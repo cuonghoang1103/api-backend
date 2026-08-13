@@ -88,3 +88,120 @@ export async function downloadPdf(content: string, filename: string): Promise<vo
   }
   doc.save(filename);
 }
+
+// ─── Xuất ĐÚNG THỨ ĐANG HIỆN TRÊN MÀN HÌNH ────────────────────────
+//
+// Hàm `downloadPdf` phía trên dựng lại PDF TỪ CHỮ MARKDOWN THÔ, nên công
+// thức ra thành `$\frac{a}{b}$` và hình vẽ mất sạch — tải một lời giải toán
+// về thì gần như vô dụng.
+//
+// Ở đây làm ngược lại: câu trả lời TRÊN MÀN HÌNH đã dựng đúng rồi (KaTeX đã
+// thành công thức, khối ```svg đã thành hình). Việc còn lại chỉ là chụp lại
+// đúng khối đó. Không dựng lại thì không có gì để dựng sai.
+//
+// Ba việc phải làm khi chụp, thiếu cái nào cũng ra file hỏng:
+//
+//  1. CHÉP RA NGOÀI MÀN HÌNH rồi mới chụp. Chụp thẳng node đang hiển thị thì
+//     dính bề rộng cửa sổ người dùng (điện thoại ra file dài ngoẵng), dính cả
+//     hàng nút Chép/Tải và khối "đang suy luận".
+//  2. ÉP NỀN TRẮNG CHỮ ĐEN (lớp `.chat-export-sheet`). File mang đi in hoặc
+//     gửi cho thầy cô — nền đen là vô dụng ở mọi chỗ đó.
+//  3. ĐỢI FONT SẴN SÀNG. html2canvas đo chữ ngay lúc gọi; font toán của KaTeX
+//     mà chưa nạp xong thì công thức bị lệch hoặc mất dấu.
+
+const BE_RONG_TRANG = 820; // px — cố định để file không phụ thuộc cửa sổ người dùng
+
+/** Dựng một "tờ giấy" ngoài màn hình chứa bản sao của câu trả lời đã dựng. */
+function dungToGiay(node: HTMLElement): HTMLElement {
+  const to = document.createElement('div');
+  to.className = 'chat-export-sheet';
+  to.style.cssText = [
+    'position:fixed', 'left:-99999px', 'top:0',
+    `width:${BE_RONG_TRANG}px`, 'padding:40px 44px',
+    'background:#ffffff', 'box-sizing:border-box', 'z-index:-1',
+  ].join(';');
+  to.innerHTML = node.innerHTML;
+
+  // Bỏ những thứ chỉ có nghĩa trên web, không có nghĩa trong file.
+  const bo = ['.chat-actions', '.katex-html + .katex-mathml', '[data-export-skip]'];
+  to.querySelectorAll(bo.join(',')).forEach((el) => el.remove());
+  // Khối "đang suy luận" — các bước nghĩ, không phải lời giải.
+  to.querySelectorAll('button').forEach((b) => {
+    if (b.textContent?.includes('suy luận')) b.closest('div')?.remove();
+    else b.remove();
+  });
+
+  document.body.appendChild(to);
+  return to;
+}
+
+/** Chụp một node đã dựng thành canvas, nền trắng, nét gấp đôi cho chữ sắc. */
+async function chup(node: HTMLElement): Promise<HTMLCanvasElement> {
+  const [{ default: html2canvas }] = await Promise.all([
+    import('html2canvas'),
+    // Font toán chưa nạp xong thì html2canvas đo sai bề rộng chữ.
+    document.fonts?.ready ?? Promise.resolve(),
+  ]);
+  const to = dungToGiay(node);
+  try {
+    return await html2canvas(to, {
+      backgroundColor: '#ffffff',
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      windowWidth: BE_RONG_TRANG,
+    });
+  } finally {
+    to.remove();
+  }
+}
+
+/** Tải câu trả lời đã dựng thành ảnh PNG — đúng như đang thấy trên màn hình. */
+export async function downloadRenderedPng(node: HTMLElement, filename: string): Promise<void> {
+  const canvas = await chup(node);
+  const blob = await new Promise<Blob | null>((ok) => canvas.toBlob(ok, 'image/png'));
+  if (!blob) throw new Error('không tạo được ảnh');
+  triggerDownload(blob, filename);
+}
+
+/**
+ * Tải câu trả lời đã dựng thành PDF.
+ *
+ * Ảnh chụp thường CAO HƠN một trang A4 rất nhiều, nên phải CẮT theo chiều
+ * cao trang rồi dán từng lát vào từng trang. Nhét nguyên ảnh vào một trang
+ * thì cả bài co lại thành con tem không đọc nổi.
+ */
+export async function downloadRenderedPdf(node: HTMLElement, filename: string): Promise<void> {
+  const canvas = await chup(node);
+  const { jsPDF } = await import('jspdf');
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+
+  const rongTrang = doc.internal.pageSize.getWidth();
+  const caoTrang = doc.internal.pageSize.getHeight();
+  const le = 24;
+  const rongAnh = rongTrang - le * 2;
+  // Số điểm ảnh tương ứng một trang giấy, sau khi thu ảnh cho vừa bề ngang.
+  const tyLe = rongAnh / canvas.width;
+  const caoLatPx = Math.floor((caoTrang - le * 2) / tyLe);
+
+  const lat = document.createElement('canvas');
+  const ctx = lat.getContext('2d');
+  if (!ctx) throw new Error('không mở được canvas');
+
+  let y = 0;
+  let trangDau = true;
+  while (y < canvas.height) {
+    const cao = Math.min(caoLatPx, canvas.height - y);
+    lat.width = canvas.width;
+    lat.height = cao;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, lat.width, lat.height);
+    ctx.drawImage(canvas, 0, y, canvas.width, cao, 0, 0, canvas.width, cao);
+
+    if (!trangDau) doc.addPage();
+    doc.addImage(lat.toDataURL('image/jpeg', 0.92), 'JPEG', le, le, rongAnh, cao * tyLe);
+    trangDau = false;
+    y += cao;
+  }
+  doc.save(filename);
+}

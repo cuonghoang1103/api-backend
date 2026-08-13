@@ -147,20 +147,35 @@ const BARE_ENVS = ['align\\*', 'align', 'aligned', 'gather\\*', 'gather', 'equat
  */
 function normalizeMath(src: string): string {
   const parts = (src || '').split(/(```[\s\S]*?```|~~~[\s\S]*?~~~)/g);
-  const envRe = new RegExp(`(^|[^$])\\\\begin\\{(${BARE_ENVS.join('|')})\\}([\\s\\S]*?)\\\\end\\{\\2\\}`, 'g');
+  const envRe = new RegExp(`\\\\begin\\{(${BARE_ENVS.join('|')})\\}([\\s\\S]*?)\\\\end\\{\\1\\}`, 'g');
+
   for (let i = 0; i < parts.length; i += 2) {
-    parts[i] = parts[i]
-      // ⚠️ `$$` PHẢI đứng một mình trên dòng của nó. Viết `$$\begin{align*}`
-      //    thì `remark-math` hiểu phần sau `$$` là METADATA của khối (giống
-      //    tên ngôn ngữ sau ```) và VỨT ĐI — KaTeX nhận được thân align mà
-      //    không có `\begin{align*}`, báo "Expected 'EOF', got '&'".
-      .replace(envRe, (_m, before: string, env: string, body: string) =>
-        `${before}\n\n$$\n\\begin{${env}}${body}\\end{${env}}\n$$\n\n`)
+    // ── Bước 1: hai cặp dấu remark-math không nhận → đưa về `$`/`$$` ──
+    const doi = parts[i]
       .replace(/\\\[([\s\S]*?)\\\]/g, (_m, inner: string) => `\n\n$$\n${inner.trim()}\n$$\n\n`)
       // Dấu cách ngay sau `$` làm nó KHÔNG mở được công thức trong dòng (luật
       // của remark-math), rồi `$` đó đi ghép với một `$` khác ở xa và nuốt cả
       // đoạn văn vào giữa. Cắt trắng hai đầu là hết.
       .replace(/\\\(([\s\S]*?)\\\)/g, (_m, inner: string) => `$${inner.trim()}$`);
+
+    // ── Bước 2: bọc môi trường viết TRẦN — CHỈ ở phần ngoài công thức ──
+    //
+    // ⚠️ Phải tách phần đã là công thức ra trước. Bản đầu chỉ kiểm ký tự ĐỨNG
+    // NGAY TRƯỚC `\begin` có phải `$` không — nhưng model viết đúng chuẩn là
+    // `$$` xuống dòng rồi mới `\begin{cases}`, nên ký tự ngay trước là `\n` và
+    // bộ lọc tưởng nó viết trần, bọc thêm một lớp `$$` nữa. Kết quả: `$$` mở
+    // ngoài, `$$` mở trong, hai cái đóng lạc nhau — cả HỆ PHƯƠNG TRÌNH hiện ra
+    // nguyên chữ `\begin{cases}`. Gặp thật khi soi bản xuất PDF ngày 13/08.
+    const manh = doi.split(/(\$\$[\s\S]*?\$\$|\$[^$\n]+\$)/g);
+    for (let k = 0; k < manh.length; k += 2) {
+      // ⚠️ `$$` PHẢI đứng một mình trên dòng của nó. Viết `$$\begin{align*}`
+      //    thì `remark-math` hiểu phần sau `$$` là METADATA của khối (giống
+      //    tên ngôn ngữ sau ```) và VỨT ĐI — KaTeX nhận được thân align mà
+      //    không có `\begin{align*}`, báo "Expected 'EOF', got '&'".
+      manh[k] = manh[k].replace(envRe, (_m, env: string, body: string) =>
+        `\n\n$$\n\\begin{${env}}${body}\\end{${env}}\n$$\n\n`);
+    }
+    parts[i] = manh.join('');
   }
   return parts.join('');
 }

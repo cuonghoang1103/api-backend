@@ -3865,3 +3865,63 @@ html.theme-dark .chat-studio {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Trang xuất PDF/ảnh cho câu trả lời AI ────────────────────────
+   Bản chụp phải LUÔN nền trắng chữ đen, bất kể người dùng đang để web ở
+   theme nào: file mang đi in, gửi cho thầy cô, dán vào vở — nền đen là
+   vô dụng ở mọi chỗ đó.
+
+   Vì sao phải đè tay nhiều thế: `ChatMarkdown` đặt màu CỨNG cho tiêu đề
+   và chữ đậm (`#f1f5f9`) chứ không dùng biến. Chữ trắng trên nền trắng =
+   file trắng tinh. Đây đúng là lỗi đã gặp khi làm giao diện studio, chữa
+   bằng đúng cách này: CSS có độ ưu tiên cao hơn, không sửa component.
+
+   Hình SVG dùng `stroke="currentColor"` nên nét tự thành đen theo chữ —
+   đó là lý do KHÔNG đặt `color` riêng cho `.chat-figure`.                */
+.chat-export-sheet {
+  background: #ffffff;
+  color: #111827;
+  font-size: 15px;
+  line-height: 1.75;
+}
+.chat-export-sheet .chat-markdown,
+.chat-export-sheet .chat-markdown p,
+.chat-export-sheet .chat-markdown li,
+.chat-export-sheet .chat-markdown td {
+  color: #111827;
+}
+.chat-export-sheet .chat-markdown h1,
+.chat-export-sheet .chat-markdown h2,
+.chat-export-sheet .chat-markdown h3,
+.chat-export-sheet .chat-markdown strong,
+.chat-export-sheet .chat-markdown th {
+  color: #0f172a;
+}
+.chat-export-sheet .chat-markdown a { color: #1d4ed8; }
+.chat-export-sheet .chat-markdown blockquote {
+  border-left-color: #94a3b8;
+  color: #374151;
+}
+.chat-export-sheet .chat-markdown hr { border-color: #d1d5db; }
+.chat-export-sheet .chat-markdown :not(pre) > code {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+.chat-export-sheet .chat-markdown table th,
+.chat-export-sheet .chat-markdown table td,
+.chat-export-sheet .chat-markdown > div:has(> table) {
+  border-color: #cbd5e1;
+}
+.chat-export-sheet .chat-markdown thead { background: #f1f5f9; }
+/* Hình vẽ: viền nhạt, nền trắng — nét đen thừa hưởng từ `color` ở trên. */
+.chat-export-sheet .chat-markdown .chat-figure {
+  border-color: #cbd5e1;
+  background: #ffffff;
+}
+/* Khối code giữ nền tối như trên web — in ra vẫn đọc được và đúng cái
+   người dùng đã thấy trên màn hình. */
+.chat-export-sheet .chat-markdown pre { background: #0d1117; }
+/* KaTeX kế thừa `currentColor`, nhưng vài phần tử của nó tự đặt màu. */
+.chat-export-sheet .katex,
+.chat-export-sheet .katex * { color: #111827; }

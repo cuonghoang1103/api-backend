@@ -6,7 +6,7 @@ import { User, Copy, CheckCheck, Download, FileText, Loader2, ThumbsUp, ThumbsDo
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import type { ChatMessage } from '@/types';
-import { downloadTextFile, downloadPdf } from '@/lib/chatExport';
+import { downloadTextFile, downloadPdf, downloadRenderedPdf, downloadRenderedPng } from '@/lib/chatExport';
 import ChatMarkdown from './ChatMarkdown';
 import ThinkingSteps from './ThinkingSteps';
 import { api } from '@/lib/api';
@@ -132,6 +132,9 @@ function MessageBubble({ msg, isStreaming, isLastAssistant, skin = 'terminal' }:
   const [copied, setCopied] = useState(false);
   const [dlOpen, setDlOpen] = useState(false);
   const [dlBusy, setDlBusy] = useState(false);
+  // Node chứa câu trả lời ĐÃ DỰNG (công thức + hình) — bản xuất PDF/PNG chụp
+  // lại chính nó, xem ghi chú ở `chatExport.ts`.
+  const noiDungRef = useRef<HTMLDivElement>(null);
   const [rated, setRated] = useState<null | 'up' | 'down'>(null);
   const bubbleRef = useRef<HTMLDivElement>(null);
 
@@ -155,14 +158,25 @@ function MessageBubble({ msg, isStreaming, isLastAssistant, skin = 'terminal' }:
 
   const isUser = msg.role === 'user';
 
-  const download = async (fmt: 'txt' | 'md' | 'pdf') => {
+  const download = async (fmt: 'txt' | 'md' | 'pdf' | 'png') => {
     const base = `cuongmini-${format(new Date(msg.createdAt), 'yyyyMMdd-HHmmss')}`;
     try {
       setDlBusy(true);
-      if (fmt === 'pdf') await downloadPdf(msg.content, `${base}.pdf`);
-      else downloadTextFile(msg.content, `${base}.${fmt}`);
-    } catch {
-      toast.error('Tải file thất bại');
+      const node = noiDungRef.current;
+      if (fmt === 'png') {
+        if (!node) throw new Error('chưa dựng xong nội dung');
+        await downloadRenderedPng(node, `${base}.png`);
+      } else if (fmt === 'pdf') {
+        // Chụp lại bản ĐÃ DỰNG (công thức + hình) thay vì dựng lại từ chữ
+        // markdown. Không có node thì mới lùi về bản chữ trần.
+        if (node) await downloadRenderedPdf(node, `${base}.pdf`);
+        else await downloadPdf(msg.content, `${base}.pdf`);
+      } else {
+        downloadTextFile(msg.content, `${base}.${fmt}`);
+      }
+    } catch (e) {
+      // Nói ra lý do: "Tải file thất bại" không giúp ai sửa được gì.
+      toast.error(`Tải file thất bại${e instanceof Error ? ` — ${e.message}` : ''}`);
     } finally {
       setDlBusy(false);
       setDlOpen(false);
@@ -223,16 +237,20 @@ function MessageBubble({ msg, isStreaming, isLastAssistant, skin = 'terminal' }:
                 hasAnswer={!!msg.content?.trim()}
                 skin="studio"
               />
-              {(() => {
-                const raw = msg.content ?? '';
-                if (!raw.trim()) {
-                  // Chưa có bước suy luận nào ⇒ vẫn phải nói gì đó, không thì
-                  // bong bóng rỗng trông như hỏng.
-                  if (msg.reasoning?.trim()) return null;
-                  return <span className="italic text-[color:var(--studio-text-faint)]">CuongMini đang suy luận…</span>;
-                }
-                return <ChatMarkdown content={raw} renderMath={!(isStreaming && isLastAssistant)} />;
-              })()}
+              {/* Bọc riêng phần LỜI GIẢI: bản xuất PDF/PNG chụp đúng node này,
+                  nên khối "đang suy luận" và con trỏ nhấp nháy nằm ngoài. */}
+              <div ref={noiDungRef}>
+                {(() => {
+                  const raw = msg.content ?? '';
+                  if (!raw.trim()) {
+                    // Chưa có bước suy luận nào ⇒ vẫn phải nói gì đó, không thì
+                    // bong bóng rỗng trông như hỏng.
+                    if (msg.reasoning?.trim()) return null;
+                    return <span className="italic text-[color:var(--studio-text-faint)]">CuongMini đang suy luận…</span>;
+                  }
+                  return <ChatMarkdown content={raw} renderMath={!(isStreaming && isLastAssistant)} />;
+                })()}
+              </div>
               {isStreaming && isLastAssistant && (
                 <motion.span
                   key="cursor"
@@ -299,7 +317,7 @@ function MessageBubble({ msg, isStreaming, isLastAssistant, skin = 'terminal' }:
                     className="absolute bottom-full left-0 z-20 mb-1 flex gap-1 rounded-lg border border-[color:var(--studio-border)] bg-[var(--studio-panel)] p-1"
                     style={{ boxShadow: 'var(--studio-shadow)' }}
                   >
-                    {(['txt', 'md', 'pdf'] as const).map((fmt) => (
+                    {(['png', 'pdf', 'md', 'txt'] as const).map((fmt) => (
                       <button
                         key={fmt}
                         onClick={() => download(fmt)}
@@ -382,14 +400,16 @@ function MessageBubble({ msg, isStreaming, isLastAssistant, skin = 'terminal' }:
                 skin="terminal"
               />
               {/* Guard: ensure msg.content is never undefined/null, else show placeholder */}
-              {(() => {
-                const raw = msg.content ?? '';
-                if (!raw.trim()) {
-                  if (msg.reasoning?.trim()) return null;
-                  return <span className="text-[#64748b] italic">[CuongMini đang suy luận...]</span>;
-                }
-                return <ChatMarkdown content={raw} renderMath={!(isStreaming && isLastAssistant)} />;
-              })()}
+              <div ref={noiDungRef}>
+                {(() => {
+                  const raw = msg.content ?? '';
+                  if (!raw.trim()) {
+                    if (msg.reasoning?.trim()) return null;
+                    return <span className="text-[#64748b] italic">[CuongMini đang suy luận...]</span>;
+                  }
+                  return <ChatMarkdown content={raw} renderMath={!(isStreaming && isLastAssistant)} />;
+                })()}
+              </div>
             </div>
           ) : (
             <div>
@@ -485,7 +505,7 @@ function MessageBubble({ msg, isStreaming, isLastAssistant, skin = 'terminal' }:
               </button>
               {dlOpen && !dlBusy && (
                 <div className="absolute z-20 bottom-full mb-1 left-0 flex gap-1 p-1 rounded-lg bg-[#0d1117] border border-[#22d3ee]/25 shadow-lg">
-                  {(['txt', 'md', 'pdf'] as const).map((fmt) => (
+                  {(['png', 'pdf', 'md', 'txt'] as const).map((fmt) => (
                     <button
                       key={fmt}
                       onClick={() => download(fmt)}

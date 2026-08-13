@@ -6,6 +6,7 @@ import { Send, Loader2, Paperclip, FileText, X } from 'lucide-react';
 import { toast } from 'sonner';
 import ModelPicker from './ModelPicker';
 import { useChatModelStore, getChatModel } from '@/lib/aiChatModels';
+import type { ChatSkin } from '@/store/chatSkinStore';
 
 export interface ChatAttachment { images?: string[]; documents?: string[]; documentNames?: string[] }
 
@@ -15,6 +16,8 @@ interface ChatInputProps {
   /** Stop the in-flight generation (keeps the partial reply). */
   onStop?: () => void;
   disabled?: boolean;
+  /** 'terminal' = ô lệnh bản gốc (mặc định). 'studio' = ô soạn bo tròn. */
+  skin?: ChatSkin;
 }
 
 interface Attached {
@@ -32,7 +35,31 @@ interface AttachedDoc {
 const MAX_IMAGES = 4;
 const MAX_DIM = 1568; // Anthropic's recommended long-edge cap for vision
 const MAX_DOCS = 3;
-const MAX_DOC_BYTES = 6 * 1024 * 1024; // 6MB per PDF (matches backend)
+const MAX_DOC_BYTES = 6 * 1024 * 1024; // 6MB per file (matches backend)
+
+// ── Loại file đọc được (khớp `ALLOWED_DOC_TYPES` ở src/routes/ai.routes.ts) ──
+// Trình duyệt báo `file.type` không đáng tin: kéo một file .md vào thì Chrome
+// trả chuỗi RỖNG, .csv có khi thành 'application/vnd.ms-excel'. Nên nhận diện
+// bằng ĐUÔI FILE trước, rồi mới tự đặt lại media type cho data URL — nếu để
+// nguyên chuỗi rỗng thì data URL thành `data:;base64,...` và backend từ chối.
+const DOC_TYPE_BY_EXT: Record<string, string> = {
+  pdf: 'application/pdf',
+  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  txt: 'text/plain',
+  md: 'text/markdown',
+  markdown: 'text/markdown',
+  csv: 'text/csv',
+};
+const DOC_ACCEPT = '.pdf,.docx,.txt,.md,.csv,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,text/csv';
+const FILE_ACCEPT = `image/png,image/jpeg,image/webp,image/gif,${DOC_ACCEPT}`;
+
+/** Media type chuẩn của một file tài liệu, hoặc null nếu không đọc được. */
+function docMediaType(file: File): string | null {
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  if (DOC_TYPE_BY_EXT[ext]) return DOC_TYPE_BY_EXT[ext];
+  const t = (file.type || '').toLowerCase();
+  return Object.values(DOC_TYPE_BY_EXT).includes(t) ? t : null;
+}
 
 /** Read a File as a data URL. */
 function readAsDataURL(file: File): Promise<string> {
@@ -84,7 +111,8 @@ async function compressImage(file: File): Promise<string> {
   }
 }
 
-export default function ChatInput({ onSend, isStreaming, onStop, disabled }: ChatInputProps) {
+export default function ChatInput({ onSend, isStreaming, onStop, disabled, skin = 'terminal' }: ChatInputProps) {
+  const isStudio = skin === 'studio';
   const [value, setValue] = useState('');
   const [focused, setFocused] = useState(false);
   const [images, setImages] = useState<Attached[]>([]);
@@ -118,8 +146,14 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
   const addFiles = useCallback(async (files: File[]) => {
     if (!isVision || files.length === 0) return;
     const imageFiles = files.filter((f) => f.type.startsWith('image/'));
-    const pdfFiles = files.filter((f) => f.type === 'application/pdf');
-    if (imageFiles.length === 0 && pdfFiles.length === 0) return;
+    const docFiles = files
+      .map((f) => ({ file: f, media: docMediaType(f) }))
+      .filter((x): x is { file: File; media: string } => x.media !== null);
+    const rejected = files.length - imageFiles.length - docFiles.length;
+    if (rejected > 0) {
+      toast.error('Chỉ nhận ảnh, PDF, Word (.docx) hoặc file văn bản (.txt/.md/.csv)');
+    }
+    if (imageFiles.length === 0 && docFiles.length === 0) return;
     setProcessing(true);
     try {
       if (imageFiles.length) {
@@ -131,13 +165,17 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
           ...compressed.map((dataUrl, i) => ({ id: `${Date.now()}_i${i}_${prev.length}`, dataUrl })),
         ].slice(0, MAX_IMAGES));
       }
-      if (pdfFiles.length) {
+      if (docFiles.length) {
         const room = MAX_DOCS - docs.length;
-        const toAdd = pdfFiles.slice(0, Math.max(0, room));
+        const toAdd = docFiles.slice(0, Math.max(0, room));
         const loaded = await Promise.all(
-          toAdd.map(async (f) => {
+          toAdd.map(async ({ file: f, media }) => {
             if (f.size > MAX_DOC_BYTES) { toast.error(`"${f.name}" quá lớn (tối đa 6MB)`); return null; }
-            return { name: f.name, dataUrl: await readAsDataURL(f) };
+            const raw = await readAsDataURL(f);
+            // Đặt lại media type: trình duyệt có thể trả rỗng (file .md), mà
+            // `data:;base64,...` thì backend từ chối thẳng.
+            const b64 = raw.slice(raw.indexOf(',') + 1);
+            return { name: f.name, dataUrl: `data:${media};base64,${b64}` };
           }),
         );
         setDocs((prev) => [
@@ -204,13 +242,20 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="px-4 py-3 border-t border-[#22d3ee]/10 bg-[#0d1117]/80 backdrop-blur-xl flex-shrink-0 z-10"
+      className={
+        isStudio
+          ? 'px-4 pb-4 pt-2 border-t border-[color:var(--studio-border-soft)] bg-[var(--studio-bg)] flex-shrink-0 z-10'
+          : 'px-4 py-3 border-t border-[#22d3ee]/10 bg-[#0d1117]/80 backdrop-blur-xl flex-shrink-0 z-10'
+      }
     >
-      <div className="max-w-4xl mx-auto">
-        {/* Model switcher */}
-        <div className="mb-2 flex items-center">
-          <ModelPicker disabled={isStreaming} />
-        </div>
+      <div className={isStudio ? 'max-w-3xl mx-auto' : 'max-w-4xl mx-auto'}>
+        {/* Model switcher — bản studio đặt nó BÊN TRONG ô soạn (như
+            ChatGPT/Claude) nên hàng riêng này chỉ có ở bản terminal. */}
+        {!isStudio && (
+          <div className="mb-2 flex items-center">
+            <ModelPicker disabled={isStreaming} />
+          </div>
+        )}
 
         {/* Image previews (Pro/Max only) */}
         <AnimatePresence>
@@ -227,12 +272,16 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
                   <img
                     src={img.dataUrl}
                     alt="attachment"
-                    className="w-16 h-16 object-cover rounded-lg border border-[#22d3ee]/30"
+                    className={`w-16 h-16 object-cover rounded-lg border ${isStudio ? 'border-[color:var(--studio-border)]' : 'border-[#22d3ee]/30'}`}
                   />
                   <button
                     type="button"
                     onClick={() => removeImage(img.id)}
-                    className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[#0d1117] border border-[#ef4444]/50 text-[#fca5a5] flex items-center justify-center hover:bg-[#ef4444]/20 transition-colors"
+                    className={`absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center transition-colors ${
+                      isStudio
+                        ? 'bg-[var(--studio-panel)] border border-[color:var(--studio-border)] text-[color:var(--studio-text-soft)] hover:text-rose-500'
+                        : 'bg-[#0d1117] border border-[#ef4444]/50 text-[#fca5a5] hover:bg-[#ef4444]/20'
+                    }`}
                     aria-label="Remove image"
                   >
                     <X className="w-3 h-3" />
@@ -240,8 +289,8 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
                 </div>
               ))}
               {processing && (
-                <div className="w-16 h-16 rounded-lg border border-[#22d3ee]/20 flex items-center justify-center">
-                  <Loader2 className="w-4 h-4 text-[#22d3ee] animate-spin" />
+                <div className={`w-16 h-16 rounded-lg border flex items-center justify-center ${isStudio ? 'border-[color:var(--studio-border)]' : 'border-[#22d3ee]/20'}`}>
+                  <Loader2 className={`w-4 h-4 animate-spin ${isStudio ? 'text-[color:var(--studio-text-soft)]' : 'text-[#22d3ee]'}`} />
                 </div>
               )}
             </motion.div>
@@ -258,13 +307,22 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
               className="mb-2 flex flex-wrap gap-2"
             >
               {docs.map((d) => (
-                <div key={d.id} className="relative flex items-center gap-2 pl-2 pr-6 py-1.5 rounded-lg border border-[#22d3ee]/30 bg-[#22d3ee]/[0.06] max-w-[220px]">
-                  <FileText className="w-4 h-4 text-[#22d3ee] shrink-0" />
-                  <span className="text-xs text-[#e2e8f0] truncate">{d.name}</span>
+                <div
+                  key={d.id}
+                  className={`relative flex items-center gap-2 pl-2 pr-6 py-1.5 rounded-lg border max-w-[220px] ${
+                    isStudio
+                      ? 'border-[color:var(--studio-border)] bg-[var(--studio-panel)]'
+                      : 'border-[#22d3ee]/30 bg-[#22d3ee]/[0.06]'
+                  }`}
+                >
+                  <FileText className={`w-4 h-4 shrink-0 ${isStudio ? 'text-[color:var(--studio-text-soft)]' : 'text-[#22d3ee]'}`} />
+                  <span className={`text-xs truncate ${isStudio ? 'text-[color:var(--studio-text)]' : 'text-[#e2e8f0]'}`}>{d.name}</span>
                   <button
                     type="button"
                     onClick={() => removeDoc(d.id)}
-                    className="absolute top-1/2 -translate-y-1/2 right-1 w-4 h-4 rounded-full text-[#fca5a5] flex items-center justify-center hover:bg-[#ef4444]/20 transition-colors"
+                    className={`absolute top-1/2 -translate-y-1/2 right-1 w-4 h-4 rounded-full flex items-center justify-center transition-colors ${
+                      isStudio ? 'text-[color:var(--studio-text-faint)] hover:text-rose-500' : 'text-[#fca5a5] hover:bg-[#ef4444]/20'
+                    }`}
                     aria-label="Remove file"
                   >
                     <X className="w-3 h-3" />
@@ -275,7 +333,90 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
           )}
         </AnimatePresence>
 
-        {/* Terminal input box */}
+        {/* ── Ô soạn bản STUDIO ────────────────────────────────────
+            Bo tròn, nền panel, model picker + nút đính kèm nằm ngay
+            trong ô như ChatGPT/Claude. Dùng chung state/handler với ô
+            lệnh bản terminal bên dưới — chỉ khác lớp áo. */}
+        {isStudio ? (
+          <div
+            className="rounded-[26px] border transition-colors"
+            style={{
+              background: 'var(--studio-panel)',
+              borderColor: focused ? 'var(--studio-accent)' : 'var(--studio-border)',
+              boxShadow: 'var(--studio-shadow)',
+            }}
+          >
+            <textarea
+              ref={textareaRef}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onPaste={handlePaste}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              placeholder={isVision ? 'Nhắn cho CuongMini… (đính kèm ảnh, PDF, Word)' : 'Nhắn cho CuongMini…'}
+              disabled={isDisabled}
+              rows={1}
+              className="w-full resize-none bg-transparent px-5 pt-4 pb-1 text-base sm:text-[15px] leading-6 text-[color:var(--studio-text)] placeholder:text-[color:var(--studio-text-faint)] focus:outline-none disabled:opacity-50"
+              style={{ minHeight: '52px', maxHeight: '160px' }}
+            />
+
+            {/* Hidden file input for the attach button */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept={FILE_ACCEPT}
+              multiple
+              className="hidden"
+              onChange={handleFileChange}
+            />
+
+            <div className="flex items-center justify-between gap-2 px-3 pb-2.5 pt-1">
+              <div className="flex items-center gap-1">
+                <ModelPicker disabled={isStreaming} variant="studio" />
+                {isVision && (
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isDisabled || (images.length >= MAX_IMAGES && docs.length >= MAX_DOCS)}
+                    title={images.length >= MAX_IMAGES && docs.length >= MAX_DOCS ? 'Đã đạt tối đa tệp đính kèm' : 'Đính kèm ảnh, PDF, Word (.docx) hoặc file văn bản'}
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-[color:var(--studio-text-soft)] transition-colors hover:bg-[var(--studio-panel-soft)] hover:text-[color:var(--studio-text)] disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]"
+                  >
+                    <Paperclip className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.94 }}
+                onClick={isStreaming && onStop ? onStop : handleSubmit}
+                disabled={isStreaming ? !onStop : !canSend}
+                aria-label={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
+                title={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
+                className="flex h-9 w-9 items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]"
+                style={
+                  isStreaming && onStop
+                    ? { background: 'var(--studio-text)', color: 'var(--studio-panel)' }
+                    : canSend
+                      ? { background: 'var(--studio-accent)', color: '#ffffff' }
+                      : { background: 'var(--studio-panel-soft)', color: 'var(--studio-text-faint)' }
+                }
+              >
+                {isStreaming ? (
+                  onStop ? (
+                    <span className="block h-3 w-3 rounded-[3px] bg-current" />
+                  ) : (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  )
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
+              </motion.button>
+            </div>
+          </div>
+        ) : (
+        /* Terminal input box */
         <div
           className={`
             relative bg-[#0a0a0f] border rounded-xl
@@ -305,7 +446,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
             onPaste={handlePaste}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            placeholder={isVision ? 'enter command... (dán/đính kèm ảnh hoặc PDF)' : 'enter command...'}
+            placeholder={isVision ? 'enter command... (đính kèm ảnh, PDF, Word)' : 'enter command...'}
             disabled={isDisabled}
             rows={1}
             className={`w-full pl-9 sm:pl-[170px] ${isVision ? 'pr-24' : 'pr-14'} py-3 bg-transparent text-[#f8fafc] placeholder:text-[#64748b]/40 font-mono text-base sm:text-sm focus:outline-none resize-none transition-all disabled:opacity-50`}
@@ -316,7 +457,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/png,image/jpeg,image/webp,image/gif,application/pdf"
+            accept={FILE_ACCEPT}
             multiple
             className="hidden"
             onChange={handleFileChange}
@@ -329,7 +470,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isDisabled || (images.length >= MAX_IMAGES && docs.length >= MAX_DOCS)}
-                title={images.length >= MAX_IMAGES && docs.length >= MAX_DOCS ? 'Đã đạt tối đa tệp đính kèm' : 'Đính kèm ảnh hoặc PDF'}
+                title={images.length >= MAX_IMAGES && docs.length >= MAX_DOCS ? 'Đã đạt tối đa tệp đính kèm' : 'Đính kèm ảnh, PDF, Word (.docx) hoặc file văn bản'}
                 className="w-10 h-10 rounded-xl flex items-center justify-center text-[#22d3ee] hover:bg-[#22d3ee]/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <Paperclip className="w-4 h-4" />
@@ -372,11 +513,19 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
             </motion.button>
           </div>
         </div>
+        )}
 
-        <p className="text-[11px] text-[#64748b]/50 text-center mt-1.5 font-mono">
-          <span className="text-[#22d3ee]/40">//</span>
-          <span className="hidden sm:inline"> Press Enter to execute &bull; Shift+Enter for new line &bull;</span> CuongMini responses may be incorrect
-        </p>
+        {isStudio ? (
+          <p className="mt-2 text-center text-[11px] text-[color:var(--studio-text-faint)]">
+            <span className="hidden sm:inline">Enter để gửi &bull; Shift+Enter xuống dòng &bull; </span>
+            CuongMini có thể mắc lỗi — hãy kiểm tra lại thông tin quan trọng.
+          </p>
+        ) : (
+          <p className="text-[11px] text-[#64748b]/50 text-center mt-1.5 font-mono">
+            <span className="text-[#22d3ee]/40">//</span>
+            <span className="hidden sm:inline"> Press Enter to execute &bull; Shift+Enter for new line &bull;</span> CuongMini responses may be incorrect
+          </p>
+        )}
       </div>
     </motion.div>
   );

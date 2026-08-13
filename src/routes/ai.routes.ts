@@ -93,17 +93,37 @@ function parseChatImages(raw: unknown): ParsedImage[] {
   return out;
 }
 
-// ─── PDF document limits (Pro/Max chat) ──────────────────
+// ─── Document limits (Pro/Max chat) ──────────────────────
 const MAX_CHAT_DOCS = 3;
-const MAX_DOC_BYTES = 6 * 1024 * 1024; // 6MB decoded per PDF (stays under the 10mb body cap)
-
-interface ParsedDoc { data: string }
+const MAX_DOC_BYTES = 6 * 1024 * 1024; // 6MB decoded per file (stays under the 10mb body cap)
 
 /**
- * Validate + normalize the `documents` field (array of PDF data URLs) into
- * `{ data }` blocks. PDFs only. Throws AppError on malformed/oversized input.
+ * Kiểu file đọc được. PDF + Word (.docx) đi qua bộ rút chữ của CV Builder
+ * (`extractPdf` / `extractDocx`); nhóm `text/*` đọc thẳng bằng utf8.
+ *
+ * `.doc` ĐỜI CŨ (application/msword) KHÔNG có ở đây một cách có chủ ý: nó là
+ * định dạng nhị phân OLE, mammoth không mở được, và nhận vào rồi báo lỗi sau
+ * còn tệ hơn từ chối ngay với lời khuyên lưu lại thành .docx.
  */
-function parseChatDocuments(raw: unknown): ParsedDoc[] {
+const ALLOWED_DOC_TYPES = new Set([
+  'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'text/plain',
+  'text/markdown',
+  'text/csv',
+]);
+
+interface ParsedDoc { media_type: string; data: string; name?: string }
+
+/**
+ * Validate + normalize the `documents` field (array of data URLs) into
+ * `{ media_type, data }` blocks — PDF, Word (.docx) và văn bản thuần.
+ * Throws AppError on malformed/oversized/unsupported input.
+ *
+ * `names` là mảng tên file do client gửi kèm (`documentNames`), chỉ dùng làm
+ * nhãn trong prompt — luôn coi là dữ liệu người dùng nhập, không tin.
+ */
+function parseChatDocuments(raw: unknown, names?: unknown): ParsedDoc[] {
   if (raw == null) return [];
   if (!Array.isArray(raw)) {
     throw new AppError('documents must be an array of data URLs', 400, 'INVALID_DOCUMENTS');
@@ -111,8 +131,10 @@ function parseChatDocuments(raw: unknown): ParsedDoc[] {
   if (raw.length > MAX_CHAT_DOCS) {
     throw new AppError(`Too many files (max ${MAX_CHAT_DOCS})`, 400, 'TOO_MANY_DOCUMENTS');
   }
+  const nameList = Array.isArray(names) ? names : [];
   const out: ParsedDoc[] = [];
-  for (const item of raw) {
+  for (let i = 0; i < raw.length; i++) {
+    const item = raw[i];
     if (typeof item !== 'string') {
       throw new AppError('Each file must be a data URL string', 400, 'INVALID_DOCUMENT');
     }
@@ -120,17 +142,84 @@ function parseChatDocuments(raw: unknown): ParsedDoc[] {
     if (!match) {
       throw new AppError('File must be a base64 data URL', 400, 'INVALID_DOCUMENT_FORMAT');
     }
-    if (match[1].toLowerCase() !== 'application/pdf') {
-      throw new AppError('Only PDF files are supported', 400, 'UNSUPPORTED_DOCUMENT_TYPE');
+    const mediaType = match[1].toLowerCase();
+    if (!ALLOWED_DOC_TYPES.has(mediaType)) {
+      const hint = mediaType === 'application/msword'
+        ? 'Word đời cũ (.doc) chưa đọc được — hãy lưu lại thành .docx hoặc PDF.'
+        : 'Chỉ nhận PDF, Word (.docx) hoặc file văn bản (.txt/.md/.csv).';
+      throw new AppError(hint, 400, 'UNSUPPORTED_DOCUMENT_TYPE');
     }
     const data = match[2];
     if (Math.floor((data.length * 3) / 4) > MAX_DOC_BYTES) {
-      throw new AppError('PDF too large (max 6MB each)', 400, 'DOCUMENT_TOO_LARGE');
+      throw new AppError('File too large (max 6MB each)', 400, 'DOCUMENT_TOO_LARGE');
     }
-    out.push({ data });
+    const rawName = nameList[i];
+    const name = typeof rawName === 'string' && rawName.trim()
+      ? rawName.replace(/[<>\n\r"]/g, '').trim().slice(0, 80)
+      : undefined;
+    out.push({ media_type: mediaType, data, name });
   }
   return out;
 }
+
+// ════════════════════════════════════════════════════════════════
+// POST /api/v1/ai/stt — nghe một đoạn tiếng, trả về chữ
+// ════════════════════════════════════════════════════════════════
+/**
+ * Đường LÙI cho chế độ gọi trong khung chat.
+ *
+ * Đường CHÍNH là `SpeechRecognition` ngay trong trình duyệt (miễn phí, độ trễ
+ * gần bằng không) — nhưng Safari và Firefox không có nó. Ở đó trình duyệt thu
+ * âm rồi gửi lên đây, Whisper của Groq nghe hộ (dùng lại đúng khoá + đúng hàm
+ * của phòng phỏng vấn, không thêm nhà cung cấp nào).
+ *
+ * ⚠️ Whisper KHÔNG bao giờ nói "tôi không nghe thấy gì". Cho nó nghe tiếng ồn
+ * phòng, nó nhả ra thứ hay gặp nhất trong dữ liệu huấn luyện — với tiếng Việt
+ * là phụ đề YouTube ("nhớ like share subscribe"). Nên mọi bản nghe đều phải đi
+ * qua `checkHeardSpeech` trước khi được coi là lời người dùng nói.
+ *
+ * Tiếng nói là dữ liệu cá nhân: audio chỉ nằm trong RAM đúng một lần gọi,
+ * không ghi đĩa, không ghi log.
+ */
+const voiceUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 15 * 1024 * 1024 } });
+router.post('/stt', optionalAuth, voiceUpload.single('audio'), async (req: any, res: Response<ApiResponse>) => {
+  const file = req.file as Express.Multer.File | undefined;
+  if (!file?.buffer?.length) {
+    res.status(400).json({ success: false, message: 'Thiếu audio', code: 'MISSING_AUDIO' });
+    return;
+  }
+  // Gate theo KHOÁ chứ không theo `STT_PROVIDER`: biến đó là lựa chọn riêng của
+  // phòng phỏng vấn (mặc định 'browser'), còn ở đây server-STT là đường lùi cho
+  // những trình duyệt KHÔNG nghe được — chặn theo biến kia là chặn nhầm.
+  if (!process.env.GROQ_API_KEY) {
+    res.status(503).json({ success: false, message: 'Máy chủ chưa bật nhận dạng tiếng nói', code: 'STT_UNAVAILABLE' });
+    return;
+  }
+  try {
+    const [{ transcribeWithGroq }, { checkHeardSpeech }] = await Promise.all([
+      import('../services/interview/voice/stt.js'),
+      import('../services/makerlab/hallucination.js'),
+    ]);
+    const language = typeof req.body?.language === 'string' && /^[a-z]{2}$/i.test(req.body.language)
+      ? String(req.body.language).toLowerCase()
+      : 'vi';
+    const r = await transcribeWithGroq(file.buffer, file.originalname || 'audio.webm', file.mimetype || 'audio/webm', {
+      language,
+      detail: true,
+    });
+    // ~16 kB/s cho webm/opus một kênh — đủ chính xác để bắt "đọc 30 chữ trong 1 giây".
+    const audioSec = file.buffer.length / 16_000;
+    const check = checkHeardSpeech(r.text, { noSpeechProb: r.noSpeechProb, avgLogprob: r.avgLogprob, audioSec });
+    if (!check.ok) {
+      res.json({ success: true, message: 'no-speech', data: { text: '', heard: false, reason: check.reason } });
+      return;
+    }
+    res.json({ success: true, data: { text: r.text, heard: true, provider: r.provider } });
+  } catch (err) {
+    logger.warn('AI STT thất bại', { error: err instanceof Error ? err.message : String(err) });
+    res.status(502).json({ success: false, message: 'Không nghe được đoạn ghi âm', code: 'STT_FAILED' });
+  }
+});
 
 // ─── SSE Constants ────────────────────────────────────────
 const SSE_KEEPALIVE_INTERVAL_MS = 15_000; // 15s — keep connection alive through Nginx AND reset client idle timers before slow (Opus) first-token
@@ -152,10 +241,13 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
   // returns a plain 400 rather than an SSE error frame. Images are honored only
   // on the Pro/Max (Claude) path inside the service; other models ignore them.
   let images: Array<{ media_type: string; data: string }> = [];
-  let documents: Array<{ data: string }> = [];
+  let documents: ParsedDoc[] = [];
   try {
     images = parseChatImages((req.body as { images?: unknown }).images);
-    documents = parseChatDocuments((req.body as { documents?: unknown }).documents);
+    documents = parseChatDocuments(
+      (req.body as { documents?: unknown }).documents,
+      (req.body as { documentNames?: unknown }).documentNames,
+    );
   } catch (err) {
     if (err instanceof AppError) {
       res.status(err.statusCode).json({ success: false, message: err.message, code: err.code });
@@ -260,6 +352,9 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       : undefined,
     images: images.length > 0 ? images : undefined,
     documents: documents.length > 0 ? documents : undefined,
+    // Chế độ GỌI: câu trả lời sẽ được đọc thành tiếng nên phải ngắn và
+    // KHÔNG markdown — xem `VOICE_RULES` trong ai.service.ts.
+    voice: (req.body as { voice?: unknown }).voice === true,
   };
 
   // Mutable model metadata — streamChat fills this in; we forward it to the

@@ -27,8 +27,8 @@ export const DEFAULT_CHAT_MODEL_ID = 'cuongmini-3.11';
 
 export const CHAT_MODELS: ChatModelOption[] = [
   { id: 'cuongmini-3.11', label: 'CuongMini3.11', desc: 'Nhanh & mượt · mặc định', tier: 'default' },
-  { id: 'cuongmini-pro', label: 'CuongMini Pro', desc: 'Thông minh hơn · trả lời sâu', tier: 'pro' },
-  { id: 'cuongmini-max', label: 'CuongMini Max', desc: 'Mạnh nhất · chính xác nhất', tier: 'max' },
+  { id: 'cuongmini-pro', label: 'CuongMini Pro', desc: 'Nhanh + chính xác · dùng hằng ngày', tier: 'pro' },
+  { id: 'cuongmini-max', label: 'CuongMini Max', desc: 'Mạnh nhất · toán, code, đọc file', tier: 'max' },
 ];
 
 export function getChatModel(id: string | undefined): ChatModelOption {

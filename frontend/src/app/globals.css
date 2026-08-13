@@ -3695,3 +3695,173 @@ html.theme-dark .landing-root {
   text-underline-offset: 0.14em;
   text-decoration-skip-ink: none;
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   GIAO DIỆN "STUDIO" CHO /chat  (bản dễ nhìn, kiểu ChatGPT/Claude)
+   ═══════════════════════════════════════════════════════════════════
+   Trang /chat có HAI giao diện dùng chung một logic (xem
+   `store/chatSkinStore.ts`):
+
+     • terminal — bản gốc: `.force-dark` + `.cyber-grid-bg` + mưa Matrix,
+                  chữ mono, tông cyan. KHÔNG đụng tới, vẫn là mặc định.
+     • studio   — khối dưới đây. KHÔNG dùng `.force-dark`, nên nó đi theo
+                  theme sáng/tối của cả web (`html.theme-dark`).
+
+   Mọi màu của giao diện studio đi qua biến `--studio-*` để hai theme chỉ
+   khác GIÁ TRỊ, không khác class — component viết `bg-[var(--studio-panel)]`
+   một lần là đúng cả sáng lẫn tối (đúng luật: không dùng biến thể `dark:`
+   ngoài phạm vi Notes).                                                */
+.chat-studio {
+  color-scheme: light;
+  --studio-bg: #f7f7f5;
+  --studio-bg-raise: #fbfbfa;
+  --studio-panel: #ffffff;
+  --studio-panel-soft: #eeedea;
+  --studio-border: rgba(24, 24, 27, 0.11);
+  --studio-border-soft: rgba(24, 24, 27, 0.06);
+  --studio-text: #1b1b19;
+  --studio-text-soft: #5f5f5b;
+  --studio-text-faint: #8b8b85;
+  --studio-accent: #4f46e5;
+  --studio-accent-text: #4338ca;
+  --studio-accent-soft: rgba(79, 70, 229, 0.09);
+  --studio-user-bubble: #ecebe6;
+  --studio-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 10px 28px rgba(0, 0, 0, 0.06);
+  background-color: var(--studio-bg);
+  color: var(--studio-text);
+}
+
+html.theme-dark .chat-studio {
+  color-scheme: dark;
+  --studio-bg: #191a1c;
+  --studio-bg-raise: #202124;
+  --studio-panel: #26272b;
+  --studio-panel-soft: #2e2f34;
+  --studio-border: rgba(255, 255, 255, 0.11);
+  --studio-border-soft: rgba(255, 255, 255, 0.06);
+  --studio-text: #ececee;
+  --studio-text-soft: #a9a9af;
+  --studio-text-faint: #7c7c84;
+  --studio-accent: #818cf8;
+  --studio-accent-text: #a5b4fc;
+  --studio-accent-soft: rgba(129, 140, 248, 0.14);
+  --studio-user-bubble: #303136;
+  --studio-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.34);
+}
+
+/* Thanh cuộn riêng — mảnh, xám trung tính, KHÔNG lấy thanh cuộn cyan của
+   giao diện terminal (`.chat-messages-scroll`). */
+.chat-studio-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--studio-text-faint) 55%, transparent) transparent;
+}
+.chat-studio-scroll::-webkit-scrollbar { width: 10px; }
+.chat-studio-scroll::-webkit-scrollbar-track { background: transparent; }
+.chat-studio-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--studio-text-faint) 45%, transparent);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+.chat-studio-scroll::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--studio-text-faint) 75%, transparent);
+  background-clip: content-box;
+}
+
+/* ── Markdown câu trả lời trong giao diện studio ───────────────────
+   `ChatMarkdown` gắn sẵn màu của giao diện terminal (cyan + #f1f5f9)
+   thẳng vào class Tailwind. Trên nền SÁNG, #f1f5f9 là trắng trên trắng —
+   chữ biến mất. Đè lại ở đây thay vì sửa component: các selector dưới có
+   độ ưu tiên 0-2-x, cao hơn class đơn của Tailwind (0-1-0), nên thắng mà
+   giao diện terminal vẫn giữ nguyên màu cũ.
+   Riêng KHỐI CODE giữ nền tối ở cả hai theme — đúng như ChatGPT/Claude. */
+.chat-studio .chat-markdown {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--studio-text);
+}
+.chat-studio .chat-markdown h1,
+.chat-studio .chat-markdown h2,
+.chat-studio .chat-markdown h3,
+.chat-studio .chat-markdown strong,
+.chat-studio .chat-markdown th {
+  color: var(--studio-text);
+}
+.chat-studio .chat-markdown h1 { font-size: 1.25rem; }
+.chat-studio .chat-markdown h2 { font-size: 1.1rem; }
+.chat-studio .chat-markdown h3 { font-size: 1rem; }
+.chat-studio .chat-markdown a {
+  color: var(--studio-accent-text);
+}
+.chat-studio .chat-markdown a:hover {
+  color: var(--studio-accent-text);
+  text-decoration-thickness: 2px;
+}
+.chat-studio .chat-markdown :not(pre) > code {
+  background: var(--studio-panel-soft);
+  border-color: var(--studio-border);
+  color: var(--studio-text);
+  font-size: 0.85em;
+}
+.chat-studio .chat-markdown blockquote {
+  border-left-color: var(--studio-accent);
+  color: var(--studio-text-soft);
+}
+.chat-studio .chat-markdown hr {
+  border-color: var(--studio-border);
+}
+.chat-studio .chat-markdown table {
+  font-size: 0.875rem;
+}
+.chat-studio .chat-markdown > div:has(> table),
+.chat-studio .chat-markdown table th,
+.chat-studio .chat-markdown table td {
+  border-color: var(--studio-border);
+}
+.chat-studio .chat-markdown thead {
+  background: var(--studio-panel-soft);
+}
+
+/* ── Hình vẽ trong câu trả lời AI (khối ```svg) ──────────────────
+   Model xuất SVG với `stroke="currentColor"` nên nét thừa hưởng màu chữ
+   của bong bóng — một hình dùng được ở CẢ nền tối (terminal) lẫn nền sáng
+   (studio, theme sáng). Đó cũng là lý do KHÔNG đặt `color` ở đây.          */
+.chat-markdown .chat-figure {
+  border-color: rgba(34, 211, 238, 0.18);
+  background: rgba(13, 17, 23, 0.5);
+}
+.chat-studio .chat-markdown .chat-figure {
+  border-color: var(--studio-border);
+  background: var(--studio-panel);
+}
+.chat-markdown .chat-figure svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Hàng công cụ dưới mỗi câu trả lời (bản studio) ───────────────
+   Máy có chuột: ẩn đi cho khung chat sạch, rê vào mới hiện.
+   Máy CẢM ỨNG: hiện hẳn — không có hover thì `opacity:0` nghĩa là người
+   dùng điện thoại KHÔNG BAO GIỜ bấm được Chép / Tải / Đánh giá.
+   Vùng chạm cũng phải nới ra ≥40px, icon 14px thì ngón tay không trúng.  */
+@media (hover: hover) and (pointer: fine) {
+  .chat-studio .chat-actions { opacity: 0; }
+  .chat-studio .group:hover .chat-actions,
+  .chat-studio .chat-actions:focus-within { opacity: 1; }
+}
+@media (hover: none) {
+  .chat-studio .chat-actions { opacity: 1; }
+  .chat-studio .chat-actions button { min-width: 40px; min-height: 40px; }
+}
+
+/* Người dùng xin giảm chuyển động thì cắt mọi hoạt ảnh trong khung chat —
+   kể cả hoạt ảnh do framer-motion dựng bằng CSS. */
+@media (prefers-reduced-motion: reduce) {
+  .chat-studio *, .chat-studio *::before, .chat-studio *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

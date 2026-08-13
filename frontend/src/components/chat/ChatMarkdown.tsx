@@ -13,18 +13,67 @@
  *    highlighting, lazy-loaded so it stays out of initial JS (same pattern as
  *    social/CodeBlock).
  */
-import { useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import { Check, Copy } from 'lucide-react';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { sanitizeSvg } from '@/lib/safeSvg';
 
 const SyntaxHighlighter = dynamic(
   () => import('react-syntax-highlighter').then((m) => m.Prism),
   { ssr: false, loading: () => null },
 );
+
+/**
+ * Hình vẽ do AI xuất ra dưới dạng khối ```svg.
+ *
+ * Vì sao là SVG chứ không phải ảnh sinh bằng AI: hình học cần ĐÚNG — đúng điểm
+ * thẳng hàng, đúng góc vuông, đúng nhãn A/B/C nằm cạnh đúng đỉnh. Model sinh
+ * ảnh vẽ ra thứ "trông giống hình học" nhưng nhãn sai chỗ và đường không đi qua
+ * điểm cần đi qua. SVG là toạ độ, model tính được, và sai thì nhìn ra ngay.
+ *
+ * Chuỗi luôn đi qua `sanitizeSvg` — câu trả lời của model là dữ liệu không tin
+ * được, mà SVG thì chạy được script. Lọc hỏng thì hiện mã gốc chứ không im lặng.
+ */
+function SvgFigure({ source }: { source: string }) {
+  const [state, setState] = useState<{ svg: string | null; reason?: string }>({ svg: null, reason: 'ssr' });
+
+  // Câu trả lời chảy về từng mẩu: giữa chừng chuỗi mới là NỬA cái SVG
+  // (`<circle cx="220" cy="240" stro`) — đưa vào DOMParser thì tất nhiên
+  // "sai cú pháp", và người dùng thấy báo lỗi đỏ nhấp nháy giữa lúc máy còn
+  // đang vẽ. Chỉ dựng khi đã thấy thẻ đóng `</svg>`.
+  const done = /<\/svg\s*>\s*$/i.test(source.trim());
+
+  useEffect(() => {
+    if (!done) { setState({ svg: null, reason: 'drawing' }); return; }
+    setState(sanitizeSvg(source));
+  }, [source, done]);
+
+  if (!state.svg) {
+    if (state.reason === 'ssr') return null; // sẽ dựng ngay sau khi hydrate
+    if (state.reason === 'drawing') {
+      return (
+        <div className="chat-figure my-3 flex h-32 items-center justify-center rounded-xl border text-xs opacity-60">
+          Đang vẽ hình…
+        </div>
+      );
+    }
+    return (
+      <div className="my-2 rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-xs text-amber-500">
+        Không dựng được hình ({state.reason}).
+      </div>
+    );
+  }
+  return (
+    <figure className="chat-figure my-3 overflow-x-auto rounded-xl border p-3">
+      {/* eslint-disable-next-line react/no-danger */}
+      <div dangerouslySetInnerHTML={{ __html: state.svg }} />
+    </figure>
+  );
+}
 
 function CodeBlock({ language, code }: { language: string; code: string }) {
   const [copied, setCopied] = useState(false);
@@ -63,9 +112,58 @@ function CodeBlock({ language, code }: { language: string; code: string }) {
   );
 }
 
-export default function ChatMarkdown({ content }: { content: string }) {
+// ── Công thức toán (KaTeX) ────────────────────────────────────────
+// Cùng cách làm với phòng thi (`app/exam/ExamRichContent.tsx`): nạp KaTeX
+// LƯỜI (chỉ khi trong câu trả lời thật sự có dấu công thức) rồi dựng thẳng
+// trên DOM đã mount. Không thêm remark-math/rehype-katex vì `katex` đã có sẵn
+// trong dự án — thêm hai gói nữa chỉ để làm việc y hệt là rủi ro không cần
+// (mỗi dependency mới là một lần Docker build có thể vỡ).
+const MATH_RE = /\$|\\\(|\\\[/;
+const MATH_DELIMS = [
+  { left: '$$', right: '$$', display: true },
+  { left: '\\[', right: '\\]', display: true },
+  { left: '\\(', right: '\\)', display: false },
+  { left: '$', right: '$', display: false },
+];
+
+/**
+ * `renderMath = false` khi câu trả lời ĐANG chảy về: mỗi token là một lần
+ * react-markdown vẽ lại, mà KaTeX thì thay hẳn nút chữ bằng cây <span> của
+ * nó — hai bên giẫm chân nhau sẽ ra công thức nhấp nháy rồi biến mất. Dựng
+ * một lần lúc câu trả lời đã xong là đủ và chắc.
+ *
+ * `memo` cũng vì lý do đó: bấm nút Chép/Tải làm bong bóng vẽ lại, nếu
+ * ChatMarkdown vẽ lại theo thì React khôi phục lại nút chữ gốc và công thức
+ * vừa dựng biến mất.
+ */
+function ChatMarkdown({ content, renderMath = true }: { content: string; renderMath?: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !renderMath || !MATH_RE.test(content)) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        await import('katex/dist/katex.min.css' as unknown as string);
+        const mod = await import('katex/dist/contrib/auto-render.mjs' as unknown as string);
+        const renderMathInElement = (mod.default || mod) as (
+          e: HTMLElement, o: Record<string, unknown>,
+        ) => void;
+        if (cancelled || !ref.current) return;
+        renderMathInElement(ref.current, {
+          delimiters: MATH_DELIMS,
+          throwOnError: false,
+          // Bỏ qua khối code: `$` trong code là ký tự shell/PHP, không phải công thức.
+          ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+        });
+      } catch { /* nạp lỗi thì để nguyên chữ LaTeX thô, không làm hỏng câu trả lời */ }
+    })();
+    return () => { cancelled = true; };
+  }, [content, renderMath]);
+
   return (
-    <div className="chat-markdown break-words">
+    <div ref={ref} className="chat-markdown break-words">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkBreaks]}
         components={{
@@ -79,6 +177,10 @@ export default function ChatMarkdown({ content }: { content: string }) {
                   {children}
                 </code>
               );
+            }
+            // ```svg → dựng thành HÌNH, không phải khối mã.
+            if ((match?.[1] ?? '').toLowerCase() === 'svg' || /^<svg[\s>]/i.test(text)) {
+              return <SvgFigure source={text} />;
             }
             return <CodeBlock language={match?.[1] ?? ''} code={text} />;
           },
@@ -147,3 +249,5 @@ export default function ChatMarkdown({ content }: { content: string }) {
     </div>
   );
 }
+
+export default memo(ChatMarkdown);

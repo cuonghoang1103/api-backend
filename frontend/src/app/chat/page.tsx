@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2, X } from 'lucide-react';
+import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2, X, Phone } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
@@ -15,6 +15,9 @@ import ChatInput from '@/components/chat/ChatInput';
 import SuggestedPrompts from '@/components/chat/SuggestedPrompts';
 import MatrixRain from '@/components/chat/MatrixRain';
 import QuotaIndicator from '@/components/chat/QuotaIndicator';
+import ChatSkinToggle from '@/components/chat/ChatSkinToggle';
+import VoiceCallOverlay from '@/components/chat/VoiceCallOverlay';
+import { useChatSkinStore } from '@/store/chatSkinStore';
 import LottieClient from '@/components/ui/LottieClient';
 import type { ChatMessage, ChatSession } from '@/types';
 import { findStaticResponse, getDefaultGreeting, getFallbackResponse } from '@/lib/ai-static-responses';
@@ -30,6 +33,56 @@ function RobotAvatar({ isStreaming, robotData }: { isStreaming: boolean; robotDa
     <div className="relative w-11 h-11 rounded-2xl overflow-hidden flex items-center justify-center bg-[#0d1117] border border-[#22d3ee]/20 shadow-[0_0_16px_rgba(34,211,238,0.15)]">
       <LottieClient animationData={robotData} loop autoplay style={{ width: '100%', height: '100%' }} />
     </div>
+  );
+}
+
+// ── Dấu hiệu nhận diện của bản Studio ───────────────────────────────
+// Ô vuông bo tròn, gradient chàm→tím, chữ "C" của cuongthai.com. Dùng ở
+// thanh đầu trang và màn hình chào, thay cho robot Lottie nền tối (robot
+// được dựng cho nền #0d1117 nên trên theme sáng nó lạc quẻ).
+function StudioMark({ size = 'sm' }: { size?: 'sm' | 'lg' }) {
+  const isLg = size === 'lg';
+  return (
+    <div
+      className={`flex shrink-0 items-center justify-center bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] font-bold text-white ${
+        isLg
+          ? 'h-14 w-14 rounded-2xl text-xl shadow-[0_8px_24px_rgba(99,102,241,0.32)]'
+          : 'h-9 w-9 rounded-xl text-[15px] shadow-[0_2px_10px_rgba(99,102,241,0.28)]'
+      }`}
+    >
+      C
+    </div>
+  );
+}
+
+// ── Màn hình chào bản Studio ────────────────────────────────────────
+function StudioWelcome({ prompts, onSelect, isLoading }: {
+  prompts: { id: string; label: string; icon: string; prompt: string }[];
+  onSelect: (p: string) => void;
+  isLoading: boolean;
+}) {
+  return (
+    <motion.div
+      key="welcome-studio"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.35 }}
+      // Cùng bề rộng với cột tin nhắn và ô soạn (max-w-3xl) — ba khối lệch
+      // nhau vài chục pixel là thứ mắt bắt được ngay dù không gọi tên ra.
+      className="mx-auto flex h-full w-full max-w-3xl flex-col items-center justify-center px-4 text-center"
+    >
+      <StudioMark size="lg" />
+      <h2 className="mt-5 text-2xl font-semibold tracking-tight text-[color:var(--studio-text)] sm:text-[28px]">
+        Xin chào — tôi giúp gì được cho bạn?
+      </h2>
+      <p className="mb-8 mt-2.5 max-w-md text-sm leading-6 text-[color:var(--studio-text-soft)]">
+        CuongMini là trợ lý AI của <span className="font-medium text-[color:var(--studio-text)]">cuongthai.com</span> —
+        hỏi về dự án, khoá học, bài viết, hoặc bất cứ thứ gì bạn đang làm dở.
+      </p>
+
+      <SuggestedPrompts prompts={prompts} onSelect={onSelect} isLoading={isLoading} skin="studio" />
+    </motion.div>
   );
 }
 
@@ -78,6 +131,17 @@ export default function ChatPage() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
+
+  // ── Giao diện đang chọn ────────────────────────────────────────
+  // Lựa chọn nằm trong localStorage, chỉ về SAU khi hydrate — nên
+  // trước lúc `mounted` phải render bản terminal (bản mặc định, cũng
+  // là thứ server render ra), nếu không HTML hai bên sẽ lệch nhau.
+  const persistedSkin = useChatSkinStore((s) => s.skin);
+  const skin = mounted ? persistedSkin : 'terminal';
+  const isStudio = skin === 'studio';
+
+  /** Cuộc gọi bằng giọng — xem `VoiceCallOverlay`. */
+  const [callOpen, setCallOpen] = useState(false);
 
   // Build version marker. This is a fixed ribbon that
   // shows the current commit hash + build time. It is
@@ -293,12 +357,22 @@ export default function ChatPage() {
     }
   }, [removeSession]);
 
-  const sendMessage = useCallback(async (text: string, forceStatic: boolean = false, attach?: { images?: string[]; documents?: string[]; documentNames?: string[] }) => {
+  /**
+   * Gửi một lượt hỏi. TRẢ VỀ câu trả lời đã hoàn tất (chuỗi rỗng nếu không có)
+   * — chế độ GỌI cần chính chuỗi đó để đọc lên; các nơi gọi khác bỏ qua giá trị
+   * trả về nên chữ ký cũ vẫn dùng được nguyên.
+   */
+  const sendMessage = useCallback(async (
+    text: string,
+    forceStatic: boolean = false,
+    attach?: { images?: string[]; documents?: string[]; documentNames?: string[] },
+    opts?: { voice?: boolean },
+  ): Promise<string> => {
     const images = attach?.images;
     const documents = attach?.documents;
     const documentNames = attach?.documentNames;
     const hasAttach = (images?.length ?? 0) > 0 || (documents?.length ?? 0) > 0;
-    if ((!text.trim() && !hasAttach) || isStreaming) return;
+    if ((!text.trim() && !hasAttach) || isStreaming) return '';
 
     // Determine sessionId: use current, or create a new local one
     let sessionId = currentSessionId;
@@ -381,7 +455,7 @@ export default function ChatPage() {
 
         setRobotEmotion('idle');
         setStreaming(false);
-        return;
+        return responseContent;
       }
 
       const controller = new AbortController();
@@ -393,7 +467,7 @@ export default function ChatPage() {
           'Content-Type': 'application/json',
           ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
         },
-        body: JSON.stringify({ message: text.trim(), sessionId: sessionId || undefined, topK: 5, model: useChatModelStore.getState().modelId, history: historyPayload, images: images && images.length > 0 ? images : undefined, documents: documents && documents.length > 0 ? documents : undefined }),
+        body: JSON.stringify({ message: text.trim(), sessionId: sessionId || undefined, topK: 5, model: useChatModelStore.getState().modelId, history: historyPayload, images: images && images.length > 0 ? images : undefined, documents: documents && documents.length > 0 ? documents : undefined, documentNames: documentNames && documentNames.length > 0 ? documentNames : undefined, voice: opts?.voice === true }),
       });
 
       if (!res.ok) throw new Error('Stream failed');
@@ -543,10 +617,11 @@ export default function ChatPage() {
       } else {
         setRobotEmotion('idle');
       }
+      return assistantContent;
     } catch (err) {
       // User pressed Stop — keep the partial reply, no error UI.
       if (err instanceof DOMException && err.name === 'AbortError') {
-        return;
+        return '';
       }
       console.error('Chat error:', err);
       const staticResp = findStaticResponse(text);
@@ -566,6 +641,7 @@ export default function ChatPage() {
         setRobotEmotion('sad');
       }
       removePendingMessage(sessionId, tempId);
+      return '';
     } finally {
       abortRef.current = null;
       setStreaming(false);
@@ -608,9 +684,16 @@ export default function ChatPage() {
   }, [addSession, setCurrentSessionId, clearMessages, setSuggestedPrompts, setRobotEmotion, setLimitedMode]);
 
   return (
-    <div className="force-dark relative min-h-dvh w-full overflow-hidden cyber-grid-bg pt-16">
-      {/* Matrix rain background */}
-      <MatrixRain />
+    <div
+      className={
+        isStudio
+          ? 'chat-studio relative min-h-dvh w-full overflow-hidden pt-16'
+          : 'force-dark relative min-h-dvh w-full overflow-hidden cyber-grid-bg pt-16'
+      }
+    >
+      {/* Nền mưa Matrix + lưới cyber: GIỮ NGUYÊN cho bản terminal.
+          Bản studio bỏ nền động để chữ đọc êm mắt hơn. */}
+      {!isStudio && <MatrixRain />}
 
       {/* ── Chat sessions aside (floating panel) ──────────
           Hidden by default. Slides in from the left when
@@ -648,23 +731,30 @@ export default function ChatPage() {
             exit={{ opacity: 0, x: -32, scale: 0.96 }}
             transition={{ type: 'spring', stiffness: 380, damping: 36, mass: 0.95 }}
             onMouseLeave={() => setChatAsideHovered(null)}
-            className="fixed z-[58] top-3 bottom-3 left-3 w-[288px] flex flex-col
-              bg-[#0d1117]/85 backdrop-blur-2xl
-              border border-white/[0.08]
-              rounded-3xl
-              shadow-[0_24px_80px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.04),inset_0_1px_0_rgba(255,255,255,0.06)]
-              overflow-hidden"
+            className={
+              isStudio
+                ? `fixed z-[58] top-3 bottom-3 left-3 w-[288px] flex flex-col
+                   bg-[var(--studio-panel)] border border-[color:var(--studio-border)]
+                   rounded-3xl overflow-hidden`
+                : `fixed z-[58] top-3 bottom-3 left-3 w-[288px] flex flex-col
+                   bg-[#0d1117]/85 backdrop-blur-2xl
+                   border border-white/[0.08]
+                   rounded-3xl
+                   shadow-[0_24px_80px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.04),inset_0_1px_0_rgba(255,255,255,0.06)]
+                   overflow-hidden`
+            }
+            style={isStudio ? { boxShadow: 'var(--studio-shadow)' } : undefined}
             data-build-tag="chat-aside-v3-floating"
           >
             {/* Aside header — pt-20 leaves room for the
                 chat-aside toggle button at top-4 in the
                 same corner. */}
             <div className="shrink-0 px-5 pt-20 pb-3">
-              <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-text-muted">
+              <p className={`text-[10px] uppercase tracking-[0.18em] text-text-muted ${isStudio ? '' : 'font-mono'}`}>
                 chat
               </p>
               <p className="text-lg font-semibold text-text-primary mt-1">
-                Sessions
+                {isStudio ? 'Cuộc trò chuyện' : 'Sessions'}
               </p>
             </div>
 
@@ -676,23 +766,35 @@ export default function ChatPage() {
                   setSuggestedPrompts(getContextualPrompts(''));
                   setChatAsideOpen(false);
                 }}
-                className="w-full flex items-center gap-2 px-4 py-2.5
-                  bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6]
-                  text-white text-sm font-mono font-semibold rounded-xl
-                  hover:opacity-90 transition-opacity
-                  shadow-[0_0_16px_rgba(34,211,238,0.2)]"
+                className={
+                  isStudio
+                    ? `w-full flex items-center gap-2 px-4 py-2.5 rounded-xl
+                       bg-[var(--studio-accent)] text-white text-sm font-medium
+                       hover:opacity-90 transition-opacity`
+                    : `w-full flex items-center gap-2 px-4 py-2.5
+                       bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6]
+                       text-white text-sm font-mono font-semibold rounded-xl
+                       hover:opacity-90 transition-opacity
+                       shadow-[0_0_16px_rgba(34,211,238,0.2)]`
+                }
               >
                 <Plus className="w-4 h-4" />
-                <span>&gt; new_session()</span>
+                <span>{isStudio ? 'Cuộc trò chuyện mới' : '> new_session()'}</span>
               </button>
             </div>
 
             {/* Session list — magnify on hover. */}
             <div className="flex-1 overflow-y-auto px-3 pb-3">
               {sessions.length === 0 && (
-                <p className="text-[#64748b] text-xs text-center py-8 px-2 font-mono">
-                  <span className="text-[#22d3ee]">//</span> no sessions found
-                </p>
+                isStudio ? (
+                  <p className="text-text-muted text-xs text-center py-8 px-2">
+                    Chưa có cuộc trò chuyện nào
+                  </p>
+                ) : (
+                  <p className="text-[#64748b] text-xs text-center py-8 px-2 font-mono">
+                    <span className="text-[#22d3ee]">//</span> no sessions found
+                  </p>
+                )
               )}
               {sessions.map((session, idx) => {
                 const isCurrent = currentSessionId === session.sessionId;
@@ -802,13 +904,22 @@ export default function ChatPage() {
         whileHover={{ scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
         transition={{ type: 'spring', stiffness: 320, damping: 22, mass: 0.55 }}
-        className="fixed top-4 left-16 z-[70] w-11 h-11 rounded-2xl
-          flex items-center justify-center
-          bg-[#0d1117]/85 backdrop-blur-2xl
-          border border-white/10
-          shadow-[0_4px_24px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)]
-          text-text-primary
-          focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22d3ee]/40"
+        className={
+          isStudio
+            ? `fixed top-4 left-16 z-[70] w-11 h-11 rounded-2xl
+               flex items-center justify-center
+               bg-[var(--studio-panel)] border border-[color:var(--studio-border)]
+               text-[color:var(--studio-text)]
+               focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]`
+            : `fixed top-4 left-16 z-[70] w-11 h-11 rounded-2xl
+               flex items-center justify-center
+               bg-[#0d1117]/85 backdrop-blur-2xl
+               border border-white/10
+               shadow-[0_4px_24px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)]
+               text-text-primary
+               focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22d3ee]/40`
+        }
+        style={isStudio ? { boxShadow: 'var(--studio-shadow)' } : undefined}
       >
         <AnimatePresence mode="wait" initial={false}>
           {chatAsideOpen ? (
@@ -847,10 +958,87 @@ export default function ChatPage() {
           internally (flex-1 overflow-y-auto) and the composer stays visible
           above the mobile bottom nav (--app-chrome-bottom = 0 on desktop). */}
       <main
-        className="pt-16 flex flex-col h-[calc(100dvh-4rem-var(--app-chrome-bottom))]"
+        className={
+          isStudio
+            // Bản studio bỏ pt-16 THỨ HAI: div gốc đã chừa 4rem cho Navbar,
+            // thêm 4rem nữa chỉ tạo một dải trống dưới navbar (thấy rõ ở bản
+            // terminal). Bản terminal giữ nguyên để không đổi bố cục cũ.
+            ? 'flex flex-col h-[calc(100dvh-4rem-var(--app-chrome-bottom))]'
+            : 'pt-16 flex flex-col h-[calc(100dvh-4rem-var(--app-chrome-bottom))]'
+        }
         style={keyboardInset > 0 ? { height: `calc(100dvh - 4rem - ${keyboardInset}px)` } : undefined}
       >
-        {/* Cyber Terminal Header */}
+        {/* ══ Thanh đầu trang — bản STUDIO ══════════════════════════ */}
+        {isStudio ? (
+          <motion.header
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-shrink-0 items-center gap-3 border-b border-[color:var(--studio-border-soft)] bg-[var(--studio-bg)]/90 px-4 py-2.5 backdrop-blur-md sm:px-6"
+          >
+            <StudioMark />
+            <div className="min-w-0 flex-1">
+              <h1 className="flex items-center gap-2 text-[15px] font-semibold leading-tight text-[color:var(--studio-text)]">
+                CuongThai AI
+                {limitedMode && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-medium text-amber-600">
+                    <AlertCircle className="h-3 w-3" />
+                    Tiết kiệm
+                  </span>
+                )}
+              </h1>
+              <p className="mt-0.5 flex items-center gap-1.5 truncate text-[11px] text-[color:var(--studio-text-faint)]">
+                <span>cuongthai.com</span>
+                <span aria-hidden>·</span>
+                <span>{isStreaming ? 'đang trả lời…' : 'sẵn sàng'}</span>
+                <span aria-hidden>·</span>
+                <span>{isAuthenticated ? 'đã đăng nhập' : 'khách'}</span>
+                {backendConnected === false && (
+                  <>
+                    <span aria-hidden>·</span>
+                    <span className="inline-flex items-center gap-1 text-rose-500">
+                      <WifiOff className="h-3 w-3" /> mất kết nối
+                    </span>
+                  </>
+                )}
+              </p>
+            </div>
+
+            {limitedMode && (
+              <button
+                onClick={() => setLimitedMode(false, '')}
+                className="hidden items-center gap-1 rounded-full border border-[color:var(--studio-border)] px-2.5 py-1 text-[11px] text-[color:var(--studio-text-soft)] transition-colors hover:text-[color:var(--studio-text)] sm:inline-flex"
+              >
+                <RefreshCw className="h-3 w-3" />
+                Thử lại AI
+              </button>
+            )}
+
+            {/* Gọi cho CuongMini — nói thay vì gõ */}
+            <button
+              type="button"
+              onClick={() => setCallOpen(true)}
+              title="Gọi cho CuongMini"
+              aria-label="Gọi cho CuongMini"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-[color:var(--studio-text-soft)] transition-colors hover:bg-[var(--studio-panel-soft)] hover:text-[color:var(--studio-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]"
+            >
+              <Phone className="h-4 w-4" />
+            </button>
+
+            {/* Nút đổi giao diện — ngay cạnh nút về trang chủ */}
+            <ChatSkinToggle tone="studio" />
+
+            <Link
+              href="/"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-[color:var(--studio-text-soft)] transition-colors hover:bg-[var(--studio-panel-soft)] hover:text-[color:var(--studio-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]"
+              title="Về trang chủ"
+            >
+              <Home className="h-4 w-4" />
+            </Link>
+
+            <QuotaIndicator compact />
+          </motion.header>
+        ) : (
+        /* ══ Thanh đầu trang — bản TERMINAL (bản gốc) ══════════════ */
         <motion.header
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -914,10 +1102,24 @@ export default function ChatPage() {
             </div>
           </div>
 
+          {/* Gọi cho CuongMini — nói thay vì gõ */}
+          <button
+            type="button"
+            onClick={() => setCallOpen(true)}
+            title="Gọi cho CuongMini"
+            aria-label="Gọi cho CuongMini"
+            className="flex items-center justify-center w-9 h-9 rounded-xl text-[#64748b] hover:text-[#22d3ee] hover:bg-[#22d3ee]/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22d3ee]/40"
+          >
+            <Phone className="w-4 h-4" />
+          </button>
+
+          {/* Nút đổi giao diện — ngay cạnh nút về trang chủ */}
+          <ChatSkinToggle tone="terminal" />
+
           {/* Back to home */}
           <Link
             href="/"
-            className="flex items-center justify-center w-9 h-9 rounded-xl hover:bg-white/5 text-[#64748b] hover:text-[#f8fafc] transition-colors"
+            className="flex items-center justify-center w-9 h-9 rounded-xl hover:bg-white/5 text-[#64748b] hover:text-[#f8fafc] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22d3ee]/40"
             title="Back to home"
           >
             <Home className="w-4 h-4" />
@@ -926,9 +1128,16 @@ export default function ChatPage() {
           {/* Quota indicator (Mục #4) */}
           <QuotaIndicator compact />
         </motion.header>
+        )}
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto chat-scanlines chat-messages-scroll">
+        <div
+          className={
+            isStudio
+              ? 'flex-1 overflow-y-auto chat-studio-scroll'
+              : 'flex-1 overflow-y-auto chat-scanlines chat-messages-scroll'
+          }
+        >
           {!mounted ? (
             <div className="flex items-center justify-center h-full">
               <div className="animate-pulse text-[#64748b] font-mono">[ loading systems... ]</div>
@@ -936,18 +1145,28 @@ export default function ChatPage() {
           ) : (
             <AnimatePresence mode="popLayout">
               {currentMessages.length === 0 ? (
-                <ChatWelcome
-                  key="welcome"
-                  prompts={suggestedPrompts}
-                  onSelect={handlePromptSelect}
-                  isLoading={isStreaming}
-                  robotData={robotData ?? undefined}
-                />
+                isStudio ? (
+                  <StudioWelcome
+                    key="welcome"
+                    prompts={suggestedPrompts}
+                    onSelect={handlePromptSelect}
+                    isLoading={isStreaming}
+                  />
+                ) : (
+                  <ChatWelcome
+                    key="welcome"
+                    prompts={suggestedPrompts}
+                    onSelect={handlePromptSelect}
+                    isLoading={isStreaming}
+                    robotData={robotData ?? undefined}
+                  />
+                )
               ) : (
                 <ChatMessages
                   key="messages"
                   messages={currentMessages}
                   isStreaming={isStreaming}
+                  skin={skin}
                 />
               )}
             </AnimatePresence>
@@ -955,8 +1174,21 @@ export default function ChatPage() {
         </div>
 
         {/* Input — always at bottom */}
-        <ChatInput onSend={(msg, attach) => sendMessage(msg, false, attach)} isStreaming={isStreaming} onStop={stopStreaming} />
+        <ChatInput onSend={(msg, attach) => { void sendMessage(msg, false, attach); }} isStreaming={isStreaming} onStop={stopStreaming} skin={skin} />
       </main>
+
+      {/* Cuộc gọi bằng giọng — mỗi lượt vẫn đi qua `sendMessage` nên nội dung
+          được lưu vào đúng phiên chat đang mở. */}
+      <AnimatePresence>
+        {callOpen && (
+          <VoiceCallOverlay
+            open={callOpen}
+            onClose={() => setCallOpen(false)}
+            skin={skin}
+            onAsk={(text) => sendMessage(text, false, undefined, { voice: true })}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Build tag ribbon. Hidden by default, visible when
           the URL has ?build=1. Press 'B' anywhere on the

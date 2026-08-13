@@ -21,7 +21,8 @@ const TIER_COLOR = {
   max: 'text-amber-300',
 } as const;
 
-export default function ModelPicker({ disabled = false }: { disabled?: boolean }) {
+export default function ModelPicker({ disabled = false, variant = 'terminal' }: { disabled?: boolean; variant?: 'terminal' | 'studio' }) {
+  const isStudio = variant === 'studio';
   const { modelId, setModelId } = useChatModelStore();
   const { isPro } = usePro();
   const router = useRouter();
@@ -48,7 +49,11 @@ export default function ModelPicker({ disabled = false }: { disabled?: boolean }
         onClick={() => !disabled && setOpen((s) => !s)}
         disabled={disabled}
         title="Chọn model AI"
-        className={`inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium transition-colors hover:bg-white/10 disabled:opacity-50 ${TIER_COLOR[active.tier]}`}
+        className={
+          isStudio
+            ? 'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium text-[color:var(--studio-text-soft)] transition-colors hover:bg-[var(--studio-panel-soft)] hover:text-[color:var(--studio-text)] disabled:opacity-50'
+            : `inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium transition-colors hover:bg-white/10 disabled:opacity-50 ${TIER_COLOR[active.tier]}`
+        }
       >
         <ActiveIcon className="h-3.5 w-3.5" />
         <span>{active.label}</span>
@@ -56,8 +61,15 @@ export default function ModelPicker({ disabled = false }: { disabled?: boolean }
       </button>
 
       {open && (
-        <div className="absolute bottom-full left-0 z-[120] mb-2 w-64 overflow-hidden rounded-xl border border-white/10 bg-[#0d1424] shadow-2xl shadow-black/50">
-          <div className="flex items-center gap-1.5 border-b border-white/5 px-3 py-2 text-[11px] text-slate-500">
+        <div
+          className={
+            isStudio
+              ? 'absolute bottom-full left-0 z-[120] mb-2 w-64 overflow-hidden rounded-xl border border-[color:var(--studio-border)] bg-[var(--studio-panel)]'
+              : 'absolute bottom-full left-0 z-[120] mb-2 w-64 overflow-hidden rounded-xl border border-white/10 bg-[#0d1424] shadow-2xl shadow-black/50'
+          }
+          style={isStudio ? { boxShadow: 'var(--studio-shadow)' } : undefined}
+        >
+          <div className={`flex items-center gap-1.5 border-b px-3 py-2 text-[11px] ${isStudio ? 'border-[color:var(--studio-border-soft)] text-[color:var(--studio-text-faint)]' : 'border-white/5 text-slate-500'}`}>
             <Sparkles className="h-3 w-3" /> Chọn model
           </div>
           {CHAT_MODELS.map((m) => {
@@ -73,16 +85,20 @@ export default function ModelPicker({ disabled = false }: { disabled?: boolean }
                   setModelId(m.id);
                   setOpen(false);
                 }}
-                className={`flex w-full items-start gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-white/5 ${isActive ? 'bg-white/[0.04]' : ''}`}
+                className={
+                  isStudio
+                    ? `flex w-full items-start gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-[var(--studio-panel-soft)] ${isActive ? 'bg-[var(--studio-accent-soft)]' : ''}`
+                    : `flex w-full items-start gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-white/5 ${isActive ? 'bg-white/[0.04]' : ''}`
+                }
               >
                 <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${TIER_COLOR[m.tier]}`} />
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5 text-sm text-white">
+                  <div className={`flex items-center gap-1.5 text-sm ${isStudio ? 'text-[color:var(--studio-text)]' : 'text-white'}`}>
                     {m.label}
-                    {m.tier === 'default' && <span className="rounded bg-white/10 px-1 py-0.5 text-[9px] text-slate-400">MẶC ĐỊNH</span>}
-                    {locked && <span className="inline-flex items-center gap-0.5 rounded bg-amber-400/15 px-1 py-0.5 text-[9px] font-semibold text-amber-300"><Crown className="h-2.5 w-2.5" /> PRO</span>}
+                    {m.tier === 'default' && <span className={`rounded px-1 py-0.5 text-[9px] ${isStudio ? 'bg-[var(--studio-panel-soft)] text-[color:var(--studio-text-faint)]' : 'bg-white/10 text-slate-400'}`}>MẶC ĐỊNH</span>}
+                    {locked && <span className="inline-flex items-center gap-0.5 rounded bg-amber-400/15 px-1 py-0.5 text-[9px] font-semibold text-amber-500"><Crown className="h-2.5 w-2.5" /> PRO</span>}
                   </div>
-                  <div className="text-[11px] text-slate-500">{locked ? 'Nâng cấp Pro để mở khoá' : m.desc}</div>
+                  <div className={`text-[11px] ${isStudio ? 'text-[color:var(--studio-text-faint)]' : 'text-slate-500'}`}>{locked ? 'Nâng cấp Pro để mở khoá' : m.desc}</div>
                 </div>
                 {locked ? <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-500" /> : isActive ? <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" /> : null}
               </button>

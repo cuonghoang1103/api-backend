@@ -145,7 +145,7 @@ function ChatBubble({ msg, isLastAssistant, isStreaming }: {
         }`}>
           {!isUser ? (
             <div className="markdown-content text-xs overflow-hidden">
-              <ChatMarkdown content={msg.content} />
+              <ChatMarkdown content={msg.content} renderMath={!(isLastAssistant && isStreaming)} />
             </div>
           ) : (
             <span className="whitespace-pre-wrap">{msg.content}</span>

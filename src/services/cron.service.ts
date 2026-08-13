@@ -260,7 +260,14 @@ export function startCronJobs(): void {
   //   ingest   every 2 hours
   //   bulletin 07:30 VN  = 00:30 UTC
   //   sweep    every 5 min, publishes anything whose scheduled time has passed
-  const newsEnabled = String(process.env.TECH_NEWS_AUTOPOST ?? 'true').toLowerCase() !== 'false';
+  // MẶC ĐỊNH TẮT (đổi 11/08/2026). Trước đây mặc định là BẬT, nghĩa là chỉ cần
+  // dựng máy mới hoặc quên một biến môi trường là mỗi 07:30 sáng lại có một bài
+  // báo được sinh ra và tính tiền — không ai đặt lệnh, không ai đọc log.
+  //
+  // Việc chạy nền phải là thứ người ta CHỌN bật, không phải thứ phải nhớ tắt.
+  // Bật lại: TECH_NEWS_AUTOPOST=true trong /opt/cuonghoangdev/.env rồi dựng lại
+  // container. Nút "chạy ngay" của admin không bị ảnh hưởng.
+  const newsEnabled = String(process.env.TECH_NEWS_AUTOPOST ?? 'false').toLowerCase() === 'true';
 
   cron.schedule('15 */2 * * *', async () => {
     if (!newsEnabled) return;
@@ -336,7 +343,11 @@ export function startCronJobs(): void {
   `Stale PENDING order cleanup every 15 min (TTL ${ttlMinutes}m)`,
   `Dashboard archive daily @ 04:00 Vietnam (archive ${archiveDays}d, purge ${purgeDays}d, completed-expiry ${COMPLETED_TASK_RETENTION_DAYS}d)`,
   'Orphaned upload cleanup every 4 hours (24h TTL, 50/batch)',
-  'Tech news ingest every 2h; bulletin 07:30 VN; scheduled-publish sweep every 5 min',
+  // Nói đúng trạng thái THẬT. Dòng này từng ghi cứng "bulletin 07:30 VN" kể cả
+  // khi job đã tắt — đọc log rồi tin là nó đang chạy thì còn tệ hơn không log.
+  newsEnabled
+    ? 'Tech news ingest every 2h; bulletin 07:30 VN; scheduled-publish sweep every 5 min'
+    : 'Tech news: TẮT (TECH_NEWS_AUTOPOST chưa bật) — chỉ còn scheduled-publish sweep, không gọi AI',
   'Maker Lab housekeeping hourly (telemetry prune, stale devices, expired commands)',
   ],
   });

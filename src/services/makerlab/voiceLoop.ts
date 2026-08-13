@@ -1112,7 +1112,7 @@ async function thinkAndSpeak(
       const say = partialSay(raw);
       if (say.length <= emitted) continue;
 
-      const { sentences, consumed } = takeSentences(say, emitted);
+      const { sentences, consumed } = takeSentences(say, emitted, !daGuiMauDau);
       if (!sentences.length) continue;
 
       if (seq === null) {
@@ -1291,7 +1291,11 @@ function partialSay(raw: string): string {
  * Chỉ cắt ở dấu kết câu CÓ khoảng trắng theo sau, để "3.5 giây" hay
  * "gpt-5.4-mini" không bị xé đôi giữa con số.
  */
-function takeSentences(text: string, from: number): { sentences: string[]; consumed: number } {
+function takeSentences(
+  text: string,
+  from: number,
+  mauDau = false,
+): { sentences: string[]; consumed: number } {
   const rest = text.slice(from);
   const out: string[] = [];
   let consumed = 0;
@@ -1305,6 +1309,53 @@ function takeSentences(text: string, from: number): { sentences: string[]; consu
       consumed = end;
     }
   }
+
+  /**
+   * MẨU ĐẦU TIÊN được cắt ở DẤU PHẨY, không đợi hết câu.
+   *
+   * ⚠️ ĐÂY LÀ ĐÒN DUY NHẤT CÒN LẠI CHO ĐỘ TRỄ MỞ MIỆNG, VÌ MODEL VÔ CAN.
+   *
+   * Đo 13/08/2026 trên chính LLM máy nhà, đúng kiểu production gọi
+   * (streaming + json_object), ba vòng:
+   *
+   *   chữ đầu 99-316 ms · CÂU đầu 272-569 ms · trọn câu trả lời 396-965 ms
+   *
+   * Model ra trọn một câu trong DƯỚI 0,6 giây. Mà robot mất 9,1-9,5 giây
+   * mới phát ra tiếng. Toàn bộ phần chênh nằm ở máy đọc sinh mẩu đầu.
+   *
+   * Mà thời gian sinh tỉ lệ với ĐỘ DÀI mẩu: 40 ký tự → 1,7 giây; 120 →
+   * 3,7 giây. Nên mẩu đầu càng ngắn thì miệng càng mở sớm, và phần còn
+   * lại vẫn kịp về vì bo đang bận phát mẩu đầu.
+   *
+   * Chỉ áp cho mẩu ĐẦU. Cắt ở dấu phẩy suốt lượt thì nhiều mối nối, và
+   * mối nối mới là thứ nghe thành "giật" — bài học đã trả giá rồi.
+   */
+  if (mauDau && !out.length) {
+    // Ưu tiên cắt ở ranh giới mệnh đề gần nhất trong tầm — nghe tự nhiên
+    // hơn hẳn cắt giữa chừng.
+    const NGAN_NHAT = 22;
+    const DAI_NHAT = 60;
+    let cat = -1;
+    const re2 = /[,;:—–]\s/g;
+    let m2: RegExpExecArray | null;
+    while ((m2 = re2.exec(rest))) {
+      if (m2.index + 1 >= NGAN_NHAT && m2.index + 1 <= DAI_NHAT) cat = m2.index + 1;
+      if (m2.index + 1 > DAI_NHAT) break;
+    }
+    // Không có ranh giới nào thì cắt ở KHOẢNG TRẮNG cuối cùng trong tầm.
+    // Chỗ cắt hơi lửng, nhưng nó chỉ là mẩu ĐẦU và đổi lại là miệng mở
+    // sớm hơn nhiều giây — người nghe nhận ra quãng im, không nhận ra
+    // một dấu phẩy thiếu.
+    if (cat < 0 && rest.length >= DAI_NHAT) {
+      const sp = rest.lastIndexOf(' ', DAI_NHAT);
+      if (sp >= NGAN_NHAT) cat = sp;
+    }
+    if (cat >= NGAN_NHAT) {
+      const piece = rest.slice(0, cat).trim();
+      if (piece.length >= NGAN_NHAT) return { sentences: [piece], consumed: cat };
+    }
+  }
+
   return { sentences: out, consumed };
 }
 

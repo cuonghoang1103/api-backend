@@ -889,6 +889,84 @@ def tts_stream(payload: Dict[str, Any]):
         )
 
     def sinh():
+        """Sinh trong LUỒNG RIÊNG, đẩy qua hàng đợi CÓ TRẦN.
+
+        ⚠️ CHỖ NÓ TREO CHÍNH LÀ `yield`, KHÔNG PHẢI VÒNG LẶP.
+
+        Bản trước giữ khoá rồi `yield` thẳng cho HTTP. Python generator
+        dừng ngay tại `yield` cho tới khi người tiêu thụ kéo tiếp — nên
+        khi Node hết hạn chờ và bỏ đi, KHÔNG ai kéo nữa, bộ sinh nằm
+        chết tại `yield`, và khoá bị giữ vĩnh viễn.
+
+        Tôi đã thử vá bằng cách kiểm hạn giờ ngay TRƯỚC `yield`. Không
+        ăn — vì một khi đã treo ở `yield` thì vòng lặp không bao giờ
+        quay lại chỗ kiểm đó nữa. Log vẫn ghi `KẸT: giữ khoá 49s bởi
+        'robot 45 ký tự'` sau khi vá.
+
+        Cách đúng: tách hẳn hai vai.
+          · luồng SINH  giữ khoá, đẩy vào hàng đợi. Hàng đợi có TRẦN, nên
+            khách bỏ đi ⇒ đợi đầy ⇒ `put` hết hạn ⇒ nó tự bỏ cuộc và nhả
+            khoá. Nó không bao giờ phụ thuộc vào việc ai đó có kéo hay
+            không.
+          · luồng HTTP  chỉ lấy ra và gửi đi. Treo bao lâu cũng không giữ
+            khoá của model.
+
+        Trần hàng đợi 48 mẩu ≈ vài giây tiếng: đủ để máy đọc chạy trước
+        khi mạng chậm, đủ nhỏ để nhận ra khách đã đi trong vài giây.
+        """
+        import queue as _q
+
+        hop: "_q.Queue[Any]" = _q.Queue(maxsize=48)
+        XONG = object()
+
+        def chay():
+            t = engine()
+            try:
+                with khoa_mo_hinh(
+                    uu_tien=True, viec=f"robot {len(text)} ký tự", soChu=len(text)
+                ):
+                    t0 = time.time()
+                    tong = 0
+                    han = tran_cho_viec(len(text))
+                    for mau in t.infer_stream(text=text, voice=voice, style=style):
+                        if time.time() - t0 > han:
+                            print(f"[tts] ⛔ cắt luồng: quá {han:.0f}s. Nhả khoá.", flush=True)
+                            break
+                        b = _ve_16k(mau)
+                        tong += len(b)
+                        try:
+                            # Chờ CÓ HẠN. Khách bỏ đi thì hàng đợi đầy và
+                            # ta biết trong vài giây, thay vì nằm mãi.
+                            hop.put(b, timeout=20)
+                        except _q.Full:
+                            print("[tts] ⛔ khách không lấy tiếng nữa — bỏ lượt, nhả khoá.", flush=True)
+                            break
+                    giay = tong / 2 / BO_SR
+                    ms = (time.time() - t0) * 1000
+                    print(
+                        f"[stream] {giay:.2f}s tieng trong {ms:.0f}ms "
+                        f"(RTF {ms/1000/max(giay,0.01):.3f})",
+                        flush=True,
+                    )
+            except Exception as e:  # noqa: BLE001
+                print(f"[tts] luồng hỏng: {str(e)[:200]}", flush=True)
+            finally:
+                try:
+                    hop.put(XONG, timeout=5)
+                except Exception:  # noqa: BLE001
+                    pass
+
+        threading.Thread(target=chay, daemon=True).start()
+        while True:
+            try:
+                mau = hop.get(timeout=180)
+            except Exception:  # noqa: BLE001
+                return
+            if mau is XONG:
+                return
+            yield mau
+
+    def _sinh_cu_khong_dung():
         t = engine()
         # ⚠️ Giữ khoá suốt cả luồng. Model này KHÔNG chạy song song được,
         # và hai lượt chồng nhau thì cả hai ra tiếng lẫn lộn — tệ hơn hẳn

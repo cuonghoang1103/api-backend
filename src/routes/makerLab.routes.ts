@@ -35,6 +35,8 @@ import { prisma } from '../config/database.js';
 import * as svc from '../services/makerlab/makerLab.service.js';
 import { COMMAND_CATALOG, COMMAND_TYPES } from '../services/makerlab/commands.js';
 import { cloneVoiceHowTo } from '../services/makerlab/tts.js';
+import { luuNao } from '../services/makerlab/voiceLoop.js';
+import { laNao, NHAN_NAO } from '../services/makerlab/nao.js';
 import multer from 'multer';
 import { createHash } from 'crypto';
 import { uploadGeneric } from '../storage/uploadService.js';
@@ -487,6 +489,34 @@ router.post('/projects/:id/training', authenticate, async (req, res: Response<Ap
 adminRouter.put('/projects/:id/persona', async (req, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await svc.upsertPersona(toId(req), req.body ?? {}) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/**
+ * Đổi NÃO cho robot: máy nhà hay cổng.
+ *
+ * Route riêng chứ không nhét vào `PUT persona`, vì `upsertPersona` ghi đè cả
+ * `traits` — mà `traits` còn giữ kiến thức huấn luyện, chế độ tiếng và tốc độ
+ * đọc. `luuNao` đọc-sửa-ghi nên chỉ đụng đúng một khoá.
+ *
+ * `nao: null` = bỏ ghim, quay về theo `LLM_LOCAL_PURPOSES` của máy chủ.
+ * Cả hai não LUÔN còn đó — đây chỉ là chọn dùng cái nào, không phải gỡ bỏ.
+ */
+adminRouter.put('/projects/:id/nao', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const raw: unknown = req.body?.nao ?? null;
+    if (raw !== null && !laNao(raw)) {
+      res.status(400).json({ success: false, message: "nao phải là 'may-nha', 'cong', hoặc null" });
+      return;
+    }
+    const projectId = toId(req);
+    await luuNao(projectId, raw);
+    res.json({
+      success: true,
+      data: { nao: raw, nhan: raw ? NHAN_NAO[raw] : 'theo cấu hình máy chủ' },
+    });
   } catch (e) {
     next(e);
   }

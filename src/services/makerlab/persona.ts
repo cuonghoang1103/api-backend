@@ -1,4 +1,5 @@
 import { CHE_DO, laCheDo, type CheDo } from './cheDo.js';
+import { laNao, type Nao } from './nao.js';
 /**
  * ============================================================
  * Maker Lab — Persona
@@ -60,6 +61,14 @@ export interface PersonaConfig {
   speechRate: number;
   /** Chế độ tiếng đang bật: vi | en | robot. */
   cheDo: CheDo;
+  /**
+   * Não đang dùng: `'may-nha'` | `'cong'` | `null` (theo cấu hình máy chủ).
+   *
+   * Ghim ở đây ĐÈ LÊN `LLM_LOCAL_PURPOSES`. Có nó thì người dùng quay về
+   * model cũ được ngay bằng một câu nói, không cần deploy — đúng thứ cần
+   * khi model mới nói không vừa ý giữa chừng.
+   */
+  nao: Nao | null;
 }
 
 /** Kẹp tốc độ đọc về dải Google chấp nhận; ngoài dải là API trả 400. */
@@ -146,6 +155,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       knowledge: [],
       speechRate: 1,
       cheDo: 'vi',
+      nao: null,
       // 0.9 chứ không 0.8: chém gió cần chỗ để đi chệch. Nhiệt độ thấp
       // cho ra những câu đùa an toàn nhất, tức là những câu nhạt nhất.
       temperature: 0.9,
@@ -176,6 +186,9 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     cheDo: laCheDo((row.traits as { cheDo?: unknown } | null)?.cheDo)
       ? ((row.traits as { cheDo: CheDo }).cheDo)
       : 'vi',
+    nao: laNao((row.traits as { nao?: unknown } | null)?.nao)
+      ? ((row.traits as { nao: Nao }).nao)
+      : null,
   };
 }
 

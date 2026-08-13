@@ -22,6 +22,7 @@
  */
 
 import OpenAI from 'openai';
+import type { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { canTraCuu, tinMoiNhat, timTrenWeb, dungDoanTraCuu } from './web.js';
@@ -35,6 +36,7 @@ import { PCM_SAMPLE_RATE } from './audio.js';
 import { gatewayKey, gatewayRoot, modelFor, endpointFor } from '../llm/gateway.js';
 import { khopLenhNhanh } from './phanXa.js';
 import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
+import { khopDoiNao, CHAO_DOI_NAO, type Nao } from './nao.js';
 
 // ─── Conversation memory ───────────────────────────────────
 //
@@ -200,6 +202,29 @@ async function luuCheDo(projectId: number, cheDo: CheDo): Promise<void> {
   });
 }
 
+/**
+ * Ghim não cho robot. `null` = bỏ ghim, quay về theo cấu hình máy chủ.
+ *
+ * Đọc-sửa-ghi y như `luuCheDo`, và vì đúng một lý do: `traits` còn giữ
+ * kiến thức huấn luyện, tốc độ đọc và chế độ tiếng. Ghi đè nguyên khối là
+ * xoá sạch phần Huấn luyện.
+ */
+export async function luuNao(projectId: number, nao: Nao | null): Promise<void> {
+  const row = await prisma.makerPersona.findFirst({
+    where: { projectId },
+    select: { id: true, traits: true },
+  });
+  if (!row) return;
+  const cu = (row.traits as Record<string, unknown> | null) ?? {};
+  const moi: Record<string, unknown> = { ...cu };
+  if (nao) moi.nao = nao;
+  else delete moi.nao;
+  await prisma.makerPersona.update({
+    where: { id: row.id },
+    data: { traits: moi as Prisma.InputJsonValue },
+  });
+}
+
 /** Xoá trí nhớ của MỘT robot — nút "quên hết đi" trên trang quản trị. */
 export async function clearHistory(deviceId: number): Promise<void> {
   await prisma.makerConversation.deleteMany({ where: { deviceId } });
@@ -299,15 +324,31 @@ function usable(p: LlmProvider): boolean {
  * trường. Groq miễn phí nên nó là cái lưới đỡ phía dưới — chậm hơn,
  * kém hơn, nhưng còn nói được.
  */
-function llmChain(): LlmProvider[] {
+function llmChain(nao: Nao | null = null): LlmProvider[] {
   const chain: LlmProvider[] = [];
 
-  // ── Máy nhà đứng ĐẦU nếu `robot_voice` được bật trong LLM_LOCAL_PURPOSES ──
+  // ── Người dùng GHIM não nào thì nghe người dùng ──
+  //
+  // `nao` đè lên `LLM_LOCAL_PURPOSES`. Đây là đường thoát khi model mới nói
+  // không vừa ý: một câu "đổi về model cũ đi" là xong, không cần deploy,
+  // không cần sửa biến môi trường, không cần ai ngồi trước máy chủ.
+  // Ghim 'cong' thì BỎ HẲN máy nhà khỏi chuỗi — ghim mà vẫn thử máy nhà
+  // trước thì ghim để làm gì.
+  if (nao === 'cong') {
+    const congP = providerNamed('compat');
+    if (usable(congP)) chain.push(congP);
+    const groqP = providerNamed('groq');
+    if (usable(groqP) && !chain.some((c) => c.baseURL === groqP.baseURL)) chain.push(groqP);
+    if (!chain.length) chain.push(congP);
+    return chain;
+  }
+
+  // ── Máy nhà đứng ĐẦU nếu được ghim, hoặc `robot_voice` bật trong env ──
   //
   // Đo 13/08/2026 trên đúng đề bài production: chữ đầu 96–333 ms so với
   // 2.119–4.575 ms của cổng. Với robot thì đó là khác biệt giữa "nói chuyện
   // được" và "chờ đèn đỏ".
-  const ep = endpointFor('robot_voice');
+  const ep = nao === 'may-nha' ? { ...endpointFor('robot_voice'), local: true } : endpointFor('robot_voice');
   if (ep.local && ep.key) {
     chain.push({ baseURL: `${ep.root}/v1`, key: ep.key, label: 'may-nha' });
   }
@@ -587,6 +628,27 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       });
       return { heard, said: cf.chaoDoi, actions: [], spoken: spokenDoi, ms: timing };
     }
+
+    // ── Đổi NÃO: cũng phải đứng trước LLM, và vì đúng lý do như trên ──
+    //
+    // "đổi về model cũ đi" mà rơi vào LLM thì model sẽ NÓI VỀ việc đổi
+    // model thay vì ĐỔI. Tệ hơn nữa: nếu não hiện tại đang là thứ người
+    // ta muốn bỏ, câu trả lời đó lại do chính nó nói ra.
+    const naoMoi = khopDoiNao(heard);
+    if (naoMoi && naoMoi !== persona.nao) {
+      await luuNao(input.projectId, naoMoi);
+      const cau = CHAO_DOI_NAO[naoMoi];
+      const spokenNao = await speakOnce(persona, cau, input.deviceId);
+      timing.total = Date.now() - started;
+      emitTranscript(input.deviceId, 'bot', cau);
+      logger.info('MakerLab doi nao', {
+        deviceId: input.deviceId,
+        tu: persona.nao ?? '(theo cau hinh)',
+        sang: naoMoi,
+        heard,
+      });
+      return { heard, said: cau, actions: [], spoken: spokenNao, ms: timing };
+    }
   }
 
   // ⚠️ LỆNH ĐƠN GIẢN THÌ ĐỪNG GỌI LLM.
@@ -784,7 +846,7 @@ async function thinkAndSpeak(
 
   const messages = await dungMessages(persona, ctx, deviceId, heard, doanTraCuu);
 
-  const chain = llmChain();
+  const chain = llmChain(persona.nao);
   const p = chain[0];
   const model = robotModel(p);
 
@@ -1116,7 +1178,7 @@ async function think(
   // Thử nhà chính, hỏng thì tụt xuống nhà dự phòng. Không lặp lại
   // trên cùng một nhà: đây là đường thời gian thực, thà trả lời câu
   // đỡ hay còn hơn để người dùng ngồi chờ thêm hai giây nữa.
-  for (const p of llmChain()) {
+  for (const p of llmChain(persona.nao)) {
     const model = robotModel(p);
     try {
       // `response_format: json_object` là thứ ĐẦU TIÊN vỡ khi đổi model.

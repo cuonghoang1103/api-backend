@@ -128,7 +128,17 @@ export async function transcribeWithGroq(
     // Blob keeps the audio in memory only — never touches disk.
     form.append('file', new Blob([new Uint8Array(audio)], { type: mimetype || 'audio/webm' }), filename || 'answer.webm');
     form.append('model', model);
-    form.append('language', opts.language);
+    // ⚠️ CHUỖI RỖNG PHẢI BỎ HẲN TRƯỜNG, KHÔNG PHẢI GỬI TRƯỜNG RỖNG.
+    //
+    // Groq coi `language=""` là một mã ngôn ngữ và trả `HTTP 400
+    // unsupported language` kèm cả bảng 99 mã hợp lệ. Bỏ trường đi mới
+    // là "tự dò".
+    //
+    // Đo thật 13/08/2026: chế độ tiếng Anh của robot đổi sang tự dò
+    // bằng `stt: null`, chỗ gọi hoá nó thành `?? ''`, và MỌI lượt nói
+    // chết 400 trong hơn hai giờ. Không ai thấy, vì lỗi nằm trong log
+    // server còn người dùng chỉ thấy robot im.
+    if (opts.language) form.append('language', opts.language);
     // `verbose_json` costs nothing extra but carries the per-segment confidence
     // numbers. Opt-in so the interview keeps its existing lighter response.
     form.append('response_format', opts.detail ? 'verbose_json' : 'json');

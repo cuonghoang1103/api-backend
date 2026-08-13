@@ -616,7 +616,16 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       // Đọc câu chào bằng ĐÚNG giọng của chế độ mới — đó là cách người
       // dùng biết lệnh đã ăn, không cần nhìn màn hình.
       const spokenDoi = await speakOnce(
-        { ...persona, cheDo: moi, voiceId: cf.giong ?? persona.voiceId },
+        {
+          ...persona,
+          cheDo: moi,
+          voiceId: cf.giong ?? persona.voiceId,
+          // Đổi tên giọng mà quên nhà cung cấp = gửi `robot-walle` cho
+          // Google. Nó không biết tên đó, hỏng, rơi xuống giọng dự
+          // phòng — và người dùng nghe câu chào bằng giọng cũ nên tưởng
+          // lệnh đổi chưa ăn.
+          voiceProvider: cf.nhaCungCap ?? persona.voiceProvider,
+        },
         cf.chaoDoi,
         input.deviceId,
       );

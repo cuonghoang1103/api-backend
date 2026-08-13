@@ -141,10 +141,34 @@ const DEFAULT_SAMPLES: Array<{ user: string; bot: string }> = [
 ];
 
 /** Load the persona for a project, falling back to the default. */
+/**
+ * Đè giọng + nhà cung cấp của CHẾ ĐỘ lên persona.
+ *
+ * ⚠️ PHẢI LÀM Ở ĐÂY, KHÔNG PHẢI Ở TỪNG CHỖ GỌI.
+ *
+ * `voiceLoop.ts` gọi máy đọc ở BA chỗ: đường luồng, đường dự phòng khi
+ * luồng hỏng, và đường nói câu chào lúc đổi chế độ. Bản trước chỉ có
+ * đường luồng biết tới chế độ; hai đường kia đọc thẳng `persona.voiceId`
+ * nên vẫn dùng giọng Việt để đọc tiếng Anh — mà chúng chỉ chạy lúc có
+ * sự cố, tức đúng lúc không ai ngồi soi log.
+ *
+ * Giải ngay chỗ nạp thì mọi chỗ gọi ĐÃ đúng sẵn, và chỗ gọi thứ tư thêm
+ * sau này cũng đúng mà không cần ai nhớ.
+ */
+function apCheDo(p: PersonaConfig): PersonaConfig {
+  const cf = CHE_DO[p.cheDo];
+  if (!cf.giong && !cf.nhaCungCap) return p;
+  return {
+    ...p,
+    voiceId: cf.giong ?? p.voiceId,
+    voiceProvider: cf.nhaCungCap ?? p.voiceProvider,
+  };
+}
+
 export async function loadPersona(projectId: number): Promise<PersonaConfig> {
   const row = await prisma.makerPersona.findUnique({ where: { projectId } });
   if (!row) {
-    return {
+    return apCheDo({
       projectId,
       name: 'Robot',
       systemPrompt: DEFAULT_PERSONA_PROMPT,
@@ -167,9 +191,9 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       // rớt mạng. Đây là TRẦN, không phải đích — prompt vẫn dặn đừng
       // thành bài diễn văn.
       maxTokens: 420,
-    };
+    });
   }
-  return {
+  return apCheDo({
     projectId,
     name: row.name,
     systemPrompt: row.systemPrompt || DEFAULT_PERSONA_PROMPT,
@@ -196,7 +220,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     nao: laNao((row.traits as { nao?: unknown } | null)?.nao)
       ? ((row.traits as { nao: Nao }).nao)
       : null,
-  };
+  });
 }
 
 /** Kiến thức nằm trong `traits.knowledge` — dùng cột JSON có sẵn, khỏi migration. */

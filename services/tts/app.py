@@ -205,9 +205,57 @@ GIONG_ANH = {
     "en-bieu-cam": "English — nhiều biểu cảm",
 }
 
+# Giọng NHÂN BẢN tiếng Anh — hỏi thẳng tiến trình 8091, không viết cứng.
+#
+# ⚠️ BẢNG VIẾT CỨNG Ở TRÊN KHÔNG BAO GIỜ BIẾT GIỌNG NGƯỜI DÙNG TỰ NHÂN BẢN.
+#
+# Bản đầu chỉ so với `GIONG_ANH`. Nhân bản giọng robot xong, đặt tên
+# `robot-walle`, thì tên đó KHÔNG có trong bảng ⇒ `la_giong_anh` trả
+# False ⇒ câu tiếng Anh bị đẩy sang máy đọc TIẾNG VIỆT ⇒ nó không tra
+# được tên giọng ⇒ hỏng ⇒ cả chuỗi tụt xuống Google.
+#
+# Triệu chứng y hệt lỗi "mất giọng nhân bản" vừa chữa sáng nay, và cũng
+# y hệt kiểu khó chịu đó: không có lỗi nào ném ra, chỉ có giọng lạ phát
+# ra loa. Nên chỗ nào hỏi "giọng này của ai" đều phải hỏi ĐÚNG cái tiến
+# trình đang giữ giọng, chứ không hỏi một bản chép.
+_giong_anh_cache: Dict[str, float] = {}   # tên giọng → lúc thấy lần cuối
+_CACHE_GIAY = 60.0
+
+
+def _giong_anh_song() -> set:
+    """Danh sách giọng tiếng Anh đang có, nhớ tạm 60 giây.
+
+    Nhớ tạm để một lượt nói không phải nhảy thêm một vòng HTTP; 60 giây
+    đủ ngắn để nhân bản xong là dùng được gần như ngay.
+    """
+    import urllib.request
+    import json as _json
+
+    gio = time.time()
+    con_han = [k for k, v in _giong_anh_cache.items() if gio - v < _CACHE_GIAY]
+    if con_han:
+        return set(con_han)
+    try:
+        with urllib.request.urlopen(f"{CHATTERBOX_URL}/voices", timeout=3) as r:
+            ds = _json.loads(r.read()).get("voices") or []
+        _giong_anh_cache.clear()
+        for v in ds:
+            _giong_anh_cache[str(v)] = gio
+        return set(_giong_anh_cache)
+    except Exception as e:  # noqa: BLE001
+        # Hỏi không được thì lùi về bảng dựng sẵn — thà thiếu giọng nhân
+        # bản còn hơn chặn cả ba giọng vẫn chạy tốt.
+        print(f"[tts] khong hoi duoc danh sach giong Anh: {e}", flush=True)
+        return set(GIONG_ANH)
+
 
 def la_giong_anh(voice: Optional[str]) -> bool:
-    return bool(voice) and str(voice) in GIONG_ANH
+    if not voice:
+        return False
+    v = str(voice)
+    if v in GIONG_ANH:      # đường nhanh, không đụng mạng
+        return True
+    return CHATTERBOX_BAT and v in _giong_anh_song()
 
 
 def doc_tieng_anh(text: str, voice: str) -> bytes:
@@ -296,6 +344,13 @@ def voices():
         ds += [
             {"id": k, "label": v, "custom": False, "lang": "en"}
             for k, v in GIONG_ANH.items()
+        ]
+        # Giọng tiếng Anh NHÂN BẢN cũng phải hiện ra. Thiếu nó thì người
+        # dùng nhân bản xong mở ô chọn không thấy đâu — đúng chuyện đã
+        # xảy ra với giọng "Trangg" bên tiếng Việt.
+        ds += [
+            {"id": v, "label": f"English — {v} (nhân bản)", "custom": True, "lang": "en"}
+            for v in sorted(_giong_anh_song() - set(GIONG_ANH))
         ]
     return {"voices": ds}
 

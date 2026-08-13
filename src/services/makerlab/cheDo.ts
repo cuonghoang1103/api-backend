@@ -51,6 +51,19 @@ export interface CauHinhCheDo {
   nhacLlm: string;
   /** Tên giọng gửi cho máy đọc. `null` = giữ giọng đang cấu hình. */
   giong: string | null;
+  /**
+   * Nhà cung cấp giọng bắt buộc cho chế độ này. `null` = giữ cái đang đặt.
+   *
+   * ⚠️ ĐỔI GIỌNG MÀ QUÊN ĐỔI NHÀ CUNG CẤP LÀ ĐỔI SANG MỘT CÁI TÊN VÔ NGHĨA.
+   *
+   * `en-cham` và `robot-walle` chỉ tồn tại ở dịch vụ tự dựng
+   * (`cuongmini`). Persona của người dùng đang để `google`, nên khi đổi
+   * sang chế độ robot mà chỉ đổi tên giọng thì Google nhận tên
+   * `robot-walle`, không biết nó là gì, hỏng — và cả chuỗi lặng lẽ rơi
+   * xuống giọng dự phòng. Không ném lỗi nào, chỉ có giọng lạ phát ra
+   * loa: đúng kiểu hỏng đã tốn cả buổi sáng nay để tìm.
+   */
+  nhaCungCap: string | null;
   /** Có phiên âm từ tiếng Anh sang chính tả Việt không. */
   phienAm: boolean;
   /** Câu robot nói ngay khi vừa đổi sang chế độ này. */
@@ -64,6 +77,7 @@ export const CHE_DO: Record<CheDo, CauHinhCheDo> = {
     stt: 'vi',
     nhacLlm: 'Trả lời HOÀN TOÀN bằng tiếng Việt, tự nhiên như đang nói chuyện.',
     giong: null, // giữ giọng nhân bản đang đặt trong persona
+    nhaCungCap: null,
     phienAm: true,
     chaoDoi: 'Dạ, em nói tiếng Việt.',
     nhan: 'Tiếng Việt',
@@ -74,6 +88,7 @@ export const CHE_DO: Record<CheDo, CauHinhCheDo> = {
       'Reply ENTIRELY in English, in a natural conversational tone. ' +
       'Keep it short — 3 or 4 sentences at most, because your words are read aloud.',
     giong: 'en-cham',
+    nhaCungCap: 'cuongmini',
     // KHÔNG phiên âm ở chế độ tiếng Anh: ở đây chính tả GỐC mới là thứ
     // đúng, và đổi "deploy" thành "đi-pờ-loi" là biến nó thành một từ vô
     // nghĩa với máy đọc tiếng Anh.
@@ -93,6 +108,7 @@ export const CHE_DO: Record<CheDo, CauHinhCheDo> = {
     // vòng + giảm bit) đã bị từ chối vì nghe rè và mất chữ. Chất robot
     // giờ đến từ chính giọng mẫu, tự nhiên hơn hẳn.
     giong: 'robot-walle',
+    nhaCungCap: 'cuongmini',
     phienAm: false,
     chaoDoi: 'Beep boop! Robot mode on.',
     nhan: 'Giọng robot',

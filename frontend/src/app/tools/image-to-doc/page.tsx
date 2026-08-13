@@ -513,12 +513,44 @@ export default function ImageToDocPage() {
         .mp-giay .katex { font-size: 1.05em; }
         .mp-giay .katex-display { margin: 10px 0; }
 
+        /* ─── In ra PDF ───────────────────────────────────────────────────
+           Hai thứ phải xử lý, và chúng khác nguồn gốc:
+
+           1) Nút bot AI, nút menu, thanh dưới… là phần tử NỔI của layout
+              chung. Liệt kê từng cái để ẩn là trò đuổi bắt — hôm nay thêm
+              một widget nữa là lại lòi ra trên bản in. Nên ẩn TẤT CẢ rồi
+              chỉ bật lại đúng vùng in.
+
+           2) Dòng "8/13/26, 10:52 PM — CuongThai…" và "https://… 1/3" KHÔNG
+              phải của web: trình duyệt tự in vào phần lề giấy. CSS không tắt
+              được cái ô đó, nhưng "@page { margin: 0 }" thì trình duyệt hết
+              chỗ để in nên nó biến mất (đã đo bằng Chrome CÓ bật cờ header).
+              Lề thật lấy lại bằng padding + "box-decoration-break: clone" —
+              thiếu "clone" thì trang 2 trở đi dính sát mép giấy.
+
+           ⚠️ TUYỆT ĐỐI không dùng dấu huyền (backtick) trong khối này: cả
+              khối nằm trong một template literal, một dấu backtick là cắt
+              đứt chuỗi và build đổ ngay. */
         @media print {
-          @page { size: A4; margin: 16mm 14mm; }
-          body { background: #fff !important; }
-          .khong-in, nav, header, footer { display: none !important; }
-          .vung-in { max-height: none !important; overflow: visible !important; border: none !important; }
-          .mp-giay { padding: 0; font-size: 13pt; }
+          @page { size: A4; margin: 0; }
+          html, body { background: #fff !important; }
+          body * { visibility: hidden !important; }
+          .vung-in, .vung-in * { visibility: visible !important; }
+          .vung-in {
+            position: absolute !important;
+            left: 0; top: 0; width: 100%;
+            max-height: none !important;
+            overflow: visible !important;
+            border: none !important;
+            border-radius: 0 !important;
+          }
+          .mp-giay {
+            padding: 14mm 15mm;
+            -webkit-box-decoration-break: clone;
+            box-decoration-break: clone;
+            font-size: 13pt;
+          }
+          .mp-giay .mp-anh img { max-width: 100%; }
         }
       `}</style>
     </div>

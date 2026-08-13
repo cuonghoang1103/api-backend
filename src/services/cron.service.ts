@@ -306,14 +306,19 @@ export function startCronJobs(): void {
   cron.schedule('7 * * * *', async () => {
     try {
       const svc = await import('./makerlab/makerLab.service.js');
+      // Hội thoại robot lớn nhanh như telemetry (2 dòng mỗi lượt nói),
+      // nên dọn chung một chỗ — thêm bảng mà quên dọn là đầy đĩa VPS,
+      // đúng thứ đã có lần giết Postgres.
+      const { donHoiThoaiCu } = await import('./makerlab/voiceLoop.js');
       const days = Number(process.env.MAKERLAB_TELEMETRY_RETENTION_DAYS) || 30;
-      const [deleted, offline, expired] = await Promise.all([
+      const [deleted, offline, expired, hoiThoai] = await Promise.all([
         svc.pruneTelemetry(days),
         svc.reconcileStaleDevices(),
         svc.expireStaleCommands(),
+        donHoiThoaiCu(),
       ]);
-      if (deleted || offline || expired) {
-        logger.info('cron maker-lab housekeeping', { deleted, offline, expired });
+      if (deleted || offline || expired || hoiThoai) {
+        logger.info('cron maker-lab housekeeping', { deleted, offline, expired, hoiThoai });
       }
     } catch (err) {
       logger.error('cron maker-lab housekeeping failed', { error: (err as Error).message });

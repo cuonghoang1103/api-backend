@@ -2029,6 +2029,10 @@ model DocumentChunk {
 
   @@index([documentType], name: "idx_document_chunks_type")
   @@index([documentId], name: "idx_document_chunks_doc_id")
+  /// Kho kiến thức robot lọc theo CẢ HAI cột cùng lúc (`maker_kb` + projectId),
+  /// nên hai index rời ở trên không đủ. Chỉ mục toàn văn GIN đi kèm nằm trong
+  /// migration 20260813093000 — Prisma không diễn tả được index theo biểu thức.
+  @@index([documentType, documentId], name: "idx_document_chunks_type_doc")
   @@map("document_chunks")
 }
 
@@ -7482,11 +7486,12 @@ model MakerDevice {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  project   MakerProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  owner     User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  telemetry MakerTelemetry[]
-  commands  MakerCommand[]
-  logs      MakerDeviceLog[]
+  project       MakerProject        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  owner         User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  telemetry     MakerTelemetry[]
+  commands      MakerCommand[]
+  logs          MakerDeviceLog[]
+  conversations MakerConversation[]
 
   @@index([ownerId], name: "idx_maker_device_owner")
   @@index([projectId], name: "idx_maker_device_project")
@@ -7559,6 +7564,33 @@ model MakerDeviceLog {
 
   @@index([deviceId, createdAt], name: "idx_maker_devicelog_device_time")
   @@map("maker_device_logs")
+}
+
+/// Trí nhớ hội thoại của robot — mỗi dòng là MỘT lượt nói.
+///
+/// Trước 13/08/2026 lịch sử nằm trong một `Map` trong RAM: giữ 4 lượt, xoá
+/// sau 30 phút im lặng, và restart backend là quên sạch. Người dùng kể tên
+/// con mèo lúc sáng, chiều hỏi lại thì robot đã quên — không phải vì model
+/// yếu (đo thật: model nhớ tốt tới ~450 lượt) mà vì app chỉ đưa cho nó 4.
+///
+/// Volume tương tự `MakerTelemetry`, nên cũng cần cron dọn — xem
+/// `donHoiThoaiCu()` trong voiceLoop.ts.
+model MakerConversation {
+  id       Int    @id @default(autoincrement())
+  deviceId Int    @map("device_id")
+  /// 'user' = người nói, 'assistant' = robot đáp.
+  role     String @db.VarChar(12)
+  content  String @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  device MakerDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  /// DESC vì truy vấn duy nhất là "N lượt GẦN NHẤT của một thiết bị" —
+  /// luôn đọc từ mới nhất lùi lại. Phải khai ở đây chứ không chỉ trong file
+  /// SQL viết tay, nếu không `migrate diff` báo drift mãi.
+  @@index([deviceId, createdAt(sort: Desc)], name: "idx_maker_conv_device_time")
+  @@map("maker_conversations")
 }
 
 /// How the robot talks — the personality layer, editable from the web.

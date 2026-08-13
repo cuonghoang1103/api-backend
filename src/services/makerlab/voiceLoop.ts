@@ -25,63 +25,159 @@ import OpenAI from 'openai';
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { canTraCuu, tinMoiNhat, timTrenWeb, dungDoanTraCuu } from './web.js';
+import { timKienThuc, dungDoanKienThuc } from './kienThuc.js';
 import { transcribeWithGroq } from '../interview/voice/stt.js';
 import { loadPersona, buildSystemPrompt, buildFewShot, type PersonaConfig } from './persona.js';
 import { validateCommand, type ValidatedCommand } from './commands.js';
 import { synthesizeSpeech } from './tts.js';
 import { checkHeardSpeech } from './hallucination.js';
 import { PCM_SAMPLE_RATE } from './audio.js';
-import { gatewayKey, gatewayRoot, modelFor } from '../llm/gateway.js';
+import { gatewayKey, gatewayRoot, modelFor, endpointFor } from '../llm/gateway.js';
 import { khopLenhNhanh } from './phanXa.js';
 import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
 
 // ─── Conversation memory ───────────────────────────────────
-// Short-term only, in process memory. Long-term recall (pgvector over
-// past conversations) is a separate feature — see the Overview tab's
-// upgrade list. Keeping this small is deliberate: every extra turn is
-// tokens on the critical path of a real-time reply.
+//
+// Lưu ở DATABASE (`maker_conversations`), không còn trong RAM.
+//
+// Luật cũ vẫn đúng và đừng quên: mỗi lượt cũ là token phải trả lại trên
+// đường nóng của MỌI câu sau. Đo thật hồi còn 4 lượt: prompt cơ bản 885
+// token, lúc dùng thật phình lên 2096 — hơn một nửa là lịch sử, và thời
+// gian nghĩ tỉ lệ thẳng với số token vào.
 /**
- * Nhớ 4 lượt gần nhất, không phải 8.
+ * ⚠️ Vì thế con số này KHÔNG phải "càng to càng tốt". Nới 4 → 30 ngày
+ * 13/08/2026 vì đo thật cho thấy trần cũ đến từ model cũ chứ không phải
+ * từ nhu cầu:
  *
- * Mỗi lượt cũ là token phải trả lại trên đường nóng của MỌI câu sau.
- * Đo thật: prompt cơ bản 885 token, nhưng lúc dùng thật đã phình lên
- * 2096 — hơn một nửa là lịch sử. Và thời gian nghĩ tỉ lệ thẳng với số
- * token vào.
+ *   4 lượt   →  681 ms   (model cục bộ)
+ *   60 lượt  → 1.187 ms
+ *   400 lượt → 6.288 ms
  *
- * Bốn lượt vẫn đủ để robot theo được mạch chuyện ("cái đó" trỏ về câu
- * trước), mà cắt gần một nghìn token khỏi mỗi lần gọi.
+ * 30 lượt là chỗ robot nhớ được cả buổi nói chuyện mà vẫn dưới một giây.
+ * Muốn đổi thì đặt env, đừng sửa mã.
  */
-const MAX_HISTORY_TURNS = 4;
-const HISTORY_TTL_MS = 30 * 60 * 1000;
+const MAX_HISTORY_TURNS = Number(process.env.ROBOT_HISTORY_TURNS) || 30;
+
+/**
+ * Bao lâu không nói thì coi như sang câu chuyện khác.
+ *
+ * Cũ là 30 phút, và nó không phải một lựa chọn — nó là hệ quả của việc
+ * lịch sử nằm trong RAM. 24 giờ để "sáng kể, chiều hỏi lại" vẫn nhớ, thứ
+ * mà bản cũ không làm được kể cả khi người dùng ngồi đó cả ngày.
+ */
+const HISTORY_TTL_MS = (Number(process.env.ROBOT_HISTORY_TTL_HOURS) || 24) * 60 * 60 * 1000;
+
+/** Giữ lại bao lâu rồi mới dọn. Bảng này lớn nhanh như `MakerTelemetry`. */
+const HISTORY_PRUNE_DAYS = Number(process.env.ROBOT_HISTORY_PRUNE_DAYS) || 30;
 
 interface Turn {
   role: 'user' | 'assistant';
   content: string;
 }
-interface History {
-  turns: Turn[];
-  touchedAt: number;
-}
-const histories = new Map<number, History>();
 
-function getHistory(deviceId: number): Turn[] {
-  const h = histories.get(deviceId);
-  if (!h) return [];
-  if (Date.now() - h.touchedAt > HISTORY_TTL_MS) {
-    histories.delete(deviceId);
-    return [];
-  }
-  return h.turns;
+/**
+ * Lịch sử nằm ở DATABASE, không phải RAM.
+ *
+ * Bản cũ dùng `new Map()` trong tiến trình. Ba thứ hỏng cùng lúc và không
+ * cái nào hiện ra trong log:
+ *   • restart backend (mỗi lần deploy) ⇒ mọi robot quên sạch;
+ *   • chạy nhiều tiến trình ⇒ mỗi tiến trình một trí nhớ khác nhau, robot
+ *     nhớ hay quên tuỳ vào request rơi vào đâu;
+ *   • không xem lại được robot đã nói gì với ai.
+ */
+async function getHistory(deviceId: number): Promise<Turn[]> {
+  const tuLuc = new Date(Date.now() - HISTORY_TTL_MS);
+  // Lấy N lượt MỚI NHẤT (nên phải desc) rồi đảo lại cho đúng thứ tự kể
+  // chuyện. Lấy asc + take là lấy nhầm phần ĐẦU của cuộc nói chuyện.
+  //
+  // ⚠️ SẮP THEO `id`, KHÔNG PHẢI `createdAt`. Câu hỏi và câu đáp của cùng
+  //    một lượt được ghi bằng MỘT `createMany`, nên chúng trùng timestamp
+  //    tới từng mili giây. Sắp theo cột có giá trị bằng nhau thì thứ tự
+  //    Postgres trả về là tuỳ ý — đo 13/08/2026: robot đọc được lịch sử
+  //    XÁO TRỘN, câu đáp đứng trước câu hỏi, và nó "quên" thứ vừa được kể.
+  //    Nhìn y hệt model kém trí nhớ. `id` là SERIAL nên luôn tăng đúng thứ
+  //    tự ghi. `createdAt` vẫn dùng để lọc TTL, chỉ không dùng để sắp.
+  const rows = await prisma.makerConversation.findMany({
+    where: { deviceId, createdAt: { gte: tuLuc } },
+    orderBy: { id: 'desc' },
+    take: MAX_HISTORY_TURNS * 2,
+    select: { role: true, content: true },
+  });
+  return rows.reverse().map((r) => ({ role: r.role === 'user' ? 'user' : 'assistant', content: r.content }));
 }
 
+/**
+ * Ghi lượt vừa nói.
+ *
+ * KHÔNG `await` ở chỗ gọi: đây là đường nói thời gian thực, ghi log không
+ * được bắt người ta chờ. Hỏng thì nuốt lỗi và ghi lại — mất một lượt trí
+ * nhớ còn hơn làm robot câm giữa câu.
+ */
 function pushHistory(deviceId: number, ...turns: Turn[]): void {
-  const h = histories.get(deviceId) ?? { turns: [], touchedAt: Date.now() };
-  h.turns.push(...turns);
-  if (h.turns.length > MAX_HISTORY_TURNS * 2) {
-    h.turns = h.turns.slice(-MAX_HISTORY_TURNS * 2);
-  }
-  h.touchedAt = Date.now();
-  histories.set(deviceId, h);
+  if (!turns.length) return;
+  prisma.makerConversation
+    .createMany({ data: turns.map((t) => ({ deviceId, role: t.role, content: t.content })) })
+    .catch((e) => logger.warn('MakerLab khong ghi duoc hoi thoai', { deviceId, err: String(e) }));
+}
+
+/**
+ * Dọn hội thoại cũ. Gọi từ cron, không phải từ đường nói.
+ */
+export async function donHoiThoaiCu(): Promise<number> {
+  const truoc = new Date(Date.now() - HISTORY_PRUNE_DAYS * 24 * 60 * 60 * 1000);
+  const r = await prisma.makerConversation.deleteMany({ where: { createdAt: { lt: truoc } } });
+  if (r.count) logger.info('MakerLab don hoi thoai cu', { xoa: r.count, truocNgay: truoc.toISOString() });
+  return r.count;
+}
+
+/**
+ * Dựng mảng messages cho một lượt nói. `thinkAndSpeak` và `think` dựng y
+ * hệt nhau — tách ra một chỗ để lần sau sửa là sửa cho cả hai, chứ không
+ * vá một nơi rồi quên nơi kia.
+ *
+ * ⛔ ĐOẠN TRA INTERNET KHÔNG ĐƯỢC MANG VAI `system`.
+ *
+ * Nó từng là system message THỨ HAI. Cổng modelapi.vn dễ tính nên chuyện
+ * đó nằm im hàng tháng. Đo với model cục bộ ngày 13/08/2026 thì mọi câu
+ * hỏi tin tức/tra cứu chết ngay:
+ *
+ *     HTTP 500 — Jinja Exception: System message must be at the beginning.
+ *
+ * Template chat của Qwen3.5 (và nhiều model mở khác) chỉ cho đúng MỘT
+ * system message, ở vị trí đầu tiên. Vai `user` thì cả hai bên đều nhận —
+ * đã thử thật với cả `user` lẫn `assistant`, đều OK.
+ *
+ * Ý đồ cũ giữ nguyên: dữ liệu đứng NGAY TRƯỚC câu người dùng vừa nói.
+ * Đặt lên đầu cùng tính cách thì model lẫn nó với "mày là ai" rồi đọc lại
+ * cả danh sách như đọc mục lục. Khác một điểm so với bản cũ: giờ nó nằm
+ * SAU lịch sử hội thoại — trước kia code nói "ngay trước câu người dùng"
+ * nhưng lại chèn trước cả 4 lượt lịch sử, tức cách câu hỏi 8 tin nhắn.
+ */
+async function dungMessages(
+  persona: PersonaConfig,
+  ctx: { deviceName?: string; battery?: number | null },
+  deviceId: number,
+  heard: string,
+  doanTraCuu: string,
+): Promise<Array<{ role: 'system' | 'user' | 'assistant'; content: string }>> {
+  // Kho kiến thức chạy SONG SONG với lịch sử: cả hai đều là truy vấn DB vài
+  // mili giây, nối tiếp nhau thì cộng dồn vô nghĩa trên đường nói.
+  const [lichSu, mauKienThuc] = await Promise.all([
+    getHistory(deviceId),
+    persona.projectId ? timKienThuc(persona.projectId, heard, 3) : Promise.resolve([]),
+  ]);
+  const doanKienThuc = dungDoanKienThuc(mauKienThuc);
+
+  return [
+    { role: 'system', content: buildSystemPrompt(persona, ctx) },
+    ...buildFewShot(persona),
+    ...lichSu,
+    // Cùng chỗ với đoạn tra web, cùng lý do: sát câu hỏi thì model dùng nó,
+    // và vai `user` vì template Qwen3.5 chỉ cho một system message ở đầu.
+    ...(doanKienThuc ? [{ role: 'user' as const, content: doanKienThuc }] : []),
+    ...(doanTraCuu ? [{ role: 'user' as const, content: doanTraCuu }] : []),
+    { role: 'user', content: heard },
+  ];
 }
 
 /**
@@ -104,8 +200,9 @@ async function luuCheDo(projectId: number, cheDo: CheDo): Promise<void> {
   });
 }
 
-export function clearHistory(deviceId: number): void {
-  histories.delete(deviceId);
+/** Xoá trí nhớ của MỘT robot — nút "quên hết đi" trên trang quản trị. */
+export async function clearHistory(deviceId: number): Promise<void> {
+  await prisma.makerConversation.deleteMany({ where: { deviceId } });
 }
 
 // ─── Chốt chặn chi phí ─────────────────────────────────────
@@ -203,10 +300,34 @@ function usable(p: LlmProvider): boolean {
  * kém hơn, nhưng còn nói được.
  */
 function llmChain(): LlmProvider[] {
+  const chain: LlmProvider[] = [];
+
+  // ── Máy nhà đứng ĐẦU nếu `robot_voice` được bật trong LLM_LOCAL_PURPOSES ──
+  //
+  // Đo 13/08/2026 trên đúng đề bài production: chữ đầu 96–333 ms so với
+  // 2.119–4.575 ms của cổng. Với robot thì đó là khác biệt giữa "nói chuyện
+  // được" và "chờ đèn đỏ".
+  const ep = endpointFor('robot_voice');
+  if (ep.local && ep.key) {
+    chain.push({ baseURL: `${ep.root}/v1`, key: ep.key, label: 'may-nha' });
+  }
+
   const primary = providerNamed((process.env.MAKERLAB_LLM_PROVIDER || 'compat').toLowerCase());
-  const chain = usable(primary) ? [primary] : [];
+  if (usable(primary) && !chain.some((c) => c.baseURL === primary.baseURL)) chain.push(primary);
+
+  // ⚠️ CỔNG phải nằm TRƯỚC Groq trong lưới đỡ.
+  //
+  // Trước 13/08/2026 lưới đỡ duy nhất là Groq — hợp lý hồi cổng là thứ đắt
+  // nhất. Giờ nhà chính là MÁY NHÀ, và máy nhà thì mất điện, mất mạng, hay
+  // đang bận train giọng. Rơi thẳng xuống Groq nghĩa là mỗi lần cúp điện ở
+  // nhà là robot đổi hẳn sang một model khác hẳn — kèm rủi ro 429 của bậc
+  // miễn phí (đã dính một lần). Cổng mới là thứ tương đương gần nhất.
+  const congP = providerNamed('compat');
+  if (usable(congP) && !chain.some((c) => c.baseURL === congP.baseURL)) chain.push(congP);
+
   const groqP = providerNamed('groq');
-  if (primary.label !== 'groq' && usable(groqP)) chain.push(groqP);
+  if (usable(groqP) && !chain.some((c) => c.baseURL === groqP.baseURL)) chain.push(groqP);
+
   if (!chain.length) chain.push(primary); // để lỗi nói rõ là thiếu gì
   return chain;
 }
@@ -661,17 +782,7 @@ async function thinkAndSpeak(
   const gw = await import('../../socket/device.gateway.js');
   const { PCM_SAMPLE_RATE } = await import('./audio.js');
 
-  const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
-    { role: 'system', content: buildSystemPrompt(persona, ctx) },
-    ...buildFewShot(persona),
-    // Kết quả tra internet đứng NGAY TRƯỚC câu người dùng vừa nói, ở vai
-    // system: đặt sau thì model đã đọc câu hỏi rồi mới thấy dữ liệu và
-    // hay bỏ qua; đặt lên đầu cùng tính cách thì nó lẫn với "mày là ai"
-    // và model dễ nhắc lại danh sách như đọc mục lục.
-    ...(doanTraCuu ? [{ role: 'system' as const, content: doanTraCuu }] : []),
-    ...getHistory(deviceId),
-    { role: 'user', content: heard },
-  ];
+  const messages = await dungMessages(persona, ctx, deviceId, heard, doanTraCuu);
 
   const chain = llmChain();
   const p = chain[0];
@@ -1000,17 +1111,7 @@ async function think(
   ctx: { deviceName?: string; battery?: number | null },
   doanTraCuu = '',
 ): Promise<RobotReply> {
-  const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
-    { role: 'system', content: buildSystemPrompt(persona, ctx) },
-    ...buildFewShot(persona),
-    // Kết quả tra internet đứng NGAY TRƯỚC câu người dùng vừa nói, ở vai
-    // system: đặt sau thì model đã đọc câu hỏi rồi mới thấy dữ liệu và
-    // hay bỏ qua; đặt lên đầu cùng tính cách thì nó lẫn với "mày là ai"
-    // và model dễ nhắc lại danh sách như đọc mục lục.
-    ...(doanTraCuu ? [{ role: 'system' as const, content: doanTraCuu }] : []),
-    ...getHistory(deviceId),
-    { role: 'user', content: heard },
-  ];
+  const messages = await dungMessages(persona, ctx, deviceId, heard, doanTraCuu);
 
   // Thử nhà chính, hỏng thì tụt xuống nhà dự phòng. Không lặp lại
   // trên cùng một nhà: đây là đường thời gian thực, thà trả lời câu

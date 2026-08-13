@@ -50,7 +50,11 @@ const ADMIN_USER_ID = 1;
 // `model` is what tells the providers apart.
 const WINDOW_MS = 5 * 60 * 60 * 1000;
 const WINDOW_BUDGET = Number(val('--budget', '3200000')) || 3_200_000;
-const MODEL = process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
+// Model lấy từ bản đồ dùng chung (src/services/llm/gateway.ts) — hằng số chép
+// tay ở đây từng làm bộ tự điều tiết đếm nhầm: nó lọc log theo TÊN MODEL, nên
+// khi model thật đổi thì bộ đếm trả 0 và script chạy hết tốc lực, im lặng.
+const { modelFor } = await import('../dist/services/llm/gateway.js');
+const MODEL = process.env.LLM_MODEL_GENERATION || modelFor('interview_generate');
 async function windowUsed() {
   const agg = await prisma.interviewLLMCallLog.aggregate({
     where: { createdAt: { gte: new Date(Date.now() - WINDOW_MS) }, success: true, model: MODEL },

@@ -44,7 +44,11 @@ const LIMIT = num('--limit', 0);
 const IDS = String(val('--ids', '')).split(',').map((x) => x.trim()).filter(Boolean)
   .map(Number).filter((n) => Number.isInteger(n) && n > 0);
 const BUDGET = num('--budget', 3_200_000);
-const MODEL = process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
+// Model lấy từ bản đồ dùng chung (src/services/llm/gateway.ts) — hằng số chép
+// tay ở đây từng làm bộ tự điều tiết đếm nhầm: nó lọc log theo TÊN MODEL, nên
+// khi model thật đổi thì bộ đếm trả 0 và script chạy hết tốc lực, im lặng.
+const { modelFor } = await import('../dist/services/llm/gateway.js');
+const MODEL = process.env.LLM_MODEL_GENERATION || modelFor('language_bulk');
 const BATCH = 10;
 
 // Which characters a word in this language MUST contain at least one of.

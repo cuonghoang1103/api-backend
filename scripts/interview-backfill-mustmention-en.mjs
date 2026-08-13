@@ -22,7 +22,11 @@ const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] :
 const BATCH = Number(val('--batch', 8)) || 8;
 const LIMIT = Number(val('--limit', 0)) || 0;
 const BUDGET = Number(val('--budget', 8_000_000)) || 8_000_000;
-const MODEL = process.env.LLM_MODEL_INTERVIEW || 'rb-sonnet-5';
+// Model lấy từ bản đồ dùng chung (src/services/llm/gateway.ts) — hằng số chép
+// tay ở đây từng làm bộ tự điều tiết đếm nhầm: nó lọc log theo TÊN MODEL, nên
+// khi model thật đổi thì bộ đếm trả 0 và script chạy hết tốc lực, im lặng.
+const { modelFor } = await import('../dist/services/llm/gateway.js');
+const MODEL = process.env.LLM_MODEL_INTERVIEW || modelFor('interview_generate');
 const WINDOW_MS = 5 * 60 * 60 * 1000;
 
 async function windowUsed() {

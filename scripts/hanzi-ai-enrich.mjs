@@ -32,7 +32,11 @@ const LANGS = String(val('--langs', 'ja,zh')).split(',').map((s) => s.trim()).fi
 const ONLY_LEVELS = String(val('--level', '')).split(',').map((x) => x.trim()).filter(Boolean);
 const LIMIT = num('--limit', 0);
 const BUDGET = num('--budget', 3_200_000);
-const MODEL = process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
+// Model lấy từ bản đồ dùng chung (src/services/llm/gateway.ts) — hằng số chép
+// tay ở đây từng làm bộ tự điều tiết đếm nhầm: nó lọc log theo TÊN MODEL, nên
+// khi model thật đổi thì bộ đếm trả 0 và script chạy hết tốc lực, im lặng.
+const { modelFor } = await import('../dist/services/llm/gateway.js');
+const MODEL = process.env.LLM_MODEL_GENERATION || modelFor('language_bulk');
 const BATCH = 8; // a character's entry is ~400 tokens out; 8 keeps JSON well clear of truncation
 
 // A quota belongs to a KEY, so only count what this model spent. --budget 0

@@ -134,7 +134,7 @@ export function DeviceConsole({
   isAuthed,
   speechRate: speechRate0 = 1,
   cheDo: cheDo0 = 'vi',
-  amLuong: amLuong0 = 80,
+  amLuong: amLuong0 = 50,
   giongTheoCheDo: giong0 = {},
   nao: nao0 = null,
 }: {

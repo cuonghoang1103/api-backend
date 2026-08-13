@@ -112,6 +112,35 @@ const TTS_TIMEOUT_MS = Number(process.env.MAKERLAB_TTS_TIMEOUT_MS) || 20_000;
 const TTS_TTFB_MS = Number(process.env.MAKERLAB_TTS_TTFB_MS) || 8_000;
 
 /**
+ * Hạn chờ byte đầu, tính theo ĐỘ DÀI khi máy đọc KHÔNG sinh theo luồng.
+ *
+ * ⚠️ MỘT CON SỐ CHO CẢ HAI MÁY ĐỌC LÀ SAI TỪ GIẢ ĐỊNH.
+ *
+ * VieNeu sinh theo luồng: byte đầu về sau ~165 ms bất kể đoạn dài bao
+ * nhiêu, nên 8 giây là quá thừa và bắt kẹt rất nhanh.
+ *
+ * Chatterbox thì KHÔNG. Nó làm xong cả đoạn rồi mới trả byte đầu tiên,
+ * nên "byte đầu" chính là "sinh xong". Đo thật 13/08/2026:
+ *
+ *    40 ký tự → 1.735 ms
+ *   120 ký tự → 3.709 ms
+ *   220 ký tự → 7.050 ms   ← sát mép
+ *   320 ký tự → 9.384 ms   ← VƯỢT hạn 8 giây
+ *
+ * Máy chủ gom câu tới ÍT NHẤT 220 ký tự nên đoạn thật thường 250-350.
+ * Hậu quả người dùng thấy: robot nói tiếng Anh được một hai câu rồi đột
+ * ngột nhảy sang giọng Google tiếng Việt đọc chữ tiếng Anh. Mẩu ĐẦU gửi
+ * ngay khi có một câu nên nó ngắn và sống sót; mẩu thứ hai mới chết.
+ *
+ * ~29 ms mỗi ký tự là số đo; nhân đôi thành 60 để chừa chỗ cho lúc máy
+ * bận (train giọng, LLM đang trả lời dài) mà vẫn bắt được kẹt thật.
+ */
+function hanChoByteDau(voice: string | null | undefined, soChu: number): number {
+  if (khoaGain('cuongmini', voice) !== 'cuongmini-en') return TTS_TTFB_MS;
+  return Math.max(TTS_TTFB_MS, 4_000 + soChu * 60);
+}
+
+/**
  * Phiên âm từ tiếng Anh sang chính tả tiếng Việt trước khi đưa cho máy
  * đọc. CHỈ cho `cuongmini` — đó là giọng nhân bản tiếng Việt.
  *
@@ -338,7 +367,8 @@ export async function streamCuongMini(
   // (đo thật), nên quá 8 giây mà chưa có gì thì nó không sắp có.
   const huy = new AbortController();
   const tong = setTimeout(() => huy.abort(), 120_000);
-  let dauTien = setTimeout(() => huy.abort(), TTS_TTFB_MS);
+  const han = hanChoByteDau(opts.voice, text.length);
+  let dauTien = setTimeout(() => huy.abort(), han);
 
   let res: Awaited<ReturnType<typeof fetch>>;
   try {
@@ -357,7 +387,7 @@ export async function streamCuongMini(
     clearTimeout(dauTien);
     throw new Error(
       huy.signal.aborted
-        ? `cuongmini không trả byte nào trong ${TTS_TTFB_MS} ms — máy đọc đang kẹt`
+        ? `cuongmini không trả byte nào trong ${han} ms (${text.length} ký tự) — máy đọc đang kẹt`
         : `cuongmini stream: ${e instanceof Error ? e.message : String(e)}`,
     );
   }
@@ -384,10 +414,91 @@ export async function streamCuongMini(
     }
   })();
   const r = Number(opts.speakingRate);
-  // Tốc độ 1 là đường nóng: KHÔNG đẻ tiến trình, không thêm một mili giây
-  // nào. Chỉ khi người dùng thật sự kéo thanh trượt mới dựng ffmpeg.
-  if (!Number.isFinite(r) || r === 1) return bomThang(nguon, onChunk);
-  return bomQuaTocDo(nguon, r, onChunk);
+  const loc = chuoiLoc(r, GAIN_DB[khoaGain('cuongmini', opts.voice)] ?? 0);
+  // Không có bộ lọc nào cần chạy ⇒ đường nóng: KHÔNG đẻ tiến trình,
+  // không thêm một mili giây nào.
+  if (!loc) return bomThang(nguon, onChunk);
+  return bomQuaFfmpeg(nguon, loc, onChunk);
+}
+
+/**
+ * ============================================================
+ * Chuẩn hoá độ TO — hai máy đọc, hai mức, chênh 6 dB
+ * ============================================================
+ *
+ * ⚠️ ĐỔI CHẾ ĐỘ TIẾNG LÀ ĐỔI LUÔN MÁY ĐỌC, VÀ HAI MÁY KHÔNG CÙNG MỘT MỨC.
+ *
+ * Đo thật 13/08/2026, cùng một câu, đo RMS:
+ *
+ *   Chatterbox (Anh + Robot)   ~7.400  →  −12,8 dBFS
+ *   VieNeu     (Tiếng Việt)    ~3.400  →  −19,6 dBFS
+ *
+ * Chênh 6,8 dB — hơn GẤP ĐÔI độ to. Người dùng nghe ra là "loa lúc to
+ * lúc nhỏ, không giữ đúng mức đã cài", và tưởng loa hỏng hoặc nút âm
+ * lượng không ăn. Thật ra nút vẫn ăn: nó nhân đúng phần trăm, nhưng nhân
+ * lên hai thứ vốn đã khác nhau.
+ *
+ * Trong CÙNG một máy đọc thì các giọng đều nhau (±0,4 dB đo trên 3 giọng
+ * mỗi bên), nên chênh lệch nằm ở tầng MÁY ĐỌC, không phải tầng giọng —
+ * và một bảng gain theo máy đọc là đủ.
+ *
+ * ── Vì sao KHÔNG dùng `speechnorm` / `loudnorm` ──
+ *
+ * `speechnorm` chỉ biết ĐẨY LÊN. Đo được: nguồn to −13,7 → −13,0 dBFS,
+ * tức nó làm cái đã to càng to hơn, và chênh lệch chỉ giảm còn 3,3 dB.
+ * Sai hướng.
+ *
+ * `loudnorm` (EBU R128) chuẩn nhất nhưng cần NHÌN TRƯỚC vài giây — đây
+ * là đường nói chuyện thời gian thực, độ trễ mở miệng đang ~165 ms và
+ * không được phép cộng thêm giây nào.
+ *
+ * Gain cố định + `alimiter` thì đoán trước được hoàn toàn, không thở
+ * phập phồng, không nhìn trước. Đo lại sau khi áp: −16,4 so với −15,5
+ * dBFS, chênh 0,9 dB — dưới ngưỡng tai người phân biệt — và KHÔNG mẫu
+ * nào vượt ngưỡng ở cả hai bên.
+ *
+ * Đổi bằng env khi thêm máy đọc mới, không cần sửa mã:
+ *   `MAKERLAB_GAIN_CUONGMINI_VI` / `MAKERLAB_GAIN_CUONGMINI_EN` / `MAKERLAB_GAIN_GOOGLE`
+ */
+const GAIN_DB: Record<string, number> = {
+  // VieNeu — nguồn nhỏ nhất, kéo lên.
+  'cuongmini-vi': Number(process.env.MAKERLAB_GAIN_CUONGMINI_VI ?? 3.7),
+  // Chatterbox — nguồn to nhất, hạ xuống.
+  'cuongmini-en': Number(process.env.MAKERLAB_GAIN_CUONGMINI_EN ?? -3.2),
+  // Google chỉ còn là lưới đỡ; để 0 cho tới khi có số đo thật.
+  google: Number(process.env.MAKERLAB_GAIN_GOOGLE ?? 0),
+};
+
+/** Giọng này thuộc máy đọc nào — quyết định lấy gain nào. */
+export function khoaGain(provider: string, voice?: string | null): string {
+  if (provider !== 'cuongmini') return provider;
+  // Giọng tiếng Anh đều bắt đầu bằng `en-`, trừ giọng nhân bản. Cách chắc
+  // chắn là hỏi máy chủ, nhưng ở đường nóng thì một lần gọi mạng cho mỗi
+  // mẩu tiếng là quá đắt — nên dựa vào tên, và giọng nhân bản tiếng Anh
+  // khai báo qua `MAKERLAB_GIONG_EN` khi cần.
+  const dsEn = (process.env.MAKERLAB_GIONG_EN || 'robot-walle')
+    .split(',')
+    .map((x) => x.trim())
+    .filter(Boolean);
+  const v = String(voice || '');
+  return v.startsWith('en-') || dsEn.includes(v) ? 'cuongmini-en' : 'cuongmini-vi';
+}
+
+/** Chuỗi bộ lọc ffmpeg, hoặc `null` nếu không cần đụng tới tiếng. */
+function chuoiLoc(rate: number, gainDb: number): string | null {
+  const loc: string[] = [];
+  if (Number.isFinite(rate) && rate !== 1) {
+    loc.push(`atempo=${Math.min(2, Math.max(0.5, rate)).toFixed(2)}`);
+  }
+  // Dưới 0,3 dB thì tai không nghe ra, mà vẫn phải đẻ một tiến trình
+  // ffmpeg cho mỗi mẩu tiếng. Không đáng.
+  if (Number.isFinite(gainDb) && Math.abs(gainDb) >= 0.3) {
+    // `alimiter` đứng SAU: kéo lên 3,7 dB trên một nguồn vốn đã chạm đỉnh
+    // 32767 (đo được ở giọng "Cuong") là vỡ tiếng. Limiter chặn đúng chỗ
+    // đó, và nó chỉ nhìn trước ~5 ms nên không ảnh hưởng độ trễ.
+    loc.push(`volume=${gainDb.toFixed(1)}dB`, 'alimiter=limit=0.95');
+  }
+  return loc.length ? loc.join(',') : null;
 }
 
 async function bomThang(
@@ -418,17 +529,18 @@ async function bomThang(
  * nhanh hơn nhưng giọng biến thành giọng chuột — đây là giọng nhân bản
  * của chính người dùng, méo cao độ là hỏng hết ý nghĩa.
  */
-async function bomQuaTocDo(
+async function bomQuaFfmpeg(
   nguon: AsyncIterable<Uint8Array>,
-  rate: number,
+  loc: string,
   onChunk: (pcm: Buffer) => Promise<boolean>,
 ): Promise<number> {
-  const r = Math.min(2, Math.max(0.5, rate));
   const { spawn } = await import('child_process');
   const ff = spawn(process.env.FFMPEG_PATH || 'ffmpeg', [
     '-hide_banner', '-loglevel', 'error',
     '-f', 's16le', '-ar', String(TTS_SR), '-ac', '1', '-i', 'pipe:0',
-    '-af', `atempo=${r.toFixed(2)}`,
+    // MỘT lượt ffmpeg cho cả đổi tốc độ lẫn chuẩn âm lượng. Hai lượt là
+    // hai tiến trình và hai lần sao chép đệm cho mỗi mẩu tiếng.
+    '-af', loc,
     '-f', 's16le', '-ar', String(TTS_SR), '-ac', '1', 'pipe:1',
   ]);
   // Người dùng chen lời ⇒ ta giết ffmpeg ⇒ lệnh ghi đang dở bắn EPIPE.

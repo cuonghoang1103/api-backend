@@ -1055,7 +1055,24 @@ async function thinkAndSpeak(
     //
     // 220 ký tự ≈ 14 giây tiếng, vẫn đủ dài để mối nối thưa, mà mẩu về
     // sớm hơn gần một giây so với 400.
-    const GOM_TOI_THIEU = 220;
+    /**
+     * ⚠️ CỠ MẨU PHẢI THEO MÁY ĐỌC, KHÔNG PHẢI MỘT SỐ CHUNG.
+     *
+     * 220 được chỉnh cho VieNeu, thứ sinh THEO LUỒNG: byte đầu về sau
+     * ~165 ms bất kể đoạn dài bao nhiêu, nên gom to chỉ có lợi (ít mối
+     * nối hơn) mà không tốn gì.
+     *
+     * Chatterbox thì ngược hẳn — nó làm xong CẢ ĐOẠN rồi mới trả byte
+     * đầu. Đo thật: 120 ký tự → 3,7 giây; 220 → 7,1 giây; 320 → 9,4
+     * giây. Gom to ở đây là tự cộng thẳng vào độ trễ mở miệng, và vượt
+     * hạn chờ thì cả mẩu bị vứt, tụt xuống giọng Google đọc tiếng Anh
+     * bằng âm tiếng Việt — đúng lỗi người dùng gặp: "nói được một hai
+     * câu là nó nhảy về giọng Google".
+     *
+     * 120 ký tự cho ~7,3 giây tiếng trong 3,7 giây sinh, tức bo phát
+     * gần gấp đôi thời gian máy cần cho mẩu sau. Thừa chỗ.
+     */
+    const GOM_TOI_THIEU = persona.cheDo === 'vi' ? 220 : 120;
     const cho: string[] = [];
     let daGuiMauDau = false;
 

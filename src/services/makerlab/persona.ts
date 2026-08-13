@@ -195,11 +195,15 @@ function apCheDo(p: PersonaConfig): PersonaConfig {
   // mặc định của chế độ → giọng chung trong persona.
   const rieng = p.giongTheoCheDo?.[p.cheDo] || null;
   const giong = rieng ?? cf.giong ?? p.voiceId;
-  if (!giong && !cf.nhaCungCap) return p;
+  if (!giong && !cf.nhaCungCap && !cf.ngonNgu) return p;
   return {
     ...p,
     voiceId: giong,
     voiceProvider: cf.nhaCungCap ?? p.voiceProvider,
+    // Ngôn ngữ đi theo chế độ, không theo cấu hình gốc của persona. Lưới
+    // đỡ Google lấy trường này — để nguyên `vi-VN` là nó đọc tiếng Anh
+    // bằng âm tiếng Việt.
+    language: cf.ngonNgu ?? p.language,
   };
 }
 
@@ -220,7 +224,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       speechRate: 1,
       cheDo: 'vi',
       giongTheoCheDo: null,
-      amLuong: 80,
+      amLuong: 50,
       nao: null,
       // 0.9 chứ không 0.8: chém gió cần chỗ để đi chệch. Nhiệt độ thấp
       // cho ra những câu đùa an toàn nhất, tức là những câu nhạt nhất.
@@ -251,7 +255,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     // mỗi lần deploy robot lại quay về tiếng Việt mà không ai hiểu vì sao.
     amLuong: (() => {
       const v = Number((row.traits as { amLuong?: unknown } | null)?.amLuong);
-      return Number.isFinite(v) && v > 0 ? Math.max(10, Math.min(100, v)) : 80;
+      return Number.isFinite(v) && v > 0 ? Math.max(10, Math.min(100, v)) : 50;
     })(),
     cheDo: laCheDo((row.traits as { cheDo?: unknown } | null)?.cheDo)
       ? ((row.traits as { cheDo: CheDo }).cheDo)

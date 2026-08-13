@@ -64,6 +64,20 @@ export interface CauHinhCheDo {
    * loa: đúng kiểu hỏng đã tốn cả buổi sáng nay để tìm.
    */
   nhaCungCap: string | null;
+  /**
+   * Mã ngôn ngữ cho máy đọc DỰ PHÒNG (Google), ví dụ `vi-VN` / `en-US`.
+   *
+   * ⚠️ QUÊN TRƯỜNG NÀY THÌ LƯỚI ĐỠ TỰ NÓ THÀNH MỘT LỖI.
+   *
+   * Người dùng báo 13/08/2026: chế độ tiếng Anh nói được một hai câu rồi
+   * nhảy sang "giọng Google tiếng Việt đọc tiếng Anh, rất khó hiểu".
+   * Nguyên nhân gốc là hạn chờ (đã vá), nhưng thứ biến một lần tụt hạng
+   * thành thứ KHÔNG NGHE NỔI là chỗ này: lưới đỡ luôn lấy
+   * `persona.language`, mà persona để `vi-VN` vĩnh viễn.
+   *
+   * Lưới đỡ được phép nghe kém hơn. Không được phép nghe SAI NGÔN NGỮ.
+   */
+  ngonNgu: string | null;
   /** Có phiên âm từ tiếng Anh sang chính tả Việt không. */
   phienAm: boolean;
   /** Câu robot nói ngay khi vừa đổi sang chế độ này. */
@@ -78,6 +92,7 @@ export const CHE_DO: Record<CheDo, CauHinhCheDo> = {
     nhacLlm: 'Trả lời HOÀN TOÀN bằng tiếng Việt, tự nhiên như đang nói chuyện.',
     giong: null, // giữ giọng nhân bản đang đặt trong persona
     nhaCungCap: null,
+    ngonNgu: null, // giữ `persona.language`
     phienAm: true,
     chaoDoi: 'Dạ, em nói tiếng Việt.',
     nhan: 'Tiếng Việt',
@@ -89,6 +104,7 @@ export const CHE_DO: Record<CheDo, CauHinhCheDo> = {
       'Keep it short — 3 or 4 sentences at most, because your words are read aloud.',
     giong: 'en-cham',
     nhaCungCap: 'cuongmini',
+    ngonNgu: 'en-US',
     // KHÔNG phiên âm ở chế độ tiếng Anh: ở đây chính tả GỐC mới là thứ
     // đúng, và đổi "deploy" thành "đi-pờ-loi" là biến nó thành một từ vô
     // nghĩa với máy đọc tiếng Anh.
@@ -109,6 +125,7 @@ export const CHE_DO: Record<CheDo, CauHinhCheDo> = {
     // giờ đến từ chính giọng mẫu, tự nhiên hơn hẳn.
     giong: 'robot-walle',
     nhaCungCap: 'cuongmini',
+    ngonNgu: 'en-US',
     phienAm: false,
     chaoDoi: 'Beep boop! Robot mode on.',
     nhan: 'Giọng robot',

@@ -135,7 +135,7 @@ static const uint32_t PLAY_START_BYTES = 16 * 1024;
  * 16.000 lần mỗi giây, và ESP32-S3 không có bộ tính số thực đủ nhanh
  * để phung phí.
  */
-static uint8_t volumePct = 100;
+static uint8_t volumePct = 50;   // mặc định 50% — server gửi lại mức đã lưu ngay khi bo nối được
 
 void setVolume(uint8_t pct) {
   if (pct < 10) pct = 10;

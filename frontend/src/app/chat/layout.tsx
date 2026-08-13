@@ -5,9 +5,9 @@ import type { Metadata } from 'next';
 // its own <title> (root template appends " | CuongThai") + description
 // without touching any rendering or logic.
 export const metadata: Metadata = {
-  title: 'AI Chat',
+  title: 'CuongMini AI',
   description:
-    'Chat with the CuongThai AI assistant.',
+    'Trò chuyện với CuongMini — trợ lý AI của cuongthai.com. Giải toán có hình vẽ, đọc ảnh/PDF/Word, và gọi bằng giọng nói.',
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -164,6 +164,7 @@ const MATH_CODE_RULES =
   + '- **TỰ KIỂM hình bằng SỐ trước khi gửi** — đây là chỗ sai nhiều nhất. Với mỗi ràng buộc của đề: ba điểm phải THẲNG HÀNG thì hai hệ số góc phải bằng nhau (ví dụ $E$ nằm trên đường $HD$ thì $\\frac{y_H-y_E}{x_H-x_E} = \\frac{y_D-y_H}{x_D-x_H}$); hai đường phải VUÔNG GÓC thì tích vô hướng hai vectơ chỉ phương bằng 0; điểm phải nằm TRÊN đường tròn thì khoảng cách tới tâm đúng bằng bán kính. Lệch thì tính lại toạ độ, đừng gửi hình "trông gần đúng".\n'
   + '- **Mỗi câu MỘT hình.** Đừng dồn hết điểm của cả bài (a, b, c) vào một hình: nhãn chồng lên nhau, đường cắt loạn, người học không biết nhìn đâu. Câu nào cần thêm điểm thì vẽ lại hình cho câu đó, chỉ gồm những gì câu đó dùng.\n'
   + '- Hai nhãn bất kỳ phải cách nhau ≥ 14 đơn vị. Điểm nào nằm sát nhau thì đẩy nhãn ra hai phía đối nhau.\n'
+  + '- **Hình phải có ĐỦ mọi điểm mà lời giải câu đó nhắc tới.** Chứng minh có nói tới $N$ mà hình không có $N$ thì người học không lần theo được — hình thiếu điểm còn tệ hơn không vẽ. Dựng xong hãy đọc lại lời giải, đối chiếu từng tên điểm.\n'
   + '- Dưới hình ghi một dòng chú thích ngắn về những gì đã dựng.\n'
   + '\n## Code:\n'
   + '- Code phải chạy được: đủ import/khai báo, đúng cú pháp, đặt tên rõ ràng. Ghi rõ ngôn ngữ + phiên bản khi nó ảnh hưởng tới kết quả.\n'

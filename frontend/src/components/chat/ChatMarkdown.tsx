@@ -13,11 +13,14 @@
  *    highlighting, lazy-loaded so it stays out of initial JS (same pattern as
  *    social/CodeBlock).
  */
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 import { Check, Copy } from 'lucide-react';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { sanitizeSvg } from '@/lib/safeSvg';
@@ -112,91 +115,79 @@ function CodeBlock({ language, code }: { language: string; code: string }) {
   );
 }
 
-// ── Công thức toán (KaTeX) ────────────────────────────────────────
-// Cùng cách làm với phòng thi (`app/exam/ExamRichContent.tsx`): nạp KaTeX
-// LƯỜI (chỉ khi trong câu trả lời thật sự có dấu công thức) rồi dựng thẳng
-// trên DOM đã mount. Không thêm remark-math/rehype-katex vì `katex` đã có sẵn
-// trong dự án — thêm hai gói nữa chỉ để làm việc y hệt là rủi ro không cần
-// (mỗi dependency mới là một lần Docker build có thể vỡ).
-const MATH_RE = /\$|\\\(|\\\[/;
-const MATH_DELIMS = [
-  { left: '$$', right: '$$', display: true },
-  { left: '\\[', right: '\\]', display: true },
-  { left: '\\(', right: '\\)', display: false },
-  { left: '$', right: '$', display: false },
-];
+// ── Công thức toán (KaTeX qua remark-math + rehype-katex) ─────────
+//
+// Trước đây chỗ này tự gọi `renderMathInElement` lên DOM đã mount. Cách đó
+// hỏng hai lần liên tiếp trên production, và cả hai đều CÙNG một gốc: công
+// thức bị MARKDOWN xử lý trước khi KaTeX kịp nhìn thấy.
+//
+//  1. `$$` xuống dòng → `remark-breaks` chèn `<br>` vào giữa, cặp dấu nằm ở
+//     ba nút văn bản khác nhau, KaTeX không ghép được.
+//  2. `\\` trong `\begin{align*}` → markdown coi `\\` là dấu thoát và trả
+//     về MỘT gạch chéo, thế là dấu xuống hàng của align biến mất.
+//
+// Vá bằng regex là chạy theo từng triệu chứng: sau `\\` sẽ tới `\{`, `\_`,
+// `\%`… mỗi cái một lần vỡ. `remark-math` bóc công thức ra thành nút riêng
+// NGAY TỪ LÚC PHÂN TÍCH, trước mọi phép thoát và trước `remark-breaks`, rồi
+// `rehype-katex` dựng nó — nội dung công thức không còn đi qua markdown nữa.
+//
+// (Thứ tự plugin có ý nghĩa: `remarkMath` phải đứng TRƯỚC `remarkBreaks`.)
+
+/** Môi trường LaTeX model hay viết TRẦN, không bọc `$$`. */
+const BARE_ENVS = ['align\\*', 'align', 'aligned', 'gather\\*', 'gather', 'equation\\*', 'equation', 'cases', 'array', 'bmatrix', 'pmatrix', 'vmatrix'];
 
 /**
- * Dồn công thức KHỐI về MỘT dòng trước khi đưa cho react-markdown.
+ * Đưa mọi kiểu viết công thức về đúng hai dạng `remark-math` hiểu (`$…$`,
+ * `$$…$$`), chỉ đụng phần NGOÀI khối ```code```.
  *
- * Model viết công thức đứng riêng theo kiểu chuẩn của LaTeX:
- *
- *     $$
- *     AB \perp AC.
- *     $$
- *
- * `remark-breaks` (bật để câu trả lời xuống dòng đúng ý model) biến MỖI dấu
- * xuống dòng thành một thẻ `<br>`. Thế là ba mảnh `$$`, `AB \perp AC.`, `$$`
- * nằm ở BA nút văn bản khác nhau trong DOM — mà `renderMathInElement` của
- * KaTeX chỉ ghép được cặp dấu nằm TRONG CÙNG một nút. Kết quả: công thức
- * trong dòng (`$...$`) dựng đẹp, còn công thức khối trơ ra thành chữ
- * `$$ \boxed{...} $$` — đúng thứ người dùng gặp trên production 13/08.
- *
- * Xuống dòng trong LaTeX chỉ là khoảng trắng, nên gộp lại KHÔNG đổi ý nghĩa.
- * Chỉ gộp phần NGOÀI khối ```code``` — trong đó `$$` là ký tự thật của shell,
- * PHP, awk… đụng vào là hỏng mã người ta dán.
+ * - `\begin{align*} … \end{align*}` viết trần → bọc `$$…$$`. Model xuất kiểu
+ *   này rất thường xuyên và nếu không bọc thì nó hiện ra nguyên chữ LaTeX.
+ * - `\[ … \]` → `$$ … $$`, `\( … \)` → `$ … $` (remark-math không nhận
+ *   hai cặp dấu này).
  */
-function inlineBlockMath(src: string): string {
+function normalizeMath(src: string): string {
   const parts = (src || '').split(/(```[\s\S]*?```|~~~[\s\S]*?~~~)/g);
+  const envRe = new RegExp(`(^|[^$])\\\\begin\\{(${BARE_ENVS.join('|')})\\}([\\s\\S]*?)\\\\end\\{\\2\\}`, 'g');
   for (let i = 0; i < parts.length; i += 2) {
     parts[i] = parts[i]
-      .replace(/\$\$([\s\S]*?)\$\$/g, (_m, inner: string) => `$$${inner.replace(/\s*\n\s*/g, ' ').trim()}$$`)
-      .replace(/\\\[([\s\S]*?)\\\]/g, (_m, inner: string) => `\\[${inner.replace(/\s*\n\s*/g, ' ').trim()}\\]`);
+      // ⚠️ `$$` PHẢI đứng một mình trên dòng của nó. Viết `$$\begin{align*}`
+      //    thì `remark-math` hiểu phần sau `$$` là METADATA của khối (giống
+      //    tên ngôn ngữ sau ```) và VỨT ĐI — KaTeX nhận được thân align mà
+      //    không có `\begin{align*}`, báo "Expected 'EOF', got '&'".
+      .replace(envRe, (_m, before: string, env: string, body: string) =>
+        `${before}\n\n$$\n\\begin{${env}}${body}\\end{${env}}\n$$\n\n`)
+      .replace(/\\\[([\s\S]*?)\\\]/g, (_m, inner: string) => `\n\n$$\n${inner.trim()}\n$$\n\n`)
+      // Dấu cách ngay sau `$` làm nó KHÔNG mở được công thức trong dòng (luật
+      // của remark-math), rồi `$` đó đi ghép với một `$` khác ở xa và nuốt cả
+      // đoạn văn vào giữa. Cắt trắng hai đầu là hết.
+      .replace(/\\\(([\s\S]*?)\\\)/g, (_m, inner: string) => `$${inner.trim()}$`);
   }
   return parts.join('');
 }
 
 /**
- * `renderMath = false` khi câu trả lời ĐANG chảy về: mỗi token là một lần
- * react-markdown vẽ lại, mà KaTeX thì thay hẳn nút chữ bằng cây <span> của
- * nó — hai bên giẫm chân nhau sẽ ra công thức nhấp nháy rồi biến mất. Dựng
- * một lần lúc câu trả lời đã xong là đủ và chắc.
- *
- * `memo` cũng vì lý do đó: bấm nút Chép/Tải làm bong bóng vẽ lại, nếu
- * ChatMarkdown vẽ lại theo thì React khôi phục lại nút chữ gốc và công thức
- * vừa dựng biến mất.
+ * `renderMath = false` khi câu trả lời ĐANG chảy về: công thức mới về một nửa
+ * (`$$\\frac{a}{`) thì KaTeX báo lỗi đỏ nhấp nháy giữa lúc máy còn đang gõ.
+ * Tắt plugin trong lúc stream, bật lại khi xong — chữ LaTeX thô hiện thoáng
+ * qua vài giây rồi thành công thức, dễ chịu hơn hẳn màn hình nháy đỏ.
  */
 function ChatMarkdown({ content, renderMath = true }: { content: string; renderMath?: boolean }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const source = useMemo(() => inlineBlockMath(content), [content]);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || !renderMath || !MATH_RE.test(source)) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        await import('katex/dist/katex.min.css' as unknown as string);
-        const mod = await import('katex/dist/contrib/auto-render.mjs' as unknown as string);
-        const renderMathInElement = (mod.default || mod) as (
-          e: HTMLElement, o: Record<string, unknown>,
-        ) => void;
-        if (cancelled || !ref.current) return;
-        renderMathInElement(ref.current, {
-          delimiters: MATH_DELIMS,
-          throwOnError: false,
-          // Bỏ qua khối code: `$` trong code là ký tự shell/PHP, không phải công thức.
-          ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-        });
-      } catch { /* nạp lỗi thì để nguyên chữ LaTeX thô, không làm hỏng câu trả lời */ }
-    })();
-    return () => { cancelled = true; };
-  }, [source, renderMath]);
+  const source = useMemo(() => normalizeMath(content), [content]);
+  const remarkPlugins = useMemo(
+    () => (renderMath ? [remarkGfm, remarkMath, remarkBreaks] : [remarkGfm, remarkBreaks]),
+    [renderMath],
+  );
+  const rehypePlugins = useMemo(
+    () => (renderMath ? [[rehypeKatex, { throwOnError: false, strict: false, trust: false }]] : []),
+    [renderMath],
+  );
 
   return (
-    <div ref={ref} className="chat-markdown break-words">
+    <div className="chat-markdown break-words">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkBreaks]}
+        remarkPlugins={remarkPlugins}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        rehypePlugins={rehypePlugins as any}
         components={{
           code({ className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');

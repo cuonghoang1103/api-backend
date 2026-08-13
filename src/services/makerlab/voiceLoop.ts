@@ -1115,6 +1115,48 @@ async function thinkAndSpeak(
     );
   }
 
+  /**
+   * ============================================================
+   * Tách việc SINH khỏi việc ĐẨY
+   * ============================================================
+   *
+   * ⚠️ `await speakPiece()` TUẦN TỰ LÀ NGUỒN GỐC CỦA "ĐẦU TO, SAU NHỎ".
+   *
+   * Bản trước đẩy từng mẩu PCM xuống bo NGAY trong `onChunk`, và chờ bo
+   * nhận xong mới chảy tiếp. Đệm bo chỉ 2 giây, nên đẩy một mẩu 16 giây
+   * tiếng mất ~14 giây thật. Xong mới bắt đầu SINH mẩu sau, mất thêm ~4
+   * giây — và suốt 4 giây đó bo không có gì để phát.
+   *
+   * Đo trên bo thật 13/08/2026, câu trả lời 1.127 chữ (~68 giây tiếng):
+   *
+   *     RƠI BYTE : 0                  ← không tràn
+   *     ĐÓI ĐỆM  : 1 lần / 27.406 ms  ← đói suốt 27 giây
+   *
+   * Tức hơn một phần ba lượt nói là khoảng lặng. Người dùng nghe thành
+   * "nói được một đoạn rồi nhỏ dần, giật".
+   *
+   * Máy đọc sinh nhanh gấp ~4 lần thời gian thực, nên nó THỪA SỨC chạy
+   * trước. Cái chặn nó là phép chờ ở `onChunk`. Bỏ phép chờ đó ra:
+   * `onChunk` chỉ NỐI việc đẩy vào một chuỗi rồi trả về ngay, còn máy
+   * đọc cứ chảy hết tốc lực vào bộ nhớ máy chủ.
+   *
+   * Chuỗi giữ ĐÚNG THỨ TỰ — tiếng mà đảo mẩu thì còn tệ hơn im lặng.
+   *
+   * Cái giá: PCM nằm tạm trong bộ nhớ VPS. Một lượt dài nhất (trần 180
+   * giây tiếng) là ~5,7 MB — không đáng kể, và nó đổi lấy việc bo không
+   * bao giờ phải ngồi chờ.
+   */
+  let chuoiDay: Promise<boolean> = Promise.resolve(true);
+  const noiVaoChuoi = (pcm: Buffer) => {
+    chuoiDay = chuoiDay.then(async (con) => {
+      if (!con || seq === null) return false;
+      const ok = await gw.speakStreamPushPcm(deviceId, pcm, seq as number);
+      if (ok && !firstAudioMs) firstAudioMs = Date.now() - started;
+      if (ok) spoken = true;
+      return ok;
+    });
+  };
+
   const speakPiece = async (piece: string) => {
     if (seq === null) return;
     const t = Date.now();
@@ -1142,10 +1184,10 @@ async function thinkAndSpeak(
             phienAm: CHE_DO[persona.cheDo].phienAm,
           },
           async (pcm) => {
-            const ok = await gw.speakStreamPushPcm(deviceId, pcm, seq as number);
-            if (ok && !firstAudioMs) firstAudioMs = Date.now() - started;
-            if (ok) spoken = true;
-            return ok;
+            // Trả `true` NGAY, không chờ bo. Máy đọc cứ chảy hết tốc
+            // lực; việc đẩy xuống bo đi theo chuỗi riêng, đúng thứ tự.
+            noiVaoChuoi(pcm);
+            return true;
           },
         );
         if (byte > 0) {
@@ -1378,6 +1420,13 @@ async function thinkAndSpeak(
       if (seq !== null) await speakPiece(conLai);
     }
 
+    // ⚠️ CHỜ CHUỖI ĐẨY XONG RỒI MỚI BÁO HẾT LƯỢT.
+    //
+    // Từ khi việc đẩy tách khỏi việc sinh, `speakPiece` trả về lúc máy
+    // đọc sinh xong — chứ KHÔNG phải lúc bo nhận xong. Báo `say_end`
+    // ngay lúc đó là cắt cụt đuôi câu, và bo còn coi mọi byte tới sau
+    // `say_end` là của lượt SAU nên nó vứt luôn.
+    await chuoiDay;
     if (seq !== null) gw.speakStreamEnd(deviceId, seq, parsed.say);
     // Ghi luôn ĐUÔI câu và số token ra: đó là hai thứ phân biệt được
     // "model bị cắt ở trần token" với "tiếng bị cắt lúc phát". Không có

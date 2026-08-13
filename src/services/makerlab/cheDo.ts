@@ -86,9 +86,13 @@ export const CHE_DO: Record<CheDo, CauHinhCheDo> = {
     nhacLlm:
       'Reply ENTIRELY in English, short and playful, like a small cartoon robot. ' +
       'Keep it to 2 or 3 short sentences.',
-    // Vẫn dùng giọng tiếng Anh; hiệu ứng robot đắp thêm ở tầng âm thanh.
-    // Khi có giọng nhân bản từ thoại nhân vật thì đổi đúng dòng này.
-    giong: 'en-cham',
+    // Giọng nhân bản từ đoạn thoại nhân vật người dùng gửi (13/08/2026),
+    // nằm ở dịch vụ Chatterbox trên máy nhà. Người dùng đã nghe và duyệt.
+    //
+    // KHÔNG đắp thêm bộ lọc robot bằng ffmpeg nữa: bản lọc (điều biến
+    // vòng + giảm bit) đã bị từ chối vì nghe rè và mất chữ. Chất robot
+    // giờ đến từ chính giọng mẫu, tự nhiên hơn hẳn.
+    giong: 'robot-walle',
     phienAm: false,
     chaoDoi: 'Beep boop! Robot mode on.',
     nhan: 'Giọng robot',

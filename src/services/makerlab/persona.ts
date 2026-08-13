@@ -61,6 +61,8 @@ export interface PersonaConfig {
   speechRate: number;
   /** Chế độ tiếng đang bật: vi | en | robot. */
   cheDo: CheDo;
+  /** Âm lượng loa 10-100, lưu bền để bo mất điện vẫn nhớ. */
+  amLuong: number;
   /**
    * Não đang dùng: `'may-nha'` | `'cong'` | `null` (theo cấu hình máy chủ).
    *
@@ -155,6 +157,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       knowledge: [],
       speechRate: 1,
       cheDo: 'vi',
+      amLuong: 80,
       nao: null,
       // 0.9 chứ không 0.8: chém gió cần chỗ để đi chệch. Nhiệt độ thấp
       // cho ra những câu đùa an toàn nhất, tức là những câu nhạt nhất.
@@ -183,6 +186,10 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     // Chế độ tiếng nằm cùng chỗ với tốc độ đọc — cột JSON có sẵn, khỏi
     // migration, và sống sót qua restart. Để trong bộ nhớ tiến trình thì
     // mỗi lần deploy robot lại quay về tiếng Việt mà không ai hiểu vì sao.
+    amLuong: (() => {
+      const v = Number((row.traits as { amLuong?: unknown } | null)?.amLuong);
+      return Number.isFinite(v) && v > 0 ? Math.max(10, Math.min(100, v)) : 80;
+    })(),
     cheDo: laCheDo((row.traits as { cheDo?: unknown } | null)?.cheDo)
       ? ((row.traits as { cheDo: CheDo }).cheDo)
       : 'vi',

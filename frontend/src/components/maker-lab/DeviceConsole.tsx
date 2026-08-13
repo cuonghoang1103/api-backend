@@ -107,12 +107,15 @@ export function DeviceConsole({
   isAuthed,
   speechRate: speechRate0 = 1,
   cheDo: cheDo0 = 'vi',
+  amLuong: amLuong0 = 80,
 }: {
   projectId: number;
   projectSlug: string;
   isAuthed: boolean;
   /** Chế độ tiếng đang lưu trong persona. */
   cheDo?: string;
+  /** Âm lượng đang lưu trong persona. */
+  amLuong?: number;
   /** Tốc độ đọc đang lưu trong persona, để thanh trượt khởi động đúng chỗ. */
   speechRate?: number;
 }) {
@@ -122,6 +125,40 @@ export function DeviceConsole({
   // ── Chế độ tiếng ──
   const [cheDo, setCheDo] = useState(cheDo0);
   const [savingCheDo, setSavingCheDo] = useState(false);
+
+  // ── Âm lượng ──
+  const [amLuong, setAmLuong] = useState(amLuong0);
+
+  /**
+   * Lưu MỘT lượt: tốc độ đọc, chế độ tiếng, âm lượng.
+   *
+   * Vì sao có nút Lưu riêng thay vì tự lưu từng thứ: người dùng muốn
+   * chỉnh vài thứ rồi mới chốt, và muốn biết chắc cái gì đã được ghi
+   * xuống. Tự lưu từng bước kéo thanh trượt vừa bắn nhiều lệnh chồng
+   * nhau, vừa không cho người ta cơ hội đổi ý.
+   *
+   * Âm lượng lưu vào persona VÀ gửi thẳng xuống bo: persona để tắt web
+   * mở lại vẫn nhớ, lệnh xuống bo để nghe thấy tác dụng ngay.
+   */
+  const [dangLuu, setDangLuu] = useState(false);
+  const luuTatCa = useCallback(async () => {
+    setDangLuu(true);
+    try {
+      await updatePersona(projectId, { speechRate: rate, cheDo, amLuong });
+      if (activeIdRef.current) {
+        try {
+          await sendCommand(activeIdRef.current, 'volume', { percent: amLuong });
+        } catch {
+          /* bo có thể đang tắt — cài đặt vẫn lưu, áp dụng ở lần bật sau */
+        }
+      }
+      toast.success(`Đã lưu · ${cheDo === 'vi' ? 'Tiếng Việt' : cheDo === 'en' ? 'English' : 'Robot'} · tốc độ ${rate.toFixed(2)}× · âm lượng ${amLuong}%`);
+    } catch {
+      toast.error('Không lưu được');
+    } finally {
+      setDangLuu(false);
+    }
+  }, [projectId, rate, cheDo, amLuong]);
 
   /**
    * Đổi chế độ tiếng. Đổi CẢ BA tầng ở phía server (tai nghe, đầu nghĩ,
@@ -183,7 +220,14 @@ export function DeviceConsole({
   const [thinking, setThinking] = useState(false);
 
   const logEndRef = useRef<HTMLDivElement>(null);
+  // `luuTatCa` khai báo TRƯỚC `activeId` nên không đọc trực tiếp được.
+  // Dùng ref thay vì đảo thứ tự: đảo thì phải kéo theo cả cụm state của
+  // thiết bị lên trên, và cụm đó vốn thuộc về phần dưới.
+  const activeIdRef = useRef<number | null>(null);
   const active = devices.find((d) => d.id === activeId) ?? null;
+  useEffect(() => {
+    activeIdRef.current = activeId;
+  }, [activeId]);
 
   // ── Load devices ──
   const refresh = useCallback(async () => {
@@ -624,6 +668,67 @@ export function DeviceConsole({
                   Riêng giọng miễn phí <code>translate_tts</code> không nhận tham số tốc độ.
                 </p>
               </div>
+
+              <div className="mt-4">
+                <div className="mb-1.5 flex items-center justify-between">
+                  <label className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                    Âm lượng loa
+                  </label>
+                  <span className="text-xs font-semibold" style={{ color: 'var(--accent, #6366f1)' }}>
+                    {amLuong}%
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setAmLuong((v) => Math.max(10, v - 10))}
+                    className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border text-sm font-bold"
+                    style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+                    aria-label="Giảm âm lượng"
+                  >
+                    −
+                  </button>
+                  <input
+                    type="range"
+                    min={10}
+                    max={100}
+                    step={5}
+                    value={amLuong}
+                    onChange={(e) => setAmLuong(Number(e.target.value))}
+                    className="w-full"
+                    style={{ accentColor: 'var(--accent, #6366f1)' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setAmLuong((v) => Math.min(100, v + 10))}
+                    className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border text-sm font-bold"
+                    style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+                    aria-label="Tăng âm lượng"
+                  >
+                    +
+                  </button>
+                </div>
+                <p className="mt-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                  Chỉnh bằng phần mềm vì mạch khuếch đại MAX98357A không có chân
+                  chỉnh — bấm Lưu để áp dụng và nhớ luôn cho lần bật sau.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => void luuTatCa()}
+                disabled={dangLuu}
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition disabled:opacity-50"
+                style={{ background: 'var(--accent, #6366f1)' }}
+              >
+                {dangLuu ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                {dangLuu ? 'Đang lưu…' : 'Lưu cài đặt'}
+              </button>
+              <p className="mt-1.5 text-center text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                Lưu chế độ tiếng, tốc độ đọc và âm lượng vào robot. Tắt web mở lại
+                vẫn giữ nguyên.
+              </p>
+
 
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {(['spin', 'wiggle', 'nod', 'shake', 'celebrate'] as const).map((n) => (

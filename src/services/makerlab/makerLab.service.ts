@@ -321,6 +321,7 @@ export async function upsertPersona(
      */
     speechRate?: number;
     cheDo?: string;
+    amLuong?: number;
   },
 ) {
   const { DEFAULT_PERSONA_PROMPT } = await import('./persona.js');
@@ -330,9 +331,10 @@ export async function upsertPersona(
   const coRate = typeof data.speechRate === 'number' && Number.isFinite(data.speechRate);
   const { laCheDo } = await import('./cheDo.js');
   const coCheDo = laCheDo(data.cheDo);
+  const coAmLuong = typeof data.amLuong === 'number' && Number.isFinite(data.amLuong);
 
   let traitsMerged = (data.traits ?? undefined) as Prisma.InputJsonValue | undefined;
-  if (coRate || coCheDo) {
+  if (coRate || coCheDo || coAmLuong) {
     const cur = await prisma.makerPersona.findUnique({
       where: { projectId },
       select: { traits: true },
@@ -342,6 +344,9 @@ export async function upsertPersona(
       ...base,
       ...(coRate ? { speechRate: Math.max(0.25, Math.min(4, data.speechRate as number)) } : {}),
       ...(coCheDo ? { cheDo: data.cheDo } : {}),
+      // Âm lượng lưu vào persona chứ không chỉ gửi xuống bo: bo mất điện
+      // là quên sạch, mà người dùng đã chỉnh thì họ mong nó GIỮ NGUYÊN.
+      ...(coAmLuong ? { amLuong: Math.max(10, Math.min(100, data.amLuong as number)) } : {}),
     } as Prisma.InputJsonValue;
   }
   const clean = {

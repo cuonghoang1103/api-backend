@@ -163,6 +163,8 @@ export interface PersonaPayload {
   speechRate?: number;
   /** Chế độ tiếng: 'vi' | 'en' | 'robot'. Đổi được cả từ web lẫn bằng giọng nói. */
   cheDo?: string;
+  /** Âm lượng loa 10-100. Lưu bền — bo mất điện vẫn nhớ. */
+  amLuong?: number;
 }
 
 /**

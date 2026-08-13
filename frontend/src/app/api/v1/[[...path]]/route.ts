@@ -149,6 +149,10 @@ async function toNextResponse(response: Response): Promise<NextResponse> {
     "x-accel-buffering", "access-control-expose-headers",
     // download filename + CV export round-trip signal
     "content-disposition", "x-cv-roundtrip",
+    // Ảnh → Word: số công thức KHÔNG dựng nổi thành công thức Word. Không
+    // chuyển tiếp thì giao diện luôn đọc ra 0 và báo "đều ổn" — đúng lúc
+    // người dùng cần biết là phải sửa tay.
+    "x-cong-thuc-hong", "x-cong-thuc-tong",
   ];
   for (const h of forwarding) {
     const v = response.headers.get(h);

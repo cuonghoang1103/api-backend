@@ -13,7 +13,7 @@ import {
   Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
   FileText, Newspaper, Radio, Code2, Binary, Map as MapIcon, ClipboardCheck,
   Waypoints, Blocks, CircuitBoard,
-  AudioLines,
+  AudioLines, ScanText,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -103,6 +103,7 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/cv', label: 'CV Builder', icon: FileText, section: 'learn' },
   // Tools
   { href: '/notes', label: 'Notes', icon: NotebookPen, section: 'tools' },
+  { href: '/tools/image-to-doc', label: 'Ảnh → Word', icon: ScanText, section: 'tools' },
   { href: '/chat', label: 'AI Chat', icon: Sparkles, section: 'tools' },
   { href: '/music', label: 'Music', icon: Music, section: 'tools' },
   { href: '/finance', label: 'MoneyFlow', icon: Wallet, section: 'tools' },

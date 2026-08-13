@@ -4566,6 +4566,64 @@ export interface VoiceUpsertPayload {
   publishedAt?: string | null;
 }
 
+// ─── Công cụ tài liệu: ảnh → chữ + công thức → Word ──────────────────────
+// Một ảnh mỗi lời gọi (xem `src/services/docTools/transcribe.service.ts`):
+// mỗi lượt 15–80 giây, nên gộp 10 ảnh vào một request sẽ đụng trần 300 giây
+// của nginx và mất luôn cả tập. Gọi lẻ thì hỏng trang nào biết trang đó.
+
+export type CheDoHinh = 'bo-qua' | 'mo-ta' | 've-lai';
+
+export interface HinhVeLai {
+  pngBase64: string;
+  rong: number;
+  cao: number;
+}
+
+export interface TrangChep {
+  chiSo: number;
+  ten?: string;
+  vanBan: string;
+  hinhVeLai: HinhVeLai[];
+  soChoNgo: number;
+  loi?: string;
+  model?: string;
+  tokenVao?: number;
+  tokenRa?: number;
+  costUsd?: number;
+}
+
+export const docToolsApi = {
+  presets() {
+    return api.get<{
+      data: {
+        toiDaAnh: number;
+        toiDaMoiAnhMb: number;
+        presets: { id: string; label: string; hint: string }[];
+        cheDoHinh: { id: CheDoHinh; label: string; hint: string }[];
+      };
+    }>('/doc-tools/presets');
+  },
+
+  /** Chép MỘT ảnh. `timeout` rộng: chế độ vẽ lại hình đo được tới ~80 giây. */
+  transcribe(file: File, opts: { presets?: string[]; note?: string; cheDoHinh?: CheDoHinh }) {
+    const fd = new FormData();
+    fd.append('images', file);
+    if (opts.presets?.length) fd.append('presets', JSON.stringify(opts.presets));
+    if (opts.note) fd.append('note', opts.note);
+    if (opts.cheDoHinh) fd.append('cheDoHinh', opts.cheDoHinh);
+    return api.post<{ data: { trang: TrangChep[]; tong: { soTrang: number; soTrangHong: number; soChoNgo: number; costUsd: number } } }>(
+      '/doc-tools/transcribe',
+      fd,
+      { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 180000 },
+    );
+  },
+
+  /** Bản chép đã sửa → file .docx (bytes, không phải JSON). */
+  exportDocx(data: { tieuDe?: string; vanBan: string; hinh?: { pngBase64: string; chuThich?: string }[] }) {
+    return api.post('/doc-tools/export/docx', data, { responseType: 'blob', timeout: 120000 });
+  },
+};
+
 export const voiceApi = {
   list(params?: { type?: VoiceType; series?: string; tag?: string; q?: string; featured?: boolean; page?: number; size?: number }) {
     return api.get<{

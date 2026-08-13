@@ -861,6 +861,7 @@ for route in \
     exams \
     maker-lab/projects \
     maker-lab/meta \
+    doc-tools/presets \
     repos \
     projects \
     about/stats \

@@ -212,6 +212,7 @@ export type LlmPurpose =
   | 'exam_grade'          // chấm bài tự luận phòng thi
   | 'exphub_doc'          // sinh tài liệu cho Exp Hub
   | 'news_bulletin'       // bản tin công nghệ chạy nền mỗi sáng
+  | 'doc_ocr'             // chép đề/bài giảng từ ẢNH ra chữ + công thức
   | 'robot_voice';        // robot Maker Lab — độ trễ quan trọng ngang độ thông minh
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
@@ -244,6 +245,11 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   exam_grade: 'gpt-5.5',
   exphub_doc: 'gpt-5.6-terra',
   news_bulletin: 'gpt-5.6-terra',
+  // Chép đề toán từ ảnh. Đo 13/08 trên một ảnh chụp lệch, nén JPEG q55, đủ
+  // phân số lồng / căn bậc ba / cận tích phân / vector: `sol` đúng 7/7 bài,
+  // `gpt-5.4-mini` (rẻ hơn 8 lần) rụng mũi tên vector `AB` → `|AB|`. Ở đây
+  // một ký hiệu sai là hỏng cả bài, nên KHÔNG hạ model để tiết kiệm.
+  doc_ocr: 'gpt-5.6-sol',
   // Robot đang chạy tốt với model này sau bốn lần vá lỗi âm thanh — đổi model
   // là đổi cả nhịp nói lẫn cách nó chọn lệnh, nên giữ nguyên. Thấy chậm thì
   // `gpt-5.4-mini` nhanh hơn rõ (1,3s so với 4,2s).
@@ -302,9 +308,17 @@ export interface LlmEndpoint {
  * nữa — cặp đó luôn trả về CỔNG, nên chỗ nào còn dùng nó là chỗ đó không bao
  * giờ đi máy nhà dù đã bật env.
  */
+/**
+ * Việc PHẢI NHÌN ĐƯỢC ẢNH. Máy nhà đang chạy Qwen3.5-9B — model CHỮ, không có
+ * mắt. Cho việc này đi máy nhà thì nó KHÔNG báo lỗi: nó trả lời trôi chảy như
+ * chưa từng thấy tấm ảnh nào, và người dùng nhận về một bản chép bịa. Nên chặn
+ * ở đây, chứ không trông vào việc nhớ đừng ghi tên nó vào `LLM_LOCAL_PURPOSES`.
+ */
+const VISION_PURPOSES = new Set<LlmPurpose>(['chat_vision', 'doc_ocr']);
+
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   const root = localRoot();
-  if (root && localPurposes().has(purpose) && process.env.LLM_LOCAL_API_KEY) {
+  if (root && !VISION_PURPOSES.has(purpose) && localPurposes().has(purpose) && process.env.LLM_LOCAL_API_KEY) {
     return { root, key: process.env.LLM_LOCAL_API_KEY, local: true, label: 'may-nha' };
   }
   return { root: gatewayRoot(), key: gatewayKey(), local: false, label: 'cong' };

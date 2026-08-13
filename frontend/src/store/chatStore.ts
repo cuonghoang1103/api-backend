@@ -27,6 +27,17 @@ interface ChatState {
   updateLastAssistantMessage: (sessionId: string, content: string) => void;
   /** Nối thêm một mẩu suy luận vào lượt assistant cuối (không đụng `content`). */
   appendAssistantReasoning: (sessionId: string, step: string) => void;
+  /**
+   * Mốc "mạch mới" theo phiên: tin nhắn CŨ HƠN mốc này vẫn hiện trên màn hình
+   * nhưng KHÔNG gửi lên model nữa.
+   *
+   * Cố ý KHÔNG xoá tin nhắn. Tiền tốn là do gửi lại lịch sử ở mỗi lượt, nên
+   * chỉ cần ngừng gửi là hết tốn — mà bài giải người dùng vừa nhận thì vẫn còn
+   * đó để đọc lại và tải về. Xoá thật là mất hẳn, không lấy lại được, và nó
+   * KHÔNG rẻ hơn cách này một đồng nào.
+   */
+  contextResetAt: Record<string, number>;
+  setContextReset: (sessionId: string, at?: number) => void;
   removePendingMessage: (sessionId: string, tempId: number) => void;
   setMessages: (sessionId: string, messages: ChatMessage[]) => void;
   clearMessages: (sessionId: string) => void;
@@ -156,6 +167,12 @@ export const useChatStore = create<ChatState>()(
           };
         }),
 
+      contextResetAt: {},
+      setContextReset: (sessionId, at) =>
+        set((state) => ({
+          contextResetAt: { ...state.contextResetAt, [sessionId]: at ?? Date.now() },
+        })),
+
       appendAssistantReasoning: (sessionId, step) =>
         set((state) => {
           const msgs = state.messages[sessionId];
@@ -213,6 +230,10 @@ export const useChatStore = create<ChatState>()(
         ),
         currentSessionId: state.currentSessionId,
         isSidebarOpen: state.isSidebarOpen,
+        // Mốc mạch mới phải sống qua F5, không thì tải lại trang là lịch sử
+        // cũ lặng lẽ được gửi lên lại và người dùng trả tiền cho thứ họ đã
+        // chủ động cắt.
+        contextResetAt: state.contextResetAt,
       }),
     }
   )

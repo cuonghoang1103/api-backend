@@ -52,14 +52,31 @@ import { logger } from '../utils/logger.js';
 // The chat surfaces send recent turns so the model has context. We cap the
 // count + per-message length so the prompt stays bounded (cost + latency).
 const MAX_HISTORY_TURNS = 10;
-const MAX_HISTORY_CHARS = 6000;
+const MAX_HISTORY_CHARS = 12_000;
+/** Lượt cuối — chỗ "viết tiếp" phải đọc lại. Xem `sanitizeHistory`. */
+const MAX_LAST_TURN_CHARS = 60_000;
 export interface ChatTurn { role: 'user' | 'assistant'; content: string }
+/**
+ * Cắt gọn lịch sử trước khi gửi lên model.
+ *
+ * ⚠️ Trần 6.000 ký tự/lượt là con số của thời câu trả lời còn ngắn. Từ
+ * 13/08/2026 bậc Max viết được tới 32.000 token (~100.000 ký tự), nên một
+ * lời giải toán dài bị cắt còn 6% khi quay lại làm lịch sử — và người dùng
+ * nhắn "viết tiếp" thì model KHÔNG ĐỌC ĐƯỢC phần nó vừa viết, đành hỏi lại
+ * từ đầu. Người dùng gặp thật: "trả lời được đoạn nó cứ bắt tôi gửi ảnh".
+ *
+ * Lượt CUỐI giữ dài hơn hẳn phần còn lại: đó chính là chỗ "viết tiếp" cần
+ * đọc. Các lượt cũ hơn chỉ cần đủ để nhớ mạch, không cần nguyên văn.
+ */
 function sanitizeHistory(history?: ChatTurn[]): ChatTurn[] {
   if (!Array.isArray(history)) return [];
-  return history
+  const giu = history
     .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim())
-    .slice(-MAX_HISTORY_TURNS)
-    .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_HISTORY_CHARS) }));
+    .slice(-MAX_HISTORY_TURNS);
+  return giu.map((m, i) => ({
+    role: m.role,
+    content: m.content.slice(0, i === giu.length - 1 ? MAX_LAST_TURN_CHARS : MAX_HISTORY_CHARS),
+  }));
 }
 
 // ─── Chat model registry (user-facing "CuongMini" tiers) ─────────────

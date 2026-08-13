@@ -17,6 +17,7 @@ import MatrixRain from '@/components/chat/MatrixRain';
 import QuotaIndicator from '@/components/chat/QuotaIndicator';
 import ChatSkinToggle from '@/components/chat/ChatSkinToggle';
 import VoiceCallOverlay from '@/components/chat/VoiceCallOverlay';
+import ContextBar from '@/components/chat/ContextBar';
 import { useChatSkinStore } from '@/store/chatSkinStore';
 import LottieClient from '@/components/ui/LottieClient';
 import type { ChatMessage, ChatSession } from '@/types';
@@ -237,6 +238,8 @@ export default function ChatPage() {
     addMessage,
     updateLastAssistantMessage,
     appendAssistantReasoning,
+    contextResetAt,
+    setContextReset,
     removePendingMessage,
     setMessages,
     setStreaming,
@@ -263,6 +266,34 @@ export default function ChatPage() {
   }, []);
 
   const currentMessages = currentSessionId ? (messages[currentSessionId] || []) : [];
+
+  // ── Cắt mạch: đo phần ĐANG được gửi lại ở mỗi lượt ───────────────
+  //
+  // Đo bằng KÝ TỰ chứ không bằng số tin nhắn: mười câu chào hỏi chẳng tốn gì,
+  // còn hai lời giải toán kèm hình thì đã hơn 40k ký tự và bị gửi lại nguyên
+  // vẹn ở mỗi câu hỏi tiếp theo.
+  const NGUONG_HOI = 24_000;      // đủ dài để đáng nhắc
+  const NGUONG_TU_CAT = 90_000;   // quá dài — tự cắt, chỉ báo cho biết
+  const [daBoQuaCatMach, setDaBoQuaCatMach] = useState(false);
+  const mocMach = currentSessionId ? (contextResetAt[currentSessionId] ?? 0) : 0;
+  const nguChanh = (() => {
+    const trong = currentMessages.filter((m) => new Date(m.createdAt).getTime() >= mocMach);
+    return { soTin: trong.length, soKyTu: trong.reduce((s, m) => s + (m.content?.length ?? 0), 0) };
+  })();
+  const hienThanhCatMach = !daBoQuaCatMach && nguChanh.soKyTu >= NGUONG_HOI;
+
+  // Quá ngưỡng cứng thì tự cắt — nhưng NÓI RA. Một tối ưu âm thầm làm model
+  // đột nhiên quên bài đang làm, và người dùng không hiểu vì sao.
+  useEffect(() => {
+    if (!currentSessionId || isStreaming) return;
+    if (nguChanh.soKyTu < NGUONG_TU_CAT) return;
+    setContextReset(currentSessionId);
+    setDaBoQuaCatMach(false);
+    toast.info('Mạch chat đã quá dài nên tôi tự cắt để bạn khỏi tốn — tin nhắn cũ vẫn còn trên màn hình');
+  }, [currentSessionId, isStreaming, nguChanh.soKyTu, setContextReset]);
+
+  // Đổi phiên thì lời nhắc phải hiện lại — "để sau" là cho phiên đó thôi.
+  useEffect(() => { setDaBoQuaCatMach(false); }, [currentSessionId]);
 
   // Check backend connectivity
   useEffect(() => {
@@ -406,10 +437,33 @@ export default function ChatPage() {
     };
 
     // Capture prior turns for multi-turn memory BEFORE adding the new message.
-    const historyPayload = (useChatStore.getState().messages[sessionId] || [])
+    // `contextResetAt` = ranh giới "mạch mới": tin nhắn cũ hơn mốc này vẫn nằm
+    // trên màn hình nhưng KHÔNG gửi lên model nữa (xem nút "Bắt đầu mạch mới").
+    const tatCa = useChatStore.getState().messages[sessionId] || [];
+    const moc = useChatStore.getState().contextResetAt[sessionId] ?? 0;
+    const historyPayload = tatCa
       .filter((m) => (m.role === 'user' || m.role === 'assistant') && m.content?.trim())
+      .filter((m) => new Date(m.createdAt).getTime() >= moc)
       .slice(-10)
       .map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }));
+
+    // ── Kèm lại ẢNH ĐỀ BÀI cho lượt hỏi tiếp ─────────────────────
+    //
+    // Lịch sử gửi lên model là CHỮ THUẦN — ảnh chỉ đi kèm đúng lượt người dùng
+    // vừa đính. Nên sau khi gửi ảnh đề toán, hỏi tiếp "viết tiếp" hay "câu c
+    // thì sao" là model KHÔNG CÒN NHÌN THẤY ĐỀ, và nó đành xin gửi lại ảnh.
+    // Người dùng gặp đúng lỗi này.
+    //
+    // Cách chữa: lượt sau không đính gì thì tự kèm lại ảnh của lượt có ảnh
+    // GẦN NHẤT — nhưng chỉ khi nó còn trong tầm mấy lượt vừa rồi, vì mỗi lần
+    // gửi lại là một lần trả tiền cho ảnh đó.
+    const TAM_NHO_ANH = 6; // số tin nhắn gần nhất còn coi là "đang làm bài đó"
+    let anhGui = images;
+    if ((!images || images.length === 0) && documents == null) {
+      const ganDay = tatCa.filter((m) => new Date(m.createdAt).getTime() >= moc).slice(-TAM_NHO_ANH);
+      const luotCoAnh = [...ganDay].reverse().find((m) => m.role === 'user' && m.images?.length);
+      if (luotCoAnh?.images?.length) anhGui = luotCoAnh.images.slice(0, 2);
+    }
 
     addMessage(sessionId, userMsg);
     setRobotEmotion('typing');
@@ -468,7 +522,7 @@ export default function ChatPage() {
           'Content-Type': 'application/json',
           ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
         },
-        body: JSON.stringify({ message: text.trim(), sessionId: sessionId || undefined, topK: 5, model: useChatModelStore.getState().modelId, history: historyPayload, images: images && images.length > 0 ? images : undefined, documents: documents && documents.length > 0 ? documents : undefined, documentNames: documentNames && documentNames.length > 0 ? documentNames : undefined, voice: opts?.voice === true }),
+        body: JSON.stringify({ message: text.trim(), sessionId: sessionId || undefined, topK: 5, model: useChatModelStore.getState().modelId, history: historyPayload, images: anhGui && anhGui.length > 0 ? anhGui : undefined, documents: documents && documents.length > 0 ? documents : undefined, documentNames: documentNames && documentNames.length > 0 ? documentNames : undefined, voice: opts?.voice === true }),
       });
 
       if (!res.ok) throw new Error('Stream failed');
@@ -1192,6 +1246,22 @@ export default function ChatPage() {
                 />
               )}
             </AnimatePresence>
+          )}
+          {/* Nhắc cắt mạch khi lịch sử đã đủ dài để tốn tiền thật sự.
+              Chỉ hiện lúc KHÔNG stream — chen vào giữa lúc đang trả lời thì
+              nó nhảy chỗ ngay dưới mắt người đang đọc. */}
+          {!isStreaming && hienThanhCatMach && currentSessionId && (
+            <ContextBar
+              soTin={nguChanh.soTin}
+              soKyTu={nguChanh.soKyTu}
+              skin={skin}
+              onMachMoi={() => {
+                setContextReset(currentSessionId);
+                setDaBoQuaCatMach(false);
+                toast.success('Đã cắt mạch — câu hỏi sau sẽ không gửi lại phần cũ nữa');
+              }}
+              onBoQua={() => setDaBoQuaCatMach(true)}
+            />
           )}
         </div>
 

@@ -25,6 +25,8 @@ interface ChatState {
 
   addMessage: (sessionId: string, message: ChatMessage) => void;
   updateLastAssistantMessage: (sessionId: string, content: string) => void;
+  /** Nối thêm một mẩu suy luận vào lượt assistant cuối (không đụng `content`). */
+  appendAssistantReasoning: (sessionId: string, step: string) => void;
   removePendingMessage: (sessionId: string, tempId: number) => void;
   setMessages: (sessionId: string, messages: ChatMessage[]) => void;
   clearMessages: (sessionId: string) => void;
@@ -154,6 +156,20 @@ export const useChatStore = create<ChatState>()(
           };
         }),
 
+      appendAssistantReasoning: (sessionId, step) =>
+        set((state) => {
+          const msgs = state.messages[sessionId];
+          if (!msgs || msgs.length === 0) return state;
+          const last = msgs[msgs.length - 1];
+          if (last.role !== 'assistant') return state;
+          return {
+            messages: {
+              ...state.messages,
+              [sessionId]: [...msgs.slice(0, -1), { ...last, reasoning: (last.reasoning || '') + step }],
+            },
+          };
+        }),
+
       removePendingMessage: (sessionId, tempId) =>
         set((state) => ({
           messages: {
@@ -184,7 +200,17 @@ export const useChatStore = create<ChatState>()(
       storage: createJSONStorage(() => ssrSafeStorage),
       partialize: (state) => ({
         sessions: state.sessions,
-        messages: state.messages,
+        // Bỏ `reasoning` trước khi ghi xuống localStorage. Một bài hình khó
+        // đẻ ra ~1,8KB bước suy luận, và persist ghi LẠI TOÀN BỘ store sau
+        // MỖI token chảy về — giữ lại là vừa phình chỗ chứa (trần ~5MB) vừa
+        // tốn công tuần tự hoá mỗi token, đổi lấy thứ chỉ đáng xem lúc đang
+        // chờ. Mở lại đoạn chat cũ sẽ không còn các bước — đúng ý đồ.
+        messages: Object.fromEntries(
+          Object.entries(state.messages).map(([sid, list]) => [
+            sid,
+            list.map(({ reasoning: _drop, ...rest }) => rest),
+          ]),
+        ),
         currentSessionId: state.currentSessionId,
         isSidebarOpen: state.isSidebarOpen,
       }),

@@ -42,7 +42,7 @@ import {
   computeEmbeddings,
   cosineSimilarity,
 } from './aiProviders.js';
-import { claudeChatAvailable, completeClaudeChat, completeViaOpenAiRoute, hasDocument, hasImage, streamClaudeChat, streamViaOpenAiRoute, proModel, maxModel, proMaxTokens, maxMaxTokens, visionModel, type ClaudeMessage, type ClaudeContentBlock } from './claudeChat.js';
+import { claudeChatAvailable, completeClaudeChat, completeViaOpenAiRoute, hasDocument, hasImage, streamClaudeChat, streamViaOpenAiRoute, proModel, maxModel, proMaxTokens, maxMaxTokens, visionModel, type ClaudeMessage, type ClaudeContentBlock, type ChatStreamPart } from './claudeChat.js';
 import { isProEffective } from './pro.service.js';
 import { isAnthropicModel } from './llm/gateway.js';
 import { logger } from '../utils/logger.js';
@@ -83,6 +83,25 @@ export const CHAT_MODELS: Record<string, ChatModelDef> = {
 };
 function resolveChatModel(id?: string): ChatModelDef {
   return (id && CHAT_MODELS[id]) || CHAT_MODELS[DEFAULT_CHAT_MODEL_ID];
+}
+
+/**
+ * Mức suy luận cho từng bậc — thứ quyết định người dùng có thấy "đang suy
+ * luận" hay không, vì không gửi `reasoning_effort` thì cổng KHÔNG trả về
+ * `reasoning_content` nào cả (đo 13/08/2026).
+ *
+ * Max cao vì đó là bậc dành cho bài khó (toán hình nhiều bước) — thêm token
+ * suy luận ở đây là thứ đáng tiền nhất. Pro để `medium`: bậc này bán bằng ĐỘ
+ * NHANH (2,4s so với 4,7s), đẩy lên `high` là bỏ mất lý do tồn tại của nó.
+ *
+ * Tắt hẳn: `AI_CHAT_REASONING=off` (mất luôn dòng "đang suy luận", câu trả
+ * lời không đổi). Hoặc ép một mức: `AI_CHAT_REASONING=low|medium|high`.
+ */
+function reasoningEffortFor(modelId: string): 'low' | 'medium' | 'high' | undefined {
+  const env = (process.env.AI_CHAT_REASONING || '').trim().toLowerCase();
+  if (env === 'off') return undefined;
+  if (env === 'low' || env === 'medium' || env === 'high') return env;
+  return modelId === 'cuongmini-max' ? 'high' : 'medium';
 }
 
 /** Mutable metadata the route reads to tell the client which model actually
@@ -687,7 +706,7 @@ export class AIService {
   async *streamChat(
     context: ChatContext,
     meta?: ChatModelMeta,
-  ): AsyncGenerator<string, void, unknown> {
+  ): AsyncGenerator<ChatStreamPart, void, unknown> {
     const { sessionId, message, documentType, topK } = context;
 
     // Build RAG context
@@ -757,10 +776,18 @@ export class AIService {
         try {
           const stream = pdfTurn
             ? streamClaudeChat({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens })
-            : streamViaOpenAiRoute({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens });
-          for await (const delta of stream) {
-            streamed += delta;
-            yield delta;
+            : streamViaOpenAiRoute({
+                model: gwModel,
+                system: systemPrompt,
+                messages: claudeMessages,
+                maxTokens: outTokens,
+                reasoningEffort: reasoningEffortFor(selected.id),
+              });
+          for await (const part of stream) {
+            // Bước suy luận đi thẳng ra client, KHÔNG cộng vào câu trả lời —
+            // cộng vào là nó vừa lọt vào bong bóng chat vừa được lưu xuống DB.
+            if (typeof part === 'string') streamed += part;
+            yield part;
           }
           // Empty stream (no error but zero tokens) → treat as failure so we
           // try the non-stream path rather than returning a blank answer.
@@ -925,7 +952,7 @@ export class AIService {
    * Dùng khi cần access thêm metadata (usage, model info).
    */
   async getStreamResult(context: ChatContext): Promise<{
-    stream: AsyncGenerator<string, void, unknown>;
+    stream: AsyncGenerator<ChatStreamPart, void, unknown>;
     sessionId: string | undefined;
   }> {
     const { sessionId } = context;

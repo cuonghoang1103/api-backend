@@ -111,7 +111,29 @@ interface ClaudeCallParams {
   messages: ClaudeMessage[];
   maxTokens?: number;
   timeoutMs?: number;
+  /**
+   * Bật phần SUY LUẬN của model (`reasoning_effort` của tuyến OpenAI).
+   *
+   * Đo thật 13/08/2026 trên modelapi.vn: KHÔNG gửi tham số này thì `delta` chỉ
+   * có `role` + `content`; gửi vào thì có thêm `reasoning_content` — mỗi bước
+   * là một tiêu đề in đậm kiểu `**Proving A,H,D,C cyclic via right angles**`.
+   * Cả bốn model `gpt-5.6-sol` / `gpt-5.5` / `gpt-5.6-terra` / `gpt-5.4-mini`
+   * đều nhận, cả ba mức `low` / `medium` / `high` đều chạy.
+   *
+   * Không đặt ⇒ không gửi ⇒ y như cũ. Token suy luận tính vào token RA nên
+   * mức càng cao càng tốn — xem chỗ gọi trong `ai.service.ts`.
+   */
+  reasoningEffort?: 'low' | 'medium' | 'high';
 }
+
+/**
+ * Một mẩu chảy về từ model.
+ *
+ * Chuỗi = chữ của câu trả lời (giữ nguyên kiểu cũ nên mọi chỗ đang cộng dồn
+ * chuỗi không phải sửa). Đối tượng = một bước suy luận, KHÔNG phải câu trả
+ * lời — đừng cộng nó vào nội dung tin nhắn.
+ */
+export type ChatStreamPart = string | { type: 'reasoning'; text: string };
 
 /** Bỏ lượt rỗng và giữ đúng thứ tự lượt mà API đòi. */
 function usableMessages(messages: ClaudeMessage[]): ClaudeMessage[] {
@@ -184,6 +206,7 @@ function toOpenAiBody(p: ClaudeCallParams, stream: boolean): string {
       ...usableMessages(p.messages).map((m) => ({ role: m.role, content: toOpenAiContent(m.content) })),
     ],
     ...(stream ? { stream: true } : {}),
+    ...(p.reasoningEffort ? { reasoning_effort: p.reasoningEffort } : {}),
   });
 }
 
@@ -283,7 +306,7 @@ export async function completeClaudeChat(p: ClaudeCallParams): Promise<string> {
  * dịch giao thức, nhưng đi đường vòng chẳng được gì. Tuyến OpenAI thì nhận
  * ảnh theo đúng chuẩn `image_url`, và đó là thứ đã đo chạy thật.
  */
-export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator<string, void, unknown> {
+export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator<ChatStreamPart, void, unknown> {
   if (hasDocument(p.messages)) throw new Error('tuyến OpenAI không đọc được PDF');
   const key = requireKey();
   const ctrl = new AbortController();
@@ -314,12 +337,16 @@ export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator
         if (!raw || raw === '[DONE]') continue;
         try {
           const evt = JSON.parse(raw) as {
-            choices?: Array<{ delta?: { content?: string } }>;
+            choices?: Array<{ delta?: { content?: string; reasoning_content?: string; reasoning?: string } }>;
             error?: { message?: string };
           };
           if (evt.error) throw new Error(`openai route stream error: ${evt.error.message ?? 'unknown'}`);
-          const delta = evt.choices?.[0]?.delta?.content;
-          if (delta) yield delta;
+          const d = evt.choices?.[0]?.delta;
+          // Suy luận về TRƯỚC câu trả lời. Hai tên vì các cổng gộp đặt khác
+          // nhau; modelapi.vn dùng `reasoning_content` (đo 13/08).
+          const think = d?.reasoning_content ?? d?.reasoning;
+          if (think) yield { type: 'reasoning', text: think };
+          if (d?.content) yield d.content;
         } catch (e) {
           if (e instanceof Error && e.message.startsWith('openai route stream error')) throw e;
         }

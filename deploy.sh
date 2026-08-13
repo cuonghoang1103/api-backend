@@ -169,6 +169,13 @@ if [ "$MODE" = "local" ]; then
     # ⚠️ KHÔNG chèn dòng `#` vào giữa các dòng nối bằng `\` bên dưới: dấu `\`
     # nối các dòng thành MỘT lệnh, nên `#` sẽ biến mọi tham số phía sau thành
     # chú thích — kể cả `--exclude='.env'`, tức là bí mật bị đẩy lên VPS.
+    #
+    # `secrets.h`: khoá WiFi/API của firmware con robot
+    # (firmware/mini-me-robot/src/secrets.h). Nó KHÔNG khớp mẫu `.env*` nên
+    # suốt thời gian qua vẫn được đẩy lên VPS — bí mật nằm trên server mà
+    # không ai cần tới nó ở đó (firmware nạp qua USB/OTA từ máy local, VPS
+    # không build firmware). Thêm ở đây thì `--delete-excluded` cũng tự XOÁ
+    # bản đã lỡ đẩy lên trong lần deploy kế tiếp.
     rsync -azP \
         --delete \
         --delete-excluded \
@@ -180,6 +187,7 @@ if [ "$MODE" = "local" ]; then
         --exclude='.env' \
         --exclude='.env.*' \
         --exclude='*.env' \
+        --exclude='secrets.h' \
         --exclude='uploads/' \
         --exclude='*.log' \
         --exclude='.DS_Store' \

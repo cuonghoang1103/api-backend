@@ -372,10 +372,26 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
 
   try {
     // async generator: yields each text chunk from Gemini stream
-    for await (const chunk of aiService.streamChat(chatContext, modelMeta)) {
+    for await (const part of aiService.streamChat(chatContext, modelMeta)) {
       // Emit the resolved model once (before the first token) so the client can
       // revert the picker immediately if a Claude tier fell back to default.
       sendModelFrame();
+
+      // ─── Bước suy luận ───────────────────────────────────
+      // Khung RIÊNG, và trường tên `step` chứ KHÔNG phải `text`: mọi chỗ đọc
+      // stream cũ đều làm `data.text ?? data.content ?? ''` rồi cộng vào câu
+      // trả lời (xem ChatModal.tsx) — đặt tên `text` là suy luận lọt thẳng
+      // vào bong bóng chat của những client chưa cập nhật.
+      // Không tính vào tokenCount/accumulated: hai cái đó là chốt chặn ĐỘ DÀI
+      // CÂU TRẢ LỜI, tính lẫn suy luận vào là cắt ngang câu trả lời thật.
+      if (typeof part !== 'string') {
+        if (part.text) {
+          res.write(`data: ${JSON.stringify({ type: 'reasoning', step: part.text })}\n\n`);
+        }
+        continue;
+      }
+      const chunk = part;
+
       // Safety: max 10000 tokens
       tokenCount++;
       if (tokenCount > 10000) {

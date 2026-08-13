@@ -126,7 +126,7 @@ export const MODEL_CATALOG: Record<string, ModelInfo> = {
   'claude-opus-5': { vendor: 'anthropic', in: 5, out: 25, vision: true, note: '⚠ chưa mua được — suy luận sâu nhất + đọc PDF gốc' },
   'claude-sonnet-5': { vendor: 'anthropic', in: 3, out: 15, vision: true, note: '⚠ chưa mua được — giỏi code, giá vừa' },
   'claude-sonnet-4-6': { vendor: 'anthropic', in: 3, out: 15, vision: true, note: '⚠ chưa mua được' },
-  'claude-fable-5': { vendor: 'anthropic', in: 1, out: 5, vision: true, note: '⚠ chưa mua được' },
+  'claude-fable-5': { vendor: 'anthropic', in: 10, out: 50, vision: true, note: '⚠ chưa mua được — đắt nhất, gấp đôi opus-5' },
   'claude-opus-4-8': { vendor: 'anthropic', in: 5, out: 25, vision: true, note: '⚠ chưa mua được' },
   'claude-opus-4-7': { vendor: 'anthropic', in: 5, out: 25, vision: true, note: '⚠ chưa mua được' },
   'claude-opus-4-6': { vendor: 'anthropic', in: 5, out: 25, vision: true, note: '⚠ chưa mua được' },

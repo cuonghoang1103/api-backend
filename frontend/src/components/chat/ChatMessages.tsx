@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import type { ChatMessage } from '@/types';
 import { downloadTextFile, downloadPdf } from '@/lib/chatExport';
 import ChatMarkdown from './ChatMarkdown';
+import ThinkingSteps from './ThinkingSteps';
 import { api } from '@/lib/api';
 import type { ChatSkin } from '@/store/chatSkinStore';
 
@@ -216,10 +217,19 @@ function MessageBubble({ msg, isStreaming, isLastAssistant, skin = 'terminal' }:
             </div>
           ) : (
             <div className="markdown-content pt-0.5 text-[15px] leading-7 text-[color:var(--studio-text)]">
+              <ThinkingSteps
+                reasoning={msg.reasoning}
+                streaming={isStreaming && isLastAssistant}
+                hasAnswer={!!msg.content?.trim()}
+                skin="studio"
+              />
               {(() => {
                 const raw = msg.content ?? '';
                 if (!raw.trim()) {
-                  return <span className="italic text-[color:var(--studio-text-faint)]">Đang soạn câu trả lời…</span>;
+                  // Chưa có bước suy luận nào ⇒ vẫn phải nói gì đó, không thì
+                  // bong bóng rỗng trông như hỏng.
+                  if (msg.reasoning?.trim()) return null;
+                  return <span className="italic text-[color:var(--studio-text-faint)]">CuongMini đang suy luận…</span>;
                 }
                 return <ChatMarkdown content={raw} renderMath={!(isStreaming && isLastAssistant)} />;
               })()}
@@ -365,11 +375,18 @@ function MessageBubble({ msg, isStreaming, isLastAssistant, skin = 'terminal' }:
         >
           {!isUser ? (
             <div className="markdown-content">
+              <ThinkingSteps
+                reasoning={msg.reasoning}
+                streaming={isStreaming && isLastAssistant}
+                hasAnswer={!!msg.content?.trim()}
+                skin="terminal"
+              />
               {/* Guard: ensure msg.content is never undefined/null, else show placeholder */}
               {(() => {
                 const raw = msg.content ?? '';
                 if (!raw.trim()) {
-                  return <span className="text-[#64748b] italic">[CuongMini đang xử lý...]</span>;
+                  if (msg.reasoning?.trim()) return null;
+                  return <span className="text-[#64748b] italic">[CuongMini đang suy luận...]</span>;
                 }
                 return <ChatMarkdown content={raw} renderMath={!(isStreaming && isLastAssistant)} />;
               })()}

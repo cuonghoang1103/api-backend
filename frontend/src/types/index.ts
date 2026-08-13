@@ -328,6 +328,13 @@ export interface ChatMessage {
   images?: string[];
   /** Names of attached PDFs, user turns only (shown as chips; not persisted). */
   documentNames?: string[];
+  /**
+   * Các bước suy luận của model, nối liền theo thứ tự chảy về (lượt assistant).
+   * Chỉ sống trong phiên đang mở — backend không lưu xuống DB, nên mở lại
+   * đoạn chat cũ sẽ không có. Cố ý: đây là thứ xem lúc chờ, không phải nội
+   * dung câu trả lời.
+   */
+  reasoning?: string;
   tokenCount?: number;
   createdAt: string;
 }

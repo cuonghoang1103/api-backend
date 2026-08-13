@@ -236,6 +236,7 @@ export default function ChatPage() {
     setCurrentSessionId,
     addMessage,
     updateLastAssistantMessage,
+    appendAssistantReasoning,
     removePendingMessage,
     setMessages,
     setStreaming,
@@ -528,6 +529,13 @@ export default function ChatPage() {
               }
               continue;
             }
+            // Bước suy luận của model. Trường là `step` chứ không phải `text`
+            // — cố ý, để nó không bị nhánh cộng chuỗi bên dưới nuốt vào câu
+            // trả lời (xem ghi chú ở ai.routes.ts).
+            if (data.type === 'reasoning') {
+              if (data.step) appendAssistantReasoning(sessionId, data.step);
+              continue;
+            }
             if (data.type === 'done') {
               if (typeof data.messageId === 'number') resolvedMessageId = data.messageId;
               continue;
@@ -649,7 +657,7 @@ export default function ChatPage() {
   }, [
     isStreaming, currentSessionId, addMessage, setStreaming, setRobotEmotion,
     setSuggestedPrompts, setMessages, setCurrentSessionId, addSession,
-    updateLastAssistantMessage, removePendingMessage, removeSession, limitedMode, setLimitedMode,
+    updateLastAssistantMessage, appendAssistantReasoning, removePendingMessage, removeSession, limitedMode, setLimitedMode,
     getToken,
   ]);
 

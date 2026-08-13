@@ -250,16 +250,106 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   robot_voice: 'gpt-5.6-terra',
 };
 
-/** Model cho một công việc. `LLM_MODEL_<PURPOSE>` đè lên mặc định. */
-export function modelFor(purpose: LlmPurpose): string {
+// ─── Định tuyến lai: việc nào đi máy nhà, việc nào đi cổng ─────────
+
+/**
+ * Máy nhà (RTX 3060) chạy Qwen3.5-9B qua llama.cpp, mở đúng tuyến OpenAI
+ * `/v1/chat/completions` nên cắm vào đây không cần lớp chuyển đổi nào.
+ *
+ * Đo 13/08/2026, cùng một đề bài production của robot:
+ *     cổng `gpt-5.6-terra`  chữ đầu 2.119–4.575 ms
+ *     máy nhà  9B           chữ đầu    96–  333 ms
+ * Đổi lại: tiếng Việt 87% so với 93%, và tục ngữ yếu hơn (đã bù bằng tra web).
+ *
+ * BA biến, không phải bảy — một địa chỉ, một khoá, một danh sách việc:
+ *     LLM_LOCAL_BASE_URL=http://127.0.0.1:18100   (KHÔNG kèm /v1)
+ *     LLM_LOCAL_API_KEY=...
+ *     LLM_LOCAL_PURPOSES=robot_voice,cv_parse,language_bulk,...
+ *
+ * Thiếu bất kỳ biến nào ⇒ mọi việc đi cổng như cũ. Đây là mặc định, và nó
+ * phải là mặc định: máy nhà mất điện hay mất mạng KHÔNG được làm chết web.
+ */
+function localRoot(): string | undefined {
+  const raw = process.env.LLM_LOCAL_BASE_URL?.trim();
+  if (!raw) return undefined;
+  return raw.replace(/\/+$/, '').replace(/\/v1$/, '');
+}
+
+/** Việc nào được phép đi máy nhà. Tên sai chính tả ⇒ việc đó đi cổng, im lặng. */
+function localPurposes(): Set<string> {
+  const raw = process.env.LLM_LOCAL_PURPOSES ?? '';
+  return new Set(
+    raw
+      .split(',')
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean),
+  );
+}
+
+export interface LlmEndpoint {
+  /** Gốc, KHÔNG kèm `/v1`. */
+  root: string;
+  key: string | undefined;
+  /** `true` = đang đi máy nhà. Dùng để biết có được tụt về cổng khi hỏng không. */
+  local: boolean;
+  label: string;
+}
+
+/**
+ * Địa chỉ + khoá cho một công việc.
+ *
+ * ⚠️ Gọi hàm này chứ đừng gọi thẳng `chatCompletionsUrl()` + `gatewayKey()`
+ * nữa — cặp đó luôn trả về CỔNG, nên chỗ nào còn dùng nó là chỗ đó không bao
+ * giờ đi máy nhà dù đã bật env.
+ */
+export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
+  const root = localRoot();
+  if (root && localPurposes().has(purpose) && process.env.LLM_LOCAL_API_KEY) {
+    return { root, key: process.env.LLM_LOCAL_API_KEY, local: true, label: 'may-nha' };
+  }
+  return { root: gatewayRoot(), key: gatewayKey(), local: false, label: 'cong' };
+}
+
+/** Cổng dự phòng khi máy nhà không trả lời. Luôn là cổng, không bao giờ ngược lại. */
+export function fallbackEndpoint(): LlmEndpoint {
+  return { root: gatewayRoot(), key: gatewayKey(), local: false, label: 'cong' };
+}
+
+/** `POST` cho một điểm cuối bất kỳ. */
+export function chatUrlOf(ep: LlmEndpoint): string {
+  return `${ep.root}/v1/chat/completions`;
+}
+
+/**
+ * Model cho một công việc.
+ *
+ * Máy nhà chỉ phục vụ MỘT model, và tên của nó không nằm trong bảng của cổng —
+ * nên khi việc đi máy nhà thì tên model cũng phải đổi theo, nếu không
+ * llama-server nhận một cái tên nó không biết. `LLM_MODEL_<PURPOSE>` vẫn đè
+ * lên tất cả, để còn ghim từng việc một khi cần.
+ */
+export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
   const env = process.env[`LLM_MODEL_${purpose.toUpperCase()}`];
-  return (env && env.trim()) || PURPOSE_MODEL[purpose];
+  if (env && env.trim()) return env.trim();
+  const diem = ep ?? endpointFor(purpose);
+  if (diem.local) return process.env.LLM_LOCAL_MODEL?.trim() || 'qwen3.5-9b-local';
+  return PURPOSE_MODEL[purpose];
 }
 
 /** Toàn bộ bản đồ — cho trang quản trị và cho lệnh kiểm tra cấu hình. */
-export function allPurposeModels(): Array<{ purpose: LlmPurpose; model: string; price: { in: number; out: number }; vendor: ModelVendor }> {
+export function allPurposeModels(): Array<{
+  purpose: LlmPurpose;
+  model: string;
+  price: { in: number; out: number };
+  vendor: ModelVendor;
+  /** 'may-nha' hay 'cong' — không có cột này thì không ai biết định tuyến đã bật hay chưa. */
+  noi: string;
+}> {
   return (Object.keys(PURPOSE_MODEL) as LlmPurpose[]).map((p) => {
-    const model = modelFor(p);
-    return { purpose: p, model, price: priceOf(model), vendor: vendorOf(model) };
+    const ep = endpointFor(p);
+    const model = modelFor(p, ep);
+    // Việc chạy ở máy nhà thì KHÔNG tính tiền — đó là điểm chính của nó.
+    const price = ep.local ? { in: 0, out: 0 } : priceOf(model);
+    return { purpose: p, model, price, vendor: vendorOf(model), noi: ep.label };
   });
 }

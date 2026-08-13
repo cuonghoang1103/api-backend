@@ -95,6 +95,135 @@ def _luu_giong_nhan_ban(d: Dict[str, str]) -> None:
 NHAN_BAN: Dict[str, str] = _nap_giong_nhan_ban()
 
 
+# ─── Giữ VRAM trong tầm kiểm soát ──────────────────────────────
+#
+# Card 12 GB này nuôi BA thứ cùng lúc: LLM cục bộ 5,8 GB, máy đọc tiếng
+# Việt 0,7 GB, và bộ này. Đo 13/08/2026 lúc chật nhất: còn **441 MiB**
+# trống. Hết chỗ thì thứ đổ trước không phải bộ nhẹ nhất mà là bộ nào
+# xin thêm trước — nên đây là chuyện của cả máy, không riêng máy đọc.
+_lan_cuoi: float = 0.0
+_RANH_TAT = float(os.environ.get("CHATTERBOX_IDLE_UNLOAD_SEC", "0") or 0)
+
+
+def _tra_bo_dem() -> None:
+    """Trả phần bộ đệm đã xin nhưng không còn dùng về cho driver.
+
+    ⚠️ ĐÂY LÀ THỨ LÀM `nvidia-smi` NHÌN NHƯ RÒ RỈ BỘ NHỚ.
+
+    Đo thật: bộ này phình từ 3.630 lên 4.576 MiB sau vài chục câu, trong
+    khi trọng số trên đĩa chỉ 3.044 MB và trọng số thì KHÔNG tự lớn lên.
+    Phần phình là bộ đệm: mỗi câu dài hơn câu trước đòi một khối to hơn,
+    PyTorch xin của driver rồi giữ luôn.
+
+    Giữ lại là CÓ LỢI khi card chỉ chạy một thứ — lần sau khỏi hỏi
+    driver. Ở đây thì ngược lại: chỗ giữ không dùng tới của bộ này chính
+    là chỗ LLM cần lúc trả lời dài.
+
+    Giá phải trả: lần sinh sau phải xin lại driver, đo được vài mili
+    giây trên tổng ~2 giây một câu — không đáng kể.
+    """
+    global _lan_cuoi
+    _lan_cuoi = time.time()
+    try:
+        import torch
+
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def _canh_ranh() -> None:
+    """Rảnh quá lâu thì NHẢ HẲN mô hình, giành lại trọn 4,5 GB.
+
+    Chỉ bật khi đặt `CHATTERBOX_IDLE_UNLOAD_SEC`. Mặc định TẮT vì cái giá
+    rất dễ thấy: nạp lại mất ~20-30 giây, và nó rơi đúng vào câu tiếng
+    Anh đầu tiên sau khi rảnh — người dùng sẽ tưởng robot treo.
+
+    Đáng bật khi máy cần chỗ cho việc khác (train, model lớn hơn) và
+    tiếng Anh chỉ dùng thỉnh thoảng.
+    """
+    global _m
+    while True:
+        time.sleep(30)
+        if _RANH_TAT <= 0 or _m is None or _lan_cuoi <= 0:
+            continue
+        if time.time() - _lan_cuoi < _RANH_TAT:
+            continue
+        with _nap_lock:
+            if _m is None:
+                continue
+            _m = None
+        _tra_bo_dem()
+        print(f"[cb] ranh qua {_RANH_TAT:.0f}s — da nha mo hinh, tra lai VRAM", flush=True)
+
+
+if _RANH_TAT > 0:
+    threading.Thread(target=_canh_ranh, daemon=True).start()
+
+
+def _ha_do_chinh_xac(m) -> None:
+    """Hạ trọng số xuống fp16 để lấy lại ~1,7 GB VRAM.
+
+    ⚠️ CHỈ HẠ T3 (thân Llama), KHÔNG ĐỘNG VÀO S3GEN.
+
+    Hai khối này chịu fp16 khác hẳn nhau:
+
+      t3     thân Llama 0,5B, 2.031 MB. Sinh token rời rạc — sai số nhỏ
+             cùng lắm đổi một token, và token nào cũng ra tiếng nghe
+             được. Đây là khối TO NHẤT nên cũng là khối đáng hạ nhất.
+
+      s3gen  1.008 MB, dùng flow matching + vocoder: tích phân LIÊN TỤC
+             qua nhiều bước, sai số mỗi bước cộng dồn. fp16 ở đây hay
+             cho ra NaN, và NaN trong âm thanh không kêu "lỗi" — nó
+             thành một khoảng IM LẶNG hoặc tiếng rít. Lãi 1 GB không
+             đáng đổi lấy một máy đọc thỉnh thoảng câm.
+
+    Đặt `CHATTERBOX_DTYPE=float32` để tắt hẳn nếu tai nghe thấy khác.
+    """
+    import torch
+
+    kieu = os.environ.get("CHATTERBOX_DTYPE", "float16").lower()
+    if kieu in ("float32", "fp32", "off", "none"):
+        return
+    try:
+        m.t3 = m.t3.half()
+
+        # ⚠️ HẠ TRỌNG SỐ MÀ QUÊN VÉC-TƠ ĐIỀU KIỆN LÀ HỎNG NGAY LƯỢT ĐẦU.
+        #
+        # `t3.inference()` nhân đặc trưng giọng với lớp `cond_enc`. Hạ mỗi
+        # trọng số thì phép nhân đó thành `Float × Half`:
+        #   RuntimeError: mat1 and mat2 must have the same dtype
+        # Không phải lỗi tinh vi — nó chết thẳng ở HTTP 500, đo được
+        # 13/08/2026.
+        #
+        # `T3Cond.to(dtype=)` tự bỏ qua tensor số nguyên (mã token là
+        # `long`, ép sang half là phá sạch). Dùng đúng nó, đừng tự đi
+        # từng trường.
+        def _ha_conds() -> None:
+            c = getattr(m, "conds", None)
+            if c is not None and getattr(c, "t3", None) is not None:
+                c.t3.to(dtype=torch.float16)
+
+        _ha_conds()
+
+        # Nhân bản giọng thì đặc trưng được DỰNG LẠI mỗi lượt gọi, ở
+        # fp32. Hạ một lần lúc nạp là không đủ — phải hạ sau mỗi lần
+        # dựng, nếu không thì giọng dựng sẵn chạy ngon còn giọng nhân
+        # bản chết, mà đó lại đúng là giọng đang dùng.
+        goc = m.prepare_conditionals
+
+        def boc(*a, **kw):
+            r = goc(*a, **kw)
+            _ha_conds()
+            return r
+
+        m.prepare_conditionals = boc
+        print("[cb] da ha t3 xuong fp16 (s3gen giu fp32)", flush=True)
+    except Exception as e:  # noqa: BLE001
+        print(f"[cb] khong ha duoc fp16, giu fp32: {e}", flush=True)
+
+
 def may():
     global _m
     if _m is None:
@@ -106,6 +235,8 @@ def may():
                 _m = ChatterboxTTS.from_pretrained(
                     device=os.environ.get("CHATTERBOX_DEVICE", "cuda")
                 )
+                _ha_do_chinh_xac(_m)
+                _tra_bo_dem()  # bản fp32 vừa bỏ đi còn nằm trong bộ đệm
                 print(f"[cb] sẵn sàng sau {time.time() - t0:.1f}s", flush=True)
     return _m
 
@@ -126,6 +257,49 @@ def ve_16k(x: np.ndarray, sr: int) -> bytes:
         x = librosa.resample(x, orig_sr=sr, target_sr=BO_SR, res_type="soxr_hq")
     x = np.clip(x, -1.0, 1.0)
     return (x * 32767.0).astype("<i2").tobytes()
+
+
+@app.get("/vram")
+def vram():
+    """Bóc tách VRAM: trọng số bao nhiêu, bộ đệm bao nhiêu.
+
+    ⚠️ `nvidia-smi` KHÔNG phân biệt được hai thứ này, và đó là lý do
+    con số nhìn như rò rỉ bộ nhớ.
+
+    PyTorch xin VRAM từ driver theo khối lớn rồi tự chia nhỏ. Xin xong nó
+    **giữ luôn**, kể cả khi tensor bên trong đã chết — lần sau cần thì
+    khỏi hỏi driver nữa, nhanh hơn nhiều. Với máy đọc thì mỗi câu dài hơn
+    câu trước lại đòi một khối to hơn, nên `nvidia-smi` chỉ có tăng, và
+    nhìn hệt như rò rỉ.
+
+    `allocated` = tensor đang sống thật. `reserved` = tổng đã xin của
+    driver. Hiệu số chính là phần đòi lại được bằng `empty_cache()`.
+    """
+    import torch
+
+    if not torch.cuda.is_available():
+        return {"cuda": False}
+    return {
+        "cuda": True,
+        "daNap": _m is not None,
+        "dangDung_MB": round(torch.cuda.memory_allocated() / 2**20),
+        "daXinCuaDriver_MB": round(torch.cuda.memory_reserved() / 2**20),
+        "doiLaiDuoc_MB": round(
+            (torch.cuda.memory_reserved() - torch.cuda.memory_allocated()) / 2**20
+        ),
+        "dinhCaoDangDung_MB": round(torch.cuda.max_memory_allocated() / 2**20),
+        "kieuSo": str(_kieu_so()),
+        "ranhGiay": round(time.time() - _lan_cuoi) if _lan_cuoi else None,
+    }
+
+
+def _kieu_so() -> str:
+    if _m is None:
+        return "chưa nạp"
+    try:
+        return str(next(_m.t3.parameters()).dtype)
+    except Exception:  # noqa: BLE001
+        return "?"
 
 
 @app.get("/health")
@@ -224,6 +398,7 @@ def doc(payload: Dict[str, Any]):
     t0 = time.time()
     with _chay_lock:
         wav = m.generate(text, **tham)
+        _tra_bo_dem()
     b = ve_16k(wav.squeeze().detach().cpu().numpy(), int(m.sr))
     giay = len(b) / 2 / BO_SR
     print(f"[cb] {ten}: {giay:.2f}s tiếng trong {time.time()-t0:.2f}s", flush=True)

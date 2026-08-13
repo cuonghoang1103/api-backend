@@ -165,6 +165,10 @@ export interface PersonaPayload {
   cheDo?: string;
   /** Âm lượng loa 10-100. Lưu bền — bo mất điện vẫn nhớ. */
   amLuong?: number;
+  /** Giọng riêng cho từng chế độ tiếng: `{ vi, en, robot }`. Hoà vào, không đè cả bảng. */
+  giongTheoCheDo?: Record<string, string | null>;
+  /** Não ghim: `'may-nha'` | `'cong'` | `null` = tự động theo cấu hình máy chủ. */
+  nao?: string | null;
 }
 
 /**

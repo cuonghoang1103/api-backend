@@ -56,6 +56,7 @@ import {
   sendCommand,
   updatePersona,
 } from '@/lib/maker-lab-api';
+import { listVoices } from '@/lib/voice-mini-api';
 import type { MakerDevice, MakerDeviceCredentials } from '@/types/maker-lab';
 
 const EMOTIONS = [
@@ -101,6 +102,32 @@ function sucSong(dbm: unknown): string {
   return 'rất yếu';
 }
 
+/** Nhãn hiển thị — để một chỗ, khỏi rải chuỗi ba ngôi khắp file. */
+const CHE_DO_NHAN: Record<string, string> = {
+  vi: '🇻🇳 Tiếng Việt',
+  en: '🇬🇧 English',
+  robot: '🤖 Robot',
+};
+
+const NAO_NHAN: Record<string, string> = {
+  auto: 'não tự động',
+  'may-nha': 'não ở nhà',
+  cong: 'não trên mạng',
+};
+
+/**
+ * Giọng mặc định của từng chế độ khi người dùng chưa chọn riêng.
+ *
+ * Phải KHỚP với `CHE_DO` bên server (`src/services/makerlab/cheDo.ts`).
+ * Ở đây chỉ để hiện chữ "mặc định: …" cho người dùng biết cái gì sẽ chạy
+ * nếu họ không chọn gì — server vẫn là nơi quyết định thật.
+ */
+const GIONG_MAC_DINH: Record<string, string> = {
+  vi: 'giọng trong tab Tính cách',
+  en: 'en-cham',
+  robot: 'robot-walle',
+};
+
 export function DeviceConsole({
   projectId,
   projectSlug,
@@ -108,6 +135,8 @@ export function DeviceConsole({
   speechRate: speechRate0 = 1,
   cheDo: cheDo0 = 'vi',
   amLuong: amLuong0 = 80,
+  giongTheoCheDo: giong0 = {},
+  nao: nao0 = null,
 }: {
   projectId: number;
   projectSlug: string;
@@ -116,6 +145,10 @@ export function DeviceConsole({
   cheDo?: string;
   /** Âm lượng đang lưu trong persona. */
   amLuong?: number;
+  /** Giọng riêng từng chế độ đang lưu: `{ vi, en, robot }`. */
+  giongTheoCheDo?: Record<string, string>;
+  /** Não ghim: `'may-nha'` | `'cong'` | `null` = tự động. */
+  nao?: string | null;
   /** Tốc độ đọc đang lưu trong persona, để thanh trượt khởi động đúng chỗ. */
   speechRate?: number;
 }) {
@@ -128,6 +161,24 @@ export function DeviceConsole({
 
   // ── Âm lượng ──
   const [amLuong, setAmLuong] = useState(amLuong0);
+
+  /**
+   * Giọng RIÊNG cho từng chế độ + danh sách giọng có thật trên máy đọc.
+   *
+   * ⚠️ Danh sách phải NẠP TỪ MÁY CHỦ. Giọng nhân bản do người dùng tự
+   * đặt tên lúc tải mẫu lên, nên mã nguồn không thể biết trước — viết
+   * cứng là nhân bản xong mở ô chọn không thấy đâu.
+   */
+  const [giongCheDo, setGiongCheDo] = useState<Record<string, string>>(giong0);
+  const [dsGiong, setDsGiong] = useState<Array<{ id: string; label: string; lang?: string }>>([]);
+  useEffect(() => {
+    listVoices()
+      .then((v) => setDsGiong(v as Array<{ id: string; label: string; lang?: string }>))
+      .catch(() => setDsGiong([]));
+  }, []);
+
+  // ── Não (model) ──
+  const [nao, setNao] = useState<string>(nao0 ?? 'auto');
 
   /**
    * Lưu MỘT lượt: tốc độ đọc, chế độ tiếng, âm lượng.
@@ -144,7 +195,13 @@ export function DeviceConsole({
   const luuTatCa = useCallback(async () => {
     setDangLuu(true);
     try {
-      await updatePersona(projectId, { speechRate: rate, cheDo, amLuong });
+      await updatePersona(projectId, {
+        speechRate: rate,
+        cheDo,
+        amLuong,
+        giongTheoCheDo: giongCheDo,
+        nao: nao === 'auto' ? null : nao,
+      });
       if (activeIdRef.current) {
         try {
           // `level`, KHÔNG phải `percent`: firmware đọc
@@ -156,13 +213,16 @@ export function DeviceConsole({
           /* bo có thể đang tắt — cài đặt vẫn lưu, áp dụng ở lần bật sau */
         }
       }
-      toast.success(`Đã lưu · ${cheDo === 'vi' ? 'Tiếng Việt' : cheDo === 'en' ? 'English' : 'Robot'} · tốc độ ${rate.toFixed(2)}× · âm lượng ${amLuong}%`);
+      toast.success(
+        `Đã lưu · ${CHE_DO_NHAN[cheDo] ?? cheDo} · giọng ${giongCheDo[cheDo] || 'mặc định'} · ` +
+          `tốc độ ${rate.toFixed(2)}× · âm lượng ${amLuong}% · ${NAO_NHAN[nao] ?? nao}`,
+      );
     } catch {
       toast.error('Không lưu được');
     } finally {
       setDangLuu(false);
     }
-  }, [projectId, rate, cheDo, amLuong]);
+  }, [projectId, rate, cheDo, amLuong, giongCheDo, nao]);
 
   /**
    * Đổi chế độ tiếng. Đổi CẢ BA tầng ở phía server (tai nghe, đầu nghĩ,
@@ -633,6 +693,93 @@ export function DeviceConsole({
                   Đổi được cả bằng giọng nói: &ldquo;nói tiếng Anh đi&rdquo;, &ldquo;nói giọng
                   robot&rdquo;, &ldquo;nói tiếng Việt&rdquo;. Robot đáp lại ngay bằng thứ tiếng mới
                   để bạn biết lệnh đã ăn.
+                </p>
+
+                {/* ── Giọng RIÊNG cho chế độ đang chọn ──
+                    Một ô giọng chung cho ba chế độ là sai từ ý tưởng:
+                    đổi qua tiếng Anh rồi quay về tiếng Việt là mất giọng
+                    đã lưu, và người nghe tưởng "robot tự đổi giọng". */}
+                <div className="mt-3">
+                  <label
+                    className="mb-1.5 block text-xs font-medium"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    Giọng cho {CHE_DO_NHAN[cheDo] ?? cheDo}
+                  </label>
+                  <select
+                    value={giongCheDo[cheDo] ?? ''}
+                    onChange={(e) =>
+                      setGiongCheDo((cu) => {
+                        const moi = { ...cu };
+                        if (e.target.value) moi[cheDo] = e.target.value;
+                        else delete moi[cheDo];
+                        return moi;
+                      })
+                    }
+                    className="w-full rounded-lg border px-3 py-2 text-sm"
+                    style={{
+                      borderColor: 'var(--border-color)',
+                      background: 'var(--bg-secondary)',
+                      color: 'var(--text-primary)',
+                    }}
+                  >
+                    <option value="">— Mặc định ({GIONG_MAC_DINH[cheDo]}) —</option>
+                    {dsGiong
+                      // Chế độ Việt chỉ hiện giọng Việt, Anh/Robot chỉ hiện
+                      // giọng Anh. Trộn lẫn là mời người dùng chọn giọng
+                      // Việt để đọc tiếng Anh — đúng lỗi "phi lê" đã chữa.
+                      .filter((v) =>
+                        cheDo === 'vi' ? (v.lang ?? 'vi') === 'vi' : v.lang === 'en',
+                      )
+                      .map((v) => (
+                        <option key={v.id} value={v.id}>
+                          {v.label || v.id}
+                        </option>
+                      ))}
+                  </select>
+                  <p className="mt-1 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                    Mỗi chế độ nhớ giọng riêng — đổi qua đổi lại không mất giọng của chế độ kia.
+                  </p>
+                </div>
+              </div>
+
+              {/* ── Não (model) ── */}
+              <div className="mt-4">
+                <label
+                  className="mb-1.5 block text-sm font-medium"
+                  style={{ color: 'var(--text-primary)' }}
+                >
+                  Não (model)
+                </label>
+                <div className="flex gap-1.5">
+                  {[
+                    { id: 'auto', nhan: '⚙️ Tự động' },
+                    { id: 'may-nha', nhan: '🏠 Máy nhà' },
+                    { id: 'cong', nhan: '☁️ Trên mạng' },
+                  ].map((n) => (
+                    <button
+                      key={n.id}
+                      type="button"
+                      onClick={() => setNao(n.id)}
+                      className="flex-1 rounded-lg border px-2 py-2 text-xs font-medium transition"
+                      style={{
+                        borderColor:
+                          nao === n.id ? 'var(--accent, #6366f1)' : 'var(--border-color)',
+                        background:
+                          nao === n.id
+                            ? 'color-mix(in srgb, var(--accent, #6366f1) 14%, transparent)'
+                            : 'var(--bg-secondary)',
+                        color: nao === n.id ? 'var(--accent, #6366f1)' : 'var(--text-secondary)',
+                      }}
+                    >
+                      {n.nhan}
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                  Máy nhà nhanh hơn nhiều nhưng tiếng Việt kém hơn chút. <b>Máy nhà chết thì
+                  robot tự nhảy sang não trên mạng</b> — mất điện ở nhà cũng vẫn nói được, không
+                  cần bạn làm gì. Đổi được cả bằng giọng nói: &ldquo;đổi về model cũ đi&rdquo;.
                 </p>
               </div>
 

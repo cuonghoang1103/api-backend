@@ -250,6 +250,10 @@ export default function MakerProjectPage() {
           speechRate={Number(project.persona?.traits?.speechRate) || 1}
           cheDo={String(project.persona?.traits?.cheDo || 'vi')}
           amLuong={Number(project.persona?.traits?.amLuong) || 80}
+          giongTheoCheDo={
+            (project.persona?.traits?.giongTheoCheDo as Record<string, string> | undefined) ?? {}
+          }
+          nao={(project.persona?.traits?.nao as string | undefined) ?? null}
         />
       )}
       {tab === 'persona' && (

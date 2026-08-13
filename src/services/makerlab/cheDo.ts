@@ -142,12 +142,50 @@ export function khopDoiCheDo(heard: string): CheDo | null {
   const s = khongDau(heard);
   if (!s || s.length > 40) return null;
 
-  const coDongTu = /(noi|chuyen|doi|switch|speak|change|talk|use)/.test(s);
-  if (!coDongTu) return null;
+  const tenNgonNgu =
+    /(giong robot|robot mode|robot voice|kieu robot)/.test(s)
+      ? 'robot'
+      : /(tieng anh|english|tieng my)/.test(s)
+        ? 'en'
+        : /(tieng viet|vietnamese|viet nam)/.test(s)
+          ? 'vi'
+          : null;
+  if (!tenNgonNgu) return null;
 
-  if (/(giong robot|robot mode|robot voice|kieu robot)/.test(s)) return 'robot';
-  if (/(tieng anh|english|tieng my)/.test(s)) return 'en';
-  if (/(tieng viet|vietnamese|viet nam)/.test(s)) return 'vi';
+  /**
+   * Động từ phải đứng NGAY TRƯỚC tên ngôn ngữ, cách tối đa hai từ đệm.
+   *
+   * Tìm động từ ở bất cứ đâu trong câu là bắt nhầm: "người Việt Nam mình
+   * hay NÓI câu đó lắm" có cả "nói" lẫn "Việt Nam" nên bản trước hiểu
+   * thành lệnh đổi sang tiếng Việt — giữa lúc người ta đang kể chuyện.
+   *
+   * Buộc chúng dính nhau thì "nói tiếng Việt đi" ăn, còn câu kể trượt,
+   * mà không cần đoán độ dài câu.
+   */
+  const DONG_TU = 'noi|chuyen|doi|switch|speak|change|talk|use|xai|dung';
+  const TEN = 'tieng anh|english|tieng my|tieng viet|vietnamese|viet nam|giong robot|robot mode|robot voice|kieu robot';
+  if (new RegExp(`(${DONG_TU})(\\s+\\S+){0,2}\\s+(${TEN})`).test(s)) {
+    return tenNgonNgu as CheDo;
+  }
+
+  /**
+   * Câu NGẮN chỉ có mỗi tên ngôn ngữ cũng tính là lệnh.
+   *
+   * Bản đầu bắt buộc phải có động từ, và người dùng báo "đổi ngôn ngữ
+   * trực tiếp trên robot chưa mượt". Đúng: nói cộc lốc "tiếng Anh" hay
+   * "robot đi" là cách người ta ra lệnh cho một cái máy — chẳng ai đọc
+   * đủ "hãy chuyển sang chế độ tiếng Anh".
+   *
+   * Vì sao vẫn giữ chốt: "tiếng Anh" nằm trong câu DÀI thì đó là người
+   * ta đang KỂ, không phải ra lệnh — "anh đang học tiếng Anh nên muốn em
+   * dạy anh vài từ". Bắt nhầm thì robot đột ngột đổi tiếng giữa cuộc trò
+   * chuyện và người dùng không hiểu vì sao.
+   *
+   * 18 ký tự đủ chỗ cho "noi tieng anh di" / "giong robot di" mà không
+   * đủ chỗ cho một câu kể.
+   */
+  if (s.length <= 18) return tenNgonNgu as CheDo;
+
   return null;
 }
 

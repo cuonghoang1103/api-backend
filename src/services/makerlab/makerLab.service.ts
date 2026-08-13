@@ -322,6 +322,10 @@ export async function upsertPersona(
     speechRate?: number;
     cheDo?: string;
     amLuong?: number;
+    /** Giọng riêng cho từng chế độ tiếng: `{ vi, en, robot }`. Hoà vào, không đè. */
+    giongTheoCheDo?: Record<string, string | null>;
+    /** Não ghim: `'may-nha'` | `'cong'` | `null` = tự động theo cấu hình. */
+    nao?: string | null;
   },
 ) {
   const { DEFAULT_PERSONA_PROMPT } = await import('./persona.js');
@@ -332,9 +336,14 @@ export async function upsertPersona(
   const { laCheDo } = await import('./cheDo.js');
   const coCheDo = laCheDo(data.cheDo);
   const coAmLuong = typeof data.amLuong === 'number' && Number.isFinite(data.amLuong);
+  const { laNao } = await import('./nao.js');
+  // `nao` có BA trạng thái, và `null` là một trạng thái THẬT ("tự động"),
+  // không phải "không gửi". Chỉ `undefined` mới nghĩa là không đụng tới.
+  const coNao = data.nao !== undefined && (data.nao === null || laNao(data.nao));
+  const coGiong = !!data.giongTheoCheDo && typeof data.giongTheoCheDo === 'object';
 
   let traitsMerged = (data.traits ?? undefined) as Prisma.InputJsonValue | undefined;
-  if (coRate || coCheDo || coAmLuong) {
+  if (coRate || coCheDo || coAmLuong || coNao || coGiong) {
     const cur = await prisma.makerPersona.findUnique({
       where: { projectId },
       select: { traits: true },
@@ -347,6 +356,28 @@ export async function upsertPersona(
       // Âm lượng lưu vào persona chứ không chỉ gửi xuống bo: bo mất điện
       // là quên sạch, mà người dùng đã chỉnh thì họ mong nó GIỮ NGUYÊN.
       ...(coAmLuong ? { amLuong: Math.max(10, Math.min(100, data.amLuong as number)) } : {}),
+      ...(coNao ? { nao: data.nao } : {}),
+      // Hoà từng CHẾ ĐỘ một, không thay cả bảng: web có thể chỉ gửi
+      // giọng của chế độ đang sửa, và ghi đè cả bảng là xoá hai chế độ
+      // kia — đúng cái lỗi "đổi qua đổi lại là mất giọng" đang chữa.
+      ...(coGiong
+        ? {
+            giongTheoCheDo: (() => {
+              const cu = ((base.giongTheoCheDo ?? {}) as Record<string, unknown>) || {};
+              const moi: Record<string, string> = {};
+              for (const [k, v] of Object.entries(cu)) {
+                if (laCheDo(k) && typeof v === 'string' && v) moi[k] = v;
+              }
+              for (const [k, v] of Object.entries(data.giongTheoCheDo as Record<string, string | null>)) {
+                if (!laCheDo(k)) continue;
+                // `null` = XOÁ giọng riêng của chế độ đó, quay về mặc định.
+                if (v === null) delete moi[k];
+                else if (typeof v === 'string' && v.trim()) moi[k] = v.trim().slice(0, 120);
+              }
+              return moi;
+            })(),
+          }
+        : {}),
     } as Prisma.InputJsonValue;
   }
   const clean = {

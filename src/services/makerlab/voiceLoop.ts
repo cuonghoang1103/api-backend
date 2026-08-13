@@ -318,6 +318,60 @@ function usable(p: LlmProvider): boolean {
 }
 
 /**
+ * ============================================================
+ * Bộ ngắt mạch — nhà nào vừa chết thì tạm thời BỎ QUA
+ * ============================================================
+ *
+ * ⚠️ CÓ LƯỚI ĐỠ KHÔNG CÓ NGHĨA LÀ ĐỠ MƯỢT.
+ *
+ * Chuỗi dự phòng đã có sẵn (máy nhà → cổng → Groq) và nó hoạt động. Cái
+ * thiếu là TRÍ NHỚ: nhà mất điện thì mỗi lượt nói đều thử máy nhà
+ * TRƯỚC, chờ nó hết giờ, rồi mới tụt xuống cổng. Robot vẫn trả lời được
+ * — nhưng lượt nào cũng cõng thêm quãng chờ đó, và người dùng nghe ra
+ * là "robot chậm hẳn" chứ không nghe ra là "máy nhà chết".
+ *
+ * Nhớ lại vài chục giây thì lượt ĐẦU chịu quãng chờ, các lượt sau đi
+ * thẳng xuống cổng. Hết hạn thì thử lại — điện có lại là tự quay về, ai
+ * cũng không phải làm gì.
+ *
+ * Vì sao không dùng healthcheck định kỳ: `/health` trả 200 không chứng
+ * minh model chạy được (đúng bài học đã học với máy đọc). Lấy chính lượt
+ * nói thật làm phép thử thì không bao giờ sai.
+ */
+const _nhaChet = new Map<string, number>();
+const NGHI_MS = 60_000;
+
+function dangChet(label: string): boolean {
+  const den = _nhaChet.get(label);
+  if (!den) return false;
+  if (Date.now() >= den) {
+    _nhaChet.delete(label);
+    logger.info('MakerLab thử lại nhà LLM sau thời gian nghỉ', { provider: label });
+    return false;
+  }
+  return true;
+}
+
+export function baoNhaHong(label: string, err: unknown): void {
+  // Cổng và Groq là lưới đỡ CUỐI — đánh dấu chúng chết thì không còn gì
+  // để tụt xuống nữa, tức là biến một lỗi tạm thành robot câm.
+  if (label !== 'may-nha') return;
+  _nhaChet.set(label, Date.now() + NGHI_MS);
+  logger.warn('MakerLab tạm bỏ qua máy nhà, chuyển sang cổng', {
+    provider: label,
+    nghiGiay: NGHI_MS / 1000,
+    error: err instanceof Error ? err.message : String(err),
+  });
+}
+
+/** Trạng thái cho trang quản trị / tab Điều khiển. */
+export function trangThaiNao(): { mayNhaChet: boolean; conNghiGiay: number } {
+  const den = _nhaChet.get('may-nha');
+  const con = den ? Math.max(0, Math.round((den - Date.now()) / 1000)) : 0;
+  return { mayNhaChet: con > 0, conNghiGiay: con };
+}
+
+/**
  * Nhà chính, và nhà dự phòng nếu nhà chính chưa cấu hình.
  *
  * Một con robot không nên câm chỉ vì hết credit hay sai một biến môi
@@ -349,7 +403,7 @@ function llmChain(nao: Nao | null = null): LlmProvider[] {
   // 2.119–4.575 ms của cổng. Với robot thì đó là khác biệt giữa "nói chuyện
   // được" và "chờ đèn đỏ".
   const ep = nao === 'may-nha' ? { ...endpointFor('robot_voice'), local: true } : endpointFor('robot_voice');
-  if (ep.local && ep.key) {
+  if (ep.local && ep.key && !dangChet('may-nha')) {
     chain.push({ baseURL: `${ep.root}/v1`, key: ep.key, label: 'may-nha' });
   }
 
@@ -1087,8 +1141,13 @@ async function thinkAndSpeak(
     });
     return { reply: parsed, spoken, llmMs: Date.now() - started };
   } catch (err) {
+    // Chỉ đánh dấu khi model KHÔNG nói được câu nào. Hỏng giữa chừng sau
+    // khi đã phát tiếng là chuyện khác — mạng chớp một cái chẳng hạn —
+    // và đánh dấu chết vì thế là bỏ qua máy nhà oan trong cả phút.
+    if (!spoken) baoNhaHong(p.label, err);
     logger.warn('MakerLab đường nghĩ-và-nói hỏng, lùi về đường cũ', {
       deviceId,
+      provider: p.label,
       error: err instanceof Error ? err.message : String(err),
     });
     if (seq !== null) gw.speakStreamEnd(deviceId, seq);
@@ -1234,6 +1293,7 @@ async function think(
         return parsed;
       }
     } catch (err) {
+      baoNhaHong(p.label, err);
       logger.warn('MakerLab LLM failed', {
         deviceId,
         provider: p.label,

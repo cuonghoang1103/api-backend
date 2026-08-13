@@ -61,6 +61,24 @@ export interface PersonaConfig {
   speechRate: number;
   /** Chế độ tiếng đang bật: vi | en | robot. */
   cheDo: CheDo;
+  /**
+   * Giọng RIÊNG cho từng chế độ tiếng.
+   *
+   * ⚠️ MỘT Ô GIỌNG CHUNG CHO BA CHẾ ĐỘ LÀ SAI NGAY TỪ Ý TƯỞNG.
+   *
+   * Bản trước chỉ có `voiceId` chung. Chế độ Anh/Robot ép giọng của
+   * riêng nó nên chạy được, còn chế độ Việt dùng ô chung — và ô đó bị
+   * xoá trắng thì tiếng Việt tụt xuống giọng Google, thứ cắt văn bản
+   * thành mẩu ~200 ký tự rồi dán lại.
+   *
+   * Người dùng nghe ra ba triệu chứng rời rạc: "nói lắp", "lặp lại từ",
+   * và "quay lại tiếng Việt thì thành giọng mặc định chứ không phải
+   * giọng tôi đã lưu". Cả ba là MỘT gốc.
+   *
+   * Tách theo chế độ thì đổi qua đổi lại không bao giờ mất giọng của
+   * chế độ kia, và mỗi chế độ chọn được giọng hợp với nó.
+   */
+  giongTheoCheDo: Partial<Record<CheDo, string>> | null;
   /** Âm lượng loa 10-100, lưu bền để bo mất điện vẫn nhớ. */
   amLuong: number;
   /**
@@ -71,6 +89,22 @@ export interface PersonaConfig {
    * khi model mới nói không vừa ý giữa chừng.
    */
   nao: Nao | null;
+}
+
+/**
+ * Lọc bảng giọng-theo-chế-độ đọc từ cột JSON.
+ *
+ * `traits` là JSON tự do — bất cứ thứ gì cũng có thể nằm trong đó, kể cả
+ * số, mảng, hay `null`. Tin thẳng vào nó là mời một `voiceId` kiểu số
+ * đi thẳng xuống máy đọc.
+ */
+function chuanGiongTheoCheDo(raw: unknown): Partial<Record<CheDo, string>> | null {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const ra: Partial<Record<CheDo, string>> = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    if (laCheDo(k) && typeof v === 'string' && v.trim()) ra[k] = v.trim().slice(0, 120);
+  }
+  return Object.keys(ra).length ? ra : null;
 }
 
 /** Kẹp tốc độ đọc về dải Google chấp nhận; ngoài dải là API trả 400. */
@@ -157,10 +191,14 @@ const DEFAULT_SAMPLES: Array<{ user: string; bot: string }> = [
  */
 function apCheDo(p: PersonaConfig): PersonaConfig {
   const cf = CHE_DO[p.cheDo];
-  if (!cf.giong && !cf.nhaCungCap) return p;
+  // Thứ tự ưu tiên: giọng người dùng chọn RIÊNG cho chế độ này → giọng
+  // mặc định của chế độ → giọng chung trong persona.
+  const rieng = p.giongTheoCheDo?.[p.cheDo] || null;
+  const giong = rieng ?? cf.giong ?? p.voiceId;
+  if (!giong && !cf.nhaCungCap) return p;
   return {
     ...p,
-    voiceId: cf.giong ?? p.voiceId,
+    voiceId: giong,
     voiceProvider: cf.nhaCungCap ?? p.voiceProvider,
   };
 }
@@ -181,6 +219,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       knowledge: [],
       speechRate: 1,
       cheDo: 'vi',
+      giongTheoCheDo: null,
       amLuong: 80,
       nao: null,
       // 0.9 chứ không 0.8: chém gió cần chỗ để đi chệch. Nhiệt độ thấp
@@ -217,6 +256,9 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     cheDo: laCheDo((row.traits as { cheDo?: unknown } | null)?.cheDo)
       ? ((row.traits as { cheDo: CheDo }).cheDo)
       : 'vi',
+    giongTheoCheDo: chuanGiongTheoCheDo(
+      (row.traits as { giongTheoCheDo?: unknown } | null)?.giongTheoCheDo,
+    ),
     nao: laNao((row.traits as { nao?: unknown } | null)?.nao)
       ? ((row.traits as { nao: Nao }).nao)
       : null,

@@ -731,18 +731,47 @@ static void pumpPlayback() {
   // đó là ca gây tiếng lặp mà log vẫn báo sạch. Bộ đếm phải thấy được
   // thứ người dùng nghe thấy, nếu không nó chỉ làm mình yên tâm nhầm.
   if (buffered() < 2 && !playEnded) {
-    if (!underrunSince) {
-      underrunSince = millis();
-      underruns++;
-    }
     // Bơm im lặng cho tới khi DMA no, KHÔNG phải một khối rồi thôi —
     // một khối là 16 ms, mà vòng loop() chỉ chạy 60 lần/giây nên vẫn
     // nạp chậm hơn thời gian thực và DMA vẫn kịp cạn để lặp.
     memset(stereoBlock, 0, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t));
+    size_t daBom = 0;
     for (int i = 0; i < 24; i++) {
       size_t w = 0;
       i2s_write(I2S_NUM_1, stereoBlock, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t), &w, 0);
+      daBom += w;
       if (w < AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t)) break;
+    }
+
+    /**
+     * ⚠️ CHỈ TÍNH ĐÓI ĐỆM KHI THẬT SỰ CÓ IM LẶNG ĐI RA LOA.
+     *
+     * Bản trước đếm ngay khi `buffered() < 2`. Nhưng `buffered()` đo
+     * VÒNG ĐỆM SERVER BƠM VÀO, không đo thứ loa đang phát: DMA của I2S
+     * còn giữ sẵn ~512 ms tiếng. Vòng đệm cạn nửa giây mà loa vẫn kêu
+     * liên tục.
+     *
+     * Và `i2s_write` với hạn chờ 0: DMA đầy thì `w = 0`, vòng lặp thoát
+     * ngay, KHÔNG một mẫu im lặng nào đi ra loa. Không có khoảng lặng —
+     * mà bộ đếm vẫn tính.
+     *
+     * Đo thật 13/08/2026: bo báo `1 lần / 48.220 ms` cho một lượt mà
+     * người dùng nghe **liền mạch, không im quãng nào**. Bộ đếm sai gần
+     * năm mươi giây, và nó suýt đẩy tôi đi vá một đường ống vốn đang
+     * chạy tốt.
+     *
+     * `daBom > 0` mới là bằng chứng: có im lặng THẬT được ghi vào DMA.
+     * Bộ đếm phải đo đúng thứ tai người nghe được, không đo một trạng
+     * thái nội bộ trông có vẻ liên quan.
+     */
+    if (daBom > 0) {
+      if (!underrunSince) {
+        underrunSince = millis();
+        underruns++;
+      }
+    } else if (underrunSince) {
+      underrunMs += millis() - underrunSince;
+      underrunSince = 0;
     }
     return;
   }

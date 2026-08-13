@@ -104,6 +104,10 @@ uint32_t clipBlocks();
 uint32_t clippedSamples();
 /** Ngưỡng VAD hiện tại = nền × 3, đã kẹp. Vượt mức này là mở lượt nghe. */
 int32_t gate();
+
+/** Hệ số ngưỡng MỞ lượt (nền × hệ số). Chỉnh lúc chạy, khỏi nạp lại bo. */
+void setVadMult(uint8_t m);
+uint8_t vadMult();
 /** Số byte của đoạn phát gần nhất, để hiện lên màn. */
 uint32_t lastClipBytes();
 /** Số lần và tổng thời gian đệm cạn trong đoạn vừa phát. */

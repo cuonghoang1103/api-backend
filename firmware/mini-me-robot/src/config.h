@@ -171,6 +171,25 @@
 // vẫn vượt thoải mái vì giọng cách 30 cm cao gấp 6-8 lần nền.
 #define VAD_GATE_MULT        4
 
+// ── Trễ hai mức: MỞ thì khó, GIỮ thì dễ ──
+//
+// ⚠️ MỘT NGƯỠNG CHO CẢ HAI VIỆC LÀ SAI, VÀ NÓ SAI THEO HAI CHIỀU CÙNG LÚC.
+//
+// Mở lượt và giữ lượt là hai câu hỏi khác nhau:
+//   mở  — "có ai đang nói với mình không?" · đoán sai thì tốn một lần
+//         gọi Whisper và Whisper nghe tiếng ồn thì BỊA ra phụ đề
+//   giữ — "người đang nói đã dứt câu chưa?" · đoán sai thì CẮT NGANG
+//         giữa câu, và người dùng phải nói lại từ đầu
+//
+// Dùng chung một ngưỡng ×4 thì: muốn đủ nhạy phải hạ xuống, mà hạ xuống
+// là mở lượt loạn xạ. Bế tắc — và đó là lý do người dùng vừa kêu "nói
+// robot không nghe" vừa kêu "nó nghe cả tiếng ồn".
+//
+// Tách ra thì hết bế tắc. Giữ ở ×2 nghĩa là những âm tiết nhỏ giữa câu
+// (phụ âm đầu tiếng Việt gần như im) không bị tính là im lặng, nên câu
+// không bị cắt vụn — mà ngưỡng MỞ vẫn nghiêm như cũ.
+#define VAD_HOLD_MULT        2
+
 // Bộ đếm RỈ phải đạt bấy nhiêu mới mở lượt nghe (mỗi khối 16 ms).
 // Tăng khi to, giảm khi nhỏ — xem chú thích trong audio.cpp.
 //

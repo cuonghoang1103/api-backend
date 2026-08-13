@@ -624,6 +624,36 @@ static void handleCommand(JsonDocument& doc) {
     return;
   }
 
+  /**
+   * Chỉnh núm lúc đang chạy, không phải nạp lại bo.
+   *
+   * ⚠️ CHỈNH VAD PHẢI DÒ BẰNG CÁCH NÓI THẬT TRONG PHÒNG THẬT.
+   *
+   * Con số hợp phòng này không suy ra được từ mã: nó phụ thuộc mic đặt
+   * đâu, phòng ồn cỡ nào, người nói cách bao xa. Mà mỗi lần thử lại phải
+   * nạp lại bo thì không ai dò tới nơi tới chốn — nên nó nằm ở đây.
+   *
+   * `nguong` báo về ngay trong ack để người chỉnh thấy tác dụng tức thì.
+   */
+  if (!strcmp(type, "config")) {
+    const char* key = doc["payload"]["key"] | "";
+    if (!strcmp(key, "micGain") || !strcmp(key, "vadMult")) {
+      const int v = doc["payload"]["value"] | 0;
+      if (v >= 2 && v <= 12) {
+        audio::setVadMult((uint8_t)v);
+        st.lastNote = String("do nhay VAD x") + audio::vadMult();
+        sendAck(id, true);
+        sendLog("info", String("VAD he so x") + audio::vadMult() +
+                            ", nguong hien tai " + audio::gate());
+        return;
+      }
+      sendAck(id, false, "value phai trong 2..12");
+      return;
+    }
+    sendAck(id, false, "key chua ho tro");
+    return;
+  }
+
   if (!strcmp(type, "reboot")) {
     sendAck(id, true);
     sendLog("warn", "Dang khoi dong lai theo yeu cau");

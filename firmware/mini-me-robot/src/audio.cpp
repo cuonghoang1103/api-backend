@@ -198,12 +198,30 @@ static int32_t noiseFloor = VAD_THRESHOLD / 2;
  * nào, rồi mới bắt đầu làm việc.
  */
 static uint16_t calibBlocks = 0;
-static int64_t calibSum = 0;
-static const uint16_t CALIB_BLOCKS = 60;   // 60 × 16 ms ≈ 1 giây
+static const uint16_t CALIB_BLOCKS = 150;  // 150 × 16 ms ≈ 2,4 giây
+// Mẫu để lấy phân vị — xem ghi chú trong hàm đo. 64 mẫu là đủ để phân vị
+// 25% ổn định, mà chỉ tốn 256 byte.
+static int32_t mauNen[64];
+static uint8_t soMau = 0;
 
-static int32_t vadGate() {
-  int32_t gate = noiseFloor * VAD_GATE_MULT;
-  if (gate < VAD_THRESHOLD) gate = VAD_THRESHOLD;
+// Hệ số ngưỡng MỞ, chỉnh được lúc chạy qua lệnh `config {key:"vadMult"}`.
+// Có nó thì dò được con số hợp phòng mà KHÔNG phải nạp lại bo mỗi lần —
+// và dò bằng cách nói thật trong phòng thật là cách duy nhất đúng.
+static uint8_t gateMult = VAD_GATE_MULT;
+
+void setVadMult(uint8_t m) {
+  if (m < 2) m = 2;
+  if (m > 12) m = 12;
+  gateMult = m;
+}
+uint8_t vadMult() { return gateMult; }
+
+static int32_t vadGate(bool giuLuot = false) {
+  // Đang trong lượt thì hạ ngưỡng — xem VAD_HOLD_MULT trong config.h.
+  const int32_t he = giuLuot ? VAD_HOLD_MULT : (int32_t)gateMult;
+  int32_t gate = noiseFloor * he;
+  const int32_t san = giuLuot ? VAD_THRESHOLD / 2 : VAD_THRESHOLD;
+  if (gate < san) gate = san;
 
   // ⚠️ Trần CŨ là `VAD_THRESHOLD * 6` = 16.800, một con số tuyệt đối.
   //
@@ -950,18 +968,62 @@ static void pumpMic() {
   // Đặt trước mọi phép xét khác, kể cả cờ chạm đầu: mở lượt nghe trong
   // lúc còn chưa biết phòng ồn cỡ nào thì lượt đó chắc chắn hỏng.
   if (calibBlocks < CALIB_BLOCKS) {
-    calibSum += micLevel;
+    /**
+     * ⚠️ LẤY TRUNG BÌNH LÀ SAI, VÀ SAI THEO CHIỀU LÀM ROBOT ĐIẾC.
+     *
+     * Đo thật 13/08/2026 trên chính con bo này: phép đo lúc khởi động ra
+     * nền **14.396** → ngưỡng **57.584**. Nền THẬT khi đã ổn định chỉ
+     * **4.888**. Sai gấp ba, và sai theo chiều xấu nhất — robot cần
+     * tiếng to hơn 57.584 mới nghe, trong khi giọng nói cách 30 cm đo
+     * được khoảng 9.000. Tức là ĐIẾC HẲN cho tới khi nền tự bám xuống,
+     * mà nền chỉ đi xuống mỗi khối một phần tám nên mất hàng chục giây.
+     *
+     * Đúng cái người dùng kể: "nói mấy lần nó mới nghe".
+     *
+     * Hai chỗ sai:
+     *
+     *   1. Đo NGAY từ khối đầu. Giây đầu sau reset còn có quá độ của
+     *      I2S, DMA loa mồi, và cú nhấp cổng USB — toàn thứ to.
+     *   2. Lấy TRUNG BÌNH. Một quá độ duy nhất kéo cả trung bình lên,
+     *      vì nó to gấp mười lần nền.
+     *
+     * Sửa: bỏ 30 khối đầu cho I2S ổn định, rồi lấy PHÂN VỊ THẤP thay
+     * cho trung bình. Nền phòng theo định nghĩa là phần YÊN của đoạn
+     * ghi — thống kê nào bị một tiếng động kéo đi thì thống kê đó không
+     * đo được nền.
+     */
+    static const uint16_t BO_QUA = 30;   // ~0,5 giây đầu
+    if (calibBlocks >= BO_QUA && soMau < 64) mauNen[soMau++] = micLevel;
     if (++calibBlocks == CALIB_BLOCKS) {
-      noiseFloor = (int32_t)(calibSum / CALIB_BLOCKS);
+      if (soMau >= 8) {
+        // Sắp xếp nổi bọt — 64 phần tử, chạy một lần duy nhất trong đời
+        // thiết bị, không đáng đổi lấy một thuật toán khó đọc hơn.
+        for (uint8_t i = 1; i < soMau; i++) {
+          const int32_t v = mauNen[i];
+          int8_t j = i - 1;
+          while (j >= 0 && mauNen[j] > v) { mauNen[j + 1] = mauNen[j]; j--; }
+          mauNen[j + 1] = v;
+        }
+        noiseFloor = mauNen[soMau / 4];   // phân vị 25%
+      } else {
+        noiseFloor = VAD_THRESHOLD / 2;
+      }
       if (noiseFloor < VAD_THRESHOLD / 4) noiseFloor = VAD_THRESHOLD / 4;
-      Serial.printf("[vad] do nen phong: %ld, nguong %ld\n", (long)noiseFloor,
-                    (long)vadGate());
+      Serial.printf("[vad] do nen phong: %ld (tu %u mau), nguong mo %ld, giu %ld\n",
+                    (long)noiseFloor, soMau, (long)vadGate(false), (long)vadGate(true));
     }
     pushPreroll(pcmBlock);
     return;
   }
 
-  const bool loud = micLevel > vadGate();
+  // ⚠️ HAI NGƯỠNG, CHỌN THEO ĐANG-Ở-TRONG-LƯỢT HAY CHƯA.
+  //
+  // `loud` dùng cho việc MỞ lượt (ngưỡng nghiêm), `conNoi` dùng cho việc
+  // GIỮ lượt (ngưỡng dễ). Bản trước dùng chung một biến cho cả hai, nên
+  // phụ âm đầu tiếng Việt — gần như im — bị tính là "đã dứt câu" và lượt
+  // bị cắt vụn giữa chừng.
+  const bool loud = micLevel > vadGate(false);
+  const bool conNoi = micLevel > vadGate(true);
 
   if (!micOpen) {
     // Bám nền KHÔNG ĐỐI XỨNG: tụt nhanh, leo chậm.
@@ -1012,7 +1074,7 @@ static void pumpMic() {
 
   if (cbChunk) cbChunk((const uint8_t*)pcmBlock, n * sizeof(int16_t));
 
-  if (loud) {
+  if (conNoi) {
     micQuietAt = 0;
   } else if (micQuietAt == 0) {
     micQuietAt = now;

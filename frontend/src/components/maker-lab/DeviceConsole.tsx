@@ -412,6 +412,26 @@ export function DeviceConsole({
     }
   }
 
+  /**
+   * Tự cuộn xuống tin mới nhất.
+   *
+   * ⚠️ KHÔNG CÓ CÁI NÀY THÌ TIN NHẮN TRÔNG NHƯ BỊ TRỄ.
+   *
+   * Tin của người dùng và của robot đều tới NGAY qua socket — máy chủ
+   * phát bản chép lời ngay sau khi nghe xong, trước cả lúc model nghĩ.
+   * Nhưng nếu khung không cuộn thì chúng rơi xuống dưới vùng nhìn thấy,
+   * và người dùng kết luận "sao nó chậm thế". Đúng dữ liệu, sai chỗ
+   * nhìn.
+   *
+   * Cuộn cả khi `thinking` đổi, để dòng "đang nghĩ…" cũng hiện ra.
+   */
+  const khungChat = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = khungChat.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }, [chat, thinking]);
+
   async function handleChat() {
     const text = chatInput.trim();
     if (!text || !activeId) return;
@@ -938,7 +958,20 @@ export function DeviceConsole({
                 Nói chuyện với robot
               </h4>
 
-              <div className="mb-3 h-56 space-y-2 overflow-y-auto pr-1">
+              {/* ⚠️ `flex-1` chứ KHÔNG phải chiều cao cố định.
+                  Bản trước để `h-56` (224px) trong một `section` vốn giãn
+                  theo cột bên cạnh — nên tin nhắn bị nhốt trong một dải
+                  hẹp ở trên còn hai phần ba khung để trống, và tin mới
+                  nhất bị cắt ngang giữa dòng.
+                  `min-h-0` là bắt buộc: mặc định `min-height:auto` của
+                  flex item không cho con co lại, và khi đó `overflow-y`
+                  không bao giờ kích hoạt — hộp cứ dài ra đẩy ô nhập
+                  xuống khỏi màn hình. */}
+              <div
+                ref={khungChat}
+                className="mb-3 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1"
+                style={{ minHeight: '18rem' }}
+              >
                 {chat.length === 0 && (
                   <p className="pt-16 text-center text-xs" style={{ color: 'var(--text-muted)' }}>
                     Gõ gì đó. Robot nghĩ bằng tính cách bạn đã đặt, rồi phát ra loa nếu nó đang online.

@@ -36,6 +36,7 @@ import { PCM_SAMPLE_RATE } from './audio.js';
 import { gatewayKey, gatewayRoot, modelFor, endpointFor } from '../llm/gateway.js';
 import { khopLenhNhanh } from './phanXa.js';
 import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
+import { goiYNghe } from './goiYNghe.js';
 import {
   CAU,
   NHAC_MOI,
@@ -634,6 +635,15 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     const lang = CHE_DO[persona0.cheDo].stt ?? '';
     const tr = await transcribeWithGroq(wav, 'turn.wav', 'audio/wav', {
       language: lang,
+      // Mồi vốn từ cho Whisper — tên riêng người dùng tự dạy, từ điều
+      // khiển, thuật ngữ công nghệ. Không tốn thêm gì, và nó chữa đúng
+      // loại lỗi khó chịu nhất: nghe sai TÊN và THUẬT NGỮ.
+      hints: goiYNghe(
+        persona0.cheDo,
+        persona0.knowledge,
+        persona0.name,
+        persona0.wakeWord,
+      ),
       detail: true,
     });
     heard = tr.text.trim();

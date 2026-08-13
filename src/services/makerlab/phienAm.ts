@@ -54,6 +54,11 @@
  * tiêu là nghe như người Việt nói từ đó, chứ không phải như người Anh.
  * Người Việt nói "phai" chứ không nói /faɪl/ với âm `l` cuối rõ rệt.
  */
+/** Danh sách từ khoá công nghệ — dùng làm gợi ý từ vựng cho Whisper. */
+export function tuKhoaCongNghe(): string[] {
+  return Object.keys(TU_DIEN);
+}
+
 const TU_DIEN: Record<string, string> = {
   // ── Lập trình / máy tính ──
   file: 'phai', files: 'phai', deploy: 'đi-pờ-loi', deployed: 'đi-pờ-loi',

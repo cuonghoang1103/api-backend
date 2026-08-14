@@ -149,3 +149,7 @@ firmware/**/shell/stl/
 
 # Token phiên đăng nhập để script xuất bản firmware dùng — KHÔNG commit
 .makerlab-token
+
+# Python bytecode (dịch vụ TTS/xưởng giọng chạy trên máy nhà)
+__pycache__/
+*.pyc

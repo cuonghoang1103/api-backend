@@ -68,6 +68,18 @@ try:
 except Exception as _e:  # noqa: BLE001
     print(f"[tts] khong nap duoc bo dieu khien: {_e}", flush=True)
 
+# Xưởng giọng — thu dữ liệu huấn luyện F5-TTS. Cũng đi ké cổng này chứ
+# không dựng cổng riêng (đường hầm ngược chỉ chở cổng đã ghi sẵn), và
+# cũng MẶC ĐỊNH TẮT khi thiếu khoá. Nạp hỏng thì chỉ mất xưởng, dịch vụ
+# đọc chữ của robot vẫn chạy — nên bọc `try` chứ không để nó kéo cả tiến
+# trình chết theo.
+try:
+    from xuong import router as _xuong_router
+
+    app.include_router(_xuong_router)
+except Exception as _e:  # noqa: BLE001
+    print(f"[tts] khong nap duoc xuong giong: {_e}", flush=True)
+
 _tts: Any = None
 _lock = threading.Lock()          # model KHÔNG an toàn đa luồng
 

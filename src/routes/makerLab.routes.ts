@@ -765,5 +765,192 @@ adminRouter.post('/ha-tang/dk/reboot', async (req, res: Response<ApiResponse>, n
   }
 });
 
+/* ══════════════════════════════════════════════════════════
+ *  XƯỞNG GIỌNG — thu dữ liệu huấn luyện F5-TTS
+ * ══════════════════════════════════════════════════════════
+ *
+ * ⚠️ VÌ SAO PHIÊN ÂM Ở ĐÂY CHỨ KHÔNG Ở MÁY NHÀ.
+ *
+ * Máy nhà không có `GROQ_API_KEY`, và đó là chuyện tốt: mỗi bản sao của
+ * một khoá là thêm một chỗ để mất nó. Backend thì đã có sẵn khoá và đã
+ * có sẵn `transcribeWithGroq` — chính hàm robot dùng để nghe.
+ *
+ * Nên chia việc: VPS nghe, máy nhà cất. Tiếng đi qua đây đúng một lần,
+ * vừa được phiên âm vừa được chuyển tiếp, không thêm vòng nào.
+ *
+ * ⚠️ VÀ VÌ SAO VẪN PHIÊN ÂM DÙ ĐÃ BIẾT TRƯỚC CÂU.
+ *
+ * Kịch bản có sẵn chữ, nên nghe lại nghe như thừa. Không thừa: người ta
+ * đọc trượt, đọc thêm chữ "à", bỏ mất một từ, hoặc đọc thành câu khác
+ * hẳn. Dữ liệu train mà chữ không khớp tiếng là dạy model sai một cách
+ * KHÔNG BÁO LỖI — nó vẫn train xong, chỉ là kém đi.
+ *
+ * Nên Whisper ở đây làm việc của một người soát: nó nghe lại và nói ra
+ * cái nó NGHE ĐƯỢC, rồi màn hình đặt hai câu cạnh nhau cho người dùng
+ * quyết. Nó không tự sửa gì.
+ */
+
+/** Gọi máy nhà nhưng giữ nguyên nhị phân — dùng cho tiếng. */
+async function goiMayNhaTho(
+  duong: string,
+  init: RequestInit,
+): Promise<{ ma: number; than: ArrayBuffer; kieu: string }> {
+  const goc = (process.env.TTS_SERVICE_URL || 'http://tts:8080').replace(/\/+$/, '');
+  const khoa = process.env.MAY_NHA_TOKEN || '';
+  if (!khoa) return { ma: 503, than: new ArrayBuffer(0), kieu: 'application/json' };
+  const r = await fetch(`${goc}${duong}`, {
+    ...init,
+    headers: { ...(init.headers ?? {}), 'X-Token': khoa },
+    signal: AbortSignal.timeout(60_000),
+  });
+  return {
+    ma: r.status,
+    than: await r.arrayBuffer(),
+    kieu: r.headers.get('content-type') || 'application/octet-stream',
+  };
+}
+
+adminRouter.get('/ha-tang/xuong/kich-ban', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha('/xuong/kich-ban');
+    res.status(ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.get('/ha-tang/xuong/tien-do', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha('/xuong/tien-do');
+    res.status(ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.get('/ha-tang/xuong/nen', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha('/xuong/nen');
+    res.status(ma).json({ success: ma === 200, data: du });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/**
+ * Nhận một đoạn thu: phiên âm rồi chuyển tiếp về máy nhà.
+ *
+ * ⚠️ Trần 25 MB. Một câu 15 giây ở webm/opus nặng ~120 KB, nên 25 MB là
+ * rộng gấp hai trăm lần — nó ở đây để chặn một cú tải nhầm file phim,
+ * không phải để giới hạn việc thu.
+ */
+const thuUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
+
+adminRouter.post(
+  '/ha-tang/xuong/cau/:cid',
+  thuUpload.single('tieng'),
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      const f = req.file;
+      if (!f?.buffer?.length) {
+        res.status(400).json({ success: false, message: 'Không có dữ liệu tiếng.' });
+        return;
+      }
+      const cid = String(req.params.cid);
+      const chuGoc = String(req.body?.chu ?? '');
+
+      // Nghe lại để soát. Hỏng thì KHÔNG chặn việc lưu — mất một lần
+      // soát còn hơn mất đoạn thu người ta vừa đọc.
+      let nghe = '';
+      let loiNghe = '';
+      try {
+        const { transcribeWithGroq } = await import('../services/interview/voice/stt.js');
+        const kq = await transcribeWithGroq(f.buffer, 'thu.webm', f.mimetype || 'audio/webm', {
+          language: 'vi',
+          // Đưa câu trong kịch bản làm gợi ý từ vựng: Whisper bám vào đó
+          // với tên riêng và thuật ngữ, nên chỗ đọc đúng sẽ khớp đúng và
+          // chỗ đọc trượt mới lộ ra.
+          hints: chuGoc.slice(0, 300),
+        });
+        nghe = (kq?.text ?? '').trim();
+      } catch (e) {
+        loiNghe = e instanceof Error ? e.message : String(e);
+      }
+
+      const { ma, du } = await goiMayNha(`/xuong/cau/${encodeURIComponent(cid)}`, {
+        method: 'POST',
+        body: new Uint8Array(f.buffer),
+        headers: {
+          'Content-Type': 'application/octet-stream',
+          // Chữ đi base64 trong header: tiếng Việt có dấu trong header
+          // thô là chỗ vỡ mã kinh điển.
+          'X-Chu': Buffer.from(chuGoc, 'utf-8').toString('base64'),
+          'X-Phien-Am': nghe ? '1' : '0',
+        },
+      });
+
+      res.status(ma).json({
+        success: ma === 200,
+        data: { ...(du as object), nghe, loiNghe },
+        message: (du as { detail?: string })?.detail,
+      });
+    } catch (e) {
+      next(e);
+    }
+  },
+);
+
+adminRouter.put('/ha-tang/xuong/cau/:cid/chu', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha(`/xuong/cau/${encodeURIComponent(String(req.params.cid))}/chu`, {
+      method: 'PUT',
+      body: JSON.stringify({ chu: String(req.body?.chu ?? '') }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    res.status(ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.delete('/ha-tang/xuong/cau/:cid', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha(`/xuong/cau/${encodeURIComponent(String(req.params.cid))}`, {
+      method: 'DELETE',
+    });
+    res.status(ma).json({ success: ma === 200, data: du });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/** Nghe lại đoạn đã thu — chuyển thẳng nhị phân, không đụng vào. */
+adminRouter.get('/ha-tang/xuong/am/:cid', async (req, res, next) => {
+  try {
+    const { ma, than, kieu } = await goiMayNhaTho(
+      `/xuong/am/${encodeURIComponent(String(req.params.cid))}.wav`,
+      { method: 'GET' },
+    );
+    if (ma !== 200) {
+      res.status(ma).json({ success: false, message: 'Chưa có tiếng.' });
+      return;
+    }
+    res.setHeader('Content-Type', kieu);
+    res.send(Buffer.from(than));
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post('/ha-tang/xuong/xuat', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha('/xuong/xuat', { method: 'POST' });
+    logger.info('Xuất dataset xưởng giọng', { ma });
+    res.status(ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
 export { adminRouter };
 export default router;

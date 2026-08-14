@@ -326,6 +326,8 @@ export async function upsertPersona(
     giongTheoCheDo?: Record<string, string | null>;
     /** Não ghim: `'may-nha'` | `'cong'` | `null` = tự động theo cấu hình. */
     nao?: string | null;
+    /** Nơi robot đứng, ví dụ "Hà Nội, Việt Nam". Dùng khi hỏi thời tiết. */
+    viTri?: string | null;
     /** Kho bộ tính cách. Ghi ĐÈ cả kho — người dùng sửa trên web là gửi cả bộ. */
     boTinhCach?: unknown;
     /** Bộ đang bật. `null` = quay về bản gốc của persona. */
@@ -363,6 +365,9 @@ export async function upsertPersona(
       // Kho tính cách: `undefined` = không đụng, giá trị = ghi đè cả kho.
       // Ghi đè cả kho là ĐÚNG ở đây — web gửi lên trạng thái sau khi sửa,
       // và hoà từng bộ một thì xoá một bộ sẽ không bao giờ có tác dụng.
+      ...(data.viTri !== undefined
+        ? { viTri: data.viTri ? String(data.viTri).slice(0, 120) : null }
+        : {}),
       ...(data.boTinhCach !== undefined
         ? { boTinhCach: (await import('./tinhCach.js')).chuanKhoTinhCach(data.boTinhCach) ?? {} }
         : {}),

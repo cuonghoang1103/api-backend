@@ -292,6 +292,25 @@ export async function luuNao(projectId: number, nao: Nao | null): Promise<void> 
   });
 }
 
+/**
+ * Người dùng vừa bảo quên hết? Khớp HẸP, đòi động từ, chỉ nhận câu ngắn.
+ *
+ * Xoá trí nhớ là việc KHÔNG hoàn tác được, nên chốt phải chặt hơn mọi
+ * lệnh khác. "Tôi quên mất cái đó rồi" là kể chuyện, không phải lệnh.
+ */
+export function khopQuenHet(heard: string): boolean {
+  const s = heard
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/gi, 'd')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!s || s.length > 34) return false;
+  return /\b(quen|xoa|reset|clear)\b(\s+\S+){0,2}\s+(het|sach|tri nho|lich su|bo nho|all|memory|history)\b/.test(s);
+}
+
 /** Xoá trí nhớ của MỘT robot — nút "quên hết đi" trên trang quản trị. */
 export async function clearHistory(deviceId: number): Promise<void> {
   await prisma.makerConversation.deleteMany({ where: { deviceId } });
@@ -806,6 +825,34 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
         heard,
       });
       return { heard, said: cf.chaoDoi, actions: [], spoken: spokenDoi, ms: timing };
+    }
+
+    /**
+     * ── "Quên hết đi": xoá trí nhớ hội thoại ──
+     *
+     * ⚠️ VÁ ĐẦU VÀO KHÔNG XOÁ ĐƯỢC THỨ ĐÃ NẰM TRONG LỊCH SỬ.
+     *
+     * Bản 09:43 hôm nay ngăn không đưa số liệu thiết bị vào prompt nữa.
+     * Nhưng robot VẪN đọc wifi ở cuối mỗi câu — vì 38 câu trả lời CŨ
+     * trong lịch sử đều làm thế, và model giữ 30 lượt gần nhất làm ngữ
+     * cảnh. Nó nhìn thấy chính nó làm thế 38 lần rồi cứ thế làm tiếp.
+     *
+     * Cùng cơ chế đã gây ra lỗi độ dài: model bắt chước cái nó THẤY, và
+     * lịch sử cũng là thứ nó thấy. Sửa nguồn không hoàn tác được quá
+     * khứ — phải xoá quá khứ.
+     *
+     * `clearHistory` đã có sẵn từ lâu nhưng KHÔNG route, KHÔNG nút — một
+     * hàm không ai gọi tới được. Nay có ba đường: câu lệnh này, nút trên
+     * web, và route admin.
+     */
+    if (khopQuenHet(heard)) {
+      await clearHistory(input.deviceId);
+      const cau = 'Rồi, tôi quên sạch rồi. Bắt đầu lại từ đầu nhé.';
+      const noiDuoc = await speakOnce(persona, cau, input.deviceId);
+      emitTranscript(input.deviceId, 'bot', cau);
+      logger.info('MakerLab xoá trí nhớ theo lệnh giọng nói', { deviceId: input.deviceId });
+      timing.total = Date.now() - started;
+      return { heard, said: cau, actions: [], spoken: noiDuoc, ms: timing };
     }
 
     /**

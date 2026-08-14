@@ -24,7 +24,7 @@
 
 import { useEffect, useState } from 'react';
 import { Mic2, Plus, Trash2, Save, Volume2, Loader2, AlertTriangle, Users } from 'lucide-react';
-import { updatePersona, sayOnDevice, type BoTinhCach } from '@/lib/maker-lab-api';
+import { updatePersona, sayOnDevice, xoaTriNho, type BoTinhCach } from '@/lib/maker-lab-api';
 import { listVoices } from '@/lib/voice-mini-api';
 import type { MakerPersona, MakerDevice } from '@/types/maker-lab';
 
@@ -175,6 +175,12 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
   const [kho, setKho] = useState<Record<string, BoTinhCach>>(traits.boTinhCach ?? {});
   const [boDang, setBoDang] = useState<string | null>(traits.tinhCachDangDung ?? null);
   const [tenMoi, setTenMoi] = useState('');
+  const [viTri, setViTri] = useState(
+    (persona?.traits as { viTri?: unknown })?.viTri
+      ? String((persona?.traits as { viTri?: unknown }).viTri)
+      : '',
+  );
+  const [dangXoaNho, setDangXoaNho] = useState(false);
 
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null);
@@ -201,6 +207,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
           : [{ user: '', bot: '' }],
       kho: (persona?.traits as { boTinhCach?: unknown })?.boTinhCach ?? {},
       boDang: (persona?.traits as { tinhCachDangDung?: unknown })?.tinhCachDangDung ?? null,
+      viTri: (persona?.traits as { viTri?: unknown })?.viTri ?? '',
     }),
   );
 
@@ -236,7 +243,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
    * chứ không giống "chưa bấm lưu". Một dấu chấm đủ để phân biệt hai
    * chuyện đó.
    */
-  const dangCo = JSON.stringify({ prompt, provider, voiceId, temperature, maxTokens, samples, kho, boDang });
+  const dangCo = JSON.stringify({ prompt, provider, voiceId, temperature, maxTokens, samples, kho, boDang, viTri });
   const coThayDoi = moc !== dangCo;
 
   async function save() {
@@ -255,6 +262,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
         temperature,
         maxTokens,
         sampleDialogues: samples.filter((s) => s.user.trim() && s.bot.trim()),
+        viTri: viTri.trim() || null,
         boTinhCach: kho,
         tinhCachDangDung: boDang,
       });
@@ -310,6 +318,64 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
 
   return (
     <div className="space-y-8">
+      {/* ── Vị trí + trí nhớ ── */}
+      <section className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+            Robot đang ở đâu
+          </label>
+          <input
+            value={viTri}
+            onChange={(e) => setViTri(e.target.value)}
+            placeholder="Hà Nội, Việt Nam"
+            className="mt-2 w-full rounded-lg border px-3 py-2 text-sm outline-none"
+            style={{
+              borderColor: 'var(--border-color)',
+              background: 'var(--bg-surface)',
+              color: 'var(--text-primary)',
+            }}
+          />
+          <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+            Hỏi thời tiết hay chuyện quanh đây thì robot lấy nơi này làm mốc. Bỏ trống thì
+            nó đoán, và mỗi hôm đoán một nơi.
+          </p>
+        </div>
+
+        <div>
+          <label className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+            Trí nhớ hội thoại
+          </label>
+          <button
+            type="button"
+            disabled={dangXoaNho}
+            onClick={async () => {
+              const dev = devices[0];
+              if (!dev) return;
+              if (!window.confirm('Xoá sạch trí nhớ hội thoại của robot? Không hoàn tác được.'))
+                return;
+              setDangXoaNho(true);
+              try {
+                await xoaTriNho(dev.id);
+                setMsg({ kind: 'ok', text: 'Đã xoá trí nhớ. Robot bắt đầu lại từ đầu.' });
+              } catch (e) {
+                setMsg({ kind: 'err', text: e instanceof Error ? e.message : 'Xoá không được' });
+              } finally {
+                setDangXoaNho(false);
+              }
+            }}
+            className="mt-2 flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition disabled:opacity-50"
+            style={{ borderColor: '#ef444455', color: '#ef4444' }}
+          >
+            {dangXoaNho ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 size={14} />}
+            Quên hết đi
+          </button>
+          <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+            Robot bắt chước cả những câu CHÍNH NÓ đã nói. Đổi tính cách hay sửa lỗi nói năng
+            mà nó vẫn giữ thói cũ thì xoá chỗ này. Nói &ldquo;quên hết đi&rdquo; cũng được.
+          </p>
+        </div>
+      </section>
+
       {/* ── Bộ tính cách ── */}
       <section>
         <h3

@@ -151,8 +151,15 @@ export interface BoTinhCach {
   chaoDoi?: string;
 }
 
+/** Xoá trí nhớ hội thoại — robot quên sạch, bắt đầu lại từ đầu. */
+export async function xoaTriNho(deviceId: number): Promise<void> {
+  await api.delete(`/admin${BASE}/devices/${deviceId}/history`);
+}
+
 export interface PersonaPayload {
   name?: string;
+  /** Nơi robot đứng, ví dụ "Hà Nội, Việt Nam". Dùng khi hỏi thời tiết. */
+  viTri?: string | null;
   /** Ghi ĐÈ cả kho bộ tính cách — web luôn gửi trạng thái sau khi sửa. */
   boTinhCach?: Record<string, BoTinhCach>;
   /** Bộ đang bật. `null` = quay về bản gốc của persona. */

@@ -536,6 +536,25 @@ adminRouter.put('/projects/:id/nao', async (req, res: Response<ApiResponse>, nex
  * chứng minh "file khớp với thứ người gửi NÓI", chứ không chứng minh
  * "file nguyên vẹn".
  */
+/**
+ * Xoá trí nhớ hội thoại của MỘT robot.
+ *
+ * ⚠️ `clearHistory` đã tồn tại từ lâu mà KHÔNG route, KHÔNG nút — một hàm
+ * không ai gọi tới được. Nó chỉ lộ ra khi cần thật: 13/08/2026 robot vẫn
+ * đọc wifi ở cuối mỗi câu dù đã vá đầu vào, vì 38 câu trả lời CŨ trong
+ * lịch sử đều làm thế và model bắt chước chính nó. Lúc đó mới phát hiện
+ * không có cách nào xoá.
+ */
+adminRouter.delete('/devices/:id/history', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { clearHistory } = await import('../services/makerlab/voiceLoop.js');
+    await clearHistory(toId(req));
+    res.json({ success: true, message: 'Đã xoá trí nhớ hội thoại' });
+  } catch (e) {
+    next(e);
+  }
+});
+
 adminRouter.post(
   '/projects/:id/firmware/upload',
   firmwareUpload.single('file'),

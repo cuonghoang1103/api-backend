@@ -80,6 +80,19 @@ export interface PersonaConfig {
    * chế độ kia, và mỗi chế độ chọn được giọng hợp với nó.
    */
   giongTheoCheDo: Partial<Record<CheDo, string>> | null;
+  /**
+   * Nơi robot đang đứng, ví dụ "Hà Nội, Việt Nam".
+   *
+   * ⚠️ ĐẶT TRONG PROMPT HỆ THỐNG, KHÔNG PHẢI KHỐI ĐỘNG.
+   *
+   * Vị trí là thứ TĨNH — nó không đổi giữa hai lượt như giờ hay pin. Nên
+   * nó nằm được ở phần đầu prompt mà không phá bộ đệm prefix, khác hẳn
+   * `khoiTrangThai()` phải đẩy xuống cuối.
+   *
+   * Có nó thì hỏi "thời tiết thế nào" mới tra được đúng chỗ. Không có
+   * thì model đoán, và nó sẽ đoán Hà Nội hoặc San Francisco tuỳ hôm.
+   */
+  viTri: string | null;
   /** Kho các bộ tính cách người dùng tự soạn. */
   khoTinhCach: KhoTinhCach | null;
   /** Khoá bộ tính cách đang bật. `null` = dùng bản gốc của persona. */
@@ -255,6 +268,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       speechRate: 1,
       cheDo: 'vi',
       giongTheoCheDo: null,
+      viTri: null,
       khoTinhCach: null,
       tinhCachDangDung: null,
       amLuong: 50,
@@ -296,6 +310,10 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     giongTheoCheDo: chuanGiongTheoCheDo(
       (row.traits as { giongTheoCheDo?: unknown } | null)?.giongTheoCheDo,
     ),
+    viTri: (() => {
+      const v = (row.traits as { viTri?: unknown } | null)?.viTri;
+      return typeof v === 'string' && v.trim() ? v.trim().slice(0, 120) : null;
+    })(),
     khoTinhCach: chuanKhoTinhCach((row.traits as { boTinhCach?: unknown } | null)?.boTinhCach),
     tinhCachDangDung: (() => {
       const v = (row.traits as { tinhCachDangDung?: unknown } | null)?.tinhCachDangDung;
@@ -546,6 +564,12 @@ export function buildSystemPrompt(
     `\n${CHE_DO[persona.cheDo].nhacLlm}`,
     traitLines ? `\nThang tính cách hiện tại:\n${traitLines}` : '',
     known,
+    // Vị trí là TĨNH nên nằm ở đây được, không phá bộ đệm prefix. Khác
+    // hẳn giờ/pin/cảm biến — mấy thứ đó phải xuống cuối, xem
+    // `khoiTrangThai()`.
+    persona.viTri
+      ? `\nBạn đang ở ${persona.viTri}. Hỏi về thời tiết, giờ giấc, hay chuyện quanh đây thì lấy nơi này làm mốc, đừng đoán nơi khác.`
+      : '',
     // ⚠️ KHỐI TRẠNG THÁI ĐỘNG ĐÃ CHUYỂN XUỐNG CUỐI — xem ghi chú ở đó.
     `\nBạn điều khiển được thân thể bằng các lệnh sau:\n${commandCheatSheet()}`,
     // ⚠️ Hai luật dưới đây sinh ra từ phép đo 13/08/2026, khi so model cục

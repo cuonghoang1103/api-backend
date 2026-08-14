@@ -140,6 +140,15 @@ export function XuongGiong() {
   const [danMucMoi, setDanMucMoi] = useState('');
   const [dangThem, setDangThem] = useState(false);
 
+  // Soát lại toàn bộ
+  const [dangSoat, setDangSoat] = useState(false);
+  const [soatXong, setSoatXong] = useState(0);
+  const [soatTong, setSoatTong] = useState(0);
+  const [dangNgo, setDangNgo] = useState<
+    Array<{ id: string; tenMuc: string; chu: string; nghe: string; khop: number | null; biaRa: string }>
+  >([]);
+  const dungSoat = useRef(false);
+
   const streamRef = useRef<MediaStream | null>(null);
   const recRef = useRef<MediaRecorder | null>(null);
   const acRef = useRef<AudioContext | null>(null);
@@ -490,6 +499,56 @@ export function XuongGiong() {
     }
   }, [hienTai, chuDoc, napLai]);
 
+  /**
+   * Nghe lại TẤT CẢ đoạn đã thu và chấm khớp.
+   *
+   * ⚠️ Đây KHÔNG phải chấm điểm giọng. Whisper học tiếng phổ thông, nên
+   * nó chấm thấp đúng những đoạn đọc đúng nhất — giọng miền Trung, đoạn
+   * cười, đoạn gằn. Ngưỡng vì thế đặt RIÊNG theo từng mục ở backend, và
+   * TẮT HẲN với tiếng miền Trung cùng mọi mục người dùng tự tạo.
+   *
+   * Kết quả chỉ để LỌC RA CHỖ ĐÁNG NGHE LẠI. Tai người dùng vẫn là chốt
+   * cuối — nút phát nằm ngay cạnh.
+   */
+  const soatLai = useCallback(async () => {
+    const ds = cau.filter((c) => c.daThu);
+    if (!ds.length) return;
+    dungSoat.current = false;
+    setDangSoat(true);
+    setSoatTong(ds.length);
+    setSoatXong(0);
+    setDangNgo([]);
+    const ngo: typeof dangNgo = [];
+    for (let i = 0; i < ds.length; i++) {
+      if (dungSoat.current) break;
+      const c = ds[i];
+      try {
+        const r = await api.post(
+          `${BASE}/soat-lai/${encodeURIComponent(c.id)}`,
+          { chu: chuCuaCau(c), muc: c.muc },
+          { timeout: 60_000 },
+        );
+        const d = r.data?.data;
+        if (d?.dangNgo || d?.biaRa) {
+          ngo.push({
+            id: c.id,
+            tenMuc: c.tenMuc,
+            chu: chuCuaCau(c),
+            nghe: d.nghe ?? '',
+            khop: d.khop ?? null,
+            biaRa: d.biaRa ?? '',
+          });
+          setDangNgo([...ngo]);
+        }
+      } catch {
+        /* một đoạn hỏng không được làm dừng cả lượt soát */
+      }
+      setSoatXong(i + 1);
+    }
+    setDangSoat(false);
+    void napLai();
+  }, [cau, chuCuaCau, napLai]);
+
   const xuat = useCallback(async () => {
     try {
       const r = await api.post(`${BASE}/xuat`, {});
@@ -564,6 +623,22 @@ export function XuongGiong() {
                 className="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-[var(--text-secondary)] hover:bg-white/5"
               >
                 <RefreshCw className="mr-1 inline h-3.5 w-3.5" /> Làm mới
+              </button>
+              <button
+                onClick={() => (dangSoat ? (dungSoat.current = true) : void soatLai())}
+                disabled={tienDo.soDoan === 0}
+                className="rounded-lg border border-amber-400/40 bg-amber-400/10 px-3 py-1.5 text-sm text-amber-300 hover:bg-amber-400/20 disabled:opacity-40"
+              >
+                {dangSoat ? (
+                  <>
+                    <Loader2 className="mr-1 inline h-3.5 w-3.5 animate-spin" />
+                    {soatXong}/{soatTong} — bấm để dừng
+                  </>
+                ) : (
+                  <>
+                    <Ear className="mr-1 inline h-3.5 w-3.5" /> Soát lại tất cả
+                  </>
+                )}
               </button>
               <button
                 onClick={() => void xuat()}
@@ -961,6 +1036,74 @@ export function XuongGiong() {
                 </button>
               </div>
             </div>
+          )}
+        </section>
+      )}
+
+      {/* ══ Kết quả soát ══ */}
+      {(dangSoat || dangNgo.length > 0 || soatXong > 0) && (
+        <section className="mt-6 rounded-xl border border-amber-400/25 bg-amber-400/[0.04] p-4">
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+            <span className="font-medium text-[var(--text-primary)]">
+              Soát lại — {soatXong}/{soatTong} đoạn
+            </span>
+            {!dangSoat && (
+              <span className={dangNgo.length ? 'text-sm text-amber-300' : 'text-sm text-emerald-400'}>
+                {dangNgo.length ? `${dangNgo.length} đoạn nên nghe lại` : 'Không có đoạn nào đáng ngờ ✓'}
+              </span>
+            )}
+          </div>
+
+          {/* ⚠️ Nói rõ giới hạn NGAY TẠI CHỖ đọc kết quả, không giấu trong
+              tài liệu. Một danh sách "đáng ngờ" mà không kèm câu này sẽ
+              được đọc như một bảng điểm, và người dùng sẽ thu lại đúng
+              những đoạn hay nhất. */}
+          <p className="mb-3 text-xs leading-relaxed text-[var(--text-secondary)]">
+            Đây <strong>không phải điểm giọng</strong>. Nó chỉ đo Whisper có nghe ra
+            cùng bộ từ hay không — mà Whisper học tiếng phổ thông, nên chấm thấp
+            đúng lúc bạn đọc hay nhất. Ngưỡng đã hạ riêng cho mục cười và mục cảm
+            xúc, và <strong>tắt hẳn</strong> cho tiếng miền Trung cùng mọi mục bạn
+            tự tạo. Nghe lại rồi tự quyết — tai bạn đúng hơn nó.
+          </p>
+
+          {dangNgo.length > 0 && (
+            <ul className="space-y-2">
+              {dangNgo.map((d) => (
+                <li key={d.id} className="rounded-lg border border-white/10 bg-black/20 p-2.5">
+                  <div className="mb-1 flex flex-wrap items-center gap-2 text-xs">
+                    <button
+                      onClick={() => {
+                        const i = cau.findIndex((c) => c.id === d.id);
+                        if (i >= 0) {
+                          setViTri(i);
+                          setKetQua(null);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }}
+                      className="rounded bg-cyan-400/15 px-2 py-0.5 font-medium text-cyan-300 hover:bg-cyan-400/25"
+                    >
+                      {d.tenMuc} · tới câu này →
+                    </button>
+                    {d.biaRa ? (
+                      <span className="text-amber-300">máy không nghe ra ({d.biaRa})</span>
+                    ) : (
+                      <span className="text-amber-300">khớp {((d.khop ?? 0) * 100).toFixed(0)}%</span>
+                    )}
+                    <audio
+                      controls
+                      className="ml-auto h-7"
+                      src={`/api/v1${BASE}/am/${encodeURIComponent(d.id)}`}
+                    />
+                  </div>
+                  <p className="text-xs text-[var(--text-primary)]">{d.chu}</p>
+                  {d.nghe && (
+                    <p className="mt-0.5 text-xs text-[var(--text-secondary)]">
+                      máy nghe: {d.nghe}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
           )}
         </section>
       )}

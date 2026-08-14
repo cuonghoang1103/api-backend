@@ -350,6 +350,9 @@ async def kich_ban(x_token: Optional[str] = Header(None, alias="X-Token")):
         if g:
             c["do"] = g.get("do")
             c["chuSua"] = g.get("chuSua")
+            c["nghe"] = g.get("nghe")
+            c["khop"] = g.get("khop")
+            c["biaRa"] = g.get("biaRa")
     tt = dict(tom_tat())
     tt["soCau"] = len(cau)
     tt["soTuThem"] = sum(1 for c in cau if c.get("tuThem"))
@@ -433,6 +436,30 @@ async def luu_cau(cid: str, req: Request, x_token: Optional[str] = Header(None, 
     }
     _ghi_meta(meta)
     return {"id": cid, "do": do}
+
+
+@router.put("/cau/{cid}/soat")
+async def luu_soat(cid: str, req: Request, x_token: Optional[str] = Header(None, alias="X-Token")):
+    """Cất lại kết quả soát: máy nghe ra câu gì, khớp bao nhiêu.
+
+    ⚠️ Bản đầu KHÔNG cất thứ này, và đó là một lỗ hổng thật: soát xong
+    hiện lên màn hình rồi thôi, nên không có cách nào xem lại 89 đoạn đã
+    thu hôm trước — muốn biết phải thu lại từ đầu.
+
+    Cùng họ với bài học đã trả giá nhiều lần trong dự án: một con số chỉ
+    tồn tại trong khoảnh khắc nó được tính ra thì bằng không tồn tại.
+    """
+    _kiem_khoa(x_token)
+    meta = _doc_meta()
+    if cid not in meta:
+        raise HTTPException(404, "Chưa thu câu này.")
+    b = await req.json()
+    meta[cid]["nghe"] = str(b.get("nghe") or "")[:600]
+    meta[cid]["khop"] = b.get("khop")
+    meta[cid]["biaRa"] = str(b.get("biaRa") or "")[:200]
+    meta[cid]["soatLuc"] = int(time.time())
+    _ghi_meta(meta)
+    return {"id": cid}
 
 
 @router.put("/cau/{cid}/chu")

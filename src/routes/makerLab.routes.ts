@@ -977,6 +977,129 @@ adminRouter.get('/ha-tang/xuong/am/:cid', async (req, res, next) => {
   }
 });
 
+/**
+ * Soát lại một đoạn ĐÃ THU: nghe lại, chấm khớp, cất kết quả.
+ *
+ * ⚠️ % KHỚP KHÔNG PHẢI ĐIỂM "GIỌNG CHUẨN". Nó đo đúng một thứ: Whisper
+ * có nghe ra cùng bộ từ hay không.
+ *
+ * Whisper học chủ yếu tiếng phổ thông, nên nó chấm THẤP đúng những đoạn
+ * đọc ĐÚNG NHẤT: giọng miền Trung, đoạn cười, đoạn gằn giọng. Lấy con số
+ * này làm điểm là bảo người dùng thu lại những đoạn hay nhất — đúng thứ
+ * mà cả buổi thu đang cố tạo ra.
+ *
+ * Nên nó chỉ dùng để LỌC RA CHỖ ĐÁNG NGHE LẠI, và ngưỡng phải khác nhau
+ * theo từng mục (xem `NGUONG_SOAT` bên dưới). Quyết định cuối cùng vẫn là
+ * tai người dùng — nút phát vẫn ở đó.
+ */
+const NGUONG_SOAT: Record<string, number | null> = {
+  // Đọc rõ, tiếng phổ thông — khớp thấp ở đây là đáng nghi thật.
+  nen: 0.8,
+  nghiem: 0.8,
+  so: 0.75,
+  hoi: 0.75,
+  // Đọc có cảm xúc làm méo chữ CÓ CHỦ Ý. Hạ ngưỡng, đừng bắt lỗi cái
+  // đang cố đạt được.
+  vui: 0.65,
+  buon: 0.7,
+  gian: 0.65,
+  // Cười giữa câu thì Whisper gần như luôn nghe hụt. Bắt lỗi ở đây là
+  // phá đúng mục khó thu nhất.
+  cuoi: 0.45,
+  // ⚠️ TẮT HẲN với tiếng miền Trung. Whisper không được huấn luyện cho
+  // giọng này, nên con số nó cho ra không mang thông tin gì về việc
+  // người dùng đọc tốt hay tệ. Một ngưỡng ở đây chỉ tạo báo động giả.
+  trung: null,
+};
+
+/** Ngưỡng cho mục người dùng tự tạo: không biết họ định thu kiểu gì → tắt. */
+function nguongCuaMuc(muc: string): number | null {
+  if (muc.startsWith('rieng-')) return null;
+  return muc in NGUONG_SOAT ? NGUONG_SOAT[muc] : 0.75;
+}
+
+/** % từ trong câu gốc mà máy cũng nghe ra. Giống hệt bản ở frontend. */
+function doKhopTu(goc: string, nghe: string): number {
+  const chuan = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/[.,!?;:"'()‘’“”]/g, ' ')
+      .split(/\s+/)
+      .filter(Boolean);
+  const a = chuan(goc);
+  if (!a.length) return 1;
+  const b = new Set(chuan(nghe));
+  return a.filter((t) => b.has(t)).length / a.length;
+}
+
+adminRouter.post('/ha-tang/xuong/soat-lai/:cid', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const cid = String(req.params.cid);
+    const chu = String(req.body?.chu ?? '').trim();
+    const muc = String(req.body?.muc ?? '');
+    if (!chu) {
+      res.status(400).json({ success: false, message: 'Thiếu chữ để đối chiếu.' });
+      return;
+    }
+
+    // Lấy chính file wav ĐÃ CẤT, không phải file người dùng vừa gửi —
+    // đó mới là thứ sẽ đi vào bộ dữ liệu train. Soát cái khác là soát
+    // một thứ không ai dùng.
+    const { ma, than } = await goiMayNhaTho(`/xuong/am/${encodeURIComponent(cid)}.wav`, {
+      method: 'GET',
+    });
+    if (ma !== 200) {
+      res.status(404).json({ success: false, message: 'Không tìm thấy tiếng đã thu.' });
+      return;
+    }
+    const wav = Buffer.from(than);
+
+    const { transcribeWithGroq } = await import('../services/interview/voice/stt.js');
+    const { checkHeardSpeech } = await import('../services/makerlab/hallucination.js');
+    const kq = await transcribeWithGroq(wav, 'soat.wav', 'audio/wav', {
+      language: 'vi',
+      hints: chu.slice(0, 300),
+      detail: true,
+    });
+    const t = (kq?.text ?? '').trim();
+    // 16-bit mono 24 kHz + 44 byte đầu WAV → giây.
+    const giay = Math.max(0, (wav.length - 44) / 2 / 24_000);
+    const check = checkHeardSpeech(t, {
+      noSpeechProb: kq?.noSpeechProb,
+      avgLogprob: kq?.avgLogprob,
+      audioSec: giay,
+    });
+
+    const nghe = check.ok ? t : '';
+    const biaRa = check.ok ? '' : (check.reason ?? 'máy nghe không ra');
+    const khop = nghe ? doKhopTu(chu, nghe) : null;
+    const nguong = nguongCuaMuc(muc);
+
+    await goiMayNha(`/xuong/cau/${encodeURIComponent(cid)}/soat`, {
+      method: 'PUT',
+      body: JSON.stringify({ nghe, khop, biaRa }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    res.json({
+      success: true,
+      data: {
+        id: cid,
+        nghe,
+        biaRa,
+        khop,
+        giay: Math.round(giay * 100) / 100,
+        nguong,
+        // `dangNgo` chứ không phải `dat`/`hong`: con số này không đủ tư
+        // cách phán một đoạn thu là hỏng, nó chỉ đủ để nói "nên nghe lại".
+        dangNgo: nguong != null && khop != null && khop < nguong,
+      },
+    });
+  } catch (e) {
+    next(e);
+  }
+});
+
 /* Mục và câu do người dùng TỰ VIẾT.
  *
  * Kịch bản dựng sẵn không biết người dùng nói giọng vùng nào — miền Trung

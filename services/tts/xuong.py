@@ -205,6 +205,7 @@ def _cau_day_du() -> List[Dict[str, Any]]:
         ra.append({
             "id": c["id"], "muc": m["khoa"], "tenMuc": m["ten"], "dan": m["dan"],
             "lamMau": m["lamMau"], "chu": c["chu"], "tuThem": True,
+            "nghia": c.get("nghia") or "",
         })
     return ra
 
@@ -599,6 +600,15 @@ async def them_cau(req: Request, x_token: Optional[str] = Header(None, alias="X-
     chu = str(b.get("chu") or "").strip()[:600]
     if not chu:
         raise HTTPException(400, "Thiếu chữ.")
+    # ⚠️ NGHĨA PHỔ THÔNG KHÔNG BAO GIỜ ĐI VÀO CHỮ ĐỂ TRAIN.
+    #
+    # Chữ trong dataset phải đúng y những gì đọc ra miệng. Ghép chú thích
+    # vào là dạy model đọc luôn cả phần chú thích — hỏng dữ liệu, và hỏng
+    # theo kiểu chỉ nghe ra sau khi train xong.
+    #
+    # Nó ở đây cho việc KHÁC: giúp người đọc lại hiểu câu, và làm nguồn
+    # cho cuốn từ điển robot dùng để dịch. Xem `mienTrung.ts`.
+    nghia = str(b.get("nghia") or "").strip()[:600]
     if not any(m["khoa"] == muc for m in _muc_day_du()):
         raise HTTPException(404, f"Không có mục '{muc}'.")
 
@@ -608,9 +618,9 @@ async def them_cau(req: Request, x_token: Optional[str] = Header(None, alias="X-
     # câu mới thừa hưởng tiếng của câu cũ.
     d["dem"] = int(d.get("dem") or 0) + 1
     cid = f"{muc}-t{d['dem']:03d}"
-    d["cau"].append({"id": cid, "muc": muc, "chu": chu})
+    d["cau"].append({"id": cid, "muc": muc, "chu": chu, "nghia": nghia})
     _ghi_json(THEM, d)
-    return {"id": cid, "muc": muc, "chu": chu}
+    return {"id": cid, "muc": muc, "chu": chu, "nghia": nghia}
 
 
 @router.delete("/them/cau/{cid}")

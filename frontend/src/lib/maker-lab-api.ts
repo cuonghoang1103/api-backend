@@ -199,6 +199,28 @@ export interface PersonaPayload {
  * Đường admin chứ không phải đường công khai: persona quyết định robot
  * nói gì ra loa trong nhà bạn, nên nó không phải thứ ai cũng sửa được.
  */
+/**
+ * Đổi kiểu nói tiếng Việt: `'pho-thong'` | `'mien-trung'`.
+ *
+ * ⚠️ ROUTE RIÊNG, KHÔNG ĐI QUA `updatePersona`. `upsertPersona` ở máy chủ
+ * ghi đè CẢ cột `traits`, mà `traits` còn giữ kiến thức huấn luyện, chế
+ * độ tiếng, tốc độ đọc, âm lượng và bộ tính cách. Gộp vào đó là một cú
+ * bấm đổi kiểu nói làm bay hết những thứ kia — im lặng.
+ *
+ * `tuDien` không gửi = GIỮ NGUYÊN từ điển cũ, không phải xoá.
+ */
+export async function luuKieuNoi(
+  projectId: number,
+  kieuNoi: 'pho-thong' | 'mien-trung',
+  tuDien?: Array<{ tu: string; nghia: string }>,
+): Promise<{ kieuNoi: string; nhan: string }> {
+  const res = await api.put(`/admin${BASE}/projects/${projectId}/kieu-noi`, {
+    kieuNoi,
+    ...(tuDien ? { tuDien } : {}),
+  });
+  return res.data?.data;
+}
+
 export async function updatePersona(
   projectId: number,
   payload: PersonaPayload,

@@ -1,6 +1,7 @@
 import { CHE_DO, laCheDo, type CheDo } from './cheDo.js';
 import { laNao, type Nao } from './nao.js';
 import { chuanKhoTinhCach, type KhoTinhCach } from './tinhCach.js';
+import { danKieuNoi, laKieuNoi, MAU_MIEN_TRUNG, type KieuNoi } from './mienTrung.js';
 /**
  * ============================================================
  * Maker Lab — Persona
@@ -107,6 +108,25 @@ export interface PersonaConfig {
    * khi model mới nói không vừa ý giữa chừng.
    */
   nao: Nao | null;
+  /**
+   * Kiểu nói tiếng Việt: `'pho-thong'` | `'mien-trung'`.
+   *
+   * ⚠️ TRỤC RIÊNG, KHÔNG PHẢI MỘT `cheDo` MỚI.
+   *
+   * `cheDo` chọn NGÔN NGỮ (vi/en/robot) và kéo theo cả giọng đọc lẫn mã
+   * ngôn ngữ cho Whisper. Kiểu nói thì nằm TRONG tiếng Việt — nó chỉ đổi
+   * từ ngữ, không đổi ngôn ngữ. Gộp vào `cheDo` là phải nhân đôi mọi chế
+   * độ, và sẽ có "en-miền-trung" vô nghĩa.
+   */
+  kieuNoi: KieuNoi;
+  /**
+   * Từ địa phương người dùng tự dạy, gom từ xưởng giọng.
+   *
+   * Bảng lõi trong `mienTrung.ts` KHÔNG THỂ đầy đủ — Nghệ Tĩnh, Quảng
+   * Bình, Huế, Quảng Nam mỗi nơi một khác. Chỉ chủ nhân mới biết quê mình
+   * nói gì.
+   */
+  tuDienRieng: Array<{ tu: string; nghia: string }> | null;
 }
 
 /**
@@ -273,6 +293,11 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       tinhCachDangDung: null,
       amLuong: 50,
       nao: null,
+      // Mặc định phổ thông: đây là bản dùng khi CHƯA có persona trong DB,
+      // tức lần chạy đầu tiên. Bật sẵn miền Trung ở đây là ép một lựa
+      // chọn vùng miền lên mọi robot mới.
+      kieuNoi: 'pho-thong',
+      tuDienRieng: null,
       // 0.9 chứ không 0.8: chém gió cần chỗ để đi chệch. Nhiệt độ thấp
       // cho ra những câu đùa an toàn nhất, tức là những câu nhạt nhất.
       temperature: 0.9,
@@ -322,6 +347,22 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     nao: laNao((row.traits as { nao?: unknown } | null)?.nao)
       ? ((row.traits as { nao: Nao }).nao)
       : null,
+    kieuNoi: laKieuNoi((row.traits as { kieuNoi?: unknown } | null)?.kieuNoi)
+      ? ((row.traits as { kieuNoi: KieuNoi }).kieuNoi)
+      : 'pho-thong',
+    tuDienRieng: (() => {
+      const v = (row.traits as { tuDienRieng?: unknown } | null)?.tuDienRieng;
+      if (!Array.isArray(v)) return null;
+      const ds = v
+        .filter((x): x is { tu: string; nghia: string } => {
+          const o = x as { tu?: unknown; nghia?: unknown };
+          return typeof o?.tu === 'string' && typeof o?.nghia === 'string';
+        })
+        .map((x) => ({ tu: x.tu.trim().slice(0, 40), nghia: x.nghia.trim().slice(0, 120) }))
+        .filter((x) => x.tu && x.nghia)
+        .slice(0, 200);
+      return ds.length ? ds : null;
+    })(),
   }));
 }
 
@@ -562,6 +603,14 @@ export function buildSystemPrompt(
     // trả lời tiếng Việt như thường. Triệu chứng khó chịu ở chỗ nó KHÔNG
     // sai hẳn: robot nghe tiếng Anh, hiểu đúng, rồi đáp bằng tiếng Việt.
     `\n${CHE_DO[persona.cheDo].nhacLlm}`,
+    // Kiểu nói đi NGAY SAU nhắc ngôn ngữ, và chỉ có tác dụng trong tiếng
+    // Việt: "nói giọng miền Trung" ở chế độ tiếng Anh là vô nghĩa, mà một
+    // dòng dặn vô nghĩa vẫn tốn ngữ cảnh và vẫn có cơ hội làm model lẫn.
+    //
+    // Từ điển đi kèm ở đây — phần TĨNH của prompt. Nó không đổi giữa các
+    // lượt nên llama.cpp dùng lại được; đặt vào khối động là mỗi lượt nạp
+    // lại vài trăm chữ, đúng lỗi "càng nói càng lâu" đã truy ra 13/08.
+    persona.cheDo === 'vi' ? `\n${danKieuNoi(persona.kieuNoi, persona.tuDienRieng)}` : '',
     traitLines ? `\nThang tính cách hiện tại:\n${traitLines}` : '',
     known,
     // Vị trí là TĨNH nên nằm ở đây được, không phá bộ đệm prefix. Khác
@@ -717,6 +766,33 @@ export function buildFewShot(
   // Cách sửa tử tế về sau: thêm `sampleDialoguesEn` vào `MakerPersona` để
   // chủ tự viết vài cặp thoại tiếng Anh, rồi chọn bộ theo `cheDo`.
   if (persona.cheDo !== 'vi') return [];
+
+  /**
+   * ⚠️ CHẾ ĐỘ MIỀN TRUNG: THAY HẲN MẪU, KHÔNG TRỘN THÊM.
+   *
+   * Đây là CÙNG MỘT LỖI với đoạn tiếng Anh ngay trên, chỉ đổi trục. Mẫu
+   * của người dùng viết bằng tiếng phổ thông; giữ chúng lại ở chế độ miền
+   * Trung là đưa cho model sáu ví dụ dạy rằng "câu kiểu này → đáp BẰNG
+   * PHỔ THÔNG", rồi mong một dòng dặn thắng được cả sáu.
+   *
+   * Phép đo hôm 13/08 đã trả lời sẵn: nhắc thêm bao nhiêu lần cũng không
+   * thắng nổi mẫu ngược chiều (1/8 so với 7/8).
+   *
+   * Cái mất: mất giọng văn riêng người dùng đã soạn. Chấp nhận được, và
+   * chữa được — họ soạn bộ tính cách bằng tiếng miền Trung trong
+   * `tinhCach.ts` là lấy lại được cả hai.
+   */
+  if (persona.kieuNoi === 'mien-trung') {
+    const ra: Array<{ role: 'user' | 'assistant'; content: string }> = [];
+    for (const s of MAU_MIEN_TRUNG) {
+      ra.push({ role: 'user', content: s.user });
+      // ⚠️ Khoá là `say`, KHÔNG phải `speech` — phải khớp đúng vỏ JSON mà
+      // bộ đọc ở `voiceLoop` tìm. Sáu mẫu sai khoá là sáu ví dụ dạy model
+      // nhả một khoá không ai đọc: robot câm, và không có lỗi nào để thấy.
+      ra.push({ role: 'assistant', content: JSON.stringify({ say: s.bot, actions: [] }) });
+    }
+    return ra;
+  }
 
   const out: Array<{ role: 'user' | 'assistant'; content: string }> = [];
   for (const s of persona.sampleDialogues) {

@@ -46,6 +46,7 @@ import { khopLenhNhanh } from './phanXa.js';
 import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
 import { goiYNghe } from './goiYNghe.js';
 import { khopDoiTinhCach } from './tinhCach.js';
+import { khopDoiKieuNoi, CHAO_DOI_KIEU, tuGoiYNghe, type KieuNoi } from './mienTrung.js';
 import {
   CAU,
   NHAC_MOI,
@@ -252,6 +253,20 @@ async function luuTinhCach(projectId: number, khoa: string): Promise<void> {
   await prisma.makerPersona.update({
     where: { id: row.id },
     data: { traits: { ...cu, tinhCachDangDung: khoa } as never },
+  });
+}
+
+/** Ghim kiểu nói (phổ thông / miền Trung) — sống qua deploy và mất điện. */
+async function luuKieuNoi(projectId: number, kieu: KieuNoi): Promise<void> {
+  const row = await prisma.makerPersona.findFirst({
+    where: { projectId },
+    select: { id: true, traits: true },
+  });
+  if (!row) return;
+  const cu = (row.traits as Record<string, unknown> | null) ?? {};
+  await prisma.makerPersona.update({
+    where: { id: row.id },
+    data: { traits: { ...cu, kieuNoi: kieu } as never },
   });
 }
 
@@ -706,12 +721,23 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       // Mồi vốn từ cho Whisper — tên riêng người dùng tự dạy, từ điều
       // khiển, thuật ngữ công nghệ. Không tốn thêm gì, và nó chữa đúng
       // loại lỗi khó chịu nhất: nghe sai TÊN và THUẬT NGỮ.
-      hints: goiYNghe(
-        persona0.cheDo,
-        persona0.knowledge,
-        persona0.name,
-        persona0.wakeWord,
-      ),
+      hints: [
+        goiYNghe(persona0.cheDo, persona0.knowledge, persona0.name, persona0.wakeWord),
+        // ⚠️ ĐÂY MỚI LÀ CHỖ CHỮA "ROBOT KHÔNG HIỂU GIỌNG MIỀN TRUNG".
+        //
+        // LLM vốn hiểu "nỏ biết mô". Khâu hỏng là WHISPER: nó học chủ yếu
+        // tiếng phổ thông nên nghe "nỏ" thành "nó", "chộ" thành "chỗ" —
+        // và LLM nhận được một câu đã sai từ trước khi tới lượt nó.
+        //
+        // Mồi vào đây thì Whisper bám theo. Chỉ mồi khi ĐANG ở kiểu miền
+        // Trung: gửi kèm ở kiểu phổ thông là đẩy Whisper nghe ra từ địa
+        // phương ở những câu vốn không có, tức đổi một lỗi lấy một lỗi.
+        persona0.cheDo === 'vi' && persona0.kieuNoi === 'mien-trung'
+          ? tuGoiYNghe(persona0.tuDienRieng)
+          : '',
+      ]
+        .filter(Boolean)
+        .join(', '),
       detail: true,
     });
     heard = tr.text.trim();
@@ -878,6 +904,34 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
           deviceId: input.deviceId,
           tu: persona.tinhCachDangDung,
           sang: boMoi,
+          heard,
+        });
+        timing.total = Date.now() - started;
+        return { heard, said: cau, actions: [], spoken: noiDuoc, ms: timing };
+      }
+    }
+
+    /**
+     * ── Đổi KIỂU NÓI bằng giọng: phổ thông ↔ miền Trung ──
+     *
+     * Bắt trước khi vào LLM, cùng lý do với lệnh đổi tính cách ngay trên:
+     * "nói giọng miền Trung đi" mà rơi vào LLM thì model sẽ TRẢ LỜI về
+     * giọng miền Trung thay vì ĐỔI sang nói giọng đó.
+     *
+     * Chỉ có nghĩa trong tiếng Việt — ở chế độ EN thì "miền Trung" không
+     * phải một lựa chọn, và bắt lệnh ở đó là bắt nhầm một câu kể chuyện.
+     */
+    if (persona.cheDo === 'vi') {
+      const kieuMoi = khopDoiKieuNoi(heard);
+      if (kieuMoi && kieuMoi !== persona.kieuNoi) {
+        await luuKieuNoi(input.projectId, kieuMoi);
+        const cau = CHAO_DOI_KIEU[kieuMoi];
+        const noiDuoc = await speakOnce(persona, cau, input.deviceId);
+        emitTranscript(input.deviceId, 'bot', cau);
+        logger.info('MakerLab đổi kiểu nói', {
+          deviceId: input.deviceId,
+          tu: persona.kieuNoi,
+          sang: kieuMoi,
           heard,
         });
         timing.total = Date.now() - started;

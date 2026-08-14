@@ -24,7 +24,13 @@
 
 import { useEffect, useState } from 'react';
 import { Mic2, Plus, Trash2, Save, Volume2, Loader2, AlertTriangle, Users } from 'lucide-react';
-import { updatePersona, sayOnDevice, xoaTriNho, type BoTinhCach } from '@/lib/maker-lab-api';
+import {
+  updatePersona,
+  sayOnDevice,
+  xoaTriNho,
+  luuKieuNoi,
+  type BoTinhCach,
+} from '@/lib/maker-lab-api';
 import { listVoices } from '@/lib/voice-mini-api';
 import type { MakerPersona, MakerDevice } from '@/types/maker-lab';
 
@@ -243,6 +249,51 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
    * chứ không giống "chưa bấm lưu". Một dấu chấm đủ để phân biệt hai
    * chuyện đó.
    */
+  /**
+   * Kiểu nói + từ điển riêng.
+   *
+   * ⚠️ CỐ Ý ĐỨNG NGOÀI `dangCo`/`moc` (bộ dò "có gì chưa lưu").
+   *
+   * Hai thứ này lưu qua route RIÊNG và lưu NGAY khi bấm, không chờ nút
+   * Lưu chung — vì `updatePersona` ghi đè cả `traits`, nên gộp chúng vào
+   * luồng lưu chung là mở đường cho một cú Lưu xoá mất chúng.
+   */
+  const [kieu, setKieu] = useState<'pho-thong' | 'mien-trung'>(
+    (persona?.traits as { kieuNoi?: unknown })?.kieuNoi === 'mien-trung'
+      ? 'mien-trung'
+      : 'pho-thong',
+  );
+  const [tuDien, setTuDien] = useState<Array<{ tu: string; nghia: string }>>(() => {
+    const v = (persona?.traits as { tuDienRieng?: unknown })?.tuDienRieng;
+    return Array.isArray(v)
+      ? (v as Array<{ tu?: unknown; nghia?: unknown }>)
+          .filter((x) => typeof x?.tu === 'string' && typeof x?.nghia === 'string')
+          .map((x) => ({ tu: String(x.tu), nghia: String(x.nghia) }))
+      : [];
+  });
+  const [moTuDien, setMoTuDien] = useState(false);
+  const [dangDoiKieu, setDangDoiKieu] = useState(false);
+
+  async function doiKieu(k: 'pho-thong' | 'mien-trung', kemTuDien = false) {
+    setDangDoiKieu(true);
+    setMsg(null);
+    try {
+      const sach = tuDien.filter((x) => x.tu.trim() && x.nghia.trim());
+      await luuKieuNoi(projectId, k, kemTuDien ? sach : undefined);
+      setKieu(k);
+      setMsg({
+        kind: 'ok',
+        text: kemTuDien
+          ? `Đã lưu ${sach.length} từ. Lượt nói tiếp theo dùng ngay.`
+          : `Robot sẽ trả lời kiểu ${k === 'mien-trung' ? 'miền Trung' : 'phổ thông'} từ lượt sau.`,
+      });
+    } catch (e) {
+      setMsg({ kind: 'err', text: e instanceof Error ? e.message : 'Đổi kiểu nói thất bại' });
+    } finally {
+      setDangDoiKieu(false);
+    }
+  }
+
   const dangCo = JSON.stringify({ prompt, provider, voiceId, temperature, maxTokens, samples, kho, boDang, viTri });
   const coThayDoi = moc !== dangCo;
 
@@ -318,6 +369,126 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
 
   return (
     <div className="space-y-8">
+      {/* ── Kiểu nói tiếng Việt ── */}
+      <section
+        className="rounded-xl border p-4"
+        style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}
+      >
+        <label className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+          Kiểu nói tiếng Việt
+        </label>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {(
+            [
+              ['pho-thong', 'Phổ thông'],
+              ['mien-trung', 'Miền Trung'],
+            ] as const
+          ).map(([k, ten]) => (
+            <button
+              key={k}
+              type="button"
+              disabled={dangDoiKieu}
+              onClick={() => void doiKieu(k)}
+              className="rounded-lg border px-3 py-1.5 text-sm transition disabled:opacity-40"
+              style={
+                kieu === k
+                  ? { borderColor: '#22d3ee', background: 'rgba(34,211,238,0.12)', color: '#22d3ee' }
+                  : { borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }
+              }
+            >
+              {ten}
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => setMoTuDien((v) => !v)}
+            className="rounded-lg border px-3 py-1.5 text-sm"
+            style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+          >
+            Từ điển riêng ({tuDien.length})
+          </button>
+        </div>
+        <p className="mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+          Robot <strong>hiểu cả hai kiểu</strong> dù bạn nói giọng nào — cái này chỉ chọn
+          kiểu nó <strong>trả lời</strong>. Ở kiểu miền Trung, hỏi nghĩa một từ thì nó dịch
+          sang phổ thông cho bạn. Đổi được bằng giọng nói: &ldquo;nói giọng miền Trung
+          đi&rdquo; · &ldquo;nói phổ thông đi&rdquo;.
+        </p>
+        <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+          Đây là chuyện của <strong>từ ngữ</strong>. Còn <strong>ngữ âm</strong> — cách đổ
+          thanh, mở nguyên âm — là do model giọng quyết, và nó đến từ phần bạn đang thu ở
+          Xưởng giọng.
+        </p>
+
+        {moTuDien && (
+          <div className="mt-3 border-t pt-3" style={{ borderColor: 'var(--border-color)' }}>
+            <p className="mb-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+              Bảng lõi đã có 35 từ dùng chung khắp miền Trung. Thêm vào đây những từ riêng
+              quê bạn — robot dùng chúng để nói <em>và</em> để dịch khi bạn hỏi nghĩa.
+            </p>
+            {tuDien.map((t, i) => (
+              <div key={i} className="mb-1.5 flex gap-2">
+                <input
+                  value={t.tu}
+                  onChange={(e) =>
+                    setTuDien((ds) => ds.map((x, j) => (j === i ? { ...x, tu: e.target.value } : x)))
+                  }
+                  placeholder="ngái"
+                  className="w-32 rounded-lg border px-2 py-1 text-sm outline-none"
+                  style={{
+                    borderColor: 'var(--border-color)',
+                    background: 'var(--bg-base)',
+                    color: 'var(--text-primary)',
+                  }}
+                />
+                <input
+                  value={t.nghia}
+                  onChange={(e) =>
+                    setTuDien((ds) =>
+                      ds.map((x, j) => (j === i ? { ...x, nghia: e.target.value } : x)),
+                    )
+                  }
+                  placeholder="xa"
+                  className="flex-1 rounded-lg border px-2 py-1 text-sm outline-none"
+                  style={{
+                    borderColor: 'var(--border-color)',
+                    background: 'var(--bg-base)',
+                    color: 'var(--text-primary)',
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setTuDien((ds) => ds.filter((_, j) => j !== i))}
+                  className="px-2 text-sm"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+            <div className="mt-2 flex gap-2">
+              <button
+                type="button"
+                onClick={() => setTuDien((ds) => [...ds, { tu: '', nghia: '' }])}
+                className="rounded-lg border px-3 py-1 text-xs"
+                style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+              >
+                + Thêm từ
+              </button>
+              <button
+                type="button"
+                disabled={dangDoiKieu}
+                onClick={() => void doiKieu(kieu, true)}
+                className="rounded-lg px-3 py-1 text-xs font-medium disabled:opacity-40"
+                style={{ background: '#22d3ee', color: '#0f172a' }}
+              >
+                Lưu từ điển
+              </button>
+            </div>
+          </div>
+        )}
+      </section>
+
       {/* ── Vị trí + trí nhớ ── */}
       <section className="grid gap-4 sm:grid-cols-2">
         <div>

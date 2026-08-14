@@ -523,6 +523,63 @@ adminRouter.put('/projects/:id/nao', async (req, res: Response<ApiResponse>, nex
 });
 
 /**
+ * Đổi KIỂU NÓI tiếng Việt: phổ thông ↔ miền Trung.
+ *
+ * Route riêng chứ không nhét vào `PUT persona`, đúng lý do đã ghi ở route
+ * `/nao` ngay trên: `upsertPersona` GHI ĐÈ CẢ `traits` — mà `traits` còn
+ * giữ kiến thức huấn luyện, chế độ tiếng, tốc độ đọc, âm lượng, bộ tính
+ * cách. Một cú đổi kiểu nói mà xoá mất mấy thứ đó là mất công người dùng
+ * đã bỏ ra, và mất im lặng.
+ *
+ * `tuDien` đi kèm được: đây là chỗ nhận từ địa phương người dùng tự dạy.
+ * Bảng lõi trong `mienTrung.ts` không thể đầy đủ — Nghệ Tĩnh, Huế, Quảng
+ * Nam mỗi nơi một khác, và chỉ chủ nhân mới biết quê mình nói gì.
+ */
+adminRouter.put('/projects/:id/kieu-noi', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { laKieuNoi, NHAN_KIEU } = await import('../services/makerlab/mienTrung.js');
+    const raw: unknown = req.body?.kieuNoi;
+    if (!laKieuNoi(raw)) {
+      res
+        .status(400)
+        .json({ success: false, message: "kieuNoi phải là 'pho-thong' hoặc 'mien-trung'" });
+      return;
+    }
+    const projectId = toId(req);
+
+    const row = await prisma.makerPersona.findFirst({
+      where: { projectId },
+      select: { id: true, traits: true },
+    });
+    if (!row) {
+      res.status(404).json({ success: false, message: 'Chưa có persona cho dự án này.' });
+      return;
+    }
+    const cu = (row.traits as Record<string, unknown> | null) ?? {};
+    const moi: Record<string, unknown> = { ...cu, kieuNoi: raw };
+
+    // Từ điển riêng: chỉ ghi khi client GỬI mảng. Không gửi = giữ nguyên,
+    // chứ không phải xoá — một lần bấm nút đổi kiểu không được làm bay
+    // cuốn từ điển người dùng đã dạy dần.
+    if (Array.isArray(req.body?.tuDien)) {
+      moi.tuDienRieng = (req.body.tuDien as Array<{ tu?: unknown; nghia?: unknown }>)
+        .filter((x) => typeof x?.tu === 'string' && typeof x?.nghia === 'string')
+        .map((x) => ({
+          tu: String(x.tu).trim().slice(0, 40),
+          nghia: String(x.nghia).trim().slice(0, 120),
+        }))
+        .filter((x) => x.tu && x.nghia)
+        .slice(0, 200);
+    }
+
+    await prisma.makerPersona.update({ where: { id: row.id }, data: { traits: moi as never } });
+    res.json({ success: true, data: { kieuNoi: raw, nhan: NHAN_KIEU[raw] } });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/**
  * Xuất bản một bản build: nhận .bin → đẩy R2 → ghi bản ghi → xong.
  *
  * Vì sao là MỘT route làm cả ba việc, thay vì để script tự đẩy R2 rồi

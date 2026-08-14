@@ -55,6 +55,8 @@ interface Cau {
   do?: Do;
   /** Câu/mục do người dùng tự viết — xoá được, khác câu dựng sẵn. */
   tuThem?: boolean;
+  /** Nghĩa phổ thông — chỉ để đọc hiểu, KHÔNG đi vào dữ liệu train. */
+  nghia?: string;
 }
 
 interface Do {
@@ -453,11 +455,16 @@ export function XuongGiong() {
   // người viết kịch bản không biết người dùng nói kiểu nào — chỉ họ mới
   // biết. Đọc câu không phải giọng mình thì HẠI HƠN không đọc.
   const themCau = useCallback(
-    async (muc: string, chu: string) => {
-      const t = chu.trim();
+    async (muc: string, dong: string) => {
+      // Cú pháp một dòng: `câu || nghĩa phổ thông`. Phần nghĩa TUỲ CHỌN và
+      // KHÔNG đi vào dữ liệu train — nó chỉ để đọc lại cho hiểu, và làm
+      // nguồn cho từ điển robot dùng khi dịch.
+      const [chuTho, nghiaTho] = dong.split('||');
+      const t = (chuTho ?? '').trim();
+      const nghia = (nghiaTho ?? '').trim();
       if (!t) return;
       try {
-        await api.post(`${BASE}/them/cau`, { muc, chu: t });
+        await api.post(`${BASE}/them/cau`, { muc, chu: t, nghia });
         await napLai();
         setLoi('');
       } catch (e) {
@@ -798,6 +805,14 @@ export function XuongGiong() {
                 })
               : chuDoc}
           </p>
+
+          {/* Nghĩa phổ thông — CHỈ để đọc cho hiểu, KHÔNG phải thứ để đọc
+              thành tiếng, và KHÔNG đi vào dữ liệu train. */}
+          {hienTai.nghia && (
+            <p className="-mt-3 mb-5 text-sm italic" style={{ color: 'var(--text-secondary)' }}>
+              nghĩa: {hienTai.nghia}
+            </p>
+          )}
 
           {/* Thanh mức tiếng */}
           <div className="mb-4">
@@ -1163,9 +1178,10 @@ export function XuongGiong() {
                 onBlur={() => (mienBanPhim.current = false)}
                 rows={5}
                 placeholder={
-                  'Mỗi dòng một câu — dán cả chục câu một lúc cũng được.\n\n' +
-                  'Đi mô rứa?\n' +
-                  'Nỏ biết mô, để tui hỏi lại đã.\n' +
+                  'Mỗi dòng một câu — dán cả chục câu một lúc cũng được.\n' +
+                  'Muốn ghi nghĩa phổ thông thì thêm dấu || rồi viết nghĩa.\n\n' +
+                  'Đi mô rứa? || Đi đâu vậy?\n' +
+                  'Nỏ biết mô, để tui hỏi lại đã. || Không biết đâu, để tôi hỏi lại đã.\n' +
                   'Mần chi mà lâu rứa hè?'
                 }
                 className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 font-mono text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/50"

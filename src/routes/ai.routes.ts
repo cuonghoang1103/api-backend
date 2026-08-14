@@ -223,7 +223,28 @@ router.post('/stt', optionalAuth, voiceUpload.single('audio'), async (req: any, 
 
 // ─── SSE Constants ────────────────────────────────────────
 const SSE_KEEPALIVE_INTERVAL_MS = 15_000; // 15s — keep connection alive through Nginx AND reset client idle timers before slow (Opus) first-token
-const SSE_TIMEOUT_MS = 240_000;           // 4 phút — room for long (10k–15k token) Pro/Max answers
+/**
+ * TRẦN TUYỆT ĐỐI cho một lượt SSE — chốt chặn cuối, KHÔNG phải phép đo sức khoẻ.
+ *
+ * ⚠️ 240 giây (giá trị cũ) đã GIẾT NHỮNG CÂU TRẢ LỜI ĐANG CHẢY TỐT. Từ khi bật
+ * `reasoning_effort`, model nghĩ xong mới viết: một đề hai bài kèm ảnh ngốn 51
+ * bước suy luận, quá 4 phút trước khi có chữ. Người dùng gặp thật 14/08 —
+ * "Response timeout. Please try again." ngay dưới danh sách 51 bước.
+ *
+ * Đây là tầng thứ HAI mắc cùng một lỗi: `claudeChat.ts` cũng từng đặt đồng hồ
+ * tuyệt đối 220s và đã tách làm hai (im lặng + trần). Vá một tầng mà quên tầng
+ * kia thì người dùng vẫn thấy y hệt như cũ, chỉ đổi câu chữ báo lỗi.
+ */
+const SSE_TIMEOUT_MS = 900_000;           // 15 phút — chốt chặn cuối
+/**
+ * IM LẶNG bao lâu thì coi là hỏng thật.
+ *
+ * Đặt lại sau MỖI khung dữ liệu gửi được cho client — kể cả khung `reasoning`,
+ * vì lúc model đang nghĩ thì đó chính là bằng chứng nó còn làm việc. Khung
+ * keepalive KHÔNG tính: nó do server tự phát, có phát đều đến mấy cũng không
+ * chứng minh model còn sống.
+ */
+const SSE_IDLE_MS = 150_000;              // 2,5 phút không có gói nào từ model
 
 // ════════════════════════════════════════════════════════════════
 // POST /api/v1/ai/chat
@@ -305,10 +326,29 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
   // ─── 4. Set up cleanup timers ─────────────────────────
   let keepaliveTimer: ReturnType<typeof setInterval>;
   let timeoutTimer: ReturnType<typeof setTimeout>;
+  let idleTimer: ReturnType<typeof setTimeout>;
 
   const clearTimers = (): void => {
     clearInterval(keepaliveTimer);
     clearTimeout(timeoutTimer);
+    clearTimeout(idleTimer);
+  };
+
+  /** Có gói THẬT từ model ⇒ nó còn sống ⇒ lùi hạn im lặng. */
+  const datLaiImLang = (): void => {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => batLoiHetGio('im lặng'), SSE_IDLE_MS);
+  };
+
+  const batLoiHetGio = (vi: 'im lặng' | 'trần'): void => {
+    if (res.writableEnded) return;
+    clearTimers();
+    const loi = vi === 'im lặng'
+      ? `Cổng AI im lặng quá ${Math.round(SSE_IDLE_MS / 1000)} giây — có thể nó đang quá tải.`
+      : `Câu trả lời chạy quá ${Math.round(SSE_TIMEOUT_MS / 60000)} phút nên phải dừng.`;
+    logger.warn('AI chat SSE hết giờ', { vi, sessionId });
+    res.write(`data: ${JSON.stringify({ type: 'error', error: loi, done: true })}\n\n`);
+    res.end();
   };
 
   // Keepalive: send comment ':' every 25s to prevent Nginx 60s timeout
@@ -318,20 +358,11 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     }
   }, SSE_KEEPALIVE_INTERVAL_MS);
 
-  // Timeout: force close after 3 minutes
-  timeoutTimer = setTimeout(() => {
-    if (!res.writableEnded) {
-      clearTimers();
-      res.write(
-        `data: ${JSON.stringify({
-          type: 'error',
-          error: 'Response timeout. Please try again.',
-          done: true,
-        })}\n\n`,
-      );
-      res.end();
-    }
-  }, SSE_TIMEOUT_MS);
+  // Đồng hồ IM LẶNG — đặt lại mỗi khi có gói thật từ model (xem `datLaiImLang`).
+  idleTimer = setTimeout(() => batLoiHetGio('im lặng'), SSE_IDLE_MS);
+
+  // Trần tuyệt đối
+  timeoutTimer = setTimeout(() => batLoiHetGio('trần'), SSE_TIMEOUT_MS);
 
   // ─── 5. Handle client disconnect ──────────────────────
   // When user navigates away or closes tab
@@ -376,6 +407,10 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       // Emit the resolved model once (before the first token) so the client can
       // revert the picker immediately if a Claude tier fell back to default.
       sendModelFrame();
+      // Bất kỳ mẩu nào từ model — chữ, bước suy luận, hay hình vừa vẽ lại —
+      // đều là bằng chứng nó còn làm việc. Keepalive KHÔNG tính: nó do server
+      // tự phát, có phát đều đến mấy cũng không nói lên model còn sống.
+      datLaiImLang();
 
       // ─── Bước suy luận ───────────────────────────────────
       // Khung RIÊNG, và trường tên `step` chứ KHÔNG phải `text`: mọi chỗ đọc

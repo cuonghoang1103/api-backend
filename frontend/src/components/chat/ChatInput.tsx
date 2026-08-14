@@ -244,7 +244,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled, skin 
       animate={{ opacity: 1, y: 0 }}
       className={
         isStudio
-          ? 'px-4 pb-4 pt-2 border-t border-[color:var(--studio-border-soft)] bg-[var(--studio-bg)] flex-shrink-0 z-10'
+          ? 'px-4 pb-2.5 pt-1.5 border-t border-[color:var(--studio-border-soft)] bg-[var(--studio-bg)] flex-shrink-0 z-10'
           : 'px-4 py-3 border-t border-[#22d3ee]/10 bg-[#0d1117]/80 backdrop-blur-xl flex-shrink-0 z-10'
       }
     >
@@ -357,8 +357,8 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled, skin 
               placeholder={isVision ? 'Nhắn cho CuongMini… (đính kèm ảnh, PDF, Word)' : 'Nhắn cho CuongMini…'}
               disabled={isDisabled}
               rows={1}
-              className="w-full resize-none bg-transparent px-5 pt-4 pb-1 text-base sm:text-[15px] leading-6 text-[color:var(--studio-text)] placeholder:text-[color:var(--studio-text-faint)] focus:outline-none disabled:opacity-50"
-              style={{ minHeight: '52px', maxHeight: '160px' }}
+              className="w-full resize-none bg-transparent px-4 pt-2.5 pb-0.5 text-base sm:text-[15px] leading-6 text-[color:var(--studio-text)] placeholder:text-[color:var(--studio-text-faint)] focus:outline-none disabled:opacity-50"
+              style={{ minHeight: '38px', maxHeight: '150px' }}
             />
 
             {/* Hidden file input for the attach button */}
@@ -371,7 +371,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled, skin 
               onChange={handleFileChange}
             />
 
-            <div className="flex items-center justify-between gap-2 px-3 pb-2.5 pt-1">
+            <div className="flex items-center justify-between gap-2 px-2.5 pb-1.5 pt-0">
               <div className="flex items-center gap-1">
                 <ModelPicker disabled={isStreaming} variant="studio" />
                 {isVision && (
@@ -380,7 +380,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled, skin 
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isDisabled || (images.length >= MAX_IMAGES && docs.length >= MAX_DOCS)}
                     title={images.length >= MAX_IMAGES && docs.length >= MAX_DOCS ? 'Đã đạt tối đa tệp đính kèm' : 'Đính kèm ảnh, PDF, Word (.docx) hoặc file văn bản'}
-                    className="flex h-9 w-9 items-center justify-center rounded-full text-[color:var(--studio-text-soft)] transition-colors hover:bg-[var(--studio-panel-soft)] hover:text-[color:var(--studio-text)] disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]"
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-[color:var(--studio-text-soft)] transition-colors hover:bg-[var(--studio-panel-soft)] hover:text-[color:var(--studio-text)] disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]"
                   >
                     <Paperclip className="h-4 w-4" />
                   </button>
@@ -394,7 +394,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled, skin 
                 disabled={isStreaming ? !onStop : !canSend}
                 aria-label={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
                 title={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
-                className="flex h-9 w-9 items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]"
+                className="flex h-8 w-8 items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]"
                 style={
                   isStreaming && onStop
                     ? { background: 'var(--studio-text)', color: 'var(--studio-panel)' }

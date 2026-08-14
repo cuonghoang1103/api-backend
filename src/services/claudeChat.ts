@@ -113,9 +113,30 @@ export function maxMaxTokens(): number {
   return Number.isFinite(n) && n > 0 ? n : 32_000;
 }
 
+/**
+ * TRẦN TUYỆT ĐỐI cho một lời gọi — chốt chặn cuối, không phải phép đo sức khoẻ.
+ *
+ * ⚠️ 220 giây (giá trị cũ) đã GIẾT NHỮNG CÂU TRẢ LỜI ĐANG CHẢY TỐT. Từ khi
+ * bật `reasoning_effort`, model nghĩ xong mới viết: một đề hai bài kèm ảnh
+ * ngốn 49 bước suy luận, quá 220s trước khi có chữ đầu tiên. Đồng hồ chém
+ * ngang lúc đang nghĩ, `streamed` rỗng, và người dùng nhìn thấy một bong bóng
+ * chỉ có các bước suy luận rồi im. Log prod 14/08: `openai route stream
+ * timeout`.
+ */
 function claudeTimeoutMs(): number {
-  // Generous: a maxed-out (10k–15k token) answer can legitimately take a while.
-  return Number(process.env.AI_CHAT_CLAUDE_TIMEOUT_MS) || 220_000;
+  return Number(process.env.AI_CHAT_CLAUDE_TIMEOUT_MS) || 600_000;
+}
+
+/**
+ * IM LẶNG bao lâu thì coi là cổng đã chết.
+ *
+ * Đây mới là phép đo đúng: một luồng khoẻ vẫn nhả gói đều đặn (chữ, hoặc
+ * `reasoning_content` lúc đang nghĩ), nên đồng hồ này được đặt lại sau MỖI
+ * gói. Chỉ khi cổng thật sự câm mới ngắt. Đồng hồ tuyệt đối ở trên giữ vai
+ * trò chốt chặn cho trường hợp cổng nhả gói mãi không dứt.
+ */
+function imLangMs(): number {
+  return Number(process.env.AI_CHAT_STREAM_IDLE_MS) || 90_000;
 }
 
 interface ClaudeCallParams {
@@ -327,7 +348,15 @@ export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator
   if (hasDocument(p.messages)) throw new Error('tuyến OpenAI không đọc được PDF');
   const key = requireKey();
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
+  // HAI đồng hồ, hai vai khác nhau — xem `claudeTimeoutMs` / `imLangMs`.
+  const dongHoTran = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
+  let dongHoImLang: ReturnType<typeof setTimeout> | null = null;
+  let daImLang = false;
+  const datLaiImLang = (): void => {
+    if (dongHoImLang) clearTimeout(dongHoImLang);
+    dongHoImLang = setTimeout(() => { daImLang = true; ctrl.abort(); }, imLangMs());
+  };
+  datLaiImLang();
   // Cổng báo vì sao nó dừng. `length` = chạm trần token — phải NÓI RA, vì lúc
   // đó câu trả lời đứt ngang giữa công thức và người đọc không có cách nào
   // biết là mình đang đọc một lời giải chưa xong.
@@ -347,6 +376,11 @@ export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator
     for (;;) {
       const { done, value } = await reader.read();
       if (done) break;
+      // Có gói về = cổng còn sống. Đặt lại đồng hồ im lặng — kể cả gói chỉ
+      // chứa `reasoning_content`: lúc model đang nghĩ thì đó CHÍNH LÀ dấu
+      // hiệu nó vẫn làm việc, và đây là chỗ đồng hồ tuyệt đối 220s cũ đã
+      // chém nhầm một câu trả lời hoàn toàn khoẻ mạnh.
+      datLaiImLang();
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split('\n');
       buffer = lines.pop() || '';
@@ -381,10 +415,15 @@ export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator
       yield '\n\n> ⚠️ **Câu trả lời bị cắt vì chạm trần độ dài.** Nhắn "viết tiếp" để tôi làm nốt phần còn lại.\n';
     }
   } catch (e) {
-    if ((e as Error).name === 'AbortError') throw new Error('openai route stream timeout');
+    if ((e as Error).name === 'AbortError') {
+      throw new Error(daImLang
+        ? `openai route stream im lặng quá ${Math.round(imLangMs() / 1000)}s`
+        : `openai route stream quá trần ${Math.round((p.timeoutMs ?? claudeTimeoutMs()) / 1000)}s`);
+    }
     throw e;
   } finally {
-    clearTimeout(timer);
+    clearTimeout(dongHoTran);
+    if (dongHoImLang) clearTimeout(dongHoImLang);
   }
 }
 

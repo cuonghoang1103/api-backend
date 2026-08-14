@@ -72,6 +72,14 @@ function ThinkingStepsInner({ reasoning, streaming, hasAnswer, skin }: Props) {
   const [manual, setManual] = useState<boolean | null>(null);
   const open = manual ?? (streaming && !hasAnswer);
 
+  // Bài khó đẻ ra 49 bước — mở hết là một bức tường chữ đẩy ô soạn tin xuống
+  // tận đáy trang. Lúc chưa bấm gì thì chỉ hiện MẤY BƯỚC CUỐI (cái đang chạy
+  // là cái người ta muốn nhìn); bấm mở mới xổ hết.
+  const CUON = 6;
+  const moHet = manual === true;
+  const hien = moHet ? steps : steps.slice(-CUON);
+  const conLai = steps.length - hien.length;
+
   if (steps.length === 0) return null;
 
   const studio = skin === 'studio';
@@ -84,7 +92,12 @@ function ThinkingStepsInner({ reasoning, streaming, hasAnswer, skin }: Props) {
     <div className={`mb-2 ${studio ? '' : 'font-mono'}`}>
       <button
         type="button"
-        onClick={() => setManual(!open)}
+        onClick={() => {
+          // Ba nấc: đóng → mở gọn (mấy bước cuối) → mở hết → đóng.
+          if (!open) setManual(false);        // đang đóng → mở ở dạng gọn
+          else if (!moHet) setManual(true);   // đang gọn → xổ hết
+          else setManual(null);               // đang hết → đóng lại
+        }}
         aria-expanded={open}
         className="group flex items-center gap-1.5 rounded-md px-1 py-0.5 text-[12px] transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2"
         style={{ color: cText }}
@@ -92,9 +105,10 @@ function ThinkingStepsInner({ reasoning, streaming, hasAnswer, skin }: Props) {
         <Brain className={`h-3.5 w-3.5 ${streaming && !hasAnswer ? 'animate-pulse' : ''}`} style={{ color: cAccent }} />
         <span>
           {streaming && !hasAnswer
-            ? 'CuongMini đang suy luận…'
+            ? `CuongMini đang suy luận… (${steps.length} bước)`
             : `Đã suy luận · ${steps.length} bước`}
         </span>
+        <span className="opacity-60">{open ? (moHet ? '· thu gọn' : '· xem hết') : '· mở ra'}</span>
         <ChevronDown
           className="h-3 w-3 transition-transform"
           style={{ transform: open ? 'rotate(180deg)' : 'none' }}
@@ -112,8 +126,13 @@ function ThinkingStepsInner({ reasoning, streaming, hasAnswer, skin }: Props) {
             className="overflow-hidden pl-[7px]"
             style={{ borderLeft: `1px solid ${cLine}`, marginLeft: 7 }}
           >
-            {steps.map((s, i) => {
-              const last = i === steps.length - 1;
+            {conLai > 0 && (
+              <li className="py-[3px] text-[12px] leading-5 opacity-60" style={{ color: cFaint }}>
+                … {conLai} bước trước đó (bấm dòng trên để xem hết)
+              </li>
+            )}
+            {hien.map((s, i) => {
+              const last = i === hien.length - 1;
               const running = streaming && !hasAnswer && last;
               return (
                 <motion.li

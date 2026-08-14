@@ -608,7 +608,19 @@ export default function ChatPage() {
               if (typeof data.messageId === 'number') resolvedMessageId = data.messageId;
               continue;
             }
-            if (data.type === 'error') continue;
+            // ⚠️ Trước đây dòng này là `continue` — NUỐT LUÔN thông báo lỗi.
+            // Backend hết cách, gửi khung `error` lên, và người dùng nhìn thấy
+            // một bong bóng trống không kèm lời giải thích nào. Gặp thật
+            // 14/08: model nghĩ 49 bước rồi luồng bị ngắt, màn hình im lặng.
+            if (data.type === 'error') {
+              const loi = typeof data.error === 'string' ? data.error : 'Không lấy được câu trả lời';
+              if (!assistantContent.trim()) {
+                assistantContent = `> ⚠️ **${loi}**\n>\n> Thử nhắn lại, hoặc hỏi ngắn hơn / tách nhỏ đề bài.`;
+                updateLastAssistantMessage(sessionId, assistantContent);
+              }
+              toast.error(loi);
+              continue;
+            }
 
             const text = data.text ?? data.content ?? '';
             if (text) {

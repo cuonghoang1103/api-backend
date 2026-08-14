@@ -196,119 +196,76 @@ async function canSangCucBo(anh: Buffer): Promise<Buffer> {
 }
 
 /**
- * Cắt bỏ DÒNG CHỮ dính ở mép mẩu hình.
+ * Bỏ mọi DÒNG CHỮ nằm rời khỏi hình.
  *
- * Khung do model chỉ ra hay ôm thêm một dòng đề bài phía trên hoặc phía dưới
- * ("sau.", "góc đối đỉnh có trên hình vẽ."). Nhận ra chúng bằng hình dạng:
- * một dải mực MỎNG (dưới ~9% chiều cao) nằm tách khỏi khối chính bởi một
- * quãng giấy trắng. Hình vẽ thì cao và liền mạch, không bị nhầm.
+ * Cách cũ đi từ MÉP vào: chỉ dám gọt trong rìa 20% chiều cao. Khung do model
+ * chỉ ra mà rộng tay — đo trên ảnh thật của người dùng: HAI dòng đề phía trên
+ * và HAI dòng phía dưới — thì các dòng bên trong nằm ngoài tầm với, và mẩu
+ * hình vẫn "mang theo chữ vào".
  *
- * Chỉ được phép gọt tối đa 25% mỗi đầu — thà để sót một dòng chữ còn hơn cắt
- * cụt mất hình.
+ * Cách này ngược lại: tìm KHỐI MỰC CHÍNH (dải cao nhất — chính là hình vẽ),
+ * rồi nhận thêm những dải NẰM SÁT nó (đó là nhãn điểm: x, y, A, B… luôn dính
+ * quanh nét), và cắt bỏ tất cả phần còn lại. Bao nhiêu dòng chữ, ở trên hay ở
+ * dưới, xa hay gần, đều rụng hết.
  */
 export async function catChuODau(anh: Buffer): Promise<Buffer> {
   try {
     const { data, info } = await sharp(anh).grayscale().raw().toBuffer({ resolveWithObject: true });
     const W = info.width;
     const H = info.height;
+    const C = info.channels;
 
-    // Dải nào có mực: đếm điểm tối mỗi hàng.
-    const coMuc: boolean[] = [];
-    for (let y = 0; y < H; y++) {
-      let toi = 0;
-      for (let x = 0; x < W; x += 2) if (data[y * W + x] < 150) toi++;
-      coMuc.push(toi > W / 2 / 60); // >~1,7% bề ngang mới tính là có mực
-    }
-
-    // Gom thành các dải liên tiếp.
-    const daiTho: Array<{ dau: number; cuoi: number }> = [];
-    for (let y = 0; y < H; y++) {
-      if (!coMuc[y]) continue;
-      const cuoiDai = daiTho[daiTho.length - 1];
-      if (cuoiDai && y - cuoiDai.cuoi <= 2) cuoiDai.cuoi = y;
-      else daiTho.push({ dau: y, cuoi: y });
-    }
-
-    // ⚠️ VỨT CHẤM NHIỄU TRƯỚC ĐÃ. Đo trên ảnh thật: dưới dòng chữ đề còn một
-    // chấm CAO 1 PIXEL cách đó 4px. Vòng lặp gọt gặp chấm đó trước, thấy khe
-    // trắng chưa đủ rộng nên DỪNG NGAY — và thế là dòng chữ ngay trên nó không
-    // bao giờ bị gọt. Một hạt bụi chặn đứng cả tính năng.
-    const dai = daiTho.filter((d) => {
-      const cao = d.cuoi - d.dau + 1;
-      if (cao > 3) return true;
-      let dem = 0;
-      for (let y = d.dau; y <= d.cuoi; y++) for (let x = 0; x < W; x += 2) if (data[y * W + x] < 150) dem++;
-      return dem > W / 2 * 0.06; // dải mỏng mà thưa mực ⇒ bụi, bỏ
-    });
-    if (dai.length < 2) return anh; // chỉ một khối → không có gì để gọt
-
-    /** Dải này trải ngang bao nhiêu phần bề rộng — dòng chữ trải rộng, còn
-     *  một nhãn lẻ ("S" trên đỉnh hình chóp) thì chỉ vài phần trăm. Thiếu
-     *  phép thử này, chữ S bị gọt mất y như một dòng đề bài. */
-    const trongNgang = (dau: number, cuoi: number): number => {
-      let trai = W;
-      let phai = 0;
-      for (let y = dau; y <= cuoi; y++) {
-        for (let x = 0; x < W; x += 2) {
-          if (data[y * W + x] < 150) {
-            if (x < trai) trai = x;
-            if (x > phai) phai = x;
-          }
-        }
-      }
-      return phai > trai ? (phai - trai) / W : 0;
-    };
-    const RONG_NHU_DONG_CHU = 0.22;   // đo thật: dòng chữ đề 38%, nhãn lẻ "S" ~5%
-    // Nhãn của hình LUÔN dính sát nét (cách vài pixel). Dải nào nằm cách khối
-    // hình cả một quãng lớn thì chắc chắn không thuộc hình — đo thật: chữ
-    // "sau:" ở đầu trang cách hình 200px (28% chiều cao) mà chỉ rộng 6%, tức
-    // bằng một nhãn, nên chỉ xét bề rộng thì không tài nào phân biệt được.
-    const KHE_XA = H * 0.08;
-
-    // Bốn điều kiện để coi một dải là DÒNG CHỮ chứ không phải phần của hình:
-    //   • mỏng (một dòng chữ thấp hơn hẳn khối hình),
-    //   • nằm ở rìa (không gọt vào giữa),
-    //   • và CÓ KHOẢNG TRẮNG rõ ràng ngăn nó với phần còn lại — đây là điều
-    //     kiện quan trọng nhất: nét hình dù đứt đoạn vẫn nằm sát nhau, còn
-    //     dòng chữ thì cách hình một quãng giấy trắng.
-    const MONG = H * 0.07;
-    const TOI_DA_GOT = H * 0.2;    // gọt tối đa 20% mỗi đầu
-    const KHE_TRANG = Math.max(5, H * 0.012);
-    let tren = 0;
-    let duoi = H;
-
-    for (let i = 0; i < dai.length - 1; i++) {
-      const d = dai[i];
-      const khe = dai[i + 1].dau - d.cuoi;
-      const laChu = khe >= KHE_XA || (khe >= KHE_TRANG && trongNgang(d.dau, d.cuoi) >= RONG_NHU_DONG_CHU);
-      if (d.cuoi - d.dau + 1 <= MONG && d.cuoi < TOI_DA_GOT && laChu) tren = d.cuoi + 2;
-      else break;
-    }
-    for (let i = dai.length - 1; i > 0; i--) {
-      const d = dai[i];
-      const khe = d.dau - dai[i - 1].cuoi;
-      const laChu = khe >= KHE_XA || (khe >= KHE_TRANG && trongNgang(d.dau, d.cuoi) >= RONG_NHU_DONG_CHU);
-      if (d.cuoi - d.dau + 1 <= MONG && d.dau > H - TOI_DA_GOT && laChu) duoi = d.dau - 2;
-      else break;
-    }
-
-    const dinh = Math.max(0, tren);
-    const cao = Math.max(20, Math.min(H, duoi) - dinh);
-    if (cao >= H - 4) return anh; // không gọt được gì
-
-    // ⛔ CHỐT CHẶN: đếm mực trước và sau. Trên ảnh chụp tối, nhiễu làm hình bị
-    // vỡ thành nhiều dải rời và phép gọt ở trên ăn luôn phần dưới của hình
-    // (đã đo: mất chữ "y" và đuôi một đường). Gọt mà mất quá 12% mực thì thà
-    // giữ nguyên cả dòng chữ thừa — chữ thừa còn xoá tay được, hình cụt thì
-    // không.
-    const demMuc = (tu: number, den: number): number => {
+    const demHang = (y: number): number => {
       let n = 0;
-      for (let y = tu; y < den; y++) for (let x = 0; x < W; x += 2) if (data[y * W + x] < 150) n++;
+      for (let x = 0; x < W; x += 2) if (data[(y * W + x) * C] < 150) n++;
       return n;
     };
-    const mucTruoc = demMuc(0, H);
-    const mucSau = demMuc(dinh, dinh + cao);
-    if (mucTruoc > 0 && mucSau / mucTruoc < 0.55) return anh;  // chốt cuối: đừng bao giờ ăn mất nửa hình
+
+    // Gom các hàng có mực thành dải liên tiếp (cho phép hở tối đa 3 hàng).
+    //
+    // ⚠️ NGƯỠNG PHẢI RẤT THẤP. Bản trước đòi mỗi hàng có >1,7% bề ngang là
+    // mực — mức đó hợp với DÒNG CHỮ (dày đặc) nhưng HÌNH VẼ NÉT MẢNH thì
+    // trượt sạch: một hàng cắt ngang hai đường kẻ chỉ có 2-3 điểm tối. Hậu
+    // quả đo được: cả hình chỉ hiện ra hai dải cao 4px, còn ba dải "cao nhất"
+    // lại chính là ba dòng chữ ⇒ thuật toán tưởng CHỮ mới là hình và giữ lại
+    // đúng thứ cần bỏ. Nay chỉ cần 2 mẫu tối là tính có mực; hạt nhiễu do
+    // bước lọc bụi bên dưới lo.
+    const daiTho: Array<{ dau: number; cuoi: number; muc: number }> = [];
+    for (let y = 0; y < H; y++) {
+      const m = demHang(y);
+      if (m < 2) continue;
+      const cuoi = daiTho[daiTho.length - 1];
+      if (cuoi && y - cuoi.cuoi <= 3) { cuoi.cuoi = y; cuoi.muc += m; }
+      else daiTho.push({ dau: y, cuoi: y, muc: m });
+    }
+
+    // Vứt hạt bụi: dải mỏng mà thưa mực. Một chấm 1 pixel từng chặn đứng cả
+    // bộ gọt ở bản trước.
+    const dai = daiTho.filter((d) => d.cuoi - d.dau + 1 > 3 || d.muc > (W / 2) * 0.06);
+    if (dai.length < 2) return anh;
+
+    // Khối chính = dải CAO NHẤT. Hình vẽ luôn cao hơn một dòng chữ nhiều lần.
+    let chinh = 0;
+    for (let i = 1; i < dai.length; i++) {
+      if (dai[i].cuoi - dai[i].dau > dai[chinh].cuoi - dai[chinh].dau) chinh = i;
+    }
+    const caoChinh = dai[chinh].cuoi - dai[chinh].dau + 1;
+    // Khối chính phải ra dáng một hình vẽ; nếu nó cũng mỏng như dòng chữ thì
+    // mẩu này không phải hình — đừng đụng vào.
+    if (caoChinh < H * 0.12) return anh;
+
+    // Nhận thêm các dải NẰM SÁT khối chính — đó là nhãn của hình.
+    const KHE_GAN = Math.max(6, H * 0.035);
+    let tren = chinh;
+    while (tren > 0 && dai[tren].dau - dai[tren - 1].cuoi <= KHE_GAN) tren--;
+    let duoi = chinh;
+    while (duoi < dai.length - 1 && dai[duoi + 1].dau - dai[duoi].cuoi <= KHE_GAN) duoi++;
+
+    const LE_GIU = 8;
+    const dinh = Math.max(0, dai[tren].dau - LE_GIU);
+    const day = Math.min(H, dai[duoi].cuoi + LE_GIU);
+    const cao = day - dinh;
+    if (cao >= H - 4 || cao < H * 0.15) return anh; // không gọt được, hoặc gọt quá tay
 
     return await sharp(anh)
       .extract({ left: 0, top: dinh, width: W, height: cao })

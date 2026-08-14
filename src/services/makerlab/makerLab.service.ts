@@ -326,6 +326,10 @@ export async function upsertPersona(
     giongTheoCheDo?: Record<string, string | null>;
     /** Não ghim: `'may-nha'` | `'cong'` | `null` = tự động theo cấu hình. */
     nao?: string | null;
+    /** Kho bộ tính cách. Ghi ĐÈ cả kho — người dùng sửa trên web là gửi cả bộ. */
+    boTinhCach?: unknown;
+    /** Bộ đang bật. `null` = quay về bản gốc của persona. */
+    tinhCachDangDung?: string | null;
   },
 ) {
   const { DEFAULT_PERSONA_PROMPT } = await import('./persona.js');
@@ -356,6 +360,15 @@ export async function upsertPersona(
       // Âm lượng lưu vào persona chứ không chỉ gửi xuống bo: bo mất điện
       // là quên sạch, mà người dùng đã chỉnh thì họ mong nó GIỮ NGUYÊN.
       ...(coAmLuong ? { amLuong: Math.max(10, Math.min(100, data.amLuong as number)) } : {}),
+      // Kho tính cách: `undefined` = không đụng, giá trị = ghi đè cả kho.
+      // Ghi đè cả kho là ĐÚNG ở đây — web gửi lên trạng thái sau khi sửa,
+      // và hoà từng bộ một thì xoá một bộ sẽ không bao giờ có tác dụng.
+      ...(data.boTinhCach !== undefined
+        ? { boTinhCach: (await import('./tinhCach.js')).chuanKhoTinhCach(data.boTinhCach) ?? {} }
+        : {}),
+      ...(data.tinhCachDangDung !== undefined
+        ? { tinhCachDangDung: data.tinhCachDangDung ? String(data.tinhCachDangDung).slice(0, 40) : null }
+        : {}),
       ...(coNao ? { nao: data.nao } : {}),
       // Hoà từng CHẾ ĐỘ một, không thay cả bảng: web có thể chỉ gửi
       // giọng của chế độ đang sửa, và ghi đè cả bảng là xoá hai chế độ

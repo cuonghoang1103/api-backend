@@ -1,5 +1,6 @@
 import { CHE_DO, laCheDo, type CheDo } from './cheDo.js';
 import { laNao, type Nao } from './nao.js';
+import { chuanKhoTinhCach, type KhoTinhCach } from './tinhCach.js';
 /**
  * ============================================================
  * Maker Lab — Persona
@@ -79,6 +80,10 @@ export interface PersonaConfig {
    * chế độ kia, và mỗi chế độ chọn được giọng hợp với nó.
    */
   giongTheoCheDo: Partial<Record<CheDo, string>> | null;
+  /** Kho các bộ tính cách người dùng tự soạn. */
+  khoTinhCach: KhoTinhCach | null;
+  /** Khoá bộ tính cách đang bật. `null` = dùng bản gốc của persona. */
+  tinhCachDangDung: string | null;
   /** Âm lượng loa 10-100, lưu bền để bo mất điện vẫn nhớ. */
   amLuong: number;
   /**
@@ -196,6 +201,25 @@ const DEFAULT_SAMPLES: Array<{ user: string; bot: string }> = [
  * Giải ngay chỗ nạp thì mọi chỗ gọi ĐÃ đúng sẵn, và chỗ gọi thứ tư thêm
  * sau này cũng đúng mà không cần ai nhớ.
  */
+/**
+ * Áp BỘ TÍNH CÁCH đang bật lên persona.
+ *
+ * ⚠️ MẪU ĐỐI THOẠI MỚI LÀ THỨ TẠO RA PHONG CÁCH, KHÔNG PHẢI `systemPrompt`.
+ *
+ * Nên một bộ chỉ đổi `systemPrompt` mà giữ nguyên mẫu gốc thì người dùng
+ * bấm đổi xong sẽ thấy robot nói y hệt — và kết luận là tính năng hỏng.
+ * Bộ nào cũng nên tự mang mẫu của nó; ở đây chỉ đè những gì bộ có khai.
+ */
+function apTinhCach(p: PersonaConfig): PersonaConfig {
+  const bo = p.tinhCachDangDung ? p.khoTinhCach?.[p.tinhCachDangDung] : null;
+  if (!bo) return p;
+  return {
+    ...p,
+    systemPrompt: bo.systemPrompt || p.systemPrompt,
+    sampleDialogues: bo.sampleDialogues?.length ? bo.sampleDialogues : p.sampleDialogues,
+  };
+}
+
 function apCheDo(p: PersonaConfig): PersonaConfig {
   const cf = CHE_DO[p.cheDo];
   // Thứ tự ưu tiên: giọng người dùng chọn RIÊNG cho chế độ này → giọng
@@ -217,7 +241,7 @@ function apCheDo(p: PersonaConfig): PersonaConfig {
 export async function loadPersona(projectId: number): Promise<PersonaConfig> {
   const row = await prisma.makerPersona.findUnique({ where: { projectId } });
   if (!row) {
-    return apCheDo({
+    return apCheDo(apTinhCach({
       projectId,
       name: 'Robot',
       systemPrompt: DEFAULT_PERSONA_PROMPT,
@@ -231,6 +255,8 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       speechRate: 1,
       cheDo: 'vi',
       giongTheoCheDo: null,
+      khoTinhCach: null,
+      tinhCachDangDung: null,
       amLuong: 50,
       nao: null,
       // 0.9 chứ không 0.8: chém gió cần chỗ để đi chệch. Nhiệt độ thấp
@@ -241,9 +267,9 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       // rớt mạng. Đây là TRẦN, không phải đích — prompt vẫn dặn đừng
       // thành bài diễn văn.
       maxTokens: 420,
-    });
+    }));
   }
-  return apCheDo({
+  return apCheDo(apTinhCach({
     projectId,
     name: row.name,
     systemPrompt: row.systemPrompt || DEFAULT_PERSONA_PROMPT,
@@ -270,10 +296,15 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     giongTheoCheDo: chuanGiongTheoCheDo(
       (row.traits as { giongTheoCheDo?: unknown } | null)?.giongTheoCheDo,
     ),
+    khoTinhCach: chuanKhoTinhCach((row.traits as { boTinhCach?: unknown } | null)?.boTinhCach),
+    tinhCachDangDung: (() => {
+      const v = (row.traits as { tinhCachDangDung?: unknown } | null)?.tinhCachDangDung;
+      return typeof v === 'string' && v.trim() ? v.trim().slice(0, 40) : null;
+    })(),
     nao: laNao((row.traits as { nao?: unknown } | null)?.nao)
       ? ((row.traits as { nao: Nao }).nao)
       : null,
-  });
+  }));
 }
 
 /**

@@ -23,8 +23,8 @@
  */
 
 import { useEffect, useState } from 'react';
-import { Mic2, Plus, Trash2, Save, Volume2, Loader2, AlertTriangle } from 'lucide-react';
-import { updatePersona, sayOnDevice } from '@/lib/maker-lab-api';
+import { Mic2, Plus, Trash2, Save, Volume2, Loader2, AlertTriangle, Users } from 'lucide-react';
+import { updatePersona, sayOnDevice, type BoTinhCach } from '@/lib/maker-lab-api';
 import { listVoices } from '@/lib/voice-mini-api';
 import type { MakerPersona, MakerDevice } from '@/types/maker-lab';
 
@@ -158,6 +158,24 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
       ? (persona.sampleDialogues as Array<{ user: string; bot: string }>)
       : [{ user: '', bot: '' }],
   );
+  /**
+   * Kho bộ tính cách + bộ đang bật.
+   *
+   * ⚠️ MỖI BỘ PHẢI TỰ MANG MẪU ĐỐI THOẠI CỦA NÓ.
+   *
+   * Mẫu mới là thứ tạo ra phong cách, không phải mấy dòng tính từ. Một
+   * bộ chỉ đổi lời dặn mà dùng chung mẫu gốc thì bấm đổi xong nghe y hệt
+   * — và người dùng sẽ kết luận tính năng hỏng chứ không nghĩ là mình
+   * chưa soạn mẫu.
+   */
+  const traits = (persona?.traits ?? {}) as {
+    boTinhCach?: Record<string, BoTinhCach>;
+    tinhCachDangDung?: string | null;
+  };
+  const [kho, setKho] = useState<Record<string, BoTinhCach>>(traits.boTinhCach ?? {});
+  const [boDang, setBoDang] = useState<string | null>(traits.tinhCachDangDung ?? null);
+  const [tenMoi, setTenMoi] = useState('');
+
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null);
   const [testing, setTesting] = useState(false);
@@ -181,6 +199,8 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
         Array.isArray(persona?.sampleDialogues) && persona.sampleDialogues.length
           ? (persona.sampleDialogues as Array<{ user: string; bot: string }>)
           : [{ user: '', bot: '' }],
+      kho: (persona?.traits as { boTinhCach?: unknown })?.boTinhCach ?? {},
+      boDang: (persona?.traits as { tinhCachDangDung?: unknown })?.tinhCachDangDung ?? null,
     }),
   );
 
@@ -216,7 +236,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
    * chứ không giống "chưa bấm lưu". Một dấu chấm đủ để phân biệt hai
    * chuyện đó.
    */
-  const dangCo = JSON.stringify({ prompt, provider, voiceId, temperature, maxTokens, samples });
+  const dangCo = JSON.stringify({ prompt, provider, voiceId, temperature, maxTokens, samples, kho, boDang });
   const coThayDoi = moc !== dangCo;
 
   async function save() {
@@ -235,6 +255,8 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
         temperature,
         maxTokens,
         sampleDialogues: samples.filter((s) => s.user.trim() && s.bot.trim()),
+        boTinhCach: kho,
+        tinhCachDangDung: boDang,
       });
       setMoc(dangCo);
       setMsg({ kind: 'ok', text: 'Đã lưu. Lượt nói tiếp theo dùng ngay bản này — không cần deploy.' });
@@ -263,8 +285,145 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
     }
   }
 
+  /** Lưu bộ đang soạn thành một bộ mới, hoặc ghi đè bộ đang chọn. */
+  function luuThanhBo(khoa: string, nhan: string) {
+    setKho((k) => ({
+      ...k,
+      [khoa]: {
+        ...(k[khoa] ?? {}),
+        nhan,
+        systemPrompt: prompt,
+        sampleDialogues: samples.filter((x) => x.user.trim() && x.bot.trim()),
+      },
+    }));
+    setBoDang(khoa);
+  }
+
+  /** Nạp một bộ lên ô soạn để sửa. */
+  function napBo(khoa: string) {
+    const bo = kho[khoa];
+    if (!bo) return;
+    if (bo.systemPrompt) setPrompt(bo.systemPrompt);
+    if (bo.sampleDialogues?.length) setSamples(bo.sampleDialogues);
+    setBoDang(khoa);
+  }
+
   return (
     <div className="space-y-8">
+      {/* ── Bộ tính cách ── */}
+      <section>
+        <h3
+          className="flex items-center gap-2 text-lg font-semibold"
+          style={{ color: 'var(--text-primary)' }}
+        >
+          <Users className="h-5 w-5" style={{ color: accent }} />
+          Bộ tính cách
+        </h3>
+        <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+          Mỗi bộ có mẫu đối thoại RIÊNG. Đừng trộn hai phong cách vào một bộ — model học
+          cách nói từ mẫu, thấy hai kiểu lẫn nhau thì nó chọn bừa. Đổi được bằng nút ở
+          đây, hoặc nói với robot &ldquo;đổi sang &lt;tên bộ&gt;&rdquo;.
+        </p>
+
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setBoDang(null)}
+            className="rounded-lg border px-3 py-1.5 text-sm transition"
+            style={{
+              borderColor: boDang === null ? accent : 'var(--border-color)',
+              background: boDang === null ? `${accent}18` : 'transparent',
+              color: 'var(--text-primary)',
+            }}
+          >
+            Bản gốc
+          </button>
+          {Object.entries(kho).map(([khoa, bo]) => (
+            <span key={khoa} className="inline-flex items-stretch">
+              <button
+                type="button"
+                onClick={() => napBo(khoa)}
+                className="rounded-l-lg border px-3 py-1.5 text-sm transition"
+                style={{
+                  borderColor: boDang === khoa ? accent : 'var(--border-color)',
+                  background: boDang === khoa ? `${accent}18` : 'transparent',
+                  color: 'var(--text-primary)',
+                }}
+                title={`${bo.sampleDialogues?.length ?? 0} mẫu đối thoại`}
+              >
+                {bo.nhan}
+                <span className="ml-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+                  {bo.sampleDialogues?.length ?? 0} mẫu
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setKho((k) => {
+                    const m = { ...k };
+                    delete m[khoa];
+                    return m;
+                  });
+                  if (boDang === khoa) setBoDang(null);
+                }}
+                className="rounded-r-lg border border-l-0 px-2 transition"
+                style={{ borderColor: 'var(--border-color)', color: '#ef4444' }}
+                title="Xoá bộ này"
+              >
+                <Trash2 size={13} />
+              </button>
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <input
+            value={tenMoi}
+            onChange={(e) => setTenMoi(e.target.value)}
+            placeholder="Tên bộ mới, ví dụ: Nghiêm túc"
+            className="w-56 rounded-lg border px-3 py-2 text-sm outline-none"
+            style={{
+              borderColor: 'var(--border-color)',
+              background: 'var(--bg-surface)',
+              color: 'var(--text-primary)',
+            }}
+          />
+          <button
+            type="button"
+            disabled={!tenMoi.trim()}
+            onClick={() => {
+              const nhan = tenMoi.trim();
+              const khoa = nhan
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/gi, 'd')
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-|-$/g, '')
+                .slice(0, 40);
+              if (!khoa) return;
+              luuThanhBo(khoa, nhan);
+              setTenMoi('');
+            }}
+            className="rounded-lg px-3 py-2 text-sm text-white transition disabled:opacity-40"
+            style={{ background: accent }}
+          >
+            <Plus size={14} className="mr-1 inline" />
+            Lưu ô đang soạn thành bộ này
+          </button>
+          {boDang && kho[boDang] && (
+            <button
+              type="button"
+              onClick={() => luuThanhBo(boDang, kho[boDang].nhan)}
+              className="rounded-lg border px-3 py-2 text-sm transition"
+              style={{ borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
+            >
+              Ghi đè &ldquo;{kho[boDang].nhan}&rdquo;
+            </button>
+          )}
+        </div>
+      </section>
+
       {/* ── Giọng nói ── */}
       <section>
         <h3

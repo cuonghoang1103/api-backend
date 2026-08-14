@@ -45,6 +45,7 @@ import { xinSlot } from '../llm/hangDoi.js';
 import { khopLenhNhanh } from './phanXa.js';
 import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
 import { goiYNghe } from './goiYNghe.js';
+import { khopDoiTinhCach } from './tinhCach.js';
 import {
   CAU,
   NHAC_MOI,
@@ -237,6 +238,20 @@ async function luuCheDo(projectId: number, cheDo: CheDo): Promise<void> {
   await prisma.makerPersona.update({
     where: { id: row.id },
     data: { traits: { ...cu, cheDo } },
+  });
+}
+
+/** Ghi bộ tính cách đang bật vào `traits`. */
+async function luuTinhCach(projectId: number, khoa: string): Promise<void> {
+  const row = await prisma.makerPersona.findFirst({
+    where: { projectId },
+    select: { id: true, traits: true },
+  });
+  if (!row) return;
+  const cu = (row.traits as Record<string, unknown> | null) ?? {};
+  await prisma.makerPersona.update({
+    where: { id: row.id },
+    data: { traits: { ...cu, tinhCachDangDung: khoa } as never },
   });
 }
 
@@ -791,6 +806,36 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
         heard,
       });
       return { heard, said: cf.chaoDoi, actions: [], spoken: spokenDoi, ms: timing };
+    }
+
+    /**
+     * ── Đổi BỘ TÍNH CÁCH bằng giọng nói ──
+     *
+     * Đặt ngay sau lệnh đổi tiếng và trước LLM, vì đúng lý do: câu "đổi
+     * sang giọng nghiêm túc đi" mà rơi vào LLM thì model sẽ TRẢ LỜI về
+     * việc nghiêm túc thay vì ĐỔI sang nghiêm túc.
+     *
+     * Chỉ chạy khi người dùng đã soạn ít nhất một bộ — chưa soạn thì
+     * không có gì để đổi, và bắt khớp từ khoá trong kho rỗng chỉ tổ tốn
+     * một phép so mỗi lượt.
+     */
+    if (persona.khoTinhCach) {
+      const boMoi = khopDoiTinhCach(heard, persona.khoTinhCach);
+      if (boMoi && boMoi !== persona.tinhCachDangDung) {
+        await luuTinhCach(input.projectId, boMoi);
+        const bo = persona.khoTinhCach[boMoi];
+        const cau = bo.chaoDoi || `Rồi, tôi đổi sang ${bo.nhan}.`;
+        const noiDuoc = await speakOnce(persona, cau, input.deviceId);
+        emitTranscript(input.deviceId, 'bot', cau);
+        logger.info('MakerLab đổi bộ tính cách', {
+          deviceId: input.deviceId,
+          tu: persona.tinhCachDangDung,
+          sang: boMoi,
+          heard,
+        });
+        timing.total = Date.now() - started;
+        return { heard, said: cau, actions: [], spoken: noiDuoc, ms: timing };
+      }
     }
 
     /**

@@ -140,8 +140,23 @@ export async function setComponentAcquired(
 
 // ─── Persona (admin) ───────────────────────────────────────
 
+/** Một bộ tính cách: giọng văn + mẫu đối thoại RIÊNG của nó. */
+export interface BoTinhCach {
+  nhan: string;
+  systemPrompt?: string;
+  sampleDialogues?: Array<{ user: string; bot: string }>;
+  /** Từ khoá để đổi bằng giọng nói, ví dụ `['cà khịa','láo cá']`. */
+  tuKhoa?: string[];
+  /** Câu robot nói ngay khi vừa đổi sang bộ này. */
+  chaoDoi?: string;
+}
+
 export interface PersonaPayload {
   name?: string;
+  /** Ghi ĐÈ cả kho bộ tính cách — web luôn gửi trạng thái sau khi sửa. */
+  boTinhCach?: Record<string, BoTinhCach>;
+  /** Bộ đang bật. `null` = quay về bản gốc của persona. */
+  tinhCachDangDung?: string | null;
   systemPrompt?: string;
   voiceProvider?: string;
   voiceId?: string | null;

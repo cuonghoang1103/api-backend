@@ -8,7 +8,7 @@ import {
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
  CreditCard, Github, Search, TrendingUp, AlertTriangle, Gamepad2,
- FlaskConical, KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase, Crown, MonitorPlay, Radio, Activity, Server } from 'lucide-react';
+ FlaskConical, KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase, Crown, MonitorPlay, Radio, Activity, Server, Mic } from 'lucide-react';
 
 const adminNav = [
  { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -47,6 +47,7 @@ const adminNav = [
  { label: 'Quản lý Projects', href: '/admin/projects', icon: Sparkles },
  { label: 'AI Knowledge Base', href: '/admin/ai-knowledge', icon: Database },
  { label: 'Hạ tầng — VPS & GPU', href: '/admin/ha-tang', icon: Server },
+ { label: 'Xưởng giọng — thu để train', href: '/admin/xuong-giong', icon: Mic },
  { label: 'Lượt truy cập', href: '/admin/analytics', icon: Activity },
  { label: 'AI Chat Analytics', href: '/admin/ai-analytics', icon: MessageSquare },
  { label: 'Quản lý Nhãn dán', href: '/admin/stickers', icon: Sticker },

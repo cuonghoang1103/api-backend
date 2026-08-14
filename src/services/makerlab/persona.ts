@@ -284,6 +284,34 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
  * lệnh, luật, mẫu đối thoại, TOÀN BỘ lịch sử — giữ nguyên byte-for-byte
  * giữa hai lượt, và cache ăn trọn.
  */
+/**
+ * Câu hỏi này có CẦN số liệu trạng thái không?
+ *
+ * ⚠️ ĐƯA SỐ LIỆU VÀO MỌI LƯỢT THÌ MODEL SẼ NÓI VỀ CHÚNG Ở MỌI LƯỢT.
+ *
+ * Bản trước gộp khối số liệu vào chính câu người dùng vừa nói — để cache
+ * ăn. Nhưng model đọc nó như thể NGƯỜI DÙNG vừa đọc mấy dòng đó ra, nên
+ * nó lịch sự đáp lại. Người dùng báo: "câu nào cuối cùng nó cũng kèm câu
+ * đang chạy trên CuongMini với tên wifi tốc độ, rất phiền".
+ *
+ * Bảo model "đừng nhắc tới" thì không chắc — model 9B tuân luật phủ định
+ * kém. Cách chắc chắn là ĐỪNG ĐƯA nó vào khi không ai hỏi.
+ *
+ * Và nó còn nhanh hơn: lượt thường không có một chữ động nào, nên phần
+ * chung giữa hai lượt là TOÀN BỘ prompt cộng toàn bộ lịch sử — cache ăn
+ * trọn, không phải "ăn tới chỗ khối động" như trước.
+ */
+export function canTrangThai(heard: string): boolean {
+  const s = heard
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/gi, 'd')
+    .toLowerCase();
+  return /(gio|may gio|ngay|hom nay|thu may|bay gio|sang|trua|chieu|toi nay|time|clock|date|today|pin|battery|wifi|mang|song|ket noi|ping|network|signal|vat can|phia truoc|bao xa|khoang cach|obstacle|distance|thiet bi|dang chay tren|chay tren may)/.test(
+    s,
+  );
+}
+
 export function khoiTrangThai(ctx: {
   deviceName?: string;
   battery?: number | null;

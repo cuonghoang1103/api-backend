@@ -28,7 +28,14 @@ import { logger } from '../../utils/logger.js';
 import { canTraCuu, tinMoiNhat, timTrenWeb, dungDoanTraCuu } from './web.js';
 import { timKienThuc, dungDoanKienThuc } from './kienThuc.js';
 import { transcribeWithGroq } from '../interview/voice/stt.js';
-import { loadPersona, buildSystemPrompt, buildFewShot, khoiTrangThai, type PersonaConfig } from './persona.js';
+import {
+  loadPersona,
+  buildSystemPrompt,
+  buildFewShot,
+  khoiTrangThai,
+  canTrangThai,
+  type PersonaConfig,
+} from './persona.js';
 import { validateCommand, type ValidatedCommand } from './commands.js';
 import { synthesizeSpeech } from './tts.js';
 import { checkHeardSpeech } from './hallucination.js';
@@ -189,15 +196,27 @@ async function dungMessages(
     // và vai `user` vì template Qwen3.5 chỉ cho một system message ở đầu.
     ...(doanKienThuc ? [{ role: 'user' as const, content: doanKienThuc }] : []),
     ...(doanTraCuu ? [{ role: 'user' as const, content: doanTraCuu }] : []),
-    // ⚠️ KHỐI ĐỘNG ĐI CÙNG CÂU MỚI, SAU MỌI THỨ KHÔNG ĐỔI.
-    //
-    // Giờ/pin/cảm biến đổi mỗi lượt. Đặt chúng ở system prompt thì cache
-    // đứt ngay đó và cả 30 lượt lịch sử phía sau phải nạp lại — đo được
-    // model đi từ 1.954 ms (lượt 1) lên 12.228 ms (lượt 3).
-    //
-    // Gộp vào chính câu người dùng vừa nói: câu đó vốn đã mới, nên khối
-    // động đi nhờ mà không tốn thêm gì.
-    { role: 'user', content: `${khoiTrangThai(ctx)}\n\n${heard}` },
+    /**
+     * ⚠️ SỐ LIỆU TRẠNG THÁI CHỈ ĐƯA KHI NGƯỜI TA HỎI TỚI.
+     *
+     * Hai lý do, và lý do thứ nhất là do chính tôi gây ra:
+     *
+     * 1. Bản trước gộp khối số liệu vào MỌI câu người dùng nói, để cache
+     *    ăn. Model đọc nó như thể người dùng vừa đọc mấy dòng đó ra, nên
+     *    nó đáp lại — mỗi lượt. Người dùng báo: "câu nào cuối cùng nó
+     *    cũng kèm câu đang chạy trên CuongMini với tên wifi tốc độ".
+     *
+     * 2. Lượt thường không có chữ động nào thì phần chung giữa hai lượt
+     *    là TOÀN BỘ prompt cộng toàn bộ lịch sử — cache ăn trọn, tốt hơn
+     *    hẳn so với "ăn tới chỗ khối động".
+     *
+     * Hỏi "mấy giờ rồi", "pin còn bao nhiêu", "wifi gì" thì mới đưa. Lúc
+     * đó cache có đứt cũng đáng: người ta đang hỏi đúng cái đó.
+     */
+    {
+      role: 'user',
+      content: canTrangThai(heard) ? `${khoiTrangThai(ctx)}\n\n${heard}` : heard,
+    },
   ];
 }
 

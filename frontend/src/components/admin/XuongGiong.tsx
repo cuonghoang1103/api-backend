@@ -105,7 +105,13 @@ export function XuongGiong() {
   const [muc, setMuc] = useState(0); // mức tiếng 0..1 để vẽ thanh
   const [dinhPhien, setDinhPhien] = useState(0); // đỉnh cao nhất trong lượt thu
   const [giayThu, setGiayThu] = useState(0);
-  const [ketQua, setKetQua] = useState<{ do: Do; nghe: string; loiNghe?: string } | null>(null);
+  const [ketQua, setKetQua] = useState<{
+    do: Do;
+    nghe: string;
+    /** Whisper có nhả ra một câu bịa không, và vì sao biết. Rỗng = không. */
+    biaRa?: string;
+    loiNghe?: string;
+  } | null>(null);
   const [thietBi, setThietBi] = useState<MediaTrackSettings | null>(null);
   const [nenPhong, setNenPhong] = useState<{ rms: number; danh: string } | null>(null);
   const [dangDoPhong, setDangDoPhong] = useState(false);
@@ -270,7 +276,7 @@ export function XuongGiong() {
             timeout: 90_000,
           });
           const d = r.data?.data ?? {};
-          setKetQua({ do: d.do, nghe: d.nghe ?? '', loiNghe: d.loiNghe });
+          setKetQua({ do: d.do, nghe: d.nghe ?? '', biaRa: d.biaRa, loiNghe: d.loiNghe });
           setCau((cs) =>
             cs.map((c) => (c.id === hienTai.id ? { ...c, daThu: true, do: d.do } : c)),
           );
@@ -388,8 +394,15 @@ export function XuongGiong() {
     }
   }, []);
 
+  /**
+   * % khớp giữa kịch bản và cái máy nghe được.
+   *
+   * ⚠️ Chỉ tính khi máy nghe ra một câu THẬT. Không có câu (máy bịa, hoặc
+   * gọi hỏng) mà vẫn tính thì ra "khớp 0%" — một con số nghe như bạn đọc
+   * sai bét, trong khi thật ra chưa ai soát cả.
+   */
   const khop = useMemo(
-    () => (ketQua && hienTai ? doKhop(hienTai.chu, ketQua.nghe) : null),
+    () => (ketQua?.nghe && !ketQua.biaRa && hienTai ? doKhop(hienTai.chu, ketQua.nghe) : null),
     [ketQua, hienTai],
   );
 
@@ -583,8 +596,10 @@ export function XuongGiong() {
           </p>
 
           {/* Câu cần đọc — to, dễ đọc từ xa, vì người ta ngồi lùi khỏi mic */}
+          {/* Tô đỏ từ lệch — chỉ khi máy nghe ra câu thật. Không có câu mà
+              vẫn tô thì CẢ CÂU đỏ rực, trông như đọc sai hết. */}
           <p className="mb-5 text-2xl leading-relaxed text-[var(--text-primary)]">
-            {tuGoc.length && ketQua
+            {tuGoc.length && khop != null
               ? hienTai.chu.split(/(\s+)/).map((t, i) => {
                   const sach = chuanTu(t)[0];
                   if (!sach) return <span key={i}>{t}</span>;
@@ -719,6 +734,28 @@ export function XuongGiong() {
                   <p className="text-xs text-[var(--text-secondary)]">
                     Không soát lại được ({ketQua.loiNghe}) — tiếng vẫn đã lưu.
                   </p>
+                ) : ketQua.biaRa ? (
+                  /**
+                   * ⚠️ Whisper KHÔNG BAO GIỜ nói "tôi không nghe ra gì". Cho nó
+                   * nghe tiếng ồn thì nó nhả ra thứ hay gặp nhất trong dữ liệu
+                   * học, mà với tiếng Việt là phụ đề YouTube: "Hãy subscribe
+                   * cho kênh Ghiền Mì Gõ…". Câu bịa nhìn tự tin y hệt câu thật.
+                   *
+                   * Nên ở đây KHÔNG hiện câu đó ra. Hiện nó lên là mời người
+                   * dùng bấm "lấy câu máy nghe làm chuẩn" và nhét một câu rác
+                   * vào dữ liệu huấn luyện.
+                   */
+                  <div className="text-xs">
+                    <span className="text-amber-300">
+                      <AlertTriangle className="mr-1 inline h-3 w-3" />
+                      Máy không nghe ra ({ketQua.biaRa}) — đã chặn câu bịa.
+                    </span>
+                    <p className="mt-1 text-[var(--text-secondary)]">
+                      Tiếng vẫn lưu bình thường và vẫn dùng để train, vì chữ lấy
+                      từ kịch bản chứ không lấy từ máy. Chỉ là lần này không soát
+                      hộ được — nghe lại ở nút phát để tự kiểm.
+                    </p>
+                  </div>
                 ) : (
                   <>
                     <div className="flex items-center gap-2 text-xs">

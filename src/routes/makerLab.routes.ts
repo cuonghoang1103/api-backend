@@ -859,24 +859,13 @@ adminRouter.post(
       const cid = String(req.params.cid);
       const chuGoc = String(req.body?.chu ?? '');
 
-      // Nghe lại để soát. Hỏng thì KHÔNG chặn việc lưu — mất một lần
-      // soát còn hơn mất đoạn thu người ta vừa đọc.
-      let nghe = '';
-      let loiNghe = '';
-      try {
-        const { transcribeWithGroq } = await import('../services/interview/voice/stt.js');
-        const kq = await transcribeWithGroq(f.buffer, 'thu.webm', f.mimetype || 'audio/webm', {
-          language: 'vi',
-          // Đưa câu trong kịch bản làm gợi ý từ vựng: Whisper bám vào đó
-          // với tên riêng và thuật ngữ, nên chỗ đọc đúng sẽ khớp đúng và
-          // chỗ đọc trượt mới lộ ra.
-          hints: chuGoc.slice(0, 300),
-        });
-        nghe = (kq?.text ?? '').trim();
-      } catch (e) {
-        loiNghe = e instanceof Error ? e.message : String(e);
-      }
-
+      // ⚠️ CẤT TRƯỚC, NGHE SAU — đổi thứ tự so với bản đầu, vì hai lý do.
+      //
+      // 1. Chốt chặn Whisper-bịa cần THỜI LƯỢNG THẬT để xét, mà thời
+      //    lượng thật chỉ có sau khi máy nhà cắt lặng và đo. Đoán ở đây
+      //    là đưa cho chốt chặn một con số sai, và một chốt chặn xét trên
+      //    số sai thì tệ hơn không có.
+      // 2. Máy nhà từ chối thì khỏi tốn một lượt gọi Groq.
       const { ma, du } = await goiMayNha(`/xuong/cau/${encodeURIComponent(cid)}`, {
         method: 'POST',
         body: new Uint8Array(f.buffer),
@@ -885,14 +874,60 @@ adminRouter.post(
           // Chữ đi base64 trong header: tiếng Việt có dấu trong header
           // thô là chỗ vỡ mã kinh điển.
           'X-Chu': Buffer.from(chuGoc, 'utf-8').toString('base64'),
-          'X-Phien-Am': nghe ? '1' : '0',
         },
       });
+      if (ma !== 200) {
+        res.status(ma).json({ success: false, data: du, message: (du as { detail?: string })?.detail });
+        return;
+      }
+      const giay = Number((du as { do?: { giay?: number } })?.do?.giay) || undefined;
 
-      res.status(ma).json({
-        success: ma === 200,
-        data: { ...(du as object), nghe, loiNghe },
-        message: (du as { detail?: string })?.detail,
+      // Nghe lại để soát. Hỏng thì KHÔNG chặn — tiếng đã cất rồi.
+      let nghe = '';
+      let loiNghe = '';
+      let biaRa = '';
+      try {
+        const { transcribeWithGroq } = await import('../services/interview/voice/stt.js');
+        const { checkHeardSpeech } = await import('../services/makerlab/hallucination.js');
+        const kq = await transcribeWithGroq(f.buffer, 'thu.webm', f.mimetype || 'audio/webm', {
+          language: 'vi',
+          // Đưa câu trong kịch bản làm gợi ý từ vựng: Whisper bám vào đó
+          // với tên riêng và thuật ngữ, nên chỗ đọc đúng sẽ khớp đúng và
+          // chỗ đọc trượt mới lộ ra.
+          hints: chuGoc.slice(0, 300),
+          // ⚠️ BẮT BUỘC. Không có `detail` thì không có `noSpeechProb` —
+          // và đó là chỗ DUY NHẤT Whisper thừa nhận nó đang đoán. Thiếu
+          // nó, chốt chặn dưới đây chỉ còn xét được chữ, mất hẳn tầng
+          // bằng chứng mạnh nhất.
+          detail: true,
+        });
+        const t = (kq?.text ?? '').trim();
+
+        // ⚠️ CHỐT CHẶN ĐÃ CÓ SẴN TRONG DỰ ÁN TỪ LÂU — `hallucination.ts`,
+        // robot dùng nó ở `voiceLoop.ts:756`. Bản đầu của xưởng này dựng
+        // một đường mới mà QUÊN NỐI VÀO, nên Whisper nhả nguyên câu
+        // "Hãy subscribe cho kênh Ghiền Mì Gõ…" ra màn hình thu — đúng
+        // chuỗi nằm sẵn trong `hallucination.test.ts` như một ca thử.
+        //
+        // Bài học lặp lại: bộ chặn phải TỚI ĐƯỢC mọi đường, không chỉ
+        // đường nó sinh ra cùng.
+        const check = checkHeardSpeech(t, {
+          noSpeechProb: kq?.noSpeechProb,
+          avgLogprob: kq?.avgLogprob,
+          audioSec: giay,
+        });
+        if (check.ok) nghe = t;
+        else biaRa = check.reason ?? 'máy nghe không ra';
+      } catch (e) {
+        loiNghe = e instanceof Error ? e.message : String(e);
+      }
+
+      res.status(200).json({
+        success: true,
+        // `biaRa` đi riêng chứ không nhét vào `nghe`: màn hình phải phân
+        // biệt được "máy nghe ra câu khác" với "máy không nghe ra gì".
+        // Gộp lại là dạy người dùng tin một câu bịa.
+        data: { ...(du as object), nghe, biaRa, loiNghe },
       });
     } catch (e) {
       next(e);

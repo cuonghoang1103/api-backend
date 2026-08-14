@@ -244,22 +244,40 @@ export async function catChuODau(anh: Buffer): Promise<Buffer> {
     const dai = daiTho.filter((d) => d.cuoi - d.dau + 1 > 3 || d.muc > (W / 2) * 0.06);
     if (dai.length < 2) return anh;
 
-    // Khối chính = dải CAO NHẤT. Hình vẽ luôn cao hơn một dòng chữ nhiều lần.
-    let chinh = 0;
-    for (let i = 1; i < dai.length; i++) {
-      if (dai[i].cuoi - dai[i].dau > dai[chinh].cuoi - dai[chinh].dau) chinh = i;
+    /**
+     * MẬT ĐỘ MỰC — thước phân biệt CHỮ với NÉT VẼ, mạnh hơn mọi thước khác.
+     * Một hàng chữ có 10-40% số mẫu là điểm tối; một hàng cắt ngang hình vẽ
+     * chỉ có 2-5 mẫu trên vài trăm. Đo trên ảnh dựng lại: dòng chữ 0,101 —
+     * hình vẽ 0,012, cách nhau gần 10 lần.
+     */
+    const matDo = (d: { dau: number; cuoi: number; muc: number }): number =>
+      d.muc / ((d.cuoi - d.dau + 1) * (W / 2));
+    const NGUONG_CHU = 0.04;
+
+    // Khối chính = dải CAO NHẤT trong số các dải KHÔNG PHẢI CHỮ. Chọn theo mỗi
+    // chiều cao là hỏng: một dòng chữ in đậm cao 31px có thể cao hơn một mảnh
+    // hình bị đứt quãng.
+    let chinh = -1;
+    for (let i = 0; i < dai.length; i++) {
+      if (matDo(dai[i]) >= NGUONG_CHU) continue;
+      if (chinh < 0 || dai[i].cuoi - dai[i].dau > dai[chinh].cuoi - dai[chinh].dau) chinh = i;
     }
+    if (chinh < 0) return anh; // toàn chữ, không có hình → đừng đụng
     const caoChinh = dai[chinh].cuoi - dai[chinh].dau + 1;
     // Khối chính phải ra dáng một hình vẽ; nếu nó cũng mỏng như dòng chữ thì
     // mẩu này không phải hình — đừng đụng vào.
     if (caoChinh < H * 0.12) return anh;
 
-    // Nhận thêm các dải NẰM SÁT khối chính — đó là nhãn của hình.
-    const KHE_GAN = Math.max(6, H * 0.035);
+    // Nhận thêm các dải NẰM SÁT khối chính — đó là nhãn của hình hoặc mảnh
+    // hình bị đứt. TUYỆT ĐỐI không nhận dải nào là CHỮ, dù nó nằm sát tới đâu:
+    // đo trên ảnh thật, một dấu ":" nằm ngay trên hình được nhận là nhãn, rồi
+    // từ đó "bắc cầu" lên nốt cả dòng chữ đề phía trên.
+    const KHE_GAN = Math.min(30, Math.max(6, H * 0.035));
+    const nhanDuoc = (i: number): boolean => matDo(dai[i]) < NGUONG_CHU;
     let tren = chinh;
-    while (tren > 0 && dai[tren].dau - dai[tren - 1].cuoi <= KHE_GAN) tren--;
+    while (tren > 0 && dai[tren].dau - dai[tren - 1].cuoi <= KHE_GAN && nhanDuoc(tren - 1)) tren--;
     let duoi = chinh;
-    while (duoi < dai.length - 1 && dai[duoi + 1].dau - dai[duoi].cuoi <= KHE_GAN) duoi++;
+    while (duoi < dai.length - 1 && dai[duoi + 1].dau - dai[duoi].cuoi <= KHE_GAN && nhanDuoc(duoi + 1)) duoi++;
 
     const LE_GIU = 8;
     const dinh = Math.max(0, dai[tren].dau - LE_GIU);

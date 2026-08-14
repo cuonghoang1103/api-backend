@@ -977,6 +977,62 @@ adminRouter.get('/ha-tang/xuong/am/:cid', async (req, res, next) => {
   }
 });
 
+/* Mục và câu do người dùng TỰ VIẾT.
+ *
+ * Kịch bản dựng sẵn không biết người dùng nói giọng vùng nào — miền Trung
+ * có Nghệ Tĩnh, Huế, Quảng Nam, mỗi nơi một bộ từ. Mà đọc câu không phải
+ * giọng mình thì hại hơn không đọc. Nên phần này để họ tự viết, không
+ * phải chờ sửa mã rồi deploy. */
+adminRouter.post('/ha-tang/xuong/them/muc', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha('/xuong/them/muc', {
+      method: 'POST',
+      body: JSON.stringify(req.body ?? {}),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    res.status(ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post('/ha-tang/xuong/them/cau', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha('/xuong/them/cau', {
+      method: 'POST',
+      body: JSON.stringify(req.body ?? {}),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    res.status(ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.delete('/ha-tang/xuong/them/cau/:cid', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha(
+      `/xuong/them/cau/${encodeURIComponent(String(req.params.cid))}`,
+      { method: 'DELETE' },
+    );
+    res.status(ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.delete('/ha-tang/xuong/them/muc/:khoa', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha(
+      `/xuong/them/muc/${encodeURIComponent(String(req.params.khoa))}`,
+      { method: 'DELETE' },
+    );
+    res.status(ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
 adminRouter.post('/ha-tang/xuong/xuat', async (_req, res: Response<ApiResponse>, next) => {
   try {
     const { ma, du } = await goiMayNha('/xuong/xuat', { method: 'POST' });

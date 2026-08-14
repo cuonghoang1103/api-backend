@@ -466,6 +466,59 @@ KICH_BAN: List[Muc] = [
             "Cổng kết nối là tám nghìn không trăm chín mươi.",
         ],
     },
+    {
+        "khoa": "trung",
+        "ten": "Tiếng miền Trung",
+        "dan": (
+            "⚠️ SỬA CÂU CHO ĐÚNG KIỂU BẠN NÓI TRƯỚC KHI ĐỌC. Bấm 'Sửa "
+            "chữ' nếu câu nào nghe không thuận miệng — miền Trung mỗi vùng "
+            "một khác (Nghệ Tĩnh, Quảng Bình, Huế, Quảng Nam), và đọc một "
+            "câu KHÔNG PHẢI giọng mình là dạy model một giọng giả. Thà bỏ "
+            "câu đó còn hơn.\n\n"
+            "Đọc thật tự nhiên, như đang nói với người cùng quê."
+        ),
+        "lamMau": True,
+        "cau": [
+            # ── Lõi chung mọi vùng miền Trung: mô, tê, răng, rứa, chi, ni, nớ ──
+            "Đi mô rứa?",
+            "Răng rứa? Có chuyện chi à?",
+            "Cái ni là cái chi rứa?",
+            "Có chi mô, chuyện nhỏ mà.",
+            "Bây chừ mấy giờ rồi hè?",
+            "Cái nớ để đó tui làm cho.",
+            "Ăn cơm chưa rứa?",
+            "Nói rứa mà cũng nói được à.",
+            "Đứa nớ đi mô từ sáng tới chừ không thấy về.",
+            "Tui có biết mô mà nói.",
+            "Rứa là xong rồi hè, khoẻ.",
+            "Chờ tui một chút, tui ra liền.",
+            "Trời ni mà đi ra ngoài là ướt hết.",
+            "Mần chi mà lâu rứa không biết.",
+            "Thôi được rồi, để mai tính.",
+            # ── Câu dài — vừa là dữ liệu, vừa là mẫu tham chiếu giọng Trung ──
+            "Hôm ni trời nắng dữ quá, đi mô cũng thấy mệt, "
+            "chắc tui ở nhà cho khoẻ chứ không đi đâu nữa mô.",
+            "Cái chuyện nớ tui nghe rồi, mà nghe răng cũng thấy lạ lạ, "
+            "không biết có thiệt không nữa, để tui hỏi lại đã rồi tính.",
+            "Bây chừ mà đi ra chợ thì đông lắm, chờ trưa trưa một chút "
+            "cho vắng bớt rồi hẵng đi, chứ chen chúc mệt lắm.",
+            "Nhà tui ở gần đó, đi bộ mấy phút là tới, "
+            "rứa mà lâu ni bận quá nên cũng ít khi qua chơi.",
+            "Hồi nhỏ tui hay theo mấy đứa trong xóm ra đồng chơi tới tối mới về, "
+            "về nhà là bị la, mà bữa sau vẫn đi, chừ nghĩ lại thấy vui.",
+            "Tui nói thiệt chứ không phải nói cho vui mô, "
+            "cái ni mà làm được là hay lắm đó, ai cũng khen chứ không phải một mình tui.",
+            "Mưa từ chiều tới chừ chưa tạnh, đường sá ướt nhẹp, "
+            "ra ngoài chi cho cực, ở trong nhà uống miếng nước chè cho ấm bụng.",
+            # ── Có cảm xúc, để mẫu tham chiếu vừa mang giọng vừa mang tình ──
+            "Trời ơi hay quá, rứa là được rồi!",
+            "Tui bực thiệt đó, nói hoài mà cứ rứa.",
+            "Ha ha, răng mà buồn cười rứa không biết!",
+            "Thôi, cũng chẳng biết nói răng nữa, để rứa đi.",
+            "Mừng cho hắn, cực khổ lâu ni chừ mới được rứa.",
+            "Đủ rồi nghe, tui không muốn nghe thêm chi nữa hết.",
+        ],
+    },
 ]
 
 

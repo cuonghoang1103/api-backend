@@ -39,7 +39,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   AlertTriangle, Check, ChevronLeft, ChevronRight, CircleDot, Download,
-  Ear, Loader2, Mic, MicOff, Play, RefreshCw, Square, Trash2, Volume2,
+  Ear, Loader2, Mic, MicOff, Pencil, Plus, RefreshCw, Square, Trash2, Volume2,
 } from 'lucide-react';
 import { api } from '@/lib/api';
 
@@ -53,6 +53,8 @@ interface Cau {
   daThu?: boolean;
   chuSua?: string;
   do?: Do;
+  /** Câu/mục do người dùng tự viết — xoá được, khác câu dựng sẵn. */
+  tuThem?: boolean;
 }
 
 interface Do {
@@ -116,6 +118,27 @@ export function XuongGiong() {
   const [nenPhong, setNenPhong] = useState<{ rms: number; danh: string } | null>(null);
   const [dangDoPhong, setDangDoPhong] = useState(false);
   const [suaChu, setSuaChu] = useState<string | null>(null);
+  /**
+   * Chữ người dùng tự sửa, giữ NGAY TẠI MÁY.
+   *
+   * ⚠️ Phải sửa được TRƯỚC KHI THU, không chỉ sau.
+   *
+   * Mục tiếng miền Trung làm lộ ra chỗ này: mỗi vùng nói một khác, nên
+   * người dùng cần nắn câu cho thuận miệng RỒI MỚI đọc. Mà đường lưu chữ
+   * ở máy nhà đòi phải có đoạn thu trước đã (`if cid not in meta: 404`).
+   *
+   * Giữ ở localStorage thì sửa được lúc nào cũng được, sống qua cả lần
+   * tải lại trang, và lúc thu thì gửi kèm — không phải đổi gì ở máy nhà.
+   */
+  const [suaCucBo, setSuaCucBo] = useState<Record<string, string>>({});
+
+  // Khung "câu của tôi"
+  const [moThem, setMoThem] = useState(false);
+  const [cauMoi, setCauMoi] = useState('');
+  const [mucDich, setMucDich] = useState('');
+  const [tenMucMoi, setTenMucMoi] = useState('');
+  const [danMucMoi, setDanMucMoi] = useState('');
+  const [dangThem, setDangThem] = useState(false);
 
   const streamRef = useRef<MediaStream | null>(null);
   const recRef = useRef<MediaRecorder | null>(null);
@@ -125,6 +148,21 @@ export function XuongGiong() {
   const mienBanPhim = useRef(false);
 
   const hienTai = cau[viTri];
+
+  /**
+   * Chữ THẬT SỰ dùng cho câu này — ưu tiên bản sửa tại máy, rồi bản đã
+   * lưu ở máy nhà, cuối cùng mới tới bản trong kịch bản.
+   *
+   * ⚠️ Phải dùng ở CẢ BA chỗ: hiện lên màn hình, gửi kèm lúc thu, và tính
+   * % khớp. Lệch một chỗ là người dùng đọc câu A mà dữ liệu ghi câu B —
+   * kiểu hỏng im lặng tệ nhất, vì nó không báo gì và chỉ lộ ra ở chất
+   * lượng model sau nhiều giờ train.
+   */
+  const chuCuaCau = useCallback(
+    (c: Cau) => suaCucBo[c.id] ?? c.chuSua ?? c.chu,
+    [suaCucBo],
+  );
+  const chuDoc = hienTai ? chuCuaCau(hienTai) : '';
 
   // ── Nạp kịch bản ──────────────────────────────────────────
   const napLai = useCallback(async () => {
@@ -146,6 +184,12 @@ export function XuongGiong() {
 
   useEffect(() => {
     void napLai();
+    try {
+      const s = localStorage.getItem('xuong-sua-chu');
+      if (s) setSuaCucBo(JSON.parse(s) as Record<string, string>);
+    } catch {
+      /* localStorage hỏng thì mất bản sửa, không mất tiếng — đi tiếp. */
+    }
   }, [napLai]);
 
   // Nhảy tới câu chưa thu đầu tiên — mở ra là làm tiếp được ngay, không
@@ -271,7 +315,7 @@ export function XuongGiong() {
         try {
           const form = new FormData();
           form.append('tieng', blob, 'thu.webm');
-          form.append('chu', hienTai.chu);
+          form.append('chu', chuCuaCau(hienTai));
           const r = await api.post(`${BASE}/cau/${encodeURIComponent(hienTai.id)}`, form, {
             timeout: 90_000,
           });
@@ -333,13 +377,28 @@ export function XuongGiong() {
 
   const luuChu = useCallback(
     async (chu: string) => {
-      if (!hienTai) return;
-      try {
-        await api.put(`${BASE}/cau/${encodeURIComponent(hienTai.id)}/chu`, { chu });
-        setCau((cs) => cs.map((c) => (c.id === hienTai.id ? { ...c, chuSua: chu } : c)));
-        setSuaChu(null);
-      } catch {
-        setLoi('Không lưu được chữ.');
+      if (!hienTai || !chu.trim()) return;
+      // Ghi tại máy TRƯỚC và luôn luôn: đây là bản người dùng sẽ đọc, và
+      // nó phải tồn tại kể cả khi chưa thu câu nào.
+      setSuaCucBo((m) => {
+        const moi = { ...m, [hienTai.id]: chu.trim() };
+        try {
+          localStorage.setItem('xuong-sua-chu', JSON.stringify(moi));
+        } catch {
+          /* đầy quota — bản sửa vẫn dùng được trong phiên này */
+        }
+        return moi;
+      });
+      setSuaChu(null);
+      // Đã thu rồi thì đẩy luôn lên máy nhà cho khớp; chưa thu thì lúc
+      // thu sẽ gửi kèm.
+      if (hienTai.daThu) {
+        try {
+          await api.put(`${BASE}/cau/${encodeURIComponent(hienTai.id)}/chu`, { chu: chu.trim() });
+          setCau((cs) => cs.map((c) => (c.id === hienTai.id ? { ...c, chuSua: chu.trim() } : c)));
+        } catch {
+          setLoi('Đã sửa tại máy nhưng chưa đẩy lên được — thu lại câu này là khớp.');
+        }
       }
     },
     [hienTai],
@@ -378,6 +437,59 @@ export function XuongGiong() {
     [dungDo],
   );
 
+  // ── Tự thêm mục và câu ────────────────────────────────────
+  //
+  // Kịch bản dựng sẵn viết bằng tiếng phổ thông, cộng một mục miền Trung
+  // chỉ gồm phần LÕI CHUNG. Nhưng miền Trung không phải một giọng, và
+  // người viết kịch bản không biết người dùng nói kiểu nào — chỉ họ mới
+  // biết. Đọc câu không phải giọng mình thì HẠI HƠN không đọc.
+  const themCau = useCallback(
+    async (muc: string, chu: string) => {
+      const t = chu.trim();
+      if (!t) return;
+      try {
+        await api.post(`${BASE}/them/cau`, { muc, chu: t });
+        await napLai();
+        setLoi('');
+      } catch (e) {
+        const m = e as { response?: { data?: { message?: string } } };
+        setLoi(m.response?.data?.message ?? 'Không thêm được câu.');
+      }
+    },
+    [napLai],
+  );
+
+  const themMuc = useCallback(
+    async (ten: string, dan: string) => {
+      const t = ten.trim();
+      if (!t) return null;
+      try {
+        const r = await api.post(`${BASE}/them/muc`, { ten: t, dan: dan.trim(), lamMau: true });
+        await napLai();
+        setLoi('');
+        return (r.data?.data?.khoa as string) ?? null;
+      } catch (e) {
+        const m = e as { response?: { data?: { message?: string } } };
+        setLoi(m.response?.data?.message ?? 'Không tạo được mục.');
+        return null;
+      }
+    },
+    [napLai],
+  );
+
+  const xoaCauThem = useCallback(async () => {
+    if (!hienTai?.tuThem) return;
+    if (!confirm(`Xoá hẳn câu này khỏi kịch bản?\n\n"${chuDoc.slice(0, 80)}"`)) return;
+    try {
+      await api.delete(`${BASE}/them/cau/${encodeURIComponent(hienTai.id)}`);
+      await napLai();
+      setKetQua(null);
+      setViTri((v) => Math.max(0, v - 1));
+    } catch {
+      setLoi('Không xoá được câu.');
+    }
+  }, [hienTai, chuDoc, napLai]);
+
   const xuat = useCallback(async () => {
     try {
       const r = await api.post(`${BASE}/xuat`, {});
@@ -402,11 +514,11 @@ export function XuongGiong() {
    * sai bét, trong khi thật ra chưa ai soát cả.
    */
   const khop = useMemo(
-    () => (ketQua?.nghe && !ketQua.biaRa && hienTai ? doKhop(hienTai.chu, ketQua.nghe) : null),
+    () => (ketQua?.nghe && !ketQua.biaRa && hienTai ? doKhop(chuDoc, ketQua.nghe) : null),
     [ketQua, hienTai],
   );
 
-  const tuGoc = useMemo(() => (hienTai ? chuanTu(hienTai.chu) : []), [hienTai]);
+  const tuGoc = useMemo(() => chuanTu(chuDoc), [chuDoc]);
   const tuNghe = useMemo(() => new Set(ketQua ? chuanTu(ketQua.nghe) : []), [ketQua]);
 
   if (dangTai) {
@@ -600,7 +712,7 @@ export function XuongGiong() {
               vẫn tô thì CẢ CÂU đỏ rực, trông như đọc sai hết. */}
           <p className="mb-5 text-2xl leading-relaxed text-[var(--text-primary)]">
             {tuGoc.length && khop != null
-              ? hienTai.chu.split(/(\s+)/).map((t, i) => {
+              ? chuDoc.split(/(\s+)/).map((t, i) => {
                   const sach = chuanTu(t)[0];
                   if (!sach) return <span key={i}>{t}</span>;
                   return (
@@ -609,7 +721,7 @@ export function XuongGiong() {
                     </span>
                   );
                 })
-              : hienTai.chu}
+              : chuDoc}
           </p>
 
           {/* Thanh mức tiếng */}
@@ -674,11 +786,36 @@ export function XuongGiong() {
                 />
                 <button
                   onClick={() => void xoaCau()}
+                  title="Xoá đoạn thu"
                   className="rounded-lg border border-white/10 px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-white/5"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
               </>
+            )}
+
+            {/* ⚠️ LUÔN HIỆN, không chờ khớp thấp.
+                Bản đầu chỉ hiện nút này khi Whisper nghe lệch > 15%. Mục
+                tiếng miền Trung phá vỡ giả định đó: Whisper nghe sai gần
+                như luôn, và khi chốt chặn bắt được câu bịa thì KHÔNG có
+                % khớp nào cả — nút biến mất đúng lúc cần nhất. Và quan
+                trọng hơn: câu phải sửa được TRƯỚC khi đọc, chứ sửa sau
+                thì đã đọc sai mất rồi. */}
+            <button
+              onClick={() => setSuaChu(chuDoc)}
+              className="rounded-lg border border-white/10 px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-white/5"
+            >
+              <Pencil className="mr-1 inline h-3.5 w-3.5" /> Sửa chữ
+            </button>
+
+            {hienTai.tuThem && (
+              <button
+                onClick={() => void xoaCauThem()}
+                title="Xoá hẳn câu này khỏi kịch bản"
+                className="rounded-lg border border-red-400/30 px-3 py-2 text-sm text-red-300/80 hover:bg-red-400/10"
+              >
+                <Trash2 className="mr-1 inline h-3.5 w-3.5" /> Xoá câu
+              </button>
             )}
 
             <button
@@ -786,7 +923,7 @@ export function XuongGiong() {
                           Lấy câu máy nghe làm chuẩn
                         </button>
                         <button
-                          onClick={() => setSuaChu(hienTai.chuSua ?? hienTai.chu)}
+                          onClick={() => setSuaChu(chuDoc)}
                           className="rounded border border-white/10 px-2 py-1 text-xs hover:bg-white/5"
                         >
                           Sửa tay
@@ -827,6 +964,142 @@ export function XuongGiong() {
           )}
         </section>
       )}
+
+      {/* ══ Câu của tôi ══ */}
+      <section className="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+        <button
+          onClick={() => {
+            setMoThem((v) => !v);
+            if (!mucDich && hienTai) setMucDich(hienTai.muc);
+          }}
+          className="flex w-full items-center justify-between text-left"
+        >
+          <span className="flex items-center gap-2 font-medium text-[var(--text-primary)]">
+            <Plus className="h-4 w-4 text-cyan-400" /> Câu của tôi
+          </span>
+          <span className="text-xs text-[var(--text-secondary)]">
+            {moThem ? 'thu gọn' : 'mở ra'}
+          </span>
+        </button>
+
+        {moThem && (
+          <div className="mt-4 space-y-5">
+            <p className="rounded-lg border-l-2 border-cyan-400/60 bg-cyan-400/5 px-3 py-2 text-xs leading-relaxed text-[var(--text-secondary)]">
+              Kịch bản dựng sẵn viết bằng tiếng phổ thông, và mục miền Trung chỉ có
+              phần <strong>lõi chung</strong> (mô, tê, răng, rứa, chi, ni, nớ). Quê
+              bạn nói kiểu nào thì chỉ bạn biết — viết vào đây.
+              <br />
+              <strong className="text-amber-300">
+                Đọc một câu không phải giọng mình còn hại hơn không đọc
+              </strong>{' '}
+              — nó dạy model một giọng lai. Nên cứ sửa hoặc bỏ câu nào nghe không
+              thuận miệng.
+            </p>
+
+            {/* Thêm câu vào một mục */}
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[var(--text-primary)]">
+                Thêm câu vào mục
+              </label>
+              <select
+                value={mucDich}
+                onChange={(e) => setMucDich(e.target.value)}
+                className="mb-2 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[var(--text-primary)]"
+              >
+                {tienDo &&
+                  Object.entries(tienDo.theoMuc).map(([k, v]) => (
+                    <option key={k} value={k}>
+                      {v.ten} ({v.xong}/{v.tong})
+                    </option>
+                  ))}
+              </select>
+              <textarea
+                value={cauMoi}
+                onChange={(e) => setCauMoi(e.target.value)}
+                onFocus={() => (mienBanPhim.current = true)}
+                onBlur={() => (mienBanPhim.current = false)}
+                rows={5}
+                placeholder={
+                  'Mỗi dòng một câu — dán cả chục câu một lúc cũng được.\n\n' +
+                  'Đi mô rứa?\n' +
+                  'Nỏ biết mô, để tui hỏi lại đã.\n' +
+                  'Mần chi mà lâu rứa hè?'
+                }
+                className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 font-mono text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/50"
+              />
+              <div className="mt-2 flex items-center gap-2">
+                <button
+                  disabled={dangThem || !cauMoi.trim() || !mucDich}
+                  onClick={async () => {
+                    // ⚠️ Thêm TUẦN TỰ, không Promise.all: id sinh từ một bộ
+                    // đếm ở máy nhà, gửi song song là hai câu cùng xin một số.
+                    setDangThem(true);
+                    const ds = cauMoi
+                      .split('\n')
+                      .map((x) => x.trim())
+                      .filter(Boolean);
+                    for (const c of ds) await themCau(mucDich, c);
+                    setCauMoi('');
+                    setDangThem(false);
+                  }}
+                  className="rounded-lg bg-cyan-500 px-3 py-1.5 text-sm font-medium text-slate-900 hover:bg-cyan-400 disabled:opacity-40"
+                >
+                  {dangThem ? (
+                    <>
+                      <Loader2 className="mr-1 inline h-3.5 w-3.5 animate-spin" /> Đang thêm…
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="mr-1 inline h-3.5 w-3.5" /> Thêm{' '}
+                      {cauMoi.split('\n').filter((x) => x.trim()).length || 0} câu
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Tạo mục mới */}
+            <div className="border-t border-white/10 pt-4">
+              <label className="mb-1 block text-xs font-medium text-[var(--text-primary)]">
+                Hoặc tạo mục mới của riêng bạn
+              </label>
+              <input
+                value={tenMucMoi}
+                onChange={(e) => setTenMucMoi(e.target.value)}
+                onFocus={() => (mienBanPhim.current = true)}
+                onBlur={() => (mienBanPhim.current = false)}
+                placeholder="Tên mục — ví dụ: Giọng Nghệ Tĩnh, Nói với mẹ, Chửi yêu…"
+                className="mb-2 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[var(--text-primary)]"
+              />
+              <textarea
+                value={danMucMoi}
+                onChange={(e) => setDanMucMoi(e.target.value)}
+                onFocus={() => (mienBanPhim.current = true)}
+                onBlur={() => (mienBanPhim.current = false)}
+                rows={2}
+                placeholder="Lời dặn cách đọc — hiện to lúc thu để bạn khỏi quên. Ví dụ: nói nhanh, giọng cao, kiểu đang trêu."
+                className="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-[var(--text-primary)]"
+              />
+              <button
+                disabled={dangThem || !tenMucMoi.trim()}
+                onClick={async () => {
+                  setDangThem(true);
+                  const k = await themMuc(tenMucMoi, danMucMoi);
+                  if (k) {
+                    setMucDich(k);
+                    setTenMucMoi('');
+                    setDanMucMoi('');
+                  }
+                  setDangThem(false);
+                }}
+                className="mt-2 rounded-lg border border-white/10 px-3 py-1.5 text-sm text-[var(--text-primary)] hover:bg-white/5 disabled:opacity-40"
+              >
+                <Plus className="mr-1 inline h-3.5 w-3.5" /> Tạo mục
+              </button>
+            </div>
+          </div>
+        )}
+      </section>
 
       <p className="mt-4 text-center text-xs text-[var(--text-secondary)]">
         <kbd className="rounded bg-white/10 px-1.5">Space</kbd> thu/dừng ·{' '}

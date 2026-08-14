@@ -64,6 +64,8 @@ TOKEN = os.environ.get("MAY_NHA_TOKEN", "")
 GOC = Path(os.environ.get("XUONG_DIR", str(Path.home() / "f5-train" / "xuong")))
 TIENG = GOC / "tieng"
 META = GOC / "meta.json"
+# Mục và câu do NGƯỜI DÙNG tự thêm — xem `_doc_them`.
+THEM = GOC / "them.json"
 
 # F5-TTS làm việc ở 24 kHz — xem ghi chú đầu file.
 SR = 24_000
@@ -112,13 +114,99 @@ def _doc_meta() -> Dict[str, Any]:
 
 
 def _ghi_meta(d: Dict[str, Any]) -> None:
+    _ghi_json(META, d)
+
+
+def _ghi_json(duong: Path, d: Dict[str, Any]) -> None:
     GOC.mkdir(parents=True, exist_ok=True)
     # Ghi qua file tạm rồi đổi tên: mất điện giữa chừng thì mất bản ghi
     # MỚI, không mất cả sổ. Sổ này là thứ duy nhất nối tiếng với chữ —
     # hỏng nó là hỏng toàn bộ công thu.
-    tam = META.with_suffix(".json.tam")
+    tam = duong.with_suffix(duong.suffix + ".tam")
     tam.write_text(json.dumps(d, ensure_ascii=False, indent=1), "utf-8")
-    tam.replace(META)
+    tam.replace(duong)
+
+
+# ══════════════════════════════════════════════════════════
+#  Mục và câu do NGƯỜI DÙNG tự thêm
+# ══════════════════════════════════════════════════════════
+#
+# ⚠️ VÌ SAO PHẢI CÓ, VÀ VÌ SAO KHÔNG PHẢI SỬA `kichban.py`.
+#
+# Kịch bản dựng sẵn viết bằng tiếng phổ thông, cộng một mục miền Trung
+# chỉ gồm phần LÕI CHUNG (mô, tê, răng, rứa, chi, ni, nớ). Nhưng miền
+# Trung không phải một giọng: Nghệ Tĩnh nói "nỏ", "chộ", "mần"; Huế nói
+# "ưng", "bây chừ"; Quảng Nam lại khác nữa. Người viết kịch bản KHÔNG
+# BIẾT người dùng nói kiểu nào — chỉ họ mới biết.
+#
+# Và đọc một câu không phải giọng mình thì HẠI HƠN LÀ KHÔNG ĐỌC: model
+# học ra một giọng lai không giống ai. Nên chỗ này phải mở cho người dùng
+# tự viết, không phải chờ sửa mã rồi deploy.
+#
+# ── Vì sao id có chữ `t`, và vì sao mục có tiền tố `rieng-` ──
+#
+# Id câu dựng sẵn là `{mục}-{ba chữ số}`. Câu tự thêm là `{mục}-t{số}` —
+# có chữ `t` nên KHÔNG BAO GIỜ đụng id dựng sẵn, kể cả khi sau này kịch
+# bản gốc thêm câu. Mục tự tạo mang tiền tố `rieng-` vì cùng lý do: khoá
+# dựng sẵn hiện có `trung`, mà một tiền tố `t` trơn cộng slug "rung" sẽ
+# ra đúng chữ đó.
+#
+# Đây không phải cẩn thận thừa: id là TÊN FILE WAV trên đĩa. Trùng id là
+# một đoạn thu đè lên một đoạn thu khác, im lặng, và người dùng chỉ phát
+# hiện khi nghe lại thấy câu này ra tiếng câu kia.
+
+
+def _doc_them() -> Dict[str, Any]:
+    try:
+        d = json.loads(THEM.read_text("utf-8"))
+        if isinstance(d, dict):
+            d.setdefault("muc", [])
+            d.setdefault("cau", [])
+            d.setdefault("dem", 0)
+            return d
+    except Exception:
+        pass
+    return {"muc": [], "cau": [], "dem": 0}
+
+
+def _khong_dau(s: str) -> str:
+    import unicodedata
+
+    s = unicodedata.normalize("NFD", s)
+    s = "".join(c for c in s if unicodedata.category(c) != "Mn")
+    s = s.replace("đ", "d").replace("Đ", "D").lower()
+    return "".join(c if c.isalnum() else "-" for c in s).strip("-")[:24] or "muc"
+
+
+def _muc_day_du() -> List[Dict[str, Any]]:
+    """Mục dựng sẵn + mục tự thêm, theo đúng thứ tự hiện trên màn hình."""
+    ra = [
+        {
+            "khoa": m["khoa"], "ten": m["ten"], "dan": m["dan"],
+            "lamMau": m["lamMau"], "tuThem": False,
+        }
+        for m in KICH_BAN
+    ]
+    for m in _doc_them()["muc"]:
+        ra.append({**m, "tuThem": True})
+    return ra
+
+
+def _cau_day_du() -> List[Dict[str, Any]]:
+    """Câu dựng sẵn + câu tự thêm, đã gắn thông tin mục."""
+    ra = list(tat_ca_cau())
+    ban_muc = {m["khoa"]: m for m in _muc_day_du()}
+    for c in _doc_them()["cau"]:
+        m = ban_muc.get(c.get("muc") or "")
+        if not m:
+            # Mục đã bị xoá — bỏ qua chứ không ném, để một dòng rác không
+            # làm chết cả màn hình thu.
+            continue
+        ra.append({
+            "id": c["id"], "muc": m["khoa"], "tenMuc": m["ten"], "dan": m["dan"],
+            "lamMau": m["lamMau"], "chu": c["chu"], "tuThem": True,
+        })
+    return ra
 
 
 # ══════════════════════════════════════════════════════════
@@ -255,15 +343,17 @@ def _do_chat_luong(mau: np.ndarray) -> Dict[str, Any]:
 async def kich_ban(x_token: Optional[str] = Header(None, alias="X-Token")):
     _kiem_khoa(x_token)
     meta = _doc_meta()
-    cau = tat_ca_cau()
+    cau = _cau_day_du()
     for c in cau:
         g = meta.get(str(c["id"]))
         c["daThu"] = bool(g)
         if g:
             c["do"] = g.get("do")
             c["chuSua"] = g.get("chuSua")
-            c["phienAm"] = g.get("phienAm")
-    return {"cau": cau, "tomTat": tom_tat()}
+    tt = dict(tom_tat())
+    tt["soCau"] = len(cau)
+    tt["soTuThem"] = sum(1 for c in cau if c.get("tuThem"))
+    return {"cau": cau, "tomTat": tt, "muc": _muc_day_du()}
 
 
 @router.get("/tien-do")
@@ -272,8 +362,17 @@ async def tien_do(x_token: Optional[str] = Header(None, alias="X-Token")):
     meta = _doc_meta()
     tong_giay = 0.0
     theo_muc: Dict[str, Dict[str, float]] = {}
-    for m in KICH_BAN:
-        theo_muc[m["khoa"]] = {"ten": m["ten"], "xong": 0, "tong": len(m["cau"]), "giay": 0.0}
+    dem_cau: Dict[str, int] = {}
+    for c in _cau_day_du():
+        dem_cau[str(c["muc"])] = dem_cau.get(str(c["muc"]), 0) + 1
+    for m in _muc_day_du():
+        theo_muc[m["khoa"]] = {
+            "ten": m["ten"],
+            "xong": 0,
+            "tong": dem_cau.get(m["khoa"], 0),
+            "giay": 0.0,
+            "tuThem": m.get("tuThem", False),
+        }
     for k, v in meta.items():
         muc = k.rsplit("-", 1)[0]
         g = float((v.get("do") or {}).get("giay") or 0)
@@ -304,7 +403,7 @@ async def luu_cau(cid: str, req: Request, x_token: Optional[str] = Header(None, 
     tiếng Việt có dấu trong URL vừa bị ghi vào log vừa hay vỡ mã.
     """
     _kiem_khoa(x_token)
-    if not any(c["id"] == cid for c in tat_ca_cau()):
+    if not any(c["id"] == cid for c in _cau_day_du()):
         raise HTTPException(404, "Không có câu này trong kịch bản.")
 
     tho = await req.body()
@@ -389,7 +488,7 @@ async def xuat(x_token: Optional[str] = Header(None, alias="X-Token")):
     if not meta:
         raise HTTPException(400, "Chưa thu câu nào.")
 
-    ban_do = {c["id"]: c for c in tat_ca_cau()}
+    ban_do = {c["id"]: c for c in _cau_day_du()}
     xuat_dir = GOC / "xuat"
     wavs = xuat_dir / "wavs"
     if xuat_dir.exists():
@@ -436,6 +535,95 @@ async def xuat(x_token: Optional[str] = Header(None, alias="X-Token")):
         # là một request sẽ chết giữa đường.
         "buocTiep": "chạy `bash ~/f5-train/chuan-bi.sh` để dựng dataset cho F5-TTS",
     }
+
+
+@router.post("/them/muc")
+async def them_muc(req: Request, x_token: Optional[str] = Header(None, alias="X-Token")):
+    """Tạo một mục mới của riêng người dùng."""
+    _kiem_khoa(x_token)
+    b = await req.json()
+    ten = str(b.get("ten") or "").strip()[:60]
+    if not ten:
+        raise HTTPException(400, "Thiếu tên mục.")
+    dan = str(b.get("dan") or "").strip()[:1200] or "Đọc tự nhiên, đúng kiểu bạn vẫn nói."
+    lam_mau = bool(b.get("lamMau", True))
+
+    d = _doc_them()
+    khoa = f"rieng-{_khong_dau(ten)}"
+    # Trùng tên thì thêm số, chứ KHÔNG ghi đè: ghi đè là hai mục dùng
+    # chung một dải id, tức hai câu khác nhau cùng một tên file wav.
+    da_co = {m["khoa"] for m in d["muc"]} | {m["khoa"] for m in KICH_BAN}
+    if khoa in da_co:
+        i = 2
+        while f"{khoa}-{i}" in da_co:
+            i += 1
+        khoa = f"{khoa}-{i}"
+    d["muc"].append({"khoa": khoa, "ten": ten, "dan": dan, "lamMau": lam_mau})
+    _ghi_json(THEM, d)
+    return {"khoa": khoa, "ten": ten}
+
+
+@router.post("/them/cau")
+async def them_cau(req: Request, x_token: Optional[str] = Header(None, alias="X-Token")):
+    """Thêm một câu vào mục bất kỳ — kể cả mục dựng sẵn."""
+    _kiem_khoa(x_token)
+    b = await req.json()
+    muc = str(b.get("muc") or "").strip()
+    chu = str(b.get("chu") or "").strip()[:600]
+    if not chu:
+        raise HTTPException(400, "Thiếu chữ.")
+    if not any(m["khoa"] == muc for m in _muc_day_du()):
+        raise HTTPException(404, f"Không có mục '{muc}'.")
+
+    d = _doc_them()
+    # Bộ đếm TĂNG MÃI, không dùng lại số đã xoá. Dùng lại là một câu mới
+    # nhận đúng id của câu vừa xoá, và nếu file wav cũ chưa kịp xoá thì
+    # câu mới thừa hưởng tiếng của câu cũ.
+    d["dem"] = int(d.get("dem") or 0) + 1
+    cid = f"{muc}-t{d['dem']:03d}"
+    d["cau"].append({"id": cid, "muc": muc, "chu": chu})
+    _ghi_json(THEM, d)
+    return {"id": cid, "muc": muc, "chu": chu}
+
+
+@router.delete("/them/cau/{cid}")
+async def xoa_cau_them(cid: str, x_token: Optional[str] = Header(None, alias="X-Token")):
+    _kiem_khoa(x_token)
+    d = _doc_them()
+    truoc = len(d["cau"])
+    d["cau"] = [c for c in d["cau"] if c["id"] != cid]
+    if len(d["cau"]) == truoc:
+        raise HTTPException(404, "Không phải câu tự thêm.")
+    _ghi_json(THEM, d)
+    # Xoá luôn tiếng đã thu cho câu đó, nếu có — để lại là rác chiếm đĩa
+    # mà không đường nào tới được nữa.
+    meta = _doc_meta()
+    if meta.pop(cid, None) is not None:
+        _ghi_meta(meta)
+    (TIENG / f"{cid}.wav").unlink(missing_ok=True)
+    return {"id": cid, "xoa": True}
+
+
+@router.delete("/them/muc/{khoa}")
+async def xoa_muc_them(khoa: str, x_token: Optional[str] = Header(None, alias="X-Token")):
+    """Xoá cả mục. Chỉ xoá được mục TỰ TẠO, không đụng mục dựng sẵn."""
+    _kiem_khoa(x_token)
+    d = _doc_them()
+    if not any(m["khoa"] == khoa for m in d["muc"]):
+        raise HTTPException(404, "Không phải mục tự tạo.")
+    con = [c for c in d["cau"] if c["muc"] == khoa]
+    d["muc"] = [m for m in d["muc"] if m["khoa"] != khoa]
+    d["cau"] = [c for c in d["cau"] if c["muc"] != khoa]
+    _ghi_json(THEM, d)
+    meta = _doc_meta()
+    doi = False
+    for c in con:
+        if meta.pop(c["id"], None) is not None:
+            doi = True
+        (TIENG / f"{c['id']}.wav").unlink(missing_ok=True)
+    if doi:
+        _ghi_meta(meta)
+    return {"khoa": khoa, "xoaCau": len(con)}
 
 
 @router.get("/nen")

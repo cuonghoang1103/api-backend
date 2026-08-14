@@ -541,6 +541,12 @@ def run_job(jid: str, text: str, voice: Optional[str], style: str) -> None:
         if f5_giong.la_giong_f5(voice):
             t0 = time.time()
             x, sr = f5_giong.tong_hop(text, str(voice))
+            # WAV tự mang tần số trong tiêu đề nên về lý thì để nguyên
+            # 24 kHz cũng phát đúng. Vẫn hạ xuống BO_SR cho THỐNG NHẤT với
+            # đường luồng: hai đường trả hai thứ khác nhau là mời một lỗi
+            # chỉ xuất hiện ở đường lưới đỡ — đúng loại lỗi khó thấy nhất.
+            x = doi_tan_so(x, sr, BO_SR)
+            sr = BO_SR
             dur = len(x) / sr
             _jobs[jid].update(
                 state="done",
@@ -872,6 +878,48 @@ def remove_voice(name: str):
 BO_SR = 16_000
 
 
+def doi_tan_so(x, tu_sr: int, den_sr: int = BO_SR):
+    """Đổi tần số lấy mẫu, CÓ lọc chống răng cưa.
+
+    ⛔⛔ BỎ BƯỚC NÀY LÀ ROBOT NÓI GIỌNG MA.
+
+    Bo phát PCM thô ở đúng `BO_SR = 16.000` và KHÔNG có cách nào biết tần
+    số thật của luồng — PCM thô không mang tiêu đề. Đưa nó 24.000 thì nó
+    vẫn phát ở 16.000, tức mọi thứ chậm lại và trầm xuống đúng 1,5 lần.
+
+    Xảy ra thật 15/08/2026: F5-TTS nhả 24 kHz, tôi đẩy thẳng xuống bo, và
+    người dùng nghe ra "giọng lạ, rất đáng sợ và ghê rợn". Không có lỗi
+    nào trong log — mọi con số đều đẹp, chỉ có tai người nghe ra.
+
+    ⚠️ Và phải HẠ TẦN CÓ LỌC. Lấy mẫu thưa ra bằng cách bỏ bớt điểm thì
+    mọi tần số trên 8 kHz gập ngược xuống dải nghe được thành tiếng rít
+    kim loại. `soxr` (qua librosa) lo phần lọc; hai đường lui phía dưới
+    giữ cho dịch vụ không chết nếu thiếu thư viện — nhưng đường lui cuối
+    KHÔNG lọc, nên nó chỉ là lưới đỡ, không phải lựa chọn.
+    """
+    if tu_sr == den_sr:
+        return x
+    try:
+        import librosa
+
+        return librosa.resample(x, orig_sr=tu_sr, target_sr=den_sr, res_type="soxr_hq")
+    except Exception:
+        pass
+    try:
+        from math import gcd
+
+        from scipy.signal import resample_poly
+
+        g = gcd(tu_sr, den_sr)
+        return resample_poly(x, den_sr // g, tu_sr // g).astype(np.float32)
+    except Exception:
+        pass
+    # Lưới đỡ cuối: nội suy tuyến tính, KHÔNG lọc. Nghe được nhưng có
+    # răng cưa — chỉ để dịch vụ không chết.
+    n = int(round(len(x) * den_sr / tu_sr))
+    return np.interp(np.linspace(0, len(x) - 1, n), np.arange(len(x)), x).astype(np.float32)
+
+
 def _ve_16k_tu(x: np.ndarray, sr: int) -> bytes:
     """float [-1,1] ở `sr` bất kỳ → PCM 16-bit LE mono 16 kHz.
 
@@ -917,8 +965,12 @@ def tts_stream(payload: Dict[str, Any]):
             except Exception as e:
                 print(f"[tts] F5 hỏng: {e}", flush=True)
                 return
-            print(f"[tts] F5: {len(x)/sr:.2f}s tiếng trong {time.time()-t0:.2f}s", flush=True)
-            khoi = max(1, int(sr * 0.25))
+            print(f"[tts] F5: {len(x)/sr:.2f}s tiếng trong {time.time()-t0:.2f}s "
+                  f"({sr} Hz → {BO_SR} Hz)", flush=True)
+            # ⚠️ PCM thô không mang tiêu đề — bo phát ở đúng BO_SR bất kể
+            # ta gửi gì. Xem `doi_tan_so`.
+            x = doi_tan_so(x, sr, BO_SR)
+            khoi = max(1, int(BO_SR * 0.25))
             for i in range(0, len(x), khoi):
                 yield (np.clip(x[i : i + khoi], -1, 1) * 32767).astype("<i2").tobytes()
 

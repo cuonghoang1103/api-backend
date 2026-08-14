@@ -109,9 +109,33 @@ import { khopDoiNao, CHAO_DOI_NAO, type Nao } from './nao.js';
  *   400 lượt → 6.288 ms
  *
  * 30 lượt là chỗ robot nhớ được cả buổi nói chuyện mà vẫn dưới một giây.
- * Muốn đổi thì đặt env, đừng sửa mã.
+ *
+ * ⚠️⚠️ HẠ 30 → 12 NGÀY 15/08/2026, VÌ PHÉP ĐO TRÊN ĐÃ LỖI THỜI.
+ *
+ * Bảng số kia đo lúc prompt hệ thống còn gọn. Từ đó tới nay nó phình:
+ * từ điển miền Trung (~950 ký tự), sáu mẫu đối thoại tiếng Nghệ, bảng
+ * lệnh, ba luật làm việc. Mỗi lượt lịch sử vì thế cũng nặng hơn.
+ *
+ * Đo thật trên lượt robot 15/08 (llama.cpp `print_timing`):
+ *
+ *     một lượt xử lý 8.692 token   ← prompt ~8.500
+ *     nạp prompt 1.481 token/giây  → ~5,7 giây CHỈ để đọc lại lịch sử
+ *     sinh chữ      56 token/giây
+ *     tiếng đầu ra sau 4-8 giây
+ *
+ * Người dùng thấy chậm tới mức bỏ máy nhà chuyển sang cổng trả phí. Mà
+ * máy nhà KHÔNG chậm — nó chỉ đang phải đọc lại 8.500 token mỗi câu.
+ *
+ * 12 lượt ≈ 6 lượt hỏi-đáp gần nhất: vẫn đủ một mạch trò chuyện, mà cắt
+ * quá nửa prompt.
+ *
+ * ⚠️ Con số này phải ĐO LẠI mỗi khi prompt hệ thống to thêm. Nó không
+ * phải hằng số của robot, nó là hằng số của MỘT KÍCH CỠ PROMPT — và
+ * chính đó là chỗ bảng đo cũ hoá sai mà không ai để ý.
+ *
+ * Đổi được bằng env `ROBOT_HISTORY_TURNS` mà không cần deploy.
  */
-const MAX_HISTORY_TURNS = Number(process.env.ROBOT_HISTORY_TURNS) || 30;
+const MAX_HISTORY_TURNS = Number(process.env.ROBOT_HISTORY_TURNS) || 12;
 
 /**
  * Bao lâu không nói thì coi như sang câu chuyện khác.

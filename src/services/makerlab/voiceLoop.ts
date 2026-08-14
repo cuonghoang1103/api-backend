@@ -1076,13 +1076,33 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   // `web.ts`: cách chuẩn của ngành là để model tự gọi công cụ rồi gọi
   // model LẦN HAI kèm kết quả, mà một lượt gọi ở đây là 1,6 giây tới
   // chữ đầu tiên — người ta đang đứng chờ nghe tiếng.
+  /**
+   * Câu hỏi phụ thuộc NƠI CHỐN thì phải tra kèm nơi chốn.
+   *
+   * ⚠️ Người dùng báo 14/08/2026: hỏi "thời tiết thế nào", robot đáp "tôi
+   * biết mình ở đâu rồi nhưng không biết thời tiết hiện tại".
+   *
+   * `canTraCuu` CÓ nhận chữ "thời tiết" nên nó vẫn tra web — nhưng tra
+   * đúng nguyên văn câu hỏi, tức "thời tiết thế nào" trần trụi. Kết quả
+   * về là mấy trang thời tiết chung chung, không có số cho nơi nào cả,
+   * nên model đọc xong vẫn không có gì để nói.
+   *
+   * Vị trí nằm sẵn trong persona rồi; chỉ là chưa ai ghép nó vào câu tra.
+   */
+  const CAN_NOI_CHON =
+    /\b(th[ờo]i ti[ếe]t|nhi[ệe]t đ[ộo]|m[ưu]a|n[ắa]ng|b[ãa]o|quanh đ[âa]y|g[ầa]n đ[âa]y|[ởo] đ[âa]y|ch[ỗo] n[àa]y)\b/i;
+  function themViTri(cau: string, viTri: string | null): string {
+    if (!viTri || !CAN_NOI_CHON.test(cau)) return cau;
+    return `${cau} ${viTri}`;
+  }
+
   let doanTraCuu = '';
   const kieuTra = canTraCuu(heard);
   if (kieuTra) {
     const t = Date.now();
     const muc =
       kieuTra === 'tim'
-        ? await timTrenWeb(heard, 5)
+        ? await timTrenWeb(themViTri(heard, persona.viTri), 5)
         : await tinMoiNhat(8, kieuTra === 'tin-cong-nghe');
     doanTraCuu = dungDoanTraCuu(muc, kieuTra);
     logger.info('MakerLab tra internet', {

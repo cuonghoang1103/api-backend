@@ -33,6 +33,7 @@
 import { WebSocket } from 'ws';
 import { randomUUID } from 'crypto';
 import { logger } from '../../utils/logger.js';
+import { docSoTrongCau } from './docSo.js';
 import { phienAmSangViet } from './phienAm.js';
 
 export type TtsProvider =
@@ -150,6 +151,19 @@ function hanChoByteDau(voice: string | null | undefined, soChu: number): number 
  * Tắt được bằng `MAKERLAB_PHIEN_AM=false` — nếu một ngày mô hình tự đọc
  * chữ Latin đúng thì đây là thứ nên tắt trước, chứ không phải gỡ mã.
  */
+/**
+ * Chuẩn hoá văn bản TRƯỚC khi đưa cho máy đọc: số thành chữ, rồi mới
+ * phiên âm từ ngoại lai.
+ *
+ * ⚠️ THỨ TỰ QUAN TRỌNG. Đọc số trước: `300000` phải thành "ba trăm
+ * nghìn" khi nó còn là chữ số. Chạy phiên âm trước thì bộ phiên âm nhìn
+ * thấy một chuỗi số và không biết làm gì với nó, còn bộ đọc số sau đó
+ * lại gặp chữ chứ không gặp số nữa.
+ */
+function chuanChoMayDoc(text: string, phienAm = true): string {
+  return doiChuNgoaiLai(docSoTrongCau(text), phienAm);
+}
+
 function doiChuNgoaiLai(text: string, bat = true): string {
   if (!bat) return text;
   if (process.env.MAKERLAB_PHIEN_AM === 'false') return text;
@@ -362,7 +376,7 @@ async function synthesizeCuongMini(
   const nhan = await fetch(`${goc}/tts`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text: doiChuNgoaiLai(text), voice: voice || undefined, style: 'tu_nhien' }),
+    body: JSON.stringify({ text: chuanChoMayDoc(text), voice: voice || undefined, style: 'tu_nhien' }),
     // 4 giây, không phải 20. Đây là chốt PHÁT HIỆN HỎNG, không phải
     // chốt chờ việc: nếu máy ở nhà tắt hoặc đường hầm đứt thì cổng bên
     // VPS biến mất và lời gọi này bị từ chối tức thì. Nhưng nếu máy còn
@@ -472,7 +486,7 @@ export async function streamCuongMini(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        text: doiChuNgoaiLai(text, opts.phienAm !== false),
+        text: chuanChoMayDoc(text, opts.phienAm !== false),
         voice: opts.voice || undefined,
         style: 'tu_nhien',
       }),

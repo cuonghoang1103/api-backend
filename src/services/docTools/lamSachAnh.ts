@@ -124,16 +124,190 @@ export async function lamSachAnh(anh: Buffer, tuyChon: TuyChonLamSach = {}): Pro
 
   if (langNen) {
     try {
-      ra = await sharp(ra)
-        .grayscale()
-        .normalise()                 // giãn mức xám: chỗ sáng nhất → trắng
-        .linear(1.45, -48)           // tăng tương phản, đẩy nền xám lên trắng
-        .median(1)                   // xoá hạt nhiễu JPEG, giữ nét
-        .sharpen({ sigma: 0.8 })
-        .png()
-        .toBuffer();
+      ra = await canSangCucBo(ra);
     } catch { /* giữ nguyên */ }
   }
 
   return ra;
+}
+
+/**
+ * CÂN SÁNG CỤC BỘ (flat-field) — thứ duy nhất trị được bóng đổ.
+ *
+ * Bản đầu dùng `normalise()` + `linear()`, tức chỉnh mức xám cho TOÀN ảnh
+ * bằng một công thức duy nhất. Ảnh chụp trang giấy dưới đèn thì độ sáng
+ * KHÔNG đều — bóng tay, bóng đèn vắt chéo trang — nên một công thức chung
+ * không thể vừa cứu chỗ tối vừa không cháy chỗ sáng. Kết quả: người dùng nhận
+ * mẩu hình nửa trắng nửa xám đen, "màu không đồng nhau".
+ *
+ * Cách đúng (mọi app scan tài liệu đều làm): ước lượng ĐỘ SÁNG NỀN tại từng
+ * chỗ bằng một bản làm mờ rất mạnh, rồi CHIA ảnh gốc cho nền đó. Nền sáng hay
+ * tối gì cũng về trắng, còn nét vẽ — vốn tối hơn hẳn nền quanh nó — vẫn đen.
+ */
+async function canSangCucBo(anh: Buffer): Promise<Buffer> {
+  // Khử hạt TRƯỚC khi chia. Vùng ảnh tối có tỉ lệ tín hiệu/nhiễu rất thấp,
+  // phép chia lại khuếch đại nhiễu lên — đo được: ảnh chụp tối nặng cho ra
+  // các VỆT SỌC DỌC ở nửa tối. `median` xoá hạt mà vẫn giữ nét thẳng.
+  const { data, info } = await sharp(anh).grayscale().median(3).raw().toBuffer({ resolveWithObject: true });
+  const W = info.width;
+  const H = info.height;
+  const KA = info.channels; // ĐỌC ra, không đoán
+
+  // Bán kính làm mờ phải LỚN hơn nét vẽ nhiều lần, nếu không chính nét lại bị
+  // coi là nền và bị xoá trắng.
+  const sigma = Math.max(12, Math.round(Math.min(W, H) / 12));
+
+  // ⚠️ Đưa raw 1 kênh vào `sharp` rồi `.blur()` thì bản ra có thể là 3 KÊNH
+  // (sharp tự về sRGB). Bản đầu đọc `nen[i]` như thể 1 kênh ⇒ lệch 1/3 bước ⇒
+  // bản đồ nền thành rác ⇒ ảnh ra kẻ SỌC NGANG đen trắng. Ép b-w và vẫn đọc
+  // số kênh thật ra mà dùng.
+  const nenRa = await sharp(data, { raw: { width: W, height: H, channels: KA as 1 | 2 | 3 | 4 } })
+    .blur(sigma)
+    .toColourspace('b-w')
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const nen = nenRa.data;
+  const KN = nenRa.info.channels;
+
+  const ra = Buffer.allocUnsafe(W * H);
+  for (let i = 0; i < W * H; i++) {
+    const g = data[i * KA];
+    const b = nen[i * KN] || 1;
+    // Tỉ lệ so với nền tại CHỖ ĐÓ: 1.0 = sáng bằng nền → trắng.
+    let v = (g / b) * 255;
+    // Kéo giãn quanh ngưỡng nền: >98% nền coi như giấy trắng, <62% là nét đen.
+    v = ((v - 158) / (250 - 158)) * 255;
+    ra[i] = v < 0 ? 0 : v > 255 ? 255 : v;
+  }
+
+  return sharp(ra, { raw: { width: W, height: H, channels: 1 } })
+    .median(1)
+    .sharpen({ sigma: 0.7 })
+    .png()
+    .toBuffer();
+}
+
+/**
+ * Cắt bỏ DÒNG CHỮ dính ở mép mẩu hình.
+ *
+ * Khung do model chỉ ra hay ôm thêm một dòng đề bài phía trên hoặc phía dưới
+ * ("sau.", "góc đối đỉnh có trên hình vẽ."). Nhận ra chúng bằng hình dạng:
+ * một dải mực MỎNG (dưới ~9% chiều cao) nằm tách khỏi khối chính bởi một
+ * quãng giấy trắng. Hình vẽ thì cao và liền mạch, không bị nhầm.
+ *
+ * Chỉ được phép gọt tối đa 25% mỗi đầu — thà để sót một dòng chữ còn hơn cắt
+ * cụt mất hình.
+ */
+export async function catChuODau(anh: Buffer): Promise<Buffer> {
+  try {
+    const { data, info } = await sharp(anh).grayscale().raw().toBuffer({ resolveWithObject: true });
+    const W = info.width;
+    const H = info.height;
+
+    // Dải nào có mực: đếm điểm tối mỗi hàng.
+    const coMuc: boolean[] = [];
+    for (let y = 0; y < H; y++) {
+      let toi = 0;
+      for (let x = 0; x < W; x += 2) if (data[y * W + x] < 150) toi++;
+      coMuc.push(toi > W / 2 / 60); // >~1,7% bề ngang mới tính là có mực
+    }
+
+    // Gom thành các dải liên tiếp.
+    const dai: Array<{ dau: number; cuoi: number }> = [];
+    for (let y = 0; y < H; y++) {
+      if (!coMuc[y]) continue;
+      const cuoiDai = dai[dai.length - 1];
+      if (cuoiDai && y - cuoiDai.cuoi <= 2) cuoiDai.cuoi = y;
+      else dai.push({ dau: y, cuoi: y });
+    }
+    if (dai.length < 2) return anh; // chỉ một khối → không có gì để gọt
+
+    /** Dải này trải ngang bao nhiêu phần bề rộng — dòng chữ trải rộng, còn
+     *  một nhãn lẻ ("S" trên đỉnh hình chóp) thì chỉ vài phần trăm. Thiếu
+     *  phép thử này, chữ S bị gọt mất y như một dòng đề bài. */
+    const trongNgang = (dau: number, cuoi: number): number => {
+      let trai = W;
+      let phai = 0;
+      for (let y = dau; y <= cuoi; y++) {
+        for (let x = 0; x < W; x += 2) {
+          if (data[y * W + x] < 150) {
+            if (x < trai) trai = x;
+            if (x > phai) phai = x;
+          }
+        }
+      }
+      return phai > trai ? (phai - trai) / W : 0;
+    };
+    const RONG_NHU_DONG_CHU = 0.22;   // đo thật: dòng chữ đề 38%, nhãn lẻ "S" ~5%
+
+    // Bốn điều kiện để coi một dải là DÒNG CHỮ chứ không phải phần của hình:
+    //   • mỏng (một dòng chữ thấp hơn hẳn khối hình),
+    //   • nằm ở rìa (không gọt vào giữa),
+    //   • và CÓ KHOẢNG TRẮNG rõ ràng ngăn nó với phần còn lại — đây là điều
+    //     kiện quan trọng nhất: nét hình dù đứt đoạn vẫn nằm sát nhau, còn
+    //     dòng chữ thì cách hình một quãng giấy trắng.
+    const MONG = H * 0.07;
+    const TOI_DA_GOT = H * 0.12;   // gọt tối đa 12% mỗi đầu
+    const KHE_TRANG = Math.max(5, H * 0.012);
+    let tren = 0;
+    let duoi = H;
+
+    for (let i = 0; i < dai.length - 1; i++) {
+      const d = dai[i];
+      const khe = dai[i + 1].dau - d.cuoi;
+      if (d.cuoi - d.dau + 1 <= MONG && d.cuoi < TOI_DA_GOT && khe >= KHE_TRANG && trongNgang(d.dau, d.cuoi) >= RONG_NHU_DONG_CHU) tren = d.cuoi + 2;
+      else break;
+    }
+    for (let i = dai.length - 1; i > 0; i--) {
+      const d = dai[i];
+      const khe = d.dau - dai[i - 1].cuoi;
+      if (d.cuoi - d.dau + 1 <= MONG && d.dau > H - TOI_DA_GOT && khe >= KHE_TRANG && trongNgang(d.dau, d.cuoi) >= RONG_NHU_DONG_CHU) duoi = d.dau - 2;
+      else break;
+    }
+
+    const dinh = Math.max(0, tren);
+    const cao = Math.max(20, Math.min(H, duoi) - dinh);
+    if (cao >= H - 4) return anh; // không gọt được gì
+
+    // ⛔ CHỐT CHẶN: đếm mực trước và sau. Trên ảnh chụp tối, nhiễu làm hình bị
+    // vỡ thành nhiều dải rời và phép gọt ở trên ăn luôn phần dưới của hình
+    // (đã đo: mất chữ "y" và đuôi một đường). Gọt mà mất quá 12% mực thì thà
+    // giữ nguyên cả dòng chữ thừa — chữ thừa còn xoá tay được, hình cụt thì
+    // không.
+    const demMuc = (tu: number, den: number): number => {
+      let n = 0;
+      for (let y = tu; y < den; y++) for (let x = 0; x < W; x += 2) if (data[y * W + x] < 150) n++;
+      return n;
+    };
+    const mucTruoc = demMuc(0, H);
+    const mucSau = demMuc(dinh, dinh + cao);
+    if (mucTruoc > 0 && mucSau / mucTruoc < 0.55) return anh;  // chốt cuối: đừng bao giờ ăn mất nửa hình
+
+    return await sharp(anh)
+      .extract({ left: 0, top: dinh, width: W, height: cao })
+      .png()
+      .toBuffer();
+  } catch {
+    return anh;
+  }
+}
+
+/**
+ * Cắt viền GIẤY TRẮNG thừa quanh hình rồi chừa lại một lề đều.
+ *
+ * Nhờ bước này mà khung do model chỉ ra được phép chừa RỘNG (đỡ cắt cụt nhãn
+ * ở mép — đã đo: chừa hẹp thì mất luôn chữ S, A, B, C của hình chóp), mà mẩu
+ * cuối cùng vẫn gọn gàng. Chỉ chạy SAU khi đã cân sáng: lúc đó nền mới thật
+ * sự trắng đều để `trim` bám vào.
+ */
+export async function gonVienTrang(anh: Buffer, leGiu = 10): Promise<Buffer> {
+  try {
+    return await sharp(anh)
+      .trim({ threshold: 12 })
+      .extend({ top: leGiu, bottom: leGiu, left: leGiu, right: leGiu, background: '#ffffff' })
+      .png()
+      .toBuffer();
+  } catch {
+    return anh; // ảnh toàn trắng thì `trim` ném lỗi — giữ nguyên
+  }
 }

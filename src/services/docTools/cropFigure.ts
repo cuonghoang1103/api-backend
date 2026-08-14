@@ -13,7 +13,7 @@
 import sharp from 'sharp';
 import { logger } from '../../utils/logger.js';
 import { visionComplete, type VisionImage } from './vision.js';
-import { lamSachAnh } from './lamSachAnh.js';
+import { catChuODau, gonVienTrang, lamSachAnh } from './lamSachAnh.js';
 
 export interface KhungHinh {
   top: number;
@@ -34,13 +34,19 @@ Trả về DUY NHẤT một JSON, không kèm lời nào khác:
 {"hinh":[{"top":0.0,"left":0.0,"width":0.0,"height":0.0}]}
 
 - Toạ độ CHUẨN HOÁ theo tỉ lệ 0..1 so với kích thước ảnh (0,0 = góc trên bên trái).
-- Khung phải bao TRỌN hình vẽ cùng mọi nhãn điểm và số đo của nó.
-- KHÔNG bao gồm phần chữ của đề bài.
+- Khung phải bao TRỌN hình vẽ cùng mọi nhãn điểm và số đo của nó — kể cả chữ cái nằm sát mép hình.
+- Nhưng TUYỆT ĐỐI không được chứa dòng chữ nào của đề bài (ví dụ "Bài 60. Cho hình vẽ sau:" hay "a) Liệt kê..."). Hình nằm sát chữ thì cắt sát vào hình cho tới khi hết chữ.
+- Ngoài cùng chỉ nên chừa một chút giấy trắng, không chừa rộng.
 - Liệt kê theo thứ tự từ TRÊN xuống DƯỚI.
 - Không có hình vẽ nào thì trả {"hinh":[]}.`;
 
-/** Chừa thêm quanh khung — model hay cắt sát, mất nhãn ở mép. */
-const LE = 0.015;
+/**
+ * Chừa thêm quanh khung. ĐỂ NHỎ THÔI: trên trang 2200px thì 1,5% đã là 33px,
+ * đủ kéo nguyên một dòng đề bài vào mẩu hình — người dùng bắt được đúng lỗi
+ * này ("còn dính các chữ của đề bài trong ảnh"). Nhãn ở mép hình được cứu
+ * bằng `catChuODau()` + lời dặn khung phải ôm trọn nhãn, không phải bằng lề.
+ */
+const LE = 0.025;
 
 /** Hỏi model khung của từng hình. Hỏng thì trả mảng rỗng, KHÔNG ném. */
 export async function timKhungHinh(anh: VisionImage, userId?: number | null): Promise<KhungHinh[]> {
@@ -102,7 +108,10 @@ export async function catCacHinh(anh: VisionImage, khungs: KhungHinh[]): Promise
       // cạnh chữ Times đen trong file Word thì nhìn bẩn. Đưa nền về trắng và
       // phóng nét cho đủ dày. KHÔNG nắn thẳng ở đây — cả trang đã được nắn
       // trước khi cắt, mà mẩu hình thì không có dòng chữ nào để đo nghiêng.
-      const png = await lamSachAnh(thoAnh, { nanThang: false, rongToiThieu: 700 });
+      // Thứ tự có chủ ý: LÀM SẠCH trước rồi mới GỌT CHỮ. Trên ảnh chưa cân
+      // sáng, một mảng bóng đổ cũng bị đếm là "có mực" nên gọt sai chỗ.
+      const daSach = await lamSachAnh(thoAnh, { nanThang: false, rongToiThieu: 700 });
+      const png = await gonVienTrang(await catChuODau(daSach));
       const meta = await sharp(png).metadata();
       ra.push({ pngBase64: png.toString('base64'), rong: meta.width ?? width, cao: meta.height ?? height });
     } catch (e) {

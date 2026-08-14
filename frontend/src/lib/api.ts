@@ -87,7 +87,51 @@ const api: AxiosInstance = axios.create({
   withCredentials: true,
 });
 
-api.interceptors.request.use((config) => config);
+/**
+ * ⚠️⚠️ FORMDATA PHẢI ĐƯỢC GỠ `Content-Type`, NẾU KHÔNG FILE BIẾN MẤT.
+ *
+ * Instance ở trên đặt cứng `Content-Type: application/json`. Với axios
+ * 1.x, khi Content-Type là JSON **và** dữ liệu là `FormData`, hàm
+ * `transformRequest` làm đúng một việc chết người:
+ *
+ *     return hasJSONContentType ? JSON.stringify(formDataToJSON(data)) : data;
+ *                                              ^^^^^^^^^^^^^^^^^^^^^
+ *
+ * File nhị phân bị serialize thành `{}` — nó biến mất TRƯỚC KHI rời trình
+ * duyệt. Server nhận một thân JSON không có file, multer bóc ra rỗng, và
+ * lỗi báo về là "không có dữ liệu" — nghe như người dùng chưa chọn file,
+ * trong khi họ chọn rồi. Không có dòng log nào ở giữa để lần ra.
+ *
+ * Dự án này đã bị đúng bẫy đó BA LẦN: nhân bản giọng ở `voice-mini-api`
+ * (có ghi chú tại chỗ), nút tải firmware OTA ở `maker-lab-api`, và xưởng
+ * giọng 14/08/2026. Cách chữa cũ là mỗi chỗ tự nhớ ghi đè
+ * `'Content-Type': 'multipart/form-data'` — mà "mỗi chỗ tự nhớ" chính là
+ * thứ đã hỏng ba lần.
+ *
+ * Nên chữa ở ĐÂY, một lần: hễ thân là FormData thì gỡ hẳn Content-Type.
+ * Bộ chuyển tiếp thấy không phải JSON nên để nguyên FormData, rồi trình
+ * duyệt tự đặt `multipart/form-data; boundary=…` — thứ chỉ nó mới sinh
+ * đúng được, vì `boundary` phải khớp với thân nó vừa dựng.
+ *
+ * Interceptor chạy TRƯỚC `transformRequest`, nên gỡ ở đây là kịp.
+ */
+api.interceptors.request.use((config) => {
+  if (typeof FormData !== 'undefined' && config.data instanceof FormData) {
+    // `config.headers` là AxiosHeaders ở axios 1.x, nhưng có thể là object
+    // thuần nếu chỗ gọi tự dựng — xử lý cả hai, vì đoán sai kiểu ở đây là
+    // im lặng không gỡ được gì.
+    const h = config.headers as unknown as {
+      delete?: (k: string) => void;
+      setContentType?: (v: unknown) => void;
+    } & Record<string, unknown>;
+    if (typeof h?.delete === 'function') h.delete('Content-Type');
+    else if (h) {
+      delete h['Content-Type'];
+      delete h['content-type'];
+    }
+  }
+  return config;
+});
 
 // ─── Silent session refresh ──────────────────────────────────
 // The backend_token cookie lives 7 days but each JWT only lasts ~24h.

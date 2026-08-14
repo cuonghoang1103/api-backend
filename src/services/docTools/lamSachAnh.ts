@@ -245,14 +245,33 @@ export async function catChuODau(anh: Buffer): Promise<Buffer> {
     if (dai.length < 2) return anh;
 
     /**
-     * MẬT ĐỘ MỰC — thước phân biệt CHỮ với NÉT VẼ, mạnh hơn mọi thước khác.
-     * Một hàng chữ có 10-40% số mẫu là điểm tối; một hàng cắt ngang hình vẽ
-     * chỉ có 2-5 mẫu trên vài trăm. Đo trên ảnh dựng lại: dòng chữ 0,101 —
-     * hình vẽ 0,012, cách nhau gần 10 lần.
+     * MẬT ĐỘ MỰC TRONG PHẠM VI NGANG CỦA CHÍNH NÓ — thước phân biệt CHỮ với
+     * NÉT VẼ.
+     *
+     * ⚠️ Phải chia cho bề ngang THẬT của dải, không phải bề ngang cả ảnh. Đo
+     * trên ảnh thật của người dùng: mẩu chữ "sau:" chỉ chiếm ~15% bề ngang
+     * nên tính trên cả ảnh ra 0,034 — lọt xuống dưới ngưỡng 0,04 và được giữ
+     * lại, đúng chữ mà người dùng phàn nàn. Tính trong phạm vi của nó thì nó
+     * là ~0,23: chữ đặc, không lẫn đi đâu được.
+     *
+     * Số đo thật trên ba hình của tờ Toán 7:
+     *     dòng chữ  0,14 – 0,23      hình vẽ  0,02 – 0,03
      */
-    const matDo = (d: { dau: number; cuoi: number; muc: number }): number =>
-      d.muc / ((d.cuoi - d.dau + 1) * (W / 2));
-    const NGUONG_CHU = 0.04;
+    const matDo = (d: { dau: number; cuoi: number; muc: number }): number => {
+      let trai = W;
+      let phai = 0;
+      for (let y = d.dau; y <= d.cuoi; y++) {
+        for (let x = 0; x < W; x += 2) {
+          if (data[(y * W + x) * C] < 150) {
+            if (x < trai) trai = x;
+            if (x > phai) phai = x;
+          }
+        }
+      }
+      const rong = Math.max(20, phai - trai);
+      return d.muc / ((d.cuoi - d.dau + 1) * (rong / 2));
+    };
+    const NGUONG_CHU = 0.08;
 
     // Khối chính = dải CAO NHẤT trong số các dải KHÔNG PHẢI CHỮ. Chọn theo mỗi
     // chiều cao là hỏng: một dòng chữ in đậm cao 31px có thể cao hơn một mảnh

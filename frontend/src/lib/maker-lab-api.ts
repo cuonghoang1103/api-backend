@@ -213,12 +213,28 @@ export async function luuKieuNoi(
   projectId: number,
   kieuNoi: 'pho-thong' | 'mien-trung',
   tuDien?: Array<{ tu: string; nghia: string }>,
+  mauMienTrung?: Array<{ user: string; bot: string }>,
 ): Promise<{ kieuNoi: string; nhan: string }> {
   const res = await api.put(`/admin${BASE}/projects/${projectId}/kieu-noi`, {
     kieuNoi,
     ...(tuDien ? { tuDien } : {}),
+    ...(mauMienTrung ? { mauMienTrung } : {}),
   });
   return res.data?.data;
+}
+
+/**
+ * Bộ mẫu + từ điển MẶC ĐỊNH, lấy từ máy chủ.
+ *
+ * ⚠️ KHÔNG chép lại ở đây. Chép là hai bản trôi dạt, và người dùng lại
+ * gặp đúng lỗi đã gặp: trang hiện một bộ, robot chạy một bộ khác.
+ */
+export async function layMacDinhKieuNoi(): Promise<{
+  mau: Array<{ user: string; bot: string }>;
+  tuDien: Array<{ tu: string; nghia: string; vung?: string }>;
+}> {
+  const res = await api.get(`/admin${BASE}/kieu-noi/mac-dinh`);
+  return res.data?.data ?? { mau: [], tuDien: [] };
 }
 
 export async function updatePersona(

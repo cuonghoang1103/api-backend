@@ -127,6 +127,28 @@ export interface PersonaConfig {
    * nói gì.
    */
   tuDienRieng: Array<{ tu: string; nghia: string }> | null;
+  /**
+   * Mẫu đối thoại RIÊNG cho chế độ miền Trung.
+   *
+   * ⚠️ VÌ SAO PHẢI CÓ BỘ MẪU RIÊNG, KHÔNG DÙNG CHUNG `sampleDialogues`.
+   *
+   * Mẫu là thứ quyết định model NÓI kiểu gì — mạnh hơn mọi lời dặn. Nên ở
+   * chế độ miền Trung, tám mẫu tiếng phổ thông của người dùng phải bị
+   * thay ra, nếu không chúng dạy ngược lại đúng thứ ta đang cố dạy.
+   *
+   * Nhưng THAY BẰNG MẪU CỨNG TRONG MÃ thì lại sinh một lỗi khác, và đó
+   * chính là lỗi người dùng gặp 14/08: trang Tính cách hiện tám mẫu phổ
+   * thông của họ, còn robot lại chạy sáu mẫu nằm cứng trong mã mà không ai
+   * nhìn thấy. Trang nói một đằng, máy làm một nẻo — và người dùng sửa mẫu
+   * mãi không thấy gì đổi.
+   *
+   * `null` hoặc rỗng = dùng bộ mặc định `MAU_MIEN_TRUNG`. Có thì dùng của
+   * người dùng, vì họ biết quê họ nói gì.
+   *
+   * (Đây đúng "cách sửa tử tế về sau" đã ghi trong `buildFewShot` cho ca
+   * tiếng Anh — cùng một vấn đề, khác trục.)
+   */
+  mauMienTrung: Array<{ user: string; bot: string }> | null;
 }
 
 /**
@@ -298,6 +320,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       // chọn vùng miền lên mọi robot mới.
       kieuNoi: 'pho-thong',
       tuDienRieng: null,
+      mauMienTrung: null,
       // 0.9 chứ không 0.8: chém gió cần chỗ để đi chệch. Nhiệt độ thấp
       // cho ra những câu đùa an toàn nhất, tức là những câu nhạt nhất.
       temperature: 0.9,
@@ -361,6 +384,19 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
         .map((x) => ({ tu: x.tu.trim().slice(0, 40), nghia: x.nghia.trim().slice(0, 120) }))
         .filter((x) => x.tu && x.nghia)
         .slice(0, 200);
+      return ds.length ? ds : null;
+    })(),
+    mauMienTrung: (() => {
+      const v = (row.traits as { mauMienTrung?: unknown } | null)?.mauMienTrung;
+      if (!Array.isArray(v)) return null;
+      const ds = v
+        .filter((x): x is { user: string; bot: string } => {
+          const o = x as { user?: unknown; bot?: unknown };
+          return typeof o?.user === 'string' && typeof o?.bot === 'string';
+        })
+        .map((x) => ({ user: x.user.slice(0, 600), bot: x.bot.slice(0, 2000) }))
+        .filter((x) => x.user.trim() && x.bot.trim())
+        .slice(0, 20);
       return ds.length ? ds : null;
     })(),
   }));
@@ -784,7 +820,10 @@ export function buildFewShot(
    */
   if (persona.kieuNoi === 'mien-trung') {
     const ra: Array<{ role: 'user' | 'assistant'; content: string }> = [];
-    for (const s of MAU_MIEN_TRUNG) {
+    // Mẫu NGƯỜI DÙNG viết đi trước mẫu dựng sẵn — họ biết quê họ nói gì,
+    // ta thì không. Chưa viết thì dùng bộ mặc định làm điểm xuất phát.
+    const bo = persona.mauMienTrung?.length ? persona.mauMienTrung : MAU_MIEN_TRUNG;
+    for (const s of bo) {
       ra.push({ role: 'user', content: s.user });
       // ⚠️ Khoá là `say`, KHÔNG phải `speech` — phải khớp đúng vỏ JSON mà
       // bộ đọc ở `voiceLoop` tìm. Sáu mẫu sai khoá là sáu ví dụ dạy model

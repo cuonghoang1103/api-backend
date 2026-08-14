@@ -29,6 +29,7 @@ import {
   sayOnDevice,
   xoaTriNho,
   luuKieuNoi,
+  layMacDinhKieuNoi,
   type BoTinhCach,
 } from '@/lib/maker-lab-api';
 import { listVoices } from '@/lib/voice-mini-api';
@@ -273,13 +274,43 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
   });
   const [moTuDien, setMoTuDien] = useState(false);
   const [dangDoiKieu, setDangDoiKieu] = useState(false);
+  /**
+   * Mẫu đối thoại RIÊNG cho miền Trung — thứ THẬT SỰ quyết định robot nói
+   * kiểu gì.
+   *
+   * ⚠️ Bản trước để mẫu này NẰM CỨNG TRONG MÃ và không hiện ra. Người dùng
+   * mở trang, thấy tám mẫu tiếng phổ thông của họ ở dưới, và tưởng đó là
+   * thứ robot đang dùng — trong khi robot chạy sáu mẫu khác mà không ai
+   * nhìn thấy. Sửa mẫu mãi không thấy gì đổi.
+   */
+  const [mauMT, setMauMT] = useState<Array<{ user: string; bot: string }>>([]);
+  const [moMauMT, setMoMauMT] = useState(false);
+
+  // Nạp bộ mặc định từ MÁY CHỦ (không chép lại ở frontend — hai bản sẽ
+  // trôi dạt, và đó đúng là lỗi vừa gặp).
+  useEffect(() => {
+    const cua = (persona?.traits as { mauMienTrung?: unknown })?.mauMienTrung;
+    if (Array.isArray(cua) && cua.length) {
+      setMauMT(cua as Array<{ user: string; bot: string }>);
+      return;
+    }
+    layMacDinhKieuNoi()
+      .then((d) => setMauMT(d.mau ?? []))
+      .catch(() => {});
+  }, [persona]);
 
   async function doiKieu(k: 'pho-thong' | 'mien-trung', kemTuDien = false) {
     setDangDoiKieu(true);
     setMsg(null);
     try {
       const sach = tuDien.filter((x) => x.tu.trim() && x.nghia.trim());
-      await luuKieuNoi(projectId, k, kemTuDien ? sach : undefined);
+      const mauSach = mauMT.filter((x) => x.user.trim() && x.bot.trim());
+      await luuKieuNoi(
+        projectId,
+        k,
+        kemTuDien ? sach : undefined,
+        kemTuDien ? mauSach : undefined,
+      );
       setKieu(k);
       setMsg({
         kind: 'ok',
@@ -401,11 +432,19 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
           ))}
           <button
             type="button"
+            onClick={() => setMoMauMT((v) => !v)}
+            className="rounded-lg border px-3 py-1.5 text-sm"
+            style={{ borderColor: '#f0abfc55', color: '#f0abfc' }}
+          >
+            Mẫu câu miền Trung ({mauMT.length}) ← quyết định nó NÓI
+          </button>
+          <button
+            type="button"
             onClick={() => setMoTuDien((v) => !v)}
             className="rounded-lg border px-3 py-1.5 text-sm"
             style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
           >
-            Từ điển riêng ({tuDien.length})
+            Từ điển ({tuDien.length}) ← để NGHE và DỊCH
           </button>
         </div>
         <p className="mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>
@@ -419,6 +458,78 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
           thanh, mở nguyên âm — là do model giọng quyết, và nó đến từ phần bạn đang thu ở
           Xưởng giọng.
         </p>
+
+        {moMauMT && (
+          <div className="mt-3 border-t pt-3" style={{ borderColor: 'var(--border-color)' }}>
+            <p className="mb-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+              <strong className="text-fuchsia-300">Đây mới là thứ quyết định robot nói kiểu gì.</strong>{' '}
+              Mẫu nặng hơn mọi lời dặn — đo 13/08: nhắc thêm bao nhiêu lần cũng không
+              thắng nổi mẫu ngược chiều (1/8 so với 7/8). Ở chế độ miền Trung, tám mẫu
+              tiếng phổ thông bên dưới <em>không</em> được dùng; robot dùng đúng bộ này.
+              <br />
+              Viết bằng <strong>đúng giọng quê bạn</strong>, và để dài ngắn khác nhau —
+              mẫu đều một độ dài dạy ra câu trả lời đều một độ dài.
+            </p>
+            {mauMT.map((m, i) => (
+              <div key={i} className="mb-2 rounded-lg border p-2" style={{ borderColor: 'var(--border-color)' }}>
+                <input
+                  value={m.user}
+                  onChange={(e) =>
+                    setMauMT((ds) => ds.map((x, j) => (j === i ? { ...x, user: e.target.value } : x)))
+                  }
+                  placeholder="Người hỏi: Mấy giờ rồi?"
+                  className="mb-1 w-full rounded border px-2 py-1 text-sm outline-none"
+                  style={{
+                    borderColor: 'var(--border-color)',
+                    background: 'var(--bg-base)',
+                    color: 'var(--text-primary)',
+                  }}
+                />
+                <textarea
+                  value={m.bot}
+                  onChange={(e) =>
+                    setMauMT((ds) => ds.map((x, j) => (j === i ? { ...x, bot: e.target.value } : x)))
+                  }
+                  rows={2}
+                  placeholder="Robot đáp: Chừ hơn tám giờ rồi eng."
+                  className="w-full rounded border px-2 py-1 text-sm outline-none"
+                  style={{
+                    borderColor: 'var(--border-color)',
+                    background: 'var(--bg-base)',
+                    color: 'var(--text-primary)',
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setMauMT((ds) => ds.filter((_, j) => j !== i))}
+                  className="mt-1 text-xs"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  ✕ bỏ mẫu này
+                </button>
+              </div>
+            ))}
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setMauMT((ds) => [...ds, { user: '', bot: '' }])}
+                className="rounded-lg border px-3 py-1 text-xs"
+                style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+              >
+                + Thêm mẫu
+              </button>
+              <button
+                type="button"
+                disabled={dangDoiKieu}
+                onClick={() => void doiKieu(kieu, true)}
+                className="rounded-lg px-3 py-1 text-xs font-medium disabled:opacity-40"
+                style={{ background: '#f0abfc', color: '#0f172a' }}
+              >
+                Lưu mẫu + từ điển
+              </button>
+            </div>
+          </div>
+        )}
 
         {moTuDien && (
           <div className="mt-3 border-t pt-3" style={{ borderColor: 'var(--border-color)' }}>

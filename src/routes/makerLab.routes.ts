@@ -535,6 +535,23 @@ adminRouter.put('/projects/:id/nao', async (req, res: Response<ApiResponse>, nex
  * Bảng lõi trong `mienTrung.ts` không thể đầy đủ — Nghệ Tĩnh, Huế, Quảng
  * Nam mỗi nơi một khác, và chỉ chủ nhân mới biết quê mình nói gì.
  */
+/**
+ * Bộ mặc định để trang điền sẵn.
+ *
+ * ⚠️ TRẢ TỪ MÁY CHỦ, KHÔNG CHÉP LẠI Ở FRONTEND. Chép là hai bản trôi
+ * dạt: sửa mẫu trong `mienTrung.ts` mà trang vẫn hiện bản cũ, và người
+ * dùng lại thấy đúng cái lỗi vừa gặp — trang nói một đằng, máy làm một
+ * nẻo.
+ */
+adminRouter.get('/kieu-noi/mac-dinh', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const { MAU_MIEN_TRUNG, TU_DIEN } = await import('../services/makerlab/mienTrung.js');
+    res.json({ success: true, data: { mau: MAU_MIEN_TRUNG, tuDien: TU_DIEN } });
+  } catch (e) {
+    next(e);
+  }
+});
+
 adminRouter.put('/projects/:id/kieu-noi', async (req, res: Response<ApiResponse>, next) => {
   try {
     const { laKieuNoi, NHAN_KIEU } = await import('../services/makerlab/mienTrung.js');
@@ -570,6 +587,22 @@ adminRouter.put('/projects/:id/kieu-noi', async (req, res: Response<ApiResponse>
         }))
         .filter((x) => x.tu && x.nghia)
         .slice(0, 200);
+    }
+
+    /**
+     * Mẫu đối thoại riêng cho miền Trung.
+     *
+     * ⚠️ ĐÂY MỚI LÀ THỨ QUYẾT ĐỊNH ROBOT NÓI KIỂU GÌ, không phải từ điển.
+     * Từ điển giúp Whisper NGHE và giúp robot DỊCH; mẫu mới dạy nó NÓI.
+     *
+     * Cùng luật với từ điển: không gửi = giữ nguyên, không phải xoá.
+     */
+    if (Array.isArray(req.body?.mauMienTrung)) {
+      moi.mauMienTrung = (req.body.mauMienTrung as Array<{ user?: unknown; bot?: unknown }>)
+        .filter((x) => typeof x?.user === 'string' && typeof x?.bot === 'string')
+        .map((x) => ({ user: String(x.user).slice(0, 600), bot: String(x.bot).slice(0, 2000) }))
+        .filter((x) => x.user.trim() && x.bot.trim())
+        .slice(0, 20);
     }
 
     await prisma.makerPersona.update({ where: { id: row.id }, data: { traits: moi as never } });

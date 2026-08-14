@@ -124,6 +124,23 @@ export interface TranscriptResult {
  * Transcribe an audio buffer via Groq Whisper. Throws on any failure so the
  * route can tell the client to fall back to browser STT / typing.
  */
+/**
+ * Cắt chuỗi theo SỐ BYTE UTF-8, tại ranh giới dấu phẩy.
+ *
+ * Không cắt giữa một ký tự nhiều byte (`TextDecoder` sẽ nhả ký tự thay
+ * thế), và không cắt đôi một từ — một từ cụt là thứ Whisper chưa từng
+ * thấy, và nó sẽ cố nghe ra thứ đó.
+ */
+export function catTheoByte(s: string, tranByte: number): string {
+  const bo = new TextEncoder().encode(s);
+  if (bo.length <= tranByte) return s;
+  // `fatal: false` + cắt lùi: bỏ phần đuôi hỏng nếu rơi giữa ký tự.
+  let cat = new TextDecoder('utf-8').decode(bo.slice(0, tranByte)).replace(/\uFFFD+$/, '');
+  const i = cat.lastIndexOf(',');
+  if (i > cat.length * 0.5) cat = cat.slice(0, i);
+  return cat.trim();
+}
+
 export async function transcribeWithGroq(
   audio: Buffer,
   filename: string,
@@ -157,7 +174,24 @@ export async function transcribeWithGroq(
     // numbers. Opt-in so the interview keeps its existing lighter response.
     form.append('response_format', opts.detail ? 'verbose_json' : 'json');
     form.append('temperature', '0');
-    if (opts.hints) form.append('prompt', opts.hints);
+    // ⛔⛔ TRẦN CỦA GROQ ĐẾM BYTE, KHÔNG ĐẾM KÝ TỰ — DÙ NÓ VIẾT "characters".
+    //
+    //     prompt length must be 896 characters or fewer,
+    //     but provided prompt contains 1048 characters
+    //
+    // 1048 đó là byte UTF-8 của 850 ký tự tiếng Việt. Chữ có dấu tốn 2-3
+    // byte, nên một chuỗi "850 ký tự" an toàn theo mắt người lại vượt
+    // trần theo mắt máy chủ.
+    //
+    // Đo thật 15/08/2026: robot CÂM HOÀN TOÀN vì mỗi lượt nghe trả 400.
+    // Vá lần một cắt ở 850 KÝ TỰ, con số lỗi chỉ tụt 1482 → 1048 chứ
+    // không hết — và tôi suýt kết luận "bản vá không ăn", trong khi nó có
+    // ăn, chỉ là cắt sai đơn vị.
+    //
+    // ⚠️ ĐẶT Ở ĐÂY, KHÔNG ĐẶT Ở CHỖ GỌI. Tám nơi trong dự án gọi hàm này;
+    // vá từng nơi là chờ nơi thứ chín. Đây là chỗ thắt duy nhất mà mọi
+    // lời gọi đều đi qua.
+    if (opts.hints) form.append('prompt', catTheoByte(opts.hints, 880));
     return form;
   };
 

@@ -153,9 +153,17 @@ async function canSangCucBo(anh: Buffer): Promise<Buffer> {
   const H = info.height;
   const KA = info.channels; // ĐỌC ra, không đoán
 
-  // Bán kính làm mờ phải LỚN hơn nét vẽ nhiều lần, nếu không chính nét lại bị
-  // coi là nền và bị xoá trắng.
-  const sigma = Math.max(12, Math.round(Math.min(W, H) / 12));
+  // Bán kính ước lượng nền — chọn con số này là một sự đánh đổi:
+  //   quá NHỎ ⇒ chính nét vẽ bị coi là nền và bị xoá trắng;
+  //   quá LỚN ⇒ nền không bám kịp MÉP bóng đổ, để lại hai vệt xám dọc theo
+  //             ranh giới vùng tối — đúng "vệt đen" người dùng thấy.
+  // Đo thật trên mẩu có vệt bóng dọc mép gắt (% điểm XÁM còn sót / % MỰC giữ được):
+  //     1/12 → 15,14% xám · 1,68% mực     1/30 → 2,30% · 1,61%
+  //     1/45 →  1,19% xám · 1,59% mực     1/60 → 0,34% · 1,55%
+  // Tức thu bán kính lại làm vệt xám giảm 44 lần mà chỉ mất ~7% nét. Chọn
+  // 1/50 để còn dư an toàn cho hình vẽ nét ĐẬM (bút lông, phô-tô đậm) — nét
+  // càng dày thì càng cần bán kính lớn hơn nó nhiều lần.
+  const sigma = Math.max(10, Math.round(Math.min(W, H) / 50));
 
   // ⚠️ Đưa raw 1 kênh vào `sharp` rồi `.blur()` thì bản ra có thể là 3 KÊNH
   // (sharp tự về sRGB). Bản đầu đọc `nen[i]` như thể 1 kênh ⇒ lệch 1/3 bước ⇒
@@ -213,13 +221,25 @@ export async function catChuODau(anh: Buffer): Promise<Buffer> {
     }
 
     // Gom thành các dải liên tiếp.
-    const dai: Array<{ dau: number; cuoi: number }> = [];
+    const daiTho: Array<{ dau: number; cuoi: number }> = [];
     for (let y = 0; y < H; y++) {
       if (!coMuc[y]) continue;
-      const cuoiDai = dai[dai.length - 1];
+      const cuoiDai = daiTho[daiTho.length - 1];
       if (cuoiDai && y - cuoiDai.cuoi <= 2) cuoiDai.cuoi = y;
-      else dai.push({ dau: y, cuoi: y });
+      else daiTho.push({ dau: y, cuoi: y });
     }
+
+    // ⚠️ VỨT CHẤM NHIỄU TRƯỚC ĐÃ. Đo trên ảnh thật: dưới dòng chữ đề còn một
+    // chấm CAO 1 PIXEL cách đó 4px. Vòng lặp gọt gặp chấm đó trước, thấy khe
+    // trắng chưa đủ rộng nên DỪNG NGAY — và thế là dòng chữ ngay trên nó không
+    // bao giờ bị gọt. Một hạt bụi chặn đứng cả tính năng.
+    const dai = daiTho.filter((d) => {
+      const cao = d.cuoi - d.dau + 1;
+      if (cao > 3) return true;
+      let dem = 0;
+      for (let y = d.dau; y <= d.cuoi; y++) for (let x = 0; x < W; x += 2) if (data[y * W + x] < 150) dem++;
+      return dem > W / 2 * 0.06; // dải mỏng mà thưa mực ⇒ bụi, bỏ
+    });
     if (dai.length < 2) return anh; // chỉ một khối → không có gì để gọt
 
     /** Dải này trải ngang bao nhiêu phần bề rộng — dòng chữ trải rộng, còn
@@ -239,6 +259,11 @@ export async function catChuODau(anh: Buffer): Promise<Buffer> {
       return phai > trai ? (phai - trai) / W : 0;
     };
     const RONG_NHU_DONG_CHU = 0.22;   // đo thật: dòng chữ đề 38%, nhãn lẻ "S" ~5%
+    // Nhãn của hình LUÔN dính sát nét (cách vài pixel). Dải nào nằm cách khối
+    // hình cả một quãng lớn thì chắc chắn không thuộc hình — đo thật: chữ
+    // "sau:" ở đầu trang cách hình 200px (28% chiều cao) mà chỉ rộng 6%, tức
+    // bằng một nhãn, nên chỉ xét bề rộng thì không tài nào phân biệt được.
+    const KHE_XA = H * 0.08;
 
     // Bốn điều kiện để coi một dải là DÒNG CHỮ chứ không phải phần của hình:
     //   • mỏng (một dòng chữ thấp hơn hẳn khối hình),
@@ -247,7 +272,7 @@ export async function catChuODau(anh: Buffer): Promise<Buffer> {
     //     kiện quan trọng nhất: nét hình dù đứt đoạn vẫn nằm sát nhau, còn
     //     dòng chữ thì cách hình một quãng giấy trắng.
     const MONG = H * 0.07;
-    const TOI_DA_GOT = H * 0.12;   // gọt tối đa 12% mỗi đầu
+    const TOI_DA_GOT = H * 0.2;    // gọt tối đa 20% mỗi đầu
     const KHE_TRANG = Math.max(5, H * 0.012);
     let tren = 0;
     let duoi = H;
@@ -255,13 +280,15 @@ export async function catChuODau(anh: Buffer): Promise<Buffer> {
     for (let i = 0; i < dai.length - 1; i++) {
       const d = dai[i];
       const khe = dai[i + 1].dau - d.cuoi;
-      if (d.cuoi - d.dau + 1 <= MONG && d.cuoi < TOI_DA_GOT && khe >= KHE_TRANG && trongNgang(d.dau, d.cuoi) >= RONG_NHU_DONG_CHU) tren = d.cuoi + 2;
+      const laChu = khe >= KHE_XA || (khe >= KHE_TRANG && trongNgang(d.dau, d.cuoi) >= RONG_NHU_DONG_CHU);
+      if (d.cuoi - d.dau + 1 <= MONG && d.cuoi < TOI_DA_GOT && laChu) tren = d.cuoi + 2;
       else break;
     }
     for (let i = dai.length - 1; i > 0; i--) {
       const d = dai[i];
       const khe = d.dau - dai[i - 1].cuoi;
-      if (d.cuoi - d.dau + 1 <= MONG && d.dau > H - TOI_DA_GOT && khe >= KHE_TRANG && trongNgang(d.dau, d.cuoi) >= RONG_NHU_DONG_CHU) duoi = d.dau - 2;
+      const laChu = khe >= KHE_XA || (khe >= KHE_TRANG && trongNgang(d.dau, d.cuoi) >= RONG_NHU_DONG_CHU);
+      if (d.cuoi - d.dau + 1 <= MONG && d.dau > H - TOI_DA_GOT && laChu) duoi = d.dau - 2;
       else break;
     }
 

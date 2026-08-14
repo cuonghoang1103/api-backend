@@ -273,6 +273,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
       : [];
   });
   const [moTuDien, setMoTuDien] = useState(false);
+  const [danTuDien, setDanTuDien] = useState('');
   const [dangDoiKieu, setDangDoiKieu] = useState(false);
   /**
    * Mẫu đối thoại RIÊNG cho miền Trung — thứ THẬT SỰ quyết định robot nói
@@ -577,6 +578,57 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
                 </button>
               </div>
             ))}
+            {/* ⚠️ DÁN HÀNG LOẠT — nhập từng ô một cho vài chục từ là việc
+                người ta bỏ dở giữa chừng, và bỏ dở thì từ điển thiếu, mà
+                từ điển thiếu thì Whisper nghe hụt đúng những từ hay dùng
+                nhất. */}
+            <div className="mt-3 border-t pt-3" style={{ borderColor: 'var(--border-color)' }}>
+              <label className="text-xs font-medium" style={{ color: 'var(--text-primary)' }}>
+                Dán hàng loạt — mỗi dòng một từ, ngăn bằng dấu <code>=</code>
+              </label>
+              <textarea
+                value={danTuDien}
+                onChange={(e) => setDanTuDien(e.target.value)}
+                rows={4}
+                placeholder={'nỏ = không\nchộ = thấy\nngái = xa'}
+                className="mt-1 w-full rounded-lg border px-2 py-1 font-mono text-xs outline-none"
+                style={{
+                  borderColor: 'var(--border-color)',
+                  background: 'var(--bg-base)',
+                  color: 'var(--text-primary)',
+                }}
+              />
+              <button
+                type="button"
+                disabled={!danTuDien.trim()}
+                onClick={() => {
+                  const moi = danTuDien
+                    .split('\n')
+                    .map((d) => d.split('='))
+                    .filter((x) => x.length >= 2)
+                    .map((x) => ({ tu: x[0].trim(), nghia: x.slice(1).join('=').trim() }))
+                    .filter((x) => x.tu && x.nghia);
+                  // Gộp chứ KHÔNG đè: từ đã có giữ nguyên nghĩa cũ. Dán đè
+                  // là một lần dán nhầm xoá công gõ tay của cả buổi.
+                  setTuDien((ds) => {
+                    const co = new Set(ds.map((x) => x.tu.trim().toLowerCase()));
+                    return [...ds, ...moi.filter((x) => !co.has(x.tu.toLowerCase()))];
+                  });
+                  setDanTuDien('');
+                }}
+                className="mt-1 rounded-lg border px-3 py-1 text-xs"
+                style={{ borderColor: '#22d3ee55', color: '#22d3ee' }}
+              >
+                + Gộp{' '}
+                {danTuDien.split('\n').filter((d) => d.includes('=') && d.trim()).length || 0} từ
+                vào danh sách
+              </button>
+              <p className="mt-1 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                Từ đã có giữ nguyên nghĩa cũ — dán lại không đè lên công bạn đã gõ.
+                Gộp xong nhớ bấm <strong>Lưu mẫu + từ điển</strong>.
+              </p>
+            </div>
+
             <div className="mt-2 flex gap-2">
               <button
                 type="button"

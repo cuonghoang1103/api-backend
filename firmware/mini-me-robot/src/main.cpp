@@ -723,7 +723,16 @@ static void handleCommand(JsonDocument& doc) {
     // TLS tải về — chuốc lỗi ở đúng chỗ khó truy nhất.
     audio::playStop();
 
-    const char* muon = doc["cmd"]["payload"]["version"] | (const char*)nullptr;
+    // ⚠️ `doc["payload"]`, KHÔNG phải `doc["cmd"]["payload"]`.
+    //
+    // Khung lệnh là `{t:'cmd', id, type, payload}` — không có khoá `cmd`
+    // nào cả. Mọi handler khác đọc đúng `doc["payload"]`; riêng chỗ này
+    // sót lại từ một khung cũ, nên `muon` LUÔN rỗng.
+    //
+    // Hậu quả im lặng: bảo robot "cập nhật lên bản 0.4.2" thì nó nạp bản
+    // MỚI NHẤT, không phải bản 0.4.2 — và không có gì báo sai. Chỉ lộ ra
+    // khi ai đó cần lùi về một bản cũ, tức đúng lúc đang gấp.
+    const char* muon = doc["payload"]["version"] | (const char*)nullptr;
     sendLog("warn", "Bat dau cap nhat firmware qua WiFi");
     face::set(face::THINKING);
 

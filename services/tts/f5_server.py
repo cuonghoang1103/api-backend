@@ -62,9 +62,21 @@ NHAN_ROI_GIAY = float(os.environ.get("F5_NHAN_ROI_GIAY", "600"))
 app = FastAPI(title="F5-TTS giọng Cường")
 
 _model = None
+_model_duong: Optional[str] = None   # model NÀO đang nằm trong VRAM
 _lan_cuoi = 0.0
 _khoa = threading.Lock()
 _kho: Optional[Dict[str, dict]] = None
+
+# ⚠️ MỖI GIỌNG CÓ THỂ CẦN MỘT MODEL KHÁC NHAU.
+#
+# Giọng chủ nhân dùng `cuong_giong_6000.pt` — đã học 35,7 phút giọng đó.
+# Giọng NGƯỜI KHÁC phải dùng nền `hynt_nen.pt` chưa fine-tune ai: đưa
+# giọng lạ vào model đã học một người là nó kéo về phía người đó, và bản
+# nhân bản mất giống dần.
+#
+# Hai model là ~5 GB. Card 12 GB đang chia cho llama.cpp (5,9 GB) nên
+# KHÔNG giữ cả hai — nạp cái nào cần, thấy đổi thì nhả cái cũ trước.
+MODEL_MAC_DINH = str(CKPT)
 
 # Mỗi cảm xúc một "giọng" — vì F5 chép ngữ điệu từ ĐOẠN MẪU, nên chọn cảm
 # xúc chính là chọn mẫu. Ánh xạ thành `voiceId` để robot, trang web và
@@ -77,6 +89,8 @@ TEN_GIONG: Dict[str, Tuple[str, str]] = {
     "f5-cuong-cuoi": ("cuoi", "Cường (F5) — cười khi nói"),
     "f5-cuong-nghiem": ("nghiem", "Cường (F5) — nghiêm túc, giảng giải"),
     "f5-cuong-nghe": ("nghe", "Cường (F5) — tiếng Nghệ Tĩnh"),
+    # Giọng người khác — chạy nền hynt, xem ghi chú ở `MODEL_MAC_DINH`.
+    "f5-khanh-linh": ("khanh-linh", "Khánh Linh (F5) — nhân bản, nền 1000h"),
 }
 
 
@@ -90,15 +104,37 @@ def kho_mau() -> Dict[str, dict]:
     return _kho
 
 
-def _nap():
-    """Nạp model. Gọi TRONG khoá — hai lượt cùng nạp hai bản là OOM."""
-    global _model, _lan_cuoi
+def _nap(duong: Optional[str] = None):
+    """Nạp model cần cho lượt này. Gọi TRONG khoá.
+
+    Đổi model thì NHẢ CÁI CŨ TRƯỚC. Giữ cả hai là ~5 GB trên một card
+    12 GB đang chia cho não robot — OOM ở đây nghĩa là robot mất giọng
+    giữa câu.
+    """
+    global _model, _model_duong, _lan_cuoi
+    can = str(duong or MODEL_MAC_DINH)
+    if not Path(can).is_absolute():
+        can = str(F5_DIR / can)
+
+    if _model is not None and _model_duong != can:
+        print(f"[f5] đổi model: {Path(_model_duong or '?').name} → {Path(can).name}", flush=True)
+        _model = None
+        _model_duong = None
+        gc.collect()
+        try:
+            import torch
+
+            torch.cuda.empty_cache()
+        except Exception:
+            pass
+
     if _model is None:
         from f5_tts.api import F5TTS
 
         t0 = time.time()
-        _model = F5TTS(model=KIEN_TRUC, ckpt_file=str(CKPT), vocab_file=str(VOCAB))
-        print(f"[f5] nạp {CKPT.name} trong {time.time()-t0:.1f}s", flush=True)
+        _model = F5TTS(model=KIEN_TRUC, ckpt_file=can, vocab_file=str(VOCAB))
+        _model_duong = can
+        print(f"[f5] nạp {Path(can).name} trong {time.time()-t0:.1f}s", flush=True)
     _lan_cuoi = time.time()
     return _model
 
@@ -114,6 +150,7 @@ def _canh_roi() -> None:
             if _model is None or time.time() - _lan_cuoi < NHAN_ROI_GIAY:
                 continue
             _model = None
+            globals()["_model_duong"] = None
         gc.collect()
         try:
             import torch
@@ -143,6 +180,7 @@ def health():
         "daNap": _model is not None,
         "roiGiay": round(time.time() - _lan_cuoi, 1) if _lan_cuoi else None,
         "ckpt": CKPT.name,
+        "dangNap": Path(_model_duong).name if _model_duong else None,
     }
 
 
@@ -188,7 +226,7 @@ def noi(y: YeuCau):
 
     t0 = time.time()
     with _khoa:
-        tts = _nap()
+        tts = _nap(m.get("model"))
         wav, sr, _ = tts.infer(
             ref_file=str(f),
             ref_text=m["chu"],

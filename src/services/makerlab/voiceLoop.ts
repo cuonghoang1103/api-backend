@@ -47,6 +47,39 @@ import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
 import { goiYNghe } from './goiYNghe.js';
 import { khopDoiTinhCach } from './tinhCach.js';
 import { khopDoiKieuNoi, CHAO_DOI_KIEU, tuGoiYNghe, type KieuNoi } from './mienTrung.js';
+
+/**
+ * Ghép các phần gợi ý cho Whisper, CẮT theo trần cứng của Groq.
+ *
+ * ⛔⛔ GROQ TỪ CHỐI CẢ LƯỢT NẾU PROMPT QUÁ 896 KÝ TỰ.
+ *
+ *     groq stt HTTP 400: prompt length must be 896 characters or fewer,
+ *                        but provided prompt contains 1482 characters
+ *
+ * Không phải cắt bớt — nó ném cả request. Nghĩa là MỌI lượt nói chết ở
+ * khâu đầu, robot im hoàn toàn, và người dùng chỉ thấy "nói mà nó không
+ * trả lời". Log thì đầy lỗi, nhưng log nằm trên máy chủ.
+ *
+ * Xảy ra thật 15/08/2026, ngay sau khi mồi từ điển miền Trung vào đây:
+ * người dùng nhập 164 từ, chuỗi gợi ý phình lên 1.482 ký tự, và robot
+ * câm suốt từ lúc deploy.
+ *
+ * ⚠️ BÀI HỌC: `goiYNghe()` ĐÃ có trần riêng 380 ký tự, nên tôi tưởng
+ * phần mình thêm cũng an toàn. Trần của từng mảnh KHÔNG bảo vệ được cái
+ * tổng — chỉ có trần đặt ở CHỖ GHÉP mới bảo vệ được.
+ *
+ * Cắt ở ranh giới dấu phẩy: một từ bị chặt đôi thành thứ Whisper chưa
+ * từng thấy, và nó sẽ cố nghe ra thứ đó.
+ */
+const TRAN_GOI_Y = 850; // dưới 896 một khoảng, chừa cho dấu nối
+
+function catGoiY(phan: string[]): string {
+  const s = phan.filter(Boolean).join(', ');
+  if (s.length <= TRAN_GOI_Y) return s;
+  const cat = s.slice(0, TRAN_GOI_Y);
+  const i = cat.lastIndexOf(',');
+  return (i > TRAN_GOI_Y * 0.5 ? cat.slice(0, i) : cat).trim();
+}
 import {
   CAU,
   NHAC_MOI,
@@ -721,7 +754,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       // Mồi vốn từ cho Whisper — tên riêng người dùng tự dạy, từ điều
       // khiển, thuật ngữ công nghệ. Không tốn thêm gì, và nó chữa đúng
       // loại lỗi khó chịu nhất: nghe sai TÊN và THUẬT NGỮ.
-      hints: [
+      hints: catGoiY([
         goiYNghe(persona0.cheDo, persona0.knowledge, persona0.name, persona0.wakeWord),
         // ⚠️ ĐÂY MỚI LÀ CHỖ CHỮA "ROBOT KHÔNG HIỂU GIỌNG MIỀN TRUNG".
         //
@@ -735,9 +768,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
         persona0.cheDo === 'vi' && persona0.kieuNoi === 'mien-trung'
           ? tuGoiYNghe(persona0.tuDienRieng)
           : '',
-      ]
-        .filter(Boolean)
-        .join(', '),
+      ]),
       detail: true,
     });
     heard = tr.text.trim();

@@ -46,6 +46,58 @@ function thuocTinhSo(the: string, ten: string): number | null {
   return m ? Number(m[1]) : null;
 }
 
+/** Một đoạn thẳng đã vẽ — dùng để bắt nhãn đè lên nét. */
+interface Doan { a: Diem; b: Diem }
+
+/** Rút mọi đoạn thẳng: `<line>` và các chặng của `<path>` (M/L/moveto/lineto). */
+function doanTrongHinh(svg: string): Doan[] {
+  const ra: Doan[] = [];
+  for (const m of svg.matchAll(/<line\b[^>]*>/g)) {
+    const x1 = thuocTinhSo(m[0], 'x1');
+    const y1 = thuocTinhSo(m[0], 'y1');
+    const x2 = thuocTinhSo(m[0], 'x2');
+    const y2 = thuocTinhSo(m[0], 'y2');
+    if (x1 !== null && y1 !== null && x2 !== null && y2 !== null) {
+      ra.push({ a: { x: x1, y: y1 }, b: { x: x2, y: y2 } });
+    }
+  }
+  // `<path>`: chỉ lấy chặng thẳng. Cung tròn (`A`) bỏ qua — đè lên cung ít
+  // gây khó đọc hơn đè lên nét thẳng, mà tính giao với cung thì đắt và dễ sai.
+  for (const m of svg.matchAll(/\sd="([^"]+)"/g)) {
+    const lenh = m[1].match(/[MLmlHhVv][^A-Za-z]*/g) ?? [];
+    let cur: Diem | null = null;
+    for (const l of lenh) {
+      const so = (l.match(new RegExp(SO, 'g')) ?? []).map(Number);
+      const ky = l[0];
+      if ((ky === 'M' || ky === 'L') && so.length >= 2) {
+        const p = { x: so[0], y: so[1] };
+        if (ky === 'L' && cur) ra.push({ a: cur, b: p });
+        cur = p;
+      }
+    }
+  }
+  return ra;
+}
+
+/** Đoạn thẳng có cắt hình chữ nhật không (dùng thuật toán chặt dần Liang–Barsky). */
+function doanCatHop(d: Doan, x0: number, y0: number, x1: number, y1: number): boolean {
+  let t0 = 0;
+  let t1 = 1;
+  const dx = d.b.x - d.a.x;
+  const dy = d.b.y - d.a.y;
+  const canh: Array<[number, number]> = [
+    [-dx, d.a.x - x0], [dx, x1 - d.a.x],
+    [-dy, d.a.y - y0], [dy, y1 - d.a.y],
+  ];
+  for (const [p, q] of canh) {
+    if (p === 0) { if (q < 0) return false; continue; }
+    const r = q / p;
+    if (p < 0) { if (r > t1) return false; if (r > t0) t0 = r; }
+    else { if (r < t0) return false; if (r < t1) t1 = r; }
+  }
+  return true;
+}
+
 /** Mọi cặp toạ độ xuất hiện trong `d="..."` của <path>. */
 function toaDoTrongPath(svg: string): Diem[] {
   const ra: Diem[] = [];
@@ -174,6 +226,19 @@ export function kiemRangBuoc(
         if (lech > nguong) loi.push(`${ten[0]} phải là trung điểm ${ten[1]}${ten[2]} nhưng lệch ${lech.toFixed(1)} đơn vị.`);
         break;
       }
+      case 'right-angle': {
+        // `right-angle P Q R` — góc tại P giữa hai cạnh PQ và PR phải là 90°.
+        // Khai riêng chứ không dùng `perp` vì ở đây model còn phải VẼ ký hiệu
+        // ô vuông, và ô vuông đặt sai chỗ là lỗi nhìn thấy ngay.
+        if (P.length < 3) continue;
+        const tvh = tichVoHuong(P[0], P[1], P[0], P[2]);
+        const chuan = khoangCach(P[0], P[1]) * khoangCach(P[0], P[2]);
+        if (chuan > 0 && Math.abs(tvh) / chuan > 0.04) {
+          const goc = (Math.acos(Math.max(-1, Math.min(1, tvh / chuan))) * 180) / Math.PI;
+          loi.push(`Góc tại ${ten[0]} (giữa ${ten[0]}${ten[1]} và ${ten[0]}${ten[2]}) phải là 90° nhưng đang là ${goc.toFixed(1)}° — ký hiệu ô vuông vẽ ở đó sẽ lệch. Tính lại toạ độ.`);
+        }
+        break;
+      }
       case 'eq-dist': {
         if (P.length < 4) continue;
         const a = khoangCach(P[0], P[1]);
@@ -251,6 +316,33 @@ export function kiemHinh(
     for (let j = i + 1; j < nhan.length; j++) {
       const k = khoangCach(nhan[i], nhan[j]);
       if (k < 14) loi.push(`Nhãn ${nhan[i].ten} và ${nhan[j].ten} chỉ cách nhau ${k.toFixed(0)} đơn vị (cần ≥ 14) — chữ sẽ đè lên nhau, đẩy ra hai phía đối nhau.`);
+    }
+  }
+
+  // ── 3b. Nhãn ĐÈ LÊN NÉT VẼ ───────────────────────────────────────
+  //
+  // Đây là thứ làm hình trông cẩu thả nhất và bản kiểm đầu BỎ SÓT: nó chỉ so
+  // nhãn với nhãn, nên hai chữ cách nhau 20 đơn vị vẫn "đạt" dù cả hai đang
+  // nằm đè lên cạnh tam giác. Người dùng nhìn ra ngay: "chữ A, B, C trùng với
+  // hình vẽ, bị che mất, trông không chuyên nghiệp".
+  const doan = doanTrongHinh(svg);
+  if (doan.length) {
+    for (const m of svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)) {
+      const x = thuocTinhSo(m[1], 'x');
+      const y = thuocTinhSo(m[1], 'y');
+      const chu = m[2].replace(/<[^>]*>/g, '').trim();
+      if (x === null || y === null || !chu || chu.length > 4) continue;
+      const co = thuocTinhSo(m[1], 'font-size') ?? 14;
+      const neo = /text-anchor="([^"]+)"/.exec(m[1])?.[1] ?? 'start';
+      // Hộp chữ áng chừng: bề ngang ~0,6 lần cỡ chữ mỗi ký tự, đường cơ sở ở `y`.
+      const w = chu.length * co * 0.6;
+      const tX = neo === 'middle' ? x - w / 2 : neo === 'end' ? x - w : x;
+      // Nới 1 đơn vị: chạm sát mép vẫn đọc được, không đáng bắt vẽ lại.
+      const [x0, y0, x1, y1] = [tX - 1, y - co + 1, tX + w + 1, y + co * 0.25];
+      const dung = doan.filter((d) => doanCatHop(d, x0, y0, x1, y1));
+      if (dung.length) {
+        loi.push(`Nhãn "${chu}" ở (${x.toFixed(0)}, ${y.toFixed(0)}) nằm ĐÈ LÊN ${dung.length} nét vẽ — chữ bị nét cắt ngang, không đọc được. Đẩy nhãn ra PHÍA NGOÀI hình 10–16 đơn vị theo hướng rời xa tâm hình.`);
+      }
     }
   }
 

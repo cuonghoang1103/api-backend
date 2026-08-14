@@ -47,15 +47,128 @@ DON="${DON:-2}"
 LR="${LR:-1e-5}"
 
 DICH="$F5/.venv/lib64/python3.14/data/${TEN}_char"
-CK="$F5/nen/hynt_model_last.pt"
+# ⚠️ NỀN ĐÃ LỘT, không phải checkpoint gốc — xem ghi chú ở bộ quét dưới.
+CK="$F5/nen/hynt_nen.pt"
 LOG="$F5/train-$(date +%Y%m%d-%H%M%S).log"
 
 echo "════ Kiểm trước khi động vào GPU ════"
 [ -d "$DICH" ] || { echo "✗ Chưa có dataset $DICH — chạy chuan-bi.sh trước."; exit 1; }
-[ -f "$CK" ] || { echo "✗ Thiếu checkpoint nền $CK"; exit 1; }
+if [ ! -f "$CK" ]; then
+  echo "✗ Thiếu nền đã lột $CK"
+  echo "  Tạo bằng: .venv/bin/python lot-nen.py nen/hynt_model_last.pt nen/hynt_nen.pt"
+  exit 1
+fi
 SO_VOCAB=$(wc -l < "$DICH/vocab.txt")
 [ "$SO_VOCAB" -eq 2566 ] || { echo "✗ vocab.txt $SO_VOCAB dòng, phải 2566 — chạy lại chuan-bi.sh."; exit 1; }
 echo "  dataset ✓   vocab $SO_VOCAB ✓   nền ✓"
+
+# ⛔⛔ FILE CŨ TRONG `ckpts/` ĐÈ LÊN `--pretrain`, KHÔNG BÁO MỘT LỜI.
+#
+# `--pretrain` KHÔNG phải thứ quyết định nền. Nó chỉ chép file vào
+# `ckpts/<tên>/` với tiền tố `pretrained_`. Chọn nạp cái nào là việc của
+# `load_checkpoint` (`trainer.py:194`), và nó chọn thế này:
+#
+#     1. có `model_last.pt`  → lấy luôn, bỏ qua nền bạn chỉ định
+#     2. có `model_<số>.pt`  → lấy cái số lớn nhất
+#     3. còn lại             → next(f for f in ds if f.startswith("pretrained_"))
+#
+# ⚠️ Nhánh 3 dùng `next()` trên `os.listdir` — tức LẤY FILE ĐẦU TIÊN THEO
+# THỨ TỰ HỆ THỐNG TỆP. Hai nền trong một thư mục là tung đồng xu.
+#
+# Đo thật 14/08/2026, hai lần chết liên tiếp trong thư mục này:
+#   · `model_last.pt` (12/08, 12 bước, nhúng 2546) — nhánh 1 nuốt luôn
+#   · dời nó đi rồi, còn HAI file `pretrained_`:
+#       pretrained_hynt_model_last.pt         2567  ← cái muốn
+#       pretrained_model_1250000.safetensors  2546  ← `next()` bốc phải
+#
+# ⚠️⚠️ Và thông báo lỗi ĐÁNH LẠC HƯỚNG hoàn toàn:
+#
+#     size mismatch … [2546, 512] from checkpoint, current model [2567, 512]
+#
+# Nghe như vocab sai, khiến người ta đi sửa vocab — trong khi vocab đúng,
+# chỉ là nó nạp nhầm nền.
+#
+# Chốt chặn: quét MỌI file trainer có thể nhặt, đo bảng nhúng từng cái,
+# lệch thì DỜI SANG TÊN KHÁC (không xoá — đó là hàng GB công train của ai
+# đó) cho tới khi trong thư mục chỉ còn thứ khớp.
+CKPT_DIR="$F5/.venv/lib64/python3.14/ckpts/$TEN"
+if [ -d "$CKPT_DIR" ]; then
+  echo ""
+  echo "════ Quét MỌI checkpoint trong ckpts/ ════"
+  "$F5/.venv/bin/python" - "$CKPT_DIR" <<'PY'
+import os, sys, time, json
+
+thu = sys.argv[1]
+CAN = 2567  # bảng nhúng của nền hynt
+
+
+def do(duong):
+    """(số hàng lớp nhúng, số bước) — `None` ở đâu là không đọc được chỗ đó.
+
+    ⚠️ PHẢI XÉT CẢ SỐ BƯỚC, KHÔNG CHỈ KÍCH THƯỚC.
+
+    `load_checkpoint` rẽ nhánh theo việc file CÓ khoá `update` hay không:
+    có thì nạp cả optimizer và đặt `update = checkpoint["update"]`; không
+    thì lấy trọng số làm nền và đếm lại từ 0.
+
+    Đo 14/08/2026: nền hynt mang `update: 540000`. F5-TTS hiểu là "train
+    tiếp lượt đang dở ở bước 540.000", thấy đích 1.800 bước đã qua từ
+    lâu, và THOÁT NGAY VỚI MÃ 0 — in "Train xong" mà không chạy một bước.
+    Một lỗi báo THÀNH CÔNG thì không ai đi tìm.
+
+    Nên file nào mang số bước lớn hơn mọi lượt train thật của ta (vài
+    nghìn) đều là bản sao của nền, không phải tiến độ của mình.
+    """
+    try:
+        if duong.endswith(".safetensors"):
+            # Đọc phần TIÊU ĐỀ thôi — nó có sẵn hình dạng, khỏi nạp 1,3 GB.
+            with open(duong, "rb") as f:
+                n = int.from_bytes(f.read(8), "little")
+                head = json.loads(f.read(n))
+            for k, v in head.items():
+                if k.endswith("text_embed.text_embed.weight"):
+                    return v["shape"][0], None  # safetensors không mang số bước
+            return None, None
+        import torch
+
+        ck = torch.load(duong, map_location="meta", weights_only=False, mmap=True)
+        buoc = ck.get("update") or ck.get("step")
+        sd = ck.get("ema_model_state_dict") or ck.get("model_state_dict") or ck
+        for k, v in sd.items():
+            if k.endswith("text_embed.text_embed.weight"):
+                return v.shape[0], buoc
+    except Exception as e:
+        print(f"    (không đọc được {os.path.basename(duong)}: {e})")
+    return None, None
+
+
+# ⚠️ Chỉ những file mà trainer THẬT SỰ nhặt: xem `load_checkpoint`, nó lọc
+# theo tiền tố model_/pretrained_ và đuôi .pt/.safetensors.
+ds = sorted(
+    f for f in os.listdir(thu)
+    if (f.startswith("model_") or f.startswith("pretrained_"))
+    and f.endswith((".pt", ".safetensors"))
+)
+if not ds:
+    print("  (trống — train sẽ bắt đầu từ nền)")
+TRAN_BUOC = 100_000  # lượt train của ta chỉ vài nghìn bước
+
+for f in ds:
+    p = os.path.join(thu, f)
+    n, buoc = do(p)
+    if n != CAN:
+        ly = f"nhúng {n}, cần {CAN}"
+    elif buoc and buoc >= TRAN_BUOC:
+        ly = f"mang số bước {buoc:,} — là bản sao của nền, không phải tiến độ của ta"
+    else:
+        print(f"  ✓ {f}: nhúng {n}" + (f", bước {buoc:,}" if buoc else "") + " — giữ")
+        continue
+    moi = f"{p}.bo-{time.strftime('%Y%m%d-%H%M%S')}"
+    os.rename(p, moi)
+    print(f"  ⚠ {f}: {ly}")
+    print(f"    → ĐÃ DỜI sang {os.path.basename(moi)}")
+PY
+fi
 
 # ── Nhường VRAM ──
 #

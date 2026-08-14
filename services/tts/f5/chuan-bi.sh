@@ -55,9 +55,17 @@ echo ""
 echo "════ 2. Dựng dataset (arrow + duration) ════"
 mkdir -p "$DATA_VENV"
 rm -rf "$DICH"
+# ⚠️ THAM SỐ ĐẦU LÀ FILE CSV, KHÔNG PHẢI THƯ MỤC.
+#
+# Nó tên là `inp_dir` — nghe như thư mục, và bản đầu của script này đưa
+# thư mục vào rồi chết ở `ValueError: input must be a .csv file`. Phần
+# trợ giúp của chính nó mới nói đúng: "Input CSV with header".
+#
+# Tên biến nói dối về kiểu dữ liệu là chuyện thường gặp; đọc `--help` chứ
+# đừng suy từ tên.
 "$F5/.venv/bin/python" \
   "$F5/.venv/lib64/python3.14/site-packages/f5_tts/train/datasets/prepare_csv_wavs.py" \
-  "$XUAT" "$DICH"
+  "$XUAT/metadata.csv" "$DICH"
 
 echo ""
 echo "════ 3. Chép đè bảng chữ TIẾNG VIỆT (xem ghi chú đầu file) ════"

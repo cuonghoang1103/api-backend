@@ -61,6 +61,8 @@ app = FastAPI(title="Voice CuongMini")
 
 # Bộ điều khiển máy nhà. MẶC ĐỊNH TẮT — không có `MAY_NHA_TOKEN` thì mọi
 # endpoint của nó trả 503. Xem đầu file `dieukhien.py`.
+import f5_giong
+
 try:
     from dieukhien import router as _dk_router
 
@@ -381,6 +383,13 @@ def to_wav(audio: np.ndarray, sr: int) -> bytes:
 
 def reap_jobs() -> None:
     now = time.time()
+    # Nhả model F5 khi lâu không ai gọi — 2,5 GB VRAM trên một card 12 GB
+    # đang chia cho cả não robot. Bám vào vòng dọn có sẵn thay vì dựng
+    # thêm một luồng: một luồng nữa là một thứ nữa có thể chết âm thầm.
+    try:
+        f5_giong.nha_neu_roi()
+    except Exception:
+        pass
     for jid in [k for k, v in _jobs.items() if now - v["at"] > JOB_TTL_SEC]:
         _jobs.pop(jid, None)
 
@@ -504,6 +513,10 @@ def voices():
             {"id": v, "label": f"English — {v} (nhân bản)", "custom": True, "lang": "en"}
             for v in sorted(_giong_anh_song() - set(GIONG_ANH))
         ]
+    # F5 gộp vào CÙNG danh sách, cùng lý do đã ghi ở giọng tiếng Anh:
+    # trả về danh sách riêng thì mọi chỗ gọi đều phải nhớ hỏi thêm, và chỗ
+    # nào quên thì im lặng thiếu giọng.
+    ds += f5_giong.danh_sach()
     return {"voices": ds}
 
 
@@ -521,6 +534,23 @@ def run_job(jid: str, text: str, voice: Optional[str], style: str) -> None:
         # Google tiếng Việt nói tiếng Anh, rất khó hiểu". Log của đường
         # luồng thì SẠCH, vì đường luồng có hỏng đâu — nó chỉ không được
         # gọi tới ở những lượt đó.
+        # ⚠️ F5 phải có mặt ở CẢ HAI đường, và đây là đường LƯỚI ĐỠ —
+        # chạy đúng lúc đường luồng đã hỏng. Bỏ sót thì máy đọc tiếng Việt
+        # nhận tên `f5-cuong`, trả "Voice not found", cả chuỗi rơi xuống
+        # Google. Đúng vết xe 13/08 với giọng tiếng Anh.
+        if f5_giong.la_giong_f5(voice):
+            t0 = time.time()
+            x, sr = f5_giong.tong_hop(text, str(voice))
+            dur = len(x) / sr
+            _jobs[jid].update(
+                state="done",
+                wav=to_wav(x, sr),
+                seconds=round(dur, 2),
+                ms=int((time.time() - t0) * 1000),
+                rtf=round((time.time() - t0) / dur, 3) if dur else None,
+            )
+            return
+
         if la_giong_anh(voice):
             if not CHATTERBOX_BAT:
                 raise RuntimeError("Máy đọc tiếng Anh đang tắt (CHATTERBOX_ENABLED=false)")
@@ -875,6 +905,24 @@ def tts_stream(payload: Dict[str, Any]):
 
     voice = payload.get("voice") or None
     style = str(payload.get("style") or "tu_nhien")
+
+    if f5_giong.la_giong_f5(voice):
+        # F5 sinh CẢ ĐOẠN một lúc, không theo luồng — giống Chatterbox.
+        # Cắt thành khối để phía robot vẫn nhận đều đặn thay vì đứng chờ
+        # rồi nhận một cục.
+        def sinh_f5():
+            t0 = time.time()
+            try:
+                x, sr = f5_giong.tong_hop(text, str(voice))
+            except Exception as e:
+                print(f"[tts] F5 hỏng: {e}", flush=True)
+                return
+            print(f"[tts] F5: {len(x)/sr:.2f}s tiếng trong {time.time()-t0:.2f}s", flush=True)
+            khoi = max(1, int(sr * 0.25))
+            for i in range(0, len(x), khoi):
+                yield (np.clip(x[i : i + khoi], -1, 1) * 32767).astype("<i2").tobytes()
+
+        return StreamingResponse(sinh_f5(), media_type="application/octet-stream")
 
     if la_giong_anh(voice):
         if not CHATTERBOX_BAT:

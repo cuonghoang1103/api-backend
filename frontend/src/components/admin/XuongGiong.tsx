@@ -596,7 +596,7 @@ export function XuongGiong() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-6">
+    <div translate="no" className="notranslate mx-auto w-full max-w-5xl px-4 py-6">
       <header className="mb-6">
         <h1 className="flex items-center gap-2 text-2xl font-bold text-[var(--text-primary)]">
           <Mic className="h-6 w-6 text-cyan-400" /> Xưởng giọng
@@ -790,20 +790,47 @@ export function XuongGiong() {
           </p>
 
           {/* Câu cần đọc — to, dễ đọc từ xa, vì người ta ngồi lùi khỏi mic */}
-          {/* Tô đỏ từ lệch — chỉ khi máy nghe ra câu thật. Không có câu mà
-              vẫn tô thì CẢ CÂU đỏ rực, trông như đọc sai hết. */}
-          <p className="mb-5 text-2xl leading-relaxed text-[var(--text-primary)]">
-            {tuGoc.length && khop != null
-              ? chuDoc.split(/(\s+)/).map((t, i) => {
-                  const sach = chuanTu(t)[0];
-                  if (!sach) return <span key={i}>{t}</span>;
-                  return (
-                    <span key={i} className={tuNghe.has(sach) ? '' : 'bg-red-500/25 rounded px-0.5'}>
-                      {t}
-                    </span>
-                  );
-                })
-              : chuDoc}
+          {/* ══ Câu cần đọc ══
+           *
+           * ⚠️ `translate="no"` + `.notranslate` KHÔNG PHẢI ĐỂ CHO ĐẸP.
+           *
+           * Cốc Cốc, Chrome và mọi bộ dịch trong trình duyệt đều sửa DOM
+           * trực tiếp: chúng gộp các nút chữ anh em lại rồi thay nội dung.
+           * React không biết chuyện đó, nên lượt render sau nó đi chèn vào
+           * một cây đã khác và ném đúng lỗi người dùng gặp 14/08:
+           *
+           *     Không thể thực thi 'insertBefore' trên 'Node': nút mà nút
+           *     mới cần chèn vào trước đó không phải là con của nút này
+           *
+           * Cả trang trắng, giữa buổi thu, sau khi đã ngồi gần một tiếng.
+           *
+           * Và ở đây nó còn tệ hơn một lỗi hiển thị: câu này là câu người
+           * dùng SẮP ĐỌC THÀNH TIẾNG. Bộ dịch sửa nó thì họ đọc một đằng
+           * mà dữ liệu ghi một nẻo — hỏng dữ liệu train, im lặng.
+           *
+           * ⚠️ CẤU TRÚC PHẢI ỔN ĐỊNH.
+           *
+           * Bản trước lật qua lại giữa MỘT chuỗi trần và MỘT MẢNG ~20 thẻ
+           * span, tuỳ theo đã soát hay chưa. Mỗi lần thu xong là một lần
+           * lật, và mỗi lần lật là một cơ hội để React và DOM lệch nhau.
+           * Nay luôn là mảng span, chỉ đổi màu nền.
+           *
+           * Khoá ghép cả vị trí lẫn chữ: chỉ số thuần khiến React dùng lại
+           * nhầm thẻ khi câu đổi độ dài.
+           */}
+          <p
+            translate="no"
+            className="notranslate mb-5 text-2xl leading-relaxed text-[var(--text-primary)]"
+          >
+            {chuDoc.split(/(\s+)/).map((t, i) => {
+              const sach = chuanTu(t)[0];
+              const lech = khop != null && sach && !tuNghe.has(sach);
+              return (
+                <span key={`${i}-${t}`} className={lech ? 'rounded bg-red-500/25 px-0.5' : undefined}>
+                  {t}
+                </span>
+              );
+            })}
           </p>
 
           {/* Nghĩa phổ thông — CHỈ để đọc cho hiểu, KHÔNG phải thứ để đọc

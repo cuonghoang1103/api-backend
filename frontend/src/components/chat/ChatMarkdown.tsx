@@ -145,18 +145,72 @@ const BARE_ENVS = ['align\\*', 'align', 'aligned', 'gather\\*', 'gather', 'equat
  * - `\[ … \]` → `$$ … $$`, `\( … \)` → `$ … $` (remark-math không nhận
  *   hai cặp dấu này).
  */
+/**
+ * Đưa hàng rào `$$` của công thức KHỐI về đúng dạng `remark-math` hiểu: dấu
+ * mở và dấu đóng mỗi cái nằm MỘT MÌNH trên dòng của nó.
+ *
+ * ⚠️ ĐÂY LÀ CÁI BẪY LÀM VỠ CẢ CÂU TRẢ LỜI, không chỉ một công thức. Model
+ * thường viết:
+ *
+ *     $$\overrightarrow{ME}
+ *     =\left(u(1-\lambda),
+ *     \frac{uv(1-\lambda)}{1-u}\right),$$
+ *
+ * `remark-math` thấy `$$` ở ĐẦU DÒNG thì coi phần còn lại của dòng đó là
+ * METADATA (giống tên ngôn ngữ sau ```) và VỨT ĐI, rồi đi tìm một dòng CHỈ CÓ
+ * `$$` để đóng. Dòng đó thường mãi sau mới xuất hiện, nên khối này nuốt trọn
+ * mấy đoạn văn ở giữa; hàng rào đóng bị dùng nhầm lại MỞ một khối mới, nuốt
+ * tiếp đoạn sau. Hệ quả trên màn hình: mấy mảng chữ đỏ "undefined" xen giữa
+ * những khối `\begin{aligned}` hiện ra nguyên chữ LaTeX. Gặp thật 14/08 trên
+ * production, 4 khối hỏng trong một lời giải.
+ *
+ * Chỉ đụng `$$` ĐẦU DÒNG. `$$…$$` nằm giữa câu là công thức TRONG DÒNG,
+ * remark-math xử lý đúng — tách nó ra là làm hỏng thứ đang chạy tốt.
+ */
+function chuanHoaHangRao(text: string): string {
+  const ra: string[] = [];
+  let trongKhoi = false;
+  for (const dong of text.split('\n')) {
+    const cat = dong.trim();
+    if (!trongKhoi) {
+      // Mở khối: `$$` ở đầu dòng mà còn chữ phía sau ⇒ tách chữ xuống dòng.
+      const mo = /^\$\$(?!\$)(.+)$/.exec(cat);
+      if (mo) {
+        const than = mo[1].trim();
+        // `$$x=1$$` gọn trên một dòng: tách thành ba dòng cho chắc.
+        const donDong = /^(.*?)\$\$$/.exec(than);
+        if (donDong) { ra.push('$$', donDong[1].trim(), '$$'); continue; }
+        ra.push('$$', than);
+        trongKhoi = true;
+        continue;
+      }
+      if (cat === '$$') { ra.push('$$'); trongKhoi = true; continue; }
+      ra.push(dong);
+      continue;
+    }
+    // Đang trong khối: đóng khi gặp dòng chỉ có `$$`, hoặc dòng KẾT THÚC bằng `$$`.
+    if (cat === '$$') { ra.push('$$'); trongKhoi = false; continue; }
+    const dong2 = /^(.*\S)\$\$$/.exec(cat);
+    if (dong2) { ra.push(dong2[1], '$$'); trongKhoi = false; continue; }
+    ra.push(dong);
+  }
+  // Model quên đóng ⇒ tự đóng, còn hơn để nó nuốt hết phần còn lại.
+  if (trongKhoi) ra.push('$$');
+  return ra.join('\n');
+}
+
 function normalizeMath(src: string): string {
   const parts = (src || '').split(/(```[\s\S]*?```|~~~[\s\S]*?~~~)/g);
   const envRe = new RegExp(`\\\\begin\\{(${BARE_ENVS.join('|')})\\}([\\s\\S]*?)\\\\end\\{\\1\\}`, 'g');
 
   for (let i = 0; i < parts.length; i += 2) {
     // ── Bước 1: hai cặp dấu remark-math không nhận → đưa về `$`/`$$` ──
-    const doi = parts[i]
+    const doi = chuanHoaHangRao(parts[i]
       .replace(/\\\[([\s\S]*?)\\\]/g, (_m, inner: string) => `\n\n$$\n${inner.trim()}\n$$\n\n`)
       // Dấu cách ngay sau `$` làm nó KHÔNG mở được công thức trong dòng (luật
       // của remark-math), rồi `$` đó đi ghép với một `$` khác ở xa và nuốt cả
       // đoạn văn vào giữa. Cắt trắng hai đầu là hết.
-      .replace(/\\\(([\s\S]*?)\\\)/g, (_m, inner: string) => `$${inner.trim()}$`);
+      .replace(/\\\(([\s\S]*?)\\\)/g, (_m, inner: string) => `$${inner.trim()}$`));
 
     // ── Bước 2: bọc môi trường viết TRẦN — CHỈ ở phần ngoài công thức ──
     //

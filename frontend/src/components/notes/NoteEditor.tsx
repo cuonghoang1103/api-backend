@@ -33,32 +33,53 @@ import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import { fileApi } from '@/lib/api';
-import type { NoteFull } from '@/types';
-import { Check, Loader2, CloudOff, Trash2, Plus, Minus, Star, Archive, AlertCircle, Undo2, Redo2 } from 'lucide-react';
+import type { NoteFull, NoteSubjectTree } from '@/types';
+import { Check, Loader2, CloudOff, Trash2, Plus, Minus, Star, Archive, AlertCircle, Undo2, Redo2, SlidersHorizontal, ChevronRight } from 'lucide-react';
 import NoteCodeBlock from '@/components/notes/extensions/NoteCodeBlock';
 import NoteCallout from '@/components/notes/extensions/NoteCallout';
 import NoteMath from '@/components/notes/extensions/NoteMath';
 import TabIndent from '@/components/notes/extensions/TabIndent';
 import SlashMenu, { type SlashMenuRef } from '@/components/notes/SlashMenu';
 import NoteTableOfContents from '@/components/notes/NoteTableOfContents';
+import NotePropertiesPanel from '@/components/notes/NotePropertiesPanel';
 
 type SaveState = 'idle' | 'saving' | 'saved' | 'error';
 
+export type NoteSavePatch = Partial<Pick<
+  NoteFull,
+  | 'title'
+  | 'contentJson'
+  | 'contentHtml'
+  | 'tags'
+  | 'isFavorite'
+  | 'isArchived'
+  | 'needsReview'
+  | 'reviewDate'
+  | 'subjectId'
+  | 'chapterId'
+>>;
+
 interface NoteEditorProps {
   note: NoteFull;
+  tree: NoteSubjectTree[];
   /** Persist a partial update. Should be idempotent on the server. */
-  onSave: (patch: Partial<{ title: string; contentJson: Record<string, unknown> | null; contentHtml: string | null; isFavorite: boolean; isArchived: boolean; needsReview: boolean }>) => Promise<void>;
+  onSave: (patch: NoteSavePatch) => Promise<void>;
+  onDuplicate?: () => Promise<void>;
+  /** Shared editors may edit title/body but cannot move/archive/duplicate. */
+  ownerControls?: boolean;
+  contextLabel?: string;
 }
 
 const AUTOSAVE_MS = 900;
 /** Quá số ký tự này sau "/" thì coi như người dùng đang viết chữ, không gọi lệnh. */
 const SLASH_MAX_QUERY = 24;
 
-export default function NoteEditor({ note, onSave }: NoteEditorProps) {
+export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerControls = true, contextLabel }: NoteEditorProps) {
   const [title, setTitle] = useState(note.title);
   const [saveState, setSaveState] = useState<SaveState>('idle');
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
+  const [propertiesOpen, setPropertiesOpen] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const slashRef = useRef<SlashMenuRef>(null);
@@ -70,7 +91,7 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
 
   // ─── Debounced save ────────────────────────────────────────
   const queueSave = useCallback(
-    (patch: Partial<{ title: string; contentJson: Record<string, unknown> | null; contentHtml: string | null; isFavorite: boolean; isArchived: boolean; needsReview: boolean }>) => {
+    (patch: NoteSavePatch) => {
       if (saveTimer.current) clearTimeout(saveTimer.current);
       setSaveState('saving');
       saveTimer.current = setTimeout(async () => {
@@ -326,6 +347,9 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
 
   useEffect(() => () => { if (saveTimer.current) clearTimeout(saveTimer.current); }, []);
 
+  const currentSubject = tree.find((item) => item.id === note.subjectId) ?? null;
+  const currentChapter = currentSubject?.chapters.find((item) => item.id === note.chapterId) ?? null;
+
   // Undo/Redo bằng bàn phím do StarterKit (extension History) lo sẵn:
   // Mod-z / Shift-Mod-z đã có keymap ngay trên DOM của editor.
   //
@@ -370,6 +394,17 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
         </div>
       </div>
 
+      {/* Location breadcrumb — establishes page context before the title. */}
+      <nav aria-label="Vị trí ghi chú" className="mb-3 flex min-w-0 items-center gap-1 text-[12px] text-slate-500 dark:text-slate-400">
+        <span className="truncate">{contextLabel ?? currentSubject?.name ?? 'Môn học'}</span>
+        {currentChapter && (
+          <>
+            <ChevronRight className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">{currentChapter.title}</span>
+          </>
+        )}
+      </nav>
+
       {/* Title */}
       <input
         ref={titleRef}
@@ -385,7 +420,7 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
           and queueSave fires the PATCH. The debounce timer is
           cleared first so the click isn't merged with a pending
           content save. */}
-      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+      {ownerControls && <div className="mt-2 flex flex-wrap items-center gap-1.5">
         <FlagButton
           active={note.isFavorite}
           onClick={() => {
@@ -418,7 +453,29 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
           label="Lưu trữ"
           activeClass="border-slate-400/40 bg-slate-400/15 text-slate-900 dark:text-slate-100"
         />
-      </div>
+        <button
+          type="button"
+          onClick={() => setPropertiesOpen((open) => !open)}
+          aria-expanded={propertiesOpen}
+          className={`ml-auto inline-flex min-h-11 items-center gap-1.5 rounded-md border px-2.5 text-[12px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 sm:min-h-10 ${
+            propertiesOpen
+              ? 'border-teal-500/40 bg-teal-50 text-teal-800 dark:bg-teal-500/10 dark:text-teal-200'
+              : 'border-slate-200 text-slate-600 hover:bg-slate-100 dark:border-white/[0.08] dark:text-slate-300 dark:hover:bg-white/[0.05]'
+          }`}
+        >
+          <SlidersHorizontal className="h-3.5 w-3.5" />
+          Thuộc tính
+        </button>
+      </div>}
+
+      {ownerControls && propertiesOpen && onDuplicate && (
+        <NotePropertiesPanel
+          note={note}
+          tree={tree}
+          onSave={onSave}
+          onDuplicate={onDuplicate}
+        />
+      )}
 
       <div className="my-4 h-px w-full bg-slate-100 dark:bg-white/[0.06]" />
 

@@ -71,7 +71,7 @@ export async function getTree(userId: number) {
           notes: {
             // Sidebar default view hides archived; the user can flip to
             // the "Archive" filter pill to see them.
-            where: { isArchived: false },
+            where: { isArchived: false, deletedAt: null },
             orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'desc' }],
             select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, isArchived: true, needsReview: true, updatedAt: true },
           },
@@ -79,7 +79,7 @@ export async function getTree(userId: number) {
       },
       // Notes that live directly under the subject (no chapter).
       notes: {
-        where: { chapterId: null, isArchived: false },
+        where: { chapterId: null, isArchived: false, deletedAt: null },
         orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'desc' }],
         select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, isArchived: true, needsReview: true, updatedAt: true },
       },
@@ -91,7 +91,7 @@ export async function getTree(userId: number) {
 /** Recently-updated notes across all subjects (for the "Recent" rail). */
 export async function getRecentNotes(userId: number, limit = 8) {
   return prisma.note.findMany({
-    where: { userId, isArchived: false },
+    where: { userId, isArchived: false, deletedAt: null },
     orderBy: { updatedAt: 'desc' },
     take: Math.min(20, Math.max(1, limit)),
     select: { id: true, title: true, subjectId: true, chapterId: true, updatedAt: true, isPinned: true },
@@ -104,12 +104,12 @@ export async function getRecentNotes(userId: number, limit = 8) {
 // "All" (the default tree) and one of the special-purpose views
 // without having to write a fresh Prisma query in the route.
 
-export type NoteFilter = 'all' | 'favorites' | 'archive' | 'needs-review';
+export type NoteFilter = 'all' | 'favorites' | 'archive' | 'needs-review' | 'trash';
 
 const FILTER_LIMIT = 200;
 
 export async function listFilteredNotes(userId: number, filter: NoteFilter) {
-  const where: Prisma.NoteWhereInput = { userId };
+  const where: Prisma.NoteWhereInput = { userId, deletedAt: null };
   switch (filter) {
     case 'favorites':
       where.isFavorite = true;
@@ -121,6 +121,10 @@ export async function listFilteredNotes(userId: number, filter: NoteFilter) {
     case 'needs-review':
       where.needsReview = true;
       where.isArchived = false;
+      break;
+    case 'trash':
+      delete where.deletedAt;
+      where.deletedAt = { not: null };
       break;
     case 'all':
     default:
@@ -135,7 +139,7 @@ export async function listFilteredNotes(userId: number, filter: NoteFilter) {
     select: {
       id: true, title: true, subjectId: true, chapterId: true,
       isPinned: true, isFavorite: true, isArchived: true, needsReview: true,
-      updatedAt: true,
+      deletedAt: true, updatedAt: true,
     },
   });
 }
@@ -236,13 +240,153 @@ export async function createNote(userId: number, data: { subjectId?: number; cha
   // includes, child collections are undefined and the UI crashes the
   // first time the user opens the resource drawer on a freshly created
   // note (Phase 3a regression — attachments/length access blows up).
-  return prisma.note.create({
-    data: { userId, subjectId, chapterId, title: title.length ? title : 'Ghi chú mới' },
-    include: {
-      attachments: { orderBy: { sortOrder: 'asc' } },
-      links: { orderBy: { sortOrder: 'asc' } },
-      vocabEntries: { orderBy: { sortOrder: 'asc' } },
-    },
+  return prisma.$transaction(async (tx) => {
+    const note = await tx.note.create({
+      data: { userId, subjectId, chapterId, title: title.length ? title : 'Ghi chú mới' },
+    });
+    await tx.noteVersion.create({
+      data: {
+        noteId: note.id, userId, version: 1, title: note.title,
+        contentJson: Prisma.JsonNull, contentHtml: note.contentHtml,
+        tags: note.tags, origin: 'INITIAL',
+      },
+    });
+    return tx.note.findUniqueOrThrow({
+      where: { id: note.id },
+      include: {
+        attachments: { orderBy: { sortOrder: 'asc' } },
+        links: { orderBy: { sortOrder: 'asc' } },
+        vocabEntries: { orderBy: { sortOrder: 'asc' } },
+      },
+    });
+  });
+}
+
+/**
+ * Duplicate a complete note inside the same subject/chapter.
+ *
+ * The operation is one transaction so the copied page never appears
+ * half-populated. R2 objects are referenced by the new attachment rows
+ * rather than uploaded again; deleting a note only deletes its database
+ * rows, so the shared object URL remains valid for the copy.
+ */
+export async function duplicateNote(userId: number, id: number) {
+  assertId(id);
+
+  return prisma.$transaction(async (tx) => {
+    const source = await tx.note.findFirst({
+      where: { id, userId, deletedAt: null },
+      include: {
+        attachments: { orderBy: { sortOrder: 'asc' } },
+        links: { orderBy: { sortOrder: 'asc' } },
+        vocabEntries: { orderBy: { sortOrder: 'asc' } },
+      },
+    });
+    if (!source) {
+      throw new AppError('Ghi chú không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+    }
+
+    const last = await tx.note.findFirst({
+      where: { userId, subjectId: source.subjectId, chapterId: source.chapterId, deletedAt: null },
+      orderBy: { sortOrder: 'desc' },
+      select: { sortOrder: true },
+    });
+    const copyTitle = `Bản sao — ${source.title}`.slice(0, 300);
+
+    const copy = await tx.note.create({
+      data: {
+        userId,
+        subjectId: source.subjectId,
+        chapterId: source.chapterId,
+        title: copyTitle,
+        contentJson: source.contentJson === null
+          ? Prisma.JsonNull
+          : source.contentJson as Prisma.InputJsonValue,
+        contentHtml: source.contentHtml,
+        tags: source.tags,
+        isPinned: false,
+        isFavorite: source.isFavorite,
+        isArchived: false,
+        needsReview: source.needsReview,
+        reviewDate: source.reviewDate,
+        sortOrder: (last?.sortOrder ?? -1) + 1,
+      },
+      select: { id: true },
+    });
+
+    await tx.noteVersion.create({
+      data: {
+        noteId: copy.id,
+        userId,
+        version: 1,
+        title: copyTitle,
+        contentJson: source.contentJson === null
+          ? Prisma.JsonNull
+          : source.contentJson as Prisma.InputJsonValue,
+        contentHtml: source.contentHtml,
+        tags: source.tags,
+        origin: 'INITIAL',
+      },
+    });
+
+    await Promise.all([
+      source.attachments.length > 0
+        ? tx.noteAttachment.createMany({
+          data: source.attachments.map((item) => ({
+            userId,
+            noteId: copy.id,
+            subjectId: null,
+            chapterId: null,
+            fileName: item.fileName,
+            fileUrl: item.fileUrl,
+            fileType: item.fileType,
+            fileSizeBytes: item.fileSizeBytes,
+            sortOrder: item.sortOrder,
+          })),
+        })
+        : Promise.resolve(),
+      source.links.length > 0
+        ? tx.noteLink.createMany({
+          data: source.links.map((item) => ({
+            userId,
+            noteId: copy.id,
+            subjectId: null,
+            chapterId: null,
+            label: item.label,
+            url: item.url,
+            type: item.type,
+            thumbnailUrl: item.thumbnailUrl,
+            sortOrder: item.sortOrder,
+          })),
+        })
+        : Promise.resolve(),
+      source.vocabEntries.length > 0
+        ? tx.noteVocabEntry.createMany({
+          data: source.vocabEntries.map((item) => ({
+            userId,
+            noteId: copy.id,
+            term: item.term,
+            reading: item.reading,
+            meaning: item.meaning,
+            example: item.example,
+            sortOrder: item.sortOrder,
+            isKnown: item.isKnown,
+            reviewCount: item.reviewCount,
+            knownStreak: item.knownStreak,
+            lastReviewedAt: item.lastReviewedAt,
+          })),
+        })
+        : Promise.resolve(),
+    ]);
+
+    return tx.note.findUniqueOrThrow({
+      where: { id: copy.id },
+      include: {
+        attachments: { orderBy: { sortOrder: 'asc' } },
+        links: { orderBy: { sortOrder: 'asc' } },
+        vocabEntries: { orderBy: { sortOrder: 'asc' } },
+      },
+    });
   });
 }
 
@@ -293,14 +437,22 @@ export async function updateNote(
   if (data.contentHtml !== undefined) d.contentHtml = data.contentHtml == null ? null : String(data.contentHtml);
   if (data.tags !== undefined) {
     if (!Array.isArray(data.tags)) throw new AppError('tags phải là mảng', 400, 'INVALID_TAGS');
-    d.tags = data.tags.map((t) => String(t).trim().toLowerCase()).filter(Boolean).slice(0, 50);
+    d.tags = [...new Set(data.tags.map((t) => String(t).trim().toLowerCase()).filter(Boolean))].slice(0, 50);
   }
   if (data.isPinned !== undefined) d.isPinned = Boolean(data.isPinned);
   if (data.isFavorite !== undefined) d.isFavorite = Boolean(data.isFavorite);
   if (data.isArchived !== undefined) d.isArchived = Boolean(data.isArchived);
   if (data.needsReview !== undefined) d.needsReview = Boolean(data.needsReview);
   if (data.reviewDate !== undefined) {
-    d.reviewDate = data.reviewDate ? new Date(data.reviewDate) : null;
+    if (!data.reviewDate) {
+      d.reviewDate = null;
+    } else {
+      const parsed = new Date(data.reviewDate);
+      if (Number.isNaN(parsed.getTime())) {
+        throw new AppError('Ngày ôn tập không hợp lệ', 400, 'INVALID_REVIEW_DATE');
+      }
+      d.reviewDate = parsed;
+    }
   }
   if (data.sortOrder !== undefined) d.sortOrder = Math.floor(Number(data.sortOrder) || 0);
 
@@ -308,6 +460,11 @@ export async function updateNote(
   if (data.subjectId !== undefined) {
     await assertSubjectOwnership(userId, Number(data.subjectId));
     d.subjectId = Number(data.subjectId);
+    // A chapter belongs to exactly one subject. If a caller moves a
+    // note to another subject without naming a target chapter, place
+    // it at the new subject root instead of retaining a chapter from
+    // the previous subject.
+    if (data.chapterId === undefined) d.chapterId = null;
   }
   if (data.chapterId !== undefined) {
     if (data.chapterId === null) {
@@ -321,16 +478,217 @@ export async function updateNote(
 
   if (Object.keys(d).length === 0) throw new AppError('Không có trường hợp lệ để cập nhật', 400, 'EMPTY_UPDATE');
 
-  const res = await prisma.note.updateMany({ where: { id, userId }, data: d });
-  if (res.count === 0) throw new AppError('Ghi chú không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
-  return prisma.note.findUnique({ where: { id } });
+  const createsSnapshot = data.title !== undefined
+    || data.contentJson !== undefined
+    || data.contentHtml !== undefined
+    || data.tags !== undefined;
+
+  return prisma.$transaction(async (tx) => {
+    const current = await tx.note.findFirst({ where: { id, userId, deletedAt: null } });
+    if (!current) throw new AppError('Ghi chú không tồn tại, đã ở trong thùng rác hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+
+    const updated = await tx.note.update({ where: { id }, data: d });
+    if (!createsSnapshot) return updated;
+
+    // Immutable coalescing: the first content edit after a manual or
+    // initial snapshot is saved immediately. Further autosaves within
+    // five minutes update the page but do not create noisy history rows.
+    const latest = await tx.noteVersion.findFirst({
+      where: { noteId: id },
+      orderBy: { version: 'desc' },
+      select: { id: true, origin: true, createdAt: true },
+    });
+    const withinWindow = latest?.origin === 'AUTO_SAVE'
+      && Date.now() - latest.createdAt.getTime() < 5 * 60 * 1000;
+    if (withinWindow) {
+      // Coalesce in place. Overwriting the open autosave row (instead of
+      // leaving it frozen at the content it held when the window opened)
+      // keeps the newest history entry equal to the live page, so
+      // "restore the most recent version" can never silently roll the
+      // user back past edits they already saw saved.
+      await tx.noteVersion.update({
+        where: { id: latest.id },
+        data: {
+          userId,
+          title: updated.title,
+          contentJson: updated.contentJson === null
+            ? Prisma.JsonNull
+            : updated.contentJson as Prisma.InputJsonValue,
+          contentHtml: updated.contentHtml,
+          tags: updated.tags,
+        },
+      });
+      return updated;
+    }
+
+    const numbered = await tx.note.update({
+      where: { id },
+      data: { version: { increment: 1 } },
+    });
+    await tx.noteVersion.create({
+      data: {
+        noteId: id,
+        userId,
+        version: numbered.version,
+        title: numbered.title,
+        contentJson: numbered.contentJson === null
+          ? Prisma.JsonNull
+          : numbered.contentJson as Prisma.InputJsonValue,
+        contentHtml: numbered.contentHtml,
+        tags: numbered.tags,
+        origin: 'AUTO_SAVE',
+      },
+    });
+    return numbered;
+  });
 }
 
 export async function deleteNote(userId: number, id: number) {
   assertId(id);
-  const res = await prisma.note.deleteMany({ where: { id, userId } });
+  // Only `deletedAt` marks the trash. Every list/tree/search query already
+  // filters on it, so there is no need to also force `isArchived` — doing
+  // that destroyed the user's real archive flag, and restore could not tell
+  // "was archived before deletion" from "archived by the delete itself".
+  const res = await prisma.note.updateMany({
+    where: { id, userId, deletedAt: null },
+    data: { deletedAt: new Date(), isPinned: false },
+  });
   if (res.count === 0) throw new AppError('Ghi chú không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
-  return { id, deleted: true };
+  return { id, deleted: true, permanent: false };
+}
+
+export async function restoreDeletedNote(userId: number, id: number) {
+  assertId(id);
+  const res = await prisma.note.updateMany({
+    where: { id, userId, deletedAt: { not: null } },
+    data: { deletedAt: null },
+  });
+  if (res.count === 0) throw new AppError('Ghi chú không có trong thùng rác hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+  return getNote(userId, id);
+}
+
+export async function permanentlyDeleteNote(userId: number, id: number) {
+  assertId(id);
+  const res = await prisma.note.deleteMany({ where: { id, userId, deletedAt: { not: null } } });
+  if (res.count === 0) throw new AppError('Chỉ có thể xóa vĩnh viễn ghi chú đang ở trong thùng rác', 409, 'NOT_IN_TRASH');
+  return { id, deleted: true, permanent: true };
+}
+
+/** Nightly retention sweep. Child rows and versions cascade with the note. */
+export async function purgeExpiredDeletedNotes(retentionDays = 30) {
+  const safeDays = Math.max(1, Math.min(365, Math.floor(retentionDays)));
+  const cutoff = new Date(Date.now() - safeDays * 24 * 60 * 60 * 1000);
+  const result = await prisma.note.deleteMany({ where: { deletedAt: { lt: cutoff } } });
+  return result.count;
+}
+
+// ─── Immutable version history ───────────────────────────────
+
+async function ownedActiveNote(userId: number, noteId: number) {
+  assertId(noteId, 'noteId');
+  const note = await prisma.note.findFirst({ where: { id: noteId, userId, deletedAt: null } });
+  if (!note) throw new AppError('Ghi chú không tồn tại, đã ở trong thùng rác hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+  return note;
+}
+
+/**
+ * Snapshot provenance. `NoteVersion.userId` is *who wrote the snapshot*,
+ * which for a shared page is the collaborating editor rather than the
+ * owner — so it must never be used as an access filter. Authorization is
+ * `ownedActiveNote` above; the author is shown to the owner instead.
+ */
+const versionAuthorSelect = {
+  select: { id: true, username: true, displayName: true, fullName: true, avatarUrl: true },
+} as const;
+
+export async function listNoteVersions(userId: number, noteId: number) {
+  await ownedActiveNote(userId, noteId);
+  return prisma.noteVersion.findMany({
+    where: { noteId },
+    orderBy: { version: 'desc' },
+    select: {
+      id: true, version: true, title: true, origin: true, createdAt: true,
+      user: versionAuthorSelect,
+    },
+    take: 200,
+  });
+}
+
+export async function getNoteVersion(userId: number, noteId: number, version: number) {
+  await ownedActiveNote(userId, noteId);
+  assertId(version, 'version');
+  const snapshot = await prisma.noteVersion.findFirst({
+    where: { noteId, version },
+    include: { user: versionAuthorSelect },
+  });
+  if (!snapshot) throw new AppError('Phiên bản ghi chú không tồn tại', 404, 'VERSION_NOT_FOUND');
+  return snapshot;
+}
+
+export async function createManualNoteVersion(userId: number, noteId: number) {
+  assertId(noteId, 'noteId');
+  return prisma.$transaction(async (tx) => {
+    const note = await tx.note.findFirst({ where: { id: noteId, userId, deletedAt: null } });
+    if (!note) throw new AppError('Ghi chú không tồn tại, đã ở trong thùng rác hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+    const numbered = await tx.note.update({ where: { id: noteId }, data: { version: { increment: 1 } } });
+    return tx.noteVersion.create({
+      data: {
+        noteId, userId, version: numbered.version, title: numbered.title,
+        contentJson: numbered.contentJson === null ? Prisma.JsonNull : numbered.contentJson as Prisma.InputJsonValue,
+        contentHtml: numbered.contentHtml, tags: numbered.tags, origin: 'MANUAL',
+      },
+    });
+  });
+}
+
+export async function restoreNoteVersion(userId: number, noteId: number, targetVersion: number) {
+  assertId(noteId, 'noteId');
+  assertId(targetVersion, 'version');
+  return prisma.$transaction(async (tx) => {
+    const current = await tx.note.findFirst({ where: { id: noteId, userId, deletedAt: null } });
+    if (!current) throw new AppError('Ghi chú không tồn tại, đã ở trong thùng rác hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+    const target = await tx.noteVersion.findFirst({ where: { noteId, version: targetVersion } });
+    if (!target) throw new AppError('Phiên bản ghi chú không tồn tại', 404, 'VERSION_NOT_FOUND');
+
+    // Claim both version numbers with one atomic increment before writing
+    // either row. Deriving them from the value read at the top of the
+    // transaction let two concurrent restores pick the same numbers and
+    // collide on uk_note_version_note_number (a 500 instead of a restore).
+    const claimed = await tx.note.update({
+      where: { id: noteId },
+      data: { version: { increment: 2 } },
+      select: { version: true },
+    });
+    const restoredVersion = claimed.version;
+    const beforeVersion = restoredVersion - 1;
+
+    // Preserve the exact pre-restore page, then record the restored
+    // state as another immutable version. Both are undoable later.
+    await tx.noteVersion.create({
+      data: {
+        noteId, userId, version: beforeVersion, title: current.title,
+        contentJson: current.contentJson === null ? Prisma.JsonNull : current.contentJson as Prisma.InputJsonValue,
+        contentHtml: current.contentHtml, tags: current.tags, origin: 'BEFORE_RESTORE',
+      },
+    });
+    const restored = await tx.note.update({
+      where: { id: noteId },
+      data: {
+        title: target.title,
+        contentJson: target.contentJson === null ? Prisma.JsonNull : target.contentJson as Prisma.InputJsonValue,
+        contentHtml: target.contentHtml,
+        tags: target.tags,
+      },
+    });
+    await tx.noteVersion.create({
+      data: {
+        noteId, userId, version: restoredVersion, title: restored.title,
+        contentJson: restored.contentJson === null ? Prisma.JsonNull : restored.contentJson as Prisma.InputJsonValue,
+        contentHtml: restored.contentHtml, tags: restored.tags, origin: 'RESTORE',
+      },
+    });
+    return restored;
+  });
 }
 
 // ─── Reorder (drag-and-drop) ─────────────────────────────────
@@ -362,7 +720,7 @@ export function reorderChapters(userId: number, subjectId: number, orderedIds: u
 
 export function reorderNotes(userId: number, orderedIds: unknown) {
   return applyOrder(orderedIds, (id, order) =>
-    prisma.note.updateMany({ where: { id, userId }, data: { sortOrder: order } }),
+    prisma.note.updateMany({ where: { id, userId, deletedAt: null }, data: { sortOrder: order } }),
   );
 }
 
@@ -379,7 +737,7 @@ async function resolveParent(userId: number, p: { noteId?: number | null; subjec
     throw new AppError('Phải gắn vào đúng một ghi chú hoặc một môn học', 400, 'INVALID_PARENT');
   }
   if (hasNote) {
-    const n = await prisma.note.findFirst({ where: { id: Number(p.noteId), userId }, select: { id: true } });
+    const n = await prisma.note.findFirst({ where: { id: Number(p.noteId), userId, deletedAt: null }, select: { id: true } });
     if (!n) throw new AppError('Ghi chú không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
     return { noteId: n.id, subjectId: null };
   }
@@ -492,7 +850,7 @@ export async function deleteLink(userId: number, id: number) {
 /** Verify a note belongs to the user. Used before touching vocab. */
 async function assertNoteOwnership(userId: number, noteId: number): Promise<void> {
  assertId(noteId, 'noteId');
- const ok = await prisma.note.findFirst({ where: { id: noteId, userId }, select: { id: true } });
+ const ok = await prisma.note.findFirst({ where: { id: noteId, userId, deletedAt: null }, select: { id: true } });
  if (!ok) throw new AppError('Ghi chú không tồn tại hoặc không thuộc về bạn', 404, 'NOT_FOUND');
 }
 
@@ -592,7 +950,7 @@ export async function searchNotes(
   opts: { q?: string; subjectId?: number; tag?: string; includeArchived?: boolean },
 ) {
   const q = (opts.q ?? '').trim();
-  const and: Prisma.NoteWhereInput[] = [{ userId }];
+  const and: Prisma.NoteWhereInput[] = [{ userId, deletedAt: null }];
   if (!opts.includeArchived) and.push({ isArchived: false });
   if (opts.subjectId) and.push({ subjectId: Number(opts.subjectId) });
   if (opts.tag) and.push({ tags: { has: String(opts.tag).toLowerCase() } });
@@ -617,7 +975,7 @@ export async function searchNotes(
 
 /** Distinct tags across the user's notes (for the search tag filter). */
 export async function listTags(userId: number): Promise<string[]> {
-  const rows = await prisma.note.findMany({ where: { userId }, select: { tags: true } });
+  const rows = await prisma.note.findMany({ where: { userId, deletedAt: null }, select: { tags: true } });
   const set = new Set<string>();
   rows.forEach((r) => r.tags.forEach((t) => set.add(t)));
   return Array.from(set).sort();

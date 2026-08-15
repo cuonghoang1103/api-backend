@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronRight, ChevronDown, Loader2,
-  FolderOpen, FileText, Eye, Edit3, Users,
+  FolderOpen, FileText, Eye, Edit3, Users, MessageCircle,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { noteShareApi, type NoteSharedSummary } from '@/lib/api';
@@ -197,13 +197,17 @@ export default function NotesSharedWithMe({
                 {/* Permission badge */}
                 <span className={cn(
                   'shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-medium',
-                  share.permission === 'edit'
+                  share.permission === 'editor' || share.permission === 'edit'
                     ? 'bg-emerald-500/10 text-emerald-400'
-                    : 'bg-slate-500/10 text-slate-400'
+                    : share.permission === 'commenter' ? 'bg-sky-500/10 text-sky-400' : 'bg-slate-500/10 text-slate-400'
                 )}>
-                  {share.permission === 'edit' ? (
+                  {share.permission === 'editor' || share.permission === 'edit' ? (
                     <span className="flex items-center gap-0.5">
                       <Edit3 className="h-2.5 w-2.5" /> Sửa
+                    </span>
+                  ) : share.permission === 'commenter' ? (
+                    <span className="flex items-center gap-0.5">
+                      <MessageCircle className="h-2.5 w-2.5" /> Bình luận
                     </span>
                   ) : (
                     <span className="flex items-center gap-0.5">

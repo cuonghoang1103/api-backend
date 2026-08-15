@@ -30,6 +30,14 @@ import {
   checkNoteAccess,
 } from '../services/notesShare.service.js';
 import type { ApiResponse } from '../types/index.js';
+import {
+  createNoteComment,
+  deleteNoteComment,
+  listNoteComments,
+  setNoteCommentResolved,
+  updateNoteComment,
+  updateSharedNoteContent,
+} from '../services/notesCollaboration.service.js';
 
 const router = Router();
 
@@ -107,7 +115,7 @@ router.get('/received/:subjectId', async (req: any, res: Response<ApiResponse>, 
           orderBy: { sortOrder: 'asc' },
           include: {
             notes: {
-              where: access.isOwner ? {} : { isArchived: false },
+              where: { deletedAt: null, ...(access.isOwner ? {} : { isArchived: false }) },
               orderBy: { sortOrder: 'asc' },
             },
           },
@@ -115,6 +123,7 @@ router.get('/received/:subjectId', async (req: any, res: Response<ApiResponse>, 
         notes: {
           where: {
             chapterId: null,
+            deletedAt: null,
             ...(access.isOwner ? {} : { isArchived: false }),
           },
           orderBy: { sortOrder: 'asc' },
@@ -147,11 +156,13 @@ router.get('/received/:subjectId/notes/:noteId', async (req: any, res: Response<
       where: {
         id: noteId,
         subjectId: subjectId,
+        deletedAt: null,
         ...(access.isOwner ? {} : { isArchived: false }),
       },
       include: {
         attachments: true,
         links: true,
+        vocabEntries: { orderBy: { sortOrder: 'asc' } },
       },
     });
     if (!note) {
@@ -168,6 +179,62 @@ router.get('/received/:subjectId/notes/:noteId', async (req: any, res: Response<
   } catch (error) {
     next(error);
   }
+});
+
+// Shared editing is deliberately narrow: editor/owner may change title,
+// rich content and tags. Structural moves, archive/delete and resources
+// remain owner-only through the regular Notes routes.
+router.patch('/received/:subjectId/notes/:noteId', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const subjectId = Number(req.params.subjectId);
+    const noteId = Number(req.params.noteId);
+    const note = await updateSharedNoteContent(req.user.userId, subjectId, noteId, req.body ?? {});
+    const access = await checkNoteAccess(req.user.userId, subjectId);
+    res.json({ success: true, data: { ...note, myPermission: access.permission, isOwner: access.isOwner } });
+  } catch (error) { next(error); }
+});
+
+// ─── Page discussions ─────────────────────────────────────────
+router.get('/notes/:noteId/comments', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await listNoteComments(req.user.userId, Number(req.params.noteId), String(req.query.resolved ?? 'true') !== 'false');
+    res.json({ success: true, data });
+  } catch (error) { next(error); }
+});
+
+router.post('/notes/:noteId/comments', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const comment = await createNoteComment(req.user.userId, Number(req.params.noteId), req.body ?? {});
+    res.status(201).json({ success: true, data: comment });
+  } catch (error) { next(error); }
+});
+
+router.patch('/comments/:commentId', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const comment = await updateNoteComment(req.user.userId, Number(req.params.commentId), req.body?.content);
+    res.json({ success: true, data: comment });
+  } catch (error) { next(error); }
+});
+
+router.post('/comments/:commentId/resolve', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const comment = await setNoteCommentResolved(req.user.userId, Number(req.params.commentId), true);
+    res.json({ success: true, data: comment });
+  } catch (error) { next(error); }
+});
+
+router.post('/comments/:commentId/reopen', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const comment = await setNoteCommentResolved(req.user.userId, Number(req.params.commentId), false);
+    res.json({ success: true, data: comment });
+  } catch (error) { next(error); }
+});
+
+router.delete('/comments/:commentId', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await deleteNoteComment(req.user.userId, Number(req.params.commentId));
+    res.json({ success: true, data: result });
+  } catch (error) { next(error); }
 });
 
 // ─── GET /api/v1/notes-shares/subject/:subjectId ──

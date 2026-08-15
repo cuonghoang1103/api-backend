@@ -22,9 +22,16 @@ import {
   deleteChapter,
   reorderChapters,
   createNote,
+  duplicateNote,
   getNote,
   updateNote,
   deleteNote,
+  restoreDeletedNote,
+  permanentlyDeleteNote,
+  listNoteVersions,
+  getNoteVersion,
+  createManualNoteVersion,
+  restoreNoteVersion,
   reorderNotes,
   getSubject,
   addAttachment,
@@ -129,7 +136,7 @@ router.delete('/chapters/:id', async (req: Request, res: Response<ApiResponse>, 
 router.get('/notes/filter', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const raw = String(req.query.f ?? 'all').toLowerCase();
-    const filter: NoteFilter = (['all', 'favorites', 'archive', 'needs-review'] as const).includes(raw as NoteFilter)
+    const filter: NoteFilter = (['all', 'favorites', 'archive', 'needs-review', 'trash'] as const).includes(raw as NoteFilter)
       ? (raw as NoteFilter)
       : 'all';
     const notes = await listFilteredNotes(req.userId!, filter);
@@ -144,10 +151,59 @@ router.post('/notes', async (req: Request, res: Response<ApiResponse>, next) => 
   } catch (err) { next(err); }
 });
 
+router.post('/notes/:id/duplicate', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const note = await duplicateNote(req.userId!, Number(req.params.id));
+    res.status(201).json({ success: true, data: note });
+  } catch (err) { next(err); }
+});
+
 router.patch('/notes/reorder', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const result = await reorderNotes(req.userId!, req.body?.orderedIds);
     res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+router.post('/notes/:id/restore', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const note = await restoreDeletedNote(req.userId!, Number(req.params.id));
+    res.json({ success: true, data: note });
+  } catch (err) { next(err); }
+});
+
+router.delete('/notes/:id/permanent', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const result = await permanentlyDeleteNote(req.userId!, Number(req.params.id));
+    res.json({ success: true, data: result });
+  } catch (err) { next(err); }
+});
+
+router.get('/notes/:id/versions', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const versions = await listNoteVersions(req.userId!, Number(req.params.id));
+    res.json({ success: true, data: versions });
+  } catch (err) { next(err); }
+});
+
+router.get('/notes/:id/versions/:version', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const snapshot = await getNoteVersion(req.userId!, Number(req.params.id), Number(req.params.version));
+    res.json({ success: true, data: snapshot });
+  } catch (err) { next(err); }
+});
+
+router.post('/notes/:id/versions', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const snapshot = await createManualNoteVersion(req.userId!, Number(req.params.id));
+    res.status(201).json({ success: true, data: snapshot });
+  } catch (err) { next(err); }
+});
+
+router.post('/notes/:id/versions/:version/restore', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const note = await restoreNoteVersion(req.userId!, Number(req.params.id), Number(req.params.version));
+    res.json({ success: true, data: note });
   } catch (err) { next(err); }
 });
 

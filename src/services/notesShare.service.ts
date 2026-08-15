@@ -3,12 +3,13 @@
  * ======================================
  *
  * Lets user A share a NoteSubject (folder) with user B at
- * view or edit granularity. Shares are private — the recipient
+ * viewer / commenter / editor granularity. Shares are private — the recipient
  * must be authenticated and have an active share record.
  *
  * Permission levels:
- *   - "view" : read-only access to the subject + all chapters + notes
- *   - "edit"  : can create/edit/delete notes within the shared subject
+ *   - "viewer"   : read-only access
+ *   - "commenter": read + page discussions
+ *   - "editor"   : comment + edit note title/content/tags
  *
  * Two models:
  *   - NoteSubjectShare     : owner-side (who has access, permission level)
@@ -20,13 +21,18 @@ import { AppError } from '../middleware/errorHandler.js';
 import { notifyNoteShare } from './notification.service.js';
 
 /** Permission values stored in `note_subject_shares.permission`. */
-export const NOTE_SHARE_PERMISSIONS = ['view', 'edit'] as const;
+export const NOTE_SHARE_PERMISSIONS = ['viewer', 'commenter', 'editor'] as const;
 export type NoteSharePermission = (typeof NOTE_SHARE_PERMISSIONS)[number];
+export type NoteAccessRole = 'owner' | NoteSharePermission;
 
 function safePermission(p: string): NoteSharePermission {
-  return (NOTE_SHARE_PERMISSIONS as readonly string[]).includes(p)
-    ? (p as NoteSharePermission)
-    : 'view';
+  const normalized = String(p ?? '').toLowerCase();
+  // Read legacy values safely before the migration is applied.
+  if (normalized === 'view') return 'viewer';
+  if (normalized === 'edit') return 'editor';
+  return (NOTE_SHARE_PERMISSIONS as readonly string[]).includes(normalized)
+    ? (normalized as NoteSharePermission)
+    : 'viewer';
 }
 
 // ─── Resolve recipient ──────────────────────────────────────────
@@ -122,7 +128,7 @@ export async function createNoteShare(
       subjectId: input.subjectId,
       ownerId,
       recipientId: resolvedRecipientId,
-      permission: safePermission(input.permission ?? 'view'),
+      permission: safePermission(input.permission ?? 'viewer'),
       note: input.note ?? null,
     },
     include: {
@@ -226,7 +232,7 @@ export async function listSharedWithMe(recipientId: number) {
             select: { id: true, title: true },
           },
           notes: {
-            where: { isArchived: false },
+            where: { isArchived: false, deletedAt: null },
             orderBy: { sortOrder: 'asc' },
             select: { id: true, title: true, updatedAt: true },
           },
@@ -243,8 +249,9 @@ export async function listSharedWithMe(recipientId: number) {
 
 export async function checkNoteAccess(userId: number, subjectId: number): Promise<{
   hasAccess: boolean;
-  permission: NoteSharePermission | null;
+  permission: NoteAccessRole | null;
   isOwner: boolean;
+  ownerId: number;
 }> {
   // Check if owner
   const subject = await prisma.noteSubject.findUnique({
@@ -255,7 +262,7 @@ export async function checkNoteAccess(userId: number, subjectId: number): Promis
     throw new AppError('Subject not found', 404, 'SUBJECT_NOT_FOUND');
   }
   if (subject.userId === userId) {
-    return { hasAccess: true, permission: 'edit', isOwner: true };
+    return { hasAccess: true, permission: 'owner', isOwner: true, ownerId: subject.userId };
   }
 
   // Check for active share
@@ -265,13 +272,40 @@ export async function checkNoteAccess(userId: number, subjectId: number): Promis
     },
   });
   if (!share) {
-    return { hasAccess: false, permission: null, isOwner: false };
+    return { hasAccess: false, permission: null, isOwner: false, ownerId: subject.userId };
   }
   return {
     hasAccess: true,
-    permission: share.permission as NoteSharePermission,
+    permission: safePermission(share.permission),
     isOwner: false,
+    ownerId: subject.userId,
   };
+}
+
+/** Resolve access from a note id, then enforce one role hierarchy everywhere. */
+export async function resolveNoteAccess(userId: number, noteId: number) {
+  const note = await prisma.note.findFirst({
+    where: { id: noteId, deletedAt: null },
+    select: { id: true, subjectId: true, userId: true, isArchived: true },
+  });
+  if (!note) throw new AppError('Note not found', 404, 'NOTE_NOT_FOUND');
+  const access = await checkNoteAccess(userId, note.subjectId);
+  const permission = access.permission;
+  if (!access.hasAccess || !permission) {
+    throw new AppError('You do not have access to this note', 403, 'ACCESS_DENIED');
+  }
+  if (note.isArchived && !access.isOwner) {
+    throw new AppError('Archived notes are only visible to the owner', 403, 'ARCHIVED_NOTE');
+  }
+  return { ...access, permission, noteId: note.id, subjectId: note.subjectId };
+}
+
+export function canCommentOnNote(role: NoteAccessRole): boolean {
+  return role === 'owner' || role === 'editor' || role === 'commenter';
+}
+
+export function canEditSharedNote(role: NoteAccessRole): boolean {
+  return role === 'owner' || role === 'editor';
 }
 
 // ─── Update share permission ───────────────────────────────────

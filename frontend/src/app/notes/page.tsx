@@ -8,14 +8,14 @@
 
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight } from 'lucide-react';
+import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight, History, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { notesApi, noteShareApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import type { NoteSubjectTree, NoteRecent, NoteFull, NoteSubjectFull, NoteTab } from '@/types';
-import type { NoteSharedSubjectFull } from '@/lib/api';
+import type { NoteSharedFull, NoteSharedSubjectFull } from '@/lib/api';
 import NotesSidebar from '@/components/notes/NotesSidebar';
-import NoteEditor from '@/components/notes/NoteEditor';
+import NoteEditor, { type NoteSavePatch } from '@/components/notes/NoteEditor';
 import SharedNoteViewer from '@/components/notes/SharedNoteViewer';
 import NoteResourcePanel from '@/components/notes/NoteResourcePanel';
 import VocabTable from '@/components/notes/VocabTable';
@@ -24,6 +24,9 @@ import SubjectView from '@/components/notes/SubjectView';
 import NotesSearch from '@/components/notes/NotesSearch';
 import NotesShareManagerModal from '@/components/notes/NotesShareManagerModal';
 import NotesSharedWithMe from '@/components/notes/NotesSharedWithMe';
+import DeletedNoteView from '@/components/notes/DeletedNoteView';
+import NoteVersionHistory from '@/components/notes/NoteVersionHistory';
+import NoteCommentsPanel from '@/components/notes/NoteCommentsPanel';
 import { exportNoteAsPdf } from '@/lib/notesPdf';
 import { NotesThemeProvider, useNotesTheme } from '@/components/notes/NotesThemeProvider';
 import { Sparkles } from 'lucide-react';
@@ -182,6 +185,10 @@ function NotesPageInner() {
   const [resourceOpen, setResourceOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [trashAction, setTrashAction] = useState<'restore' | 'delete' | null>(null);
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [focusCommentId, setFocusCommentId] = useState<number | null>(null);
 
   // ─── PART 1: Multi-tab state ──────────────────────────────────
   const [openTabs, setOpenTabs] = useState<NoteTab[]>([]);
@@ -279,7 +286,7 @@ function NotesPageInner() {
   // view; the other three flatten the matching notes into a single
   // list (favorites / archive / needs-review) so the user can act
   // on them in bulk without drilling into each subject.
-  const [filter, setFilter] = useState<'tree' | 'favorites' | 'archive' | 'needs-review'>('tree');
+  const [filter, setFilter] = useState<'tree' | 'favorites' | 'archive' | 'needs-review' | 'trash'>('tree');
   const [filteredNotes, setFilteredNotes] = useState<import('@/types').NoteSummary[]>([]);
 
   // Phase 4: Share modal state
@@ -288,7 +295,7 @@ function NotesPageInner() {
 
   // Phase 4: Shared with me state
   const [sharedSubject, setSharedSubject] = useState<NoteSharedSubjectFull | null>(null);
-  const [sharedSelectedNote, setSharedSelectedNote] = useState<any | null>(null);
+  const [sharedSelectedNote, setSharedSelectedNote] = useState<NoteSharedFull | null>(null);
 
   const handleOpenShare = useCallback((subject: NoteSubjectTree) => {
     setSharingSubject(subject);
@@ -353,6 +360,8 @@ function NotesPageInner() {
   // ─── Selection ─────────────────────────────────────────────
   const selectNote = useCallback(async (id: number) => {
     setDrawerOpen(false);
+    setHistoryOpen(false);
+    setResourceOpen(false);
     setSubjectView(null);
     setSharedSubject(null); // Close shared subject view
     setSharedSelectedNote(null);
@@ -364,6 +373,34 @@ function NotesPageInner() {
       openTab('note', id, note.title);
     } catch { /* note may have been deleted; ignore */ }
   }, [openTab]);
+
+  // Bell notifications deep-link to /notes?note=ID&comment=ID.
+  const commentDeepLinkHandled = useRef(false);
+  useEffect(() => {
+    if (!isAuthenticated || loading || commentDeepLinkHandled.current) return;
+    const params = new URLSearchParams(window.location.search);
+    const noteId = Number(params.get('note'));
+    const sharedSubjectId = Number(params.get('sharedSubject'));
+    const sharedNoteId = Number(params.get('sharedNote'));
+    const commentId = Number(params.get('comment'));
+    const isOwnedLink = Number.isInteger(noteId) && noteId > 0;
+    const isSharedLink = Number.isInteger(sharedSubjectId) && sharedSubjectId > 0
+      && Number.isInteger(sharedNoteId) && sharedNoteId > 0;
+    if (!isOwnedLink && !isSharedLink) return;
+    commentDeepLinkHandled.current = true;
+    const openTarget = isOwnedLink
+      ? selectNote(noteId)
+      : handleOpenSharedSubject(sharedSubjectId).then(() => handleOpenSharedNote(sharedSubjectId, sharedNoteId));
+    void openTarget.then(() => {
+      setFocusCommentId(Number.isInteger(commentId) && commentId > 0 ? commentId : null);
+      setCommentsOpen(true);
+    }).catch(() => {
+      // The note may have been deleted or the share revoked since the
+      // notification was sent. Land on /notes instead of throwing an
+      // unhandled rejection into an otherwise working page.
+      toast.error('Không mở được ghi chú từ thông báo');
+    });
+  }, [isAuthenticated, loading, selectNote, handleOpenSharedSubject, handleOpenSharedNote]);
 
   const openSubject = useCallback(async (id: number) => {
     setDrawerOpen(false);
@@ -434,9 +471,47 @@ function NotesPageInner() {
  await notesApi.deleteChapter(id); await refreshTree();
  }, [refreshTree]);
  const delNote = useCallback(async (id: number) => {
- if (!confirm('Xoá ghi chú này?')) return;
- await notesApi.deleteNote(id); setSelected((s) => (s?.id === id ? null : s)); await refreshTree();
- }, [refreshTree]);
+ if (!confirm('Đưa ghi chú này vào Thùng rác? Bạn có thể khôi phục trong 30 ngày.')) return;
+ await notesApi.deleteNote(id);
+ setSelected((s) => (s?.id === id ? null : s));
+ await refreshTree();
+ if (filter !== 'tree') {
+   const res = await notesApi.getFilteredNotes(filter);
+   setFilteredNotes(res.data.data.notes);
+ }
+ toast.success('Đã chuyển ghi chú vào Thùng rác');
+ }, [refreshTree, filter]);
+
+ const restoreDeleted = useCallback(async () => {
+   if (!selected || !selected.deletedAt || trashAction) return;
+   setTrashAction('restore');
+   try {
+     const res = await notesApi.restoreNote(selected.id);
+     setSelected(res.data.data);
+     await refreshTree();
+     const trash = await notesApi.getFilteredNotes('trash');
+     setFilteredNotes(trash.data.data.notes);
+     setFilter('tree');
+     toast.success('Đã khôi phục ghi chú');
+   } catch { toast.error('Không thể khôi phục ghi chú'); }
+   finally { setTrashAction(null); }
+ }, [selected, trashAction, refreshTree]);
+
+ const deletePermanently = useCallback(async () => {
+   if (!selected || !selected.deletedAt || trashAction) return;
+   if (!confirm('Xóa vĩnh viễn ghi chú này? Hành động này không thể hoàn tác.')) return;
+   setTrashAction('delete');
+   try {
+     const id = selected.id;
+     await notesApi.permanentlyDeleteNote(id);
+     setSelected(null);
+     closeTab(makeTabId('note', id));
+     const trash = await notesApi.getFilteredNotes('trash');
+     setFilteredNotes(trash.data.data.notes);
+     toast.success('Đã xóa vĩnh viễn ghi chú');
+   } catch { toast.error('Không thể xóa vĩnh viễn ghi chú'); }
+   finally { setTrashAction(null); }
+ }, [selected, trashAction, closeTab]);
 
  // ─── Reorder (Phase 2.5) ──────────────────────────────────
  // Each reorder callback optimistically applies the new order to
@@ -496,9 +571,18 @@ function NotesPageInner() {
  }, [refreshTree]);
 
   // ─── Editor save ───────────────────────────────────────────
-  const saveNote = useCallback(async (patch: Partial<{ title: string; contentJson: Record<string, unknown> | null; contentHtml: string | null; isFavorite: boolean; isArchived: boolean; needsReview: boolean }>) => {
+  const saveNote = useCallback(async (patch: NoteSavePatch) => {
     if (!selected) return;
-    await notesApi.updateNote(selected.id, patch);
+    const res = await notesApi.updateNote(selected.id, patch);
+    const updatedAt = res.data.data?.updatedAt ?? new Date().toISOString();
+    // Keep every visible page property in sync immediately. Child
+    // collections stay on the current object because updateNote does
+    // not mutate them and intentionally returns a compact row.
+    setSelected((current) => (
+      current && current.id === selected.id
+        ? { ...current, ...patch, updatedAt }
+        : current
+    ));
     if (patch.title !== undefined) {
       // Keep the sidebar + selected title in sync without a full refetch.
       const t = patch.title;
@@ -508,6 +592,9 @@ function NotesPageInner() {
         notes: subj.notes.map((n) => (n.id === selected.id ? { ...n, title: t } : n)),
         chapters: subj.chapters.map((ch) => ({ ...ch, notes: ch.notes.map((n) => (n.id === selected.id ? { ...n, title: t } : n)) })),
       })));
+      setOpenTabs((prev) => prev.map((tab) => (
+        tab.id === makeTabId('note', selected.id) ? { ...tab, title: t } : tab
+      )));
     }
   // Phase 3d — keep the open note + tree in sync after a flag toggle.
   // We mutate the local copies so the sidebar's flat list view
@@ -532,7 +619,37 @@ function NotesPageInner() {
       } catch { /* ignore */ }
     }
   }
-  }, [selected, filter]);
+  if (patch.subjectId !== undefined || patch.chapterId !== undefined) {
+    await refreshTree();
+  }
+  }, [selected, filter, refreshTree]);
+
+  const saveSharedNote = useCallback(async (patch: NoteSavePatch) => {
+    if (!sharedSelectedNote || !sharedSubject) return;
+    const editable = {
+      ...(patch.title !== undefined ? { title: patch.title } : {}),
+      ...(patch.contentJson !== undefined ? { contentJson: patch.contentJson } : {}),
+      ...(patch.contentHtml !== undefined ? { contentHtml: patch.contentHtml } : {}),
+      ...(patch.tags !== undefined ? { tags: patch.tags } : {}),
+    };
+    const response = await noteShareApi.updateSharedNote(sharedSubject.id, sharedSelectedNote.id, editable);
+    setSharedSelectedNote(response.data.data);
+  }, [sharedSelectedNote, sharedSubject]);
+
+  const duplicateSelectedNote = useCallback(async () => {
+    if (!selected) return;
+    try {
+      const res = await notesApi.duplicateNote(selected.id);
+      const copy = res.data.data;
+      await refreshTree();
+      setSelected(copy);
+      openTab('note', copy.id, copy.title);
+      toast.success('Đã nhân bản đầy đủ ghi chú');
+    } catch (error) {
+      toast.error('Không thể nhân bản ghi chú');
+      throw error;
+    }
+  }, [selected, refreshTree, openTab]);
 
   // Phase 3d — PDF export. Fetch the canonical HTML from the
   // server (so the editor's in-flight edits stay out of the
@@ -701,8 +818,26 @@ function NotesPageInner() {
                 </button>
               ))}
             </div>
-            {selected && (
+            {(selected && !selected.deletedAt || sharedSelectedNote) && (
+              <button
+                onClick={() => { setFocusCommentId(null); setCommentsOpen(true); }}
+                title="Bình luận và thảo luận"
+                aria-label="Mở bình luận và thảo luận"
+                className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:text-slate-300 dark:hover:bg-white/[0.05]"
+              >
+                <MessageCircle className="h-[18px] w-[18px]" />
+              </button>
+            )}
+            {selected && !selected.deletedAt && (
               <>
+                <button
+                  onClick={() => setHistoryOpen(true)}
+                  title="Lịch sử phiên bản"
+                  aria-label="Lịch sử phiên bản"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05]"
+                >
+                  <History className="h-[18px] w-[18px]" />
+                </button>
                 <button
                   onClick={exportPdf}
                   disabled={pdfBusy}
@@ -768,18 +903,39 @@ function NotesPageInner() {
                 <ChevronRight className="h-4 w-4 rotate-180" />
                 Quay lại danh sách
               </button>
-              {/* key: remount the viewer per note — TipTap's useEditor only
-                  loads `content` on mount, so switching note 1 → note 2
-                  without a key kept showing note 1's body. */}
-              <SharedNoteViewer
-                key={sharedSelectedNote.id}
-                title={sharedSelectedNote.title}
-                contentJson={sharedSelectedNote.contentJson as Record<string, unknown> | null}
-                contentHtml={sharedSelectedNote.contentHtml}
-                isFavorite={sharedSelectedNote.isFavorite}
-                needsReview={sharedSelectedNote.needsReview}
-                isArchived={sharedSelectedNote.isArchived}
-              />
+              {sharedSelectedNote.myPermission === 'editor' || sharedSelectedNote.myPermission === 'owner' ? (
+                <>
+                  <div className="mx-auto mt-4 max-w-[760px] px-4 sm:px-6">
+                    <span className="inline-flex rounded-full border border-emerald-300 bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300">Bạn có quyền chỉnh sửa · mọi thay đổi được lưu vào lịch sử</span>
+                  </div>
+                  <NoteEditor
+                    key={`shared-edit-${sharedSelectedNote.id}`}
+                    note={sharedSelectedNote}
+                    tree={[]}
+                    onSave={saveSharedNote}
+                    ownerControls={false}
+                    contextLabel={sharedSubject?.name ?? 'Được chia sẻ'}
+                  />
+                </>
+              ) : (
+                <>
+                  <div className="mx-auto mt-4 max-w-[760px] px-4 sm:px-6">
+                    <span className="inline-flex rounded-full border border-slate-300 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-600 dark:border-white/[0.1] dark:bg-white/[0.04] dark:text-slate-300">
+                      {sharedSelectedNote.myPermission === 'commenter' ? 'Bạn có thể xem và bình luận' : 'Bạn chỉ có quyền xem'}
+                    </span>
+                  </div>
+                  {/* key remounts TipTap when switching shared notes. */}
+                  <SharedNoteViewer
+                    key={sharedSelectedNote.id}
+                    title={sharedSelectedNote.title}
+                    contentJson={sharedSelectedNote.contentJson}
+                    contentHtml={sharedSelectedNote.contentHtml}
+                    isFavorite={sharedSelectedNote.isFavorite}
+                    needsReview={sharedSelectedNote.needsReview}
+                    isArchived={sharedSelectedNote.isArchived}
+                  />
+                </>
+              )}
             </>
           ) : sharedSubject ? (
             // Shared subject view - full width for better readability
@@ -803,11 +959,13 @@ function NotesPageInner() {
                   {sharedSubject.name}
                 </h1>
                 <span className={`ml-2 rounded-full px-2 py-0.5 text-xs font-medium ${
-                  sharedSubject.myPermission === 'edit'
+                  sharedSubject.myPermission === 'editor' || sharedSubject.myPermission === 'owner'
                     ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
                     : 'bg-slate-100 text-slate-600 dark:bg-slate-500/15 dark:text-slate-300'
                 }`}>
-                  {sharedSubject.myPermission === 'edit' ? '✏️ Chỉnh sửa' : '👁️ Xem'}
+                  {sharedSubject.myPermission === 'editor' || sharedSubject.myPermission === 'owner'
+                    ? '✏️ Chỉnh sửa'
+                    : sharedSubject.myPermission === 'commenter' ? '💬 Bình luận' : '👁️ Xem'}
                 </span>
               </div>
 
@@ -885,8 +1043,22 @@ function NotesPageInner() {
             </div>
           ) : subjectView ? (
             <SubjectView subject={subjectView} treeSubject={treeSubjectFor(subjectView.id)} onChanged={refreshSubject} onSelectNote={selectNote} onAddNote={addNote} />
+          ) : selected?.deletedAt ? (
+            <DeletedNoteView
+              note={selected}
+              restoring={trashAction === 'restore'}
+              deleting={trashAction === 'delete'}
+              onRestore={restoreDeleted}
+              onDeletePermanently={deletePermanently}
+            />
           ) : selected ? (
-            <NoteEditor key={selected.id} note={selected} onSave={saveNote} />
+            <NoteEditor
+              key={selected.id}
+              note={selected}
+              tree={tree}
+              onSave={saveNote}
+              onDuplicate={duplicateSelectedNote}
+            />
           ) : (
             <div className="flex h-[60vh] flex-col items-center justify-center px-6 text-center text-slate-500">
               <NotebookPen className="mb-3 h-9 w-9 text-teal-400/50" />
@@ -930,6 +1102,34 @@ function NotesPageInner() {
               </div>
             </motion.aside>
           </>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {historyOpen && selected && !selected.deletedAt && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <NoteVersionHistory
+              note={selected}
+              onClose={() => setHistoryOpen(false)}
+              onRestored={(restored) => {
+                setSelected((current) => current ? { ...current, ...restored } : restored);
+                void refreshTree();
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {commentsOpen && ((selected && !selected.deletedAt) || sharedSelectedNote) && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <NoteCommentsPanel
+              noteId={(sharedSelectedNote ?? selected)!.id}
+              noteTitle={(sharedSelectedNote ?? selected)!.title}
+              focusCommentId={focusCommentId}
+              onClose={() => { setCommentsOpen(false); setFocusCommentId(null); }}
+            />
+          </motion.div>
         )}
       </AnimatePresence>
 

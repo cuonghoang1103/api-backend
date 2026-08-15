@@ -410,6 +410,8 @@ export const notesApi = {
   // Notes
   createNote: (data: { subjectId: number; chapterId?: number | null; title?: string }) =>
     api.post<{ data: import('@/types').NoteFull }>('/notes/notes', data),
+  duplicateNote: (id: number) =>
+    api.post<{ data: import('@/types').NoteFull }>(`/notes/notes/${id}/duplicate`),
   getNote: (id: number) =>
     api.get<{ data: import('@/types').NoteFull }>(`/notes/notes/${id}`),
   updateNote: (id: number, data: Partial<{
@@ -428,14 +430,28 @@ export const notesApi = {
   }>) =>
     api.patch<{ data: import('@/types').NoteFull }>(`/notes/notes/${id}`, data),
   deleteNote: (id: number) =>
-    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes/notes/${id}`),
+    api.delete<{ data: { id: number; deleted: boolean; permanent: false } }>(`/notes/notes/${id}`),
+  restoreNote: (id: number) =>
+    api.post<{ data: import('@/types').NoteFull }>(`/notes/notes/${id}/restore`),
+  permanentlyDeleteNote: (id: number) =>
+    api.delete<{ data: { id: number; deleted: boolean; permanent: true } }>(`/notes/notes/${id}/permanent`),
   reorderNotes: (orderedIds: number[]) =>
     api.patch<{ data: { reordered: number } }>('/notes/notes/reorder', { orderedIds }),
 
   // ── Phase 3d: flag-filtered views for the sidebar pills ──
   // ?f=all (default) | favorites | archive | needs-review
-  getFilteredNotes: (filter: 'all' | 'favorites' | 'archive' | 'needs-review') =>
+  getFilteredNotes: (filter: 'all' | 'favorites' | 'archive' | 'needs-review' | 'trash') =>
     api.get<{ data: { filter: string; notes: import('@/types').NoteSummary[] } }>('/notes/notes/filter', { params: { f: filter } }),
+
+  // Immutable page history. Autosave snapshots are coalesced server-side.
+  getVersions: (id: number) =>
+    api.get<{ data: import('@/types').NoteVersionSummary[] }>(`/notes/notes/${id}/versions`),
+  getVersion: (id: number, version: number) =>
+    api.get<{ data: import('@/types').NoteVersionFull }>(`/notes/notes/${id}/versions/${version}`),
+  createVersion: (id: number) =>
+    api.post<{ data: import('@/types').NoteVersionFull }>(`/notes/notes/${id}/versions`),
+  restoreVersion: (id: number, version: number) =>
+    api.post<{ data: import('@/types').NoteFull }>(`/notes/notes/${id}/versions/${version}/restore`),
 
   // ── Phase 3d: PDF export of a single note ──
   // Returns the rendered HTML so the client can convert it to a
@@ -493,7 +509,7 @@ export interface NoteShare {
   subjectId: number;
   ownerId: number;
   recipientId: number;
-  permission: 'view' | 'edit';
+  permission: NoteSharePermission;
   note: string | null;
   createdAt: string;
   updatedAt: string;
@@ -501,6 +517,9 @@ export interface NoteShare {
   recipient?: { id: number; username: string; email: string; avatarUrl: string | null; displayName: string | null };
   owner?: { id: number; username: string; avatarUrl: string | null; displayName: string | null };
 }
+
+export type NoteSharePermission = 'viewer' | 'commenter' | 'editor';
+export type NoteAccessRole = 'owner' | NoteSharePermission;
 
 export interface NoteShareRecipientMini {
   id: number;
@@ -515,7 +534,7 @@ export interface NoteSharedSubject {
   id: number;
   shareId: number;
   subjectId: number;
-  permission: 'view' | 'edit';
+  permission: NoteSharePermission;
   sharedAt: string;
   owner: {
     id: number;
@@ -540,7 +559,7 @@ export interface NoteSharedSubjectFull {
   emoji: string | null;
   color: string | null;
   userId: number;
-  myPermission: 'view' | 'edit';
+  myPermission: NoteAccessRole;
   isOwner: boolean;
   chapters: Array<{
     id: number;
@@ -593,9 +612,42 @@ export interface NoteSharedSummary {
   };
 }
 
+export interface NoteSharedFull extends NoteFull {
+  myPermission: NoteAccessRole;
+  isOwner: boolean;
+}
+
+export interface NoteCommentAuthor {
+  id: number;
+  username: string;
+  displayName: string | null;
+  fullName: string | null;
+  avatarUrl: string | null;
+}
+
+export interface NoteCommentMention {
+  user: NoteCommentAuthor;
+}
+
+export interface NoteComment {
+  id: number;
+  noteId: number;
+  authorId: number;
+  parentId: number | null;
+  content: string;
+  resolvedAt: string | null;
+  resolvedById: number | null;
+  createdAt: string;
+  updatedAt: string;
+  author: NoteCommentAuthor;
+  resolvedBy: NoteCommentAuthor | null;
+  mentions: NoteCommentMention[];
+  replies?: NoteComment[];
+}
+
 export const noteShareApi = {
   // Share a subject with another user
-  create: (data: { subjectId: number; recipientId: number; permission?: 'view' | 'edit'; note?: string }) =>
+  create: (data: { subjectId: number; recipientId: number; permission?: NoteSharePermission; note?: string }) =>
     api.post<{ data: NoteShare }>('/notes-shares', data),
 
   // List all shares I own (outbox)
@@ -607,7 +659,7 @@ export const noteShareApi = {
     api.delete<{ data: { id: number; deleted: boolean } }>(`/notes-shares/${shareId}`),
 
   // Update share permission or note
-  update: (shareId: number, data: { permission?: 'view' | 'edit'; note?: string | null }) =>
+  update: (shareId: number, data: { permission?: NoteSharePermission; note?: string | null }) =>
     api.patch<{ data: NoteShare }>(`/notes-shares/${shareId}`, data),
 
   // List shares for a specific subject (owner only)
@@ -624,7 +676,23 @@ export const noteShareApi = {
 
   // Get full content of a shared note
   getSharedNote: (subjectId: number, noteId: number) =>
-    api.get<{ data: NoteFull }>(`/notes-shares/received/${subjectId}/notes/${noteId}`),
+    api.get<{ data: NoteSharedFull }>(`/notes-shares/received/${subjectId}/notes/${noteId}`),
+
+  updateSharedNote: (subjectId: number, noteId: number, data: Partial<Pick<import('@/types').NoteFull, 'title' | 'contentJson' | 'contentHtml' | 'tags'>>) =>
+    api.patch<{ data: NoteSharedFull }>(`/notes-shares/received/${subjectId}/notes/${noteId}`, data),
+
+  listComments: (noteId: number, includeResolved = true) =>
+    api.get<{ data: { permission: NoteAccessRole; threads: NoteComment[] } }>(`/notes-shares/notes/${noteId}/comments`, { params: { resolved: includeResolved } }),
+  createComment: (noteId: number, data: { content: string; parentId?: number; mentions?: number[] }) =>
+    api.post<{ data: NoteComment }>(`/notes-shares/notes/${noteId}/comments`, data),
+  updateComment: (commentId: number, content: string) =>
+    api.patch<{ data: NoteComment }>(`/notes-shares/comments/${commentId}`, { content }),
+  resolveComment: (commentId: number) =>
+    api.post<{ data: NoteComment }>(`/notes-shares/comments/${commentId}/resolve`),
+  reopenComment: (commentId: number) =>
+    api.post<{ data: NoteComment }>(`/notes-shares/comments/${commentId}/reopen`),
+  deleteComment: (commentId: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes-shares/comments/${commentId}`),
 
   // Search users to share with
   searchUsers: (q: string, limit = 8) =>
@@ -2120,7 +2188,7 @@ export type PrefSoundKind =
 export type PrefNotifyType =
   | 'NEW_POST' | 'NEW_REACTION' | 'NEW_COMMENT' | 'NEW_REPLY' | 'NEW_MENTION'
   | 'NEW_MESSAGE' | 'FRIEND_REQUEST' | 'FRIEND_ACCEPT' | 'NEW_FOLLOW'
-  | 'NOTE_SHARE' | 'HUB_SHARE' | 'ADMIN_ANNOUNCEMENT';
+  | 'NOTE_SHARE' | 'NOTE_COMMENT' | 'NOTE_REPLY' | 'NOTE_MENTION' | 'HUB_SHARE' | 'ADMIN_ANNOUNCEMENT';
 
 export interface ServerPreferences {
   sound: {

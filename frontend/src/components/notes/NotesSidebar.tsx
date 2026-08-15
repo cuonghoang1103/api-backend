@@ -62,10 +62,10 @@ export interface SidebarCallbacks {
   onReorderNotes: (orderedIds: number[]) => void;
   // Phase 3d — filter pill switcher. `'tree'` is the default
   // hierarchical view; the others flatten their matches.
-  onChangeFilter: (filter: 'tree' | 'favorites' | 'archive' | 'needs-review') => void;
+  onChangeFilter: (filter: 'tree' | 'favorites' | 'archive' | 'needs-review' | 'trash') => void;
 }
 
-export type NoteSidebarFilter = 'tree' | 'favorites' | 'archive' | 'needs-review';
+export type NoteSidebarFilter = 'tree' | 'favorites' | 'archive' | 'needs-review' | 'trash';
 
 interface Props extends SidebarCallbacks {
   tree: NoteSubjectTree[];
@@ -191,6 +191,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
         <FilterPill active={filter === 'favorites'} icon={<Star className="h-3 w-3" />} label="Yêu thích" onClick={() => cb.onChangeFilter('favorites')} />
         <FilterPill active={filter === 'needs-review'} icon={<AlertCircle className="h-3 w-3" />} label="Cần ôn" onClick={() => cb.onChangeFilter('needs-review')} />
         <FilterPill active={filter === 'archive'} icon={<Archive className="h-3 w-3" />} label="Lưu trữ" onClick={() => cb.onChangeFilter('archive')} />
+        <FilterPill active={filter === 'trash'} icon={<Trash2 className="h-3 w-3" />} label="Thùng rác" onClick={() => cb.onChangeFilter('trash')} />
       </div>
 
       {/* PART 2: Pinned section */}
@@ -270,6 +271,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
         {filter === 'favorites' && (<><Star className="h-3 w-3" /> Yêu thích</>)}
         {filter === 'archive' && (<><Archive className="h-3 w-3" /> Lưu trữ</>)}
         {filter === 'needs-review' && (<><AlertCircle className="h-3 w-3" /> Cần ôn</>)}
+        {filter === 'trash' && (<><Trash2 className="h-3 w-3" /> Thùng rác · tự xóa sau 30 ngày</>)}
         <span className="ml-auto text-slate-500 dark:text-slate-500">{filteredNotes.length}</span>
       </div>
       {filteredNotes.length === 0 ? (
@@ -277,6 +279,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
           {filter === 'favorites' && 'Chưa đánh dấu ghi chú nào.'}
           {filter === 'archive' && 'Không có ghi chú trong lưu trữ.'}
           {filter === 'needs-review' && 'Không có ghi chú cần ôn.'}
+          {filter === 'trash' && 'Thùng rác đang trống.'}
         </div>
       ) : (
         filteredNotes.map((n) => (
@@ -287,8 +290,11 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
               selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
-            {n.isPinned ? <Pin className="h-3 w-3 shrink-0 text-amber-400" /> : <FileText className="h-3 w-3 shrink-0 opacity-60" />}
-            <span className="truncate">{n.title || 'Không có tiêu đề'}</span>
+            {filter === 'trash' ? <Trash2 className="h-3 w-3 shrink-0 text-rose-400" /> : n.isPinned ? <Pin className="h-3 w-3 shrink-0 text-amber-400" /> : <FileText className="h-3 w-3 shrink-0 opacity-60" />}
+            <span className="min-w-0 flex-1 truncate">{n.title || 'Không có tiêu đề'}</span>
+            {filter === 'trash' && n.deletedAt && (
+              <span className="shrink-0 text-[10px] text-slate-400">{trashDaysRemaining(n.deletedAt)} ngày</span>
+            )}
             {n.isFavorite && <Star className="ml-auto h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />}
             {n.needsReview && <AlertCircle className="ml-auto h-3 w-3 shrink-0 text-rose-400" />}
             {n.isArchived && <Archive className="ml-auto h-3 w-3 shrink-0 text-slate-500 dark:text-slate-500" />}
@@ -374,6 +380,11 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
  const next = arrayMove(ids, oldIndex, newIndex);
  cb.onReorderSubjects(next);
  }
+}
+
+function trashDaysRemaining(deletedAt: string): number {
+  const expires = new Date(deletedAt).getTime() + 30 * 24 * 60 * 60 * 1000;
+  return Math.max(0, Math.ceil((expires - Date.now()) / (24 * 60 * 60 * 1000)));
 }
 
 // ─── SubjectBranch — owns the per-subject DndContexts ──────────
@@ -961,4 +972,3 @@ function EmojiPicker({ currentEmoji, onSelect, onClose }: EmojiPickerProps) {
     </div>
   );
 }
-

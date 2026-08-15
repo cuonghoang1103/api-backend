@@ -57,6 +57,9 @@ export const NOTIFY_TYPES = [
   'FRIEND_ACCEPT',
   'NEW_FOLLOW',
   'NOTE_SHARE',
+  'NOTE_COMMENT',
+  'NOTE_REPLY',
+  'NOTE_MENTION',
   'HUB_SHARE',
   'ADMIN_ANNOUNCEMENT',
 ] as const;

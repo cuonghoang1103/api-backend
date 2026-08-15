@@ -36,7 +36,7 @@ const ALL_KINDS: SoundKind[] = ['message', 'notification', 'login', 'post', 'lik
 export const ALL_NOTIFY_TYPES: NotifyType[] = [
   'NEW_REACTION', 'NEW_COMMENT', 'NEW_REPLY', 'NEW_MENTION', 'NEW_MESSAGE',
   'FRIEND_REQUEST', 'FRIEND_ACCEPT', 'NEW_FOLLOW',
-  'NOTE_SHARE', 'HUB_SHARE', 'NEW_POST', 'ADMIN_ANNOUNCEMENT',
+  'NOTE_SHARE', 'NOTE_COMMENT', 'NOTE_REPLY', 'NOTE_MENTION', 'HUB_SHARE', 'NEW_POST', 'ADMIN_ANNOUNCEMENT',
 ];
 
 export interface NotifyTypeMeta {
@@ -55,6 +55,9 @@ export const NOTIFY_TYPE_META: Record<NotifyType, NotifyTypeMeta> = {
   FRIEND_ACCEPT: { label: 'Chấp nhận kết bạn', description: 'Lời mời kết bạn của bạn được chấp nhận', icon: 'UserCheck' },
   NEW_FOLLOW: { label: 'Người theo dõi mới', description: 'Ai đó bắt đầu theo dõi bạn', icon: 'UserPlus' },
   NOTE_SHARE: { label: 'Chia sẻ ghi chú', description: 'Ai đó chia sẻ một môn ghi chú với bạn', icon: 'FolderOpen' },
+  NOTE_COMMENT: { label: 'Bình luận ghi chú', description: 'Có thảo luận mới trên ghi chú của bạn', icon: 'MessageCircle' },
+  NOTE_REPLY: { label: 'Trả lời ghi chú', description: 'Ai đó trả lời thảo luận ghi chú', icon: 'CornerDownRight' },
+  NOTE_MENTION: { label: 'Được nhắc trong ghi chú', description: 'Ai đó nhắc @bạn trong thảo luận ghi chú', icon: 'AtSign' },
   HUB_SHARE: { label: 'Chia sẻ tài liệu', description: 'Ai đó chia sẻ thư mục tài liệu với bạn', icon: 'Share2' },
   NEW_POST: { label: 'Bài viết mới', description: 'Người bạn theo dõi đăng bài mới', icon: 'Send' },
   ADMIN_ANNOUNCEMENT: { label: 'Thông báo từ Admin', description: 'Admin đăng thông báo mới ở diễn đàn', icon: 'Crown' },

@@ -48,6 +48,9 @@ export const NOTIFICATION_TYPES = [
   'NEW_FOLLOW',
   // ─── Sharing notifications (added 2026-07-02) ─────────────
   'NOTE_SHARE',   // Note subject (folder) was shared with recipient
+  'NOTE_COMMENT', // New root discussion on a note
+  'NOTE_REPLY',   // Reply to a note discussion
+  'NOTE_MENTION', // Mention inside a note discussion
   'HUB_SHARE',    // Hub folder/file/link was shared with recipient
   // ─── Admin announcement (added 2026-08-08) ────────────────
   // Was previously socket-only: the client fabricated a bell entry with a
@@ -264,6 +267,24 @@ export async function notifyNoteShare(
     type: 'NOTE_SHARE',
     entityId: subjectId,
     payload: { subjectName, subjectEmoji, permission },
+  });
+}
+
+export async function notifyNoteCollaboration(
+  recipientId: number,
+  senderId: number,
+  type: 'NOTE_COMMENT' | 'NOTE_REPLY' | 'NOTE_MENTION',
+  noteId: number,
+  commentId: number,
+  payload?: Record<string, unknown>,
+): Promise<void> {
+  await pushNotification({
+    receiverId: recipientId,
+    senderId,
+    type,
+    entityId: noteId,
+    secondaryEntityId: commentId,
+    payload: { ...(payload ?? {}), surface: 'notes' },
   });
 }
 

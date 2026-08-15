@@ -51,6 +51,9 @@ function describeNotification(n: SocialNotification): string {
     case 'FRIEND_ACCEPT': return `${name} đã chấp nhận lời mời kết bạn`;
     case 'NEW_FOLLOW': return `${name} đã bắt đầu theo dõi bạn`;
     case 'NOTE_SHARE': return `${name} đã chia sẻ một ghi chú với bạn`;
+    case 'NOTE_COMMENT': return `${name} đã bình luận trên ghi chú của bạn`;
+    case 'NOTE_REPLY': return `${name} đã trả lời thảo luận trong ghi chú`;
+    case 'NOTE_MENTION': return `${name} đã nhắc đến bạn trong một ghi chú`;
     case 'HUB_SHARE': return `${name} đã chia sẻ một thư mục tài liệu với bạn`;
     case 'ADMIN_ANNOUNCEMENT': {
       const title = (n.payload?.title as string) || 'Thông báo mới';
@@ -72,6 +75,9 @@ function typeIcon(t: NotificationType) {
     case 'FRIEND_ACCEPT': return UserCheck;
     case 'NEW_FOLLOW': return UserPlus;
     case 'NOTE_SHARE': return FolderOpen;
+    case 'NOTE_COMMENT': return MessageCircle;
+    case 'NOTE_REPLY': return CornerDownRight;
+    case 'NOTE_MENTION': return AtSign;
     case 'HUB_SHARE': return Share2;
     case 'ADMIN_ANNOUNCEMENT': return Crown;
     case 'NEW_POST': return Send;
@@ -90,6 +96,9 @@ function typeColor(t: NotificationType): string {
     case 'FRIEND_ACCEPT': return '#10b981';
     case 'NEW_FOLLOW': return '#06b6d4';
     case 'NOTE_SHARE': return '#14b8a6';
+    case 'NOTE_COMMENT': return '#3b82f6';
+    case 'NOTE_REPLY': return '#22d3ee';
+    case 'NOTE_MENTION': return '#8b5cf6';
     case 'HUB_SHARE': return '#f59e0b';
     case 'ADMIN_ANNOUNCEMENT': return '#fbbf24';
     default: return '#8a8d91';
@@ -107,6 +116,16 @@ function targetUrl(n: SocialNotification): string {
     return n.entityId ? `/profile/${n.entityId}` : '/friends';
   }
   if (n.type === 'NOTE_SHARE') return '/notes';
+  if (n.type === 'NOTE_COMMENT' || n.type === 'NOTE_REPLY' || n.type === 'NOTE_MENTION') {
+    const ownerId = Number(n.payload?.ownerId);
+    const subjectId = Number(n.payload?.subjectId);
+    const shared = Number.isInteger(ownerId) && ownerId > 0 && n.receiverId !== ownerId;
+    const params = shared
+      ? new URLSearchParams({ sharedSubject: String(subjectId), sharedNote: String(n.entityId ?? '') })
+      : new URLSearchParams({ note: String(n.entityId ?? '') });
+    if (n.secondaryEntityId) params.set('comment', String(n.secondaryEntityId));
+    return `/notes?${params.toString()}`;
+  }
   if (n.type === 'HUB_SHARE') return '/hub';
   if (n.type === 'ADMIN_ANNOUNCEMENT') return n.entityId ? `/forum/${n.entityId}` : '/forum';
   if (n.entityId) {
@@ -159,7 +178,7 @@ const FILTERS: Array<{ key: string; label: string; types: NotificationType[] | n
   { key: 'social', label: 'Tương tác', types: ['NEW_REACTION', 'NEW_COMMENT', 'NEW_REPLY', 'NEW_MENTION'] as NotificationType[] },
   { key: 'people', label: 'Bạn bè', types: ['FRIEND_REQUEST', 'FRIEND_ACCEPT', 'NEW_FOLLOW'] as NotificationType[] },
   { key: 'messages', label: 'Tin nhắn', types: ['NEW_MESSAGE'] as NotificationType[] },
-  { key: 'shares', label: 'Chia sẻ', types: ['NOTE_SHARE', 'HUB_SHARE'] as NotificationType[] },
+  { key: 'shares', label: 'Chia sẻ', types: ['NOTE_SHARE', 'NOTE_COMMENT', 'NOTE_REPLY', 'NOTE_MENTION', 'HUB_SHARE'] as NotificationType[] },
   { key: 'admin', label: 'Từ Admin', types: ['ADMIN_ANNOUNCEMENT'] as NotificationType[] },
 ];
 

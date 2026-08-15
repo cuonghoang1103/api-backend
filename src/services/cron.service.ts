@@ -48,6 +48,19 @@ export function startCronJobs(): void {
  }
   }, { timezone: 'UTC' });
 
+  // ─── Notes trash retention @ 03:30 Vietnam (20:30 UTC) ─────
+  // Soft-deleted notes are recoverable for 30 full days. The delete
+  // cascades to attachments, links, vocab and immutable versions.
+  cron.schedule('30 20 * * *', async () => {
+    try {
+      const { purgeExpiredDeletedNotes } = await import('./notes.service.js');
+      const deleted = await purgeExpiredDeletedNotes(30);
+      if (deleted > 0) logger.info('cron notes trash retention', { deleted, retentionDays: 30 });
+    } catch (err) {
+      logger.error('cron notes trash retention failed', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // ─── Weekly re-embed check @ Sunday 02:00 Vietnam (19:00 UTC Sat) ───
   cron.schedule('0 19 * * 6', async () => {
  logger.info('cron running weekly re-embed check');
@@ -338,6 +351,7 @@ export function startCronJobs(): void {
   logger.info('cron all jobs registered', {
   jobs: [
   'Nightly cleanup @ 03:00 Vietnam',
+  'Notes trash retention daily @ 03:30 Vietnam (30 days)',
   'Weekly re-embed @ Sun 02:00 Vietnam',
   'Hourly health check',
   `Stale PENDING order cleanup every 15 min (TTL ${ttlMinutes}m)`,

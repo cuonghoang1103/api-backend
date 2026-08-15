@@ -263,6 +263,10 @@ model User {
   noteAttachments            NoteAttachment[]
   noteLinks                  NoteLink[]
   noteVocabEntries           NoteVocabEntry[]
+  noteVersions               NoteVersion[]
+  noteCommentsAuthored       NoteComment[]               @relation("NoteCommentAuthor")
+  noteCommentsResolved       NoteComment[]               @relation("NoteCommentResolver")
+  noteCommentMentions        NoteCommentMention[]
   // Phase 4 add — notes subject sharing
   noteSubjectsOwned          NoteSubjectShare[]          @relation("NoteSubjectSharesOwned")
   noteSubjectsReceived       NoteSubjectShare[]          @relation("NoteSubjectSharesReceived")
@@ -4033,8 +4037,8 @@ model NoteSubjectShare {
   ownerId     Int      @map("owner_id")
   // Recipient = the user who has been granted access
   recipientId Int      @map("recipient_id")
-  // 'view' = read-only | 'edit' = can modify notes inside
-  permission  String   @default("view") @db.VarChar(20)
+  // viewer | commenter | editor. Owner is implicit from subject.userId.
+  permission  String   @default("viewer") @db.VarChar(20)
   // Optional note from the owner
   note        String?  @db.VarChar(500)
   createdAt   DateTime @default(now()) @map("created_at")
@@ -4105,6 +4109,12 @@ model Note {
   isArchived  Boolean   @default(false) @map("is_archived")
   needsReview Boolean   @default(false) @map("needs_review")
   reviewDate  DateTime? @map("review_date")
+  // Soft-delete: notes stay recoverable for 30 days before the
+  // nightly retention job permanently removes them.
+  deletedAt   DateTime? @map("deleted_at")
+  // Monotonic snapshot number. It only changes when a NoteVersion
+  // row is created, not on every metadata-only update.
+  version     Int       @default(1)
   sortOrder   Int       @default(0) @map("sort_order")
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
@@ -4115,12 +4125,78 @@ model Note {
   attachments  NoteAttachment[]
   links        NoteLink[]
   vocabEntries NoteVocabEntry[]
+  versions     NoteVersion[]
+  comments     NoteComment[]
 
   @@index([userId, subjectId, chapterId, sortOrder], name: "idx_notes_user_tree")
   @@index([userId, updatedAt(sort: Desc)], name: "idx_notes_user_recent")
   @@index([userId, isPinned], name: "idx_notes_user_pinned")
   @@index([userId, isArchived], name: "idx_notes_user_archived")
+  @@index([userId, deletedAt], name: "idx_notes_user_deleted")
   @@map("notes")
+}
+
+// Immutable page snapshots. Autosave snapshots are coalesced by the
+// service so typing does not create one row per keystroke; manual and
+// restore snapshots are always retained.
+model NoteVersion {
+  id          Int      @id @default(autoincrement())
+  noteId      Int      @map("note_id")
+  userId      Int      @map("user_id")
+  version     Int
+  title       String   @db.VarChar(300)
+  contentJson Json?    @map("content_json")
+  contentHtml String?  @map("content_html") @db.Text
+  tags        String[] @default([])
+  // INITIAL | AUTO_SAVE | MANUAL | BEFORE_RESTORE | RESTORE
+  origin      String   @default("AUTO_SAVE") @db.VarChar(24)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([noteId, version], map: "uk_note_version_note_number")
+  @@index([noteId, createdAt(sort: Desc)], map: "idx_note_versions_note_created")
+  @@index([userId], map: "idx_note_versions_user")
+  @@map("note_versions")
+}
+
+// Page-level discussion threads. A root comment may be resolved; replies
+// reference it through parentId. Inline block anchors are deliberately left
+// for a later phase after collaborative document IDs are stable.
+model NoteComment {
+  id           Int       @id @default(autoincrement())
+  noteId       Int       @map("note_id")
+  authorId     Int       @map("author_id")
+  parentId     Int?      @map("parent_id")
+  content      String    @db.VarChar(4000)
+  resolvedAt   DateTime? @map("resolved_at")
+  resolvedById Int?      @map("resolved_by_id")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  note       Note                 @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  author     User                 @relation("NoteCommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  parent     NoteComment?         @relation("NoteCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies    NoteComment[]        @relation("NoteCommentReplies")
+  resolvedBy User?                @relation("NoteCommentResolver", fields: [resolvedById], references: [id], onDelete: SetNull)
+  mentions   NoteCommentMention[]
+
+  @@index([noteId, parentId, createdAt], map: "idx_note_comments_thread")
+  @@index([authorId], map: "idx_note_comments_author")
+  @@map("note_comments")
+}
+
+model NoteCommentMention {
+  commentId Int @map("comment_id")
+  userId    Int @map("user_id")
+
+  comment NoteComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([commentId, userId], map: "pk_note_comment_mentions")
+  @@index([userId], map: "idx_note_comment_mentions_user")
+  @@map("note_comment_mentions")
 }
 
 model NoteAttachment {

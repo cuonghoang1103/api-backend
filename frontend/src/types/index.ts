@@ -1305,6 +1305,7 @@ export interface NoteSummary {
   isFavorite: boolean;
   isArchived: boolean;
   needsReview: boolean;
+  deletedAt?: string | null;
   updatedAt: string;
 }
 
@@ -1404,12 +1405,42 @@ export interface NoteFull {
   isArchived: boolean;
   needsReview: boolean;
   reviewDate: string | null;
+  deletedAt: string | null;
+  version: number;
   sortOrder: number;
   createdAt: string;
   updatedAt: string;
   attachments: NoteAttachment[];
   links: NoteLink[];
   vocabEntries: NoteVocabEntry[];
+}
+
+export type NoteVersionOrigin = 'INITIAL' | 'AUTO_SAVE' | 'MANUAL' | 'BEFORE_RESTORE' | 'RESTORE';
+
+/** Who wrote the snapshot — on a shared page this may be a collaborator. */
+export interface NoteVersionAuthor {
+  id: number;
+  username: string;
+  displayName: string | null;
+  fullName: string | null;
+  avatarUrl: string | null;
+}
+
+export interface NoteVersionSummary {
+  id: number;
+  version: number;
+  title: string;
+  origin: NoteVersionOrigin;
+  createdAt: string;
+  user: NoteVersionAuthor;
+}
+
+export interface NoteVersionFull extends NoteVersionSummary {
+  noteId: number;
+  userId: number;
+  contentJson: Record<string, unknown> | null;
+  contentHtml: string | null;
+  tags: string[];
 }
 
 // Phase 2 — subject detail + search

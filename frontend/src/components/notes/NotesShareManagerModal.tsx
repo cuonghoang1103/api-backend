@@ -14,10 +14,10 @@ import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X, Users, UserPlus, Trash2, Loader2, Search,
-  Eye, Edit3, Send, FolderOpen,
+  Eye, Edit3, Send, FolderOpen, MessageCircle,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { noteShareApi, type NoteShare, type NoteShareRecipientMini } from '@/lib/api';
+import { noteShareApi, type NoteShare, type NoteSharePermission, type NoteShareRecipientMini } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
 interface NotesShareManagerModalProps {
@@ -25,6 +25,13 @@ interface NotesShareManagerModalProps {
   subject: { id: number; name: string; emoji?: string | null; color?: string | null } | null;
   onClose: () => void;
   onChanged?: () => void;
+}
+
+function normalizePermission(permission: string): NoteSharePermission {
+  if (permission === 'edit') return 'editor';
+  if (permission === 'view') return 'viewer';
+  if (permission === 'commenter' || permission === 'editor') return permission;
+  return 'viewer';
 }
 
 export default function NotesShareManagerModal({
@@ -40,8 +47,9 @@ export default function NotesShareManagerModal({
   const [searchResults, setSearchResults] = useState<NoteShareRecipientMini[]>([]);
   const [searching, setSearching] = useState(false);
   const [selectedUser, setSelectedUser] = useState<NoteShareRecipientMini | null>(null);
-  const [newPermission, setNewPermission] = useState<'view' | 'edit'>('view');
+  const [newPermission, setNewPermission] = useState<NoteSharePermission>('viewer');
   const [creating, setCreating] = useState(false);
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Load shares for this subject
@@ -53,6 +61,13 @@ export default function NotesShareManagerModal({
       .catch(() => toast.error('Không tải được danh sách chia sẻ'))
       .finally(() => setLoading(false));
   }, [open, subject?.id]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [open, onClose]);
 
   // Search users
   useEffect(() => {
@@ -108,6 +123,17 @@ export default function NotesShareManagerModal({
     }
   };
 
+  const updatePermission = async (share: NoteShare, permission: NoteSharePermission) => {
+    setUpdatingId(share.id);
+    try {
+      const response = await noteShareApi.update(share.id, { permission });
+      setShares((current) => current.map((item) => item.id === share.id ? response.data.data : item));
+      toast.success('Đã cập nhật quyền truy cập');
+      onChanged?.();
+    } catch { toast.error('Không thể cập nhật quyền'); }
+    finally { setUpdatingId(null); }
+  };
+
   return (
     <AnimatePresence>
       {open && subject && (
@@ -117,6 +143,9 @@ export default function NotesShareManagerModal({
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
           onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="notes-share-title"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -132,13 +161,14 @@ export default function NotesShareManagerModal({
                   <FolderOpen className="h-5 w-5 text-neon-violet" />
                 </div>
                 <div>
-                  <h2 className="font-semibold text-text-primary">Chia sẻ ghi chú</h2>
+                  <h2 id="notes-share-title" className="font-semibold text-text-primary">Chia sẻ ghi chú</h2>
                   <p className="text-xs text-text-muted">{subject.emoji} {subject.name}</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
                 className="p-2 rounded-lg hover:bg-white/5 text-text-muted hover:text-text-primary transition-colors"
+                aria-label="Đóng hộp thoại chia sẻ"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -189,23 +219,19 @@ export default function NotesShareManagerModal({
                           </p>
                         </div>
 
-                        {/* Permission badge */}
-                        <div className={cn(
-                          'px-2 py-1 rounded-full text-xs font-medium',
-                          share.permission === 'edit'
-                            ? 'bg-emerald-500/10 text-emerald-400'
-                            : 'bg-slate-500/10 text-slate-400'
-                        )}>
-                          {share.permission === 'edit' ? (
-                            <span className="flex items-center gap-1">
-                              <Edit3 className="h-3 w-3" /> Chỉnh sửa
-                            </span>
-                          ) : (
-                            <span className="flex items-center gap-1">
-                              <Eye className="h-3 w-3" /> Xem
-                            </span>
-                          )}
-                        </div>
+                        {/* Permission — editable by the owner, enforced again by backend. */}
+                        <label className="sr-only" htmlFor={`share-permission-${share.id}`}>Quyền của @{share.recipient?.username}</label>
+                        <select
+                          id={`share-permission-${share.id}`}
+                          value={normalizePermission(share.permission)}
+                          disabled={updatingId === share.id}
+                          onChange={(event) => updatePermission(share, event.target.value as NoteSharePermission)}
+                          className="min-h-9 rounded-lg border border-darkborder bg-darkbg px-2 text-xs text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet disabled:opacity-50"
+                        >
+                          <option value="viewer">Chỉ xem</option>
+                          <option value="commenter">Bình luận</option>
+                          <option value="editor">Chỉnh sửa</option>
+                        </select>
 
                         {/* Revoke button */}
                         <button
@@ -213,6 +239,7 @@ export default function NotesShareManagerModal({
                           disabled={revokingId === share.id}
                           className="p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-colors"
                           title="Thu hồi quyền truy cập"
+                          aria-label={`Thu hồi quyền của @${share.recipient?.username}`}
                         >
                           {revokingId === share.id ? (
                             <Loader2 className="h-4 w-4 animate-spin" />
@@ -314,10 +341,10 @@ export default function NotesShareManagerModal({
                   <label className="text-xs text-text-muted mb-1.5 block">Quyền truy cập</label>
                   <div className="flex gap-2">
                     <button
-                      onClick={() => setNewPermission('view')}
+                      onClick={() => setNewPermission('viewer')}
                       className={cn(
                         'flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border text-sm font-medium transition-colors',
-                        newPermission === 'view'
+                        newPermission === 'viewer'
                           ? 'border-neon-violet bg-neon-violet/10 text-neon-violet'
                           : 'border-darkborder text-text-muted hover:border-darkborder/80'
                       )}
@@ -325,10 +352,21 @@ export default function NotesShareManagerModal({
                       <Eye className="h-4 w-4" /> Xem
                     </button>
                     <button
-                      onClick={() => setNewPermission('edit')}
+                      onClick={() => setNewPermission('commenter')}
                       className={cn(
                         'flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border text-sm font-medium transition-colors',
-                        newPermission === 'edit'
+                        newPermission === 'commenter'
+                          ? 'border-sky-500 bg-sky-500/10 text-sky-300'
+                          : 'border-darkborder text-text-muted hover:border-darkborder/80'
+                      )}
+                    >
+                      <MessageCircle className="h-4 w-4" /> Bình luận
+                    </button>
+                    <button
+                      onClick={() => setNewPermission('editor')}
+                      className={cn(
+                        'flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border text-sm font-medium transition-colors',
+                        newPermission === 'editor'
                           ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
                           : 'border-darkborder text-text-muted hover:border-darkborder/80'
                       )}

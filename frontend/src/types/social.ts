@@ -220,6 +220,9 @@ export type NotificationType =
   | 'NEW_FOLLOW'
   // Sharing notifications (added 2026-07-02)
   | 'NOTE_SHARE'   // Note subject (folder) was shared with you
+  | 'NOTE_COMMENT'
+  | 'NOTE_REPLY'
+  | 'NOTE_MENTION'
   | 'HUB_SHARE'    // Hub folder/file/link was shared with you
   // Admin announcement (added 2026-07-09, made a real server-side type on
   // 2026-08-08). entityId = the announcement id, payload.title = its

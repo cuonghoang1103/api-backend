@@ -1,0 +1,52 @@
+/**
+ * Nối `frontend/src/lib/api.ts` (4.994 dòng, viết cho web) vào app desktop.
+ *
+ * ─── Vì sao chỉ cần chừng này ───
+ * `lib/api.ts` tạo MỘT instance axios rồi `export default` nó ra (dòng 1945).
+ * Toàn bộ 4.994 dòng còn lại gọi qua instance đó. Nên đổi `baseURL` và gắn
+ * header xác thực lên chính instance ấy là mọi lời gọi API của web chạy nguyên
+ * xi trong app desktop — không phải sửa một dòng nào của web.
+ *
+ * ─── Hai khác biệt phải bù ───
+ *  1. Web dùng đường dẫn tương đối `/api/v1` vì nó chạy cùng origin với proxy
+ *     Next. App desktop chạy ở `app://cuongthai`, nơi đường dẫn tương đối trỏ
+ *     vào chính bundle chứ không ra máy chủ.
+ *  2. Web xác thực bằng cookie httpOnly mà proxy Next đọc rồi gắn Bearer hộ.
+ *     App desktop không có proxy đó, nên phải tự gắn Bearer.
+ *
+ * ─── Vì sao KHÔNG fork lib/api.ts ───
+ * Fork nghĩa là nuôi hai bản 5.000 dòng song song, và mỗi endpoint mới phải
+ * thêm hai lần. Bộ nối này là 40 dòng.
+ */
+import webApi from '@/lib/api';
+
+let configured = false;
+
+/**
+ * Trỏ axios của web vào máy chủ thật và gắn token.
+ *
+ * Gọi mỗi khi token đổi (đăng nhập, làm mới). Interceptor chỉ gắn MỘT lần —
+ * gắn lại ở mỗi lần gọi sẽ chồng hàng chục interceptor lên nhau, mỗi cái ghi đè
+ * header của cái trước, và cái cuối cùng thắng theo thứ tự không ai đoán được.
+ */
+export function configureWebApi(options: {
+  /** Gốc API. Chuỗi RỖNG ở chế độ dev — khi đó proxy của Vite lo việc chuyển tiếp. */
+  apiBase: string;
+  getToken: () => string | null;
+}): void {
+  // `baseURL` của web là '/api/v1'; ghép gốc vào trước để thành URL tuyệt đối.
+  webApi.defaults.baseURL = `${options.apiBase}/api/v1`;
+
+  // KHÔNG gửi cookie: app desktop xác thực bằng Bearer, và gửi kèm cookie chỉ
+  // tạo đường thứ hai để nhầm lẫn phiên nào đang có hiệu lực.
+  webApi.defaults.withCredentials = false;
+
+  if (configured) return;
+  configured = true;
+
+  webApi.interceptors.request.use((config) => {
+    const token = options.getToken();
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  });
+}

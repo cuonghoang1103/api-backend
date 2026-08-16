@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { type AxiosError, type AxiosInstance } from 'axios';
 import type { ApiResponse, AuthResponse, NoteFull } from '@/types';
 import type { ReactionType, ReactionBreakdown } from '@/types/social';
 
@@ -4466,7 +4466,6 @@ import type {
  ContentStatus,
  ContentType,
  IdeaListParams,
- IdeaStatus,
  ScriptTemplate,
  ScriptVersionOrigin,
 } from '@/types';

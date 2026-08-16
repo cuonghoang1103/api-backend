@@ -18,6 +18,23 @@ export default defineConfig({
     alias: {
       '@renderer': path.resolve(__dirname, 'src/renderer'),
       '@shared': path.resolve(__dirname, 'src/shared'),
+      /**
+       * `@` trỏ vào cây nguồn của WEB.
+       *
+       * App desktop dùng lại nguyên các component Notes của web (22 file, hơn
+       * 6.000 dòng: slash menu, database, bình luận, lịch sử phiên bản…). Viết
+       * lại chúng nghĩa là nuôi hai bản song song mãi mãi và mỗi tính năng mới
+       * phải làm hai lần.
+       *
+       * Chúng import theo `@/...`, nên alias này là thứ duy nhất cần để chúng
+       * biên dịch được ở đây.
+       */
+      '@': path.resolve(__dirname, '../frontend/src'),
+      /**
+       * `next/dynamic` — thứ Next duy nhất mà cây Notes dùng tới (đúng MỘT lần).
+       * Thay bằng một shim dựng trên React.lazy, xem src/renderer/shims/.
+       */
+      'next/dynamic': path.resolve(__dirname, 'src/renderer/shims/next-dynamic.tsx'),
     },
   },
   server: {

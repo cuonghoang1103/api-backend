@@ -1,4 +1,21 @@
 /*
+ * Tailwind — CẦN cho các component Notes dùng lại từ web.
+ *
+ * ⚠️ `@tailwind base` bao gồm Preflight, một lớp reset TOÀN CỤC. Nó sẽ đụng vào
+ * mọi thứ trong app, không chỉ phần Notes. Vẫn bật vì cây Notes của web được
+ * viết với giả định Preflight có mặt (nút không viền, tiêu đề không cỡ mặc
+ * định, ảnh display:block…). Tắt nó đi thì Notes vỡ ở hàng trăm chỗ nhỏ, còn
+ * bật thì chỉ vài chỗ của app desktop cần chỉnh — và app desktop là phần tôi
+ * kiểm soát được.
+ *
+ * Đặt TRƯỚC mọi quy tắc của app: Preflight phải là nền, không phải thứ ghi đè
+ * lên style đã viết.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
  * Design token + layout của shell.
  *
  * Đổi chủ đề = đổi giá trị biến ở `:root[data-theme]`, không đổi lớp trên từng
@@ -1697,4 +1714,36 @@ code {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ── Vùng chứa Notes dùng lại từ web ───────────────────── */
+
+/*
+ * Trang Notes của web tự quản lý bố cục của nó (sidebar riêng, vùng soạn thảo,
+ * panel phụ). Nên vùng chứa ở đây KHÔNG được thêm padding hay giới hạn chiều
+ * rộng như `.ct-page` — làm vậy sẽ bóp trang vào giữa và cắt mất panel bên phải.
+ */
+.ct-notes-host {
+  height: 100%;
+  overflow: hidden;
+  /* Notes có nền riêng theo chủ đề của nó; để lộ nền app phía sau sẽ thành
+     hai mảng màu khác nhau ở hai nửa màn hình. */
+  background: var(--ct-bg);
+}
+
+.ct-notes-host > * {
+  height: 100%;
+}
+
+/*
+ * Preflight của Tailwind reset `button` về không viền, nền trong suốt. App
+ * desktop vốn đã tự đặt những thứ này nên phần lớn không đổi — nhưng nó cũng
+ * reset `font` về mặc định của trình duyệt, làm nút trong app mất cỡ chữ.
+ * Trả lại đúng một thuộc tính đó thay vì tắt cả Preflight.
+ */
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }

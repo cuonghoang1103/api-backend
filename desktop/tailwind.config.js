@@ -14,9 +14,21 @@ export default {
   darkMode: 'class',
   content: [
     './src/renderer/**/*.{ts,tsx,html}',
-    '../frontend/src/components/notes/**/*.{ts,tsx}',
-    '../frontend/src/components/ui/**/*.{ts,tsx}',
-    '../frontend/src/lib/**/*.{ts,tsx}',
+    /**
+     * ⚠️ Quét CẢ cây nguồn của web, không chỉ `components/notes`.
+     *
+     * Bản đầu chỉ liệt kê `components/notes` và bỏ sót `app/notes/page.tsx` —
+     * chính là nơi giữ bố cục ngoài cùng: `h-[calc(100dvh-…)]` và BA
+     * `overflow-y-auto`. Không quét thì Tailwind không sinh những lớp đó, ba
+     * vùng cuộn không tồn tại, và cây môn học bị cắt cụt ở đáy — không kéo
+     * được, không lỗi, không cảnh báo.
+     *
+     * Liệt kê từng thư mục là mời gọi bỏ sót lần nữa: cây Notes import chéo
+     * sang `components/ui`, `lib`, `store`, `types`, và sẽ còn mở rộng. Quét cả
+     * cây tốn thêm chút thời gian dựng, đổi lấy việc không bao giờ phải đoán
+     * xem còn thiếu thư mục nào.
+     */
+    '../frontend/src/**/*.{ts,tsx}',
   ],
   theme: { extend: {} },
   plugins: [],

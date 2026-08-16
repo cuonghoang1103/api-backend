@@ -10,6 +10,7 @@ import {
   type NoteDatabasePropertyType,
   type NoteDatabaseRow,
   type NoteDatabaseViewType,
+  type NoteDatabaseSummary,
   fileApi,
 } from '@/lib/api';
 import { BoardView, CalendarView, GalleryView, ListView } from '@/components/notes/NoteDatabaseViews';
@@ -20,8 +21,9 @@ import {
 } from '@/lib/noteDatabaseQuery';
 import NoteDatabaseRowModal from '@/components/notes/NoteDatabaseRowModal';
 import {
-  asFiles, asPersonIds, displayValue, editableValue, isReadOnlyType, needsCustomEditor,
+  asFiles, asPersonIds, asRelationIds, displayValue, editableValue, isReadOnlyType, needsCustomEditor,
   optionNames, outboundValue, personLabel, statusGroupOf, DEFAULT_STATUS_OPTIONS,
+  ROLLUP_FUNCTION_LABEL,
   type CellContext, type DatabasePerson,
 } from '@/lib/noteDatabaseValues';
 
@@ -46,6 +48,8 @@ const TYPE_LABEL: Record<NoteDatabasePropertyType, string> = {
   FILE: 'Tệp',
   CREATED_TIME: 'Ngày tạo',
   LAST_EDITED_TIME: 'Sửa lần cuối',
+  RELATION: 'Quan hệ',
+  ROLLUP: 'Tổng hợp',
 };
 
 /* Màu chip trạng thái theo NHÓM, không theo tên tuỳ chọn: tên do người dùng
@@ -59,6 +63,7 @@ const STATUS_CHIP: Record<'todo' | 'doing' | 'done', string> = {
 const NEW_COLUMN_TYPES: NoteDatabasePropertyType[] = [
   'TEXT', 'NUMBER', 'SELECT', 'MULTI_SELECT', 'STATUS', 'DATE', 'CHECKBOX',
   'PERSON', 'URL', 'EMAIL', 'FILE', 'CREATED_TIME', 'LAST_EDITED_TIME',
+  'RELATION', 'ROLLUP',
 ];
 
 export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Props) {
@@ -72,6 +77,13 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
   const [addingColumn, setAddingColumn] = useState(false);
   const [columnName, setColumnName] = useState('');
   const [columnType, setColumnType] = useState<NoteDatabasePropertyType>('TEXT');
+  // Cấu hình cho hai kiểu cột cần khai báo thêm lúc tạo.
+  const [relationTarget, setRelationTarget] = useState<number | null>(null);
+  const [rollupRelationId, setRollupRelationId] = useState<number | null>(null);
+  const [rollupTargetId, setRollupTargetId] = useState<number | null>(null);
+  const [rollupFn, setRollupFn] = useState<string>('count');
+  /** Các bảng khác trong cùng môn — nguồn để chọn bảng đích cho cột quan hệ. */
+  const [siblingDatabases, setSiblingDatabases] = useState<NoteDatabaseSummary[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const load = useCallback(async () => {
@@ -142,7 +154,19 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
       .catch(() => { /* ô người sẽ hiện "#id" — xem displayValue */ });
     return () => { alive = false; };
   }, [hasPersonColumn, databaseId]);
-  const cellCtx: CellContext = useMemo(() => ({ people }), [people]);
+  const cellCtx: CellContext = useMemo(
+    () => ({ people, relationLabels: database?.relationLabels ?? {} }),
+    [people, database],
+  );
+
+  // Bảng khác trong cùng môn, để chọn đích cho cột quan hệ. Nạp khi người dùng
+  // mở form thêm cột chứ không nạp lúc mở bảng.
+  useEffect(() => {
+    if (!addingColumn || !database || siblingDatabases.length > 0) return;
+    noteDatabaseApi.listBySubject(database.subjectId)
+      .then((res) => setSiblingDatabases(res.data.data))
+      .catch(() => { /* ô chọn sẽ rỗng; người dùng đổi kiểu cột khác được */ });
+  }, [addingColumn, database, siblingDatabases.length]);
 
   /**
    * Cấu hình lọc / sắp xếp / nhóm của khung nhìn mặc định.
@@ -200,6 +224,27 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
 
   const saveTimelineProperties = (next: { startPropertyId: number | null; endPropertyId: number | null }) => {
     changeViewConfig({ ...viewConfig, timeline: next });
+  };
+
+  /**
+   * Ghi lại toàn bộ danh sách liên kết của một ô quan hệ.
+   *
+   * Cập nhật tại chỗ trước rồi mới `load()`: chip phải hiện/biến ngay khi bấm.
+   * Phải `load()` lại chứ không dừng ở cập nhật tại chỗ, vì mọi cột ROLLUP
+   * trỏ vào quan hệ này đều phải tính lại — và chỉ máy chủ tính được chúng.
+   */
+  const saveRelations = async (row: NoteDatabaseRow, property: NoteDatabaseProperty, next: number[]) => {
+    setDatabase((current) => current && ({
+      ...current,
+      rows: current.rows.map((r) => (r.id === row.id ? { ...r, values: { ...r.values, [property.id]: next } } : r)),
+    }));
+    try {
+      await noteDatabaseApi.setRowRelations(row.id, property.id, next);
+      await load();
+    } catch {
+      toast.error('Không lưu được liên kết');
+      await load();
+    }
   };
 
   /** Ghi ngày mới sau khi kéo một thanh trên Dòng thời gian. */
@@ -292,10 +337,27 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
       // Cột STATUS sinh ra kèm ba tuỳ chọn mặc định. Cột trạng thái RỖNG là
       // vô dụng: người dùng phải tự nghĩ ra tên nhóm và tự gán `group`, mà
       // `group` mới là thứ khiến STATUS khác SELECT.
+      // Cột quan hệ chưa chọn bảng đích là cột chết: máy chủ sẽ từ chối mọi
+      // lượt ghi liên kết vào nó. Chặn ngay để người dùng không tạo ra rồi
+      // mới phát hiện.
+      if (columnType === 'RELATION' && relationTarget === null) {
+        toast.error('Chọn bảng đích cho cột quan hệ');
+        setBusy(false);
+        return;
+      }
+      if (columnType === 'ROLLUP' && rollupRelationId === null) {
+        toast.error('Chọn cột quan hệ để tổng hợp qua đó');
+        setBusy(false);
+        return;
+      }
       await noteDatabaseApi.createProperty(databaseId, {
         name,
         type: columnType,
         ...(columnType === 'STATUS' ? { config: { options: DEFAULT_STATUS_OPTIONS } } : {}),
+        ...(columnType === 'RELATION' ? { config: { targetDatabaseId: relationTarget } } : {}),
+        ...(columnType === 'ROLLUP' ? {
+          config: { relationPropertyId: rollupRelationId, targetPropertyId: rollupTargetId, fn: rollupFn },
+        } : {}),
       });
       setColumnName('');
       setAddingColumn(false);
@@ -543,6 +605,44 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
                     );
                   }
 
+                  /* QUAN HỆ: chip cho các dòng đã nối, cộng một ô chọn thêm.
+                     Không dùng ô nhập chữ như PERSON được: bảng đích có thể
+                     hàng trăm dòng và tên trùng nhau, nên phải chọn theo id
+                     chứ không đối chiếu theo tên. */
+                  if (property.type === 'RELATION') {
+                    const linked = asRelationIds(value);
+                    const labels = database.relationLabels ?? {};
+                    return (
+                      <td key={property.id} className="px-3 py-2 align-top">
+                        <div className="flex flex-wrap items-center gap-1">
+                          {linked.map((id) => (
+                            <span key={id} className="inline-flex items-center gap-1 rounded bg-indigo-100 px-1.5 py-0.5 text-[11px] text-indigo-800 dark:bg-indigo-500/20 dark:text-indigo-200">
+                              <span className="max-w-[9rem] truncate">{labels[String(id)] ?? `#${id}`}</span>
+                              {canEdit && (
+                                <button
+                                  type="button"
+                                  aria-label="Bỏ liên kết"
+                                  onClick={() => void saveRelations(row, property, linked.filter((x) => x !== id))}
+                                  className="text-indigo-500 hover:text-rose-500"
+                                >
+                                  <X className="h-2.5 w-2.5" aria-hidden="true" />
+                                </button>
+                              )}
+                            </span>
+                          ))}
+                          {canEdit && (
+                            <RelationPicker
+                              propertyId={property.id}
+                              exclude={linked}
+                              onPick={(id) => void saveRelations(row, property, [...linked, id])}
+                            />
+                          )}
+                          {linked.length === 0 && !canEdit && <span className="text-slate-300 dark:text-slate-600">—</span>}
+                        </div>
+                      </td>
+                    );
+                  }
+
                   /* FILE: không sửa được bằng ô nhập chữ, nên nó có nhánh
                      riêng — chip cho tệp đã có, cộng một nút tải lên. */
                   if (property.type === 'FILE') {
@@ -705,6 +805,55 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
               >
                 {NEW_COLUMN_TYPES.map((type) => <option key={type} value={type}>{TYPE_LABEL[type]}</option>)}
               </select>
+
+              {/* Hai kiểu cột dưới đây VÔ DỤNG nếu thiếu cấu hình, nên hỏi
+                  ngay tại đây thay vì tạo cột rỗng rồi bắt người dùng đi tìm
+                  chỗ cấu hình sau. */}
+              {columnType === 'RELATION' && (
+                <select
+                  aria-label="Bảng đích"
+                  value={relationTarget ?? ''}
+                  onChange={(e) => setRelationTarget(e.target.value === '' ? null : Number(e.target.value))}
+                  className="min-h-9 rounded border border-slate-300 px-1 text-xs dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
+                >
+                  <option value="">— bảng đích —</option>
+                  {siblingDatabases.map((d) => <option key={d.id} value={d.id}>{d.title}</option>)}
+                </select>
+              )}
+
+              {columnType === 'ROLLUP' && (
+                <>
+                  <select
+                    aria-label="Qua cột quan hệ"
+                    value={rollupRelationId ?? ''}
+                    onChange={(e) => setRollupRelationId(e.target.value === '' ? null : Number(e.target.value))}
+                    className="min-h-9 rounded border border-slate-300 px-1 text-xs dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
+                  >
+                    <option value="">— qua quan hệ —</option>
+                    {properties.filter((p) => p.type === 'RELATION').map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                  </select>
+                  <select
+                    aria-label="Phép tổng hợp"
+                    value={rollupFn}
+                    onChange={(e) => setRollupFn(e.target.value)}
+                    className="min-h-9 rounded border border-slate-300 px-1 text-xs dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
+                  >
+                    {Object.entries(ROLLUP_FUNCTION_LABEL).map(([fn, label]) => <option key={fn} value={fn}>{label}</option>)}
+                  </select>
+                  {/* Cột bên bảng đích. `count` không cần, nên ô này chỉ hiện
+                      khi phép tổng hợp thật sự đọc dữ liệu. */}
+                  {rollupFn !== 'count' && (
+                    <input
+                      aria-label="Id cột bên bảng đích"
+                      value={rollupTargetId ?? ''}
+                      onChange={(e) => setRollupTargetId(e.target.value === '' ? null : Number(e.target.value))}
+                      placeholder="id cột đích"
+                      inputMode="numeric"
+                      className="min-h-9 w-24 rounded border border-slate-300 px-2 text-xs dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
+                    />
+                  )}
+                </>
+              )}
               <button type="button" onClick={addColumn} disabled={busy || !columnName.trim()} aria-label="Lưu cột mới" className="flex h-9 w-9 items-center justify-center rounded-md text-teal-600 hover:bg-teal-50 disabled:opacity-40 dark:hover:bg-teal-500/10">
                 <Check className="h-4 w-4" aria-hidden="true" />
               </button>
@@ -724,5 +873,67 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
         </footer>
       )}
     </section>
+  );
+}
+
+/**
+ * Ô chọn một dòng bên bảng đích để nối vào.
+ *
+ * Nạp danh sách LƯỜI — chỉ khi người dùng bấm mở. Một bảng có 200 dòng, mỗi
+ * dòng một cột quan hệ, sẽ là 200 lượt gọi ngay lúc mở bảng nếu nạp sẵn.
+ *
+ * `exclude` bỏ những dòng đã nối: hiện lại chúng chỉ tạo cơ hội bấm nhầm rồi
+ * chẳng có gì xảy ra (máy chủ khử trùng lặp), và người dùng không hiểu vì sao.
+ */
+function RelationPicker({
+  propertyId, exclude, onPick,
+}: {
+  propertyId: number;
+  exclude: number[];
+  onPick: (rowId: number) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [options, setOptions] = useState<{ id: number; label: string }[] | null>(null);
+
+  const openPicker = () => {
+    setOpen(true);
+    if (options !== null) return;
+    noteDatabaseApi.listRelationOptions(propertyId)
+      .then((res) => setOptions(res.data.data))
+      .catch(() => setOptions([]));
+  };
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={openPicker}
+        aria-label="Nối tới một dòng"
+        className="rounded px-1.5 py-0.5 text-[11px] text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/10"
+      >
+        + Nối
+      </button>
+    );
+  }
+
+  const available = (options ?? []).filter((o) => !exclude.includes(o.id));
+  return (
+    <select
+      autoFocus
+      aria-label="Chọn dòng để nối"
+      defaultValue=""
+      onBlur={() => setOpen(false)}
+      onChange={(event) => {
+        const id = Number(event.target.value);
+        setOpen(false);
+        if (Number.isInteger(id) && id > 0) onPick(id);
+      }}
+      className="min-h-6 rounded border border-slate-300 bg-white px-1 text-[11px] dark:border-white/[0.12] dark:bg-black/30 dark:text-slate-100"
+    >
+      <option value="">
+        {options === null ? 'Đang tải…' : available.length === 0 ? 'Không còn dòng nào' : '— chọn —'}
+      </option>
+      {available.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+    </select>
   );
 }

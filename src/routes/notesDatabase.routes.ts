@@ -20,6 +20,8 @@ import {
   deleteView,
   getDatabase,
   listDatabasePeople,
+  listRelationOptions,
+  setRowRelations,
   listDatabases,
   reorderProperties,
   reorderRows,
@@ -51,6 +53,20 @@ router.post('/', async (req: any, res: Response<ApiResponse>, next) => {
 // ─── Rows, properties and views ───────────────────────────────
 // Declared before '/:databaseId' so those literal segments are not swallowed
 // by the parameterised route.
+
+router.get('/properties/:propertyId/relation-options', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await listRelationOptions(req.user.userId, Number(req.params.propertyId), req.query.q as string | undefined);
+    res.json({ success: true, data });
+  } catch (error) { next(error); }
+});
+
+router.put('/rows/:rowId/relations/:propertyId', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await setRowRelations(req.user.userId, Number(req.params.rowId), Number(req.params.propertyId), req.body?.targetRowIds);
+    res.json({ success: true, data });
+  } catch (error) { next(error); }
+});
 
 router.get('/:databaseId/people', async (req: any, res: Response<ApiResponse>, next) => {
   try {

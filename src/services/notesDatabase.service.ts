@@ -19,6 +19,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { canEditSharedNote, checkNoteAccess } from './notesShare.service.js';
+import { computeRollups, loadRelationData, parseRelationConfig } from './noteDatabaseRollup.js';
 
 // ─── Property types ───────────────────────────────────────────
 
@@ -27,6 +28,8 @@ export const DATABASE_PROPERTY_TYPES = [
   // 17/08/2026 — sáu kiểu bổ sung. Cột `type` là VARCHAR chứ không phải enum
   // Postgres, nên thêm ở đây là đủ, KHÔNG cần migration.
   'STATUS', 'PERSON', 'EMAIL', 'FILE', 'CREATED_TIME', 'LAST_EDITED_TIME',
+  // 17/08/2026 — quan hệ giữa hai bảng và số tổng hợp từ quan hệ đó.
+  'RELATION', 'ROLLUP',
 ] as const;
 export type DatabasePropertyType = (typeof DATABASE_PROPERTY_TYPES)[number];
 
@@ -299,6 +302,15 @@ export function normalizeCellValue(
       // Tính ra lúc đọc — xem COMPUTED_PROPERTY_TYPES. Không bao giờ lưu.
       return null;
 
+    /* RELATION nằm ở bảng `note_database_row_links` (ghi qua `setRowRelations`),
+     * ROLLUP thì tính lúc đọc. Cả hai KHÔNG được rơi vào nhánh `default` bên
+     * dưới — nhánh đó ép mọi thứ thành chuỗi, nên một mảng id sẽ được lưu
+     * thành "12,13" trong bảng ô, và từ đó có hai nguồn sự thật cho cùng một
+     * cột: một mảng đúng ở bảng liên kết và một chuỗi rác ở đây. */
+    case 'RELATION':
+    case 'ROLLUP':
+      return null;
+
     default:
       return String(raw).slice(0, 2000);
   }
@@ -434,17 +446,45 @@ export async function getDatabase(userId: number, databaseId: number) {
     }),
   ]);
 
+  const rowIds = rows.map((row) => row.id);
+  const relationIds = full.properties.filter((p) => p.type === 'RELATION').map((p) => p.id);
+  const links = await loadRelationData(relationIds, rowIds);
+  const rollupValues = await computeRollups(
+    full.properties.filter((p) => p.type === 'ROLLUP').map((p) => ({ id: p.id, config: p.config })),
+    links,
+    rowIds,
+  );
+
   // Flatten cells into a propertyId → value map so the client never has to
   // scan an array per cell to render one row.
   return {
     ...full,
-    rows: rows.map((row) => withComputedValues({
-      id: row.id,
-      sortOrder: row.sortOrder,
-      createdAt: row.createdAt,
-      updatedAt: row.updatedAt,
-      values: Object.fromEntries(row.cells.map((cell) => [cell.propertyId, cell.value])) as Record<string, unknown>,
-    }, full.properties)),
+    /**
+     * Nhãn của các dòng được cột RELATION trỏ tới, gửi kèm để client vẽ chip
+     * mà không phải gọi thêm một lượt cho mỗi liên kết.
+     */
+    relationLabels: Object.fromEntries(links.labels),
+    rows: rows.map((row) => {
+      const base = withComputedValues({
+        id: row.id,
+        sortOrder: row.sortOrder,
+        createdAt: row.createdAt,
+        updatedAt: row.updatedAt,
+        values: Object.fromEntries(row.cells.map((cell) => [cell.propertyId, cell.value])) as Record<string, unknown>,
+      }, full.properties);
+
+      // RELATION và ROLLUP không nằm trong bảng `cells` — cái thứ nhất ở bảng
+      // liên kết riêng, cái thứ hai tính lúc đọc. Tiêm vào cùng chỗ với các ô
+      // khác để client chỉ có MỘT cách đọc giá trị của một cột.
+      for (const property of full.properties) {
+        if (property.type === 'RELATION') {
+          base.values[property.id] = links.forward.get(property.id)?.get(row.id) ?? [];
+        } else if (property.type === 'ROLLUP') {
+          base.values[property.id] = rollupValues.get(property.id)?.get(row.id) ?? null;
+        }
+      }
+      return base;
+    }),
   };
 }
 
@@ -479,6 +519,112 @@ export async function listDatabasePeople(userId: number, databaseId: number) {
     if (share.recipient) people.set(share.recipient.id, share.recipient);
   }
   return [...people.values()];
+}
+
+/**
+ * Đặt lại danh sách dòng mà một ô RELATION trỏ tới.
+ *
+ * Thay TOÀN BỘ chứ không thêm/bớt từng cái: client gửi lên danh sách cuối
+ * cùng nó muốn, và ở đây khớp lại cho đúng. Làm theo kiểu thêm/bớt sẽ cần
+ * client biết chính xác trạng thái hiện tại, mà nó không biết được khi có hai
+ * người cùng sửa.
+ */
+export async function setRowRelations(
+  userId: number,
+  rowId: number,
+  propertyId: number,
+  targetRowIds: unknown,
+) {
+  assertId(rowId, 'rowId');
+  assertId(propertyId, 'propertyId');
+
+  const row = await prisma.noteDatabaseRow.findUnique({
+    where: { id: rowId },
+    select: { id: true, databaseId: true },
+  });
+  if (!row) throw new AppError('Dòng không tồn tại', 404, 'ROW_NOT_FOUND');
+  await assertDatabaseAccess(userId, row.databaseId, true);
+
+  const property = await prisma.noteDatabaseProperty.findUnique({
+    where: { id: propertyId },
+    select: { id: true, databaseId: true, type: true, config: true },
+  });
+  // Cột phải thuộc ĐÚNG bảng chứa dòng này. Thiếu phép kiểm đó, người dùng gửi
+  // lên một propertyId bất kỳ và ghi liên kết vào cột của bảng người khác.
+  if (!property || property.databaseId !== row.databaseId) {
+    throw new AppError('Cột không thuộc bảng này', 400, 'UNKNOWN_PROPERTY');
+  }
+  if (property.type !== 'RELATION') {
+    throw new AppError('Cột này không phải kiểu quan hệ', 400, 'NOT_A_RELATION');
+  }
+  const config = parseRelationConfig(property.config);
+  if (!config) throw new AppError('Cột quan hệ chưa chọn bảng đích', 400, 'RELATION_NOT_CONFIGURED');
+
+  // Người dùng phải có quyền ĐỌC bảng đích. Không kiểm thì họ dựng được liên
+  // kết tới bảng của người khác rồi đọc nhãn dòng bên đó qua `relationLabels`
+  // — một đường rò dữ liệu đi vòng.
+  await assertDatabaseAccess(userId, config.targetDatabaseId, false);
+
+  const wanted = [...new Set(
+    (Array.isArray(targetRowIds) ? targetRowIds : [])
+      .map(Number)
+      .filter((id) => Number.isInteger(id) && id > 0),
+  )].slice(0, 100);
+
+  // Chỉ nhận dòng THẬT SỰ thuộc bảng đích. Lọc bằng truy vấn chứ không tin
+  // danh sách client gửi: id lạ sẽ tạo liên kết trỏ sang bảng khác hẳn.
+  const valid = wanted.length === 0 ? [] : (await prisma.noteDatabaseRow.findMany({
+    where: { id: { in: wanted }, databaseId: config.targetDatabaseId },
+    select: { id: true },
+  })).map((r) => r.id);
+
+  await prisma.$transaction(async (tx) => {
+    await tx.noteDatabaseRowLink.deleteMany({ where: { propertyId, fromRowId: rowId } });
+    if (valid.length > 0) {
+      await tx.noteDatabaseRowLink.createMany({
+        data: valid.map((toRowId) => ({ propertyId, fromRowId: rowId, toRowId })),
+        skipDuplicates: true,
+      });
+    }
+    await tx.noteDatabaseRow.update({ where: { id: rowId }, data: { updatedById: userId } });
+  });
+
+  return { rowId, propertyId, targetRowIds: valid };
+}
+
+/**
+ * Danh sách dòng chọn được cho một cột RELATION: id + nhãn của bảng đích.
+ *
+ * Gác bằng quyền đọc bảng ĐÍCH, không phải bảng nguồn — nếu không, ai có
+ * quyền sửa bảng nguồn sẽ đọc được tiêu đề mọi dòng của một bảng họ không
+ * được phép mở.
+ */
+export async function listRelationOptions(userId: number, propertyId: number, search?: string) {
+  assertId(propertyId, 'propertyId');
+  const property = await prisma.noteDatabaseProperty.findUnique({
+    where: { id: propertyId },
+    select: { databaseId: true, type: true, config: true },
+  });
+  if (!property || property.type !== 'RELATION') {
+    throw new AppError('Cột này không phải kiểu quan hệ', 400, 'NOT_A_RELATION');
+  }
+  await assertDatabaseAccess(userId, property.databaseId, false);
+  const config = parseRelationConfig(property.config);
+  if (!config) return [];
+  await assertDatabaseAccess(userId, config.targetDatabaseId, false);
+
+  const rows = await prisma.noteDatabaseRow.findMany({
+    where: { databaseId: config.targetDatabaseId },
+    orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+    select: { id: true, cells: { where: { property: { isTitle: true } }, select: { value: true } } },
+    take: 500,
+  });
+
+  const needle = String(search ?? '').trim().toLowerCase();
+  return rows
+    .map((r) => ({ id: r.id, label: String(r.cells[0]?.value ?? '') || `Dòng #${r.id}` }))
+    .filter((r) => needle === '' || r.label.toLowerCase().includes(needle))
+    .slice(0, 100);
 }
 
 export async function updateDatabase(

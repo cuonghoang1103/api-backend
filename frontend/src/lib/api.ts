@@ -765,7 +765,8 @@ export type NoteDatabasePropertyType =
   // src/services/notesDatabase.service.ts — union này chép tay nên `tsc`
   // KHÔNG bắt được lúc hai bên lệch nhau; dự án đã vỡ seed trên production
   // vì đúng kiểu chép tay này (08/08/2026, xem CLAUDE.md).
-  | 'STATUS' | 'PERSON' | 'EMAIL' | 'FILE' | 'CREATED_TIME' | 'LAST_EDITED_TIME';
+  | 'STATUS' | 'PERSON' | 'EMAIL' | 'FILE' | 'CREATED_TIME' | 'LAST_EDITED_TIME'
+  | 'RELATION' | 'ROLLUP';
 
 // Phải khớp `DATABASE_VIEW_TYPES` trong src/services/notesDatabase.service.ts.
 export type NoteDatabaseViewType = 'TABLE' | 'BOARD' | 'CALENDAR' | 'GALLERY' | 'TIMELINE' | 'LIST';
@@ -820,6 +821,12 @@ export interface NoteDatabaseSummary {
 
 export interface NoteDatabaseFull extends NoteDatabaseSummary {
   rows: NoteDatabaseRow[];
+  /**
+   * Nhãn của các dòng mà cột quan hệ trỏ tới, khoá theo id dòng BÊN BẢNG ĐÍCH.
+   * Máy chủ gửi kèm để client vẽ chip mà không phải gọi thêm một lượt cho mỗi
+   * liên kết — một bảng 200 dòng mỗi dòng 3 liên kết sẽ là 600 lượt gọi.
+   */
+  relationLabels?: Record<string, string>;
 }
 
 export interface NoteSyncedBlockDto {
@@ -863,6 +870,15 @@ export const noteDatabaseApi = {
     api.delete<{ data: { id: number; deleted: boolean } }>(`/notes-databases/${databaseId}`),
 
   /** Người có thể gán vào cột PERSON: chủ môn + những người được chia sẻ môn. */
+  /** Dòng chọn được cho một cột quan hệ (id + nhãn của bảng đích). */
+  listRelationOptions: (propertyId: number, q?: string) =>
+    api.get<{ data: { id: number; label: string }[] }>(
+      `/notes-databases/properties/${propertyId}/relation-options`, { params: q ? { q } : undefined }),
+  /** Đặt LẠI TOÀN BỘ danh sách dòng mà một ô quan hệ trỏ tới. */
+  setRowRelations: (rowId: number, propertyId: number, targetRowIds: number[]) =>
+    api.put<{ data: { rowId: number; propertyId: number; targetRowIds: number[] } }>(
+      `/notes-databases/rows/${rowId}/relations/${propertyId}`, { targetRowIds }),
+
   listPeople: (databaseId: number) =>
     api.get<{ data: DatabasePerson[] }>(`/notes-databases/${databaseId}/people`),
 

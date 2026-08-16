@@ -4210,8 +4210,9 @@ model NoteDatabaseProperty {
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
-  database NoteDatabase       @relation(fields: [databaseId], references: [id], onDelete: Cascade)
+  database NoteDatabase          @relation(fields: [databaseId], references: [id], onDelete: Cascade)
   cells    NoteDatabaseCell[]
+  rowLinks NoteDatabaseRowLink[]
 
   @@unique([databaseId, name], map: "uk_note_database_property_name")
   @@index([databaseId, sortOrder], map: "idx_note_database_properties_sort")
@@ -4227,10 +4228,13 @@ model NoteDatabaseRow {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  database  NoteDatabase       @relation(fields: [databaseId], references: [id], onDelete: Cascade)
-  createdBy User?              @relation("NoteDatabaseRowCreator", fields: [createdById], references: [id], onDelete: SetNull)
-  updatedBy User?              @relation("NoteDatabaseRowUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+  database  NoteDatabase          @relation(fields: [databaseId], references: [id], onDelete: Cascade)
+  createdBy User?                 @relation("NoteDatabaseRowCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  updatedBy User?                 @relation("NoteDatabaseRowUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
   cells     NoteDatabaseCell[]
+  // Hai chiều của cùng một bảng liên kết — xem NoteDatabaseRowLink.
+  linksOut  NoteDatabaseRowLink[] @relation("NoteRowLinkFrom")
+  linksIn   NoteDatabaseRowLink[] @relation("NoteRowLinkTo")
 
   @@index([databaseId, sortOrder], map: "idx_note_database_rows_sort")
   @@index([createdById], map: "idx_note_database_rows_creator")
@@ -4252,6 +4256,38 @@ model NoteDatabaseCell {
   @@unique([rowId, propertyId], map: "uk_note_database_cell_row_property")
   @@index([propertyId], map: "idx_note_database_cells_property")
   @@map("note_database_cells")
+}
+
+// Liên kết giữa hai dòng của hai database ("relation" của Notion).
+//
+// ─── Vì sao là BẢNG RIÊNG chứ không nhét vào `note_database_cells` ───
+// Cách dễ hơn là lưu mảng id vào `value` của ô. Nhưng liên kết của Notion là
+// HAI CHIỀU: nối Dự án → Công việc thì bên Công việc phải thấy ngay Dự án đó.
+// Với mảng JSONB, muốn có chiều ngược phải giữ hai mảng ở hai bên và cập nhật
+// đồng thời — chỉ cần một lượt ghi hỏng giữa chừng là hai bên lệch nhau vĩnh
+// viễn, mà không có ràng buộc nào của cơ sở dữ liệu phát hiện ra.
+//
+// Một hàng ở đây phục vụ CẢ HAI chiều: chiều xuôi tra theo `from_row_id`,
+// chiều ngược tra theo `to_row_id`. Không có gì để lệch.
+//
+// `property_id` là cột RELATION sở hữu liên kết này — nhờ nó, hai cột quan hệ
+// khác nhau giữa cùng một cặp database ("Người phụ trách" và "Người duyệt")
+// không giẫm lên nhau.
+model NoteDatabaseRowLink {
+  id         Int      @id @default(autoincrement())
+  propertyId Int      @map("property_id")
+  fromRowId  Int      @map("from_row_id")
+  toRowId    Int      @map("to_row_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  property NoteDatabaseProperty @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  fromRow  NoteDatabaseRow      @relation("NoteRowLinkFrom", fields: [fromRowId], references: [id], onDelete: Cascade)
+  toRow    NoteDatabaseRow      @relation("NoteRowLinkTo", fields: [toRowId], references: [id], onDelete: Cascade)
+
+  @@unique([propertyId, fromRowId, toRowId], map: "uk_note_row_link")
+  @@index([propertyId, fromRowId], map: "idx_note_row_link_from")
+  @@index([propertyId, toRowId], map: "idx_note_row_link_to")
+  @@map("note_database_row_links")
 }
 
 model NoteDatabaseView {

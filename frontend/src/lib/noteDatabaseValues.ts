@@ -34,6 +34,33 @@ export interface DatabaseFile {
  */
 export interface CellContext {
   people?: DatabasePerson[];
+  /** Nhãn dòng bên bảng đích của cột quan hệ, khoá theo id. Xem NoteDatabaseFull. */
+  relationLabels?: Record<string, string>;
+}
+
+/** Phép tổng hợp của cột ROLLUP. Phải khớp `ROLLUP_FUNCTIONS` ở backend. */
+export const ROLLUP_FUNCTION_LABEL: Record<string, string> = {
+  count: 'Đếm dòng',
+  countNotEmpty: 'Đếm ô có dữ liệu',
+  countDone: 'Đếm việc xong',
+  percentDone: '% hoàn thành',
+  sum: 'Tổng',
+  average: 'Trung bình',
+  min: 'Nhỏ nhất',
+  max: 'Lớn nhất',
+  earliestDate: 'Ngày sớm nhất',
+  latestDate: 'Ngày muộn nhất',
+};
+
+export function rollupFunctionOf(property: NoteDatabaseProperty): string {
+  const fn = (property.config as { fn?: unknown } | null)?.fn;
+  return typeof fn === 'string' ? fn : 'count';
+}
+
+/** Id các dòng mà một ô quan hệ đang trỏ tới. */
+export function asRelationIds(value: unknown): number[] {
+  if (!Array.isArray(value)) return [];
+  return value.map(Number).filter((id) => Number.isInteger(id) && id > 0);
 }
 
 export function personLabel(person: DatabasePerson): string {
@@ -46,12 +73,14 @@ export function personLabel(person: DatabasePerson): string {
  * rồi thấy giá trị cũ quay lại mà không hiểu vì sao.
  */
 export function isReadOnlyType(type: NoteDatabaseProperty['type']): boolean {
-  return type === 'CREATED_TIME' || type === 'LAST_EDITED_TIME';
+  // ROLLUP cũng chỉ đọc: máy chủ tính lại mỗi lần đọc từ dữ liệu bảng khác,
+  // nên gõ vào đó thì lượt đọc kế tiếp ghi đè ngay.
+  return type === 'CREATED_TIME' || type === 'LAST_EDITED_TIME' || type === 'ROLLUP';
 }
 
 /** Cột nào cần giao diện riêng thay vì ô nhập chữ thường. */
 export function needsCustomEditor(type: NoteDatabaseProperty['type']): boolean {
-  return type === 'FILE' || type === 'PERSON' || isReadOnlyType(type);
+  return type === 'FILE' || type === 'PERSON' || type === 'RELATION' || isReadOnlyType(type);
 }
 
 /**
@@ -123,6 +152,27 @@ export function displayValue(property: NoteDatabaseProperty, value: unknown, ctx
       const files = asFiles(value);
       if (files.length === 0) return '';
       return files.length === 1 ? (files[0]!.name || files[0]!.url) : `${files.length} tệp`;
+    }
+    case 'RELATION': {
+      const ids = asRelationIds(value);
+      if (ids.length === 0) return '';
+      // Cùng lý do với cột PERSON: dòng bên kia có thể đã bị xoá, và hiện
+      // "#id" cho biết ô này TỪNG trỏ tới cái gì thay vì để nó trông như trống.
+      return ids.map((id) => ctx.relationLabels?.[String(id)] ?? `#${id}`).join(', ');
+    }
+    case 'ROLLUP': {
+      if (value === null || value === undefined) return '';
+      // `% hoàn thành` là con số duy nhất cần đơn vị — thiếu dấu % thì "50"
+      // trông y hệt một phép đếm.
+      if (rollupFunctionOf(property) === 'percentDone') return `${value}%`;
+      const fn = rollupFunctionOf(property);
+      if (fn === 'earliestDate' || fn === 'latestDate') {
+        const date = new Date(String(value));
+        return Number.isNaN(date.getTime())
+          ? ''
+          : date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      }
+      return typeof value === 'number' ? value.toLocaleString('vi-VN') : String(value);
     }
     default:
       return String(value);

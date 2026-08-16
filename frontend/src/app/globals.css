@@ -2548,37 +2548,83 @@ aside ::-webkit-scrollbar-thumb:hover {
  * Mọi rule dưới đây đều có selector `.dark .note-prose xxx`
  * riêng để giữ nguyên giao diện cũ khi user đang ở dark mode.
  * ──────────────────────────────────────────────────────────── */
+/* ── Nhịp dọc kiểu Notion (17/08/2026) ──────────────────────────
+ * Notion đặt các khối SÁT nhau (~2px) rồi mở khoảng trống LỚN ngay
+ * TRƯỚC tiêu đề. Đó là thứ tạo ra cảm giác "chia mục" của nó: mắt
+ * thấy nhóm, không thấy một chuỗi dòng cách đều.
+ *
+ * Bản cũ dùng `> * + * { margin-top: 0.85em }` — mọi khối cách nhau
+ * y hệt nhau, nên đoạn văn và tiêu đề trôi thành một dải phẳng.
+ *
+ * ⚠️ line-height 1.6, KHÔNG phải 1.5 của Notion. Tiếng Việt có dấu
+ * cả TRÊN lẫn DƯỚI cùng một chữ (ậ, ệ, ộ); ở 1.5 dấu nặng của dòng
+ * trên chạm dấu mũ của dòng dưới. Đo trên "Nghiệm phương trình bậc
+ * hai": 1.5 → chạm, 1.6 → hở ~2px.
+ *
+ * Màu chữ xám ẤM (55,53,47) thay slate lạnh: đây là màu mực của
+ * Notion và là lý do nền trắng của nó trông như giấy chứ không như
+ * màn hình. */
 .note-prose {
   font-size: 16px;          /* >= 16px: no iOS focus zoom */
-  line-height: 1.75;
-  color: #1f2937;            /* slate-800 — dễ đọc trên nền trắng */
+  line-height: 1.6;
+  color: rgb(55, 53, 47);
   min-height: 60vh;
 }
-.note-prose > * + * { margin-top: 0.85em; }
-.note-prose h1 { font-size: 1.7rem; font-weight: 700; color: #0f172a; line-height: 1.25; margin-top: 1.4em; letter-spacing: -0.01em; }
-.note-prose h2 { font-size: 1.35rem; font-weight: 700; color: #0f172a; line-height: 1.3; margin-top: 1.3em; }
-.note-prose h3 { font-size: 1.12rem; font-weight: 600; color: #1e293b; margin-top: 1.1em; }
-.note-prose p { color: #1f2937; }
-.note-prose strong { color: #0f172a; font-weight: 600; }
-.note-prose em { color: #4338ca; }
-.note-prose a { color: #0d9488; text-decoration: underline; text-underline-offset: 2px; }
-.note-prose ul { list-style: disc; padding-left: 1.4em; }
-.note-prose ol { list-style: decimal; padding-left: 1.4em; }
-.note-prose li { margin: 0.2em 0; }
-.note-prose li > ul, .note-prose li > ol { margin-top: 0.2em; }
+/* Mặc định chặt; từng loại khối tự nới ở dưới. */
+.note-prose > * + * { margin-top: 2px; }
+.note-prose > p + p { margin-top: 1px; }
+
+.note-prose h1,
+.note-prose h2,
+.note-prose h3 {
+  color: rgb(55, 53, 47);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;       /* tiêu đề DÍNH vào nội dung của nó */
+}
+.note-prose h1 { font-size: 1.875em; line-height: 1.3; }
+.note-prose h2 { font-size: 1.5em;   line-height: 1.3; }
+.note-prose h3 { font-size: 1.25em;  line-height: 1.3; }
+/* Khoảng trống lớn TRƯỚC tiêu đề — nhưng không phải ở đầu trang. */
+.note-prose > h1 + *, .note-prose > h2 + *, .note-prose > h3 + * { margin-top: 4px; }
+.note-prose > * + h1 { margin-top: 2em; }
+.note-prose > * + h2 { margin-top: 1.4em; }
+.note-prose > * + h3 { margin-top: 1em; }
+.note-prose > h1:first-child,
+.note-prose > h2:first-child,
+.note-prose > h3:first-child { margin-top: 0; }
+
+.note-prose p { color: inherit; }
+.note-prose strong { color: inherit; font-weight: 600; }
+/* `em` KHÔNG đổi màu: chữ nghiêng đã đủ để phân biệt, tô thêm màu
+ * làm câu bị vằn. Bản cũ để tím indigo. */
+.note-prose em { color: inherit; }
+.note-prose a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(55, 53, 47, 0.4);
+  text-underline-offset: 2px;
+}
+.note-prose a:hover { background: rgba(55, 53, 47, 0.08); }
+.note-prose ul { list-style: disc; padding-left: 1.6em; }
+.note-prose ol { list-style: decimal; padding-left: 1.6em; }
+.note-prose li { margin: 1px 0; }
+.note-prose li > ul, .note-prose li > ol { margin-top: 1px; }
+.note-prose > ul, .note-prose > ol { margin-top: 4px; }
 .note-prose blockquote {
-  border-left: 3px solid rgba(13, 148, 136, 0.45);
-  padding: 0.1em 0 0.1em 1em;
-  color: #475569;
-  font-style: italic;
+  border-left: 3px solid currentColor;
+  padding: 0 0 0 14px;
+  color: inherit;
+  font-style: normal;       /* Notion không nghiêng trích dẫn */
+  margin-top: 8px;
 }
 .note-prose :not(pre) > code {
-  background: rgba(13, 148, 136, 0.08);
-  color: #0f766e;
-  border: 1px solid rgba(13, 148, 136, 0.20);
-  border-radius: 4px;
-  padding: 0.08em 0.4em;
-  font-size: 0.88em;
+  background: rgba(135, 131, 120, 0.15);
+  color: #eb5757;
+  border: none;
+  border-radius: 3px;
+  padding: 0.2em 0.4em;
+  font-size: 0.85em;
   font-family: var(--font-mono, ui-monospace, monospace);
 }
 .note-prose pre {
@@ -2602,30 +2648,175 @@ aside ::-webkit-scrollbar-thumb:hover {
 /* Dark theme override — khi wrapper có class `dark`, các quy tắc
    này áp dụng vào .note-prose bên trong. Giữ nguyên bảng màu
    gốc của editor cũ (chữ sáng trên nền tối). */
-.dark .note-prose { color: #cbd5e1; }
-.dark .note-prose h1 { color: #f1f5f9; }
-.dark .note-prose h2 { color: #f1f5f9; }
-.dark .note-prose h3 { color: #e2e8f0; }
-.dark .note-prose p { color: #cbd5e1; }
-.dark .note-prose strong { color: #f1f5f9; }
-.dark .note-prose em { color: #a5b4fc; }
-.dark .note-prose a { color: #2dd4bf; }
+/* Mực tối của Notion là TRẮNG MỜ (81%), không phải xám xanh đặc.
+ * Trắng đặc trên nền tối gây loá ở khối chữ dài; 81% giữ tương phản
+ * đủ đọc mà không chói. Tiêu đề đẩy lên 90% để vẫn nổi hơn thân bài. */
+.dark .note-prose { color: rgba(255, 255, 255, 0.81); }
+.dark .note-prose h1,
+.dark .note-prose h2,
+.dark .note-prose h3 { color: rgba(255, 255, 255, 0.9); }
+.dark .note-prose p { color: inherit; }
+.dark .note-prose strong { color: rgba(255, 255, 255, 0.95); }
+.dark .note-prose em { color: inherit; }
+.dark .note-prose a {
+  color: inherit;
+  text-decoration-color: rgba(255, 255, 255, 0.4);
+}
+.dark .note-prose a:hover { background: rgba(255, 255, 255, 0.1); }
 .dark .note-prose blockquote {
-  border-left-color: rgba(45, 212, 191, 0.5);
-  color: #94a3b8;
+  border-left-color: currentColor;
+  color: inherit;
 }
 .dark .note-prose :not(pre) > code {
-  background: rgba(45, 212, 191, 0.1);
-  color: #5eead4;
-  border-color: rgba(45, 212, 191, 0.18);
+  background: rgba(135, 131, 120, 0.28);
+  color: #ff7369;           /* đỏ của Notion, chỉnh sáng cho nền tối */
+  border: none;
 }
 .dark .note-prose pre {
   background: #0a0d12;
   border-color: rgba(255, 255, 255, 0.07);
 }
 .dark .note-prose pre code { color: #e2e8f0; }
+
+/* ── Chủ đề NÂU (17/08/2026) ────────────────────────────────────
+ * Nâu chưa từng có luật riêng cho vùng soạn thảo: nó rơi vào nhánh
+ * mặc định và dùng mực XÁM trên nền vàng ngà, nên "Nâu" chỉ đổi được
+ * cái nền còn chữ vẫn như chủ đề trắng.
+ *
+ * `NotesThemeProvider` đã có sẵn màu mực đúng (`--notes-text`,
+ * #43361f) nhưng chỉ các component đọc biến đó mới dùng — `.note-prose`
+ * ghi màu thẳng nên không thấy. Ở đây gọi lại đúng biến ấy để một
+ * nguồn duy nhất quyết định màu mực.
+ *
+ * Chọn `data-notes-theme` (do provider ghi lên <html>) chứ KHÔNG thêm
+ * lớp mới: mọi lớp đặt trên <html> đều có nguy cơ đụng Tailwind, và
+ * dự án đã hỏng một lần vì đúng chuyện đó (02/07/2026, lớp `.dark`). */
+html[data-notes-theme='brown'] .note-prose { color: var(--notes-text, #43361f); }
+html[data-notes-theme='brown'] .note-prose h1,
+html[data-notes-theme='brown'] .note-prose h2,
+html[data-notes-theme='brown'] .note-prose h3,
+html[data-notes-theme='brown'] .note-prose strong { color: #2f2513; }
+html[data-notes-theme='brown'] .note-prose a { text-decoration-color: rgba(67, 54, 31, 0.45); }
+html[data-notes-theme='brown'] .note-prose a:hover { background: rgba(67, 54, 31, 0.1); }
+html[data-notes-theme='brown'] .note-prose :not(pre) > code {
+  background: rgba(67, 54, 31, 0.12);
+  color: #9c3a2f;           /* đỏ gạch, hợp giấy ngà hơn #eb5757 */
+}
 .dark .note-prose hr { border-top-color: rgba(255, 255, 255, 0.22); }
 .dark .note-prose img.note-img { border-color: rgba(255, 255, 255, 0.06); }
+/* ── Tay cầm khối + thanh công cụ nổi (17/08/2026) ──────────────
+ * Xem components/notes/extensions/BlockHandle.ts để biết phần hành vi.
+ *
+ * Tay cầm nằm NGOÀI luồng nội dung (`position: absolute`) và được đặt
+ * vào phần tử cha của vùng soạn thảo. Vì thế `.note-prose` cần chừa
+ * lề trái đủ rộng, nếu không tay cầm sẽ đè lên chữ ở dòng đầu. */
+.note-block-handle {
+  position: absolute;
+  z-index: 20;
+  /* `flex` + `visibility: hidden`, KHÔNG phải `display: none` — xem lý do
+   * đo được trong BlockHandle.ts (phần tử display:none không có
+   * `offsetParent`, nên lần đặt vị trí đầu tiên rơi lệch). */
+  display: flex;
+  visibility: hidden;
+  align-items: center;
+  gap: 1px;
+  /* Dịch sang trái đúng bề rộng của chính nó để nằm gọn trong lề. */
+  transform: translateX(-100%);
+  padding-right: 4px;
+  /* Không nhận sự kiện chuột trên vùng trống giữa hai nút — nếu không,
+   * dải trong suốt này che mất chữ bên dưới và người dùng không bôi
+   * đen được từ đầu dòng. */
+  pointer-events: none;
+}
+.note-block-handle__btn {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 22px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: rgba(55, 53, 47, 0.35);
+  font-size: 15px;
+  line-height: 1;
+  cursor: grab;
+  transition: background 120ms, color 120ms, opacity 120ms;
+}
+.note-block-handle__btn:hover {
+  background: rgba(55, 53, 47, 0.09);
+  color: rgba(55, 53, 47, 0.7);
+}
+.note-block-handle__grip:active { cursor: grabbing; }
+.dark .note-block-handle__btn { color: rgba(255, 255, 255, 0.3); }
+.dark .note-block-handle__btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+}
+html[data-notes-theme='brown'] .note-block-handle__btn { color: rgba(67, 54, 31, 0.4); }
+html[data-notes-theme='brown'] .note-block-handle__btn:hover { background: rgba(67, 54, 31, 0.12); }
+
+/* Chừa chỗ cho tay cầm. 44px = 2 nút (40px) + khe thở.
+ * Dưới 640px thì bỏ hẳn: trên điện thoại không có `mousemove` để tay
+ * cầm hiện ra, nên chừa lề chỉ tổ ăn mất bề ngang vốn đã hẹp. */
+@media (min-width: 640px) {
+  .note-prose { padding-left: 44px; margin-left: -44px; }
+}
+
+.note-bubble {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  /* Co đúng bề rộng nội dung. Thiếu dòng này, thanh giãn ra bằng hộp mà
+   * Tippy cấp cho nó — đo được 838px trên khung rộng 846px, tức một dải
+   * trắng chạy gần hết bề ngang màn hình thay vì một thanh nhỏ. */
+  width: max-content;
+  padding: 4px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid rgba(55, 53, 47, 0.12);
+  box-shadow: 0 12px 28px rgba(15, 15, 15, 0.16), 0 3px 8px rgba(15, 15, 15, 0.1);
+}
+.note-bubble__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: rgb(55, 53, 47);
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+}
+.note-bubble__btn:hover { background: rgba(55, 53, 47, 0.09); }
+/* Trạng thái BẬT tô bằng màu nhấn, không phải bằng nền đậm hơn: nền
+ * đậm dễ bị nhầm với trạng thái đang rê chuột, và người dùng không
+ * biết định dạng đã áp hay chưa. */
+.note-bubble__btn.is-active { color: #0d9488; background: rgba(13, 148, 136, 0.12); }
+.note-bubble__sep {
+  width: 1px;
+  height: 18px;
+  margin: 0 3px;
+  background: rgba(55, 53, 47, 0.14);
+}
+.dark .note-bubble {
+  background: #1f2126;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.dark .note-bubble__btn { color: rgba(255, 255, 255, 0.85); }
+.dark .note-bubble__btn:hover { background: rgba(255, 255, 255, 0.1); }
+.dark .note-bubble__btn.is-active { color: #2dd4bf; background: rgba(45, 212, 191, 0.16); }
+.dark .note-bubble__sep { background: rgba(255, 255, 255, 0.14); }
+html[data-notes-theme='brown'] .note-bubble {
+  background: #f3e9d6;
+  border-color: rgba(67, 54, 31, 0.2);
+}
+html[data-notes-theme='brown'] .note-bubble__btn { color: #43361f; }
+html[data-notes-theme='brown'] .note-bubble__btn:hover { background: rgba(67, 54, 31, 0.12); }
+
 /* Placeholder (TipTap Placeholder extension) */
 .note-prose p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);

@@ -36,13 +36,15 @@ import Table from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
+import Link from '@tiptap/extension-link';
 import { fileApi } from '@/lib/api';
 import type { NoteFull, NoteSubjectTree } from '@/types';
-import { Check, Loader2, CloudOff, Trash2, Plus, Minus, Star, Archive, AlertCircle, Undo2, Redo2, SlidersHorizontal, ChevronRight, Wifi, WifiOff } from 'lucide-react';
+import { Check, Loader2, CloudOff, Trash2, Plus, Minus, Star, Archive, AlertCircle, Undo2, Redo2, SlidersHorizontal, ChevronRight, Wifi, WifiOff, Bold, Italic, Strikethrough, Code as CodeIcon, Link2, Link2Off, Quote as QuoteIcon, List, ListOrdered, ListChecks, Heading1, Heading2, Heading3, Pilcrow } from 'lucide-react';
 import NoteCodeBlock from '@/components/notes/extensions/NoteCodeBlock';
 import NoteCallout from '@/components/notes/extensions/NoteCallout';
 import NoteMath from '@/components/notes/extensions/NoteMath';
 import TabIndent from '@/components/notes/extensions/TabIndent';
+import BlockHandle from '@/components/notes/extensions/BlockHandle';
 import SlashMenu, { type SlashMenuRef } from '@/components/notes/SlashMenu';
 import NoteTableOfContents from '@/components/notes/NoteTableOfContents';
 import NotePropertiesPanel from '@/components/notes/NotePropertiesPanel';
@@ -234,6 +236,21 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
       // Notepad-style Tab: inserts an 8-space indent at the caret in
       // prose, while leaving list/task/table Tab behaviour untouched.
       TabIndent,
+      // Tay cầm ⠿ + nút chèn ở lề trái, hiện khi rê chuột qua từng khối.
+      BlockHandle,
+      /* Liên kết. StarterKit v2 KHÔNG kèm extension này — thiếu nó thì
+         `setLink`/`isActive('link')` im lặng không làm gì, và người dùng chỉ
+         thấy nút bấm không phản ứng.
+         `openOnClick: false` vì đang ở chế độ soạn thảo: bấm vào chữ có link
+         phải đặt được con trỏ để sửa, không phải nhảy đi mất.
+         `protocols` KHÔNG có `javascript:` — TipTap tự chặn, nhưng ghi ra đây
+         để lần sau ai mở rộng danh sách thì thấy ngay ranh giới. */
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        protocols: ['http', 'https', 'mailto'],
+        HTMLAttributes: { rel: 'noopener noreferrer nofollow', target: '_blank' },
+      }),
       ...(collaboration ? [
         Collaboration.configure({ document: collaboration.document }),
         CollaborationCursor.configure({
@@ -571,6 +588,114 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
 
       {/* Body */}
       <EditorContent editor={editor} />
+
+      {/* Thanh công cụ nổi khi BÔI ĐEN chữ — định dạng ngay tại chỗ thay vì
+          với tay lên thanh công cụ trên cùng.
+
+          `shouldShow` loại trừ bảng và khối mã có chủ đích: trong bảng đã có
+          thanh riêng ngay bên dưới (hai thanh chồng nhau che mất nội dung), và
+          trong khối mã thì in đậm/nghiêng vô nghĩa — nó chỉ chèn ký tự rác vào
+          mã. */}
+      {editor && (
+        <BubbleMenu
+          editor={editor}
+          tippyOptions={{ placement: 'top', duration: 120, maxWidth: 'none' }}
+          shouldShow={({ editor: ed, from, to }) =>
+            from !== to && !ed.isActive('table') && !ed.isActive('codeBlock') && !ed.isActive('image')
+          }
+          className="note-bubble"
+        >
+          {([
+            { key: 'p', icon: Pilcrow, label: 'Văn bản', on: () => editor.isActive('paragraph') && !editor.isActive('blockquote'), run: () => editor.chain().focus().setParagraph().run() },
+            { key: 'h1', icon: Heading1, label: 'Tiêu đề 1', on: () => editor.isActive('heading', { level: 1 }), run: () => editor.chain().focus().toggleHeading({ level: 1 }).run() },
+            { key: 'h2', icon: Heading2, label: 'Tiêu đề 2', on: () => editor.isActive('heading', { level: 2 }), run: () => editor.chain().focus().toggleHeading({ level: 2 }).run() },
+            { key: 'h3', icon: Heading3, label: 'Tiêu đề 3', on: () => editor.isActive('heading', { level: 3 }), run: () => editor.chain().focus().toggleHeading({ level: 3 }).run() },
+          ] as const).map(({ key, icon: Icon, label, on, run }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={run}
+              title={label}
+              aria-label={label}
+              aria-pressed={on()}
+              className={`note-bubble__btn${on() ? ' is-active' : ''}`}
+            >
+              <Icon className="h-3.5 w-3.5" />
+            </button>
+          ))}
+
+          <span className="note-bubble__sep" />
+
+          {([
+            { key: 'bold', icon: Bold, label: 'Đậm (⌘B)', on: () => editor.isActive('bold'), run: () => editor.chain().focus().toggleBold().run() },
+            { key: 'italic', icon: Italic, label: 'Nghiêng (⌘I)', on: () => editor.isActive('italic'), run: () => editor.chain().focus().toggleItalic().run() },
+            { key: 'strike', icon: Strikethrough, label: 'Gạch ngang', on: () => editor.isActive('strike'), run: () => editor.chain().focus().toggleStrike().run() },
+            { key: 'code', icon: CodeIcon, label: 'Mã', on: () => editor.isActive('code'), run: () => editor.chain().focus().toggleCode().run() },
+          ] as const).map(({ key, icon: Icon, label, on, run }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={run}
+              title={label}
+              aria-label={label}
+              aria-pressed={on()}
+              className={`note-bubble__btn${on() ? ' is-active' : ''}`}
+            >
+              <Icon className="h-3.5 w-3.5" />
+            </button>
+          ))}
+
+          <span className="note-bubble__sep" />
+
+          {/* Liên kết: một nút, hai vai trò. Đang đứng trên link thì nó GỠ link
+              (chỗ hay cần nhất và khó tìm nhất); ngoài link thì nó hỏi địa chỉ.
+              `prompt` là có chủ đích — một hộp thoại tự vẽ cần quản lý tiêu
+              điểm, phím Esc và vị trí, mà đổi lại đúng một ô nhập chữ. */}
+          <button
+            type="button"
+            title={editor.isActive('link') ? 'Gỡ liên kết' : 'Chèn liên kết'}
+            aria-label={editor.isActive('link') ? 'Gỡ liên kết' : 'Chèn liên kết'}
+            className={`note-bubble__btn${editor.isActive('link') ? ' is-active' : ''}`}
+            onClick={() => {
+              if (editor.isActive('link')) {
+                editor.chain().focus().extendMarkRange('link').unsetLink().run();
+                return;
+              }
+              const previous = (editor.getAttributes('link').href as string | undefined) ?? '';
+              const href = window.prompt('Địa chỉ liên kết', previous);
+              if (href === null) return;            // bấm Huỷ — không đụng gì
+              if (href.trim() === '') {
+                editor.chain().focus().extendMarkRange('link').unsetLink().run();
+                return;
+              }
+              editor.chain().focus().extendMarkRange('link').setLink({ href: href.trim() }).run();
+            }}
+          >
+            {editor.isActive('link') ? <Link2Off className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
+          </button>
+
+          <span className="note-bubble__sep" />
+
+          {([
+            { key: 'ul', icon: List, label: 'Danh sách', on: () => editor.isActive('bulletList'), run: () => editor.chain().focus().toggleBulletList().run() },
+            { key: 'ol', icon: ListOrdered, label: 'Danh sách đánh số', on: () => editor.isActive('orderedList'), run: () => editor.chain().focus().toggleOrderedList().run() },
+            { key: 'task', icon: ListChecks, label: 'Checklist', on: () => editor.isActive('taskList'), run: () => editor.chain().focus().toggleTaskList().run() },
+            { key: 'quote', icon: QuoteIcon, label: 'Trích dẫn', on: () => editor.isActive('blockquote'), run: () => editor.chain().focus().toggleBlockquote().run() },
+          ] as const).map(({ key, icon: Icon, label, on, run }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={run}
+              title={label}
+              aria-label={label}
+              aria-pressed={on()}
+              className={`note-bubble__btn${on() ? ' is-active' : ''}`}
+            >
+              <Icon className="h-3.5 w-3.5" />
+            </button>
+          ))}
+        </BubbleMenu>
+      )}
 
       {/* Table floating toolbar — shows when caret is inside a table,
           giving the user an obvious way to add/remove rows & columns

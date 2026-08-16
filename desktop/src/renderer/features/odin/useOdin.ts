@@ -46,6 +46,8 @@ export interface OdinState {
   /** Câu Odin đang "nói" — hiện trong bong bóng. */
   say: string | null;
   poke: () => void;
+  /** Cho Odin nói một câu và nhảy lên mừng. Dùng cho tin đáng chú ý. */
+  announce: (message: string) => void;
   startListening: () => Promise<void>;
   stopListening: () => void;
   dismissSay: () => void;
@@ -151,6 +153,14 @@ export function useOdin(options: {
     moodFor('vui', 1400);
   }, [moodFor]);
 
+  const announce = useCallback(
+    (message: string) => {
+      setSay(message);
+      moodFor('vui', 1600);
+    },
+    [moodFor],
+  );
+
   // ── Nhấn-để-nói ──────────────────────────────────────────
   const startListening = useCallback(async () => {
     if (listening || !api) return;
@@ -255,6 +265,7 @@ export function useOdin(options: {
     listening,
     say,
     poke,
+    announce,
     startListening,
     stopListening,
     dismissSay: () => setSay(null),

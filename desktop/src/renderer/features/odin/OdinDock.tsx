@@ -9,9 +9,10 @@
  * Nó KHÔNG che nội dung: nằm ở góc, kích thước nhỏ, và có thể tắt hẳn trong
  * Cài đặt. Một trợ lý mà không tắt được thì là một thứ chắn đường.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Mic, X } from 'lucide-react';
 import { useAppState } from '../../app-state';
+import { useUpdateStatus } from '../../components/UpdateBanner';
 import { useSession } from '../../auth/session';
 import { OdinRobot } from './OdinRobot';
 import { useOdin } from './useOdin';
@@ -70,6 +71,23 @@ export function OdinDock() {
       window.removeEventListener('keyup', onUp);
     };
   }, [enabled, odin]);
+
+  /**
+   * Odin lên tiếng khi bản mới đã tải xong.
+   *
+   * CHỈ ở trạng thái `ready` — lúc đó mới có việc cho người dùng làm (khởi động
+   * lại). Nói ở `checking` hay `downloading` là làm phiền để báo một thứ họ
+   * không tác động được, và một trợ lý hay làm phiền sẽ bị tắt.
+   */
+  const update = useUpdateStatus();
+  const announced = useRef(false);
+  useEffect(() => {
+    if (!enabled || update.state !== 'ready' || announced.current) return;
+    announced.current = true;
+    odin.announce(
+      `Có bản ${update.version} rồi! Bấm "Cài bản ${update.version}" ở góc dưới bên trái khi bạn rảnh nhé.`,
+    );
+  }, [enabled, update, odin]);
 
   if (!enabled) return null;
 

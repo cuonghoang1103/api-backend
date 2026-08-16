@@ -1650,3 +1650,51 @@ code {
   opacity: 0.35;
   cursor: not-allowed;
 }
+
+/* ── Dải báo bản mới ───────────────────────────────────── */
+
+.ct-update-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 9px;
+  margin-bottom: 6px;
+  border: 1px solid transparent;
+  border-radius: var(--ct-radius-sm);
+  font-size: 12.5px;
+  text-align: left;
+  background: none;
+}
+
+.ct-update-banner[data-tone='ready'] {
+  background: color-mix(in srgb, var(--ct-ok) 14%, transparent);
+  border-color: color-mix(in srgb, var(--ct-ok) 40%, transparent);
+  color: var(--ct-ok);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--ct-motion-fast) var(--ct-ease);
+}
+
+.ct-update-banner[data-tone='ready']:hover {
+  background: color-mix(in srgb, var(--ct-ok) 22%, transparent);
+}
+
+.ct-update-banner[data-tone='ready']:active {
+  transform: scale(0.97);
+}
+
+.ct-update-banner[data-tone='busy'] {
+  color: var(--ct-text-muted);
+  background: var(--ct-hover);
+}
+
+.ct-update-banner[data-tone='muted'] {
+  color: var(--ct-text-faint);
+}
+
+.ct-update-banner span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

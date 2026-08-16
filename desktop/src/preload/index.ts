@@ -25,6 +25,7 @@ import type {
   NotesFolder,
   StorageUsage,
   StoredSession,
+  UpdateStatus,
 } from '../shared/ipc';
 
 /**
@@ -67,6 +68,7 @@ const bridge: DesktopBridge = {
 
   update: {
     check: () => ipcRenderer.invoke('update:check') as Promise<void>,
+    getStatus: () => ipcRenderer.invoke('update:getStatus') as Promise<UpdateStatus>,
     install: () => ipcRenderer.invoke('update:install') as Promise<void>,
   },
 

@@ -90,6 +90,18 @@ const rejected = await window.evaluate(async () => {
   await probe('fileUrl', () => globalThis.cuongthai.app.openExternal('file:///etc/passwd'));
   await probe('badKey', () => globalThis.cuongthai.settings.set('khoa-bia-dat', 'x'));
   await probe('badZoom', () => globalThis.cuongthai.app.setZoom(999));
+
+  // Kênh trạng thái cập nhật phải trả lời NGAY, không treo.
+  // Bản 0.1.0 quay vòng mãi mãi vì `app-update.yml` trỏ vào một repo không tồn
+  // tại (sai `owner`), và lời gọi không bao giờ trả về — người dùng nhìn
+  // "Đang kiểm tra…" vô tận mà không có cách nào biết chuyện gì hỏng.
+  try {
+    const status = await globalThis.cuongthai.update.getStatus();
+    out.updateStatus = typeof status?.state === 'string' ? status.state : 'SAI KIỂU';
+  } catch {
+    out.updateStatus = 'NÉM LỖI';
+  }
+
   return out;
 });
 
@@ -98,6 +110,13 @@ check('chặn javascript: URL', rejected.javascriptUrl === 'đã chặn', reject
 check('chặn file:// URL', rejected.fileUrl === 'đã chặn', rejected.fileUrl);
 check('chặn khoá cấu hình lạ', rejected.badKey === 'đã chặn', rejected.badKey);
 check('chặn zoom ngoài khoảng', rejected.badZoom === 'đã chặn', rejected.badZoom);
+check(
+  'update:getStatus trả lời ngay, không treo',
+  ['idle', 'checking', 'none', 'available', 'downloading', 'ready', 'error'].includes(
+    rejected.updateStatus,
+  ),
+  String(rejected.updateStatus),
+);
 
 // ── 5. Kênh sự kiện ngoài danh sách trắng bị từ chối ──────────
 const eventGuard = await window.evaluate(() => {

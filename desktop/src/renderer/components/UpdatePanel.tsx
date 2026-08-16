@@ -8,22 +8,19 @@
 import { useEffect, useState } from 'react';
 import { AlertTriangle, Check, RefreshCw, RotateCw } from 'lucide-react';
 import type { AppInfo, UpdateStatus } from '../../shared/ipc';
+import { useUpdateStatus } from './UpdateBanner';
 
 export function UpdatePanel() {
-  const [status, setStatus] = useState<UpdateStatus>({ state: 'idle' });
+  // Dùng CHUNG hook với dải ở sidebar. Hai chỗ tự giữ trạng thái riêng sẽ có
+  // lúc nói hai điều khác nhau về cùng một sự việc.
+  const status = useUpdateStatus();
   const [info, setInfo] = useState<AppInfo | null>(null);
 
   useEffect(() => {
-    const bridge = window.cuongthai;
-    if (!bridge) return;
-    void bridge.app.getInfo().then(setInfo);
-    return bridge.on('update:status', (payload) => {
-      setStatus(payload as UpdateStatus);
-    });
+    void window.cuongthai?.app.getInfo().then(setInfo);
   }, []);
 
   const check = () => {
-    setStatus({ state: 'checking' });
     void window.cuongthai?.update.check();
   };
 

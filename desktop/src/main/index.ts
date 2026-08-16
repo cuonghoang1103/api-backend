@@ -94,6 +94,11 @@ async function bootstrap(): Promise<void> {
   mainWindow = createMainWindow();
   watchNetwork();
 
+  // Tự kiểm bản mới. Không ai vào Cài đặt mỗi ngày để hỏi — bắt họ làm vậy
+  // nghĩa là phần lớn người dùng mắc kẹt ở bản cũ mà không hề biết.
+  const { scheduleUpdateChecks } = await import('./ipc/update');
+  scheduleUpdateChecks();
+
   app.on('activate', () => {
     // macOS: bấm icon ở Dock khi không còn cửa sổ nào.
     if (BrowserWindow.getAllWindows().length === 0) {

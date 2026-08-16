@@ -203,6 +203,7 @@ export const INVOKE_CHANNELS = {
   'auth:clearSession': null,
 
   'update:check': null,
+  'update:getStatus': null,
   'update:install': null,
 
   'storage:usage': null,
@@ -309,6 +310,14 @@ export interface DesktopBridge {
   };
   update: {
     check(): Promise<void>;
+    /**
+     * Trạng thái cập nhật biết lần cuối.
+     *
+     * Cần vì main tự kiểm theo lịch: nếu renderer chỉ nghe sự kiện `update:status`,
+     * nó sẽ BỎ LỠ mọi lần kiểm xảy ra trước khi nó gắn listener — và người dùng
+     * mở app lên thấy "Chưa kiểm tra" dù bản mới đã tải xong từ lâu.
+     */
+    getStatus(): Promise<UpdateStatus>;
     install(): Promise<void>;
   };
   storage: {

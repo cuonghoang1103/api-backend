@@ -9,6 +9,7 @@
 import { useCallback, useRef } from 'react';
 import { PanelLeftClose, PanelLeftOpen, Settings } from 'lucide-react';
 import { useAppState } from '../app-state';
+import { UpdateBanner } from './UpdateBanner';
 import { UserMenu } from './UserMenu';
 import { GROUP_LABELS, GROUP_ORDER, INTERNAL_ROUTES, ROUTES, isPorted } from '../routes';
 
@@ -85,6 +86,9 @@ export function Sidebar() {
       </div>
 
       <div className="ct-sidebar-footer">
+        {/* Trên tài khoản, không dưới: mắt đi từ trên xuống nên thứ cần hành
+            động phải nằm trước thứ chỉ để xem. */}
+        <UpdateBanner collapsed={collapsed} />
         <UserMenu collapsed={collapsed} />
 
         <button

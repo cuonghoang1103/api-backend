@@ -100,10 +100,24 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const resolvedTheme: 'light' | 'dark' =
     theme === 'system' ? (systemDark ? 'dark' : 'light') : theme;
 
-  // Gắn lên <html> để CSS đổi biến. Làm ở đây thay vì trong component để chỉ
-  // có MỘT chỗ ghi thuộc tính này — hai chỗ ghi sẽ đá nhau lúc chuyển theme.
+  /**
+   * Gắn chủ đề của APP lên `<html>` bằng `data-ct-theme`.
+   *
+   * ⚠️ KHÔNG dùng `data-theme`. Thuộc tính đó đã có chủ: `NotesThemeProvider`
+   * của web ghi chủ đề riêng của Notes (light / dark / brown) lên đúng nó.
+   *
+   * Khi hai hệ cùng ghi một thuộc tính, chúng giẫm lên nhau: người dùng bấm
+   * "Trắng" trong Notes → Notes đặt `data-theme="light"` → effect này đặt lại
+   * thành `dark` → chữ đổi theo chủ đề Notes nhưng NỀN vẫn tối, thành chữ nhạt
+   * trên nền tối, không đọc được.
+   *
+   * Dự án đã dính đúng họ lỗi này một lần (02/07/2026): chủ đề toàn cục đặt
+   * lớp `.dark` lên `<html>` và kích hoạt mọi biến thể `dark:` của Tailwind bên
+   * trong Notes, phá chính bộ chuyển chủ đề của nó. Tiền lệ đó là lý do ở đây
+   * dùng một tên riêng thay vì tên chung.
+   */
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', resolvedTheme);
+    document.documentElement.setAttribute('data-ct-theme', resolvedTheme);
   }, [resolvedTheme]);
 
   const setSetting = useCallback(

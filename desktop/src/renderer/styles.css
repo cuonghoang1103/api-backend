@@ -74,7 +74,7 @@
   color-scheme: light;
 }
 
-:root[data-theme='dark'] {
+:root[data-ct-theme='dark'] {
   --ct-bg: #0a0a11;
   --ct-surface: #14141d;
   --ct-surface-2: #191924;
@@ -1726,9 +1726,13 @@ code {
 .ct-notes-host {
   height: 100%;
   overflow: hidden;
-  /* Notes có nền riêng theo chủ đề của nó; để lộ nền app phía sau sẽ thành
-     hai mảng màu khác nhau ở hai nửa màn hình. */
-  background: var(--ct-bg);
+  /*
+   * KHÔNG đặt `background` ở đây.
+   *
+   * Notes tự sơn nền theo chủ đề riêng của nó (Trắng / Tối / Nâu). Đặt nền của
+   * app lên vùng chứa sẽ ĐÈ qua mọi khoảng mà Notes chưa sơn tới, nên hai chủ
+   * đề sáng hiện ra chữ nhạt trên nền tối của app — đúng lỗi đã gặp.
+   */
 
   /*
    * ⚠️ Hai dòng dưới là thứ làm Notes CUỘN ĐƯỢC. Thiếu chúng, cây môn học bị

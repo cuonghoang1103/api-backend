@@ -269,7 +269,7 @@ check(
 check('vị trí được giữ lại', restored.x === 120 && restored.y === 90, `${restored.x},${restored.y}`);
 
 const themeKept = await window2.evaluate(
-  () => document.documentElement.getAttribute('data-theme'),
+  () => document.documentElement.getAttribute('data-ct-theme'),
 );
 check('chủ đề được giữ lại', themeKept === 'dark', String(themeKept));
 

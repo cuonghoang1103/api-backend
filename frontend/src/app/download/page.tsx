@@ -25,7 +25,7 @@ const RELEASE_BASE =
 const RELEASES_PAGE = 'https://github.com/cuonghoang1103/cuongthai-desktop/releases';
 
 /** Must match `version` in desktop/package.json. */
-const VERSION = '0.2.0';
+const VERSION = '0.2.1';
 
 type Platform = 'mac-arm' | 'mac-intel' | 'windows' | 'linux' | 'unknown';
 

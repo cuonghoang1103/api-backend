@@ -227,7 +227,8 @@ export type LlmPurpose =
   | 'exphub_doc'          // sinh tài liệu cho Exp Hub
   | 'news_bulletin'       // bản tin công nghệ chạy nền mỗi sáng
   | 'doc_ocr'             // chép đề/bài giảng từ ẢNH ra chữ + công thức
-  | 'robot_voice';        // robot Maker Lab — độ trễ quan trọng ngang độ thông minh
+  | 'robot_voice'         // robot Maker Lab — độ trễ quan trọng ngang độ thông minh
+  | 'agent_code';         // agent lập trình của app desktop — GỌI TOOL nhiều lượt
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // Bậc Max lấy model mạnh nhất mua được; Pro lấy gpt-5.5 vì nó nhanh gần gấp
@@ -268,6 +269,16 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // là đổi cả nhịp nói lẫn cách nó chọn lệnh, nên giữ nguyên. Thấy chậm thì
   // `gpt-5.4-mini` nhanh hơn rõ (1,3s so với 4,2s).
   robot_voice: 'gpt-5.6-terra',
+  // ⚠️ ĐỪNG hạ xuống `gpt-5.5` cho "nhanh hơn" — với việc GỌI TOOL nó ngược
+  // hẳn với chat. Đo 17/08/2026, cùng một chuỗi 3 bước (list_dir → read_file
+  // → read_file) trên cùng dữ liệu:
+  //     gpt-5.6-sol  14,6s   ·  gpt-5.5  57,1s
+  // Cả hai đều ra đúng đáp án, nhưng 5.5 chậm gấp 4 vì cổng bọc nó trong một
+  // prompt ẩn ~4,5k token MỖI LƯỢT — và vòng lặp agent thì "mỗi lượt" là hàng
+  // chục lần, không phải một. 5.5 còn rò token dừng `<CPA_DONE>` ra câu trả
+  // lời (gpt-5.4-mini cũng vậy), nên dùng chúng làm lưới đỡ thì phải cắt chuỗi
+  // đó trước khi hiện cho người dùng.
+  agent_code: 'gpt-5.6-sol',
 };
 
 // ─── Định tuyến lai: việc nào đi máy nhà, việc nào đi cổng ─────────
@@ -330,9 +341,19 @@ export interface LlmEndpoint {
  */
 const VISION_PURPOSES = new Set<LlmPurpose>(['chat_vision', 'doc_ocr']);
 
+/**
+ * Việc PHẢI GỌI TOOL nhiều lượt. Chặn khỏi máy nhà vì cùng một lý do như ảnh:
+ * hỏng mà KHÔNG báo lỗi. Qwen3.5-9B qua llama.cpp có nhả `tool_calls`, nhưng
+ * một model 9B đi sai một bước trong chuỗi 20 bước thì nó không dừng lại — nó
+ * bịa ra đường đi tiếp, và người dùng nhận về một câu trả lời tự tin về đoạn
+ * mã chưa từng được đọc. Cổng đã đo chạy đúng chuỗi 3 bước (17/08); máy nhà
+ * thì CHƯA ai đo. Đo xong thấy tốt thì bỏ tên ra khỏi đây.
+ */
+const TOOL_PURPOSES = new Set<LlmPurpose>(['agent_code']);
+
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   const root = localRoot();
-  if (root && !VISION_PURPOSES.has(purpose) && localPurposes().has(purpose) && process.env.LLM_LOCAL_API_KEY) {
+  if (root && !VISION_PURPOSES.has(purpose) && !TOOL_PURPOSES.has(purpose) && localPurposes().has(purpose) && process.env.LLM_LOCAL_API_KEY) {
     return { root, key: process.env.LLM_LOCAL_API_KEY, local: true, label: 'may-nha' };
   }
   return { root: gatewayRoot(), key: gatewayKey(), local: false, label: 'cong' };

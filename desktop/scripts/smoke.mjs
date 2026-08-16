@@ -56,7 +56,8 @@ check('module không lộ ra renderer', !isolation.hasModule);
 check('Buffer không lộ ra renderer', !isolation.hasBuffer);
 
 // ── 2. Bề mặt cầu nối đúng hợp đồng ──────────────────────────
-const expected = ['app', 'auth', 'music', 'notes', 'on', 'settings', 'storage', 'update'];
+// Sắp xếp theo THỨ TỰ CHỮ CÁI vì phép so sánh dưới dùng `bridgeKeys` đã sort.
+const expected = ['agent', 'app', 'auth', 'music', 'notes', 'on', 'settings', 'storage', 'update'];
 console.log('\nCầu nối preload:');
 check('window.cuongthai tồn tại', isolation.bridgeKeys !== null);
 check(
@@ -91,6 +92,18 @@ const rejected = await window.evaluate(async () => {
   await probe('badKey', () => globalThis.cuongthai.settings.set('khoa-bia-dat', 'x'));
   await probe('badZoom', () => globalThis.cuongthai.app.setZoom(999));
 
+  // Hai khoá QUYỀN TRUY CẬP ĐĨA. Chúng nằm trong enum (main phải ghi được sau
+  // khi người dùng chọn thư mục), nên lớp zod cho qua — chặn phải là một luật
+  // RIÊNG trong handler. Nếu luật đó biến mất, mọi thứ khác vẫn xanh: nhà tù
+  // đường dẫn của agent vẫn chạy đúng, nó chỉ đang canh một thư mục gốc mà
+  // renderer vừa tự đổi. Đó là lý do phép kiểm này tồn tại.
+  await probe('ghiAgentWorkspace', () =>
+    globalThis.cuongthai.settings.set('agentWorkspace', '/Users/x/.ssh'),
+  );
+  await probe('ghiNotesFolder', () =>
+    globalThis.cuongthai.settings.set('notesFolder', '/etc'),
+  );
+
   // Kênh trạng thái cập nhật phải trả lời NGAY, không treo.
   // Bản 0.1.0 quay vòng mãi mãi vì `app-update.yml` trỏ vào một repo không tồn
   // tại (sai `owner`), và lời gọi không bao giờ trả về — người dùng nhìn
@@ -110,6 +123,16 @@ check('chặn javascript: URL', rejected.javascriptUrl === 'đã chặn', reject
 check('chặn file:// URL', rejected.fileUrl === 'đã chặn', rejected.fileUrl);
 check('chặn khoá cấu hình lạ', rejected.badKey === 'đã chặn', rejected.badKey);
 check('chặn zoom ngoài khoảng', rejected.badZoom === 'đã chặn', rejected.badZoom);
+check(
+  'renderer KHÔNG tự đổi được thư mục agent được đọc',
+  rejected.ghiAgentWorkspace === 'đã chặn',
+  rejected.ghiAgentWorkspace,
+);
+check(
+  'renderer KHÔNG tự đổi được thư mục ghi chú',
+  rejected.ghiNotesFolder === 'đã chặn',
+  rejected.ghiNotesFolder,
+);
 check(
   'update:getStatus trả lời ngay, không treo',
   ['idle', 'checking', 'none', 'available', 'downloading', 'ready', 'error'].includes(

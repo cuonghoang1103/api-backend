@@ -38,6 +38,45 @@ interface SessionEnvelope {
   sessionToken: string;
 }
 
+/**
+ * Đọc phiên đã cất, dùng NGAY TRONG MAIN.
+ *
+ * Tách ra khỏi handler `auth:loadSession` vì agent gọi backend từ chính main
+ * process (renderer bị sandbox, không gọi mạng dài hơi được) nên nó cần token
+ * mà không đi vòng qua renderer. Đi vòng qua renderer là đưa token cho lớp
+ * kém tin cậy hơn rồi nhận lại — vô nghĩa về mặt an toàn và thêm một đường
+ * hỏng.
+ */
+export function readStoredSession(): StoredSession | null {
+  if (!safeStorage.isEncryptionAvailable()) return null;
+
+  let encrypted: Buffer;
+  try {
+    encrypted = fs.readFileSync(sessionFilePath());
+  } catch {
+    return null; // Chưa từng đăng nhập.
+  }
+
+  try {
+    const decrypted = safeStorage.decryptString(encrypted);
+    const parsed = JSON.parse(decrypted) as Partial<SessionEnvelope>;
+    if (typeof parsed.userId !== 'number' || typeof parsed.sessionToken !== 'string') {
+      return null;
+    }
+    return { userId: parsed.userId, sessionToken: parsed.sessionToken };
+  } catch {
+    // Giải mã hỏng — thường là do người dùng đổi tài khoản HĐH, hoặc keyring
+    // bị tạo lại. Không cứu được; xoá để lần sau đăng nhập sạch, và KHÔNG
+    // làm app chết vì chuyện này.
+    try {
+      fs.unlinkSync(sessionFilePath());
+    } catch {
+      /* file có thể đã biến mất — không sao */
+    }
+    return null;
+  }
+}
+
 export function registerAuthHandlers(): void {
   handle('auth:storeSession', (session) => {
     if (!safeStorage.isEncryptionAvailable()) {
@@ -64,35 +103,7 @@ export function registerAuthHandlers(): void {
     fs.renameSync(temp, target);
   });
 
-  handle('auth:loadSession', (): StoredSession | null => {
-    if (!safeStorage.isEncryptionAvailable()) return null;
-
-    let encrypted: Buffer;
-    try {
-      encrypted = fs.readFileSync(sessionFilePath());
-    } catch {
-      return null; // Chưa từng đăng nhập.
-    }
-
-    try {
-      const decrypted = safeStorage.decryptString(encrypted);
-      const parsed = JSON.parse(decrypted) as Partial<SessionEnvelope>;
-      if (typeof parsed.userId !== 'number' || typeof parsed.sessionToken !== 'string') {
-        return null;
-      }
-      return { userId: parsed.userId, sessionToken: parsed.sessionToken };
-    } catch {
-      // Giải mã hỏng — thường là do người dùng đổi tài khoản HĐH, hoặc keyring
-      // bị tạo lại. Không cứu được; xoá để lần sau đăng nhập sạch, và KHÔNG
-      // làm app chết vì chuyện này.
-      try {
-        fs.unlinkSync(sessionFilePath());
-      } catch {
-        /* file có thể đã biến mất — không sao */
-      }
-      return null;
-    }
-  });
+  handle('auth:loadSession', (): StoredSession | null => readStoredSession());
 
   handle('auth:clearSession', () => {
     try {

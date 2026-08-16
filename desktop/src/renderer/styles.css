@@ -1802,3 +1802,382 @@ select {
   width: 24px;
   color: var(--ct-text);
 }
+
+/* ── Trợ lý AI: /chat hai chế độ ────────────────────────
+ *
+ * Trang này CHIẾM TRỌN chiều cao thay vì cuộn theo `.ct-content` như các trang
+ * khác. Lý do: ô nhập phải neo ở đáy màn hình. Nếu cả trang cùng cuộn thì ô
+ * nhập trôi lên trên theo bảng ghi, và người dùng phải cuộn xuống mới gõ được
+ * — mỗi lần trả lời một lần cuộn.
+ *
+ * Cột cao hơn màn hình phải có trần chiều cao, nếu không cả trang "đơ" —
+ * xem [[feedback_sticky_column_needs_max_height]]. Ở đây trần là `100%` cộng
+ * `min-height: 0` trên mọi mắt xích flex; thiếu `min-height: 0` thì con flex
+ * KHÔNG co nhỏ hơn nội dung của nó và thanh cuộn trong không bao giờ xuất hiện.
+ */
+
+.ct-page-full {
+  max-width: none;
+  height: 100%;
+  padding: 18px 20px;
+  display: flex;
+  min-height: 0;
+}
+
+.ct-panel-full {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 16px 18px 12px;
+}
+
+.ct-panel-full > .ct-page-head {
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+/* Hai chế độ cùng nằm trong cây React; chỉ một cái hiện. Dùng `display` chứ
+   không tháo component ra — tháo là mất hội thoại đang dở. */
+.ct-chedo {
+  display: none;
+  flex: 1;
+  min-height: 0;
+}
+
+.ct-chedo[data-hien='true'] {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Nút chuyển chế độ ── */
+
+.ct-segment {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: var(--ct-bg);
+  flex-shrink: 0;
+}
+
+.ct-segment-nut {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: var(--ct-radius-sm);
+  background: none;
+  color: var(--ct-text-muted);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease), color var(--ct-motion-fast) var(--ct-ease);
+}
+
+.ct-segment-nut:hover {
+  color: var(--ct-text);
+}
+
+.ct-segment-nut[data-chon='true'] {
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  box-shadow: var(--ct-shadow-sm);
+}
+
+.ct-segment-pro {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--ct-accent);
+  color: var(--ct-accent-text, #fff);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+/* ── Khung agent ── */
+
+.ct-agent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Thanh phạm vi quyền. Luôn hiện: người dùng phải nhìn thấy agent đang được
+   đọc thư mục nào mà không phải đi tìm. */
+.ct-agent-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ct-border);
+  flex-shrink: 0;
+}
+
+.ct-agent-bar-spacer {
+  flex: 1;
+}
+
+.ct-agent-ws {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 340px;
+  padding: 5px 10px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  color: var(--ct-text);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.ct-agent-ws:hover {
+  background: var(--ct-hover);
+}
+
+.ct-agent-ws-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ct-agent-branch {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--ct-hover);
+  color: var(--ct-text-muted);
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  flex-shrink: 0;
+}
+
+.ct-agent-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid transparent;
+  border-radius: var(--ct-radius-sm);
+  background: none;
+  color: var(--ct-text-muted);
+  cursor: pointer;
+}
+
+.ct-agent-icon:hover:not(:disabled) {
+  background: var(--ct-hover);
+  color: var(--ct-text);
+}
+
+.ct-agent-icon:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ── Thanh hạn mức ── */
+
+.ct-agent-hanmuc {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: default;
+}
+
+.ct-agent-hanmuc-thanh {
+  width: 68px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--ct-hover);
+  overflow: hidden;
+}
+
+.ct-agent-hanmuc-day {
+  height: 100%;
+  background: var(--ct-accent);
+  transition: width var(--ct-motion) var(--ct-ease);
+}
+
+/* Gần cạn thì đổi màu. Một thanh xanh đầy 95% trông y hệt một thanh xanh đầy
+   40% nếu người dùng chỉ liếc qua. */
+.ct-agent-hanmuc-day[data-cao='true'] {
+  background: var(--ct-warn);
+}
+
+.ct-agent-hanmuc-chu {
+  font-size: 11.5px;
+  color: var(--ct-text-muted);
+  white-space: nowrap;
+}
+
+/* ── Bảng ghi ── */
+
+.ct-agent-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ct-agent-nguoi {
+  align-self: flex-end;
+  max-width: 78%;
+  padding: 9px 13px;
+  border-radius: var(--ct-radius);
+  background: var(--ct-accent);
+  color: #fff;
+  font-size: 13.5px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ct-agent-may {
+  max-width: 92%;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ct-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Dòng tiến trình công cụ — nhịp "chữ → công cụ → chữ" của Claude Code. */
+.ct-agent-tool {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 9px;
+  border-left: 2px solid var(--ct-border);
+  color: var(--ct-text-muted);
+  font-size: 12px;
+  align-self: flex-start;
+  max-width: 92%;
+}
+
+.ct-agent-tool[data-vong='notes'] {
+  border-left-color: var(--ct-accent);
+}
+
+.ct-agent-tool code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  color: var(--ct-text);
+}
+
+.ct-agent-tool-tomtat {
+  color: var(--ct-text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ct-agent-nghi {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ct-text-muted);
+  font-size: 12.5px;
+  padding: 2px 0;
+}
+
+.ct-agent-trong {
+  margin: auto;
+  text-align: center;
+  max-width: 460px;
+}
+
+.ct-agent-trong h2 {
+  margin: 10px 0 8px;
+  font-size: 16px;
+}
+
+.ct-agent-goiy {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.ct-agent-goiy li {
+  padding: 7px 11px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  color: var(--ct-text-muted);
+  font-size: 12.5px;
+}
+
+/* ── Ô soạn ── */
+
+.ct-agent-soan {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ct-border);
+  flex-shrink: 0;
+}
+
+.ct-agent-o {
+  flex: 1;
+  resize: none;
+  padding: 9px 11px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.ct-agent-o:focus {
+  outline: none;
+  border-color: var(--ct-accent);
+}
+
+.ct-agent-o:disabled {
+  opacity: 0.6;
+}
+
+.ct-agent-dung {
+  background: var(--ct-err);
+}
+
+.ct-agent-chan {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  color: var(--ct-text-faint);
+  font-size: 11.5px;
+  flex-shrink: 0;
+}
+
+.ct-agent-chan code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Chừa chỗ cho robot Odin.
+ *
+ * Odin nổi `position: fixed; right: 22px` rộng 104px, tức là nó phủ dải ~126px
+ * sát mép phải. Trang này neo ô soạn ở đáy nên nút Gửi rơi thẳng xuống dưới
+ * con robot — người dùng bấm không trúng. Trừ đi phần đệm sẵn có của trang
+ * (20px) và của panel (18px) thì còn thiếu ~90px.
+ *
+ * Chỉ chừa khi robot đang bật: tắt robot rồi mà vẫn chừa thì mất chỗ vô cớ.
+ */
+.ct-page-full[data-chua-robot='true'] .ct-agent-soan,
+.ct-page-full[data-chua-robot='true'] .ct-agent-chan {
+  padding-right: 90px;
+}

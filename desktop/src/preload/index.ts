@@ -14,6 +14,8 @@
  */
 import { contextBridge, ipcRenderer } from 'electron';
 import type {
+  AgentInfo,
+  AgentWorkspace,
   AppInfo,
   DesktopBridge,
   EventChannel,
@@ -37,6 +39,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'app:networkChanged',
   'app:navigate',
   'update:status',
+  'agent:event',
 ];
 
 const bridge: DesktopBridge = {
@@ -99,6 +102,18 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('music:deleteAudio', { trackId }) as Promise<void>,
     usage: () => ipcRenderer.invoke('music:usage') as Promise<MusicUsage>,
     clearAll: () => ipcRenderer.invoke('music:clearAll') as Promise<void>,
+  },
+
+  agent: {
+    getInfo: () => ipcRenderer.invoke('agent:getInfo') as Promise<AgentInfo>,
+    getWorkspace: () => ipcRenderer.invoke('agent:getWorkspace') as Promise<AgentWorkspace>,
+    chooseWorkspace: () => ipcRenderer.invoke('agent:chooseWorkspace') as Promise<AgentWorkspace>,
+    clearWorkspace: () => ipcRenderer.invoke('agent:clearWorkspace') as Promise<AgentWorkspace>,
+    // Không có timeout ở đây: một lượt agent chạy vài phút là bình thường. Muốn
+    // dừng thì gọi `cancel()`, đừng trông vào việc lời hứa này tự bỏ cuộc.
+    send: (text: string) => ipcRenderer.invoke('agent:send', { text }) as Promise<void>,
+    cancel: () => ipcRenderer.invoke('agent:cancel') as Promise<void>,
+    reset: () => ipcRenderer.invoke('agent:reset') as Promise<void>,
   },
 
   on: (channel: EventChannel, listener: (payload: unknown) => void) => {

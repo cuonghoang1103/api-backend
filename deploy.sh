@@ -900,6 +900,7 @@ for route in \
     social/series/100-ngay-java \
     social/series/100-ngay-database \
     social/series/100-ngay-tieng-anh \
+    agent/tools \
     cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)

@@ -22,6 +22,7 @@
     "lint": "eslint src --ext .ts,.tsx",
     "test": "vitest run",
     "smoke": "npm run build && node scripts/smoke.mjs",
+    "smoke:agent": "npm run build && node scripts/smoke-agent.mjs",
     "smoke:dev": "npm run build:main && node scripts/smoke-dev.mjs",
     "pack": "npm run build && electron-builder --dir",
     "dist:mac": "npm run build && electron-builder --mac",

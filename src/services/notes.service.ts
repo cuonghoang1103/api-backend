@@ -957,7 +957,15 @@ export function reorderVocab(userId: number, noteId: number, orderedIds: unknown
 // so ILIKE is plenty fast; we return a short text snippet around
 // the match for context. Archived notes are excluded by default.
 
-function htmlToText(html: string | null): string {
+/**
+ * Bỏ thẻ HTML, còn lại chữ thuần.
+ *
+ * Xuất ra ngoài vì agent (`src/services/agent/serverTools.ts`) cần đúng phép
+ * biến đổi NÀY chứ không phải một bản chép gần giống: gửi thẳng `contentHtml`
+ * cho model là trả tiền cho hàng nghìn token thẻ `<p>` vô nghĩa, còn chép lại
+ * hàm này ở chỗ khác thì hai bản sẽ trôi dạt.
+ */
+export function htmlToText(html: string | null): string {
   if (!html) return '';
   return html.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
 }

@@ -50,6 +50,15 @@ export const settingKeySchema = z.enum([
   'lastRoute',
   /** Đường dẫn thư mục lưu ghi chú. Do NGƯỜI DÙNG chọn qua hộp thoại hệ thống. */
   'notesFolder',
+  /**
+   * Thư mục dự án mà agent được phép ĐỌC.
+   *
+   * ⛔ CHỈ main ghi được — xem `KHOA_CHI_MAIN` trong `main/ipc/settings.ts`.
+   * Đổi khoá này là đổi phạm vi đọc của một mô hình ngôn ngữ, nên nó phải là
+   * một hành động người dùng NHÌN THẤY (hộp thoại của hệ điều hành), không
+   * phải một dòng lệnh renderer gọi được.
+   */
+  'agentWorkspace',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 
@@ -183,6 +192,59 @@ export interface MusicUsage {
 export const zoomSchema = z.number().min(0.5).max(2.5);
 
 // ─────────────────────────────────────────────────────────────
+// Agent lập trình (chỉ tài khoản Pro)
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Câu hỏi người dùng gõ. Trần 8.000 ký tự — dài hơn thế thì họ đang dán cả file
+ * vào khung chat, mà việc đó đã có tool `read_file` làm tốt hơn và rẻ hơn.
+ */
+export const agentSendSchema = z.object({
+  text: z.string().trim().min(1, 'Chưa nhập gì').max(8000),
+});
+
+/** Thư mục dự án agent đang được phép đọc. `null` = chưa chọn. */
+export interface AgentWorkspace {
+  path: string | null;
+  /** Chỉ tên thư mục, để hiện lên giao diện mà không phơi cả đường dẫn. */
+  name: string | null;
+  /** Nhánh git hiện tại, `null` nếu không phải kho git. */
+  branch: string | null;
+}
+
+export interface AgentQuota {
+  daDung: number;
+  tran: number;
+  phanTram: number;
+  hoiLucNao: string | null;
+}
+
+/** Thông tin agent lúc mở màn hình: có Pro không, trần bao nhiêu, còn bao nhiêu. */
+export interface AgentInfo {
+  pro: boolean;
+  configured: boolean;
+  model: string | null;
+  quota: AgentQuota | null;
+  /** Ước lượng còn chạy được bao nhiêu VIỆC — con số người dùng hiểu được, khác "còn 3,4 triệu token". */
+  soViecConLai: number | null;
+}
+
+/**
+ * Sự kiện agent đẩy từ main lên renderer trong lúc chạy.
+ *
+ * Kiểu này dùng chung hai phía. Renderer KHÔNG được tự định nghĩa lại — hai
+ * bản sao của một hợp đồng thì sẽ có ngày lệch nhau, và lệch ở đây nghĩa là
+ * giao diện im lặng bỏ qua một loại sự kiện mà không ai biết.
+ */
+export type AgentUiEvent =
+  | { loai: 'batDau'; model: string }
+  | { loai: 'chu'; delta: string }
+  | { loai: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
+  | { loai: 'xong'; hanMuc: AgentQuota | null; tienUsd: number; daLuoc: number }
+  | { loai: 'loi'; thongDiep: string; ma?: string }
+  | { loai: 'huy' };
+
+// ─────────────────────────────────────────────────────────────
 // Kênh
 // ─────────────────────────────────────────────────────────────
 
@@ -223,6 +285,14 @@ export const INVOKE_CHANNELS = {
   'music:deleteAudio': z.object({ trackId: trackIdSchema }),
   'music:usage': null,
   'music:clearAll': null,
+
+  'agent:getInfo': null,
+  'agent:getWorkspace': null,
+  'agent:chooseWorkspace': null,
+  'agent:clearWorkspace': null,
+  'agent:send': agentSendSchema,
+  'agent:cancel': null,
+  'agent:reset': null,
 } as const;
 
 export type InvokeChannel = keyof typeof INVOKE_CHANNELS;
@@ -232,6 +302,8 @@ export const EVENT_CHANNELS = [
   'app:networkChanged',
   'app:navigate',
   'update:status',
+  /** Tiến trình agent. Nhiều sự kiện mỗi giây trong lúc chữ đang chảy. */
+  'agent:event',
 ] as const;
 
 export type EventChannel = (typeof EVENT_CHANNELS)[number];
@@ -347,6 +419,24 @@ export interface DesktopBridge {
     deleteAudio(trackId: number): Promise<void>;
     usage(): Promise<MusicUsage>;
     clearAll(): Promise<void>;
+  };
+  /**
+   * Agent lập trình — CHỈ tài khoản Pro (máy chủ chặn, không phải app).
+   *
+   * `send()` là hàm chạy LÂU: nó không trả về cho tới khi agent trả lời xong,
+   * có thể vài phút. Tiến trình đi qua sự kiện `agent:event`, không qua giá trị
+   * trả về. Renderer phải gắn listener TRƯỚC khi gọi `send()`.
+   */
+  agent: {
+    getInfo(): Promise<AgentInfo>;
+    getWorkspace(): Promise<AgentWorkspace>;
+    /** Mở hộp thoại hệ thống. Trả về thư mục đã chọn, hoặc giữ nguyên nếu người dùng huỷ. */
+    chooseWorkspace(): Promise<AgentWorkspace>;
+    clearWorkspace(): Promise<AgentWorkspace>;
+    send(text: string): Promise<void>;
+    cancel(): Promise<void>;
+    /** Xoá hội thoại, bắt đầu việc mới. Hạn mức KHÔNG được reset theo. */
+    reset(): Promise<void>;
   };
   /** Trả về hàm huỷ đăng ký. Renderer PHẢI gọi nó khi unmount. */
   on(channel: EventChannel, listener: (payload: unknown) => void): () => void;

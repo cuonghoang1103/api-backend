@@ -22,6 +22,8 @@
     "db:seed:interview": "tsx prisma/seed.interview.ts",
     "db:seed:maker": "tsx prisma/seed.maker-lab.ts",
     "llm:check": "tsx scripts/llm-check.ts",
+    "agent:check": "tsx scripts/agent-check.ts",
+    "agent:check:http": "tsx scripts/agent-http-check.ts",
     "llm:route": "tsx scripts/dinh-tuyen-check.ts",
     "eval:grader": "tsx eval/runEval.ts",
     "eval:grader:ai": "tsx eval/runEval.ts --ai",

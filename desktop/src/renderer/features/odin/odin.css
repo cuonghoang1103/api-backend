@@ -1,0 +1,440 @@
+/*
+ * Odin — bảng màu và chuyển động.
+ *
+ * MỌI animation ở đây chỉ dùng `transform` và `opacity`. Hai thuộc tính đó
+ * chạy trên GPU và KHÔNG buộc trình duyệt tính lại bố cục; đổi `top`/`width`
+ * thay vào đó sẽ khiến cả trang phải bố trí lại 60 lần mỗi giây chỉ vì một con
+ * robot ở góc màn hình.
+ *
+ * Toàn bộ khối này tự tắt khi người dùng bật "giảm chuyển động" — quy tắc
+ * `prefers-reduced-motion` ở đầu styles.css áp lên mọi animation của app.
+ */
+
+.odin-dock {
+  --odin-body: #6b7cf0;
+  --odin-body-light: #8b9bf5;
+  --odin-highlight: #b9c4ff;
+  --odin-screen: #1b2142;
+  --odin-eye: #7fe6c9;
+  --odin-outline: #3d4aa8;
+
+  position: fixed;
+  right: 22px;
+  /* Nằm trên thanh trạng thái, không đè lên nó. */
+  bottom: calc(var(--ct-statusbar-h) + 16px);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  /* Vùng bao trong suốt không được chặn chuột ở phần rỗng — nếu không, một
+     hình chữ nhật vô hình sẽ nuốt cú bấm vào nội dung phía sau. */
+  pointer-events: none;
+}
+
+.odin-dock > * {
+  pointer-events: auto;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ⚠️ transform-box: fill-box — BẮT BUỘC cho mọi phần tử SVG
+   ══════════════════════════════════════════════════════════
+   Với phần tử SVG, `transform-origin` mặc định tính theo TOÀN BỘ viewBox
+   (`transform-box: view-box`), KHÔNG phải theo khung bao của chính phần tử.
+
+   Hậu quả đo được ngày 16/08/2026: `transform-origin: 50% 12%` trên thanh tay
+   cho ra `84px 19.8px` — tức 50% của viewBox 168px, đúng tâm cả con robot chứ
+   không phải vai. Tay xoay quanh đỉnh đầu rồi văng ra ngoài khung, và triệu
+   chứng là "robot bay mà không có tay" — không lỗi, không cảnh báo, chỉ là
+   tay biến mất.
+
+   `fill-box` bắt các phần trăm tính theo khung bao của chính phần tử, đúng như
+   trực giác khi viết CSS cho HTML.
+   ══════════════════════════════════════════════════════════ */
+.odin-head,
+.odin-body,
+.odin-arms,
+.odin-arm,
+.odin-legs,
+.odin-shadow {
+  transform-box: fill-box;
+}
+
+/* ── Nhân vật ──────────────────────────────────────────── */
+
+.odin-figure {
+  position: relative;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+  border-radius: 50%;
+  transition: transform 200ms var(--ct-ease);
+}
+
+.odin-figure:active {
+  transform: scale(0.94);
+}
+
+.odin-svg {
+  overflow: visible;
+  filter: drop-shadow(0 6px 16px rgba(45, 55, 160, 0.34));
+}
+
+/* ── Trôi lên xuống khi rảnh ───────────────────────────── */
+
+@keyframes odin-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+
+@keyframes odin-shadow-pulse {
+  0%, 100% { transform: scaleX(1);    opacity: 0.22; }
+  50%      { transform: scaleX(0.86); opacity: 0.13; }
+}
+
+.odin-dock[data-mood='thuong'] .odin-head,
+.odin-dock[data-mood='thuong'] .odin-body,
+.odin-dock[data-mood='ngu'] .odin-head,
+.odin-dock[data-mood='ngu'] .odin-body {
+  animation: odin-float 3.4s ease-in-out infinite;
+}
+
+/* Đầu trôi lệch pha một chút so với thân → cổ như có độ đàn hồi. Cùng pha thì
+   cả con robot trông như một khối gỗ trượt lên xuống. */
+.odin-dock[data-mood='thuong'] .odin-head {
+  animation-delay: -0.22s;
+}
+
+.odin-shadow {
+  transform-origin: center;
+  animation: odin-shadow-pulse 3.4s ease-in-out infinite;
+}
+
+/* ── Nhảy tưng tưng khi được bấm ───────────────────────── */
+
+@keyframes odin-hop {
+  0%   { transform: translateY(0)    scaleY(1); }
+  18%  { transform: translateY(2px)  scaleY(0.88); }
+  42%  { transform: translateY(-20px) scaleY(1.1); }
+  62%  { transform: translateY(0)    scaleY(0.94); }
+  78%  { transform: translateY(-7px) scaleY(1.04); }
+  100% { transform: translateY(0)    scaleY(1); }
+}
+
+/* Nén xuống trước khi bật lên (18%) là thứ khiến cú nhảy có lực. Bỏ khung đó
+   đi thì robot chỉ "trượt lên rồi trượt xuống". */
+.odin-dock[data-mood='vui'] .odin-head,
+.odin-dock[data-mood='vui'] .odin-body {
+  animation: odin-hop 900ms var(--ct-spring);
+  transform-origin: center bottom;
+}
+
+@keyframes odin-arm-wave {
+  0%, 100% { transform: rotate(0deg); }
+  30%      { transform: rotate(-26deg); }
+  60%      { transform: rotate(8deg); }
+}
+
+.odin-arm {
+  transform-origin: 50% 10%;
+}
+
+.odin-dock[data-mood='vui'] .odin-arm-right {
+  animation: odin-arm-wave 900ms var(--ct-ease);
+}
+
+/* ── Đang nghĩ ─────────────────────────────────────────── */
+
+@keyframes odin-think {
+  0%, 100% { transform: rotate(-4deg); }
+  50%      { transform: rotate(4deg); }
+}
+
+.odin-dock[data-mood='nghi'] .odin-head {
+  animation: odin-think 1.5s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+
+/* ── Đang nghe ─────────────────────────────────────────── */
+
+@keyframes odin-listen {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.035); }
+}
+
+.odin-dock[data-mood='nghe'] .odin-head {
+  animation: odin-listen 780ms ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* ── Lo lắng ───────────────────────────────────────────── */
+
+@keyframes odin-worry {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-2px); }
+  75%      { transform: translateX(2px); }
+}
+
+/* Rung RẤT nhẹ và CHẬM. Robot báo lỗi mà rung bần bật thì tạo lo lắng thay vì
+   truyền tin — trạng thái lỗi phải bình tĩnh. */
+.odin-dock[data-mood='lo'] .odin-head,
+.odin-dock[data-mood='lo'] .odin-body {
+  animation: odin-worry 2.6s ease-in-out infinite;
+}
+
+/* ── Huy hiệu thông báo ────────────────────────────────── */
+
+@keyframes odin-badge-in {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+
+.odin-badge {
+  position: absolute;
+  top: 2px;
+  right: -2px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #f2545b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(242, 84, 91, 0.5);
+  animation: odin-badge-in 320ms var(--ct-spring);
+}
+
+/* ── Nút micro ─────────────────────────────────────────── */
+
+.odin-mic {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 26px;
+  border: none;
+  border-radius: 999px;
+  background: var(--odin-screen);
+  color: var(--odin-eye);
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(20, 25, 60, 0.4);
+  transition: transform 160ms var(--ct-ease), background 160ms var(--ct-ease);
+}
+
+.odin-mic:hover {
+  transform: scale(1.08);
+}
+
+.odin-mic[data-active='true'] {
+  background: #f2545b;
+  color: #fff;
+}
+
+/* Sóng âm khi đang thu. Bốn vạch, lệch pha nhau để trông như dao động thật. */
+.odin-wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 13px;
+}
+
+.odin-wave i {
+  display: block;
+  width: 2.5px;
+  height: 4px;
+  border-radius: 2px;
+  background: currentColor;
+  animation: odin-wave-bar 620ms ease-in-out infinite;
+}
+
+.odin-wave i:nth-child(2) { animation-delay: 130ms; }
+.odin-wave i:nth-child(3) { animation-delay: 260ms; }
+.odin-wave i:nth-child(4) { animation-delay: 90ms; }
+
+@keyframes odin-wave-bar {
+  0%, 100% { transform: scaleY(1); }
+  50%      { transform: scaleY(3.1); }
+}
+
+/* ── Bong bóng thoại ───────────────────────────────────── */
+
+@keyframes odin-bubble-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.94); }
+  to   { opacity: 1; transform: none; }
+}
+
+.odin-bubble {
+  position: relative;
+  max-width: 232px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--ct-radius);
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  box-shadow: var(--ct-shadow);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ct-text);
+  animation: odin-bubble-in 280ms var(--ct-spring);
+}
+
+.odin-bubble button {
+  border: none;
+  background: none;
+  padding: 2px;
+  cursor: pointer;
+  color: var(--ct-text-faint);
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.odin-bubble button:hover {
+  color: var(--ct-text);
+  background: var(--ct-hover);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   Rê chuột vào → BAY
+   ══════════════════════════════════════════════════════════
+   Không cần bấm. Con trỏ chạm tới là robot bật lên, giơ hai tay, co hai chân,
+   và mặt chuyển sang cười (bộ mắt do React đổi, xem OdinRobot).
+
+   Ba phần chuyển động cùng lúc nhưng KHÁC biên độ — đó là thứ khiến nó trông
+   như một sinh vật chứ không phải một khối ảnh bị dịch lên:
+     • thân bay cao nhất và lắc lư nhẹ
+     • tay xoay lên trên, lệch pha nhau một chút
+     • chân co vào trong, thu ngắn lại
+     • bóng đổ co lại → mắt đọc ra "đang ở trên cao"
+   ══════════════════════════════════════════════════════════ */
+
+@keyframes odin-fly-body {
+  0%   { transform: translateY(0)     rotate(0deg); }
+  35%  { transform: translateY(-15px) rotate(-3deg); }
+  70%  { transform: translateY(-11px) rotate(3deg); }
+  100% { transform: translateY(-13px) rotate(0deg); }
+}
+
+@keyframes odin-fly-hover {
+  0%, 100% { transform: translateY(-13px) rotate(0deg); }
+  50%      { transform: translateY(-19px) rotate(2deg); }
+}
+
+/* Giơ tay: xoay quanh khớp vai (đầu trên của thanh tay), không xoay quanh tâm —
+   xoay quanh tâm thì tay rời khỏi thân và trông như bị gãy. */
+/* Giơ tay tới ~155°: bàn tay chỉ chếch LÊN và RA NGOÀI, nằm cạnh đầu chứ
+   không vắt ngang qua nó. Góc lớn hơn (180°) sẽ đưa tay vào giữa mặt. */
+@keyframes odin-fly-arm-left {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(-155deg); }
+}
+
+@keyframes odin-fly-arm-right {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(155deg); }
+}
+
+/* Vẫy nhẹ khi đã giơ lên — tay đứng im ở trên trông như bị đóng băng. */
+@keyframes odin-fly-arm-left-wave {
+  0%, 100% { transform: rotate(-155deg); }
+  50%      { transform: rotate(-168deg); }
+}
+
+@keyframes odin-fly-arm-right-wave {
+  0%, 100% { transform: rotate(155deg); }
+  50%      { transform: rotate(168deg); }
+}
+
+/* Cả CỤM tay phải bay lên cùng thân. Chỉ xoay từng tay mà quên tịnh tiến cụm
+   thì vai rời khỏi thân — tay lơ lửng cạnh một cái thân đã bay đi mất. */
+@keyframes odin-fly-arms-lift {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-13px); }
+}
+
+/* Chân co lên VÀ bay theo thân. Bản đầu chỉ co (-6px) nên chân bị thân — vốn
+   đã bay lên 13px — che mất hoàn toàn. */
+@keyframes odin-fly-legs {
+  0%   { transform: translateY(0)     scaleY(1); }
+  100% { transform: translateY(-15px) scaleY(0.72); }
+}
+
+@keyframes odin-fly-shadow {
+  0%   { transform: scaleX(1);    opacity: 0.22; }
+  100% { transform: scaleX(0.55); opacity: 0.1; }
+}
+
+.odin-dock[data-hover='true'] .odin-head,
+.odin-dock[data-hover='true'] .odin-body {
+  animation:
+    odin-fly-body 420ms var(--ct-spring) forwards,
+    odin-fly-hover 1.6s ease-in-out 420ms infinite;
+  transform-origin: center bottom;
+}
+
+/* Đầu bay cao hơn thân một chút và trễ hơn 40ms → cổ có độ đàn hồi. */
+.odin-dock[data-hover='true'] .odin-head {
+  animation-delay: 0.04s, 0.46s;
+}
+
+.odin-arm {
+  /* Khớp vai nằm ở đầu trên của thanh tay. */
+  transform-origin: 50% 12%;
+  transition: transform 200ms var(--ct-ease);
+}
+
+.odin-dock[data-hover='true'] .odin-arm-left {
+  animation:
+    odin-fly-arm-left 380ms var(--ct-spring) forwards,
+    odin-fly-arm-left-wave 1.1s ease-in-out 380ms infinite;
+}
+
+.odin-dock[data-hover='true'] .odin-arm-right {
+  animation:
+    odin-fly-arm-right 380ms var(--ct-spring) forwards,
+    odin-fly-arm-right-wave 1.1s ease-in-out 460ms infinite;
+}
+
+.odin-legs {
+  transform-origin: center top;
+}
+
+.odin-arms {
+  transform-origin: center top;
+}
+
+.odin-dock[data-hover='true'] .odin-arms {
+  animation: odin-fly-arms-lift 420ms var(--ct-spring) forwards;
+}
+
+.odin-dock[data-hover='true'] .odin-legs {
+  animation: odin-fly-legs 420ms var(--ct-spring) forwards;
+}
+
+.odin-dock[data-hover='true'] .odin-shadow {
+  animation: odin-fly-shadow 420ms var(--ct-ease) forwards;
+}
+
+/* Rê chuột ĐÈ LÊN trạng thái trôi bình thường. Không có dòng này thì hai
+   animation cùng tranh thuộc tính `transform` và robot giật loạn. */
+.odin-dock[data-hover='true'][data-mood='thuong'] .odin-head,
+.odin-dock[data-hover='true'][data-mood='thuong'] .odin-body,
+.odin-dock[data-hover='true'][data-mood='ngu'] .odin-head,
+.odin-dock[data-hover='true'][data-mood='ngu'] .odin-body {
+  animation:
+    odin-fly-body 420ms var(--ct-spring) forwards,
+    odin-fly-hover 1.6s ease-in-out 420ms infinite;
+}
+
+/* Cú NHẤN vẫn thắng cả hai: đó là hành động chủ động nhất của người dùng. */
+.odin-dock[data-mood='vui'] .odin-head,
+.odin-dock[data-mood='vui'] .odin-body {
+  animation: odin-hop 900ms var(--ct-spring) !important;
+}

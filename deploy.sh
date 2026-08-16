@@ -176,6 +176,13 @@ if [ "$MODE" = "local" ]; then
     # không ai cần tới nó ở đó (firmware nạp qua USB/OTA từ máy local, VPS
     # không build firmware). Thêm ở đây thì `--delete-excluded` cũng tự XOÁ
     # bản đã lỡ đẩy lên trong lần deploy kế tiếp.
+    #
+    # `desktop/release/` + `desktop/out/`: đầu ra của electron-builder — mỗi
+    # nền tảng một installer ~100-300MB. VPS không chạy app desktop và không
+    # build nó; đẩy lên chỉ tốn băng thông mỗi lần deploy và ăn đĩa (đúng cái
+    # đã một lần làm đầy đĩa và giết Postgres). `node_modules/` và `dist/`
+    # phía trên không có dấu `/` đầu nên rsync đã khớp ở MỌI độ sâu —
+    # `desktop/node_modules` và `desktop/dist` được loại sẵn, không cần thêm.
     rsync -azP \
         --delete \
         --delete-excluded \
@@ -192,6 +199,8 @@ if [ "$MODE" = "local" ]; then
         --exclude='*.log' \
         --exclude='.DS_Store' \
         --exclude='coverage/' \
+        --exclude='desktop/release/' \
+        --exclude='desktop/out/' \
         -e "ssh -i ${VPS_SSH_KEY} -o StrictHostKeyChecking=accept-new" \
         "${REPO_DIR}/" \
         "${VPS_USER}@${VPS_IP}:${VPS_DEPLOY_DIR}/"

@@ -1,0 +1,13 @@
+node_modules/
+dist/
+release/
+out/
+*.log
+
+# electron-builder cache + chứng chỉ ký. KHÔNG BAO GIỜ commit chứng chỉ:
+# một file .p12 lọt vào lịch sử git là phải thu hồi chứng chỉ, không phải
+# xoá commit là xong.
+.cache/
+*.p12
+*.pfx
+*.cer

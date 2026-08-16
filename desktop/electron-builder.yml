@@ -1,0 +1,121 @@
+# Cấu hình đóng gói — electron-builder
+#
+# Chạy:
+#   npm run pack        # thư mục chưa nén, để thử nhanh
+#   npm run dist:mac    # CuongThai-<ver>-arm64.dmg và -x64.dmg
+#   npm run dist:win    # CuongThai-Setup-<ver>.exe
+#   npm run dist:linux  # .AppImage và .deb
+#
+# ⚠️ CHƯA KÝ SỐ (quyết định của chủ dự án, 16/08/2026). Hệ quả thực tế:
+#   • macOS: Gatekeeper báo "app bị hỏng, hãy chuyển vào Thùng rác". App KHÔNG
+#     hỏng — đó là thông báo mặc định cho phần mềm chưa công chứng. Người dùng
+#     phải chuột phải → Mở, hoặc chạy:
+#       xattr -dr com.apple.quarantine /Applications/CuongThai.app
+#   • Windows: SmartScreen chặn màn xanh, phải bấm "Thêm thông tin" → "Vẫn chạy".
+#   • Linux: không ảnh hưởng.
+# Đường ký đã dựng sẵn — xem docs/building-and-packaging.md để cắm chứng chỉ vào.
+
+appId: com.cuongthai.desktop
+productName: CuongThai
+copyright: © 2026 CuongHoangDev
+
+directories:
+  output: release
+  buildResources: build
+
+# Chỉ đóng gói thứ app thật sự cần lúc chạy.
+# `dist/**` là mã đã build; `node_modules` được electron-builder tự lọc theo
+# `dependencies` trong package.json (KHÔNG gồm devDependencies), nên electron,
+# vite, playwright... không lọt vào bản cài.
+files:
+  - dist/**/*
+  - package.json
+  - '!**/*.map'   # source map chỉ có ích khi gỡ lỗi, và nó phình gói lên gấp đôi
+
+# ── macOS ──────────────────────────────────────────────────
+mac:
+  category: public.app-category.productivity
+  icon: build/icon.png
+  # arm64 và x64 RIÊNG, không dùng `universal`: bản universal nhét cả hai kiến
+  # trúc vào một file nên nặng gấp đôi (~250MB), trong khi mỗi người dùng chỉ
+  # cần đúng một nửa. Trang /download tự nhận diện và đưa đúng bản.
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+  # macOS 11 là bản cũ nhất Electron 33 còn hỗ trợ.
+  minimumSystemVersion: '11.0'
+  # Hardened runtime chỉ có ý nghĩa khi CÓ ký; bật lúc chưa ký sẽ làm app không
+  # chạy được trên chính máy build.
+  hardenedRuntime: false
+  identity: null
+  # Khai báo lý do xin quyền micro. macOS hiện đúng câu này trong hộp thoại xin
+  # quyền — bỏ trống thì hệ thống hiện chuỗi mặc định vô nghĩa, và người dùng
+  # không hiểu vì sao app xin micro nên họ từ chối.
+  extendInfo:
+    NSMicrophoneUsageDescription: >-
+      CuongThai dùng micro khi bạn giữ nút nói với trợ lý Odin. Micro chỉ bật
+      trong lúc bạn giữ nút và tắt ngay khi thả tay.
+
+dmg:
+  title: '${productName} ${version}'
+  artifactName: '${productName}-${version}-${arch}.${ext}'
+
+# ── Windows ────────────────────────────────────────────────
+win:
+  icon: build/icon.png
+  target:
+    - target: nsis
+      arch: [x64]
+
+nsis:
+  oneClick: false
+  # Cho người dùng chọn thư mục cài. Bắt buộc cài vào Program Files sẽ đòi
+  # quyền quản trị, và app này không cần quyền đó.
+  allowToChangeInstallationDirectory: true
+  perMachine: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  artifactName: '${productName}-Setup-${version}.${ext}'
+
+# ── Linux ──────────────────────────────────────────────────
+linux:
+  icon: build/icon.png
+  category: Development
+  synopsis: Ứng dụng desktop cho cuongthai.com
+  target:
+    - target: AppImage
+      arch: [x64]
+    - target: deb
+      arch: [x64]
+  # Đăng ký scheme deep-link để vòng OAuth quay lại được app.
+  desktop:
+    MimeType: x-scheme-handler/cuongthai;
+
+appImage:
+  artifactName: '${productName}-${version}.${ext}'
+
+deb:
+  artifactName: '${productName}-${version}.${ext}'
+  # libsecret là kho khoá của Linux. Thiếu nó thì `safeStorage` không mã hoá
+  # được, app từ chối ghi phiên, và người dùng phải đăng nhập lại mỗi lần mở.
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - xdg-utils
+    - libsecret-1-0
+
+# ── Phát hành ──────────────────────────────────────────────
+# GitHub Releases. electron-updater đọc thẳng từ đây; không cần máy chủ riêng.
+# ⚠️ Repo dưới đây CHƯA TỒN TẠI tính đến 16/08/2026. Trước lần phát hành đầu:
+#     gh repo create cuonghoang1103/cuongthai-desktop --public
+#   Hoặc đổi `repo` thành `api-backend` để phát hành ngay trong repo hiện tại —
+#   nhưng repo đó là PRIVATE, mà electron-updater tải bản mới KHÔNG kèm token,
+#   nên bản cài sẽ không tự cập nhật được. Repo phát hành phải PUBLIC.
+publish:
+  provider: github
+  owner: cuonghoang1103
+  repo: cuongthai-desktop
+  releaseType: release

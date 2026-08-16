@@ -41,7 +41,8 @@ export type ThemeSetting = z.infer<typeof themeSchema>;
 /** Khoá cấu hình renderer được phép đọc/ghi. Danh sách đóng, không tự do. */
 export const settingKeySchema = z.enum([
   'theme',
-  'sidebarCollapsed',
+  /** 'full' | 'icons' | 'hidden' — xem components/Sidebar.tsx */
+  'sidebarMode',
   'robotPanelOpen',
   'robotEnabled',
   'reducedMotion',

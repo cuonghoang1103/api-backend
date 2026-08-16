@@ -45,6 +45,13 @@ function Content() {
 
 function Shell() {
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const { settings, setSetting } = useAppState();
+
+  // Phím tắt chỉ đảo giữa 'full' và 'hidden' — bỏ qua 'icons'. Người bấm ⌘B
+  // muốn CHỖ, không muốn đi qua một trạng thái trung gian rồi phải bấm tiếp.
+  const toggleSidebar = () => {
+    setSetting('sidebarMode', settings.sidebarMode === 'hidden' ? 'full' : 'hidden');
+  };
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -55,10 +62,17 @@ function Shell() {
         setPaletteOpen((open) => !open);
       }
       if (event.key === 'Escape') setPaletteOpen(false);
+
+      // ⌘B / Ctrl+B — ẩn/hiện thanh bên. Quy ước chung của mọi app có sidebar
+      // (VS Code, Notion, Slack), nên người dùng thử phím này trước khi đi tìm nút.
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'b') {
+        event.preventDefault();
+        toggleSidebar();
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, []);
+  }, [settings.sidebarMode, setSetting]);
 
   return (
     <div className="ct-shell">

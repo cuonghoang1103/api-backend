@@ -7,15 +7,43 @@
  * phím phải bấm Tab 14 lần mới ra khỏi sidebar.
  */
 import { useCallback, useRef } from 'react';
-import { PanelLeftClose, PanelLeftOpen, Settings } from 'lucide-react';
+import { PanelLeft, PanelLeftClose, PanelLeftOpen, Settings } from 'lucide-react';
 import { useAppState } from '../app-state';
 import { UpdateBanner } from './UpdateBanner';
 import { UserMenu } from './UserMenu';
 import { GROUP_LABELS, GROUP_ORDER, INTERNAL_ROUTES, ROUTES, isPorted } from '../routes';
 
+/**
+ * Ba trạng thái thay vì hai.
+ *
+ * `icons` hữu ích ở phần lớn màn hình — vẫn thấy được mình đang ở đâu mà không
+ * tốn chỗ. Nhưng những trang có SIDEBAR RIÊNG (Ghi chú, và sau này Nhạc) thì
+ * hai thanh cạnh nhau vẫn quá chật, nên cần ẩn hẳn.
+ *
+ * Vòng lặp `full → icons → hidden → full` chứ không phải hai nút riêng: hai
+ * điều khiển cho cùng một thứ buộc người dùng phải nhớ nút nào làm gì.
+ */
+export type SidebarMode = 'full' | 'icons' | 'hidden';
+
+const NEXT_MODE: Record<SidebarMode, SidebarMode> = {
+  full: 'icons',
+  icons: 'hidden',
+  hidden: 'full',
+};
+
+const MODE_LABEL: Record<SidebarMode, string> = {
+  full: 'Thu gọn thành biểu tượng',
+  icons: 'Ẩn hẳn thanh bên',
+  hidden: 'Hiện lại thanh bên',
+};
+
 export function Sidebar() {
   const { route, navigate, settings, setSetting } = useAppState();
-  const collapsed = settings.sidebarCollapsed === true;
+  const mode: SidebarMode =
+    settings.sidebarMode === 'icons' || settings.sidebarMode === 'hidden'
+      ? settings.sidebarMode
+      : 'full';
+  const collapsed = mode === 'icons';
   const listRef = useRef<HTMLDivElement>(null);
 
   const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -32,6 +60,23 @@ export function Sidebar() {
     const next = items[(current + delta + items.length) % items.length];
     next?.focus();
   }, []);
+
+  // Ẩn hẳn: trả về một nút mảnh để mở lại. KHÔNG trả về `null` — ẩn mà không
+  // chừa đường quay lại thì người dùng mất luôn điều hướng và chỉ còn cách
+  // khởi động lại app.
+  if (mode === 'hidden') {
+    return (
+      <button
+        type="button"
+        className="ct-sidebar-peek"
+        onClick={() => setSetting('sidebarMode', 'full')}
+        aria-label="Hiện lại thanh bên"
+        title="Hiện lại thanh bên  (⌘B)"
+      >
+        <PanelLeft size={15} aria-hidden />
+      </button>
+    );
+  }
 
   return (
     <nav
@@ -105,14 +150,14 @@ export function Sidebar() {
         <button
           type="button"
           className="ct-nav-item"
-          onClick={() => setSetting('sidebarCollapsed', !collapsed)}
-          aria-label={collapsed ? 'Mở rộng thanh bên' : 'Thu gọn thanh bên'}
-          title={collapsed ? 'Mở rộng thanh bên' : 'Thu gọn thanh bên'}
+          onClick={() => setSetting('sidebarMode', NEXT_MODE[mode])}
+          aria-label={MODE_LABEL[mode]}
+          title={`${MODE_LABEL[mode]}  (⌘B)`}
         >
-          {collapsed ? (
-            <PanelLeftOpen className="ct-nav-icon" size={17} aria-hidden />
-          ) : (
+          {mode === 'full' ? (
             <PanelLeftClose className="ct-nav-icon" size={17} aria-hidden />
+          ) : (
+            <PanelLeftOpen className="ct-nav-icon" size={17} aria-hidden />
           )}
           <span className="ct-nav-label">Thu gọn</span>
         </button>

@@ -1729,6 +1729,28 @@ code {
   /* Notes có nền riêng theo chủ đề của nó; để lộ nền app phía sau sẽ thành
      hai mảng màu khác nhau ở hai nửa màn hình. */
   background: var(--ct-bg);
+
+  /*
+   * ⚠️ Hai dòng dưới là thứ làm Notes CUỘN ĐƯỢC. Thiếu chúng, cây môn học bị
+   * cắt cụt ở đáy và không kéo lên xuống được.
+   *
+   * Trang Notes của web đặt chiều cao bằng
+   *     h-[calc(100dvh - var(--app-chrome-bottom))]
+   * Hai vế đều sai trong app desktop:
+   *
+   *   • `100dvh` là chiều cao TOÀN MÀN HÌNH. Nhưng ở đây Notes nằm trong khung
+   *     đã trừ thanh tiêu đề (44px) và thanh trạng thái (30px). Lấy nguyên
+   *     100dvh thì nội dung cao hơn khung đúng 74px, và phần thừa bị
+   *     `overflow: hidden` cắt mất — không có thanh cuộn nào để lấy lại.
+   *
+   *   • `--app-chrome-bottom` là biến của WEB (chiều cao thanh điều hướng đáy
+   *     trên mobile). Desktop không khai báo nó, mà `calc()` gặp biến không tồn
+   *     tại thì HỎNG CẢ BIỂU THỨC — trình duyệt bỏ luôn khai báo chiều cao.
+   *
+   * Khai báo biến đó ở đây bằng đúng chiều cao khung của app là sửa được cả
+   * hai vế cùng lúc: `100dvh - 74px` ra đúng vùng nội dung thật.
+   */
+  --app-chrome-bottom: calc(var(--ct-titlebar-h) + var(--ct-statusbar-h));
 }
 
 .ct-notes-host > * {
@@ -1746,4 +1768,33 @@ input,
 textarea,
 select {
   font: inherit;
+}
+
+/* Nút mảnh để mở lại thanh bên khi đã ẩn hẳn.
+   Luôn hiện, nằm sát mép trái — ẩn mà không chừa đường quay lại thì người dùng
+   mất điều hướng và chỉ còn cách khởi động lại app. */
+.ct-sidebar-peek {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 56px;
+  border: 1px solid var(--ct-border);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  background: var(--ct-surface);
+  color: var(--ct-text-faint);
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity var(--ct-motion) var(--ct-ease), width var(--ct-motion) var(--ct-ease);
+}
+
+.ct-sidebar-peek:hover {
+  opacity: 1;
+  width: 24px;
+  color: var(--ct-text);
 }

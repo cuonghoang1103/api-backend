@@ -37,6 +37,30 @@ export function startCronJobs(): void {
   }
   _started = true;
 
+  // ─── Nhắc việc cho robot — MỖI PHÚT ───
+  //
+  // Nhịp một phút vì đây là báo thức: chậm 5 phút thì nó không còn là
+  // báo thức nữa. Mỗi nhịp là một truy vấn có chỉ mục trên `maker_plans`
+  // (`active = true`), thường trả về vài dòng — rẻ hơn nhiều so với
+  // đống job hằng giờ ngay dưới.
+  //
+  // Đặt `timezone: 'UTC'` cho khớp mọi job khác, và điều đó KHÔNG sao:
+  // lịch chạy mỗi phút nên múi giờ của cron không ảnh hưởng gì. Toàn bộ
+  // phần giờ địa phương do `gioDiaPhuong()` trong `keHoach.ts` lo, theo
+  // đúng `tz` của TỪNG kế hoạch.
+  cron.schedule('* * * * *', async () => {
+    try {
+      const { nhipNhacViec } = await import('./makerlab/nhacViec.js');
+      const n = await nhipNhacViec();
+      if (n) logger.info('cron đã nhắc việc cho robot', { soLoiNhac: n });
+    } catch (err) {
+      // Nuốt lỗi tại đây: một nhịp hỏng không được phép làm cron tự gỡ
+      // lịch, nếu không thì một lỗi thoáng qua làm câm báo thức vĩnh
+      // viễn cho tới lần restart sau.
+      logger.error('cron nhắc việc lỗi', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // ─── Nightly cleanup @ 03:00 Vietnam (20:00 UTC) ───
   cron.schedule('0 20 * * *', async () => {
  logger.info('cron running nightly cleanup job');

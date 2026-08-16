@@ -333,6 +333,7 @@ model User {
   // A device is a real board (robot, sensor node) owned by this user;
   // commands are the control actions this user issued to any device.
   makerDevices  MakerDevice[]
+  makerPlans    MakerPlan[]    @relation("MakerPlanOwner")
   makerCommands MakerCommand[]
 
   // ─── Account erasure requests (added 2026-08-08) ─────────────────
@@ -7627,6 +7628,7 @@ model MakerProject {
   devices    MakerDevice[]
   firmwares  MakerFirmware[]
   persona    MakerPersona?
+  plans      MakerPlan[]      @relation("MakerPlanProject")
 
   @@index([published, sortOrder], name: "idx_maker_project_pub_order")
   @@index([platform], name: "idx_maker_project_platform")
@@ -7856,4 +7858,126 @@ model MakerPersona {
   project MakerProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@map("maker_personas")
+}
+
+// ════════════════════════════════════════════════════════════
+// Kế hoạch theo giờ — robot nhắc việc, hướng dẫn, chấm xong
+// ════════════════════════════════════════════════════════════
+//
+// ⚠️ VÌ SAO KHÔNG DÙNG `NoteDatabase` CHO VIỆC NÀY.
+//
+// Notes đã có cơ sở dữ liệu có kiểu (DATE, CHECKBOX…) và nhìn qua thì
+// đây đúng là việc của nó. Nhưng nó lưu kiểu EAV: `note_database_cells`
+// giữ giá trị trong cột `value Json?`, khoá theo `(rowId, propertyId)`.
+// Hỏi "việc nào tới hạn trong phút tới" trên hình dạng đó nghĩa là join
+// `rows → cells → properties`, lọc theo TÊN cột do người dùng tự đặt,
+// rồi phân tích JSON — quét toàn bảng, MỖI PHÚT MỘT LẦN, và hỏng ngay
+// khi người ta đổi tên cột.
+//
+// Notes đúng cho việc VIẾT, sai cho việc HẸN GIỜ. Nên: bảng riêng có
+// cột giờ là số nguyên đã đánh chỉ mục, còn hướng dẫn dài thì trỏ sang
+// một trang Notes qua `noteId`.
+
+enum MakerPlanKind {
+  ONCE // đúng một ngày, xong là thôi
+  DAILY // mỗi ngày
+  WEEKDAYS // thứ 2 → thứ 6
+  WEEKLY // theo `thu`, ví dụ [1,3,5]
+}
+
+enum MakerRunState {
+  PENDING // đã tới giờ, đang chờ người xác nhận
+  DONE
+  SKIPPED // người dùng bảo bỏ qua hôm nay
+  MISSED // quá hạn ân xá mà không ai đụng tới
+}
+
+/// ĐỊNH NGHĨA một việc — "7 giờ sáng tập thể dục, mỗi ngày".
+model MakerPlan {
+  id        Int @id @default(autoincrement())
+  ownerId   Int @map("owner_id")
+  projectId Int @map("project_id")
+
+  title String @db.VarChar(200)
+
+  /// Robot đọc đoạn này để HƯỚNG DẪN, không chỉ nhắc suông. Giữ ngắn —
+  /// nó bị đọc thành tiếng, và người ta đang đứng chờ.
+  huongDan String? @map("huong_dan") @db.Text
+
+  /// Trang Notes chứa hướng dẫn dài. CỐ Ý KHÔNG khai khoá ngoại: khai
+  /// thì phải thêm back-relation vào `Note` — một model đang bị cả web
+  /// dùng — cho một liên kết tuỳ chọn. Id mồ côi được xử lúc đọc.
+  noteId Int? @map("note_id")
+
+  kind MakerPlanKind @default(DAILY)
+
+  /// Số PHÚT kể từ 00:00 GIỜ ĐỊA PHƯƠNG, 0..1439.
+  ///
+  /// ⚠️ Số nguyên chứ không phải `DateTime`, và giờ ĐỊA PHƯƠNG chứ
+  /// không phải UTC. Container chạy UTC còn người dùng ở +07; lưu
+  /// `DateTime` thì "7 giờ sáng" thành 00:00 UTC, rồi một hôm nào đó có
+  /// người đọc nó ra giờ máy chủ và báo thức kêu lúc 2 giờ chiều.
+  /// Lưu ý định ("7 giờ sáng, ở múi này") rồi quy đổi lúc so.
+  gio Int
+
+  tz String @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
+
+  /// Thứ trong tuần cho `WEEKLY`. 0 = Chủ nhật … 6 = Thứ bảy.
+  thu Int[] @default([])
+
+  /// Ngày cho `ONCE`, dạng "2026-08-20" theo `tz`. Chuỗi chứ không phải
+  /// `Date` — cùng lý do với `gio`.
+  ngayMot String? @map("ngay_mot") @db.VarChar(10)
+
+  /// Nhắc sớm bao nhiêu phút trước giờ. 0 = đúng giờ.
+  nhacTruoc Int @default(0) @map("nhac_truoc")
+
+  active    Boolean  @default(true)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  owner   User           @relation("MakerPlanOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  project MakerProject   @relation("MakerPlanProject", fields: [projectId], references: [id], onDelete: Cascade)
+  runs    MakerPlanRun[]
+
+  @@index([ownerId, active], map: "idx_maker_plan_owner")
+  @@index([projectId, active], map: "idx_maker_plan_project")
+  @@map("maker_plans")
+}
+
+/// MỘT LẦN việc đó xuất hiện, trong đúng một ngày.
+///
+/// Chỉ sinh ra khi tới giờ, KHÔNG dựng sẵn cả tháng lúc nửa đêm: dựng
+/// sẵn thì một đêm máy chủ chết là hôm sau mất trắng lịch, mà không ai
+/// biết cho tới lúc chuông không kêu.
+model MakerPlanRun {
+  id     Int @id @default(autoincrement())
+  planId Int @map("plan_id")
+
+  /// "2026-08-17" theo `plan.tz`. Đây là khoá chống nhắc hai lần.
+  ngay String @db.VarChar(10)
+
+  state MakerRunState @default(PENDING)
+
+  /// Lúc robot NÓI RA. Rỗng nghĩa là tới giờ rồi mà chưa nói được —
+  /// robot đang offline chẳng hạn — nên vòng sau còn thử lại.
+  nhacLuc DateTime? @map("nhac_luc")
+
+  xongLuc DateTime? @map("xong_luc")
+
+  /// Hoãn tới lúc nào ("nhắc lại sau 10 phút").
+  hoanToi DateTime? @map("hoan_toi")
+
+  /// Người dùng nói gì lúc báo xong — "xong rồi nhưng chạy có 2km".
+  ghiChu String? @map("ghi_chu") @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  plan MakerPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, ngay], map: "uk_maker_plan_run_day")
+  @@index([ngay, state], map: "idx_maker_plan_run_day_state")
+  @@map("maker_plan_runs")
 }

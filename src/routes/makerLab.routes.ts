@@ -1256,5 +1256,91 @@ adminRouter.post('/ha-tang/xuong/xuat', async (_req, res: Response<ApiResponse>,
   }
 });
 
+// ════════════════════════════════════════════════════════════
+// Kế hoạch trong ngày — robot nhắc việc
+// ════════════════════════════════════════════════════════════
+//
+// Mọi route ở đây lọc theo `ownerId = userId(req)`. Kế hoạch thuộc về
+// NGƯỜI chứ không thuộc về dự án hay con bo, nên `projectId` chỉ dùng
+// để biết đọc bằng giọng của persona nào.
+//
+// ⚠️ Sửa/xoá đều đi qua `where: { id, ownerId }` chứ KHÔNG phải
+// `where: { id }` rồi kiểm quyền sau. Viết kiểu sau thì một lần quên
+// `if` là người lạ sửa được lịch của người khác; viết kiểu này thì
+// không tìm thấy hàng là tự nhiên hỏng, không cần nhớ gì.
+
+/** Kế hoạch của tôi, đủ mọi ngày — cho màn hình quản lý. */
+router.get('/plans', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const rows = await prisma.makerPlan.findMany({
+      where: { ownerId: userId(req) },
+      orderBy: [{ active: 'desc' }, { gio: 'asc' }, { sortOrder: 'asc' }],
+    });
+    const { docGio } = await import('../services/makerlab/keHoach.js');
+    res.json({ success: true, data: rows.map((r) => ({ ...r, gioChu: docGio(r.gio) })) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/** Việc của HÔM NAY + tóm tắt tiến độ. Đây là thứ trang chính hiện. */
+router.get('/plans/today', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { homNay, tomTat } = await import('../services/makerlab/keHoach.js');
+    const muc = await homNay(userId(req));
+    res.json({ success: true, data: { muc, tomTat: tomTat(muc) } });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.post('/plans', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const svcKh = await import('../services/makerlab/keHoachService.js');
+    res.status(201).json({ success: true, data: await svcKh.taoKeHoach(userId(req), req.body ?? {}) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.put('/plans/:id', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const svcKh = await import('../services/makerlab/keHoachService.js');
+    res.json({ success: true, data: await svcKh.suaKeHoach(userId(req), toId(req), req.body ?? {}) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.delete('/plans/:id', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const n = await prisma.makerPlan.deleteMany({ where: { id: toId(req), ownerId: userId(req) } });
+    if (!n.count) throw Object.assign(new Error('Không tìm thấy kế hoạch'), { statusCode: 404 });
+    res.json({ success: true, message: 'Đã xoá' });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/**
+ * Chấm xong / bỏ qua / hoãn MỘT LƯỢT.
+ *
+ * `runId` có thể chưa tồn tại khi việc chưa tới giờ — bấm tích xanh sớm
+ * là chuyện bình thường ("làm trước cho xong"). Nên nhận `planId` và tự
+ * tạo lượt cho hôm nay nếu chưa có.
+ */
+router.post('/plans/:id/xong', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const svcKh = await import('../services/makerlab/keHoachService.js');
+    const kieu = String((req.body ?? {}).kieu ?? 'xong');
+    res.json({
+      success: true,
+      data: await svcKh.chotLuot(userId(req), toId(req), kieu, Number((req.body ?? {}).phut) || 10),
+    });
+  } catch (e) {
+    next(e);
+  }
+});
+
 export { adminRouter };
 export default router;

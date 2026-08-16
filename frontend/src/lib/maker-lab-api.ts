@@ -309,3 +309,88 @@ export async function saveTrainingAnswer(
   const res = await api.post(`${BASE}/projects/${projectId}/training`, { question, answer });
   return res.data?.data?.knowledge ?? [];
 }
+
+// ─── Kế hoạch trong ngày ───────────────────────────────────
+
+export type MakerPlanKind = 'ONCE' | 'DAILY' | 'WEEKDAYS' | 'WEEKLY';
+export type MakerRunState = 'PENDING' | 'DONE' | 'SKIPPED' | 'MISSED';
+
+export interface MakerPlan {
+  id: number;
+  title: string;
+  huongDan: string | null;
+  noteId: number | null;
+  kind: MakerPlanKind;
+  /** Số phút kể từ 00:00 giờ địa phương. */
+  gio: number;
+  /** "07:15" — máy chủ tính sẵn để khỏi mỗi nơi tự định dạng một kiểu. */
+  gioChu?: string;
+  tz: string;
+  thu: number[];
+  ngayMot: string | null;
+  nhacTruoc: number;
+  active: boolean;
+}
+
+export interface MucHomNay {
+  planId: number;
+  runId: number | null;
+  title: string;
+  huongDan: string | null;
+  noteId: number | null;
+  gio: number;
+  gioChu: string;
+  /** `CHUA_TOI` = chưa tới giờ. Khác hẳn `PENDING` = tới rồi mà chưa làm. */
+  state: MakerRunState | 'CHUA_TOI';
+  xongLuc: string | null;
+  ghiChu: string | null;
+}
+
+export interface TomTatNgay {
+  tong: number;
+  xong: number;
+  conLai: number;
+  loQua: number;
+}
+
+export async function listPlans(): Promise<MakerPlan[]> {
+  const res = await api.get(`${BASE}/plans`);
+  return res.data?.data ?? [];
+}
+
+export async function planToday(): Promise<{ muc: MucHomNay[]; tomTat: TomTatNgay }> {
+  const res = await api.get(`${BASE}/plans/today`);
+  return res.data?.data ?? { muc: [], tomTat: { tong: 0, xong: 0, conLai: 0, loQua: 0 } };
+}
+
+/**
+ * `gio` nhận cả số phút lẫn chuỗi "07:15" — máy chủ đọc được cả hai.
+ *
+ * Phải `Omit` trước rồi mới giao: `Partial<MakerPlan> & { gio: string }`
+ * là giao của `number | undefined` với `string`, tức `never` — kiểu vẫn
+ * biên dịch được ở chỗ khai báo nhưng không giá trị nào lọt qua nổi.
+ */
+type SuaKeHoach = Omit<Partial<MakerPlan>, 'gio'> & { gio?: number | string; projectId?: number };
+
+export async function createPlan(body: SuaKeHoach & { title: string; gio: number | string }) {
+  const res = await api.post(`${BASE}/plans`, body);
+  return res.data?.data as MakerPlan;
+}
+
+export async function updatePlan(id: number, body: SuaKeHoach) {
+  const res = await api.put(`${BASE}/plans/${id}`, body);
+  return res.data?.data as MakerPlan;
+}
+
+export async function deletePlan(id: number): Promise<void> {
+  await api.delete(`${BASE}/plans/${id}`);
+}
+
+/** Chốt lượt HÔM NAY: xong · bỏ qua · hoãn · mở lại (bấm nhầm thì gỡ ra). */
+export async function chotLuot(
+  planId: number,
+  kieu: 'xong' | 'bo-qua' | 'hoan' | 'mo-lai',
+  phut = 10,
+): Promise<void> {
+  await api.post(`${BASE}/plans/${planId}/xong`, { kieu, phut });
+}

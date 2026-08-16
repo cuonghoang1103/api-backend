@@ -46,6 +46,7 @@ import { khopLenhNhanh } from './phanXa.js';
 import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
 import { goiYNghe } from './goiYNghe.js';
 import { timDanhThuc, moCong, dangThuc } from './danhThuc.js';
+import { khopLenhKeHoach, xuLyLenhKeHoach } from './lenhKeHoach.js';
 import { khopDoiTinhCach } from './tinhCach.js';
 import { khopDoiKieuNoi, CHAO_DOI_KIEU, tuGoiYNghe, type KieuNoi } from './mienTrung.js';
 
@@ -791,6 +792,10 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     select: {
       id: true,
       name: true,
+      // Cần cho lệnh kế hoạch: việc thuộc về NGƯỜI, không thuộc về bo.
+      // Một người có thể có nhiều robot, và nói với con nào cũng phải
+      // ra cùng một danh sách việc.
+      ownerId: true,
       batteryPct: true,
       // Bản ghi telemetry MỚI NHẤT. `MakerDevice` không giữ số liệu mạng
       // (chỉ có batteryPct), còn số liệu thô thì nằm ở bảng riêng —
@@ -1049,6 +1054,33 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       logger.info('MakerLab xoá trí nhớ theo lệnh giọng nói', { deviceId: input.deviceId });
       timing.total = Date.now() - started;
       return { heard, said: cau, actions: [], spoken: noiDuoc, ms: timing };
+    }
+
+    /**
+     * ── KẾ HOẠCH TRONG NGÀY: "hôm nay có gì" · "xong rồi" · "hoãn" ──
+     *
+     * Đứng trước LLM vì cùng lý do với mấy lệnh trên: "xong rồi" mà rơi
+     * vào model thì nó đáp "ừ giỏi lắm" — nghe thân thiện và KHÔNG tích
+     * xanh gì cả, mà người dùng lại tưởng đã xong.
+     *
+     * ⚠️ `xuLyLenhKeHoach` trả `null` khi khớp chữ nhưng KHÔNG có việc
+     * nào đang treo. Lúc đó phải để lượt nói RƠI TIẾP xuống LLM, đừng
+     * nuốt: "ăn cơm xong rồi" là câu nói chuyện, không phải lệnh.
+     */
+    if (device?.ownerId) {
+      const lenhKh = khopLenhKeHoach(heard);
+      if (lenhKh) {
+        const ra = await xuLyLenhKeHoach(lenhKh, device.ownerId, input.deviceId, heard);
+        if (ra) {
+          const noiDuoc = await speakOnce(persona, ra.cau, input.deviceId);
+          emitTranscript(input.deviceId, 'bot', ra.cau);
+          logger.info('MakerLab lệnh kế hoạch', {
+            deviceId: input.deviceId, loai: lenhKh.loai, runId: ra.runId,
+          });
+          timing.total = Date.now() - started;
+          return { heard, said: ra.cau, actions: [], spoken: noiDuoc, ms: timing };
+        }
+      }
     }
 
     /**
@@ -1404,7 +1436,10 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
  * nên mọi thứ liên quan tới model — cắt câu, gom mẩu, chờ JSON — đều
  * thừa, mà mỗi thứ thừa là một chỗ chờ.
  */
-async function speakOnce(
+// Xuất ra để bộ nhắc việc (`nhacViec.ts`) dùng lại. Nó cần nói ra loa
+// mà KHÔNG đi qua `runVoiceTurn` — lời nhắc không phải một lượt hội
+// thoại, nó không có câu hỏi nào để trả lời.
+export async function speakOnce(
   persona: Awaited<ReturnType<typeof loadPersona>>,
   text: string,
   deviceId: number,

@@ -38,6 +38,7 @@ import {
   Heading1, Heading2, Heading3, List, ListOrdered, ListChecks, Code2,
   Lightbulb, StickyNote, TriangleAlert, Sigma, SquareRadical, Minus,
   Table2, Quote, ImagePlus, GripHorizontal, Search,
+  ChevronRight, Clapperboard, Paperclip, Bookmark, Frame,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -59,6 +60,10 @@ interface Props {
   editor: Editor | null;
   /** Mở hộp thoại chọn ảnh của NoteEditor (đã có sẵn luồng upload R2). */
   onPickImage?: () => void;
+  /** Chọn video — đi đường upload R2 trực tiếp (bỏ qua trần 100MB của proxy). */
+  onPickVideo?: () => void;
+  /** Chọn tệp đính kèm bất kỳ. */
+  onPickFile?: () => void;
   /**
    * Người dùng bấm Esc để bỏ qua. NoteEditor ghi nhớ vị trí "/" này và
    * không mở lại bảng cho tới khi rời khỏi nó — nếu không, gõ thêm một
@@ -91,7 +96,11 @@ function deaccent(s: string): string {
     .toLowerCase();
 }
 
-function buildItems(onPickImage?: () => void): Item[] {
+function buildItems(
+  onPickImage?: () => void,
+  onPickVideo?: () => void,
+  onPickFile?: () => void,
+): Item[] {
   // Editor được nới sang `any` để gọi được các lệnh của extension nhà
   // trồng (setCallout, …) mà không vướng kiểu hẹp ChainedCommands.
   const chain = (ed: Editor) => (ed as unknown as { chain: () => any }).chain();
@@ -161,6 +170,55 @@ function buildItems(onPickImage?: () => void): Item[] {
     }] : []),
 
     {
+      label: 'Toggle', hint: 'Khối thu gọn được', icon: ChevronRight, group: 'Khối nội dung',
+      keywords: ['toggle', 'thu gon', 'gap', 'collapse', 'accordion', 'an hien'],
+      // Bọc sẵn hai đoạn: đoạn đầu là TIÊU ĐỀ (luôn hiện), đoạn sau là thân
+      // (ẩn khi thu gọn). Bọc một đoạn thôi thì thu gọn lại chẳng giấu được
+      // gì và người dùng tưởng nút hỏng.
+      run: (ed, r) => at(ed, r)
+        .insertContent({
+          type: 'toggle',
+          attrs: { open: true },
+          content: [
+            { type: 'paragraph', content: [{ type: 'text', text: 'Tiêu đề' }] },
+            { type: 'paragraph' },
+          ],
+        })
+        .run(),
+    },
+    ...(onPickVideo ? [{
+      label: 'Video', hint: 'Tải video lên', icon: Clapperboard, group: 'Khối nội dung' as Group,
+      keywords: ['video', 'phim', 'mp4', 'clip', 'upload'],
+      run: (ed: Editor, r: SlashRange) => { at(ed, r).run(); onPickVideo(); },
+    }] : []),
+    ...(onPickFile ? [{
+      label: 'Tệp đính kèm', hint: 'Tải tệp bất kỳ lên', icon: Paperclip, group: 'Khối nội dung' as Group,
+      keywords: ['file', 'tep', 'dinh kem', 'attach', 'pdf', 'tai lieu', 'upload'],
+      run: (ed: Editor, r: SlashRange) => { at(ed, r).run(); onPickFile(); },
+    }] : []),
+    {
+      label: 'Bookmark', hint: 'Thẻ xem trước một liên kết', icon: Bookmark, group: 'Khối nội dung',
+      keywords: ['bookmark', 'link', 'lien ket', 'the', 'preview', 'xem truoc'],
+      run: (ed, r) => {
+        // Hỏi địa chỉ TRƯỚC khi xoá "/": người dùng bấm Huỷ thì mọi thứ y
+        // nguyên, không để lại một dòng cụt đã bị xoá mất dấu "/".
+        const url = window.prompt('Dán địa chỉ liên kết');
+        if (!url?.trim()) return;
+        at(ed, r).insertContent({ type: 'bookmark', attrs: { url: url.trim() } }).run();
+      },
+    },
+    {
+      label: 'Nhúng', hint: 'YouTube, Vimeo, Figma, Google Docs…', icon: Frame, group: 'Khối nội dung',
+      keywords: ['embed', 'nhung', 'youtube', 'vimeo', 'figma', 'iframe', 'video'],
+      run: (ed, r) => {
+        const url = window.prompt('Dán địa chỉ cần nhúng (YouTube, Vimeo, Figma, Google Docs, CodePen…)');
+        if (!url?.trim()) return;
+        // `setEmbed` tự đổi sang bookmark nếu địa chỉ không thuộc nhà cung cấp
+        // nào — CSP sẽ chặn iframe lạ và để lại khung trắng câm.
+        at(ed, r).setEmbed(url.trim()).run();
+      },
+    },
+    {
       label: 'Callout — Mẹo', hint: 'Mẹo hữu ích', icon: Lightbulb, group: 'Khối nội dung',
       keywords: ['callout', 'tip', 'meo'],
       run: (ed, r) => at(ed, r).toggleCallout({ kind: 'tip' }).run(),
@@ -220,7 +278,7 @@ const GAP = 8;          // cách con trỏ
 const DESIRED_H = 380;  // chiều cao "thoải mái" của bảng
 const MIN_H = 160;      // dưới mức này thì cuộn trong bảng
 
-const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor, onPickImage, onDismiss }, ref) => {
+const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor, onPickImage, onPickVideo, onPickFile, onDismiss }, ref) => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
@@ -252,7 +310,10 @@ const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor, onPickImage, onDism
     isOpen: () => openRef.current,
   }), []);
 
-  const allItems = useMemo(() => buildItems(onPickImage), [onPickImage]);
+  const allItems = useMemo(
+    () => buildItems(onPickImage, onPickVideo, onPickFile),
+    [onPickImage, onPickVideo, onPickFile],
+  );
 
   const matches = useMemo(() => {
     const q = deaccent(query.trim());

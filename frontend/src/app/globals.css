@@ -2817,6 +2817,161 @@ html[data-notes-theme='brown'] .note-bubble {
 html[data-notes-theme='brown'] .note-bubble__btn { color: #43361f; }
 html[data-notes-theme='brown'] .note-bubble__btn:hover { background: rgba(67, 54, 31, 0.12); }
 
+/* ── Khối mới: Toggle · Media · Bookmark · Embed (17/08/2026) ────
+ * Màu lấy từ biến chủ đề của Notes (`--notes-*`) chứ không ghi cứng,
+ * để một khối dùng được ở cả ba chủ đề sáng/tối/nâu mà không cần ba
+ * bộ luật. Chỗ nào cần tương phản thì dùng `currentColor` pha alpha. */
+
+/* Toggle — thu gọn hoàn toàn bằng CSS. Con ĐẦU TIÊN là tiêu đề (luôn
+ * hiện), mọi con sau là thân. Nhờ vậy tiêu đề vẫn là rich text đầy đủ
+ * và việc đóng/mở không hề đụng tới nội dung. */
+.note-toggle {
+  position: relative;
+  padding-left: 24px;
+  margin: 2px 0;
+}
+.note-toggle__arrow {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: currentColor;
+  opacity: 0.5;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 140ms ease, opacity 120ms, background 120ms;
+}
+.note-toggle__arrow:hover { opacity: 1; background: rgba(127, 127, 127, 0.16); }
+.note-toggle[data-open='true'] > .note-toggle__arrow { transform: rotate(90deg); }
+/* `[data-node-view-content-react]` là lớp bọc mà `NodeViewContent` của
+ * TipTap React chèn thêm vào GIỮA thân và các khối con. Đo được cây thật:
+ *   .note-toggle__body > [data-node-view-content-react] > p, p, …
+ * Bỏ qua lớp này thì bộ chọn trỏ đúng vào nó — một phần tử duy nhất — nên
+ * "ẩn mọi con trừ con đầu" chẳng ẩn được gì và nút thu gọn trông như hỏng.
+ * Viết cả hai nhánh để nếu TipTap bỏ lớp bọc thì luật vẫn đúng. */
+.note-toggle[data-open='false'] > .note-toggle__body > [data-node-view-content-react] > *:not(:first-child),
+.note-toggle[data-open='false'] > .note-toggle__body > p:not(:first-child) { display: none; }
+.note-toggle__peek {
+  display: block;
+  margin-top: 2px;
+  padding: 1px 6px;
+  border: none;
+  border-radius: 4px;
+  background: rgba(127, 127, 127, 0.14);
+  color: inherit;
+  opacity: 0.6;
+  font-size: 12px;
+  cursor: pointer;
+}
+.note-toggle__peek:hover { opacity: 1; }
+
+/* Media — video và tệp đính kèm */
+.note-media { position: relative; margin: 8px 0; }
+.note-media--video video {
+  width: 100%;
+  max-height: 70vh;
+  border-radius: 8px;
+  background: #000;
+  display: block;
+}
+.note-media--file > a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 120ms, border-color 120ms;
+}
+.note-media--file > a:hover {
+  background: rgba(127, 127, 127, 0.09);
+  border-color: rgba(127, 127, 127, 0.5);
+}
+.note-media__name { font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.note-media__meta { font-size: 12px; opacity: 0.6; white-space: nowrap; }
+.note-media--broken {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px dashed rgba(220, 38, 38, 0.5);
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 14px;
+}
+.note-media--broken button { margin-left: auto; border: none; background: transparent; color: inherit; cursor: pointer; }
+/* Nút xoá chỉ hiện khi rê chuột — luôn hiện thì mỗi khối media mọc thêm
+ * một nút đỏ, và trang đầy video trông như một bảng cảnh báo. */
+.note-media__del, .note-bookmark__del, .note-embed__del {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(15, 15, 15, 0.65);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms;
+}
+.note-media:hover .note-media__del,
+.note-bookmark:hover .note-bookmark__del,
+.note-embed:hover .note-embed__del { opacity: 1; }
+
+/* Bookmark — thẻ xem trước liên kết */
+.note-bookmark { position: relative; margin: 8px 0; }
+.note-bookmark > a {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: background 120ms, border-color 120ms;
+}
+.note-bookmark > a:hover { background: rgba(127, 127, 127, 0.07); border-color: rgba(127, 127, 127, 0.5); }
+.note-bookmark__text { flex: 1; min-width: 0; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.note-bookmark__title { display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 14px; line-height: 1.35; }
+/* Cắt mô tả ở 2 dòng: thẻ bookmark phải có chiều cao đoán trước được,
+ * nếu không một trang có mô tả dài sẽ đẩy cả bố cục ghi chú lệch đi. */
+.note-bookmark__desc {
+  font-size: 12px;
+  opacity: 0.7;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.note-bookmark__site { display: flex; align-items: center; gap: 5px; font-size: 11.5px; opacity: 0.6; margin-top: auto; }
+.note-bookmark__site img { border-radius: 3px; flex: none; }
+.note-bookmark__warn { color: #d97706; }
+.note-bookmark__thumb { width: 150px; object-fit: cover; flex: none; }
+@media (max-width: 520px) { .note-bookmark__thumb { display: none; } }
+
+/* Embed — iframe nhà cung cấp trong danh sách đóng (xem NoteEmbed.tsx) */
+.note-embed { position: relative; margin: 10px 0; }
+.note-embed > div { width: 100%; border-radius: 8px; overflow: hidden; background: rgba(127, 127, 127, 0.12); }
+.note-embed iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+.note-spin { animation: note-spin 1s linear infinite; }
+@keyframes note-spin { to { transform: rotate(360deg); } }
+
 /* Placeholder (TipTap Placeholder extension) */
 .note-prose p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);

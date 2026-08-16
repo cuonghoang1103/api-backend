@@ -45,6 +45,10 @@ import NoteCallout from '@/components/notes/extensions/NoteCallout';
 import NoteMath from '@/components/notes/extensions/NoteMath';
 import TabIndent from '@/components/notes/extensions/TabIndent';
 import BlockHandle from '@/components/notes/extensions/BlockHandle';
+import NoteToggle from '@/components/notes/extensions/NoteToggle';
+import NoteMedia from '@/components/notes/extensions/NoteMedia';
+import NoteBookmark from '@/components/notes/extensions/NoteBookmark';
+import NoteEmbed from '@/components/notes/extensions/NoteEmbed';
 import SlashMenu, { type SlashMenuRef } from '@/components/notes/SlashMenu';
 import NoteTableOfContents from '@/components/notes/NoteTableOfContents';
 import NotePropertiesPanel from '@/components/notes/NotePropertiesPanel';
@@ -210,6 +214,64 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
   // Dùng lại đúng luồng upload R2 của paste/drop, chỉ khác đường vào.
   const imageInputRef = useRef<HTMLInputElement>(null);
 
+  // ─── Tải VIDEO và TỆP ĐÍNH KÈM ──────────────────────────────
+  /**
+   * Video đi đường presign R2 TRỰC TIẾP trước.
+   *
+   * Đường thường (`/files/upload`) đi qua proxy Cloudflare, nơi có trần 100MB
+   * cho thân yêu cầu — quá trần thì người dùng nhận lỗi mạng chung chung chứ
+   * không ai nói cho họ biết vì sao. `uploadVideoDirect` PUT thẳng lên R2 nên
+   * không dính trần đó. Nó ném `PRESIGN_UNAVAILABLE` trên backend không dùng
+   * R2, và khi ấy đường thường vẫn chạy được với file nhỏ.
+   */
+  const uploadVideo = useCallback(async (ed: Editor, file: File) => {
+    const insert = (url: string, poster: string) => {
+      ed.chain().focus()
+        .insertContent([
+          { type: 'media', attrs: { kind: 'video', src: url, name: file.name, size: file.size, mime: file.type, poster } },
+          { type: 'paragraph' },
+        ])
+        .focus().run();
+    };
+    type UploadRes = { data?: { data?: { url?: string; thumbnail?: string } } };
+    try {
+      const res = (await fileApi.uploadVideoDirect(file)) as UploadRes;
+      const d = res.data?.data;
+      if (d?.url) return insert(d.url, d.thumbnail ?? '');
+    } catch {
+      // rơi xuống đường thường
+    }
+    try {
+      const res = (await fileApi.upload(file, 'video')) as UploadRes;
+      const d = res.data?.data;
+      if (d?.url) return insert(d.url, d.thumbnail ?? '');
+    } catch {
+      // Chèn khối HỎNG thay vì im lặng: một lần tải lên thất bại mà không để
+      // lại dấu vết nào thì người dùng tưởng mình chưa bấm, và bấm lại mãi.
+      ed.chain().focus().insertContent({ type: 'media', attrs: { kind: 'video', src: '', name: file.name } }).run();
+    }
+  }, []);
+
+  const uploadFile = useCallback(async (ed: Editor, file: File) => {
+    try {
+      const res = (await fileApi.upload(file, 'documents')) as { data?: { data?: { url?: string } } };
+      const url = res.data?.data?.url;
+      if (!url) throw new Error('khong co url');
+      ed.chain().focus()
+        .insertContent([
+          { type: 'media', attrs: { kind: 'file', src: url, name: file.name, size: file.size, mime: file.type } },
+          { type: 'paragraph' },
+        ])
+        .focus().run();
+    } catch {
+      ed.chain().focus().insertContent({ type: 'media', attrs: { kind: 'file', src: '', name: file.name } }).run();
+    }
+  }, []);
+
+  const videoInputRef = useRef<HTMLInputElement>(null);
+  const attachInputRef = useRef<HTMLInputElement>(null);
+
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -227,6 +289,10 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
       NoteCodeBlock,
       NoteCallout,
       NoteMath,
+      NoteToggle,
+      NoteMedia,
+      NoteBookmark,
+      NoteEmbed,
       TaskList.configure({ HTMLAttributes: { class: 'note-task-list' } }),
       TaskItem.configure({ nested: true, HTMLAttributes: { class: 'note-task-item' } }),
       Table.configure({ resizable: false, HTMLAttributes: { class: 'note-table' } }),
@@ -764,6 +830,8 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
         ref={slashRef}
         editor={editor}
         onPickImage={() => imageInputRef.current?.click()}
+        onPickVideo={() => videoInputRef.current?.click()}
+        onPickFile={() => attachInputRef.current?.click()}
         onDismiss={(range) => { slashDismissedAt.current = range.from; }}
       />
 
@@ -779,6 +847,32 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
           const files = Array.from(e.target.files ?? []);
           if (editor) files.forEach((f) => void uploadAndInsert(editor, f));
           // Xoá value để chọn lại đúng tệp vừa rồi vẫn kích hoạt onChange.
+          e.target.value = '';
+        }}
+      />
+
+      {/* Video và tệp đính kèm. `Array.from` NGAY trong handler là bắt buộc:
+          `e.target.files` là danh sách SỐNG, và dòng `e.target.value = ''`
+          bên dưới xoá sạch nó — đọc trễ một nhịp là nhận mảng rỗng. */}
+      <input
+        ref={videoInputRef}
+        type="file"
+        accept="video/*"
+        hidden
+        onChange={(e) => {
+          const files = Array.from(e.target.files ?? []);
+          if (editor) files.forEach((f) => void uploadVideo(editor, f));
+          e.target.value = '';
+        }}
+      />
+      <input
+        ref={attachInputRef}
+        type="file"
+        multiple
+        hidden
+        onChange={(e) => {
+          const files = Array.from(e.target.files ?? []);
+          if (editor) files.forEach((f) => void uploadFile(editor, f));
           e.target.value = '';
         }}
       />

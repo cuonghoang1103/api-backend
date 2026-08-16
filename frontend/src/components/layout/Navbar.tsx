@@ -23,6 +23,7 @@ import {
  Globe, ShoppingBag, Bell, NotebookPen, Newspaper,
 Sun, Moon, ArrowLeft, Megaphone,
 PlayCircle, Receipt, Ticket, Award, Crown,
+  MonitorDown,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { usePro } from '@/hooks/usePro';
@@ -52,6 +53,9 @@ const TOP_NAV_LINKS: TopNavLinkItem[] = [
  { href: '/messages', label: 'Messenger', icon: MessageCircle, authOnly: true },
  { href: '/music', label: 'Music', icon: Music },
  { href: '/chat', label: 'AI Chat', icon: Sparkles },
+  // Trang tải app desktop. Đặt cuối vì nó không phải nội dung — người dùng
+  // vào một lần rồi thôi, khác Feed/Music là chỗ quay lại hằng ngày.
+  { href: '/download', label: 'Get App', icon: MonitorDown },
 ];
 
 // Mobile bottom tab bar — Facebook-style, kept to 4 essential tabs.

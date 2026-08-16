@@ -40,7 +40,17 @@ RUN pip install --no-cache-dir \
       "python-multipart==0.0.20"
 
 WORKDIR /app
-COPY app.py /app/app.py
+# ⚠️ COPY *.py, KHÔNG chỉ app.py. `app.py` import thẳng `f5_giong` (và
+# `dieukhien` / `xuong` / `may` trong try/except), tất cả đều nằm cạnh nó
+# trong services/tts/. Chép mỗi app.py thì file có mặt trên VPS nhưng
+# KHÔNG có trong image — container không bind-mount /app, chỉ gắn volume
+# /models — nên nó chết bằng `ModuleNotFoundError` ngay lúc uvicorn nạp
+# app, trong khi deploy.sh vẫn thoát 0 và smoke-test vẫn xanh (smoke-test
+# chỉ gọi route của backend Node, không đụng tới TTS). Đã cháy thật
+# 15/08/2026: `import f5_giong` thêm vào lúc 02:34, image dựng lúc 03:17,
+# TTS crashloop suốt ~24h mà không ai thấy.
+# Thư mục f5/ cố ý KHÔNG chép: đó là script train cho máy nhà có GPU.
+COPY *.py /app/
 
 # Model tải về /models — được gắn volume, nên tải đúng MỘT lần rồi
 # sống qua mọi lần deploy. Nướng thẳng vào image thì mỗi lần đổi một

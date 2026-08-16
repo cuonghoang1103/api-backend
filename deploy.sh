@@ -314,7 +314,15 @@ ok "Frontend image built"
 # In ra dòng "bỏ qua" chứ KHÔNG im lặng: một tối ưu âm thầm trông y hệt
 # một bước bị hỏng, và người đọc log tháng sau sẽ ngồi đoán tại sao sửa
 # app.py mà không thấy gì đổi.
-TTS_HASH=$(cat services/tts/Dockerfile services/tts/app.py 2>/dev/null | sha256sum | cut -c1-16)
+# Băm MỌI file .py trong services/tts/, không chỉ app.py. Bản cũ chỉ băm
+# `Dockerfile + app.py`, nên sửa `f5_giong.py` xong deploy vẫn in "BỎ QUA"
+# và chạy ảnh cũ — cộng với việc Dockerfile hồi đó chỉ `COPY app.py`, đó là
+# đúng hai lớp im lặng chồng lên nhau (sự cố TTS 15/08/2026).
+# `sort` để thứ tự file không phụ thuộc vào thứ tự `find` trả về, nếu không
+# băm sẽ đổi lung tung giữa các máy và deploy nào cũng dựng lại 10 phút.
+TTS_HASH=$( { cat services/tts/Dockerfile 2>/dev/null; \
+              find services/tts -maxdepth 1 -name '*.py' -type f -print0 2>/dev/null \
+                | sort -z | xargs -0 cat 2>/dev/null; } | sha256sum | cut -c1-16)
 # Đặt dấu băm trong DATA_DIR (/opt/cuonghoangdev), KHÔNG đặt trong repo:
 # repo bị rsync ghi đè mỗi lần deploy, còn DATA_DIR thì rsync không đụng
 # tới — chính chỗ `.env` production đang sống.

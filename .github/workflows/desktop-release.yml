@@ -1,0 +1,129 @@
+# Dựng ứng dụng desktop cho cả ba nền tảng và đẩy lên GitHub Releases.
+#
+# ⚠️ CHỈ CHẠY BẰNG TAY (`workflow_dispatch`). KHÔNG thêm trigger `push:`.
+#    Dự án này đã có hai lần sự cố thật vì nhiều workflow cùng chạy trên mỗi
+#    push và giẫm chân nhau (03/07 và 06/07/2026 — xem CLAUDE.md). Workflow này
+#    không đụng tới VPS nên không đua với deploy, nhưng quy tắc "không tự chạy
+#    theo push" vẫn giữ cho nhất quán.
+#
+# Cách chạy: tab Actions → "Desktop — dựng bản cài 3 nền tảng" → Run workflow.
+#
+# Cần MỘT secret: `RELEASE_TOKEN` (xem docs/building-and-packaging.md).
+# KHÔNG đụng tới VPS_HOST / VPS_USER / VPS_SSH_PRIVATE_KEY — 10 workflow khác
+# đang dùng chúng.
+
+name: Desktop — dựng bản cài 3 nền tảng
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Phiên bản (để trống = dùng version trong desktop/package.json)'
+        required: false
+        type: string
+
+# Không cho hai lần chạy chồng nhau: cả hai sẽ cùng tải file lên một release và
+# ghi đè lẫn nhau.
+concurrency:
+  group: desktop-release
+  cancel-in-progress: false
+
+jobs:
+  # ── Kiểm trước khi dựng ────────────────────────────────────
+  # Chạy RIÊNG và chạy TRƯỚC. Dựng ba nền tảng mất ~15 phút và tốn phút Actions;
+  # để một lỗi TypeScript làm hỏng cả ba job là lãng phí thấy rõ.
+  kiem-tra:
+    name: Kiểm tra mã
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - run: npm ci
+        working-directory: desktop
+
+      - name: Kiểm kiểu
+        run: npm run typecheck
+        working-directory: desktop
+
+      - name: Unit test
+        run: npx vitest run
+        working-directory: desktop
+
+  # ── Dựng ───────────────────────────────────────────────────
+  dung:
+    name: Dựng ${{ matrix.ten }}
+    needs: kiem-tra
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # Một nền tảng hỏng thì hai nền tảng kia VẪN dựng xong. Mặc định của
+      # GitHub là huỷ hết — mà thà có hai bản còn hơn không có bản nào.
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            ten: macOS
+            lenh: dist:mac
+          - os: windows-latest
+            ten: Windows
+            lenh: dist:win
+          - os: ubuntu-latest
+            ten: Linux
+            lenh: dist:linux
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      # libsecret là kho khoá của Linux. electron-builder cần nó lúc đóng gói
+      # bản .deb; thiếu thì bản cài ra vẫn chạy nhưng safeStorage không mã hoá
+      # được và người dùng phải đăng nhập lại mỗi lần mở app.
+      - name: Cài thư viện hệ thống (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y libsecret-1-dev
+
+      - run: npm ci
+        working-directory: desktop
+
+      - name: Đặt phiên bản
+        if: inputs.version != ''
+        run: npm version "${{ inputs.version }}" --no-git-tag-version
+        working-directory: desktop
+
+      - name: Dựng và phát hành
+        run: npm run ${{ matrix.lenh }} -- --publish always
+        working-directory: desktop
+        env:
+          # Token có quyền ghi vào repo PHÁT HÀNH (cuongthai-desktop), không
+          # phải `GITHUB_TOKEN` mặc định — token mặc định chỉ có quyền trong
+          # chính repo đang chạy workflow.
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          # Không ký số (chưa mua chứng chỉ). Đặt tường minh để electron-builder
+          # không đi tìm chứng chỉ trong keychain của máy runner rồi báo lỗi khó hiểu.
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
+      # Giữ lại file cài kể cả khi bước phát hành hỏng — nếu không, một lỗi
+      # token sẽ vứt luôn 15 phút dựng và phải chạy lại từ đầu.
+      - name: Lưu bản cài làm artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ban-cai-${{ matrix.ten }}
+          path: |
+            desktop/release/*.dmg
+            desktop/release/*.exe
+            desktop/release/*.AppImage
+            desktop/release/*.deb
+            desktop/release/*.yml
+          if-no-files-found: warn
+          retention-days: 14

@@ -57,7 +57,13 @@ mac:
       trong lúc bạn giữ nút và tắt ngay khi thả tay.
 
 dmg:
-  title: '${productName} ${version}'
+  # ⚠️ `title` PHẢI có ${arch}. Đây là tên ổ đĩa ảo lúc dựng, và macOS mount nó
+  # thật vào /Volumes. Hai bản arm64 + x64 dựng liên tiếp với cùng một tên sẽ
+  # đụng nhau: bản sau không mount được, rồi `hdiutil detach` thất bại năm lần
+  # liên tiếp và giết cả job. Máy cá nhân ít gặp vì ổ cũ kịp tự tháo; máy CI
+  # nhanh hơn nên dính chắc.
+  # Đã hỏng đúng như vậy trên GitHub Actions ngày 16/08/2026.
+  title: '${productName} ${version} ${arch}'
   artifactName: '${productName}-${version}-${arch}.${ext}'
 
 # ── Windows ────────────────────────────────────────────────

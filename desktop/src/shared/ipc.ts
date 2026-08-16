@@ -47,6 +47,8 @@ export const settingKeySchema = z.enum([
   'reducedMotion',
   'zoomLevel',
   'lastRoute',
+  /** Đường dẫn thư mục lưu ghi chú. Do NGƯỜI DÙNG chọn qua hộp thoại hệ thống. */
+  'notesFolder',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 
@@ -87,6 +89,57 @@ export const storeSessionSchema = z.object({
   sessionToken: z.string().min(1).max(4096),
 });
 
+
+/**
+ * ─────────────────────────────────────────────────────────────
+ * Kho ghi chú trên đĩa
+ * ─────────────────────────────────────────────────────────────
+ *
+ * Đây là bề mặt DUY NHẤT mà renderer chạm được tới đĩa, và nó cố ý rất hẹp.
+ *
+ * Ba ràng buộc, mỗi cái chống một kiểu hỏng:
+ *
+ *  1. KHÔNG có "mở thư mục bất kỳ". Renderer không truyền được đường dẫn tuyệt
+ *     đối. Nó chỉ nói tên file TƯƠNG ĐỐI, còn thư mục gốc do main giữ và chỉ
+ *     đổi được khi NGƯỜI DÙNG tự chọn qua hộp thoại hệ thống (`notes:chooseFolder`).
+ *     Nếu renderer đặt được đường dẫn thì một lỗi XSS đọc được cả ổ đĩa.
+ *
+ *  2. Tên file bị chặn `..`, `/`, `\` và ký tự điều khiển ngay ở tầng schema.
+ *     Main còn resolve rồi đối chiếu lại lần nữa — hai lớp độc lập.
+ *
+ *  3. Chỉ `.md`. Ghi được đuôi tuỳ ý nghĩa là ghi được `.command`, `.sh`,
+ *     `.desktop` — file thực thi mà hệ điều hành có thể chạy.
+ */
+export const noteFileNameSchema = z
+  .string()
+  .min(1)
+  .max(200)
+  .refine((name) => !name.includes('..'), 'Tên file không được chứa ".."')
+  .refine((name) => !/[/\\]/.test(name), 'Tên file không được chứa dấu phân cách thư mục')
+  // eslint-disable-next-line no-control-regex
+  .refine((name) => !/[\u0000-\u001f]/.test(name), 'Tên file chứa ký tự không hợp lệ')
+  .refine((name) => name.toLowerCase().endsWith('.md'), 'Chỉ ghi được file .md');
+
+export const writeNoteFileSchema = z.object({
+  fileName: noteFileNameSchema,
+  content: z.string().max(5_000_000),
+});
+
+export const noteFileSchema = z.object({ fileName: noteFileNameSchema });
+
+export interface NotesFolder {
+  /** `null` = người dùng chưa chọn thư mục nào. */
+  path: string | null;
+  /** Số file .md đang có. */
+  fileCount: number;
+}
+
+export interface NoteFileInfo {
+  fileName: string;
+  size: number;
+  modifiedAt: number;
+}
+
 export const zoomSchema = z.number().min(0.5).max(2.5);
 
 // ─────────────────────────────────────────────────────────────
@@ -115,6 +168,14 @@ export const INVOKE_CHANNELS = {
 
   'storage:usage': null,
   'storage:clearCache': null,
+
+  'notes:getFolder': null,
+  'notes:chooseFolder': null,
+  'notes:listFiles': null,
+  'notes:readFile': noteFileSchema,
+  'notes:writeFile': writeNoteFileSchema,
+  'notes:deleteFile': noteFileSchema,
+  'notes:revealFolder': null,
 } as const;
 
 export type InvokeChannel = keyof typeof INVOKE_CHANNELS;
@@ -208,6 +269,17 @@ export interface DesktopBridge {
   storage: {
     usage(): Promise<StorageUsage>;
     clearCache(): Promise<void>;
+  };
+  /** Kho ghi chú trên đĩa. Xem `noteFileNameSchema` để biết giới hạn. */
+  notes: {
+    getFolder(): Promise<NotesFolder>;
+    /** Mở hộp thoại hệ thống. Trả về thư mục đã chọn, hoặc `null` nếu huỷ. */
+    chooseFolder(): Promise<NotesFolder>;
+    listFiles(): Promise<NoteFileInfo[]>;
+    readFile(fileName: string): Promise<string | null>;
+    writeFile(fileName: string, content: string): Promise<void>;
+    deleteFile(fileName: string): Promise<void>;
+    revealFolder(): Promise<void>;
   };
   /** Trả về hàm huỷ đăng ký. Renderer PHẢI gọi nó khi unmount. */
   on(channel: EventChannel, listener: (payload: unknown) => void): () => void;

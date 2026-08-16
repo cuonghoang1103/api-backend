@@ -84,12 +84,14 @@ export async function registerIpcHandlers(): Promise<void> {
     { registerAuthHandlers },
     { registerStorageHandlers },
     { registerUpdateHandlers },
+    { registerNotesHandlers },
   ] = await Promise.all([
     import('./app'),
     import('./settings'),
     import('./auth'),
     import('./storage'),
     import('./update'),
+    import('./notes'),
   ]);
 
   registerAppHandlers();
@@ -97,6 +99,7 @@ export async function registerIpcHandlers(): Promise<void> {
   registerAuthHandlers();
   registerStorageHandlers();
   registerUpdateHandlers();
+  registerNotesHandlers();
 
   assertEveryChannelRegistered();
 }

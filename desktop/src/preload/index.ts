@@ -19,6 +19,8 @@ import type {
   EventChannel,
   SettingKey,
   SettingValue,
+  NoteFileInfo,
+  NotesFolder,
   StorageUsage,
   StoredSession,
 } from '../shared/ipc';
@@ -69,6 +71,19 @@ const bridge: DesktopBridge = {
   storage: {
     usage: () => ipcRenderer.invoke('storage:usage') as Promise<StorageUsage>,
     clearCache: () => ipcRenderer.invoke('storage:clearCache') as Promise<void>,
+  },
+
+  notes: {
+    getFolder: () => ipcRenderer.invoke('notes:getFolder') as Promise<NotesFolder>,
+    chooseFolder: () => ipcRenderer.invoke('notes:chooseFolder') as Promise<NotesFolder>,
+    listFiles: () => ipcRenderer.invoke('notes:listFiles') as Promise<NoteFileInfo[]>,
+    readFile: (fileName: string) =>
+      ipcRenderer.invoke('notes:readFile', { fileName }) as Promise<string | null>,
+    writeFile: (fileName: string, content: string) =>
+      ipcRenderer.invoke('notes:writeFile', { fileName, content }) as Promise<void>,
+    deleteFile: (fileName: string) =>
+      ipcRenderer.invoke('notes:deleteFile', { fileName }) as Promise<void>,
+    revealFolder: () => ipcRenderer.invoke('notes:revealFolder') as Promise<void>,
   },
 
   on: (channel: EventChannel, listener: (payload: unknown) => void) => {

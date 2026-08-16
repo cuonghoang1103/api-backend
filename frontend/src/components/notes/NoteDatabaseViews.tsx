@@ -130,6 +130,49 @@ export function GalleryView({ properties, rows, onOpenRow }: ViewProps) {
   );
 }
 
+// ─── List ─────────────────────────────────────────────────────
+
+/**
+ * Danh sách gọn: mỗi dòng một hàng, tiêu đề bên trái, vài trường tóm tắt bên
+ * phải.
+ *
+ * Khác Gallery ở MẬT ĐỘ chứ không ở dữ liệu: Gallery mỗi dòng một thẻ, đẹp
+ * nhưng một màn hình chỉ chứa được chín mười dòng. List là khung nhìn để LƯỚT
+ * — hợp với sổ tay, danh sách đọc, việc cần làm, những thứ mà điều người dùng
+ * cần là nhìn hết một lượt chứ không phải nhìn kỹ từng cái.
+ */
+export function ListView({ properties, rows, onOpenRow }: ViewProps) {
+  if (rows.length === 0) {
+    return <p className="px-4 py-6 text-center text-sm text-slate-500">Chưa có dòng nào.</p>;
+  }
+  return (
+    <ul className="divide-y divide-slate-100 dark:divide-white/[0.05]">
+      {rows.map((row) => (
+        <li key={row.id}>
+          <button
+            type="button"
+            onClick={() => onOpenRow?.(row.id)}
+            className="flex w-full items-center gap-3 px-3 py-2 text-left hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:hover:bg-white/[0.03]"
+          >
+            <span className="min-w-0 flex-1 truncate text-sm text-slate-800 dark:text-slate-100">
+              {rowTitle(properties, row.values)}
+            </span>
+            {/* Trường tóm tắt ẩn dần trên màn hẹp thay vì xuống dòng: một danh
+                sách mà mỗi mục cao hai ba dòng thì mất hẳn lý do tồn tại. */}
+            <span className="hidden shrink-0 items-center gap-3 sm:flex">
+              {summaryFields(properties, row).slice(0, 3).map((entry) => (
+                <span key={entry.property.id} className="max-w-[9rem] truncate text-[11.5px] text-slate-500 dark:text-slate-400">
+                  {displayValue(entry.property, entry.value)}
+                </span>
+              ))}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 // ─── Calendar ─────────────────────────────────────────────────
 
 /** Month grid keyed off the first DATE column. */

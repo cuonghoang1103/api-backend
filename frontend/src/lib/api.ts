@@ -767,7 +767,8 @@ export type NoteDatabasePropertyType =
   // vì đúng kiểu chép tay này (08/08/2026, xem CLAUDE.md).
   | 'STATUS' | 'PERSON' | 'EMAIL' | 'FILE' | 'CREATED_TIME' | 'LAST_EDITED_TIME';
 
-export type NoteDatabaseViewType = 'TABLE' | 'BOARD' | 'CALENDAR' | 'GALLERY' | 'TIMELINE';
+// Phải khớp `DATABASE_VIEW_TYPES` trong src/services/notesDatabase.service.ts.
+export type NoteDatabaseViewType = 'TABLE' | 'BOARD' | 'CALENDAR' | 'GALLERY' | 'TIMELINE' | 'LIST';
 
 export interface NoteDatabaseProperty {
   id: number;

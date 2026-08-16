@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CalendarDays, Check, Columns3, LayoutGrid, Loader2, Plus, Table2, Trash2, X } from 'lucide-react';
+import { CalendarDays, Check, Columns3, GanttChartSquare, LayoutGrid, Loader2, Plus, Rows3, Table2, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   noteDatabaseApi,
@@ -12,7 +12,8 @@ import {
   type NoteDatabaseViewType,
   fileApi,
 } from '@/lib/api';
-import { BoardView, CalendarView, GalleryView } from '@/components/notes/NoteDatabaseViews';
+import { BoardView, CalendarView, GalleryView, ListView } from '@/components/notes/NoteDatabaseViews';
+import TimelineView from '@/components/notes/NoteDatabaseTimeline';
 import NoteDatabaseToolbar from '@/components/notes/NoteDatabaseToolbar';
 import {
   applyViewConfig, parseViewConfig, EMPTY_VIEW_CONFIG, type ViewConfig,
@@ -183,6 +184,46 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
     [database, properties, viewConfig, cellCtx],
   );
 
+  /**
+   * Cột ngày mà Dòng thời gian đang dùng.
+   *
+   * Lưu trong `config` của khung nhìn cùng chỗ với bộ lọc, nên mở lại vẫn đúng
+   * cột. Đọc qua `viewConfig` chứ không giữ state riêng: hai nguồn sự thật cho
+   * cùng một lựa chọn sẽ lệch nhau ngay lần nạp lại đầu tiên.
+   *
+   * Không chọn thì tự đoán cột ngày ĐẦU TIÊN. Bắt người dùng chọn trước khi
+   * thấy được gì sẽ khiến khung nhìn này trông như hỏng ở lần mở đầu.
+   */
+  const firstDateProperty = properties.find((p) => p.type === 'DATE')?.id ?? null;
+  const timelineStartId = viewConfig.timeline?.startPropertyId ?? firstDateProperty;
+  const timelineEndId = viewConfig.timeline?.endPropertyId ?? null;
+
+  const saveTimelineProperties = (next: { startPropertyId: number | null; endPropertyId: number | null }) => {
+    changeViewConfig({ ...viewConfig, timeline: next });
+  };
+
+  /** Ghi ngày mới sau khi kéo một thanh trên Dòng thời gian. */
+  const moveTimelineRow = async (rowId: number, next: { start: string; end: string | null }) => {
+    if (timelineStartId === null) return;
+    const values: Record<number, unknown> = { [timelineStartId]: next.start };
+    if (timelineEndId !== null && next.end !== null) values[timelineEndId] = next.end;
+
+    // Cập nhật ngay tại chỗ TRƯỚC khi gọi mạng: thanh vừa được thả phải nằm
+    // yên ở chỗ mới. Đợi máy chủ trả lời thì nó bật ngược về vị trí cũ một
+    // nhịp rồi mới nhảy tới — trông như thao tác đã hỏng.
+    setDatabase((current) => current && ({
+      ...current,
+      rows: current.rows.map((row) => (row.id === rowId ? { ...row, values: { ...row.values, ...values } } : row)),
+    }));
+
+    try {
+      await noteDatabaseApi.updateRow(rowId, values as never);
+    } catch {
+      toast.error('Không lưu được ngày mới');
+      await load();   // trả về đúng trạng thái máy chủ, không để lại thay đổi ảo
+    }
+  };
+
   const commitCell = async (row: NoteDatabaseRow, property: NoteDatabaseProperty, raw: string) => {
     setEditing(null);
     // Cột tính ra thì máy chủ bỏ qua mọi lượt ghi — chặn ngay ở đây để không
@@ -301,14 +342,17 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
           <span className="shrink-0 text-[11px] font-normal text-slate-500">{database.rows.length} dòng</span>
         </h3>
         <div className="flex items-center gap-1">
-          {/* All four views read the rows already in state — switching costs
-              no request and cannot show a stale second copy of the data. */}
+          {/* Cả sáu khung nhìn đọc số dòng đã có sẵn trong state — đổi khung
+              nhìn không tốn một lượt gọi nào và không thể hiện ra một bản sao
+              cũ của dữ liệu. */}
           <div role="tablist" aria-label="Kiểu hiển thị" className="flex items-center gap-0.5 rounded-lg bg-slate-100 p-0.5 dark:bg-white/[0.05]">
             {([
               ['TABLE', 'Bảng', Table2],
               ['BOARD', 'Kanban', Columns3],
               ['GALLERY', 'Thẻ', LayoutGrid],
               ['CALENDAR', 'Lịch', CalendarDays],
+              ['TIMELINE', 'Dòng thời gian', GanttChartSquare],
+              ['LIST', 'Danh sách', Rows3],
             ] as const).map(([type, label, Icon]) => (
               <button
                 key={type}
@@ -369,7 +413,23 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
             />
           )
           : viewType === 'GALLERY' ? <GalleryView properties={view.visibleProperties} rows={view.rows} onOpenRow={setOpenRowId} />
-            : <CalendarView properties={view.visibleProperties} rows={view.rows} onOpenRow={setOpenRowId} />
+            : viewType === 'LIST' ? <ListView properties={view.visibleProperties} rows={view.rows} onOpenRow={setOpenRowId} />
+              : viewType === 'TIMELINE' ? (
+                <TimelineView
+                  properties={view.visibleProperties}
+                  rows={view.rows}
+                  onOpenRow={setOpenRowId}
+                  startPropertyId={timelineStartId}
+                  endPropertyId={timelineEndId}
+                  onPickProperties={saveTimelineProperties}
+                  // Chỉ trao khả năng kéo khi người dùng có quyền sửa. Thiếu
+                  // điều kiện này thì người chỉ-xem kéo được thanh, thấy nó
+                  // dịch đi, rồi mất thay đổi lúc tải lại — tệ hơn hẳn so với
+                  // không kéo được ngay từ đầu.
+                  {...(canEdit ? { onMoveRow: moveTimelineRow } : {})}
+                />
+              )
+                : <CalendarView properties={view.visibleProperties} rows={view.rows} onOpenRow={setOpenRowId} />
       )}
 
       {/* A card in Kanban/Gallery/Calendar has nowhere to put a row of

@@ -50,10 +50,22 @@ export interface ViewConfig {
   hiddenPropertyIds: number[];
   /** Tìm nhanh trong mọi cột, độc lập với bộ lọc. */
   search: string;
+  /**
+   * Cột ngày mà khung nhìn Dòng thời gian dùng để vẽ thanh.
+   *
+   * Nằm trong cùng một `config` với bộ lọc chứ không tách ra chỗ khác: cả hai
+   * đều là "khung nhìn này đang được cấu hình thế nào", và tách ra sẽ thành
+   * hai đường lưu cho một thứ.
+   *
+   * ⚠️ Khoá này phải được liệt kê trong `sanitizeViewConfig()` ở backend, nếu
+   * không nó bị vứt âm thầm lúc ghi.
+   */
+  timeline: { startPropertyId: number | null; endPropertyId: number | null } | null;
 }
 
 export const EMPTY_VIEW_CONFIG: ViewConfig = {
   filters: [], filterJoin: 'and', sorts: [], groupPropertyId: null, hiddenPropertyIds: [], search: '',
+  timeline: null,
 };
 
 /**
@@ -99,6 +111,12 @@ export function parseViewConfig(raw: unknown): ViewConfig {
       ? c.hiddenPropertyIds.map(num).filter((n): n is number => n !== null)
       : [],
     search: typeof c.search === 'string' ? c.search : '',
+    timeline: (c.timeline && typeof c.timeline === 'object' && !Array.isArray(c.timeline))
+      ? {
+          startPropertyId: num((c.timeline as Record<string, unknown>).startPropertyId),
+          endPropertyId: num((c.timeline as Record<string, unknown>).endPropertyId),
+        }
+      : null,
   };
 }
 

@@ -45,7 +45,10 @@ export const COMPUTED_PROPERTY_TYPES = new Set<DatabasePropertyType>([
   'CREATED_TIME', 'LAST_EDITED_TIME',
 ]);
 
-export const DATABASE_VIEW_TYPES = ['TABLE', 'BOARD', 'CALENDAR', 'GALLERY', 'TIMELINE'] as const;
+// `LIST` thêm 17/08/2026 cho đủ sáu kiểu như Notion. Cột `type` là VARCHAR
+// nên không cần migration — nhưng PHẢI khớp union ở frontend/src/lib/api.ts,
+// và chỗ đó chép tay nên `tsc` không bắt được lúc hai bên lệch nhau.
+export const DATABASE_VIEW_TYPES = ['TABLE', 'BOARD', 'CALENDAR', 'GALLERY', 'TIMELINE', 'LIST'] as const;
 export type DatabaseViewType = (typeof DATABASE_VIEW_TYPES)[number];
 
 function assertId(value: number, label = 'id') {
@@ -809,6 +812,17 @@ function sanitizeViewConfig(raw: unknown): Prisma.InputJsonValue {
     return [{ propertyId, direction: o.direction === 'desc' ? 'desc' : 'asc' }];
   }).slice(0, 10) : [];
 
+  /* Cột ngày mà khung nhìn Dòng thời gian đang dùng.
+   *
+   * PHẢI có mặt ở đây. Hàm này dựng lại một object với đúng những khoá nó
+   * biết, nên một khoá không được liệt kê sẽ bị VỨT ÂM THẦM: người dùng chọn
+   * cột ngày, thấy dòng thời gian hiện lên đúng, rồi mở lại hôm sau thì lựa
+   * chọn biến mất mà không có lỗi nào. Thêm khung nhìn mới có cấu hình riêng
+   * thì nhớ thêm vào đây. */
+  const timelineRaw = (c.timeline && typeof c.timeline === 'object' && !Array.isArray(c.timeline))
+    ? c.timeline as Record<string, unknown>
+    : null;
+
   return {
     filters,
     filterJoin: c.filterJoin === 'or' ? 'or' : 'and',
@@ -818,6 +832,9 @@ function sanitizeViewConfig(raw: unknown): Prisma.InputJsonValue {
       ? c.hiddenPropertyIds.map(id).filter((n): n is number => n !== null).slice(0, 100)
       : [],
     search: text(c.search, 200),
+    timeline: timelineRaw
+      ? { startPropertyId: id(timelineRaw.startPropertyId), endPropertyId: id(timelineRaw.endPropertyId) }
+      : null,
   } as Prisma.InputJsonValue;
 }
 

@@ -50,6 +50,7 @@ const TYPE_LABEL: Record<NoteDatabasePropertyType, string> = {
   LAST_EDITED_TIME: 'Sửa lần cuối',
   RELATION: 'Quan hệ',
   ROLLUP: 'Tổng hợp',
+  FORMULA: 'Công thức',
 };
 
 /* Màu chip trạng thái theo NHÓM, không theo tên tuỳ chọn: tên do người dùng
@@ -63,7 +64,7 @@ const STATUS_CHIP: Record<'todo' | 'doing' | 'done', string> = {
 const NEW_COLUMN_TYPES: NoteDatabasePropertyType[] = [
   'TEXT', 'NUMBER', 'SELECT', 'MULTI_SELECT', 'STATUS', 'DATE', 'CHECKBOX',
   'PERSON', 'URL', 'EMAIL', 'FILE', 'CREATED_TIME', 'LAST_EDITED_TIME',
-  'RELATION', 'ROLLUP',
+  'RELATION', 'ROLLUP', 'FORMULA',
 ];
 
 export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Props) {
@@ -82,6 +83,7 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
   const [rollupRelationId, setRollupRelationId] = useState<number | null>(null);
   const [rollupTargetId, setRollupTargetId] = useState<number | null>(null);
   const [rollupFn, setRollupFn] = useState<string>('count');
+  const [formulaExpr, setFormulaExpr] = useState('');
   /** Các bảng khác trong cùng môn — nguồn để chọn bảng đích cho cột quan hệ. */
   const [siblingDatabases, setSiblingDatabases] = useState<NoteDatabaseSummary[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -345,6 +347,11 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
         setBusy(false);
         return;
       }
+      if (columnType === 'FORMULA' && !formulaExpr.trim()) {
+        toast.error('Nhập biểu thức cho cột công thức');
+        setBusy(false);
+        return;
+      }
       if (columnType === 'ROLLUP' && rollupRelationId === null) {
         toast.error('Chọn cột quan hệ để tổng hợp qua đó');
         setBusy(false);
@@ -358,6 +365,7 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
         ...(columnType === 'ROLLUP' ? {
           config: { relationPropertyId: rollupRelationId, targetPropertyId: rollupTargetId, fn: rollupFn },
         } : {}),
+        ...(columnType === 'FORMULA' ? { config: { expression: formulaExpr } } : {}),
       });
       setColumnName('');
       setAddingColumn(false);
@@ -819,6 +827,16 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
                   <option value="">— bảng đích —</option>
                   {siblingDatabases.map((d) => <option key={d.id} value={d.id}>{d.title}</option>)}
                 </select>
+              )}
+
+              {columnType === 'FORMULA' && (
+                <input
+                  aria-label="Biểu thức"
+                  value={formulaExpr}
+                  onChange={(e) => setFormulaExpr(e.target.value)}
+                  placeholder='if(prop("Trạng thái") == "Xong", "✅", "⏳")'
+                  className="min-h-9 w-72 rounded border border-slate-300 px-2 font-mono text-[11px] dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
+                />
               )}
 
               {columnType === 'ROLLUP' && (

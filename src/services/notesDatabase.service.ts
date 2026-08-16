@@ -20,6 +20,7 @@ import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { canEditSharedNote, checkNoteAccess } from './notesShare.service.js';
 import { computeRollups, loadRelationData, parseRelationConfig } from './noteDatabaseRollup.js';
+import { compileFormula, runFormula, type FormulaValue } from './noteDatabaseFormula.js';
 
 // ─── Property types ───────────────────────────────────────────
 
@@ -29,7 +30,7 @@ export const DATABASE_PROPERTY_TYPES = [
   // Postgres, nên thêm ở đây là đủ, KHÔNG cần migration.
   'STATUS', 'PERSON', 'EMAIL', 'FILE', 'CREATED_TIME', 'LAST_EDITED_TIME',
   // 17/08/2026 — quan hệ giữa hai bảng và số tổng hợp từ quan hệ đó.
-  'RELATION', 'ROLLUP',
+  'RELATION', 'ROLLUP', 'FORMULA',
 ] as const;
 export type DatabasePropertyType = (typeof DATABASE_PROPERTY_TYPES)[number];
 
@@ -309,6 +310,7 @@ export function normalizeCellValue(
      * cột: một mảng đúng ở bảng liên kết và một chuỗi rác ở đây. */
     case 'RELATION':
     case 'ROLLUP':
+    case 'FORMULA':
       return null;
 
     default:
@@ -335,6 +337,40 @@ function withComputedValues<T extends { createdAt: Date; updatedAt: Date; values
     else if (property.type === 'LAST_EDITED_TIME') row.values[property.id] = row.updatedAt.toISOString();
   }
   return row;
+}
+
+/**
+ * Chạy một công thức đã biên dịch trên bản đồ giá trị của một dòng.
+ *
+ * Bắt lỗi TỪNG DÒNG chứ không từng bảng: một dòng có dữ liệu lạ (ngày gõ sai,
+ * số âm chỗ không nên) chỉ được làm hỏng ô của chính nó. Ném lên thì cả bảng
+ * không mở được vì một dòng.
+ */
+function runFormulaSafely(
+  compiled: ReturnType<typeof compileFormula> | null,
+  values: Record<string, unknown>,
+  propertyByName: Map<string, number>,
+  now: Date,
+): FormulaValue {
+  if (!compiled) return null;
+  try {
+    return runFormula(compiled, {
+      now,
+      prop: (name: string) => {
+        const id = propertyByName.get(name);
+        if (id === undefined) return null;
+        const value = values[id];
+        if (value === undefined || value === null) return null;
+        if (typeof value === 'number' || typeof value === 'string' || typeof value === 'boolean') return value;
+        // Mảng (nhiều lựa chọn, người, quan hệ) rút về chuỗi ngăn cách dấu
+        // phẩy, để `contains(prop("Nhãn"), "gấp")` vẫn dùng được.
+        if (Array.isArray(value)) return value.map((v) => String(v)).join(', ');
+        return String(value);
+      },
+    });
+  } catch (error) {
+    return `⚠ ${error instanceof Error ? error.message : 'Công thức lỗi'}`;
+  }
 }
 
 // ─── Access ───────────────────────────────────────────────────
@@ -446,6 +482,27 @@ export async function getDatabase(userId: number, databaseId: number) {
     }),
   ]);
 
+  /* Biên dịch công thức MỘT LẦN cho cả bảng, không phải mỗi dòng một lần.
+   * Một bảng 5.000 dòng với 3 cột công thức sẽ là 15.000 lượt phân tích cú
+   * pháp trên cùng ba chuỗi không đổi.
+   *
+   * Cú pháp sai thì `compiled` để null và mọi ô của cột đó hiện thông báo
+   * lỗi — người dùng phải THẤY lỗi trong ô mới biết đường sửa, chứ ném lên
+   * thì cả bảng không mở được vì một dấu ngoặc thiếu. */
+  const formulas = full.properties
+    .filter((p) => p.type === 'FORMULA')
+    .map((property) => {
+      const expression = String((property.config as { expression?: unknown } | null)?.expression ?? '');
+      try {
+        return { property, compiled: expression ? compileFormula(expression) : null, error: null as string | null };
+      } catch (error) {
+        return { property, compiled: null, error: error instanceof Error ? error.message : 'Công thức lỗi' };
+      }
+    });
+  /** Tra giá trị theo TÊN cột — `prop("Hạn")` nhận tên, không nhận id. */
+  const propertyByName = new Map(full.properties.map((p) => [p.name, p.id]));
+  const now = new Date();
+
   const rowIds = rows.map((row) => row.id);
   const relationIds = full.properties.filter((p) => p.type === 'RELATION').map((p) => p.id);
   const links = await loadRelationData(relationIds, rowIds);
@@ -482,6 +539,19 @@ export async function getDatabase(userId: number, databaseId: number) {
         } else if (property.type === 'ROLLUP') {
           base.values[property.id] = rollupValues.get(property.id)?.get(row.id) ?? null;
         }
+      }
+
+      /* FORMULA tính SAU CÙNG, sau khi quan hệ và tổng hợp đã có giá trị.
+       * Nhờ thứ tự này, một công thức viết được `prop("% xong") > 80` — tức
+       * là tính trên kết quả của rollup. Tính trước thì `prop()` đọc phải ô
+       * rỗng và mọi công thức dựa vào tổng hợp đều ra 0. */
+      for (const { property, compiled, error } of formulas) {
+        // Sai cú pháp thì hiện thông báo TRONG Ô. Trả null sẽ ra ô rỗng, và
+        // người dùng tưởng công thức đúng nhưng dữ liệu chưa có — họ sẽ đi tìm
+        // ở nhầm chỗ.
+        base.values[property.id] = error !== null
+          ? `⚠ ${error}`
+          : runFormulaSafely(compiled, base.values, propertyByName, now);
       }
       return base;
     }),

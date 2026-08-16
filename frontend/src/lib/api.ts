@@ -766,7 +766,7 @@ export type NoteDatabasePropertyType =
   // KHÔNG bắt được lúc hai bên lệch nhau; dự án đã vỡ seed trên production
   // vì đúng kiểu chép tay này (08/08/2026, xem CLAUDE.md).
   | 'STATUS' | 'PERSON' | 'EMAIL' | 'FILE' | 'CREATED_TIME' | 'LAST_EDITED_TIME'
-  | 'RELATION' | 'ROLLUP';
+  | 'RELATION' | 'ROLLUP' | 'FORMULA';
 
 // Phải khớp `DATABASE_VIEW_TYPES` trong src/services/notesDatabase.service.ts.
 export type NoteDatabaseViewType = 'TABLE' | 'BOARD' | 'CALENDAR' | 'GALLERY' | 'TIMELINE' | 'LIST';

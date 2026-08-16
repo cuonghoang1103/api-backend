@@ -75,7 +75,9 @@ export function personLabel(person: DatabasePerson): string {
 export function isReadOnlyType(type: NoteDatabaseProperty['type']): boolean {
   // ROLLUP cũng chỉ đọc: máy chủ tính lại mỗi lần đọc từ dữ liệu bảng khác,
   // nên gõ vào đó thì lượt đọc kế tiếp ghi đè ngay.
-  return type === 'CREATED_TIME' || type === 'LAST_EDITED_TIME' || type === 'ROLLUP';
+  // FORMULA cũng chỉ đọc: máy chủ tính lại mỗi lần đọc từ các cột khác, nên
+  // gõ vào ô thì lượt đọc kế tiếp ghi đè ngay.
+  return type === 'CREATED_TIME' || type === 'LAST_EDITED_TIME' || type === 'ROLLUP' || type === 'FORMULA';
 }
 
 /** Cột nào cần giao diện riêng thay vì ô nhập chữ thường. */
@@ -159,6 +161,23 @@ export function displayValue(property: NoteDatabaseProperty, value: unknown, ctx
       // Cùng lý do với cột PERSON: dòng bên kia có thể đã bị xoá, và hiện
       // "#id" cho biết ô này TỪNG trỏ tới cái gì thay vì để nó trông như trống.
       return ids.map((id) => ctx.relationLabels?.[String(id)] ?? `#${id}`).join(', ');
+    }
+    /* FORMULA: máy chủ đã tính xong và trả về giá trị cuối. Ở đây chỉ định
+     * dạng cho dễ đọc — và giữ NGUYÊN chuỗi lỗi bắt đầu bằng "⚠" để người
+     * dùng thấy được công thức sai ở đâu. */
+    case 'FORMULA': {
+      if (value === null || value === undefined) return '';
+      if (typeof value === 'number') return value.toLocaleString('vi-VN');
+      if (typeof value === 'boolean') return value ? '✓' : '✗';
+      const text = String(value);
+      // Chuỗi ISO do now()/dateAdd() trả về thì hiện thành ngày người đọc được.
+      if (/^\d{4}-\d{2}-\d{2}T/.test(text)) {
+        const date = new Date(text);
+        if (!Number.isNaN(date.getTime())) {
+          return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+      }
+      return text;
     }
     case 'ROLLUP': {
       if (value === null || value === undefined) return '';

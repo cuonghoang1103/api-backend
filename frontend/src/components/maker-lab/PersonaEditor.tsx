@@ -189,6 +189,18 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
   );
   const [dangXoaNho, setDangXoaNho] = useState(false);
 
+  // ── Cổng đánh thức ──
+  const [tuDanhThuc, setTuDanhThuc] = useState(persona?.wakeWord ?? '');
+  // `!== false` chứ không `?? true`: khoá vắng mặt nghĩa là BẬT (mặc
+  // định), chỉ đúng chữ `false` mới là tắt.
+  const [congDanhThuc, setCongDanhThuc] = useState(
+    (persona?.traits as { congDanhThuc?: unknown })?.congDanhThuc !== false,
+  );
+  const [giayThucGiac, setGiayThucGiac] = useState(() => {
+    const v = Number((persona?.traits as { giayThucGiac?: unknown })?.giayThucGiac);
+    return Number.isFinite(v) && v > 0 ? Math.max(5, Math.min(300, v)) : 30;
+  });
+
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null);
   const [testing, setTesting] = useState(false);
@@ -215,6 +227,12 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
       kho: (persona?.traits as { boTinhCach?: unknown })?.boTinhCach ?? {},
       boDang: (persona?.traits as { tinhCachDangDung?: unknown })?.tinhCachDangDung ?? null,
       viTri: (persona?.traits as { viTri?: unknown })?.viTri ?? '',
+      tuDanhThuc: persona?.wakeWord ?? '',
+      congDanhThuc: (persona?.traits as { congDanhThuc?: unknown })?.congDanhThuc !== false,
+      giayThucGiac: (() => {
+        const v = Number((persona?.traits as { giayThucGiac?: unknown })?.giayThucGiac);
+        return Number.isFinite(v) && v > 0 ? Math.max(5, Math.min(300, v)) : 30;
+      })(),
     }),
   );
 
@@ -326,7 +344,7 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
     }
   }
 
-  const dangCo = JSON.stringify({ prompt, provider, voiceId, temperature, maxTokens, samples, kho, boDang, viTri });
+  const dangCo = JSON.stringify({ prompt, provider, voiceId, temperature, maxTokens, samples, kho, boDang, viTri, tuDanhThuc, congDanhThuc, giayThucGiac });
   const coThayDoi = moc !== dangCo;
 
   async function save() {
@@ -346,6 +364,11 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
         maxTokens,
         sampleDialogues: samples.filter((s) => s.user.trim() && s.bot.trim()),
         viTri: viTri.trim() || null,
+        // Ô rỗng = tắt cổng ở phía máy chủ dù cờ còn bật. Đó là chốt hãm
+        // cố ý: không có tên để gọi thì gác cổng nghĩa là câm vĩnh viễn.
+        wakeWord: tuDanhThuc.trim() || null,
+        congDanhThuc,
+        giayThucGiac,
         boTinhCach: kho,
         tinhCachDangDung: boDang,
       });
@@ -650,6 +673,95 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
             </div>
           </div>
         )}
+      </section>
+
+      {/* ── Cổng đánh thức ── */}
+      <section
+        className="rounded-xl border p-4"
+        style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}
+      >
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+              Chỉ trả lời khi được gọi tên
+            </h3>
+            <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+              Tắt thì robot đáp lại mọi câu nó nghe thấy trong phòng.
+            </p>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={congDanhThuc}
+            aria-label="Bật cổng đánh thức"
+            onClick={() => setCongDanhThuc((v) => !v)}
+            className="relative h-7 w-12 shrink-0 rounded-full transition-colors"
+            style={{ background: congDanhThuc ? accent : 'var(--border-color)' }}
+          >
+            <span
+              className="absolute top-1 h-5 w-5 rounded-full bg-white transition-all"
+              style={{ left: congDanhThuc ? '1.5rem' : '0.25rem' }}
+            />
+          </button>
+        </div>
+
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+              Từ đánh thức
+            </label>
+            <input
+              value={tuDanhThuc}
+              onChange={(e) => setTuDanhThuc(e.target.value)}
+              placeholder="Odin"
+              className="mt-2 w-full rounded-lg border px-3 py-2 text-sm outline-none"
+              style={{
+                borderColor: 'var(--border-color)',
+                background: 'var(--bg-base)',
+                color: 'var(--text-primary)',
+              }}
+            />
+            <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+              Nhận cả &ldquo;Odin&rdquo;, &ldquo;Hey Odin&rdquo;, &ldquo;Odin ơi&rdquo; và
+              mấy kiểu bộ nghe chép trẹo như &ldquo;Ô đin&rdquo;, &ldquo;Ốt đin&rdquo;. Chỉ
+              tính khi nằm ở <strong>đầu câu</strong> — nhắc tên giữa câu thì không đánh thức.
+            </p>
+            {congDanhThuc && !tuDanhThuc.trim() && (
+              <p className="mt-1 text-xs font-medium" style={{ color: '#f59e0b' }}>
+                Bỏ trống thì cổng tự vô hiệu — robot vẫn trả lời mọi thứ.
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+              Nghe tiếp bao lâu: {giayThucGiac} giây
+            </label>
+            <input
+              type="range"
+              min={5}
+              max={120}
+              step={5}
+              value={giayThucGiac}
+              onChange={(e) => setGiayThucGiac(Number(e.target.value))}
+              className="mt-3 w-full"
+              style={{ accentColor: accent }}
+            />
+            <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+              Gọi tên một lần rồi nói chuyện thoải mái trong ngần này giây, không phải gọi
+              lại. Mỗi lượt trả lời lại tính từ đầu. Hết giờ thì <strong>mắt lim dim</strong> —
+              nhìn mắt là biết nó còn nghe hay đã ngủ.
+            </p>
+          </div>
+        </div>
+
+        <p
+          className="mt-3 rounded-lg px-3 py-2 text-xs"
+          style={{ background: 'var(--bg-base)', color: 'var(--text-muted)' }}
+        >
+          Ô chat ở tab Điều khiển <strong>luôn qua được cổng</strong> — gõ chữ là robot làm,
+          kể cả lúc nó đang ngủ. Đó là đường thoát khi nó nghe hụt tên.
+        </p>
       </section>
 
       {/* ── Vị trí + trí nhớ ── */}

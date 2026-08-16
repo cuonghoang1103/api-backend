@@ -322,6 +322,10 @@ export async function upsertPersona(
     speechRate?: number;
     cheDo?: string;
     amLuong?: number;
+    /** Cổng đánh thức: chỉ trả lời khi được gọi tên (`wakeWord`). */
+    congDanhThuc?: boolean;
+    /** Gọi tên xong nghe tiếp bao nhiêu giây, 5–300. */
+    giayThucGiac?: number;
     /** Giọng riêng cho từng chế độ tiếng: `{ vi, en, robot }`. Hoà vào, không đè. */
     giongTheoCheDo?: Record<string, string | null>;
     /** Não ghim: `'may-nha'` | `'cong'` | `null` = tự động theo cấu hình. */
@@ -347,9 +351,15 @@ export async function upsertPersona(
   // không phải "không gửi". Chỉ `undefined` mới nghĩa là không đụng tới.
   const coNao = data.nao !== undefined && (data.nao === null || laNao(data.nao));
   const coGiong = !!data.giongTheoCheDo && typeof data.giongTheoCheDo === 'object';
+  // Cờ boolean: `undefined` = không đụng, `false` = tắt thật. Kiểm bằng
+  // `typeof === 'boolean'` chứ KHÔNG bằng truthiness — `if (data.congDanhThuc)`
+  // thì lệnh TẮT (false) trông y hệt "không gửi", và nút tắt sẽ không
+  // bao giờ có tác dụng.
+  const coCong = typeof data.congDanhThuc === 'boolean';
+  const coGiay = typeof data.giayThucGiac === 'number' && Number.isFinite(data.giayThucGiac);
 
   let traitsMerged = (data.traits ?? undefined) as Prisma.InputJsonValue | undefined;
-  if (coRate || coCheDo || coAmLuong || coNao || coGiong) {
+  if (coRate || coCheDo || coAmLuong || coNao || coGiong || coCong || coGiay) {
     const cur = await prisma.makerPersona.findUnique({
       where: { projectId },
       select: { traits: true },
@@ -362,6 +372,10 @@ export async function upsertPersona(
       // Âm lượng lưu vào persona chứ không chỉ gửi xuống bo: bo mất điện
       // là quên sạch, mà người dùng đã chỉnh thì họ mong nó GIỮ NGUYÊN.
       ...(coAmLuong ? { amLuong: Math.max(10, Math.min(100, data.amLuong as number)) } : {}),
+      ...(coCong ? { congDanhThuc: data.congDanhThuc } : {}),
+      ...(coGiay
+        ? { giayThucGiac: Math.max(5, Math.min(300, Math.round(data.giayThucGiac as number))) }
+        : {}),
       // Kho tính cách: `undefined` = không đụng, giá trị = ghi đè cả kho.
       // Ghi đè cả kho là ĐÚNG ở đây — web gửi lên trạng thái sau khi sửa,
       // và hoà từng bộ một thì xoá một bộ sẽ không bao giờ có tác dụng.

@@ -1,8 +1,10 @@
 #include "face.h"
 
+#include "eyes.h"
+
 namespace face {
 
-static TFT_eSPI* tft = nullptr;
+static Arduino_GFX* tft = nullptr;
 
 // ─── Bảng màu ──────────────────────────────────────────────
 // Nền đen tuyền + mắt xanh lơ phát sáng: đây là bảng màu của mọi con
@@ -54,7 +56,7 @@ static int drawnLX = -999, drawnLY = -999;
 /**
  * Cung dày, vẽ bằng cách xếp các cột dọc theo một parabol.
  *
- * TFT_eSPI có drawArc nhưng chỉ ở bản mới, và cung của nó là cung
+ * Thư viện có drawArc nhưng cung của nó là cung TRÒN, và cung của nó là cung
  * TRÒN — mắt cười hay miệng cười thì cung parabol trông tự nhiên hơn
  * nhiều, vì nó dẹt ở giữa và cong nhanh ở hai đầu, giống nét vẽ tay.
  */
@@ -104,7 +106,7 @@ static void brow(int cx, int tiltPx, uint16_t color) {
   const int w = EYE_W - 20;
   const int y = EYE_Y - EYE_H / 2 - 26;
   const int x0 = cx - w / 2, x1 = cx + w / 2;
-  // Vẽ dày bằng ba đường kề nhau: drawLine của TFT_eSPI chỉ dày 1 px.
+  // Vẽ dày bằng ba đường kề nhau: drawLine chỉ dày 1 px.
   for (int k = -4; k <= 4; k++)
     tft->drawLine(x0, y - tiltPx + k, x1, y + tiltPx + k, color);
 }
@@ -334,7 +336,7 @@ static void drawFace() {
 
 // ─── API ───────────────────────────────────────────────────
 
-void begin(TFT_eSPI* t) {
+void begin(Arduino_GFX* t) {
   tft = t;
   // Xoá TOÀN màn đúng MỘT lần lúc khởi động. Sau đó chỉ xoá theo dải.
   // Không có dòng này thì rác lúc bật nguồn nằm lại vĩnh viễn ở những
@@ -351,11 +353,39 @@ void begin(TFT_eSPI* t) {
   dirty = true;
 }
 
+/**
+ * ⚠️ HAI ENUM PHẢI KHỚP 12 GIÁ TRỊ ĐẦU.
+ *
+ * `face::Emotion` (màn ngực) và `eyes::Expr` (hai mắt) khai cùng 12 tên
+ * theo cùng thứ tự, nên ép kiểu thẳng là đúng. Ai thêm một giá trị vào
+ * GIỮA một trong hai bảng sẽ làm lệch toàn bộ phần còn lại — và triệu
+ * chứng là mặt vẫn có biểu cảm, chỉ là SAI biểu cảm, kiểu lỗi khó ngờ
+ * nhất. Mấy dòng dưới bắt nó ngay lúc biên dịch.
+ */
+static_assert((int)NEUTRAL   == (int)eyes::NEUTRAL   && (int)HAPPY     == (int)eyes::HAPPY &&
+              (int)SAD       == (int)eyes::SAD       && (int)ANGRY     == (int)eyes::ANGRY &&
+              (int)SURPRISED == (int)eyes::SURPRISED && (int)SLEEPY    == (int)eyes::SLEEPY &&
+              (int)LOVE      == (int)eyes::LOVE      && (int)THINKING  == (int)eyes::THINKING &&
+              (int)CONFUSED  == (int)eyes::CONFUSED  && (int)WINK      == (int)eyes::WINK &&
+              (int)LISTENING == (int)eyes::LISTENING && (int)SPEAKING  == (int)eyes::SPEAKING,
+              "face::Emotion va eyes::Expr da lech thu tu");
+
 void set(Emotion e, uint32_t ms) {
   if (ms == 0) baseEmo = e;
   emo = e;
   emoUntil = ms ? millis() + ms : 0;
   dirty = true;
+
+  // ⚠️ CHUYỂN TIẾP TỚI HAI MẮT NGAY TẠI ĐÂY, không phải ở chỗ gọi.
+  //
+  // `main.cpp` gọi `face::set()` từ tám chỗ khác nhau (nghe xong, nghĩ
+  // xong, nói xong, chạm đầu, lệnh từ server…). Thêm một dòng
+  // `eyes::set()` cạnh mỗi chỗ thì chỉ cần quên một chỗ là mắt và mặt
+  // ngực nói hai chuyện khác nhau — mà không có gì báo lỗi.
+  //
+  // Chặn ở đây thì không thể sót. Cùng lý do với `catTheoByte()` đặt ở
+  // chỗ nghẽn thay vì ở tám nơi gọi.
+  eyes::set((eyes::Expr)e, ms);
 }
 
 void setByName(const char* name, uint32_t ms) {
@@ -367,11 +397,17 @@ void setByName(const char* name, uint32_t ms) {
   };
   for (auto& m : map)
     if (!strcmp(name, m.n)) { set(m.e, ms); return; }
+
+  // Tên màn ngực không biết vẫn đưa xuống mắt: bảng của mắt rộng hơn
+  // (28 tên, có scanning/charging/dizzy/excited…). Server thêm biểu cảm
+  // mới thì mắt hiện được ngay, màn ngực giữ nguyên mặt cũ.
+  eyes::setByName(name, ms);
 }
 
 void look(float x, float y) {
   lookTargetX = constrain(x, -1.0f, 1.0f);
   lookTargetY = constrain(y, -1.0f, 1.0f);
+  eyes::look(x, y);
 }
 
 void setStatus(bool w, bool s) {
@@ -383,6 +419,7 @@ void setStatus(bool w, bool s) {
       tft->fillCircle(W - 42, 16, 6, serverOk ? C_DOT_OK : C_DOT_BAD);
     }
   }
+  eyes::setStatus(w, s);
 }
 
 void setClock(const char* hhmm) {
@@ -394,6 +431,7 @@ void setClock(const char* hhmm) {
 }
 
 void setBattery(int pct) {
+  eyes::setBattery(pct);
   if (pct == batPct) return;
   batPct = pct;
   drawBattery();

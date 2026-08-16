@@ -61,6 +61,14 @@ export interface PersonaConfig {
    * JSON sẵn có và đang giữ `knowledge`.
    */
   speechRate: number;
+  /**
+   * Chỉ trả lời khi được gọi tên (`wakeWord`). Mặc định bật.
+   *
+   * Tự vô hiệu khi `wakeWord` rỗng — xem chốt hãm trong `runVoiceTurn`.
+   */
+  congDanhThuc: boolean;
+  /** Gọi tên xong thì nghe tiếp bao nhiêu giây mà không cần gọi lại. */
+  giayThucGiac: number;
   /** Chế độ tiếng đang bật: vi | en | robot. */
   cheDo: CheDo;
   /**
@@ -308,6 +316,10 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       wakeWord: null,
       knowledge: [],
       speechRate: 1,
+      // `wakeWord` ở nhánh này là `null`, nên cổng tự vô hiệu dù cờ bật
+      // — robot chưa có persona trong DB thì vẫn trả lời bình thường.
+      congDanhThuc: true,
+      giayThucGiac: 30,
       cheDo: 'vi',
       giongTheoCheDo: null,
       viTri: null,
@@ -351,6 +363,26 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     amLuong: (() => {
       const v = Number((row.traits as { amLuong?: unknown } | null)?.amLuong);
       return Number.isFinite(v) && v > 0 ? Math.max(10, Math.min(100, v)) : 50;
+    })(),
+    // ── Cổng đánh thức ──
+    //
+    // Mặc định BẬT. Ngược với luật "AI chạy nền phải mặc định TẮT" —
+    // và đúng vì nó ngược chiều: cái mặc định tắt kia để robot khỏi tự
+    // tiêu tiền, còn cái này để robot khỏi tự nói. Bật nó là làm robot
+    // IM ĐI, tức là nó vốn đã là phía an toàn.
+    //
+    // ⚠️ Nhưng chốt hãm quan trọng nằm ở `voiceLoop`: **ô từ đánh thức
+    // rỗng thì cổng tự vô hiệu**. Không có chốt đó thì một ô trống —
+    // đúng trạng thái prod trước 16/08/2026 — biến robot thành câm
+    // vĩnh viễn, và triệu chứng là "hỏng" chứ không phải "đang ngủ".
+    congDanhThuc:
+      (row.traits as { congDanhThuc?: unknown } | null)?.congDanhThuc !== false,
+    // Sau khi được gọi tên thì nghe tiếp bao lâu mà không cần gọi lại.
+    // 30 giây: đủ cho một lượt hỏi-đáp-hỏi lại, ngắn hơn thì đang nói
+    // chuyện phải gọi tên liên tục, dài hơn thì lại thành không có cổng.
+    giayThucGiac: (() => {
+      const v = Number((row.traits as { giayThucGiac?: unknown } | null)?.giayThucGiac);
+      return Number.isFinite(v) && v > 0 ? Math.max(5, Math.min(300, v)) : 30;
     })(),
     cheDo: laCheDo((row.traits as { cheDo?: unknown } | null)?.cheDo)
       ? ((row.traits as { cheDo: CheDo }).cheDo)
@@ -616,7 +648,7 @@ export function buildSystemPrompt(
     'Ai muốn nối WiFi mới thì phát lệnh `wifi_portal` — TUYỆT ĐỐI đừng bắt họ ' +
       'đọc tên mạng hay mật khẩu cho mày nghe. Lệnh đó làm robot phát ra một WiFi ' +
       'riêng để họ vào cài bằng bàn phím điện thoại. Nói cho họ biết: nối vào WiFi ' +
-      '"Mini-Me-Setup", mật khẩu 12345678, rồi trang cài đặt tự hiện lên. Cài xong ' +
+      '"Odin-Setup", mật khẩu 12345678, rồi trang cài đặt tự hiện lên. Cài xong ' +
       'robot nhớ luôn mạng đó, lần sau tới nơi là tự vào.',
   );
 

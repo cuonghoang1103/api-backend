@@ -29,7 +29,8 @@
 #include <WiFiClientSecure.h>
 #include <WebSocketsClient.h>
 #include <ArduinoJson.h>
-#include <TFT_eSPI.h>
+#include "man_hinh.h"
+#include "eyes.h"
 #include <esp_heap_caps.h>
 
 #include "audio.h"
@@ -39,7 +40,13 @@
 #include "config.h"
 #include "secrets.h"
 
-static TFT_eSPI tft = TFT_eSPI();
+// Màn NGỰC. Ba màn (ngực + hai mắt) dựng chung trong `man_hinh.h` vì
+// chúng đi chung một bus SPI — xem lý do và bảng chân ở đó.
+//
+// Tham chiếu chứ không phải con trỏ, để mọi lời gọi `tft.fillRect(...)`
+// sẵn có giữ nguyên. Arduino_GFX cùng gốc Adafruit_GFX với TFT_eSPI nên
+// tên hàm trùng khít; chỉ `init()` đổi thành `begin(tốc độ)`.
+static Arduino_GFX& tft = *man_hinh::nguc();
 static WebSocketsClient ws;
 
 // ─── Trạng thái ────────────────────────────────────────────
@@ -103,7 +110,7 @@ static void watchTask(void*) {
 }
 
 // ─── Bỏ dấu tiếng Việt để hiện lên màn ─────────────────────
-// Phông GLCD/Font2 của TFT_eSPI chỉ có ASCII. Đưa thẳng UTF-8 vào thì
+// Phông mặc định của thư viện đồ hoạ chỉ có ASCII. Đưa thẳng UTF-8 vào thì
 // mỗi chữ có dấu hiện ra hai ô vuông rác. Câu robot nghe/nói là thứ
 // đáng nhìn nhất trên màn này, nên bỏ dấu còn hơn bỏ luôn.
 
@@ -1072,14 +1079,22 @@ void setup() {
   delay(300);
   Serial.println("\nMini-Me Robot — chặng B");
 
-  tft.init();
-  tft.setRotation(1);
+  // Bật cả ba màn trong một lần: ngực + hai mắt. Xoay đã đặt lúc dựng.
+  const int soMan = man_hinh::batTatCa();
+  Serial.printf("[man] %d/3 man da gui xong chuoi khoi tao\n", soMan);
 
   // Khuôn mặt chiếm trọn màn, thay cho bảng chữ của chặng A. Bảng chữ
   // hữu ích lúc gỡ lỗi, nhưng một con robot nhìn vào mà thấy bảng
   // thông số thì nó là thiết bị đo, không phải bạn cùng bàn. Thông tin
   // trạng thái rút gọn còn hai chấm tròn ở góc.
   face::begin(&tft);
+
+  // Hai mắt. Vẽ theo dải có ngân sách thời gian nên chúng chạy được CẢ
+  // KHI đang phát tiếng — khác hẳn màn ngực, vốn phải ngồi im lúc đó
+  // (xem chú thích ở vòng loop bên dưới).
+  eyes::setBus(man_hinh::busMatTrai(), man_hinh::busMatPhai());
+  if (!eyes::begin(man_hinh::matTrai(), man_hinh::matPhai()))
+    Serial.println("!! eyes::begin() that bai — robot van chay, chi la khong co mat");
 
   // Cảm biến chạm TTP223: ngõ ra push-pull, tự kéo về mức thấp khi
   // không ai chạm. Vẫn khai INPUT_PULLDOWN để lúc CHƯA cắm dây thì
@@ -1338,7 +1353,7 @@ void loop() {
       } else {
         tft.print("Vao Cai dat > WiFi tren dien thoai,");
         tft.setCursor(20, 285);
-        tft.print("chon lai Mini-Me-Setup roi go lai");
+        tft.print("chon lai Odin-Setup roi go lai");
       }
       // Nốt trầm = hỏng, khác hẳn nốt cao lúc xong. Dài 500 ms và to
       // hơn: bản trước 220 ms ở mức 55 — người dùng đang cúi nhìn điện
@@ -1442,6 +1457,16 @@ void loop() {
   // Nói xong thì mặt vẽ lại ngay ở vòng sau — mắt người không nhận ra
   // vài trăm mili giây đứng hình, còn tai thì nhận ra ngay một nhịp
   // vấp.
+  // ── HAI MẮT ──
+  // KHÔNG nằm trong nhánh `!speaking` như màn ngực. `eyes::loop()` chỉ
+  // giữ CPU tối đa 4 ms mỗi lần rồi trả lại, nên I2S vẫn được bơm kịp
+  // giữa hai dải. Đây là lý do cả bộ vẽ mắt được viết theo dải: lúc
+  // robot đang nói chính là lúc người ta nhìn vào mắt nó nhiều nhất.
+  gStage = "eyes";
+  eyes::setLevel(audio::speaking() ? audio::level() : 0);
+  eyes::loop();
+
+  // ── MÀN NGỰC ──
   if (!audio::speaking()) {
     gStage = "face";
     face::loop();

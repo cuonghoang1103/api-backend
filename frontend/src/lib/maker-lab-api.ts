@@ -187,6 +187,15 @@ export interface PersonaPayload {
   cheDo?: string;
   /** Âm lượng loa 10-100. Lưu bền — bo mất điện vẫn nhớ. */
   amLuong?: number;
+  /**
+   * Cổng đánh thức: robot chỉ trả lời khi câu nói MỞ ĐẦU bằng `wakeWord`.
+   *
+   * Máy chủ tự vô hiệu cổng khi `wakeWord` rỗng — không có tên để gọi
+   * thì gác cổng đồng nghĩa với câm vĩnh viễn.
+   */
+  congDanhThuc?: boolean;
+  /** Gọi tên xong nghe tiếp bao nhiêu giây mà không cần gọi lại (5–300). */
+  giayThucGiac?: number;
   /** Giọng riêng cho từng chế độ tiếng: `{ vi, en, robot }`. Hoà vào, không đè cả bảng. */
   giongTheoCheDo?: Record<string, string | null>;
   /** Não ghim: `'may-nha'` | `'cong'` | `null` = tự động theo cấu hình máy chủ. */

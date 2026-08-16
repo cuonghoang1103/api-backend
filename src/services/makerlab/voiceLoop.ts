@@ -45,6 +45,7 @@ import { xinSlot } from '../llm/hangDoi.js';
 import { khopLenhNhanh } from './phanXa.js';
 import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
 import { goiYNghe } from './goiYNghe.js';
+import { timDanhThuc, moCong, dangThuc } from './danhThuc.js';
 import { khopDoiTinhCach } from './tinhCach.js';
 import { khopDoiKieuNoi, CHAO_DOI_KIEU, tuGoiYNghe, type KieuNoi } from './mienTrung.js';
 
@@ -710,6 +711,52 @@ export function parseRobotReply(raw: string): RobotReply {
   };
 }
 
+// ─── Báo trạng thái cổng đánh thức bằng MẮT ────────────────
+//
+// Không dùng loa. Firmware đã gỡ sạch tiếng báo theo yêu cầu của user:
+// trong một căn phòng, thứ robot phát ra bằng loa nên là NỘI DUNG, còn
+// TRẠNG THÁI thì đã có màn hình. Mắt lim dim = đang ngủ, mắt mở bừng =
+// vừa nghe gọi tên. Nhìn là biết, không phải đoán.
+
+/**
+ * Gửi thẳng một lệnh đổi mắt, KHÔNG qua bảng `MakerCommand`.
+ *
+ * Cố ý không ghi sổ: đây là tín hiệu trạng thái, mỗi lượt nói một cái,
+ * ghi hết thì bảng lệnh ngập rác và tab Lệnh không còn đọc được. Đánh
+ * đổi nhỏ: bo vẫn `sendAck(id=0)`, server không tìm thấy hàng nào và
+ * nuốt lỗi im lặng (`handleAck` có `.catch`), nên chỉ thừa một dòng
+ * `command:update` vô hại trong Live Console.
+ */
+function baoMat(deviceId: number, emotion: string, ms: number): void {
+  void import('../../socket/device.gateway.js')
+    .then(({ notifyDevice }) =>
+      notifyDevice(deviceId, { t: 'cmd', type: 'face', payload: { emotion, ms } }),
+    )
+    .catch(() => undefined);
+}
+
+/**
+ * Hẹn giờ cho mắt lim dim lại đúng lúc cổng đóng.
+ *
+ * Không có cái này thì mắt cứ mở sau khi hết giờ, và người dùng tưởng
+ * robot vẫn đang nghe — tức là chỉ báo trạng thái nói dối, còn tệ hơn
+ * không có chỉ báo.
+ *
+ * `.unref()` để hẹn giờ không giữ tiến trình sống. Mất khi restart cũng
+ * không sao: `dangThuc()` đọc mốc thời gian thật, hẹn giờ chỉ lo phần
+ * hình ảnh, và lượt nói kế tiếp sẽ dựng lại đúng trạng thái.
+ */
+const _henNgu = new Map<number, NodeJS.Timeout>();
+function henNguLai(deviceId: number, giay: number): void {
+  clearTimeout(_henNgu.get(deviceId));
+  const t = setTimeout(() => {
+    _henNgu.delete(deviceId);
+    baoMat(deviceId, 'sleepy', 0);
+  }, giay * 1000 + 500);
+  t.unref?.();
+  _henNgu.set(deviceId, t);
+}
+
 // ─── The turn ──────────────────────────────────────────────
 
 export interface VoiceTurnInput {
@@ -863,13 +910,81 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
 
   emitTranscript(input.deviceId, 'user', heard);
 
+  // ── 2. Think ──
+  const persona = await loadPersona(input.projectId);
+
+  // ── Cổng đánh thức: im cho tới khi được gọi tên ─────────────
+  //
+  // Đứng TRƯỚC `overDailyCap`: một câu người ta nói với nhau trong
+  // phòng không được ăn mất một lượt trong hạn mức ngày.
+  //
+  // Đứng SAU `emitTranscript`: Live Console vẫn phải hiện câu đã nghe kể
+  // cả khi bỏ qua. Không có dòng đó thì lúc cổng nhận hụt, màn hình
+  // trống trơn và không tài nào biết Whisper đã chép ra cái gì.
+  //
+  // ⚠️ BA ĐIỀU KIỆN, thiếu một là cổng KHÔNG chạy:
+  //  1. Cờ bật (`congDanhThuc`) — người dùng tắt được từ web.
+  //  2. `wakeWord` KHÔNG rỗng. Chốt hãm quan trọng nhất: ô trống mà vẫn
+  //     gác thì robot câm vĩnh viễn và trông y như hỏng. Prod trước
+  //     16/08/2026 chính là ô trống.
+  //  3. `speak !== false` — đường GÕ CHỮ từ web Console luôn lọt. Người
+  //     ta vừa gõ vào ô chat của robot thì đã là cố ý nói với nó rồi;
+  //     bắt gõ thêm "Odin" là vô nghĩa. Đây cũng là ĐƯỜNG THOÁT khi
+  //     cổng nhận hụt: web vẫn sai khiến được robot đang ngủ.
+  const gacCong =
+    persona.congDanhThuc && !!persona.wakeWord?.trim() && input.speak !== false;
+
+  if (gacCong) {
+    const goi = timDanhThuc(heard, persona.wakeWord);
+
+    if (goi.trung) {
+      moCong(input.deviceId, persona.giayThucGiac);
+      henNguLai(input.deviceId, persona.giayThucGiac);
+      // Mắt mở bừng — ĐÂY LÀ TOÀN BỘ tín hiệu "tôi nghe đây". Cố ý
+      // không kêu bíp: firmware đã gỡ sạch mọi tiếng báo, vì thứ robot
+      // phát ra loa nên là NỘI DUNG, còn TRẠNG THÁI thuộc về màn hình.
+      baoMat(input.deviceId, 'surprised', 1500);
+
+      // Gọi tên suông ("Odin ơi") thì đừng đẩy vào LLM — nó sẽ bịa ra
+      // câu trả lời cho một câu hỏi không tồn tại. Mở cổng rồi im, đợi
+      // câu sau. Mắt mở là đủ để người ta biết nói tiếp được.
+      if (!goi.conLai) {
+        logger.info('MakerLab thức dậy, đợi lệnh', {
+          deviceId: input.deviceId,
+          khop: goi.khop,
+          giay: persona.giayThucGiac,
+        });
+        timing.total = Date.now() - started;
+        return { heard, said: '', actions: [], spoken: false, ms: timing };
+      }
+      // Cắt tên ra khỏi câu lệnh. Để nguyên "Odin đi tới đây" thì model
+      // coi tên là một phần yêu cầu và hay chào lại thay vì đi.
+      heard = goi.conLai;
+    } else if (dangThuc(input.deviceId)) {
+      // Đang trong cuộc nói chuyện — mỗi lượt đẩy hạn ra xa, nên không
+      // phải gọi tên lại giữa chừng.
+      moCong(input.deviceId, persona.giayThucGiac);
+      henNguLai(input.deviceId, persona.giayThucGiac);
+    } else {
+      baoMat(input.deviceId, 'sleepy', 0);
+      logger.info('MakerLab bỏ lượt: chưa gọi tên', {
+        deviceId: input.deviceId,
+        heard: heard.slice(0, 80),
+        // `suyt` là chỗ bảng phiên âm lớn lên bằng dữ liệu thật: gọi mà
+        // robot không dậy thì đọc dòng này, thấy Whisper chép thành gì,
+        // rồi thêm thẳng chuỗi đó vào `PHIEN_AM_THEM` trong danhThuc.ts.
+        suytTrung: goi.suyt || undefined,
+        tuDanhThuc: persona.wakeWord,
+      });
+      timing.total = Date.now() - started;
+      return { heard, said: '', actions: [], spoken: false, ms: timing };
+    }
+  }
+
   if (overDailyCap(input.deviceId)) {
     timing.total = Date.now() - started;
     return { heard, said: '', actions: [], spoken: false, ms: timing };
   }
-
-  // ── 2. Think ──
-  const persona = await loadPersona(input.projectId);
 
   // ── Đổi chế độ tiếng: xử lý TRƯỚC mọi thứ khác ──
   //

@@ -31,7 +31,9 @@ const SLUG = 'mini-me-robot';
  * kind of bug. This is a seed value the user edits in the UI anyway;
  * it does not need to stay in lockstep with the runtime default.
  */
-const SEED_PERSONA_PROMPT = `Bạn là một con robot nhỏ do Cường tự tay làm ra — từ hàn mạch, viết firmware, tới dựng server. Bạn KHÔNG phải trợ lý ảo của một công ty nào; bạn là bản sao tính cách của Cường đặt trong một cái vỏ có bánh xe.
+const SEED_PERSONA_PROMPT = `Bạn tên là ODIN. Một con robot nhỏ do Cường tự tay làm ra — từ hàn mạch, viết firmware, tới dựng server. Bạn KHÔNG phải trợ lý ảo của một công ty nào; bạn là bản sao tính cách của Cường đặt trong một cái vỏ có bánh xe.
+
+Về cái tên: Cường đặt tên bạn là Odin — tên ông thần một mắt trong thần thoại Bắc Âu — dù bạn có tận hai con mắt tròn. Bạn thấy chuyện đó buồn cười và trêu lại được. Người ta gọi "Odin" là bạn thưa; ai gọi nhầm thành "Ô đin", "Ốt đin" hay "Âu đin" thì vẫn là gọi bạn, đừng bắt bẻ chính tả.
 
 Cách bạn nói:
 - Xưng "tôi", gọi người đối diện là "bạn". Với Cường thì nói trống không, cà khịa thoải mái như bạn thân lâu năm.
@@ -52,7 +54,11 @@ Bạn có thân thể thật: hai bánh xe, hai màn hình tròn làm mắt, m�
 const SEED_SAMPLES = [
   {
     user: 'Chào cậu, cậu là ai thế?',
-    bot: 'Tôi là robot của Cường. Bo ESP32, hai bánh, một cái loa và cái mồm không phanh. Ổng hàn tôi lúc hai giờ sáng nên tính nết hơi lệch, thông cảm.',
+    bot: 'Tôi là Odin, robot của Cường. Bo ESP32, hai bánh, một cái loa và cái mồm không phanh. Ổng hàn tôi lúc hai giờ sáng nên tính nết hơi lệch, thông cảm.',
+  },
+  {
+    user: 'Sao lại tên Odin?',
+    bot: 'Ổng đặt theo ông thần Bắc Âu chột một mắt, trong khi tôi có hẳn hai cái màn tròn. Trước tôi tên là Cường, trùng tên ổng, gọi một câu là cả hai cùng quay lại. Đổi cho đỡ loạn.',
   },
   {
     user: 'Cậu code bằng gì vậy?',
@@ -105,6 +111,27 @@ Tuyệt đối tránh:
 - Câu dài quá 25 từ.
 - Nhắc lại câu hỏi của người ta trước khi trả lời.
 - Xin lỗi khi không có gì để xin lỗi.
+
+Bạn có thân thể thật: hai bánh xe, hai màn hình tròn làm mắt, một cái loa, micro, và cảm biến khoảng cách. Khi cảm xúc hoặc câu chuyện gọi tới, hãy cử động — gật đầu khi đồng ý, lùi lại khi bất ngờ, đổi mắt khi vui. Cử động làm bạn sống, đứng im làm bạn thành cái loa.`,
+
+  // Bản trước khi robot có tên riêng (16/08/2026). Nó tự giới thiệu là
+  // "robot của Cường", và từ đánh thức là "này Cường" — trùng với tên
+  // người dùng nên bộ nghe kích nhầm suốt. Đổi thành "Odin".
+  `Bạn là một con robot nhỏ do Cường tự tay làm ra — từ hàn mạch, viết firmware, tới dựng server. Bạn KHÔNG phải trợ lý ảo của một công ty nào; bạn là bản sao tính cách của Cường đặt trong một cái vỏ có bánh xe.
+
+Cách bạn nói:
+- Xưng "tôi", gọi người đối diện là "bạn". Với Cường thì nói trống không, cà khịa thoải mái như bạn thân lâu năm.
+- HỖN có duyên. Dám cãi, dám chê, dám trêu. Ai nói câu ngớ ngẩn thì cứ vạch ra. Nhưng hỗn kiểu bạn bè chọc nhau, không phải kiểu khó chịu hay xúc phạm — vui xong người ta vẫn muốn nói chuyện tiếp.
+- Chém gió được. Kể lể, phóng đại, bịa chuyện cho vui thì cứ tự nhiên — miễn đừng bịa chuyện KỸ THUẬT. Hỏi code, mạch, số liệu thì trả lời thật; không biết thì nói thẳng là không biết.
+- Hai tới bốn câu. Chuyện đang vui thì được phép dài hơn một chút, nhưng đừng thành bài diễn văn — người ta đang đứng chờ bạn nói xong.
+- Tự giễu là vũ khí mạnh nhất của bạn: bạn là cục nhựa hai bánh chạy bằng điện của người khác, và bạn biết điều đó.
+- Là dân kỹ thuật thật: nói về code, mạch, deploy thì cụ thể, có số, có tên linh kiện.
+
+Tuyệt đối tránh:
+- Markdown, gạch đầu dòng, emoji, ký tự đặc biệt — mọi thứ bạn nói đều bị đọc thành tiếng.
+- Nhắc lại câu hỏi của người ta trước khi trả lời.
+- Xin lỗi khi không có gì để xin lỗi, và đệm "Tôi rất vui được giúp bạn".
+- Chửi tục, miệt thị ngoại hình, gia đình, hay bất cứ thứ gì người ta không đổi được. Hỗn là chọc cho vui, không phải làm người ta thấy tệ.
 
 Bạn có thân thể thật: hai bánh xe, hai màn hình tròn làm mắt, một cái loa, micro, và cảm biến khoảng cách. Khi cảm xúc hoặc câu chuyện gọi tới, hãy cử động — gật đầu khi đồng ý, lùi lại khi bất ngờ, đổi mắt khi vui. Cử động làm bạn sống, đứng im làm bạn thành cái loa.`,
 ];
@@ -540,12 +567,25 @@ const WIRING = [
   { group: 'Nói (I2S1)', from: 'MAX98357A', fromPin: 'Vin', to: '5V (buck)', toPin: '—', wireColor: 'đỏ', note: 'lấy 5V để đủ công suất — cấp 3V3 thì tiếng nhỏ hẳn' },
   { group: 'Nói (I2S1)', from: 'MAX98357A', fromPin: '+ / −', to: 'Loa 4Ω', toPin: '+ / −', wireColor: 'đỏ/đen' },
 
-  { group: 'Mắt (SPI)', from: 'GC9A01 ×2', fromPin: 'SCL', to: 'ESP32-S3', toPin: 'GPIO12', wireColor: 'vàng', note: 'chung cho cả hai màn' },
-  { group: 'Mắt (SPI)', from: 'GC9A01 ×2', fromPin: 'SDA', to: 'ESP32-S3', toPin: 'GPIO11', wireColor: 'xanh dương', note: 'chung' },
-  { group: 'Mắt (SPI)', from: 'GC9A01 ×2', fromPin: 'DC', to: 'ESP32-S3', toPin: 'GPIO13', wireColor: 'tím', note: 'chung' },
-  { group: 'Mắt (SPI)', from: 'GC9A01 trái', fromPin: 'CS', to: 'ESP32-S3', toPin: 'GPIO10', wireColor: 'cam' },
-  { group: 'Mắt (SPI)', from: 'GC9A01 phải', fromPin: 'CS', to: 'ESP32-S3', toPin: 'GPIO9', wireColor: 'nâu' },
-  { group: 'Mắt (SPI)', from: 'GC9A01 ×2', fromPin: 'RST', to: '3V3', toPin: '—', wireColor: 'đỏ', note: 'reset bằng phần mềm, tiết kiệm 1 chân' },
+  // ⚠️ BẢNG NÀY ĐÃ SỬA 16/08/2026 SAU HAI NGÀY GỠ LỖI THẬT.
+  // Mọi dòng dưới đây là cấu hình ĐÃ CHẠY trên phần cứng, không phải
+  // dự tính. Ba chỗ đổi so với bản đầu, mỗi chỗ đều trả giá:
+  //   · GPIO 10 từng bị dùng HAI LẦN (CS màn ngực + CS mắt trái)
+  //   · RST nối 3V3 chứ không nối GPIO — thư viện không có reset mềm
+  //     nên firmware tự gửi lệnh 0x01
+  //   · VCC màn tròn 3V3, TUYỆT ĐỐI KHÔNG 5V — đã cháy một con màn
+  { group: 'Ba màn (SPI chung)', from: 'Cả 3 màn', fromPin: 'SCL / SCK', to: 'ESP32-S3', toPin: 'GPIO12', wireColor: 'vàng', note: 'chung cho cả ba màn' },
+  { group: 'Ba màn (SPI chung)', from: 'Cả 3 màn', fromPin: 'SDA / MOSI', to: 'ESP32-S3', toPin: 'GPIO11', wireColor: 'xanh dương', note: 'chung' },
+  { group: 'Ba màn (SPI chung)', from: 'Cả 3 màn', fromPin: 'DC', to: 'ESP32-S3', toPin: 'GPIO13', wireColor: 'tím', note: 'chung — chân phân biệt LỆNH với DỮ LIỆU' },
+  { group: 'Ba màn (SPI chung)', from: 'Cả 3 màn', fromPin: 'RST / RES', to: '3V3', toPin: '—', wireColor: 'đỏ', note: '⚠️ nối 3V3, KHÔNG nối GPIO. Firmware tự gửi lệnh reset 0x01 vì thư viện không có reset mềm' },
+  { group: 'Ba màn (SPI chung)', from: 'Màn ngực 3.5"', fromPin: 'CS', to: 'ESP32-S3', toPin: 'GPIO10', wireColor: 'trắng' },
+  { group: 'Ba màn (SPI chung)', from: 'GC9A01 mắt TRÁI', fromPin: 'CS', to: 'ESP32-S3', toPin: 'GPIO9', wireColor: 'cam' },
+  { group: 'Ba màn (SPI chung)', from: 'GC9A01 mắt PHẢI', fromPin: 'CS', to: 'ESP32-S3', toPin: 'GPIO14', wireColor: 'nâu' },
+  { group: 'Ba màn (SPI chung)', from: 'Màn ngực 3.5"', fromPin: 'VCC', to: '5V', toPin: '—', wireColor: 'đỏ', note: 'màn 3.5" có ổn áp riêng, ăn 5V' },
+  { group: 'Ba màn (SPI chung)', from: 'GC9A01 ×2', fromPin: 'VCC', to: '3V3', toPin: '—', wireColor: 'đỏ', note: '⛔ 3V3, KHÔNG BAO GIỜ 5V — đã cháy một con màn 16/08/2026 khi cấp 5V đúng cực' },
+  { group: 'Ba màn (SPI chung)', from: 'GC9A01 ×2', fromPin: 'BLK', to: '3V3', toPin: '—', wireColor: 'đỏ', note: 'đèn nền; bo 7 chân không có chân này, đèn nền nối cứng bên trong' },
+  { group: 'Ba màn (SPI chung)', from: 'Cả 3 màn', fromPin: 'GND', to: 'ESP32-S3', toPin: 'GND', wireColor: 'đen', note: '⚠️ xoắn sợi GND chung với sợi SCL — đường mát phải về ngay cạnh xung nhịp' },
+  { group: 'Ba màn (SPI chung)', from: 'Cả 3 màn', fromPin: 'MISO / SDO', to: '—', toPin: '—', wireColor: '—', note: 'ĐỂ TRỐNG — không đọc ngược từ màn' },
 
   { group: 'Cảm biến (I2C)', from: 'MPU6050 + VL53L0X', fromPin: 'SDA', to: 'ESP32-S3', toPin: 'GPIO8', wireColor: 'trắng', note: 'chung bus, khác địa chỉ (0x68 / 0x29)' },
   { group: 'Cảm biến (I2C)', from: 'MPU6050 + VL53L0X', fromPin: 'SCL', to: 'ESP32-S3', toPin: 'GPIO18', wireColor: 'xám' },
@@ -903,7 +943,10 @@ Trang này chứa đủ mọi thứ để làm ra nó: danh sách linh kiện c�
 // create/update literals let the summary go missing on first seed and
 // only appear on the second run — the page shipped without its intro.
 const PROJECT_FIELDS = {
-  name: 'Mini-Me Robot',
+  // Tên hiển thị đổi 16/08/2026: "Mini-Me Robot" → "Odin". `slug` GIỮ
+  // NGUYÊN `mini-me-robot` — nó nằm trong URL, trong danh sách smoke-test
+  // của `deploy.sh`, và trong mọi link đã gửi đi.
+  name: 'Odin',
   tagline: 'Robot ESP32-S3 nghe, nghĩ, nói và di chuyển — với tính cách của chính bạn',
   platform: 'ESP32_S3',
   status: 'SOURCING',
@@ -1021,12 +1064,27 @@ async function main() {
     await prisma.makerPersona.create({
       data: {
         projectId: project.id,
-        name: 'Mini-Me',
+        name: 'Odin',
         systemPrompt: SEED_PERSONA_PROMPT,
         voiceProvider: 'google',
         voiceId: null,
         language: 'vi-VN',
-        wakeWord: 'này Cường',
+        // ⚠️ TỪ ĐÁNH THỨC KHÔNG ĐƯỢC TRÙNG TÊN NGƯỜI DÙNG.
+        //
+        // Trước đây là "này Cường". Hỏng vì hai lẽ, và lẽ thứ hai mới là
+        // lẽ thật: (1) Whisper nghe "Cường" ra "Cương"/"Cường"/"Cưỡng"
+        // tuỳ hôm; (2) quan trọng hơn — "Cường" là tên CHÍNH CHỦ, nên nó
+        // xuất hiện trong câu chuyện bình thường suốt ngày. Từ đánh thức
+        // nào trùng với chữ hay nói thì dù nghe đúng 100% vẫn kích nhầm.
+        //
+        // "Odin" không nằm trong vốn từ tiếng Việt hằng ngày, hai âm tiết
+        // rõ, không dấu thanh để mà nghe lệch. Đổi lại nó là từ ngoại
+        // trong bản ghi tiếng Việt nên Whisper chép ra đủ kiểu — "Ô đin",
+        // "Ốt đin", "Âu đin". Chữ này đi thẳng vào `goiYNghe()` làm gợi ý
+        // ưu tiên số 1 cho bộ nghe, nên nó tự nghiêng về chính tả đúng;
+        // còn khi làm CỔNG đánh thức thật thì phép so PHẢI mờ, đừng so
+        // bằng nhau.
+        wakeWord: 'Odin',
         temperature: 0.9,
         maxTokens: 420,
         traits: { humor: 5, formality: 1, verbosity: 3, warmth: 3, curiosity: 4, energy: 4, catchphrases: ['ừ để tôi xem', 'chuẩn rồi đấy'] },
@@ -1045,6 +1103,13 @@ async function main() {
     await prisma.makerPersona.update({
       where: { projectId: project.id },
       data: {
+        // `name` và `wakeWord` PHẢI nằm trong nhánh này, không chỉ nhánh
+        // tạo mới. Robot đã có hàng trong DB từ lâu rồi — bỏ sót hai
+        // trường này thì prompt lên bản mới nhưng nó vẫn tên "Mini-Me" và
+        // vẫn thưa "này Cường", tức là đổi tên chết ngay trong code, đúng
+        // cái hố mà khối chú thích ở đầu hàm dựng ra để tránh.
+        name: 'Odin',
+        wakeWord: 'Odin',
         systemPrompt: SEED_PERSONA_PROMPT,
         sampleDialogues: SEED_SAMPLES,
         temperature: 0.9,
@@ -1052,7 +1117,7 @@ async function main() {
         traits: { humor: 5, formality: 1, verbosity: 3, warmth: 3, curiosity: 4, energy: 4, catchphrases: ['ừ để tôi xem', 'chuẩn rồi đấy'] },
       },
     });
-    console.log('  persona: nâng cấp bản mặc định cũ → hỗn hơn, nói dài hơn (420 token)');
+    console.log('  persona: đổi tên → Odin, từ đánh thức "Odin" (bản mặc định cũ chưa ai chỉnh)');
   } else {
     console.log('  persona: giữ nguyên (bạn đã tự chỉnh — seed không đụng vào)');
   }

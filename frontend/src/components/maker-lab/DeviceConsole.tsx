@@ -1053,7 +1053,7 @@ export function DeviceConsole({
             </button>
             <p className="mt-2 text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
               Robot sẽ phát ra WiFi{' '}
-              <strong style={{ color: 'var(--text-secondary)' }}>Mini-Me-Setup</strong> (mật khẩu{' '}
+              <strong style={{ color: 'var(--text-secondary)' }}>Odin-Setup</strong> (mật khẩu{' '}
               <strong style={{ color: 'var(--text-secondary)' }}>12345678</strong>) và hiện hướng
               dẫn lên màn hình của nó. Nối điện thoại vào là trang cài đặt tự hiện lên — chọn mạng
               từ danh sách, gõ mật khẩu, robot thử ngay rồi báo đúng/sai. Cổng tự đóng sau 3 phút.
@@ -1067,7 +1067,7 @@ export function DeviceConsole({
               đặt gì. Robot nhớ được 6 mạng.
               <br />
               Còn nếu tới nơi mà chưa thêm sẵn: robot sẽ tự phát ra WiFi{' '}
-              <strong style={{ color: 'var(--text-secondary)' }}>Mini-Me-Setup</strong> (mật khẩu{' '}
+              <strong style={{ color: 'var(--text-secondary)' }}>Odin-Setup</strong> (mật khẩu{' '}
               <strong style={{ color: 'var(--text-secondary)' }}>12345678</strong>) — nối điện
               thoại vào là trang cài đặt tự hiện lên.
             </p>
@@ -1115,7 +1115,7 @@ export function DeviceConsole({
             {!active.connected && (
               <p className="mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>
                 Robot đang offline — phải nối được mạng thì mới dạy được mạng mới. Dùng cổng{' '}
-                <strong style={{ color: 'var(--text-secondary)' }}>Mini-Me-Setup</strong> ngay trên
+                <strong style={{ color: 'var(--text-secondary)' }}>Odin-Setup</strong> ngay trên
                 robot thay cho chỗ này.
               </p>
             )}

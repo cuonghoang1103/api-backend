@@ -36,15 +36,84 @@
 #define PIN_AMP_LRC      16
 #define PIN_AMP_DIN      7
 
-// ─── Mắt: SPI ×2 GC9A01 ───────────────────────────────────
-// SCLK/MOSI/DC are shared (see platformio.ini build flags); only the
-// chip-selects differ, so two displays cost one extra GPIO.
-#define PIN_EYE_SCLK     12
-#define PIN_EYE_MOSI     11
-#define PIN_EYE_DC       13
-#define PIN_EYE_CS_L     10
-#define PIN_EYE_CS_R     9
-// RST tied to 3V3 — reset in software instead, saves a pin.
+// ─── BA MÀN chung một bus SPI ──────────────────────────────
+//
+// Màn ngực ILI9488 3.5" + hai mắt GC9A01 1.28" tròn. MOSI/SCLK/DC đi
+// chung, mỗi con một chân CS riêng. Chi tiết: `man_hinh.h`.
+//
+// ⚠️ SỬA 15/08/2026 — GPIO 10 TRƯỚC ĐÂY BỊ DÙNG HAI LẦN: vừa là CS
+// màn ngực (`-DTFT_CS=10` cũ) vừa là `PIN_EYE_CS_L`. Hai con màn cùng
+// nghe một chân CS thì con nào cũng nhận mọi thứ gửi cho con kia, và
+// triệu chứng không phải màn đen mà là hai hình chồng nhau nhấp nháy
+// — rất dễ đổ oan cho nhiễu dây rồi đi hạ tốc độ SPI.
+//
+// Lấy lại GPIO 14 bằng cách nối RST màn ngực thẳng lên 3V3 và reset
+// bằng lệnh phần mềm, đúng cách hai con mắt vẫn làm.
+//
+// ⚠️ VIỆC CẦN LÀM TRÊN BO: rút dây RST của màn 3.5" khỏi GPIO 14, cắm
+// sang 3V3. Quên thì KHÔNG cháy gì (một đầu ra nuôi hai đầu vào là
+// bình thường) — nhưng GPIO 14 nay bật/tắt theo nhịp chọn chip, nên
+// màn ngực bị reset liên tục và không bao giờ hiện được gì.
+/**
+ * ⛔⛔⛔ MÀN TRÒN GC9A01 CHẠY 3,3 V. CẤP 5 V LÀ CHÁY. Đã cháy thật.
+ *
+ * Ngày 16/08/2026 một con XY1.28YYFT-S7P **bốc khói và khét** khi cấp
+ * 5 V vào `VCC` — cắm ĐÚNG CỰC, và trên bo lúc đó **CHỈ có đúng hai
+ * sợi `VCC` với `GND`**, không một dây tín hiệu nào. Bỏ luôn con màn.
+ *
+ * Chi tiết "chỉ hai sợi" làm kết luận thành chắc chắn: không thể đổ cho
+ * chân tín hiệu, không thể đổ cho ESP32. Riêng 5 V vào `VCC` đã đủ giết.
+ *
+ * CƠ CHẾ THẬT (suy ra từ việc chính con U1 nóng lên trước khi khét):
+ * U1 đúng là ổn áp nguồn chính, và bo đúng là nhận được hơn 3,3 V. Cái
+ * giết nó là NHIỆT, không phải quá áp:
+ *
+ *     VCC 3,3 V → LDO nằm vùng sụt áp, gần như không sụt → nguội
+ *                 nhưng ra chỉ ~3,05 V → đèn nền mờ
+ *     VCC 5,0 V → LDO điều đúng ra 3,3 V → đèn nền sáng hết cỡ
+ *                 nhưng phải đốt (5,0−3,3) × dòng ngay trên thân nó
+ *
+ * Vỏ SOT-23 tản được chừng 0,4 W. Đèn nền sáng hết cỡ kéo đủ dòng để
+ * vượt mức đó, U1 nóng dần rồi chết.
+ *
+ * ⇒ LỐI RA SẠCH, không phải chọn giữa "mờ" và "cháy": cấp **3,8–4,2 V**.
+ *   Đủ chênh áp để LDO ra đủ 3,3 V (đèn nền sáng hết), mà chỉ đốt 0,7 V
+ *   thay vì 1,7 V — nhiệt giảm hơn hai lần rưỡi. Đúng bằng điện áp MỘT
+ *   viên 18650, mà robot thì có sẵn hai viên.
+ *
+ * ⚠️ Kiểu hỏng này đặc biệt xảo quyệt: cấp 5 V thì đèn nền **sáng rực
+ * hẳn lên và hết vệt tối** — trông y như vừa chữa đúng bệnh. Nó không
+ * chết ngay, nó chết dần qua vài chục phút. Nên dấu hiệu "tốt lên" lại
+ * chính là dấu hiệu đang giết nó.
+ *
+ * LUẬT: `VCC` màn tròn nối `3V3` (an toàn, hơi mờ) hoặc **3,8–4,2 V**
+ * (sáng đủ, vẫn mát). KHÔNG BAO GIỜ 5 V.
+ *
+ * Mà 3,3 V mờ cũng gần như không ảnh hưởng: mắt WALL-E nền đen tuyền,
+ * chỉ mống sáng — điểm ảnh đen không cần đèn nền.
+ */
+#define PIN_TFT_SCLK     12
+#define PIN_TFT_MOSI     11
+#define PIN_TFT_DC       13
+#define PIN_TFT_CS       10   // màn ngực 3.5"
+#define PIN_EYE_CS_L      9   // mắt trái
+
+/**
+ * RST cả ba màn nối `3V3`, reset bằng lệnh 0x01 gửi tay.
+ *
+ * ⚠️ Thư viện Arduino_GFX KHÔNG có reset mềm: nhánh `else` trong
+ * `Arduino_GC9A01::tftInit()` chỉ có đúng một dòng chú thích
+ * `// Software Rest`, không có mã. Nên `man_hinh::resetMem()` tự gửi
+ * lệnh `0x01` + chờ 150 ms trước khi khởi tạo. Thiếu bước đó thì con
+ * màn không bao giờ được reset sau lần cắm điện đầu, và mỗi lần nạp
+ * firmware (ESP32 khởi động lại, màn KHÔNG mất điện) là ra sọc.
+ *
+ * ⚠️ Ngày 15/08 tôi từng dời RST sang GPIO 14 cho "đúng chuẩn hơn" —
+ * ĐANG LÚC HỆ CHẠY ĐƯỢC. Từ đó mất luôn mốc để lùi về và mất cả buổi.
+ * Cấu hình dưới đây là cấu hình đã CHỨNG MINH chạy trên phần cứng
+ * thật; đừng đổi nó để cho đẹp lý thuyết.
+ */
+#define PIN_EYE_CS_R     14   // mắt phải — GPIO 14 rảnh vì RST về 3V3
 
 // ─── Cảm biến: I2C (MPU6050 0x68 + VL53L0X 0x29) ──────────
 #define PIN_I2C_SDA      8
@@ -65,10 +134,9 @@
 // ─── Phụ trợ ──────────────────────────────────────────────
 #define PIN_LED_RING     21
 #define LED_RING_COUNT   16
-// ⚠️ KHÔNG dùng GPIO 14 cho chân này: đó là chân RESET của màn 3.5"
-// (`-DTFT_RST=14` trong platformio.ini). Hai đầu ra đẩy-kéo đấu chung
-// một dây thì con này kéo lên, con kia kéo xuống, và dòng chạy thẳng
-// từ đầu ra này sang đầu ra kia.
+// ⚠️ KHÔNG dùng GPIO 14 cho chân này: đó là CS của MẮT PHẢI. Một chân
+// GPIO chỉ làm được một việc — gán nó cho vòng LED nữa thì mắt phải
+// mất chọn chip và tắt ngóm.
 //
 // GPIO 17 trống thật: 26-37 là flash/PSRAM của bản N16R8, 19/20 là USB,
 // 43/44 là UART gỡ lỗi, 0/45/46 là chân định đoạt kiểu khởi động.

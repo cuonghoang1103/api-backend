@@ -391,7 +391,7 @@ router.delete('/voices/:name', authenticate, async (req: Request, res: Response<
       res.status(409).json({
         success: false,
         message:
-          `Không xoá được: robot "${dungBoi.name ?? 'Mini-Me'}" đang dùng giọng này. ` +
+          `Không xoá được: robot "${dungBoi.name ?? 'Odin'}" đang dùng giọng này. ` +
           `Vào Maker Lab → Tính cách đổi sang giọng khác trước, rồi quay lại xoá.`,
       });
       return;

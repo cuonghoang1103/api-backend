@@ -1,7 +1,7 @@
 #pragma once
 /**
  * ============================================================
- * Mini-Me Robot — khuôn mặt trên màn 3.5"
+ * Mini-Me Robot — khuôn mặt trên màn NGỰC 3.5"
  * ============================================================
  *
  * Vẽ mặt chiếm trọn màn 480×320, đủ 10 biểu cảm mà hệ lệnh đã khai
@@ -21,7 +21,9 @@
  */
 
 #include <Arduino.h>
-#include <TFT_eSPI.h>
+#include <Arduino_GFX_Library.h>
+
+#include "mau.h"
 
 namespace face {
 
@@ -41,7 +43,7 @@ enum Emotion : uint8_t {
   SPEAKING,
 };
 
-void begin(TFT_eSPI* tft);
+void begin(Arduino_GFX* tft);
 
 /** Đổi biểu cảm. `ms` = 0 nghĩa là giữ mãi tới lệnh sau. */
 void set(Emotion e, uint32_t ms = 0);

@@ -89,7 +89,10 @@ void quenHet() {
 }
 
 // ─── Cổng cấu hình ─────────────────────────────────────────
-static const char* CONG_SSID = "Mini-Me-Setup";
+// Đổi 16/08/2026 cùng lúc robot được đặt tên Odin. Nạp bản này xong
+// thì tên mạng cũ BIẾN MẤT — lần cài WiFi sau phải tìm "Odin-Setup",
+// và điện thoại đã nhớ "Mini-Me-Setup" sẽ không tự nối lại nữa.
+static const char* CONG_SSID = "Odin-Setup";
 static const char* CONG_PASS = "12345678";  // WPA2 đòi tối thiểu 8 ký tự
 /**
  * Cổng tự đóng sau ngần này giây.
@@ -245,7 +248,7 @@ static void moCong() {
                                     "<br><br>WiFi cua robot SE TAT trong luc thu (no chi co mot "
                                     "ang-ten). Trang nay se khong tu tai lai — do la binh thuong, "
                                     "khong phai loi. Neu sai mat khau, vao Cai dat &gt; WiFi chon "
-                                    "lai Mini-Me-Setup de go lai."));
+                                    "lai Odin-Setup de go lai."));
   });
 
   // Mọi đường dẫn lạ đều trả về trang chính — điện thoại thăm dò cổng

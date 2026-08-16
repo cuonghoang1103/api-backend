@@ -24,8 +24,26 @@ import { canEditSharedNote, checkNoteAccess } from './notesShare.service.js';
 
 export const DATABASE_PROPERTY_TYPES = [
   'TITLE', 'TEXT', 'NUMBER', 'SELECT', 'MULTI_SELECT', 'DATE', 'CHECKBOX', 'URL',
+  // 17/08/2026 — sáu kiểu bổ sung. Cột `type` là VARCHAR chứ không phải enum
+  // Postgres, nên thêm ở đây là đủ, KHÔNG cần migration.
+  'STATUS', 'PERSON', 'EMAIL', 'FILE', 'CREATED_TIME', 'LAST_EDITED_TIME',
 ] as const;
 export type DatabasePropertyType = (typeof DATABASE_PROPERTY_TYPES)[number];
+
+/**
+ * Kiểu TÍNH RA, không lưu: giá trị luôn đến từ `createdAt`/`updatedAt` của
+ * chính dòng đó.
+ *
+ * Ghi vào những cột này bị BỎ QUA chứ không báo lỗi. Chỗ khác trong tệp này
+ * cố ý ném lỗi thay vì âm thầm ép kiểu (một cột NUMBER nhận "abc" thành 0 sẽ
+ * làm hỏng mọi phép cộng về sau), nhưng ở đây khác hẳn: client gửi lại NGUYÊN
+ * bản đồ `values` khi sửa một ô bất kỳ, nên ném lỗi nghĩa là không sửa nổi
+ * dòng nào chừng nào bảng còn một cột thời gian. Không ghi được là ĐỊNH NGHĨA
+ * của cột, không phải dữ liệu hỏng.
+ */
+export const COMPUTED_PROPERTY_TYPES = new Set<DatabasePropertyType>([
+  'CREATED_TIME', 'LAST_EDITED_TIME',
+]);
 
 export const DATABASE_VIEW_TYPES = ['TABLE', 'BOARD', 'CALENDAR', 'GALLERY', 'TIMELINE'] as const;
 export type DatabaseViewType = (typeof DATABASE_VIEW_TYPES)[number];
@@ -198,9 +216,110 @@ export function normalizeCellValue(
       return picked.length > 0 ? picked : null;
     }
 
+    /* STATUS dùng chung luật với SELECT nhưng khác Ý NGHĨA: `config.options`
+     * của nó mang thêm `group` (todo / doing / done) để Board gom cột và để
+     * thanh tiến độ biết đâu là "xong". Phần kiểm hợp lệ thì y hệt, nên gọi
+     * lại chứ không chép. */
+    case 'STATUS': {
+      const option = String(raw).trim().slice(0, 200);
+      if (!option) return null;
+      const allowed = configOptions(config);
+      if (allowed && !allowed.includes(option)) {
+        throw new AppError(`Trạng thái "${option}" không có trong cột này`, 400, 'INVALID_STATUS_OPTION');
+      }
+      return option;
+    }
+
+    case 'EMAIL': {
+      const email = String(raw).trim().slice(0, 320).toLowerCase();
+      if (!email) return null;
+      /* Kiểm bằng regex CỐ Ý lỏng. Địa chỉ email hợp lệ theo RFC 5322 gồm cả
+       * dấu ngoặc kép, chú thích và ký tự quốc tế; một regex "chặt" luôn từ
+       * chối nhầm địa chỉ thật, mà từ chối nhầm ở đây thì người dùng không
+       * lưu nổi dữ liệu của chính họ. Ở đây chỉ chặn thứ rõ ràng không phải
+       * email; muốn biết địa chỉ có thật hay không thì phải gửi thư. */
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        throw new AppError('Địa chỉ email không hợp lệ', 400, 'INVALID_EMAIL');
+      }
+      return email;
+    }
+
+    /* PERSON lưu MẢNG ID người dùng, không lưu tên.
+     *
+     * Lưu tên kèm theo sẽ nhanh hơn lúc hiển thị nhưng nó đóng băng tại thời
+     * điểm gán: người dùng đổi tên là mọi dòng cũ vẫn gọi họ bằng tên cũ, và
+     * không có cách nào biết dòng nào cần sửa. Tên tra ở phía client từ danh
+     * sách thành viên của môn (GET .../people).
+     *
+     * KHÔNG kiểm ở đây rằng id đó có quyền vào môn: kiểm được thì tốt, nhưng
+     * nó cần một truy vấn cho mỗi ô được ghi, và hậu quả của việc gán nhầm
+     * một người ngoài chỉ là một cái tên không tra được — trong khi chi phí
+     * là mọi thao tác sửa bảng chậm đi. */
+    case 'PERSON': {
+      const list = Array.isArray(raw) ? raw : [raw];
+      const ids = [...new Set(
+        list.map((item) => Number(typeof item === 'object' && item !== null ? (item as { id?: unknown }).id : item))
+            .filter((id) => Number.isInteger(id) && id > 0),
+      )].slice(0, 20);
+      return ids.length > 0 ? ids : null;
+    }
+
+    /* FILE lưu mảng { url, name, size, mime }. Tệp đã nằm trên R2 qua luồng
+     * /files/upload sẵn có — ở đây chỉ ghi lại địa chỉ. */
+    case 'FILE': {
+      const list = Array.isArray(raw) ? raw : [raw];
+      const files = list
+        .map((item) => {
+          if (!item || typeof item !== 'object') return null;
+          const f = item as Record<string, unknown>;
+          const url = String(f.url ?? '').trim().slice(0, 2000);
+          if (!url) return null;
+          // Cùng lý do với cột URL: một địa chỉ `javascript:` được lưu ở đây
+          // sẽ thành liên kết bấm được cho MỌI người xem bảng chia sẻ.
+          let parsed: URL;
+          try { parsed = new URL(url); } catch { return null; }
+          if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
+          return {
+            url: parsed.toString(),
+            name: String(f.name ?? '').slice(0, 300),
+            size: Number.isFinite(Number(f.size)) ? Number(f.size) : null,
+            mime: String(f.mime ?? '').slice(0, 150),
+          };
+        })
+        .filter((f): f is NonNullable<typeof f> => f !== null)
+        .slice(0, 10);
+      return files.length > 0 ? files : null;
+    }
+
+    case 'CREATED_TIME':
+    case 'LAST_EDITED_TIME':
+      // Tính ra lúc đọc — xem COMPUTED_PROPERTY_TYPES. Không bao giờ lưu.
+      return null;
+
     default:
       return String(raw).slice(0, 2000);
   }
+}
+
+
+/**
+ * Tiêm giá trị của các cột TÍNH RA vào bản đồ `values` của một dòng.
+ *
+ * Làm ở tầng đọc chứ không bắt client tự suy: nếu để client tự lấy
+ * `row.createdAt` khi thấy cột kiểu CREATED_TIME thì mỗi nơi hiển thị bảng
+ * (bảng, board, lịch, gallery, timeline, khối nhúng trong ghi chú) phải nhớ
+ * làm đúng như nhau, và chỗ nào quên thì cột đó rỗng mà không ai biết vì sao.
+ * Ở đây nó là một dòng, ở đó nó là sáu chỗ phải đồng bộ.
+ */
+function withComputedValues<T extends { createdAt: Date; updatedAt: Date; values: Record<string, unknown> }>(
+  row: T,
+  properties: { id: number; type: string }[],
+): T {
+  for (const property of properties) {
+    if (property.type === 'CREATED_TIME') row.values[property.id] = row.createdAt.toISOString();
+    else if (property.type === 'LAST_EDITED_TIME') row.values[property.id] = row.updatedAt.toISOString();
+  }
+  return row;
 }
 
 // ─── Access ───────────────────────────────────────────────────
@@ -316,14 +435,47 @@ export async function getDatabase(userId: number, databaseId: number) {
   // scan an array per cell to render one row.
   return {
     ...full,
-    rows: rows.map((row) => ({
+    rows: rows.map((row) => withComputedValues({
       id: row.id,
       sortOrder: row.sortOrder,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
-      values: Object.fromEntries(row.cells.map((cell) => [cell.propertyId, cell.value])),
-    })),
+      values: Object.fromEntries(row.cells.map((cell) => [cell.propertyId, cell.value])) as Record<string, unknown>,
+    }, full.properties)),
   };
+}
+
+/**
+ * Những người có thể gán vào cột PERSON của một bảng: chủ môn + mọi người
+ * được chia sẻ môn đó.
+ *
+ * Gác bằng quyền truy cập BẢNG chứ không bằng quyền sở hữu môn. `listSubjectShares`
+ * sẵn có chỉ cho chủ môn gọi, nên dùng nó thì một người được chia sẻ quyền sửa
+ * sẽ thấy ô chọn người rỗng — họ sửa được bảng nhưng không gán được việc cho ai,
+ * kể cả cho chính mình.
+ */
+export async function listDatabasePeople(userId: number, databaseId: number) {
+  const { database } = await assertDatabaseAccess(userId, databaseId, false);
+
+  const [subject, shares] = await Promise.all([
+    prisma.noteSubject.findUniqueOrThrow({
+      where: { id: database.subjectId },
+      select: { user: { select: { id: true, username: true, displayName: true, avatarUrl: true } } },
+    }),
+    prisma.noteSubjectShare.findMany({
+      where: { subjectId: database.subjectId },
+      select: { recipient: { select: { id: true, username: true, displayName: true, avatarUrl: true } } },
+    }),
+  ]);
+
+  // `Map` theo id để chủ môn không xuất hiện hai lần khi họ cũng nằm trong
+  // danh sách chia sẻ (tự chia sẻ cho chính mình là chuyện có thật).
+  const people = new Map<number, { id: number; username: string; displayName: string | null; avatarUrl: string | null }>();
+  people.set(subject.user.id, subject.user);
+  for (const share of shares) {
+    if (share.recipient) people.set(share.recipient.id, share.recipient);
+  }
+  return [...people.values()];
 }
 
 export async function updateDatabase(
@@ -581,13 +733,13 @@ export async function updateRow(userId: number, rowId: number, values: unknown) 
     where: { id: rowId },
     include: { cells: { select: { propertyId: true, value: true } } },
   });
-  return {
+  return withComputedValues({
     id: fresh.id,
     sortOrder: fresh.sortOrder,
     createdAt: fresh.createdAt,
     updatedAt: fresh.updatedAt,
-    values: Object.fromEntries(fresh.cells.map((cell) => [cell.propertyId, cell.value])),
-  };
+    values: Object.fromEntries(fresh.cells.map((cell) => [cell.propertyId, cell.value])) as Record<string, unknown>,
+  }, properties);
 }
 
 export async function deleteRow(userId: number, rowId: number) {

@@ -760,7 +760,12 @@ export interface NoteReferenceGraph {
 // subject's share, so there is no separate permission call.
 
 export type NoteDatabasePropertyType =
-  | 'TITLE' | 'TEXT' | 'NUMBER' | 'SELECT' | 'MULTI_SELECT' | 'DATE' | 'CHECKBOX' | 'URL';
+  | 'TITLE' | 'TEXT' | 'NUMBER' | 'SELECT' | 'MULTI_SELECT' | 'DATE' | 'CHECKBOX' | 'URL'
+  // 17/08/2026. Phải khớp `DATABASE_PROPERTY_TYPES` trong
+  // src/services/notesDatabase.service.ts — union này chép tay nên `tsc`
+  // KHÔNG bắt được lúc hai bên lệch nhau; dự án đã vỡ seed trên production
+  // vì đúng kiểu chép tay này (08/08/2026, xem CLAUDE.md).
+  | 'STATUS' | 'PERSON' | 'EMAIL' | 'FILE' | 'CREATED_TIME' | 'LAST_EDITED_TIME';
 
 export type NoteDatabaseViewType = 'TABLE' | 'BOARD' | 'CALENDAR' | 'GALLERY' | 'TIMELINE';
 
@@ -769,7 +774,12 @@ export interface NoteDatabaseProperty {
   databaseId: number;
   name: string;
   type: NoteDatabasePropertyType;
-  config: { options?: string[] } | null;
+  /**
+   * `options` nhận CẢ hai dạng: mảng chuỗi (SELECT / MULTI_SELECT, dạng cũ)
+   * và mảng `{ name, group, color }` (STATUS, cần nhóm để Board xếp cột).
+   * Backend `configOptions()` đã đọc được cả hai từ trước.
+   */
+  config: { options?: (string | { name: string; group?: string; color?: string })[] } | null;
   isTitle: boolean;
   sortOrder: number;
 }
@@ -832,6 +842,13 @@ export const noteSyncedBlockApi = {
     api.patch<{ data: NoteSyncedBlockDto }>(`/notes-synced-blocks/${blockId}`, { contentJson }),
 };
 
+export interface DatabasePerson {
+  id: number;
+  username: string;
+  displayName: string | null;
+  avatarUrl: string | null;
+}
+
 export const noteDatabaseApi = {
   listBySubject: (subjectId: number) =>
     api.get<{ data: NoteDatabaseSummary[] }>(`/notes-databases/subject/${subjectId}`),
@@ -843,6 +860,10 @@ export const noteDatabaseApi = {
     api.patch<{ data: NoteDatabaseSummary }>(`/notes-databases/${databaseId}`, data),
   remove: (databaseId: number) =>
     api.delete<{ data: { id: number; deleted: boolean } }>(`/notes-databases/${databaseId}`),
+
+  /** Người có thể gán vào cột PERSON: chủ môn + những người được chia sẻ môn. */
+  listPeople: (databaseId: number) =>
+    api.get<{ data: DatabasePerson[] }>(`/notes-databases/${databaseId}/people`),
 
   createProperty: (databaseId: number, data: { name: string; type: NoteDatabasePropertyType; config?: unknown }) =>
     api.post<{ data: NoteDatabaseProperty }>(`/notes-databases/${databaseId}/properties`, data),

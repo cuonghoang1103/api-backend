@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import type { NoteDatabaseProperty, NoteDatabaseRow } from '@/lib/api';
-import { displayValue, rowTitle } from '@/lib/noteDatabaseValues';
+import { displayValue, optionNames, rowTitle } from '@/lib/noteDatabaseValues';
 
 /**
  * Board / Gallery / Calendar renderings of a database.
@@ -39,7 +39,10 @@ export function BoardView({ properties, rows, onOpenRow, groupPropertyId }: View
 
   const columns = useMemo(() => {
     if (!groupProperty) return [];
-    const declared = groupProperty.config?.options ?? [];
+    // `optionNames` chứ không phải `config.options` thẳng: cột STATUS lưu tuỳ
+    // chọn dạng { name, group } nên duyệt thô sẽ đặt khoá cột là một object và
+    // Board hiện ra một cột tên "[object Object]".
+    const declared = optionNames(groupProperty);
     const seen = new Map<string, NoteDatabaseRow[]>();
     for (const option of declared) seen.set(option, []);
     for (const row of rows) {

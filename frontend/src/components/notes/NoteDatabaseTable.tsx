@@ -10,10 +10,15 @@ import {
   type NoteDatabasePropertyType,
   type NoteDatabaseRow,
   type NoteDatabaseViewType,
+  fileApi,
 } from '@/lib/api';
 import { BoardView, CalendarView, GalleryView } from '@/components/notes/NoteDatabaseViews';
 import NoteDatabaseRowModal from '@/components/notes/NoteDatabaseRowModal';
-import { displayValue, editableValue, outboundValue } from '@/lib/noteDatabaseValues';
+import {
+  asFiles, asPersonIds, displayValue, editableValue, isReadOnlyType, needsCustomEditor,
+  optionNames, outboundValue, personLabel, statusGroupOf, DEFAULT_STATUS_OPTIONS,
+  type CellContext, type DatabasePerson,
+} from '@/lib/noteDatabaseValues';
 
 interface Props {
   databaseId: number;
@@ -30,10 +35,25 @@ const TYPE_LABEL: Record<NoteDatabasePropertyType, string> = {
   DATE: 'Ngày',
   CHECKBOX: 'Ô đánh dấu',
   URL: 'Liên kết',
+  STATUS: 'Trạng thái',
+  PERSON: 'Người',
+  EMAIL: 'Email',
+  FILE: 'Tệp',
+  CREATED_TIME: 'Ngày tạo',
+  LAST_EDITED_TIME: 'Sửa lần cuối',
+};
+
+/* Màu chip trạng thái theo NHÓM, không theo tên tuỳ chọn: tên do người dùng
+ * đặt ("Ship rồi", "Đã bàn giao") nên tra theo tên là không bao giờ đủ. */
+const STATUS_CHIP: Record<'todo' | 'doing' | 'done', string> = {
+  todo:  'bg-slate-200 text-slate-700 dark:bg-white/10 dark:text-slate-300',
+  doing: 'bg-amber-200 text-amber-900 dark:bg-amber-500/20 dark:text-amber-200',
+  done:  'bg-emerald-200 text-emerald-900 dark:bg-emerald-500/20 dark:text-emerald-200',
 };
 
 const NEW_COLUMN_TYPES: NoteDatabasePropertyType[] = [
-  'TEXT', 'NUMBER', 'SELECT', 'MULTI_SELECT', 'DATE', 'CHECKBOX', 'URL',
+  'TEXT', 'NUMBER', 'SELECT', 'MULTI_SELECT', 'STATUS', 'DATE', 'CHECKBOX',
+  'PERSON', 'URL', 'EMAIL', 'FILE', 'CREATED_TIME', 'LAST_EDITED_TIME',
 ];
 
 export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Props) {
@@ -101,9 +121,30 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
     [database],
   );
 
+  /**
+   * Danh sách người gán được — nạp LƯỜI, chỉ khi bảng thật sự có cột PERSON.
+   *
+   * Nạp vô điều kiện sẽ thêm một lượt gọi mạng cho mọi bảng, kể cả phần lớn
+   * bảng không có cột nào cần tới nó.
+   */
+  const [people, setPeople] = useState<DatabasePerson[]>([]);
+  const hasPersonColumn = properties.some((property) => property.type === 'PERSON');
+  useEffect(() => {
+    if (!hasPersonColumn) return;
+    let alive = true;
+    noteDatabaseApi.listPeople(databaseId)
+      .then((res) => { if (alive) setPeople(res.data.data); })
+      .catch(() => { /* ô người sẽ hiện "#id" — xem displayValue */ });
+    return () => { alive = false; };
+  }, [hasPersonColumn, databaseId]);
+  const cellCtx: CellContext = useMemo(() => ({ people }), [people]);
+
   const commitCell = async (row: NoteDatabaseRow, property: NoteDatabaseProperty, raw: string) => {
     setEditing(null);
-    const next = outboundValue(property, raw);
+    // Cột tính ra thì máy chủ bỏ qua mọi lượt ghi — chặn ngay ở đây để không
+    // bắn một lượt gọi mạng chỉ để nhận lại đúng giá trị cũ.
+    if (isReadOnlyType(property.type)) return;
+    const next = outboundValue(property, raw, cellCtx);
     const previous = row.values[property.id] ?? null;
     if (JSON.stringify(next) === JSON.stringify(previous)) return;
 
@@ -163,7 +204,14 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
     if (!name || busy) return;
     setBusy(true);
     try {
-      await noteDatabaseApi.createProperty(databaseId, { name, type: columnType });
+      // Cột STATUS sinh ra kèm ba tuỳ chọn mặc định. Cột trạng thái RỖNG là
+      // vô dụng: người dùng phải tự nghĩ ra tên nhóm và tự gán `group`, mà
+      // `group` mới là thứ khiến STATUS khác SELECT.
+      await noteDatabaseApi.createProperty(databaseId, {
+        name,
+        type: columnType,
+        ...(columnType === 'STATUS' ? { config: { options: DEFAULT_STATUS_OPTIONS } } : {}),
+      });
       setColumnName('');
       setAddingColumn(false);
       await load();
@@ -329,6 +377,75 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
                     );
                   }
 
+                  /* Cột TÍNH RA: chữ thường, không bấm được. Để nguyên nút
+                     bấm sẽ mời người dùng sửa một thứ máy chủ luôn ghi đè —
+                     họ gõ, thấy giá trị cũ quay lại, và tưởng lưu bị hỏng. */
+                  if (isReadOnlyType(property.type)) {
+                    return (
+                      <td key={property.id} className="px-3 py-2 align-top">
+                        <span className="block min-h-7 px-1 py-0.5 text-slate-500 dark:text-slate-400">
+                          {displayValue(property, value, cellCtx) || '—'}
+                        </span>
+                      </td>
+                    );
+                  }
+
+                  /* FILE: không sửa được bằng ô nhập chữ, nên nó có nhánh
+                     riêng — chip cho tệp đã có, cộng một nút tải lên. */
+                  if (property.type === 'FILE') {
+                    const files = asFiles(value);
+                    return (
+                      <td key={property.id} className="px-3 py-2 align-top">
+                        <div className="flex flex-wrap items-center gap-1">
+                          {files.map((file) => (
+                            <a
+                              key={file.url}
+                              href={file.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="max-w-[10rem] truncate rounded bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-700 hover:bg-slate-200 dark:bg-white/10 dark:text-slate-200"
+                            >
+                              {file.name || file.url}
+                            </a>
+                          ))}
+                          {canEdit && (
+                            <label className="cursor-pointer rounded px-1.5 py-0.5 text-[11px] text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/10">
+                              + Tệp
+                              <input
+                                type="file"
+                                hidden
+                                onChange={async (event) => {
+                                  // `Array.from` NGAY tại đây: `files` là danh
+                                  // sách SỐNG và dòng reset value bên dưới xoá
+                                  // sạch nó.
+                                  const picked = Array.from(event.target.files ?? []);
+                                  event.target.value = '';
+                                  const file = picked[0];
+                                  if (!file) return;
+                                  try {
+                                    const res = await fileApi.upload(file, 'documents');
+                                    const url = (res.data as { data?: { url?: string } })?.data?.url;
+                                    if (!url) throw new Error('khong co url');
+                                    await noteDatabaseApi.updateRow(row.id, {
+                                      [property.id]: [
+                                        ...files,
+                                        { url, name: file.name, size: file.size, mime: file.type },
+                                      ],
+                                    } as never);
+                                    await load();
+                                  } catch {
+                                    toast.error('Không tải được tệp lên');
+                                  }
+                                }}
+                              />
+                            </label>
+                          )}
+                          {files.length === 0 && !canEdit && <span className="text-slate-300 dark:text-slate-600">—</span>}
+                        </div>
+                      </td>
+                    );
+                  }
+
                   return (
                     <td key={property.id} className="px-3 py-2 align-top">
                       {isEditing ? (
@@ -350,19 +467,25 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
                         <button
                           type="button"
                           disabled={!canEdit}
-                          onClick={() => { setEditing({ rowId: row.id, propertyId: property.id }); setDraft(editableValue(property, value)); }}
+                          onClick={() => { setEditing({ rowId: row.id, propertyId: property.id }); setDraft(editableValue(property, value, cellCtx)); }}
                           className="min-h-7 w-full truncate rounded px-1 py-0.5 text-left text-slate-800 hover:bg-slate-100 disabled:cursor-default disabled:hover:bg-transparent dark:text-slate-200 dark:hover:bg-white/[0.05]"
                         >
                           {property.type === 'URL' && value ? (
-                            <span className="text-teal-600 underline dark:text-teal-300">{displayValue(property, value)}</span>
+                            <span className="text-teal-600 underline dark:text-teal-300">{displayValue(property, value, cellCtx)}</span>
                           ) : (
-                            displayValue(property, value) || <span className="text-slate-300 dark:text-slate-600">—</span>
+                            property.type === 'STATUS' && value ? (
+                              <span className={`inline-block rounded-full px-2 py-0.5 text-[11px] font-medium ${STATUS_CHIP[statusGroupOf(property, value) ?? 'todo']}`}>
+                                {String(value)}
+                              </span>
+                            ) : (
+                              displayValue(property, value, cellCtx) || <span className="text-slate-300 dark:text-slate-600">—</span>
+                            )
                           )}
                         </button>
                       )}
-                      {property.config?.options && (
+                      {optionNames(property).length > 0 && (
                         <datalist id={`opts-${property.id}`}>
-                          {property.config.options.map((option) => <option key={option} value={option} />)}
+                          {optionNames(property).map((option) => <option key={option} value={option} />)}
                         </datalist>
                       )}
                     </td>

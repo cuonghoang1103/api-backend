@@ -8,7 +8,7 @@ import {
   type NoteDatabaseProperty,
   type NoteDatabaseRow,
 } from '@/lib/api';
-import { editableValue, outboundValue, rowTitle } from '@/lib/noteDatabaseValues';
+import { editableValue, optionNames, outboundValue, rowTitle } from '@/lib/noteDatabaseValues';
 
 interface Props {
   properties: NoteDatabaseProperty[];
@@ -137,9 +137,9 @@ export default function NoteDatabaseRowModal({
                       placeholder={property.type === 'MULTI_SELECT' ? 'Ngăn cách bằng dấu phẩy' : undefined}
                       className="min-h-10 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 disabled:opacity-60 dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"
                     />
-                    {property.config?.options && (
+                    {optionNames(property).length > 0 && (
                       <datalist id={`modal-opts-${property.id}`}>
-                        {property.config.options.map((option) => <option key={option} value={option} />)}
+                        {optionNames(property).map((option) => <option key={option} value={option} />)}
                       </datalist>
                     )}
                   </>

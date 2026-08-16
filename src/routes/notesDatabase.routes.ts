@@ -19,6 +19,7 @@ import {
   deleteRow,
   deleteView,
   getDatabase,
+  listDatabasePeople,
   listDatabases,
   reorderProperties,
   reorderRows,
@@ -50,6 +51,13 @@ router.post('/', async (req: any, res: Response<ApiResponse>, next) => {
 // ─── Rows, properties and views ───────────────────────────────
 // Declared before '/:databaseId' so those literal segments are not swallowed
 // by the parameterised route.
+
+router.get('/:databaseId/people', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await listDatabasePeople(req.user.userId, Number(req.params.databaseId));
+    res.json({ success: true, data });
+  } catch (error) { next(error); }
+});
 
 router.post('/:databaseId/properties', async (req: any, res: Response<ApiResponse>, next) => {
   try {

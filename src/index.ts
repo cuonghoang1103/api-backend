@@ -94,6 +94,9 @@ const musicPlayCountsRoutes = (await import(path.join(__dirname, 'routes', 'musi
 // Cyber-music Phase 2b: synced karaoke lyrics (per-track, idempotent upsert).
 const musicLyricsRoutes = (await import(path.join(__dirname, 'routes', 'music-lyrics.routes.js'))).default;
 const aiRoutes = (await import(path.join(__dirname, 'routes', 'ai.routes.js'))).default;
+// Agent lập trình của app desktop — giao thức gọi tool nhiều lượt, khác hẳn
+// /ai/chat nên ở router riêng.
+const agentRoutes = (await import(path.join(__dirname, 'routes', 'agent.routes.js'))).default;
 const adminRoutes = (await import(path.join(__dirname, 'routes', 'admin.routes.js'))).default;
 const skillRoutes = (await import(path.join(__dirname, 'routes', 'skill.routes.js'))).default;
 const projectRoutes = (await import(path.join(__dirname, 'routes', 'project.routes.js'))).default;
@@ -131,6 +134,7 @@ const contentRoutes = (await import(path.join(__dirname, 'routes', 'content.rout
 const notesRoutes = (await import(path.join(__dirname, 'routes', 'notes.routes.js'))).default;
 const notesShareRoutes = (await import(path.join(__dirname, 'routes', 'notesShare.routes.js'))).default;
 const notesDatabaseRoutes = (await import(path.join(__dirname, 'routes', 'notesDatabase.routes.js'))).default;
+const noteSyncedBlockRoutes = (await import(path.join(__dirname, 'routes', 'noteSyncedBlock.routes.js'))).default;
 const mobileRoutes = (await import(path.join(__dirname, 'routes', 'mobile.routes.js'))).default;
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
 const { initNotesCollaborationGateway } = await import(path.join(__dirname, 'socket', 'notes-collaboration.gateway.js'));
@@ -505,6 +509,7 @@ app.use('/api/v1/music/play-counts', musicPlayCountsRoutes);
 // Cyber-music Phase 2b — synced karaoke lyrics (/tracks/:id/lyrics).
 app.use('/api/v1/music', musicLyricsRoutes);
 app.use('/api/v1/ai', aiRoutes);
+app.use('/api/v1/agent', agentRoutes);
 app.use('/api/v1/admin/embed-jobs', embedJobsRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/skills', skillRoutes);
@@ -557,6 +562,7 @@ app.use('/api/v1/notes', notesRoutes);
 // Notes Share — share subjects with other users
 app.use('/api/v1/notes-shares', notesShareRoutes);
 app.use('/api/v1/notes-databases', notesDatabaseRoutes);
+app.use('/api/v1/notes-synced-blocks', noteSyncedBlockRoutes);
 app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
 // EXP_Hub — Code Snippet Library

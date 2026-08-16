@@ -38,7 +38,7 @@ import {
   Heading1, Heading2, Heading3, List, ListOrdered, ListChecks, Code2,
   Lightbulb, StickyNote, TriangleAlert, Sigma, SquareRadical, Minus,
   Table2, Quote, ImagePlus, GripHorizontal, Search,
-  ChevronRight, Clapperboard, Paperclip, Bookmark, Frame,
+  ChevronRight, Clapperboard, Paperclip, Bookmark, Frame, Database, Unlink,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -217,6 +217,19 @@ function buildItems(
         // nào — CSP sẽ chặn iframe lạ và để lại khung trắng câm.
         at(ed, r).setEmbed(url.trim()).run();
       },
+    },
+    {
+      label: 'Bảng dữ liệu', hint: 'Nhúng một database vào trang', icon: Database, group: 'Nâng cao',
+      keywords: ['database', 'bang', 'du lieu', 'table', 'db', 'nhung'],
+      // Chèn khối rỗng: nó tự hiện danh sách bảng của môn để chọn, kèm nút tạo
+      // bảng mới. Bắt chọn TRƯỚC khi chèn thì phải dựng một hộp thoại riêng,
+      // trong khi chính khối đã là chỗ hiển nhiên để chọn.
+      run: (ed, r) => at(ed, r).setDatabaseBlock(null).run(),
+    },
+    {
+      label: 'Khối dùng chung', hint: 'Sửa một chỗ, mọi trang cùng đổi', icon: Unlink, group: 'Nâng cao',
+      keywords: ['synced', 'dung chung', 'dong bo', 'sync', 'chia se', 'lap lai'],
+      run: (ed, r) => at(ed, r).setSyncedBlock(null).run(),
     },
     {
       label: 'Callout — Mẹo', hint: 'Mẹo hữu ích', icon: Lightbulb, group: 'Khối nội dung',

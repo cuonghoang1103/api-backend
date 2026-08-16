@@ -49,6 +49,8 @@ import NoteToggle from '@/components/notes/extensions/NoteToggle';
 import NoteMedia from '@/components/notes/extensions/NoteMedia';
 import NoteBookmark from '@/components/notes/extensions/NoteBookmark';
 import NoteEmbed from '@/components/notes/extensions/NoteEmbed';
+import NoteDatabaseBlock from '@/components/notes/extensions/NoteDatabaseBlock';
+import NoteSyncedBlock from '@/components/notes/extensions/NoteSyncedBlock';
 import SlashMenu, { type SlashMenuRef } from '@/components/notes/SlashMenu';
 import NoteTableOfContents from '@/components/notes/NoteTableOfContents';
 import NotePropertiesPanel from '@/components/notes/NotePropertiesPanel';
@@ -114,6 +116,16 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
   // Track the note id so switching notes resets local state instead
   // of bleeding one note's title/content into another.
   const noteIdRef = useRef(note.id);
+  /**
+   * Ghi chú đang mở, dạng ref.
+   *
+   * Cần vì `useEditor` dựng danh sách extension MỘT lần, còn `note` thì đổi
+   * mỗi lần người dùng bấm sang trang khác. Đóng gói `note` thẳng vào phần
+   * cấu hình extension sẽ khoá cứng ghi chú đầu tiên: khối bảng nhúng ở trang
+   * thứ hai vẫn đi liệt kê bảng của môn thuộc trang thứ nhất.
+   */
+  const noteRef = useRef(note);
+  noteRef.current = note;
 
   // ─── Debounced save ────────────────────────────────────────
   const queueSave = useCallback(
@@ -293,6 +305,11 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
       NoteMedia,
       NoteBookmark,
       NoteEmbed,
+      // Bảng nhúng cần biết MÔN của ghi chú để liệt kê bảng chọn được.
+      // Truyền bằng hàm chứ không phải giá trị: editor dựng một lần, còn
+      // ghi chú thì đổi khi người dùng bấm sang trang khác.
+      NoteDatabaseBlock.configure({ getSubjectId: () => noteRef.current?.subjectId ?? null }),
+      NoteSyncedBlock,
       TaskList.configure({ HTMLAttributes: { class: 'note-task-list' } }),
       TaskItem.configure({ nested: true, HTMLAttributes: { class: 'note-task-item' } }),
       Table.configure({ resizable: false, HTMLAttributes: { class: 'note-table' } }),

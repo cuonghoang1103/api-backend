@@ -268,6 +268,7 @@ model User {
   noteCommentsResolved       NoteComment[]               @relation("NoteCommentResolver")
   noteCommentMentions        NoteCommentMention[]
   noteDatabases              NoteDatabase[]
+  noteSyncedBlocks           NoteSyncedBlock[]
   noteDatabaseRowsCreated    NoteDatabaseRow[]           @relation("NoteDatabaseRowCreator")
   noteDatabaseRowsUpdated    NoteDatabaseRow[]           @relation("NoteDatabaseRowUpdater")
   // Phase 4 add — notes subject sharing
@@ -4378,6 +4379,32 @@ model NoteAttachment {
   @@index([userId, noteId], name: "idx_note_attachments_note")
   @@index([userId, subjectId], name: "idx_note_attachments_subject")
   @@map("note_attachments")
+}
+
+// Nội dung DÙNG CHUNG giữa nhiều trang ("synced block" của Notion).
+//
+// Khối trong tài liệu chỉ lưu `blockId`; nội dung thật nằm ở đây. Nhờ vậy sửa
+// ở một trang là mọi trang nhúng cùng khối đều đổi theo — đó chính là điều
+// khiến nó khác một đoạn văn chép đi chép lại.
+//
+// Lưu `contentJson` (JSON của ProseMirror) chứ không lưu HTML: HTML phải phân
+// tích lại mỗi lần đọc và mất thông tin thuộc tính của các node nhà trồng
+// (callout, math, media). Đây cũng là dạng `Note.contentJson` đang dùng.
+//
+// KHÔNG có khoá ngoại tới Note: một khối có thể được nhúng ở nhiều ghi chú,
+// và xoá một ghi chú không được phép kéo theo nội dung mà các ghi chú khác
+// vẫn đang hiển thị.
+model NoteSyncedBlock {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  contentJson Json?    @map("content_json")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, updatedAt(sort: Desc)], map: "idx_note_synced_blocks_user")
+  @@map("note_synced_blocks")
 }
 
 model NoteLink {

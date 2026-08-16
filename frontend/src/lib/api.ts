@@ -811,6 +811,27 @@ export interface NoteDatabaseFull extends NoteDatabaseSummary {
   rows: NoteDatabaseRow[];
 }
 
+export interface NoteSyncedBlockDto {
+  id: number;
+  contentJson: unknown;
+  updatedAt: string;
+}
+
+/**
+ * Khối nội dung DÙNG CHUNG giữa nhiều trang ghi chú.
+ *
+ * Không có `list` và không có `remove` — xem noteSyncedBlock.service.ts ở
+ * backend để biết vì sao xoá là thao tác nguy hiểm ở đây.
+ */
+export const noteSyncedBlockApi = {
+  create: (contentJson?: unknown) =>
+    api.post<{ data: NoteSyncedBlockDto }>('/notes-synced-blocks', { contentJson }),
+  get: (blockId: number) =>
+    api.get<{ data: NoteSyncedBlockDto }>(`/notes-synced-blocks/${blockId}`),
+  update: (blockId: number, contentJson: unknown) =>
+    api.patch<{ data: NoteSyncedBlockDto }>(`/notes-synced-blocks/${blockId}`, { contentJson }),
+};
+
 export const noteDatabaseApi = {
   listBySubject: (subjectId: number) =>
     api.get<{ data: NoteDatabaseSummary[] }>(`/notes-databases/subject/${subjectId}`),

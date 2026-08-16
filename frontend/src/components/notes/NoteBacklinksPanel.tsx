@@ -8,14 +8,21 @@ import { notesApi, type NoteBacklinkBundle, type NoteChildSummary } from '@/lib/
 interface Props {
   noteId: number;
   noteTitle: string;
+  /** Pages in the same subject that could become the parent. */
+  candidateParents: Array<{ id: number; title: string }>;
   onOpenNote: (noteId: number) => void;
+  /** Refresh the sidebar tree after the page moves. */
+  onMoved: () => void;
   onClose: () => void;
 }
 
-export default function NoteBacklinksPanel({ noteId, noteTitle, onOpenNote, onClose }: Props) {
+export default function NoteBacklinksPanel({
+  noteId, noteTitle, candidateParents, onOpenNote, onMoved, onClose,
+}: Props) {
   const [bundle, setBundle] = useState<NoteBacklinkBundle | null>(null);
   const [children, setChildren] = useState<NoteChildSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [moving, setMoving] = useState(false);
 
   const load = useCallback(async () => {
     const [links, kids] = await Promise.all([
@@ -38,6 +45,31 @@ export default function NoteBacklinksPanel({ noteId, noteTitle, onOpenNote, onCl
   }, [onClose]);
 
   const open = (id: number) => { onOpenNote(id); onClose(); };
+
+  const parentId = bundle && bundle.breadcrumb.length > 0
+    ? bundle.breadcrumb[bundle.breadcrumb.length - 1].id
+    : null;
+
+  /**
+   * The server is the authority on whether a move is legal — it rejects
+   * cycles, cross-subject parents and over-deep nesting. Surfacing its
+   * message verbatim is why the picker can offer every sibling page without
+   * having to replicate the cycle walk in the browser.
+   */
+  const moveInto = async (nextParentId: number | null) => {
+    if (moving) return;
+    setMoving(true);
+    try {
+      await notesApi.setParent(noteId, nextParentId);
+      await load();
+      onMoved();
+      toast.success(nextParentId === null ? 'Đã đưa ra ngoài cùng' : 'Đã chuyển vào trang cha');
+    } catch (error) {
+      const message = (error as { response?: { data?: { message?: string } } })
+        .response?.data?.message;
+      toast.error(message || 'Không chuyển được trang');
+    } finally { setMoving(false); }
+  };
 
   return (
     <div
@@ -90,6 +122,33 @@ export default function NoteBacklinksPanel({ noteId, noteTitle, onOpenNote, onCl
                   </nav>
                 </Section>
               )}
+
+              <Section title="Lồng trang này vào">
+                <div className="flex flex-wrap items-center gap-2">
+                  <label htmlFor="note-parent-picker" className="sr-only">Chọn trang cha</label>
+                  <select
+                    id="note-parent-picker"
+                    value={parentId ?? ''}
+                    disabled={moving}
+                    onChange={(event) => moveInto(event.target.value === '' ? null : Number(event.target.value))}
+                    className="min-h-10 min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-2 text-[13px] text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 disabled:opacity-60 dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-200"
+                  >
+                    <option value="">— Ngoài cùng (không lồng) —</option>
+                    {candidateParents
+                      .filter((candidate) => candidate.id !== noteId)
+                      .map((candidate) => (
+                        <option key={candidate.id} value={candidate.id}>
+                          {candidate.title || 'Không có tiêu đề'}
+                        </option>
+                      ))}
+                  </select>
+                  {moving && <Loader2 className="h-4 w-4 shrink-0 animate-spin text-slate-400" aria-hidden="true" />}
+                </div>
+                <p className="mt-1.5 text-[11px] leading-5 text-slate-500">
+                  Chỉ lồng được trong cùng môn học, tối đa 10 cấp. Chọn một trang con của
+                  chính nó sẽ bị từ chối.
+                </p>
+              </Section>
 
               <Section title={`Trang con (${children.length})`}>
                 {children.length === 0 ? (

@@ -12,6 +12,8 @@ import {
   type NoteDatabaseViewType,
 } from '@/lib/api';
 import { BoardView, CalendarView, GalleryView } from '@/components/notes/NoteDatabaseViews';
+import NoteDatabaseRowModal from '@/components/notes/NoteDatabaseRowModal';
+import { displayValue, editableValue, outboundValue } from '@/lib/noteDatabaseValues';
 
 interface Props {
   databaseId: number;
@@ -34,48 +36,6 @@ const NEW_COLUMN_TYPES: NoteDatabasePropertyType[] = [
   'TEXT', 'NUMBER', 'SELECT', 'MULTI_SELECT', 'DATE', 'CHECKBOX', 'URL',
 ];
 
-/** Render a stored cell value for display (not for editing). */
-function displayValue(property: NoteDatabaseProperty, value: unknown): string {
-  if (value === null || value === undefined) return '';
-  switch (property.type) {
-    case 'CHECKBOX':
-      return value ? '✓' : '';
-    case 'DATE': {
-      const date = new Date(String(value));
-      return Number.isNaN(date.getTime())
-        ? ''
-        : date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    }
-    case 'MULTI_SELECT':
-      return Array.isArray(value) ? value.join(', ') : String(value);
-    case 'NUMBER':
-      return typeof value === 'number' ? value.toLocaleString('vi-VN') : String(value);
-    default:
-      return String(value);
-  }
-}
-
-/** Turn a stored value into what the <input> should show while editing. */
-function editableValue(property: NoteDatabaseProperty, value: unknown): string {
-  if (value === null || value === undefined) return '';
-  if (property.type === 'DATE') {
-    const date = new Date(String(value));
-    // <input type="date"> only accepts yyyy-mm-dd.
-    return Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10);
-  }
-  if (property.type === 'MULTI_SELECT') return Array.isArray(value) ? value.join(', ') : String(value);
-  return String(value);
-}
-
-/** Convert what the user typed back into the shape the API expects. */
-function outboundValue(property: NoteDatabaseProperty, raw: string): unknown {
-  if (property.type === 'MULTI_SELECT') {
-    const picked = raw.split(',').map((part) => part.trim()).filter(Boolean);
-    return picked.length > 0 ? picked : null;
-  }
-  return raw === '' ? null : raw;
-}
-
 export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Props) {
   const [database, setDatabase] = useState<NoteDatabaseFull | null>(null);
   const [loading, setLoading] = useState(true);
@@ -83,6 +43,7 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
   const [editing, setEditing] = useState<{ rowId: number; propertyId: number } | null>(null);
   const [draft, setDraft] = useState('');
   const [viewType, setViewType] = useState<NoteDatabaseViewType>('TABLE');
+  const [openRowId, setOpenRowId] = useState<number | null>(null);
   const [addingColumn, setAddingColumn] = useState(false);
   const [columnName, setColumnName] = useState('');
   const [columnType, setColumnType] = useState<NoteDatabasePropertyType>('TEXT');
@@ -91,11 +52,42 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
   const load = useCallback(async () => {
     const res = await noteDatabaseApi.get(databaseId);
     setDatabase(res.data.data);
+    return res.data.data;
   }, [databaseId]);
+
+  /** The row the persisted view choice lives on. */
+  const defaultView = useMemo(() => {
+    const views = database?.views ?? [];
+    return views.find((view) => view.isDefault) ?? views[0] ?? null;
+  }, [database]);
+
+  /**
+   * Persist the view choice on the database's default view row.
+   *
+   * Without this the switcher was local state only: every reload dropped the
+   * user back to the table, which reads as the setting not working at all.
+   * The UI switches immediately and the write is fire-and-forget — a failed
+   * save costs a preference, and blocking the switch on a round-trip would
+   * make the tabs feel broken.
+   */
+  const chooseView = useCallback((type: NoteDatabaseViewType) => {
+    setViewType(type);
+    if (!canEdit || !defaultView || defaultView.type === type) return;
+    setDatabase((current) => current && ({
+      ...current,
+      views: current.views.map((view) => (view.id === defaultView.id ? { ...view, type } : view)),
+    }));
+    void noteDatabaseApi.updateView(defaultView.id, { type }).catch(() => { /* preference only */ });
+  }, [canEdit, defaultView]);
 
   useEffect(() => {
     setLoading(true);
     load()
+      .then((loaded) => {
+        // Restore the saved view instead of always landing on the table.
+        const saved = loaded.views.find((view) => view.isDefault) ?? loaded.views[0];
+        if (saved) setViewType(saved.type);
+      })
       .catch(() => toast.error('Không tải được cơ sở dữ liệu'))
       .finally(() => setLoading(false));
   }, [load]);
@@ -230,7 +222,7 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
                 key={type}
                 role="tab"
                 aria-selected={viewType === type}
-                onClick={() => setViewType(type)}
+                onClick={() => chooseView(type)}
                 title={label}
                 className={`flex h-8 w-8 items-center justify-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${
                   viewType === type
@@ -256,10 +248,33 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
       </header>
 
       {viewType !== 'TABLE' && (
-        viewType === 'BOARD' ? <BoardView properties={properties} rows={database.rows} />
-          : viewType === 'GALLERY' ? <GalleryView properties={properties} rows={database.rows} />
-            : <CalendarView properties={properties} rows={database.rows} />
+        viewType === 'BOARD' ? <BoardView properties={properties} rows={database.rows} onOpenRow={setOpenRowId} />
+          : viewType === 'GALLERY' ? <GalleryView properties={properties} rows={database.rows} onOpenRow={setOpenRowId} />
+            : <CalendarView properties={properties} rows={database.rows} onOpenRow={setOpenRowId} />
       )}
+
+      {/* A card in Kanban/Gallery/Calendar has nowhere to put a row of
+          inputs, so opening one leads here. */}
+      {openRowId !== null && (() => {
+        const target = database.rows.find((row) => row.id === openRowId);
+        if (!target) return null;
+        return (
+          <NoteDatabaseRowModal
+            properties={properties}
+            row={target}
+            canEdit={canEdit}
+            onSaved={(saved) => setDatabase((current) => current && ({
+              ...current,
+              rows: current.rows.map((row) => (row.id === saved.id ? { ...row, values: saved.values } : row)),
+            }))}
+            onDeleted={(rowId) => setDatabase((current) => current && ({
+              ...current,
+              rows: current.rows.filter((row) => row.id !== rowId),
+            }))}
+            onClose={() => setOpenRowId(null)}
+          />
+        );
+      })()}
 
       {/* Wide tables scroll inside their own box; the page never scrolls sideways. */}
       {viewType === 'TABLE' && (

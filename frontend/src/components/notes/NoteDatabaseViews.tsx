@@ -1,10 +1,8 @@
 'use client';
 
 import { useMemo } from 'react';
-import type {
-  NoteDatabaseProperty,
-  NoteDatabaseRow,
-} from '@/lib/api';
+import type { NoteDatabaseProperty, NoteDatabaseRow } from '@/lib/api';
+import { displayValue, rowTitle } from '@/lib/noteDatabaseValues';
 
 /**
  * Board / Gallery / Calendar renderings of a database.
@@ -22,31 +20,12 @@ interface ViewProps {
 
 const UNSET = '__unset__';
 
-function titleOf(properties: NoteDatabaseProperty[], row: NoteDatabaseRow): string {
-  const titleProperty = properties.find((property) => property.isTitle);
-  const raw = titleProperty ? row.values[titleProperty.id] : null;
-  const text = raw === null || raw === undefined ? '' : String(raw);
-  return text || 'Không có tiêu đề';
-}
-
 function summaryFields(properties: NoteDatabaseProperty[], row: NoteDatabaseRow) {
   return properties
     .filter((property) => !property.isTitle)
     .map((property) => ({ property, value: row.values[property.id] }))
     .filter((entry) => entry.value !== null && entry.value !== undefined && entry.value !== '')
     .slice(0, 4);
-}
-
-function renderValue(property: NoteDatabaseProperty, value: unknown): string {
-  if (value === null || value === undefined) return '';
-  if (property.type === 'CHECKBOX') return value ? '✓' : '—';
-  if (property.type === 'MULTI_SELECT') return Array.isArray(value) ? value.join(', ') : String(value);
-  if (property.type === 'NUMBER') return typeof value === 'number' ? value.toLocaleString('vi-VN') : String(value);
-  if (property.type === 'DATE') {
-    const date = new Date(String(value));
-    return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('vi-VN');
-  }
-  return String(value);
 }
 
 // ─── Board ────────────────────────────────────────────────────
@@ -97,12 +76,12 @@ export function BoardView({ properties, rows, onOpenRow, groupPropertyId }: View
                   onClick={() => onOpenRow?.(row.id)}
                   className="w-full rounded-lg border border-slate-200 bg-white p-2.5 text-left shadow-sm hover:border-teal-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:border-white/[0.07] dark:bg-white/[0.04]"
                 >
-                  <p className="truncate text-[13px] font-medium text-slate-800 dark:text-slate-200">{titleOf(properties, row)}</p>
+                  <p className="truncate text-[13px] font-medium text-slate-800 dark:text-slate-200">{rowTitle(properties, row.values)}</p>
                   {summaryFields(properties, row)
                     .filter((entry) => entry.property.id !== groupProperty.id)
                     .map((entry) => (
                       <p key={entry.property.id} className="mt-1 truncate text-[11px] text-slate-500">
-                        {entry.property.name}: {renderValue(entry.property, entry.value)}
+                        {entry.property.name}: {displayValue(entry.property, entry.value)}
                       </p>
                     ))}
                 </button>
@@ -133,12 +112,12 @@ export function GalleryView({ properties, rows, onOpenRow }: ViewProps) {
           onClick={() => onOpenRow?.(row.id)}
           className="rounded-xl border border-slate-200 bg-white p-3 text-left shadow-sm hover:border-teal-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:border-white/[0.07] dark:bg-white/[0.03]"
         >
-          <p className="truncate text-sm font-medium text-slate-900 dark:text-slate-100">{titleOf(properties, row)}</p>
+          <p className="truncate text-sm font-medium text-slate-900 dark:text-slate-100">{rowTitle(properties, row.values)}</p>
           <dl className="mt-2 space-y-0.5">
             {summaryFields(properties, row).map((entry) => (
               <div key={entry.property.id} className="flex gap-1 text-[11px]">
                 <dt className="shrink-0 text-slate-400">{entry.property.name}:</dt>
-                <dd className="truncate text-slate-600 dark:text-slate-300">{renderValue(entry.property, entry.value)}</dd>
+                <dd className="truncate text-slate-600 dark:text-slate-300">{displayValue(entry.property, entry.value)}</dd>
               </div>
             ))}
           </dl>
@@ -223,10 +202,10 @@ export function CalendarView({ properties, rows, onOpenRow, month }: ViewProps &
                         key={row.id}
                         type="button"
                         onClick={() => onOpenRow?.(row.id)}
-                        title={titleOf(properties, row)}
+                        title={rowTitle(properties, row.values)}
                         className="block w-full truncate rounded bg-teal-500/10 px-1 py-0.5 text-left text-[10px] text-teal-700 hover:bg-teal-500/20 dark:text-teal-300"
                       >
-                        {titleOf(properties, row)}
+                        {rowTitle(properties, row.values)}
                       </button>
                     ))}
                     {cell.items.length > 3 && (

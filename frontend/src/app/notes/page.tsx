@@ -1152,7 +1152,19 @@ function NotesPageInner() {
             <NoteBacklinksPanel
               noteId={selected.id}
               noteTitle={selected.title}
+              candidateParents={(() => {
+                // Every page in the same subject, chapters included. The
+                // server rejects the illegal picks (cycles, too deep), so the
+                // list deliberately does not try to pre-filter descendants.
+                const subject = tree.find((item) => item.id === selected.subjectId);
+                if (!subject) return [];
+                return [
+                  ...subject.notes,
+                  ...subject.chapters.flatMap((chapter) => chapter.notes),
+                ].map((note) => ({ id: note.id, title: note.title }));
+              })()}
               onOpenNote={(id) => { void selectNote(id); }}
+              onMoved={() => { void refreshTree(); }}
               onClose={() => setLinksOpen(false)}
             />
           </motion.div>

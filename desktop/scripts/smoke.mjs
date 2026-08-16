@@ -56,7 +56,7 @@ check('module không lộ ra renderer', !isolation.hasModule);
 check('Buffer không lộ ra renderer', !isolation.hasBuffer);
 
 // ── 2. Bề mặt cầu nối đúng hợp đồng ──────────────────────────
-const expected = ['app', 'auth', 'notes', 'on', 'settings', 'storage', 'update'];
+const expected = ['app', 'auth', 'music', 'notes', 'on', 'settings', 'storage', 'update'];
 console.log('\nCầu nối preload:');
 check('window.cuongthai tồn tại', isolation.bridgeKeys !== null);
 check(

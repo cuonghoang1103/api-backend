@@ -19,6 +19,8 @@ import type {
   EventChannel,
   SettingKey,
   SettingValue,
+  DownloadedTrack,
+  MusicUsage,
   NoteFileInfo,
   NotesFolder,
   StorageUsage,
@@ -84,6 +86,17 @@ const bridge: DesktopBridge = {
     deleteFile: (fileName: string) =>
       ipcRenderer.invoke('notes:deleteFile', { fileName }) as Promise<void>,
     revealFolder: () => ipcRenderer.invoke('notes:revealFolder') as Promise<void>,
+  },
+
+  music: {
+    listDownloaded: () =>
+      ipcRenderer.invoke('music:listDownloaded') as Promise<DownloadedTrack[]>,
+    saveAudio: (trackId: number, bytes: Uint8Array, ext: string) =>
+      ipcRenderer.invoke('music:saveAudio', { trackId, bytes, ext }) as Promise<void>,
+    deleteAudio: (trackId: number) =>
+      ipcRenderer.invoke('music:deleteAudio', { trackId }) as Promise<void>,
+    usage: () => ipcRenderer.invoke('music:usage') as Promise<MusicUsage>,
+    clearAll: () => ipcRenderer.invoke('music:clearAll') as Promise<void>,
   },
 
   on: (channel: EventChannel, listener: (payload: unknown) => void) => {

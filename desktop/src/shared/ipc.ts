@@ -140,6 +140,45 @@ export interface NoteFileInfo {
   modifiedAt: number;
 }
 
+
+/**
+ * ─────────────────────────────────────────────────────────────
+ * Nhạc tải về nghe ngoại tuyến
+ * ─────────────────────────────────────────────────────────────
+ *
+ * Khác kho ghi chú ở một điểm quan trọng: người dùng KHÔNG chọn thư mục. Nhạc
+ * tải về là bộ nhớ đệm của ứng dụng, không phải tài liệu của họ — nó nằm trong
+ * `userData`, xoá app là mất theo, và không ai đi tìm nó bằng Finder.
+ *
+ * Tên file do MAIN đặt từ `trackId` (một số), nên ở đây không có ô nào cho
+ * renderer truyền chuỗi đường dẫn. Không có chuỗi thì không có path traversal.
+ */
+export const trackIdSchema = z.number().int().positive();
+
+export const saveAudioSchema = z.object({
+  trackId: trackIdSchema,
+  /**
+   * Dữ liệu âm thanh. Trần 120MB — một bài hát vài phút nặng 3–10MB, nên con số
+   * này rộng rãi cho cả bản không nén, đồng thời chặn được việc một renderer bị
+   * chiếm cố ghi đầy đĩa người dùng.
+   */
+  bytes: z.instanceof(Uint8Array).refine((b) => b.byteLength <= 120 * 1024 * 1024, 'File quá lớn'),
+  /** Đuôi file, dùng để đoán kiểu MIME lúc phát. Danh sách đóng. */
+  ext: z.enum(['mp3', 'm4a', 'webm', 'ogg', 'wav', 'flac']),
+});
+
+export interface DownloadedTrack {
+  trackId: number;
+  ext: string;
+  size: number;
+  downloadedAt: number;
+}
+
+export interface MusicUsage {
+  count: number;
+  totalBytes: number;
+}
+
 export const zoomSchema = z.number().min(0.5).max(2.5);
 
 // ─────────────────────────────────────────────────────────────
@@ -176,6 +215,12 @@ export const INVOKE_CHANNELS = {
   'notes:writeFile': writeNoteFileSchema,
   'notes:deleteFile': noteFileSchema,
   'notes:revealFolder': null,
+
+  'music:listDownloaded': null,
+  'music:saveAudio': saveAudioSchema,
+  'music:deleteAudio': z.object({ trackId: trackIdSchema }),
+  'music:usage': null,
+  'music:clearAll': null,
 } as const;
 
 export type InvokeChannel = keyof typeof INVOKE_CHANNELS;
@@ -280,6 +325,18 @@ export interface DesktopBridge {
     writeFile(fileName: string, content: string): Promise<void>;
     deleteFile(fileName: string): Promise<void>;
     revealFolder(): Promise<void>;
+  };
+  /**
+   * Nhạc tải về. Phát lại qua `app://cuongthai/media/<trackId>` — dùng protocol
+   * thay vì đọc file thành Blob để thẻ <audio> tua được bằng Range request gốc;
+   * Blob URL bắt trình duyệt nạp TOÀN BỘ bài vào RAM trước khi phát nốt đầu.
+   */
+  music: {
+    listDownloaded(): Promise<DownloadedTrack[]>;
+    saveAudio(trackId: number, bytes: Uint8Array, ext: string): Promise<void>;
+    deleteAudio(trackId: number): Promise<void>;
+    usage(): Promise<MusicUsage>;
+    clearAll(): Promise<void>;
   };
   /** Trả về hàm huỷ đăng ký. Renderer PHẢI gọi nó khi unmount. */
   on(channel: EventChannel, listener: (payload: unknown) => void): () => void;

@@ -9,6 +9,7 @@
  */
 import { app, session, shell, protocol, net } from 'electron';
 import type { BrowserWindow } from 'electron';
+import fs from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import {
@@ -59,9 +60,34 @@ export function registerAppProtocol(rendererRoot: string): void {
       return new Response('Not found', { status: 404 });
     }
 
+    const rawPath = decodeURIComponent(url.pathname);
+
+    /**
+     * `app://cuongthai/media/<trackId>` → file nhạc đã tải trong `userData`.
+     *
+     * Phục vụ qua protocol thay vì đọc file thành Blob URL là có lý do: `net.fetch`
+     * trên `file://` hỗ trợ Range request, nên thẻ <audio> TUA được và chỉ nạp
+     * phần đang nghe. Blob URL bắt trình duyệt nạp TOÀN BỘ bài vào RAM trước khi
+     * phát nốt đầu tiên — với một danh sách phát dài thì đó là vài trăm MB.
+     *
+     * `trackId` phải là số nguyên. Không phải số thì từ chối ngay, nên không có
+     * chuỗi nào lọt vào `path.join` để dựng đường dẫn đi ra ngoài.
+     */
+    if (rawPath.startsWith('/media/')) {
+      const trackId = Number(rawPath.slice('/media/'.length));
+      if (!Number.isInteger(trackId) || trackId <= 0) {
+        return new Response('Bad request', { status: 400 });
+      }
+      const { musicDir } = await import('./ipc/music');
+      const dir = musicDir();
+      const entries = await fs.readdir(dir).catch(() => [] as string[]);
+      const match = entries.find((name) => name.startsWith(`${trackId}.`));
+      if (!match) return new Response('Not found', { status: 404 });
+      return net.fetch(pathToFileURL(path.join(dir, match)).toString());
+    }
+
     // SPA: mọi đường dẫn không phải file tĩnh đều trả index.html để router
     // phía renderer tự xử lý.
-    const rawPath = decodeURIComponent(url.pathname);
     const hasExtension = path.extname(rawPath) !== '';
     const relative = hasExtension ? rawPath.replace(/^\/+/, '') : 'index.html';
 

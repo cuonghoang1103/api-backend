@@ -30,11 +30,29 @@ import {
   updateRow,
   updateView,
 } from '../services/notesDatabase.service.js';
+import { createTaskWorkspace, listMyTasks } from '../services/noteTaskWorkspace.js';
 
 const router = Router();
 router.use(authenticate);
 
 // ─── Databases ────────────────────────────────────────────────
+
+// ─── Bộ khung quản lý công việc ───────────────────────────────
+// Khai báo TRƯỚC '/:databaseId' để chuỗi 'my-tasks' không bị nuốt thành id.
+
+router.get('/my-tasks', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await listMyTasks(req.user.userId);
+    res.json({ success: true, data });
+  } catch (error) { next(error); }
+});
+
+router.post('/task-workspace', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await createTaskWorkspace(req.user.userId, Number(req.body?.subjectId));
+    res.status(201).json({ success: true, data });
+  } catch (error) { next(error); }
+});
 
 router.get('/subject/:subjectId', async (req: any, res: Response<ApiResponse>, next) => {
   try {

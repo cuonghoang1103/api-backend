@@ -857,6 +857,19 @@ export interface DatabasePerson {
   avatarUrl: string | null;
 }
 
+export interface MyTask {
+  rowId: number;
+  databaseId: number;
+  databaseTitle: string;
+  subjectId: number;
+  subjectName: string;
+  title: string;
+  status: string | null;
+  statusGroup: 'todo' | 'doing' | 'done' | null;
+  due: string | null;
+  priority: string | null;
+}
+
 export const noteDatabaseApi = {
   listBySubject: (subjectId: number) =>
     api.get<{ data: NoteDatabaseSummary[] }>(`/notes-databases/subject/${subjectId}`),
@@ -878,6 +891,13 @@ export const noteDatabaseApi = {
   setRowRelations: (rowId: number, propertyId: number, targetRowIds: number[]) =>
     api.put<{ data: { rowId: number; propertyId: number; targetRowIds: number[] } }>(
       `/notes-databases/rows/${rowId}/relations/${propertyId}`, { targetRowIds }),
+
+  /** Dựng sẵn cặp bảng Dự án ↔ Công việc đã nối đủ quan hệ/tổng hợp/công thức. */
+  createTaskWorkspace: (subjectId: number) =>
+    api.post<{ data: { projectDatabaseId: number; taskDatabaseId: number } }>(
+      '/notes-databases/task-workspace', { subjectId }),
+  /** Mọi việc được gán cho tôi, gom từ mọi bảng tôi truy cập được. */
+  listMyTasks: () => api.get<{ data: MyTask[] }>('/notes-databases/my-tasks'),
 
   listPeople: (databaseId: number) =>
     api.get<{ data: DatabasePerson[] }>(`/notes-databases/${databaseId}/people`),

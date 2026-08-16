@@ -6,12 +6,13 @@
 // subject is opened from the sidebar.
 
 import { useCallback, useEffect, useState } from 'react';
-import { FileText, Plus } from 'lucide-react';
+import { FileText, Plus, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import type { NoteSubjectFull, NoteSubjectTree } from '@/types';
 import { noteDatabaseApi, type NoteDatabaseSummary } from '@/lib/api';
 import NoteResourcePanel from './NoteResourcePanel';
 import NoteDatabaseTable from './NoteDatabaseTable';
+import MyTasksPanel from './MyTasksPanel';
 
 interface Props {
   subject: NoteSubjectFull;
@@ -116,6 +117,25 @@ function SubjectDatabases({ subjectId }: { subjectId: number }) {
     finally { setCreating(false); }
   };
 
+  /**
+   * Dựng cặp bảng Dự án ↔ Công việc.
+   *
+   * Toàn bộ việc nối cột nằm ở BACKEND (`createTaskWorkspace`): mười mấy bước
+   * và thứ tự giữa chúng là bắt buộc — quan hệ cần bảng đích có trước, tổng
+   * hợp cần quan hệ có trước, công thức cần tổng hợp có trước. Làm ở client
+   * nghĩa là mười mấy lượt gọi mạng, và đứt giữa chừng thì để lại một bộ khung
+   * dựng dở mà người dùng không biết thiếu gì.
+   */
+  const createWorkspace = async () => {
+    setCreating(true);
+    try {
+      await noteDatabaseApi.createTaskWorkspace(subjectId);
+      await load();
+    } catch {
+      toast.error('Không dựng được bộ quản lý công việc');
+    } finally { setCreating(false); }
+  };
+
   return (
     <section className="mb-8">
       <div className="mb-2 flex items-center justify-between">
@@ -128,6 +148,21 @@ function SubjectDatabases({ subjectId }: { subjectId: number }) {
           <Plus className="h-3 w-3" aria-hidden="true" /> Bảng mới
         </button>
       </div>
+
+      {/* Bộ khung dựng sẵn — chỉ mời khi môn CHƯA có bảng nào. Sau đó ẩn đi:
+          bấm hai lần sẽ ra hai cặp bảng trùng tên và người dùng không biết
+          cặp nào là cặp thật. */}
+      {!loading && databases.length === 0 && (
+        <button
+          type="button"
+          onClick={createWorkspace}
+          disabled={creating}
+          className="mb-3 flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-teal-400/60 px-3 py-3 text-[12.5px] text-teal-700 hover:bg-teal-50 disabled:opacity-50 dark:text-teal-300 dark:hover:bg-teal-500/10"
+        >
+          <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+          Dựng sẵn bộ quản lý công việc (Dự án ↔ Công việc, đã nối tiến độ và cảnh báo trễ hạn)
+        </button>
+      )}
       {loading ? (
         <p className="text-[13px] text-slate-500">Đang tải…</p>
       ) : databases.length === 0 ? (
@@ -144,6 +179,10 @@ function SubjectDatabases({ subjectId }: { subjectId: number }) {
           ))}
         </div>
       )}
+
+      <div className="mt-4">
+        <MyTasksPanel />
+      </div>
     </section>
   );
 }

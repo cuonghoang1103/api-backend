@@ -118,6 +118,19 @@ function parse(tokens: Token[]): Node {
     return token;
   };
 
+  /**
+   * Đếm độ lồng THẬT của biểu thức, không đếm khung đệ quy của trình phân tích.
+   *
+   * Bản đầu bọc cả `parseBinary` và `parseUnary`. Chuỗi ưu tiên toán tử có 5
+   * bậc và luôn đi hết từ trên xuống, nên MỖI biểu thức con tốn 7 đơn vị độ
+   * sâu bất kể nó đơn giản đến đâu — bốn tầng `if` lồng nhau đã vượt trần 40
+   * và báo "lồng quá sâu" cho một công thức hoàn toàn bình thường. Đo được
+   * bằng đúng công thức cảnh báo trễ hạn của bộ khung dựng sẵn.
+   *
+   * Chỉ `parsePrimary` mới làm độ sâu tăng theo ĐẦU VÀO: đó là chỗ xử lý ngoặc
+   * và tham số hàm. Chuỗi ưu tiên thì dài cố định, không phụ thuộc người dùng
+   * gõ gì, nên nó không phải thứ cần chặn.
+   */
   const guard = <T>(fn: () => T): T => {
     depth += 1;
     if (depth > MAX_DEPTH) throw new FormulaError('Công thức lồng quá sâu');
@@ -133,7 +146,7 @@ function parse(tokens: Token[]): Node {
     ['*', '/', '%'],
   ];
 
-  const parseBinary = (level: number): Node => guard(() => {
+  const parseBinary = (level: number): Node => {
     if (level >= LEVELS.length) return parseUnary();
     let left = parseBinary(level + 1);
     while (peek().type === 'op' && LEVELS[level]!.includes(peek().value)) {
@@ -142,9 +155,9 @@ function parse(tokens: Token[]): Node {
       left = { kind: 'binary', op, left, right };
     }
     return left;
-  });
+  };
 
-  const parseUnary = (): Node => guard(() => {
+  const parseUnary = (): Node => {
     if (peek().type === 'op' && (peek().value === '-' || peek().value === '+')) {
       const op = eat('op').value;
       return { kind: 'unary', op, operand: parseUnary() };
@@ -154,7 +167,7 @@ function parse(tokens: Token[]): Node {
       return { kind: 'unary', op: 'not', operand: parseUnary() };
     }
     return parsePrimary();
-  });
+  };
 
   const parsePrimary = (): Node => guard(() => {
     const token = peek();

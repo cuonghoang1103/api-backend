@@ -13,6 +13,10 @@ import {
   fileApi,
 } from '@/lib/api';
 import { BoardView, CalendarView, GalleryView } from '@/components/notes/NoteDatabaseViews';
+import NoteDatabaseToolbar from '@/components/notes/NoteDatabaseToolbar';
+import {
+  applyViewConfig, parseViewConfig, EMPTY_VIEW_CONFIG, type ViewConfig,
+} from '@/lib/noteDatabaseQuery';
 import NoteDatabaseRowModal from '@/components/notes/NoteDatabaseRowModal';
 import {
   asFiles, asPersonIds, displayValue, editableValue, isReadOnlyType, needsCustomEditor,
@@ -138,6 +142,46 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
     return () => { alive = false; };
   }, [hasPersonColumn, databaseId]);
   const cellCtx: CellContext = useMemo(() => ({ people }), [people]);
+
+  /**
+   * Cấu hình lọc / sắp xếp / nhóm của khung nhìn mặc định.
+   *
+   * Giữ ở state riêng chứ không đọc thẳng `view.config` mỗi lần render: người
+   * dùng gõ vào ô giá trị là mỗi ký tự một lần đổi, mà `database` chỉ được
+   * thay sau một vòng gọi mạng — đọc thẳng thì ô nhập mất chữ giữa chừng mỗi
+   * lần máy chủ trả lời chậm.
+   */
+  const [viewConfig, setViewConfig] = useState<ViewConfig>(EMPTY_VIEW_CONFIG);
+  const configLoadedFor = useRef<number | null>(null);
+  useEffect(() => {
+    const current = database?.views?.find((v) => v.isDefault) ?? database?.views?.[0];
+    // Nạp MỘT lần cho mỗi khung nhìn. Nạp lại sau mỗi `load()` sẽ ghi đè thứ
+    // người dùng vừa gõ bằng bản đã lưu trước đó — và `load()` chạy sau mọi
+    // lần sửa ô, tức là gần như liên tục.
+    if (!current || configLoadedFor.current === current.id) return;
+    configLoadedFor.current = current.id;
+    setViewConfig(parseViewConfig(current.config));
+  }, [database]);
+
+  const configSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const changeViewConfig = (next: ViewConfig) => {
+    setViewConfig(next);
+    const current = database?.views?.find((v) => v.isDefault) ?? database?.views?.[0];
+    if (!current || !canEdit) return;
+    if (configSaveTimer.current) clearTimeout(configSaveTimer.current);
+    // Ghi trễ: kết quả lọc đã hiện tức thì vì lọc chạy ngay trong trình duyệt,
+    // nên không có lý do gì bắn một PATCH cho mỗi phím gõ.
+    configSaveTimer.current = setTimeout(() => {
+      void noteDatabaseApi
+        .updateView(current.id, { config: next as unknown as Record<string, unknown> })
+        .catch(() => toast.error('Không lưu được bộ lọc'));
+    }, 600);
+  };
+
+  const view = useMemo(
+    () => applyViewConfig(database?.rows ?? [], properties, viewConfig, cellCtx),
+    [database, properties, viewConfig, cellCtx],
+  );
 
   const commitCell = async (row: NoteDatabaseRow, property: NoteDatabaseProperty, raw: string) => {
     setEditing(null);
@@ -295,10 +339,37 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
         </div>
       </header>
 
+      <NoteDatabaseToolbar
+        properties={properties}
+        config={viewConfig}
+        onChange={changeViewConfig}
+        shown={view.rows.length}
+        total={database.rows.length}
+        canEdit={canEdit}
+      />
+
+      {/* Mọi khung nhìn đọc `view.rows` — bản ĐÃ lọc và ĐÃ sắp xếp — chứ không
+          đọc `database.rows` thô. Để mỗi khung nhìn tự lọc lấy sẽ là bốn bản
+          sao của cùng một luật, và chỗ nào quên thì bộ lọc lặng lẽ không có
+          tác dụng ở đúng khung nhìn đó.
+
+          `visibleProperties` cũng vậy: ẩn cột phải ăn ở cả Board và Gallery,
+          nếu không thì cột đã ẩn vẫn hiện trên thẻ. */}
       {viewType !== 'TABLE' && (
-        viewType === 'BOARD' ? <BoardView properties={properties} rows={database.rows} onOpenRow={setOpenRowId} />
-          : viewType === 'GALLERY' ? <GalleryView properties={properties} rows={database.rows} onOpenRow={setOpenRowId} />
-            : <CalendarView properties={properties} rows={database.rows} onOpenRow={setOpenRowId} />
+        viewType === 'BOARD'
+          ? (
+            <BoardView
+              properties={view.visibleProperties}
+              rows={view.rows}
+              onOpenRow={setOpenRowId}
+              // Nhóm đã chọn ở thanh công cụ điều khiển luôn cột của Board:
+              // hai chỗ cùng nói "nhóm theo" mà cho ra hai kết quả khác nhau
+              // là thứ không ai đoán nổi.
+              {...(viewConfig.groupPropertyId !== null ? { groupPropertyId: viewConfig.groupPropertyId } : {})}
+            />
+          )
+          : viewType === 'GALLERY' ? <GalleryView properties={view.visibleProperties} rows={view.rows} onOpenRow={setOpenRowId} />
+            : <CalendarView properties={view.visibleProperties} rows={view.rows} onOpenRow={setOpenRowId} />
       )}
 
       {/* A card in Kanban/Gallery/Calendar has nowhere to put a row of
@@ -330,7 +401,7 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
         <table className="w-full min-w-[560px] border-collapse text-sm">
           <thead>
             <tr className="border-b border-slate-200 dark:border-white/[0.07]">
-              {properties.map((property) => (
+              {view.visibleProperties.map((property) => (
                 <th
                   key={property.id}
                   scope="col"
@@ -356,9 +427,31 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
             </tr>
           </thead>
           <tbody>
-            {database.rows.map((row) => (
-              <tr key={row.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50/60 dark:border-white/[0.04] dark:hover:bg-white/[0.02]">
-                {properties.map((property) => {
+            {/* Khi có nhóm, chèn một hàng tiêu đề trước mỗi cụm. Dựng danh
+                sách phẳng kèm mốc nhóm thay vì lồng nhiều <tbody>: nhiều
+                <tbody> làm chiều rộng cột được tính LẠI cho từng khối, nên
+                các cụm không thẳng hàng với nhau. */}
+            {(view.groups
+              ? view.groups.flatMap((group) => [
+                  { kind: 'group' as const, key: `g-${group.key}`, label: group.label, count: group.rows.length },
+                  ...group.rows.map((row) => ({ kind: 'row' as const, key: `r-${row.id}`, row })),
+                ])
+              : view.rows.map((row) => ({ kind: 'row' as const, key: `r-${row.id}`, row }))
+            ).map((entry) => entry.kind === 'group' ? (
+              <tr key={entry.key} className="bg-slate-50 dark:bg-white/[0.03]">
+                <td
+                  colSpan={view.visibleProperties.length + (canEdit ? 1 : 0)}
+                  className="px-3 py-1.5 text-[11.5px] font-semibold text-slate-600 dark:text-slate-300"
+                >
+                  {entry.label}
+                  <span className="ml-1.5 font-normal text-slate-400">{entry.count}</span>
+                </td>
+              </tr>
+            ) : (() => {
+              const row = entry.row;
+              return (
+              <tr key={entry.key} className="border-b border-slate-100 last:border-0 hover:bg-slate-50/60 dark:border-white/[0.04] dark:hover:bg-white/[0.02]">
+                {view.visibleProperties.map((property) => {
                   const isEditing = editing?.rowId === row.id && editing.propertyId === property.id;
                   const value = row.values[property.id] ?? null;
 
@@ -504,11 +597,15 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
                   </td>
                 )}
               </tr>
-            ))}
-            {database.rows.length === 0 && (
+              );
+            })())}
+            {view.rows.length === 0 && (
               <tr>
-                <td colSpan={properties.length + (canEdit ? 1 : 0)} className="px-3 py-6 text-center text-sm text-slate-500">
-                  Chưa có dòng nào.
+                <td colSpan={view.visibleProperties.length + (canEdit ? 1 : 0)} className="px-3 py-6 text-center text-sm text-slate-500">
+                  {/* Phân biệt "bảng rỗng" với "bộ lọc giấu hết": hai chuyện
+                      trông giống hệt nhau trên màn hình nhưng cách xử lý ngược
+                      nhau — một bên là thêm dòng, một bên là bỏ lọc. */}
+                  {database.rows.length === 0 ? 'Chưa có dòng nào.' : 'Không dòng nào khớp bộ lọc.'}
                 </td>
               </tr>
             )}

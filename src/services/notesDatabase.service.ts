@@ -771,6 +771,56 @@ export async function reorderRows(userId: number, databaseId: number, orderedIds
 
 // ─── Views ────────────────────────────────────────────────────
 
+
+/**
+ * Làm sạch `config` của một khung nhìn trước khi ghi.
+ *
+ * Trước 17/08/2026 trường này nhận NGUYÊN xi bất cứ JSON nào client gửi lên.
+ * Hai hậu quả: một client lỗi có thể ghi vào đây một chuỗi hàng MB (cột JSONB
+ * không có trần), và cấu hình rác được lưu vĩnh viễn rồi đọc lại ở mọi phiên
+ * sau — người dùng không có cách nào tự dọn ngoài việc xoá cả khung nhìn.
+ *
+ * Ở đây CẮT BỎ phần không hiểu thay vì ném lỗi: đây là trạng thái giao diện,
+ * không phải dữ liệu của người dùng. Một bộ lọc bị bỏ đi thì bảng hiện nhiều
+ * dòng hơn dự kiến — thấy ngay và sửa được; còn ném lỗi thì người dùng không
+ * lưu nổi khung nhìn mà chẳng hiểu vì sao.
+ */
+function sanitizeViewConfig(raw: unknown): Prisma.InputJsonValue {
+  const c = (raw && typeof raw === 'object' && !Array.isArray(raw)) ? raw as Record<string, unknown> : {};
+  const id = (v: unknown): number | null => {
+    const n = Number(v);
+    return Number.isInteger(n) && n > 0 ? n : null;
+  };
+  const text = (v: unknown, max: number) => (typeof v === 'string' ? v.slice(0, max) : '');
+
+  const filters = Array.isArray(c.filters) ? c.filters.flatMap((f) => {
+    if (!f || typeof f !== 'object') return [];
+    const o = f as Record<string, unknown>;
+    const propertyId = id(o.propertyId);
+    if (propertyId === null || typeof o.operator !== 'string') return [];
+    return [{ propertyId, operator: o.operator.slice(0, 20), value: text(o.value, 200) }];
+  }).slice(0, 20) : [];
+
+  const sorts = Array.isArray(c.sorts) ? c.sorts.flatMap((s) => {
+    if (!s || typeof s !== 'object') return [];
+    const o = s as Record<string, unknown>;
+    const propertyId = id(o.propertyId);
+    if (propertyId === null) return [];
+    return [{ propertyId, direction: o.direction === 'desc' ? 'desc' : 'asc' }];
+  }).slice(0, 10) : [];
+
+  return {
+    filters,
+    filterJoin: c.filterJoin === 'or' ? 'or' : 'and',
+    sorts,
+    groupPropertyId: id(c.groupPropertyId),
+    hiddenPropertyIds: Array.isArray(c.hiddenPropertyIds)
+      ? c.hiddenPropertyIds.map(id).filter((n): n is number => n !== null).slice(0, 100)
+      : [],
+    search: text(c.search, 200),
+  } as Prisma.InputJsonValue;
+}
+
 export async function createView(
   userId: number,
   databaseId: number,
@@ -789,7 +839,7 @@ export async function createView(
       databaseId,
       name,
       type,
-      config: (input.config ?? { hiddenPropertyIds: [], sorts: [], filters: [] }) as Prisma.InputJsonValue,
+      config: sanitizeViewConfig(input.config),
       sortOrder: (last?.sortOrder ?? -1) + 1,
     },
   });
@@ -811,7 +861,7 @@ export async function updateView(
   const data: Prisma.NoteDatabaseViewUncheckedUpdateInput = {};
   if (input.name !== undefined) data.name = cleanText(input.name, 120, 'Tên khung nhìn');
   if (input.type !== undefined) data.type = parseViewType(input.type);
-  if (input.config !== undefined) data.config = input.config as Prisma.InputJsonValue;
+  if (input.config !== undefined) data.config = sanitizeViewConfig(input.config);
   if (Object.keys(data).length === 0) {
     throw new AppError('Không có trường hợp lệ để cập nhật', 400, 'EMPTY_UPDATE');
   }

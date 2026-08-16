@@ -97,6 +97,16 @@ for later phases because they depend on stable collaborative block/database IDs.
 
 ## Phase 4 — Real-time editing
 
+Status: real-time editing core implemented in the current working tree. It
+uses Hocuspocus/Yjs with five-minute document-scoped tokens, server-enforced
+read-only roles plus live permission rechecks, live carets/presence, reconnect
+queues, Redis cross-instance fan-out/locking, compacted PostgreSQL state, and
+materialized Note JSON/HTML.
+Version restore and legacy REST content replacement safely reset stale CRDT
+state. Authenticated two-browser E2E and concurrent load testing remain after
+the migration is applied; durable browser-restart offline storage and presence
+for read-only viewers are follow-up hardening slices.
+
 - Use a CRDT document protocol (Yjs is the preferred fit for TipTap).
 - Add a WebSocket collaboration gateway, short-lived document tokens,
   connection presence, cursors, reconnect, and offline update queues.

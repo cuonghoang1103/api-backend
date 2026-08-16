@@ -130,8 +130,10 @@ const simulationRoutes = (await import(path.join(__dirname, 'routes', 'simulatio
 const contentRoutes = (await import(path.join(__dirname, 'routes', 'content.routes.js'))).default;
 const notesRoutes = (await import(path.join(__dirname, 'routes', 'notes.routes.js'))).default;
 const notesShareRoutes = (await import(path.join(__dirname, 'routes', 'notesShare.routes.js'))).default;
+const notesDatabaseRoutes = (await import(path.join(__dirname, 'routes', 'notesDatabase.routes.js'))).default;
 const mobileRoutes = (await import(path.join(__dirname, 'routes', 'mobile.routes.js'))).default;
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
+const { initNotesCollaborationGateway } = await import(path.join(__dirname, 'socket', 'notes-collaboration.gateway.js'));
 // Maker Lab — hardware/embedded hub + raw-WebSocket gateway for physical devices
 const makerLabModule = await import(path.join(__dirname, 'routes', 'makerLab.routes.js'));
 const makerLabRoutes = makerLabModule.default;
@@ -554,6 +556,7 @@ app.use('/api/v1/hub', hubPublicRouter);
 app.use('/api/v1/notes', notesRoutes);
 // Notes Share — share subjects with other users
 app.use('/api/v1/notes-shares', notesShareRoutes);
+app.use('/api/v1/notes-databases', notesDatabaseRoutes);
 app.use('/api/v1/cyber', cyberRoutes);
 app.use('/api/v1/quota', quotaRoutes);
 // EXP_Hub — Code Snippet Library
@@ -610,7 +613,12 @@ app.use('/api/v1/mobile', mobileRoutes);
 // from a hot-reload wrapper.
 initSocketServer(server);
 
-// ─── 9c. Maker Lab device gateway (raw WebSocket) ─────
+// ─── 9c. Notes CRDT collaboration gateway ─────────────
+// Dedicated Hocuspocus/Yjs protocol on /notes-collaboration. It shares the
+// HTTP server but not Socket.IO's wire protocol.
+initNotesCollaborationGateway(server);
+
+// ─── 9d. Maker Lab device gateway (raw WebSocket) ─────
 // Shares the same HTTP server but claims only /device-ws. Must be
 // initialised AFTER socket.io so both 'upgrade' listeners coexist —
 // each ignores paths it doesn't own (see device.gateway.ts).

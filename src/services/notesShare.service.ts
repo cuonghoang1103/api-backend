@@ -85,6 +85,22 @@ async function assertSubjectOwnership(ownerId: number, subjectId: number): Promi
   }
 }
 
+/** Reconnect every open page in a subject so changed roles take effect now. */
+async function invalidateRealtimeSubject(subjectId: number) {
+  try {
+    const notes = await prisma.note.findMany({
+      where: { subjectId, deletedAt: null },
+      select: { id: true },
+    });
+    const { invalidateNoteCollaborationDocument } = await import('../socket/notes-collaboration.gateway.js');
+    for (const note of notes) invalidateNoteCollaborationDocument(note.id);
+  } catch {
+    // The database permission is already authoritative. If the optional
+    // realtime gateway is not initialized, reconnect/token expiry still
+    // enforces it; never fail the share mutation because of fan-out cleanup.
+  }
+}
+
 // ─── Share a subject ──────────────────────────────────────────
 
 export interface CreateNoteShareInput {
@@ -180,6 +196,8 @@ export async function deleteNoteShare(ownerId: number, shareId: number) {
       where: { id: shareId },
     }),
   ]);
+
+  await invalidateRealtimeSubject(share.subjectId);
 
   return { id: shareId, deleted: true };
 }
@@ -326,7 +344,7 @@ export async function updateNoteShare(
     throw new AppError('You do not own this share', 403, 'NOT_OWNER');
   }
 
-  return prisma.noteSubjectShare.update({
+  const updated = await prisma.noteSubjectShare.update({
     where: { id: shareId },
     data: {
       permission: data.permission ? safePermission(data.permission) : undefined,
@@ -341,6 +359,8 @@ export async function updateNoteShare(
       },
     },
   });
+  await invalidateRealtimeSubject(updated.subject.id);
+  return updated;
 }
 
 // ─── Search users to share with ────────────────────────────────

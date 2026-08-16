@@ -856,6 +856,7 @@ for route in \
     social/notifications \
     friends \
     notes \
+    notes-databases \
     music/tracks \
     courses \
     hub/folders \

@@ -7,6 +7,7 @@
 // on mobile. Calm, low-distraction design — no animated bg.
 
 import { useCallback, useEffect, useState, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight, History, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
@@ -15,7 +16,7 @@ import { useAuthStore } from '@/store/authStore';
 import type { NoteSubjectTree, NoteRecent, NoteFull, NoteSubjectFull, NoteTab } from '@/types';
 import type { NoteSharedFull, NoteSharedSubjectFull } from '@/lib/api';
 import NotesSidebar from '@/components/notes/NotesSidebar';
-import NoteEditor, { type NoteSavePatch } from '@/components/notes/NoteEditor';
+import type { NoteSavePatch } from '@/components/notes/NoteEditor';
 import SharedNoteViewer from '@/components/notes/SharedNoteViewer';
 import NoteResourcePanel from '@/components/notes/NoteResourcePanel';
 import VocabTable from '@/components/notes/VocabTable';
@@ -33,6 +34,20 @@ import { Sparkles } from 'lucide-react';
 import { DndContext, PointerSensor, useSensor, useSensors, closestCenter, type DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, useSortable, horizontalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+
+// Yjs + Hocuspocus are only needed after a user opens an editable page. Keep
+// the collaboration protocol out of the initial Notes navigation bundle.
+const NoteRealtimeEditor = dynamic(
+  () => import('@/components/notes/NoteRealtimeEditor'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex min-h-[320px] items-center justify-center" role="status" aria-label="Đang tải editor cộng tác">
+        <Loader2 className="h-5 w-5 animate-spin text-teal-500 motion-reduce:animate-none" aria-hidden="true" />
+      </div>
+    ),
+  },
+);
 
 export default function NotesPage() {
   // Wrap với theme provider để tất cả component con (sidebar,
@@ -908,7 +923,7 @@ function NotesPageInner() {
                   <div className="mx-auto mt-4 max-w-[760px] px-4 sm:px-6">
                     <span className="inline-flex rounded-full border border-emerald-300 bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300">Bạn có quyền chỉnh sửa · mọi thay đổi được lưu vào lịch sử</span>
                   </div>
-                  <NoteEditor
+                  <NoteRealtimeEditor
                     key={`shared-edit-${sharedSelectedNote.id}`}
                     note={sharedSelectedNote}
                     tree={[]}
@@ -1052,7 +1067,7 @@ function NotesPageInner() {
               onDeletePermanently={deletePermanently}
             />
           ) : selected ? (
-            <NoteEditor
+            <NoteRealtimeEditor
               key={selected.id}
               note={selected}
               tree={tree}

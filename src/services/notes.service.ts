@@ -483,64 +483,76 @@ export async function updateNote(
     || data.contentHtml !== undefined
     || data.tags !== undefined;
 
-  return prisma.$transaction(async (tx) => {
-    const current = await tx.note.findFirst({ where: { id, userId, deletedAt: null } });
-    if (!current) throw new AppError('Ghi chú không tồn tại, đã ở trong thùng rác hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+  const realtimeReset = data.contentJson !== undefined
+    ? await import('../socket/notes-collaboration.gateway.js')
+    : null;
+  await realtimeReset?.beginNoteCollaborationReset(id);
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const current = await tx.note.findFirst({ where: { id, userId, deletedAt: null } });
+      if (!current) throw new AppError('Ghi chú không tồn tại, đã ở trong thùng rác hoặc không thuộc về bạn', 404, 'NOT_FOUND');
 
-    const updated = await tx.note.update({ where: { id }, data: d });
-    if (!createsSnapshot) return updated;
+      if (data.contentJson !== undefined) {
+        await tx.noteCollaborationDocument.deleteMany({ where: { noteId: id } });
+      }
 
-    // Immutable coalescing: the first content edit after a manual or
-    // initial snapshot is saved immediately. Further autosaves within
-    // five minutes update the page but do not create noisy history rows.
-    const latest = await tx.noteVersion.findFirst({
-      where: { noteId: id },
-      orderBy: { version: 'desc' },
-      select: { id: true, origin: true, createdAt: true },
-    });
-    const withinWindow = latest?.origin === 'AUTO_SAVE'
-      && Date.now() - latest.createdAt.getTime() < 5 * 60 * 1000;
-    if (withinWindow) {
-      // Coalesce in place. Overwriting the open autosave row (instead of
-      // leaving it frozen at the content it held when the window opened)
-      // keeps the newest history entry equal to the live page, so
-      // "restore the most recent version" can never silently roll the
-      // user back past edits they already saw saved.
-      await tx.noteVersion.update({
-        where: { id: latest.id },
+      const updated = await tx.note.update({ where: { id }, data: d });
+      if (!createsSnapshot) return updated;
+
+      // Immutable coalescing: the first content edit after a manual or
+      // initial snapshot is saved immediately. Further autosaves within
+      // five minutes update the page but do not create noisy history rows.
+      const latest = await tx.noteVersion.findFirst({
+        where: { noteId: id },
+        orderBy: { version: 'desc' },
+        select: { id: true, origin: true, createdAt: true },
+      });
+      const withinWindow = latest?.origin === 'AUTO_SAVE'
+        && Date.now() - latest.createdAt.getTime() < 5 * 60 * 1000;
+      if (withinWindow) {
+        // Coalesce in place. Overwriting the open autosave row (instead of
+        // leaving it frozen at the content it held when the window opened)
+        // keeps the newest history entry equal to the live page, so
+        // "restore the most recent version" can never silently roll the
+        // user back past edits they already saw saved.
+        await tx.noteVersion.update({
+          where: { id: latest.id },
+          data: {
+            userId,
+            title: updated.title,
+            contentJson: updated.contentJson === null
+              ? Prisma.JsonNull
+              : updated.contentJson as Prisma.InputJsonValue,
+            contentHtml: updated.contentHtml,
+            tags: updated.tags,
+          },
+        });
+        return updated;
+      }
+
+      const numbered = await tx.note.update({
+        where: { id },
+        data: { version: { increment: 1 } },
+      });
+      await tx.noteVersion.create({
         data: {
+          noteId: id,
           userId,
-          title: updated.title,
-          contentJson: updated.contentJson === null
+          version: numbered.version,
+          title: numbered.title,
+          contentJson: numbered.contentJson === null
             ? Prisma.JsonNull
-            : updated.contentJson as Prisma.InputJsonValue,
-          contentHtml: updated.contentHtml,
-          tags: updated.tags,
+            : numbered.contentJson as Prisma.InputJsonValue,
+          contentHtml: numbered.contentHtml,
+          tags: numbered.tags,
+          origin: 'AUTO_SAVE',
         },
       });
-      return updated;
-    }
-
-    const numbered = await tx.note.update({
-      where: { id },
-      data: { version: { increment: 1 } },
+      return numbered;
     });
-    await tx.noteVersion.create({
-      data: {
-        noteId: id,
-        userId,
-        version: numbered.version,
-        title: numbered.title,
-        contentJson: numbered.contentJson === null
-          ? Prisma.JsonNull
-          : numbered.contentJson as Prisma.InputJsonValue,
-        contentHtml: numbered.contentHtml,
-        tags: numbered.tags,
-        origin: 'AUTO_SAVE',
-      },
-    });
-    return numbered;
-  });
+  } finally {
+    realtimeReset?.endNoteCollaborationReset(id);
+  }
 }
 
 export async function deleteNote(userId: number, id: number) {
@@ -644,51 +656,58 @@ export async function createManualNoteVersion(userId: number, noteId: number) {
 export async function restoreNoteVersion(userId: number, noteId: number, targetVersion: number) {
   assertId(noteId, 'noteId');
   assertId(targetVersion, 'version');
-  return prisma.$transaction(async (tx) => {
-    const current = await tx.note.findFirst({ where: { id: noteId, userId, deletedAt: null } });
-    if (!current) throw new AppError('Ghi chú không tồn tại, đã ở trong thùng rác hoặc không thuộc về bạn', 404, 'NOT_FOUND');
-    const target = await tx.noteVersion.findFirst({ where: { noteId, version: targetVersion } });
-    if (!target) throw new AppError('Phiên bản ghi chú không tồn tại', 404, 'VERSION_NOT_FOUND');
+  const realtimeReset = await import('../socket/notes-collaboration.gateway.js');
+  await realtimeReset.beginNoteCollaborationReset(noteId);
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const current = await tx.note.findFirst({ where: { id: noteId, userId, deletedAt: null } });
+      if (!current) throw new AppError('Ghi chú không tồn tại, đã ở trong thùng rác hoặc không thuộc về bạn', 404, 'NOT_FOUND');
+      const target = await tx.noteVersion.findFirst({ where: { noteId, version: targetVersion } });
+      if (!target) throw new AppError('Phiên bản ghi chú không tồn tại', 404, 'VERSION_NOT_FOUND');
 
-    // Claim both version numbers with one atomic increment before writing
-    // either row. Deriving them from the value read at the top of the
-    // transaction let two concurrent restores pick the same numbers and
-    // collide on uk_note_version_note_number (a 500 instead of a restore).
-    const claimed = await tx.note.update({
-      where: { id: noteId },
-      data: { version: { increment: 2 } },
-      select: { version: true },
-    });
-    const restoredVersion = claimed.version;
-    const beforeVersion = restoredVersion - 1;
+      // Claim both version numbers with one atomic increment before writing
+      // either row. Deriving them from the value read at the top of the
+      // transaction let two concurrent restores pick the same numbers and
+      // collide on uk_note_version_note_number (a 500 instead of a restore).
+      const claimed = await tx.note.update({
+        where: { id: noteId },
+        data: { version: { increment: 2 } },
+        select: { version: true },
+      });
+      const restoredVersion = claimed.version;
+      const beforeVersion = restoredVersion - 1;
 
-    // Preserve the exact pre-restore page, then record the restored
-    // state as another immutable version. Both are undoable later.
-    await tx.noteVersion.create({
-      data: {
-        noteId, userId, version: beforeVersion, title: current.title,
-        contentJson: current.contentJson === null ? Prisma.JsonNull : current.contentJson as Prisma.InputJsonValue,
-        contentHtml: current.contentHtml, tags: current.tags, origin: 'BEFORE_RESTORE',
-      },
+      // Preserve the exact pre-restore page, then record the restored
+      // state as another immutable version. Both are undoable later.
+      await tx.noteVersion.create({
+        data: {
+          noteId, userId, version: beforeVersion, title: current.title,
+          contentJson: current.contentJson === null ? Prisma.JsonNull : current.contentJson as Prisma.InputJsonValue,
+          contentHtml: current.contentHtml, tags: current.tags, origin: 'BEFORE_RESTORE',
+        },
+      });
+      const restored = await tx.note.update({
+        where: { id: noteId },
+        data: {
+          title: target.title,
+          contentJson: target.contentJson === null ? Prisma.JsonNull : target.contentJson as Prisma.InputJsonValue,
+          contentHtml: target.contentHtml,
+          tags: target.tags,
+        },
+      });
+      await tx.noteCollaborationDocument.deleteMany({ where: { noteId } });
+      await tx.noteVersion.create({
+        data: {
+          noteId, userId, version: restoredVersion, title: restored.title,
+          contentJson: restored.contentJson === null ? Prisma.JsonNull : restored.contentJson as Prisma.InputJsonValue,
+          contentHtml: restored.contentHtml, tags: restored.tags, origin: 'RESTORE',
+        },
+      });
+      return restored;
     });
-    const restored = await tx.note.update({
-      where: { id: noteId },
-      data: {
-        title: target.title,
-        contentJson: target.contentJson === null ? Prisma.JsonNull : target.contentJson as Prisma.InputJsonValue,
-        contentHtml: target.contentHtml,
-        tags: target.tags,
-      },
-    });
-    await tx.noteVersion.create({
-      data: {
-        noteId, userId, version: restoredVersion, title: restored.title,
-        contentJson: restored.contentJson === null ? Prisma.JsonNull : restored.contentJson as Prisma.InputJsonValue,
-        contentHtml: restored.contentHtml, tags: restored.tags, origin: 'RESTORE',
-      },
-    });
-    return restored;
-  });
+  } finally {
+    realtimeReset.endNoteCollaborationReset(noteId);
+  }
 }
 
 // ─── Reorder (drag-and-drop) ─────────────────────────────────

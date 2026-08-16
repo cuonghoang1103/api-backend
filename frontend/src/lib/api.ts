@@ -645,7 +645,22 @@ export interface NoteComment {
   replies?: NoteComment[];
 }
 
+export interface NoteRealtimeSession {
+  token: string;
+  expiresIn: number;
+  documentName: string;
+  websocketPath: string;
+  permission: NoteAccessRole;
+  canEdit: boolean;
+  /** Someone else can open this page, so REST fallback would diverge. */
+  isShared: boolean;
+  user: { id: number; name: string; avatarUrl: string | null };
+}
+
 export const noteShareApi = {
+  getCollaborationToken: (noteId: number) =>
+    api.post<{ data: NoteRealtimeSession }>(`/notes-shares/notes/${noteId}/collaboration-token`),
+
   // Share a subject with another user
   create: (data: { subjectId: number; recipientId: number; permission?: NoteSharePermission; note?: string }) =>
     api.post<{ data: NoteShare }>('/notes-shares', data),
@@ -697,6 +712,100 @@ export const noteShareApi = {
   // Search users to share with
   searchUsers: (q: string, limit = 8) =>
     api.get<{ data: NoteShareRecipientMini[] }>('/notes-shares/search-users', { params: { q, limit } }),
+};
+
+// ─── Notes Databases (Phase 5) ────────────────────────────────
+// Typed tables living inside a NoteSubject. Access is inherited from the
+// subject's share, so there is no separate permission call.
+
+export type NoteDatabasePropertyType =
+  | 'TITLE' | 'TEXT' | 'NUMBER' | 'SELECT' | 'MULTI_SELECT' | 'DATE' | 'CHECKBOX' | 'URL';
+
+export type NoteDatabaseViewType = 'TABLE' | 'BOARD' | 'CALENDAR' | 'GALLERY' | 'TIMELINE';
+
+export interface NoteDatabaseProperty {
+  id: number;
+  databaseId: number;
+  name: string;
+  type: NoteDatabasePropertyType;
+  config: { options?: string[] } | null;
+  isTitle: boolean;
+  sortOrder: number;
+}
+
+export interface NoteDatabaseView {
+  id: number;
+  databaseId: number;
+  name: string;
+  type: NoteDatabaseViewType;
+  config: Record<string, unknown>;
+  isDefault: boolean;
+  sortOrder: number;
+}
+
+/** Cell values keyed by property id. A missing key means an empty cell. */
+export type NoteDatabaseRowValues = Record<number, unknown>;
+
+export interface NoteDatabaseRow {
+  id: number;
+  sortOrder: number;
+  createdAt?: string;
+  updatedAt?: string;
+  values: NoteDatabaseRowValues;
+}
+
+export interface NoteDatabaseSummary {
+  id: number;
+  subjectId: number;
+  title: string;
+  description: string | null;
+  icon: string | null;
+  updatedAt: string;
+  properties: NoteDatabaseProperty[];
+  views: NoteDatabaseView[];
+  _count?: { rows: number };
+}
+
+export interface NoteDatabaseFull extends NoteDatabaseSummary {
+  rows: NoteDatabaseRow[];
+}
+
+export const noteDatabaseApi = {
+  listBySubject: (subjectId: number) =>
+    api.get<{ data: NoteDatabaseSummary[] }>(`/notes-databases/subject/${subjectId}`),
+  create: (data: { subjectId: number; title?: string; description?: string; icon?: string }) =>
+    api.post<{ data: NoteDatabaseSummary }>('/notes-databases', data),
+  get: (databaseId: number) =>
+    api.get<{ data: NoteDatabaseFull }>(`/notes-databases/${databaseId}`),
+  update: (databaseId: number, data: { title?: string; description?: string | null; icon?: string | null }) =>
+    api.patch<{ data: NoteDatabaseSummary }>(`/notes-databases/${databaseId}`, data),
+  remove: (databaseId: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes-databases/${databaseId}`),
+
+  createProperty: (databaseId: number, data: { name: string; type: NoteDatabasePropertyType; config?: unknown }) =>
+    api.post<{ data: NoteDatabaseProperty }>(`/notes-databases/${databaseId}/properties`, data),
+  updateProperty: (propertyId: number, data: { name?: string; type?: NoteDatabasePropertyType; config?: unknown }) =>
+    api.patch<{ data: NoteDatabaseProperty }>(`/notes-databases/properties/${propertyId}`, data),
+  deleteProperty: (propertyId: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes-databases/properties/${propertyId}`),
+  reorderProperties: (databaseId: number, orderedIds: number[]) =>
+    api.patch<{ data: { reordered: number } }>(`/notes-databases/${databaseId}/properties/reorder`, { orderedIds }),
+
+  createRow: (databaseId: number, values?: NoteDatabaseRowValues) =>
+    api.post<{ data: NoteDatabaseRow }>(`/notes-databases/${databaseId}/rows`, { values: values ?? {} }),
+  updateRow: (rowId: number, values: NoteDatabaseRowValues) =>
+    api.patch<{ data: NoteDatabaseRow }>(`/notes-databases/rows/${rowId}`, { values }),
+  deleteRow: (rowId: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes-databases/rows/${rowId}`),
+  reorderRows: (databaseId: number, orderedIds: number[]) =>
+    api.patch<{ data: { reordered: number } }>(`/notes-databases/${databaseId}/rows/reorder`, { orderedIds }),
+
+  createView: (databaseId: number, data: { name?: string; type?: NoteDatabaseViewType; config?: unknown }) =>
+    api.post<{ data: NoteDatabaseView }>(`/notes-databases/${databaseId}/views`, data),
+  updateView: (viewId: number, data: { name?: string; type?: NoteDatabaseViewType; config?: unknown }) =>
+    api.patch<{ data: NoteDatabaseView }>(`/notes-databases/views/${viewId}`, data),
+  deleteView: (viewId: number) =>
+    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes-databases/views/${viewId}`),
 };
 
 // Music API

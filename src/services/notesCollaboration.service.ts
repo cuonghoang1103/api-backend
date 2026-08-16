@@ -66,57 +66,68 @@ export async function updateSharedNoteContent(
   }
   if (Object.keys(data).length === 0) throw new AppError('No editable fields supplied', 400, 'EMPTY_UPDATE');
 
-  return prisma.$transaction(async (tx) => {
-    const note = await tx.note.findFirst({ where: { id: noteId, userId: access.ownerId, deletedAt: null } });
-    if (!note) throw new AppError('Note not found', 404, 'NOTE_NOT_FOUND');
-    const updated = await tx.note.update({ where: { id: noteId }, data });
+  const realtimeReset = input.contentJson !== undefined
+    ? await import('../socket/notes-collaboration.gateway.js')
+    : null;
+  await realtimeReset?.beginNoteCollaborationReset(noteId);
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const note = await tx.note.findFirst({ where: { id: noteId, userId: access.ownerId, deletedAt: null } });
+      if (!note) throw new AppError('Note not found', 404, 'NOTE_NOT_FOUND');
+      if (input.contentJson !== undefined) {
+        await tx.noteCollaborationDocument.deleteMany({ where: { noteId } });
+      }
+      const updated = await tx.note.update({ where: { id: noteId }, data });
 
-    const latest = await tx.noteVersion.findFirst({
-      where: { noteId }, orderBy: { version: 'desc' }, select: { id: true, origin: true, createdAt: true },
-    });
-    const withinWindow = latest?.origin === 'AUTO_SAVE'
-      && Date.now() - latest.createdAt.getTime() < 5 * 60 * 1000;
-    if (withinWindow) {
-      // Overwrite the open autosave row so the newest history entry always
-      // matches the live page, and so it is attributed to whoever actually
-      // typed last rather than to whoever opened the window.
-      await tx.noteVersion.update({
-        where: { id: latest.id },
-        data: {
-          userId: actorId,
-          title: updated.title,
-          contentJson: updated.contentJson === null
-            ? Prisma.JsonNull
-            : updated.contentJson as Prisma.InputJsonValue,
-          contentHtml: updated.contentHtml,
-          tags: updated.tags,
+      const latest = await tx.noteVersion.findFirst({
+        where: { noteId }, orderBy: { version: 'desc' }, select: { id: true, origin: true, createdAt: true },
+      });
+      const withinWindow = latest?.origin === 'AUTO_SAVE'
+        && Date.now() - latest.createdAt.getTime() < 5 * 60 * 1000;
+      if (withinWindow) {
+        // Overwrite the open autosave row so the newest history entry always
+        // matches the live page, and so it is attributed to whoever actually
+        // typed last rather than to whoever opened the window.
+        await tx.noteVersion.update({
+          where: { id: latest.id },
+          data: {
+            userId: actorId,
+            title: updated.title,
+            contentJson: updated.contentJson === null
+              ? Prisma.JsonNull
+              : updated.contentJson as Prisma.InputJsonValue,
+            contentHtml: updated.contentHtml,
+            tags: updated.tags,
+          },
+        });
+      } else {
+        const numbered = await tx.note.update({ where: { id: noteId }, data: { version: { increment: 1 } } });
+        await tx.noteVersion.create({
+          data: {
+            noteId,
+            userId: actorId,
+            version: numbered.version,
+            title: numbered.title,
+            contentJson: numbered.contentJson === null ? Prisma.JsonNull : numbered.contentJson as Prisma.InputJsonValue,
+            contentHtml: numbered.contentHtml,
+            tags: numbered.tags,
+            origin: 'AUTO_SAVE',
+          },
+        });
+      }
+
+      return tx.note.findUniqueOrThrow({
+        where: { id: noteId },
+        include: {
+          attachments: { orderBy: { sortOrder: 'asc' } },
+          links: { orderBy: { sortOrder: 'asc' } },
+          vocabEntries: { orderBy: { sortOrder: 'asc' } },
         },
       });
-    } else {
-      const numbered = await tx.note.update({ where: { id: noteId }, data: { version: { increment: 1 } } });
-      await tx.noteVersion.create({
-        data: {
-          noteId,
-          userId: actorId,
-          version: numbered.version,
-          title: numbered.title,
-          contentJson: numbered.contentJson === null ? Prisma.JsonNull : numbered.contentJson as Prisma.InputJsonValue,
-          contentHtml: numbered.contentHtml,
-          tags: numbered.tags,
-          origin: 'AUTO_SAVE',
-        },
-      });
-    }
-
-    return tx.note.findUniqueOrThrow({
-      where: { id: noteId },
-      include: {
-        attachments: { orderBy: { sortOrder: 'asc' } },
-        links: { orderBy: { sortOrder: 'asc' } },
-        vocabEntries: { orderBy: { sortOrder: 'asc' } },
-      },
     });
-  });
+  } finally {
+    realtimeReset?.endNoteCollaborationReset(noteId);
+  }
 }
 
 export async function listNoteComments(userId: number, noteId: number, includeResolved = true) {

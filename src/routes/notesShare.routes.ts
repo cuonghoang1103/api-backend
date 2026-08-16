@@ -38,11 +38,22 @@ import {
   updateNoteComment,
   updateSharedNoteContent,
 } from '../services/notesCollaboration.service.js';
+import { createNoteRealtimeToken } from '../services/notesRealtime.service.js';
 
 const router = Router();
 
 // All routes require auth
 router.use(authenticate);
+
+// Short-lived, document-scoped token for the Hocuspocus/Yjs gateway. This
+// route works for owners and recipients; the service resolves the live share
+// permission and the gateway checks it again during the WebSocket handshake.
+router.post('/notes/:noteId/collaboration-token', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const session = await createNoteRealtimeToken(req.user.userId, Number(req.params.noteId));
+    res.json({ success: true, data: session });
+  } catch (error) { next(error); }
+});
 
 // ─── POST /api/v1/notes-shares ────────────────────────
 // Share a subject with another user

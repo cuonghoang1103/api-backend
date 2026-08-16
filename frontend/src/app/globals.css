@@ -2635,6 +2635,30 @@ aside ::-webkit-scrollbar-thumb:hover {
   color: #475569;
 }
 
+/* Yjs collaboration caret. Color is assigned per participant by the
+   awareness payload; layout/contrast stays scoped to the Notes editor. */
+.note-prose .collaboration-cursor__caret {
+  border-left: 2px solid currentColor;
+  border-right: 0;
+  margin-left: -1px;
+  pointer-events: none;
+  position: relative;
+  word-break: normal;
+}
+.note-prose .collaboration-cursor__label {
+  border-radius: 4px 4px 4px 0;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  left: -1px;
+  line-height: 1;
+  padding: 3px 5px;
+  position: absolute;
+  top: -1.45em;
+  white-space: nowrap;
+  z-index: 20;
+}
+
 /* ─── Flashcard 3D flip (Phase 3b) ───────────────────────────────
    Pure CSS perspective + transform — no animation lib required.
    Respects prefers-reduced-motion: when set, we skip the flip and

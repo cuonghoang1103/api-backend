@@ -5,9 +5,13 @@
 // notes for quick navigation. Shown in the main pane when a
 // subject is opened from the sidebar.
 
+import { useCallback, useEffect, useState } from 'react';
 import { FileText, Plus } from 'lucide-react';
+import { toast } from 'sonner';
 import type { NoteSubjectFull, NoteSubjectTree } from '@/types';
+import { noteDatabaseApi, type NoteDatabaseSummary } from '@/lib/api';
 import NoteResourcePanel from './NoteResourcePanel';
+import NoteDatabaseTable from './NoteDatabaseTable';
 
 interface Props {
   subject: NoteSubjectFull;
@@ -69,10 +73,77 @@ export default function SubjectView({ subject, treeSubject, onChanged, onSelectN
         )}
       </section>
 
+      {/* Typed databases (Phase 5) */}
+      <SubjectDatabases subjectId={subject.id} />
+
       {/* Subject-level resources */}
       <div className="rounded-xl border border-slate-200 dark:border-white/[0.05] bg-slate-100 dark:bg-white/[0.015] p-4">
         <NoteResourcePanel parent={{ subjectId: subject.id }} attachments={subject.attachments} links={subject.links} onChanged={onChanged} />
       </div>
     </div>
+  );
+}
+
+/**
+ * Databases attached to this subject. They inherit the subject's share, so
+ * the backend decides who may write; `canEdit` here only controls whether the
+ * editing affordances are rendered.
+ */
+function SubjectDatabases({ subjectId }: { subjectId: number }) {
+  const [databases, setDatabases] = useState<NoteDatabaseSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [creating, setCreating] = useState(false);
+
+  const load = useCallback(async () => {
+    const res = await noteDatabaseApi.listBySubject(subjectId);
+    setDatabases(res.data.data);
+  }, [subjectId]);
+
+  useEffect(() => {
+    setLoading(true);
+    load().catch(() => { /* a subject with no access simply shows nothing */ })
+      .finally(() => setLoading(false));
+  }, [load]);
+
+  const create = async () => {
+    if (creating) return;
+    setCreating(true);
+    try {
+      await noteDatabaseApi.create({ subjectId, title: 'Bảng mới' });
+      await load();
+      toast.success('Đã tạo bảng mới');
+    } catch { toast.error('Không tạo được bảng'); }
+    finally { setCreating(false); }
+  };
+
+  return (
+    <section className="mb-8">
+      <div className="mb-2 flex items-center justify-between">
+        <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Cơ sở dữ liệu</h2>
+        <button
+          onClick={create}
+          disabled={creating}
+          className="flex min-h-8 items-center gap-1 rounded-md px-2 py-1 text-[11px] text-teal-600 hover:bg-teal-100 disabled:opacity-50 dark:bg-teal-500/10 dark:text-teal-300"
+        >
+          <Plus className="h-3 w-3" aria-hidden="true" /> Bảng mới
+        </button>
+      </div>
+      {loading ? (
+        <p className="text-[13px] text-slate-500">Đang tải…</p>
+      ) : databases.length === 0 ? (
+        <p className="text-[13px] text-slate-500">Chưa có bảng nào trong môn này.</p>
+      ) : (
+        <div className="space-y-4">
+          {databases.map((database) => (
+            <NoteDatabaseTable
+              key={database.id}
+              databaseId={database.id}
+              canEdit
+              onDeleted={() => { void load(); }}
+            />
+          ))}
+        </div>
+      )}
+    </section>
   );
 }

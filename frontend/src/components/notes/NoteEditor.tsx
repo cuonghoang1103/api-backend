@@ -24,6 +24,10 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useEditor, EditorContent, BubbleMenu, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import Collaboration, { isChangeOrigin } from '@tiptap/extension-collaboration';
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
+import type { HocuspocusProvider, WebSocketStatus } from '@hocuspocus/provider';
+import type * as Y from 'yjs';
 import Placeholder from '@tiptap/extension-placeholder';
 import Image from '@tiptap/extension-image';
 import TaskList from '@tiptap/extension-task-list';
@@ -34,7 +38,7 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import { fileApi } from '@/lib/api';
 import type { NoteFull, NoteSubjectTree } from '@/types';
-import { Check, Loader2, CloudOff, Trash2, Plus, Minus, Star, Archive, AlertCircle, Undo2, Redo2, SlidersHorizontal, ChevronRight } from 'lucide-react';
+import { Check, Loader2, CloudOff, Trash2, Plus, Minus, Star, Archive, AlertCircle, Undo2, Redo2, SlidersHorizontal, ChevronRight, Wifi, WifiOff } from 'lucide-react';
 import NoteCodeBlock from '@/components/notes/extensions/NoteCodeBlock';
 import NoteCallout from '@/components/notes/extensions/NoteCallout';
 import NoteMath from '@/components/notes/extensions/NoteMath';
@@ -59,6 +63,21 @@ export type NoteSavePatch = Partial<Pick<
   | 'chapterId'
 >>;
 
+export interface NoteRealtimeParticipant {
+  id: number;
+  name: string;
+  avatarUrl: string | null;
+  color: string;
+}
+
+export interface NoteRealtimeEditorState {
+  document: Y.Doc;
+  provider: HocuspocusProvider;
+  localUser: NoteRealtimeParticipant;
+  users: NoteRealtimeParticipant[];
+  status: WebSocketStatus;
+}
+
 interface NoteEditorProps {
   note: NoteFull;
   tree: NoteSubjectTree[];
@@ -68,13 +87,14 @@ interface NoteEditorProps {
   /** Shared editors may edit title/body but cannot move/archive/duplicate. */
   ownerControls?: boolean;
   contextLabel?: string;
+  collaboration?: NoteRealtimeEditorState;
 }
 
 const AUTOSAVE_MS = 900;
 /** Quá số ký tự này sau "/" thì coi như người dùng đang viết chữ, không gọi lệnh. */
 const SLASH_MAX_QUERY = 24;
 
-export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerControls = true, contextLabel }: NoteEditorProps) {
+export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerControls = true, contextLabel, collaboration }: NoteEditorProps) {
   const [title, setTitle] = useState(note.title);
   const [saveState, setSaveState] = useState<SaveState>('idle');
   const [canUndo, setCanUndo] = useState(false);
@@ -196,6 +216,9 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
       StarterKit.configure({
         heading: { levels: [1, 2, 3] },
         codeBlock: false,
+        // Yjs owns undo/redo in collaborative mode. Registering the regular
+        // ProseMirror history plugin as well would create two competing stacks.
+        history: collaboration ? false : {},
       }),
       Placeholder.configure({ placeholder: 'Bắt đầu viết… (dán ảnh trực tiếp như Notion, hoặc gõ "/" để chèn khối)' }),
       Image.configure({ inline: false, allowBase64: false, HTMLAttributes: { class: 'note-img', loading: 'lazy' } }),
@@ -211,8 +234,17 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
       // Notepad-style Tab: inserts an 8-space indent at the caret in
       // prose, while leaving list/task/table Tab behaviour untouched.
       TabIndent,
+      ...(collaboration ? [
+        Collaboration.configure({ document: collaboration.document }),
+        CollaborationCursor.configure({
+          provider: collaboration.provider,
+          user: collaboration.localUser,
+        }),
+      ] : []),
     ],
-    content: note.contentJson ?? '',
+    // The collaborative Y.Doc is already loaded before this component mounts.
+    // Supplying static content here would seed it a second time for every user.
+    content: collaboration ? undefined : note.contentJson ?? '',
     editorProps: {
       attributes: {
         class: 'note-prose focus:outline-none',
@@ -307,8 +339,13 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
         return false;
       },
     },
-    onUpdate({ editor }) {
-      queueSave({ contentJson: editor.getJSON() as Record<string, unknown>, contentHtml: editor.getHTML() });
+    onUpdate({ editor, transaction }) {
+      // Hocuspocus persists the shared Y.Doc and materializes JSON/HTML on the
+      // backend. Local mode keeps the original REST autosave. In collaborative
+      // mode we intentionally do not PATCH remote updates back from every tab.
+      if (!collaboration && !isChangeOrigin(transaction)) {
+        queueSave({ contentJson: editor.getJSON() as Record<string, unknown>, contentHtml: editor.getHTML() });
+      }
       // Update undo/redo state
       setCanUndo(editor.can().undo());
       setCanRedo(editor.can().redo());
@@ -330,7 +367,7 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
       noteIdRef.current = note.id;
       setTitle(note.title);
       setSaveState('idle');
-      editor?.commands.setContent(note.contentJson ?? '', false);
+      if (!collaboration) editor?.commands.setContent(note.contentJson ?? '', false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [note.id]);
@@ -341,17 +378,34 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
   useEffect(() => {
     if (noteIdRef.current === note.id && document.activeElement !== titleRef.current) {
       setTitle(note.title);
+      collaboration?.document.getMap('metadata').set('title', note.title);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [note.title]);
+
+  // Title is a small Y.Map field next to the ProseMirror fragment. This keeps
+  // heading edits live without forcing the title input into the document body.
+  useEffect(() => {
+    if (!collaboration) return;
+    const metadata = collaboration.document.getMap<unknown>('metadata');
+    const applyRemoteTitle = () => {
+      const value = metadata.get('title');
+      if (typeof value === 'string' && document.activeElement !== titleRef.current) {
+        setTitle(value);
+      }
+    };
+    metadata.observe(applyRemoteTitle);
+    applyRemoteTitle();
+    return () => metadata.unobserve(applyRemoteTitle);
+  }, [collaboration]);
 
   useEffect(() => () => { if (saveTimer.current) clearTimeout(saveTimer.current); }, []);
 
   const currentSubject = tree.find((item) => item.id === note.subjectId) ?? null;
   const currentChapter = currentSubject?.chapters.find((item) => item.id === note.chapterId) ?? null;
 
-  // Undo/Redo bằng bàn phím do StarterKit (extension History) lo sẵn:
-  // Mod-z / Shift-Mod-z đã có keymap ngay trên DOM của editor.
+  // Undo/Redo bằng bàn phím do StarterKit History (local) hoặc Yjs
+  // UndoManager (collaboration) xử lý: Mod-z / Shift-Mod-z đã có keymap.
   //
   // Ở đây TRƯỚC ĐÂY còn một listener trên `document` làm đúng việc đó
   // lần nữa. ProseMirror xử lý phím rồi để sự kiện nổi bọt tiếp, nên
@@ -361,16 +415,44 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
   return (
     <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
       {/* Save status + Undo/Redo toolbar */}
-      <div className="mb-3 flex h-5 items-center justify-between text-[11px] text-slate-500 dark:text-slate-500">
+      <div className="mb-3 flex min-h-7 items-center justify-between gap-3 text-[11px] text-slate-500 dark:text-slate-500">
         {/* Left: save status */}
-        <div className="flex h-5 items-center gap-1.5">
-          {saveState === 'saving' && (<><Loader2 className="h-3 w-3 animate-spin" /> Đang lưu…</>)}
-          {saveState === 'saved' && (<><Check className="h-3 w-3 text-teal-400" /> Đã lưu</>)}
-          {saveState === 'error' && (<span className="flex items-center gap-1.5 text-amber-400"><CloudOff className="h-3 w-3" /> Lưu thất bại — sẽ thử lại khi bạn gõ tiếp</span>)}
+        <div className="flex min-h-5 items-center gap-1.5" aria-live="polite" aria-atomic="true">
+          {collaboration ? (
+            collaboration.status === 'connected'
+              ? <><Wifi className="h-3 w-3 text-teal-500" aria-hidden="true" /> Đồng bộ thời gian thực</>
+              : collaboration.status === 'connecting'
+                ? <><Loader2 className="h-3 w-3 animate-spin motion-reduce:animate-none" aria-hidden="true" /> Đang kết nối lại…</>
+                : <span className="flex items-center gap-1.5 text-amber-600 dark:text-amber-300"><WifiOff className="h-3 w-3" aria-hidden="true" /> Mất kết nối — thay đổi đang chờ đồng bộ</span>
+          ) : (
+            <>
+              {saveState === 'saving' && (<><Loader2 className="h-3 w-3 animate-spin motion-reduce:animate-none" /> Đang lưu…</>)}
+              {saveState === 'saved' && (<><Check className="h-3 w-3 text-teal-400" /> Đã lưu</>)}
+              {saveState === 'error' && (<span className="flex items-center gap-1.5 text-amber-400"><CloudOff className="h-3 w-3" /> Lưu thất bại — sẽ thử lại khi bạn gõ tiếp</span>)}
+            </>
+          )}
         </div>
 
         {/* Right: Undo/Redo buttons */}
         <div className="flex items-center gap-1">
+          {collaboration && (
+            <div className="mr-1 flex items-center -space-x-1.5" aria-label={`${collaboration.users.length} người đang mở ghi chú`}>
+              {collaboration.users.slice(0, 5).map((user) => (
+                <span
+                  key={user.id}
+                  className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full border-2 border-white text-[9px] font-bold text-white shadow-sm dark:border-slate-950"
+                  style={{ backgroundColor: user.color }}
+                  title={`${user.name}${user.id === collaboration.localUser.id ? ' (bạn)' : ''}`}
+                >
+                  {user.avatarUrl ? <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" /> : user.name.slice(0, 1).toUpperCase()}
+                  <span className="sr-only">{user.name}{user.id === collaboration.localUser.id ? ' (bạn)' : ''}</span>
+                </span>
+              ))}
+              {collaboration.users.length > 5 && (
+                <span className="flex h-6 min-w-6 items-center justify-center rounded-full border-2 border-white bg-slate-600 px-1 text-[9px] font-bold text-white dark:border-slate-950">+{collaboration.users.length - 5}</span>
+              )}
+            </div>
+          )}
           <button
             type="button"
             onClick={() => editor?.chain().focus().undo().run()}
@@ -409,7 +491,12 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
       <input
         ref={titleRef}
         value={title}
-        onChange={(e) => { setTitle(e.target.value); queueSave({ title: e.target.value }); }}
+        onChange={(e) => {
+          const value = e.target.value;
+          setTitle(value);
+          collaboration?.document.getMap('metadata').set('title', value);
+          queueSave({ title: value });
+        }}
         placeholder="Tiêu đề ghi chú"
         // text-base (16px) avoids iOS focus auto-zoom on mobile.
         className="w-full bg-transparent text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none"

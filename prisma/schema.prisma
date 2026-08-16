@@ -267,6 +267,9 @@ model User {
   noteCommentsAuthored       NoteComment[]               @relation("NoteCommentAuthor")
   noteCommentsResolved       NoteComment[]               @relation("NoteCommentResolver")
   noteCommentMentions        NoteCommentMention[]
+  noteDatabases              NoteDatabase[]
+  noteDatabaseRowsCreated    NoteDatabaseRow[]           @relation("NoteDatabaseRowCreator")
+  noteDatabaseRowsUpdated    NoteDatabaseRow[]           @relation("NoteDatabaseRowUpdater")
   // Phase 4 add — notes subject sharing
   noteSubjectsOwned          NoteSubjectShare[]          @relation("NoteSubjectSharesOwned")
   noteSubjectsReceived       NoteSubjectShare[]          @relation("NoteSubjectSharesReceived")
@@ -4023,6 +4026,7 @@ model NoteSubject {
   // Phase 4 add — subject-level sharing
   shares          NoteSubjectShare[]
   shareRecipients NoteSubjectShareRecipient[] @relation("SubjectShareRecipients")
+  databases       NoteDatabase[]
 
   @@index([userId, sortOrder], name: "idx_note_subjects_user_sort")
   @@index([userId, isPinned], name: "idx_note_subjects_user_pinned")
@@ -4119,14 +4123,18 @@ model Note {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  subject      NoteSubject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  chapter      NoteChapter?     @relation(fields: [chapterId], references: [id], onDelete: SetNull)
-  attachments  NoteAttachment[]
-  links        NoteLink[]
-  vocabEntries NoteVocabEntry[]
-  versions     NoteVersion[]
-  comments     NoteComment[]
+  user                  User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject               NoteSubject                @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  chapter               NoteChapter?               @relation(fields: [chapterId], references: [id], onDelete: SetNull)
+  attachments           NoteAttachment[]
+  links                 NoteLink[]
+  vocabEntries          NoteVocabEntry[]
+  versions              NoteVersion[]
+  comments              NoteComment[]
+  // Compacted Yjs state for conflict-free real-time editing. The regular
+  // contentJson/contentHtml fields remain materialized read/search/export
+  // projections so existing Notes clients keep working during the rollout.
+  collaborationDocument NoteCollaborationDocument?
 
   @@index([userId, subjectId, chapterId, sortOrder], name: "idx_notes_user_tree")
   @@index([userId, updatedAt(sort: Desc)], name: "idx_notes_user_recent")
@@ -4134,6 +4142,123 @@ model Note {
   @@index([userId, isArchived], name: "idx_notes_user_archived")
   @@index([userId, deletedAt], name: "idx_notes_user_deleted")
   @@map("notes")
+}
+
+// One compacted CRDT document per note. Hocuspocus keeps active documents in
+// memory and rewrites this state on a debounce, rather than inserting one row
+// per keystroke. `stateVector` supports later differential sync/auditing while
+// `contentJson` on Note remains the backwards-compatible projection.
+model NoteCollaborationDocument {
+  noteId      Int      @id @map("note_id")
+  state       Bytes
+  stateVector Bytes    @map("state_vector")
+  byteSize    Int      @default(0) @map("byte_size")
+  updateCount Int      @default(0) @map("update_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@index([updatedAt(sort: Desc)], map: "idx_note_collaboration_updated")
+  @@map("note_collaboration_documents")
+}
+
+// A database lives inside one Note subject, so the existing subject share is
+// also its permission boundary. The first slice deliberately stores flexible
+// cell values as validated JSON while keeping property definitions normalized.
+model NoteDatabase {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  subjectId   Int      @map("subject_id")
+  title       String   @db.VarChar(200)
+  description String?  @db.Text
+  icon        String?  @db.VarChar(30)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user       User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject    NoteSubject            @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  properties NoteDatabaseProperty[]
+  rows       NoteDatabaseRow[]
+  views      NoteDatabaseView[]
+
+  @@index([userId, updatedAt(sort: Desc)], map: "idx_note_databases_user_updated")
+  @@index([subjectId, updatedAt(sort: Desc)], map: "idx_note_databases_subject_updated")
+  @@map("note_databases")
+}
+
+model NoteDatabaseProperty {
+  id         Int      @id @default(autoincrement())
+  databaseId Int      @map("database_id")
+  name       String   @db.VarChar(120)
+  // TITLE | TEXT | NUMBER | SELECT | MULTI_SELECT | DATE | CHECKBOX | URL
+  type       String   @db.VarChar(24)
+  config     Json?
+  isTitle    Boolean  @default(false) @map("is_title")
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  database NoteDatabase       @relation(fields: [databaseId], references: [id], onDelete: Cascade)
+  cells    NoteDatabaseCell[]
+
+  @@unique([databaseId, name], map: "uk_note_database_property_name")
+  @@index([databaseId, sortOrder], map: "idx_note_database_properties_sort")
+  @@map("note_database_properties")
+}
+
+model NoteDatabaseRow {
+  id          Int      @id @default(autoincrement())
+  databaseId  Int      @map("database_id")
+  createdById Int?     @map("created_by_id")
+  updatedById Int?     @map("updated_by_id")
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  database  NoteDatabase       @relation(fields: [databaseId], references: [id], onDelete: Cascade)
+  createdBy User?              @relation("NoteDatabaseRowCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  updatedBy User?              @relation("NoteDatabaseRowUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+  cells     NoteDatabaseCell[]
+
+  @@index([databaseId, sortOrder], map: "idx_note_database_rows_sort")
+  @@index([createdById], map: "idx_note_database_rows_creator")
+  @@index([updatedById], map: "idx_note_database_rows_updater")
+  @@map("note_database_rows")
+}
+
+model NoteDatabaseCell {
+  id         Int      @id @default(autoincrement())
+  rowId      Int      @map("row_id")
+  propertyId Int      @map("property_id")
+  value      Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  row      NoteDatabaseRow      @relation(fields: [rowId], references: [id], onDelete: Cascade)
+  property NoteDatabaseProperty @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@unique([rowId, propertyId], map: "uk_note_database_cell_row_property")
+  @@index([propertyId], map: "idx_note_database_cells_property")
+  @@map("note_database_cells")
+}
+
+model NoteDatabaseView {
+  id         Int      @id @default(autoincrement())
+  databaseId Int      @map("database_id")
+  name       String   @db.VarChar(120)
+  // Phase 5 starts with TABLE; BOARD/CALENDAR/GALLERY/TIMELINE follow later.
+  type       String   @default("TABLE") @db.VarChar(24)
+  config     Json
+  isDefault  Boolean  @default(false) @map("is_default")
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  database NoteDatabase @relation(fields: [databaseId], references: [id], onDelete: Cascade)
+
+  @@index([databaseId, sortOrder], map: "idx_note_database_views_sort")
+  @@map("note_database_views")
 }
 
 // Immutable page snapshots. Autosave snapshots are coalesced by the

@@ -163,6 +163,12 @@ async function materializeDocument(
   });
 
   pendingUpdates.delete(noteId);
+
+  // Real-time edits land here rather than through updateNote, so the wiki
+  // backlink index has to be rebuilt from this path too or `[[…]]` typed in a
+  // collaborative session would never register.
+  const { syncNoteReferences } = await import('../services/notesHierarchy.service.js');
+  void syncNoteReferences(noteId);
 }
 
 /**

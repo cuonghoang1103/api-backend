@@ -179,6 +179,45 @@ router.delete('/notes/:id/permanent', async (req: Request, res: Response<ApiResp
   } catch (err) { next(err); }
 });
 
+// ─── Sub-pages, backlinks and the reference graph (Phase 6) ──
+
+router.get('/graph', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const { referenceGraph } = await import('../services/notesHierarchy.service.js');
+    res.json({ success: true, data: await referenceGraph(req.userId!) });
+  } catch (err) { next(err); }
+});
+
+router.patch('/notes/:id/parent', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const { setNoteParent } = await import('../services/notesHierarchy.service.js');
+    const raw = req.body?.parentNoteId;
+    const parentNoteId = raw === null || raw === undefined || raw === '' ? null : Number(raw);
+    const note = await setNoteParent(req.userId!, Number(req.params.id), parentNoteId);
+    res.json({ success: true, data: note });
+  } catch (err) { next(err); }
+});
+
+router.get('/notes/:id/children', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const { childrenOf } = await import('../services/notesHierarchy.service.js');
+    res.json({ success: true, data: await childrenOf(req.userId!, Number(req.params.id)) });
+  } catch (err) { next(err); }
+});
+
+router.get('/notes/:id/backlinks', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const { ancestorsOf, backlinksOf, outgoingLinksOf } = await import('../services/notesHierarchy.service.js');
+    const id = Number(req.params.id);
+    const [breadcrumb, backlinks, outgoing] = await Promise.all([
+      ancestorsOf(req.userId!, id),
+      backlinksOf(req.userId!, id),
+      outgoingLinksOf(req.userId!, id),
+    ]);
+    res.json({ success: true, data: { breadcrumb, backlinks, outgoing } });
+  } catch (err) { next(err); }
+});
+
 router.get('/notes/:id/versions', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const versions = await listNoteVersions(req.userId!, Number(req.params.id));

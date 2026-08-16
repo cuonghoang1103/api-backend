@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight, History, MessageCircle } from 'lucide-react';
+import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight, History, MessageCircle, Link2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { notesApi, noteShareApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -28,6 +28,7 @@ import NotesSharedWithMe from '@/components/notes/NotesSharedWithMe';
 import DeletedNoteView from '@/components/notes/DeletedNoteView';
 import NoteVersionHistory from '@/components/notes/NoteVersionHistory';
 import NoteCommentsPanel from '@/components/notes/NoteCommentsPanel';
+import NoteBacklinksPanel from '@/components/notes/NoteBacklinksPanel';
 import { exportNoteAsPdf } from '@/lib/notesPdf';
 import { NotesThemeProvider, useNotesTheme } from '@/components/notes/NotesThemeProvider';
 import { Sparkles } from 'lucide-react';
@@ -203,6 +204,7 @@ function NotesPageInner() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [trashAction, setTrashAction] = useState<'restore' | 'delete' | null>(null);
   const [commentsOpen, setCommentsOpen] = useState(false);
+  const [linksOpen, setLinksOpen] = useState(false);
   const [focusCommentId, setFocusCommentId] = useState<number | null>(null);
 
   // ─── PART 1: Multi-tab state ──────────────────────────────────
@@ -377,6 +379,7 @@ function NotesPageInner() {
     setDrawerOpen(false);
     setHistoryOpen(false);
     setResourceOpen(false);
+    setLinksOpen(false);
     setSubjectView(null);
     setSharedSubject(null); // Close shared subject view
     setSharedSelectedNote(null);
@@ -854,6 +857,14 @@ function NotesPageInner() {
                   <History className="h-[18px] w-[18px]" />
                 </button>
                 <button
+                  onClick={() => setLinksOpen(true)}
+                  title="Trang con & liên kết ngược"
+                  aria-label="Trang con và liên kết ngược"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:text-slate-300 dark:hover:bg-white/[0.05]"
+                >
+                  <Link2 className="h-[18px] w-[18px]" />
+                </button>
+                <button
                   onClick={exportPdf}
                   disabled={pdfBusy}
                   title="Xuất PDF"
@@ -1130,6 +1141,19 @@ function NotesPageInner() {
                 setSelected((current) => current ? { ...current, ...restored } : restored);
                 void refreshTree();
               }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {linksOpen && selected && !selected.deletedAt && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <NoteBacklinksPanel
+              noteId={selected.id}
+              noteTitle={selected.title}
+              onOpenNote={(id) => { void selectNote(id); }}
+              onClose={() => setLinksOpen(false)}
             />
           </motion.div>
         )}

@@ -552,6 +552,12 @@ export async function updateNote(
     });
   } finally {
     realtimeReset?.endNoteCollaborationReset(id);
+    if (data.contentJson !== undefined) {
+      // Backlinks are a derived index — rebuild them after the content lands,
+      // and never let a failure here fail the save itself.
+      const { syncNoteReferences } = await import('./notesHierarchy.service.js');
+      void syncNoteReferences(id);
+    }
   }
 }
 

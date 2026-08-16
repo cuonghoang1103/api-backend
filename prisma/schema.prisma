@@ -4097,31 +4097,35 @@ model NoteChapter {
 }
 
 model Note {
-  id          Int       @id @default(autoincrement())
-  userId      Int       @map("user_id")
-  subjectId   Int       @map("subject_id")
+  id           Int       @id @default(autoincrement())
+  userId       Int       @map("user_id")
+  subjectId    Int       @map("subject_id")
   // Optional: a note can live directly under a subject (no chapter).
-  chapterId   Int?      @map("chapter_id")
-  title       String    @default("Untitled") @db.VarChar(300)
+  chapterId    Int?      @map("chapter_id")
+  title        String    @default("Untitled") @db.VarChar(300)
   // Rich editor document (TipTap/ProseMirror JSON). Source of truth.
-  contentJson Json?     @map("content_json")
+  contentJson  Json?     @map("content_json")
   // Server-rendered HTML cache of contentJson for fast read/print.
-  contentHtml String?   @map("content_html") @db.Text
-  tags        String[]  @default([])
-  isPinned    Boolean   @default(false) @map("is_pinned")
-  isFavorite  Boolean   @default(false) @map("is_favorite")
-  isArchived  Boolean   @default(false) @map("is_archived")
-  needsReview Boolean   @default(false) @map("needs_review")
-  reviewDate  DateTime? @map("review_date")
+  contentHtml  String?   @map("content_html") @db.Text
+  tags         String[]  @default([])
+  isPinned     Boolean   @default(false) @map("is_pinned")
+  isFavorite   Boolean   @default(false) @map("is_favorite")
+  isArchived   Boolean   @default(false) @map("is_archived")
+  needsReview  Boolean   @default(false) @map("needs_review")
+  reviewDate   DateTime? @map("review_date")
   // Soft-delete: notes stay recoverable for 30 days before the
   // nightly retention job permanently removes them.
-  deletedAt   DateTime? @map("deleted_at")
+  deletedAt    DateTime? @map("deleted_at")
   // Monotonic snapshot number. It only changes when a NoteVersion
   // row is created, not on every metadata-only update.
-  version     Int       @default(1)
-  sortOrder   Int       @default(0) @map("sort_order")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  version      Int       @default(1)
+  // Sub-pages. A note nested under another still belongs to the same
+  // subject, so sharing and trash keep working unchanged; only the tree
+  // rendering and breadcrumb care about this.
+  parentNoteId Int?      @map("parent_note_id")
+  sortOrder    Int       @default(0) @map("sort_order")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
 
   user                  User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
   subject               NoteSubject                @relation(fields: [subjectId], references: [id], onDelete: Cascade)
@@ -4135,12 +4139,17 @@ model Note {
   // contentJson/contentHtml fields remain materialized read/search/export
   // projections so existing Notes clients keep working during the rollout.
   collaborationDocument NoteCollaborationDocument?
+  parentNote            Note?                      @relation("NoteSubPages", fields: [parentNoteId], references: [id], onDelete: Cascade)
+  childNotes            Note[]                     @relation("NoteSubPages")
+  outgoingReferences    NoteReference[]            @relation("NoteReferenceSource")
+  incomingReferences    NoteReference[]            @relation("NoteReferenceTarget")
 
   @@index([userId, subjectId, chapterId, sortOrder], name: "idx_notes_user_tree")
   @@index([userId, updatedAt(sort: Desc)], name: "idx_notes_user_recent")
   @@index([userId, isPinned], name: "idx_notes_user_pinned")
   @@index([userId, isArchived], name: "idx_notes_user_archived")
   @@index([userId, deletedAt], name: "idx_notes_user_deleted")
+  @@index([parentNoteId, sortOrder], name: "idx_notes_parent")
   @@map("notes")
 }
 
@@ -4259,6 +4268,27 @@ model NoteDatabaseView {
 
   @@index([databaseId, sortOrder], map: "idx_note_database_views_sort")
   @@map("note_database_views")
+}
+
+// Wiki-style references between pages, rebuilt from `[[Tiêu đề]]` markers
+// every time a page's content is saved. Stored rather than searched on read
+// so the backlinks panel is one indexed lookup instead of a scan of every
+// note body the viewer owns.
+model NoteReference {
+  id           Int      @id @default(autoincrement())
+  sourceNoteId Int      @map("source_note_id")
+  targetNoteId Int      @map("target_note_id")
+  // The exact text inside [[ ]], kept so a renamed target still shows what
+  // the author originally typed.
+  label        String   @db.VarChar(300)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  source Note @relation("NoteReferenceSource", fields: [sourceNoteId], references: [id], onDelete: Cascade)
+  target Note @relation("NoteReferenceTarget", fields: [targetNoteId], references: [id], onDelete: Cascade)
+
+  @@unique([sourceNoteId, targetNoteId], map: "uk_note_reference_pair")
+  @@index([targetNoteId], map: "idx_note_references_target")
+  @@map("note_references")
 }
 
 // Immutable page snapshots. Autosave snapshots are coalesced by the

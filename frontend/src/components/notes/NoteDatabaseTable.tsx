@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Check, Loader2, Plus, Table2, Trash2, X } from 'lucide-react';
+import { CalendarDays, Check, Columns3, LayoutGrid, Loader2, Plus, Table2, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   noteDatabaseApi,
@@ -9,7 +9,9 @@ import {
   type NoteDatabaseProperty,
   type NoteDatabasePropertyType,
   type NoteDatabaseRow,
+  type NoteDatabaseViewType,
 } from '@/lib/api';
+import { BoardView, CalendarView, GalleryView } from '@/components/notes/NoteDatabaseViews';
 
 interface Props {
   databaseId: number;
@@ -80,6 +82,7 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
   const [busy, setBusy] = useState(false);
   const [editing, setEditing] = useState<{ rowId: number; propertyId: number } | null>(null);
   const [draft, setDraft] = useState('');
+  const [viewType, setViewType] = useState<NoteDatabaseViewType>('TABLE');
   const [addingColumn, setAddingColumn] = useState(false);
   const [columnName, setColumnName] = useState('');
   const [columnType, setColumnType] = useState<NoteDatabasePropertyType>('TEXT');
@@ -213,18 +216,53 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
           <span className="truncate">{database.icon ? `${database.icon} ` : ''}{database.title}</span>
           <span className="shrink-0 text-[11px] font-normal text-slate-500">{database.rows.length} dòng</span>
         </h3>
-        {canEdit && (
-          <button
-            type="button"
-            onClick={removeDatabase}
-            className="inline-flex min-h-9 items-center gap-1 rounded-md px-2 text-[11px] text-rose-600 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 dark:text-rose-300 dark:hover:bg-rose-500/10"
-          >
-            <Trash2 className="h-3.5 w-3.5" aria-hidden="true" /> Xoá bảng
-          </button>
-        )}
+        <div className="flex items-center gap-1">
+          {/* All four views read the rows already in state — switching costs
+              no request and cannot show a stale second copy of the data. */}
+          <div role="tablist" aria-label="Kiểu hiển thị" className="flex items-center gap-0.5 rounded-lg bg-slate-100 p-0.5 dark:bg-white/[0.05]">
+            {([
+              ['TABLE', 'Bảng', Table2],
+              ['BOARD', 'Kanban', Columns3],
+              ['GALLERY', 'Thẻ', LayoutGrid],
+              ['CALENDAR', 'Lịch', CalendarDays],
+            ] as const).map(([type, label, Icon]) => (
+              <button
+                key={type}
+                role="tab"
+                aria-selected={viewType === type}
+                onClick={() => setViewType(type)}
+                title={label}
+                className={`flex h-8 w-8 items-center justify-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${
+                  viewType === type
+                    ? 'bg-white text-teal-600 shadow-sm dark:bg-white/[0.12] dark:text-teal-300'
+                    : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                }`}
+              >
+                <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+                <span className="sr-only">{label}</span>
+              </button>
+            ))}
+          </div>
+          {canEdit && (
+            <button
+              type="button"
+              onClick={removeDatabase}
+              className="inline-flex min-h-9 items-center gap-1 rounded-md px-2 text-[11px] text-rose-600 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 dark:text-rose-300 dark:hover:bg-rose-500/10"
+            >
+              <Trash2 className="h-3.5 w-3.5" aria-hidden="true" /> Xoá bảng
+            </button>
+          )}
+        </div>
       </header>
 
+      {viewType !== 'TABLE' && (
+        viewType === 'BOARD' ? <BoardView properties={properties} rows={database.rows} />
+          : viewType === 'GALLERY' ? <GalleryView properties={properties} rows={database.rows} />
+            : <CalendarView properties={properties} rows={database.rows} />
+      )}
+
       {/* Wide tables scroll inside their own box; the page never scrolls sideways. */}
+      {viewType === 'TABLE' && (
       <div className="overflow-x-auto">
         <table className="w-full min-w-[560px] border-collapse text-sm">
           <thead>
@@ -339,8 +377,9 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
           </tbody>
         </table>
       </div>
+      )}
 
-      {canEdit && (
+      {viewType === 'TABLE' && canEdit && (
         <footer className="flex flex-wrap items-center gap-2 border-t border-slate-200 px-3 py-2 dark:border-white/[0.07]">
           <button
             type="button"

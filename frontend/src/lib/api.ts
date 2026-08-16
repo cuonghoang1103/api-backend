@@ -453,6 +453,16 @@ export const notesApi = {
   restoreVersion: (id: number, version: number) =>
     api.post<{ data: import('@/types').NoteFull }>(`/notes/notes/${id}/versions/${version}/restore`),
 
+  // ── Phase 6: sub-pages, backlinks and the reference graph ──
+  setParent: (id: number, parentNoteId: number | null) =>
+    api.patch<{ data: import('@/types').NoteFull }>(`/notes/notes/${id}/parent`, { parentNoteId }),
+  getChildren: (id: number) =>
+    api.get<{ data: NoteChildSummary[] }>(`/notes/notes/${id}/children`),
+  getBacklinks: (id: number) =>
+    api.get<{ data: NoteBacklinkBundle }>(`/notes/notes/${id}/backlinks`),
+  getGraph: () =>
+    api.get<{ data: NoteReferenceGraph }>('/notes/graph'),
+
   // ── Phase 3d: PDF export of a single note ──
   // Returns the rendered HTML so the client can convert it to a
   // PDF (jspdf + html2canvas). Server is the source of truth for
@@ -713,6 +723,37 @@ export const noteShareApi = {
   searchUsers: (q: string, limit = 8) =>
     api.get<{ data: NoteShareRecipientMini[] }>('/notes-shares/search-users', { params: { q, limit } }),
 };
+
+// ─── Notes sub-pages + backlinks (Phase 6) ────────────────────
+
+export interface NoteChildSummary {
+  id: number;
+  title: string;
+  sortOrder: number;
+  updatedAt: string;
+  isPinned: boolean;
+  isFavorite: boolean;
+}
+
+export interface NoteLinkRef {
+  id: number;
+  title: string;
+  subjectId: number;
+  /** The text the author actually typed inside [[ ]]. */
+  label: string;
+  updatedAt?: string;
+}
+
+export interface NoteBacklinkBundle {
+  breadcrumb: Array<{ id: number; title: string }>;
+  backlinks: NoteLinkRef[];
+  outgoing: NoteLinkRef[];
+}
+
+export interface NoteReferenceGraph {
+  nodes: Array<{ id: number; title: string; subjectId: number }>;
+  edges: Array<{ sourceNoteId: number; targetNoteId: number }>;
+}
 
 // ─── Notes Databases (Phase 5) ────────────────────────────────
 // Typed tables living inside a NoteSubject. Access is inherited from the

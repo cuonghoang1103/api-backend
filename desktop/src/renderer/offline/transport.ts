@@ -48,6 +48,18 @@ const ENDPOINTS: Record<string, EndpointSpec> = {
     update: () => ({ path: '/api/v1/cv/profile', method: 'PUT' }),
   },
 
+  /**
+   * Ghi chú. `PATCH /notes/:id` ghi đè các trường gửi lên nên gửi lại hai lần
+   * vẫn ra một trạng thái — an toàn để xếp hàng.
+   *
+   * KHÔNG có `create`: `POST /notes` sinh ghi chú mới mỗi lần gọi, và một lần
+   * thử lại sau timeout sẽ nhân đôi ghi chú của người dùng.
+   */
+  note: {
+    update: (id) => ({ path: `/api/v1/notes/notes/${id}`, method: 'PATCH' }),
+    delete: (id) => ({ path: `/api/v1/notes/notes/${id}`, method: 'DELETE' }),
+  },
+
   'cv-item': {
     update: (id) => ({ path: `/api/v1/cv/items/${id}`, method: 'PUT' }),
     delete: (id) => ({ path: `/api/v1/cv/items/${id}`, method: 'DELETE' }),

@@ -1504,3 +1504,42 @@ code {
   vertical-align: -2px;
   margin-right: 3px;
 }
+
+/* ── Notes ─────────────────────────────────────────────── */
+
+.ct-title-input {
+  flex: 1;
+  border: none;
+  background: none;
+  color: var(--ct-text);
+  font-size: 19px;
+  font-weight: 700;
+  padding: 0;
+  min-width: 0;
+}
+
+.ct-title-input:focus {
+  outline: none;
+}
+
+.ct-title-input:disabled {
+  opacity: 0.75;
+}
+
+.ct-note-body {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+/* Nút trông như liên kết — dùng cho hành động phụ nằm trong câu văn. */
+.ct-linklike {
+  border: none;
+  background: none;
+  padding: 0;
+  margin-left: 8px;
+  color: var(--ct-accent-text);
+  font-size: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}

@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight, History, MessageCircle, Link2 } from 'lucide-react';
+import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight, History, MessageCircle, Link2, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { notesApi, noteShareApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -871,6 +871,26 @@ function NotesPageInner() {
             )}
             {selected && !selected.deletedAt && (
               <>
+                {/* Chia sẻ ngay trên trang, như Notion.
+                    Trước đây nút này CHỈ nằm ở dòng môn học trong thanh bên, và
+                    còn bị ẩn tới khi rê chuột vào — người đang đứng ở một ghi
+                    chú không có cách nào biết là chia sẻ được. Quyền vẫn gắn
+                    với MÔN HỌC (chia sẻ môn thì cả môn dùng chung), nên nút này
+                    mở đúng hộp thoại đó, chỉ khác chỗ đặt. */}
+                {(() => {
+                  const subject = tree.find((item) => item.id === selected.subjectId);
+                  if (!subject) return null;
+                  return (
+                    <button
+                      onClick={() => handleOpenShare(subject)}
+                      title={`Chia sẻ môn "${subject.name}"`}
+                      aria-label={`Chia sẻ môn ${subject.name}`}
+                      className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:text-slate-300 dark:hover:bg-white/[0.05]"
+                    >
+                      <Share2 className="h-[18px] w-[18px]" />
+                    </button>
+                  );
+                })()}
                 <button
                   onClick={() => setHistoryOpen(true)}
                   title="Lịch sử phiên bản"

@@ -94,11 +94,23 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
     return res.data.data;
   }, [databaseId]);
 
-  /** The row the persisted view choice lives on. */
-  const defaultView = useMemo(() => {
-    const views = database?.views ?? [];
-    return views.find((view) => view.isDefault) ?? views[0] ?? null;
-  }, [database]);
+  /* Khung nhìn ĐANG CHỌN, không phải khung nhìn mặc định.
+   *
+   * Trước đây mọi thứ neo vào `views.find(isDefault)`, nên dù backend lưu được
+   * nhiều khung nhìn thì giao diện vẫn chỉ dùng đúng một cái — không thể vừa có
+   * "Kế hoạch 140 ngày" vừa có "Việc đang tắc" cạnh nhau như Notion. */
+  const [activeViewId, setActiveViewId] = useState<number | null>(null);
+  const orderedViews = useMemo(
+    () => (database?.views ?? []).slice().sort((a, b) => a.sortOrder - b.sortOrder),
+    [database],
+  );
+  const activeView = useMemo(
+    () => orderedViews.find((v) => v.id === activeViewId)
+      ?? orderedViews.find((v) => v.isDefault)
+      ?? orderedViews[0]
+      ?? null,
+    [orderedViews, activeViewId],
+  );
 
   /**
    * Persist the view choice on the database's default view row.
@@ -111,13 +123,66 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
    */
   const chooseView = useCallback((type: NoteDatabaseViewType) => {
     setViewType(type);
-    if (!canEdit || !defaultView || defaultView.type === type) return;
+    if (!canEdit || !activeView || activeView.type === type) return;
     setDatabase((current) => current && ({
       ...current,
-      views: current.views.map((view) => (view.id === defaultView.id ? { ...view, type } : view)),
+      views: current.views.map((view) => (view.id === activeView.id ? { ...view, type } : view)),
     }));
-    void noteDatabaseApi.updateView(defaultView.id, { type }).catch(() => { /* preference only */ });
-  }, [canEdit, defaultView]);
+    void noteDatabaseApi.updateView(activeView.id, { type }).catch(() => { /* preference only */ });
+  }, [canEdit, activeView]);
+
+  /* Khung nhìn mới KHÔNG chép bộ lọc của cái đang mở.
+   *
+   * Chép sang nghe có vẻ tiện, nhưng người ta tạo khung nhìn mới chính vì muốn
+   * một góc nhìn KHÁC — nhận sẵn bộ lọc cũ thì việc đầu tiên phải làm là đi xoá
+   * từng điều kiện một. */
+  const addView = async () => {
+    if (!canEdit || busy) return;
+    const name = window.prompt('Tên khung nhìn mới', `Khung nhìn ${orderedViews.length + 1}`);
+    if (name === null) return;
+    setBusy(true);
+    try {
+      const res = await noteDatabaseApi.createView(databaseId, { name: name.trim() || 'Khung nhìn mới', type: 'TABLE' });
+      await load();
+      setActiveViewId(res.data.data.id);
+    } catch (error) {
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+      toast.error(message || 'Không tạo được khung nhìn');
+    } finally { setBusy(false); }
+  };
+
+  const renameView = async () => {
+    if (!canEdit || !activeView) return;
+    const name = window.prompt('Đổi tên khung nhìn', activeView.name);
+    if (name === null || !name.trim() || name.trim() === activeView.name) return;
+    const next = name.trim();
+    // Đổi tên hiện ngay rồi mới ghi: đây là nhãn, không phải dữ liệu.
+    setDatabase((current) => current && ({
+      ...current,
+      views: current.views.map((v) => (v.id === activeView.id ? { ...v, name: next } : v)),
+    }));
+    try {
+      await noteDatabaseApi.updateView(activeView.id, { name: next });
+    } catch { toast.error('Không đổi được tên khung nhìn'); await load(); }
+  };
+
+  const removeView = async () => {
+    if (!canEdit || !activeView) return;
+    if (orderedViews.length <= 1) {
+      toast.error('Phải giữ lại ít nhất một khung nhìn');
+      return;
+    }
+    if (!window.confirm(`Xoá khung nhìn "${activeView.name}"? Bộ lọc và sắp xếp của nó sẽ mất, các dòng thì không.`)) return;
+    try {
+      await noteDatabaseApi.deleteView(activeView.id);
+      setActiveViewId(null);      // rơi về khung nhìn đầu tiên còn lại
+      configLoadedFor.current = null;
+      await load();
+    } catch (error) {
+      const message = (error as { response?: { data?: { message?: string } } }).response?.data?.message;
+      toast.error(message || 'Không xoá được khung nhìn');
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -181,19 +246,21 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
   const [viewConfig, setViewConfig] = useState<ViewConfig>(EMPTY_VIEW_CONFIG);
   const configLoadedFor = useRef<number | null>(null);
   useEffect(() => {
-    const current = database?.views?.find((v) => v.isDefault) ?? database?.views?.[0];
+    const current = activeView;
     // Nạp MỘT lần cho mỗi khung nhìn. Nạp lại sau mỗi `load()` sẽ ghi đè thứ
     // người dùng vừa gõ bằng bản đã lưu trước đó — và `load()` chạy sau mọi
-    // lần sửa ô, tức là gần như liên tục.
+    // lần sửa ô, tức là gần như liên tục. Đổi sang khung nhìn khác thì id đổi
+    // nên nó nạp lại đúng một lần cho khung nhìn mới.
     if (!current || configLoadedFor.current === current.id) return;
     configLoadedFor.current = current.id;
     setViewConfig(parseViewConfig(current.config));
-  }, [database]);
+    setViewType(current.type);
+  }, [activeView]);
 
   const configSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const changeViewConfig = (next: ViewConfig) => {
     setViewConfig(next);
-    const current = database?.views?.find((v) => v.isDefault) ?? database?.views?.[0];
+    const current = activeView;
     if (!current || !canEdit) return;
     if (configSaveTimer.current) clearTimeout(configSaveTimer.current);
     // Ghi trễ: kết quả lọc đã hiện tức thì vì lọc chạy ngay trong trình duyệt,
@@ -466,6 +533,59 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
           )}
         </div>
       </header>
+
+      {/* Dãy khung nhìn có tên — mỗi cái giữ bộ lọc / sắp xếp / kiểu hiển thị
+          riêng, nên "Kế hoạch 140 ngày" và "Việc đang tắc" sống cạnh nhau thay
+          vì phải sửa lại bộ lọc mỗi lần đổi góc nhìn. */}
+      <div className="flex items-center gap-1 overflow-x-auto border-b border-slate-200 px-3 py-1.5 dark:border-white/[0.07]">
+        <div role="tablist" aria-label="Khung nhìn" className="flex items-center gap-1">
+          {orderedViews.map((v) => {
+            const active = activeView?.id === v.id;
+            return (
+              <button
+                key={v.id}
+                role="tab"
+                aria-selected={active}
+                onClick={() => setActiveViewId(v.id)}
+                onDoubleClick={() => { if (active) void renameView(); }}
+                title={active ? 'Bấm đúp để đổi tên' : v.name}
+                className={`min-h-8 shrink-0 whitespace-nowrap rounded-md px-2.5 text-[12.5px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${
+                  active
+                    ? 'bg-slate-100 font-medium text-slate-900 dark:bg-white/[0.1] dark:text-slate-100'
+                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700 dark:hover:bg-white/[0.05] dark:hover:text-slate-300'
+                }`}
+              >
+                {v.name}
+              </button>
+            );
+          })}
+        </div>
+        {canEdit && (
+          <div className="ml-1 flex shrink-0 items-center gap-0.5">
+            <button
+              type="button"
+              onClick={addView}
+              disabled={busy}
+              title="Thêm khung nhìn"
+              aria-label="Thêm khung nhìn"
+              className="flex h-8 w-8 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:hover:bg-white/[0.05]"
+            >
+              <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+            </button>
+            {orderedViews.length > 1 && (
+              <button
+                type="button"
+                onClick={removeView}
+                title={`Xoá khung nhìn "${activeView?.name ?? ''}"`}
+                aria-label="Xoá khung nhìn đang chọn"
+                className="flex h-8 w-8 items-center justify-center rounded-md text-slate-400 hover:bg-rose-50 hover:text-rose-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 dark:hover:bg-rose-500/10 dark:hover:text-rose-300"
+              >
+                <X className="h-3.5 w-3.5" aria-hidden="true" />
+              </button>
+            )}
+          </div>
+        )}
+      </div>
 
       <NoteDatabaseToolbar
         properties={properties}

@@ -101,12 +101,23 @@ jobs:
         run: |
           REPO="cuonghoang1103/cuongthai-desktop"
           TAG="${{ steps.tag.outputs.tag }}"
-          if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
-            echo "Đã có $TAG — dùng lại."
-          else
-            gh release create "$TAG" --repo "$REPO" --draft --title "$TAG" --notes "Đang dựng…"
-            echo "Đã tạo bản nháp $TAG."
-          fi
+          # API releases của GitHub có lúc trả 503 hàng chục phút liền (gặp thật
+          # 17/08/2026). Không thử lại thì cả lần chạy chết vì một sự cố bên
+          # ngoài, và người dựng phải ngồi canh để bấm lại.
+          for i in 1 2 3 4 5 6; do
+            if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+              echo "Đã có $TAG — dùng lại."
+              exit 0
+            fi
+            if gh release create "$TAG" --repo "$REPO" --draft --title "$TAG" --notes "Đang dựng…"; then
+              echo "Đã tạo bản nháp $TAG."
+              exit 0
+            fi
+            echo "Lần $i thất bại (API GitHub?) — chờ 30s rồi thử lại."
+            sleep 30
+          done
+          echo "❌ Không tạo được bản nháp sau 6 lần thử."
+          exit 1
 
   # ── Dựng ───────────────────────────────────────────────────
   dung:

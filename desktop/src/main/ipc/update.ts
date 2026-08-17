@@ -14,7 +14,9 @@
  * phiên và nạp dữ liệu, thêm một lời gọi mạng vào đúng lúc đó chỉ làm chậm thứ
  * người dùng đang chờ.
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, shell } from 'electron';
+import fs from 'node:fs';
+import path from 'node:path';
 import type { UpdateStatus } from '../../shared/ipc';
 import { IS_DEV } from '../config';
 import { handle } from './index';
@@ -183,4 +185,78 @@ export function registerUpdateHandlers(): void {
     const autoUpdater = await getUpdater();
     autoUpdater.quitAndInstall(false, true);
   });
+
+  handle('update:taiThuCong', () => taiFileCai());
+  handle('update:moThuMuc', () => {
+    if (duongFileCai) shell.showItemInFolder(duongFileCai);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// macOS — TỰ TẢI FILE CÀI
+// ════════════════════════════════════════════════════════════
+
+/**
+ * Vì sao có phần này.
+ *
+ * Trên macOS app không tự cài đè được (chưa ký số), nên trước đây nút cập nhật
+ * chỉ mở trang phát hành trên GitHub. Trang đó có 15 tệp — arm64/x64, dmg/zip,
+ * kèm `.blockmap` và `.yml` — và chọn nhầm là tải 140MB rồi không mở được gì.
+ * App thì biết chính xác nó đang chạy trên kiến trúc nào. Để nó chọn.
+ *
+ * Tải xong KHÔNG tự mở file: mở `.dmg` là gắn một ổ đĩa vào máy người dùng, đó
+ * là việc của họ. Chỉ hiện file trong Finder.
+ */
+const REPO_PHAT_HANH = 'https://github.com/cuonghoang1103/cuongthai-desktop/releases';
+
+let duongFileCai: string | null = null;
+
+export function tenFileCai(version: string, arch: string = process.arch): string {
+  // Khớp `artifactName` của electron-builder: '${productName}-${version}-${arch}.${ext}'
+  const a = arch === 'x64' ? 'x64' : 'arm64';
+  return `CuongThai-${version}-${a}.dmg`;
+}
+
+async function taiFileCai(): Promise<void> {
+  const tt = lastStatus;
+  if (tt.state !== 'manual') throw new Error('Chưa có bản mới nào để tải.');
+  const { version } = tt;
+  const ten = tenFileCai(version);
+  const url = `${REPO_PHAT_HANH}/download/v${version}/${ten}`;
+  const dich = path.join(app.getPath('downloads'), ten);
+
+  broadcast({ state: 'taiTay', version, percent: 0 });
+  try {
+    const res = await fetch(url, { redirect: 'follow' });
+    if (!res.ok || !res.body) throw new Error(`Máy chủ trả về ${res.status}`);
+
+    const tong = Number(res.headers.get('content-length') || 0);
+    // Ghi ra file TẠM rồi mới đổi tên. Đứt mạng giữa chừng mà đã ghi thẳng vào
+    // tên thật thì người dùng có một file `.dmg` cụt trong Downloads trông y
+    // như file thật, và nó hỏng theo cách khó hiểu lúc mở.
+    const tam = `${dich}.tai`;
+    const ra = fs.createWriteStream(tam);
+    let da = 0;
+    let phanTramCu = -1;
+
+    for await (const mau of res.body as unknown as AsyncIterable<Uint8Array>) {
+      ra.write(mau);
+      da += mau.byteLength;
+      if (tong) {
+        const p = Math.round((da / tong) * 100);
+        // Chỉ phát khi số thật sự đổi — 140MB chia theo từng mẩu là hàng nghìn
+        // lần gửi IPC cho cùng một con số.
+        if (p !== phanTramCu) { phanTramCu = p; broadcast({ state: 'taiTay', version, percent: p }); }
+      }
+    }
+    await new Promise<void>((xong, hong) => ra.end((e?: Error) => (e ? hong(e) : xong())));
+    await fs.promises.rename(tam, dich);
+
+    duongFileCai = dich;
+    broadcast({ state: 'taiXong', version, duong: dich });
+  } catch (err) {
+    // Tải hỏng KHÔNG được để người dùng cụt đường: quay về `manual` để nút "mở
+    // trang tải" hiện lại, kèm lý do.
+    broadcast({ state: 'error', message: `Không tải được bản cài: ${(err as Error).message}. Mở ${REPO_PHAT_HANH}/latest để tải tay.` });
+  }
 }

@@ -85,6 +85,8 @@ const bridge: DesktopBridge = {
     check: () => ipcRenderer.invoke('update:check') as Promise<void>,
     getStatus: () => ipcRenderer.invoke('update:getStatus') as Promise<UpdateStatus>,
     install: () => ipcRenderer.invoke('update:install') as Promise<void>,
+    taiThuCong: () => ipcRenderer.invoke('update:taiThuCong') as Promise<void>,
+    moThuMuc: () => ipcRenderer.invoke('update:moThuMuc') as Promise<void>,
   },
 
   storage: {

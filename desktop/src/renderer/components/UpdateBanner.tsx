@@ -15,7 +15,7 @@
  * Một dải báo "đang kiểm tra…" mỗi 6 tiếng là nhiễu, không phải thông tin.
  */
 import { useEffect, useState } from 'react';
-import { AlertTriangle, Download, RotateCw } from 'lucide-react';
+import { AlertTriangle, Download, FolderOpen, RotateCw } from 'lucide-react';
 import type { UpdateStatus } from '../../shared/ipc';
 
 /**
@@ -72,15 +72,41 @@ export function UpdateBanner({ collapsed }: { collapsed: boolean }) {
         type="button"
         className="ct-update-banner"
         data-tone="ready"
-        onClick={() => void window.cuongthai?.app.openExternal(
-          'https://github.com/cuonghoang1103/cuongthai-desktop/releases/latest',
-        )}
-        title={`Đã có bản ${status.version}. Bản macOS chưa ký số nên phải tải và cài tay — bấm để mở trang tải.`}
+        onClick={() => void window.cuongthai?.update.taiThuCong()}
+        title={`Đã có bản ${status.version}. Bản macOS chưa ký số nên không tự cài đè được — bấm để tải file cài đúng cho máy này.`}
       >
-        <RotateCw size={13} aria-hidden />
+        <Download size={13} aria-hidden />
         {!collapsed && (
           <span>
-            Có bản <strong>{status.version}</strong> — tải tay
+            Tải bản <strong>{status.version}</strong>
+          </span>
+        )}
+      </button>
+    );
+  }
+
+  if (status.state === 'taiTay') {
+    return (
+      <div className="ct-update-banner" data-tone="busy" title={`Đang tải bản cài ${status.version}… ${status.percent}%`}>
+        <Download size={13} aria-hidden />
+        {!collapsed && <span>Đang tải… {status.percent}%</span>}
+      </div>
+    );
+  }
+
+  if (status.state === 'taiXong') {
+    return (
+      <button
+        type="button"
+        className="ct-update-banner"
+        data-tone="ready"
+        onClick={() => void window.cuongthai?.update.moThuMuc()}
+        title={`Đã tải xong bản ${status.version}. Bấm để mở thư mục, rồi mở file .dmg và kéo CuongThai vào Applications.`}
+      >
+        <FolderOpen size={13} aria-hidden />
+        {!collapsed && (
+          <span>
+            Mở bản <strong>{status.version}</strong>
           </span>
         )}
       </button>

@@ -577,6 +577,10 @@ export const INVOKE_CHANNELS = {
   'update:check': null,
   'update:getStatus': null,
   'update:install': null,
+  /** macOS: tải file cài `.dmg` đúng kiến trúc về thư mục Tải xuống. */
+  'update:taiThuCong': null,
+  /** Mở thư mục chứa file cài vừa tải (Finder/Explorer), không tự mở file. */
+  'update:moThuMuc': null,
 
   'storage:usage': null,
   'storage:clearCache': null,
@@ -715,6 +719,15 @@ export type UpdateStatus =
    * không cài được. Xem ghi chú trong `main/ipc/update.ts`.
    */
   | { state: 'manual'; version: string }
+  /**
+   * macOS: app đang TỰ tải file cài về máy người dùng.
+   *
+   * Khác `downloading` (Squirrel tải bản vá để tự áp): đây là tải cái `.dmg`
+   * người dùng sẽ mở tay. Tách riêng vì hai đường kết thúc khác hẳn nhau —
+   * một bên "khởi động lại để cài", bên kia "mở thư mục".
+   */
+  | { state: 'taiTay'; version: string; percent: number }
+  | { state: 'taiXong'; version: string; duong: string }
   | { state: 'none' }
   | { state: 'error'; message: string };
 
@@ -754,6 +767,16 @@ export interface DesktopBridge {
      */
     getStatus(): Promise<UpdateStatus>;
     install(): Promise<void>;
+    /**
+     * macOS: tải file cài `.dmg` ĐÚNG kiến trúc máy về thư mục Tải xuống.
+     *
+     * Có nút này vì trang phát hành có 15 tệp (arm64/x64 · dmg/zip · blockmap ·
+     * yml) và chọn nhầm một cái là tải 140MB rồi không mở được. App biết mình
+     * chạy trên kiến trúc nào — để nó chọn.
+     */
+    taiThuCong(): Promise<void>;
+    /** Mở thư mục chứa file cài vừa tải. KHÔNG tự mở file cài. */
+    moThuMuc(): Promise<void>;
   };
   storage: {
     usage(): Promise<StorageUsage>;

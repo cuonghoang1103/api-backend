@@ -6,7 +6,7 @@
  * hẳn với `none` (đã hỏi máy chủ và không có bản mới).
  */
 import { useEffect, useState } from 'react';
-import { AlertTriangle, Check, RefreshCw, RotateCw } from 'lucide-react';
+import { AlertTriangle, Check, Download, FolderOpen, RefreshCw, RotateCw } from 'lucide-react';
 import type { AppInfo, UpdateStatus } from '../../shared/ipc';
 import { useUpdateStatus } from './UpdateBanner';
 
@@ -66,6 +66,32 @@ export function UpdatePanel() {
             Khởi động lại để cài
           </button>
         )}
+
+        {/* macOS: KHÔNG có nút "khởi động lại để cài" vì nó sẽ không cài được
+            gì (Squirrel.Mac từ chối bản chưa ký). Nút ở đây tải đúng file cài
+            cho kiến trúc máy này — trang phát hành có 15 tệp và chọn nhầm là
+            tải 140MB rồi không mở được. */}
+        {status.state === 'manual' && (
+          <button
+            type="button"
+            className="ct-btn"
+            onClick={() => void window.cuongthai?.update.taiThuCong()}
+          >
+            <Download size={14} aria-hidden />
+            Tải bản {status.version}
+          </button>
+        )}
+
+        {status.state === 'taiXong' && (
+          <button
+            type="button"
+            className="ct-btn"
+            onClick={() => void window.cuongthai?.update.moThuMuc()}
+          >
+            <FolderOpen size={14} aria-hidden />
+            Mở thư mục chứa file cài
+          </button>
+        )}
       </div>
 
       {info?.isDev === true && (
@@ -108,8 +134,17 @@ function StatusLine({ status, isDev }: { status: UpdateStatus; isDev: boolean })
       // cài không tồn tại.
       return (
         <span style={{ color: 'var(--ct-warn)' }}>
-          Đã có bản {status.version}. Bản macOS chưa ký số nên phải tải và cài tay
-          — mở trang tải ở nút phía trên.
+          Đã có bản {status.version}. Bản macOS chưa ký số nên không tự cài đè được
+          — bấm “Tải bản {status.version}” rồi mở file .dmg và kéo app vào Applications.
+        </span>
+      );
+    case 'taiTay':
+      return <span>Đang tải bản cài {status.version}… {status.percent}%</span>;
+    case 'taiXong':
+      return (
+        <span style={{ color: 'var(--ct-ok)' }}>
+          <Check size={13} aria-hidden /> Đã tải xong bản {status.version}. Mở file
+          .dmg rồi kéo CuongThai vào Applications (ghi đè bản cũ).
         </span>
       );
     case 'error':

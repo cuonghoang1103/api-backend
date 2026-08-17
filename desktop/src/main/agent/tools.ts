@@ -21,9 +21,72 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
+import { soSanhDong, type KetQuaDiff } from './diff';
 import { fileBiCam, LoiNguc, moTrongNguc, thuMucBiCam, TRAN_BYTE_FILE } from './jail';
+import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
 
 const chay = promisify(execFile);
+
+/**
+ * Ngữ cảnh cần cho các tool GHI: cách hỏi người dùng, và cách bỏ dở khi bị huỷ.
+ * Tool ĐỌC không cần gì trong này — đó là lý do nó là tham số tuỳ chọn chứ
+ * không phải thứ mọi tool phải mang theo.
+ */
+export interface BoiCanhGhi {
+  /** Đẩy thẻ duyệt lên giao diện. */
+  xinPhep: (y: YeuCauXinPhep & { diff: KetQuaDiff; taoMoi: boolean }) => void;
+  signal: AbortSignal;
+}
+
+/**
+ * NHẬT KÝ HOÀN TÁC — nội dung file TRƯỚC lần agent chạm vào ĐẦU TIÊN.
+ *
+ * `null` nghĩa là file chưa từng tồn tại (agent vừa tạo mới), nên hoàn tác là
+ * XOÁ nó đi. Chỉ ghi lần đầu: sửa file năm lần thì hoàn tác phải quay về bản
+ * trước cả năm lần, không phải về bản trước lần thứ năm.
+ *
+ * Cố ý KHÔNG dựa vào git: nhiều thư mục người dùng mở ra không phải kho git,
+ * và ngay cả khi có git thì thay đổi chưa commit của chính họ cũng nằm lẫn
+ * trong đó — `git checkout` để hoàn tác agent sẽ cuốn theo cả việc họ đang làm
+ * dở. Bản sao trong RAM chỉ biết đúng những file agent đã đụng.
+ */
+const nhatKyHoanTac = new Map<string, string | null>();
+
+export function xoaNhatKyHoanTac(): void {
+  nhatKyHoanTac.clear();
+}
+
+export function soFileDaSua(): number {
+  return nhatKyHoanTac.size;
+}
+
+/** Danh sách file agent đã sửa trong việc này (đường dẫn tuyệt đối). */
+export function fileDaSua(): string[] {
+  return [...nhatKyHoanTac.keys()];
+}
+
+/**
+ * Trả mọi file agent đã đụng về nguyên trạng.
+ *
+ * Trả về số file đã khôi phục. Lỗi từng file không làm hỏng cả lượt — hoàn tác
+ * được 4/5 file vẫn tốt hơn nhiều so với dừng ở file thứ nhất rồi bỏ mặc bốn
+ * file kia đã đổi.
+ */
+export async function hoanTacTatCa(): Promise<{ soFile: number; loi: string[] }> {
+  const loi: string[] = [];
+  let soFile = 0;
+  for (const [duongDan, goc] of nhatKyHoanTac) {
+    try {
+      if (goc === null) await fs.rm(duongDan, { force: true });
+      else await fs.writeFile(duongDan, goc, 'utf8');
+      soFile++;
+    } catch (err) {
+      loi.push(`${path.basename(duongDan)}: ${(err as Error).message}`);
+    }
+  }
+  nhatKyHoanTac.clear();
+  return { soFile, loi };
+}
 
 // ─── Trần ──────────────────────────────────────────────────────────
 const MAX_MUC_THU_MUC = 300;
@@ -57,6 +120,7 @@ export async function chayToolAgent(
   goc: string,
   ten: string,
   args: Record<string, unknown>,
+  ghi?: BoiCanhGhi,
 ): Promise<KetQuaTool> {
   try {
     switch (ten) {
@@ -66,6 +130,16 @@ export async function chayToolAgent(
       case 'glob': return await toolGlob(goc, args);
       case 'git_status': return await toolGitStatus(goc);
       case 'git_diff': return await toolGitDiff(goc, args);
+      case 'edit_file':
+      case 'create_file': {
+        // Không có bối cảnh ghi ⇒ phiên này không bật quyền sửa. Trả lỗi vào
+        // hội thoại chứ không im lặng bỏ qua: model cần biết để nói lại với
+        // người dùng, thay vì tưởng đã sửa xong.
+        if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
+        return ten === 'edit_file'
+          ? await toolEditFile(goc, args, ghi)
+          : await toolCreateFile(goc, args, ghi);
+      }
       default:
         return { noiDung: `LỖI: app không cài tool tên "${ten}".`, tomTat: 'tool lạ' };
     }
@@ -145,6 +219,137 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
     noiDung: danhSo + (con > 0 ? `\n[… còn ${con} dòng nữa. Gọi lại read_file với offset=${tu + lat.length} để đọc tiếp.]` : ''),
     tomTat: `${lat.length}/${dong.length} dòng`,
   };
+}
+
+// ─── edit_file / create_file ───────────────────────────────────────
+
+/** Trần cho một lần ghi. Lớn hơn thế thì gần như chắc chắn model đang làm sai việc. */
+const TRAN_BYTE_GHI = 512 * 1024;
+
+/**
+ * Ghi xuống đĩa + ghi nhật ký hoàn tác.
+ *
+ * `goc === null` nghĩa là file chưa tồn tại. Ghi nhật ký TRƯỚC khi ghi đĩa và
+ * chỉ ghi lần đầu — thứ tự này quan trọng: ghi đĩa trước rồi mới lưu bản gốc
+ * là lưu nhầm bản đã bị sửa.
+ */
+async function ghiVaNhoDeHoanTac(duongDan: string, noiDungMoi: string, goc: string | null): Promise<void> {
+  if (!nhatKyHoanTac.has(duongDan)) nhatKyHoanTac.set(duongDan, goc);
+  await fs.mkdir(path.dirname(duongDan), { recursive: true });
+  await fs.writeFile(duongDan, noiDungMoi, 'utf8');
+}
+
+/** Câu trả lời khi người dùng từ chối. Viết cho MODEL đọc, nên nó phải nói được bước tiếp theo. */
+function loiTuChoi(viec: string): KetQuaTool {
+  return {
+    noiDung:
+      `NGƯỜI DÙNG TỪ CHỐI ${viec}. Đây không phải lỗi kỹ thuật — họ đã xem thay đổi và không đồng ý. ` +
+      'ĐỪNG gọi lại y hệt. Hãy hỏi họ muốn khác chỗ nào, hoặc đề nghị một cách làm khác.',
+    tomTat: 'bị từ chối',
+  };
+}
+
+async function toolEditFile(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {
+  const tuongDoi = String(args.path ?? '');
+  const cu = typeof args.old_text === 'string' ? args.old_text : '';
+  const moi = typeof args.new_text === 'string' ? args.new_text : '';
+  if (!tuongDoi) return { noiDung: 'LỖI: thiếu "path".', tomTat: 'thiếu đường dẫn' };
+  if (!cu) return { noiDung: 'LỖI: "old_text" rỗng. Muốn tạo file mới thì dùng create_file.', tomTat: 'thiếu old_text' };
+  if (cu === moi) return { noiDung: 'LỖI: old_text và new_text giống hệt nhau, không có gì để sửa.', tomTat: 'không đổi' };
+
+  const dich = await moTrongNguc(goc, tuongDoi, { phaiCoThat: true });
+  const st = await fs.stat(dich);
+  if (st.isDirectory()) return { noiDung: `LỖI: "${tuongDoi}" là thư mục.`, tomTat: 'là thư mục' };
+  if (st.size > TRAN_BYTE_FILE) return { noiDung: 'LỖI: file quá lớn để sửa (trần 2MB).', tomTat: 'quá lớn' };
+
+  const noiDung = await fs.readFile(dich, 'utf8');
+
+  // KHỚP CHÍNH XÁC, và phải DUY NHẤT. Đây là chỗ cả thiết kế đứng hay đổ:
+  // khớp nhiều nơi mà cứ thay cái đầu tiên thì model sửa nhầm chỗ, người dùng
+  // duyệt một diff trông hợp lý, và cái sai nằm ở đoạn không ai nhìn.
+  const soLan = demSoLan(noiDung, cu);
+  if (soLan === 0) {
+    return {
+      noiDung:
+        `LỖI: không tìm thấy old_text trong ${tuongDoi}. Nội dung trên đĩa khác với thứ bạn đang nhớ. ` +
+        'Hãy gọi read_file để đọc lại đoạn đó rồi chép CHÍNH XÁC (kể cả thụt lề).',
+      tomTat: 'không khớp',
+    };
+  }
+  if (soLan > 1) {
+    return {
+      noiDung:
+        `LỖI: old_text xuất hiện ${soLan} lần trong ${tuongDoi} nên không biết sửa chỗ nào. ` +
+        'Hãy lấy thêm vài dòng phía trên hoặc phía dưới cho đoạn đó đủ riêng biệt.',
+      tomTat: `trùng ${soLan} chỗ`,
+    };
+  }
+
+  const noiDungMoi = noiDung.replace(cu, moi);
+  if (Buffer.byteLength(noiDungMoi, 'utf8') > TRAN_BYTE_GHI) {
+    return { noiDung: `LỖI: file sau khi sửa vượt trần ${TRAN_BYTE_GHI / 1024}KB.`, tomTat: 'quá lớn' };
+  }
+
+  const diff = soSanhDong(noiDung, noiDungMoi);
+  const tuDong = daChoPhepCaFile(tuongDoi);
+  const quyet = await hoiNguoiDung(
+    { ten: 'edit_file', duongDan: tuongDoi },
+    (y) => ghi.xinPhep({ ...y, diff, taoMoi: false }),
+    ghi.signal,
+  );
+  if (quyet === 'tuChoi') return loiTuChoi(`sửa ${tuongDoi}`);
+
+  await ghiVaNhoDeHoanTac(dich, noiDungMoi, noiDung);
+  return {
+    noiDung: `Đã sửa ${tuongDoi}: +${diff.soThem} −${diff.soBo} dòng. Người dùng đã duyệt.`,
+    tomTat: `+${diff.soThem} −${diff.soBo}${tuDong ? ' (tự duyệt)' : ''}`,
+  };
+}
+
+async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {
+  const tuongDoi = String(args.path ?? '');
+  const noiDung = typeof args.content === 'string' ? args.content : '';
+  if (!tuongDoi) return { noiDung: 'LỖI: thiếu "path".', tomTat: 'thiếu đường dẫn' };
+  if (Buffer.byteLength(noiDung, 'utf8') > TRAN_BYTE_GHI) {
+    return { noiDung: `LỖI: nội dung vượt trần ${TRAN_BYTE_GHI / 1024}KB.`, tomTat: 'quá lớn' };
+  }
+
+  // `phaiCoThat: false` vì file CHƯA tồn tại — nhưng ngục vẫn kiểm đường dẫn
+  // và danh sách chặn, nên `create_file('.env', …)` vẫn bị chặn.
+  const dich = await moTrongNguc(goc, tuongDoi);
+  const daCo = await fs.stat(dich).then(() => true).catch(() => false);
+  if (daCo) {
+    return {
+      noiDung: `LỖI: "${tuongDoi}" đã tồn tại. Dùng edit_file để sửa file có sẵn.`,
+      tomTat: 'đã tồn tại',
+    };
+  }
+
+  const diff = soSanhDong('', noiDung);
+  const quyet = await hoiNguoiDung(
+    { ten: 'create_file', duongDan: tuongDoi },
+    (y) => ghi.xinPhep({ ...y, diff, taoMoi: true }),
+    ghi.signal,
+  );
+  if (quyet === 'tuChoi') return loiTuChoi(`tạo ${tuongDoi}`);
+
+  await ghiVaNhoDeHoanTac(dich, noiDung, null);
+  return {
+    noiDung: `Đã tạo ${tuongDoi} (${noiDung.split('\n').length} dòng). Người dùng đã duyệt.`,
+    tomTat: `tạo mới, ${noiDung.split('\n').length} dòng`,
+  };
+}
+
+/** Đếm số lần chuỗi con xuất hiện. Không dùng regex — `old_text` chứa ký tự đặc biệt là chuyện thường. */
+function demSoLan(trong: string, tim: string): number {
+  let dem = 0;
+  let i = trong.indexOf(tim);
+  while (i !== -1) {
+    dem++;
+    if (dem > 1) return dem; // chỉ cần biết "nhiều hơn một"
+    i = trong.indexOf(tim, i + tim.length);
+  }
+  return dem;
 }
 
 // ─── grep ──────────────────────────────────────────────────────────

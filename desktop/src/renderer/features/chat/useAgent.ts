@@ -13,13 +13,23 @@
  * thật sự gọi `cancel()` chứ không chỉ ẩn giao diện đi.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { AgentInfo, AgentQuota, AgentUiEvent, AgentWorkspace } from '../../../shared/ipc';
+import type { AgentInfo, AgentQuota, AgentQuyetDinh, AgentUiEvent, AgentWorkspace } from '../../../shared/ipc';
+import type { TheXinPhep } from './XinPhep';
 
 /** Một mục trên màn hình. Không phải một tin nhắn giao thức. */
 export type MucHienThi =
   | { kieu: 'nguoi'; text: string }
   | { kieu: 'may'; text: string }
   | { kieu: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
+  /**
+   * Thẻ duyệt nằm NGAY TRONG dòng thời gian hội thoại, không phải hộp thoại
+   * nổi. Hộp thoại nổi che mất đoạn agent vừa giải thích lý do nó muốn sửa —
+   * mà đó chính là thứ người dùng cần đọc để quyết định.
+   *
+   * `xong` giữ lại sau khi đã trả lời để lịch sử còn thấy "chỗ này đã duyệt /
+   * đã từ chối", thay vì thẻ biến mất không dấu vết.
+   */
+  | { kieu: 'xinPhep'; the: TheXinPhep; xong?: 'dongY' | 'tuChoi' }
   | { kieu: 'loi'; text: string; ma?: string };
 
 /**
@@ -54,6 +64,8 @@ export interface TrangThaiAgent {
   dangNghi: boolean;
   hanMuc: AgentQuota | null;
   tienPhien: number;
+  /** Số file agent đã sửa trong việc này — để bật/tắt nút Hoàn tác. */
+  soFileDaSua: number;
 }
 
 export function useAgent(info: AgentInfo | null) {
@@ -62,6 +74,7 @@ export function useAgent(info: AgentInfo | null) {
   const [dangNghi, datDangNghi] = useState(false);
   const [hanMuc, datHanMuc] = useState<AgentQuota | null>(null);
   const [tienPhien, datTienPhien] = useState(0);
+  const [soFileDaSua, datSoFileDaSua] = useState(0);
 
   // Hạn mức ban đầu lấy từ `getInfo`; sau đó mỗi khung `xong` tự cập nhật, nên
   // KHÔNG cần gọi lại `/usage` — gọi lại là thêm một round-trip cho một con số
@@ -95,9 +108,28 @@ export function useAgent(info: AgentInfo | null) {
           datDangNghi(false);
           datMuc((truoc) => [...truoc, { kieu: 'tool', ten: e.ten, tomTat: e.tomTat, vong: e.vong }]);
           break;
+        case 'xinPhep':
+          // Tắt con quay: agent KHÔNG còn đang nghĩ, nó đang chờ NGƯỜI DÙNG.
+          // Để con quay quay tiếp thì người dùng ngồi đợi một thứ đang đợi họ.
+          datDangNghi(false);
+          datMuc((truoc) => [...truoc, {
+            kieu: 'xinPhep',
+            the: { id: e.id, ten: e.ten, duongDan: e.duongDan, taoMoi: e.taoMoi, diff: e.diff },
+          }]);
+          break;
+        case 'xongXinPhep':
+          datMuc((truoc) => truoc.map((m) =>
+            m.kieu === 'xinPhep' && m.the.id === e.id
+              ? { ...m, xong: e.dongY ? 'dongY' : 'tuChoi' }
+              : m,
+          ));
+          // Trả lời xong thì agent chạy tiếp ⇒ bật lại con quay.
+          if (e.dongY) datDangNghi(true);
+          break;
         case 'xong':
           if (e.hanMuc) datHanMuc(e.hanMuc);
           datTienPhien((t) => t + e.tienUsd);
+          datSoFileDaSua(e.soFileDaSua);
           break;
         case 'loi':
           datDangNghi(false);
@@ -141,15 +173,46 @@ export function useAgent(info: AgentInfo | null) {
     await window.cuongthai?.agent.reset();
     datMuc([]);
     datTienPhien(0);
+    datSoFileDaSua(0);
     datDangChay(false);
     datDangNghi(false);
   }, []);
 
+  /**
+   * Trả lời thẻ duyệt.
+   *
+   * KHÔNG tự đánh dấu thẻ là đã xong ở đây — chờ khung `xongXinPhep` từ main.
+   * Đánh dấu ngay ở phía giao diện thì một thẻ đã hết giờ 5 phút vẫn hiện ra
+   * "đã duyệt" trong khi main đã từ chối nó từ lâu, và người dùng tin vào một
+   * thay đổi chưa bao giờ được ghi.
+   */
+  const traLoiXinPhep = useCallback((id: string, quyetDinh: AgentQuyetDinh) => {
+    void window.cuongthai?.agent.traLoiXinPhep(id, quyetDinh);
+  }, []);
+
+  const hoanTac = useCallback(async (): Promise<{ soFile: number; loi: string[] } | null> => {
+    const kq = await window.cuongthai?.agent.hoanTac();
+    if (!kq) return null;
+    datSoFileDaSua(0);
+    datDangChay(false);
+    datDangNghi(false);
+    datMuc((truoc) => [...truoc, {
+      kieu: 'loi',
+      ma: 'HOAN_TAC',
+      text: kq.loi.length
+        ? `Đã hoàn tác ${kq.soFile} file. Không hoàn tác được: ${kq.loi.join(' · ')}`
+        : `Đã trả ${kq.soFile} file về nguyên trạng.`,
+    }]);
+    return kq;
+  }, []);
+
   return {
-    trangThai: { muc, dangChay, dangNghi, hanMuc, tienPhien } satisfies TrangThaiAgent,
+    trangThai: { muc, dangChay, dangNghi, hanMuc, tienPhien, soFileDaSua } satisfies TrangThaiAgent,
     gui,
     dung,
     batDauLai,
+    traLoiXinPhep,
+    hoanTac,
   };
 }
 

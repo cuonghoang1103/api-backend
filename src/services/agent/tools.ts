@@ -39,7 +39,7 @@ export type ToolRing = 'client' | 'server';
  * gọi thứ app không chạy được. Đây là cách để thêm tool mà không làm chết app
  * cũ đang cài trên máy người dùng.
  */
-export type AgentCapability = 'fs_read' | 'git_read';
+export type AgentCapability = 'fs_read' | 'git_read' | 'fs_write';
 
 export interface AgentToolDef {
   name: string;
@@ -151,6 +151,53 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
 
+  // ─── Vòng 1b: SỬA file (P2) — mỗi lần ghi đều phải được người dùng duyệt ──
+  //
+  // Nguyên thuỷ là THAY CHUỖI, không phải unified diff và cũng không phải ghi
+  // đè cả file:
+  //   • diff cần số dòng, mà model đếm dòng sai thường xuyên — và sai một dòng
+  //     là vá vào chỗ khác chứ không phải báo lỗi;
+  //   • ghi đè cả file bắt model chép lại nguyên văn phần nó không định sửa,
+  //     tốn tiền theo kích thước file và thỉnh thoảng đánh rơi vài dòng.
+  // Thay chuỗi thì sai là KHÔNG KHỚP, mà không khớp thì không ghi gì cả. Hỏng
+  // ồn ào bao giờ cũng hơn hỏng im lặng.
+  {
+    name: 'edit_file',
+    ring: 'client',
+    capability: 'fs_write',
+    description:
+      'Sửa một đoạn trong file có sẵn: thay old_text bằng new_text. ' +
+      'old_text phải khớp CHÍNH XÁC từng ký tự, kể cả thụt lề và xuống dòng — hãy đọc file bằng read_file ngay trước khi sửa, đừng dựa vào trí nhớ. ' +
+      'old_text cũng phải DUY NHẤT trong file; nếu đoạn đó xuất hiện nhiều lần, lấy thêm dòng phía trên/dưới cho đủ riêng biệt. ' +
+      'Người dùng phải DUYỆT thì mới ghi. Bị từ chối là chuyện bình thường: đừng gọi lại y hệt, hãy hỏi họ muốn khác chỗ nào. ' +
+      'Mỗi lần gọi sửa MỘT chỗ — nhiều chỗ thì gọi nhiều lần để người dùng duyệt từng cái.',
+    parameters: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Đường dẫn TƯƠNG ĐỐI so với gốc dự án.' },
+        old_text: { type: 'string', description: 'Đoạn văn bản hiện có, chép chính xác từ file.' },
+        new_text: { type: 'string', description: 'Đoạn thay thế. Để chuỗi rỗng nghĩa là XOÁ đoạn đó.' },
+      },
+      required: ['path', 'old_text', 'new_text'],
+    },
+  },
+  {
+    name: 'create_file',
+    ring: 'client',
+    capability: 'fs_write',
+    description:
+      'Tạo file MỚI kèm nội dung. Báo lỗi nếu file đã tồn tại — muốn đổi file có sẵn thì dùng edit_file. ' +
+      'Thư mục cha còn thiếu sẽ được tạo theo. Cũng cần người dùng duyệt.',
+    parameters: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Đường dẫn TƯƠNG ĐỐI so với gốc dự án.' },
+        content: { type: 'string', description: 'Toàn bộ nội dung file.' },
+      },
+      required: ['path', 'content'],
+    },
+  },
+
   // ─── Vòng 2: Notes (máy chủ tự chạy) ───────────────────────────
   {
     name: 'notes_search',
@@ -219,7 +266,7 @@ export function toolsForGateway(capabilities: readonly AgentCapability[]): Array
 }
 
 /** Danh sách nhóm khả năng hợp lệ — dùng để lọc phần app gửi lên. */
-export const ALL_CAPABILITIES: readonly AgentCapability[] = ['fs_read', 'git_read'];
+export const ALL_CAPABILITIES: readonly AgentCapability[] = ['fs_read', 'git_read', 'fs_write'];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {
   if (!Array.isArray(raw)) return [];

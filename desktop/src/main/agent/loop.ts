@@ -23,7 +23,9 @@
  */
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from '../ipc/auth';
-import { chayToolAgent } from './tools';
+import type { KetQuaDiff } from './diff';
+import { chayToolAgent, soFileDaSua, xoaNhatKyHoanTac } from './tools';
+import { huyTatCa, xoaQuyenDaCap, type YeuCauXinPhep } from './xinPhep';
 
 /** Trần vòng lặp phía app. RỘNG HƠN trần bước của máy chủ (30) để máy chủ mới là bên nói dừng. */
 const MAX_VONG = 40;
@@ -34,7 +36,11 @@ export type SuKienAgent =
   | { loai: 'chu'; delta: string }
   /** Một tool vừa chạy xong (bất kể vòng 1 hay vòng 2) — để hiện dòng tiến trình. */
   | { loai: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
-  | { loai: 'xong'; hanMuc: HanMucUi | null; tienUsd: number; daLuoc: number }
+  /** Vòng lặp ĐANG DỪNG chờ người dùng duyệt. Giao diện phải hiện thẻ diff. */
+  | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: KetQuaDiff }
+  /** Thẻ duyệt đã được trả lời (hoặc hết giờ) — giao diện gỡ nó đi. */
+  | { loai: 'xongXinPhep'; id: string; dongY: boolean }
+  | { loai: 'xong'; hanMuc: HanMucUi | null; tienUsd: number; daLuoc: number; soFileDaSua: number }
   | { loai: 'loi'; thongDiep: string; ma?: string }
   | { loai: 'huy' };
 
@@ -56,6 +62,8 @@ export interface BoiCanh {
   /** Thư mục dự án, hoặc null nếu chưa chọn. */
   goc: string | null;
   nhanh?: string;
+  /** Người dùng đã bật chế độ cho sửa file chưa. Mặc định KHÔNG. */
+  choSua?: boolean;
 }
 
 /**
@@ -70,6 +78,13 @@ let dangChay: AbortController | null = null;
 
 export function xoaHoiThoai(): void {
   hoiThoai = [];
+  // Bắt đầu việc mới ⇒ quên quyền đã cấp và quên nhật ký hoàn tác. Quyền
+  // "cho phép cả file này" được cấp cho MỘT việc, không phải cấp vĩnh viễn;
+  // và giữ nhật ký cũ lại thì nút Hoàn tác sẽ lùi cả những thay đổi thuộc
+  // việc trước mà người dùng đã chấp nhận xong xuôi.
+  huyTatCa();
+  xoaQuyenDaCap();
+  xoaNhatKyHoanTac();
 }
 
 export function dangChayKhong(): boolean {
@@ -80,6 +95,9 @@ export function dangChayKhong(): boolean {
 export function huyLuot(): void {
   dangChay?.abort();
   dangChay = null;
+  // Thẻ duyệt đang mở phải được giải phóng, nếu không vòng lặp treo mãi ở
+  // `await hoiNguoiDung()` dù lượt đã bị huỷ.
+  huyTatCa();
 }
 
 /**
@@ -108,13 +126,21 @@ export async function chayLuot(
   // Chỉ khai báo khả năng khi THẬT SỰ có thư mục. Khai bừa thì máy chủ đưa tool
   // đọc file cho model, model gọi, và app trả lỗi ở mọi lời gọi — agent quay
   // vòng trong một việc nó không bao giờ làm được.
-  const capabilities = boiCanh.goc ? ['fs_read', 'git_read'] : [];
+  //
+  // `fs_write` thêm vào chỉ khi người dùng đã BẬT chế độ sửa. Không bật thì máy
+  // chủ không đưa tool sửa cho model, nên model không thể gọi thứ nó sẽ bị từ
+  // chối — im lặng bỏ qua ở phía app thì model cứ thử lại mãi.
+  const capabilities = boiCanh.goc
+    ? boiCanh.choSua ? ['fs_read', 'git_read', 'fs_write'] : ['fs_read', 'git_read']
+    : [];
+
+  let daThuLai = false;
 
   try {
     for (let vong = 0; vong < MAX_VONG; vong++) {
       if (dieuKhien.signal.aborted) { phat({ loai: 'huy' }); return; }
 
-      const ketQua = await mgoiMotLuot({
+      const phanHoi = await mgoiMotLuot({
         token: phien.sessionToken,
         messages: hoiThoai,
         capabilities,
@@ -131,20 +157,48 @@ export async function chayLuot(
         phat,
       });
 
-      if (!ketQua) return; // lỗi hoặc huỷ — `mgoiMotLuot` đã phát sự kiện rồi
+      if (!phanHoi.ok) {
+        if (MA_DANG_THU_LAI.has(phanHoi.ma) && !daThuLai) {
+          daThuLai = true;
+          phat({ loai: 'tool', ten: 'kết nối', tomTat: 'đứt giữa chừng — đang thử lại', vong: 'may' });
+          vong--; // lần thử lại không tính là một vòng
+          continue;
+        }
+        phat({ loai: 'loi', thongDiep: phanHoi.thongDiep, ma: phanHoi.ma });
+        return;
+      }
+      const ketQua = phanHoi.ketQua;
+      // Đi được một bước ⇒ nạp lại quyền thử lại. "Một lần" là một lần cho MỖI
+      // chỗ kẹt, không phải một lần cho cả việc — việc 20 bước mà đứt ở bước 3
+      // rồi lại đứt ở bước 17 là hai sự cố khác nhau.
+      daThuLai = false;
 
       hoiThoai.push(...ketQua.append);
 
       if (ketQua.stop === 'end' || ketQua.stop === 'max_steps') {
-        phat({ loai: 'xong', hanMuc: ketQua.quota, tienUsd: ketQua.costUsd, daLuoc: ketQua.daLuoc });
+        phat({
+          loai: 'xong', hanMuc: ketQua.quota, tienUsd: ketQua.costUsd,
+          daLuoc: ketQua.daLuoc, soFileDaSua: soFileDaSua(),
+        });
         return;
       }
 
       // 'tool_calls' → chạy; 'continue' → không có gì để chạy, vòng lại ngay.
       for (const goi of ketQua.toolCalls) {
         if (dieuKhien.signal.aborted) { phat({ loai: 'huy' }); return; }
+
+        // Bối cảnh ghi chỉ dựng khi người dùng đã bật chế độ sửa. Không bật thì
+        // `chayToolAgent` nhận `undefined` và tự trả lỗi cho model.
+        const boiCanhGhi = boiCanh.choSua
+          ? {
+              signal: dieuKhien.signal,
+              xinPhep: (y: YeuCauXinPhep & { diff: KetQuaDiff; taoMoi: boolean }) =>
+                phat({ loai: 'xinPhep', id: y.id, ten: y.ten, duongDan: y.duongDan, taoMoi: y.taoMoi, diff: y.diff }),
+            }
+          : undefined;
+
         const kq = boiCanh.goc
-          ? await chayToolAgent(boiCanh.goc, goi.name, goi.args)
+          ? await chayToolAgent(boiCanh.goc, goi.name, goi.args, boiCanhGhi)
           : { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
         hoiThoai.push({ role: 'tool', tool_call_id: goi.id, content: kq.noiDung });
         phat({ loai: 'tool', ten: goi.name, tomTat: kq.tomTat, vong: 'may' });
@@ -175,6 +229,19 @@ interface KetQuaLuot {
   daLuoc: number;
 }
 
+/**
+ * Lỗi đáng THỬ LẠI: đường truyền đứt, không phải cổng từ chối.
+ *
+ * Đo thật 17/08/2026: cổng thỉnh thoảng im hẳn quá 90 giây và đồng hồ im lặng ở
+ * backend cắt lượt. Hội thoại lúc đó vẫn nguyên vẹn ở main, nên thử lại là gửi
+ * đúng thứ vừa gửi — rẻ hơn nhiều so với bắt người dùng gõ lại câu hỏi và mất
+ * hết những bước agent đã đi.
+ *
+ * CHỈ thử lại MỘT lần, và chỉ với nhóm lỗi này. Lỗi "hết hạn mức", "chưa Pro",
+ * "cổng trả 400" mà thử lại thì chỉ tốn thêm tiền cho cùng một câu trả lời.
+ */
+const MA_DANG_THU_LAI = new Set(['CONNECTION_LOST', 'LLM_ERROR']);
+
 async function mgoiMotLuot(o: {
   token: string;
   messages: TinNhan[];
@@ -182,7 +249,7 @@ async function mgoiMotLuot(o: {
   workspace?: { name: string; platform: string; branch?: string };
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
-}): Promise<KetQuaLuot | null> {
+}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
   const res = await fetch(`${API_ORIGIN}/api/v1/agent/turn`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${o.token}` },
@@ -198,23 +265,21 @@ async function mgoiMotLuot(o: {
     // 403 = chưa Pro. Phải phân biệt với 401 (phiên hết hạn) vì hai cái dẫn tới
     // hai màn hình khác hẳn nhau: một cái mời nâng cấp, một cái bắt đăng nhập.
     const than = await res.json().catch(() => ({})) as { message?: string; code?: string };
-    o.phat({
-      loai: 'loi',
+    return {
+      ok: false,
       thongDiep: than.message ?? `Máy chủ trả về ${res.status}.`,
       ma: than.code ?? String(res.status),
-    });
-    return null;
+    };
   }
   if (!res.body) {
-    o.phat({ loai: 'loi', thongDiep: 'Máy chủ không trả về dữ liệu.' });
-    return null;
+    return { ok: false, thongDiep: 'Máy chủ không trả về dữ liệu.', ma: 'EMPTY_BODY' };
   }
 
   const doc = res.body.getReader();
   const giaiMa = new TextDecoder();
   let dem = '';
   const ra: KetQuaLuot = { append: [], stop: 'end', toolCalls: [], quota: null, costUsd: 0, daLuoc: 0 };
-  let coLoi = false;
+  let loi: { thongDiep: string; ma: string } | null = null;
 
   for (;;) {
     const { done, value } = await doc.read();
@@ -249,12 +314,14 @@ async function mgoiMotLuot(o: {
           ra.daLuoc = e.compact?.soDaLuoc ?? 0;
           break;
         case 'error':
-          coLoi = true;
-          o.phat({ loai: 'loi', thongDiep: e.error, ma: e.code });
+          // Ghi lại, KHÔNG phát ngay: chỗ gọi có thể quyết định thử lại, và
+          // phát lỗi trước khi thử lại là hiện một thông báo đỏ rồi tự sửa —
+          // người dùng đọc được cái đỏ đó và tưởng đã hỏng.
+          loi = { thongDiep: e.error, ma: e.code ?? 'LLM_ERROR' };
           break;
       }
     }
   }
 
-  return coLoi ? null : ra;
+  return loi ? { ok: false, ...loi } : { ok: true, ketQua: ra };
 }

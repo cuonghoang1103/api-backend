@@ -2181,3 +2181,173 @@ select {
 .ct-page-full[data-chua-robot='true'] .ct-agent-chan {
   padding-right: 90px;
 }
+
+/* ── Thẻ duyệt thay đổi (P2) ────────────────────────────
+ *
+ * Thẻ nằm TRONG dòng thời gian hội thoại, không phải hộp thoại nổi: hộp thoại
+ * nổi che mất đoạn agent vừa giải thích vì sao nó muốn sửa — đúng thứ người
+ * dùng cần đọc để quyết định.
+ */
+
+.ct-xinphep {
+  border: 1px solid var(--ct-accent);
+  border-radius: var(--ct-radius);
+  background: var(--ct-surface);
+  padding: 10px 12px;
+  max-width: 92%;
+  align-self: flex-start;
+  width: 100%;
+}
+
+.ct-xinphep-dau {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+  font-size: 12.5px;
+  color: var(--ct-text);
+}
+
+.ct-xinphep-duongdan {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.ct-xinphep-dem {
+  font-size: 11.5px;
+  color: var(--ct-text-muted);
+  white-space: nowrap;
+}
+
+.ct-xinphep-them { color: var(--ct-ok); font-weight: 600; }
+.ct-xinphep-bo { color: var(--ct-err); font-weight: 600; }
+
+/* Bảng diff.
+ *
+ * Trần chiều cao + tự cuộn: một diff 400 dòng mà đẩy nút Cho phép xuống dưới
+ * đáy màn hình thì người dùng phải cuộn đi tìm nút, và cái họ tìm là nút chứ
+ * không phải nội dung. */
+.ct-diff {
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+
+.ct-diff-dong {
+  display: flex;
+  align-items: baseline;
+  white-space: pre;
+}
+
+.ct-diff-dong[data-loai='them'] {
+  background: color-mix(in srgb, var(--ct-ok) 14%, transparent);
+}
+
+.ct-diff-dong[data-loai='bo'] {
+  background: color-mix(in srgb, var(--ct-err) 14%, transparent);
+}
+
+/* Số dòng KHÔNG được bôi đen theo khi người dùng bôi để chép đoạn mã. */
+.ct-diff-so {
+  flex: 0 0 38px;
+  text-align: right;
+  padding-right: 8px;
+  color: var(--ct-text-faint);
+  user-select: none;
+}
+
+.ct-diff-dau {
+  flex: 0 0 14px;
+  text-align: center;
+  user-select: none;
+  color: var(--ct-text-muted);
+}
+
+.ct-diff-dong[data-loai='them'] .ct-diff-dau { color: var(--ct-ok); }
+.ct-diff-dong[data-loai='bo'] .ct-diff-dau { color: var(--ct-err); }
+
+/* `pre-wrap` để dòng dài xuống hàng thay vì kéo ngang cả thẻ. */
+.ct-diff-text {
+  flex: 1;
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding-right: 8px;
+}
+
+.ct-diff-ngat {
+  padding: 2px 0 2px 52px;
+  color: var(--ct-text-faint);
+  user-select: none;
+}
+
+.ct-xinphep-nut {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.ct-xinphep-tuchoi {
+  margin-left: auto;
+  border-color: color-mix(in srgb, var(--ct-err) 40%, transparent);
+  color: var(--ct-err);
+}
+
+/* ── Nút bật quyền sửa ──
+ *
+ * Bật thì phải NHÌN THẤY NGAY. Đây là quyền ghi vào mã nguồn do một mô hình
+ * ngôn ngữ điều khiển; một cái nút bật/tắt trông giống hệt nhau ở hai trạng
+ * thái là cách chắc chắn để người dùng quên mất nó đang bật. */
+.ct-agent-suanut {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: none;
+  color: var(--ct-text-muted);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ct-agent-suanut:hover:not(:disabled) { background: var(--ct-hover); }
+.ct-agent-suanut:disabled { opacity: 0.45; cursor: default; }
+
+.ct-agent-suanut[data-bat='true'] {
+  border-color: var(--ct-warn);
+  background: color-mix(in srgb, var(--ct-warn) 14%, transparent);
+  color: var(--ct-warn);
+}
+
+.ct-agent-hoantac {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border: 1px solid color-mix(in srgb, var(--ct-warn) 40%, transparent);
+  border-radius: var(--ct-radius-sm);
+  background: none;
+  color: var(--ct-warn);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ct-agent-hoantac:hover { background: color-mix(in srgb, var(--ct-warn) 14%, transparent); }
+
+/* Dấu vết của thẻ đã trả lời. */
+.ct-agent-tool[data-xong='dongY'] { border-left-color: var(--ct-ok); }
+.ct-agent-tool[data-xong='tuChoi'] { border-left-color: var(--ct-err); }

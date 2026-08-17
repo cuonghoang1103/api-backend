@@ -145,15 +145,24 @@ try {
   const quayHien = await man.locator('.ct-agent-nghi').isVisible({ timeout: 5000 }).catch(() => false);
   check('con quay bật ngay, không chờ chữ đầu tiên', quayHien);
 
-  // Chờ có câu trả lời (mục 'may' cuối cùng có chữ) hoặc lỗi.
+  // Chờ lượt KẾT THÚC.
+  //
+  // ⚠️ Điều kiện "có chữ + không thấy con quay" là SAI, và sai một cách rất
+  // khó thấy: agent hay mở đầu bằng "Tôi sẽ dò cấu trúc dự án…" rồi mới gọi
+  // tool. Câu mở đầu đó đã dài hơn 20 ký tự và con quay đã tắt (khung `chu`
+  // tắt nó), nên phép chờ trả về NGAY GIỮA LƯỢT — rồi mọi phép kiểm sau đó đo
+  // một màn hình còn đang chạy dở. Chỉ những lần model im lặng gọi tool luôn
+  // mới tình cờ đúng.
+  //
+  // Tín hiệu ĐÚNG là nút quay lại chữ "Gửi": nó chỉ đổi khi `chayLuot()` đã
+  // trả về.
   await w.waitForFunction(
     () => {
       const man = document.querySelector('.ct-chedo[data-hien="true"]');
       if (!man) return false;
       if (man.querySelector('.ct-agent-scroll .ct-notice[data-tone="err"]')) return true;
-      const may = [...man.querySelectorAll('.ct-agent-may')];
-      return may.length > 0 && may[may.length - 1].textContent.length > 20
-        && !man.querySelector('.ct-agent-nghi');
+      const nut = man.querySelector('.ct-agent-soan .ct-btn');
+      return !!nut && nut.textContent.includes('Gửi');
     },
     // ⚠️ Tham số THỨ BA mới là options. Playwright là `(fn, arg, options)`, nên
     // đặt `{timeout}` ở vị trí thứ hai thì nó bị hiểu là ĐỐI SỐ truyền vào hàm
@@ -180,6 +189,81 @@ try {
 
     const hanMucSau = await man.locator('.ct-agent-hanmuc-chu').innerText();
     check('hạn mức cập nhật sau lượt chạy', hanMucSau.length > 0, hanMucSau);
+  }
+
+  // ══ P2: sửa file có duyệt diff ══
+  //
+  // Đây là phép kiểm quan trọng nhất của cả file. Nó chứng minh ba điều mà
+  // không phép kiểm nào khác chạm tới: agent KHÔNG ghi được gì trước khi người
+  // dùng bấm, nó GHI THẬT sau khi bấm, và hoàn tác trả file về NGUYÊN VĂN.
+  console.log('\nP2 — sửa file có duyệt:');
+  const fileThu = path.join(duAn, 'src', 'boot.ts');
+  const noiDungGoc = fs.readFileSync(fileThu, 'utf8');
+
+  check('mặc định quyền sửa TẮT', (await man.locator('.ct-agent-suanut').getAttribute('data-bat')) === 'false');
+  await man.locator('.ct-agent-suanut').click();
+  // ĐỢI React vẽ lại, đừng đọc thuộc tính ngay sau `click()`. Bấm là đồng bộ,
+  // còn `datCheDoSua` là một vòng IPC rồi mới setState — đọc ngay thì luôn thấy
+  // giá trị CŨ, và phép kiểm báo hỏng cho một thứ hoàn toàn đúng.
+  const batDuoc = await man
+    .locator('.ct-agent-suanut[data-bat="true"]')
+    .waitFor({ timeout: 10000 })
+    .then(() => true)
+    .catch(() => false);
+  check('bật được quyền sửa', batDuoc);
+
+  await oNhap.fill('Trong src/boot.ts, đổi giá trị CONG từ 7331 thành 9999. Chỉ đổi đúng con số đó.');
+  await man.locator('.ct-agent-soan .ct-btn').first().click();
+
+  // Thẻ duyệt phải hiện ra — và file trên đĩa phải CHƯA đổi.
+  await w.waitForSelector('.ct-chedo[data-hien="true"] .ct-xinphep', { timeout: 180000 });
+  check('thẻ duyệt hiện ra trước khi ghi', true);
+  check(
+    'file trên đĩa CHƯA đổi khi thẻ còn đang chờ',
+    fs.readFileSync(fileThu, 'utf8') === noiDungGoc,
+  );
+
+  const soDongThem = await man.locator('.ct-xinphep .ct-diff-dong[data-loai="them"]').count();
+  const soDongBo = await man.locator('.ct-xinphep .ct-diff-dong[data-loai="bo"]').count();
+  check('thẻ có bảng diff', soDongThem > 0 && soDongBo > 0, `+${soDongThem} −${soDongBo}`);
+  const chuThem = await man.locator('.ct-xinphep .ct-diff-dong[data-loai="them"] .ct-diff-text').first().innerText();
+  check('diff hiện đúng giá trị mới', chuThem.includes('9999'), chuThem.trim());
+
+  await man.locator('.ct-xinphep .ct-btn', { hasText: 'Cho phép' }).first().click();
+  await w.waitForFunction(
+    () => !document.querySelector('.ct-chedo[data-hien="true"] .ct-xinphep'),
+    null,
+    { timeout: 30000 },
+  );
+
+  const sauKhiDuyet = fs.readFileSync(fileThu, 'utf8');
+  check('file trên đĩa ĐÃ đổi sau khi duyệt', sauKhiDuyet.includes('9999') && !sauKhiDuyet.includes('7331'));
+
+  // Chờ lượt kết thúc THẬT rồi mới hoàn tác.
+  //
+  // ⚠️ KHÔNG chờ `.ct-agent-nghi` biến mất: con quay tắt ở mỗi khung chữ và mỗi
+  // dòng công cụ, nên "không thấy con quay" chỉ nghĩa là agent vừa nói gì đó,
+  // không nghĩa là nó xong. Tín hiệu ĐÚNG là nút quay về chữ "Gửi" — nó chỉ đổi
+  // khi `chayLuot()` đã trả về, tức là khung `xong` đã tới và `soFileDaSua` đã
+  // được cập nhật.
+  await w.waitForFunction(
+    () => {
+      const nut = document.querySelector('.ct-chedo[data-hien="true"] .ct-agent-soan .ct-btn');
+      return !!nut && nut.textContent.includes('Gửi');
+    },
+    null,
+    { timeout: 180000 },
+  );
+
+  const coNutHoanTac = await man.locator('.ct-agent-hoantac').count();
+  check('nút Hoàn tác hiện ra sau khi có file bị sửa', coNutHoanTac === 1);
+  if (coNutHoanTac === 1) {
+    await man.locator('.ct-agent-hoantac').click();
+    await w.waitForTimeout(1500);
+    check(
+      'hoàn tác trả file về NGUYÊN VĂN bản gốc',
+      fs.readFileSync(fileThu, 'utf8') === noiDungGoc,
+    );
   }
 } finally {
   await app?.close().catch(() => {});

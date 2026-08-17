@@ -105,4 +105,20 @@ export default defineConfig({
     sourcemap: true,
     target: 'chrome128',
   },
+
+  /**
+   * Vitest quét từ GỐC GÓI, không từ `root` của Vite.
+   *
+   * `root` ở trên là `src/renderer` vì đó là gốc của trang web được dựng — và
+   * hệ quả phụ là vitest chỉ nhìn thấy test trong renderer. Mã ở `src/main`
+   * (nhà tù đường dẫn, diff, môi giới xin phép) là phần logic thuần đáng kiểm
+   * nhất trong cả app, mà lại nằm ngoài tầm quét: viết test ở đó thì nó im
+   * lặng không chạy, và "im lặng không chạy" trông giống hệt "chạy và đạt".
+   *
+   * Khối này CHỈ ảnh hưởng vitest, không đụng gì tới bản dựng.
+   */
+  test: {
+    root: path.resolve(__dirname),
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+  },
 });

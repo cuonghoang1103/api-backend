@@ -25,8 +25,20 @@ import type { AgentInfo, AgentQuota, AgentWorkspace } from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
 import { chayLuot, dangChayKhong, huyLuot, xoaHoiThoai, type SuKienAgent } from '../agent/loop';
+import { hoanTacTatCa } from '../agent/tools';
+import { traLoi } from '../agent/xinPhep';
 import { readStoredSession } from './auth';
 import { handle } from './index';
+
+/**
+ * Quyền cho agent SỬA file — sống trong RAM, KHÔNG lưu xuống đĩa.
+ *
+ * Mở app lại là tắt. Đây là quyền ghi vào mã nguồn do một mô hình ngôn ngữ điều
+ * khiển; một quyền như thế mà tự bật lại sau mỗi lần khởi động thì người dùng
+ * sẽ quên mất là nó đang bật, và cái quên đó chỉ lộ ra khi có file bị sửa.
+ * Bật lại tốn đúng một cú bấm.
+ */
+let choSua = false;
 
 const chay = promisify(execFile);
 
@@ -55,11 +67,12 @@ async function nhanhGit(goc: string): Promise<string | null> {
 }
 
 async function moTa(goc: string | null): Promise<AgentWorkspace> {
-  if (!goc) return { path: null, name: null, branch: null };
+  if (!goc) return { path: null, name: null, branch: null, choSua: false };
   return {
     path: goc,
     name: path.basename(goc),
     branch: await nhanhGit(goc),
+    choSua,
   };
 }
 
@@ -174,7 +187,7 @@ export function registerAgentHandlers(): void {
     };
 
     const nhanh = conSong ? await nhanhGit(conSong) : null;
-    await chayLuot(text, { goc: conSong, ...(nhanh ? { nhanh } : {}) }, phat);
+    await chayLuot(text, { goc: conSong, choSua, ...(nhanh ? { nhanh } : {}) }, phat);
   });
 
   handle('agent:cancel', () => {
@@ -184,5 +197,32 @@ export function registerAgentHandlers(): void {
   handle('agent:reset', () => {
     huyLuot();
     xoaHoiThoai();
+  });
+
+  handle('agent:traLoiXinPhep', ({ id, quyetDinh }, event) => {
+    // `traLoi` cần đường dẫn để nhớ "cho phép cả file này". Nó tự tra trong sổ
+    // yêu cầu đang treo, nên ở đây chỉ chuyển tiếp quyết định.
+    const nhan = traLoi(id, quyetDinh);
+    // Báo lại cho giao diện gỡ thẻ — kể cả khi `nhan === false` (thẻ đã hết
+    // giờ). Không báo thì một thẻ quá hạn nằm lại trên màn hình vĩnh viễn và
+    // người dùng bấm mãi không có gì xảy ra.
+    if (!event.sender.isDestroyed()) {
+      event.sender.send('agent:event', {
+        loai: 'xongXinPhep', id, dongY: nhan && quyetDinh !== 'tuChoi',
+      });
+    }
+  });
+
+  handle('agent:datCheDoSua', async ({ bat }): Promise<AgentWorkspace> => {
+    if (dangChayKhong()) throw new Error('Đang chạy dở — hãy dừng trước khi đổi quyền sửa.');
+    choSua = bat;
+    return moTa(thuMucHienTai());
+  });
+
+  handle('agent:hoanTac', async () => {
+    // Huỷ lượt trước: hoàn tác trong lúc agent vẫn đang ghi tiếp là chạy đua
+    // với chính nó, và bên thắng là bên ghi sau.
+    huyLuot();
+    return hoanTacTatCa();
   });
 }

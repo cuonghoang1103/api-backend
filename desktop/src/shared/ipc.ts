@@ -210,7 +210,42 @@ export interface AgentWorkspace {
   name: string | null;
   /** Nhánh git hiện tại, `null` nếu không phải kho git. */
   branch: string | null;
+  /**
+   * Đã bật cho agent SỬA file chưa.
+   *
+   * KHÔNG lưu xuống đĩa: mỗi lần mở app lại là tắt. Đây là quyền ghi vào mã
+   * nguồn của người dùng do một mô hình ngôn ngữ điều khiển — một quyền như thế
+   * mà tự bật lại sau mỗi lần khởi động, âm thầm, thì người dùng sẽ quên mất là
+   * nó đang bật. Bật lại chỉ tốn một cú bấm.
+   */
+  choSua: boolean;
 }
+
+/** Một dòng trong bảng diff hiện cho người dùng duyệt. */
+export interface AgentDiffLine {
+  loai: 'giu' | 'them' | 'bo';
+  soCu: number | null;
+  soMoi: number | null;
+  text: string;
+}
+
+export interface AgentDiff {
+  dong: AgentDiffLine[];
+  soThem: number;
+  soBo: number;
+  quaLon: boolean;
+}
+
+/** Người dùng bấm gì trên thẻ duyệt. */
+export const agentQuyetDinhSchema = z.enum(['choPhep', 'choPhepCaFile', 'tuChoi']);
+export type AgentQuyetDinh = z.infer<typeof agentQuyetDinhSchema>;
+
+export const agentTraLoiSchema = z.object({
+  id: z.string().min(1).max(64),
+  quyetDinh: agentQuyetDinhSchema,
+});
+
+export const agentCheDoSuaSchema = z.object({ bat: z.boolean() });
 
 export interface AgentQuota {
   daDung: number;
@@ -240,7 +275,11 @@ export type AgentUiEvent =
   | { loai: 'batDau'; model: string }
   | { loai: 'chu'; delta: string }
   | { loai: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
-  | { loai: 'xong'; hanMuc: AgentQuota | null; tienUsd: number; daLuoc: number }
+  /** Agent ĐANG DỪNG chờ duyệt. Giao diện hiện thẻ diff và bắt buộc phải trả lời. */
+  | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: AgentDiff }
+  /** Thẻ đã được trả lời (hoặc hết giờ 5 phút) — gỡ thẻ đi. */
+  | { loai: 'xongXinPhep'; id: string; dongY: boolean }
+  | { loai: 'xong'; hanMuc: AgentQuota | null; tienUsd: number; daLuoc: number; soFileDaSua: number }
   | { loai: 'loi'; thongDiep: string; ma?: string }
   | { loai: 'huy' };
 
@@ -293,6 +332,9 @@ export const INVOKE_CHANNELS = {
   'agent:send': agentSendSchema,
   'agent:cancel': null,
   'agent:reset': null,
+  'agent:traLoiXinPhep': agentTraLoiSchema,
+  'agent:datCheDoSua': agentCheDoSuaSchema,
+  'agent:hoanTac': null,
 } as const;
 
 export type InvokeChannel = keyof typeof INVOKE_CHANNELS;
@@ -437,6 +479,15 @@ export interface DesktopBridge {
     cancel(): Promise<void>;
     /** Xoá hội thoại, bắt đầu việc mới. Hạn mức KHÔNG được reset theo. */
     reset(): Promise<void>;
+    /**
+     * Trả lời thẻ duyệt. PHẢI gọi — vòng lặp đang đứng chờ đúng lời hứa này,
+     * và nó chỉ tự thoát sau 5 phút hết giờ (coi như từ chối).
+     */
+    traLoiXinPhep(id: string, quyetDinh: AgentQuyetDinh): Promise<void>;
+    /** Bật/tắt quyền sửa file. Không lưu xuống đĩa — mở app lại là tắt. */
+    datCheDoSua(bat: boolean): Promise<AgentWorkspace>;
+    /** Trả mọi file agent đã sửa trong việc này về nguyên trạng. */
+    hoanTac(): Promise<{ soFile: number; loi: string[] }>;
   };
   /** Trả về hàm huỷ đăng ký. Renderer PHẢI gọi nó khi unmount. */
   on(channel: EventChannel, listener: (payload: unknown) => void): () => void;

@@ -64,8 +64,21 @@ const MAX_MESSAGES = 200;
 const MAX_TOTAL_CHARS = 600_000;
 /** Trần cho MỘT kết quả tool do app gửi lên. App đã tự cắt; đây là lớp phòng khi app cũ chưa cắt. */
 const MAX_TOOL_RESULT_CHARS = 60_000;
-/** Cổng im lặng quá lâu ⇒ bỏ. Dài hơn chat vì model phải nghĩ trước khi chọn tool. */
-const IDLE_MS = 90_000;
+/**
+ * HAI đồng hồ, vì đây là HAI loại hỏng khác nhau — gộp làm một là đo sai.
+ *
+ * `CHO_BYTE_DAU_MS` — từ lúc gửi tới lúc cổng nhả byte đầu tiên. Chờ ở đây là
+ * chuyện BÌNH THƯỜNG: yêu cầu đang xếp hàng bên trong cổng. Đo thật
+ * 17/08/2026 lúc cổng quá tải: một lời gọi 10 token mất **129 giây** — trong
+ * khi buổi sáng cùng ngày chỉ mất 2–5 giây. Đặt trần 90s như cũ thì mỗi lúc
+ * cổng đông là người dùng mất trắng lượt, dù cổng vẫn đang làm việc.
+ *
+ * `IM_LANG_MS` — im lặng SAU khi chữ đã bắt đầu chảy. Cái này thì khác hẳn:
+ * stream đã mở rồi mà tắt tiếng nghĩa là kết nối chết, và chờ thêm chẳng để
+ * làm gì. Nên nó CHẶT hơn, không lỏng hơn.
+ */
+const CHO_BYTE_DAU_MS = 180_000;
+const IM_LANG_MS = 60_000;
 const MAX_OUTPUT_TOKENS = 4_000;
 
 // ─── Kiểu tin nhắn (theo giao thức OpenAI) ─────────────────────────
@@ -488,12 +501,17 @@ async function goiCong(o: {
   onText: (delta: string) => void;
 }): Promise<KetQuaCong> {
   // Đồng hồ IM LẶNG, không phải đồng hồ tổng: một lượt agent đọc file to có
-  // thể chạy lâu một cách chính đáng, nhưng im lặng 90 giây thì cổng đã chết.
+  // thể chạy lâu một cách chính đáng.
+  //
+  // Trần khởi đầu là `CHO_BYTE_DAU_MS` (rộng — cổng đang xếp hàng), và `lui()`
+  // siết xuống `IM_LANG_MS` ngay khi gói đầu tiên về (chặt — stream đã mở mà
+  // tắt tiếng là kết nối chết).
   const imLang = new AbortController();
   let timer: ReturnType<typeof setTimeout> | undefined;
+  let daCoByte = false;
   const lui = (): void => {
     clearTimeout(timer);
-    timer = setTimeout(() => imLang.abort(), IDLE_MS);
+    timer = setTimeout(() => imLang.abort(), daCoByte ? IM_LANG_MS : CHO_BYTE_DAU_MS);
   };
   const huy = (): void => imLang.abort();
   o.signal.addEventListener('abort', huy, { once: true });
@@ -534,6 +552,7 @@ async function goiCong(o: {
     for (;;) {
       const { done, value } = await reader.read();
       if (done) break;
+      daCoByte = true;
       lui();
       buf += dec.decode(value, { stream: true });
       const dong = buf.split('\n');

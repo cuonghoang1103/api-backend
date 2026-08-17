@@ -17,10 +17,12 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import {
-  CircleStop, FolderOpen, Loader2, NotebookPen, RotateCcw, Send, Sparkles, Terminal, X,
+  Check, CircleStop, FilePen, FolderOpen, Loader2, NotebookPen,
+  RotateCcw, Send, Sparkles, Terminal, Undo2, X,
 } from 'lucide-react';
 import type { AgentInfo, AgentWorkspace } from '../../../shared/ipc';
 import { useAgent } from './useAgent';
+import { XinPhep } from './XinPhep';
 
 export function AgentMode({
   info,
@@ -33,7 +35,7 @@ export function AgentMode({
   datThuMuc: (w: AgentWorkspace) => void;
   napLai: () => void;
 }) {
-  const { trangThai, gui, dung, batDauLai } = useAgent(info);
+  const { trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac } = useAgent(info);
   const [nhap, datNhap] = useState('');
   const cuonRef = useRef<HTMLDivElement>(null);
 
@@ -55,6 +57,11 @@ export function AgentMode({
       // án không còn mở.
       void batDauLai();
     }
+  };
+
+  const doiCheDoSua = async (): Promise<void> => {
+    const w = await window.cuongthai?.agent.datCheDoSua(!thuMuc?.choSua);
+    if (w) datThuMuc(w);
   };
 
   const boThuMuc = async (): Promise<void> => {
@@ -118,6 +125,36 @@ export function AgentMode({
 
         <div className="ct-agent-bar-spacer" />
 
+        {coThuMuc && (
+          <button
+            type="button"
+            className="ct-agent-suanut"
+            data-bat={thuMuc?.choSua === true}
+            onClick={() => void doiCheDoSua()}
+            disabled={trangThai.dangChay}
+            title={
+              thuMuc?.choSua
+                ? 'Agent ĐANG được sửa file (mỗi thay đổi vẫn phải bạn duyệt). Bấm để tắt.'
+                : 'Bật cho agent sửa file. Mỗi thay đổi sẽ hiện diff để bạn duyệt trước khi ghi.'
+            }
+          >
+            <FilePen size={13} aria-hidden />
+            {thuMuc?.choSua ? 'Cho sửa: BẬT' : 'Cho sửa: tắt'}
+          </button>
+        )}
+
+        {trangThai.soFileDaSua > 0 && (
+          <button
+            type="button"
+            className="ct-agent-hoantac"
+            onClick={() => void hoanTac()}
+            title="Trả mọi file agent đã sửa trong việc này về nguyên trạng"
+          >
+            <Undo2 size={13} aria-hidden />
+            Hoàn tác {trangThai.soFileDaSua} file
+          </button>
+        )}
+
         {trangThai.hanMuc && <ThanhHanMuc quota={trangThai.hanMuc} soViec={info.soViecConLai} />}
 
         <button
@@ -140,10 +177,27 @@ export function AgentMode({
           if (m.kieu === 'may') return <div key={i} className="ct-agent-may">{m.text}</div>;
           if (m.kieu === 'loi') {
             return (
-              <div key={i} className="ct-notice" data-tone="err">
+              <div key={i} className="ct-notice" data-tone={m.ma === 'HOAN_TAC' ? 'warn' : 'err'}>
                 <span>{m.text}</span>
               </div>
             );
+          }
+          if (m.kieu === 'xinPhep') {
+            // Đã trả lời rồi thì thu về một dòng dấu vết, không giữ nguyên thẻ
+            // to đùng: hội thoại dài mà mỗi lần sửa chiếm nửa màn hình thì cuộn
+            // lại đọc mạch suy nghĩ không nổi.
+            if (m.xong) {
+              return (
+                <div key={i} className="ct-agent-tool" data-vong="may" data-xong={m.xong}>
+                  {m.xong === 'dongY' ? <Check size={12} aria-hidden /> : <X size={12} aria-hidden />}
+                  <code>{m.the.duongDan}</code>
+                  <span className="ct-agent-tool-tomtat">
+                    {m.xong === 'dongY' ? 'đã duyệt' : 'đã từ chối'}
+                  </span>
+                </div>
+              );
+            }
+            return <XinPhep key={i} the={m.the} traLoi={traLoiXinPhep} />;
           }
           return (
             <div key={i} className="ct-agent-tool" data-vong={m.vong}>
@@ -189,7 +243,9 @@ export function AgentMode({
 
       <div className="ct-agent-chan">
         <span>
-          Bản này <strong>chỉ đọc</strong> — chưa sửa file, chưa chạy lệnh. Không đọc <code>.env</code> và các file khoá.
+          {thuMuc?.choSua
+            ? <>Agent <strong>sửa được file</strong> — mỗi thay đổi phải bạn duyệt. Chưa chạy được lệnh. Không đọc <code>.env</code> và các file khoá.</>
+            : <>Đang <strong>chỉ đọc</strong> — chưa sửa file, chưa chạy lệnh. Không đọc <code>.env</code> và các file khoá.</>}
         </span>
         {trangThai.tienPhien > 0 && <span className="ct-muted">~${trangThai.tienPhien.toFixed(3)} phiên này</span>}
       </div>

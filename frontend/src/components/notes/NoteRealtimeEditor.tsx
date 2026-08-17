@@ -47,7 +47,27 @@ function collaborationUrl(path: string): string {
   // cross-origin CSP exceptions, this gives WebSocket traffic the same DNS,
   // TLS and Cloudflare path as the page. Local development still connects
   // directly to the backend port from NEXT_PUBLIC_API_URL.
-  const base = new URL(isLocalApi && apiUrl ? apiUrl.origin : window.location.origin);
+  /**
+   * ⚠️ `window.location.origin` KHÔNG dùng được trong app desktop.
+   *
+   * App chạy ở origin `app://cuongthai`. Dựng URL từ đó thì nhánh
+   * `protocol === 'https:'` sai, nên nó ra `ws://cuongthai/notes-collaboration`
+   * — một host không tồn tại. Kết quả: Notes trong app desktop LUÔN báo
+   * "Không nối được máy chủ cộng tác · đang lưu theo cách thường", trong khi
+   * chính websocket đó trên máy chủ trả 101 bình thường.
+   *
+   * Renderer của desktop đặt sẵn `__ctWebOrigin` (lấy từ main lúc khởi động).
+   * Web thường không có biến đó và đi nguyên đường cũ.
+   */
+  const laWeb = window.location.protocol === 'http:' || window.location.protocol === 'https:';
+  const gocNgoai = (globalThis as { __ctWebOrigin?: string }).__ctWebOrigin;
+  const goc = isLocalApi && apiUrl
+    ? apiUrl.origin
+    : laWeb
+      ? window.location.origin
+      : (gocNgoai ?? 'https://cuongthai.com');
+
+  const base = new URL(goc);
   base.protocol = base.protocol === 'https:' ? 'wss:' : 'ws:';
   base.pathname = path;
   base.search = '';

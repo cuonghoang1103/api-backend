@@ -96,8 +96,30 @@ async function bootstrap(): Promise<void> {
 
   // Robot nổi — bật sau cửa sổ chính. Nó là cửa sổ hệ điều hành RIÊNG, sống
   // chừng nào app chưa thoát hẳn, kể cả khi cửa sổ chính đã đóng.
-  const { moRobot, cuaSoChinh, dongRobot } = await import('./robotNoi');
+  const { moRobot, cuaSoChinh, dongRobot, robotTheoTieuDiem } = await import('./robotNoi');
   moRobot();
+
+  /**
+   * Một lúc chỉ MỘT con robot trên màn hình.
+   *
+   * App đã có dock robot vẽ trong trang, cũng ở góc dưới-phải; cửa sổ nổi cũng
+   * neo góc dưới-phải màn hình. Cửa sổ chính mở to là hai con chồng lên nhau —
+   * người dùng nhìn thấy ngay và hỏi "sao lại có 2 con robot".
+   *
+   * `blur`/`hide`/`minimize` ⇒ hiện con nổi; quay vào app ⇒ ẩn nó đi.
+   */
+  const theoDoiTieuDiem = (w: BrowserWindow): void => {
+    w.on('focus', () => robotTheoTieuDiem(true));
+    w.on('show', () => robotTheoTieuDiem(true));
+    w.on('blur', () => robotTheoTieuDiem(false));
+    w.on('hide', () => robotTheoTieuDiem(false));
+    w.on('minimize', () => robotTheoTieuDiem(false));
+    w.on('closed', () => robotTheoTieuDiem(false));
+  };
+  theoDoiTieuDiem(mainWindow);
+  // Cửa sổ chính vừa mở là đang có tiêu điểm — ẩn con nổi ngay, đừng để nó
+  // nháy lên một cái rồi mới biến mất.
+  robotTheoTieuDiem(mainWindow.isFocused());
 
   // Nguồn tin cho robot: hỏi thăm tin nhắn/thông báo chưa đọc ở MAIN, độc lập
   // với mọi cửa sổ — vì cửa sổ chính có thể đã đóng trong khi app vẫn chạy.
@@ -149,7 +171,25 @@ async function bootstrap(): Promise<void> {
      * thấy gì xảy ra, mãi mãi. Phải hỏi đúng "còn cửa sổ CHÍNH không".
      */
     void import('./robotNoi').then(({ cuaSoChinh }) => {
-      if (!cuaSoChinh()) mainWindow = createMainWindow();
+      const w = cuaSoChinh();
+      /**
+       * ⚠️ Có cửa sổ chính rồi thì vẫn phải ĐƯA NÓ RA TRƯỚC.
+       *
+       * Trước đây nhánh này chỉ tạo cửa sổ khi CHƯA có, còn có rồi thì không
+       * làm gì. Trên macOS, `activate` bắn cả khi ⌘Tab sang app — và vì robot
+       * nổi là một cửa sổ luôn hiện ở mức `screen-saver`, hệ điều hành coi như
+       * app đã có cửa sổ trên màn hình nên KHÔNG tự nâng cửa sổ chính lên.
+       * Người dùng ⌘Tab sang CuongThai và chỉ thấy… con robot; phải bấm tay
+       * vào cửa sổ hoặc vào robot mới vào được app.
+       */
+      if (w) {
+        if (w.isMinimized()) w.restore();
+        w.show();
+        w.focus();
+        return;
+      }
+      mainWindow = createMainWindow();
+      theoDoiTieuDiem(mainWindow);
     });
   });
 }

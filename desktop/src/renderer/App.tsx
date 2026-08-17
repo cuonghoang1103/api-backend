@@ -138,7 +138,19 @@ function WithApiOrigin() {
   useEffect(() => {
     const bridge = window.cuongthai;
     if (!bridge) return;
-    void bridge.app.getInfo().then((info) => setApiOrigin(info.apiBase));
+    void bridge.app.getInfo().then((info) => {
+      setApiOrigin(info.apiBase);
+      /**
+       * Đặt gốc web lên global cho mã DÙNG CHUNG với frontend đọc.
+       *
+       * Notes lấy nguyên các component của web, và `collaborationUrl()` ở đó
+       * dựng địa chỉ websocket từ `window.location.origin`. Trong app đó là
+       * `app://cuongthai` ⇒ ra `ws://cuongthai/...` không tồn tại, và Notes
+       * luôn báo "Không nối được máy chủ cộng tác". Một biến global là cách
+       * rẻ nhất để mã dùng chung biết mình đang chạy trong app.
+       */
+      (globalThis as { __ctWebOrigin?: string }).__ctWebOrigin = info.webOrigin;
+    });
   }, []);
 
   return (

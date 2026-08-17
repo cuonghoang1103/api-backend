@@ -113,6 +113,54 @@ if (tt.co) {
   });
   check('robot có bảng màu (không phải vệt đen)', mau.every(Boolean), mau.join(' '));
 
+  // ── MỘT robot một lúc ──
+  // Dock trong app và cửa sổ nổi đều ở góc dưới-phải; hiện cùng lúc là hai con
+  // chồng nhau — đúng thứ người dùng báo.
+  const trangThai = async () => app.evaluate(({ BrowserWindow }) => {
+    const ds = BrowserWindow.getAllWindows();
+    const rb = ds.find((w) => w.webContents.getURL().includes('robot.html'));
+    const ch = ds.find((w) => w !== rb);
+    return { robotHien: !!rb?.isVisible(), chinhCoTieuDiem: !!ch?.isFocused() };
+  });
+
+  // ⚠️ THU GỌN khung chat trước. Robot CỐ Ý không tự ẩn khi khung chat mini
+  // đang mở (người dùng gõ dở mà nó biến mất giữa câu là tệ hơn nhiều), nên
+  // kiểm lúc còn mở là kiểm sai trạng thái.
+  await trang.locator('.rb-chat-nut button:has-text("✕")').click().catch(() => {});
+  await new Promise((r) => setTimeout(r, 600));
+
+  // `focus()` không phải lúc nào cũng cấp được tiêu điểm THẬT ở môi trường
+  // chạy tự động. Bắn thẳng sự kiện là cách kiểm đúng thứ cần kiểm: phản ứng
+  // của app khi cửa sổ chính được đưa ra trước.
+  await app.evaluate(({ BrowserWindow }) => {
+    const ch = BrowserWindow.getAllWindows().find((w) => !w.webContents.getURL().includes('robot.html'));
+    ch?.focus();
+    ch?.emit('focus');
+  });
+  await new Promise((r) => setTimeout(r, 800));
+  const khiTrongApp = await trangThai();
+  check('ĐANG ở trong app ⇒ robot nổi ẨN (không chồng lên dock)',
+    !khiTrongApp.robotHien, JSON.stringify(khiTrongApp));
+
+  await app.evaluate(({ BrowserWindow }) => {
+    const ds = BrowserWindow.getAllWindows();
+    const ch = ds.find((w) => !w.webContents.getURL().includes('robot.html'));
+    ch?.hide();
+    ch?.emit('hide');
+  });
+  await new Promise((r) => setTimeout(r, 800));
+  check('ẩn cửa sổ chính ⇒ robot nổi HIỆN lại', (await trangThai()).robotHien);
+
+  // ── `activate` phải ĐƯA cửa sổ chính ra trước (⌘Tab) ──
+  const sauActivate = await app.evaluate(async ({ app: a, BrowserWindow }) => {
+    a.emit('activate');
+    await new Promise((r) => setTimeout(r, 900));
+    const ch = BrowserWindow.getAllWindows().find((w) => !w.webContents.getURL().includes('robot.html'));
+    return { hien: !!ch?.isVisible(), soCuaSo: BrowserWindow.getAllWindows().length };
+  });
+  check('⌘Tab (activate) ⇒ cửa sổ chính hiện ra, KHÔNG tạo cửa sổ thừa',
+    sauActivate.hien && sauActivate.soCuaSo === 2, JSON.stringify(sauActivate));
+
   await trang.screenshot({ path: path.join(root, 'robot-thu.png') });
   console.log('   (ảnh chụp: desktop/robot-thu.png)');
 }

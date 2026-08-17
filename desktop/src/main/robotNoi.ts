@@ -147,6 +147,33 @@ export function baoRobot(kenh: string, du: unknown): void {
   if (w) w.webContents.send(kenh, du);
 }
 
+/**
+ * Ẩn/hiện robot nổi theo việc người dùng có đang ở TRONG app hay không.
+ *
+ * App đã có sẵn một con robot vẽ BÊN TRONG trang (`.odin-dock`, cũng
+ * `position: fixed` ở góc dưới-phải). Cửa sổ nổi cũng neo góc dưới-phải màn
+ * hình, nên khi cửa sổ chính đang mở to thì hai con CHỒNG LÊN NHAU — đúng thứ
+ * người dùng nhìn thấy và hỏi "sao lại có 2 con robot".
+ *
+ * Cách chữa không phải bỏ con nào: mỗi con phục vụ một lúc khác nhau. Dock
+ * trong app có đủ mic và bảng trợ lý; con nổi chỉ để lúc người dùng đã đi chỗ
+ * khác. Nên chỉ cần chúng ĐỪNG cùng xuất hiện.
+ *
+ * KHÔNG ẩn khi khung chat mini đang mở: người dùng vừa gõ dở trong đó mà cửa
+ * sổ chính tình cờ nhận tiêu điểm thì khung biến mất giữa câu.
+ */
+export function robotTheoTieuDiem(dangOTrongApp: boolean): void {
+  const w = cuaSoRobot();
+  if (!w) return;
+  if (dangOTrongApp && !dangRong) {
+    if (w.isVisible()) w.hide();
+  } else if (!w.isVisible()) {
+    // `showInactive`: hiện lại KHÔNG cướp tiêu điểm. `show()` sẽ kéo app
+    // CuongThai lên trước mặt người đang gõ ở app khác.
+    w.showInactive();
+  }
+}
+
 export function dongRobot(): void {
   if (cuaSo && !cuaSo.isDestroyed()) cuaSo.destroy();
   cuaSo = null;

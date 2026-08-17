@@ -45,6 +45,7 @@ import NoteCallout from '@/components/notes/extensions/NoteCallout';
 import NoteMath from '@/components/notes/extensions/NoteMath';
 import TabIndent from '@/components/notes/extensions/TabIndent';
 import BlockHandle from '@/components/notes/extensions/BlockHandle';
+import NoteAiMenu from '@/components/notes/NoteAiMenu';
 import NoteToggle from '@/components/notes/extensions/NoteToggle';
 import NoteMedia from '@/components/notes/extensions/NoteMedia';
 import NoteBookmark from '@/components/notes/extensions/NoteBookmark';
@@ -756,6 +757,10 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
           >
             {editor.isActive('link') ? <Link2Off className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
           </button>
+
+          <span className="note-bubble__sep" />
+
+          <NoteAiMenu editor={editor} />
 
           <span className="note-bubble__sep" />
 

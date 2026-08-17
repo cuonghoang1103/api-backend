@@ -487,6 +487,13 @@ export const notesApi = {
   deleteLink: (id: number) =>
     api.delete<{ data: { id: number; deleted: boolean } }>(`/notes/links/${id}`),
 
+  /** Danh sách thao tác AI dùng được trong trình soạn thảo. */
+  aiActions: () =>
+    api.get<{ data: { key: string; label: string }[] }>('/notes/ai/actions'),
+  /** Nhờ AI xử lý đoạn chữ đang bôi đen. `action` phải nằm trong danh sách trên. */
+  aiAssist: (action: string, selection: string) =>
+    api.post<{ data: { text: string; action: string } }>('/notes/ai/assist', { action, selection }),
+
   search: (params: { q?: string; subjectId?: number; tag?: string }) =>
     api.get<{ data: import('@/types').NoteSearchResult[] }>('/notes/search', { params }),
   getTags: () =>

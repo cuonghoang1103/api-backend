@@ -326,6 +326,23 @@ router.delete('/links/:id', async (req: Request, res: Response<ApiResponse>, nex
 });
 
 // ─── Search + tags ───────────────────────────────────────────
+// ─── AI trong trình soạn thảo ────────────────────────────────
+
+router.get('/ai/actions', async (_req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const { listAiActions } = await import('../services/noteAiAssist.service.js');
+    res.json({ success: true, data: listAiActions() });
+  } catch (err) { next(err); }
+});
+
+router.post('/ai/assist', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const { runAiAssist } = await import('../services/noteAiAssist.service.js');
+    const data = await runAiAssist(req.userId!, req.body?.action, req.body?.selection);
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+
 router.get('/search', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const results = await searchNotes(req.userId!, {

@@ -585,19 +585,72 @@ export async function restoreDeletedNote(userId: number, id: number) {
   return getNote(userId, id);
 }
 
-export async function permanentlyDeleteNote(userId: number, id: number) {
-  assertId(id);
-  const res = await prisma.note.deleteMany({ where: { id, userId, deletedAt: { not: null } } });
-  if (res.count === 0) throw new AppError('Chỉ có thể xóa vĩnh viễn ghi chú đang ở trong thùng rác', 409, 'NOT_IN_TRASH');
-  return { id, deleted: true, permanent: true };
+/**
+ * Delete the R2 objects behind attachment URLs that nothing points at any more.
+ *
+ * MUST be called AFTER the owning rows are gone, and MUST re-check what is
+ * still referenced. `duplicateNote` copies attachment rows that reuse the
+ * SOURCE note's object URL — two rows, one file — so deleting "this note's
+ * files" would silently empty every attachment in the copy. Asking the
+ * database which URLs still have a row is the only way to tell a real orphan
+ * from a shared file.
+ *
+ * Best effort by design: a failed object delete leaks storage, which is
+ * cheap; failing the user's delete because a bucket call timed out is not.
+ */
+async function releaseOrphanedAttachmentUrls(candidates: Array<string | null | undefined>) {
+  const unique = [...new Set(candidates.filter((url): url is string => Boolean(url)))];
+  if (unique.length === 0) return 0;
+  try {
+    const stillReferenced = await prisma.noteAttachment.findMany({
+      where: { fileUrl: { in: unique } },
+      select: { fileUrl: true },
+    });
+    const kept = new Set(stillReferenced.map((row) => row.fileUrl));
+    const orphans = unique.filter((url) => !kept.has(url));
+    if (orphans.length === 0) return 0;
+    const { deleteByUrls } = await import('../storage/uploadService.js');
+    await deleteByUrls(orphans);
+    return orphans.length;
+  } catch {
+    return 0;
+  }
 }
 
-/** Nightly retention sweep. Child rows and versions cascade with the note. */
+export async function permanentlyDeleteNote(userId: number, id: number) {
+  assertId(id);
+  // Read the URLs before the cascade removes the attachment rows.
+  const attachments = await prisma.noteAttachment.findMany({
+    where: { noteId: id },
+    select: { fileUrl: true },
+  });
+  const res = await prisma.note.deleteMany({ where: { id, userId, deletedAt: { not: null } } });
+  if (res.count === 0) throw new AppError('Chỉ có thể xóa vĩnh viễn ghi chú đang ở trong thùng rác', 409, 'NOT_IN_TRASH');
+  const freed = await releaseOrphanedAttachmentUrls(attachments.map((row) => row.fileUrl));
+  return { id, deleted: true, permanent: true, filesDeleted: freed };
+}
+
+/**
+ * Nightly retention sweep. Child rows and versions cascade with the note; the
+ * uploaded files behind them do not, so they are collected and released here.
+ */
 export async function purgeExpiredDeletedNotes(retentionDays = 30) {
   const safeDays = Math.max(1, Math.min(365, Math.floor(retentionDays)));
   const cutoff = new Date(Date.now() - safeDays * 24 * 60 * 60 * 1000);
+
+  const expiring = await prisma.note.findMany({
+    where: { deletedAt: { lt: cutoff } },
+    select: { id: true },
+  });
+  if (expiring.length === 0) return { notes: 0, filesDeleted: 0 };
+
+  const attachments = await prisma.noteAttachment.findMany({
+    where: { noteId: { in: expiring.map((note) => note.id) } },
+    select: { fileUrl: true },
+  });
   const result = await prisma.note.deleteMany({ where: { deletedAt: { lt: cutoff } } });
-  return result.count;
+  const freed = await releaseOrphanedAttachmentUrls(attachments.map((row) => row.fileUrl));
+  return { notes: result.count, filesDeleted: freed };
 }
 
 // ─── Immutable version history ───────────────────────────────

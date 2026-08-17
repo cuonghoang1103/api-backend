@@ -78,8 +78,10 @@ export function startCronJobs(): void {
   cron.schedule('30 20 * * *', async () => {
     try {
       const { purgeExpiredDeletedNotes } = await import('./notes.service.js');
-      const deleted = await purgeExpiredDeletedNotes(30);
-      if (deleted > 0) logger.info('cron notes trash retention', { deleted, retentionDays: 30 });
+      const { notes, filesDeleted } = await purgeExpiredDeletedNotes(30);
+      if (notes > 0) {
+        logger.info('cron notes trash retention', { notes, filesDeleted, retentionDays: 30 });
+      }
     } catch (err) {
       logger.error('cron notes trash retention failed', { error: (err as Error).message });
     }

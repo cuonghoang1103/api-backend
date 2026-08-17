@@ -31,6 +31,7 @@ import {
   updateRow,
   updateView,
 } from '../services/notesDatabase.service.js';
+import { parseDatabaseQuery } from '../services/noteDatabaseQuery.js';
 import { createTaskWorkspace, listMyTasks } from '../services/noteTaskWorkspace.js';
 import { applyTemplate, listTemplates } from '../services/noteDatabaseTemplates.js';
 
@@ -200,7 +201,14 @@ router.delete('/views/:viewId', async (req: any, res: Response<ApiResponse>, nex
 
 router.get('/:databaseId', async (req: any, res: Response<ApiResponse>, next) => {
   try {
-    const data = await getDatabase(req.user.userId, Number(req.params.databaseId));
+    // Không có tham số nào thì KHÔNG dựng truy vấn: `getDatabase` giữ nguyên
+    // hình dạng trả về cũ, nên mọi nơi gọi hiện tại chạy y như trước.
+    const wantsQuery = Boolean(req.query?.view || req.query?.page || req.query?.pageSize);
+    const data = await getDatabase(
+      req.user.userId,
+      Number(req.params.databaseId),
+      wantsQuery ? parseDatabaseQuery(req.query) : undefined,
+    );
     res.json({ success: true, data });
   } catch (error) { next(error); }
 });

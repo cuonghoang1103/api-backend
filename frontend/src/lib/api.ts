@@ -828,6 +828,16 @@ export interface NoteDatabaseSummary {
 
 export interface NoteDatabaseFull extends NoteDatabaseSummary {
   rows: NoteDatabaseRow[];
+  /** Tổng số dòng SAU khi lọc — không phải số dòng của trang đang xem. */
+  total: number;
+  page?: number;
+  pageSize?: number;
+  /**
+   * Máy chủ đã chạm trần quét (5.000 dòng) nên `total` là số đếm trên phần đã
+   * đọc, KHÔNG phải số thật. Giao diện phải nói ra thay vì hiện một con số
+   * trông chắc chắn.
+   */
+  truncated: boolean;
   /**
    * Nhãn của các dòng mà cột quan hệ trỏ tới, khoá theo id dòng BÊN BẢNG ĐÍCH.
    * Máy chủ gửi kèm để client vẽ chip mà không phải gọi thêm một lượt cho mỗi
@@ -882,8 +892,21 @@ export const noteDatabaseApi = {
     api.get<{ data: NoteDatabaseSummary[] }>(`/notes-databases/subject/${subjectId}`),
   create: (data: { subjectId: number; title?: string; description?: string; icon?: string }) =>
     api.post<{ data: NoteDatabaseSummary }>('/notes-databases', data),
-  get: (databaseId: number) =>
-    api.get<{ data: NoteDatabaseFull }>(`/notes-databases/${databaseId}`),
+  /**
+   * Không truyền `view` thì máy chủ trả nguyên bảng như trước (client tự lọc).
+   * Truyền vào thì máy chủ lọc/sắp/phân trang — dùng CÙNG một bộ luật, kể cả
+   * khớp bỏ dấu tiếng Việt và số kiểu Việt.
+   */
+  get: (databaseId: number, query?: { view?: unknown; page?: number; pageSize?: number }) =>
+    api.get<{ data: NoteDatabaseFull }>(`/notes-databases/${databaseId}`, {
+      params: query
+        ? {
+          ...(query.view !== undefined ? { view: JSON.stringify(query.view) } : {}),
+          ...(query.page !== undefined ? { page: query.page } : {}),
+          ...(query.pageSize !== undefined ? { pageSize: query.pageSize } : {}),
+        }
+        : undefined,
+    }),
   update: (databaseId: number, data: { title?: string; description?: string | null; icon?: string | null }) =>
     api.patch<{ data: NoteDatabaseSummary }>(`/notes-databases/${databaseId}`, data),
   remove: (databaseId: number) =>

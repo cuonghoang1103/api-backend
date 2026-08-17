@@ -21,6 +21,10 @@ import { AppError } from '../middleware/errorHandler.js';
 import { canEditSharedNote, checkNoteAccess } from './notesShare.service.js';
 import { computeRollups, loadRelationData, parseRelationConfig } from './noteDatabaseRollup.js';
 import { compileFormula, runFormula, type FormulaValue } from './noteDatabaseFormula.js';
+import {
+  applyFilters, applySearch, applySorts, queryIsEmpty,
+  type DatabaseQuery, type QueryContext, type QueryRow,
+} from './noteDatabaseQuery.js';
 
 // ─── Property types ───────────────────────────────────────────
 
@@ -52,6 +56,16 @@ export const COMPUTED_PROPERTY_TYPES = new Set<DatabasePropertyType>([
 // `LIST` thêm 17/08/2026 cho đủ sáu kiểu như Notion. Cột `type` là VARCHAR
 // nên không cần migration — nhưng PHẢI khớp union ở frontend/src/lib/api.ts,
 // và chỗ đó chép tay nên `tsc` không bắt được lúc hai bên lệch nhau.
+/**
+ * Trần số dòng đọc lên trong MỘT lượt.
+ *
+ * Lọc và sắp phải chạy sau khi quan hệ/tổng hợp/công thức đã tính, nên không
+ * đẩy xuống SQL được — cả tập phải nằm trong bộ nhớ. Vượt trần thì
+ * `getDatabase` trả `truncated: true` để giao diện NÓI RA, thay vì im lặng
+ * hiện đúng 5.000 dòng và để người dùng tin đó là tất cả.
+ */
+export const ROW_SCAN_LIMIT = 5000;
+
 export const DATABASE_VIEW_TYPES = ['TABLE', 'BOARD', 'CALENDAR', 'GALLERY', 'TIMELINE', 'LIST'] as const;
 export type DatabaseViewType = (typeof DATABASE_VIEW_TYPES)[number];
 
@@ -470,7 +484,7 @@ export async function createDatabase(
   });
 }
 
-export async function getDatabase(userId: number, databaseId: number) {
+export async function getDatabase(userId: number, databaseId: number, query?: DatabaseQuery) {
   const { database } = await assertDatabaseAccess(userId, databaseId, false);
   const [full, rows] = await Promise.all([
     prisma.noteDatabase.findUniqueOrThrow({ where: { id: database.id }, include: databaseInclude }),
@@ -478,7 +492,7 @@ export async function getDatabase(userId: number, databaseId: number) {
       where: { databaseId: database.id },
       orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
       include: { cells: { select: { propertyId: true, value: true } } },
-      take: 5000,
+      take: ROW_SCAN_LIMIT,
     }),
   ]);
 
@@ -514,14 +528,8 @@ export async function getDatabase(userId: number, databaseId: number) {
 
   // Flatten cells into a propertyId → value map so the client never has to
   // scan an array per cell to render one row.
-  return {
-    ...full,
-    /**
-     * Nhãn của các dòng được cột RELATION trỏ tới, gửi kèm để client vẽ chip
-     * mà không phải gọi thêm một lượt cho mỗi liên kết.
-     */
-    relationLabels: Object.fromEntries(links.labels),
-    rows: rows.map((row) => {
+  const materialised: QueryRow[] = (
+    rows.map((row) => {
       const base = withComputedValues({
         id: row.id,
         sortOrder: row.sortOrder,
@@ -554,8 +562,85 @@ export async function getDatabase(userId: number, databaseId: number) {
           : runFormulaSafely(compiled, base.values, propertyByName, now);
       }
       return base;
-    }),
+    })
+  ) as unknown as QueryRow[];
+
+  const relationLabels = Object.fromEntries(links.labels);
+
+  // Không có yêu cầu lọc/sắp/tìm thì trả nguyên như trước — giữ y hệt hình
+  // dạng cũ để mọi nơi gọi hiện tại không phải đổi một dòng nào.
+  if (!query) {
+    return {
+      ...full,
+      relationLabels,
+      rows: materialised,
+      total: materialised.length,
+      truncated: rows.length >= ROW_SCAN_LIMIT,
+    };
+  }
+
+  /* Lọc và sắp CHẠY SAU khi quan hệ / tổng hợp / công thức đã có giá trị.
+   * Bắt buộc phải theo thứ tự này: ba loại cột đó không tồn tại trong bảng
+   * nào, máy chủ tính lúc đọc — lọc trước thì điều kiện trên cột công thức
+   * đọc phải ô rỗng và loại sạch mọi dòng. */
+  const ctx: QueryContext = {
+    relationLabels,
+    personNames: await personNamesFor(full.properties, materialised),
   };
+  const properties = full.properties.map((p) => ({ id: p.id, name: p.name, type: p.type }));
+
+  let working = materialised;
+  if (!queryIsEmpty(query)) {
+    working = applyFilters(working, properties, query.filters, query.filterJoin, ctx);
+    working = applySearch(working, properties, query.search, ctx);
+    working = applySorts(working, properties, query.sorts, ctx);
+  }
+
+  const total = working.length;
+  const start = (query.page - 1) * query.pageSize;
+  return {
+    ...full,
+    relationLabels,
+    rows: working.slice(start, start + query.pageSize),
+    total,
+    page: query.page,
+    pageSize: query.pageSize,
+    // `truncated` nói về LƯỢT ĐỌC, không phải về trang: nếu bảng vượt trần
+    // quét thì `total` là số đếm trên phần đã đọc, không phải số thật — và
+    // giao diện PHẢI nói ra điều đó thay vì hiện một con số trông chắc chắn.
+    truncated: rows.length >= ROW_SCAN_LIMIT,
+  };
+}
+
+/**
+ * Tên hiển thị của những người được nhắc tới trong các ô PERSON.
+ *
+ * Chỉ truy vấn khi bảng THỰC SỰ có cột PERSON: lọc theo tên người là ca hiếm,
+ * còn `getDatabase` thì chạy ở mọi lượt mở bảng.
+ */
+async function personNamesFor(
+  properties: Array<{ id: number; type: string }>,
+  rows: QueryRow[],
+): Promise<Map<number, string>> {
+  const personProperties = properties.filter((p) => p.type === 'PERSON');
+  if (personProperties.length === 0) return new Map();
+  const ids = new Set<number>();
+  for (const row of rows) {
+    for (const property of personProperties) {
+      const raw = row.values[String(property.id)];
+      if (!Array.isArray(raw)) continue;
+      for (const value of raw) {
+        const id = Number(value);
+        if (Number.isInteger(id) && id > 0) ids.add(id);
+      }
+    }
+  }
+  if (ids.size === 0) return new Map();
+  const users = await prisma.user.findMany({
+    where: { id: { in: [...ids] } },
+    select: { id: true, username: true, displayName: true },
+  });
+  return new Map(users.map((u) => [u.id, (u.displayName?.trim() || u.username)]));
 }
 
 /**

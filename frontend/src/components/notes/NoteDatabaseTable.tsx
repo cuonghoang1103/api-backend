@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CalendarDays, Check, Columns3, GanttChartSquare, LayoutGrid, Loader2, Plus, Rows3, Table2, Trash2, X } from 'lucide-react';
+import { AlertTriangle, CalendarDays, Check, Columns3, GanttChartSquare, LayoutGrid, Loader2, Plus, Rows3, Table2, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   noteDatabaseApi,
@@ -410,6 +410,20 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
           <Table2 className="h-4 w-4 shrink-0" aria-hidden="true" />
           <span className="truncate">{database.icon ? `${database.icon} ` : ''}{database.title}</span>
           <span className="shrink-0 text-[11px] font-normal text-slate-500">{database.rows.length} dòng</span>
+          {/* Máy chủ chạm trần quét: số ở trên là số đếm trên phần ĐÃ ĐỌC.
+              Im lặng ở đây nghĩa là bảng hiện đúng 5.000 dòng và người dùng
+              tin đó là tất cả — lọc trên tập đã cắt cho kết quả sai mà trông
+              hợp lý. */}
+          {database.truncated && (
+            <span
+              role="status"
+              title="Bảng vượt 5.000 dòng. Số liệu và bộ lọc chỉ tính trên 5.000 dòng đầu."
+              className="inline-flex shrink-0 items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-800 dark:border-amber-400/25 dark:bg-amber-500/10 dark:text-amber-200"
+            >
+              <AlertTriangle className="h-3 w-3" aria-hidden="true" />
+              Mới đọc 5.000 dòng đầu
+            </span>
+          )}
         </h3>
         <div className="flex items-center gap-1">
           {/* Cả sáu khung nhìn đọc số dòng đã có sẵn trong state — đổi khung

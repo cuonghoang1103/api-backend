@@ -35,6 +35,7 @@ export type MucHienThi =
   | { kieu: 'xinPhep'; the: TheXinPhep; xong?: 'dongY' | 'tuChoi' }
   /** Thẻ duyệt LỆNH. Khác thẻ sửa file: hiện chuỗi lệnh + lý do nguy hiểm. */
   | { kieu: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh; xong?: 'dongY' | 'tuChoi' }
+  | { kieu: 'xinPhepMcp'; id: string; server: string; tool: string; args: string; xong?: 'dongY' | 'tuChoi' }
   /**
    * Đầu ra lệnh, gom dần khi lệnh còn đang chạy.
    *
@@ -147,6 +148,12 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
             kieu: 'xinPhepLenh', id: e.id, lenh: e.lenh, phanLoai: e.phanLoai,
           }]);
           break;
+        case 'xinPhepMcp':
+          datDangNghi(false);
+          datMuc((truoc) => [...truoc, {
+            kieu: 'xinPhepMcp', id: e.id, server: e.server, tool: e.tool, args: e.args,
+          }]);
+          break;
         case 'lenhRa':
           datMuc((truoc) => {
             const cuoi = truoc[truoc.length - 1];
@@ -161,7 +168,9 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           break;
         case 'xongXinPhep':
           datMuc((truoc) => truoc.map((m) =>
-            (m.kieu === 'xinPhep' && m.the.id === e.id) || (m.kieu === 'xinPhepLenh' && m.id === e.id)
+            (m.kieu === 'xinPhep' && m.the.id === e.id)
+            || (m.kieu === 'xinPhepLenh' && m.id === e.id)
+            || (m.kieu === 'xinPhepMcp' && m.id === e.id)
               ? { ...m, xong: e.dongY ? 'dongY' : 'tuChoi' }
               : m,
           ));

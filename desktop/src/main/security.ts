@@ -259,8 +259,13 @@ export async function openExternalSafely(rawUrl: string): Promise<void> {
 }
 
 /**
- * Chặn tiến trình con. Không tính năng nào của app cần sinh tiến trình; bịt
- * sẵn thì một lỗ RCE trong renderer cũng không leo ra shell được.
+ * Ghi lại khi một tiến trình con thoát bất thường.
+ *
+ * App CÓ sinh tiến trình con — `agent/lenh.ts` khi người dùng duyệt một lệnh,
+ * và `agent/mcp.ts` cho mỗi server MCP. Cả hai đều chỉ chạy sau khi người dùng
+ * bấm duyệt, và đều ở MAIN; renderer không có đường nào tự sinh tiến trình.
+ * Chỗ này chỉ ghi log để còn điều tra, KHÔNG tự khởi động lại — một server MCP
+ * chết đi chết lại mà cứ tự bật lên là một vòng lặp ngốn CPU im lặng.
  */
 export function forbidChildProcesses(): void {
   app.on('child-process-gone', (_event, details) => {

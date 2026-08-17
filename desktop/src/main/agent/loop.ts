@@ -29,7 +29,8 @@ import { luuPhien, type TinNhanLuu } from './phien';
 import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua } from './tools';
 import { taoSoCuoc, type SoCuoc } from './so';
-import { huyTatCa, type YeuCauXinPhep } from './xinPhep';
+import { hanMucMcp, goiToolMcp, laToolMcp, toolMcpHienCo } from './mcp';
+import { hoiNguoiDung, huyTatCa, type YeuCauXinPhep } from './xinPhep';
 
 /** Trần vòng lặp phía app. RỘNG HƠN trần bước của máy chủ (30) để máy chủ mới là bên nói dừng. */
 const MAX_VONG = 40;
@@ -45,6 +46,8 @@ export type SuKienAgent =
   /** Thẻ duyệt đã được trả lời (hoặc hết giờ) — giao diện gỡ nó đi. */
   | { loai: 'xongXinPhep'; id: string; dongY: boolean }
   | { loai: 'xinPhepLenh'; id: string; lenh: string; phanLoai: PhanLoaiLenh }
+  /** Agent muốn gọi một tool MCP của bên thứ ba. LUÔN phải hỏi, không nhớ được. */
+  | { loai: 'xinPhepMcp'; id: string; server: string; tool: string; args: string }
   | { loai: 'lenhRa'; mau: string }
   | { loai: 'keHoach'; viec: Array<{ ten: string; trangThai: string }> }
   | { loai: 'xong'; hanMuc: HanMucUi | null; tienUsd: number; daLuoc: number; soFileDaSua: number }
@@ -322,6 +325,11 @@ export async function chayLuot(
           : {}),
         ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
         ...(boiCanh.mucNoLuc ? { mucNoLuc: boiCanh.mucNoLuc } : {}),
+        // Gửi ở MỌI vòng, không phải chỉ vòng đầu: người dùng có thể nạp lại
+        // MCP giữa chừng, và máy chủ chỉ chấp nhận tool có mặt trong lượt NÀY.
+        toolMcp: toolMcpHienCo().map((t) => ({
+          name: t.ten, description: t.moTa, parameters: t.thamSo,
+        })),
         signal: dieuKhien.signal,
         phat,
       });
@@ -384,7 +392,11 @@ export async function chayLuot(
         };
 
         let kq: { noiDung: string; tomTat: string };
-        if (!boiCanh.goc) {
+        if (laToolMcp(goi.name)) {
+          // Tool MCP xử lý TRƯỚC cả phép kiểm "đã mở dự án chưa": một server
+          // Linear hay Sentry không cần thư mục nào trên máy cả.
+          kq = await chayToolMcpCoDuyet(goi.name, goi.args, c, dieuKhien.signal, phat);
+        } else if (!boiCanh.goc) {
           kq = { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
         } else if (goi.name === 'giao_viec_phu') {
           kq = await chayViecPhu(c, goi.args, boiCanh, phien.sessionToken, dieuKhien.signal, phat);
@@ -411,6 +423,62 @@ export async function chayLuot(
       });
     }
   }
+}
+
+/**
+ * Gọi một tool MCP — nhưng chỉ sau khi người dùng bấm duyệt.
+ *
+ * ⚠️ `choNho: false`. Đây là điểm khác cốt lõi so với tool sửa file và tool
+ * chạy lệnh: KHÔNG có "cho phép cả …" cho tool MCP.
+ *
+ * Lý do là ranh giới tin cậy. Duyệt `npm test` cả phiên là duyệt một lệnh
+ * người dùng đọc được và hiểu được. Duyệt một tool MCP cả phiên là cấp quyền
+ * cho mã của NGƯỜI LẠ chạy bao nhiêu lần tuỳ ý với tham số mà model tự chọn —
+ * và chính server đó lại là bên viết phần mô tả mà model đọc để quyết định gọi
+ * gì. Bên viết mô tả không được là bên hưởng lợi từ việc bỏ qua cửa duyệt.
+ *
+ * Nên thẻ duyệt hiện cả THAM SỐ, không chỉ tên tool: `mcp__db__query` nghe vô
+ * hại cho tới khi nhìn thấy tham số nó định chạy.
+ */
+async function chayToolMcpCoDuyet(
+  ten: string,
+  args: Record<string, unknown>,
+  c: CuocHoiThoai,
+  signal: AbortSignal,
+  phat: (e: SuKienAgent) => void,
+): Promise<{ noiDung: string; tomTat: string }> {
+  const t = toolMcpHienCo().find((x) => x.ten === ten);
+  if (!t) {
+    return { noiDung: `LỖI: không có tool MCP tên "${ten}".`, tomTat: 'không có tool' };
+  }
+
+  let thamSo = '';
+  try {
+    thamSo = JSON.stringify(args, null, 2).slice(0, 2000);
+  } catch {
+    thamSo = '(không đọc được tham số)';
+  }
+
+  const id = `mcp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const quyet = await hoiNguoiDung(
+    { ten: 'mcp', duongDan: `${t.server}: ${t.tenGoc}`, khoa: id, choNho: false },
+    (y) => phat({ loai: 'xinPhepMcp', id: y.id, server: t.server, tool: t.tenGoc, args: thamSo }),
+    signal,
+    c.so.soNho,
+  );
+  if (quyet === 'tuChoi') {
+    return {
+      noiDung: `NGƯỜI DÙNG TỪ CHỐI gọi ${ten}. Đừng thử lại tool này; hãy tìm cách khác hoặc hỏi họ.`,
+      tomTat: 'bị từ chối',
+    };
+  }
+
+  const noiDung = await goiToolMcp(ten, args);
+  const h = hanMucMcp();
+  return {
+    noiDung,
+    tomTat: noiDung.startsWith('LỖI') ? 'lỗi' : `${t.server} · ${h.daDung}/${h.tran} lượt hôm nay`,
+  };
 }
 
 /**
@@ -531,6 +599,7 @@ async function mgoiMotLuot(o: {
   ghiChuDuAn?: { ten: string; noiDung: string };
   mucNoLuc?: string;
   laPhu?: boolean;
+  toolMcp?: Array<{ name: string; description: string; parameters: Record<string, unknown> }>;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
 }): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
@@ -545,6 +614,7 @@ async function mgoiMotLuot(o: {
       ghiChuDuAn: o.ghiChuDuAn,
       mucNoLuc: o.mucNoLuc,
       laPhu: o.laPhu,
+      toolMcp: o.toolMcp,
     }),
   });
 

@@ -15,14 +15,14 @@
  * trình đi qua kênh sự kiện `agent:event`; `invoke` chỉ để biết lượt đã kết
  * thúc (hoặc hỏng ngay từ đầu).
  */
-import { BrowserWindow, dialog } from 'electron';
+import { BrowserWindow, dialog, shell } from 'electron';
 import { execFile } from 'node:child_process';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
 import type {
-  AgentInfo, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, MucNoLuc,
+  AgentInfo, AgentMcpTrangThai, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, MucNoLuc,
 } from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
@@ -30,6 +30,7 @@ import {
   chayLuot, coCuocDangChay, cuocDangChay, dongCuoc, huyLuotCua, napPhien,
   soCuaCuoc, taoCuoc, xoaHoiThoai, xoaMoiCuoc, type SuKienAgent,
 } from '../agent/loop';
+import { duongDanCauHinh, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
 import { danhSachPhien, docPhien, dungLaiHienThi, xoaPhien } from '../agent/phien';
 import { hoanTacTatCa } from '../agent/tools';
 import { traLoi } from '../agent/xinPhep';
@@ -287,4 +288,30 @@ export function registerAgentHandlers(): void {
     huyLuotCua(cuocId);
     return hoanTacTatCa(soCuaCuoc(cuocId));
   });
+
+  // ─── MCP ─────────────────────────────────────────────────────────
+
+  handle('agent:mcpTrangThai', (): AgentMcpTrangThai => trangThaiMcp());
+
+  handle('agent:mcpNapLai', async (): Promise<AgentMcpTrangThai> => {
+    await napLaiMcp();
+    return trangThaiMcp();
+  });
+
+  handle('agent:mcpMoCauHinh', async () => {
+    // Nạp một lần trước khi mở: `napLaiMcp` tự ghi file mẫu khi chưa có. Mở một
+    // file không tồn tại thì hệ điều hành báo lỗi cụt lủn, và người dùng không
+    // có cách nào biết phải tạo nó ở đâu, tên gì, cú pháp ra sao.
+    await napLaiMcp().catch(() => {});
+    await shell.openPath(duongDanCauHinh());
+  });
+}
+
+function trangThaiMcp(): AgentMcpTrangThai {
+  return {
+    duongDan: duongDanCauHinh(),
+    server: trangThaiServer(),
+    soTool: toolMcpHienCo().length,
+    hanMuc: hanMucMcp(),
+  };
 }

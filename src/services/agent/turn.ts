@@ -44,7 +44,7 @@ import { nenNguCanh } from './compact.js';
 import { loiCanVi, loiHetHan, xemHanMuc, xemViAgent, type HanMuc } from './quota.js';
 import { runServerTool } from './serverTools.js';
 import { buildSystemPrompt, catGhiChu, type WorkspaceHint } from './prompt.js';
-import { parseCapabilities, toolByName, toolsForGateway, type AgentCapability } from './tools.js';
+import { parseCapabilities, parseToolMcp, toolByName, toolsForGateway, type AgentCapability } from './tools.js';
 import { logger } from '../../utils/logger.js';
 import { prisma } from '../../config/database.js';
 
@@ -183,6 +183,13 @@ export interface AgentTurnInput {
    * người dùng cập nhật app.
    */
   ghiChuDuAn?: { ten: string; noiDung: string };
+  /**
+   * Tool MCP app phát hiện được trên máy người dùng.
+   *
+   * Bộ tool DUY NHẤT không do máy chủ sở hữu — xem `parseToolMcp` trong
+   * `tools.ts` để biết vì sao, và vì sao mô tả của chúng bị rào lại.
+   */
+  toolMcp?: unknown;
   userId: number;
 }
 
@@ -327,6 +334,10 @@ export async function runAgentTurn(
   const buocDaDi = demBuoc(messages);
   const mucNoLuc = docMucNoLuc(input.mucNoLuc);
   const laPhu = input.laPhu === true;
+  // Agent phụ KHÔNG được cắm tool MCP: nó chạy không có người ngồi duyệt từng
+  // lời gọi, mà duyệt tay là chốt chặn chính của MCP.
+  const toolMcp = laPhu ? [] : parseToolMcp(input.toolMcp);
+  const tenMcp = new Set(toolMcp.map((t) => t.name));
   // Agent phụ có trần RIÊNG và cứng: 10 bước, bất kể người dùng chọn mức nào.
   // Để nó theo mức "Kỹ" thì ba việc phụ × 60 bước = 180 bước cho một câu hỏi.
   const MAX_AGENT_STEPS = laPhu ? 10 : TRAN_BUOC[mucNoLuc];
@@ -380,10 +391,11 @@ export async function runAgentTurn(
     capabilities,
     mucNoLuc,
     laPhu,
+    soToolMcp: toolMcp.length,
     ...(input.workspace ? { workspace: input.workspace } : {}),
     ...(ghiChu ? { ghiChu } : {}),
   });
-  const tools = toolsForGateway(capabilities);
+  const tools = toolsForGateway(capabilities, toolMcp);
 
   const { ep, tra } = await xinDiemCuoi('agent_code');
   const model = modelFor('agent_code', ep);
@@ -458,7 +470,11 @@ export async function runAgentTurn(
       // ── Có tool của app ⇒ dừng lượt, giao lại cho app ──
       if (vongClient.length > 0) {
         for (const c of vongClient) {
-          const t = toolByName(c.function.name);
+          // Tool MCP không nằm trong danh mục của máy chủ — hợp lệ khi và chỉ
+          // khi app vừa khai báo nó ở lượt NÀY. Model nhớ một tool MCP từ lượt
+          // trước rồi gọi lại sau khi người dùng đã rút server ra thì phải bị
+          // chặn ở đây, không phải ở app.
+          const t = toolByName(c.function.name) ?? (tenMcp.has(c.function.name) ? true : undefined);
           if (!t) {
             // Model bịa ra tên tool. Trả lỗi vào hội thoại để nó tự sửa ở lượt
             // sau, thay vì để app nhận một tool nó không biết chạy.

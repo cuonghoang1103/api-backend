@@ -99,6 +99,14 @@ async function bootstrap(): Promise<void> {
   const { scheduleUpdateChecks } = await import('./ipc/update');
   scheduleUpdateChecks();
 
+  // Bật server MCP ở NỀN, không `await`. Chờ ở đây nghĩa là một server MCP hỏng
+  // giữ cửa sổ trắng thêm 10 giây — mà MCP là tính năng phần lớn người dùng
+  // không cắm gì vào. Chưa cấu hình gì thì đây chỉ là một lần đọc file nhỏ.
+  void import('./agent/mcp').then(({ napLaiMcp }) => napLaiMcp()).catch(() => {});
+  app.on('will-quit', () => {
+    void import('./agent/mcp').then(({ tatHet }) => tatHet()).catch(() => {});
+  });
+
   app.on('activate', () => {
     // macOS: bấm icon ở Dock khi không còn cửa sổ nào.
     if (BrowserWindow.getAllWindows().length === 0) {

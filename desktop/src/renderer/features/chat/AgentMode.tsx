@@ -18,14 +18,14 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
-  FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, RotateCcw, Search, Send,
+  FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
   Sparkles, SquareTerminal, Terminal, Undo2, X,
 } from 'lucide-react';
-import type { AgentInfo, AgentViec, AgentWorkspace, MucNoLuc } from '../../../shared/ipc';
+import type { AgentInfo, AgentMcpTrangThai, AgentViec, AgentWorkspace, MucNoLuc } from '../../../shared/ipc';
 import { useAgent } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
-import { XinPhep, XinPhepLenh } from './XinPhep';
+import { XinPhep, XinPhepLenh, XinPhepMcp } from './XinPhep';
 
 export function AgentMode({
   cuocId,
@@ -193,7 +193,13 @@ export function AgentMode({
         </button>
 
         {coThuMuc && (
-          <button type="button" className="ct-agent-icon" onClick={() => void boThuMuc()} title="Thôi cho đọc thư mục này">
+          <button
+            type="button"
+            className="ct-agent-icon"
+            data-nut="boThuMuc"
+            onClick={() => void boThuMuc()}
+            title="Thôi cho đọc thư mục này"
+          >
             <X size={13} aria-hidden />
           </button>
         )}
@@ -257,9 +263,12 @@ export function AgentMode({
 
         {trangThai.hanMuc && <ThanhHanMuc quota={trangThai.hanMuc} soViec={info.soViecConLai} />}
 
+        <NutMcp khoa={trangThai.dangChay} />
+
         <button
           type="button"
           className="ct-agent-icon"
+          data-nut="lichSu"
           onClick={() => datMoLichSu(true)}
           title={`Việc đã lưu (${phien.length})`}
         >
@@ -269,6 +278,7 @@ export function AgentMode({
         <button
           type="button"
           className="ct-agent-icon"
+          data-nut="viecMoi"
           onClick={() => void batDauLai()}
           disabled={trangThai.muc.length === 0}
           title="Bắt đầu việc mới (xoá hội thoại, KHÔNG hoàn lại hạn mức)"
@@ -342,6 +352,24 @@ export function AgentMode({
               );
             }
             return <XinPhepLenh key={i} id={m.id} lenh={m.lenh} phanLoai={m.phanLoai} traLoi={traLoiXinPhep} />;
+          }
+          if (m.kieu === 'xinPhepMcp') {
+            if (m.xong) {
+              return (
+                <div key={i} className="ct-agent-tool" data-vong="may" data-xong={m.xong}>
+                  {m.xong === 'dongY' ? <Check size={12} aria-hidden /> : <X size={12} aria-hidden />}
+                  <code>{m.server} · {m.tool}</code>
+                  <span className="ct-agent-tool-tomtat">
+                    {m.xong === 'dongY' ? 'đã gọi' : 'đã từ chối'}
+                  </span>
+                </div>
+              );
+            }
+            return (
+              <XinPhepMcp
+                key={i} id={m.id} server={m.server} tool={m.tool} args={m.args} traLoi={traLoiXinPhep}
+              />
+            );
           }
           // Đầu ra lệnh: hiện nguyên văn, KHÔNG dựng bằng innerHTML. Đây là chữ
           // do một tiến trình bất kỳ trên máy in ra, và nó có thể chứa bất cứ gì.
@@ -487,6 +515,114 @@ function ChonMucNoLuc({
           {m.nhan}
         </button>
       ))}
+    </div>
+  );
+}
+
+/**
+ * Nút MCP + bảng trạng thái.
+ *
+ * Chỉ hiện SỐ TOOL trên nút, không hiện danh sách: một người cắm 3 server sẽ có
+ * ~20 tool, và đổ hết lên thanh công cụ thì lấp mất mọi thứ khác. Bấm mới mở.
+ *
+ * Bảng ưu tiên hiện SERVER HỎNG kèm lý do. Một server MCP hỏng thì hỏng câm —
+ * agent chỉ đơn giản không có tool đó, không có gì đỏ ở đâu cả, và người dùng
+ * ngồi hỏi tại sao nó không chịu dùng công cụ mình vừa cắm.
+ */
+function NutMcp({ khoa }: { khoa: boolean }) {
+  const [mo, datMo] = useState(false);
+  const [tt, datTt] = useState<AgentMcpTrangThai | null>(null);
+  const [dangNap, datDangNap] = useState(false);
+
+  // Hỏi lại MỖI LẦN MỞ BẢNG, không chỉ lúc gắn component.
+  //
+  // Trạng thái này đổi sau lưng màn hình: một server chết giữa chừng, một tab
+  // khác vừa bấm Nạp lại, hạn mức ngày vừa tăng vì agent gọi tool. Chỉ đọc một
+  // lần lúc mở app thì bảng kể chuyện của lúc khởi động — và người ta mở đúng
+  // cái bảng này KHI nghi có gì đó không ổn, tức là đúng lúc dữ liệu cũ nguy
+  // hiểm nhất.
+  // `mo` trong danh sách phụ thuộc ⇒ chạy cả lúc gắn (để nút hiện được số tool)
+  // lẫn mỗi lần mở bảng.
+  useEffect(() => {
+    void window.cuongthai?.agent.mcpTrangThai().then(datTt).catch(() => {});
+  }, [mo]);
+
+  const napLai = async () => {
+    datDangNap(true);
+    try {
+      const kq = await window.cuongthai?.agent.mcpNapLai();
+      if (kq) datTt(kq);
+    } finally {
+      datDangNap(false);
+    }
+  };
+
+  const soTool = tt?.soTool ?? 0;
+  const soHong = tt?.server.filter((s) => !s.ok).length ?? 0;
+
+  return (
+    <div className="ct-mcp-boc">
+      <button
+        type="button"
+        className="ct-agent-icon"
+        data-nut="mcp"
+        data-canhbao={soHong > 0}
+        onClick={() => datMo((v) => !v)}
+        title={soTool > 0 ? `MCP: ${soTool} tool` : 'MCP — cắm thêm công cụ ngoài'}
+      >
+        <Plug size={13} aria-hidden />
+        {soTool > 0 && <span className="ct-mcp-dem">{soTool}</span>}
+      </button>
+
+      {mo && (
+        <div className="ct-mcp-bang">
+          <div className="ct-mcp-dau">
+            <strong>Server MCP</strong>
+            <button
+              type="button"
+              className="ct-btn ct-btn-ghost ct-mcp-nho"
+              onClick={() => void napLai()}
+              disabled={dangNap || khoa}
+              title={khoa ? 'Đang chạy một việc — nạp lại sau khi xong' : 'Tắt hết rồi bật lại theo file cấu hình'}
+            >
+              {dangNap ? <Loader2 size={12} aria-hidden className="ct-spin" /> : <RotateCcw size={12} aria-hidden />}
+              Nạp lại
+            </button>
+          </div>
+
+          {!tt || tt.server.length === 0 ? (
+            <p className="ct-mcp-trong">
+              Chưa cắm server nào. Sửa file <code>mcp.json</code> rồi bấm Nạp lại.
+            </p>
+          ) : (
+            <ul className="ct-mcp-ds">
+              {tt.server.map((s) => (
+                <li key={s.ten} data-ok={s.ok}>
+                  <span className="ct-mcp-cham" />
+                  <span className="ct-mcp-ten">{s.ten}</span>
+                  <span className="ct-mcp-phu">{s.ok ? `${s.soTool} tool` : (s.loi ?? 'hỏng')}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {tt && (
+            <p className="ct-mcp-chan">
+              Đã dùng {tt.hanMuc.daDung}/{tt.hanMuc.tran} lượt gọi hôm nay.
+              {' '}Mỗi lượt gọi đều cần bạn duyệt.
+            </p>
+          )}
+
+          <button
+            type="button"
+            className="ct-btn ct-btn-ghost ct-mcp-nho"
+            onClick={() => void window.cuongthai?.agent.mcpMoCauHinh()}
+          >
+            <FileCode2 size={12} aria-hidden />
+            Mở file cấu hình
+          </button>
+        </div>
+      )}
     </div>
   );
 }

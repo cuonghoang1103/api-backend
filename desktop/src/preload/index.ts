@@ -15,6 +15,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import type {
   AgentInfo,
+  AgentMcpTrangThai,
   AgentMucKhoiPhuc,
   AgentPhien,
   AgentQuyetDinh,
@@ -136,6 +137,9 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:moPhien', { cuocId, id }) as
         Promise<{ muc: AgentMucKhoiPhuc[] } | null>,
     xoaPhien: (id: string) => ipcRenderer.invoke('agent:xoaPhien', { id }) as Promise<void>,
+    mcpTrangThai: () => ipcRenderer.invoke('agent:mcpTrangThai') as Promise<AgentMcpTrangThai>,
+    mcpNapLai: () => ipcRenderer.invoke('agent:mcpNapLai') as Promise<AgentMcpTrangThai>,
+    mcpMoCauHinh: () => ipcRenderer.invoke('agent:mcpMoCauHinh') as Promise<void>,
   },
 
   on: (channel: EventChannel, listener: (payload: unknown) => void) => {

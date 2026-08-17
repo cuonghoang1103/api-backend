@@ -16,7 +16,7 @@
  *     Đây là chỗ đổi chác giữa phiền và an toàn, và nó nghiêng theo cách người
  *     ta thật sự làm việc: sửa sâu vài file, không rải khắp dự án.
  */
-import { AlertTriangle, Check, CheckCheck, FilePlus2, FilePen, Terminal, X } from 'lucide-react';
+import { AlertTriangle, Check, CheckCheck, FilePlus2, FilePen, Plug, Terminal, X } from 'lucide-react';
 import type { AgentDiff, AgentPhanLoaiLenh, AgentQuyetDinh } from '../../../shared/ipc';
 
 export interface TheXinPhep {
@@ -158,6 +158,74 @@ export function XinPhepLenh({
             Chạy, và đừng hỏi lại lệnh này
           </button>
         )}
+        <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
+          <X size={14} aria-hidden />
+          Từ chối
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Thẻ duyệt GỌI TOOL MCP.
+ *
+ * ─── KHÔNG CÓ NÚT "ĐỪNG HỎI LẠI" — VÀ ĐÓ LÀ ĐIỂM CHÍNH ───
+ * Thẻ sửa file và thẻ chạy lệnh đều có đường tắt để khỏi bấm mười lần. Thẻ này
+ * cố ý không có. Duyệt `npm test` cả phiên là duyệt một lệnh người dùng đọc
+ * được. Duyệt một tool MCP cả phiên là cấp quyền cho mã của NGƯỜI LẠ chạy bao
+ * nhiêu lần tuỳ ý, với tham số do model chọn — và chính server đó lại là bên
+ * viết phần mô tả mà model đọc để quyết định gọi gì.
+ *
+ * ─── THAM SỐ HIỆN ĐẦY ĐỦ, KHÔNG CHỈ TÊN TOOL ───
+ * `mcp__db__query` nghe vô hại cho tới khi nhìn thấy câu lệnh nó định chạy. Tên
+ * tool là thứ server tự đặt; tham số mới là việc sắp xảy ra thật.
+ */
+export function XinPhepMcp({
+  id,
+  server,
+  tool,
+  args,
+  traLoi,
+}: {
+  id: string;
+  server: string;
+  tool: string;
+  args: string;
+  traLoi: (id: string, q: AgentQuyetDinh) => void;
+}) {
+  return (
+    <div className="ct-xinphep" data-muc="cankiem">
+      <div className="ct-xinphep-dau">
+        <Plug size={14} aria-hidden />
+        <span>Agent muốn gọi tool của server ngoài</span>
+        <span className="ct-xinphep-dem">
+          <span className="ct-mcp-ten">{server}</span>
+        </span>
+      </div>
+
+      <div className="ct-lenh-hop">
+        <span className="ct-lenh-dau">›</span>
+        <code className="ct-lenh-chu">{tool}</code>
+      </div>
+
+      {/* Text thô trong `<pre>`: tham số đến từ model và từ server ngoài — hai
+          nguồn đều không được phép dựng thành HTML trong renderer. */}
+      <pre className="ct-mcp-args">{args}</pre>
+
+      <div className="ct-notice" data-tone="warn" style={{ margin: '8px 0 0' }}>
+        <AlertTriangle size={15} aria-hidden />
+        <span>
+          Tool này do <strong>{server}</strong> cung cấp, không phải của ứng dụng.
+          Nó chạy trên máy bạn và có thể làm bất cứ điều gì server đó lập trình sẵn.
+        </span>
+      </div>
+
+      <div className="ct-xinphep-nut">
+        <button type="button" className="ct-btn" onClick={() => traLoi(id, 'choPhep')}>
+          <Check size={14} aria-hidden />
+          Cho phép lần này
+        </button>
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
           <X size={14} aria-hidden />
           Từ chối

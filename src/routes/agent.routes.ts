@@ -141,7 +141,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   // và app nhận HTTP 200 cho một yêu cầu hỏng. Sai sớm thì sai bằng mã HTTP.
   const body = req.body as {
     messages?: unknown; capabilities?: unknown; workspace?: unknown;
-    ghiChuDuAn?: unknown; mucNoLuc?: unknown; laPhu?: unknown;
+    ghiChuDuAn?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
@@ -199,6 +199,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
         mucNoLuc: body.mucNoLuc,
         laPhu: body.laPhu,
+        toolMcp: body.toolMcp,
         userId: req.userId,
       },
       guiKhung,

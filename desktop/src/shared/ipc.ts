@@ -353,6 +353,15 @@ export interface AgentQuota {
   hoiLucNao: string | null;
 }
 
+/** Trạng thái các server MCP người dùng đã cắm. */
+export interface AgentMcpTrangThai {
+  /** Đường dẫn file cấu hình — hiện lên để người dùng biết sửa ở đâu. */
+  duongDan: string;
+  server: Array<{ ten: string; ok: boolean; soTool: number; loi?: string }>;
+  soTool: number;
+  hanMuc: { daDung: number; tran: number };
+}
+
 /** Thông tin agent lúc mở màn hình: có Pro không, trần bao nhiêu, còn bao nhiêu. */
 export interface AgentInfo {
   pro: boolean;
@@ -380,6 +389,11 @@ export type AgentUiEvent = { cuocId: string } & (
   | { loai: 'xongXinPhep'; id: string; dongY: boolean }
   /** Xin phép CHẠY LỆNH — payload khác thẻ sửa file: có chuỗi lệnh + phân loại. */
   | { loai: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh }
+  /**
+   * Xin phép gọi một tool MCP. Mang cả THAM SỐ — tên tool một mình không đủ để
+   * quyết định: `mcp__db__query` nghe vô hại tới khi nhìn thấy câu lệnh nó chạy.
+   */
+  | { loai: 'xinPhepMcp'; id: string; server: string; tool: string; args: string }
   /** Đầu ra của lệnh, chảy ra khi nó còn đang chạy. */
   | { loai: 'lenhRa'; mau: string }
   /** Agent công bố/cập nhật danh sách việc. Luôn là TOÀN BỘ danh sách. */
@@ -448,6 +462,9 @@ export const INVOKE_CHANNELS = {
   'agent:dsPhien': null,
   'agent:moPhien': agentMoPhienSchema,
   'agent:xoaPhien': agentPhienSchema,
+  'agent:mcpTrangThai': null,
+  'agent:mcpNapLai': null,
+  'agent:mcpMoCauHinh': null,
 } as const;
 
 export type InvokeChannel = keyof typeof INVOKE_CHANNELS;
@@ -619,6 +636,12 @@ export interface DesktopBridge {
      */
     moPhien(cuocId: string, id: string): Promise<{ muc: AgentMucKhoiPhuc[] } | null>;
     xoaPhien(id: string): Promise<void>;
+    /** Trạng thái MCP hiện tại. Không khởi động lại server nào. */
+    mcpTrangThai(): Promise<AgentMcpTrangThai>;
+    /** Tắt hết server MCP rồi bật lại theo file cấu hình. Có thể mất vài giây. */
+    mcpNapLai(): Promise<AgentMcpTrangThai>;
+    /** Mở file `mcp.json` bằng ứng dụng mặc định của hệ điều hành. */
+    mcpMoCauHinh(): Promise<void>;
   };
   /** Trả về hàm huỷ đăng ký. Renderer PHẢI gọi nó khi unmount. */
   on(channel: EventChannel, listener: (payload: unknown) => void): () => void;

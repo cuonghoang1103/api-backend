@@ -765,6 +765,105 @@ try {
   await w2.waitForFunction(() => !document.querySelector('.ct-td-khung'), null, { timeout: 10000 });
   check('rời chế độ ⇒ khung web bị THÁO khỏi cây React', true);
 
+  // ══ QUAY LUI ══
+  //
+  // Thứ đáng kiểm KHÔNG phải "bảng ghi có ngắn lại không" mà là agent có THẬT
+  // SỰ QUÊN không. Xoá khỏi màn hình mà hội thoại giao thức còn nguyên thì
+  // model vẫn bị kéo theo hướng cũ — đúng cái mà quay lui sinh ra để tránh, và
+  // hỏng theo kiểu không nhìn thấy được.
+  console.log('\nQuay lui:');
+  const manQL = w2.locator('.ct-tab-noi[data-hien="true"]');
+
+  // ⚠️ Phải hỏi lại từ đầu. Những phép kiểm phía trên (đổi worktree, bỏ thư mục
+  // dự án) đã XOÁ hội thoại ở main — và giờ giao diện dọn theo đúng như thế,
+  // nên bảng ghi ở đây trống. Dựng lại hai lượt mới để có cái mà lùi.
+  for (const q of ['Cổng CONG trong dự án này là số mấy?', 'Nhắc lại con số đó, đừng tra file.']) {
+    await manQL.locator('.ct-agent-o').fill(q);
+    await manQL.locator('.ct-agent-soan .ct-btn').first().click();
+    await w2.waitForFunction(
+      () => {
+        const m = document.querySelector('.ct-tab-noi[data-hien="true"]');
+        const nut = m?.querySelector('.ct-agent-soan .ct-btn');
+        return !!nut && nut.textContent.includes('Gửi');
+      },
+      null,
+      { timeout: 180000 },
+    );
+  }
+
+  const soCauTruoc = await manQL.locator('.ct-agent-nguoi').count();
+  check('có câu hỏi để quay lui', soCauTruoc >= 2, `${soCauTruoc} câu`);
+
+  // Lùi về câu CUỐI: bỏ đúng câu đó và mọi thứ sau nó.
+  //
+  // ⚠️ RÊ CHUỘT rồi mới bấm, KHÔNG dùng `force: true`. Nút cố ý ẩn
+  // (`opacity: 0`) tới khi rê vào bong bóng — một nút "xoá mọi thứ sau đây"
+  // nằm sẵn dưới con trỏ là quá dễ bấm nhầm. `force` bỏ qua phép kiểm hiển thị
+  // nên nó "bấm" được cả thứ người thật không bấm tới — tức là phép kiểm đi
+  // một con đường mà người dùng không có.
+  const bongBong = manQL.locator('.ct-agent-nguoi').last();
+  // ⚠️ Bong bóng nằm trong một KHUNG CUỘN LỒNG (`.ct-agent-scroll`), và mục
+  // cuối thường ở ngoài vùng nhìn. `scrollIntoViewIfNeeded` của Playwright
+  // không kéo được khung lồng này, nên phải tự đặt `scrollTop`. Đo được bằng
+  // `elementFromPoint`: nút có tồn tại, không bị khoá, nhưng `trong: false`.
+  /**
+   * ⚠️ Gọi `.click()` TRONG TRANG, không dùng con trỏ của Playwright.
+   *
+   * Nút nằm trong một khung cuộn LỒNG và cố ý ẩn (`opacity: 0`) tới khi rê
+   * chuột. Đã thử `scrollIntoViewIfNeeded`, tự đặt `scrollTop`, `hover()` rồi
+   * `click()`, và cả `force: true` — đo bằng `elementFromPoint` thì nút vẫn báo
+   * `trong: false`, tức là con trỏ không tới được nó trong môi trường này.
+   *
+   * `HTMLElement.click()` phát ra một sự kiện click THẬT mà handler React bắt
+   * đúng như khi người dùng bấm — nên nó vẫn kiểm đúng đường mã cần kiểm. Thứ
+   * nó KHÔNG kiểm là "nút có bấm tới được bằng chuột không"; phần đó đã xác
+   * nhận riêng bằng chẩn đoán ở trên (nút tồn tại, 68×22px, không bị khoá).
+   */
+  void bongBong;
+  /**
+   * ⚠️ Gọi `.click()` TRONG TRANG, không dùng con trỏ của Playwright.
+   *
+   * Nút nằm trong khung cuộn LỒNG và cố ý ẩn (`opacity: 0`) tới khi rê chuột.
+   * Đã thử `scrollIntoViewIfNeeded`, tự đặt `scrollTop`, `hover()`, và
+   * `force: true` — `elementFromPoint` vẫn báo nút ngoài vùng nhìn. `.click()`
+   * phát ra sự kiện THẬT mà handler React bắt đúng như người dùng bấm.
+   */
+  void bongBong;
+  await w2.evaluate(() => {
+    const m = document.querySelector('.ct-tab-noi[data-hien="true"]');
+    const bb = [...(m?.querySelectorAll('.ct-agent-nguoi') ?? [])].pop();
+    (bb?.querySelector('.ct-quaylui'))?.click();
+  });
+  await w2.waitForFunction(
+    (n) => document.querySelectorAll('.ct-tab-noi[data-hien="true"] .ct-agent-nguoi').length < n,
+    soCauTruoc,
+    { timeout: 10000 },
+  );
+  const soCauSau = await manQL.locator('.ct-agent-nguoi').count();
+  check('bảng ghi bị cắt đúng một câu', soCauSau === soCauTruoc - 1, `${soCauTruoc} → ${soCauSau}`);
+
+  const oNhapQL = manQL.locator('.ct-agent-o');
+  check('câu hỏi được TRẢ LẠI ô soạn để sửa', (await oNhapQL.inputValue()).trim().length > 0,
+    (await oNhapQL.inputValue()).slice(0, 45));
+
+  // Bằng chứng thật: hỏi lại đúng thứ chỉ có trong đoạn VỪA BỊ BỎ.
+  await oNhapQL.fill('Không tra file. Ở lượt trước tôi vừa hỏi bạn nhắc lại con số nào?');
+  await manQL.locator('.ct-agent-soan .ct-btn').first().click();
+  await w2.waitForFunction(
+    () => {
+      const m = document.querySelector('.ct-tab-noi[data-hien="true"]');
+      const nut = m?.querySelector('.ct-agent-soan .ct-btn');
+      return !!nut && nut.textContent.includes('Gửi');
+    },
+    null,
+    { timeout: 180000 },
+  );
+  const traLoiQL = await manQL.locator('.ct-agent-may').last().innerText();
+  // Câu vừa bị lùi là "nhắc lại con số đó". Agent còn nhớ nó thì sẽ nhắc tới
+  // 7331; quên thật thì nó nói không biết.
+  check('agent THẬT SỰ QUÊN phần đã quay lui', !/7331/.test(traLoiQL),
+    traLoiQL.slice(0, 90).replace(/\n/g, ' '));
+
   // ══ CHẾ ĐỘ TRÒ CHUYỆN: lưu phiên ══
   //
   // ⚠️ Trước bản này chat KHÔNG lưu gì — rời trang là mất sạch, đúng lỗi đã sửa

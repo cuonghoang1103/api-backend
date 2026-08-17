@@ -229,6 +229,14 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           datDangNghi(false);
           datMuc((truoc) => [...truoc, { kieu: 'loi', text: e.thongDiep, ...(e.ma ? { ma: e.ma } : {}) }]);
           break;
+        case 'daXoa':
+          // Main đã xoá hội thoại ⇒ dọn theo. Không dọn thì màn hình kể một câu
+          // chuyện mà agent không còn nhớ chữ nào.
+          datMuc([]);
+          datKeHoach([]);
+          datDangChay(false);
+          datDangNghi(false);
+          break;
         case 'huy':
           datDangNghi(false);
           datMuc((truoc) => [...truoc, { kieu: 'loi', text: 'Đã dừng theo yêu cầu.', ma: 'CANCELLED' }]);
@@ -247,6 +255,52 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   }, []);
 
   useEffect(() => { void napPhien(); }, [napPhien]);
+
+  /**
+   * Quay lui về câu hỏi thứ `k` (1 = câu đầu).
+   *
+   * ⚠️ Cắt bảng ghi theo THỨ TỰ CÂU HỎI, không theo chỉ số mảng — bản hiển thị
+   * và bản giao thức không cùng độ dài (một lượt sinh nhiều tin nhắn giao thức
+   * nhưng có thể chỉ vài dòng trên màn hình). Thứ tự câu hỏi thì luôn khớp,
+   * nên nó là điểm neo duy nhất dịch được giữa hai bên.
+   */
+  const quayLui = useCallback(async (k: number): Promise<{ cauHoi: string; coSuaFile: boolean } | null> => {
+    /**
+     * ⚠️ PHẢI bắt lỗi ở đây.
+     *
+     * Lời gọi IPC có thể NÉM (schema từ chối, handler ném), và chỗ gọi dùng
+     * `void quayLui(...)` nên một promise bị từ chối biến mất không dấu vết:
+     * không đếm giảm, không chữ vào ô soạn, không dòng lỗi — y hệt một cú bấm
+     * không ăn. Mất bốn lần chạy bộ kiểm mới lần ra, vì mọi triệu chứng đều là
+     * "không có gì xảy ra".
+     */
+    let r: { ok: boolean; loi?: string; cauHoi?: string; coSuaFile?: boolean } | undefined;
+    try {
+      r = await window.cuongthai?.agent.quayLui(cuocId, k);
+    } catch (err) {
+      datMuc((truoc) => [...truoc, {
+        kieu: 'loi', ma: 'QUAY_LUI', text: `Quay lui hỏng: ${(err as Error).message}`,
+      }]);
+      return null;
+    }
+    if (!r?.ok) {
+      // NÓI RA khi hỏng. Bản đầu lặng lẽ `return null`, nên một lần quay lui
+      // thất bại trông y hệt một cú bấm không ăn — người dùng bấm lại vài lần
+      // rồi kết luận nút hỏng, mà không ở đâu nói lý do.
+      datMuc((truoc) => [...truoc, {
+        kieu: 'loi', ma: 'QUAY_LUI', text: r?.loi ?? 'Không quay lui được.',
+      }]);
+      return null;
+    }
+
+    datMuc((truoc) => {
+      let dem = 0;
+      const cat = truoc.findIndex((m) => m.kieu === 'nguoi' && ++dem === k);
+      return cat >= 0 ? truoc.slice(0, cat) : truoc;
+    });
+    datKeHoach([]);
+    return { cauHoi: r.cauHoi ?? '', coSuaFile: r.coSuaFile === true };
+  }, [cuocId]);
 
   const moPhien = useCallback(async (id: string) => {
     const kq = await window.cuongthai?.agent.moPhien(cuocId, id);
@@ -350,6 +404,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     hoanTac,
     phien,
     phienDangMo,
+    quayLui,
     moPhien,
     xoaPhien,
   };

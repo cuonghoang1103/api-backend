@@ -3071,6 +3071,34 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   box-shadow: var(--ct-shadow-sm);
 }
 
+/* ── Quay lui ── */
+
+/* Nút chỉ hiện khi rê chuột vào bong bóng. Hiện thường trực thì mỗi câu hỏi
+   mang một nút "xoá mọi thứ sau đây" luôn nằm sẵn dưới con trỏ — quá dễ bấm
+   nhầm cho một thao tác không hoàn tác được. */
+.ct-quaylui {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border: 1px solid var(--ct-border);
+  border-radius: 999px;
+  background: var(--ct-surface);
+  color: var(--ct-text-faint);
+  font-size: 10px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.ct-agent-nguoi { position: relative; }
+.ct-agent-nguoi:hover .ct-quaylui { opacity: 1; }
+.ct-quaylui:hover:not(:disabled) { color: var(--ct-text); border-color: var(--ct-accent); }
+.ct-quaylui:disabled { display: none; }
+
 /* ── Thư mục chat ── */
 .ct-tm-dai {
   display: flex;

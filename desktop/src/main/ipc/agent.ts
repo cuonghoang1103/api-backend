@@ -28,7 +28,8 @@ import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
 import {
   bangGhiCua, chayLuot, cuocDangChay, datGocChoCuoc, datQuyenChoCuoc, dongCuoc, dsCuocDangMo,
-  daChonGocCua, datGocNeuChuaCo, gocCuaCuoc, huyLuotCua, napPhien, quyenCuaCuoc, soCuaCuoc, taoCuoc,
+  daChonGocCua, datGocNeuChuaCo, gocCuaCuoc, huyLuotCua, napPhien, quayLui, quyenCuaCuoc, soCuaCuoc,
+  taoCuoc,
   xoaHoiThoai, type SuKienAgent,
 } from '../agent/loop';
 import { duongDanCauHinh, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
@@ -375,6 +376,8 @@ export function registerAgentHandlers(): void {
     }
     return xoaWorktree(goc, duongDan);
   });
+
+  handle('agent:quayLui', ({ cuocId, k }) => quayLui(cuocId, k));
 
   handle('agent:dsCuoc', (): AgentCuocDangMo[] => dsCuocDangMo());
 

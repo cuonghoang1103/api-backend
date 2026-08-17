@@ -21,6 +21,7 @@
  * đúng chỗ đó. Backend cố ý tách nó khỏi `'tool_calls'` chính vì bộ kiểm thử
  * đầu tiên đã dính (xem ghi chú trong `src/services/agent/turn.ts`).
  */
+import { BrowserWindow } from 'electron';
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from '../ipc/auth';
 import type { KetQuaDiff } from './diff';
@@ -58,7 +59,9 @@ export type SuKienAgent =
       nguCanh?: NguCanhUi;
     }
   | { loai: 'loi'; thongDiep: string; ma?: string }
-  | { loai: 'huy' };
+  | { loai: 'huy' }
+  /** Hội thoại ở main vừa bị xoá sạch — giao diện PHẢI dọn bảng ghi theo. */
+  | { loai: 'daXoa' };
 
 export interface NguCanhUi { kyTu: number; tran: number; phanTram: number; soLuotDaBo: number }
 
@@ -351,6 +354,23 @@ export function cuocDangChay(id: string): boolean {
 }
 
 /** Xoá nội dung một cuộc nhưng giữ nó mở (nút "việc mới" trong cùng tab). */
+/**
+ * Báo cho MỌI cửa sổ biết một cuộc vừa bị xoá sạch.
+ *
+ * ⚠️ Không có bước này thì màn hình NÓI DỐI. Hội thoại ở main bị xoá bởi những
+ * đường người dùng không nghĩ là "xoá": đổi thư mục dự án, chuyển worktree, bỏ
+ * thư mục. Renderer không hay biết nên nó tiếp tục vẽ nguyên bảng ghi cũ — người
+ * dùng đọc thấy một cuộc trò chuyện mà agent đã quên hoàn toàn, rồi hỏi tiếp
+ * dựa trên nó và nhận về câu trả lời như người mất trí nhớ.
+ *
+ * Phát hiện 17/08/2026 khi làm Quay lui: màn hình 5 câu hỏi, main 0 câu.
+ */
+function baoDaXoa(id: string): void {
+  for (const w of BrowserWindow.getAllWindows()) {
+    if (!w.isDestroyed()) w.webContents.send('agent:event', { cuocId: id, loai: 'daXoa' });
+  }
+}
+
 export function xoaHoiThoai(id: string): void {
   const c = layCuoc(id);
   huyLuotCua(id);
@@ -364,6 +384,68 @@ export function xoaHoiThoai(id: string): void {
   // và giữ nhật ký cũ lại thì nút Hoàn tác sẽ lùi cả những thay đổi thuộc
   // việc trước mà người dùng đã chấp nhận xong xuôi.
   c.so = taoSoCuoc();
+  baoDaXoa(id);
+}
+
+/**
+ * ============================================================
+ * QUAY LUI — bỏ hội thoại từ một câu hỏi trở đi
+ * ============================================================
+ *
+ * Dùng khi agent đi sai hướng: thay vì gõ thêm "không, ý tôi là…" (câu đó nằm
+ * LẠI trong ngữ cảnh và vẫn kéo model theo hướng cũ), người dùng lùi về đúng
+ * chỗ rẽ nhầm rồi hỏi lại cho khác.
+ *
+ * ─── ĐỊNH VỊ BẰNG THỨ TỰ CÂU HỎI, KHÔNG BẰNG CHỈ SỐ MẢNG ───
+ * Bản hiển thị và bản giao thức KHÔNG cùng độ dài: một lượt sinh ra nhiều tin
+ * nhắn giao thức (assistant + n tin `tool`) nhưng có thể chỉ vài dòng trên màn
+ * hình, và ngược lại có những dòng chỉ tồn tại ở giao diện. Chỉ số mảng vì thế
+ * không dịch được giữa hai bên.
+ *
+ * Thứ CHẮC CHẮN khớp là THỨ TỰ CÂU HỎI CỦA NGƯỜI DÙNG: câu thứ k ở màn hình
+ * đúng là câu thứ k trong giao thức. Nên tham số là `k`, không phải chỉ số.
+ *
+ * ⚠️ KHÔNG đụng tới FILE. Quay lui bỏ phần hội thoại, không hoàn tác những gì
+ * agent đã ghi lên đĩa — người dùng đã DUYỆT từng thay đổi đó, và lặng lẽ lùi
+ * chúng là xoá việc họ đã đồng ý. Muốn lùi file thì có nút Hoàn tác riêng, và
+ * giao diện phải nói rõ hai thứ này khác nhau.
+ */
+export interface KetQuaQuayLui {
+  ok: boolean;
+  loi?: string;
+  /** Nguyên văn câu hỏi vừa bị bỏ — giao diện đặt lại vào ô soạn để sửa và gửi lại. */
+  cauHoi?: string;
+  /** Có thay đổi file nào xảy ra trong phần bị bỏ không — để cảnh báo. */
+  coSuaFile?: boolean;
+}
+
+export function quayLui(cuocId: string, k: number): KetQuaQuayLui {
+  const c = layCuoc(cuocId);
+  if (c.dangChay) return { ok: false, loi: 'Việc này đang chạy dở — hãy dừng nó trước.' };
+
+  const viTri: number[] = [];
+  c.hoiThoai.forEach((m, i) => { if (m.role === 'user') viTri.push(i); });
+  if (k < 1 || k > viTri.length) {
+    return { ok: false, loi: `Không có câu hỏi thứ ${k} (hội thoại có ${viTri.length} câu).` };
+  }
+
+  const cat = viTri[k - 1]!;
+  const boDi = c.hoiThoai.slice(cat);
+
+  // Lượt có ảnh mang `content` là MẢNG khối; lấy phần chữ để trả lại ô soạn.
+  const dau = c.hoiThoai[cat]!;
+  const cauHoi = Array.isArray(dau.content)
+    ? dau.content.filter((x) => x.type === 'text').map((x) => x.text).join(' ')
+    : String(dau.content ?? '');
+
+  // Có tool ghi nào trong phần sắp bỏ không. Kiểm bằng tên tool trong
+  // `tool_calls` — đó là bản ghi trung thực nhất về việc đã thật sự xảy ra.
+  const TOOL_GHI = new Set(['edit_file', 'create_file', 'run_command', 'chay_lenh_nen', 'git_commit', 'tao_pr']);
+  const coSuaFile = boDi.some((m) => m.role === 'assistant'
+    && (m.tool_calls ?? []).some((t) => TOOL_GHI.has(t.function.name)));
+
+  c.hoiThoai = c.hoiThoai.slice(0, cat);
+  return { ok: true, cauHoi, coSuaFile };
 }
 
 /** Người dùng bấm dừng ở một cuộc cụ thể. */

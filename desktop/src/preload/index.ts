@@ -151,6 +151,9 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:doiWorktree', { cuocId, duongDan }) as Promise<{ ok: boolean; loi?: string }>,
     xoaWorktree: (cuocId: string, duongDan: string) =>
       ipcRenderer.invoke('agent:xoaWorktree', { cuocId, duongDan }) as Promise<{ ok: boolean; loi?: string }>,
+    quayLui: (cuocId: string, k: number) =>
+      ipcRenderer.invoke('agent:quayLui', { cuocId, k }) as
+        Promise<{ ok: boolean; loi?: string; cauHoi?: string; coSuaFile?: boolean }>,
     dsCuoc: () => ipcRenderer.invoke('agent:dsCuoc') as Promise<AgentCuocDangMo[]>,
     bangGhi: (cuocId: string) =>
       ipcRenderer.invoke('agent:bangGhi', { cuocId }) as

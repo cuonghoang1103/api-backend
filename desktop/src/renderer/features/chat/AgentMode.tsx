@@ -44,9 +44,11 @@ export function AgentMode({
   datDuAn?: (d: string | null) => void;
 }) {
   const {
-    trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac,
+    trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac, quayLui,
     phien, phienDangMo, moPhien, xoaPhien,
   } = useAgent(cuocId, info);
+  /** Cảnh báo sau khi quay lui qua một đoạn CÓ sửa file. */
+  const [canhQuayLui, datCanhQuayLui] = useState<string | null>(null);
   /**
    * Thư mục dự án của RIÊNG tab này.
    *
@@ -321,14 +323,47 @@ export function AgentMode({
 
       {trangThai.keHoach.length > 0 && <BangKeHoach viec={trangThai.keHoach} />}
 
+      {canhQuayLui && (
+        <div className="ct-notice" data-tone="warn" style={{ margin: '0 0 8px' }}>
+          <span>{canhQuayLui}</span>
+          <button type="button" className="ct-agent-icon" onClick={() => datCanhQuayLui(null)} aria-label="Đóng">
+            <X size={12} aria-hidden />
+          </button>
+        </div>
+      )}
+
       {/* ── Bảng ghi ── */}
       <div className="ct-agent-scroll" ref={cuonRef}>
         {trangThai.muc.length === 0 && <ManHinhTrong coThuMuc={coThuMuc} />}
 
         {trangThai.muc.map((m, i) => {
           if (m.kieu === 'nguoi') {
+            // Thứ tự câu hỏi (1, 2, 3…) — điểm neo duy nhất dịch được giữa bảng
+            // ghi và hội thoại giao thức. Đếm lại ở đây thay vì lưu sẵn: bảng
+            // ghi bị cắt bởi chính thao tác này, nên số phải luôn tính từ hiện tại.
+            const thuTu = trangThai.muc.slice(0, i + 1).filter((x) => x.kieu === 'nguoi').length;
             return (
               <div key={i} className="ct-agent-nguoi">
+                <button
+                  type="button"
+                  className="ct-quaylui"
+                  disabled={trangThai.dangChay}
+                  title={'Quay lui về đây — bỏ câu này và MỌI thứ sau nó khỏi hội thoại, '
+                    + 'rồi đặt lại câu hỏi vào ô soạn để bạn sửa. KHÔNG hoàn tác file đã ghi.'}
+                  onClick={() => {
+                    void quayLui(thuTu).then((r) => {
+                      if (!r) return;
+                      datNhap(r.cauHoi);
+                      datCanhQuayLui(r.coSuaFile
+                        ? 'Đã quay lui. Lưu ý: đoạn vừa bỏ CÓ sửa file hoặc chạy lệnh — '
+                          + 'những thay đổi đó vẫn còn trên đĩa. Dùng nút Hoàn tác nếu muốn lùi cả chúng.'
+                        : null);
+                    });
+                  }}
+                >
+                  <Undo2 size={11} aria-hidden />
+                  Quay lui
+                </button>
                 {m.anh?.length ? (
                   <div className="ct-anh-goi">
                     {m.anh.map((a, k) => <img key={k} src={a} alt={`ảnh ${k + 1}`} />)}

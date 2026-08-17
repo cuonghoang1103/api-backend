@@ -365,6 +365,18 @@ export const agentCheDoLenhSchema = z.object({ cuocId: cuocIdSchema, bat: z.bool
 export const agentPhienSchema = z.object({ id: z.string().min(1).max(64) });
 
 /**
+ * Quay lui về câu hỏi thứ `k` (1 = câu đầu tiên).
+ *
+ * Định vị bằng THỨ TỰ CÂU HỎI chứ không bằng chỉ số mảng: bản hiển thị và bản
+ * giao thức không cùng độ dài, nên chỉ số không dịch được giữa hai bên. Thứ tự
+ * câu hỏi thì luôn khớp.
+ */
+export const agentQuayLuiSchema = z.object({
+  cuocId: cuocIdSchema,
+  k: z.number().int().min(1).max(500),
+});
+
+/**
  * ⚠️ `duongDan` ở đây là NGOẠI LỆ DUY NHẤT cho quy tắc "renderer không truyền
  * đường dẫn" — và nó an toàn vì main KHÔNG tin chuỗi này: `xoaWorktree` /
  * `doiWorktree` đối chiếu nó với danh sách `git worktree list` của chính repo
@@ -515,6 +527,12 @@ export type AgentUiEvent = { cuocId: string } & (
     }
   | { loai: 'loi'; thongDiep: string; ma?: string }
   | { loai: 'huy' }
+  /**
+   * Hội thoại ở main vừa bị xoá sạch (đổi thư mục dự án, chuyển worktree, bỏ
+   * thư mục). Giao diện PHẢI dọn bảng ghi — giữ lại là vẽ một cuộc trò chuyện
+   * agent đã quên hoàn toàn.
+   */
+  | { loai: 'daXoa' }
 );
 
 // ─────────────────────────────────────────────────────────────
@@ -589,6 +607,7 @@ export const INVOKE_CHANNELS = {
   'agent:taoWorktree': agentTaoWorktreeSchema,
   'agent:doiWorktree': agentDoiWorktreeSchema,
   'agent:xoaWorktree': agentDoiWorktreeSchema,
+  'agent:quayLui': agentQuayLuiSchema,
   'agent:dsCuoc': null,
   'agent:bangGhi': agentCuocSchema,
   'agent:mcpTrangThai': null,
@@ -781,6 +800,15 @@ export interface DesktopBridge {
      * Renderer bị tháo hẳn mỗi lần đổi trang, nên nó KHÔNG được tự nhớ danh
      * sách tab — hỏi lại main lúc gắn. Xem `dsCuocDangMo` trong `agent/loop.ts`.
      */
+    /**
+     * Bỏ hội thoại từ câu hỏi thứ `k` trở đi, trả lại nguyên văn câu đó để giao
+     * diện đặt vào ô soạn.
+     *
+     * KHÔNG đụng tới file đã sửa — xem ghi chú ở `quayLui` trong agent/loop.ts.
+     */
+    quayLui(cuocId: string, k: number): Promise<{
+      ok: boolean; loi?: string; cauHoi?: string; coSuaFile?: boolean;
+    }>;
     dsCuoc(): Promise<AgentCuocDangMo[]>;
     /**
      * Bảng ghi của một cuộc + nó có ĐANG CHẠY không.

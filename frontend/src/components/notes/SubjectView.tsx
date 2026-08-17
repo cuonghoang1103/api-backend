@@ -126,6 +126,29 @@ function SubjectDatabases({ subjectId }: { subjectId: number }) {
    * nghĩa là mười mấy lượt gọi mạng, và đứt giữa chừng thì để lại một bộ khung
    * dựng dở mà người dùng không biết thiếu gì.
    */
+  /** Danh sách mẫu — `null` nghĩa là chưa mở bộ chọn. */
+  const [templates, setTemplates] = useState<{ key: string; title: string; icon: string; description: string }[] | null>(null);
+
+  const openTemplates = () => {
+    if (templates !== null) { setTemplates(null); return; }
+    // Nạp mỗi lần mở thay vì nhớ lại: danh sách mẫu là hằng số ở backend, nên
+    // một lượt gọi nhẹ hơn hẳn việc nuôi thêm một tầng nhớ đệm.
+    void noteDatabaseApi.listTemplates()
+      .then((res) => setTemplates(res.data.data))
+      .catch(() => toast.error('Không tải được danh sách mẫu'));
+  };
+
+  const useTemplate = async (key: string) => {
+    setCreating(true);
+    try {
+      await noteDatabaseApi.applyTemplate(subjectId, key);
+      setTemplates(null);
+      await load();
+    } catch {
+      toast.error('Không dựng được bảng từ mẫu');
+    } finally { setCreating(false); }
+  };
+
   const createWorkspace = async () => {
     setCreating(true);
     try {
@@ -147,7 +170,44 @@ function SubjectDatabases({ subjectId }: { subjectId: number }) {
         >
           <Plus className="h-3 w-3" aria-hidden="true" /> Bảng mới
         </button>
+        <button
+          type="button"
+          onClick={openTemplates}
+          className="flex min-h-8 items-center gap-1 rounded-md px-2 py-1 text-[11px] text-indigo-600 hover:bg-indigo-50 dark:text-indigo-300 dark:hover:bg-indigo-500/10"
+        >
+          <Sparkles className="h-3 w-3" aria-hidden="true" /> Dùng mẫu
+        </button>
       </div>
+
+      {/* Bộ chọn mẫu. Hiện ngay trong khối này chứ không mở hộp thoại: nó chỉ
+          là một danh sách bấm-là-xong, mà hộp thoại thì cần quản lý tiêu điểm,
+          phím Esc và lớp phủ — trả giá đó cho một danh sách tám dòng là thừa. */}
+      {templates !== null && (
+        <div className="mb-3 grid grid-cols-1 gap-1.5 rounded-lg border border-slate-200 p-2 sm:grid-cols-2 dark:border-white/[0.08]">
+          {templates.map((tpl) => (
+            <button
+              key={tpl.key}
+              type="button"
+              disabled={creating}
+              onClick={() => void useTemplate(tpl.key)}
+              className="flex items-start gap-2 rounded-md px-2 py-1.5 text-left hover:bg-slate-100 disabled:opacity-50 dark:hover:bg-white/[0.06]"
+            >
+              <span className="text-base leading-none" aria-hidden>{tpl.icon}</span>
+              <span className="min-w-0">
+                <span className="block truncate text-[12.5px] font-medium text-slate-800 dark:text-slate-100">{tpl.title}</span>
+                <span className="block text-[11px] leading-snug text-slate-500">{tpl.description}</span>
+              </span>
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => setTemplates(null)}
+            className="col-span-full rounded px-2 py-1 text-[11px] text-slate-500 hover:bg-slate-100 dark:hover:bg-white/10"
+          >
+            Đóng
+          </button>
+        </div>
+      )}
 
       {/* Bộ khung dựng sẵn — chỉ mời khi môn CHƯA có bảng nào. Sau đó ẩn đi:
           bấm hai lần sẽ ra hai cặp bảng trùng tên và người dùng không biết

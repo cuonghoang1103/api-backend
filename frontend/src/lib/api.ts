@@ -896,6 +896,15 @@ export const noteDatabaseApi = {
   createTaskWorkspace: (subjectId: number) =>
     api.post<{ data: { projectDatabaseId: number; taskDatabaseId: number } }>(
       '/notes-databases/task-workspace', { subjectId }),
+  /** Danh sách mẫu database dựng sẵn. */
+  listTemplates: () =>
+    api.get<{ data: { key: string; title: string; icon: string; description: string }[] }>(
+      '/notes-databases/templates'),
+  /** Dựng một bảng từ mẫu, kèm cột và dòng ví dụ. */
+  applyTemplate: (subjectId: number, key: string) =>
+    api.post<{ data: { databaseId: number; title: string } }>(
+      `/notes-databases/templates/${key}`, { subjectId }),
+
   /** Mọi việc được gán cho tôi, gom từ mọi bảng tôi truy cập được. */
   listMyTasks: () => api.get<{ data: MyTask[] }>('/notes-databases/my-tasks'),
 

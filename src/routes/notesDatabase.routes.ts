@@ -31,6 +31,7 @@ import {
   updateView,
 } from '../services/notesDatabase.service.js';
 import { createTaskWorkspace, listMyTasks } from '../services/noteTaskWorkspace.js';
+import { applyTemplate, listTemplates } from '../services/noteDatabaseTemplates.js';
 
 const router = Router();
 router.use(authenticate);
@@ -44,6 +45,19 @@ router.get('/my-tasks', async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const data = await listMyTasks(req.user.userId);
     res.json({ success: true, data });
+  } catch (error) { next(error); }
+});
+
+router.get('/templates', async (_req: any, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: listTemplates() });
+  } catch (error) { next(error); }
+});
+
+router.post('/templates/:key', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await applyTemplate(req.user.userId, Number(req.body?.subjectId), String(req.params.key));
+    res.status(201).json({ success: true, data });
   } catch (error) { next(error); }
 });
 

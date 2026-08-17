@@ -3071,6 +3071,121 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   box-shadow: var(--ct-shadow-sm);
 }
 
+/* ── Trình duyệt trong app ── */
+.ct-td { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+.ct-td-thanh {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 0 10px;
+  flex-shrink: 0;
+}
+
+.ct-td-o-boc {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  padding: 0 9px;
+  height: 30px;
+  border: 1px solid var(--ct-border);
+  border-radius: 999px;
+  background: var(--ct-surface);
+  color: var(--ct-text-faint);
+}
+
+.ct-td-o-boc:focus-within { border-color: var(--ct-accent); }
+
+.ct-td-o {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  color: var(--ct-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+.ct-td-xoa {
+  display: grid;
+  place-items: center;
+  width: 15px; height: 15px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ct-bg);
+  color: var(--ct-text-faint);
+  cursor: pointer;
+}
+
+/* Ô GIỮ CHỖ cho trang web. Nền tối/sáng để lúc chưa tải xong không lộ ra một
+   khoảng trắng chói. Nội dung đặt vào đây sẽ bị lớp phủ của main che hết. */
+.ct-td-khung {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  overflow: hidden;
+}
+
+/* ── Worktree ── */
+.ct-wt-ds li { gap: 4px; }
+
+.ct-wt-chon {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 3px 6px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ct-wt-chon:hover:not(:disabled) { background: var(--ct-bg); }
+.ct-wt-chon:disabled { cursor: default; }
+
+.ct-wt-nhan {
+  flex-shrink: 0;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--ct-bg);
+  color: var(--ct-text-faint);
+  font-size: 9.5px;
+}
+
+.ct-wt-nhan[data-dang] { background: color-mix(in srgb, var(--ct-ok) 18%, transparent); color: var(--ct-ok); }
+
+.ct-wt-xoa { position: static; background: none; color: var(--ct-text-faint); }
+.ct-wt-xoa:hover { color: var(--ct-err); }
+
+.ct-wt-tao {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ct-border);
+}
+
+.ct-wt-tao .ct-td-o {
+  padding: 4px 8px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  font-size: 11.5px;
+}
+
+.ct-mcp-chan[data-loi] { color: var(--ct-err); }
+
 /* ── Đính kèm ở chế độ Trò chuyện ── */
 
 /* Lớp phủ kéo-thả. `pointer-events:none` là bắt buộc: lớp phủ nhận được con trỏ

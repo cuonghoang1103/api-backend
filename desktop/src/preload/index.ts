@@ -21,6 +21,7 @@ import type {
   AgentPhien,
   AgentQuyetDinh,
   AgentWorkspace,
+  AgentWorktree,
   MucNoLuc,
   AppInfo,
   DesktopBridge,
@@ -46,6 +47,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'app:navigate',
   'update:status',
   'agent:event',
+  'browser:trangThai',
 ];
 
 const bridge: DesktopBridge = {
@@ -141,6 +143,14 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:moPhien', { cuocId, id }) as
         Promise<{ muc: AgentMucKhoiPhuc[] } | null>,
     xoaPhien: (id: string) => ipcRenderer.invoke('agent:xoaPhien', { id }) as Promise<void>,
+    dsWorktree: (cuocId: string) =>
+      ipcRenderer.invoke('agent:dsWorktree', { cuocId }) as Promise<AgentWorktree[]>,
+    taoWorktree: (cuocId: string, ten: string) =>
+      ipcRenderer.invoke('agent:taoWorktree', { cuocId, ten }) as Promise<{ ok: boolean; loi?: string }>,
+    doiWorktree: (cuocId: string, duongDan: string) =>
+      ipcRenderer.invoke('agent:doiWorktree', { cuocId, duongDan }) as Promise<{ ok: boolean; loi?: string }>,
+    xoaWorktree: (cuocId: string, duongDan: string) =>
+      ipcRenderer.invoke('agent:xoaWorktree', { cuocId, duongDan }) as Promise<{ ok: boolean; loi?: string }>,
     dsCuoc: () => ipcRenderer.invoke('agent:dsCuoc') as Promise<AgentCuocDangMo[]>,
     bangGhi: (cuocId: string) =>
       ipcRenderer.invoke('agent:bangGhi', { cuocId }) as
@@ -148,6 +158,20 @@ const bridge: DesktopBridge = {
     mcpTrangThai: () => ipcRenderer.invoke('agent:mcpTrangThai') as Promise<AgentMcpTrangThai>,
     mcpNapLai: () => ipcRenderer.invoke('agent:mcpNapLai') as Promise<AgentMcpTrangThai>,
     mcpMoCauHinh: () => ipcRenderer.invoke('agent:mcpMoCauHinh') as Promise<void>,
+  },
+
+  browser: {
+    mo: (vung: { x: number; y: number; width: number; height: number }, url?: string) =>
+      ipcRenderer.invoke('browser:mo', { vung, url }) as Promise<void>,
+    an: () => ipcRenderer.invoke('browser:an') as Promise<void>,
+    datVung: (vung: { x: number; y: number; width: number; height: number }) =>
+      ipcRenderer.invoke('browser:datVung', vung) as Promise<void>,
+    diToi: (url: string) =>
+      ipcRenderer.invoke('browser:diToi', { url }) as Promise<{ ok: boolean; loi?: string }>,
+    lui: () => ipcRenderer.invoke('browser:lui') as Promise<void>,
+    toi: () => ipcRenderer.invoke('browser:toi') as Promise<void>,
+    napLai: () => ipcRenderer.invoke('browser:napLai') as Promise<void>,
+    moNgoai: () => ipcRenderer.invoke('browser:moNgoai') as Promise<void>,
   },
 
   on: (channel: EventChannel, listener: (payload: unknown) => void) => {

@@ -18,10 +18,10 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
-  FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
+  FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
   Sparkles, SquareTerminal, Terminal, Undo2, X,
 } from 'lucide-react';
-import type { AgentInfo, AgentMcpTrangThai, AgentViec, MucNoLuc } from '../../../shared/ipc';
+import type { AgentInfo, AgentMcpTrangThai, AgentViec, AgentWorktree, MucNoLuc } from '../../../shared/ipc';
 import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
@@ -53,7 +53,7 @@ export function AgentMode({
    * Trước đây cha giữ MỘT thư mục rồi phát cho mọi tab — nên hai tab không thể
    * làm hai dự án khác nhau, dù đó chính là lý do người ta mở hai tab.
    */
-  const { thuMuc, datThuMuc } = useThuMuc(cuocId);
+  const { thuMuc, datThuMuc, napThuMuc } = useThuMuc(cuocId);
   const [nhap, datNhap] = useState('');
   const [moLichSu, datMoLichSu] = useState(false);
   /** Ảnh đã dán, chờ gửi kèm câu hỏi tới. */
@@ -271,6 +271,10 @@ export function AgentMode({
         />
 
         {trangThai.hanMuc && <ThanhHanMuc quota={trangThai.hanMuc} soViec={info.soViecConLai} />}
+
+        {coThuMuc && (
+          <NutWorktree cuocId={cuocId} khoa={trangThai.dangChay} onDoi={() => { void napThuMuc(); void batDauLai(); }} />
+        )}
 
         <NutMcp khoa={trangThai.dangChay} />
 
@@ -524,6 +528,138 @@ function ChonMucNoLuc({
           {m.nhan}
         </button>
       ))}
+    </div>
+  );
+}
+
+/**
+ * Nút WORKTREE + bảng.
+ *
+ * `git worktree` cho agent một bản sao riêng của repo: cùng lịch sử, khác nhánh,
+ * khác thư mục. Hai điều nó giải quyết:
+ *
+ *  1. "Để agent sửa thẳng vào chỗ tôi đang làm dở thì sao?" — với worktree thì
+ *     nó KHÔNG sửa; cây làm việc của bạn không bị đụng tới.
+ *  2. Hai tab cùng repo cùng được ghi thì `chayLuot` phải chặn (đè lên nhau).
+ *     Hai worktree = hai đường dẫn ⇒ khoá không còn phải chặn, chạy song song
+ *     thật sự.
+ */
+function NutWorktree({
+  cuocId, khoa, onDoi,
+}: { cuocId: string; khoa: boolean; onDoi: () => void }) {
+  const [mo, datMo] = useState(false);
+  const [ds, datDs] = useState<AgentWorktree[]>([]);
+  const [ten, datTen] = useState('');
+  const [ban, datBan] = useState(false);
+  const [loi, datLoi] = useState<string | null>(null);
+
+  const nap = async (): Promise<void> => {
+    datDs((await window.cuongthai?.agent.dsWorktree(cuocId)) ?? []);
+  };
+  // Hỏi lại mỗi lần MỞ bảng: người dùng có thể vừa tạo/xoá worktree bằng git ở
+  // terminal, và một danh sách cũ ở đây dẫn tới thao tác lên thứ không còn nữa.
+  useEffect(() => { if (mo) void nap(); }, [mo, cuocId]);
+
+  const chay = async (viec: () => Promise<{ ok: boolean; loi?: string } | undefined>): Promise<void> => {
+    datBan(true); datLoi(null);
+    try {
+      const r = await viec();
+      if (r && !r.ok) { datLoi(r.loi ?? 'Không làm được.'); return; }
+      await nap();
+      onDoi();
+    } finally { datBan(false); }
+  };
+
+  const dangDung = ds.find((w) => w.dangDung);
+
+  return (
+    <div className="ct-mcp-boc">
+      <button
+        type="button"
+        className="ct-agent-icon"
+        data-nut="worktree"
+        onClick={() => datMo((v) => !v)}
+        title={dangDung && !dangDung.laChinh ? `Worktree: ${dangDung.nhanh}` : 'Worktree — bản sao riêng của repo'}
+      >
+        <GitBranch size={13} aria-hidden />
+        {dangDung && !dangDung.laChinh && <span className="ct-mcp-dem">•</span>}
+      </button>
+
+      {mo && (
+        <div className="ct-mcp-bang">
+          <div className="ct-mcp-dau"><strong>Worktree</strong></div>
+
+          {ds.length === 0 ? (
+            <p className="ct-mcp-trong">Thư mục này không phải kho git, nên chưa dùng worktree được.</p>
+          ) : (
+            <ul className="ct-mcp-ds ct-wt-ds">
+              {ds.map((w) => (
+                <li key={w.duongDan} data-ok={w.dangDung}>
+                  <button
+                    type="button"
+                    className="ct-wt-chon"
+                    disabled={ban || khoa || w.dangDung}
+                    onClick={() => void chay(() => window.cuongthai!.agent.doiWorktree(cuocId, w.duongDan))}
+                    title={w.duongDan}
+                  >
+                    <span className="ct-mcp-ten">{w.nhanh ?? '(tách rời)'}</span>
+                    {w.laChinh && <span className="ct-wt-nhan">chính</span>}
+                    {w.dangDung && <span className="ct-wt-nhan" data-dang>đang mở</span>}
+                  </button>
+                  {w.cuaApp && !w.dangDung && (
+                    <button
+                      type="button"
+                      className="ct-dk-bo ct-wt-xoa"
+                      disabled={ban}
+                      onClick={() => void chay(() => window.cuongthai!.agent.xoaWorktree(cuocId, w.duongDan))}
+                      aria-label={`Xoá worktree ${w.nhanh}`}
+                    >
+                      <X size={11} aria-hidden />
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {ds.length > 0 && (
+            <div className="ct-wt-tao">
+              <input
+                className="ct-td-o"
+                value={ten}
+                placeholder="tên nhánh mới…"
+                spellCheck={false}
+                disabled={ban || khoa}
+                onChange={(e) => datTen(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.nativeEvent.isComposing) return;
+                  if (e.key === 'Enter' && ten.trim()) {
+                    e.preventDefault();
+                    void chay(() => window.cuongthai!.agent.taoWorktree(cuocId, ten)).then(() => datTen(''));
+                  }
+                }}
+              />
+              <button
+                type="button"
+                className="ct-btn ct-mcp-nho"
+                disabled={ban || khoa || !ten.trim()}
+                onClick={() => void chay(() => window.cuongthai!.agent.taoWorktree(cuocId, ten)).then(() => datTen(''))}
+              >
+                {ban ? <Loader2 size={12} aria-hidden className="ct-spin" /> : <FolderPlus size={12} aria-hidden />}
+                Tạo
+              </button>
+            </div>
+          )}
+
+          {loi && <p className="ct-mcp-chan" data-loi>{loi}</p>}
+          {!loi && ds.length > 0 && (
+            <p className="ct-mcp-chan">
+              Nhánh mới mang tiền tố <code>agent/</code>. Xoá worktree KHÔNG xoá nhánh,
+              và không xoá ép khi còn thay đổi chưa commit.
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -12,20 +12,23 @@
  * bên cạnh. Nếu là route riêng thì họ bấm vào và gặp một trang chết.
  */
 import { useEffect, useRef, useState } from 'react';
-import { Bot, Loader2, Terminal } from 'lucide-react';
+import { Bot, Globe, Loader2, Terminal } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { AgentMode } from './AgentMode';
+import { BrowserMode } from './BrowserMode';
 import { ChatMode } from './ChatMode';
 import { ThanhTab, type TabAgent } from './Tabs';
 import { useAgentInfo } from './useAgent';
 
-type CheDo = 'chat' | 'code';
+type CheDo = 'chat' | 'code' | 'web';
 
 export function ChatPage() {
   const { info, dangTai, nap } = useAgentInfo();
   const { settings, setSetting } = useAppState();
   // Khôi phục chế độ đã chọn lần trước — xem `chatCheDo` trong shared/ipc.ts.
-  const [cheDo, datCheDoTho] = useState<CheDo>(settings.chatCheDo === 'code' ? 'code' : 'chat');
+  const [cheDo, datCheDoTho] = useState<CheDo>(
+    settings.chatCheDo === 'code' || settings.chatCheDo === 'web' ? settings.chatCheDo : 'chat',
+  );
   const datCheDo = (m: CheDo): void => { datCheDoTho(m); setSetting('chatCheDo', m); };
 
   /**
@@ -39,7 +42,7 @@ export function ChatPage() {
   useEffect(() => {
     if (daDongBoCheDo.current || settings.chatCheDo === undefined) return;
     daDongBoCheDo.current = true;
-    if (settings.chatCheDo === 'code') datCheDoTho('code');
+    if (settings.chatCheDo === 'code' || settings.chatCheDo === 'web') datCheDoTho(settings.chatCheDo);
   }, [settings.chatCheDo]);
 
   /**
@@ -135,7 +138,9 @@ export function ChatPage() {
             <p className="ct-muted" style={{ margin: 0 }}>
               {cheDo === 'chat'
                 ? 'Hỏi đáp thường ngày.'
-                : 'Agent đọc dự án trên máy bạn và ghi chú của bạn.'}
+                : cheDo === 'web'
+                  ? 'Xem dev server và tài liệu ngay trong app.'
+                  : 'Agent đọc dự án trên máy bạn và ghi chú của bạn.'}
             </p>
           </div>
 
@@ -166,6 +171,17 @@ export function ChatPage() {
                   tiền. */}
               {info?.pro !== true && <span className="ct-segment-pro">Pro</span>}
             </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={cheDo === 'web'}
+              className="ct-segment-nut"
+              data-chon={cheDo === 'web'}
+              onClick={() => datCheDo('web')}
+            >
+              <Globe size={14} aria-hidden />
+              Trình duyệt
+            </button>
           </div>
         </div>
 
@@ -175,6 +191,14 @@ export function ChatPage() {
         <div className="ct-chedo" data-hien={cheDo === 'chat'}>
           <ChatMode pro={info?.pro === true} />
         </div>
+        {/* ⚠️ Trình duyệt KHÔNG được giữ sống bằng CSS như hai chế độ kia: trang
+            web là một lớp phủ do main vẽ theo toạ độ, `display:none` không giấu
+            được nó. Phải tháo khỏi cây React để `an()` chạy. */}
+        {cheDo === 'web' && (
+          <div className="ct-chedo" data-hien>
+            <BrowserMode hien />
+          </div>
+        )}
         <div className="ct-chedo" data-hien={cheDo === 'code'}>
           {dangTai && !info ? (
             <div className="ct-agent-nghi">

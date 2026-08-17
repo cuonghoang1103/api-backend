@@ -70,6 +70,16 @@ fs.writeFileSync(
   '- Lệnh chạy bộ kiểm của dự án này là `node kiem.mjs`, KHÔNG phải `npm test`.\n',
 );
 
+// Biến dự án giả thành KHO GIT thật — worktree chỉ kiểm được trên repo thật.
+try {
+  const git = (a) => execFileSync('git', a, { cwd: duAn, stdio: 'pipe' });
+  git(['init', '-q', '-b', 'main']);
+  git(['config', 'user.email', 'smoke@test.local']);
+  git(['config', 'user.name', 'Smoke']);
+  git(['add', '-A']);
+  git(['commit', '-q', '-m', 'khoi tao']);
+} catch { /* máy không có git ⇒ phép kiểm worktree tự báo và bỏ qua */ }
+
 // ─── userData riêng: app thử KHÔNG dùng chung gì với app thật ───────
 const userData = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-smoke-ud-'));
 const storeFile = path.join(userData, 'cuongthai-desktop.json');
@@ -650,6 +660,100 @@ try {
   // Và phải đặt lại được: tab A lấy lại thư mục mặc định.
   await w2.evaluate((id) => globalThis.cuongthai.agent.getWorkspace(id), tabA2);
   check('quyền của tab A bị TẮT khi đổi thư mục', wA2.choSua === false);
+
+  // ══ WORKTREE ══
+  //
+  // `git worktree` cho agent một bản sao riêng: cùng lịch sử, khác nhánh, khác
+  // THƯ MỤC. Cái cuối là điểm chính — hai đường dẫn khác nhau thì khoá
+  // chống-đụng-nhau trong `chayLuot` không còn phải chặn, tức là hai tab chạy
+  // song song thật sự.
+  console.log('\nWorktree:');
+  // ⚠️ Dùng tab B, KHÔNG dùng tab A.
+  //
+  // Phép kiểm "mỗi tab một dự án" ở trên vừa bỏ thư mục của tab A một cách CÓ
+  // CHỦ ĐÍCH, và cờ `daChonGoc` giữ đúng quyết định đó — `getWorkspace` sẽ
+  // KHÔNG tự điền lại mặc định (chính là lỗi đã sửa lúc làm per-tab). Nên tab A
+  // không có thư mục, và mọi phép kiểm worktree trên nó đều hỏng vì một lý do
+  // chẳng liên quan gì tới worktree.
+  const dsWtTab = await w2.evaluate(() => globalThis.cuongthai.agent.dsCuoc());
+  const tabWt = dsWtTab[1].id;
+  const wsTruoc = await w2.evaluate((id) => globalThis.cuongthai.agent.getWorkspace(id), tabWt);
+  check('tab dùng để kiểm worktree có thư mục', !!wsTruoc.path, String(wsTruoc.name));
+
+  const wt0 = await w2.evaluate((id) => globalThis.cuongthai.agent.dsWorktree(id), tabWt);
+  check('nhận ra repo git và liệt kê được cây chính', wt0.length === 1 && wt0[0].laChinh,
+    `${wt0.length} worktree`);
+
+  const tao = await w2.evaluate((id) => globalThis.cuongthai.agent.taoWorktree(id, 'thu nghiem'), tabWt);
+  check('tạo được worktree mới', tao.ok === true, tao.loi ?? '');
+
+  const wt1 = await w2.evaluate((id) => globalThis.cuongthai.agent.dsWorktree(id), tabWt);
+  const moi = wt1.find((x) => !x.laChinh);
+  check('tên nhánh mang tiền tố agent/ và tên đã được dọn',
+    moi?.nhanh === 'agent/thu-nghiem', String(moi?.nhanh));
+  check('tab CHUYỂN sang worktree vừa tạo', moi?.dangDung === true);
+
+  const wsWt = await w2.evaluate((id) => globalThis.cuongthai.agent.getWorkspace(id), tabWt);
+  check('thư mục của tab đổi theo, và nằm NGOÀI repo gốc',
+    !!wsWt.path && wsWt.path !== duAn && wsWt.path.includes('-worktrees'), String(wsWt.name));
+  check('quyền bị TẮT khi đổi worktree', wsWt.choSua === false && wsWt.choChayLenh === false);
+
+  // ⛔ Không cho renderer trỏ vào thư mục bất kỳ qua đường worktree.
+  const bay = await w2.evaluate((id) => globalThis.cuongthai.agent.doiWorktree(id, '/etc'), tabWt);
+  check('CHẶN đổi sang đường dẫn không phải worktree của repo', bay.ok === false, bay.loi ?? '');
+
+  // Không xoá được cây MÌNH ĐANG ĐỨNG — nếu không tab mất thư mục dưới chân.
+  const xoaMinh = await w2.evaluate(
+    ([id, p]) => globalThis.cuongthai.agent.xoaWorktree(id, p), [tabWt, moi.duongDan],
+  );
+  check('KHÔNG xoá được worktree mà tab đang đứng', xoaMinh.ok === false, xoaMinh.loi ?? '');
+
+  // Về cây chính rồi mới xoá được worktree.
+  const chinh = wt1.find((x) => x.laChinh);
+  await w2.evaluate(([id, p]) => globalThis.cuongthai.agent.doiWorktree(id, p), [tabWt, chinh.duongDan]);
+  const xoa = await w2.evaluate(([id, p]) => globalThis.cuongthai.agent.xoaWorktree(id, p), [tabWt, moi.duongDan]);
+  check('xoá được worktree sau khi rời khỏi nó', xoa.ok === true, xoa.loi ?? '');
+
+  const wt2 = await w2.evaluate((id) => globalThis.cuongthai.agent.dsWorktree(id), tabWt);
+  check('danh sách trở lại chỉ còn cây chính', wt2.length === 1, `${wt2.length} worktree`);
+
+  // ══ TRÌNH DUYỆT TRONG APP ══
+  //
+  // ⚠️ Trang web là lớp phủ do MAIN vẽ theo toạ độ, KHÔNG nằm trong DOM. Nên
+  // thứ đáng kiểm nhất không phải "có mở được không" mà là "có BIẾN MẤT khi rời
+  // chế độ không" — quên gỡ thì nó lơ lửng trên màn hình khác và trông y hệt
+  // app hỏng.
+  console.log('\nTrình duyệt trong app:');
+  await w2.locator('.ct-segment-nut', { hasText: 'Trình duyệt' }).click();
+  await w2.waitForSelector('.ct-td-khung', { timeout: 10000 });
+  check('mở được chế độ Trình duyệt', true);
+
+  const oDiaChi = w2.locator('#ct-td-o');
+  check('có ô địa chỉ, mặc định trỏ dev server', (await oDiaChi.inputValue()).includes('localhost:3000'));
+
+  // Chặn scheme lạ — ô địa chỉ là đầu vào của người dùng.
+  const chan = await w2.evaluate(() => globalThis.cuongthai.browser.diToi('file:///etc/passwd'));
+  check('CHẶN scheme không phải http/https', chan.ok === false, chan.loi ?? '');
+
+  // TẢI THẬT một trang. Backend cục bộ đang chạy sẵn cho bộ kiểm này, nên dùng
+  // nó — không phụ thuộc mạng ngoài, và nó chứng minh đúng thứ cần chứng minh:
+  // view có tồn tại, có điều hướng, và có báo trạng thái ngược lên renderer.
+  const ttWeb = await w2.evaluate(async (u) => {
+    const nhan = new Promise((xong) => {
+      const go = globalThis.cuongthai.on('browser:trangThai', (p) => {
+        if (p && p.url && p.url.includes('/api/v1/agent/tools') && !p.dangTai) { go(); xong(p); }
+      });
+      setTimeout(() => { go(); xong(null); }, 15000);
+    });
+    await globalThis.cuongthai.browser.diToi(u);
+    return nhan;
+  }, `${API}/api/v1/agent/tools`);
+  check('TẢI THẬT được một trang và báo trạng thái ngược lên', !!ttWeb && ttWeb.dangTai === false,
+    ttWeb ? String(ttWeb.url).slice(0, 60) : 'không nhận được khung trạng thái');
+
+  await w2.locator('.ct-segment-nut', { hasText: 'Lập trình' }).click();
+  await w2.waitForFunction(() => !document.querySelector('.ct-td-khung'), null, { timeout: 10000 });
+  check('rời chế độ ⇒ khung web bị THÁO khỏi cây React', true);
 
   // ══ MCP ══
   //

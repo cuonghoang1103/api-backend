@@ -215,6 +215,40 @@ export interface MusicUsage {
 export const zoomSchema = z.number().min(0.5).max(2.5);
 
 // ─────────────────────────────────────────────────────────────
+// Trình duyệt trong app
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Vùng (theo toạ độ cửa sổ) mà trình duyệt được vẽ đè lên.
+ *
+ * Renderer đo ô giữ chỗ bằng `getBoundingClientRect()` rồi gửi lên. Đây KHÔNG
+ * phải lỗ hổng: nó chỉ quyết định vẽ ở đâu, không quyết định mở cái gì.
+ */
+export const browserVungSchema = z.object({
+  x: z.number().finite().min(-10_000).max(20_000),
+  y: z.number().finite().min(-10_000).max(20_000),
+  width: z.number().finite().min(0).max(20_000),
+  height: z.number().finite().min(0).max(20_000),
+});
+
+/** Địa chỉ người dùng gõ. Main lọc lại scheme — chỉ http/https. */
+export const browserUrlSchema = z.object({ url: z.string().min(1).max(2048) });
+
+export const browserMoSchema = z.object({
+  vung: browserVungSchema,
+  url: z.string().max(2048).optional(),
+});
+
+export interface BrowserTrangThai {
+  url: string;
+  tieuDe: string;
+  dangTai: boolean;
+  luiDuoc: boolean;
+  toiDuoc: boolean;
+  loi: string | null;
+}
+
+// ─────────────────────────────────────────────────────────────
 // Agent lập trình (chỉ tài khoản Pro)
 // ─────────────────────────────────────────────────────────────
 
@@ -329,6 +363,22 @@ export const agentTraLoiSchema = z.object({
 export const agentCheDoSuaSchema = z.object({ cuocId: cuocIdSchema, bat: z.boolean() });
 export const agentCheDoLenhSchema = z.object({ cuocId: cuocIdSchema, bat: z.boolean() });
 export const agentPhienSchema = z.object({ id: z.string().min(1).max(64) });
+
+/**
+ * ⚠️ `duongDan` ở đây là NGOẠI LỆ DUY NHẤT cho quy tắc "renderer không truyền
+ * đường dẫn" — và nó an toàn vì main KHÔNG tin chuỗi này: `xoaWorktree` /
+ * `doiWorktree` đối chiếu nó với danh sách `git worktree list` của chính repo
+ * đang mở, và từ chối mọi thứ không nằm trong đó. Renderer chỉ CHỌN LẠI một
+ * đường dẫn main vừa đưa cho nó, không tự nghĩ ra đường dẫn mới.
+ */
+export const agentDoiWorktreeSchema = z.object({
+  cuocId: cuocIdSchema,
+  duongDan: z.string().min(1).max(1024),
+});
+export const agentTaoWorktreeSchema = z.object({
+  cuocId: cuocIdSchema,
+  ten: z.string().min(1).max(60),
+});
 export const agentMoPhienSchema = z.object({
   cuocId: cuocIdSchema,
   id: z.string().min(1).max(64),
@@ -370,6 +420,18 @@ export interface AgentQuota {
   tran: number;
   phanTram: number;
   hoiLucNao: string | null;
+}
+
+/** Một worktree của repo đang mở. */
+export interface AgentWorktree {
+  duongDan: string;
+  nhanh: string | null;
+  /** Cây làm việc CHÍNH — cái người dùng tự mở. Không xoá được từ trong app. */
+  laChinh: boolean;
+  /** Do app tạo ⇒ mới cho xoá. Không suy từ tên nhánh: người dùng có thể tự đặt trùng. */
+  cuaApp: boolean;
+  /** Tab đang đứng ở worktree này. */
+  dangDung: boolean;
 }
 
 /** Một cuộc đang mở trong main — nguồn sự thật cho thanh tab. */
@@ -488,6 +550,19 @@ export const INVOKE_CHANNELS = {
   'agent:dsPhien': null,
   'agent:moPhien': agentMoPhienSchema,
   'agent:xoaPhien': agentPhienSchema,
+  'browser:mo': browserMoSchema,
+  'browser:an': null,
+  'browser:datVung': browserVungSchema,
+  'browser:diToi': browserUrlSchema,
+  'browser:lui': null,
+  'browser:toi': null,
+  'browser:napLai': null,
+  'browser:moNgoai': null,
+
+  'agent:dsWorktree': agentCuocSchema,
+  'agent:taoWorktree': agentTaoWorktreeSchema,
+  'agent:doiWorktree': agentDoiWorktreeSchema,
+  'agent:xoaWorktree': agentDoiWorktreeSchema,
   'agent:dsCuoc': null,
   'agent:bangGhi': agentCuocSchema,
   'agent:mcpTrangThai': null,
@@ -504,6 +579,8 @@ export const EVENT_CHANNELS = [
   'update:status',
   /** Tiến trình agent. Nhiều sự kiện mỗi giây trong lúc chữ đang chảy. */
   'agent:event',
+  /** URL / tiêu đề / lui-tới của trình duyệt trong app. */
+  'browser:trangThai',
 ] as const;
 
 export type EventChannel = (typeof EVENT_CHANNELS)[number];
@@ -679,6 +756,14 @@ export interface DesktopBridge {
      * và trả tiền hai lần cho cùng một câu.
      */
     bangGhi(cuocId: string): Promise<{ muc: AgentMucKhoiPhuc[]; dangChay: boolean }>;
+    /** Worktree của repo mà tab này đang mở. Rỗng = không phải kho git. */
+    dsWorktree(cuocId: string): Promise<AgentWorktree[]>;
+    /** Tạo worktree mới (nhánh `agent/<tên>`) và CHUYỂN tab sang đó. */
+    taoWorktree(cuocId: string, ten: string): Promise<{ ok: boolean; loi?: string }>;
+    /** Chuyển tab sang một worktree đã có. */
+    doiWorktree(cuocId: string, duongDan: string): Promise<{ ok: boolean; loi?: string }>;
+    /** Xoá worktree do app tạo. CỐ Ý không xoá ép khi còn thay đổi chưa commit. */
+    xoaWorktree(cuocId: string, duongDan: string): Promise<{ ok: boolean; loi?: string }>;
     /** Trạng thái MCP hiện tại. Không khởi động lại server nào. */
     mcpTrangThai(): Promise<AgentMcpTrangThai>;
     /** Tắt hết server MCP rồi bật lại theo file cấu hình. Có thể mất vài giây. */
@@ -686,6 +771,20 @@ export interface DesktopBridge {
     /** Mở file `mcp.json` bằng ứng dụng mặc định của hệ điều hành. */
     mcpMoCauHinh(): Promise<void>;
   };
+  browser: {
+    /** Hiện trình duyệt đè lên `vung` (toạ độ cửa sổ), tuỳ chọn mở luôn `url`. */
+    mo(vung: { x: number; y: number; width: number; height: number }, url?: string): Promise<void>;
+    /** Gỡ khỏi cửa sổ nhưng GIỮ trang — quay lại không phải tải lại. */
+    an(): Promise<void>;
+    datVung(vung: { x: number; y: number; width: number; height: number }): Promise<void>;
+    diToi(url: string): Promise<{ ok: boolean; loi?: string }>;
+    lui(): Promise<void>;
+    toi(): Promise<void>;
+    napLai(): Promise<void>;
+    /** Mở trang hiện tại bằng trình duyệt hệ thống. */
+    moNgoai(): Promise<void>;
+  };
+
   /** Trả về hàm huỷ đăng ký. Renderer PHẢI gọi nó khi unmount. */
   on(channel: EventChannel, listener: (payload: unknown) => void): () => void;
 }

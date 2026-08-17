@@ -22,7 +22,7 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 
 import type {
-  AgentCuocDangMo, AgentInfo, AgentMcpTrangThai, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, MucNoLuc,
+  AgentCuocDangMo, AgentInfo, AgentMcpTrangThai, AgentWorktree, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, MucNoLuc,
 } from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
@@ -32,6 +32,7 @@ import {
   xoaHoiThoai, type SuKienAgent,
 } from '../agent/loop';
 import { duongDanCauHinh, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
+import { dsWorktree, taoWorktree, xoaWorktree } from '../agent/worktree';
 import { danhSachPhien, docPhien, dungLaiHienThi, xoaPhien } from '../agent/phien';
 import { hoanTacTatCa } from '../agent/tools';
 import { traLoi } from '../agent/xinPhep';
@@ -328,6 +329,51 @@ export function registerAgentHandlers(): void {
     // với chính nó, và bên thắng là bên ghi sau.
     huyLuotCua(cuocId);
     return hoanTacTatCa(soCuaCuoc(cuocId));
+  });
+
+  // ─── Worktree ────────────────────────────────────────────────────
+
+  handle('agent:dsWorktree', async ({ cuocId }): Promise<AgentWorktree[]> => {
+    const goc = gocCua(cuocId);
+    if (!goc) return [];
+    const ds = await dsWorktree(goc);
+    return ds.map((w) => ({ ...w, dangDung: path.resolve(w.duongDan) === path.resolve(goc) }));
+  });
+
+  handle('agent:taoWorktree', async ({ cuocId, ten }) => {
+    if (cuocDangChay(cuocId)) return { ok: false, loi: 'Việc này đang chạy dở — dừng nó trước.' };
+    const goc = gocCua(cuocId);
+    if (!goc) return { ok: false, loi: 'Tab này chưa mở thư mục dự án nào.' };
+    const kq = await taoWorktree(goc, ten);
+    if (!kq.ok || !kq.duongDan) return { ok: false, ...(kq.loi ? { loi: kq.loi } : {}) };
+    // Chuyển tab sang worktree vừa tạo. `datGocChoCuoc` xoá hội thoại — ĐÚNG:
+    // agent vừa đọc file ở cây cũ, và giờ nó đứng ở một cây khác.
+    datGocChoCuoc(cuocId, kq.duongDan);
+    return { ok: true };
+  });
+
+  handle('agent:doiWorktree', async ({ cuocId, duongDan }) => {
+    if (cuocDangChay(cuocId)) return { ok: false, loi: 'Việc này đang chạy dở — dừng nó trước.' };
+    const goc = gocCua(cuocId);
+    if (!goc) return { ok: false, loi: 'Tab này chưa mở thư mục dự án nào.' };
+    // ⛔ KHÔNG tin `duongDan` từ renderer. Chỉ chấp nhận nếu git NÓI rằng nó là
+    // một worktree của chính repo đang mở — nếu không thì đây thành một đường
+    // vòng để đặt phạm vi đọc của agent vào thư mục bất kỳ.
+    const ds = await dsWorktree(goc);
+    const muc = ds.find((w) => path.resolve(w.duongDan) === path.resolve(duongDan));
+    if (!muc) return { ok: false, loi: 'Đường dẫn không phải worktree của repo này.' };
+    if (!(await conDungDuoc(muc.duongDan))) return { ok: false, loi: 'Thư mục worktree không còn tồn tại.' };
+    datGocChoCuoc(cuocId, muc.duongDan);
+    return { ok: true };
+  });
+
+  handle('agent:xoaWorktree', async ({ cuocId, duongDan }) => {
+    const goc = gocCua(cuocId);
+    if (!goc) return { ok: false, loi: 'Tab này chưa mở thư mục dự án nào.' };
+    if (path.resolve(duongDan) === path.resolve(goc)) {
+      return { ok: false, loi: 'Không xoá được worktree mà tab này đang đứng. Chuyển sang cây khác trước.' };
+    }
+    return xoaWorktree(goc, duongDan);
   });
 
   handle('agent:dsCuoc', (): AgentCuocDangMo[] => dsCuocDangMo());

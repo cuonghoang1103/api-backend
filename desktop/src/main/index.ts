@@ -105,6 +105,7 @@ async function bootstrap(): Promise<void> {
   void import('./agent/mcp').then(({ napLaiMcp }) => napLaiMcp()).catch(() => {});
   app.on('will-quit', () => {
     void import('./agent/mcp').then(({ tatHet }) => tatHet()).catch(() => {});
+    void import('./browser').then(({ huy }) => huy()).catch(() => {});
   });
 
   app.on('activate', () => {

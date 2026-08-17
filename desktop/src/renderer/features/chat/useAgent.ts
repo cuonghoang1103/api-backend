@@ -370,13 +370,14 @@ export function useAgentInfo() {
 export function useThuMuc(cuocId: string) {
   const [thuMuc, datThuMuc] = useState<AgentWorkspace | null>(null);
 
-  useEffect(() => {
-    let huy = false;
-    void window.cuongthai?.agent.getWorkspace(cuocId).then((w) => { if (!huy) datThuMuc(w); });
-    return () => { huy = true; };
+  const napThuMuc = useCallback(async () => {
+    const w = await window.cuongthai?.agent.getWorkspace(cuocId);
+    if (w) datThuMuc(w);
   }, [cuocId]);
 
-  return { thuMuc, datThuMuc };
+  useEffect(() => { void napThuMuc(); }, [napThuMuc]);
+
+  return { thuMuc, datThuMuc, napThuMuc };
 }
 
 /**

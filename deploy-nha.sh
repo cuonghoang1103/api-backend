@@ -207,9 +207,25 @@ set -u
 cd ${DICH} || exit 1
 export DOCKER_BUILDKIT=1
 
-docker build -t ${GHCR_BE}:${SHA} -t ${GHCR_BE}:latest . > /tmp/nha-be.log 2>&1 &
+# ⛔⛔ PHẢI CHỈ RÕ \`-f Dockerfile.backend\`.
+#
+# \`docker build .\` lấy \`Dockerfile\` mặc định — một file KHÁC hẳn thứ
+# production dùng. \`docker-compose.yml\` dựng backend bằng
+# \`dockerfile: Dockerfile.backend\` (node:22-slim, glibc), còn \`Dockerfile\`
+# trần kết thúc ở \`node:22-alpine\` (musl) trong khi vẫn chép sang engine
+# Prisma bản \`debian-openssl-3.0.x\`. Engine glibc KHÔNG nạp được trên musl.
+#
+# Hậu quả đo thật 18/08/2026: ảnh dựng xong bình thường, đẩy lên GHCR bình
+# thường, tráo lên production bình thường — rồi backend restart vô tận với
+# \`Could not parse schema engine response\` và API chết 502 suốt 7 phút.
+# Ảnh nhỏ hơn 1,1GB và có 13 lớp thay vì 19; nhìn con số là thấy khác, nhưng
+# không có bước nào so.
+#
+# Frontend thì \`./frontend\` đã trỏ đúng \`frontend/Dockerfile\` mà compose
+# dùng — vẫn ghi rõ cho khỏi trôi.
+docker build -f Dockerfile.backend -t ${GHCR_BE}:${SHA} -t ${GHCR_BE}:latest . > /tmp/nha-be.log 2>&1 &
 PID_BE=\$!
-docker build -t ${GHCR_FE}:${SHA} -t ${GHCR_FE}:latest ./frontend > /tmp/nha-fe.log 2>&1 &
+docker build -f frontend/Dockerfile -t ${GHCR_FE}:${SHA} -t ${GHCR_FE}:latest ./frontend > /tmp/nha-fe.log 2>&1 &
 PID_FE=\$!
 
 wait \$PID_BE; MA_BE=\$?
@@ -223,6 +239,35 @@ then
     lui_ve_vps "Build ở máy nhà thất bại"
 fi
 ok "Hai ảnh đã dựng xong ở máy nhà"
+
+# ─── 3b. Ảnh có CHẠY NỔI không ─────────────────────────────────────────
+#
+# Build xanh KHÔNG có nghĩa là ảnh chạy được. 18/08/2026: ảnh backend dựng
+# xong, đẩy lên GHCR, tráo lên production — rồi restart vô tận với
+# `Could not parse schema engine response` và API chết 502 suốt 7 phút, vì nó
+# dựng nhầm Dockerfile nên nền là musl còn engine Prisma là bản glibc.
+#
+# Phép kiểm rẻ nhất bắt đúng lớp lỗi đó: engine Prisma trong ảnh phải hợp với
+# libc của chính ảnh. Hai lần chạy container vài giây, đổi lấy việc không bao
+# giờ tráo một ảnh chết lên production nữa.
+info "Kiểm ảnh backend có chạy nổi không (libc ↔ engine Prisma)..."
+KQ_KIEM=$(sshnha "docker run --rm --entrypoint sh ${GHCR_BE}:${SHA} -c '
+    if ls /lib/ld-musl-x86_64.so.1 >/dev/null 2>&1; then echo -n musl; else echo -n glibc; fi
+    echo -n \" \"
+    ls node_modules/.prisma/client/ 2>/dev/null | grep -o \"debian\|musl\" | head -1
+'" 2>/dev/null)
+LIBC_ANH=$(echo "$KQ_KIEM" | awk '{print $1}')
+LIBC_ENGINE=$(echo "$KQ_KIEM" | awk '{print $2}')
+[ "$LIBC_ENGINE" = "debian" ] && LIBC_ENGINE=glibc
+if [ -z "$LIBC_ANH" ] || [ -z "$LIBC_ENGINE" ]; then
+    lui_ve_vps "Không đọc được engine Prisma trong ảnh backend (ảnh hỏng?)"
+elif [ "$LIBC_ANH" != "$LIBC_ENGINE" ]; then
+    fail "Ảnh backend nền ${LIBC_ANH} nhưng engine Prisma là bản ${LIBC_ENGINE} — engine sẽ KHÔNG nạp được."
+    fail "Gần như chắc chắn là dựng nhầm Dockerfile: production dùng Dockerfile.backend"
+    fail "(node:22-slim, glibc), còn Dockerfile trần kết thúc ở node:22-alpine (musl)."
+    lui_ve_vps "Ảnh backend không chạy nổi — DỪNG trước khi tráo"
+fi
+ok "Ảnh backend hợp lệ (nền ${LIBC_ANH}, engine ${LIBC_ENGINE})"
 
 if [ "$KHONG_DAY" = true ]; then
     ok "Xong phần build (--khong-day). Ảnh nằm ở máy nhà, chưa đẩy đi đâu."

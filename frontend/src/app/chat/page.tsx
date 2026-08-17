@@ -4,11 +4,11 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2, X, Phone } from 'lucide-react';
+import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2, X, Phone, Folder, FolderOpen, FolderPlus, Check } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
-import { api } from '@/lib/api';
+import { api, aiApi } from '@/lib/api';
 import { toast } from 'sonner';
 import ChatMessages from '@/components/chat/ChatMessages';
 import ChatInput from '@/components/chat/ChatInput';
@@ -20,7 +20,7 @@ import VoiceCallOverlay from '@/components/chat/VoiceCallOverlay';
 import ContextBar from '@/components/chat/ContextBar';
 import { useChatSkinStore } from '@/store/chatSkinStore';
 import LottieClient from '@/components/ui/LottieClient';
-import type { ChatMessage, ChatSession } from '@/types';
+import type { ChatMessage, ChatSession, ChatFolder } from '@/types';
 import { findStaticResponse, getDefaultGreeting, getFallbackResponse } from '@/lib/ai-static-responses';
 import { useChatModelStore, DEFAULT_CHAT_MODEL_ID, getChatModel } from '@/lib/aiChatModels';
 import { useKeyboardInset } from '@/hooks/useKeyboardInset';
@@ -249,6 +249,94 @@ export default function ChatPage() {
     clearMessages,
   } = useChatStore();
 
+  // ─── Thư mục chat ───────────────────────────────────────
+  // Lọc ở PHÍA CLIENT, không gọi lại máy chủ mỗi lần đổi thư mục. Danh sách
+  // phiên đã nằm sẵn trong store (và mỗi phiên mang theo `folderId`), nên đổi
+  // thư mục là lọc một mảng — tức thì, và không làm mất những phiên chỉ có ở
+  // máy (chưa kịp lên máy chủ) như khi hỏi lại theo `?folderId=`.
+  const [folders, setFolders] = useState<ChatFolder[]>([]);
+  const [folderFilter, setFolderFilter] = useState<'all' | 'none' | string>('all');
+  const [folderMenuFor, setFolderMenuFor] = useState<string | null>(null);
+  const [creatingFolder, setCreatingFolder] = useState(false);
+  const [newFolderName, setNewFolderName] = useState('');
+
+  const loadFolders = useCallback(async () => {
+    try {
+      const res = await aiApi.getChatFolders();
+      setFolders((res.data?.data as ChatFolder[]) || []);
+    } catch {
+      // Thư mục là phụ trợ. Không lấy được thì danh sách phiên vẫn dùng bình
+      // thường — chặn cả trang vì một tính năng sắp xếp là đổi lớn lấy nhỏ.
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    void loadFolders();
+  }, [isAuthenticated, loadFolders]);
+
+  // Đóng menu "chuyển vào thư mục" khi panel đóng — nếu không, mở lại panel là
+  // thấy một menu lơ lửng của phiên trước.
+  useEffect(() => {
+    if (!chatAsideOpen) { setFolderMenuFor(null); setCreatingFolder(false); }
+  }, [chatAsideOpen]);
+
+  const taoThuMuc = async () => {
+    const ten = newFolderName.trim();
+    if (!ten) return;
+    try {
+      const res = await aiApi.createChatFolder(ten);
+      const moi = res.data?.data as ChatFolder;
+      // Trùng tên ⇒ máy chủ trả về thư mục CŨ. Thêm mù quáng sẽ nhân đôi dòng
+      // trong danh sách, nên chỉ thêm khi thật sự chưa có.
+      setFolders((c) => (c.some((f) => f.id === moi.id) ? c : [moi, ...c]));
+      setNewFolderName('');
+      setCreatingFolder(false);
+      setFolderFilter(moi.id);
+    } catch {
+      toast.error('Không tạo được thư mục');
+    }
+  };
+
+  const xoaThuMuc = async (id: string) => {
+    try {
+      await aiApi.deleteChatFolder(id);
+      setFolders((c) => c.filter((f) => f.id !== id));
+      if (folderFilter === id) setFolderFilter('all');
+      // Cuộc bên trong KHÔNG mất — chúng rơi về "Chưa phân loại".
+      setSessions(
+        useChatStore.getState().sessions.map((s) =>
+          s.folderId === id ? { ...s, folderId: null, folder: null } : s,
+        ),
+      );
+      toast.success('Đã xoá thư mục. Các cuộc bên trong vẫn còn.');
+    } catch {
+      toast.error('Không xoá được thư mục');
+    }
+  };
+
+  const chuyenVaoThuMuc = async (sessionId: string, folderId: string | null) => {
+    setFolderMenuFor(null);
+    try {
+      await aiApi.moveSessionToFolder(sessionId, folderId);
+      const tm = folderId ? folders.find((f) => f.id === folderId) ?? null : null;
+      setSessions(
+        useChatStore.getState().sessions.map((s) =>
+          s.sessionId === sessionId ? { ...s, folderId, folder: tm } : s,
+        ),
+      );
+      void loadFolders(); // số đếm trên chip
+    } catch {
+      toast.error('Không chuyển được cuộc trò chuyện');
+    }
+  };
+
+  const sessionsHienThi = sessions.filter((s) => {
+    if (folderFilter === 'all') return true;
+    if (folderFilter === 'none') return !s.folderId;
+    return s.folderId === folderFilter;
+  });
+
   const [backendConnected, setBackendConnected] = useState<boolean | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   // Stop-generation support: abort the in-flight stream, keep the partial reply.
@@ -324,7 +412,28 @@ export default function ChatPage() {
       }
 
       api.get('/ai/chat/sessions').then((res) => {
-        const apiSessions: ChatSession[] = res.data?.data || [];
+        /**
+         * ⚠️ MÁY CHỦ TRẢ VỀ `id`, TRANG NÀY ĐỌC `sessionId`.
+         *
+         * `ChatSession.id` trong Prisma CHÍNH LÀ chuỗi `sess_…`; không có cột
+         * `sessionId` nào cả. Nhận thô vào store thì mọi cuộc tải từ máy chủ có
+         * `sessionId === undefined`, kéo theo một chuỗi hỏng ÂM THẦM: `key` của
+         * React trùng nhau hết, bấm vào một dòng gọi `handleSelectSession(undefined)`
+         * nên không mở được cuộc nào, nút xoá gọi `/sessions/undefined`, và
+         * `currentSessionId === session.sessionId` không bao giờ đúng nên không
+         * dòng nào được đánh dấu đang mở. Không có lỗi nào hiện ra.
+         *
+         * Chuẩn hoá ngay tại cửa vào — mọi chỗ phía sau chỉ biết `sessionId`.
+         */
+        type PhienTuApi = Omit<ChatSession, 'id'> & { id?: unknown };
+        const apiSessions: ChatSession[] = ((res.data?.data ?? []) as PhienTuApi[])
+          .map((s) => ({
+            ...(s as unknown as ChatSession),
+            // KHÔNG `String(s.id)`: `id` thiếu sẽ thành chuỗi "undefined" và
+            // trôi tiếp như một id hợp lệ.
+            sessionId: s.sessionId ?? (typeof s.id === 'string' ? s.id : ''),
+          }))
+          .filter((s) => !!s.sessionId);
         const persisted = useChatStore.getState().sessions;
         const persistedIds = new Set(persisted.map(s => s.sessionId));
 
@@ -871,12 +980,120 @@ export default function ChatPage() {
               </button>
             </div>
 
+            {/* ── Thư mục ──────────────────────────────────
+                Một dải chip cuộn ngang. Panel chỉ rộng 288px nên cây thư mục
+                dọc sẽ ăn hết chỗ của chính danh sách cuộc trò chuyện — thứ
+                người dùng thật sự đến đây để tìm. */}
+            <div className="px-4 pb-2 shrink-0">
+              {/* XUỐNG DÒNG chứ không cuộn ngang: panel chỉ 288px, cuộn ngang
+                  giấu mất chính những thư mục người dùng vừa tạo và không có
+                  gì gợi ý là còn nữa. Vài thư mục thì hai dòng là cùng. */}
+              <div className="flex flex-wrap items-center gap-1.5 pb-1">
+                {([
+                  { id: 'all', ten: 'Tất cả' },
+                  { id: 'none', ten: 'Chưa phân loại' },
+                ] as const).map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => setFolderFilter(c.id)}
+                    className={cn(
+                      'shrink-0 px-2.5 py-1 rounded-lg text-[11px] transition-colors whitespace-nowrap',
+                      isStudio ? '' : 'font-mono',
+                      folderFilter === c.id
+                        ? 'bg-white/[0.12] text-text-primary'
+                        : 'text-text-muted hover:text-text-primary hover:bg-white/[0.05]',
+                    )}
+                  >
+                    {c.ten}
+                  </button>
+                ))}
+
+                {folders.map((f) => (
+                  <span key={f.id} className="shrink-0 group/f relative">
+                    <button
+                      onClick={() => setFolderFilter(f.id)}
+                      className={cn(
+                        'flex items-center gap-1.5 pl-2 pr-6 py-1 rounded-lg text-[11px] transition-colors whitespace-nowrap',
+                        isStudio ? '' : 'font-mono',
+                        folderFilter === f.id
+                          ? 'bg-white/[0.12] text-text-primary'
+                          : 'text-text-muted hover:text-text-primary hover:bg-white/[0.05]',
+                      )}
+                    >
+                      {folderFilter === f.id
+                        ? <FolderOpen className="w-3 h-3 shrink-0" style={f.mau ? { color: f.mau } : undefined} />
+                        : <Folder className="w-3 h-3 shrink-0" style={f.mau ? { color: f.mau } : undefined} />}
+                      {f.ten}
+                      {typeof f._count?.sessions === 'number' && (
+                        <span className="text-text-muted/60">{f._count.sessions}</span>
+                      )}
+                    </button>
+                    {/* Nút xoá nằm NGOÀI nút chip, không lồng bên trong — nút
+                        trong nút là HTML không hợp lệ và trình duyệt xử lý
+                        mỗi nơi một kiểu. */}
+                    <button
+                      onClick={() => void xoaThuMuc(f.id)}
+                      aria-label={`Xoá thư mục ${f.ten}`}
+                      title="Xoá nhãn thư mục (các cuộc bên trong vẫn còn)"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 p-0.5 rounded
+                                 text-text-muted/50 opacity-0 group-hover/f:opacity-100
+                                 hover:text-red-400 transition-opacity"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+
+                <button
+                  onClick={() => setCreatingFolder(true)}
+                  aria-label="Thư mục mới"
+                  title="Thư mục mới"
+                  className="shrink-0 p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-white/[0.05] transition-colors"
+                >
+                  <FolderPlus className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {creatingFolder && (
+                <div className="flex items-center gap-1.5 mt-1.5">
+                  <input
+                    autoFocus
+                    value={newFolderName}
+                    onChange={(e) => setNewFolderName(e.target.value)}
+                    onKeyDown={(e) => {
+                      // Bộ gõ tiếng Việt dùng Enter để chốt chữ đang gõ — nhận
+                      // Enter lúc đó là cắt mất chữ cuối của cái tên.
+                      if (e.nativeEvent.isComposing) return;
+                      if (e.key === 'Enter') { e.preventDefault(); void taoThuMuc(); }
+                      if (e.key === 'Escape') { setCreatingFolder(false); setNewFolderName(''); }
+                    }}
+                    placeholder="Tên thư mục…"
+                    maxLength={80}
+                    className="flex-1 min-w-0 px-2 py-1 rounded-lg text-[12px] bg-white/[0.06]
+                               border border-white/10 text-text-primary
+                               placeholder:text-text-muted/60 outline-none focus:border-white/25"
+                  />
+                  <button
+                    onClick={() => void taoThuMuc()}
+                    disabled={!newFolderName.trim()}
+                    aria-label="Tạo thư mục"
+                    className="p-1.5 rounded-lg text-text-muted hover:text-text-primary
+                               hover:bg-white/[0.06] disabled:opacity-40 transition-colors"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+            </div>
+
             {/* Session list — magnify on hover. */}
             <div className="flex-1 overflow-y-auto px-3 pb-3">
-              {sessions.length === 0 && (
+              {sessionsHienThi.length === 0 && (
                 isStudio ? (
                   <p className="text-text-muted text-xs text-center py-8 px-2">
-                    Chưa có cuộc trò chuyện nào
+                    {folderFilter === 'all'
+                      ? 'Chưa có cuộc trò chuyện nào'
+                      : 'Thư mục này chưa có cuộc nào'}
                   </p>
                 ) : (
                   <p className="text-[#64748b] text-xs text-center py-8 px-2 font-mono">
@@ -884,12 +1101,12 @@ export default function ChatPage() {
                   </p>
                 )
               )}
-              {sessions.map((session, idx) => {
+              {sessionsHienThi.map((session, idx) => {
                 const isCurrent = currentSessionId === session.sessionId;
                 const isHovered = chatAsideHovered === session.sessionId;
                 let scale = 1;
                 if (chatAsideHovered) {
-                  const hovIdx = sessions.findIndex((s) => s.sessionId === chatAsideHovered);
+                  const hovIdx = sessionsHienThi.findIndex((s) => s.sessionId === chatAsideHovered);
                   if (hovIdx >= 0) {
                     const d = Math.abs(idx - hovIdx);
                     if (d === 0) scale = 1.55;
@@ -958,14 +1175,70 @@ export default function ChatPage() {
                       {isCurrent && (
                         <span className="w-1.5 h-1.5 rounded-full bg-[#22d3ee] led-eye shrink-0" />
                       )}
+                      {/* Chừa chỗ cho hai nút thao tác nằm đè lên bên phải. */}
+                      <span className="w-14 shrink-0" aria-hidden />
+                    </button>
+
+                    {/* ⚠️ Hai nút này là ANH EM của nút dòng, không nằm TRONG
+                        nó: `<button>` lồng `<button>` là HTML không hợp lệ,
+                        React cảnh báo, và mỗi trình duyệt xử lý cú bấm một
+                        kiểu. Đặt tuyệt đối đè lên mép phải của dòng. */}
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5">
                       <button
-                        onClick={(e) => { e.stopPropagation(); handleDeleteSession(session.sessionId); }}
-                        className="ml-1 p-1.5 rounded-lg text-text-muted hover:text-red-400 hover:bg-white/[0.04] transition-colors shrink-0"
+                        onClick={() => setFolderMenuFor((c) => (c === session.sessionId ? null : session.sessionId))}
+                        className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-white/[0.06] transition-colors"
+                        aria-label="Chuyển vào thư mục"
+                        title={session.folder?.ten ? `Trong: ${session.folder.ten}` : 'Chuyển vào thư mục'}
+                      >
+                        {session.folderId
+                          ? <FolderOpen className="w-3.5 h-3.5" style={session.folder?.mau ? { color: session.folder.mau } : undefined} />
+                          : <Folder className="w-3.5 h-3.5" />}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteSession(session.sessionId)}
+                        className="p-1.5 rounded-lg text-text-muted hover:text-red-400 hover:bg-white/[0.04] transition-colors"
                         aria-label="Delete session"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
-                    </button>
+                    </div>
+
+                    {folderMenuFor === session.sessionId && (
+                      <div
+                        className="absolute right-2 top-[46px] z-10 w-48 max-h-56 overflow-y-auto
+                                   rounded-xl border border-white/10 bg-[#0d1117]/95 backdrop-blur-xl
+                                   shadow-[0_12px_40px_rgba(0,0,0,0.6)] py-1"
+                      >
+                        <button
+                          onClick={() => void chuyenVaoThuMuc(session.sessionId, null)}
+                          className="w-full text-left px-3 py-1.5 text-[12px] text-text-muted
+                                     hover:text-text-primary hover:bg-white/[0.06] transition-colors"
+                        >
+                          Bỏ khỏi thư mục
+                        </button>
+                        {folders.length === 0 && (
+                          <p className="px-3 py-1.5 text-[11px] text-text-muted/70">
+                            Chưa có thư mục nào — tạo ở dải trên.
+                          </p>
+                        )}
+                        {folders.map((f) => (
+                          <button
+                            key={f.id}
+                            onClick={() => void chuyenVaoThuMuc(session.sessionId, f.id)}
+                            className={cn(
+                              'w-full text-left px-3 py-1.5 text-[12px] flex items-center gap-2 transition-colors',
+                              session.folderId === f.id
+                                ? 'text-text-primary bg-white/[0.06]'
+                                : 'text-text-muted hover:text-text-primary hover:bg-white/[0.06]',
+                            )}
+                          >
+                            <Folder className="w-3 h-3 shrink-0" style={f.mau ? { color: f.mau } : undefined} />
+                            <span className="truncate">{f.ten}</span>
+                            {session.folderId === f.id && <Check className="w-3 h-3 ml-auto shrink-0" />}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </motion.div>
                 );
               })}

@@ -1231,10 +1231,27 @@ export const aiApi = {
   getChatHistory: (sessionId: string) =>
     api.get(`/ai/chat/history/${sessionId}`),
 
-  getSessions: () => api.get('/ai/chat/sessions'),
+  /** `folderId`: bỏ trống = tất cả · `'none'` = chưa phân loại · id = thư mục đó. */
+  getSessions: (folderId?: string) =>
+    api.get('/ai/chat/sessions', folderId ? { params: { folderId } } : undefined),
 
   deleteSession: (sessionId: string) =>
     api.delete(`/ai/chat/sessions/${sessionId}`),
+
+  // ── Thư mục chat ──
+  getChatFolders: () => api.get('/ai/chat/folders'),
+
+  /** Trùng tên thì máy chủ trả về CHÍNH thư mục đang có (200), không tạo thêm. */
+  createChatFolder: (ten: string, mau?: string) =>
+    api.post('/ai/chat/folders', { ten, ...(mau ? { mau } : {}) }),
+
+  /** Xoá nhãn thôi — cuộc bên trong rơi về "Chưa phân loại", không mất. */
+  deleteChatFolder: (folderId: string) =>
+    api.delete(`/ai/chat/folders/${folderId}`),
+
+  /** `folderId = null` để bỏ cuộc ra khỏi thư mục. */
+  moveSessionToFolder: (sessionId: string, folderId: string | null) =>
+    api.patch(`/ai/chat/sessions/${sessionId}/folder`, { folderId }),
 
   submitFeedback: (data: {
     messageId: number;

@@ -346,6 +346,18 @@ export interface ChatSession {
   title?: string;
   createdAt: string;
   updatedAt?: string;
+  /** Thư mục đang chứa cuộc này. `null`/thiếu = chưa phân loại. */
+  folderId?: string | null;
+  folder?: ChatFolder | null;
+}
+
+/** Thư mục gom các cuộc trò chuyện. Xoá thư mục KHÔNG xoá cuộc bên trong. */
+export interface ChatFolder {
+  id: string;
+  ten: string;
+  mau?: string | null;
+  /** Chỉ có ở danh sách thư mục, không có ở `session.folder`. */
+  _count?: { sessions: number };
 }
 
 export interface ChatRequest {

@@ -242,7 +242,12 @@ const nextConfig = {
               // search → YouTube IFrame Player flow. Without these the
               // search results show no thumbnails and the player never
               // loads its API script.
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com",
+              // cdn.jsdelivr.net: Pyodide (Python biên dịch sang WASM) cho nút "Chạy"
+              // ở khối mã trong /chat. Nạp từ CDN chứ KHÔNG nhồi 30MB vào
+              // `public/`: VPS từng đầy đĩa tới mức Postgres chết, và mỗi bản
+              // dựng Docker sẽ mang thêm chừng ấy. Người dùng web thì vốn đang
+              // online. (App desktop thì ngược lại — nó bọc sẵn để chạy offline.)
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com https://cdn.jsdelivr.net",
               "style-src 'self' 'unsafe-inline'",
               // `media.cuongthai.com` (the R2 custom domain) was
               // added when the project migrated to Cloudflare R2 in
@@ -269,7 +274,7 @@ const nextConfig = {
               // báo ra chỉ là "Couldn't load texture blob:" — không hề nhắc tới CSP.
               // blob: là dữ liệu do chính trang này tạo ra, không mở cửa cho bên
               // thứ ba nào.
-              "connect-src 'self' blob: wss://cuongthai.com https://cuongthai.com https://api.cuongthai.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://*.sentry.io wss://*.sentry.io https://www.youtube.com https://api.giphy.com",
+              "connect-src 'self' blob: wss://cuongthai.com https://cuongthai.com https://api.cuongthai.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://*.sentry.io wss://*.sentry.io https://www.youtube.com https://api.giphy.com https://cdn.jsdelivr.net",
               // frame-src also allows R2 / media so lesson PDF (Bài tập/Đáp
               // án) can render inline in an <iframe> — the doc download
               // endpoint 302s to a signed R2 URL, and CSP applies to the

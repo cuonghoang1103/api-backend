@@ -21,7 +21,8 @@ import remarkBreaks from 'remark-breaks';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
-import { Check, Copy } from 'lucide-react';
+import { Check, Copy, Download, Play, Square } from 'lucide-react';
+import { usePythonSandbox, type KetQuaChay } from '@/hooks/usePythonSandbox';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { sanitizeSvg } from '@/lib/safeSvg';
 
@@ -78,8 +79,48 @@ function SvgFigure({ source }: { source: string }) {
   );
 }
 
+/**
+ * Bọc byte của WASM thành Blob.
+ *
+ * `new Blob([uint8])` không qua được TypeScript vì `Uint8Array` từ Pyodide có
+ * kiểu `Uint8Array<ArrayBufferLike>`, mà `BlobPart` đòi `ArrayBuffer` thật
+ * (`SharedArrayBuffer` không có `resizable`/`transfer`). Sao chép sang một
+ * `ArrayBuffer` mới là cách vừa qua kiểu vừa đúng về ngữ nghĩa.
+ */
+function blobCua(dulieu: Uint8Array): Blob {
+  const sao = new Uint8Array(dulieu.length);
+  sao.set(dulieu);
+  return new Blob([sao.buffer]);
+}
+
+/** Ngôn ngữ chạy được trong hộp cát. Chỉ Python — xem `lib/pythonWorker.ts`. */
+const CHAY_DUOC = new Set(['python', 'py', 'python3']);
+
 function CodeBlock({ language, code }: { language: string; code: string }) {
   const [copied, setCopied] = useState(false);
+  const { chay, giet, dangChay, tienTrinh } = usePythonSandbox();
+  const [kq, setKq] = useState<KetQuaChay | null>(null);
+  const chayDuoc = CHAY_DUOC.has((language || '').toLowerCase());
+
+  const bamChay = async () => {
+    setKq(null);
+    setKq(await chay(code));
+  };
+
+  /**
+   * Tải file script vừa tạo.
+   *
+   * Dựng blob rồi bấm một thẻ `<a download>` — file nằm trong hệ thống file ẢO
+   * của WASM, trình duyệt không thấy nó, nên không có cách nào khác.
+   */
+  const taiVe = (ten: string, dulieu: Uint8Array) => {
+    const url = URL.createObjectURL(blobCua(dulieu));
+    const a = document.createElement('a');
+    a.href = url; a.download = ten;
+    a.click();
+    // Thu hồi NGAY sau khi bấm thì Safari huỷ luôn lần tải; lùi một nhịp.
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  };
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(code);
@@ -100,6 +141,18 @@ function CodeBlock({ language, code }: { language: string; code: string }) {
           {copied ? <Check size={12} className="text-[#4ade80]" /> : <Copy size={12} />}
           {copied ? 'Đã chép' : 'Copy'}
         </button>
+
+        {chayDuoc && (
+          <button
+            type="button"
+            onClick={() => (dangChay ? giet() : void bamChay())}
+            className="ml-auto mr-2 inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] text-[#94a3b8] transition-colors hover:text-[#4ade80]"
+            title={dangChay ? 'Dừng' : 'Chạy mã này ngay trong trình duyệt — không gửi lên máy chủ'}
+          >
+            {dangChay ? <Square size={12} /> : <Play size={12} />}
+            {dangChay ? 'Dừng' : 'Chạy'}
+          </button>
+        )}
       </div>
       <div className="overflow-x-auto text-xs leading-relaxed">
         <SyntaxHighlighter
@@ -111,6 +164,54 @@ function CodeBlock({ language, code }: { language: string; code: string }) {
           {code}
         </SyntaxHighlighter>
       </div>
+
+      {(tienTrinh || kq) && (
+        <div className="border-t border-white/[0.06] bg-black/40 px-3 py-2 text-xs">
+          {tienTrinh && <p className="font-mono text-[11px] text-[#94a3b8]">{tienTrinh}</p>}
+
+          {/* Chữ do MÃ NGƯỜI DÙNG in ra — hiện nguyên văn trong `<pre>`, tuyệt
+              đối không dựng thành HTML. */}
+          {kq?.ra ? (
+            <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-words font-mono text-[11px] leading-relaxed text-[#cbd5e1]">
+              {kq.ra}
+            </pre>
+          ) : null}
+
+          {kq?.loi ? (
+            <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-words font-mono text-[11px] leading-relaxed text-[#f87171]">
+              {kq.loi}
+            </pre>
+          ) : null}
+
+          {kq && !kq.ra && !kq.loi && !kq.file.length && (
+            <p className="font-mono text-[11px] text-[#64748b]">
+              Chạy xong, không in ra gì. Dùng <code>print(...)</code> để xem kết quả.
+            </p>
+          )}
+
+          {kq?.file.map((f) => (
+            <div key={f.ten} className="mt-2">
+              {/* Ảnh thì XEM ĐƯỢC NGAY. Biểu đồ mà bắt tải về rồi mở bằng app
+                  khác thì gần như không ai xem. */}
+              {/\.(png|jpe?g|gif|webp|svg)$/i.test(f.ten) && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={URL.createObjectURL(blobCua(f.dulieu))}
+                  alt={f.ten}
+                  className="max-h-96 w-auto rounded-lg border border-white/10 bg-white"
+                />
+              )}
+              <button
+                type="button"
+                onClick={() => taiVe(f.ten, f.dulieu)}
+                className="mt-1 inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[10px] text-[#22d3ee] hover:underline"
+              >
+                <Download size={11} /> {f.ten} ({(f.dulieu.length / 1024).toFixed(0)} KB)
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

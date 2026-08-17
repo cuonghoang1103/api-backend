@@ -146,10 +146,20 @@ self.onmessage = async (e: MessageEvent<YeuCau>) => {
      */
     await py.runPythonAsync(`
 if 'matplotlib.pyplot' in sys.modules:
+    import warnings
     _plt = sys.modules['matplotlib.pyplot']
-    for _i, _n in enumerate(_plt.get_fignums(), 1):
-        _plt.figure(_n).savefig('/xuat/bieu-do-%d.png' % _i, dpi=110, bbox_inches='tight')
-    _plt.close('all')
+    # ⚠️ Dập cảnh báo CHỈ QUANH lệnh của MÌNH.
+    #
+    # matplotlib 3.10 phun MatplotlibDeprecationWarning ("x parameter as float
+    # was deprecated") ở MỖI lần savefig. Đây là lệnh do ta gọi, không phải
+    # người dùng — nhưng nó in ra SAU đầu ra của họ nên trông y như mã họ vừa
+    # viết bị lỗi, và họ không sửa được gì. \`catch_warnings\` giới hạn đúng
+    # khối này: cảnh báo từ mã NGƯỜI DÙNG vẫn hiện nguyên.
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        for _i, _n in enumerate(_plt.get_fignums(), 1):
+            _plt.figure(_n).savefig('/xuat/bieu-do-%d.png' % _i, dpi=110, bbox_inches='tight')
+        _plt.close('all')
 `);
     const ra = String(await py.runPythonAsync('_out.getvalue()'));
 

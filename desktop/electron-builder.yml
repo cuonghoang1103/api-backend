@@ -39,8 +39,20 @@ mac:
   # arm64 và x64 RIÊNG, không dùng `universal`: bản universal nhét cả hai kiến
   # trúc vào một file nên nặng gấp đôi (~250MB), trong khi mỗi người dùng chỉ
   # cần đúng một nửa. Trang /download tự nhận diện và đưa đúng bản.
+  # ⛔ PHẢI có CẢ `zip`, không chỉ `dmg`.
+  #
+  # `dmg` là thứ người dùng tải về và cài lần đầu. Nhưng electron-updater trên
+  # macOS dùng Squirrel.Mac, và Squirrel CHỈ áp được bản cập nhật từ `.zip` —
+  # thiếu nó thì app tìm thấy bản mới, tải xuống, rồi chết với
+  # `ZIP file not provided` và người dùng mắc kẹt ở bản cũ mãi mãi.
+  #
+  # Đo được 17/08/2026 bằng cách CHẠY bản đã đóng gói. Đọc cấu hình không ra:
+  # `dmg` trông hoàn toàn hợp lý, và `latest-mac.yml` vẫn được sinh ra bình
+  # thường như thể mọi thứ đều ổn.
   target:
     - target: dmg
+      arch: [arm64, x64]
+    - target: zip
       arch: [arm64, x64]
   # macOS 11 là bản cũ nhất Electron 33 còn hỗ trợ.
   minimumSystemVersion: '11.0'

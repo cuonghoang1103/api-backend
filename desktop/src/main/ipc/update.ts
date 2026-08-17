@@ -54,7 +54,26 @@ export function currentUpdateStatus(): UpdateStatus {
  * lúc khởi động, kể cả ở bản dev nơi nó không bao giờ được dùng.
  */
 async function getUpdater() {
-  const { autoUpdater } = await import('electron-updater');
+  /**
+   * ⛔⛔ PHẢI lấy qua `default` — và đây là một lỗi ĐÃ SỐNG QUA MỌI BẢN PHÁT HÀNH.
+   *
+   * `electron-updater` là gói CommonJS. Trong bản đóng gói, dòng này biên dịch
+   * thành `import()` THẬT của Node, và Node dựng namespace cho gói CJS bằng bộ
+   * dò export tĩnh (`cjs-module-lexer`). Thư viện này phơi `autoUpdater` qua
+   * một GETTER (nó chọn provider theo nền tảng lúc đọc), mà getter thì bộ dò
+   * tĩnh không thấy — nên `ns.autoUpdater` là `undefined`, còn
+   * `ns.default.autoUpdater` mới là thật.
+   *
+   * Hậu quả: `autoUpdater.autoDownload = …` ném `TypeError`, lời hứa bị nuốt ở
+   * `void scheduleUpdateChecks()`, và app IM LẶNG không bao giờ kiểm bản mới.
+   * Không có gì đỏ, không có thông báo — chỉ là người dùng mắc kẹt ở bản cũ
+   * mãi mãi. Đo được 17/08/2026 bằng cách CHẠY bản đã đóng gói; đọc mã không
+   * bao giờ ra, và ở dev thì đường này gần như không ai đi tới.
+   */
+  const mod = await import('electron-updater');
+  const autoUpdater = mod.autoUpdater
+    ?? (mod as unknown as { default?: { autoUpdater?: typeof mod.autoUpdater } }).default?.autoUpdater;
+  if (!autoUpdater) throw new Error('Không nạp được electron-updater (thiếu autoUpdater).');
   autoUpdater.autoDownload = false;
   autoUpdater.autoInstallOnAppQuit = true;
   autoUpdater.allowDowngrade = false;

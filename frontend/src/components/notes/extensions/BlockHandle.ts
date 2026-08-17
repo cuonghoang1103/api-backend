@@ -125,13 +125,55 @@ export const BlockHandle = Extension.create({
           const host = view.dom.parentElement ?? document.body;
           host.appendChild(wrap);
 
-          const hide = () => {
+          /* Ẩn CÓ ĐỘ TRỄ, và huỷ được.
+           *
+           * Tay cầm nằm NGOÀI `view.dom` — nó ở lề trái, cách mép chữ GUTTER
+           * pixel. Bản đầu gắn thẳng `hide` vào `mouseleave` của `view.dom`,
+           * nên khoảnh khắc người dùng rê chuột ra khỏi vùng chữ để với tới
+           * tay cầm thì `mouseleave` bắn và tay cầm biến mất — con trỏ KHÔNG
+           * BAO GIỜ chạm tới được. Ở đúng đường biên thì mousemove và
+           * mouseleave thay nhau bắn, nên nó nháy giựt liên tục.
+           *
+           * Khoảng lề giữa chữ và tay cầm không thuộc phần tử nào, nên chỉ
+           * kiểm `relatedTarget` là chưa đủ: phải cho con trỏ một quãng thời
+           * gian để băng qua khoảng trống đó. */
+          const HIDE_DELAY_MS = 220;
+          let hideTimer: ReturnType<typeof setTimeout> | null = null;
+
+          const cancelHide = () => {
+            if (hideTimer !== null) {
+              clearTimeout(hideTimer);
+              hideTimer = null;
+            }
+          };
+
+          const hideNow = () => {
+            cancelHide();
             wrap.style.visibility = 'hidden';
             target = null;
           };
 
+          const hide = () => {
+            cancelHide();
+            hideTimer = setTimeout(hideNow, HIDE_DELAY_MS);
+          };
+
+          /* Con trỏ đã lên tới tay cầm thì giữ nguyên, bất kể nó vừa rời khỏi
+           * vùng chữ. Rời hẳn tay cầm mới hẹn ẩn lại.
+           *
+           * `mouseover`/`mouseout` chứ KHÔNG phải `mouseenter`/`mouseleave`:
+           * khung ngoài đặt `pointer-events: none` (cố ý — dải trong suốt giữa
+           * hai nút mà nhận chuột thì che mất chữ, không bôi đen được từ đầu
+           * dòng). Nó không bao giờ là đích của sự kiện, mà `mouseenter` lại
+           * KHÔNG bubble — nên gắn kiểu đó thì không đời nào bắn. Hai sự kiện
+           * này có bubble, nên chúng đi lên từ chính hai cái nút. */
+          wrap.addEventListener('mouseover', cancelHide);
+          wrap.addEventListener('mouseout', hide);
+
           const place = (event: MouseEvent) => {
             if (!view.editable) return;
+            // Quay lại vùng chữ thì huỷ lệnh ẩn đang chờ.
+            cancelHide();
             const next = blockAt(view, event.clientX, event.clientY);
             if (!next) return;      // giữ nguyên vị trí cũ, không giấu đi
 
@@ -221,6 +263,10 @@ export const BlockHandle = Extension.create({
             destroy() {
               view.dom.removeEventListener('mousemove', place);
               view.dom.removeEventListener('mouseleave', hide);
+              // Dọn hẹn giờ: nó giữ tham chiếu tới `wrap` và `target`, nên bỏ
+              // lại thì mỗi lần đổi ghi chú là một lượt hẹn còn sống chạy trên
+              // cây DOM vừa bị gỡ.
+              cancelHide();
               wrap.remove();
             },
           };

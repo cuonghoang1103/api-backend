@@ -71,58 +71,10 @@ jobs:
         run: npx vitest run
         working-directory: desktop
 
-  # ── Tạo SẴN bản nháp ───────────────────────────────────────
-  #
-  # ⚠️ ĐÂY LÀ CHỐT CHỐNG ĐUA. Không có job này thì ba nhánh dựng chạy song song
-  # và mỗi nhánh tự tạo bản phát hành cho CÙNG một thẻ — GitHub cho phép nhiều
-  # bản NHÁP trùng tên thẻ, nên tệp mac nằm ở một bản, tệp Linux ở bản khác, và
-  # `gh release view v<x>` chỉ thấy một trong số đó.
-  #
-  # Đã xảy ra thật với 0.5.4: cả ba job đều XANH, log macOS ghi rõ
-  # `creating GitHub release reason=release doesn't exist tag=v0.5.4`, và bước
-  # công bố báo "THIẾU latest.yml". Bản 0.5.3 thoát chỉ vì may về thứ tự.
-  #
-  # Có bản nháp sẵn thì electron-builder tìm thấy và tải VÀO ĐÓ.
-  tao-nhap:
-    name: Tạo bản nháp
-    needs: kiem-tra
-    runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.tag.outputs.tag }}
-    steps:
-      - uses: actions/checkout@v4
-      - id: tag
-        run: echo "tag=v$(node -p "require('./desktop/package.json').version")" >> "$GITHUB_OUTPUT"
-      - name: Tạo bản nháp nếu chưa có
-        env:
-          # Cùng token với bước công bố — `GITHUB_TOKEN` mặc định chỉ có quyền trên
-          # repo NÀY, không tạo được release ở repo cuongthai-desktop.
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        run: |
-          REPO="cuonghoang1103/cuongthai-desktop"
-          TAG="${{ steps.tag.outputs.tag }}"
-          # API releases của GitHub có lúc trả 503 hàng chục phút liền (gặp thật
-          # 17/08/2026). Không thử lại thì cả lần chạy chết vì một sự cố bên
-          # ngoài, và người dựng phải ngồi canh để bấm lại.
-          for i in 1 2 3 4 5 6; do
-            if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
-              echo "Đã có $TAG — dùng lại."
-              exit 0
-            fi
-            if gh release create "$TAG" --repo "$REPO" --draft --title "$TAG" --notes "Đang dựng…"; then
-              echo "Đã tạo bản nháp $TAG."
-              exit 0
-            fi
-            echo "Lần $i thất bại (API GitHub?) — chờ 30s rồi thử lại."
-            sleep 30
-          done
-          echo "❌ Không tạo được bản nháp sau 6 lần thử."
-          exit 1
-
   # ── Dựng ───────────────────────────────────────────────────
   dung:
     name: Dựng ${{ matrix.ten }}
-    needs: tao-nhap
+    needs: kiem-tra
     runs-on: ${{ matrix.os }}
     strategy:
       # Một nền tảng hỏng thì hai nền tảng kia VẪN dựng xong. Mặc định của
@@ -170,8 +122,21 @@ jobs:
         run: npm version "${{ inputs.version }}" --no-git-tag-version
         working-directory: desktop
 
-      - name: Dựng và phát hành
-        run: npm run ${{ matrix.lenh }} -- --publish always
+      # ⛔ KHÔNG `--publish` ở đây.
+      #
+      # Ba job chạy song song, mỗi job gọi publisher GitHub của electron-builder,
+      # và mỗi cái tự tạo bản phát hành khi thấy thẻ chưa tồn tại — GitHub cho
+      # phép nhiều bản NHÁP trùng thẻ, nên tệp mac nằm ở bản này, Linux ở bản
+      # kia. Đã hỏng đúng vậy với 0.5.4 (ba bản nháp v0.5.4 cùng lúc).
+      #
+      # Tạo sẵn một bản nháp rồi để chúng dùng chung cũng KHÔNG ăn thua:
+      # electron-builder vẫn ghi `creating GitHub release reason=release doesn't
+      # exist` — nó không nhận bản nháp do người khác tạo.
+      #
+      # Nên: dựng xong thì NỘP tệp cho Actions, và đúng MỘT job công bố. Không
+      # còn chỗ nào để đua.
+      - name: Dựng
+        run: npm run ${{ matrix.lenh }} -- --publish never
         working-directory: desktop
         env:
           # Token có quyền ghi vào repo PHÁT HÀNH (cuongthai-desktop), không
@@ -182,18 +147,29 @@ jobs:
           # không đi tìm chứng chỉ trong keychain của máy runner rồi báo lỗi khó hiểu.
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
 
-      # Giữ lại file cài kể cả khi bước phát hành hỏng — nếu không, một lỗi
-      # token sẽ vứt luôn 15 phút dựng và phải chạy lại từ đầu.
+      # Đây giờ là ĐƯỜNG CHÍNH đưa tệp sang job công bố, không còn là bản dự
+      # phòng. `if: always()` vẫn giữ: dựng hỏng giữa chừng thì phần đã xong vẫn
+      # tải về xem được.
       - name: Lưu bản cài làm artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ban-cai-${{ matrix.ten }}
+          # ⛔ PHẢI có `*.zip` và `*.blockmap`.
+          #
+          # Từ khi job công bố lấy tệp TỪ ĐÂY (thay vì mỗi nhánh tự tải thẳng
+          # lên GitHub), danh sách này quyết định bản phát hành có gì. Thiếu
+          # `.zip` là bản macOS mất đúng thứ Squirrel.Mac bắt buộc phải có —
+          # xem ghi chú dài trong electron-builder.yml. Thiếu `.blockmap` thì
+          # cập nhật không tải theo phần chênh lệch được nữa, phải tải lại trọn
+          # gói mỗi lần.
           path: |
             desktop/release/*.dmg
             desktop/release/*.exe
             desktop/release/*.AppImage
             desktop/release/*.deb
+            desktop/release/*.zip
+            desktop/release/*.blockmap
             desktop/release/*.yml
           if-no-files-found: warn
           retention-days: 14
@@ -223,17 +199,19 @@ jobs:
           echo "tag=v${VER}" >> "$GITHUB_OUTPUT"
           echo "Sẽ công bố v${VER}"
 
-      # Đếm file TRƯỚC khi công bố. Cả ba job đều báo thành công mà vẫn có thể
-      # thiếu file nếu một lượt upload lỗi âm thầm — mà đúng những file `.yml`
-      # này mới là thứ `electron-updater` đọc, thiếu nó thì app báo lỗi đỏ dù
-      # bản cài vẫn nằm đó.
+      - name: Tải bản cài của cả ba nền tảng về
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ban-cai-*
+          path: tep
+          merge-multiple: true
+
+      # Đếm file TRƯỚC khi công bố — và đếm trên ĐĨA, trước khi tải lên. Những
+      # file `.yml` này mới là thứ `electron-updater` đọc; thiếu một cái thì app
+      # báo lỗi đỏ dù bản cài vẫn nằm đó.
       - name: Kiểm đủ file rồi mới công bố
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
-          TAG="${{ steps.tag.outputs.tag }}"
-          REPO="cuonghoang1103/cuongthai-desktop"
-          FILES=$(gh release view "$TAG" --repo "$REPO" --json assets --jq '.assets[].name')
+          FILES=$(cd tep && ls)
           echo "$FILES"
           for f in latest.yml latest-mac.yml latest-linux.yml; do
             echo "$FILES" | grep -qx "$f" || { echo "❌ THIẾU $f — giữ nguyên bản nháp"; exit 1; }
@@ -241,7 +219,23 @@ jobs:
           echo "$FILES" | grep -q '\.exe$'      || { echo "❌ THIẾU bản cài Windows"; exit 1; }
           echo "$FILES" | grep -q '\.dmg$'      || { echo "❌ THIẾU bản cài macOS"; exit 1; }
           echo "$FILES" | grep -q '\.AppImage$' || { echo "❌ THIẾU bản cài Linux"; exit 1; }
+          # `.zip` của macOS: Squirrel.Mac CHỈ áp được bản cập nhật từ zip.
+          # Thiếu nó thì app tìm thấy bản mới, tải xuống, rồi chết với
+          # `ZIP file not provided`.
+          echo "$FILES" | grep -q 'mac\.zip$'   || { echo "❌ THIẾU .zip của macOS"; exit 1; }
           echo "✅ Đủ file"
+
+      # MỘT job, MỘT lần tạo. `--clobber` để chạy lại không chết vì tệp đã có.
+      - name: Tạo bản phát hành và tải tệp lên
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          REPO="cuonghoang1103/cuongthai-desktop"
+          VER="${TAG#v}"
+          gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1 \
+            || gh release create "$TAG" --repo "$REPO" --draft --title "$VER" --notes "CuongThai $VER"
+          gh release upload "$TAG" --repo "$REPO" --clobber tep/*
 
       - name: Chuyển nháp sang công bố
         env:

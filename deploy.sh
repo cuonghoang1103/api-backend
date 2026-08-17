@@ -866,6 +866,7 @@ for route in \
     friends \
     notes \
     notes-shares \
+    ai/chat/folders \
     notes-databases \
     music/tracks \
     courses \

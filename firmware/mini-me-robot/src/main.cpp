@@ -35,6 +35,7 @@
 
 #include "audio.h"
 #include "face.h"
+#include "banh_xe.h"
 #include "net.h"
 #include "ota.h"
 #include "config.h"
@@ -638,6 +639,41 @@ static void handleCommand(JsonDocument& doc) {
   st.cmdCount++;
   st.lastCmd = String(type);
 
+  // ── HAI BÁNH XÍCH ──
+  //
+  // `ms` là "chạy bao lâu rồi tự dừng", KHÔNG phải gợi ý. Server gửi
+  // `move` đúng MỘT lần rồi thôi (`commands.ts`: `ms` mặc định 500,
+  // trần 5000) — bỏ qua nó mà trông vào watchdog thì mọi lệnh đều bị
+  // cắt ở 500ms, và câu "tiến 3 giây" thành một cú giật nửa giây.
+  //
+  // Hạn dừng vẫn được chốt NGAY TRONG CHIP lúc nhận lệnh, nên tính an
+  // toàn không mất gì: mạng chết cũng không kéo dài thời gian chạy.
+  if (!strcmp(type, "move")) {
+    const int l = doc["payload"]["left"] | 0;
+    const int r = doc["payload"]["right"] | 0;
+    const uint32_t ms = doc["payload"]["ms"] | 0;
+    banhXe::datToDo(l, r, ms);
+    st.lastNote = String("chay ") + l + "/" + r + " (" + ms + "ms)";
+    sendAck(id, true);
+    return;
+  }
+
+  if (!strcmp(type, "stop")) {
+    banhXe::dung();
+    st.lastNote = "dung";
+    sendAck(id, true);
+    return;
+  }
+
+  if (!strcmp(type, "turn")) {
+    const float deg = doc["payload"]["deg"] | 0.0f;
+    const int toc = doc["payload"]["speed"] | 160;
+    banhXe::quayGoc(deg, toc);
+    st.lastNote = String("quay ") + (int)deg + "do" + (banhXe::coGyro() ? "" : " (mu)");
+    sendAck(id, true);
+    return;
+  }
+
   if (!strcmp(type, "face")) {
     const char* emo = doc["payload"]["emotion"] | "neutral";
     const uint32_t ms = doc["payload"]["ms"] | 3000;
@@ -686,6 +722,17 @@ static void handleCommand(JsonDocument& doc) {
         return;
       }
       sendAck(id, false, "value phai trong 2..12");
+      return;
+    }
+    if (!strcmp(key, "maxSpeed")) {
+      const int v = doc["payload"]["value"] | 0;
+      if (v >= 10 && v <= 100) {
+        banhXe::datTranTocDo(v);
+        st.lastNote = String("tran toc do ") + banhXe::tranTocDo() + "%";
+        sendAck(id, true);
+        return;
+      }
+      sendAck(id, false, "value phai trong 10..100");
       return;
     }
     sendAck(id, false, "key chua ho tro");
@@ -1096,6 +1143,10 @@ void setup() {
   if (!eyes::begin(man_hinh::matTrai(), man_hinh::matPhai()))
     Serial.println("!! eyes::begin() that bai — robot van chay, chi la khong co mat");
 
+  // Hai bánh xích. Không phụ thuộc màn hay mạng — dựng sớm để robot
+  // luôn ở trạng thái ĐỨNG YÊN xác định, kể cả khi mọi thứ khác hỏng.
+  banhXe::begin();
+
   // Cảm biến chạm TTP223: ngõ ra push-pull, tự kéo về mức thấp khi
   // không ai chạm. Vẫn khai INPUT_PULLDOWN để lúc CHƯA cắm dây thì
   // chân không thả nổi — thả nổi là robot tự "bị vuốt đầu" liên tục.
@@ -1465,6 +1516,13 @@ void loop() {
   gStage = "eyes";
   eyes::setLevel(audio::speaking() ? audio::level() : 0);
   eyes::loop();
+
+  // ── BÁNH XE ──
+  // Rẻ (vài phép tính + một lần đọc I2C), nhưng PHẢI chạy mỗi vòng:
+  // trong này có watchdog cắt động cơ khi mất lệnh. Bỏ nhịp là robot
+  // chạy tiếp lệnh cuối cùng cho tới khi đâm vào cái gì đó.
+  gStage = "banh-xe";
+  banhXe::tick();
 
   // ── MÀN NGỰC ──
   if (!audio::speaking()) {

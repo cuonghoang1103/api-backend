@@ -119,17 +119,42 @@
 #define PIN_I2C_SDA      8
 #define PIN_I2C_SCL      18
 
-// ─── Động cơ: DRV8833 ─────────────────────────────────────
-#define PIN_MOTOR_AIN1   39
-#define PIN_MOTOR_AIN2   40
-#define PIN_MOTOR_BIN1   41
-#define PIN_MOTOR_BIN2   42
-// nSLEEP tied to 3V3 = always awake.
+// ─── Động cơ: 2× IBT-2 (BTS7960) ──────────────────────────
+//
+// ĐỔI TỪ DRV8833 (18/08/2026). Lý do: động cơ thật là 33GB-520 12V,
+// dòng kẹt của nó vượt xa mức 1,5A mà DRV8833 chịu được — cắm vào là
+// cháy mạch chứ không phải chạy chậm.
+//
+// ⚠️ IBT-2 KHÔNG PHẢI mạch cầu H thường. Mỗi mạch chỉ lái MỘT bánh,
+// nên phải mua HAI. Bù lại nó nhận thẳng 12V và chịu 43A.
+//
+// ⚠️⚠️ CHÂN `VCC` CỦA IBT-2 PHẢI CẮM VÀO **3V3**, KHÔNG PHẢI 5V.
+// Chân điều khiển đi qua đệm 74HC244, ngưỡng mức cao của nó là
+// 0,7 × VCC. Cấp VCC = 5V thì ngưỡng thành 3,5V, mà ESP32 chỉ ra
+// được 3,3V — thấp hơn ngưỡng. Robot sẽ im ru không rõ lý do, đo
+// chân nào cũng thấy "có tín hiệu". Cấp 3V3 thì ngưỡng còn 2,31V.
+//
+// Nối dây mỗi mạch:
+//   RPWM ← chân dưới đây (tiến)     LPWM ← chân dưới đây (lùi)
+//   R_EN + L_EN → nối cứng 3V3      VCC → 3V3      GND → GND chung
+//   B+ / B− → ắc-quy 12V            M+ / M− → động cơ
+#define PIN_MOTOR_AIN1   39   // bánh TRÁI  — RPWM (tiến)
+#define PIN_MOTOR_AIN2   40   // bánh TRÁI  — LPWM (lùi)
+#define PIN_MOTOR_BIN1   41   // bánh PHẢI  — RPWM (tiến)
+#define PIN_MOTOR_BIN2   42   // bánh PHẢI  — LPWM (lùi)
 
-// ─── Encoder (1 kênh mỗi bánh — chiều quay đã biết) ───────
-#define PIN_ENC_L        47
-#define PIN_ENC_R        48
-#define ENCODER_TICKS_PER_REV 374   // 11 xung × tỉ số truyền 34
+// ─── Encoder — KHÔNG CÓ TRÊN PHẦN CỨNG THẬT ───────────────
+//
+// Giữ lại hai định nghĩa này để khỏi vỡ mã cũ, nhưng động cơ 33GB-520
+// mua về chỉ ra **2 dây** (chỉ nguồn), không có encoder. Bản có encoder
+// là mã khác, 6 dây. Đừng viết mã dựa vào hai chân này.
+//
+// Thay cho encoder, `banh_xe.cpp` giữ hướng bằng **con quay MPU6050**.
+// Với xe xích thì đó còn là lựa chọn ĐÚNG HƠN: xích trượt, encoder vẫn
+// đếm đủ vòng trong khi thân xe đã lệch hướng.
+#define PIN_ENC_L        47   // KHÔNG DÙNG
+#define PIN_ENC_R        48   // KHÔNG DÙNG
+#define ENCODER_TICKS_PER_REV 374   // KHÔNG DÙNG
 
 // ─── Phụ trợ ──────────────────────────────────────────────
 #define PIN_LED_RING     21

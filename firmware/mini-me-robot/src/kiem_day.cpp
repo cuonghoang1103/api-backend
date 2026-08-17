@@ -46,8 +46,15 @@ static const Chan DS[] = {
     {PIN_TFT_DC, "DC"},
     {PIN_TFT_SCLK, "SCL / SCK"},
     {PIN_TFT_MOSI, "SDA / MOSI"},
-    {PIN_TFT_RST, "RST"},
+    {PIN_EYE_CS_R, "CS   (mat phai)"},
 };
+// ⚠️ KHÔNG có dòng RST ở đây, và đó là CỐ Ý. Cả ba con màn đều nối RST
+// cứng vào 3V3, nên `config.h` không khai `PIN_TFT_RST` — bản trước liệt
+// nó vào bảng này nên `pio run -e kiem-day` không biên dịch nổi (chỉ
+// môi trường này hỏng, `mini-me` vẫn xanh nên không ai thấy).
+//
+// Muốn kiểm sợi RST thì đo bằng đồng hồ: nó phải thông với chân 3V3,
+// firmware không kéo được chân mà nó không giữ.
 static constexpr int SO = sizeof(DS) / sizeof(DS[0]);
 
 void setup() {

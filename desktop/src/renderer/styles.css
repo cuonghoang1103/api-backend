@@ -2631,3 +2631,319 @@ select {
   background: var(--ct-hover);
   color: var(--ct-text);
 }
+
+/* ════════════════════════════════════════════════════════════
+   Markdown trong câu trả lời của agent
+   ════════════════════════════════════════════════════════════
+   Trước khi có khối này, câu trả lời hiện bằng chữ thuần: khối mã, **đậm**,
+   danh sách đều lộ nguyên ký tự. Đó là lý do lớn nhất khiến màn hình trông
+   thô sơ — lớn hơn cả màu và font. */
+
+.ct-md {
+  font-size: 13.5px;
+  line-height: 1.68;
+  color: var(--ct-text);
+}
+
+/* Khoảng cách giữa các đoạn là thứ tạo ra NHỊP ĐỌC. Đoạn dính nhau thì mắt
+   không biết nghỉ ở đâu, và một câu trả lời dài thành một khối chữ đặc. */
+.ct-md p { margin: 0 0 10px; }
+.ct-md > div > *:last-child { margin-bottom: 0; }
+
+.ct-md h4 {
+  margin: 16px 0 8px;
+  font-size: 13.5px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--ct-text);
+}
+
+.ct-md > div > h4:first-child { margin-top: 0; }
+
+.ct-md ul,
+.ct-md ol {
+  margin: 0 0 10px;
+  padding-left: 20px;
+}
+
+.ct-md li { margin: 3px 0; }
+.ct-md li::marker { color: var(--ct-text-faint); }
+
+.ct-md blockquote {
+  margin: 0 0 10px;
+  padding: 2px 0 2px 12px;
+  border-left: 2px solid var(--ct-border);
+  color: var(--ct-text-muted);
+}
+
+/* Mã trong dòng: nền nhẹ + viền mảnh. Chỉ đổi màu chữ thì ở nền tối gần như
+   không phân biệt được với chữ thường. */
+.ct-md code {
+  padding: 1.5px 5px;
+  border: 1px solid var(--ct-border);
+  border-radius: 4px;
+  background: var(--ct-bg);
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  color: var(--ct-text);
+}
+
+.ct-md a {
+  color: var(--ct-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* ── Khối mã ── */
+
+.ct-md-ma {
+  margin: 0 0 12px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: var(--ct-bg);
+  overflow: hidden;
+}
+
+.ct-md-ma-dau {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--ct-border);
+  background: color-mix(in srgb, var(--ct-text) 4%, transparent);
+}
+
+.ct-md-ma-ngon {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ct-text-faint);
+}
+
+.ct-md-ma-chep {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--ct-text-faint);
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--ct-motion-fast) var(--ct-ease);
+}
+
+/* Nút Chép chỉ hiện khi rê chuột — nó là thao tác phụ, không đáng chiếm sự chú
+   ý thường trực trên mọi khối mã. Nhưng phải hiện khi được focus bằng bàn phím,
+   nếu không người dùng bàn phím sẽ tab vào một nút vô hình. */
+.ct-md-ma:hover .ct-md-ma-chep,
+.ct-md-ma-chep:focus-visible { opacity: 1; }
+
+.ct-md-ma-chep:hover { background: var(--ct-hover); color: var(--ct-text); }
+
+.ct-md-ma pre {
+  margin: 0;
+  padding: 10px 12px;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.ct-md-ma pre code {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: inherit;
+}
+
+/* ── Tô màu cú pháp ──
+   Bảng màu tự đặt theo biến chủ đề thay vì nhập một theme của highlight.js:
+   theme dựng sẵn ghim màu tuyệt đối, nên ở chủ đề sáng nó cho ra chữ vàng nhạt
+   trên nền trắng. */
+.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-section { color: #c678dd; }
+.hljs-string, .hljs-regexp, .hljs-addition { color: #98c379; }
+.hljs-number, .hljs-symbol, .hljs-bullet { color: #d19a66; }
+.hljs-title, .hljs-name, .hljs-title\.function\.{ color: #61afef; }
+.hljs-attr, .hljs-attribute, .hljs-variable, .hljs-template-variable { color: #e06c75; }
+.hljs-comment, .hljs-quote { color: var(--ct-text-faint); font-style: italic; }
+.hljs-type, .hljs-class .hljs-title, .hljs-title\.class\. { color: #e5c07b; }
+.hljs-built_in, .hljs-meta { color: #56b6c2; }
+.hljs-deletion { color: var(--ct-err); }
+
+html[data-ct-theme='light'] .hljs-keyword,
+html[data-ct-theme='light'] .hljs-selector-tag,
+html[data-ct-theme='light'] .hljs-literal { color: #a626a4; }
+html[data-ct-theme='light'] .hljs-string { color: #50a14f; }
+html[data-ct-theme='light'] .hljs-number { color: #986801; }
+html[data-ct-theme='light'] .hljs-title,
+html[data-ct-theme='light'] .hljs-name { color: #4078f2; }
+html[data-ct-theme='light'] .hljs-attr { color: #e45649; }
+html[data-ct-theme='light'] .hljs-type { color: #c18401; }
+html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
+
+/* ════════════════════════════════════════════════════════════
+   NÂNG CẤP GIAO DIỆN AGENT (17/08)
+   ════════════════════════════════════════════════════════════
+   Ba thứ làm màn hình cũ trông thô sơ, theo đúng thứ tự nặng nhẹ:
+     1. câu trả lời là chữ THUẦN — khối mã, đậm, danh sách lộ nguyên ký tự
+        (đã sửa bằng `markdown.tsx`);
+     2. dòng công cụ RỜI RẠC — mỗi dòng một vạch trái gãy khúc, không thành cột;
+     3. nút quyền HÉT TO hơn nội dung, kéo mắt khỏi thứ đáng đọc.
+   Khối này lo (2) và (3). */
+
+/* ── Bề rộng đọc ──
+   Chữ dài quá 75-80 ký tự thì mắt lạc dòng khi xuống hàng. Bảng ghi giãn hết
+   màn 27" là không đọc nổi, dù trông "tận dụng chỗ". */
+.ct-agent-scroll {
+  padding: 18px 2px 8px;
+  gap: 2px;
+}
+
+.ct-agent-may,
+.ct-agent-nguoi,
+.ct-xinphep,
+.ct-lenh-ra {
+  max-width: 74ch;
+}
+
+.ct-agent-may {
+  margin: 10px 0 14px;
+  max-width: 74ch;
+}
+
+.ct-agent-nguoi {
+  margin: 14px 0 12px;
+  padding: 10px 14px;
+  border-radius: 14px 14px 4px 14px;
+  font-size: 13.5px;
+  letter-spacing: -0.005em;
+  box-shadow: var(--ct-shadow-sm);
+}
+
+/* ── Dòng công cụ: thành MỘT CỘT, không phải bảy mẩu rời ──
+   Bỏ vạch trái từng dòng. Thay bằng một máng icon rộng cố định để mọi icon
+   thẳng hàng — chính sự thẳng hàng đó biến bảy dòng thành một khối đọc lướt
+   được, thay vì bảy vật thể phải nhìn từng cái. */
+.ct-agent-tool {
+  gap: 9px;
+  padding: 3px 8px;
+  border-left: 0;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--ct-text-faint);
+  transition: background var(--ct-motion-fast) var(--ct-ease);
+}
+
+.ct-agent-tool:hover { background: var(--ct-hover); }
+
+/* Máng icon: rộng cố định ⇒ tên tool luôn bắt đầu ở cùng một cột. */
+.ct-agent-tool > svg {
+  flex: 0 0 14px;
+  color: var(--ct-text-faint);
+}
+
+.ct-agent-tool[data-vong='notes'] > svg { color: var(--ct-accent); }
+.ct-agent-tool[data-xong='dongY'] > svg { color: var(--ct-ok); }
+.ct-agent-tool[data-xong='tuChoi'] > svg { color: var(--ct-err); }
+
+/* Tên tool: chữ đơn sắc, KHÔNG nền. Nền biến nó thành cái nút — mắt tưởng bấm
+   được và cứ dừng lại ở đó. */
+.ct-agent-tool code {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ct-text-muted);
+  letter-spacing: -0.01em;
+}
+
+.ct-agent-tool-tomtat {
+  font-size: 11.5px;
+  color: var(--ct-text-faint);
+}
+
+/* ── Nút quyền: nhỏ lại, vẫn nhận ra ngay ──
+   Bản trước tô nền vàng/đỏ đậm nên hai cái nút hút mắt hơn cả câu trả lời.
+   Trạng thái BẬT vẫn phải thấy ngay, nhưng bằng CHẤM MÀU + viền, không phải
+   bằng cả mảng nền. */
+.ct-agent-suanut {
+  gap: 5px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.ct-agent-suanut[data-bat='true'] {
+  background: none;
+  border-color: color-mix(in srgb, var(--ct-warn) 45%, transparent);
+  color: var(--ct-warn);
+}
+
+.ct-agent-suanut[data-lenh='true'][data-bat='true'] {
+  background: none;
+  border-color: color-mix(in srgb, var(--ct-err) 45%, transparent);
+  color: var(--ct-err);
+}
+
+.ct-agent-bar {
+  gap: 5px;
+  padding-bottom: 12px;
+}
+
+/* ── Con quay: có nhịp thở, không đứng chết ──
+   Người dùng nhìn nó suốt ~10 giây im lặng đầu mỗi lượt. Một dòng chữ tĩnh
+   trong 10 giây trông y hệt một app treo. */
+.ct-agent-nghi {
+  gap: 9px;
+  padding: 6px 8px;
+  font-size: 12.5px;
+  color: var(--ct-text-muted);
+}
+
+.ct-agent-nghi span { animation: ct-tho 1.8s ease-in-out infinite; }
+
+@keyframes ct-tho {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+/* ── Chữ ──
+   Bộ font hệ thống, nhưng khai báo RÕ thay vì để trình duyệt tự chọn: mặc định
+   của Chromium trên Linux hay rơi vào một font khác hẳn macOS, và cùng một
+   giao diện trông lệch nhau giữa hai máy. */
+.ct-agent,
+.ct-md,
+.ct-agent-nguoi {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter',
+    'Helvetica Neue', system-ui, sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+.ct-panel-full > .ct-page-head h1 {
+  font-size: 17px;
+  font-weight: 620;
+  letter-spacing: -0.02em;
+}
+
+.ct-agent-chan {
+  padding-top: 10px;
+  margin-top: 2px;
+  border-top: 1px solid var(--ct-border);
+  font-size: 11px;
+}
+
+.ct-agent-soan { padding-top: 12px; }
+
+.ct-agent-o {
+  padding: 10px 13px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  transition: border-color var(--ct-motion-fast) var(--ct-ease);
+}

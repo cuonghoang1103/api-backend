@@ -17,12 +17,14 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import {
-  Check, CircleStop, FilePen, FolderOpen, History, Loader2, NotebookPen,
-  RotateCcw, Send, Sparkles, Terminal, Undo2, X,
+  BookOpen, Check, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen, FolderTree,
+  GitBranch, History, Loader2, NotebookPen, RotateCcw, Search, Send, Sparkles,
+  SquareTerminal, Terminal, Undo2, X,
 } from 'lucide-react';
 import type { AgentInfo, AgentWorkspace } from '../../../shared/ipc';
 import { useAgent } from './useAgent';
 import { LichSu } from './LichSu';
+import { ChuAgent } from './markdown';
 import { XinPhep, XinPhepLenh } from './XinPhep';
 
 export function AgentMode({
@@ -237,7 +239,13 @@ export function AgentMode({
 
         {trangThai.muc.map((m, i) => {
           if (m.kieu === 'nguoi') return <div key={i} className="ct-agent-nguoi">{m.text}</div>;
-          if (m.kieu === 'may') return <div key={i} className="ct-agent-may">{m.text}</div>;
+          if (m.kieu === 'may') {
+            return (
+              <div key={i} className="ct-agent-may">
+                <ChuAgent text={m.text} />
+              </div>
+            );
+          }
           if (m.kieu === 'loi') {
             return (
               <div key={i} className="ct-notice" data-tone={
@@ -282,8 +290,8 @@ export function AgentMode({
           // do một tiến trình bất kỳ trên máy in ra, và nó có thể chứa bất cứ gì.
           if (m.kieu === 'lenhRa') return <pre key={i} className="ct-lenh-ra">{m.text}</pre>;
           return (
-            <div key={i} className="ct-agent-tool" data-vong={m.vong}>
-              {m.vong === 'notes' ? <NotebookPen size={12} aria-hidden /> : <Terminal size={12} aria-hidden />}
+            <div key={i} className="ct-agent-tool" data-vong={m.vong} data-ten={m.ten}>
+              <IconTool ten={m.ten} vong={m.vong} />
               <code>{m.ten}</code>
               <span className="ct-agent-tool-tomtat">{m.tomTat}</span>
             </div>
@@ -338,6 +346,31 @@ export function AgentMode({
       </div>
     </div>
   );
+}
+
+/**
+ * Icon riêng cho TỪNG tool.
+ *
+ * Một icon chung cho mọi tool thì dòng tiến trình chỉ còn phân biệt được bằng
+ * cách ĐỌC tên — mà mắt lướt qua mười dòng thì không ai đọc. Hình dạng khác
+ * nhau cho phép nhận ra nhịp làm việc (dò → tìm → đọc → sửa → chạy) chỉ bằng
+ * liếc, đúng như Claude Code làm.
+ */
+function IconTool({ ten, vong }: { ten: string; vong: 'may' | 'notes' }) {
+  const p = { size: 12, 'aria-hidden': true } as const;
+  if (vong === 'notes') return <NotebookPen {...p} />;
+  switch (ten) {
+    case 'list_dir': return <FolderTree {...p} />;
+    case 'glob': return <FolderTree {...p} />;
+    case 'grep': return <Search {...p} />;
+    case 'read_file': return <FileCode2 {...p} />;
+    case 'edit_file': return <FilePen {...p} />;
+    case 'create_file': return <FilePlus2 {...p} />;
+    case 'run_command': return <SquareTerminal {...p} />;
+    case 'git_status':
+    case 'git_diff': return <GitBranch {...p} />;
+    default: return ten.endsWith('.md') ? <BookOpen {...p} /> : <Terminal {...p} />;
+  }
 }
 
 /**

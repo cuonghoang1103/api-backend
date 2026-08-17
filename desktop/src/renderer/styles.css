@@ -2531,3 +2531,103 @@ select {
   font-size: 11.5px;
   line-height: 1.5;
 }
+
+/* ── Tab của chế độ Lập trình ───────────────────────────── */
+
+/* Mọi tab đều được dựng, chỉ một tab hiện. Tháo tab khỏi cây React là mất bảng
+   ghi của nó — mà bảng ghi ấy đã tốn tiền thật để có. */
+.ct-tab-noi {
+  display: none;
+  flex: 1;
+  min-height: 0;
+}
+
+.ct-tab-noi[data-hien='true'] {
+  display: flex;
+  flex-direction: column;
+}
+
+.ct-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-bottom: 8px;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.ct-tab {
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  flex-shrink: 0;
+  max-width: 200px;
+}
+
+.ct-tab[data-chon='true'] {
+  border-color: var(--ct-border);
+  background: var(--ct-surface);
+  box-shadow: var(--ct-shadow-sm);
+}
+
+.ct-tab-chon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 5px 4px 5px 10px;
+  border: 0;
+  background: none;
+  color: var(--ct-text-muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ct-tab[data-chon='true'] .ct-tab-chon { color: var(--ct-text); }
+
+.ct-tab-chu {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Chỉ MỘT việc chạy tại một thời điểm, nên dấu chấm này trả lời đúng câu người
+   dùng đang hỏi: "cái nào đang bận?". */
+.ct-tab-cham {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ct-ok);
+  flex-shrink: 0;
+  animation: ct-tab-nhap 1.4s ease-in-out infinite;
+}
+
+@keyframes ct-tab-nhap {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.ct-tab-dong,
+.ct-tab-them {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--ct-text-faint);
+  cursor: pointer;
+}
+
+.ct-tab-them { margin: 0 0 0 4px; width: 24px; height: 24px; }
+
+.ct-tab-dong:hover,
+.ct-tab-them:hover {
+  background: var(--ct-hover);
+  color: var(--ct-text);
+}

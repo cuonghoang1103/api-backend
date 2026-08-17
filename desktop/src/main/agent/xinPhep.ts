@@ -31,6 +31,8 @@ export interface YeuCauXinPhep {
 interface DangCho {
   giaiPhong: (q: QuyetDinh) => void;
   dongHo: ReturnType<typeof setTimeout>;
+  /** Sổ nhớ của CUỘC HỘI THOẠI đã hỏi. Xem ghi chú ở `daNhoKhoa` bên dưới. */
+  soNho: Set<string>;
   /**
    * Khoá để NHỚ nếu người dùng chọn "cho phép cả …". Với file là đường dẫn,
    * với lệnh là nguyên văn chuỗi lệnh.
@@ -54,18 +56,25 @@ const HET_GIO_MS = 5 * 60_000;
 
 const dangCho = new Map<string, DangCho>();
 
-/** Khoá đã được "cho phép cả …" trong PHIÊN này. Không bao giờ ghi xuống đĩa. */
-const daNhoKhoa = new Set<string>();
+/**
+ * Sổ "cho phép cả …" là của TỪNG CUỘC HỘI THOẠI, không phải của cả app.
+ *
+ * Từ khi mở được nhiều cuộc cùng lúc, một `Set` chung nghĩa là: duyệt
+ * `npm test` ở tab A thì tab B cũng tự chạy `npm test` mà người dùng chưa hề
+ * nhìn thấy nó. Quyền được cấp cho MỘT việc, trong MỘT lần ngồi xuống — nó
+ * không được rò sang việc khác chỉ vì hai việc tình cờ mở cùng lúc.
+ *
+ * Sổ do `loop.ts` giữ theo cuộc và truyền vào đây; module này không giữ trạng
+ * thái chung nào nữa.
+ */
+export function taoSoNho(): Set<string> {
+  return new Set<string>();
+}
 
 let demId = 0;
 
-/** Bắt đầu một việc mới ⇒ quên hết quyền đã cấp. Quyền không được sống lâu hơn việc nó phục vụ. */
-export function xoaQuyenDaCap(): void {
-  daNhoKhoa.clear();
-}
-
-export function daChoPhepCaFile(khoa: string): boolean {
-  return daNhoKhoa.has(khoa);
+export function daChoPhepCaFile(soNho: Set<string>, khoa: string): boolean {
+  return soNho.has(khoa);
 }
 
 /**
@@ -78,6 +87,7 @@ export function hoiNguoiDung(
   yeuCau: Omit<YeuCauXinPhep, 'id'> & { khoa?: string; choNho?: boolean },
   phat: (y: YeuCauXinPhep) => void,
   signal: AbortSignal,
+  soNho: Set<string>,
 ): Promise<QuyetDinh> {
   const khoa = yeuCau.khoa ?? yeuCau.duongDan;
   const choNho = yeuCau.choNho !== false;
@@ -85,7 +95,7 @@ export function hoiNguoiDung(
   // Đã cấp quyền cho khoá này rồi ⇒ đi thẳng, không hỏi lại. Đây là thứ giữ cho
   // việc sửa mười chỗ trong cùng một file (hay chạy `npm test` mười lần trong
   // vòng lặp sửa→chạy→sửa) không thành mười lần bấm.
-  if (choNho && daNhoKhoa.has(khoa)) return Promise.resolve('choPhepCaFile');
+  if (choNho && soNho.has(khoa)) return Promise.resolve('choPhepCaFile');
 
   const id = `xp_${++demId}`;
   return new Promise<QuyetDinh>((resolve) => {
@@ -102,7 +112,7 @@ export function hoiNguoiDung(
     function huy(): void { ketThuc('tuChoi'); }
 
     const dongHo = setTimeout(() => ketThuc('tuChoi'), HET_GIO_MS);
-    dangCho.set(id, { giaiPhong: ketThuc, dongHo, khoa, choNho });
+    dangCho.set(id, { giaiPhong: ketThuc, dongHo, khoa, choNho, soNho });
 
     // Người dùng bấm Dừng giữa lúc thẻ duyệt đang mở ⇒ coi như từ chối. KHÔNG
     // được để treo: lượt đã bị huỷ thì không còn ai đọc kết quả nữa.
@@ -119,7 +129,7 @@ export function traLoi(id: string, quyetDinh: QuyetDinh): boolean {
   // `choNho === false` ⇒ nút "cho phép cả …" vẫn cho lệnh/thay đổi NÀY đi, chỉ
   // là không ghi nhớ. Giao diện đã ẩn nút đó với lệnh nguy hiểm; đây là lớp
   // chặn thứ hai, phòng khi một app bị sửa vẫn gửi lên quyết định ấy.
-  if (quyetDinh === 'choPhepCaFile' && muc.choNho) daNhoKhoa.add(muc.khoa);
+  if (quyetDinh === 'choPhepCaFile' && muc.choNho) muc.soNho.add(muc.khoa);
   muc.giaiPhong(quyetDinh);
   return true;
 }

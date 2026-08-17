@@ -114,19 +114,24 @@ const bridge: DesktopBridge = {
     clearWorkspace: () => ipcRenderer.invoke('agent:clearWorkspace') as Promise<AgentWorkspace>,
     // Không có timeout ở đây: một lượt agent chạy vài phút là bình thường. Muốn
     // dừng thì gọi `cancel()`, đừng trông vào việc lời hứa này tự bỏ cuộc.
-    send: (text: string) => ipcRenderer.invoke('agent:send', { text }) as Promise<void>,
-    cancel: () => ipcRenderer.invoke('agent:cancel') as Promise<void>,
-    reset: () => ipcRenderer.invoke('agent:reset') as Promise<void>,
-    traLoiXinPhep: (id: string, quyetDinh: AgentQuyetDinh) =>
-      ipcRenderer.invoke('agent:traLoiXinPhep', { id, quyetDinh }) as Promise<void>,
+    taoCuoc: () => ipcRenderer.invoke('agent:taoCuoc') as Promise<string>,
+    dongCuoc: (cuocId: string) => ipcRenderer.invoke('agent:dongCuoc', { cuocId }) as Promise<void>,
+    send: (cuocId: string, text: string) =>
+      ipcRenderer.invoke('agent:send', { cuocId, text }) as Promise<void>,
+    cancel: (cuocId: string) => ipcRenderer.invoke('agent:cancel', { cuocId }) as Promise<void>,
+    reset: (cuocId: string) => ipcRenderer.invoke('agent:reset', { cuocId }) as Promise<void>,
+    traLoiXinPhep: (cuocId: string, id: string, quyetDinh: AgentQuyetDinh) =>
+      ipcRenderer.invoke('agent:traLoiXinPhep', { cuocId, id, quyetDinh }) as Promise<void>,
     datCheDoSua: (bat: boolean) =>
       ipcRenderer.invoke('agent:datCheDoSua', { bat }) as Promise<AgentWorkspace>,
     datCheDoLenh: (bat: boolean) =>
       ipcRenderer.invoke('agent:datCheDoLenh', { bat }) as Promise<AgentWorkspace>,
-    hoanTac: () => ipcRenderer.invoke('agent:hoanTac') as Promise<{ soFile: number; loi: string[] }>,
+    hoanTac: (cuocId: string) =>
+      ipcRenderer.invoke('agent:hoanTac', { cuocId }) as Promise<{ soFile: number; loi: string[] }>,
     dsPhien: () => ipcRenderer.invoke('agent:dsPhien') as Promise<AgentPhien[]>,
-    moPhien: (id: string) =>
-      ipcRenderer.invoke('agent:moPhien', { id }) as Promise<{ muc: AgentMucKhoiPhuc[] } | null>,
+    moPhien: (cuocId: string, id: string) =>
+      ipcRenderer.invoke('agent:moPhien', { cuocId, id }) as
+        Promise<{ muc: AgentMucKhoiPhuc[] } | null>,
     xoaPhien: (id: string) => ipcRenderer.invoke('agent:xoaPhien', { id }) as Promise<void>,
   },
 

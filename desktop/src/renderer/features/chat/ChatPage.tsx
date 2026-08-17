@@ -11,11 +11,12 @@
  * mở được trang, vẫn trò chuyện được, chỉ thấy thêm một lời mời nâng cấp ở tab
  * bên cạnh. Nếu là route riêng thì họ bấm vào và gặp một trang chết.
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Bot, Loader2, Terminal } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { AgentMode } from './AgentMode';
 import { ChatMode } from './ChatMode';
+import { ThanhTab, type TabAgent } from './Tabs';
 import { useAgentInfo } from './useAgent';
 
 type CheDo = 'chat' | 'code';
@@ -24,6 +25,44 @@ export function ChatPage() {
   const { info, thuMuc, datThuMuc, dangTai, nap } = useAgentInfo();
   const [cheDo, datCheDo] = useState<CheDo>('chat');
   const { settings } = useAppState();
+
+  /**
+   * Các việc đang mở. Cha giữ danh sách vì nó là chỗ DUY NHẤT biết có những tab
+   * nào — mỗi `AgentMode` chỉ biết cuộc của chính nó.
+   *
+   * Chưa có tab nào ⇒ tạo một cái ngay khi biết mình có quyền Pro. Tạo sớm hơn
+   * là tạo cho một người sẽ chỉ thấy màn hình mời nâng cấp.
+   */
+  const [tabs, datTabs] = useState<string[]>([]);
+  const [tabMo, datTabMo] = useState<string>('');
+  const [tenTab, datTenTab] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (!info?.pro || tabs.length > 0) return;
+    void window.cuongthai?.agent.taoCuoc().then((id) => {
+      if (!id) return;
+      datTabs([id]);
+      datTabMo(id);
+    });
+  }, [info?.pro, tabs.length]);
+
+  const themTab = (): void => {
+    void window.cuongthai?.agent.taoCuoc().then((id) => {
+      if (!id) return;
+      datTabs((t) => [...t, id]);
+      datTabMo(id);
+    });
+  };
+
+  const dongTab = (id: string): void => {
+    void window.cuongthai?.agent.dongCuoc(id);
+    datTabs((t) => {
+      const conLai = t.filter((x) => x !== id);
+      // Đóng tab ĐANG mở ⇒ nhảy sang tab bên cạnh, không để màn hình trống.
+      if (id === tabMo && conLai.length > 0) datTabMo(conLai[conLai.length - 1]!);
+      return conLai;
+    });
+  };
 
   /**
    * Robot Odin nổi ở `position: fixed; right: 22px` với bề ngang 104px, tức là
@@ -95,7 +134,43 @@ export function ChatPage() {
               <span>Đang kiểm tra quyền…</span>
             </div>
           ) : info ? (
-            <AgentMode info={info} thuMuc={thuMuc} datThuMuc={datThuMuc} napLai={nap} />
+            /* MỌI tab đều được dựng, chỉ ẩn bằng CSS — tháo ra là mất bảng ghi
+               của tab đó, mà bảng ghi ấy đã tốn tiền thật để có. */
+            tabs.length === 0 ? (
+              <div className="ct-agent-nghi">
+                <Loader2 size={13} aria-hidden className="ct-spin" />
+                <span>Đang mở việc…</span>
+              </div>
+            ) : (
+              <>
+                {/* Thanh tab vẽ ĐÚNG MỘT LẦN ở đây. Để trong `AgentMode` thì mỗi
+                    tab đang mở dựng một bản sao — vô hình vì tab kia bị ẩn,
+                    nhưng vẫn nằm trong DOM và làm mọi selector khớp N phần tử. */}
+                <ThanhTab
+                  tabs={tabs.map((x): TabAgent => ({
+                    id: x,
+                    tieuDe: tenTab[x] ?? 'Việc mới',
+                    dangChay: false,
+                  }))}
+                  dangMo={tabMo}
+                  onChon={datTabMo}
+                  onThem={themTab}
+                  onDong={dongTab}
+                />
+                {tabs.map((id) => (
+                  <div key={id} className="ct-tab-noi" data-hien={id === tabMo}>
+                    <AgentMode
+                      cuocId={id}
+                      info={info}
+                      thuMuc={thuMuc}
+                      datThuMuc={datThuMuc}
+                      napLai={nap}
+                      datTieuDe={(t) => datTenTab((cu) => (cu[id] === t ? cu : { ...cu, [id]: t }))}
+                    />
+                  </div>
+                ))}
+              </>
+            )
           ) : (
             <div className="ct-empty">
               <h1>Chưa kết nối được máy chủ</h1>

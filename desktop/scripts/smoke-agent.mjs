@@ -469,6 +469,57 @@ try {
   const traLoiNho = await man2.locator('.ct-agent-may').last().innerText();
   check('agent NHỚ hội thoại từ trước khi đóng app', /9999/.test(traLoiNho),
     traLoiNho.slice(0, 90).replace(/\n/g, ' '));
+
+  // ══ Nhiều tab ══
+  //
+  // Thứ đáng kiểm KHÔNG phải "có vẽ ra hai cái tab không" mà là hai cuộc có
+  // THẬT SỰ tách nhau ở main không: bảng ghi riêng, và hội thoại riêng. Một
+  // biến chung sót lại sẽ làm tab B trả lời bằng ký ức của tab A — không lỗi,
+  // không đỏ, chỉ sai.
+  console.log('\nNhiều việc song song:');
+  const soTabTruoc = await man2.locator('.ct-tab').count();
+  check('có thanh tab', soTabTruoc >= 1, `${soTabTruoc} tab`);
+
+  const soMucTabA = await man2.locator('.ct-agent-scroll > *').count();
+  await man2.locator('.ct-tab-them').click();
+  await w2.waitForFunction(
+    (n) => document.querySelectorAll('.ct-chedo[data-hien="true"] .ct-tab').length > n,
+    soTabTruoc,
+    { timeout: 10000 },
+  );
+  check('mở được tab thứ hai', true);
+
+  // Tab mới phải TRỐNG. Không trống nghĩa là hai tab dùng chung một bảng ghi.
+  const manB = w2.locator('.ct-tab-noi[data-hien="true"]');
+  const soMucTabB = await manB.locator('.ct-agent-scroll > *').count();
+  check('tab mới có bảng ghi RIÊNG (trống)', soMucTabB < soMucTabA,
+    `tab A ${soMucTabA} mục · tab B ${soMucTabB} mục`);
+
+  // Hỏi ở tab B một câu mà chỉ tab A mới biết câu trả lời. Trả lời được nghĩa
+  // là hai cuộc DÙNG CHUNG hội thoại — đúng thứ phải không xảy ra.
+  await manB.locator('.ct-agent-o').fill('Không tra file. Con số tôi từng nhờ bạn đổi CONG thành là bao nhiêu?');
+  await manB.locator('.ct-agent-soan .ct-btn').first().click();
+  await w2.waitForFunction(
+    () => {
+      const m = document.querySelector('.ct-tab-noi[data-hien="true"]');
+      if (!m) return false;
+      const nut = m.querySelector('.ct-agent-soan .ct-btn');
+      return !!nut && nut.textContent.includes('Gửi');
+    },
+    null,
+    { timeout: 180000 },
+  );
+  const traLoiB = await manB.locator('.ct-agent-may').last().innerText();
+  check('tab B KHÔNG thấy hội thoại của tab A', !/9999/.test(traLoiB),
+    traLoiB.slice(0, 100).replace(/\n/g, ' '));
+
+  // Quay lại tab A: bảng ghi của nó phải còn nguyên.
+  await w2.locator('.ct-chedo[data-hien="true"] .ct-tab').first().locator('.ct-tab-chon').click();
+  await w2.waitForTimeout(300);
+  const manA = w2.locator('.ct-tab-noi[data-hien="true"]');
+  const soMucQuayLai = await manA.locator('.ct-agent-scroll > *').count();
+  check('quay lại tab A vẫn còn nguyên bảng ghi', soMucQuayLai >= soMucTabA,
+    `${soMucQuayLai} mục`);
 } catch (err) {
   console.log(`\n\x1b[31mHỎNG: ${String(err.message).split('\n')[0]}\x1b[0m`);
   await inBangGhi('lúc hỏng');

@@ -199,9 +199,15 @@ export const zoomSchema = z.number().min(0.5).max(2.5);
  * Câu hỏi người dùng gõ. Trần 8.000 ký tự — dài hơn thế thì họ đang dán cả file
  * vào khung chat, mà việc đó đã có tool `read_file` làm tốt hơn và rẻ hơn.
  */
+export const cuocIdSchema = z.string().min(1).max(64);
+
 export const agentSendSchema = z.object({
+  /** Cuộc hội thoại (tab) nhận câu hỏi này. Mọi kênh có trạng thái đều phải mang nó. */
+  cuocId: cuocIdSchema,
   text: z.string().trim().min(1, 'Chưa nhập gì').max(8000),
 });
+
+export const agentCuocSchema = z.object({ cuocId: cuocIdSchema });
 
 /** Thư mục dự án agent đang được phép đọc. `null` = chưa chọn. */
 export interface AgentWorkspace {
@@ -250,6 +256,15 @@ export const agentQuyetDinhSchema = z.enum(['choPhep', 'choPhepCaFile', 'tuChoi'
 export type AgentQuyetDinh = z.infer<typeof agentQuyetDinhSchema>;
 
 export const agentTraLoiSchema = z.object({
+  /**
+   * Cuộc nào đang hỏi.
+   *
+   * ⚠️ BẮT BUỘC. Khung `xongXinPhep` phát ra từ đây cũng phải mang `cuocId` như
+   * mọi khung khác — thiếu nó thì hook lọc bỏ, thẻ duyệt KHÔNG bao giờ biến
+   * mất, và người dùng bấm mãi không thấy gì xảy ra (dù thay đổi ĐÃ được ghi).
+   * Đã dính đúng lỗi này lúc thêm nhiều tab.
+   */
+  cuocId: cuocIdSchema,
   id: z.string().min(1).max(64),
   quyetDinh: agentQuyetDinhSchema,
 });
@@ -257,6 +272,10 @@ export const agentTraLoiSchema = z.object({
 export const agentCheDoSuaSchema = z.object({ bat: z.boolean() });
 export const agentCheDoLenhSchema = z.object({ bat: z.boolean() });
 export const agentPhienSchema = z.object({ id: z.string().min(1).max(64) });
+export const agentMoPhienSchema = z.object({
+  cuocId: cuocIdSchema,
+  id: z.string().min(1).max(64),
+});
 
 /** Một việc đã lưu. Nhãn duy nhất người dùng nhận ra nó là `tieuDe`. */
 export interface AgentPhien {
@@ -313,7 +332,7 @@ export interface AgentInfo {
  * bản sao của một hợp đồng thì sẽ có ngày lệch nhau, và lệch ở đây nghĩa là
  * giao diện im lặng bỏ qua một loại sự kiện mà không ai biết.
  */
-export type AgentUiEvent =
+export type AgentUiEvent = { cuocId: string } & (
   | { loai: 'batDau'; model: string }
   | { loai: 'chu'; delta: string }
   | { loai: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
@@ -327,7 +346,8 @@ export type AgentUiEvent =
   | { loai: 'lenhRa'; mau: string }
   | { loai: 'xong'; hanMuc: AgentQuota | null; tienUsd: number; daLuoc: number; soFileDaSua: number }
   | { loai: 'loi'; thongDiep: string; ma?: string }
-  | { loai: 'huy' };
+  | { loai: 'huy' }
+);
 
 // ─────────────────────────────────────────────────────────────
 // Kênh
@@ -376,14 +396,16 @@ export const INVOKE_CHANNELS = {
   'agent:chooseWorkspace': null,
   'agent:clearWorkspace': null,
   'agent:send': agentSendSchema,
-  'agent:cancel': null,
-  'agent:reset': null,
+  'agent:cancel': agentCuocSchema,
+  'agent:reset': agentCuocSchema,
+  'agent:taoCuoc': null,
+  'agent:dongCuoc': agentCuocSchema,
   'agent:traLoiXinPhep': agentTraLoiSchema,
   'agent:datCheDoSua': agentCheDoSuaSchema,
   'agent:datCheDoLenh': agentCheDoLenhSchema,
-  'agent:hoanTac': null,
+  'agent:hoanTac': agentCuocSchema,
   'agent:dsPhien': null,
-  'agent:moPhien': agentPhienSchema,
+  'agent:moPhien': agentMoPhienSchema,
   'agent:xoaPhien': agentPhienSchema,
 } as const;
 
@@ -525,25 +547,34 @@ export interface DesktopBridge {
     /** Mở hộp thoại hệ thống. Trả về thư mục đã chọn, hoặc giữ nguyên nếu người dùng huỷ. */
     chooseWorkspace(): Promise<AgentWorkspace>;
     clearWorkspace(): Promise<AgentWorkspace>;
-    send(text: string): Promise<void>;
-    cancel(): Promise<void>;
-    /** Xoá hội thoại, bắt đầu việc mới. Hạn mức KHÔNG được reset theo. */
-    reset(): Promise<void>;
+    /** Mở một cuộc (tab) mới. Trả về id — mọi lời gọi sau đó phải mang nó. */
+    taoCuoc(): Promise<string>;
+    dongCuoc(cuocId: string): Promise<void>;
+    send(cuocId: string, text: string): Promise<void>;
+    cancel(cuocId: string): Promise<void>;
+    /** Xoá hội thoại của MỘT cuộc, giữ tab. Hạn mức KHÔNG được reset theo. */
+    reset(cuocId: string): Promise<void>;
     /**
      * Trả lời thẻ duyệt. PHẢI gọi — vòng lặp đang đứng chờ đúng lời hứa này,
      * và nó chỉ tự thoát sau 5 phút hết giờ (coi như từ chối).
      */
-    traLoiXinPhep(id: string, quyetDinh: AgentQuyetDinh): Promise<void>;
+    traLoiXinPhep(cuocId: string, id: string, quyetDinh: AgentQuyetDinh): Promise<void>;
     /** Bật/tắt quyền sửa file. Không lưu xuống đĩa — mở app lại là tắt. */
     datCheDoSua(bat: boolean): Promise<AgentWorkspace>;
     /** Bật/tắt quyền chạy lệnh. Cũng không lưu xuống đĩa. */
     datCheDoLenh(bat: boolean): Promise<AgentWorkspace>;
     /** Trả mọi file agent đã sửa trong việc này về nguyên trạng. */
-    hoanTac(): Promise<{ soFile: number; loi: string[] }>;
+    hoanTac(cuocId: string): Promise<{ soFile: number; loi: string[] }>;
     /** Các việc đã lưu, mới nhất trước. */
     dsPhien(): Promise<AgentPhien[]>;
-    /** Mở lại một việc cũ — gõ tiếp là agent đi tiếp từ đúng chỗ đó. */
-    moPhien(id: string): Promise<{ muc: AgentMucKhoiPhuc[] } | null>;
+    /**
+     * Mở lại một việc cũ VÀO tab `cuocId`.
+     *
+     * Tab GIỮ NGUYÊN id của nó — chỉ chỗ ghi xuống đĩa đổi. Đổi id tab thì
+     * React remount component (`key={id}`) và xoá sạch bảng ghi vừa nạp; đã
+     * dính đúng lỗi đó lúc thêm nhiều tab.
+     */
+    moPhien(cuocId: string, id: string): Promise<{ muc: AgentMucKhoiPhuc[] } | null>;
     xoaPhien(id: string): Promise<void>;
   };
   /** Trả về hàm huỷ đăng ký. Renderer PHẢI gọi nó khi unmount. */

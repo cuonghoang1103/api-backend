@@ -24,7 +24,10 @@ import { promisify } from 'node:util';
 import type { AgentInfo, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace } from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
-import { chayLuot, dangChayKhong, huyLuot, napPhien, phienHienTai, xoaHoiThoai, type SuKienAgent } from '../agent/loop';
+import {
+  chayLuot, coCuocDangChay, cuocDangChay, dongCuoc, huyLuotCua, napPhien,
+  soCuaCuoc, taoCuoc, xoaHoiThoai, xoaMoiCuoc, type SuKienAgent,
+} from '../agent/loop';
 import { danhSachPhien, docPhien, dungLaiHienThi, xoaPhien } from '../agent/phien';
 import { hoanTacTatCa } from '../agent/tools';
 import { traLoi } from '../agent/xinPhep';
@@ -163,20 +166,19 @@ export function registerAgentHandlers(): void {
     if (ketQua.canceled || !goc) return moTa(cu);
 
     setSetting('agentWorkspace', goc);
-    // Đổi thư mục = đổi cả bối cảnh. Giữ lại hội thoại cũ thì agent vẫn tin vào
-    // những file nó đọc ở dự án TRƯỚC, và trả lời về một dự án không còn mở.
-    xoaHoiThoai();
+    // Đổi thư mục = đổi cả bối cảnh, ở MỌI tab chứ không riêng tab đang nhìn.
+    xoaMoiCuoc();
     return moTa(goc);
   });
 
   handle('agent:clearWorkspace', async (): Promise<AgentWorkspace> => {
     setSetting('agentWorkspace', '');
-    xoaHoiThoai();
+    xoaMoiCuoc();
     return moTa(null);
   });
 
-  handle('agent:send', async ({ text }, event) => {
-    if (dangChayKhong()) throw new Error('Đang có một lượt chạy dở. Hãy dừng nó trước.');
+  handle('agent:send', async ({ cuocId, text }, event) => {
+    if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở. Hãy dừng nó trước.');
 
     const goc = thuMucHienTai();
     const conSong = goc && (await conDungDuoc(goc)) ? goc : null;
@@ -186,24 +188,35 @@ export function registerAgentHandlers(): void {
     // này app có nhiều cửa sổ thì tiến trình của cửa sổ này không được rơi vào
     // khung chat của cửa sổ kia.
     const guiVe = event.sender;
+    /**
+     * Mọi sự kiện đều mang `cuocId`.
+     *
+     * Từ khi mở được nhiều tab, tất cả cùng nghe kênh `agent:event` — không gắn
+     * id thì chữ của tab A chảy vào bảng ghi tab B, và không có gì báo lỗi cả.
+     */
     const phat = (e: SuKienAgent): void => {
-      if (!guiVe.isDestroyed()) guiVe.send('agent:event', e);
+      if (!guiVe.isDestroyed()) guiVe.send('agent:event', { ...e, cuocId });
     };
 
     const nhanh = conSong ? await nhanhGit(conSong) : null;
-    await chayLuot(text, { goc: conSong, choSua, choChayLenh, ...(nhanh ? { nhanh } : {}) }, phat);
+    await chayLuot(cuocId, text, { goc: conSong, choSua, choChayLenh, ...(nhanh ? { nhanh } : {}) }, phat);
   });
 
-  handle('agent:cancel', () => {
-    huyLuot();
+  handle('agent:cancel', ({ cuocId }) => {
+    huyLuotCua(cuocId);
   });
 
-  handle('agent:reset', () => {
-    huyLuot();
-    xoaHoiThoai();
+  handle('agent:reset', ({ cuocId }) => {
+    xoaHoiThoai(cuocId);
   });
 
-  handle('agent:traLoiXinPhep', ({ id, quyetDinh }, event) => {
+  handle('agent:taoCuoc', () => taoCuoc());
+
+  handle('agent:dongCuoc', ({ cuocId }) => {
+    dongCuoc(cuocId);
+  });
+
+  handle('agent:traLoiXinPhep', ({ cuocId, id, quyetDinh }, event) => {
     // `traLoi` cần đường dẫn để nhớ "cho phép cả file này". Nó tự tra trong sổ
     // yêu cầu đang treo, nên ở đây chỉ chuyển tiếp quyết định.
     const nhan = traLoi(id, quyetDinh);
@@ -212,43 +225,44 @@ export function registerAgentHandlers(): void {
     // người dùng bấm mãi không có gì xảy ra.
     if (!event.sender.isDestroyed()) {
       event.sender.send('agent:event', {
-        loai: 'xongXinPhep', id, dongY: nhan && quyetDinh !== 'tuChoi',
+        cuocId, loai: 'xongXinPhep', id, dongY: nhan && quyetDinh !== 'tuChoi',
       });
     }
   });
 
   handle('agent:datCheDoSua', async ({ bat }): Promise<AgentWorkspace> => {
-    if (dangChayKhong()) throw new Error('Đang chạy dở — hãy dừng trước khi đổi quyền sửa.');
+    if (coCuocDangChay()) throw new Error('Đang chạy dở — hãy dừng trước khi đổi quyền sửa.');
     choSua = bat;
     return moTa(thuMucHienTai());
   });
 
   handle('agent:datCheDoLenh', async ({ bat }): Promise<AgentWorkspace> => {
-    if (dangChayKhong()) throw new Error('Đang chạy dở — hãy dừng trước khi đổi quyền chạy lệnh.');
+    if (coCuocDangChay()) throw new Error('Đang chạy dở — hãy dừng trước khi đổi quyền chạy lệnh.');
     choChayLenh = bat;
     return moTa(thuMucHienTai());
   });
 
   handle('agent:dsPhien', (): Promise<AgentPhien[]> => danhSachPhien());
 
-  handle('agent:moPhien', async ({ id }): Promise<{ muc: AgentMucKhoiPhuc[] } | null> => {
+  handle('agent:moPhien', async ({ cuocId, id }): Promise<{ muc: AgentMucKhoiPhuc[] } | null> => {
     const p = await docPhien(id);
     if (!p) return null;
-    napPhien(p.id, p.hoiThoai, p.duAn);
+    // Nạp VÀO tab hiện tại; tab giữ nguyên id của nó, chỉ `phienId` đổi.
+    napPhien(cuocId, p.id, p.hoiThoai, p.duAn);
     return { muc: dungLaiHienThi(p.hoiThoai) };
   });
 
   handle('agent:xoaPhien', async ({ id }) => {
-    // Xoá phiên ĐANG mở ⇒ dọn luôn bộ nhớ làm việc, nếu không agent vẫn nhớ một
+    // Xoá phiên ⇒ đóng luôn cuộc nếu nó đang mở, nếu không agent vẫn nhớ một
     // việc mà người dùng vừa bảo là bỏ đi.
-    if (phienHienTai() === id) xoaHoiThoai();
+    dongCuoc(id);
     await xoaPhien(id);
   });
 
-  handle('agent:hoanTac', async () => {
+  handle('agent:hoanTac', async ({ cuocId }) => {
     // Huỷ lượt trước: hoàn tác trong lúc agent vẫn đang ghi tiếp là chạy đua
     // với chính nó, và bên thắng là bên ghi sau.
-    huyLuot();
-    return hoanTacTatCa();
+    huyLuotCua(cuocId);
+    return hoanTacTatCa(soCuaCuoc(cuocId));
   });
 }

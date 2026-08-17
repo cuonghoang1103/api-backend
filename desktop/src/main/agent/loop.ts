@@ -27,8 +27,9 @@ import type { KetQuaDiff } from './diff';
 import { docGhiChuDuAn } from './ghiChu';
 import { luuPhien, type TinNhanLuu } from './phien';
 import type { PhanLoaiLenh } from './lenh';
-import { chayToolAgent, soFileDaSua, xoaNhatKyHoanTac } from './tools';
-import { huyTatCa, xoaQuyenDaCap, type YeuCauXinPhep } from './xinPhep';
+import { chayToolAgent, soFileDaSua } from './tools';
+import { taoSoCuoc, type SoCuoc } from './so';
+import { huyTatCa, type YeuCauXinPhep } from './xinPhep';
 
 /** Trần vòng lặp phía app. RỘNG HƠN trần bước của máy chủ (30) để máy chủ mới là bên nói dừng. */
 const MAX_VONG = 40;
@@ -80,58 +81,126 @@ export interface BoiCanh {
  * `tool_calls` và `tool_call_id` — thứ giao thức cần nhưng người dùng không
  * bao giờ nhìn thấy.
  */
-let hoiThoai: TinNhan[] = [];
-let dangChay: AbortController | null = null;
-
 /**
- * Phiên đang mở. Sinh khi có câu hỏi ĐẦU TIÊN, không phải khi mở màn hình —
- * mở màn hình rồi đóng lại không tạo ra việc gì để nhớ.
+ * MỘT CUỘC HỘI THOẠI đang mở.
+ *
+ * Trước khi có nhiều tab, tất cả những thứ dưới đây là biến module. Đúng khi
+ * chỉ có một cuộc, và sai CÂM LẶNG ngay khi có hai: lượt đang chạy ở tab A ghi
+ * kết quả vào hội thoại mà tab B vừa chuyển sang, nút Hoàn tác lùi nhầm file,
+ * quyền cấp ở tab này tự áp cho tab kia.
  */
-let phienId: string | null = null;
-/** Thư mục dự án lúc phiên bắt đầu, để danh sách phiên nói được việc đó thuộc dự án nào. */
-let phienDuAn: string | null = null;
-
-export function phienHienTai(): string | null {
-  return phienId;
+interface CuocHoiThoai {
+  /** Id của TAB. Ổn định suốt đời tab — React key theo nó, đổi là remount. */
+  id: string;
+  /**
+   * Id của PHIÊN trên đĩa. Tách khỏi `id` có chủ ý.
+   *
+   * Mở một phiên cũ vào tab đang có thì tab KHÔNG được đổi id: `key={id}` ở
+   * renderer khiến React remount component và xoá sạch bảng ghi vừa nạp — đúng
+   * lỗi đã dính khi thêm nhiều tab. Nên tab giữ id của nó, chỉ đổi chỗ nó ghi
+   * xuống đĩa.
+   */
+  phienId: string;
+  hoiThoai: TinNhan[];
+  duAn: string | null;
+  dangChay: AbortController | null;
+  so: SoCuoc;
 }
 
-/** Nạp một phiên cũ vào bộ nhớ làm việc. Sau lời gọi này, gõ tiếp là đi tiếp việc đó. */
-export function napPhien(id: string, tinNhan: TinNhanLuu[], duAn: string | null): void {
-  huyLuot();
-  hoiThoai = tinNhan as TinNhan[];
-  phienId = id;
-  phienDuAn = duAn;
+const cuoc = new Map<string, CuocHoiThoai>();
+
+function layCuoc(id: string): CuocHoiThoai {
+  let c = cuoc.get(id);
+  if (!c) {
+    c = { id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc() };
+    cuoc.set(id, c);
+  }
+  return c;
+}
+
+/** Sinh id cho một cuộc mới. Cũng chính là id phiên lưu xuống đĩa. */
+export function taoCuoc(): string {
+  const id = `p${Date.now().toString(36)}${Math.floor(Math.random() * 1e4).toString(36)}`;
+  layCuoc(id);
+  return id;
+}
+
+/**
+ * Xoá nội dung MỌI cuộc đang mở.
+ *
+ * Dùng khi đổi thư mục dự án: bối cảnh cũ hỏng với TẤT CẢ các tab, không chỉ
+ * tab đang nhìn. Giữ lại thì agent ở tab bên cạnh vẫn tin vào những file nó đọc
+ * ở dự án TRƯỚC và trả lời về một dự án không còn mở.
+ */
+export function xoaMoiCuoc(): void {
+  for (const [id] of cuoc) xoaHoiThoai(id);
+}
+
+export function dongCuoc(id: string): void {
+  huyLuotCua(id);
+  cuoc.delete(id);
+}
+
+/** Nạp một phiên cũ thành một cuộc đang mở. Gõ tiếp là đi tiếp việc đó. */
+export function napPhien(cuocId: string, phienId: string, tinNhan: TinNhanLuu[], duAn: string | null): void {
+  const c = layCuoc(cuocId);
+  huyLuotCua(cuocId);
+  c.phienId = phienId;
+  c.hoiThoai = tinNhan as TinNhan[];
+  c.duAn = duAn;
   // Quyền đã cấp và nhật ký hoàn tác KHÔNG khôi phục theo. Hoàn tác một thay
   // đổi từ hôm qua là ghi đè lên thứ người dùng có thể đã sửa tiếp bằng tay; và
   // quyền "cho phép cả file này" cấp cho phiên trước thì hết hiệu lực cùng
   // phiên đó — mở lại là một lần ngồi xuống mới.
-  xoaQuyenDaCap();
-  xoaNhatKyHoanTac();
+  c.so = taoSoCuoc();
 }
 
-export function xoaHoiThoai(): void {
-  hoiThoai = [];
-  phienId = null;
-  phienDuAn = null;
+export function soCuaCuoc(id: string): SoCuoc {
+  return layCuoc(id).so;
+}
+
+export function soFileDaSuaCua(id: string): number {
+  return soFileDaSua(layCuoc(id).so);
+}
+
+/** Có cuộc nào đang chạy không — dùng để chặn đổi quyền giữa chừng. */
+export function coCuocDangChay(): boolean {
+  for (const [, c] of cuoc) if (c.dangChay) return true;
+  return false;
+}
+
+export function cuocDangChay(id: string): boolean {
+  return layCuoc(id).dangChay !== null;
+}
+
+/** Xoá nội dung một cuộc nhưng giữ nó mở (nút "việc mới" trong cùng tab). */
+export function xoaHoiThoai(id: string): void {
+  const c = layCuoc(id);
+  huyLuotCua(id);
+  c.hoiThoai = [];
+  c.duAn = null;
+  // Việc mới trong cùng tab ⇒ phiên mới. Giữ `phienId` cũ là ghi đè lên việc
+  // trước bằng một hội thoại rỗng.
+  c.phienId = c.id;
   // Bắt đầu việc mới ⇒ quên quyền đã cấp và quên nhật ký hoàn tác. Quyền
   // "cho phép cả file này" được cấp cho MỘT việc, không phải cấp vĩnh viễn;
   // và giữ nhật ký cũ lại thì nút Hoàn tác sẽ lùi cả những thay đổi thuộc
   // việc trước mà người dùng đã chấp nhận xong xuôi.
-  huyTatCa();
-  xoaQuyenDaCap();
-  xoaNhatKyHoanTac();
+  c.so = taoSoCuoc();
 }
 
-export function dangChayKhong(): boolean {
-  return dangChay !== null;
-}
-
-/** Người dùng bấm dừng. */
-export function huyLuot(): void {
-  dangChay?.abort();
-  dangChay = null;
+/** Người dùng bấm dừng ở một cuộc cụ thể. */
+export function huyLuotCua(id: string): void {
+  const c = cuoc.get(id);
+  if (!c) return;
+  c.dangChay?.abort();
+  c.dangChay = null;
   // Thẻ duyệt đang mở phải được giải phóng, nếu không vòng lặp treo mãi ở
   // `await hoiNguoiDung()` dù lượt đã bị huỷ.
+  //
+  // ⚠️ `huyTatCa()` huỷ MỌI thẻ đang treo, kể cả của cuộc khác. Chấp nhận được
+  // vì chỉ MỘT cuộc chạy tại một thời điểm (xem `chayLuot`), nên không bao giờ
+  // có hai thẻ của hai cuộc cùng treo.
   huyTatCa();
 }
 
@@ -142,11 +211,24 @@ export function huyLuot(): void {
  * chục giây tới vài phút), không phải một lời gọi request/response.
  */
 export async function chayLuot(
+  cuocId: string,
   cauHoi: string,
   boiCanh: BoiCanh,
   phat: (e: SuKienAgent) => void,
 ): Promise<void> {
-  if (dangChay) throw new Error('Đang có một lượt chạy dở. Hãy dừng nó trước.');
+  const c = layCuoc(cuocId);
+  if (c.dangChay) throw new Error('Việc này đang chạy dở. Hãy dừng nó trước.');
+  /**
+   * CHỈ MỘT cuộc chạy tại một thời điểm, dù mở bao nhiêu tab.
+   *
+   * Không phải vì khó làm — mà vì hai agent chạy cùng lúc trên CÙNG một thư mục
+   * dự án là công thức của tai nạn: cái này sửa file cái kia vừa đọc, hai thẻ
+   * duyệt chen nhau trên màn hình, và hạn mức tiêu gấp đôi mà không ai để ý.
+   * Mở nhiều tab để CHUYỂN QUA LẠI và đọc lại việc cũ; chạy thì lần lượt.
+   */
+  if (coCuocDangChay()) {
+    throw new Error('Một việc khác đang chạy. Hãy đợi hoặc dừng nó trước — mỗi lúc chỉ chạy được một việc.');
+  }
 
   const phien = readStoredSession();
   if (!phien) {
@@ -155,14 +237,9 @@ export async function chayLuot(
   }
 
   const dieuKhien = new AbortController();
-  dangChay = dieuKhien;
-  hoiThoai.push({ role: 'user', content: cauHoi });
-
-  // Câu hỏi đầu tiên ⇒ đây là một việc mới, đặt tên cho nó.
-  if (!phienId) {
-    phienId = `p${Date.now().toString(36)}${Math.floor(Math.random() * 1e4).toString(36)}`;
-    phienDuAn = boiCanh.goc ? tenThuMuc(boiCanh.goc) : null;
-  }
+  c.dangChay = dieuKhien;
+  c.hoiThoai.push({ role: 'user', content: cauHoi });
+  if (!c.duAn && boiCanh.goc) c.duAn = tenThuMuc(boiCanh.goc);
 
   // Chỉ khai báo khả năng khi THẬT SỰ có thư mục. Khai bừa thì máy chủ đưa tool
   // đọc file cho model, model gọi, và app trả lỗi ở mọi lời gọi — agent quay
@@ -194,7 +271,7 @@ export async function chayLuot(
 
       const phanHoi = await mgoiMotLuot({
         token: phien.sessionToken,
-        messages: hoiThoai,
+        messages: c.hoiThoai,
         capabilities,
         ...(boiCanh.goc
           ? {
@@ -226,12 +303,12 @@ export async function chayLuot(
       // rồi lại đứt ở bước 17 là hai sự cố khác nhau.
       daThuLai = false;
 
-      hoiThoai.push(...ketQua.append);
+      c.hoiThoai.push(...ketQua.append);
 
       if (ketQua.stop === 'end' || ketQua.stop === 'max_steps') {
         phat({
           loai: 'xong', hanMuc: ketQua.quota, tienUsd: ketQua.costUsd,
-          daLuoc: ketQua.daLuoc, soFileDaSua: soFileDaSua(),
+          daLuoc: ketQua.daLuoc, soFileDaSua: soFileDaSua(c.so),
         });
         return;
       }
@@ -245,6 +322,7 @@ export async function chayLuot(
         const boiCanhGhi = boiCanh.choSua
           ? {
               signal: dieuKhien.signal,
+              so: c.so,
               xinPhep: (y: YeuCauXinPhep & { diff: KetQuaDiff; taoMoi: boolean }) =>
                 phat({ loai: 'xinPhep', id: y.id, ten: y.ten, duongDan: y.duongDan, taoMoi: y.taoMoi, diff: y.diff }),
             }
@@ -255,6 +333,7 @@ export async function chayLuot(
         const boiCanhLenh = boiCanh.choChayLenh
           ? {
               signal: dieuKhien.signal,
+              so: c.so,
               xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) =>
                 phat({ loai: 'xinPhepLenh', id: y.id, lenh: y.duongDan, phanLoai: y.phanLoai }),
               onRa: (mau: string) => phat({ loai: 'lenhRa', mau }),
@@ -264,7 +343,7 @@ export async function chayLuot(
         const kq = boiCanh.goc
           ? await chayToolAgent(boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh)
           : { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
-        hoiThoai.push({ role: 'tool', tool_call_id: goi.id, content: kq.noiDung });
+        c.hoiThoai.push({ role: 'tool', tool_call_id: goi.id, content: kq.noiDung });
         phat({ loai: 'tool', ten: goi.name, tomTat: kq.tomTat, vong: 'may' });
       }
     }
@@ -274,12 +353,12 @@ export async function chayLuot(
     if (dieuKhien.signal.aborted) phat({ loai: 'huy' });
     else phat({ loai: 'loi', thongDiep: (err as Error).message || 'Lỗi không rõ.' });
   } finally {
-    if (dangChay === dieuKhien) dangChay = null;
+    if (c.dangChay === dieuKhien) c.dangChay = null;
     // Lưu ở `finally`, KHÔNG ở nhánh thành công. Lượt hỏng giữa chừng hay bị
     // người dùng bấm Dừng vẫn chứa những bước agent đã đi và đã trả tiền —
     // mất chúng chỉ vì lượt không kết thúc đẹp là mất đúng thứ đáng giữ nhất.
-    if (phienId) {
-      void luuPhien(phienId, hoiThoai as TinNhanLuu[], phienDuAn).catch(() => {
+    {
+      void luuPhien(c.phienId, c.hoiThoai as TinNhanLuu[], c.duAn).catch(() => {
         /* ghi đĩa hỏng KHÔNG được làm hỏng lượt vừa chạy xong */
       });
     }

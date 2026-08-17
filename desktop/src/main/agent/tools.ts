@@ -25,6 +25,7 @@ import { soSanhDong, type KetQuaDiff } from './diff';
 import { fileBiCam, LoiNguc, moTrongNguc, thuMucBiCam, TRAN_BYTE_FILE } from './jail';
 import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
 import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
+import type { SoCuoc } from './so';
 
 const chay = promisify(execFile);
 
@@ -37,10 +38,14 @@ export interface BoiCanhGhi {
   /** Đẩy thẻ duyệt SỬA FILE lên giao diện. */
   xinPhep: (y: YeuCauXinPhep & { diff: KetQuaDiff; taoMoi: boolean }) => void;
   signal: AbortSignal;
+  /** Sổ của CUỘC hội thoại này — nhật ký hoàn tác + quyền đã cấp. */
+  so: SoCuoc;
 }
 
 /** Ngữ cảnh cho `run_command`. Tách khỏi `BoiCanhGhi` vì hai quyền BẬT RIÊNG. */
 export interface BoiCanhLenh {
+  /** Sổ của CUỘC hội thoại này. */
+  so: SoCuoc;
   /** Đẩy thẻ duyệt LỆNH lên giao diện — kèm phân loại nguy hiểm để người dùng thấy lý do. */
   xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) => void;
   /** Đầu ra chảy ra màn hình khi lệnh còn đang chạy. */
@@ -60,19 +65,8 @@ export interface BoiCanhLenh {
  * trong đó — `git checkout` để hoàn tác agent sẽ cuốn theo cả việc họ đang làm
  * dở. Bản sao trong RAM chỉ biết đúng những file agent đã đụng.
  */
-const nhatKyHoanTac = new Map<string, string | null>();
-
-export function xoaNhatKyHoanTac(): void {
-  nhatKyHoanTac.clear();
-}
-
-export function soFileDaSua(): number {
-  return nhatKyHoanTac.size;
-}
-
-/** Danh sách file agent đã sửa trong việc này (đường dẫn tuyệt đối). */
-export function fileDaSua(): string[] {
-  return [...nhatKyHoanTac.keys()];
+export function soFileDaSua(so: SoCuoc): number {
+  return so.nhatKyHoanTac.size;
 }
 
 /**
@@ -82,10 +76,10 @@ export function fileDaSua(): string[] {
  * được 4/5 file vẫn tốt hơn nhiều so với dừng ở file thứ nhất rồi bỏ mặc bốn
  * file kia đã đổi.
  */
-export async function hoanTacTatCa(): Promise<{ soFile: number; loi: string[] }> {
+export async function hoanTacTatCa(so: SoCuoc): Promise<{ soFile: number; loi: string[] }> {
   const loi: string[] = [];
   let soFile = 0;
-  for (const [duongDan, goc] of nhatKyHoanTac) {
+  for (const [duongDan, goc] of so.nhatKyHoanTac) {
     try {
       if (goc === null) await fs.rm(duongDan, { force: true });
       else await fs.writeFile(duongDan, goc, 'utf8');
@@ -94,7 +88,7 @@ export async function hoanTacTatCa(): Promise<{ soFile: number; loi: string[] }>
       loi.push(`${path.basename(duongDan)}: ${(err as Error).message}`);
     }
   }
-  nhatKyHoanTac.clear();
+  so.nhatKyHoanTac.clear();
   return { soFile, loi };
 }
 
@@ -248,8 +242,8 @@ const TRAN_BYTE_GHI = 512 * 1024;
  * chỉ ghi lần đầu — thứ tự này quan trọng: ghi đĩa trước rồi mới lưu bản gốc
  * là lưu nhầm bản đã bị sửa.
  */
-async function ghiVaNhoDeHoanTac(duongDan: string, noiDungMoi: string, goc: string | null): Promise<void> {
-  if (!nhatKyHoanTac.has(duongDan)) nhatKyHoanTac.set(duongDan, goc);
+async function ghiVaNhoDeHoanTac(so: SoCuoc, duongDan: string, noiDungMoi: string, goc: string | null): Promise<void> {
+  if (!so.nhatKyHoanTac.has(duongDan)) so.nhatKyHoanTac.set(duongDan, goc);
   await fs.mkdir(path.dirname(duongDan), { recursive: true });
   await fs.writeFile(duongDan, noiDungMoi, 'utf8');
 }
@@ -306,15 +300,16 @@ async function toolEditFile(goc: string, args: Record<string, unknown>, ghi: Boi
   }
 
   const diff = soSanhDong(noiDung, noiDungMoi);
-  const tuDong = daChoPhepCaFile(tuongDoi);
+  const tuDong = daChoPhepCaFile(ghi.so.quyenDaCap, tuongDoi);
   const quyet = await hoiNguoiDung(
     { ten: 'edit_file', duongDan: tuongDoi },
     (y) => ghi.xinPhep({ ...y, diff, taoMoi: false }),
     ghi.signal,
+    ghi.so.quyenDaCap,
   );
   if (quyet === 'tuChoi') return loiTuChoi(`sửa ${tuongDoi}`);
 
-  await ghiVaNhoDeHoanTac(dich, noiDungMoi, noiDung);
+  await ghiVaNhoDeHoanTac(ghi.so, dich, noiDungMoi, noiDung);
   return {
     noiDung: `Đã sửa ${tuongDoi}: +${diff.soThem} −${diff.soBo} dòng. Người dùng đã duyệt.`,
     tomTat: `+${diff.soThem} −${diff.soBo}${tuDong ? ' (tự duyệt)' : ''}`,
@@ -345,10 +340,11 @@ async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: B
     { ten: 'create_file', duongDan: tuongDoi },
     (y) => ghi.xinPhep({ ...y, diff, taoMoi: true }),
     ghi.signal,
+    ghi.so.quyenDaCap,
   );
   if (quyet === 'tuChoi') return loiTuChoi(`tạo ${tuongDoi}`);
 
-  await ghiVaNhoDeHoanTac(dich, noiDung, null);
+  await ghiVaNhoDeHoanTac(ghi.so, dich, noiDung, null);
   return {
     noiDung: `Đã tạo ${tuongDoi} (${noiDung.split('\n').length} dòng). Người dùng đã duyệt.`,
     tomTat: `tạo mới, ${noiDung.split('\n').length} dòng`,
@@ -388,6 +384,7 @@ async function toolRunCommand(
     { ten: 'run_command', duongDan: lenh, khoa: lenh, choNho: phanLoai.choNho },
     (y) => boiCanh.xinPhepLenh({ ...y, phanLoai }),
     boiCanh.signal,
+    boiCanh.so.quyenDaCap,
   );
   if (quyet === 'tuChoi') {
     return {

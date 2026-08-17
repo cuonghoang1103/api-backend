@@ -26,23 +26,38 @@ import { LichSu } from './LichSu';
 import { XinPhep, XinPhepLenh } from './XinPhep';
 
 export function AgentMode({
+  cuocId,
   info,
   thuMuc,
   datThuMuc,
   napLai,
+  datTieuDe,
 }: {
+  /** Cuộc (tab) mà màn hình này thuộc về. Mọi lời gọi IPC mang id này. */
+  cuocId: string;
   info: AgentInfo;
   thuMuc: AgentWorkspace | null;
   datThuMuc: (w: AgentWorkspace) => void;
   napLai: () => void;
+  /** Báo tiêu đề lên cha để thanh tab hiện đúng tên việc. */
+  datTieuDe?: (t: string) => void;
 }) {
   const {
     trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac,
     phien, phienDangMo, moPhien, xoaPhien,
-  } = useAgent(info);
+  } = useAgent(cuocId, info);
   const [nhap, datNhap] = useState('');
   const [moLichSu, datMoLichSu] = useState(false);
   const cuonRef = useRef<HTMLDivElement>(null);
+
+  // Tiêu đề tab = câu hỏi ĐẦU TIÊN, giống cách đặt tên phiên ở main. Một tab
+  // tên "Việc mới" mãi mãi thì mở ba tab là không phân biệt được cái nào.
+  const cauDau = trangThai.muc.find((m) => m.kieu === 'nguoi');
+  useEffect(() => {
+    if (cauDau?.kieu === 'nguoi') {
+      datTieuDe?.(cauDau.text.slice(0, 40));
+    }
+  }, [cauDau, datTieuDe]);
 
   // Tự cuộn xuống đáy khi có nội dung mới. Chỉ khi người dùng ĐANG ở gần đáy:
   // kéo lên đọc lại một đoạn cũ rồi bị giật xuống là mất chỗ đang đọc.

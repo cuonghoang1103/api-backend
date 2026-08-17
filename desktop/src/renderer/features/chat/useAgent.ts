@@ -80,7 +80,14 @@ export interface TrangThaiAgent {
   soFileDaSua: number;
 }
 
-export function useAgent(info: AgentInfo | null) {
+/**
+ * Một cuộc hội thoại (một tab).
+ *
+ * ⚠️ MỖI tab gọi hook này, nên MỌI tab cùng nghe kênh `agent:event`. Sự kiện
+ * mang `cuocId` và hook LỌC theo nó — thiếu bước lọc thì chữ của tab đang chạy
+ * chảy vào bảng ghi của mọi tab khác, và không có gì báo lỗi cả.
+ */
+export function useAgent(cuocId: string, info: AgentInfo | null) {
   const [muc, datMuc] = useState<MucHienThi[]>([]);
   const [dangChay, datDangChay] = useState(false);
   const [dangNghi, datDangNghi] = useState(false);
@@ -108,6 +115,7 @@ export function useAgent(info: AgentInfo | null) {
 
     return cau.on('agent:event', (payload) => {
       const e = payload as AgentUiEvent;
+      if (e.cuocId !== cuocId) return; // sự kiện của tab khác
       switch (e.loai) {
         case 'batDau':
           datDangNghi(true);
@@ -171,7 +179,7 @@ export function useAgent(info: AgentInfo | null) {
           break;
       }
     });
-  }, [themChu]);
+  }, [themChu, cuocId]);
 
   /** Việc đã lưu + phiên đang mở. Nạp lại sau mỗi lượt để danh sách luôn đúng. */
   const [phien, datPhien] = useState<AgentPhien[]>([]);
@@ -185,8 +193,9 @@ export function useAgent(info: AgentInfo | null) {
   useEffect(() => { void napPhien(); }, [napPhien]);
 
   const moPhien = useCallback(async (id: string) => {
-    const kq = await window.cuongthai?.agent.moPhien(id);
+    const kq = await window.cuongthai?.agent.moPhien(cuocId, id);
     if (!kq) return;
+
     // Bảng ghi khôi phục ĐƠN GIẢN hơn bản gốc (không có thẻ duyệt kèm diff) —
     // xem `dungLaiHienThi` ở main. Nói rõ ra bằng một dòng, thay vì để người
     // dùng tự hỏi vì sao lịch sử trông khác lúc họ đang chạy.
@@ -199,7 +208,7 @@ export function useAgent(info: AgentInfo | null) {
     datPhienDangMo(id);
     datTienPhien(0);
     datSoFileDaSua(0);
-  }, []);
+  }, [cuocId]);
 
   const xoaPhien = useCallback(async (id: string) => {
     await window.cuongthai?.agent.xoaPhien(id);
@@ -219,7 +228,7 @@ export function useAgent(info: AgentInfo | null) {
     datDangChay(true);
     datDangNghi(true);
     try {
-      await cau.agent.send(text);
+      await cau.agent.send(cuocId, text);
     } catch (err) {
       datMuc((truoc) => [...truoc, { kieu: 'loi', text: (err as Error).message }]);
     } finally {
@@ -230,21 +239,21 @@ export function useAgent(info: AgentInfo | null) {
       // lượt kết thúc. Nạp lại ở đây thay vì theo đồng hồ.
       void napPhien();
     }
-  }, [napPhien]);
+  }, [napPhien, cuocId]);
 
   const dung = useCallback(() => {
-    void window.cuongthai?.agent.cancel();
-  }, []);
+    void window.cuongthai?.agent.cancel(cuocId);
+  }, [cuocId]);
 
   const batDauLai = useCallback(async () => {
-    await window.cuongthai?.agent.reset();
+    await window.cuongthai?.agent.reset(cuocId);
     datMuc([]);
     datTienPhien(0);
     datSoFileDaSua(0);
     datDangChay(false);
     datDangNghi(false);
     datPhienDangMo(null);
-  }, []);
+  }, [cuocId]);
 
   /**
    * Trả lời thẻ duyệt.
@@ -255,11 +264,11 @@ export function useAgent(info: AgentInfo | null) {
    * thay đổi chưa bao giờ được ghi.
    */
   const traLoiXinPhep = useCallback((id: string, quyetDinh: AgentQuyetDinh) => {
-    void window.cuongthai?.agent.traLoiXinPhep(id, quyetDinh);
-  }, []);
+    void window.cuongthai?.agent.traLoiXinPhep(cuocId, id, quyetDinh);
+  }, [cuocId]);
 
   const hoanTac = useCallback(async (): Promise<{ soFile: number; loi: string[] } | null> => {
-    const kq = await window.cuongthai?.agent.hoanTac();
+    const kq = await window.cuongthai?.agent.hoanTac(cuocId);
     if (!kq) return null;
     datSoFileDaSua(0);
     datDangChay(false);
@@ -272,7 +281,7 @@ export function useAgent(info: AgentInfo | null) {
         : `Đã trả ${kq.soFile} file về nguyên trạng.`,
     }]);
     return kq;
-  }, []);
+  }, [cuocId]);
 
   return {
     trangThai: { muc, dangChay, dangNghi, hanMuc, tienPhien, soFileDaSua } satisfies TrangThaiAgent,

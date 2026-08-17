@@ -4099,35 +4099,42 @@ model NoteChapter {
 }
 
 model Note {
-  id           Int       @id @default(autoincrement())
-  userId       Int       @map("user_id")
-  subjectId    Int       @map("subject_id")
+  id             Int       @id @default(autoincrement())
+  userId         Int       @map("user_id")
+  subjectId      Int       @map("subject_id")
   // Optional: a note can live directly under a subject (no chapter).
-  chapterId    Int?      @map("chapter_id")
-  title        String    @default("Untitled") @db.VarChar(300)
+  chapterId      Int?      @map("chapter_id")
+  title          String    @default("Untitled") @db.VarChar(300)
   // Rich editor document (TipTap/ProseMirror JSON). Source of truth.
-  contentJson  Json?     @map("content_json")
+  contentJson    Json?     @map("content_json")
   // Server-rendered HTML cache of contentJson for fast read/print.
-  contentHtml  String?   @map("content_html") @db.Text
-  tags         String[]  @default([])
-  isPinned     Boolean   @default(false) @map("is_pinned")
-  isFavorite   Boolean   @default(false) @map("is_favorite")
-  isArchived   Boolean   @default(false) @map("is_archived")
-  needsReview  Boolean   @default(false) @map("needs_review")
-  reviewDate   DateTime? @map("review_date")
+  contentHtml    String?   @map("content_html") @db.Text
+  tags           String[]  @default([])
+  isPinned       Boolean   @default(false) @map("is_pinned")
+  isFavorite     Boolean   @default(false) @map("is_favorite")
+  isArchived     Boolean   @default(false) @map("is_archived")
+  needsReview    Boolean   @default(false) @map("needs_review")
+  reviewDate     DateTime? @map("review_date")
   // Soft-delete: notes stay recoverable for 30 days before the
   // nightly retention job permanently removes them.
-  deletedAt    DateTime? @map("deleted_at")
+  deletedAt      DateTime? @map("deleted_at")
   // Monotonic snapshot number. It only changes when a NoteVersion
   // row is created, not on every metadata-only update.
-  version      Int       @default(1)
+  version        Int       @default(1)
   // Sub-pages. A note nested under another still belongs to the same
   // subject, so sharing and trash keep working unchanged; only the tree
   // rendering and breadcrumb care about this.
-  parentNoteId Int?      @map("parent_note_id")
-  sortOrder    Int       @default(0) @map("sort_order")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  parentNoteId   Int?      @map("parent_note_id")
+  // Ghi chú này là THÂN TRANG của một dòng database, không phải trang người
+  // dùng tự tạo. Cờ riêng chứ không suy ra từ quan hệ `databaseRow`: thanh bên
+  // và các danh sách phẳng lọc theo nó ở MỌI lượt tải, và một cột boolean có
+  // index rẻ hơn hẳn truy vấn con tương quan trên đường nóng.
+  // Tìm kiếm thì VẪN trả về chúng — Notion cũng vậy, và một trang đã viết mà
+  // tìm không ra thì coi như mất.
+  isDatabasePage Boolean   @default(false) @map("is_database_page")
+  sortOrder      Int       @default(0) @map("sort_order")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
 
   user                  User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
   subject               NoteSubject                @relation(fields: [subjectId], references: [id], onDelete: Cascade)
@@ -4145,6 +4152,7 @@ model Note {
   childNotes            Note[]                     @relation("NoteSubPages")
   outgoingReferences    NoteReference[]            @relation("NoteReferenceSource")
   incomingReferences    NoteReference[]            @relation("NoteReferenceTarget")
+  databaseRow           NoteDatabaseRow?           @relation("NoteDatabaseRowPage")
 
   @@index([userId, subjectId, chapterId, sortOrder], name: "idx_notes_user_tree")
   @@index([userId, updatedAt(sort: Desc)], name: "idx_notes_user_recent")
@@ -4225,12 +4233,20 @@ model NoteDatabaseRow {
   createdById Int?     @map("created_by_id")
   updatedById Int?     @map("updated_by_id")
   sortOrder   Int      @default(0) @map("sort_order")
+  // Thân trang của dòng — như Notion, mở một dòng ra là một TRANG viết được.
+  // Tạo LƯỜI: chỉ sinh khi người dùng mở trang lần đầu, nên một bảng 500 dòng
+  // không đẻ ra 500 ghi chú rỗng.
+  pageNoteId  Int?     @unique(map: "uk_note_database_row_page") @map("page_note_id")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   database  NoteDatabase          @relation(fields: [databaseId], references: [id], onDelete: Cascade)
   createdBy User?                 @relation("NoteDatabaseRowCreator", fields: [createdById], references: [id], onDelete: SetNull)
   updatedBy User?                 @relation("NoteDatabaseRowUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+  // SetNull chứ không Cascade: xoá thân trang thì dòng vẫn còn (mất bài viết,
+  // giữ dữ liệu). Chiều ngược lại — xoá dòng thì xoá trang — do service làm,
+  // vì khoá ngoại nằm ở phía dòng nên không diễn đạt được bằng cascade.
+  page      Note?                 @relation("NoteDatabaseRowPage", fields: [pageNoteId], references: [id], onDelete: SetNull)
   cells     NoteDatabaseCell[]
   // Hai chiều của cùng một bảng liên kết — xem NoteDatabaseRowLink.
   linksOut  NoteDatabaseRowLink[] @relation("NoteRowLinkFrom")

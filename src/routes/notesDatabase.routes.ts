@@ -26,6 +26,7 @@ import {
   reorderProperties,
   reorderRows,
   updateDatabase,
+  openRowPage,
   updateProperty,
   updateRow,
   updateView,
@@ -154,6 +155,15 @@ router.patch('/properties/:propertyId', async (req: any, res: Response<ApiRespon
 router.delete('/properties/:propertyId', async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const data = await deleteProperty(req.user.userId, Number(req.params.propertyId));
+    res.json({ success: true, data });
+  } catch (error) { next(error); }
+});
+
+// Thân trang của một dòng — tạo lười ở lần mở đầu tiên. Khai báo TRƯỚC
+// '/rows/:rowId' để đoạn literal 'page' không bị nuốt bởi tham số.
+router.get('/rows/:rowId/page', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await openRowPage(req.user.userId, Number(req.params.rowId));
     res.json({ success: true, data });
   } catch (error) { next(error); }
 });

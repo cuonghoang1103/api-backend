@@ -932,7 +932,10 @@ export const noteDatabaseApi = {
   updateRow: (rowId: number, values: NoteDatabaseRowValues) =>
     api.patch<{ data: NoteDatabaseRow }>(`/notes-databases/rows/${rowId}`, { values }),
   deleteRow: (rowId: number) =>
-    api.delete<{ data: { id: number; deleted: boolean } }>(`/notes-databases/rows/${rowId}`),
+    api.delete<{ data: { id: number; deleted: boolean; pageNoteId: number | null } }>(`/notes-databases/rows/${rowId}`),
+  /** Thân trang của dòng — máy chủ tạo lười ở lần mở đầu tiên. */
+  openRowPage: (rowId: number) =>
+    api.get<{ data: import('@/types').NoteFull }>(`/notes-databases/rows/${rowId}/page`),
   reorderRows: (databaseId: number, orderedIds: number[]) =>
     api.patch<{ data: { reordered: number } }>(`/notes-databases/${databaseId}/rows/reorder`, { orderedIds }),
 

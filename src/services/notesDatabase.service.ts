@@ -969,8 +969,21 @@ export async function deleteRow(userId: number, rowId: number) {
   });
   if (!row) throw new AppError('Dòng không tồn tại', 404, 'ROW_NOT_FOUND');
   await assertDatabaseAccess(userId, row.databaseId, true);
+  // Thân trang phải đi theo dòng. Khoá ngoại nằm ở phía dòng nên cascade của
+  // Postgres không diễn đạt được chiều này — xoá dòng mà bỏ trang lại thì
+  // trang thành mồ côi: không thanh bên nào hiện (cờ is_database_page), không
+  // dòng nào trỏ tới, chỉ tìm kiếm mới thấy.
+  const pageNoteId = await pageNoteIdOfRow(rowId);
   await prisma.noteDatabaseRow.delete({ where: { id: rowId } });
-  return { id: rowId, deleted: true };
+  if (pageNoteId) {
+    // Vào thùng rác chứ không xoá thẳng: xoá nhầm một dòng có bài viết dài mà
+    // không lấy lại được là mất mát thật, và thùng rác đã giữ 30 ngày sẵn.
+    await prisma.note.updateMany({
+      where: { id: pageNoteId, deletedAt: null },
+      data: { deletedAt: new Date(), isPinned: false },
+    });
+  }
+  return { id: rowId, deleted: true, pageNoteId };
 }
 
 export async function reorderRows(userId: number, databaseId: number, orderedIds: unknown) {
@@ -1115,4 +1128,162 @@ export async function deleteView(userId: number, viewId: number) {
   }
   await prisma.noteDatabaseView.delete({ where: { id: viewId } });
   return { id: viewId, deleted: true };
+}
+
+// ─── Dòng là một TRANG (Phase 7) ──────────────────────────────
+//
+// Trong Notion, mở một dòng ra là mở một TRANG viết được, không phải một hộp
+// thoại các ô. Ở đây thân trang là một `Note` thật, nên nó dùng lại nguyên
+// khối hạ tầng đã có: cùng chỉnh sửa thời gian thực, lịch sử phiên bản, thảo
+// luận, thùng rác, đính kèm — không phải viết lại thứ nào.
+//
+// Trang sinh LƯỜI, chỉ khi người dùng mở lần đầu. Một bảng 500 dòng không đẻ
+// ra 500 ghi chú rỗng, và bảng cũ không cần migration dữ liệu.
+
+/** Giá trị ô tiêu đề của một dòng, dùng làm tên trang. */
+async function rowTitleText(databaseId: number, rowId: number): Promise<string> {
+  const titleProperty = await prisma.noteDatabaseProperty.findFirst({
+    where: { databaseId, isTitle: true },
+    select: { id: true },
+  });
+  if (!titleProperty) return 'Không có tiêu đề';
+  const cell = await prisma.noteDatabaseCell.findFirst({
+    where: { rowId, propertyId: titleProperty.id },
+    select: { value: true },
+  });
+  const raw = cell?.value;
+  const text = raw === null || raw === undefined ? '' : String(raw).trim();
+  return (text || 'Không có tiêu đề').slice(0, 300);
+}
+
+/**
+ * Mở (và nếu cần thì tạo) thân trang của một dòng.
+ *
+ * ĐỌC chỉ cần quyền xem; TẠO cần quyền sửa. Tách hai mức vì nếu không, người
+ * chỉ có quyền xem bấm vào một dòng chưa ai mở bao giờ sẽ nhận lỗi 403 khó
+ * hiểu — trong khi thứ họ muốn chỉ là xem, và trang thì chưa tồn tại.
+ */
+export async function openRowPage(userId: number, rowId: number) {
+  assertId(rowId, 'rowId');
+  const row = await prisma.noteDatabaseRow.findUnique({
+    where: { id: rowId },
+    select: { id: true, databaseId: true, pageNoteId: true },
+  });
+  if (!row) throw new AppError('Dòng không tồn tại', 404, 'ROW_NOT_FOUND');
+  const { database, access } = await assertDatabaseAccess(userId, row.databaseId, false);
+  // `assertDatabaseAccess` đã ném lỗi nếu không có quyền, nhưng kiểu trả về
+  // vẫn là `NoteAccessRole | null` nên TS không thu hẹp qua object. Thu hẹp
+  // tại chỗ thay vì đổi chữ ký hàm dùng chung.
+  const permission = access.permission;
+  if (!permission) throw new AppError('Bạn không có quyền truy cập', 403, 'ACCESS_DENIED');
+  const title = await rowTitleText(row.databaseId, row.id);
+
+  if (row.pageNoteId) {
+    const existing = await prisma.note.findFirst({
+      where: { id: row.pageNoteId, deletedAt: null },
+      include: {
+        attachments: { orderBy: { sortOrder: 'asc' } },
+        links: { orderBy: { sortOrder: 'asc' } },
+        vocabEntries: { orderBy: { sortOrder: 'asc' } },
+      },
+    });
+    // Trang có thể đã vào thùng rác qua giao diện Ghi chú. Rơi xuống nhánh tạo
+    // lại bên dưới thay vì trả 404 — dòng vẫn còn thì trang phải mở lại được.
+    if (existing) {
+      if (existing.title !== title && canEditSharedNote(permission)) {
+        // Ô tiêu đề là nguồn sự thật. Đồng bộ lúc mở để đổi tên dòng ở bảng
+        // hiện ra ngay trên trang, không cần lượt ghi riêng.
+        return prisma.note.update({
+          where: { id: existing.id },
+          data: { title },
+          include: {
+            attachments: { orderBy: { sortOrder: 'asc' } },
+            links: { orderBy: { sortOrder: 'asc' } },
+            vocabEntries: { orderBy: { sortOrder: 'asc' } },
+          },
+        });
+      }
+      return existing;
+    }
+  }
+
+  if (!canEditSharedNote(permission)) {
+    throw new AppError('Dòng này chưa có trang, cần quyền chỉnh sửa để tạo', 403, 'EDIT_PERMISSION_REQUIRED');
+  }
+
+  return prisma.$transaction(async (tx) => {
+    const note = await tx.note.create({
+      data: {
+        // Chủ môn học, KHÔNG phải người đang bấm: giữ bất biến
+        // note.userId === subject.userId mà cả module Ghi chú dựa vào.
+        userId: access.ownerId,
+        subjectId: database.subjectId,
+        title,
+        isDatabasePage: true,
+      },
+    });
+    // Ảnh chụp v1, đúng như createNote làm — thiếu nó thì lịch sử phiên bản
+    // của trang này bắt đầu từ hư không và bản đầu tiên không khôi phục được.
+    await tx.noteVersion.create({
+      data: {
+        noteId: note.id, userId, version: 1, title: note.title,
+        contentJson: Prisma.JsonNull, contentHtml: null, tags: [], origin: 'INITIAL',
+      },
+    });
+    await tx.noteDatabaseRow.update({ where: { id: rowId }, data: { pageNoteId: note.id } });
+    return tx.note.findUniqueOrThrow({
+      where: { id: note.id },
+      include: {
+        attachments: { orderBy: { sortOrder: 'asc' } },
+        links: { orderBy: { sortOrder: 'asc' } },
+        vocabEntries: { orderBy: { sortOrder: 'asc' } },
+      },
+    });
+  });
+}
+
+/**
+ * Đổi tên trang thì đổi luôn ô tiêu đề của dòng.
+ *
+ * Chiều ngược của phép đồng bộ trong `openRowPage`. Có cả hai chiều thì tiêu
+ * đề hành xử như MỘT trường duy nhất, giống Notion; thiếu chiều này thì người
+ * dùng sửa tên trên trang, quay lại bảng thấy tên cũ, rồi lần mở sau tên vừa
+ * sửa bị ghi đè mất.
+ *
+ * Không bao giờ ném lỗi ra ngoài: đây là hệ quả phụ của một lượt lưu ghi chú.
+ */
+export async function syncRowTitleFromPage(noteId: number, title: string): Promise<void> {
+  try {
+    const row = await prisma.noteDatabaseRow.findUnique({
+      where: { pageNoteId: noteId },
+      select: { id: true, databaseId: true },
+    });
+    if (!row) return;
+    const titleProperty = await prisma.noteDatabaseProperty.findFirst({
+      where: { databaseId: row.databaseId, isTitle: true },
+      select: { id: true },
+    });
+    if (!titleProperty) return;
+    const clean = title.trim().slice(0, 2000);
+    if (!clean) {
+      await prisma.noteDatabaseCell.deleteMany({ where: { rowId: row.id, propertyId: titleProperty.id } });
+      return;
+    }
+    await prisma.noteDatabaseCell.upsert({
+      where: { rowId_propertyId: { rowId: row.id, propertyId: titleProperty.id } },
+      create: { rowId: row.id, propertyId: titleProperty.id, value: clean },
+      update: { value: clean },
+    });
+  } catch {
+    /* chỉ là đồng bộ hiển thị */
+  }
+}
+
+/** Thân trang của một dòng sắp bị xoá. Gọi TRƯỚC khi xoá dòng. */
+export async function pageNoteIdOfRow(rowId: number): Promise<number | null> {
+  const row = await prisma.noteDatabaseRow.findUnique({
+    where: { id: rowId },
+    select: { pageNoteId: true },
+  });
+  return row?.pageNoteId ?? null;
 }

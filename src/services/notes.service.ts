@@ -71,7 +71,7 @@ export async function getTree(userId: number) {
           notes: {
             // Sidebar default view hides archived; the user can flip to
             // the "Archive" filter pill to see them.
-            where: { isArchived: false, deletedAt: null },
+            where: { isArchived: false, deletedAt: null, isDatabasePage: false },
             orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'desc' }],
             select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, isArchived: true, needsReview: true, updatedAt: true },
           },
@@ -79,7 +79,7 @@ export async function getTree(userId: number) {
       },
       // Notes that live directly under the subject (no chapter).
       notes: {
-        where: { chapterId: null, isArchived: false, deletedAt: null },
+        where: { chapterId: null, isArchived: false, deletedAt: null, isDatabasePage: false },
         orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'desc' }],
         select: { id: true, title: true, sortOrder: true, isPinned: true, isFavorite: true, isArchived: true, needsReview: true, updatedAt: true },
       },
@@ -91,7 +91,7 @@ export async function getTree(userId: number) {
 /** Recently-updated notes across all subjects (for the "Recent" rail). */
 export async function getRecentNotes(userId: number, limit = 8) {
   return prisma.note.findMany({
-    where: { userId, isArchived: false, deletedAt: null },
+    where: { userId, isArchived: false, deletedAt: null, isDatabasePage: false },
     orderBy: { updatedAt: 'desc' },
     take: Math.min(20, Math.max(1, limit)),
     select: { id: true, title: true, subjectId: true, chapterId: true, updatedAt: true, isPinned: true },
@@ -109,7 +109,11 @@ export type NoteFilter = 'all' | 'favorites' | 'archive' | 'needs-review' | 'tra
 const FILTER_LIMIT = 200;
 
 export async function listFilteredNotes(userId: number, filter: NoteFilter) {
-  const where: Prisma.NoteWhereInput = { userId, deletedAt: null };
+  // Trang-của-dòng bị loại khỏi mọi danh sách phẳng của thanh bên, kể cả
+  // Thùng rác: người dùng không tạo ra chúng nên cũng không mong thấy chúng
+  // xếp cạnh trang mình tự viết. Chúng vẫn tìm kiếm ra được, và vẫn mở được
+  // từ chính dòng của nó.
+  const where: Prisma.NoteWhereInput = { userId, deletedAt: null, isDatabasePage: false };
   switch (filter) {
     case 'favorites':
       where.isFavorite = true;
@@ -557,6 +561,13 @@ export async function updateNote(
       // and never let a failure here fail the save itself.
       const { syncNoteReferences } = await import('./notesHierarchy.service.js');
       void syncNoteReferences(id);
+    }
+    if (data.title !== undefined) {
+      // Nếu ghi chú này là thân trang của một dòng database, đổi tên trang
+      // phải đổi luôn ô tiêu đề của dòng — nếu không, bảng vẫn hiện tên cũ và
+      // lần mở trang sau sẽ ghi đè mất tên vừa sửa (xem `openRowPage`).
+      const { syncRowTitleFromPage } = await import('./notesDatabase.service.js');
+      void syncRowTitleFromPage(id, String(d.title ?? ''));
     }
   }
 }

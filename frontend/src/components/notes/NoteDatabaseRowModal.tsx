@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Loader2, Trash2, X } from 'lucide-react';
+import { FileText, Loader2, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   noteDatabaseApi,
@@ -44,6 +44,10 @@ export default function NoteDatabaseRowModal({
         : editableValue(property, row.values[property.id]),
     ])));
   const [saving, setSaving] = useState(false);
+  const [opening, setOpening] = useState(false);
+  // Chỉ lưu trước khi mở trang KHI có thay đổi thật — nếu không thì mỗi lần
+  // xem một dòng lại bắn một lượt ghi vô nghĩa.
+  const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
@@ -51,8 +55,9 @@ export default function NoteDatabaseRowModal({
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  const save = async () => {
-    if (!canEdit || saving) return;
+  /** Ghi bản nháp. Trả về có ghi được hay không, để nơi gọi biết đường dừng. */
+  const saveDraft = async (): Promise<boolean> => {
+    if (!canEdit || saving) return false;
     setSaving(true);
     try {
       const values: Record<number, unknown> = {};
@@ -64,13 +69,50 @@ export default function NoteDatabaseRowModal({
       }
       const res = await noteDatabaseApi.updateRow(row.id, values);
       onSaved(res.data.data);
-      toast.success('Đã lưu');
-      onClose();
+      setDirty(false);
+      return true;
     } catch (error) {
       const message = (error as { response?: { data?: { message?: string } } })
         .response?.data?.message;
       toast.error(message || 'Không lưu được, kiểm tra lại giá trị');
+      return false;
     } finally { setSaving(false); }
+  };
+
+  const save = async () => {
+    if (await saveDraft()) {
+      toast.success('Đã lưu');
+      onClose();
+    }
+  };
+
+  /**
+   * Mở thân trang của dòng.
+   *
+   * Lưu trước rồi mới đi: rời trang mà bỏ những gì đang gõ dở trong hộp thoại
+   * là mất dữ liệu người dùng thấy được. Lưu hỏng thì DỪNG lại — `save()` đã
+   * hiện lỗi, và đi tiếp lúc đó nghĩa là vứt bản nháp đúng vào lúc nó không
+   * ghi được.
+   */
+  const openPage = async () => {
+    if (opening) return;
+    setOpening(true);
+    try {
+      if (canEdit && dirty) {
+        const saved = await saveDraft();
+        if (!saved) return;
+      }
+      const res = await noteDatabaseApi.openRowPage(row.id);
+      // Điều hướng cả trang chứ không mở thêm hộp thoại: thân trang là một
+      // ghi chú thật, nên nó phải mở trong đúng trình soạn thảo có cùng chỉnh
+      // sửa thời gian thực, lịch sử phiên bản và thảo luận.
+      window.location.href = `/notes?note=${res.data.data.id}`;
+    } catch (error) {
+      const message = (error as { response?: { data?: { message?: string } } })
+        .response?.data?.message;
+      toast.error(message || 'Không mở được trang của dòng này');
+      setOpening(false);
+    }
   };
 
   const remove = async () => {
@@ -99,6 +141,17 @@ export default function NoteDatabaseRowModal({
             {rowTitle(ordered, row.values)}
           </h2>
           <button
+            onClick={openPage}
+            disabled={opening || saving}
+            title="Mở dòng này như một trang viết được"
+            className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-lg border border-slate-300 px-2.5 text-xs font-medium text-slate-700 hover:bg-slate-100 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:border-white/[0.12] dark:text-slate-200 dark:hover:bg-white/[0.06]"
+          >
+            {opening
+              ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+              : <FileText className="h-3.5 w-3.5" aria-hidden="true" />}
+            Mở trang
+          </button>
+          <button
             onClick={onClose}
             aria-label="Đóng"
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:hover:bg-white/[0.06]"
@@ -121,7 +174,7 @@ export default function NoteDatabaseRowModal({
                     type="checkbox"
                     disabled={!canEdit}
                     checked={draft[property.id] === 'true'}
-                    onChange={(event) => setDraft((current) => ({ ...current, [property.id]: event.target.checked ? 'true' : '' }))}
+                    onChange={(event) => { setDirty(true); setDraft((current) => ({ ...current, [property.id]: event.target.checked ? 'true' : '' })); }}
                     className="h-4 w-4 accent-teal-600"
                   />
                 ) : (
@@ -132,7 +185,7 @@ export default function NoteDatabaseRowModal({
                       inputMode={property.type === 'NUMBER' ? 'decimal' : undefined}
                       disabled={!canEdit}
                       value={draft[property.id] ?? ''}
-                      onChange={(event) => setDraft((current) => ({ ...current, [property.id]: event.target.value }))}
+                      onChange={(event) => { setDirty(true); setDraft((current) => ({ ...current, [property.id]: event.target.value })); }}
                       list={property.config?.options ? `modal-opts-${property.id}` : undefined}
                       placeholder={property.type === 'MULTI_SELECT' ? 'Ngăn cách bằng dấu phẩy' : undefined}
                       className="min-h-10 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 disabled:opacity-60 dark:border-white/[0.12] dark:bg-black/20 dark:text-slate-100"

@@ -277,7 +277,8 @@ async function batServer(ten: string, c: CauHinhServer): Promise<ToolMcp[]> {
 
     const ds = (await Promise.race([goi(s, 'tools/list'), loiSpawn, hetGio])) as { tools?: unknown[] };
     return (ds?.tools ?? [])
-      .filter((t): t is Record<string, unknown> => !!t && typeof t === 'object' && typeof t.name === 'string')
+      .filter((t): t is Record<string, unknown> => !!t && typeof t === 'object')
+      .filter((t) => typeof t.name === 'string')
       .map((t) => ({
         // Tiền tố đảm bảo tool MCP không bao giờ trùng tên với tool sẵn có —
         // một server đặt tên tool là `read_file` mà không có tiền tố thì nó lặng

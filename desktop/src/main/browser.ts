@@ -74,7 +74,7 @@ function batTrangThai(): void {
   cuaSoChu.webContents.send('browser:trangThai', tt);
 }
 
-function tao(cuaSo: BrowserWindow): WebContentsView {
+function tao(): WebContentsView {
   const v = new WebContentsView({
     webPreferences: {
       partition: PHAN_VUNG,
@@ -104,9 +104,21 @@ function tao(cuaSo: BrowserWindow): WebContentsView {
     if (!hopLe(url)) e.preventDefault();
   });
 
-  for (const su of ['did-navigate', 'did-navigate-in-page', 'did-finish-load', 'did-start-loading', 'did-stop-loading', 'page-title-updated'] as const) {
-    wc.on(su, () => batTrangThai());
-  }
+  /**
+   * Gắn từng sự kiện MỘT, không gộp vào vòng lặp.
+   *
+   * Kiểu của `webContents.on` là một chồng overload, mỗi tên sự kiện một chữ ký
+   * riêng. Duyệt một mảng tên rồi gọi `wc.on(su, …)` khiến TypeScript phải hợp
+   * nhất cả chồng đó và nó chọn overload cuối (`'zoom-changed'`), rồi báo lỗi
+   * cho mọi tên khác. Viết thẳng ra dài hơn nhưng đúng kiểu.
+   */
+  const doi = (): void => batTrangThai();
+  wc.on('did-navigate', doi);
+  wc.on('did-navigate-in-page', doi);
+  wc.on('did-finish-load', doi);
+  wc.on('did-start-loading', doi);
+  wc.on('did-stop-loading', doi);
+  wc.on('page-title-updated', doi);
 
   wc.on('did-fail-load', (_e, ma, moTa, urlLoi, laKhungChinh) => {
     // -3 = ABORTED, xảy ra mỗi lần người dùng bấm sang trang khác giữa chừng.
@@ -126,7 +138,7 @@ function tao(cuaSo: BrowserWindow): WebContentsView {
 export function mo(cuaSo: BrowserWindow, vung: typeof vungHienTai, url?: string): void {
   cuaSoChu = cuaSo;
   if (!khung) {
-    khung = tao(cuaSo);
+    khung = tao();
     cuaSo.contentView.addChildView(khung);
   } else if (!dangHien) {
     cuaSo.contentView.addChildView(khung);

@@ -617,7 +617,11 @@ async function chayToolMcpCoDuyet(
     { ten: 'mcp', duongDan: `${t.server}: ${t.tenGoc}`, khoa: id, choNho: false },
     (y) => phat({ loai: 'xinPhepMcp', id: y.id, server: t.server, tool: t.tenGoc, args: thamSo }),
     signal,
-    c.so.soNho,
+    // ⚠️ `quyenDaCap`, KHÔNG phải `soNho`. Lỗi này chạy được suốt vì MCP luôn
+    // truyền `choNho: false`, nên `hoiNguoiDung` không bao giờ chạm vào sổ —
+    // `undefined` đi qua mà không ai dereference. Nó chỉ nổ khi có người sau
+    // này cho MCP nhớ quyền.
+    c.so.quyenDaCap,
   );
   if (quyet === 'tuChoi') {
     return {

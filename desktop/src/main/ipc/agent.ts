@@ -27,8 +27,9 @@ import type {
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
 import {
-  bangGhiCua, chayLuot, coCuocDangChay, cuocDangChay, dongCuoc, dsCuocDangMo, huyLuotCua, napPhien,
-  soCuaCuoc, taoCuoc, xoaHoiThoai, xoaMoiCuoc, type SuKienAgent,
+  bangGhiCua, chayLuot, cuocDangChay, datGocChoCuoc, datQuyenChoCuoc, dongCuoc, dsCuocDangMo,
+  daChonGocCua, datGocNeuChuaCo, gocCuaCuoc, huyLuotCua, napPhien, quyenCuaCuoc, soCuaCuoc, taoCuoc,
+  xoaHoiThoai, type SuKienAgent,
 } from '../agent/loop';
 import { duongDanCauHinh, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
 import { danhSachPhien, docPhien, dungLaiHienThi, xoaPhien } from '../agent/phien';
@@ -38,16 +39,21 @@ import { readStoredSession } from './auth';
 import { handle } from './index';
 
 /**
- * Quyền cho agent SỬA file — sống trong RAM, KHÔNG lưu xuống đĩa.
+ * ⚠️ THƯ MỤC DỰ ÁN VÀ HAI CỜ QUYỀN GIỜ THUỘC VỀ TỪNG CUỘC, không phải cả app.
  *
- * Mở app lại là tắt. Đây là quyền ghi vào mã nguồn do một mô hình ngôn ngữ điều
- * khiển; một quyền như thế mà tự bật lại sau mỗi lần khởi động thì người dùng
- * sẽ quên mất là nó đang bật, và cái quên đó chỉ lộ ra khi có file bị sửa.
- * Bật lại tốn đúng một cú bấm.
+ * Trước 17/08 chúng là biến module ở đây, nên mọi tab dùng chung — "tab A làm
+ * project A, tab B làm project B" là chuyện không thể dù giao diện có nhiều
+ * tab, và bật quyền ghi ở một tab là bật cho mọi tab.
+ *
+ * Giờ chúng nằm trong `CuocHoiThoai` (xem `agent/loop.ts`). Cài đặt
+ * `agentWorkspace` còn lại đúng một vai trò: THƯ MỤC MẶC ĐỊNH cho tab mới, để
+ * người dùng không phải chọn lại mỗi lần mở việc mới.
+ *
+ * Quyền vẫn KHÔNG BAO GIỜ lưu xuống đĩa và KHÔNG kế thừa sang tab mới: đây là
+ * quyền ghi vào mã nguồn do một mô hình ngôn ngữ điều khiển, và một quyền như
+ * thế mà tự bật lại thì người dùng sẽ quên mất nó đang bật — cái quên đó chỉ lộ
+ * ra khi đã có file bị sửa.
  */
-let choSua = false;
-/** Quyền CHẠY LỆNH — cũng chỉ trong RAM, cũng mặc định tắt, và bật riêng. */
-let choChayLenh = false;
 
 const chay = promisify(execFile);
 
@@ -63,9 +69,31 @@ function mucNoLucHienTai(): MucNoLuc {
   return v === 'nhanh' || v === 'ky' ? v : 'canBang';
 }
 
-function thuMucHienTai(): string | null {
+/** Thư mục MẶC ĐỊNH cho tab mới — thư mục người dùng chọn gần nhất. */
+function thuMucMacDinh(): string | null {
   const v = getSettings().agentWorkspace;
   return typeof v === 'string' && v.length > 0 ? v : null;
+}
+
+/**
+ * Thư mục của một cuộc, tự lấy mặc định nếu cuộc chưa có.
+ *
+ * Lấy mặc định ở LẦN HỎI ĐẦU chứ không ở `taoCuoc()`: tab được tạo trước khi
+ * renderer kịp hỏi, và gán trong `taoCuoc` khiến `datGocChoCuoc` sau đó thấy
+ * "không đổi" rồi bỏ qua bước xoá hội thoại.
+ */
+function gocCua(cuocId: string): string | null {
+  const rieng = gocCuaCuoc(cuocId);
+  if (rieng) return rieng;
+  // Người dùng ĐÃ tự quyết cho tab này (kể cả quyết định là "bỏ") ⇒ tôn trọng.
+  // Thiếu nhánh này thì bấm ✕ xong, lần hỏi ngay sau tự điền lại thư mục mặc
+  // định và nút Bỏ trông như không làm gì.
+  if (daChonGocCua(cuocId)) return null;
+  const md = thuMucMacDinh();
+  // `datGocNeuChuaCo`, KHÔNG phải `datGocChoCuoc` — cái sau xoá hội thoại, và
+  // gọi nó ở đây sẽ xoá sạch một phiên vừa được mở lại.
+  if (md) datGocNeuChuaCo(cuocId, md);
+  return md;
 }
 
 /** Nhánh git của thư mục, `null` nếu không phải kho git hoặc không có git. */
@@ -80,15 +108,16 @@ async function nhanhGit(goc: string): Promise<string | null> {
   }
 }
 
-async function moTa(goc: string | null): Promise<AgentWorkspace> {
+async function moTa(cuocId: string, goc: string | null): Promise<AgentWorkspace> {
   const mucNoLuc = mucNoLucHienTai();
   if (!goc) return { path: null, name: null, branch: null, choSua: false, choChayLenh: false, mucNoLuc };
+  const q = quyenCuaCuoc(cuocId);
   return {
     path: goc,
     name: path.basename(goc),
     branch: await nhanhGit(goc),
-    choSua,
-    choChayLenh,
+    choSua: q.choSua,
+    choChayLenh: q.choChayLenh,
     mucNoLuc,
   };
 }
@@ -144,18 +173,21 @@ export function registerAgentHandlers(): void {
     }
   });
 
-  handle('agent:getWorkspace', async (): Promise<AgentWorkspace> => {
-    const goc = thuMucHienTai();
+  handle('agent:getWorkspace', async ({ cuocId }): Promise<AgentWorkspace> => {
+    const goc = gocCua(cuocId);
     if (goc && !(await conDungDuoc(goc))) {
-      setSetting('agentWorkspace', '');
-      return moTa(null);
+      // Thư mục biến mất (đổi tên, tháo ổ ngoài). Gỡ khỏi cuộc NÀY và khỏi cả
+      // giá trị mặc định — để tab mới không kế thừa một đường dẫn đã chết.
+      datGocChoCuoc(cuocId, null);
+      if (thuMucMacDinh() === goc) setSetting('agentWorkspace', '');
+      return moTa(cuocId, null);
     }
-    return moTa(goc);
+    return moTa(cuocId, goc);
   });
 
-  handle('agent:chooseWorkspace', async (): Promise<AgentWorkspace> => {
+  handle('agent:chooseWorkspace', async ({ cuocId }): Promise<AgentWorkspace> => {
     const cuaSo = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0];
-    const cu = thuMucHienTai();
+    const cu = gocCua(cuocId);
     const tuyChon = {
       title: 'Chọn thư mục dự án cho agent',
       message: 'Agent sẽ ĐỌC được mọi file trong thư mục này (trừ .env và các file khoá).',
@@ -173,26 +205,32 @@ export function registerAgentHandlers(): void {
     // Huỷ ⇒ GIỮ NGUYÊN thư mục cũ. Coi "huỷ" là "bỏ chọn" là một cái bẫy: người
     // dùng bấm nhầm rồi Esc, và mất luôn thư mục đang làm việc.
     const goc = ketQua.filePaths[0];
-    if (ketQua.canceled || !goc) return moTa(cu);
+    if (ketQua.canceled || !goc) return moTa(cuocId, cu);
 
+    // Ghi làm MẶC ĐỊNH cho tab mới, và gán cho ĐÚNG tab này.
+    //
+    // ⚠️ KHÔNG `xoaMoiCuoc()` nữa. Đổi thư mục chỉ làm hỏng bối cảnh của tab
+    // này; xoá luôn việc của các tab đang làm dự án KHÁC là mất dữ liệu người
+    // dùng vì một thao tác chẳng liên quan gì tới chúng.
     setSetting('agentWorkspace', goc);
-    // Đổi thư mục = đổi cả bối cảnh, ở MỌI tab chứ không riêng tab đang nhìn.
-    xoaMoiCuoc();
-    return moTa(goc);
+    datGocChoCuoc(cuocId, goc);
+    return moTa(cuocId, goc);
   });
 
-  handle('agent:clearWorkspace', async (): Promise<AgentWorkspace> => {
-    setSetting('agentWorkspace', '');
-    xoaMoiCuoc();
-    return moTa(null);
+  handle('agent:clearWorkspace', async ({ cuocId }): Promise<AgentWorkspace> => {
+    // Chỉ gỡ khỏi TAB NÀY. Giá trị mặc định giữ nguyên: người dùng đóng dự án ở
+    // một tab không có nghĩa là họ muốn tab sau cũng bắt đầu từ con số không.
+    datGocChoCuoc(cuocId, null);
+    return moTa(cuocId, null);
   });
 
   handle('agent:send', async ({ cuocId, text, anh }, event) => {
     if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở. Hãy dừng nó trước.');
 
-    const goc = thuMucHienTai();
+    const goc = gocCua(cuocId);
     const conSong = goc && (await conDungDuoc(goc)) ? goc : null;
-    if (goc && !conSong) setSetting('agentWorkspace', '');
+    if (goc && !conSong) datGocChoCuoc(cuocId, null);
+    const quyen = quyenCuaCuoc(cuocId);
 
     // Bắn thẳng về đúng cửa sổ đã gửi yêu cầu, không phải "mọi cửa sổ": nếu sau
     // này app có nhiều cửa sổ thì tiến trình của cửa sổ này không được rơi vào
@@ -213,7 +251,7 @@ export function registerAgentHandlers(): void {
       cuocId,
       text,
       {
-        goc: conSong, choSua, choChayLenh, mucNoLuc: mucNoLucHienTai(),
+        goc: conSong, choSua: quyen.choSua, choChayLenh: quyen.choChayLenh, mucNoLuc: mucNoLucHienTai(),
         ...(anh?.length ? { anh } : {}),
         ...(nhanh ? { nhanh } : {}),
       },
@@ -249,16 +287,19 @@ export function registerAgentHandlers(): void {
     }
   });
 
-  handle('agent:datCheDoSua', async ({ bat }): Promise<AgentWorkspace> => {
-    if (coCuocDangChay()) throw new Error('Đang chạy dở — hãy dừng trước khi đổi quyền sửa.');
-    choSua = bat;
-    return moTa(thuMucHienTai());
+  // Chặn theo CUỘC NÀY, không theo cả app: đổi quyền của tab đang rảnh trong
+  // lúc tab khác chạy là chuyện vô hại, và chặn nó lại làm nhiều tab thành vô
+  // dụng đúng lúc người dùng cần chuẩn bị việc tiếp theo.
+  handle('agent:datCheDoSua', async ({ cuocId, bat }): Promise<AgentWorkspace> => {
+    if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở — hãy dừng trước khi đổi quyền sửa.');
+    datQuyenChoCuoc(cuocId, { choSua: bat });
+    return moTa(cuocId, gocCua(cuocId));
   });
 
-  handle('agent:datCheDoLenh', async ({ bat }): Promise<AgentWorkspace> => {
-    if (coCuocDangChay()) throw new Error('Đang chạy dở — hãy dừng trước khi đổi quyền chạy lệnh.');
-    choChayLenh = bat;
-    return moTa(thuMucHienTai());
+  handle('agent:datCheDoLenh', async ({ cuocId, bat }): Promise<AgentWorkspace> => {
+    if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở — hãy dừng trước khi đổi quyền chạy lệnh.');
+    datQuyenChoCuoc(cuocId, { choChayLenh: bat });
+    return moTa(cuocId, gocCua(cuocId));
   });
 
   handle('agent:dsPhien', (): Promise<AgentPhien[]> => danhSachPhien());
@@ -267,7 +308,7 @@ export function registerAgentHandlers(): void {
     const p = await docPhien(id);
     if (!p) return null;
     // Nạp VÀO tab hiện tại; tab giữ nguyên id của nó, chỉ `phienId` đổi.
-    napPhien(cuocId, p.id, p.hoiThoai, p.duAn);
+    napPhien(cuocId, p.id, p.hoiThoai, p.duAn, p.goc ?? null);
     return { muc: dungLaiHienThi(p.hoiThoai) };
   });
 

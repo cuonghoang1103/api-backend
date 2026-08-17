@@ -323,8 +323,11 @@ export const agentTraLoiSchema = z.object({
   quyetDinh: agentQuyetDinhSchema,
 });
 
-export const agentCheDoSuaSchema = z.object({ bat: z.boolean() });
-export const agentCheDoLenhSchema = z.object({ bat: z.boolean() });
+// Quyền là của TỪNG cuộc, nên phải mang `cuocId`. Không mang thì bật quyền ghi
+// ở tab đang làm dự án A cũng bật luôn cho tab đang làm dự án B — người dùng
+// cấp một quyền và nhận về hai.
+export const agentCheDoSuaSchema = z.object({ cuocId: cuocIdSchema, bat: z.boolean() });
+export const agentCheDoLenhSchema = z.object({ cuocId: cuocIdSchema, bat: z.boolean() });
 export const agentPhienSchema = z.object({ id: z.string().min(1).max(64) });
 export const agentMoPhienSchema = z.object({
   cuocId: cuocIdSchema,
@@ -469,9 +472,9 @@ export const INVOKE_CHANNELS = {
   'music:clearAll': null,
 
   'agent:getInfo': null,
-  'agent:getWorkspace': null,
-  'agent:chooseWorkspace': null,
-  'agent:clearWorkspace': null,
+  'agent:getWorkspace': agentCuocSchema,
+  'agent:chooseWorkspace': agentCuocSchema,
+  'agent:clearWorkspace': agentCuocSchema,
   'agent:send': agentSendSchema,
   'agent:cancel': agentCuocSchema,
   'agent:reset': agentCuocSchema,
@@ -626,10 +629,10 @@ export interface DesktopBridge {
    */
   agent: {
     getInfo(): Promise<AgentInfo>;
-    getWorkspace(): Promise<AgentWorkspace>;
+    getWorkspace(cuocId: string): Promise<AgentWorkspace>;
     /** Mở hộp thoại hệ thống. Trả về thư mục đã chọn, hoặc giữ nguyên nếu người dùng huỷ. */
-    chooseWorkspace(): Promise<AgentWorkspace>;
-    clearWorkspace(): Promise<AgentWorkspace>;
+    chooseWorkspace(cuocId: string): Promise<AgentWorkspace>;
+    clearWorkspace(cuocId: string): Promise<AgentWorkspace>;
     /** Mở một cuộc (tab) mới. Trả về id — mọi lời gọi sau đó phải mang nó. */
     taoCuoc(): Promise<string>;
     dongCuoc(cuocId: string): Promise<void>;
@@ -643,9 +646,9 @@ export interface DesktopBridge {
      */
     traLoiXinPhep(cuocId: string, id: string, quyetDinh: AgentQuyetDinh): Promise<void>;
     /** Bật/tắt quyền sửa file. Không lưu xuống đĩa — mở app lại là tắt. */
-    datCheDoSua(bat: boolean): Promise<AgentWorkspace>;
+    datCheDoSua(cuocId: string, bat: boolean): Promise<AgentWorkspace>;
     /** Bật/tắt quyền chạy lệnh. Cũng không lưu xuống đĩa. */
-    datCheDoLenh(bat: boolean): Promise<AgentWorkspace>;
+    datCheDoLenh(cuocId: string, bat: boolean): Promise<AgentWorkspace>;
     /** Đặt cấp độ nỗ lực. Đây LÀ thứ được lưu — nó là sở thích, không phải quyền. */
     datMucNoLuc(muc: MucNoLuc): Promise<void>;
     /** Trả mọi file agent đã sửa trong việc này về nguyên trạng. */

@@ -607,6 +607,50 @@ try {
   check('NỘI DUNG việc sống sót qua lần đổi trang', dauVet.length > 0 && conDu.length === dauVet.length,
     `giữ ${conDu.length}/${dauVet.length} dấu vết (${dauVet.join(', ')})`);
 
+  // ══ MỖI TAB MỘT DỰ ÁN RIÊNG ══
+  //
+  // ⚠️ Đây là thứ người dùng đã thử và KHÔNG làm được (17/08): "mở task A với
+  // project A, task B với project B". Trước bản này thư mục dự án là một cài
+  // đặt TOÀN APP, nên mọi tab dùng chung một thư mục — giao diện có nhiều tab
+  // nhưng chúng không thể trỏ vào hai chỗ khác nhau.
+  console.log('\nMỗi tab một dự án riêng:');
+
+  // ⛔ KHÔNG có cửa hậu "đặt thư mục theo đường dẫn" cho renderer, và sẽ không
+  // bao giờ có: đường dẫn PHẢI đến từ hộp thoại hệ thống, vì đó là phạm vi đọc
+  // của một mô hình ngôn ngữ. Hộp thoại thì không tự động hoá được.
+  //
+  // Nên kiểm thứ CHỨNG MINH ĐƯỢC bằng bề mặt thật: sự TÁCH BIỆT. Trước bản này
+  // thư mục và quyền là biến toàn cục, nên thao tác ở một tab áp cho mọi tab —
+  // và đó chính là cái làm "mỗi tab một dự án" bất khả thi.
+  const dsTab = await w2.evaluate(() => globalThis.cuongthai.agent.dsCuoc());
+  const [tabA2, tabB2] = [dsTab[0].id, dsTab[1].id];
+
+  const wA0 = await w2.evaluate((id) => globalThis.cuongthai.agent.getWorkspace(id), tabA2);
+  const wB0 = await w2.evaluate((id) => globalThis.cuongthai.agent.getWorkspace(id), tabB2);
+  check('mỗi tab tự trả về thư mục của mình', !!wA0.path && !!wB0.path, `${wA0.name} / ${wB0.name}`);
+
+  // Bật quyền SỬA ở tab A. Tab B phải KHÔNG bị bật theo — người dùng cấp một
+  // quyền thì nhận đúng một quyền, không phải hai.
+  await w2.evaluate((id) => globalThis.cuongthai.agent.datCheDoSua(id, true), tabA2);
+  const wA1 = await w2.evaluate((id) => globalThis.cuongthai.agent.getWorkspace(id), tabA2);
+  const wB1 = await w2.evaluate((id) => globalThis.cuongthai.agent.getWorkspace(id), tabB2);
+  check('bật quyền SỬA ở tab A KHÔNG lây sang tab B',
+    wA1.choSua === true && wB1.choSua === false,
+    `A=${wA1.choSua} B=${wB1.choSua}`);
+
+  // Bỏ thư mục ở tab A. Tab B phải giữ nguyên dự án của nó — trước bản này
+  // `clearWorkspace` là toàn cục và sẽ xoá cả hai.
+  await w2.evaluate((id) => globalThis.cuongthai.agent.clearWorkspace(id), tabA2);
+  const wA2 = await w2.evaluate((id) => globalThis.cuongthai.agent.getWorkspace(id), tabA2);
+  const wB2 = await w2.evaluate((id) => globalThis.cuongthai.agent.getWorkspace(id), tabB2);
+  check('bỏ thư mục ở tab A KHÔNG xoá dự án của tab B',
+    wA2.path === null && wB2.path === wB0.path,
+    `A=${wA2.path} B=${wB2.name}`);
+
+  // Và phải đặt lại được: tab A lấy lại thư mục mặc định.
+  await w2.evaluate((id) => globalThis.cuongthai.agent.getWorkspace(id), tabA2);
+  check('quyền của tab A bị TẮT khi đổi thư mục', wA2.choSua === false);
+
   // ══ MCP ══
   //
   // Kiểm bằng một server MCP THẬT (`scripts/mcp-gia.mjs`) nói đúng giao thức

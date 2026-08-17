@@ -342,24 +342,41 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
 }
 
 /** Nạp thông tin agent + thư mục. Trả về cả hàm nạp lại cho nút "Thử lại". */
+/**
+ * Thông tin TOÀN CỤC của agent: có Pro không, hạn mức còn bao nhiêu.
+ *
+ * ⚠️ KHÔNG còn giữ thư mục dự án. Thư mục là của TỪNG TAB (xem `useThuMuc`) —
+ * để ở đây thì mọi tab dùng chung một thư mục, và "tab A làm project A, tab B
+ * làm project B" là chuyện không thể dù giao diện có nhiều tab.
+ */
 export function useAgentInfo() {
   const [info, datInfo] = useState<AgentInfo | null>(null);
-  const [thuMuc, datThuMuc] = useState<AgentWorkspace | null>(null);
   const [dangTai, datDangTai] = useState(true);
 
   const nap = useCallback(async () => {
     const cau = window.cuongthai;
     if (!cau) { datDangTai(false); return; }
     datDangTai(true);
-    const [i, w] = await Promise.all([cau.agent.getInfo(), cau.agent.getWorkspace()]);
-    datInfo(i);
-    datThuMuc(w);
+    datInfo(await cau.agent.getInfo());
     datDangTai(false);
   }, []);
 
   useEffect(() => { void nap(); }, [nap]);
 
-  return { info, thuMuc, datThuMuc, dangTai, nap };
+  return { info, dangTai, nap };
+}
+
+/** Thư mục dự án + hai cờ quyền của MỘT tab. Mỗi tab một bộ riêng. */
+export function useThuMuc(cuocId: string) {
+  const [thuMuc, datThuMuc] = useState<AgentWorkspace | null>(null);
+
+  useEffect(() => {
+    let huy = false;
+    void window.cuongthai?.agent.getWorkspace(cuocId).then((w) => { if (!huy) datThuMuc(w); });
+    return () => { huy = true; };
+  }, [cuocId]);
+
+  return { thuMuc, datThuMuc };
 }
 
 /**

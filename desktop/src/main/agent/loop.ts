@@ -125,6 +125,30 @@ interface CuocHoiThoai {
   phienId: string;
   hoiThoai: TinNhan[];
   duAn: string | null;
+  /**
+   * Thư mục dự án CỦA RIÊNG CUỘC NÀY.
+   *
+   * ⚠️ Trước 17/08 đây là một cài đặt TOÀN APP, nên mọi tab dùng chung một thư
+   * mục — "tab A làm project A, tab B làm project B" là chuyện không thể, dù
+   * giao diện có nhiều tab. Chuyển vào đây là thứ làm nó thành thật.
+   *
+   * ⛔ Renderer vẫn KHÔNG truyền được đường dẫn: nó chỉ gửi `cuocId`, còn đường
+   * dẫn do main nhận từ hộp thoại hệ thống. Đây là phạm vi đọc của một mô hình
+   * ngôn ngữ; nó phải đến từ một cú bấm người dùng NHÌN THẤY.
+   */
+  goc: string | null;
+  /**
+   * Người dùng đã TỰ QUYẾT thư mục cho cuộc này chưa (kể cả quyết định là "bỏ").
+   *
+   * ⚠️ Không có cờ này thì "chưa chọn gì" và "đã cố ý bỏ" trông giống hệt nhau
+   * (`goc === null`), nên lần hỏi ngay sau khi bấm ✕ sẽ TỰ ĐIỀN LẠI thư mục mặc
+   * định — nút Bỏ trông như không làm gì. Bộ kiểm bắt đúng lỗi này.
+   */
+  daChonGoc: boolean;
+  /** Quyền SỬA của riêng cuộc này. KHÔNG lưu xuống đĩa, KHÔNG kế thừa sang tab mới. */
+  choSua: boolean;
+  /** Quyền CHẠY LỆNH của riêng cuộc này. Cũng chỉ trong RAM, cũng bật riêng. */
+  choChayLenh: boolean;
   dangChay: AbortController | null;
   so: SoCuoc;
   /** Việc phụ đã giao trong LƯỢT hiện tại. Đặt lại về 0 ở đầu mỗi câu hỏi. */
@@ -136,7 +160,10 @@ const cuoc = new Map<string, CuocHoiThoai>();
 function layCuoc(id: string): CuocHoiThoai {
   let c = cuoc.get(id);
   if (!c) {
-    c = { id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc(), soViecPhu: 0 };
+    c = {
+      id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc(), soViecPhu: 0,
+      goc: null, daChonGoc: false, choSua: false, choChayLenh: false,
+    };
     cuoc.set(id, c);
   }
   return c;
@@ -152,12 +179,75 @@ export function taoCuoc(): string {
 /**
  * Xoá nội dung MỌI cuộc đang mở.
  *
- * Dùng khi đổi thư mục dự án: bối cảnh cũ hỏng với TẤT CẢ các tab, không chỉ
- * tab đang nhìn. Giữ lại thì agent ở tab bên cạnh vẫn tin vào những file nó đọc
- * ở dự án TRƯỚC và trả lời về một dự án không còn mở.
+ * ⚠️ Từ khi mỗi tab có thư mục riêng, đổi thư mục KHÔNG còn được gọi hàm này —
+ * nó chỉ làm hỏng bối cảnh của đúng MỘT tab, và xoá luôn việc của các tab khác
+ * đang làm dự án khác là mất dữ liệu của người dùng. Giữ lại cho những trường
+ * hợp thật sự toàn cục (đăng xuất chẳng hạn).
  */
 export function xoaMoiCuoc(): void {
   for (const [id] of cuoc) xoaHoiThoai(id);
+}
+
+// ─── Thư mục & quyền: của TỪNG cuộc ────────────────────────────────
+
+export function gocCuaCuoc(id: string): string | null {
+  return layCuoc(id).goc;
+}
+
+/** Người dùng đã tự quyết thư mục cho cuộc này chưa (kể cả quyết định "bỏ"). */
+export function daChonGocCua(id: string): boolean {
+  return layCuoc(id).daChonGoc;
+}
+
+export function quyenCuaCuoc(id: string): { choSua: boolean; choChayLenh: boolean } {
+  const c = layCuoc(id);
+  return { choSua: c.choSua, choChayLenh: c.choChayLenh };
+}
+
+/**
+ * Đặt thư mục dự án cho MỘT cuộc.
+ *
+ * Đổi thư mục ⇒ xoá hội thoại CỦA CUỘC ĐÓ: những gì agent đã đọc ở dự án cũ
+ * không còn đúng, và để lại thì nó trả lời về một dự án không còn mở. Nhưng chỉ
+ * cuộc đó — các tab khác đang làm dự án khác không liên quan gì.
+ *
+ * Quyền bị TẮT theo. Quyền được cấp cho một phạm vi cụ thể; đổi phạm vi mà giữ
+ * quyền nghĩa là người dùng cấp quyền ghi cho thư mục A rồi bỗng nhiên agent
+ * ghi được vào thư mục B mà không ai bấm gì.
+ */
+export function datGocChoCuoc(id: string, goc: string | null): void {
+  const c = layCuoc(id);
+  // Đánh dấu ĐÃ QUYẾT dù giá trị có đổi hay không — bấm ✕ trên một tab chưa
+  // chọn gì vẫn là một quyết định ("tab này không đọc dự án nào").
+  c.daChonGoc = true;
+  if (c.goc === goc) return;
+  c.goc = goc;
+  c.choSua = false;
+  c.choChayLenh = false;
+  xoaHoiThoai(id);
+}
+
+/**
+ * Gán thư mục cho một cuộc CHƯA CÓ thư mục nào — KHÔNG xoá hội thoại.
+ *
+ * ⚠️ Tách khỏi `datGocChoCuoc` vì một cái bẫy thật: tab mới lấy thư mục mặc
+ * định ở lần hỏi đầu, và nếu đường đó đi qua `datGocChoCuoc` thì nó XOÁ hội
+ * thoại. Với tab trống thì vô hại; với một tab vừa MỞ LẠI PHIÊN CŨ thì nó xoá
+ * sạch việc vừa nạp — mất dữ liệu vì một lời gọi chỉ định đọc trạng thái.
+ *
+ * "Điền giá trị mặc định cho chỗ đang trống" không phải là "đổi bối cảnh", nên
+ * nó không được mang theo hậu quả của việc đổi bối cảnh.
+ */
+export function datGocNeuChuaCo(id: string, goc: string): void {
+  const c = layCuoc(id);
+  if (c.daChonGoc || c.goc) return;
+  c.goc = goc;
+}
+
+export function datQuyenChoCuoc(id: string, quyen: { choSua?: boolean; choChayLenh?: boolean }): void {
+  const c = layCuoc(id);
+  if (typeof quyen.choSua === 'boolean') c.choSua = quyen.choSua;
+  if (typeof quyen.choChayLenh === 'boolean') c.choChayLenh = quyen.choChayLenh;
 }
 
 export function dongCuoc(id: string): void {
@@ -166,12 +256,22 @@ export function dongCuoc(id: string): void {
 }
 
 /** Nạp một phiên cũ thành một cuộc đang mở. Gõ tiếp là đi tiếp việc đó. */
-export function napPhien(cuocId: string, phienId: string, tinNhan: TinNhanLuu[], duAn: string | null): void {
+export function napPhien(
+  cuocId: string,
+  phienId: string,
+  tinNhan: TinNhanLuu[],
+  duAn: string | null,
+  goc?: string | null,
+): void {
   const c = layCuoc(cuocId);
   huyLuotCua(cuocId);
   c.phienId = phienId;
   c.hoiThoai = tinNhan as TinNhan[];
   c.duAn = duAn;
+  // Khôi phục cả THƯ MỤC của phiên đó. Từ khi mỗi tab một dự án, mở một việc cũ
+  // vào tab đang trỏ dự án khác thì agent đọc nhầm repo và trả lời rất tự tin
+  // về những file không liên quan gì.
+  if (goc !== undefined) { c.goc = goc; c.daChonGoc = true; c.choSua = false; c.choChayLenh = false; }
   // Quyền đã cấp và nhật ký hoàn tác KHÔNG khôi phục theo. Hoàn tác một thay
   // đổi từ hôm qua là ghi đè lên thứ người dùng có thể đã sửa tiếp bằng tay; và
   // quyền "cho phép cả file này" cấp cho phiên trước thì hết hiệu lực cùng
@@ -293,16 +393,18 @@ export async function chayLuot(
    * một thư mục. Lúc đó cái này sửa file cái kia vừa đọc, và không có thứ tự
    * nào đúng cả. Chỉ chặn đúng trường hợp đó.
    */
-  // Thư mục dự án hiện là cài đặt TOÀN APP, nên mọi tab dùng chung một thư mục.
-  // Vì thế "cùng thư mục" lúc này = "có cuộc nào khác đang chạy". Khi thư mục
-  // thành của từng tab thì đổi phép so sánh ở đây thành so đường dẫn — chứ
-  // ĐỪNG so `duAn`, nó chỉ giữ TÊN thư mục và được gán sau lượt đầu.
-  if ((boiCanh.choSua || boiCanh.choChayLenh) && coCuocDangChay()) {
-    throw new Error(
-      'Một việc khác đang chạy trên cùng thư mục dự án, mà việc này lại được phép SỬA/CHẠY LỆNH. '
-      + 'Hãy đợi nó xong — hai agent cùng ghi một chỗ sẽ đè lên nhau. '
-      + '(Việc CHỈ ĐỌC thì chạy song song thoải mái.)',
-    );
+  // So ĐƯỜNG DẪN THẬT, không so tên. Hai dự án khác nhau trùng tên thư mục
+  // ("frontend", "api") là chuyện rất thường; so tên là chặn nhầm hai việc
+  // không liên quan gì tới nhau.
+  if ((boiCanh.choSua || boiCanh.choChayLenh) && boiCanh.goc) {
+    const dung = [...cuoc.values()].find((k) => k.id !== c.id && k.dangChay && k.goc === boiCanh.goc);
+    if (dung) {
+      throw new Error(
+        'Một việc khác đang chạy trên CÙNG thư mục dự án này, mà việc này lại được phép SỬA/CHẠY LỆNH. '
+        + 'Hãy đợi nó xong — hai agent cùng ghi một chỗ sẽ đè lên nhau. '
+        + '(Việc chỉ đọc, hoặc việc ở thư mục KHÁC, thì chạy song song thoải mái.)',
+      );
+    }
   }
 
   const phien = readStoredSession();
@@ -469,7 +571,7 @@ export async function chayLuot(
     // người dùng bấm Dừng vẫn chứa những bước agent đã đi và đã trả tiền —
     // mất chúng chỉ vì lượt không kết thúc đẹp là mất đúng thứ đáng giữ nhất.
     {
-      void luuPhien(c.phienId, c.hoiThoai as TinNhanLuu[], c.duAn).catch(() => {
+      void luuPhien(c.phienId, c.hoiThoai as TinNhanLuu[], c.duAn, c.goc).catch(() => {
         /* ghi đĩa hỏng KHÔNG được làm hỏng lượt vừa chạy xong */
       });
     }

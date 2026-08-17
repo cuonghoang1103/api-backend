@@ -2593,8 +2593,25 @@ select {
   white-space: nowrap;
 }
 
-/* Chỉ MỘT việc chạy tại một thời điểm, nên dấu chấm này trả lời đúng câu người
-   dùng đang hỏi: "cái nào đang bận?". */
+/* Tên dự án trên tab. Nhỏ và mờ hơn tên việc: nó là thứ để LIẾC, không phải để
+   đọc — mắt tìm "cái nào là repo kia" chứ không đọc từng chữ. */
+.ct-tab-duan {
+  flex-shrink: 0;
+  max-width: 88px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--ct-bg);
+  color: var(--ct-text-faint);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.01em;
+}
+
+/* Dấu chấm "đang chạy" — giờ có thể có NHIỀU tab cùng chạy, nên nó trả lời
+   "những cái nào đang bận" chứ không còn là "cái nào". */
 .ct-tab-cham {
   width: 6px;
   height: 6px;

@@ -21,8 +21,8 @@ import {
   FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
   Sparkles, SquareTerminal, Terminal, Undo2, X,
 } from 'lucide-react';
-import type { AgentInfo, AgentMcpTrangThai, AgentViec, AgentWorkspace, MucNoLuc } from '../../../shared/ipc';
-import { useAgent } from './useAgent';
+import type { AgentInfo, AgentMcpTrangThai, AgentViec, MucNoLuc } from '../../../shared/ipc';
+import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
 import { XinPhep, XinPhepLenh, XinPhepMcp } from './XinPhep';
@@ -30,24 +30,30 @@ import { XinPhep, XinPhepLenh, XinPhepMcp } from './XinPhep';
 export function AgentMode({
   cuocId,
   info,
-  thuMuc,
-  datThuMuc,
   napLai,
   datTieuDe,
+  datDuAn,
 }: {
   /** Cuộc (tab) mà màn hình này thuộc về. Mọi lời gọi IPC mang id này. */
   cuocId: string;
   info: AgentInfo;
-  thuMuc: AgentWorkspace | null;
-  datThuMuc: (w: AgentWorkspace) => void;
   napLai: () => void;
   /** Báo tiêu đề lên cha để thanh tab hiện đúng tên việc. */
   datTieuDe?: (t: string) => void;
+  /** Báo tên dự án lên cha — thanh tab cần nó để phân biệt hai tab khác repo. */
+  datDuAn?: (d: string | null) => void;
 }) {
   const {
     trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac,
     phien, phienDangMo, moPhien, xoaPhien,
   } = useAgent(cuocId, info);
+  /**
+   * Thư mục dự án của RIÊNG tab này.
+   *
+   * Trước đây cha giữ MỘT thư mục rồi phát cho mọi tab — nên hai tab không thể
+   * làm hai dự án khác nhau, dù đó chính là lý do người ta mở hai tab.
+   */
+  const { thuMuc, datThuMuc } = useThuMuc(cuocId);
   const [nhap, datNhap] = useState('');
   const [moLichSu, datMoLichSu] = useState(false);
   /** Ảnh đã dán, chờ gửi kèm câu hỏi tới. */
@@ -63,6 +69,9 @@ export function AgentMode({
     }
   }, [cauDau, datTieuDe]);
 
+  // Báo tên dự án lên thanh tab mỗi khi nó đổi.
+  useEffect(() => { datDuAn?.(thuMuc?.name ?? null); }, [thuMuc?.name, datDuAn]);
+
   // Tự cuộn xuống đáy khi có nội dung mới. Chỉ khi người dùng ĐANG ở gần đáy:
   // kéo lên đọc lại một đoạn cũ rồi bị giật xuống là mất chỗ đang đọc.
   useEffect(() => {
@@ -73,7 +82,7 @@ export function AgentMode({
   }, [trangThai.muc, trangThai.dangNghi]);
 
   const chonThuMuc = async (): Promise<void> => {
-    const w = await window.cuongthai?.agent.chooseWorkspace();
+    const w = await window.cuongthai?.agent.chooseWorkspace(cuocId);
     if (w) {
       datThuMuc(w);
       // Main đã xoá hội thoại khi đổi thư mục (bối cảnh cũ không còn đúng);
@@ -84,23 +93,23 @@ export function AgentMode({
   };
 
   const doiCheDoSua = async (): Promise<void> => {
-    const w = await window.cuongthai?.agent.datCheDoSua(!thuMuc?.choSua);
+    const w = await window.cuongthai?.agent.datCheDoSua(cuocId, !thuMuc?.choSua);
     if (w) datThuMuc(w);
   };
 
   const doiMucNoLuc = async (m: MucNoLuc): Promise<void> => {
     await window.cuongthai?.agent.datMucNoLuc(m);
-    const w = await window.cuongthai?.agent.getWorkspace();
+    const w = await window.cuongthai?.agent.getWorkspace(cuocId);
     if (w) datThuMuc(w);
   };
 
   const doiCheDoLenh = async (): Promise<void> => {
-    const w = await window.cuongthai?.agent.datCheDoLenh(!thuMuc?.choChayLenh);
+    const w = await window.cuongthai?.agent.datCheDoLenh(cuocId, !thuMuc?.choChayLenh);
     if (w) datThuMuc(w);
   };
 
   const boThuMuc = async (): Promise<void> => {
-    const w = await window.cuongthai?.agent.clearWorkspace();
+    const w = await window.cuongthai?.agent.clearWorkspace(cuocId);
     if (w) { datThuMuc(w); void batDauLai(); }
   };
 

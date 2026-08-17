@@ -18,6 +18,8 @@ export interface TabAgent {
   id: string;
   tieuDe: string;
   dangChay: boolean;
+  /** Tên thư mục dự án của tab này. Mỗi tab một dự án riêng nên đây là thứ phân biệt chúng. */
+  duAn?: string | null;
 }
 
 export function ThanhTab({
@@ -37,9 +39,18 @@ export function ThanhTab({
     <div className="ct-tabs" role="tablist" aria-label="Việc đang mở">
       {tabs.map((t) => (
         <div key={t.id} className="ct-tab" data-chon={t.id === dangMo} role="tab" aria-selected={t.id === dangMo}>
-          <button type="button" className="ct-tab-chon" onClick={() => onChon(t.id)} title={t.tieuDe}>
+          <button
+            type="button"
+            className="ct-tab-chon"
+            onClick={() => onChon(t.id)}
+            title={t.duAn ? `${t.tieuDe}\n📁 ${t.duAn}` : t.tieuDe}
+          >
             {t.dangChay && <span className="ct-tab-cham" aria-label="đang chạy" />}
             <span className="ct-tab-chu">{t.tieuDe}</span>
+            {/* Tên dự án ngay trên tab: từ khi mỗi tab một dự án, hai tab cùng
+                tên việc mà khác repo là chuyện thường, và không có nhãn này thì
+                người dùng phải bấm vào từng cái để biết mình đang ở đâu. */}
+            {t.duAn && <span className="ct-tab-duan">{t.duAn}</span>}
           </button>
           {/* Tab cuối cùng KHÔNG có nút đóng: đóng hết thì màn hình trống trơn
               và người dùng phải đi tìm cách tạo lại. Luôn còn ít nhất một. */}

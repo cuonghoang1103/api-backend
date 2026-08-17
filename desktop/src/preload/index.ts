@@ -112,9 +112,12 @@ const bridge: DesktopBridge = {
 
   agent: {
     getInfo: () => ipcRenderer.invoke('agent:getInfo') as Promise<AgentInfo>,
-    getWorkspace: () => ipcRenderer.invoke('agent:getWorkspace') as Promise<AgentWorkspace>,
-    chooseWorkspace: () => ipcRenderer.invoke('agent:chooseWorkspace') as Promise<AgentWorkspace>,
-    clearWorkspace: () => ipcRenderer.invoke('agent:clearWorkspace') as Promise<AgentWorkspace>,
+    getWorkspace: (cuocId: string) =>
+      ipcRenderer.invoke('agent:getWorkspace', { cuocId }) as Promise<AgentWorkspace>,
+    chooseWorkspace: (cuocId: string) =>
+      ipcRenderer.invoke('agent:chooseWorkspace', { cuocId }) as Promise<AgentWorkspace>,
+    clearWorkspace: (cuocId: string) =>
+      ipcRenderer.invoke('agent:clearWorkspace', { cuocId }) as Promise<AgentWorkspace>,
     // Không có timeout ở đây: một lượt agent chạy vài phút là bình thường. Muốn
     // dừng thì gọi `cancel()`, đừng trông vào việc lời hứa này tự bỏ cuộc.
     taoCuoc: () => ipcRenderer.invoke('agent:taoCuoc') as Promise<string>,
@@ -125,10 +128,10 @@ const bridge: DesktopBridge = {
     reset: (cuocId: string) => ipcRenderer.invoke('agent:reset', { cuocId }) as Promise<void>,
     traLoiXinPhep: (cuocId: string, id: string, quyetDinh: AgentQuyetDinh) =>
       ipcRenderer.invoke('agent:traLoiXinPhep', { cuocId, id, quyetDinh }) as Promise<void>,
-    datCheDoSua: (bat: boolean) =>
-      ipcRenderer.invoke('agent:datCheDoSua', { bat }) as Promise<AgentWorkspace>,
-    datCheDoLenh: (bat: boolean) =>
-      ipcRenderer.invoke('agent:datCheDoLenh', { bat }) as Promise<AgentWorkspace>,
+    datCheDoSua: (cuocId: string, bat: boolean) =>
+      ipcRenderer.invoke('agent:datCheDoSua', { cuocId, bat }) as Promise<AgentWorkspace>,
+    datCheDoLenh: (cuocId: string, bat: boolean) =>
+      ipcRenderer.invoke('agent:datCheDoLenh', { cuocId, bat }) as Promise<AgentWorkspace>,
     datMucNoLuc: (muc: MucNoLuc) =>
       ipcRenderer.invoke('agent:datMucNoLuc', { muc }) as Promise<void>,
     hoanTac: (cuocId: string) =>

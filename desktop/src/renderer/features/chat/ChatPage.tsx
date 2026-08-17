@@ -22,7 +22,7 @@ import { useAgentInfo } from './useAgent';
 type CheDo = 'chat' | 'code';
 
 export function ChatPage() {
-  const { info, thuMuc, datThuMuc, dangTai, nap } = useAgentInfo();
+  const { info, dangTai, nap } = useAgentInfo();
   const { settings, setSetting } = useAppState();
   // Khôi phục chế độ đã chọn lần trước — xem `chatCheDo` trong shared/ipc.ts.
   const [cheDo, datCheDoTho] = useState<CheDo>(settings.chatCheDo === 'code' ? 'code' : 'chat');
@@ -53,6 +53,8 @@ export function ChatPage() {
   const [tabMo, datTabMoTho] = useState<string>('');
   const datTabMo = (id: string): void => { datTabMoTho(id); setSetting('agentTabMo', id); };
   const [tenTab, datTenTab] = useState<Record<string, string>>({});
+  /** Tên dự án của từng tab — mỗi `AgentMode` tự báo lên khi nó biết. */
+  const [duAnTab, datDuAnTab] = useState<Record<string, string | null>>({});
 
   /**
    * ⚠️ HỎI LẠI MAIN, ĐỪNG TỰ NHỚ.
@@ -197,6 +199,7 @@ export function ChatPage() {
                     id: x,
                     tieuDe: tenTab[x] ?? 'Việc mới',
                     dangChay: false,
+                    duAn: duAnTab[x] ?? null,
                   }))}
                   dangMo={tabMo}
                   onChon={datTabMo}
@@ -208,10 +211,9 @@ export function ChatPage() {
                     <AgentMode
                       cuocId={id}
                       info={info}
-                      thuMuc={thuMuc}
-                      datThuMuc={datThuMuc}
                       napLai={nap}
                       datTieuDe={(t) => datTenTab((cu) => (cu[id] === t ? cu : { ...cu, [id]: t }))}
+                      datDuAn={(d) => datDuAnTab((cu) => (cu[id] === d ? cu : { ...cu, [id]: d }))}
                     />
                   </div>
                 ))}

@@ -42,8 +42,16 @@ export interface TomTatPhien {
   id: string;
   /** Câu hỏi đầu tiên, cắt ngắn — nhãn duy nhất người dùng nhận ra phiên bằng. */
   tieuDe: string;
-  /** Tên thư mục dự án lúc đó. */
+  /** Tên thư mục dự án lúc đó — để HIỆN cho người dùng đọc. */
   duAn: string | null;
+  /**
+   * ĐƯỜNG DẪN đầy đủ của thư mục dự án lúc đó.
+   *
+   * Tên thôi không đủ từ khi mỗi tab một dự án: mở một việc cũ vào tab đang trỏ
+   * dự án khác thì agent đọc nhầm repo và trả lời rất tự tin về những file
+   * không liên quan gì. `null` = phiên cũ lưu trước khi có trường này.
+   */
+  goc?: string | null;
   luucLuc: number;
   soTinNhan: number;
 }
@@ -89,6 +97,7 @@ export async function luuPhien(
   id: string,
   hoiThoai: TinNhanLuu[],
   duAn: string | null,
+  goc?: string | null,
 ): Promise<TomTatPhien | null> {
   // Hội thoại chưa có câu hỏi nào của người dùng thì không có gì để lưu — và
   // một danh sách đầy phiên rỗng làm cái danh sách thành vô dụng.
@@ -98,6 +107,7 @@ export async function luuPhien(
     id,
     tieuDe: datTieuDe(hoiThoai),
     duAn,
+    goc: goc ?? null,
     luucLuc: Date.now(),
     soTinNhan: hoiThoai.length,
   };
@@ -132,6 +142,7 @@ export async function danhSachPhien(): Promise<TomTatPhien[]> {
           id: j.id,
           tieuDe: j.tieuDe,
           duAn: j.duAn ?? null,
+          goc: j.goc ?? null,
           luucLuc: j.luucLuc ?? 0,
           soTinNhan: j.soTinNhan ?? 0,
         });
@@ -153,6 +164,7 @@ export async function docPhien(id: string): Promise<FilePhien | null> {
       id: String(j.id ?? id),
       tieuDe: String(j.tieuDe ?? ''),
       duAn: j.duAn ?? null,
+      goc: j.goc ?? null,
       luucLuc: j.luucLuc ?? 0,
       soTinNhan: j.soTinNhan ?? j.hoiThoai.length,
       hoiThoai: j.hoiThoai as TinNhanLuu[],

@@ -22,12 +22,12 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 
 import type {
-  AgentInfo, AgentMcpTrangThai, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, MucNoLuc,
+  AgentCuocDangMo, AgentInfo, AgentMcpTrangThai, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, MucNoLuc,
 } from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
 import {
-  chayLuot, coCuocDangChay, cuocDangChay, dongCuoc, huyLuotCua, napPhien,
+  bangGhiCua, chayLuot, coCuocDangChay, cuocDangChay, dongCuoc, dsCuocDangMo, huyLuotCua, napPhien,
   soCuaCuoc, taoCuoc, xoaHoiThoai, xoaMoiCuoc, type SuKienAgent,
 } from '../agent/loop';
 import { duongDanCauHinh, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
@@ -288,6 +288,13 @@ export function registerAgentHandlers(): void {
     huyLuotCua(cuocId);
     return hoanTacTatCa(soCuaCuoc(cuocId));
   });
+
+  handle('agent:dsCuoc', (): AgentCuocDangMo[] => dsCuocDangMo());
+
+  handle('agent:bangGhi', ({ cuocId }): { muc: AgentMucKhoiPhuc[]; dangChay: boolean } => ({
+    muc: bangGhiCua(cuocId),
+    dangChay: cuocDangChay(cuocId),
+  }));
 
   // ─── MCP ─────────────────────────────────────────────────────────
 

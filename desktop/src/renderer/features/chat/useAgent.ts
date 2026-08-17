@@ -14,8 +14,8 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
-  AgentInfo, AgentPhanLoaiLenh, AgentPhien, AgentQuota, AgentQuyetDinh, AgentUiEvent,
-  AgentViec, AgentWorkspace,
+  AgentInfo, AgentMucKhoiPhuc, AgentPhanLoaiLenh, AgentPhien, AgentQuota, AgentQuyetDinh,
+  AgentUiEvent, AgentViec, AgentWorkspace,
 } from '../../../shared/ipc';
 import type { TheXinPhep } from './XinPhep';
 
@@ -106,6 +106,32 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   useEffect(() => {
     if (info?.quota) datHanMuc(info.quota);
   }, [info]);
+
+  /**
+   * Dựng lại bảng ghi từ main mỗi lần component được GẮN.
+   *
+   * Không phải chuyện "cho tiện": React tháo cả trang này khi người dùng đổi
+   * route (xem `Content()` trong `App.tsx`), nên `muc` ở đây mất sạch dù hội
+   * thoại trong main còn nguyên. Không dựng lại thì màn hình nói dối — nó bảo
+   * cuộc này trống trong khi agent vẫn nhớ đủ, và câu trả lời tiếp theo sẽ nhắc
+   * tới những thứ người dùng không còn thấy trên màn hình.
+   *
+   * Cũng nhờ đó mà quay lại giữa lúc một lượt đang chạy vẫn thấy được các bước
+   * đã đi; phần chữ đang chảy dở thì hiện nốt khi lượt kết thúc.
+   */
+  useEffect(() => {
+    let huy = false;
+    void (async () => {
+      const cu = await window.cuongthai?.agent.bangGhi(cuocId);
+      if (huy || !cu) return;
+      // CHỈ nạp khi đang trống. Sự kiện trực tiếp có thể tới trước lời gọi này
+      // trả về, và đè lên chúng bằng ảnh chụp cũ là xoá đúng phần mới nhất.
+      if (cu.muc.length) datMuc((truoc) => (truoc.length > 0 ? truoc : cu.muc.map(doiSangMuc)));
+      // Lượt vẫn đang chạy ở main ⇒ nút phải là Dừng, và con quay phải quay.
+      if (cu.dangChay) { datDangChay(true); datDangNghi(true); }
+    })();
+    return () => { huy = true; };
+  }, [cuocId]);
 
   const themChu = useCallback((delta: string) => {
     datMuc((truoc) => gopChu(truoc, delta));
@@ -218,9 +244,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     // xem `dungLaiHienThi` ở main. Nói rõ ra bằng một dòng, thay vì để người
     // dùng tự hỏi vì sao lịch sử trông khác lúc họ đang chạy.
     datMuc([
-      ...kq.muc.map((m) => (m.kieu === 'tool'
-        ? { kieu: 'tool' as const, ten: m.ten, tomTat: m.tomTat, vong: 'may' as const }
-        : m)),
+      ...kq.muc.map(doiSangMuc),
       { kieu: 'loi', ma: 'KHOI_PHUC', text: 'Đã mở lại việc này. Gõ tiếp là agent đi tiếp từ đúng chỗ đó.' },
     ]);
     datPhienDangMo(id);
@@ -336,4 +360,18 @@ export function useAgentInfo() {
   useEffect(() => { void nap(); }, [nap]);
 
   return { info, thuMuc, datThuMuc, dangTai, nap };
+}
+
+/**
+ * Mục khôi phục (từ main) → mục bảng ghi (của màn hình).
+ *
+ * Bản khôi phục CỐ Ý nghèo hơn bản lúc chạy: không có thẻ duyệt kèm diff. Diff
+ * không nằm trong bản lưu, và dựng lại nó nghĩa là đọc file HÔM NAY — cho ra
+ * một cái diff không phải cái người dùng đã duyệt. Một dòng công cụ nói đúng
+ * sự thật thì tốt hơn một cái thẻ nói sai.
+ */
+function doiSangMuc(m: AgentMucKhoiPhuc): MucHienThi {
+  return m.kieu === 'tool'
+    ? { kieu: 'tool', ten: m.ten, tomTat: m.tomTat, vong: 'may' }
+    : m;
 }

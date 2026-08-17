@@ -25,7 +25,7 @@ import { API_ORIGIN } from '../config';
 import { readStoredSession } from '../ipc/auth';
 import type { KetQuaDiff } from './diff';
 import { docGhiChuDuAn } from './ghiChu';
-import { luuPhien, type TinNhanLuu } from './phien';
+import { dungLaiHienThi, luuPhien, type MucKhoiPhuc, type TinNhanLuu } from './phien';
 import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua } from './tools';
 import { taoSoCuoc, type SoCuoc } from './so';
@@ -183,6 +183,45 @@ export function soCuaCuoc(id: string): SoCuoc {
   return layCuoc(id).so;
 }
 
+/**
+ * Các cuộc ĐANG MỞ, để renderer dựng lại thanh tab.
+ *
+ * ⚠️ Đây là thứ vá lỗi mất việc khi rời trang. Renderer bị THÁO HẲN mỗi lần
+ * người dùng bấm sang Ghi chú rồi quay lại (`App.tsx` đổi component theo route),
+ * nên mọi `useState` của nó biến mất — kể cả danh sách tab. Bản trước thấy 0
+ * tab liền TẠO MỘT CUỘC MỚI RỖNG, và người dùng nhìn thấy đúng cảnh việc đang
+ * làm dở biến mất không dấu vết.
+ *
+ * Main mới là nơi hội thoại thật sự sống. Renderer hỏi lại nó lúc gắn, thay vì
+ * tự nhớ — nhớ hai nơi thì sẽ có ngày lệch, mà lệch ở đây nghĩa là mất việc.
+ */
+export interface TomTatCuoc {
+  id: string;
+  tieuDe: string;
+  dangChay: boolean;
+}
+
+export function dsCuocDangMo(): TomTatCuoc[] {
+  const ra: TomTatCuoc[] = [];
+  for (const [, c] of cuoc) {
+    const dau = c.hoiThoai.find((m) => m.role === 'user');
+    const noi = Array.isArray(dau?.content)
+      ? dau.content.filter((k) => k.type === 'text').map((k) => String((k as { text?: unknown }).text ?? '')).join(' ')
+      : String(dau?.content ?? '');
+    ra.push({
+      id: c.id,
+      tieuDe: noi.trim().replace(/\s+/g, ' ').slice(0, 40) || 'Việc mới',
+      dangChay: c.dangChay !== null,
+    });
+  }
+  return ra;
+}
+
+/** Bảng ghi của một cuộc, dựng lại từ bản giao thức. */
+export function bangGhiCua(id: string): MucKhoiPhuc[] {
+  return dungLaiHienThi(layCuoc(id).hoiThoai as TinNhanLuu[]);
+}
+
 export function soFileDaSuaCua(id: string): number {
   return soFileDaSua(layCuoc(id).so);
 }
@@ -243,15 +282,27 @@ export async function chayLuot(
   const c = layCuoc(cuocId);
   if (c.dangChay) throw new Error('Việc này đang chạy dở. Hãy dừng nó trước.');
   /**
-   * CHỈ MỘT cuộc chạy tại một thời điểm, dù mở bao nhiêu tab.
+   * Chạy SONG SONG được — nhưng chỉ khi hai việc KHÔNG GHI vào cùng một chỗ.
    *
-   * Không phải vì khó làm — mà vì hai agent chạy cùng lúc trên CÙNG một thư mục
-   * dự án là công thức của tai nạn: cái này sửa file cái kia vừa đọc, hai thẻ
-   * duyệt chen nhau trên màn hình, và hạn mức tiêu gấp đôi mà không ai để ý.
-   * Mở nhiều tab để CHUYỂN QUA LẠI và đọc lại việc cũ; chạy thì lần lượt.
+   * Bản trước chặn cứng "mỗi lúc một việc". Chặn thế là quá tay: hai việc CHỈ
+   * ĐỌC thì không đụng gì nhau, và người dùng mở nhiều tab chính là để chạy
+   * nhiều việc. Cấm cả những trường hợp an toàn chỉ khiến tính năng nhiều tab
+   * thành vô nghĩa.
+   *
+   * Thứ thật sự nguy hiểm hẹp hơn nhiều: hai agent cùng ĐƯỢC GHI, trên CÙNG
+   * một thư mục. Lúc đó cái này sửa file cái kia vừa đọc, và không có thứ tự
+   * nào đúng cả. Chỉ chặn đúng trường hợp đó.
    */
-  if (coCuocDangChay()) {
-    throw new Error('Một việc khác đang chạy. Hãy đợi hoặc dừng nó trước — mỗi lúc chỉ chạy được một việc.');
+  // Thư mục dự án hiện là cài đặt TOÀN APP, nên mọi tab dùng chung một thư mục.
+  // Vì thế "cùng thư mục" lúc này = "có cuộc nào khác đang chạy". Khi thư mục
+  // thành của từng tab thì đổi phép so sánh ở đây thành so đường dẫn — chứ
+  // ĐỪNG so `duAn`, nó chỉ giữ TÊN thư mục và được gán sau lượt đầu.
+  if ((boiCanh.choSua || boiCanh.choChayLenh) && coCuocDangChay()) {
+    throw new Error(
+      'Một việc khác đang chạy trên cùng thư mục dự án, mà việc này lại được phép SỬA/CHẠY LỆNH. '
+      + 'Hãy đợi nó xong — hai agent cùng ghi một chỗ sẽ đè lên nhau. '
+      + '(Việc CHỈ ĐỌC thì chạy song song thoải mái.)',
+    );
   }
 
   const phien = readStoredSession();

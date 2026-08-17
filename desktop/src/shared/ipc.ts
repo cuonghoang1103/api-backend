@@ -66,6 +66,22 @@ export const settingKeySchema = z.enum([
    * file thì mất mã.
    */
   'agentMucNoLuc',
+  /**
+   * Chế độ đang mở ở /chat: 'chat' (trò chuyện) hay 'code' (lập trình).
+   *
+   * Lưu vì cùng lý do với `agentMucNoLuc`: đây là SỞ THÍCH, không phải quyền.
+   * Rời trang rồi quay lại mà bị đá về Trò chuyện thì người đang làm việc lập
+   * trình phải bấm lại mỗi lần — và họ tưởng việc của mình mất, vì màn hình
+   * hiện ra không phải màn hình họ để lại.
+   */
+  'chatCheDo',
+  /**
+   * Tab (cuộc) đang mở ở chế độ Lập trình.
+   *
+   * Không nhớ thì quay lại trang là nhảy về tab CUỐI, không phải tab người dùng
+   * đang làm — và với người mở ba tab thì đó vẫn là "việc của tôi đâu rồi".
+   */
+  'agentTabMo',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 
@@ -353,6 +369,13 @@ export interface AgentQuota {
   hoiLucNao: string | null;
 }
 
+/** Một cuộc đang mở trong main — nguồn sự thật cho thanh tab. */
+export interface AgentCuocDangMo {
+  id: string;
+  tieuDe: string;
+  dangChay: boolean;
+}
+
 /** Trạng thái các server MCP người dùng đã cắm. */
 export interface AgentMcpTrangThai {
   /** Đường dẫn file cấu hình — hiện lên để người dùng biết sửa ở đâu. */
@@ -462,6 +485,8 @@ export const INVOKE_CHANNELS = {
   'agent:dsPhien': null,
   'agent:moPhien': agentMoPhienSchema,
   'agent:xoaPhien': agentPhienSchema,
+  'agent:dsCuoc': null,
+  'agent:bangGhi': agentCuocSchema,
   'agent:mcpTrangThai': null,
   'agent:mcpNapLai': null,
   'agent:mcpMoCauHinh': null,
@@ -636,6 +661,21 @@ export interface DesktopBridge {
      */
     moPhien(cuocId: string, id: string): Promise<{ muc: AgentMucKhoiPhuc[] } | null>;
     xoaPhien(id: string): Promise<void>;
+    /**
+     * Các cuộc ĐANG MỞ trong main.
+     *
+     * Renderer bị tháo hẳn mỗi lần đổi trang, nên nó KHÔNG được tự nhớ danh
+     * sách tab — hỏi lại main lúc gắn. Xem `dsCuocDangMo` trong `agent/loop.ts`.
+     */
+    dsCuoc(): Promise<AgentCuocDangMo[]>;
+    /**
+     * Bảng ghi của một cuộc + nó có ĐANG CHẠY không.
+     *
+     * `dangChay` đi kèm chứ không tách thành lời gọi riêng: quay lại trang giữa
+     * lúc một lượt đang chạy mà nút vẫn hiện "Gửi" thì người dùng bấm phát nữa
+     * và trả tiền hai lần cho cùng một câu.
+     */
+    bangGhi(cuocId: string): Promise<{ muc: AgentMucKhoiPhuc[]; dangChay: boolean }>;
     /** Trạng thái MCP hiện tại. Không khởi động lại server nào. */
     mcpTrangThai(): Promise<AgentMcpTrangThai>;
     /** Tắt hết server MCP rồi bật lại theo file cấu hình. Có thể mất vài giây. */

@@ -524,6 +524,89 @@ try {
   check('quay lại tab A vẫn còn nguyên bảng ghi', soMucQuayLai >= soMucTabA,
     `${soMucQuayLai} mục`);
 
+  // ══ RỜI TRANG RỒI QUAY LẠI ══
+  //
+  // ⚠️ Phép kiểm này ra đời vì một lỗi THẬT người dùng báo 17/08, mà cả 55 phép
+  // kiểm trước đó không bắt được: chúng đều ở LẠI trong /chat.
+  //
+  // `App.tsx` đổi hẳn component theo route, nên bấm sang Ghi chú là ChatPage bị
+  // THÁO và mọi `useState` biến mất. Bản trước thấy 0 tab liền tạo một cuộc mới
+  // rỗng ⇒ người dùng nhìn thấy việc đang làm dở biến mất không dấu vết.
+  console.log('\nRời trang rồi quay lại:');
+  const soTabTruocKhiRoi = await w2.evaluate(() => globalThis.cuongthai.agent.dsCuoc()).then((d) => d.length);
+  // ⚠️ Ghi lại ĐANG MỞ TAB NÀO và tab ĐÓ có bao nhiêu mục.
+  //
+  // Bản trước chỉ đếm "sau khi về có >1 mục", và nó ĐẠT trong khi thực tế đang
+  // hỏng: quay lại nhảy về tab cuối, nên phép kiểm so 16 mục của tab A với 2
+  // mục của tab B rồi kết luận "không mất gì". Một phép kiểm đạt vì lý do sai
+  // còn tệ hơn không có phép kiểm — nó cấp một chứng nhận giả.
+  const tabDangMoTruoc = await w2.evaluate(() => globalThis.cuongthai.settings.getAll()).then((s) => s.agentTabMo);
+  const chuTruocKhiRoi = await manA.locator('.ct-agent-scroll').innerText();
+
+  await w2.locator('[data-nav-item]').filter({ hasText: 'Ghi chú' }).first().click();
+  await w2.waitForFunction(
+    () => !document.querySelector('.ct-agent-bar'),
+    null,
+    { timeout: 10000 },
+  );
+  check('rời được sang trang khác (ChatPage đã bị tháo)', true);
+
+  await w2.locator('[data-nav-item]').filter({ hasText: 'AI Chat' }).first().click();
+  // ⚠️ Chờ CHẾ ĐỘ LẬP TRÌNH đang HIỆN, không chờ `.ct-agent-bar`: cả hai chế độ
+  // cùng nằm trong DOM (giữ sống bằng CSS), nên chờ `.ct-agent-bar` là chờ một
+  // thứ có sẵn kể cả khi màn hình đang ở Trò chuyện — phép chờ luôn đạt và
+  // không kiểm gì. Đã dính đúng bẫy đó ở lần chạy trước.
+  await w2.waitForFunction(
+    () => !!document.querySelector('.ct-chedo[data-hien="true"] .ct-agent-bar'),
+    null,
+    { timeout: 15000 },
+  );
+  check('chế độ Lập trình được NHỚ qua lần đổi trang', true);
+
+  // Chờ thanh tab dựng lại xong (một vòng IPC hỏi main).
+  await w2.waitForFunction(
+    (n) => document.querySelectorAll('.ct-chedo[data-hien="true"] .ct-tab').length >= n,
+    soTabTruocKhiRoi,
+    { timeout: 15000 },
+  );
+
+  const soCuocSau = await w2.evaluate(() => globalThis.cuongthai.agent.dsCuoc()).then((d) => d.length);
+  check('KHÔNG đẻ thêm cuộc rỗng khi quay lại', soCuocSau === soTabTruocKhiRoi,
+    `trước ${soTabTruocKhiRoi} · sau ${soCuocSau}`);
+
+  const soTabSau = await w2.locator('.ct-chedo[data-hien="true"] .ct-tab').count();
+  check('thanh tab dựng lại đủ số tab', soTabSau === soTabTruocKhiRoi, `${soTabSau} tab`);
+
+  const tabDangMoSau = await w2.evaluate(() => globalThis.cuongthai.settings.getAll()).then((s) => s.agentTabMo);
+  check('mở lại ĐÚNG tab đang xem, không nhảy về tab cuối', tabDangMoSau === tabDangMoTruoc,
+    `${String(tabDangMoTruoc).slice(-6)} → ${String(tabDangMoSau).slice(-6)}`);
+
+  /**
+   * Đo NỘI DUNG, không đo số mục.
+   *
+   * Đếm mục cho ra con số lệch một cách hợp lệ: bản dựng lại đi từ hội thoại
+   * GIAO THỨC, nên nó thiếu những dòng chỉ-có-trên-giao-diện (dòng `AGENTS.md`
+   * phát ở đầu mỗi lượt chẳng hạn). Bắt số mục phải bằng nhau là bắt bản dựng
+   * lại tái tạo cả phần trang trí — sai kỳ vọng, và sẽ đỏ mãi.
+   *
+   * Thứ PHẢI sống sót là VIỆC: câu người dùng đã hỏi và câu agent đã trả lời.
+   * Nên đối chiếu bằng những chuỗi agent không thể đoán ra.
+   */
+  const manQuayLai = w2.locator('.ct-tab-noi[data-hien="true"]');
+  const dauVet = ['9999', 'DU-AN-XANH-88'].filter((t) => chuTruocKhiRoi.includes(t));
+  await w2.waitForFunction(
+    (ds) => {
+      const el = document.querySelector('.ct-tab-noi[data-hien="true"] .ct-agent-scroll');
+      return !!el && ds.every((t) => el.textContent.includes(t));
+    },
+    dauVet,
+    { timeout: 15000 },
+  ).catch(() => {});
+  const chuSauKhiVe = await manQuayLai.locator('.ct-agent-scroll').innerText();
+  const conDu = dauVet.filter((t) => chuSauKhiVe.includes(t));
+  check('NỘI DUNG việc sống sót qua lần đổi trang', dauVet.length > 0 && conDu.length === dauVet.length,
+    `giữ ${conDu.length}/${dauVet.length} dấu vết (${dauVet.join(', ')})`);
+
   // ══ MCP ══
   //
   // Kiểm bằng một server MCP THẬT (`scripts/mcp-gia.mjs`) nói đúng giao thức

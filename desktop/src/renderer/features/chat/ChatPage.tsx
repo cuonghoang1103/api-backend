@@ -11,7 +11,7 @@
  * mở được trang, vẫn trò chuyện được, chỉ thấy thêm một lời mời nâng cấp ở tab
  * bên cạnh. Nếu là route riêng thì họ bấm vào và gặp một trang chết.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Bot, Loader2, Terminal } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { AgentMode } from './AgentMode';
@@ -23,8 +23,24 @@ type CheDo = 'chat' | 'code';
 
 export function ChatPage() {
   const { info, thuMuc, datThuMuc, dangTai, nap } = useAgentInfo();
-  const [cheDo, datCheDo] = useState<CheDo>('chat');
-  const { settings } = useAppState();
+  const { settings, setSetting } = useAppState();
+  // Khôi phục chế độ đã chọn lần trước — xem `chatCheDo` trong shared/ipc.ts.
+  const [cheDo, datCheDoTho] = useState<CheDo>(settings.chatCheDo === 'code' ? 'code' : 'chat');
+  const datCheDo = (m: CheDo): void => { datCheDoTho(m); setSetting('chatCheDo', m); };
+
+  /**
+   * Cấu hình được nạp BẤT ĐỒNG BỘ và `app-state` cố ý không chặn render, nên
+   * lần dựng đầu tiên có thể chưa thấy `chatCheDo`. Đồng bộ đúng MỘT LẦN khi nó
+   * tới — không có canh `daDongBo` thì mỗi lần cấu hình đổi vì bất cứ lý do gì
+   * (đổi theme chẳng hạn) là màn hình lại nhảy về chế độ đã lưu, ngay giữa lúc
+   * người dùng vừa bấm sang chế độ kia.
+   */
+  const daDongBoCheDo = useRef(false);
+  useEffect(() => {
+    if (daDongBoCheDo.current || settings.chatCheDo === undefined) return;
+    daDongBoCheDo.current = true;
+    if (settings.chatCheDo === 'code') datCheDoTho('code');
+  }, [settings.chatCheDo]);
 
   /**
    * Các việc đang mở. Cha giữ danh sách vì nó là chỗ DUY NHẤT biết có những tab
@@ -34,16 +50,46 @@ export function ChatPage() {
    * là tạo cho một người sẽ chỉ thấy màn hình mời nâng cấp.
    */
   const [tabs, datTabs] = useState<string[]>([]);
-  const [tabMo, datTabMo] = useState<string>('');
+  const [tabMo, datTabMoTho] = useState<string>('');
+  const datTabMo = (id: string): void => { datTabMoTho(id); setSetting('agentTabMo', id); };
   const [tenTab, datTenTab] = useState<Record<string, string>>({});
 
+  /**
+   * ⚠️ HỎI LẠI MAIN, ĐỪNG TỰ NHỚ.
+   *
+   * `App.tsx` đổi hẳn component theo route, nên rời /chat sang Ghi chú là màn
+   * này bị THÁO, và mọi `useState` ở đây biến mất — kể cả `tabs`. Bản trước chỉ
+   * có nhánh "chưa có tab nào ⇒ tạo mới", nên quay lại là nó tạo một cuộc RỖNG
+   * và người dùng nhìn thấy việc đang làm dở biến mất không dấu vết. (Việc thật
+   * ra vẫn nằm trên đĩa và trong main — chỉ màn hình mất; nhưng nhìn thì y hệt
+   * mất trắng.)
+   *
+   * Main giữ hội thoại thật. Lúc gắn thì hỏi nó xem đang có những cuộc nào; chỉ
+   * tạo mới khi nó thật sự không có cái nào.
+   */
   useEffect(() => {
     if (!info?.pro || tabs.length > 0) return;
-    void window.cuongthai?.agent.taoCuoc().then((id) => {
-      if (!id) return;
+    let huy = false;
+    void (async () => {
+      const dangMo = (await window.cuongthai?.agent.dsCuoc()) ?? [];
+      if (huy) return;
+      if (dangMo.length > 0) {
+        datTabs(dangMo.map((c) => c.id));
+        datTenTab(Object.fromEntries(dangMo.map((c) => [c.id, c.tieuDe])));
+        // Mở lại ĐÚNG tab người dùng đang xem. Rơi về tab cuối chỉ vì nó tình
+        // cờ đứng cuối danh sách thì người mở ba tab vẫn thấy "việc của tôi
+        // đâu rồi" — chỉ là ở một tab khác.
+        const cu = settings.agentTabMo;
+        const con = typeof cu === 'string' && dangMo.some((c) => c.id === cu);
+        datTabMo(con ? (cu as string) : dangMo[dangMo.length - 1]!.id);
+        return;
+      }
+      const id = await window.cuongthai?.agent.taoCuoc();
+      if (huy || !id) return;
       datTabs([id]);
       datTabMo(id);
-    });
+    })();
+    return () => { huy = true; };
   }, [info?.pro, tabs.length]);
 
   const themTab = (): void => {

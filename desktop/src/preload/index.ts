@@ -15,6 +15,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import type {
   AgentInfo,
+  AgentCuocDangMo,
   AgentMcpTrangThai,
   AgentMucKhoiPhuc,
   AgentPhien,
@@ -137,6 +138,10 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:moPhien', { cuocId, id }) as
         Promise<{ muc: AgentMucKhoiPhuc[] } | null>,
     xoaPhien: (id: string) => ipcRenderer.invoke('agent:xoaPhien', { id }) as Promise<void>,
+    dsCuoc: () => ipcRenderer.invoke('agent:dsCuoc') as Promise<AgentCuocDangMo[]>,
+    bangGhi: (cuocId: string) =>
+      ipcRenderer.invoke('agent:bangGhi', { cuocId }) as
+        Promise<{ muc: AgentMucKhoiPhuc[]; dangChay: boolean }>,
     mcpTrangThai: () => ipcRenderer.invoke('agent:mcpTrangThai') as Promise<AgentMcpTrangThai>,
     mcpNapLai: () => ipcRenderer.invoke('agent:mcpNapLai') as Promise<AgentMcpTrangThai>,
     mcpMoCauHinh: () => ipcRenderer.invoke('agent:mcpMoCauHinh') as Promise<void>,

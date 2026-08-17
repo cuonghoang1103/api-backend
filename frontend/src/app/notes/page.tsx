@@ -29,6 +29,8 @@ import DeletedNoteView from '@/components/notes/DeletedNoteView';
 import NoteVersionHistory from '@/components/notes/NoteVersionHistory';
 import NoteCommentsPanel from '@/components/notes/NoteCommentsPanel';
 import NoteBacklinksPanel from '@/components/notes/NoteBacklinksPanel';
+import NoteQuickOpen from '@/components/notes/NoteQuickOpen';
+import NoteBreadcrumb, { type BreadcrumbEntry } from '@/components/notes/NoteBreadcrumb';
 import { exportNoteAsPdf } from '@/lib/notesPdf';
 import { NotesThemeProvider, useNotesTheme } from '@/components/notes/NotesThemeProvider';
 import { Sparkles } from 'lucide-react';
@@ -375,6 +377,24 @@ function NotesPageInner() {
   }, [filter, isAuthenticated]);
 
   // ─── Selection ─────────────────────────────────────────────
+  /**
+   * Đường dẫn trang cha của ghi chú đang mở.
+   *
+   * Dùng lại endpoint backlinks — nó VỐN ĐÃ trả `breadcrumb` (xem `ancestorsOf`
+   * ở backend), trước nay frontend nhận về rồi chỉ lấy id cha và bỏ cả chuỗi.
+   * Không thêm endpoint mới cho thứ đã có sẵn trên đường truyền.
+   */
+  const [breadcrumb, setBreadcrumb] = useState<BreadcrumbEntry[]>([]);
+  useEffect(() => {
+    const noteId = selected?.id;
+    if (!noteId) { setBreadcrumb([]); return; }
+    let alive = true;
+    notesApi.getBacklinks(noteId)
+      .then((res) => { if (alive) setBreadcrumb(res.data.data.breadcrumb ?? []); })
+      .catch(() => { if (alive) setBreadcrumb([]); });
+    return () => { alive = false; };
+  }, [selected?.id]);
+
   const selectNote = useCallback(async (id: number) => {
     setDrawerOpen(false);
     setHistoryOpen(false);
@@ -779,6 +799,9 @@ function NotesPageInner() {
     <div className="notes-page h-[calc(100dvh-var(--app-chrome-bottom))] pt-16
       bg-[var(--notes-bg,#ffffff)] text-[var(--notes-text,#1e293b)]
       dark:bg-[#0c0f14] dark:text-slate-200">
+      {/* Mở nhanh Cmd/Ctrl+K. Đặt ở cấp trang chứ không trong editor: nó phải
+          mở được cả khi chưa chọn ghi chú nào, và đó chính là lúc cần nhất. */}
+      <NoteQuickOpen onOpen={(id) => { void selectNote(id); }} />
       <div className="flex h-full">
         {/* Desktop sidebar — resizable (drag the right edge, Notion-style) */}
         <aside
@@ -1078,13 +1101,26 @@ function NotesPageInner() {
               onDeletePermanently={deletePermanently}
             />
           ) : selected ? (
-            <NoteRealtimeEditor
-              key={selected.id}
-              note={selected}
-              tree={tree}
-              onSave={saveNote}
-              onDuplicate={duplicateSelectedNote}
-            />
+            <>
+              {/* Đường dẫn trang cha, canh cùng bề rộng với thân ghi chú
+                  (max-w-[760px] của editor) để không lệch khỏi cột chữ. */}
+              {(breadcrumb.length > 0 || treeSubjectFor(selected.subjectId)) && (
+                <div className="mx-auto w-full max-w-[760px] px-4 pt-4 sm:px-6">
+                  <NoteBreadcrumb
+                    trail={breadcrumb}
+                    subjectName={treeSubjectFor(selected.subjectId)?.name ?? null}
+                    onOpen={(id) => { void selectNote(id); }}
+                  />
+                </div>
+              )}
+              <NoteRealtimeEditor
+                key={selected.id}
+                note={selected}
+                tree={tree}
+                onSave={saveNote}
+                onDuplicate={duplicateSelectedNote}
+              />
+            </>
           ) : (
             <div className="flex h-[60vh] flex-col items-center justify-center px-6 text-center text-slate-500">
               <NotebookPen className="mb-3 h-9 w-9 text-teal-400/50" />

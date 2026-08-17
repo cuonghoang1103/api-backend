@@ -149,3 +149,57 @@ jobs:
             desktop/release/*.yml
           if-no-files-found: warn
           retention-days: 14
+
+  # ── Công bố ────────────────────────────────────────────────
+  # Chạy SAU KHI cả ba nền tảng dựng xong. `needs: dung` đợi trọn ma trận và
+  # chỉ chạy nếu KHÔNG job nào hỏng — nên một bản phát hành thiếu nền tảng sẽ
+  # nằm mãi ở dạng nháp thay vì được công bố nửa vời.
+  #
+  # Đây là chốt chặn cho lỗi mà `releaseType: draft` mở đường giải quyết: xem
+  # ghi chú dài trong desktop/electron-builder.yml.
+  cong-bo:
+    name: Công bố bản phát hành
+    needs: dung
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Xác định thẻ phiên bản
+        id: tag
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            VER="${{ inputs.version }}"
+          else
+            VER=$(node -p "require('./desktop/package.json').version")
+          fi
+          echo "tag=v${VER}" >> "$GITHUB_OUTPUT"
+          echo "Sẽ công bố v${VER}"
+
+      # Đếm file TRƯỚC khi công bố. Cả ba job đều báo thành công mà vẫn có thể
+      # thiếu file nếu một lượt upload lỗi âm thầm — mà đúng những file `.yml`
+      # này mới là thứ `electron-updater` đọc, thiếu nó thì app báo lỗi đỏ dù
+      # bản cài vẫn nằm đó.
+      - name: Kiểm đủ file rồi mới công bố
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          REPO="cuonghoang1103/cuongthai-desktop"
+          FILES=$(gh release view "$TAG" --repo "$REPO" --json assets --jq '.assets[].name')
+          echo "$FILES"
+          for f in latest.yml latest-mac.yml latest-linux.yml; do
+            echo "$FILES" | grep -qx "$f" || { echo "❌ THIẾU $f — giữ nguyên bản nháp"; exit 1; }
+          done
+          echo "$FILES" | grep -q '\.exe$'      || { echo "❌ THIẾU bản cài Windows"; exit 1; }
+          echo "$FILES" | grep -q '\.dmg$'      || { echo "❌ THIẾU bản cài macOS"; exit 1; }
+          echo "$FILES" | grep -q '\.AppImage$' || { echo "❌ THIẾU bản cài Linux"; exit 1; }
+          echo "✅ Đủ file"
+
+      - name: Chuyển nháp sang công bố
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          gh release edit "${{ steps.tag.outputs.tag }}" \
+            --repo cuonghoang1103/cuongthai-desktop \
+            --draft=false --latest
+          echo "✅ Đã công bố ${{ steps.tag.outputs.tag }}"

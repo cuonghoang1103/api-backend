@@ -136,4 +136,18 @@ publish:
   provider: github
   owner: cuonghoang1103
   repo: cuongthai-desktop
-  releaseType: release
+  # NHÁP, không phải `release`.
+  #
+  # Ba nền tảng dựng SONG SONG và cùng đẩy file vào một bản phát hành. Với
+  # `releaseType: release`, job nào xong trước sẽ CÔNG BỐ bản phát hành ngay,
+  # trong khi hai job kia còn đang dựng — nên luôn có một cửa sổ vài phút mà
+  # bản phát hành tồn tại công khai nhưng thiếu file.
+  #
+  # Ai bấm "Kiểm tra bản mới" đúng lúc đó sẽ nhận nguyên một bãi lỗi đỏ
+  # `Cannot find latest-mac.yml … 404`, đọc như app hỏng chứ không phải "đang
+  # dựng, chờ chút". Đã xảy ra thật với bản 0.5.1 ngày 17/08/2026.
+  #
+  # Để nháp thì `electron-updater` KHÔNG thấy gì (bản nháp không nằm trong
+  # `/releases/latest` và tải ẩn danh thì 404) — app im lặng báo "đã mới nhất"
+  # cho tới khi bản phát hành đủ file được công bố ở bước cuối của workflow.
+  releaseType: draft

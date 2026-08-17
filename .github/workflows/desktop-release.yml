@@ -42,10 +42,26 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: desktop/package-lock.json
+          cache-dependency-path: |
+            desktop/package-lock.json
+            frontend/package-lock.json
 
       - run: npm ci
         working-directory: desktop
+
+      # ⚠️ PHẢI cài cả deps của FRONTEND.
+      #
+      # App desktop dùng lại nguyên các component Notes của web qua alias
+      # `@` → `../frontend/src` (xem `desktop/vite.config.ts`). Nên cây module
+      # của renderer chạm THẬT vào `frontend/node_modules`, và thiếu nó thì cả
+      # typecheck lẫn vitest lẫn `vite build` đều hỏng ở bước phân giải import.
+      #
+      # Hỏng đúng như vậy 17/08/2026: `routes.test.ts` (chỉ dùng `fs.existsSync`)
+      # vẫn đỏ, vì nó import `./routes` → `page-registry` → `NotesPage` →
+      # `@/app/notes/page` → `@dnd-kit/core`. Thông báo lỗi trỏ vào một file
+      # frontend mà job này tưởng như không liên quan gì.
+      - run: npm ci
+        working-directory: frontend
 
       - name: Kiểm kiểu
         run: npm run typecheck
@@ -83,7 +99,9 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: desktop/package-lock.json
+          cache-dependency-path: |
+            desktop/package-lock.json
+            frontend/package-lock.json
 
       # libsecret là kho khoá của Linux. electron-builder cần nó lúc đóng gói
       # bản .deb; thiếu thì bản cài ra vẫn chạy nhưng safeStorage không mã hoá
@@ -94,6 +112,10 @@ jobs:
 
       - run: npm ci
         working-directory: desktop
+
+      # Cùng lý do như ở job kiểm tra: renderer biên dịch mã nguồn của frontend.
+      - run: npm ci
+        working-directory: frontend
 
       - name: Đặt phiên bản
         if: inputs.version != ''

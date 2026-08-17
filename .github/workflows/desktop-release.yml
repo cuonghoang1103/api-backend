@@ -71,10 +71,47 @@ jobs:
         run: npx vitest run
         working-directory: desktop
 
+  # ── Tạo SẴN bản nháp ───────────────────────────────────────
+  #
+  # ⚠️ ĐÂY LÀ CHỐT CHỐNG ĐUA. Không có job này thì ba nhánh dựng chạy song song
+  # và mỗi nhánh tự tạo bản phát hành cho CÙNG một thẻ — GitHub cho phép nhiều
+  # bản NHÁP trùng tên thẻ, nên tệp mac nằm ở một bản, tệp Linux ở bản khác, và
+  # `gh release view v<x>` chỉ thấy một trong số đó.
+  #
+  # Đã xảy ra thật với 0.5.4: cả ba job đều XANH, log macOS ghi rõ
+  # `creating GitHub release reason=release doesn't exist tag=v0.5.4`, và bước
+  # công bố báo "THIẾU latest.yml". Bản 0.5.3 thoát chỉ vì may về thứ tự.
+  #
+  # Có bản nháp sẵn thì electron-builder tìm thấy và tải VÀO ĐÓ.
+  tao-nhap:
+    name: Tạo bản nháp
+    needs: kiem-tra
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: tag
+        run: echo "tag=v$(node -p "require('./desktop/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Tạo bản nháp nếu chưa có
+        env:
+          # Cùng token với bước công bố — `GITHUB_TOKEN` mặc định chỉ có quyền trên
+          # repo NÀY, không tạo được release ở repo cuongthai-desktop.
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          REPO="cuonghoang1103/cuongthai-desktop"
+          TAG="${{ steps.tag.outputs.tag }}"
+          if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+            echo "Đã có $TAG — dùng lại."
+          else
+            gh release create "$TAG" --repo "$REPO" --draft --title "$TAG" --notes "Đang dựng…"
+            echo "Đã tạo bản nháp $TAG."
+          fi
+
   # ── Dựng ───────────────────────────────────────────────────
   dung:
     name: Dựng ${{ matrix.ten }}
-    needs: kiem-tra
+    needs: tao-nhap
     runs-on: ${{ matrix.os }}
     strategy:
       # Một nền tảng hỏng thì hai nền tảng kia VẪN dựng xong. Mặc định của

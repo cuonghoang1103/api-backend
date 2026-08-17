@@ -48,6 +48,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'update:status',
   'agent:event',
   'browser:trangThai',
+  'robot:tin',
 ];
 
 const bridge: DesktopBridge = {
@@ -164,6 +165,15 @@ const bridge: DesktopBridge = {
     mcpTrangThai: () => ipcRenderer.invoke('agent:mcpTrangThai') as Promise<AgentMcpTrangThai>,
     mcpNapLai: () => ipcRenderer.invoke('agent:mcpNapLai') as Promise<AgentMcpTrangThai>,
     mcpMoCauHinh: () => ipcRenderer.invoke('agent:mcpMoCauHinh') as Promise<void>,
+  },
+
+  robot: {
+    doiKichThuoc: (rong: boolean) =>
+      ipcRenderer.invoke('robot:doiKichThuoc', { rong }) as Promise<void>,
+    moChinh: (duongDan: string) =>
+      ipcRenderer.invoke('robot:moChinh', { duongDan }) as Promise<void>,
+    hoi: (chu: string) => ipcRenderer.invoke('robot:hoi', { chu }) as Promise<{ chu: string }>,
+    baoNhac: (ten: string) => ipcRenderer.invoke('robot:baoNhac', { ten }) as Promise<void>,
   },
 
   browser: {

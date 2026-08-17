@@ -203,6 +203,9 @@ export function MusicPage() {
     });
     audio.current = element;
     setPlayingId(track.id);
+    // Cho robot nổi biết đang nghe gì. Main tự bỏ qua nếu người dùng đang nhìn
+    // app — báo tên bài ngay trong trang nhạc là nói lại điều đã thấy.
+    void window.cuongthai?.robot.baoNhac(`${track.title}${track.artist ? ` — ${track.artist}` : ''}`);
     void element.play().catch(() => {
       setError(`Không phát được "${track.title}".`);
       setPlayingId(null);

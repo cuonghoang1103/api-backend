@@ -1,0 +1,195 @@
+/**
+ * Cửa sổ robot nổi.
+ *
+ * ⚠️ Nền PHẢI trong suốt tới tận cùng. Bất kỳ màu nào ở `html`, `body`, hay
+ * `.rb` cũng thành một khối chữ nhật lơ lửng trên màn hình người dùng — cửa sổ
+ * này không có khung để giấu nó.
+ */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: transparent;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #e8e8f0;
+  user-select: none;
+}
+
+.rb {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 8px;
+  gap: 8px;
+}
+
+/**
+ * KÉO ĐỂ DỜI, nhưng phần bấm được thì không kéo.
+ *
+ * `-webkit-app-region: drag` nuốt mọi sự kiện chuột của phần tử. Đặt nó lên cả
+ * con robot thì click/dblclick không bao giờ tới nơi. Nên: vùng kéo là NỀN
+ * quanh robot, còn bản thân robot là `no-drag`.
+ */
+.rb { -webkit-app-region: drag; }
+.rb-than, .rb-chat { -webkit-app-region: no-drag; }
+
+.rb-than {
+  position: relative;
+  cursor: pointer;
+  filter: drop-shadow(0 8px 22px rgba(0, 0, 0, 0.45));
+  transition: transform 0.18s ease;
+}
+
+.rb-than:hover { transform: translateY(-3px) scale(1.04); }
+.rb-than:active { transform: translateY(0) scale(0.97); }
+
+/* Chấm báo có tin — nhỏ, ở vai robot, đủ để liếc thấy. */
+.rb-cham {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 2px solid #12121a;
+  animation: rb-dap 1.6s ease-in-out infinite;
+}
+
+@keyframes rb-dap {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.22); }
+}
+
+/* Bong bóng thông báo. Neo BÊN TRÁI robot vì robot đứng ở mép phải màn hình —
+   thả sang phải là nó tràn ra ngoài cửa sổ và bị cắt. */
+.rb-bong {
+  position: absolute;
+  right: calc(100% + 6px);
+  top: 26px;
+  max-width: 230px;
+  padding: 8px 11px;
+  border-radius: 12px;
+  background: rgba(28, 28, 40, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: normal;
+  animation: rb-hien 0.22s ease;
+}
+
+@keyframes rb-hien {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.rb-bong[data-loai='tin-nhan'] { border-left: 3px solid #60a5fa; }
+.rb-bong[data-loai='thong-bao'] { border-left: 3px solid #fbbf24; }
+.rb-bong[data-loai='nhac'] { border-left: 3px solid #34d399; }
+.rb-bong[data-loai='agent'] { border-left: 3px solid #a78bfa; }
+
+/* ── Khung chat mini ── */
+.rb-chat {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  background: rgba(18, 18, 26, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.rb-chat-dau {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 12.5px;
+  /* Thanh tiêu đề kéo được — quy ước của mọi cửa sổ. */
+  -webkit-app-region: drag;
+}
+
+.rb-chat-nut { display: flex; gap: 6px; -webkit-app-region: no-drag; }
+
+.rb-chat-nut button {
+  padding: 3px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: none;
+  color: #b8b8c8;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.rb-chat-nut button:hover { color: #fff; border-color: rgba(255, 255, 255, 0.35); }
+
+.rb-chat-than {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  user-select: text;
+}
+
+.rb-chat-trong { margin: 0; color: #7a7a8c; font-size: 11.5px; line-height: 1.5; }
+
+.rb-toi, .rb-may {
+  max-width: 88%;
+  padding: 7px 11px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.rb-toi { align-self: flex-end; background: #2f2f45; }
+.rb-may { align-self: flex-start; background: rgba(255, 255, 255, 0.06); }
+.rb-cho { color: #7a7a8c; font-style: italic; }
+
+.rb-chat-soan {
+  display: flex;
+  gap: 6px;
+  padding: 9px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rb-chat-soan input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  color: inherit;
+  font-family: inherit;
+  font-size: 12.5px;
+  outline: none;
+}
+
+.rb-chat-soan input:focus { border-color: #7c7cf0; }
+
+.rb-chat-soan button {
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #6366f1;
+  color: #fff;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.rb-chat-soan button:disabled { opacity: 0.45; cursor: default; }

@@ -614,6 +614,11 @@ export const INVOKE_CHANNELS = {
   'agent:xoaPhien': agentPhienSchema,
   'app:luuFile': luuFileSchema,
 
+  'robot:doiKichThuoc': z.object({ rong: z.boolean() }),
+  'robot:moChinh': z.object({ duongDan: z.string().min(1).max(200) }),
+  'robot:hoi': z.object({ chu: z.string().min(1).max(4000) }),
+  'robot:baoNhac': z.object({ ten: z.string().min(1).max(200) }),
+
   'browser:mo': browserMoSchema,
   'browser:an': null,
   'browser:datVung': browserVungSchema,
@@ -646,6 +651,8 @@ export const EVENT_CHANNELS = [
   'agent:event',
   /** URL / tiêu đề / lui-tới của trình duyệt trong app. */
   'browser:trangThai',
+  /** Thông báo đẩy tới CỬA SỔ ROBOT nổi (tin nhắn, nhạc, agent xong việc). */
+  'robot:tin',
 ] as const;
 
 export type EventChannel = (typeof EVENT_CHANNELS)[number];
@@ -858,6 +865,24 @@ export interface DesktopBridge {
     /** Mở file `mcp.json` bằng ứng dụng mặc định của hệ điều hành. */
     mcpMoCauHinh(): Promise<void>;
   };
+  /**
+   * Cửa sổ robot NỔI — trợ lý đứng ngoài app, luôn thấy kể cả khi người dùng
+   * đang ở app khác. Xem `main/robotNoi.ts`.
+   */
+  robot: {
+    /** Phình ra thành khung chat mini, hoặc thu về đúng con robot. */
+    doiKichThuoc(rong: boolean): Promise<void>;
+    /** Đưa cửa sổ chính ra trước và điều hướng tới `duongDan`. */
+    moChinh(duongDan: string): Promise<void>;
+    /** Hỏi nhanh một câu, trả về câu trả lời đã hoàn chỉnh (không chảy chữ). */
+    hoi(chu: string): Promise<{ chu: string }>;
+    /**
+     * Báo bài đang phát. Main tự BỎ QUA khi cửa sổ chính đang được nhìn — nói
+     * lại tên bài ngay trong trang nhạc là thừa.
+     */
+    baoNhac(ten: string): Promise<void>;
+  };
+
   browser: {
     /** Hiện trình duyệt đè lên `vung` (toạ độ cửa sổ), tuỳ chọn mở luôn `url`. */
     mo(vung: { x: number; y: number; width: number; height: number }, url?: string): Promise<void>;

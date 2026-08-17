@@ -10,14 +10,25 @@
  * `prefers-reduced-motion` ở đầu styles.css áp lên mọi animation của app.
  */
 
-.odin-dock {
+/*
+ * Bảng màu ở `:root`, KHÔNG ở `.odin-dock`.
+ *
+ * Cùng con robot ấy được vẽ ở hai nơi: dock trong app (`.odin-dock`) và cửa sổ
+ * NỔI riêng (`robot.html`). Nhốt biến trong `.odin-dock` thì cửa sổ nổi không
+ * có class đó, mọi `fill="var(--odin-…)"` rơi về giá trị mặc định của SVG là
+ * ĐEN — và con robot thành một vệt đen không mắt. Không lỗi, không cảnh báo,
+ * chỉ sai. Tên biến đã có tiền tố `--odin-` nên để ở `:root` không đụng ai.
+ */
+:root {
   --odin-body: #6b7cf0;
   --odin-body-light: #8b9bf5;
   --odin-highlight: #b9c4ff;
   --odin-screen: #1b2142;
   --odin-eye: #7fe6c9;
   --odin-outline: #3d4aa8;
+}
 
+.odin-dock {
   position: fixed;
   right: 22px;
   /* Nằm trên thanh trạng thái, không đè lên nó. */

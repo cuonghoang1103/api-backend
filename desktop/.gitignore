@@ -11,3 +11,6 @@ out/
 *.p12
 *.pfx
 *.cer
+
+# Ảnh chụp của phép kiểm robot — sinh ra mỗi lần chạy, không phải nguồn.
+robot-thu.png

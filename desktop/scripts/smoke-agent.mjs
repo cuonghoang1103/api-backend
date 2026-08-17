@@ -52,6 +52,24 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+/**
+ * Cửa sổ CHÍNH, không phải "cửa sổ đầu tiên".
+ *
+ * ⚠️ Từ khi có robot NỔI, app mở HAI cửa sổ và `firstWindow()` trả về cái nào
+ * xuất hiện trước — có lúc là robot. Mọi phép kiểm sau đó rồi tìm `.ct-shell`
+ * trong một cửa sổ 150px chỉ có con robot, và hỏng với "Timeout" không nói gì
+ * về nguyên nhân thật. Nhận diện bằng NỘI DUNG: chỉ cửa sổ chính có `#root`.
+ */
+async function cuaSoChinhCua(app) {
+  for (let i = 0; i < 60; i++) {
+    for (const w of app.windows()) {
+      if (await w.locator('#root').count().catch(() => 0)) return w;
+    }
+    await new Promise((r) => setTimeout(r, 250));
+  }
+  throw new Error('không thấy cửa sổ chính (chỉ có robot?)');
+}
+
 const root = path.dirname(fileURLToPath(new URL('../package.json', import.meta.url)));
 const repo = path.resolve(root, '..');
 const PORT = process.env.AGENT_SMOKE_PORT ?? '3001';
@@ -163,7 +181,7 @@ try {
     args: [`--user-data-dir=${userData}`, path.join(root, 'dist/main/index.cjs')],
     env: { ...process.env, CT_RENDERER: 'bundle', CUONGTHAI_API_ORIGIN: API },
   });
-  const w = await app.firstWindow();
+  const w = await cuaSoChinhCua(app);
   cuaSo = w;
   await w.waitForLoadState('domcontentloaded');
 
@@ -450,7 +468,7 @@ try {
     args: [`--user-data-dir=${userData}`, path.join(root, 'dist/main/index.cjs')],
     env: { ...process.env, CT_RENDERER: 'bundle', CUONGTHAI_API_ORIGIN: API },
   });
-  const w2 = await app.firstWindow();
+  const w2 = await cuaSoChinhCua(app);
   cuaSo = w2;
   await w2.waitForLoadState('domcontentloaded');
   await w2.waitForSelector('.ct-shell', { timeout: 20000 });

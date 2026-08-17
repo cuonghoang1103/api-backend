@@ -104,6 +104,21 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
     target: 'chrome128',
+    /**
+     * HAI trang, không phải một.
+     *
+     * `index.html` là cửa sổ chính. `robot.html` là con robot NỔI — một cửa sổ
+     * hệ điều hành riêng, không khung, luôn trên cùng, sống cả khi cửa sổ chính
+     * đã đóng. Nó phải là entry riêng vì nó nạp một cây React khác hẳn (chỉ con
+     * robot + khung chat mini), và gói chung với app đầy đủ nghĩa là mỗi lần mở
+     * robot phải tải cả trang Notes, Academy, sân chơi 3D…
+     */
+    rollupOptions: {
+      input: {
+        index: path.resolve(__dirname, 'src/renderer/index.html'),
+        robot: path.resolve(__dirname, 'src/renderer/robot.html'),
+      },
+    },
   },
 
   /**

@@ -94,6 +94,35 @@ async function bootstrap(): Promise<void> {
   mainWindow = createMainWindow();
   watchNetwork();
 
+  // Robot nổi — bật sau cửa sổ chính. Nó là cửa sổ hệ điều hành RIÊNG, sống
+  // chừng nào app chưa thoát hẳn, kể cả khi cửa sổ chính đã đóng.
+  const { moRobot, cuaSoChinh, dongRobot } = await import('./robotNoi');
+  moRobot();
+
+  // Nguồn tin cho robot: hỏi thăm tin nhắn/thông báo chưa đọc ở MAIN, độc lập
+  // với mọi cửa sổ — vì cửa sổ chính có thể đã đóng trong khi app vẫn chạy.
+  const { batTheoDoiTin, dungTheoDoiTin } = await import('./robotTin');
+  batTheoDoiTin();
+  app.on('will-quit', () => dungTheoDoiTin());
+
+  /**
+   * Đóng cửa sổ CHÍNH trên Windows/Linux ⇒ thoát app.
+   *
+   * ⚠️ Không có nhánh này thì robot nổi GIỮ APP SỐNG MÃI: `window-all-closed`
+   * không bao giờ bắn vì robot vẫn còn đó, nên người dùng đóng cửa sổ chính và
+   * app biến thành một tiến trình ma chỉ giết được bằng Task Manager.
+   *
+   * (Electron KHÔNG có sự kiện `browser-window-closed` ở cấp app — chỉ có
+   * `closed` trên từng cửa sổ. Nên gắn vào đúng cửa sổ chính.)
+   *
+   * macOS thì KHÔNG thoát: ở đó đóng cửa sổ không đồng nghĩa thoát app, và
+   * robot đứng lại chính là điều người dùng muốn.
+   */
+  mainWindow.on('closed', () => {
+    if (process.platform === 'darwin') return;
+    if (!cuaSoChinh()) { dungTheoDoiTin(); dongRobot(); app.quit(); }
+  });
+
   // Tự kiểm bản mới. Không ai vào Cài đặt mỗi ngày để hỏi — bắt họ làm vậy
   // nghĩa là phần lớn người dùng mắc kẹt ở bản cũ mà không hề biết.
   const { scheduleUpdateChecks } = await import('./ipc/update');
@@ -112,10 +141,16 @@ async function bootstrap(): Promise<void> {
   });
 
   app.on('activate', () => {
-    // macOS: bấm icon ở Dock khi không còn cửa sổ nào.
-    if (BrowserWindow.getAllWindows().length === 0) {
-      mainWindow = createMainWindow();
-    }
+    /**
+     * macOS: bấm icon ở Dock.
+     *
+     * ⚠️ KHÔNG đếm `getAllWindows().length` nữa. Robot nổi LUÔN là một cửa sổ,
+     * nên con số đó không bao giờ về 0 — và người dùng bấm icon Dock sẽ chẳng
+     * thấy gì xảy ra, mãi mãi. Phải hỏi đúng "còn cửa sổ CHÍNH không".
+     */
+    void import('./robotNoi').then(({ cuaSoChinh }) => {
+      if (!cuaSoChinh()) mainWindow = createMainWindow();
+    });
   });
 }
 
@@ -151,3 +186,5 @@ app.on('window-all-closed', () => {
   // macOS giữ app sống khi đóng hết cửa sổ — đó là quy ước của nền tảng.
   if (process.platform !== 'darwin') app.quit();
 });
+
+

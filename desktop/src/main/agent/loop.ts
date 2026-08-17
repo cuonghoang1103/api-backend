@@ -612,6 +612,15 @@ export async function chayLuot(
           daLuoc: ketQua.daLuoc, soFileDaSua: soFileDaSua(c.so),
           ...(ketQua.nguCanh ? { nguCanh: ketQua.nguCanh } : {}),
         });
+        // Việc agent thường chạy nhiều phút; người dùng đi làm việc khác là
+        // chuyện bình thường. Robot nổi báo hộ. Nhập động để `loop.ts` không kéo
+        // theo cả tầng cửa sổ khi chạy trong vitest.
+        void import('../robotTin')
+          .then(({ baoAgentXong }) => {
+            const n = soFileDaSua(c.so);
+            baoAgentXong(n > 0 ? `Xong việc — đã sửa ${n} tệp` : 'Agent đã trả lời xong');
+          })
+          .catch(() => {});
         return;
       }
 

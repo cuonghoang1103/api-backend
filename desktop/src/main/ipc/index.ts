@@ -88,6 +88,7 @@ export async function registerIpcHandlers(): Promise<void> {
     { registerMusicHandlers },
     { registerAgentHandlers },
     { registerBrowserHandlers },
+    { registerRobotHandlers },
   ] = await Promise.all([
     import('./app'),
     import('./settings'),
@@ -98,6 +99,7 @@ export async function registerIpcHandlers(): Promise<void> {
     import('./music'),
     import('./agent'),
     import('./browser'),
+    import('./robot'),
   ]);
 
   registerAppHandlers();
@@ -109,6 +111,7 @@ export async function registerIpcHandlers(): Promise<void> {
   registerMusicHandlers();
   registerAgentHandlers();
   registerBrowserHandlers();
+  registerRobotHandlers();
 
   assertEveryChannelRegistered();
 }

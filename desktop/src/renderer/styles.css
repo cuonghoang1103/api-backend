@@ -70,9 +70,17 @@
   --ct-sidebar-w-collapsed: 60px;
   --ct-titlebar-h: 44px;
   --ct-statusbar-h: 30px;
+  /* Chiều cao thật của thanh phát nhạc. `--ct-player-h` là chỗ nó CHIẾM: bằng 0
+     khi chưa nghe gì (thanh không được dựng), bằng chiều cao thật khi có bài —
+     `.ct-shell:has(.ct-player)` bên dưới bật nó lên. Nhờ vậy thứ nổi ở góc dưới
+     tự tránh, không cần JS đo đạc. */
+  --ct-player-h-thuc: 84px;
+  --ct-player-h: 0px;
 
   color-scheme: light;
 }
+
+.ct-shell:has(.ct-player) { --ct-player-h: var(--ct-player-h-thuc); }
 
 :root[data-ct-theme='dark'] {
   --ct-bg: #0a0a11;
@@ -1894,6 +1902,11 @@ code {
    không còn nằm trong vùng cuộn nào. */
 .ct-player {
   flex: 0 0 auto;
+  /* Chiều cao CHỐT, để thứ khác tính được chỗ mà tránh — xem `--ct-player-h`
+     dùng ở hộp nhắc cập nhật. Không chốt thì chiều cao đổi theo nội dung và
+     mọi phép trừ dựa vào nó đều sai một cách âm thầm. */
+  min-height: var(--ct-player-h-thuc);
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
   align-items: center;
@@ -2062,6 +2075,63 @@ code {
   color: var(--ct-text-muted);
   background: var(--ct-hover);
 }
+
+/* ── Hộp nhắc "bản mới đã sẵn sàng" ──────────────────────
+   Nổi ở góc phải dưới, KHÔNG phủ giữa màn hình: đang gõ dở thì gõ tiếp. Đặt
+   trên thanh phát nhạc một khoảng để không đè lên nó. */
+.ct-update-toast {
+  position: fixed;
+  right: 18px;
+  /* Tự tránh thanh trạng thái, VÀ thanh phát nhạc nếu đang có bài.
+     `:has()` để CSS tự biết thanh phát có mặt hay không — không cần JS truyền
+     xuống, và không có chuyện quên cập nhật khi một bên đổi. */
+  bottom: calc(var(--ct-statusbar-h) + var(--ct-player-h) + 16px);
+  z-index: 60;
+  width: min(340px, calc(100vw - 36px));
+  display: flex;
+  gap: 12px;
+  padding: 14px 14px 14px 15px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-lg);
+  background: var(--ct-surface);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+  animation: ct-toast-vao var(--ct-motion) var(--ct-ease);
+}
+@keyframes ct-toast-vao {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ct-update-toast { animation: none; }
+}
+.ct-update-toast-icon {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--ct-ok) 16%, transparent);
+  color: var(--ct-ok);
+}
+.ct-update-toast-body { min-width: 0; flex: 1; }
+.ct-update-toast-title { margin: 0; font-size: 13.5px; font-weight: 700; color: var(--ct-text); }
+.ct-update-toast-desc { margin: 3px 0 0; font-size: 12.5px; color: var(--ct-text-muted); }
+.ct-update-toast-actions { display: flex; gap: 8px; margin-top: 11px; }
+.ct-update-toast-actions .ct-btn { padding: 6px 12px; font-size: 12.5px; }
+.ct-update-toast-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: 0;
+  background: none;
+  color: var(--ct-text-faint);
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 6px;
+  line-height: 0;
+}
+.ct-update-toast-close:hover { background: var(--ct-hover); color: var(--ct-text); }
 
 .ct-update-banner[data-tone='muted'] {
   color: var(--ct-text-faint);

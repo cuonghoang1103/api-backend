@@ -69,10 +69,22 @@ export function UpdatePanel() {
           </button>
         )}
 
-        {/* macOS: KHÔNG có nút "khởi động lại để cài" vì nó sẽ không cài được
-            gì (Squirrel.Mac từ chối bản chưa ký). Nút ở đây tải đúng file cài
-            cho kiến trúc máy này — trang phát hành có 15 tệp và chọn nhầm là
-            tải 140MB rồi không mở được. */}
+        {/* macOS, bản đã TẢI SẴN ở nền: bấm là tráo ngay, vài giây. */}
+        {status.state === 'sanSang' && noi?.ghiDuoc !== false && (
+          <button
+            type="button"
+            className="ct-btn"
+            onClick={() => void window.cuongthai?.update.tuCapNhat()}
+          >
+            <RotateCw size={14} aria-hidden />
+            Khởi động lại để dùng {status.version}
+          </button>
+        )}
+
+        {/* macOS: KHÔNG có nút "khởi động lại để cài" theo đường Squirrel vì nó
+            sẽ không cài được gì (Squirrel.Mac từ chối bản chưa ký). Nút ở đây
+            tải đúng file cài cho kiến trúc máy này — trang phát hành có 15 tệp
+            và chọn nhầm là tải 140MB rồi không mở được. */}
         {status.state === 'manual' && (
           <>
             {/* Cập nhật THẬT: tải .zip rồi tráo bó ứng dụng, không qua Squirrel.
@@ -170,6 +182,13 @@ function StatusLine({ status, isDev }: { status: UpdateStatus; isDev: boolean })
         <span style={{ color: 'var(--ct-warn)' }}>
           Đã có bản {status.version}. Bản macOS chưa ký số nên không tự cài đè được
           — bấm “Tải bản {status.version}” rồi mở file .dmg và kéo app vào Applications.
+        </span>
+      );
+    case 'sanSang':
+      return (
+        <span style={{ color: 'var(--ct-ok)' }}>
+          <Check size={13} aria-hidden /> Bản {status.version} đã tải xong — bấm “Khởi động lại”
+          là app tự thay chính nó rồi mở lại, không phải kéo thả gì.
         </span>
       );
     case 'taiTay':

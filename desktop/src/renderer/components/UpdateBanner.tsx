@@ -66,6 +66,26 @@ export function UpdateBanner({ collapsed }: { collapsed: boolean }) {
    * phải tải tay, thay vì để người dùng bấm một nút "cập nhật" rồi không thấy
    * gì xảy ra.
    */
+  // macOS: đã tải sẵn, bấm là tráo ngay — không phải chờ tải nữa.
+  if (status.state === 'sanSang') {
+    return (
+      <button
+        type="button"
+        className="ct-update-banner"
+        data-tone="ready"
+        onClick={() => void window.cuongthai?.update.tuCapNhat()}
+        title={`Bản ${status.version} đã tải xong. Bấm để thay app và mở lại — mất vài giây.`}
+      >
+        <RotateCw size={13} aria-hidden />
+        {!collapsed && (
+          <span>
+            Khởi động lại <strong>{status.version}</strong>
+          </span>
+        )}
+      </button>
+    );
+  }
+
   if (status.state === 'manual') {
     return (
       <button

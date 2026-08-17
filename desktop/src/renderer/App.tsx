@@ -10,6 +10,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { Sidebar } from './components/Sidebar';
 import { StatusBar } from './components/StatusBar';
 import { TitleBar } from './components/TitleBar';
+import { UpdateToast } from './components/UpdateToast';
 import { About } from './pages/About';
 import { NotPorted } from './pages/NotPorted';
 import { Settings } from './pages/Settings';
@@ -103,6 +104,9 @@ function Shell() {
           <StatusBar />
         </div>
         <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+        {/* Chỉ hiện khi bản mới đã TẢI XONG và chờ một cú bấm. Ngoài vùng nội
+            dung nên thấy ở mọi trang, và không chặn thao tác. */}
+        <UpdateToast />
         {/* Odin nằm NGOÀI vùng nội dung để không bị cuộn theo trang, và ngoài
             ErrorBoundary của nội dung để một trang hỏng không kéo nó chết theo. */}
         <OdinDock />

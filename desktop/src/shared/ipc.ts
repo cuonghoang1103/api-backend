@@ -744,6 +744,14 @@ export type UpdateStatus =
    */
   | { state: 'taiTay'; version: string; percent: number }
   | { state: 'taiXong'; version: string; duong: string }
+  /**
+   * macOS: bản mới ĐÃ TẢI XONG và nằm sẵn trên đĩa — bấm là thay ngay, không
+   * phải chờ tải nữa.
+   *
+   * Đây là trạng thái tương đương `ready` của Windows/Linux, chỉ khác cách cài:
+   * bên kia Squirrel áp bản vá lúc thoát, bên này app tự tráo bó `.app`.
+   */
+  | { state: 'sanSang'; version: string }
   /** macOS: đang TRÁO bó ứng dụng (bung zip → thay → mở lại). */
   | { state: 'dangCai'; version: string }
   | { state: 'caiXong'; version: string }

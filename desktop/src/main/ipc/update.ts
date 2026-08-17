@@ -119,7 +119,10 @@ async function runCheck(): Promise<void> {
        * nhánh này đi là đường tự động quay lại ngay.
        */
       if (process.platform === 'darwin') {
-        broadcast({ state: 'manual', version: info.version });
+        // Tải SẴN ở nền, rồi mới hỏi. Người dùng bấm "Khởi động lại" là thay
+        // ngay trong vài giây, không phải đứng nhìn thanh tải 150MB — đúng kiểu
+        // app Claude. Tải hỏng thì rơi về `manual` để còn bấm thử lại.
+        void taiSanBanMac(info.version);
         return;
       }
       // Có bản mới thì tải luôn. Người dùng không phải bấm thêm một nút nữa —
@@ -325,10 +328,73 @@ export function noiDangChay(): { duong: string; trongApplications: boolean; ghiD
   return { duong, trongApplications: duong.startsWith('/Applications/'), ghiDuoc };
 }
 
+/** Bản `.zip` đã tải sẵn, đang chờ tráo. Giữ giữa các lần kiểm. */
+let zipDaTai: { version: string; fileZip: string; thuMuc: string } | null = null;
+
+/** Tải `.zip` của một phiên bản về thư mục tạm, có báo tiến độ. */
+async function taiZipVe(version: string): Promise<{ fileZip: string; thuMuc: string }> {
+  const ten = tenFileZip(version);
+  const url = `${REPO_PHAT_HANH}/download/v${version}/${ten}`;
+  const thuMuc = fs.mkdtempSync(path.join(app.getPath('temp'), 'ct-update-'));
+  const fileZip = path.join(thuMuc, ten);
+
+  const res = await fetch(url, { redirect: 'follow' });
+  if (!res.ok || !res.body) throw new Error(`Máy chủ trả về ${res.status}`);
+  const tong = Number(res.headers.get('content-length') || 0);
+  const ra = fs.createWriteStream(fileZip);
+  let da = 0;
+  let cu = -1;
+  for await (const mau of res.body as unknown as AsyncIterable<Uint8Array>) {
+    ra.write(mau);
+    da += mau.byteLength;
+    if (tong) {
+      const p = Math.round((da / tong) * 100);
+      // Chỉ phát khi số thật sự đổi — 150MB chia theo từng mẩu là hàng nghìn
+      // lần gửi IPC cho cùng một con số.
+      if (p !== cu) { cu = p; broadcast({ state: 'taiTay', version, percent: p }); }
+    }
+  }
+  await new Promise<void>((xong, hong) => ra.end((e?: Error) => (e ? hong(e) : xong())));
+  return { fileZip, thuMuc };
+}
+
+/**
+ * macOS: tải sẵn bản mới ở NỀN ngay khi phát hiện, chưa cài.
+ *
+ * Để người dùng bấm "Khởi động lại" là xong trong vài giây, thay vì bấm rồi
+ * đứng nhìn thanh tải 150MB. Tải hỏng thì rơi về `manual` — vẫn còn nút để bấm
+ * thử lại, không mất đường.
+ *
+ * KHÔNG tải khi app đang chạy từ chỗ không ghi đè được (bản dựng thử, hoặc app
+ * còn nằm trong ảnh đĩa `.dmg`): tải về cũng không tráo được, chỉ tổ ngốn băng
+ * thông của người ta.
+ */
+async function taiSanBanMac(version: string): Promise<void> {
+  if (zipDaTai?.version === version && fs.existsSync(zipDaTai.fileZip)) {
+    broadcast({ state: 'sanSang', version });
+    return;
+  }
+  const noi = noiDangChay();
+  if (!noi.ghiDuoc) {
+    broadcast({ state: 'manual', version });
+    return;
+  }
+  try {
+    broadcast({ state: 'taiTay', version, percent: 0 });
+    // Bản tải dở của lần trước không còn dùng được nữa — dọn đi trước.
+    if (zipDaTai) { fs.rmSync(zipDaTai.thuMuc, { recursive: true, force: true }); zipDaTai = null; }
+    const { fileZip, thuMuc } = await taiZipVe(version);
+    zipDaTai = { version, fileZip, thuMuc };
+    broadcast({ state: 'sanSang', version });
+  } catch {
+    broadcast({ state: 'manual', version });
+  }
+}
+
 async function tuCapNhat(): Promise<void> {
   const tt = lastStatus;
-  if (tt.state !== 'manual') throw new Error('Chưa có bản mới nào để cài.');
-  const { version } = tt;
+  const version = (tt.state === 'manual' || tt.state === 'sanSang') ? tt.version : null;
+  if (!version) throw new Error('Chưa có bản mới nào để cài.');
 
   const noi = noiDangChay();
   if (!noi.ghiDuoc) {
@@ -340,28 +406,18 @@ async function tuCapNhat(): Promise<void> {
     return;
   }
 
-  const ten = tenFileZip(version);
-  const url = `${REPO_PHAT_HANH}/download/v${version}/${ten}`;
-  const tmp = fs.mkdtempSync(path.join(app.getPath('temp'), 'ct-update-'));
-  const fileZip = path.join(tmp, ten);
+  // Dùng bản đã tải sẵn nếu có; không thì tải ngay bây giờ.
+  const coSan = zipDaTai?.version === version && fs.existsSync(zipDaTai.fileZip) ? zipDaTai : null;
+  let tmp = coSan?.thuMuc ?? '';
+  let fileZip = coSan?.fileZip ?? '';
 
   try {
-    broadcast({ state: 'taiTay', version, percent: 0 });
-    const res = await fetch(url, { redirect: 'follow' });
-    if (!res.ok || !res.body) throw new Error(`Máy chủ trả về ${res.status}`);
-    const tong = Number(res.headers.get('content-length') || 0);
-    const ra = fs.createWriteStream(fileZip);
-    let da = 0;
-    let cu = -1;
-    for await (const mau of res.body as unknown as AsyncIterable<Uint8Array>) {
-      ra.write(mau);
-      da += mau.byteLength;
-      if (tong) {
-        const p = Math.round((da / tong) * 100);
-        if (p !== cu) { cu = p; broadcast({ state: 'taiTay', version, percent: p }); }
-      }
+    if (!coSan) {
+      broadcast({ state: 'taiTay', version, percent: 0 });
+      const ket = await taiZipVe(version);
+      tmp = ket.thuMuc;
+      fileZip = ket.fileZip;
     }
-    await new Promise<void>((xong, hong) => ra.end((e?: Error) => (e ? hong(e) : xong())));
 
     broadcast({ state: 'dangCai', version });
 
@@ -409,6 +465,7 @@ async function tuCapNhat(): Promise<void> {
       message: `Không cài được bản mới: ${(err as Error).message}. Bấm "Tải bản cài" để cài tay.`,
     });
   } finally {
-    fs.rmSync(tmp, { recursive: true, force: true });
+    if (tmp) fs.rmSync(tmp, { recursive: true, force: true });
+    zipDaTai = null;   // thư mục tạm vừa bị xoá, đừng để lại con trỏ chết
   }
 }

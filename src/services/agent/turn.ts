@@ -43,7 +43,7 @@ import { checkBudget, budgetMessage } from '../llm/budget.js';
 import { nenNguCanh } from './compact.js';
 import { loiCanVi, loiHetHan, xemHanMuc, xemViAgent, type HanMuc } from './quota.js';
 import { runServerTool } from './serverTools.js';
-import { buildSystemPrompt, type WorkspaceHint } from './prompt.js';
+import { buildSystemPrompt, catGhiChu, type WorkspaceHint } from './prompt.js';
 import { parseCapabilities, toolByName, toolsForGateway, type AgentCapability } from './tools.js';
 import { logger } from '../../utils/logger.js';
 import { prisma } from '../../config/database.js';
@@ -132,6 +132,14 @@ export interface AgentTurnInput {
   messages: unknown;
   capabilities: unknown;
   workspace?: WorkspaceHint;
+  /**
+   * Ghi chú dự án (`AGENTS.md`/`CLAUDE.md`) app đọc từ máy người dùng.
+   *
+   * App gửi lên NGUYÊN VĂN; máy chủ mới là bên cắt về trần và bọc rào. Cắt ở
+   * app thì mỗi bản app cũ giữ một cái trần khác nhau, và sửa trần phải chờ
+   * người dùng cập nhật app.
+   */
+  ghiChuDuAn?: { ten: string; noiDung: string };
   userId: number;
 }
 
@@ -289,7 +297,14 @@ export async function runAgentTurn(
     return;
   }
 
-  const system = buildSystemPrompt({ capabilities, workspace: input.workspace });
+  const ghiChu = input.ghiChuDuAn?.noiDung
+    ? catGhiChu(input.ghiChuDuAn.ten, input.ghiChuDuAn.noiDung)
+    : undefined;
+  const system = buildSystemPrompt({
+    capabilities,
+    ...(input.workspace ? { workspace: input.workspace } : {}),
+    ...(ghiChu ? { ghiChu } : {}),
+  });
   const tools = toolsForGateway(capabilities);
 
   const { ep, tra } = await xinDiemCuoi('agent_code');

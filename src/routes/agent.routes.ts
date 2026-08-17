@@ -139,7 +139,9 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   // ─── 1. Kiểm đầu vào TRƯỚC khi mở SSE ────────────────────────
   // Mở SSE rồi mới thấy đầu vào sai thì lỗi phải đi trong một khung sự kiện,
   // và app nhận HTTP 200 cho một yêu cầu hỏng. Sai sớm thì sai bằng mã HTTP.
-  const body = req.body as { messages?: unknown; capabilities?: unknown; workspace?: unknown };
+  const body = req.body as {
+    messages?: unknown; capabilities?: unknown; workspace?: unknown; ghiChuDuAn?: unknown;
+  };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
     return;
@@ -151,6 +153,14 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         platform: str((body.workspace as any).platform, 20),
         branch: str((body.workspace as any).branch, 120),
       }
+    : undefined;
+
+  // Ghi chú dự án: nhận NGUYÊN VĂN rồi cắt ở `runAgentTurn`. Trần thô ở đây chỉ
+  // để một app hỏng không đẩy được 50MB vào thân yêu cầu.
+  const gc = body.ghiChuDuAn;
+  const ghiChuDuAn = gc && typeof gc === 'object'
+    && typeof (gc as any).ten === 'string' && typeof (gc as any).noiDung === 'string'
+    ? { ten: String((gc as any).ten).slice(0, 80), noiDung: String((gc as any).noiDung).slice(0, 200_000) }
     : undefined;
 
   // ─── 2. Mở SSE ───────────────────────────────────────────────
@@ -185,6 +195,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         messages: body.messages,
         capabilities: body.capabilities,
         workspace,
+        ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
         userId: req.userId,
       },
       guiKhung,

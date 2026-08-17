@@ -24,6 +24,7 @@
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from '../ipc/auth';
 import type { KetQuaDiff } from './diff';
+import { docGhiChuDuAn } from './ghiChu';
 import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua, xoaNhatKyHoanTac } from './tools';
 import { huyTatCa, xoaQuyenDaCap, type YeuCauXinPhep } from './xinPhep';
@@ -142,6 +143,14 @@ export async function chayLuot(
     if (boiCanh.choChayLenh) capabilities.push('shell');
   }
 
+  // Đọc LẠI ở mỗi lượt người dùng gõ — xem ghi chú đầu `ghiChu.ts`. Đọc một
+  // lần cho cả lượt là đủ: trong cùng một lượt agent không sửa file này, và đọc
+  // lại ở từng vòng chỉ thêm I/O không đổi gì.
+  const ghiChuDuAn = boiCanh.goc ? await docGhiChuDuAn(boiCanh.goc) : null;
+  if (ghiChuDuAn) {
+    phat({ loai: 'tool', ten: ghiChuDuAn.ten, tomTat: 'quy ước dự án', vong: 'may' });
+  }
+
   let daThuLai = false;
 
   try {
@@ -161,6 +170,7 @@ export async function chayLuot(
               },
             }
           : {}),
+        ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
         signal: dieuKhien.signal,
         phat,
       });
@@ -266,6 +276,7 @@ async function mgoiMotLuot(o: {
   messages: TinNhan[];
   capabilities: string[];
   workspace?: { name: string; platform: string; branch?: string };
+  ghiChuDuAn?: { ten: string; noiDung: string };
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
 }): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
@@ -277,6 +288,7 @@ async function mgoiMotLuot(o: {
       messages: o.messages,
       capabilities: o.capabilities,
       workspace: o.workspace,
+      ghiChuDuAn: o.ghiChuDuAn,
     }),
   });
 

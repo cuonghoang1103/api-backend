@@ -61,6 +61,14 @@ fs.writeFileSync(path.join(duAn, 'src', 'boot.ts'), 'export const CONG = 7331;\n
 fs.writeFileSync(path.join(duAn, 'README.md'), '# du-an-smoke\n');
 // File này PHẢI bị nhà tù chặn — đây là phép kiểm bảo mật, không phải trang trí.
 fs.writeFileSync(path.join(duAn, '.env'), 'SECRET=sk-khong-duoc-lo-ra\n');
+// Bộ nhớ dự án. Mã "DU-AN-XANH-88" KHÔNG có ở bất kỳ file nào khác và agent
+// không thể đoán ra — nói đúng nó nghĩa là nội dung file này đã vào prompt.
+fs.writeFileSync(
+  path.join(duAn, 'AGENTS.md'),
+  '# Quy ước dự án\n\n' +
+  '- Mã dự án nội bộ: **DU-AN-XANH-88**\n' +
+  '- Lệnh chạy bộ kiểm của dự án này là `node kiem.mjs`, KHÔNG phải `npm test`.\n',
+);
 
 // ─── userData riêng: app thử KHÔNG dùng chung gì với app thật ───────
 const userData = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-smoke-ud-'));
@@ -219,8 +227,12 @@ try {
     const soTool = await man.locator('.ct-agent-tool').count();
     check('sự kiện tool đi tới được giao diện', soTool > 0, `${soTool} dòng công cụ`);
 
-    const tenTool = soTool > 0 ? await man.locator('.ct-agent-tool code').first().innerText() : '';
-    check('dòng công cụ mang tên tool thật', /list_dir|read_file|grep|glob|git_/.test(tenTool), tenTool);
+    // Duyệt TẤT CẢ dòng công cụ, không chỉ dòng đầu: từ khi có bộ nhớ dự án,
+    // dòng đầu tiên là mốc `AGENTS.md — quy ước dự án` chứ không phải một tool
+    // thật. Khẳng định "dòng ĐẦU là tool thật" đã đúng cho tới đúng lúc đó.
+    const tenTool = (await man.locator('.ct-agent-tool code').allInnerTexts()).join(' ');
+    check('có dòng công cụ mang tên tool thật', /list_dir|read_file|grep|glob|git_/.test(tenTool),
+      tenTool.split('\n').join(' ').slice(0, 60));
 
     const traLoi = await man.locator('.ct-agent-may').last().innerText();
     check('agent ĐỌC ĐƯỢC file và trả lời đúng', traLoi.includes('7331'), traLoi.slice(0, 90).replace(/\n/g, ' '));
@@ -363,6 +375,40 @@ try {
     traLoiCuoi.slice(0, 110).replace(/\n/g, ' '),
   );
   check('agent đọc đúng MÃ THOÁT khác 0', /\b1\b/.test(traLoiCuoi));
+
+  // ══ Bộ nhớ dự án ══
+  //
+  // Câu hỏi này chỉ trả lời được nếu nội dung AGENTS.md đã nằm trong prompt hệ
+  // thống. Nếu agent phải GỌI TOOL đọc file mới biết thì bộ nhớ dự án chưa
+  // hoạt động — nó chỉ đang tự tìm ra, và điều đó thì nó vẫn làm được từ P1.
+  console.log('\nBộ nhớ dự án (AGENTS.md):');
+  const soMucTruoc = await man.locator('.ct-agent-tool').count();
+  await oNhap.fill('Mã dự án nội bộ là gì? Trả lời ngắn gọn.');
+  await man.locator('.ct-agent-soan .ct-btn').first().click();
+  await w.waitForFunction(
+    () => {
+      const m = document.querySelector('.ct-chedo[data-hien="true"]');
+      if (!m) return false;
+      const nut = m.querySelector('.ct-agent-soan .ct-btn');
+      return !!nut && nut.textContent.includes('Gửi');
+    },
+    null,
+    { timeout: 180000 },
+  );
+
+  const traLoiMa = await man.locator('.ct-agent-may').last().innerText();
+  check('agent biết sự thật CHỈ CÓ trong AGENTS.md', /DU-?AN-?XANH-?88/i.test(traLoiMa),
+    traLoiMa.slice(0, 90).replace(/\n/g, ' '));
+
+  // Dòng tiến trình `AGENTS.md — quy ước dự án` được phát ở đầu MỖI lượt, nên
+  // nó luôn có. Thứ đáng đo là agent có phải đi ĐỌC file không: nếu chỉ có đúng
+  // dòng ghi chú và không có `read_file`/`grep` nào thì nội dung đã ở sẵn trong
+  // prompt — đúng điều bộ nhớ dự án sinh ra để làm.
+  const soMucSau = await man.locator('.ct-agent-tool').count();
+  const toolMoi = await man.locator('.ct-agent-tool').nth(soMucTruoc).innerText().catch(() => '');
+  check('có dòng tiến trình cho AGENTS.md', /AGENTS\.md/.test(toolMoi), toolMoi.trim());
+  check('KHÔNG phải đọc file mới biết (nội dung đã ở trong prompt)',
+    soMucSau - soMucTruoc <= 1, `${soMucSau - soMucTruoc} dòng công cụ`);
 } catch (err) {
   console.log(`\n\x1b[31mHỎNG: ${String(err.message).split('\n')[0]}\x1b[0m`);
   await inBangGhi('lúc hỏng');

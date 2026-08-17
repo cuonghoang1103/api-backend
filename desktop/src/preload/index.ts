@@ -140,6 +140,8 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:datCheDoSua', { cuocId, bat }) as Promise<AgentWorkspace>,
     datCheDoLenh: (cuocId: string, bat: boolean) =>
       ipcRenderer.invoke('agent:datCheDoLenh', { cuocId, bat }) as Promise<AgentWorkspace>,
+    datCheDoNote: (cuocId: string, bat: boolean) =>
+      ipcRenderer.invoke('agent:datCheDoNote', { cuocId, bat }) as Promise<AgentWorkspace>,
     datMucNoLuc: (muc: MucNoLuc) =>
       ipcRenderer.invoke('agent:datMucNoLuc', { muc }) as Promise<void>,
     hoanTac: (cuocId: string) =>

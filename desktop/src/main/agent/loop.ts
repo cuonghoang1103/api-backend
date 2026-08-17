@@ -52,6 +52,8 @@ export type SuKienAgent =
   | { loai: 'xinPhepMcp'; id: string; server: string; tool: string; args: string }
   /** Xin phép COMMIT hoặc MỞ PR. `chiTiet` là thứ người dùng phải ĐỌC trước khi bấm. */
   | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr'; chiTiet: string }
+  /** Xin phép GHI vào sổ ghi chú. `chiTiet` là nội dung sắp ghi — người dùng phải ĐỌC. */
+  | { loai: 'xinPhepNote'; id: string; viec: 'tao' | 'ghi'; chiTiet: string }
   | { loai: 'lenhRa'; mau: string }
   | { loai: 'keHoach'; viec: Array<{ ten: string; trangThai: string }> }
   | {
@@ -91,6 +93,8 @@ export interface BoiCanh {
   choSua?: boolean;
   /** Người dùng đã bật chế độ cho chạy lệnh chưa. Mặc định KHÔNG. */
   choChayLenh?: boolean;
+  /** Cho phép GHI vào sổ ghi chú trên cuongthai.com. Độc lập với thư mục dự án. */
+  choGhiNote?: boolean;
   /** 'nhanh' | 'canBang' | 'ky'. Quyết định trần bước ở máy chủ. */
   mucNoLuc?: string;
   /** Ảnh dán kèm câu hỏi này (data URI). */
@@ -160,6 +164,14 @@ interface CuocHoiThoai {
   choSua: boolean;
   /** Quyền CHẠY LỆNH của riêng cuộc này. Cũng chỉ trong RAM, cũng bật riêng. */
   choChayLenh: boolean;
+  /**
+   * Cho phép GHI vào sổ ghi chú.
+   *
+   * Công tắc RIÊNG, không đi ké `choSua`: ghi chú không nằm trong thư mục dự án
+   * (người dùng có thể muốn agent ghi chú mà chẳng mở dự án mã nào), và hỏng
+   * thì không có `git checkout` nào lấy lại — đó là dữ liệu thật trên máy chủ.
+   */
+  choGhiNote: boolean;
   dangChay: AbortController | null;
   so: SoCuoc;
   /** Việc phụ đã giao trong LƯỢT hiện tại. Đặt lại về 0 ở đầu mỗi câu hỏi. */
@@ -173,7 +185,7 @@ function layCuoc(id: string): CuocHoiThoai {
   if (!c) {
     c = {
       id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc(), soViecPhu: 0,
-      goc: null, daChonGoc: false, choSua: false, choChayLenh: false,
+      goc: null, daChonGoc: false, choSua: false, choChayLenh: false, choGhiNote: false,
     };
     cuoc.set(id, c);
   }
@@ -210,9 +222,9 @@ export function daChonGocCua(id: string): boolean {
   return layCuoc(id).daChonGoc;
 }
 
-export function quyenCuaCuoc(id: string): { choSua: boolean; choChayLenh: boolean } {
+export function quyenCuaCuoc(id: string): { choSua: boolean; choChayLenh: boolean; choGhiNote: boolean } {
   const c = layCuoc(id);
-  return { choSua: c.choSua, choChayLenh: c.choChayLenh };
+  return { choSua: c.choSua, choChayLenh: c.choChayLenh, choGhiNote: c.choGhiNote };
 }
 
 /**
@@ -238,6 +250,7 @@ export function datGocChoCuoc(id: string, goc: string | null): void {
   c.goc = goc;
   c.choSua = false;
   c.choChayLenh = false;
+  c.choGhiNote = false;
   xoaHoiThoai(id);
 }
 
@@ -258,10 +271,11 @@ export function datGocNeuChuaCo(id: string, goc: string): void {
   c.goc = goc;
 }
 
-export function datQuyenChoCuoc(id: string, quyen: { choSua?: boolean; choChayLenh?: boolean }): void {
+export function datQuyenChoCuoc(id: string, quyen: { choSua?: boolean; choChayLenh?: boolean; choGhiNote?: boolean }): void {
   const c = layCuoc(id);
   if (typeof quyen.choSua === 'boolean') c.choSua = quyen.choSua;
   if (typeof quyen.choChayLenh === 'boolean') c.choChayLenh = quyen.choChayLenh;
+  if (typeof quyen.choGhiNote === 'boolean') c.choGhiNote = quyen.choGhiNote;
 }
 
 export function dongCuoc(id: string): void {
@@ -288,6 +302,9 @@ export function napPhien(
   // Khôi phục cả THƯ MỤC của phiên đó. Từ khi mỗi tab một dự án, mở một việc cũ
   // vào tab đang trỏ dự án khác thì agent đọc nhầm repo và trả lời rất tự tin
   // về những file không liên quan gì.
+  // Đổi thư mục ⇒ thu hồi quyền trên FILE và LỆNH (chúng gắn với thư mục cũ).
+  // `choGhiNote` KHÔNG bị thu hồi: sổ ghi chú không nằm trong thư mục nào cả,
+  // nên tắt nó ở đây chỉ là bắt người dùng bật lại một thứ không hề đổi.
   if (goc !== undefined) { c.goc = goc; c.daChonGoc = true; c.choSua = false; c.choChayLenh = false; }
   // Quyền đã cấp và nhật ký hoàn tác KHÔNG khôi phục theo. Hoàn tác một thay
   // đổi từ hôm qua là ghi đè lên thứ người dùng có thể đã sửa tiếp bằng tay; và
@@ -549,6 +566,8 @@ export async function chayLuot(
     if (boiCanh.choChayLenh) capabilities.push('shell', 'shell_nen');
     if (boiCanh.choSua) capabilities.push('git_write');
   }
+  // NGOÀI khối trên: ghi chú sống trên máy chủ, không cần thư mục dự án nào.
+  if (boiCanh.choGhiNote) capabilities.push('notes_write');
 
   // Đọc LẠI ở mỗi lượt người dùng gõ — xem ghi chú đầu `ghiChu.ts`. Đọc một
   // lần cho cả lượt là đủ: trong cùng một lượt agent không sửa file này, và đọc
@@ -670,6 +689,16 @@ export async function chayLuot(
             }
           : undefined;
 
+        // Ghi chú KHÔNG theo `choSua`: nó không phải file trong dự án.
+        const boiCanhNote = boiCanh.choGhiNote
+          ? {
+              so: c.so,
+              signal: dieuKhien.signal,
+              xinPhepNote: (y: YeuCauXinPhep & { viec: 'tao' | 'ghi'; chiTiet: string }) =>
+                phat({ loai: 'xinPhepNote', id: y.id, viec: y.viec, chiTiet: y.chiTiet }),
+            }
+          : undefined;
+
         const boiCanhKeHoach = {
           keHoach: (viec: Array<{ ten: string; trangThai: string }>) => phat({ loai: 'keHoach', viec }),
         };
@@ -679,6 +708,13 @@ export async function chayLuot(
           // Tool MCP xử lý TRƯỚC cả phép kiểm "đã mở dự án chưa": một server
           // Linear hay Sentry không cần thư mục nào trên máy cả.
           kq = await chayToolMcpCoDuyet(goi.name, goi.args, c, dieuKhien.signal, phat);
+        } else if (goi.name === 'notes_tao' || goi.name === 'notes_ghi') {
+          // TRƯỚC chốt "chưa mở dự án": sổ ghi chú sống trên máy chủ, chẳng
+          // liên quan gì tới thư mục mã. Đặt sau chốt đó thì người dùng chỉ
+          // muốn agent ghi chú vẫn bị bắt mở một dự án không tồn tại.
+          kq = boiCanhNote
+            ? await chayToolAgent('', goi.name, goi.args, undefined, undefined, undefined, undefined, undefined, boiCanhNote)
+            : { noiDung: 'LỖI: phiên này không bật quyền ghi ghi chú.', tomTat: 'không có quyền' };
         } else if (!boiCanh.goc) {
           kq = { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
         } else if (goi.name === 'giao_viec_phu') {

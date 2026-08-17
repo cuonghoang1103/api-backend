@@ -76,6 +76,35 @@ const PORT = process.env.AGENT_SMOKE_PORT ?? '3001';
 const USER_ID = Number(process.env.AGENT_SMOKE_USER ?? '6');
 const API = `http://localhost:${PORT}`;
 
+/** Tạo một sổ ghi chú thử qua API, trả về subjectId. */
+async function taoSoGhiChu() {
+  const r = await fetch(`${API}/api/v1/notes/subjects`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${globalThis.__TOKEN_THU__}` },
+    body: JSON.stringify({ name: `Sổ smoke ${Date.now()}` }),
+  });
+  const j = await r.json().catch(() => null);
+  return Number(j?.data?.id ?? 0);
+}
+
+/** Đọc lại ghi chú trong một sổ — hỏi MÁY CHỦ, không tin lời agent. */
+async function docGhiChuCuaSo(subjectId) {
+  const r = await fetch(`${API}/api/v1/notes/tree`, {
+    headers: { Authorization: `Bearer ${globalThis.__TOKEN_THU__}` },
+  });
+  const j = await r.json().catch(() => null);
+  const mon = (j?.data?.tree ?? []).find((m) => m.id === subjectId);
+  const ds = [];
+  for (const n of mon?.notes ?? []) {
+    const r2 = await fetch(`${API}/api/v1/notes/notes/${n.id}`, {
+      headers: { Authorization: `Bearer ${globalThis.__TOKEN_THU__}` },
+    });
+    const j2 = await r2.json().catch(() => null);
+    ds.push({ title: j2?.data?.title ?? '', html: j2?.data?.contentHtml ?? '', coJson: !!j2?.data?.contentJson });
+  }
+  return ds;
+}
+
 const results = [];
 function check(label, pass, detail = '') {
   results.push(pass);
@@ -170,6 +199,8 @@ try {
   const { createHmac } = await import('node:crypto');
   const sig = createHmac('sha256', secret).update(`${head}.${body}`).digest('base64url');
   const token = `${head}.${body}.${sig}`;
+  // Dùng lại chính token này cho các phép kiểm hỏi thẳng máy chủ (ghi chú).
+  globalThis.__TOKEN_THU__ = token;
 
   console.log(`\nKhởi động app (API → ${API}, dự án giả ${path.basename(duAn)})…\n`);
   app = await electron.launch({
@@ -289,16 +320,18 @@ try {
   const fileThu = path.join(duAn, 'src', 'boot.ts');
   const noiDungGoc = fs.readFileSync(fileThu, 'utf8');
 
-  // ⚠️ `.ct-agent-suanut` khớp CẢ HAI nút quyền (Cho sửa + Chạy lệnh) từ khi có
+  // ⚠️ Bám `data-nut`, KHÔNG bám `:not([data-lenh])`. Phép loại trừ đó đúng khi
+  // chỉ có hai nút quyền, và vỡ ngay lúc thêm nút thứ ba (Ghi chú) — với một
+  // lỗi "strict mode violation" chẳng nói gì về nguyên nhân. Cũ:
   // P3. Nút sửa file là nút KHÔNG mang `data-lenh`.
-  const nutSua = man.locator('.ct-agent-suanut:not([data-lenh])');
+  const nutSua = man.locator('.ct-agent-suanut[data-nut="chosua"]');
   check('mặc định quyền sửa TẮT', (await nutSua.getAttribute('data-bat')) === 'false');
   await nutSua.click();
   // ĐỢI React vẽ lại, đừng đọc thuộc tính ngay sau `click()`. Bấm là đồng bộ,
   // còn `datCheDoSua` là một vòng IPC rồi mới setState — đọc ngay thì luôn thấy
   // giá trị CŨ, và phép kiểm báo hỏng cho một thứ hoàn toàn đúng.
   const batDuoc = await man
-    .locator('.ct-agent-suanut:not([data-lenh])[data-bat="true"]')
+    .locator('.ct-agent-suanut[data-nut="chosua"][data-bat="true"]')
     .waitFor({ timeout: 10000 })
     .then(() => true)
     .catch(() => false);
@@ -371,10 +404,10 @@ try {
   );
 
   check('mặc định quyền chạy lệnh TẮT',
-    (await man.locator('.ct-agent-suanut[data-lenh="true"]').getAttribute('data-bat')) === 'false');
-  await man.locator('.ct-agent-suanut[data-lenh="true"]').click();
+    (await man.locator('.ct-agent-suanut[data-nut="chaylenh"]').getAttribute('data-bat')) === 'false');
+  await man.locator('.ct-agent-suanut[data-nut="chaylenh"]').click();
   const batLenh = await man
-    .locator('.ct-agent-suanut[data-lenh="true"][data-bat="true"]')
+    .locator('.ct-agent-suanut[data-nut="chaylenh"][data-bat="true"]')
     .waitFor({ timeout: 10000 }).then(() => true).catch(() => false);
   check('bật được quyền chạy lệnh', batLenh);
 
@@ -1070,6 +1103,59 @@ try {
   const ttSau = await w2.evaluate(() => globalThis.cuongthai.agent.mcpTrangThai());
   check('lượt gọi được tính vào hạn mức ngày', ttSau.hanMuc.daDung === 1,
     `${ttSau.hanMuc.daDung}/${ttSau.hanMuc.tran}`);
+
+  // ══════════════════════════════════════════════════════════
+  // AGENT GHI VÀO SỔ GHI CHÚ
+  // ══════════════════════════════════════════════════════════
+  //
+  // Đường này khác mọi tool khác ở một điểm: nó ghi vào DỮ LIỆU THẬT của người
+  // dùng trên máy chủ, không phải file trong thư mục dự án. Nên kiểm cả ba
+  // chốt: tool chỉ xuất hiện khi người dùng BẬT công tắc, vòng lặp DỪNG chờ
+  // duyệt, và nội dung hiện trên thẻ ĐÚNG là thứ sắp ghi.
+  const soThu = await taoSoGhiChu();
+  check('dựng được sổ ghi chú thử', soThu > 0, `subject ${soThu}`);
+
+  const nutGhiNote = manMcp.locator('[data-nut="ghinote"]');
+  check('nút "Ghi chú" có mặt kể cả khi CHƯA mở dự án', await nutGhiNote.count() === 1);
+  await nutGhiNote.click();
+  await w2.waitForTimeout(400);
+  check('bật được quyền ghi ghi chú',
+    (await nutGhiNote.innerText()).includes('BẬT'), await nutGhiNote.innerText());
+
+  await manMcp.locator('.ct-agent-o').fill(
+    `Tạo một ghi chú mới trong sổ có subject_id = ${soThu}, tiêu đề "Ghi chú từ agent", `
+    + 'nội dung gồm một dòng chính xác là: MOC-8642 agent ghi thật.',
+  );
+  await manMcp.locator('.ct-agent-soan .ct-btn').first().click();
+
+  await w2.waitForSelector('.ct-tab-noi[data-hien="true"] .ct-xinphep', { timeout: 120000 });
+  const theNote = manMcp.locator('.ct-xinphep').last();
+  const chuNote = await theNote.innerText();
+  check('thẻ duyệt GHI CHÚ hiện ra và DỪNG vòng lặp', /ghi chú/i.test(chuNote),
+    chuNote.split('\n')[0]);
+  // Duyệt cái mình ĐỌC: nội dung sắp ghi phải nằm trên thẻ, không chỉ tên tool.
+  check('thẻ hiện NỘI DUNG sắp ghi', /MOC-8642/.test(chuNote));
+  check('thẻ ghi chú KHÔNG có nút "cho phép cả phiên"',
+    await theNote.locator('.ct-btn', { hasText: 'đừng hỏi lại' }).count() === 0);
+
+  await theNote.locator('.ct-btn', { hasText: /Tạo ghi chú|Thêm vào|Viết đè/ }).click();
+  await w2.waitForFunction(
+    () => {
+      const m = document.querySelector('.ct-tab-noi[data-hien="true"]');
+      const nut = m?.querySelector('.ct-agent-soan .ct-btn');
+      return !!nut && nut.textContent.includes('Gửi');
+    },
+    null,
+    { timeout: 180000 },
+  );
+
+  // Chốt cuối: hỏi thẳng MÁY CHỦ. Agent nói "đã ghi xong" không chứng minh gì.
+  const daGhi = await docGhiChuCuaSo(soThu);
+  check('ghi chú THẬT SỰ nằm trên máy chủ', daGhi.some((n) => /MOC-8642/.test(n.html)),
+    daGhi.map((n) => n.title).join(', ') || 'sổ rỗng');
+  // Trình soạn nạp `contentJson`; chỉ có `contentHtml` là ghi chú hiện TRỐNG.
+  check('có contentJson (nếu thiếu, trình soạn hiện TRỐNG)',
+    daGhi.some((n) => n.coJson));
 } catch (err) {
   console.log(`\n\x1b[31mHỎNG: ${String(err.message).split('\n')[0]}\x1b[0m`);
   await inBangGhi('lúc hỏng');

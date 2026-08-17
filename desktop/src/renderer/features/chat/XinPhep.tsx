@@ -16,7 +16,7 @@
  *     Đây là chỗ đổi chác giữa phiền và an toàn, và nó nghiêng theo cách người
  *     ta thật sự làm việc: sửa sâu vài file, không rải khắp dự án.
  */
-import { AlertTriangle, Check, CheckCheck, FilePlus2, FilePen, GitCommitHorizontal, GitPullRequest, Plug, Terminal, X } from 'lucide-react';
+import { AlertTriangle, Check, CheckCheck, FilePlus2, FilePen, GitCommitHorizontal, GitPullRequest, NotebookPen, Plug, Terminal, X } from 'lucide-react';
 import type { AgentDiff, AgentPhanLoaiLenh, AgentQuyetDinh } from '../../../shared/ipc';
 
 export interface TheXinPhep {
@@ -288,6 +288,74 @@ export function XinPhepGit({
         >
           <Check size={14} aria-hidden />
           {laPr ? 'Đẩy và mở PR' : 'Commit'}
+        </button>
+        <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
+          <X size={14} aria-hidden />
+          Từ chối
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Thẻ duyệt GHI VÀO SỔ GHI CHÚ.
+ *
+ * ─── HAI CHẾ ĐỘ, HAI MỨC HẬU QUẢ ───
+ * "Thêm" nối vào cuối, chữ cũ không bị đụng — hỏng thì xoá đoạn thừa là xong.
+ * "Thay" viết đè TOÀN BỘ bài, và đây là ghi chú THẬT của người dùng chứ không
+ * phải file trong dự án: không có `git checkout` nào lấy lại được, chỉ còn
+ * lịch sử phiên bản của Notes. Nên chế độ thay hiện cảnh báo riêng.
+ *
+ * Không có nút "đừng hỏi lại": mỗi lần ghi là một nội dung khác, nên một lần
+ * đồng ý không nói gì về lần sau.
+ */
+export function XinPhepNote({
+  id,
+  viec,
+  chiTiet,
+  traLoi,
+}: {
+  id: string;
+  viec: 'tao' | 'ghi';
+  chiTiet: string;
+  traLoi: (id: string, q: AgentQuyetDinh) => void;
+}) {
+  // `chiTiet` do main dựng và luôn nói rõ chế độ ở dòng đầu.
+  const laThay = chiTiet.includes('THAY TOÀN BỘ');
+  return (
+    <div className="ct-xinphep" data-muc={laThay ? 'nguyhiem' : 'cankiem'}>
+      <div className="ct-xinphep-dau">
+        <NotebookPen size={14} aria-hidden />
+        <span>
+          {viec === 'tao'
+            ? 'Agent muốn TẠO một ghi chú mới'
+            : laThay ? 'Agent muốn VIẾT ĐÈ một ghi chú' : 'Agent muốn thêm vào một ghi chú'}
+        </span>
+      </div>
+
+      {/* Chữ do model soạn — hiện nguyên văn trong `<pre>`, KHÔNG dựng HTML. */}
+      <pre className="ct-mcp-args">{chiTiet}</pre>
+
+      {laThay && (
+        <div className="ct-notice" data-tone="err" style={{ margin: '8px 0 0' }}>
+          <AlertTriangle size={15} aria-hidden />
+          <span>
+            <strong>Toàn bộ nội dung cũ sẽ bị thay.</strong> Đây là ghi chú thật của bạn,
+            không phải file trong dự án — lấy lại được ở lịch sử phiên bản của Ghi chú,
+            nhưng không có nút hoàn tác ở đây.
+          </span>
+        </div>
+      )}
+
+      <div className="ct-xinphep-nut">
+        <button
+          type="button"
+          className={laThay ? 'ct-btn ct-xinphep-lieu' : 'ct-btn'}
+          onClick={() => traLoi(id, 'choPhep')}
+        >
+          <Check size={14} aria-hidden />
+          {viec === 'tao' ? 'Tạo ghi chú' : laThay ? 'Viết đè' : 'Thêm vào'}
         </button>
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
           <X size={14} aria-hidden />

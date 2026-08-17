@@ -27,6 +27,7 @@ import { chuanBiCommit, chuanBiPr, commit, taoPr } from './gitViet';
 import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
 import { batLenhNen, docDauRaNen, dungLenhNen } from './lenhNen';
 import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
+import { toolNotesTao, toolNotesGhi, type BoiCanhNote } from './ghiNote';
 import type { SoCuoc } from './so';
 
 const chay = promisify(execFile);
@@ -70,6 +71,8 @@ export interface BoiCanhGit {
   /** Thẻ duyệt cho commit / PR — mang theo phần người dùng cần ĐỌC trước khi bấm. */
   xinPhepGit: (y: YeuCauXinPhep & { viec: 'commit' | 'pr'; chiTiet: string }) => void;
 }
+
+export type { BoiCanhNote } from './ghiNote';
 
 export interface BoiCanhLenh {
   /** Sổ của CUỘC hội thoại này. */
@@ -157,6 +160,7 @@ export async function chayToolAgent(
   keHoach?: BoiCanhKeHoach,
   nen?: BoiCanhNen,
   gitGhi?: BoiCanhGit,
+  note?: BoiCanhNote,
 ): Promise<KetQuaTool> {
   try {
     switch (ten) {
@@ -201,6 +205,14 @@ export async function chayToolAgent(
       case 'tao_pr': {
         if (!gitGhi) return { noiDung: 'LỖI: phiên này không bật quyền ghi git.', tomTat: 'không có quyền' };
         return await toolTaoPr(goc, args, gitGhi);
+      }
+      case 'notes_tao': {
+        if (!note) return { noiDung: 'LỖI: phiên này không bật quyền ghi ghi chú.', tomTat: 'không có quyền' };
+        return await toolNotesTao(args, note);
+      }
+      case 'notes_ghi': {
+        if (!note) return { noiDung: 'LỖI: phiên này không bật quyền ghi ghi chú.', tomTat: 'không có quyền' };
+        return await toolNotesGhi(args, note);
       }
       case 'list_dir': return await toolListDir(goc, args);
       case 'read_file': return await toolReadFile(goc, args);

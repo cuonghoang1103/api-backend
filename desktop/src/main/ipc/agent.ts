@@ -112,14 +112,21 @@ async function nhanhGit(goc: string): Promise<string | null> {
 
 async function moTa(cuocId: string, goc: string | null): Promise<AgentWorkspace> {
   const mucNoLuc = mucNoLucHienTai();
-  if (!goc) return { path: null, name: null, branch: null, choSua: false, choChayLenh: false, mucNoLuc };
   const q = quyenCuaCuoc(cuocId);
+  // ⚠️ `choGhiNote` phải có ở CẢ HAI nhánh. Nhánh "chưa chọn thư mục" trả cứng
+  // false cho hai quyền kia (đúng — chúng gắn với thư mục), nhưng ghi chú thì
+  // KHÔNG cần thư mục nào: bỏ sót ở đây thì người dùng bật công tắc xong giao
+  // diện vẫn vẽ "tắt", bấm mãi không lên, mà không có lỗi nào.
+  if (!goc) {
+    return { path: null, name: null, branch: null, choSua: false, choChayLenh: false, choGhiNote: q.choGhiNote, mucNoLuc };
+  }
   return {
     path: goc,
     name: path.basename(goc),
     branch: await nhanhGit(goc),
     choSua: q.choSua,
     choChayLenh: q.choChayLenh,
+    choGhiNote: q.choGhiNote,
     mucNoLuc,
   };
 }
@@ -253,7 +260,12 @@ export function registerAgentHandlers(): void {
       cuocId,
       text,
       {
-        goc: conSong, choSua: quyen.choSua, choChayLenh: quyen.choChayLenh, mucNoLuc: mucNoLucHienTai(),
+        // ⚠️ Thiếu MỘT trường ở đây là tool biến mất khỏi tầm nhìn của model mà
+        // KHÔNG có lỗi nào: `capabilities` rỗng ⇒ máy chủ không gửi tool ⇒ model
+        // trả lời lịch sự "tôi không có tool đó", đúng như nó được dạy. Bật công
+        // tắc trên giao diện vẫn hiện BẬT, nên nhìn đâu cũng thấy ổn.
+        goc: conSong, choSua: quyen.choSua, choChayLenh: quyen.choChayLenh,
+        choGhiNote: quyen.choGhiNote, mucNoLuc: mucNoLucHienTai(),
         ...(anh?.length ? { anh } : {}),
         ...(nhanh ? { nhanh } : {}),
       },
@@ -301,6 +313,12 @@ export function registerAgentHandlers(): void {
   handle('agent:datCheDoLenh', async ({ cuocId, bat }): Promise<AgentWorkspace> => {
     if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở — hãy dừng trước khi đổi quyền chạy lệnh.');
     datQuyenChoCuoc(cuocId, { choChayLenh: bat });
+    return moTa(cuocId, gocCua(cuocId));
+  });
+
+  handle('agent:datCheDoNote', async ({ cuocId, bat }): Promise<AgentWorkspace> => {
+    if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở — hãy dừng trước khi đổi quyền ghi ghi chú.');
+    datQuyenChoCuoc(cuocId, { choGhiNote: bat });
     return moTa(cuocId, gocCua(cuocId));
   });
 

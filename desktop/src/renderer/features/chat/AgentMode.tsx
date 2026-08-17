@@ -25,7 +25,7 @@ import type { AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktr
 import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
-import { XinPhep, XinPhepGit, XinPhepLenh, XinPhepMcp } from './XinPhep';
+import { XinPhep, XinPhepGit, XinPhepLenh, XinPhepMcp, XinPhepNote } from './XinPhep';
 
 export function AgentMode({
   cuocId,
@@ -107,6 +107,11 @@ export function AgentMode({
 
   const doiCheDoLenh = async (): Promise<void> => {
     const w = await window.cuongthai?.agent.datCheDoLenh(cuocId, !thuMuc?.choChayLenh);
+    if (w) datThuMuc(w);
+  };
+
+  const doiCheDoNote = async (): Promise<void> => {
+    const w = await window.cuongthai?.agent.datCheDoNote(cuocId, !thuMuc?.choGhiNote);
     if (w) datThuMuc(w);
   };
 
@@ -238,6 +243,7 @@ export function AgentMode({
           <button
             type="button"
             className="ct-agent-suanut"
+            data-nut="chosua"
             data-bat={thuMuc?.choSua === true}
             onClick={() => void doiCheDoSua()}
             disabled={trangThai.dangChay}
@@ -256,6 +262,7 @@ export function AgentMode({
           <button
             type="button"
             className="ct-agent-suanut"
+            data-nut="chaylenh"
             data-bat={thuMuc?.choChayLenh === true}
             data-lenh="true"
             onClick={() => void doiCheDoLenh()}
@@ -270,6 +277,26 @@ export function AgentMode({
             {thuMuc?.choChayLenh ? 'Chạy lệnh: BẬT' : 'Chạy lệnh: tắt'}
           </button>
         )}
+
+        {/* KHÔNG bọc trong `coThuMuc`: sổ ghi chú nằm trên máy chủ, không phải
+            trong thư mục dự án. Ẩn nút này khi chưa mở dự án nghĩa là bắt người
+            dùng chọn một thư mục mã chỉ để nhờ agent ghi chú. */}
+        <button
+          type="button"
+          className="ct-agent-suanut"
+          data-bat={thuMuc?.choGhiNote === true}
+          data-nut="ghinote"
+          onClick={() => void doiCheDoNote()}
+          disabled={trangThai.dangChay}
+          title={
+            thuMuc?.choGhiNote
+              ? 'Agent ĐANG ghi được vào Ghi chú (mỗi lần ghi vẫn phải bạn duyệt). Bấm để tắt.'
+              : 'Bật cho agent tạo và sửa ghi chú của bạn trên cuongthai.com. Bạn thấy nội dung rồi mới duyệt.'
+          }
+        >
+          <NotebookPen size={13} aria-hidden />
+          {thuMuc?.choGhiNote ? 'Ghi chú: BẬT' : 'Ghi chú: tắt'}
+        </button>
 
         {trangThai.soFileDaSua > 0 && (
           <button
@@ -433,6 +460,20 @@ export function AgentMode({
               );
             }
             return <XinPhepGit key={i} id={m.id} viec={m.viec} chiTiet={m.chiTiet} traLoi={traLoiXinPhep} />;
+          }
+          if (m.kieu === 'xinPhepNote') {
+            if (m.xong) {
+              return (
+                <div key={i} className="ct-agent-tool" data-vong="notes" data-xong={m.xong}>
+                  {m.xong === 'dongY' ? <Check size={12} aria-hidden /> : <X size={12} aria-hidden />}
+                  <code>{m.viec === 'tao' ? 'tạo ghi chú' : 'ghi ghi chú'}</code>
+                  <span className="ct-agent-tool-tomtat">
+                    {m.xong === 'dongY' ? 'đã ghi' : 'đã từ chối'}
+                  </span>
+                </div>
+              );
+            }
+            return <XinPhepNote key={i} id={m.id} viec={m.viec} chiTiet={m.chiTiet} traLoi={traLoiXinPhep} />;
           }
           if (m.kieu === 'xinPhepMcp') {
             if (m.xong) {

@@ -44,7 +44,15 @@ export type AgentCapability =
   /** Chạy lệnh ở NỀN + đọc đầu ra + dừng. Tách khỏi `shell` để app cũ không nhận tool nó chưa biết chạy. */
   | 'shell_nen'
   /** commit / mở PR. Tách riêng vì nó GHI vào lịch sử git và ĐẨY ra ngoài. */
-  | 'git_write';
+  | 'git_write'
+  /**
+   * GHI vào sổ ghi chú cá nhân trên cuongthai.com.
+   *
+   * Tách khỏi `fs_write` vì đây không phải file trong dự án mà là dữ liệu
+   * THẬT của người dùng trên máy chủ — sửa sai thì không có `git checkout`
+   * nào lấy lại được, chỉ còn lịch sử phiên bản của Notes.
+   */
+  | 'notes_write';
 
 export interface AgentToolDef {
   name: string;
@@ -434,6 +442,47 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       required: ['id'],
     },
   },
+  // ─── Ghi chú: GHI ──────────────────────────────────────────────
+  {
+    name: 'notes_tao',
+    ring: 'client',
+    capability: 'notes_write',
+    description:
+      'TẠO một ghi chú MỚI trong sổ của người dùng trên cuongthai.com. '
+      + 'Cần subject_id — lấy từ notes_tree; ĐỪNG đoán số. Chưa biết thì gọi notes_tree trước. '
+      + 'Nội dung viết bằng Markdown (tiêu đề #, danh sách -, **đậm**, `mã`); máy sẽ đổi sang định dạng của Notes. '
+      + 'Người dùng thấy tiêu đề + toàn bộ nội dung rồi mới duyệt, nên hãy viết bản HOÀN CHỈNH ngay, đừng tạo vỏ rỗng rồi định ghi tiếp.',
+    parameters: {
+      type: 'object',
+      properties: {
+        subject_id: { type: 'integer', description: 'id môn/sổ chứa ghi chú. Lấy từ notes_tree.' },
+        chapter_id: { type: 'integer', description: 'id chương (tuỳ chọn). Bỏ trống thì ghi chú nằm thẳng trong sổ.' },
+        tieu_de: { type: 'string', description: 'Tiêu đề ghi chú.' },
+        noi_dung: { type: 'string', description: 'Nội dung Markdown.' },
+      },
+      required: ['subject_id', 'tieu_de', 'noi_dung'],
+    },
+  },
+  {
+    name: 'notes_ghi',
+    ring: 'client',
+    capability: 'notes_write',
+    description:
+      'GHI vào một ghi chú ĐÃ CÓ. Lấy id từ notes_search hoặc notes_tree. '
+      + 'che_do="them" nối vào CUỐI bài (dùng cho "thêm vào ghi chú X" — an toàn, không đụng chữ cũ). '
+      + 'che_do="thay" THAY TOÀN BỘ nội dung cũ; chỉ dùng khi người dùng nói rõ là viết lại, và hãy notes_read trước để biết mình đang xoá cái gì. '
+      + 'Người dùng thấy phần thêm/bản mới rồi mới duyệt.',
+    parameters: {
+      type: 'object',
+      properties: {
+        id: { type: 'integer', description: 'id ghi chú.' },
+        che_do: { type: 'string', enum: ['them', 'thay'], description: '"them" = nối vào cuối. "thay" = viết đè toàn bộ.' },
+        noi_dung: { type: 'string', description: 'Nội dung Markdown.' },
+        tieu_de: { type: 'string', description: 'Đổi tiêu đề (tuỳ chọn).' },
+      },
+      required: ['id', 'che_do', 'noi_dung'],
+    },
+  },
   {
     name: 'notes_tree',
     ring: 'server',
@@ -554,9 +603,19 @@ export function laToolMcp(name: string): boolean {
   return name.startsWith('mcp__');
 }
 
-/** Danh sách nhóm khả năng hợp lệ — dùng để lọc phần app gửi lên. */
+/**
+ * Danh sách nhóm khả năng hợp lệ — dùng để lọc phần app gửi lên.
+ *
+ * ⚠️ ĐÂY LÀ NƠI THỨ HAI phải sửa khi thêm một capability. Thêm vào union
+ * `AgentCapability` và gắn cho tool là chưa đủ: `parseCapabilities` lọc theo
+ * ĐÚNG mảng này, nên một tên thiếu ở đây bị VỨT ÂM THẦM — app gửi lên đủ,
+ * máy chủ không gửi tool xuống, và model trả lời rất lịch sự rằng "tôi không
+ * có tool đó". Không có lỗi nào ở bất kỳ tầng nào. TypeScript cũng không bắt
+ * được, vì thiếu một phần tử trong mảng vẫn là mảng hợp lệ.
+ */
 export const ALL_CAPABILITIES: readonly AgentCapability[] = [
   'fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent', 'shell_nen', 'git_write',
+  'notes_write',
 ];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {

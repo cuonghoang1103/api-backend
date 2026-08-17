@@ -316,6 +316,14 @@ export interface AgentViec {
 /** Thư mục dự án agent đang được phép đọc. `null` = chưa chọn. */
 export interface AgentWorkspace {
   path: string | null;
+  /**
+   * Đã bật cho agent GHI vào sổ ghi chú chưa.
+   *
+   * KHÔNG đi kèm `choSua`: đó là quyền trên FILE trong thư mục dự án, còn đây
+   * là dữ liệu thật của người dùng trên máy chủ. Và nó KHÔNG bị thu hồi khi
+   * đổi thư mục dự án, vì sổ ghi chú chẳng nằm trong thư mục nào.
+   */
+  choGhiNote?: boolean;
   /** Chỉ tên thư mục, để hiện lên giao diện mà không phơi cả đường dẫn. */
   name: string | null;
   /** Nhánh git hiện tại, `null` nếu không phải kho git. */
@@ -380,6 +388,7 @@ export const agentTraLoiSchema = z.object({
 // cấp một quyền và nhận về hai.
 export const agentCheDoSuaSchema = z.object({ cuocId: cuocIdSchema, bat: z.boolean() });
 export const agentCheDoLenhSchema = z.object({ cuocId: cuocIdSchema, bat: z.boolean() });
+export const agentCheDoNoteSchema = z.object({ cuocId: cuocIdSchema, bat: z.boolean() });
 export const agentPhienSchema = z.object({ id: z.string().min(1).max(64) });
 
 /**
@@ -535,6 +544,8 @@ export type AgentUiEvent = { cuocId: string } & (
    * ghi "agent muốn commit" thì không ai duyệt được gì cả.
    */
   | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr'; chiTiet: string }
+  /** Xin phép GHI vào sổ ghi chú. `chiTiet` là nội dung sắp ghi — người dùng phải ĐỌC nó. */
+  | { loai: 'xinPhepNote'; id: string; viec: 'tao' | 'ghi'; chiTiet: string }
   /** Đầu ra của lệnh, chảy ra khi nó còn đang chạy. */
   | { loai: 'lenhRa'; mau: string }
   /** Agent công bố/cập nhật danh sách việc. Luôn là TOÀN BỘ danh sách. */
@@ -611,6 +622,7 @@ export const INVOKE_CHANNELS = {
   'agent:traLoiXinPhep': agentTraLoiSchema,
   'agent:datCheDoSua': agentCheDoSuaSchema,
   'agent:datCheDoLenh': agentCheDoLenhSchema,
+  'agent:datCheDoNote': agentCheDoNoteSchema,
   'agent:datMucNoLuc': agentMucNoLucSchema,
   'agent:hoanTac': agentCuocSchema,
   'agent:dsPhien': null,
@@ -834,6 +846,11 @@ export interface DesktopBridge {
     datCheDoSua(cuocId: string, bat: boolean): Promise<AgentWorkspace>;
     /** Bật/tắt quyền chạy lệnh. Cũng không lưu xuống đĩa. */
     datCheDoLenh(cuocId: string, bat: boolean): Promise<AgentWorkspace>;
+    /**
+     * Cho agent GHI vào sổ ghi chú. Độc lập với thư mục dự án — ghi chú nằm
+     * trên máy chủ, không phải trong cây mã.
+     */
+    datCheDoNote(cuocId: string, bat: boolean): Promise<AgentWorkspace>;
     /** Đặt cấp độ nỗ lực. Đây LÀ thứ được lưu — nó là sở thích, không phải quyền. */
     datMucNoLuc(muc: MucNoLuc): Promise<void>;
     /** Trả mọi file agent đã sửa trong việc này về nguyên trạng. */

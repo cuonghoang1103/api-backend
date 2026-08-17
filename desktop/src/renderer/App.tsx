@@ -3,6 +3,8 @@ import { AppStateProvider, useAppState } from './app-state';
 import { LoginScreen } from './auth/LoginScreen';
 import { SessionProvider, useSession } from './auth/session';
 import { CommandPalette } from './components/CommandPalette';
+import { MusicPlayerProvider } from './features/music/player';
+import { PlayerBar } from './features/music/PlayerBar';
 import { OdinDock } from './features/odin/OdinDock';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Sidebar } from './components/Sidebar';
@@ -75,25 +77,37 @@ function Shell() {
   }, [settings.sidebarMode, setSetting]);
 
   return (
-    <div className="ct-shell">
-      <Sidebar />
-      <div className="ct-main">
-        <TitleBar onOpenPalette={() => setPaletteOpen(true)} />
-        <div className="ct-content">
-          {/* Boundary bọc RIÊNG phần nội dung, không bọc cả shell: lỗi ở một
-              trang thì sidebar và thanh trạng thái phải còn sống để người dùng
-              đi chỗ khác. Bọc cả shell là mất luôn đường thoát. */}
-          <ErrorBoundary>
-            <Content />
-          </ErrorBoundary>
+    /* Nhạc bọc NGOÀI cả shell.
+     *
+     * Thẻ <audio> sống trong provider này, nên chuyển trang — thậm chí một
+     * trang nổ và ErrorBoundary thay nó bằng màn báo lỗi — cũng không làm đứt
+     * bài đang nghe. Đặt nó bên trong `ct-content` thì mỗi lần đổi route là
+     * React tháo nó ra, và đó chính là lỗi "chuyển mục là tắt nhạc, quay lại
+     * thì mất bài đang nghe dở". */
+    <MusicPlayerProvider>
+      <div className="ct-shell">
+        <Sidebar />
+        <div className="ct-main">
+          <TitleBar onOpenPalette={() => setPaletteOpen(true)} />
+          <div className="ct-content">
+            {/* Boundary bọc RIÊNG phần nội dung, không bọc cả shell: lỗi ở một
+                trang thì sidebar và thanh trạng thái phải còn sống để người dùng
+                đi chỗ khác. Bọc cả shell là mất luôn đường thoát. */}
+            <ErrorBoundary>
+              <Content />
+            </ErrorBoundary>
+          </div>
+          {/* Thanh phát ở đây, giữa nội dung và thanh trạng thái: thấy ở MỌI
+              trang, và tự biến mất khi chưa nghe gì. */}
+          <PlayerBar />
+          <StatusBar />
         </div>
-        <StatusBar />
+        <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+        {/* Odin nằm NGOÀI vùng nội dung để không bị cuộn theo trang, và ngoài
+            ErrorBoundary của nội dung để một trang hỏng không kéo nó chết theo. */}
+        <OdinDock />
       </div>
-      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
-      {/* Odin nằm NGOÀI vùng nội dung để không bị cuộn theo trang, và ngoài
-          ErrorBoundary của nội dung để một trang hỏng không kéo nó chết theo. */}
-      <OdinDock />
-    </div>
+    </MusicPlayerProvider>
   );
 }
 

@@ -50,6 +50,8 @@ export function AgentMode({
   } = useAgent(cuocId, info);
   const [nhap, datNhap] = useState('');
   const [moLichSu, datMoLichSu] = useState(false);
+  /** Ảnh đã dán, chờ gửi kèm câu hỏi tới. */
+  const [anh, datAnh] = useState<string[]>([]);
   const cuonRef = useRef<HTMLDivElement>(null);
 
   // Tiêu đề tab = câu hỏi ĐẦU TIÊN, giống cách đặt tên phiên ở main. Một tab
@@ -106,7 +108,37 @@ export function AgentMode({
     const text = nhap.trim();
     if (!text || trangThai.dangChay) return;
     datNhap('');
-    void gui(text);
+    datAnh([]);
+    void gui(text, anh.length ? anh : undefined);
+  };
+
+  /**
+   * Dán ảnh từ bộ nhớ tạm.
+   *
+   * Chặn `preventDefault` CHỈ khi thật sự có ảnh — dán chữ phải hoạt động như
+   * bình thường. `clipboardData.items` có cả ảnh lẫn phiên bản chữ của cùng một
+   * lần chép (ví dụ chép từ Figma), nên phải lọc theo `type` chứ không lấy bừa
+   * item đầu.
+   */
+  const danAnh = (e: React.ClipboardEvent<HTMLTextAreaElement>): void => {
+    const files = [...(e.clipboardData?.items ?? [])]
+      .filter((i) => i.kind === 'file' && /^image\/(png|jpeg|webp|gif)$/.test(i.type))
+      .map((i) => i.getAsFile())
+      .filter((f): f is File => !!f);
+    if (!files.length) return;
+    e.preventDefault();
+
+    for (const f of files.slice(0, 3 - anh.length)) {
+      // 4MB là trần của máy chủ. Chặn ở đây để người dùng biết NGAY, thay vì
+      // gửi đi rồi bị từ chối câm lặng ở tầng dưới.
+      if (f.size > 4 * 1024 * 1024) continue;
+      const doc = new FileReader();
+      doc.onload = () => {
+        const url = String(doc.result ?? '');
+        if (url.startsWith('data:image/')) datAnh((cu) => (cu.length >= 3 ? cu : [...cu, url]));
+      };
+      doc.readAsDataURL(f);
+    }
   };
 
   const phimTrongO = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
@@ -252,7 +284,18 @@ export function AgentMode({
         {trangThai.muc.length === 0 && <ManHinhTrong coThuMuc={coThuMuc} />}
 
         {trangThai.muc.map((m, i) => {
-          if (m.kieu === 'nguoi') return <div key={i} className="ct-agent-nguoi">{m.text}</div>;
+          if (m.kieu === 'nguoi') {
+            return (
+              <div key={i} className="ct-agent-nguoi">
+                {m.anh?.length ? (
+                  <div className="ct-anh-goi">
+                    {m.anh.map((a, k) => <img key={k} src={a} alt={`ảnh ${k + 1}`} />)}
+                  </div>
+                ) : null}
+                {m.text}
+              </div>
+            );
+          }
           if (m.kieu === 'may') {
             return (
               <div key={i} className="ct-agent-may">
@@ -322,12 +365,28 @@ export function AgentMode({
       </div>
 
       {/* ── Ô nhập ── */}
+      {anh.length > 0 && (
+        <div className="ct-anh-cho">
+          {anh.map((a, i) => (
+            <div key={i} className="ct-anh-o">
+              <img src={a} alt={`ảnh ${i + 1}`} />
+              <button type="button" onClick={() => datAnh((cu) => cu.filter((_, k) => k !== i))} title="Bỏ ảnh này">
+                <X size={11} aria-hidden />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="ct-agent-soan">
         <textarea
           className="ct-agent-o"
           rows={2}
+          onPaste={danAnh}
           value={nhap}
-          placeholder={coThuMuc ? `Hỏi về dự án ${thuMuc?.name}…` : 'Chọn thư mục dự án trước, rồi hỏi…'}
+          placeholder={coThuMuc
+            ? `Hỏi về dự án ${thuMuc?.name}… (dán ảnh chụp màn hình được)`
+            : 'Chọn thư mục dự án trước, rồi hỏi…'}
           onChange={(e) => datNhap(e.target.value)}
           onKeyDown={phimTrongO}
           disabled={trangThai.dangChay}

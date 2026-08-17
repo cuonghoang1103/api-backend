@@ -69,6 +69,28 @@ export interface KetQuaNen {
  * Chỉ rút ngắn `content`.
  */
 export function nenNguCanh(messages: AgentMessage[]): KetQuaNen {
+  /**
+   * ẢNH CŨ BỊ GỠ, chỉ giữ tấm của lượt GẦN NHẤT.
+   *
+   * Ảnh là thứ đắt nhất trong hội thoại — một ảnh chụp màn hình tốn cỡ 1.500
+   * token, và nó được gửi lại ở MỌI lượt gọi cổng sau đó. Một việc 20 bước với
+   * hai tấm ảnh là +60k token cho hai tấm hình mà agent đã đọc xong từ bước
+   * đầu. Nó vẫn nhớ nội dung — nó đã mô tả tấm ảnh trong câu trả lời của chính
+   * nó, và câu đó thì được giữ nguyên.
+   */
+  const viTriAnhCuoi = messages.reduce(
+    (v, m, i) => (m.role === 'user' && Array.isArray(m.content) ? i : v),
+    -1,
+  );
+  messages = messages.map((m, i) => {
+    if (m.role !== 'user' || !Array.isArray(m.content) || i === viTriAnhCuoi) return m;
+    const chu = m.content.filter((k) => k.type === 'text');
+    return {
+      role: 'user',
+      content: [...chu, { type: 'text' as const, text: '[ảnh đã gỡ để tiết kiệm ngữ cảnh]' }],
+    };
+  });
+
   // Duyệt NGƯỢC: cái gần hiện tại nhất là cái đáng giữ nhất.
   const viTriTool: number[] = [];
   for (let i = messages.length - 1; i >= 0; i--) {

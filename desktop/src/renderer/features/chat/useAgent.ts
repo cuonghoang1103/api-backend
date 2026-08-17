@@ -21,7 +21,7 @@ import type { TheXinPhep } from './XinPhep';
 
 /** Một mục trên màn hình. Không phải một tin nhắn giao thức. */
 export type MucHienThi =
-  | { kieu: 'nguoi'; text: string }
+  | { kieu: 'nguoi'; text: string; anh?: string[] }
   | { kieu: 'may'; text: string }
   | { kieu: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
   /**
@@ -229,16 +229,16 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   /** Chặn gửi hai lần khi người dùng bấm nhanh — React chưa kịp vẽ lại nút. */
   const dangGui = useRef(false);
 
-  const gui = useCallback(async (text: string) => {
+  const gui = useCallback(async (text: string, anh?: string[]) => {
     const cau = window.cuongthai;
     if (!cau || dangGui.current) return;
     dangGui.current = true;
 
-    datMuc((truoc) => [...truoc, { kieu: 'nguoi', text }]);
+    datMuc((truoc) => [...truoc, { kieu: 'nguoi', text, ...(anh?.length ? { anh } : {}) }]);
     datDangChay(true);
     datDangNghi(true);
     try {
-      await cau.agent.send(cuocId, text);
+      await cau.agent.send(cuocId, text, anh);
     } catch (err) {
       datMuc((truoc) => [...truoc, { kieu: 'loi', text: (err as Error).message }]);
     } finally {

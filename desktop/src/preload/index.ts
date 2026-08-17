@@ -117,8 +117,8 @@ const bridge: DesktopBridge = {
     // dừng thì gọi `cancel()`, đừng trông vào việc lời hứa này tự bỏ cuộc.
     taoCuoc: () => ipcRenderer.invoke('agent:taoCuoc') as Promise<string>,
     dongCuoc: (cuocId: string) => ipcRenderer.invoke('agent:dongCuoc', { cuocId }) as Promise<void>,
-    send: (cuocId: string, text: string) =>
-      ipcRenderer.invoke('agent:send', { cuocId, text }) as Promise<void>,
+    send: (cuocId: string, text: string, anh?: string[]) =>
+      ipcRenderer.invoke('agent:send', { cuocId, text, anh }) as Promise<void>,
     cancel: (cuocId: string) => ipcRenderer.invoke('agent:cancel', { cuocId }) as Promise<void>,
     reset: (cuocId: string) => ipcRenderer.invoke('agent:reset', { cuocId }) as Promise<void>,
     traLoiXinPhep: (cuocId: string, id: string, quyetDinh: AgentQuyetDinh) =>

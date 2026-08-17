@@ -103,6 +103,9 @@ const MAX_TOOL_RESULT_CHARS = 60_000;
 const CHO_BYTE_DAU_MS = 180_000;
 const IM_LANG_MS = 60_000;
 const MAX_OUTPUT_TOKENS = 4_000;
+/** Ảnh mỗi lượt, và trần cho một data URI (~5,5MB chuỗi ≈ 4MB ảnh). */
+const MAX_ANH = 3;
+const MAX_ANH_BYTES = 5_600_000;
 
 // ─── Kiểu tin nhắn (theo giao thức OpenAI) ─────────────────────────
 
@@ -112,8 +115,21 @@ export interface ToolCall {
   function: { name: string; arguments: string };
 }
 
+/**
+ * Khối nội dung cho lượt CÓ ẢNH.
+ *
+ * Tuyến OpenAI của cổng nhận ảnh dạng `image_url` với data URI. Đo 11/08 (ghi
+ * trong CLAUDE.md): trong tám model của khoá này, CHỈ `gpt-5.6-sol` thật sự
+ * nhìn được ảnh — mấy model kia nhận ảnh, không báo lỗi, và BỊA ra nội dung.
+ * Agent vốn đã chạy trên sol nên không cần ép model; nhưng nếu có ngày đổi
+ * model cho `agent_code` thì phải kiểm lại chỗ này TRƯỚC.
+ */
+export type KhoiNoiDung =
+  | { type: 'text'; text: string }
+  | { type: 'image_url'; image_url: { url: string } };
+
 export type AgentMessage =
-  | { role: 'user'; content: string }
+  | { role: 'user'; content: string | KhoiNoiDung[] }
   | { role: 'assistant'; content: string | null; tool_calls?: ToolCall[] }
   | { role: 'tool'; tool_call_id: string; content: string };
 
@@ -202,7 +218,32 @@ function sanitizeIncoming(raw: unknown): AgentMessage[] {
     const role = (m as { role?: unknown }).role;
 
     if (role === 'user') {
-      const content = String((m as { content?: unknown }).content ?? '');
+      const tho = (m as { content?: unknown }).content;
+      if (Array.isArray(tho)) {
+        // Lượt có ảnh. Lọc CHẶT: chỉ nhận `text` và `image_url` với data URI
+        // ảnh — một `image_url` trỏ ra Internet là biến agent thành công cụ
+        // gọi ra ngoài thay mặt người dùng, mà chẳng ai duyệt lời gọi đó.
+        const khoi: KhoiNoiDung[] = [];
+        let soAnh = 0;
+        for (const k of tho) {
+          if (!k || typeof k !== 'object') continue;
+          const t = (k as { type?: unknown }).type;
+          if (t === 'text') {
+            const text = String((k as { text?: unknown }).text ?? '');
+            tongChu += text.length;
+            khoi.push({ type: 'text', text });
+          } else if (t === 'image_url' && soAnh < MAX_ANH) {
+            const url = String((k as { image_url?: { url?: unknown } }).image_url?.url ?? '');
+            if (!/^data:image\/(png|jpeg|webp|gif);base64,/.test(url)) continue;
+            if (url.length > MAX_ANH_BYTES) continue;
+            soAnh++;
+            khoi.push({ type: 'image_url', image_url: { url } });
+          }
+        }
+        if (khoi.length) out.push({ role: 'user', content: khoi });
+        continue;
+      }
+      const content = String(tho ?? '');
       tongChu += content.length;
       out.push({ role: 'user', content });
     } else if (role === 'assistant') {
@@ -227,6 +268,9 @@ function sanitizeIncoming(raw: unknown): AgentMessage[] {
     // 'system' rơi vào đây và bị bỏ — có chủ ý, xem ghi chú đầu hàm.
   }
 
+  // `tongChu` CỐ Ý không cộng độ dài data URI của ảnh: một ảnh 2MB là ~2,7
+  // triệu ký tự base64, tức là một tấm ảnh sẽ tự mình vượt trần 600k và chặn
+  // cả hội thoại. Ảnh có trần riêng (`MAX_ANH`, `MAX_ANH_BYTES`) ở trên.
   if (tongChu > MAX_TOTAL_CHARS) {
     throw new AgentInputError(
       `Hội thoại quá nặng (${Math.round(tongChu / 1000)}k ký tự, trần ${MAX_TOTAL_CHARS / 1000}k). Hãy bắt đầu phiên mới.`,

@@ -208,10 +208,23 @@ export const zoomSchema = z.number().min(0.5).max(2.5);
  */
 export const cuocIdSchema = z.string().min(1).max(64);
 
+/**
+ * Ảnh dán kèm câu hỏi — data URI base64.
+ *
+ * Trần 5,6 triệu ký tự ≈ 4MB ảnh, tối đa 3 tấm. Kiểm ở đây RỒI kiểm lại ở máy
+ * chủ: đây là schema của app (một app bị sửa thì bỏ qua được), máy chủ mới là
+ * chỗ phán cuối cùng.
+ */
+export const anhSchema = z
+  .string()
+  .max(5_600_000)
+  .regex(/^data:image\/(png|jpeg|webp|gif);base64,/, 'Chỉ nhận ảnh png/jpeg/webp/gif');
+
 export const agentSendSchema = z.object({
   /** Cuộc hội thoại (tab) nhận câu hỏi này. Mọi kênh có trạng thái đều phải mang nó. */
   cuocId: cuocIdSchema,
   text: z.string().trim().min(1, 'Chưa nhập gì').max(8000),
+  anh: z.array(anhSchema).max(3).optional(),
 });
 
 export const agentCuocSchema = z.object({ cuocId: cuocIdSchema });
@@ -578,7 +591,7 @@ export interface DesktopBridge {
     /** Mở một cuộc (tab) mới. Trả về id — mọi lời gọi sau đó phải mang nó. */
     taoCuoc(): Promise<string>;
     dongCuoc(cuocId: string): Promise<void>;
-    send(cuocId: string, text: string): Promise<void>;
+    send(cuocId: string, text: string, anh?: string[]): Promise<void>;
     cancel(cuocId: string): Promise<void>;
     /** Xoá hội thoại của MỘT cuộc, giữ tab. Hạn mức KHÔNG được reset theo. */
     reset(cuocId: string): Promise<void>;

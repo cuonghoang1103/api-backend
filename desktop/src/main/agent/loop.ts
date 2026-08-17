@@ -58,9 +58,13 @@ export interface HanMucUi {
   hoiLucNao: string | null;
 }
 
+type KhoiNoiDung =
+  | { type: 'text'; text: string }
+  | { type: 'image_url'; image_url: { url: string } };
+
 interface TinNhan {
   role: 'user' | 'assistant' | 'tool';
-  content?: string | null;
+  content?: string | KhoiNoiDung[] | null;
   tool_calls?: Array<{ id: string; type: 'function'; function: { name: string; arguments: string } }>;
   tool_call_id?: string;
 }
@@ -75,6 +79,8 @@ export interface BoiCanh {
   choChayLenh?: boolean;
   /** 'nhanh' | 'canBang' | 'ky'. Quyết định trần bước ở máy chủ. */
   mucNoLuc?: string;
+  /** Ảnh dán kèm câu hỏi này (data URI). */
+  anh?: string[];
 }
 
 /**
@@ -241,7 +247,20 @@ export async function chayLuot(
 
   const dieuKhien = new AbortController();
   c.dangChay = dieuKhien;
-  c.hoiThoai.push({ role: 'user', content: cauHoi });
+  // Có ảnh ⇒ tin nhắn thành mảng khối. Chữ đi TRƯỚC ảnh: model đọc theo thứ tự,
+  // và câu hỏi đặt sau ảnh thì nó đã bắt đầu mô tả tấm ảnh trước khi biết được
+  // hỏi gì về nó.
+  c.hoiThoai.push(
+    boiCanh.anh?.length
+      ? {
+          role: 'user',
+          content: [
+            { type: 'text', text: cauHoi },
+            ...boiCanh.anh.map((url) => ({ type: 'image_url' as const, image_url: { url } })),
+          ],
+        }
+      : { role: 'user', content: cauHoi },
+  );
   if (!c.duAn && boiCanh.goc) c.duAn = tenThuMuc(boiCanh.goc);
 
   // Chỉ khai báo khả năng khi THẬT SỰ có thư mục. Khai bừa thì máy chủ đưa tool

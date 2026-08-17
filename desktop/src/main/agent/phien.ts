@@ -32,7 +32,8 @@ import path from 'node:path';
 
 export interface TinNhanLuu {
   role: 'user' | 'assistant' | 'tool';
-  content?: string | null;
+  /** Mảng = lượt có ảnh (khối `text` + `image_url`). */
+  content?: string | Array<Record<string, unknown>> | null;
   tool_calls?: Array<{ id: string; type: 'function'; function: { name: string; arguments: string } }>;
   tool_call_id?: string;
 }
@@ -67,8 +68,12 @@ function duongDan(id: string): string {
 
 /** Tiêu đề lấy từ câu hỏi ĐẦU TIÊN — thứ người dùng nhớ về việc đó. */
 function datTieuDe(hoiThoai: TinNhanLuu[]): string {
-  const dau = hoiThoai.find((m) => m.role === 'user' && typeof m.content === 'string');
-  const tho = (dau?.content ?? '').trim().replace(/\s+/g, ' ');
+  const dau = hoiThoai.find((m) => m.role === 'user');
+  const c = dau?.content;
+  const tho = (Array.isArray(c)
+    ? c.filter((k) => k?.type === 'text').map((k) => String(k.text ?? '')).join(' ')
+    : String(c ?? '')
+  ).trim().replace(/\s+/g, ' ');
   if (!tho) return 'Việc chưa đặt tên';
   return tho.length > MAX_TIEU_DE ? `${tho.slice(0, MAX_TIEU_DE)}…` : tho;
 }
@@ -197,7 +202,15 @@ export function dungLaiHienThi(hoiThoai: TinNhanLuu[]): MucKhoiPhuc[] {
 
   for (const m of hoiThoai) {
     if (m.role === 'user') {
-      ra.push({ kieu: 'nguoi', text: String(m.content ?? '') });
+      // Lượt có ảnh: chỉ dựng lại phần CHỮ. Data URI base64 nằm trong file phiên
+      // nhưng không vẽ lại — một ảnh 2MB dựng vào bảng ghi khôi phục làm màn
+      // hình khựng, và người dùng đã nhìn thấy nó lúc gửi rồi.
+      const c = m.content;
+      const text = Array.isArray(c)
+        ? c.filter((k) => k?.type === 'text').map((k) => String(k.text ?? '')).join(' ')
+          + (c.some((k) => k?.type === 'image_url') ? '  🖼 (có ảnh đính kèm)' : '')
+        : String(c ?? '');
+      ra.push({ kieu: 'nguoi', text });
     } else if (m.role === 'assistant') {
       const chu = String(m.content ?? '').trim();
       if (chu) ra.push({ kieu: 'may', text: chu });

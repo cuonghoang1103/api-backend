@@ -186,7 +186,7 @@ export function registerAgentHandlers(): void {
     return moTa(null);
   });
 
-  handle('agent:send', async ({ cuocId, text }, event) => {
+  handle('agent:send', async ({ cuocId, text, anh }, event) => {
     if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở. Hãy dừng nó trước.');
 
     const goc = thuMucHienTai();
@@ -211,7 +211,11 @@ export function registerAgentHandlers(): void {
     await chayLuot(
       cuocId,
       text,
-      { goc: conSong, choSua, choChayLenh, mucNoLuc: mucNoLucHienTai(), ...(nhanh ? { nhanh } : {}) },
+      {
+        goc: conSong, choSua, choChayLenh, mucNoLuc: mucNoLucHienTai(),
+        ...(anh?.length ? { anh } : {}),
+        ...(nhanh ? { nhanh } : {}),
+      },
       phat,
     );
   });

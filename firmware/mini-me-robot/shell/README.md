@@ -6,23 +6,42 @@ https://cuongthai.com/maker-lab/mini-me-robot?tab=shell
 
 ---
 
+## Xem trước trước khi gửi đi in
+
+```bash
+node gen-stl.mjs stl        # sinh 9 file STL
+python3 xem-stl.py stl anh  # dựng ảnh → anh/00-tat-ca.png
+```
+
+⚠️ **Nhìn ảnh TRƯỚC KHI trả tiền in.** Vỏ nhựa đắt hơn firmware nhiều: sai một con số là mất cả lô và mấy ngày chờ ship. `xem-stl.py` dựng hai góc cho mỗi mảnh — nghiêng để thấy khối, và **chiếu thẳng từ trên xuống để thấy lỗ nằm đâu**.
+
+⚠️ **Nhưng ảnh KHÔNG bắt được mọi lỗi.** Ngày 16/08/2026 ống mắt trông hoàn toàn bình thường trong ảnh, trong khi hốc chữ nhật bên trong đang **chọc thủng thành ống** — nửa đường chéo hốc 31 mm lớn hơn bán kính ống 27 mm, lưới tự cắt nhau. Chỉ phép **đo bằng số** mới lộ ra. Đo xong rồi hãy tin mắt.
+
 ## Số lượng cần in
 
 | File | In mấy cái | Kích thước (mm) | Ghi chú |
 |---|---|---|---|
-| `01-than.stl` | 1 | 106 × 130 × 80 | Hộp chính, hở nóc và hở mặt sau |
-| `02-nap-sau.stl` | 1 | 106 × 80 × 3 | Cửa bảo trì — 4 vít M3 |
-| `03-tam-nguc.stl` | 1 | 96 × 60 × 3 | Lỗ ⌀8 cho laser + 4 lỗ vít |
-| `04-dau.stl` | 1 | 105 × 52 × 60 | 2 lỗ ⌀42 cho ống mắt |
-| `05-ong-mat.stl` | **2** | 48 × 48 × 45 | ⌀48 ngoài / ⌀42 trong, có gờ chặn PCB |
+| `01-than.stl` | 1 | 150 × 120 × 130 | Hộp chính, hở nóc và hở mặt sau |
+| `02-nap-sau.stl` | 1 | 150 × 130 × 3 | Cửa bảo trì — 4 vít M3 |
+| `03-tam-nguc.stl` | 1 | 140 × 138 × 7 | Cửa sổ 86×41 + lỗ loa ⌀52 + trụ bắt |
+| `04-dau.stl` | 1 | 130 × 60 × 56 | 2 lỗ ⌀35 + 8 vấu giữ bo màn |
+| `05-ong-mat.stl` | **2** | 54 × 54 × 40 | Vành khuyên úp ngoài mặt đầu |
 | `06-canh-tay-tren.stl` | **2** | 18 × 52 × 14 | Rỗng giữa để luồn dây khuỷu |
 | `07-cang-tay.stl` | **2** | 20 × 54 × 12 | Có sẵn bàn tay |
-| `08-op-xich.stl` | **2** | 150 × 62 × 6 | 2 lỗ trục ⌀8 |
-| `09-gia-co.stl` | 1 | 44 × 18 × 26 | Ôm 2 servo MG90S vuông góc |
+| `08-op-xich.stl` | **2** | 195 × 105 × 6 | Trùm ngoài khung TP101 |
+| `09-gia-co.stl` | 1 | 44 × 18 × 26 | Ôm **MỘT** servo MG90S. ⚠️ Dòng cũ ghi "2 servo vuông góc" là SAI — hình chỉ có một rãnh chữ U, đã kiểm bằng mặt cắt. Muốn đầu quay 2 trục thì MUA khung pan-tilt sẵn (20-40k), đừng in |
 
-Tổng **13 lần in**, khoảng **380 g nhựa**, **~26 giờ**.
+Tổng **13 lần in**, khoảng **520 g nhựa**, **~34 giờ**.
 
----
+### Số đo thật đã đo (16/08/2026)
+
+| Linh kiện | Kích thước | Ảnh hưởng tới vỏ |
+|---|---|---|
+| Loa | **⌀65 × 30 dày** | ép thân cao 130 (bản cũ tính cho ⌀40) |
+| Đế pin 18650 đôi | 92 × 43 × 22, nằm ngang | chốt chiều sâu thân 120 |
+| Màn 3.5" | 100 × 55 × 5, viền 6 → kính 88 × 43 | cửa sổ khoét 86 × 41 (chờm 1mm che sai số in) |
+| Bo màn tròn | 38 × 45,5 × 3,2, kính ⌀32,4 | **chữ nhật, KHÔNG vuông** — xem mảnh 05 |
+| Khung TP101 | 193 × 163 × 60, 0,47 kg | ốp xích cao 105 để trông gấp rưỡi |
 
 ## Thông số in
 

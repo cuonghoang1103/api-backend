@@ -2947,3 +2947,109 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   font-size: 13.5px;
   transition: border-color var(--ct-motion-fast) var(--ct-ease);
 }
+
+/* ── Bảng kế hoạch ──
+   Ghim TRÊN bảng ghi, không cuộn theo: nó trả lời câu "còn bao lâu nữa?" —
+   câu hỏi chỉ nhức lên sau bước thứ năm, đúng lúc nó sẽ trôi khỏi màn hình nếu
+   để nó cuộn cùng. */
+.ct-kehoach {
+  flex-shrink: 0;
+  margin-bottom: 10px;
+  padding: 9px 12px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: color-mix(in srgb, var(--ct-accent) 5%, var(--ct-surface));
+}
+
+.ct-kehoach-dau {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ct-text-muted);
+}
+
+.ct-kehoach-dem {
+  color: var(--ct-text-faint);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-kehoach-thanh {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--ct-hover);
+  overflow: hidden;
+}
+
+.ct-kehoach-day {
+  height: 100%;
+  background: var(--ct-accent);
+  transition: width var(--ct-motion) var(--ct-ease);
+}
+
+.ct-kehoach-ds {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  /* Kế hoạch 30 việc không được đẩy bảng ghi xuống hết màn hình. */
+  max-height: 148px;
+  overflow-y: auto;
+}
+
+.ct-kehoach-ds li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ct-text-faint);
+}
+
+.ct-kehoach-ds li[data-tt='dang'] { color: var(--ct-text); font-weight: 500; }
+.ct-kehoach-ds li[data-tt='dang'] > svg { color: var(--ct-accent); }
+.ct-kehoach-ds li[data-tt='xong'] > svg { color: var(--ct-ok); }
+
+/* Việc đã xong gạch ngang + mờ: mắt lướt qua được ngay phần đã làm, dừng đúng
+   ở việc đang chạy. */
+.ct-kehoach-ds li[data-tt='xong'] span {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.ct-spin-cham { animation: ct-tho 1.6s ease-in-out infinite; }
+
+/* ── Chọn cấp độ nỗ lực ── */
+.ct-noluc {
+  display: inline-flex;
+  gap: 1px;
+  padding: 2px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+}
+
+.ct-noluc-nut {
+  padding: 2px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--ct-text-faint);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ct-noluc-nut:hover:not(:disabled) { color: var(--ct-text); }
+.ct-noluc-nut:disabled { opacity: 0.45; cursor: default; }
+
+.ct-noluc-nut[data-chon='true'] {
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  box-shadow: var(--ct-shadow-sm);
+}

@@ -46,6 +46,7 @@ export type SuKienAgent =
   | { loai: 'xongXinPhep'; id: string; dongY: boolean }
   | { loai: 'xinPhepLenh'; id: string; lenh: string; phanLoai: PhanLoaiLenh }
   | { loai: 'lenhRa'; mau: string }
+  | { loai: 'keHoach'; viec: Array<{ ten: string; trangThai: string }> }
   | { loai: 'xong'; hanMuc: HanMucUi | null; tienUsd: number; daLuoc: number; soFileDaSua: number }
   | { loai: 'loi'; thongDiep: string; ma?: string }
   | { loai: 'huy' };
@@ -72,6 +73,8 @@ export interface BoiCanh {
   choSua?: boolean;
   /** Người dùng đã bật chế độ cho chạy lệnh chưa. Mặc định KHÔNG. */
   choChayLenh?: boolean;
+  /** 'nhanh' | 'canBang' | 'ky'. Quyết định trần bước ở máy chủ. */
+  mucNoLuc?: string;
 }
 
 /**
@@ -250,7 +253,7 @@ export async function chayLuot(
   // chối — im lặng bỏ qua ở phía app thì model cứ thử lại mãi.
   const capabilities: string[] = [];
   if (boiCanh.goc) {
-    capabilities.push('fs_read', 'git_read');
+    capabilities.push('fs_read', 'git_read', 'plan');
     if (boiCanh.choSua) capabilities.push('fs_write');
     if (boiCanh.choChayLenh) capabilities.push('shell');
   }
@@ -283,6 +286,7 @@ export async function chayLuot(
             }
           : {}),
         ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
+        ...(boiCanh.mucNoLuc ? { mucNoLuc: boiCanh.mucNoLuc } : {}),
         signal: dieuKhien.signal,
         phat,
       });
@@ -340,8 +344,12 @@ export async function chayLuot(
             }
           : undefined;
 
+        const boiCanhKeHoach = {
+          keHoach: (viec: Array<{ ten: string; trangThai: string }>) => phat({ loai: 'keHoach', viec }),
+        };
+
         const kq = boiCanh.goc
-          ? await chayToolAgent(boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh)
+          ? await chayToolAgent(boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh, boiCanhKeHoach)
           : { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
         c.hoiThoai.push({ role: 'tool', tool_call_id: goi.id, content: kq.noiDung });
         phat({ loai: 'tool', ten: goi.name, tomTat: kq.tomTat, vong: 'may' });
@@ -399,6 +407,7 @@ async function mgoiMotLuot(o: {
   capabilities: string[];
   workspace?: { name: string; platform: string; branch?: string };
   ghiChuDuAn?: { ten: string; noiDung: string };
+  mucNoLuc?: string;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
 }): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
@@ -411,6 +420,7 @@ async function mgoiMotLuot(o: {
       capabilities: o.capabilities,
       workspace: o.workspace,
       ghiChuDuAn: o.ghiChuDuAn,
+      mucNoLuc: o.mucNoLuc,
     }),
   });
 

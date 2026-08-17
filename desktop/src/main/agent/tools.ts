@@ -43,6 +43,11 @@ export interface BoiCanhGhi {
 }
 
 /** Ngữ cảnh cho `run_command`. Tách khỏi `BoiCanhGhi` vì hai quyền BẬT RIÊNG. */
+/** Ngữ cảnh cho `cap_nhat_ke_hoach`. Không chạm đĩa — chỉ đẩy lên màn hình. */
+export interface BoiCanhKeHoach {
+  keHoach: (viec: Array<{ ten: string; trangThai: string }>) => void;
+}
+
 export interface BoiCanhLenh {
   /** Sổ của CUỘC hội thoại này. */
   so: SoCuoc;
@@ -126,9 +131,28 @@ export async function chayToolAgent(
   args: Record<string, unknown>,
   ghi?: BoiCanhGhi,
   lenh?: BoiCanhLenh,
+  keHoach?: BoiCanhKeHoach,
 ): Promise<KetQuaTool> {
   try {
     switch (ten) {
+      case 'cap_nhat_ke_hoach': {
+        const viec = Array.isArray(args.viec) ? args.viec : [];
+        const sach = viec
+          .filter((v): v is Record<string, unknown> => !!v && typeof v === 'object')
+          .map((v) => ({
+            ten: String(v.ten ?? '').slice(0, 200),
+            trangThai: v.trangThai === 'dang' || v.trangThai === 'xong' ? String(v.trangThai) : 'chua',
+          }))
+          .filter((v) => v.ten)
+          .slice(0, 30);
+        if (!sach.length) return { noiDung: 'LỖI: danh sách việc rỗng.', tomTat: 'rỗng' };
+        keHoach?.keHoach(sach);
+        const xong = sach.filter((v) => v.trangThai === 'xong').length;
+        return {
+          noiDung: `Đã cập nhật kế hoạch: ${xong}/${sach.length} việc xong. Người dùng đang nhìn thấy danh sách này.`,
+          tomTat: `${xong}/${sach.length} việc`,
+        };
+      }
       case 'run_command': {
         if (!lenh) return { noiDung: 'LỖI: phiên này không bật quyền chạy lệnh.', tomTat: 'không có quyền' };
         return await toolRunCommand(goc, args, lenh);

@@ -14,7 +14,8 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
-  AgentInfo, AgentPhanLoaiLenh, AgentPhien, AgentQuota, AgentQuyetDinh, AgentUiEvent, AgentWorkspace,
+  AgentInfo, AgentPhanLoaiLenh, AgentPhien, AgentQuota, AgentQuyetDinh, AgentUiEvent,
+  AgentViec, AgentWorkspace,
 } from '../../../shared/ipc';
 import type { TheXinPhep } from './XinPhep';
 
@@ -76,6 +77,8 @@ export interface TrangThaiAgent {
   dangNghi: boolean;
   hanMuc: AgentQuota | null;
   tienPhien: number;
+  /** Kế hoạch agent công bố. Rỗng = việc này không cần kế hoạch. */
+  keHoach: AgentViec[];
   /** Số file agent đã sửa trong việc này — để bật/tắt nút Hoàn tác. */
   soFileDaSua: number;
 }
@@ -94,6 +97,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   const [hanMuc, datHanMuc] = useState<AgentQuota | null>(null);
   const [tienPhien, datTienPhien] = useState(0);
   const [soFileDaSua, datSoFileDaSua] = useState(0);
+  const [keHoach, datKeHoach] = useState<AgentViec[]>([]);
 
   // Hạn mức ban đầu lấy từ `getInfo`; sau đó mỗi khung `xong` tự cập nhật, nên
   // KHÔNG cần gọi lại `/usage` — gọi lại là thêm một round-trip cho một con số
@@ -164,6 +168,11 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           // Trả lời xong thì agent chạy tiếp ⇒ bật lại con quay.
           if (e.dongY) datDangNghi(true);
           break;
+        case 'keHoach':
+          // THAY THẾ, không nối thêm: agent luôn gửi TOÀN BỘ danh sách. Nối thêm
+          // thì mỗi lần cập nhật trạng thái lại nhân đôi số việc.
+          datKeHoach(e.viec);
+          break;
         case 'xong':
           if (e.hanMuc) datHanMuc(e.hanMuc);
           datTienPhien((t) => t + e.tienUsd);
@@ -208,6 +217,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     datPhienDangMo(id);
     datTienPhien(0);
     datSoFileDaSua(0);
+    datKeHoach([]);
   }, [cuocId]);
 
   const xoaPhien = useCallback(async (id: string) => {
@@ -250,6 +260,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     datMuc([]);
     datTienPhien(0);
     datSoFileDaSua(0);
+    datKeHoach([]);
     datDangChay(false);
     datDangNghi(false);
     datPhienDangMo(null);
@@ -284,7 +295,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   }, [cuocId]);
 
   return {
-    trangThai: { muc, dangChay, dangNghi, hanMuc, tienPhien, soFileDaSua } satisfies TrangThaiAgent,
+    trangThai: { muc, dangChay, dangNghi, hanMuc, tienPhien, soFileDaSua, keHoach } satisfies TrangThaiAgent,
     gui,
     dung,
     batDauLai,

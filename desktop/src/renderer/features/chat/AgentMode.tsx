@@ -17,11 +17,11 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import {
-  BookOpen, Check, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen, FolderTree,
-  GitBranch, History, Loader2, NotebookPen, RotateCcw, Search, Send, Sparkles,
-  SquareTerminal, Terminal, Undo2, X,
+  BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
+  FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, RotateCcw, Search, Send,
+  Sparkles, SquareTerminal, Terminal, Undo2, X,
 } from 'lucide-react';
-import type { AgentInfo, AgentWorkspace } from '../../../shared/ipc';
+import type { AgentInfo, AgentViec, AgentWorkspace, MucNoLuc } from '../../../shared/ipc';
 import { useAgent } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
@@ -83,6 +83,12 @@ export function AgentMode({
 
   const doiCheDoSua = async (): Promise<void> => {
     const w = await window.cuongthai?.agent.datCheDoSua(!thuMuc?.choSua);
+    if (w) datThuMuc(w);
+  };
+
+  const doiMucNoLuc = async (m: MucNoLuc): Promise<void> => {
+    await window.cuongthai?.agent.datMucNoLuc(m);
+    const w = await window.cuongthai?.agent.getWorkspace();
     if (w) datThuMuc(w);
   };
 
@@ -211,6 +217,12 @@ export function AgentMode({
           </button>
         )}
 
+        <ChonMucNoLuc
+          muc={thuMuc?.mucNoLuc ?? 'canBang'}
+          khoa={trangThai.dangChay}
+          onChon={(m) => void doiMucNoLuc(m)}
+        />
+
         {trangThai.hanMuc && <ThanhHanMuc quota={trangThai.hanMuc} soViec={info.soViecConLai} />}
 
         <button
@@ -232,6 +244,8 @@ export function AgentMode({
           <RotateCcw size={13} aria-hidden />
         </button>
       </div>
+
+      {trangThai.keHoach.length > 0 && <BangKeHoach viec={trangThai.keHoach} />}
 
       {/* ── Bảng ghi ── */}
       <div className="ct-agent-scroll" ref={cuonRef}>
@@ -344,6 +358,76 @@ export function AgentMode({
         </span>
         {trangThai.tienPhien > 0 && <span className="ct-muted">~${trangThai.tienPhien.toFixed(3)} phiên này</span>}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Bảng kế hoạch — ghim TRÊN bảng ghi, không cuộn theo.
+ *
+ * Nó trả lời đúng câu người dùng hỏi trong đầu suốt một việc dài: "còn bao lâu
+ * nữa?". Để nó cuộn theo bảng ghi thì sau bước thứ năm nó trôi khỏi màn hình,
+ * đúng lúc câu hỏi đó bắt đầu nhức.
+ */
+function BangKeHoach({ viec }: { viec: AgentViec[] }) {
+  const xong = viec.filter((v) => v.trangThai === 'xong').length;
+  return (
+    <div className="ct-kehoach">
+      <div className="ct-kehoach-dau">
+        <ListChecks size={13} aria-hidden />
+        <span>Kế hoạch</span>
+        <span className="ct-kehoach-dem">{xong}/{viec.length}</span>
+        <div className="ct-kehoach-thanh">
+          <div className="ct-kehoach-day" style={{ width: `${(xong / viec.length) * 100}%` }} />
+        </div>
+      </div>
+      <ul className="ct-kehoach-ds">
+        {viec.map((v, i) => (
+          <li key={i} data-tt={v.trangThai}>
+            {v.trangThai === 'xong'
+              ? <Check size={12} aria-hidden />
+              : v.trangThai === 'dang'
+                ? <CircleDot size={12} aria-hidden className="ct-spin-cham" />
+                : <Circle size={12} aria-hidden />}
+            <span>{v.ten}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/**
+ * Chọn cấp độ nỗ lực.
+ *
+ * Nhãn nói bằng SỐ BƯỚC, không bằng tên model. Đây là thứ thật sự đổi — và nói
+ * "nhanh/mạnh" theo model sẽ là nói dối: đo được model "nhẹ" chậm gấp 4 ở việc
+ * gọi tool. Người dùng chọn ở đây là chọn "đào sâu tới đâu", nên nhãn phải nói
+ * đúng điều đó.
+ */
+function ChonMucNoLuc({
+  muc, khoa, onChon,
+}: { muc: MucNoLuc; khoa: boolean; onChon: (m: MucNoLuc) => void }) {
+  const mucs: Array<{ id: MucNoLuc; nhan: string; mo: string }> = [
+    { id: 'nhanh', nhan: 'Nhanh', mo: 'tối đa 8 bước — hỏi nhanh, trả lời sớm' },
+    { id: 'canBang', nhan: 'Cân bằng', mo: 'tối đa 30 bước — mặc định' },
+    { id: 'ky', nhan: 'Kỹ', mo: 'tối đa 60 bước — đọc rộng, tự chạy test, tốn nhiều hạn mức hơn' },
+  ];
+  return (
+    <div className="ct-noluc" role="group" aria-label="Cấp độ">
+      {mucs.map((m) => (
+        <button
+          key={m.id}
+          type="button"
+          className="ct-noluc-nut"
+          data-chon={m.id === muc}
+          disabled={khoa}
+          onClick={() => onChon(m.id)}
+          title={m.mo}
+        >
+          {m.nhan}
+        </button>
+      ))}
     </div>
   );
 }

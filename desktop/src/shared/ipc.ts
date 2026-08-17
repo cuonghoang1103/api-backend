@@ -59,6 +59,13 @@ export const settingKeySchema = z.enum([
    * phải một dòng lệnh renderer gọi được.
    */
   'agentWorkspace',
+  /**
+   * Cấp độ nỗ lực. KHÁC hai cờ quyền ở chỗ nó ĐƯỢC lưu xuống đĩa: đây là sở
+   * thích ("tôi thích agent đào sâu"), không phải quyền truy cập. Quên mất mình
+   * đang ở mức Kỹ thì cùng lắm tốn thêm token; quên mất agent đang được sửa
+   * file thì mất mã.
+   */
+  'agentMucNoLuc',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 
@@ -209,6 +216,22 @@ export const agentSendSchema = z.object({
 
 export const agentCuocSchema = z.object({ cuocId: cuocIdSchema });
 
+/**
+ * Cấp độ nỗ lực. Quyết định SỐ BƯỚC agent được đi (8 / 30 / 60), KHÔNG quyết
+ * định model — đo thật 17/08: với việc gọi tool, model "nhẹ" chậm gấp 4 và tốn
+ * token gấp 9. Một thanh trượt "Nhanh ↔ Kỹ" mà đầu Nhanh lại chậm hơn là một
+ * thanh trượt nói dối.
+ */
+export const mucNoLucSchema = z.enum(['nhanh', 'canBang', 'ky']);
+export type MucNoLuc = z.infer<typeof mucNoLucSchema>;
+export const agentMucNoLucSchema = z.object({ muc: mucNoLucSchema });
+
+/** Một việc trong kế hoạch agent công bố. */
+export interface AgentViec {
+  ten: string;
+  trangThai: string;
+}
+
 /** Thư mục dự án agent đang được phép đọc. `null` = chưa chọn. */
 export interface AgentWorkspace {
   path: string | null;
@@ -225,6 +248,8 @@ export interface AgentWorkspace {
    * duyệt một lệnh dính tới file nhạy cảm, và cảnh báo to trên thẻ.
    */
   choChayLenh: boolean;
+  /** Cấp độ nỗ lực đang chọn. */
+  mucNoLuc: MucNoLuc;
   /**
    * Đã bật cho agent SỬA file chưa.
    *
@@ -344,6 +369,8 @@ export type AgentUiEvent = { cuocId: string } & (
   | { loai: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh }
   /** Đầu ra của lệnh, chảy ra khi nó còn đang chạy. */
   | { loai: 'lenhRa'; mau: string }
+  /** Agent công bố/cập nhật danh sách việc. Luôn là TOÀN BỘ danh sách. */
+  | { loai: 'keHoach'; viec: AgentViec[] }
   | { loai: 'xong'; hanMuc: AgentQuota | null; tienUsd: number; daLuoc: number; soFileDaSua: number }
   | { loai: 'loi'; thongDiep: string; ma?: string }
   | { loai: 'huy' }
@@ -403,6 +430,7 @@ export const INVOKE_CHANNELS = {
   'agent:traLoiXinPhep': agentTraLoiSchema,
   'agent:datCheDoSua': agentCheDoSuaSchema,
   'agent:datCheDoLenh': agentCheDoLenhSchema,
+  'agent:datMucNoLuc': agentMucNoLucSchema,
   'agent:hoanTac': agentCuocSchema,
   'agent:dsPhien': null,
   'agent:moPhien': agentMoPhienSchema,
@@ -563,6 +591,8 @@ export interface DesktopBridge {
     datCheDoSua(bat: boolean): Promise<AgentWorkspace>;
     /** Bật/tắt quyền chạy lệnh. Cũng không lưu xuống đĩa. */
     datCheDoLenh(bat: boolean): Promise<AgentWorkspace>;
+    /** Đặt cấp độ nỗ lực. Đây LÀ thứ được lưu — nó là sở thích, không phải quyền. */
+    datMucNoLuc(muc: MucNoLuc): Promise<void>;
     /** Trả mọi file agent đã sửa trong việc này về nguyên trạng. */
     hoanTac(cuocId: string): Promise<{ soFile: number; loi: string[] }>;
     /** Các việc đã lưu, mới nhất trước. */

@@ -39,7 +39,7 @@ export type ToolRing = 'client' | 'server';
  * gọi thứ app không chạy được. Đây là cách để thêm tool mà không làm chết app
  * cũ đang cài trên máy người dùng.
  */
-export type AgentCapability = 'fs_read' | 'git_read' | 'fs_write' | 'shell';
+export type AgentCapability = 'fs_read' | 'git_read' | 'fs_write' | 'shell' | 'plan';
 
 export interface AgentToolDef {
   name: string;
@@ -221,6 +221,44 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
 
+  // ─── Kế hoạch (P4) — không chạm đĩa, chỉ vẽ lên màn hình ────────
+  //
+  // Tool này KHÔNG làm gì trên máy: nó chỉ đẩy một danh sách việc lên giao
+  // diện. Nhưng nó đổi hẳn cảm giác dùng — một việc 20 bước mà không có danh
+  // sách thì người dùng chỉ thấy tool chạy lộn xộn và không biết còn bao lâu.
+  // Nó cũng làm agent làm việc có thứ tự hơn: viết kế hoạch ra buộc nó chia
+  // việc trước khi lao vào bước đầu tiên.
+  {
+    name: 'cap_nhat_ke_hoach',
+    ring: 'client',
+    capability: 'plan',
+    description:
+      'Công bố (hoặc cập nhật) danh sách việc cần làm, hiện lên màn hình cho người dùng theo dõi. ' +
+      'GỌI NGAY khi việc cần từ 3 bước trở lên, TRƯỚC khi bắt tay làm — kế hoạch viết sau khi làm xong thì vô dụng. ' +
+      'Gửi LẠI TOÀN BỘ danh sách mỗi lần cập nhật (không gửi phần thêm), với trạng thái mới nhất của từng mục. ' +
+      'Đánh dấu "dang" cho ĐÚNG MỘT việc tại một thời điểm, và đổi sang "xong" ngay khi làm xong việc đó — ' +
+      'đừng dồn tới cuối mới cập nhật, vì lúc đó người dùng đã ngồi nhìn một danh sách đứng im suốt cả lượt. ' +
+      'Việc đơn giản một bước thì ĐỪNG dùng tool này.',
+    parameters: {
+      type: 'object',
+      properties: {
+        viec: {
+          type: 'array',
+          description: 'Toàn bộ danh sách, theo thứ tự làm.',
+          items: {
+            type: 'object',
+            properties: {
+              ten: { type: 'string', description: 'Việc cần làm, một câu ngắn.' },
+              trangThai: { type: 'string', enum: ['chua', 'dang', 'xong'], description: 'chua | dang | xong' },
+            },
+            required: ['ten', 'trangThai'],
+          },
+        },
+      },
+      required: ['viec'],
+    },
+  },
+
   // ─── Vòng 2: Notes (máy chủ tự chạy) ───────────────────────────
   {
     name: 'notes_search',
@@ -289,7 +327,7 @@ export function toolsForGateway(capabilities: readonly AgentCapability[]): Array
 }
 
 /** Danh sách nhóm khả năng hợp lệ — dùng để lọc phần app gửi lên. */
-export const ALL_CAPABILITIES: readonly AgentCapability[] = ['fs_read', 'git_read', 'fs_write', 'shell'];
+export const ALL_CAPABILITIES: readonly AgentCapability[] = ['fs_read', 'git_read', 'fs_write', 'shell', 'plan'];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {
   if (!Array.isArray(raw)) return [];

@@ -140,7 +140,8 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   // Mở SSE rồi mới thấy đầu vào sai thì lỗi phải đi trong một khung sự kiện,
   // và app nhận HTTP 200 cho một yêu cầu hỏng. Sai sớm thì sai bằng mã HTTP.
   const body = req.body as {
-    messages?: unknown; capabilities?: unknown; workspace?: unknown; ghiChuDuAn?: unknown;
+    messages?: unknown; capabilities?: unknown; workspace?: unknown;
+    ghiChuDuAn?: unknown; mucNoLuc?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
@@ -196,6 +197,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         capabilities: body.capabilities,
         workspace,
         ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
+        mucNoLuc: body.mucNoLuc,
         userId: req.userId,
       },
       guiKhung,

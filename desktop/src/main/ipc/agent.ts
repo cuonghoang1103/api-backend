@@ -21,7 +21,9 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
-import type { AgentInfo, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace } from '../../shared/ipc';
+import type {
+  AgentInfo, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, MucNoLuc,
+} from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
 import {
@@ -55,6 +57,11 @@ const chay = promisify(execFile);
  */
 const TOKEN_MOI_VIEC = 141_000;
 
+function mucNoLucHienTai(): MucNoLuc {
+  const v = getSettings().agentMucNoLuc;
+  return v === 'nhanh' || v === 'ky' ? v : 'canBang';
+}
+
 function thuMucHienTai(): string | null {
   const v = getSettings().agentWorkspace;
   return typeof v === 'string' && v.length > 0 ? v : null;
@@ -73,13 +80,15 @@ async function nhanhGit(goc: string): Promise<string | null> {
 }
 
 async function moTa(goc: string | null): Promise<AgentWorkspace> {
-  if (!goc) return { path: null, name: null, branch: null, choSua: false, choChayLenh: false };
+  const mucNoLuc = mucNoLucHienTai();
+  if (!goc) return { path: null, name: null, branch: null, choSua: false, choChayLenh: false, mucNoLuc };
   return {
     path: goc,
     name: path.basename(goc),
     branch: await nhanhGit(goc),
     choSua,
     choChayLenh,
+    mucNoLuc,
   };
 }
 
@@ -199,7 +208,12 @@ export function registerAgentHandlers(): void {
     };
 
     const nhanh = conSong ? await nhanhGit(conSong) : null;
-    await chayLuot(cuocId, text, { goc: conSong, choSua, choChayLenh, ...(nhanh ? { nhanh } : {}) }, phat);
+    await chayLuot(
+      cuocId,
+      text,
+      { goc: conSong, choSua, choChayLenh, mucNoLuc: mucNoLucHienTai(), ...(nhanh ? { nhanh } : {}) },
+      phat,
+    );
   });
 
   handle('agent:cancel', ({ cuocId }) => {
@@ -257,6 +271,10 @@ export function registerAgentHandlers(): void {
     // việc mà người dùng vừa bảo là bỏ đi.
     dongCuoc(id);
     await xoaPhien(id);
+  });
+
+  handle('agent:datMucNoLuc', ({ muc }) => {
+    setSetting('agentMucNoLuc', muc);
   });
 
   handle('agent:hoanTac', async ({ cuocId }) => {

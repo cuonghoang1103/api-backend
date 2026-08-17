@@ -55,8 +55,31 @@ import { prisma } from '../../config/database.js';
 // hiện ra là biểu đồ chi phí (xem `llm/budget.ts`) — một vòng lặp agent hỏng
 // còn nhanh hơn thế, vì mỗi vòng tự sinh ra vòng sau.
 
-/** Số lượt model được gọi tool trong MỘT hội thoại. Đếm được từ chính hội thoại app gửi lên. */
-const MAX_AGENT_STEPS = 30;
+/**
+ * CẤP ĐỘ NỖ LỰC — trần bước theo mức người dùng chọn.
+ *
+ * ⚠️ CỐ Ý KHÔNG đổi MODEL theo mức. Trực giác là "nhanh thì dùng model nhẹ",
+ * nhưng đo thật 17/08 cho kết quả NGƯỢC: với việc gọi tool, `gpt-5.5` chậm gấp
+ * 4 và tốn token gấp 9 so với `gpt-5.6-sol` (cổng bọc nó trong một prompt ẩn
+ * ~4,5k token mỗi lượt). Một thanh trượt "Nhanh ↔ Kỹ" mà đầu "Nhanh" lại chậm
+ * hơn là một thanh trượt nói dối.
+ *
+ * Thứ ĐỔI THẬT theo mức là SỐ BƯỚC agent được đi. Đó cũng là thứ quyết định
+ * giá: đo được ~18k token mỗi bước sau khi nén, nên 10 bước ≈ 0,2 $ còn 40
+ * bước ≈ 0,9 $. Người dùng chọn mức là đang chọn "đào sâu tới đâu", và đó đúng
+ * là điều họ muốn nói.
+ */
+export type MucNoLuc = 'nhanh' | 'canBang' | 'ky';
+
+const TRAN_BUOC: Record<MucNoLuc, number> = {
+  nhanh: 8,
+  canBang: 30,
+  ky: 60,
+};
+
+function docMucNoLuc(raw: unknown): MucNoLuc {
+  return raw === 'nhanh' || raw === 'ky' ? raw : 'canBang';
+}
 /** Số lần máy chủ tự gọi lại cổng trong MỘT lượt (khi model chỉ đòi tool vòng 2). */
 const MAX_SERVER_HOPS = 4;
 /** Trần độ dài hội thoại. Vượt là app hỏng hoặc bị sửa — không phải người dùng gõ dài. */
@@ -132,6 +155,8 @@ export interface AgentTurnInput {
   messages: unknown;
   capabilities: unknown;
   workspace?: WorkspaceHint;
+  /** Cấp độ nỗ lực người dùng chọn. Quyết định trần bước, KHÔNG quyết định model. */
+  mucNoLuc?: unknown;
   /**
    * Ghi chú dự án (`AGENTS.md`/`CLAUDE.md`) app đọc từ máy người dùng.
    *
@@ -254,6 +279,8 @@ export async function runAgentTurn(
   const messages = sanitizeIncoming(input.messages);
   const capabilities: AgentCapability[] = parseCapabilities(input.capabilities);
   const buocDaDi = demBuoc(messages);
+  const mucNoLuc = docMucNoLuc(input.mucNoLuc);
+  const MAX_AGENT_STEPS = TRAN_BUOC[mucNoLuc];
 
   // ─── BỐN chốt chặn, theo thứ tự RẺ TRƯỚC ───────────────────────
   // Ba cái đầu chỉ đọc bộ nhớ / một truy vấn đã đánh chỉ mục. Cái đắt nhất
@@ -302,6 +329,7 @@ export async function runAgentTurn(
     : undefined;
   const system = buildSystemPrompt({
     capabilities,
+    mucNoLuc,
     ...(input.workspace ? { workspace: input.workspace } : {}),
     ...(ghiChu ? { ghiChu } : {}),
   });

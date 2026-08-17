@@ -108,11 +108,14 @@ export function buildSystemPrompt(opts: {
   capabilities: readonly AgentCapability[];
   workspace?: WorkspaceHint;
   ghiChu?: GhiChuDuAn;
+  /** 'nhanh' | 'canBang' | 'ky' — người dùng chọn đào sâu tới đâu. */
+  mucNoLuc?: string;
 }): string {
   const coFile = opts.capabilities.includes('fs_read');
   const coGit = opts.capabilities.includes('git_read');
   const coSua = opts.capabilities.includes('fs_write');
   const coLenh = opts.capabilities.includes('shell');
+  const coKeHoach = opts.capabilities.includes('plan');
 
   const hoanCanh: string[] = [];
   if (opts.workspace?.name) hoanCanh.push(`Thư mục dự án đang mở: "${opts.workspace.name}".`);
@@ -228,6 +231,30 @@ ${g.daCat ? `\n   ⚠️ Bên dưới CHỈ LÀ PHẦN ĐẦU (${g.noiDung.lengt
 ─── ${g.ten} ───
 ${g.noiDung}
 ─── hết ${g.ten} ───`);
+  }
+
+  if (coKeHoach) {
+    muc.push(`KẾ HOẠCH
+   Việc cần từ 3 bước trở lên: gọi \`cap_nhat_ke_hoach\` NGAY, TRƯỚC khi bắt
+   tay làm. Kế hoạch viết sau khi xong thì vô dụng — nó chỉ là bản tường thuật.
+   • Đánh dấu "dang" cho ĐÚNG MỘT việc, và đổi sang "xong" NGAY khi làm xong
+     việc đó. Dồn tới cuối mới cập nhật thì người dùng ngồi nhìn một danh sách
+     đứng im suốt cả lượt, đúng lúc họ cần biết còn bao lâu nữa.
+   • Việc một bước thì ĐỪNG dùng — một danh sách một dòng chỉ thêm nhiễu.`);
+  }
+
+  // Mức nỗ lực nói cho model biết NGÂN SÁCH của nó, thay vì để nó tự đoán. Không
+  // nói thì "nhanh" và "kỹ" cho ra cùng một hành vi, chỉ khác lúc bị cắt ngang.
+  if (opts.mucNoLuc === 'nhanh') {
+    muc.push(`NGÂN SÁCH: NHANH
+   Người dùng chọn mức NHANH — bạn chỉ có khoảng 8 bước. Đi thẳng vào câu hỏi,
+   đọc đúng chỗ cần đọc, trả lời sớm. Chưa đủ dữ kiện thì nói rõ là chưa đủ và
+   mời họ hỏi lại ở mức Kỹ, đừng cố nhồi mọi thứ vào 8 bước.`);
+  } else if (opts.mucNoLuc === 'ky') {
+    muc.push(`NGÂN SÁCH: KỸ
+   Người dùng chọn mức KỸ — bạn có tới 60 bước. Được phép đọc rộng, đối chiếu
+   nhiều chỗ, chạy bộ kiểm rồi sửa tiếp cho tới khi xanh. Nhưng RỘNG không phải
+   là LAN MAN: mỗi bước vẫn phải trả lời được "bước này để làm gì".`);
   }
 
   muc.push(`TRẢ LỜI

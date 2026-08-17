@@ -14,7 +14,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
-  AgentInfo, AgentMucKhoiPhuc, AgentPhanLoaiLenh, AgentPhien, AgentQuota, AgentQuyetDinh,
+  AgentInfo, AgentMucKhoiPhuc, AgentNguCanh, AgentPhanLoaiLenh, AgentPhien, AgentQuota, AgentQuyetDinh,
   AgentUiEvent, AgentViec, AgentWorkspace,
 } from '../../../shared/ipc';
 import type { TheXinPhep } from './XinPhep';
@@ -83,6 +83,8 @@ export interface TrangThaiAgent {
   keHoach: AgentViec[];
   /** Số file agent đã sửa trong việc này — để bật/tắt nút Hoàn tác. */
   soFileDaSua: number;
+  /** Ngữ cảnh đã dùng tới đâu. `null` = chưa chạy lượt nào nên chưa biết. */
+  nguCanh: AgentNguCanh | null;
 }
 
 /**
@@ -100,6 +102,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   const [tienPhien, datTienPhien] = useState(0);
   const [soFileDaSua, datSoFileDaSua] = useState(0);
   const [keHoach, datKeHoach] = useState<AgentViec[]>([]);
+  const [nguCanh, datNguCanh] = useState<AgentNguCanh | null>(null);
 
   // Hạn mức ban đầu lấy từ `getInfo`; sau đó mỗi khung `xong` tự cập nhật, nên
   // KHÔNG cần gọi lại `/usage` — gọi lại là thêm một round-trip cho một con số
@@ -217,6 +220,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           datKeHoach(e.viec);
           break;
         case 'xong':
+          if (e.nguCanh) datNguCanh(e.nguCanh);
           if (e.hanMuc) datHanMuc(e.hanMuc);
           datTienPhien((t) => t + e.tienUsd);
           datSoFileDaSua(e.soFileDaSua);
@@ -259,6 +263,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     datTienPhien(0);
     datSoFileDaSua(0);
     datKeHoach([]);
+    datNguCanh(null);
   }, [cuocId]);
 
   const xoaPhien = useCallback(async (id: string) => {
@@ -302,6 +307,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     datTienPhien(0);
     datSoFileDaSua(0);
     datKeHoach([]);
+    datNguCanh(null);
     datDangChay(false);
     datDangNghi(false);
     datPhienDangMo(null);
@@ -336,7 +342,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   }, [cuocId]);
 
   return {
-    trangThai: { muc, dangChay, dangNghi, hanMuc, tienPhien, soFileDaSua, keHoach } satisfies TrangThaiAgent,
+    trangThai: { muc, dangChay, dangNghi, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh } satisfies TrangThaiAgent,
     gui,
     dung,
     batDauLai,

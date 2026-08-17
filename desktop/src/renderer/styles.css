@@ -3148,6 +3148,94 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   overflow: hidden;
 }
 
+/* ── Toán (KaTeX) và sơ đồ (mermaid) ── */
+
+/* Công thức KHỐI: cho cuộn ngang riêng. Một công thức dài mà không có khung
+   cuộn sẽ đẩy giãn cả bong bóng và làm trang cuộn ngang — lỗi bố cục kinh điển
+   của mọi trang có toán. */
+.ct-toan-khoi {
+  margin: 8px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0;
+}
+
+.ct-md .katex { font-size: 1.02em; }
+
+/* KaTeX mặc định màu đen; trong chủ đề tối nó biến mất hoàn toàn. */
+.ct-md .katex,
+.ct-md .katex .mord,
+.ct-md .katex .mbin,
+.ct-md .katex .mrel,
+.ct-md .katex .mopen,
+.ct-md .katex .mclose,
+.ct-md .katex .mpunct { color: var(--ct-text); }
+
+.ct-sodo {
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  overflow-x: auto;
+}
+
+.ct-sodo[data-cho] {
+  color: var(--ct-text-faint);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.ct-sodo[data-loi] { border-color: var(--ct-err); }
+
+.ct-sodo-loi {
+  margin-bottom: 8px;
+  font-size: 11.5px;
+  color: var(--ct-err);
+}
+
+.ct-sodo svg { max-width: 100%; height: auto; display: block; }
+
+/* ── Vòng ngữ cảnh ── */
+.ct-vongnc {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  color: var(--ct-text-faint);
+}
+
+.ct-vongnc-nen { fill: none; stroke: var(--ct-border); stroke-width: 3; }
+
+.ct-vongnc-day {
+  fill: none;
+  stroke: var(--ct-ok);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.4s ease;
+}
+
+/* Đổi màu theo mức, không chỉ đổi độ dài cung: 72% và 91% nhìn gần giống nhau
+   nếu chỉ khác chiều dài, mà hai mức đó nghĩa khác hẳn nhau. */
+.ct-vongnc[data-muc='gan'] .ct-vongnc-day { stroke: var(--ct-warn); }
+.ct-vongnc[data-muc='day'] .ct-vongnc-day { stroke: var(--ct-err); }
+.ct-vongnc[data-muc='gan'] .ct-vongnc-so { color: var(--ct-warn); }
+.ct-vongnc[data-muc='day'] .ct-vongnc-so { color: var(--ct-err); }
+
+.ct-vongnc-so {
+  font-size: 10.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-vongnc-canh {
+  font-size: 9.5px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ct-warn) 18%, transparent);
+  color: var(--ct-warn);
+}
+
 /* ── Worktree ── */
 .ct-wt-ds li { gap: 4px; }
 

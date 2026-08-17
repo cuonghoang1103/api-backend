@@ -27,8 +27,10 @@
  * lọt qua, vì không có thẻ nào được sinh ra từ đầu vào.
  */
 import hljs from 'highlight.js/lib/common';
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
 import { Check, Copy } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // ─── Khối ──────────────────────────────────────────────────────────
 
@@ -82,8 +84,65 @@ function trongDong(s: string): string {
   return t.replace(new RegExp(`${MOC}(\\d+)${MOC}`, 'g'), (_, i: string) => `<code>${oMa[Number(i)]}</code>`);
 }
 
+/**
+ * ============================================================
+ * TOÁN — `$…$` và `$$…$$`
+ * ============================================================
+ *
+ * ⚠️ Bậc Pro/Max của chat gắn thêm luật toán vào prompt hệ thống, nên model
+ * TRẢ VỀ LaTeX. Không dựng thì người dùng đọc được nguyên `$$T = m g r$$` và
+ * `$g \approx 9.81\,\text{m/s}^2$` — trông y như lỗi font, và người dùng đã
+ * báo đúng như vậy (17/08).
+ *
+ * ─── TÁCH TRƯỚC KHI THOÁT HTML ───
+ * LaTeX đầy `<`, `>`, `&`, `\`. Cho nó đi qua `thoat()` thì `\lt` thành
+ * `&amp;lt;` và KaTeX nhận một chuỗi đã hỏng. Nên: rút công thức ra, thay bằng
+ * MỐC, chạy toàn bộ đường markdown như thường, rồi cắm HTML của KaTeX vào.
+ *
+ * KaTeX tự sinh HTML an toàn (nó không bao giờ nhả thẻ do người dùng gõ), nên
+ * cắm lại bằng `dangerouslySetInnerHTML` là hợp lệ — cùng lý do với khối mã đã
+ * qua highlight.js.
+ */
+function tachToan(tho: string): { chu: string; ct: string[] } {
+  const ct: string[] = [];
+  const dat = (ma: string, khoi: boolean): string => {
+    let html: string;
+    try {
+      html = katex.renderToString(ma.trim(), {
+        displayMode: khoi,
+        // `throwOnError: false` để một công thức sai KHÔNG làm hỏng cả câu trả
+        // lời — KaTeX vẽ nó màu đỏ và phần còn lại vẫn đọc được.
+        throwOnError: false,
+        strict: false,
+        output: 'html',
+      });
+    } catch {
+      // Vẫn hỏng ⇒ trả lại nguyên văn ĐÃ THOÁT. Thà thấy `$x$` còn hơn mất chữ.
+      html = `<code>${thoat(ma)}</code>`;
+    }
+    ct.push(khoi ? `<div class="ct-toan-khoi">${html}</div>` : html);
+    return `${MOC_TOAN}${ct.length - 1}${MOC_TOAN}`;
+  };
+
+  return {
+    chu: tho
+      // `$$…$$` TRƯỚC `$…$`, nếu không dấu mở của khối bị bắt thành công thức
+      // trong dòng rỗng.
+      .replace(/\$\$([\s\S]+?)\$\$/g, (_, m: string) => dat(m, true))
+      // Trong dòng: cấm khoảng trắng ngay sau `$` mở — "giá 5 $ và 10 $" là câu
+      // tiếng Việt bình thường, không phải công thức, và bắt nhầm nó thì cả câu
+      // biến thành ký hiệu toán.
+      .replace(/\$(?!\s)([^$\n]+?)(?<!\s)\$/g, (_, m: string) => dat(m, false)),
+    ct,
+  };
+}
+
+/** Mốc riêng cho toán — KHÁC mốc của mã trong dòng, nếu không hai bộ giẫm nhau. */
+const MOC_TOAN = '\u0001';
+
 /** Một đoạn chữ (không phải khối mã) → HTML. */
-function doanChu(tho: string): string {
+function doanChu(thoGoc: string): string {
+  const { chu: tho, ct } = tachToan(thoGoc);
   const ra: string[] = [];
   let dsMo: 'ul' | 'ol' | null = null;
 
@@ -125,7 +184,11 @@ function doanChu(tho: string): string {
     ra.push(`<p>${trongDong(thoat(t))}</p>`);
   }
   dongDs();
-  return ra.join('');
+  // Cắm HTML của KaTeX vào SAU cùng — sau khi mọi bước markdown đã chạy xong.
+  return ra.join('').replace(
+    new RegExp(`${MOC_TOAN}(\\d+)${MOC_TOAN}`, 'g'),
+    (_, i: string) => ct[Number(i)] ?? '',
+  );
 }
 
 /**
@@ -163,6 +226,10 @@ export function tachKhoi(tho: string): Khoi[] {
 function KhoiMa({ ngonNgu, noiDung }: { ngonNgu: string; noiDung: string }) {
   const [daChep, datDaChep] = useState(false);
 
+  // ```mermaid ⇒ VẼ, không tô màu cú pháp. Người ta viết mermaid để nhìn thấy
+  // hình, không phải để đọc mã của hình.
+  if (ngonNgu.toLowerCase() === 'mermaid') return <SoDo ma={noiDung} />;
+
   // `highlight.js` tự thoát đầu vào và chỉ sinh ra `<span class>` — không có
   // đường nào cho HTML của người dùng lọt qua. Hỏng ngôn ngữ thì tự dò.
   let html: string;
@@ -193,6 +260,80 @@ function KhoiMa({ ngonNgu, noiDung }: { ngonNgu: string; noiDung: string }) {
       <pre><code dangerouslySetInnerHTML={{ __html: html }} /></pre>
     </div>
   );
+}
+
+/**
+ * SƠ ĐỒ MERMAID.
+ *
+ * ─── NẠP LƯỜI, VÀ ĐÓ KHÔNG PHẢI TỐI ƯU VẶT ───
+ * Gói mermaid nặng ~1MB. Nạp thẳng ở đầu file nghĩa là MỌI người mở app đều
+ * trả cái giá đó, kể cả người không bao giờ hỏi tới sơ đồ. `import()` động
+ * khiến nó chỉ được tải khi có một khối ```mermaid thật sự xuất hiện.
+ *
+ * ⚠️ Dựng SAU một nhịp chờ. Trong lúc chữ còn chảy, khối mermaid liên tục ở
+ * trạng thái cú pháp dở dang và mermaid ném lỗi ở mỗi mẩu — màn hình sẽ nhấp
+ * nháy chữ đỏ suốt vài giây. Cùng bài học với KaTeX dựng trên DOM.
+ */
+function SoDo({ ma }: { ma: string }) {
+  const [html, datHtml] = useState<string | null>(null);
+  const [loi, datLoi] = useState<string | null>(null);
+  const oRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Theo dõi chủ đề, và VẼ LẠI khi nó đổi.
+   *
+   * ⚠️ Mermaid nướng màu thẳng vào SVG lúc dựng, không dùng biến CSS. Nên đổi
+   * sang chủ đề sáng mà không vẽ lại thì sơ đồ giữ nguyên hộp ĐEN trên nền
+   * trắng — đọc được, nhưng trông như hỏng. Bắt được bằng cách đổi chủ đề trên
+   * trang xem thử, không phải bằng đọc mã.
+   */
+  const [toi, datToi] = useState(() => document.documentElement.classList.contains('theme-dark'));
+  useEffect(() => {
+    const gd = document.documentElement;
+    const theoDoi = new MutationObserver(() => datToi(gd.classList.contains('theme-dark')));
+    theoDoi.observe(gd, { attributes: true, attributeFilter: ['class'] });
+    return () => theoDoi.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let huy = false;
+    const hen = setTimeout(() => {
+      void (async () => {
+        try {
+          const { default: mermaid } = await import('mermaid');
+          mermaid.initialize({
+            startOnLoad: false,
+            // Theo chủ đề app. Lớp toàn cục là `theme-dark`, KHÔNG phải `dark`
+            // — xem quy ước trong CLAUDE.md.
+            theme: toi ? 'dark' : 'default',
+            securityLevel: 'strict',
+            fontFamily: 'inherit',
+          });
+          const id = `sd${Math.random().toString(36).slice(2, 9)}`;
+          const { svg } = await mermaid.render(id, ma.trim());
+          if (!huy) { datHtml(svg); datLoi(null); }
+        } catch (err) {
+          if (!huy) datLoi(((err as Error).message || 'sơ đồ không hợp lệ').split('\n')[0]!);
+        }
+      })();
+    }, 350);
+    return () => { huy = true; clearTimeout(hen); };
+  }, [ma, toi]);
+
+  if (loi) {
+    // Hỏng thì hiện MÃ GỐC, không hiện ô trống: người dùng vẫn đọc được nội
+    // dung, và biết vì sao nó không thành hình.
+    return (
+      <div className="ct-sodo" data-loi>
+        <div className="ct-sodo-loi">Không vẽ được sơ đồ: {loi}</div>
+        <pre><code>{ma}</code></pre>
+      </div>
+    );
+  }
+  if (!html) return <div className="ct-sodo" data-cho>Đang vẽ sơ đồ…</div>;
+  // SVG do mermaid sinh ở `securityLevel: 'strict'` — đã lọc script và thuộc
+  // tính sự kiện. Cùng hạng tin cậy với đầu ra của highlight.js.
+  return <div className="ct-sodo" ref={oRef} dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
 /**

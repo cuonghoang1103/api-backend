@@ -44,6 +44,7 @@ import { nenNguCanh } from './compact.js';
 import { loiCanVi, loiHetHan, xemHanMuc, xemViAgent, type HanMuc } from './quota.js';
 import { runServerTool } from './serverTools.js';
 import { buildSystemPrompt, catGhiChu, type WorkspaceHint } from './prompt.js';
+import { catLuotCu, loiNhacDaCat, tongKyTu } from './catCu.js';
 import { parseCapabilities, parseToolMcp, toolByName, toolsForGateway, type AgentCapability } from './tools.js';
 import { logger } from '../../utils/logger.js';
 import { prisma } from '../../config/database.js';
@@ -162,6 +163,14 @@ export type AgentEvent =
       usage: { inputTokens: number; outputTokens: number; costUsd: number };
       /** Hạn mức 5 giờ SAU lượt này — app vẽ thẳng lên thanh đo, không phải hỏi lại. */
       quota: { daDung: number; tran: number; phanTram: number; hoiLucNao: string | null };
+      /**
+       * Ngữ cảnh đã dùng tới đâu — để app vẽ vòng tròn.
+       *
+       * Con số này là thứ người dùng KHÔNG có cách nào tự biết: họ nhìn thấy
+       * hội thoại trên màn hình nhưng không biết bao nhiêu phần trong đó còn
+       * thật sự tới được model.
+       */
+      nguCanh: { kyTu: number; tran: number; phanTram: number; soLuotDaBo: number };
       /** Có nén ngữ cảnh không, và cắt được bao nhiêu. Để hiện "đã lược N kết quả cũ". */
       compact?: { soDaLuoc: number; kyTuDaCat: number };
     }
@@ -215,8 +224,12 @@ export class AgentInputError extends Error {
 function sanitizeIncoming(raw: unknown): AgentMessage[] {
   if (!Array.isArray(raw)) throw new AgentInputError('messages phải là mảng', 'BAD_MESSAGES');
   if (raw.length === 0) throw new AgentInputError('messages rỗng', 'BAD_MESSAGES');
-  if (raw.length > MAX_MESSAGES) {
-    throw new AgentInputError(`Hội thoại quá dài (${raw.length} tin nhắn, trần ${MAX_MESSAGES}). Hãy bắt đầu phiên mới.`, 'TOO_MANY_MESSAGES');
+  // ⚠️ KHÔNG ném khi quá dài nữa — xem `catCu.ts`. Ném ở đây nghĩa là người
+  // dùng đang làm dở một việc 40 bước bỗng bị chặn hẳn và mất mạch, thứ họ đã
+  // trả tiền để dựng lên. Giờ hội thoại quá dài thì tự bỏ lượt CŨ NHẤT.
+  // Vẫn giữ một trần tuyệt đối rất cao để chặn payload ác ý.
+  if (raw.length > MAX_MESSAGES * 5) {
+    throw new AgentInputError(`messages quá lớn (${raw.length}).`, 'BAD_MESSAGES');
   }
 
   const out: AgentMessage[] = [];
@@ -280,12 +293,6 @@ function sanitizeIncoming(raw: unknown): AgentMessage[] {
   // `tongChu` CỐ Ý không cộng độ dài data URI của ảnh: một ảnh 2MB là ~2,7
   // triệu ký tự base64, tức là một tấm ảnh sẽ tự mình vượt trần 600k và chặn
   // cả hội thoại. Ảnh có trần riêng (`MAX_ANH`, `MAX_ANH_BYTES`) ở trên.
-  if (tongChu > MAX_TOTAL_CHARS) {
-    throw new AgentInputError(
-      `Hội thoại quá nặng (${Math.round(tongChu / 1000)}k ký tự, trần ${MAX_TOTAL_CHARS / 1000}k). Hãy bắt đầu phiên mới.`,
-      'CONVERSATION_TOO_LARGE',
-    );
-  }
   if (out.length === 0) throw new AgentInputError('Không có tin nhắn hợp lệ nào', 'BAD_MESSAGES');
   return out;
 }
@@ -329,7 +336,18 @@ export async function runAgentTurn(
     return;
   }
 
-  const messages = sanitizeIncoming(input.messages);
+  const messagesGoc = sanitizeIncoming(input.messages);
+  /**
+   * Tự bỏ lượt cũ khi chạm trần, thay vì từ chối cả lượt.
+   *
+   * Thứ tự quan trọng: CẮT trước, NÉN sau. Nén rút gọn kết quả tool trong phần
+   * còn lại; cắt bỏ hẳn những lượt cũ nhất. Làm ngược thì công nén bỏ ra cho
+   * những lượt sắp bị vứt là công vô ích.
+   */
+  const boLuot = catLuotCu(messagesGoc, MAX_TOTAL_CHARS, MAX_MESSAGES);
+  const messages = boLuot.soLuotDaBo > 0
+    ? [loiNhacDaCat(boLuot.soLuotDaBo), ...boLuot.messages]
+    : boLuot.messages;
   const capabilities: AgentCapability[] = parseCapabilities(input.capabilities);
   const buocDaDi = demBuoc(messages);
   const mucNoLuc = docMucNoLuc(input.mucNoLuc);
@@ -357,6 +375,7 @@ export async function runAgentTurn(
       stop: 'max_steps',
       usage: { inputTokens: 0, outputTokens: 0, costUsd: 0 },
       quota: goiHanMuc(await xemHanMuc(input.userId)),
+      nguCanh: goiNguCanh(messages, boLuot.soLuotDaBo),
     });
     return;
   }
@@ -419,6 +438,7 @@ export async function runAgentTurn(
     stop,
     usage: { inputTokens: inTong, outputTokens: outTong, costUsd: costUsd(model, inTong, outTong) },
     quota: goiHanMuc({ ...hanMuc, daDung: hanMuc.daDung + inTong + outTong }),
+    nguCanh: goiNguCanh([...messages, ...append], boLuot.soLuotDaBo),
     ...(daLuoc > 0 ? { compact: { soDaLuoc: daLuoc, kyTuDaCat: daCat } } : {}),
   });
 
@@ -529,6 +549,19 @@ export async function runAgentTurn(
 }
 
 /** Gói hạn mức cho app. `Date` phải thành chuỗi vì nó đi qua JSON. */
+function goiNguCanh(
+  messages: readonly AgentMessage[],
+  soLuotDaBo: number,
+): { kyTu: number; tran: number; phanTram: number; soLuotDaBo: number } {
+  const kyTu = tongKyTu(messages);
+  return {
+    kyTu,
+    tran: MAX_TOTAL_CHARS,
+    phanTram: Math.min(100, Math.round((kyTu / MAX_TOTAL_CHARS) * 100)),
+    soLuotDaBo,
+  };
+}
+
 function goiHanMuc(h: HanMuc): { daDung: number; tran: number; phanTram: number; hoiLucNao: string | null } {
   return {
     daDung: h.daDung,

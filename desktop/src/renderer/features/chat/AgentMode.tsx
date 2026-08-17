@@ -21,7 +21,7 @@ import {
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
   Sparkles, SquareTerminal, Terminal, Undo2, X,
 } from 'lucide-react';
-import type { AgentInfo, AgentMcpTrangThai, AgentViec, AgentWorktree, MucNoLuc } from '../../../shared/ipc';
+import type { AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, MucNoLuc } from '../../../shared/ipc';
 import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
@@ -116,6 +116,23 @@ export function AgentMode({
   const guiDi = (): void => {
     const text = nhap.trim();
     if (!text || trangThai.dangChay) return;
+
+    /**
+     * Lệnh gạch chéo — xử lý ở đây, KHÔNG gửi lên model.
+     *
+     * `/clear` làm đúng việc nút ↺ vẫn làm, nhưng gõ được. Người quen Claude
+     * Code gõ nó theo phản xạ, và nếu nó rơi vào model thì model sẽ lịch sự
+     * giải thích rằng nó không xoá được gì — tức là một lượt bị tính tiền để
+     * nói "không".
+     */
+    const lenh = text.toLowerCase();
+    if (lenh === '/clear' || lenh === '/new' || lenh === '/moi') {
+      datNhap('');
+      datAnh([]);
+      void batDauLai();
+      return;
+    }
+
     datNhap('');
     datAnh([]);
     void gui(text, anh.length ? anh : undefined);
@@ -269,6 +286,8 @@ export function AgentMode({
           khoa={trangThai.dangChay}
           onChon={(m) => void doiMucNoLuc(m)}
         />
+
+        {trangThai.nguCanh && <VongNguCanh n={trangThai.nguCanh} />}
 
         {trangThai.hanMuc && <ThanhHanMuc quota={trangThai.hanMuc} soViec={info.soViecConLai} />}
 
@@ -542,6 +561,53 @@ function ChonMucNoLuc({
           {m.nhan}
         </button>
       ))}
+    </div>
+  );
+}
+
+/**
+ * VÒNG NGỮ CẢNH — bao nhiêu phần hội thoại còn tới được model.
+ *
+ * ─── VÌ SAO CON SỐ NÀY ĐÁNG CÓ CHỖ TRÊN MÀN HÌNH ───
+ * Người dùng nhìn thấy cả hội thoại và tưởng agent nhớ hết. Thực tế máy chủ tự
+ * lược kết quả tool cũ, và khi chạm trần thì BỎ HẲN những lượt cũ nhất. Không
+ * hiện ra thì họ hỏi "sao lúc nãy tôi nói rồi mà giờ nó quên?" — và không có
+ * chỗ nào trả lời được.
+ *
+ * Vẽ bằng SVG một vòng cung, không bằng thanh ngang: nó nằm cạnh thanh hạn mức
+ * (vốn đã là thanh ngang), và hai thanh ngang cạnh nhau thì mắt không tách được
+ * cái nào là cái nào.
+ */
+function VongNguCanh({ n }: { n: AgentNguCanh }) {
+  const R = 7;
+  const chuVi = 2 * Math.PI * R;
+  const p = Math.min(100, Math.max(0, n.phanTram));
+  const muc = p >= 90 ? 'day' : p >= 70 ? 'gan' : 'thoai';
+  return (
+    <div
+      className="ct-vongnc"
+      data-muc={muc}
+      title={
+        `Ngữ cảnh: ${Math.round(n.kyTu / 1000)}k / ${Math.round(n.tran / 1000)}k ký tự (${p}%)`
+        + (n.soLuotDaBo > 0
+          ? `\n⚠ Đã tự bỏ ${n.soLuotDaBo} lượt cũ nhất để lọt trần — agent KHÔNG còn nhớ phần đó, `
+            + 'dù bạn vẫn thấy chúng ở trên.'
+          : '\nChạm trần thì lượt cũ nhất sẽ tự bị bỏ, không phải bắt đầu lại.')
+      }
+    >
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
+        <circle cx="9" cy="9" r={R} className="ct-vongnc-nen" />
+        <circle
+          cx="9" cy="9" r={R}
+          className="ct-vongnc-day"
+          strokeDasharray={`${(chuVi * p) / 100} ${chuVi}`}
+          // Bắt đầu từ 12 giờ, không phải 3 giờ — mọi vòng tiến trình người ta
+          // từng thấy đều chạy từ đỉnh.
+          transform="rotate(-90 9 9)"
+        />
+      </svg>
+      <span className="ct-vongnc-so">{p}%</span>
+      {n.soLuotDaBo > 0 && <span className="ct-vongnc-canh">↺{n.soLuotDaBo}</span>}
     </div>
   );
 }

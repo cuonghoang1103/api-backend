@@ -415,6 +415,21 @@ export interface AgentPhanLoaiLenh {
   choNho: boolean;
 }
 
+/**
+ * Ngữ cảnh đã dùng tới đâu.
+ *
+ * Người dùng KHÔNG có cách nào tự biết con số này: họ nhìn thấy cả hội thoại
+ * trên màn hình, nhưng không biết bao nhiêu phần trong đó còn thật sự tới được
+ * model. Vòng tròn là chỗ duy nhất nói ra.
+ */
+export interface AgentNguCanh {
+  kyTu: number;
+  tran: number;
+  phanTram: number;
+  /** Số lượt CŨ đã bị bỏ tự động để lọt trần. >0 nghĩa là agent đã quên phần đó. */
+  soLuotDaBo: number;
+}
+
 export interface AgentQuota {
   daDung: number;
   tran: number;
@@ -494,7 +509,10 @@ export type AgentUiEvent = { cuocId: string } & (
   | { loai: 'lenhRa'; mau: string }
   /** Agent công bố/cập nhật danh sách việc. Luôn là TOÀN BỘ danh sách. */
   | { loai: 'keHoach'; viec: AgentViec[] }
-  | { loai: 'xong'; hanMuc: AgentQuota | null; tienUsd: number; daLuoc: number; soFileDaSua: number }
+  | {
+      loai: 'xong'; hanMuc: AgentQuota | null; tienUsd: number; daLuoc: number; soFileDaSua: number;
+      nguCanh?: AgentNguCanh;
+    }
   | { loai: 'loi'; thongDiep: string; ma?: string }
   | { loai: 'huy' }
 );

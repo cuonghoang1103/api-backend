@@ -53,9 +53,14 @@ export type SuKienAgent =
   | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr'; chiTiet: string }
   | { loai: 'lenhRa'; mau: string }
   | { loai: 'keHoach'; viec: Array<{ ten: string; trangThai: string }> }
-  | { loai: 'xong'; hanMuc: HanMucUi | null; tienUsd: number; daLuoc: number; soFileDaSua: number }
+  | {
+      loai: 'xong'; hanMuc: HanMucUi | null; tienUsd: number; daLuoc: number; soFileDaSua: number;
+      nguCanh?: NguCanhUi;
+    }
   | { loai: 'loi'; thongDiep: string; ma?: string }
   | { loai: 'huy' };
+
+export interface NguCanhUi { kyTu: number; tran: number; phanTram: number; soLuotDaBo: number }
 
 export interface HanMucUi {
   daDung: number;
@@ -523,6 +528,7 @@ export async function chayLuot(
         phat({
           loai: 'xong', hanMuc: ketQua.quota, tienUsd: ketQua.costUsd,
           daLuoc: ketQua.daLuoc, soFileDaSua: soFileDaSua(c.so),
+          ...(ketQua.nguCanh ? { nguCanh: ketQua.nguCanh } : {}),
         });
         return;
       }
@@ -768,6 +774,7 @@ interface KetQuaLuot {
   quota: HanMucUi | null;
   costUsd: number;
   daLuoc: number;
+  nguCanh?: NguCanhUi;
 }
 
 /**
@@ -861,6 +868,7 @@ async function mgoiMotLuot(o: {
           ra.quota = e.quota ?? null;
           ra.costUsd = e.usage?.costUsd ?? 0;
           ra.daLuoc = e.compact?.soDaLuoc ?? 0;
+          if (e.nguCanh) ra.nguCanh = e.nguCanh;
           break;
         case 'error':
           // Ghi lại, KHÔNG phát ngay: chỗ gọi có thể quyết định thử lại, và

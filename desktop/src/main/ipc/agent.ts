@@ -21,10 +21,11 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
-import type { AgentInfo, AgentQuota, AgentWorkspace } from '../../shared/ipc';
+import type { AgentInfo, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace } from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
-import { chayLuot, dangChayKhong, huyLuot, xoaHoiThoai, type SuKienAgent } from '../agent/loop';
+import { chayLuot, dangChayKhong, huyLuot, napPhien, phienHienTai, xoaHoiThoai, type SuKienAgent } from '../agent/loop';
+import { danhSachPhien, docPhien, dungLaiHienThi, xoaPhien } from '../agent/phien';
 import { hoanTacTatCa } from '../agent/tools';
 import { traLoi } from '../agent/xinPhep';
 import { readStoredSession } from './auth';
@@ -226,6 +227,22 @@ export function registerAgentHandlers(): void {
     if (dangChayKhong()) throw new Error('Đang chạy dở — hãy dừng trước khi đổi quyền chạy lệnh.');
     choChayLenh = bat;
     return moTa(thuMucHienTai());
+  });
+
+  handle('agent:dsPhien', (): Promise<AgentPhien[]> => danhSachPhien());
+
+  handle('agent:moPhien', async ({ id }): Promise<{ muc: AgentMucKhoiPhuc[] } | null> => {
+    const p = await docPhien(id);
+    if (!p) return null;
+    napPhien(p.id, p.hoiThoai, p.duAn);
+    return { muc: dungLaiHienThi(p.hoiThoai) };
+  });
+
+  handle('agent:xoaPhien', async ({ id }) => {
+    // Xoá phiên ĐANG mở ⇒ dọn luôn bộ nhớ làm việc, nếu không agent vẫn nhớ một
+    // việc mà người dùng vừa bảo là bỏ đi.
+    if (phienHienTai() === id) xoaHoiThoai();
+    await xoaPhien(id);
   });
 
   handle('agent:hoanTac', async () => {

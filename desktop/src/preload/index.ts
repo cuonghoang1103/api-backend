@@ -15,6 +15,8 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import type {
   AgentInfo,
+  AgentMucKhoiPhuc,
+  AgentPhien,
   AgentQuyetDinh,
   AgentWorkspace,
   AppInfo,
@@ -122,6 +124,10 @@ const bridge: DesktopBridge = {
     datCheDoLenh: (bat: boolean) =>
       ipcRenderer.invoke('agent:datCheDoLenh', { bat }) as Promise<AgentWorkspace>,
     hoanTac: () => ipcRenderer.invoke('agent:hoanTac') as Promise<{ soFile: number; loi: string[] }>,
+    dsPhien: () => ipcRenderer.invoke('agent:dsPhien') as Promise<AgentPhien[]>,
+    moPhien: (id: string) =>
+      ipcRenderer.invoke('agent:moPhien', { id }) as Promise<{ muc: AgentMucKhoiPhuc[] } | null>,
+    xoaPhien: (id: string) => ipcRenderer.invoke('agent:xoaPhien', { id }) as Promise<void>,
   },
 
   on: (channel: EventChannel, listener: (payload: unknown) => void) => {

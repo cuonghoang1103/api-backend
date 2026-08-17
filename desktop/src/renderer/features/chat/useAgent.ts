@@ -14,7 +14,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
-  AgentInfo, AgentPhanLoaiLenh, AgentQuota, AgentQuyetDinh, AgentUiEvent, AgentWorkspace,
+  AgentInfo, AgentPhanLoaiLenh, AgentPhien, AgentQuota, AgentQuyetDinh, AgentUiEvent, AgentWorkspace,
 } from '../../../shared/ipc';
 import type { TheXinPhep } from './XinPhep';
 
@@ -173,6 +173,40 @@ export function useAgent(info: AgentInfo | null) {
     });
   }, [themChu]);
 
+  /** Việc đã lưu + phiên đang mở. Nạp lại sau mỗi lượt để danh sách luôn đúng. */
+  const [phien, datPhien] = useState<AgentPhien[]>([]);
+  const [phienDangMo, datPhienDangMo] = useState<string | null>(null);
+
+  const napPhien = useCallback(async () => {
+    const ds = await window.cuongthai?.agent.dsPhien();
+    if (ds) datPhien(ds);
+  }, []);
+
+  useEffect(() => { void napPhien(); }, [napPhien]);
+
+  const moPhien = useCallback(async (id: string) => {
+    const kq = await window.cuongthai?.agent.moPhien(id);
+    if (!kq) return;
+    // Bảng ghi khôi phục ĐƠN GIẢN hơn bản gốc (không có thẻ duyệt kèm diff) —
+    // xem `dungLaiHienThi` ở main. Nói rõ ra bằng một dòng, thay vì để người
+    // dùng tự hỏi vì sao lịch sử trông khác lúc họ đang chạy.
+    datMuc([
+      ...kq.muc.map((m) => (m.kieu === 'tool'
+        ? { kieu: 'tool' as const, ten: m.ten, tomTat: m.tomTat, vong: 'may' as const }
+        : m)),
+      { kieu: 'loi', ma: 'KHOI_PHUC', text: 'Đã mở lại việc này. Gõ tiếp là agent đi tiếp từ đúng chỗ đó.' },
+    ]);
+    datPhienDangMo(id);
+    datTienPhien(0);
+    datSoFileDaSua(0);
+  }, []);
+
+  const xoaPhien = useCallback(async (id: string) => {
+    await window.cuongthai?.agent.xoaPhien(id);
+    if (id === phienDangMo) { datMuc([]); datPhienDangMo(null); }
+    await napPhien();
+  }, [phienDangMo, napPhien]);
+
   /** Chặn gửi hai lần khi người dùng bấm nhanh — React chưa kịp vẽ lại nút. */
   const dangGui = useRef(false);
 
@@ -192,8 +226,11 @@ export function useAgent(info: AgentInfo | null) {
       dangGui.current = false;
       datDangChay(false);
       datDangNghi(false);
+      // Main lưu phiên ở `finally` của mỗi lượt, nên danh sách chỉ đúng SAU khi
+      // lượt kết thúc. Nạp lại ở đây thay vì theo đồng hồ.
+      void napPhien();
     }
-  }, []);
+  }, [napPhien]);
 
   const dung = useCallback(() => {
     void window.cuongthai?.agent.cancel();
@@ -206,6 +243,7 @@ export function useAgent(info: AgentInfo | null) {
     datSoFileDaSua(0);
     datDangChay(false);
     datDangNghi(false);
+    datPhienDangMo(null);
   }, []);
 
   /**
@@ -243,6 +281,10 @@ export function useAgent(info: AgentInfo | null) {
     batDauLai,
     traLoiXinPhep,
     hoanTac,
+    phien,
+    phienDangMo,
+    moPhien,
+    xoaPhien,
   };
 }
 

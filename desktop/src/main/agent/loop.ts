@@ -25,6 +25,7 @@ import { API_ORIGIN } from '../config';
 import { readStoredSession } from '../ipc/auth';
 import type { KetQuaDiff } from './diff';
 import { docGhiChuDuAn } from './ghiChu';
+import { luuPhien, type TinNhanLuu } from './phien';
 import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua, xoaNhatKyHoanTac } from './tools';
 import { huyTatCa, xoaQuyenDaCap, type YeuCauXinPhep } from './xinPhep';
@@ -82,8 +83,36 @@ export interface BoiCanh {
 let hoiThoai: TinNhan[] = [];
 let dangChay: AbortController | null = null;
 
+/**
+ * Phiên đang mở. Sinh khi có câu hỏi ĐẦU TIÊN, không phải khi mở màn hình —
+ * mở màn hình rồi đóng lại không tạo ra việc gì để nhớ.
+ */
+let phienId: string | null = null;
+/** Thư mục dự án lúc phiên bắt đầu, để danh sách phiên nói được việc đó thuộc dự án nào. */
+let phienDuAn: string | null = null;
+
+export function phienHienTai(): string | null {
+  return phienId;
+}
+
+/** Nạp một phiên cũ vào bộ nhớ làm việc. Sau lời gọi này, gõ tiếp là đi tiếp việc đó. */
+export function napPhien(id: string, tinNhan: TinNhanLuu[], duAn: string | null): void {
+  huyLuot();
+  hoiThoai = tinNhan as TinNhan[];
+  phienId = id;
+  phienDuAn = duAn;
+  // Quyền đã cấp và nhật ký hoàn tác KHÔNG khôi phục theo. Hoàn tác một thay
+  // đổi từ hôm qua là ghi đè lên thứ người dùng có thể đã sửa tiếp bằng tay; và
+  // quyền "cho phép cả file này" cấp cho phiên trước thì hết hiệu lực cùng
+  // phiên đó — mở lại là một lần ngồi xuống mới.
+  xoaQuyenDaCap();
+  xoaNhatKyHoanTac();
+}
+
 export function xoaHoiThoai(): void {
   hoiThoai = [];
+  phienId = null;
+  phienDuAn = null;
   // Bắt đầu việc mới ⇒ quên quyền đã cấp và quên nhật ký hoàn tác. Quyền
   // "cho phép cả file này" được cấp cho MỘT việc, không phải cấp vĩnh viễn;
   // và giữ nhật ký cũ lại thì nút Hoàn tác sẽ lùi cả những thay đổi thuộc
@@ -128,6 +157,12 @@ export async function chayLuot(
   const dieuKhien = new AbortController();
   dangChay = dieuKhien;
   hoiThoai.push({ role: 'user', content: cauHoi });
+
+  // Câu hỏi đầu tiên ⇒ đây là một việc mới, đặt tên cho nó.
+  if (!phienId) {
+    phienId = `p${Date.now().toString(36)}${Math.floor(Math.random() * 1e4).toString(36)}`;
+    phienDuAn = boiCanh.goc ? tenThuMuc(boiCanh.goc) : null;
+  }
 
   // Chỉ khai báo khả năng khi THẬT SỰ có thư mục. Khai bừa thì máy chủ đưa tool
   // đọc file cho model, model gọi, và app trả lỗi ở mọi lời gọi — agent quay
@@ -240,6 +275,14 @@ export async function chayLuot(
     else phat({ loai: 'loi', thongDiep: (err as Error).message || 'Lỗi không rõ.' });
   } finally {
     if (dangChay === dieuKhien) dangChay = null;
+    // Lưu ở `finally`, KHÔNG ở nhánh thành công. Lượt hỏng giữa chừng hay bị
+    // người dùng bấm Dừng vẫn chứa những bước agent đã đi và đã trả tiền —
+    // mất chúng chỉ vì lượt không kết thúc đẹp là mất đúng thứ đáng giữ nhất.
+    if (phienId) {
+      void luuPhien(phienId, hoiThoai as TinNhanLuu[], phienDuAn).catch(() => {
+        /* ghi đĩa hỏng KHÔNG được làm hỏng lượt vừa chạy xong */
+      });
+    }
   }
 }
 

@@ -256,6 +256,30 @@ export const agentTraLoiSchema = z.object({
 
 export const agentCheDoSuaSchema = z.object({ bat: z.boolean() });
 export const agentCheDoLenhSchema = z.object({ bat: z.boolean() });
+export const agentPhienSchema = z.object({ id: z.string().min(1).max(64) });
+
+/** Một việc đã lưu. Nhãn duy nhất người dùng nhận ra nó là `tieuDe`. */
+export interface AgentPhien {
+  id: string;
+  tieuDe: string;
+  /** Tên thư mục dự án lúc làm việc đó. */
+  duAn: string | null;
+  luucLuc: number;
+  soTinNhan: number;
+}
+
+/**
+ * Bảng ghi dựng lại từ một phiên cũ.
+ *
+ * CỐ Ý đơn giản hơn bảng ghi lúc chạy: không có thẻ duyệt kèm diff. Diff không
+ * nằm trong bản lưu, và dựng lại nó nghĩa là đọc file HÔM NAY — cho ra một cái
+ * diff không phải cái người dùng đã duyệt hôm qua. Một dòng công cụ nói đúng
+ * sự thật thì tốt hơn một cái thẻ nói sai.
+ */
+export type AgentMucKhoiPhuc =
+  | { kieu: 'nguoi'; text: string }
+  | { kieu: 'may'; text: string }
+  | { kieu: 'tool'; ten: string; tomTat: string };
 
 /** Phân loại mức nguy hiểm của một lệnh — hiện thẳng trên thẻ duyệt. */
 export interface AgentPhanLoaiLenh {
@@ -358,6 +382,9 @@ export const INVOKE_CHANNELS = {
   'agent:datCheDoSua': agentCheDoSuaSchema,
   'agent:datCheDoLenh': agentCheDoLenhSchema,
   'agent:hoanTac': null,
+  'agent:dsPhien': null,
+  'agent:moPhien': agentPhienSchema,
+  'agent:xoaPhien': agentPhienSchema,
 } as const;
 
 export type InvokeChannel = keyof typeof INVOKE_CHANNELS;
@@ -513,6 +540,11 @@ export interface DesktopBridge {
     datCheDoLenh(bat: boolean): Promise<AgentWorkspace>;
     /** Trả mọi file agent đã sửa trong việc này về nguyên trạng. */
     hoanTac(): Promise<{ soFile: number; loi: string[] }>;
+    /** Các việc đã lưu, mới nhất trước. */
+    dsPhien(): Promise<AgentPhien[]>;
+    /** Mở lại một việc cũ — gõ tiếp là agent đi tiếp từ đúng chỗ đó. */
+    moPhien(id: string): Promise<{ muc: AgentMucKhoiPhuc[] } | null>;
+    xoaPhien(id: string): Promise<void>;
   };
   /** Trả về hàm huỷ đăng ký. Renderer PHẢI gọi nó khi unmount. */
   on(channel: EventChannel, listener: (payload: unknown) => void): () => void;

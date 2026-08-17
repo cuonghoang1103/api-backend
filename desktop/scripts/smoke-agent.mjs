@@ -409,6 +409,66 @@ try {
   check('có dòng tiến trình cho AGENTS.md', /AGENTS\.md/.test(toolMoi), toolMoi.trim());
   check('KHÔNG phải đọc file mới biết (nội dung đã ở trong prompt)',
     soMucSau - soMucTruoc <= 1, `${soMucSau - soMucTruoc} dòng công cụ`);
+
+  // ══ Lưu và mở lại phiên ══
+  //
+  // Phép kiểm THẬT là: ĐÓNG HẲN app, mở lại, mở phiên cũ, rồi hỏi một câu chỉ
+  // trả lời được nếu agent còn nhớ hội thoại trước. Kiểm bằng cách bấm quanh
+  // trong cùng một lần chạy thì không chứng minh được gì — bộ nhớ RAM vẫn còn
+  // nguyên ở đó, và đó chính là thứ ta đang muốn thay thế.
+  console.log('\nLưu & mở lại phiên:');
+  const dsTruoc = await w.evaluate(() => globalThis.cuongthai.agent.dsPhien());
+  check('phiên được lưu tự động sau khi chạy', dsTruoc.length >= 1, `${dsTruoc.length} phiên`);
+  const phienThu = dsTruoc[0];
+  check('tiêu đề lấy từ câu hỏi đầu tiên', /Cổng|CONG/i.test(phienThu?.tieuDe ?? ''),
+    (phienThu?.tieuDe ?? '').slice(0, 50));
+  check('phiên nhớ tên dự án', phienThu?.duAn === path.basename(duAn), String(phienThu?.duAn));
+
+  // ── ĐÓNG app, MỞ LẠI ──
+  await app.close();
+  app = await electron.launch({
+    args: [`--user-data-dir=${userData}`, path.join(root, 'dist/main/index.cjs')],
+    env: { ...process.env, CT_RENDERER: 'bundle', CUONGTHAI_API_ORIGIN: API },
+  });
+  const w2 = await app.firstWindow();
+  cuaSo = w2;
+  await w2.waitForLoadState('domcontentloaded');
+  await w2.waitForSelector('.ct-shell', { timeout: 20000 });
+  await w2.locator('.ct-segment-nut', { hasText: 'Lập trình' }).click();
+  await w2.waitForSelector('.ct-agent-bar', { timeout: 20000 });
+  const man2 = w2.locator('.ct-chedo[data-hien="true"]');
+  check('mở lại app vào được màn hình', true);
+
+  // Danh sách phiên phải SỐNG SÓT qua lần khởi động lại — đây là điểm của cả
+  // tính năng.
+  await man2.locator('.ct-agent-bar .ct-agent-icon').nth(1).click();
+  await w2.waitForSelector('.ct-lichsu', { timeout: 10000 });
+  const soMuc = await w2.locator('.ct-lichsu-muc').count();
+  check('danh sách việc sống sót qua lần khởi động lại', soMuc >= 1, `${soMuc} việc`);
+
+  await w2.locator('.ct-lichsu-mo').first().click();
+  await w2.waitForSelector('.ct-lichsu', { state: 'detached', timeout: 10000 });
+  const soMucKhoiPhuc = await man2.locator('.ct-agent-scroll > *').count();
+  check('bảng ghi dựng lại từ phiên cũ', soMucKhoiPhuc > 2, `${soMucKhoiPhuc} mục`);
+
+  // Câu hỏi này CHỈ trả lời được nếu agent còn nhớ hội thoại trước — nó không
+  // nhắc lại con số, và không có file nào chứa "9999" nữa (đã hoàn tác).
+  const oNhap2 = man2.locator('.ct-agent-o');
+  await oNhap2.fill('Không cần tra lại file. Trong việc này, con số tôi từng nhờ bạn đổi CONG THÀNH là bao nhiêu?');
+  await man2.locator('.ct-agent-soan .ct-btn').first().click();
+  await w2.waitForFunction(
+    () => {
+      const m = document.querySelector('.ct-chedo[data-hien="true"]');
+      if (!m) return false;
+      const nut = m.querySelector('.ct-agent-soan .ct-btn');
+      return !!nut && nut.textContent.includes('Gửi');
+    },
+    null,
+    { timeout: 180000 },
+  );
+  const traLoiNho = await man2.locator('.ct-agent-may').last().innerText();
+  check('agent NHỚ hội thoại từ trước khi đóng app', /9999/.test(traLoiNho),
+    traLoiNho.slice(0, 90).replace(/\n/g, ' '));
 } catch (err) {
   console.log(`\n\x1b[31mHỎNG: ${String(err.message).split('\n')[0]}\x1b[0m`);
   await inBangGhi('lúc hỏng');

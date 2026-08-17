@@ -17,11 +17,12 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import {
-  Check, CircleStop, FilePen, FolderOpen, Loader2, NotebookPen,
+  Check, CircleStop, FilePen, FolderOpen, History, Loader2, NotebookPen,
   RotateCcw, Send, Sparkles, Terminal, Undo2, X,
 } from 'lucide-react';
 import type { AgentInfo, AgentWorkspace } from '../../../shared/ipc';
 import { useAgent } from './useAgent';
+import { LichSu } from './LichSu';
 import { XinPhep, XinPhepLenh } from './XinPhep';
 
 export function AgentMode({
@@ -35,8 +36,12 @@ export function AgentMode({
   datThuMuc: (w: AgentWorkspace) => void;
   napLai: () => void;
 }) {
-  const { trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac } = useAgent(info);
+  const {
+    trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac,
+    phien, phienDangMo, moPhien, xoaPhien,
+  } = useAgent(info);
   const [nhap, datNhap] = useState('');
+  const [moLichSu, datMoLichSu] = useState(false);
   const cuonRef = useRef<HTMLDivElement>(null);
 
   // Tự cuộn xuống đáy khi có nội dung mới. Chỉ khi người dùng ĐANG ở gần đáy:
@@ -109,6 +114,16 @@ export function AgentMode({
 
   return (
     <div className="ct-agent">
+      {moLichSu && (
+        <LichSu
+          phien={phien}
+          dangMo={phienDangMo}
+          onMo={(id) => { void moPhien(id); datMoLichSu(false); }}
+          onXoa={(id) => void xoaPhien(id)}
+          onDong={() => datMoLichSu(false)}
+        />
+      )}
+
       {/* ── Thanh phạm vi quyền + hạn mức ── */}
       <div className="ct-agent-bar">
         <button
@@ -184,6 +199,15 @@ export function AgentMode({
         <button
           type="button"
           className="ct-agent-icon"
+          onClick={() => datMoLichSu(true)}
+          title={`Việc đã lưu (${phien.length})`}
+        >
+          <History size={13} aria-hidden />
+        </button>
+
+        <button
+          type="button"
+          className="ct-agent-icon"
           onClick={() => void batDauLai()}
           disabled={trangThai.muc.length === 0}
           title="Bắt đầu việc mới (xoá hội thoại, KHÔNG hoàn lại hạn mức)"
@@ -201,7 +225,9 @@ export function AgentMode({
           if (m.kieu === 'may') return <div key={i} className="ct-agent-may">{m.text}</div>;
           if (m.kieu === 'loi') {
             return (
-              <div key={i} className="ct-notice" data-tone={m.ma === 'HOAN_TAC' ? 'warn' : 'err'}>
+              <div key={i} className="ct-notice" data-tone={
+                m.ma === 'HOAN_TAC' ? 'warn' : m.ma === 'KHOI_PHUC' ? 'info' : 'err'
+              }>
                 <span>{m.text}</span>
               </div>
             );

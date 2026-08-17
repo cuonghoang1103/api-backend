@@ -34,8 +34,30 @@ jobs:
           echo "=== Prune dangling images ==="
           ssh vps "docker image prune -f 2>&1 | tail -3"
           echo ""
-          echo "=== Prune builder cache older than 7 days ==="
-          ssh vps "docker builder prune -f --filter 'until=168h' 2>&1 | tail -3"
+          # ⚠️ NGƯỠNG THEO ĐĨA CÒN LẠI, không phải theo tuổi cache.
+          #
+          # Trước đây chỗ này luôn lọc `until=168h`. Cache build của repo này
+          # sinh ra ở MỖI lần deploy, nên gần như toàn bộ nó luôn trẻ hơn 7
+          # ngày và job thu về ĐÚNG 0 byte — đã đo hai lần. Nó chạy xanh, log
+          # đẹp, và không dọn được gì; 18/08/2026 một lần deploy chết giữa
+          # chừng với "no space left on device" trong khi cache đang giữ
+          # 2,7GB mà job này vừa bỏ qua.
+          #
+          # Cache là thứ TÁI TẠO ĐƯỢC — không phải ảnh, không phải container,
+          # không phải dữ liệu. Còn dưới 12G thì dọn sạch; trên ngưỡng đó thì
+          # giữ lại cache mới để deploy sau còn nhanh.
+          echo "=== Prune builder cache ==="
+          ssh vps '
+            free_g=$(df -BG --output=avail / | tail -1 | tr -dc "0-9")
+            echo "Còn trống: ${free_g}G"
+            if [ "$free_g" -lt 12 ]; then
+              echo "Dưới 12G — dọn TOÀN BỘ cache build."
+              docker builder prune -f 2>&1 | tail -3
+            else
+              echo "Đủ chỗ — chỉ dọn cache cũ hơn 7 ngày."
+              docker builder prune -f --filter "until=168h" 2>&1 | tail -3
+            fi
+          '
 
       - name: Truncate container logs > 200MB
         run: |

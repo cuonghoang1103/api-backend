@@ -214,6 +214,24 @@ export interface MusicUsage {
 
 export const zoomSchema = z.number().min(0.5).max(2.5);
 
+/**
+ * Lưu một file do hộp cát Python sinh ra.
+ *
+ * ⛔ Renderer KHÔNG truyền đường dẫn — nó chỉ đưa TÊN GỢI Ý và nội dung. Nơi
+ * lưu do NGƯỜI DÙNG chọn qua hộp thoại của hệ điều hành, đúng nguyên tắc đã
+ * dùng cho thư mục ghi chú và thư mục dự án của agent.
+ *
+ * Trần 40MB: đủ cho bảng tính, báo cáo, ảnh biểu đồ; và chặn một script lỡ tay
+ * sinh ra file khổng lồ rồi đẩy cả qua IPC.
+ */
+export const luuFileSchema = z.object({
+  ten: z.string().min(1).max(200)
+    // eslint-disable-next-line no-control-regex
+    .refine((t) => !/[/\\\u0000-\u001f]/.test(t), 'Tên file không được chứa dấu phân cách hay ký tự điều khiển')
+    .refine((t) => !t.includes('..'), 'Tên file không được chứa ".."'),
+  dulieu: z.instanceof(Uint8Array).refine((b) => b.byteLength <= 40 * 1024 * 1024, 'File quá lớn (trần 40MB)'),
+});
+
 // ─────────────────────────────────────────────────────────────
 // Trình duyệt trong app
 // ─────────────────────────────────────────────────────────────
@@ -594,6 +612,8 @@ export const INVOKE_CHANNELS = {
   'agent:dsPhien': null,
   'agent:moPhien': agentMoPhienSchema,
   'agent:xoaPhien': agentPhienSchema,
+  'app:luuFile': luuFileSchema,
+
   'browser:mo': browserMoSchema,
   'browser:an': null,
   'browser:datVung': browserVungSchema,
@@ -700,6 +720,11 @@ export interface DesktopBridge {
     getInfo(): Promise<AppInfo>;
     openExternal(url: string): Promise<void>;
     reload(): Promise<void>;
+    /**
+     * Lưu file hộp cát sinh ra. Người dùng chọn nơi lưu qua hộp thoại hệ điều
+     * hành; renderer không bao giờ biết đường dẫn.
+     */
+    luuFile(ten: string, dulieu: Uint8Array): Promise<{ ok: boolean; huy?: boolean; loi?: string }>;
     setZoom(level: number): Promise<void>;
   };
   settings: {

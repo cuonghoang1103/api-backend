@@ -56,6 +56,9 @@ const bridge: DesktopBridge = {
     openExternal: (url: string) =>
       ipcRenderer.invoke('app:openExternal', url) as Promise<void>,
     reload: () => ipcRenderer.invoke('app:reload') as Promise<void>,
+    luuFile: (ten: string, dulieu: Uint8Array) =>
+      ipcRenderer.invoke('app:luuFile', { ten, dulieu }) as
+        Promise<{ ok: boolean; huy?: boolean; loi?: string }>,
     setZoom: (level: number) =>
       ipcRenderer.invoke('app:setZoom', level) as Promise<void>,
   },

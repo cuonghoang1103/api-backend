@@ -29,8 +29,9 @@
 import hljs from 'highlight.js/lib/common';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
-import { Check, Copy } from 'lucide-react';
+import { Check, CircleStop, Copy, Download, Play } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useSandbox, type KetQuaChay } from './useSandbox';
 
 // ─── Khối ──────────────────────────────────────────────────────────
 
@@ -229,6 +230,9 @@ function KhoiMa({ ngonNgu, noiDung }: { ngonNgu: string; noiDung: string }) {
   // ```mermaid ⇒ VẼ, không tô màu cú pháp. Người ta viết mermaid để nhìn thấy
   // hình, không phải để đọc mã của hình.
   if (ngonNgu.toLowerCase() === 'mermaid') return <SoDo ma={noiDung} />;
+  // Python ⇒ thêm nút CHẠY. Xem `ChayPython` để biết vì sao hộp cát nằm ở
+  // trình duyệt chứ không phải trên máy chủ.
+  if (chayDuoc(ngonNgu)) return <ChayPython ma={noiDung} ngonNgu={ngonNgu} />;
 
   // `highlight.js` tự thoát đầu vào và chỉ sinh ra `<span class>` — không có
   // đường nào cho HTML của người dùng lọt qua. Hỏng ngôn ngữ thì tự dò.
@@ -258,6 +262,89 @@ function KhoiMa({ ngonNgu, noiDung }: { ngonNgu: string; noiDung: string }) {
         </button>
       </div>
       <pre><code dangerouslySetInnerHTML={{ __html: html }} /></pre>
+    </div>
+  );
+}
+
+/** Ngôn ngữ chạy được trong hộp cát. Chỉ Python — đừng hứa thứ chưa có. */
+function chayDuoc(ngonNgu: string): boolean {
+  return ['python', 'py', 'python3'].includes(ngonNgu.toLowerCase());
+}
+
+/**
+ * KHỐI MÃ PYTHON CHẠY ĐƯỢC.
+ *
+ * ─── HỘP CÁT NẰM Ở TRÌNH DUYỆT, KHÔNG PHẢI TRÊN MÁY CHỦ ───
+ * Mã chạy trong WebAssembly, trong một Web Worker: không `fs`, không tiến trình
+ * con, không với được `window.cuongthai`, không ra mạng (CSP chặn). Chạy trên
+ * VPS thì mã do model sinh ra nằm cùng máy với Postgres chứa dữ liệu thật —
+ * xem ghi chú đầu `pythonWorker.ts`.
+ *
+ * ─── XUẤT FILE ───
+ * Script ghi vào `/xuat` thì app đọc ra và mời lưu. Nơi lưu do NGƯỜI DÙNG chọn
+ * qua hộp thoại hệ điều hành; renderer không bao giờ truyền đường dẫn.
+ */
+function ChayPython({ ma, ngonNgu }: { ma: string; ngonNgu: string }) {
+  const { chay, giet, dangChay, tienTrinh } = useSandbox();
+  const [kq, datKq] = useState<KetQuaChay | null>(null);
+  const [daLuu, datDaLuu] = useState<string | null>(null);
+
+  let html: string;
+  try {
+    html = hljs.highlight(ma, { language: 'python' }).value;
+  } catch {
+    html = ma.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c] ?? c));
+  }
+
+  const luu = async (f: { ten: string; dulieu: Uint8Array }): Promise<void> => {
+    const r = await window.cuongthai?.app.luuFile(f.ten, f.dulieu);
+    if (r?.ok) datDaLuu(f.ten);
+    else if (r?.loi) datDaLuu(`lỗi: ${r.loi}`);
+  };
+
+  return (
+    <div className="ct-ma">
+      <div className="ct-ma-dau">
+        <span className="ct-ma-ngonngu">{ngonNgu}</span>
+        {dangChay ? (
+          <button type="button" className="ct-ma-chep" onClick={giet} title="Dừng — giết hẳn tiến trình">
+            <CircleStop size={12} aria-hidden />
+            Dừng
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="ct-ma-chep"
+            onClick={() => { datDaLuu(null); void chay(ma).then(datKq); }}
+            title="Chạy trong hộp cát Python (WebAssembly) — không đụng tới máy bạn"
+          >
+            <Play size={12} aria-hidden />
+            Chạy
+          </button>
+        )}
+      </div>
+      <pre><code dangerouslySetInnerHTML={{ __html: html }} /></pre>
+
+      {tienTrinh && <div className="ct-ma-ra" data-cho>{tienTrinh}</div>}
+
+      {kq && !dangChay && (
+        <div className="ct-ma-ra" data-loi={kq.loi ? '' : undefined}>
+          {/* Text thô: đây là đầu ra của mã người lạ viết, không bao giờ dựng
+              thành HTML. */}
+          <pre>{kq.loi ?? (kq.ra.trim() || '(chạy xong, không in ra gì)')}</pre>
+          {kq.file.length > 0 && (
+            <div className="ct-ma-file">
+              {kq.file.map((f, i) => (
+                <button key={i} type="button" className="ct-btn ct-mcp-nho" onClick={() => void luu(f)}>
+                  <Download size={12} aria-hidden />
+                  Lưu {f.ten} ({Math.max(1, Math.round(f.dulieu.byteLength / 1024))} KB)
+                </button>
+              ))}
+            </div>
+          )}
+          {daLuu && <div className="ct-ma-daluu">Đã lưu {daLuu}</div>}
+        </div>
+      )}
     </div>
   );
 }

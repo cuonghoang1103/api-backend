@@ -907,6 +907,37 @@ try {
   await w2.locator('.ct-segment-nut', { hasText: 'Lập trình' }).click();
   await w2.waitForSelector('.ct-tab-noi[data-hien="true"]', { timeout: 10000 });
 
+  // ══ HỘP CÁT PYTHON ══
+  //
+  // ⚠️ Kiểm trong BẢN ĐÓNG GÓI, vì thứ dễ hỏng nhất là CSP: bản dev nới lỏng
+  // hơn hẳn, nên "chạy dev thấy ổn" không chứng minh gì. Cần `wasm-unsafe-eval`
+  // trong `script-src`; thiếu là Chromium chặn biên dịch WASM và Pyodide chết
+  // câm ngay lúc nạp.
+  console.log('\nHộp cát Python:');
+  // Tên file worker mang mã băm nội dung nên đổi sau mỗi lần dựng — viết cứng
+  // là hỏng ở lần build kế tiếp. Bộ kiểm chạy ở Node nên đọc thẳng thư mục dựng.
+  const tenWorker = fs.readdirSync(path.join(root, 'dist/renderer/assets'))
+    .find((f) => f.startsWith('pythonWorker-') && f.endsWith('.js'));
+  check('worker hộp cát có trong bản dựng', !!tenWorker, String(tenWorker));
+
+  const py = await w2.evaluate(async (ten) => {
+    const w = new Worker(new URL(`/assets/${ten}`, location.origin), { type: 'module' });
+    return new Promise((xong) => {
+      const het = setTimeout(() => { w.terminate(); xong({ loi: 'quá 120s' }); }, 120000);
+      w.onmessage = (e) => {
+        if (e.data.loai === 'nap') return;
+        clearTimeout(het); w.terminate(); xong(e.data);
+      };
+      w.onerror = (e) => { clearTimeout(het); w.terminate(); xong({ loi: String(e.message || e) }); };
+      w.postMessage({ id: 1, ma: 'print(6*7)\nopen("/xuat/kq.csv","w").write("a,b\\n1,2\\n")' });
+    });
+  }, tenWorker);
+  check('Pyodide nạp và CHẠY được dưới CSP của bản đóng gói',
+    py?.loai === 'ket-qua', py?.loi ?? JSON.stringify(py).slice(0, 90));
+  check('bắt được đầu ra của Python', String(py?.ra ?? '').includes('42'), String(py?.ra ?? '').trim());
+  check('XUẤT FILE: script ghi /xuat được trả về', (py?.file ?? []).length === 1,
+    (py?.file ?? []).map((f) => f.ten).join(', '));
+
   // ══ MCP ══
   //
   // Kiểm bằng một server MCP THẬT (`scripts/mcp-gia.mjs`) nói đúng giao thức

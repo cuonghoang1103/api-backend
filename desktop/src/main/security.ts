@@ -137,9 +137,22 @@ function contentSecurityPolicy(): string {
     // Đã dính đúng lỗi này ngày 16/08/2026. Bản đóng gói KHÔNG bị, nên smoke
     // test (chạy ở chế độ bundle) vẫn xanh trong khi dev vỡ hoàn toàn — đó là
     // lý do phải có phép kiểm riêng cho đường dev, xem scripts/smoke-dev.mjs.
+    //
+    // ⚠️ `'wasm-unsafe-eval'` là để chạy HỘP CÁT PYTHON (Pyodide) trong chế độ
+    // Trò chuyện. Nó KHÔNG phải `'unsafe-eval'`:
+    //
+    //   'unsafe-eval'       → mở lại `eval()` và `new Function()` cho JAVASCRIPT.
+    //                         Một lỗ XSS bất kỳ lập tức thành chạy mã tuỳ ý.
+    //   'wasm-unsafe-eval'  → CHỈ cho phép biên dịch WebAssembly. Không mở
+    //                         `eval` JS, không mở `new Function`.
+    //
+    // Mã Python chạy trong hộp cát WASM: không có `fs`, không có `child_process`,
+    // không với được `window.cuongthai`, và không ra mạng được (`connect-src`
+    // vẫn chặn). Đây là hộp cát MẠNH HƠN so với chạy trên VPS — ở đó mã lạ nằm
+    // cùng máy với Postgres chứa dữ liệu thật của người dùng.
     IS_DEV
-      ? `script-src 'self' ${APP_ORIGIN} ${DEV_SERVER_URL} 'unsafe-eval' 'unsafe-inline'`
-      : `script-src 'self' ${APP_ORIGIN}`,
+      ? `script-src 'self' ${APP_ORIGIN} ${DEV_SERVER_URL} 'unsafe-eval' 'unsafe-inline' 'wasm-unsafe-eval'`
+      : `script-src 'self' ${APP_ORIGIN} 'wasm-unsafe-eval'`,
     // 'unsafe-inline' cho style là nhượng bộ có chủ ý: React/Tailwind chèn
     // style inline khi chạy animation. Nó KHÔNG cho phép chạy script.
     `style-src 'self' ${APP_ORIGIN} 'unsafe-inline'`,

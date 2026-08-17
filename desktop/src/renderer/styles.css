@@ -3071,6 +3071,121 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   box-shadow: var(--ct-shadow-sm);
 }
 
+/* ── Đính kèm ở chế độ Trò chuyện ── */
+
+/* Lớp phủ kéo-thả. `pointer-events:none` là bắt buộc: lớp phủ nhận được con trỏ
+   thì nó "cướp" sự kiện dragleave của khung dưới và ô sáng kẹt lại mãi. */
+.ct-dk-phu {
+  position: absolute;
+  inset: 8px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  border: 2px dashed var(--ct-accent);
+  border-radius: var(--ct-radius);
+  background: color-mix(in srgb, var(--ct-accent) 8%, transparent);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ct-accent);
+}
+
+.ct-dk-dai {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 0 0;
+  flex-shrink: 0;
+}
+
+.ct-dk-o {
+  position: relative;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface);
+  overflow: hidden;
+}
+
+.ct-dk-o[data-loai='image'] { width: 72px; height: 54px; }
+.ct-dk-anh { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.ct-dk-tai {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 26px 8px 10px;
+  max-width: 230px;
+  color: var(--ct-text-faint);
+}
+
+.ct-dk-tai-chu { display: flex; flex-direction: column; min-width: 0; }
+
+.ct-dk-ten {
+  font-size: 11.5px;
+  color: var(--ct-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ct-dk-co { font-size: 10px; font-variant-numeric: tabular-nums; }
+
+.ct-dk-bo {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.62);
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Đính kèm ĐÃ GỬI, trong bong bóng người dùng. Nhỏ hơn dải xem trước: lúc này
+   nó là dấu vết của việc đã xảy ra, không còn là thứ đang chờ thao tác. */
+.ct-dk-dagui {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 7px;
+}
+
+.ct-dk-dagui-anh {
+  width: 128px;
+  max-height: 128px;
+  object-fit: cover;
+  border-radius: var(--ct-radius-sm);
+  display: block;
+}
+
+.ct-dk-dagui-tai {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  font-size: 11px;
+}
+
+/* Chân khung chat: chọn bậc model + nhắc trần đính kèm. */
+.ct-chat-chan {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0 0;
+  flex-shrink: 0;
+}
+
+.ct-chat-chan-chu { font-size: 10.5px; color: var(--ct-text-faint); }
+
 /* ── MCP ── */
 .ct-mcp-boc { position: relative; display: flex; }
 

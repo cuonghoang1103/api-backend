@@ -173,7 +173,7 @@ export function ChatPage() {
             Tháo ra là mất hội thoại đang dở chỉ vì người dùng liếc sang tab kia
             — và với chế độ Lập trình thì đó là hội thoại đã tốn tiền thật. */}
         <div className="ct-chedo" data-hien={cheDo === 'chat'}>
-          <ChatMode />
+          <ChatMode pro={info?.pro === true} />
         </div>
         <div className="ct-chedo" data-hien={cheDo === 'code'}>
           {dangTai && !info ? (

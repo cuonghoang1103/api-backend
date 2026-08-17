@@ -3,15 +3,14 @@
  * MÔI GIỚI XIN PHÉP — chỗ vòng lặp agent ĐỨNG LẠI chờ người dùng
  * ============================================================
  *
- * Agent gọi `edit_file` → main dựng diff → đẩy lên giao diện → **dừng** →
- * người dùng bấm → main mới ghi đĩa (hoặc không).
+ * Agent muốn ghi file hoặc chạy lệnh → main dựng thẻ (diff, hoặc chuỗi lệnh) →
+ * đẩy lên giao diện → **dừng** → người dùng bấm → main mới làm thật.
  *
- * ─── VÌ SAO PHẢI DỪNG THẬT, KHÔNG PHẢI HỎI RỒI GHI LUÔN ───
- * Cách dễ viết hơn là ghi trước rồi cho phép hoàn tác. Nhưng "hoàn tác được"
- * và "chưa xảy ra" là hai chuyện khác nhau: giữa lúc ghi và lúc bấm hoàn tác,
- * file đã đổi thật — một tiến trình theo dõi (`tsc --watch`, `next dev`,
- * hot reload) đã đọc bản mới và đã chạy theo nó. Với người dùng thì đó là
- * "agent tự ý sửa mã của tôi", đúng nghĩa đen.
+ * ─── VÌ SAO PHẢI DỪNG THẬT, KHÔNG PHẢI LÀM RỒI CHO HOÀN TÁC ───
+ * Cách dễ viết hơn là làm trước rồi cho hoàn tác. Nhưng "hoàn tác được" và
+ * "chưa xảy ra" là hai chuyện khác nhau: giữa lúc ghi và lúc bấm hoàn tác, một
+ * tiến trình theo dõi (`tsc --watch`, `next dev`) đã đọc bản mới và chạy theo
+ * nó. Với LỆNH thì còn tuyệt đối hơn — `npm publish` không có nút hoàn tác nào.
  *
  * ─── BA CÁCH THOÁT, TẤT CẢ ĐỀU PHẢI GIẢI PHÓNG LỜI HỨA ───
  * Người dùng trả lời · người dùng bấm Dừng · hết giờ. Thiếu bất kỳ đường nào
@@ -23,15 +22,28 @@ export type QuyetDinh = 'choPhep' | 'choPhepCaFile' | 'tuChoi';
 
 export interface YeuCauXinPhep {
   id: string;
-  /** 'edit_file' | 'create_file' — để giao diện nói đúng việc sắp xảy ra. */
+  /** 'edit_file' | 'create_file' | 'run_command' — để giao diện nói đúng việc sắp xảy ra. */
   ten: string;
-  /** Đường dẫn TƯƠNG ĐỐI, để hiện lên mà không phơi cả cây thư mục. */
+  /** Đường dẫn tương đối, hoặc chuỗi lệnh — thứ hiện lên cho người dùng đọc. */
   duongDan: string;
 }
 
 interface DangCho {
   giaiPhong: (q: QuyetDinh) => void;
   dongHo: ReturnType<typeof setTimeout>;
+  /**
+   * Khoá để NHỚ nếu người dùng chọn "cho phép cả …". Với file là đường dẫn,
+   * với lệnh là nguyên văn chuỗi lệnh.
+   *
+   * ⚠️ Khoá nằm Ở ĐÂY chứ không phải do chỗ trả lời truyền vào. Bản đầu (P2)
+   * nhận `duongDan` làm tham số của `traLoi()`, và `ipc/agent.ts` gọi thiếu nó
+   * — nên "Cho phép cả file này" hoạt động ĐÚNG NHƯ "Cho phép": lần sửa sau
+   * vẫn hỏi lại. Không có gì báo lỗi, không có gì đỏ; chỉ là một nút không làm
+   * điều nó hứa. Giữ khoá trong sổ thì chỗ trả lời không thể quên nó được nữa.
+   */
+  khoa: string;
+  /** Có được phép nhớ không. Lệnh nguy hiểm ⇒ false, dù người dùng bấm nút nhớ. */
+  choNho: boolean;
 }
 
 /**
@@ -42,18 +54,18 @@ const HET_GIO_MS = 5 * 60_000;
 
 const dangCho = new Map<string, DangCho>();
 
-/** File đã được "cho phép cả file" trong PHIÊN này. Không bao giờ ghi xuống đĩa. */
-const choPhepCaFile = new Set<string>();
+/** Khoá đã được "cho phép cả …" trong PHIÊN này. Không bao giờ ghi xuống đĩa. */
+const daNhoKhoa = new Set<string>();
 
 let demId = 0;
 
 /** Bắt đầu một việc mới ⇒ quên hết quyền đã cấp. Quyền không được sống lâu hơn việc nó phục vụ. */
 export function xoaQuyenDaCap(): void {
-  choPhepCaFile.clear();
+  daNhoKhoa.clear();
 }
 
-export function daChoPhepCaFile(duongDan: string): boolean {
-  return choPhepCaFile.has(duongDan);
+export function daChoPhepCaFile(khoa: string): boolean {
+  return daNhoKhoa.has(khoa);
 }
 
 /**
@@ -63,13 +75,17 @@ export function daChoPhepCaFile(duongDan: string): boolean {
  * này không biết gì về IPC, và nhờ thế test được mà không cần dựng Electron.
  */
 export function hoiNguoiDung(
-  yeuCau: Omit<YeuCauXinPhep, 'id'>,
+  yeuCau: Omit<YeuCauXinPhep, 'id'> & { khoa?: string; choNho?: boolean },
   phat: (y: YeuCauXinPhep) => void,
   signal: AbortSignal,
 ): Promise<QuyetDinh> {
-  // Đã cấp quyền cho cả file này rồi ⇒ đi thẳng, không hỏi lại. Đây là thứ giữ
-  // cho việc sửa mười chỗ trong cùng một file không thành mười lần bấm.
-  if (choPhepCaFile.has(yeuCau.duongDan)) return Promise.resolve('choPhepCaFile');
+  const khoa = yeuCau.khoa ?? yeuCau.duongDan;
+  const choNho = yeuCau.choNho !== false;
+
+  // Đã cấp quyền cho khoá này rồi ⇒ đi thẳng, không hỏi lại. Đây là thứ giữ cho
+  // việc sửa mười chỗ trong cùng một file (hay chạy `npm test` mười lần trong
+  // vòng lặp sửa→chạy→sửa) không thành mười lần bấm.
+  if (choNho && daNhoKhoa.has(khoa)) return Promise.resolve('choPhepCaFile');
 
   const id = `xp_${++demId}`;
   return new Promise<QuyetDinh>((resolve) => {
@@ -86,21 +102,24 @@ export function hoiNguoiDung(
     function huy(): void { ketThuc('tuChoi'); }
 
     const dongHo = setTimeout(() => ketThuc('tuChoi'), HET_GIO_MS);
-    dangCho.set(id, { giaiPhong: ketThuc, dongHo });
+    dangCho.set(id, { giaiPhong: ketThuc, dongHo, khoa, choNho });
 
     // Người dùng bấm Dừng giữa lúc thẻ duyệt đang mở ⇒ coi như từ chối. KHÔNG
     // được để treo: lượt đã bị huỷ thì không còn ai đọc kết quả nữa.
     signal.addEventListener('abort', huy, { once: true });
 
-    phat({ ...yeuCau, id });
+    phat({ id, ten: yeuCau.ten, duongDan: yeuCau.duongDan });
   });
 }
 
 /** Giao diện trả lời. `false` = không có yêu cầu nào mang id đó (đã hết giờ hoặc đã trả lời). */
-export function traLoi(id: string, quyetDinh: QuyetDinh, duongDan?: string): boolean {
+export function traLoi(id: string, quyetDinh: QuyetDinh): boolean {
   const muc = dangCho.get(id);
   if (!muc) return false;
-  if (quyetDinh === 'choPhepCaFile' && duongDan) choPhepCaFile.add(duongDan);
+  // `choNho === false` ⇒ nút "cho phép cả …" vẫn cho lệnh/thay đổi NÀY đi, chỉ
+  // là không ghi nhớ. Giao diện đã ẩn nút đó với lệnh nguy hiểm; đây là lớp
+  // chặn thứ hai, phòng khi một app bị sửa vẫn gửi lên quyết định ấy.
+  if (quyetDinh === 'choPhepCaFile' && muc.choNho) daNhoKhoa.add(muc.khoa);
   muc.giaiPhong(quyetDinh);
   return true;
 }
@@ -112,4 +131,9 @@ export function huyTatCa(): void {
     muc.giaiPhong('tuChoi');
   }
   dangCho.clear();
+}
+
+/** Số yêu cầu đang treo — cho test và cho phép kiểm "không rò lời hứa". */
+export function soDangCho(): number {
+  return dangCho.size;
 }

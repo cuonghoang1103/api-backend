@@ -16,8 +16,8 @@
  *     Đây là chỗ đổi chác giữa phiền và an toàn, và nó nghiêng theo cách người
  *     ta thật sự làm việc: sửa sâu vài file, không rải khắp dự án.
  */
-import { Check, CheckCheck, FilePlus2, FilePen, X } from 'lucide-react';
-import type { AgentDiff, AgentQuyetDinh } from '../../../shared/ipc';
+import { AlertTriangle, Check, CheckCheck, FilePlus2, FilePen, Terminal, X } from 'lucide-react';
+import type { AgentDiff, AgentPhanLoaiLenh, AgentQuyetDinh } from '../../../shared/ipc';
 
 export interface TheXinPhep {
   id: string;
@@ -85,6 +85,80 @@ export function XinPhep({
           Cho phép cả file này
         </button>
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(the.id, 'tuChoi')}>
+          <X size={14} aria-hidden />
+          Từ chối
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Thẻ duyệt CHẠY LỆNH.
+ *
+ * ─── KHÁC THẺ SỬA FILE Ở BA CHỖ, VÀ KHÁC CÓ LÝ DO ───
+ *
+ *  1. Chuỗi lệnh hiện TO và ĐẦY ĐỦ, không cắt, không xuống dòng lén. Người dùng
+ *     duyệt đúng cái họ đọc; một chuỗi bị cắt ở giữa là một chuỗi họ chưa đọc.
+ *
+ *  2. Lệnh nguy hiểm hiện lý do CỤ THỂ ("xoá file — không hoàn tác được"), chứ
+ *     không phải một chữ "cảnh báo" chung chung. Cảnh báo chung thì người ta
+ *     học cách bỏ qua sau lần thứ ba.
+ *
+ *  3. Nút "cho phép lệnh này" BIẾN MẤT với lệnh nguy hiểm — không phải mờ đi,
+ *     mà không có. `rm -rf` không được phép trở thành thói quen một cú bấm.
+ *     (Main cũng chặn lần nữa, xem `choNho` trong xinPhep.ts.)
+ */
+export function XinPhepLenh({
+  id,
+  lenh,
+  phanLoai,
+  traLoi,
+}: {
+  id: string;
+  lenh: string;
+  phanLoai: AgentPhanLoaiLenh;
+  traLoi: (id: string, q: AgentQuyetDinh) => void;
+}) {
+  const nguyHiem = phanLoai.muc === 'nguyhiem';
+  return (
+    <div className="ct-xinphep" data-muc={phanLoai.muc}>
+      <div className="ct-xinphep-dau">
+        <Terminal size={14} aria-hidden />
+        <span>Agent muốn chạy lệnh</span>
+      </div>
+
+      <div className="ct-lenh-hop">
+        <span className="ct-lenh-dau">$</span>
+        <code className="ct-lenh-chu">{lenh}</code>
+      </div>
+
+      {phanLoai.lyDo.length > 0 && (
+        <div className="ct-notice" data-tone={nguyHiem ? 'err' : 'warn'} style={{ margin: '8px 0 0' }}>
+          <AlertTriangle size={15} aria-hidden />
+          <span>
+            {nguyHiem ? <strong>Nguy hiểm: </strong> : null}
+            {phanLoai.lyDo.join(' · ')}
+          </span>
+        </div>
+      )}
+
+      <div className="ct-xinphep-nut">
+        <button
+          type="button"
+          className={nguyHiem ? 'ct-btn ct-xinphep-lieu' : 'ct-btn'}
+          onClick={() => traLoi(id, 'choPhep')}
+        >
+          <Check size={14} aria-hidden />
+          {nguyHiem ? 'Vẫn chạy' : 'Chạy lệnh'}
+        </button>
+        {phanLoai.choNho && (
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => traLoi(id, 'choPhepCaFile')}>
+            <CheckCheck size={14} aria-hidden />
+            Chạy, và đừng hỏi lại lệnh này
+          </button>
+        )}
+        <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
           <X size={14} aria-hidden />
           Từ chối
         </button>

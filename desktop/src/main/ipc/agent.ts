@@ -39,6 +39,8 @@ import { handle } from './index';
  * Bật lại tốn đúng một cú bấm.
  */
 let choSua = false;
+/** Quyền CHẠY LỆNH — cũng chỉ trong RAM, cũng mặc định tắt, và bật riêng. */
+let choChayLenh = false;
 
 const chay = promisify(execFile);
 
@@ -67,12 +69,13 @@ async function nhanhGit(goc: string): Promise<string | null> {
 }
 
 async function moTa(goc: string | null): Promise<AgentWorkspace> {
-  if (!goc) return { path: null, name: null, branch: null, choSua: false };
+  if (!goc) return { path: null, name: null, branch: null, choSua: false, choChayLenh: false };
   return {
     path: goc,
     name: path.basename(goc),
     branch: await nhanhGit(goc),
     choSua,
+    choChayLenh,
   };
 }
 
@@ -187,7 +190,7 @@ export function registerAgentHandlers(): void {
     };
 
     const nhanh = conSong ? await nhanhGit(conSong) : null;
-    await chayLuot(text, { goc: conSong, choSua, ...(nhanh ? { nhanh } : {}) }, phat);
+    await chayLuot(text, { goc: conSong, choSua, choChayLenh, ...(nhanh ? { nhanh } : {}) }, phat);
   });
 
   handle('agent:cancel', () => {
@@ -216,6 +219,12 @@ export function registerAgentHandlers(): void {
   handle('agent:datCheDoSua', async ({ bat }): Promise<AgentWorkspace> => {
     if (dangChayKhong()) throw new Error('Đang chạy dở — hãy dừng trước khi đổi quyền sửa.');
     choSua = bat;
+    return moTa(thuMucHienTai());
+  });
+
+  handle('agent:datCheDoLenh', async ({ bat }): Promise<AgentWorkspace> => {
+    if (dangChayKhong()) throw new Error('Đang chạy dở — hãy dừng trước khi đổi quyền chạy lệnh.');
+    choChayLenh = bat;
     return moTa(thuMucHienTai());
   });
 

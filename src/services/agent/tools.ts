@@ -39,7 +39,7 @@ export type ToolRing = 'client' | 'server';
  * gọi thứ app không chạy được. Đây là cách để thêm tool mà không làm chết app
  * cũ đang cài trên máy người dùng.
  */
-export type AgentCapability = 'fs_read' | 'git_read' | 'fs_write';
+export type AgentCapability = 'fs_read' | 'git_read' | 'fs_write' | 'shell';
 
 export interface AgentToolDef {
   name: string;
@@ -198,6 +198,29 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
 
+  // ─── Vòng 1c: CHẠY LỆNH (P3) ───────────────────────────────────
+  {
+    name: 'run_command',
+    ring: 'client',
+    capability: 'shell',
+    description:
+      'Chạy một lệnh shell trong thư mục dự án và trả về đầu ra kèm mã thoát. ' +
+      'Dùng để CHẠY BỘ KIỂM và tự xác nhận việc mình vừa sửa: `npm test`, `npx tsc --noEmit`, `npm run build`, `pytest`. ' +
+      'Người dùng phải DUYỆT từng lệnh, và họ nhìn thấy nguyên văn chuỗi lệnh — nên hãy viết lệnh ngắn, rõ, làm ĐÚNG MỘT việc. ' +
+      'KHÔNG chạy lệnh xoá, cài gói, git commit/push, hay tải gì từ Internet: người dùng sẽ từ chối và bạn mất một lượt. ' +
+      'KHÔNG dùng lệnh để đọc file — đã có read_file, và những file bị chặn thì chặn là có lý do. ' +
+      'Lệnh chạy KHÔNG có bàn phím: thứ gì hỏi lại người dùng sẽ treo tới khi hết giờ. Thêm cờ không-hỏi (ví dụ `--yes`) nếu cần. ' +
+      'Đầu ra bị cắt ở khoảng 24.000 ký tự (giữ đầu và đuôi, bỏ khúc giữa).',
+    parameters: {
+      type: 'object',
+      properties: {
+        command: { type: 'string', description: 'Lệnh đầy đủ, chạy từ gốc dự án.' },
+        timeout_seconds: { type: 'integer', description: 'Trần thời gian. Mặc định 120, tối đa 600.' },
+      },
+      required: ['command'],
+    },
+  },
+
   // ─── Vòng 2: Notes (máy chủ tự chạy) ───────────────────────────
   {
     name: 'notes_search',
@@ -266,7 +289,7 @@ export function toolsForGateway(capabilities: readonly AgentCapability[]): Array
 }
 
 /** Danh sách nhóm khả năng hợp lệ — dùng để lọc phần app gửi lên. */
-export const ALL_CAPABILITIES: readonly AgentCapability[] = ['fs_read', 'git_read', 'fs_write'];
+export const ALL_CAPABILITIES: readonly AgentCapability[] = ['fs_read', 'git_read', 'fs_write', 'shell'];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {
   if (!Array.isArray(raw)) return [];

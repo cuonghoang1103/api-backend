@@ -13,7 +13,9 @@
  * thật sự gọi `cancel()` chứ không chỉ ẩn giao diện đi.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { AgentInfo, AgentQuota, AgentQuyetDinh, AgentUiEvent, AgentWorkspace } from '../../../shared/ipc';
+import type {
+  AgentInfo, AgentPhanLoaiLenh, AgentQuota, AgentQuyetDinh, AgentUiEvent, AgentWorkspace,
+} from '../../../shared/ipc';
 import type { TheXinPhep } from './XinPhep';
 
 /** Một mục trên màn hình. Không phải một tin nhắn giao thức. */
@@ -30,6 +32,16 @@ export type MucHienThi =
    * đã từ chối", thay vì thẻ biến mất không dấu vết.
    */
   | { kieu: 'xinPhep'; the: TheXinPhep; xong?: 'dongY' | 'tuChoi' }
+  /** Thẻ duyệt LỆNH. Khác thẻ sửa file: hiện chuỗi lệnh + lý do nguy hiểm. */
+  | { kieu: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh; xong?: 'dongY' | 'tuChoi' }
+  /**
+   * Đầu ra lệnh, gom dần khi lệnh còn đang chạy.
+   *
+   * Là MỘT mục nối thêm chứ không phải mỗi mẩu một mục: `npm test` nhả ra hàng
+   * nghìn mẩu, mỗi mẩu một phần tử thì React dựng lại hàng nghìn nút và màn
+   * hình giật cứng.
+   */
+  | { kieu: 'lenhRa'; text: string }
   | { kieu: 'loi'; text: string; ma?: string };
 
 /**
@@ -117,9 +129,27 @@ export function useAgent(info: AgentInfo | null) {
             the: { id: e.id, ten: e.ten, duongDan: e.duongDan, taoMoi: e.taoMoi, diff: e.diff },
           }]);
           break;
+        case 'xinPhepLenh':
+          datDangNghi(false);
+          datMuc((truoc) => [...truoc, {
+            kieu: 'xinPhepLenh', id: e.id, lenh: e.lenh, phanLoai: e.phanLoai,
+          }]);
+          break;
+        case 'lenhRa':
+          datMuc((truoc) => {
+            const cuoi = truoc[truoc.length - 1];
+            if (cuoi?.kieu === 'lenhRa') {
+              // Trần hiển thị: giữ đuôi. Đầu ra lệnh thì phần CUỐI là phần đang
+              // xảy ra, và đó là thứ người dùng đang nhìn.
+              const gop = (cuoi.text + e.mau).slice(-20_000);
+              return [...truoc.slice(0, -1), { kieu: 'lenhRa', text: gop }];
+            }
+            return [...truoc, { kieu: 'lenhRa', text: e.mau }];
+          });
+          break;
         case 'xongXinPhep':
           datMuc((truoc) => truoc.map((m) =>
-            m.kieu === 'xinPhep' && m.the.id === e.id
+            (m.kieu === 'xinPhep' && m.the.id === e.id) || (m.kieu === 'xinPhepLenh' && m.id === e.id)
               ? { ...m, xong: e.dongY ? 'dongY' : 'tuChoi' }
               : m,
           ));

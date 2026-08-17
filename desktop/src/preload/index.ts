@@ -119,6 +119,8 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:traLoiXinPhep', { id, quyetDinh }) as Promise<void>,
     datCheDoSua: (bat: boolean) =>
       ipcRenderer.invoke('agent:datCheDoSua', { bat }) as Promise<AgentWorkspace>,
+    datCheDoLenh: (bat: boolean) =>
+      ipcRenderer.invoke('agent:datCheDoLenh', { bat }) as Promise<AgentWorkspace>,
     hoanTac: () => ipcRenderer.invoke('agent:hoanTac') as Promise<{ soFile: number; loi: string[] }>,
   },
 

@@ -211,6 +211,15 @@ export interface AgentWorkspace {
   /** Nhánh git hiện tại, `null` nếu không phải kho git. */
   branch: string | null;
   /**
+   * Đã bật cho agent CHẠY LỆNH chưa. Cũng không lưu xuống đĩa.
+   *
+   * ⚠️ Bật cái này thì danh sách chặn file của `jail.ts` tụt xuống hàng KHUYẾN
+   * CÁO: `cat .env` là một lệnh shell, và shell không biết gì về nhà tù đó.
+   * Không vá kín được mà vẫn giữ shell — thứ làm được là không bao giờ TỰ
+   * duyệt một lệnh dính tới file nhạy cảm, và cảnh báo to trên thẻ.
+   */
+  choChayLenh: boolean;
+  /**
    * Đã bật cho agent SỬA file chưa.
    *
    * KHÔNG lưu xuống đĩa: mỗi lần mở app lại là tắt. Đây là quyền ghi vào mã
@@ -246,6 +255,15 @@ export const agentTraLoiSchema = z.object({
 });
 
 export const agentCheDoSuaSchema = z.object({ bat: z.boolean() });
+export const agentCheDoLenhSchema = z.object({ bat: z.boolean() });
+
+/** Phân loại mức nguy hiểm của một lệnh — hiện thẳng trên thẻ duyệt. */
+export interface AgentPhanLoaiLenh {
+  muc: 'thuong' | 'cankiem' | 'nguyhiem';
+  lyDo: string[];
+  /** Có được phép nhớ để lần sau tự chạy không. Lệnh nguy hiểm ⇒ false. */
+  choNho: boolean;
+}
 
 export interface AgentQuota {
   daDung: number;
@@ -279,6 +297,10 @@ export type AgentUiEvent =
   | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: AgentDiff }
   /** Thẻ đã được trả lời (hoặc hết giờ 5 phút) — gỡ thẻ đi. */
   | { loai: 'xongXinPhep'; id: string; dongY: boolean }
+  /** Xin phép CHẠY LỆNH — payload khác thẻ sửa file: có chuỗi lệnh + phân loại. */
+  | { loai: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh }
+  /** Đầu ra của lệnh, chảy ra khi nó còn đang chạy. */
+  | { loai: 'lenhRa'; mau: string }
   | { loai: 'xong'; hanMuc: AgentQuota | null; tienUsd: number; daLuoc: number; soFileDaSua: number }
   | { loai: 'loi'; thongDiep: string; ma?: string }
   | { loai: 'huy' };
@@ -334,6 +356,7 @@ export const INVOKE_CHANNELS = {
   'agent:reset': null,
   'agent:traLoiXinPhep': agentTraLoiSchema,
   'agent:datCheDoSua': agentCheDoSuaSchema,
+  'agent:datCheDoLenh': agentCheDoLenhSchema,
   'agent:hoanTac': null,
 } as const;
 
@@ -486,6 +509,8 @@ export interface DesktopBridge {
     traLoiXinPhep(id: string, quyetDinh: AgentQuyetDinh): Promise<void>;
     /** Bật/tắt quyền sửa file. Không lưu xuống đĩa — mở app lại là tắt. */
     datCheDoSua(bat: boolean): Promise<AgentWorkspace>;
+    /** Bật/tắt quyền chạy lệnh. Cũng không lưu xuống đĩa. */
+    datCheDoLenh(bat: boolean): Promise<AgentWorkspace>;
     /** Trả mọi file agent đã sửa trong việc này về nguyên trạng. */
     hoanTac(): Promise<{ soFile: number; loi: string[] }>;
   };

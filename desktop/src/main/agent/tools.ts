@@ -23,6 +23,7 @@ import { promisify } from 'node:util';
 
 import { soSanhDong, type KetQuaDiff } from './diff';
 import { fileBiCam, LoiNguc, moTrongNguc, thuMucBiCam, TRAN_BYTE_FILE } from './jail';
+import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
 import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
 
 const chay = promisify(execFile);
@@ -33,8 +34,17 @@ const chay = promisify(execFile);
  * không phải thứ mọi tool phải mang theo.
  */
 export interface BoiCanhGhi {
-  /** Đẩy thẻ duyệt lên giao diện. */
+  /** Đẩy thẻ duyệt SỬA FILE lên giao diện. */
   xinPhep: (y: YeuCauXinPhep & { diff: KetQuaDiff; taoMoi: boolean }) => void;
+  signal: AbortSignal;
+}
+
+/** Ngữ cảnh cho `run_command`. Tách khỏi `BoiCanhGhi` vì hai quyền BẬT RIÊNG. */
+export interface BoiCanhLenh {
+  /** Đẩy thẻ duyệt LỆNH lên giao diện — kèm phân loại nguy hiểm để người dùng thấy lý do. */
+  xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) => void;
+  /** Đầu ra chảy ra màn hình khi lệnh còn đang chạy. */
+  onRa: (mau: string) => void;
   signal: AbortSignal;
 }
 
@@ -121,9 +131,14 @@ export async function chayToolAgent(
   ten: string,
   args: Record<string, unknown>,
   ghi?: BoiCanhGhi,
+  lenh?: BoiCanhLenh,
 ): Promise<KetQuaTool> {
   try {
     switch (ten) {
+      case 'run_command': {
+        if (!lenh) return { noiDung: 'LỖI: phiên này không bật quyền chạy lệnh.', tomTat: 'không có quyền' };
+        return await toolRunCommand(goc, args, lenh);
+      }
       case 'list_dir': return await toolListDir(goc, args);
       case 'read_file': return await toolReadFile(goc, args);
       case 'grep': return await toolGrep(goc, args);
@@ -350,6 +365,63 @@ function demSoLan(trong: string, tim: string): number {
     i = trong.indexOf(tim, i + tim.length);
   }
   return dem;
+}
+
+// ─── run_command ───────────────────────────────────────────────────
+
+async function toolRunCommand(
+  goc: string,
+  args: Record<string, unknown>,
+  boiCanh: BoiCanhLenh,
+): Promise<KetQuaTool> {
+  const lenh = typeof args.command === 'string' ? args.command.trim() : '';
+  if (!lenh) return { noiDung: 'LỖI: thiếu "command".', tomTat: 'thiếu lệnh' };
+  if (lenh.length > 2000) return { noiDung: 'LỖI: lệnh quá dài (trần 2000 ký tự).', tomTat: 'quá dài' };
+
+  const phanLoai = phanLoaiLenh(lenh);
+
+  // Khoá ghi nhớ là NGUYÊN VĂN chuỗi lệnh, không phải tên chương trình. Nhớ
+  // theo tên thì duyệt `npm test` một lần là `npm publish` cũng tự chạy — cùng
+  // một chữ `npm`. Nhớ theo nguyên văn thì đổi một ký tự là hỏi lại, và đó
+  // chính là điều mình muốn.
+  const quyet = await hoiNguoiDung(
+    { ten: 'run_command', duongDan: lenh, khoa: lenh, choNho: phanLoai.choNho },
+    (y) => boiCanh.xinPhepLenh({ ...y, phanLoai }),
+    boiCanh.signal,
+  );
+  if (quyet === 'tuChoi') {
+    return {
+      noiDung:
+        `NGƯỜI DÙNG TỪ CHỐI chạy lệnh: ${lenh}\n` +
+        'Họ đã đọc lệnh và không đồng ý. ĐỪNG gọi lại y hệt — hãy hỏi xem họ muốn chạy gì thay thế, ' +
+        'hoặc mô tả lệnh cần chạy để họ tự chạy.',
+      tomTat: 'bị từ chối',
+    };
+  }
+
+  const kq = await chayLenh({
+    lenh,
+    cwd: goc,
+    giay: Number(args.timeout_seconds) || TRAN_GIAY_MAC_DINH,
+    signal: boiCanh.signal,
+    onRa: boiCanh.onRa,
+  });
+
+  // Đầu ra đưa cho model PHẢI mở đầu bằng mã thoát. Model đọc từ trên xuống, và
+  // một bãi log 20.000 ký tự không nói được "hỏng hay không" — con số ở dòng
+  // đầu thì nói được ngay.
+  const dau = kq.hetGio
+    ? `LỆNH BỊ DỪNG vì quá ${Math.round(kq.giay)}s. Có thể nó đang chờ bàn phím, hoặc thật sự chạy lâu.`
+    : kq.ma === 0
+      ? `Lệnh chạy XONG, mã thoát 0 (${kq.giay.toFixed(1)}s).`
+      : kq.ma === null
+        ? `Lệnh bị dừng giữa chừng (${kq.giay.toFixed(1)}s).`
+        : `Lệnh HỎNG, mã thoát ${kq.ma} (${kq.giay.toFixed(1)}s).`;
+
+  return {
+    noiDung: `$ ${lenh}\n${dau}\n\n${kq.ra || '(không có đầu ra)'}`,
+    tomTat: kq.hetGio ? 'hết giờ' : kq.ma === 0 ? `xong ${kq.giay.toFixed(0)}s` : `mã thoát ${kq.ma ?? '—'}`,
+  };
 }
 
 // ─── grep ──────────────────────────────────────────────────────────

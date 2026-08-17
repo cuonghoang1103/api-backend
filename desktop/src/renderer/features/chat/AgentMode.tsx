@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import type { AgentInfo, AgentWorkspace } from '../../../shared/ipc';
 import { useAgent } from './useAgent';
-import { XinPhep } from './XinPhep';
+import { XinPhep, XinPhepLenh } from './XinPhep';
 
 export function AgentMode({
   info,
@@ -61,6 +61,11 @@ export function AgentMode({
 
   const doiCheDoSua = async (): Promise<void> => {
     const w = await window.cuongthai?.agent.datCheDoSua(!thuMuc?.choSua);
+    if (w) datThuMuc(w);
+  };
+
+  const doiCheDoLenh = async (): Promise<void> => {
+    const w = await window.cuongthai?.agent.datCheDoLenh(!thuMuc?.choChayLenh);
     if (w) datThuMuc(w);
   };
 
@@ -143,6 +148,25 @@ export function AgentMode({
           </button>
         )}
 
+        {coThuMuc && (
+          <button
+            type="button"
+            className="ct-agent-suanut"
+            data-bat={thuMuc?.choChayLenh === true}
+            data-lenh="true"
+            onClick={() => void doiCheDoLenh()}
+            disabled={trangThai.dangChay}
+            title={
+              thuMuc?.choChayLenh
+                ? 'Agent ĐANG chạy được lệnh (mỗi lệnh vẫn phải bạn duyệt). Bấm để tắt.'
+                : 'Bật cho agent chạy lệnh — để nó tự chạy test sau khi sửa. Mỗi lệnh hiện nguyên văn để bạn duyệt.'
+            }
+          >
+            <Terminal size={13} aria-hidden />
+            {thuMuc?.choChayLenh ? 'Chạy lệnh: BẬT' : 'Chạy lệnh: tắt'}
+          </button>
+        )}
+
         {trangThai.soFileDaSua > 0 && (
           <button
             type="button"
@@ -199,6 +223,23 @@ export function AgentMode({
             }
             return <XinPhep key={i} the={m.the} traLoi={traLoiXinPhep} />;
           }
+          if (m.kieu === 'xinPhepLenh') {
+            if (m.xong) {
+              return (
+                <div key={i} className="ct-agent-tool" data-vong="may" data-xong={m.xong}>
+                  {m.xong === 'dongY' ? <Check size={12} aria-hidden /> : <X size={12} aria-hidden />}
+                  <code>{m.lenh}</code>
+                  <span className="ct-agent-tool-tomtat">
+                    {m.xong === 'dongY' ? 'đã chạy' : 'đã từ chối'}
+                  </span>
+                </div>
+              );
+            }
+            return <XinPhepLenh key={i} id={m.id} lenh={m.lenh} phanLoai={m.phanLoai} traLoi={traLoiXinPhep} />;
+          }
+          // Đầu ra lệnh: hiện nguyên văn, KHÔNG dựng bằng innerHTML. Đây là chữ
+          // do một tiến trình bất kỳ trên máy in ra, và nó có thể chứa bất cứ gì.
+          if (m.kieu === 'lenhRa') return <pre key={i} className="ct-lenh-ra">{m.text}</pre>;
           return (
             <div key={i} className="ct-agent-tool" data-vong={m.vong}>
               {m.vong === 'notes' ? <NotebookPen size={12} aria-hidden /> : <Terminal size={12} aria-hidden />}
@@ -243,9 +284,14 @@ export function AgentMode({
 
       <div className="ct-agent-chan">
         <span>
-          {thuMuc?.choSua
-            ? <>Agent <strong>sửa được file</strong> — mỗi thay đổi phải bạn duyệt. Chưa chạy được lệnh. Không đọc <code>.env</code> và các file khoá.</>
-            : <>Đang <strong>chỉ đọc</strong> — chưa sửa file, chưa chạy lệnh. Không đọc <code>.env</code> và các file khoá.</>}
+          {!thuMuc?.choSua && !thuMuc?.choChayLenh
+            ? <>Đang <strong>chỉ đọc</strong> — chưa sửa file, chưa chạy lệnh. Không đọc <code>.env</code> và các file khoá.</>
+            : thuMuc?.choChayLenh
+              // ⚠️ Bật chạy lệnh thì `cat .env` là một lệnh shell, và shell không
+              // biết gì về danh sách chặn file. Phải nói thẳng ở đây, vì đây là
+              // chỗ duy nhất người dùng nhìn thấy thường trực.
+              ? <>Agent {thuMuc?.choSua ? <><strong>sửa được file</strong> và </> : null}<strong>chạy được lệnh</strong> — mỗi việc đều phải bạn duyệt. Lệnh shell <strong>đọc được cả</strong> <code>.env</code>, hãy đọc kỹ trước khi duyệt.</>
+              : <>Agent <strong>sửa được file</strong> — mỗi thay đổi phải bạn duyệt. Chưa chạy được lệnh. Không đọc <code>.env</code> và các file khoá.</>}
         </span>
         {trangThai.tienPhien > 0 && <span className="ct-muted">~${trangThai.tienPhien.toFixed(3)} phiên này</span>}
       </div>

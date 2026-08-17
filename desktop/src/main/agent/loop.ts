@@ -24,6 +24,7 @@
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from '../ipc/auth';
 import type { KetQuaDiff } from './diff';
+import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua, xoaNhatKyHoanTac } from './tools';
 import { huyTatCa, xoaQuyenDaCap, type YeuCauXinPhep } from './xinPhep';
 
@@ -40,6 +41,8 @@ export type SuKienAgent =
   | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: KetQuaDiff }
   /** Thẻ duyệt đã được trả lời (hoặc hết giờ) — giao diện gỡ nó đi. */
   | { loai: 'xongXinPhep'; id: string; dongY: boolean }
+  | { loai: 'xinPhepLenh'; id: string; lenh: string; phanLoai: PhanLoaiLenh }
+  | { loai: 'lenhRa'; mau: string }
   | { loai: 'xong'; hanMuc: HanMucUi | null; tienUsd: number; daLuoc: number; soFileDaSua: number }
   | { loai: 'loi'; thongDiep: string; ma?: string }
   | { loai: 'huy' };
@@ -64,6 +67,8 @@ export interface BoiCanh {
   nhanh?: string;
   /** Người dùng đã bật chế độ cho sửa file chưa. Mặc định KHÔNG. */
   choSua?: boolean;
+  /** Người dùng đã bật chế độ cho chạy lệnh chưa. Mặc định KHÔNG. */
+  choChayLenh?: boolean;
 }
 
 /**
@@ -130,9 +135,12 @@ export async function chayLuot(
   // `fs_write` thêm vào chỉ khi người dùng đã BẬT chế độ sửa. Không bật thì máy
   // chủ không đưa tool sửa cho model, nên model không thể gọi thứ nó sẽ bị từ
   // chối — im lặng bỏ qua ở phía app thì model cứ thử lại mãi.
-  const capabilities = boiCanh.goc
-    ? boiCanh.choSua ? ['fs_read', 'git_read', 'fs_write'] : ['fs_read', 'git_read']
-    : [];
+  const capabilities: string[] = [];
+  if (boiCanh.goc) {
+    capabilities.push('fs_read', 'git_read');
+    if (boiCanh.choSua) capabilities.push('fs_write');
+    if (boiCanh.choChayLenh) capabilities.push('shell');
+  }
 
   let daThuLai = false;
 
@@ -197,8 +205,19 @@ export async function chayLuot(
             }
           : undefined;
 
+        // Bối cảnh LỆNH tách riêng khỏi bối cảnh GHI: hai quyền bật độc lập,
+        // nên bật "cho sửa" không được kéo theo "cho chạy lệnh".
+        const boiCanhLenh = boiCanh.choChayLenh
+          ? {
+              signal: dieuKhien.signal,
+              xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) =>
+                phat({ loai: 'xinPhepLenh', id: y.id, lenh: y.duongDan, phanLoai: y.phanLoai }),
+              onRa: (mau: string) => phat({ loai: 'lenhRa', mau }),
+            }
+          : undefined;
+
         const kq = boiCanh.goc
-          ? await chayToolAgent(boiCanh.goc, goi.name, goi.args, boiCanhGhi)
+          ? await chayToolAgent(boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh)
           : { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
         hoiThoai.push({ role: 'tool', tool_call_id: goi.id, content: kq.noiDung });
         phat({ loai: 'tool', ten: goi.name, tomTat: kq.tomTat, vong: 'may' });

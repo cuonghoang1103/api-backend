@@ -24,6 +24,16 @@
  *
  * Thứ DUY NHẤT còn động vào trạng thái thật là cờ Pro của tài khoản thử trong
  * CSDL cục bộ; khôi phục nằm trong `finally`.
+ *
+ * ⚠️ BỘ KIỂM NÀY CÓ THỂ HỎNG LẺ TẺ, và đó không phải lỗi mã. Nó phụ thuộc vào
+ * việc model CHỌN gọi tool nào — cùng một câu hỏi, có lượt nó gọi `edit_file`
+ * ngay, có lượt nó đọc quanh rồi trả lời bằng chữ. Đã gặp thật 17/08: một lần
+ * chạy P2 hết giờ vì model không gọi `edit_file`, lần chạy ngay sau đó thì
+ * 28/28. Hỏng một lần thì chạy lại; hỏng hai ba lần liên tiếp ở CÙNG một chỗ
+ * mới là dấu hiệu mã có vấn đề.
+ *
+ * Vì thế mỗi lần hỏng đều IN RA BẢNG GHI (`inBangGhi`) — không có nó thì phải
+ * chạy lại một lượt thật, mất phút và tốn tiền, chỉ để nhìn agent đã nói gì.
  */
 import { _electron as electron } from 'playwright';
 import { execFileSync } from 'node:child_process';
@@ -62,6 +72,34 @@ const psql = (sql) =>
 const proGoc = psql(`select is_pro from users where id=${USER_ID};`);
 
 let app;
+let cuaSo = null;
+
+/**
+ * In bảng ghi đang hiện lên màn hình.
+ *
+ * Khi một phép chờ hết giờ, thứ đắt nhất là KHÔNG biết agent đã làm gì. Không
+ * có hàm này thì mỗi lần hỏng phải chạy lại một lượt thật (mất phút, tốn tiền)
+ * chỉ để nhìn xem nó nói gì.
+ */
+async function inBangGhi(viSao) {
+  if (!cuaSo) return;
+  console.log(`\n──── BẢNG GHI ${viSao} ────`);
+  try {
+    const dong = await cuaSo.evaluate(() => {
+      const man = document.querySelector('.ct-chedo[data-hien="true"]');
+      if (!man) return ['(không có chế độ nào đang hiện)'];
+      return [...man.querySelectorAll('.ct-agent-scroll > *')].map((e) => {
+        const c = e.className || e.tagName;
+        return `[${String(c).replace('ct-agent-', '').replace('ct-', '')}] ${(e.textContent || '').trim().slice(0, 250)}`;
+      });
+    });
+    dong.forEach((d) => console.log('  ' + d));
+  } catch (e) {
+    console.log('  (không đọc được: ' + e.message + ')');
+  }
+  console.log('────────────────────────────\n');
+}
+
 try {
   // ── Bật Pro tạm ──
   psql(`update users set is_pro=true where id=${USER_ID};`);
@@ -98,6 +136,7 @@ try {
     env: { ...process.env, CT_RENDERER: 'bundle', CUONGTHAI_API_ORIGIN: API },
   });
   const w = await app.firstWindow();
+  cuaSo = w;
   await w.waitForLoadState('domcontentloaded');
 
   // ── Cấy phiên rồi nạp lại để app tự khôi phục ──
@@ -200,13 +239,16 @@ try {
   const fileThu = path.join(duAn, 'src', 'boot.ts');
   const noiDungGoc = fs.readFileSync(fileThu, 'utf8');
 
-  check('mặc định quyền sửa TẮT', (await man.locator('.ct-agent-suanut').getAttribute('data-bat')) === 'false');
-  await man.locator('.ct-agent-suanut').click();
+  // ⚠️ `.ct-agent-suanut` khớp CẢ HAI nút quyền (Cho sửa + Chạy lệnh) từ khi có
+  // P3. Nút sửa file là nút KHÔNG mang `data-lenh`.
+  const nutSua = man.locator('.ct-agent-suanut:not([data-lenh])');
+  check('mặc định quyền sửa TẮT', (await nutSua.getAttribute('data-bat')) === 'false');
+  await nutSua.click();
   // ĐỢI React vẽ lại, đừng đọc thuộc tính ngay sau `click()`. Bấm là đồng bộ,
   // còn `datCheDoSua` là một vòng IPC rồi mới setState — đọc ngay thì luôn thấy
   // giá trị CŨ, và phép kiểm báo hỏng cho một thứ hoàn toàn đúng.
   const batDuoc = await man
-    .locator('.ct-agent-suanut[data-bat="true"]')
+    .locator('.ct-agent-suanut:not([data-lenh])[data-bat="true"]')
     .waitFor({ timeout: 10000 })
     .then(() => true)
     .catch(() => false);
@@ -265,6 +307,66 @@ try {
       fs.readFileSync(fileThu, 'utf8') === noiDungGoc,
     );
   }
+
+  // ══ P3: chạy lệnh ══
+  //
+  // Phép kiểm này chứng minh thứ P3 sinh ra để làm: agent tự chạy được bộ kiểm
+  // và ĐỌC được kết quả. Dùng một lệnh in ra chuỗi mà agent không thể đoán —
+  // nếu nó nói đúng chuỗi đó thì nó đã thật sự chạy lệnh và đọc đầu ra, chứ
+  // không phải bịa ra một câu trả lời nghe hợp lý.
+  console.log('\nP3 — chạy lệnh:');
+  fs.writeFileSync(
+    path.join(duAn, 'kiem.mjs'),
+    'console.log("KET_QUA_KIEM: 4 dat, 1 hong");\nprocess.exit(1);\n',
+  );
+
+  check('mặc định quyền chạy lệnh TẮT',
+    (await man.locator('.ct-agent-suanut[data-lenh="true"]').getAttribute('data-bat')) === 'false');
+  await man.locator('.ct-agent-suanut[data-lenh="true"]').click();
+  const batLenh = await man
+    .locator('.ct-agent-suanut[data-lenh="true"][data-bat="true"]')
+    .waitFor({ timeout: 10000 }).then(() => true).catch(() => false);
+  check('bật được quyền chạy lệnh', batLenh);
+
+  await oNhap.fill('Chạy `node kiem.mjs` rồi cho tôi biết nó in ra đúng dòng gì và mã thoát là mấy.');
+  await man.locator('.ct-agent-soan .ct-btn').first().click();
+
+  await w.waitForSelector('.ct-chedo[data-hien="true"] .ct-xinphep[data-muc]', { timeout: 180000 });
+  check('thẻ duyệt LỆNH hiện ra', true);
+  const lenhHien = (await man.locator('.ct-lenh-chu').first().innerText()).trim();
+  check('thẻ hiện nguyên văn chuỗi lệnh', lenhHien.includes('kiem.mjs'), lenhHien);
+
+  const coNutNho = await man.locator('.ct-xinphep .ct-btn', { hasText: 'đừng hỏi lại' }).count();
+  check('lệnh thường ⇒ CÓ nút "đừng hỏi lại lệnh này"', coNutNho === 1);
+
+  await man.locator('.ct-xinphep .ct-btn', { hasText: 'Chạy lệnh' }).first().click();
+
+  await w.waitForFunction(
+    () => {
+      const m = document.querySelector('.ct-chedo[data-hien="true"]');
+      if (!m) return false;
+      if (m.querySelector('.ct-agent-scroll .ct-notice[data-tone="err"]')) return true;
+      const nut = m.querySelector('.ct-agent-soan .ct-btn');
+      return !!nut && nut.textContent.includes('Gửi');
+    },
+    null,
+    { timeout: 180000 },
+  );
+
+  const coDauRa = await man.locator('.ct-lenh-ra').count();
+  check('đầu ra lệnh chảy ra màn hình', coDauRa > 0);
+
+  const traLoiCuoi = await man.locator('.ct-agent-may').last().innerText();
+  check(
+    'agent ĐỌC được đầu ra thật (chuỗi nó không thể đoán)',
+    traLoiCuoi.includes('KET_QUA_KIEM') || /4 đạt|4 dat/i.test(traLoiCuoi),
+    traLoiCuoi.slice(0, 110).replace(/\n/g, ' '),
+  );
+  check('agent đọc đúng MÃ THOÁT khác 0', /\b1\b/.test(traLoiCuoi));
+} catch (err) {
+  console.log(`\n\x1b[31mHỎNG: ${String(err.message).split('\n')[0]}\x1b[0m`);
+  await inBangGhi('lúc hỏng');
+  results.push(false);
 } finally {
   await app?.close().catch(() => {});
 

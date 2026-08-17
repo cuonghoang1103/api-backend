@@ -2351,3 +2351,71 @@ select {
 /* Dấu vết của thẻ đã trả lời. */
 .ct-agent-tool[data-xong='dongY'] { border-left-color: var(--ct-ok); }
 .ct-agent-tool[data-xong='tuChoi'] { border-left-color: var(--ct-err); }
+
+/* ── P3: thẻ duyệt lệnh + đầu ra ────────────────────────── */
+
+/* Thẻ lệnh nguy hiểm phải TRÔNG khác hẳn, không chỉ khác chữ. Người dùng đọc
+   màu trước khi đọc chữ, và với `rm -rf` thì nửa giây đó đáng giá. */
+.ct-xinphep[data-muc='nguyhiem'] {
+  border-color: var(--ct-err);
+  background: color-mix(in srgb, var(--ct-err) 6%, var(--ct-surface));
+}
+
+.ct-lenh-hop {
+  display: flex;
+  gap: 8px;
+  padding: 9px 11px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+}
+
+.ct-lenh-dau {
+  color: var(--ct-text-faint);
+  user-select: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Lệnh XUỐNG DÒNG chứ không cắt: một chuỗi bị cắt ở giữa là một chuỗi người
+   dùng chưa đọc hết, mà họ lại sắp bấm duyệt nó. */
+.ct-lenh-chu {
+  flex: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ct-text);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.ct-xinphep-lieu {
+  background: var(--ct-err);
+}
+
+/* Đầu ra lệnh, chảy trực tiếp khi còn đang chạy. */
+.ct-lenh-ra {
+  margin: 0;
+  max-height: 260px;
+  overflow: auto;
+  padding: 9px 11px;
+  border: 1px solid var(--ct-border);
+  border-left: 2px solid var(--ct-text-faint);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  color: var(--ct-text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-width: 92%;
+  align-self: flex-start;
+}
+
+/* Nút chạy lệnh bật ⇒ đỏ, không phải vàng như nút sửa file. Hai quyền khác
+   hạng: sửa file có nút Hoàn tác, chạy lệnh thì không. */
+.ct-agent-suanut[data-lenh='true'][data-bat='true'] {
+  border-color: var(--ct-err);
+  background: color-mix(in srgb, var(--ct-err) 14%, transparent);
+  color: var(--ct-err);
+}

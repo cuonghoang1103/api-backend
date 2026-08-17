@@ -39,7 +39,12 @@ export type ToolRing = 'client' | 'server';
  * gọi thứ app không chạy được. Đây là cách để thêm tool mà không làm chết app
  * cũ đang cài trên máy người dùng.
  */
-export type AgentCapability = 'fs_read' | 'git_read' | 'fs_write' | 'shell' | 'plan' | 'subagent';
+export type AgentCapability =
+  | 'fs_read' | 'git_read' | 'fs_write' | 'shell' | 'plan' | 'subagent'
+  /** Chạy lệnh ở NỀN + đọc đầu ra + dừng. Tách khỏi `shell` để app cũ không nhận tool nó chưa biết chạy. */
+  | 'shell_nen'
+  /** commit / mở PR. Tách riêng vì nó GHI vào lịch sử git và ĐẨY ra ngoài. */
+  | 'git_write';
 
 export interface AgentToolDef {
   name: string;
@@ -291,6 +296,88 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
   },
 
   // ─── Vòng 2: Notes (máy chủ tự chạy) ───────────────────────────
+  // ─── Lệnh chạy NỀN ─────────────────────────────────────────────
+  {
+    name: 'chay_lenh_nen',
+    ring: 'client',
+    capability: 'shell_nen',
+    description:
+      'Khởi động một lệnh CHẠY LÂU ở nền rồi trả về NGAY, kèm một mã để gọi lại. '
+      + 'Dùng cho thứ không bao giờ tự dừng: `npm run dev`, `tsc --watch`, một server. '
+      + 'ĐỪNG dùng cho lệnh có điểm dừng (`npm test`, `npm run build`) — dùng run_command, nó chờ xong và trả kết quả luôn. '
+      + 'Sau khi bật, hãy đợi vài giây rồi gọi doc_dau_ra_nen để xem nó lên được không: '
+      + 'lệnh chết ngay lúc khởi động trông y hệt lệnh đang chạy tốt. '
+      + 'Người dùng phải DUYỆT. Xong việc thì gọi dung_lenh_nen — đừng để tiến trình sống mãi.',
+    parameters: {
+      type: 'object',
+      properties: { lenh: { type: 'string', description: 'Lệnh shell, chạy trong gốc dự án.' } },
+      required: ['lenh'],
+    },
+  },
+  {
+    name: 'doc_dau_ra_nen',
+    ring: 'client',
+    capability: 'shell_nen',
+    description:
+      'Đọc phần đầu ra MỚI của một lệnh nền kể từ lần đọc trước (không lặp lại phần cũ). '
+      + 'Trả kèm: lệnh còn chạy không, mã thoát nếu đã dừng, và đã chạy bao nhiêu giây. '
+      + 'Chưa có gì mới KHÔNG có nghĩa là hỏng — server im lặng sau khi khởi động xong là bình thường.',
+    parameters: {
+      type: 'object',
+      properties: { id: { type: 'string', description: 'Mã do chay_lenh_nen trả về.' } },
+      required: ['id'],
+    },
+  },
+  {
+    name: 'dung_lenh_nen',
+    ring: 'client',
+    capability: 'shell_nen',
+    description: 'Dừng một lệnh nền (giết cả nhóm tiến trình con của nó). Không cần duyệt lại.',
+    parameters: {
+      type: 'object',
+      properties: { id: { type: 'string', description: 'Mã do chay_lenh_nen trả về.' } },
+      required: ['id'],
+    },
+  },
+
+  // ─── Git GHI ───────────────────────────────────────────────────
+  {
+    name: 'git_commit',
+    ring: 'client',
+    capability: 'git_write',
+    description:
+      'Commit những thay đổi đang có trong cây làm việc. '
+      + 'TUYỆT ĐỐI không chạy được trên nhánh chung (main/master/develop/production) — hãy tạo nhánh hoặc dùng worktree trước. '
+      + 'File bí mật (.env, khoá riêng…) luôn bị loại, kể cả khi .gitignore sót. '
+      + 'Lời nhắn viết theo quy ước của dự án; nói RÕ đã làm gì và VÌ SAO, đừng chỉ liệt kê tên file. '
+      + 'Người dùng thấy danh sách file + lời nhắn rồi mới duyệt.',
+    parameters: {
+      type: 'object',
+      properties: {
+        loi_nhan: { type: 'string', description: 'Nội dung commit. Dòng đầu ngắn gọn, xuống dòng rồi mới giải thích.' },
+      },
+      required: ['loi_nhan'],
+    },
+  },
+  {
+    name: 'tao_pr',
+    ring: 'client',
+    capability: 'git_write',
+    description:
+      'ĐẨY nhánh hiện tại lên origin rồi mở Pull Request bằng GitHub CLI. '
+      + 'Đây là hành động RA NGOÀI — người khác nhìn thấy và nhận thông báo, nên chỉ gọi khi người dùng đã nói rõ là muốn mở PR. '
+      + 'Cần máy đã cài `gh` và đã đăng nhập. Không đẩy ép; nhánh phân kỳ thì git từ chối và đó là đúng. '
+      + 'Hãy commit xong xuôi trước khi gọi.',
+    parameters: {
+      type: 'object',
+      properties: {
+        tieu_de: { type: 'string', description: 'Tiêu đề PR, một dòng.' },
+        than: { type: 'string', description: 'Mô tả PR: đã đổi gì, vì sao, kiểm thế nào.' },
+      },
+      required: ['tieu_de', 'than'],
+    },
+  },
+
   {
     /**
      * Đọc một trang web.
@@ -468,7 +555,9 @@ export function laToolMcp(name: string): boolean {
 }
 
 /** Danh sách nhóm khả năng hợp lệ — dùng để lọc phần app gửi lên. */
-export const ALL_CAPABILITIES: readonly AgentCapability[] = ['fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent'];
+export const ALL_CAPABILITIES: readonly AgentCapability[] = [
+  'fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent', 'shell_nen', 'git_write',
+];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {
   if (!Array.isArray(raw)) return [];

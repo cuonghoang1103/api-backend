@@ -29,6 +29,7 @@ import { dungLaiHienThi, luuPhien, type MucKhoiPhuc, type TinNhanLuu } from './p
 import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua } from './tools';
 import { taoSoCuoc, type SoCuoc } from './so';
+import { dungLenhNenCua } from './lenhNen';
 import { hanMucMcp, goiToolMcp, laToolMcp, toolMcpHienCo } from './mcp';
 import { hoiNguoiDung, huyTatCa, type YeuCauXinPhep } from './xinPhep';
 
@@ -48,6 +49,8 @@ export type SuKienAgent =
   | { loai: 'xinPhepLenh'; id: string; lenh: string; phanLoai: PhanLoaiLenh }
   /** Agent muốn gọi một tool MCP của bên thứ ba. LUÔN phải hỏi, không nhớ được. */
   | { loai: 'xinPhepMcp'; id: string; server: string; tool: string; args: string }
+  /** Xin phép COMMIT hoặc MỞ PR. `chiTiet` là thứ người dùng phải ĐỌC trước khi bấm. */
+  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr'; chiTiet: string }
   | { loai: 'lenhRa'; mau: string }
   | { loai: 'keHoach'; viec: Array<{ ten: string; trangThai: string }> }
   | { loai: 'xong'; hanMuc: HanMucUi | null; tienUsd: number; daLuoc: number; soFileDaSua: number }
@@ -217,6 +220,9 @@ export function quyenCuaCuoc(id: string): { choSua: boolean; choChayLenh: boolea
  */
 export function datGocChoCuoc(id: string, goc: string | null): void {
   const c = layCuoc(id);
+  // Đổi thư mục ⇒ lệnh nền cũ đang chạy trong thư mục CŨ. Giữ lại thì agent đọc
+  // đầu ra của một dev server thuộc dự án khác và kết luận về dự án này.
+  if (c.goc !== goc) dungLenhNenCua(id);
   // Đánh dấu ĐÃ QUYẾT dù giá trị có đổi hay không — bấm ✕ trên một tab chưa
   // chọn gì vẫn là một quyết định ("tab này không đọc dự án nào").
   c.daChonGoc = true;
@@ -252,6 +258,9 @@ export function datQuyenChoCuoc(id: string, quyen: { choSua?: boolean; choChayLe
 
 export function dongCuoc(id: string): void {
   huyLuotCua(id);
+  // Dọn lệnh nền của cuộc này. Không dọn thì đóng tab để lại một `next dev` ăn
+  // CPU mãi mãi mà không còn giao diện nào nhắc tới nó.
+  dungLenhNenCua(id);
   cuoc.delete(id);
 }
 
@@ -446,7 +455,12 @@ export async function chayLuot(
   if (boiCanh.goc) {
     capabilities.push('fs_read', 'git_read', 'plan', 'subagent');
     if (boiCanh.choSua) capabilities.push('fs_write');
-    if (boiCanh.choChayLenh) capabilities.push('shell');
+    // Lệnh nền và ghi git đi CÙNG hai quyền đã có, không thêm công tắc thứ ba
+    // và thứ tư: người dùng đã phải cân nhắc hai lần rồi, và mỗi lời gọi vẫn
+    // phải duyệt riêng. `git_write` theo `choSua` vì commit là ghi vào repo;
+    // `shell_nen` theo `choChayLenh` vì nó vẫn là chạy lệnh.
+    if (boiCanh.choChayLenh) capabilities.push('shell', 'shell_nen');
+    if (boiCanh.choSua) capabilities.push('git_write');
   }
 
   // Đọc LẠI ở mỗi lượt người dùng gõ — xem ghi chú đầu `ghiChu.ts`. Đọc một
@@ -540,6 +554,25 @@ export async function chayLuot(
             }
           : undefined;
 
+        const boiCanhNen = boiCanh.choChayLenh
+          ? {
+              cuocId: c.id,
+              so: c.so,
+              signal: dieuKhien.signal,
+              xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) =>
+                phat({ loai: 'xinPhepLenh', id: y.id, lenh: y.duongDan, phanLoai: y.phanLoai }),
+            }
+          : undefined;
+
+        const boiCanhGit = boiCanh.choSua
+          ? {
+              so: c.so,
+              signal: dieuKhien.signal,
+              xinPhepGit: (y: YeuCauXinPhep & { viec: 'commit' | 'pr'; chiTiet: string }) =>
+                phat({ loai: 'xinPhepGit', id: y.id, viec: y.viec, chiTiet: y.chiTiet }),
+            }
+          : undefined;
+
         const boiCanhKeHoach = {
           keHoach: (viec: Array<{ ten: string; trangThai: string }>) => phat({ loai: 'keHoach', viec }),
         };
@@ -554,7 +587,9 @@ export async function chayLuot(
         } else if (goi.name === 'giao_viec_phu') {
           kq = await chayViecPhu(c, goi.args, boiCanh, phien.sessionToken, dieuKhien.signal, phat);
         } else {
-          kq = await chayToolAgent(boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh, boiCanhKeHoach);
+          kq = await chayToolAgent(
+            boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh, boiCanhKeHoach, boiCanhNen, boiCanhGit,
+          );
         }
         c.hoiThoai.push({ role: 'tool', tool_call_id: goi.id, content: kq.noiDung });
         phat({ loai: 'tool', ten: goi.name, tomTat: kq.tomTat, vong: 'may' });

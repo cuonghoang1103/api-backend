@@ -23,7 +23,9 @@ import { promisify } from 'node:util';
 
 import { soSanhDong, type KetQuaDiff } from './diff';
 import { fileBiCam, LoiNguc, moTrongNguc, thuMucBiCam, TRAN_BYTE_FILE } from './jail';
+import { chuanBiCommit, chuanBiPr, commit, taoPr } from './gitViet';
 import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
+import { batLenhNen, docDauRaNen, dungLenhNen } from './lenhNen';
 import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
 import type { SoCuoc } from './so';
 
@@ -46,6 +48,27 @@ export interface BoiCanhGhi {
 /** Ngữ cảnh cho `cap_nhat_ke_hoach`. Không chạm đĩa — chỉ đẩy lên màn hình. */
 export interface BoiCanhKeHoach {
   keHoach: (viec: Array<{ ten: string; trangThai: string }>) => void;
+}
+
+/**
+ * Ngữ cảnh cho lệnh chạy NỀN và cho git ghi.
+ *
+ * Tách khỏi `BoiCanhLenh` vì chúng thuộc hai khả năng khác (`shell_nen`,
+ * `git_write`) và bật độc lập — gộp chung thì bật quyền chạy lệnh là tự động
+ * bật luôn quyền commit, mà hai thứ đó khác hẳn nhau về hậu quả.
+ */
+export interface BoiCanhNen {
+  cuocId: string;
+  so: SoCuoc;
+  signal: AbortSignal;
+  xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) => void;
+}
+
+export interface BoiCanhGit {
+  so: SoCuoc;
+  signal: AbortSignal;
+  /** Thẻ duyệt cho commit / PR — mang theo phần người dùng cần ĐỌC trước khi bấm. */
+  xinPhepGit: (y: YeuCauXinPhep & { viec: 'commit' | 'pr'; chiTiet: string }) => void;
 }
 
 export interface BoiCanhLenh {
@@ -132,6 +155,8 @@ export async function chayToolAgent(
   ghi?: BoiCanhGhi,
   lenh?: BoiCanhLenh,
   keHoach?: BoiCanhKeHoach,
+  nen?: BoiCanhNen,
+  gitGhi?: BoiCanhGit,
 ): Promise<KetQuaTool> {
   try {
     switch (ten) {
@@ -156,6 +181,26 @@ export async function chayToolAgent(
       case 'run_command': {
         if (!lenh) return { noiDung: 'LỖI: phiên này không bật quyền chạy lệnh.', tomTat: 'không có quyền' };
         return await toolRunCommand(goc, args, lenh);
+      }
+      case 'chay_lenh_nen': {
+        if (!nen) return { noiDung: 'LỖI: phiên này không bật quyền chạy lệnh nền.', tomTat: 'không có quyền' };
+        return await toolChayLenhNen(goc, args, nen);
+      }
+      case 'doc_dau_ra_nen': {
+        if (!nen) return { noiDung: 'LỖI: phiên này không bật quyền chạy lệnh nền.', tomTat: 'không có quyền' };
+        return toolDocDauRaNen(args);
+      }
+      case 'dung_lenh_nen': {
+        if (!nen) return { noiDung: 'LỖI: phiên này không bật quyền chạy lệnh nền.', tomTat: 'không có quyền' };
+        return toolDungLenhNen(args);
+      }
+      case 'git_commit': {
+        if (!gitGhi) return { noiDung: 'LỖI: phiên này không bật quyền ghi git.', tomTat: 'không có quyền' };
+        return await toolGitCommit(goc, args, gitGhi);
+      }
+      case 'tao_pr': {
+        if (!gitGhi) return { noiDung: 'LỖI: phiên này không bật quyền ghi git.', tomTat: 'không có quyền' };
+        return await toolTaoPr(goc, args, gitGhi);
       }
       case 'list_dir': return await toolListDir(goc, args);
       case 'read_file': return await toolReadFile(goc, args);
@@ -655,4 +700,122 @@ async function toolGitDiff(goc: string, args: Record<string, unknown>): Promise<
     noiDung: dong.slice(0, MAX_DONG_DIFF).join('\n') + (cat ? `\n[… diff bị cắt, còn ${dong.length - MAX_DONG_DIFF} dòng. Truyền "path" để xem hẹp hơn.]` : ''),
     tomTat: `${Math.min(dong.length, MAX_DONG_DIFF)} dòng diff${cat ? ' (cắt)' : ''}`,
   };
+}
+
+// ─── Lệnh chạy NỀN ───────────────────────────────────────────────
+
+async function toolChayLenhNen(
+  goc: string, args: Record<string, unknown>, nen: BoiCanhNen,
+): Promise<KetQuaTool> {
+  const lenh = typeof args.lenh === 'string' ? args.lenh.trim() : '';
+  if (!lenh) return { noiDung: 'LỖI: thiếu tham số "lenh".', tomTat: 'thiếu lệnh' };
+
+  // Cùng bộ phân loại nguy hiểm như lệnh đồng bộ. Chạy nền KHÔNG làm một lệnh
+  // bớt nguy hiểm — `rm -rf` ở nền vẫn xoá đúng ngần ấy file.
+  const phanLoai = phanLoaiLenh(lenh);
+  const quyet = await hoiNguoiDung(
+    { ten: 'run_command', duongDan: lenh, khoa: `nen:${lenh}`, choNho: phanLoai.choNho },
+    (y) => nen.xinPhepLenh({ ...y, phanLoai }),
+    nen.signal,
+    nen.so.quyenDaCap,
+  );
+  if (quyet === 'tuChoi') {
+    return { noiDung: `NGƯỜI DÙNG TỪ CHỐI chạy nền: ${lenh}`, tomTat: 'bị từ chối' };
+  }
+
+  const kq = batLenhNen({ lenh, cwd: goc, cuocId: nen.cuocId });
+  if (!kq.ok) return { noiDung: `LỖI: ${kq.loi}`, tomTat: 'không bật được' };
+  return {
+    noiDung:
+      `Đã khởi động ở nền, mã "${kq.id}".\n`
+      + 'Nó chạy tiếp kể cả sau khi lượt này kết thúc. Hãy đợi vài giây rồi gọi '
+      + `doc_dau_ra_nen với id "${kq.id}" để xem nó lên được không — lệnh chết ngay lúc `
+      + 'khởi động trông y hệt lệnh đang chạy tốt.',
+    tomTat: `nền ${kq.id}`,
+  };
+}
+
+function toolDocDauRaNen(args: Record<string, unknown>): KetQuaTool {
+  const id = typeof args.id === 'string' ? args.id : '';
+  const r = docDauRaNen(id);
+  if (!r.ok) return { noiDung: `LỖI: ${r.loi}`, tomTat: 'không có mã đó' };
+  const trangThai = r.dangChay
+    ? `đang chạy (${r.giay}s)`
+    : `đã dừng, mã thoát ${r.ma ?? 'bị giết'} (${r.giay}s)`;
+  const than = r.coGiMoi
+    ? r.moi
+    : '(chưa in thêm gì kể từ lần đọc trước — với server thì đây thường là bình thường)';
+  return {
+    noiDung: `Lệnh: ${r.lenh}\nTrạng thái: ${trangThai}\n\n${than}`,
+    tomTat: trangThai,
+  };
+}
+
+function toolDungLenhNen(args: Record<string, unknown>): KetQuaTool {
+  const id = typeof args.id === 'string' ? args.id : '';
+  const r = dungLenhNen(id);
+  return r.ok
+    ? { noiDung: `Đã dừng lệnh nền "${id}" (giết cả nhóm tiến trình con).`, tomTat: 'đã dừng' }
+    : { noiDung: `LỖI: ${r.loi}`, tomTat: 'không dừng được' };
+}
+
+// ─── Git GHI ─────────────────────────────────────────────────────
+
+async function toolGitCommit(
+  goc: string, args: Record<string, unknown>, g: BoiCanhGit,
+): Promise<KetQuaTool> {
+  const loiNhan = typeof args.loi_nhan === 'string' ? args.loi_nhan.trim() : '';
+  if (!loiNhan) return { noiDung: 'LỖI: thiếu "loi_nhan".', tomTat: 'thiếu lời nhắn' };
+
+  const cb = await chuanBiCommit(goc);
+  if (!cb.ok) return { noiDung: `LỖI: ${cb.loi}`, tomTat: 'không commit được' };
+
+  // Thẻ duyệt hiện ĐÚNG những gì sắp xảy ra: nhánh, danh sách file, lời nhắn.
+  // Người dùng duyệt cái họ ĐỌC, không phải duyệt một tên hàm.
+  const chiTiet =
+    `Nhánh: ${cb.nhanh}\n\n${cb.file!.map((f: string) => `  ${f}`).join('\n')}`
+    + (cb.daChan?.length ? `\n\nBỊ LOẠI (file bí mật): ${cb.daChan.join(', ')}` : '')
+    + `\n\n─── lời nhắn ───\n${loiNhan}`;
+
+  const quyet = await hoiNguoiDung(
+    { ten: 'git_commit', duongDan: `commit ${cb.file!.length} file lên ${cb.nhanh}`, khoa: `commit:${Date.now()}`, choNho: false },
+    (y) => g.xinPhepGit({ ...y, viec: 'commit', chiTiet }),
+    g.signal,
+    g.so.quyenDaCap,
+  );
+  if (quyet === 'tuChoi') return { noiDung: 'NGƯỜI DÙNG TỪ CHỐI commit.', tomTat: 'bị từ chối' };
+
+  const kq = await commit(goc, loiNhan, cb.file!);
+  return kq.ok
+    ? { noiDung: kq.noi, tomTat: 'đã commit' }
+    : { noiDung: `LỖI: ${kq.loi}`, tomTat: 'commit hỏng' };
+}
+
+async function toolTaoPr(
+  goc: string, args: Record<string, unknown>, g: BoiCanhGit,
+): Promise<KetQuaTool> {
+  const tieuDe = typeof args.tieu_de === 'string' ? args.tieu_de.trim() : '';
+  const than = typeof args.than === 'string' ? args.than : '';
+  if (!tieuDe) return { noiDung: 'LỖI: thiếu "tieu_de".', tomTat: 'thiếu tiêu đề' };
+
+  const cb = await chuanBiPr(goc);
+  if (!cb.ok) return { noiDung: `LỖI: ${cb.loi}`, tomTat: 'không mở PR được' };
+
+  const chiTiet =
+    `Sẽ ĐẨY nhánh "${cb.nhanh}" lên origin${cb.daCoTrenRemote ? ' (đã có sẵn trên đó)' : ' (nhánh mới)'}`
+    + `${cb.soCommit ? `, ${cb.soCommit} commit` : ''}, rồi mở Pull Request.\n\n`
+    + `─── tiêu đề ───\n${tieuDe}\n\n─── mô tả ───\n${than.slice(0, 1500)}`;
+
+  const quyet = await hoiNguoiDung(
+    { ten: 'tao_pr', duongDan: `mở PR từ ${cb.nhanh}`, khoa: `pr:${Date.now()}`, choNho: false },
+    (y) => g.xinPhepGit({ ...y, viec: 'pr', chiTiet }),
+    g.signal,
+    g.so.quyenDaCap,
+  );
+  if (quyet === 'tuChoi') return { noiDung: 'NGƯỜI DÙNG TỪ CHỐI mở PR.', tomTat: 'bị từ chối' };
+
+  const kq = await taoPr(goc, tieuDe, than);
+  if (kq.ok) return { noiDung: kq.noi, tomTat: 'đã mở PR' };
+  // `noi` có thể mang một sự thật quan trọng: nhánh ĐÃ được đẩy lên dù PR hỏng.
+  return { noiDung: `${kq.noi ? kq.noi + '\n' : ''}LỖI: ${kq.loi}`, tomTat: 'PR hỏng' };
 }

@@ -36,6 +36,7 @@ export type MucHienThi =
   /** Thẻ duyệt LỆNH. Khác thẻ sửa file: hiện chuỗi lệnh + lý do nguy hiểm. */
   | { kieu: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh; xong?: 'dongY' | 'tuChoi' }
   | { kieu: 'xinPhepMcp'; id: string; server: string; tool: string; args: string; xong?: 'dongY' | 'tuChoi' }
+  | { kieu: 'xinPhepGit'; id: string; viec: 'commit' | 'pr'; chiTiet: string; xong?: 'dongY' | 'tuChoi' }
   /**
    * Đầu ra lệnh, gom dần khi lệnh còn đang chạy.
    *
@@ -180,6 +181,12 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
             kieu: 'xinPhepMcp', id: e.id, server: e.server, tool: e.tool, args: e.args,
           }]);
           break;
+        case 'xinPhepGit':
+          datDangNghi(false);
+          datMuc((truoc) => [...truoc, {
+            kieu: 'xinPhepGit', id: e.id, viec: e.viec, chiTiet: e.chiTiet,
+          }]);
+          break;
         case 'lenhRa':
           datMuc((truoc) => {
             const cuoi = truoc[truoc.length - 1];
@@ -197,6 +204,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
             (m.kieu === 'xinPhep' && m.the.id === e.id)
             || (m.kieu === 'xinPhepLenh' && m.id === e.id)
             || (m.kieu === 'xinPhepMcp' && m.id === e.id)
+            || (m.kieu === 'xinPhepGit' && m.id === e.id)
               ? { ...m, xong: e.dongY ? 'dongY' : 'tuChoi' }
               : m,
           ));

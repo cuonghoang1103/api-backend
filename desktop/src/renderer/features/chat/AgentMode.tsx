@@ -25,7 +25,7 @@ import type { AgentInfo, AgentMcpTrangThai, AgentViec, AgentWorktree, MucNoLuc }
 import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
-import { XinPhep, XinPhepLenh, XinPhepMcp } from './XinPhep';
+import { XinPhep, XinPhepGit, XinPhepLenh, XinPhepMcp } from './XinPhep';
 
 export function AgentMode({
   cuocId,
@@ -365,6 +365,20 @@ export function AgentMode({
               );
             }
             return <XinPhepLenh key={i} id={m.id} lenh={m.lenh} phanLoai={m.phanLoai} traLoi={traLoiXinPhep} />;
+          }
+          if (m.kieu === 'xinPhepGit') {
+            if (m.xong) {
+              return (
+                <div key={i} className="ct-agent-tool" data-vong="may" data-xong={m.xong}>
+                  {m.xong === 'dongY' ? <Check size={12} aria-hidden /> : <X size={12} aria-hidden />}
+                  <code>{m.viec === 'pr' ? 'mở PR' : 'commit'}</code>
+                  <span className="ct-agent-tool-tomtat">
+                    {m.xong === 'dongY' ? 'đã duyệt' : 'đã từ chối'}
+                  </span>
+                </div>
+              );
+            }
+            return <XinPhepGit key={i} id={m.id} viec={m.viec} chiTiet={m.chiTiet} traLoi={traLoiXinPhep} />;
           }
           if (m.kieu === 'xinPhepMcp') {
             if (m.xong) {

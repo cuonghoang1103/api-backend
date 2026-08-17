@@ -106,6 +106,9 @@ async function bootstrap(): Promise<void> {
   app.on('will-quit', () => {
     void import('./agent/mcp').then(({ tatHet }) => tatHet()).catch(() => {});
     void import('./browser').then(({ huy }) => huy()).catch(() => {});
+    // Lệnh nền SỐNG LÂU HƠN lượt sinh ra nó — đó là điểm của nó. Nhưng nó không
+    // được sống lâu hơn cả app: thiếu dòng này là để lại `npm run dev` mồ côi.
+    void import('./agent/lenhNen').then(({ dungMoiLenhNen }) => dungMoiLenhNen()).catch(() => {});
   });
 
   app.on('activate', () => {

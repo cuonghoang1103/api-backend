@@ -63,6 +63,15 @@ export function ChatMode({ pro }: { pro: boolean }) {
   const [bac, datBac] = useState<string>('cuongmini-3.11');
   const [dangChay, datDangChay] = useState(false);
   const [dangCho, datDangCho] = useState(false);
+  /**
+   * Đã chờ bao nhiêu giây.
+   *
+   * ⚠️ Đây là phần vá cảm giác "load mãi", và nó là vá THẬT chứ không phải trang
+   * trí. Đo 17/08: chữ đầu tiên về sau 3–4s là bình thường, nhưng cổng có lúc
+   * vọt lên 35s. Một con quay không đếm thì 4 giây và 40 giây trông y hệt nhau,
+   * nên người dùng không phân biệt được "đang chạy" với "treo rồi".
+   */
+  const [choGiay, datChoGiay] = useState(0);
   const [loi, datLoi] = useState<string | null>(null);
   /** Máy chủ đã HẠ BẬC lượt này chưa, và vì sao — xem khung `model` của SSE. */
   const [roiBac, datRoiBac] = useState<string | null>(null);
@@ -86,6 +95,13 @@ export function ChatMode({ pro }: { pro: boolean }) {
     if (!el) return;
     if (el.scrollHeight - el.scrollTop - el.clientHeight < 120) el.scrollTop = el.scrollHeight;
   }, [luot, dangCho]);
+
+  useEffect(() => {
+    if (!dangCho) { datChoGiay(0); return; }
+    const t0 = Date.now();
+    const id = setInterval(() => datChoGiay(Math.round((Date.now() - t0) / 1000)), 500);
+    return () => clearInterval(id);
+  }, [dangCho]);
 
   const napDsPhien = useCallback(async () => {
     if (!api) return;
@@ -375,7 +391,13 @@ export function ChatMode({ pro }: { pro: boolean }) {
         {dangCho && (
           <div className="ct-agent-nghi">
             <Loader2 size={13} aria-hidden className="ct-spin" />
-            <span>Đang trả lời…</span>
+            <span>
+              Đang trả lời… {choGiay}s
+              {/* Quá 10s thì nói RÕ nguyên nhân. Người dùng đang ngồi đoán xem
+                  app hỏng hay mạng hỏng; nói thật là "cổng AI đang chậm" vừa
+                  đúng vừa cho họ một lựa chọn (đổi bậc, hoặc chờ). */}
+              {choGiay >= 10 && ' — cổng AI đang chậm, không phải app treo. Bấm Dừng nếu muốn thử lại.'}
+            </span>
           </div>
         )}
         {loi && <div className="ct-notice" data-tone="err"><span>{loi}</span></div>}

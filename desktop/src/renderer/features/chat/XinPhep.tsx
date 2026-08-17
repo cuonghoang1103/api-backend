@@ -16,7 +16,7 @@
  *     Đây là chỗ đổi chác giữa phiền và an toàn, và nó nghiêng theo cách người
  *     ta thật sự làm việc: sửa sâu vài file, không rải khắp dự án.
  */
-import { AlertTriangle, Check, CheckCheck, FilePlus2, FilePen, Plug, Terminal, X } from 'lucide-react';
+import { AlertTriangle, Check, CheckCheck, FilePlus2, FilePen, GitCommitHorizontal, GitPullRequest, Plug, Terminal, X } from 'lucide-react';
 import type { AgentDiff, AgentPhanLoaiLenh, AgentQuyetDinh } from '../../../shared/ipc';
 
 export interface TheXinPhep {
@@ -225,6 +225,69 @@ export function XinPhepMcp({
         <button type="button" className="ct-btn" onClick={() => traLoi(id, 'choPhep')}>
           <Check size={14} aria-hidden />
           Cho phép lần này
+        </button>
+        <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
+          <X size={14} aria-hidden />
+          Từ chối
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Thẻ duyệt COMMIT / MỞ PR.
+ *
+ * ─── HAI VIỆC, HAI MỨC HẬU QUẢ KHÁC HẲN NHAU ───
+ * Commit là thay đổi CỤC BỘ — sai thì `git reset` là xong. Mở PR thì ĐẨY nhánh
+ * lên origin và tạo một thứ người khác nhìn thấy, nhận thông báo, và có thể đã
+ * đọc trước khi bạn kịp rút lại. Nên PR hiện cảnh báo riêng, và nút của nó nói
+ * rõ là "đẩy lên" chứ không phải một chữ "OK" chung chung.
+ *
+ * Cả hai đều KHÔNG có nút "đừng hỏi lại": ghi vào lịch sử git và đẩy ra ngoài
+ * không được phép trở thành thói quen một cú bấm.
+ */
+export function XinPhepGit({
+  id,
+  viec,
+  chiTiet,
+  traLoi,
+}: {
+  id: string;
+  viec: 'commit' | 'pr';
+  chiTiet: string;
+  traLoi: (id: string, q: AgentQuyetDinh) => void;
+}) {
+  const laPr = viec === 'pr';
+  return (
+    <div className="ct-xinphep" data-muc={laPr ? 'nguyhiem' : 'cankiem'}>
+      <div className="ct-xinphep-dau">
+        {laPr ? <GitPullRequest size={14} aria-hidden /> : <GitCommitHorizontal size={14} aria-hidden />}
+        <span>{laPr ? 'Agent muốn ĐẨY nhánh và mở Pull Request' : 'Agent muốn commit'}</span>
+      </div>
+
+      {/* Text thô trong `<pre>`: đây là tên file và lời nhắn do model soạn —
+          không được dựng thành HTML trong renderer. */}
+      <pre className="ct-mcp-args">{chiTiet}</pre>
+
+      {laPr && (
+        <div className="ct-notice" data-tone="err" style={{ margin: '8px 0 0' }}>
+          <AlertTriangle size={15} aria-hidden />
+          <span>
+            <strong>Việc này đi RA NGOÀI.</strong> Nhánh sẽ nằm trên origin và PR sẽ hiện
+            cho người khác cùng repo — họ nhận thông báo ngay. Không có nút hoàn tác.
+          </span>
+        </div>
+      )}
+
+      <div className="ct-xinphep-nut">
+        <button
+          type="button"
+          className={laPr ? 'ct-btn ct-xinphep-lieu' : 'ct-btn'}
+          onClick={() => traLoi(id, 'choPhep')}
+        >
+          <Check size={14} aria-hidden />
+          {laPr ? 'Đẩy và mở PR' : 'Commit'}
         </button>
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
           <X size={14} aria-hidden />

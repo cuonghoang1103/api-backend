@@ -482,6 +482,14 @@ export type AgentUiEvent = { cuocId: string } & (
    * quyết định: `mcp__db__query` nghe vô hại tới khi nhìn thấy câu lệnh nó chạy.
    */
   | { loai: 'xinPhepMcp'; id: string; server: string; tool: string; args: string }
+  /**
+   * Xin phép COMMIT hoặc MỞ PR.
+   *
+   * `chiTiet` mang đúng thứ người dùng phải đọc trước khi bấm — nhánh, danh
+   * sách file, lời nhắn (commit) hoặc nhánh + tiêu đề + mô tả (PR). Một thẻ chỉ
+   * ghi "agent muốn commit" thì không ai duyệt được gì cả.
+   */
+  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr'; chiTiet: string }
   /** Đầu ra của lệnh, chảy ra khi nó còn đang chạy. */
   | { loai: 'lenhRa'; mau: string }
   /** Agent công bố/cập nhật danh sách việc. Luôn là TOÀN BỘ danh sách. */

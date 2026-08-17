@@ -24,8 +24,25 @@ const RELEASE_BASE =
   'https://github.com/cuonghoang1103/cuongthai-desktop/releases/latest/download';
 const RELEASES_PAGE = 'https://github.com/cuonghoang1103/cuongthai-desktop/releases';
 
-/** Must match `version` in desktop/package.json. */
-const VERSION = '0.2.1';
+/**
+ * Phiên bản DỰ PHÒNG, chỉ dùng khi không hỏi được GitHub.
+ *
+ * ⚠️ ĐỪNG dựa vào hằng số này để dựng link tải. Trước 18/08/2026 trang này ghép
+ * `/releases/latest/download` (LUÔN trỏ bản mới nhất) với một số phiên bản gõ
+ * cứng ở đây, nên nó chỉ đúng đúng một khoảnh khắc: lúc ai đó vừa sửa tay con
+ * số. Từ bản 0.3.0 trở đi mọi nút tải đều 404 — địa chỉ hỏi
+ * `CuongThai-Setup-0.2.1.exe` trong bản phát hành 0.5.2, và file đó không tồn
+ * tại ở đó. Không có gì báo lỗi vì hằng số vẫn "hợp lệ".
+ *
+ * Phiên bản thật lấy từ GitHub lúc mở trang. Hỏng thì nút tải trỏ về trang
+ * danh sách bản phát hành — người dùng tự chọn — chứ KHÔNG bao giờ trỏ vào một
+ * địa chỉ đoán mò.
+ */
+const FALLBACK_VERSION = '0.5.3';
+const LATEST_API = 'https://api.github.com/repos/cuonghoang1103/cuongthai-desktop/releases/latest';
+
+interface ReleaseAsset { name: string; browser_download_url: string; size: number }
+interface ReleaseInfo { version: string; assets: ReleaseAsset[] }
 
 type Platform = 'mac-arm' | 'mac-intel' | 'windows' | 'linux' | 'unknown';
 
@@ -37,7 +54,7 @@ interface Build {
   size: string;
 }
 
-const BUILDS: Build[] = [
+const buildsFor = (VERSION: string): Build[] => [
   {
     id: 'mac-arm',
     label: 'macOS · Apple Silicon',
@@ -55,7 +72,7 @@ const BUILDS: Build[] = [
   {
     id: 'windows',
     label: 'Windows',
-    detail: '64-bit, Windows 10 or later',
+    detail: '64-bit · Windows 10 và 11 (cùng một bản cài)',
     file: `CuongThai-Setup-${VERSION}.exe`,
     size: '~85 MB',
   },
@@ -112,7 +129,7 @@ function detectPlatform(): Platform {
  * written to be *readable*: no piping a remote script straight into a shell,
  * because nobody can audit what they are about to run that way.
  */
-const TERMINAL: { id: Platform | 'linux-deb'; title: string; shell: string; code: string }[] = [
+const terminalFor = (VERSION: string): { id: Platform | 'linux-deb'; title: string; shell: string; code: string }[] => [
   {
     id: 'mac-arm',
     title: 'macOS · Apple Silicon (M1–M4)',
@@ -199,19 +216,66 @@ function CopyBlock({ code }: { code: string }) {
 export default function DownloadPage() {
   const [platform, setPlatform] = useState<Platform>('unknown');
   const [showTerminal, setShowTerminal] = useState(false);
+  const [release, setRelease] = useState<ReleaseInfo | null>(null);
+  /** Hỏi GitHub hỏng (mất mạng, hoặc chạm trần 60 lượt/giờ cho mỗi IP). */
+  const [lookupFailed, setLookupFailed] = useState(false);
 
   useEffect(() => {
     setPlatform(detectPlatform());
   }, []);
 
-  const primary = BUILDS.find((build) => build.id === platform);
-  const others = BUILDS.filter((build) => build.id !== platform);
+  useEffect(() => {
+    let alive = true;
+    fetch(LATEST_API, { headers: { Accept: 'application/vnd.github+json' } })
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
+      .then((json: { tag_name?: string; name?: string; assets?: ReleaseAsset[] }) => {
+        if (!alive) return;
+        const tag = String(json.tag_name ?? json.name ?? '').replace(/^v/, '');
+        if (!tag) throw new Error('không đọc được số phiên bản');
+        setRelease({ version: tag, assets: json.assets ?? [] });
+      })
+      .catch(() => { if (alive) setLookupFailed(true); });
+    return () => { alive = false; };
+  }, []);
+
+  const version = release?.version ?? FALLBACK_VERSION;
+  const builds = buildsFor(version);
+  const terminal = terminalFor(version);
+
+  /**
+   * Địa chỉ tải của một file.
+   *
+   * Ưu tiên `browser_download_url` mà GitHub trả về — đó là địa chỉ THẬT, không
+   * phải tên file đoán ra. Không tìm thấy thì trả null, và nút sẽ trỏ về trang
+   * danh sách bản phát hành. Thà bắt người dùng bấm thêm một lần còn hơn ném
+   * họ vào một trang 404.
+   */
+  const urlFor = (file: string): string | null => {
+    const asset = release?.assets.find((a) => a.name === file);
+    if (asset) return asset.browser_download_url;
+    return release ? null : (lookupFailed ? null : `${RELEASE_BASE}/${file}`);
+  };
+
+  /**
+   * Dung lượng thật của file, lấy từ GitHub.
+   *
+   * Con số gõ trong `buildsFor` chỉ là ước lượng lúc viết trang và đã lệch xa:
+   * ghi "~85 MB" cho Windows trong khi bản 0.5.3 nặng 114 MB. Người dùng mạng
+   * yếu đọc con số đó để quyết định có tải hay không, nên sai 30 MB là sai thật.
+   */
+  const sizeFor = (file: string, fallback: string): string => {
+    const asset = release?.assets.find((a) => a.name === file);
+    return asset ? `${Math.round(asset.size / 1048576)} MB` : fallback;
+  };
+
+  const primary = builds.find((build) => build.id === platform);
+  const others = builds.filter((build) => build.id !== platform);
 
   // Put the visitor's own OS first in the terminal list, but keep all of them
   // visible — people install on machines they are not currently sitting at.
   const terminalOrdered = [
-    ...TERMINAL.filter((t) => t.id === platform),
-    ...TERMINAL.filter((t) => t.id !== platform),
+    ...terminal.filter((t) => t.id === platform),
+    ...terminal.filter((t) => t.id !== platform),
   ];
 
   return (
@@ -220,19 +284,19 @@ export default function DownloadPage() {
         <h1 className="text-3xl font-bold sm:text-4xl">Get CuongThai for desktop</h1>
         <p className="mx-auto mt-3 max-w-xl text-[var(--text-secondary)]">
           Your workspace as a native app — with Odin the assistant, offline
-          reading, and drafts that never get lost. Version {VERSION}.
+          reading, and drafts that never get lost. Version {version}.
         </p>
       </header>
 
       <section className="mt-10">
         {primary ? (
           <a
-            href={`${RELEASE_BASE}/${primary.file}`}
+            href={urlFor(primary.file) ?? RELEASES_PAGE}
             className="mx-auto flex max-w-md flex-col items-center rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-7 text-center transition hover:border-indigo-500"
           >
             <span className="text-lg font-semibold">Download for {primary.label}</span>
             <span className="mt-1 text-sm text-[var(--text-secondary)]">
-              {primary.detail} · {primary.size}
+              {primary.detail} · {sizeFor(primary.file, primary.size)}
             </span>
             <span className="mt-5 rounded-xl bg-indigo-600 px-7 py-3 font-semibold text-white">
               Download
@@ -253,7 +317,7 @@ export default function DownloadPage() {
           {others.map((build) => (
             <li key={build.id}>
               <a
-                href={`${RELEASE_BASE}/${build.file}`}
+                href={urlFor(build.file) ?? RELEASES_PAGE}
                 className="flex items-center justify-between rounded-xl border border-[var(--border-color)] px-4 py-3 transition hover:border-indigo-500"
               >
                 <span>
@@ -262,13 +326,13 @@ export default function DownloadPage() {
                     {build.detail}
                   </span>
                 </span>
-                <span className="text-sm text-[var(--text-secondary)]">{build.size}</span>
+                <span className="text-sm text-[var(--text-secondary)]">{sizeFor(build.file, build.size)}</span>
               </a>
             </li>
           ))}
           <li>
             <a
-              href={`${RELEASE_BASE}/CuongThai-${VERSION}.deb`}
+              href={urlFor(`CuongThai-${version}.deb`) ?? RELEASES_PAGE}
               className="flex items-center justify-between rounded-xl border border-[var(--border-color)] px-4 py-3 transition hover:border-indigo-500"
             >
               <span>
@@ -371,7 +435,7 @@ export default function DownloadPage() {
             <div className="font-medium">Linux (AppImage)</div>
             <p className="text-[var(--text-secondary)]">Make it executable first:</p>
             <code className="mt-1 block overflow-x-auto rounded-lg bg-black/30 p-2 text-xs">
-              chmod +x CuongThai-{VERSION}.AppImage
+              chmod +x CuongThai-{version}.AppImage
             </code>
           </div>
         </div>

@@ -58,6 +58,35 @@ export function UpdateBanner({ collapsed }: { collapsed: boolean }) {
     );
   }
 
+  /**
+   * macOS: có bản mới nhưng phải TẢI TAY.
+   *
+   * Không có nút "cài" ở đây vì không cài được — Squirrel.Mac từ chối bản chưa
+   * ký. Nút này mở trang tải bằng trình duyệt hệ thống, và câu chữ nói THẲNG là
+   * phải tải tay, thay vì để người dùng bấm một nút "cập nhật" rồi không thấy
+   * gì xảy ra.
+   */
+  if (status.state === 'manual') {
+    return (
+      <button
+        type="button"
+        className="ct-update-banner"
+        data-tone="ready"
+        onClick={() => void window.cuongthai?.app.openExternal(
+          'https://github.com/cuonghoang1103/cuongthai-desktop/releases/latest',
+        )}
+        title={`Đã có bản ${status.version}. Bản macOS chưa ký số nên phải tải và cài tay — bấm để mở trang tải.`}
+      >
+        <RotateCw size={13} aria-hidden />
+        {!collapsed && (
+          <span>
+            Có bản <strong>{status.version}</strong> — tải tay
+          </span>
+        )}
+      </button>
+    );
+  }
+
   if (status.state === 'ready') {
     return (
       <button

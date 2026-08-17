@@ -506,14 +506,27 @@ export class AIService {
   }
 
   // ─── Get all sessions ────────────────────────────────────
-  async getSessions(userId?: number) {
+  /**
+   * Danh sách cuộc chat.
+   *
+   * `folderId` lọc theo thư mục. Ba trạng thái, cố ý phân biệt:
+   *   undefined  → TẤT CẢ (màn hình mặc định)
+   *   'none'     → chỉ những cuộc CHƯA xếp thư mục nào
+   *   '<id>'     → chỉ trong thư mục đó
+   * Gộp `undefined` với "chưa phân loại" là mất đường xem toàn bộ.
+   */
+  async getSessions(userId?: number, folderId?: string) {
+    const loc = folderId === 'none' ? { folderId: null }
+      : folderId ? { folderId }
+      : {};
     return prisma.chatSession.findMany({
-      where: userId ? { userId } : undefined,
+      where: userId ? { userId, ...loc } : undefined,
       include: {
         _count: { select: { messages: true } },
+        folder: { select: { id: true, ten: true, mau: true } },
       },
       orderBy: { updatedAt: 'desc' },
-      take: 50,
+      take: 100,
     });
   }
 

@@ -528,7 +528,8 @@ router.post('/chat/sync', optionalAuth, async (req: any, res: Response<ApiRespon
 // ════════════════════════════════════════════════════════════════
 router.get('/chat/sessions', optionalAuth, async (req: any, res: Response<ApiResponse>, next) => {
   try {
-    const sessions = await aiService.getSessions(req.userId);
+    const folderId = typeof req.query.folderId === 'string' ? req.query.folderId : undefined;
+    const sessions = await aiService.getSessions(req.userId, folderId);
     res.json({ success: true, data: sessions });
   } catch (error) {
     next(error);
@@ -546,6 +547,80 @@ router.post('/chat/sessions', authenticate, async (req: any, res: Response<ApiRe
   } catch (error) {
     next(error);
   }
+});
+
+// ════════════════════════════════════════════════════════════════
+// THƯ MỤC CHAT — gom cuộc theo chủ đề
+//
+// Vì sao cần: người dùng hỏi nhiều chủ đề trong một danh sách phẳng, và sau
+// vài chục cuộc thì tìm lại một câu cũ là bới đống. Thư mục cho họ tự chia.
+//
+// Tất cả đều `authenticate` (KHÔNG phải `optionalAuth`): thư mục là của một
+// người cụ thể, khách vãng lai không có gì để gom.
+// ════════════════════════════════════════════════════════════════
+router.get('/chat/folders', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const ds = await prisma.chatFolder.findMany({
+      where: { userId: req.userId },
+      include: { _count: { select: { sessions: true } } },
+      orderBy: { updatedAt: 'desc' },
+      take: 100,
+    });
+    res.json({ success: true, data: ds });
+  } catch (error) { next(error); }
+});
+
+router.post('/chat/folders', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const ten = String((req.body as { ten?: unknown }).ten ?? '').trim().slice(0, 80);
+    if (!ten) throw new AppError('Tên thư mục không được để trống', 400, 'BAD_NAME');
+    const mau = typeof (req.body as { mau?: unknown }).mau === 'string'
+      ? String((req.body as { mau: string }).mau).slice(0, 16)
+      : null;
+
+    // Trùng tên ⇒ trả về CHÍNH thư mục đang có, không tạo thêm và cũng không
+    // ném lỗi. Người dùng gõ lại một cái tên họ đã có nghĩa là họ muốn dùng nó.
+    const daCo = await prisma.chatFolder.findFirst({ where: { userId: req.userId, ten } });
+    if (daCo) { res.status(200).json({ success: true, data: daCo }); return; }
+
+    const moi = await prisma.chatFolder.create({ data: { userId: req.userId, ten, mau } });
+    res.status(201).json({ success: true, data: moi });
+  } catch (error) { next(error); }
+});
+
+router.delete('/chat/folders/:folderId', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { folderId } = req.params;
+    // Kiểm chủ sở hữu TRƯỚC KHI xoá — thiếu bước này thì bất kỳ ai biết id là
+    // xoá được thư mục của người khác.
+    const tm = await prisma.chatFolder.findFirst({ where: { id: folderId, userId: req.userId } });
+    if (!tm) throw new AppError('Không tìm thấy thư mục', 404, 'NOT_FOUND');
+
+    // Cuộc bên trong KHÔNG bị xoá — FK là ON DELETE SET NULL, chúng rơi về
+    // "Chưa phân loại". Xoá theo là biến một cú bấm dọn nhãn thành mất hàng
+    // chục cuộc hội thoại.
+    await prisma.chatFolder.delete({ where: { id: folderId } });
+    res.json({ success: true, data: { deleted: true } });
+  } catch (error) { next(error); }
+});
+
+/** Chuyển một cuộc vào thư mục (hoặc bỏ ra ngoài khi `folderId` là null). */
+router.patch('/chat/sessions/:sessionId/folder', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { sessionId } = req.params;
+    const raw = (req.body as { folderId?: unknown }).folderId;
+    const folderId = typeof raw === 'string' && raw ? raw : null;
+
+    const phien = await prisma.chatSession.findFirst({ where: { id: sessionId, userId: req.userId } });
+    if (!phien) throw new AppError('Không tìm thấy cuộc trò chuyện', 404, 'NOT_FOUND');
+
+    if (folderId) {
+      const tm = await prisma.chatFolder.findFirst({ where: { id: folderId, userId: req.userId } });
+      if (!tm) throw new AppError('Không tìm thấy thư mục', 404, 'NOT_FOUND');
+    }
+    const moi = await prisma.chatSession.update({ where: { id: sessionId }, data: { folderId } });
+    res.json({ success: true, data: moi });
+  } catch (error) { next(error); }
 });
 
 // ════════════════════════════════════════════════════════════════

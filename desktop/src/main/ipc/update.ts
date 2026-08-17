@@ -97,6 +97,29 @@ async function runCheck(): Promise<void> {
     autoUpdater.on('update-not-available', () => broadcast({ state: 'none' }));
     autoUpdater.on('update-available', (info) => {
       broadcast({ state: 'available', version: info.version });
+      /**
+       * ⛔ TRÊN macOS: KHÔNG tải, chỉ BÁO.
+       *
+       * Squirrel.Mac bắt buộc bản cập nhật phải có chữ ký hợp lệ, mà app này cố
+       * ý KHÔNG ký số (xem `identity: null` trong electron-builder.yml — người
+       * dùng đã cân nhắc giá và quyết định hoãn). Đo thật 17/08/2026: nó tải
+       * xong 130MB rồi chết ở bước cuối với
+       *
+       *   Code signature ... did not pass validation: code has no resources
+       *   but signature indicates they must be present
+       *
+       * Nên tải về là ném 130MB băng thông của người dùng vào thùng rác, MỖI
+       * LẦN có bản mới. Thà nói thẳng "có bản mới, bấm để tải" và để họ cài tay
+       * — mất một phút, nhưng thật sự lên được bản mới.
+       *
+       * Windows (NSIS) và Linux (AppImage) KHÔNG có ràng buộc này nên vẫn tự
+       * cập nhật đầy đủ. Ký được app macOS (Apple Developer, 99 $/năm) thì xoá
+       * nhánh này đi là đường tự động quay lại ngay.
+       */
+      if (process.platform === 'darwin') {
+        broadcast({ state: 'manual', version: info.version });
+        return;
+      }
       // Có bản mới thì tải luôn. Người dùng không phải bấm thêm một nút nữa —
       // và khi tải xong họ mới được hỏi có khởi động lại không.
       void autoUpdater.downloadUpdate();

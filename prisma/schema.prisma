@@ -134,6 +134,7 @@ model User {
   courseOrders            CourseOrder[]
   refundedCourseOrders    CourseOrder[]            @relation("CourseOrderRefunder")
   chatSessions            ChatSession[]
+  chatFolders             ChatFolder[]
   chatFeedback            ChatFeedback[]
   assignmentSubmissions   AssignmentSubmission[]
   aiConfigUpdates         AiConfig[]               @relation("AiConfigUpdater")
@@ -1923,18 +1924,54 @@ model PostComment {
 // 10. AI CHATBOT (RAG + Gemini)
 // ============================================================
 
+/// Thư mục gom các cuộc chat theo chủ đề ("Java", "Việc công ty"…).
+///
+/// Vì sao cần: người dùng hỏi nhiều chủ đề khác nhau trong cùng một danh sách
+/// phẳng, và sau vài chục cuộc thì tìm lại một câu hỏi cũ là bới đống. Thư mục
+/// cho họ tự chia — mỗi lần vào đúng chỗ, không lẫn ngữ cảnh.
+model ChatFolder {
+  id        String   @id @default(cuid())
+  userId    Int      @map("user_id")
+  ten       String   @db.VarChar(80)
+  /// Màu nhãn, để phân biệt bằng mắt. Rỗng = màu mặc định.
+  mau       String?  @db.VarChar(16)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessions ChatSession[]
+
+  /// Một người không có hai thư mục trùng tên — nếu không họ tự làm mình rối.
+  /// Dùng tên MẶC ĐỊNH (`userId_ten`), KHÔNG đặt `name:` tuỳ chỉnh.
+  ///
+  /// `name:` chỉ đổi tên khoá phía client, không đổi tên index trong DB — nên
+  /// nó vừa gây lệch schema vừa tạo đúng cái bẫy đã ghi trong CLAUDE.md: truy
+  /// vấn phải dùng tên tuỳ chỉnh chứ không phải khoá ghép mặc định, và quên là
+  /// lỗi lúc chạy chứ không phải lúc build.
+  @@unique([userId, ten])
+  @@index([userId], name: "idx_chat_folders_user")
+  @@map("chat_folders")
+}
+
 model ChatSession {
   id        String   @id @default(cuid())
   userId    Int?     @map("user_id")
   title     String?  @db.VarChar(255)
+  /// Thư mục chứa cuộc này. `null` = chưa xếp vào đâu ("Chưa phân loại").
+  folderId  String?  @map("folder_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   user      User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Xoá thư mục KHÔNG xoá cuộc — chúng rơi về "Chưa phân loại". Xoá theo là
+  /// một cú bấm làm mất hàng chục cuộc hội thoại, và người dùng chỉ định dọn
+  /// cái nhãn.
+  folder    ChatFolder?     @relation(fields: [folderId], references: [id], onDelete: SetNull)
   messages  ChatMessage[]
   analytics ChatAnalytics[]
 
   @@index([userId], name: "idx_chat_sessions_user")
+  @@index([folderId], name: "idx_chat_sessions_folder")
   @@index([createdAt(sort: Desc)], name: "idx_chat_sessions_created_at")
   @@map("chat_sessions")
 }

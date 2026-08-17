@@ -661,6 +661,14 @@ export type UpdateStatus =
   | { state: 'available'; version: string }
   | { state: 'downloading'; percent: number }
   | { state: 'ready'; version: string }
+  /**
+   * Có bản mới nhưng PHẢI TẢI TAY — chỉ xảy ra trên macOS.
+   *
+   * Squirrel.Mac đòi chữ ký hợp lệ để áp bản cập nhật, mà app cố ý không ký số.
+   * Tải tự động ở đây là ném 130MB của người dùng đi mỗi lần có bản mới rồi vẫn
+   * không cài được. Xem ghi chú trong `main/ipc/update.ts`.
+   */
+  | { state: 'manual'; version: string }
   | { state: 'none' }
   | { state: 'error'; message: string };
 

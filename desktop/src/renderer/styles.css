@@ -3071,6 +3071,103 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   box-shadow: var(--ct-shadow-sm);
 }
 
+/* ── Thư mục chat ── */
+.ct-tm-dai {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ct-border);
+}
+
+.ct-tm-o { display: inline-flex; align-items: center; }
+
+.ct-tm-nut {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border: 1px solid var(--ct-border);
+  border-radius: 999px;
+  background: none;
+  color: var(--ct-text-faint);
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ct-tm-nut:hover { color: var(--ct-text); }
+
+.ct-tm-nut[data-chon='true'] {
+  background: var(--ct-surface-2);
+  border-color: var(--ct-accent);
+  color: var(--ct-text);
+  font-weight: 600;
+}
+
+.ct-tm-dem {
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--ct-bg);
+  font-size: 9.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-tm-xoa {
+  display: grid;
+  place-items: center;
+  width: 15px; height: 15px;
+  margin-left: -2px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ct-text-faint);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+/* Nút xoá chỉ hiện khi rê chuột vào: nó nằm cạnh nút chọn, và hiện thường trực
+   thì mắt phải phân biệt hai nút sát nhau ở mọi thư mục. */
+.ct-tm-o:hover .ct-tm-xoa { opacity: 1; }
+.ct-tm-xoa:hover { color: var(--ct-err); }
+
+.ct-tm-tao {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.ct-tm-tao .ct-td-o {
+  padding: 4px 8px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  font-family: inherit;
+  font-size: 11.5px;
+}
+
+.ct-tm-nhan {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--ct-surface-2);
+  font-size: 9.5px;
+}
+
+.ct-tm-chon {
+  flex-shrink: 0;
+  max-width: 130px;
+  padding: 2px 4px;
+  border: 1px solid var(--ct-border);
+  border-radius: 4px;
+  background: var(--ct-bg);
+  color: var(--ct-text-faint);
+  font-family: inherit;
+  font-size: 10.5px;
+}
+
 /* ── Thanh phiên của chế độ Trò chuyện ── */
 .ct-chat-phien-phu {
   font-size: 10.5px;

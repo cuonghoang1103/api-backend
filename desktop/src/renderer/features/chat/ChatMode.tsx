@@ -18,19 +18,39 @@
  * một nút chết. Mở kênh sinh ảnh trong Console của cổng thì mới làm được.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { CircleStop, History, Loader2, MessageSquare, Plus, Send, Trash2, X } from 'lucide-react';
+import {
+  CircleStop, FolderOpen, FolderPlus, History, Loader2, MessageSquare, Plus, Send, Trash2, X,
+} from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { ChuAgent } from './markdown';
 import {
   DaiDinhKem, DinhKemDaGui, NutDinhKem, ODinhKem, useDinhKem, type TepDinhKem,
 } from './DinhKem';
 
+interface ThuMuc {
+  id: string;
+  ten: string;
+  mau: string | null;
+  _count?: { sessions: number };
+}
+
 interface PhienChat {
   id: string;
   title: string | null;
   updatedAt: string;
+  folderId: string | null;
   _count?: { messages: number };
+  folder?: { id: string; ten: string; mau: string | null } | null;
 }
+
+/**
+ * Bộ lọc thư mục đang chọn.
+ *
+ * Ba trạng thái, cố ý phân biệt: `null` = xem TẤT CẢ · `'none'` = chỉ những
+ * cuộc chưa xếp vào đâu · `<id>` = một thư mục cụ thể. Gộp "tất cả" với "chưa
+ * phân loại" là mất đường xem toàn bộ.
+ */
+type LocThuMuc = null | 'none' | string;
 
 interface Luot {
   vai: 'user' | 'assistant';
@@ -86,6 +106,9 @@ export function ChatMode({ pro }: { pro: boolean }) {
   const [phienId, datPhienId] = useState<string | null>(null);
   const [dsPhien, datDsPhien] = useState<PhienChat[]>([]);
   const [moLichSu, datMoLichSu] = useState(false);
+  const [dsThuMuc, datDsThuMuc] = useState<ThuMuc[]>([]);
+  const [loc, datLoc] = useState<LocThuMuc>(null);
+  const [tenMoi, datTenMoi] = useState('');
   const huyRef = useRef<AbortController | null>(null);
   const cuonRef = useRef<HTMLDivElement>(null);
   const dk = useDinhKem();
@@ -109,12 +132,58 @@ export function ChatMode({ pro }: { pro: boolean }) {
       // ⚠️ `api.request` ĐÃ bóc `envelope.data` (xem `unwrap` trong api/client.ts),
       // nên đây là mảng luôn — bóc `.data` lần nữa cho ra `undefined`, và danh
       // sách rỗng vĩnh viễn trong khi máy chủ trả về đủ dữ liệu.
-      const r = await api.request<PhienChat[]>('/api/v1/ai/chat/sessions');
+      const q = loc ? `?folderId=${encodeURIComponent(loc)}` : '';
+      const r = await api.request<PhienChat[]>(`/api/v1/ai/chat/sessions${q}`);
       datDsPhien(Array.isArray(r) ? r : []);
     } catch { /* mất mạng — danh sách rỗng, không phải lỗi chặn đường */ }
+  }, [api, loc]);
+
+  const napThuMuc = useCallback(async () => {
+    if (!api) return;
+    try {
+      const r = await api.request<ThuMuc[]>('/api/v1/ai/chat/folders');
+      datDsThuMuc(Array.isArray(r) ? r : []);
+    } catch { /* chưa đăng nhập hoặc mất mạng */ }
   }, [api]);
 
+  const taoThuMuc = useCallback(async () => {
+    const ten = tenMoi.trim();
+    if (!ten || !api) return;
+    try {
+      await api.request('/api/v1/ai/chat/folders', { method: 'POST', body: { ten } });
+      datTenMoi('');
+      await napThuMuc();
+    } catch (err) {
+      datLoi(`Không tạo được thư mục: ${(err as Error).message}`);
+    }
+  }, [api, tenMoi, napThuMuc]);
+
+  const xoaThuMuc = useCallback(async (id: string) => {
+    if (!api) return;
+    try {
+      await api.request(`/api/v1/ai/chat/folders/${id}`, { method: 'DELETE' });
+      // Cuộc bên trong KHÔNG mất — máy chủ đặt `folderId` về null. Nếu đang lọc
+      // theo đúng thư mục vừa xoá thì quay về xem tất cả, không để màn hình
+      // trống trơn mà người dùng tưởng mất hết.
+      if (loc === id) datLoc(null);
+      await Promise.all([napThuMuc(), napDsPhien()]);
+    } catch (err) {
+      datLoi(`Không xoá được thư mục: ${(err as Error).message}`);
+    }
+  }, [api, loc, napThuMuc, napDsPhien]);
+
+  const xepVaoThuMuc = useCallback(async (sid: string, folderId: string | null) => {
+    if (!api) return;
+    try {
+      await api.request(`/api/v1/ai/chat/sessions/${sid}/folder`, { method: 'PATCH', body: { folderId } });
+      await Promise.all([napThuMuc(), napDsPhien()]);
+    } catch (err) {
+      datLoi(`Không xếp được: ${(err as Error).message}`);
+    }
+  }, [api, napThuMuc, napDsPhien]);
+
   useEffect(() => { void napDsPhien(); }, [napDsPhien]);
+  useEffect(() => { void napThuMuc(); }, [napThuMuc]);
 
   /** Mở một phiên cũ: nạp lịch sử từ máy chủ và gõ tiếp vào chính phiên đó. */
   const moPhien = useCallback(async (id: string) => {
@@ -333,8 +402,59 @@ export function ChatMode({ pro }: { pro: boolean }) {
               <X size={14} aria-hidden />
             </button>
           </div>
+          {/* Dải thư mục. "Tất cả" và "Chưa phân loại" là HAI mục khác nhau —
+              gộp lại là mất đường xem toàn bộ. */}
+          <div className="ct-tm-dai">
+            <button type="button" className="ct-tm-nut" data-chon={loc === null} onClick={() => datLoc(null)}>
+              Tất cả
+            </button>
+            <button type="button" className="ct-tm-nut" data-chon={loc === 'none'} onClick={() => datLoc('none')}>
+              Chưa phân loại
+            </button>
+            {dsThuMuc.map((f) => (
+              <span key={f.id} className="ct-tm-o">
+                <button
+                  type="button" className="ct-tm-nut" data-chon={loc === f.id}
+                  onClick={() => datLoc(f.id)} title={`${f._count?.sessions ?? 0} cuộc`}
+                >
+                  <FolderOpen size={11} aria-hidden />
+                  {f.ten}
+                  {!!f._count?.sessions && <span className="ct-tm-dem">{f._count.sessions}</span>}
+                </button>
+                <button
+                  type="button" className="ct-tm-xoa"
+                  onClick={() => void xoaThuMuc(f.id)}
+                  title={`Xoá thư mục "${f.ten}" — các cuộc bên trong KHÔNG bị xoá, chúng về Chưa phân loại`}
+                  aria-label={`Xoá thư mục ${f.ten}`}
+                >
+                  <X size={10} aria-hidden />
+                </button>
+              </span>
+            ))}
+          </div>
+
+          <div className="ct-tm-tao">
+            <input
+              className="ct-td-o"
+              value={tenMoi}
+              placeholder="tên thư mục mới, ví dụ Java…"
+              maxLength={80}
+              onChange={(e) => datTenMoi(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.nativeEvent.isComposing) return;
+                if (e.key === 'Enter') { e.preventDefault(); void taoThuMuc(); }
+              }}
+            />
+            <button type="button" className="ct-btn ct-mcp-nho" disabled={!tenMoi.trim()} onClick={() => void taoThuMuc()}>
+              <FolderPlus size={12} aria-hidden />
+              Tạo
+            </button>
+          </div>
+
           {dsPhien.length === 0 ? (
-            <p className="ct-mcp-trong">Chưa có cuộc nào được lưu.</p>
+            <p className="ct-mcp-trong">
+              {loc ? 'Thư mục này chưa có cuộc nào.' : 'Chưa có cuộc nào được lưu.'}
+            </p>
           ) : (
             <ul className="ct-lichsu-ds">
               {dsPhien.map((p) => (
@@ -347,8 +467,24 @@ export function ChatMode({ pro }: { pro: boolean }) {
                         dòng thành một tấm chắn vô hình nuốt mọi cú bấm. */}
                     <span className="ct-chat-phien-phu">
                       {p._count?.messages ?? 0} tin · {new Date(p.updatedAt).toLocaleDateString('vi-VN')}
+                      {p.folder && <span className="ct-tm-nhan">{p.folder.ten}</span>}
                     </span>
                   </button>
+
+                  {/* Xếp cuộc vào thư mục. Dùng `select` chứ không phải menu tự
+                      vẽ: nó ngắn gọn, hệ điều hành tự lo bàn phím và cuộn, và
+                      không cần một lớp phủ nữa chồng lên bảng lịch sử. */}
+                  {dsThuMuc.length > 0 && (
+                    <select
+                      className="ct-tm-chon"
+                      value={p.folderId ?? ''}
+                      onChange={(e) => void xepVaoThuMuc(p.id, e.target.value || null)}
+                      title="Xếp cuộc này vào thư mục"
+                    >
+                      <option value="">— chưa phân loại —</option>
+                      {dsThuMuc.map((f) => <option key={f.id} value={f.id}>{f.ten}</option>)}
+                    </select>
+                  )}
                   <button
                     type="button" className="ct-dk-bo ct-wt-xoa"
                     onClick={() => void xoaPhien(p.id)} aria-label={`Xoá ${p.title ?? 'cuộc này'}`}

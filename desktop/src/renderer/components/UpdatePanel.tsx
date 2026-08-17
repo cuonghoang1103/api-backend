@@ -102,6 +102,16 @@ function StatusLine({ status, isDev }: { status: UpdateStatus; isDev: boolean })
           Bản {status.version} đã sẵn sàng
         </span>
       );
+    case 'manual':
+      // macOS chưa ký số ⇒ Squirrel.Mac từ chối áp bản mới. Nói THẲNG lý do và
+      // việc phải làm, thay vì một dòng "đã có bản mới" rồi để họ đi tìm nút
+      // cài không tồn tại.
+      return (
+        <span style={{ color: 'var(--ct-warn)' }}>
+          Đã có bản {status.version}. Bản macOS chưa ký số nên phải tải và cài tay
+          — mở trang tải ở nút phía trên.
+        </span>
+      );
     case 'error':
       return (
         <span style={{ color: 'var(--ct-err)' }}>

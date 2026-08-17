@@ -98,6 +98,16 @@ export interface BoiCanh {
  * kết quả vào hội thoại mà tab B vừa chuyển sang, nút Hoàn tác lùi nhầm file,
  * quyền cấp ở tab này tự áp cho tab kia.
  */
+/**
+ * Trần việc phụ cho MỘT câu hỏi của người dùng.
+ *
+ * 3 là con số cân giữa "đủ để dò song song" và "đủ rẻ". Mỗi việc phụ là một
+ * hội thoại riêng phải trả tiền riêng: đo được một việc phụ 10 bước tốn cỡ
+ * 60–90k token ≈ 0,1 $. Ba cái là ~0,3 $ cộng thêm vào câu hỏi — bằng cả một
+ * việc thường. Cho phép nhiều hơn thì một câu hỏi có thể tốn hơn cả buổi làm.
+ */
+const MAX_VIEC_PHU = 3;
+
 interface CuocHoiThoai {
   /** Id của TAB. Ổn định suốt đời tab — React key theo nó, đổi là remount. */
   id: string;
@@ -114,6 +124,8 @@ interface CuocHoiThoai {
   duAn: string | null;
   dangChay: AbortController | null;
   so: SoCuoc;
+  /** Việc phụ đã giao trong LƯỢT hiện tại. Đặt lại về 0 ở đầu mỗi câu hỏi. */
+  soViecPhu: number;
 }
 
 const cuoc = new Map<string, CuocHoiThoai>();
@@ -121,7 +133,7 @@ const cuoc = new Map<string, CuocHoiThoai>();
 function layCuoc(id: string): CuocHoiThoai {
   let c = cuoc.get(id);
   if (!c) {
-    c = { id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc() };
+    c = { id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc(), soViecPhu: 0 };
     cuoc.set(id, c);
   }
   return c;
@@ -247,6 +259,10 @@ export async function chayLuot(
 
   const dieuKhien = new AbortController();
   c.dangChay = dieuKhien;
+  // Trần việc phụ tính theo TỪNG CÂU HỎI, không theo cả cuộc: người dùng hỏi
+  // mười câu trong một tab thì mỗi câu được ba việc phụ, chứ không phải cả tab
+  // chỉ có ba.
+  c.soViecPhu = 0;
   // Có ảnh ⇒ tin nhắn thành mảng khối. Chữ đi TRƯỚC ảnh: model đọc theo thứ tự,
   // và câu hỏi đặt sau ảnh thì nó đã bắt đầu mô tả tấm ảnh trước khi biết được
   // hỏi gì về nó.
@@ -272,7 +288,7 @@ export async function chayLuot(
   // chối — im lặng bỏ qua ở phía app thì model cứ thử lại mãi.
   const capabilities: string[] = [];
   if (boiCanh.goc) {
-    capabilities.push('fs_read', 'git_read', 'plan');
+    capabilities.push('fs_read', 'git_read', 'plan', 'subagent');
     if (boiCanh.choSua) capabilities.push('fs_write');
     if (boiCanh.choChayLenh) capabilities.push('shell');
   }
@@ -367,9 +383,14 @@ export async function chayLuot(
           keHoach: (viec: Array<{ ten: string; trangThai: string }>) => phat({ loai: 'keHoach', viec }),
         };
 
-        const kq = boiCanh.goc
-          ? await chayToolAgent(boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh, boiCanhKeHoach)
-          : { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
+        let kq: { noiDung: string; tomTat: string };
+        if (!boiCanh.goc) {
+          kq = { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
+        } else if (goi.name === 'giao_viec_phu') {
+          kq = await chayViecPhu(c, goi.args, boiCanh, phien.sessionToken, dieuKhien.signal, phat);
+        } else {
+          kq = await chayToolAgent(boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh, boiCanhKeHoach);
+        }
         c.hoiThoai.push({ role: 'tool', tool_call_id: goi.id, content: kq.noiDung });
         phat({ loai: 'tool', ten: goi.name, tomTat: kq.tomTat, vong: 'may' });
       }
@@ -390,6 +411,88 @@ export async function chayLuot(
       });
     }
   }
+}
+
+/**
+ * Chạy một AGENT PHỤ.
+ *
+ * Nó là một vòng lặp agent thu nhỏ, dùng lại đúng `mgoiMotLuot` — nên nó đi qua
+ * cùng đường xin phép, cùng hạn mức, cùng cầu dao tiền. Khác ở ba chỗ, và cả ba
+ * đều là giới hạn CỨNG, không phải mặc định người dùng đổi được:
+ *
+ *   • `laPhu: true`  → máy chủ dựng prompt gọn và ép trần 10 bước;
+ *   • khả năng CHỈ ĐỌC → không `fs_write`, không `shell`, không `subagent`.
+ *     Bỏ `subagent` ở đây là thứ chặn đệ quy: agent phụ không giao việc tiếp
+ *     được, nên không có cây việc phụ nào mọc ra sau lưng;
+ *   • hội thoại RIÊNG, bắt đầu trống → nó không thấy hội thoại của agent chính,
+ *     và ngược lại agent chính chỉ nhận về đúng đoạn chữ cuối.
+ */
+async function chayViecPhu(
+  c: CuocHoiThoai,
+  args: Record<string, unknown>,
+  boiCanh: BoiCanh,
+  token: string,
+  signal: AbortSignal,
+  phat: (e: SuKienAgent) => void,
+): Promise<{ noiDung: string; tomTat: string }> {
+  const nhiemVu = String(args.nhiem_vu ?? '').trim();
+  if (!nhiemVu) return { noiDung: 'LỖI: thiếu "nhiem_vu".', tomTat: 'thiếu nhiệm vụ' };
+  if (c.soViecPhu >= MAX_VIEC_PHU) {
+    return {
+      noiDung:
+        `LỖI: đã dùng hết ${MAX_VIEC_PHU} việc phụ cho câu hỏi này. ` +
+        'Hãy tự làm nốt phần còn lại bằng grep/read_file — rẻ hơn và bạn vẫn còn bước.',
+      tomTat: 'hết lượt việc phụ',
+    };
+  }
+  c.soViecPhu++;
+
+  phat({ loai: 'tool', ten: 'giao_viec_phu', tomTat: `${nhiemVu.slice(0, 60)}…`, vong: 'may' });
+
+  const phu: TinNhan[] = [{ role: 'user', content: nhiemVu }];
+  let traLoi = '';
+
+  for (let vong = 0; vong < 14; vong++) {
+    if (signal.aborted) return { noiDung: 'Việc phụ bị dừng.', tomTat: 'đã dừng' };
+
+    const ph = await mgoiMotLuot({
+      token,
+      messages: phu,
+      capabilities: ['fs_read', 'git_read'],
+      ...(boiCanh.goc ? { workspace: { name: tenThuMuc(boiCanh.goc), platform: process.platform as string } } : {}),
+      laPhu: true,
+      signal,
+      // Sự kiện của agent phụ KHÔNG đẩy lên màn hình: bảng ghi sẽ thành một mớ
+      // hai luồng chữ đan nhau mà người dùng không biết luồng nào của ai. Họ
+      // thấy một dòng "giao_viec_phu" lúc bắt đầu và bản tóm tắt lúc xong.
+      phat: () => {},
+    });
+
+    if (!ph.ok) return { noiDung: `LỖI ở việc phụ: ${ph.thongDiep}`, tomTat: 'lỗi' };
+    phu.push(...(ph.ketQua.append as TinNhan[]));
+
+    if (ph.ketQua.stop === 'end' || ph.ketQua.stop === 'max_steps') {
+      const cuoi = ph.ketQua.append[ph.ketQua.append.length - 1];
+      traLoi = cuoi && cuoi.role === 'assistant' ? String(cuoi.content ?? '') : '';
+      break;
+    }
+
+    for (const goi of ph.ketQua.toolCalls) {
+      // KHÔNG truyền bối cảnh ghi/lệnh ⇒ agent phụ gọi `edit_file` sẽ nhận lỗi
+      // "không có quyền" thay vì ghi được. Lớp chặn thứ hai, sau việc máy chủ
+      // đã không đưa những tool đó cho nó.
+      const kq = await chayToolAgent(boiCanh.goc!, goi.name, goi.args);
+      phu.push({ role: 'tool', tool_call_id: goi.id, content: kq.noiDung });
+    }
+  }
+
+  if (!traLoi.trim()) {
+    return { noiDung: 'Việc phụ chạy xong nhưng không trả về tóm tắt nào.', tomTat: 'không có kết quả' };
+  }
+  return {
+    noiDung: `KẾT QUẢ VIỆC PHỤ — "${nhiemVu.slice(0, 80)}"\n\n${traLoi}`,
+    tomTat: `xong (${c.soViecPhu}/${MAX_VIEC_PHU})`,
+  };
 }
 
 function tenThuMuc(p: string): string {
@@ -427,6 +530,7 @@ async function mgoiMotLuot(o: {
   workspace?: { name: string; platform: string; branch?: string };
   ghiChuDuAn?: { ten: string; noiDung: string };
   mucNoLuc?: string;
+  laPhu?: boolean;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
 }): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
@@ -440,6 +544,7 @@ async function mgoiMotLuot(o: {
       workspace: o.workspace,
       ghiChuDuAn: o.ghiChuDuAn,
       mucNoLuc: o.mucNoLuc,
+      laPhu: o.laPhu,
     }),
   });
 

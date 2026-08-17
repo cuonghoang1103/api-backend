@@ -173,6 +173,8 @@ export interface AgentTurnInput {
   workspace?: WorkspaceHint;
   /** Cấp độ nỗ lực người dùng chọn. Quyết định trần bước, KHÔNG quyết định model. */
   mucNoLuc?: unknown;
+  /** Lượt này thuộc một AGENT PHỤ — prompt gọn hơn, trần bước riêng. */
+  laPhu?: unknown;
   /**
    * Ghi chú dự án (`AGENTS.md`/`CLAUDE.md`) app đọc từ máy người dùng.
    *
@@ -324,7 +326,10 @@ export async function runAgentTurn(
   const capabilities: AgentCapability[] = parseCapabilities(input.capabilities);
   const buocDaDi = demBuoc(messages);
   const mucNoLuc = docMucNoLuc(input.mucNoLuc);
-  const MAX_AGENT_STEPS = TRAN_BUOC[mucNoLuc];
+  const laPhu = input.laPhu === true;
+  // Agent phụ có trần RIÊNG và cứng: 10 bước, bất kể người dùng chọn mức nào.
+  // Để nó theo mức "Kỹ" thì ba việc phụ × 60 bước = 180 bước cho một câu hỏi.
+  const MAX_AGENT_STEPS = laPhu ? 10 : TRAN_BUOC[mucNoLuc];
 
   // ─── BỐN chốt chặn, theo thứ tự RẺ TRƯỚC ───────────────────────
   // Ba cái đầu chỉ đọc bộ nhớ / một truy vấn đã đánh chỉ mục. Cái đắt nhất
@@ -374,6 +379,7 @@ export async function runAgentTurn(
   const system = buildSystemPrompt({
     capabilities,
     mucNoLuc,
+    laPhu,
     ...(input.workspace ? { workspace: input.workspace } : {}),
     ...(ghiChu ? { ghiChu } : {}),
   });

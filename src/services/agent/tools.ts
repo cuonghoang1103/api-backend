@@ -39,7 +39,7 @@ export type ToolRing = 'client' | 'server';
  * gọi thứ app không chạy được. Đây là cách để thêm tool mà không làm chết app
  * cũ đang cài trên máy người dùng.
  */
-export type AgentCapability = 'fs_read' | 'git_read' | 'fs_write' | 'shell' | 'plan';
+export type AgentCapability = 'fs_read' | 'git_read' | 'fs_write' | 'shell' | 'plan' | 'subagent';
 
 export interface AgentToolDef {
   name: string;
@@ -259,6 +259,37 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
 
+  // ─── Việc phụ (sub-agent) ──────────────────────────────────────
+  //
+  // ⚠️ SUB-AGENT NHÂN TOKEN LÊN, KHÔNG CHIA RA. Mỗi việc phụ mang ngữ cảnh
+  // riêng của nó, nên ba việc phụ là ba hội thoại phải trả tiền song song. Nó
+  // CHỈ đáng khi câu hỏi cần dò nhiều hướng độc lập trên một repo lớn — thứ mà
+  // agent chính làm tuần tự thì tốn nhiều bước hơn hẳn.
+  //
+  // Vì thế mô tả dưới đây nói rõ KHI NÀO ĐỪNG DÙNG, và nói trước cả hai con số
+  // trần. Model không biết trần thì nó sẽ đâm vào trần rồi mới biết.
+  {
+    name: 'giao_viec_phu',
+    ring: 'client',
+    capability: 'subagent',
+    description:
+      'Giao một việc TÌM HIỂU độc lập cho một agent phụ, nhận về bản tóm tắt. ' +
+      'Agent phụ CHỈ ĐỌC (không sửa file, không chạy lệnh, không giao việc tiếp) và tối đa 10 bước. ' +
+      'DÙNG KHI: cần dò nhiều hướng độc lập nhau trên repo lớn — ví dụ "tìm mọi nơi xử lý thanh toán" song song với "tìm mọi nơi ghi log". ' +
+      'ĐỪNG DÙNG KHI: việc chỉ cần vài lần grep/read (tự làm rẻ hơn nhiều), hoặc khi các bước phụ thuộc nhau — agent phụ không thấy hội thoại của bạn và không nói chuyện được với nhau. ' +
+      'Tối đa 3 việc phụ cho MỘT câu hỏi của người dùng. Mỗi việc phụ tốn hạn mức như một lượt riêng, nên hãy viết nhiệm vụ THẬT CỤ THỂ: nói rõ cần tìm gì và muốn nhận lại gì.',
+    parameters: {
+      type: 'object',
+      properties: {
+        nhiem_vu: {
+          type: 'string',
+          description: 'Nhiệm vụ đầy đủ, tự đứng một mình được — agent phụ KHÔNG thấy hội thoại của bạn.',
+        },
+      },
+      required: ['nhiem_vu'],
+    },
+  },
+
   // ─── Vòng 2: Notes (máy chủ tự chạy) ───────────────────────────
   {
     name: 'notes_search',
@@ -327,7 +358,7 @@ export function toolsForGateway(capabilities: readonly AgentCapability[]): Array
 }
 
 /** Danh sách nhóm khả năng hợp lệ — dùng để lọc phần app gửi lên. */
-export const ALL_CAPABILITIES: readonly AgentCapability[] = ['fs_read', 'git_read', 'fs_write', 'shell', 'plan'];
+export const ALL_CAPABILITIES: readonly AgentCapability[] = ['fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent'];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {
   if (!Array.isArray(raw)) return [];

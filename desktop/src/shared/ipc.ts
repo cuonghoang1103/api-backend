@@ -590,6 +590,10 @@ export const INVOKE_CHANNELS = {
   'update:install': null,
   /** macOS: tải file cài `.dmg` đúng kiến trúc về thư mục Tải xuống. */
   'update:taiThuCong': null,
+  /** macOS: tự tải .zip rồi TRÁO bó ứng dụng — cập nhật thật, không qua Squirrel. */
+  'update:tuCapNhat': null,
+  /** App đang chạy từ đâu; dùng để cảnh báo khi mở nhầm bản dựng thử. */
+  'update:noiDangChay': null,
   /** Mở thư mục chứa file cài vừa tải (Finder/Explorer), không tự mở file. */
   'update:moThuMuc': null,
 
@@ -740,6 +744,9 @@ export type UpdateStatus =
    */
   | { state: 'taiTay'; version: string; percent: number }
   | { state: 'taiXong'; version: string; duong: string }
+  /** macOS: đang TRÁO bó ứng dụng (bung zip → thay → mở lại). */
+  | { state: 'dangCai'; version: string }
+  | { state: 'caiXong'; version: string }
   | { state: 'none' }
   | { state: 'error'; message: string };
 
@@ -789,6 +796,16 @@ export interface DesktopBridge {
     taiThuCong(): Promise<void>;
     /** Mở thư mục chứa file cài vừa tải. KHÔNG tự mở file cài. */
     moThuMuc(): Promise<void>;
+    /**
+     * macOS: tải bản mới rồi TRÁO thẳng bó ứng dụng và mở lại.
+     *
+     * Không đi qua Squirrel.Mac — nó đòi chữ ký Developer ID mà app này chưa
+     * có. Thay bó `.app` thì không cần chữ ký nào; app nằm trong
+     * `/Applications` và người dùng là chủ.
+     */
+    tuCapNhat(): Promise<void>;
+    /** App đang chạy từ thư mục nào, có ghi đè tại chỗ được không. */
+    noiDangChay(): Promise<{ duong: string; trongApplications: boolean; ghiDuoc: boolean }>;
   };
   storage: {
     usage(): Promise<StorageUsage>;

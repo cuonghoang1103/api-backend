@@ -87,6 +87,10 @@ const bridge: DesktopBridge = {
     install: () => ipcRenderer.invoke('update:install') as Promise<void>,
     taiThuCong: () => ipcRenderer.invoke('update:taiThuCong') as Promise<void>,
     moThuMuc: () => ipcRenderer.invoke('update:moThuMuc') as Promise<void>,
+    tuCapNhat: () => ipcRenderer.invoke('update:tuCapNhat') as Promise<void>,
+    noiDangChay: () => ipcRenderer.invoke('update:noiDangChay') as Promise<{
+      duong: string; trongApplications: boolean; ghiDuoc: boolean;
+    }>,
   },
 
   storage: {

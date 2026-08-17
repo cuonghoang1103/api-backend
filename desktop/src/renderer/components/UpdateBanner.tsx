@@ -72,16 +72,26 @@ export function UpdateBanner({ collapsed }: { collapsed: boolean }) {
         type="button"
         className="ct-update-banner"
         data-tone="ready"
-        onClick={() => void window.cuongthai?.update.taiThuCong()}
-        title={`Đã có bản ${status.version}. Bản macOS chưa ký số nên không tự cài đè được — bấm để tải file cài đúng cho máy này.`}
+        onClick={() => void window.cuongthai?.update.tuCapNhat()}
+        title={`Bấm để cập nhật lên ${status.version} ngay: app tự tải và tự thay chính nó rồi mở lại.`}
       >
-        <Download size={13} aria-hidden />
+        <RotateCw size={13} aria-hidden />
         {!collapsed && (
           <span>
-            Tải bản <strong>{status.version}</strong>
+            Cập nhật <strong>{status.version}</strong>
           </span>
         )}
       </button>
+    );
+  }
+
+  if (status.state === 'dangCai' || status.state === 'caiXong') {
+    return (
+      <div className="ct-update-banner" data-tone="busy"
+        title={status.state === 'dangCai' ? 'Đang thay app…' : 'Xong — đang mở lại app'}>
+        <RotateCw size={13} aria-hidden />
+        {!collapsed && <span>{status.state === 'dangCai' ? 'Đang cài…' : 'Đang mở lại…'}</span>}
+      </div>
     );
   }
 

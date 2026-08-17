@@ -15,9 +15,11 @@ export function UpdatePanel() {
   // lúc nói hai điều khác nhau về cùng một sự việc.
   const status = useUpdateStatus();
   const [info, setInfo] = useState<AppInfo | null>(null);
+  const [noi, setNoi] = useState<{ duong: string; trongApplications: boolean; ghiDuoc: boolean } | null>(null);
 
   useEffect(() => {
     void window.cuongthai?.app.getInfo().then(setInfo);
+    void window.cuongthai?.update.noiDangChay?.().then(setNoi).catch(() => {});
   }, []);
 
   const check = () => {
@@ -72,14 +74,30 @@ export function UpdatePanel() {
             cho kiến trúc máy này — trang phát hành có 15 tệp và chọn nhầm là
             tải 140MB rồi không mở được. */}
         {status.state === 'manual' && (
-          <button
-            type="button"
-            className="ct-btn"
-            onClick={() => void window.cuongthai?.update.taiThuCong()}
-          >
-            <Download size={14} aria-hidden />
-            Tải bản {status.version}
-          </button>
+          <>
+            {/* Cập nhật THẬT: tải .zip rồi tráo bó ứng dụng, không qua Squirrel.
+                Chỉ hiện khi chỗ đang chạy ghi đè được — nếu không thì nút này
+                là một lời hứa suông. */}
+            {noi?.ghiDuoc !== false && (
+              <button
+                type="button"
+                className="ct-btn"
+                onClick={() => void window.cuongthai?.update.tuCapNhat()}
+              >
+                <RotateCw size={14} aria-hidden />
+                Cập nhật lên {status.version} ngay
+              </button>
+            )}
+            <button
+              type="button"
+              className="ct-btn ct-btn-ghost"
+              onClick={() => void window.cuongthai?.update.taiThuCong()}
+              title="Tải file .dmg về để cài tay"
+            >
+              <Download size={14} aria-hidden />
+              Tải bản cài
+            </button>
+          </>
         )}
 
         {status.state === 'taiXong' && (
@@ -93,6 +111,22 @@ export function UpdatePanel() {
           </button>
         )}
       </div>
+
+      {/* ⚠️ Cảnh báo mở NHẦM BẢN DỰNG THỬ.
+          Đây là thứ đã làm người dùng bấm cập nhật ba lần mà không hiểu vì sao
+          không lên bản mới: họ mở app từ `desktop/release/…` trong thư mục mã
+          nguồn (bản 0.4.0 cũ), trong khi bản thật trong Applications đã mới.
+          Không có dòng này thì không có gì trên màn hình nói ra điều đó. */}
+      {noi && !noi.trongApplications && (
+        <div className="ct-notice" data-tone="err" style={{ marginTop: 10 }}>
+          <AlertTriangle size={15} aria-hidden />
+          <span>
+            <strong>Bạn đang mở một bản dựng thử, không phải app đã cài.</strong>{' '}
+            Nó chạy từ <code>{noi.duong}</code> nên sẽ không bao giờ nhận được bản mới.
+            Hãy thoát rồi mở CuongThai từ thư mục <strong>Applications</strong> (hoặc Spotlight).
+          </span>
+        </div>
+      )}
 
       {info?.isDev === true && (
         <p className="ct-field-help">
@@ -139,7 +173,15 @@ function StatusLine({ status, isDev }: { status: UpdateStatus; isDev: boolean })
         </span>
       );
     case 'taiTay':
-      return <span>Đang tải bản cài {status.version}… {status.percent}%</span>;
+      return <span>Đang tải bản {status.version}… {status.percent}%</span>;
+    case 'dangCai':
+      return <span>Đang thay app sang bản {status.version}…</span>;
+    case 'caiXong':
+      return (
+        <span style={{ color: 'var(--ct-ok)' }}>
+          <Check size={13} aria-hidden /> Đã cài bản {status.version} — app đang khởi động lại…
+        </span>
+      );
     case 'taiXong':
       return (
         <span style={{ color: 'var(--ct-ok)' }}>

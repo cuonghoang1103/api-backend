@@ -61,6 +61,16 @@ os.makedirs('/xuat', exist_ok=True)
 _out = io.StringIO()
 sys.stdout = _out
 sys.stderr = _out
+
+# ─── matplotlib ───────────────────────────────────────────────
+# Đặt bộ vẽ bằng BIẾN MÔI TRƯỜNG, không phải matplotlib.use().
+#
+# Bộ vẽ mặc định cố mở một cửa sổ; trong worker không có DOM nên nó ném lỗi khó
+# hiểu. Nhưng gọi matplotlib.use('AGG') ở đây thì VÔ TÁC DỤNG: lúc này người
+# dùng chưa import matplotlib, sys.modules chưa có nó, nên mọi nhánh
+# "if 'matplotlib' in sys.modules" đều sai. matplotlib đọc MPLBACKEND ngay lúc
+# import, nên đặt trước là chắc chắn đúng — và vô hại khi không ai dùng nó.
+os.environ['MPLBACKEND'] = 'AGG'
 `;
 
 async function nap(): Promise<unknown> {
@@ -93,6 +103,7 @@ self.onmessage = async (e: MessageEvent<YeuCau>) => {
   try {
     const py = (await nap()) as {
       runPythonAsync: (s: string) => Promise<unknown>;
+      loadPackagesFromImports: (s: string) => Promise<unknown>;
       globals: { get: (k: string) => unknown };
       FS: {
         readdir: (p: string) => string[];
@@ -101,8 +112,45 @@ self.onmessage = async (e: MessageEvent<YeuCau>) => {
       };
     };
 
+    /**
+     * Nạp gói theo ĐÚNG những gì mã import.
+     *
+     * `loadPackagesFromImports` đọc mã, tìm các `import`, và nạp gói tương ứng
+     * cùng toàn bộ phụ thuộc. Nạp sẵn numpy+pandas+matplotlib cho mọi lần chạy
+     * là bắt người chỉ in "hello" phải chờ vài giây và tốn bộ nhớ vô ích.
+     *
+     * Wheel nằm trong bản dựng (`public/pyodide/*.whl`), nên bước này KHÔNG
+     * cần mạng — xem `scripts/tai-goi-python.mjs`.
+     */
+    try {
+      await py.loadPackagesFromImports(ma);
+    } catch (e) {
+      // Import một gói không có trong bộ ⇒ báo rõ, đừng để mã chạy tiếp rồi
+      // chết bằng ModuleNotFoundError khó hiểu hơn.
+      self.postMessage({
+        id, loai: 'nap',
+        thongDiep: `Không nạp được gói: ${(e as Error).message}`,
+      } satisfies PhanHoi);
+    }
+
     await py.runPythonAsync(CHUAN_BI);
     await py.runPythonAsync(ma);
+    /**
+     * Lưu MỌI biểu đồ còn mở, SAU khi mã người dùng chạy xong.
+     *
+     * Không vá `plt.show()` mà quét ở đây, vì hai lý do gộp lại thành một cách
+     * làm đơn giản hơn: với bộ vẽ AGG thì `show()` là lệnh RỖNG (chạy êm,
+     * không lỗi, không có gì hiện ra — người dùng viết đúng mã mẫu trên mạng
+     * rồi nhận khung trống), và rất nhiều người quên gọi `show()` hẳn. Quét
+     * cuối lượt bắt được cả hai trường hợp.
+     */
+    await py.runPythonAsync(`
+if 'matplotlib.pyplot' in sys.modules:
+    _plt = sys.modules['matplotlib.pyplot']
+    for _i, _n in enumerate(_plt.get_fignums(), 1):
+        _plt.figure(_n).savefig('/xuat/bieu-do-%d.png' % _i, dpi=110, bbox_inches='tight')
+    _plt.close('all')
+`);
     const ra = String(await py.runPythonAsync('_out.getvalue()'));
 
     // Gom file script vừa ghi ra `/xuat`.
@@ -119,9 +167,24 @@ self.onmessage = async (e: MessageEvent<YeuCau>) => {
 
     self.postMessage({ id, loai: 'ket-qua', ra, file } satisfies PhanHoi);
   } catch (err) {
-    // Traceback của Python nằm trong `message`. Giữ NGUYÊN VĂN: dòng cuối của
-    // nó chính là thứ người dùng cần đọc, cắt gọn đi là lấy mất câu trả lời.
-    self.postMessage({ id, loai: 'loi', loi: (err as Error).message } satisfies PhanHoi);
+    /**
+     * ⚠️ `(err as Error).message` CÓ THỂ RỖNG.
+     *
+     * Đo thật: `import mot_goi_khong_ton_tai` làm worker gửi về `loi: ""`, và
+     * giao diện hiện đúng chữ "Lỗi:" rồi hết — người dùng không biết gì hơn
+     * lúc chưa bấm. Nên lấy theo thứ tự: `message` → `String(err)` → và quan
+     * trọng nhất là NHỮNG GÌ ĐÃ IN RA trước khi chết.
+     *
+     * Phần in ra đặc biệt cần vì `CHUAN_BI` chuyển hướng `sys.stderr` vào
+     * `_out`: traceback của Python chảy vào đó chứ không lên `message`.
+     */
+    let loi = (err as Error)?.message || String(err ?? '');
+    try {
+      const daIn = String(await (pyodide as { runPythonAsync: (s: string) => Promise<unknown> })
+        .runPythonAsync('_out.getvalue()'));
+      if (daIn.trim()) loi = loi.trim() ? `${daIn.trimEnd()}\n${loi}` : daIn;
+    } catch { /* hộp cát chết hẳn — dùng những gì đang có */ }
+    self.postMessage({ id, loai: 'loi', loi: loi.trim() || 'Lỗi không rõ (không có thông báo).' } satisfies PhanHoi);
   }
 };
 

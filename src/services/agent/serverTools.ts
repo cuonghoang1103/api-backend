@@ -16,6 +16,7 @@
  * đọc JSON lồng nhau, và mỗi dấu ngoặc thừa là token phải trả tiền.
  */
 import { getNote, getTree, htmlToText, searchNotes } from '../notes.service.js';
+import { docWeb } from './webTool.js';
 import { logger } from '../../utils/logger.js';
 
 /** Trần cho từng loại kết quả — không cắt thì một sổ ghi chú lớn nuốt sạch ngữ cảnh. */
@@ -51,6 +52,8 @@ export async function runServerTool(
         return await toolNotesRead(args, userId);
       case 'notes_tree':
         return await toolNotesTree(userId);
+      case 'doc_web':
+        return await docWeb(args);
       default:
         return { content: `LỖI: không có tool tên "${name}".`, summary: 'tool lạ' };
     }

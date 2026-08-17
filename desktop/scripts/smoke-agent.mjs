@@ -11,6 +11,16 @@
  *   node scripts/smoke-agent.mjs                 (cần backend cục bộ ở :3001)
  *   AGENT_SMOKE_PORT=3001 AGENT_SMOKE_USER=6 node scripts/smoke-agent.mjs
  *
+ * ⚠️ BACKEND THỬ PHẢI CÓ `CORS_ORIGINS=app://cuongthai`.
+ *
+ * Chế độ Trò chuyện gọi API từ RENDERER (khác agent — agent gọi từ tiến trình
+ * main nên không có CORS). Renderer của app chạy ở origin `app://cuongthai`, mà
+ * danh sách CORS mặc định chỉ có cuongthai.com và localhost:3000. Thiếu biến
+ * này thì mọi phép kiểm chat hỏng với lý do chẳng liên quan gì tới chat.
+ * (Prod CÓ biến này sẵn trên VPS — đã kiểm bằng curl 17/08.)
+ *
+ *   CORS_ORIGINS=app://cuongthai PORT=3011 npx tsx src/index.ts
+ *
  * ⚠️ CHẠY TRONG THƯ MỤC userData RIÊNG (`--user-data-dir`), nên nó KHÔNG đụng
  * tới cấu hình, phiên đăng nhập hay thư mục ghi chú thật của bạn. Đây không
  * phải chuyện gọn gàng: script cần ghim sẵn `agentWorkspace`, mà khoá đó CỐ Ý
@@ -754,6 +764,49 @@ try {
   await w2.locator('.ct-segment-nut', { hasText: 'Lập trình' }).click();
   await w2.waitForFunction(() => !document.querySelector('.ct-td-khung'), null, { timeout: 10000 });
   check('rời chế độ ⇒ khung web bị THÁO khỏi cây React', true);
+
+  // ══ CHẾ ĐỘ TRÒ CHUYỆN: lưu phiên ══
+  //
+  // ⚠️ Trước bản này chat KHÔNG lưu gì — rời trang là mất sạch, đúng lỗi đã sửa
+  // cho chế độ Lập trình mà chat thì chưa. Máy chủ vốn có sẵn
+  // `/ai/chat/sessions` và bản WEB dùng từ lâu; app chỉ chưa gọi.
+  console.log('\nTrò chuyện — lưu phiên:');
+  await w2.locator('.ct-segment-nut', { hasText: 'Trò chuyện' }).click();
+  await w2.waitForSelector('.ct-chat-thanh', { timeout: 10000 });
+  check('chế độ Trò chuyện có thanh phiên', true);
+
+  const manChat = w2.locator('.ct-chedo[data-hien="true"]');
+  await manChat.locator('.ct-agent-o').fill('Trả lời đúng một từ: xanh');
+  await manChat.locator('.ct-agent-soan .ct-btn').first().click();
+  await w2.waitForFunction(
+    () => {
+      const m = document.querySelector('.ct-chedo[data-hien="true"]');
+      const nut = m?.querySelector('.ct-agent-soan .ct-btn');
+      return !!nut && nut.textContent.includes('Gửi');
+    },
+    null,
+    { timeout: 180000 },
+  );
+  const traLoiChat = await manChat.locator('.ct-agent-may').last().innerText().catch(() => '');
+  check('chat trả lời được', traLoiChat.trim().length > 0, traLoiChat.slice(0, 50).replace(/\n/g, ' '));
+
+  // Danh sách phiên phải có thêm một mục — nghĩa là máy chủ ĐÃ lưu.
+  await manChat.locator('[data-nut="chatLichSu"]').click();
+  await w2.waitForSelector('.ct-lichsu', { timeout: 10000 });
+  const soPhienChat = await w2.locator('.ct-lichsu-muc').count();
+  check('cuộc vừa nói được LƯU lên máy chủ', soPhienChat >= 1, `${soPhienChat} cuộc`);
+
+  // Mở lại phiên đó ⇒ lịch sử quay về.
+  await w2.locator('.ct-lichsu-mo').first().click();
+  await w2.waitForSelector('.ct-lichsu', { state: 'detached', timeout: 10000 });
+  const soLuotSauKhiMo = await manChat.locator('.ct-agent-nguoi, .ct-agent-may').count();
+  check('mở lại cuộc cũ ⇒ lịch sử dựng lại', soLuotSauKhiMo >= 2, `${soLuotSauKhiMo} lượt`);
+
+  // Quay lại chế độ Lập trình — phần MCP bên dưới thao tác trên `.ct-tab-noi`,
+  // thứ chỉ tồn tại trong chế độ đó. Bỏ bước này thì mọi phép kiểm MCP hỏng vì
+  // một lý do chẳng liên quan gì tới MCP.
+  await w2.locator('.ct-segment-nut', { hasText: 'Lập trình' }).click();
+  await w2.waitForSelector('.ct-tab-noi[data-hien="true"]', { timeout: 10000 });
 
   // ══ MCP ══
   //

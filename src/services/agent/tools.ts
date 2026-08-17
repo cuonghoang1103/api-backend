@@ -292,6 +292,31 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
 
   // ─── Vòng 2: Notes (máy chủ tự chạy) ───────────────────────────
   {
+    /**
+     * Đọc một trang web.
+     *
+     * Vòng MÁY CHỦ, không vòng app: chạy ở app thì lời gọi đi ra từ mạng LAN
+     * của người dùng — agent với được vào router, NAS, service nội bộ của công
+     * ty họ. Ở máy chủ thì bề mặt đó thu về một chỗ có chặn SSRF (xem
+     * `webTool.ts`).
+     */
+    name: 'doc_web',
+    ring: 'server',
+    description:
+      'Đọc nội dung CHỮ của một trang web (HTML, văn bản, JSON) và trả về. '
+      + 'Dùng khi cần tra tài liệu thư viện, đọc changelog, xem một thông báo lỗi lạ, '
+      + 'hoặc kiểm chứng một API trước khi viết mã theo nó. '
+      + 'CHỈ đọc được địa chỉ công khai — địa chỉ nội bộ (localhost, 192.168.x, 10.x) bị chặn. '
+      + 'Trang dài sẽ bị cắt; nếu cần phần sau thì nói rõ cho người dùng là bạn mới đọc một phần.',
+    parameters: {
+      type: 'object',
+      properties: {
+        url: { type: 'string', description: 'Địa chỉ đầy đủ, ví dụ https://nodejs.org/api/fs.html' },
+      },
+      required: ['url'],
+    },
+  },
+  {
     name: 'notes_search',
     ring: 'server',
     description:

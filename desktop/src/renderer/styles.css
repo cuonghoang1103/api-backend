@@ -3071,6 +3071,21 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   box-shadow: var(--ct-shadow-sm);
 }
 
+/* ── Thanh phiên của chế độ Trò chuyện ── */
+.ct-chat-phien-phu {
+  font-size: 10.5px;
+  color: var(--ct-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-chat-thanh {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 0 10px;
+  flex-shrink: 0;
+}
+
 /* ── Trình duyệt trong app ── */
 .ct-td { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 

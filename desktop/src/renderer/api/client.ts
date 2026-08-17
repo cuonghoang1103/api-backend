@@ -148,6 +148,19 @@ export class ApiClient {
         // tính, và `RequestInit.body` không nhận undefined.
         ...(options.body === undefined ? {} : { body: JSON.stringify(options.body) }),
         signal: controller.signal,
+        /**
+         * KHÔNG dùng bộ nhớ đệm HTTP.
+         *
+         * Express bật ETag mặc định, nên một danh sách ít đổi (phiên chat, ghi
+         * chú) trả `304 Not Modified` — và 304 KHÔNG có thân. Renderer nhận về
+         * một phản hồi rỗng rồi kết luận là "không có gì", trong khi máy chủ
+         * đang nói "y như cũ". Đã dính thật 17/08: danh sách phiên chat luôn
+         * rỗng dù máy chủ có dữ liệu.
+         *
+         * Đây là API động có xác thực; đệm nó không tiết kiệm được gì đáng kể
+         * mà đổi lấy một lớp trạng thái cũ vô hình.
+         */
+        cache: 'no-store',
         // KHÔNG gửi cookie. App desktop xác thực bằng Bearer; gửi kèm cookie chỉ
         // tạo đường thứ hai để nhầm lẫn phiên nào đang có hiệu lực.
         credentials: 'omit',
@@ -170,6 +183,10 @@ export class ApiClient {
     if (response.ok) {
       // 204 không có thân phản hồi — `json()` sẽ ném.
       if (response.status === 204) return undefined as T;
+      // 304 KHÔNG có thân. Express bật ETag nên danh sách ít đổi hay trả 304, và
+      // `response.json()` ném ở đó — người dùng thấy "không tải được" trong khi
+      // máy chủ đang nói "y như cũ". Xem thêm `no-store` ở `send()`.
+      if (response.status === 304) return undefined as T;
       const envelope = (await response.json()) as ApiEnvelope<T>;
       return (envelope.data ?? envelope) as T;
     }

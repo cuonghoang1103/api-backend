@@ -17,13 +17,20 @@
  * this group"** — cả hai model, chặn ở cấp nhóm khoá. Dựng nút cho nó là dựng
  * một nút chết. Mở kênh sinh ảnh trong Console của cổng thì mới làm được.
  */
-import { useEffect, useRef, useState } from 'react';
-import { CircleStop, Loader2, MessageSquare, Send } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { CircleStop, History, Loader2, MessageSquare, Plus, Send, Trash2, X } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { ChuAgent } from './markdown';
 import {
   DaiDinhKem, DinhKemDaGui, NutDinhKem, ODinhKem, useDinhKem, type TepDinhKem,
 } from './DinhKem';
+
+interface PhienChat {
+  id: string;
+  title: string | null;
+  updatedAt: string;
+  _count?: { messages: number };
+}
 
 interface Luot {
   vai: 'user' | 'assistant';
@@ -59,6 +66,17 @@ export function ChatMode({ pro }: { pro: boolean }) {
   const [loi, datLoi] = useState<string | null>(null);
   /** Máy chủ đã HẠ BẬC lượt này chưa, và vì sao — xem khung `model` của SSE. */
   const [roiBac, datRoiBac] = useState<string | null>(null);
+  /**
+   * Phiên chat đang mở, và danh sách phiên cũ.
+   *
+   * ⚠️ Trước bản này chế độ Trò chuyện KHÔNG lưu gì: rời trang là mất sạch hội
+   * thoại — đúng lỗi đã sửa cho chế độ Lập trình, chỉ là ở đây chưa sửa. Máy
+   * chủ vốn đã có sẵn `/ai/chat/sessions` + `/ai/chat/history/:id` và BẢN WEB
+   * dùng từ lâu; app chỉ đơn giản là chưa gọi.
+   */
+  const [phienId, datPhienId] = useState<string | null>(null);
+  const [dsPhien, datDsPhien] = useState<PhienChat[]>([]);
+  const [moLichSu, datMoLichSu] = useState(false);
   const huyRef = useRef<AbortController | null>(null);
   const cuonRef = useRef<HTMLDivElement>(null);
   const dk = useDinhKem();
@@ -68,6 +86,59 @@ export function ChatMode({ pro }: { pro: boolean }) {
     if (!el) return;
     if (el.scrollHeight - el.scrollTop - el.clientHeight < 120) el.scrollTop = el.scrollHeight;
   }, [luot, dangCho]);
+
+  const napDsPhien = useCallback(async () => {
+    if (!api) return;
+    try {
+      // ⚠️ `api.request` ĐÃ bóc `envelope.data` (xem `unwrap` trong api/client.ts),
+      // nên đây là mảng luôn — bóc `.data` lần nữa cho ra `undefined`, và danh
+      // sách rỗng vĩnh viễn trong khi máy chủ trả về đủ dữ liệu.
+      const r = await api.request<PhienChat[]>('/api/v1/ai/chat/sessions');
+      datDsPhien(Array.isArray(r) ? r : []);
+    } catch { /* mất mạng — danh sách rỗng, không phải lỗi chặn đường */ }
+  }, [api]);
+
+  useEffect(() => { void napDsPhien(); }, [napDsPhien]);
+
+  /** Mở một phiên cũ: nạp lịch sử từ máy chủ và gõ tiếp vào chính phiên đó. */
+  const moPhien = useCallback(async (id: string) => {
+    if (!api) return;
+    try {
+      const r = await api.request<Array<{ role: string; content: string }>>(
+        `/api/v1/ai/chat/history/${id}`,
+      );
+      const ds = Array.isArray(r) ? r : [];
+      datLuot(ds.map((m) => ({
+        vai: m.role === 'user' ? 'user' as const : 'assistant' as const,
+        text: String(m.content ?? ''),
+      })));
+      datPhienId(id);
+      datMoLichSu(false);
+      datLoi(null);
+    } catch (err) {
+      datLoi(`Không mở được việc cũ: ${(err as Error).message}`);
+    }
+  }, [api]);
+
+  const xoaPhien = useCallback(async (id: string) => {
+    if (!api) return;
+    try {
+      await api.request(`/api/v1/ai/chat/sessions/${id}`, { method: 'DELETE' });
+      if (id === phienId) { datPhienId(null); datLuot([]); }
+      await napDsPhien();
+    } catch (err) {
+      datLoi(`Không xoá được: ${(err as Error).message}`);
+    }
+  }, [api, phienId, napDsPhien]);
+
+  const chatMoi = (): void => {
+    huyRef.current?.abort();
+    datPhienId(null);
+    datLuot([]);
+    datLoi(null);
+    datRoiBac(null);
+    dk.xoaHet();
+  };
 
   // Rời trang giữa chừng ⇒ cắt kết nối. Không cắt thì stream chạy tiếp tới cùng
   // và vẫn bị tính tiền, chỉ khác là không còn ai đọc.
@@ -93,6 +164,25 @@ export function ChatMode({ pro }: { pro: boolean }) {
     huyRef.current = dieuKhien;
 
     try {
+      /**
+       * Tạo phiên TRƯỚC nếu chưa có.
+       *
+       * ⚠️ Máy chủ KHÔNG tự tạo: `/ai/chat` lấy `sessionId` thẳng từ body, và
+       * không có thì nó bỏ qua bước lưu tin nhắn (`if (sessionId) saveUserMessage`).
+       * Khung `connected` vẫn trả về một trường `sessionId` — nhưng đó chính là
+       * thứ client vừa gửi, nên tin vào nó là tin vào `undefined`. Bản đầu của
+       * tôi làm đúng như vậy và hội thoại không bao giờ được lưu, trong khi mọi
+       * thứ trên màn hình trông hoàn toàn bình thường.
+       */
+      let phienDung = phienId;
+      if (!phienDung) {
+        const r = await api.request<{ sessionId?: string }>(
+          '/api/v1/ai/chat/sessions', { method: 'POST', body: { title: text.slice(0, 60) || 'Cuộc mới' } },
+        );
+        phienDung = r?.sessionId ?? null;
+        if (phienDung) datPhienId(phienDung);
+      }
+
       const anh = tep.filter((t) => t.loai === 'image');
       const tai = tep.filter((t) => t.loai === 'tailieu');
       const res = await fetch(`${api.baseUrlForForms()}/api/v1/ai/chat`, {
@@ -102,6 +192,9 @@ export function ChatMode({ pro }: { pro: boolean }) {
         body: JSON.stringify({
           message: text,
           model: bac,
+          // Có phiên thì gõ tiếp vào phiên đó; chưa có thì để máy chủ tự tạo và
+          // nhặt id nó trả về ở khung `connected`.
+          ...(phienDung ? { sessionId: phienDung } : {}),
           history: truoc.slice(-SO_LUOT_NGU_CANH - 1, -1).map((l) => ({ role: l.vai, content: l.text })),
           // Máy chủ nhận data URL đầy đủ và tự tách phần base64 (`parseChatImages`
           // / `parseChatDocuments`). Gửi kèm TÊN FILE vì nó là nhãn duy nhất
@@ -177,6 +270,9 @@ export function ChatMode({ pro }: { pro: boolean }) {
       huyRef.current = null;
       datDangChay(false);
       datDangCho(false);
+      // Cập nhật danh sách SAU khi xong: tiêu đề phiên do máy chủ đặt từ câu
+      // hỏi đầu, và nó chỉ có sau khi lượt chạy.
+      void napDsPhien();
     }
   };
 
@@ -197,6 +293,59 @@ export function ChatMode({ pro }: { pro: boolean }) {
         </div>
       )}
 
+      <div className="ct-chat-thanh">
+        <button type="button" className="ct-agent-icon" data-nut="chatMoi" onClick={chatMoi} title="Bắt đầu cuộc mới">
+          <Plus size={14} aria-hidden />
+        </button>
+        <button
+          type="button" className="ct-agent-icon" data-nut="chatLichSu"
+          onClick={() => { datMoLichSu((v) => !v); void napDsPhien(); }}
+          title={`Cuộc đã lưu (${dsPhien.length})`}
+        >
+          <History size={14} aria-hidden />
+        </button>
+        <span className="ct-chat-chan-chu">
+          {phienId ? 'Đang lưu vào máy chủ' : 'Cuộc mới — sẽ được lưu khi bạn gửi'}
+        </span>
+      </div>
+
+      {moLichSu && (
+        <div className="ct-lichsu" role="dialog" aria-label="Cuộc trò chuyện đã lưu">
+          <div className="ct-lichsu-dau">
+            <strong>Cuộc đã lưu</strong>
+            <button type="button" className="ct-agent-icon" onClick={() => datMoLichSu(false)} aria-label="Đóng">
+              <X size={14} aria-hidden />
+            </button>
+          </div>
+          {dsPhien.length === 0 ? (
+            <p className="ct-mcp-trong">Chưa có cuộc nào được lưu.</p>
+          ) : (
+            <ul className="ct-lichsu-ds">
+              {dsPhien.map((p) => (
+                <li key={p.id} className="ct-lichsu-muc" data-dang={p.id === phienId}>
+                  <button type="button" className="ct-lichsu-mo" onClick={() => void moPhien(p.id)}>
+                    <span className="ct-lichsu-tieude">{p.title?.trim() || 'Cuộc chưa đặt tên'}</span>
+                    {/* ⚠️ KHÔNG dùng `ct-lichsu-phu`: tên đó đã có nghĩa khác —
+                        tấm phủ toàn màn hình (`position:absolute; inset:0`) của
+                        bảng lịch sử agent. Đặt nó lên một dòng chữ biến mỗi
+                        dòng thành một tấm chắn vô hình nuốt mọi cú bấm. */}
+                    <span className="ct-chat-phien-phu">
+                      {p._count?.messages ?? 0} tin · {new Date(p.updatedAt).toLocaleDateString('vi-VN')}
+                    </span>
+                  </button>
+                  <button
+                    type="button" className="ct-dk-bo ct-wt-xoa"
+                    onClick={() => void xoaPhien(p.id)} aria-label={`Xoá ${p.title ?? 'cuộc này'}`}
+                  >
+                    <Trash2 size={11} aria-hidden />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
       <div className="ct-agent-scroll" ref={cuonRef}>
         {luot.length === 0 && (
           <div className="ct-agent-trong">
@@ -214,11 +363,13 @@ export function ChatMode({ pro }: { pro: boolean }) {
             {l.text}
           </div>
         ) : (
-          /* Dựng markdown thay vì chữ thuần: câu trả lời có khối mã, danh sách,
-             bảng — hiện thô thì người đọc phải tự giải mã dấu ```. Bộ dựng thoát
-             HTML TRƯỚC rồi mới định dạng, nên nội dung máy chủ trả về không thể
-             sinh ra thẻ nào. */
-          <ChuAgent key={i} text={l.text} />
+          /* ⚠️ PHẢI giữ lớp bọc `.ct-agent-may` — `ChuAgent` chỉ dựng phần chữ
+             (`.ct-md`), còn bong bóng, khoảng cách và màu nền là của lớp này.
+             Bỏ nó đi thì markdown vẫn đúng nhưng câu trả lời mất hẳn khung, và
+             nhìn như chữ rơi tự do giữa trang. Giống hệt cách `AgentMode` bọc. */
+          <div key={i} className="ct-agent-may">
+            <ChuAgent text={l.text} />
+          </div>
         )))}
 
         {dangCho && (

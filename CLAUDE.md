@@ -7,7 +7,7 @@ Full-stack application:
 - **Frontend**: Next.js (in `frontend/`)
 - **Database**: PostgreSQL with Prisma ORM
 - **Storage**: Cloudflare R2
-- **Deployment**: Docker containers on VPS, deployed by running `bash deploy.sh` from the local machine. A push to `main` does NOT deploy — see "Docker & Deploy" below
+- **Deployment**: Docker containers on VPS, deployed by running `bash deploy-nha.sh` from the local machine (máy nhà builds, VPS only swaps). A push to `main` does NOT deploy — see "Docker & Deploy" below
 
 ## Environment
 
@@ -25,7 +25,7 @@ Full-stack application:
 - **NEVER** run `npx prisma migrate reset` — it wipes ALL data
 - **NEVER** run `npx prisma db push` against production/VPS — bypasses migration history
 - **NEVER** run `git push --force` or `--force-with-lease` to `main`
-- **NEVER** push to `main` without completing the pre-push checklist below, and always ask the user for confirmation first. (A push no longer deploys — `deploy.sh` does — but `main` is still the shared trunk, so it stays a confirm-first action)
+- **NEVER** push to `main` without completing the pre-push checklist below, and always ask the user for confirmation first. (A push no longer deploys — `deploy-nha.sh` does — but `main` is still the shared trunk, so it stays a confirm-first action)
 - **NEVER** auto-resolve failed migrations (`prisma migrate resolve`) — see Migration Failure Protocol
 - **NEVER** commit `.env`, `.env.local`, secrets, API keys, or credentials
 - **NEVER** SSH into VPS to modify database or containers directly, unless user explicitly asks
@@ -164,11 +164,59 @@ Rationale: auto-resolving partially-applied migrations can silently corrupt sche
 **STANDARD deploy + push flow (2026-07-06 — follow this order):**
 1. Run the conditional pre-push checklist locally (tsc / build)
 2. Commit to **local `main`**
-3. Deploy with a full **`bash deploy.sh`** from the local machine (rsync → sequential image builds on VPS → zero-downtime swap → smoke-test). This is the ONLY deploy path — do NOT deploy by pushing to GitHub
+3. Deploy with **`bash deploy-nha.sh`** (máy nhà build → GHCR → VPS chỉ tráo). This is the standard path since 2026-08-18. Do NOT deploy by pushing to GitHub
 4. **Wait for the user to test production and confirm the fix works**
 5. Only THEN `git push` to origin (with user confirmation, per Forbidden Actions). At this point the push is just syncing GitHub with what prod already runs
 
-Why not push-to-deploy: `deploy-ghcr.yml` and `backend-vps` once ran on every push to `main` and raced each other into real outages (2026-07-03: feed 500 while schema lagged the image; 2026-07-06: backend recreate race → `Exited(137)` + orphan containers, recovered via `docker start cuonghoangdev_backend`). `deploy.sh` stays the only deploy path regardless — it is the one that rsyncs the working tree, builds sequentially, swaps with zero downtime and smoke-tests.
+Why not push-to-deploy: `deploy-ghcr.yml` and `backend-vps` once ran on every push to `main` and raced each other into real outages (2026-07-03: feed 500 while schema lagged the image; 2026-07-06: backend recreate race → `Exited(137)` + orphan containers, recovered via `docker start cuonghoangdev_backend`). Deploying stays a script you run, never a side effect of pushing.
+
+### `deploy-nha.sh` — đường CHUẨN (từ 18/08/2026)
+
+Máy nhà (12 nhân/31GB) build cả hai ảnh SONG SONG rồi đẩy lên GHCR; VPS chỉ kéo
+ảnh về và tráo. Hai cái lợi lớn:
+
+- **Nhanh hơn ~3×.** Build song song ở nhà ~3-6 phút; VPS build tuần tự ~15 phút
+  (nó buộc phải tuần tự vì build song song từng bị OOM giết, exit 137).
+- **VPS KHÔNG còn cache build.** Đây mới là điều quan trọng: cache build từng
+  phình 7,6GB trên chính cái đĩa chứa Postgres, và 18/08/2026 một lần
+  `deploy.sh` chết giữa chừng với `no space left on device` (đĩa tụt xuống
+  còn 1,8GB trong lúc `next build` chạy).
+- Chỉ nội dung **đã commit** đi qua (`git push` vào kho trần ở máy nhà), nên nó
+  không thể chộp trúng file phiên khác đang lưu dở như `deploy.sh` từng làm.
+
+```bash
+bash deploy-nha.sh              # chuẩn; máy nhà hỏng thì tự lùi về deploy.sh
+bash deploy-nha.sh --khong-lui  # hỏng thì dừng hẳn
+bash deploy-nha.sh --khong-day  # chỉ build ở nhà, không đẩy, không tráo
+```
+
+⚠️ Nó **hỏi `[y/N]`** khi cây làm việc còn thay đổi chưa commit (những thay đổi
+đó sẽ KHÔNG lên production). Chạy nền thì phải `echo y | bash deploy-nha.sh`,
+không thì nó dừng im với exit 0.
+
+⚠️ **Dựng ảnh ngoài compose thì PHẢI `-f <đúng file compose dùng>`.**
+18/08/2026 script chạy `docker build .` — lấy `Dockerfile` mặc định thay vì
+`Dockerfile.backend` mà compose dùng. Kết quả: nền `node:22-alpine` (musl) mang
+engine Prisma bản `debian-openssl-3.0.x` (glibc) ⇒ build xanh, đẩy xanh, tráo
+xanh, rồi backend restart vô tận và **API chết 502 bảy phút**. Đã vá, và đã
+thêm chốt kiểm libc ↔ engine **trước khi đẩy**. Bài học: *build xanh không có
+nghĩa là ảnh chạy được.*
+
+**Khôi phục nhanh khi tráo trúng ảnh chết:** ảnh cũ thường vẫn còn dạng mồ côi.
+```bash
+ssh root@<vps> "docker images -a --filter dangling=true"   # đối chiếu kích thước
+ssh root@<vps> "docker tag <id> cuonghoangdev-backend:latest"
+ssh root@<vps> "cd /home/deployer/repo && set -a && . /opt/cuonghoangdev/.env; set +a; \
+                docker compose -p cuonghoangdev up -d --no-build backend"
+```
+Mất ~40 giây, thay vì dựng lại 15 phút.
+
+### `deploy.sh` — đường LÙI
+
+Vẫn giữ nguyên và vẫn dùng được: nó rsync cây làm việc rồi build ngay trên VPS,
+nên không phụ thuộc máy nhà. Dùng khi máy nhà tắt/mất mạng, hoặc khi cần deploy
+thứ CHƯA commit. Đổi lại: chậm hơn, và nó là đường đã ba lần chộp trúng file
+phiên khác đang gõ dở.
 
 **What a push to `main` actually triggers (verified 2026-08-07):** only `ci-lint.yml` — "CI - Lint & Type Check". **Both deploy workflows are now `on: workflow_dispatch:` only**, i.e. manual-run, so a push cannot start a deploy and cannot re-run the race above. Don't re-add a `push:` trigger to either without a plan for the concurrency problem.
 
@@ -205,7 +253,7 @@ To re-arm it later: create a repo secret named exactly `ANTHROPIC_API_KEY` (put 
 - Verify it installs in the Docker build (some packages need system libs) — test with `docker build` locally if unsure
 
 **Deploy hygiene (avoid stale/partial builds):**
-- **Always run a FULL `bash deploy.sh`** after any code change. **NEVER** use `bash deploy.sh --no-build` after changing code — it only rsyncs, does NOT rebuild, so the container keeps running the OLD image (this caused the 2026-07-02 GIF 404 below) and it also **skips the smoke-test**.
+- Dùng `deploy-nha.sh`. Nếu phải lùi về `deploy.sh` thì **luôn chạy FULL**, **NEVER** `bash deploy.sh --no-build` after changing code — it only rsyncs, does NOT rebuild, so the container keeps running the OLD image (this caused the 2026-07-02 GIF 404 below) and it also **skips the smoke-test**.
 - `deploy.sh` builds backend and frontend images **sequentially** (Step 2a) — an OOM guard for the 6GB VPS: parallel cold builds (cache is pruned after every deploy) killed `next build` with exit 137 on 2026-07-06. Keep it sequential; with a warm cache both builds are near-instant no-ops. If a deploy still fails on `npm ci`/network fetching prebuilt binaries (e.g. sharp), a simple retry usually succeeds and reuses the cached layers.
 - `deploy.sh` runs a **post-deploy smoke-test**: it hits core GET routes on the internal backend and **FAILS the deploy if any returns 404** (404 = route not mounted → stale/partial build). 401/200 = healthy.
 - **When you add a new feature module/router**, add one of its param-less, unauth GET routes to the smoke-test list in `deploy.sh` (search `Smoke-testing core API routes`). Only add routes that return **non-404** on a bare unauth GET — do NOT add POST-only or param-required routes (e.g. `/stickers`, `/auth/login`) or every deploy will false-fail.

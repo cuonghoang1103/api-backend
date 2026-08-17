@@ -30,6 +30,22 @@ export interface Track {
   artist?: string | null;
   durationSeconds?: number | null;
   coverImage?: string | null;
+  /** Với bài lấy từ YouTube, đây là link `watch?v=…` chứ không phải file nhạc. */
+  audioUrl?: string | null;
+}
+
+/**
+ * Bài này còn trỏ vào YouTube, chưa có file nhạc trên máy chủ?
+ *
+ * Trang WEB phát được những bài đó bằng khung nhúng YouTube
+ * (`isYouTubeUrl` trong `MusicAudioController`). App thì không: nó phát bằng
+ * thẻ <audio>, mà `GET /music/stream/:id` với một dòng như vậy trả **400**
+ * (đo thật trên prod: bài id 51 → 400, bài thường → 200). Không nhận ra thì
+ * người dùng chỉ thấy "Không phát được bài này" mà không hiểu vì sao — trong
+ * khi cùng bài ấy nghe được trên web.
+ */
+export function laBaiYouTube(track: Track): boolean {
+  return /youtube\.com|youtu\.be/.test(track.audioUrl ?? '');
 }
 
 export type RepeatMode = 'off' | 'all' | 'one';
@@ -243,6 +259,9 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
   const playableSrc = useCallback((track: Track): string | null => {
     if (downloaded.has(track.id)) return `app://cuongthai/media/${track.id}`;
     if (!online) return null;
+    // Bài còn trỏ vào YouTube thì `/stream/:id` trả 400 — chặn ở đây để báo cho
+    // ra lý do, thay vì để thẻ <audio> ném ra "Không phát được bài này".
+    if (laBaiYouTube(track)) return null;
     return `${api?.baseUrlForForms() ?? ''}/api/v1/music/stream/${track.id}`;
   }, [downloaded, online, api]);
 
@@ -251,7 +270,11 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     if (!element) return;
     const src = playableSrc(track);
     if (!src) {
-      setError(`"${track.title}" chưa tải về máy nên không nghe được khi ngoại tuyến.`);
+      setError(
+        laBaiYouTube(track) && online
+          ? `"${track.title}" lấy từ YouTube và chưa được rút âm thanh về máy chủ. Bấm nút bên phải dòng đó để rút (10-60 giây), sau đó nghe được như mọi bài khác.`
+          : `"${track.title}" chưa tải về máy nên không nghe được khi ngoại tuyến.`,
+      );
       return;
     }
     setError(null);

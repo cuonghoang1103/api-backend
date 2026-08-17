@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
-import { clock, fold, formatBytes, shuffled, useMusicPlayer, type Track } from './player';
+import { clock, fold, formatBytes, laBaiYouTube, shuffled, useMusicPlayer, type Track } from './player';
 
 /** Một kết quả tìm trên YouTube — hình dạng của `GET /music/youtube-search`. */
 interface KetQuaYouTube {
@@ -101,22 +101,57 @@ export function MusicPage() {
   }, [toggle, tuaToi, position, setVolume]);
 
   /**
-   * Đưa một bài từ YouTube vào thư viện rồi phát.
+   * Bảo máy chủ rút âm thanh của một dòng YouTube về R2.
    *
-   * HAI bước, và bước hai mới là bước quan trọng:
+   * Gọi bằng `fetch` trần chứ không `api.request`: `request()` chặn cứng 30
+   * giây, mà yt-dlp + ffmpeg trên máy chủ mất 10-60 giây — hết giờ ở phía app
+   * trong khi máy chủ vẫn đang làm là kiểu hỏng khó hiểu nhất.
+   */
+  const rutAmThanh = async (trackId: number) => {
+    if (!api) return;
+    setTienTrinhThem('Đang rút âm thanh về máy chủ… (10-60 giây)');
+    const phanHoi = await fetch(
+      `${api.baseUrlForForms()}/api/v1/music/tracks/${trackId}/download-audio`,
+      { method: 'POST', headers: { ...api.authHeaders(), 'Content-Type': 'application/json' }, body: '{}' },
+    );
+    if (!phanHoi.ok) {
+      const chiTiet = await phanHoi.json().catch(() => null) as { message?: string } | null;
+      throw new Error(
+        phanHoi.status === 403
+          ? 'Chỉ tài khoản quản trị mới rút được âm thanh về máy chủ.'
+          : chiTiet?.message ?? `Máy chủ trả về ${phanHoi.status}`,
+      );
+    }
+  };
+
+  /** Dòng cũ trong thư viện còn trỏ vào YouTube — rút âm thanh rồi phát. */
+  const rutRoiPhat = async (track: Track) => {
+    if (!api || dangThem) return;
+    setDangThem(String(track.id));
+    setError(null);
+    try {
+      await rutAmThanh(track.id);
+      setTienTrinhThem('Đang làm mới danh sách…');
+      await loadTracks();
+      playTrack({ ...track, audioUrl: null });
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : String(caught));
+    } finally {
+      setDangThem(null);
+      setTienTrinhThem(null);
+    }
+  };
+
+  /**
+   * Đưa một bài từ YouTube vào thư viện rồi phát. HAI bước:
    *  1. `POST /music/tracks/remote` — tạo dòng trong CSDL. `audioUrl` là **bắt
    *     buộc**, và `download-audio` sau đó đọc đúng trường này làm địa chỉ
-   *     YouTube, nên phải gửi link `watch?v=…` chứ không để trống. (Trang web
-   *     gửi `result.audioUrl` — mà kết quả tìm KHÔNG có trường đó, nên lời gọi
-   *     ấy luôn trả 400 và bị `catch` nuốt mất. Đừng chép theo.)
-   *  2. `POST /music/tracks/:id/download-audio` — máy chủ rút âm thanh về R2.
-   *     Chỉ sau bước này bài mới phát được bằng thẻ <audio>, tua được, tải về
-   *     nghe offline được. Bỏ bước này thì bài hiện trong danh sách mà bấm vào
-   *     là im lặng.
+   *     YouTube, nên phải gửi link `watch?v=…`.
+   *  2. `rutAmThanh` — máy chủ rút âm thanh về R2.
    *
-   * Gọi bằng `fetch` trần chứ không `api.request`: `request()` chặn cứng 30 giây,
-   * mà rút âm thanh (yt-dlp + ffmpeg trên máy chủ) mất 10-60 giây — hết giờ ở
-   * phía app trong khi máy chủ vẫn đang làm là kiểu hỏng khó hiểu nhất.
+   * ⚠️ Bước 2 bắt buộc VỚI APP, không bắt buộc với web. Web phát bài YouTube
+   * bằng khung nhúng nên một dòng trỏ vào `youtube.com` là đủ dùng; app phát
+   * bằng thẻ <audio>, mà `GET /stream/:id` của dòng như vậy trả **400**.
    */
   const themTuYouTube = async (r: KetQuaYouTube) => {
     if (!api || dangThem) return;
@@ -137,19 +172,7 @@ export function MusicPage() {
         },
       });
 
-      setTienTrinhThem('Đang rút âm thanh về máy chủ… (10-60 giây)');
-      const phanHoi = await fetch(
-        `${api.baseUrlForForms()}/api/v1/music/tracks/${tao.id}/download-audio`,
-        { method: 'POST', headers: { ...api.authHeaders(), 'Content-Type': 'application/json' }, body: '{}' },
-      );
-      if (!phanHoi.ok) {
-        const chiTiet = await phanHoi.json().catch(() => null) as { message?: string } | null;
-        throw new Error(
-          phanHoi.status === 403
-            ? 'Bài đã vào thư viện nhưng chỉ tài khoản quản trị mới rút được âm thanh về máy chủ.'
-            : chiTiet?.message ?? `Máy chủ trả về ${phanHoi.status}`,
-        );
-      }
+      await rutAmThanh(tao.id);
 
       setTienTrinhThem('Đang làm mới danh sách…');
       await loadTracks();
@@ -341,8 +364,11 @@ export function MusicPage() {
               playing={playing}
               isDownloaded={downloaded.has(track.id)}
               isDownloading={downloading.has(track.id)}
+              chuaRutAmThanh={laBaiYouTube(track) && !downloaded.has(track.id)}
+              dangRut={dangThem === String(track.id)}
               online={online}
               onPlay={() => (currentId === track.id ? toggle() : playTrack(track, visible))}
+              onExtract={() => void rutRoiPhat(track)}
               onDownload={() => void download(track)}
               onRemove={() => void remove(track.id)}
             />
@@ -418,8 +444,8 @@ export function MusicPage() {
 
 /** Một dòng trong danh sách thư viện. Tách riêng cho dễ đọc, không có trạng thái. */
 function DongBai({
-  track, index, isCurrent, playing, isDownloaded, isDownloading, online,
-  onPlay, onDownload, onRemove,
+  track, index, isCurrent, playing, isDownloaded, isDownloading, chuaRutAmThanh, dangRut, online,
+  onPlay, onExtract, onDownload, onRemove,
 }: {
   track: Track;
   index: number;
@@ -427,14 +453,21 @@ function DongBai({
   playing: boolean;
   isDownloaded: boolean;
   isDownloading: boolean;
+  /** Dòng còn trỏ vào YouTube: app chưa phát được cho tới khi rút âm thanh. */
+  chuaRutAmThanh: boolean;
+  dangRut: boolean;
   online: boolean;
   onPlay: () => void;
+  onExtract: () => void;
   onDownload: () => void;
   onRemove: () => void;
 }) {
-  const playable = isDownloaded || online;
+  const playable = isDownloaded || (online && !chuaRutAmThanh);
+  // Bấm phát một dòng YouTube = rút âm thanh rồi phát, chứ không phải báo lỗi.
+  const bam = chuaRutAmThanh && online ? onExtract : onPlay;
+  const bamDuoc = playable || (chuaRutAmThanh && online);
   return (
-    <li className="ct-trk" data-current={isCurrent} onDoubleClick={() => playable && onPlay()}>
+    <li className="ct-trk" data-current={isCurrent} onDoubleClick={() => bamDuoc && bam()}>
       <span className="ct-trk-index">
         {isCurrent && playing
           ? <span className="ct-trk-bars" aria-label="đang phát"><i /><i /><i /></span>
@@ -444,10 +477,14 @@ function DongBai({
       <button
         type="button"
         className="ct-trk-art"
-        onClick={onPlay}
-        disabled={!playable}
+        onClick={bam}
+        disabled={!bamDuoc || dangRut}
         aria-label={isCurrent && playing ? `Tạm dừng ${track.title}` : `Phát ${track.title}`}
-        title={!playable ? 'Chưa tải về máy — cần mạng để nghe' : undefined}
+        title={
+          chuaRutAmThanh
+            ? 'Bài lấy từ YouTube — bấm để rút âm thanh về máy chủ rồi phát (10-60 giây)'
+            : !playable ? 'Chưa tải về máy — cần mạng để nghe' : undefined
+        }
       >
         {track.coverImage
           ? <img src={track.coverImage} alt="" loading="lazy" />
@@ -468,7 +505,18 @@ function DongBai({
 
       <span className="ct-trk-time">{clock(track.durationSeconds)}</span>
 
-      {isDownloaded ? (
+      {chuaRutAmThanh ? (
+        <button
+          type="button"
+          className="ct-trk-action"
+          onClick={onExtract}
+          disabled={!online || dangRut}
+          aria-label={`Rút âm thanh cho ${track.title}`}
+          title="Bài lấy từ YouTube — rút âm thanh về máy chủ để nghe được trong app"
+        >
+          {dangRut ? <Loader2 size={14} className="ct-spin" aria-hidden /> : <Youtube size={15} aria-hidden />}
+        </button>
+      ) : isDownloaded ? (
         <button
           type="button"
           className="ct-trk-action"

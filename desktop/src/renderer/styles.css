@@ -1562,113 +1562,398 @@ code {
 }
 
 /* ── Music ─────────────────────────────────────────────── */
-
-.ct-track-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 4px;
+/* Thanh phát DÍNH ĐÁY bằng `sticky`, KHÔNG bằng flex hai tầng.
+   `.ct-content` bao ngoài vốn đã là vùng cuộn (`overflow-y: auto`), nên lồng
+   thêm một vùng cuộn `height: 100%` bên trong là dựng hai thanh cuộn chồng
+   nhau và bắt chiều cao phải khớp tuyệt đối — sai một chỗ là thanh phát trôi
+   mất. `sticky` bám vào đúng vùng cuộn sẵn có, không cần tính chiều cao nào. */
+.ct-music {
+  padding: 22px 24px 0;
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
 }
 
-.ct-track {
+/* ── Đang phát ───────────────────────────────────────── */
+.ct-np {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--ct-radius-lg);
+  border: 1px solid var(--ct-border);
+  background: var(--ct-surface);
+  margin-bottom: 18px;
+  isolation: isolate;
+}
+/* Nền lấy chính ảnh bìa, làm mờ mạnh: mỗi bài một sắc riêng mà không cần
+   bảng màu gõ tay. `scale` để mép ảnh mờ không lộ viền. */
+.ct-np-wash {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(46px) saturate(150%);
+  transform: scale(1.25);
+  opacity: 0.34;
+  z-index: -1;
+}
+.ct-np-body {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 22px;
+  backdrop-filter: blur(2px);
+}
+.ct-np-meta { min-width: 0; flex: 1; }
+.ct-np-eyebrow {
+  margin: 0 0 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ct-accent-text);
+}
+.ct-np-title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 700;
+  color: var(--ct-text);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.ct-np-artist { margin: 4px 0 0; color: var(--ct-text-muted); font-size: 13.5px; }
+
+/* ── Đĩa than ────────────────────────────────────────── */
+.ct-vinyl { flex: 0 0 auto; width: 132px; height: 132px; }
+.ct-vinyl-disc {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  /* Rãnh đĩa: các vòng tròn đồng tâm mảnh, không phải ảnh nền. */
+  background:
+    repeating-radial-gradient(circle at 50% 50%,
+      rgba(0, 0, 0, 0.42) 0 1px,
+      rgba(0, 0, 0, 0.16) 1px 3px),
+    #14141a;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.34);
+  animation: ct-spin 7s linear infinite;
+  animation-play-state: paused;
+}
+.ct-vinyl.is-spinning .ct-vinyl-disc { animation-play-state: running; }
+.ct-vinyl-art {
+  width: 58%;
+  height: 58%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+.ct-vinyl-art-blank {
+  display: grid;
+  place-items: center;
+  background: var(--ct-accent);
+  color: #fff;
+}
+/* Lỗ trục giữa — chi tiết nhỏ nhưng thiếu nó thì đĩa trông như cái huy hiệu. */
+.ct-vinyl-hole {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--ct-surface);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+@keyframes ct-spin { to { transform: rotate(360deg); } }
+
+/* ── Dải nhịp (trang trí) ────────────────────────────── */
+.ct-eq { display: flex; align-items: flex-end; gap: 3px; height: 26px; margin-top: 14px; }
+.ct-eq span {
+  width: 3px;
+  height: 20%;
+  border-radius: 2px;
+  background: var(--ct-accent);
+  opacity: 0.45;
+  transition: height var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-eq.is-live span { animation: ct-eq-bounce 900ms ease-in-out infinite alternate; opacity: 0.85; }
+@keyframes ct-eq-bounce { from { height: 15%; } to { height: 100%; } }
+
+/* ── Thanh công cụ ───────────────────────────────────── */
+.ct-music-toolbar {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 9px 12px;
-  border: 1px solid transparent;
-  border-radius: var(--ct-radius);
-  transition: background var(--ct-motion-fast) var(--ct-ease);
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
-
-.ct-track:hover {
-  background: var(--ct-hover);
-}
-
-.ct-track[data-playing='true'] {
-  background: var(--ct-active);
-  border-color: color-mix(in srgb, var(--ct-accent) 40%, transparent);
-}
-
-.ct-track-play {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
+.ct-music-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 0 11px;
+  height: 36px;
+  border-radius: var(--ct-radius-sm);
   border: 1px solid var(--ct-border);
-  border-radius: 50%;
   background: var(--ct-surface);
-  color: var(--ct-text);
-  cursor: pointer;
-  transition: transform var(--ct-motion-fast) var(--ct-ease);
+  color: var(--ct-text-faint);
 }
-
-.ct-track-play:hover:not(:disabled) {
-  transform: scale(1.08);
-  border-color: var(--ct-accent);
-}
-
-.ct-track-play:active:not(:disabled) {
-  transform: scale(0.92);
-}
-
-.ct-track-play:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.ct-track-main {
+.ct-music-search input {
   flex: 1;
   min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 13.5px;
+}
+.ct-music-usage {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ct-text-muted);
 }
 
-.ct-track-title {
-  font-weight: 600;
+/* ── Danh sách bài ───────────────────────────────────── */
+.ct-tracks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.ct-trk {
+  display: grid;
+  grid-template-columns: 26px 40px minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 10px;
+  border-radius: var(--ct-radius-sm);
+  transition: background var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-trk:hover { background: var(--ct-hover); }
+.ct-trk[data-current='true'] { background: var(--ct-active); }
+.ct-trk[data-current='true'] .ct-trk-title { color: var(--ct-accent-text); }
+
+.ct-trk-index {
+  font-size: 12px;
+  color: var(--ct-text-faint);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+/* Ba vạch nhảy thay cho số thứ tự ở bài đang phát — nhìn một cái là biết bài
+   nào đang chạy mà không phải dò icon. */
+.ct-trk-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.ct-trk-bars i {
+  width: 2px;
+  background: var(--ct-accent);
+  border-radius: 1px;
+  animation: ct-eq-bounce 700ms ease-in-out infinite alternate;
+}
+.ct-trk-bars i:nth-child(2) { animation-delay: 160ms; }
+.ct-trk-bars i:nth-child(3) { animation-delay: 320ms; }
+
+.ct-trk-art {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--ct-hover);
+}
+.ct-trk-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ct-trk-art-blank {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: var(--ct-accent);
+  color: #fff;
+}
+/* Nút phát chỉ hiện khi rê chuột hoặc khi đang là bài hiện tại — để danh sách
+   ở trạng thái nghỉ trông sạch, không phải một rừng tam giác. */
+.ct-trk-art-veil {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  opacity: 0;
+  transition: opacity var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-trk:hover .ct-trk-art-veil,
+.ct-trk[data-current='true'] .ct-trk-art-veil { opacity: 1; }
+.ct-trk-art:disabled { cursor: not-allowed; opacity: 0.5; }
+
+.ct-trk-main { display: flex; flex-direction: column; min-width: 0; gap: 2px; }
+.ct-trk-title {
   font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ct-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ct-trk-artist {
+  font-size: 12px;
+  color: var(--ct-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ct-trk-time {
+  font-size: 12px;
+  color: var(--ct-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.ct-trk-action {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ct-text-faint);
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease), color var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-trk-action:hover:not(:disabled) { background: var(--ct-hover); color: var(--ct-text); }
+.ct-trk-action:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Thanh phát ──────────────────────────────────────── */
+.ct-player {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  margin: 16px -24px 0;
+  padding-left: 24px;
+  padding-right: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid var(--ct-border);
+  /* Nền ĐỤC, không trong suốt: danh sách bài cuộn qua bên dưới, và chữ chồng
+     lên chữ thì không đọc được cái nào. */
+  background: var(--ct-surface);
+}
+.ct-player-now { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.ct-player-art { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; flex: 0 0 auto; }
+.ct-player-text { display: flex; flex-direction: column; min-width: 0; gap: 1px; }
+.ct-player-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ct-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ct-player-artist {
+  font-size: 11.5px;
+  color: var(--ct-text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.ct-track-meta {
-  display: flex;
-  gap: 10px;
-  margin-top: 2px;
-  font-size: 11.5px;
-  color: var(--ct-text-faint);
-}
-
-.ct-track-meta .ct-offline-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.ct-track-action {
+.ct-player-mid { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 0; width: 100%; }
+.ct-player-buttons { display: flex; align-items: center; gap: 6px; }
+.ct-pbtn {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
-  border: none;
-  border-radius: 8px;
-  background: none;
-  color: var(--ct-text-faint);
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ct-text-muted);
   cursor: pointer;
+  transition: color var(--ct-motion-fast) var(--ct-ease),
+              background var(--ct-motion-fast) var(--ct-ease),
+              transform var(--ct-motion-fast) var(--ct-spring);
+}
+.ct-pbtn:hover { color: var(--ct-text); background: var(--ct-hover); }
+.ct-pbtn:active { transform: scale(0.92); }
+.ct-pbtn.is-on { color: var(--ct-accent-text); }
+.ct-pbtn-main {
+  width: 38px;
+  height: 38px;
+  background: var(--ct-accent);
+  color: #fff;
+}
+.ct-pbtn-main:hover { background: var(--ct-accent); color: #fff; filter: brightness(1.08); }
+
+.ct-seek { display: flex; align-items: center; gap: 9px; width: 100%; }
+.ct-seek-time {
+  font-size: 11px;
+  color: var(--ct-text-faint);
+  font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+  min-width: 34px;
+  text-align: center;
+}
+.ct-player-right { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+
+/* Thanh trượt dùng chung cho tua và âm lượng.
+   Phần đã qua tô bằng `--ct-progress` do React đặt — một biến, không phải hai
+   phần tử chồng nhau. */
+.ct-seek-bar, .ct-vol {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--ct-accent) 0 var(--ct-progress, 0%),
+    var(--ct-border) var(--ct-progress, 0%) 100%);
+  cursor: pointer;
+  outline: none;
+}
+.ct-seek-bar { flex: 1; min-width: 0; }
+.ct-vol { width: 84px; flex: 0 0 auto; }
+.ct-seek-bar::-webkit-slider-thumb, .ct-vol::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ct-accent);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  /* Núm ẩn cho tới khi rê chuột — thanh mảnh trông gọn hơn hẳn, và núm vẫn
+     hiện ngay khi người dùng định kéo. */
+  opacity: 0;
+  transition: opacity var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-seek-bar:hover::-webkit-slider-thumb,
+.ct-vol:hover::-webkit-slider-thumb,
+.ct-seek-bar:focus-visible::-webkit-slider-thumb,
+.ct-vol:focus-visible::-webkit-slider-thumb { opacity: 1; }
+.ct-seek-bar:focus-visible, .ct-vol:focus-visible {
+  box-shadow: 0 0 0 2px var(--ct-accent);
 }
 
-.ct-track-action:hover:not(:disabled) {
-  background: var(--ct-hover);
-  color: var(--ct-text);
+/* Màn hẹp: bỏ cột phải, dồn thanh phát về hai cột cho khỏi chen chúc. */
+@media (max-width: 720px) {
+  .ct-player { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+  .ct-player-right { display: none; }
+  .ct-np-body { flex-direction: column; align-items: flex-start; }
+  .ct-trk { grid-template-columns: 22px 40px minmax(0, 1fr) auto auto; }
+  .ct-trk .ct-offline-tag { display: none; }
 }
 
-.ct-track-action:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
+/* Tôn trọng thiết lập giảm chuyển động: đĩa đứng yên, dải nhịp không nhảy. */
+@media (prefers-reduced-motion: reduce) {
+  .ct-vinyl-disc { animation: none; }
+  .ct-eq.is-live span, .ct-trk-bars i { animation: none; height: 60%; }
 }
-
-/* ── Dải báo bản mới ───────────────────────────────────── */
 
 .ct-update-banner {
   display: flex;

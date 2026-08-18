@@ -13,7 +13,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Mic, X } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useUpdateStatus } from '../../components/UpdateBanner';
-import { docThanhTieng, ngungNoi, phatTieng } from './giongNoi';
+import { docThanhTieng, ngungNoi, phatTieng, datTocDoDoc } from './giongNoi';
 import { hoiOdin } from './hoiOdin';
 import { useSession } from '../../auth/session';
 import { OdinRobot } from './OdinRobot';
@@ -138,8 +138,29 @@ export function OdinDock() {
       const duoi = cauDau && tra.startsWith(cauDau) ? tra.slice(cauDau.length).trim() : '';
 
       if (tiengCauDau) {
+        /*
+         * ⚠️ ĐẶT HÀNG PHẦN ĐUÔI **TRƯỚC** KHI PHÁT CÂU ĐẦU.
+         *
+         * Bản đầu của tôi gọi máy đọc cho phần đuôi SAU khi câu đầu phát
+         * xong — nên giữa hai đoạn là trọn một vòng gọi máy đọc, và người
+         * dùng nghe thấy một khoảng lặng 3-4 giây ngay chỗ dấu chấm. Đúng
+         * như báo cáo 18/08: "đến đoạn dấu chấm nó tự nhiên dùng 3-4s mới
+         * đọc tiếp".
+         *
+         * Tôi cắt câu ra để giọng RA SỚM, rồi lại tự tạo một chỗ ngắt ở
+         * giữa — chữa được đầu câu mà làm hỏng khúc giữa.
+         *
+         * Đặt hàng ngay từ bây giờ thì máy đọc chạy đoạn hai TRONG LÚC đoạn
+         * một đang phát; câu đầu thường dài hơn thời gian sinh đoạn hai, nên
+         * nối vào là liền mạch.
+         */
+        const tiengDuoi = duoi ? docThanhTieng(api, duoi, tenGiong) : null;
+        // Nuốt lỗi ở đây để lời hứa không thành "unhandled rejection" trong
+        // lúc mình còn đang phát đoạn một; lỗi thật nổi lên ở `await` bên dưới.
+        void tiengDuoi?.catch(() => {});
+
         await phatTieng(await tiengCauDau);
-        if (duoi) await phatTieng(await docThanhTieng(api, duoi, tenGiong));
+        if (tiengDuoi) await phatTieng(await tiengDuoi);
       } else {
         await phatTieng(await docThanhTieng(api, tra, tenGiong));
       }
@@ -149,6 +170,13 @@ export function OdinDock() {
       odin.announce(`Mình gặp trục trặc: ${e instanceof Error ? e.message : String(e)}`);
     }
   }, [api, odin, ngonNgu, settings]);
+
+  // Áp tốc độ đã lưu NGAY khi app mở, và mỗi lần người dùng đổi. Chỉ đặt lúc
+  // bấm nút thì khởi động lại app là về 1× — người dùng chỉnh xong, hôm sau mở
+  // ra thấy như cũ và tưởng thiết đặt không lưu.
+  useEffect(() => {
+    datTocDoDoc(typeof settings.odinTocDo === 'number' ? settings.odinTocDo : 1);
+  }, [settings.odinTocDo]);
 
   const update = useUpdateStatus();
   /* Nhớ ĐÃ BÁO BẢN NÀO, không phải "đã báo hay chưa".

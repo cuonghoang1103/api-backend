@@ -14,12 +14,19 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Loader2, Volume2 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
-import { docThanhTieng, layDanhSachGiong, ngungNoi, phatTieng, type Giong } from './giongNoi';
+import { docThanhTieng, layDanhSachGiong, ngungNoi, phatTieng, type Giong, datTocDoDoc } from './giongNoi';
 
 const CAU_THU: Record<'vi' | 'en', string> = {
   vi: 'Xin chào, mình là Odin. Mình sẽ đọc câu trả lời bằng giọng này.',
   en: 'Hi, I am Odin. I will read answers out loud in this voice.',
 };
+
+/**
+ * Bảy mức tốc độ người dùng chọn (18/08/2026). CỐ Ý dày ở quanh 1× — đó là
+ * vùng người ta thật sự tinh chỉnh; 0,85 và 0,95 nghe khác nhau rõ, còn
+ * nhảy thẳng 0,5 → 1 thì không ai dùng khoảng giữa.
+ */
+const TOC_DO = [0.5, 0.75, 0.85, 0.95, 1, 1.25, 1.5];
 
 export function OdinPanel() {
   const { settings, setSetting } = useAppState();
@@ -30,6 +37,7 @@ export function OdinPanel() {
   const [loi, setLoi] = useState<string | null>(null);
 
   const ngonNgu = (settings.odinNgonNgu === 'en' ? 'en' : 'vi') as 'vi' | 'en';
+  const tocDo = typeof settings.odinTocDo === 'number' ? settings.odinTocDo : 1;
   const khoaGiong = ngonNgu === 'en' ? 'odinGiongEn' : 'odinGiongVi';
   const giongDangChon = typeof settings[khoaGiong] === 'string' ? String(settings[khoaGiong]) : '';
   const noiThanhTieng = settings.odinNoiThanhTieng !== false;
@@ -93,6 +101,29 @@ export function OdinPanel() {
               <button type="button" data-active={ngonNgu === 'en'}
                 onClick={() => setSetting('odinNgonNgu', 'en')}>English</button>
             </div>
+          </dd>
+        </div>
+
+        <div className="ct-row">
+          <dt>Tốc độ đọc</dt>
+          <dd>
+            <div className="ct-tocdo">
+              {TOC_DO.map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  data-active={Math.abs(tocDo - v) < 0.001}
+                  onClick={() => { setSetting('odinTocDo', v); datTocDoDoc(v); }}
+                  title={v === 1 ? 'Tốc độ gốc' : `${v}× tốc độ gốc`}
+                >
+                  {v === 1 ? '1×' : `${String(v).replace('.', ',')}×`}
+                </button>
+              ))}
+            </div>
+            <p className="ct-ghichu">
+              Áp cho mọi giọng, đổi là ăn ngay — không phải đọc lại. Giữ cao độ
+              nên chậm lại không thành giọng trầm đục.
+            </p>
           </dd>
         </div>
 

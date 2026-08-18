@@ -5529,3 +5529,38 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   background: var(--ct-active); color: var(--ct-accent-text);
   font-size: 16px; font-weight: 640;
 }
+
+/* ── Chọn tốc độ đọc ──
+   Bảy mức nên KHÔNG dùng thanh trượt: thanh trượt cho cảm giác liên tục
+   trong khi chỉ có bảy giá trị, và kéo trúng đúng 0,85 trên một thanh 300px
+   là việc khó chịu. Bảy cái nút thì bấm phát trúng phát. */
+.ct-tocdo {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+}
+
+.ct-tocdo button {
+  min-width: 40px;
+  padding: 3px 7px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--ct-text-faint);
+  font-size: 11px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.ct-tocdo button:hover { color: var(--ct-text); }
+
+.ct-tocdo button[data-active='true'] {
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  box-shadow: var(--ct-shadow-sm);
+}

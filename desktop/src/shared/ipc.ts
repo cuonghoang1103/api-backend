@@ -98,6 +98,8 @@ export const settingKeySchema = z.enum([
    * nguyên. Gộp thành một khoá là mỗi lần chuyển tiếng lại phải chọn lại giọng.
    */
   'odinNgonNgu',
+  /** Tốc độ đọc, 0,5–1,5. Áp cho mọi giọng ở cả dock lẫn cửa sổ robot nổi. */
+  'odinTocDo',
   'odinGiongVi',
   'odinGiongEn',
   /** Odin có ĐỌC THÀNH TIẾNG câu trả lời không. Tắt được, vì có lúc cần yên. */

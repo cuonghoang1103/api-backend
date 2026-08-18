@@ -13,6 +13,8 @@
  * lén. Đây là lý do `dungHet()` được gọi ở CẢ hai lối ra.
  */
 
+import { layTocDoDoc } from './giongNoi';
+
 export interface BoThu {
   dung: () => void;
 }
@@ -81,6 +83,10 @@ export async function phatBase64(base64: string): Promise<void> {
   urlDangPhat = url;
   the ??= new Audio();
   the.src = url;
+  // Cùng tốc độ với dock trong app — hai nơi phát mà hai tốc độ thì người
+  // dùng chỉnh một chỗ rồi tưởng nó không ăn.
+  the.playbackRate = layTocDoDoc();
+  the.preservesPitch = true;
   await new Promise<void>((xong) => {
     if (!the) { xong(); return; }
     const het = (): void => {

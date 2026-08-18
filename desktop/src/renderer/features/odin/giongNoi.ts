@@ -113,12 +113,53 @@ export function ngungNoi(): void {
   if (urlDangPhat) { URL.revokeObjectURL(urlDangPhat); urlDangPhat = null; }
 }
 
+/**
+ * ============================================================
+ * TỐC ĐỘ ĐỌC
+ * ============================================================
+ *
+ * Chỉnh ở MÁY PHÁT, không phải ở máy đọc — và đó là lựa chọn tốt hơn chứ
+ * không phải đường vòng:
+ *
+ *  • Máy đọc của web KHÔNG nhận tham số tốc độ (đã kiểm `/tts` và
+ *    `/tts-stream`, cả hai không có trường nào).
+ *  • Chỉnh ở đây áp cho MỌI giọng như nhau — 18 giọng Việt, 8 giọng F5 tự
+ *    train, 4 giọng Anh. Chỉnh ở máy đọc thì mỗi bên một kiểu.
+ *  • Không phải sinh lại tiếng: đổi tốc độ là đổi ngay, kể cả với câu đã
+ *    tải về rồi.
+ *
+ * `preservesPitch` giữ nguyên cao độ khi kéo giãn thời gian — thiếu nó thì
+ * chậm lại thành giọng trầm đục và nhanh lên thành giọng chuột.
+ */
+let tocDoDoc = 1;
+
+/** Đặt tốc độ đọc. Kẹp trong khoảng nghe được — ngoài khoảng đó là không hiểu nổi. */
+export function datTocDoDoc(v: number): void {
+  tocDoDoc = Math.min(2, Math.max(0.5, Number.isFinite(v) ? v : 1));
+  if (theAudio) {
+    theAudio.playbackRate = tocDoDoc;
+    theAudio.preservesPitch = true;
+  }
+}
+
+export function layTocDoDoc(): number {
+  return tocDoDoc;
+}
+
+function apTocDo(a: HTMLAudioElement): void {
+  a.playbackRate = tocDoDoc;
+  // Tên có tiền tố ở một số bản WebKit cũ — gán cả hai cho chắc.
+  a.preservesPitch = true;
+  (a as unknown as { webkitPreservesPitch?: boolean }).webkitPreservesPitch = true;
+}
+
 export function phatTieng(blob: Blob): Promise<void> {
   ngungNoi();
   if (!theAudio) theAudio = new Audio();
   const url = URL.createObjectURL(blob);
   urlDangPhat = url;
   theAudio.src = url;
+  apTocDo(theAudio);
   return new Promise((xong) => {
     const donDep = () => {
       // Thu hồi URL sau khi phát xong: mỗi câu là một Blob trong bộ nhớ, không

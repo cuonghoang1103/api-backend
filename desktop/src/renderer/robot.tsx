@@ -51,6 +51,19 @@ function Robot() {
     return () => clearInterval(id);
   }, []);
 
+  /*
+   * Cửa sổ phải PHÌNH RA khi có bong bóng chữ.
+   *
+   * ⚠️ Cửa sổ Electron CẮT mọi thứ tràn ra ngoài biên. Bong bóng rộng 230px
+   * nằm bên trái robot, mà cửa sổ gọn chỉ 150px — nên mọi câu trả lời dài
+   * đều bị xén mất phần đầu. Người dùng báo 18/08: "phần chữ đã bị cắt đi,
+   * không thấy hết". Không có lỗi nào để thấy, chỉ có chữ mất.
+   */
+  useEffect(() => {
+    if (rong) return;                       // đang mở khung chat, cỡ đã to sẵn
+    void window.cuongthai?.robot.doiCo(tin || tt === 'nghi' ? 'noi' : 'gon');
+  }, [tin, tt, rong]);
+
   useEffect(() => {
     const cau = window.cuongthai;
     if (!cau) return;
@@ -152,6 +165,13 @@ function Robot() {
         onMouseLeave={() => datHover(false)}
         title={'Bấm một lần: mở khung chat nhanh\nBấm hai lần: mở trang AI Chat\nKéo để dời'}
       >
+        {/* Đang nghĩ mà KHÔNG nói gì thì người dùng không biết nó có nghe
+            thấy mình không. Trong app đã có câu này (`DangNghi`), ngoài app
+            thì trước đây chỉ có con quay trên nút micro — quá nhỏ và quá xa
+            tầm mắt. */}
+        {!tin && !rong && tt === 'nghi' && (
+          <div className="rb-bong" data-loai="cho">Chờ tớ suy nghĩ xíu nhé…</div>
+        )}
         {tin && !rong && (
           <div className="rb-bong" data-loai={tin.loai}>
             {tin.chu}

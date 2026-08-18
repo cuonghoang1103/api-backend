@@ -693,6 +693,8 @@ export const INVOKE_CHANNELS = {
   'app:luuFile': luuFileSchema,
 
   'robot:doiKichThuoc': z.object({ rong: z.boolean() }),
+  /** Ba cỡ cửa sổ robot. Xem `NOI` trong robotNoi.ts để biết vì sao cần cỡ thứ ba. */
+  'robot:doiCo': z.object({ co: z.enum(['gon', 'noi', 'rong']) }),
   'robot:moChinh': z.object({ duongDan: z.string().min(1).max(200) }),
   'robot:hoi': z.object({ chu: z.string().min(1).max(4000) }),
   /**
@@ -1007,6 +1009,15 @@ export interface DesktopBridge {
   robot: {
     /** Phình ra thành khung chat mini, hoặc thu về đúng con robot. */
     doiKichThuoc(rong: boolean): Promise<void>;
+    /**
+     * Đổi cỡ cửa sổ theo việc đang làm.
+     *
+     * ⚠️ BẮT BUỘC gọi trước khi hiện bong bóng chữ. Cửa sổ Electron CẮT mọi
+     * thứ tràn ra ngoài biên, nên bong bóng 230px trong cửa sổ 150px bị xén
+     * mất phần đầu — người dùng thấy những mẩu chữ cụt và tưởng model trả
+     * lời cụt.
+     */
+    doiCo(co: 'gon' | 'noi' | 'rong'): Promise<void>;
     /** Đưa cửa sổ chính ra trước và điều hướng tới `duongDan`. */
     moChinh(duongDan: string): Promise<void>;
     /** Hỏi nhanh một câu, trả về câu trả lời đã hoàn chỉnh (không chảy chữ). */

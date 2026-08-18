@@ -181,6 +181,8 @@ const bridge: DesktopBridge = {
   robot: {
     doiKichThuoc: (rong: boolean) =>
       ipcRenderer.invoke('robot:doiKichThuoc', { rong }) as Promise<void>,
+    doiCo: (co: 'gon' | 'noi' | 'rong') =>
+      ipcRenderer.invoke('robot:doiCo', { co }) as Promise<void>,
     moChinh: (duongDan: string) =>
       ipcRenderer.invoke('robot:moChinh', { duongDan }) as Promise<void>,
     hoi: (chu: string) => ipcRenderer.invoke('robot:hoi', { chu }) as Promise<{ chu: string }>,

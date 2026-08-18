@@ -80,6 +80,18 @@ body {
   line-height: 1.45;
   white-space: normal;
   animation: rb-hien 0.22s ease;
+  /* Câu trả lời dài thì CUỘN trong bong bóng, đừng để nó cao vô tận rồi lại
+     bị biên cửa sổ cắt. Cửa sổ đã phình sang cỡ `noi` (300×250) khi có bong
+     bóng — xem `doiCo` trong robotNoi.ts. */
+  max-height: 190px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.rb-bong[data-loai='cho'] {
+  border-left: 3px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.72);
+  font-style: italic;
 }
 
 @keyframes rb-hien {

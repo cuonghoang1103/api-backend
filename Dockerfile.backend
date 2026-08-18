@@ -34,8 +34,25 @@ RUN if [ -d "$(pwd)/host-cache" ] && [ "$(ls -A "$(pwd)/host-cache")" != "" ]; t
     fi
 
 # Install ALL dependencies (including devDependencies for TypeScript).
-# Offline fallback: if npm ci fails, restore from /app-host-cache/ if populated.
+#
+# BA NẤC, theo thứ tự nhanh → chắc:
+#   1. qua gương npmmirror (nhanh từ châu Á)
+#   2. KHÔNG qua gương — về nguồn gốc của sharp
+#   3. host-cache đã hâm sẵn
+#
+# ⚠️ NẤC 2 LÀ THỨ THIẾU SUỐT TỪ ĐẦU, và nó đã chặn deploy hai lần liền
+# 18/08/2026: `npmmirror.com` hết giờ khi tải `libvips-8.14.5-linux-x64.tar.br`,
+# sharp quay sang biên dịch bằng node-gyp rồi chết. Gương được ghim CỨNG bằng
+# `ENV` nên không có đường nào đi vòng — một cái CDN ở nước khác nghẽn là cả
+# dây chuyền deploy đứng, dù nguồn gốc vẫn sống.
+#
+# Gương vẫn là nấc ĐẦU vì nó thật sự nhanh hơn từ Việt Nam. Chỉ là từ nay nó
+# không còn là đường DUY NHẤT.
 RUN npm ci --include=dev --no-audit --fetch-timeout=60000 || \
+    (echo "npm ci hỏng qua gương — thử lại KHÔNG dùng gương..." && \
+     rm -rf node_modules && \
+     npm_config_sharp_binary_host= npm_config_sharp_libvips_binary_host= \
+       npm ci --include=dev --no-audit --fetch-timeout=120000) || \
     (echo "npm ci failed — checking host cache..." && \
      if [ -d /app-host-cache/node_modules ] && \
         [ -d /app-host-cache/node_modules/sharp ] && \

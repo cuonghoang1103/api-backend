@@ -35,6 +35,19 @@ import { IS_DEV, DEV_SERVER_URL, RENDERER_SOURCE, APP_ORIGIN } from './config';
 const GON = { width: 150, height: 190 };
 /** Lúc mở khung chat mini. */
 const RONG = { width: 380, height: 520 };
+/**
+ * Cỡ khi robot đang NÓI một câu — vừa đủ cho bong bóng chữ.
+ *
+ * ⚠️ VÌ SAO PHẢI CÓ CỠ THỨ BA. Cửa sổ Electron CẮT mọi thứ tràn ra ngoài
+ * biên nó. Bong bóng rộng 230px nằm bên trái robot, mà cửa sổ gọn chỉ 150px
+ * — nên mỗi câu trả lời dài đều bị xén mất phần đầu, và người dùng thấy
+ * những mẩu chữ cụt như "ux", "với", "Dev". Không có lỗi nào để thấy, chỉ
+ * có chữ mất.
+ *
+ * Cao 250 vì bong bóng cao bao nhiêu là tuỳ câu trả lời; ngần này chứa được
+ * khoảng 10 dòng, dài hơn thì bong bóng tự cuộn (xem `.rb-bong` trong CSS).
+ */
+const NOI = { width: 300, height: 250 };
 /** Chừa mép màn hình. */
 const LE = 24;
 
@@ -124,10 +137,35 @@ export function moRobot(): BrowserWindow {
  * robot nhảy vào giữa màn hình. Neo theo góc dưới-phải thì khung chat mở ra
  * đúng chỗ mắt đang nhìn.
  */
+/** Ba cỡ cửa sổ, theo việc robot đang làm. */
+export type CoRobot = 'gon' | 'noi' | 'rong';
+
+let coHienTai: CoRobot = 'gon';
+
+export function doiCo(co: CoRobot): void {
+  const w = cuaSoRobot();
+  if (!w) return;
+  // Đang mở khung chat thì KHÔNG thu nhỏ vì một bong bóng — người dùng đang
+  // gõ dở, cửa sổ co lại giữa chừng là mất chỗ gõ.
+  if (coHienTai === 'rong' && co === 'noi') return;
+  coHienTai = co;
+  dangRong = co === 'rong';
+  const kt = co === 'rong' ? RONG : co === 'noi' ? NOI : GON;
+  const cu = w.getBounds();
+  // Neo theo góc DƯỚI-PHẢI: robot đứng ở đó, và phình sang trái/lên trên thì
+  // nó không nhảy chỗ dưới mắt người dùng.
+  w.setBounds({
+    x: cu.x + cu.width - kt.width,
+    y: cu.y + cu.height - kt.height,
+    ...kt,
+  });
+}
+
 export function doiKichThuoc(rong: boolean): void {
   const w = cuaSoRobot();
   if (!w) return;
   dangRong = rong;
+  coHienTai = rong ? 'rong' : 'gon';
   const kt = rong ? RONG : GON;
   const cu = w.getBounds();
   w.setBounds({

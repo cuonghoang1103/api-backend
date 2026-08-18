@@ -3,7 +3,7 @@
  *
  * Mỏng có chủ ý — mọi quyết định về cửa sổ nằm ở `main/robotNoi.ts`.
  */
-import { doiKichThuoc, moTrangChinh } from '../robotNoi';
+import { doiCo, doiKichThuoc, moTrangChinh } from '../robotNoi';
 import { baoNhac } from '../robotTin';
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from './auth';
@@ -12,6 +12,8 @@ import { handle } from './index';
 
 export function registerRobotHandlers(): void {
   handle('robot:doiKichThuoc', ({ rong }) => doiKichThuoc(rong));
+
+  handle('robot:doiCo', ({ co }) => doiCo(co));
 
   handle('robot:baoNhac', ({ ten }) => baoNhac(ten));
 

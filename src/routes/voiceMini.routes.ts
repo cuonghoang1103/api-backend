@@ -76,6 +76,82 @@ const TTS_BASE = (process.env.TTS_SERVICE_URL || 'http://tts:8080').replace(/\/+
 const MAX_CHARS = Number(process.env.VOICE_MINI_MAX_CHARS) || 5000;
 
 /**
+ * Máy đọc THỨ HAI: F5-TTS chạy trên máy nhà (giọng nhân bản của chủ dự án),
+ * với tới qua đường hầm ngược `172.18.0.1:18092`.
+ *
+ * Khác `TTS_BASE` ở ba điểm, và cả ba đều phải xử lý riêng:
+ *
+ *  1. **Đồng bộ**: `POST /noi` trả thẳng tiếng, không có khái niệm mã việc.
+ *     Nhưng giao diện đã quen luồng "đặt việc → hỏi kết quả", nên ở đây giữ
+ *     nguyên hợp đồng đó và cất tiếng vào bộ nhớ tạm — đổi hợp đồng thì phải
+ *     sửa cả app lẫn web cho một nguồn giọng.
+ *  2. **PCM THÔ, không có header WAV** (`application/octet-stream`). Đưa thẳng
+ *     cho thẻ <audio> là im lặng. Phải tự bọc header — xem `bocWav()`.
+ *  3. **Máy nhà có thể TẮT**. Nên mọi lời gọi tới nó đều phải chịu được hỏng:
+ *     danh sách giọng thiếu 8 mục còn hơn cả trang danh sách chết theo.
+ */
+const F5_BASE = (process.env.F5_TTS_URL || 'http://172.18.0.1:18092').replace(/\/+$/, '');
+/** Giọng có id bắt đầu bằng đây thì đi đường F5. */
+const F5_TIEN_TO = 'f5-';
+
+/**
+ * Bọc PCM 16-bit mono thành WAV.
+ *
+ * Không có 44 byte header này thì trình duyệt không biết tần số lấy mẫu, số
+ * kênh hay độ sâu bit — nó từ chối phát, và không có lỗi nào ngoài sự im lặng.
+ * F5 gửi tần số thật ở header `X-Sample-Rate` (đo được: 24000).
+ */
+function bocWav(pcm: Buffer, sampleRate: number): Buffer {
+  const header = Buffer.alloc(44);
+  header.write('RIFF', 0);
+  header.writeUInt32LE(36 + pcm.length, 4);
+  header.write('WAVE', 8);
+  header.write('fmt ', 12);
+  header.writeUInt32LE(16, 16);          // độ dài khối fmt
+  header.writeUInt16LE(1, 20);           // 1 = PCM không nén
+  header.writeUInt16LE(1, 22);           // 1 kênh
+  header.writeUInt32LE(sampleRate, 24);
+  header.writeUInt32LE(sampleRate * 2, 28);  // byte mỗi giây = sr × kênh × 2
+  header.writeUInt16LE(2, 32);           // byte mỗi khung
+  header.writeUInt16LE(16, 34);          // 16 bit
+  header.write('data', 36);
+  header.writeUInt32LE(pcm.length, 40);
+  return Buffer.concat([header, pcm]);
+}
+
+/**
+ * Tiếng do F5 đọc xong, chờ giao diện tới lấy.
+ *
+ * Có TTL và trần số lượng: không có thì mỗi câu đọc là vài trăm KB nằm lại
+ * trong RAM của backend vĩnh viễn, và một người bấm cả ngày là đủ làm sập.
+ */
+const F5_TTL_MS = 5 * 60 * 1000;
+const F5_TRAN_VIEC = 40;
+const khoTiengF5 = new Map<string, { wav: Buffer; luc: number }>();
+
+function donKhoF5(): void {
+  const nay = Date.now();
+  for (const [k, v] of khoTiengF5) {
+    if (nay - v.luc > F5_TTL_MS) khoTiengF5.delete(k);
+  }
+  // Vẫn quá nhiều thì bỏ cái CŨ NHẤT — người dùng gần như luôn lấy cái vừa đặt.
+  while (khoTiengF5.size > F5_TRAN_VIEC) {
+    const cuNhat = [...khoTiengF5.entries()].sort((a, b) => a[1].luc - b[1].luc)[0];
+    if (!cuNhat) break;
+    khoTiengF5.delete(cuNhat[0]);
+  }
+}
+
+async function f5Fetch(path: string, init?: RequestInit): Promise<Response_> {
+  return fetch(`${F5_BASE}${path}`, {
+    ...init,
+    // Rộng hơn đường thường: F5 nạp model ở lần gọi đầu mất hơn 10 giây (đo
+    // 18/08/2026: lần đầu 11,7s — lần sau 1,2s).
+    signal: AbortSignal.timeout(Number(process.env.F5_TIMEOUT_MS) || 60_000),
+  });
+}
+
+/**
  * Trần số việc ĐANG CHẠY của mỗi người.
  *
  * Không có nó thì một người bấm nút hai chục lần là hai chục luồng cùng
@@ -104,7 +180,26 @@ router.get('/voices', authenticate, async (_req, res: Response<ApiResponse>) => 
   try {
     const r = await upstream('/voices');
     if (!r.ok) throw new Error(`tts HTTP ${r.status}`);
-    res.json({ success: true, data: await r.json() });
+    const chinh = await r.json() as { voices?: unknown[] };
+
+    /* Gộp thêm giọng của máy nhà — nhưng KHÔNG để nó làm hỏng cả danh sách.
+     * Máy nhà tắt là chuyện bình thường (mất điện, người dùng tắt máy), và khi
+     * đó thiếu 8 giọng còn hơn cả trang chọn giọng chết theo. */
+    let themF5: unknown[] = [];
+    try {
+      const rf = await f5Fetch('/voices');
+      if (rf.ok) {
+        const o = await rf.json() as { voices?: unknown[] };
+        themF5 = Array.isArray(o.voices) ? o.voices : [];
+      }
+    } catch {
+      logger.info('VoiceMini: máy nhà (F5) không trả lời — bỏ qua nhóm giọng đó');
+    }
+
+    res.json({
+      success: true,
+      data: { ...chinh, voices: [...(chinh.voices ?? []), ...themF5] },
+    });
   } catch (e) {
     // Lần gọi đầu sau khi container khởi động phải nạp model ~45 giây,
     // nên hết giờ ở đây KHÔNG có nghĩa là hỏng — nói đúng như thế thay
@@ -143,6 +238,38 @@ router.post('/tts', authenticate, async (req: Request, res: Response<ApiResponse
     return;
   }
 
+  /* Giọng của máy nhà đi ĐƯỜNG KHÁC: F5 đọc xong ngay trong một lời gọi, không
+   * có mã việc. Vẫn trả `{jobId}` như đường kia để giao diện không phải biết có
+   * hai loại máy đọc — tiếng cất tạm trong bộ nhớ, `GET /tts/:jobId` lấy ra. */
+  if (voice?.startsWith(F5_TIEN_TO)) {
+    try {
+      const rf = await f5Fetch('/noi', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ text, voice }),
+      });
+      if (!rf.ok) {
+        const chiTiet = await rf.text().catch(() => '');
+        throw new Error(chiTiet.slice(0, 200) || `f5 HTTP ${rf.status}`);
+      }
+      const pcm = Buffer.from(await rf.arrayBuffer());
+      const sr = Number(rf.headers.get('x-sample-rate')) || 24000;
+      donKhoF5();
+      const jobId = `f5-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+      khoTiengF5.set(jobId, { wav: bocWav(pcm, sr), luc: Date.now() });
+      logger.info('VoiceMini F5 đọc xong', { userId, jobId, kyTu: text.length, voice, sr });
+      res.json({ success: true, data: { jobId } });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      logger.warn('VoiceMini: F5 hỏng', { error: msg });
+      res.status(503).json({
+        success: false,
+        message: 'Máy đọc giọng riêng (ở máy nhà) không trả lời. Máy đó có thể đang tắt — chọn tạm một giọng khác.',
+      });
+    }
+    return;
+  }
+
   try {
     const r = await upstream('/tts', {
       method: 'POST',
@@ -164,6 +291,22 @@ router.post('/tts', authenticate, async (req: Request, res: Response<ApiResponse
 router.get('/tts/:jobId', authenticate, async (req: Request, res: Response) => {
   const userId = (req as Request & { user?: { id: number } }).user?.id ?? 0;
   const jobId = String(req.params.jobId);
+
+  // Việc của F5 đã xong từ lúc đặt — lấy thẳng trong kho tạm, không hỏi ai.
+  const sanF5 = khoTiengF5.get(jobId);
+  if (sanF5) {
+    khoTiengF5.delete(jobId);   // lấy một lần rồi thôi, đừng giữ RAM
+    res.setHeader('Content-Type', 'audio/wav');
+    res.setHeader('Content-Length', String(sanF5.wav.length));
+    res.send(sanF5.wav);
+    return;
+  }
+  if (jobId.startsWith('f5-')) {
+    // Mã việc F5 mà không còn trong kho = đã lấy rồi, hoặc quá 5 phút.
+    res.status(404).json({ success: false, message: 'Bản đọc đã hết hạn, bấm đọc lại giúp mình.' });
+    return;
+  }
+
   try {
     const r = await upstream(`/tts/${encodeURIComponent(jobId)}`);
 

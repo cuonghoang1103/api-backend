@@ -20,6 +20,7 @@
 import { prisma } from '../config/database.js';
 import { BadRequestError } from '../middleware/errorHandler.js';
 import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
+import { timTheoNghia } from './noteEmbedding.service.js';
 
 /** Số ghi chú đưa vào ngữ cảnh. Nhiều hơn không giúp — model bắt đầu lạc. */
 const SO_NGUON = 6;
@@ -151,7 +152,20 @@ export async function hoiTroLyGhiChu(userId: number, cauHoiTho: unknown): Promis
     throw new BadRequestError('Đã hết hạn mức AI hôm nay. Thử lại vào ngày mai.');
   }
 
-  const lienQuan = await timGhiChuLienQuan(userId, cauHoi);
+  /* HAI TẦNG, theo đúng thứ tự này.
+   *
+   * 1) Tìm theo NGHĨA (vector) — bắt được câu hỏi không trùng một từ nào với
+   *    ghi chú. Đo thật: "cách cập nhật lược đồ CSDL bằng công cụ ORM" đứng
+   *    0,554 so với câu hỏi về "migration Prisma", trong khi thứ không liên
+   *    quan chỉ 0,32. Tìm từ khoá trả về RỖNG cho cặp đó.
+   * 2) Máy nhúng ở máy nhà tắt ⇒ `timTheoNghia` trả `null` ⇒ lùi về từ khoá.
+   *    Mất độ tinh, KHÔNG mất tính năng. Đây là lý do bước tìm được tách hàm
+   *    ngay từ đầu.
+   */
+  const theoNghia = await timTheoNghia(userId, cauHoi, SO_NGUON);
+  const lienQuan = theoNghia && theoNghia.length > 0
+    ? theoNghia.map((m) => ({ id: m.noteId, title: m.title, chu: m.content, diem: m.diem }))
+    : await timGhiChuLienQuan(userId, cauHoi);
   if (lienQuan.length === 0) {
     // KHÔNG hỏi model khi không tìm được gì. Hỏi thì nó sẽ bịa ra một câu trả
     // lời nghe rất hợp lý từ kiến thức chung, và người dùng tưởng đó là ghi

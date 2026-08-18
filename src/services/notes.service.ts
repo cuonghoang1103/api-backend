@@ -561,6 +561,16 @@ export async function updateNote(
       // and never let a failure here fail the save itself.
       const { syncNoteReferences } = await import('./notesHierarchy.service.js');
       void syncNoteReferences(id);
+
+      /* Dựng lại vector cho Trợ lý — cũng là chỉ mục dẫn xuất, cũng KHÔNG được
+       * làm hỏng việc lưu.
+       *
+       * `void` chứ không `await`: nhúng gọi sang máy nhà và mất vài trăm mili
+       * giây. Bắt người dùng chờ chừng đó cho MỖI lần tự lưu là biến một thao
+       * tác tức thì thành một thao tác giật. Vector chậm vài giây so với nội
+       * dung là chấp nhận được — trợ lý không cần đúng tới từng giây. */
+      const { capNhatNhung } = await import('./noteEmbedding.service.js');
+      void capNhatNhung(id).catch(() => { /* máy nhúng tắt — trợ lý tự lùi về từ khoá */ });
     }
     if (data.title !== undefined) {
       // Nếu ghi chú này là thân trang của một dòng database, đổi tên trang

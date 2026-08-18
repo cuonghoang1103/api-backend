@@ -4061,6 +4061,7 @@ model NoteSubject {
   chapters        NoteChapter[]
   notes           Note[]
   attachments     NoteAttachment[]
+  embeddings      NoteEmbedding[]
   links           NoteLink[]
   // Phase 4 add — subject-level sharing
   shares          NoteSubjectShare[]
@@ -4190,6 +4191,7 @@ model Note {
   outgoingReferences    NoteReference[]            @relation("NoteReferenceSource")
   incomingReferences    NoteReference[]            @relation("NoteReferenceTarget")
   databaseRow           NoteDatabaseRow?           @relation("NoteDatabaseRowPage")
+  NoteEmbedding         NoteEmbedding[]
 
   @@index([userId, subjectId, chapterId, sortOrder], name: "idx_notes_user_tree")
   @@index([userId, updatedAt(sort: Desc)], name: "idx_notes_user_recent")
@@ -4443,6 +4445,29 @@ model NoteCommentMention {
   @@id([commentId, userId], map: "pk_note_comment_mentions")
   @@index([userId], map: "idx_note_comment_mentions_user")
   @@map("note_comment_mentions")
+}
+
+/// Nhúng vector của ghi chú — dùng cho Trợ lý hỏi–đáp toàn kho.
+///
+/// ⚠️ Cột `embedding` là kiểu `vector(1024)` của pgvector, Prisma KHÔNG hiểu nên
+/// phải khai `Unsupported`. Hệ quả: mọi thao tác đọc/ghi cột đó phải đi bằng
+/// `$queryRaw`/`$executeRaw` — Prisma Client không sinh hàm cho nó. Đừng cố
+/// dùng `create`/`update` thông thường rồi tưởng nó im lặng bỏ qua, nó sẽ ném.
+model NoteEmbedding {
+  id         BigInt                      @id @default(autoincrement())
+  noteId     Int                         @map("note_id")
+  chunkIndex Int                         @map("chunk_index")
+  content    String
+  embedding  Unsupported("vector(1024)")
+  updatedAt  DateTime                    @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  note          Note         @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  NoteSubject   NoteSubject? @relation(fields: [noteSubjectId], references: [id])
+  noteSubjectId Int?
+
+  @@unique([noteId, chunkIndex], map: "uk_note_embedding_chunk")
+  @@index([noteId], map: "idx_note_embeddings_note")
+  @@map("note_embeddings")
 }
 
 model NoteAttachment {

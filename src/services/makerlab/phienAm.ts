@@ -214,8 +214,82 @@ export function coTheLaTiengViet(w: string): boolean {
  * Chỉ gọi khi đang đọc bằng giọng VIỆT. Với giọng tiếng Anh thì làm thế
  * là phá — lúc đó chính tả gốc mới là thứ đúng.
  */
+/**
+ * ============================================================
+ * TÊN RIÊNG NHIỀU MẢNH — phải xử lý TRƯỚC khi tách từ
+ * ============================================================
+ *
+ * Lượt phiên âm chính tách từ theo chữ cái (`[A-Za-zÀ-ỹ]+`), nên mọi tên
+ * có DẤU CHẤM hoặc KHOẢNG TRẮNG đều vỡ ra trước khi kịp tra từ điển:
+ *
+ *     "Node.js"        → "Node" + "js"        (mất nghĩa)
+ *     "cuongthai.com"  → "cuongthai" + "com"  (đọc liền, không có "chấm")
+ *     "Spring Boot"    → "Spring" + "Boot"    (đọc rời, sai trọng âm)
+ *
+ * Người dùng báo đúng ba nhóm này 19/08/2026. Nên bảng dưới chạy TRƯỚC,
+ * trên chuỗi còn nguyên vẹn.
+ *
+ * ⚠️ Thứ tự trong bảng có ý nghĩa: mục DÀI phải đứng trước mục ngắn hơn
+ * chứa nó, nếu không "Spring Boot" bị "spring" nuốt mất một nửa.
+ */
+const TEN_RIENG: Array<[RegExp, string]> = [
+  // ── Tên có dấu chấm ──
+  [/\bnode\.?js\b/gi, 'nốt-dây-ét'],
+  [/\bnext\.?js\b/gi, 'nét-dây-ét'],
+  [/\bnest\.?js\b/gi, 'nét-dây-ét'],
+  [/\bvue\.?js\b/gi, 'viu-dây-ét'],
+  [/\bexpress\.?js\b/gi, 'ich-sờ-prét'],
+  [/\bsocket\.?io\b/gi, 'sóc-kịt ai-ô'],
+  [/\b\.net\b/gi, 'chấm-nét'],
+
+  // ── Tên hai chữ ──
+  [/\bspring\s*boot\b/gi, 'sờ-pring bút'],
+  [/\bvisual\s*studio\b/gi, 'vi-du-ồ sờ-tiu-đi-ô'],
+  [/\bmachine\s*learning\b/gi, 'mơ-sin lơn-ning'],
+  [/\bdeep\s*learning\b/gi, 'đíp lơn-ning'],
+  [/\bpull\s*request\b/gi, 'pun ri-quét'],
+
+  // ── Tên riêng một chữ hay gặp ──
+  [/\bjava\b/gi, 'gia-va'],
+  [/\bjavascript\b/gi, 'gia-va sờ-cờ-ríp'],
+  [/\btypescript\b/gi, 'tai-p sờ-cờ-ríp'],
+  [/\bpython\b/gi, 'pai-thần'],
+  [/\bgithub\b/gi, 'ghít-hấp'],
+  [/\bgit\b/gi, 'ghít'],
+  [/\breact\b/gi, 'ri-ác'],
+  [/\bangular\b/gi, 'ang-viu-lơ'],
+  [/\blaravel\b/gi, 'la-ra-vồ'],
+  [/\bpostgres(ql)?\b/gi, 'pốt-grét'],
+  [/\bmysql\b/gi, 'mai ét-quy-eo'],
+  [/\bmongodb\b/gi, 'mông-gô đi-bi'],
+  [/\bredis\b/gi, 'rét-đít'],
+  [/\bnginx\b/gi, 'en-din-ích'],
+  [/\bkubernetes\b/gi, 'ku-bơ-nét'],
+  [/\blanguage\b/gi, 'lang-guịch'],
+  [/\bacademy\b/gi, 'ơ-ca-đơ-mi'],
+  [/\bstudio\b/gi, 'sờ-tiu-đi-ô'],
+  [/\bplayground\b/gi, 'pờ-lây-gờ-rao'],
+];
+
+/**
+ * Tên miền: `cuongthai.com` → `cuongthai chấm com`.
+ *
+ * Chạy SAU bảng trên (để `node.js` không bị hiểu là tên miền) và TRƯỚC
+ * lượt tách từ. Không đọc "chấm" thì hai phần dính liền thành một từ vô
+ * nghĩa — người dùng nghe "cuongthaicom".
+ */
+const DUOI_MIEN = /\b([a-z0-9][a-z0-9-]{1,})\.(com|vn|net|org|io|dev|ai|me)\b/gi;
+
+function tenRiengTruoc(text: string): string {
+  let ra = text;
+  for (const [re, thay] of TEN_RIENG) ra = ra.replace(re, thay);
+  return ra.replace(DUOI_MIEN, (_, ten: string, duoi: string) => `${ten} chấm ${duoi.toLowerCase()}`);
+}
+
 export function phienAmSangViet(text: string): string {
   if (!text) return text;
+  // Tên riêng nhiều mảnh phải đi TRƯỚC — xem chú thích ở `TEN_RIENG`.
+  text = tenRiengTruoc(text);
 
   // ⚠️ VIẾT HOA CẢ CÂU LÀ NHẤN MẠNH, KHÔNG PHẢI VIẾT TẮT.
   //

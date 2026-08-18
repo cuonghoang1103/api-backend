@@ -28,6 +28,7 @@ import multer from 'multer';
 import { authenticate } from '../middleware/auth.js';
 import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
+import { demTuDaDoi, phienAmSangViet } from '../services/makerlab/phienAm.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -93,6 +94,14 @@ const MAX_CHARS = Number(process.env.VOICE_MINI_MAX_CHARS) || 5000;
 const F5_BASE = (process.env.F5_TTS_URL || 'http://172.18.0.1:18092').replace(/\/+$/, '');
 /** Giọng có id bắt đầu bằng đây thì đi đường F5. */
 const F5_TIEN_TO = 'f5-';
+
+/**
+ * Giọng TIẾNG ANH — không phiên âm cho chúng.
+ *
+ * Đo thật 18/08 bằng `GET /voices`: khoá này phục vụ 4 giọng Anh, còn lại
+ * (18 giọng Việt + 8 giọng F5) đều là tiếng Việt.
+ */
+const GIONG_ANH = new Set(['en-default', 'en-cham', 'en-bieu-cam', 'robot-walle']);
 
 /**
  * Bọc PCM 16-bit mono thành WAV.
@@ -277,6 +286,28 @@ router.post('/tts', authenticate, async (req: Request, res: Response<ApiResponse
     return;
   }
 
+  /*
+   * PHIÊN ÂM TỪ TIẾNG ANH — chỉ cho giọng VIỆT.
+   *
+   * ⚠️ TRƯỚC 19/08/2026 BỘ PHIÊN ÂM CHỈ PHỤC VỤ ROBOT MAKER LAB. Nó nằm ở
+   * `makerlab/phienAm.ts` và chỉ `makerlab/tts.ts` gọi — nên app desktop,
+   * robot nổi và web đều đọc "Node.js", "Spring Boot", "cuongthai.com"
+   * bằng luật chính tả tiếng Việt và ra sai hết. Người dùng báo đúng ba
+   * nhóm đó.
+   *
+   * Đặt ở ĐÂY vì đây là cửa chung của mọi máy đọc — thêm một nơi gọi mới
+   * sau này cũng tự được phiên âm mà người viết không phải nhớ.
+   *
+   * ⛔ KHÔNG áp cho giọng TIẾNG ANH: giọng Anh đọc "Node.js" đúng sẵn, mà
+   * phiên âm sang "nốt-dây-ét" rồi đưa cho nó thì thành một chuỗi vô nghĩa.
+   * Cách nhận biết: id giọng Anh nằm trong `GIONG_ANH`, còn lại coi là Việt.
+   */
+  const laGiongAnh = !!voice && GIONG_ANH.has(voice);
+  const chuDoc = laGiongAnh ? text : phienAmSangViet(text);
+  if (chuDoc !== text) {
+    logger.info('VoiceMini phiên âm', { doi: demTuDaDoi(text, chuDoc), voice });
+  }
+
   /* Giọng của máy nhà đi ĐƯỜNG KHÁC: F5 đọc xong ngay trong một lời gọi, không
    * có mã việc. Vẫn trả `{jobId}` như đường kia để giao diện không phải biết có
    * hai loại máy đọc — tiếng cất tạm trong bộ nhớ, `GET /tts/:jobId` lấy ra. */
@@ -285,7 +316,7 @@ router.post('/tts', authenticate, async (req: Request, res: Response<ApiResponse
       const rf = await f5Fetch('/noi', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ text, voice }),
+        body: JSON.stringify({ text: chuDoc, voice }),
       });
       if (!rf.ok) {
         const chiTiet = await rf.text().catch(() => '');
@@ -310,7 +341,7 @@ router.post('/tts', authenticate, async (req: Request, res: Response<ApiResponse
     const r = await upstream('/tts', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ text, voice }),
+      body: JSON.stringify({ text: chuDoc, voice }),
     });
     const data = (await r.json()) as { jobId?: string; detail?: string };
     if (!r.ok || !data.jobId) throw new Error(data.detail || `tts HTTP ${r.status}`);

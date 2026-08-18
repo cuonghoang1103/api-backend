@@ -280,13 +280,41 @@ fi
 
 # ─── 4. Đẩy ảnh lên GHCR ───────────────────────────────────────────────
 # Chỉ những lớp THAY ĐỔI mới phải truyền, nên lần deploy sau nhẹ hơn nhiều.
+# ⚠️ KHÔNG nuốt đầu ra vào /dev/null. Bản trước làm thế rồi in
+# "máy nhà nhiều khả năng chưa đăng nhập GHCR" — một câu ĐOÁN, và 18/08/2026 nó
+# đoán SAI: máy nhà đăng nhập bình thường, `docker push` chạy tay được ngay,
+# nguyên nhân thật là mạng đứt giữa chừng. Câu đoán sai tốn của người đọc một
+# vòng đi tạo token mới, trong khi việc đúng chỉ là bấm chạy lại.
+#
+# Nên: giữ lỗi THẬT, tự thử lại một lần, và chỉ nhắc chuyện đăng nhập KHI lỗi
+# đúng là chuyện đăng nhập.
+NHAT_KY_DAY=/tmp/nha-day-ghcr.log
+
+day_anh_len_ghcr() {
+    sshnha "docker push ${GHCR_BE}:${SHA} && docker push ${GHCR_BE}:latest && \
+            docker push ${GHCR_FE}:${SHA} && docker push ${GHCR_FE}:latest" \
+        > "$NHAT_KY_DAY" 2>&1
+}
+
 info "Đẩy ảnh lên GHCR..."
-if ! sshnha "docker push ${GHCR_BE}:${SHA} && docker push ${GHCR_BE}:latest && \
-             docker push ${GHCR_FE}:${SHA} && docker push ${GHCR_FE}:latest" >/dev/null 2>&1; then
-    warn "Đẩy ảnh thất bại — máy nhà nhiều khả năng chưa đăng nhập GHCR."
-    warn "Chạy MỘT LẦN trên máy nhà (token cần quyền write:packages):"
-    warn "    ssh ${MAY_NHA} 'echo <TOKEN> | docker login ghcr.io -u cuonghoang1103 --password-stdin'"
-    lui_ve_vps "Không đẩy được ảnh lên GHCR"
+if ! day_anh_len_ghcr; then
+    warn "Đẩy ảnh hỏng ở lần 1 — bốn dòng cuối:"
+    tail -4 "$NHAT_KY_DAY" | sed 's/^/         /'
+    # Đẩy ảnh là truyền hàng trăm MB; đứt giữa chừng là chuyện thường và lần
+    # thử lại gần như luôn qua (chỉ những lớp còn thiếu mới phải truyền lại).
+    info "Thử lại lần 2..."
+    if ! day_anh_len_ghcr; then
+        fail "Không đẩy được ảnh lên GHCR sau 2 lần. Lỗi THẬT:"
+        tail -12 "$NHAT_KY_DAY" | sed 's/^/         /'
+        if grep -qiE 'denied|unauthorized|authentication required|forbidden|login' "$NHAT_KY_DAY"; then
+            warn "Lỗi trên là chuyện QUYỀN. Chạy MỘT LẦN trên máy nhà (token cần write:packages):"
+            warn "    ssh ${MAY_NHA} 'echo <TOKEN> | docker login ghcr.io -u cuonghoang1103 --password-stdin'"
+        else
+            warn "Lỗi trên KHÔNG phải chuyện đăng nhập. Nhật ký đầy đủ: $NHAT_KY_DAY"
+        fi
+        lui_ve_vps "Không đẩy được ảnh lên GHCR"
+    fi
+    ok "Lần 2 qua — đúng là trục trặc mạng, không phải cấu hình."
 fi
 ok "Ảnh đã lên GHCR (tag ${SHA} và latest)"
 

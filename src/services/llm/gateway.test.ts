@@ -27,9 +27,23 @@ test('mọi việc đều tra được model mà không gọi vòng', () => {
   }
 });
 
-test('thiếu khoá của nhóm thì LÙI, không trả về model gọi không được', () => {
-  const cu = process.env.LLM_GATEWAY_API_KEY_GPT;
+test('thiếu khoá NHÓM GPT thì LÙI, không trả về model gọi không được', () => {
+  // ⚠️ Phép kiểm này TỰ DỰNG môi trường, không mượn `.env`. Bản đầu tiên chỉ
+  // xoá khoá GPT rồi khẳng định "mọi model đều gọi được" — ở máy nhà nó XANH
+  // nhờ khoá thật trong `.env` (`config/env.ts` gọi `dotenv.config()`), còn
+  // trên CI không có `.env` nên KHÔNG khoá nào tồn tại và nó ĐỎ. Cả hai kết
+  // quả đều không nói gì về mã: điều cần kiểm là "mất khoá GPT thì có lùi về
+  // nhóm mặc định không", nên nhóm mặc định BẮT BUỘC phải có khoá.
+  const luu = {
+    gpt: process.env.LLM_GATEWAY_API_KEY_GPT,
+    mac: process.env.LLM_GATEWAY_API_KEY,
+    compat: process.env.OPENAI_COMPAT_API_KEY,
+    anthropic: process.env.ANTHROPIC_API_KEY,
+  };
   delete process.env.LLM_GATEWAY_API_KEY_GPT;
+  delete process.env.OPENAI_COMPAT_API_KEY;
+  delete process.env.ANTHROPIC_API_KEY;
+  process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap-nhom-mac-dinh';
   try {
     for (const { purpose } of allPurposeModels()) {
       const m = modelFor(purpose);
@@ -39,7 +53,34 @@ test('thiếu khoá của nhóm thì LÙI, không trả về model gọi không 
       );
     }
   } finally {
-    if (cu !== undefined) process.env.LLM_GATEWAY_API_KEY_GPT = cu;
+    for (const [ten, gt] of [
+      ['LLM_GATEWAY_API_KEY_GPT', luu.gpt],
+      ['LLM_GATEWAY_API_KEY', luu.mac],
+      ['OPENAI_COMPAT_API_KEY', luu.compat],
+      ['ANTHROPIC_API_KEY', luu.anthropic],
+    ] as const) {
+      if (gt === undefined) delete process.env[ten];
+      else process.env[ten] = gt;
+    }
+  }
+});
+
+test('KHÔNG có khoá nào thì không model nào gọi được — và đó KHÔNG phải lỗi mã', () => {
+  // Chốt lại đúng ranh giới mà phép kiểm trên từng vượt qua nhầm.
+  const luu = [
+    'LLM_GATEWAY_API_KEY_GPT',
+    'LLM_GATEWAY_API_KEY',
+    'OPENAI_COMPAT_API_KEY',
+    'ANTHROPIC_API_KEY',
+  ].map((t) => [t, process.env[t]] as const);
+  for (const [t] of luu) delete process.env[t];
+  try {
+    assert.equal(goiDuocModel('claude-sonnet-5'), false);
+    assert.equal(goiDuocModel('gpt-5.6-sol'), false);
+    // vẫn phải trả về MỘT model, không được ném
+    assert.ok(modelFor('chat_pro').length > 0);
+  } finally {
+    for (const [t, gt] of luu) if (gt !== undefined) process.env[t] = gt;
   }
 });
 

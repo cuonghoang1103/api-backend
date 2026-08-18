@@ -5115,3 +5115,161 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-bt-bl-soan input::placeholder { color: var(--ct-text-faint); }
 
 .ct-bt-them { width: 100%; margin-top: 14px; justify-content: center; }
+
+/* ════════════════════════════════════════════════════════════
+   TIN NHẮN
+   ════════════════════════════════════════════════════════════ */
+
+.ct-tn-khung {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 12px;
+  /* Trừ đi tiêu đề trang + thanh trạng thái để khung vừa đúng một màn hình:
+     cả trang cuộn thì khung soạn tin trôi khỏi tầm mắt trong lúc đang gõ. */
+  height: calc(100vh - var(--ct-titlebar-h) - var(--ct-statusbar-h) - 130px);
+  min-height: 380px;
+}
+
+/* ── Danh sách cuộc ── */
+.ct-tn-ds {
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: var(--ct-surface);
+  overflow-y: auto;
+  padding: 6px;
+}
+.ct-tn-cuoc {
+  width: 100%;
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px;
+  border: none; background: transparent;
+  border-radius: var(--ct-radius-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-tn-cuoc:hover { background: var(--ct-hover); }
+.ct-tn-cuoc[data-chon='true'] { background: var(--ct-active); }
+.ct-tn-cuoc-chu { flex: 1; min-width: 0; }
+.ct-tn-cuoc-dau { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.ct-tn-cuoc-dau strong {
+  font-size: 13px; font-weight: 600; color: var(--ct-text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ct-tn-cuoc-dau span { font-size: 10.5px; color: var(--ct-text-faint); flex-shrink: 0; }
+/* Một dòng, cắt bằng dấu ba chấm: tin nhắn dài mà xuống dòng thì mỗi mục cao
+   gấp ba và danh sách chỉ còn thấy vài cuộc. */
+.ct-tn-cuoc p {
+  margin: 2px 0 0; font-size: 12px; color: var(--ct-text-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ct-tn-cham {
+  min-width: 18px; height: 18px; padding: 0 5px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  background: var(--ct-accent); color: #fff;
+  font-size: 10.5px; font-weight: 620;
+  flex-shrink: 0;
+}
+
+.ct-tn-avt {
+  width: 38px; height: 38px; flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.ct-tn-avt[data-nho='true'] { width: 28px; height: 28px; font-size: 12px; }
+.ct-tn-avt[data-chu='true'] {
+  background: var(--ct-active); color: var(--ct-accent-text);
+  font-size: 15px; font-weight: 640;
+}
+
+/* ── Khung trò chuyện ── */
+.ct-tn-hoi {
+  display: flex; flex-direction: column;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: var(--ct-surface);
+  overflow: hidden;
+}
+.ct-tn-hoi-dau {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ct-border);
+}
+.ct-tn-hoi-dau strong { font-size: 13.5px; color: var(--ct-text); }
+/* Nút quay lại chỉ có nghĩa ở bố cục MỘT cột. */
+.ct-tn-lui { display: none; }
+
+.ct-tn-cuon {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+
+.ct-tn-tin { display: flex; flex-direction: column; align-items: flex-start; max-width: 78%; }
+.ct-tn-tin[data-toi='true'] { align-self: flex-end; align-items: flex-end; }
+.ct-tn-bong {
+  padding: 8px 12px;
+  border-radius: 16px;
+  background: var(--ct-hover);
+  color: var(--ct-text);
+}
+.ct-tn-tin[data-toi='true'] .ct-tn-bong { background: var(--ct-accent); color: #fff; }
+.ct-tn-bong p {
+  margin: 0; font-size: 13.5px; line-height: 1.5;
+  white-space: pre-wrap; overflow-wrap: break-word;
+}
+.ct-tn-bong img { max-width: 100%; border-radius: 10px; display: block; }
+.ct-tn-gio { font-size: 10px; color: var(--ct-text-faint); margin: 1px 4px 6px; }
+.ct-tn-thu-hoi {
+  font-size: 12.5px; color: var(--ct-text-faint);
+  padding: 7px 12px; border: 1px dashed var(--ct-border); border-radius: 14px;
+}
+
+.ct-tn-soan {
+  display: flex; gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--ct-border);
+}
+.ct-tn-soan input {
+  flex: 1; min-width: 0;
+  padding: 9px 14px;
+  border: 1px solid var(--ct-border);
+  border-radius: 999px;
+  background: var(--ct-surface-2);
+  color: var(--ct-text);
+  font-size: 13.5px;
+  outline: none;
+}
+.ct-tn-soan input:focus { border-color: var(--ct-accent); }
+.ct-tn-soan input::placeholder { color: var(--ct-text-faint); }
+
+/* Cửa sổ hẹp: một cột. Đang mở một cuộc thì ẩn danh sách đi, và hiện nút lùi —
+   nhét hai cột vào 700px thì cả hai đều không dùng được. */
+@media (max-width: 860px) {
+  .ct-tn-khung { grid-template-columns: 1fr; }
+  .ct-tn-khung[data-mo='true'] .ct-tn-ds { display: none; }
+  .ct-tn-khung:not([data-mo='true']) .ct-tn-hoi { display: none; }
+  .ct-tn-lui {
+    display: inline-flex; padding: 4px;
+    border: none; background: transparent; border-radius: 6px;
+    color: var(--ct-text-muted); cursor: pointer;
+  }
+  .ct-tn-lui:hover { background: var(--ct-hover); }
+}
+
+/* Chừa chỗ cho dock robot.
+ *
+ * `.odin-dock` là `position: fixed` ở góc dưới-phải MÀN HÌNH (`right: 22px`,
+ * `z-index: 60`), mà nút Gửi của khung soạn tin cũng nằm đúng góc đó. Đo thật
+ * bằng playwright: cú bấm vào nút Gửi bị chính con robot nuốt —
+ * "odin-dock subtree intercepts pointer events". Người dùng sẽ bấm mãi không
+ * gửi được và không hiểu vì sao.
+ *
+ * Chỉ chừa khi cửa sổ đủ hẹp để cột phải chạm mép màn hình; rộng hơn thì hai
+ * thứ không đụng nhau và một khoảng trống 130px là thừa. */
+@media (max-width: 1320px) {
+  .ct-tn-soan { padding-right: 130px; }
+}

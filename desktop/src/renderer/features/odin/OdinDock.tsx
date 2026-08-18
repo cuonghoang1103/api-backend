@@ -80,12 +80,25 @@ export function OdinDock() {
    * không tác động được, và một trợ lý hay làm phiền sẽ bị tắt.
    */
   const update = useUpdateStatus();
-  const announced = useRef(false);
+  /* Nhớ ĐÃ BÁO BẢN NÀO, không phải "đã báo hay chưa".
+   * Một cờ boolean nghĩa là suốt phiên chỉ báo được đúng một lần — bản kế tiếp
+   * ra trong lúc app còn mở sẽ im lặng trôi qua. */
+  const daBao = useRef<string | null>(null);
   useEffect(() => {
-    if (!enabled || update.state !== 'ready' || announced.current) return;
-    announced.current = true;
+    if (!enabled) return;
+    /* ⛔ Trước đây chỉ nghe `ready`, mà `ready` là trạng thái của WINDOWS/LINUX.
+     * macOS đi đường riêng (`sanSang` khi đã tải sẵn, `manual` khi chưa), nên
+     * trên máy Mac con robot CHƯA TỪNG báo bản mới lần nào — người dùng phải tự
+     * vào Cài đặt bấm kiểm tra. */
+    const v = update.state === 'ready' || update.state === 'sanSang' || update.state === 'manual'
+      ? update.version
+      : null;
+    if (!v || daBao.current === v) return;
+    daBao.current = v;
     odin.announce(
-      `Có bản ${update.version} rồi! Bấm "Cài bản ${update.version}" ở góc dưới bên trái khi bạn rảnh nhé.`,
+      update.state === 'manual'
+        ? `Có bản ${v} rồi! Bấm "Cập nhật ${v}" ở góc dưới bên trái là mình lo phần còn lại.`
+        : `Có bản ${v} rồi, tải xong sẵn luôn! Bấm "Khởi động lại" ở góc dưới bên trái khi bạn rảnh nhé.`,
     );
   }, [enabled, update, odin]);
 

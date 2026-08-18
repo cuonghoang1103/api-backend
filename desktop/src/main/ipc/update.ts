@@ -6,9 +6,10 @@
  * (`autoInstallOnAppQuit`), thời điểm duy nhất không cắt ngang việc của ai.
  *
  * ─── Tự kiểm tra, không đợi người dùng đi tìm ───
- * Kiểm một lần sau khi mở app 15 giây, rồi mỗi 6 tiếng. Không ai vào Cài đặt
- * mỗi ngày để hỏi xem có bản mới không — bắt họ làm vậy nghĩa là phần lớn người
- * dùng sẽ mắc kẹt ở bản cũ vĩnh viễn mà không biết.
+ * Kiểm một lần sau khi mở app 15 giây, mỗi 45 phút sau đó, VÀ mỗi lần người
+ * dùng quay lại cửa sổ (chốt 10 phút). Không ai vào Cài đặt mỗi ngày để hỏi xem
+ * có bản mới không — bắt họ làm vậy nghĩa là phần lớn người dùng sẽ mắc kẹt ở
+ * bản cũ vĩnh viễn mà không biết.
  *
  * 15 giây chứ không phải ngay lập tức: lúc khởi động app còn đang khôi phục
  * phiên và nạp dữ liệu, thêm một lời gọi mạng vào đúng lúc đó chỉ làm chậm thứ
@@ -35,7 +36,18 @@ const CHECK_TIMEOUT_MS = 30_000;
 
 /** Tự kiểm sau khi mở app, rồi định kỳ. */
 const FIRST_CHECK_DELAY_MS = 15_000;
-const PERIODIC_CHECK_MS = 6 * 60 * 60 * 1000;
+/**
+ * 45 phút, KHÔNG phải 6 tiếng.
+ *
+ * 6 tiếng nghĩa là: phát hành lúc 10h thì người mở app từ 9h sáng tới 15h mới
+ * biết — và trong lúc đó họ phải tự vào Cài đặt bấm "Kiểm tra bản mới", đúng
+ * cái phiền mà tự-cập-nhật sinh ra để xoá bỏ. Một lời gọi HTTP nhỏ mỗi 45 phút
+ * là cái giá không đáng kể.
+ */
+const PERIODIC_CHECK_MS = 45 * 60 * 1000;
+/** Quay lại app sau khi bỏ đi lâu thì kiểm luôn — nhưng không dày hơn mức này. */
+const FOCUS_CHECK_MIN_GAP_MS = 10 * 60 * 1000;
+let lanKiemCuoi = 0;
 
 let lastStatus: UpdateStatus = { state: 'idle' };
 
@@ -91,6 +103,7 @@ async function runCheck(): Promise<void> {
   }
 
   broadcast({ state: 'checking' });
+  lanKiemCuoi = Date.now();
   const autoUpdater = await getUpdater();
 
   if (!listenersAttached) {
@@ -167,13 +180,51 @@ async function runCheck(): Promise<void> {
 }
 
 /**
- * Bật lịch tự kiểm tra. Gọi một lần sau khi cửa sổ đầu tiên đã mở.
+ * Hốt những bó `CuongThai.app.cu-*` còn sót của các lần cập nhật trước.
+ *
+ * Mỗi bó ~176MB. Bản 0.5.8 để lại hai cái (352MB) vì bước dọn ném lỗi ENOTDIR
+ * — xem ghi chú trong `tuCapNhat`. Dọn lúc khởi động, im lặng, không chặn gì.
  */
+export function donRacCapNhat(): void {
+  if (process.platform !== 'darwin' || !app.isPackaged) return;
+  try {
+    const noi = noiDangChay();
+    const thuMuc = path.dirname(noi.duong);
+    const ten = path.basename(noi.duong);
+    const noAsarCu = process.noAsar;
+    try {
+      process.noAsar = true;
+      for (const muc of fs.readdirSync(thuMuc)) {
+        if (!muc.startsWith(`${ten}.cu-`)) continue;
+        fs.rmSync(path.join(thuMuc, muc), { recursive: true, force: true });
+      }
+    } finally {
+      process.noAsar = noAsarCu;
+    }
+  } catch {
+    /* không dọn được cũng không sao — đây là việc phụ */
+  }
+}
+
+/** Bật lịch tự kiểm tra. Gọi một lần sau khi cửa sổ đầu tiên đã mở. */
 export function scheduleUpdateChecks(): void {
   if (IS_DEV || !app.isPackaged) return;
 
+  donRacCapNhat();
   setTimeout(() => void runCheck(), FIRST_CHECK_DELAY_MS);
   setInterval(() => void runCheck(), PERIODIC_CHECK_MS);
+
+  /* Kiểm thêm mỗi khi người dùng quay lại app.
+   *
+   * Người để app chạy nền cả ngày rồi quay lại lúc chiều là trường hợp thường
+   * gặp nhất, và đó cũng đúng lúc họ sẵn sàng khởi động lại. Có chốt 10 phút để
+   * bấm qua bấm lại giữa các cửa sổ không thành một tràng lời gọi. */
+  app.on('browser-window-focus', () => {
+    const gio = Date.now();
+    if (gio - lanKiemCuoi < FOCUS_CHECK_MIN_GAP_MS) return;
+    lanKiemCuoi = gio;
+    void runCheck();
+  });
 }
 
 export function registerUpdateHandlers(): void {
@@ -443,7 +494,35 @@ async function tuCapNhat(): Promise<void> {
       fs.renameSync(cuDoi, noi.duong);        // tráo hỏng ⇒ trả bản cũ về chỗ
       throw e;
     }
-    fs.rmSync(cuDoi, { recursive: true, force: true });
+
+    /* Tới đây bản mới ĐÃ NẰM ĐÚNG CHỖ. Mọi thứ còn lại chỉ là dọn rác, nên
+     * KHÔNG được phép làm hỏng cả lần cập nhật.
+     *
+     * ⛔ Lỗi thật, bản 0.5.8, 18/08/2026:
+     *     ENOTDIR: not a directory, rmdir '…/CuongThai.app.cu-…/Contents/Resources/app.asar'
+     *
+     * Electron VÁ `fs` để đọc được bên trong `.asar`: với mã chạy trong
+     * Electron, `app.asar` trông như một THƯ MỤC. Nên `rmSync(recursive)` đi
+     * vào trong nó rồi gọi `rmdir` — còn nhân hệ điều hành thì thấy đúng bản
+     * chất: một FILE. Kết quả là ENOTDIR.
+     *
+     * `process.noAsar = true` tắt lớp vá đó, `fs` quay lại nhìn thấy file thật.
+     * Trả lại giá trị cũ ở `finally` vì cờ này là TOÀN CỤC — để bật vĩnh viễn
+     * là mọi chỗ khác đọc `.asar` sẽ hỏng theo.
+     *
+     * Và dù có hỏng thì vẫn đi tiếp: người dùng cần APP MỚI chạy được, không
+     * cần thư mục cũ biến mất. Bản 0.5.8 ném lỗi ở đây nên app không bao giờ
+     * khởi động lại — nhìn như "cập nhật thất bại", trong khi bản mới đã nằm
+     * sẵn ở /Applications rồi. */
+    const noAsarCu = process.noAsar;
+    try {
+      process.noAsar = true;
+      fs.rmSync(cuDoi, { recursive: true, force: true });
+    } catch {
+      /* để lại thư mục cũ cũng được — lần mở sau `donRacCapNhat()` sẽ hốt */
+    } finally {
+      process.noAsar = noAsarCu;
+    }
 
     /**
      * Mở lại bản mới SAU KHI tiến trình này chết hẳn.

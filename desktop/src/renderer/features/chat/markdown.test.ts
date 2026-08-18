@@ -87,3 +87,59 @@ describe('an toàn', () => {
     expect(h).not.toContain('href=');
   });
 });
+
+describe('bảng markdown', () => {
+  it('dựng đúng bảng có tiêu đề và thân', () => {
+    const h = html('| a | b |\n| --- | --- |\n| 1 | 2 |');
+    expect(h).toContain('<table>');
+    expect(h).toContain('<th>a</th>');
+    expect(h).toContain('<td>2</td>');
+    expect(h).not.toContain('|');
+  });
+
+  it('KHÔNG dựng bảng khi thiếu dòng kẻ — đó chỉ là chữ có dấu gạch dọc', () => {
+    const h = html('| a | b |\n| 1 | 2 |');
+    expect(h).not.toContain('<table>');
+  });
+
+  it('bù ô cho hàng thiếu, không để lệch cột', () => {
+    const h = html('| a | b | c |\n| --- | --- | --- |\n| 1 | 2 |');
+    // Ba ô ở hàng thân dù đầu vào chỉ có hai.
+    expect((h.match(/<td/g) ?? []).length).toBe(3);
+  });
+
+  it('theo căn lề của dòng kẻ', () => {
+    const h = html('| a | b | c |\n| :--- | :---: | ---: |\n| 1 | 2 | 3 |');
+    expect(h).toContain('text-align:center');
+    expect(h).toContain('text-align:right');
+  });
+
+  it('giữ chữ đậm trong ô', () => {
+    const h = html('| a |\n| --- |\n| **đậm** |');
+    expect(h).toContain('<strong>đậm</strong>');
+  });
+
+  it('ô bắt đầu bằng dấu gạch KHÔNG bị hiểu thành danh sách', () => {
+    const h = html('| x | y |\n| --- | --- |\n| - không có | ✅ có |');
+    expect(h).toContain('<table>');
+    expect(h).not.toContain('<ul>');
+  });
+
+  it('bảng THẬT từ câu trả lời của model (ảnh người dùng gửi 18/08)', () => {
+    const h = html(
+      '| Đặc điểm | ESP32 | ESP32-S3 |\n'
+      + '|----------|--------|---------|\n'
+      + '| **CPU** | Dual-core Xtensa LX6 | Dual-core Xtensa LX7 |\n'
+      + '| **RAM** | 520KB SRAM | 512KB SRAM |',
+    );
+    expect(h).toContain('<table>');
+    expect(h).toContain('Xtensa LX7');
+    expect(h).not.toContain('|----------|');
+  });
+
+  it('chữ sau bảng vẫn là đoạn văn bình thường', () => {
+    const h = html('| a |\n| --- |\n| 1 |\n\nSau bảng.');
+    expect(h).toContain('<table>');
+    expect(h).toContain('<p>Sau bảng.</p>');
+  });
+});

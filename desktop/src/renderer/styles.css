@@ -3517,6 +3517,46 @@ select {
 
 .ct-md > div > h4:first-child { margin-top: 0; }
 
+/* ── Bảng markdown ──
+   Model trả bảng rất thường xuyên (hỏi so sánh hai thứ là ra bảng). Trước
+   18/08/2026 bộ dựng không biết bảng nên người dùng nhận nguyên văn
+   `| Đặc điểm | ESP32 |` — trông y như giao diện hỏng.
+
+   ⚠️ PHẢI CUỘN NGANG TRONG KHUNG RIÊNG. Bảng ba cột chữ tiếng Việt rộng hơn
+   bong bóng chat là chuyện thường; để nó tự giãn thì nó đẩy vỡ cả cột chat và
+   người dùng phải cuộn ngang cả trang. */
+.ct-md-bang {
+  margin: 0 0 12px;
+  overflow-x: auto;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+}
+
+.ct-md-bang table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  /* Số trong bảng so sánh phải thẳng cột thì mắt mới đối chiếu được. */
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-md-bang th,
+.ct-md-bang td {
+  padding: 7px 10px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--ct-border);
+}
+
+.ct-md-bang th {
+  background: var(--ct-hover);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ct-md-bang tr:last-child td { border-bottom: 0; }
+.ct-md-bang tbody tr:hover { background: var(--ct-hover); }
+
 .ct-md ul,
 .ct-md ol {
   margin: 0 0 10px;

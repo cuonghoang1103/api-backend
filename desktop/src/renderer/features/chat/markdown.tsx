@@ -141,6 +141,63 @@ function tachToan(tho: string): { chu: string; ct: string[] } {
 /** Mốc riêng cho toán — KHÁC mốc của mã trong dòng, nếu không hai bộ giẫm nhau. */
 const MOC_TOAN = '\u0001';
 
+/**
+ * ============================================================
+ * BẢNG MARKDOWN
+ * ============================================================
+ *
+ * ⚠️ TRƯỚC 18/08/2026 BỘ NÀY KHÔNG BIẾT BẢNG. Model trả về bảng rất
+ * thường xuyên (so sánh hai thứ là ra bảng ngay), và người dùng nhận
+ * được nguyên văn `| Đặc điểm | ESP32 |` cùng dòng `|-----|-----|` —
+ * trông y như giao diện hỏng.
+ *
+ * Bảng cần NHÌN TRƯỚC một dòng: một dòng `|…|` chỉ là bảng khi dòng ngay
+ * sau nó là dòng kẻ. Nên vòng lặp chính phải chạy theo chỉ số, không phải
+ * `for…of`.
+ */
+function laDongBang(s: string): boolean {
+  const t = s.trim();
+  return t.startsWith('|') && t.slice(1).includes('|');
+}
+
+/** Dòng kẻ ngăn tiêu đề với thân: `| --- | :---: |`. */
+function laDongKe(s: string): boolean {
+  return /^\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?$/.test(s.trim());
+}
+
+function oCuaDong(s: string): string[] {
+  let t = s.trim();
+  if (t.startsWith('|')) t = t.slice(1);
+  if (t.endsWith('|')) t = t.slice(0, -1);
+  return t.split('|').map((x) => x.trim());
+}
+
+function dungBang(dongDau: string, dongKe: string, than: string[]): string {
+  const dau = oCuaDong(dongDau);
+  const canh = oCuaDong(dongKe).map((c) => {
+    const trai = c.startsWith(':');
+    const phai = c.endsWith(':');
+    if (trai && phai) return 'center';
+    if (phai) return 'right';
+    return '';
+  });
+  const kieu = (n: number): string => (canh[n] ? ` style="text-align:${canh[n]}"` : '');
+  const th = dau.map((c, n) => `<th${kieu(n)}>${trongDong(thoat(c))}</th>`).join('');
+  const tr = than
+    .map((d) => {
+      const o = oCuaDong(d);
+      // Hàng thiếu ô thì BÙ cho đủ. Model thỉnh thoảng bỏ sót một `|`, và một
+      // hàng ngắn hơn hàng khác làm cả bảng lệch cột — trông như hỏng nặng
+      // hơn nhiều so với một ô trống.
+      while (o.length < dau.length) o.push('');
+      return `<tr>${o.slice(0, dau.length).map((x, n) => `<td${kieu(n)}>${trongDong(thoat(x))}</td>`).join('')}</tr>`;
+    })
+    .join('');
+  // Bọc trong khung cuộn NGANG: bảng rộng hơn bong bóng chat là chuyện
+  // thường, và để nó tự giãn thì nó đẩy vỡ cả cột chat.
+  return `<div class="ct-md-bang"><table><thead><tr>${th}</tr></thead><tbody>${tr}</tbody></table></div>`;
+}
+
 /** Một đoạn chữ (không phải khối mã) → HTML. */
 function doanChu(thoGoc: string): string {
   const { chu: tho, ct } = tachToan(thoGoc);
@@ -151,8 +208,21 @@ function doanChu(thoGoc: string): string {
     if (dsMo) { ra.push(`</${dsMo}>`); dsMo = null; }
   };
 
-  for (const dong of tho.split('\n')) {
-    const t = dong.trimEnd();
+  const dongs = tho.split('\n');
+  for (let i = 0; i < dongs.length; i += 1) {
+    const t = dongs[i]!.trimEnd();
+
+    // Bảng phải xét TRƯỚC mọi thứ khác: một ô bảng có thể bắt đầu bằng `-`
+    // hoặc `#`, và nếu để luật danh sách/tiêu đề chạy trước thì nó nuốt mất.
+    if (laDongBang(t) && i + 1 < dongs.length && laDongKe(dongs[i + 1]!)) {
+      dongDs();
+      const than: string[] = [];
+      let j = i + 2;
+      while (j < dongs.length && laDongBang(dongs[j]!)) { than.push(dongs[j]!); j += 1; }
+      ra.push(dungBang(t, dongs[i + 1]!, than));
+      i = j - 1;
+      continue;
+    }
 
     const tieuDe = /^(#{1,4})\s+(.*)$/.exec(t);
     if (tieuDe) {

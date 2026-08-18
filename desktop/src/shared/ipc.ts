@@ -82,6 +82,14 @@ export const settingKeySchema = z.enum([
    * đang làm — và với người mở ba tab thì đó vẫn là "việc của tôi đâu rồi".
    */
   'agentTabMo',
+  /**
+   * Thanh phát nhạc đang THU GỌN?
+   *
+   * Lưu xuống đĩa vì đây là sở thích chỗ ngồi: người đã thu nó lại một lần
+   * không muốn mở app lần sau lại thấy nó chiếm chỗ tiếp. Và nó CHỈ đổi phần
+   * nhìn — nhạc vẫn phát bình thường lúc thu, xem `PlayerBar.tsx`.
+   */
+  'playerThuGon',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 

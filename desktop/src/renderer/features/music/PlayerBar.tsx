@@ -10,14 +10,14 @@
  * nguyên chiều cao như cũ.
  */
 import {
-  Music2, Pause, Play, Repeat, Repeat1, Shuffle, SkipBack, SkipForward,
-  Volume1, Volume2, VolumeX,
+  ChevronDown, ChevronUp, Music2, Pause, Play, Repeat, Repeat1, Shuffle,
+  SkipBack, SkipForward, Volume1, Volume2, VolumeX,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { clock, useMusicPlayer } from './player';
 
 export function PlayerBar() {
-  const { route, navigate } = useAppState();
+  const { route, navigate, settings, setSetting } = useAppState();
   const {
     current, playing, length, shownPosition,
     toggle, step, batDauTua,
@@ -29,6 +29,47 @@ export function PlayerBar() {
 
   const progress = length > 0 ? Math.min(100, (shownPosition / length) * 100) : 0;
   const oTrangNhac = route === '/music';
+  const thuGon = settings.playerThuGon === true;
+
+  /* Thu gọn CHỈ đổi phần nhìn — không chạm vào thẻ <audio>, nên nhạc không hề
+     ngắt quãng. Và không thu thành ZERO: còn lại một dải mỏng có nút phát, tên
+     bài và vạch tiến độ. Ẩn sạch thì nhạc kêu mà không còn gì để bấm, đúng cái
+     hỏng vừa sửa hôm nay khi thanh này còn nằm trong trang Nhạc. */
+  if (thuGon) {
+    return (
+      <div className="ct-player" data-thu="true" role="group" aria-label="Điều khiển phát nhạc (đã thu gọn)">
+        <span className="ct-player-line" aria-hidden style={{ width: `${progress}%` }} />
+        <button
+          type="button"
+          className="ct-pbtn ct-pbtn-nho"
+          onClick={toggle}
+          aria-label={playing ? 'Tạm dừng' : 'Phát'}
+          title={playing ? 'Tạm dừng' : 'Phát'}
+        >
+          {playing ? <Pause size={14} aria-hidden /> : <Play size={14} aria-hidden />}
+        </button>
+        <button
+          type="button"
+          className="ct-player-thu-ten"
+          onClick={() => { if (!oTrangNhac) navigate('/music'); }}
+          title={oTrangNhac ? current.title : `${current.title} — bấm để mở trang Nhạc`}
+        >
+          {current.title}
+          <span className="ct-muted"> · {current.artist || 'Không rõ nghệ sĩ'}</span>
+        </button>
+        <span className="ct-seek-time">{clock(shownPosition)}</span>
+        <button
+          type="button"
+          className="ct-pbtn ct-pbtn-nho"
+          onClick={() => setSetting('playerThuGon', false)}
+          aria-label="Mở rộng thanh phát"
+          title="Mở rộng thanh phát"
+        >
+          <ChevronUp size={15} aria-hidden />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="ct-player" role="group" aria-label="Điều khiển phát nhạc">
@@ -128,6 +169,15 @@ export function PlayerBar() {
           onChange={(event) => { setMuted(false); setVolume(Number(event.target.value) / 100); }}
           aria-label="Âm lượng"
         />
+        <button
+          type="button"
+          className="ct-pbtn"
+          onClick={() => setSetting('playerThuGon', true)}
+          aria-label="Thu gọn thanh phát"
+          title="Thu gọn — nhạc vẫn phát bình thường"
+        >
+          <ChevronDown size={16} aria-hidden />
+        </button>
       </div>
     </div>
   );

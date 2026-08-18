@@ -75,12 +75,16 @@
      `.ct-shell:has(.ct-player)` bên dưới bật nó lên. Nhờ vậy thứ nổi ở góc dưới
      tự tránh, không cần JS đo đạc. */
   --ct-player-h-thuc: 84px;
+  --ct-player-h-thu: 34px;
   --ct-player-h: 0px;
 
   color-scheme: light;
 }
 
 .ct-shell:has(.ct-player) { --ct-player-h: var(--ct-player-h-thuc); }
+/* Thu gọn thì nó chỉ còn một dải mỏng — thứ nổi ở góc dưới phải tụt theo, nếu
+   không sẽ có một khoảng trống 50px không ai hiểu vì sao. */
+.ct-shell:has(.ct-player[data-thu='true']) { --ct-player-h: var(--ct-player-h-thu); }
 
 :root[data-ct-theme='dark'] {
   --ct-bg: #0a0a11;
@@ -2075,6 +2079,46 @@ code {
   color: var(--ct-text-muted);
   background: var(--ct-hover);
 }
+
+/* ── Thanh phát ở dạng THU GỌN ───────────────────────────
+   Một dải mỏng: nút phát · tên bài · giờ · nút mở lại. Vạch tiến độ vẽ bằng
+   một span tuyệt đối chứ không phải `<input range>` — dải này để LIẾC, không
+   để thao tác chính xác; muốn tua thì mở rộng ra. */
+.ct-player[data-thu='true'] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: var(--ct-player-h-thu);
+  padding: 0 10px 0 8px;
+  grid-template-columns: none;
+}
+.ct-player-line {
+  position: absolute;
+  left: 0;
+  top: -1px;
+  height: 2px;
+  background: var(--ct-accent);
+  transition: width 240ms linear;
+  pointer-events: none;
+}
+.ct-pbtn-nho { width: 26px; height: 26px; }
+.ct-player-thu-ten {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--ct-text);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ct-player-thu-ten:hover { text-decoration: underline; }
 
 /* ── Hộp nhắc "bản mới đã sẵn sàng" ──────────────────────
    Nổi ở góc phải dưới, KHÔNG phủ giữa màn hình: đang gõ dở thì gõ tiếp. Đặt

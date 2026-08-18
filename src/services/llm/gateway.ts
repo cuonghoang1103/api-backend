@@ -590,11 +590,16 @@ function modelCong(purpose: LlmPurpose): string {
 }
 
 export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
+  const env = process.env[`LLM_MODEL_${purpose.toUpperCase()}`]?.trim();
   const diem = ep ?? endpointFor(purpose);
-  if (diem.local) return process.env.LLM_LOCAL_MODEL?.trim() || 'qwen3.5-9b-local';
-  // `modelGoiDuoc` bọc cả nhánh env: đặt tay một model của nhóm chưa cắm khoá
-  // thì cũng chết y hệt, và đó lại là nhánh người ta dùng lúc đang vội.
-  return modelGoiDuoc(modelCong(purpose));
+  // ⚠️ `LLM_MODEL_<VIỆC>` phải THẮNG, kể cả khi việc này đang chạy ở máy nhà —
+  // đó là cái van người ta vặn lúc đang chữa cháy, và một cái van bị nhánh
+  // khác nuốt mất thì lần sau không ai tin nó nữa.
+  if (diem.local) return env || process.env.LLM_LOCAL_MODEL?.trim() || 'qwen3.5-9b-local';
+  // Lưới đỡ chỉ áp cho đường qua CỔNG (model máy nhà không cần khoá nhóm nào),
+  // nhưng áp cho CẢ nhánh env: đặt tay một model của nhóm chưa cắm khoá thì
+  // cũng chết y hệt, và đó lại là nhánh người ta dùng lúc đang vội.
+  return modelGoiDuoc(env || PURPOSE_MODEL[purpose]);
 }
 
 /** Toàn bộ bản đồ — cho trang quản trị và cho lệnh kiểm tra cấu hình. */

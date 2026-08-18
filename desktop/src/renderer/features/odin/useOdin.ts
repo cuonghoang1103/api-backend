@@ -23,6 +23,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ApiClient } from '../../api/client';
+import { chuChoMayDoc } from './loiNoi';
 
 export type OdinMood =
   /** Bình thường, trôi lên xuống. */
@@ -37,6 +38,12 @@ export type OdinMood =
   | 'lo'
   /** Không có gì xảy ra một lúc lâu. */
   | 'ngu';
+
+/**
+ * Trần chữ cho bong bóng nổi. ~40 từ — đủ cho một câu trả lời nói, và vừa
+ * khoảng người ta liếc mắt đọc được mà không phải dừng việc đang làm.
+ */
+const TRAN_BONG_BONG = 220;
 
 export interface OdinState {
   mood: OdinMood;
@@ -153,9 +160,27 @@ export function useOdin(options: {
     moodFor('vui', 1400);
   }, [moodFor]);
 
+  /**
+   * Bong bóng nói của robot.
+   *
+   * ⚠️ HAI LỚP CHỐNG ĐỠ, và cả hai đều cần thiết.
+   *
+   * Gốc rễ đã chữa ở chỗ khác: lượt hỏi từ robot nay gửi `voice: true` nên máy
+   * chủ trả về 2–4 câu lời nói. Nhưng bong bóng KHÔNG được tin vào điều đó.
+   * Ảnh chụp 18/08/2026 cho thấy nó từng hiện nguyên một bài so sánh Spring
+   * Boot với Node.js — cả khối ```javascript, cả `**đậm**`, cả `###` — dài
+   * gần hết chiều cao màn hình và che mất phần mềm người dùng đang làm việc.
+   *
+   *  1. BÓC MARKDOWN: bong bóng là chữ thuần, không dựng markdown. Để nguyên
+   *     thì người dùng đọc thấy dấu sao và dấu huyền ba cái.
+   *  2. CẮT NGẮN: bong bóng nổi trên MỌI cửa sổ. Một câu trả lời dài ở đây
+   *     không phải là "nhiều thông tin", nó là một tấm rèm che màn hình. Ai
+   *     cần đọc đủ thì mở khung chat — chữ vẫn còn nguyên ở đó.
+   */
   const announce = useCallback(
     (message: string) => {
-      setSay(message);
+      const sach = chuChoMayDoc(message);
+      setSay(sach.length > TRAN_BONG_BONG ? `${sach.slice(0, TRAN_BONG_BONG).trimEnd()}…` : sach);
       moodFor('vui', 1600);
     },
     [moodFor],

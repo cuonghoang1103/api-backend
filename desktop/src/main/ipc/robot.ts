@@ -7,6 +7,7 @@ import { doiKichThuoc, moTrangChinh } from '../robotNoi';
 import { baoNhac } from '../robotTin';
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from './auth';
+import { getSettings } from '../store';
 import { handle } from './index';
 
 export function registerRobotHandlers(): void {
@@ -34,14 +35,129 @@ export function registerRobotHandlers(): void {
   handle('robot:hoi', async ({ chu }) => {
     const phien = readStoredSession();
     if (!phien) return { chu: 'Chưa đăng nhập. Mở app chính để đăng nhập trước.' };
+    return { chu: await hoiTroLy(phien.sessionToken, chu, false) };
+  });
 
+  /**
+   * NÓI với robot nổi — thu ở cửa sổ robot, ba chặng còn lại chạy ở đây.
+   *
+   * ─── VÌ SAO CẢ BA CHẶNG Ở MAIN ───
+   * Cửa sổ robot chạy ở origin `app://cuongthai`. Mọi lời gọi từ đó ra máy chủ
+   * phải qua CORS, và nó cũng không giữ phiên đăng nhập — `robot:hoi` đã đi
+   * đường main vì đúng lý do này. Nhận dạng tiếng và máy đọc thì cùng cảnh.
+   *
+   * Renderer chỉ làm đúng một việc nó buộc phải làm: bật micro. `getUserMedia`
+   * không tồn tại ở tiến trình main.
+   */
+  handle('robot:noi', async ({ tiengBase64 }) => {
+    const phien = readStoredSession();
+    if (!phien) return { cauHoi: '', traLoi: 'Chưa đăng nhập. Mở app chính để đăng nhập trước.', tiengBase64: null };
+
+    const token = phien.sessionToken;
+    try {
+      // ── 1. Nghe ──
+      const byte = Buffer.from(tiengBase64, 'base64');
+      const form = new FormData();
+      form.append('audio', new Blob([byte], { type: 'audio/webm' }), 'noi.webm');
+      const rNghe = await fetch(`${API_ORIGIN}/api/v1/ai/stt`, {
+        method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: form,
+      });
+      const jNghe = await rNghe.json() as { message?: string; data?: { text?: string } };
+      if (!rNghe.ok) return { cauHoi: '', traLoi: jNghe.message ?? `Nghe hỏng (${rNghe.status}).`, tiengBase64: null };
+      const cauHoi = jNghe.data?.text?.trim() ?? '';
+      // Im lặng hoặc tiếng ồn ⇒ DỪNG ở đây. Đưa một chuỗi rỗng cho model thì nó
+      // sẽ bịa ra một câu trả lời cho một câu hỏi không tồn tại.
+      if (!cauHoi) return { cauHoi: '', traLoi: 'Mình chưa nghe rõ. Bạn nói lại giúp nhé.', tiengBase64: null };
+
+      // ── 2. Nghĩ ──
+      const traLoi = await hoiTroLy(token, cauHoi, true);
+
+      // ── 3. Nói ──
+      // Đọc hỏng thì KHÔNG được làm hỏng cả lượt: người dùng vẫn còn chữ để
+      // đọc, và mất tiếng còn hơn mất câu trả lời.
+      let tieng: string | null = null;
+      if (getSettings().odinNoiThanhTieng !== false) {
+        tieng = await docThanhTieng(token, traLoi).catch(() => null);
+      }
+      return { cauHoi, traLoi, tiengBase64: tieng };
+    } catch (err) {
+      return { cauHoi: '', traLoi: `Không gọi được máy chủ: ${(err as Error).message}`, tiengBase64: null };
+    }
+  });
+}
+
+/** Nhịp hỏi máy đọc. Xem chú thích trong `docThanhTieng`. */
+const NHIP_DAU_MS = 120;
+const NHIP_TOI_DA_MS = 600;
+const TRAN_DOC_MS = 45_000;
+
+/**
+ * Gọi máy đọc, trả tiếng dạng base64 (hoặc ném lỗi).
+ *
+ * ⚠️ NHỊP HỎI TĂNG DẦN, KHÔNG PHẢI 700ms CỐ ĐỊNH.
+ *
+ * Bản ở renderer hỏi lại mỗi 700ms. Một câu ngắn thường xong trong ~300ms, mà
+ * lần hỏi đầu (ngay lập tức) gần như luôn nhận 202 — nên nó ngồi chờ đủ 700ms
+ * rồi mới lấy được tiếng. Tức là **gần 400ms chờ suông** cho mỗi câu, và đó
+ * chính là quãng người dùng thấy "chữ ra rồi mà giọng chưa ra".
+ *
+ * Bắt đầu 120ms rồi nhân 1,5 lần: câu ngắn lấy được gần như ngay, câu dài vẫn
+ * không đấm máy chủ liên tục.
+ */
+async function docThanhTieng(token: string, chu: string): Promise<string> {
+  const giong = ngonNguHienTai() === 'en' ? getSettings().odinGiongEn : getSettings().odinGiongVi;
+  const dat = await fetch(`${API_ORIGIN}/api/v1/voice-mini/tts`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ text: chu, ...(typeof giong === 'string' && giong ? { voice: giong } : {}) }),
+  });
+  if (!dat.ok) throw new Error(`Máy đọc từ chối (${dat.status})`);
+  const { data } = await dat.json() as { data?: { jobId?: string } };
+  const jobId = data?.jobId;
+  if (!jobId) throw new Error('Máy đọc không trả mã việc.');
+
+  const hetHan = Date.now() + TRAN_DOC_MS;
+  let nhip = NHIP_DAU_MS;
+  for (;;) {
+    if (Date.now() > hetHan) throw new Error('Máy đọc không trả kết quả kịp.');
+    const lay = await fetch(`${API_ORIGIN}/api/v1/voice-mini/tts/${encodeURIComponent(jobId)}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (lay.status === 202) {
+      await new Promise((x) => setTimeout(x, nhip));
+      nhip = Math.min(Math.round(nhip * 1.5), NHIP_TOI_DA_MS);
+      continue;
+    }
+    if (!lay.ok) throw new Error(`Lấy tiếng hỏng (${lay.status})`);
+    return Buffer.from(await lay.arrayBuffer()).toString('base64');
+  }
+}
+
+/** Ngôn ngữ người dùng đã khoá trong thiết đặt. */
+function ngonNguHienTai(): 'vi' | 'en' {
+  return getSettings().odinNgonNgu === 'en' ? 'en' : 'vi';
+}
+
+/**
+ * Hỏi trợ lý, trả về câu đã gom đủ.
+ *
+ * @param laLoiNoi Câu trả lời sẽ được ĐỌC THÀNH TIẾNG ⇒ gửi `voice: true` để
+ *   máy chủ áp `VOICE_RULES` (2–4 câu, không markdown). Thiếu cờ này chính là
+ *   lỗi 18/08/2026: bong bóng robot hiện nguyên một bài so sánh Spring Boot
+ *   với Node.js kèm cả khối ```javascript, che gần hết màn hình.
+ */
+async function hoiTroLy(token: string, chu: string, laLoiNoi: boolean): Promise<string> {
     try {
       const res = await fetch(`${API_ORIGIN}/api/v1/ai/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${phien.sessionToken}` },
-        body: JSON.stringify({ message: chu }),
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          message: chu,
+          ngonNgu: ngonNguHienTai(),
+          ...(laLoiNoi ? { voice: true } : {}),
+        }),
       });
-      if (!res.ok || !res.body) return { chu: `Máy chủ trả về ${res.status}.` };
+      if (!res.ok || !res.body) return `Máy chủ trả về ${res.status}.`;
 
       // Đọc hết SSE rồi mới trả — khung mini không chảy chữ.
       const giaiMa = new TextDecoder();
@@ -60,9 +176,8 @@ export function registerRobotHandlers(): void {
           } catch { /* khung lạ — bỏ qua, app cũ không được vỡ vì khung mới */ }
         }
       }
-      return { chu: ra.trim() || '(không có nội dung)' };
+      return ra.trim() || '(không có nội dung)';
     } catch (err) {
-      return { chu: `Không gọi được máy chủ: ${(err as Error).message}` };
+      return `Không gọi được máy chủ: ${(err as Error).message}`;
     }
-  });
 }

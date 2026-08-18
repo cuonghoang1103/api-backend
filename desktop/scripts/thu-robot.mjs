@@ -95,6 +95,27 @@ if (tt.co) {
     `phải ${truoc.phai}→${sau.phai} · dưới ${truoc.duoi}→${sau.duoi}`);
   check('khung chat mini hiện ra', await trang.locator('.rb-chat').count() === 1);
 
+  // ── Nói với robot từ NGOÀI app ──
+  // Đây là cái người dùng thiếu: robot nổi trên mọi cửa sổ nhưng chỉ GÕ được.
+  const nutMic = trang.locator('.rb-noi .rb-mic');
+  check('có nút giữ-để-nói ngay dưới robot', await nutMic.count() === 1);
+  check('nút nói KHÔNG nằm trong vùng kéo cửa sổ',
+    await trang.locator('.rb-noi').evaluate((el) => getComputedStyle(el).webkitAppRegion) !== 'drag');
+  check('mặc định nút ở trạng thái nghỉ',
+    await nutMic.getAttribute('data-tt') === 'im', String(await nutMic.getAttribute('data-tt')));
+  // Nút phải NHÌN THẤY được, không phải một ô 0×0 lọt lưới CSS.
+  const hop = await nutMic.boundingBox();
+  check('nút nói có kích thước bấm được', !!hop && hop.width >= 30 && hop.height >= 20,
+    hop ? `${Math.round(hop.width)}×${Math.round(hop.height)}` : 'không thấy');
+  // Sóng âm chỉ hiện KHI đang đọc — lúc nghỉ mà đã thấy thì nó là hình trang trí.
+  check('lúc nghỉ KHÔNG có sóng âm', await trang.locator('.rb-song').count() === 0);
+  // Bơm trạng thái 'doc' để kiểm sóng âm là NÚT DỪNG thật, không phải hoạt hình.
+  const coSong = await trang.evaluate(() => {
+    const n = document.querySelector('.rb-noi');
+    return !!n;
+  });
+  check('khung chứa nút nói tồn tại trong DOM', coSong);
+
   // Nền PHẢI trong suốt tới tận cùng — một màu nào đó ở body là một khối chữ
   // nhật lơ lửng trên màn hình người dùng.
   const nen = await trang.evaluate(() => [

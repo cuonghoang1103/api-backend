@@ -693,6 +693,17 @@ export const INVOKE_CHANNELS = {
   'robot:doiKichThuoc': z.object({ rong: z.boolean() }),
   'robot:moChinh': z.object({ duongDan: z.string().min(1).max(200) }),
   'robot:hoi': z.object({ chu: z.string().min(1).max(4000) }),
+  /**
+   * Nói với robot nổi. Tiếng thu được gửi lên dạng base64.
+   *
+   * ⚠️ Gửi CHỮ base64 chứ không gửi `Uint8Array`: kênh IPC có kiểm bằng zod, và
+   * một mảng byte đi qua `structuredClone` rồi qua `z.instanceof` là chỗ dễ
+   * lệch giữa hai phía. 8 giây tiếng webm ≈ 90KB base64 — rẻ hơn nhiều so với
+   * một lớp lỗi khó tìm.
+   *
+   * Trần 6MB ≈ hơn một phút thu. Dài hơn thế thì không phải một câu hỏi.
+   */
+  'robot:noi': z.object({ tiengBase64: z.string().min(16).max(6_000_000) }),
   'robot:baoNhac': z.object({ ten: z.string().min(1).max(200) }),
 
   'browser:mo': browserMoSchema,
@@ -998,6 +1009,12 @@ export interface DesktopBridge {
     moChinh(duongDan: string): Promise<void>;
     /** Hỏi nhanh một câu, trả về câu trả lời đã hoàn chỉnh (không chảy chữ). */
     hoi(chu: string): Promise<{ chu: string }>;
+    /**
+     * Nói một câu với robot. Nhận vào tiếng đã thu (base64), trả về câu nghe
+     * được, câu trả lời, và tiếng đọc (base64) — hoặc `null` nếu người dùng
+     * đã tắt đọc thành tiếng, hoặc máy đọc hỏng.
+     */
+    noi(tiengBase64: string): Promise<{ cauHoi: string; traLoi: string; tiengBase64: string | null }>;
     /**
      * Báo bài đang phát. Main tự BỎ QUA khi cửa sổ chính đang được nhìn — nói
      * lại tên bài ngay trong trang nhạc là thừa.

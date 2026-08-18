@@ -19,6 +19,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { OdinRobot } from './features/odin/OdinRobot';
+import { batDauThu, ngungPhat, phatBase64, type BoThu } from './features/odin/nghePhat';
 import './features/odin/odin.css';
 import './robot.css';
 
@@ -29,12 +30,16 @@ interface ThongBao {
   chu: string;
 }
 
+type TrangThaiNoi = 'im' | 'nghe' | 'nghi' | 'doc';
+
 function Robot() {
   const [rong, datRong] = useState(false);
   const [nhay, datNhay] = useState(false);
   const [tin, datTin] = useState<ThongBao | null>(null);
   const [hover, datHover] = useState(false);
   const henRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [tt, datTt] = useState<TrangThaiNoi>('im');
+  const thuRef = useRef<BoThu | null>(null);
 
   // Nháy mắt. Giữ đúng nhịp của con robot trong app để nó vẫn là "cùng một
   // nhân vật" chứ không phải hai con giống nhau.
@@ -72,6 +77,63 @@ function Robot() {
     }, TRE_NHAP_DUP_MS);
   }, [rong, doiRong]);
 
+  /**
+   * Giữ để nói.
+   *
+   * ⚠️ TẮT MICRO Ở MỌI LỐI RA. Bốn lối: thả chuột, chuột rời khỏi nút, cửa sổ
+   * mất tiêu điểm, và component bị tháo. Bỏ sót một lối là đèn micro của máy
+   * sáng mãi sau khi người dùng đã đi làm việc khác — và không có cách nào tắt
+   * ngoài việc thoát app.
+   */
+  const batDauNoi = useCallback(async () => {
+    if (tt !== 'im') return;
+    ngungPhat();
+    datTt('nghe');
+    const bo = await batDauThu(async (tiengBase64) => {
+      datTt('nghi');
+      try {
+        const kq = await window.cuongthai?.robot.noi(tiengBase64);
+        if (!kq) { datTt('im'); return; }
+        // Hiện CÂU TRẢ LỜI trong bong bóng. Câu hỏi thì không — người vừa nói
+        // ra nó xong, nhắc lại là thừa chỗ trên một bong bóng nổi trên mọi thứ.
+        datTin({ loai: 'agent', chu: kq.traLoi });
+        if (kq.tiengBase64) {
+          datTt('doc');
+          await phatBase64(kq.tiengBase64);
+        }
+      } catch (e) {
+        datTin({ loai: 'thong-bao', chu: `Trục trặc: ${(e as Error).message}` });
+      } finally {
+        datTt('im');
+      }
+    });
+    if (!bo) {
+      datTt('im');
+      datTin({ loai: 'thong-bao', chu: 'Mình không mở được micro. Kiểm tra quyền micro giúp mình nhé.' });
+      return;
+    }
+    thuRef.current = bo;
+  }, [tt]);
+
+  const thaTayNoi = useCallback(() => {
+    thuRef.current?.dung();
+    thuRef.current = null;
+    // KHÔNG đặt lại 'im' ở đây: `onstop` chạy sau và sẽ chuyển sang 'nghi'.
+    // Đặt 'im' ngay là nút nháy về trạng thái nghỉ rồi mới bận lại.
+    datTt((c) => (c === 'nghe' ? 'nghi' : c));
+  }, []);
+
+  // Cửa sổ mất tiêu điểm giữa lúc đang thu ⇒ dừng. Người dùng đã đi chỗ khác.
+  useEffect(() => {
+    const roi = (): void => { if (thuRef.current) thaTayNoi(); };
+    window.addEventListener('blur', roi);
+    return () => {
+      window.removeEventListener('blur', roi);
+      thuRef.current?.dung();
+      ngungPhat();
+    };
+  }, [thaTayNoi]);
+
   const bamDup = useCallback(() => {
     if (henRef.current) { clearTimeout(henRef.current); henRef.current = null; }
     datTin(null);
@@ -97,8 +159,56 @@ function Robot() {
         )}
         {/* Có tin thì robot 'vui' — cùng bộ tâm trạng với con robot trong app,
             nên nó vẫn là MỘT nhân vật chứ không phải hai con giống nhau. */}
-        <OdinRobot mood={tin ? 'vui' : 'thuong'} blinking={nhay} hovering={hover} size={104} />
+        <OdinRobot
+          mood={tt === 'nghe' ? 'vui' : tt === 'nghi' ? 'nghi' : tin ? 'vui' : 'thuong'}
+          blinking={nhay}
+          hovering={hover}
+          size={104}
+        />
         {tin && !rong && <span className="rb-cham" />}
+      </div>
+
+      {/*
+        Nút nói nằm NGOÀI `.rb-than` — thân robot đã nhận bấm-một-lần,
+        bấm-hai-lần và kéo. Nhét thêm giữ-để-nói vào đó là bốn cử chỉ tranh nhau
+        một vùng, và cái nào cũng sai lúc.
+      */}
+      <div className="rb-noi">
+        {tt === 'doc' ? (
+          /* Đang đọc ⇒ hiện SÓNG ÂM, bấm vào là im ngay. Người dùng nghe hai
+             câu đầu đã đủ ý thì phải có đường tắt — không thì họ ngồi chờ hết
+             câu hoặc phải tắt cả app. */
+          <button
+            type="button"
+            className="rb-song"
+            onClick={() => { ngungPhat(); datTt('im'); }}
+            title="Đang đọc — bấm để dừng"
+            aria-label="Dừng đọc"
+          >
+            {[0, 1, 2, 3, 4].map((i) => <i key={i} style={{ animationDelay: `${i * 90}ms` }} />)}
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="rb-mic"
+            data-tt={tt}
+            disabled={tt === 'nghi'}
+            onPointerDown={() => void batDauNoi()}
+            onPointerUp={thaTayNoi}
+            onPointerLeave={thaTayNoi}
+            title={tt === 'nghi' ? 'Đang nghĩ…' : 'Giữ để nói'}
+            aria-label="Giữ để nói"
+          >
+            {tt === 'nghi'
+              ? <span className="rb-xoay" />
+              : (
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <rect x="9" y="3" width="6" height="11" rx="3" />
+                  <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
+                </svg>
+              )}
+          </button>
+        )}
       </div>
     </div>
   );

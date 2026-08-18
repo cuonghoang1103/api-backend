@@ -335,7 +335,23 @@ export function ChatMode({ pro }: { pro: boolean }) {
    */
   const luotGoi = useCallback(async (tiengBase64: string) => {
     if (!api) throw new Error('Chưa đăng nhập.');
-    const blob = await (await fetch(`data:audio/webm;base64,${tiengBase64}`)).blob();
+    /*
+     * ⚠️ KHÔNG DÙNG `fetch('data:...')` ĐỂ ĐỔI base64 → Blob.
+     *
+     * `connect-src` của app chỉ cho `app://cuongthai` và vài origin đã khai;
+     * `data:` KHÔNG có trong đó, nên CSP chặn và trình duyệt ném đúng một
+     * câu: "Failed to fetch". Không nhắc gì tới CSP, không nhắc gì tới
+     * `data:` — nhìn y như mất mạng. Người dùng gặp đúng câu đó 19/08/2026.
+     *
+     * Giải mã thẳng bằng `atob` — thuần JS, không đụng mạng, không đụng CSP.
+     * Đây cũng đúng cách `phatBase64` trong `nghePhat.ts` vẫn làm; chỗ này
+     * lệch đi là do tôi viết hai kiểu cho cùng một việc.
+     *
+     * Và NỚI CSP để cho `data:` qua là hướng sai: thà sửa một dòng mã còn
+     * hơn mở rộng thứ đang bảo vệ cả app.
+     */
+    const byte = Uint8Array.from(atob(tiengBase64), (c) => c.charCodeAt(0));
+    const blob = new Blob([byte], { type: 'audio/webm' });
     const form = new FormData();
     form.append('audio', blob, 'goi.webm');
     const r = await fetch(`${api.baseUrlForForms()}/api/v1/ai/stt`, {

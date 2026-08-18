@@ -14,10 +14,16 @@
  * vòng, 3 lời gọi tool, kho mã giả cố định để mọi model đi qua cùng lượng dữ
  * liệu):
  *
- *   claude-sonnet-5   14,0s · 1,2326 · trả lời đúng
- *   gpt-5.6-sol       22,2s · 1,4508 · trả lời đúng
- *   claude-opus-4-8   17,2s · 2,7960 · trả lời đúng
- *   gpt-5.6-terra     34,9s · 2,5782 · trả lời đúng
+ *   claude-sonnet-5   1,23 · 2,28 · 1,77  ⇒ TB 1,76   · vào ~3.700 token
+ *   gpt-5.6-terra     2,58 · 3,05 · 2,78  ⇒ TB 2,80   · vào ~15.800
+ *   claude-opus-4-8   3,70 · 2,80 · 5,73  ⇒ TB 4,07   · vào ~3.600
+ *   gpt-5.6-sol      13,49 ·13,21 ·11,59  ⇒ TB 12,77  · vào ~19.200
+ *
+ * Cả bốn trả lời ĐÚNG, độ trễ nay xấp xỉ nhau (10–25s) nên tốc độ không phải
+ * thứ để chọn. Thứ để chọn là cột TOKEN VÀO: model GPT mang gấp năm lần token
+ * vào cho CÙNG một câu hỏi, vì cổng tự bọc chúng trong một prompt ẩn. Trong
+ * vòng lặp gọi tool, phần bọc đó nhân theo số vòng — nên chênh lệch 5× ở token
+ * thành 7,3× ở tiền.
  *
  * ⚠️ CON SỐ CỦA GPT PHỤ THUỘC MẠNH VÀO TẢI, và đó chính là lý do danh sách
  * này khép kín. Một lượt đo sớm hơn (chạy chồng lên phép đo khác) cho
@@ -43,19 +49,19 @@ export const MODEL_AGENT: readonly ModelAgent[] = Object.freeze([
     id: 'sonnet-5',
     model: 'claude-sonnet-5',
     ten: 'Claude Sonnet 5',
-    mo: 'Mặc định — nhanh nhất và rẻ nhất trong ba (đo: 14,0s mỗi việc)',
+    mo: 'Mặc định — rẻ nhất, đo 1,76 mỗi việc trên vòng lặp gọi tool',
   },
   {
     id: 'opus-4-8',
     model: 'claude-opus-4-8',
     ten: 'Claude Opus 4.8',
-    mo: 'Mạnh nhất, đắt gấp 2,3 lần và chậm hơn 23% — để dành cho việc khó',
+    mo: 'Mạnh nhất — đắt gấp 2,3 lần (4,07/việc). Để dành việc khó',
   },
   {
     id: 'gpt-sol',
     model: 'gpt-5.6-sol',
     ten: 'GPT 5.6 Sol',
-    mo: 'Của nhà khác — chậm hơn 59%, đắt hơn 18%; dùng khi muốn ý kiến thứ hai',
+    mo: 'Nhà khác — ĐẮT GẤP 7,3 LẦN (12,77/việc). Chỉ khi cần ý kiến thứ hai',
   },
 ]);
 

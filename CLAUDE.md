@@ -370,9 +370,23 @@ từ hệ số — phải đo bằng sổ của cổng.
 
 **Model cho agent (AI Code) người dùng CHỌN ĐƯỢC** — danh sách trắng ở
 `src/services/agent/models.ts`, app chỉ gửi mã ngắn (`sonnet-5` / `opus-4-8` /
-`gpt-sol`). Đo trên đúng vòng lặp gọi tool: `claude-sonnet-5` 14,0s/1,23 ·
-`gpt-5.6-sol` 22,2s/1,45 · `claude-opus-4-8` 17,2s/2,80 — nên mặc định là
-sonnet-5.
+`gpt-sol`).
+
+⚠️⚠️ **GIÁ LẺ MỘT LƯỢT KHÔNG SUY RA ĐƯỢC GIÁ TRONG VÒNG LẶP GỌI TOOL.** Đo 3
+lượt trên đúng vòng lặp của agent (cùng câu hỏi, kho mã giả cố định):
+
+| Model | 3 lượt | TB | Token **vào** TB |
+|---|---|---|---|
+| `claude-sonnet-5` | 1,23 · 2,28 · 1,77 | **1,76** | 3.719 |
+| `gpt-5.6-terra` | 2,58 · 3,05 · 2,78 | 2,80 | 15.829 |
+| `claude-opus-4-8` | 3,70 · 2,80 · 5,73 | 4,07 | 3.622 |
+| `gpt-5.6-sol` | 13,49 · 13,21 · 11,59 | **12,77** | 19.215 |
+
+Theo bảng giá lẻ thì `gpt-5.6-sol` (1,22) rẻ hơn `claude-opus-4-8` (2,00).
+Trong vòng lặp thì NGƯỢC LẠI, và ngược tới ba lần. Lý do nằm ở cột token vào:
+cổng bọc model GPT trong ~15k token ẩn mỗi việc, và phần bọc đó nhân theo số
+vòng. Nên mặc định là **`claude-sonnet-5`**, rẻ hơn `gpt-5.6-sol` **7,3 lần**.
+Nhãn trong app nói thẳng con số này để người dùng chọn có cơ sở.
 
 **Ảnh: CHỈ `gpt-5.6-sol` nhìn được thật.** Đo bằng ảnh 1×1 px: sol trả lời
 đúng; `gpt-5.5` / `gpt-5.6-terra` / `gpt-5.4-mini` nhận ảnh, không báo lỗi, và

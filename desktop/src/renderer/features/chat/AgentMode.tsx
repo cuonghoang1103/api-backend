@@ -628,18 +628,19 @@ function BangKeHoach({ viec }: { viec: AgentViec[] }) {
  *
  * ─── VÌ SAO HAI DANH SÁCH RỜI, KHÔNG PHẢI MỘT THANH TRƯỢT ───
  * Trực giác muốn một thanh "rẻ ↔ mạnh" gộp cả model lẫn số bước. Đo thật
- * 18/08 nói không: con model rẻ nhất cổng bán (`gpt-5.6-terra`, 0,17/việc so
- * với 1,23 của Sonnet 5) là con DUY NHẤT vỡ giữa vòng lặp gọi tool. Một thanh
- * trượt mà đầu "tiết kiệm" là đầu hỏng thì nó là cái bẫy, không phải lựa chọn.
+ * 18/08 nói không: model đắt nhất theo bảng giá lẻ của cổng (opus, 2,00/lượt)
+ * lại RẺ HƠN BA LẦN so với `gpt-5.6-sol` (1,22/lượt) khi chạy vòng lặp gọi
+ * tool — vì cổng bọc model GPT trong ~15k token ẩn mỗi việc, và phần bọc đó
+ * nhân theo số vòng. Một thanh trượt gộp sẽ xếp chúng ngược hẳn thực tế.
  *
  * Nhãn nói bằng SỐ ĐO ĐƯỢC — số bước, số giây, gấp mấy lần tiền — chứ không
  * bằng tính từ. "Mạnh hơn" thì ai cũng bấm; "đắt gấp 2,3 lần và chậm hơn 23%"
  * thì người ta bấm khi họ thật sự cần.
  */
 const DS_MODEL: Array<{ id: ModelAgent; ten: string; mo: string }> = [
-  { id: 'sonnet-5', ten: 'Claude Sonnet 5', mo: 'nhanh nhất, rẻ nhất — mặc định' },
-  { id: 'opus-4-8', ten: 'Claude Opus 4.8', mo: 'đắt gấp 2,3 lần, chậm hơn 23% — việc khó' },
-  { id: 'gpt-sol', ten: 'GPT 5.6 Sol', mo: 'nhà khác — chậm hơn 59%, ý kiến thứ hai' },
+  { id: 'sonnet-5', ten: 'Claude Sonnet 5', mo: 'rẻ nhất — mặc định (1,76/việc)' },
+  { id: 'opus-4-8', ten: 'Claude Opus 4.8', mo: 'mạnh nhất — đắt gấp 2,3 lần (4,07/việc)' },
+  { id: 'gpt-sol', ten: 'GPT 5.6 Sol', mo: 'nhà khác — ĐẮT GẤP 7,3 LẦN (12,77/việc)' },
 ];
 
 const DS_MUC: Array<{ id: MucNoLuc; ten: string; mo: string }> = [

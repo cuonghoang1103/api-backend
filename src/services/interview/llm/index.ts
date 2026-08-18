@@ -391,6 +391,33 @@ function purposeFor(step: LLMStep, feature?: LLMFeature | null): LlmPurpose {
   }
 }
 
+/**
+ * Biến cũ có còn trỏ vào chỗ SỐNG không.
+ *
+ * ⚠️ ĐÂY LÀ MỘT LỖI ĐÃ SỐNG TRÊN PRODUCTION, không phải phòng xa. 18/08/2026
+ * `/opt/cuonghoangdev/.env` vẫn còn `LLM_MODEL_REPORT=rb-opus-4-8` và
+ * `LLM_MODEL_INTERVIEW=rb-sonnet-5` — tên model của cổng **Rambo đã chết**.
+ * Nhánh này đứng TRƯỚC bản đồ model, nên nó nuốt luôn mọi phân công mới: báo
+ * cáo phỏng vấn AI gọi `rb-opus-4-8`, cổng trả `model_not_found`, và
+ * `aiReport.ts` nuốt lỗi trả `null`. Người dùng thấy "không có báo cáo", không
+ * thấy lỗi nào, và không ai đi tìm trong env.
+ *
+ * Nên biến cũ chỉ được tôn trọng khi nó trỏ vào một cái tên CÒN SỐNG. Cái tên
+ * `rb-*` thì không — xem ghi chú về cổng Rambo trong `gateway.ts`.
+ */
+const daKeuRb = new Set<string>();
+function conSong(model: string, step: string): boolean {
+  if (!model.startsWith('rb-')) return true;
+  if (!daKeuRb.has(step)) {
+    daKeuRb.add(step);
+    logger.warn(
+      `[llm] bỏ qua biến cũ cho bước "${step}": "${model}" là model của cổng Rambo ĐÃ CHẾT. `
+      + 'Hãy xoá dòng đó khỏi .env của VPS; trong lúc chờ, bước này dùng bản đồ model mới.',
+    );
+  }
+  return false;
+}
+
 export function modelForStep(step: LLMStep, feature?: LLMFeature | null, purpose?: LlmPurpose, ep?: LlmEndpoint): string {
   if (purpose) return modelFor(purpose, ep);
   // Biến cũ (chỉ khi VPS còn đặt) — giữ để một máy chưa cập nhật env không đổi
@@ -399,9 +426,11 @@ export function modelForStep(step: LLMStep, feature?: LLMFeature | null, purpose
   // ⚠️ Nhưng chúng chỉ biết tên model của CỔNG. Đi máy nhà mà vẫn đọc chúng
   // là gửi `gpt-5.6-terra` sang llama-server, một cái tên nó không phục vụ.
   if (!ep?.local) {
-    if (step === 'report' && process.env.LLM_MODEL_REPORT) return process.env.LLM_MODEL_REPORT;
-    if (step === 'generation' && process.env.LLM_MODEL_GENERATION) return process.env.LLM_MODEL_GENERATION;
-    if (step === 'interview' && process.env.LLM_MODEL_INTERVIEW) return process.env.LLM_MODEL_INTERVIEW;
+    const cu = step === 'report' ? process.env.LLM_MODEL_REPORT
+      : step === 'generation' ? process.env.LLM_MODEL_GENERATION
+        : step === 'interview' ? process.env.LLM_MODEL_INTERVIEW
+          : undefined;
+    if (cu?.trim() && conSong(cu.trim(), step)) return cu.trim();
   }
   return modelFor(purposeFor(step, feature), ep);
 }

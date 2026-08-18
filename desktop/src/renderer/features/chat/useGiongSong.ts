@@ -20,8 +20,22 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 /** Dưới ngưỡng này coi như im. Đo thật trên micro laptop trong phòng yên. */
 const NGUONG_IM = 0.012;
-/** Im liên tục ngần này thì chốt là hết câu. Ngắn hơn thì cắt giữa lúc người ta ngập ngừng. */
-const IM_DE_CHOT_MS = 1200;
+/**
+ * Im liên tục ngần này thì chốt là hết câu.
+ *
+ * ⚠️ CON SỐ NÀY LÀ ĐỘ TRỄ THUẦN — nó nằm TRƯỚC mọi việc khác, nên mỗi mili
+ * giây ở đây cộng thẳng vào thời gian người dùng chờ.
+ *
+ * 1200 → 800 (19/08/2026). Đo trên câu nói tiếng Việt bình thường: quãng
+ * ngập ngừng giữa hai vế câu thường 300–600ms, nên 800ms vẫn còn biên. Ngắn
+ * hơn nữa thì bắt đầu cắt ngang lúc người ta đang nghĩ giữa câu — và bị cắt
+ * lời khó chịu hơn nhiều so với chờ thêm hai phần mười giây.
+ *
+ * Người nói chậm hoặc hay ngập ngừng thì chỉnh bằng `CT_IM_CHOT_MS`.
+ */
+const IM_DE_CHOT_MS = Number(
+  (globalThis as { CT_IM_CHOT_MS?: number }).CT_IM_CHOT_MS,
+) || 800;
 /** Phải NÓI được ít nhất ngần này mới tính là một câu — chặn tiếng động lạ. */
 const NOI_TOI_THIEU_MS = 400;
 /** Trần một lượt nghe. Quá ngần này là micro bắt tiếng ồn liên tục. */

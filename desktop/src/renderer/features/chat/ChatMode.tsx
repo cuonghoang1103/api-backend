@@ -22,6 +22,7 @@ import {
   CircleStop, FolderOpen, FolderPlus, History, MessageSquare, Plus, Send, Trash2, X, Search, BookOpen } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { docThanhTieng, ngungNoi, phatTieng } from '../odin/giongNoi';
+import { catCauDau } from '../odin/hoiOdin';
 import { ManGoi } from './ManGoi';
 import { DangNghi } from './DangNghi';
 import { useSession } from '../../auth/session';
@@ -345,21 +346,62 @@ export function ChatMode({ pro }: { pro: boolean }) {
     const cau = than.data?.text?.trim() ?? '';
     if (!cau) return { traLoi: '', phat: async () => {}, ngung: () => {} };
 
-    const traLoi = await guiDi(cau, true);
     const giong = settings.odinNgonNgu === 'en' ? settings.odinGiongEn : settings.odinGiongVi;
+    const tenGiong = typeof giong === 'string' && giong ? giong : undefined;
+    const doc = settings.odinNoiThanhTieng !== false;
+
+    /*
+     * ĐẶT HÀNG MÁY ĐỌC NGAY KHI CÓ CÂU ĐẦU, không chờ trọn câu trả lời.
+     *
+     * Bốn chặng của một lượt nói: nghe → nhận dạng → nghĩ → đọc → phát. Bản
+     * trước chạy nối đuôi cả bốn. Nay chặng "đọc" của câu đầu nằm GỌN TRONG
+     * chặng "nghĩ", nên tiếng ra sớm hơn đúng bằng thời gian máy đọc chạy.
+     */
+    let cauDau = '';
+    let tiengCauDau: Promise<Blob> | null = null;
+    const traLoi = await guiDi(cau, true, (c) => {
+      if (!doc) return;
+      cauDau = c;
+      tiengCauDau = docThanhTieng(api, c, tenGiong);
+      void tiengCauDau.catch(() => {});   // lỗi thật nổi lên ở await bên dưới
+    });
+
     return {
       traLoi,
       phat: async () => {
-        if (settings.odinNoiThanhTieng === false || !traLoi) return;
-        const t = await docThanhTieng(api, traLoi, typeof giong === 'string' && giong ? giong : undefined);
-        await phatTieng(t);
+        if (!doc || !traLoi) return;
+        const duoi = cauDau && traLoi.startsWith(cauDau) ? traLoi.slice(cauDau.length).trim() : '';
+        if (tiengCauDau) {
+          // Đặt hàng phần đuôi TRƯỚC khi phát câu đầu — nếu không, giữa hai
+          // đoạn là trọn một vòng gọi máy đọc và người nghe thấy một khoảng
+          // lặng ngay chỗ dấu chấm (đã dính đúng lỗi này ở bản dock).
+          const tiengDuoi = duoi ? docThanhTieng(api, duoi, tenGiong) : null;
+          void tiengDuoi?.catch(() => {});
+          await phatTieng(await tiengCauDau);
+          if (tiengDuoi) await phatTieng(await tiengDuoi);
+          return;
+        }
+        await phatTieng(await docThanhTieng(api, traLoi, tenGiong));
       },
       ngung: () => ngungNoi(),
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api, settings]);
 
-  const guiDi = async (nhapNgoai?: string, tuMicro = false): Promise<string> => {
+  const guiDi = async (
+    nhapNgoai?: string,
+    tuMicro = false,
+    /**
+     * Gọi MỘT LẦN ngay khi câu đầu tiên đã đủ, trong lúc phần còn lại vẫn
+     * đang chảy về.
+     *
+     * ⚠️ ĐÂY LÀ TOÀN BỘ CHỖ CẮT ĐƯỢC ĐỘ TRỄ. Không có nó thì bốn chặng chạy
+     * nối đuôi: nghe → nhận dạng → NGHĨ XONG HẲN → đọc → phát. Có nó thì
+     * chặng "đọc" nằm GỌN TRONG chặng "nghĩ", và người dùng nghe thấy tiếng
+     * sớm hơn đúng bằng thời gian máy đọc chạy.
+     */
+    onCauDau?: (cau: string) => void,
+  ): Promise<string> => {
     const text = (nhapNgoai ?? nhap).trim();
     const tep = dk.tep;
     // Có đính kèm thì KHÔNG bắt buộc phải gõ chữ — máy chủ cũng cho vậy. Thả
@@ -369,6 +411,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
     // lặp sẽ ra bản cũ.
     let traLoiDayDu = '';
     let nguonLuot: Nguon[] = [];
+    let daBaoCauDau = false;
 
     const truoc: Luot[] = [...luot, { vai: 'user', text, ...(tep.length ? { tep } : {}) }];
     datLuot(truoc);
@@ -463,6 +506,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
             continue;
           }
           if (e.type === 'chunk' && e.text) {
+            // (callback câu đầu xử lý ngay dưới, sau khi đã cộng chuỗi)
             datDangCho(false);
             const mieng = e.text;
             traLoiDayDu += mieng;
@@ -472,6 +516,10 @@ export function ChatMode({ pro }: { pro: boolean }) {
               if (!cuoi || cuoi.vai !== 'assistant') return [...cu, { vai: 'assistant', text: mieng }];
               return [...cu.slice(0, -1), { vai: 'assistant', text: cuoi.text + mieng }];
             });
+            if (onCauDau && !daBaoCauDau) {
+              const cau = catCauDau(traLoiDayDu);
+              if (cau) { daBaoCauDau = true; onCauDau(cau); }
+            }
           } else if (e.type === 'error') {
             datLoi(e.error ?? 'Lỗi không rõ.');
           } else if (e.type === 'model' && e.fellBack) {

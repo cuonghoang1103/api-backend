@@ -82,10 +82,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certifi
 # yt-dlp: extracts YouTube audio for the "Download to site" music feature
 # (POST /api/v1/music/tracks/:id/download-audio). We use the self-contained
 # Linux binary so we DON'T need python3 in the runtime image; it shells out
-# to the ffmpeg installed above to transcode to mp3. Redeploy re-pulls the
-# latest build (yt-dlp needs to stay current as YouTube changes).
-RUN curl -fsSL https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux \
-      -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp
+# to the ffmpeg installed above to transcode to mp3.
+#
+# ⛔ BẢN NIGHTLY, KHÔNG PHẢI BẢN PHÁT HÀNH ỔN ĐỊNH.
+#
+# YouTube đổi cách ký URL media liên tục, và yt-dlp vá trong ngày — nhưng bản
+# "latest release" có thể đứng yên hàng tuần. Đo thật 18/08/2026 với cùng một
+# video, cùng một máy:
+#     yt-dlp 2026.07.04 (bản phát hành)  →  HTTP Error 403: Forbidden
+#     yt-dlp 2026.08.17 (nightly)        →  tải 52,75 MB trong 8 giây
+#
+# Triệu chứng rất dễ chẩn đoán nhầm: lấy metadata vẫn 200, chỉ khâu tải dữ liệu
+# mới 403, nên nó trông y hệt "máy chủ bị chặn theo IP". Tôi đã kết luận sai
+# đúng như vậy, và chỉ vỡ ra khi thử trên máy nhà (IP dân cư) — nó CŨNG 403.
+# Cùng một máy, đổi sang nightly là chạy. Vậy thủ phạm là phiên bản, không phải
+# đường mạng.
+#
+# Mỗi lần deploy là dựng lại lớp này nên yt-dlp luôn mới; YouTube có siết nữa
+# thì chỉ cần deploy lại, không phải sửa mã.
+RUN curl -fsSL https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/latest/download/yt-dlp_linux \
+      -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp \
+ && /usr/local/bin/yt-dlp --version
 
 # Create uploads directory
 RUN mkdir -p /app/uploads/images /app/uploads/audio /app/uploads/video /app/uploads/documents \

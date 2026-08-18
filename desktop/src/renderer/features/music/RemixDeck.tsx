@@ -289,8 +289,7 @@ export function RemixDeck({ baiRemix, baiThuong }: { baiRemix: Track[]; baiThuon
             rut.status === 403
               ? 'Chỉ tài khoản quản trị mới rút được âm thanh về máy chủ.'
               : rut.status >= 500
-                ? 'YouTube từ chối cho máy chủ tải bài này (chặn theo IP máy chủ), nên bài kho Remix chưa dùng được ở bàn DJ. '
-                  + 'Hãy chọn bài ở nhóm "Thư viện" — những bài đó có sẵn file nhạc thật.'
+                ? 'Máy chủ chưa tải được bài này từ YouTube. Thử lại sau ít phút; nếu vẫn vậy thì chọn tạm bài ở nhóm "Thư viện".'
                 : chiTiet?.message ?? `Rút âm thanh thất bại (${rut.status})`,
           );
         }

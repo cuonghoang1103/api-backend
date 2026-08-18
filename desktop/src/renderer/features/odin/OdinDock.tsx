@@ -94,17 +94,55 @@ export function OdinDock() {
     // và hai giọng chồng nhau thì không nghe ra chữ nào.
     ngungNoi();
     odin.announce(ngonNgu === 'en' ? 'Let me think…' : 'Để mình nghĩ chút…');
+    const doc = settings.odinNoiThanhTieng !== false;
+    const giong = ngonNgu === 'en' ? settings.odinGiongEn : settings.odinGiongVi;
+    const tenGiong = typeof giong === 'string' && giong ? giong : undefined;
+
+    /*
+     * BA VIỆC, CHO HAI VIỆC ĐẦU CHỒNG LÊN NHAU.
+     *
+     * Trước: chờ trọn câu trả lời → gọi máy đọc → phát. Người dùng thấy chữ ở
+     * cuối việc một và nghe tiếng ở cuối việc ba, nên tiếng luôn về sau chữ
+     * đúng bằng thời gian máy đọc chạy.
+     *
+     * Nay: câu ĐẦU vừa đủ là gửi ngay cho máy đọc trong lúc phần còn lại vẫn
+     * đang chảy về. Máy đọc chạy song song với model, nên tiếng câu đầu thường
+     * sẵn sàng ngay khi chữ hiện ra.
+     *
+     * CHỈ tách MỘT lần, ở câu đầu. Tách từng câu thì một câu trả lời bốn câu
+     * thành bốn lời gọi máy đọc — đắt gấp bốn, và ba lần ngắt giữa chừng nghe
+     * rời rạc hơn là liền mạch.
+     */
+    let tiengCauDau: Promise<Blob> | null = null;
+    let cauDau = '';
+
     try {
-      const tra = await hoiOdin(api, cauHoi, ngonNgu);
+      const tra = await hoiOdin(api, cauHoi, ngonNgu, undefined, (cau) => {
+        if (!doc) return;
+        cauDau = cau;
+        // KHÔNG await: để nó chạy trong lúc vòng đọc stream tiếp tục.
+        tiengCauDau = docThanhTieng(api, cau, tenGiong);
+        // Nuốt lỗi ở đây để một lời hứa hỏng không thành "unhandled rejection";
+        // lỗi thật sẽ nổi lên lúc await bên dưới.
+        void tiengCauDau.catch(() => {});
+      });
       if (!tra) {
         odin.announce(ngonNgu === 'en' ? 'I did not catch that.' : 'Mình chưa nghĩ ra câu trả lời.');
         return;
       }
       odin.announce(tra);
-      if (settings.odinNoiThanhTieng === false) return;
-      const giong = ngonNgu === 'en' ? settings.odinGiongEn : settings.odinGiongVi;
-      const blob = await docThanhTieng(api, tra, typeof giong === 'string' && giong ? giong : undefined);
-      await phatTieng(blob);
+      if (!doc) return;
+
+      // Phần đuôi = câu trả lời trừ câu đầu đã gửi đi. Câu trả lời chỉ có đúng
+      // một câu thì không có đuôi, và cũng không tốn thêm lời gọi nào.
+      const duoi = cauDau && tra.startsWith(cauDau) ? tra.slice(cauDau.length).trim() : '';
+
+      if (tiengCauDau) {
+        await phatTieng(await tiengCauDau);
+        if (duoi) await phatTieng(await docThanhTieng(api, duoi, tenGiong));
+      } else {
+        await phatTieng(await docThanhTieng(api, tra, tenGiong));
+      }
     } catch (e) {
       // Hỏng thì nói ra lý do NGẮN, và vẫn để lại câu chữ. Im lặng ở đây là
       // kiểu hỏng tệ nhất: người dùng không biết mình có được nghe hay không.

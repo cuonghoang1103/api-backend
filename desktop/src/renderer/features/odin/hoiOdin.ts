@@ -14,11 +14,39 @@ interface Api {
   authHeaders(): Record<string, string>;
 }
 
+/**
+ * Cắt câu ĐẦU TIÊN ra khỏi phần chữ đang chảy về.
+ *
+ * Trả `null` khi chưa đủ một câu. Ngưỡng 12 ký tự để một câu cụt kiểu "Ừ."
+ * không trở thành một lời gọi máy đọc riêng — đọc "Ừ" rồi ngắt, rồi đọc tiếp
+ * nghe rời rạc hơn hẳn đọc liền.
+ */
+export function catCauDau(chu: string): string | null {
+  const m = /[.!?…]["')\]]?\s/.exec(chu);
+  if (!m) return null;
+  // Cắt hết CẢ khớp (gồm dấu đóng ngoặc nếu có) rồi mới trim — cắt ở
+  // `m.index + 1` là bỏ lại dấu ngoặc đóng cho câu sau, và máy đọc mở đầu câu
+  // kế bằng một dấu nháy lạc lõng.
+  const cau = chu.slice(0, m.index + m[0].length).trim();
+  return cau.length >= 12 ? cau : null;
+}
+
 export async function hoiOdin(
   api: Api,
   cauHoi: string,
   ngonNgu: 'vi' | 'en',
   tinHieu?: AbortSignal,
+  /**
+   * Gọi MỘT LẦN ngay khi câu đầu tiên đã đủ, trong lúc phần còn lại vẫn đang
+   * chảy về.
+   *
+   * ⚠️ ĐÂY LÀ TOÀN BỘ LÝ DO GIỌNG RA NHANH ĐƯỢC. Trước đó ba việc chạy nối
+   * đuôi: chờ trọn câu trả lời → gọi máy đọc → phát. Người dùng thấy chữ ở
+   * cuối việc thứ nhất và nghe tiếng ở cuối việc thứ ba. Cho máy đọc chạy câu
+   * đầu ngay khi có nó thì việc thứ hai nằm GỌN TRONG việc thứ nhất, và tiếng
+   * gần như ra cùng lúc với chữ.
+   */
+  cauDauXong?: (cau: string) => void,
 ): Promise<string> {
   const res = await fetch(`${api.baseUrlForForms()}/api/v1/ai/chat`, {
     method: 'POST',
@@ -60,6 +88,7 @@ export async function hoiOdin(
   const giaiMa = new TextDecoder();
   let dem = '';
   let tra = '';
+  let daBaoCauDau = false;
 
   for (;;) {
     const { done, value } = await doc.read();
@@ -77,6 +106,10 @@ export async function hoiOdin(
           const o = JSON.parse(than) as { content?: string; delta?: string; text?: string; error?: string };
           if (o.error) throw new Error(o.error);
           tra += o.content ?? o.delta ?? o.text ?? '';
+          if (cauDauXong && !daBaoCauDau) {
+            const cau = catCauDau(tra);
+            if (cau) { daBaoCauDau = true; cauDauXong(cau); }
+          }
         } catch {
           /* khung không phải JSON (ví dụ `connected`) — bỏ qua, không phải lỗi */
         }

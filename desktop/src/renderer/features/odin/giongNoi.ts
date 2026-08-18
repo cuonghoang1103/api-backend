@@ -29,7 +29,19 @@ interface Api {
 
 /** Trần thời gian chờ máy đọc. Câu của trợ lý ngắn, quá ngần này là có sự cố. */
 const TRAN_MS = 45_000;
-const NHIP_HOI_MS = 700;
+/**
+ * Nhịp hỏi máy đọc — TĂNG DẦN, không cố định.
+ *
+ * ⚠️ 700ms CỐ ĐỊNH LÀ ~400ms CHỜ SUÔNG MỖI CÂU. Một câu nói ngắn xong trong
+ * khoảng 300ms, nhưng lần hỏi đầu (ngay lập tức) gần như luôn nhận 202 — nên
+ * vòng lặp ngủ trọn 700ms rồi mới lấy được tiếng. Đó chính là quãng người dùng
+ * mô tả là "chữ ra rồi mà giọng chưa ra".
+ *
+ * 120ms rồi nhân 1,5: câu ngắn lấy được gần như ngay, câu dài vẫn không đấm
+ * máy chủ liên tục.
+ */
+const NHIP_DAU_MS = 120;
+const NHIP_TOI_DA_MS = 600;
 
 export async function layDanhSachGiong(api: Api): Promise<Giong[]> {
   const res = await fetch(`${api.baseUrlForForms()}/api/v1/voice-mini/voices`, {
@@ -67,6 +79,7 @@ export async function docThanhTieng(api: Api, text: string, voice?: string): Pro
   if (!jobId) throw new Error('Máy đọc không trả mã việc.');
 
   const hetHan = Date.now() + TRAN_MS;
+  let nhip = NHIP_DAU_MS;
   for (;;) {
     if (Date.now() > hetHan) throw new Error('Máy đọc không trả kết quả kịp.');
     const lay = await fetch(`${api.baseUrlForForms()}/api/v1/voice-mini/tts/${encodeURIComponent(jobId)}`, {
@@ -74,7 +87,8 @@ export async function docThanhTieng(api: Api, text: string, voice?: string): Pro
     });
     // 202 = đang làm. Đây là nhánh BÌNH THƯỜNG, không phải lỗi.
     if (lay.status === 202) {
-      await new Promise((x) => setTimeout(x, NHIP_HOI_MS));
+      await new Promise((x) => setTimeout(x, nhip));
+      nhip = Math.min(Math.round(nhip * 1.5), NHIP_TOI_DA_MS);
       continue;
     }
     if (!lay.ok) {

@@ -288,11 +288,41 @@ const VOICE_RULES =
   + '- Nếu câu hỏi cần trả lời dài (đoạn code, danh sách, công thức), nói ngắn phần cốt lõi rồi mời người dùng xem trong khung chat.\n'
   + '- Nghe chưa rõ hoặc thiếu dữ kiện thì hỏi lại MỘT câu ngắn, đừng đoán.\n';
 
-function buildSystemPrompt(ragContext: string, deep = false, voice = false): string {
+/**
+ * Câu quy định NGÔN NGỮ trả lời.
+ *
+ * ⚠️ PHẢI THAY câu mặc định, KHÔNG được nối thêm vào sau nó. Câu mặc định nói
+ * "người dùng viết tiếng nào thì trả lời tiếng đó"; nối thêm "luôn trả lời
+ * tiếng Anh" là đặt hai luật ngược nhau vào cùng một prompt, và model sẽ theo
+ * cái nào tuỳ lúc — đúng kiểu lỗi lúc được lúc không, không ai lần ra.
+ *
+ * Và lệnh cho chế độ tiếng Anh được viết BẰNG TIẾNG ANH: một câu tiếng Việt
+ * bảo "hãy trả lời tiếng Anh" tự nó đã kéo model về tiếng Việt.
+ * Xem [[feedback_fewshot_language_beats_instruction]].
+ */
+function luatNgonNgu(ngonNgu?: 'vi' | 'en'): string {
+  if (ngonNgu === 'en') {
+    return 'ALWAYS reply in English — every single time, even when the user writes or speaks '
+      + 'Vietnamese. The user picked English in settings; do NOT mirror the language of their '
+      + 'question. If they ask in Vietnamese, understand it and still answer in English.\n\n';
+  }
+  if (ngonNgu === 'vi') {
+    return 'LUÔN trả lời bằng tiếng Việt, kể cả khi người dùng hỏi bằng tiếng Anh. Người dùng đã '
+      + 'chọn tiếng Việt trong thiết đặt — đừng đổi ngôn ngữ theo câu hỏi.\n\n';
+  }
+  return 'Mặc định trả lời bằng tiếng Việt; nếu người dùng viết bằng ngôn ngữ khác thì trả lời bằng ngôn ngữ đó.\n\n';
+}
+
+function buildSystemPrompt(
+  ragContext: string,
+  deep = false,
+  voice = false,
+  ngonNgu?: 'vi' | 'en',
+): string {
   return (
     'Bạn là CuongMini — trợ lý AI chính thức của website cuongthai.com (CuongHoangDev), do Hoàng Nghĩa Cường xây dựng. '
     + 'Khi được hỏi bạn là ai, hãy trả lời: "Tôi là CuongMini, trợ lý AI của CuongHoangDev."\n'
-    + 'Mặc định trả lời bằng tiếng Việt; nếu người dùng viết bằng ngôn ngữ khác thì trả lời bằng ngôn ngữ đó.\n\n'
+    + luatNgonNgu(ngonNgu)
     + '## Nguyên tắc trả lời:\n'
     + '- Trả lời ngắn gọn, đúng trọng tâm; có ví dụ code khi cần.\n'
     + '- Định dạng bằng Markdown chuẩn: xuống dòng rõ ràng, gạch đầu dòng cho danh sách, ```lang cho code, bảng khi so sánh.\n'
@@ -326,6 +356,16 @@ interface ChatContext {
   documents?: ChatDocumentInput[];
   /** Lượt hỏi đến từ chế độ GỌI — câu trả lời sẽ được đọc thành tiếng. */
   voice?: boolean;
+  /**
+   * Ngôn ngữ người dùng KHOÁ trong thiết đặt. Bỏ trống = để model theo ngôn
+   * ngữ của câu hỏi (hành vi cũ của trang /chat).
+   *
+   * ⚠️ Chỉ nhận `'vi' | 'en'`, KHÔNG nhận chữ tự do. App từng gửi lên một
+   * trường `systemHint` chứa nguyên câu lệnh hệ thống — máy chủ không đọc nên
+   * vô hại, nhưng nếu có đọc thì bất kỳ client nào cũng viết lại được luật của
+   * trợ lý. Ngôn ngữ là lựa chọn có ràng buộc, không phải chữ người dùng gõ.
+   */
+  ngonNgu?: 'vi' | 'en';
 }
 
 /** A validated, base64-encoded image ready for a Claude image block. */
@@ -759,7 +799,11 @@ export class AIService {
       topK ?? 5,
       message,
     );
-    const systemPrompt = buildSystemPrompt(ragContext);
+    // ⚠️ `voice` phải đi qua CẢ đường này. Bỏ sót ở đây nghĩa là người dùng
+    // KHÔNG Pro bấm micro thì nhận về câu đầy markdown rồi máy đọc phải đọc cả
+    // dấu sao và gạch đầu dòng. Đo thật 18/08: bậc Pro rơi xuống đường miễn phí
+    // (tài khoản chưa Pro) và câu trả lời ra `- **Lập trình & phát triển`.
+    const systemPrompt = buildSystemPrompt(ragContext, false, !!context.voice, context.ngonNgu);
 
     // Save user message
     if (sessionId) {
@@ -813,7 +857,7 @@ export class AIService {
     // Phải chọn model TRƯỚC khi dựng system prompt: hai bậc trả phí được gắn
     // thêm luật toán/code (`MATH_CODE_RULES`), bậc mặc định thì không.
     const selected = resolveChatModel(context.model);
-    const systemPrompt = buildSystemPrompt(ragContext, selected.tier === 'claude', !!context.voice);
+    const systemPrompt = buildSystemPrompt(ragContext, selected.tier === 'claude', !!context.voice, context.ngonNgu);
 
     // Save user message
     if (sessionId) {

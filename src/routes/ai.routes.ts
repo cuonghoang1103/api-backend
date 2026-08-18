@@ -386,6 +386,10 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     // Chế độ GỌI: câu trả lời sẽ được đọc thành tiếng nên phải ngắn và
     // KHÔNG markdown — xem `VOICE_RULES` trong ai.service.ts.
     voice: (req.body as { voice?: unknown }).voice === true,
+    // Ngôn ngữ KHOÁ trong thiết đặt — danh sách trắng, không nhận chữ tự do.
+    ngonNgu: ((v): 'vi' | 'en' | undefined => (v === 'vi' || v === 'en' ? v : undefined))(
+      (req.body as { ngonNgu?: unknown }).ngonNgu,
+    ),
   };
 
   // Mutable model metadata — streamChat fills this in; we forward it to the

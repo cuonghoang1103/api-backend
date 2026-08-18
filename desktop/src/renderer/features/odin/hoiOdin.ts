@@ -27,12 +27,28 @@ export async function hoiOdin(
     ...(tinHieu ? { signal: tinHieu } : {}),
     body: JSON.stringify({
       message: cauHoi,
-      /* Nói ra thì phải NGẮN. Câu trả lời dạng chữ đọc nhanh bằng mắt, còn đọc
-       * thành tiếng thì ba đoạn văn là gần một phút — không ai đứng nghe hết,
-       * mà cũng không tua lại được. */
-      systemHint: ngonNgu === 'en'
-        ? 'You are Odin, a desktop voice assistant. Answer in English, at most 3 short sentences, plain speech — no markdown, no lists, no code blocks.'
-        : 'Bạn là Odin, trợ lý giọng nói trên máy tính. Trả lời bằng tiếng Việt, tối đa 3 câu ngắn, lời nói thường — không markdown, không gạch đầu dòng, không khối mã.',
+      /*
+       * ⚠️ TRƯỚC 18/08/2026 CHỖ NÀY GỬI `systemHint` — MỘT TRƯỜNG MÁY CHỦ
+       * KHÔNG HỀ ĐỌC. Nó chứa nguyên câu "Answer in English, at most 3 short
+       * sentences, no markdown", trông rất thuyết phục trong mã, và rơi thẳng
+       * vào hư không. Triệu chứng: chọn English thì GIỌNG đổi (app tự chọn)
+       * còn CHỮ vẫn ra tiếng Việt — vì prompt mặc định của máy chủ dặn "người
+       * dùng viết tiếng nào thì trả lời tiếng đó".
+       *
+       * Bài học: gửi một trường lên máy chủ không có nghĩa là máy chủ dùng nó.
+       * Hai trường dưới đây là hai trường máy chủ THẬT SỰ đọc (xem
+       * `ChatContext` trong ai.service.ts).
+       */
+
+      /* Khoá ngôn ngữ trả lời. Máy chủ đối chiếu danh sách trắng rồi THAY câu
+       * quy định ngôn ngữ trong prompt, chứ không nối thêm — nối thêm là đặt
+       * hai luật ngược nhau. */
+      ngonNgu,
+
+      /* Câu trả lời sẽ được ĐỌC THÀNH TIẾNG. Cờ này bật `VOICE_RULES` ở máy
+       * chủ: 2–4 câu, không markdown, không gạch đầu dòng, số viết thành chữ.
+       * Thiếu nó thì máy đọc phải đọc cả dấu sao của chữ in đậm. */
+      voice: true,
     }),
   });
   if (!res.ok || !res.body) {

@@ -21,6 +21,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   CircleStop, FolderOpen, FolderPlus, History, Loader2, MessageSquare, Plus, Send, Trash2, X,
 } from 'lucide-react';
+import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { ChuAgent } from './markdown';
 import {
@@ -79,6 +80,7 @@ const BAC = [
 
 export function ChatMode({ pro }: { pro: boolean }) {
   const { api } = useSession();
+  const { settings } = useAppState();
   const [luot, datLuot] = useState<Luot[]>([]);
   const [nhap, datNhap] = useState('');
   const [bac, datBac] = useState<string>('cuongmini-3.11');
@@ -237,7 +239,18 @@ export function ChatMode({ pro }: { pro: boolean }) {
    * câu vừa nhận dạng, mà `datNhap(x)` rồi gọi ngay `guiDi()` thì hàm vẫn đọc
    * giá trị CŨ — state React chỉ đổi ở lần dựng sau.
    */
-  const guiDi = async (nhapNgoai?: string): Promise<string> => {
+  /**
+   * @param tuMicro Lượt này đến từ nút giữ-để-nói, nên câu trả lời sẽ được ĐỌC
+   *   THÀNH TIẾNG bằng giọng của ngôn ngữ đang chọn. Khi đó phải nói cho máy
+   *   chủ biết CẢ HAI điều: trả lời bằng tiếng gì, và trả lời theo kiểu nói.
+   *   Thiếu điều thứ nhất là đúng lỗi người dùng gặp 18/08/2026 — chọn English
+   *   thì giọng đổi mà chữ vẫn ra tiếng Việt. Thiếu điều thứ hai là máy đọc
+   *   phải đọc cả dấu sao của chữ in đậm.
+   *
+   *   Lượt GÕ TAY thì KHÔNG khoá ngôn ngữ: người dùng gõ tiếng gì muốn được
+   *   trả lời tiếng đó, và thiết đặt kia là thiết đặt của trợ lý GIỌNG NÓI.
+   */
+  const guiDi = async (nhapNgoai?: string, tuMicro = false): Promise<string> => {
     const text = (nhapNgoai ?? nhap).trim();
     const tep = dk.tep;
     // Có đính kèm thì KHÔNG bắt buộc phải gõ chữ — máy chủ cũng cho vậy. Thả
@@ -297,6 +310,9 @@ export function ChatMode({ pro }: { pro: boolean }) {
           // model có để nói "trong file hợp-đồng.pdf thì…".
           ...(anh.length ? { images: anh.map((t) => t.url) } : {}),
           ...(tai.length ? { documents: tai.map((t) => t.url), documentNames: tai.map((t) => t.ten) } : {}),
+          ...(tuMicro
+            ? { voice: true, ngonNgu: settings.odinNgonNgu === 'en' ? 'en' : 'vi' }
+            : {}),
         }),
       });
       if (!res.ok || !res.body) {
@@ -576,7 +592,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
         />
         {/* Gọi thoại: giữ để nói, thả ra là gửi thẳng vào khung chat này —
             nên câu nói nằm lại trong lịch sử, xem lại được như tin nhắn gõ tay. */}
-        <NutGoiThoai khoa={dangChay} onNoi={(cau) => guiDi(cau)} />
+        <NutGoiThoai khoa={dangChay} onNoi={(cau) => guiDi(cau, true)} />
         {dangChay ? (
           <button type="button" className="ct-btn ct-agent-dung" onClick={() => huyRef.current?.abort()}>
             <CircleStop size={14} aria-hidden />

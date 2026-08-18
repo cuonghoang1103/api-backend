@@ -20,6 +20,8 @@ export interface Giong {
   custom?: boolean;
 }
 
+import { chuChoMayDoc } from './loiNoi';
+
 interface Api {
   baseUrlForForms(): string;
   authHeaders(): Record<string, string>;
@@ -46,11 +48,15 @@ export async function layDanhSachGiong(api: Api): Promise<Giong[]> {
  * nào, vì phát ngay giữa lúc người dùng đang nghe câu trước là chồng tiếng.
  */
 export async function docThanhTieng(api: Api, text: string, voice?: string): Promise<Blob> {
+  // Bóc markdown ở ĐÂY, không ở từng nơi gọi. Đây là cửa duy nhất mọi câu nói
+  // đi qua, nên đặt ở đây thì không có đường nào lọt — thêm một nơi gọi mới
+  // sau này cũng tự được lọc mà người viết không phải nhớ.
+  const doc = chuChoMayDoc(text);
   const dat = await fetch(`${api.baseUrlForForms()}/api/v1/voice-mini/tts`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...api.authHeaders() },
     credentials: 'omit',
-    body: JSON.stringify({ text, ...(voice ? { voice } : {}) }),
+    body: JSON.stringify({ text: doc, ...(voice ? { voice } : {}) }),
   });
   if (!dat.ok) {
     const than = await dat.json().catch(() => null) as { message?: string } | null;

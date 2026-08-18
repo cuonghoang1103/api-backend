@@ -103,8 +103,17 @@ export async function hoiOdin(
         const than = dong.slice(5).trim();
         if (!than || than === '[DONE]') continue;
         try {
-          const o = JSON.parse(than) as { content?: string; delta?: string; text?: string; error?: string };
+          const o = JSON.parse(than) as {
+            type?: string; content?: string; delta?: string; text?: string; error?: string;
+          };
           if (o.error) throw new Error(o.error);
+          /*
+           * ⚠️ PHẢI KIỂM `type`. Bản trước cộng thẳng `o.text` bất kể khung
+           * loại gì — nên bất cứ khung MỚI nào máy chủ thêm vào mà có trường
+           * `text` đều bị robot ĐỌC THÀNH TIẾNG như một phần câu trả lời.
+           * Ngày thêm khung "đang tìm web" là ngày robot đọc luôn cả dòng đó.
+           */
+          if (o.type && o.type !== 'chunk') continue;
           tra += o.content ?? o.delta ?? o.text ?? '';
           if (cauDauXong && !daBaoCauDau) {
             const cau = catCauDau(tra);

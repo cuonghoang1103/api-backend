@@ -390,6 +390,24 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     ngonNgu: ((v): 'vi' | 'en' | undefined => (v === 'vi' || v === 'en' ? v : undefined))(
       (req.body as { ngonNgu?: unknown }).ngonNgu,
     ),
+    choTimWeb: (req.body as { choTimWeb?: unknown }).choTimWeb !== false,
+
+    /*
+     * BƯỚC và NGUỒN đi bằng khung SSE RIÊNG, không lẫn vào `chunk`.
+     *
+     * ⚠️ KHÔNG được đặt tên trường là `text`. App cũ (`hoiOdin.ts`) cộng
+     * `o.text` của MỌI khung vào câu trả lời mà không kiểm `type` — nên một
+     * khung mới mang `text` sẽ bị robot ĐỌC THÀNH TIẾNG. Đã vá app, nhưng
+     * người dùng bản cũ thì không, và họ không có lỗi gì ở đây.
+     */
+    banBuoc: (buoc: { viec: 'tim' | 'doc'; chu: string }) => {
+      if (res.writableEnded) return;
+      res.write(`data: ${JSON.stringify({ type: 'buoc', viec: buoc.viec, chu: buoc.chu })}\n\n`);
+    },
+    banNguon: (nguon: Array<{ tieuDe: string; url: string; mien: string }>) => {
+      if (res.writableEnded) return;
+      res.write(`data: ${JSON.stringify({ type: 'nguon', nguon })}\n\n`);
+    },
   };
 
   // Mutable model metadata — streamChat fills this in; we forward it to the

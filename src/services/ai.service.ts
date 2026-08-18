@@ -46,6 +46,8 @@ import { claudeChatAvailable, completeClaudeChat, completeViaOpenAiRoute, hasDoc
 import { goKhoiCheck, kiemHinh, tachHinh, thayHinh, type HinhTrongCauTraLoi } from './figureCheck.js';
 import { isProEffective } from './pro.service.js';
 import { isAnthropicModel } from './llm/gateway.js';
+import { canTimWeb } from './search/canTim.js';
+import { goiChoModel, timWeb } from './search/searxng.js';
 import { logger } from '../utils/logger.js';
 
 // ─── Conversation history helpers (multi-turn memory) ────────────────
@@ -339,6 +341,33 @@ function buildSystemPrompt(
   );
 }
 
+/**
+ * Tìm web nếu câu hỏi cần, rồi gói kết quả thành chữ cho model đọc.
+ *
+ * Trả chuỗi RỖNG khi không cần tìm, khi tìm hỏng, hoặc khi không có kết quả
+ * — cả ba đều KHÔNG phải lỗi, và cả ba đều để câu trả lời chạy tiếp bình
+ * thường bằng kiến thức sẵn có.
+ *
+ * ⚠️ Lượt GIỌNG NÓI thì KHÔNG tìm. Câu trả lời nói ra không đọc được thẻ
+ * nguồn, còn tìm kiếm thì thêm vài giây im lặng vào đúng thứ người dùng
+ * đang chờ nghe — trả giá mà không nhận lại gì.
+ */
+async function timNeuCan(context: ChatContext): Promise<string> {
+  if (context.voice || context.choTimWeb === false) return '';
+
+  const quyet = canTimWeb(context.message);
+  if (!quyet.can) return '';
+
+  context.banBuoc?.({ viec: 'tim', chu: quyet.cauTim });
+  const ket = await timWeb(quyet.cauTim);
+  if (!ket.length) return '';
+
+  logger.info('[chat] đã tìm web', { viSao: quyet.viSao, so: ket.length });
+  context.banBuoc?.({ viec: 'doc', chu: ket.map((k) => k.mien).slice(0, 4).join(', ') });
+  context.banNguon?.(ket.map((k) => ({ tieuDe: k.tieuDe, url: k.url, mien: k.mien })));
+  return `\n\n${goiChoModel(ket)}`;
+}
+
 // ─── ChatContext interface ────────────────────────────────────
 interface ChatContext {
   userId?: number;
@@ -366,6 +395,16 @@ interface ChatContext {
    * trợ lý. Ngôn ngữ là lựa chọn có ràng buộc, không phải chữ người dùng gõ.
    */
   ngonNgu?: 'vi' | 'en';
+  /**
+   * Cho phép lượt này TÌM WEB. Mặc định bật; tắt cho lượt của robot/giọng
+   * nói (câu trả lời nói ra không đọc được thẻ nguồn, mà tìm kiếm thì thêm
+   * vài giây im lặng vào đúng thứ người dùng đang chờ nghe).
+   */
+  choTimWeb?: boolean;
+  /** Máy chủ gọi lại để đẩy BƯỚC ra SSE ("đang tìm…", "đang đọc…"). */
+  banBuoc?: (buoc: { viec: 'tim' | 'doc'; chu: string }) => void;
+  /** Máy chủ gọi lại MỘT LẦN với danh sách nguồn đã dùng. */
+  banNguon?: (nguon: Array<{ tieuDe: string; url: string; mien: string }>) => void;
 }
 
 /** A validated, base64-encoded image ready for a Claude image block. */
@@ -857,7 +896,17 @@ export class AIService {
     // Phải chọn model TRƯỚC khi dựng system prompt: hai bậc trả phí được gắn
     // thêm luật toán/code (`MATH_CODE_RULES`), bậc mặc định thì không.
     const selected = resolveChatModel(context.model);
-    const systemPrompt = buildSystemPrompt(ragContext, selected.tier === 'claude', !!context.voice, context.ngonNgu);
+
+    /*
+     * TÌM WEB — phải chạy TRƯỚC khi dựng system prompt, vì kết quả đi thẳng
+     * vào prompt đó. Đặt sau là dựng prompt rỗng rồi tìm cho vui.
+     *
+     * Không tìm thì trả chuỗi rỗng và mọi thứ chạy y như trước — đây là lớp
+     * LÀM GIÀU, không phải mắt xích bắt buộc.
+     */
+    const nguCanhWeb = await timNeuCan(context);
+    const systemPrompt = buildSystemPrompt(ragContext, selected.tier === 'claude', !!context.voice, context.ngonNgu)
+      + nguCanhWeb;
 
     // Save user message
     if (sessionId) {

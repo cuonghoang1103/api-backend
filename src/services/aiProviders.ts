@@ -156,9 +156,31 @@ function getClient(provider: AIProviderConfig): OpenAI {
 
   const clientConfig: ConstructorParameters<typeof OpenAI>[0] = {
     apiKey,
-    // Short HTTP timeout so streaming failures surface quickly instead of
-    // hanging the SSE response for 20+ seconds.
-    timeout: 8_000,
+    /*
+     * ⚠️ 8 GIÂY LÀ QUÁ NGẮN, VÀ NÓ CẮT CẢ CÂU TRẢ LỜI BÌNH THƯỜNG.
+     *
+     * Trần này của SDK áp cho CẢ LƯỢT, không phải cho byte đầu tiên. Nên
+     * mọi câu trả lời cần hơn 8 giây để sinh xong đều bị huỷ giữa chừng và
+     * rơi sang nhà cung cấp dự phòng — người dùng bậc miễn phí nhận
+     * "All AI providers failed" cho một câu hỏi hoàn toàn bình thường.
+     * Đo 18/08/2026: cổng mất 3,3s chỉ để trả 10 token, nên một câu giải
+     * thích dài vượt 8 giây là chuyện thường ngày.
+     *
+     * Ý định ban đầu ("để lỗi stream lộ ra nhanh") vẫn đúng, nhưng thứ
+     * canh việc đó là ĐỒNG HỒ IM LẶNG của SSE (`SSE_IDLE_MS` = 150s trong
+     * ai.routes.ts) — nó bắt đúng trường hợp "cổng câm" mà không cắt nhầm
+     * câu trả lời đang chảy tốt.
+     *
+     * ⚠️ CON SỐ NÀY VẪN LÀ CÔNG CỤ SAI HÌNH DẠNG, chỉ là đã bớt sai. Thứ
+     * đáng canh là THỜI GIAN TỚI TOKEN ĐẦU TIÊN (cổng chết thì phải bỏ sang
+     * nhà khác trong vài giây), còn một luồng đang chảy tốt thì không nên bị
+     * cắt bao giờ. SDK không diễn đạt được ý đó bằng một tham số, nên chỗ
+     * này tạm dùng một trần tổng.
+     *
+     * Chọn 120s vì nó phải NHỎ HƠN `SSE_IDLE_MS` (150s): lớn hơn thì SSE
+     * đứt trước, và chuỗi nhà cung cấp dự phòng không bao giờ được thử.
+     */
+    timeout: 120_000,
     maxRetries: 0,
   };
   const baseURL = providerBaseURL(provider);

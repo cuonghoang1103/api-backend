@@ -37,7 +37,28 @@ const app = await electron.launch({
   env: { ...process.env, CT_RENDERER: 'bundle' },
 });
 
-const window = await app.firstWindow();
+/**
+ * Cửa sổ CHÍNH — không phải cửa sổ robot.
+ *
+ * ⚠️ `firstWindow()` trả về cửa sổ nào MỞ TRƯỚC, và app mở hai cửa sổ:
+ * cửa sổ chính (`index.html`) và con robot nổi (`robot.html`). Thứ tự là
+ * hên xui. Bốc trúng robot thì mọi phép chờ `.ct-card`/`.ct-shell` đều hết
+ * giờ sau 15 giây, và bộ smoke báo một lỗi KHÔNG TỒN TẠI — 19/08/2026 nó
+ * làm tôi tưởng vừa gây hồi quy ở màn đăng nhập, phải stash rồi chạy lại
+ * hai lượt mới biết là do chính bộ kiểm.
+ */
+async function cuaSoChinh(ung, hanMs = 15000) {
+  const het = Date.now() + hanMs;
+  for (;;) {
+    for (const trang of ung.windows()) {
+      if (!trang.url().endsWith('/robot.html')) return trang;
+    }
+    if (Date.now() > het) throw new Error('không thấy cửa sổ chính (chỉ có robot?)');
+    await new Promise((r) => setTimeout(r, 100));
+  }
+}
+
+const window = await cuaSoChinh(app);
 await window.waitForLoadState('domcontentloaded');
 
 // ── 1. Cách ly renderer ──────────────────────────────────────
@@ -57,7 +78,14 @@ check('Buffer không lộ ra renderer', !isolation.hasBuffer);
 
 // ── 2. Bề mặt cầu nối đúng hợp đồng ──────────────────────────
 // Sắp xếp theo THỨ TỰ CHỮ CÁI vì phép so sánh dưới dùng `bridgeKeys` đã sort.
-const expected = ['agent', 'app', 'auth', 'music', 'notes', 'on', 'settings', 'storage', 'update'];
+/* ⚠️ Danh sách này TỤT HẬU và phép kiểm đỏ suốt: `browser` và `robot` thêm
+   vào preload sau mà không ai sửa ở đây. Một phép kiểm đỏ triền miên thì
+   không còn gác gì nữa — người ta lướt qua nó. Thêm nhóm mới vào preload
+   thì thêm cả vào đây, đó chính là điều phép kiểm này muốn ép. */
+const expected = [
+  'agent', 'app', 'auth', 'browser', 'music', 'notes',
+  'on', 'robot', 'settings', 'storage', 'update',
+];
 console.log('\nCầu nối preload:');
 check('window.cuongthai tồn tại', isolation.bridgeKeys !== null);
 check(
@@ -266,7 +294,10 @@ if (!smokeUser || !smokePass) {
 // Chỉ chứng minh được bằng cách TẮT rồi MỞ LẠI. Đọc mã chỉ cho thấy ý định.
 const marker = { width: 1024, height: 700 };
 await app.evaluate(({ BrowserWindow }, size) => {
-  const win = BrowserWindow.getAllWindows()[0];
+  // Cùng lý do như `cuaSoChinh`: robot nổi cũng là một BrowserWindow, và nó
+  // KHÔNG resizable — đó là dấu phân biệt chắc chắn hơn thứ tự trong mảng.
+  const win = BrowserWindow.getAllWindows().find((w) => w.isResizable())
+    ?? BrowserWindow.getAllWindows()[0];
   win.unmaximize();
   win.setBounds({ x: 120, y: 90, ...size });
 }, marker);
@@ -277,10 +308,11 @@ const app2 = await electron.launch({
   args: [path.join(root, 'dist/main/index.cjs')],
   env: { ...process.env, CT_RENDERER: 'bundle' },
 });
-const window2 = await app2.firstWindow();
+const window2 = await cuaSoChinh(app2);
 await window2.waitForLoadState('domcontentloaded');
 const restored = await app2.evaluate(({ BrowserWindow }) =>
-  BrowserWindow.getAllWindows()[0].getNormalBounds(),
+  (BrowserWindow.getAllWindows().find((w) => w.isResizable())
+    ?? BrowserWindow.getAllWindows()[0]).getNormalBounds(),
 );
 
 console.log('\nKhôi phục cửa sổ (sau khi khởi động lại):');

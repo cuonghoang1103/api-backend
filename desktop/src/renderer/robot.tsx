@@ -271,7 +271,7 @@ function KhungChat({ onDong }: { onDong: () => void }) {
         {luot.map((l, i) => (
           <div key={i} className={l.toi ? 'rb-toi' : 'rb-may'}>{l.chu}</div>
         ))}
-        {dangCho && <div className="rb-may rb-cho">Đang trả lời…</div>}
+        {dangCho && <div className="rb-may rb-cho">Chờ tớ suy nghĩ xíu nhé…</div>}
       </div>
 
       <div className="rb-chat-soan">

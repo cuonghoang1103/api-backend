@@ -5564,3 +5564,9 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   color: var(--ct-text);
   box-shadow: var(--ct-shadow-sm);
 }
+
+/* Số giây và câu giải thích trong dòng chờ — mờ hơn câu chính, vì chúng là
+   thông tin phụ. Cùng cỡ chữ thì mắt đọc con số trước câu, mà con số mới là
+   thứ ít quan trọng nhất. */
+.ct-nghi-giay { opacity: 0.55; font-variant-numeric: tabular-nums; }
+.ct-nghi-phu { opacity: 0.7; }

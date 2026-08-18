@@ -19,9 +19,10 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  CircleStop, FolderOpen, FolderPlus, History, Loader2, MessageSquare, Plus, Send, Trash2, X,
+  CircleStop, FolderOpen, FolderPlus, History, MessageSquare, Plus, Send, Trash2, X,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
+import { DangNghi } from './DangNghi';
 import { useSession } from '../../auth/session';
 import { ChuAgent } from './markdown';
 import {
@@ -80,7 +81,7 @@ const BAC = [
 
 export function ChatMode({ pro }: { pro: boolean }) {
   const { api } = useSession();
-  const { settings } = useAppState();
+  const { settings, layThamSo } = useAppState();
   const [luot, datLuot] = useState<Luot[]>([]);
   const [nhap, datNhap] = useState('');
   const [bac, datBac] = useState<string>('cuongmini-3.11');
@@ -189,6 +190,18 @@ export function ChatMode({ pro }: { pro: boolean }) {
   useEffect(() => { void napThuMuc(); }, [napThuMuc]);
 
   /** Mở một phiên cũ: nạp lịch sử từ máy chủ và gõ tiếp vào chính phiên đó. */
+  /* Bấm hai lần vào robot nổi ⇒ main gửi kèm `phien=<id>` của cuộc trò chuyện
+     bằng giọng nói. Mở đúng cuộc đó, vì đấy chính là lý do người dùng bấm:
+     họ vừa NGHE xong và muốn ĐỌC lại đầy đủ.
+
+     Chạy MỘT lần khi gắn: `layThamSo` tự xoá sau khi đọc, nên không có
+     chuyện trang tự nhảy về cuộc cũ giữa lúc đang gõ. */
+  useEffect(() => {
+    const id = layThamSo('phien');
+    if (id) void moPhien(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const moPhien = useCallback(async (id: string) => {
     if (!api) return;
     try {
@@ -553,18 +566,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
           </div>
         )))}
 
-        {dangCho && (
-          <div className="ct-agent-nghi">
-            <Loader2 size={13} aria-hidden className="ct-spin" />
-            <span>
-              Đang trả lời… {choGiay}s
-              {/* Quá 10s thì nói RÕ nguyên nhân. Người dùng đang ngồi đoán xem
-                  app hỏng hay mạng hỏng; nói thật là "cổng AI đang chậm" vừa
-                  đúng vừa cho họ một lựa chọn (đổi bậc, hoặc chờ). */}
-              {choGiay >= 10 && ' — cổng AI đang chậm, không phải app treo. Bấm Dừng nếu muốn thử lại.'}
-            </span>
-          </div>
-        )}
+        {dangCho && <DangNghi giay={choGiay} />}
         {loi && <div className="ct-notice" data-tone="err"><span>{loi}</span></div>}
         {roiBac && <div className="ct-notice" data-tone="warn"><span>{roiBac}</span></div>}
         {dk.loi && <div className="ct-notice" data-tone="warn"><span>{dk.loi}</span></div>}

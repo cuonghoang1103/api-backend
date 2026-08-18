@@ -21,6 +21,7 @@ import {
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
   Sparkles, SquareTerminal, Terminal, Undo2, X, ChevronDown, Cpu, Zap,
 } from 'lucide-react';
+import { DangNghi } from './DangNghi';
 import type { AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, ModelAgent, MucNoLuc } from '../../../shared/ipc';
 import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
@@ -104,6 +105,15 @@ export function AgentMode({
     const w = await window.cuongthai?.agent.getWorkspace(cuocId);
     if (w) datThuMuc(w);
   };
+
+  /* Đếm giây trong lúc agent nghĩ. Không có nó thì dòng chờ đứng im, và một
+     dòng đứng im 50 giây không phân biệt được với app treo. */
+  const [nghiGiay, datNghiGiay] = useState(0);
+  useEffect(() => {
+    if (!trangThai.dangNghi) { datNghiGiay(0); return; }
+    const id = setInterval(() => datNghiGiay((c) => c + 1), 1000);
+    return () => clearInterval(id);
+  }, [trangThai.dangNghi]);
 
   const doiModel = async (m: ModelAgent): Promise<void> => {
     await window.cuongthai?.agent.datModel(m);
@@ -519,10 +529,12 @@ export function AgentMode({
 
         {/* Con quay bật từ khung `batDau`, KHÔNG chờ tới chữ đầu tiên. */}
         {trangThai.dangNghi && (
-          <div className="ct-agent-nghi">
-            <Loader2 size={13} aria-hidden className="ct-spin" />
-            <span>Đang đọc và suy nghĩ…</span>
-          </div>
+          <DangNghi
+            giay={nghiGiay}
+            /* Agent có việc để nói ở chặng đầu: nó ĐANG ĐỌC mã, chứ không
+               chỉ ngồi nghĩ. Nói đúng việc thì người dùng chờ dễ hơn. */
+            chuRieng="Chờ tớ đọc qua đã nhé…"
+          />
         )}
       </div>
 

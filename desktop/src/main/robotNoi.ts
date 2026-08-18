@@ -193,14 +193,14 @@ export function cuaSoChinh(): BrowserWindow | null {
 }
 
 /** Đưa cửa sổ chính ra trước và điều hướng tới một trang. */
-export function moTrangChinh(duongDan: string): void {
+export function moTrangChinh(duongDan: string, query = ''): void {
   const w = cuaSoChinh();
   if (!w) {
     // Cửa sổ chính đã đóng (macOS) ⇒ mở lại. Import động để tránh vòng phụ thuộc.
     void import('./window').then(({ createMainWindow }) => {
       const moi = createMainWindow();
       moi.webContents.once('did-finish-load', () => {
-        moi.webContents.send('app:navigate', { path: duongDan, query: '' });
+        moi.webContents.send('app:navigate', { path: duongDan, query });
       });
     });
     return;
@@ -209,5 +209,5 @@ export function moTrangChinh(duongDan: string): void {
   w.show();
   w.focus();
   app.focus({ steal: true });
-  w.webContents.send('app:navigate', { path: duongDan, query: '' });
+  w.webContents.send('app:navigate', { path: duongDan, query });
 }

@@ -19,7 +19,9 @@ export function registerRobotHandlers(): void {
     // Chỉ nhận đường dẫn TRONG app, không nhận URL. Một chuỗi `https://…` lọt
     // vào đây sẽ được renderer chính coi là đích điều hướng.
     const sach = duongDan.startsWith('/') && !duongDan.startsWith('//') ? duongDan : '/chat';
-    moTrangChinh(sach);
+    // Mở /chat mà đang có phiên nói thì mở ĐÚNG cuộc đó — đấy là toàn bộ lý do
+    // người dùng bấm hai lần vào robot: họ muốn đọc lại thứ vừa nghe.
+    moTrangChinh(sach, sach === '/chat' && phienNoi ? `phien=${encodeURIComponent(phienNoi)}` : '');
   });
 
   /**
@@ -133,6 +135,28 @@ async function docThanhTieng(token: string, chu: string): Promise<string> {
   }
 }
 
+/**
+ * PHIÊN CHAT CHO CÁC LƯỢT NÓI.
+ *
+ * ⚠️ TRƯỚC 18/08/2026 LƯỢT NÓI KHÔNG ĐƯỢC LƯU Ở ĐÂU CẢ. Máy chủ chỉ ghi
+ * khi yêu cầu có `sessionId` (`if (sessionId)` trong `ai.service.ts`), mà
+ * robot không gửi — nên mọi câu hỏi bằng giọng nói bay đi sau khi đọc
+ * xong. Người dùng thấy bong bóng cắt mất chữ và không có đường nào xem
+ * lại: "chữ nó không hiện hết, tôi kéo không xem được".
+ *
+ * Nay mọi lượt nói đi vào MỘT phiên chat, nên bấm hai lần vào robot là mở
+ * đúng cuộc đó trong app với chữ đầy đủ và toàn bộ lịch sử.
+ *
+ * Giữ trong bộ nhớ, KHÔNG lưu xuống đĩa: mở app một lần là một cuộc trò
+ * chuyện. Nối tiếp cuộc của hôm qua thì lịch sử thành một dải vô tận không
+ * ai đọc lại.
+ */
+let phienNoi: string | null = null;
+
+export function phienNoiHienTai(): string | null {
+  return phienNoi;
+}
+
 /** Ngôn ngữ người dùng đã khoá trong thiết đặt. */
 function ngonNguHienTai(): 'vi' | 'en' {
   return getSettings().odinNgonNgu === 'en' ? 'en' : 'vi';
@@ -147,6 +171,19 @@ function ngonNguHienTai(): 'vi' | 'en' {
  *   với Node.js kèm cả khối ```javascript, che gần hết màn hình.
  */
 async function hoiTroLy(token: string, chu: string, laLoiNoi: boolean): Promise<string> {
+    // Chưa có phiên thì tạo. Hỏng thì KHÔNG chặn đường: mất lịch sử còn hơn
+    // mất câu trả lời — người dùng đang chờ nghe, không đang xem lịch sử.
+    if (!phienNoi) {
+      phienNoi = await fetch(`${API_ORIGIN}/api/v1/ai/chat/sessions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ title: 'Trò chuyện bằng giọng nói' }),
+      })
+        .then((r) => (r.ok ? r.json() as Promise<{ data?: { sessionId?: string } }> : null))
+        .then((j) => j?.data?.sessionId ?? null)
+        .catch(() => null);
+    }
+
     try {
       const res = await fetch(`${API_ORIGIN}/api/v1/ai/chat`, {
         method: 'POST',
@@ -154,6 +191,7 @@ async function hoiTroLy(token: string, chu: string, laLoiNoi: boolean): Promise<
         body: JSON.stringify({
           message: chu,
           ngonNgu: ngonNguHienTai(),
+          ...(phienNoi ? { sessionId: phienNoi } : {}),
           ...(laLoiNoi ? { voice: true } : {}),
         }),
       });

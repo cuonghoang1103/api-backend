@@ -13,6 +13,7 @@
 import {
   createContext,
   useCallback,
+  useRef,
   useContext,
   useEffect,
   useMemo,
@@ -27,6 +28,14 @@ type Settings = Partial<Record<SettingKey, SettingValue>>;
 interface AppState {
   route: string;
   navigate: (path: string) => void;
+  /**
+   * Đọc MỘT tham số của lần điều hướng gần nhất, rồi XOÁ nó đi.
+   *
+   * Xoá sau khi đọc là cố ý: tham số này mô tả một hành động ("mở phiên
+   * abc"), không phải một trạng thái. Để nguyên thì trang mở lại phiên đó
+   * mỗi lần bị vẽ lại, và người dùng bị đá về cuộc cũ giữa lúc đang gõ.
+   */
+  layThamSo: (ten: string) => string | null;
 
   settings: Settings;
   setSetting: (key: SettingKey, value: SettingValue) => void;
@@ -74,12 +83,24 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     });
   }, [bridge]);
 
+  /* Tham số của lần điều hướng gần nhất, ví dụ `phien=abc` khi bấm hai lần
+     vào robot để mở đúng cuộc trò chuyện bằng giọng nói.
+
+     Dùng `useRef` chứ không `useState`: đây là thứ đọc MỘT LẦN lúc trang mở
+     rồi thôi. Để nó vào state thì mỗi lần đổi lại vẽ lại cả cây, và tệ hơn —
+     trang sẽ mở lại phiên đó mỗi lần vô tình vẽ lại. */
+  const viTri = useRef('');
+
   // Deep link (cuongthai://) — main gửi sang đường dẫn đã tách sẵn.
   useEffect(() => {
     if (!bridge) return;
     return bridge.on('app:navigate', (payload) => {
-      const next = payload as { path?: string };
-      if (typeof next.path === 'string') setRoute(next.path);
+      const next = payload as { path?: string; query?: string };
+      if (typeof next.path !== 'string') return;
+      // Giữ query lại cho trang đích đọc. Đặt TRƯỚC `setRoute` để trang mở ra
+      // đã thấy sẵn — đặt sau thì nó vẽ một lượt với tham số cũ rồi mới nhảy.
+      viTri.current = typeof next.query === 'string' ? next.query : '';
+      setRoute(next.path);
     });
   }, [bridge]);
 
@@ -142,10 +163,18 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     [setSetting],
   );
 
+  const layThamSo = useCallback((ten: string): string | null => {
+    if (!viTri.current) return null;
+    const v = new URLSearchParams(viTri.current).get(ten);
+    if (v !== null) viTri.current = '';   // đọc một lần rồi thôi
+    return v;
+  }, []);
+
   const value = useMemo<AppState>(
     () => ({
       route,
       navigate,
+      layThamSo,
       settings,
       setSetting,
       theme,
@@ -153,7 +182,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       online,
       hasBridge: bridge !== undefined,
     }),
-    [route, navigate, settings, setSetting, theme, resolvedTheme, online, bridge],
+    [route, navigate, layThamSo, settings, setSetting, theme, resolvedTheme, online, bridge],
   );
 
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;

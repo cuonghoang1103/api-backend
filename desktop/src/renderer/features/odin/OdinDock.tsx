@@ -93,7 +93,7 @@ export function OdinDock() {
     // Cắt câu đang đọc dở: người dùng vừa hỏi câu mới thì câu cũ hết giá trị,
     // và hai giọng chồng nhau thì không nghe ra chữ nào.
     ngungNoi();
-    odin.announce(ngonNgu === 'en' ? 'Let me think…' : 'Để mình nghĩ chút…');
+    odin.announce(ngonNgu === 'en' ? 'Give me a sec to think…' : 'Chờ tớ suy nghĩ xíu nhé…');
     const doc = settings.odinNoiThanhTieng !== false;
     const giong = ngonNgu === 'en' ? settings.odinGiongEn : settings.odinGiongVi;
     const tenGiong = typeof giong === 'string' && giong ? giong : undefined;
@@ -127,7 +127,7 @@ export function OdinDock() {
         void tiengCauDau.catch(() => {});
       });
       if (!tra) {
-        odin.announce(ngonNgu === 'en' ? 'I did not catch that.' : 'Mình chưa nghĩ ra câu trả lời.');
+        odin.announce(ngonNgu === 'en' ? "Sorry, I didn't catch that." : 'Xin lỗi, tớ chưa nghĩ ra câu trả lời.');
         return;
       }
       odin.announce(tra);

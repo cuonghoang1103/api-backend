@@ -494,6 +494,16 @@ export const notesApi = {
   aiAssist: (action: string, selection: string) =>
     api.post<{ data: { text: string; action: string } }>('/notes/ai/assist', { action, selection }),
 
+  /**
+   * Hỏi trợ lý về TOÀN BỘ ghi chú. Khác `aiAssist` — cái kia chỉ nhìn thấy
+   * đoạn đang bôi đen, cái này tự đi tìm ghi chú liên quan và trả kèm nguồn.
+   */
+  aiHoi: (question: string) =>
+    api.post<{ data: {
+      answer: string;
+      sources: { noteId: number; title: string; trich: string }[];
+    } }>('/notes/ai/hoi', { question }),
+
   search: (params: { q?: string; subjectId?: number; tag?: string }) =>
     api.get<{ data: import('@/types').NoteSearchResult[] }>('/notes/search', { params }),
   getTags: () =>

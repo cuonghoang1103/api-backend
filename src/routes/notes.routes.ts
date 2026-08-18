@@ -343,6 +343,21 @@ router.post('/ai/assist', async (req: Request, res: Response<ApiResponse>, next)
   } catch (err) { next(err); }
 });
 
+/**
+ * Hỏi trợ lý về TOÀN BỘ ghi chú của mình.
+ *
+ * Khác `/ai/assist` (chỉ thấy đoạn đang bôi đen): endpoint này tự đi tìm ghi
+ * chú liên quan rồi trả lời KÈM TRÍCH DẪN — mỗi ý ghi rõ lấy từ ghi chú nào,
+ * để người đọc kiểm chứng được thay vì phải tin.
+ */
+router.post('/ai/hoi', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const { hoiTroLyGhiChu } = await import('../services/noteAssistant.service.js');
+    const data = await hoiTroLyGhiChu(req.userId!, req.body?.question);
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+
 router.get('/search', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const results = await searchNotes(req.userId!, {

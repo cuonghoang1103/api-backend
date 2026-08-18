@@ -29,6 +29,7 @@ import DeletedNoteView from '@/components/notes/DeletedNoteView';
 import NoteVersionHistory from '@/components/notes/NoteVersionHistory';
 import NoteCommentsPanel from '@/components/notes/NoteCommentsPanel';
 import NoteBacklinksPanel from '@/components/notes/NoteBacklinksPanel';
+import NoteAssistantPanel from '@/components/notes/NoteAssistantPanel';
 import NoteQuickOpen from '@/components/notes/NoteQuickOpen';
 import NoteBreadcrumb, { type BreadcrumbEntry } from '@/components/notes/NoteBreadcrumb';
 import { exportNoteAsPdf } from '@/lib/notesPdf';
@@ -207,6 +208,8 @@ function NotesPageInner() {
   const [trashAction, setTrashAction] = useState<'restore' | 'delete' | null>(null);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [linksOpen, setLinksOpen] = useState(false);
+  /** Trợ lý hỏi–đáp trên toàn bộ ghi chú. Nổi ở góc, không chiếm chỗ của trang. */
+  const [troLyOpen, setTroLyOpen] = useState(false);
   const [focusCommentId, setFocusCommentId] = useState<number | null>(null);
 
   // ─── PART 1: Multi-tab state ──────────────────────────────────
@@ -1201,6 +1204,32 @@ function NotesPageInner() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Nút nổi mở trợ lý — luôn thấy, không phụ thuộc đang chọn ghi chú nào,
+          vì câu hỏi là về CẢ KHO chứ không về một trang. */}
+      {!troLyOpen && (
+        <button
+          type="button"
+          onClick={() => setTroLyOpen(true)}
+          title="Hỏi trợ lý về ghi chú của bạn"
+          className="fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-full bg-violet-600 px-4 py-3 text-sm font-medium text-white shadow-xl hover:bg-violet-500"
+        >
+          <Sparkles size={16} />
+          Hỏi trợ lý
+        </button>
+      )}
+      {troLyOpen && (
+        <NoteAssistantPanel
+          onDong={() => setTroLyOpen(false)}
+          onMoGhiChu={(noteId) => {
+            /* Dùng `selectNote` chứ không tự `setSelected`: nó nạp bản ĐẦY ĐỦ
+             * của ghi chú và mở tab. Nhét bản tóm tắt lấy từ cây vào state là
+             * thiếu nội dung, và TypeScript đã bắt được đúng chỗ đó. */
+            void selectNote(noteId);
+            setTroLyOpen(false);
+          }}
+        />
+      )}
 
       <AnimatePresence>
         {linksOpen && selected && !selected.deletedAt && (

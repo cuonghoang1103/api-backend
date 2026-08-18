@@ -38,7 +38,7 @@ const RELEASES_PAGE = 'https://github.com/cuonghoang1103/cuongthai-desktop/relea
  * danh sách bản phát hành — người dùng tự chọn — chứ KHÔNG bao giờ trỏ vào một
  * địa chỉ đoán mò.
  */
-const FALLBACK_VERSION = '0.5.9';
+const FALLBACK_VERSION = '0.5.10';
 const LATEST_API = 'https://api.github.com/repos/cuonghoang1103/cuongthai-desktop/releases/latest';
 
 interface ReleaseAsset { name: string; browser_download_url: string; size: number }

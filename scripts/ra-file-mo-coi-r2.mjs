@@ -17,9 +17,17 @@
  *
  *  1. Chỉ soi HAI tiền tố: `audio/songs/` và `images/playlist-covers/`. Không
  *     đụng tới bất cứ thứ gì khác trong bucket.
- *  2. Đối chiếu với TOÀN BỘ bảng `music_tracks`, kể cả dòng `active = false`.
- *     Xoá bài là xoá mềm, dòng vẫn còn và vẫn có thể được khôi phục — coi nó là
- *     rác vì "đã xoá" là hiểu sai và sẽ xoá mất file của bài còn khôi phục được.
+ *  2. Đối chiếu với MỌI bảng có thể trỏ vào hai tiền tố đó — `music_tracks`
+ *     VÀ `music_playlists` — kể cả dòng `active = false`. Xoá bài là xoá mềm,
+ *     dòng vẫn còn và vẫn khôi phục được; coi nó là rác vì "đã xoá" là hiểu sai
+ *     và sẽ xoá mất file của bài còn khôi phục được.
+ *
+ *     ⛔ Bản đầu của script này CHỈ soi `music_tracks`, và lần chạy thật đầu
+ *     tiên (18/08/2026) đã báo `images/playlist-covers/u1/1783688758833-….webp`
+ *     là mồ côi — trong khi đó chính là ẢNH BÌA của playlist "Nhạc của Cường".
+ *     Thêm `--xoa` lúc ấy là mất ảnh thật. Bài học: thư mục tên `playlist-covers`
+ *     thì dĩ nhiên có bảng PLAYLIST trỏ vào, đừng chỉ đối chiếu một bảng vì nó
+ *     là bảng mình đang nghĩ tới.
  *  3. Bỏ qua file mới tạo dưới 24 giờ: một lượt tải lên đang dở dang có file
  *     trên R2 trước khi dòng CSDL kịp ghi, và nó trông y hệt file mồ côi.
  */
@@ -48,6 +56,7 @@ async function main() {
   const rows = await prisma.musicTrack.findMany({
     select: { id: true, localPath: true, coverImage: true, audioUrl: true },
   });
+  const playlists = await prisma.musicPlaylist.findMany({ select: { id: true, coverUrl: true } });
   const dungRoi = new Set();
   for (const r of rows) {
     for (const u of [r.localPath, r.coverImage, r.audioUrl]) {
@@ -55,7 +64,11 @@ async function main() {
       if (k) dungRoi.add(k);
     }
   }
-  console.log(`CSDL: ${rows.length} bài, ${dungRoi.size} khoá đang được dùng`);
+  for (const p of playlists) {
+    const k = goc(p.coverUrl);
+    if (k) dungRoi.add(k);
+  }
+  console.log(`CSDL: ${rows.length} bài + ${playlists.length} playlist → ${dungRoi.size} khoá đang được dùng`);
 
   // ── 2. Mọi object trên R2 dưới hai tiền tố ────────────────────────
   const tren = [];

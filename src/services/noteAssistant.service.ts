@@ -143,6 +143,49 @@ export async function timGhiChuLienQuan(
     .slice(0, SO_NGUON);
 }
 
+/** Ngưỡng giống nhau tối thiểu để một mẩu được coi là liên quan.
+ *  Dưới mức này bge-m3 vẫn trả kết quả, nhưng là nhiễu — đo trên dữ liệu thật
+ *  19/08/2026: thứ không liên quan nằm quanh 0,32-0,34. */
+const NGUONG_NGHIA = 0.42;
+
+/**
+ * Gộp kết quả của hai tầng thay vì chọn một.
+ *
+ * Đo trên kho thật, câu "học bảng ký hiệu viết của người Nhật thế nào":
+ *   • theo NGHĨA  bắt được "Hiragana" (0,458) mà từ khoá bỏ sót hoàn toàn,
+ *     nhưng lại đặt một ghi chú không liên quan lên hạng nhất (0,575);
+ *   • theo TỪ KHOÁ đặt đúng "Chữ hán" lên đầu nhưng mù với "Hiragana".
+ *
+ * Mỗi tầng sai một kiểu khác nhau, nên gộp lại tốt hơn hẳn cả hai: ghi chú
+ * được CẢ HAI tầng chọn sẽ nổi lên trên, còn thứ chỉ một tầng thấy vẫn có mặt.
+ */
+export function gopHaiTang(
+  nghia: Array<{ noteId: number; title: string; content: string; diem: number }> | null,
+  tuKhoa: Array<{ id: number; title: string; chu: string; diem: number }>,
+): Array<{ id: number; title: string; chu: string; diem: number }> {
+  const bang = new Map<number, { id: number; title: string; chu: string; diem: number }>();
+
+  // Chuẩn hoá điểm từ khoá về thang 0..1 để cộng được với điểm cosine.
+  const caoNhat = Math.max(1, ...tuKhoa.map((t) => t.diem));
+  for (const t of tuKhoa) {
+    bang.set(t.id, { id: t.id, title: t.title, chu: t.chu, diem: (t.diem / caoNhat) * 0.6 });
+  }
+  for (const n of nghia ?? []) {
+    if (n.diem < NGUONG_NGHIA) continue;
+    const cu = bang.get(n.noteId);
+    if (cu) {
+      // CẢ HAI tầng cùng chọn ⇒ cộng dồn. Đây chính là chỗ gộp thắng từng tầng.
+      cu.diem += n.diem;
+      // Giữ đoạn trích của tầng NGHĨA: nó là mẩu gần câu hỏi nhất, còn tầng từ
+      // khoá đưa cả bài.
+      cu.chu = n.content;
+    } else {
+      bang.set(n.noteId, { id: n.noteId, title: n.title, chu: n.content, diem: n.diem });
+    }
+  }
+  return [...bang.values()].sort((a, b) => b.diem - a.diem);
+}
+
 export async function hoiTroLyGhiChu(userId: number, cauHoiTho: unknown): Promise<KetQuaHoi> {
   const cauHoi = String(cauHoiTho ?? '').trim();
   if (!cauHoi) throw new BadRequestError('Chưa nhập câu hỏi.');
@@ -162,10 +205,11 @@ export async function hoiTroLyGhiChu(userId: number, cauHoiTho: unknown): Promis
    *    Mất độ tinh, KHÔNG mất tính năng. Đây là lý do bước tìm được tách hàm
    *    ngay từ đầu.
    */
-  const theoNghia = await timTheoNghia(userId, cauHoi, SO_NGUON);
-  const lienQuan = theoNghia && theoNghia.length > 0
-    ? theoNghia.map((m) => ({ id: m.noteId, title: m.title, chu: m.content, diem: m.diem }))
-    : await timGhiChuLienQuan(userId, cauHoi);
+  const [theoNghia, theoTuKhoa] = await Promise.all([
+    timTheoNghia(userId, cauHoi, SO_NGUON * 2),
+    timGhiChuLienQuan(userId, cauHoi),
+  ]);
+  const lienQuan = gopHaiTang(theoNghia, theoTuKhoa).slice(0, SO_NGUON);
   if (lienQuan.length === 0) {
     // KHÔNG hỏi model khi không tìm được gì. Hỏi thì nó sẽ bịa ra một câu trả
     // lời nghe rất hợp lý từ kiến thức chung, và người dùng tưởng đó là ghi

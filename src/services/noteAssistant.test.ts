@@ -39,3 +39,36 @@ test('cắt trần 8 từ để câu dài không dựng truy vấn khổng lồ'
 test('bỏ ký tự một chữ cái — nhiễu chứ không phải từ khoá', () => {
   assert.ok(!tachTuKhoa('a b prisma').includes('a'));
 });
+
+test('gộp hai tầng: ghi chú được CẢ HAI chọn phải nổi lên trên', async () => {
+  const { gopHaiTang } = await import('./noteAssistant.service.js');
+  const ra = gopHaiTang(
+    [{ noteId: 2, title: 'B', content: 'b', diem: 0.50 },
+     { noteId: 1, title: 'A', content: 'a', diem: 0.45 }],
+    [{ id: 1, title: 'A', chu: 'a-cu', diem: 10 }],
+  );
+  assert.equal(ra[0]!.id, 1, 'A được cả hai tầng chọn nên phải đứng đầu');
+  assert.ok(ra[0]!.diem > ra[1]!.diem);
+});
+
+test('gộp hai tầng: bỏ kết quả dưới ngưỡng nhiễu', async () => {
+  const { gopHaiTang } = await import('./noteAssistant.service.js');
+  const ra = gopHaiTang([{ noteId: 9, title: 'nhiễu', content: 'x', diem: 0.30 }], []);
+  assert.equal(ra.length, 0, '0,30 là mức của thứ KHÔNG liên quan — phải loại');
+});
+
+test('gộp hai tầng: máy nhúng tắt (null) vẫn trả kết quả từ khoá', async () => {
+  const { gopHaiTang } = await import('./noteAssistant.service.js');
+  const ra = gopHaiTang(null, [{ id: 5, title: 'X', chu: 'x', diem: 4 }]);
+  assert.equal(ra.length, 1);
+  assert.equal(ra[0]!.id, 5);
+});
+
+test('gộp hai tầng: giữ đoạn trích của tầng NGHĨA, không phải cả bài', async () => {
+  const { gopHaiTang } = await import('./noteAssistant.service.js');
+  const ra = gopHaiTang(
+    [{ noteId: 1, title: 'A', content: 'mẩu-gần-câu-hỏi', diem: 0.6 }],
+    [{ id: 1, title: 'A', chu: 'cả-bài-dài', diem: 3 }],
+  );
+  assert.equal(ra[0]!.chu, 'mẩu-gần-câu-hỏi');
+});

@@ -715,6 +715,15 @@ export const INVOKE_CHANNELS = {
    * Trần 6MB ≈ hơn một phút thu. Dài hơn thế thì không phải một câu hỏi.
    */
   'robot:noi': z.object({ tiengBase64: z.string().min(16).max(6_000_000) }),
+  /**
+   * Đọc MỘT câu. Tách riêng khỏi `robot:noi` để renderer dựng được DÂY
+   * CHUYỀN: đang phát câu N thì đã đặt hàng câu N+1.
+   *
+   * Không có dây chuyền thì mỗi lần sang câu mới là một quãng lặng bằng
+   * trọn thời gian máy đọc chạy (~2,6s) — đúng cái "lag 2-3-4 giây" người
+   * dùng phàn nàn.
+   */
+  'robot:docCau': z.object({ cau: z.string().min(1).max(2000) }),
   'robot:baoNhac': z.object({ ten: z.string().min(1).max(200) }),
 
   'browser:mo': browserMoSchema,
@@ -1034,7 +1043,9 @@ export interface DesktopBridge {
      * được, câu trả lời, và tiếng đọc (base64) — hoặc `null` nếu người dùng
      * đã tắt đọc thành tiếng, hoặc máy đọc hỏng.
      */
-    noi(tiengBase64: string): Promise<{ cauHoi: string; traLoi: string; tiengBase64: string | null }>;
+    noi(tiengBase64: string): Promise<{ cauHoi: string; traLoi: string; cau: string[] }>;
+    /** Đọc một câu, trả tiếng base64. `null` khi người dùng đã tắt đọc thành tiếng. */
+    docCau(cau: string): Promise<{ tiengBase64: string | null }>;
     /**
      * Báo bài đang phát. Main tự BỎ QUA khi cửa sổ chính đang được nhìn — nói
      * lại tên bài ngay trong trang nhạc là thừa.

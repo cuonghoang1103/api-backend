@@ -40,6 +40,9 @@ function Robot() {
   const henRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tt, datTt] = useState<TrangThaiNoi>('im');
   const thuRef = useRef<BoThu | null>(null);
+  /* Vòng đọc chạy async qua nhiều câu. Không có cờ này thì đóng cửa sổ hay
+     bấm nói câu mới giữa chừng, vòng cũ vẫn phát tiếp — hai giọng chồng nhau. */
+  const conSongRef = useRef(true);
 
   // Nháy mắt. Giữ đúng nhịp của con robot trong app để nó vẫn là "cùng một
   // nhân vật" chứ không phải hai con giống nhau.
@@ -107,12 +110,40 @@ function Robot() {
       try {
         const kq = await window.cuongthai?.robot.noi(tiengBase64);
         if (!kq) { datTt('im'); return; }
-        // Hiện CÂU TRẢ LỜI trong bong bóng. Câu hỏi thì không — người vừa nói
-        // ra nó xong, nhắc lại là thừa chỗ trên một bong bóng nổi trên mọi thứ.
-        datTin({ loai: 'agent', chu: kq.traLoi });
-        if (kq.tiengBase64) {
-          datTt('doc');
-          await phatBase64(kq.tiengBase64);
+        if (!kq.cau.length) { datTin({ loai: 'agent', chu: kq.traLoi }); return; }
+
+        /*
+         * ĐỌC THEO DÂY CHUYỀN, HIỆN THEO NHỊP.
+         *
+         * Bong bóng hiện ĐÚNG câu đang đọc, không đổ cả bài ra một lượt —
+         * cửa sổ robot nhỏ, cả bài dài thì bị chính biên cửa sổ cắt mất
+         * (người dùng gửi ảnh chữ cụt hai lần).
+         *
+         * ⚠️ ĐẶT HÀNG CÂU N+1 TRƯỚC KHI PHÁT CÂU N. Đọc xong mới đặt hàng
+         * câu sau thì giữa hai câu là trọn một vòng gọi máy đọc (~2,6s) —
+         * đúng cái "lag 2-3-4 giây" người dùng phàn nàn. Câu tiếng Việt
+         * ~50 ký tự phát mất 4-5 giây, còn sinh mất ~2,6s, nên dây chuyền
+         * luôn chạy trước được một câu.
+         */
+        datTt('doc');
+        const docCau = (c: string): Promise<string | null> =>
+          window.cuongthai?.robot.docCau(c)
+            .then((r) => r?.tiengBase64 ?? null)
+            .catch(() => null) ?? Promise.resolve(null);
+
+        let keTiep = docCau(kq.cau[0]!);
+        for (let i = 0; i < kq.cau.length; i += 1) {
+          if (!conSongRef.current) return;
+          const tiengNay = keTiep;
+          // Đặt hàng câu sau NGAY, trước khi ngồi chờ câu này phát xong.
+          keTiep = i + 1 < kq.cau.length ? docCau(kq.cau[i + 1]!) : Promise.resolve(null);
+          void keTiep.catch(() => {});
+
+          datTin({ loai: 'agent', chu: kq.cau[i]! });
+          const t = await tiengNay;
+          if (!conSongRef.current) return;
+          if (t) await phatBase64(t);
+          else await new Promise((x) => setTimeout(x, 1200));  // tắt tiếng: vẫn cho kịp đọc chữ
         }
       } catch (e) {
         datTin({ loai: 'thong-bao', chu: `Trục trặc: ${(e as Error).message}` });
@@ -142,6 +173,7 @@ function Robot() {
     window.addEventListener('blur', roi);
     return () => {
       window.removeEventListener('blur', roi);
+      conSongRef.current = false;
       thuRef.current?.dung();
       ngungPhat();
     };
@@ -179,6 +211,15 @@ function Robot() {
         )}
         {/* Có tin thì robot 'vui' — cùng bộ tâm trạng với con robot trong app,
             nên nó vẫn là MỘT nhân vật chứ không phải hai con giống nhau. */}
+        {/* Bong bóng SUY NGHĨ trên đầu robot khi nó đang nói — ba chấm nở
+            dần, giống bong bóng trong truyện tranh. Nó nói "câu này là robot
+            đang nói", tách hẳn khỏi bong bóng thông báo (tin nhắn, nhạc) vốn
+            cũng dùng chung khung chữ. */}
+        {tt === 'doc' && !rong && (
+          <span className="rb-nghi-icon" aria-hidden>
+            <i /><i /><i />
+          </span>
+        )}
         <OdinRobot
           mood={tt === 'nghe' ? 'vui' : tt === 'nghi' ? 'nghi' : tin ? 'vui' : 'thuong'}
           blinking={nhay}

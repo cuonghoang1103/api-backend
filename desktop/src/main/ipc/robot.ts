@@ -8,6 +8,7 @@ import { baoNhac } from '../robotTin';
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from './auth';
 import { getSettings } from '../store';
+import { tachCau } from '../../renderer/features/odin/tachCau';
 import { handle } from './index';
 
 export function registerRobotHandlers(): void {
@@ -55,7 +56,7 @@ export function registerRobotHandlers(): void {
    */
   handle('robot:noi', async ({ tiengBase64 }) => {
     const phien = readStoredSession();
-    if (!phien) return { cauHoi: '', traLoi: 'Chưa đăng nhập. Mở app chính để đăng nhập trước.', tiengBase64: null };
+    if (!phien) return { cauHoi: '', traLoi: 'Chưa đăng nhập. Mở app chính để đăng nhập trước.', cau: [] };
 
     const token = phien.sessionToken;
     try {
@@ -67,26 +68,34 @@ export function registerRobotHandlers(): void {
         method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: form,
       });
       const jNghe = await rNghe.json() as { message?: string; data?: { text?: string } };
-      if (!rNghe.ok) return { cauHoi: '', traLoi: jNghe.message ?? `Nghe hỏng (${rNghe.status}).`, tiengBase64: null };
+      if (!rNghe.ok) return { cauHoi: '', traLoi: jNghe.message ?? `Nghe hỏng (${rNghe.status}).`, cau: [] };
       const cauHoi = jNghe.data?.text?.trim() ?? '';
       // Im lặng hoặc tiếng ồn ⇒ DỪNG ở đây. Đưa một chuỗi rỗng cho model thì nó
       // sẽ bịa ra một câu trả lời cho một câu hỏi không tồn tại.
-      if (!cauHoi) return { cauHoi: '', traLoi: 'Mình chưa nghe rõ. Bạn nói lại giúp nhé.', tiengBase64: null };
+      if (!cauHoi) return { cauHoi: '', traLoi: 'Mình chưa nghe rõ. Bạn nói lại giúp nhé.', cau: [] };
 
       // ── 2. Nghĩ ──
       const traLoi = await hoiTroLy(token, cauHoi, true);
 
-      // ── 3. Nói ──
-      // Đọc hỏng thì KHÔNG được làm hỏng cả lượt: người dùng vẫn còn chữ để
-      // đọc, và mất tiếng còn hơn mất câu trả lời.
-      let tieng: string | null = null;
-      if (getSettings().odinNoiThanhTieng !== false) {
-        tieng = await docThanhTieng(token, traLoi).catch(() => null);
-      }
-      return { cauHoi, traLoi, tiengBase64: tieng };
+      // ── 3. Trả về CÂU, không trả tiếng ──
+      //
+      // Renderer tự đặt hàng từng câu qua `robot:docCau` để dựng dây chuyền:
+      // đang phát câu N thì đã sinh câu N+1. Trả sẵn một cục tiếng ở đây thì
+      // không làm được điều đó, và bong bóng cũng không hiện theo nhịp đọc
+      // được — nó chỉ biết cả bài.
+      return { cauHoi, traLoi, cau: tachCau(traLoi) };
     } catch (err) {
-      return { cauHoi: '', traLoi: `Không gọi được máy chủ: ${(err as Error).message}`, tiengBase64: null };
+      const loi = `Không gọi được máy chủ: ${(err as Error).message}`;
+      return { cauHoi: '', traLoi: loi, cau: [loi] };
     }
+  });
+
+  handle('robot:docCau', async ({ cau }) => {
+    const phien = readStoredSession();
+    if (!phien || getSettings().odinNoiThanhTieng === false) return { tiengBase64: null };
+    // Đọc hỏng thì KHÔNG làm hỏng cả lượt: người dùng vẫn còn chữ, và mất
+    // tiếng một câu còn hơn mất cả câu trả lời.
+    return { tiengBase64: await docThanhTieng(phien.sessionToken, cau).catch(() => null) };
   });
 }
 

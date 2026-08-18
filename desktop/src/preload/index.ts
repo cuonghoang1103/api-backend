@@ -187,7 +187,10 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('robot:moChinh', { duongDan }) as Promise<void>,
     hoi: (chu: string) => ipcRenderer.invoke('robot:hoi', { chu }) as Promise<{ chu: string }>,
     noi: (tiengBase64: string) => ipcRenderer.invoke('robot:noi', { tiengBase64 }) as Promise<{
-      cauHoi: string; traLoi: string; tiengBase64: string | null;
+      cauHoi: string; traLoi: string; cau: string[];
+    }>,
+    docCau: (cau: string) => ipcRenderer.invoke('robot:docCau', { cau }) as Promise<{
+      tiengBase64: string | null;
     }>,
     baoNhac: (ten: string) => ipcRenderer.invoke('robot:baoNhac', { ten }) as Promise<void>,
   },

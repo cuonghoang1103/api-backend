@@ -1,5 +1,12 @@
 // ─── App types ────────────────────────────────────────────────────────────────
 
+/** Một trang web AI đã dùng làm nguồn cho câu trả lời. */
+export interface NguonWeb {
+  tieuDe: string;
+  url: string;
+  mien: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   message: string;
@@ -335,6 +342,13 @@ export interface ChatMessage {
    * dung câu trả lời.
    */
   reasoning?: string;
+  /**
+   * Trang web đã dùng để trả lời lượt này.
+   *
+   * Gắn vào TIN NHẮN chứ không vào màn hình: cuộn lên xem câu cũ vẫn phải
+   * thấy nó đã dựa vào đâu, và mở lại phiên hôm sau cũng vậy.
+   */
+  nguon?: NguonWeb[];
   tokenCount?: number;
   createdAt: string;
 }

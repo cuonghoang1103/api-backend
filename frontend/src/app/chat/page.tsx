@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2, X, Phone, Folder, FolderOpen, FolderPlus, Check } from 'lucide-react';
+import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2, X, Phone, Folder, FolderOpen, FolderPlus, Check, Search, BookOpen } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
@@ -20,7 +20,7 @@ import VoiceCallOverlay from '@/components/chat/VoiceCallOverlay';
 import ContextBar from '@/components/chat/ContextBar';
 import { useChatSkinStore } from '@/store/chatSkinStore';
 import LottieClient from '@/components/ui/LottieClient';
-import type { ChatMessage, ChatSession, ChatFolder } from '@/types';
+import type { ChatMessage, ChatSession, ChatFolder, NguonWeb } from '@/types';
 import { findStaticResponse, getDefaultGreeting, getFallbackResponse } from '@/lib/ai-static-responses';
 import { useChatModelStore, DEFAULT_CHAT_MODEL_ID, getChatModel } from '@/lib/aiChatModels';
 import { useKeyboardInset } from '@/hooks/useKeyboardInset';
@@ -158,6 +158,9 @@ export default function ChatPage() {
   // browser is on the new build.
   const BUILD_TAG = 'chat-v13-navbar-dock-final-2026-06-16T07:35Z-pending';
   const [showBuildTag, setShowBuildTag] = useState(false);
+  /* Bước tìm web của LƯỢT ĐANG CHẠY. Xoá khi lượt xong — nguồn thì gắn vào
+     tin nhắn (còn mãi), còn bước thì chỉ có nghĩa trong lúc chờ. */
+  const [buocWeb, datBuocWeb] = useState<Array<{ viec: string; chu: string }>>([]);
   useEffect(() => {
     if (typeof window === 'undefined') return;
     // Only show the ribbon when ?build=1 is in the URL,
@@ -238,6 +241,7 @@ export default function ChatPage() {
     addMessage,
     updateLastAssistantMessage,
     appendAssistantReasoning,
+    datNguonChoLuotCuoi,
     contextResetAt,
     setContextReset,
     removePendingMessage,
@@ -699,6 +703,19 @@ export default function ChatPage() {
               if (data.step) appendAssistantReasoning(sessionId, data.step);
               continue;
             }
+            // Bước tìm web. Trường là `viec`/`chu` chứ KHÔNG phải `text` —
+            // cùng lý do với `reasoning`: một trường tên `text` sẽ bị nhánh
+            // cộng chuỗi bên dưới nuốt vào câu trả lời.
+            if (data.type === 'buoc') {
+              datBuocWeb((c) => [...c, { viec: String(data.viec ?? ''), chu: String(data.chu ?? '') }]);
+              continue;
+            }
+            // Nguồn web đã dùng. Gắn vào TIN NHẮN để cuộn lên xem câu cũ vẫn
+            // thấy nó dựa vào đâu.
+            if (data.type === 'nguon') {
+              if (Array.isArray(data.nguon)) datNguonChoLuotCuoi(sessionId, data.nguon as NguonWeb[]);
+              continue;
+            }
             // Backend kiểm hình bằng toạ độ, thấy sai và đã vẽ lại. Thay đúng
             // khối ```svg thứ `index`, giữ nguyên toàn bộ phần chữ.
             if (data.type === 'figure_fix') {
@@ -842,11 +859,14 @@ export default function ChatPage() {
     } finally {
       abortRef.current = null;
       setStreaming(false);
+      // Bước chỉ có nghĩa trong lúc chờ. Nguồn thì đã gắn vào tin nhắn nên
+      // vẫn còn sau khi lượt xong.
+      datBuocWeb([]);
     }
   }, [
     isStreaming, currentSessionId, addMessage, setStreaming, setRobotEmotion,
     setSuggestedPrompts, setMessages, setCurrentSessionId, addSession,
-    updateLastAssistantMessage, appendAssistantReasoning, removePendingMessage, removeSession, limitedMode, setLimitedMode,
+    updateLastAssistantMessage, appendAssistantReasoning, datNguonChoLuotCuoi, removePendingMessage, removeSession, limitedMode, setLimitedMode,
     getToken,
   ]);
 
@@ -1530,6 +1550,21 @@ export default function ChatPage() {
                   skin={skin}
                 />
               )}
+              {/* Bước tìm web — chỉ hiện TRONG LÚC chờ. Nguồn thì gắn vào tin
+                  nhắn nên còn mãi; bước thì hết nghĩa khi câu trả lời đã có. */}
+              {buocWeb.map((b, i) => (
+                <div
+                  key={`bw${i}`}
+                  className="mx-auto mt-2 flex max-w-3xl items-center gap-2 rounded-lg border px-3 py-2 text-[11.5px]"
+                  style={{ borderColor: 'var(--border)', background: 'var(--bg-secondary)', color: 'var(--text-tertiary)' }}
+                >
+                  {b.viec === 'tim' ? <Search className="h-3 w-3 flex-none" /> : <BookOpen className="h-3 w-3 flex-none" />}
+                  <span style={{ color: 'var(--text-primary)' }}>
+                    {b.viec === 'tim' ? 'Đang tìm trên web' : 'Đang đọc'}
+                  </span>
+                  <span className="truncate">{b.chu}</span>
+                </div>
+              ))}
             </AnimatePresence>
           )}
           {/* Nhắc cắt mạch khi lịch sử đã đủ dài để tốn tiền thật sự.

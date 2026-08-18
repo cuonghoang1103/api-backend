@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { ssrSafeStorage } from './ssrSafeStorage';
-import type { ChatMessage, ChatSession } from '@/types';
+import type { ChatMessage, ChatSession, NguonWeb } from '@/types';
 
 export type RobotEmotion = 'idle' | 'thinking' | 'happy' | 'typing' | 'sad' | 'excited';
 
@@ -27,6 +27,7 @@ interface ChatState {
   updateLastAssistantMessage: (sessionId: string, content: string) => void;
   /** Nối thêm một mẩu suy luận vào lượt assistant cuối (không đụng `content`). */
   appendAssistantReasoning: (sessionId: string, step: string) => void;
+  datNguonChoLuotCuoi: (sessionId: string, nguon: NguonWeb[]) => void;
   /**
    * Mốc "mạch mới" theo phiên: tin nhắn CŨ HƠN mốc này vẫn hiện trên màn hình
    * nhưng KHÔNG gửi lên model nữa.
@@ -172,6 +173,21 @@ export const useChatStore = create<ChatState>()(
         set((state) => ({
           contextResetAt: { ...state.contextResetAt, [sessionId]: at ?? Date.now() },
         })),
+
+      /** Gắn nguồn web vào lượt trả lời cuối. Cùng khuôn với `appendAssistantReasoning`. */
+      datNguonChoLuotCuoi: (sessionId, nguon) =>
+        set((state) => {
+          const msgs = state.messages[sessionId];
+          if (!msgs || msgs.length === 0) return state;
+          const last = msgs[msgs.length - 1];
+          if (last.role !== 'assistant') return state;
+          return {
+            messages: {
+              ...state.messages,
+              [sessionId]: [...msgs.slice(0, -1), { ...last, nguon }],
+            },
+          };
+        }),
 
       appendAssistantReasoning: (sessionId, step) =>
         set((state) => {

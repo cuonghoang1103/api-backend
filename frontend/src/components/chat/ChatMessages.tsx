@@ -11,6 +11,7 @@ import ChatMarkdown from './ChatMarkdown';
 import ThinkingSteps from './ThinkingSteps';
 import { api } from '@/lib/api';
 import type { ChatSkin } from '@/store/chatSkinStore';
+import { NguonCards } from './NguonCards';
 
 // ── Inject cyberpunk scrollbar styles directly (bypasses Tailwind build pipeline) ──
 function ChatScrollStyles() {
@@ -260,6 +261,10 @@ function MessageBubble({ msg, isStreaming, isLastAssistant, skin = 'terminal' }:
                   style={{ background: 'var(--studio-accent)' }}
                 />
               )}
+              {/* Thẻ nguồn nằm TRONG khối lời giải, dưới câu trả lời — nó
+                  thuộc về câu trả lời đó, không phải về màn hình. Cuộn lên
+                  xem câu cũ vẫn phải thấy nó đã dựa vào đâu. */}
+              {msg.nguon?.length ? <NguonCards nguon={msg.nguon} /> : null}
             </div>
           )}
 

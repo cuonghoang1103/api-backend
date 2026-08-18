@@ -155,6 +155,22 @@ export function baoAgentXong(chuThich: string): void {
   baoRobot('robot:tin', { loai: 'agent', chu: chuThich });
 }
 
+/**
+ * Có bản app mới, đã tải sẵn, chỉ chờ khởi động lại.
+ *
+ * Cũng chỉ báo khi người dùng ĐANG Ở CHỖ KHÁC — ngồi ngay trong app thì đã có
+ * hộp nhắc ở góc và dải ở cạnh tài khoản, robot nói thêm là làm phiền.
+ *
+ * Đây là mảnh cuối để tin "có bản mới" tới được người dùng ở MỌI tình huống:
+ *  • đang nhìn app  → hộp nhắc góc phải dưới + dải cạnh tài khoản
+ *  • đang làm việc khác → robot nổi ngoài app (chính hàm này)
+ *  • không để ý gì   → lần mở app sau, kiểm sau 15 giây là thấy
+ */
+export function baoBanMoi(version: string): void {
+  if (dangNhinApp()) return;
+  baoRobot('robot:tin', { loai: 'thong-bao', chu: `Có bản ${version} — bấm để khởi động lại` });
+}
+
 /** Dùng cho kiểm thử: ép một vòng chạy ngay thay vì đợi 25 giây. */
 export async function _motVongChoKiemThu(): Promise<void> {
   await motVong();

@@ -20,6 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { UpdateStatus } from '../../shared/ipc';
 import { IS_DEV } from '../config';
+import { baoBanMoi } from '../robotTin';
 import { handle } from './index';
 
 /**
@@ -51,10 +52,26 @@ let lanKiemCuoi = 0;
 
 let lastStatus: UpdateStatus = { state: 'idle' };
 
+/** Đã đẩy thông báo ngoài app cho bản nào rồi — để không lải nhải mỗi 45 phút. */
+let daBaoRaNgoai: string | null = null;
+
 function broadcast(status: UpdateStatus): void {
   lastStatus = status;
   for (const window of BrowserWindow.getAllWindows()) {
     window.webContents.send('update:status', status);
+  }
+
+  /* Tin "có bản mới" phải tới được người dùng KỂ CẢ khi họ đang ở app khác.
+   * Ba trạng thái này là ba đường "sẵn sàng cài" của ba nền tảng:
+   *   ready   → Windows/Linux, Squirrel đã tải xong
+   *   sanSang → macOS, gói .zip đã tải sẵn
+   *   manual  → macOS, chưa tải được sẵn nhưng bấm một nút là xong
+   * Chỉ báo MỘT LẦN cho mỗi số phiên bản. */
+  if (status.state === 'ready' || status.state === 'sanSang' || status.state === 'manual') {
+    if (daBaoRaNgoai !== status.version) {
+      daBaoRaNgoai = status.version;
+      baoBanMoi(status.version);
+    }
   }
 }
 

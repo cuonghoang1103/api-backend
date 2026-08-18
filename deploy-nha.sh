@@ -74,6 +74,7 @@ KHOA="/var/lock/cuongthai-deploy.lock"
 TU_LUI=true
 CHI_BUILD=false
 KHONG_DAY=false
+KHONG_HOI=false
 for a in "$@"; do
     case "$a" in
         --khong-lui) TU_LUI=false ;;
@@ -81,6 +82,8 @@ for a in "$@"; do
         # Dựng ảnh ở máy nhà rồi DỪNG — không đẩy GHCR, không tráo. Dùng để thử
         # đường build khi chưa có khoá GHCR, hoặc để xem mã có build nổi không.
         --khong-day) KHONG_DAY=true; CHI_BUILD=true ;;
+        # Bỏ qua bước hỏi duyệt push qua Telegram ở cuối (bước 8).
+        --khong-hoi) KHONG_HOI=true ;;
     esac
 done
 
@@ -402,6 +405,47 @@ info "Dọn ảnh cũ trên VPS..."
 sshvps "docker image prune -f >/dev/null 2>&1; df -h / | tail -1" | sed 's/^/         /'
 info "Dọn thư mục build cũ ở máy nhà (giữ 3 bản gần nhất)..."
 sshnha "cd ${THU_MUC_NHA} 2>/dev/null && ls -1t | tail -n +4 | xargs -r rm -rf" 2>/dev/null || true
+
+# ─── 8. Hỏi duyệt trên điện thoại rồi mới push lên GitHub ──────────────
+#
+# Quy trình chuẩn (CLAUDE.md): deploy TRƯỚC, người dùng thử production, XONG
+# rồi mới push — lúc đó push chỉ là đồng bộ GitHub với thứ prod đã chạy. Bước
+# này giữ nguyên thứ tự đó, chỉ bỏ đi khoảng chờ: thay vì phải nhớ quay lại
+# gõ `git push`, bot Telegram của máy nhà hỏi ngay trên điện thoại, bấm một nút.
+#
+# ⚠️ KHÔNG tự push. Đẩy lên `main` là hành động phải có người đồng ý, và cái
+# nút CHÍNH LÀ chỗ đồng ý đó. Không ai bấm ⇒ không push, và deploy vẫn tính là
+# thành công (production đã chạy rồi, push chỉ là việc còn lại).
+if [ "$KHONG_HOI" != true ]; then
+    git fetch --quiet origin "$NHANH" 2>/dev/null || true
+    CHUA_DAY=$(git rev-list --count "origin/${NHANH}..HEAD" 2>/dev/null || echo 0)
+    if [ "$CHUA_DAY" = "0" ]; then
+        info "GitHub đã có commit này rồi — không cần push."
+    elif ! sshnha "test -x \$HOME/bin/hoi-duyet.sh" 2>/dev/null; then
+        warn "Máy nhà không trả lời (hoặc chưa có hoi-duyet.sh) — bỏ qua hỏi duyệt."
+        warn "Muốn push thì chạy tay: git push origin ${NHANH}"
+    else
+        info "Hỏi duyệt push qua Telegram (chờ tối đa 15 phút)..."
+        CAU="✅ Deploy XONG — production đang chạy ${SHA} (nhánh ${NHANH}).
+Smoke-test ${SO_ROUTE} route sạch.
+Còn ${CHUA_DAY} commit chưa lên GitHub. Push bây giờ?"
+        # 0 = đồng ý · 1 = từ chối · 2 = hết giờ. Chỉ 0 mới push.
+        sshnha "bash \$HOME/bin/hoi-duyet.sh $(printf %q "$CAU") 900"
+        TRA_LOI=$?
+        case "$TRA_LOI" in
+            0)  info "Đã duyệt — đang push lên GitHub..."
+                # KHÔNG --force, không bao giờ. Bị từ chối thì để nguyên cho
+                # người xem, đừng tự ép.
+                if git push origin "HEAD:${NHANH}"; then
+                    ok "Đã push ${SHA} lên origin/${NHANH}"
+                else
+                    fail "Push hỏng — production vẫn đang chạy bình thường, chỉ GitHub là chưa đồng bộ."
+                fi ;;
+            1)  info "Đã từ chối — KHÔNG push. Production vẫn chạy ${SHA}." ;;
+            *)  warn "Hết giờ, không ai trả lời — KHÔNG push." ;;
+        esac
+    fi
+fi
 
 echo ""
 ok "XONG — production đang chạy commit ${SHA}"

@@ -176,6 +176,45 @@ async function upstream(path: string, init?: RequestInit): Promise<Response_> {
 }
 type Response_ = Awaited<ReturnType<typeof fetch>>;
 
+/**
+ * Nói ĐÚNG vì sao máy đọc máy nhà hỏng.
+ *
+ * ⚠️ BẢN CŨ ĐOÁN, VÀ ĐOÁN SAI. Mọi lỗi đều ra một câu: "Máy đó có thể đang
+ * tắt — chọn tạm một giọng khác." Ngày 18/08/2026 người dùng gặp câu đó trong
+ * khi máy nhà đang BẬT, dịch vụ F5 đang CHẠY, đường hầm đang MỞ. Sự thật nằm
+ * trong log của máy nhà:
+ *
+ *     torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 20.00 MiB.
+ *     GPU 0 has a total capacity of 11.62 GiB of which 56.88 MiB is free.
+ *
+ * Bốn dịch vụ GPU cùng ở trên một card 12GB, và F5 xin thêm 20MiB thì không
+ * còn. Một câu đoán sai khiến người ta đi kiểm nguồn điện và đường mạng thay
+ * vì nhìn vào VRAM — đó là cái giá thật của việc đoán.
+ *
+ * Nên: phân biệt "KHÔNG trả lời" với "TRẢ LỜI nhưng lỗi". Chỉ trường hợp đầu
+ * mới được nói tới chuyện máy tắt.
+ */
+export async function vinaoF5Hong(e: unknown): Promise<string> {
+  const loi = e instanceof Error ? e.message : String(e);
+  // Có phản hồi HTTP (kể cả 500) ⇒ máy nhà SỐNG. Hỏi `/health` để nói cụ thể.
+  const coPhanHoi = /HTTP \d{3}/.test(loi) || loi.includes('f5 HTTP');
+  if (coPhanHoi) {
+    const song = await f5Fetch('/health')
+      .then((r) => (r.ok ? r.json() as Promise<{ ok?: boolean; daNap?: boolean }> : null))
+      .catch(() => null);
+    if (song) {
+      return song.daNap === false
+        ? 'Máy đọc giọng riêng đang chạy nhưng KHÔNG NẠP ĐƯỢC giọng — nhiều khả năng GPU máy nhà hết VRAM. '
+          + 'Tắt bớt một dịch vụ GPU rồi thử lại, hoặc chọn tạm một giọng khác.'
+        : 'Máy đọc giọng riêng đang chạy nhưng trả về lỗi khi đọc. Thử lại, hoặc chọn tạm một giọng khác.';
+    }
+    return 'Máy đọc giọng riêng trả về lỗi. Thử lại, hoặc chọn tạm một giọng khác.';
+  }
+  // Không có phản hồi nào ⇒ mới thật sự là "không trả lời".
+  return 'Máy đọc giọng riêng (ở máy nhà) không trả lời — máy có thể đang tắt hoặc đường hầm đứt. '
+    + 'Chọn tạm một giọng khác.';
+}
+
 router.get('/voices', authenticate, async (_req, res: Response<ApiResponse>) => {
   try {
     const r = await upstream('/voices');
@@ -262,10 +301,7 @@ router.post('/tts', authenticate, async (req: Request, res: Response<ApiResponse
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       logger.warn('VoiceMini: F5 hỏng', { error: msg });
-      res.status(503).json({
-        success: false,
-        message: 'Máy đọc giọng riêng (ở máy nhà) không trả lời. Máy đó có thể đang tắt — chọn tạm một giọng khác.',
-      });
+      res.status(503).json({ success: false, message: await vinaoF5Hong(e) });
     }
     return;
   }

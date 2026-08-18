@@ -61,21 +61,36 @@ export interface ChatResponse {
  * Danh sách providers, xếp theo priority.
  *
  * Thứ tự thử khi fallback:
- * 1. Groq (free, nhanh, OpenAI-compatible) — ưu tiên #1
- * 2. OpenRouter (1 key cho 200+ models) — fallback #1
- * 3. OpenAI (trả phí, chất lượng cao nhất) — fallback #2
+ * 1. modelapi (cổng trả phí của web) — ưu tiên #1
+ * 2. OpenRouter (1 key cho 200+ models) — lưới đỡ
+ * 3. OpenAI (trả phí) — lưới đỡ cuối
  *
  * Mỗi provider có apiKey riêng → có thể tắt/bật độc lập qua .env.
+ *
+ * ⚠️ GROQ ĐÃ TẮT 18/08/2026 — `enabled: false`, KHÔNG xoá khỏi danh sách.
+ *
+ * Model mặc định của nó, `llama-3.1-8b-instant`, đã bị Groq KHAI TỬ. Nó không
+ * hỏng ồn ào mà trả `404 The model does not exist or you do not have access`,
+ * và vì nó đứng ưu tiên #1 nên MỌI câu hỏi đều gõ cửa nó trước, ăn ~1 giây rồi
+ * mới đi tiếp. Đọc log prod 18/08 thấy đúng chuỗi đó ở mọi lượt:
+ *   groq✗ (404) → modelapi✗ (400) → openrouter✓ (9076ms)
+ * Ba lần liên tiếp còn làm CircuitBreaker của groq bật, tức là nó vừa vô dụng
+ * vừa gây nhiễu cho phần giám sát.
+ *
+ * Giữ lại cấu hình (thay vì xoá) vì Groq vẫn là nhà cung cấp miễn phí đáng
+ * dùng — chỉ cần đặt `GROQ_CHAT_MODEL` sang một model còn sống rồi bật lại.
  */
 const PROVIDERS: AIProviderConfig[] = [
   {
     name: 'groq',
     apiKeyEnv: 'GROQ_API_KEY',
     modelEnv: 'GROQ_CHAT_MODEL',
+    // Tên này đã bị Groq khai tử — xem ghi chú ở trên. Đổi tên model rồi mới
+    // bật lại `enabled`.
     defaultModel: 'llama-3.1-8b-instant',
     baseURL: 'https://api.groq.com/openai/v1',
     priority: 1,
-    enabled: true,
+    enabled: false,
   },
   {
     // Cổng trả phí của web (modelapi.vn). Đứng NGAY SAU Groq: bậc chat miễn
@@ -85,7 +100,9 @@ const PROVIDERS: AIProviderConfig[] = [
     name: 'modelapi',
     apiKeyEnv: 'LLM_GATEWAY_API_KEY',
     modelEnv: 'LLM_MODEL_CHAT_FREE_FALLBACK',
-    defaultModel: 'gpt-5.4-mini',
+    // Phải khớp `PURPOSE_MODEL.chat_free_fallback` trong gateway.ts. Để lại
+    // `gpt-5.4-mini` là để lại một tên đã chết ở nhóm khoá hiện tại.
+    defaultModel: 'claude-sonnet-4-6',
     baseURL: null,
     resolveKey: gatewayKey,
     resolveBaseURL: () => `${gatewayRoot()}/v1`,

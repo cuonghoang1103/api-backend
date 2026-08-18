@@ -449,7 +449,7 @@ export async function runAgentTurn(
       const nen = nenNguCanh([...messages, ...append]);
       if (nen.soDaLuoc > daLuoc) { daLuoc = nen.soDaLuoc; daCat = nen.kyTuDaCat; }
 
-      const ketQua = await goiCong({
+      const ketQua = await goiCongCoLuoiDo({
         url: chatUrlOf(ep),
         key: ep.key,
         model,
@@ -531,8 +531,33 @@ export async function runAgentTurn(
     // operation was aborted" — vừa sai (cổng không lỗi) vừa không nói được
     // phải làm gì. Cùng chuyện đó xảy ra trên production mỗi lần deploy.
     const dutKetNoi = /aborted|ECONNRESET|socket hang up|terminated|fetch failed|ETIMEDOUT/i.test(message);
+
+    /**
+     * Cổng KHÔNG CÓ nhà cung cấp cho model — sự cố phía cổng, không phải phía
+     * người dùng.
+     *
+     * Gặp thật 18/08/2026: cả 6 model chat của khoá này đều trả
+     * `HTTP 400 unknown provider for model …`, trong khi `GET /v1/models` vẫn
+     * liệt kê đủ 8 model. Người dùng ở máy khác nhìn thấy nguyên khối JSON đó
+     * và tưởng máy mình hoặc bản app mình lỗi — trong khi mọi người đều đang
+     * gặp và không ai sửa được gì từ phía app.
+     *
+     * `No available channel` là cùng một chuyện, chỉ khác mã lỗi (503) —
+     * kênh có tồn tại nhưng không cái nào đang bật cho nhóm của khoá.
+     */
+    const congThieuKenh = /unknown provider for model|No available channel/i.test(message);
+    const tenModel = /unknown provider for model ([\w.-]+)/i.exec(message)?.[1] ?? model;
+
     emit(
-      dutKetNoi
+      congThieuKenh
+        ? {
+            type: 'error',
+            code: 'LLM_NO_PROVIDER',
+            error: `Cổng AI hiện không phục vụ model "${tenModel}". Đây là sự cố ở phía cổng `
+              + '(nhà cung cấp chưa gắn kênh cho model này) — KHÔNG phải do máy bạn hay bản app bạn đang dùng, '
+              + 'và mọi người đều đang gặp. Hỏi lại cũng không khác; hãy báo cho chủ web để bật lại kênh model ở Console của cổng.',
+          }
+        : dutKetNoi
         ? {
             type: 'error',
             code: 'CONNECTION_LOST',
@@ -632,6 +657,60 @@ interface KetQuaCong {
  * thì các mảnh của chúng xen kẽ nhau, ghép nhầm sẽ cho ra một chuỗi JSON hỏng
  * và lượt sau đổ vỡ ở chỗ không liên quan.
  */
+/**
+ * Model dự phòng cho agent khi model chính KHÔNG DÙNG ĐƯỢC.
+ *
+ * Cố ý khác HỌ với model chính. 18/08/2026 cả họ `gpt-5.x` chết cùng lúc (nhóm
+ * khoá mất sạch kênh), nên một model dự phòng cùng họ sẽ chết y hệt và lưới đỡ
+ * thành vô dụng. Đổi được bằng `LLM_MODEL_AGENT_BACKUP`.
+ */
+function modelDuPhong(chinh: string): string | null {
+  const dat = process.env.LLM_MODEL_AGENT_BACKUP?.trim();
+  if (dat) return dat === chinh ? null : dat;
+  const macDinh = chinh.startsWith('claude') ? 'claude-opus-4-8' : 'claude-sonnet-5';
+  return macDinh === chinh ? 'claude-sonnet-4-6' : macDinh;
+}
+
+/**
+ * Model KHÔNG DÙNG ĐƯỢC ≠ lời gọi hỏng.
+ *
+ * Chỉ ba lỗi này mới đáng thử model khác, và cả ba đều nói cùng một chuyện:
+ * cái tên model ấy hiện không có ai phục vụ.
+ *   400 unknown provider for model X      — nhà cung cấp bị gỡ khỏi nhóm
+ *   503 No available channel … under group — nhóm của khoá không có kênh
+ *   404 not supported by any configured channel
+ * Hết giờ, mất mạng, hết hạn mức, người dùng bấm dừng thì thử lại model khác
+ * chỉ tốn thêm tiền và thời gian mà không sửa được gì.
+ */
+function modelChet(thongDiep: string): boolean {
+  return /unknown provider for model|No available channel|not supported by any configured channel/i.test(thongDiep);
+}
+
+/**
+ * Gọi cổng, và nếu MODEL CHẾT thì thử đúng MỘT lần với model dự phòng.
+ *
+ * Vì sao agent cần cái này: 18/08/2026 cổng chết, AI Chat vẫn trả lời được nhờ
+ * dây chuyền dự phòng của `aiProviders.ts`, còn AI Code gọi thẳng cổng nên
+ * chết hẳn — người dùng ở máy khác nhìn thấy lỗi đỏ và tưởng máy mình hỏng.
+ *
+ * Chỉ đổi MODEL, vẫn cùng cổng và cùng giao thức, nên phần gọi tool giữ nguyên
+ * hành vi. Rơi sang một nhà cung cấp khác không gọi được tool thì agent không
+ * "sống sót" mà chỉ hỏng theo kiểu khó hiểu hơn.
+ */
+async function goiCongCoLuoiDo(o: Parameters<typeof goiCong>[0]): Promise<KetQuaCong> {
+  try {
+    return await goiCong(o);
+  } catch (err) {
+    const thong = (err as Error).message || '';
+    const duPhong = modelChet(thong) ? modelDuPhong(o.model) : null;
+    if (!duPhong) throw err;
+    logger.warn('agent: model chính không dùng được, thử model dự phòng', {
+      chinh: o.model, duPhong, loi: thong.slice(0, 120),
+    });
+    return goiCong({ ...o, model: duPhong });
+  }
+}
+
 async function goiCong(o: {
   url: string;
   key: string | undefined;

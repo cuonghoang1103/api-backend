@@ -231,55 +231,80 @@ export type LlmPurpose =
   | 'agent_code';         // agent lập trình của app desktop — GỌI TOOL nhiều lượt
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
-  // Bậc Max lấy model mạnh nhất mua được; Pro lấy gpt-5.5 vì nó nhanh gần gấp
-  // đôi (2,4s so với 4,7s) mà vẫn thuộc nhóm mạnh — trong hội thoại, độ trễ là
-  // thứ người dùng cảm thấy trước cả chất lượng.
-  chat_pro: 'gpt-5.5',
-  chat_max: 'gpt-5.6-sol',
-  // Lượt có ảnh LUÔN dùng sol, kể cả bậc Pro. Đo 11/08 với một ảnh 1×1 px:
-  // sol trả lời đúng "1×1", còn 5.5 / terra / mini đều tự tin nói "16×16".
-  // Chúng nhận được ảnh nhưng không thật sự nhìn — và một câu trả lời sai mà
-  // trôi chảy thì tệ hơn hẳn một lỗi.
-  chat_vision: 'gpt-5.6-sol',
-  chat_free_fallback: 'gpt-5.4-mini',
+  /**
+   * ⚠️ ĐỔI SANG CLAUDE 18/08/2026 — bắt buộc, không phải nâng cấp cho vui.
+   *
+   * Nhóm `default` của khoá mất sạch kênh: MỌI model `gpt-5.x` trả
+   * `400 unknown provider`, đo 38/38 lượt trong nhật ký của chính cổng. Khoá
+   * đã được chuyển sang nhóm `claude`, nơi `GET /v1/models` liệt kê 6 model và
+   * 4 model gọi được thật.
+   *
+   * Đã kiểm ĐÚNG LÀ CLAUDE THẬT, không phải tên bịa trỏ vào model rẻ:
+   *   • tự khai "Claude, do Anthropic tạo ra"
+   *   • bài bèo phủ ao (48 ngày → nửa ao lúc nào): cả ba trả lời 47 ✅
+   *   • đếm chữ r trong "strawberry": cả ba trả lời 3 ✅
+   *   • cùng một đề văn, ba model cho ba câu KHÁC nhau ⇒ không phải một model
+   *     đội ba cái tên
+   *
+   * Giá đo thật (chênh lệch sổ của cổng, 2 lượt/model, ~71 vào + 350 ra):
+   *   opus-4-8  2,00 đơn vị/lượt · sonnet-5  0,80 · sonnet-4-6  0,60
+   * ⇒ opus đắt gấp ~3,4 lần sonnet-4-6. Nên opus CHỈ dùng cho việc người dùng
+   * đọc từng chữ và trả tiền để đọc kỹ; việc tương tác và việc máy đọc thì
+   * không.
+   *
+   * `claude-fable-5` cổng liệt kê nhưng gọi ra `404 not supported by any
+   * configured channel` — ĐỪNG dùng, nó là một cái tên chết.
+   *
+   * Đổi từng việc mà không cần deploy: đặt `LLM_MODEL_<TÊN VIỆC VIẾT HOA>`.
+   */
 
-  interview_grade: 'gpt-5.5',
-  interview_report: 'gpt-5.6-sol',
-  interview_generate: 'gpt-5.6-sol',
+  // Hội thoại: Max lấy model mạnh nhất; Pro lấy sonnet-5 vì nhanh hơn rõ
+  // (đo: opus 8,5s · sonnet-5 3,7s cho cùng câu) mà vẫn thuộc nhóm mạnh —
+  // trong hội thoại, độ trễ là thứ người dùng cảm thấy trước cả chất lượng.
+  chat_pro: 'claude-sonnet-5',
+  chat_max: 'claude-opus-4-8',
+  // Lượt có ảnh lấy model mạnh nhất. Bài học cũ vẫn nguyên giá trị: model yếu
+  // NHẬN được ảnh, không báo lỗi, và BỊA nội dung — sai mà trôi chảy thì tệ
+  // hơn hẳn một lỗi. Chưa đo lại khả năng nhìn của bộ Claude này.
+  chat_vision: 'claude-opus-4-8',
+  chat_free_fallback: 'claude-sonnet-4-6',
 
-  language_tutor: 'gpt-5.5',
-  language_bulk: 'gpt-5.6-terra',
+  interview_grade: 'claude-sonnet-5',
+  interview_report: 'claude-opus-4-8',
+  interview_generate: 'claude-sonnet-5',
 
-  codelab_coach: 'gpt-5.5',
-  codelab_bulk: 'gpt-5.6-terra',
+  language_tutor: 'claude-sonnet-5',
+  language_bulk: 'claude-sonnet-4-6',
 
-  cv_critique: 'gpt-5.6-sol',
-  cv_writing: 'gpt-5.5',
-  cv_parse: 'gpt-5.4-mini',
+  codelab_coach: 'claude-sonnet-5',
+  codelab_bulk: 'claude-sonnet-4-6',
 
-  exam_grade: 'gpt-5.5',
-  exphub_doc: 'gpt-5.6-terra',
-  news_bulletin: 'gpt-5.6-terra',
-  // Chép đề toán từ ảnh. Đo 13/08 trên một ảnh chụp lệch, nén JPEG q55, đủ
-  // phân số lồng / căn bậc ba / cận tích phân / vector: `sol` đúng 7/7 bài,
-  // `gpt-5.4-mini` (rẻ hơn 8 lần) rụng mũi tên vector `AB` → `|AB|`. Ở đây
-  // một ký hiệu sai là hỏng cả bài, nên KHÔNG hạ model để tiết kiệm.
-  doc_ocr: 'gpt-5.6-sol',
-  // Robot đang chạy tốt với model này sau bốn lần vá lỗi âm thanh — đổi model
-  // là đổi cả nhịp nói lẫn cách nó chọn lệnh, nên giữ nguyên. Thấy chậm thì
-  // `gpt-5.4-mini` nhanh hơn rõ (1,3s so với 4,2s).
-  robot_voice: 'gpt-5.6-terra',
-  // ⚠️ ĐỪNG hạ xuống `gpt-5.5` cho "nhanh hơn" — với việc GỌI TOOL nó ngược
-  // hẳn với chat. Đo 17/08/2026, cùng một chuỗi 3 bước (list_dir → read_file
-  // → read_file) trên cùng dữ liệu:
-  //     gpt-5.6-sol  14,6s   ·  gpt-5.5  57,1s
-  // Cả hai đều ra đúng đáp án, nhưng 5.5 chậm gấp 4 vì cổng bọc nó trong một
-  // prompt ẩn ~4,5k token MỖI LƯỢT — và vòng lặp agent thì "mỗi lượt" là hàng
-  // chục lần, không phải một. 5.5 còn rò token dừng `<CPA_DONE>` ra câu trả
-  // lời (gpt-5.4-mini cũng vậy), nên dùng chúng làm lưới đỡ thì phải cắt chuỗi
-  // đó trước khi hiện cho người dùng.
-  agent_code: 'gpt-5.6-sol',
+  cv_critique: 'claude-opus-4-8',
+  cv_writing: 'claude-sonnet-5',
+  cv_parse: 'claude-sonnet-4-6',
+
+  exam_grade: 'claude-sonnet-5',
+  exphub_doc: 'claude-sonnet-4-6',
+  /**
+   * OCR đề thi lấy model MẠNH NHẤT, không hạ để tiết kiệm.
+   *
+   * Bài học cũ vẫn đúng nguyên: model rẻ rụng mũi tên vector `AB` → `|AB|`, và
+   * một ký hiệu sai là hỏng cả bài toán. Ở đây tiết kiệm vài xu đổi lấy một đề
+   * thi sai là lỗ.
+   */
+  doc_ocr: 'claude-opus-4-8',
+  news_bulletin: 'claude-sonnet-4-6',
+  robot_voice: 'claude-sonnet-4-6',
+
+  /**
+   * Agent gọi tool — bài học cũ về `gpt-5.5` chậm gấp 4 KHÔNG áp dụng nữa (bộ
+   * gpt đã chết hẳn), nhưng cái cốt lõi thì còn: vòng lặp agent chạy hàng chục
+   * lượt cho MỘT câu hỏi, nên mỗi giây và mỗi đồng đều nhân lên hàng chục lần.
+   * sonnet-5 nhanh nhất trong ba model đo được và rẻ hơn opus 2,5 lần.
+   */
+  agent_code: 'claude-sonnet-5',
 };
+
 
 // ─── Định tuyến lai: việc nào đi máy nhà, việc nào đi cổng ─────────
 

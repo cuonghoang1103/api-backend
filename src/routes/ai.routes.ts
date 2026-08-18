@@ -487,8 +487,23 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
 
     // If headers already sent, write error frame
     if (!res.writableEnded) {
-      const errMsg =
-        streamError instanceof Error ? streamError.message : 'Stream interrupted';
+      const tho = streamError instanceof Error ? streamError.message : 'Stream interrupted';
+      /**
+       * Cổng KHÔNG CÓ nhà cung cấp cho model — sự cố phía cổng, không phải
+       * phía người dùng.
+       *
+       * Gặp thật 18/08/2026: cả 6 model chat của khoá này đều trả
+       * `HTTP 400 unknown provider for model …` trong khi `GET /v1/models` vẫn
+       * liệt kê đủ. Người dùng ở máy khác nhìn nguyên khối JSON đó rồi tưởng
+       * máy mình hoặc bản app mình hỏng — trong khi mọi người đều đang gặp và
+       * không ai sửa được gì từ phía app. Cùng câu chữ với `agent/turn.ts`.
+       */
+      const tenModel = /unknown provider for model ([\w.-]+)/i.exec(tho)?.[1];
+      const errMsg = (tenModel || /No available channel/i.test(tho))
+        ? `Cổng AI hiện không phục vụ model "${tenModel ?? 'đang dùng'}". Đây là sự cố ở phía cổng `
+          + '(nhà cung cấp chưa gắn kênh cho model này) — KHÔNG phải do máy bạn hay bản app bạn đang dùng, '
+          + 'và mọi người đều đang gặp. Hãy báo cho chủ web để bật lại kênh model ở Console của cổng.'
+        : tho;
       res.write(
         `data: ${JSON.stringify({ type: 'error', error: errMsg, done: true })}\n\n`,
       );

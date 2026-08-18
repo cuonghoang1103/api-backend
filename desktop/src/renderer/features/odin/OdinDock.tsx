@@ -14,7 +14,7 @@ import { Mic, X } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useUpdateStatus } from '../../components/UpdateBanner';
 import { docThanhTieng, ngungNoi, phatTieng, datTocDoDoc } from './giongNoi';
-import { hoiOdin } from './hoiOdin';
+import { hoiOdin, phienNoiHienTai } from './hoiOdin';
 import { useSession } from '../../auth/session';
 import { OdinRobot } from './OdinRobot';
 import { useOdin } from './useOdin';
@@ -211,9 +211,48 @@ export function OdinDock() {
       data-hover={hovering}
     >
       {odin.say && (
-        <div className="odin-bubble" role="status">
-          <span>{odin.say}</span>
-          <button type="button" onClick={odin.dismissSay} aria-label="Đóng">
+        /*
+         * BẤM VÀO BONG BÓNG ⇒ MỞ ĐÚNG CUỘC TRÒ CHUYỆN ĐÓ TRONG /chat.
+         *
+         * Bong bóng cắt ở 220 ký tự vì nó nổi trên mọi cửa sổ — nhưng "đọc
+         * tiếp ở đâu" thì trước 19/08/2026 không có câu trả lời: khung chữ
+         * là một `div` trơ, và lượt hỏi bằng giọng còn chưa được lưu. Người
+         * dùng bấm vào rồi báo lại. Nay nó là nút, và đích đến là cuộc trò
+         * chuyện thật.
+         *
+         * Chỉ bấm được khi CÓ phiên: những câu như "Mình không dùng được
+         * micro" không thuộc cuộc nào, và mở một trang trống còn tệ hơn là
+         * không cho bấm.
+         */
+        <div
+          className="odin-bubble"
+          role="status"
+          data-mo-duoc={phienNoiHienTai() ? 'true' : 'false'}
+        >
+          {phienNoiHienTai() ? (
+            <button
+              type="button"
+              className="odin-bubble-mo"
+              title="Bấm để đọc đầy đủ trong AI Chat"
+              onClick={() => {
+                const id = phienNoiHienTai();
+                odin.dismissSay();
+                navigate('/chat', id ? `phien=${encodeURIComponent(id)}` : undefined);
+              }}
+            >
+              <span>{odin.say}</span>
+              <span className="odin-bubble-goi-y">Bấm để đọc đầy đủ →</span>
+            </button>
+          ) : (
+            <span>{odin.say}</span>
+          )}
+          {/* `stopPropagation` để bấm × không kéo theo cả việc mở trang. */}
+          <button
+            type="button"
+            className="odin-bubble-dong"
+            onClick={(e) => { e.stopPropagation(); odin.dismissSay(); }}
+            aria-label="Đóng"
+          >
             <X size={12} aria-hidden />
           </button>
         </div>

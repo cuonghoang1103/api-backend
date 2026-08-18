@@ -27,7 +27,7 @@ type Settings = Partial<Record<SettingKey, SettingValue>>;
 
 interface AppState {
   route: string;
-  navigate: (path: string) => void;
+  navigate: (path: string, thamSo?: string) => void;
   /**
    * Đọc MỘT tham số của lần điều hướng gần nhất, rồi XOÁ nó đi.
    *
@@ -36,6 +36,9 @@ interface AppState {
    * mỗi lần bị vẽ lại, và người dùng bị đá về cuộc cũ giữa lúc đang gõ.
    */
   layThamSo: (ten: string) => string | null;
+  /** Tăng sau MỖI lần điều hướng. Trang đích theo dõi số này để đọc lại
+   *  tham số kể cả khi nó vốn đã đang mở (không có lần gắn thứ hai). */
+  lanDieuHuong: number;
 
   settings: Settings;
   setSetting: (key: SettingKey, value: SettingValue) => void;
@@ -91,6 +94,17 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
      trang sẽ mở lại phiên đó mỗi lần vô tình vẽ lại. */
   const viTri = useRef('');
 
+  /* ⚠️ NHƯNG REF THÌ KHÔNG ĐÁNH THỨC ĐƯỢC AI.
+     Trang đích đọc tham số trong một effect chạy lúc GẮN. Điều hướng tới
+     đúng trang đang mở (bấm bong bóng Odin khi đã ở /chat) không gắn lại
+     gì cả ⇒ effect không chạy ⇒ bấm xong không có gì xảy ra. Bộ đếm này là
+     tín hiệu duy nhất trang đích có thể theo dõi.
+
+     Đếm chứ không giữ chuỗi truy vấn: `layThamSo` tự xoá sau khi đọc, nên
+     một lần điều hướng không mang tham số sẽ đọc ra `null` và trang đích
+     không làm gì — đúng ý "đọc một lần rồi thôi" ở trên. */
+  const [lanDieuHuong, datLanDieuHuong] = useState(0);
+
   // Deep link (cuongthai://) — main gửi sang đường dẫn đã tách sẵn.
   useEffect(() => {
     if (!bridge) return;
@@ -101,6 +115,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       // đã thấy sẵn — đặt sau thì nó vẽ một lượt với tham số cũ rồi mới nhảy.
       viTri.current = typeof next.query === 'string' ? next.query : '';
       setRoute(next.path);
+      datLanDieuHuong((n) => n + 1);
     });
   }, [bridge]);
 
@@ -152,9 +167,17 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     [bridge],
   );
 
+  /**
+   * @param thamSo Chuỗi truy vấn (`phien=abc`) cho trang đích đọc bằng
+   *   `layThamSo`. Trước đây chỉ tiến trình MAIN đặt được tham số (qua sự
+   *   kiện mở trang), nên điều hướng NGAY TRONG renderer không mang theo
+   *   được gì — bấm bong bóng Odin sẽ mở /chat trống thay vì đúng cuộc.
+   */
   const navigate = useCallback(
-    (path: string) => {
+    (path: string, thamSo?: string) => {
+      viTri.current = thamSo ?? '';
       setRoute(path);
+      datLanDieuHuong((n) => n + 1);
       // Không ghi nhớ route nội bộ (Cài đặt, Giới thiệu): mở lại app mà rơi
       // thẳng vào màn hình Cài đặt là hành vi khó hiểu.
       const isInternal = Object.values(INTERNAL_ROUTES).some((r) => r === path);
@@ -175,6 +198,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       route,
       navigate,
       layThamSo,
+      lanDieuHuong,
       settings,
       setSetting,
       theme,
@@ -182,7 +206,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       online,
       hasBridge: bridge !== undefined,
     }),
-    [route, navigate, layThamSo, settings, setSetting, theme, resolvedTheme, online, bridge],
+    [route, navigate, layThamSo, lanDieuHuong, settings, setSetting, theme, resolvedTheme, online, bridge],
   );
 
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;

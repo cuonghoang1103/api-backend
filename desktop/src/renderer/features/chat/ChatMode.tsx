@@ -139,7 +139,7 @@ const BAC = [
 
 export function ChatMode({ pro }: { pro: boolean }) {
   const { api } = useSession();
-  const { settings, layThamSo } = useAppState();
+  const { settings, layThamSo, lanDieuHuong } = useAppState();
   const [luot, datLuot] = useState<Luot[]>([]);
   const [nhap, datNhap] = useState('');
   const [bac, datBac] = useState<string>('cuongmini-3.11');
@@ -257,13 +257,17 @@ export function ChatMode({ pro }: { pro: boolean }) {
      bằng giọng nói. Mở đúng cuộc đó, vì đấy chính là lý do người dùng bấm:
      họ vừa NGHE xong và muốn ĐỌC lại đầy đủ.
 
-     Chạy MỘT lần khi gắn: `layThamSo` tự xoá sau khi đọc, nên không có
-     chuyện trang tự nhảy về cuộc cũ giữa lúc đang gõ. */
+     ⚠️ THEO DÕI `lanDieuHuong`, KHÔNG PHẢI `[]`. Bấm bong bóng Odin trong
+     lúc ĐANG Ở trang này không gắn lại component, nên effect chạy-một-lần
+     sẽ im lặng không làm gì — và đó chính là cảnh người dùng gặp: bấm vào
+     khung chữ, không có gì xảy ra. `layThamSo` vẫn tự xoá sau khi đọc, nên
+     những lần điều hướng KHÔNG mang tham số đọc ra `null` và trang đứng
+     yên — không có chuyện tự nhảy về cuộc cũ giữa lúc đang gõ. */
   useEffect(() => {
     const id = layThamSo('phien');
     if (id) void moPhien(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [lanDieuHuong]);
 
   const moPhien = useCallback(async (id: string) => {
     if (!api) return;

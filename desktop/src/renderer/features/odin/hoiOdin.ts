@@ -31,6 +31,59 @@ export function catCauDau(chu: string): string | null {
   return cau.length >= 12 ? cau : null;
 }
 
+/**
+ * ============================================================
+ * PHIÊN TRÒ CHUYỆN BẰNG GIỌNG
+ * ============================================================
+ *
+ * ⚠️ TRƯỚC 19/08/2026 CHỖ NÀY KHÔNG GỬI `sessionId`, VÀ MÁY CHỦ CHỈ LƯU KHI
+ * CÓ NÓ (`if (sessionId)` trong `ai.service.ts`). Nghĩa là mọi câu hỏi bằng
+ * giọng trong app đều bốc hơi ngay sau khi đọc xong: bong bóng cắt ở 220 ký
+ * tự, phần còn lại KHÔNG CÒN Ở ĐÂU CẢ. Người dùng bấm vào bong bóng để "đọc
+ * đầy đủ" thì chỉ có thể rơi vào một trang chat trống.
+ *
+ * Cửa sổ robot NỔI đã làm đúng từ trước (`main/ipc/robot.ts` giữ `phienNoi`),
+ * nên hai đường đi cùng một tính năng lại cho hai kết quả khác nhau — đúng
+ * loại chênh lệch không ai để ý cho tới lúc có người bấm thử.
+ *
+ * Giữ trong bộ nhớ, KHÔNG xuống đĩa: mở app một lần là một cuộc trò chuyện.
+ */
+let phienNoi: string | null = null;
+
+/** Mã cuộc trò chuyện bằng giọng đang mở, để mở đúng nó trong trang /chat. */
+export function phienNoiHienTai(): string | null {
+  return phienNoi;
+}
+
+/** Quên phiên hiện tại — dùng khi đăng xuất hoặc người dùng muốn bắt đầu lại. */
+export function quenPhienNoi(): void {
+  phienNoi = null;
+}
+
+/**
+ * Lấy phiên, tạo nếu chưa có.
+ *
+ * Hỏng thì trả `null` và ĐI TIẾP. Người dùng đang chờ NGHE câu trả lời, không
+ * đang xem lịch sử — mất lịch sử còn hơn mất câu trả lời.
+ */
+async function baoDamPhien(api: Api): Promise<string | null> {
+  if (phienNoi) return phienNoi;
+  try {
+    const r = await fetch(`${api.baseUrlForForms()}/api/v1/ai/chat/sessions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...api.authHeaders() },
+      credentials: 'omit',
+      body: JSON.stringify({ title: 'Trò chuyện bằng giọng nói' }),
+    });
+    if (!r.ok) return null;
+    const j = (await r.json()) as { data?: { sessionId?: string } };
+    phienNoi = j?.data?.sessionId ?? null;
+  } catch {
+    phienNoi = null;
+  }
+  return phienNoi;
+}
+
 export async function hoiOdin(
   api: Api,
   cauHoi: string,
@@ -48,6 +101,7 @@ export async function hoiOdin(
    */
   cauDauXong?: (cau: string) => void,
 ): Promise<string> {
+  const phien = await baoDamPhien(api);
   const res = await fetch(`${api.baseUrlForForms()}/api/v1/ai/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...api.authHeaders() },
@@ -55,6 +109,9 @@ export async function hoiOdin(
     ...(tinHieu ? { signal: tinHieu } : {}),
     body: JSON.stringify({
       message: cauHoi,
+      /* Máy chủ CHỈ lưu lượt chat khi có `sessionId`. Thiếu nó thì câu trả
+         lời chỉ tồn tại trong bong bóng đã bị cắt ngắn. */
+      ...(phien ? { sessionId: phien } : {}),
       /*
        * ⚠️ TRƯỚC 18/08/2026 CHỖ NÀY GỬI `systemHint` — MỘT TRƯỜNG MÁY CHỦ
        * KHÔNG HỀ ĐỌC. Nó chứa nguyên câu "Answer in English, at most 3 short

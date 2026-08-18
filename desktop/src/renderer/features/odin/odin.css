@@ -311,6 +311,52 @@
   background: var(--ct-hover);
 }
 
+/* ── Khung chữ BẤM ĐƯỢC ───────────────────────────────────────
+   Bong bóng cắt câu trả lời ở 220 ký tự (nó nổi trên mọi cửa sổ, để dài là
+   thành tấm rèm che màn hình). Nên bản thân nó phải là đường dẫn tới bản
+   đầy đủ — nếu không, phần bị cắt coi như mất.
+
+   ⚠️ `.odin-bubble button` ở trên đặt `background: none; padding: 2px` cho
+   nút ×. Nút chữ này DÙNG CHUNG bộ chọn đó, nên phải đặt lại mọi thứ nó
+   vừa xoá — bỏ sót là chữ dính sát mép và mất canh trái. */
+.odin-bubble-mo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.odin-bubble-mo:hover { background: none; color: inherit; }
+
+.odin-bubble-goi-y {
+  font-size: 11px;
+  color: var(--ct-accent, #a78bfa);
+  opacity: 0.85;
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.odin-bubble-mo:hover .odin-bubble-goi-y,
+.odin-bubble-mo:focus-visible .odin-bubble-goi-y {
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+/* Cả khung sáng lên khi rê chuột — để mắt đọc ra "chỗ này bấm được" trước
+   khi kịp đọc dòng gợi ý. */
+.odin-bubble[data-mo-duoc='true']:hover {
+  border-color: var(--ct-accent, #a78bfa);
+}
+
+.odin-bubble-dong { align-self: flex-start; }
+
 
 /* ══════════════════════════════════════════════════════════
    Rê chuột vào → BAY

@@ -205,9 +205,25 @@ function Robot() {
           <div className="rb-bong" data-loai="cho">Chờ tớ suy nghĩ xíu nhé…</div>
         )}
         {tin && !rong && (
-          <div className="rb-bong" data-loai={tin.loai}>
+          /*
+           * Bấm vào KHUNG CHỮ ⇒ mở thẳng trang AI Chat ở đúng cuộc trò
+           * chuyện. Bong bóng chỉ hiện MỘT câu đang đọc (cửa sổ nhỏ, cả bài
+           * thì bị biên cửa sổ cắt), nên nó phải là đường dẫn tới bản đầy đủ.
+           *
+           * `stopPropagation`: thân robot đã nhận bấm-một-lần (mở khung mini)
+           * và bấm-hai-lần. Không chặn thì một cú bấm vào chữ vừa mở khung
+           * mini vừa nhảy trang.
+           */
+          <button
+            type="button"
+            className="rb-bong"
+            data-loai={tin.loai}
+            title="Bấm để đọc đầy đủ trong AI Chat"
+            onClick={(e) => { e.stopPropagation(); bamDup(); }}
+            onDoubleClick={(e) => e.stopPropagation()}
+          >
             {tin.chu}
-          </div>
+          </button>
         )}
         {/* Có tin thì robot 'vui' — cùng bộ tâm trạng với con robot trong app,
             nên nó vẫn là MỘT nhân vật chứ không phải hai con giống nhau. */}

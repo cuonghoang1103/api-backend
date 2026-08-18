@@ -104,6 +104,20 @@ body {
 .rb-bong[data-loai='nhac'] { border-left: 3px solid #34d399; }
 .rb-bong[data-loai='agent'] { border-left: 3px solid #a78bfa; }
 
+/* Bong bóng nay là NÚT (bấm để mở trang chat đầy đủ). `<button>` mang theo
+   một bộ mặc định của trình duyệt — font hệ thống, canh giữa, viền — nên phải
+   đặt lại hết, không thì chữ đổi phông và dồn vào giữa. */
+button.rb-bong {
+  display: block;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-app-region: no-drag;   /* nằm trong vùng kéo cửa sổ ⇒ phải trừ ra */
+}
+
+button.rb-bong:hover { border-color: rgba(167, 139, 250, 0.75); }
+
 /* ── Khung chat mini ── */
 .rb-chat {
   flex: 1;

@@ -5570,3 +5570,102 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
    thứ ít quan trọng nhất. */
 .ct-nghi-giay { opacity: 0.55; font-variant-numeric: tabular-nums; }
 .ct-nghi-phu { opacity: 0.7; }
+
+/* ── Bước đang chạy: "đang tìm trên web", "đang đọc" ──
+   Hiện TRONG LÚC chờ, ngay trên dòng chờ. Người dùng thấy nó đang làm gì
+   thay vì một con quay đứng im — cùng lý do với `DangNghi`. */
+.ct-buoc {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  font-size: 11.5px;
+  color: var(--ct-text-faint);
+}
+
+.ct-buoc svg { flex: none; color: var(--ct-accent); }
+.ct-buoc span { color: var(--ct-text); }
+.ct-buoc em {
+  font-style: normal;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ── Thẻ nguồn dưới câu trả lời ── */
+.ct-nguon {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ct-border);
+}
+
+.ct-nguon-nhan {
+  margin: 0 0 6px;
+  color: var(--ct-text-faint);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ct-nguon ul {
+  display: grid;
+  /* Tự xuống dòng theo bề rộng: bong bóng chat co giãn, mà một hàng thẻ
+     tràn ra ngoài thì phải cuộn ngang cả trang. */
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ct-nguon button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 7px 9px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  text-align: left;
+  cursor: pointer;
+}
+
+.ct-nguon button:hover { background: var(--ct-hover); border-color: var(--ct-accent); }
+
+.ct-nguon-so {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 5px;
+  background: var(--ct-hover);
+  color: var(--ct-text-faint);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.ct-nguon img { flex: none; width: 16px; height: 16px; border-radius: 3px; }
+
+.ct-nguon-chu { min-width: 0; }
+.ct-nguon-chu strong {
+  display: block;
+  overflow: hidden;
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--ct-text);
+}
+.ct-nguon-chu em {
+  display: block;
+  color: var(--ct-text-faint);
+  font-size: 10.5px;
+  font-style: normal;
+}

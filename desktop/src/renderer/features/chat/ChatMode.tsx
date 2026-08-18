@@ -19,8 +19,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  CircleStop, FolderOpen, FolderPlus, History, MessageSquare, Plus, Send, Trash2, X,
-} from 'lucide-react';
+  CircleStop, FolderOpen, FolderPlus, History, MessageSquare, Plus, Send, Trash2, X, Search, BookOpen } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { DangNghi } from './DangNghi';
 import { useSession } from '../../auth/session';
@@ -55,11 +54,67 @@ interface PhienChat {
  */
 type LocThuMuc = null | 'none' | string;
 
+/** Một trang web đã dùng để trả lời. */
+export interface Nguon {
+  tieuDe: string;
+  url: string;
+  mien: string;
+}
+
 interface Luot {
   vai: 'user' | 'assistant';
   text: string;
   /** Đính kèm của lượt này — giữ lại để bảng ghi còn thấy đã gửi gì. */
   tep?: TepDinhKem[];
+  /** Nguồn web đã dùng cho lượt trả lời này. Gắn vào LƯỢT chứ không vào màn
+      hình — cuộn lên xem câu cũ vẫn phải thấy nó đã dựa vào đâu. */
+  nguon?: Nguon[];
+}
+
+/**
+ * Thẻ NGUỒN dưới câu trả lời.
+ *
+ * ⚠️ Đánh số khớp với `[1]`, `[2]` trong câu trả lời. Model được dặn ghi số
+ * ngay sau câu nó dùng nguồn đó; không đánh số ở đây thì người đọc thấy
+ * `[2]` mà không biết `[2]` là trang nào — tệ hơn là không có gì.
+ *
+ * ⚠️ Favicon lấy TỪ CHÍNH TRANG ĐÓ (`https://<miền>/favicon.ico`), KHÔNG
+ * qua dịch vụ favicon của Google. Dùng Google thì mỗi lần hiện thẻ nguồn là
+ * một lần báo cho họ biết trợ lý của người dùng đang trích trang nào — đi
+ * ngược đúng lý do web này tự dựng máy tìm kiếm thay vì mua API.
+ *
+ * Đổi lại: nhiều trang không có `/favicon.ico` ở gốc nên ảnh hỏng. Hỏng thì
+ * ẨN chứ không hiện ô vỡ — một hàng thẻ ba ô ảnh vỡ trông như giao diện
+ * hỏng, còn thiếu ảnh thì thẻ vẫn đọc được bằng số, tiêu đề và tên miền.
+ */
+function TheNguon({ nguon }: { nguon: Nguon[] }) {
+  return (
+    <div className="ct-nguon">
+      <p className="ct-nguon-nhan">Nguồn</p>
+      <ul>
+        {nguon.map((n, i) => (
+          <li key={n.url + i}>
+            <button
+              type="button"
+              onClick={() => void window.cuongthai?.app.openExternal(n.url)}
+              title={n.url}
+            >
+              <span className="ct-nguon-so">{i + 1}</span>
+              <img
+                src={`https://${n.mien}/favicon.ico`}
+                alt=""
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+              />
+              <span className="ct-nguon-chu">
+                <strong>{n.tieuDe}</strong>
+                <em>{n.mien}</em>
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 /** Số lượt cũ gửi kèm làm ngữ cảnh. Đủ để nhớ mạch, không đủ để phình hoá đơn. */
@@ -96,6 +151,10 @@ export function ChatMode({ pro }: { pro: boolean }) {
    * nên người dùng không phân biệt được "đang chạy" với "treo rồi".
    */
   const [choGiay, datChoGiay] = useState(0);
+  /* Bước và nguồn của LƯỢT ĐANG CHẠY. Gắn vào lượt trả lời cuối cùng khi
+     xong — giữ riêng ở đây thì đổi cuộc là mất, mà người dùng vẫn muốn thấy
+     nguồn của câu trả lời cũ khi cuộn lên. */
+  const [buocDangChay, datBuocDangChay] = useState<Array<{ viec: string; chu: string }>>([]);
   const [loi, datLoi] = useState<string | null>(null);
   /** Máy chủ đã HẠ BẬC lượt này chưa, và vì sao — xem khung `model` của SSE. */
   const [roiBac, datRoiBac] = useState<string | null>(null);
@@ -272,6 +331,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
     // Gom song song với việc dựng giao diện: `luot` là state, đọc ngay sau vòng
     // lặp sẽ ra bản cũ.
     let traLoiDayDu = '';
+    let nguonLuot: Nguon[] = [];
 
     const truoc: Luot[] = [...luot, { vai: 'user', text, ...(tep.length ? { tep } : {}) }];
     datLuot(truoc);
@@ -349,9 +409,22 @@ export function ChatMode({ pro }: { pro: boolean }) {
 
         for (const d of dong) {
           if (!d.startsWith('data: ')) continue;
-          let e: { type?: string; text?: string; error?: string; fellBack?: boolean; reason?: string };
+          let e: {
+            type?: string; text?: string; error?: string; fellBack?: boolean; reason?: string;
+            viec?: string; chu?: string; nguon?: unknown;
+          };
           try { e = JSON.parse(d.slice(6)); } catch { continue; }
 
+          if (e.type === 'buoc') {
+            datBuocDangChay((c) => [...c, { viec: String(e.viec ?? ''), chu: String(e.chu ?? '') }]);
+            continue;
+          }
+          if (e.type === 'nguon' && Array.isArray(e.nguon)) {
+            // Gắn nguồn vào lượt trả lời — nó thuộc về câu trả lời đó, không
+            // thuộc về màn hình. Đổi cuộc rồi quay lại vẫn phải còn.
+            nguonLuot = e.nguon as Nguon[];
+            continue;
+          }
           if (e.type === 'chunk' && e.text) {
             datDangCho(false);
             const mieng = e.text;
@@ -396,6 +469,18 @@ export function ChatMode({ pro }: { pro: boolean }) {
       huyRef.current = null;
       datDangChay(false);
       datDangCho(false);
+      datBuocDangChay([]);
+      // Gắn nguồn vào LƯỢT trả lời (không phải vào màn hình): cuộn lên xem
+      // câu cũ vẫn phải thấy nó đã dựa vào những trang nào.
+      if (nguonLuot.length) {
+        datLuot((cu) => {
+          const c = [...cu];
+          for (let i = c.length - 1; i >= 0; i -= 1) {
+            if (c[i]!.vai === 'assistant') { c[i] = { ...c[i]!, nguon: nguonLuot }; break; }
+          }
+          return c;
+        });
+      }
       // Cập nhật danh sách SAU khi xong: tiêu đề phiên do máy chủ đặt từ câu
       // hỏi đầu, và nó chỉ có sau khi lượt chạy.
       void napDsPhien();
@@ -563,9 +648,17 @@ export function ChatMode({ pro }: { pro: boolean }) {
              nhìn như chữ rơi tự do giữa trang. Giống hệt cách `AgentMode` bọc. */
           <div key={i} className="ct-agent-may">
             <ChuAgent text={l.text} />
+            {l.nguon?.length ? <TheNguon nguon={l.nguon} /> : null}
           </div>
         )))}
 
+        {buocDangChay.map((b, i) => (
+          <div key={`b${i}`} className="ct-buoc" data-viec={b.viec}>
+            {b.viec === 'tim' ? <Search size={12} aria-hidden /> : <BookOpen size={12} aria-hidden />}
+            <span>{b.viec === 'tim' ? 'Đang tìm trên web' : 'Đang đọc'}</span>
+            <em>{b.chu}</em>
+          </div>
+        ))}
         {dangCho && <DangNghi giay={choGiay} />}
         {loi && <div className="ct-notice" data-tone="err"><span>{loi}</span></div>}
         {roiBac && <div className="ct-notice" data-tone="warn"><span>{roiBac}</span></div>}

@@ -274,10 +274,24 @@ export function RemixDeck({ baiRemix, baiThuong }: { baiRemix: Track[]; baiThuon
         );
         if (!rut.ok) {
           const chiTiet = await rut.json().catch(() => null) as { message?: string } | null;
+          /* ⚠️ 502/500 ở đây gần như luôn là MỘT nguyên nhân, và nó không nằm ở
+           * app: YouTube trả 403 khi máy chủ tải dữ liệu media.
+           *
+           * Đo 18/08/2026 trên VPS: lấy metadata thì được, tải media thì 403 —
+           * thử cả năm kiểu client (ios · tv · web_safari · mweb · web_embedded)
+           * đều hỏng, và yt-dlp trong ảnh ĐÃ là bản mới nhất (2026.07.04). Đây
+           * là YouTube chặn theo IP trung tâm dữ liệu, không phải cấu hình sai.
+           *
+           * Nói thẳng ra cho người dùng, kèm việc họ làm được ngay — thay vì
+           * ném ra "Internal Server Error" (nginx thay thân JSON của backend
+           * bằng trang lỗi của nó, nên thông báo tiếng Việt gốc cũng mất). */
           throw new Error(
             rut.status === 403
-              ? 'Bài này lấy từ YouTube và chỉ tài khoản quản trị mới rút được âm thanh về máy chủ.'
-              : chiTiet?.message ?? `Rút âm thanh thất bại (${rut.status})`,
+              ? 'Chỉ tài khoản quản trị mới rút được âm thanh về máy chủ.'
+              : rut.status >= 500
+                ? 'YouTube từ chối cho máy chủ tải bài này (chặn theo IP máy chủ), nên bài kho Remix chưa dùng được ở bàn DJ. '
+                  + 'Hãy chọn bài ở nhóm "Thư viện" — những bài đó có sẵn file nhạc thật.'
+                : chiTiet?.message ?? `Rút âm thanh thất bại (${rut.status})`,
           );
         }
         dat(ten)((cu) => ({ ...cu, ghiChu: 'Đang tải nhạc…' }));

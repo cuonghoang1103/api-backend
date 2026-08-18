@@ -32,6 +32,7 @@ import {
   getSignedDownloadUrl as r2Signed,
   buildPublicUrl as r2PublicUrl,
   keyFromUrl as r2KeyFromUrl,
+  listObjects as r2List,
 } from '../config/r2.js';
 import path from 'path';
 import fs from 'fs/promises';
@@ -91,6 +92,11 @@ export interface StorageProvider {
   /** Reverse-lookup: extract the key from a public URL. */
   keyFromUrl(url: string | null | undefined): string | null;
   /**
+   * Liệt kê object theo tiền tố — dùng cho việc RÀ SOÁT (đối chiếu kho lưu trữ
+   * với CSDL), không dùng trong đường phục vụ người dùng.
+   */
+  list(prefix: string): Promise<Array<{ key: string; size: number; lastModified?: Date }>>;
+  /**
    * Open a readable stream for a key. Used by the music stream endpoint.
    * The `options.range` parameter is forwarded to the storage backend so
    * the returned stream contains exactly the requested bytes (or all
@@ -148,6 +154,27 @@ class LocalStorageProvider implements StorageProvider {
 
   publicUrl(key: string): string {
     return `${config.publicBaseUrl}/uploads/${key.replace(/^\/+/, '')}`;
+  }
+
+  async list(prefix: string): Promise<Array<{ key: string; size: number; lastModified?: Date }>> {
+    // Kho cục bộ: đi bộ trên đĩa. Thiếu thư mục là chưa có gì — trả rỗng, không ném.
+    // Gốc là `config.uploadDir` — cùng chỗ mà `put()` ghi vào (xem `fullPath`
+    // ở trên). Lớp này KHÔNG có trường `this.root`.
+    const goc = path.join(config.uploadDir, prefix);
+    const ra: Array<{ key: string; size: number; lastModified?: Date }> = [];
+    const diBo = async (duong: string): Promise<void> => {
+      let muc: Awaited<ReturnType<typeof fs.readdir>>;
+      try { muc = await fs.readdir(duong, { withFileTypes: true } as never) as never; }
+      catch { return; }
+      for (const m of muc as unknown as Array<{ name: string; isDirectory(): boolean }>) {
+        const con = path.join(duong, m.name);
+        if (m.isDirectory()) { await diBo(con); continue; }
+        const st = statSync(con);
+        ra.push({ key: path.relative(config.uploadDir, con), size: st.size, lastModified: st.mtime });
+      }
+    };
+    await diBo(goc);
+    return ra;
   }
 
   keyFromUrl(url: string | null | undefined): string | null {
@@ -254,6 +281,9 @@ class R2StorageProvider implements StorageProvider {
     return r2PublicUrl(key);
   }
 
+  async list(prefix: string): Promise<Array<{ key: string; size: number; lastModified?: Date }>> {
+    return r2List(prefix);
+  }
   keyFromUrl(url: string | null | undefined): string | null {
     return r2KeyFromUrl(url);
   }

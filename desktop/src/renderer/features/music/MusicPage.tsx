@@ -23,6 +23,7 @@ import { useSession } from '../../auth/session';
 import { NowPlaying } from './NowPlaying';
 import { PlaylistBar } from './PlaylistBar';
 import { RemixDeck } from './RemixDeck';
+import { TaiNhacLen } from './TaiNhacLen';
 import { clock, fold, formatBytes, laBaiYouTube, shuffled, useMusicPlayer, type Track } from './player';
 
 /** Một kết quả tìm trên YouTube — hình dạng của `GET /music/youtube-search`. */
@@ -267,6 +268,12 @@ export function MusicPage() {
               <Disc3 size={13} aria-hidden /> REMIX
             </button>
           </div>
+          {/* Tải lên đúng KHO đang mở: ở thẻ Remix thì vào kho Remix, ở thẻ
+              Nhạc thường thì vào thư viện. Một nút, không phải hỏi thêm. */}
+          <TaiNhacLen
+            category={khu === 'remix' ? 'REMIX' : 'NORMAL'}
+            onXong={() => { void loadTracks(); void napRemix(); }}
+          />
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void loadTracks()} disabled={!online}>
             <RefreshCw size={14} aria-hidden />
             Làm mới

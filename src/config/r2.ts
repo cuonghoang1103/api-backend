@@ -22,7 +22,7 @@
  *     check). Signed URLs are short-lived (5-10 minutes) and
  *     point at the R2 endpoint, not the CDN.
  */
-import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, HeadObjectCommand, DeleteObjectsCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, HeadObjectCommand, DeleteObjectsCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { config } from './env.js';
 
@@ -258,6 +258,38 @@ export async function getSignedDownloadUrl(
  * We never encode the slash; doing so would break the CDN cache
  * key for nested prefixes.
  */
+/**
+ * Liệt kê object theo tiền tố khoá.
+ *
+ * Dùng để RÀ SOÁT, không dùng trong đường phục vụ người dùng: nó gọi nhiều
+ * lượt mạng và bucket lớn thì tốn thời gian.
+ *
+ * ⚠️ PHẢI đi hết trang. `ListObjectsV2` trả tối đa 1000 khoá mỗi lượt; ai chỉ
+ * đọc trang đầu sẽ tưởng bucket chỉ có 1000 object — và với một script đối
+ * chiếu để XOÁ thì đó là kiểu sai tệ nhất: mọi object từ 1001 trở đi trông như
+ * "không có trên R2", còn mọi object thật sự mồ côi ở các trang sau thì lọt lưới.
+ */
+export async function listObjects(
+  prefix: string,
+): Promise<Array<{ key: string; size: number; lastModified?: Date }>> {
+  const client = getR2Client();
+  const ra: Array<{ key: string; size: number; lastModified?: Date }> = [];
+  let token: string | undefined;
+  do {
+    const res = await client.send(new ListObjectsV2Command({
+      Bucket: config.r2.bucketName,
+      Prefix: prefix,
+      ContinuationToken: token,
+    }));
+    for (const o of res.Contents ?? []) {
+      if (!o.Key) continue;
+      ra.push({ key: o.Key, size: o.Size ?? 0, lastModified: o.LastModified });
+    }
+    token = res.IsTruncated ? res.NextContinuationToken : undefined;
+  } while (token);
+  return ra;
+}
+
 export function buildPublicUrl(key: string): string {
   const base = config.r2.publicUrl || '';
   // Defensive: strip any leading slash on the key so we don't

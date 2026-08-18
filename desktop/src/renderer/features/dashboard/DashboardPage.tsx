@@ -33,11 +33,25 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Bell, Check, ChevronRight, Flame, MessageSquare, Plus, RefreshCw, Trash2,
+  Bell, BookOpen, Briefcase, Check, ChevronRight, Coffee, Dumbbell, Flame,
+  Gamepad2, MessageSquare, Moon, Plus, RefreshCw, Trash2, UtensilsCrossed, Users, X,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
+
+/**
+ * ⚠️ `api.request` TỰ tuần tự hoá `body` — ĐỪNG `JSON.stringify` trước.
+ *
+ * `RequestOptions.body` khai kiểu `unknown` và `client.ts` gọi
+ * `JSON.stringify(options.body)` ở tầng dưới. Đưa vào một chuỗi đã stringify
+ * là mã hoá HAI LẦN: máy chủ nhận `"{\"timeline\":[…]}"` — một chuỗi, không
+ * phải object — nên mọi trường đều `undefined` và nó trả 400.
+ *
+ * Hỏng kiểu này KHÔNG thấy được trên màn hình: giao diện đã đổi lạc quan từ
+ * trước, `.catch()` im lặng nạp lại, và người dùng chỉ thấy thay đổi của mình
+ * lặng lẽ quay về như cũ vài giây sau. Đo bằng cách hỏi thẳng máy chủ mới ra.
+ */
 
 type Scope = 'today' | 'week' | 'month';
 
@@ -63,6 +77,26 @@ interface DashboardData {
   tasks: Task[];
   celebratedToday: boolean;
 }
+
+/**
+ * Bộ hoạt động — GIỮ ĐÚNG khoá và nhãn của bản web (`Timeline.tsx`).
+ *
+ * Cùng một `timeline` được cả hai bên đọc/ghi. Đặt thêm một khoá chỉ desktop
+ * biết thì mở bên web sẽ thấy một ô có màu mà không có tên; đổi nhãn thì cùng
+ * một giờ hiện hai chữ khác nhau ở hai nơi.
+ */
+const HOAT_DONG = [
+  { khoa: 'study',    ten: 'Học tập',    mau: '#7c3aed', Icon: BookOpen },
+  { khoa: 'work',     ten: 'Làm việc',   mau: '#0891b2', Icon: Briefcase },
+  { khoa: 'exercise', ten: 'Thể dục',    mau: '#059669', Icon: Dumbbell },
+  { khoa: 'cook',     ten: 'Nấu ăn',     mau: '#ea580c', Icon: UtensilsCrossed },
+  { khoa: 'sleep',    ten: 'Đi ngủ',     mau: '#4f46e5', Icon: Moon },
+  { khoa: 'rest',     ten: 'Nghỉ ngơi',  mau: '#db2777', Icon: Coffee },
+  { khoa: 'leisure',  ten: 'Giải trí',   mau: '#d97706', Icon: Gamepad2 },
+  { khoa: 'social',   ten: 'Bạn bè',     mau: '#0d9488', Icon: Users },
+] as const;
+
+const THEO_KHOA = new Map(HOAT_DONG.map((h) => [h.khoa, h]));
 
 /** EXP cần cho một cấp. Khớp `src/utils/dashboard.ts` phía máy chủ. */
 const EXP_MOI_CAP = 100;
@@ -173,6 +207,93 @@ export function DashboardPage() {
    */
   const coHoatDong = (du?.timeline ?? []).some((s) => !!s.activity);
 
+  // ── Đặt hoạt động cho từng khung giờ ────────────────────
+  /** Giờ đang mở bảng chọn. `null` = không mở. */
+  const [dangChon, datDangChon] = useState<number | null>(null);
+  /** Hoạt động dùng gần nhất — trở thành "cọ" để KÉO tô nhiều giờ. */
+  const [co, datCo] = useState<string | null>(null);
+  const dangKeo = useRef(false);
+  /**
+   * Giờ nơi cú kéo BẮT ĐẦU.
+   *
+   * `mousedown` chưa tô gì cả (nó mở bảng chọn — bấm một ô là để ĐỔI hoạt động
+   * của ô đó). Nên nếu chỉ tô ở `mouseenter` thì kéo từ 3 đến 7 ra 4→7, mất
+   * đúng ô xuất phát. Giữ lại để tô bù ngay khi biết đây là một cú KÉO chứ
+   * không phải một cú bấm.
+   */
+  const gioBatDau = useRef<number | null>(null);
+  const henLuu = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /**
+   * Ghi cả 24 ô xuống máy chủ, HOÃN LẠI một nhịp.
+   *
+   * Kéo qua 8 tiếng ngủ là 8 lần đổi trạng thái. Gửi ngay mỗi lần là 8 lời gọi
+   * PUT chở cùng một mảng, và lần về sau có thể chen trước lần trước rồi ghi đè
+   * bằng dữ liệu cũ hơn. Gộp lại thành một lời gọi sau khi tay đã rời.
+   */
+  const luuDongThoiGian = useCallback((moi: TimelineSlot[]) => {
+    if (henLuu.current) clearTimeout(henLuu.current);
+    henLuu.current = setTimeout(() => {
+      void api?.request('/api/v1/dashboard/state', {
+        method: 'PUT', body: { timeline: moi },
+      }).catch(() => {
+        // Ghi hỏng ⇒ lấy lại bản của máy chủ, đừng để màn hình nói dối.
+        void nap();
+      });
+    }, 600);
+  }, [api, nap]);
+
+  const datGio = useCallback((gioSo: number, khoa: string | null, cungVoi?: number) => {
+    datDangChon(null);
+    setDu((c) => {
+      if (!c) return c;
+      const h = khoa ? THEO_KHOA.get(khoa as never) : null;
+      const dat = new Set([gioSo, ...(cungVoi === undefined ? [] : [cungVoi])]);
+      const moi = c.timeline.map((s) => (
+        dat.has(s.hour)
+          ? { hour: s.hour, ...(h ? { activity: { type: h.khoa, label: h.ten } } : {}) }
+          : s
+      ));
+      luuDongThoiGian(moi);
+      return { ...c, timeline: moi };
+    });
+    if (khoa) datCo(khoa);
+  }, [luuDongThoiGian]);
+
+  // Thả chuột ở BẤT KỲ đâu cũng phải kết thúc lượt kéo — thả ngoài dải mà vẫn
+  // coi là đang kéo thì mọi lần rê chuột sau đó đều tô bậy.
+  useEffect(() => {
+    const thoi = () => { dangKeo.current = false; };
+    window.addEventListener('mouseup', thoi);
+    return () => window.removeEventListener('mouseup', thoi);
+  }, []);
+
+  /**
+   * Đóng bảng chọn: Esc, hoặc bấm ra ngoài.
+   *
+   * ⚠️ KHÔNG dùng tấm phủ `position: fixed` để bắt cú bấm ngoài. Đã thử và
+   * hỏng: tấm phủ nằm ở ngữ cảnh xếp lớp khác nên `z-index` của bảng chọn
+   * không thắng được nó, và mọi cú bấm vào chính bảng đều bị tấm phủ nuốt —
+   * playwright báo thẳng "ct-tq-chon-nen intercepts pointer events". Lắng nghe
+   * ở `document` thì không có gì nằm đè lên ai.
+   */
+  useEffect(() => {
+    if (dangChon === null) return;
+    const phim = (e: KeyboardEvent) => { if (e.key === 'Escape') datDangChon(null); };
+    const bam = (e: MouseEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t?.closest('.ct-tq-chon') || t?.closest('.ct-tq-gio')) return;
+      datDangChon(null);
+    };
+    window.addEventListener('keydown', phim);
+    // `mousedown` chứ không `click`: bấm-rồi-kéo để tô cũng phải đóng bảng ngay.
+    document.addEventListener('mousedown', bam);
+    return () => {
+      window.removeEventListener('keydown', phim);
+      document.removeEventListener('mousedown', bam);
+    };
+  }, [dangChon]);
+
   /** Tick một việc. Đổi giao diện TRƯỚC rồi mới gọi máy chủ — tick mà phải chờ mạng thì cảm giác như app đơ. */
   const tick = async (t: Task) => {
     if (!api) return;
@@ -180,7 +301,7 @@ export function DashboardPage() {
     setDu((c) => c && ({ ...c, tasks: c.tasks.map((x) => (x.id === t.id ? { ...x, done: !x.done } : x)) }));
     try {
       await api.request(`/api/v1/dashboard/tasks/${t.id}`, {
-        method: 'PATCH', body: JSON.stringify({ done: !t.done }),
+        method: 'PATCH', body: { done: !t.done },
       });
       void nap(); // EXP/cấp do máy chủ tính — lấy lại con số thật
     } catch {
@@ -194,7 +315,7 @@ export function DashboardPage() {
     setDangThem(true);
     try {
       await api.request('/api/v1/dashboard/tasks', {
-        method: 'POST', body: JSON.stringify({ title: ten, scope: 'today', date: ngay }),
+        method: 'POST', body: { title: ten, scope: 'today', date: ngay },
       });
       setNhap('');
       await nap();
@@ -360,27 +481,81 @@ export function DashboardPage() {
       {du && (
         <section className="ct-tq-khoi">
           <div className="ct-tq-khoi-dau"><h2>Một ngày của bạn</h2></div>
-          <div className="ct-tq-dong" role="list">
-            {du.timeline.map((s) => (
+          <div className="ct-tq-dong">
+            {du.timeline.map((s) => {
+              const h = s.activity ? THEO_KHOA.get(s.activity.type as never) : null;
+              return (
+                <button
+                  key={s.hour}
+                  type="button"
+                  className="ct-tq-gio"
+                  data-co={!!s.activity}
+                  data-qua={s.hour < gio}
+                  data-nay={s.hour === gio}
+                  data-mo={dangChon === s.hour}
+                  style={h ? { background: h.mau } : undefined}
+                  onMouseDown={() => { dangKeo.current = true; gioBatDau.current = s.hour; datDangChon(s.hour); }}
+                  /* Kéo qua để tô hàng loạt bằng cọ vừa chọn. Không có nó thì
+                     đặt 8 tiếng ngủ là tám lần bấm + tám lần chọn. */
+                  onMouseEnter={() => {
+                    if (!dangKeo.current || !co) return;
+                    datDangChon(null);
+                    // Tô bù ô xuất phát ở lần rê đầu tiên.
+                    const bd = gioBatDau.current;
+                    gioBatDau.current = null;
+                    datGio(s.hour, co, bd === null ? undefined : bd);
+                  }}
+                  title={`${String(s.hour).padStart(2, '0')}:00${s.activity ? ` — ${s.activity.label}` : ''}`}
+                  aria-label={`Đặt hoạt động cho ${s.hour} giờ`}
+                >
+                  {s.hour % 3 === 0 && <span className="ct-tq-gio-nhan">{s.hour}</span>}
+                </button>
+              );
+            })}
+
+            {dangChon !== null && (
               <div
-                key={s.hour}
-                role="listitem"
-                className="ct-tq-gio"
-                data-co={!!s.activity}
-                data-qua={s.hour < gio}
-                data-nay={s.hour === gio}
-                title={s.activity ? `${String(s.hour).padStart(2, '0')}:00 — ${s.activity.label}` : `${String(s.hour).padStart(2, '0')}:00`}
-              >
-                {s.hour % 3 === 0 && <span className="ct-tq-gio-nhan">{s.hour}</span>}
+                  className="ct-tq-chon"
+                  /* Neo theo cột giờ, và kẹp lại để bảng không tràn khỏi mép
+                     phải khi bấm vào những giờ cuối ngày. */
+                  style={{ left: `${Math.min(Math.max(dangChon / 24, 0.02), 0.62) * 100}%` }}
+                >
+                  <div className="ct-tq-chon-dau">
+                    <strong>{String(dangChon).padStart(2, '0')}:00</strong>
+                    <button type="button" onClick={() => datDangChon(null)} aria-label="Đóng">
+                      <X size={13} aria-hidden />
+                    </button>
+                  </div>
+                  <div className="ct-tq-chon-luoi">
+                    {HOAT_DONG.map(({ khoa, ten, mau, Icon }) => (
+                      <button
+                        key={khoa}
+                        type="button"
+                        className="ct-tq-chon-muc"
+                        data-chon={du.timeline[dangChon]?.activity?.type === khoa}
+                        onMouseDown={(e) => { e.stopPropagation(); datGio(dangChon, khoa); }}
+                      >
+                        <span className="ct-tq-chon-cham" style={{ background: mau }} />
+                        <Icon size={13} aria-hidden />
+                        {ten}
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    className="ct-tq-chon-bo"
+                    onMouseDown={(e) => { e.stopPropagation(); datGio(dangChon, null); }}
+                  >
+                    Bỏ trống giờ này
+                  </button>
               </div>
-            ))}
+            )}
           </div>
-          {!coHoatDong && (
-            <p className="ct-tq-goi">
-              Phần đậm là số giờ đã trôi qua hôm nay. Đặt hoạt động cho từng khung giờ
-              ở bản web để dải này kể được cả ngày của bạn.
-            </p>
-          )}
+          <p className="ct-tq-goi">
+            {coHoatDong
+              ? 'Bấm một ô để đổi hoạt động. Chọn xong thì KÉO ngang để tô nhanh nhiều giờ liền nhau.'
+              : 'Phần đậm là số giờ đã trôi qua hôm nay. Bấm một ô để đặt hoạt động — chọn xong thì kéo ngang để tô cả một khoảng.'}
+          </p>
         </section>
       )}
 

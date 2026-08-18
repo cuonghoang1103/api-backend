@@ -117,17 +117,42 @@ jobs:
       #   2. timeout 300 + thử lại một lần — gương treo thì đổi lượt là qua
       #   3. `timeout-minutes` ở cấp JOB (bên trên) — dù có gì kẹt ở đâu thì
       #      cũng không job nào đốt quá số phút đó nữa
+      # ⚠️ ĐÃ TREO HAI LẦN, và lần thứ hai mới đọc được vì sao.
+      #
+      # 0.5.21: treo 12 tiếng (chưa có trần). 0.5.22: treo đủ 300s HAI LẦN
+      # rồi `exit 124`, KHÔNG in ra một dòng nào. `DEBIAN_FRONTEND` không
+      # cứu được ⇒ không phải debconf hỏi.
+      #
+      # Thủ phạm gần như chắc chắn: runner của GitHub chạy
+      # `unattended-upgrades` lúc khởi động và nó GIỮ KHOÁ dpkg. `apt-get`
+      # mặc định chờ khoá VÔ HẠN — nên nó đứng im, không lỗi, không thông
+      # báo. `DPkg::Lock::Timeout` là thứ duy nhất bảo nó bỏ cuộc.
+      #
+      # Bỏ luôn `-qq`: lần trước nó che mất chỗ kẹt, và một bước hay treo
+      # thì im lặng là thứ đắt nhất.
+      #
+      # `continue-on-error`: Windows và macOS đã dựng xong. Chặn cả bản
+      # phát hành vì MỘT thư viện đóng gói của Linux là đánh đổi tồi — bản
+      # .deb thiếu libsecret vẫn chạy, chỉ là người dùng Linux phải đăng
+      # nhập lại mỗi lần mở app. Có bản cài cho ba nền tảng, kém một chút ở
+      # một nền tảng, vẫn hơn không có bản nào.
       - name: Cài thư viện hệ thống (Linux)
         if: matrix.os == 'ubuntu-latest'
+        continue-on-error: true
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
           cai() {
-            sudo -E apt-get update -qq \
-              && sudo -E apt-get install -y --no-install-recommends libsecret-1-dev
+            sudo -E apt-get -o DPkg::Lock::Timeout=90 update \
+              && sudo -E apt-get -o DPkg::Lock::Timeout=90 install -y --no-install-recommends libsecret-1-dev
           }
-          timeout 300 bash -c "$(declare -f cai); cai" \
-            || { echo "apt treo hoặc hỏng — thử lại một lần"; timeout 300 bash -c "$(declare -f cai); cai"; }
+          timeout 240 bash -c "$(declare -f cai); cai" && exit 0
+          echo "::warning::apt lần 1 hỏng — chờ khoá dpkg rồi thử lại"
+          # In ra AI đang giữ khoá, để lần sau khỏi phải đoán.
+          sudo lsof /var/lib/dpkg/lock-frontend 2>/dev/null || true
+          timeout 240 bash -c "$(declare -f cai); cai" && exit 0
+          echo "::warning::KHÔNG cài được libsecret-1-dev. Bản .deb vẫn dựng, nhưng safeStorage không mã hoá được — người dùng Linux phải đăng nhập lại mỗi lần mở app."
+          exit 0
 
       - run: npm ci
         working-directory: desktop

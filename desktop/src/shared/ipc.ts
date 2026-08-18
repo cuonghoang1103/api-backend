@@ -90,6 +90,17 @@ export const settingKeySchema = z.enum([
    * nhìn — nhạc vẫn phát bình thường lúc thu, xem `PlayerBar.tsx`.
    */
   'playerThuGon',
+  /**
+   * Trợ lý Odin — ngôn ngữ nói ('vi' | 'en') và giọng của TỪNG ngôn ngữ.
+   *
+   * Ba khoá chứ không phải một: đổi ngôn ngữ rồi đổi lại thì giọng cũ phải còn
+   * nguyên. Gộp thành một khoá là mỗi lần chuyển tiếng lại phải chọn lại giọng.
+   */
+  'odinNgonNgu',
+  'odinGiongVi',
+  'odinGiongEn',
+  /** Odin có ĐỌC THÀNH TIẾNG câu trả lời không. Tắt được, vì có lúc cần yên. */
+  'odinNoiThanhTieng',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 

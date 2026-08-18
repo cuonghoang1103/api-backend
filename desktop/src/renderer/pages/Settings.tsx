@@ -12,6 +12,7 @@ import { Trash2 } from 'lucide-react';
 import { useAppState } from '../app-state';
 import { SyncPanel } from '../components/SyncPanel';
 import { UpdatePanel } from '../components/UpdatePanel';
+import { OdinPanel } from '../features/odin/OdinPanel';
 import type { ThemeSetting } from '../../shared/ipc';
 
 function formatBytes(bytes: number): string {
@@ -111,6 +112,8 @@ export function Settings() {
         <SyncPanel />
 
         <UpdatePanel />
+
+        <OdinPanel />
 
         <section className="ct-section">
           <h2>Dung lượng</h2>

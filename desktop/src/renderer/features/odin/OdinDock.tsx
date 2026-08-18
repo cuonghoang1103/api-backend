@@ -9,10 +9,12 @@
  * Nó KHÔNG che nội dung: nằm ở góc, kích thước nhỏ, và có thể tắt hẳn trong
  * Cài đặt. Một trợ lý mà không tắt được thì là một thứ chắn đường.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Mic, X } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useUpdateStatus } from '../../components/UpdateBanner';
+import { docThanhTieng, ngungNoi, phatTieng } from './giongNoi';
+import { hoiOdin } from './hoiOdin';
 import { useSession } from '../../auth/session';
 import { OdinRobot } from './OdinRobot';
 import { useOdin } from './useOdin';
@@ -21,6 +23,8 @@ import './odin.css';
 export function OdinDock() {
   const { navigate, settings, online } = useAppState();
   const { api } = useSession();
+  /** Ngôn ngữ Odin nói. Mặc định tiếng Việt — đây là app tiếng Việt. */
+  const ngonNgu: 'vi' | 'en' = settings.odinNgonNgu === 'en' ? 'en' : 'vi';
 
   const enabled = settings.robotEnabled !== false;
 
@@ -36,13 +40,7 @@ export function OdinDock() {
     api,
     online,
     enabled,
-    onTranscript: (text) => {
-      // Chuyển câu vừa nói sang AI Chat. Dùng sessionStorage vì đây là dữ liệu
-      // của đúng phiên cửa sổ này — không đáng ghi xuống đĩa, và không nên còn
-      // lại ở lần mở app sau.
-      sessionStorage.setItem('odin:transcript', text);
-      navigate('/chat');
-    },
+    onTranscript: (text) => { void traLoiBangTieng(text); },
   });
 
   // Phím tắt nhấn-giữ. Dùng phím ` (backquote) vì nó gần như không bao giờ
@@ -79,6 +77,41 @@ export function OdinDock() {
    * lại). Nói ở `checking` hay `downloading` là làm phiền để báo một thứ họ
    * không tác động được, và một trợ lý hay làm phiền sẽ bị tắt.
    */
+
+  /**
+   * Nghe xong thì TRẢ LỜI, và nói lại thành tiếng.
+   *
+   * Trước đây chỗ này chỉ nhét câu vừa nói vào `sessionStorage` rồi nhảy sang
+   * trang /chat — nên "nói với robot" thật ra chỉ là một cách gõ chữ bằng
+   * giọng, robot chưa từng đáp lại. Nay: hỏi trợ lý → hiện bong bóng → đọc.
+   *
+   * Đọc là TUỲ CHỌN (`odinNoiThanhTieng`) và mặc định bật. Tắt đi thì vẫn có
+   * câu trả lời bằng chữ — người đang ở chỗ đông người vẫn dùng được.
+   */
+  const traLoiBangTieng = useCallback(async (cauHoi: string) => {
+    if (!api) return;
+    // Cắt câu đang đọc dở: người dùng vừa hỏi câu mới thì câu cũ hết giá trị,
+    // và hai giọng chồng nhau thì không nghe ra chữ nào.
+    ngungNoi();
+    odin.announce(ngonNgu === 'en' ? 'Let me think…' : 'Để mình nghĩ chút…');
+    try {
+      const tra = await hoiOdin(api, cauHoi, ngonNgu);
+      if (!tra) {
+        odin.announce(ngonNgu === 'en' ? 'I did not catch that.' : 'Mình chưa nghĩ ra câu trả lời.');
+        return;
+      }
+      odin.announce(tra);
+      if (settings.odinNoiThanhTieng === false) return;
+      const giong = ngonNgu === 'en' ? settings.odinGiongEn : settings.odinGiongVi;
+      const blob = await docThanhTieng(api, tra, typeof giong === 'string' && giong ? giong : undefined);
+      await phatTieng(blob);
+    } catch (e) {
+      // Hỏng thì nói ra lý do NGẮN, và vẫn để lại câu chữ. Im lặng ở đây là
+      // kiểu hỏng tệ nhất: người dùng không biết mình có được nghe hay không.
+      odin.announce(`Mình gặp trục trặc: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  }, [api, odin, ngonNgu, settings]);
+
   const update = useUpdateStatus();
   /* Nhớ ĐÃ BÁO BẢN NÀO, không phải "đã báo hay chưa".
    * Một cờ boolean nghĩa là suốt phiên chỉ báo được đúng một lần — bản kế tiếp

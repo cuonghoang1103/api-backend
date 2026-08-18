@@ -26,6 +26,7 @@ import { ChuAgent } from './markdown';
 import {
   DaiDinhKem, DinhKemDaGui, NutDinhKem, ODinhKem, useDinhKem, type TepDinhKem,
 } from './DinhKem';
+import { NutGoiThoai } from './NutGoiThoai';
 
 interface ThuMuc {
   id: string;
@@ -229,12 +230,22 @@ export function ChatMode({ pro }: { pro: boolean }) {
   // và vẫn bị tính tiền, chỉ khác là không còn ai đọc.
   useEffect(() => () => huyRef.current?.abort(), []);
 
-  const guiDi = async (): Promise<void> => {
-    const text = nhap.trim();
+  /**
+   * Gửi một câu. TRẢ VỀ trọn câu trả lời để nút gọi thoại đọc thành tiếng.
+   *
+   * `nhapNgoai` để gọi được mà không đi qua state `nhap`: nút gọi thoại có sẵn
+   * câu vừa nhận dạng, mà `datNhap(x)` rồi gọi ngay `guiDi()` thì hàm vẫn đọc
+   * giá trị CŨ — state React chỉ đổi ở lần dựng sau.
+   */
+  const guiDi = async (nhapNgoai?: string): Promise<string> => {
+    const text = (nhapNgoai ?? nhap).trim();
     const tep = dk.tep;
     // Có đính kèm thì KHÔNG bắt buộc phải gõ chữ — máy chủ cũng cho vậy. Thả
     // một ảnh lỗi vào rồi bấm gửi là một câu hỏi hoàn chỉnh.
-    if ((!text && tep.length === 0) || dangChay || !api) return;
+    if ((!text && tep.length === 0) || dangChay || !api) return '';
+    // Gom song song với việc dựng giao diện: `luot` là state, đọc ngay sau vòng
+    // lặp sẽ ra bản cũ.
+    let traLoiDayDu = '';
 
     const truoc: Luot[] = [...luot, { vai: 'user', text, ...(tep.length ? { tep } : {}) }];
     datLuot(truoc);
@@ -315,6 +326,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
           if (e.type === 'chunk' && e.text) {
             datDangCho(false);
             const mieng = e.text;
+            traLoiDayDu += mieng;
             datLuot((cu) => {
               if (!daMo) { daMo = true; return [...cu, { vai: 'assistant', text: mieng }]; }
               const cuoi = cu[cu.length - 1];
@@ -359,6 +371,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
       // hỏi đầu, và nó chỉ có sau khi lượt chạy.
       void napDsPhien();
     }
+    return traLoiDayDu.trim();
   };
 
   const coGiDeGui = Boolean(nhap.trim()) || dk.tep.length > 0;
@@ -561,6 +574,9 @@ export function ChatMode({ pro }: { pro: boolean }) {
           }}
           disabled={dangChay}
         />
+        {/* Gọi thoại: giữ để nói, thả ra là gửi thẳng vào khung chat này —
+            nên câu nói nằm lại trong lịch sử, xem lại được như tin nhắn gõ tay. */}
+        <NutGoiThoai khoa={dangChay} onNoi={(cau) => guiDi(cau)} />
         {dangChay ? (
           <button type="button" className="ct-btn ct-agent-dung" onClick={() => huyRef.current?.abort()}>
             <CircleStop size={14} aria-hidden />

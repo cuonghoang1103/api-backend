@@ -2080,6 +2080,20 @@ code {
   background: var(--ct-hover);
 }
 
+/* ── Nút gọi thoại trong khung soạn tin ─────────────────── */
+.ct-goi.dang-nghe {
+  border-color: color-mix(in srgb, var(--ct-err) 60%, transparent);
+  color: var(--ct-err);
+  /* Nhịp đập khi micro ĐANG mở. Đây không phải trang trí: người dùng phải nhìn
+     ra ngay là máy đang nghe, không được để nghi ngờ chuyện đó. */
+  animation: ct-goi-dap 1.1s ease-in-out infinite;
+}
+@keyframes ct-goi-dap {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ct-err) 45%, transparent); }
+  50%      { box-shadow: 0 0 0 6px color-mix(in srgb, var(--ct-err) 0%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) { .ct-goi.dang-nghe { animation: none; } }
+
 /* ══════════════════════════════════════════════════════════
    PLAYLIST
    ══════════════════════════════════════════════════════════ */

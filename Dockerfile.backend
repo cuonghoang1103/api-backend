@@ -79,30 +79,13 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates tini ffmpeg libvips42 && rm -rf /var/lib/apt/lists/* && \
     useradd --uid 1001 --gid 0 --shell /bin/bash --create-home nodejs
 
-# yt-dlp: extracts YouTube audio for the "Download to site" music feature
-# (POST /api/v1/music/tracks/:id/download-audio). We use the self-contained
-# Linux binary so we DON'T need python3 in the runtime image; it shells out
-# to the ffmpeg installed above to transcode to mp3.
-#
-# ⛔ BẢN NIGHTLY, KHÔNG PHẢI BẢN PHÁT HÀNH ỔN ĐỊNH.
-#
-# YouTube đổi cách ký URL media liên tục, và yt-dlp vá trong ngày — nhưng bản
-# "latest release" có thể đứng yên hàng tuần. Đo thật 18/08/2026 với cùng một
-# video, cùng một máy:
-#     yt-dlp 2026.07.04 (bản phát hành)  →  HTTP Error 403: Forbidden
-#     yt-dlp 2026.08.17 (nightly)        →  tải 52,75 MB trong 8 giây
-#
-# Triệu chứng rất dễ chẩn đoán nhầm: lấy metadata vẫn 200, chỉ khâu tải dữ liệu
-# mới 403, nên nó trông y hệt "máy chủ bị chặn theo IP". Tôi đã kết luận sai
-# đúng như vậy, và chỉ vỡ ra khi thử trên máy nhà (IP dân cư) — nó CŨNG 403.
-# Cùng một máy, đổi sang nightly là chạy. Vậy thủ phạm là phiên bản, không phải
-# đường mạng.
-#
-# Mỗi lần deploy là dựng lại lớp này nên yt-dlp luôn mới; YouTube có siết nữa
-# thì chỉ cần deploy lại, không phải sửa mã.
-RUN curl -fsSL https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/latest/download/yt-dlp_linux \
-      -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp \
- && /usr/local/bin/yt-dlp --version
+# ⚠️ yt-dlp TỪNG được cài ở đây; nay nằm CUỐI tầng runner, không phải ở đây — xem cuối file.
+# Lý do: Docker dùng lại lớp RUN theo CHUỖI LỆNH, mà chuỗi này không bao giờ
+# đổi ⇒ nếu để nguyên chỗ cũ thì nó được tái dùng vĩnh viễn và yt-dlp ĐỨNG YÊN
+# mãi mãi, dù ghi chú cũ ở đây từng khẳng định ngược lại. Muốn nó thật sự mới
+# thì phải phá cache có chủ đích, và phá cache ở ĐẦU tầng runner sẽ kéo theo
+# mọi lớp phía sau — gồm cả `COPY node_modules` NẶNG 750MB ⇒ mỗi lần deploy
+# đẩy lại 750MB thay vì 40MB. Đặt ở cuối là để phá cache chỉ tốn đúng 40MB.
 
 # Create uploads directory
 RUN mkdir -p /app/uploads/images /app/uploads/audio /app/uploads/video /app/uploads/documents \
@@ -140,6 +123,32 @@ RUN chmod +x /usr/local/bin/fix-uploads-perms.sh
  # copies named paths only, so without this line the stroke endpoint 500s on
  # prod while working locally.
  COPY --from=builder --chown=1001:0 /app/data ./data
+
+# ─── yt-dlp (ĐẶT CUỐI CÙNG CÓ CHỦ ĐÍCH) ────────────────────────────────
+# yt-dlp tách tiếng YouTube cho tính năng "Tải về site"
+# (POST /api/v1/music/tracks/:id/download-audio). Dùng bản nhị phân Linux
+# tự chứa nên ảnh chạy KHÔNG cần python3; nó gọi ffmpeg cài ở trên để đổi mp3.
+#
+# ⛔ BẢN NIGHTLY, KHÔNG PHẢI BẢN PHÁT HÀNH ỔN ĐỊNH.
+# YouTube đổi cách ký URL media liên tục, yt-dlp vá trong ngày, còn bản
+# "latest release" có thể đứng yên hàng tuần. Đo thật 18/08/2026, cùng video,
+# cùng máy:  2026.07.04 (phát hành) → HTTP 403  ·  2026.08.17 (nightly) → tải
+# 52,75 MB trong 8 giây. Triệu chứng dễ chẩn nhầm: lấy metadata vẫn 200, chỉ
+# khâu tải dữ liệu mới 403, nên trông y hệt "bị chặn theo IP" — đã kết luận
+# sai đúng như vậy, chỉ vỡ ra khi thử trên máy nhà (IP dân cư) cũng 403.
+#
+# `YTDLP_NGAY` là để PHÁ CACHE: deploy-nha.sh truyền ngày hôm nay vào, nên lớp
+# này dựng lại mỗi ngày và yt-dlp luôn mới. Không có nó thì Docker tái dùng lớp
+# vĩnh viễn — đó là trạng thái trước 18/08/2026, và cái ghi chú cũ trong file
+# này khẳng định ngược lại là SAI.
+#
+# Vì nó nằm CUỐI, phá cache ở đây chỉ dựng lại 40MB. Đừng dời nó lên trên:
+# lên trên `COPY node_modules` là mỗi lần deploy đẩy lại 750MB.
+ARG YTDLP_NGAY=khong-ro
+RUN echo "yt-dlp bust: ${YTDLP_NGAY}" >/dev/null && \
+    curl -fsSL https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/latest/download/yt-dlp_linux \
+      -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp \
+ && /usr/local/bin/yt-dlp --version
 
 # Set environment
 ENV NODE_ENV=production

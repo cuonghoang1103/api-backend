@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2, X, Phone, Folder, FolderOpen, FolderPlus, Check, Search, BookOpen } from 'lucide-react';
+import { Home, Wifi, WifiOff, AlertCircle, RefreshCw, Plus, MessageSquare, Trash2, X, Folder, FolderOpen, FolderPlus, Check, Search, BookOpen } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
@@ -17,6 +17,7 @@ import MatrixRain from '@/components/chat/MatrixRain';
 import QuotaIndicator from '@/components/chat/QuotaIndicator';
 import ChatSkinToggle from '@/components/chat/ChatSkinToggle';
 import VoiceCallOverlay from '@/components/chat/VoiceCallOverlay';
+import { NutSongAm } from '@/components/chat/NutSongAm';
 import ContextBar from '@/components/chat/ContextBar';
 import { useChatSkinStore } from '@/store/chatSkinStore';
 import LottieClient from '@/components/ui/LottieClient';
@@ -1394,16 +1395,8 @@ export default function ChatPage() {
               </button>
             )}
 
-            {/* Gọi cho CuongMini — nói thay vì gõ */}
-            <button
-              type="button"
-              onClick={() => setCallOpen(true)}
-              title="Gọi cho CuongMini"
-              aria-label="Gọi cho CuongMini"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-[color:var(--studio-text-soft)] transition-colors hover:bg-[var(--studio-panel-soft)] hover:text-[color:var(--studio-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]"
-            >
-              <Phone className="h-4 w-4" />
-            </button>
+            {/* Nói chuyện — nút SÓNG ÂM, không phải ống nghe. Xem `NutSongAm`. */}
+            <NutSongAm onClick={() => setCallOpen(true)} tone="studio" />
 
             {/* Nút đổi giao diện — ngay cạnh nút về trang chủ */}
             <ChatSkinToggle tone="studio" />
@@ -1483,16 +1476,8 @@ export default function ChatPage() {
             </div>
           </div>
 
-          {/* Gọi cho CuongMini — nói thay vì gõ */}
-          <button
-            type="button"
-            onClick={() => setCallOpen(true)}
-            title="Gọi cho CuongMini"
-            aria-label="Gọi cho CuongMini"
-            className="flex items-center justify-center w-9 h-9 rounded-xl text-[#64748b] hover:text-[#22d3ee] hover:bg-[#22d3ee]/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22d3ee]/40"
-          >
-            <Phone className="w-4 h-4" />
-          </button>
+          {/* Nói chuyện — nút SÓNG ÂM, không phải ống nghe. Xem `NutSongAm`. */}
+          <NutSongAm onClick={() => setCallOpen(true)} tone="terminal" />
 
           {/* Nút đổi giao diện — ngay cạnh nút về trang chủ */}
           <ChatSkinToggle tone="terminal" />

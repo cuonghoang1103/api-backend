@@ -29,6 +29,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Mic, MicOff, PhoneOff, Volume2, VolumeX, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSpeech } from '@/hooks/useSpeech';
+import { useMicLevel } from '@/hooks/useMicLevel';
 import type { ChatSkin } from '@/store/chatSkinStore';
 
 type Phase = 'idle' | 'listening' | 'thinking' | 'speaking' | 'blocked';
@@ -164,6 +165,37 @@ export default function VoiceCallOverlay({
   }, [speaking, phase, beginListening]);
 
   // ── Chạm vòng tròn: cắt lời / bắt đầu nghe ────────────────────
+  /*
+   * ĐO BIÊN ĐỘ GIỌNG THẬT để vòng sáng nở theo tiếng nói.
+   *
+   * ⚠️ Phải mở một luồng micro RIÊNG chỉ để đo. Đường chính dùng
+   * `SpeechRecognition` của trình duyệt, và nó KHÔNG nhả luồng âm thanh ra
+   * cho ai — không có cách nào đọc biên độ từ đó.
+   *
+   * Luồng này đóng ngay khi thôi nghe: để nó sống thì đèn micro của máy vẫn
+   * sáng sau khi người dùng đã ngừng nói, và họ có mọi lý do để nghĩ app
+   * đang nghe lén.
+   */
+  const { level: mucGiong, batDau: doGiong, dungLai: thoiDo } = useMicLevel();
+
+  useEffect(() => {
+    if (phase !== 'listening') { thoiDo(); return; }
+    let song = true;
+    let luong: MediaStream | null = null;
+    void navigator.mediaDevices?.getUserMedia({ audio: true })
+      .then((s) => {
+        if (!song) { s.getTracks().forEach((t) => t.stop()); return; }
+        luong = s;
+        doGiong(s);
+      })
+      .catch(() => { /* không đo được thì thôi — hoạt hình lùi về nhịp đều */ });
+    return () => {
+      song = false;
+      thoiDo();
+      luong?.getTracks().forEach((t) => t.stop());
+    };
+  }, [phase, doGiong, thoiDo]);
+
   const tapOrb = useCallback(() => {
     if (phase === 'speaking') { stopSpeak(); return; }  // cắt lời → effect trên sẽ nghe tiếp
     if (phase === 'listening') { stopListen(); setPhase('idle'); return; }
@@ -268,10 +300,27 @@ export default function VoiceCallOverlay({
               />
             </>
           )}
+          {/* Quầng nở theo GIỌNG THẬT — chỉ khi đang nghe. Đây là thứ phân
+              biệt "micro đang nghe thấy tôi" với "hoạt hình đang chạy". */}
+          {phase === 'listening' && (
+            <span
+              className="pointer-events-none absolute inset-0 rounded-full bg-[#6366f1]"
+              style={{
+                opacity: Math.min(0.4, mucGiong * 3.2),
+                transform: `scale(${1 + Math.min(0.45, mucGiong * 4)})`,
+                transition: 'opacity 110ms linear, transform 110ms linear',
+              }}
+            />
+          )}
           <motion.span
             className="relative flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] text-2xl font-bold text-white shadow-[0_10px_40px_rgba(99,102,241,0.35)] sm:h-32 sm:w-32"
             animate={reduceMotion ? undefined : { scale: active ? [1, 1.04, 1] : 1 }}
             transition={{ duration: 2.4, repeat: active ? Infinity : 0, ease: 'easeInOut' }}
+            /* Nở theo giọng chồng lên nhịp thở — nhịp thở cho biết "đang bật",
+               còn phần nở này cho biết "đang nghe thấy bạn". */
+            style={phase === 'listening'
+              ? { scale: 1 + Math.min(0.14, mucGiong * 1.6) }
+              : undefined}
           >
             {phase === 'thinking' || uploading
               ? <Loader2 className="h-7 w-7 animate-spin" />

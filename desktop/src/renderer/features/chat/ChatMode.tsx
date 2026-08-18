@@ -21,6 +21,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   CircleStop, FolderOpen, FolderPlus, History, MessageSquare, Plus, Send, Trash2, X, Search, BookOpen } from 'lucide-react';
 import { useAppState } from '../../app-state';
+import { docThanhTieng, ngungNoi, phatTieng } from '../odin/giongNoi';
+import { ManGoi } from './ManGoi';
 import { DangNghi } from './DangNghi';
 import { useSession } from '../../auth/session';
 import { ChuAgent } from './markdown';
@@ -155,6 +157,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
      xong — giữ riêng ở đây thì đổi cuộc là mất, mà người dùng vẫn muốn thấy
      nguồn của câu trả lời cũ khi cuộn lên. */
   const [buocDangChay, datBuocDangChay] = useState<Array<{ viec: string; chu: string }>>([]);
+  const [moManGoi, datMoManGoi] = useState(false);
   const [loi, datLoi] = useState<string | null>(null);
   /** Máy chủ đã HẠ BẬC lượt này chưa, và vì sao — xem khung `model` của SSE. */
   const [roiBac, datRoiBac] = useState<string | null>(null);
@@ -322,6 +325,40 @@ export function ChatMode({ pro }: { pro: boolean }) {
    *   Lượt GÕ TAY thì KHÔNG khoá ngôn ngữ: người dùng gõ tiếng gì muốn được
    *   trả lời tiếng đó, và thiết đặt kia là thiết đặt của trợ lý GIỌNG NÓI.
    */
+  /**
+   * Một lượt của màn NÓI CHUYỆN: tiếng đã thu → chữ → câu trả lời → tiếng.
+   *
+   * Đi qua đúng `guiDi` của khung chat, nên cuộc nói chuyện được lưu vào
+   * chính phiên đang mở — đóng màn gọi ra là thấy toàn bộ dạng chữ, không
+   * phải một cuộc trò chuyện song song biến mất khi tắt.
+   */
+  const luotGoi = useCallback(async (tiengBase64: string) => {
+    if (!api) throw new Error('Chưa đăng nhập.');
+    const blob = await (await fetch(`data:audio/webm;base64,${tiengBase64}`)).blob();
+    const form = new FormData();
+    form.append('audio', blob, 'goi.webm');
+    const r = await fetch(`${api.baseUrlForForms()}/api/v1/ai/stt`, {
+      method: 'POST', headers: api.authHeaders(), body: form, credentials: 'omit',
+    });
+    const than = await r.json() as { message?: string; data?: { text?: string } };
+    if (!r.ok) throw new Error(than.message ?? `Nghe hỏng (${r.status})`);
+    const cau = than.data?.text?.trim() ?? '';
+    if (!cau) return { traLoi: '', phat: async () => {}, ngung: () => {} };
+
+    const traLoi = await guiDi(cau, true);
+    const giong = settings.odinNgonNgu === 'en' ? settings.odinGiongEn : settings.odinGiongVi;
+    return {
+      traLoi,
+      phat: async () => {
+        if (settings.odinNoiThanhTieng === false || !traLoi) return;
+        const t = await docThanhTieng(api, traLoi, typeof giong === 'string' && giong ? giong : undefined);
+        await phatTieng(t);
+      },
+      ngung: () => ngungNoi(),
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [api, settings]);
+
   const guiDi = async (nhapNgoai?: string, tuMicro = false): Promise<string> => {
     const text = (nhapNgoai ?? nhap).trim();
     const tep = dk.tep;
@@ -687,6 +724,22 @@ export function ChatMode({ pro }: { pro: boolean }) {
         />
         {/* Gọi thoại: giữ để nói, thả ra là gửi thẳng vào khung chat này —
             nên câu nói nằm lại trong lịch sử, xem lại được như tin nhắn gõ tay. */}
+        {/* Nút NÓI CHUYỆN — mở màn riêng, không phải giữ-để-nói.
+            Giữ-để-nói vẫn còn dùng được cho câu lẻ; nút này dành cho lúc
+            muốn nói chuyện rảnh tay. */}
+        <button
+          type="button"
+          className="ct-nut-goi"
+          data-nut="mogoi"
+          disabled={dangChay}
+          onClick={() => datMoManGoi(true)}
+          title="Nói chuyện — rảnh tay, tự nghe tiếp sau mỗi câu"
+          aria-label="Mở màn nói chuyện"
+        >
+          <span className="ct-nut-goi-song">
+            {[0, 1, 2].map((i) => <i key={i} style={{ animationDelay: `${i * 130}ms` }} />)}
+          </span>
+        </button>
         <NutGoiThoai khoa={dangChay} onNoi={(cau) => guiDi(cau, true)} />
         {dangChay ? (
           <button type="button" className="ct-btn ct-agent-dung" onClick={() => huyRef.current?.abort()}>
@@ -721,6 +774,12 @@ export function ChatMode({ pro }: { pro: boolean }) {
           {pro ? 'Tối đa 4 ảnh · 3 tài liệu mỗi lượt' : 'Đính kèm ảnh/tài liệu cần tài khoản Pro'}
         </span>
       </div>
+
+      {/* Màn nói chuyện phủ lên trên — đặt CUỐI cây để nó nằm trên mọi thứ
+          mà không phải đấu z-index với thanh công cụ và ô soạn. */}
+      {moManGoi && (
+        <ManGoi hoi={luotGoi} onDong={() => { ngungNoi(); datMoManGoi(false); }} />
+      )}
     </div>
   );
 }

@@ -5669,3 +5669,147 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   font-size: 10.5px;
   font-style: normal;
 }
+
+/* ── Nút mở màn nói chuyện ──
+   Tròn, có sóng âm — khác hẳn nút "Giữ để nói" bên cạnh, vì hai thứ này làm
+   hai việc khác nhau: một cái cho câu lẻ, một cái cho cả cuộc nói chuyện. */
+.ct-nut-goi {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ct-accent);
+  cursor: pointer;
+  transition: transform 0.15s var(--ct-ease), opacity 0.15s;
+}
+
+.ct-nut-goi:hover:not(:disabled) { transform: scale(1.07); }
+.ct-nut-goi:disabled { opacity: 0.4; cursor: default; }
+
+.ct-nut-goi-song { display: flex; align-items: center; gap: 2.5px; height: 14px; }
+.ct-nut-goi-song i {
+  display: block;
+  width: 2.5px;
+  height: 5px;
+  border-radius: 2px;
+  background: #fff;
+  animation: ct-goi-song 1s ease-in-out infinite;
+}
+
+@keyframes ct-goi-song {
+  0%, 100% { height: 5px; }
+  50% { height: 13px; }
+}
+
+/* ── Màn nói chuyện ── */
+.ct-goi-man {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  background: var(--ct-bg);
+}
+
+.ct-goi-dong {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ct-hover);
+  color: var(--ct-text-faint);
+  cursor: pointer;
+}
+
+.ct-goi-dong:hover { color: var(--ct-text); }
+
+/* Vòng sáng. `--no` (0…1) do JS đặt từ BIÊN ĐỘ MICRO THẬT — không phải hoạt
+   hình theo đồng hồ. Hoạt hình theo đồng hồ trông y hệt nhau dù người dùng
+   nói hay im, và người ta nhận ra ngay là nó giả. */
+.ct-goi-vong {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 132px;
+  height: 132px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ct-accent);
+  cursor: pointer;
+  /* Nở theo giọng, có trần để tiếng to không làm vòng nuốt cả màn hình. */
+  transform: scale(calc(1 + var(--no, 0) * 0.22));
+  transition: transform 90ms linear, background 0.2s;
+}
+
+.ct-goi-vong[data-pha='nghi'] { background: var(--ct-text-faint); }
+.ct-goi-vong[data-pha='dung'] { background: var(--ct-hover); }
+
+/* Quầng sáng nở theo giọng, mờ dần ra ngoài. */
+.ct-goi-quang {
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  background: var(--ct-accent);
+  opacity: calc(var(--no, 0) * 0.35);
+  transform: scale(calc(1 + var(--no, 0) * 0.35));
+  transition: opacity 120ms linear, transform 120ms linear;
+  pointer-events: none;
+}
+
+.ct-goi-vong[data-pha='noi'] .ct-goi-quang {
+  /* MÁY nói thì đập theo nhịp riêng — để mắt phân biệt được ai đang nói. */
+  opacity: 0.3;
+  animation: ct-goi-tho 1.5s ease-in-out infinite;
+}
+
+@keyframes ct-goi-tho {
+  0%, 100% { transform: scale(1); opacity: 0.18; }
+  50% { transform: scale(1.28); opacity: 0.4; }
+}
+
+.ct-goi-loi { display: flex; align-items: center; gap: 4px; height: 40px; }
+.ct-goi-loi i {
+  display: block;
+  width: 4px;
+  height: 10px;
+  border-radius: 3px;
+  background: #fff;
+  animation: ct-goi-song 0.9s ease-in-out infinite;
+}
+
+.ct-goi-vong[data-pha='dung'] .ct-goi-loi i,
+.ct-goi-vong[data-pha='nghi'] .ct-goi-loi i { animation: none; height: 10px; }
+
+.ct-goi-pha { margin: 0; font-size: 15px; font-weight: 500; color: var(--ct-text); }
+.ct-goi-tra {
+  margin: 0;
+  max-width: 460px;
+  max-height: 132px;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ct-text-faint);
+}
+.ct-goi-cau { margin: 0; font-size: 12px; font-style: italic; color: var(--ct-text-faint); }
+.ct-goi-nhac { margin: 0; font-size: 11.5px; color: var(--ct-text-faint); }
+.ct-goi-loi-chu { margin: 0; font-size: 12px; color: var(--ct-warn); }
+
+/* Người bật "giảm chuyển động" thì bỏ nhịp đập, NHƯNG giữ phần nở theo giọng
+   — đó là phản hồi cho hành động của họ, không phải hoạt hình trang trí. */
+@media (prefers-reduced-motion: reduce) {
+  .ct-goi-loi i,
+  .ct-nut-goi-song i { animation: none; }
+  .ct-goi-vong[data-pha='noi'] .ct-goi-quang { animation: none; }
+}

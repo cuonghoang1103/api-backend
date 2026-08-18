@@ -6,7 +6,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { phienAmSangViet } from './phienAm.js';
+import { readFileSync } from 'node:fs';
+
+import { phienAmSangViet, tuKhoaCongNghe } from './phienAm.js';
 
 test('tên có DẤU CHẤM không bị vỡ ra', () => {
   const r = phienAmSangViet('Dự án này dùng Node.js và Next.js.');
@@ -49,4 +51,29 @@ test('câu THẬT của model, trộn Việt và thuật ngữ', () => {
   assert.match(r, /gia-va/);
   assert.match(r, /phờ-rêm-goéc/);       // framework, có sẵn trong từ điển
   assert.match(r, /là .* giúp xây dựng ứng dụng/);  // phần tiếng Việt còn nguyên
+});
+
+test('từ tiếng Anh thường gặp (đợt bổ sung 19/08) được phiên âm', () => {
+  const mau: Array<[string, string]> = [
+    ['Bấm nút Submit ở cuối form', 'submit'],
+    ['Vào phần Dashboard xem Report', 'report'],
+    ['Cái component này render chậm', 'component'],
+    ['Anh gửi invoice cho customer chưa', 'invoice'],
+    ['Cắm charger vào rồi bật bluetooth lên', 'bluetooth'],
+    ['Kéo file lên webhook rồi chạy migration', 'migration'],
+  ];
+  for (const [cau, tu] of mau) {
+    const ra = phienAmSangViet(cau);
+    assert.ok(!new RegExp(`\\b${tu}\\b`, 'i').test(ra), `"${tu}" vẫn còn nguyên trong: ${ra}`);
+  }
+});
+
+test('TU_DIEN không có khoá nào bị ghi đè', () => {
+  // Object literal trong JS gộp khoá trùng KHÔNG báo lỗi — nên đếm dòng nguồn
+  // rồi so với số mục thực tế; lệch nghĩa là có khoá bị đè.
+  const src = readFileSync(new URL('./phienAm.ts', import.meta.url), 'utf8');
+  const batDau = src.indexOf('const TU_DIEN');
+  const than = src.slice(batDau, src.indexOf('\n};', batDau));
+  const dong = [...than.matchAll(/(?:^|[,{]\s*)\n?\s*'?([a-z0-9.+#-]+)'?:\s*'/gm)].length;
+  assert.equal(dong, tuKhoaCongNghe().length, 'có khoá trùng trong TU_DIEN');
 });

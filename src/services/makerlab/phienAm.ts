@@ -113,6 +113,62 @@ const TU_DIEN: Record<string, string> = {
   driver: 'đờ-rai-vơ', monitor: 'mo-ni-tơ', keyboard: 'ki-boóc',
   mouse: 'mao', chip: 'chíp', board: 'boóc', robot: 'rô-bốt',
 
+  // ── Giao diện / thao tác trên web (bổ sung 19/08/2026) ──
+  button: 'bắt-tần', form: 'phom', input: 'in-pút', output: 'ao-pút',
+  select: 'si-léc', option: 'óp-sừn', label: 'lây-bồ', title: 'tai-tồ',
+  header: 'he-đơ', footer: 'phút-tơ', sidebar: 'sai-ba', popup: 'póp-ắp',
+  modal: 'mô-đồ', tab: 'táp', tabs: 'táp', panel: 'pa-nồ', card: 'cát',
+  chart: 'chát', report: 'ri-pót', preview: 'pri-viu', publish: 'pắp-lít',
+  draft: 'đờ-ráp', archive: 'a-cai', filter: 'phiu-tơ', sort: 'sót',
+  list: 'lít', item: 'ai-tầm', content: 'con-ten', image: 'i-mịt',
+  photo: 'phô-tô', audio: 'ô-đi-ô', format: 'pho-mát', text: 'tét',
+  icon: 'ai-cần', avatar: 'a-va-ta', banner: 'ben-nơ', slider: 'sờ-lai-đơ',
+  dropdown: 'đờ-róp-đao', checkbox: 'chéc-bóc', toggle: 'tóc-gồ',
+
+  // ── Dữ liệu / máy chủ ──
+  admin: 'át-min', user: 'diu-dơ', users: 'diu-dơ', client: 'cờ-lai-ần',
+  service: 'sơ-vít', system: 'sít-tầm', default: 'đi-phôn', custom: 'cát-tầm',
+  export: 'ếch-sờ-pót', import: 'im-pót', sync: 'xinh', restore: 'ri-sờ-to',
+  migrate: 'mai-gờ-rêit', migration: 'mai-gờ-rê-sừn', schema: 'sờ-ki-mà',
+  table: 'tê-bồ', column: 'co-lầm', row: 'rô', index: 'in-đéc',
+  key: 'ki', value: 've-liu', null: 'nồ', payload: 'pê-lôt',
+  session: 'sét-sừn', cookie: 'cúc-ki', webhook: 'goép-húc', socket: 'sóc-kịt',
+  port: 'pót', host: 'hốt', domain: 'đô-mêin', proxy: 'pờ-róc-si',
+  firewall: 'phai-o-goa', encrypt: 'en-cờ-ríp', hash: 'hát',
+  certificate: 'sơ-ti-phi-kịt', license: 'lai-sần', quota: 'quô-tà',
+  middleware: 'mi-đồ-goe', crawler: 'cờ-rao-lơ', parser: 'pa-sơ',
+
+  // ── Lập trình (bổ sung) ──
+  loop: 'lúp', event: 'i-vần', handler: 'hen-đờ-lơ', hook: 'húc',
+  state: 'sờ-têit', props: 'pờ-róp', component: 'cầm-pô-nần',
+  render: 'ren-đơ', route: 'rao', syntax: 'sin-tác', compile: 'cầm-pai',
+  refactor: 'ri-phéc-tơ', lint: 'lin', typo: 'tai-pô', crash: 'cờ-rát',
+  fix: 'phích', patchset: 'pétch-sét', rollback: 'rôn-béc',
+  pipeline: 'pai-pờ-lain', workflow: 'goéc-phờ-lâu', trigger: 'tờ-ríc-gơ',
+  webpack: 'goép-pác', bundle: 'băn-đồ', minify: 'mi-ni-phai',
+
+  // ── Công việc / kinh doanh ──
+  feedback: 'phít-béc', support: 'sơ-pót', customer: 'cát-tơ-mơ',
+  partner: 'pát-nơ', budget: 'bắt-gịt', revenue: 're-vơ-niu',
+  profit: 'pờ-rô-phịt', startup: 'sờ-tát-ắp', investor: 'in-vét-tơ',
+  roadmap: 'rôt-máp', milestone: 'main-sờ-tôn', sprint: 'sờ-prin',
+  backlog: 'béc-lóc', scrum: 'sờ-cờ-rầm', kanban: 'căn-ban',
+  premium: 'pờ-ri-mi-ầm', trial: 'tờ-rai-ồ', billing: 'bin-ling',
+  invoice: 'in-voi', payment: 'pê-mần', refund: 'ri-phăn',
+  discount: 'đít-cao', subscription: 'sáp-cờ-ríp-sừn',
+
+  // ── Nội dung / mạng xã hội ──
+  podcast: 'pót-cát', channel: 'chen-nồ', subscribe: 'sáp-cờ-raib',
+  follow: 'phô-lâu', comment: 'com-men', post: 'pốt', story: 'sờ-to-ri',
+  thumbnail: 'thăm-nêu', caption: 'cáp-sừn', hashtag: 'hét-tác',
+  trend: 'tren', viral: 'vai-rồ', playlist: 'pờ-lây-lít',
+
+  // ── Phần cứng / đời thường ──
+  charger: 'chác-giơ', adapter: 'ơ-đáp-tơ', cable: 'kêi-bồ',
+  headphone: 'hét-phôn', speaker: 'sờ-pi-cơ', camera: 'ca-mê-ra',
+  microphone: 'mai-cờ-rô-phôn', bluetooth: 'bờ-lu-tút', hotspot: 'hót-sờ-pót',
+  printer: 'pờ-rin-tơ', scanner: 'sờ-ken-nơ', webcam: 'goép-kem',
+
   // ── Đời thường ──
   ship: 'síp', order: 'oóc-đơ', voucher: 'vao-chơ', sale: 'sêu',
   team: 'tim', meeting: 'mi-ting', deadline: 'đét-lain', project: 'pờ-rô-giéc',

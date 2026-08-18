@@ -180,17 +180,17 @@ function Robot() {
              câu hoặc phải tắt cả app. */
           <button
             type="button"
-            className="rb-song"
+            className="odin-mic rb-dung"
             onClick={() => { ngungPhat(); datTt('im'); }}
             title="Đang đọc — bấm để dừng"
             aria-label="Dừng đọc"
           >
-            {[0, 1, 2, 3, 4].map((i) => <i key={i} style={{ animationDelay: `${i * 90}ms` }} />)}
+            <span className="odin-wave" aria-hidden><i /><i /><i /><i /></span>
           </button>
         ) : (
           <button
             type="button"
-            className="rb-mic"
+            className="odin-mic"
             data-tt={tt}
             disabled={tt === 'nghi'}
             onPointerDown={() => void batDauNoi()}

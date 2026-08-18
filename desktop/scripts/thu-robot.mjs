@@ -97,7 +97,7 @@ if (tt.co) {
 
   // ── Nói với robot từ NGOÀI app ──
   // Đây là cái người dùng thiếu: robot nổi trên mọi cửa sổ nhưng chỉ GÕ được.
-  const nutMic = trang.locator('.rb-noi .rb-mic');
+  const nutMic = trang.locator('.rb-noi .odin-mic');
   check('có nút giữ-để-nói ngay dưới robot', await nutMic.count() === 1);
   check('nút nói KHÔNG nằm trong vùng kéo cửa sổ',
     await trang.locator('.rb-noi').evaluate((el) => getComputedStyle(el).webkitAppRegion) !== 'drag');
@@ -108,7 +108,18 @@ if (tt.co) {
   check('nút nói có kích thước bấm được', !!hop && hop.width >= 30 && hop.height >= 20,
     hop ? `${Math.round(hop.width)}×${Math.round(hop.height)}` : 'không thấy');
   // Sóng âm chỉ hiện KHI đang đọc — lúc nghỉ mà đã thấy thì nó là hình trang trí.
-  check('lúc nghỉ KHÔNG có sóng âm', await trang.locator('.rb-song').count() === 0);
+  check('lúc nghỉ KHÔNG có sóng âm', await trang.locator('.rb-noi .odin-wave').count() === 0);
+  // ⚠️ Robot nổi và robot TRONG APP phải là MỘT nhân vật. Bản đầu tôi dựng
+  // bộ nút riêng và người dùng nhìn ra ngay là hai kiểu khác nhau.
+  const kieu = await nutMic.evaluate((el) => {
+    const c = getComputedStyle(el);
+    return { rong: c.width, cao: c.height, nen: c.backgroundColor, bo: c.borderRadius };
+  });
+  check('nút nói dùng ĐÚNG kiểu của dock trong app (40×26, bo tròn hết)',
+    kieu.rong === '40px' && kieu.cao === '26px' && parseInt(kieu.bo, 10) >= 13,
+    `${kieu.rong}×${kieu.cao} · bo ${kieu.bo}`);
+  check('nền nút nói là màu MÀN HÌNH của robot, không phải nền mờ tự chế',
+    kieu.nen === 'rgb(27, 33, 66)', kieu.nen);
   // Bơm trạng thái 'doc' để kiểm sóng âm là NÚT DỪNG thật, không phải hoạt hình.
   const coSong = await trang.evaluate(() => {
     const n = document.querySelector('.rb-noi');

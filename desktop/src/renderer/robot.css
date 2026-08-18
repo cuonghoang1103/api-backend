@@ -195,49 +195,41 @@ body {
 .rb-chat-soan button:disabled { opacity: 0.45; cursor: default; }
 
 /* ── Nói với robot ──
-   Nút nằm DƯỚI robot, ngoài `.rb-than`: thân robot đã nhận bấm-một-lần,
-   bấm-hai-lần và kéo rồi. */
+   ⚠️ DÙNG LẠI `.odin-mic` + `.odin-wave` CỦA DOCK TRONG APP, không dựng bộ
+   riêng. Bản đầu tôi làm một bộ `.rb-mic`/`.rb-song` khác hẳn — 46×30 viền
+   trắng nền mờ, so với 40×26 nền xanh đen chữ bạc hà của dock. Người dùng
+   nhìn ra ngay: "cái mic ở ngoài không giống như khi đang ở trong app".
+   Robot nổi và robot trong app phải là MỘT nhân vật, không phải hai con
+   giống nhau mặc đồ khác. Dưới đây chỉ còn phần cửa sổ nổi cần thêm. */
 .rb-noi {
   display: flex;
   justify-content: center;
-  margin-top: -6px;
+  margin-top: -4px;
   -webkit-app-region: no-drag;   /* nếu không, kéo cửa sổ nuốt mất cú bấm */
 }
 
-.rb-mic,
-.rb-song {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  width: 46px;
-  height: 30px;
-  padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 15px;
-  background: rgba(20, 20, 34, 0.82);
-  color: #c9c9ec;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
-}
-
-.rb-mic:hover:not(:disabled) { color: #fff; border-color: rgba(255, 255, 255, 0.3); }
-.rb-mic:disabled { cursor: default; opacity: 0.7; }
-
-/* Đang nghe: đỏ và có quầng — phải nhìn là biết micro ĐANG bật. Một cái nút
-   đang thu mà trông y như lúc nghỉ là chỗ để người dùng bị thu trộm bởi chính
-   sự bất cẩn của giao diện. */
-.rb-mic[data-tt='nghe'] {
+/* Đang thu: dock đã có `[data-active]` màu đỏ. Cửa sổ nổi dùng `data-tt`
+   nên ánh xạ sang cùng một màu, để hai nơi báo "đang nghe" giống hệt nhau. */
+.rb-noi .odin-mic[data-tt='nghe'] {
+  background: #f2545b;
   color: #fff;
-  border-color: rgba(239, 68, 68, 0.85);
-  background: rgba(239, 68, 68, 0.28);
-  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.16);
 }
+
+.rb-noi .odin-mic:disabled { cursor: default; opacity: 0.75; }
+
+/* Đang ĐỌC: sóng âm kiêm nút DỪNG. Khác trạng thái "đang nghe" của dock, nên
+   phải khác màu — nếu không người dùng không phân biệt được lúc nào robot
+   nghe mình và lúc nào nó đang nói. */
+.rb-noi .odin-mic.rb-dung {
+  background: var(--odin-body);
+  color: #fff;
+}
+
+.rb-noi .odin-mic.rb-dung:hover { background: var(--odin-body-light); }
 
 .rb-xoay {
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
   border: 2px solid currentColor;
   border-top-color: transparent;
   border-radius: 50%;
@@ -246,28 +238,6 @@ body {
 
 @keyframes rb-quay { to { transform: rotate(360deg); } }
 
-/* Sóng âm khi đang đọc. Nó vừa là dấu hiệu "đang nói", vừa là NÚT DỪNG —
-   nên nó phải trông bấm được, không phải một hình trang trí. */
-.rb-song { border-color: rgba(139, 138, 245, 0.55); }
-.rb-song:hover { border-color: rgba(139, 138, 245, 0.95); background: rgba(139, 138, 245, 0.18); }
-
-.rb-song i {
-  display: block;
-  width: 3px;
-  height: 6px;
-  border-radius: 2px;
-  background: #8b8af5;
-  animation: rb-song 0.9s ease-in-out infinite;
-}
-
-@keyframes rb-song {
-  0%, 100% { height: 5px; opacity: 0.55; }
-  50%      { height: 17px; opacity: 1; }
-}
-
-/* Người bật "giảm chuyển động" thì sóng đứng yên — nhưng VẪN hiện, vì nó là
-   nút dừng chứ không phải hoạt hình cho vui. */
 @media (prefers-reduced-motion: reduce) {
-  .rb-song i { animation: none; height: 12px; }
   .rb-xoay { animation-duration: 2s; }
 }

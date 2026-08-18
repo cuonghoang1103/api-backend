@@ -12,14 +12,17 @@
  * ⚠️ TÊN TRƯỜNG. Máy chủ trả thẳng hình dạng model Prisma: `coverImage`,
  * `durationSeconds` — KHÔNG phải `coverUrl`/`duration`.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  CheckCircle2, CloudOff, Download, HardDrive, ListMusic, Loader2, Music2,
-  Pause, Play, Plus, RefreshCw, Search, Shuffle, Youtube,
+  CheckCircle2, CloudOff, Disc3, Download, HardDrive, ListMusic, Loader2, Maximize2,
+  Music2, Pause, Play, Plus, RefreshCw, Search, Shuffle, Youtube,
   Trash2,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
+import { NowPlaying } from './NowPlaying';
+import { PlaylistBar } from './PlaylistBar';
+import { RemixDeck } from './RemixDeck';
 import { clock, fold, formatBytes, laBaiYouTube, shuffled, useMusicPlayer, type Track } from './player';
 
 /** Một kết quả tìm trên YouTube — hình dạng của `GET /music/youtube-search`. */
@@ -44,6 +47,12 @@ export function MusicPage() {
   } = useMusicPlayer();
 
   const [query, setQuery] = useState('');
+  /** 'thuong' = thư viện thường · 'remix' = bàn DJ. Giống hai thẻ trên web. */
+  const [khu, setKhu] = useState<'thuong' | 'remix'>('thuong');
+  const [moToanManh, setMoToanManh] = useState(false);
+  /** Tăng lên là buộc dãy playlist nạp lại (vừa thêm bài vào một playlist). */
+  const [nhipPlaylist, setNhipPlaylist] = useState(0);
+  const [baiRemix, setBaiRemix] = useState<Track[]>([]);
 
   // ─── Tìm trực tuyến (YouTube) ────────────────────────────────
   const [ketQuaYT, setKetQuaYT] = useState<KetQuaYouTube[]>([]);
@@ -82,6 +91,18 @@ export function MusicPage() {
     }, 350);
     return () => { conSong = false; clearTimeout(bo); };
   }, [query, api, online]);
+
+  /* Bài REMIX là một KHO KHÁC, không phải bộ lọc của thư viện thường:
+     `GET /music/tracks` mặc định trả `category=NORMAL`, phải hỏi riêng
+     `category=REMIX`. Chỉ hỏi khi người dùng mở thẻ đó. */
+  const napRemix = useCallback(async () => {
+    if (!api) return;
+    try {
+      const ket = await api.request<unknown>('/api/v1/music/tracks?page=1&size=100&category=REMIX');
+      setBaiRemix(Array.isArray(ket) ? (ket as Track[]) : []);
+    } catch { setBaiRemix([]); }
+  }, [api]);
+  useEffect(() => { if (khu === 'remix') void napRemix(); }, [khu, napRemix]);
 
   // Phím tắt — CHỈ ở trang này. Đưa lên cấp app thì bấm dấu cách trong Ghi chú
   // sẽ dừng nhạc thay vì gõ khoảng trắng.
@@ -229,14 +250,53 @@ export function MusicPage() {
             Nghe trực tuyến, tìm thêm trên YouTube, hoặc tải về máy để nghe khi mất mạng.
           </p>
         </div>
-        <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void loadTracks()} disabled={!online}>
-          <RefreshCw size={14} aria-hidden />
-          Làm mới
-        </button>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <div className="ct-segmented" role="tablist" aria-label="Khu vực nhạc">
+            <button
+              type="button" role="tab" aria-selected={khu === 'thuong'}
+              data-active={khu === 'thuong'}
+              onClick={() => setKhu('thuong')}
+            >
+              NHẠC THƯỜNG
+            </button>
+            <button
+              type="button" role="tab" aria-selected={khu === 'remix'}
+              data-active={khu === 'remix'}
+              onClick={() => setKhu('remix')}
+            >
+              <Disc3 size={13} aria-hidden /> REMIX
+            </button>
+          </div>
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void loadTracks()} disabled={!online}>
+            <RefreshCw size={14} aria-hidden />
+            Làm mới
+          </button>
+        </div>
       </div>
 
+      {/* ─── Bàn DJ ─── */}
+      {khu === 'remix' && (
+        <>
+          <RemixDeck tracks={baiRemix.length > 0 ? baiRemix : tracks} />
+          {baiRemix.length === 0 && (
+            <p className="ct-muted" style={{ marginTop: 10 }}>
+              Chưa có bài nào ở kho REMIX — bàn DJ đang dùng tạm thư viện thường.
+            </p>
+          )}
+        </>
+      )}
+
+      {/* ─── Playlist ─── */}
+      {khu === 'thuong' && (
+        <PlaylistBar
+          onPhat={(bai, danhSach) => playTrack(bai, danhSach)}
+          baiDangPhat={currentId}
+          moiThem={nhipPlaylist}
+        />
+      )}
+
       {/* ─── Đang phát ─── */}
-      {current && (
+      {khu === 'thuong' && current && (
         <section className="ct-np" aria-label="Đang phát">
           {/* Nền mờ lấy chính ảnh bìa: mỗi bài một sắc riêng mà không cần bảng
               màu gõ tay cho từng bài. */}
@@ -257,6 +317,9 @@ export function MusicPage() {
               <p className="ct-np-eyebrow">Đang phát</p>
               <h2 className="ct-np-title" title={current.title}>{current.title}</h2>
               <p className="ct-np-artist">{current.artist || 'Không rõ nghệ sĩ'}</p>
+              <button type="button" className="ct-btn ct-btn-ghost ct-np-mo" onClick={() => setMoToanManh(true)}>
+                <Maximize2 size={13} aria-hidden /> Xem toàn màn hình
+              </button>
 
               {/* Dải nhịp trang trí, KHÔNG phải phổ tần thật. Phân tích phổ thật
                   cần đưa audio qua Web Audio, mà luồng nhạc là khác nguồn gốc
@@ -273,7 +336,7 @@ export function MusicPage() {
       )}
 
       {/* ─── Tấm bìa thư viện — thay chỗ trống lúc chưa nghe gì ─── */}
-      {!current && tracks.length > 0 && (
+      {khu === 'thuong' && !current && tracks.length > 0 && (
         <section className="ct-lib" aria-label="Thư viện">
           <div className="ct-lib-collage" aria-hidden>
             {anhBia.length > 0
@@ -300,6 +363,7 @@ export function MusicPage() {
       )}
 
       {/* ─── Thanh công cụ danh sách ─── */}
+      {khu === 'thuong' && (<>
       <div className="ct-music-toolbar">
         <label className="ct-music-search">
           <Search size={14} aria-hidden />
@@ -437,7 +501,17 @@ export function MusicPage() {
       {/* Thanh phát KHÔNG nằm ở đây nữa — nó ở `App.tsx`, sống qua mọi lần
           chuyển trang. Xem `PlayerBar.tsx`. Chừa chỗ để dòng cuối không bị nó
           che khi đang nghe. */}
+      </>)}
+
       {current && <div style={{ height: 8 }} aria-hidden />}
+
+      {/* ─── Màn ĐANG PHÁT toàn cảnh ─── */}
+      {moToanManh && current && (
+        <NowPlaying
+          onDong={() => setMoToanManh(false)}
+          onDaThemVaoPlaylist={() => setNhipPlaylist((n) => n + 1)}
+        />
+      )}
     </div>
   );
 }

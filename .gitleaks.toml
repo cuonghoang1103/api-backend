@@ -43,3 +43,24 @@ targetRules = ["generic-api-key"]
 paths = [
   '''frontend/public/playground/''',
 ]
+
+# ── Tên thẻ ảnh Docker của Postgres ────────────────────────────────────────
+# Rule `generic-api-key` đoán mò và bắt nhầm chuỗi `16-3.4-pgvector` trong
+#     image: ghcr.io/cuonghoang1103/api-backend-postgres:16-3.4-pgvector
+# vì nó trông giống chuỗi ngẫu nhiên đứng sau dấu hai chấm. Đây là TÊN THẺ ẢNH
+# Docker, không phải khoá — nội dung nó chỉ định là phiên bản Postgres 16 +
+# PostGIS 3.4 + pgvector.
+#
+# Miễn trừ theo CHUỖI CỤ THỂ chứ không theo file: nếu sau này có ai vô tình dán
+# một khoá thật vào docker-compose.yml thì vẫn bị chặn.
+[[allowlists]]
+description = "Thẻ ảnh Docker postgres pgvector — không phải khoá"
+targetRules = ["generic-api-key"]
+# ⚠️ `regexes` của gitleaks đối chiếu với CHUỖI BÍ MẬT nó trích ra (ở đây là
+# `16-3.4-pgvector`), KHÔNG phải cả dòng — nên phải đặt `regexTarget = "line"`
+# thì mới khớp được nguyên dòng `image:`. Viết regex theo dòng mà quên dòng này
+# thì luật miễn trừ im lặng không có tác dụng.
+regexTarget = "line"
+regexes = [
+  '''image:\s*ghcr\.io/[^/]+/api-backend-postgres:[0-9.]+-[0-9.]+-pgvector''',
+]

@@ -1,0 +1,14 @@
+# Postgres của production = postgis/postgis:16-3.4 + pgvector.
+#
+# Vì sao phải dựng ảnh riêng: ảnh postgis KHÔNG có pgvector, nên `CREATE
+# EXTENSION vector` báo "extension is not available" — không phải lỗi quyền,
+# mà là file .so không tồn tại trong ảnh.
+#
+# ⛔ PHẢI dựng FROM ĐÚNG ảnh prod đang chạy. Đổi sang ảnh pgvector/pgvector
+# thì mất postgis, và mọi bảng dùng kiểu geometry sẽ không nạp lại được.
+# Postgres 16 → 16, PostGIS 3.4 → 3.4, không đổi phiên bản nào.
+FROM postgis/postgis:16-3.4
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends postgresql-16-pgvector \
+ && rm -rf /var/lib/apt/lists/*

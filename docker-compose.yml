@@ -6,7 +6,19 @@
 services:
   # ─── PostgreSQL Database ─────────────────────────────────
   postgres:
-    image: postgis/postgis:16-3.4
+    # postgis/postgis:16-3.4 + pgvector, dựng từ Dockerfile.postgres.
+    #
+    # Vì sao phải dựng ảnh riêng (18/08/2026): ảnh postgis KHÔNG mang pgvector,
+    # nên `CREATE EXTENSION vector` báo "extension is not available" — không
+    # phải lỗi quyền mà là file .so không tồn tại trong ảnh. Và KHÔNG được đổi
+    # sang ảnh pgvector/pgvector: nó không có PostGIS, mọi bảng dùng kiểu
+    # geometry sẽ không nạp lại được. Nên ảnh này dựng FROM ĐÚNG ảnh cũ, giữ
+    # nguyên Postgres 16 và PostGIS 3.4.
+    #
+    # Đã thử trên BẢN SAO DỮ LIỆU THẬT ở máy nhà trước khi lên prod: 281 bảng /
+    # 223.382 dòng nạp đủ, postgis_version() vẫn 3.4, pgvector 0.8.6 chạy thật
+    # (truy vấn <-> ra đúng thứ tự, chỉ mục HNSW tạo được).
+    image: ghcr.io/cuonghoang1103/api-backend-postgres:16-3.4-pgvector
     container_name: cuonghoangdev_postgres
     restart: unless-stopped
     # Performance tuning sized for the 2G container on the 8GB VPS (2026-07-14).

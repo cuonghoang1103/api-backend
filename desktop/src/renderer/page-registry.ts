@@ -16,6 +16,7 @@
  */
 import type { ComponentType } from 'react';
 import { ChatPage } from './features/chat/ChatPage';
+import { DashboardPage } from './features/dashboard/DashboardPage';
 import { CvPage } from './features/cv/CvPage';
 import { MusicPage } from './features/music/MusicPage';
 import { NotesPage } from './features/notes/NotesPage';
@@ -23,6 +24,7 @@ import { ProPage } from './features/pro/ProPage';
 import { TechTrendsPage } from './features/tech-trends/TechTrendsPage';
 
 export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
+  '/dashboard': DashboardPage,
   '/chat': ChatPage,
   '/cv': CvPage,
   '/music': MusicPage,

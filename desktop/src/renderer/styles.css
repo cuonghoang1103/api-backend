@@ -4566,3 +4566,295 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   border-radius: 8px;
   border: 1px solid color-mix(in srgb, #fff 25%, transparent);
 }
+
+/* ════════════════════════════════════════════════════════════
+   TỔNG QUAN
+   ════════════════════════════════════════════════════════════
+   Chỉ dùng token `--ct-*`, KHÔNG đặt cứng màu nào: app có cả theme sáng lẫn
+   tối, và một mã màu cứng ở đây là một mảng đen trên nền trắng ở theme kia.
+   Xem [[feedback_dark_surface_needs_color_not_just_vars]]. */
+
+.ct-tq { max-width: 940px; }
+
+/* ── Lời chào ── */
+.ct-tq-chao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+.ct-tq-chao-chu {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--ct-text);
+}
+.ct-tq-chao-ngay {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: var(--ct-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ct-tq-cham {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--ct-text-faint);
+}
+
+/* Vòng EXP. `transform: rotate(-90deg)` để vạch chạy bắt đầu từ 12 giờ —
+   mặc định SVG bắt đầu từ 3 giờ, trông như đang lệch. */
+.ct-tq-cap { position: relative; width: 62px; height: 62px; flex-shrink: 0; }
+.ct-tq-vong { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ct-tq-vong-nen,
+.ct-tq-vong-chay {
+  fill: none;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+.ct-tq-vong-nen { stroke: var(--ct-border); }
+.ct-tq-vong-chay {
+  stroke: var(--ct-accent);
+  transition: stroke-dasharray var(--ct-motion) var(--ct-ease);
+}
+.ct-tq-cap-so {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  line-height: 1;
+}
+.ct-tq-cap-so strong { font-size: 19px; font-weight: 680; color: var(--ct-text); }
+.ct-tq-cap-so span { font-size: 9px; color: var(--ct-text-faint); margin-top: 2px; }
+
+/* ── Ba ô nhịp ── */
+.ct-tq-nhip {
+  display: grid;
+  /* `auto-fit` + `minmax` để cửa sổ hẹp thì tự xuống hàng thay vì bị bóp dẹp. */
+  grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.ct-tq-o {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 13px 15px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: var(--ct-surface);
+  text-align: left;
+}
+.ct-tq-o-icon { color: var(--ct-text-faint); margin-bottom: 2px; }
+.ct-tq-o-so {
+  font-size: 24px; font-weight: 660; line-height: 1;
+  color: var(--ct-text); font-variant-numeric: tabular-nums;
+}
+.ct-tq-o-so i { font-style: normal; font-size: 15px; color: var(--ct-text-faint); }
+.ct-tq-o-nhan { font-size: 11.5px; color: var(--ct-text-muted); }
+
+.ct-tq-o-thanh {
+  height: 3px; border-radius: 2px; margin-top: 7px;
+  background: var(--ct-border); overflow: hidden;
+}
+.ct-tq-o-thanh > div {
+  height: 100%; border-radius: 2px;
+  background: var(--ct-accent);
+  transition: width var(--ct-motion) var(--ct-ease);
+}
+
+/* Ô bấm được: chỉ sáng lên khi THẬT SỰ có gì để xem. Một ô "0 tin nhắn" mà vẫn
+   mời bấm là dẫn người dùng tới một trang rỗng. */
+.ct-tq-o-bam { cursor: pointer; transition: border-color var(--ct-motion) var(--ct-ease); }
+.ct-tq-o-bam:not(:disabled):hover { border-color: var(--ct-accent); }
+.ct-tq-o-bam:disabled { cursor: default; opacity: 0.55; }
+.ct-tq-o-bam:not(:disabled) .ct-tq-o-so,
+.ct-tq-o-bam:not(:disabled) .ct-tq-o-icon { color: var(--ct-accent-text); }
+
+/* ── Khối ── */
+.ct-tq-khoi { margin-bottom: 22px; }
+.ct-tq-khoi-dau {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.ct-tq-khoi-dau h2 {
+  margin: 0; font-size: 12px; font-weight: 620;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--ct-text-faint);
+}
+.ct-tq-xong-het {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; color: var(--ct-ok);
+}
+
+/* ── Thêm việc ── */
+.ct-tq-them { display: flex; gap: 8px; margin-bottom: 10px; }
+.ct-tq-them input {
+  flex: 1; min-width: 0;
+  padding: 9px 13px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  font-size: 13.5px;
+  outline: none;
+  transition: border-color var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-tq-them input:focus { border-color: var(--ct-accent); }
+.ct-tq-them input::placeholder { color: var(--ct-text-faint); }
+
+/* ── Danh sách việc ── */
+.ct-tq-ds { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.ct-tq-viec {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 13px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface);
+  transition: border-color var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-tq-viec:hover { border-color: var(--ct-text-faint); }
+.ct-tq-viec-ten { flex: 1; min-width: 0; font-size: 13.5px; color: var(--ct-text); }
+/* Việc đã xong LÙI XUỐNG chứ không biến mất: thấy mình vừa làm được gì là
+   phần thưởng của cả trang này. */
+.ct-tq-viec[data-xong='true'] .ct-tq-viec-ten {
+  text-decoration: line-through;
+  color: var(--ct-text-faint);
+}
+.ct-tq-viec-exp {
+  font-size: 10.5px; color: var(--ct-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-tq-tick {
+  width: 19px; height: 19px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--ct-border);
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease),
+              border-color var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-tq-tick:hover { border-color: var(--ct-accent); }
+.ct-tq-viec[data-xong='true'] .ct-tq-tick {
+  background: var(--ct-accent);
+  border-color: var(--ct-accent);
+}
+
+/* Nút xoá chỉ hiện khi rê chuột vào dòng — luôn hiện thì mỗi dòng có một cái
+   thùng rác mời bấm nhầm. Vẫn hiện khi được focus bằng bàn phím. */
+.ct-tq-xoa {
+  display: inline-flex; padding: 3px;
+  border: none; background: transparent;
+  color: var(--ct-text-faint);
+  border-radius: 6px; cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--ct-motion-fast) var(--ct-ease), color var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-tq-viec:hover .ct-tq-xoa,
+.ct-tq-xoa:focus-visible { opacity: 1; }
+.ct-tq-xoa:hover { color: var(--ct-err); }
+
+.ct-tq-trong {
+  margin: 0; padding: 16px 2px;
+  font-size: 13px; color: var(--ct-text-faint);
+}
+
+/* ── Dòng thời gian 24 giờ ── */
+.ct-tq-dong {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 3px;
+  padding: 13px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: var(--ct-surface);
+}
+.ct-tq-gio {
+  position: relative;
+  height: 34px;
+  border-radius: 5px;
+  background: var(--ct-hover);
+  transition: background var(--ct-motion) var(--ct-ease);
+}
+.ct-tq-gio[data-co='true'] { background: var(--ct-accent); opacity: 0.75; }
+/* Giờ hiện tại: viền chứ không đổi nền — đổi nền thì nó lẫn với ô "có việc". */
+.ct-tq-gio[data-nay='true'] {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 1px;
+}
+.ct-tq-gio-nhan {
+  position: absolute; bottom: -16px; left: 0;
+  font-size: 9px; color: var(--ct-text-faint);
+}
+.ct-tq-dong { padding-bottom: 30px; }
+
+/* ── Đi nhanh ── */
+.ct-tq-nhanh {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px;
+}
+.ct-tq-link {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 13px 15px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--ct-motion) var(--ct-ease);
+}
+.ct-tq-link:hover { border-color: var(--ct-accent); }
+.ct-tq-link span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ct-tq-link strong { font-size: 13.5px; font-weight: 600; }
+.ct-tq-link em { font-style: normal; font-size: 11.5px; color: var(--ct-text-muted); }
+.ct-tq-link svg { color: var(--ct-text-faint); flex-shrink: 0; }
+
+/* ── Tổng quan: tinh chỉnh sau khi NHÌN bản dựng thật ── */
+
+/* Vòng EXP ở cấp 1 gần như rỗng, nhìn như hỏng. Con số viết ra mới trả lời
+   được "còn bao xa nữa". */
+.ct-tq-chao { align-items: flex-start; }
+.ct-tq-exp-chu {
+  margin: 0; text-align: right; line-height: 1.35;
+  display: flex; flex-direction: column;
+  font-size: 15px; font-weight: 640; color: var(--ct-text);
+  font-variant-numeric: tabular-nums;
+}
+.ct-tq-exp-chu i { font-style: normal; font-size: 12px; color: var(--ct-text-faint); font-weight: 500; }
+.ct-tq-exp-chu span { font-size: 11px; color: var(--ct-text-muted); font-weight: 500; }
+
+.ct-tq-khoi-phu {
+  margin-left: auto;
+  font-size: 11px; color: var(--ct-text-faint);
+}
+
+/* Dải 24 giờ: phần ĐÃ QUA đậm hơn phần sắp tới. Không có phân biệt này thì nó
+   là 24 ô xám hệt nhau — một hàng ô chết. */
+.ct-tq-gio { background: var(--ct-hover); opacity: 0.5; }
+.ct-tq-gio[data-qua='true'] { opacity: 1; }
+.ct-tq-gio[data-co='true'] { background: var(--ct-accent); opacity: 0.4; }
+.ct-tq-gio[data-co='true'][data-qua='true'] { opacity: 0.8; }
+.ct-tq-gio[data-nay='true'] { opacity: 1; background: var(--ct-accent); }
+
+.ct-tq-goi {
+  margin: 10px 0 0; font-size: 11.5px; line-height: 1.5;
+  color: var(--ct-text-faint);
+}
+
+/* Vòng EXP + chữ là MỘT khối, canh phải. */
+.ct-tq-tiendo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.ct-tq-exp-chu { text-align: left; }
+
+/* Tăng tương phản "đã qua" ↔ "sắp tới". Ở bản trước chênh nhau quá ít, nhìn
+   vẫn ra 24 ô hệt nhau — đúng thứ cần tránh. */
+.ct-tq-gio { opacity: 1; background: color-mix(in srgb, var(--ct-text) 5%, transparent); }
+.ct-tq-gio[data-qua='true'] { background: color-mix(in srgb, var(--ct-text) 17%, transparent); }
+.ct-tq-gio[data-co='true'] { background: color-mix(in srgb, var(--ct-accent) 35%, transparent); }
+.ct-tq-gio[data-co='true'][data-qua='true'] { background: color-mix(in srgb, var(--ct-accent) 70%, transparent); }
+.ct-tq-gio[data-nay='true'] { background: var(--ct-accent); }

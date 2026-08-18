@@ -19,9 +19,9 @@ import { useEffect, useRef, useState } from 'react';
 import {
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
-  Sparkles, SquareTerminal, Terminal, Undo2, X,
+  Sparkles, SquareTerminal, Terminal, Undo2, X, ChevronDown, Cpu, Zap,
 } from 'lucide-react';
-import type { AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, MucNoLuc } from '../../../shared/ipc';
+import type { AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, ModelAgent, MucNoLuc } from '../../../shared/ipc';
 import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
@@ -101,6 +101,15 @@ export function AgentMode({
 
   const doiMucNoLuc = async (m: MucNoLuc): Promise<void> => {
     await window.cuongthai?.agent.datMucNoLuc(m);
+    const w = await window.cuongthai?.agent.getWorkspace(cuocId);
+    if (w) datThuMuc(w);
+  };
+
+  const doiModel = async (m: ModelAgent): Promise<void> => {
+    await window.cuongthai?.agent.datModel(m);
+    // Đọc lại thư mục thay vì tự đặt trạng thái: nguồn sự thật là tiến trình
+    // main (nó mới là nơi ghi xuống đĩa). Tự đặt ở đây thì giao diện đổi ngay
+    // cả khi ghi hỏng — đúng kiểu lỗi chỉ lộ ra sau khi khởi động lại app.
     const w = await window.cuongthai?.agent.getWorkspace(cuocId);
     if (w) datThuMuc(w);
   };
@@ -310,10 +319,13 @@ export function AgentMode({
           </button>
         )}
 
-        <ChonMucNoLuc
-          muc={thuMuc?.mucNoLuc ?? 'canBang'}
+        <ChonModelVaMuc
+          muc={thuMuc?.mucNoLuc ?? 'vua'}
+          model={thuMuc?.model ?? 'sonnet-5'}
           khoa={trangThai.dangChay}
-          onChon={(m) => void doiMucNoLuc(m)}
+          info={info}
+          onChonMuc={(m) => void doiMucNoLuc(m)}
+          onChonModel={(m) => void doiModel(m)}
         />
 
         {trangThai.nguCanh && <VongNguCanh n={trangThai.nguCanh} />}
@@ -547,7 +559,7 @@ export function AgentMode({
             Dừng
           </button>
         ) : (
-          <button type="button" className="ct-btn" onClick={guiDi} disabled={!nhap.trim()}>
+          <button type="button" data-nut="gui" className="ct-btn" onClick={guiDi} disabled={!nhap.trim()}>
             <Send size={14} aria-hidden />
             Gửi
           </button>
@@ -607,36 +619,159 @@ function BangKeHoach({ viec }: { viec: AgentViec[] }) {
 }
 
 /**
- * Chọn cấp độ nỗ lực.
+ * MODEL + MỨC NỖ LỰC — một nút, một bảng.
  *
- * Nhãn nói bằng SỐ BƯỚC, không bằng tên model. Đây là thứ thật sự đổi — và nói
- * "nhanh/mạnh" theo model sẽ là nói dối: đo được model "nhẹ" chậm gấp 4 ở việc
- * gọi tool. Người dùng chọn ở đây là chọn "đào sâu tới đâu", nên nhãn phải nói
- * đúng điều đó.
+ * ─── VÌ SAO GỘP LÀM MỘT ───
+ * Sáu mức nỗ lực dàn thành sáu cái nút thì chiếm hết thanh công cụ, mà thanh
+ * đó đã có bảy thứ khác. Và hai lựa chọn này luôn được cân nhắc CÙNG NHAU —
+ * "dùng Opus ở mức Ultracode" là một quyết định, không phải hai.
+ *
+ * ─── VÌ SAO HAI DANH SÁCH RỜI, KHÔNG PHẢI MỘT THANH TRƯỢT ───
+ * Trực giác muốn một thanh "rẻ ↔ mạnh" gộp cả model lẫn số bước. Đo thật
+ * 18/08 nói không: con model rẻ nhất cổng bán (`gpt-5.6-terra`, 0,17/việc so
+ * với 1,23 của Sonnet 5) là con DUY NHẤT vỡ giữa vòng lặp gọi tool. Một thanh
+ * trượt mà đầu "tiết kiệm" là đầu hỏng thì nó là cái bẫy, không phải lựa chọn.
+ *
+ * Nhãn nói bằng SỐ ĐO ĐƯỢC — số bước, số giây, gấp mấy lần tiền — chứ không
+ * bằng tính từ. "Mạnh hơn" thì ai cũng bấm; "đắt gấp 2,3 lần và chậm hơn 23%"
+ * thì người ta bấm khi họ thật sự cần.
  */
-function ChonMucNoLuc({
-  muc, khoa, onChon,
-}: { muc: MucNoLuc; khoa: boolean; onChon: (m: MucNoLuc) => void }) {
-  const mucs: Array<{ id: MucNoLuc; nhan: string; mo: string }> = [
-    { id: 'nhanh', nhan: 'Nhanh', mo: 'tối đa 8 bước — hỏi nhanh, trả lời sớm' },
-    { id: 'canBang', nhan: 'Cân bằng', mo: 'tối đa 30 bước — mặc định' },
-    { id: 'ky', nhan: 'Kỹ', mo: 'tối đa 60 bước — đọc rộng, tự chạy test, tốn nhiều hạn mức hơn' },
-  ];
+const DS_MODEL: Array<{ id: ModelAgent; ten: string; mo: string }> = [
+  { id: 'sonnet-5', ten: 'Claude Sonnet 5', mo: 'nhanh nhất, rẻ nhất — mặc định' },
+  { id: 'opus-4-8', ten: 'Claude Opus 4.8', mo: 'đắt gấp 2,3 lần, chậm hơn 23% — việc khó' },
+  { id: 'gpt-sol', ten: 'GPT 5.6 Sol', mo: 'nhà khác — chậm hơn 59%, ý kiến thứ hai' },
+];
+
+const DS_MUC: Array<{ id: MucNoLuc; ten: string; mo: string }> = [
+  { id: 'thap', ten: 'Thấp', mo: '8 bước — hỏi nhanh, trả lời sớm' },
+  { id: 'vua', ten: 'Vừa', mo: '30 bước — mặc định' },
+  { id: 'cao', ten: 'Cao', mo: '60 bước — đọc rộng, tự chạy test' },
+  { id: 'ratCao', ten: 'Rất cao', mo: '100 bước · 5 agent phụ' },
+  { id: 'toiDa', ten: 'Tối đa', mo: '160 bước · 6 agent phụ' },
+  { id: 'ultracode', ten: 'Ultracode', mo: '260 bước · 10 agent phụ — chia việc, chạy song song, tự phản biện' },
+];
+
+function ChonModelVaMuc({
+  muc, model, khoa, info, onChonMuc, onChonModel,
+}: {
+  muc: MucNoLuc; model: ModelAgent; khoa: boolean; info: AgentInfo;
+  onChonMuc: (m: MucNoLuc) => void; onChonModel: (m: ModelAgent) => void;
+}) {
+  const [mo, datMo] = useState(false);
+  const boc = useRef<HTMLDivElement | null>(null);
+
+  // Đóng khi bấm ra ngoài. ⚠️ KHÔNG dùng lớp nền phủ toàn màn hình: lớp đó
+  // nuốt luôn cú bấm đầu tiên, nên bấm từ bảng này sang nút khác phải bấm hai
+  // lần — và lần đầu trông như app lag.
+  useEffect(() => {
+    if (!mo) return;
+    const ngoai = (e: MouseEvent) => {
+      if (boc.current && !boc.current.contains(e.target as Node)) datMo(false);
+    };
+    const phim = (e: KeyboardEvent) => { if (e.key === 'Escape') datMo(false); };
+    document.addEventListener('mousedown', ngoai);
+    document.addEventListener('keydown', phim);
+    return () => {
+      document.removeEventListener('mousedown', ngoai);
+      document.removeEventListener('keydown', phim);
+    };
+  }, [mo]);
+
+  // Bảng của MÁY CHỦ thắng bảng chép cứng ở trên. Con số bước là thứ máy chủ
+  // áp đặt, nên app tự khai "60 bước" trong khi máy chủ đã đổi thành 100 là
+  // một lời nói dối không ai phát hiện được. Bảng chép cứng chỉ để app còn
+  // chạy được với máy chủ cũ chưa khai hai trường này.
+  const dsMuc = info.mucNoLuc?.length
+    ? info.mucNoLuc.map((m) => {
+        const cu = DS_MUC.find((x) => x.id === m.id);
+        return {
+          id: m.id,
+          ten: m.ten,
+          mo: `${m.buoc} bước · ${m.viecPhu} agent phụ${cu && cu.id === 'ultracode' ? ' — chia việc, chạy song song, tự phản biện' : ''}`,
+        };
+      })
+    : DS_MUC;
+  const dsModel = info.models?.length
+    ? info.models.map((m) => ({ id: m.id as ModelAgent, ten: m.ten, mo: m.mo, dungDuoc: m.dungDuoc }))
+    : DS_MODEL.map((m) => ({ ...m, dungDuoc: true }));
+
+  const mucNay = dsMuc.find((m) => m.id === muc) ?? dsMuc[1] ?? DS_MUC[1]!;
+  const modelNay = dsModel.find((m) => m.id === model) ?? dsModel[0] ?? { ...DS_MODEL[0]!, dungDuoc: true };
+  // Tên ngắn cho cái nút — tên đầy đủ không lọt vào thanh công cụ.
+  const tenNgan = modelNay.ten.replace('Claude ', '').replace('GPT ', 'GPT ');
+
   return (
-    <div className="ct-noluc" role="group" aria-label="Cấp độ">
-      {mucs.map((m) => (
-        <button
-          key={m.id}
-          type="button"
-          className="ct-noluc-nut"
-          data-chon={m.id === muc}
-          disabled={khoa}
-          onClick={() => onChon(m.id)}
-          title={m.mo}
-        >
-          {m.nhan}
-        </button>
-      ))}
+    <div className="ct-chonmm" ref={boc}>
+      <button
+        type="button"
+        className="ct-chonmm-nut"
+        data-nut="modelmuc"
+        data-muc={muc}
+        data-model={model}
+        data-ultra={muc === 'ultracode'}
+        disabled={khoa}
+        onClick={() => datMo((v) => !v)}
+        title={khoa ? 'Đang chạy một việc — đổi sau khi xong' : `${modelNay.ten} · mức ${mucNay.ten}`}
+        aria-expanded={mo}
+      >
+        {muc === 'ultracode' ? <Zap size={12} aria-hidden /> : <Cpu size={12} aria-hidden />}
+        <span className="ct-chonmm-chu">{tenNgan}</span>
+        <span className="ct-chonmm-cham">·</span>
+        <span className="ct-chonmm-muc">{mucNay.ten}</span>
+        <ChevronDown size={11} aria-hidden />
+      </button>
+
+      {mo && (
+        <div className="ct-chonmm-bang" role="dialog" aria-label="Model và mức nỗ lực">
+          <p className="ct-chonmm-nhan">Model</p>
+          <ul className="ct-chonmm-ds">
+            {dsModel.map((m) => (
+              <li key={m.id}>
+                <button
+                  type="button"
+                  data-chon-model={m.id}
+                  data-chon={m.id === model}
+                  disabled={!m.dungDuoc}
+                  title={m.dungDuoc ? m.mo : 'Máy chủ chưa cắm khoá cho nhà cung cấp này'}
+                  onClick={() => onChonModel(m.id)}
+                >
+                  {m.id === model ? <Check size={12} aria-hidden /> : <span className="ct-chonmm-o" />}
+                  <span>
+                    <strong>{m.ten}</strong>
+                    <em>{m.dungDuoc ? m.mo : 'chưa cắm khoá trên máy chủ'}</em>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <p className="ct-chonmm-nhan">Mức nỗ lực</p>
+          <ul className="ct-chonmm-ds">
+            {dsMuc.map((m) => (
+              <li key={m.id}>
+                <button
+                  type="button"
+                  data-chon-muc={m.id}
+                  data-chon={m.id === muc}
+                  data-ultra={m.id === 'ultracode'}
+                  onClick={() => onChonMuc(m.id)}
+                >
+                  {m.id === muc ? <Check size={12} aria-hidden /> : <span className="ct-chonmm-o" />}
+                  <span>
+                    <strong>{m.ten}</strong>
+                    <em>{m.mo}</em>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <p className="ct-chonmm-chan">
+            Mức càng cao càng tốn hạn mức 5 giờ. Ultracode có thể dùng hết hạn mức
+            trong một việc — nó được sinh ra để làm cho xong hẳn, không để hỏi nhanh.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

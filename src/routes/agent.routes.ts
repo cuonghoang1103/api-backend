@@ -26,6 +26,8 @@ import { AGENT_TOOLS, ALL_CAPABILITIES } from '../services/agent/tools.js';
 import { soGioCuaSo, tranToken, xemHanMuc } from '../services/agent/quota.js';
 import { AgentInputError, runAgentTurn, type AgentEvent } from '../services/agent/turn.js';
 import { gatewayConfigured, modelFor } from '../services/llm/gateway.js';
+import { dsModelAgent } from '../services/agent/models.js';
+import { DS_MUC_NO_LUC } from '../services/agent/turn.js';
 
 const router = Router();
 router.use(authenticate);
@@ -77,6 +79,8 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
         pro,
         configured: gatewayConfigured(),
         model: modelFor('agent_code'),
+        models: dsModelAgent(),
+        mucNoLuc: DS_MUC_NO_LUC,
         capabilities: ALL_CAPABILITIES,
         limits: { tokenCap: tranToken(), windowHours: soGioCuaSo() },
         tools: AGENT_TOOLS.map((t) => ({
@@ -142,6 +146,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   const body = req.body as {
     messages?: unknown; capabilities?: unknown; workspace?: unknown;
     ghiChuDuAn?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
+    model?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
@@ -198,6 +203,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         workspace,
         ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
         mucNoLuc: body.mucNoLuc,
+        model: body.model,
         laPhu: body.laPhu,
         toolMcp: body.toolMcp,
         userId: req.userId,

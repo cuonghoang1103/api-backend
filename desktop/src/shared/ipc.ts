@@ -66,6 +66,7 @@ export const settingKeySchema = z.enum([
    * file thì mất mã.
    */
   'agentMucNoLuc',
+  'agentModel',
   /**
    * Chế độ đang mở ở /chat: 'chat' (trò chuyện) hay 'code' (lập trình).
    *
@@ -317,14 +318,31 @@ export const agentSendSchema = z.object({
 export const agentCuocSchema = z.object({ cuocId: cuocIdSchema });
 
 /**
- * Cấp độ nỗ lực. Quyết định SỐ BƯỚC agent được đi (8 / 30 / 60), KHÔNG quyết
- * định model — đo thật 17/08: với việc gọi tool, model "nhẹ" chậm gấp 4 và tốn
- * token gấp 9. Một thanh trượt "Nhanh ↔ Kỹ" mà đầu Nhanh lại chậm hơn là một
- * thanh trượt nói dối.
+ * Cấp độ nỗ lực — quyết định SỐ BƯỚC agent được đi và SỐ AGENT PHỤ nó được
+ * giao việc (8/1 · 30/3 · 60/3 · 100/5 · 160/6 · 260/10).
+ *
+ * ⚠️ NỖ LỰC VÀ MODEL LÀ HAI THỨ RỜI NHAU, và phải ở hai nút riêng. Trực giác
+ * muốn gộp ("mức thấp thì dùng model rẻ") nhưng đo thật cho kết quả ngược: con
+ * rẻ nhất trong bảng (`gpt-5.6-terra`, 0,17/việc) là con DUY NHẤT vỡ giữa vòng
+ * lặp gọi tool. Một thanh trượt mà đầu "tiết kiệm" lại là đầu hỏng thì nó
+ * không phải thanh trượt, nó là cái bẫy.
+ *
+ * ⚠️ TÊN CŨ (`nhanh`/`canBang`/`ky`) máy chủ vẫn nhận — người dùng bản app cũ
+ * không bị tụt mức. Nhưng app mới thì không gửi chúng nữa.
  */
-export const mucNoLucSchema = z.enum(['nhanh', 'canBang', 'ky']);
+export const mucNoLucSchema = z.enum(['thap', 'vua', 'cao', 'ratCao', 'toiDa', 'ultracode']);
 export type MucNoLuc = z.infer<typeof mucNoLucSchema>;
 export const agentMucNoLucSchema = z.object({ muc: mucNoLucSchema });
+
+/**
+ * Model agent dùng. App chỉ gửi MÃ NGẮN; tên model thật nằm ở danh sách trắng
+ * của máy chủ (`src/services/agent/models.ts`) và app không được đặt tên model
+ * tuỳ ý — nếu không thì ai sửa được gói tin cũng gọi được model đắt nhất cổng
+ * bán, bằng tiền của chủ web.
+ */
+export const modelAgentSchema = z.enum(['sonnet-5', 'opus-4-8', 'gpt-sol']);
+export type ModelAgent = z.infer<typeof modelAgentSchema>;
+export const agentModelSchema = z.object({ model: modelAgentSchema });
 
 /** Một việc trong kế hoạch agent công bố. */
 export interface AgentViec {
@@ -358,6 +376,8 @@ export interface AgentWorkspace {
   choChayLenh: boolean;
   /** Cấp độ nỗ lực đang chọn. */
   mucNoLuc: MucNoLuc;
+  /** Model đang chọn. Lưu xuống đĩa vì đây là SỞ THÍCH, không phải quyền. */
+  model: ModelAgent;
   /**
    * Đã bật cho agent SỬA file chưa.
    *
@@ -531,6 +551,22 @@ export interface AgentInfo {
   quota: AgentQuota | null;
   /** Ước lượng còn chạy được bao nhiêu VIỆC — con số người dùng hiểu được, khác "còn 3,4 triệu token". */
   soViecConLai: number | null;
+  /**
+   * Model agent dùng được, do MÁY CHỦ khai.
+   *
+   * `dungDuoc: false` = model có trong danh sách nhưng nhóm của nó chưa cắm
+   * khoá trên máy chủ. Phải hiện ra chứ không được lọc đi: người dùng chọn nó,
+   * nhận về lỗi, rồi không hiểu vì sao — còn tệ hơn thấy nó xám và biết lý do.
+   */
+  models?: Array<{ id: string; ten: string; mo: string; dungDuoc: boolean }>;
+  /**
+   * Bảng mức nỗ lực + SỐ BƯỚC, cũng do máy chủ khai.
+   *
+   * ⚠️ Chép cứng con số này vào app là mầm nói dối. Máy chủ deploy trước, app
+   * người dùng cập nhật sau — nên một bản app còn ghi "60 bước" trong khi máy
+   * chủ đã đổi thành 100 là chuyện bình thường, và không có lỗi nào để thấy.
+   */
+  mucNoLuc?: Array<{ id: MucNoLuc; ten: string; buoc: number; viecPhu: number }>;
 }
 
 /**
@@ -647,6 +683,7 @@ export const INVOKE_CHANNELS = {
   'agent:datCheDoLenh': agentCheDoLenhSchema,
   'agent:datCheDoNote': agentCheDoNoteSchema,
   'agent:datMucNoLuc': agentMucNoLucSchema,
+  'agent:datModel': agentModelSchema,
   'agent:hoanTac': agentCuocSchema,
   'agent:dsPhien': null,
   'agent:moPhien': agentMoPhienSchema,
@@ -897,6 +934,7 @@ export interface DesktopBridge {
     datCheDoNote(cuocId: string, bat: boolean): Promise<AgentWorkspace>;
     /** Đặt cấp độ nỗ lực. Đây LÀ thứ được lưu — nó là sở thích, không phải quyền. */
     datMucNoLuc(muc: MucNoLuc): Promise<void>;
+    datModel(model: ModelAgent): Promise<void>;
     /** Trả mọi file agent đã sửa trong việc này về nguyên trạng. */
     hoanTac(cuocId: string): Promise<{ soFile: number; loi: string[] }>;
     /** Các việc đã lưu, mới nhất trước. */

@@ -297,16 +297,48 @@ ${g.noiDung}
 
   // Mức nỗ lực nói cho model biết NGÂN SÁCH của nó, thay vì để nó tự đoán. Không
   // nói thì "nhanh" và "kỹ" cho ra cùng một hành vi, chỉ khác lúc bị cắt ngang.
-  if (opts.mucNoLuc === 'nhanh') {
-    muc.push(`NGÂN SÁCH: NHANH
-   Người dùng chọn mức NHANH — bạn chỉ có khoảng 8 bước. Đi thẳng vào câu hỏi,
+  if (opts.mucNoLuc === 'thap') {
+    muc.push(`NGÂN SÁCH: THẤP
+   Người dùng chọn mức THẤP — bạn chỉ có khoảng 8 bước. Đi thẳng vào câu hỏi,
    đọc đúng chỗ cần đọc, trả lời sớm. Chưa đủ dữ kiện thì nói rõ là chưa đủ và
-   mời họ hỏi lại ở mức Kỹ, đừng cố nhồi mọi thứ vào 8 bước.`);
-  } else if (opts.mucNoLuc === 'ky') {
-    muc.push(`NGÂN SÁCH: KỸ
-   Người dùng chọn mức KỸ — bạn có tới 60 bước. Được phép đọc rộng, đối chiếu
+   mời họ hỏi lại ở mức cao hơn, đừng cố nhồi mọi thứ vào 8 bước.`);
+  } else if (opts.mucNoLuc === 'cao') {
+    muc.push(`NGÂN SÁCH: CAO
+   Người dùng chọn mức CAO — bạn có tới 60 bước. Được phép đọc rộng, đối chiếu
    nhiều chỗ, chạy bộ kiểm rồi sửa tiếp cho tới khi xanh. Nhưng RỘNG không phải
    là LAN MAN: mỗi bước vẫn phải trả lời được "bước này để làm gì".`);
+  } else if (opts.mucNoLuc === 'ratCao' || opts.mucNoLuc === 'toiDa') {
+    const buoc = opts.mucNoLuc === 'toiDa' ? 160 : 100;
+    muc.push(`NGÂN SÁCH: ${opts.mucNoLuc === 'toiDa' ? 'TỐI ĐA' : 'RẤT CAO'}
+   Người dùng chọn mức rộng — bạn có tới ${buoc} bước, và họ đang trả tiền cho
+   độ chắc chắn chứ không phải cho tốc độ. Việc đáng làm thêm ở mức này:
+   • ĐỌC HẾT thứ liên quan trước khi kết luận, thay vì đọc một file rồi suy ra.
+   • Sửa xong thì CHẠY để kiểm, đừng dừng ở "chắc là đúng".
+   • Tự đặt lại câu hỏi "mình có đang giả định điều gì chưa kiểm không?" —
+     và nếu có thì đi kiểm điều đó.
+   Nhiều bước KHÔNG có nghĩa là phải dùng hết. Xong sớm thì trả lời sớm.`);
+  } else if (opts.mucNoLuc === 'ultracode') {
+    muc.push(`NGÂN SÁCH: ULTRACODE
+   Mức cao nhất — tới 260 bước và tối đa 10 agent phụ. Người dùng bật mức này
+   khi họ muốn việc được làm CHO XONG HẲN, chấp nhận tốn hạn mức.
+
+   Ở mức này hãy làm việc theo lối khác hẳn, không phải "giống mức Cao nhưng
+   lâu hơn":
+   • CHIA VIỆC RA TRƯỚC. Công bố kế hoạch bằng \`ke_hoach\` ngay từ đầu, rồi
+     bám theo nó — 260 bước không có kế hoạch thì thành 260 bước đi lạc.
+   • DÙNG AGENT PHỤ CHO VIỆC DÒ SONG SONG. Khi có nhiều hướng tìm hiểu ĐỘC LẬP
+     nhau ("mọi nơi đụng tới thanh toán" / "mọi nơi ghi log"), giao mỗi hướng
+     cho một agent phụ thay vì tự đi tuần tự. Việc phụ thuộc nhau thì KHÔNG —
+     agent phụ không thấy hội thoại của bạn và không nói chuyện với nhau được.
+   • TỰ PHẢN BIỆN TRƯỚC KHI CHỐT. Sau khi có kết luận, đi tìm bằng chứng NGƯỢC
+     LẠI một lượt. Ở mức này bạn có đủ bước để làm việc đó, và một kết luận
+     sai mà tự tin là thứ tốn thời gian nhất của người dùng.
+   • CHẠY THẬT ĐỂ KIỂM. Sửa mã thì chạy bộ kiểm/biên dịch; không có bộ kiểm thì
+     nói rõ là chưa có gì kiểm được, đừng để "trông có vẻ đúng" thay cho "đã
+     chạy đúng".
+
+   ⚠️ Hạn mức 5 giờ mới là trần thật, không phải 260 bước. Tiêu hết là việc
+   đứt giữa chừng, nên đừng lãng phí bước vào việc đọc lại thứ đã đọc.`);
   }
 
   muc.push(`TRẢ LỜI

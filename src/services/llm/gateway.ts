@@ -24,6 +24,7 @@
  * chúng còn đúng. Thấy model tên `rb-*` là biết đang nhìn vào đường đã chết.
  */
 
+import { logger } from '../../utils/logger.js';
 import { xinSlot, type MucUuTien } from './hangDoi.js';
 
 // ─── Địa chỉ + khoá ────────────────────────────────────────────────
@@ -51,6 +52,90 @@ export function gatewayKey(): string | undefined {
     process.env.ANTHROPIC_API_KEY ||
     undefined
   );
+}
+
+/**
+ * Khoá ĐÚNG NHÓM cho một model.
+ *
+ * ⚠️ MỘT KHOÁ CHỈ THUỘC MỘT NHÓM. Đo thật 18/08/2026: khoá đang ở nhóm
+ * `claude` gọi `grok-4.6` trả `503 No available channel for model grok-4.6
+ * under group claude`. Nên muốn dùng model của nhóm khác thì phải có khoá
+ * riêng của nhóm đó — không có cách nào lách bằng tham số.
+ *
+ * Chọn khoá theo TIỀN TỐ TÊN MODEL, vì tên model là thứ duy nhất nơi gọi nào
+ * cũng biết. Thiếu khoá của nhóm ⇒ rơi về khoá mặc định, và người dùng sẽ thấy
+ * đúng lỗi 503 nói rõ nhóm nào thiếu kênh — dễ lần ra hơn nhiều so với một lỗi
+ * chung chung.
+ *
+ * Thêm nhóm mới: đặt biến `LLM_GATEWAY_API_KEY_<TIỀN TỐ VIẾT HOA>`.
+ */
+export function gatewayKeyFor(model: string | undefined): string | undefined {
+  const tienTo = nhomCua(model);
+  if (!tienTo) return gatewayKey();
+  const rieng = process.env[`LLM_GATEWAY_API_KEY_${tienTo}`]?.trim();
+  return rieng || gatewayKey();
+}
+
+/** Nhóm của một model = tiền tố tên nó, viết hoa. `gpt-5.6-sol` → `GPT`. */
+function nhomCua(model: string | undefined): string {
+  return (model ?? '').split(/[-.]/)[0]?.toUpperCase() ?? '';
+}
+
+/**
+ * Nhóm mà KHOÁ MẶC ĐỊNH phục vụ. Cổng không nói ra điều này ở đâu cả — nhìn
+ * chuỗi khoá thì hai nhóm giống hệt nhau — nên nó phải được KHAI, không đoán.
+ * Mặc định `CLAUDE` vì đó là nhóm của khoá đang chạy trên production.
+ */
+function nhomMacDinh(): string {
+  return (process.env.LLM_GATEWAY_GROUP?.trim() || 'claude').toUpperCase();
+}
+
+/**
+ * MODEL LÙI khi nhóm của model chính chưa được cắm khoá.
+ *
+ * ⚠️ Đây là lưới đỡ CHO MỘT LỖI RẤT DỄ XẢY RA, không phải phòng xa. Bản đồ
+ * `PURPOSE_MODEL` sống trong mã và đi theo mỗi lần deploy; còn khoá thì sống
+ * trong `/opt/cuonghoangdev/.env` trên VPS và phải người thêm bằng tay. Hai
+ * thứ đó lệch nhịp nhau chỉ một lần là chín tính năng cùng trả `503 No
+ * available channel` — mà 503 nghe như "cổng đang bận", nên sẽ có người ngồi
+ * chờ nó tự khỏi.
+ *
+ * Lùi về Claude vì đó là nhóm của khoá mặc định trên production. Kèm giá đo
+ * thật 18/08 để thấy cái giá của việc quên: mỗi dòng dưới đây là một việc đang
+ * chạy đắt hơn dự tính.
+ */
+const MODEL_LUI: Record<string, string> = {
+  'gpt-5.4-mini': 'claude-sonnet-4-6',   // 0,116 → 0,597 (đắt gấp 5,1)
+  'gpt-5.6-terra': 'claude-sonnet-4-6',  // 0,484 → 0,597
+  'gpt-5.5': 'claude-sonnet-5',          // 1,144 → 0,801 (rẻ đi, nhưng vẫn là lùi)
+  'gpt-5.6-sol': 'claude-opus-4-8',      // 1,222 → 2,003 (đắt gấp 1,6)
+};
+
+/** Đã cắm khoá cho nhóm của model này chưa. */
+export function goiDuocModel(model: string): boolean {
+  const nhom = nhomCua(model);
+  if (!nhom || nhom === nhomMacDinh()) return !!gatewayKey();
+  return !!process.env[`LLM_GATEWAY_API_KEY_${nhom}`]?.trim();
+}
+
+/**
+ * Model thật sự gọi được. Trả về chính nó nếu nhóm đã có khoá; nếu chưa thì
+ * trả về model lùi và KÊU TO MỘT LẦN — im lặng ở đây là để người ta phát hiện
+ * ra qua hoá đơn.
+ */
+const daKeu = new Set<string>();
+export function modelGoiDuoc(model: string): string {
+  if (goiDuocModel(model)) return model;
+  const lui = MODEL_LUI[model];
+  if (!daKeu.has(model)) {
+    daKeu.add(model);
+    logger.warn(
+      lui
+        ? `[llm] chưa có LLM_GATEWAY_API_KEY_${nhomCua(model)} ⇒ "${model}" tạm chạy bằng "${lui}". Thêm khoá vào .env của VPS rồi khởi động lại backend.`
+        : `[llm] chưa có LLM_GATEWAY_API_KEY_${nhomCua(model)} và "${model}" không có model lùi — việc dùng nó sẽ trả 503.`,
+    );
+  }
+  return lui ?? model;
 }
 
 /** Có đủ khoá để gọi không. Thiếu khoá ⇒ mọi module tự hạ xuống chế độ tĩnh. */
@@ -258,11 +343,30 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * Đổi từng việc mà không cần deploy: đặt `LLM_MODEL_<TÊN VIỆC VIẾT HOA>`.
    */
 
-  // Hội thoại: Max lấy model mạnh nhất; Pro lấy sonnet-5 vì nhanh hơn rõ
-  // (đo: opus 8,5s · sonnet-5 3,7s cho cùng câu) mà vẫn thuộc nhóm mạnh —
-  // trong hội thoại, độ trễ là thứ người dùng cảm thấy trước cả chất lượng.
+  /**
+   * ⚠️ TỪ 18/08/2026 BẢN ĐỒ NÀY DÙNG HAI KHOÁ, KHÔNG PHẢI MỘT.
+   *
+   * Một token của cổng New API thuộc về ĐÚNG MỘT nhóm. Khoá cũ nằm nhóm
+   * `claude` và `GET /v1/models` của nó KHÔNG có model gpt nào; khoá GPT mới
+   * thì ngược lại. Nên hễ có một dòng `gpt-*` ở dưới thì `gatewayKeyFor()`
+   * phải tìm được `LLM_GATEWAY_API_KEY_GPT` trong env, nếu không việc đó gọi
+   * bằng khoá Claude và ăn `503 No available channel`.
+   *
+   * Giá đo thật 18/08 (chênh lệch sổ của cổng, mỗi model 3 lượt cùng một câu):
+   *   gpt-5.4-mini 0,116/lượt · gpt-5.6-terra 0,484 · claude-sonnet-4-6 0,597
+   *   claude-sonnet-5 0,801 · gpt-5.5 1,144 · gpt-5.6-sol 1,222
+   *   claude-opus-4-8 2,003
+   * Cả bảy đều qua hai bẫy suy luận (bèo phủ ao 47 · đếm r trong strawberry 3)
+   * và đều gọi tool đúng tham số. Nên chỗ nào KHÔNG cần đọc kỹ thì con rẻ
+   * nhất là con đúng.
+   */
+
+  // Hội thoại: Max đổi sang gpt-5.6-sol — rẻ hơn opus 39% mà vẫn qua sạch bộ
+  // kiểm. Pro giữ sonnet-5: đo theo TOKEN RA thì sonnet-5 rẻ hơn gpt-5.5 tới
+  // 39% (1,486 so với 2,419 mỗi 1k token ra); gpt-5.5 chỉ "rẻ hơn mỗi lượt"
+  // vì nó viết câu trả lời NGẮN HƠN, mà ngắn hơn không phải là rẻ hơn.
   chat_pro: 'claude-sonnet-5',
-  chat_max: 'claude-opus-4-8',
+  chat_max: 'gpt-5.6-sol',
   // Lượt có ảnh lấy model mạnh nhất. Bài học cũ vẫn nguyên giá trị: model yếu
   // NHẬN được ảnh, không báo lỗi, và BỊA nội dung — sai mà trôi chảy thì tệ
   // hơn hẳn một lỗi. Chưa đo lại khả năng nhìn của bộ Claude này.
@@ -270,21 +374,21 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   chat_free_fallback: 'claude-sonnet-4-6',
 
   interview_grade: 'claude-sonnet-5',
-  interview_report: 'claude-opus-4-8',
+  interview_report: 'gpt-5.6-sol',
   interview_generate: 'claude-sonnet-5',
 
   language_tutor: 'claude-sonnet-5',
-  language_bulk: 'claude-sonnet-4-6',
+  language_bulk: 'gpt-5.4-mini',
 
   codelab_coach: 'claude-sonnet-5',
-  codelab_bulk: 'claude-sonnet-4-6',
+  codelab_bulk: 'gpt-5.4-mini',
 
-  cv_critique: 'claude-opus-4-8',
+  cv_critique: 'gpt-5.6-sol',
   cv_writing: 'claude-sonnet-5',
-  cv_parse: 'claude-sonnet-4-6',
+  cv_parse: 'gpt-5.4-mini',
 
   exam_grade: 'claude-sonnet-5',
-  exphub_doc: 'claude-sonnet-4-6',
+  exphub_doc: 'gpt-5.4-mini',
   /**
    * OCR đề thi lấy model MẠNH NHẤT, không hạ để tiết kiệm.
    *
@@ -293,8 +397,8 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * thi sai là lỗ.
    */
   doc_ocr: 'claude-opus-4-8',
-  news_bulletin: 'claude-sonnet-4-6',
-  robot_voice: 'claude-sonnet-4-6',
+  news_bulletin: 'gpt-5.4-mini',
+  robot_voice: 'gpt-5.4-mini',
 
   /**
    * Agent gọi tool — bài học cũ về `gpt-5.5` chậm gấp 4 KHÔNG áp dụng nữa (bộ
@@ -381,7 +485,14 @@ export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   if (root && !VISION_PURPOSES.has(purpose) && !TOOL_PURPOSES.has(purpose) && localPurposes().has(purpose) && process.env.LLM_LOCAL_API_KEY) {
     return { root, key: process.env.LLM_LOCAL_API_KEY, local: true, label: 'may-nha' };
   }
-  return { root: gatewayRoot(), key: gatewayKey(), local: false, label: 'cong' };
+  // Khoá theo NHÓM của model việc này dùng — xem `gatewayKeyFor`. Đây là nơi
+  // DUY NHẤT ráp {địa chỉ + khoá}, nên chỉ cần đúng một chỗ này biết chuyện.
+  //
+  // ⚠️ PHẢI là `modelCong`, KHÔNG được là `modelFor`. `modelFor` hỏi ngược lại
+  // `endpointFor` để biết việc này có chạy ở máy nhà không ⇒ gọi vòng vô tận,
+  // và nó nổ bằng "Maximum call stack size exceeded" — một câu chẳng nhắc gì
+  // tới model hay khoá. Đã dính thật 18/08 và chỉ lộ ra khi CHẠY.
+  return { root: gatewayRoot(), key: gatewayKeyFor(modelCong(purpose)), local: false, label: 'cong' };
 }
 
 /** Cổng dự phòng khi máy nhà không trả lời. Luôn là cổng, không bao giờ ngược lại. */
@@ -466,15 +577,32 @@ export function chatUrlOf(ep: LlmEndpoint): string {
  * llama-server nhận một cái tên nó không biết. `LLM_MODEL_<PURPOSE>` vẫn đè
  * lên tất cả, để còn ghim từng việc một khi cần.
  */
-export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
+/**
+ * Model của một việc KHI ĐI QUA CỔNG — thuần tra bảng, không hỏi gì ai.
+ *
+ * Tách riêng khỏi `modelFor` vì `endpointFor` cần biết model để chọn khoá,
+ * còn `modelFor` lại cần biết điểm cuối để biết có phải máy nhà không. Hai
+ * chiều đó gặp nhau là vòng lặp vô tận (xem chú thích trong `endpointFor`).
+ */
+function modelCong(purpose: LlmPurpose): string {
   const env = process.env[`LLM_MODEL_${purpose.toUpperCase()}`];
-  if (env && env.trim()) return env.trim();
+  return env?.trim() || PURPOSE_MODEL[purpose];
+}
+
+export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
   const diem = ep ?? endpointFor(purpose);
   if (diem.local) return process.env.LLM_LOCAL_MODEL?.trim() || 'qwen3.5-9b-local';
-  return PURPOSE_MODEL[purpose];
+  // `modelGoiDuoc` bọc cả nhánh env: đặt tay một model của nhóm chưa cắm khoá
+  // thì cũng chết y hệt, và đó lại là nhánh người ta dùng lúc đang vội.
+  return modelGoiDuoc(modelCong(purpose));
 }
 
 /** Toàn bộ bản đồ — cho trang quản trị và cho lệnh kiểm tra cấu hình. */
+/** Tên MỌI việc. Có nó thì bộ kiểm quét được toàn bảng, không sót việc mới. */
+export const LLM_PURPOSES: readonly LlmPurpose[] = Object.freeze(
+  Object.keys(PURPOSE_MODEL) as LlmPurpose[],
+);
+
 export function allPurposeModels(): Array<{
   purpose: LlmPurpose;
   model: string;

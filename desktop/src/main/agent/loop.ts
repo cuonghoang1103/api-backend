@@ -97,6 +97,7 @@ export interface BoiCanh {
   choGhiNote?: boolean;
   /** 'nhanh' | 'canBang' | 'ky'. Quyết định trần bước ở máy chủ. */
   mucNoLuc?: string;
+  model?: string;
   /** Ảnh dán kèm câu hỏi này (data URI). */
   anh?: string[];
 }
@@ -124,7 +125,21 @@ export interface BoiCanh {
  * 60–90k token ≈ 0,1 $. Ba cái là ~0,3 $ cộng thêm vào câu hỏi — bằng cả một
  * việc thường. Cho phép nhiều hơn thì một câu hỏi có thể tốn hơn cả buổi làm.
  */
-const MAX_VIEC_PHU = 3;
+/**
+ * Trần agent phụ THEO MỨC NỖ LỰC — phải khớp `TRAN_VIEC_PHU` ở máy chủ
+ * (`src/services/agent/turn.ts`). Trần thật nằm ở đây vì `giao_viec_phu` là
+ * tool vòng CLIENT: máy chủ chỉ mô tả nó, còn người đếm là app.
+ */
+const TRAN_VIEC_PHU: Record<string, number> = {
+  thap: 1, vua: 3, cao: 3, ratCao: 5, toiDa: 6, ultracode: 10,
+  // tên cũ, phòng khi thiết đặt trên đĩa chưa được đổi
+  nhanh: 1, canBang: 3, ky: 3,
+};
+const MAX_VIEC_PHU_MAC_DINH = 3;
+
+function tranViecPhu(muc: string | undefined): number {
+  return (muc && TRAN_VIEC_PHU[muc]) || MAX_VIEC_PHU_MAC_DINH;
+}
 
 interface CuocHoiThoai {
   /** Id của TAB. Ổn định suốt đời tab — React key theo nó, đổi là remount. */
@@ -598,6 +613,7 @@ export async function chayLuot(
           : {}),
         ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
         ...(boiCanh.mucNoLuc ? { mucNoLuc: boiCanh.mucNoLuc } : {}),
+        ...(boiCanh.model ? { model: boiCanh.model } : {}),
         // Gửi ở MỌI vòng, không phải chỉ vòng đầu: người dùng có thể nạp lại
         // MCP giữa chừng, và máy chủ chỉ chấp nhận tool có mặt trong lượt NÀY.
         toolMcp: toolMcpHienCo().map((t) => ({
@@ -830,10 +846,11 @@ async function chayViecPhu(
 ): Promise<{ noiDung: string; tomTat: string }> {
   const nhiemVu = String(args.nhiem_vu ?? '').trim();
   if (!nhiemVu) return { noiDung: 'LỖI: thiếu "nhiem_vu".', tomTat: 'thiếu nhiệm vụ' };
-  if (c.soViecPhu >= MAX_VIEC_PHU) {
+  const tran = tranViecPhu(boiCanh.mucNoLuc);
+  if (c.soViecPhu >= tran) {
     return {
       noiDung:
-        `LỖI: đã dùng hết ${MAX_VIEC_PHU} việc phụ cho câu hỏi này. ` +
+        `LỖI: đã dùng hết ${tran} việc phụ cho câu hỏi này. ` +
         'Hãy tự làm nốt phần còn lại bằng grep/read_file — rẻ hơn và bạn vẫn còn bước.',
       tomTat: 'hết lượt việc phụ',
     };
@@ -853,6 +870,15 @@ async function chayViecPhu(
       messages: phu,
       capabilities: ['fs_read', 'git_read'],
       ...(boiCanh.goc ? { workspace: { name: tenThuMuc(boiCanh.goc), platform: process.platform as string } } : {}),
+      // Việc phụ chạy ĐÚNG model người dùng chọn, không phải model mặc định.
+      // Bản tóm tắt của nó đi thẳng vào kết luận của agent chính, nên một model
+      // khác ở đây là một mắt xích người dùng không chọn mà vẫn quyết định câu
+      // trả lời. Và người chọn GPT để lấy "ý kiến thứ hai" mà việc phụ vẫn chạy
+      // Claude thì họ không nhận được thứ họ trả tiền để có.
+      //
+      // ⚠️ Đổi lại: ở mức Ultracode (10 việc phụ) với Opus thì tiền nhân lên
+      // rất nhanh. Trần thật là hạn mức 5 giờ, và bảng chọn đã nói trước điều đó.
+      ...(boiCanh.model ? { model: boiCanh.model } : {}),
       laPhu: true,
       signal,
       // Sự kiện của agent phụ KHÔNG đẩy lên màn hình: bảng ghi sẽ thành một mớ
@@ -884,7 +910,7 @@ async function chayViecPhu(
   }
   return {
     noiDung: `KẾT QUẢ VIỆC PHỤ — "${nhiemVu.slice(0, 80)}"\n\n${traLoi}`,
-    tomTat: `xong (${c.soViecPhu}/${MAX_VIEC_PHU})`,
+    tomTat: `xong (${c.soViecPhu}/${tran})`,
   };
 }
 
@@ -924,6 +950,7 @@ async function mgoiMotLuot(o: {
   workspace?: { name: string; platform: string; branch?: string };
   ghiChuDuAn?: { ten: string; noiDung: string };
   mucNoLuc?: string;
+  model?: string;
   laPhu?: boolean;
   toolMcp?: Array<{ name: string; description: string; parameters: Record<string, unknown> }>;
   signal: AbortSignal;
@@ -939,6 +966,7 @@ async function mgoiMotLuot(o: {
       workspace: o.workspace,
       ghiChuDuAn: o.ghiChuDuAn,
       mucNoLuc: o.mucNoLuc,
+      model: o.model,
       laPhu: o.laPhu,
       toolMcp: o.toolMcp,
     }),

@@ -41,6 +41,7 @@ import {
 } from '../llm/gateway.js';
 import { checkBudget, budgetMessage } from '../llm/budget.js';
 import { nenNguCanh } from './compact.js';
+import { modelAgentTu } from './models.js';
 import { loiCanVi, loiHetHan, xemHanMuc, xemViAgent, type HanMuc } from './quota.js';
 import { runServerTool } from './serverTools.js';
 import { buildSystemPrompt, catGhiChu, type WorkspaceHint } from './prompt.js';
@@ -70,16 +71,66 @@ import { prisma } from '../../config/database.js';
  * bước ≈ 0,9 $. Người dùng chọn mức là đang chọn "đào sâu tới đâu", và đó đúng
  * là điều họ muốn nói.
  */
-export type MucNoLuc = 'nhanh' | 'canBang' | 'ky';
+export type MucNoLuc = 'thap' | 'vua' | 'cao' | 'ratCao' | 'toiDa' | 'ultracode';
 
 const TRAN_BUOC: Record<MucNoLuc, number> = {
-  nhanh: 8,
-  canBang: 30,
-  ky: 60,
+  thap: 8,
+  vua: 30,
+  cao: 60,
+  ratCao: 100,
+  toiDa: 160,
+  ultracode: 260,
 };
 
+/**
+ * Số agent PHỤ được giao việc trong một câu hỏi, theo mức.
+ *
+ * ⚠️ Agent phụ NHÂN token lên chứ không chia ra — mỗi việc phụ là một hội thoại
+ * riêng phải trả tiền song song. Nên con số này tăng chậm hơn số bước rất
+ * nhiều, và chỉ ở `ultracode` mới thật sự mở ra.
+ */
+const TRAN_VIEC_PHU: Record<MucNoLuc, number> = {
+  thap: 1,
+  vua: 3,
+  cao: 3,
+  ratCao: 5,
+  toiDa: 6,
+  ultracode: 10,
+};
+
+/**
+ * Bảng mức cho app vẽ giao diện.
+ *
+ * Ở MÁY CHỦ chứ không phải trong app, vì con số bước là thứ máy chủ áp đặt —
+ * app cũ hiện "60 bước" trong khi máy chủ đã đổi thành 100 là một lời nói dối
+ * mà không ai phát hiện được.
+ */
+export const DS_MUC_NO_LUC: ReadonlyArray<{ id: MucNoLuc; ten: string; buoc: number; viecPhu: number }> =
+  Object.freeze(
+    (Object.keys(TRAN_BUOC) as MucNoLuc[]).map((id) => ({
+      id,
+      ten: { thap: 'Thấp', vua: 'Vừa', cao: 'Cao', ratCao: 'Rất cao', toiDa: 'Tối đa', ultracode: 'Ultracode' }[id],
+      buoc: TRAN_BUOC[id],
+      viecPhu: TRAN_VIEC_PHU[id],
+    })),
+  );
+
+export function tranViecPhu(muc: MucNoLuc): number {
+  return TRAN_VIEC_PHU[muc];
+}
+
+/**
+ * ⚠️ TÊN CŨ PHẢI CÒN SỐNG. Máy chủ deploy trước, app desktop thì người dùng
+ * cập nhật lúc nào tuỳ họ — và có người còn đang chạy bản 0.5.x cũ. App cũ gửi
+ * `canBang`; bỏ nhánh này là mức của họ âm thầm tụt về mặc định, không lỗi nào
+ * hiện ra, chỉ là agent bỗng "lười đi".
+ */
+const TEN_CU: Record<string, MucNoLuc> = { nhanh: 'thap', canBang: 'vua', ky: 'cao' };
+
 function docMucNoLuc(raw: unknown): MucNoLuc {
-  return raw === 'nhanh' || raw === 'ky' ? raw : 'canBang';
+  if (typeof raw !== 'string') return 'vua';
+  if (raw in TRAN_BUOC) return raw as MucNoLuc;
+  return TEN_CU[raw] ?? 'vua';
 }
 /** Số lần máy chủ tự gọi lại cổng trong MỘT lượt (khi model chỉ đòi tool vòng 2). */
 const MAX_SERVER_HOPS = 4;
@@ -182,6 +233,8 @@ export interface AgentTurnInput {
   workspace?: WorkspaceHint;
   /** Cấp độ nỗ lực người dùng chọn. Quyết định trần bước, KHÔNG quyết định model. */
   mucNoLuc?: unknown;
+  /** Mã model người dùng chọn — đối chiếu danh sách trắng ở `models.ts`. */
+  model?: unknown;
   /** Lượt này thuộc một AGENT PHỤ — prompt gọn hơn, trần bước riêng. */
   laPhu?: unknown;
   /**
@@ -417,7 +470,22 @@ export async function runAgentTurn(
   const tools = toolsForGateway(capabilities, toolMcp);
 
   const { ep, tra } = await xinDiemCuoi('agent_code');
-  const model = modelFor('agent_code', ep);
+  // Người dùng chọn model ⇒ lấy model đó; không chọn (hoặc app cũ không gửi)
+  // ⇒ về đúng `PURPOSE_MODEL.agent_code` như trước.
+  //
+  // ⚠️ `null` nghĩa là mã HỢP LỆ nhưng nhóm của nó chưa cắm khoá. Phải nói ra
+  // bằng chữ chứ không được lặng lẽ đổi sang model khác: người dùng cố ý chọn
+  // GPT rồi nhận về câu trả lời của Claude thì họ đang đọc thứ họ không chọn.
+  const chon = ep.local ? null : modelAgentTu(input.model);
+  if (!ep.local && !chon) {
+    tra();
+    throw new AgentInputError(
+      'Model bạn chọn chưa được cắm khoá trên máy chủ. Hãy chọn lại Claude Sonnet 5, '
+      + 'hoặc báo quản trị thêm khoá của nhóm đó vào máy chủ.',
+      'MODEL_CHUA_CO_KHOA',
+    );
+  }
+  const model = chon?.model ?? modelFor('agent_code', ep);
   emit({ type: 'start', model });
 
   const append: AgentMessage[] = [];

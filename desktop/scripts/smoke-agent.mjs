@@ -254,7 +254,7 @@ try {
   // ── Chạy MỘT lượt thật ──
   console.log('\nMột lượt agent thật (đọc file trên đĩa):');
   await oNhap.fill('Cổng (CONG) trong dự án này là số mấy? Tự tìm trong mã.');
-  await man.locator('.ct-agent-soan .ct-btn').click();
+  await man.locator('.ct-agent-soan [data-nut="gui"]').click();
 
   // Con quay phải hiện NGAY — đây là chốt UX quan trọng nhất, vì có tới ~10
   // giây im lặng trước dòng chữ đầu tiên.
@@ -277,7 +277,7 @@ try {
       const man = document.querySelector('.ct-chedo[data-hien="true"]');
       if (!man) return false;
       if (man.querySelector('.ct-agent-scroll .ct-notice[data-tone="err"]')) return true;
-      const nut = man.querySelector('.ct-agent-soan .ct-btn');
+      const nut = man.querySelector('.ct-agent-soan [data-nut="gui"], .ct-agent-soan .ct-agent-dung');
       return !!nut && nut.textContent.includes('Gửi');
     },
     // ⚠️ Tham số THỨ BA mới là options. Playwright là `(fn, arg, options)`, nên
@@ -338,7 +338,7 @@ try {
   check('bật được quyền sửa', batDuoc);
 
   await oNhap.fill('Trong src/boot.ts, đổi giá trị CONG từ 7331 thành 9999. Chỉ đổi đúng con số đó.');
-  await man.locator('.ct-agent-soan .ct-btn').first().click();
+  await man.locator('.ct-agent-soan [data-nut="gui"]').click();
 
   // Thẻ duyệt phải hiện ra — và file trên đĩa phải CHƯA đổi.
   await w.waitForSelector('.ct-chedo[data-hien="true"] .ct-xinphep', { timeout: 180000 });
@@ -373,7 +373,7 @@ try {
   // được cập nhật.
   await w.waitForFunction(
     () => {
-      const nut = document.querySelector('.ct-chedo[data-hien="true"] .ct-agent-soan .ct-btn');
+      const nut = document.querySelector('.ct-chedo[data-hien="true"] .ct-agent-soan [data-nut="gui"], .ct-chedo[data-hien="true"] .ct-agent-soan .ct-agent-dung');
       return !!nut && nut.textContent.includes('Gửi');
     },
     null,
@@ -403,6 +403,63 @@ try {
     'console.log("KET_QUA_KIEM: 4 dat, 1 hong");\nprocess.exit(1);\n',
   );
 
+  // ─── Chọn model + mức nỗ lực ────────────────────────────────────
+  //
+  // ⚠️ Phép kiểm ở đây KHÔNG dừng ở "giao diện đổi màu". Bài học cũ: bật công
+  // tắc Ghi chú thì nút hiện BẬT trong khi `chayLuot` không mang cờ đó lên, nên
+  // tool không bao giờ tới tay model — và không có lỗi nào để thấy. Nên dòng
+  // quan trọng nhất của khối này là dòng cuối: đọc lại từ TIẾN TRÌNH MAIN.
+  const nutMM = man.locator('.ct-chonmm-nut[data-nut="modelmuc"]');
+  check('nút chọn model + mức có mặt', await nutMM.count() === 1);
+  check('mặc định là Sonnet 5, mức Vừa',
+    (await nutMM.getAttribute('data-model')) === 'sonnet-5'
+    && (await nutMM.getAttribute('data-muc')) === 'vua',
+    `${await nutMM.getAttribute('data-model')} · ${await nutMM.getAttribute('data-muc')}`);
+
+  await nutMM.click();
+  const soModel = await man.locator('.ct-chonmm-bang [data-chon-model]').count();
+  const soMucChon = await man.locator('.ct-chonmm-bang [data-chon-muc]').count();
+  check('bảng hiện đủ 3 model và 6 mức', soModel === 3 && soMucChon === 6, `${soModel} model · ${soMucChon} mức`);
+
+  await man.locator('.ct-chonmm-bang [data-chon-muc="ultracode"]').click();
+  const ultraLen = await man
+    .locator('.ct-chonmm-nut[data-muc="ultracode"]')
+    .waitFor({ timeout: 8000 }).then(() => true).catch(() => false);
+  check('chọn được Ultracode, nút đổi theo', ultraLen);
+  check('Ultracode được đánh dấu KHÁC các mức thường',
+    (await nutMM.getAttribute('data-ultra')) === 'true');
+
+  await man.locator('.ct-chonmm-bang [data-chon-model="opus-4-8"]').click();
+  const doiOpus = await man
+    .locator('.ct-chonmm-nut[data-model="opus-4-8"]')
+    .waitFor({ timeout: 8000 }).then(() => true).catch(() => false);
+  check('đổi được model sang Opus 4.8', doiOpus);
+
+  // Bấm ra ngoài để đóng — cũng là phép kiểm cho chuyện KHÔNG dùng lớp nền phủ
+  // (lớp đó nuốt cú bấm đầu, nên bảng sẽ không đóng ở lần bấm này).
+  await man.locator('.ct-agent-bar').click({ position: { x: 2, y: 2 } });
+  const daDong = await man.locator('.ct-chonmm-bang')
+    .waitFor({ state: 'detached', timeout: 5000 }).then(() => true).catch(() => false);
+  check('bấm ra ngoài thì bảng đóng', daDong);
+
+  // ⭐ Dòng quan trọng nhất: lựa chọn có ĐI XUỐNG tiến trình main không, hay chỉ
+  // đổi trong React rồi mất khi gửi câu hỏi.
+  const wsSauKhiChon = await w.evaluate(async () => {
+    const ds = await globalThis.cuongthai.agent.dsCuoc();
+    const id = ds[0]?.id;
+    return id ? globalThis.cuongthai.agent.getWorkspace(id) : null;
+  }).catch(() => null);
+  check('main NHỚ lựa chọn (không chỉ đổi trên giao diện)',
+    wsSauKhiChon?.model === 'opus-4-8' && wsSauKhiChon?.mucNoLuc === 'ultracode',
+    JSON.stringify({ model: wsSauKhiChon?.model, muc: wsSauKhiChon?.mucNoLuc }));
+
+  // Trả về mặc định — các phép kiểm sau chạy bằng model rẻ nhất, và mức
+  // Ultracode cho phép 260 bước thì một câu hỏi lạc đường sẽ chạy rất lâu.
+  await nutMM.click();
+  await man.locator('.ct-chonmm-bang [data-chon-model="sonnet-5"]').click();
+  await man.locator('.ct-chonmm-bang [data-chon-muc="vua"]').click();
+  await man.locator('.ct-agent-bar').click({ position: { x: 2, y: 2 } });
+
   check('mặc định quyền chạy lệnh TẮT',
     (await man.locator('.ct-agent-suanut[data-nut="chaylenh"]').getAttribute('data-bat')) === 'false');
   await man.locator('.ct-agent-suanut[data-nut="chaylenh"]').click();
@@ -412,7 +469,7 @@ try {
   check('bật được quyền chạy lệnh', batLenh);
 
   await oNhap.fill('Chạy `node kiem.mjs` rồi cho tôi biết nó in ra đúng dòng gì và mã thoát là mấy.');
-  await man.locator('.ct-agent-soan .ct-btn').first().click();
+  await man.locator('.ct-agent-soan [data-nut="gui"]').click();
 
   await w.waitForSelector('.ct-chedo[data-hien="true"] .ct-xinphep[data-muc]', { timeout: 180000 });
   check('thẻ duyệt LỆNH hiện ra', true);
@@ -429,7 +486,7 @@ try {
       const m = document.querySelector('.ct-chedo[data-hien="true"]');
       if (!m) return false;
       if (m.querySelector('.ct-agent-scroll .ct-notice[data-tone="err"]')) return true;
-      const nut = m.querySelector('.ct-agent-soan .ct-btn');
+      const nut = m.querySelector('.ct-agent-soan [data-nut="gui"], .ct-agent-soan .ct-agent-dung');
       return !!nut && nut.textContent.includes('Gửi');
     },
     null,
@@ -455,12 +512,12 @@ try {
   console.log('\nBộ nhớ dự án (AGENTS.md):');
   const soMucTruoc = await man.locator('.ct-agent-tool').count();
   await oNhap.fill('Mã dự án nội bộ là gì? Trả lời ngắn gọn.');
-  await man.locator('.ct-agent-soan .ct-btn').first().click();
+  await man.locator('.ct-agent-soan [data-nut="gui"]').click();
   await w.waitForFunction(
     () => {
       const m = document.querySelector('.ct-chedo[data-hien="true"]');
       if (!m) return false;
-      const nut = m.querySelector('.ct-agent-soan .ct-btn');
+      const nut = m.querySelector('.ct-agent-soan [data-nut="gui"], .ct-agent-soan .ct-agent-dung');
       return !!nut && nut.textContent.includes('Gửi');
     },
     null,
@@ -529,12 +586,12 @@ try {
   // nhắc lại con số, và không có file nào chứa "9999" nữa (đã hoàn tác).
   const oNhap2 = man2.locator('.ct-agent-o');
   await oNhap2.fill('Không cần tra lại file. Trong việc này, con số tôi từng nhờ bạn đổi CONG THÀNH là bao nhiêu?');
-  await man2.locator('.ct-agent-soan .ct-btn').first().click();
+  await man2.locator('.ct-agent-soan [data-nut="gui"]').click();
   await w2.waitForFunction(
     () => {
       const m = document.querySelector('.ct-chedo[data-hien="true"]');
       if (!m) return false;
-      const nut = m.querySelector('.ct-agent-soan .ct-btn');
+      const nut = m.querySelector('.ct-agent-soan [data-nut="gui"], .ct-agent-soan .ct-agent-dung');
       return !!nut && nut.textContent.includes('Gửi');
     },
     null,
@@ -572,12 +629,12 @@ try {
   // Hỏi ở tab B một câu mà chỉ tab A mới biết câu trả lời. Trả lời được nghĩa
   // là hai cuộc DÙNG CHUNG hội thoại — đúng thứ phải không xảy ra.
   await manB.locator('.ct-agent-o').fill('Không tra file. Con số tôi từng nhờ bạn đổi CONG thành là bao nhiêu?');
-  await manB.locator('.ct-agent-soan .ct-btn').first().click();
+  await manB.locator('.ct-agent-soan [data-nut="gui"]').click();
   await w2.waitForFunction(
     () => {
       const m = document.querySelector('.ct-tab-noi[data-hien="true"]');
       if (!m) return false;
-      const nut = m.querySelector('.ct-agent-soan .ct-btn');
+      const nut = m.querySelector('.ct-agent-soan [data-nut="gui"], .ct-agent-soan .ct-agent-dung');
       return !!nut && nut.textContent.includes('Gửi');
     },
     null,
@@ -830,11 +887,11 @@ try {
   // nên bảng ghi ở đây trống. Dựng lại hai lượt mới để có cái mà lùi.
   for (const q of ['Cổng CONG trong dự án này là số mấy?', 'Nhắc lại con số đó, đừng tra file.']) {
     await manQL.locator('.ct-agent-o').fill(q);
-    await manQL.locator('.ct-agent-soan .ct-btn').first().click();
+    await manQL.locator('.ct-agent-soan [data-nut="gui"]').click();
     await w2.waitForFunction(
       () => {
         const m = document.querySelector('.ct-tab-noi[data-hien="true"]');
-        const nut = m?.querySelector('.ct-agent-soan .ct-btn');
+        const nut = m?.querySelector('.ct-agent-soan [data-nut="gui"], .ct-agent-soan .ct-agent-dung');
         return !!nut && nut.textContent.includes('Gửi');
       },
       null,
@@ -899,11 +956,16 @@ try {
 
   // Bằng chứng thật: hỏi lại đúng thứ chỉ có trong đoạn VỪA BỊ BỎ.
   await oNhapQL.fill('Không tra file. Ở lượt trước tôi vừa hỏi bạn nhắc lại con số nào?');
-  await manQL.locator('.ct-agent-soan .ct-btn').first().click();
+  await manQL.locator('.ct-agent-soan [data-nut="gui"]').click();
   await w2.waitForFunction(
     () => {
       const m = document.querySelector('.ct-tab-noi[data-hien="true"]');
-      const nut = m?.querySelector('.ct-agent-soan .ct-btn');
+      // ⚠️ Bám `[data-nut="gui"]`, KHÔNG bám `.ct-btn` đầu tiên. Nút MICRO
+      // (NutGoiThoai) cũng mang class `ct-btn` và đứng TRƯỚC nút Gửi trong
+      // DOM, nên `.first()` bắt trúng nó — và nó không bao giờ có chữ "Gửi",
+      // nên phép chờ này đứng đủ 180 giây rồi báo hỏng, trông y như máy chủ
+      // treo. Đúng bài học cũ về bộ chọn lỏng lẻo.
+      const nut = m?.querySelector('.ct-agent-soan [data-nut="gui"], .ct-agent-soan .ct-agent-dung');
       return !!nut && nut.textContent.includes('Gửi');
     },
     null,
@@ -927,11 +989,11 @@ try {
 
   const manChat = w2.locator('.ct-chedo[data-hien="true"]');
   await manChat.locator('.ct-agent-o').fill('Trả lời đúng một từ: xanh');
-  await manChat.locator('.ct-agent-soan .ct-btn').first().click();
+  await manChat.locator('.ct-agent-soan [data-nut="gui"]').click();
   await w2.waitForFunction(
     () => {
       const m = document.querySelector('.ct-chedo[data-hien="true"]');
-      const nut = m?.querySelector('.ct-agent-soan .ct-btn');
+      const nut = m?.querySelector('.ct-agent-soan [data-nut="gui"], .ct-agent-soan .ct-agent-dung');
       return !!nut && nut.textContent.includes('Gửi');
     },
     null,
@@ -1030,12 +1092,12 @@ try {
   await manMcp.locator('.ct-agent-o').fill(
     'Liệt kê các tool mcp__ bạn đang có và nói ngắn gọn mỗi cái làm gì. Đừng gọi tool nào cả.',
   );
-  await manMcp.locator('.ct-agent-soan .ct-btn').first().click();
+  await manMcp.locator('.ct-agent-soan [data-nut="gui"]').click();
   await w2.waitForFunction(
     () => {
       const m = document.querySelector('.ct-tab-noi[data-hien="true"]');
       if (!m) return false;
-      const nut = m.querySelector('.ct-agent-soan .ct-btn');
+      const nut = m.querySelector('.ct-agent-soan [data-nut="gui"], .ct-agent-soan .ct-agent-dung');
       return !!nut && nut.textContent.includes('Gửi');
     },
     null,
@@ -1071,7 +1133,7 @@ try {
   await manMcp.locator('.ct-agent-o').fill(
     'Dùng tool mcp__gia__cong để cộng 7331 và 1234. Chỉ trả về con số tool đưa ra.',
   );
-  await manMcp.locator('.ct-agent-soan .ct-btn').first().click();
+  await manMcp.locator('.ct-agent-soan [data-nut="gui"]').click();
 
   await w2.waitForSelector('.ct-tab-noi[data-hien="true"] .ct-xinphep', { timeout: 120000 });
   const theMcp = manMcp.locator('.ct-xinphep').last();
@@ -1090,7 +1152,7 @@ try {
     () => {
       const m = document.querySelector('.ct-tab-noi[data-hien="true"]');
       if (!m) return false;
-      const nut = m.querySelector('.ct-agent-soan .ct-btn');
+      const nut = m.querySelector('.ct-agent-soan [data-nut="gui"], .ct-agent-soan .ct-agent-dung');
       return !!nut && nut.textContent.includes('Gửi');
     },
     null,
@@ -1126,7 +1188,7 @@ try {
     `Tạo một ghi chú mới trong sổ có subject_id = ${soThu}, tiêu đề "Ghi chú từ agent", `
     + 'nội dung gồm một dòng chính xác là: MOC-8642 agent ghi thật.',
   );
-  await manMcp.locator('.ct-agent-soan .ct-btn').first().click();
+  await manMcp.locator('.ct-agent-soan [data-nut="gui"]').click();
 
   await w2.waitForSelector('.ct-tab-noi[data-hien="true"] .ct-xinphep', { timeout: 120000 });
   const theNote = manMcp.locator('.ct-xinphep').last();
@@ -1142,7 +1204,7 @@ try {
   await w2.waitForFunction(
     () => {
       const m = document.querySelector('.ct-tab-noi[data-hien="true"]');
-      const nut = m?.querySelector('.ct-agent-soan .ct-btn');
+      const nut = m?.querySelector('.ct-agent-soan [data-nut="gui"], .ct-agent-soan .ct-agent-dung');
       return !!nut && nut.textContent.includes('Gửi');
     },
     null,

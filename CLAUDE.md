@@ -289,7 +289,31 @@ file người dùng vừa đính kèm).
 ```bash
 LLM_GATEWAY_BASE_URL=https://modelapi.vn/v1
 LLM_GATEWAY_API_KEY=sk-...      # cũng đọc OPENAI_COMPAT_API_KEY / ANTHROPIC_API_KEY
+LLM_GATEWAY_API_KEY_GPT=sk-...  # khoá nhóm GPT (18/08) — xem "HAI KHOÁ" ngay dưới
 ```
+
+### ⚠️ HAI KHOÁ, MỘT CHO MỖI NHÓM (18/08/2026)
+
+**Một token của cổng thuộc về ĐÚNG MỘT nhóm, và `GET /v1/models` chỉ liệt kê
+model của nhóm đó.** Đo thật: khoá cũ (nhóm `claude`) thấy 6 model
+`claude-*` và KHÔNG thấy model `gpt-*` nào; khoá GPT mới thì ngược lại. Gọi
+model của nhóm khác trả `503 No available channel for model X under group Y` —
+nghe như cổng đang bận, nhưng nó vĩnh viễn.
+
+`gatewayKeyFor(model)` trong `gateway.ts` chọn khoá theo **tiền tố tên model**:
+`gpt-5.6-sol` → tìm `LLM_GATEWAY_API_KEY_GPT`, không có thì rơi về khoá mặc
+định. Nhóm mà khoá MẶC ĐỊNH phục vụ được khai bằng `LLM_GATEWAY_GROUP`
+(mặc định `claude` — đúng với production).
+
+**Thiếu khoá thì KHÔNG chết, mà LÙI.** `modelGoiDuoc()` đổi sang model Claude
+tương đương và ghi một dòng WARN. Lưới đỡ này có vì bản đồ model sống trong mã
+(đi theo mỗi deploy) còn khoá sống trong `/opt/cuonghoangdev/.env` (người thêm
+tay) — hai thứ lệch nhịp một lần là chín tính năng cùng trả 503. Cái giá của
+việc quên: `cv_parse`/`news_bulletin`/… chạy đắt gấp 5,1 lần.
+
+Kiểm bản đồ đang hiệu lực: `npx tsx --test src/services/llm/gateway.test.ts`
+(4 phép kiểm, trong đó có một cái bắt lỗi gọi vòng `endpointFor ↔ modelFor` mà
+`tsc` KHÔNG thấy).
 
 ⚠️ **Cổng Rambo (`LLM_BASE_URL`, model `rb-*`) ĐÃ CHẾT.** Thấy `rb-` ở đâu là
 chỗ đó đang trỏ vào đường chết.
@@ -303,11 +327,52 @@ của toàn cổng. Khoá của web, đo thật 11/08/2026 bằng `GET /v1/model
 nhưng nó vĩnh viễn cho tới khi có người mở kênh Anthropic trong Console.
 
 **Phân model theo VIỆC, không theo module** — `PURPOSE_MODEL` trong
-`gateway.ts`, đổi bằng `LLM_MODEL_<TÊN VIỆC>` chứ không sửa mã. Việc người
-dùng đọc từng chữ (báo cáo phỏng vấn, mổ CV, sinh câu hỏi) → `gpt-5.6-sol`.
-Việc tương tác cần nhanh (chấm bài, gia sư, kèm code, chat Pro) → `gpt-5.5`
-(2s so với 5,5s của sol). Việc máy đọc (tách JSON) → `gpt-5.4-mini`. Việc
-chạy nền → `gpt-5.6-terra`.
+`gateway.ts`, đổi bằng `LLM_MODEL_<TÊN VIỆC>` chứ không sửa mã.
+
+Giá đo thật 18/08/2026 (chênh lệch sổ của cổng, 3 lượt cùng một câu ~70 token
+vào; cả 9 model đều qua hai bẫy suy luận và gọi tool đúng tham số):
+
+| Model | Giá/lượt | Độ trễ | Trần token |
+|---|---|---|---|
+| `gpt-5.4-mini` | **0,116** | 5,8s | ✅ |
+| `grok-4.6` | 0,341 | 65,7s | ❌ vượt 41× |
+| `gpt-5.6-terra` | 0,484 | 7,3s | ✅ |
+| `claude-sonnet-4-6` | 0,597 | ~12s | ✅ |
+| `claude-sonnet-5` | 0,801 | ~9,8s | ✅ |
+| `grok-4.5` | 1,058 | 24,5s | ❌ vượt 30× |
+| `gpt-5.5` | 1,144 | 9,6s | ⚠️ vượt 5× |
+| `gpt-5.6-sol` | 1,222 | 9,6s | ✅ |
+| `claude-opus-4-8` | 2,003 | 12,3s | ✅ |
+
+Phân hiện tại: việc chạy nền + việc máy đọc (`cv_parse`, `exphub_doc`,
+`language_bulk`, `codelab_bulk`, `news_bulletin`, `robot_voice`) →
+**`gpt-5.4-mini`** (rẻ hơn `sonnet-4-6` 5,1 lần). Việc người dùng đọc từng chữ
+(`chat_max`, `cv_critique`, `interview_report`) → **`gpt-5.6-sol`** (rẻ hơn
+opus 39%). Việc tương tác (`chat_pro`, `exam_grade`, `language_tutor`,
+`codelab_coach`, `cv_writing`) và **`agent_code`** → giữ **`claude-sonnet-5`**.
+
+⛔ **`doc_ocr` KHÔNG hạ.** Model rẻ rụng mũi tên vector `AB` → `|AB|`, và một
+ký hiệu sai là hỏng cả bài toán.
+
+⚠️ **`Upstream stream ended without a terminal response event` là lỗi TẢI,
+không phải tính chất của model.** 18/08 thấy `gpt-5.6-terra` trả lỗi đó ngay
+lời gọi tool đầu tiên, và suýt ghi vào đây là "model vỡ". Đo lại lúc không có
+phép đo nào chạy song song: nó hoàn thành 5 lời gọi tool và trả lời đúng. Thấy
+lỗi này thì đi kiểm xem có gì đang chạy chồng, đừng đổi model.
+
+⛔ **Grok loại hẳn.** Không tôn trọng `max_tokens` (vượt 30–41×) ⇒ mọi trần chi
+phí của web mất tác dụng với nó.
+
+**GPT tính tiền cả token suy luận người dùng không thấy**: đo `usage` thật,
+`gpt-5.5` 79/365 và `gpt-5.6-sol` 93/433 token ra là `reasoning_tokens`
+(~21%); Claude báo 0. Nên "gpt rẻ hơn theo hệ số của shop" không suy ra được
+từ hệ số — phải đo bằng sổ của cổng.
+
+**Model cho agent (AI Code) người dùng CHỌN ĐƯỢC** — danh sách trắng ở
+`src/services/agent/models.ts`, app chỉ gửi mã ngắn (`sonnet-5` / `opus-4-8` /
+`gpt-sol`). Đo trên đúng vòng lặp gọi tool: `claude-sonnet-5` 14,0s/1,23 ·
+`gpt-5.6-sol` 22,2s/1,45 · `claude-opus-4-8` 17,2s/2,80 — nên mặc định là
+sonnet-5.
 
 **Ảnh: CHỈ `gpt-5.6-sol` nhìn được thật.** Đo bằng ảnh 1×1 px: sol trả lời
 đúng; `gpt-5.5` / `gpt-5.6-terra` / `gpt-5.4-mini` nhận ảnh, không báo lỗi, và

@@ -22,7 +22,7 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 
 import type {
-  AgentCuocDangMo, AgentInfo, AgentMcpTrangThai, AgentWorktree, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, MucNoLuc,
+  AgentCuocDangMo, AgentInfo, AgentMcpTrangThai, AgentWorktree, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, ModelAgent, MucNoLuc,
 } from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
@@ -66,9 +66,22 @@ const chay = promisify(execFile);
  */
 const TOKEN_MOI_VIEC = 141_000;
 
+const MUC_HOP_LE = new Set<string>(['thap', 'vua', 'cao', 'ratCao', 'toiDa', 'ultracode']);
+/** Tên cũ còn nằm trong file thiết đặt của người đã dùng bản trước. */
+const MUC_TEN_CU: Record<string, MucNoLuc> = { nhanh: 'thap', canBang: 'vua', ky: 'cao' };
+
 function mucNoLucHienTai(): MucNoLuc {
   const v = getSettings().agentMucNoLuc;
-  return v === 'nhanh' || v === 'ky' ? v : 'canBang';
+  if (typeof v !== 'string') return 'vua';
+  if (MUC_HOP_LE.has(v)) return v as MucNoLuc;
+  return MUC_TEN_CU[v] ?? 'vua';
+}
+
+const MODEL_HOP_LE = new Set<string>(['sonnet-5', 'opus-4-8', 'gpt-sol']);
+
+function modelHienTai(): ModelAgent {
+  const v = getSettings().agentModel;
+  return typeof v === 'string' && MODEL_HOP_LE.has(v) ? (v as ModelAgent) : 'sonnet-5';
 }
 
 /** Thư mục MẶC ĐỊNH cho tab mới — thư mục người dùng chọn gần nhất. */
@@ -112,13 +125,14 @@ async function nhanhGit(goc: string): Promise<string | null> {
 
 async function moTa(cuocId: string, goc: string | null): Promise<AgentWorkspace> {
   const mucNoLuc = mucNoLucHienTai();
+  const model = modelHienTai();
   const q = quyenCuaCuoc(cuocId);
   // ⚠️ `choGhiNote` phải có ở CẢ HAI nhánh. Nhánh "chưa chọn thư mục" trả cứng
   // false cho hai quyền kia (đúng — chúng gắn với thư mục), nhưng ghi chú thì
   // KHÔNG cần thư mục nào: bỏ sót ở đây thì người dùng bật công tắc xong giao
   // diện vẫn vẽ "tắt", bấm mãi không lên, mà không có lỗi nào.
   if (!goc) {
-    return { path: null, name: null, branch: null, choSua: false, choChayLenh: false, choGhiNote: q.choGhiNote, mucNoLuc };
+    return { path: null, name: null, branch: null, choSua: false, choChayLenh: false, choGhiNote: q.choGhiNote, mucNoLuc, model };
   }
   return {
     path: goc,
@@ -128,6 +142,7 @@ async function moTa(cuocId: string, goc: string | null): Promise<AgentWorkspace>
     choChayLenh: q.choChayLenh,
     choGhiNote: q.choGhiNote,
     mucNoLuc,
+    model,
   };
 }
 
@@ -159,7 +174,12 @@ export function registerAgentHandlers(): void {
       ]);
       if (!rTools.ok) return trong;
 
-      const tools = await rTools.json() as { data?: { pro?: boolean; configured?: boolean; model?: string } };
+      const tools = await rTools.json() as {
+        data?: {
+          pro?: boolean; configured?: boolean; model?: string;
+          models?: AgentInfo['models']; mucNoLuc?: AgentInfo['mucNoLuc'];
+        };
+      };
       const usage = rUsage.ok
         ? (await rUsage.json() as { data?: { daDung: number; tran: number; phanTram: number; hoiLucNao: string | null; conLai: number } }).data
         : undefined;
@@ -174,6 +194,11 @@ export function registerAgentHandlers(): void {
         model: tools.data?.model ?? null,
         quota,
         soViecConLai: usage ? Math.max(0, Math.floor(usage.conLai / TOKEN_MOI_VIEC)) : null,
+        // Máy chủ cũ chưa khai hai trường này ⇒ `undefined`, và giao diện tự
+        // lùi về bảng chép cứng. Không được đổi thành `[]`: mảng rỗng là "máy
+        // chủ nói không có model nào", nghĩa hoàn toàn khác.
+        ...(tools.data?.models ? { models: tools.data.models } : {}),
+        ...(tools.data?.mucNoLuc ? { mucNoLuc: tools.data.mucNoLuc } : {}),
       };
     } catch {
       // Mất mạng. KHÔNG ném — màn hình agent vẫn phải mở được để người dùng
@@ -265,7 +290,7 @@ export function registerAgentHandlers(): void {
         // trả lời lịch sự "tôi không có tool đó", đúng như nó được dạy. Bật công
         // tắc trên giao diện vẫn hiện BẬT, nên nhìn đâu cũng thấy ổn.
         goc: conSong, choSua: quyen.choSua, choChayLenh: quyen.choChayLenh,
-        choGhiNote: quyen.choGhiNote, mucNoLuc: mucNoLucHienTai(),
+        choGhiNote: quyen.choGhiNote, mucNoLuc: mucNoLucHienTai(), model: modelHienTai(),
         ...(anh?.length ? { anh } : {}),
         ...(nhanh ? { nhanh } : {}),
       },
@@ -341,6 +366,10 @@ export function registerAgentHandlers(): void {
 
   handle('agent:datMucNoLuc', ({ muc }) => {
     setSetting('agentMucNoLuc', muc);
+  });
+
+  handle('agent:datModel', ({ model }) => {
+    setSetting('agentModel', model);
   });
 
   handle('agent:hoanTac', async ({ cuocId }) => {

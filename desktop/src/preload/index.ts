@@ -22,6 +22,7 @@ import type {
   AgentQuyetDinh,
   AgentWorkspace,
   AgentWorktree,
+  ModelAgent,
   MucNoLuc,
   AppInfo,
   DesktopBridge,
@@ -148,6 +149,8 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:datCheDoNote', { cuocId, bat }) as Promise<AgentWorkspace>,
     datMucNoLuc: (muc: MucNoLuc) =>
       ipcRenderer.invoke('agent:datMucNoLuc', { muc }) as Promise<void>,
+    datModel: (model: ModelAgent) =>
+      ipcRenderer.invoke('agent:datModel', { model }) as Promise<void>,
     hoanTac: (cuocId: string) =>
       ipcRenderer.invoke('agent:hoanTac', { cuocId }) as Promise<{ soFile: number; loi: string[] }>,
     dsPhien: () => ipcRenderer.invoke('agent:dsPhien') as Promise<AgentPhien[]>,

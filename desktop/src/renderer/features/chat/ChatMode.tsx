@@ -583,7 +583,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
             Dừng
           </button>
         ) : (
-          <button type="button" className="ct-btn" onClick={() => void guiDi()} disabled={!coGiDeGui}>
+          <button type="button" data-nut="gui" className="ct-btn" onClick={() => void guiDi()} disabled={!coGiDeGui}>
             <Send size={14} aria-hidden />
             Gửi
           </button>

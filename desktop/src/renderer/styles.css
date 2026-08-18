@@ -3881,6 +3881,11 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-spin-cham { animation: ct-tho 1.6s ease-in-out infinite; }
 
 /* ── Chọn cấp độ nỗ lực ── */
+/* ── Bậc model của chế độ TRÒ CHUYỆN ──
+   ⚠️ ĐỪNG xoá vì "chế độ Lập trình không dùng nữa". 18/08/2026 đã xoá đúng
+   khối này khi thay bộ chọn nỗ lực của Lập trình, và `ChatMode.tsx` mất sạch
+   kiểu dáng — không lỗi biên dịch nào, không phép kiểm nào đỏ, chỉ là cái
+   thanh chọn bậc bỗng thành ba cái nút trần. Grep `ct-noluc` trước khi động. */
 .ct-noluc {
   display: inline-flex;
   gap: 1px;
@@ -3909,6 +3914,112 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   background: var(--ct-surface);
   color: var(--ct-text);
   box-shadow: var(--ct-shadow-sm);
+}
+
+/* ── Chọn model + mức nỗ lực ──
+   Một nút gọn trên thanh công cụ, một bảng thả xuống có hai danh sách. Sáu mức
+   dàn thành sáu nút thì thanh công cụ vỡ hàng, mà nó đã có bảy thứ khác. */
+.ct-chonmm { position: relative; display: flex; }
+
+.ct-chonmm-nut {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  color: var(--ct-text-faint);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ct-chonmm-nut:hover:not(:disabled) { color: var(--ct-text); border-color: var(--ct-border-manh, var(--ct-border)); }
+.ct-chonmm-nut:disabled { opacity: 0.45; cursor: default; }
+.ct-chonmm-chu { color: var(--ct-text); }
+.ct-chonmm-cham { opacity: 0.5; }
+.ct-chonmm-muc { color: var(--ct-text-faint); }
+
+/* Ultracode phải NHÌN LÀ THẤY. Nó tiêu hạn mức nhanh gấp nhiều lần các mức
+   khác, nên để nó trông y hệt mức Vừa là giấu đi cái giá của nó. */
+.ct-chonmm-nut[data-ultra='true'] {
+  border-color: var(--ct-accent);
+  color: var(--ct-accent);
+}
+.ct-chonmm-nut[data-ultra='true'] .ct-chonmm-chu,
+.ct-chonmm-nut[data-ultra='true'] .ct-chonmm-muc { color: var(--ct-accent); }
+
+.ct-chonmm-bang {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 30;
+  width: 300px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: var(--ct-surface);
+  box-shadow: var(--ct-shadow);
+}
+
+.ct-chonmm-nhan {
+  margin: 2px 0 6px;
+  color: var(--ct-text-faint);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ct-chonmm-ds { margin: 0 0 12px; padding: 0; list-style: none; }
+.ct-chonmm-ds:last-of-type { margin-bottom: 8px; }
+
+.ct-chonmm-ds button {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  width: 100%;
+  padding: 6px 7px;
+  border: 0;
+  border-radius: var(--ct-radius-sm);
+  background: none;
+  color: var(--ct-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.ct-chonmm-ds button:hover:not(:disabled) { background: var(--ct-hover); }
+.ct-chonmm-ds button:disabled { opacity: 0.45; cursor: default; }
+.ct-chonmm-ds button[data-chon='true'] { background: var(--ct-hover); }
+.ct-chonmm-ds button > svg { flex: none; margin-top: 2px; color: var(--ct-accent); }
+
+/* Ô trống giữ đúng chỗ của dấu tích — không có nó thì dòng chưa chọn thụt sang
+   trái 19px so với dòng đang chọn, và cả danh sách trông như bị lệch. */
+.ct-chonmm-o { flex: none; width: 12px; height: 12px; margin-top: 2px; }
+
+.ct-chonmm-ds strong { display: block; font-size: 12px; font-weight: 600; }
+.ct-chonmm-ds em {
+  display: block;
+  margin-top: 1px;
+  color: var(--ct-text-faint);
+  font-size: 10.5px;
+  font-style: normal;
+  line-height: 1.35;
+}
+
+.ct-chonmm-ds button[data-ultra='true'] strong { color: var(--ct-accent); }
+
+.ct-chonmm-chan {
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--ct-border);
+  color: var(--ct-text-faint);
+  font-size: 10.5px;
+  line-height: 1.4;
 }
 
 /* ── Hộp cát Python ── */

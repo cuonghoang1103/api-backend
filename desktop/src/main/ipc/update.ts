@@ -180,13 +180,21 @@ async function runCheck(): Promise<void> {
 }
 
 /**
- * Hốt những bó `CuongThai.app.cu-*` còn sót của các lần cập nhật trước.
+ * Dọn rác cập nhật của MỌI nền tảng. Chạy lúc khởi động, im lặng, không chặn gì.
  *
- * Mỗi bó ~176MB. Bản 0.5.8 để lại hai cái (352MB) vì bước dọn ném lỗi ENOTDIR
- * — xem ghi chú trong `tuCapNhat`. Dọn lúc khởi động, im lặng, không chặn gì.
+ * macOS: bó `CuongThai.app.cu-*` còn sót sau một lần tráo (~176MB mỗi cái —
+ * bản 0.5.8 để lại hai cái vì bước dọn ném ENOTDIR, xem `tuCapNhat`).
+ * Windows/Linux: gói cài `electron-updater` tải về rồi bỏ quên.
  */
 export function donRacCapNhat(): void {
-  if (process.platform !== 'darwin' || !app.isPackaged) return;
+  if (!app.isPackaged) return;
+  donRacMac();
+  donRacTaiVe();
+}
+
+/** Bó `.app` cũ còn sót sau một lần tráo trên macOS. */
+function donRacMac(): void {
+  if (process.platform !== 'darwin') return;
   try {
     const noi = noiDangChay();
     const thuMuc = path.dirname(noi.duong);
@@ -203,6 +211,35 @@ export function donRacCapNhat(): void {
     }
   } catch {
     /* không dọn được cũng không sao — đây là việc phụ */
+  }
+}
+
+/**
+ * Gói cài mà `electron-updater` tải về rồi bỏ quên — Windows và Linux.
+ *
+ * Nó cất bản tải xuống ở `<cache>/<tên app>-updater/pending`, mỗi gói 130-170MB.
+ * Cài xong thường tự dọn, nhưng cài lỡ dở, mất điện, hay người dùng bấm "để
+ * sau" rồi gỡ app ra thì gói nằm lại vĩnh viễn.
+ *
+ * ⚠️ CHỈ xoá thứ đã hơn BẢY NGÀY. Trong thư mục đó có thể đang là gói của một
+ * bản cập nhật CHƯA cài xong — người dùng bấm "để sau" và nó sẽ được cài lúc
+ * thoát app. Xoá đi là bắt họ tải lại 170MB mà không hiểu vì sao.
+ */
+function donRacTaiVe(): void {
+  if (process.platform === 'darwin') return;
+  const BAY_NGAY = 7 * 24 * 60 * 60 * 1000;
+  try {
+    const goc = path.join(app.getPath('userData'), '..', `${app.getName()}-updater`, 'pending');
+    if (!fs.existsSync(goc)) return;
+    for (const ten of fs.readdirSync(goc)) {
+      const duong = path.join(goc, ten);
+      try {
+        if (Date.now() - fs.statSync(duong).mtimeMs < BAY_NGAY) continue;
+        fs.rmSync(duong, { recursive: true, force: true });
+      } catch { /* file đang bị khoá — bỏ qua, lần sau dọn */ }
+    }
+  } catch {
+    /* không có thư mục đó cũng là chuyện bình thường */
   }
 }
 

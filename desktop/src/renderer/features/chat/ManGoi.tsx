@@ -22,7 +22,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 
-import { ngheMotCau, useBienDo, type BoNghe } from './useGiongSong';
+import { canhNguoiNoiChen, ngheMotCau, useBienDo, type BoCanh, type BoNghe } from './useGiongSong';
 
 type Pha = 'nghe' | 'nghi' | 'noi' | 'dung';
 
@@ -36,8 +36,15 @@ const CHU: Record<Pha, string> = {
 export function ManGoi({
   onDong,
   hoi,
+  catLoiBangGiong = true,
 }: {
   onDong: () => void;
+  /**
+   * Cho phep ngat loi bang GIONG. Tat duoc vi loa ngoai mo to van ro qua
+   * khu vong am - va mot tro ly tu ngat loi chinh no lien tuc con kho dung
+   * hon mot tro ly khong ngat loi duoc.
+   */
+  catLoiBangGiong?: boolean;
   /** Gửi câu đã nghe được, nhận về câu trả lời + tiếng đọc. */
   hoi: (cau: string) => Promise<{ traLoi: string; phat: () => Promise<void>; ngung: () => void }>;
 }) {
@@ -48,12 +55,14 @@ export function ManGoi({
   const [bienDo, datBienDo] = useBienDo();
   const ngheRef = useRef<BoNghe | null>(null);
   const ngungPhatRef = useRef<(() => void) | null>(null);
+  const canhRef = useRef<BoCanh | null>(null);
   const conSongRef = useRef(true);
 
   useEffect(() => () => {
     conSongRef.current = false;
     ngheRef.current?.huy();
     ngungPhatRef.current?.();
+    canhRef.current?.thoi();
   }, []);
 
   const batDauNghe = useCallback(async () => {
@@ -74,8 +83,27 @@ export function ManGoi({
         datTraLoi(kq.traLoi);
         ngungPhatRef.current = kq.ngung;
         datPha('noi');
+
+        /*
+         * NGAT LOI BANG GIONG - canh micro TRONG LUC dang doc.
+         *
+         * Day la khac biet lon nhat giua "phai ngoi nghe het" va "noi chen
+         * vao la no im". Lon hon nhieu so voi chenh lech vai giay do tre.
+         */
+        let biCat = false;
+        if (catLoiBangGiong) {
+          canhRef.current = await canhNguoiNoiChen(() => {
+            biCat = true;
+            ngungPhatRef.current?.();      // im NGAY, dung doi het cau
+          });
+        }
+
         await kq.phat();
+        canhRef.current?.thoi();
+        canhRef.current = null;
         if (!conSongRef.current) return;
+        // Bi cat loi => nguoi dung DANG NOI DO. Nghe tiep ngay, dung cho.
+        if (biCat) { void batDauNghe(); return; }
         // Nói xong thì TỰ nghe tiếp — đó là toàn bộ điểm của chế độ này.
         void batDauNghe();
       } catch (e) {
@@ -91,7 +119,7 @@ export function ManGoi({
       return;
     }
     ngheRef.current = bo;
-  }, [hoi, datBienDo]);
+  }, [hoi, datBienDo, catLoiBangGiong]);
 
   // Mở màn là nghe luôn — người dùng bấm vào đây là để nói, không phải để
   // bấm thêm một lần nữa.
@@ -135,7 +163,7 @@ export function ManGoi({
 
       <p className="ct-goi-nhac">
         {pha === 'noi'
-          ? 'Chạm vào vòng để cắt lời và nói tiếp'
+          ? (catLoiBangGiong ? 'Cứ nói chen vào — tớ sẽ im ngay' : 'Chạm vào vòng để cắt lời')
           : 'Nói xong cứ im — tớ tự biết là hết câu'}
       </p>
     </div>

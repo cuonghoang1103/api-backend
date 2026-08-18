@@ -5813,3 +5813,15 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   .ct-nut-goi-song i { animation: none; }
   .ct-goi-vong[data-pha='noi'] .ct-goi-quang { animation: none; }
 }
+
+/* Công tắc bật/tắt trong bảng cài đặt. */
+.ct-congtac {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--ct-text);
+  cursor: pointer;
+}
+
+.ct-congtac input { width: 15px; height: 15px; accent-color: var(--ct-accent); cursor: pointer; }

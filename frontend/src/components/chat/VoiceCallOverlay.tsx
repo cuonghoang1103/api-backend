@@ -39,7 +39,7 @@ const PHASE_LABEL: Record<Phase, { vi: string; hint: string }> = {
   idle: { vi: 'Chạm để nói', hint: 'Chạm vào vòng tròn rồi nói' },
   listening: { vi: 'Đang nghe…', hint: 'Nói xong cứ im, mình tự hiểu là hết câu' },
   thinking: { vi: 'Đang nghĩ…', hint: '' },
-  speaking: { vi: 'CuongMini đang nói…', hint: 'Chạm để cắt lời' },
+  speaking: { vi: 'CuongMini đang nói…', hint: 'Chạm để cắt lời' },  // đổi động bên dưới khi bật chen giọng
   blocked: { vi: 'Không dùng được mic', hint: 'Cho phép micro trong trình duyệt rồi thử lại' },
 };
 
@@ -177,9 +177,14 @@ export default function VoiceCallOverlay({
    * đang nghe lén.
    */
   const { level: mucGiong, batDau: doGiong, dungLai: thoiDo } = useMicLevel();
+  const [chenBangGiong, datChenBangGiong] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return window.localStorage.getItem('ct-chen-giong') !== 'tat';
+  });
 
   useEffect(() => {
-    if (phase !== 'listening') { thoiDo(); return; }
+    // Mở cả khi ĐANG NÓI: đó là lúc cần nghe xem người dùng có chen lời không.
+    if (phase !== 'listening' && phase !== 'speaking') { thoiDo(); return; }
     let song = true;
     let luong: MediaStream | null = null;
     void navigator.mediaDevices?.getUserMedia({ audio: true })
@@ -195,6 +200,36 @@ export default function VoiceCallOverlay({
       luong?.getTracks().forEach((t) => t.stop());
     };
   }, [phase, doGiong, thoiDo]);
+
+  /**
+   * NGẮT LỜI BẰNG GIỌNG — nói chen vào là trợ lý im ngay, không phải chạm.
+   *
+   * ⚠️ CHỖ KHÓ DUY NHẤT: MICRO NGHE THẤY CHÍNH CÁI LOA. Không xử lý thì máy
+   * tự ngắt lời chính nó ngay câu đầu. Hai lớp chống:
+   *   1. `echoCancellation` của trình duyệt (bật trong `getUserMedia`)
+   *   2. ngưỡng cao hơn hẳn mức nói thường, và phải GIỮ LIÊN TỤC 250ms —
+   *      phần loa rò qua khử vọng âm thì nhỏ và ngắt quãng, còn giọng người
+   *      nói vào micro thì to và liên tục.
+   *
+   * Loa ngoài mở rất to vẫn có thể rò lọt, nên có công tắc tắt: một trợ lý
+   * tự ngắt lời mình liên tục còn khó dùng hơn một trợ lý không ngắt được.
+   */
+  const NGUONG_CHEN = 0.05;
+  const GIU_MS = 250;
+  const chenTu = useRef(0);
+
+  useEffect(() => {
+    if (phase !== 'speaking' || !chenBangGiong) { chenTu.current = 0; return; }
+    if (mucGiong > NGUONG_CHEN) {
+      if (!chenTu.current) chenTu.current = Date.now();
+      else if (Date.now() - chenTu.current >= GIU_MS) {
+        chenTu.current = 0;
+        stopSpeak();          // im NGAY; effect sẵn có sẽ chuyển sang nghe
+      }
+    } else {
+      chenTu.current = 0;
+    }
+  }, [mucGiong, phase, chenBangGiong, stopSpeak]);
 
   const tapOrb = useCallback(() => {
     if (phase === 'speaking') { stopSpeak(); return; }  // cắt lời → effect trên sẽ nghe tiếp
@@ -333,7 +368,34 @@ export default function VoiceCallOverlay({
 
         <div className="min-h-[3.5rem]">
           <p className={`text-lg font-medium ${textMain}`} aria-live="polite">{label.vi}</p>
-          {label.hint && <p className={`mt-1 text-[13px] ${textFaint}`}>{label.hint}</p>}
+          {(() => {
+            // Khi bật chen giọng thì câu gợi ý lúc máy nói phải nói ĐÚNG cách
+            // dùng — bảo "chạm để cắt lời" trong khi nói chen cũng được là
+            // giấu mất tính năng vừa làm.
+            const goiY = phase === 'speaking' && chenBangGiong
+              ? 'Cứ nói chen vào — mình sẽ im ngay'
+              : label.hint;
+            return goiY ? <p className={`mt-1 text-[13px] ${textFaint}`}>{goiY}</p> : null;
+          })()}
+
+          {/* Công tắc chen lời. Đặt ngay đây chứ không giấu trong cài đặt:
+              người cần tắt nó là người vừa bị nó ngắt lời nhầm, và họ đang ở
+              đúng màn hình này. */}
+          <button
+            type="button"
+            onClick={() => {
+              const moi = !chenBangGiong;
+              datChenBangGiong(moi);
+              window.localStorage.setItem('ct-chen-giong', moi ? 'bat' : 'tat');
+            }}
+            className={`mt-3 rounded-full border px-3 py-1 text-[11.5px] transition-colors ${textFaint}`}
+            style={{ borderColor: 'currentColor', opacity: 0.75 }}
+            title={chenBangGiong
+              ? 'Đang bật. Loa ngoài mở to có thể rò tiếng vào micro làm nó tự ngắt lời — khi đó hãy tắt.'
+              : 'Đang tắt. Muốn cắt lời thì chạm vào vòng tròn.'}
+          >
+            Ngắt lời bằng giọng: {chenBangGiong ? 'BẬT' : 'TẮT'}
+          </button>
         </div>
 
         {/* Lời thoại gần nhất — mỗi bên tối đa 2 dòng, đủ để biết máy nghe đúng chưa */}

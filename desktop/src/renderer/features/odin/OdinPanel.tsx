@@ -105,6 +105,26 @@ export function OdinPanel() {
         </div>
 
         <div className="ct-row">
+          <dt>Ngắt lời bằng giọng</dt>
+          <dd>
+            <label className="ct-congtac">
+              <input
+                type="checkbox"
+                checked={settings.odinCatLoi !== false}
+                onChange={(e) => setSetting('odinCatLoi', e.target.checked)}
+              />
+              <span>{settings.odinCatLoi !== false ? 'Bật' : 'Tắt'}</span>
+            </label>
+            <p className="ct-ghichu">
+              Trong màn nói chuyện, cứ nói chen vào là trợ lý im ngay — không phải
+              chạm. Dùng <strong>tai nghe</strong> thì chính xác nhất; loa ngoài mở
+              to có thể rò tiếng vào micro làm nó tự ngắt lời chính mình, khi đó
+              hãy tắt mục này.
+            </p>
+          </dd>
+        </div>
+
+        <div className="ct-row">
           <dt>Tốc độ đọc</dt>
           <dd>
             <div className="ct-tocdo">

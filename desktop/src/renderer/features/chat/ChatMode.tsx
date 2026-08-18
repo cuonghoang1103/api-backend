@@ -778,7 +778,11 @@ export function ChatMode({ pro }: { pro: boolean }) {
       {/* Màn nói chuyện phủ lên trên — đặt CUỐI cây để nó nằm trên mọi thứ
           mà không phải đấu z-index với thanh công cụ và ô soạn. */}
       {moManGoi && (
-        <ManGoi hoi={luotGoi} onDong={() => { ngungNoi(); datMoManGoi(false); }} />
+        <ManGoi
+          hoi={luotGoi}
+          catLoiBangGiong={settings.odinCatLoi !== false}
+          onDong={() => { ngungNoi(); datMoManGoi(false); }}
+        />
       )}
     </div>
   );

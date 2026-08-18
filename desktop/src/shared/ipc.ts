@@ -100,6 +100,13 @@ export const settingKeySchema = z.enum([
   'odinNgonNgu',
   /** Tốc độ đọc, 0,5–1,5. Áp cho mọi giọng ở cả dock lẫn cửa sổ robot nổi. */
   'odinTocDo',
+  /**
+   * Cho phép ngắt lời trợ lý bằng GIỌNG (mặc định bật).
+   *
+   * Tắt được vì loa ngoài mở to vẫn rò qua khử vọng âm, và khi rò thì máy
+   * tự ngắt lời chính nó — khó dùng hơn hẳn việc không ngắt lời được.
+   */
+  'odinCatLoi',
   'odinGiongVi',
   'odinGiongEn',
   /** Odin có ĐỌC THÀNH TIẾNG câu trả lời không. Tắt được, vì có lúc cần yên. */

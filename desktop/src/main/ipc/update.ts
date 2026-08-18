@@ -584,14 +584,27 @@ async function tuCapNhat(): Promise<void> {
      * `open` ngay lập tức thì macOS thấy app cùng bundle id đang chạy và chỉ
      * đưa cửa sổ CŨ ra trước — người dùng thấy "không có gì xảy ra". Một tiến
      * trình con tách rời đợi tiến trình cha biến mất rồi mới mở.
+     *
+     * ⛔ KHÔNG dùng kèm `app.relaunch()`, và KHÔNG dùng `open -n`.
+     *
+     * App có `requestSingleInstanceLock()` (main/index.ts): thực thể thứ hai
+     * xin khoá không được là `app.quit()` ngay. Nếu vừa `app.relaunch()` vừa
+     * `open -n` thì có HAI thực thể cùng khởi động và đua nhau giành khoá —
+     * cái thua tự thoát. Tuỳ lúc, cái thua lại chính là cái đã dựng xong cửa
+     * sổ, và người dùng thấy app "nháy lên rồi tắt" hoặc "không khởi động lại".
+     *
+     * Giữ đúng MỘT đường: đợi tiến trình này chết, rồi `open` (không `-n`).
+     * Lúc đó không còn thực thể nào nên không có ai để tranh khoá; mà nếu
+     * người dùng đã tự mở lại trong lúc chờ thì `open` chỉ đưa cửa sổ đó ra
+     * trước — đúng thứ họ muốn.
      */
     const { spawn } = await import('node:child_process');
-    spawn('/bin/sh', ['-c', `while kill -0 ${process.pid} 2>/dev/null; do sleep 0.4; done; open -n "${noi.duong}"`], {
+    spawn('/bin/sh', ['-c', `while kill -0 ${process.pid} 2>/dev/null; do sleep 0.4; done; open "${noi.duong}"`], {
       detached: true, stdio: 'ignore',
     }).unref();
 
     broadcast({ state: 'caiXong', version });
-    setTimeout(() => { app.relaunch(); app.exit(0); }, 900);
+    setTimeout(() => app.exit(0), 900);
   } catch (err) {
     broadcast({
       state: 'error',

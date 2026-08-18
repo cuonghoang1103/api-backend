@@ -277,12 +277,10 @@ export function MusicPage() {
       {/* ─── Bàn DJ ─── */}
       {khu === 'remix' && (
         <>
-          <RemixDeck tracks={baiRemix.length > 0 ? baiRemix : tracks} />
-          {baiRemix.length === 0 && (
-            <p className="ct-muted" style={{ marginTop: 10 }}>
-              Chưa có bài nào ở kho REMIX — bàn DJ đang dùng tạm thư viện thường.
-            </p>
-          )}
+          {/* Đưa CẢ HAI kho vào bàn DJ. Kho Remix của web toàn là link YouTube
+              (chưa có file nhạc), nên nếu chỉ đưa mỗi nó thì mở bàn DJ ra là
+              không có gì phát được ngay. */}
+          <RemixDeck baiRemix={baiRemix} baiThuong={tracks} />
         </>
       )}
 

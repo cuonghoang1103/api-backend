@@ -2280,17 +2280,27 @@ code {
 /* ══════════════════════════════════════════════════════════
    BÀN DJ
    ══════════════════════════════════════════════════════════ */
-.ct-dj { margin-bottom: 20px; }
+.ct-dj {
+  margin-bottom: 20px;
+  /* Màu riêng cho từng mâm — nhìn là biết đang chỉnh bên nào, không phải đọc
+     chữ "MÂM A". Đây là quy ước của mọi bàn DJ thật. */
+  --dj-a: #22d3ee;
+  --dj-b: #f472b6;
+}
+.ct-dj-mam[data-ten='A'] { --dj-mau: var(--dj-a); }
+.ct-dj-mam[data-ten='B'] { --dj-mau: var(--dj-b); }
 .ct-dj-den {
   position: relative;
-  height: 132px;
-  border: 1px solid var(--ct-border);
+  height: 168px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: var(--ct-radius-lg);
   background:
-    radial-gradient(90% 130% at 50% 100%, color-mix(in srgb, var(--ct-accent) 20%, transparent), transparent 70%),
-    #08080d;
+    radial-gradient(70% 120% at 20% 0%, rgba(34, 211, 238, 0.14), transparent 60%),
+    radial-gradient(70% 120% at 80% 0%, rgba(244, 114, 182, 0.14), transparent 60%),
+    linear-gradient(#0a0a11, #06060a);
   overflow: hidden;
   margin-bottom: 14px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 .ct-dj-canvas { width: 100%; height: 100%; display: block; }
 .ct-dj-den-nhan {
@@ -2302,23 +2312,65 @@ code {
 .ct-dj-ban { display: grid; grid-template-columns: 1fr 132px 1fr; gap: 14px; align-items: stretch; }
 @media (max-width: 900px) { .ct-dj-ban { grid-template-columns: 1fr; } }
 .ct-dj-mam {
-  padding: 14px;
+  position: relative;
+  padding: 15px;
   border: 1px solid var(--ct-border);
   border-radius: var(--ct-radius-lg);
-  background: var(--ct-surface);
-  display: flex; flex-direction: column; gap: 11px;
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--dj-mau) 13%, transparent), transparent 62%),
+    var(--ct-surface);
+  display: flex; flex-direction: column; gap: 12px;
+  overflow: hidden;
+}
+/* Vệt màu ở mép trên: dấu nhận biết mâm, mảnh thôi để không thành sặc sỡ. */
+.ct-dj-mam::before {
+  content: '';
+  position: absolute; inset: 0 0 auto 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--dj-mau), transparent);
+}
+.ct-dj-nhan { color: var(--dj-mau, var(--ct-accent-text)); }
+
+/* Cột mức tín hiệu — cho biết mâm nào ĐANG ra tiếng, kể cả khi crossfader
+   đã kéo hẳn sang bên kia. */
+.ct-dj-vu {
+  flex: 0 0 auto;
+  width: 5px; height: 92px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.07);
+  display: flex; align-items: flex-end;
+  overflow: hidden;
+}
+.ct-dj-vu i {
+  width: 100%;
+  background: linear-gradient(to top, var(--dj-mau), #fff);
+  border-radius: 3px;
+  transition: height 90ms linear;
+}
+.ct-dj-ghi {
+  margin: 6px 0 0; font-size: 11.5px; line-height: 1.45;
+  color: var(--dj-mau, var(--ct-accent-text));
 }
 .ct-dj-mam-top { display: flex; justify-content: space-between; align-items: center; }
 .ct-dj-nhan { font-size: 10.5px; font-weight: 700; letter-spacing: 0.18em; color: var(--ct-accent-text); }
 .ct-dj-thoigian { font-size: 11.5px; color: var(--ct-text-faint); font-variant-numeric: tabular-nums; }
 .ct-dj-dia-hang { display: flex; gap: 13px; align-items: center; }
 .ct-dj-dia {
-  position: relative; flex: 0 0 auto; width: 92px; height: 92px; border-radius: 50%;
+  position: relative; flex: 0 0 auto; width: 96px; height: 96px; border-radius: 50%;
   display: grid; place-items: center; overflow: hidden;
   background: repeating-radial-gradient(circle at 50% 50%, rgba(0,0,0,0.45) 0 1px, rgba(0,0,0,0.18) 1px 3px), #131318;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.36);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4),
+              0 0 0 1px rgba(255, 255, 255, 0.06),
+              0 0 26px color-mix(in srgb, var(--dj-mau) 30%, transparent);
   animation: ct-spin 3.2s linear infinite;
   animation-play-state: paused;
+}
+/* Vệt sáng quét trên mặt đĩa — chi tiết nhỏ nhưng thiếu nó thì đĩa trông phẳng
+   như một hình tròn tô màu. */
+.ct-dj-dia::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: 50%;
+  background: linear-gradient(125deg, rgba(255,255,255,0.16) 0%, transparent 42%);
+  pointer-events: none;
 }
 .ct-dj-dia.is-quay { animation-play-state: running; }
 .ct-dj-dia img { width: 62%; height: 62%; border-radius: 50%; object-fit: cover; }
@@ -2340,9 +2392,15 @@ code {
   appearance: none; width: 100%; height: 5px; border-radius: 3px; cursor: pointer;
   background: linear-gradient(to right, var(--ct-accent) 0 var(--ct-progress, 0%), var(--ct-border) var(--ct-progress, 0%) 100%);
 }
+.ct-dj-num input[type='range'] {
+  background: linear-gradient(to right,
+    var(--dj-mau, var(--ct-accent)) 0 var(--ct-progress, 0%),
+    rgba(255,255,255,0.09) var(--ct-progress, 0%) 100%);
+}
 .ct-dj-num input[type='range']::-webkit-slider-thumb {
-  appearance: none; width: 14px; height: 14px; border-radius: 50%;
-  background: #fff; box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  appearance: none; width: 15px; height: 15px; border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.5), 0 0 10px color-mix(in srgb, var(--dj-mau) 70%, transparent);
 }
 .ct-dj-chon select {
   width: 100%; padding: 7px 9px; font: inherit; font-size: 12.5px;
@@ -2352,14 +2410,18 @@ code {
 .ct-dj-giua {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
   padding: 14px 10px; border: 1px solid var(--ct-border);
-  border-radius: var(--ct-radius-lg); background: var(--ct-surface);
+  border-radius: var(--ct-radius-lg);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--dj-a) 8%, var(--ct-surface)),
+                                      color-mix(in srgb, var(--dj-b) 8%, var(--ct-surface)));
 }
+.ct-dj-cross-nhan span:first-child { color: var(--dj-a); }
+.ct-dj-cross-nhan span:last-child { color: var(--dj-b); }
 /* Crossfader dựng ĐỨNG trên màn rộng: nó nằm giữa hai mâm, và nằm ngang thì
    không ai nhìn ra nó thuộc về cả hai bên. */
 .ct-dj-cross {
   appearance: none; width: 5px; flex: 1; min-height: 120px; border-radius: 3px; cursor: pointer;
   writing-mode: vertical-lr;
-  background: linear-gradient(to bottom, var(--ct-accent) 0 var(--ct-progress, 50%), var(--ct-border) var(--ct-progress, 50%) 100%);
+  background: linear-gradient(to bottom, var(--dj-a) 0 var(--ct-progress, 50%), var(--dj-b) var(--ct-progress, 50%) 100%);
 }
 .ct-dj-cross::-webkit-slider-thumb {
   appearance: none; width: 26px; height: 16px; border-radius: 4px;

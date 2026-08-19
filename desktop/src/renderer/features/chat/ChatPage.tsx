@@ -18,6 +18,7 @@ import { AgentMode } from './AgentMode';
 import { BrowserMode } from './BrowserMode';
 import { ChatMode } from './ChatMode';
 import { ThanhTab, type TabAgent } from './Tabs';
+import { ThanhBen } from './ThanhBen';
 import { useAgentInfo } from './useAgent';
 
 type CheDo = 'chat' | 'code' | 'web';
@@ -96,6 +97,19 @@ export function ChatPage() {
     })();
     return () => { huy = true; };
   }, [info?.pro, tabs.length]);
+
+  /**
+   * Mở một việc cũ VÀO TAB ĐANG MỞ.
+   *
+   * Không tạo tab mới: người dùng bấm vào lịch sử là muốn ĐỌC LẠI, và mỗi cú
+   * bấm sinh một tab thì sau năm phút họ có mười tab không đóng kịp. Main
+   * (`agent:moPhien`) thay hội thoại của tab đó và bắn sự kiện để `AgentMode`
+   * vẽ lại — nên ở đây không phải tự đặt state gì.
+   */
+  const moPhienVaoTab = async (id: string): Promise<void> => {
+    if (!tabMo) return;
+    await window.cuongthai?.agent.moPhien(tabMo, id);
+  };
 
   const themTab = (): void => {
     void window.cuongthai?.agent.taoCuoc().then((id) => {
@@ -205,6 +219,19 @@ export function ChatPage() {
           </div>
         </div>
 
+        {/* ⚠️ Thanh bên CHỈ hiện ở chế độ Lập trình. Ở Trò chuyện nó sẽ liệt kê
+            đúng cùng danh sách phiên agent — tức là một cột chiếm chỗ để hiện
+            thứ không mở được từ đó. Ở Trình duyệt thì trang web là lớp phủ do
+            main vẽ theo toạ độ, thêm một cột bên trái là lệch hết toạ độ đó. */}
+        <div className="ct-ai-than" data-co-ben={cheDo === 'code'}>
+          {cheDo === 'code' && (
+            <ThanhBen
+              cuocId={tabMo || null}
+              onMoPhien={(id) => { void moPhienVaoTab(id); }}
+              onTaoTab={themTab}
+            />
+          )}
+
         {/* Cả hai chế độ được GIỮ SỐNG bằng CSS thay vì tháo khỏi cây React.
             Tháo ra là mất hội thoại đang dở chỉ vì người dùng liếc sang tab kia
             — và với chế độ Lập trình thì đó là hội thoại đã tốn tiền thật. */}
@@ -272,6 +299,7 @@ export function ChatPage() {
               </div>
             </div>
           )}
+        </div>
         </div>
       </div>
     </div>

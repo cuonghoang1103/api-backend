@@ -2683,6 +2683,127 @@ select {
   padding: 12px 20px 10px;
 }
 
+/* ══════════════════════════════════════════════════════════
+   THANH BÊN TRÁI CỦA TRANG AI — lịch sử phiên
+   ══════════════════════════════════════════════════════════ */
+
+.ct-ai-than {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  gap: 0;
+}
+.ct-ai-than > .ct-chedo { flex: 1; min-width: 0; }
+
+.ct-tb {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--ct-border);
+  padding-right: 8px;
+  margin-right: 10px;
+}
+/* Đang kéo thì TẮT hiệu ứng chuyển: bề rộng đổi theo từng khung hình, để
+   transition vào là thanh chạy đuổi theo con trỏ chậm hơn nửa giây. */
+.ct-tb[data-keo='true'] { user-select: none; }
+
+.ct-tb-dau { display: flex; align-items: center; gap: 5px; padding: 0 2px 8px; }
+.ct-tb-nut {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; flex-shrink: 0;
+  border: none; border-radius: 7px;
+  background: none; color: var(--ct-text-faint);
+  cursor: pointer;
+}
+.ct-tb-nut:hover { background: var(--ct-hover); color: var(--ct-text); }
+
+.ct-tb-tim {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: 5px;
+  padding: 4px 8px;
+  border: 1px solid var(--ct-border); border-radius: 8px;
+  background: var(--ct-surface-2); color: var(--ct-text-faint);
+}
+.ct-tb-tim input {
+  flex: 1; min-width: 0;
+  border: none; background: none; outline: none;
+  color: var(--ct-text); font: inherit; font-size: 12px;
+}
+.ct-tb-tim input::placeholder { color: var(--ct-text-faint); }
+
+.ct-tb-ds { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.ct-tb-trong {
+  display: flex; align-items: center; gap: 5px;
+  margin: 8px 4px; font-size: 12px; color: var(--ct-text-faint);
+}
+
+.ct-tb-nhom { margin-bottom: 12px; }
+.ct-tb-nhom h3 {
+  display: flex; align-items: center; gap: 5px;
+  margin: 0 0 4px; padding: 0 4px;
+  font-size: 10.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--ct-text-faint);
+  /* Dính lại khi cuộn: danh sách dài thì phải luôn biết đang xem dự án nào. */
+  position: sticky; top: 0; z-index: 1;
+  background: var(--ct-surface);
+  padding-top: 4px; padding-bottom: 4px;
+}
+
+.ct-tb-muc { display: flex; align-items: center; gap: 2px; }
+.ct-tb-muc-mo {
+  flex: 1; min-width: 0;
+  padding: 5px 8px;
+  border: none; border-radius: 7px;
+  background: none; color: var(--ct-text-muted);
+  font: inherit; font-size: 12.5px; text-align: left;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  cursor: pointer;
+}
+.ct-tb-muc-mo:hover { background: var(--ct-hover); color: var(--ct-text); }
+
+/* Nút xoá chỉ hiện khi rê vào hàng — hiện thường trực thì mỗi hàng có một
+   thùng rác đỏ, và mắt dừng ở đó thay vì ở tiêu đề. */
+.ct-tb-muc-xoa {
+  opacity: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; flex-shrink: 0;
+  border: none; border-radius: 6px;
+  background: none; color: var(--ct-text-faint);
+  cursor: pointer;
+  transition: opacity var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-tb-muc:hover .ct-tb-muc-xoa { opacity: 1; }
+.ct-tb-muc-xoa:hover { color: var(--ct-err); background: var(--ct-hover); }
+
+/* Vạch kéo: rộng 8px để dễ trúng, nhưng chỉ VẼ một sợi mảnh khi rê vào. */
+.ct-tb-keo {
+  position: absolute; top: 0; bottom: 0; right: -4px;
+  width: 8px;
+  cursor: col-resize;
+}
+.ct-tb-keo:hover::after,
+.ct-tb[data-keo='true'] .ct-tb-keo::after {
+  content: ''; position: absolute; top: 0; bottom: 0; left: 3px;
+  width: 2px; background: var(--ct-accent);
+}
+
+/* Đã gập: còn một cái tai nhỏ để mở lại. */
+.ct-tb-mo {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 34px; flex-shrink: 0;
+  margin-right: 8px;
+  border: 1px solid var(--ct-border);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  background: var(--ct-surface-2); color: var(--ct-text-faint);
+  cursor: pointer;
+}
+.ct-tb-mo:hover { color: var(--ct-text); border-color: var(--ct-accent); }
+
 /* ── Nút gập đầu trang ── */
 .ct-page-head-gap {
   display: inline-flex; align-items: center; justify-content: center;

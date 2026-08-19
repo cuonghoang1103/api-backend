@@ -118,6 +118,9 @@ export const settingKeySchema = z.enum([
    * gập lại mỗi ngày, và cái nút thành phiền hơn là tiện.
    */
   'aiGapDau',
+  /** Thanh bên trái của trang AI: đang gập, và rộng bao nhiêu px. */
+  'aiThanhBenGap',
+  'aiThanhBenRong',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 

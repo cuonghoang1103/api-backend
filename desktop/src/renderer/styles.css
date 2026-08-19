@@ -3977,6 +3977,47 @@ select {
    Bảng màu tự đặt theo biến chủ đề thay vì nhập một theme của highlight.js:
    theme dựng sẵn ghim màu tuyệt đối, nên ở chủ đề sáng nó cho ra chữ vàng nhạt
    trên nền trắng. */
+/* ── Lệnh shell: TÔ MÀU như mã, đừng để trùng chữ chat ──
+   Người dùng 19/08/2026: "code và lệnh không có màu, nó trùng với chữ chat".
+   Đúng — khối mã trong câu trả lời ĐI QUA markdown nên có màu sẵn, nhưng lệnh
+   trong thẻ duyệt và dòng tool thì không: chúng là `<code>` trần.
+
+   Không chạy highlight.js ở đây (một lời gọi cho mỗi dòng tool là đắt và
+   phần lớn lệnh chỉ một dòng). Thay bằng: nền tối hơn, chữ xanh mint, và dấu
+   `$` nhạt ở đầu — đủ để mắt tách nó khỏi văn xuôi ngay lập tức. */
+.ct-lenh-hop {
+  display: flex; align-items: flex-start; gap: 7px;
+  padding: 8px 11px;
+  border: 1px solid var(--ct-border);
+  border-left: 3px solid var(--ct-accent);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+}
+.ct-lenh-dau { color: var(--ct-text-faint); font-family: ui-monospace, Menlo, monospace; flex-shrink: 0; }
+.ct-lenh-chu {
+  flex: 1; min-width: 0;
+  padding: 0; border: none; background: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px; line-height: 1.5;
+  color: #56b6c2;
+  white-space: pre-wrap; word-break: break-all;
+}
+html[data-ct-theme='light'] .ct-lenh-chu { color: #0184bc; }
+
+/* Lệnh ĐÃ CHẠY thu về một dòng — vẫn phải khác màu văn xuôi. */
+.ct-agent-tool > code { color: #56b6c2; }
+html[data-ct-theme='light'] .ct-agent-tool > code { color: #0184bc; }
+
+/* ── Chữ ĐẬM phải NỔI HẲN ──
+   Bản trước `strong` chỉ đậm hơn một chút, cùng màu chữ thường, nên "phân
+   biệt những thứ quan trọng" không có tác dụng gì. Nay đậm hơn VÀ sáng hơn. */
+.ct-md strong, .ct-agent-may strong {
+  font-weight: 700;
+  color: var(--ct-text);
+}
+.ct-md, .ct-agent-may { color: var(--ct-text-muted); }
+.ct-md em { color: var(--ct-text); font-style: italic; }
+
 .hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-section { color: #c678dd; }
 .hljs-string, .hljs-regexp, .hljs-addition { color: #98c379; }
 .hljs-number, .hljs-symbol, .hljs-bullet { color: #d19a66; }

@@ -978,7 +978,20 @@ interface KetQuaLuot {
  * CHỈ thử lại MỘT lần, và chỉ với nhóm lỗi này. Lỗi "hết hạn mức", "chưa Pro",
  * "cổng trả 400" mà thử lại thì chỉ tốn thêm tiền cho cùng một câu trả lời.
  */
-const MA_DANG_THU_LAI = new Set(['CONNECTION_LOST', 'LLM_ERROR']);
+const MA_DANG_THU_LAI = new Set([
+  'CONNECTION_LOST', 'LLM_ERROR',
+  /*
+   * MÁY CHỦ ĐANG KHỞI ĐỘNG LẠI. 19/08/2026 người dùng nhận "Máy chủ trả về
+   * 502" giữa một lượt agent 20 bước — vì tôi deploy đúng lúc họ đang chạy.
+   * Container tráo mất ~10 giây; lượt chết vĩnh viễn và mọi bước đã đi đều
+   * mất, dù chỉ cần đợi một nhịp.
+   *
+   * Ba mã này KHÔNG phải "cổng AI từ chối" mà là "chỗ nhận đang thay ca" —
+   * đúng loại đáng thử lại nhất, và thử lại rẻ hơn nhiều so với bắt người
+   * dùng gõ lại câu hỏi.
+   */
+  '502', '503', '504',
+]);
 
 async function mgoiMotLuot(o: {
   token: string;

@@ -106,7 +106,12 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     description:
       'Đọc nội dung một file, trả về kèm số dòng ở đầu mỗi dòng. ' +
       'MẶC ĐỊNH chỉ đọc 800 dòng đầu — file dài hơn sẽ bị CẮT và cuối kết quả có ghi rõ còn bao nhiêu dòng. ' +
-      'Cần phần sau thì gọi lại với offset. Đừng đoán nội dung phần bị cắt.',
+      'Cần phần sau thì gọi lại với offset. Đừng đoán nội dung phần bị cắt. ' +
+      'ĐỌC ĐƯỢC CẢ ẢNH (.png .jpg .jpeg .gif .webp) — trả về tấm ảnh để bạn NHÌN, không phải mô tả. ' +
+      'Nhờ vậy bạn chụp được màn hình bất cứ thứ gì chạy được lệnh: ' +
+      'điện thoại Android qua cáp (`adb exec-out screencap -p > /tmp/man.png` rồi read_file nó), ' +
+      'máy ảo iOS (`xcrun simctl io booted screenshot /tmp/man.png`), ' +
+      'màn hình máy (`screencapture -x /tmp/man.png` trên macOS). Trần 1.4MB mỗi ảnh.',
     parameters: {
       type: 'object',
       properties: {

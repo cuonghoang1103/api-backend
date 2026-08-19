@@ -316,6 +316,55 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
     };
   }
 
+  /*
+   * ẢNH: TRẢ VỀ DẠNG ẢNH, KHÔNG PHẢI CHỮ.
+   *
+   * Người dùng 20/08/2026 hỏi vì sao Claude Code chụp được màn hình điện
+   * thoại qua cáp USB rồi đưa vào hội thoại, còn AI Code trong app thì không.
+   *
+   * Hoá ra khoảng cách chỉ có ĐÚNG MỘT BƯỚC. Claude Code làm hai việc:
+   *   1. `adb exec-out screencap -p > man.png`   ← `run_command`, app ĐÃ CÓ
+   *   2. đọc `man.png` NHƯ MỘT TẤM ẢNH           ← chỗ này app thiếu
+   *
+   * Bước 2 trước đây rơi vào bộ bắt file nhị phân ngay dưới và trả về "không
+   * đọc thành chữ được" — nên model kết luận nó "không có tool chụp màn
+   * hình", trong khi thứ thiếu là khả năng ĐỌC ẢNH ĐÃ CÓ SẴN TRÊN ĐĨA.
+   *
+   * Đường ống ảnh thì đã chạy từ 19/08 (`web_anh`), và đã đo tận cổng: ảnh
+   * phải là KHỐI ANH EM cạnh `tool_result`, nhét vào trong nó là cổng lọc mất
+   * (xem `src/services/agent/anthropic.ts`). Ở đây chỉ nối thêm một nguồn vào
+   * đúng đường ống đó.
+   *
+   * Bốn định dạng này là toàn bộ những gì Anthropic nhận. Định dạng khác thì
+   * rơi xuống nhánh nhị phân bên dưới và báo đúng lý do.
+   */
+  const KIEU_ANH: Record<string, string> = {
+    '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif', '.webp': 'image/webp',
+  };
+  const duoi = path.extname(dich).toLowerCase();
+  const kieu = KIEU_ANH[duoi];
+  if (kieu) {
+    // base64 phình ~4/3 so với byte gốc, và mỗi tấm ảnh còn tốn token theo
+    // diện tích. Trần riêng, thấp hơn trần file chữ: một ảnh 2MB là vài nghìn
+    // token cho MỘT lời gọi, và model thường đọc nhiều ảnh liên tiếp.
+    const TRAN_ANH = 1_400_000;
+    if (st.size > TRAN_ANH) {
+      return {
+        noiDung: `LỖI: ảnh nặng ${(st.size / 1024 / 1024).toFixed(1)}MB, quá lớn (trần 1.4MB). `
+          + 'Thu nhỏ trước bằng run_command (ví dụ `sips -Z 1200 anh.png` trên macOS, '
+          + 'hoặc `magick anh.png -resize 1200x anh-nho.png`) rồi đọc lại.',
+        tomTat: 'ảnh quá lớn',
+      };
+    }
+    const byte = await fs.readFile(dich);
+    return {
+      noiDung: `Ảnh ${path.basename(dich)} (${duoi.slice(1).toUpperCase()}, ${(st.size / 1024).toFixed(0)}KB).`,
+      tomTat: `ảnh ${(st.size / 1024).toFixed(0)}KB`,
+      anh: [{ media_type: kieu, data: byte.toString('base64') }],
+    };
+  }
+
   const tho = await fs.readFile(dich, 'utf8');
   // Đọc "utf8" một file nhị phân không ném lỗi — nó trả về đầy ký tự thay thế
   // U+FFFD. Gửi đống đó lên cổng là trả tiền cho rác, nên bắt tại đây.

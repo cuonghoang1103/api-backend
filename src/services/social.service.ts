@@ -1071,9 +1071,21 @@ export function serializePost(
     savesCount: post._count?.saves ?? 0,
     // Phase 6 — sharesCount and isShared
     sharesCount: post.sharesCount ?? 0,
-    isLiked: currentUserId ? (post.likes as unknown[] | undefined)?.length ?? 0 > 0 : false,
-    isSaved: currentUserId ? (post.saves as unknown[] | undefined)?.length ?? 0 > 0 : false,
-    isShared: currentUserId ? (post.shares as unknown[] | undefined)?.length ?? 0 > 0 : false,
+    // ⚠️ Cặp ngoặc quanh `?? 0` là BẮT BUỘC. Không có nó, JavaScript đọc
+    //     (x)?.length ?? 0 > 0
+    // thành
+    //     (x)?.length ?? (0 > 0)
+    // vì `>` ưu tiên cao hơn `??`. Khi `length` tồn tại thì biểu thức trả về
+    // chính CON SỐ đó, không phải boolean — `isLiked: 1` thay vì `isLiked: true`.
+    //
+    // Web viết bằng JS nên không ai phát hiện suốt nhiều tháng: 0/1 dùng được
+    // y như false/true trong mọi câu `if`. Nhưng app iOS giải mã JSON theo
+    // kiểu chặt, gặp số ở chỗ khai Bool là hỏng NGAY — và hỏng cả mảng, nên
+    // TOÀN BỘ bảng tin trắng trơn chứ không phải mất mỗi một trường.
+    // Tìm ra 19/08/2026 khi dựng app iOS.
+    isLiked: currentUserId ? ((post.likes as unknown[] | undefined)?.length ?? 0) > 0 : false,
+    isSaved: currentUserId ? ((post.saves as unknown[] | undefined)?.length ?? 0) > 0 : false,
+    isShared: currentUserId ? ((post.shares as unknown[] | undefined)?.length ?? 0) > 0 : false,
     // ─── Reaction fields (added 2026-06-20) ────────────────────
     // The user's current reaction type (or null if they haven't
     // reacted). PostCard reads this to highlight the right emoji.

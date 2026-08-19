@@ -2670,6 +2670,8 @@ select {
   padding: 0;
   display: flex;
   min-height: 0;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .ct-panel-full {
@@ -2691,13 +2693,27 @@ select {
   flex: 1;
   display: flex;
   min-height: 0;
+  min-width: 0;
   gap: 0;
+  /* ⚠️ CHẶN TRÀN NGANG. Người dùng gửi ảnh 19/08/2026 khoanh một thanh cuộn
+     ngang chạy suốt đáy cửa sổ, che mất ô nhập. Thanh bên có bề rộng CỐ ĐỊNH
+     (px, do người dùng kéo) cộng thêm padding + margin; chỉ cần cột giữa đòi
+     rộng hơn phần còn lại một chút là tổng vượt cửa sổ và trình duyệt đẻ ra
+     thanh cuộn cho CẢ TRANG.
+
+     `min-width: 0` cho phép cột giữa co lại (mặc định của flex item là
+     `min-width: auto` = không co nhỏ hơn nội dung), còn `overflow: hidden`
+     là lưới chặn cuối: có tràn thì cắt, tuyệt đối không đẻ thanh cuộn. */
+  overflow: hidden;
 }
 .ct-ai-than > .ct-chedo { flex: 1; min-width: 0; }
 
 .ct-tb {
   position: relative;
   flex-shrink: 0;
+  /* Bề rộng đặt bằng `style` là bề rộng TỔNG, kể cả padding — nếu không thì
+     mỗi lần kéo lại cộng thêm 18px vô hình và tổng vượt cửa sổ. */
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   min-height: 0;

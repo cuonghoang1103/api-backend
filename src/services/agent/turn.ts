@@ -74,6 +74,13 @@ import { prisma } from '../../config/database.js';
  */
 export type MucNoLuc = 'thap' | 'vua' | 'cao' | 'ratCao' | 'toiDa' | 'ultracode';
 
+/** Tên hiển thị của từng mức. Một chỗ duy nhất — bảng chọn và câu báo lỗi
+ *  phải gọi cùng một tên, không thì người dùng đọc "Kỹ" trong lỗi rồi đi tìm
+ *  "Kỹ" trong bảng chọn và không thấy. */
+const TEN_MUC: Record<MucNoLuc, string> = {
+  thap: 'Thấp', vua: 'Vừa', cao: 'Cao', ratCao: 'Rất cao', toiDa: 'Tối đa', ultracode: 'Ultracode',
+};
+
 const TRAN_BUOC: Record<MucNoLuc, number> = {
   thap: 8,
   vua: 30,
@@ -110,7 +117,7 @@ export const DS_MUC_NO_LUC: ReadonlyArray<{ id: MucNoLuc; ten: string; buoc: num
   Object.freeze(
     (Object.keys(TRAN_BUOC) as MucNoLuc[]).map((id) => ({
       id,
-      ten: { thap: 'Thấp', vua: 'Vừa', cao: 'Cao', ratCao: 'Rất cao', toiDa: 'Tối đa', ultracode: 'Ultracode' }[id],
+      ten: TEN_MUC[id],
       buoc: TRAN_BUOC[id],
       viecPhu: TRAN_VIEC_PHU[id],
     })),
@@ -378,8 +385,35 @@ function parseToolCalls(raw: unknown): ToolCall[] {
  * con số app tự khai — số app khai thì một app hỏng sẽ khai lại từ 0 mỗi lần,
  * và cái trần trở thành trang trí.
  */
-function demBuoc(messages: AgentMessage[]): number {
-  return messages.filter((m) => m.role === 'assistant' && m.tool_calls?.length).length;
+/**
+ * Số bước ĐÃ ĐI TRONG VIỆC ĐANG LÀM.
+ *
+ * ⚠️ TRƯỚC 19/08/2026 HÀM NÀY ĐẾM CẢ CUỘC TRÒ CHUYỆN, và đó là một lỗi nặng
+ * núp sau một câu thông báo nghe rất hợp lý.
+ *
+ * Người dùng gặp: "Đã chạm trần 8 bước trong một việc. Hãy hỏi lại câu hỏi
+ * hẹp hơn, hoặc bắt đầu việc mới." — hiện ra NGAY, trước khi agent làm gì.
+ * Vì bộ đếm gộp cả những câu hỏi TRƯỚC trong cùng cuộc: ở mức Thấp (8 bước),
+ * sau khoảng tám lời gọi tool cộng dồn thì MỌI câu hỏi sau đều bị từ chối
+ * tức khắc. Cuộc trò chuyện chết hẳn.
+ *
+ * Chỗ độc của nó: câu thông báo tự đề nghị "bắt đầu việc mới", nên lỗi trông
+ * y hệt một giới hạn có chủ ý. Người dùng mở cuộc mới, thấy hết, và không ai
+ * báo là hỏng.
+ *
+ * "Một việc" = từ tin nhắn `user` GẦN NHẤT trở đi. Người dùng gõ câu mới là
+ * họ giao việc mới, và trần phải tính lại từ đầu — đúng như chữ "trong một
+ * việc" vẫn nói.
+ */
+export function demBuocViecNay(messages: AgentMessage[]): number {
+  let dau = -1;
+  for (let i = messages.length - 1; i >= 0; i -= 1) {
+    if (messages[i]?.role === 'user') { dau = i; break; }
+  }
+  return messages
+    .slice(dau + 1)
+    .filter((m) => m.role === 'assistant' && m.tool_calls?.length)
+    .length;
 }
 
 /** Cổng đôi khi rò token dừng nội bộ ra câu trả lời — xem ghi chú `agent_code` trong gateway.ts. */
@@ -412,7 +446,7 @@ export async function runAgentTurn(
     ? [loiNhacDaCat(boLuot.soLuotDaBo), ...boLuot.messages]
     : boLuot.messages;
   const capabilities: AgentCapability[] = parseCapabilities(input.capabilities);
-  const buocDaDi = demBuoc(messages);
+  const buocDaDi = demBuocViecNay(messages);
   const mucNoLuc = docMucNoLuc(input.mucNoLuc);
   const laPhu = input.laPhu === true;
   // Agent phụ KHÔNG được cắm tool MCP: nó chạy không có người ngồi duyệt từng
@@ -433,7 +467,14 @@ export async function runAgentTurn(
       type: 'done',
       append: [{
         role: 'assistant',
-        content: `Đã chạm trần ${MAX_AGENT_STEPS} bước trong một việc. Hãy hỏi lại câu hỏi hẹp hơn, hoặc bắt đầu việc mới.`,
+        /* Nói rõ ĐANG Ở MỨC NÀO và nâng lên được — câu cũ chỉ khuyên "hỏi
+           hẹp hơn / bắt đầu việc mới", tức là đổ lỗi cho câu hỏi trong khi
+           thứ chặn thật là một lựa chọn người dùng đổi được trong hai giây.
+           Ở mức Thấp (8 bước) lời khuyên đó còn dẫn sai hẳn hướng. */
+        content: laPhu
+          ? `Việc phụ đã chạm trần ${MAX_AGENT_STEPS} bước.`
+          : `Đã chạm trần ${MAX_AGENT_STEPS} bước cho việc này (mức "${TEN_MUC[mucNoLuc]}"). `
+            + 'Nâng mức nỗ lực ở thanh trên để agent đi được xa hơn, hoặc hỏi lại câu hẹp hơn.',
       }],
       stop: 'max_steps',
       usage: { inputTokens: 0, outputTokens: 0, costUsd: 0 },

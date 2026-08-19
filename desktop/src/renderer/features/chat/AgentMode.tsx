@@ -24,6 +24,7 @@ import {
 import { useAppState } from '../../app-state';
 import { DangNghi } from './DangNghi';
 import { KhungWeb } from './KhungWeb';
+import { GoiYLenh } from './GoiYLenh';
 import type { AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, ModelAgent, MucNoLuc } from '../../../shared/ipc';
 import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
@@ -724,6 +725,14 @@ export function AgentMode({
           {trangThai.dangChay && <span className="ct-agent-xuongday-cham" aria-hidden />}
         </button>
       )}
+
+      {/* Bảng gợi ý lệnh — chỉ hiện khi ô nhập bắt đầu bằng `/` và chưa có
+          khoảng trắng. `GoiYLenh` tự lo phím lên/xuống/Enter/Esc. */}
+      <GoiYLenh
+        chu={nhap}
+        onChon={(ten) => datNhap(`${ten} `)}
+        onDong={() => datNhap('')}
+      />
 
       {/* ── Ô nhập ── */}
       {anh.length > 0 && (

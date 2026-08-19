@@ -6543,3 +6543,44 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 
 .ct-congtac input { width: 15px; height: 15px; accent-color: var(--ct-accent); cursor: pointer; }
+
+
+/* ══════════════════════════════════════════════════════════
+   GỢI Ý LỆNH GẠCH CHÉO
+   ══════════════════════════════════════════════════════════
+   Nổi NGAY TRÊN ô nhập, không phải giữa màn hình: mắt người dùng đang ở ô
+   nhập, và một bảng nhảy ra chỗ khác bắt họ đi tìm. */
+.ct-goiy {
+  position: relative;
+  margin: 0 0 6px;
+  padding: 4px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface);
+  box-shadow: var(--ct-shadow);
+  animation: ct-bt-vao 140ms var(--ct-ease);
+}
+.ct-goiy button {
+  display: flex; align-items: baseline; gap: 9px;
+  width: 100%; padding: 7px 10px;
+  border: none; border-radius: 7px;
+  background: none; color: var(--ct-text);
+  font: inherit; font-size: 13px; text-align: left;
+  cursor: pointer;
+}
+.ct-goiy button[data-chon='true'] { background: var(--ct-active); }
+.ct-goiy code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px; font-weight: 600; color: var(--ct-accent-text);
+  flex-shrink: 0;
+}
+.ct-goiy button > span { flex: 1; min-width: 0; color: var(--ct-text-muted); }
+.ct-goiy em {
+  font-style: normal; font-size: 11px; color: var(--ct-text-faint);
+  font-family: ui-monospace, Menlo, monospace;
+}
+.ct-goiy-chan {
+  margin: 2px 0 0; padding: 4px 10px 2px;
+  border-top: 1px solid var(--ct-border);
+  font-size: 10.5px; color: var(--ct-text-faint);
+}

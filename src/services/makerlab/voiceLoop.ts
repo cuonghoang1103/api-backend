@@ -37,7 +37,7 @@ import {
   type PersonaConfig,
 } from './persona.js';
 import { validateCommand, type ValidatedCommand } from './commands.js';
-import { synthesizeSpeech } from './tts.js';
+import { synthesizeSpeech, sinhTronGoi } from './tts.js';
 import { checkHeardSpeech } from './hallucination.js';
 import { PCM_SAMPLE_RATE } from './audio.js';
 import { gatewayKey, gatewayRoot, modelFor, endpointFor } from '../llm/gateway.js';
@@ -1794,7 +1794,13 @@ async function thinkAndSpeakLoi(
      * Trần 260: quá đó thì mối nối thưa tới mức không còn cải thiện gì,
      * mà một mẩu hỏng lại mất nhiều tiếng hơn.
      */
-    const TRAN_MAU = 260;
+    // ⚠️ THEO MÁY ĐỌC, không phải một số chung — xem `sinhTronGoi`.
+    // 260 chỉnh cho VieNeu (sinh theo luồng, byte đầu ~165 ms). Giọng sinh
+    // TRỌN GÓI (f5-*, tiếng Anh) thì mỗi mẩu phải sinh xong mới có byte đầu,
+    // nên gom to là cộng thẳng vào độ trễ và đẻ ra khoảng ngắt giữa các mẩu.
+    // 120 là con số đã đo trên bo thật cho loại này: 3,7 s sinh ra 7,3 s
+    // tiếng ⇒ bo phát gần gấp đôi thời gian máy cần cho mẩu sau.
+    const TRAN_MAU = sinhTronGoi(persona.voiceProvider, persona.voiceId) ? 120 : 260;
     let mauTruoc = 0;
     const gomToiThieu = () => (mauTruoc ? Math.min(mauTruoc * 2, TRAN_MAU) : TRAN_MAU);
     const cho: string[] = [];

@@ -594,6 +594,29 @@ export function khoaGain(provider: string, voice?: string | null): string {
   return v.startsWith('en-') || dsEn.includes(v) ? 'cuongmini-en' : 'cuongmini-vi';
 }
 
+/**
+ * Máy đọc này có trả byte đầu SỚM không, hay phải sinh xong cả đoạn?
+ *
+ * Đây là thứ quyết định CỠ MẨU ở `voiceLoop.ts`, và nó KHÔNG suy ra được từ
+ * `khoaGain` — hàm đó chỉ phân biệt Việt với Anh.
+ *
+ *   VieNeu   sinh THEO LUỒNG: byte đầu về sau ~165 ms bất kể đoạn dài bao
+ *            nhiêu ⇒ gom mẩu to chỉ có lợi (ít mối nối) mà không tốn gì.
+ *   F5, Chatterbox  sinh TRỌN GÓI rồi mới trả byte đầu. Đo thật 19/08/2026
+ *            trên F5: ≈ 900 ms phí cố định + 0,38 × số giây tiếng. Gom to ở
+ *            đây là cộng thẳng vào độ trễ mở miệng.
+ *
+ * ⚠️ Ghi chú cạnh `TRAN_MAU` đã cảnh báo "cỡ mẩu phải theo máy đọc" từ trước,
+ * nhưng hằng số vẫn là một số CHUNG — nên khi persona đổi sang giọng `f5-*`
+ * thì nó âm thầm dùng con số chỉnh cho VieNeu. Người nghe ra: robot nói được
+ * một đoạn rồi ngắt nhẹ giữa các mẩu.
+ */
+export function sinhTronGoi(provider: string, voice?: string | null): boolean {
+  if (provider !== 'cuongmini') return true;
+  const v = String(voice || '');
+  return v.startsWith('f5-') || khoaGain(provider, voice) === 'cuongmini-en';
+}
+
 /** Chuỗi bộ lọc ffmpeg, hoặc `null` nếu không cần đụng tới tiếng. */
 function chuoiLoc(rate: number, gainDb: number): string | null {
   const loc: string[] = [];

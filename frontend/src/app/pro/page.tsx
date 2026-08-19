@@ -43,8 +43,16 @@ export default function ProPage() {
       qc.invalidateQueries({ queryKey: ['pro-status'] });
       qc.invalidateQueries({ queryKey: ['music-access'] });
     } catch (e) {
-      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      toast.error(msg || 'Mã không hợp lệ hoặc đã hết lượt.');
+      const loi = e as { response?: { status?: number; data?: { message?: string } } };
+      /* 401 ở đây KHÔNG phải "mã sai" — là chưa có phiên hợp lệ ở máy chủ.
+       * Nói nhầm thành "mã sai" khiến người dùng đi hỏi lại mã mới, trong khi
+       * việc cần làm là đăng nhập lại. Đúng cái đã xảy ra 19/08/2026 với người
+       * đăng nhập bằng Google mà backend chưa tạo được tài khoản. */
+      if (loi.response?.status === 401) {
+        toast.error('Phiên đăng nhập chưa hợp lệ. Hãy đăng xuất rồi đăng nhập lại, sau đó nhập mã.');
+      } else {
+        toast.error(loi.response?.data?.message || 'Mã không hợp lệ hoặc đã hết lượt.');
+      }
     } finally {
       setSubmitting(false);
     }

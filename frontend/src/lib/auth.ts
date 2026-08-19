@@ -1,4 +1,5 @@
 import NextAuth from "next-auth";
+import { goiBackend, maNhaCungCap } from '@/lib/backendServer';
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import type { NextAuthConfig } from "next-auth";
@@ -122,7 +123,7 @@ export const authConfig: NextAuthConfig = {
 
         if (account && account.provider !== "credentials") {
           // Fresh OAuth sign-in: create/find user in backend and get role
-          endpoint = `${BACKEND_URL}/api/v1/auth/oauth/register`;
+          endpoint = `/api/v1/auth/oauth/register`;
           options = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -130,7 +131,9 @@ export const authConfig: NextAuthConfig = {
               email,
               fullName: (token.name as string) ?? email.split("@")[0],
               provider: account.provider,
-              providerId: token.sub ?? "",
+              // Có đường lùi: `token.sub` rỗng thì backend trả 422 và tài khoản
+              // KHÔNG BAO GIỜ được tạo — xem `maNhaCungCap`.
+              providerId: maNhaCungCap(token.sub, account.provider, email),
             }),
             cache: "no-store",
           };
@@ -139,18 +142,31 @@ export const authConfig: NextAuthConfig = {
           // server→server call; send the internal secret so the backend
           // accepts it while rejecting external callers. (Server-side env,
           // never exposed to the browser.)
-          endpoint = `${BACKEND_URL}/api/v1/auth/role?email=${encodeURIComponent(email)}`;
+          endpoint = `/api/v1/auth/role?email=${encodeURIComponent(email)}`;
           options = {
             cache: "no-store",
             headers: { "X-Internal-Token": process.env.INTERNAL_API_SECRET ?? "" },
           };
         }
 
-        const res = await fetch(endpoint, options);
+        const res = await goiBackend(endpoint, options);
         if (!res.ok) {
-          console.warn(`[nextauth] backend returned ${res.status}, keeping current token`);
+          /* ⛔ ĐĂNG NHẬP OAUTH MÀ BACKEND TỪ CHỐI = KHÔNG CÓ TÀI KHOẢN.
+           *
+           * Trước đây chỗ này chỉ `console.warn` rồi `return token`, nên
+           * NextAuth vẫn cấp phiên: người dùng thấy mình đã đăng nhập, còn
+           * backend thì chưa hề có tài khoản nào. Hệ quả (19/08/2026): tìm
+           * không ra user, trang cá nhân quay mãi, mã Pro báo sai — ba triệu
+           * chứng ở ba chỗ khác nhau, không chỗ nào chỉ về đây.
+           *
+           * Đánh dấu vào token để `session` biết mà báo cho người dùng, thay
+           * vì im lặng giả vờ mọi thứ ổn. */
+          const chiTiet = await res.text().catch(() => '');
+          console.error(`[nextauth] backend từ chối ${res.status} cho ${email}: ${chiTiet.slice(0, 200)}`);
+          token.backendLoi = `HTTP ${res.status}`;
           return token;
         }
+        delete (token as Record<string, unknown>).backendLoi;
 
         const data = await res.json();
         const freshRole = normalizeRole(data.data?.primaryRole ?? data.data?.role ?? "USER");
@@ -163,7 +179,9 @@ export const authConfig: NextAuthConfig = {
         token.username = (data.data?.username as string) ?? (token.username as string) ?? email.split("@")[0];
         token.backendRoleVersion = freshVersion;
       } catch (err) {
+        // Đã thử nội bộ lẫn công khai, mỗi đường 3 lần — tới đây là hỏng thật.
         console.error("[nextauth] backend unreachable:", err);
+        token.backendLoi = 'unreachable';
       }
 
       if (account && account.provider !== "credentials") {
@@ -177,6 +195,10 @@ export const authConfig: NextAuthConfig = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = (token.id as string) ?? "";
+        /* Đưa lỗi backend RA TỚI giao diện. Không có trường này thì phiên
+         * trông y hệt một phiên lành lặn, và người dùng chỉ phát hiện có gì
+         * đó sai khi mọi tính năng lần lượt hỏng theo những cách khác nhau. */
+        (session.user as unknown as Record<string, unknown>).backendLoi = token.backendLoi ?? null;
         session.user.role = (token.role as string) as any ?? "USER";
         session.user.username = (token.username as string | null) ?? null;
         session.user.isSocialUser = (token.isSocialUser as boolean) ?? true;

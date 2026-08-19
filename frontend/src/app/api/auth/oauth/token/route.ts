@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { goiBackend, maNhaCungCap } from '@/lib/backendServer';
 import { auth } from "@/lib/auth";
 
 /**
@@ -41,14 +42,16 @@ export async function POST(request: NextRequest) {
   const email = session.user.email;
   const fullName = session.user.name ?? email.split("@")[0];
   const provider = user.provider ?? "google";
-  const userId = user.id ?? "";
+  // `user.id` rỗng ⇒ backend trả 422 (`providerId` bắt buộc không rỗng) ⇒ không
+  // có tài khoản nào được tạo. Đã thấy đúng 6 lần 422 trong log ngày 19/08.
+  const providerId = maNhaCungCap(user.id, provider, email);
 
   let backendRes;
   try {
-    backendRes = await fetch(`${BACKEND_URL}/api/v1/auth/oauth/token`, {
+    backendRes = await goiBackend(`/api/v1/auth/oauth/token`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, fullName, provider, providerId: userId }),
+      body: JSON.stringify({ email, fullName, provider, providerId }),
     });
   } catch (err) {
     console.error("[oauth/token] Backend fetch error:", err);

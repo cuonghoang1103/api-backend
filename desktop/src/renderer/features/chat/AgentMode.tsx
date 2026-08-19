@@ -36,6 +36,7 @@ export function AgentMode({
   napLai,
   datTieuDe,
   datDuAn,
+  phienCanMo,
 }: {
   /** Cuộc (tab) mà màn hình này thuộc về. Mọi lời gọi IPC mang id này. */
   cuocId: string;
@@ -45,12 +46,26 @@ export function AgentMode({
   datTieuDe?: (t: string) => void;
   /** Báo tên dự án lên cha — thanh tab cần nó để phân biệt hai tab khác repo. */
   datDuAn?: (d: string | null) => void;
+  /**
+   * Cha yêu cầu mở một việc cũ (bấm từ thanh bên lịch sử).
+   *
+   * `lan` tăng mỗi lần bấm, kể cả khi `id` không đổi — bấm lại đúng việc vừa
+   * mở phải mở lại được.
+   */
+  phienCanMo?: { id: string; lan: number };
 }) {
   const {
     trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac, quayLui,
     phien, phienDangMo, moPhien, xoaPhien,
   } = useAgent(cuocId, info);
   const { settings, setSetting } = useAppState();
+
+  /* Mở việc cũ khi thanh bên yêu cầu. Dùng `moPhien` của `useAgent` chứ không
+     gọi thẳng IPC — xem chú thích ở `ChatPage.moPhienVaoTab`. */
+  useEffect(() => {
+    if (phienCanMo) void moPhien(phienCanMo.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phienCanMo?.lan]);
   /** Cảnh báo sau khi quay lui qua một đoạn CÓ sửa file. */
   const [canhQuayLui, datCanhQuayLui] = useState<string | null>(null);
   /**

@@ -102,13 +102,22 @@ export function ChatPage() {
    * Mở một việc cũ VÀO TAB ĐANG MỞ.
    *
    * Không tạo tab mới: người dùng bấm vào lịch sử là muốn ĐỌC LẠI, và mỗi cú
-   * bấm sinh một tab thì sau năm phút họ có mười tab không đóng kịp. Main
-   * (`agent:moPhien`) thay hội thoại của tab đó và bắn sự kiện để `AgentMode`
-   * vẽ lại — nên ở đây không phải tự đặt state gì.
+   * bấm sinh một tab thì sau năm phút họ có mười tab không đóng kịp.
+   *
+   * ⚠️ KHÔNG gọi thẳng `agent.moPhien` từ đây. Bản đầu làm thế và bấm vào lịch
+   * sử KHÔNG CÓ GÌ XẢY RA: IPC đó TRẢ VỀ bảng ghi khôi phục chứ không bắn sự
+   * kiện, nên `AgentMode` chẳng biết gì mà vẽ lại. (Tôi còn viết chú thích
+   * khẳng định ngược lại — sai, và không có lỗi nào để thấy.)
+   *
+   * Đường đúng: báo xuống `AgentMode` qua prop, để nó gọi `moPhien` của
+   * `useAgent` — hàm đó mới là chỗ nhận `{ muc }` và đổ vào bảng ghi.
    */
-  const moPhienVaoTab = async (id: string): Promise<void> => {
+  const [phienCanMo, datPhienCanMo] = useState<{ id: string; lan: number } | null>(null);
+  const moPhienVaoTab = (id: string): void => {
     if (!tabMo) return;
-    await window.cuongthai?.agent.moPhien(tabMo, id);
+    // `lan` tăng mỗi lần: bấm LẠI đúng việc vừa mở phải mở lại được, mà chỉ
+    // so `id` thì lần thứ hai không đổi prop nên effect không chạy.
+    datPhienCanMo((cu) => ({ id, lan: (cu?.lan ?? 0) + 1 }));
   };
 
   const themTab = (): void => {
@@ -227,7 +236,7 @@ export function ChatPage() {
           {cheDo === 'code' && (
             <ThanhBen
               cuocId={tabMo || null}
-              onMoPhien={(id) => { void moPhienVaoTab(id); }}
+              onMoPhien={moPhienVaoTab}
               onTaoTab={themTab}
             />
           )}
@@ -285,6 +294,7 @@ export function ChatPage() {
                       napLai={nap}
                       datTieuDe={(t) => datTenTab((cu) => (cu[id] === t ? cu : { ...cu, [id]: t }))}
                       datDuAn={(d) => datDuAnTab((cu) => (cu[id] === d ? cu : { ...cu, [id]: d }))}
+                      {...(id === tabMo && phienCanMo ? { phienCanMo } : {})}
                     />
                   </div>
                 ))}

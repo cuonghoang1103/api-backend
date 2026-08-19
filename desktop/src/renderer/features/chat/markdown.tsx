@@ -199,7 +199,14 @@ function dungBang(dongDau: string, dongKe: string, than: string[]): string {
 }
 
 /** Một đoạn chữ (không phải khối mã) → HTML. */
-function doanChu(thoGoc: string): string {
+/**
+ * Một đoạn chữ markdown → HTML. Được XUẤT RA để bảng tin dùng lại: bài viết
+ * trên web cũng là markdown, và trước 19/08/2026 app hiện nguyên `**đậm**`
+ * kèm dấu sao (ảnh người dùng gửi). Dùng lại chỗ này thay vì viết bộ dựng
+ * thứ hai, vì thứ tự "thoát HTML TRƯỚC, định dạng SAU" ở đây mới là phần
+ * đáng giá — nội dung bảng tin do NGƯỜI KHÁC viết, nên nó còn cần hơn.
+ */
+export function doanChu(thoGoc: string): string {
   const { chu: tho, ct } = tachToan(thoGoc);
   const ra: string[] = [];
   let dsMo: 'ul' | 'ol' | null = null;

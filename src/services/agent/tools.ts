@@ -230,6 +230,8 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       'Dùng để CHẠY BỘ KIỂM và tự xác nhận việc mình vừa sửa: `npm test`, `npx tsc --noEmit`, `npm run build`, `pytest`. ' +
       'Người dùng phải DUYỆT từng lệnh, và họ nhìn thấy nguyên văn chuỗi lệnh — nên hãy viết lệnh ngắn, rõ, làm ĐÚNG MỘT việc. ' +
       'KHÔNG chạy lệnh xoá, cài gói, git commit/push: người dùng sẽ từ chối và bạn mất một lượt. ' +
+      '⛔ TUYỆT ĐỐI KHÔNG GHI FILE BẰNG LỆNH (Out-File, >, Set-Content, WriteAllText, sed -i): PowerShell ghi UTF-16 '
+      + 'và lớp thoát của shell nuốt dấu ngoặc kép — đã làm hỏng mã của người dùng thật. Dùng edit_file/create_file. ' +
       'RA MẠNG ĐƯỢC: `curl`, `ping`, `dig`, `ssh`, `scp`, `rsync` chạy được — chỉ luôn phải xin duyệt và không được nhớ. '
       + 'Việc nào CẦN mạng (đo tốc độ một trang, gọi thử một API, xem log trên VPS của người dùng) thì cứ gọi tool để họ bấm duyệt, '
       + 'đừng trả lời rằng bạn không có công cụ. ' +

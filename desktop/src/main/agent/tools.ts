@@ -439,7 +439,11 @@ async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: B
   const daCo = await fs.stat(dich).then(() => true).catch(() => false);
   if (daCo) {
     return {
-      noiDung: `LỖI: "${tuongDoi}" đã tồn tại. Dùng edit_file để sửa file có sẵn.`,
+      noiDung:
+        `LỖI: "${tuongDoi}" đã tồn tại. Dùng edit_file để sửa file có sẵn — `
+        + 'cần thay TRỌN nội dung thì gọi edit_file với old_text là cả nội dung cũ. '
+        + '⛔ ĐỪNG đi vòng qua run_command để ghi đè: PowerShell ghi UTF-16 và shell nuốt dấu ngoặc kép, '
+        + 'file sẽ hỏng và nút Hoàn tác KHÔNG cứu được vì nó chỉ theo dõi thay đổi của edit_file.',
       tomTat: 'đã tồn tại',
     };
   }

@@ -16,7 +16,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import { buildSystemPrompt } from './prompt.js';
-import { toolsForGateway } from './tools.js';
+import { ALL_CAPABILITIES, toolsForGateway } from './tools.js';
 
 const tenTool = (caps: any[]) => toolsForGateway(caps).map((t) => t.function.name);
 
@@ -55,4 +55,13 @@ test('địa chỉ nội bộ: câu từ chối phải CHỈ ĐÚNG nút cần b
   assert.match(than, /web_mo/, 'không nhắc web_mo — model sẽ tưởng đây là ngõ cụt');
   assert.match(than, /"Trình duyệt"/, 'không nói tên NÚT người dùng cần bật');
   assert.match(than, /ĐỪNG nói đây là giới hạn/, 'không chặn câu "không vượt qua được"');
+});
+
+test('MỌI capability của tool đều có trong ALL_CAPABILITIES', () => {
+  // `parseCapabilities` lọc bỏ thứ không có ở đây, nên thiếu một cái là tool
+  // của nó BIẾN MẤT âm thầm — xem chú thích ở `ALL_CAPABILITIES`.
+  const src = readFileSync(new URL('./tools.ts', import.meta.url), 'utf8');
+  const dungBoi = new Set([...src.matchAll(/capability: '([a-z_]+)'/g)].map((m) => m[1]!));
+  const thieu = [...dungBoi].filter((c) => !(ALL_CAPABILITIES as readonly string[]).includes(c));
+  assert.deepEqual(thieu, [], `ALL_CAPABILITIES thiếu: ${thieu.join(', ')} ⇒ tool của chúng bị lọc mất`);
 });

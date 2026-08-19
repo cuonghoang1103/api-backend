@@ -709,9 +709,23 @@ export function laToolMcp(name: string): boolean {
  * có tool đó". Không có lỗi nào ở bất kỳ tầng nào. TypeScript cũng không bắt
  * được, vì thiếu một phần tử trong mảng vẫn là mảng hợp lệ.
  */
+/**
+ * ⚠️ THÊM CAPABILITY MỚI THÌ PHẢI THÊM VÀO ĐÂY.
+ *
+ * `parseCapabilities` LỌC BỎ mọi thứ không có trong danh sách này. Thiếu một
+ * cái là app gửi đúng, nút trên giao diện hiện BẬT, máy chủ vứt đi — và model
+ * lịch sự trả lời "tôi không có tool đó". Không lỗi, không log, nhìn đâu cũng
+ * thấy ổn.
+ *
+ * Đã dính với `browser` ngày 19/08/2026: người dùng bật nút "Trình duyệt",
+ * hỏi ba lần, agent ba lần khẳng định "không thể truy cập localhost — giới hạn
+ * bảo mật, tôi không vượt qua được". Tôi đi tìm ở prompt, ở mô tả tool, ở
+ * đường truyền quyền của app — tất cả đều đúng. Thủ phạm là MỘT chuỗi thiếu
+ * trong mảng này.
+ */
 export const ALL_CAPABILITIES: readonly AgentCapability[] = [
   'fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent', 'shell_nen', 'git_write',
-  'notes_write',
+  'notes_write', 'browser',
 ];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {

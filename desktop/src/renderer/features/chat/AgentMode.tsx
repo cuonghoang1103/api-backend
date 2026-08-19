@@ -21,6 +21,7 @@ import {
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
   Sparkles, SquareTerminal, Terminal, Undo2, X, ChevronDown, Cpu, Globe, Zap,
 } from 'lucide-react';
+import { useAppState } from '../../app-state';
 import { DangNghi } from './DangNghi';
 import { KhungWeb } from './KhungWeb';
 import type { AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, ModelAgent, MucNoLuc } from '../../../shared/ipc';
@@ -49,6 +50,7 @@ export function AgentMode({
     trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac, quayLui,
     phien, phienDangMo, moPhien, xoaPhien,
   } = useAgent(cuocId, info);
+  const { settings, setSetting } = useAppState();
   /** Cảnh báo sau khi quay lui qua một đoạn CÓ sửa file. */
   const [canhQuayLui, datCanhQuayLui] = useState<string | null>(null);
   /**
@@ -98,6 +100,43 @@ export function AgentMode({
       if (typeof u === 'string' && u) datWebUrl(u);
     });
   }, []);
+
+  /*
+   * KÉO ĐỔI BỀ RỘNG khung trình duyệt.
+   *
+   * Người dùng muốn cả ba khung đều kéo được như Claude Code. Thanh bên đã
+   * có; đây là cái thứ hai, và cái thứ ba (bảng ghi) tự co theo hai cái kia
+   * — nó lấy phần còn lại, nên không cần tay nắm riêng.
+   *
+   * ⚠️ Nghe `pointermove` trên WINDOW. Chuột đi nhanh hơn tốc độ vẽ thì con
+   * trỏ rời khỏi vạch kéo giữa chừng, và nghe trên tay nắm là "tuột tay".
+   */
+  const RONG_WEB_MIN = 320;
+  const [dangKeoWeb, datDangKeoWeb] = useState(false);
+  const keoWebRef = useRef<{ x: number; rong: number } | null>(null);
+  const rongWeb = typeof settings.aiKhungWebRong === 'number'
+    ? Math.max(RONG_WEB_MIN, settings.aiKhungWebRong)
+    : 560;
+
+  useEffect(() => {
+    if (!dangKeoWeb) return;
+    const di = (e: PointerEvent): void => {
+      const b = keoWebRef.current;
+      if (!b) return;
+      // Kéo SANG TRÁI ⇒ khung web RỘNG ra, nên trừ chứ không cộng.
+      const moi = b.rong - (e.clientX - b.x);
+      // Trần theo cửa sổ: để lại ít nhất 380px cho bảng ghi, nếu không người
+      // dùng kéo hết cỡ rồi không còn chỗ đọc câu trả lời.
+      setSetting('aiKhungWebRong', Math.max(RONG_WEB_MIN, Math.min(moi, window.innerWidth - 380)));
+    };
+    const tha = (): void => { datDangKeoWeb(false); keoWebRef.current = null; };
+    window.addEventListener('pointermove', di);
+    window.addEventListener('pointerup', tha, { once: true });
+    return () => {
+      window.removeEventListener('pointermove', di);
+      window.removeEventListener('pointerup', tha);
+    };
+  }, [dangKeoWeb, setSetting]);
 
   const [xaDay, datXaDay] = useState(false);
   const XA_DAY_PX = 240;
@@ -640,7 +679,22 @@ export function AgentMode({
         )}
       </div>
 
-      {webUrl !== null && <KhungWeb url={webUrl} onDong={() => datWebUrl(null)} />}
+      {webUrl !== null && (
+        <>
+          <div
+            className="ct-keo-doc"
+            role="separator"
+            aria-orientation="vertical"
+            data-keo={dangKeoWeb}
+            onPointerDown={(e) => { keoWebRef.current = { x: e.clientX, rong: rongWeb }; datDangKeoWeb(true); }}
+            onDoubleClick={() => setSetting('aiKhungWebRong', 560)}
+            title="Kéo để đổi bề rộng · bấm đúp để về mặc định"
+          />
+          <div className="ct-khungweb-boc" style={{ width: rongWeb }}>
+            <KhungWeb url={webUrl} onDong={() => datWebUrl(null)} />
+          </div>
+        </>
+      )}
       </div>
 
       {xaDay && (

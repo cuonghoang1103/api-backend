@@ -121,6 +121,8 @@ export const settingKeySchema = z.enum([
   /** Thanh bên trái của trang AI: đang gập, và rộng bao nhiêu px. */
   'aiThanhBenGap',
   'aiThanhBenRong',
+  /** Bề rộng khung trình duyệt cạnh bảng ghi (px). Kéo được như thanh bên. */
+  'aiKhungWebRong',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 

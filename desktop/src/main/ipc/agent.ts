@@ -77,7 +77,12 @@ function mucNoLucHienTai(): MucNoLuc {
   return MUC_TEN_CU[v] ?? 'vua';
 }
 
-const MODEL_HOP_LE = new Set<string>(['sonnet-5', 'opus-4-8', 'gpt-sol']);
+/* Phải khớp `modelAgentSchema` — xem chú thích ở đó. Hai cổng, hai bảng model,
+   app nhận cả hai. */
+const MODEL_HOP_LE = new Set<string>([
+  'sonnet-5', 'opus-4-8', 'gpt-sol',
+  'haiku-4-5', 'sonnet-4-6', 'opus-4-6', 'opus-4-7',
+]);
 
 function modelHienTai(): ModelAgent {
   const v = getSettings().agentModel;

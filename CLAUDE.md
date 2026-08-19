@@ -315,8 +315,37 @@ Kiểm bản đồ đang hiệu lực: `npx tsx --test src/services/llm/gateway.
 (4 phép kiểm, trong đó có một cái bắt lỗi gọi vòng `endpointFor ↔ modelFor` mà
 `tsc` KHÔNG thấy).
 
-⚠️ **Cổng Rambo (`LLM_BASE_URL`, model `rb-*`) ĐÃ CHẾT.** Thấy `rb-` ở đâu là
-chỗ đó đang trỏ vào đường chết.
+⚠️ **Model `rb-*` cũ ĐÃ CHẾT.** Thấy `rb-` ở đâu là chỗ đó đang trỏ vào
+đường chết.
+
+### 🤖 AI Code chạy cổng RIÊNG (19/08/2026)
+
+`agent_code` — và CHỈ nó — đi qua cổng riêng của người dùng. Chat, CV, bản
+tin… vẫn đi modelapi. Cắm bằng hai biến ở `/opt/cuonghoangdev/.env`:
+
+```bash
+AGENT_GATEWAY_BASE_URL=https://rambo.ai.vn/api/claude
+AGENT_GATEWAY_API_KEY=sk-...
+```
+
+Thiếu một trong hai thì `congAgent()` trả `null` và agent tự về modelapi —
+không chết, chỉ đổi bảng model.
+
+⚠️ **Đường đúng KHÔNG phải gốc `/v1`.** Nó là `/api/claude/v1/...`, tìm ra
+nhờ đọc trang `/huong-dan` của chính họ. Gốc `GET /v1/models` trả **200 kể
+cả khi KHÔNG có khoá** — danh sách model ở đó chỉ là quảng cáo, đừng lấy nó
+làm bằng chứng cổng chạy được.
+
+⚠️ **Cổng này KHÔNG tôn trọng `max_tokens`** (đo: đặt 24, trả 103 token,
+`finish_reason: stop`). Mọi trần chi phí trong mã đều vô hiệu với nó.
+
+✅ Nó **chảy dần THẬT** — trải 308–950ms giữa mẩu đầu và mẩu cuối, khác hẳn
+modelapi (121 mẩu về cùng một mili giây). Nhận cả `Bearer` lẫn `x-api-key`.
+
+Sáu model, đo thật (thời gian tới mẩu chữ đầu, có gọi tool):
+`claude-sonnet-4-6` 2,4s · `claude-sonnet-5` 2,5s (**mặc định**) ·
+`claude-haiku-4-5` 2,9s · `claude-opus-4-6` 3,2s · `claude-opus-4-7` 3,5s ·
+`claude-opus-4-8` 4,7s. Bảng ở `src/services/agent/models.ts`.
 
 ⚠️⚠️ **TRANG `/rankings` NÓI DỐI VỀ CÁI KHOÁ NÀY MUA ĐƯỢC.** Nó liệt kê model
 của toàn cổng. Khoá của web, đo thật 11/08/2026 bằng `GET /v1/models`, chỉ có

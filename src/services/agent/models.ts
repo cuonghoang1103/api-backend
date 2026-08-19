@@ -32,7 +32,7 @@
  * bọc quanh yêu cầu, chứ không ở câu hỏi. Trong một vòng lặp gọi tool thì phần
  * bọc đó nhân lên theo số vòng.
  */
-import { goiDuocModel } from '../llm/gateway.js';
+import { congAgent, goiDuocModel } from '../llm/gateway.js';
 
 export interface ModelAgent {
   /** Mã app gửi lên. Ngắn, không đổi khi nhà cung cấp đổi tên model. */
@@ -65,6 +65,81 @@ export const MODEL_AGENT: readonly ModelAgent[] = Object.freeze([
   },
 ]);
 
+/**
+ * ============================================================
+ * BẢNG MODEL KHI CHẠY QUA CỔNG RIÊNG (rambo.ai.vn)
+ * ============================================================
+ *
+ * Cổng riêng của người dùng bán 6 model Claude, và họ nói rõ "cứ dùng thoải
+ * mái, chất lượng là được" — nên bảng này xếp theo NẶNG DẦN chứ không theo
+ * tiền. Số trong `mo` là ĐO THẬT 19/08/2026 trên đúng đường thật, mỗi model
+ * một lời gọi có kèm tool: thời gian tới mẩu chữ đầu tiên.
+ *
+ * ⚠️ KHÔNG chép bảng giá của modelapi sang đây. Hai cổng khác nhà, khác cách
+ * bọc prompt; con số "đắt gấp 7,3 lần" của `gpt-5.6-sol` chỉ đúng ở cổng kia.
+ * Cổng này không có model GPT nào.
+ */
+const MODEL_AGENT_RIENG: readonly ModelAgent[] = Object.freeze([
+  {
+    id: 'haiku-4-5',
+    model: 'claude-haiku-4-5',
+    ten: 'Claude Haiku 4.5',
+    mo: 'Nhẹ nhất — việc vặt, sửa một file, hỏi nhanh',
+  },
+  {
+    id: 'sonnet-4-6',
+    model: 'claude-sonnet-4-6',
+    ten: 'Claude Sonnet 4.6',
+    mo: 'Nhanh nhất trong đo thật (2,4s tới chữ đầu) — việc thường ngày',
+  },
+  {
+    id: 'sonnet-5',
+    model: 'claude-sonnet-5',
+    ten: 'Claude Sonnet 5',
+    mo: 'MẶC ĐỊNH — cân bằng nhất giữa nhanh và giỏi',
+  },
+  {
+    id: 'opus-4-6',
+    model: 'claude-opus-4-6',
+    ten: 'Claude Opus 4.6',
+    mo: 'Nặng — việc cần suy luận nhiều bước',
+  },
+  {
+    id: 'opus-4-7',
+    model: 'claude-opus-4-7',
+    ten: 'Claude Opus 4.7',
+    mo: 'Nặng hơn — refactor lớn, đọc cả kiến trúc',
+  },
+  {
+    id: 'opus-4-8',
+    model: 'claude-opus-4-8',
+    ten: 'Claude Opus 4.8',
+    mo: 'Nặng nhất (4,7s tới chữ đầu) — để dành việc khó nhất',
+  },
+]);
+
+/**
+ * Bảng đang hiệu lực.
+ *
+ * Cắm cổng riêng thì dùng bảng 6 model của nó; không cắm thì về bảng cũ của
+ * modelapi. Một hàm chứ không phải hằng số: `AGENT_GATEWAY_*` đọc từ môi
+ * trường, và môi trường chỉ có thật lúc CHẠY.
+ */
+function bangHienHanh(): readonly ModelAgent[] {
+  return congAgent() ? MODEL_AGENT_RIENG : MODEL_AGENT;
+}
+
+/**
+ * Model này gọi được không?
+ *
+ * Cổng riêng phục vụ TRỌN bảng của nó (đo thật cả 6, đều 200 và gọi tool
+ * đúng), nên không phải tra khoá theo nhóm như ở modelapi — chuyện "một token
+ * thuộc đúng một nhóm" là đặc thù của cổng kia.
+ */
+function goiDuoc(model: string): boolean {
+  return congAgent() ? true : goiDuocModel(model);
+}
+
 /** Mã mặc định. Cũng là thứ dùng khi app gửi mã lạ hoặc không gửi gì. */
 export const MODEL_AGENT_MAC_DINH = 'sonnet-5';
 
@@ -77,13 +152,16 @@ export const MODEL_AGENT_MAC_DINH = 'sonnet-5';
  * phải "cổng đang bận".
  */
 export function modelAgentTu(id: unknown): { model: string; id: string } | null {
+  const bang = bangHienHanh();
   const ma = typeof id === 'string' && id ? id : MODEL_AGENT_MAC_DINH;
-  const m = MODEL_AGENT.find((x) => x.id === ma) ?? MODEL_AGENT.find((x) => x.id === MODEL_AGENT_MAC_DINH)!;
-  if (!goiDuocModel(m.model)) return null;
+  // Mã lạ (app cũ gửi `gpt-sol` trong khi đã chuyển cổng) rơi về mặc định
+  // thay vì lỗi — người dùng không nên phải cài lại app mới hỏi được.
+  const m = bang.find((x) => x.id === ma) ?? bang.find((x) => x.id === MODEL_AGENT_MAC_DINH) ?? bang[0]!;
+  if (!goiDuoc(m.model)) return null;
   return { model: m.model, id: m.id };
 }
 
 /** Danh sách cho app vẽ giao diện — kèm cờ nói model nào đang gọi được thật. */
 export function dsModelAgent(): Array<ModelAgent & { dungDuoc: boolean }> {
-  return MODEL_AGENT.map((m) => ({ ...m, dungDuoc: goiDuocModel(m.model) }));
+  return bangHienHanh().map((m) => ({ ...m, dungDuoc: goiDuoc(m.model) }));
 }

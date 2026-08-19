@@ -481,6 +481,13 @@ const VISION_PURPOSES = new Set<LlmPurpose>(['chat_vision', 'doc_ocr']);
 const TOOL_PURPOSES = new Set<LlmPurpose>(['agent_code']);
 
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
+  // Agent lập trình có cổng riêng nếu người dùng đã cắm — xem `congAgent`.
+  // Đặt TRƯỚC nhánh máy nhà: `agent_code` nằm trong `TOOL_PURPOSES` nên nó
+  // không bao giờ đi máy nhà, nhưng thứ tự này nói rõ ý định.
+  if (purpose === 'agent_code') {
+    const rieng = congAgent();
+    if (rieng) return rieng;
+  }
   const root = localRoot();
   if (root && !VISION_PURPOSES.has(purpose) && !TOOL_PURPOSES.has(purpose) && localPurposes().has(purpose) && process.env.LLM_LOCAL_API_KEY) {
     return { root, key: process.env.LLM_LOCAL_API_KEY, local: true, label: 'may-nha' };
@@ -493,6 +500,47 @@ export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // và nó nổ bằng "Maximum call stack size exceeded" — một câu chẳng nhắc gì
   // tới model hay khoá. Đã dính thật 18/08 và chỉ lộ ra khi CHẠY.
   return { root: gatewayRoot(), key: gatewayKeyFor(modelCong(purpose)), local: false, label: 'cong' };
+}
+
+/**
+ * ============================================================
+ * CỔNG RIÊNG CHO AGENT LẬP TRÌNH
+ * ============================================================
+ *
+ * Người dùng tự mở một cổng Anthropic riêng (`rambo.ai.vn`) và muốn AI Code
+ * chạy hẳn qua đó. Nó KHÔNG thay cổng chung: chat, CV, bản tin… vẫn đi
+ * modelapi. Chỉ `agent_code` đổi đường, vì đó là thứ duy nhất người dùng nói
+ * "cứ dùng thoải mái, chất lượng là được".
+ *
+ * ─── ĐO THẬT 19/08/2026, TRƯỚC KHI VIẾT DÒNG NÀO ───
+ * Đường đúng KHÔNG phải `/v1/...` như mọi cổng khác — nó nằm ở
+ * `/api/claude/v1/...`, và tôi chỉ tìm ra nhờ đọc trang `/huong-dan` của
+ * chính họ. `GET /v1/models` ở gốc trả 200 KỂ CẢ KHI KHÔNG CÓ KHOÁ, nên
+ * danh sách model ở đó chỉ là quảng cáo, không chứng minh gì.
+ *
+ * Đo trên đúng đường thật, cả 6 model, có gọi tool:
+ *
+ *   claude-sonnet-4-6  mẩu đầu 2.455ms   claude-opus-4-6  3.183ms
+ *   claude-sonnet-5    mẩu đầu 2.460ms   claude-opus-4-7  3.456ms
+ *   claude-haiku-4-5   mẩu đầu 2.903ms   claude-opus-4-8  4.706ms
+ *
+ * Cả 6 gọi tool đúng (`finish_reason: tool_calls`) và CHẢY DẦN THẬT — trải
+ * 308–950ms giữa mẩu đầu và mẩu cuối. Khác hẳn modelapi (121 mẩu về cùng một
+ * mili giây), nên chữ ở AI Code sẽ hiện dần thay vì đứng im rồi đổ một cục.
+ *
+ * ⚠️ CỔNG NÀY KHÔNG TÔN TRỌNG `max_tokens`. Đặt 24, nó trả về 103 token và
+ * kết thúc bằng `stop`. Nghĩa là mọi trần chi phí trong mã đều VÔ HIỆU với
+ * nó — chấp nhận được vì đây là cổng riêng của người dùng, nhưng đừng bao giờ
+ * suy ra rằng cổng khác cũng thế.
+ *
+ * ⚠️ Nhận cả `Authorization: Bearer` lẫn `x-api-key` (đo cả hai, đều 200),
+ * nên không phải sửa header ở `goiCongCoLuoiDo`. Thiếu cả hai thì 401.
+ */
+export function congAgent(): LlmEndpoint | null {
+  const root = process.env.AGENT_GATEWAY_BASE_URL?.trim().replace(/\/+$/, '');
+  const key = process.env.AGENT_GATEWAY_API_KEY?.trim();
+  if (!root || !key) return null;
+  return { root, key, local: false, label: 'cong-agent' };
 }
 
 /** Cổng dự phòng khi máy nhà không trả lời. Luôn là cổng, không bao giờ ngược lại. */

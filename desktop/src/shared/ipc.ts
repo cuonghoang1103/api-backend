@@ -349,7 +349,22 @@ export const agentMucNoLucSchema = z.object({ muc: mucNoLucSchema });
  * tuỳ ý — nếu không thì ai sửa được gói tin cũng gọi được model đắt nhất cổng
  * bán, bằng tiền của chủ web.
  */
-export const modelAgentSchema = z.enum(['sonnet-5', 'opus-4-8', 'gpt-sol']);
+/**
+ * Mã model AI Code.
+ *
+ * ⚠️ DANH SÁCH NÀY PHẢI PHỦ CẢ HAI CỔNG. Máy chủ chọn bảng theo cổng đang
+ * cắm (`MODEL_AGENT` cho modelapi, `MODEL_AGENT_RIENG` cho cổng riêng), nên
+ * app phải nhận được mọi mã của cả hai — thiếu một mã thì `zod` chặn ngay ở
+ * cầu nối và người dùng thấy nút chọn model không có tác dụng, không có lỗi
+ * nào để thấy. `agentModels.test.ts` đọc thẳng bảng bên máy chủ và đỏ nếu
+ * hai bên lệch.
+ */
+export const modelAgentSchema = z.enum([
+  // modelapi
+  'sonnet-5', 'opus-4-8', 'gpt-sol',
+  // cổng riêng (rambo)
+  'haiku-4-5', 'sonnet-4-6', 'opus-4-6', 'opus-4-7',
+]);
 export type ModelAgent = z.infer<typeof modelAgentSchema>;
 export const agentModelSchema = z.object({ model: modelAgentSchema });
 

@@ -1553,6 +1553,53 @@ aside ::-webkit-scrollbar-thumb:hover {
 .rich-content .lz-stack .lz-layer .lz-lname { font-weight: 700; color: var(--text-primary); font-family: var(--font-jetbrains-mono), monospace; font-size: 0.9rem; }
 .rich-content .lz-stack .lz-layer .lz-lnote { font-size: 0.82rem; color: var(--text-muted); text-align: right; }
 
+/* --- Bộ tên THỨ HAI của cùng những khối này -----------------------------
+ * Tìm ra 19/08/2026 khi dựng màn học của app iOS: nội dung bài đang dùng một
+ * bộ tên lớp KHÁC với bộ mà file này định kiểu, nên các khối đó mất định dạng
+ * ở CẢ trên web — chỉ không ai để ý vì chữ vẫn đọc được, chỉ là trôi tuột.
+ *
+ * Đếm thật trên nội dung production (5 khoá GENERAL + 4 kỳ Academy):
+ *     .lz-si  108 lần    .lz-sb  76 lần    .lz-sd  32 lần
+ *     .lz-v    14 lần    .lz-lt   4 lần    .lz-ld   4 lần
+ * Cả sáu đều xuất hiện 0 lần trong file CSS này trước hôm nay.
+ *
+ * Không sửa nội dung (hàng nghìn bài, không thể rà tay). Khai thêm tên thứ hai
+ * là xong, và bài cũ lẫn bài mới đều chạy.
+ * -------------------------------------------------------------------------- */
+
+/* .lz-lt / .lz-ld = tên khác của .lz-lname / .lz-lnote */
+.rich-content .lz-stack .lz-layer .lz-lt { font-weight: 700; color: var(--text-primary); font-family: var(--font-jetbrains-mono), monospace; font-size: 0.9rem; }
+.rich-content .lz-stack .lz-layer .lz-ld { font-size: 0.82rem; color: var(--text-muted); text-align: right; }
+
+/* Trong .lz-layer, nội dung còn dùng cặp .lz-k (khoá) + .lz-v (giá trị).
+ * `.lz-k` đã có định kiểu NHƯNG bị khoá trong `.lz-flow .lz-step`, nên ở đây
+ * nó không nhận được gì. */
+.rich-content .lz-stack .lz-layer .lz-k {
+  flex-shrink: 0; font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.8rem; font-weight: 700; color: var(--lz-accent);
+}
+.rich-content .lz-stack .lz-layer .lz-v { flex: 1; font-size: 0.86rem; color: var(--text-secondary); text-align: left; }
+
+/* Bước CÓ ĐÁNH SỐ trong .lz-flow: .lz-si là con số, .lz-sb là phần thân.
+ * Đây là dạng dùng nhiều nhất (108 + 76 lần) — chủ yếu ở các bài Next.js,
+ * Node.js, Web Foundations. Thiếu nó thì con số và nội dung dính thành một
+ * dòng chữ liền, không ra hình các bước. */
+.rich-content .lz-flow .lz-step:has(.lz-si) { display: flex; gap: 0.7rem; align-items: flex-start; }
+.rich-content .lz-flow .lz-step .lz-si {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 8px;
+  display: grid; place-items: center; font-size: 0.82rem; font-weight: 700;
+  color: var(--lz-accent);
+  background: color-mix(in srgb, var(--lz-accent) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lz-accent) 28%, transparent);
+}
+.rich-content .lz-flow .lz-step .lz-sb { flex: 1; min-width: 0; font-size: 0.9rem; color: var(--text-secondary); }
+.rich-content .lz-flow .lz-step .lz-sb b,
+.rich-content .lz-flow .lz-step .lz-sb strong { color: var(--text-primary); }
+
+/* .lz-st / .lz-sd = tên khác của .lz-t / .lz-d (tiêu đề & mô tả của bước) */
+.rich-content .lz-flow .lz-step .lz-st { font-weight: 700; color: var(--text-primary); margin-top: 2px; font-family: var(--font-poppins), system-ui, sans-serif; }
+.rich-content .lz-flow .lz-step .lz-sd { font-size: 0.84rem; color: var(--text-muted); margin-top: 3px; }
+
 /* --- code output box (pairs under a <pre>) --- */
 .rich-content .out {
   background: rgba(127, 127, 127, 0.10);

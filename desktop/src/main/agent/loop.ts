@@ -107,6 +107,8 @@ export interface BoiCanh {
   choSua?: boolean;
   /** Người dùng đã bật chế độ cho chạy lệnh chưa. Mặc định KHÔNG. */
   choChayLenh?: boolean;
+  /** Cho agent LÁI trình duyệt trong app (mở/đọc/console + bấm/gõ có duyệt). */
+  choTrinhDuyet?: boolean;
   /** Cho phép GHI vào sổ ghi chú trên cuongthai.com. Độc lập với thư mục dự án. */
   choGhiNote?: boolean;
   /** 'nhanh' | 'canBang' | 'ky'. Quyết định trần bước ở máy chủ. */
@@ -201,6 +203,7 @@ interface CuocHoiThoai {
    * thì không có `git checkout` nào lấy lại — đó là dữ liệu thật trên máy chủ.
    */
   choGhiNote: boolean;
+  choTrinhDuyet: boolean;
   dangChay: AbortController | null;
   so: SoCuoc;
   /** Việc phụ đã giao trong LƯỢT hiện tại. Đặt lại về 0 ở đầu mỗi câu hỏi. */
@@ -215,6 +218,7 @@ function layCuoc(id: string): CuocHoiThoai {
     c = {
       id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc(), soViecPhu: 0,
       goc: null, daChonGoc: false, choSua: false, choChayLenh: false, choGhiNote: false,
+      choTrinhDuyet: false,
     };
     cuoc.set(id, c);
   }
@@ -251,9 +255,14 @@ export function daChonGocCua(id: string): boolean {
   return layCuoc(id).daChonGoc;
 }
 
-export function quyenCuaCuoc(id: string): { choSua: boolean; choChayLenh: boolean; choGhiNote: boolean } {
+export function quyenCuaCuoc(id: string): {
+  choSua: boolean; choChayLenh: boolean; choGhiNote: boolean; choTrinhDuyet: boolean;
+} {
   const c = layCuoc(id);
-  return { choSua: c.choSua, choChayLenh: c.choChayLenh, choGhiNote: c.choGhiNote };
+  return {
+    choSua: c.choSua, choChayLenh: c.choChayLenh,
+    choGhiNote: c.choGhiNote, choTrinhDuyet: c.choTrinhDuyet,
+  };
 }
 
 /**
@@ -300,10 +309,11 @@ export function datGocNeuChuaCo(id: string, goc: string): void {
   c.goc = goc;
 }
 
-export function datQuyenChoCuoc(id: string, quyen: { choSua?: boolean; choChayLenh?: boolean; choGhiNote?: boolean }): void {
+export function datQuyenChoCuoc(id: string, quyen: { choSua?: boolean; choChayLenh?: boolean; choGhiNote?: boolean; choTrinhDuyet?: boolean }): void {
   const c = layCuoc(id);
   if (typeof quyen.choSua === 'boolean') c.choSua = quyen.choSua;
   if (typeof quyen.choChayLenh === 'boolean') c.choChayLenh = quyen.choChayLenh;
+  if (typeof quyen.choTrinhDuyet === 'boolean') c.choTrinhDuyet = quyen.choTrinhDuyet;
   if (typeof quyen.choGhiNote === 'boolean') c.choGhiNote = quyen.choGhiNote;
 }
 
@@ -593,6 +603,7 @@ export async function chayLuot(
     // phải duyệt riêng. `git_write` theo `choSua` vì commit là ghi vào repo;
     // `shell_nen` theo `choChayLenh` vì nó vẫn là chạy lệnh.
     if (boiCanh.choChayLenh) capabilities.push('shell', 'shell_nen');
+    if (boiCanh.choTrinhDuyet) capabilities.push('browser');
     if (boiCanh.choSua) capabilities.push('git_write');
   }
   // NGOÀI khối trên: ghi chú sống trên máy chủ, không cần thư mục dự án nào.
@@ -690,7 +701,9 @@ export async function chayLuot(
 
         // Bối cảnh LỆNH tách riêng khỏi bối cảnh GHI: hai quyền bật độc lập,
         // nên bật "cho sửa" không được kéo theo "cho chạy lệnh".
-        const boiCanhLenh = boiCanh.choChayLenh
+        /* Dùng chung cho lệnh shell VÀ cho `web_bam`/`web_go` — cả hai đều
+           cần đúng một thứ: một đường xin duyệt có hiện nguyên văn việc sắp làm. */
+        const boiCanhLenh = (boiCanh.choChayLenh || boiCanh.choTrinhDuyet)
           ? {
               signal: dieuKhien.signal,
               so: c.so,

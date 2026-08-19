@@ -19,7 +19,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
-  Sparkles, SquareTerminal, Terminal, Undo2, X, ChevronDown, Cpu, Zap,
+  Sparkles, SquareTerminal, Terminal, Undo2, X, ChevronDown, Cpu, Globe, Zap,
 } from 'lucide-react';
 import { DangNghi } from './DangNghi';
 import type { AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, ModelAgent, MucNoLuc } from '../../../shared/ipc';
@@ -157,6 +157,11 @@ export function AgentMode({
 
   const doiCheDoLenh = async (): Promise<void> => {
     const w = await window.cuongthai?.agent.datCheDoLenh(cuocId, !thuMuc?.choChayLenh);
+    if (w) datThuMuc(w);
+  };
+
+  const doiCheDoTrinhDuyet = async (): Promise<void> => {
+    const w = await window.cuongthai?.agent.datCheDoTrinhDuyet(cuocId, !thuMuc?.choTrinhDuyet);
     if (w) datThuMuc(w);
   };
 
@@ -327,6 +332,25 @@ export function AgentMode({
             {thuMuc?.choChayLenh ? 'Chạy lệnh: BẬT' : 'Chạy lệnh: tắt'}
           </button>
         )}
+
+        {/* Trình duyệt KHÔNG cần thư mục dự án: agent có thể mở một trang bất
+            kỳ để đọc tài liệu hay kiểm một API. */}
+        <button
+          type="button"
+          className="ct-agent-suanut"
+          data-bat={thuMuc?.choTrinhDuyet === true}
+          data-nut="trinhduyet"
+          onClick={() => void doiCheDoTrinhDuyet()}
+          disabled={trangThai.dangChay}
+          title={
+            thuMuc?.choTrinhDuyet
+              ? 'Agent ĐANG lái được trình duyệt: mở trang, đọc sau khi JS chạy, xem console. Bấm/gõ vẫn phải bạn duyệt. Bấm để tắt.'
+              : 'Bật cho agent mở trang trong tab Trình duyệt, đọc nội dung thật và xem lỗi console. Mọi thao tác bấm/gõ vẫn hỏi bạn.'
+          }
+        >
+          <Globe size={13} aria-hidden />
+          {thuMuc?.choTrinhDuyet ? 'Trình duyệt: BẬT' : 'Trình duyệt: tắt'}
+        </button>
 
         {/* KHÔNG bọc trong `coThuMuc`: sổ ghi chú nằm trên máy chủ, không phải
             trong thư mục dự án. Ẩn nút này khi chưa mở dự án nghĩa là bắt người

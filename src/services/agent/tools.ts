@@ -52,7 +52,16 @@ export type AgentCapability =
    * THẬT của người dùng trên máy chủ — sửa sai thì không có `git checkout`
    * nào lấy lại được, chỉ còn lịch sử phiên bản của Notes.
    */
-  | 'notes_write';
+  | 'notes_write'
+  /**
+   * LÁI trình duyệt trong app: mở trang, đọc sau khi JS chạy, chụp màn hình,
+   * bấm, gõ, đọc console.
+   *
+   * Tách hẳn khỏi `doc_web` (vòng máy chủ, chỉ lấy HTML thô của địa chỉ công
+   * khai). Ở đây trang chạy TRÊN MÁY người dùng với phiên đăng nhập của họ —
+   * nên `web_bam`/`web_go` phải xin duyệt từng lần, giống lệnh shell.
+   */
+  | 'browser';
 
 export interface AgentToolDef {
   name: string;
@@ -389,6 +398,73 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
 
+  {
+    name: 'web_mo',
+    ring: 'client',
+    capability: 'browser',
+    description:
+      'Mở một địa chỉ trong TRÌNH DUYỆT của app và chờ tải xong. Người dùng NHÌN THẤY trang ngay. '
+      + 'Mở được cả địa chỉ nội bộ (http://localhost:3000) — khác `doc_web` vốn chỉ đọc địa chỉ công khai. '
+      + 'Dùng khi cần xem giao diện thật sự trông thế nào, thử một luồng, hoặc kiểm dev server sau khi sửa mã. '
+      + 'Sau khi mở, dùng `web_doc` để đọc chữ, `web_anh` để nhìn, `web_console` để xem lỗi.',
+    parameters: {
+      type: 'object',
+      properties: { url: { type: 'string', description: 'Địa chỉ đầy đủ, ví dụ http://localhost:3000/feed' } },
+      required: ['url'],
+    },
+  },
+  {
+    name: 'web_doc',
+    ring: 'client',
+    capability: 'browser',
+    description:
+      'Đọc CHỮ của trang đang mở, SAU KHI JavaScript đã chạy. '
+      + 'Đây là khác biệt với `doc_web`: trang Next/React trả về một thẻ rỗng qua HTTP, nên `doc_web` thấy trang trắng '
+      + 'trong khi người dùng nhìn thấy đầy chữ. Muốn biết trang THẬT SỰ hiện gì thì dùng tool này.',
+    parameters: { type: 'object', properties: {} },
+  },
+  {
+    name: 'web_console',
+    ring: 'client',
+    capability: 'browser',
+    description:
+      'Đọc nhật ký console của trang đang mở (log, cảnh báo, lỗi JS). '
+      + 'Nhật ký được xoá mỗi lần điều hướng, nên nó luôn thuộc về trang hiện tại. '
+      + 'Đây thường là thứ duy nhất phân biệt được "trang trắng vì lỗi JS" với "trang trắng vì dữ liệu rỗng" — '
+      + 'nhìn ảnh chụp thì hai cái giống hệt nhau.',
+    parameters: { type: 'object', properties: {} },
+  },
+  {
+    name: 'web_bam',
+    ring: 'client',
+    capability: 'browser',
+    description:
+      'Bấm vào một phần tử trên trang đang mở, chọn bằng bộ chọn CSS. '
+      + 'NGƯỜI DÙNG PHẢI DUYỆT từng lần — trang đang mở bằng phiên đăng nhập THẬT của họ, và một cú bấm nhầm '
+      + 'vào nút xoá thì không hoàn tác được. Nên viết bộ chọn hẹp và rõ, đừng dùng `button` trần. '
+      + 'Dùng `web_doc` hoặc `web_anh` trước để biết trên trang có gì.',
+    parameters: {
+      type: 'object',
+      properties: { selector: { type: 'string', description: 'Bộ chọn CSS, ví dụ [data-nut="gui"] hoặc #dang-nhap' } },
+      required: ['selector'],
+    },
+  },
+  {
+    name: 'web_go',
+    ring: 'client',
+    capability: 'browser',
+    description:
+      'Gõ chữ vào một ô nhập trên trang đang mở. Người dùng PHẢI DUYỆT từng lần. '
+      + 'KHÔNG gõ mật khẩu, khoá API hay số thẻ — nếu việc cần đăng nhập, hãy nhờ người dùng tự gõ.',
+    parameters: {
+      type: 'object',
+      properties: {
+        selector: { type: 'string', description: 'Bộ chọn CSS của ô nhập.' },
+        text: { type: 'string', description: 'Chữ cần gõ.' },
+      },
+      required: ['selector', 'text'],
+    },
+  },
   {
     /**
      * Đọc một trang web.

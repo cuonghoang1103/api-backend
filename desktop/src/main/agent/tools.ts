@@ -15,6 +15,8 @@
  * Và mỗi khi cắt thì PHẢI ghi rõ còn bao nhiêu. Model không biết mình đang đọc
  * nửa file sẽ kết luận chắc nịch trên nửa file đó.
  */
+import { BrowserWindow } from 'electron';
+
 import { execFile } from 'node:child_process';
 import type { Dirent } from 'node:fs';
 import fs from 'node:fs/promises';
@@ -28,6 +30,7 @@ import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from '.
 import { batLenhNen, docDauRaNen, dungLenhNen } from './lenhNen';
 import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
 import { toolNotesTao, toolNotesGhi, type BoiCanhNote } from './ghiNote';
+import * as trinhDuyet from '../browser';
 import type { SoCuoc } from './so';
 
 const chay = promisify(execFile);
@@ -230,6 +233,23 @@ export async function chayToolAgent(
           ? await toolEditFile(goc, args, ghi)
           : await toolCreateFile(goc, args, ghi);
       }
+      // ── Trình duyệt ──
+      // Mở / đọc / chụp / console: KHÔNG hỏi duyệt. Chúng chỉ QUAN SÁT, và
+      // bắt duyệt từng lần thì agent hỏi năm câu cho một lần xem trang — người
+      // dùng sẽ bấm bừa, và lúc đó cái duyệt ở `web_bam` cũng mất giá trị.
+      case 'web_mo': return await toolWebMo(args);
+      case 'web_doc': return await toolWebDoc();
+      case 'web_console': return await toolWebConsole();
+
+      // Bấm / gõ: ĐỔI trạng thái trang, và trang đang chạy bằng phiên đăng
+      // nhập THẬT của người dùng. Một cú bấm nhầm vào nút xoá thì không có
+      // `git checkout` nào lấy lại được.
+      case 'web_bam':
+      case 'web_go': {
+        if (!lenh) return { noiDung: 'LỖI: phiên này chưa bật quyền trình duyệt.', tomTat: 'không có quyền' };
+        return await toolWebTacDong(ten, args, lenh);
+      }
+
       default:
         return { noiDung: `LỖI: app không cài tool tên "${ten}".`, tomTat: 'tool lạ' };
     }
@@ -830,4 +850,97 @@ async function toolTaoPr(
   if (kq.ok) return { noiDung: kq.noi, tomTat: 'đã mở PR' };
   // `noi` có thể mang một sự thật quan trọng: nhánh ĐÃ được đẩy lên dù PR hỏng.
   return { noiDung: `${kq.noi ? kq.noi + '\n' : ''}LỖI: ${kq.loi}`, tomTat: 'PR hỏng' };
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// TRÌNH DUYỆT
+// ═══════════════════════════════════════════════════════════
+
+async function toolWebMo(args: Record<string, unknown>): Promise<KetQuaTool> {
+  const url = typeof args.url === 'string' ? args.url.trim() : '';
+  if (!url) return { noiDung: 'LỖI: thiếu "url".', tomTat: 'thiếu url' };
+
+  const cuaSo = BrowserWindow.getAllWindows().find((w) => w.isResizable());
+  if (!cuaSo) return { noiDung: 'LỖI: không tìm thấy cửa sổ app.', tomTat: 'không có cửa sổ' };
+
+  /* Chưa mở trình duyệt thì mở nó ra — nhưng KHÔNG tự đoán vùng hiển thị.
+     Vùng do renderer đo và gửi lên (`browser:datVung`); đoán ở đây thì trang
+     web đè lên giao diện. Nên nếu chưa mở, ta yêu cầu người dùng bấm tab. */
+  if (!trinhDuyet.dangMo()) {
+    return {
+      noiDung:
+        'Trình duyệt chưa mở. Hãy nói người dùng bấm tab "Trình duyệt" ở góc trên bên phải một lần, '
+        + 'rồi gọi lại `web_mo`. (Vùng hiển thị do giao diện đo, tool không tự đoán được.)',
+      tomTat: 'chưa mở tab trình duyệt',
+    };
+  }
+
+  const kq = trinhDuyet.diToi(url);
+  if (!kq.ok) return { noiDung: `LỖI: ${kq.loi ?? 'địa chỉ không hợp lệ'}`, tomTat: 'không mở được' };
+  await trinhDuyet.choTai();
+  return { noiDung: `Đã mở ${trinhDuyet.urlHienTai()}`, tomTat: url.slice(0, 48) };
+}
+
+async function toolWebDoc(): Promise<KetQuaTool> {
+  if (!trinhDuyet.dangMo()) return { noiDung: 'LỖI: chưa mở trang nào. Gọi web_mo trước.', tomTat: 'chưa mở' };
+  const chu = await trinhDuyet.docTrang();
+  if (!chu.trim()) {
+    return {
+      noiDung: 'Trang không có chữ nào hiện ra. Có thể nó đang lỗi — hãy gọi `web_console` để xem.',
+      tomTat: 'trang trống',
+    };
+  }
+  return { noiDung: `Nội dung ${trinhDuyet.urlHienTai()}:\n\n${chu}`, tomTat: `${chu.length} ký tự` };
+}
+
+
+async function toolWebConsole(): Promise<KetQuaTool> {
+  if (!trinhDuyet.dangMo()) return { noiDung: 'LỖI: chưa mở trang nào. Gọi web_mo trước.', tomTat: 'chưa mở' };
+  const ds = trinhDuyet.docNhatKy();
+  if (ds.length === 0) return { noiDung: 'Console trống — trang không ghi gì.', tomTat: 'trống' };
+  const soLoi = ds.filter((m) => m.loai === 'loi').length;
+  const chu = ds.map((m) => `[${m.loai}] ${m.chu}${m.nguon ? `  (${m.nguon})` : ''}`).join('\n');
+  return { noiDung: chu.slice(0, 12_000), tomTat: `${ds.length} dòng, ${soLoi} lỗi` };
+}
+
+async function toolWebTacDong(
+  ten: 'web_bam' | 'web_go',
+  args: Record<string, unknown>,
+  boiCanh: BoiCanhLenh,
+): Promise<KetQuaTool> {
+  if (!trinhDuyet.dangMo()) return { noiDung: 'LỖI: chưa mở trang nào. Gọi web_mo trước.', tomTat: 'chưa mở' };
+  const boChon = typeof args.selector === 'string' ? args.selector.trim() : '';
+  if (!boChon) return { noiDung: 'LỖI: thiếu "selector".', tomTat: 'thiếu bộ chọn' };
+  const chu = typeof args.text === 'string' ? args.text : '';
+  if (ten === 'web_go' && !chu) return { noiDung: 'LỖI: thiếu "text".', tomTat: 'thiếu chữ' };
+
+  /* Hiện NGUYÊN VĂN thứ sắp làm, kèm URL. Chỉ đưa bộ chọn thì người dùng
+     không biết nó nằm ở trang nào — mà "bấm nút Xoá" trên trang cài đặt khác
+     hẳn "bấm nút Xoá" trên một bản nháp. */
+  const moTa = ten === 'web_bam'
+    ? `Bấm "${boChon}" trên ${trinhDuyet.urlHienTai()}`
+    : `Gõ "${chu.slice(0, 60)}" vào "${boChon}" trên ${trinhDuyet.urlHienTai()}`;
+
+  const quyet = await hoiNguoiDung(
+    // KHÔNG cho nhớ: cùng một bộ chọn trên hai trang khác nhau là hai việc
+    // khác nhau, mà khoá ghi nhớ thì không phân biệt được.
+    { ten, duongDan: moTa, khoa: `${ten}:${trinhDuyet.urlHienTai()}:${boChon}`, choNho: false },
+    (y) => boiCanh.xinPhepLenh({ ...y, phanLoai: { muc: 'cankiem', lyDo: ['tác động lên trang web đang mở'], choNho: false } }),
+    boiCanh.signal,
+    boiCanh.so.quyenDaCap,
+  );
+  if (quyet === 'tuChoi') {
+    return {
+      noiDung: `NGƯỜI DÙNG TỪ CHỐI: ${moTa}. Đừng gọi lại y hệt — hỏi xem họ muốn làm gì thay thế.`,
+      tomTat: 'bị từ chối',
+    };
+  }
+
+  const kq = ten === 'web_bam'
+    ? await trinhDuyet.bamVao(boChon)
+    : await trinhDuyet.goChu(boChon, chu);
+  if (!kq.ok) return { noiDung: `LỖI: ${kq.loi}`, tomTat: 'không thấy phần tử' };
+  await trinhDuyet.choTai(4000);
+  return { noiDung: `${moTa} — xong.`, tomTat: 'xong' };
 }

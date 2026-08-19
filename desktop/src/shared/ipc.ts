@@ -408,6 +408,8 @@ export interface AgentWorkspace {
    * duyệt một lệnh dính tới file nhạy cảm, và cảnh báo to trên thẻ.
    */
   choChayLenh: boolean;
+  /** Agent lái được trình duyệt trong app. */
+  choTrinhDuyet: boolean;
   /** Cấp độ nỗ lực đang chọn. */
   mucNoLuc: MucNoLuc;
   /** Model đang chọn. Lưu xuống đĩa vì đây là SỞ THÍCH, không phải quyền. */
@@ -462,6 +464,7 @@ export const agentTraLoiSchema = z.object({
 export const agentCheDoSuaSchema = z.object({ cuocId: cuocIdSchema, bat: z.boolean() });
 export const agentCheDoLenhSchema = z.object({ cuocId: cuocIdSchema, bat: z.boolean() });
 export const agentCheDoNoteSchema = z.object({ cuocId: cuocIdSchema, bat: z.boolean() });
+export const agentCheDoTrinhDuyetSchema = z.object({ cuocId: cuocIdSchema, bat: z.boolean() });
 export const agentPhienSchema = z.object({ id: z.string().min(1).max(64) });
 
 /**
@@ -716,6 +719,7 @@ export const INVOKE_CHANNELS = {
   'agent:datCheDoSua': agentCheDoSuaSchema,
   'agent:datCheDoLenh': agentCheDoLenhSchema,
   'agent:datCheDoNote': agentCheDoNoteSchema,
+  'agent:datCheDoTrinhDuyet': agentCheDoTrinhDuyetSchema,
   'agent:datMucNoLuc': agentMucNoLucSchema,
   'agent:datModel': agentModelSchema,
   'agent:hoanTac': agentCuocSchema,
@@ -988,6 +992,7 @@ export interface DesktopBridge {
      * trên máy chủ, không phải trong cây mã.
      */
     datCheDoNote(cuocId: string, bat: boolean): Promise<AgentWorkspace>;
+    datCheDoTrinhDuyet(cuocId: string, bat: boolean): Promise<AgentWorkspace>;
     /** Đặt cấp độ nỗ lực. Đây LÀ thứ được lưu — nó là sở thích, không phải quyền. */
     datMucNoLuc(muc: MucNoLuc): Promise<void>;
     datModel(model: ModelAgent): Promise<void>;

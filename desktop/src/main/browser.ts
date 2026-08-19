@@ -112,6 +112,24 @@ function tao(): WebContentsView {
    * nhất cả chồng đó và nó chọn overload cuối (`'zoom-changed'`), rồi báo lỗi
    * cho mọi tên khác. Viết thẳng ra dài hơn nhưng đúng kiểu.
    */
+  /*
+   * NHẬT KÝ CONSOLE + LỖI MẠNG, cho agent đọc.
+   *
+   * Đây là thứ quyết định khi gỡ lỗi giao diện: "trang trắng" có thể là lỗi
+   * JS, có thể là một request 500, và nhìn ảnh chụp thì hai cái giống hệt
+   * nhau. Giữ vòng tròn 200 mục — đủ cho một lần tải trang, và không phình
+   * theo thời gian nếu người dùng để trình duyệt mở cả buổi.
+   */
+  wc.on('console-message', (_e, muc, chu, dong, nguon) => {
+    themNhatKy({
+      loai: muc === 3 ? 'loi' : muc === 2 ? 'canh-bao' : 'log',
+      chu: String(chu).slice(0, 2000),
+      ...(nguon ? { nguon: `${nguon}:${dong}` } : {}),
+    });
+  });
+
+  wc.on('did-navigate', () => { nhatKy.length = 0; });
+
   const doi = (): void => batTrangThai();
   wc.on('did-navigate', doi);
   wc.on('did-navigate-in-page', doi);
@@ -195,6 +213,106 @@ export function moNgoai(): void {
 }
 
 /** Huỷ hẳn — gọi khi đóng app. */
+// ═══════════════════════════════════════════════════════════
+// LÁI TRÌNH DUYỆT — cho agent dùng
+// ═══════════════════════════════════════════════════════════
+
+export interface MucNhatKy { loai: 'log' | 'canh-bao' | 'loi'; chu: string; nguon?: string }
+
+/** Vòng tròn 200 mục. Xoá mỗi lần điều hướng — log của trang trước gây hiểu nhầm. */
+const nhatKy: MucNhatKy[] = [];
+function themNhatKy(m: MucNhatKy): void {
+  nhatKy.push(m);
+  if (nhatKy.length > 200) nhatKy.shift();
+}
+
+export function docNhatKy(): MucNhatKy[] { return [...nhatKy]; }
+
+/** Có trình duyệt đang mở không. Agent phải biết để nói "hãy mở trang trước". */
+export function dangMo(): boolean { return !!khung && !khung.webContents.isDestroyed(); }
+
+export function urlHienTai(): string { return khung?.webContents.getURL() ?? ''; }
+
+/**
+ * Chờ trang tải xong.
+ *
+ * ⚠️ CÓ HẠN CHÓT. Trang có websocket hoặc polling thì `did-stop-loading`
+ * không bao giờ tới, và agent sẽ treo tới khi hết giờ cả lượt. Hết hạn ở đây
+ * KHÔNG phải lỗi — đọc được nội dung dở còn hơn không đọc được gì.
+ */
+export async function choTai(hanMs = 12_000): Promise<void> {
+  const wc = khung?.webContents;
+  if (!wc || !wc.isLoading()) return;
+  await new Promise<void>((xong) => {
+    const gio = setTimeout(() => { wc.off('did-stop-loading', tay); xong(); }, hanMs);
+    const tay = (): void => { clearTimeout(gio); xong(); };
+    wc.once('did-stop-loading', tay);
+  });
+}
+
+/**
+ * Đọc trang SAU KHI JS chạy.
+ *
+ * Khác hẳn `doc_web` (lấy HTML thô qua HTTP): trang Next/React trả về một
+ * `<div id="__next"></div>` rỗng, nên `doc_web` thấy trang trắng trong khi
+ * người dùng nhìn thấy đầy chữ.
+ */
+export async function docTrang(tranKyTu = 40_000): Promise<string> {
+  const wc = khung?.webContents;
+  if (!wc) return '';
+  const chu = await wc.executeJavaScript(
+    '(() => { const e = document.querySelector("main,article,#root,#__next") || document.body;'
+    + ' return e ? e.innerText : ""; })()',
+    true,
+  ) as string;
+  return typeof chu === 'string' ? chu.slice(0, tranKyTu) : '';
+}
+
+/** Ảnh chụp trang, PNG base64. */
+export async function chupTrang(): Promise<string | null> {
+  const wc = khung?.webContents;
+  if (!wc) return null;
+  const anh = await wc.capturePage();
+  return anh.isEmpty() ? null : anh.toPNG().toString('base64');
+}
+
+/**
+ * Bấm vào một phần tử theo bộ chọn CSS.
+ *
+ * Dùng bộ chọn chứ không dùng toạ độ: toạ độ đúng ở một cỡ cửa sổ và sai ở
+ * cỡ khác, mà agent không thấy cửa sổ. Cuộn phần tử vào tầm nhìn trước khi
+ * bấm — phần tử ngoài màn hình vẫn bấm được bằng JS, nhưng người dùng đang
+ * nhìn sẽ không thấy chuyện gì vừa xảy ra.
+ */
+export async function bamVao(boChon: string): Promise<{ ok: boolean; loi?: string }> {
+  const wc = khung?.webContents;
+  if (!wc) return { ok: false, loi: 'chưa mở trình duyệt' };
+  const ma = `(() => { const e = document.querySelector(${JSON.stringify(boChon)});
+    if (!e) return 'khong-thay';
+    e.scrollIntoView({ block: 'center' });
+    e.click();
+    return 'ok'; })()`;
+  const kq = await wc.executeJavaScript(ma, true) as string;
+  return kq === 'ok' ? { ok: true } : { ok: false, loi: `không thấy phần tử "${boChon}"` };
+}
+
+/** Gõ chữ vào một ô nhập. Bắn cả `input` lẫn `change` để React nhận được. */
+export async function goChu(boChon: string, chu: string): Promise<{ ok: boolean; loi?: string }> {
+  const wc = khung?.webContents;
+  if (!wc) return { ok: false, loi: 'chưa mở trình duyệt' };
+  const ma = `(() => { const e = document.querySelector(${JSON.stringify(boChon)});
+    if (!e) return 'khong-thay';
+    e.focus();
+    const dat = Object.getOwnPropertyDescriptor(
+      e instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype, 'value')?.set;
+    if (dat) dat.call(e, ${JSON.stringify(chu)}); else e.value = ${JSON.stringify(chu)};
+    e.dispatchEvent(new Event('input', { bubbles: true }));
+    e.dispatchEvent(new Event('change', { bubbles: true }));
+    return 'ok'; })()`;
+  const kq = await wc.executeJavaScript(ma, true) as string;
+  return kq === 'ok' ? { ok: true } : { ok: false, loi: `không thấy ô nhập "${boChon}"` };
+}
+
 export function huy(): void {
   an();
   khung?.webContents.close();

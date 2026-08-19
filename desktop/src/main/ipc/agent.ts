@@ -137,7 +137,10 @@ async function moTa(cuocId: string, goc: string | null): Promise<AgentWorkspace>
   // KHÔNG cần thư mục nào: bỏ sót ở đây thì người dùng bật công tắc xong giao
   // diện vẫn vẽ "tắt", bấm mãi không lên, mà không có lỗi nào.
   if (!goc) {
-    return { path: null, name: null, branch: null, choSua: false, choChayLenh: false, choGhiNote: q.choGhiNote, mucNoLuc, model };
+    return {
+      path: null, name: null, branch: null, choSua: false, choChayLenh: false,
+      choGhiNote: q.choGhiNote, choTrinhDuyet: q.choTrinhDuyet, mucNoLuc, model,
+    };
   }
   return {
     path: goc,
@@ -146,6 +149,7 @@ async function moTa(cuocId: string, goc: string | null): Promise<AgentWorkspace>
     choSua: q.choSua,
     choChayLenh: q.choChayLenh,
     choGhiNote: q.choGhiNote,
+    choTrinhDuyet: q.choTrinhDuyet,
     mucNoLuc,
     model,
   };
@@ -295,7 +299,8 @@ export function registerAgentHandlers(): void {
         // trả lời lịch sự "tôi không có tool đó", đúng như nó được dạy. Bật công
         // tắc trên giao diện vẫn hiện BẬT, nên nhìn đâu cũng thấy ổn.
         goc: conSong, choSua: quyen.choSua, choChayLenh: quyen.choChayLenh,
-        choGhiNote: quyen.choGhiNote, mucNoLuc: mucNoLucHienTai(), model: modelHienTai(),
+        choGhiNote: quyen.choGhiNote, choTrinhDuyet: quyen.choTrinhDuyet,
+        mucNoLuc: mucNoLucHienTai(), model: modelHienTai(),
         ...(anh?.length ? { anh } : {}),
         ...(nhanh ? { nhanh } : {}),
       },
@@ -346,6 +351,11 @@ export function registerAgentHandlers(): void {
     return moTa(cuocId, gocCua(cuocId));
   });
 
+  handle('agent:datCheDoTrinhDuyet', async ({ cuocId, bat }): Promise<AgentWorkspace> => {
+    if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở — hãy dừng trước khi đổi quyền ghi ghi chú.');
+    datQuyenChoCuoc(cuocId, { choTrinhDuyet: bat });
+    return moTa(cuocId, gocCua(cuocId));
+  });
   handle('agent:datCheDoNote', async ({ cuocId, bat }): Promise<AgentWorkspace> => {
     if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở — hãy dừng trước khi đổi quyền ghi ghi chú.');
     datQuyenChoCuoc(cuocId, { choGhiNote: bat });

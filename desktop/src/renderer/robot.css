@@ -43,7 +43,11 @@ body {
 
    Vòng nét đứt nhấp nháy để người dùng biết đã ăn: cửa sổ này không có
    thanh tiêu đề, nên không còn dấu hiệu nào khác. */
-.rb[data-keo='true'] .rb-than { -webkit-app-region: drag; cursor: grab; }
+/* Mở khoá kéo: KHÔNG bật `-webkit-app-region: drag`. Nó nuốt sạch sự kiện
+   chuột nên ba cú bấm để khoá lại không bao giờ tới nơi — người dùng mở khoá
+   xong là kẹt. Cửa sổ dời bằng `setBounds` ở main (xem `robotNoi.ts`). */
+.rb[data-keo='true'] .rb-than { -webkit-app-region: no-drag; cursor: grab; }
+.rb[data-dang-keo='true'] .rb-than { cursor: grabbing; }
 .rb[data-keo='true'] .rb-than::before {
   content: '';
   position: absolute; inset: -6px;

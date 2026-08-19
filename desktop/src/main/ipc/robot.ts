@@ -3,7 +3,9 @@
  *
  * Mỏng có chủ ý — mọi quyết định về cửa sổ nằm ở `main/robotNoi.ts`.
  */
-import { datNacCo, doiCo, doiKichThuoc, moTrangChinh } from '../robotNoi';
+import {
+  datNacCo, doiCo, doiKichThuoc, keoBatDau, keoToi, keoXong, moTrangChinh,
+} from '../robotNoi';
 import { baoNhac } from '../robotTin';
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from './auth';
@@ -19,6 +21,12 @@ export function registerRobotHandlers(): void {
   handle('robot:baoNhac', ({ ten }) => baoNhac(ten));
 
   handle('robot:datCo', ({ nac }) => { datNacCo(nac); });
+
+  /* Kéo cửa sổ robot. Ba nhịp: chốt gốc, dời theo độ lệch, buông. Xem chú
+     thích ở `robotNoi.ts` — vì sao không dùng `-webkit-app-region: drag`. */
+  handle('robot:keoBatDau', () => { keoBatDau(); });
+  handle('robot:keoToi', ({ dx, dy }) => { keoToi(Number(dx) || 0, Number(dy) || 0); });
+  handle('robot:keoXong', () => { keoXong(); });
 
   handle('robot:moChinh', ({ duongDan }) => {
     // Chỉ nhận đường dẫn TRONG app, không nhận URL. Một chuỗi `https://…` lọt

@@ -84,8 +84,12 @@ function Robot() {
     void window.cuongthai?.robot.doiKichThuoc(v);
   }, []);
 
-  const bam = useCallback(() => {
-    if (demVaLat()) return;     // cú thứ ba lật khoá kéo, không làm gì thêm
+  const bam = useCallback((e: { detail: number }) => {
+    if (e.detail >= 3) {
+      huyHen();                 // huỷ cả mở-khung-chat lẫn mở-cửa-sổ-chính
+      datKeoDuoc((v) => !v);
+      return;
+    }
     if (henRef.current) return; // đang chờ xem có phải nhấp đúp không
     henRef.current = setTimeout(() => {
       henRef.current = null;
@@ -212,37 +216,82 @@ function Robot() {
       return moi;
     });
   }, []);
-  const demBam = useRef(0);
-  const henDem = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /**
+   * Kéo cửa sổ robot.
+   *
+   * ⚠️ KHÔNG dùng `-webkit-app-region: drag`. Nó kéo được, nhưng nuốt sạch sự
+   * kiện chuột của phần tử — nên sau khi mở khoá thì `onClick` không bắn nữa
+   * và ba cú bấm để KHOÁ LẠI không bao giờ tới nơi. Người dùng mở khoá xong
+   * là kẹt luôn. Kéo bằng `setBounds` ở main giữ được cả hai.
+   */
+  const keo = useRef<{ x: number; y: number } | null>(null);
+  const [dangKeo, datDangKeo] = useState(false);
+  useEffect(() => {
+    if (!dangKeo) return;
+    const di = (e: PointerEvent): void => {
+      const b = keo.current;
+      if (!b) return;
+      // Gốc chốt ở MAIN; đây chỉ gửi độ lệch so với chỗ bấm xuống. Gửi vị trí
+      // tuyệt đối thì mỗi lần cửa sổ dời lại sinh một `pointermove` mới và nó
+      // tự đẩy chính nó trượt đi.
+      void window.cuongthai?.robot.keoToi(e.screenX - b.x, e.screenY - b.y);
+    };
+    const tha = (): void => {
+      datDangKeo(false);
+      keo.current = null;
+      void window.cuongthai?.robot.keoXong();
+    };
+    window.addEventListener('pointermove', di);
+    window.addEventListener('pointerup', tha, { once: true });
+    return () => {
+      window.removeEventListener('pointermove', di);
+      window.removeEventListener('pointerup', tha);
+    };
+  }, [dangKeo]);
 
-  /** Đếm cú bấm; đủ ba trong 600ms thì lật khoá. Trả `true` nếu vừa lật. */
-  const demVaLat = useCallback((): boolean => {
-    demBam.current += 1;
-    if (henDem.current) clearTimeout(henDem.current);
-    if (demBam.current >= 3) {
-      demBam.current = 0;
-      // Huỷ luôn cú hẹn mở khung chat của bấm-một-lần, nếu không mở khoá
-      // xong khung chat cũng bung ra.
-      if (henRef.current) { clearTimeout(henRef.current); henRef.current = null; }
-      datKeoDuoc((v) => !v);
-      return true;
-    }
-    henDem.current = setTimeout(() => { demBam.current = 0; }, 600);
-    return false;
+  /**
+   * Ba cú bấm lật khoá.
+   *
+   * Dùng `e.detail` của trình duyệt chứ không tự đếm bằng `setTimeout`: nó
+   * đếm theo ĐÚNG khoảng nhấp-đúp của hệ điều hành, nên khớp với cảm giác tay
+   * người dùng thay vì một con số 600ms tôi bịa ra.
+   *
+   * ⚠️ CÚ THỨ HAI CŨNG BẮN `onDoubleClick`, và ở cửa sổ nổi thì `bamDup` MỞ
+   * CỬA SỔ CHÍNH — nó cướp tiêu điểm, và cú thứ ba rơi vào cửa sổ vừa hiện
+   * lên chứ không vào robot. Đây chính là lý do ba-cú-bấm chạy trong app mà
+   * không chạy ở con robot nổi ngoài. Nên `bamDup` phải HOÃN, và cú thứ ba
+   * huỷ cái hoãn đó.
+   */
+  const henDup = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const huyHen = useCallback(() => {
+    if (henRef.current) { clearTimeout(henRef.current); henRef.current = null; }
+    if (henDup.current) { clearTimeout(henDup.current); henDup.current = null; }
   }, []);
 
   const bamDup = useCallback(() => {
     if (henRef.current) { clearTimeout(henRef.current); henRef.current = null; }
-    datTin(null);
-    void window.cuongthai?.robot.moChinh('/chat');
+    // HOÃN, không làm ngay: cú thứ ba (nếu có) sẽ huỷ cái hẹn này. Mở cửa sổ
+    // chính ngay tại cú thứ hai là cướp tiêu điểm và giết luôn cử chỉ ba bấm.
+    if (henDup.current) clearTimeout(henDup.current);
+    henDup.current = setTimeout(() => {
+      henDup.current = null;
+      datTin(null);
+      void window.cuongthai?.robot.moChinh('/chat');
+    }, 260);
   }, []);
 
   return (
-    <div className="rb" data-rong={rong} data-keo={keoDuoc}>
+    <div className="rb" data-rong={rong} data-keo={keoDuoc} data-dang-keo={dangKeo}>
       {rong && <KhungChat onDong={() => doiRong(false)} />}
 
       <div
         className="rb-than"
+        onPointerDown={(e) => {
+          if (!keoDuoc || e.button !== 0) return;
+          keo.current = { x: e.screenX, y: e.screenY };
+          datDangKeo(true);
+          void window.cuongthai?.robot.keoBatDau();
+        }}
         onClick={bam}
         onDoubleClick={bamDup}
         onMouseEnter={() => datHover(true)}

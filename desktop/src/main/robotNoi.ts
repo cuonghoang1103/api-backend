@@ -197,6 +197,47 @@ export function doiKichThuoc(rong: boolean): void {
   });
 }
 
+/**
+ * ============================================================
+ * KÉO CỬA SỔ ROBOT BẰNG JS, KHÔNG BẰNG `-webkit-app-region`
+ * ============================================================
+ *
+ * Bản trước mở khoá kéo bằng cách đặt `-webkit-app-region: drag` lên thân
+ * robot. Nó kéo được thật, nhưng đổi lại MẤT LỐI RA: thuộc tính đó nuốt sạch
+ * sự kiện chuột của phần tử, nên sau khi mở khoá thì `onClick` không còn bắn
+ * nữa và ba cú bấm để KHOÁ LẠI không bao giờ tới nơi. Người dùng mở khoá xong
+ * là kẹt luôn ở chế độ kéo.
+ *
+ * Kéo bằng `setBounds` giữ được cả hai: chuột vẫn là chuột, và cửa sổ vẫn dời.
+ *
+ * ⚠️ CHỐT GỐC Ở MAIN, KHÔNG Ở RENDERER. Renderer chỉ gửi ĐỘ LỆCH so với chỗ
+ * bấm xuống. Nếu renderer tự cộng dồn rồi gửi vị trí tuyệt đối thì mỗi lần
+ * `setBounds` chạy, con trỏ trong cửa sổ vừa dời lại sinh một `pointermove`
+ * mới — cửa sổ tự đẩy chính nó và trượt đi mất.
+ */
+let gocKeo: { x: number; y: number } | null = null;
+
+export function keoBatDau(): void {
+  const w = cuaSoRobot();
+  if (!w) return;
+  const b = w.getBounds();
+  gocKeo = { x: b.x, y: b.y };
+}
+
+export function keoToi(dx: number, dy: number): void {
+  const w = cuaSoRobot();
+  const g = gocKeo;
+  if (!w || !g) return;
+  // Chỉ đổi x/y. Đưa cả width/height vào là ép cửa sổ vẽ lại toàn bộ mỗi
+  // khung hình khi kéo, và trên máy chậm nó giật.
+  const b = w.getBounds();
+  w.setBounds({ ...b, x: Math.round(g.x + dx), y: Math.round(g.y + dy) });
+}
+
+export function keoXong(): void {
+  gocKeo = null;
+}
+
 export function dangMoRong(): boolean {
   return dangRong;
 }

@@ -41,6 +41,7 @@ import {
 } from '../llm/gateway.js';
 import { checkBudget, budgetMessage } from '../llm/budget.js';
 import { nenNguCanh } from './compact.js';
+import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { modelAgentTu } from './models.js';
 import { loiCanVi, loiHetHan, xemHanMuc, xemViAgent, type HanMuc } from './quota.js';
 import { runServerTool } from './serverTools.js';
@@ -154,7 +155,16 @@ const MAX_TOOL_RESULT_CHARS = 60_000;
  */
 const CHO_BYTE_DAU_MS = 180_000;
 const IM_LANG_MS = 60_000;
-const MAX_OUTPUT_TOKENS = 4_000;
+/**
+ * Trần token RA cho một lời gọi.
+ *
+ * ⚠️ 4.000 là con số cũ, và nó chính là lỗi người dùng báo 19/08/2026: quét
+ * xong một dự án rồi bản tổng quan bị cắt ngang giữa câu. `max_tokens` là
+ * TRẦN chứ không phải chỉ tiêu — model chỉ viết đúng thứ nó cần, nên nâng
+ * lên KHÔNG làm tăng tiền cho những câu trả lời vốn đã ngắn. Cái nó đổi là
+ * những câu trả lời dài không còn bị chặt cụt.
+ */
+const MAX_OUTPUT_TOKENS = 16_000;
 /** Ảnh mỗi lượt, và trần cho một data URI (~5,5MB chuỗi ≈ 4MB ảnh). */
 const MAX_ANH = 3;
 const MAX_ANH_BYTES = 5_600_000;
@@ -510,8 +520,15 @@ export async function runAgentTurn(
     ...(daLuoc > 0 ? { compact: { soDaLuoc: daLuoc, kyTuDaCat: daCat } } : {}),
   });
 
+  /* Trạng thái của việc VIẾT TIẾP khi chạm trần token. `viTriPrefill` là chỗ
+     tin nhắn assistant dở nằm trong `append` — giữ lại để THAY nó, không đẩy
+     thêm cái mới. */
+  let soLanVietTiep = 0;
+  let dangViet = '';
+  let viTriPrefill = -1;
+
   try {
-    for (let hop = 0; hop <= MAX_SERVER_HOPS; hop++) {
+    for (let hop = 0; hop <= MAX_SERVER_HOPS + MAX_VIET_TIEP; hop++) {
       // Nén NGAY TRƯỚC mỗi lời gọi, tính lại từ đầu mỗi lần: hop này vừa thêm
       // kết quả mới, nên cái "gần nhất" đã khác so với hop trước.
       const nen = nenNguCanh([...messages, ...append]);
@@ -533,10 +550,39 @@ export async function runAgentTurn(
 
       const noiDung = catRacCong(ketQua.text);
       const calls = ketQua.toolCalls;
+      const finishReason = ketQua.finishReason;
 
-      // ── Model không đòi tool nữa ⇒ xong lượt ──
+      // ── Model không đòi tool nữa ⇒ xong lượt, TRỪ KHI nó bị cắt ──
       if (calls.length === 0) {
-        append.push({ role: 'assistant', content: noiDung });
+        const gop = gopVietTiep(dangViet, noiDung);
+
+        /*
+         * CHẠM TRẦN TOKEN ⇒ VIẾT TIẾP, ĐỪNG DỪNG.
+         *
+         * Đây là lỗi người dùng báo 19/08/2026: quét xong một dự án rồi bản
+         * tổng quan đứt ngang giữa câu, không lỗi, không cảnh báo. Cổng vẫn
+         * gửi `finish_reason: "length"` — chỉ là không ai đọc.
+         *
+         * Cách viết tiếp: đặt phần đang dở làm tin nhắn `assistant` CUỐI rồi
+         * gọi lại (prefill). Đo thật cho thấy cổng nhận và model viết tiếp
+         * đúng chỗ — nhưng nó VIẾT LẠI mục đang dở, nên phải gộp bằng
+         * `gopVietTiep` chứ không cộng chuỗi.
+         *
+         * ⚠️ THAY tin nhắn prefill chứ không đẩy thêm: hai tin `assistant`
+         * liền nhau là một hội thoại méo, và mỗi lần gọi lại sẽ chở thêm một
+         * bản sao của phần đã viết.
+         */
+        if (finishReason === 'length' && soLanVietTiep < MAX_VIET_TIEP) {
+          soLanVietTiep += 1;
+          dangViet = gop;
+          if (viTriPrefill >= 0) append[viTriPrefill] = { role: 'assistant', content: gop };
+          else { viTriPrefill = append.length; append.push({ role: 'assistant', content: gop }); }
+          emit({ type: 'server_tool', name: 'viet_tiep', summary: `câu trả lời dài — đang viết tiếp (${soLanVietTiep}/${MAX_VIET_TIEP})` });
+          continue;
+        }
+
+        if (viTriPrefill >= 0) append[viTriPrefill] = { role: 'assistant', content: gop };
+        else append.push({ role: 'assistant', content: gop });
         thanhCong = true;
         emit(khungXong('end'));
         return;
@@ -712,6 +758,12 @@ async function ghiSo(d: {
 interface KetQuaCong {
   text: string;
   toolCalls: ToolCall[];
+  /**
+   * Lý do model dừng, do CỔNG gửi. `'length'` = chạm trần token, câu trả lời
+   * bị cắt ngang. Trước 19/08/2026 trường này không được đọc, nên một câu bị
+   * cắt trông y hệt một câu đã viết xong.
+   */
+  finishReason: string | null;
   inputTokens: number;
   outputTokens: number;
 }
@@ -830,6 +882,7 @@ async function goiCong(o: {
     }
 
     let text = '';
+    let finishReason: string | null = null;
     const mangTool = new Map<number, { id: string; name: string; args: string }>();
     let inputTokens = 0;
     let outputTokens = 0;
@@ -858,6 +911,12 @@ async function goiCong(o: {
           inputTokens = j.usage.prompt_tokens ?? inputTokens;
           outputTokens = j.usage.completion_tokens ?? outputTokens;
         }
+
+        // ⚠️ `finish_reason` nằm ở CHÍNH gói cuối, KHÔNG nằm trong `delta` —
+        // nên vòng lặp cũ (chỉ đọc `delta` rồi `continue`) bỏ qua nó hoàn
+        // toàn. Đo thật 19/08/2026: cổng gửi `finish_reason: "length"` khi
+        // chạm trần, và mã không hề đọc.
+        if (j.choices?.[0]?.finish_reason) finishReason = j.choices[0].finish_reason;
 
         const delta = j.choices?.[0]?.delta;
         if (!delta) continue;
@@ -903,7 +962,7 @@ async function goiCong(o: {
       inputTokens = Math.ceil((o.system.length + JSON.stringify(o.messages).length) / 4);
     }
 
-    return { text, toolCalls, inputTokens, outputTokens };
+    return { text, toolCalls, finishReason, inputTokens, outputTokens };
   } finally {
     clearTimeout(timer);
     o.signal.removeEventListener('abort', huy);

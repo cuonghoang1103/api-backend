@@ -34,8 +34,22 @@ import { dungLenhNenCua } from './lenhNen';
 import { hanMucMcp, goiToolMcp, laToolMcp, toolMcpHienCo } from './mcp';
 import { hoiNguoiDung, huyTatCa, type YeuCauXinPhep } from './xinPhep';
 
-/** Trần vòng lặp phía app. RỘNG HƠN trần bước của máy chủ (30) để máy chủ mới là bên nói dừng. */
-const MAX_VONG = 40;
+/**
+ * Trần vòng lặp phía app — LƯỚI ĐỠ, không phải chốt chặn thật.
+ *
+ * ⚠️ CON SỐ NÀY TỪNG LÀ 40, VÀ NÓ ĐÃ LẶNG LẼ NUỐT MẤT LỰA CHỌN CỦA NGƯỜI DÙNG.
+ * Chú thích cũ ghi "rộng hơn trần bước của máy chủ (30)" — đúng vào lúc máy
+ * chủ chỉ có một trần 30. Từ khi thêm sáu mức nỗ lực (18/08/2026), máy chủ đi
+ * tới 260 bước ở mức Ultracode, còn app vẫn cắt ở 40 và báo "Quá 40 vòng mà
+ * chưa xong". Người dùng chọn "Ultracode — 260 bước", trả tiền cho nó, rồi bị
+ * dừng ở bước 40 kèm một câu trách họ hỏi rộng quá.
+ *
+ * Chốt chặn THẬT là trần bước của máy chủ (`TRAN_BUOC`) và hạn mức 5 giờ. Số
+ * này chỉ để một lỗi vòng lặp ở app không quay mãi, nên nó phải RỘNG HƠN mọi
+ * trần của máy chủ. `loop.test.ts` đọc thẳng bảng bên máy chủ và đỏ nếu hai
+ * bên lệch lại lần nữa.
+ */
+const MAX_VONG = 320;
 
 /** Sự kiện đẩy lên renderer. Đây là thứ giao diện vẽ. */
 export type SuKienAgent =
@@ -745,7 +759,13 @@ export async function chayLuot(
       }
     }
 
-    phat({ loai: 'loi', thongDiep: `Quá ${MAX_VONG} vòng mà chưa xong. Hãy hỏi câu hẹp hơn.`, ma: 'MAX_ROUNDS' });
+    phat({
+      loai: 'loi',
+      thongDiep:
+        `Đã đi ${MAX_VONG} vòng mà chưa xong — nhiều hơn mọi trần bước của máy chủ, ` +
+        'nên gần như chắc chắn là agent đang lặp. Hãy hỏi lại câu hẹp hơn.',
+      ma: 'MAX_ROUNDS',
+    });
   } catch (err) {
     if (dieuKhien.signal.aborted) phat({ loai: 'huy' });
     else phat({ loai: 'loi', thongDiep: (err as Error).message || 'Lỗi không rõ.' });

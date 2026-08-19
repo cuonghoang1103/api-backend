@@ -867,13 +867,31 @@ async function toolWebMo(args: Record<string, unknown>): Promise<KetQuaTool> {
   /* Chưa mở trình duyệt thì mở nó ra — nhưng KHÔNG tự đoán vùng hiển thị.
      Vùng do renderer đo và gửi lên (`browser:datVung`); đoán ở đây thì trang
      web đè lên giao diện. Nên nếu chưa mở, ta yêu cầu người dùng bấm tab. */
+  /*
+   * TỰ MỞ KHUNG CHIA ĐÔI, đừng bắt người dùng đi bấm tab.
+   *
+   * Main KHÔNG tự đặt được vị trí: `WebContentsView` là lớp phủ theo toạ độ,
+   * mà toạ độ chỉ renderer đo được (cỡ cửa sổ, thanh bên đang gập hay không,
+   * mức phóng to). Nên main BÁO, renderer mở khung cạnh bảng ghi rồi gọi
+   * `browser.mo`, và ở đây ta CHỜ tới lúc thấy nó đã mở.
+   *
+   * Chờ có hạn: renderer không phản hồi (người dùng vừa đổi sang trang khác)
+   * thì thà trả một câu nói rõ còn hơn treo cả lượt.
+   */
   if (!trinhDuyet.dangMo()) {
-    return {
-      noiDung:
-        'Trình duyệt chưa mở. Hãy nói người dùng bấm tab "Trình duyệt" ở góc trên bên phải một lần, '
-        + 'rồi gọi lại `web_mo`. (Vùng hiển thị do giao diện đo, tool không tự đoán được.)',
-      tomTat: 'chưa mở tab trình duyệt',
-    };
+    cuaSo.webContents.send('agent:moWeb', { url });
+    const hetHan = Date.now() + 6000;
+    while (!trinhDuyet.dangMo() && Date.now() < hetHan) {
+      await new Promise((x) => setTimeout(x, 120));
+    }
+    if (!trinhDuyet.dangMo()) {
+      return {
+        noiDung:
+          'Không mở được khung trình duyệt (giao diện không phản hồi trong 6 giây). '
+          + 'Có thể người dùng đang ở trang khác. Hãy nhờ họ quay lại tab Lập trình rồi gọi lại `web_mo`.',
+        tomTat: 'không mở được khung',
+      };
+    }
   }
 
   const kq = trinhDuyet.diToi(url);

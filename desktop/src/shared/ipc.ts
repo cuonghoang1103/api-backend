@@ -787,6 +787,14 @@ export const EVENT_CHANNELS = [
   'agent:event',
   /** URL / tiêu đề / lui-tới của trình duyệt trong app. */
   'browser:trangThai',
+  /**
+   * Agent muốn MỞ trình duyệt cạnh bảng ghi (khung chia đôi trong AI Code).
+   *
+   * Main không tự đặt được vị trí: `WebContentsView` là lớp phủ theo toạ độ,
+   * mà toạ độ chỉ có renderer đo được. Nên main BÁO, renderer mở khung, đo,
+   * rồi gọi `browser.mo` — và `web_mo` chờ tới khi thấy trình duyệt đã mở.
+   */
+  'agent:moWeb',
   /** Thông báo đẩy tới CỬA SỔ ROBOT nổi (tin nhắn, nhạc, agent xong việc). */
   'robot:tin',
 ] as const;

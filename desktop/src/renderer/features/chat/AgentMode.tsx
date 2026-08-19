@@ -22,6 +22,7 @@ import {
   Sparkles, SquareTerminal, Terminal, Undo2, X, ChevronDown, Cpu, Globe, Zap,
 } from 'lucide-react';
 import { DangNghi } from './DangNghi';
+import { KhungWeb } from './KhungWeb';
 import type { AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, ModelAgent, MucNoLuc } from '../../../shared/ipc';
 import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
@@ -86,6 +87,18 @@ export function AgentMode({
    * Nút chỉ hiện khi ĐANG Ở XA đáy. Hiện thường trực thì nó che chữ suốt cả
    * những lúc chẳng cần tới.
    */
+  /* Khung trình duyệt chia đôi. Mở khi agent gọi `web_mo` — main bắn
+     `agent:moWeb` vì nó không tự đặt được toạ độ (xem `KhungWeb`). */
+  const [webUrl, datWebUrl] = useState<string | null>(null);
+  useEffect(() => {
+    const cau = window.cuongthai;
+    if (!cau) return;
+    return cau.on('agent:moWeb', (p) => {
+      const u = (p as { url?: string })?.url;
+      if (typeof u === 'string' && u) datWebUrl(u);
+    });
+  }, []);
+
   const [xaDay, datXaDay] = useState(false);
   const XA_DAY_PX = 240;
 
@@ -468,7 +481,8 @@ export function AgentMode({
         </div>
       )}
 
-      {/* ── Bảng ghi ── */}
+      {/* ── Bảng ghi (+ khung trình duyệt cạnh bên nếu agent đã mở) ── */}
+      <div className="ct-agent-doi" data-co-web={webUrl !== null}>
       <div className="ct-agent-scroll" ref={cuonRef}>
         {trangThai.muc.length === 0 && <ManHinhTrong coThuMuc={coThuMuc} />}
 
@@ -624,6 +638,9 @@ export function AgentMode({
             chuRieng="Chờ tớ đọc qua đã nhé…"
           />
         )}
+      </div>
+
+      {webUrl !== null && <KhungWeb url={webUrl} onDong={() => datWebUrl(null)} />}
       </div>
 
       {xaDay && (

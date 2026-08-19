@@ -2825,6 +2825,76 @@ select {
 .ct-panel-full[data-gap-dau='true'] .ct-page-head-chu { display: none; }
 .ct-panel-full[data-gap-dau='true'] > .ct-page-head { margin-bottom: 4px; }
 
+/* ══════════════════════════════════════════════════════════
+   KHUNG CHIA ĐÔI: bảng ghi | trình duyệt
+   ══════════════════════════════════════════════════════════ */
+
+.ct-agent-doi { flex: 1; min-height: 0; display: flex; gap: 0; }
+.ct-agent-doi > .ct-agent-scroll { flex: 1; min-width: 0; }
+
+/* Có trình duyệt ⇒ bảng ghi co lại còn ~44%. Hẹp hơn nữa thì khối mã trong
+   câu trả lời xuống dòng loạn; rộng hơn thì trang web không đọc được. */
+.ct-agent-doi[data-co-web='true'] > .ct-agent-scroll { flex: 0 0 44%; }
+
+.ct-khungweb {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--ct-border);
+  padding-left: 10px;
+  margin-left: 10px;
+}
+
+.ct-khungweb-dau {
+  display: flex; align-items: center; gap: 4px;
+  padding-bottom: 6px;
+}
+.ct-khungweb-url {
+  flex: 1; min-width: 0;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--ct-surface-2);
+  font-size: 11px; color: var(--ct-text-faint);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ct-khungweb-dau button {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; flex-shrink: 0;
+  border: none; border-radius: 6px;
+  background: none; color: var(--ct-text-faint);
+  cursor: pointer;
+}
+.ct-khungweb-dau button:hover { background: var(--ct-hover); color: var(--ct-text); }
+
+/* Ô GIỮ CHỖ — trang web KHÔNG nằm trong ô này. Main vẽ một lớp phủ đè lên
+   đúng vùng nó chiếm. Nền tối để lúc trang chưa tải xong không loé lên một
+   mảng trắng giữa giao diện tối. */
+.ct-khungweb-o {
+  flex: 1;
+  min-height: 0;
+  border-radius: var(--ct-radius-sm);
+  background: #0b0b12;
+}
+
+.ct-khungweb-loi {
+  margin: 6px 0 0; font-size: 11.5px; color: var(--ct-warn);
+}
+
+/* Cửa sổ hẹp thì chia đôi thành hai cột không đọc được cột nào. Xếp CHỒNG,
+   trình duyệt xuống dưới. */
+@media (max-width: 1100px) {
+  .ct-agent-doi[data-co-web='true'] { flex-direction: column; }
+  .ct-agent-doi[data-co-web='true'] > .ct-agent-scroll { flex: 1 1 auto; }
+  .ct-khungweb {
+    flex: 0 0 45%;
+    border-left: none; border-top: 1px solid var(--ct-border);
+    padding-left: 0; margin-left: 0;
+    padding-top: 8px; margin-top: 8px;
+  }
+}
+
 /* ── Nút nhảy xuống cuối ──
    Nổi trên bảng ghi, sát trên ô nhập. `position: absolute` trong `.ct-chedo`
    (đã `position: relative`) chứ không `fixed`: `fixed` thì nó đứng nguyên

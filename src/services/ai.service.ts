@@ -595,6 +595,22 @@ export class AIService {
    * Gộp `undefined` với "chưa phân loại" là mất đường xem toàn bộ.
    */
   async getSessions(userId?: number, folderId?: string, luuTru = false) {
+    /*
+     * ⛔ KHÔNG ĐĂNG NHẬP ⇒ DANH SÁCH RỖNG. Đây là vá lỗ hổng, không phải tiện ích.
+     *
+     * Route là `optionalAuth`, và trước bản này `where` để `undefined` khi không
+     * có `userId` — mà `findMany` với `where: undefined` nghĩa là LẤY TẤT CẢ.
+     * Đo thật trên production 20/08/2026: `curl` không kèm token vào
+     * `GET /api/v1/ai/chat/sessions` trả về 100 cuộc của người dùng thật, đủ cả
+     * `title` (chính là câu hỏi đầu của họ) và `userId`.
+     *
+     * Khách vãng lai KHÔNG có "danh sách của tôi": luồng ẩn danh nhận diện một
+     * cuộc bằng chính id họ đang giữ, và `GET /chat/history/:id` đã phục vụ
+     * đúng việc đó (có kiểm chủ sở hữu từ trước). Cái thiếu ở đây là chốt chặn
+     * LIỆT KÊ — thứ cho phép moi id của người khác ra ngay từ đầu.
+     */
+    if (!userId) return [];
+
     const loc = folderId === 'none' ? { folderId: null }
       : folderId ? { folderId }
       : {};
@@ -606,7 +622,7 @@ export class AIService {
      */
     const theoLuuTru = luuTru ? { archivedAt: { not: null } } : { archivedAt: null };
     return prisma.chatSession.findMany({
-      where: userId ? { userId, ...loc, ...theoLuuTru } : undefined,
+      where: { userId, ...loc, ...theoLuuTru },
       include: {
         _count: { select: { messages: true } },
         folder: { select: { id: true, ten: true, mau: true } },

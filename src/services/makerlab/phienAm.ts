@@ -296,7 +296,6 @@ const TEN_RIENG: Array<[RegExp, string]> = [
   [/\bvue\.?js\b/gi, 'viu-dây-ét'],
   [/\bexpress\.?js\b/gi, 'ich-sờ-prét'],
   [/\bsocket\.?io\b/gi, 'sóc-kịt ai-ô'],
-  [/\b\.net\b/gi, 'chấm-nét'],
 
   // ── Tên hai chữ ──
   [/\bspring\s*boot\b/gi, 'sờ-pring bút'],
@@ -336,8 +335,35 @@ const TEN_RIENG: Array<[RegExp, string]> = [
  */
 const DUOI_MIEN = /\b([a-z0-9][a-z0-9-]{1,})\.(com|vn|net|org|io|dev|ai|me)\b/gi;
 
+/**
+ * Tên ngôn ngữ/công cụ CÓ KÝ HIỆU trong tên.
+ *
+ * ⚠️ PHẢI THAY TRƯỚC lượt chữ cái ở `phienAmSangViet`, vì lượt đó dùng
+ * `/[A-Za-zÀ-ỹ]+/g` — CHỈ khớp CHỮ CÁI. Nên `C#` bị nhìn thành từ `C` rồi một
+ * dấu `#` lạc lõng: dấu thăng không bao giờ tới được từ điển, và máy đọc phát
+ * ra "xê" rồi một tiếng lạ. Người dùng báo đúng lỗi này ngày 19/08/2026.
+ *
+ * Cùng lý do với `TEN_RIENG`: thứ nào có ký tự ngoài bảng chữ cái thì phải
+ * xử lý ở lượt riêng, không trông vào lượt từ.
+ */
+const KY_HIEU_LAP_TRINH: Array<[RegExp, string]> = [
+  // Đặt C++ TRƯỚC C# là vô hại, nhưng `c\+\+` phải đứng trước `c` trong mọi
+  // trường hợp — nếu có ai thêm luật cho `c` đơn lẻ sau này.
+  [/\bC\+\+/gi, 'xi pờ-lát pờ-lát'],
+  [/\bC#/gi, 'xi sáp'],
+  [/\bF#/gi, 'ép sáp'],
+  [/\bA\*/g, 'ây sao'],
+  // ⚠️ `.NET` phải nằm ĐÂY, không nằm ở TEN_RIENG. Luật cũ `/\b\.net\b/gi`
+  // KHÔNG BAO GIỜ khớp: `\b` trước dấu chấm đòi ranh giới từ, mà giữa khoảng
+  // trắng và `.` thì cả hai đều là ký tự không-từ nên không có ranh giới nào.
+  // Hậu quả im lặng: lượt chữ cái nuốt mất "NET" thành "en-i-ti" và bỏ lại
+  // dấu chấm lạc — người nghe được ".en-i-ti".
+  [/(?<![\w.])\.net\b/gi, 'chấm-nét'],
+];
+
 function tenRiengTruoc(text: string): string {
   let ra = text;
+  for (const [re, thay] of KY_HIEU_LAP_TRINH) ra = ra.replace(re, thay);
   for (const [re, thay] of TEN_RIENG) ra = ra.replace(re, thay);
   return ra.replace(DUOI_MIEN, (_, ten: string, duoi: string) => `${ten} chấm ${duoi.toLowerCase()}`);
 }

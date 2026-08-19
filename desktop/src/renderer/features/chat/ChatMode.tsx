@@ -377,31 +377,46 @@ export function ChatMode({ pro }: { pro: boolean }) {
      * trước chạy nối đuôi cả bốn. Nay chặng "đọc" của câu đầu nằm GỌN TRONG
      * chặng "nghĩ", nên tiếng ra sớm hơn đúng bằng thời gian máy đọc chạy.
      */
-    let cauDau = '';
-    let tiengCauDau: Promise<Blob> | null = null;
-    const traLoi = await guiDi(cau, true, (c) => {
-      if (!doc) return;
-      cauDau = c;
-      tiengCauDau = docThanhTieng(api, c, tenGiong);
-      void tiengCauDau.catch(() => {});   // lỗi thật nổi lên ở await bên dưới
-    });
+    /*
+     * HÀNG ĐỢI TIẾNG — mỗi mẩu được đặt hàng NGAY khi nó đủ, không chờ trọn
+     * câu trả lời.
+     *
+     * Bản trước chỉ đặt hàng MỘT mẩu đầu, rồi phần đuôi mới được gọi trong
+     * `phat()` — tức SAU khi model viết xong hết, và gọi trọn một cục. Người
+     * dùng nghe: đọc câu 1, LẶNG 5-6 giây, rồi đọc một hơi hết phần còn lại.
+     */
+    const cacMau: string[] = [];
+    const hangTieng: Promise<Blob>[] = [];
+    const datHang = (c: string) => {
+      cacMau.push(c);
+      const t = docThanhTieng(api, c, tenGiong);
+      void t.catch(() => {});            // lỗi thật nổi lên ở await bên dưới
+      hangTieng.push(t);
+    };
+    const traLoi = await guiDi(cau, true, (c) => { if (doc) datHang(c); });
 
     return {
       traLoi,
       phat: async () => {
         if (!doc || !traLoi) return;
-        const duoi = cauDau && traLoi.startsWith(cauDau) ? traLoi.slice(cauDau.length).trim() : '';
-        if (tiengCauDau) {
-          // Đặt hàng phần đuôi TRƯỚC khi phát câu đầu — nếu không, giữa hai
-          // đoạn là trọn một vòng gọi máy đọc và người nghe thấy một khoảng
-          // lặng ngay chỗ dấu chấm (đã dính đúng lỗi này ở bản dock).
-          const tiengDuoi = duoi ? docThanhTieng(api, duoi, tenGiong) : null;
-          void tiengDuoi?.catch(() => {});
-          await phatTieng(await tiengCauDau);
-          if (tiengDuoi) await phatTieng(await tiengDuoi);
+        if (!hangTieng.length) {
+          await phatTieng(await docThanhTieng(api, traLoi, tenGiong));
           return;
         }
-        await phatTieng(await docThanhTieng(api, traLoi, tenGiong));
+        /*
+         * Đuôi CHƯA đủ một câu (model kết thúc không có dấu chấm) thì chưa ai
+         * đặt hàng — phải xả nốt, không thì mất chữ cuối. Dò bằng con trỏ chạy
+         * theo thứ tự các mẩu, chứ không `startsWith`: khoảng trắng giữa các
+         * câu có thể khác với lúc gom.
+         */
+        let viTri = 0;
+        for (const m of cacMau) {
+          const i = traLoi.indexOf(m, viTri);
+          if (i >= 0) viTri = i + m.length;
+        }
+        const conLai = traLoi.slice(viTri).trim();
+        if (conLai) datHang(conLai);
+        for (const t of hangTieng) await phatTieng(await t);
       },
       ngung: () => ngungNoi(),
     };

@@ -21,6 +21,36 @@ interface Api {
  * không trở thành một lời gọi máy đọc riêng — đọc "Ừ" rồi ngắt, rồi đọc tiếp
  * nghe rời rạc hơn hẳn đọc liền.
  */
+/**
+ * Lấy câu HOÀN CHỈNH tiếp theo ra khỏi phần chữ đang chảy về.
+ *
+ * ⚠️ VÌ SAO CẦN HÀM NÀY chứ không dùng lại `catCauDau`: bản trước chỉ báo ra
+ * ĐÚNG MỘT câu đầu (cờ `daBaoCauDau`), rồi im lặng gom hết phần còn lại và
+ * chỉ trả về khi stream kết thúc. Nhịp thật mà người dùng nghe được là:
+ * đọc câu 1 → LẶNG 5-6 giây (model viết nốt + máy đọc sinh cả đoạn đuôi
+ * trong MỘT lượt job) → đọc một hơi hết phần còn lại.
+ *
+ * Báo từng câu thì máy đọc nhận việc sớm hơn, và câu sau được sinh TRONG LÚC
+ * câu trước đang phát.
+ */
+/**
+ * Cỡ mẩu cho các lần gửi SAU mẩu đầu, tính bằng ký tự.
+ *
+ * 140 ≈ 6-7 giây tiếng — đủ dài để máy đọc kịp làm xong mẩu kế trong lúc mẩu
+ * này đang phát, mà vẫn đủ ngắn để không thành "một cục đuôi" như bản trước.
+ */
+const GOM_SAU = 140;
+
+export function catCauTiep(chu: string): { cau: string; conLai: string } | null {
+  const m = /[.!?…]["')\]]?\s/.exec(chu);
+  if (!m) return null;
+  const het = m.index + m[0].length;
+  const cau = chu.slice(0, het).trim();
+  // Câu quá cụt ("Ừ.") thì CHƯA cắt — đợi gộp với câu sau, đọc riêng nghe rời.
+  if (cau.length < 12) return null;
+  return { cau, conLai: chu.slice(het) };
+}
+
 export function catCauDau(chu: string): string | null {
   const m = /[.!?…]["')\]]?\s/.exec(chu);
   if (!m) return null;
@@ -98,8 +128,13 @@ export async function hoiOdin(
    * cuối việc thứ nhất và nghe tiếng ở cuối việc thứ ba. Cho máy đọc chạy câu
    * đầu ngay khi có nó thì việc thứ hai nằm GỌN TRONG việc thứ nhất, và tiếng
    * gần như ra cùng lúc với chữ.
+   *
+   * ⚠️ 19/08/2026: gọi MỖI CÂU, không phải mỗi câu đầu. Bản trước có cờ
+   * `daBaoCauDau` chặn sau lần đầu, nên phần đuôi chỉ được đặt hàng máy đọc
+   * SAU KHI model viết xong hết — và đặt trọn một cục. Người dùng nghe: đọc
+   * câu 1, lặng 5-6 giây, rồi đọc một hơi hết phần còn lại.
    */
-  cauDauXong?: (cau: string) => void,
+  cauXong?: (cau: string) => void,
 ): Promise<string> {
   const phien = await baoDamPhien(api);
   const res = await fetch(`${api.baseUrlForForms()}/api/v1/ai/chat`, {
@@ -145,7 +180,11 @@ export async function hoiOdin(
   const giaiMa = new TextDecoder();
   let dem = '';
   let tra = '';
-  let daBaoCauDau = false;
+  /** Phần chữ đã về nhưng CHƯA giao cho máy đọc. */
+  let chuaBao = '';
+  let daGuiMauDau = false;
+  /** Các câu đã hoàn chỉnh nhưng đang chờ gom đủ dài. */
+  let gom = '';
 
   for (;;) {
     const { done, value } = await doc.read();
@@ -171,10 +210,37 @@ export async function hoiOdin(
            * Ngày thêm khung "đang tìm web" là ngày robot đọc luôn cả dòng đó.
            */
           if (o.type && o.type !== 'chunk') continue;
-          tra += o.content ?? o.delta ?? o.text ?? '';
-          if (cauDauXong && !daBaoCauDau) {
-            const cau = catCauDau(tra);
-            if (cau) { daBaoCauDau = true; cauDauXong(cau); }
+          const them = o.content ?? o.delta ?? o.text ?? '';
+          tra += them;
+          chuaBao += them;
+          /*
+           * MẨU ĐẦU NHỎ, MẨU SAU GOM TO — không phải "mỗi câu một lời gọi".
+           *
+           * `OdinDock` đã cân nhắc và LOẠI hướng tách từng câu, có lý: một câu
+           * trả lời bốn câu thành bốn lời gọi máy đọc, và ba mối nối nghe rời
+           * hơn một. Nhưng bản chỉ-tách-một-lần lại đổi lấy một lỗi nặng hơn:
+           * phần đuôi chỉ được đặt hàng SAU khi model viết xong, và đặt trọn
+           * một cục — người dùng nghe câu 1 rồi LẶNG 5-6 giây.
+           *
+           * Đường giữa, giống hệt cơ chế đã chứng minh được ở robot: mẩu ĐẦU
+           * chỉ cần một câu (ra tiếng sớm), mẩu SAU gom tới `GOM_SAU` ký tự
+           * (ít mối nối). Máy đọc chạy mẩu sau TRONG LÚC mẩu trước đang phát.
+           */
+          if (cauXong) {
+            for (;;) {
+              const n = catCauTiep(chuaBao);
+              if (!n) break;
+              chuaBao = n.conLai;
+              // GOM nhiều câu vào một mẩu. `catCauTiep` chỉ trả MỘT câu, nên
+              // so `n.cau.length` với ngưỡng là sai — một câu hiếm khi dài
+              // 140 ký tự, và điều kiện đó sẽ chặn mãi mãi sau mẩu đầu.
+              gom = gom ? `${gom} ${n.cau}` : n.cau;
+              if (!daGuiMauDau || gom.length >= GOM_SAU) {
+                daGuiMauDau = true;
+                cauXong(gom);
+                gom = '';
+              }
+            }
           }
         } catch {
           /* khung không phải JSON (ví dụ `connected`) — bỏ qua, không phải lỗi */

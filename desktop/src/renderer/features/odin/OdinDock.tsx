@@ -109,22 +109,31 @@ export function OdinDock() {
      * đang chảy về. Máy đọc chạy song song với model, nên tiếng câu đầu thường
      * sẵn sàng ngay khi chữ hiện ra.
      *
-     * CHỈ tách MỘT lần, ở câu đầu. Tách từng câu thì một câu trả lời bốn câu
-     * thành bốn lời gọi máy đọc — đắt gấp bốn, và ba lần ngắt giữa chừng nghe
-     * rời rạc hơn là liền mạch.
+     * ⚠️ 19/08/2026 SỬA LẠI CÂN NHẮC NÀY. Ghi chú cũ ở đây nói "CHỈ tách MỘT
+     * lần" vì sợ bốn lời gọi máy đọc và ba mối nối. Đúng một nửa — nhưng nửa
+     * còn lại đắt hơn: phần đuôi chỉ được đặt hàng SAU khi model viết xong, và
+     * đặt TRỌN MỘT CỤC, nên người dùng nghe câu 1 rồi LẶNG 5-6 giây.
+     *
+     * Nay `hoiOdin` gom theo kiểu mẩu-đầu-nhỏ-mẩu-sau-to (xem `GOM_SAU`): một
+     * câu trả lời bốn câu ra ~2-3 mẩu chứ không phải bốn, mẩu sau được sinh
+     * TRONG LÚC mẩu trước đang phát. Ít mối nối hơn lo ngại cũ, mà không còn
+     * khoảng lặng.
      */
-    let tiengCauDau: Promise<Blob> | null = null;
-    let cauDau = '';
+    const cacMau: string[] = [];
+    const hangTieng: Promise<Blob>[] = [];
 
     try {
-      const tra = await hoiOdin(api, cauHoi, ngonNgu, undefined, (cau) => {
-        if (!doc) return;
-        cauDau = cau;
+      const datHang = (c: string) => {
+        cacMau.push(c);
         // KHÔNG await: để nó chạy trong lúc vòng đọc stream tiếp tục.
-        tiengCauDau = docThanhTieng(api, cau, tenGiong);
+        const t = docThanhTieng(api, c, tenGiong);
         // Nuốt lỗi ở đây để một lời hứa hỏng không thành "unhandled rejection";
         // lỗi thật sẽ nổi lên lúc await bên dưới.
-        void tiengCauDau.catch(() => {});
+        void t.catch(() => {});
+        hangTieng.push(t);
+      };
+      const tra = await hoiOdin(api, cauHoi, ngonNgu, undefined, (cau) => {
+        if (doc) datHang(cau);
       });
       if (!tra) {
         odin.announce(ngonNgu === 'en' ? "Sorry, I didn't catch that." : 'Xin lỗi, tớ chưa nghĩ ra câu trả lời.');
@@ -133,36 +142,27 @@ export function OdinDock() {
       odin.announce(tra);
       if (!doc) return;
 
-      // Phần đuôi = câu trả lời trừ câu đầu đã gửi đi. Câu trả lời chỉ có đúng
-      // một câu thì không có đuôi, và cũng không tốn thêm lời gọi nào.
-      const duoi = cauDau && tra.startsWith(cauDau) ? tra.slice(cauDau.length).trim() : '';
-
-      if (tiengCauDau) {
-        /*
-         * ⚠️ ĐẶT HÀNG PHẦN ĐUÔI **TRƯỚC** KHI PHÁT CÂU ĐẦU.
-         *
-         * Bản đầu của tôi gọi máy đọc cho phần đuôi SAU khi câu đầu phát
-         * xong — nên giữa hai đoạn là trọn một vòng gọi máy đọc, và người
-         * dùng nghe thấy một khoảng lặng 3-4 giây ngay chỗ dấu chấm. Đúng
-         * như báo cáo 18/08: "đến đoạn dấu chấm nó tự nhiên dùng 3-4s mới
-         * đọc tiếp".
-         *
-         * Tôi cắt câu ra để giọng RA SỚM, rồi lại tự tạo một chỗ ngắt ở
-         * giữa — chữa được đầu câu mà làm hỏng khúc giữa.
-         *
-         * Đặt hàng ngay từ bây giờ thì máy đọc chạy đoạn hai TRONG LÚC đoạn
-         * một đang phát; câu đầu thường dài hơn thời gian sinh đoạn hai, nên
-         * nối vào là liền mạch.
-         */
-        const tiengDuoi = duoi ? docThanhTieng(api, duoi, tenGiong) : null;
-        // Nuốt lỗi ở đây để lời hứa không thành "unhandled rejection" trong
-        // lúc mình còn đang phát đoạn một; lỗi thật nổi lên ở `await` bên dưới.
-        void tiengDuoi?.catch(() => {});
-
-        await phatTieng(await tiengCauDau);
-        if (tiengDuoi) await phatTieng(await tiengDuoi);
-      } else {
+      if (!hangTieng.length) {
         await phatTieng(await docThanhTieng(api, tra, tenGiong));
+      } else {
+        /*
+         * ⚠️ ĐUÔI CHƯA ĐỦ MỘT CÂU THÌ CHƯA AI ĐẶT HÀNG — phải xả nốt, không
+         * thì mất chữ cuối khi model kết thúc mà không có dấu chấm.
+         *
+         * Dò bằng CON TRỎ chạy theo thứ tự các mẩu, không `startsWith`:
+         * khoảng trắng giữa các câu lúc gom có thể khác với bản gốc, và
+         * `startsWith` sai một khoảng trắng là coi như không có mẩu nào.
+         */
+        let viTri = 0;
+        for (const m of cacMau) {
+          const k = tra.indexOf(m, viTri);
+          if (k >= 0) viTri = k + m.length;
+        }
+        const conLai = tra.slice(viTri).trim();
+        if (conLai) datHang(conLai);
+        // Mọi mẩu đã được ĐẶT HÀNG từ lúc nó đủ, nên tới đây chỉ còn việc phát
+        // lần lượt — máy đọc đã chạy song song với model từ trước.
+        for (const t of hangTieng) await phatTieng(await t);
       }
     } catch (e) {
       // Hỏng thì nói ra lý do NGẮN, và vẫn để lại câu chữ. Im lặng ở đây là

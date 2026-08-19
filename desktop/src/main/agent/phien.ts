@@ -27,6 +27,8 @@
  * cần biết là hội thoại có nằm trên đĩa.
  */
 import { app } from 'electron';
+
+import { API_ORIGIN } from '../config';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
@@ -74,6 +76,46 @@ function duongDan(id: string): string {
   return path.join(thuMuc(), `${id.replace(/[^a-zA-Z0-9_-]/g, '')}.json`);
 }
 
+/**
+ * Tên do AI đặt, thay cho câu hỏi bị cắt cụt.
+ *
+ * Người dùng đối chiếu với Claude Code 19/08/2026: bên đó là "iOS app
+ * AppStore approval strategy", bên mình là "Bạn xem dự án này của tôi đã có
+ * mobile app …". Ba việc cùng bắt đầu bằng "bạn kiểm tra dự án này…" thì
+ * nhìn vào không phân biệt nổi cái nào.
+ *
+ * ⚠️ CHỈ đặt MỘT LẦN, và chỉ khi tên hiện tại vẫn là câu hỏi thô. Gọi lại ở
+ * mỗi lần lưu là mỗi bước agent một lời gọi LLM — việc 60 bước thành 60 lần
+ * trả tiền cho cùng một cái tên.
+ *
+ * Hỏng thì im lặng giữ tên cũ: đặt tên là trang trí, không được phép làm
+ * hỏng việc lưu phiên.
+ */
+const daDatTen = new Set<string>();
+/** Tên AI đã đặt, theo id phiên. Sống trong bộ nhớ — mở lại app thì đọc từ file. */
+const tenAi = new Map<string, string>();
+/** Token phiên, do `loop.ts` bơm vào. `phien.ts` không tự đọc được phiên đăng nhập. */
+let tokenPhien: string | null = null;
+export function datTokenChoDatTen(t: string | null): void { tokenPhien = t; }
+
+async function nhoAiDatTen(id: string, tenTho: string, token: string): Promise<string | null> {
+  if (daDatTen.has(id)) return null;
+  daDatTen.add(id);
+  try {
+    const r = await fetch(`${API_ORIGIN}/api/v1/agent/dat-ten`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ cauHoi: tenTho }),
+      signal: AbortSignal.timeout(20_000),
+    });
+    if (!r.ok) return null;
+    const j = await r.json() as { data?: { ten?: string | null } };
+    return j.data?.ten ?? null;
+  } catch {
+    return null;
+  }
+}
+
 /** Tiêu đề lấy từ câu hỏi ĐẦU TIÊN — thứ người dùng nhớ về việc đó. */
 function datTieuDe(hoiThoai: TinNhanLuu[]): string {
   const dau = hoiThoai.find((m) => m.role === 'user');
@@ -103,9 +145,17 @@ export async function luuPhien(
   // một danh sách đầy phiên rỗng làm cái danh sách thành vô dụng.
   if (!hoiThoai.some((m) => m.role === 'user')) return null;
 
+  /* Tên do AI đặt nếu lấy được, còn không thì câu hỏi đầu cắt ngắn. Đã có
+     tên AI rồi thì GIỮ — đặt lại ở mỗi bước là mỗi bước một lời gọi LLM. */
+  const tenCu = tenAi.get(id);
+  const tho = datTieuDe(hoiThoai);
+  if (!tenCu && tokenPhien) {
+    void nhoAiDatTen(id, tho, tokenPhien).then((t) => { if (t) tenAi.set(id, t); });
+  }
+
   const tom: TomTatPhien = {
     id,
-    tieuDe: datTieuDe(hoiThoai),
+    tieuDe: tenCu ?? tho,
     duAn,
     goc: goc ?? null,
     luucLuc: Date.now(),

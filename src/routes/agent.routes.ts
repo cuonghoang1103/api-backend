@@ -21,12 +21,14 @@ import { Router, type NextFunction, type Response } from 'express';
 import { authenticate } from '../middleware/auth.js';
 import { isProEffective } from '../services/pro.service.js';
 import { logger } from '../utils/logger.js';
+import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import { AGENT_TOOLS, ALL_CAPABILITIES } from '../services/agent/tools.js';
 import { soGioCuaSo, tranToken, xemHanMuc } from '../services/agent/quota.js';
 import { AgentInputError, runAgentTurn, type AgentEvent } from '../services/agent/turn.js';
 import { gatewayConfigured, modelFor } from '../services/llm/gateway.js';
 import { dsModelAgent } from '../services/agent/models.js';
+import { datTenViec } from '../services/agent/datTen.js';
 import { DS_MUC_NO_LUC } from '../services/agent/turn.js';
 
 const router = Router();
@@ -102,6 +104,25 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
  *
  * (Trong lúc chạy thì KHÔNG cần gọi lại: mỗi khung `done` đã mang theo `quota`.)
  */
+/**
+ * POST /api/v1/agent/dat-ten — sinh tên ngắn cho một việc.
+ *
+ * App gọi MỘT LẦN sau lượt đầu tiên. Để app tự cắt câu hỏi thì ba việc cùng
+ * bắt đầu bằng "bạn kiểm tra dự án này…" là ba dòng giống hệt nhau.
+ */
+router.post('/dat-ten', chiPro, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { cauHoi } = req.body ?? {};
+    if (typeof cauHoi !== 'string') throw new AppError('Thiếu cauHoi', 400, 'BAD_INPUT');
+    const ten = await datTenViec(cauHoi);
+    // `null` KHÔNG phải lỗi: chỗ gọi giữ tên cũ. Trả 200 để app khỏi phải
+    // phân biệt "hỏng" với "không đặt được".
+    res.json({ success: true, data: { ten } });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/usage', async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const h = await xemHanMuc(req.userId);

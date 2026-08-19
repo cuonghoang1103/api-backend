@@ -26,7 +26,7 @@ import { API_ORIGIN } from '../config';
 import { readStoredSession } from '../ipc/auth';
 import type { KetQuaDiff } from './diff';
 import { docGhiChuDuAn } from './ghiChu';
-import { dungLaiHienThi, luuPhien, type MucKhoiPhuc, type TinNhanLuu } from './phien';
+import { datTokenChoDatTen, dungLaiHienThi, luuPhien, type MucKhoiPhuc, type TinNhanLuu } from './phien';
 import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua } from './tools';
 import { taoSoCuoc, type SoCuoc } from './so';
@@ -564,6 +564,9 @@ export async function chayLuot(
     phat({ loai: 'loi', thongDiep: 'Chưa đăng nhập.', ma: 'NO_SESSION' });
     return;
   }
+  // `phien.ts` không tự đọc được phiên đăng nhập — bơm token vào để nó nhờ
+  // máy chủ đặt tên việc.
+  datTokenChoDatTen(phien.sessionToken);
 
   const dieuKhien = new AbortController();
   c.dangChay = dieuKhien;

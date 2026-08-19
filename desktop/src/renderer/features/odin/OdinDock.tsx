@@ -213,6 +213,10 @@ export function OdinDock() {
    * ngoài vùng nhìn thấy và không có cách nào lôi lại.
    */
   const keoDuoc = settings.odinKeoDuoc === true;
+  /* Cùng khoá `odinCo` với con robot nổi — hai khoá riêng thì người dùng
+     chỉnh một con, con kia đứng nguyên, và họ phải nhớ đang chỉnh cái nào. */
+  const nacCo = typeof settings.odinCo === 'number' ? Math.max(0, Math.min(3, settings.odinCo)) : 0;
+  const heSo = [1, 0.82, 0.66, 0.52][nacCo]!;
   const phai = typeof settings.odinPhai === 'number' ? settings.odinPhai : 22;
   const duoi = typeof settings.odinDuoi === 'number' ? settings.odinDuoi : 16;
 
@@ -257,7 +261,14 @@ export function OdinDock() {
   return (
     <div
       className="odin-dock"
-      style={{ right: phai, bottom: `calc(var(--ct-statusbar-h) + ${duoi}px)` }}
+      style={{
+        right: phai,
+        bottom: `calc(var(--ct-statusbar-h) + ${duoi}px)`,
+        /* Thu nhỏ từ GÓC DƯỚI-PHẢI: neo mặc định ở đó, nên co từ tâm sẽ làm
+           robot nhảy vào giữa màn hình mỗi lần đổi nấc. */
+        transform: heSo === 1 ? undefined : `scale(${heSo})`,
+        transformOrigin: 'bottom right',
+      }}
       data-keo={keoDuoc}
       data-dang-keo={dangKeo}
       onPointerDown={(e) => {
@@ -269,6 +280,18 @@ export function OdinDock() {
       data-listening={odin.listening}
       data-hover={hovering}
     >
+      {/* Nút cỡ chỉ hiện lúc mở khoá — bày thường trực thì hai nút nhỏ đè lên
+          robot suốt ngày và người dùng bấm nhầm khi định mở AI Chat. */}
+      {keoDuoc && (
+        <div className="odin-co">
+          <button type="button" onClick={() => setSetting('odinCo', Math.min(3, nacCo + 1))}
+            disabled={nacCo >= 3} title="Nhỏ hơn">−</button>
+          <span>{['100%', '82%', '66%', '52%'][nacCo]}</span>
+          <button type="button" onClick={() => setSetting('odinCo', Math.max(0, nacCo - 1))}
+            disabled={nacCo <= 0} title="To hơn">+</button>
+        </div>
+      )}
+
       {odin.say && (
         /*
          * BẤM VÀO BONG BÓNG ⇒ MỞ ĐÚNG CUỘC TRÒ CHUYỆN ĐÓ TRONG /chat.

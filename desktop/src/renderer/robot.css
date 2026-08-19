@@ -52,6 +52,28 @@ body {
   animation: rb-mokhoa 1.6s ease-in-out infinite;
   pointer-events: none;
 }
+/* Hàng nút cỡ, chỉ hiện lúc mở khoá. */
+.rb-co {
+  position: absolute; top: 2px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex; align-items: center; gap: 2px;
+  padding: 2px 4px;
+  border-radius: 999px;
+  background: rgba(20, 20, 32, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  -webkit-app-region: no-drag;
+}
+.rb-co button {
+  width: 18px; height: 18px;
+  border: none; border-radius: 50%;
+  background: none; color: #fff;
+  font-size: 13px; line-height: 1; cursor: pointer;
+}
+.rb-co button:hover:not(:disabled) { background: rgba(255, 255, 255, 0.18); }
+.rb-co button:disabled { opacity: 0.3; cursor: default; }
+.rb-co span { font-size: 9.5px; color: rgba(255, 255, 255, 0.7); min-width: 26px; text-align: center; }
+
 @keyframes rb-mokhoa {
   0%, 100% { opacity: 0.45; }
   50%      { opacity: 1; }

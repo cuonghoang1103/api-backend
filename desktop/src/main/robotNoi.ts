@@ -33,6 +33,26 @@ import { IS_DEV, DEV_SERVER_URL, RENDERER_SOURCE, APP_ORIGIN } from './config';
 
 /** Kích thước lúc thu gọn — vừa đúng con robot cộng một chút bóng đổ. */
 const GON = { width: 150, height: 190 };
+
+/**
+ * Hệ số cỡ theo nấc người dùng chọn. Nấc 0 = 100% (mặc định), nhỏ dần.
+ *
+ * Cửa sổ PHẢI co theo, không chỉ co hình: `WebContentsView` trong suốt vẫn
+ * chặn chuột ở phần rỗng, nên thu nhỏ mỗi con robot mà giữ cửa sổ 150×190 là
+ * để lại một mảng vô hình nuốt cú bấm của người dùng vào thứ nằm dưới.
+ */
+const HE_SO = [1, 0.82, 0.66, 0.52] as const;
+let nacCo = 0;
+
+export function datNacCo(nac: number): void {
+  nacCo = Math.max(0, Math.min(HE_SO.length - 1, Math.round(nac)));
+  doiCo(coHienTai);
+}
+
+function nhan(kt: { width: number; height: number }): { width: number; height: number } {
+  const h = HE_SO[nacCo] ?? 1;
+  return { width: Math.round(kt.width * h), height: Math.round(kt.height * h) };
+}
 /** Lúc mở khung chat mini. */
 const RONG = { width: 380, height: 520 };
 /**
@@ -150,7 +170,9 @@ export function doiCo(co: CoRobot): void {
   if (coHienTai === 'rong' && co === 'noi') return;
   coHienTai = co;
   dangRong = co === 'rong';
-  const kt = co === 'rong' ? RONG : co === 'noi' ? NOI : GON;
+  // Khung chat mini KHÔNG co theo nấc: nó chứa chữ để đọc, thu nhỏ là
+  // không đọc nổi. Chỉ con robot mới co.
+  const kt = co === 'rong' ? RONG : nhan(co === 'noi' ? NOI : GON);
   const cu = w.getBounds();
   // Neo theo góc DƯỚI-PHẢI: robot đứng ở đó, và phình sang trái/lên trên thì
   // nó không nhảy chỗ dưới mắt người dùng.

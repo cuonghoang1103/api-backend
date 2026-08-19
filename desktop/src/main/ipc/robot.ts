@@ -3,7 +3,7 @@
  *
  * Mỏng có chủ ý — mọi quyết định về cửa sổ nằm ở `main/robotNoi.ts`.
  */
-import { doiCo, doiKichThuoc, moTrangChinh } from '../robotNoi';
+import { datNacCo, doiCo, doiKichThuoc, moTrangChinh } from '../robotNoi';
 import { baoNhac } from '../robotTin';
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from './auth';
@@ -17,6 +17,8 @@ export function registerRobotHandlers(): void {
   handle('robot:doiCo', ({ co }) => doiCo(co));
 
   handle('robot:baoNhac', ({ ten }) => baoNhac(ten));
+
+  handle('robot:datCo', ({ nac }) => { datNacCo(nac); });
 
   handle('robot:moChinh', ({ duongDan }) => {
     // Chỉ nhận đường dẫn TRONG app, không nhận URL. Một chuỗi `https://…` lọt

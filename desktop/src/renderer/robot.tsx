@@ -193,6 +193,25 @@ function Robot() {
    * cách duy nhất không giẫm lên hai cử chỉ đã có.
    */
   const [keoDuoc, datKeoDuoc] = useState(false);
+  /* Nấc cỡ 0–3, 0 = to nhất. Đọc từ thiết đặt khi mở, và bơm xuống main để
+     CỬA SỔ co theo — thu nhỏ mỗi hình mà giữ cửa sổ là để lại một mảng trong
+     suốt nuốt cú bấm của người dùng vào thứ nằm dưới. */
+  const [nacCo, datNacCo] = useState(0);
+  useEffect(() => {
+    void window.cuongthai?.settings.getAll().then((t) => {
+      const n = typeof t.odinCo === 'number' ? t.odinCo : 0;
+      datNacCo(n);
+      void window.cuongthai?.robot.datCo(n);
+    });
+  }, []);
+  const doiNac = useCallback((d: number) => {
+    datNacCo((cu) => {
+      const moi = Math.max(0, Math.min(3, cu + d));
+      void window.cuongthai?.settings.set('odinCo', moi);
+      void window.cuongthai?.robot.datCo(moi);
+      return moi;
+    });
+  }, []);
   const demBam = useRef(0);
   const henDem = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -273,7 +292,7 @@ function Robot() {
           mood={tt === 'nghe' ? 'vui' : tt === 'nghi' ? 'nghi' : tin ? 'vui' : 'thuong'}
           blinking={nhay}
           hovering={hover}
-          size={104}
+          size={Math.round(104 * [1, 0.82, 0.66, 0.52][nacCo]!)}
         />
         {tin && !rong && <span className="rb-cham" />}
       </div>
@@ -283,6 +302,17 @@ function Robot() {
         bấm-hai-lần và kéo. Nhét thêm giữ-để-nói vào đó là bốn cử chỉ tranh nhau
         một vùng, và cái nào cũng sai lúc.
       */}
+      {/* Nút cỡ CHỈ hiện khi đã mở khoá — bày thường trực thì hai cái nút
+          nhỏ đè lên con robot suốt ngày, và người dùng bấm nhầm khi định mở
+          khung chat. `no-drag` để chúng không bị vùng kéo nuốt mất cú bấm. */}
+      {keoDuoc && (
+        <div className="rb-co">
+          <button type="button" onClick={() => doiNac(1)} disabled={nacCo >= 3} title="Nhỏ hơn">−</button>
+          <span>{['100%', '82%', '66%', '52%'][nacCo]}</span>
+          <button type="button" onClick={() => doiNac(-1)} disabled={nacCo <= 0} title="To hơn">+</button>
+        </div>
+      )}
+
       <div className="rb-noi">
         {tt === 'doc' ? (
           /* Đang đọc ⇒ hiện SÓNG ÂM, bấm vào là im ngay. Người dùng nghe hai

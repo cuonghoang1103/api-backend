@@ -40,6 +40,25 @@
   animation: odin-mokhoa 1.6s ease-in-out infinite;
 }
 .odin-dock[data-dang-keo='true'] { cursor: grabbing; animation: none; }
+
+/* Hàng nút cỡ, chỉ hiện lúc mở khoá. */
+.odin-co {
+  display: flex; align-items: center; gap: 3px;
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  box-shadow: var(--ct-shadow-sm);
+}
+.odin-co button {
+  width: 19px; height: 19px;
+  border: none; border-radius: 50%;
+  background: none; color: var(--ct-text);
+  font-size: 14px; line-height: 1; cursor: pointer;
+}
+.odin-co button:hover:not(:disabled) { background: var(--ct-hover); }
+.odin-co button:disabled { opacity: 0.3; cursor: default; }
+.odin-co span { font-size: 10px; color: var(--ct-text-faint); min-width: 28px; text-align: center; }
 @keyframes odin-mokhoa {
   0%, 100% { outline-color: color-mix(in srgb, var(--ct-accent) 45%, transparent); }
   50%      { outline-color: var(--ct-accent); }

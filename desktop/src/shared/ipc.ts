@@ -131,6 +131,14 @@ export const settingKeySchema = z.enum([
    * ra ngoài màn hình ngay lần mở app sau ở cỡ cửa sổ khác.
    */
   'odinKeoDuoc',
+  /**
+   * Cỡ robot, 0–3 nấc. 0 = to nhất (mặc định hiện tại), 3 = nhỏ nhất.
+   *
+   * Một khoá dùng cho CẢ HAI con — trong app và cửa sổ nổi. Hai khoá riêng
+   * thì người dùng chỉnh một con, con kia đứng nguyên, và họ phải nhớ mình
+   * đang chỉnh cái nào.
+   */
+  'odinCo',
   'odinPhai',
   'odinDuoi',
 ]);
@@ -732,6 +740,7 @@ export const INVOKE_CHANNELS = {
   'agent:datCheDoLenh': agentCheDoLenhSchema,
   'agent:datCheDoNote': agentCheDoNoteSchema,
   'agent:datCheDoTrinhDuyet': agentCheDoTrinhDuyetSchema,
+  'robot:datCo': z.object({ nac: z.number().int().min(0).max(3) }),
   'agent:datMucNoLuc': agentMucNoLucSchema,
   'agent:datModel': agentModelSchema,
   'agent:hoanTac': agentCuocSchema,
@@ -1086,6 +1095,7 @@ export interface DesktopBridge {
     doiCo(co: 'gon' | 'noi' | 'rong'): Promise<void>;
     /** Đưa cửa sổ chính ra trước và điều hướng tới `duongDan`. */
     moChinh(duongDan: string): Promise<void>;
+    datCo(nac: number): Promise<void>;
     /** Hỏi nhanh một câu, trả về câu trả lời đã hoàn chỉnh (không chảy chữ). */
     hoi(chu: string): Promise<{ chu: string }>;
     /**

@@ -277,6 +277,43 @@ git revert <bad_commit_sha>
 
 ---
 
+## Phát hành app desktop — MỘT CHỖ DUY NHẤT (20/08/2026)
+
+```bash
+(cd desktop && npm run phat-hanh -- "mô tả ngắn")   # bump + push + dựng + KIỂM LẠI
+(cd desktop && npm run phat-hanh -- --tiep)          # ship số đang có, không bump
+```
+
+⛔ **ĐỪNG bump `desktop/package.json` bằng tay rồi `gh workflow run`.** Đó là
+cách cũ, và nó đã hỏng hai kiểu — đo thật đêm 19-20/08/2026, **11 lần bump
+trong 4,5 giờ** từ nhiều phiên Claude cùng làm app:
+
+- **0.5.39 bump rồi KHÔNG BAO GIỜ được phát hành.** Người dùng nằm lại 0.5.38,
+  trong khi mọi phiên đều tin là đã ship. Không có chỗ nào đối chiếu "số trong
+  `package.json`" với "số đã lên GitHub Releases" nên không ai thấy.
+- **v0.5.40 bị dựng HAI lượt.** Lượt A công bố 18:08:17, lượt B xong 18:15:37
+  và **tải đè** lên đúng release đó. Lần ấy vô hại vì cùng một commit — khác
+  commit thì người dùng đã tải một bản cài mang số hiệu của bản khác, hỏng câm.
+  `concurrency:` trong workflow chỉ XẾP HÀNG, không chặn.
+
+`phat-hanh.mjs` chặn đúng những cửa đã từng lọt, theo thứ tự:
+nhánh phải là `main` · `desktop/` phải **sạch** (workflow lấy mã TỪ GITHUB, thứ
+sửa dở trên máy không vào bản cài mà bản cài vẫn ra) · không được sau
+`origin/main` · **không có lượt dựng nào đang chạy** (đây là chỗ chặn hai phiên
+giẫm nhau) · số phiên bản **chưa từng công bố** · và sau khi dựng xanh thì
+**kiểm lại danh sách file** — thiếu `latest-mac.yml` hoặc một trong hai `.zip`
+macOS là tự-cập-nhật chết câm trong khi release nhìn vẫn đầy đủ.
+
+Lớp thứ hai nằm trong `desktop-release.yml` (bước *"Chặn dựng đè bản đã công
+bố"*): nó giữ được cả người gõ tay `gh workflow run`. Bản **nháp** vẫn cho dựng
+tiếp — một lượt chết giữa chừng để lại nháp, chạy lại để hoàn tất là đúng.
+
+⚠️ Bản phát hành nằm ở kho **`cuonghoang1103/cuongthai-desktop`** (công khai),
+không phải kho này — `electron-updater` tải bản mới KHÔNG kèm token nên kho
+phát hành bắt buộc phải public.
+
+---
+
 ## Cổng LLM — modelapi.vn (11/08/2026)
 
 **MỘT khoá, MỘT base URL, MỘT bảng model cho cả web.** Nguồn sự thật:

@@ -30,7 +30,8 @@
     "dist:mac:thu": "node scripts/ky-mac.mjs --thu",
     "dist:win": "npm run build && electron-builder --win",
     "dist:linux": "npm run build && electron-builder --linux",
-    "thu:python": "npm run build && node scripts/thu-python.mjs"
+    "thu:python": "npm run build && node scripts/thu-python.mjs",
+    "phat-hanh": "node scripts/phat-hanh.mjs"
   },
   "dependencies": {
     "@hocuspocus/provider": "^2.15.3",

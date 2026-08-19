@@ -39,6 +39,45 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # ── CHỐT CHẶN: KHÔNG dựng đè lên một bản ĐÃ CÔNG BỐ ──────────
+      #
+      # Nhiều phiên Claude cùng làm app desktop, và mỗi phiên tự bump version
+      # rồi tự `gh workflow run`. Đêm 19-20/08/2026 có 11 lần bump trong 4,5
+      # giờ, và hai lần dựng chồng nhau: v0.5.40 do một lượt công bố lúc
+      # 18:08:17, lượt kia xong lúc 18:15:37 và TẢI ĐÈ lên đúng release đó.
+      #
+      # Lần đó không ai mất gì vì hai lượt dựng từ cùng một commit. Nhưng nếu
+      # chúng dựng từ hai commit khác nhau thì người dùng đã tải về một bản
+      # cài mang số hiệu của bản khác — hỏng câm, và không có cách nào biết.
+      #
+      # `concurrency` bên trên chỉ xếp hàng, KHÔNG chặn: lượt sau vẫn chạy,
+      # chỉ là chạy sau. Đây mới là chỗ chặn.
+      #
+      # Bản NHÁP thì cho qua: một lượt chết giữa chừng để lại nháp, và chạy
+      # lại để hoàn tất là việc đúng.
+      - name: Chặn dựng đè bản đã công bố
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          # ⚠️ Phải là `if`, KHÔNG phải `[ -z … ] && …`. Runner chạy `bash -e`,
+          # nên khi `inputs.version` CÓ giá trị thì vế trái sai, cả câu trả về
+          # 1, và bước này chết ngay — đúng ở nhánh ít dùng nên rất dễ lọt.
+          VER='${{ inputs.version }}'
+          if [ -z "$VER" ]; then
+            VER=$(node -p "require('./desktop/package.json').version")
+          fi
+          echo "Sắp dựng phiên bản: $VER"
+          NHAP=$(gh release view "v$VER" --repo cuonghoang1103/cuongthai-desktop \
+                   --json isDraft --jq .isDraft 2>/dev/null || echo 'khong-co')
+          case "$NHAP" in
+            khong-co) echo "→ chưa có release v$VER, dựng tiếp." ;;
+            true)     echo "→ v$VER đang là bản NHÁP, dựng tiếp để hoàn tất." ;;
+            false)
+              echo "::error::v$VER ĐÃ CÔNG BỐ rồi — dựng tiếp sẽ tải ĐÈ lên bản người dùng đang tải."
+              echo "::error::Muốn ra bản mới thì bump version: (cd desktop && npm run phat-hanh -- \"mô tả\")"
+              exit 1 ;;
+          esac
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'

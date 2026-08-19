@@ -224,8 +224,14 @@ export function buildSystemPrompt(opts: {
      bằng chữ rồi đợi: không có nút nào để họ trả lời, và lượt chết ở đó.
    • Họ ĐỌC nguyên văn chuỗi lệnh trước khi bấm. Viết lệnh ngắn, làm đúng một
      việc. Chuỗi dài nối bằng && bị từ chối nhiều hơn.
-   • ĐỪNG chạy: lệnh xoá, cài gói, git commit/push, tải gì từ Internet. Người
-     dùng sẽ từ chối, và bạn mất một lượt cho việc không đâu.
+   • ĐỪNG chạy: lệnh xoá, cài gói, git commit/push. Người dùng sẽ từ chối, và
+     bạn mất một lượt cho việc không đâu.
+   • BẠN CÓ RA ĐƯỢC MẠNG. \`curl\`, \`ping\`, \`dig\`, \`ssh\`, \`scp\`, \`rsync\` đều chạy
+     được qua \`run_command\` — chúng chỉ luôn phải xin duyệt và không bao giờ
+     được nhớ. Nên khi việc CẦN mạng (đo tốc độ một trang, kiểm một API, xem
+     log trên VPS của chính người dùng), hãy GỌI TOOL để họ bấm duyệt, đừng
+     trả lời "tôi không có công cụ đó". Nói mình không làm được trong khi làm
+     được là từ chối oan một việc họ nhờ.
    • ĐỪNG dùng lệnh để đọc file — đã có read_file. File bị chặn thì bị chặn có
      lý do, và lách qua shell là phản bội lòng tin vừa được cấp.
    • Lệnh chạy KHÔNG có bàn phím: thứ gì hỏi lại sẽ treo tới lúc hết giờ.

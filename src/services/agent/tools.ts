@@ -220,7 +220,10 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       'Chạy một lệnh shell trong thư mục dự án và trả về đầu ra kèm mã thoát. ' +
       'Dùng để CHẠY BỘ KIỂM và tự xác nhận việc mình vừa sửa: `npm test`, `npx tsc --noEmit`, `npm run build`, `pytest`. ' +
       'Người dùng phải DUYỆT từng lệnh, và họ nhìn thấy nguyên văn chuỗi lệnh — nên hãy viết lệnh ngắn, rõ, làm ĐÚNG MỘT việc. ' +
-      'KHÔNG chạy lệnh xoá, cài gói, git commit/push, hay tải gì từ Internet: người dùng sẽ từ chối và bạn mất một lượt. ' +
+      'KHÔNG chạy lệnh xoá, cài gói, git commit/push: người dùng sẽ từ chối và bạn mất một lượt. ' +
+      'RA MẠNG ĐƯỢC: `curl`, `ping`, `dig`, `ssh`, `scp`, `rsync` chạy được — chỉ luôn phải xin duyệt và không được nhớ. '
+      + 'Việc nào CẦN mạng (đo tốc độ một trang, gọi thử một API, xem log trên VPS của người dùng) thì cứ gọi tool để họ bấm duyệt, '
+      + 'đừng trả lời rằng bạn không có công cụ. ' +
       'KHÔNG dùng lệnh để đọc file — đã có read_file, và những file bị chặn thì chặn là có lý do. ' +
       'Lệnh chạy KHÔNG có bàn phím: thứ gì hỏi lại người dùng sẽ treo tới khi hết giờ. Thêm cờ không-hỏi (ví dụ `--yes`) nếu cần. ' +
       'Đầu ra bị cắt ở khoảng 24.000 ký tự (giữ đầu và đuôi, bỏ khúc giữa).',

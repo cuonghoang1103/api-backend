@@ -85,6 +85,7 @@ function Robot() {
   }, []);
 
   const bam = useCallback(() => {
+    if (demVaLat()) return;     // cú thứ ba lật khoá kéo, không làm gì thêm
     if (henRef.current) return; // đang chờ xem có phải nhấp đúp không
     henRef.current = setTimeout(() => {
       henRef.current = null;
@@ -179,6 +180,38 @@ function Robot() {
     };
   }, [thaTayNoi]);
 
+  /*
+   * ẤN BA LẦN ĐỂ MỞ KHOÁ KÉO CỬA SỔ.
+   *
+   * Người dùng: "kéo được con robot trong app rồi, nhưng con nổi ngoài app
+   * vẫn không kéo được." Đúng — `.rb-than` đặt `-webkit-app-region: no-drag`
+   * vì nó nhận bấm-một-lần và bấm-hai-lần, nên vùng kéo còn lại chỉ là mấy
+   * pixel trong suốt quanh robot. Gần như không thể trúng.
+   *
+   * Không thể vừa `drag` vừa nhận bấm: `-webkit-app-region: drag` NUỐT mọi
+   * sự kiện chuột của phần tử. Nên phải có một công tắc, và ba lần bấm là
+   * cách duy nhất không giẫm lên hai cử chỉ đã có.
+   */
+  const [keoDuoc, datKeoDuoc] = useState(false);
+  const demBam = useRef(0);
+  const henDem = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /** Đếm cú bấm; đủ ba trong 600ms thì lật khoá. Trả `true` nếu vừa lật. */
+  const demVaLat = useCallback((): boolean => {
+    demBam.current += 1;
+    if (henDem.current) clearTimeout(henDem.current);
+    if (demBam.current >= 3) {
+      demBam.current = 0;
+      // Huỷ luôn cú hẹn mở khung chat của bấm-một-lần, nếu không mở khoá
+      // xong khung chat cũng bung ra.
+      if (henRef.current) { clearTimeout(henRef.current); henRef.current = null; }
+      datKeoDuoc((v) => !v);
+      return true;
+    }
+    henDem.current = setTimeout(() => { demBam.current = 0; }, 600);
+    return false;
+  }, []);
+
   const bamDup = useCallback(() => {
     if (henRef.current) { clearTimeout(henRef.current); henRef.current = null; }
     datTin(null);
@@ -186,7 +219,7 @@ function Robot() {
   }, []);
 
   return (
-    <div className="rb" data-rong={rong}>
+    <div className="rb" data-rong={rong} data-keo={keoDuoc}>
       {rong && <KhungChat onDong={() => doiRong(false)} />}
 
       <div

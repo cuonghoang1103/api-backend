@@ -36,6 +36,27 @@ body {
 .rb { -webkit-app-region: drag; }
 .rb-than, .rb-chat { -webkit-app-region: no-drag; }
 
+/* ── Mở khoá kéo (ấn ba lần vào robot) ──
+   Trả thân robot về vùng KÉO để túm được chính nó. Không thể vừa kéo vừa
+   nhận bấm — `-webkit-app-region: drag` nuốt mọi sự kiện chuột của phần tử —
+   nên đây là một công tắc, không phải trạng thái thường trực.
+
+   Vòng nét đứt nhấp nháy để người dùng biết đã ăn: cửa sổ này không có
+   thanh tiêu đề, nên không còn dấu hiệu nào khác. */
+.rb[data-keo='true'] .rb-than { -webkit-app-region: drag; cursor: grab; }
+.rb[data-keo='true'] .rb-than::before {
+  content: '';
+  position: absolute; inset: -6px;
+  border: 2px dashed var(--ct-accent, #7c6cf0);
+  border-radius: 999px;
+  animation: rb-mokhoa 1.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes rb-mokhoa {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 1; }
+}
+
 .rb-than {
   position: relative;
   cursor: pointer;

@@ -746,7 +746,8 @@ export async function chayLuot(
           keHoach: (viec: Array<{ ten: string; trangThai: string }>) => phat({ loai: 'keHoach', viec }),
         };
 
-        let kq: { noiDung: string; tomTat: string };
+        // `anh?` để `web_anh` gửi được ảnh chụp lên máy chủ — xem `KetQuaTool`.
+        let kq: { noiDung: string; tomTat: string; anh?: Array<{ media_type: string; data: string }> };
         if (laToolMcp(goi.name)) {
           // Tool MCP xử lý TRƯỚC cả phép kiểm "đã mở dự án chưa": một server
           // Linear hay Sentry không cần thư mục nào trên máy cả.
@@ -767,7 +768,10 @@ export async function chayLuot(
             boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh, boiCanhKeHoach, boiCanhNen, boiCanhGit,
           );
         }
-        c.hoiThoai.push({ role: 'tool', tool_call_id: goi.id, content: kq.noiDung });
+        c.hoiThoai.push({
+          role: 'tool', tool_call_id: goi.id, content: kq.noiDung,
+          ...(kq.anh?.length ? { anh: kq.anh } : {}),
+        });
         phat({ loai: 'tool', ten: goi.name, tomTat: kq.tomTat, vong: 'may' });
       }
     }

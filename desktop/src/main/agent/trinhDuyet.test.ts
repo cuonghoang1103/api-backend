@@ -26,8 +26,8 @@ describe('quyền trình duyệt', () => {
       .toContain('choNho: false');
   });
 
-  it('mở/đọc/console KHÔNG xin duyệt', () => {
-    for (const ten of ['toolWebMo', 'toolWebDoc', 'toolWebConsole']) {
+  it('mở/đọc/console/chụp KHÔNG xin duyệt', () => {
+    for (const ten of ['toolWebMo', 'toolWebDoc', 'toolWebConsole', 'toolWebAnh']) {
       const i = nguon.indexOf(`async function ${ten}`);
       expect(i, `không thấy ${ten}`).toBeGreaterThan(-1);
       const than = nguon.slice(i, nguon.indexOf('\n}', i));
@@ -36,9 +36,9 @@ describe('quyền trình duyệt', () => {
     }
   });
 
-  it('máy chủ khai đủ 5 tool trình duyệt, đều thuộc quyền `browser`', () => {
+  it('máy chủ khai đủ 6 tool trình duyệt, đều thuộc quyền `browser`', () => {
     const mc = readFileSync(join(goc, '../src/services/agent/tools.ts'), 'utf8');
-    for (const t of ['web_mo', 'web_doc', 'web_console', 'web_bam', 'web_go']) {
+    for (const t of ['web_mo', 'web_doc', 'web_anh', 'web_console', 'web_bam', 'web_go']) {
       const i = mc.indexOf(`name: '${t}'`);
       expect(i, `máy chủ chưa khai ${t}`).toBeGreaterThan(-1);
       expect(mc.slice(i, i + 400), 'thiếu capability browser: ' + t).toContain('capability: \'browser\'');
@@ -50,5 +50,16 @@ describe('quyền trình duyệt', () => {
     const khai = [...mc.matchAll(/name: '(web_[a-z]+)'/g)].map((m) => m[1]!);
     const thieu = khai.filter((t) => !nguon.includes(`case '${t}'`));
     expect(thieu, `app không cài: ${thieu.join(', ')}`).toEqual([]);
+  });
+});
+
+describe('ảnh chụp trang', () => {
+  it('web_anh chặn ảnh quá lớn — máy chủ BỎ IM LẶNG nếu vượt trần', () => {
+    const i = nguon.indexOf('async function toolWebAnh');
+    expect(i, 'không thấy toolWebAnh').toBeGreaterThan(-1);
+    const than = nguon.slice(i, nguon.indexOf('\n}', i));
+    expect(than, 'không kiểm cỡ ảnh ⇒ máy chủ lọc bỏ và model tưởng đã xem rồi bịa bố cục')
+      .toContain('5_600_000');
+    expect(than).toContain('anh: [{ media_type');
   });
 });

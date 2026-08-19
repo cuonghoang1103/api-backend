@@ -141,6 +141,13 @@ export interface KetQuaTool {
   noiDung: string;
   /** Một dòng cho giao diện ("128 dòng", "12 kết quả"). Không gửi cho model. */
   tomTat: string;
+  /**
+   * Ảnh kèm kết quả — hiện chỉ `web_anh` dùng.
+   *
+   * Chỉ đi được qua tuyến ANTHROPIC; tuyến OpenAI không có chỗ cho ảnh trong
+   * kết quả tool, và ở đó máy chủ tự bỏ kèm một dòng nói rõ đã bỏ.
+   */
+  anh?: Array<{ media_type: string; data: string }>;
 }
 
 /**
@@ -239,6 +246,7 @@ export async function chayToolAgent(
       // dùng sẽ bấm bừa, và lúc đó cái duyệt ở `web_bam` cũng mất giá trị.
       case 'web_mo': return await toolWebMo(args);
       case 'web_doc': return await toolWebDoc();
+      case 'web_anh': return await toolWebAnh();
       case 'web_console': return await toolWebConsole();
 
       // Bấm / gõ: ĐỔI trạng thái trang, và trang đang chạy bằng phiên đăng
@@ -961,4 +969,23 @@ async function toolWebTacDong(
   if (!kq.ok) return { noiDung: `LỖI: ${kq.loi}`, tomTat: 'không thấy phần tử' };
   await trinhDuyet.choTai(4000);
   return { noiDung: `${moTa} — xong.`, tomTat: 'xong' };
+}
+
+async function toolWebAnh(): Promise<KetQuaTool> {
+  if (!trinhDuyet.dangMo()) return { noiDung: 'LỖI: chưa mở trang nào. Gọi web_mo trước.', tomTat: 'chưa mở' };
+  const anh = await trinhDuyet.chupTrang();
+  if (!anh) return { noiDung: 'LỖI: không chụp được màn hình.', tomTat: 'hỏng' };
+  /* Trần 5,6MB chuỗi base64 — đúng con số máy chủ lọc (`MAX_ANH_BYTES`).
+     Vượt thì máy chủ BỎ IM LẶNG, và model sẽ tưởng nó đã xem ảnh. */
+  if (anh.length > 5_600_000) {
+    return {
+      noiDung: 'Ảnh chụp quá lớn để gửi. Thu nhỏ cửa sổ rồi chụp lại, hoặc dùng web_doc để đọc chữ.',
+      tomTat: 'ảnh quá lớn',
+    };
+  }
+  return {
+    noiDung: `Ảnh chụp ${trinhDuyet.urlHienTai()} — nhìn ảnh kèm theo.`,
+    tomTat: `ảnh ${Math.round(anh.length / 1365)} KB`,
+    anh: [{ media_type: 'image/png', data: anh }],
+  };
 }

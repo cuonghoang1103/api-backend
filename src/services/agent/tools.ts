@@ -424,6 +424,18 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     parameters: { type: 'object', properties: {} },
   },
   {
+    name: 'web_anh',
+    ring: 'client',
+    capability: 'browser',
+    description:
+      'Chụp màn hình trang đang mở và trả ảnh về cho bạn NHÌN. '
+      + 'Dùng khi câu hỏi là về HÌNH: bố cục lệch, màu sai, chữ đè lên nhau, nút bị che, ảnh không hiện. '
+      + 'Chữ thì `web_doc` rẻ hơn nhiều và đọc được nhiều hơn — chỉ chụp khi thật sự cần THẤY. '
+      + 'Nếu kết quả nói ảnh không gửi được thì cổng đang dùng không nhận ảnh trong kết quả tool: '
+      + 'khi đó ĐỪNG đoán bố cục, hãy nói thẳng là bạn chưa nhìn thấy.',
+    parameters: { type: 'object', properties: {} },
+  },
+  {
     name: 'web_console',
     ring: 'client',
     capability: 'browser',

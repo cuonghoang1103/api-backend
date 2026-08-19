@@ -49,6 +49,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'update:status',
   'agent:event',
   'browser:trangThai',
+  'agent:moWeb',
   'robot:tin',
 ];
 

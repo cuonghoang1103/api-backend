@@ -73,7 +73,7 @@ type TinVao =
   | { role: 'system'; content: string }
   | { role: 'user'; content: unknown }
   | { role: 'assistant'; content: string | null; tool_calls?: Array<{ id: string; function: { name: string; arguments: string } }> }
-  | { role: 'tool'; tool_call_id: string; content: string };
+  | { role: 'tool'; tool_call_id: string; content: string; anh?: Array<{ media_type: string; data: string }> };
 
 /**
  * Hội thoại kiểu OpenAI → { system, messages } kiểu Anthropic.
@@ -109,11 +109,30 @@ export function sangAnthropic(messages: TinVao[]): { system: string; messages: T
     if (m.role === 'tool') {
       // Kết quả tool đi vào tin `user` dưới dạng `tool_result`. Chuỗi rỗng là
       // hợp lệ với OpenAI nhưng Anthropic từ chối — thay bằng một dấu hiệu.
-      them('user', [{
-        type: 'tool_result',
-        tool_use_id: m.tool_call_id,
-        content: m.content && m.content.length > 0 ? m.content : '(rỗng)',
-      }]);
+      const chu = m.content && m.content.length > 0 ? m.content : '(rỗng)';
+
+      /*
+       * ẢNH ĐI CẠNH `tool_result`, KHÔNG ĐI TRONG NÓ.
+       *
+       * Đo thật trên cổng rambo 19/08/2026, cùng một tấm PNG 2×2 có ô trên-
+       * trái màu đỏ, hỏi "ô góc trên-trái màu gì":
+       *
+       *   ảnh trong tin `user` thường          → "Đỏ"      ✅ cổng NHÌN được
+       *   ảnh NHÉT TRONG `tool_result.content` → "tôi không nhận được ảnh" ❌
+       *   ảnh làm KHỐI ANH EM cạnh tool_result → "Đỏ."     ✅
+       *
+       * Nên cổng nhìn được ảnh, chỉ là nó lọc bỏ phần nằm BÊN TRONG
+       * `tool_result`. Phép đối chứng (ảnh trong tin user) là thứ phân biệt
+       * được "cổng mù" với "cổng lọc" — thiếu nó thì tôi đã kết luận sai và
+       * bỏ hẳn tính năng.
+       */
+      const khoi: KhoiAnthropic[] = [
+        { type: 'tool_result', tool_use_id: m.tool_call_id, content: chu },
+      ];
+      for (const a of m.anh ?? []) {
+        khoi.push({ type: 'image', source: { type: 'base64', media_type: a.media_type, data: a.data } });
+      }
+      them('user', khoi);
       continue;
     }
 

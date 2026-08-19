@@ -103,3 +103,32 @@ test('stop_reason dịch đúng — `max_tokens` phải thành `length` để b�
   assert.equal(stopSangFinish('end_turn'), 'stop');
   assert.equal(stopSangFinish(null), null);
 });
+
+// ── Ảnh kèm kết quả tool (`web_anh`) ──────────────────────
+test('ảnh kèm kết quả tool thành khối image trong tool_result', () => {
+  const r = sangAnthropic([
+    { role: 'user', content: 'trang trông thế nào' },
+    { role: 'assistant', content: null, tool_calls: [{ id: 'a', function: { name: 'web_anh', arguments: '{}' } }] },
+    { role: 'tool', tool_call_id: 'a', content: 'Ảnh chụp localhost:3000',
+      anh: [{ media_type: 'image/png', data: 'AAAA' }] },
+  ]);
+  // Ảnh phải là khối ANH EM, KHÔNG nằm trong `tool_result` — đo thật cho
+  // thấy cổng lọc bỏ phần bên trong (xem chú thích ở `anthropic.ts`).
+  const kh = r.messages[2]!.content as any[];
+  assert.equal(kh[0].type, 'tool_result');
+  assert.equal(typeof kh[0].content, 'string', 'ảnh bị nhét VÀO tool_result — cổng sẽ lọc mất');
+  assert.equal(kh[1].type, 'image');
+  assert.equal(kh[1].source.media_type, 'image/png');
+  assert.equal(kh[1].source.data, 'AAAA');
+});
+
+test('không có ảnh thì content vẫn là CHUỖI — đừng bọc mảng vô cớ', () => {
+  const r = sangAnthropic([
+    { role: 'user', content: 'x' },
+    { role: 'assistant', content: null, tool_calls: [{ id: 'a', function: { name: 'read_file', arguments: '{}' } }] },
+    { role: 'tool', tool_call_id: 'a', content: 'nội dung file' },
+  ]);
+  const kh = r.messages[2]!.content as any[];
+  assert.equal(typeof kh[0].content, 'string');
+  assert.equal(kh.length, 1, 'không có ảnh thì đừng đẩy thêm khối nào');
+});

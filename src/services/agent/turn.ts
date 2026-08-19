@@ -201,7 +201,20 @@ export type KhoiNoiDung =
 export type AgentMessage =
   | { role: 'user'; content: string | KhoiNoiDung[] }
   | { role: 'assistant'; content: string | null; tool_calls?: ToolCall[] }
-  | { role: 'tool'; tool_call_id: string; content: string };
+  | {
+      role: 'tool';
+      tool_call_id: string;
+      content: string;
+      /**
+       * Ảnh kèm kết quả tool — hiện chỉ `web_anh` dùng.
+       *
+       * ⚠️ CHỈ đi được qua tuyến ANTHROPIC. Giao thức OpenAI không có chỗ cho
+       * ảnh trong `role:'tool'`; ở tuyến đó ảnh bị BỎ và thay bằng một dòng
+       * chữ nói rõ là đã bỏ — thà model biết mình không được xem còn hơn nó
+       * tưởng đã xem rồi bịa ra bố cục.
+       */
+      anh?: Array<{ media_type: string; data: string }>;
+    };
 
 /** Sự kiện đẩy ra SSE cho app. */
 export type AgentEvent =
@@ -365,7 +378,23 @@ function sanitizeIncoming(raw: unknown): AgentMessage[] {
         content = `${content.slice(0, MAX_TOOL_RESULT_CHARS)}\n[… máy chủ cắt bớt, kết quả gốc ${content.length} ký tự]`;
       }
       tongChu += content.length;
-      out.push({ role: 'tool', tool_call_id: id, content });
+
+      /* Ảnh kèm kết quả tool (`web_anh`). Lọc cùng luật như ảnh người dùng
+         gửi: đúng kiểu, đúng trần dung lượng, đúng số lượng. App là phía
+         KHÔNG TIN được — nó chạy trên máy người dùng và ai sửa được gói tin
+         cũng gửi được vào đây. */
+      const anhTho = (m as { anh?: unknown }).anh;
+      const anh: Array<{ media_type: string; data: string }> = [];
+      if (Array.isArray(anhTho)) {
+        for (const a of anhTho.slice(0, MAX_ANH)) {
+          const kieu = String((a as { media_type?: unknown })?.media_type ?? '');
+          const data = String((a as { data?: unknown })?.data ?? '');
+          if (!/^image\/(png|jpeg|webp|gif)$/.test(kieu)) continue;
+          if (!data || data.length > MAX_ANH_BYTES) continue;
+          anh.push({ media_type: kieu, data });
+        }
+      }
+      out.push({ role: 'tool', tool_call_id: id, content, ...(anh.length ? { anh } : {}) });
     }
     // 'system' rơi vào đây và bị bỏ — có chủ ý, xem ghi chú đầu hàm.
   }
@@ -943,7 +972,20 @@ async function goiCong(o: {
           }
         : {
             model: o.model,
-            messages: [{ role: 'system', content: o.system }, ...o.messages],
+            /* ⚠️ Giao thức OpenAI KHÔNG có chỗ cho ảnh trong `role:'tool'`.
+               Gửi kèm thì cổng hoặc bỏ im lặng, hoặc từ chối cả lượt. Nên ta
+               tự bỏ và NÓI RÕ trong chữ — model tưởng mình đã xem ảnh rồi bịa
+               ra bố cục thì tệ hơn hẳn việc nó biết mình chưa xem. */
+            messages: [
+              { role: 'system', content: o.system },
+              ...o.messages.map((m) => (m.role === 'tool' && m.anh?.length
+                ? {
+                    role: 'tool' as const,
+                    tool_call_id: m.tool_call_id,
+                    content: `${m.content}\n[Ảnh chụp KHÔNG gửi được qua cổng này — bạn chưa nhìn thấy trang. Dùng web_doc để đọc chữ.]`,
+                  }
+                : m)),
+            ],
             tools: o.tools,
             tool_choice: 'auto',
             stream: true,

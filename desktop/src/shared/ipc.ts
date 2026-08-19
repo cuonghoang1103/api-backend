@@ -123,6 +123,16 @@ export const settingKeySchema = z.enum([
   'aiThanhBenRong',
   /** Bề rộng khung trình duyệt cạnh bảng ghi (px). Kéo được như thanh bên. */
   'aiKhungWebRong',
+  /**
+   * Robot trong app: đang MỞ KHOÁ để kéo, và toạ độ người dùng đã đặt.
+   *
+   * Toạ độ lưu theo KHOẢNG CÁCH TỚI MÉP PHẢI/DƯỚI, không phải x/y tuyệt đối:
+   * đổi cỡ cửa sổ thì robot phải giữ nguyên góc, chứ x/y tuyệt đối sẽ đẩy nó
+   * ra ngoài màn hình ngay lần mở app sau ở cỡ cửa sổ khác.
+   */
+  'odinKeoDuoc',
+  'odinPhai',
+  'odinDuoi',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 

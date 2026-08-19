@@ -21,7 +21,7 @@ import { useOdin } from './useOdin';
 import './odin.css';
 
 export function OdinDock() {
-  const { navigate, settings, online } = useAppState();
+  const { navigate, settings, setSetting, online } = useAppState();
   const { api } = useSession();
   /** Ngôn ngữ Odin nói. Mặc định tiếng Việt — đây là app tiếng Việt. */
   const ngonNgu: 'vi' | 'en' = settings.odinNgonNgu === 'en' ? 'en' : 'vi';
@@ -201,11 +201,70 @@ export function OdinDock() {
     );
   }, [enabled, update, odin]);
 
+  /*
+   * ẤN BA LẦN ĐỂ MỞ KHOÁ, ẤN BA LẦN NỮA ĐỂ CỐ ĐỊNH.
+   *
+   * Người dùng muốn tự đặt chỗ cho robot. Ba lần bấm chứ không phải kéo
+   * thẳng: bấm MỘT lần đã có nghĩa (mở AI Chat), nên nếu kéo được mọi lúc thì
+   * mỗi cú bấm hơi lệch tay sẽ thành một cú kéo, và robot trôi lung tung.
+   *
+   * Toạ độ lưu theo khoảng cách tới mép PHẢI/DƯỚI — đổi cỡ cửa sổ thì nó giữ
+   * nguyên góc. Lưu x/y tuyệt đối là mở app ở màn hình nhỏ hơn thì robot nằm
+   * ngoài vùng nhìn thấy và không có cách nào lôi lại.
+   */
+  const keoDuoc = settings.odinKeoDuoc === true;
+  const phai = typeof settings.odinPhai === 'number' ? settings.odinPhai : 22;
+  const duoi = typeof settings.odinDuoi === 'number' ? settings.odinDuoi : 16;
+
+  const demBam = useRef(0);
+  const henBam = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const keo = useRef<{ x: number; y: number; phai: number; duoi: number } | null>(null);
+  const [dangKeo, datDangKeo] = useState(false);
+
+  /** Đếm cú bấm; đủ ba trong 600ms thì lật khoá. Trả `true` nếu vừa lật. */
+  const demVaLat = (): boolean => {
+    demBam.current += 1;
+    if (henBam.current) clearTimeout(henBam.current);
+    if (demBam.current >= 3) {
+      demBam.current = 0;
+      setSetting('odinKeoDuoc', !keoDuoc);
+      return true;
+    }
+    henBam.current = setTimeout(() => { demBam.current = 0; }, 600);
+    return false;
+  };
+
+  useEffect(() => {
+    if (!dangKeo) return;
+    const di = (e: PointerEvent): void => {
+      const b = keo.current;
+      if (!b) return;
+      // Kẹp trong cửa sổ: kéo ra ngoài rồi thả là mất robot.
+      setSetting('odinPhai', Math.max(4, Math.min(b.phai - (e.clientX - b.x), window.innerWidth - 80)));
+      setSetting('odinDuoi', Math.max(4, Math.min(b.duoi - (e.clientY - b.y), window.innerHeight - 80)));
+    };
+    const tha = (): void => { datDangKeo(false); keo.current = null; };
+    window.addEventListener('pointermove', di);
+    window.addEventListener('pointerup', tha, { once: true });
+    return () => {
+      window.removeEventListener('pointermove', di);
+      window.removeEventListener('pointerup', tha);
+    };
+  }, [dangKeo, setSetting]);
+
   if (!enabled) return null;
 
   return (
     <div
       className="odin-dock"
+      style={{ right: phai, bottom: `calc(var(--ct-statusbar-h) + ${duoi}px)` }}
+      data-keo={keoDuoc}
+      data-dang-keo={dangKeo}
+      onPointerDown={(e) => {
+        if (!keoDuoc) return;
+        keo.current = { x: e.clientX, y: e.clientY, phai, duoi };
+        datDangKeo(true);
+      }}
       data-mood={odin.mood}
       data-listening={odin.listening}
       data-hover={hovering}
@@ -271,6 +330,10 @@ export function OdinDock() {
         onFocus={() => setHovering(true)}
         onBlur={() => setHovering(false)}
         onClick={() => {
+          // Cú bấm thứ ba lật khoá — KHÔNG chuyển trang, nếu không mỗi lần
+          // mở/khoá lại nhảy sang AI Chat.
+          if (demVaLat()) return;
+          if (keoDuoc) return;   // đang mở khoá ⇒ bấm là để kéo, không điều hướng
           odin.poke();
           // Đợi hết cú nhảy rồi mới chuyển trang — chuyển ngay thì người dùng
           // không kịp thấy phản hồi, và cảm giác là "bấm nhầm cái gì đó".

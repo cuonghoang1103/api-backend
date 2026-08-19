@@ -28,6 +28,23 @@
   --odin-outline: #3d4aa8;
 }
 
+/* ── Mở khoá để kéo (ấn ba lần) ──
+   Phải NHÌN RA được là đang mở khoá, nếu không người dùng ấn ba lần rồi
+   không biết đã ăn hay chưa, ấn thêm ba lần nữa là khoá lại. Vòng nét đứt
+   nhấp nháy nhẹ + con trỏ bàn tay là đủ, không cần thêm chữ. */
+.odin-dock[data-keo='true'] {
+  cursor: grab;
+  border-radius: 999px;
+  outline: 2px dashed var(--ct-accent);
+  outline-offset: 6px;
+  animation: odin-mokhoa 1.6s ease-in-out infinite;
+}
+.odin-dock[data-dang-keo='true'] { cursor: grabbing; animation: none; }
+@keyframes odin-mokhoa {
+  0%, 100% { outline-color: color-mix(in srgb, var(--ct-accent) 45%, transparent); }
+  50%      { outline-color: var(--ct-accent); }
+}
+
 .odin-dock {
   position: fixed;
   right: 22px;

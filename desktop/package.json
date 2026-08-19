@@ -25,7 +25,9 @@
     "smoke:agent": "npm run build && node scripts/smoke-agent.mjs",
     "smoke:dev": "npm run build:main && node scripts/smoke-dev.mjs",
     "pack": "npm run build && electron-builder --dir",
-    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:mac": "npm run build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac",
+    "dist:mac:ky": "node scripts/ky-mac.mjs",
+    "dist:mac:thu": "node scripts/ky-mac.mjs --thu",
     "dist:win": "npm run build && electron-builder --win",
     "dist:linux": "npm run build && electron-builder --linux",
     "thu:python": "npm run build && node scripts/thu-python.mjs"

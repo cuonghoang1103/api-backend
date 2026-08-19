@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Hardened Runtime bắt buộc phải bật thì Apple mới nhận notarize, nhưng
+	     nó chặn đúng những thứ Electron cần. Bốn khoá dưới đây là bộ tối thiểu
+	     cho một app Electron; bỏ bớt cái nào là app ký xong mở lên crash ngay,
+	     và crash đó KHÔNG xuất hiện ở bản chưa ký nên rất dễ tưởng do bản build. -->
+
+	<!-- V8 biên dịch JS thành mã máy lúc chạy. Thiếu: app chết ngay khi khởi động. -->
+	<key>com.apple.security.cs.allow-jit</key>
+	<true/>
+
+	<!-- V8 ghi vào vùng nhớ thực thi không ký. Thiếu: chết ở màn hình trắng. -->
+	<key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+	<true/>
+
+	<!-- Electron nạp framework/native module ký bằng chứng thư khác của chính
+	     nó. Thiếu: "code signature invalid" khi nạp Electron Framework. -->
+	<key>com.apple.security.cs.disable-library-validation</key>
+	<true/>
+
+	<!-- Một số đường nạp của Electron/Squirrel dùng biến môi trường dyld. -->
+	<key>com.apple.security.cs.allow-dyld-environment-variables</key>
+	<true/>
+
+	<!-- Micro cho trợ lý Odin (giữ nút để nói). Câu giải thích hiện cho người
+	     dùng nằm ở `mac.extendInfo.NSMicrophoneUsageDescription`. -->
+	<key>com.apple.security.device.audio-input</key>
+	<true/>
+</dict>
+</plist>

@@ -6,14 +6,19 @@
 #   npm run dist:win    # CuongThai-Setup-<ver>.exe
 #   npm run dist:linux  # .AppImage và .deb
 #
-# ⚠️ CHƯA KÝ SỐ (quyết định của chủ dự án, 16/08/2026). Hệ quả thực tế:
-#   • macOS: Gatekeeper báo "app bị hỏng, hãy chuyển vào Thùng rác". App KHÔNG
-#     hỏng — đó là thông báo mặc định cho phần mềm chưa công chứng. Người dùng
-#     phải chuột phải → Mở, hoặc chạy:
-#       xattr -dr com.apple.quarantine /Applications/CuongThai.app
-#   • Windows: SmartScreen chặn màn xanh, phải bấm "Thêm thông tin" → "Vẫn chạy".
-#   • Linux: không ảnh hưởng.
-# Đường ký đã dựng sẵn — xem docs/building-and-packaging.md để cắm chứng chỉ vào.
+# ⚠️ WINDOWS CHƯA KÝ SỐ (quyết định của chủ dự án, 16/08/2026) — SmartScreen
+#   chặn màn xanh, phải bấm "Thêm thông tin" → "Vẫn chạy". Linux không ảnh hưởng.
+#
+# ✅ macOS CÓ đường ký + công chứng (19/08/2026): `npm run dist:mac:ky`
+#   (xem scripts/ky-mac.mjs). Cần chứng thư "Developer ID Application" trong
+#   Keychain và hồ sơ notarytool tên `cuongthai-notary`; script tự kiểm cả hai
+#   trước khi dựng và nói rõ thiếu cái gì.
+#
+#   `npm run dist:mac` (KHÔNG ký) vẫn giữ nguyên: nó đặt
+#   CSC_IDENTITY_AUTO_DISCOVERY=false nên electron-builder bỏ qua bước ký, và
+#   `hardenedRuntime` bên dưới trở thành vô hại vì không có chữ ký nào để gắn cờ.
+#   Bản chưa ký khi tải về vẫn bị Gatekeeper báo "app bị hỏng" — app KHÔNG hỏng,
+#   gỡ bằng: xattr -dr com.apple.quarantine /Applications/CuongThai.app
 
 appId: com.cuongthai.desktop
 productName: CuongThai
@@ -27,6 +32,11 @@ directories:
 # `dist/**` là mã đã build; `node_modules` được electron-builder tự lọc theo
 # `dependencies` trong package.json (KHÔNG gồm devDependencies), nên electron,
 # vite, playwright... không lọt vào bản cài.
+# Móc chạy ngay sau khi ký, trước khi đóng .dmg/.zip — công chứng bản .app để
+# con dấu nằm sẵn trong CẢ HAI gói. Móc tự tắt nếu không có KY_MAC=1, nên bản
+# dựng chưa ký không đụng tới nó.
+afterSign: scripts/notarize-hook.cjs
+
 files:
   - dist/**/*
   - package.json
@@ -56,10 +66,28 @@ mac:
       arch: [arm64, x64]
   # macOS 11 là bản cũ nhất Electron 33 còn hỗ trợ.
   minimumSystemVersion: '11.0'
-  # Hardened runtime chỉ có ý nghĩa khi CÓ ký; bật lúc chưa ký sẽ làm app không
-  # chạy được trên chính máy build.
-  hardenedRuntime: false
-  identity: null
+  # ── Ký số + công chứng ────────────────────────────────────
+  # Apple TỪ CHỐI công chứng bất cứ thứ gì không bật Hardened Runtime, nên nó
+  # phải bật. Đổi lại, Hardened Runtime chặn đúng những gì Electron cần (JIT,
+  # bộ nhớ thực thi không ký, nạp thư viện ngoài) — bù lại bằng hai file
+  # entitlements bên dưới. Đọc chú thích trong chính hai file đó trước khi cắt
+  # bớt khoá nào: app ký xong mà thiếu khoá thì crash NGAY lúc mở, còn bản chưa
+  # ký lại chạy bình thường, nên rất dễ đổ oan cho bản build.
+  hardenedRuntime: true
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.inherit.plist
+  # `identity: null` (ép KHÔNG ký) đã bỏ. Bản chưa ký nay điều khiển bằng biến
+  # môi trường CSC_IDENTITY_AUTO_DISCOVERY=false trong script `dist:mac`, nhờ
+  # vậy cùng một file cấu hình phục vụ được cả hai đường.
+  #
+  # spctl chạy trên MÁY BUILD không nói lên điều gì về máy người dùng (máy build
+  # đã tin chứng thư của chính nó), mà lại làm hỏng build khi mạng chậm.
+  # scripts/ky-mac.mjs kiểm lại tử tế sau khi công chứng + đóng dấu xong.
+  gatekeeperAssess: false
+  # Bật bằng tham số dòng lệnh trong scripts/ky-mac.mjs (`-c.mac.notarize...`),
+  # KHÔNG bật ở đây: để `true` cố định thì mọi bản dựng chưa ký cũng lao vào
+  # công chứng rồi chết giữa chừng.
+  notarize: false
   # Khai báo lý do xin quyền micro. macOS hiện đúng câu này trong hộp thoại xin
   # quyền — bỏ trống thì hệ thống hiện chuỗi mặc định vô nghĩa, và người dùng
   # không hiểu vì sao app xin micro nên họ từ chối.

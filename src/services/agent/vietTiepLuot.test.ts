@@ -31,6 +31,30 @@ function goiCat(chu: string, ly: string) {
 }
 
 test('chạm trần token thì VIẾT TIẾP, không trả về câu cụt', async (t) => {
+  /*
+   * ⚠️ TỰ DỰNG MÔI TRƯỜNG, ĐỪNG MƯỢN `.env`.
+   *
+   * `runAgentTurn` chặn ngay ở `gatewayConfigured()` khi chưa có khoá cổng.
+   * Máy nhà có `.env` (`config/env.ts` gọi `dotenv.config()`, nạp từ ĐĨA nên
+   * `env -i` cũng không che được) ⇒ xanh. CI không có `.env` ⇒ lượt chết bằng
+   * `LLM_UNCONFIGURED` và phép kiểm chỉ thấy `["error"]`.
+   *
+   * Đây là LẦN THỨ HAI trong cùng một ngày tôi viết phép kiểm mượn `.env` —
+   * lần đầu là `gateway.test.ts`. Xem
+   * [[feedback_phep_kiem_dat_vi_ly_do_sai]] mục 3.
+   */
+  const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_BASE_URL', 'AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY']
+    .map((k) => [k, process.env[k]] as const);
+  process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap-cho-kiem-thu';
+  process.env.LLM_GATEWAY_BASE_URL = 'https://vi-du.test/v1';
+  // Cổng riêng của agent phải TẮT ở đây: bật thì `endpointFor` đi đường khác
+  // và phép kiểm không còn đo cái nó định đo.
+  delete process.env.AGENT_GATEWAY_BASE_URL;
+  delete process.env.AGENT_GATEWAY_API_KEY;
+  t.after(() => {
+    for (const [k, v] of luu) { if (v === undefined) delete process.env[k]; else process.env[k] = v; }
+  });
+
   const goc = globalThis.fetch;
   let lan = 0;
   const daGui: any[] = [];

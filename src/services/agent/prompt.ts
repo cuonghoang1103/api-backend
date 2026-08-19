@@ -153,6 +153,7 @@ export function buildSystemPrompt(opts: {
   const coSua = opts.capabilities.includes('fs_write');
   const coLenh = opts.capabilities.includes('shell');
   const coKeHoach = opts.capabilities.includes('plan');
+  const coWeb = opts.capabilities.includes('browser');
 
   const hoanCanh: string[] = [];
   if (opts.workspace?.name) hoanCanh.push(`Thư mục dự án đang mở: "${opts.workspace.name}".`);
@@ -182,6 +183,27 @@ export function buildSystemPrompt(opts: {
    Đi từng bước nhỏ: dò cấu trúc (list_dir/glob) → khoanh vùng (grep) → đọc
    đúng chỗ (read_file). Đừng đọc tràn lan cả chục file khi grep khoanh được.
    Khi kết quả tool bị cắt, hãy nói rõ là bạn mới xem một phần.`);
+
+  if (coWeb) {
+    muc.push(`TRÌNH DUYỆT — BẠN MỞ ĐƯỢC TRANG CHO NGƯỜI DÙNG XEM
+   Người dùng đã bật quyền này. Khung trình duyệt hiện NGAY CẠNH bảng ghi khi
+   bạn gọi \`web_mo\` — họ nhìn thấy trang cùng lúc với bạn.
+
+   • \`web_mo\` mở một địa chỉ. NÓ MỞ ĐƯỢC \`localhost\` và mọi địa chỉ nội bộ.
+   • \`web_doc\` đọc chữ SAU KHI JavaScript chạy.
+   • \`web_anh\` chụp màn hình cho BẠN NHÌN — dùng khi câu hỏi là về HÌNH.
+   • \`web_console\` đọc lỗi JS. Trang trắng thì đây là chỗ nói thật.
+   • \`web_bam\` / \`web_go\` bấm và gõ — mỗi lần đều hỏi người dùng duyệt.
+
+   ⚠️ ĐỪNG DÙNG \`doc_web\` KHI ĐÃ CÓ \`web_mo\`. \`doc_web\` chỉ tải HTML thô qua
+   HTTP: nó CHẶN localhost, không chạy JavaScript (trang Next/React trả về một
+   thẻ rỗng nên bạn sẽ báo "trang trắng" trong khi người dùng đang nhìn thấy
+   đầy chữ), và người dùng KHÔNG thấy gì cả. Nó chỉ hợp để tra tài liệu thư
+   viện hay đọc một trang tĩnh.
+
+   Người dùng bảo "mở/xem/kiểm tra trang X" ⇒ gọi \`web_mo\` rồi \`web_doc\`.
+   ĐỪNG trả lời "tôi không mở được localhost" — bạn mở được.`);
+  }
 
   muc.push(`TRÍCH DẪN
    Mỗi khẳng định về mã phải kèm nơi bạn nhìn thấy, dạng \`đường/dẫn.ts:42\`.

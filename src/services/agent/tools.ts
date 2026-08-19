@@ -489,7 +489,10 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     name: 'doc_web',
     ring: 'server',
     description:
-      'Đọc nội dung CHỮ của một trang web (HTML, văn bản, JSON) và trả về. '
+      'Đọc HTML THÔ của một trang web qua HTTP, KHÔNG chạy JavaScript, và người dùng KHÔNG nhìn thấy gì. '
+      + 'NẾU BẠN CÓ `web_mo` THÌ DÙNG NÓ THAY VÌ TOOL NÀY khi người dùng muốn XEM/KIỂM TRA một trang, '
+      + 'hoặc khi địa chỉ là localhost/nội bộ, hoặc khi trang chạy React/Next (tool này sẽ thấy một thẻ rỗng). '
+      + 'Tool này chỉ hợp để tra tài liệu thư viện hay đọc một trang tĩnh. '
       + 'Dùng khi cần tra tài liệu thư viện, đọc changelog, xem một thông báo lỗi lạ, '
       + 'hoặc kiểm chứng một API trước khi viết mã theo nó. '
       + 'CHỈ đọc được địa chỉ công khai — địa chỉ nội bộ (localhost, 192.168.x, 10.x) bị chặn. '

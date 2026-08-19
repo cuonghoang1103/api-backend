@@ -63,3 +63,31 @@ describe('ảnh chụp trang', () => {
     expect(than).toContain('anh: [{ media_type');
   });
 });
+
+describe('prompt phải DẠY model dùng tool trình duyệt', () => {
+  /*
+   * Người dùng bật "Trình duyệt: BẬT" rồi bảo "mở localhost:3000", agent vẫn
+   * gọi `doc_web` — tool cũ, chặn localhost — rồi trả lời "tôi không mở được
+   * localhost, bạn tự mở giúp". Tool `web_mo` CÓ trong danh sách gửi lên, quyền
+   * CÓ tới máy chủ; thứ thiếu là prompt không nhắc một chữ nào về chúng, nên
+   * model với lấy cái tool nó quen.
+   *
+   * Khai một tool là chưa đủ để nó được dùng.
+   */
+  const mc = readFileSync(join(goc, '../src/services/agent/prompt.ts'), 'utf8');
+
+  it('có mục riêng cho trình duyệt, gắn theo quyền `browser`', () => {
+    expect(mc, 'prompt không gắn mục nào theo quyền browser').toContain('includes(\'browser\')');
+    expect(mc, 'prompt không nhắc web_mo').toContain('web_mo');
+  });
+
+  it('nói thẳng là ĐỪNG dùng doc_web khi đã có web_mo', () => {
+    expect(mc, 'model sẽ tiếp tục với lấy doc_web vì nó quen hơn').toMatch(/ĐỪNG DÙNG .{0,3}doc_web/);
+  });
+
+  it('mô tả doc_web tự chỉ sang web_mo', () => {
+    const t = readFileSync(join(goc, '../src/services/agent/tools.ts'), 'utf8');
+    const i = t.indexOf('name: \'doc_web\'');
+    expect(t.slice(i, i + 900), 'mô tả doc_web không chỉ đường sang web_mo').toContain('web_mo');
+  });
+});

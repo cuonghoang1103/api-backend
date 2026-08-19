@@ -372,6 +372,38 @@ export function AgentMode({
 
       {trangThai.keHoach.length > 0 && <BangKeHoach viec={trangThai.keHoach} />}
 
+      {/*
+        DỪNG GIỮA CHỪNG MÀ KẾ HOẠCH CÒN VIỆC ⇒ MỜI LÀM TIẾP.
+
+        Người dùng báo 19/08/2026: "nó chưa trả lời hết đã tự ngắt mà không
+        thông báo gì hết. Tôi phải nói 'hết chưa' nó mới trả lời tiếp."
+
+        Nguyên nhân CHÍNH đã vá ở máy chủ (`finish_reason: 'length'` bị bỏ
+        qua — nay tự viết tiếp). Nhưng còn một nửa mà máy chủ không vá được:
+        model đôi khi dừng "tự nhiên" (`finish_reason: 'stop'`) trong khi kế
+        hoạch của chính nó còn việc chưa đánh dấu xong. Không có cách nào
+        phân biệt điều đó với một câu trả lời đã đủ, nên ĐỪNG tự gửi tiếp —
+        chỉ đưa cái nút, để người dùng quyết. Rẻ hơn một lượt bị tính tiền
+        cho một câu hỏi họ không đặt.
+      */}
+      {!trangThai.dangChay
+        && trangThai.keHoach.length > 0
+        && trangThai.keHoach.some((v) => v.trangThai !== 'xong') && (
+        <div className="ct-notice" data-tone="warn" style={{ margin: '0 0 8px' }}>
+          <span>
+            Kế hoạch còn {trangThai.keHoach.filter((v) => v.trangThai !== 'xong').length} việc
+            chưa xong mà agent đã dừng.
+          </span>
+          <button
+            type="button"
+            className="ct-btn ct-btn-ghost"
+            onClick={() => void gui('Làm tiếp những việc còn lại trong kế hoạch.')}
+          >
+            Làm tiếp
+          </button>
+        </div>
+      )}
+
       {canhQuayLui && (
         <div className="ct-notice" data-tone="warn" style={{ margin: '0 0 8px' }}>
           <span>{canhQuayLui}</span>
@@ -604,16 +636,45 @@ export function AgentMode({
  */
 function BangKeHoach({ viec }: { viec: AgentViec[] }) {
   const xong = viec.filter((v) => v.trangThai === 'xong').length;
+  const trongXong = viec.length > 0 && xong === viec.length;
+
+  /*
+   * GẬP LẠI ĐƯỢC, VÀ TỰ GẬP KHI XONG.
+   *
+   * Người dùng báo 19/08/2026: ở mức Ultracode agent lập 9 việc, bảng này
+   * ghim trên cùng và che gần hết màn hình, không có cách nào ẩn. Ba việc
+   * cùng lúc mới đủ chữa:
+   *   • bấm vào đầu bảng để gập  — quyền chủ động, lúc nào cũng có
+   *   • xong hết thì TỰ gập      — kế hoạch đã hoàn thành chỉ còn là lịch sử,
+   *                                giữ nguyên cỡ là chiếm chỗ cho một thứ
+   *                                không ai đọc nữa
+   *   • kẹp chiều cao + cuộn riêng (CSS) — kể cả khi mở, một kế hoạch 30 việc
+   *                                cũng không được phép ăn cả màn hình
+   *
+   * `null` = người dùng chưa tự quyết ⇒ đi theo luật tự gập. Bấm một lần là
+   * ý họ thắng và giữ nguyên tới hết việc.
+   */
+  const [tuGap, datTuGap] = useState<boolean | null>(null);
+  const gap = tuGap ?? trongXong;
+
   return (
-    <div className="ct-kehoach">
-      <div className="ct-kehoach-dau">
+    <div className="ct-kehoach" data-gap={gap}>
+      <button
+        type="button"
+        className="ct-kehoach-dau"
+        onClick={() => datTuGap(!gap)}
+        aria-expanded={!gap}
+        title={gap ? 'Mở kế hoạch' : 'Gập kế hoạch'}
+      >
         <ListChecks size={13} aria-hidden />
         <span>Kế hoạch</span>
         <span className="ct-kehoach-dem">{xong}/{viec.length}</span>
         <div className="ct-kehoach-thanh">
           <div className="ct-kehoach-day" style={{ width: `${(xong / viec.length) * 100}%` }} />
         </div>
-      </div>
+        <ChevronDown size={13} aria-hidden className="ct-kehoach-mui" />
+      </button>
+      {gap ? null : (
       <ul className="ct-kehoach-ds">
         {viec.map((v, i) => (
           <li key={i} data-tt={v.trangThai}>
@@ -626,6 +687,7 @@ function BangKeHoach({ viec }: { viec: AgentViec[] }) {
           </li>
         ))}
       </ul>
+      )}
     </div>
   );
 }

@@ -31,22 +31,11 @@ import {
   DaiDinhKem, DinhKemDaGui, NutDinhKem, ODinhKem, useDinhKem, type TepDinhKem,
 } from './DinhKem';
 import { NutGoiThoai } from './NutGoiThoai';
-
-interface ThuMuc {
-  id: string;
-  ten: string;
-  mau: string | null;
-  _count?: { sessions: number };
-}
-
-interface PhienChat {
-  id: string;
-  title: string | null;
-  updatedAt: string;
-  folderId: string | null;
-  _count?: { messages: number };
-  folder?: { id: string; ten: string; mau: string | null } | null;
-}
+import { NutTinNhan } from './NutTinNhan';
+/* Kiểu `PhienChat`/`ThuMuc` sống ở `ThanhBenChat` chứ không ở đây: thanh bên
+   là chỗ vẽ chúng ra, và hai bản khai trùng nhau thì thêm một trường ở máy chủ
+   là phải nhớ sửa hai chỗ — đúng kiểu trôi dạt đã làm vỡ seed hồi 08/08. */
+import { ThanhBenChat, type PhienChat, type ThuMuc } from './ThanhBenChat';
 
 /**
  * Bộ lọc thư mục đang chọn.
@@ -67,6 +56,12 @@ export interface Nguon {
 interface Luot {
   vai: 'user' | 'assistant';
   text: string;
+  /**
+   * Lúc gửi. Chỉ có ở lượt gõ trong phiên này — mở lại cuộc cũ thì máy chủ
+   * KHÔNG trả `createdAt` theo từng tin (`getChatHistory` trả cả bảng, nhưng
+   * app chỉ đọc `role`/`content`). Thà không hiện gì còn hơn hiện giờ sai.
+   */
+  luc?: number;
   /** Đính kèm của lượt này — giữ lại để bảng ghi còn thấy đã gửi gì. */
   tep?: TepDinhKem[];
   /** Nguồn web đã dùng cho lượt trả lời này. Gắn vào LƯỢT chứ không vào màn
@@ -175,6 +170,8 @@ export function ChatMode({ pro }: { pro: boolean }) {
   const [moLichSu, datMoLichSu] = useState(false);
   const [dsThuMuc, datDsThuMuc] = useState<ThuMuc[]>([]);
   const [loc, datLoc] = useState<LocThuMuc>(null);
+  /** Thanh bên đang xem KHO LƯU TRỮ thay vì danh sách thường. */
+  const [xemLuuTru, datXemLuuTru] = useState(false);
   const [tenMoi, datTenMoi] = useState('');
   const huyRef = useRef<AbortController | null>(null);
   const cuonRef = useRef<HTMLDivElement>(null);
@@ -199,11 +196,16 @@ export function ChatMode({ pro }: { pro: boolean }) {
       // ⚠️ `api.request` ĐÃ bóc `envelope.data` (xem `unwrap` trong api/client.ts),
       // nên đây là mảng luôn — bóc `.data` lần nữa cho ra `undefined`, và danh
       // sách rỗng vĩnh viễn trong khi máy chủ trả về đủ dữ liệu.
-      const q = loc ? `?folderId=${encodeURIComponent(loc)}` : '';
-      const r = await api.request<PhienChat[]>(`/api/v1/ai/chat/sessions${q}`);
+      const ts = new URLSearchParams();
+      if (loc) ts.set('folderId', loc);
+      // Danh sách thường và kho lưu trữ là HAI màn tách hẳn — máy chủ lọc, ở
+      // đây không lọc lại. Xem chú thích `nhom` trong ThanhBenChat.
+      if (xemLuuTru) ts.set('archived', '1');
+      const q = ts.toString();
+      const r = await api.request<PhienChat[]>(`/api/v1/ai/chat/sessions${q ? `?${q}` : ''}`);
       datDsPhien(Array.isArray(r) ? r : []);
     } catch { /* mất mạng — danh sách rỗng, không phải lỗi chặn đường */ }
-  }, [api, loc]);
+  }, [api, loc, xemLuuTru]);
 
   const napThuMuc = useCallback(async () => {
     if (!api) return;
@@ -272,14 +274,21 @@ export function ChatMode({ pro }: { pro: boolean }) {
   const moPhien = useCallback(async (id: string) => {
     if (!api) return;
     try {
-      const r = await api.request<Array<{ role: string; content: string }>>(
+      const r = await api.request<Array<{ role: string; content: string; createdAt?: string }>>(
         `/api/v1/ai/chat/history/${id}`,
       );
       const ds = Array.isArray(r) ? r : [];
-      datLuot(ds.map((m) => ({
-        vai: m.role === 'user' ? 'user' as const : 'assistant' as const,
-        text: String(m.content ?? ''),
-      })));
+      datLuot(ds.map((m) => {
+        // `createdAt` VỐN ĐÃ nằm trong đáp án — `getChatHistory` trả cả bảng
+        // `chat_messages`. Bản trước chỉ đọc `role`/`content`, nên mở lại một
+        // cuộc cũ là mọi nhãn thời gian biến mất dù dữ liệu có sẵn ngay đó.
+        const luc = m.createdAt ? new Date(m.createdAt).getTime() : NaN;
+        return {
+          vai: m.role === 'user' ? 'user' as const : 'assistant' as const,
+          text: String(m.content ?? ''),
+          ...(Number.isFinite(luc) ? { luc } : {}),
+        };
+      }));
       datPhienId(id);
       datMoLichSu(false);
       datLoi(null);
@@ -298,6 +307,104 @@ export function ChatMode({ pro }: { pro: boolean }) {
       datLoi(`Không xoá được: ${(err as Error).message}`);
     }
   }, [api, phienId, napDsPhien]);
+
+  /**
+   * GHIM · ĐỔI TÊN · LƯU TRỮ · TÁCH NHÁNH.
+   *
+   * Cả bốn đi qua cùng một dạng: gọi máy chủ rồi nạp lại danh sách. KHÔNG sửa
+   * `dsPhien` tại chỗ trước như bên AI Code — ở đây máy chủ mới là chỗ quyết
+   * thứ tự (nó sắp ghim lên đầu), nên đoán trước rồi để máy chủ trả về thứ tự
+   * khác chỉ làm danh sách nhảy hai lần.
+   */
+  const ghimPhien = useCallback(async (p: PhienChat) => {
+    if (!api) return;
+    try {
+      await api.request(`/api/v1/ai/chat/sessions/${p.id}`, {
+        method: 'PATCH', body: { pinned: p.pinned !== true },
+      });
+      await napDsPhien();
+    } catch (err) { datLoi(`Không ghim được: ${(err as Error).message}`); }
+  }, [api, napDsPhien]);
+
+  const luuTruPhien = useCallback(async (p: PhienChat) => {
+    if (!api) return;
+    try {
+      // Đang xem kho ⇒ thao tác là LẤY RA. Đang xem danh sách thường ⇒ CẤT ĐI.
+      await api.request(`/api/v1/ai/chat/sessions/${p.id}`, {
+        method: 'PATCH', body: { archived: !xemLuuTru },
+      });
+      await napDsPhien();
+    } catch (err) { datLoi(`Không lưu trữ được: ${(err as Error).message}`); }
+  }, [api, napDsPhien, xemLuuTru]);
+
+  const doiTenPhien = useCallback(async (id: string, ten: string) => {
+    if (!api) return;
+    try {
+      await api.request(`/api/v1/ai/chat/sessions/${id}`, { method: 'PATCH', body: { title: ten } });
+      await napDsPhien();
+    } catch (err) { datLoi(`Không đổi tên được: ${(err as Error).message}`); }
+  }, [api, napDsPhien]);
+
+  /**
+   * Tách nhánh TRỌN cuộc rồi mở bản mới ra.
+   *
+   * Không mở thì người dùng bấm xong chỉ thấy danh sách dài thêm một dòng, mà
+   * dòng đó lại nằm ngay cạnh bản gốc — trông như hàng bị nhân đôi chứ không
+   * như một việc vừa xảy ra.
+   */
+  const tachNhanhPhien = useCallback(async (id: string) => {
+    if (!api) return;
+    try {
+      const r = await api.request<{ sessionId: string }>(
+        `/api/v1/ai/chat/sessions/${id}/fork`, { method: 'POST', body: {} },
+      );
+      await napDsPhien();
+      if (r?.sessionId) await moPhien(r.sessionId);
+    } catch (err) { datLoi(`Không tách nhánh được: ${(err as Error).message}`); }
+  }, [api, napDsPhien, moPhien]);
+
+  /**
+   * QUAY LUI về lượt thứ `i` — bỏ nó và mọi thứ sau nó, đặt lại câu vào ô soạn.
+   *
+   * Cắt ở CẢ HAI nơi: mảng `luot` trên màn hình (đây mới là thứ được gửi làm
+   * ngữ cảnh — xem `history` trong `guiDi`) và bảng tin nhắn ở máy chủ. Chỉ cắt
+   * một nơi thì mở lại cuộc này ngày mai sẽ thấy đoạn tưởng đã bỏ hiện về đủ.
+   */
+  const quayLuiToi = useCallback(async (i: number) => {
+    const l = luot[i];
+    if (!l) return;
+    datLuot((cu) => cu.slice(0, i));
+    datNhap(l.text);
+    if (!api || !phienId) return;
+    try {
+      await api.request(`/api/v1/ai/chat/sessions/${phienId}/cat`, {
+        method: 'POST', body: { tuChiSo: i },
+      });
+      await napDsPhien();
+    } catch (err) {
+      datLoi(`Đã cắt trên màn hình nhưng máy chủ chưa cắt được: ${(err as Error).message}`);
+    }
+  }, [api, luot, phienId, napDsPhien]);
+
+  /**
+   * TÁCH NHÁNH từ lượt thứ `i` — cuộc mới dừng ngay TRƯỚC lượt đó, cuộc này
+   * giữ nguyên. Bản không phá của quay lui.
+   */
+  const tachNhanhTu = useCallback(async (i: number) => {
+    if (!api || !phienId) {
+      datLoi('Cuộc này chưa được lưu nên chưa tách nhánh được — hãy gửi một câu trước.');
+      return;
+    }
+    try {
+      const r = await api.request<{ sessionId: string }>(
+        `/api/v1/ai/chat/sessions/${phienId}/fork`, { method: 'POST', body: { denChiSo: i } },
+      );
+      await napDsPhien();
+      if (r?.sessionId) await moPhien(r.sessionId);
+    } catch (err) {
+      datLoi(`Không tách nhánh được: ${(err as Error).message}`);
+    }
+  }, [api, phienId, napDsPhien, moPhien]);
 
   const chatMoi = (): void => {
     huyRef.current?.abort();
@@ -448,7 +555,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
     let nguonLuot: Nguon[] = [];
     let daBaoCauDau = false;
 
-    const truoc: Luot[] = [...luot, { vai: 'user', text, ...(tep.length ? { tep } : {}) }];
+    const truoc: Luot[] = [...luot, { vai: 'user', text, luc: Date.now(), ...(tep.length ? { tep } : {}) }];
     datLuot(truoc);
     datNhap('');
     dk.xoaHet();
@@ -611,6 +718,25 @@ export function ChatMode({ pro }: { pro: boolean }) {
   const coGiDeGui = Boolean(nhap.trim()) || dk.tep.length > 0;
 
   return (
+    /* Thanh bên + khung chat nằm CẠNH nhau. Bọc thêm một lớp ở đây chứ không
+       đặt thanh bên ở `ChatPage` như bên Lập trình: mọi trạng thái của danh
+       sách cuộc (đang mở cuộc nào, vừa gửi xong nên phải nạp lại) đều sống
+       trong chính component này. Đưa lên cha thì phải nâng cả cụm state đó
+       lên theo, hoặc nạp một bản sao thứ hai — cả hai đều tệ hơn một cái div. */
+    <div className="ct-chat-doi">
+      <ThanhBenChat
+        ds={dsPhien}
+        dangMo={phienId}
+        xemLuuTru={xemLuuTru}
+        onXemLuuTru={datXemLuuTru}
+        onMo={(id) => void moPhien(id)}
+        onTaoMoi={chatMoi}
+        onXoa={(id) => void xoaPhien(id)}
+        onGhim={(p) => void ghimPhien(p)}
+        onLuuTru={(p) => void luuTruPhien(p)}
+        onDoiTen={(id, t) => void doiTenPhien(id, t)}
+        onTachNhanh={(id) => void tachNhanhPhien(id)}
+      />
     <div
       className="ct-agent"
       data-keo={dk.dangKeo}
@@ -760,6 +886,13 @@ export function ChatMode({ pro }: { pro: boolean }) {
           <div key={i} className="ct-agent-nguoi">
             <DinhKemDaGui tep={l.tep ?? []} />
             {l.text}
+            <NutTinNhan
+              text={l.text}
+              {...(l.luc === undefined ? {} : { luc: l.luc })}
+              khoa={dangChay}
+              onQuayLui={() => void quayLuiToi(i)}
+              onTachNhanh={() => void tachNhanhTu(i)}
+            />
           </div>
         ) : (
           /* ⚠️ PHẢI giữ lớp bọc `.ct-agent-may` — `ChuAgent` chỉ dựng phần chữ
@@ -867,6 +1000,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
           onDong={() => { ngungNoi(); datMoManGoi(false); }}
         />
       )}
+    </div>
     </div>
   );
 }

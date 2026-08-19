@@ -56,6 +56,10 @@ export interface TomTatPhien {
   goc?: string | null;
   luucLuc: number;
   soTinNhan: number;
+  /** Ghim lên đầu danh sách. Do NGƯỜI DÙNG đặt — xem `nhan.json` bên dưới. */
+  ghim?: boolean;
+  /** Cất đi khỏi danh sách thường, KHÔNG xoá. */
+  luuTru?: boolean;
 }
 
 interface FilePhien extends TomTatPhien {
@@ -74,6 +78,98 @@ function duongDan(id: string): string {
   // `id` do chính main sinh ra, nhưng vẫn lọc: một file `../../x.json` ghi ra
   // ngoài userData là chuyện không được phép xảy ra dù đường đi tới đó là gì.
   return path.join(thuMuc(), `${id.replace(/[^a-zA-Z0-9_-]/g, '')}.json`);
+}
+
+// ─── NHÃN NGƯỜI DÙNG ĐẶT: tên tự đặt · ghim · lưu trữ ──────────────
+
+/**
+ * Ba thứ do NGƯỜI DÙNG quyết, giữ trong MỘT file nhỏ riêng
+ * (`agent-phien/nhan.json`) thay vì trong file phiên.
+ *
+ * ─── VÌ SAO TÁCH RA ───
+ * `luuPhien` ghi đè TRỌN file phiên sau MỖI bước agent. Để ba trường này nằm
+ * trong đó thì mỗi bước phải đọc lại file cũ — có việc nặng vài MB — chỉ để
+ * giữ lại hai chữ; hoặc bỏ qua và thế là cái ghim biến mất giữa lúc agent
+ * đang chạy, không báo gì.
+ *
+ * Ở file riêng thì đường ghi của AGENT và đường ghi của NGƯỜI DÙNG không bao
+ * giờ chạm nhau, nên không có gì để lệch. Và vì tên người dùng đặt được đọc
+ * ĐÈ LÊN `tieuDe` lúc liệt kê, cái tên AI đặt vẫn nằm nguyên trong file phiên
+ * mà không tranh chấp với nó.
+ */
+interface NhanPhien {
+  ten?: string;
+  ghim?: boolean;
+  luuTru?: boolean;
+}
+type BangNhan = Record<string, NhanPhien>;
+
+/**
+ * Bản VÁ nhãn. Khác `NhanPhien` ở chỗ cho phép `undefined` tường minh —
+ * `exactOptionalPropertyTypes` phân biệt "không nhắc tới trường này" với "xoá
+ * trường này đi", và ở đây cần đúng cả hai nghĩa: `{ ghim: true }` chỉ đổi
+ * ghim, còn `{ ten: undefined }` là bỏ hẳn tên tự đặt.
+ */
+type VaNhan = { [K in keyof NhanPhien]?: NhanPhien[K] | undefined };
+
+function duongDanNhan(): string {
+  return path.join(thuMuc(), 'nhan.json');
+}
+
+async function docNhan(): Promise<BangNhan> {
+  try {
+    const j = JSON.parse(await fs.readFile(duongDanNhan(), 'utf8')) as unknown;
+    return j && typeof j === 'object' && !Array.isArray(j) ? (j as BangNhan) : {};
+  } catch {
+    // Chưa có file, hoặc file hỏng. Cả hai đều nghĩa là "chưa đặt nhãn gì" —
+    // và một bảng nhãn hỏng KHÔNG được phép làm mất danh sách phiên.
+    return {};
+  }
+}
+
+/**
+ * Ghi bảng nhãn, XẾP HÀNG.
+ *
+ * Mỗi lần sửa là một vòng đọc-sửa-ghi trọn bảng. Hai cú bấm liền nhau (ghim
+ * xong bấm lưu trữ ngay) mà chạy chồng thì cái sau đọc bảng CŨ và ghi đè mất
+ * cái trước — đúng kiểu hỏng chỉ hiện ra lúc người dùng bấm nhanh.
+ */
+let hangGhiNhan: Promise<unknown> = Promise.resolve();
+
+async function suaNhan(id: string, sua: VaNhan): Promise<void> {
+  const viec = async (): Promise<void> => {
+    const b = await docNhan();
+    const moi: VaNhan = { ...(b[id] ?? {}), ...sua };
+    // Dọn trường rỗng: bảng không nên phình vì những mục "đã bỏ ghim".
+    if (!moi.ten) delete moi.ten;
+    if (!moi.ghim) delete moi.ghim;
+    if (!moi.luuTru) delete moi.luuTru;
+    if (Object.keys(moi).length === 0) delete b[id];
+    else b[id] = moi as NhanPhien;   // mọi trường `undefined` vừa bị xoá ở trên
+
+    await fs.mkdir(thuMuc(), { recursive: true });
+    const dich = duongDanNhan();
+    const tam = `${dich}.tmp`;
+    await fs.writeFile(tam, JSON.stringify(b), 'utf8');
+    await fs.rename(tam, dich);
+  };
+  const ra = hangGhiNhan.then(viec, viec);
+  hangGhiNhan = ra.catch(() => {});
+  return ra;
+}
+
+/** Đổi tên. Tên rỗng = bỏ tên tự đặt, quay về tên AI/câu hỏi đầu. */
+export async function doiTenPhien(id: string, ten: string): Promise<void> {
+  const t = ten.trim().replace(/\s+/g, ' ').slice(0, MAX_TIEU_DE);
+  await suaNhan(id, { ten: t || undefined });
+}
+
+export async function datGhimPhien(id: string, ghim: boolean): Promise<void> {
+  await suaNhan(id, { ghim });
+}
+
+export async function datLuuTruPhien(id: string, luuTru: boolean): Promise<void> {
+  await suaNhan(id, { luuTru });
 }
 
 /**
@@ -182,19 +278,28 @@ export async function danhSachPhien(): Promise<TomTatPhien[]> {
     return []; // chưa có phiên nào — không phải lỗi
   }
 
+  const nhan = await docNhan();
   const ra: TomTatPhien[] = [];
   for (const t of ten) {
     if (!t.endsWith('.json')) continue;
+    // Bảng nhãn nằm chung thư mục và cũng đuôi `.json` — bỏ qua, không thì nó
+    // hiện lên như một phiên hỏng.
+    if (t === 'nhan.json') continue;
     try {
       const j = JSON.parse(await fs.readFile(path.join(thuMuc(), t), 'utf8')) as Partial<FilePhien>;
       if (typeof j.id === 'string' && typeof j.tieuDe === 'string') {
+        const n = nhan[j.id] ?? {};
         ra.push({
           id: j.id,
-          tieuDe: j.tieuDe,
+          // Tên người dùng tự đặt ĐÈ LÊN tên AI. Họ đã nói rõ họ muốn gọi việc
+          // này là gì; một lời gọi LLM không được phép cãi lại.
+          tieuDe: n.ten ?? j.tieuDe,
           duAn: j.duAn ?? null,
           goc: j.goc ?? null,
           luucLuc: j.luucLuc ?? 0,
           soTinNhan: j.soTinNhan ?? 0,
+          ghim: n.ghim === true,
+          luuTru: n.luuTru === true,
         });
       }
     } catch {
@@ -203,16 +308,21 @@ export async function danhSachPhien(): Promise<TomTatPhien[]> {
       continue;
     }
   }
-  return ra.sort((a, b) => b.luucLuc - a.luucLuc);
+  // Ghim lên đầu, rồi mới mới-nhất-trước. Ghim mà vẫn sắp theo thời gian thì
+  // cái ghim không nhìn thấy được — đúng thứ nó sinh ra để tránh.
+  return ra.sort((a, b) => Number(b.ghim ?? false) - Number(a.ghim ?? false) || b.luucLuc - a.luucLuc);
 }
 
 export async function docPhien(id: string): Promise<FilePhien | null> {
   try {
     const j = JSON.parse(await fs.readFile(duongDan(id), 'utf8')) as Partial<FilePhien>;
     if (!Array.isArray(j.hoiThoai)) return null;
+    const n = (await docNhan())[String(j.id ?? id)] ?? {};
     return {
       id: String(j.id ?? id),
-      tieuDe: String(j.tieuDe ?? ''),
+      tieuDe: n.ten ?? String(j.tieuDe ?? ''),
+      ghim: n.ghim === true,
+      luuTru: n.luuTru === true,
       duAn: j.duAn ?? null,
       goc: j.goc ?? null,
       luucLuc: j.luucLuc ?? 0,
@@ -226,13 +336,119 @@ export async function docPhien(id: string): Promise<FilePhien | null> {
 
 export async function xoaPhien(id: string): Promise<void> {
   await fs.rm(duongDan(id), { force: true });
+  // Dọn cả nhãn. Bỏ sót thì id đã xoá vẫn nằm trong `nhan.json` mãi mãi, và
+  // một phiên MỚI tình cờ trùng id sẽ thừa hưởng cái ghim của người đã chết.
+  await suaNhan(id, { ten: undefined, ghim: false, luuTru: false });
 }
 
-/** Xoá phiên cũ nhất khi vượt trần. Lỗi ở đây KHÔNG được làm hỏng việc lưu. */
+/**
+ * NHÂN BẢN — chép một phiên thành phiên mới.
+ *
+ * Hai chỗ dùng:
+ *   • menu ⋮ trong thanh bên  → chép TRỌN việc
+ *   • "Tách nhánh từ đây" dưới một tin nhắn → chép tới TRƯỚC câu hỏi thứ `k`
+ *
+ * Khác `quayLui` ở đúng một điểm, và đó là cả lý do nó tồn tại: quay lui CẮT
+ * việc đang có, tách nhánh để nguyên việc cũ và mở một bản mới. Người dùng
+ * muốn thử hướng khác mà vẫn giữ được đường cũ để so.
+ *
+ * ⚠️ Bản sao KHÔNG thừa hưởng ghim/lưu trữ. Ghim là "cái này tôi hay quay
+ * lại", nói về đúng một việc cụ thể — sao chép nó sang bản mới chỉ làm đầu
+ * danh sách đầy những bản nhánh người dùng chưa từng ghim.
+ */
+export async function nhanBanPhien(
+  id: string,
+  denCauHoi?: number,
+): Promise<{ id: string; tieuDe: string; cauHoi?: string } | null> {
+  const goc = await docPhien(id);
+  if (!goc) return null;
+
+  let hoiThoai = goc.hoiThoai;
+  let cauHoi: string | undefined;
+  if (typeof denCauHoi === 'number' && denCauHoi >= 1) {
+    // Định vị bằng THỨ TỰ CÂU HỎI, y như `quayLui` — bản hiển thị và bản giao
+    // thức không cùng độ dài nên chỉ số mảng không dịch được giữa hai bên.
+    const viTri: number[] = [];
+    goc.hoiThoai.forEach((m, i) => { if (m.role === 'user') viTri.push(i); });
+    const cat = viTri[denCauHoi - 1];
+    if (cat === undefined) return null;
+    hoiThoai = goc.hoiThoai.slice(0, cat);
+    const dau = goc.hoiThoai[cat]!;
+    cauHoi = Array.isArray(dau.content)
+      ? dau.content.filter((x) => x.type === 'text').map((x) => String(x.text ?? '')).join(' ')
+      : String(dau.content ?? '');
+  }
+
+  const moi = await taoPhienNhanh(hoiThoai, goc.duAn, goc.goc ?? null, goc.tieuDe);
+  return { ...moi, ...(cauHoi === undefined ? {} : { cauHoi }) };
+}
+
+/**
+ * Đặt tên cho bản nhánh.
+ *
+ * Tách thành hàm riêng vì nó có ĐÚNG một cái bẫy, và cái bẫy đó chỉ lộ ra khi
+ * chạy thật: tách nhánh của một bản nhánh cho ra "Việc A (nhánh) (nhánh)", rồi
+ * "(nhánh) (nhánh) (nhánh)". Đếm số thay vì chồng đuôi.
+ */
+export function tenNhanh(tenGocTho: string): string {
+  const goc = tenGocTho.trim() || 'Việc chưa đặt tên';
+  const m = /^(.*) \(nhánh(?: (\d+))?\)$/.exec(goc);
+  const ten = m
+    ? `${m[1]} (nhánh ${Number(m[2] ?? '1') + 1})`
+    : `${goc} (nhánh)`;
+  return ten.slice(0, MAX_TIEU_DE);
+}
+
+/**
+ * Ghi một phiên NHÁNH mới ra đĩa. CHỖ DUY NHẤT tạo bản nhánh.
+ *
+ * Hai đường dẫn tới đây: menu ⋮ trong thanh bên (chép từ FILE, qua
+ * `nhanBanPhien`) và nút "Tách nhánh từ đây" dưới một tin nhắn (chép từ hội
+ * thoại đang nằm trong BỘ NHỚ của main, qua `tachNhanhCuoc` ở loop.ts). Hai
+ * nguồn, nhưng chỉ một chỗ đặt tên và một chỗ ghi file — nếu không thì hai
+ * bản nhánh sinh ra từ hai đường sẽ khác nhau ở những chỗ không ai ngờ.
+ */
+export async function taoPhienNhanh(
+  hoiThoai: TinNhanLuu[],
+  duAn: string | null,
+  goc: string | null,
+  tenGocTho: string,
+): Promise<{ id: string; tieuDe: string }> {
+  const idMoi = `p${Date.now().toString(36)}${Math.floor(Math.random() * 1e4).toString(36)}`;
+  const tenMoi = tenNhanh(tenGocTho);
+  const noi: FilePhien = {
+    id: idMoi,
+    tieuDe: tenMoi,
+    duAn,
+    goc,
+    luucLuc: Date.now(),
+    soTinNhan: hoiThoai.length,
+    hoiThoai,
+  };
+
+  await fs.mkdir(thuMuc(), { recursive: true });
+  const dich = duongDan(idMoi);
+  const tam = `${dich}.tmp`;
+  await fs.writeFile(tam, JSON.stringify(noi), 'utf8');
+  await fs.rename(tam, dich);
+  // Đánh dấu ĐÃ ĐẶT TÊN để lời gọi "AI đặt tên" của lượt sau không thay mất
+  // chữ "(nhánh)" — thứ duy nhất phân biệt bản sao với bản gốc trong danh sách.
+  await suaNhan(idMoi, { ten: tenMoi });
+
+  return { id: idMoi, tieuDe: tenMoi };
+}
+
+/**
+ * Xoá phiên cũ nhất khi vượt trần. Lỗi ở đây KHÔNG được làm hỏng việc lưu.
+ *
+ * ⚠️ KHÔNG đụng tới phiên ĐÃ GHIM. Ghim nghĩa là "giữ cái này lại"; để bộ dọn
+ * xoá nó vì nó cũ là làm đúng ngược thứ người dùng vừa yêu cầu.
+ */
 async function donBot(): Promise<void> {
   try {
     const ds = await danhSachPhien();
-    for (const p of ds.slice(MAX_PHIEN)) await xoaPhien(p.id);
+    const boDuoc = ds.filter((p) => p.ghim !== true);
+    for (const p of boDuoc.slice(MAX_PHIEN)) await xoaPhien(p.id);
   } catch {
     /* dọn dẹp hỏng thì thôi — không đáng để mất một phiên vừa lưu */
   }

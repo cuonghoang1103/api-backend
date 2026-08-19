@@ -121,6 +121,16 @@ export const settingKeySchema = z.enum([
   /** Thanh bên trái của trang AI: đang gập, và rộng bao nhiêu px. */
   'aiThanhBenGap',
   'aiThanhBenRong',
+  /**
+   * Thanh bên của chế độ TRÒ CHUYỆN — khoá RIÊNG, không dùng chung với
+   * `aiThanhBen*` của chế độ Lập trình.
+   *
+   * Hai chế độ có nhu cầu bề rộng khác nhau (bên Lập trình tiêu đề dài hơn vì
+   * gom theo dự án), và quan trọng hơn: gập thanh bên ở chế độ này rồi sang
+   * chế độ kia thấy nó cũng gập theo là một thứ người dùng không hề yêu cầu.
+   */
+  'chatThanhBenGap',
+  'chatThanhBenRong',
   /** Bề rộng khung trình duyệt cạnh bảng ghi (px). Kéo được như thanh bên. */
   'aiKhungWebRong',
   /**
@@ -518,6 +528,33 @@ export const agentMoPhienSchema = z.object({
   cuocId: cuocIdSchema,
   id: z.string().min(1).max(64),
 });
+/** Đổi tên một việc đã lưu. Tên rỗng = bỏ tên tự đặt, về lại tên AI đặt. */
+export const agentDoiTenPhienSchema = z.object({
+  id: z.string().min(1).max(64),
+  ten: z.string().max(90),
+});
+export const agentCoPhienSchema = z.object({
+  id: z.string().min(1).max(64),
+  bat: z.boolean(),
+});
+/**
+ * Nhân bản một việc. `denCauHoi` = chép tới TRƯỚC câu hỏi thứ mấy (1 = câu
+ * đầu); vắng mặt = chép trọn việc.
+ */
+export const agentNhanBanPhienSchema = z.object({
+  id: z.string().min(1).max(64),
+  denCauHoi: z.number().int().min(1).max(999).optional(),
+});
+/**
+ * Tách nhánh hội thoại ĐANG MỞ của một tab.
+ *
+ * Khác `agent:nhanBanPhien` ở nguồn: cái kia chép từ FILE đã lưu, cái này chép
+ * từ hội thoại trong bộ nhớ main — nên nó có cả lượt vừa gõ mà chưa lưu.
+ */
+export const agentTachNhanhSchema = z.object({
+  cuocId: cuocIdSchema,
+  denCauHoi: z.number().int().min(1).max(999).optional(),
+});
 
 /** Một việc đã lưu. Nhãn duy nhất người dùng nhận ra nó là `tieuDe`. */
 export interface AgentPhien {
@@ -527,6 +564,10 @@ export interface AgentPhien {
   duAn: string | null;
   luucLuc: number;
   soTinNhan: number;
+  /** Ghim lên đầu danh sách. */
+  ghim?: boolean;
+  /** Đã cất khỏi danh sách thường. KHÔNG phải xoá — mở lại được bất cứ lúc nào. */
+  luuTru?: boolean;
 }
 
 /**
@@ -741,12 +782,26 @@ export const INVOKE_CHANNELS = {
   'agent:datCheDoNote': agentCheDoNoteSchema,
   'agent:datCheDoTrinhDuyet': agentCheDoTrinhDuyetSchema,
   'robot:datCo': z.object({ nac: z.number().int().min(0).max(3) }),
+  'robot:keoBatDau': z.object({}).optional(),
+  /* Độ lệch so với chỗ bấm xuống, đơn vị điểm ảnh CSS. Chặn hai đầu để một
+     renderer hỏng (hoặc một `NaN`) không quăng cửa sổ ra ngoài mọi màn hình,
+     chỗ người dùng không kéo lại được. */
+  'robot:keoToi': z.object({
+    dx: z.number().min(-20000).max(20000),
+    dy: z.number().min(-20000).max(20000),
+  }),
+  'robot:keoXong': z.object({}).optional(),
   'agent:datMucNoLuc': agentMucNoLucSchema,
   'agent:datModel': agentModelSchema,
   'agent:hoanTac': agentCuocSchema,
   'agent:dsPhien': null,
   'agent:moPhien': agentMoPhienSchema,
   'agent:xoaPhien': agentPhienSchema,
+  'agent:doiTenPhien': agentDoiTenPhienSchema,
+  'agent:ghimPhien': agentCoPhienSchema,
+  'agent:luuTruPhien': agentCoPhienSchema,
+  'agent:nhanBanPhien': agentNhanBanPhienSchema,
+  'agent:tachNhanhCuoc': agentTachNhanhSchema,
   'app:luuFile': luuFileSchema,
 
   'robot:doiKichThuoc': z.object({ rong: z.boolean() }),
@@ -1038,6 +1093,30 @@ export interface DesktopBridge {
      */
     moPhien(cuocId: string, id: string): Promise<{ muc: AgentMucKhoiPhuc[] } | null>;
     xoaPhien(id: string): Promise<void>;
+    /** Đổi tên việc đã lưu. Tên rỗng = bỏ tên tự đặt. */
+    doiTenPhien(id: string, ten: string): Promise<void>;
+    ghimPhien(id: string, bat: boolean): Promise<void>;
+    /** Cất đi / lấy lại. KHÔNG xoá gì cả. */
+    luuTruPhien(id: string, bat: boolean): Promise<void>;
+    /**
+     * Nhân bản việc thành một việc mới trên đĩa.
+     *
+     * `denCauHoi` = chép tới TRƯỚC câu hỏi thứ đó, và trả lại nguyên văn câu
+     * ấy để giao diện đặt vào ô soạn — đó là "tách nhánh từ đây". Vắng mặt =
+     * chép trọn việc.
+     */
+    nhanBanPhien(id: string, denCauHoi?: number): Promise<
+      { id: string; tieuDe: string; cauHoi?: string } | null
+    >;
+    /**
+     * Tách nhánh hội thoại ĐANG MỞ của tab `cuocId` thành một việc mới.
+     *
+     * `denCauHoi` = tách từ câu hỏi thứ đó (bản nhánh giữ mọi thứ TRƯỚC nó, và
+     * nguyên văn câu ấy trả về để đặt vào ô soạn). Vắng mặt = chép trọn.
+     */
+    tachNhanhCuoc(cuocId: string, denCauHoi?: number): Promise<
+      { id: string; tieuDe: string; cauHoi?: string } | null
+    >;
     /**
      * Các cuộc ĐANG MỞ trong main.
      *
@@ -1096,6 +1175,9 @@ export interface DesktopBridge {
     /** Đưa cửa sổ chính ra trước và điều hướng tới `duongDan`. */
     moChinh(duongDan: string): Promise<void>;
     datCo(nac: number): Promise<void>;
+    keoBatDau(): Promise<void>;
+    keoToi(dx: number, dy: number): Promise<void>;
+    keoXong(): Promise<void>;
     /** Hỏi nhanh một câu, trả về câu trả lời đã hoàn chỉnh (không chảy chữ). */
     hoi(chu: string): Promise<{ chu: string }>;
     /**

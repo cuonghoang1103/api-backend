@@ -2794,6 +2794,150 @@ select {
 .ct-tb-muc:hover .ct-tb-muc-xoa { opacity: 1; }
 .ct-tb-muc-xoa:hover { color: var(--ct-err); background: var(--ct-hover); }
 
+/* ── Ba nút dưới tin nhắn đã gửi ──
+   Ẩn cho tới khi rê vào bong bóng, giống cách Claude làm: hiện thường trực thì
+   mỗi câu hỏi kéo theo một hàng nút, và mắt phải lướt qua chúng để đọc mạch
+   hội thoại. Nhãn thời gian thì LUÔN hiện — nó là thông tin, không phải thao
+   tác. */
+.ct-tn-nut {
+  display: flex; align-items: center; gap: 2px;
+  margin-top: 5px;
+  opacity: 0;
+  transition: opacity var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-agent-nguoi:hover .ct-tn-nut,
+.ct-tn-nut:focus-within { opacity: 1; }
+.ct-tn-nut .ct-tn-luc { opacity: 1; }
+
+.ct-tn-nho {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 6px;
+  border: none; border-radius: 6px;
+  background: none; color: var(--ct-text-faint);
+  font: inherit; font-size: 10.5px;
+  cursor: pointer;
+}
+.ct-tn-nho:hover:not(:disabled) { background: var(--ct-hover); color: var(--ct-text); }
+.ct-tn-nho:disabled { opacity: 0.4; cursor: default; }
+
+.ct-tn-luc {
+  margin-left: auto;
+  padding-left: 8px;
+  font-size: 10.5px;
+  color: var(--ct-text-faint);
+  white-space: nowrap;
+}
+/* Nhãn thời gian phải đọc được cả khi hàng nút đang ẩn. Nó nằm TRONG hàng nút
+   (để bám mép phải cùng một dòng), nên phải tự kéo độ mờ của mình lên. */
+.ct-agent-nguoi .ct-tn-nut { opacity: 1; }
+.ct-agent-nguoi .ct-tn-nut .ct-tn-nho { opacity: 0; transition: opacity var(--ct-motion-fast) var(--ct-ease); }
+.ct-agent-nguoi:hover .ct-tn-nut .ct-tn-nho,
+.ct-tn-nut .ct-tn-nho:focus-visible { opacity: 1; }
+
+/* ⚠️ Bong bóng của NGƯỜI DÙNG có nền nhấn (tím), không phải nền trang. Dùng
+   `--ct-text-faint` ở đó cho ra chữ xám nhạt trên tím — đọc được về mặt kỹ
+   thuật, nhưng phải nheo mắt. Đo bằng ảnh chụp thật, không đoán từ mã: trong
+   ảnh 19/08 ba nút gần như chìm hẳn.
+
+   Thừa kế màu chữ của chính bong bóng rồi hạ độ đục — nền đổi màu kiểu gì thì
+   chữ vẫn giữ đúng tương phản với nó. */
+.ct-agent-nguoi .ct-tn-nho,
+.ct-agent-nguoi .ct-tn-luc { color: inherit; }
+.ct-agent-nguoi .ct-tn-nho { opacity: 0; }
+.ct-agent-nguoi:hover .ct-tn-nut .ct-tn-nho { opacity: 0.75; }
+.ct-agent-nguoi .ct-tn-nut .ct-tn-nho:hover:not(:disabled) {
+  opacity: 1;
+  background: rgb(255 255 255 / 18%);
+  color: inherit;
+}
+.ct-agent-nguoi .ct-tn-luc { opacity: 0.65; }
+
+/* ── Menu ⋮ của một hàng ──
+   Nút ẩn cho tới khi rê vào hàng, giống nút xoá bên trên. Menu thì vẽ ra
+   `document.body` bằng portal (xem MenuChamDoc.tsx) nên nó KHÔNG nằm trong
+   `.ct-tb-ds` và không bị khung cuộn cắt. */
+.ct-cham-nut {
+  opacity: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; flex-shrink: 0;
+  border: none; border-radius: 6px;
+  background: none; color: var(--ct-text-faint);
+  cursor: pointer;
+  transition: opacity var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-tb-muc:hover .ct-cham-nut,
+.ct-lichsu-muc:hover .ct-cham-nut,
+.ct-cham-nut[data-mo='true'] { opacity: 1; }
+.ct-cham-nut:hover, .ct-cham-nut[data-mo='true'] { background: var(--ct-hover); color: var(--ct-text); }
+
+.ct-cham-menu {
+  position: fixed;
+  z-index: 900;
+  padding: 5px;
+  border: 1px solid var(--ct-border); border-radius: 10px;
+  background: var(--ct-surface);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 28%);
+  display: flex; flex-direction: column; gap: 1px;
+}
+.ct-cham-muc {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; padding: 6px 9px;
+  border: none; border-radius: 7px;
+  background: none; color: var(--ct-text-muted);
+  font: inherit; font-size: 12.5px; text-align: left;
+  cursor: pointer;
+}
+.ct-cham-muc:hover { background: var(--ct-hover); color: var(--ct-text); }
+.ct-cham-muc[data-nguyhiem='true'] { color: var(--ct-err); }
+.ct-cham-muc[data-vach='true'] { margin-top: 5px; border-top: 1px solid var(--ct-border); padding-top: 9px; }
+
+/* Ô đổi tên tại chỗ. Thay hẳn nhãn trong hàng chứ không mở hộp thoại: đổi tên
+   là việc gõ vài chữ, mà một hộp thoại toàn màn hình cho việc đó thì mỗi lần
+   đổi tên là một lần mất dấu chỗ mình đang đọc. */
+.ct-tb-doiten {
+  flex: 1; min-width: 0;
+  padding: 4px 7px;
+  border: 1px solid var(--ct-accent); border-radius: 7px;
+  background: var(--ct-surface-2); color: var(--ct-text);
+  font: inherit; font-size: 12.5px;
+  outline: none;
+}
+
+/* Hàng đã ghim: một cái đinh nhỏ trước tiêu đề. */
+.ct-tb-ghim { flex-shrink: 0; color: var(--ct-accent); display: inline-flex; }
+
+/* Chế độ Trò chuyện: thanh bên + khung chat nằm cạnh nhau.
+   `min-width: 0` trên khung chat là bắt buộc — thiếu nó thì một tin nhắn dài
+   không xuống dòng sẽ đẩy cả thanh bên ra khỏi cửa sổ. */
+.ct-chat-doi { display: flex; flex: 1; min-height: 0; min-width: 0; }
+.ct-chat-doi > .ct-agent { min-width: 0; }
+
+/* Dòng phụ dưới tiêu đề cuộc trong thanh bên chat (số tin · thời gian). Có nó
+   thì hàng phải xếp CỘT, khác với hàng một dòng của thanh bên AI Code. */
+.ct-tb-muc-phu {
+  display: block;
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: var(--ct-text-faint);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ct-tb-muc[data-dangmo='true'] > .ct-tb-muc-mo {
+  background: var(--ct-hover);
+  color: var(--ct-text);
+}
+
+/* Lối vào kho lưu trữ, neo ở chân thanh bên. */
+.ct-tb-kho {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-top: 6px; padding: 6px 8px; flex-shrink: 0;
+  border: 1px solid var(--ct-border); border-radius: 8px;
+  background: none; color: var(--ct-text-faint);
+  font: inherit; font-size: 11.5px;
+  cursor: pointer;
+}
+.ct-tb-kho:hover { background: var(--ct-hover); color: var(--ct-text); }
+.ct-tb-kho[data-dang='true'] { border-color: var(--ct-accent); color: var(--ct-text); }
+
 /* ── Tay nắm kéo ──
    Bản đầu vẽ một VẠCH chạy suốt chiều cao khi rê vào, và vùng bắt lấn 4px
    sang nội dung. Người dùng đối chiếu với Claude Code và nói đúng: nó phải

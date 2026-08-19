@@ -594,17 +594,26 @@ export class AIService {
    *   '<id>'     → chỉ trong thư mục đó
    * Gộp `undefined` với "chưa phân loại" là mất đường xem toàn bộ.
    */
-  async getSessions(userId?: number, folderId?: string) {
+  async getSessions(userId?: number, folderId?: string, luuTru = false) {
     const loc = folderId === 'none' ? { folderId: null }
       : folderId ? { folderId }
       : {};
+    /*
+     * Lưu trữ là bộ lọc LOẠI TRỪ ở danh sách thường, và bộ lọc CHỈ-LẤY ở màn
+     * lưu trữ. Không có nhánh thứ ba "xem tất cả": trộn hai loại lại thì cất
+     * một cuộc đi xong vẫn thấy nó nằm đó, tức là nút Lưu trữ không làm gì cả
+     * dưới mắt người dùng.
+     */
+    const theoLuuTru = luuTru ? { archivedAt: { not: null } } : { archivedAt: null };
     return prisma.chatSession.findMany({
-      where: userId ? { userId, ...loc } : undefined,
+      where: userId ? { userId, ...loc, ...theoLuuTru } : undefined,
       include: {
         _count: { select: { messages: true } },
         folder: { select: { id: true, ten: true, mau: true } },
       },
-      orderBy: { updatedAt: 'desc' },
+      // Ghim lên đầu, rồi mới tới mới-nhất-trước. Ghim mà vẫn sắp theo thời
+      // gian thì cái ghim không nhìn thấy được — đúng thứ nó sinh ra để tránh.
+      orderBy: [{ pinned: 'desc' }, { updatedAt: 'desc' }],
       take: 100,
     });
   }

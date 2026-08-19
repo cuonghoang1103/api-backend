@@ -120,6 +120,26 @@ export function ChatPage() {
     datPhienCanMo((cu) => ({ id, lan: (cu?.lan ?? 0) + 1 }));
   };
 
+  /**
+   * Mở một việc VỪA TÁCH NHÁNH vào TAB MỚI.
+   *
+   * Khác `moPhienVaoTab` (bấm từ thanh bên → mở vào tab đang xem) ở đúng chỗ
+   * đó, và có lý do: bấm lịch sử là muốn ĐỌC LẠI, còn tách nhánh là muốn có
+   * hai đường song song để so. Đè bản nhánh lên tab đang mở thì nó thành quay
+   * lui, chỉ tốn thêm một file.
+   */
+  const moPhienVaoTabMoi = (id: string): void => {
+    void window.cuongthai?.agent.taoCuoc().then((tabId) => {
+      if (!tabId) return;
+      datTabs((t) => [...t, tabId]);
+      datTabMo(tabId);
+      // Đặt SAU khi đổi tab: `phienCanMo` chỉ được truyền xuống tab đang mở
+      // (xem chỗ dựng `AgentMode` bên dưới), nên đặt trước thì nó rơi vào tab
+      // cũ và bản nhánh đè lên đúng việc ta vừa cố giữ nguyên.
+      datPhienCanMo((cu) => ({ id, lan: (cu?.lan ?? 0) + 1 }));
+    });
+  };
+
   const themTab = (): void => {
     void window.cuongthai?.agent.taoCuoc().then((id) => {
       if (!id) return;
@@ -295,6 +315,7 @@ export function ChatPage() {
                       datTieuDe={(t) => datTenTab((cu) => (cu[id] === t ? cu : { ...cu, [id]: t }))}
                       datDuAn={(d) => datDuAnTab((cu) => (cu[id] === d ? cu : { ...cu, [id]: d }))}
                       {...(id === tabMo && phienCanMo ? { phienCanMo } : {})}
+                      onTachRaTabMoi={moPhienVaoTabMoi}
                     />
                   </div>
                 ))}

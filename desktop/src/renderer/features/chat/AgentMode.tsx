@@ -29,6 +29,7 @@ import type { AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktr
 import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
+import { NutTinNhan } from './NutTinNhan';
 import { XinPhep, XinPhepGit, XinPhepLenh, XinPhepMcp, XinPhepNote } from './XinPhep';
 
 export function AgentMode({
@@ -38,6 +39,7 @@ export function AgentMode({
   datTieuDe,
   datDuAn,
   phienCanMo,
+  onTachRaTabMoi,
 }: {
   /** Cuộc (tab) mà màn hình này thuộc về. Mọi lời gọi IPC mang id này. */
   cuocId: string;
@@ -54,9 +56,17 @@ export function AgentMode({
    * mở phải mở lại được.
    */
   phienCanMo?: { id: string; lan: number };
+  /**
+   * Mở một việc vừa tách nhánh ra TAB MỚI.
+   *
+   * Phải là tab mới chứ không phải tab này: cả điểm của tách nhánh là giữ
+   * được đường cũ để so: đè bản nhánh lên chính tab đang mở thì nó thành
+   * quay lui, chỉ khác là tốn thêm một file trên đĩa.
+   */
+  onTachRaTabMoi?: (phienId: string) => void;
 }) {
   const {
-    trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac, quayLui,
+    trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac, quayLui, tachNhanh,
     phien, phienDangMo, moPhien, xoaPhien,
   } = useAgent(cuocId, info);
   const { settings, setSetting } = useAppState();
@@ -549,13 +559,17 @@ export function AgentMode({
             const thuTu = trangThai.muc.slice(0, i + 1).filter((x) => x.kieu === 'nguoi').length;
             return (
               <div key={i} className="ct-agent-nguoi">
-                <button
-                  type="button"
-                  className="ct-quaylui"
-                  disabled={trangThai.dangChay}
-                  title={'Quay lui về đây — bỏ câu này và MỌI thứ sau nó khỏi hội thoại, '
-                    + 'rồi đặt lại câu hỏi vào ô soạn để bạn sửa. KHÔNG hoàn tác file đã ghi.'}
-                  onClick={() => {
+                {m.anh?.length ? (
+                  <div className="ct-anh-goi">
+                    {m.anh.map((a, k) => <img key={k} src={a} alt={`ảnh ${k + 1}`} />)}
+                  </div>
+                ) : null}
+                {m.text}
+                <NutTinNhan
+                  text={m.text}
+                  {...(m.luc === undefined ? {} : { luc: m.luc })}
+                  khoa={trangThai.dangChay}
+                  onQuayLui={() => {
                     void quayLui(thuTu).then((r) => {
                       if (!r) return;
                       datNhap(r.cauHoi);
@@ -565,16 +579,17 @@ export function AgentMode({
                         : null);
                     });
                   }}
-                >
-                  <Undo2 size={11} aria-hidden />
-                  Quay lui
-                </button>
-                {m.anh?.length ? (
-                  <div className="ct-anh-goi">
-                    {m.anh.map((a, k) => <img key={k} src={a} alt={`ảnh ${k + 1}`} />)}
-                  </div>
-                ) : null}
-                {m.text}
+                  /* Chỉ hiện nút tách nhánh khi cha CÓ chỗ để mở tab mới. Hiện
+                     nó ở nơi không mở được thì bấm xong sinh ra một file trên
+                     đĩa và không có gì trên màn hình — kiểu hỏng tệ nhất. */
+                  {...(onTachRaTabMoi
+                    ? {
+                      onTachNhanh: () => {
+                        void tachNhanh(thuTu).then((r) => { if (r) onTachRaTabMoi(r.id); });
+                      },
+                    }
+                    : {})}
+                />
               </div>
             );
           }

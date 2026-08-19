@@ -29,12 +29,15 @@ import { getSettings, setSetting } from '../store';
 import {
   bangGhiCua, chayLuot, cuocDangChay, datGocChoCuoc, datQuyenChoCuoc, dongCuoc, dsCuocDangMo,
   daChonGocCua, datGocNeuChuaCo, gocCuaCuoc, huyLuotCua, napPhien, quayLui, quyenCuaCuoc, soCuaCuoc,
-  taoCuoc,
+  tachNhanhCuoc, taoCuoc,
   xoaHoiThoai, type SuKienAgent,
 } from '../agent/loop';
 import { duongDanCauHinh, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
 import { dsWorktree, taoWorktree, xoaWorktree } from '../agent/worktree';
-import { danhSachPhien, docPhien, dungLaiHienThi, xoaPhien } from '../agent/phien';
+import {
+  danhSachPhien, datGhimPhien, datLuuTruPhien, docPhien, doiTenPhien, dungLaiHienThi,
+  nhanBanPhien, xoaPhien,
+} from '../agent/phien';
 import { hoanTacTatCa } from '../agent/tools';
 import { traLoi } from '../agent/xinPhep';
 import { readStoredSession } from './auth';
@@ -371,6 +374,15 @@ export function registerAgentHandlers(): void {
     napPhien(cuocId, p.id, p.hoiThoai, p.duAn, p.goc ?? null);
     return { muc: dungLaiHienThi(p.hoiThoai) };
   });
+
+  handle('agent:doiTenPhien', ({ id, ten }) => doiTenPhien(id, ten));
+  handle('agent:ghimPhien', ({ id, bat }) => datGhimPhien(id, bat));
+  handle('agent:luuTruPhien', ({ id, bat }) => datLuuTruPhien(id, bat));
+  /* Chỉ TẠO file bản sao. Mở nó vào tab nào là việc của renderer — main không
+     biết người dùng đang nhìn tab nào, và đoán sai thì bản nhánh đè lên việc
+     họ đang chạy dở ở tab khác. */
+  handle('agent:nhanBanPhien', ({ id, denCauHoi }) => nhanBanPhien(id, denCauHoi));
+  handle('agent:tachNhanhCuoc', ({ cuocId, denCauHoi }) => tachNhanhCuoc(cuocId, denCauHoi));
 
   handle('agent:xoaPhien', async ({ id }) => {
     // Xoá phiên ⇒ đóng luôn cuộc nếu nó đang mở, nếu không agent vẫn nhớ một

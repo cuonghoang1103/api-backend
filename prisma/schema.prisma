@@ -1954,13 +1954,24 @@ model ChatFolder {
 }
 
 model ChatSession {
-  id        String   @id @default(cuid())
-  userId    Int?     @map("user_id")
-  title     String?  @db.VarChar(255)
+  id         String    @id @default(cuid())
+  userId     Int?      @map("user_id")
+  title      String?   @db.VarChar(255)
   /// Thư mục chứa cuộc này. `null` = chưa xếp vào đâu ("Chưa phân loại").
-  folderId  String?  @map("folder_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  folderId   String?   @map("folder_id")
+  /// Ghim lên đầu danh sách.
+  ///
+  /// Ghim là ý của NGƯỜI DÙNG, không suy ra được từ nội dung: cuộc họ quay lại
+  /// mỗi ngày có thể là cuộc cũ nhất, và sắp theo `updatedAt` đẩy nó xuống đáy.
+  pinned     Boolean   @default(false)
+  /// Lưu trữ = CẤT ĐI, không phải xoá. `null` = đang hiện trong danh sách.
+  ///
+  /// Tách hẳn khỏi xoá vì hai việc khác nhau: người dùng lưu trữ khi việc đã
+  /// xong mà vẫn muốn tra lại được, xoá khi họ muốn nó biến mất. Gộp làm một
+  /// thì lần nào cũng phải chọn giữa "màn hình bừa" và "mất hội thoại".
+  archivedAt DateTime? @map("archived_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
 
   user      User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
   /// Xoá thư mục KHÔNG xoá cuộc — chúng rơi về "Chưa phân loại". Xoá theo là
@@ -1972,6 +1983,8 @@ model ChatSession {
 
   @@index([userId], name: "idx_chat_sessions_user")
   @@index([folderId], name: "idx_chat_sessions_folder")
+  /// Danh sách mặc định = lọc "chưa lưu trữ" rồi sắp ghim lên đầu.
+  @@index([userId, archivedAt, pinned], name: "idx_chat_sessions_user_archived")
   @@index([createdAt(sort: Desc)], name: "idx_chat_sessions_created_at")
   @@map("chat_sessions")
 }

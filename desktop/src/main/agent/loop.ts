@@ -26,7 +26,10 @@ import { API_ORIGIN } from '../config';
 import { readStoredSession } from '../ipc/auth';
 import type { KetQuaDiff } from './diff';
 import { docGhiChuDuAn } from './ghiChu';
-import { datTokenChoDatTen, dungLaiHienThi, luuPhien, type MucKhoiPhuc, type TinNhanLuu } from './phien';
+import {
+  datTokenChoDatTen, docPhien, dungLaiHienThi, luuPhien, taoPhienNhanh,
+  type MucKhoiPhuc, type TinNhanLuu,
+} from './phien';
 import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua } from './tools';
 import { taoSoCuoc, type SoCuoc } from './so';
@@ -502,6 +505,58 @@ export function quayLui(cuocId: string, k: number): KetQuaQuayLui {
 
   c.hoiThoai = c.hoiThoai.slice(0, cat);
   return { ok: true, cauHoi, coSuaFile };
+}
+
+/**
+ * TÁCH NHÁNH — chép hội thoại ĐANG MỞ thành một việc mới.
+ *
+ * Anh em với `quayLui`, khác đúng một điều và đó là cả lý do nó tồn tại:
+ * quay lui CẮT việc đang làm, tách nhánh để nguyên việc cũ. Người dùng thử một
+ * hướng khác mà vẫn giữ đường cũ để so — chứ không phải chọn một trong hai.
+ *
+ * ⚠️ Đọc hội thoại từ BỘ NHỚ của main, không từ file phiên. File chỉ được ghi
+ * ở `finally` của mỗi lượt, nên tách nhánh ngay sau khi gõ mà chưa chạy xong
+ * lượt nào sẽ chép phải bản CŨ trên đĩa — thiếu đúng đoạn người dùng vừa nhìn
+ * thấy trên màn hình.
+ */
+export async function tachNhanhCuoc(
+  cuocId: string,
+  denCauHoi?: number,
+): Promise<{ id: string; tieuDe: string; cauHoi?: string } | null> {
+  const c = layCuoc(cuocId);
+
+  let hoiThoai = c.hoiThoai as TinNhanLuu[];
+  let cauHoi: string | undefined;
+  if (typeof denCauHoi === 'number' && denCauHoi >= 1) {
+    // Định vị bằng THỨ TỰ CÂU HỎI, y như `quayLui` — xem chú thích ở đó.
+    const viTri: number[] = [];
+    hoiThoai.forEach((m, i) => { if (m.role === 'user') viTri.push(i); });
+    const cat = viTri[denCauHoi - 1];
+    if (cat === undefined) return null;
+    const dau = hoiThoai[cat]!;
+    cauHoi = Array.isArray(dau.content)
+      ? dau.content.filter((x) => x.type === 'text').map((x) => String(x.text ?? '')).join(' ')
+      : String(dau.content ?? '');
+    hoiThoai = hoiThoai.slice(0, cat);
+  }
+
+  /*
+   * Tên gốc: ưu tiên tên đang HIỆN trong danh sách (người dùng tự đặt, hoặc AI
+   * đặt), rơi về câu hỏi đầu nếu phiên chưa từng được lưu.
+   *
+   * Bản đầu chỉ dùng câu hỏi đầu, và đo thật thì thấy ngay: việc đã đổi tên
+   * thành "Việc tôi tự đặt tên" lại đẻ ra bản nhánh mang tên
+   * "câu hỏi một của Thử pgvector (nhánh)" — hai dòng cạnh nhau trong cùng một
+   * danh sách mà không nhìn ra là cùng một việc.
+   */
+  const daLuu = await docPhien(c.phienId);
+  const dauTien = hoiThoai.find((m) => m.role === 'user');
+  const tenTho = (Array.isArray(dauTien?.content)
+    ? dauTien.content.filter((k) => k?.type === 'text').map((k) => String(k.text ?? '')).join(' ')
+    : String(dauTien?.content ?? '')).trim().replace(/\s+/g, ' ');
+
+  const moi = await taoPhienNhanh(hoiThoai, c.duAn, c.goc, daLuu?.tieuDe?.trim() || tenTho);
+  return { ...moi, ...(cauHoi === undefined ? {} : { cauHoi }) };
 }
 
 /** Người dùng bấm dừng ở một cuộc cụ thể. */

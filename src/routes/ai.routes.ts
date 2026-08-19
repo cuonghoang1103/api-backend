@@ -566,7 +566,11 @@ router.post('/chat/sync', optionalAuth, async (req: any, res: Response<ApiRespon
 router.get('/chat/sessions', optionalAuth, async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const folderId = typeof req.query.folderId === 'string' ? req.query.folderId : undefined;
-    const sessions = await aiService.getSessions(req.userId, folderId);
+    // `?archived=1` mở màn lưu trữ. Mặc định (thiếu tham số) là danh sách
+    // thường — app cũ đang cài trên máy người dùng không gửi cờ này, và nó
+    // phải tiếp tục thấy đúng thứ nó vẫn thấy.
+    const luuTru = req.query.archived === '1' || req.query.archived === 'true';
+    const sessions = await aiService.getSessions(req.userId, folderId, luuTru);
     res.json({ success: true, data: sessions });
   } catch (error) {
     next(error);
@@ -657,6 +661,165 @@ router.patch('/chat/sessions/:sessionId/folder', authenticate, async (req: any, 
     }
     const moi = await prisma.chatSession.update({ where: { id: sessionId }, data: { folderId } });
     res.json({ success: true, data: moi });
+  } catch (error) { next(error); }
+});
+
+/**
+ * ĐỔI TÊN · GHIM · LƯU TRỮ — một route cho cả ba.
+ *
+ * Ba thao tác này đều là "sửa một cột của chính cuộc đó", nên gộp vào một
+ * PATCH thay vì ba đường riêng. Mỗi trường VẮNG MẶT nghĩa là không đụng tới —
+ * gửi `{ pinned: true }` không được phép xoá mất tiêu đề.
+ *
+ * ⚠️ `title: null` và `title` vắng mặt là HAI ý khác nhau, nên phải phân biệt
+ * bằng `in` chứ không bằng `?? undefined`. Bản đầu tôi viết `?? undefined` và
+ * nó biến "xoá tên đi" thành "không làm gì" — im lặng, không lỗi.
+ */
+router.patch('/chat/sessions/:sessionId', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { sessionId } = req.params;
+    const than = (req.body ?? {}) as { title?: unknown; pinned?: unknown; archived?: unknown };
+
+    const phien = await prisma.chatSession.findFirst({
+      where: { id: sessionId, userId: req.userId },
+      select: { id: true },
+    });
+    if (!phien) throw new AppError('Không tìm thấy cuộc trò chuyện', 404, 'NOT_FOUND');
+
+    const dl: { title?: string | null; pinned?: boolean; archivedAt?: Date | null } = {};
+    if ('title' in than) {
+      const t = typeof than.title === 'string' ? than.title.trim().slice(0, 255) : '';
+      // Tên rỗng ⇒ trả về `null` để máy chủ hiện lại tên mặc định, thay vì lưu
+      // một chuỗi trắng làm cả danh sách có một dòng không nhãn.
+      dl.title = t || null;
+    }
+    if (typeof than.pinned === 'boolean') dl.pinned = than.pinned;
+    if (typeof than.archived === 'boolean') dl.archivedAt = than.archived ? new Date() : null;
+
+    if (Object.keys(dl).length === 0) {
+      throw new AppError('Không có gì để đổi', 400, 'NOTHING_TO_UPDATE');
+    }
+
+    const moi = await prisma.chatSession.update({ where: { id: sessionId }, data: dl });
+    res.json({ success: true, data: moi });
+  } catch (error) { next(error); }
+});
+
+/**
+ * QUAY LUI — bỏ tin nhắn từ một chỗ trở đi.
+ *
+ * Bản web/app gửi ngữ cảnh bằng mảng `history` của CHÍNH nó, nên cắt ở màn
+ * hình là đủ để model quên. Nhưng máy chủ vẫn giữ nguyên phần đuôi, và mở lại
+ * cuộc đó ngày mai thì đoạn tưởng đã bỏ hiện lại nguyên vẹn — người dùng thấy
+ * nút quay lui "không ăn", chỉ là chậm một ngày.
+ *
+ * ⚠️ Đây là XOÁ THẬT, không có đường lùi. Chấp nhận được vì đúng là thứ người
+ * dùng vừa yêu cầu ("bỏ từ đây trở đi"), nhưng cũng chính vì thế mà nút "Tách
+ * nhánh" phải nằm ngay bên cạnh: ai muốn giữ lại đường cũ thì bấm cái kia.
+ */
+router.post('/chat/sessions/:sessionId/cat', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { sessionId } = req.params;
+    const raw = (req.body as { tuChiSo?: unknown })?.tuChiSo;
+    const tuChiSo = typeof raw === 'number' && Number.isInteger(raw) && raw >= 0 ? raw : null;
+    if (tuChiSo === null) throw new AppError('Thiếu vị trí cắt', 400, 'BAD_INDEX');
+
+    const phien = await prisma.chatSession.findFirst({
+      where: { id: sessionId, userId: req.userId },
+      select: { id: true },
+    });
+    if (!phien) throw new AppError('Không tìm thấy cuộc trò chuyện', 404, 'NOT_FOUND');
+
+    const tin = await prisma.chatMessage.findMany({
+      where: { sessionId },
+      orderBy: { createdAt: 'asc' },
+      select: { id: true },
+    });
+    const boDi = tin.slice(tuChiSo).map((m) => m.id);
+    if (boDi.length === 0) { res.json({ success: true, data: { daXoa: 0 } }); return; }
+
+    const r = await prisma.chatMessage.deleteMany({ where: { id: { in: boDi } } });
+    res.json({ success: true, data: { daXoa: r.count } });
+  } catch (error) { next(error); }
+});
+
+/**
+ * TÁCH NHÁNH — nhân bản một cuộc thành cuộc mới.
+ *
+ * Hai chỗ dùng, cùng một đường:
+ *   • menu ⋮ trong thanh bên  → chép TRỌN cuộc
+ *   • nút "Tách nhánh từ đây" dưới một tin nhắn → chép tới ĐÚNG tin đó
+ *
+ * Vì sao cần: người dùng muốn thử một hướng khác mà KHÔNG mất mạch cũ. Gõ
+ * thêm "quên phần trên đi" thì phần trên vẫn nằm trong ngữ cảnh và vẫn kéo
+ * model về hướng cũ — đó chính là lý do quay lui tồn tại. Tách nhánh là bản
+ * KHÔNG PHÁ: cuộc gốc còn nguyên.
+ *
+ * ⚠️ Chép `createdAt` của từng tin. Để Prisma tự đặt `now()` thì mọi tin
+ * trong bản sao mang cùng một mốc thời gian, và `orderBy: createdAt` sau đó
+ * trả về thứ tự tuỳ hứng — hội thoại xáo trộn câu hỏi với câu trả lời.
+ */
+router.post('/chat/sessions/:sessionId/fork', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { sessionId } = req.params;
+    /*
+     * `denChiSo` = chép ĐÚNG ngần này tin đầu tiên, tức mọi thứ TRƯỚC tin thứ
+     * `denChiSo` (đếm từ 0). Vắng mặt = chép trọn cuộc.
+     *
+     * Vì sao đếm bằng CHỈ SỐ chứ không bằng id tin: lượt vừa gửi xong chưa
+     * được nạp lại từ máy chủ nên client chưa biết id của nó, mà "tách nhánh
+     * từ đây" phải bấm được ngay trên tin vừa gửi. Chỉ số thì client luôn có.
+     */
+    const raw = (req.body as { denChiSo?: unknown })?.denChiSo;
+    const denChiSo = typeof raw === 'number' && Number.isInteger(raw) && raw >= 0 ? raw : null;
+
+    const goc = await prisma.chatSession.findFirst({
+      where: { id: sessionId, userId: req.userId },
+      select: { id: true, title: true, folderId: true },
+    });
+    if (!goc) throw new AppError('Không tìm thấy cuộc trò chuyện', 404, 'NOT_FOUND');
+
+    const tin = denChiSo === 0 ? [] : await prisma.chatMessage.findMany({
+      where: { sessionId },
+      orderBy: { createdAt: 'asc' },
+      take: denChiSo === null ? 500 : Math.min(denChiSo, 500),
+    });
+
+    const idMoi = `sess_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+    /*
+     * Tách nhánh CỦA một bản nhánh phải ĐẾM SỐ, không chồng đuôi — nếu không
+     * thì sau ba lần là "A (nhánh) (nhánh) (nhánh)". Cùng luật với bản desktop
+     * (`tenNhanh` trong `desktop/src/main/agent/phien.ts`); hai bên lệch nhau
+     * thì cùng một thao tác cho ra hai cái tên khác nhau tuỳ chỗ bấm.
+     */
+    const tenCu = goc.title?.trim() || 'Cuộc trò chuyện';
+    const mNhanh = /^(.*) \(nhánh(?: (\d+))?\)$/.exec(tenCu);
+    const tenGoc = mNhanh ? `${mNhanh[1]} (nhánh ${Number(mNhanh[2] ?? '1') + 1})` : `${tenCu} (nhánh)`;
+    await prisma.$transaction(async (tx) => {
+      await tx.chatSession.create({
+        data: {
+          id: idMoi,
+          userId: req.userId,
+          // Nhãn nói rõ đây là bản tách — hai dòng trùng tên trong danh sách
+          // thì người dùng mở nhầm và tưởng bản sao không được tạo.
+          title: tenGoc.slice(0, 255),
+          folderId: goc.folderId,
+        },
+      });
+      if (tin.length > 0) {
+        await tx.chatMessage.createMany({
+          data: tin.map((m) => ({
+            sessionId: idMoi,
+            role: m.role,
+            content: m.content,
+            tokenCount: m.tokenCount,
+            createdAt: m.createdAt,
+          })),
+        });
+      }
+    });
+
+    res.status(201).json({ success: true, data: { sessionId: idMoi, soTin: tin.length } });
   } catch (error) { next(error); }
 });
 

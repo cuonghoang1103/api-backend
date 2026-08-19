@@ -21,7 +21,15 @@ import type { TheXinPhep } from './XinPhep';
 
 /** Một mục trên màn hình. Không phải một tin nhắn giao thức. */
 export type MucHienThi =
-  | { kieu: 'nguoi'; text: string; anh?: string[] }
+  /**
+   * `luc` = lúc GỬI, theo đồng hồ máy người dùng.
+   *
+   * Chỉ có ở lượt gõ trong phiên này. Việc mở lại từ đĩa KHÔNG có mốc thời
+   * gian của từng tin — file phiên lưu bản giao thức để gửi cho cổng, và nhét
+   * thêm trường lạ vào đó là gửi một trường lạ lên API. Thà không hiện gì còn
+   * hơn hiện một con số bịa ra từ mốc lưu của cả phiên.
+   */
+  | { kieu: 'nguoi'; text: string; anh?: string[]; luc?: number }
   | { kieu: 'may'; text: string }
   | { kieu: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
   /**
@@ -344,6 +352,38 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     await napPhien();
   }, [phienDangMo, napPhien]);
 
+  /**
+   * TÁCH NHÁNH từ câu hỏi thứ `k` — bản KHÔNG PHÁ của quay lui.
+   *
+   * Quay lui cắt việc đang làm; tách nhánh để nguyên nó và mở một bản mới bên
+   * cạnh. Trả về id việc mới để màn hình mở nó ra — tạo mà không mở thì người
+   * dùng bấm xong không thấy gì xảy ra.
+   *
+   * ⚠️ Bắt lỗi tại đây, cùng lý do đã ghi ở `quayLui`: chỗ gọi dùng `void`, nên
+   * một promise bị từ chối biến mất không dấu vết và triệu chứng duy nhất là
+   * "bấm không ăn".
+   */
+  const tachNhanh = useCallback(async (k: number): Promise<
+    { id: string; tieuDe: string; cauHoi?: string } | null
+  > => {
+    try {
+      const r = await window.cuongthai?.agent.tachNhanhCuoc(cuocId, k);
+      if (!r) {
+        datMuc((truoc) => [...truoc, {
+          kieu: 'loi', ma: 'TACH_NHANH', text: 'Không tách nhánh được từ câu hỏi này.',
+        }]);
+        return null;
+      }
+      await napPhien();
+      return r;
+    } catch (err) {
+      datMuc((truoc) => [...truoc, {
+        kieu: 'loi', ma: 'TACH_NHANH', text: `Tách nhánh hỏng: ${(err as Error).message}`,
+      }]);
+      return null;
+    }
+  }, [cuocId, napPhien]);
+
   /** Chặn gửi hai lần khi người dùng bấm nhanh — React chưa kịp vẽ lại nút. */
   const dangGui = useRef(false);
 
@@ -352,7 +392,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     if (!cau || dangGui.current) return;
     dangGui.current = true;
 
-    datMuc((truoc) => [...truoc, { kieu: 'nguoi', text, ...(anh?.length ? { anh } : {}) }]);
+    datMuc((truoc) => [...truoc, { kieu: 'nguoi', text, luc: Date.now(), ...(anh?.length ? { anh } : {}) }]);
     datDangChay(true);
     datDangNghi(true);
     try {
@@ -423,6 +463,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     phien,
     phienDangMo,
     quayLui,
+    tachNhanh,
     moPhien,
     xoaPhien,
   };

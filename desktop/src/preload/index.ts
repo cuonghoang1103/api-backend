@@ -161,6 +161,23 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:moPhien', { cuocId, id }) as
         Promise<{ muc: AgentMucKhoiPhuc[] } | null>,
     xoaPhien: (id: string) => ipcRenderer.invoke('agent:xoaPhien', { id }) as Promise<void>,
+    doiTenPhien: (id: string, ten: string) =>
+      ipcRenderer.invoke('agent:doiTenPhien', { id, ten }) as Promise<void>,
+    ghimPhien: (id: string, bat: boolean) =>
+      ipcRenderer.invoke('agent:ghimPhien', { id, bat }) as Promise<void>,
+    luuTruPhien: (id: string, bat: boolean) =>
+      ipcRenderer.invoke('agent:luuTruPhien', { id, bat }) as Promise<void>,
+    /* `denCauHoi` vắng mặt phải KHÔNG xuất hiện trong gói tin: schema zod khai
+       nó `.optional()`, mà một `undefined` tường minh đi qua `structuredClone`
+       vẫn là một khoá có mặt — và đó là chỗ hai phía dễ lệch nhau nhất. */
+    nhanBanPhien: (id: string, denCauHoi?: number) =>
+      ipcRenderer.invoke('agent:nhanBanPhien', denCauHoi === undefined ? { id } : { id, denCauHoi }) as
+        Promise<{ id: string; tieuDe: string; cauHoi?: string } | null>,
+    tachNhanhCuoc: (cuocId: string, denCauHoi?: number) =>
+      ipcRenderer.invoke(
+        'agent:tachNhanhCuoc',
+        denCauHoi === undefined ? { cuocId } : { cuocId, denCauHoi },
+      ) as Promise<{ id: string; tieuDe: string; cauHoi?: string } | null>,
     dsWorktree: (cuocId: string) =>
       ipcRenderer.invoke('agent:dsWorktree', { cuocId }) as Promise<AgentWorktree[]>,
     taoWorktree: (cuocId: string, ten: string) =>
@@ -187,6 +204,9 @@ const bridge: DesktopBridge = {
     doiCo: (co: 'gon' | 'noi' | 'rong') =>
       ipcRenderer.invoke('robot:doiCo', { co }) as Promise<void>,
     datCo: (nac: number) => ipcRenderer.invoke('robot:datCo', { nac }) as Promise<void>,
+    keoBatDau: () => ipcRenderer.invoke('robot:keoBatDau') as Promise<void>,
+    keoToi: (dx: number, dy: number) => ipcRenderer.invoke('robot:keoToi', { dx, dy }) as Promise<void>,
+    keoXong: () => ipcRenderer.invoke('robot:keoXong') as Promise<void>,
     moChinh: (duongDan: string) =>
       ipcRenderer.invoke('robot:moChinh', { duongDan }) as Promise<void>,
     hoi: (chu: string) => ipcRenderer.invoke('robot:hoi', { chu }) as Promise<{ chu: string }>,

@@ -2656,10 +2656,18 @@ select {
  * KHÔNG co nhỏ hơn nội dung của nó và thanh cuộn trong không bao giờ xuất hiện.
  */
 
+/* ── Trang trợ lý AI: TRÀN VIỀN ──
+   Người dùng đối chiếu với Claude Code (ảnh 19/08/2026) và muốn khung rộng
+   như thế. Trước đó có BA lớp đệm chồng nhau — trang 20px + thẻ 26px + viền
+   bo — nên ở màn 1500px vẫn mất gần 100px mỗi bên cho thứ không chứa gì.
+
+   Thẻ có viền hợp lý ở những trang NHIỀU khối (Cài đặt, Hồ sơ): nó tách khối
+   này với khối kia. Ở đây chỉ có ĐÚNG MỘT khối chiếm trọn màn, nên cái viền
+   chỉ vẽ lại đúng biên cửa sổ — tốn chỗ mà không nói thêm gì. */
 .ct-page-full {
   max-width: none;
   height: 100%;
-  padding: 18px 20px;
+  padding: 0;
   display: flex;
   min-height: 0;
 }
@@ -2669,13 +2677,71 @@ select {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  padding: 16px 18px 12px;
+  /* Bỏ chrome của thẻ — xem ghi chú ở `.ct-page-full`. */
+  border: none;
+  border-radius: 0;
+  padding: 12px 20px 10px;
 }
 
+/* ── Nút gập đầu trang ── */
+.ct-page-head-gap {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; flex-shrink: 0;
+  margin-right: 8px;
+  border: none; border-radius: 7px;
+  background: none; color: var(--ct-text-faint);
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease),
+              transform var(--ct-motion) var(--ct-ease);
+}
+.ct-page-head-gap:hover { background: var(--ct-hover); color: var(--ct-text); }
+.ct-panel-full[data-gap-dau='true'] .ct-page-head-gap { transform: rotate(180deg); }
+
+.ct-page-head-chu { min-width: 0; flex: 1; }
+
+/* Gập: giấu CHỮ, giữ nguyên hàng nút chế độ — nếu giấu cả hàng đó thì không
+   còn đường sang Trò chuyện / Trình duyệt. */
+.ct-panel-full[data-gap-dau='true'] .ct-page-head-chu { display: none; }
+.ct-panel-full[data-gap-dau='true'] > .ct-page-head { margin-bottom: 4px; }
+
+/* ── Nút nhảy xuống cuối ──
+   Nổi trên bảng ghi, sát trên ô nhập. `position: absolute` trong `.ct-chedo`
+   (đã `position: relative`) chứ không `fixed`: `fixed` thì nó đứng nguyên
+   khi người dùng mở bảng chọn model, và che mất bảng đó. */
+.ct-agent-xuongday {
+  position: absolute;
+  left: 50%;
+  bottom: 118px;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
+  border: 1px solid var(--ct-border); border-radius: 50%;
+  background: var(--ct-surface); color: var(--ct-text-muted);
+  box-shadow: var(--ct-shadow);
+  cursor: pointer;
+  animation: ct-bt-vao 200ms var(--ct-spring);
+}
+.ct-agent-xuongday:hover { color: var(--ct-text); border-color: var(--ct-accent); }
+
+/* Chấm nhỏ khi agent ĐANG chạy: nói rằng ở dưới còn nội dung đang chảy về,
+   khác hẳn với "bạn chỉ đang cuộn lên xem lại". */
+.ct-agent-xuongday-cham {
+  position: absolute; top: 2px; right: 2px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ct-accent);
+  border: 2px solid var(--ct-surface);
+}
+
+/* Đầu trang gọn lại: tiêu đề + mô tả chiếm gần 70px chiều cao mà chỉ nói
+   một thứ người dùng đã biết (họ vừa bấm vào mục "AI Chat" ở thanh bên).
+   Chiều cao đó lấy thẳng từ chỗ đọc hội thoại. */
 .ct-panel-full > .ct-page-head {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   align-items: center;
 }
+.ct-panel-full > .ct-page-head h1 { font-size: 15px; }
+.ct-panel-full > .ct-page-head p { font-size: 11.5px; }
 
 /* Hai chế độ cùng nằm trong cây React; chỉ một cái hiện. Dùng `display` chứ
    không tháo component ra — tháo là mất hội thoại đang dở. */
@@ -2688,6 +2754,9 @@ select {
 .ct-chedo[data-hien='true'] {
   display: flex;
   flex-direction: column;
+  /* Mốc cho nút "xuống cuối" định vị theo. Không có dòng này thì nó neo vào
+     `<body>` và trôi sai chỗ ngay khi cửa sổ đổi cỡ. */
+  position: relative;
 }
 
 /* ── Nút chuyển chế độ ── */

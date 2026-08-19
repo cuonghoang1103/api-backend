@@ -111,6 +111,13 @@ export const settingKeySchema = z.enum([
   'odinGiongEn',
   /** Odin có ĐỌC THÀNH TIẾNG câu trả lời không. Tắt được, vì có lúc cần yên. */
   'odinNoiThanhTieng',
+  /**
+   * Gập khối tiêu đề của trang Trợ lý AI để lấy chỗ cho hội thoại.
+   *
+   * Nhớ xuống đĩa: gập rồi mà mở app lại thấy nó bung ra là người dùng phải
+   * gập lại mỗi ngày, và cái nút thành phiền hơn là tiện.
+   */
+  'aiGapDau',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 

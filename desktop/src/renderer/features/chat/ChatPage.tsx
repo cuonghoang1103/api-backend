@@ -12,7 +12,7 @@
  * bên cạnh. Nếu là route riêng thì họ bấm vào và gặp một trang chết.
  */
 import { useEffect, useRef, useState } from 'react';
-import { Bot, Globe, Loader2, Terminal } from 'lucide-react';
+import { Bot, ChevronUp, Globe, Loader2, Terminal } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { AgentMode } from './AgentMode';
 import { BrowserMode } from './BrowserMode';
@@ -129,11 +129,31 @@ export function ChatPage() {
    */
   const coRobot = settings.robotEnabled !== false;
 
+  /*
+   * GẬP ĐẦU TRANG.
+   *
+   * Người dùng đối chiếu với Claude Code và muốn khung rộng hơn. Tiêu đề +
+   * mô tả chiếm gần 70px chiều cao để nói một thứ họ đã biết — họ vừa bấm
+   * vào mục "AI Chat" ở thanh bên. Nhớ xuống đĩa: gập rồi mà mở app lại thấy
+   * nó bung ra là phải gập lại mỗi ngày.
+   */
+  const gapDau = settings.aiGapDau === true;
+  const doiGapDau = (): void => setSetting('aiGapDau', !gapDau);
+
   return (
     <div className="ct-page ct-page-full" data-chua-robot={coRobot}>
-      <div className="ct-panel ct-panel-full">
+      <div className="ct-panel ct-panel-full" data-gap-dau={gapDau}>
         <div className="ct-page-head">
-          <div>
+          <button
+            type="button"
+            className="ct-page-head-gap"
+            onClick={doiGapDau}
+            aria-expanded={!gapDau}
+            title={gapDau ? 'Hiện tiêu đề' : 'Ẩn tiêu đề cho rộng'}
+          >
+            <ChevronUp size={14} aria-hidden />
+          </button>
+          <div className="ct-page-head-chu">
             <h1>Trợ lý AI</h1>
             <p className="ct-muted" style={{ margin: 0 }}>
               {cheDo === 'chat'

@@ -15,7 +15,7 @@
  *     dòng chữ đầu tiên, vì model đang nghĩ xem gọi tool nào. Con quay phải
  *     bật NGAY, nếu không màn hình đứng im và người dùng tưởng app treo.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
@@ -75,6 +75,36 @@ export function AgentMode({
   // Báo tên dự án lên thanh tab mỗi khi nó đổi.
   useEffect(() => { datDuAn?.(thuMuc?.name ?? null); }, [thuMuc?.name, datDuAn]);
 
+  /*
+   * NÚT NHẢY XUỐNG CUỐI.
+   *
+   * Người dùng báo 19/08/2026: "đoạn chat dài tôi lướt thủ công bằng tay rất
+   * mỏi". Việc agent chạy hàng chục bước làm bảng ghi dài ra rất nhanh, và
+   * khi họ kéo lên xem lại một đoạn cũ thì tự-cuộn TẮT (cố ý — bị giật xuống
+   * giữa lúc đang đọc còn tệ hơn). Nên phải có đường quay lại.
+   *
+   * Nút chỉ hiện khi ĐANG Ở XA đáy. Hiện thường trực thì nó che chữ suốt cả
+   * những lúc chẳng cần tới.
+   */
+  const [xaDay, datXaDay] = useState(false);
+  const XA_DAY_PX = 240;
+
+  const xuongDay = useCallback((muot = true): void => {
+    const el = cuonRef.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: muot ? 'smooth' : 'auto' });
+  }, []);
+
+  useEffect(() => {
+    const el = cuonRef.current;
+    if (!el) return;
+    const theo = (): void => {
+      datXaDay(el.scrollHeight - el.scrollTop - el.clientHeight > XA_DAY_PX);
+    };
+    theo();
+    el.addEventListener('scroll', theo, { passive: true });
+    return () => el.removeEventListener('scroll', theo);
+  }, []);
+
   // Tự cuộn xuống đáy khi có nội dung mới. Chỉ khi người dùng ĐANG ở gần đáy:
   // kéo lên đọc lại một đoạn cũ rồi bị giật xuống là mất chỗ đang đọc.
   useEffect(() => {
@@ -82,6 +112,7 @@ export function AgentMode({
     if (!el) return;
     const ganDay = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
     if (ganDay) el.scrollTop = el.scrollHeight;
+    else datXaDay(true);
   }, [trangThai.muc, trangThai.dangNghi]);
 
   const chonThuMuc = async (): Promise<void> => {
@@ -570,6 +601,19 @@ export function AgentMode({
           />
         )}
       </div>
+
+      {xaDay && (
+        <button
+          type="button"
+          className="ct-agent-xuongday"
+          onClick={() => xuongDay()}
+          title="Xuống cuối hội thoại"
+          aria-label="Xuống cuối hội thoại"
+        >
+          <ChevronDown size={16} aria-hidden />
+          {trangThai.dangChay && <span className="ct-agent-xuongday-cham" aria-hidden />}
+        </button>
+      )}
 
       {/* ── Ô nhập ── */}
       {anh.length > 0 && (

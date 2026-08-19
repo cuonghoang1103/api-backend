@@ -453,6 +453,15 @@ export interface LlmEndpoint {
   /** `true` = đang đi máy nhà. Dùng để biết có được tụt về cổng khi hỏng không. */
   local: boolean;
   label: string;
+  /**
+   * Giao thức điểm cuối này nói. Mặc định `'openai'` — mọi cổng cũ đều thế.
+   *
+   * `'anthropic'` cho cổng riêng của agent: tuyến OpenAI của họ CÓ tồn tại
+   * nhưng trả 400 ngay khi hội thoại có một lượt gọi tool hoàn chỉnh (đo
+   * 19/08/2026), mà đó là toàn bộ vòng lặp của agent. Tuyến Anthropic gốc
+   * thì chạy trọn — nên ta tự dịch thay vì nhờ họ dịch.
+   */
+  giaoThuc?: 'openai' | 'anthropic';
 }
 
 /**
@@ -540,7 +549,7 @@ export function congAgent(): LlmEndpoint | null {
   const root = process.env.AGENT_GATEWAY_BASE_URL?.trim().replace(/\/+$/, '');
   const key = process.env.AGENT_GATEWAY_API_KEY?.trim();
   if (!root || !key) return null;
-  return { root, key, local: false, label: 'cong-agent' };
+  return { root, key, local: false, label: 'cong-agent', giaoThuc: 'anthropic' };
 }
 
 /** Cổng dự phòng khi máy nhà không trả lời. Luôn là cổng, không bao giờ ngược lại. */
@@ -614,7 +623,9 @@ export async function xinDiemCuoi(purpose: LlmPurpose): Promise<DiemCuoiDaXep> {
 
 /** `POST` cho một điểm cuối bất kỳ. */
 export function chatUrlOf(ep: LlmEndpoint): string {
-  return `${ep.root}/v1/chat/completions`;
+  return ep.giaoThuc === 'anthropic'
+    ? `${ep.root}/v1/messages`
+    : `${ep.root}/v1/chat/completions`;
 }
 
 /**

@@ -42,6 +42,7 @@ import {
 import { checkBudget, budgetMessage } from '../llm/budget.js';
 import { nenNguCanh } from './compact.js';
 import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
+import { sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import { modelAgentTu } from './models.js';
 import { loiCanVi, loiHetHan, xemHanMuc, xemViAgent, type HanMuc } from './quota.js';
 import { runServerTool } from './serverTools.js';
@@ -587,6 +588,7 @@ export async function runAgentTurn(
       const ketQua = await goiCongCoLuoiDo({
         url: chatUrlOf(ep),
         key: ep.key,
+        ...(ep.giaoThuc ? { giaoThuc: ep.giaoThuc } : {}),
         model,
         system,
         messages: nen.messages,
@@ -890,6 +892,8 @@ async function goiCong(o: {
   tools: ReturnType<typeof toolsForGateway>;
   signal: AbortSignal;
   onText: (delta: string) => void;
+  /** Mặc định `'openai'`. Xem `LlmEndpoint.giaoThuc`. */
+  giaoThuc?: 'openai' | 'anthropic';
 }): Promise<KetQuaCong> {
   // Đồng hồ IM LẶNG, không phải đồng hồ tổng: một lượt agent đọc file to có
   // thể chạy lâu một cách chính đáng.
@@ -909,21 +913,45 @@ async function goiCong(o: {
   lui();
 
   try {
+    const laAnthropic = o.giaoThuc === 'anthropic';
+
+    /* Anthropic: `system` là THAM SỐ RIÊNG và vai phải luân phiên — xem
+       `anthropic.ts`. Gửi sai một trong hai là 400 với một câu chẳng nói rõ
+       vì sao ("please try again later or create a new conversation"). */
+    const dich = laAnthropic
+      ? sangAnthropic([{ role: 'system', content: o.system }, ...o.messages] as never)
+      : null;
+
     const res = await fetch(o.url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${o.key ?? ''}` },
+      headers: laAnthropic
+        ? {
+            'Content-Type': 'application/json',
+            'x-api-key': o.key ?? '',
+            'anthropic-version': '2023-06-01',
+          }
+        : { 'Content-Type': 'application/json', Authorization: `Bearer ${o.key ?? ''}` },
       signal: imLang.signal,
-      body: JSON.stringify({
-        model: o.model,
-        messages: [{ role: 'system', content: o.system }, ...o.messages],
-        tools: o.tools,
-        tool_choice: 'auto',
-        stream: true,
-        // Không có dòng này thì gói cuối KHÔNG mang `usage`, và cả cầu dao
-        // ngân sách lẫn đồng hồ chi phí trên giao diện đều đếm bằng 0.
-        stream_options: { include_usage: true },
-        max_tokens: MAX_OUTPUT_TOKENS,
-      }),
+      body: JSON.stringify(laAnthropic
+        ? {
+            model: o.model,
+            system: dich!.system,
+            messages: dich!.messages,
+            tools: toolSangAnthropic(o.tools as never),
+            stream: true,
+            max_tokens: MAX_OUTPUT_TOKENS,
+          }
+        : {
+            model: o.model,
+            messages: [{ role: 'system', content: o.system }, ...o.messages],
+            tools: o.tools,
+            tool_choice: 'auto',
+            stream: true,
+            // Không có dòng này thì gói cuối KHÔNG mang `usage`, và cả cầu dao
+            // ngân sách lẫn đồng hồ chi phí trên giao diện đều đếm bằng 0.
+            stream_options: { include_usage: true },
+            max_tokens: MAX_OUTPUT_TOKENS,
+          }),
     });
 
     if (!res.ok || !res.body) {
@@ -956,6 +984,40 @@ async function goiCong(o: {
         if (!p || p === '[DONE]') continue;
         let j: any;
         try { j = JSON.parse(p); } catch { continue; }
+
+        /*
+         * ─── TUYẾN ANTHROPIC ───
+         * Khung hoàn toàn khác OpenAI: chữ đi trong `content_block_delta`
+         * kiểu `text_delta`; tham số tool đi trong `input_json_delta` và phải
+         * NỐI DẦN (model gửi JSON từng mẩu, mỗi mẩu vô nghĩa nếu đứng riêng);
+         * lý do dừng nằm ở `message_delta.delta.stop_reason`.
+         */
+        if (laAnthropic) {
+          if (j.type === 'message_start') {
+            inputTokens = j.message?.usage?.input_tokens ?? inputTokens;
+          } else if (j.type === 'content_block_start' && j.content_block?.type === 'tool_use') {
+            mangTool.set(j.index ?? mangTool.size, {
+              id: String(j.content_block.id ?? ''),
+              name: String(j.content_block.name ?? ''),
+              args: '',
+            });
+          } else if (j.type === 'content_block_delta') {
+            if (j.delta?.type === 'text_delta' && typeof j.delta.text === 'string') {
+              text += j.delta.text;
+              const sach = catRacCong(j.delta.text);
+              if (sach) o.onText(sach);
+            } else if (j.delta?.type === 'input_json_delta') {
+              const cuTool = mangTool.get(j.index ?? 0);
+              if (cuTool) cuTool.args += String(j.delta.partial_json ?? '');
+            }
+          } else if (j.type === 'message_delta') {
+            if (j.delta?.stop_reason) finishReason = stopSangFinish(j.delta.stop_reason);
+            if (j.usage?.output_tokens) outputTokens = j.usage.output_tokens;
+          } else if (j.type === 'error') {
+            throw new Error(`Cổng trả lỗi: ${JSON.stringify(j.error ?? j).slice(0, 200)}`);
+          }
+          continue;
+        }
 
         if (j.usage) {
           inputTokens = j.usage.prompt_tokens ?? inputTokens;

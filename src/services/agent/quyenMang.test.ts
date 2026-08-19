@@ -12,6 +12,7 @@
  * prompt sẽ tưởng là lỗ hổng và xoá đi.
  */
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 import { buildSystemPrompt } from './prompt.js';
@@ -44,4 +45,14 @@ test('prompt nói rõ agent RA ĐƯỢC MẠNG (khi đã bật shell)', () => {
     !/ĐỪNG chạy:[^\n]*Internet/.test(p),
     'prompt vẫn còn dòng cấm Internet trong danh sách ĐỪNG chạy',
   );
+});
+
+test('địa chỉ nội bộ: câu từ chối phải CHỈ ĐÚNG nút cần bật', () => {
+  const src = readFileSync(new URL('./webTool.ts', import.meta.url), 'utf8');
+  const i = src.indexOf('const noiBo =');
+  assert.ok(i > -1, 'không còn nhánh riêng cho địa chỉ nội bộ');
+  const than = src.slice(i, i + 1400);
+  assert.match(than, /web_mo/, 'không nhắc web_mo — model sẽ tưởng đây là ngõ cụt');
+  assert.match(than, /"Trình duyệt"/, 'không nói tên NÚT người dùng cần bật');
+  assert.match(than, /ĐỪNG nói đây là giới hạn/, 'không chặn câu "không vượt qua được"');
 });

@@ -128,7 +128,30 @@ export async function docWeb(args: Record<string, unknown>): Promise<KetQuaWeb> 
     let res: Response | null = null;
     for (let i = 0; i <= MAX_CHUYEN_HUONG; i++) {
       const cam = await kiemMotChang(u);
-      if (cam) return { content: `LỖI: ${cam}.`, summary: 'bị chặn' };
+      if (cam) {
+        /*
+         * ĐỊA CHỈ NỘI BỘ KHÔNG PHẢI NGÕ CỤT — có `web_mo` mở được.
+         *
+         * Người dùng bảo "mở localhost:3000", agent đáp: "đó là giới hạn bảo
+         * mật, tôi không thể vượt qua. Bạn tự mở rồi mô tả cho tôi." Câu đó
+         * SAI: app CÓ trình duyệt lái được, chỉ là công tắc "Trình duyệt"
+         * đang tắt. Model không biết vì câu từ chối cũ chỉ nói "bị chặn".
+         *
+         * Nên nói thẳng nút nào cần bật. Model đọc chuỗi này rồi thuật lại
+         * cho người dùng — đây là đường DUY NHẤT nó biết được chuyện đó.
+         */
+        const noiBo = /nội bộ/.test(cam);
+        return {
+          content: noiBo
+            ? `LỖI: ${cam}. \`doc_web\` cố ý chỉ đọc địa chỉ công khai.\n`
+              + 'NHƯNG ĐỊA CHỈ NỘI BỘ MỞ ĐƯỢC bằng tool `web_mo` — nó lái trình duyệt ngay trong app '
+              + 'và người dùng NHÌN THẤY trang. Nếu bạn không có `web_mo` trong danh sách tool thì công tắc '
+              + '"Trình duyệt" đang TẮT: hãy bảo người dùng bật nút "Trình duyệt" trên thanh công cụ rồi hỏi lại. '
+              + 'ĐỪNG nói đây là giới hạn không vượt qua được, và ĐỪNG bắt họ tự mở rồi mô tả lại cho bạn.'
+            : `LỖI: ${cam}.`,
+          summary: noiBo ? 'nội bộ — cần bật Trình duyệt' : 'bị chặn',
+        };
+      }
 
       // `redirect: 'manual'` để tự bám từng chặng — để `fetch` tự đi thì chặng
       // sau KHÔNG được kiểm, và đó chính là đường vòng qua cả bộ chặn.

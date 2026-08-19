@@ -274,6 +274,44 @@ router.delete('/notes/:id', async (req: Request, res: Response<ApiResponse>, nex
 router.get('/notes/:id/export', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const note = await getNote(req.userId!, Number(req.params.id));
+
+    /* `?format=md|docx|pdf` trả về FILE tải xuống. Không có tham số thì giữ
+     * nguyên hành vi cũ (trả JSON) — trang web đang gọi kiểu đó, đổi đi là gãy
+     * một tính năng đang chạy để thêm một tính năng mới. */
+    const dinhDang = String(req.query.format ?? '').toLowerCase();
+    if (dinhDang === 'md' || dinhDang === 'docx' || dinhDang === 'pdf') {
+      const xuat = await import('../services/noteExport.service.js');
+      const tieuDe = note.title ?? '';
+      const khoi = xuat.bocKhoi(note.contentHtml ?? '');
+      const ten = xuat.tenFileAnToan(tieuDe, dinhDang);
+
+      /* Tên file có dấu phải đi bằng `filename*=UTF-8''…` (RFC 5987). Chỉ dùng
+       * `filename="…"` thì trình duyệt lưu thành tên hỏng ("Ghi chÃº"), vì
+       * header HTTP là latin-1. Vẫn gửi kèm `filename=` không dấu làm đường lùi
+       * cho trình duyệt cũ. */
+      const tenAscii = ten.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7e]/g, '_');
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="${tenAscii}"; filename*=UTF-8''${encodeURIComponent(ten)}`,
+      );
+
+      if (dinhDang === 'md') {
+        res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+        (res as unknown as Response).send(xuat.raMarkdown(tieuDe, khoi));
+        return;
+      }
+      if (dinhDang === 'docx') {
+        const buf = await xuat.raDocx(tieuDe, khoi);
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+        (res as unknown as Response).send(buf);
+        return;
+      }
+      const buf = await xuat.raPdf(tieuDe, khoi);
+      res.setHeader('Content-Type', 'application/pdf');
+      (res as unknown as Response).send(buf);
+      return;
+    }
+
     res.json({
       success: true,
       data: {

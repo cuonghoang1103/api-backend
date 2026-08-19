@@ -495,6 +495,33 @@ export const notesApi = {
     api.post<{ data: { text: string; action: string } }>('/notes/ai/assist', { action, selection }),
 
   /**
+   * Tải ghi chú về máy dưới dạng Markdown / Word / PDF.
+   *
+   * Phải đi qua `api` (axios) chứ KHÔNG mở thẳng URL bằng thẻ <a>: endpoint
+   * cần token xác thực, mà thẻ <a> không gửi header nào. Mở thẳng sẽ nhận 401
+   * và trình duyệt lưu xuống một file JSON báo lỗi mang đuôi .pdf.
+   */
+  taiXuong: async (noteId: number, dinhDang: 'md' | 'docx' | 'pdf') => {
+    const res = await api.get(`/notes/notes/${noteId}/export`, {
+      params: { format: dinhDang },
+      responseType: 'blob',
+    });
+    // Lấy tên file máy chủ đặt (có dấu, theo RFC 5987) thay vì tự ghép ở client.
+    const cd = String(res.headers['content-disposition'] ?? '');
+    const khop = /filename\*=UTF-8''([^;]+)/i.exec(cd);
+    const ten = khop?.[1] ? decodeURIComponent(khop[1]) : `ghi-chu.${dinhDang}`;
+
+    const url = URL.createObjectURL(res.data as Blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = ten;
+    a.click();
+    // Thu hồi NGAY sau khi trình duyệt nhận lệnh tải: giữ lại là giữ nguyên
+    // file trong bộ nhớ tab cho tới khi đóng tab.
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  },
+
+  /**
    * Hỏi trợ lý về TOÀN BỘ ghi chú. Khác `aiAssist` — cái kia chỉ nhìn thấy
    * đoạn đang bôi đen, cái này tự đi tìm ghi chú liên quan và trả kèm nguồn.
    */

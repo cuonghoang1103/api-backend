@@ -5,6 +5,7 @@ import {
   CalendarClock,
   Check,
   Copy,
+  Download,
   FolderInput,
   Hash,
   Info,
@@ -12,6 +13,7 @@ import {
   Plus,
   X,
 } from 'lucide-react';
+import { notesApi } from '@/lib/api';
 import type { NoteFull, NoteSubjectTree } from '@/types';
 
 export type NoteMetadataPatch = Partial<Pick<
@@ -89,6 +91,20 @@ export default function NotePropertiesPanel({ note, tree, onSave, onDuplicate }:
       await saveWithHint({ subjectId: note.subjectId, chapterId }, 'Đã chuyển chương');
     } finally {
       setSavingLocation(false);
+    }
+  };
+
+  const [dangTai, setDangTai] = useState<'md' | 'docx' | 'pdf' | null>(null);
+  const taiXuong = async (dd: 'md' | 'docx' | 'pdf') => {
+    if (dangTai) return;
+    setDangTai(dd);
+    try {
+      await notesApi.taiXuong(note.id, dd);
+    } catch {
+      // Không chặn màn hình vì một lần tải hỏng — người dùng bấm lại được ngay.
+      alert('Không tải được ghi chú. Thử lại nhé.');
+    } finally {
+      setDangTai(null);
     }
   };
 
@@ -225,7 +241,23 @@ export default function NotePropertiesPanel({ note, tree, onSave, onDuplicate }:
         </div>
       </div>
 
-      <div className="mt-3 flex justify-end">
+      <div className="mt-3 flex flex-wrap items-center justify-end gap-2">
+        {/* Tải xuống — ba định dạng, mỗi cái một nút. Gộp thành menu xổ thì
+            thêm một cú bấm cho việc mà người ta đã biết mình muốn gì. */}
+        <span className="mr-auto text-[12px] text-slate-500 dark:text-slate-400">Tải xuống</span>
+        {(['md', 'docx', 'pdf'] as const).map((dd) => (
+          <button
+            key={dd}
+            type="button"
+            onClick={() => void taiXuong(dd)}
+            disabled={dangTai !== null}
+            title={dd === 'md' ? 'Markdown — mở được ở Obsidian, VS Code…' : dd === 'docx' ? 'Word' : 'PDF'}
+            className="inline-flex min-h-11 items-center gap-1.5 rounded-md border border-slate-200 px-2.5 text-[13px] font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 disabled:cursor-wait disabled:opacity-60 sm:min-h-10 dark:border-white/[0.08] dark:text-slate-200 dark:hover:bg-white/[0.05]"
+          >
+            {dangTai === dd ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+            {dd === 'md' ? 'Markdown' : dd === 'docx' ? 'Word' : 'PDF'}
+          </button>
+        ))}
         <button
           type="button"
           onClick={() => void duplicate()}

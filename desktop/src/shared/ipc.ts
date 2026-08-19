@@ -281,6 +281,16 @@ export interface MusicUsage {
   totalBytes: number;
 }
 
+/** Nội dung một mẫu AI, lấy từ repo gốc qua tiến trình chính. */
+export interface NoiDungMau {
+  /** Nguyên văn tệp, kể cả frontmatter. */
+  text: string;
+  /** Trang xem tệp trên GitHub. */
+  url: string;
+  /** Đã cắt bớt vì quá dài — giao diện phải nói ra, đừng giấu. */
+  catBot: boolean;
+}
+
 export const zoomSchema = z.number().min(0.5).max(2.5);
 
 /**
@@ -767,6 +777,10 @@ export const INVOKE_CHANNELS = {
   'music:usage': null,
   'music:clearAll': null,
 
+  /* Đường dẫn tệp trong repo mẫu gốc. Tiến trình chính còn kiểm lại lần nữa —
+     xem `duongAnToan()` — nên schema này chỉ là hàng rào đầu tiên. */
+  'mau:noiDung': z.object({ duong: z.string().min(1).max(300) }),
+
   'agent:getInfo': null,
   'agent:getWorkspace': agentCuocSchema,
   'agent:chooseWorkspace': agentCuocSchema,
@@ -1035,6 +1049,15 @@ export interface DesktopBridge {
    * thay vì đọc file thành Blob để thẻ <audio> tua được bằng Range request gốc;
    * Blob URL bắt trình duyệt nạp TOÀN BỘ bài vào RAM trước khi phát nốt đầu.
    */
+  /**
+   * Mẫu AI — lấy nội dung thật của một mẫu từ repo gốc.
+   *
+   * Trả `null` khi không lấy được (mất mạng, GitHub đổi tệp). Danh sách mẫu
+   * nằm sẵn trong app nên trang vẫn dùng được bình thường lúc đó.
+   */
+  mau: {
+    noiDung(duong: string): Promise<NoiDungMau | null>;
+  };
   music: {
     listDownloaded(): Promise<DownloadedTrack[]>;
     saveAudio(trackId: number, bytes: Uint8Array, ext: string): Promise<void>;

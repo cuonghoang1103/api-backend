@@ -6728,3 +6728,642 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   border-top: 1px solid var(--ct-border);
   font-size: 10.5px; color: var(--ct-text-faint);
 }
+
+/* ── Mẫu AI ────────────────────────────────────────────── */
+/* Ba cột: danh mục · danh sách · chi tiết. Cột chi tiết chỉ dựng khi có mẫu
+   được chọn, nên lưới phải khai bằng `grid-template-columns` trên phần tử cha
+   theo trạng thái — dùng `auto-fit` ở đây sẽ để cột danh sách nhảy chiều rộng
+   mỗi lần mở/đóng chi tiết, nhìn rất giật. */
+.ct-mau {
+  padding: 22px 24px 24px;
+  max-width: 1320px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ct-mau-dau {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.ct-mau-dau h1 { margin: 0 0 2px; font-size: 20px; }
+.ct-mau-dau .ct-muted { margin: 0; font-size: 13px; }
+.ct-mau-dau-nut { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── Dải chọn loại ─────────────────────────────────────── */
+.ct-mau-loai {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+  scrollbar-width: thin;
+}
+.ct-mau-loai button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  padding: 0 12px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--ct-border);
+  background: var(--ct-surface);
+  color: var(--ct-text-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease),
+              color var(--ct-motion-fast) var(--ct-ease),
+              border-color var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-mau-loai button:hover { background: var(--ct-hover); color: var(--ct-text); }
+.ct-mau-loai button[data-active='true'] {
+  color: var(--ct-text);
+  border-color: color-mix(in srgb, var(--mau-sac) 55%, transparent);
+  background: color-mix(in srgb, var(--mau-sac) 14%, var(--ct-surface));
+}
+/* Chấm màu là thứ duy nhất phân biệt 10 loại khi lướt nhanh — mỗi loại một màu
+   đã khai sẵn trong `catalog.ts`, không gõ lại bảng màu thứ hai ở đây. */
+.ct-mau-cham {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mau-sac, var(--ct-accent));
+  flex: 0 0 auto;
+}
+.ct-mau-dem {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ct-text-faint);
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--ct-surface-2);
+}
+
+.ct-mau-blurb {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ct-text-muted);
+  max-width: 76ch;
+}
+
+/* ── Thân ba cột ───────────────────────────────────────── */
+.ct-mau-than {
+  display: grid;
+  grid-template-columns: 208px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.ct-mau-than:has(.ct-mau-chitiet) {
+  grid-template-columns: 208px minmax(0, 1fr) minmax(0, 400px);
+}
+/* Cửa sổ hẹp: bỏ cột danh mục trước (lọc vẫn làm được bằng ô tìm), rồi tới cột
+   chi tiết. Xem `.ct-mau-chitiet` bên dưới — ở mức hẹp nhất nó thành khối nằm
+   dưới danh sách chứ không biến mất. */
+@media (max-width: 1180px) {
+  .ct-mau-than,
+  .ct-mau-than:has(.ct-mau-chitiet) { grid-template-columns: minmax(0, 1fr) minmax(0, 380px); }
+  .ct-mau-nhom { display: none; }
+}
+@media (max-width: 860px) {
+  .ct-mau-than,
+  .ct-mau-than:has(.ct-mau-chitiet) { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ── Cột danh mục ──────────────────────────────────────── */
+.ct-mau-nhom {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  /* `sticky` phải có trần chiều cao, nếu không cột dài hơn màn hình sẽ khoá
+     luôn việc cuộn — đã dẫm đúng bẫy này một lần. */
+  position: sticky;
+  top: 0;
+  max-height: calc(100vh - var(--ct-titlebar-h) - var(--ct-statusbar-h) - 40px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding-right: 4px;
+}
+.ct-mau-nhom-nhan {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ct-text-faint);
+}
+.ct-mau-nhom button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: var(--ct-radius-sm);
+  background: transparent;
+  color: var(--ct-text-muted);
+  font: inherit;
+  font-size: 12.5px;
+  text-align: left;
+  cursor: pointer;
+}
+.ct-mau-nhom button:hover { background: var(--ct-hover); color: var(--ct-text); }
+.ct-mau-nhom button[data-active='true'] {
+  background: var(--ct-active);
+  color: var(--ct-text);
+  font-weight: 600;
+}
+.ct-mau-nhom button span {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ct-text-faint);
+  flex: 0 0 auto;
+}
+
+/* ── Cột giữa ──────────────────────────────────────────── */
+.ct-mau-giua { min-width: 0; }
+.ct-mau-tim { margin-bottom: 8px; }
+.ct-mau-sokq {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--ct-text-muted);
+}
+.ct-mau-ds {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: calc(100vh - var(--ct-titlebar-h) - var(--ct-statusbar-h) - 210px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding-right: 4px;
+}
+.ct-mau-the {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 11px 13px;
+  border: 1px solid var(--ct-border);
+  border-left: 3px solid color-mix(in srgb, var(--mau-sac) 45%, transparent);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease),
+              border-color var(--ct-motion-fast) var(--ct-ease),
+              transform var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-mau-the:hover { background: var(--ct-hover); transform: translateX(2px); }
+.ct-mau-the[data-current='true'] {
+  border-color: color-mix(in srgb, var(--mau-sac) 60%, transparent);
+  border-left-color: var(--mau-sac);
+  background: color-mix(in srgb, var(--mau-sac) 9%, var(--ct-surface));
+}
+.ct-mau-the-ten { font-size: 13.5px; font-weight: 600; }
+/* Mô tả cắt 2 dòng: thẻ cao đều nhau thì lướt 871 mục mới nhanh được. */
+.ct-mau-the-mo {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ct-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ct-mau-the-chan {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+}
+.ct-mau-tag {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--ct-surface-2);
+  color: var(--ct-text-faint);
+}
+.ct-mau-them { align-self: center; margin: 4px 0 8px; }
+
+/* ── Cột chi tiết ──────────────────────────────────────── */
+.ct-mau-chitiet {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: 15px 16px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: var(--ct-surface);
+  position: sticky;
+  top: 0;
+  max-height: calc(100vh - var(--ct-titlebar-h) - var(--ct-statusbar-h) - 40px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+@media (max-width: 860px) {
+  .ct-mau-chitiet { position: static; max-height: none; }
+}
+.ct-mau-chitiet-dau {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.ct-mau-chitiet-dau h2 {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font-size: 15.5px;
+  font-weight: 700;
+}
+.ct-mau-chitiet-mo {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ct-text-muted);
+}
+
+.ct-mau-lenh {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 11px 12px;
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface-2);
+  border: 1px solid var(--ct-border);
+}
+.ct-mau-lenh-nhan {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--ct-text-faint);
+}
+.ct-mau-lenh pre {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ct-text);
+  /* Lệnh cài dài hơn cột — bọc dòng thay vì cuộn ngang, vì người dùng đọc để
+     hiểu mình sắp chạy gì chứ không chỉ để bấm nút chép.
+     `anywhere` chứ KHÔNG `break-all`: cả hai đều cho ngắt giữa từ, nhưng
+     `break-all` bỏ luôn ưu tiên ngắt ở dấu cách, nên nó xé "ai-mae / stro"
+     trong khi ngay trước đó có một dấu cách hoàn toàn dùng được. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.ct-mau-lenh .ct-btn { align-self: flex-start; }
+
+.ct-mau-tin {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 5px 14px;
+  margin: 0;
+  font-size: 12.5px;
+}
+.ct-mau-tin dt { color: var(--ct-text-faint); }
+.ct-mau-tin dd { margin: 0; color: var(--ct-text); min-width: 0; overflow-wrap: anywhere; }
+
+.ct-mau-tu { display: flex; flex-wrap: wrap; gap: 5px; }
+.ct-mau-tu span {
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--ct-border);
+  font-size: 11px;
+  color: var(--ct-text-muted);
+}
+
+.ct-mau-noidung {
+  border-top: 1px solid var(--ct-border);
+  padding-top: 12px;
+  min-width: 0;
+  font-size: 13px;
+}
+.ct-mau-noidung-thanh {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 11.5px;
+}
+.ct-mau-noidung-thanh .ct-muted { margin: 0; flex: 1; }
+.ct-mau-dangtai { display: flex; align-items: center; gap: 7px; margin: 0; }
+/* Nội dung tệp có thể chứa bảng và khối mã rất rộng — cho chúng cuộn TRONG
+   khối chứ không đẩy cả cột phình ra. */
+.ct-mau-noidung pre,
+.ct-mau-noidung table { max-width: 100%; overflow-x: auto; }
+
+/* ── Giọng nói ─────────────────────────────────────────── */
+.ct-gn {
+  padding: 22px 24px 26px;
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ct-gn-dau {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.ct-gn-dau h1 { margin: 0 0 2px; font-size: 20px; }
+.ct-gn-dau .ct-muted { margin: 0; font-size: 13px; }
+.ct-gn-dau-nut { display: flex; align-items: center; gap: 8px; }
+.ct-gn-cu {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--ct-warn);
+}
+
+.ct-gn-loc { display: flex; flex-direction: column; gap: 9px; margin-bottom: 16px; }
+/* `flex: 0 0 auto` là BẮT BUỘC, không phải trang trí. `.ct-music-search` dùng
+   lại từ trang Nhạc mang sẵn `flex: 1 1 220px`, vốn viết cho một thanh công cụ
+   nằm NGANG. Ở đây hộp cha xếp CỘT, nên `flex-basis` tính vào chiều CAO và
+   `flex-grow: 1` kéo ô tìm cao 210px thay vì 36px. Đo thật mới thấy — trông
+   như lỗi chiều cao, gốc lại nằm ở hướng của hộp cha. */
+.ct-gn-tim { max-width: 420px; flex: 0 0 auto; }
+.ct-gn-chip { display: flex; gap: 6px; flex-wrap: wrap; }
+.ct-gn-chip button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid var(--ct-border);
+  background: var(--ct-surface);
+  color: var(--ct-text-muted);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease),
+              color var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-gn-chip button:hover { background: var(--ct-hover); color: var(--ct-text); }
+.ct-gn-chip button[data-active='true'] {
+  background: var(--ct-accent);
+  border-color: transparent;
+  color: var(--ct-accent-text);
+  font-weight: 600;
+}
+
+/* ── Lưới thẻ ──────────────────────────────────────────── */
+.ct-gn-luoi {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+  gap: 14px;
+}
+.ct-gn-the {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--ct-motion-fast) var(--ct-ease),
+              transform var(--ct-motion-fast) var(--ct-ease),
+              box-shadow var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-gn-the:hover {
+  border-color: var(--ct-border-manh);
+  transform: translateY(-2px);
+  box-shadow: var(--ct-shadow-sm);
+}
+/* Khung ảnh giữ tỉ lệ 16/9 CỐ ĐỊNH. Để ảnh tự quyết chiều cao thì lưới nhấp
+   nhô khi ảnh tải xong, và bài không có ảnh bìa sẽ cao khác hẳn bài có. */
+.ct-gn-anh {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  background: var(--ct-surface-2);
+  overflow: hidden;
+}
+.ct-gn-anh img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ct-gn-anh-trong {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--ct-text-faint);
+}
+.ct-gn-thoi {
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  padding: 1px 6px;
+  border-radius: var(--ct-radius-sm);
+  background: rgb(0 0 0 / 0.72);
+  color: #fff;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-gn-the-than { display: flex; flex-direction: column; gap: 6px; padding: 11px 13px 13px; }
+/* `.ct-muted` toàn cục mang `margin: 0 0 18px` (nó vốn viết cho đoạn văn dưới
+   tiêu đề trang). Trong hộp FLEX, thẻ `span` bị blockify nên cái margin đó ăn
+   thật: thẻ nào có tên series thì hàng nhãn cao hơn 18px và tiêu đề tụt xuống
+   so với thẻ bên cạnh. Dọn ở mọi hàng có dùng lại `.ct-muted`. */
+.ct-gn-the-nhan { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 11.5px; }
+.ct-gn-the-nhan .ct-muted,
+.ct-gn-the-so .ct-muted,
+.ct-gn-ct-nhan .ct-muted,
+.ct-gn-dau-nut .ct-muted { margin: 0; }
+.ct-gn-the-ten {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ct-gn-the-tom {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ct-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ct-gn-the-so {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  color: var(--ct-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.ct-gn-the-so span { display: inline-flex; align-items: center; gap: 4px; }
+
+.ct-gn-trang {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 18px;
+  font-size: 12.5px;
+}
+
+/* ── Chi tiết ──────────────────────────────────────────── */
+.ct-gn-lui { margin-bottom: 14px; }
+.ct-gn-ct { max-width: 860px; }
+
+.ct-gn-phat {
+  border-radius: var(--ct-radius);
+  overflow: hidden;
+  background: var(--ct-surface-2);
+  border: 1px solid var(--ct-border);
+  margin-bottom: 14px;
+}
+.ct-gn-phat video { width: 100%; display: block; max-height: 62vh; background: #000; }
+.ct-gn-phat-trong { aspect-ratio: 16 / 9; }
+.ct-gn-audio { display: flex; flex-direction: column; }
+.ct-gn-audio img { width: 100%; max-height: 320px; object-fit: cover; display: block; }
+.ct-gn-audio audio { width: 100%; }
+
+/* YouTube: ảnh bìa + nút, KHÔNG iframe (CSP `frame-src 'none'`). */
+.ct-gn-yt {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: #000;
+  cursor: pointer;
+}
+.ct-gn-yt img { width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: cover; opacity: 0.72; }
+.ct-gn-yt-nut {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.6);
+}
+.ct-gn-yt:hover img { opacity: 0.9; }
+
+.ct-gn-ct-nhan { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; font-size: 12px; }
+.ct-gn-ct-ten { margin: 8px 0 10px; font-size: 22px; line-height: 1.3; }
+.ct-gn-ct-thanh {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ct-border);
+}
+.ct-gn-ct-thanh .ct-muted { display: inline-flex; align-items: center; gap: 5px; margin: 0; }
+.ct-gn-ct-thanh .ct-btn[data-thich='true'] { color: var(--ct-err); border-color: color-mix(in srgb, var(--ct-err) 45%, transparent); }
+.ct-gn-ct-tom { margin: 14px 0; font-size: 14px; line-height: 1.65; color: var(--ct-text-muted); }
+
+.ct-gn-mota { margin: 14px 0; font-size: 14px; line-height: 1.7; }
+.ct-gn-mota img { max-width: 100%; height: auto; border-radius: var(--ct-radius-sm); }
+.ct-gn-mota pre { overflow-x: auto; }
+.ct-gn-mota a { color: var(--ct-accent); }
+/* Show-notes là HTML tự do do admin viết. Reset toàn cục của app đã dẹp sạch
+   dấu đầu dòng và thụt lề, nên phải dựng lại TẠI ĐÂY — nếu không thì một danh
+   sách gạch đầu dòng hiện ra thành mấy dòng chữ rời, trông như bài viết hỏng. */
+.ct-gn-mota ul, .ct-gn-mota ol { padding-left: 1.5em; margin: 10px 0; }
+.ct-gn-mota ul { list-style: disc; }
+.ct-gn-mota ol { list-style: decimal; }
+.ct-gn-mota li { margin: 4px 0; }
+.ct-gn-mota h2, .ct-gn-mota h3 { margin: 18px 0 8px; font-size: 16px; }
+.ct-gn-mota blockquote {
+  margin: 12px 0;
+  padding: 2px 0 2px 14px;
+  border-left: 3px solid var(--ct-border-manh);
+  color: var(--ct-text-muted);
+}
+.ct-gn-mota code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--ct-surface-2);
+}
+.ct-gn-mota pre { padding: 11px 13px; border-radius: var(--ct-radius-sm); background: var(--ct-surface-2); }
+.ct-gn-mota pre code { padding: 0; background: none; }
+
+.ct-gn-chuong { margin: 18px 0; }
+.ct-gn-chuong h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ct-text-faint); margin: 0 0 8px; }
+.ct-gn-chuong ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; font-size: 13px; }
+.ct-gn-chuong-t { font-variant-numeric: tabular-nums; color: var(--ct-accent); margin-right: 8px; }
+
+/* ── Bình luận ─────────────────────────────────────────── */
+.ct-gn-bl { margin-top: 26px; border-top: 1px solid var(--ct-border); padding-top: 18px; }
+.ct-gn-bl h2 { font-size: 15px; margin: 0 0 12px; }
+.ct-gn-bl-soan { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 16px; }
+.ct-gn-bl-soan textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--ct-radius-sm);
+  border: 1px solid var(--ct-border);
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.55;
+  resize: vertical;
+}
+.ct-gn-bl-soan textarea:focus { outline: none; border-color: var(--ct-accent); }
+.ct-gn-loi { color: var(--ct-err); font-size: 12.5px; margin: 0 0 12px; }
+
+.ct-gn-bl-ds { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.ct-gn-bl-dau { display: flex; align-items: baseline; gap: 9px; margin: 0 0 3px; font-size: 13px; }
+.ct-gn-bl-dau .ct-muted { margin: 0; font-size: 11.5px; }
+.ct-gn-bl-chu { margin: 0; font-size: 13.5px; line-height: 1.6; white-space: pre-wrap; }
+.ct-gn-bl-con {
+  margin-top: 10px;
+  padding-left: 14px;
+  border-left: 2px solid var(--ct-border);
+}
+
+/* ── Bài liên quan ─────────────────────────────────────── */
+.ct-gn-lq { margin-top: 26px; }
+.ct-gn-lq h2 { font-size: 15px; margin: 0 0 12px; }
+.ct-gn-lq-ds { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.ct-gn-lq-ds button {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 0;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  overflow: hidden;
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.ct-gn-lq-ds button:hover { border-color: var(--ct-border-manh); }
+.ct-gn-lq-ds img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+.ct-gn-lq-ds span { padding: 0 10px 10px; line-height: 1.4; }

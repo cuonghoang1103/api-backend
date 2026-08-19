@@ -31,6 +31,7 @@ import type {
   SettingValue,
   DownloadedTrack,
   MusicUsage,
+  NoiDungMau,
   NoteFileInfo,
   NotesFolder,
   StorageUsage,
@@ -111,6 +112,11 @@ const bridge: DesktopBridge = {
     deleteFile: (fileName: string) =>
       ipcRenderer.invoke('notes:deleteFile', { fileName }) as Promise<void>,
     revealFolder: () => ipcRenderer.invoke('notes:revealFolder') as Promise<void>,
+  },
+
+  mau: {
+    noiDung: (duong: string) =>
+      ipcRenderer.invoke('mau:noiDung', { duong }) as Promise<NoiDungMau | null>,
   },
 
   music: {

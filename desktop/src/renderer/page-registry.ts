@@ -15,6 +15,7 @@
  * lệch là chuyện không xảy ra được nữa.
  */
 import type { ComponentType } from 'react';
+import { MauAIPage } from './features/aitemplates/MauAIPage';
 import { ChatPage } from './features/chat/ChatPage';
 import { DashboardPage } from './features/dashboard/DashboardPage';
 import { FeedPage } from './features/feed/FeedPage';
@@ -37,6 +38,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/notes': NotesPage,
   '/pro': ProPage,
   '/tech-trends': TechTrendsPage,
+  '/ai-templates': MauAIPage,
 };
 
 export function nativePageFor(path: string): ComponentType | undefined {

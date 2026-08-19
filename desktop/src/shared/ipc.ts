@@ -586,7 +586,7 @@ export interface AgentInfo {
  * giao diện im lặng bỏ qua một loại sự kiện mà không ai biết.
  */
 export type AgentUiEvent = { cuocId: string } & (
-  | { loai: 'batDau'; model: string }
+  | { loai: 'batDau'; model: string; buoc?: number; tranBuoc?: number }
   | { loai: 'chu'; delta: string }
   | { loai: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
   /** Agent ĐANG DỪNG chờ duyệt. Giao diện hiện thẻ diff và bắt buộc phải trả lời. */

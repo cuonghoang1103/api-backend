@@ -78,6 +78,8 @@ export interface TrangThaiAgent {
    * nào. Không có cờ này thì màn hình đứng im và người dùng tưởng app treo.
    */
   dangNghi: boolean;
+  /** Bước thứ mấy trên tổng bao nhiêu của việc đang làm. `null` = chưa biết. */
+  buoc: { nay: number; tran: number } | null;
   hanMuc: AgentQuota | null;
   tienPhien: number;
   /** Kế hoạch agent công bố. Rỗng = việc này không cần kế hoạch. */
@@ -99,6 +101,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   const [muc, datMuc] = useState<MucHienThi[]>([]);
   const [dangChay, datDangChay] = useState(false);
   const [dangNghi, datDangNghi] = useState(false);
+  const [buoc, datBuoc] = useState<{ nay: number; tran: number } | null>(null);
   const [hanMuc, datHanMuc] = useState<AgentQuota | null>(null);
   const [tienPhien, datTienPhien] = useState(0);
   const [soFileDaSua, datSoFileDaSua] = useState(0);
@@ -155,6 +158,13 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
       switch (e.loai) {
         case 'batDau':
           datDangNghi(true);
+          /* Bước thứ mấy / tổng bao nhiêu. Cổng này KHÔNG chảy chữ thật (đo
+             121 mẩu về cùng một mili giây), nên giữa hai lần gọi là một
+             khoảng lặng dài không phân biệt được với treo. Con số này là thứ
+             duy nhất nói được "vẫn đang chạy, và còn bao xa nữa". */
+          datBuoc(typeof e.buoc === 'number' && typeof e.tranBuoc === 'number'
+            ? { nay: e.buoc, tran: e.tranBuoc }
+            : null);
           break;
         case 'chu':
           datDangNghi(false);
@@ -404,7 +414,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   }, [cuocId]);
 
   return {
-    trangThai: { muc, dangChay, dangNghi, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh } satisfies TrangThaiAgent,
+    trangThai: { muc, dangChay, dangNghi, buoc, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh } satisfies TrangThaiAgent,
     gui,
     dung,
     batDauLai,

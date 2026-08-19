@@ -563,6 +563,7 @@ export function AgentMode({
         {trangThai.dangNghi && (
           <DangNghi
             giay={nghiGiay}
+            {...(trangThai.buoc ? { buoc: trangThai.buoc } : {})}
             /* Agent có việc để nói ở chặng đầu: nó ĐANG ĐỌC mã, chứ không
                chỉ ngồi nghĩ. Nói đúng việc thì người dùng chờ dễ hơn. */
             chuRieng="Chờ tớ đọc qua đã nhé…"

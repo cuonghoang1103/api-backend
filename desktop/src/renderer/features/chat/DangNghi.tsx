@@ -32,6 +32,7 @@ export function DangNghi({
   giay,
   dangTraLoi = false,
   chuRieng,
+  buoc,
 }: {
   /** Đã chờ bao lâu. Truyền 0 nếu không đếm. */
   giay: number;
@@ -39,6 +40,14 @@ export function DangNghi({
   dangTraLoi?: boolean;
   /** Câu riêng cho chặng đầu, ví dụ AI Code muốn nói rõ nó đang ĐỌC gì. */
   chuRieng?: string;
+  /**
+   * Bước thứ mấy trên tổng bao nhiêu (chỉ AI Code có).
+   *
+   * Không có nó thì một khoảng lặng 40 giây trông y hệt app treo — cổng này
+   * không chảy chữ thật, nên chữ chỉ về một cục ở cuối. Con số bước là thứ
+   * duy nhất nói được "vẫn đang chạy", và nó còn báo trước sắp chạm trần.
+   */
+  buoc?: { nay: number; tran: number };
 }) {
   const chu = dangTraLoi
     ? 'Odin đang trả lời…'
@@ -49,6 +58,11 @@ export function DangNghi({
   return (
     <div className="ct-agent-nghi">
       <Loader2 size={13} aria-hidden className="ct-spin" />
+      {buoc && (
+        <span className="ct-agent-nghi-buoc" data-sap-het={buoc.tran - buoc.nay <= 1}>
+          bước {buoc.nay}/{buoc.tran}
+        </span>
+      )}
       <span>
         {chu}
         {/* Số giây chỉ hiện sau 3s: câu trả lời nhanh mà kèm một con số nhảy

@@ -2921,6 +2921,21 @@ select {
   white-space: nowrap;
 }
 
+/* Bước thứ mấy / tổng bao nhiêu, hiện cạnh con quay. Sắp chạm trần thì đổi
+   màu — người dùng biết TRƯỚC khi bị dừng, thay vì đọc một câu từ chối. */
+.ct-agent-nghi-buoc {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--ct-hover);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ct-text-faint);
+}
+.ct-agent-nghi-buoc[data-sap-het='true'] {
+  background: color-mix(in srgb, var(--ct-warn) 18%, transparent);
+  color: var(--ct-warn);
+}
+
 .ct-agent-nghi {
   display: flex;
   align-items: center;

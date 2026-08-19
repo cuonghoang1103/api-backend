@@ -53,7 +53,7 @@ const MAX_VONG = 320;
 
 /** Sự kiện đẩy lên renderer. Đây là thứ giao diện vẽ. */
 export type SuKienAgent =
-  | { loai: 'batDau'; model: string }
+  | { loai: 'batDau'; model: string; buoc?: number; tranBuoc?: number }
   | { loai: 'chu'; delta: string }
   /** Một tool vừa chạy xong (bất kể vòng 1 hay vòng 2) — để hiện dòng tiến trình. */
   | { loai: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
@@ -1026,7 +1026,7 @@ async function mgoiMotLuot(o: {
 
       switch (e.type) {
         case 'start':
-          o.phat({ loai: 'batDau', model: e.model });
+          o.phat({ loai: 'batDau', model: e.model, ...(typeof e.buoc === 'number' ? { buoc: e.buoc } : {}), ...(typeof e.tranBuoc === 'number' ? { tranBuoc: e.tranBuoc } : {}) });
           break;
         case 'text':
           o.phat({ loai: 'chu', delta: e.delta });

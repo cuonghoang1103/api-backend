@@ -204,7 +204,16 @@ export type AgentMessage =
 
 /** Sự kiện đẩy ra SSE cho app. */
 export type AgentEvent =
-  | { type: 'start'; model: string }
+  /**
+   * `buoc`/`tranBuoc` — bước THỨ MẤY trên tổng bao nhiêu, cho việc đang làm.
+   *
+   * Người dùng báo 19/08/2026 rằng agent "đứng luôn". Một phần là lỗi thật
+   * (trần bước đếm cả cuộc), nhưng phần còn lại là KHÔNG NHÌN THẤY GÌ: cổng
+   * này không chảy chữ thật (đo 121 mẩu về cùng một mili giây), nên giữa hai
+   * lần gọi là một khoảng lặng dài không phân biệt được với treo. Biết mình
+   * đang ở "bước 7/8" vừa giải thích được sự chờ, vừa báo trước sắp chạm trần.
+   */
+  | { type: 'start'; model: string; buoc: number; tranBuoc: number }
   | { type: 'text'; delta: string }
   /** Máy chủ ĐÃ chạy xong một tool vòng 2 — chỉ để hiện tiến trình. */
   | { type: 'server_tool'; name: string; summary: string }
@@ -537,7 +546,7 @@ export async function runAgentTurn(
     );
   }
   const model = chon?.model ?? modelFor('agent_code', ep);
-  emit({ type: 'start', model });
+  emit({ type: 'start', model, buoc: buocDaDi + 1, tranBuoc: MAX_AGENT_STEPS });
 
   const append: AgentMessage[] = [];
   let inTong = 0;

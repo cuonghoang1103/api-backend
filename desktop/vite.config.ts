@@ -8,12 +8,13 @@
  */
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { noiDungBai } from './vite.noi-dung-bai';
 import path from 'node:path';
 
 export default defineConfig({
   root: path.resolve(__dirname, 'src/renderer'),
   base: './',
-  plugins: [react()],
+  plugins: [react(), noiDungBai(__dirname)],
   resolve: {
     alias: {
       '@renderer': path.resolve(__dirname, 'src/renderer'),

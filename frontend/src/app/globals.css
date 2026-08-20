@@ -1126,6 +1126,12 @@ aside ::-webkit-scrollbar-thumb:hover {
   border-bottom: 2px solid; border-right: 2px solid;
 }
 
+/* ct-desktop:bat-dau noi-dung-bai
+ * ⚠️ ĐỪNG XOÁ DÒNG MỐC NÀY. App desktop CẮT nguyên vùng giữa hai mốc này ra
+ * lúc dựng (xem `desktop/vite.config.ts`, plugin `noiDungBai`) để trang Học
+ * viện vẽ bài học giống hệt web. Chép sang bên đó thì hai bản sẽ lệch nhau;
+ * cắt từ đây thì chỉ có MỘT nguồn. Thiếu mốc là bản dựng desktop HỎNG HẲN,
+ * có chủ ý — hỏng ồn ào hơn là im lặng vẽ ra một trang xấu. */
 /* ─── Rich content (Lesson Content / Teaching Notes) ─────────────────────────
  * Used on the /learn page. Renders sanitized HTML produced by
  * the TipTap editor in the admin. The blocks below preserve
@@ -1835,6 +1841,7 @@ aside ::-webkit-scrollbar-thumb:hover {
 .rich-content span[style*="color"] {
  /* keep the inline color, no override */
 }
+/* ct-desktop:ket-thuc noi-dung-bai */
 
 /* ══════════════════════════════════════════════════════════
  * Phase 3: Case Study / Build Log styles

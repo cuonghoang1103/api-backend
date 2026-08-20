@@ -26,6 +26,7 @@ import { MusicPage } from './features/music/MusicPage';
 import { NotesPage } from './features/notes/NotesPage';
 import { ProPage } from './features/pro/ProPage';
 import { TechTrendsPage } from './features/tech-trends/TechTrendsPage';
+import { HocVienPage } from './features/academy/HocVienPage';
 import { GiongNoiPage } from './features/voice/GiongNoiPage';
 
 export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
@@ -41,6 +42,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/tech-trends': TechTrendsPage,
   '/ai-templates': MauAIPage,
   '/voice': GiongNoiPage,
+  '/academy': HocVienPage,
 };
 
 export function nativePageFor(path: string): ComponentType | undefined {

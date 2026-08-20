@@ -93,6 +93,22 @@ await ctx.addInitScript(() => {
     [/\/tech-trends\/articles/, () => mang(6, (i) => ({ id: i, title: `Bài công nghệ ${i}`, slug: `bai-${i}`,
         summary: 'Tóm tắt bài viết.', publishedAt: '2026-08-20T00:00:00Z', category: { name: 'AI' } }))],
     [/\/cv/, () => mang(3, (i) => ({ id: i, title: `CV số ${i}`, updatedAt: '2026-08-20T00:00:00Z' }))],
+    [/\/academy\/semesters/, () => mang(9, (i) => ({ id: i, name: `Kỳ ${i}`, code: `KY${i}`, ordinal: i }))],
+    [/\/courses\/semester\//, () => mang(5, (i) => ({
+        id: i, slug: `mon-${i}`, title: `Course Title ${i}|||Tên môn học số ${i}`,
+        courseCode: ['PRF192', 'LAB211', 'CSD201', 'DBI202', 'PRJ301'][i - 1],
+        shortDescription: 'Short EN|||Mô tả ngắn của môn, dài vừa đủ để tràn sang dòng thứ hai.',
+        thumbnailUrl: null, level: 'INTERMEDIATE', totalLessons: 12, isFree: true,
+        sections: mang(3, (k) => ({ id: k, title: `S${k}`, lessonCount: 4, lessons: [] })) }))],
+    [/\/courses\/[^/]+$/, () => ({
+        id: 1, slug: 'mon-1', title: 'Course|||Môn học', courseCode: 'LAB211',
+        shortDescription: 'EN|||Mô tả ngắn', thumbnailUrl: null, level: 'INTERMEDIATE',
+        isFree: true, instructorName: 'Cuong03dx',
+        whatYouLearn: ['A|||Viết được chương trình Java theo kiến trúc phân tầng', 'B|||Gỡ lỗi'],
+        sections: mang(4, (k) => ({ id: k, title: `Section ${k}|||Mục ${k}`, lessonCount: 3,
+          lessons: mang(3, (b) => ({ id: k * 10 + b, title: `L${b}|||Bài ${k}.${b}`,
+            isFreePreview: k === 1, content: k === 1 ? '<h2>Nội dung</h2><p>Chữ bài học.</p>' : null,
+            videoUrl: k === 1 ? 'https://youtu.be/x' : null })) })) })],
     [/\/dashboard$/, () => ({ level: 3, exp: 120, totalExp: 500, streak: 4,
         timeline: mang(24, (i) => ({ hour: i - 1, activity: i % 3 === 0 ? 'hoc' : null })),
         tasks: mang(4, (i) => ({ id: i, title: `Việc cần làm số ${i}`, done: i % 2 === 0 })),
@@ -153,8 +169,8 @@ const CHUAN_BI = {
 };
 
 const DUONG = JSON.parse(process.env.CT_TRANG ?? 'null')
-  ?? ['/dashboard', '/feed', '/messages', '/friends', '/chat', '/cv', '/music', '/notes',
-      '/pro', '/tech-trends', '/ai-templates', '/voice'];
+  ?? ['/academy', '/dashboard', '/feed', '/messages', '/friends', '/chat', '/cv', '/music',
+      '/notes', '/pro', '/tech-trends', '/ai-templates', '/voice'];
 
 let hong = 0;
 const bang = [];

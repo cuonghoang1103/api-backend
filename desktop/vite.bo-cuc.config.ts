@@ -7,6 +7,7 @@
  */
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { noiDungBai } from './vite.noi-dung-bai';
 import path from 'node:path';
 
 const duong = (p: string) => path.resolve(__dirname, p);
@@ -72,7 +73,7 @@ function gia() {
 export default defineConfig({
   root: path.resolve(__dirname, 'scripts'),
   base: './',
-  plugins: [react(), gia()],
+  plugins: [react(), noiDungBai(__dirname), gia()],
   resolve: {
     alias: {
       '@renderer': duong('src/renderer'),

@@ -316,6 +316,18 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
   if (st.isDirectory()) {
     return { noiDung: `LỖI: "${args.path}" là thư mục. Dùng list_dir.`, tomTat: 'là thư mục' };
   }
+
+  /*
+   * PDF — XÉT TRƯỚC TRẦN 2MB.
+   *
+   * Trần 2MB là trần cho FILE CHỮ, nơi kích thước file xấp xỉ số token phải
+   * trả tiền. Với PDF thì không: một bản 8MB có thể chỉ chứa 20 trang chữ vì
+   * phần nặng là ảnh nhúng và font. Chặn nó ở đây nghĩa là từ chối đúng loại
+   * tài liệu mà người dùng hay kéo vào nhất. Cái đáng chặn là CHỮ RÚT RA, và
+   * `docPdf` tự cắt ở 120k ký tự.
+   */
+  if (path.extname(dich).toLowerCase() === '.pdf') return await docFilePdf(dich, st.size, String(args.path ?? ''));
+
   if (st.size > TRAN_BYTE_FILE) {
     return {
       noiDung: `LỖI: file nặng ${(st.size / 1024 / 1024).toFixed(1)}MB, quá lớn để đọc (trần 2MB). Dùng grep để tìm trong nó.`,
@@ -392,6 +404,61 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
   return {
     noiDung: danhSo + (con > 0 ? `\n[… còn ${con} dòng nữa. Gọi lại read_file với offset=${tu + lat.length} để đọc tiếp.]` : ''),
     tomTat: `${lat.length}/${dong.length} dòng`,
+  };
+}
+
+/**
+ * Nhánh PDF của `read_file`.
+ *
+ * Tách ra thành hàm riêng để `toolReadFile` không phình thêm một tầng rẽ nhánh
+ * nữa — nó đã có ba nhánh (thư mục / ảnh / chữ).
+ */
+async function docFilePdf(dich: string, coByte: number, nhan: string): Promise<KetQuaTool> {
+  /* Trần riêng cho PDF: rộng hơn file chữ vì phần nặng là ảnh và font, nhưng
+     vẫn phải có trần — đọc một file 500MB là giữ cả tiến trình chính trong khi
+     người dùng nhìn app đứng hình. */
+  const TRAN_PDF = 40 * 1024 * 1024;
+  if (coByte > TRAN_PDF) {
+    return {
+      noiDung: `LỖI: PDF nặng ${(coByte / 1048576).toFixed(1)}MB, quá trần 40MB.`,
+      tomTat: 'PDF quá lớn',
+    };
+  }
+
+  const { docPdf } = await import('./docPdf');
+  const byte = await fs.readFile(dich);
+
+  let kq;
+  try {
+    kq = await docPdf(byte);
+  } catch (e) {
+    /* Hỏng thì nói ĐÚNG lý do. Bản cũ trả "file nhị phân", và model đọc câu đó
+       rồi bảo người dùng tự đổi PDF thành ảnh — đẩy việc của app sang cho họ. */
+    return {
+      noiDung: `LỖI: không mở được PDF "${nhan}" (${(e as Error).message}). `
+        + 'File có thể hỏng hoặc đặt mật khẩu.',
+      tomTat: 'PDF hỏng',
+    };
+  }
+
+  /* Nghi là bản scan thì NÓI RA, nhưng vẫn kèm phần chữ đã rút được. Vứt nó đi
+     là bảo người dùng đi OCR một file mà mình vừa đọc được — đúng lỗi bắt được
+     lúc chạy chunk đã dựng, xem ghi chú ngưỡng trong `docPdf.ts`. */
+  if (kq.banScan) {
+    const goiY = `PDF "${nhan}" có ${kq.soTrang} trang nhưng gần như không có chữ chọn được — `
+      + 'nhiều khả năng là bản scan hoặc ảnh chụp. Muốn đọc đầy đủ thì OCR: '
+      + 'đổi từng trang thành ảnh bằng run_command (`pdftoppm -png -r 200 <file> trang`) '
+      + 'rồi read_file từng ảnh — read_file đọc được ảnh.';
+    return {
+      noiDung: kq.text ? `${goiY}\n\nPhần chữ ít ỏi rút được:\n${kq.text}` : goiY,
+      tomTat: `PDF ${kq.soTrang} trang, nghi bản scan`,
+    };
+  }
+
+  return {
+    noiDung: `PDF "${nhan}" — ${kq.soTrang} trang, chữ đã rút ra:\n\n${kq.text}`
+      + (kq.catBot ? '\n\n[… đã cắt bớt vì quá dài. Dùng grep trên file này để tìm phần còn lại.]' : ''),
+    tomTat: `PDF ${kq.soTrang} trang · ${kq.text.length} ký tự`,
   };
 }
 

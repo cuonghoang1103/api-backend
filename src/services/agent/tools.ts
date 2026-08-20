@@ -111,7 +111,14 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       'Nhờ vậy bạn chụp được màn hình bất cứ thứ gì chạy được lệnh: ' +
       'điện thoại Android qua cáp (`adb exec-out screencap -p > /tmp/man.png` rồi read_file nó), ' +
       'máy ảo iOS (`xcrun simctl io booted screenshot /tmp/man.png`), ' +
-      'màn hình máy (`screencapture -x /tmp/man.png` trên macOS). Trần 1.4MB mỗi ảnh.',
+      'màn hình máy (`screencapture -x /tmp/man.png` trên macOS). Trần 1.4MB mỗi ảnh. ' +
+      // Từ app desktop 0.5.45: `read_file` tự rút chữ khỏi PDF (xem
+      // `desktop/src/main/agent/docPdf.ts`). Phải nói ra ở ĐÂY, vì đây là thứ
+      // model đọc — không có dòng này thì nó vẫn tin PDF là file nhị phân và
+      // bảo người dùng tự đổi sang ảnh, đúng thứ vừa được vá.
+      'ĐỌC ĐƯỢC CẢ PDF — tự rút chữ ra (giữ thứ tự đọc, đánh dấu ngắt trang), trần 40MB. ' +
+      'ĐỪNG bảo người dùng tự đổi PDF sang ảnh. Chỉ khi kết quả nói rõ đó là BẢN SCAN ' +
+      '(không có chữ chọn được) thì mới OCR: `pdftoppm -png -r 200 <file> trang` rồi read_file từng ảnh.',
     parameters: {
       type: 'object',
       properties: {

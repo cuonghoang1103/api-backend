@@ -27,7 +27,7 @@
  * Độ dài câu trả lời: hai bậc này được đặt `max_tokens` CAO (10k/15k) — đó
  * chính là lý do tồn tại của chúng, câu trả lời không bị cụt như bậc nhanh.
  */
-import { chatCompletionsUrl, gatewayConfigured, gatewayKey, gatewayKeyFor, messagesUrl, modelFor } from './llm/gateway.js';
+import { chatCompletionsUrl, congAnthropic, gatewayConfigured, gatewayKey, gatewayKeyFor, messagesUrl, modelFor } from './llm/gateway.js';
 
 /** A text block inside a multi-part message. */
 export interface ClaudeTextBlock {
@@ -213,6 +213,19 @@ function buildBody(p: ClaudeCallParams, stream: boolean): string {
  * `gatewayKeyFor()` đã có từ 18/08 và các nơi khác đã dùng; riêng file này —
  * đúng file phục vụ hai bậc trả phí — thì bị bỏ sót.
  */
+/**
+ * Địa chỉ + khoá cho tuyến `/v1/messages`.
+ *
+ * Model Anthropic đi cổng riêng (rambo) vì modelapi không phục vụ nổi chúng —
+ * xem `congAnthropic()` để đọc số đo. Ráp cả hai ở MỘT chỗ, vì lần trước tách
+ * khoá ra khỏi địa chỉ đúng ở file này đã đẻ ra lỗi "Pro chạy, Max im".
+ */
+function noiGuiAnthropic(model?: string): { url: string; key: string } {
+  const rieng = model ? congAnthropic(model) : null;
+  if (rieng) return rieng;
+  return { url: messagesUrl(), key: requireKey(model) };
+}
+
 function requireKey(model?: string): string {
   const key = gatewayKeyFor(model) ?? gatewayKey();
   if (!key) throw new Error('Thiếu khoá cổng LLM (LLM_GATEWAY_API_KEY / OPENAI_COMPAT_API_KEY)');
@@ -275,13 +288,13 @@ function toOpenAiBody(p: ClaudeCallParams, stream: boolean): string {
  * yielding some text, the caller keeps the partial answer.
  */
 export async function* streamClaudeChat(p: ClaudeCallParams): AsyncGenerator<string, void, unknown> {
-  const key = requireKey(p.model);
+  const noi = noiGuiAnthropic(p.model);
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
   try {
-    const res = await fetch(messagesUrl(), {
+    const res = await fetch(noi.url, {
       method: 'POST',
-      headers: messagesHeaders(key, true),
+      headers: messagesHeaders(noi.key, true),
       body: buildBody(p, true),
       signal: ctrl.signal,
     });
@@ -330,13 +343,13 @@ export async function* streamClaudeChat(p: ClaudeCallParams): AsyncGenerator<str
  * One NON-streaming completion (fallback). Throws on any error.
  */
 export async function completeClaudeChat(p: ClaudeCallParams): Promise<string> {
-  const key = requireKey(p.model);
+  const noi = noiGuiAnthropic(p.model);
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
   try {
-    const res = await fetch(messagesUrl(), {
+    const res = await fetch(noi.url, {
       method: 'POST',
-      headers: messagesHeaders(key, false),
+      headers: messagesHeaders(noi.key, false),
       body: buildBody(p, false),
       signal: ctrl.signal,
     });

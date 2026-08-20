@@ -552,6 +552,53 @@ export function congAgent(): LlmEndpoint | null {
   return { root, key, local: false, label: 'cong-agent', giaoThuc: 'anthropic' };
 }
 
+/**
+ * Model Anthropic đi cổng RIÊNG (rambo), vì modelapi KHÔNG phục vụ được chúng.
+ *
+ * ─── ĐO THẬT 20/08/2026, bằng chính khoá production ───
+ *
+ * `GET /v1/models` của modelapi LIỆT KÊ đủ 6 model Claude cho khoá này —
+ * `claude-fable-5`, `opus-4-6/4-7/4-8`, `sonnet-4-6`, `sonnet-5`. Nhưng gọi
+ * thật thì KHÔNG cái nào trả lời:
+ *
+ *   claude-sonnet-5     HTTP 500 "Upstream request failed" — 3/3 lần
+ *   claude-sonnet-4-6   hết giờ (>25s)
+ *   claude-opus-4-8     hết giờ (>25s)
+ *   claude-haiku-4-5    HTTP 503
+ *
+ * Chính `MODEL_INFO` trong file này cũng đã ghi `⚠ chưa mua được` cho
+ * `claude-sonnet-5` — nhưng `PURPOSE_MODEL` vẫn trỏ **8 việc** vào nó:
+ * chat_pro · exam_grade · language_tutor · codelab_coach · cv_writing ·
+ * interview_grade · interview_generate · agent_code. Cả tám đều đang ăn
+ * 500/hết giờ rồi mới lùi, và người dùng thấy "hỏi câu ngắn đợi 1-2 phút".
+ *
+ * Cùng lúc đó, rambo phục vụ đúng những model ấy — đo cùng một câu:
+ *
+ *   claude-haiku-4-5   chữ đầu 2.202ms · trọn 5.799ms · trải 3.597ms
+ *   claude-sonnet-5    chữ đầu 3.015ms · trọn 7.724ms · trải 4.690ms
+ *   claude-sonnet-4-6  chữ đầu 3.569ms · trọn 6.533ms · trải 2.886ms
+ *   claude-opus-4-8    chữ đầu 4.038ms · trọn 9.188ms · trải 5.113ms
+ *
+ * Cột "trải" là khoảng giữa mẩu đầu và mẩu cuối: rambo CHẢY DẦN THẬT, nên chữ
+ * hiện dần thay vì đứng im rồi đổ một cục.
+ *
+ * ⚠️ Cổng này KHÔNG tôn trọng `max_tokens` (đặt 24, trả 103). Mọi trần token
+ * trong mã đều vô hiệu với nó — chấp nhận được vì là cổng riêng của người
+ * dùng, nhưng đừng suy ra rằng cổng khác cũng thế.
+ *
+ * Tắt bằng `ANTHROPIC_QUA_CONG_RIENG=false` nếu modelapi mở lại kênh Claude.
+ */
+export function congAnthropic(model: string): { url: string; key: string } | null {
+  if (process.env.ANTHROPIC_QUA_CONG_RIENG === 'false') return null;
+  if (!isAnthropicModel(model)) return null;
+  const rieng = congAgent();
+  // `congAgent()` đã chốt cả root lẫn key, nhưng `LlmEndpoint.key` khai là
+  // `string | undefined` nên phải nói lại ở đây — và nói bằng điều kiện thật,
+  // đừng bằng `!`: cái ép kiểu đó sẽ im lặng gửi `Bearer undefined`.
+  if (!rieng?.key) return null;
+  return { url: `${rieng.root}/v1/messages`, key: rieng.key };
+}
+
 /** Cổng dự phòng khi máy nhà không trả lời. Luôn là cổng, không bao giờ ngược lại. */
 export function fallbackEndpoint(): LlmEndpoint {
   return { root: gatewayRoot(), key: gatewayKey(), local: false, label: 'cong' };

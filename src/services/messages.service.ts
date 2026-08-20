@@ -811,6 +811,16 @@ export class MessagesService {
       update: { lastReadAt: now },
     });
 
+    // "Chưa đọc" là lời nhắc CÁ NHÂN — mở hội thoại ra đọc là lời nhắc xong
+    // nhiệm vụ. Trước đây không ai xoá nó, mà phía app tính
+    // `chuaDoc = unreadCount > 0 || markedUnreadAt != nil` ⇒ hàng SÁNG VĨNH
+    // VIỄN sau một lần bấm "Chưa đọc". Đo thật 21/08: thread 12 mang
+    // markedUnreadAt từ 19:05 hôm trước dù người dùng đã đọc nhiều lần.
+    const pref = this.getPreferenceForViewer(thread.preferences, userId);
+    if (pref?.markedUnreadAt) {
+      await this.setThreadPreference(threadId, userId, 'markedUnreadAt', null);
+    }
+
     this.emitRead(thread, userId, now);
   }
 

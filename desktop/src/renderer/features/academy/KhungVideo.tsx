@@ -104,8 +104,14 @@ export function KhungVideo({
     });
   }, []);
 
-  /* Gỡ hẳn khi tháo. Không có nhánh này thì video ở lại trên trang kế tiếp. */
-  useEffect(() => () => { void window.cuongthai?.browser.an(); }, []);
+  /* Gỡ hẳn khi tháo — và DỪNG PHÁT, không chỉ gỡ.
+     `an()` một mình chỉ tháo khung khỏi cửa sổ; trang YouTube vẫn chạy nền và
+     tiếng vẫn ra loa. Người dùng báo 20/08/2026: thoát bài hoặc chuyển bài
+     khác mà vẫn nghe tiếng video bài cũ. */
+  useEffect(() => () => {
+    void window.cuongthai?.browser.an();
+    void window.cuongthai?.browser.dungVideo();
+  }, []);
 
   useEffect(() => {
     const el = oRef.current;

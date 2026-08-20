@@ -19,6 +19,7 @@ export function registerBrowserHandlers(): void {
   });
 
   handle('browser:an', () => td.an());
+  handle('browser:dungVideo', () => td.dungVideo());
   handle('browser:datVung', (vung) => td.datVung(vung));
   handle('browser:diToi', ({ url }) => td.diToi(url));
   handle('browser:lui', () => td.lui());

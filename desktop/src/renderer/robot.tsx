@@ -74,7 +74,7 @@ function Robot() {
    * dựng xong bố cục nhưng TRƯỚC khi nó vẽ, nên người dùng không thấy một
    * khung hình bong bóng bị xén rồi mới giãn ra.
    */
-  const doRef = useRef<HTMLDivElement | null>(null);
+  const doRef = useRef<HTMLButtonElement | null>(null);
   const chuBong = tin ? tin.chu : tt === 'nghi' ? CHU_CHO : null;
 
   useLayoutEffect(() => {
@@ -304,10 +304,30 @@ function Robot() {
     <div className="rb" data-rong={rong} data-keo={keoDuoc} data-dang-keo={dangKeo}>
       {rong && <KhungChat onDong={() => doiRong(false)} />}
 
-      {/* Bản sao vô hình chỉ để ĐO. Cùng lớp `.rb-bong` nên cùng font, cùng
-          đệm, cùng viền — số đo mới khớp với bong bóng thật. */}
+      {/*
+        Bản sao vô hình chỉ để ĐO.
+
+        ⚠️ PHẢI MANG ĐÚNG `data-loai`. Không có nó thì ô đo thiếu
+        `border-left: 3px` (và với 'cho' là thiếu cả chữ NGHIÊNG) mà bong bóng
+        thật có. Đo thật 20/08/2026: ô đo ra 273×35 — MỘT dòng — trong khi bong
+        bóng thật ra 274×55 — HAI dòng. Cửa sổ tính theo số đo hụt, và dòng cuối
+        bị xén. Người dùng gửi ảnh "♪ Justin Bieber - Ghost — JustinBieberVEVO"
+        cụt đáy, ngay sau bản vá tưởng đã xong.
+
+        Bài học: bản sao dùng để đo phải giống bản thật ở MỌI thứ ảnh hưởng bố
+        cục — lớp CSS thôi chưa đủ, thuộc tính chọn kiểu cũng tính.
+      */}
       {chuBong && !rong && (
-        <div ref={doRef} className="rb-bong rb-do" aria-hidden>{chuBong}</div>
+        <button
+          type="button"
+          ref={doRef}
+          className="rb-bong rb-do"
+          data-loai={tin ? tin.loai : 'cho'}
+          tabIndex={-1}
+          aria-hidden
+        >
+          {chuBong}
+        </button>
       )}
 
       {/*

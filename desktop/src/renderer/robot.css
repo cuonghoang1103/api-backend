@@ -148,10 +148,9 @@ body {
   background: rgba(28, 28, 40, 0.97);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  /* ⚠️ Bong bóng "có tin" là một <button>, mà button KHÔNG kế thừa `color`
-     lẫn `font-family` từ `body`. Thiếu hai dòng này thì nó vẽ bằng font và
-     màu chữ mặc định của hệ điều hành — khác hẳn bong bóng "đang nghĩ" vốn
-     là <div>. Hai bong bóng cùng lớp CSS mà trông như hai thứ. */
+  /* <button> không kế thừa `color`, `font-family` hay canh chữ. Khai ở ĐÂY
+     (chứ không ở `button.rb-bong`) để cả hai loại bong bóng — <div> "đang
+     nghĩ" và <button> "có tin" — ăn cùng một bộ. */
   font-family: inherit;
   color: inherit;
   text-align: left;
@@ -181,14 +180,25 @@ body {
 .rb-bong[data-loai='nhac'] { border-left: 3px solid #34d399; }
 .rb-bong[data-loai='agent'] { border-left: 3px solid #a78bfa; }
 
-/* Bong bóng nay là NÚT (bấm để mở trang chat đầy đủ). `<button>` mang theo
-   một bộ mặc định của trình duyệt — font hệ thống, canh giữa, viền — nên phải
-   đặt lại hết, không thì chữ đổi phông và dồn vào giữa. */
+/* Bong bóng "có tin" là NÚT (bấm để mở trang chat đầy đủ). `<button>` mang
+   theo một bộ mặc định của trình duyệt, nên phải đặt lại — nhưng đặt lại bằng
+   `font: inherit` thì HỎNG.
+
+   ⚠️ `font:` là thuộc tính VIẾT TẮT: nó đặt lại cả `font-size`. Chọn lọc của
+   `button.rb-bong` (0,1,1) cao hơn `.rb-bong` (0,1,0) và lại nằm sau, nên nó
+   nuốt luôn `font-size: 12px` ở trên và trả chữ về cỡ kế thừa — **16px**.
+   Đo thật 20/08/2026: bong bóng "có tin" vẽ ở 16px còn bong bóng "đang nghĩ"
+   (một <div>, cùng lớp CSS) vẽ ở 12px. To hơn 33%, và không ai thấy vì hai
+   loại bong bóng hiếm khi hiện cạnh nhau.
+
+   Hậu quả nặng hơn cái xấu: ô đo `.rb-do` là một <div> nên đo ở 12px, cửa sổ
+   tính theo số đo ấy, rồi bong bóng thật vẽ ở 16px và xuống hai dòng ⇒ **dòng
+   cuối bị xén**. Đúng cái ảnh người dùng gửi sau khi tôi tưởng đã vá xong.
+
+   Nay chỉ đặt lại đúng thứ <button> làm sai, và để `font-size` cho `.rb-bong`.
+   Ô đo cũng đã đổi thành <button> để không còn khe hở nào giữa hai bên. */
 button.rb-bong {
   display: block;
-  text-align: left;
-  font: inherit;
-  color: inherit;
   cursor: pointer;
   -webkit-app-region: no-drag;   /* nằm trong vùng kéo cửa sổ ⇒ phải trừ ra */
 }

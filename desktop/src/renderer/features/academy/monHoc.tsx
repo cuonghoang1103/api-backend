@@ -9,10 +9,10 @@
  * Chép sang một bản thứ hai thì mọi bản vá sau này phải làm hai lần, và lần
  * quên thứ nhất sẽ không ai thấy — hai trang vẫn chạy, chỉ khác nhau.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import DOMPurify from 'dompurify';
 import {
-  ArrowLeft, BookOpen, ChevronDown, ChevronRight, CloudOff, ExternalLink,
+  ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronRight, CloudOff, ExternalLink,
   FileText, Layers3, Lock, PlayCircle,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
@@ -154,8 +154,28 @@ export function ChiTietMon({
     return () => { huy = true; };
   }, [api, userId, online, slug]);
 
+  const muc = mon?.sections ?? [];
+
   if (baiMo && mon) {
-    return <DocBai bai={baiMo} mon={mon} onQuayLai={() => setBaiMo(null)} />;
+    /* Danh sách PHẲNG theo đúng thứ tự hiển thị: nối bài của từng mục lại.
+       Điều hướng phải đi XUYÊN mục — hết mục 1 là sang bài đầu mục 2, y như
+       web. Chặn trong một mục thì tới bài cuối mục là cụt đường. */
+    const phang = muc.flatMap((s) => s.lessons ?? []);
+    const i = phang.findIndex((b) => b.id === baiMo.id);
+    return (
+      /* `key` để đổi bài là GẮN LẠI hẳn: đặt lại trạng thái mở video, gắn lại
+         `KhungVideo`, và effect cuộn-lên-đầu chạy. Giữ nguyên component thì
+         bài mới hiện ra ở giữa trang, đúng chỗ người dùng đang cuộn dở. */
+      <DocBai
+        key={baiMo.id}
+        bai={baiMo}
+        mon={mon}
+        onQuayLai={() => setBaiMo(null)}
+        truoc={i > 0 ? phang[i - 1] ?? null : null}
+        sau={i >= 0 && i + 1 < phang.length ? phang[i + 1] ?? null : null}
+        onDoiBai={setBaiMo}
+      />
+    );
   }
 
   if (loi) {
@@ -180,7 +200,6 @@ export function ChiTietMon({
     );
   }
 
-  const muc = mon.sections ?? [];
   const tongBai = muc.reduce((n, s) => n + (s.lessons ?? []).length, 0);
   const hoc = raDanhSach(mon.whatYouLearn);
   const canCo = raDanhSach(mon.requirements);
@@ -281,13 +300,22 @@ export function ChiTietMon({
 
 /* ── Đọc một bài ─────────────────────────────────────────────────────────── */
 
-function DocBai({ bai, mon, onQuayLai }: { bai: Bai; mon: Mon; onQuayLai: () => void }) {
+/** Bài chưa mở khoá: máy chủ không trả nội dung LẪN video khi chưa ghi danh. */
+function baiKhoa(b: Bai): boolean { return !b.content && !b.videoUrl; }
+
+function DocBai({
+  bai, mon, onQuayLai, truoc, sau, onDoiBai,
+}: {
+  bai: Bai; mon: Mon; onQuayLai: () => void;
+  truoc: Bai | null; sau: Bai | null; onDoiBai: (b: Bai) => void;
+}) {
   /* Video HIỆN SẴN khi bài có video — người dùng yêu cầu 20/08/2026: "tôi muốn
      vào video nó hiện cố định, chứ đừng phải ấn vào nó mới hiện".
      Cái giá: mỗi lần mở một bài CÓ video là một lượt tải YouTube, kể cả khi họ
      chỉ định đọc chữ. Đổi lại còn nút X để đóng, và lúc đó nút "Xem video trong
      app" hiện lại. */
   const [xemVideo, datXemVideo] = useState(true);
+  const goc = useRef<HTMLDivElement>(null);
   /* Đổi bài thì mở lại khung (nếu bài trước họ đã đóng). */
   useEffect(() => { datXemVideo(true); }, [bai.id]);
 
@@ -302,8 +330,20 @@ function DocBai({ bai, mon, onQuayLai }: { bai: Bai; mon: Mon; onQuayLai: () => 
     return sach;
   }, [bai.content]);
 
+  /* Đổi bài phải về ĐẦU trang. Component được gắn lại (`key` ở chỗ gọi), nên
+     effect này chạy đúng một lần mỗi bài. Tìm lớp cuộn bằng cách đi ngược tổ
+     tiên thay vì gọi tên `.ct-content`: đổi tên lớp ở vỏ app thì chỗ này hỏng
+     câm, không lỗi nào để thấy. */
+  useEffect(() => {
+    for (let n = goc.current?.parentElement; n; n = n.parentElement) {
+      const k = getComputedStyle(n).overflowY;
+      if (k === 'auto' || k === 'scroll') { n.scrollTop = 0; return; }
+    }
+    window.scrollTo({ top: 0 });
+  }, []);
+
   return (
-    <div className="ct-page ct-hv ct-hv-bai-doc">
+    <div className="ct-page ct-hv ct-hv-bai-doc" ref={goc}>
       <button type="button" className="ct-btn ct-btn-ghost ct-gn-lui" onClick={onQuayLai}>
         <ArrowLeft size={14} aria-hidden /> {chuVi(mon.title)}
       </button>
@@ -361,6 +401,49 @@ function DocBai({ bai, mon, onQuayLai }: { bai: Bai; mon: Mon; onQuayLai: () => 
             </button>
           </p>
         )}
+
+      {/* Chuyển bài — đi xuyên mục, y như web.
+          Bài kế bị khoá thì KHÔNG giấu nút: giấu đi là người dùng tưởng đã hết
+          bài. Hiện ổ khoá và mở bản web, đúng cách danh sách bài đang làm. */}
+      {(truoc || sau) && (
+        <nav className="ct-hv-chuyen" aria-label="Chuyển bài">
+          {truoc ? (
+            <button
+              type="button"
+              className="ct-hv-chuyen-nut"
+              data-ben="truoc"
+              onClick={() => (baiKhoa(truoc) ? moNgoai(`${WEB}/courses/${mon.slug}`) : onDoiBai(truoc))}
+              title={chuVi(truoc.title)}
+            >
+              <ArrowLeft size={15} aria-hidden />
+              <span className="ct-hv-chuyen-chu">
+                <span className="ct-hv-chuyen-nhan">Bài trước</span>
+                <span className="ct-hv-chuyen-ten">
+                  {baiKhoa(truoc) && <Lock size={11} aria-hidden />} {chuVi(truoc.title)}
+                </span>
+              </span>
+            </button>
+          ) : <span />}
+
+          {sau && (
+            <button
+              type="button"
+              className="ct-hv-chuyen-nut"
+              data-ben="sau"
+              onClick={() => (baiKhoa(sau) ? moNgoai(`${WEB}/courses/${mon.slug}`) : onDoiBai(sau))}
+              title={chuVi(sau.title)}
+            >
+              <span className="ct-hv-chuyen-chu">
+                <span className="ct-hv-chuyen-nhan">Bài tiếp theo</span>
+                <span className="ct-hv-chuyen-ten">
+                  {baiKhoa(sau) && <Lock size={11} aria-hidden />} {chuVi(sau.title)}
+                </span>
+              </span>
+              <ArrowRight size={15} aria-hidden />
+            </button>
+          )}
+        </nav>
+      )}
     </div>
   );
 }

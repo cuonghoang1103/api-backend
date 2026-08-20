@@ -913,6 +913,9 @@ export const INVOKE_CHANNELS = {
 
   'browser:mo': browserMoSchema,
   'browser:an': null,
+  /* Khác `browser:an`: `an` chỉ GỠ khung khỏi cửa sổ, trang vẫn chạy và vẫn
+     ra tiếng. Cái này dừng hẳn — dùng khi rời bài học. */
+  'browser:dungVideo': null,
   'browser:datVung': browserVungSchema,
   'browser:diToi': browserUrlSchema,
   'browser:lui': null,
@@ -1315,6 +1318,7 @@ export interface DesktopBridge {
     mo(vung: { x: number; y: number; width: number; height: number }, url?: string): Promise<void>;
     /** Gỡ khỏi cửa sổ nhưng GIỮ trang — quay lại không phải tải lại. */
     an(): Promise<void>;
+    dungVideo(): Promise<void>;
     datVung(vung: { x: number; y: number; width: number; height: number }): Promise<void>;
     diToi(url: string): Promise<{ ok: boolean; loi?: string }>;
     lui(): Promise<void>;

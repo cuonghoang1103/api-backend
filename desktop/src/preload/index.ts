@@ -260,6 +260,7 @@ const bridge: DesktopBridge = {
     mo: (vung: { x: number; y: number; width: number; height: number }, url?: string) =>
       ipcRenderer.invoke('browser:mo', { vung, url }) as Promise<void>,
     an: () => ipcRenderer.invoke('browser:an') as Promise<void>,
+    dungVideo: () => ipcRenderer.invoke('browser:dungVideo') as Promise<void>,
     datVung: (vung: { x: number; y: number; width: number; height: number }) =>
       ipcRenderer.invoke('browser:datVung', vung) as Promise<void>,
     diToi: (url: string) =>

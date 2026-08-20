@@ -312,6 +312,31 @@ export function tiaYouTube(): void {
   });
 }
 
+/**
+ * DỪNG HẲN video: tắt tiếng ngay rồi đưa trang về trắng.
+ *
+ * ⚠️ `an()` CỐ Ý không huỷ trang — người dùng rời tab Trình duyệt rồi quay lại
+ * thì trang phải còn nguyên. Nhưng một `WebContentsView` đã gỡ khỏi cửa sổ vẫn
+ * CHẠY: video vẫn phát, và tiếng vẫn ra loa. Người dùng báo 20/08/2026: thoát
+ * bài học hay chuyển bài khác mà vẫn nghe tiếng video bài cũ.
+ *
+ * Tắt tiếng TRƯỚC rồi mới điều hướng: `loadURL` mất vài trăm mili giây, và
+ * chừng đó vẫn đủ nghe. Bỏ tắt tiếng sau khi trang đã trắng, không thì tab
+ * Trình duyệt câm vĩnh viễn ở lần dùng sau.
+ *
+ * Đổi bài thì lời gọi này chạy TRƯỚC `mo()` của bài mới (React chạy dọn dẹp
+ * của lượt cũ xong mới gắn lượt mới), và `loadURL` sau huỷ `loadURL` trước —
+ * nên không có chuyện xoá trắng mất video vừa mở.
+ */
+export function dungVideo(): void {
+  const wc = khung?.webContents;
+  if (!wc) return;
+  wc.setAudioMuted(true);
+  void wc.loadURL('about:blank')
+    .catch(() => {})
+    .finally(() => wc.setAudioMuted(false));
+}
+
 export function an(): void {
   // Đóng video giữa lúc đang toàn màn hình: phải hạ cờ, không thì lần mở sau
   // `datVung` vẫn nghĩ đang fullscreen và phủ kín cửa sổ.

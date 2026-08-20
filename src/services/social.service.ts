@@ -187,6 +187,10 @@ export interface FeedOptions {
   // Video-category filter (home feed video pills). When set, restrict to
   // posts with this videoCategoryId. Only used alongside type=VIDEO.
   videoCategoryId?: number;
+  // Bỏ hẳn bài của các loạt nhiều kỳ (100 Ngày Java/Database/Tiếng Anh) khỏi
+  // kết quả. Dùng cho bảng tin chung, nơi chúng chiếm 82% số bài và dìm hết
+  // bài thường; các loạt có màn riêng của mình để xem theo ngày.
+  excludeSeries?: boolean;
 }
 
 /**
@@ -662,7 +666,7 @@ export async function updatePost(postId: number, userId: number, data: {
 // ─── Feed ────────────────────────────────────────────────────────
 
 export async function getFeed(options: FeedOptions & { currentUserId?: number }) {
-  const { cursor, limit = 20, authorId, currentUserId, hashtag, sort = 'recent', following, type, videoCategoryId } = options;
+  const { cursor, limit = 20, authorId, currentUserId, hashtag, sort = 'recent', following, type, videoCategoryId, excludeSeries } = options;
 
   // SECURITY: enforce post visibility server-side. We intentionally
   // ignore any client-supplied `visibility` filter — it was the
@@ -696,6 +700,17 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
       ...(hashtag ? { content: { contains: `#${hashtag}`, mode: 'insensitive' as const } } : {}),
       // Content-type tab filter (Bài viết / Video / File). Omitted = all.
       ...(type ? { type } : {}),
+      // Loại bài thuộc các LOẠT NHIỀU KỲ khỏi bảng tin chung.
+      //
+      // Vì sao cần: đo 20/08/2026, bảng tin có 165 bài thì 135 là bài của ba
+      // loạt (Java 100, Database 30, Tiếng Anh 5) — tức 82%. Người mở bảng tin
+      // "Tất cả" gần như chỉ thấy bài học, còn bài thường bị đẩy chìm.
+      //
+      // Lọc ở ĐÂY chứ không ở client: nếu client tự bỏ, mỗi lượt tải 20 bài chỉ
+      // còn ~4 bài hiện lên, cuộn mãi không hết trang, và số đếm ở tab cũng sai.
+      ...(excludeSeries
+        ? { NOT: SERIES_TAGS.map((tag) => ({ content: { contains: `#${tag}-`, mode: 'insensitive' as const } })) }
+        : {}),
       // Video-category filter (home feed video pills). Omitted = all
       // categories — but then posts that opted out of "Tất cả"
       // (showInAll=false) are excluded. Profile feeds (authorId) skip the
@@ -865,12 +880,18 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
  * matches what it will actually show. One cheap GROUP BY; the frontend
  * fetches it once per visit (and after composing a post).
  */
-export async function getFeedCounts(options: { visibility?: string } = {}) {
+export async function getFeedCounts(options: { visibility?: string; excludeSeries?: boolean } = {}) {
   const where = {
     ...(options.visibility ? { visibility: options.visibility } : {}),
     // Match what the "Tất cả" surfaces actually render: posts that opted
     // out of the no-category feeds don't count toward the tab badges.
     showInAll: true,
+    // Phải nhận CÙNG cờ với `getFeed`, không thì con số trên tab đếm cả bài
+    // của các loạt mà danh sách bên dưới lại không hiện chúng — tab ghi 165
+    // rồi cuộn ra 30 bài là hết.
+    ...(options.excludeSeries
+      ? { NOT: SERIES_TAGS.map((tag) => ({ content: { contains: `#${tag}-`, mode: 'insensitive' as const } })) }
+      : {}),
   };
   const grouped = await prisma.socialPost.groupBy({
     by: ['type'],
@@ -2304,6 +2325,10 @@ const POST_SERIES: Record<string, { tag: string; label: string; total: number }>
     total: 100,
   },
 };
+/// Hashtag của mọi loạt bài, DẪN XUẤT từ `POST_SERIES` ngay trên chứ không chép
+/// tay — thêm một loạt mới thì bộ lọc `excludeSeries` tự biết, khỏi sửa hai chỗ.
+const SERIES_TAGS: string[] = Object.values(POST_SERIES).map((d) => d.tag);
+
 
 export interface PostSeriesIndex {
   slug: string;

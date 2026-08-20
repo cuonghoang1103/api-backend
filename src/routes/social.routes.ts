@@ -228,7 +228,7 @@ router.post(
   async (req: any, res: any, next) => {
     try {
       const currentUserId = req.user?.userId;
-      const { cursor, limit = '20', authorId, visibility, hashtag, sort, following, type, videoCategoryId } = req.query;
+      const { cursor, limit = '20', authorId, visibility, hashtag, sort, following, type, videoCategoryId, excludeSeries } = req.query;
       // Content-type tab filter. Only the known buckets pass through;
       // anything else falls back to "all" (undefined).
       const feedType = type === 'POST' || type === 'VIDEO' || type === 'FILE' ? type : undefined;
@@ -252,6 +252,8 @@ router.post(
         following: following === 'true' || following === '1',
         type: feedType,
         videoCategoryId: feedVideoCategoryId,
+        // ?excludeSeries=true — bảng tin chung bỏ bài của các loạt nhiều kỳ.
+        excludeSeries: excludeSeries === 'true' || excludeSeries === '1',
         currentUserId,
       });
 
@@ -276,9 +278,10 @@ router.get(
   optionalAuth,
   async (req: any, res: any, next) => {
     try {
-      const { visibility } = req.query;
+      const { visibility, excludeSeries } = req.query;
       const counts = await getFeedCounts({
         visibility: typeof visibility === 'string' ? visibility : undefined,
+        excludeSeries: excludeSeries === 'true' || excludeSeries === '1',
       });
       // Counts change slowly relative to the feed; a short cache keeps
       // the tab badges cheap without going stale for long.

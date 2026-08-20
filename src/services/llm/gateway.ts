@@ -588,7 +588,7 @@ export function congAgent(): LlmEndpoint | null {
  *
  * Tắt bằng `ANTHROPIC_QUA_CONG_RIENG=false` nếu modelapi mở lại kênh Claude.
  */
-export function congAnthropic(model: string): { url: string; key: string } | null {
+export function congAnthropic(model: string, tuyen: 'messages' | 'chat' = 'messages'): { url: string; key: string } | null {
   if (process.env.ANTHROPIC_QUA_CONG_RIENG === 'false') return null;
   if (!isAnthropicModel(model)) return null;
   const rieng = congAgent();
@@ -596,7 +596,10 @@ export function congAnthropic(model: string): { url: string; key: string } | nul
   // `string | undefined` nên phải nói lại ở đây — và nói bằng điều kiện thật,
   // đừng bằng `!`: cái ép kiểu đó sẽ im lặng gửi `Bearer undefined`.
   if (!rieng?.key) return null;
-  return { url: `${rieng.root}/v1/messages`, key: rieng.key };
+  // Rambo mở CẢ HAI tuyến. Đo thật 20/08 trên `/v1/chat/completions`:
+  // claude-sonnet-5 chữ đầu 3.015ms, 12 mẩu, trải 4.690ms — chảy dần thật.
+  const duong = tuyen === 'chat' ? '/v1/chat/completions' : '/v1/messages';
+  return { url: `${rieng.root}${duong}`, key: rieng.key };
 }
 
 /** Cổng dự phòng khi máy nhà không trả lời. Luôn là cổng, không bao giờ ngược lại. */

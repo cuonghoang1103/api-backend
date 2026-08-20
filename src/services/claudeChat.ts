@@ -221,9 +221,25 @@ function buildBody(p: ClaudeCallParams, stream: boolean): string {
  * khoá ra khỏi địa chỉ đúng ở file này đã đẻ ra lỗi "Pro chạy, Max im".
  */
 function noiGuiAnthropic(model?: string): { url: string; key: string } {
-  const rieng = model ? congAnthropic(model) : null;
+  const rieng = model ? congAnthropic(model, 'messages') : null;
   if (rieng) return rieng;
   return { url: messagesUrl(), key: requireKey(model) };
+}
+
+/**
+ * Địa chỉ + khoá cho tuyến `/v1/chat/completions`.
+ *
+ * ⚠️ ĐÂY MỚI LÀ ĐƯỜNG CHAT ĐI HẰNG NGÀY. `streamClaudeChat` (tuyến messages)
+ * chỉ dùng cho lượt có PDF — xem nhánh `pdfTurn` trong `ai.service.ts`. Vá
+ * mỗi tuyến messages là vá đúng con đường mà chat KHÔNG đi, và triệu chứng
+ * vẫn còn nguyên: người dùng thấy Pro đợi 20 giây rồi đổ cả câu một lúc.
+ * (Đã dính đúng lỗi này ngày 20/08 — đo bằng `streamClaudeChat` rồi kết luận
+ * "Pro chạy 2 giây", trong khi production gọi hàm khác.)
+ */
+function noiGuiChat(model?: string): { url: string; key: string } {
+  const rieng = model ? congAnthropic(model, 'chat') : null;
+  if (rieng) return rieng;
+  return { url: chatCompletionsUrl(), key: requireKey(model) };
 }
 
 function requireKey(model?: string): string {
@@ -380,7 +396,9 @@ export async function completeClaudeChat(p: ClaudeCallParams): Promise<string> {
  */
 export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator<ChatStreamPart, void, unknown> {
   if (hasDocument(p.messages)) throw new Error('tuyến OpenAI không đọc được PDF');
-  const key = requireKey(p.model);
+  // Khoá PHẢI đi cùng địa chỉ — xem `noiGuiChat`. Lấy khoá riêng rồi ghép
+  // vào địa chỉ khác là đúng cái đã đẻ ra "Pro chạy, Max im".
+  const noi = noiGuiChat(p.model);
   const ctrl = new AbortController();
   // HAI đồng hồ, hai vai khác nhau — xem `claudeTimeoutMs` / `imLangMs`.
   const dongHoTran = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
@@ -396,9 +414,9 @@ export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator
   // biết là mình đang đọc một lời giải chưa xong.
   let lyDoDung: string | null = null;
   try {
-    const res = await fetch(chatCompletionsUrl(), {
+    const res = await fetch(noi.url, {
       method: 'POST',
-      headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json', accept: 'text/event-stream' },
+      headers: { authorization: `Bearer ${noi.key}`, 'content-type': 'application/json', accept: 'text/event-stream' },
       body: toOpenAiBody(p, true),
       signal: ctrl.signal,
     });
@@ -469,13 +487,15 @@ export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator
  */
 export async function completeViaOpenAiRoute(p: ClaudeCallParams): Promise<string> {
   if (hasDocument(p.messages)) throw new Error('tuyến OpenAI không đọc được PDF — không hạ tuyến');
-  const key = requireKey(p.model);
+  // Khoá PHẢI đi cùng địa chỉ — xem `noiGuiChat`. Lấy khoá riêng rồi ghép
+  // vào địa chỉ khác là đúng cái đã đẻ ra "Pro chạy, Max im".
+  const noi = noiGuiChat(p.model);
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
   try {
-    const res = await fetch(chatCompletionsUrl(), {
+    const res = await fetch(noi.url, {
       method: 'POST',
-      headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+      headers: { authorization: `Bearer ${noi.key}`, 'content-type': 'application/json' },
       body: toOpenAiBody(p, false),
       signal: ctrl.signal,
     });

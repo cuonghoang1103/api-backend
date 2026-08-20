@@ -12,7 +12,7 @@
  * tưởng SAI: preload đứng cùng phía với renderer, ai kiểm soát được renderer
  * thì cũng vượt được lớp kiểm ở đây. Preload chỉ chuyển tiếp; main mới phán.
  */
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, webUtils } from 'electron';
 import type {
   AgentInfo,
   AgentCuocDangMo,
@@ -120,6 +120,26 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('mau:noiDung', { duong }) as Promise<NoiDungMau | null>,
   },
 
+  /**
+   * Đường dẫn thật của một `File` vừa thả vào.
+   *
+   * ⚠️ Electron 32 BỎ HẲN `File.path`, và app này chạy Electron 33 — nên mã
+   * kiểu `(f as any).path` sẽ luôn là `undefined`, im lặng, không lỗi.
+   * `webUtils.getPathForFile` là đường duy nhất còn lại, và nó CHỈ gọi được ở
+   * preload/renderer chứ không phải ở main.
+   *
+   * Nó ném khi `File` không đến từ đĩa (ảnh kéo từ một trang web, file dựng
+   * bằng `new File([...])`). Nuốt lỗi và trả `null` để chỗ gọi rơi về đường
+   * đọc-bằng-FileReader thay vì vỡ.
+   */
+  duongCuaFile: (f: File): string | null => {
+    try {
+      return webUtils.getPathForFile(f) || null;
+    } catch {
+      return null;
+    }
+  },
+
   music: {
     listDownloaded: () =>
       ipcRenderer.invoke('music:listDownloaded') as Promise<DownloadedTrack[]>,
@@ -185,6 +205,11 @@ const bridge: DesktopBridge = {
     themDinhKem: (cuocId: string, ten: string, duLieuBase64: string) =>
       ipcRenderer.invoke('agent:themDinhKem', { cuocId, ten, duLieuBase64 }) as
         Promise<{ ok: true; tuongDoi: string; byte: number } | { ok: false; loi: string }>,
+    themDuong: (cuocId: string, duong: string) =>
+      ipcRenderer.invoke('agent:themDuong', { cuocId, duong }) as Promise<
+        { ok: true; tuongDoi: string; byte: number; laThuMuc: boolean; coSan: boolean }
+        | { ok: false; loi: string }
+      >,
     tachNhanhCuoc: (cuocId: string, denCauHoi?: number) =>
       ipcRenderer.invoke(
         'agent:tachNhanhCuoc',

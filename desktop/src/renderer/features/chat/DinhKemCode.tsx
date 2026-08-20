@@ -34,6 +34,8 @@ export interface TepCode {
   dataUrl?: string;
   /** Chỉ có khi đã đặt lên đĩa xong. */
   tuongDoi?: string;
+  /** Kéo cả một THƯ MỤC vào — agent dùng `list_dir`/`grep` chứ không `read_file`. */
+  laThuMuc?: boolean;
   dangTai?: boolean;
   loi?: string;
 }
@@ -81,7 +83,30 @@ export function useDinhKemCode(cuocId: string) {
   const them = useCallback(async (ds: File[]) => {
     await Promise.all(ds.map(async (f) => {
       const id = `t${++dem}`;
+
+      /*
+       * ĐƯỜNG DẪN THẬT TRƯỚC, ĐỌC BYTE SAU.
+       *
+       * File kéo từ Finder/Explorer có đường dẫn thật; lấy được nó thì main
+       * đọc thẳng từ đĩa, và ba thứ tự nhiên đúng theo:
+       *   • THƯ MỤC kéo vào được. `FileReader` luôn ném lỗi với thư mục, nên
+       *     bản cũ thất bại CÂM — đúng thứ người dùng báo 20/08/2026.
+       *   • File VỐN Ở TRONG dự án thì không bị chép thành bản sao trong
+       *     `.cuongthai/dinh-kem/`. Bản cũ chép, rồi agent sửa BẢN SAO và
+       *     người dùng không thấy dự án đổi gì.
+       *   • File lớn không phải đi qua vòng đọc → base64 (+33%) → IPC, một
+       *     chuyến làm đứng hình luồng giao diện.
+       *
+       * `null` = File không đến từ đĩa (ảnh kéo từ trang web, ảnh dán) ⇒ rơi
+       * về đường cũ, vẫn chạy.
+       */
+      const duong = window.cuongthai?.duongCuaFile(f) ?? null;
+
+      /* Ảnh nhỏ vẫn GỬI THẲNG kể cả khi có đường dẫn: bắt agent gọi thêm một
+         lượt tool chỉ để nhìn cái ảnh vừa kéo vào là chậm hơn và đắt hơn.
+         Thư mục thì `f.type` rỗng và `f.size` là 0 nên không lọt vào đây. */
       const guiThang = LOAI_ANH.test(f.type)
+        && f.size > 0
         && f.size <= TRAN_ANH_BYTE
         && soAnhThang.current < MAX_ANH_THANG;
       if (guiThang) soAnhThang.current += 1;
@@ -92,15 +117,26 @@ export function useDinhKemCode(cuocId: string) {
         if (guiThang) {
           const url = await docFile(f, 'dataUrl');
           datTep((cu) => cu.map((t) => (t.id === id ? { ...t, dataUrl: url } : t)));
-        } else {
-          const than = await docFile(f, 'base64');
-          const r = await window.cuongthai?.agent.themDinhKem(cuocId, f.name, than);
+          return;
+        }
+
+        if (duong) {
+          const r = await window.cuongthai?.agent.themDuong(cuocId, duong);
           datTep((cu) => cu.map((t) => {
             if (t.id !== id) return t;
-            if (!r || !r.ok) return { ...t, dangTai: false, loi: r?.loi ?? 'Không lưu được file.' };
-            return { ...t, dangTai: false, tuongDoi: r.tuongDoi, byte: r.byte };
+            if (!r || !r.ok) return { ...t, dangTai: false, loi: r?.loi ?? 'Không thêm được.' };
+            return { ...t, dangTai: false, tuongDoi: r.tuongDoi, byte: r.byte, laThuMuc: r.laThuMuc };
           }));
+          return;
         }
+
+        const than = await docFile(f, 'base64');
+        const r = await window.cuongthai?.agent.themDinhKem(cuocId, f.name, than);
+        datTep((cu) => cu.map((t) => {
+          if (t.id !== id) return t;
+          if (!r || !r.ok) return { ...t, dangTai: false, loi: r?.loi ?? 'Không lưu được file.' };
+          return { ...t, dangTai: false, tuongDoi: r.tuongDoi, byte: r.byte };
+        }));
       } catch (e) {
         datTep((cu) => cu.map((t) => (t.id === id ? { ...t, dangTai: false, loi: (e as Error).message } : t)));
       }

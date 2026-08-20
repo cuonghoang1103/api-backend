@@ -134,3 +134,86 @@ export async function datDinhKem(
 
   return { tuongDoi: path.join(THU_MUC, cuoi), byte: byte.byteLength };
 }
+
+/**
+ * Đính kèm từ ĐƯỜNG DẪN THẬT trên đĩa (kéo-thả từ Finder / Explorer).
+ *
+ * ─── Vì sao có hàm này bên cạnh `datDinhKem` ───
+ * `datDinhKem` nhận base64: renderer phải đọc trọn file bằng `FileReader`,
+ * mã hoá base64 (phình 33%), rồi đẩy qua IPC. Một file 20MB thành ~27MB chuỗi
+ * đi qua ranh giới tiến trình — và trong lúc đó luồng giao diện đứng hình.
+ * Kéo-thả thì Electron cho biết ĐƯỜNG DẪN THẬT (`webUtils.getPathForFile`),
+ * nên main đọc thẳng từ đĩa: không đọc lại, không mã hoá, không truyền.
+ *
+ * ─── Và nó làm được hai việc mà đường base64 không làm được ───
+ *
+ * 1. **File đã nằm SẴN trong dự án thì KHÔNG chép.** Kéo `src/index.ts` từ
+ *    Finder vào khung chat, bản cũ tạo một bản sao trong `.cuongthai/dinh-kem/`
+ *    rồi đưa agent đường dẫn tới BẢN SAO. Agent sửa bản sao đó, người dùng
+ *    không thấy gì đổi trong dự án, và không ai hiểu tại sao. Ở đây: thấy nó
+ *    đã trong ngục thì trả về đúng đường tương đối của chính nó.
+ *
+ * 2. **Thư mục.** `FileReader` ném lỗi khi gặp thư mục, nên kéo một thư mục
+ *    vào là thất bại CÂM — đúng thứ người dùng báo 20/08/2026. Mà thư mục lại
+ *    là thứ hữu ích nhất để đưa cho agent: nó có `list_dir` và `grep`.
+ */
+export interface KetQuaDuongDan {
+  /** Đường tương đối tính từ gốc dự án — thứ chèn vào câu hỏi cho agent. */
+  tuongDoi: string;
+  byte: number;
+  laThuMuc: boolean;
+  /** `true` khi file vốn đã nằm trong dự án, không phải bản chép. */
+  coSan: boolean;
+}
+
+export async function datDinhKemTuDuong(goc: string, duong: string): Promise<KetQuaDuongDan> {
+  const that = path.resolve(duong);
+  const gocThat = path.resolve(goc);
+
+  const tt = await fs.stat(that);
+
+  /* Đã ở trong dự án ⇒ chỉ trỏ vào, không chép.
+     So bằng `relative` chứ không `startsWith`: `/a/duan-cu` cũng `startsWith`
+     `/a/duan`, và một cú so chuỗi cẩu thả ở đây nghĩa là file NGOÀI dự án bị
+     coi là trong, rồi đưa cho agent một đường dẫn mà cái ngục sẽ từ chối. */
+  const rel = path.relative(gocThat, that);
+  const trongDuAn = rel !== '' && !rel.startsWith('..') && !path.isAbsolute(rel);
+  if (trongDuAn) {
+    return { tuongDoi: rel, byte: tt.isDirectory() ? 0 : tt.size, laThuMuc: tt.isDirectory(), coSan: true };
+  }
+
+  /* Thư mục NGOÀI dự án: không chép (một cú kéo nhỡ tay có thể là 2GB
+     node_modules). Nói thẳng ra để người dùng tự chọn cách khác. */
+  if (tt.isDirectory()) {
+    throw new Error(
+      'Thư mục này nằm ngoài dự án. Agent chỉ đọc được trong thư mục dự án — '
+      + 'hãy mở nó bằng nút chọn thư mục, hoặc kéo một thư mục nằm trong dự án.',
+    );
+  }
+
+  if (tt.size === 0) throw new Error('File rỗng.');
+  if (tt.size > TRAN_BYTE_DINH_KEM) {
+    throw new Error(`File ${(tt.size / 1048576).toFixed(1)}MB, quá trần ${TRAN_BYTE_DINH_KEM / 1048576}MB.`);
+  }
+
+  const thuMuc = path.join(gocThat, THU_MUC);
+  await fs.mkdir(thuMuc, { recursive: true });
+
+  const sach = tenAnToan(path.basename(that));
+  const duoi = path.extname(sach);
+  const than = sach.slice(0, sach.length - duoi.length) || 'tep';
+  let cuoi = sach;
+  for (let i = 1; i < 200; i += 1) {
+    try {
+      await fs.access(path.join(thuMuc, cuoi));
+      cuoi = `${than}-${i}${duoi}`;
+    } catch {
+      break;
+    }
+  }
+
+  await fs.copyFile(that, path.join(thuMuc, cuoi));
+  void boQuaTrongGit(gocThat);
+
+  return { tuongDoi: path.join(THU_MUC, cuoi), byte: tt.size, laThuMuc: false, coSan: false };
+}

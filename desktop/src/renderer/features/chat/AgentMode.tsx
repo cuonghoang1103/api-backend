@@ -22,6 +22,7 @@ import {
   Sparkles, SquareTerminal, Terminal, Undo2, X, ChevronDown, Cpu, Globe, Zap,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
+import { useMoRieng } from '../../components/moRieng';
 import { DangNghi } from './DangNghi';
 import { KhungWeb } from './KhungWeb';
 import { GoiYLenh } from './GoiYLenh';
@@ -93,7 +94,11 @@ export function AgentMode({
    */
   const { thuMuc, datThuMuc, napThuMuc } = useThuMuc(cuocId);
   const [nhap, datNhap] = useState('');
-  const [moLichSu, datMoLichSu] = useState(false);
+  /* Tấm "Việc đã lưu" cũng vào chung sổ: nó là tấm phủ, và trước đây mở nó
+     trong khi bảng MCP đang mở là hai lớp chồng nhau. Nó tự có nền bấm-để-đóng
+     nên không cần `boc`. */
+  const lichSu = useMoRieng('agent:lichsu', false);
+  const moLichSu = lichSu.mo;
   /** Ảnh đã dán, chờ gửi kèm câu hỏi tới. */
   /* Đính kèm: ảnh nhỏ gửi thẳng, mọi thứ khác nằm trên đĩa cho agent tự mở.
      Xem `DinhKemCode.tsx`. Thay hẳn `useState<string[]>` cũ — nó chỉ nhận ảnh
@@ -328,26 +333,36 @@ export function AgentMode({
   const coThuMuc = Boolean(thuMuc?.path);
 
   return (
+    /* ⛔ KHÔNG gắn `coThuMuc ? … : undefined` như bản cũ nữa.
+       Chưa chọn thư mục thì trình duyệt coi đây không phải vùng thả, nên cú kéo
+       bị TỪ CHỐI ở tầng hệ điều hành: không lớp phủ, không thông báo, con trỏ
+       hiện dấu cấm rồi thôi. Người dùng báo 20/08/2026 là "kéo file vào không
+       được" — mã thì vẫn đúng, nó chỉ chưa bao giờ được chạy.
+       Giờ luôn nhận, và nếu thiếu thư mục thì lớp phủ nói thẳng phải làm gì. */
     <div
       className="ct-agent"
       data-keo={dk.dangKeo}
-      onDragEnter={coThuMuc ? dk.keoVao : undefined}
-      onDragOver={coThuMuc ? dk.keoTren : undefined}
-      onDragLeave={coThuMuc ? dk.keoRa : undefined}
-      onDrop={coThuMuc ? dk.thaVao : undefined}
+      onDragEnter={dk.keoVao}
+      onDragOver={dk.keoTren}
+      onDragLeave={dk.keoRa}
+      onDrop={coThuMuc ? dk.thaVao : (e) => { e.preventDefault(); dk.keoRa(); }}
     >
       {dk.dangKeo && (
-        <div className="ct-dk-phu">
-          <span>Thả file vào đây — agent sẽ đọc được nó</span>
+        <div className="ct-dk-phu" data-thieu={!coThuMuc}>
+          <span>
+            {coThuMuc
+              ? 'Thả file hoặc thư mục vào đây — agent sẽ đọc được nó'
+              : 'Chọn thư mục dự án trước đã — agent chỉ đọc được trong đó'}
+          </span>
         </div>
       )}
       {moLichSu && (
         <LichSu
           phien={phien}
           dangMo={phienDangMo}
-          onMo={(id) => { void moPhien(id); datMoLichSu(false); }}
+          onMo={(id) => { void moPhien(id); lichSu.dong(); }}
           onXoa={(id) => void xoaPhien(id)}
-          onDong={() => datMoLichSu(false)}
+          onDong={lichSu.dong}
         />
       )}
 
@@ -460,7 +475,7 @@ export function AgentMode({
           type="button"
           className="ct-agent-icon"
           data-nut="lichSu"
-          onClick={() => datMoLichSu(true)}
+          onClick={lichSu.bat}
           title={`Việc đã lưu (${phien.length})`}
         >
           <History size={13} aria-hidden />
@@ -896,25 +911,12 @@ function ChonModelVaMuc({
   muc: MucNoLuc; model: ModelAgent; khoa: boolean; info: AgentInfo;
   onChonMuc: (m: MucNoLuc) => void; onChonModel: (m: ModelAgent) => void;
 }) {
-  const [mo, datMo] = useState(false);
-  const boc = useRef<HTMLDivElement | null>(null);
-
-  // Đóng khi bấm ra ngoài. ⚠️ KHÔNG dùng lớp nền phủ toàn màn hình: lớp đó
-  // nuốt luôn cú bấm đầu tiên, nên bấm từ bảng này sang nút khác phải bấm hai
-  // lần — và lần đầu trông như app lag.
-  useEffect(() => {
-    if (!mo) return;
-    const ngoai = (e: MouseEvent) => {
-      if (boc.current && !boc.current.contains(e.target as Node)) datMo(false);
-    };
-    const phim = (e: KeyboardEvent) => { if (e.key === 'Escape') datMo(false); };
-    document.addEventListener('mousedown', ngoai);
-    document.addEventListener('keydown', phim);
-    return () => {
-      document.removeEventListener('mousedown', ngoai);
-      document.removeEventListener('keydown', phim);
-    };
-  }, [mo]);
+  /* Đóng-khi-bấm-ra-ngoài và "mỗi lúc một tấm" nay ở `useMoRieng`. Bản cũ tự
+     lo phần ra-ngoài của RIÊNG nó, nên mở bảng này trong khi bảng MCP đang mở
+     là hai bảng chồng lên nhau — không chỗ nào biết chỗ kia tồn tại. */
+  /* Không lấy `dong`: chọn model xong bảng CỐ Ý ở lại, vì đa số người đổi
+     model rồi đổi luôn mức nỗ lực ngay bên dưới. */
+  const { mo, bat, boc } = useMoRieng('agent:model');
 
   // Bảng của MÁY CHỦ thắng bảng chép cứng ở trên. Con số bước là thứ máy chủ
   // áp đặt, nên app tự khai "60 bước" trong khi máy chủ đã đổi thành 100 là
@@ -949,7 +951,7 @@ function ChonModelVaMuc({
         data-model={model}
         data-ultra={muc === 'ultracode'}
         disabled={khoa}
-        onClick={() => datMo((v) => !v)}
+        onClick={bat}
         title={khoa ? 'Đang chạy một việc — đổi sau khi xong' : `${modelNay.ten} · mức ${mucNay.ten}`}
         aria-expanded={mo}
       >
@@ -1077,7 +1079,7 @@ function VongNguCanh({ n }: { n: AgentNguCanh }) {
 function NutWorktree({
   cuocId, khoa, onDoi,
 }: { cuocId: string; khoa: boolean; onDoi: () => void }) {
-  const [mo, datMo] = useState(false);
+  const { mo, bat, boc } = useMoRieng('agent:worktree');
   const [ds, datDs] = useState<AgentWorktree[]>([]);
   const [ten, datTen] = useState('');
   const [ban, datBan] = useState(false);
@@ -1103,12 +1105,12 @@ function NutWorktree({
   const dangDung = ds.find((w) => w.dangDung);
 
   return (
-    <div className="ct-mcp-boc">
+    <div className="ct-mcp-boc" ref={boc}>
       <button
         type="button"
         className="ct-agent-icon"
         data-nut="worktree"
-        onClick={() => datMo((v) => !v)}
+        onClick={bat}
         title={dangDung && !dangDung.laChinh ? `Worktree: ${dangDung.nhanh}` : 'Worktree — bản sao riêng của repo'}
       >
         <GitBranch size={13} aria-hidden />
@@ -1205,7 +1207,7 @@ function NutWorktree({
  * ngồi hỏi tại sao nó không chịu dùng công cụ mình vừa cắm.
  */
 function NutMcp({ khoa }: { khoa: boolean }) {
-  const [mo, datMo] = useState(false);
+  const { mo, bat, boc } = useMoRieng('agent:mcp');
   const [tt, datTt] = useState<AgentMcpTrangThai | null>(null);
   const [dangNap, datDangNap] = useState(false);
 
@@ -1236,13 +1238,13 @@ function NutMcp({ khoa }: { khoa: boolean }) {
   const soHong = tt?.server.filter((s) => !s.ok).length ?? 0;
 
   return (
-    <div className="ct-mcp-boc">
+    <div className="ct-mcp-boc" ref={boc}>
       <button
         type="button"
         className="ct-agent-icon"
         data-nut="mcp"
         data-canhbao={soHong > 0}
-        onClick={() => datMo((v) => !v)}
+        onClick={bat}
         title={soTool > 0 ? `MCP: ${soTool} tool` : 'MCP — cắm thêm công cụ ngoài'}
       >
         <Plug size={13} aria-hidden />

@@ -18,7 +18,8 @@
  * Đóng menu khi: bấm ra ngoài · Escape · CUỘN (menu neo theo toạ độ tuyệt
  * đối, cuộn một cái là nó lơ lửng sai chỗ) · đổi cỡ cửa sổ.
  */
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useMoRieng } from './../../components/moRieng';
 import { createPortal } from 'react-dom';
 import { MoreVertical } from 'lucide-react';
 
@@ -35,7 +36,10 @@ const CAO_MUC = 30;
 const RONG = 176;
 
 export function MenuChamDoc({ muc, nhan }: { muc: MucMenu[]; nhan?: string }) {
-  const [mo, datMo] = useState(false);
+  /* `useId()` vì component này dựng LẠI trên từng dòng danh sách. Dùng một
+     chuỗi cố định thì mọi menu ⋮ chung một định danh và bấm một cái là bung
+     hết. `tuDong: false` vì menu vẽ bằng portal — xem ghi chú ở ChonCheDo. */
+  const { mo, bat, dong: dongTam } = useMoRieng(`menucham:${useId()}`, false);
   const [oViTri, datViTri] = useState<{ trai: number; tren: number } | null>(null);
   const nutRef = useRef<HTMLButtonElement>(null);
 
@@ -57,8 +61,8 @@ export function MenuChamDoc({ muc, nhan }: { muc: MucMenu[]; nhan?: string }) {
 
   useEffect(() => {
     if (!mo) return;
-    const dong = (): void => datMo(false);
-    const phim = (e: KeyboardEvent): void => { if (e.key === 'Escape') datMo(false); };
+    const dong = (): void => dongTam();
+    const phim = (e: KeyboardEvent): void => { if (e.key === 'Escape') dongTam(); };
     // `capture: true` cho cuộn — sự kiện cuộn KHÔNG nổi bọt lên window từ một
     // khung cuộn con, nên nghe kiểu thường thì cuộn trong danh sách không đóng
     // menu và nó đứng ì một chỗ trong lúc hàng của nó trôi đi.
@@ -72,7 +76,7 @@ export function MenuChamDoc({ muc, nhan }: { muc: MucMenu[]; nhan?: string }) {
       window.removeEventListener('resize', dong);
       window.removeEventListener('keydown', phim);
     };
-  }, [mo]);
+  }, [mo, dongTam]);
 
   return (
     <>
@@ -89,7 +93,7 @@ export function MenuChamDoc({ muc, nhan }: { muc: MucMenu[]; nhan?: string }) {
           // Chặn nổi bọt: hàng bên dưới có `onClick` mở việc, và bấm ⋮ mà mở
           // luôn cả việc thì menu vừa hiện đã bị màn hình khác che.
           e.stopPropagation();
-          datMo((v) => !v);
+          bat();
         }}
         /* Cùng lý do: `pointerdown` của window là cái đóng menu, nên cú bấm mở
            menu phải không được chạm tới nó. */
@@ -115,7 +119,7 @@ export function MenuChamDoc({ muc, nhan }: { muc: MucMenu[]; nhan?: string }) {
               /* Vạch ngăn trước mục nguy hiểm ĐẦU TIÊN: Xoá phải nằm tách hẳn
                  khỏi những mục lành, không thì tay quen bấm nhanh trượt vào nó. */
               data-vach={m.nguyHiem === true && muc[i - 1]?.nguyHiem !== true}
-              onClick={() => { datMo(false); m.onChon(); }}
+              onClick={() => { dongTam(); m.onChon(); }}
             >
               {m.icon}
               <span>{m.nhan}</span>

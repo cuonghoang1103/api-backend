@@ -38,7 +38,7 @@ import {
   danhSachPhien, datGhimPhien, datLuuTruPhien, docPhien, doiTenPhien, dungLaiHienThi,
   nhanBanPhien, xoaPhien,
 } from '../agent/phien';
-import { datDinhKem } from '../agent/dinhKem';
+import { datDinhKem, datDinhKemTuDuong } from '../agent/dinhKem';
 import { hoanTacTatCa } from '../agent/tools';
 import { traLoi } from '../agent/xinPhep';
 import { readStoredSession } from './auth';
@@ -405,6 +405,17 @@ export function registerAgentHandlers(): void {
     if (!goc) return { ok: false as const, loi: 'Chưa chọn thư mục dự án cho tab này.' };
     try {
       const r = await datDinhKem(goc, ten, duLieuBase64);
+      return { ok: true as const, ...r };
+    } catch (e) {
+      return { ok: false as const, loi: (e as Error).message };
+    }
+  });
+
+  handle('agent:themDuong', async ({ cuocId, duong }) => {
+    const goc = gocCuaCuoc(cuocId);
+    if (!goc) return { ok: false as const, loi: 'Chưa chọn thư mục dự án cho tab này.' };
+    try {
+      const r = await datDinhKemTuDuong(goc, duong);
       return { ok: true as const, ...r };
     } catch (e) {
       return { ok: false as const, loi: (e as Error).message };

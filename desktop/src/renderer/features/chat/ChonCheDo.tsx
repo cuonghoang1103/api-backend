@@ -20,6 +20,7 @@
  * trong khung có `overflow: hidden`.
  */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useMoRieng } from '../../components/moRieng';
 import { createPortal } from 'react-dom';
 import { ChevronDown, FilePen, ListChecks, ShieldCheck, Terminal } from 'lucide-react';
 
@@ -75,7 +76,11 @@ export function ChonCheDo({
   khoa: boolean;
   onChon: (c: CheDoQuyen) => void;
 }) {
-  const [mo, datMo] = useState(false);
+  /* `tuDong: false` — menu này vẽ bằng portal ở toạ độ cố định, tức là nằm
+     NGOÀI phần tử bọc. Để hook tự kiểm `contains` thì bấm vào chính menu cũng
+     bị tính là "bấm ra ngoài". Nó giữ cách đóng riêng (pointerdown/scroll/
+     resize) và chỉ mượn sổ chung để không chồng lên tấm khác. */
+  const { mo, bat, dong: dongTam } = useMoRieng('agent:quyen', false);
   const [viTri, datViTri] = useState<{ trai: number; tren: number } | null>(null);
   const nutRef = useRef<HTMLButtonElement>(null);
   const hienTai = CAC_CHE_DO.find((c) => c.ma === cheDo) ?? CAC_CHE_DO[0]!;
@@ -93,8 +98,8 @@ export function ChonCheDo({
 
   useEffect(() => {
     if (!mo) return;
-    const dong = (): void => datMo(false);
-    const phim = (e: KeyboardEvent): void => { if (e.key === 'Escape') datMo(false); };
+    const dong = (): void => dongTam();
+    const phim = (e: KeyboardEvent): void => { if (e.key === 'Escape') dongTam(); };
     window.addEventListener('pointerdown', dong);
     window.addEventListener('scroll', dong, true);
     window.addEventListener('resize', dong);
@@ -105,7 +110,7 @@ export function ChonCheDo({
       window.removeEventListener('resize', dong);
       window.removeEventListener('keydown', phim);
     };
-  }, [mo]);
+  }, [mo, dongTam]);
 
   return (
     <>
@@ -119,7 +124,7 @@ export function ChonCheDo({
         aria-haspopup="menu"
         aria-expanded={mo}
         title={`${hienTai.nhan} — ${hienTai.mo}${khoa ? '\n(đang chạy dở, dừng lại mới đổi được)' : ''}`}
-        onClick={(e) => { e.stopPropagation(); datMo((v) => !v); }}
+        onClick={(e) => { e.stopPropagation(); bat(); }}
         onPointerDown={(e) => e.stopPropagation()}
       >
         {hienTai.icon}
@@ -143,7 +148,7 @@ export function ChonCheDo({
               className="ct-chedo-muc"
               data-chon={c.ma === cheDo}
               data-bac={c.bac}
-              onClick={() => { datMo(false); if (c.ma !== cheDo) onChon(c.ma); }}
+              onClick={() => { dongTam(); if (c.ma !== cheDo) onChon(c.ma); }}
             >
               <span className="ct-chedo-muc-dau">
                 {c.icon}

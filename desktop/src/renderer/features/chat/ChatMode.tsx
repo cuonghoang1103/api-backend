@@ -21,6 +21,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   CircleStop, FolderOpen, FolderPlus, History, MessageSquare, Plus, Send, Trash2, X, Search, BookOpen } from 'lucide-react';
 import { useAppState } from '../../app-state';
+import { useMoRieng } from '../../components/moRieng';
 import { docThanhTieng, ngungNoi, phatTieng } from '../odin/giongNoi';
 import { catCauDau } from '../odin/hoiOdin';
 import { ManGoi } from './ManGoi';
@@ -167,7 +168,10 @@ export function ChatMode({ pro }: { pro: boolean }) {
    */
   const [phienId, datPhienId] = useState<string | null>(null);
   const [dsPhien, datDsPhien] = useState<PhienChat[]>([]);
-  const [moLichSu, datMoLichSu] = useState(false);
+  /* Vào chung sổ "mỗi lúc một tấm" với các tấm bên Lập trình. Tấm này không
+     có nền phủ nên để hook tự lo phần bấm-ra-ngoài (`boc` bọc cả nút lẫn tấm). */
+  const lichSu = useMoRieng('chat:lichsu');
+  const moLichSu = lichSu.mo;
   const [dsThuMuc, datDsThuMuc] = useState<ThuMuc[]>([]);
   const [loc, datLoc] = useState<LocThuMuc>(null);
   /** Thanh bên đang xem KHO LƯU TRỮ thay vì danh sách thường. */
@@ -290,7 +294,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
         };
       }));
       datPhienId(id);
-      datMoLichSu(false);
+      lichSu.dong();
       datLoi(null);
     } catch (err) {
       datLoi(`Không mở được việc cũ: ${(err as Error).message}`);
@@ -740,24 +744,36 @@ export function ChatMode({ pro }: { pro: boolean }) {
     <div
       className="ct-agent"
       data-keo={dk.dangKeo}
-      onDragOver={pro ? dk.keoVao : undefined}
-      onDragLeave={pro ? dk.keoRa : undefined}
-      onDrop={pro ? dk.thaVao : undefined}
+      /* `onDragEnter` PHẢI có bên cạnh `onDragOver`: thiếu nó thì lớp phủ chỉ
+         hiện khi con trỏ đã rê được một quãng, và cú kéo nhanh-thả-ngay trông
+         như không có gì xảy ra. */
+      onDragEnter={dk.keoVao}
+      onDragOver={dk.keoVao}
+      onDragLeave={dk.keoRa}
+      /* Không Pro thì vẫn NHẬN cú thả rồi nói lý do — bản cũ để `undefined`,
+         tức là hệ điều hành từ chối cú kéo và người dùng không nhận được một
+         chữ nào giải thích. */
+      onDrop={pro ? dk.thaVao : (e) => { e.preventDefault(); dk.keoRa(); dk.datLoi('Đính kèm file cần tài khoản Pro.'); }}
     >
       {/* Lớp phủ chỉ hiện khi con trỏ đang MANG FILE — xem `keoVao`. */}
       {dk.dangKeo && (
-        <div className="ct-dk-phu">
-          <span>Thả file vào đây</span>
+        <div className="ct-dk-phu" data-thieu={!pro}>
+          <span>{pro ? 'Thả file vào đây' : 'Đính kèm file cần tài khoản Pro'}</span>
         </div>
       )}
 
+      {/* `display: contents` — bọc để `useMoRieng` biết đâu là "bên trong"
+          (nút VÀ tấm), mà không đẻ thêm một hộp nào trong cột flex này. Đặt ref
+          lên riêng `.ct-chat-thanh` thì tấm nằm NGOÀI, và bấm vào chính tấm sẽ
+          bị tính là bấm ra ngoài ⇒ nó tự đóng ngay khi vừa chạm vào. */}
+      <div className="ct-boc-suot" ref={lichSu.boc}>
       <div className="ct-chat-thanh">
         <button type="button" className="ct-agent-icon" data-nut="chatMoi" onClick={chatMoi} title="Bắt đầu cuộc mới">
           <Plus size={14} aria-hidden />
         </button>
         <button
           type="button" className="ct-agent-icon" data-nut="chatLichSu"
-          onClick={() => { datMoLichSu((v) => !v); void napDsPhien(); }}
+          onClick={() => { lichSu.bat(); void napDsPhien(); }}
           title={`Cuộc đã lưu (${dsPhien.length})`}
         >
           <History size={14} aria-hidden />
@@ -771,7 +787,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
         <div className="ct-lichsu" role="dialog" aria-label="Cuộc trò chuyện đã lưu">
           <div className="ct-lichsu-dau">
             <strong>Cuộc đã lưu</strong>
-            <button type="button" className="ct-agent-icon" onClick={() => datMoLichSu(false)} aria-label="Đóng">
+            <button type="button" className="ct-agent-icon" onClick={lichSu.dong} aria-label="Đóng">
               <X size={14} aria-hidden />
             </button>
           </div>
@@ -870,6 +886,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
           )}
         </div>
       )}
+      </div>
 
       <div className="ct-agent-scroll" ref={cuonRef}>
         {luot.length === 0 && (

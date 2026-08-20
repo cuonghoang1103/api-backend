@@ -2679,6 +2679,23 @@ select {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  /* ⚠️⚠️ `min-width: 0` LÀ GỐC CỦA CẢ LỖI "che mất nút". Mặc định của một flex
+     item là `min-width: auto`, tức là KHÔNG được co nhỏ hơn nội dung nó chứa.
+     Thanh tab (mở 4-6 việc) và thanh công cụ cộng lại đòi hơn 1.500px, nên cả
+     tấm panel phình rộng hơn cửa sổ; `.ct-page-full` có `overflow: hidden` nên
+     nó không đẻ thanh cuộn — nó CẮT. Thứ bị cắt là mép phải: nửa thanh công cụ
+     và cả bộ chọn Trò chuyện/Lập trình/Trình duyệt.
+
+     Đo thật 20/08/2026 trên bản dựng lại đúng cây DOM này, 6 tab:
+       không có dòng dưới → tràn 191px ở 1400, 391px ở 1200, 741px ở 850
+       có dòng dưới       → 0 ở MỌI bề rộng, không gì bị cắt
+     Phần "tràn" chuyển xuống `.ct-tabs`, nơi vốn đã có `overflow-x: auto` để
+     cuộn — đúng chỗ nó nên nằm.
+
+     Lần vá trước chỉ đặt `overflow: hidden` ở `.ct-ai-than`. Nó dập được thanh
+     cuộn ngang chạy suốt đáy cửa sổ, nhưng KHÔNG dập nguyên nhân: nội dung vẫn
+     rộng hơn khung, chỉ là bị cắt im lặng thay vì cuộn. */
+  min-width: 0;
   /* Bỏ chrome của thẻ — xem ghi chú ở `.ct-page-full`. */
   border: none;
   border-radius: 0;
@@ -3283,6 +3300,14 @@ select {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  /* Vùng truy vấn cho `@container cotagent` ở trên: thanh công cụ co theo BỀ
+     RỘNG THẬT của cột này, không theo bề rộng cửa sổ.
+     ⚠️ Đặt ở `.ct-agent` chứ KHÔNG ở `.ct-chedo`: đo thật, `container-type`
+     trên `.ct-chedo` làm chính nó tụt từ 1051px xuống 352px (chứa kích thước
+     cắt đứt `flex: 1` khỏi nội dung ở đúng chỗ nó đang cần). Trên `.ct-agent`
+     thì không — bề rộng vẫn 1051px. */
+  container-type: inline-size;
+  container-name: cotagent;
   /* Gốc định vị cho tấm phủ Lịch sử. Thiếu dòng này thì `inset: 0` của nó tính
      theo viewport và tấm phủ trùm cả sidebar lẫn thanh tiêu đề. */
   position: relative;
@@ -3304,18 +3329,25 @@ select {
   flex-shrink: 0;
 }
 
-/* Khoảng đệm giữa nhóm trái và nhóm phải chỉ có nghĩa khi CÒN chỗ. Cửa sổ
-   hẹp thì nó phải biến mất, nếu không nó chiếm nốt chỗ vừa được giải phóng
-   bằng cách xuống dòng. */
-@media (max-width: 1000px) {
-  .ct-agent-bar-spacer { flex-basis: 100%; height: 0; }
-}
+/* ⛔ ĐÃ BỎ luật `@media (max-width:1000px) { .ct-agent-bar-spacer { flex-basis:
+   100% } }`. Ý định thì đúng, kết quả thì ngược: `flex-basis: 100%` ÉP xuống
+   dòng, nên nó THÊM một hàng thay vì tiết kiệm. Đo ở cột rộng 460px: có luật
+   → 3 hàng / 106px, bỏ luật → 2 hàng / 95px. `flex-wrap` tự lo phần này rồi.
 
-/* Rất hẹp: nhãn chữ trên nút quyền nhường chỗ cho icon. Vẫn bấm được, vẫn
-   biết bật hay tắt (chấm màu + viền), chỉ mất phần chữ. */
-@media (max-width: 760px) {
+   Và cả hai luật cũ đều đo NHẦM THỨ: `@media` đo bề rộng CỬA SỔ, trong khi
+   thanh công cụ nằm trong cột giữa — cột ấy còn bị thanh bên app (240px) và
+   thanh bên việc (~250px) ăn mất. Cửa sổ 1400px thì cột chỉ còn ~860px, tức là
+   ngưỡng 1000px KHÔNG BAO GIỜ chạm tới trong đúng tình huống cần nó. Đây là
+   phần "vá chưa triệt để" của lần trước.
+
+   `@container` đo đúng cái cột đang chứa nó, nên nó đúng ở mọi tổ hợp
+   đóng/mở thanh bên. Chromium 128 (đích build của app) hỗ trợ sẵn. */
+@container cotagent (max-width: 620px) {
+  /* Rất hẹp: nhãn chữ trên nút quyền nhường chỗ cho icon. Vẫn bấm được, vẫn
+     biết bật hay tắt (chấm màu + viền), chỉ mất phần chữ. */
   .ct-agent-suanut { font-size: 0; gap: 0; padding: 5px 8px; }
   .ct-agent-suanut > svg { margin: 0; }
+  .ct-agent-ws { max-width: 150px; }
 }
 
 .ct-agent-bar-spacer {
@@ -7445,3 +7477,17 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-gn-lq-ds button:hover { border-color: var(--ct-border-manh); }
 .ct-gn-lq-ds img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
 .ct-gn-lq-ds span { padding: 0 10px 10px; line-height: 1.4; }
+
+/* Hộp bọc CHỈ để nhóm về mặt DOM (cho phép kiểm "bấm ra ngoài" của
+   `useMoRieng` thấy cả nút lẫn tấm là một khối). `display: contents` nghĩa là
+   nó không sinh hộp nào, nên con của nó vẫn là con trực tiếp của lưới/flex bên
+   ngoài — thêm nó vào không xê dịch một pixel nào. */
+.ct-boc-suot { display: contents; }
+
+/* Lớp phủ kéo-thả khi CHƯA đủ điều kiện (chưa chọn thư mục dự án / chưa Pro).
+   Vẫn hiện, chỉ đổi màu sang cảnh báo: im lặng từ chối là thứ đã làm người
+   dùng tưởng tính năng không tồn tại. */
+.ct-dk-phu[data-thieu='true'] {
+  border-color: color-mix(in srgb, var(--ct-warn) 55%, transparent);
+  color: var(--ct-warn);
+}

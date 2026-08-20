@@ -828,6 +828,14 @@ export const INVOKE_CHANNELS = {
      xem `duongAnToan()` — nên schema này chỉ là hàng rào đầu tiên. */
   'mau:noiDung': z.object({ duong: z.string().min(1).max(300) }),
 
+  /* Kéo-thả từ Finder: renderer chỉ gửi ĐƯỜNG DẪN, main đọc thẳng từ đĩa.
+     Không có trần độ dài nhỏ ở đây vì đường dẫn thật có thể rất sâu; main mới
+     là chỗ phán nó có nằm trong ngục hay không. */
+  'agent:themDuong': z.object({
+    cuocId: z.string().min(1),
+    duong: z.string().min(1).max(4096),
+  }),
+
   'agent:getInfo': null,
   'agent:getWorkspace': agentCuocSchema,
   'agent:chooseWorkspace': agentCuocSchema,
@@ -1107,6 +1115,12 @@ export interface DesktopBridge {
   mau: {
     noiDung(duong: string): Promise<NoiDungMau | null>;
   };
+  /**
+   * Đường dẫn THẬT của một `File` vừa được thả vào (Electron 32 bỏ `File.path`,
+   * `webUtils` là đường duy nhất còn lại). Trả `null` khi `File` không đến từ
+   * đĩa — ví dụ ảnh kéo từ một trang web.
+   */
+  duongCuaFile(f: File): string | null;
   music: {
     listDownloaded(): Promise<DownloadedTrack[]>;
     saveAudio(trackId: number, bytes: Uint8Array, ext: string): Promise<void>;
@@ -1199,6 +1213,15 @@ export interface DesktopBridge {
     datCheDoQuyen(cuocId: string, cheDo: CheDoQuyen): Promise<AgentWorkspace>;
     themDinhKem(cuocId: string, ten: string, duLieuBase64: string): Promise<
       { ok: true; tuongDoi: string; byte: number } | { ok: false; loi: string }
+    >;
+    /**
+     * Đính kèm từ ĐƯỜNG DẪN (kéo-thả). Khác `themDinhKem` ở chỗ không phải
+     * đọc-mã hoá-truyền cả file: main đọc thẳng từ đĩa. Và nó nhận được cả
+     * THƯ MỤC, thứ `FileReader` luôn ném lỗi.
+     */
+    themDuong(cuocId: string, duong: string): Promise<
+      { ok: true; tuongDoi: string; byte: number; laThuMuc: boolean; coSan: boolean }
+      | { ok: false; loi: string }
     >;
     /**
      * Các cuộc ĐANG MỞ trong main.

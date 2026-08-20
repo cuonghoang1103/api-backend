@@ -75,13 +75,18 @@ function timChungThu() {
 }
 
 function coHoSoNotary() {
-  // notarytool cất hồ sơ dưới dịch vụ com.apple.gke.notary.tool, tài khoản là
-  // tên hồ sơ. Kiểm bằng Keychain thay vì gọi mạng: nhanh, và không tốn một
-  // lượt gọi API chỉ để biết hồ sơ có tồn tại hay không.
-  for (const dichVu of ['com.apple.gke.notary.tool', 'com.apple.gke.notary.tool.saved-creds']) {
-    if (thu('security', ['find-generic-password', '-s', dichVu, '-a', HO_SO]).ok) return true;
-  }
-  return false;
+  // Hỏi CHÍNH notarytool, đừng tự dò trong keychain.
+  //
+  // Bản đầu tìm mục generic-password dịch vụ `com.apple.gke.notary.tool` bằng
+  // lệnh `security`. SAI: notarytool cất hồ sơ ở kho khoá được bảo vệ dữ liệu,
+  // `security dump-keychain` KHÔNG liệt kê ra. Hậu quả 20/08/2026: hồ sơ đã
+  // lưu thành công ("Credentials validated"), phép kiểm vẫn báo thiếu, và cả
+  // bản dựng bị chặn ngay ở cửa — BỘ KIỂM sai, không phải thứ nó kiểm.
+  //
+  // `notarytool history` trả 0 khi hồ sơ dùng được, 69 khi không có (đo thật).
+  // Đổi lại là một lượt gọi mạng, nhưng nó kiểm ĐÚNG thứ cần biết: hồ sơ có
+  // XÀI ĐƯỢC không — chứ không phải có nằm ở cái đường dẫn ta đoán hay không.
+  return thu('xcrun', ['notarytool', 'history', '--keychain-profile', HO_SO]).ok;
 }
 
 console.log(LA_THU ? '── THỬ KÝ (không công chứng) ─────────────────' : '── Kiểm trước ────────────────────────────────');
@@ -133,7 +138,7 @@ if (!LA_THU && !coHoSoNotary()) {
   Tạo tại appleid.apple.com → Sign-In and Security → App-Specific Passwords.`);
   process.exit(1);
 }
-console.log(`${xanh('✔')} Hồ sơ notarytool: ${HO_SO}`);
+if (!LA_THU) console.log(`${xanh('✔')} Hồ sơ notarytool: ${HO_SO}`);
 
 // ── Bước 2: dựng ──────────────────────────────────────────────────
 console.log(LA_THU ? '\n── Dựng + ký (bỏ công chứng) ─────────────────' : '\n── Dựng + ký + công chứng ────────────────────');
@@ -164,6 +169,39 @@ try {
 } catch {
   console.error(do_('\n✖ Dựng thất bại — xem log ở trên.'));
   process.exit(1);
+}
+
+// ── Bước 2b: công chứng CHÍNH file .dmg ───────────────────────────
+//
+// Móc afterSign đã công chứng + đóng dấu bản .app, nên con dấu nằm sẵn bên
+// trong cả .dmg lẫn .zip — bản CÀI RỒI chạy được kể cả khi offline.
+//
+// Nhưng file .dmg là một vật thể RIÊNG. Người dùng tải nó về và mở ổ đĩa ảo;
+// lúc đó Gatekeeper kiểm chính file .dmg, không phải app bên trong. Thiếu con
+// dấu ở tầng này thì màn hình cảnh báo vẫn hiện ra ngay ở bước đầu tiên —
+// đúng thứ mà cả việc ký này sinh ra để tránh.
+//
+// Đo thật 20/08/2026: hai bản .app đạt hết 10 phép kiểm, hai file .dmg trượt
+// `stapler validate`. Lượt công chứng này nhanh vì Apple đã biết nội dung bên
+// trong từ lượt trước.
+if (!LA_THU) {
+  const dsDmgCanDau = existsSync(path.join(goc, 'release'))
+    ? readdirSync(path.join(goc, 'release')).filter((f) => f.endsWith('.dmg'))
+    : [];
+  for (const ten of dsDmgCanDau) {
+    const duong = path.join(goc, 'release', ten);
+    if (thu('xcrun', ['stapler', 'validate', duong]).ok) continue;   // đã có dấu
+    console.log(`  → công chứng ${ten}…`);
+    const r = thu('xcrun', ['notarytool', 'submit', duong,
+                            '--keychain-profile', HO_SO, '--wait']);
+    if (!r.ok) {
+      console.error(do_(`  ✖ công chứng ${ten} thất bại:\n${r.ra.trim().slice(0, 400)}`));
+      continue;
+    }
+    const dong = thu('xcrun', ['stapler', 'staple', duong]);
+    console.log(dong.ok ? `  ${xanh('✔')} đã đóng dấu ${ten}`
+                        : do_(`  ✖ đóng dấu ${ten} thất bại`));
+  }
 }
 
 // ── Bước 3: kiểm sau ──────────────────────────────────────────────

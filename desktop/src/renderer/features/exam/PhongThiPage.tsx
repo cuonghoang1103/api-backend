@@ -5,19 +5,16 @@
  * Phân bố đo được: **135 đề FE** (trắc nghiệm) · **55 đề PE** (thực hành),
  * trải trên 8 mã môn + 38 đề chưa gắn môn.
  *
- * ─── VÌ SAO KHÔNG LÀM BÀI NGAY TRONG APP ───
- * Đây là ranh giới CÓ CHỦ Ý, không phải phần bỏ dở.
+ * ─── LÀM BÀI NGAY TRONG APP, cả bốn đường nộp ───
+ * MCQ · CODE (.zip) · WRITE · SPEAK (ghi âm trong app). Xem `LamBai.tsx`.
  *
- * Một lượt thi thật gồm: tạo `attempt` (đốt một lượt của người dùng), đồng hồ
- * đếm ngược, rồi nộp theo BỐN đường khác nhau — trắc nghiệm, nộp file zip mã,
- * bài viết, và bài nói kèm tải lên tối đa 12 file âm thanh. Làm ẩu bất kỳ mắt
- * nào trong chuỗi đó thì cái mất không phải một màn hình vẽ sai — mà là công
- * sức 60 phút của người đang thi, cộng một lượt đã bị đốt.
+ * ⚠️ Trước 20/08/2026 phần này mở sang web, và chú thích ở đây từng khai đó là
+ * ranh giới có chủ ý. Nay đã làm trọn — nếu bạn đọc thấy một chú thích nói app
+ * không làm bài được thì nó là chú thích cũ, không phải mã.
  *
- * Nên app làm thật tốt phần TRA CỨU (lọc, tìm, xem đề nào bao nhiêu câu, bao
- * lâu, qua bao nhiêu điểm) và đưa người dùng sang web đúng lúc bấm "Vào thi".
- * Khi nào làm phần thi trong app, nó phải được làm trọn cả bốn đường nộp một
- * lượt — không phải ghép dần từng mảnh.
+ * Ba chốt giữ cho nó an toàn nằm trong `LamBai.tsx`: bài làm ghi xuống đĩa sau
+ * mỗi thao tác · đồng hồ tính từ `expiresAt` của máy chủ · KHÔNG tự nộp khi
+ * hết giờ. Bấm "Vào thi" lần nữa thì NỐI LẠI lượt đang dở, không đốt lượt mới.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
@@ -28,6 +25,7 @@ import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { chuVi, fold, moNgoai, WEB } from '../chu';
+import { LamBai } from './LamBai';
 
 interface De {
   id: number;
@@ -239,6 +237,10 @@ function TheDe({ de, onMo }: { de: De; onMo: () => void }) {
 }
 
 function ChiTietDe({ de, onQuayLai }: { de: De; onQuayLai: () => void }) {
+  const [dangThi, datDangThi] = useState(false);
+  if (dangThi) {
+    return <LamBai examId={de.id} tenDe={de.title} onThoat={() => datDangThi(false)} />;
+  }
   return (
     <div className="ct-page ct-pt ct-hv-ct">
       <button type="button" className="ct-btn ct-btn-ghost ct-gn-lui" onClick={onQuayLai}>
@@ -264,8 +266,11 @@ function ChiTietDe({ de, onQuayLai }: { de: De; onQuayLai: () => void }) {
       </dl>
 
       <div className="ct-hv-bai-nut">
-        <button type="button" className="ct-btn" onClick={() => moNgoai(`${WEB}/exam/${de.id}`)}>
-          <ExternalLink size={15} aria-hidden /> Vào thi trên web
+        <button type="button" className="ct-btn" onClick={() => datDangThi(true)}>
+          <ClipboardList size={15} aria-hidden /> Vào thi
+        </button>
+        <button type="button" className="ct-btn ct-btn-ghost" onClick={() => moNgoai(`${WEB}/exam/${de.id}`)}>
+          <ExternalLink size={14} aria-hidden /> Mở trên web
         </button>
         {de.course?.slug && (
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => moNgoai(`${WEB}/courses/${de.course!.slug}`)}>
@@ -274,11 +279,14 @@ function ChiTietDe({ de, onQuayLai }: { de: De; onQuayLai: () => void }) {
         )}
       </div>
 
-      {/* Nói THẲNG vì sao phải sang web, thay vì để người dùng đoán là app hỏng. */}
+      {/* Nói rõ luật chơi TRƯỚC khi họ bấm — mất 60 phút vì không biết là lỗi
+          của màn hình này, không phải của người dùng. */}
       <p className="ct-muted ct-pt-luuy">
-        Bài thi làm trên web. Một lượt thi đốt một lần làm, có đồng hồ đếm ngược và
-        {de.kind === 'PE' ? ' nộp bằng file mã nguồn' : ' nộp bài trắc nghiệm'} —
-        app chưa làm phần đó, và làm dở dang thì mất công của cả một lượt thi.
+        Bấm “Vào thi” là bắt đầu tính giờ{de.durationMinutes ? ` (${de.durationMinutes} phút)` : ''}.
+        Bài làm được lưu xuống máy sau mỗi thao tác, nên đóng app rồi mở lại vẫn còn —
+        và bấm “Vào thi” lần nữa sẽ NỐI LẠI lượt đang dở chứ không đốt lượt mới.
+        {de.kind === 'PE' && de.peType === 'CODE' && ' Đề này nộp bằng file .zip.'}
+        {de.kind === 'PE' && de.peType === 'SPEAK' && ' Đề này ghi âm trực tiếp trong app.'}
       </p>
     </div>
   );

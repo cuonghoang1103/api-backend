@@ -409,7 +409,7 @@ router.get('/:id/posts', authenticate, async (req: any, res: Response<ApiRespons
       : [];
     const legacySongById = new Map(legacySongs.map((s) => [s.id, s]));
 
-    const { serializePost, loadReactionData } = await import('../services/social.service.js');
+    const { serializePost, loadReactionData, boDemCamXucRong } = await import('../services/social.service.js');
 
     // Hydrate the SAME reaction + poll-vote data getFeed produces, so
     // like/reaction counts, the viewer's own reaction, and poll state
@@ -424,7 +424,7 @@ router.get('/:id/posts', authenticate, async (req: any, res: Response<ApiRespons
       return serializePost(post, {
         currentUserId: req.user.userId,
         pollUserVotes: pollVotesByPollId[post.poll?.id] || [],
-        reactionBreakdown: breakdownByPost.get(post.id) ?? { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
+        reactionBreakdown: breakdownByPost.get(post.id) ?? boDemCamXucRong(),
         // SocialLike.type carries the reaction type; the include selects
         // the viewer's own row so [0].type is their reaction.
         myReactionType: (post.likes as Array<{ type: string }> | undefined)?.[0]?.type ?? null,
@@ -600,14 +600,14 @@ router.get('/:id/liked', authenticate, async (req: any, res: Response<ApiRespons
       : [];
     const legacySongByIdLiked = new Map(legacySongsLiked.map((s) => [s.id, s]));
 
-    const { serializePost } = await import('../services/social.service.js');
+    const { serializePost, boDemCamXucRong } = await import('../services/social.service.js');
     const data = orderedPosts.map((post: any) => {
       if (post.musicTrackId && !post.postMusic?.song && legacySongByIdLiked.has(post.musicTrackId)) {
         post._song = legacySongByIdLiked.get(post.musicTrackId);
       }
       // Compute the viewer's reaction breakdown for THIS post so
       // PostCard highlights the correct emoji.
-      const breakdown = { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 };
+      const breakdown = boDemCamXucRong();
       let myReactionType: string | null = null;
       for (const l of post.likes ?? []) {
         const t = String(l.type || 'LIKE').toUpperCase();

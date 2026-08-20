@@ -553,9 +553,10 @@ export async function getPostById(postId: number, currentUserId?: number) {
     where: { postId: post.id },
     _count: { type: true },
   });
-  const reactionBreakdown: Record<ReactionType, number> = {
-    LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0,
-  };
+  // Dựng TỪ `REACTION_TYPES` chứ không liệt kê tay: thêm một loại ở trên mà
+  // quên sửa chỗ này thì `row.type in reactionBreakdown` trượt và loại mới
+  // luôn đếm 0 — hỏng câm, không lỗi nào.
+  const reactionBreakdown = boDemCamXucRong();
   for (const row of grouped as Array<{ type: string; _count: { type: number } }>) {
     if (row.type in reactionBreakdown) {
       reactionBreakdown[row.type as ReactionType] = row._count.type;
@@ -820,7 +821,7 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
   for (const row of reactionGrouped as Array<{ postId: number; type: string; _count: { type: number } }>) {
     let cur = breakdownByPost.get(row.postId);
     if (!cur) {
-      cur = { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 };
+      cur = boDemCamXucRong();
       breakdownByPost.set(row.postId, cur);
     }
     if (row.type in cur) {
@@ -858,7 +859,7 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
       return serializePost(post, {
         currentUserId,
         pollUserVotes: pollVotesByPollId[post.poll?.id] || [],
-        reactionBreakdown: breakdownByPost.get(post.id) ?? { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
+        reactionBreakdown: breakdownByPost.get(post.id) ?? boDemCamXucRong(),
         // SocialLike.type stores the reaction type (LIKE / LOVE / HAHA /
         // SAD / ANGRY). Both the legacy LIKE button and the new emoji
         // picker write to this column so this single read covers both.
@@ -957,7 +958,7 @@ export async function loadReactionData(
   for (const row of reactionGrouped as Array<{ postId: number; type: string; _count: { type: number } }>) {
     let cur = breakdownByPost.get(row.postId);
     if (!cur) {
-      cur = { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 };
+      cur = boDemCamXucRong();
       breakdownByPost.set(row.postId, cur);
     }
     if (row.type in cur) cur[row.type as ReactionType] = row._count.type;
@@ -1113,7 +1114,7 @@ export function serializePost(
     myReaction: myReactionType ?? null,
     // Per-type counts. Empty default so the PostCard can always
     // call `breakdown.LIKE` without a null check.
-    reactionBreakdown: reactionBreakdown ?? { LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0 },
+    reactionBreakdown: reactionBreakdown ?? boDemCamXucRong(),
     savedFolder:
       currentUserId && Array.isArray(post.saves) && (post.saves as unknown[]).length > 0
         ? (post.saves[0] as { folder?: string }).folder ?? null
@@ -1127,7 +1128,21 @@ export function serializePost(
 // rejected with 400. We keep this as a runtime constant (not a
 // Prisma enum) so we can add new emojis in the future without a
 // schema migration — the column is a plain VARCHAR(16).
-export const REACTION_TYPES = ['LIKE', 'LOVE', 'HAHA', 'SAD', 'ANGRY'] as const;
+// 20/08/2026 — thêm WOW và CARE cho đủ bộ như Facebook. Cột `type` là
+// VARCHAR(16) chứ không phải enum Postgres, nên thêm ở đây là đủ, KHÔNG cần
+// migration (xem chú thích tại `model SocialLike` trong schema).
+export const REACTION_TYPES = ['LIKE', 'LOVE', 'CARE', 'HAHA', 'WOW', 'SAD', 'ANGRY'] as const;
+
+/**
+ * Bộ đếm cảm xúc RỖNG, dựng từ `REACTION_TYPES`.
+ *
+ * Có hàm này vì `tsc` vừa bắt được BA chỗ liệt kê tay năm loại cũ. Liệt kê tay
+ * nghĩa là thêm một cảm xúc mới thì phải nhớ sửa đủ bốn nơi, quên chỗ nào thì
+ * loại đó đếm 0 vĩnh viễn — hỏng câm.
+ */
+export function boDemCamXucRong(): Record<ReactionType, number> {
+  return Object.fromEntries(REACTION_TYPES.map((t) => [t, 0])) as Record<ReactionType, number>;
+}
 export type ReactionType = (typeof REACTION_TYPES)[number];
 
 /** Reject anything that isn't in the allow-list. */
@@ -1217,9 +1232,7 @@ export async function reactPost(
     }),
   ]);
 
-  const breakdown: Record<ReactionType, number> = {
-    LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0,
-  };
+  const breakdown = boDemCamXucRong();
   for (const row of grouped as Array<{ type: string; _count: { type: number } }>) {
     if (row.type in breakdown) {
       breakdown[row.type as ReactionType] = row._count.type;
@@ -1273,9 +1286,7 @@ export async function getReactionBreakdown(postId: number) {
     where: { postId },
     _count: { type: true },
   });
-  const breakdown: Record<ReactionType, number> = {
-    LIKE: 0, LOVE: 0, HAHA: 0, SAD: 0, ANGRY: 0,
-  };
+  const breakdown = boDemCamXucRong();
   for (const row of grouped as Array<{ type: string; _count: { type: number } }>) {
     if (row.type in breakdown) {
       breakdown[row.type as ReactionType] = row._count.type;

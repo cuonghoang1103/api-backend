@@ -16,6 +16,20 @@ Nó mở TỪNG trang thật ở bốn bề rộng cửa sổ (1440 · 1180 · 1
 Thêm trang mới thì thêm đường dẫn của nó vào mảng `DUONG` trong
 `scripts/do-bo-cuc.mjs`.
 
+### Trang DÙNG LẠI của web thì càng phải kiểm
+
+Bốn trang — Thuật toán, Mô phỏng, Lộ trình, Ngoại ngữ — không viết ở đây mà
+dùng thẳng mã web (hơn 51.000 dòng, xem `features/web/TrangWeb.tsx`). Bố cục
+của chúng do mã web quyết, mà mã web viết cho **cửa sổ trình duyệt mở rộng**:
+`min-h-screen`, lưới nhiều cột, canvas 1920px. Không ai trong nhóm web nghĩ
+tới cửa sổ app hẹp 860px.
+
+Bốn luật dưới đây KHÔNG áp được vào mã web (sửa mã của người khác cho hợp cấu
+hình của mình là mở một mặt trận vĩnh viễn). Thay vào đó `.ct-web-host` tự mở
+một vùng **cuộn cả hai chiều** quanh chúng: thà cuộn ngang còn hơn cắt mất nút.
+Nếu một trang web nào đó hẹp quá mức dùng được, cách đúng là sửa **trên web** —
+sửa xong thì cả hai bên cùng được.
+
 ## Bốn luật
 
 ### 1. Mọi flex item chứa nội dung trang phải có `min-width: 0`
@@ -74,3 +88,8 @@ Nói ra để không ai tin nhầm nó là bảo chứng toàn phần:
   bằng tay, hoặc bằng bản web.
 - **Màu, khoảng cách, chữ.** Bộ này chỉ trả lời một câu: ở cửa sổ hẹp còn nhìn
   thấy và bấm được mọi thứ không.
+- **Bên trong canvas.** `/simulation` và `/algorithms` vẽ phần lớn nội dung
+  bằng canvas. Bộ đo thấy cái khung, không thấy thứ vẽ bên trong — một hoạt
+  hình sai vẫn xanh.
+- **Trang con cần đăng nhập.** Bản đo chạy với phiên giả, nên các trang Ngoại
+  ngữ cần dữ liệu học tập thật (SRS, thống kê) chỉ dựng ra khung rỗng.

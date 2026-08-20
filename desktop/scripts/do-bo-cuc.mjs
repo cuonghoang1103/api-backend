@@ -211,6 +211,17 @@ const CHUAN_BI = {
     await p.click('.ct-gn-chip button:nth-child(2)', { timeout: 3000 }).catch(() => {});
     await p.waitForTimeout(300);
   },
+  '/roadmap': async (p) => {
+    // Bấm vào một lộ trình: chứng minh bảng tra khớp `/roadmap/:slug` và cây
+    // web nhận được tham số. Không bấm thì chỉ kiểm được trang danh sách.
+    await p.click('a[href^="/roadmap/"]', { timeout: 4000 }).catch(() => {});
+    await p.waitForTimeout(900);
+  },
+  '/language': async (p) => {
+    // Cùng lý do: mở một ngôn ngữ để đi qua `/language/:code`.
+    await p.click('a[href^="/language/"]', { timeout: 4000 }).catch(() => {});
+    await p.waitForTimeout(900);
+  },
   '/ai-templates': async (p) => {
     // Mở tấm chi tiết — cột thứ ba chỉ tồn tại khi có mẫu được chọn.
     await p.click('.ct-mau-the', { timeout: 2000 }).catch(() => {});
@@ -221,7 +232,15 @@ const CHUAN_BI = {
 const DUONG = JSON.parse(process.env.CT_TRANG ?? 'null')
   ?? ['/academy', '/courses', '/code-lab', '/exam', '/dashboard', '/feed', '/messages',
       '/friends', '/chat', '/cv', '/music', '/notes', '/pro', '/tech-trends',
-      '/ai-templates', '/voice'];
+      '/ai-templates', '/voice',
+      /* Bốn trang DÙNG LẠI của web (20/08/2026). Chúng đáng kiểm hơn cả những
+         trang viết tay: bố cục do mã web quyết, mà mã web viết cho cửa sổ
+         trình duyệt rộng — `min-h-screen`, lưới nhiều cột, canvas 1920px. */
+      '/algorithms', '/simulation', '/roadmap', '/language',
+      /* Và một trang CON, để chắc bảng tra `dinhTuyenWeb` khớp thật chứ không
+         chỉ đúng trong test đơn vị. `ja` có thật: `/api/v1/my-language` trả 6
+         ngôn ngữ, đo ngày 20/08/2026. */
+      '/language/ja'];
 
 let hong = 0;
 const bang = [];

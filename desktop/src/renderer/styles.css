@@ -2563,6 +2563,25 @@ code {
  * panel phụ). Nên vùng chứa ở đây KHÔNG được thêm padding hay giới hạn chiều
  * rộng như `.ct-page` — làm vậy sẽ bóp trang vào giữa và cắt mất panel bên phải.
  */
+/* ── Vỏ cho các trang DÙNG LẠI của web ──────────────────────
+   Thuật toán · Mô phỏng · Lộ trình · Ngoại ngữ (xem features/web/TrangWeb.tsx).
+
+   ⚠️ Phải CUỘN ĐƯỢC ở đây, không phải ở trang con. Các trang web viết cho một
+   tài liệu cao bằng cả cửa sổ trình duyệt (`min-h-screen`), còn ở đây chúng
+   nằm trong `.ct-content` vốn đã trừ thanh tiêu đề và thanh trạng thái. Không
+   tự mở vùng cuộn thì đáy trang bị cắt cụt — đúng lỗi cây Notes đã dính.
+
+   KHÔNG đặt `background`: cây web tự sơn nền theo chủ đề của nó, đè nền của
+   app lên sẽ lộ ra ở mọi khoảng nó chưa sơn tới. */
+.ct-web-host {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* `min-width: 0` để trang con rộng (bảng, canvas 1920px) không đẩy cả khung
+     app phình ngang — luật 1 của BO-CUC.md. Nó tự cuộn ngang trong lòng mình. */
+  min-width: 0;
+}
+
 .ct-notes-host {
   height: 100%;
   overflow: hidden;

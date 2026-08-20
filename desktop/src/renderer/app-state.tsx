@@ -58,11 +58,23 @@ function systemPrefersDark(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
-export function AppStateProvider({ children }: { children: ReactNode }) {
+export function AppStateProvider({
+  children, tuyenBanDau,
+}: {
+  children: ReactNode;
+  /**
+   * Đường dẫn khởi đầu — CHỈ dùng cho bản dựng thử bố cục.
+   *
+   * App thật không truyền: nó khôi phục `lastRoute` từ cấu hình đã lưu. Bộ đo
+   * bố cục thì cần mở thẳng một trang cụ thể, kể cả trang con động như
+   * `/language/ja`, và không có cấu hình nào để khôi phục.
+   */
+  tuyenBanDau?: string;
+}) {
   const bridge = window.cuongthai;
 
   const [settings, setSettings] = useState<Settings>({});
-  const [route, setRoute] = useState<string>('/dashboard');
+  const [route, setRoute] = useState<string>(tuyenBanDau ?? '/dashboard');
   const [online, setOnline] = useState<boolean>(navigator.onLine);
   const [systemDark, setSystemDark] = useState<boolean>(systemPrefersDark);
 

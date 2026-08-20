@@ -143,3 +143,155 @@ declare module '@/lib/ai-templates/install' {
     installCommand?: string;
   }): InstallRecipe;
 }
+
+/* ────────────────────────────────────────────────────────────────────────────
+ * Bốn trang web dùng lại nguyên: Thuật toán · Mô phỏng · Lộ trình · Ngoại ngữ.
+ *
+ * Hơn 51.000 dòng tính năng, đổi lấy khối khai báo này. Tất cả đều là component
+ * React không nhận props và `export default` — nên khai báo giống hệt nhau, và
+ * bề mặt tiếp xúc hẹp đúng như luật ở đầu tệp.
+ *
+ * ⚠️ Danh sách này phải khớp `TUYEN_WEB` trong `features/web/dinhTuyenWeb.ts`.
+ * Thiếu một dòng thì `tsc` báo TS2307 ngay, nên nó không lệch âm thầm được —
+ * khác với những khai báo khác trong tệp này, vốn chỉ hỏng lúc CHẠY.
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+declare module '@/app/language/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/notebook/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/alphabet/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/alphabet/practice/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/conversation/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/grammar/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/grammar-check/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/hanzi/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/listening/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/practice/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/qna/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/reading/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/roadmap/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/roleplay/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/stats/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/translate/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/vocab/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/language/[code]/writing/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/components/roadmap/RoadmapLanding' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/roadmap/[slug]/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+/* Hai trang không có đường dẫn động nên không nằm trong `TUYEN_WEB`; chúng
+   được `TrangWebDon` nạp thẳng. Cùng hình dạng: component không props. */
+declare module '@/components/algorithms/AlgorithmVisualizer' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/components/simulation/SimulationStudio' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}

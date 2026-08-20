@@ -31,6 +31,11 @@ import { KhoaHocPage } from './features/academy/KhoaHocPage';
 import { CodeLabPage } from './features/codelab/CodeLabPage';
 import { PhongThiPage } from './features/exam/PhongThiPage';
 import { GiongNoiPage } from './features/voice/GiongNoiPage';
+import { ThuatToanPage } from './features/algorithms/ThuatToanPage';
+import { MoPhongPage } from './features/simulation/MoPhongPage';
+import { LoTrinhPage } from './features/roadmap/LoTrinhPage';
+import { NgoaiNguPage } from './features/language/NgoaiNguPage';
+import { thuocCayWeb } from './features/web/dinhTuyenWeb';
 
 export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/dashboard': DashboardPage,
@@ -49,8 +54,33 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/courses': KhoaHocPage,
   '/code-lab': CodeLabPage,
   '/exam': PhongThiPage,
+  '/algorithms': ThuatToanPage,
+  '/simulation': MoPhongPage,
+  '/roadmap': LoTrinhPage,
+  '/language': NgoaiNguPage,
 };
 
+/**
+ * Trang SỞ HỮU CẢ CÂY con của nó, không chỉ đúng một đường dẫn.
+ *
+ * `/language` và `/roadmap` dùng lại cây web vốn có đường dẫn động
+ * (`/language/ja/vocab`, `/roadmap/frontend`). Bảng `NATIVE_PAGES` khớp chính
+ * xác, nên thiếu phần này thì bấm vào một ngôn ngữ là rơi thẳng vào màn hình
+ * "Không tìm thấy" — đúng lúc trang vừa mới chạy được.
+ *
+ * Ranh giới nằm ở `thuocCayWeb()`: nó so theo ĐOẠN đường dẫn chứ không so
+ * chuỗi trần, nên `/languages` không bị nuốt vào cây Ngoại ngữ.
+ */
+const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
+  ['/language', NgoaiNguPage],
+  ['/roadmap', LoTrinhPage],
+];
+
 export function nativePageFor(path: string): ComponentType | undefined {
-  return NATIVE_PAGES[path];
+  const dung = NATIVE_PAGES[path];
+  if (dung) return dung;
+  // Trang con của một cây web (`/language/ja/vocab`…). Chính trang chủ cây đọc
+  // `route` rồi tự chọn màn hình con — xem `TrangWebTheoTuyen`.
+  if (!thuocCayWeb(path)) return undefined;
+  return CHU_CAY.find(([goc]) => path === goc || path.startsWith(`${goc}/`))?.[1];
 }

@@ -9,6 +9,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { noiDungBai } from './vite.noi-dung-bai';
 import path from 'node:path';
+import { aliasDesktop } from './vite.alias';
 
 const duong = (p: string) => path.resolve(__dirname, p);
 
@@ -37,11 +38,32 @@ function gia() {
              của BỘ ĐO đội lốt lỗi của trang.
              (Không dùng dấu huyền ở đây: cả khối này nằm TRONG một template
              literal, một dấu huyền là cắt đứt chuỗi và hỏng cả file cấu hình.) */
+          import { createContext, useContext, useState, useMemo } from 'react';
           const S = { online: true, settings: {}, setSetting: () => {}, resolvedTheme: 'dark',
-                      toggleSidebar: () => {}, zoom: 1, datZoom: () => {},
-                      layThamSo: () => null, datThamSo: () => {} };
-          export function useAppState() { return S; }
-          export function AppStateProvider({ children }) { return children; }`;
+                      theme: 'dark', toggleSidebar: () => {}, zoom: 1, datZoom: () => {},
+                      layThamSo: () => null, datThamSo: () => {}, lanDieuHuong: 0 };
+          /* ⚠️ PHẢI CÓ route + navigate THẬT, không phải hằng.
+             Bản đầu để S tĩnh không có route, và cây Ngoại ngữ nổ ngay ở
+             khopTuyenWeb(undefined) — bộ đo báo ba trang ĐỎ trong khi mã trang
+             hoàn toàn đúng. Lại là lỗi của BỘ ĐO đội lốt lỗi của trang, lần
+             thứ hai trong cùng tệp này.
+             Và navigate phải ĐỔI ĐƯỢC route: bước CHUAN_BI của /roadmap bấm
+             vào một lộ trình để đi tới trang con. Với navigate rỗng thì cú bấm
+             không làm gì, và phép kiểm trang con XANH mà chẳng kiểm gì. */
+          const Ctx = createContext(null);
+          export function AppStateProvider({ children, tuyenBanDau }) {
+            const [route, datRoute] = useState(tuyenBanDau ?? '/dashboard');
+            const v = useMemo(
+              () => ({ ...S, route, navigate: (p) => datRoute(p) }),
+              [route],
+            );
+            return createElement(Ctx.Provider, { value: v }, children);
+          }
+          export function useAppState() {
+            const c = useContext(Ctx);
+            if (!c) throw new Error('useAppState phai nam trong AppStateProvider');
+            return c;
+          }`;
       }
       if (id === duong('src/renderer/auth/session.tsx')) {
         /* `api` và object phiên phải là THAM CHIẾU CỐ ĐỊNH. Trả object mới mỗi
@@ -75,12 +97,8 @@ export default defineConfig({
   base: './',
   plugins: [react(), noiDungBai(__dirname), gia()],
   resolve: {
-    alias: {
-      '@renderer': duong('src/renderer'),
-      '@shared': duong('src/shared'),
-      '@': path.resolve(__dirname, '../frontend/src'),
-      'next/dynamic': duong('src/renderer/shims/next-dynamic.tsx'),
-    },
+    // Cùng MỘT bảng với bản dựng thật — xem `vite.alias.ts`.
+    alias: aliasDesktop(__dirname),
   },
   build: {
     outDir: duong('dist/bo-cuc'),

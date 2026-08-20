@@ -41,6 +41,10 @@ files:
   - dist/**/*
   - package.json
   - '!**/*.map'   # source map chỉ có ích khi gỡ lỗi, và nó phình gói lên gấp đôi
+  # Bản dựng của bộ ĐO BỐ CỤC (`npm run do:bo-cuc`) cũng nằm dưới `dist/`, và
+  # nó nặng ~4,5MB. Nó là công cụ của người viết mã, không có việc gì trong bản
+  # cài của người dùng.
+  - '!dist/bo-cuc'
 
 # ── macOS ──────────────────────────────────────────────────
 mac:

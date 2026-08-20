@@ -826,12 +826,18 @@ function NotesPageInner() {
         {/* Editor pane */}
         <main className="relative min-w-0 flex-1 overflow-y-auto pb-24 sm:pb-0">
           {/* Toolbar (search always; menu + resources contextual) */}
-          <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-[var(--notes-border,#e2e8f0)] bg-[var(--notes-toolbar-bg,#ffffff)]/90 px-3 py-2 backdrop-blur
+          {/* `flex-wrap` KHÔNG phải trang trí. Hàng này có: nút menu, ô tìm kiếm,
+              bộ chọn 3 chủ đề, rồi 4-5 nút icon. Không cho xuống dòng thì ở
+              cửa sổ hẹp (app desktop mở cạnh một cửa sổ khác) nửa phải bị đẩy
+              ra ngoài và CẮT — người dùng gửi ảnh 20/08/2026 đúng cảnh đó.
+              `min-w-0` trên ô tìm để nó chịu co thay vì giữ nguyên bề rộng và
+              đẩy mọi thứ khác đi. */}
+          <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 border-b border-[var(--notes-border,#e2e8f0)] bg-[var(--notes-toolbar-bg,#ffffff)]/90 px-3 py-2 backdrop-blur
             dark:border-white/[0.06] dark:bg-[#0c0f14]/90">
             <button onClick={() => setDrawerOpen(true)} className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05] md:hidden" aria-label="Mở danh sách">
               <Menu className="h-5 w-5" />
             </button>
-            <button onClick={() => setSearchOpen(true)} className="flex min-h-[36px] items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-[13px] text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:border-white/[0.06] dark:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/[0.05] dark:hover:text-slate-200">
+            <button onClick={() => setSearchOpen(true)} className="flex min-h-[36px] min-w-0 shrink items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-[13px] text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:border-white/[0.06] dark:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/[0.05] dark:hover:text-slate-200">
               <Search className="h-4 w-4" /> <span className="hidden sm:inline">Tìm kiếm</span>
               <kbd className="ml-1 hidden rounded bg-slate-200 px-1.5 text-[10px] text-slate-500 dark:bg-white/[0.06] md:inline">⌘K</kbd>
             </button>

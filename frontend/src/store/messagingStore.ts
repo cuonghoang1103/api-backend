@@ -1063,10 +1063,31 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     if (!auth.user) return;
     try {
       await messagingApi.markRead(threadId);
-      // Clear unread for this thread in the sidebar
+      // Clear unread for this thread in the sidebar.
+      //
+      // ⚠️ PHẢI xoá CẢ `markedUnreadAt`, không chỉ `unreadCount`. `ThreadList`
+      // tô đậm hàng khi `unreadCount > 0` HOẶC `preferences.markedUnreadAt`
+      // còn đó (xem `isMarkedUnread` ở ThreadList.tsx). Chỉ về 0 vế đầu thì
+      // bấm "Đánh dấu chưa đọc" một lần là hàng đậm VĨNH VIỄN — đọc bao nhiêu
+      // lần cũng không tắt. Đo thật trên production 21/08/2026: thread 12 mang
+      // markedUnreadAt từ hôm trước dù đã mở đọc nhiều lượt.
+      //
+      // Backend cũng đã xoá trong `markRead` từ cùng ngày; dòng này là bản
+      // lạc quan để hàng tắt NGAY, khỏi đợi lượt tải lại.
       set((s) => ({
         threads: s.threads.map((t) =>
-          t.id === threadId ? { ...t, unreadCount: 0 } : t,
+          t.id === threadId
+            ? {
+                ...t,
+                unreadCount: 0,
+                // `undefined` chứ không `null`: kiểu khai là `string?`, và
+                // `ThreadList` chỉ kiểm sự tồn tại (`!!`) nên hai giá trị
+                // tương đương về hành vi — nhưng `null` không qua được tsc.
+                preferences: t.preferences
+                  ? { ...t.preferences, markedUnreadAt: undefined }
+                  : t.preferences,
+              }
+            : t,
         ),
       }));
       get().refreshUnread();

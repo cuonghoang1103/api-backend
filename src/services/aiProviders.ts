@@ -80,17 +80,49 @@ export interface ChatResponse {
  * Giữ lại cấu hình (thay vì xoá) vì Groq vẫn là nhà cung cấp miễn phí đáng
  * dùng — chỉ cần đặt `GROQ_CHAT_MODEL` sang một model còn sống rồi bật lại.
  */
+/**
+ * Model Groq đã bị NHÀ CUNG CẤP khai tử — thay bằng model còn sống.
+ *
+ * ⚠️ Đổi tên trong mã KHÔNG đủ: production đặt đè `GROQ_CHAT_MODEL` trong
+ * `/opt/cuonghoangdev/.env`, và giá trị ở đó vẫn là tên đã chết. Env thắng
+ * mã, nên nếu không có lưới này thì bản vá "xanh ở local, vẫn hỏng trên prod".
+ *
+ * Đo thật 20/08/2026 trên khoá production, câu tiếng Việt có mã:
+ *   openai/gpt-oss-20b   1.408ms tới chữ đầu ·  1.575ms trọn lượt  ← chọn
+ *   qwen/qwen3.6-27b     1.912ms · rò khối `<think>` ra màn hình ⇒ loại
+ *   groq/compound-mini   2.987ms · tốt nhưng chậm gấp đôi
+ */
+const GROQ_DA_CHET: Record<string, string> = {
+  'llama-3.1-8b-instant': 'openai/gpt-oss-20b',
+  'llama-3.3-70b-versatile': 'openai/gpt-oss-120b',
+  'llama3-8b-8192': 'openai/gpt-oss-20b',
+  'mixtral-8x7b-32768': 'openai/gpt-oss-20b',
+};
+
+/**
+ * Đổi tên model Groq đã chết sang model còn sống, và NÓI RA.
+ *
+ * Trả về nguyên tên nếu nó không nằm trong danh sách — không đoán, không
+ * chặn tên lạ, vì Groq thêm model liên tục.
+ */
+export function modelGroqConSong(ten: string): string {
+  const thay = GROQ_DA_CHET[ten];
+  if (!thay) return ten;
+  logger.warn('Model Groq đã bị khai tử — đã tự đổi', { cu: ten, moi: thay });
+  return thay;
+}
+
 const PROVIDERS: AIProviderConfig[] = [
   {
     name: 'groq',
     apiKeyEnv: 'GROQ_API_KEY',
     modelEnv: 'GROQ_CHAT_MODEL',
-    // Tên này đã bị Groq khai tử — xem ghi chú ở trên. Đổi tên model rồi mới
-    // bật lại `enabled`.
-    defaultModel: 'llama-3.1-8b-instant',
+    // Đã đổi sang model còn sống (20/08/2026) nên BẬT LẠI. Groq miễn phí và
+    // nhanh nhất trong chuỗi — để nó đứng #1 là đúng.
+    defaultModel: 'openai/gpt-oss-20b',
     baseURL: 'https://api.groq.com/openai/v1',
     priority: 1,
-    enabled: false,
+    enabled: true,
   },
   {
     // Cổng trả phí của web (modelapi.vn). Đứng NGAY SAU Groq: bậc chat miễn

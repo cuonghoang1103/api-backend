@@ -103,13 +103,13 @@ const envSchema = z.object({
 
   // AI providers — at least one is required for chat to work
   GROQ_API_KEY: z.string().optional().default(''),
-  GROQ_CHAT_MODEL: z.string().default('llama-3.1-8b-instant'),
+  GROQ_CHAT_MODEL: z.string().default('openai/gpt-oss-20b'),
   OPENROUTER_API_KEY: z.string().optional().default(''),
   OPENROUTER_CHAT_MODEL: z.string().default('meta-llama/llama-3.1-8b-instruct:free'),
   OPENAI_API_KEY: z.string().optional().default(''),
   OPENAI_CHAT_MODEL: z.string().default('gpt-4o-mini'),
   GEMINI_API_KEY: z.string().optional().default(''),
-  AI_CHAT_MODEL: z.string().default('llama-3.1-8b-instant'),
+  AI_CHAT_MODEL: z.string().default('openai/gpt-oss-20b'),
   AI_EMBEDDING_MODEL: z.string().default('gemini-embedding-002'),
   AI_EMBEDDING_DIMENSIONS: z.string().regex(/^\d+$/).default('768'),
   AI_MAX_TOKENS: z.string().regex(/^\d+$/).default('2048'),

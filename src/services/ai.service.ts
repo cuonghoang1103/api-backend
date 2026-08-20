@@ -41,6 +41,7 @@ import {
   chatWithFallback,
   computeEmbeddings,
   cosineSimilarity,
+  modelGroqConSong,
 } from './aiProviders.js';
 import { claudeChatAvailable, completeClaudeChat, completeViaOpenAiRoute, hasDocument, hasImage, streamClaudeChat, streamViaOpenAiRoute, proModel, maxModel, proMaxTokens, maxMaxTokens, visionModel, type ClaudeMessage, type ClaudeContentBlock, type ChatStreamPart } from './claudeChat.js';
 import { goKhoiCheck, kiemHinh, tachHinh, thayHinh, type HinhTrongCauTraLoi } from './figureCheck.js';
@@ -1104,7 +1105,10 @@ export class AIService {
     if (groqAvailable && groq) {
       try {
         const stream = await groq.chat.completions.create({
-          model: config.groqChatModel,
+          // Qua lưới đổi tên: prod đặt đè `GROQ_CHAT_MODEL` bằng một model đã
+          // bị Groq khai tử, và env thắng mã. Không có dòng này thì mọi lượt
+          // chat bậc mặc định đều ăn 404 rồi rơi sang nhánh KHÔNG chảy dần.
+          model: modelGroqConSong(config.groqChatModel),
           messages: [
             { role: 'system', content: systemPrompt },
             ...history,

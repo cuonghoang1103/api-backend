@@ -1,0 +1,103 @@
+/**
+ * Khung xem video NGAY TRONG APP cho bài học.
+ *
+ * ─── Vì sao KHÔNG phải một thẻ `<iframe>` ───
+ * Đã thử thật, 20/08/2026, trong bản đã đóng gói:
+ *   • nới `frame-src` cho youtube-nocookie.com → yêu cầu mạng trả **200**
+ *   • `load` của iframe **có bắn**
+ *   • bắt tay `enablejsapi` gửi ba lần trong 10 giây → **KHÔNG một tin nhắn nào**
+ *   • chụp màn hình: **khung TRẮNG**
+ * Vì origin của renderer là `app://cuongthai`, không phải http(s). Trình nhúng
+ * của YouTube đòi trang cha có origin thật và là bên thứ ba — cùng lý do đã
+ * làm app iOS hỏng, xem [[feedback_nhung_youtube_can_origin_that]].
+ * Nên nới CSP KHÔNG mua được gì cả; đã trả lại `frame-src 'none'`.
+ *
+ * ─── Cách chạy được ───
+ * Dùng đúng cơ chế mà tab "Trình duyệt" của app đang chạy: một
+ * `WebContentsView` do MAIN giữ, vẽ ĐÈ lên cửa sổ theo toạ độ. Nó là Chromium
+ * thật đang ở `https://www.youtube.com`, nên không có vấn đề origin nào.
+ *
+ * ⚠️ Ba điều phải nhớ, chép từ bài học của `BrowserMode.tsx`:
+ *  1. Trang web luôn NỔI TRÊN mọi thứ React vẽ — không `z-index` nào thắng.
+ *     Vì thế khung này nằm ở một ô CỐ ĐỊNH phía trên, KHÔNG cuộn theo bài:
+ *     để nó trong vùng cuộn thì cuộn xuống là video đè lên chữ.
+ *  2. Quên gọi `an()` lúc tháo ⇒ video ở lại lơ lửng trên màn hình kế tiếp,
+ *     trông y hệt app hỏng.
+ *  3. Ô giữ chỗ đổi kích thước (kéo cửa sổ, ẩn thanh bên) thì phải đo lại.
+ */
+import { useCallback, useEffect, useRef } from 'react';
+import { ExternalLink, X } from 'lucide-react';
+
+/** Mã video từ mọi dạng liên kết YouTube thường gặp. */
+export function maYouTube(url: string | null | undefined): string | null {
+  if (!url) return null;
+  const m = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/,
+  );
+  return m?.[1] ?? null;
+}
+
+export function KhungVideo({
+  url, onDong,
+}: { url: string; onDong: () => void }) {
+  const oRef = useRef<HTMLDivElement>(null);
+  const daMoRef = useRef(false);
+
+  /** Đo ô giữ chỗ rồi báo lên main. Toạ độ theo VIEWPORT của cửa sổ. */
+  const doVaBao = useCallback((moLuon: boolean) => {
+    const el = oRef.current;
+    const cau = window.cuongthai;
+    if (!el || !cau) return;
+    const r = el.getBoundingClientRect();
+    /* Ô chưa có kích thước (chưa bố cục xong) ⇒ đừng báo: gửi một vùng 0×0
+       làm main thu khung về không rồi phải phóng lại, và video nháy một cái. */
+    if (r.width < 2 || r.height < 2) return;
+    const vung = { x: r.left, y: r.top, width: r.width, height: r.height };
+    if (moLuon && !daMoRef.current) {
+      daMoRef.current = true;
+      const ma = maYouTube(url);
+      /* `youtube.com/embed/…` chứ không phải trang xem đầy đủ: trang xem kéo
+         theo gợi ý, bình luận, thanh bên — trong một ô 16:9 thì chỉ tổ rối. */
+      void cau.browser.mo(vung, ma ? `https://www.youtube.com/embed/${ma}?autoplay=1` : url);
+    } else {
+      void cau.browser.datVung(vung);
+    }
+  }, [url]);
+
+  useEffect(() => {
+    // Đợi một khung hình cho bố cục xong rồi mới đo — đo ngay trong effect thì
+    // `getBoundingClientRect()` còn trả kích thước của lần vẽ trước.
+    const id = requestAnimationFrame(() => doVaBao(true));
+    return () => cancelAnimationFrame(id);
+  }, [doVaBao]);
+
+  /* Gỡ hẳn khi tháo. Không có nhánh này thì video ở lại trên trang kế tiếp. */
+  useEffect(() => () => { void window.cuongthai?.browser.an(); }, []);
+
+  useEffect(() => {
+    const el = oRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => doVaBao(false));
+    ro.observe(el);
+    const doLai = () => doVaBao(false);
+    window.addEventListener('resize', doLai);
+    return () => { ro.disconnect(); window.removeEventListener('resize', doLai); };
+  }, [doVaBao]);
+
+  return (
+    <div className="ct-hv-video">
+      <div className="ct-hv-video-thanh">
+        <span className="ct-muted">Đang phát trong app</span>
+        <button type="button" className="ct-linklike" onClick={() => void window.cuongthai?.app.openExternal(url)}>
+          <ExternalLink size={12} aria-hidden /> Mở YouTube
+        </button>
+        <button type="button" className="ct-trk-action" onClick={onDong} aria-label="Đóng video">
+          <X size={15} aria-hidden />
+        </button>
+      </div>
+      {/* Ô GIỮ CHỖ — rỗng có chủ ý. Video không nằm trong DOM này; main vẽ đè
+          lên đúng toạ độ của nó. */}
+      <div className="ct-hv-video-o" ref={oRef} />
+    </div>
+  );
+}

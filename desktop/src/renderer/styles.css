@@ -7682,12 +7682,16 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-hv-hoc ul {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 6px 18px;
+  gap: 6px 22px;
   margin: 0;
-  padding-left: 1.2em;
+  padding-left: 1.15em;
+  /* Có DẤU ĐẦU DÒNG. Thiếu nó, mấy ý thụt lề trông như câu bị chặt vụn rơi
+     rời rạc — đúng thứ người dùng thấy và hỏi "sao nó cứ tách tách ra thế". */
+  list-style: disc;
   font-size: 13.5px;
   line-height: 1.6;
 }
+.ct-hv-hoc li::marker { color: var(--ct-accent); }
 
 /* ── Mục & bài ─────────────────────────────────────────── */
 .ct-hv-muc {
@@ -7770,3 +7774,25 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-hv-noidung pre,
 .ct-hv-noidung table { max-width: 100%; overflow-x: auto; }
 .ct-hv-noidung img { max-width: 100%; height: auto; }
+
+/* ── Khung video trong bài (do MAIN vẽ đè, xem KhungVideo.tsx) ── */
+.ct-hv-video {
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius);
+  overflow: hidden;
+  background: #000;
+  margin: 0 0 18px;
+}
+.ct-hv-video-thanh {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  background: var(--ct-surface);
+  border-bottom: 1px solid var(--ct-border);
+  font-size: 11.5px;
+}
+.ct-hv-video-thanh .ct-muted { margin: 0; flex: 1; }
+/* Ô GIỮ CHỖ: rỗng có chủ ý, chỉ để đo toạ độ. Tỉ lệ cố định để main không phải
+   đoán, và để khung không nhảy khi video đổi độ phân giải. */
+.ct-hv-video-o { aspect-ratio: 16 / 9; width: 100%; }

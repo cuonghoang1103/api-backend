@@ -32,6 +32,7 @@ import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 import './noiDungBai';
+import { KhungVideo } from './KhungVideo';
 
 interface Ky {
   id: number;
@@ -115,15 +116,32 @@ function fold(t: string): string {
 /**
  * Đưa một trường "có thể là mảng, có thể là chuỗi" về mảng dòng.
  *
- * Chuỗi thì tách theo dấu chấm phẩy — đó là cách nội dung thật đang viết
- * ("Kiến trúc chuẩn FPTU …; nhập liệu an toàn …; xuất đúng định dạng …").
- * Không tách theo dấu chấm: câu tiếng Việt đầy dấu chấm trong tên viết tắt và
- * số thứ tự, tách ra sẽ vụn thành mấy chục mẩu vô nghĩa.
+ * ─── Tách theo XUỐNG DÒNG trước, chấm phẩy sau ───
+ * Web tách bằng `value.split('\n')` (xem `safeSplitLines`). Nhưng đo dữ liệu
+ * thật 20/08/2026: CEA201 có **0 xuống dòng và 10 dấu chấm phẩy** — tức là
+ * trên web nó hiện thành MỘT dòng dài duy nhất. Người viết nội dung rõ ràng
+ * dùng dấu chấm phẩy để ngăn ý.
+ *
+ * Nên nhận cả hai: có xuống dòng thì theo xuống dòng (khớp web), không có thì
+ * mới theo chấm phẩy. Và VIẾT HOA chữ đầu mỗi ý — không có bước này thì danh
+ * sách ra một loạt mẩu chữ thường cụt đầu, đọc như câu bị chặt vụn. Người dùng
+ * nhìn thấy đúng cảnh đó và hỏi "sao nó cứ tách tách ra thế?".
+ *
+ * ⛔ KHÔNG tách theo dấu chấm: câu tiếng Việt đầy dấu chấm trong tên viết tắt
+ * ("I/O (polling/interrupt/DMA)") và số thứ tự.
  */
 function raDanhSach(v: string[] | string | null | undefined): string[] {
   if (!v) return [];
-  if (Array.isArray(v)) return v.map(chuVi).filter(Boolean);
-  return chuVi(v).split(';').map((x) => x.trim()).filter(Boolean);
+  const tho = Array.isArray(v)
+    ? v.map(chuVi)
+    : (() => {
+        const c = chuVi(v);
+        return c.includes('\n') ? c.split('\n') : c.split(';');
+      })();
+  return tho
+    .map((x) => x.trim().replace(/[.;]+$/, ''))          // bỏ dấu câu cụt ở cuối
+    .filter(Boolean)
+    .map((x) => x.charAt(0).toLocaleUpperCase('vi') + x.slice(1));
 }
 
 const NHAN_BAC: Record<string, string> = {
@@ -520,6 +538,13 @@ function ChiTietMon({ slug, onQuayLai }: { slug: string; onQuayLai: () => void }
 /* ── Đọc một bài ─────────────────────────────────────────────────────────── */
 
 function DocBai({ bai, mon, onQuayLai }: { bai: Bai; mon: Mon; onQuayLai: () => void }) {
+  /* Video TẮT lúc mở bài. Bật sẵn nghĩa là mỗi lần bấm vào một bài là một lượt
+     tải YouTube, kể cả khi người ta chỉ định đọc chữ. */
+  const [xemVideo, datXemVideo] = useState(false);
+  /* Đổi bài thì đóng khung cũ: nếu không, video bài trước vẫn đang phát đè lên
+     bài mới — nó do main vẽ, React không tự dọn được. */
+  useEffect(() => { datXemVideo(false); }, [bai.id]);
+
   /* Lọc HTML trước khi dựng. Nội dung do quản trị viên soạn nên nó là HTML
      thật (không phải chữ thoát), mà một trình soạn thảo giàu định dạng thì có
      thể mang theo `<script>` hoặc `onerror=` từ chỗ dán vào. DOMPurify chạy ở
@@ -541,9 +566,14 @@ function DocBai({ bai, mon, onQuayLai }: { bai: Bai; mon: Mon; onQuayLai: () => 
       {bai.description && <p className="ct-hv-hero-mo">{chuVi(bai.description)}</p>}
 
       <div className="ct-hv-bai-nut">
+        {bai.videoUrl && !xemVideo && (
+          <button type="button" className="ct-btn" onClick={() => datXemVideo(true)}>
+            <PlayCircle size={15} aria-hidden /> Xem video trong app
+          </button>
+        )}
         {bai.videoUrl && (
-          <button type="button" className="ct-btn" onClick={() => moNgoai(bai.videoUrl!)}>
-            <PlayCircle size={15} aria-hidden /> Xem video trên YouTube
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => moNgoai(bai.videoUrl!)}>
+            <ExternalLink size={14} aria-hidden /> Mở trên YouTube
           </button>
         )}
         {bai.sourceCodeUrl && (
@@ -561,6 +591,12 @@ function DocBai({ bai, mon, onQuayLai }: { bai: Bai; mon: Mon; onQuayLai: () => 
           );
         })}
       </div>
+
+      {/* Khung video nằm NGOÀI vùng cuộn của bài — xem chú thích đầu KhungVideo:
+          trang web do main vẽ đè, cuộn theo chữ là nó trùm lên chữ. */}
+      {xemVideo && bai.videoUrl && (
+        <KhungVideo url={bai.videoUrl} onDong={() => datXemVideo(false)} />
+      )}
 
       {html
         ? <div className="ct-hv-noidung rich-content" data-ml="vi" dangerouslySetInnerHTML={{ __html: html }} />

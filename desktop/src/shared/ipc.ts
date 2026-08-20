@@ -374,7 +374,46 @@ export const agentSendSchema = z.object({
   anh: z.array(anhSchema).max(3).optional(),
 });
 
+/**
+ * BỐN CHẾ ĐỘ QUYỀN của AI Code — người dùng đối chiếu với Claude Code.
+ *
+ * Chúng quyết định HAI thứ cùng lúc: agent ĐƯỢC LÀM GÌ, và nó có phải HỎI
+ * trước không. Gộp vào một lựa chọn chứ không tách hai vì tách ra thì có
+ * những tổ hợp vô nghĩa ("không được sửa file, nhưng sửa khỏi hỏi") mà giao
+ * diện vẫn cho bấm.
+ *
+ *   keHoach      chỉ đọc — không sửa file, không chạy lệnh. Agent trình bày
+ *                cách làm, người dùng đọc rồi mới mở quyền. MẶC ĐỊNH.
+ *   hoi          sửa file + chạy lệnh, MỌI việc đều có thẻ duyệt.
+ *   tuSua        sửa file khỏi hỏi; lệnh vẫn hỏi từng cái.
+ *   tuSuaVaLenh  sửa file khỏi hỏi + lệnh THƯỜNG khỏi hỏi. Lệnh bị xếp
+ *                'cankiem'/'nguyhiem' VẪN hỏi — xem `phanLoaiLenh`.
+ *
+ * ⛔ KHÔNG có chế độ "bỏ qua tất cả". Shell đọc được `.env` (chính chân màn
+ * hình của app đang nói câu đó), nên một chế độ tắt sạch chốt chặn là đưa
+ * khoá của người dùng cho model quyết định.
+ */
+export const CHE_DO_QUYEN = ['keHoach', 'hoi', 'tuSua', 'tuSuaVaLenh'] as const;
+export type CheDoQuyen = (typeof CHE_DO_QUYEN)[number];
+export const agentCheDoQuyenSchema = z.object({
+  cuocId: cuocIdSchema,
+  cheDo: z.enum(CHE_DO_QUYEN),
+});
+
 export const agentCuocSchema = z.object({ cuocId: cuocIdSchema });
+
+/**
+ * Đặt một file từ máy vào thư mục đính kèm của dự án.
+ *
+ * Trần 34MB cho chuỗi base64 ≈ 25MB nhị phân (base64 phình 4/3). Kiểm lại
+ * bằng byte thật ở `datDinhKem` — đây chỉ là chốt chặn thô của kênh, để một
+ * gói tin khổng lồ không kịp đi qua `structuredClone` rồi mới bị từ chối.
+ */
+export const agentDinhKemSchema = z.object({
+  cuocId: cuocIdSchema,
+  ten: z.string().min(1).max(255),
+  duLieuBase64: z.string().min(4).max(34_000_000),
+});
 
 /**
  * Cấp độ nỗ lực — quyết định SỐ BƯỚC agent được đi và SỐ AGENT PHỤ nó được
@@ -427,6 +466,14 @@ export interface AgentViec {
 /** Thư mục dự án agent đang được phép đọc. `null` = chưa chọn. */
 export interface AgentWorkspace {
   path: string | null;
+  /**
+   * Chế độ quyền đang bật của tab này.
+   *
+   * `choSua`/`choChayLenh` được SUY RA từ nó, không đặt độc lập — hai nguồn
+   * cho cùng một sự thật thì sẽ có ngày lệch, và lệch ở đây nghĩa là màn hình
+   * nói agent chỉ đọc trong khi nó đang sửa file.
+   */
+  cheDoQuyen?: CheDoQuyen;
   /**
    * Đã bật cho agent GHI vào sổ ghi chú chưa.
    *
@@ -816,6 +863,8 @@ export const INVOKE_CHANNELS = {
   'agent:luuTruPhien': agentCoPhienSchema,
   'agent:nhanBanPhien': agentNhanBanPhienSchema,
   'agent:tachNhanhCuoc': agentTachNhanhSchema,
+  'agent:themDinhKem': agentDinhKemSchema,
+  'agent:datCheDoQuyen': agentCheDoQuyenSchema,
   'app:luuFile': luuFileSchema,
 
   'robot:doiKichThuoc': z.object({ rong: z.boolean() }),
@@ -1139,6 +1188,17 @@ export interface DesktopBridge {
      */
     tachNhanhCuoc(cuocId: string, denCauHoi?: number): Promise<
       { id: string; tieuDe: string; cauHoi?: string } | null
+    >;
+    /**
+     * Đặt file vào `<gốc dự án>/.cuongthai/dinh-kem/` và trả về đường dẫn
+     * TƯƠNG ĐỐI để chèn vào câu hỏi cho agent tự `read_file`.
+     *
+     * Vì sao qua đĩa chứ không gửi thẳng lên cổng: xem `agent/dinhKem.ts`.
+     */
+    /** Đổi chế độ quyền của một tab. Trả về trạng thái thư mục đã cập nhật. */
+    datCheDoQuyen(cuocId: string, cheDo: CheDoQuyen): Promise<AgentWorkspace>;
+    themDinhKem(cuocId: string, ten: string, duLieuBase64: string): Promise<
+      { ok: true; tuongDoi: string; byte: number } | { ok: false; loi: string }
     >;
     /**
      * Các cuộc ĐANG MỞ trong main.

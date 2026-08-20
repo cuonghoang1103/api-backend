@@ -29,7 +29,7 @@ import { getSettings, setSetting } from '../store';
 import {
   bangGhiCua, chayLuot, cuocDangChay, datGocChoCuoc, datQuyenChoCuoc, dongCuoc, dsCuocDangMo,
   daChonGocCua, datGocNeuChuaCo, gocCuaCuoc, huyLuotCua, napPhien, quayLui, quyenCuaCuoc, soCuaCuoc,
-  tachNhanhCuoc, taoCuoc,
+  datCheDoQuyen, tachNhanhCuoc, taoCuoc,
   xoaHoiThoai, type SuKienAgent,
 } from '../agent/loop';
 import { duongDanCauHinh, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
@@ -38,6 +38,7 @@ import {
   danhSachPhien, datGhimPhien, datLuuTruPhien, docPhien, doiTenPhien, dungLaiHienThi,
   nhanBanPhien, xoaPhien,
 } from '../agent/phien';
+import { datDinhKem } from '../agent/dinhKem';
 import { hoanTacTatCa } from '../agent/tools';
 import { traLoi } from '../agent/xinPhep';
 import { readStoredSession } from './auth';
@@ -141,7 +142,8 @@ async function moTa(cuocId: string, goc: string | null): Promise<AgentWorkspace>
   // diện vẫn vẽ "tắt", bấm mãi không lên, mà không có lỗi nào.
   if (!goc) {
     return {
-      path: null, name: null, branch: null, choSua: false, choChayLenh: false,
+      path: null, name: null, branch: null, cheDoQuyen: q.cheDoQuyen,
+      choSua: false, choChayLenh: false,
       choGhiNote: q.choGhiNote, choTrinhDuyet: q.choTrinhDuyet, mucNoLuc, model,
     };
   }
@@ -149,6 +151,7 @@ async function moTa(cuocId: string, goc: string | null): Promise<AgentWorkspace>
     path: goc,
     name: path.basename(goc),
     branch: await nhanhGit(goc),
+    cheDoQuyen: q.cheDoQuyen,
     choSua: q.choSua,
     choChayLenh: q.choChayLenh,
     choGhiNote: q.choGhiNote,
@@ -383,6 +386,30 @@ export function registerAgentHandlers(): void {
      họ đang chạy dở ở tab khác. */
   handle('agent:nhanBanPhien', ({ id, denCauHoi }) => nhanBanPhien(id, denCauHoi));
   handle('agent:tachNhanhCuoc', ({ cuocId, denCauHoi }) => tachNhanhCuoc(cuocId, denCauHoi));
+
+  /* Lỗi trả về DẠNG DỮ LIỆU chứ không ném: đính kèm hỏng (file to quá, đĩa
+     đầy, chưa chọn thư mục) là chuyện thường và giao diện phải nói được lý do
+     ngay cạnh cái file đó — một exception qua IPC chỉ còn lại chuỗi thông
+     điệp, và renderer không biết nó thuộc file nào. */
+  handle('agent:datCheDoQuyen', async ({ cuocId, cheDo }): Promise<AgentWorkspace> => {
+    // Đang chạy dở thì KHÔNG cho đổi — cùng lý do `datCheDoSua` chặn: đổi
+    // quyền giữa lượt nghĩa là nửa đầu chạy theo luật này, nửa sau luật khác,
+    // và người dùng không có cách nào biết ranh giới nằm ở đâu.
+    if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở — hãy dừng trước khi đổi chế độ.');
+    datCheDoQuyen(cuocId, cheDo);
+    return moTa(cuocId, gocCua(cuocId));
+  });
+
+  handle('agent:themDinhKem', async ({ cuocId, ten, duLieuBase64 }) => {
+    const goc = gocCuaCuoc(cuocId);
+    if (!goc) return { ok: false as const, loi: 'Chưa chọn thư mục dự án cho tab này.' };
+    try {
+      const r = await datDinhKem(goc, ten, duLieuBase64);
+      return { ok: true as const, ...r };
+    } catch (e) {
+      return { ok: false as const, loi: (e as Error).message };
+    }
+  });
 
   handle('agent:xoaPhien', async ({ id }) => {
     // Xoá phiên ⇒ đóng luôn cuộc nếu nó đang mở, nếu không agent vẫn nhớ một

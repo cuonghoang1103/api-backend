@@ -2794,6 +2794,84 @@ select {
 .ct-tb-muc:hover .ct-tb-muc-xoa { opacity: 1; }
 .ct-tb-muc-xoa:hover { color: var(--ct-err); background: var(--ct-hover); }
 
+/* ── Bộ chọn chế độ quyền ──
+   Màu theo BẬC mở: càng ít chốt chặn thì càng ấm màu. Người dùng liếc một cái
+   phải biết mình đang ở đâu, không phải đọc chữ. */
+.ct-chedo-nut {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 9px;
+  border: 1px solid var(--ct-border); border-radius: 8px;
+  background: var(--ct-surface-2); color: var(--ct-text-muted);
+  font: inherit; font-size: 11.5px; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+}
+.ct-chedo-nut:hover:not(:disabled) { background: var(--ct-hover); color: var(--ct-text); }
+.ct-chedo-nut:disabled { opacity: 0.5; cursor: default; }
+.ct-chedo-nut[data-bac='1'] { border-color: color-mix(in srgb, var(--ct-accent) 55%, transparent); color: var(--ct-text); }
+.ct-chedo-nut[data-bac='2'] { border-color: color-mix(in srgb, var(--ct-warn) 60%, transparent); color: var(--ct-warn); }
+.ct-chedo-nut[data-bac='3'] { border-color: var(--ct-warn); color: var(--ct-warn); background: color-mix(in srgb, var(--ct-warn) 10%, transparent); }
+
+.ct-chedo-menu {
+  position: fixed; z-index: 900;
+  padding: 5px;
+  border: 1px solid var(--ct-border); border-radius: 10px;
+  background: var(--ct-surface);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 28%);
+  display: flex; flex-direction: column; gap: 1px;
+}
+.ct-chedo-muc {
+  display: flex; flex-direction: column; gap: 2px;
+  width: 100%; padding: 7px 9px;
+  border: none; border-radius: 7px;
+  background: none; color: var(--ct-text-muted);
+  font: inherit; text-align: left; cursor: pointer;
+}
+.ct-chedo-muc:hover { background: var(--ct-hover); }
+.ct-chedo-muc[data-chon='true'] { background: var(--ct-hover); }
+.ct-chedo-muc[data-chon='true'] strong { color: var(--ct-accent); }
+.ct-chedo-muc[data-bac='3'] strong { color: var(--ct-warn); }
+.ct-chedo-muc-dau { display: flex; align-items: center; gap: 6px; font-size: 12.5px; }
+.ct-chedo-muc-dau strong { color: var(--ct-text); font-weight: 600; }
+.ct-chedo-muc-mo { font-size: 11px; color: var(--ct-text-faint); line-height: 1.45; }
+.ct-chedo-chan {
+  margin: 5px 4px 2px; padding-top: 7px;
+  border-top: 1px solid var(--ct-border);
+  font-size: 10.5px; color: var(--ct-text-faint); line-height: 1.45;
+}
+
+/* ── Dải file đính kèm của AI Code ──
+   Thẻ chữ chứ không phải ô ảnh: file ở đây là PDF, log, zip — xem trước một
+   cái zip là chuyện vô nghĩa, còn TÊN thì luôn đọc được. */
+.ct-dkc-dai {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 0 2px 6px;
+}
+.ct-dkc-the {
+  display: inline-flex; align-items: center; gap: 6px;
+  max-width: 320px;
+  padding: 4px 6px 4px 8px;
+  border: 1px solid var(--ct-border); border-radius: 8px;
+  background: var(--ct-surface-2);
+  font-size: 11.5px; color: var(--ct-text-muted);
+}
+.ct-dkc-the[data-loi='true'] { border-color: var(--ct-err); color: var(--ct-err); }
+.ct-dkc-ten {
+  max-width: 170px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: var(--ct-text);
+}
+.ct-dkc-the[data-loi='true'] .ct-dkc-ten { color: inherit; }
+.ct-dkc-phu { color: var(--ct-text-faint); white-space: nowrap; }
+.ct-dkc-the[data-loi='true'] .ct-dkc-phu { color: inherit; }
+.ct-dkc-bo {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; flex-shrink: 0;
+  border: none; border-radius: 5px;
+  background: none; color: var(--ct-text-faint);
+  cursor: pointer;
+}
+.ct-dkc-bo:hover { background: var(--ct-hover); color: var(--ct-text); }
+
 /* ── Ba nút dưới tin nhắn đã gửi ──
    Ẩn cho tới khi rê vào bong bóng, giống cách Claude làm: hiện thường trực thì
    mỗi câu hỏi kéo theo một hàng nút, và mắt phải lướt qua chúng để đọc mạch

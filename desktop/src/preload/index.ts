@@ -21,6 +21,7 @@ import type {
   AgentPhien,
   AgentQuyetDinh,
   AgentWorkspace,
+  CheDoQuyen,
   AgentWorktree,
   ModelAgent,
   MucNoLuc,
@@ -179,6 +180,11 @@ const bridge: DesktopBridge = {
     nhanBanPhien: (id: string, denCauHoi?: number) =>
       ipcRenderer.invoke('agent:nhanBanPhien', denCauHoi === undefined ? { id } : { id, denCauHoi }) as
         Promise<{ id: string; tieuDe: string; cauHoi?: string } | null>,
+    datCheDoQuyen: (cuocId: string, cheDo: CheDoQuyen) =>
+      ipcRenderer.invoke('agent:datCheDoQuyen', { cuocId, cheDo }) as Promise<AgentWorkspace>,
+    themDinhKem: (cuocId: string, ten: string, duLieuBase64: string) =>
+      ipcRenderer.invoke('agent:themDinhKem', { cuocId, ten, duLieuBase64 }) as
+        Promise<{ ok: true; tuongDoi: string; byte: number } | { ok: false; loi: string }>,
     tachNhanhCuoc: (cuocId: string, denCauHoi?: number) =>
       ipcRenderer.invoke(
         'agent:tachNhanhCuoc',

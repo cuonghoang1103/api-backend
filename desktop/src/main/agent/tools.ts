@@ -46,6 +46,8 @@ export interface BoiCanhGhi {
   signal: AbortSignal;
   /** Sổ của CUỘC hội thoại này — nhật ký hoàn tác + quyền đã cấp. */
   so: SoCuoc;
+  /** Chế độ đang cho tự duyệt việc sửa file. Tính ở loop.ts, xem `tuDuyetSua`. */
+  tuDuyet?: boolean;
 }
 
 /** Ngữ cảnh cho `run_command`. Tách khỏi `BoiCanhGhi` vì hai quyền BẬT RIÊNG. */
@@ -85,6 +87,11 @@ export interface BoiCanhLenh {
   /** Đầu ra chảy ra màn hình khi lệnh còn đang chạy. */
   onRa: (mau: string) => void;
   signal: AbortSignal;
+  /**
+   * Lệnh mức này có được tự duyệt không. Tính ở loop.ts (`tuDuyetLenh`), nơi
+   * biết chế độ của cuộc. Vắng mặt = luôn hỏi.
+   */
+  tuDuyetLenh?: (muc: 'thuong' | 'cankiem' | 'nguyhiem') => boolean;
 }
 
 /**
@@ -460,7 +467,7 @@ async function toolEditFile(goc: string, args: Record<string, unknown>, ghi: Boi
   const diff = soSanhDong(noiDung, noiDungMoi);
   const tuDong = daChoPhepCaFile(ghi.so.quyenDaCap, tuongDoi);
   const quyet = await hoiNguoiDung(
-    { ten: 'edit_file', duongDan: tuongDoi },
+    { ten: 'edit_file', duongDan: tuongDoi, tuDuyet: ghi.tuDuyet === true },
     (y) => ghi.xinPhep({ ...y, diff, taoMoi: false }),
     ghi.signal,
     ghi.so.quyenDaCap,
@@ -499,7 +506,7 @@ async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: B
 
   const diff = soSanhDong('', noiDung);
   const quyet = await hoiNguoiDung(
-    { ten: 'create_file', duongDan: tuongDoi },
+    { ten: 'create_file', duongDan: tuongDoi, tuDuyet: ghi.tuDuyet === true },
     (y) => ghi.xinPhep({ ...y, diff, taoMoi: true }),
     ghi.signal,
     ghi.so.quyenDaCap,
@@ -543,7 +550,11 @@ async function toolRunCommand(
   // một chữ `npm`. Nhớ theo nguyên văn thì đổi một ký tự là hỏi lại, và đó
   // chính là điều mình muốn.
   const quyet = await hoiNguoiDung(
-    { ten: 'run_command', duongDan: lenh, khoa: lenh, choNho: phanLoai.choNho },
+    {
+      ten: 'run_command', duongDan: lenh, khoa: lenh, choNho: phanLoai.choNho,
+      // Chỉ lệnh mức 'thuong' mới được tự duyệt — `tuDuyetLenh` đã lọc.
+      tuDuyet: boiCanh.tuDuyetLenh?.(phanLoai.muc) === true,
+    },
     (y) => boiCanh.xinPhepLenh({ ...y, phanLoai }),
     boiCanh.signal,
     boiCanh.so.quyenDaCap,

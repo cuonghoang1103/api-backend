@@ -33,6 +33,7 @@ import {
 import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua } from './tools';
 import { taoSoCuoc, type SoCuoc } from './so';
+import type { CheDoQuyen } from '../../shared/ipc';
 import { dungLenhNenCua } from './lenhNen';
 import { hanMucMcp, goiToolMcp, laToolMcp, toolMcpHienCo } from './mcp';
 import { hoiNguoiDung, huyTatCa, type YeuCauXinPhep } from './xinPhep';
@@ -195,6 +196,11 @@ interface CuocHoiThoai {
    */
   daChonGoc: boolean;
   /** Quyền SỬA của riêng cuộc này. KHÔNG lưu xuống đĩa, KHÔNG kế thừa sang tab mới. */
+  /**
+   * Chế độ quyền. NGUỒN SỰ THẬT — `choSua`/`choChayLenh` bên dưới được suy ra
+   * từ nó trong `datCheDoQuyen`, chứ không ai đặt độc lập.
+   */
+  cheDoQuyen: CheDoQuyen;
   choSua: boolean;
   /** Quyền CHẠY LỆNH của riêng cuộc này. Cũng chỉ trong RAM, cũng bật riêng. */
   choChayLenh: boolean;
@@ -220,7 +226,7 @@ function layCuoc(id: string): CuocHoiThoai {
   if (!c) {
     c = {
       id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc(), soViecPhu: 0,
-      goc: null, daChonGoc: false, choSua: false, choChayLenh: false, choGhiNote: false,
+      goc: null, daChonGoc: false, cheDoQuyen: 'keHoach', choSua: false, choChayLenh: false, choGhiNote: false,
       choTrinhDuyet: false,
     };
     cuoc.set(id, c);
@@ -259,10 +265,12 @@ export function daChonGocCua(id: string): boolean {
 }
 
 export function quyenCuaCuoc(id: string): {
+  cheDoQuyen: CheDoQuyen;
   choSua: boolean; choChayLenh: boolean; choGhiNote: boolean; choTrinhDuyet: boolean;
 } {
   const c = layCuoc(id);
   return {
+    cheDoQuyen: c.cheDoQuyen,
     choSua: c.choSua, choChayLenh: c.choChayLenh,
     choGhiNote: c.choGhiNote, choTrinhDuyet: c.choTrinhDuyet,
   };
@@ -312,6 +320,37 @@ export function datGocNeuChuaCo(id: string, goc: string): void {
   c.goc = goc;
 }
 
+/**
+ * Đổi chế độ quyền, và SUY RA hai cờ năng lực từ đó.
+ *
+ * Đây là chỗ DUY NHẤT đặt `choSua`/`choChayLenh` theo ý người dùng. Giữ hai
+ * công tắc rời song song với chế độ thì sẽ có lúc chúng nói ngược nhau, và
+ * người dùng không có cách nào biết cái nào đang thắng.
+ */
+export function datCheDoQuyen(id: string, cheDo: CheDoQuyen): void {
+  const c = layCuoc(id);
+  c.cheDoQuyen = cheDo;
+  const moQuyen = cheDo !== 'keHoach';
+  c.choSua = moQuyen;
+  c.choChayLenh = moQuyen;
+}
+
+/** Chế độ có cho tự duyệt việc SỬA FILE không. */
+export function tuDuyetSua(cheDo: CheDoQuyen): boolean {
+  return cheDo === 'tuSua' || cheDo === 'tuSuaVaLenh';
+}
+
+/**
+ * Chế độ có cho tự duyệt lệnh MỨC NÀY không.
+ *
+ * Chỉ `tuSuaVaLenh`, và chỉ với lệnh xếp loại `thuong`. Lệnh `cankiem` /
+ * `nguyhiem` LUÔN hỏi, bất kể chế độ — đó là ranh giới không có chế độ nào
+ * vượt qua được, vì `rm -rf` và `cat .env` nằm đúng bên kia nó.
+ */
+export function tuDuyetLenh(cheDo: CheDoQuyen, muc: 'thuong' | 'cankiem' | 'nguyhiem'): boolean {
+  return cheDo === 'tuSuaVaLenh' && muc === 'thuong';
+}
+
 export function datQuyenChoCuoc(id: string, quyen: { choSua?: boolean; choChayLenh?: boolean; choGhiNote?: boolean; choTrinhDuyet?: boolean }): void {
   const c = layCuoc(id);
   if (typeof quyen.choSua === 'boolean') c.choSua = quyen.choSua;
@@ -347,7 +386,9 @@ export function napPhien(
   // Đổi thư mục ⇒ thu hồi quyền trên FILE và LỆNH (chúng gắn với thư mục cũ).
   // `choGhiNote` KHÔNG bị thu hồi: sổ ghi chú không nằm trong thư mục nào cả,
   // nên tắt nó ở đây chỉ là bắt người dùng bật lại một thứ không hề đổi.
-  if (goc !== undefined) { c.goc = goc; c.daChonGoc = true; c.choSua = false; c.choChayLenh = false; }
+  // Mở việc cũ ⇒ về chế độ AN TOÀN NHẤT. Quyền đã cấp hôm qua không được
+  // tự sống lại hôm nay — mở lại là một lần ngồi xuống mới.
+  if (goc !== undefined) { c.goc = goc; c.daChonGoc = true; c.cheDoQuyen = 'keHoach'; c.choSua = false; c.choChayLenh = false; }
   // Quyền đã cấp và nhật ký hoàn tác KHÔNG khôi phục theo. Hoàn tác một thay
   // đổi từ hôm qua là ghi đè lên thứ người dùng có thể đã sửa tiếp bằng tay; và
   // quyền "cho phép cả file này" cấp cho phiên trước thì hết hiệu lực cùng
@@ -752,6 +793,8 @@ export async function chayLuot(
           ? {
               signal: dieuKhien.signal,
               so: c.so,
+              // Chế độ `tuSua`/`tuSuaVaLenh` ⇒ sửa file khỏi thẻ duyệt.
+              tuDuyet: tuDuyetSua(c.cheDoQuyen),
               xinPhep: (y: YeuCauXinPhep & { diff: KetQuaDiff; taoMoi: boolean }) =>
                 phat({ loai: 'xinPhep', id: y.id, ten: y.ten, duongDan: y.duongDan, taoMoi: y.taoMoi, diff: y.diff }),
             }
@@ -768,6 +811,8 @@ export async function chayLuot(
               xinPhepLenh: (y: YeuCauXinPhep & { phanLoai: PhanLoaiLenh }) =>
                 phat({ loai: 'xinPhepLenh', id: y.id, lenh: y.duongDan, phanLoai: y.phanLoai }),
               onRa: (mau: string) => phat({ loai: 'lenhRa', mau }),
+              // CHỈ lệnh mức 'thuong', và chỉ ở chế độ `tuSuaVaLenh`.
+              tuDuyetLenh: (muc: 'thuong' | 'cankiem' | 'nguyhiem') => tuDuyetLenh(c.cheDoQuyen, muc),
             }
           : undefined;
 

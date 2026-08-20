@@ -25,11 +25,17 @@ import { useAppState } from '../../app-state';
 import { DangNghi } from './DangNghi';
 import { KhungWeb } from './KhungWeb';
 import { GoiYLenh } from './GoiYLenh';
-import type { AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, ModelAgent, MucNoLuc } from '../../../shared/ipc';
+import type {
+  AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, CheDoQuyen, ModelAgent, MucNoLuc,
+} from '../../../shared/ipc';
 import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
 import { NutTinNhan } from './NutTinNhan';
+import { ChonCheDo } from './ChonCheDo';
+import {
+  DaiTepCode, NutChonTep, ODinhKemCode, useDinhKemCode,
+} from './DinhKemCode';
 import { XinPhep, XinPhepGit, XinPhepLenh, XinPhepMcp, XinPhepNote } from './XinPhep';
 
 export function AgentMode({
@@ -89,7 +95,10 @@ export function AgentMode({
   const [nhap, datNhap] = useState('');
   const [moLichSu, datMoLichSu] = useState(false);
   /** Ảnh đã dán, chờ gửi kèm câu hỏi tới. */
-  const [anh, datAnh] = useState<string[]>([]);
+  /* Đính kèm: ảnh nhỏ gửi thẳng, mọi thứ khác nằm trên đĩa cho agent tự mở.
+     Xem `DinhKemCode.tsx`. Thay hẳn `useState<string[]>` cũ — nó chỉ nhận ảnh
+     DÁN vào, không có nút chọn file, không kéo-thả, không nhận PDF/log. */
+  const dk = useDinhKemCode(cuocId);
   const cuonRef = useRef<HTMLDivElement>(null);
 
   // Tiêu đề tab = câu hỏi ĐẦU TIÊN, giống cách đặt tên phiên ở main. Một tab
@@ -204,8 +213,15 @@ export function AgentMode({
     }
   };
 
-  const doiCheDoSua = async (): Promise<void> => {
-    const w = await window.cuongthai?.agent.datCheDoSua(cuocId, !thuMuc?.choSua);
+  /**
+   * Đổi chế độ quyền.
+   *
+   * Main là nơi SUY RA `choSua`/`choChayLenh` từ chế độ, nên ở đây chỉ nhận
+   * lại nguyên trạng thái nó trả về. Tự đoán hai cờ ở renderer là dựng lên
+   * nguồn sự thật thứ hai — và hai nguồn thì sẽ có ngày nói ngược nhau.
+   */
+  const doiCheDoQuyen = async (c: CheDoQuyen): Promise<void> => {
+    const w = await window.cuongthai?.agent.datCheDoQuyen(cuocId, c);
     if (w) datThuMuc(w);
   };
 
@@ -230,11 +246,6 @@ export function AgentMode({
     // main (nó mới là nơi ghi xuống đĩa). Tự đặt ở đây thì giao diện đổi ngay
     // cả khi ghi hỏng — đúng kiểu lỗi chỉ lộ ra sau khi khởi động lại app.
     const w = await window.cuongthai?.agent.getWorkspace(cuocId);
-    if (w) datThuMuc(w);
-  };
-
-  const doiCheDoLenh = async (): Promise<void> => {
-    const w = await window.cuongthai?.agent.datCheDoLenh(cuocId, !thuMuc?.choChayLenh);
     if (w) datThuMuc(w);
   };
 
@@ -268,43 +279,26 @@ export function AgentMode({
     const lenh = text.toLowerCase();
     if (lenh === '/clear' || lenh === '/new' || lenh === '/moi') {
       datNhap('');
-      datAnh([]);
+      dk.xoaHet();
       void batDauLai();
       return;
     }
 
+    /*
+     * File nằm trên đĩa được nhắc tới bằng ĐƯỜNG DẪN trong chính câu hỏi.
+     *
+     * Không nhét vào một trường riêng của giao thức: agent đọc câu hỏi, và một
+     * trường phụ mà prompt không nhắc tới thì model bỏ qua — file coi như chưa
+     * từng gửi. Một dòng chữ thì nó đọc chắc chắn.
+     */
+    const duong = dk.duongDanTrenDia;
+    const kem = duong.length
+      ? `${text}\n\nFile tôi vừa đính kèm (đọc bằng read_file khi cần):\n${duong.map((d) => `- ${d}`).join('\n')}`
+      : text;
+
     datNhap('');
-    datAnh([]);
-    void gui(text, anh.length ? anh : undefined);
-  };
-
-  /**
-   * Dán ảnh từ bộ nhớ tạm.
-   *
-   * Chặn `preventDefault` CHỈ khi thật sự có ảnh — dán chữ phải hoạt động như
-   * bình thường. `clipboardData.items` có cả ảnh lẫn phiên bản chữ của cùng một
-   * lần chép (ví dụ chép từ Figma), nên phải lọc theo `type` chứ không lấy bừa
-   * item đầu.
-   */
-  const danAnh = (e: React.ClipboardEvent<HTMLTextAreaElement>): void => {
-    const files = [...(e.clipboardData?.items ?? [])]
-      .filter((i) => i.kind === 'file' && /^image\/(png|jpeg|webp|gif)$/.test(i.type))
-      .map((i) => i.getAsFile())
-      .filter((f): f is File => !!f);
-    if (!files.length) return;
-    e.preventDefault();
-
-    for (const f of files.slice(0, 3 - anh.length)) {
-      // 4MB là trần của máy chủ. Chặn ở đây để người dùng biết NGAY, thay vì
-      // gửi đi rồi bị từ chối câm lặng ở tầng dưới.
-      if (f.size > 4 * 1024 * 1024) continue;
-      const doc = new FileReader();
-      doc.onload = () => {
-        const url = String(doc.result ?? '');
-        if (url.startsWith('data:image/')) datAnh((cu) => (cu.length >= 3 ? cu : [...cu, url]));
-      };
-      doc.readAsDataURL(f);
-    }
+    dk.xoaHet();
+    void gui(kem, dk.anhGuiThang.length ? dk.anhGuiThang : undefined);
   };
 
   const phimTrongO = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
@@ -334,7 +328,19 @@ export function AgentMode({
   const coThuMuc = Boolean(thuMuc?.path);
 
   return (
-    <div className="ct-agent">
+    <div
+      className="ct-agent"
+      data-keo={dk.dangKeo}
+      onDragEnter={coThuMuc ? dk.keoVao : undefined}
+      onDragOver={coThuMuc ? dk.keoTren : undefined}
+      onDragLeave={coThuMuc ? dk.keoRa : undefined}
+      onDrop={coThuMuc ? dk.thaVao : undefined}
+    >
+      {dk.dangKeo && (
+        <div className="ct-dk-phu">
+          <span>Thả file vào đây — agent sẽ đọc được nó</span>
+        </div>
+      )}
       {moLichSu && (
         <LichSu
           phien={phien}
@@ -373,42 +379,11 @@ export function AgentMode({
         <div className="ct-agent-bar-spacer" />
 
         {coThuMuc && (
-          <button
-            type="button"
-            className="ct-agent-suanut"
-            data-nut="chosua"
-            data-bat={thuMuc?.choSua === true}
-            onClick={() => void doiCheDoSua()}
-            disabled={trangThai.dangChay}
-            title={
-              thuMuc?.choSua
-                ? 'Agent ĐANG được sửa file (mỗi thay đổi vẫn phải bạn duyệt). Bấm để tắt.'
-                : 'Bật cho agent sửa file. Mỗi thay đổi sẽ hiện diff để bạn duyệt trước khi ghi.'
-            }
-          >
-            <FilePen size={13} aria-hidden />
-            {thuMuc?.choSua ? 'Cho sửa: BẬT' : 'Cho sửa: tắt'}
-          </button>
-        )}
-
-        {coThuMuc && (
-          <button
-            type="button"
-            className="ct-agent-suanut"
-            data-nut="chaylenh"
-            data-bat={thuMuc?.choChayLenh === true}
-            data-lenh="true"
-            onClick={() => void doiCheDoLenh()}
-            disabled={trangThai.dangChay}
-            title={
-              thuMuc?.choChayLenh
-                ? 'Agent ĐANG chạy được lệnh (mỗi lệnh vẫn phải bạn duyệt). Bấm để tắt.'
-                : 'Bật cho agent chạy lệnh — để nó tự chạy test sau khi sửa. Mỗi lệnh hiện nguyên văn để bạn duyệt.'
-            }
-          >
-            <Terminal size={13} aria-hidden />
-            {thuMuc?.choChayLenh ? 'Chạy lệnh: BẬT' : 'Chạy lệnh: tắt'}
-          </button>
+          <ChonCheDo
+            cheDo={thuMuc?.cheDoQuyen ?? 'keHoach'}
+            khoa={trangThai.dangChay}
+            onChon={(c) => void doiCheDoQuyen(c)}
+          />
         )}
 
         {/* Trình duyệt KHÔNG cần thư mục dự án: agent có thể mở một trang bất
@@ -750,27 +725,35 @@ export function AgentMode({
       />
 
       {/* ── Ô nhập ── */}
-      {anh.length > 0 && (
+      {/* Ảnh gửi thẳng vẫn hiện thành hình, vì nhìn thấy nó mới biết mình dán
+          đúng cái nào. File trên đĩa thì chỉ có tên — xem trước một file zip
+          là chuyện vô nghĩa. */}
+      {dk.tep.some((t) => t.dataUrl) && (
         <div className="ct-anh-cho">
-          {anh.map((a, i) => (
-            <div key={i} className="ct-anh-o">
-              <img src={a} alt={`ảnh ${i + 1}`} />
-              <button type="button" onClick={() => datAnh((cu) => cu.filter((_, k) => k !== i))} title="Bỏ ảnh này">
+          {dk.tep.filter((t) => t.dataUrl).map((t) => (
+            <div key={t.id} className="ct-anh-o">
+              <img src={t.dataUrl} alt={t.ten} />
+              <button type="button" onClick={() => dk.bo(t.id)} title="Bỏ ảnh này">
                 <X size={11} aria-hidden />
               </button>
             </div>
           ))}
         </div>
       )}
+      <DaiTepCode tep={dk.tep.filter((t) => !t.dataUrl)} bo={dk.bo} />
 
       <div className="ct-agent-soan">
+        <ODinhKemCode oFileRef={dk.oFileRef} nhanTuO={dk.nhanTuO} />
+        {/* Chưa chọn thư mục dự án ⇒ khoá: file trên đĩa phải nằm TRONG gốc dự
+            án (ngục của agent), nên không có gốc thì không có chỗ để đặt. */}
+        <NutChonTep onBam={dk.moChonTep} khoa={trangThai.dangChay || !coThuMuc} />
         <textarea
           className="ct-agent-o"
           rows={2}
-          onPaste={danAnh}
+          onPaste={dk.danVao}
           value={nhap}
           placeholder={coThuMuc
-            ? `Hỏi về dự án ${thuMuc?.name}… (dán ảnh chụp màn hình được)`
+            ? `Hỏi về dự án ${thuMuc?.name}… (kéo thả, dán hoặc bấm 📎 để gửi file)`
             : 'Chọn thư mục dự án trước, rồi hỏi…'}
           onChange={(e) => datNhap(e.target.value)}
           onKeyDown={phimTrongO}
@@ -791,14 +774,16 @@ export function AgentMode({
 
       <div className="ct-agent-chan">
         <span>
-          {!thuMuc?.choSua && !thuMuc?.choChayLenh
+          {/* Chân màn hình nói ĐÚNG chế độ đang bật. Đây là chỗ duy nhất người
+              dùng nhìn thấy thường trực, nên nó phải nói cả cái GIÁ của chế độ
+              chứ không chỉ cái tên — nhất là câu về `.env`. */}
+          {thuMuc?.cheDoQuyen === 'keHoach' || !thuMuc?.cheDoQuyen
             ? <>Đang <strong>chỉ đọc</strong> — chưa sửa file, chưa chạy lệnh. Không đọc <code>.env</code> và các file khoá.</>
-            : thuMuc?.choChayLenh
-              // ⚠️ Bật chạy lệnh thì `cat .env` là một lệnh shell, và shell không
-              // biết gì về danh sách chặn file. Phải nói thẳng ở đây, vì đây là
-              // chỗ duy nhất người dùng nhìn thấy thường trực.
-              ? <>Agent {thuMuc?.choSua ? <><strong>sửa được file</strong> và </> : null}<strong>chạy được lệnh</strong> — mỗi việc đều phải bạn duyệt. Lệnh shell <strong>đọc được cả</strong> <code>.env</code>, hãy đọc kỹ trước khi duyệt.</>
-              : <>Agent <strong>sửa được file</strong> — mỗi thay đổi phải bạn duyệt. Chưa chạy được lệnh. Không đọc <code>.env</code> và các file khoá.</>}
+            : thuMuc.cheDoQuyen === 'hoi'
+              ? <>Agent <strong>sửa file và chạy lệnh</strong> — mỗi việc đều phải bạn duyệt. Lệnh shell <strong>đọc được cả</strong> <code>.env</code>, hãy đọc kỹ trước khi duyệt.</>
+              : thuMuc.cheDoQuyen === 'tuSua'
+                ? <>Agent <strong>tự sửa file, không hỏi</strong>. Lệnh vẫn hỏi từng cái. Dùng nút Hoàn tác nếu nó sửa nhầm.</>
+                : <>Agent <strong>tự sửa file và tự chạy lệnh thường</strong>, không hỏi. Chỉ lệnh bị xếp <strong>nguy hiểm</strong> mới dừng lại hỏi bạn.</>}
         </span>
         {trangThai.tienPhien > 0 && <span className="ct-muted">~${trangThai.tienPhien.toFixed(3)} phiên này</span>}
       </div>

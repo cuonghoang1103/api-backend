@@ -84,13 +84,31 @@ export function daChoPhepCaFile(soNho: Set<string>, khoa: string): boolean {
  * này không biết gì về IPC, và nhờ thế test được mà không cần dựng Electron.
  */
 export function hoiNguoiDung(
-  yeuCau: Omit<YeuCauXinPhep, 'id'> & { khoa?: string; choNho?: boolean },
+  yeuCau: Omit<YeuCauXinPhep, 'id'> & { khoa?: string; choNho?: boolean; tuDuyet?: boolean },
   phat: (y: YeuCauXinPhep) => void,
   signal: AbortSignal,
   soNho: Set<string>,
 ): Promise<QuyetDinh> {
   const khoa = yeuCau.khoa ?? yeuCau.duongDan;
   const choNho = yeuCau.choNho !== false;
+
+  /*
+   * ─── CỬA TỰ DUYỆT — CHỈ MỘT, VÀ NẰM Ở ĐÂY ───
+   *
+   * Chế độ quyền của người dùng (`tuSua` / `tuSuaVaLenh`) đi vào đúng chỗ này,
+   * không rải if ở từng tool. Rải ra thì thêm một tool mới là thêm một chỗ có
+   * thể QUÊN hỏi — và quên ở đây nghĩa là agent sửa file mà người dùng không
+   * hề thấy.
+   *
+   * Bên gọi chịu trách nhiệm tính `tuDuyet`. Với lệnh, nó đã loại sẵn mức
+   * 'cankiem'/'nguyhiem' (xem `tuDuyetLenh` trong loop.ts) — ranh giới đó
+   * không chế độ nào vượt được.
+   *
+   * KHÔNG ghi vào `soNho`: tự duyệt là hệ quả của chế độ ĐANG bật, và người
+   * dùng hạ chế độ xuống thì lần sau phải hỏi lại. Ghi vào sổ nhớ sẽ biến một
+   * lựa chọn tạm thời thành quyền vĩnh viễn của cả phiên.
+   */
+  if (yeuCau.tuDuyet === true) return Promise.resolve('choPhep');
 
   // Đã cấp quyền cho khoá này rồi ⇒ đi thẳng, không hỏi lại. Đây là thứ giữ cho
   // việc sửa mười chỗ trong cùng một file (hay chạy `npm test` mười lần trong

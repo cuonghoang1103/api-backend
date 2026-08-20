@@ -726,6 +726,25 @@ export class MessagesService {
     return serialized;
   }
 
+  /**
+   * Mốc đọc của từng người trong hội thoại — client dùng để vẽ "Đã xem".
+   *
+   * Chỉ trả những người CÓ hàng trong `MessageRead`; ai chưa từng mở hội thoại
+   * thì không có hàng, và client hiểu là chưa đọc gì. Trả rỗng còn hơn bịa ra
+   * `lastReadAt = epoch` rồi client tưởng người ta đã đọc từ 1970.
+   */
+  async listThreadReads(threadId: number, viewerId: number) {
+    const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
+    if (!thread) throw new AppError('Thread not found', 404, 'THREAD_NOT_FOUND');
+    this.assertParticipant(thread, viewerId);
+
+    const rows = await prisma.messageRead.findMany({
+      where: { threadId },
+      select: { userId: true, lastReadAt: true },
+    });
+    return rows.map((r) => ({ userId: r.userId, lastReadAt: r.lastReadAt }));
+  }
+
   async markRead(threadId: number, userId: number) {
     const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
     if (!thread) throw new AppError('Thread not found', 404, 'THREAD_NOT_FOUND');

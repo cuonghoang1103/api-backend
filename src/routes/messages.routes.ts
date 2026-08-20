@@ -163,6 +163,24 @@ router.post('/threads/:id/messages', async (req: Request, res: Response, next: N
   }
 });
 
+// ─── GET /api/v1/messages/threads/:id/reads ───────────
+// Mốc đọc của TỪNG người trong hội thoại, để client vẽ "Đã xem".
+//
+// Vì sao cần đường riêng: `unreadCount` ở danh sách hội thoại là mốc đọc của
+// CHÍNH người đang xem, không nói gì về việc người kia đã đọc tới đâu. Sự kiện
+// socket `thread:read` có bắn mốc đó, nhưng chỉ khi nó vừa xảy ra — mở lại hội
+// thoại thì không có gì để dựng lại trạng thái.
+router.get('/threads/:id/reads', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
+    const rows = await messagesService.listThreadReads(id, req.userId!);
+    res.json({ success: true, data: rows });
+  } catch (error) {
+    next(error);
+  }
+});
+
 // ─── PATCH /api/v1/messages/threads/:id/read ──────────
 router.patch('/threads/:id/read', async (req: Request, res: Response, next: NextFunction) => {
   try {

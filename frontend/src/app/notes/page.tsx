@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight, History, MessageCircle, Link2, Share2 } from 'lucide-react';
+import { Menu, NotebookPen, Loader2, Search, Paperclip, X, GraduationCap, FileDown, Sun, Moon, FileText, XCircle, ChevronRight, History, MessageCircle, Link2, Share2, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { toast } from 'sonner';
 import { notesApi, noteShareApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -170,6 +170,24 @@ function NotesPageInner() {
 
   // Resizable desktop sidebar (Notion-style). Persisted to localStorage.
   const [sidebarWidth, setSidebarWidth] = useState(288);
+  /*
+   * GẬP CỘT SỔ TAY.
+   *
+   * Cột này chiếm 288px cố định và trước đây chỉ KÉO RỘNG được, không giấu
+   * được. Trong app desktop, cửa sổ đã mất 240px cho thanh bên của app rồi, nên
+   * người dùng còn lại rất ít chỗ cho chính nội dung ghi chú — họ gửi ảnh
+   * 20/08/2026: "nó che gần hết nội dung và diện tích của các mục bên dưới".
+   *
+   * Nhớ xuống localStorage: gập rồi mà mở lại thấy nó bung ra là phải gập lại
+   * mỗi ngày, đúng kiểu khó chịu mà một nút gập sinh ra để tránh.
+   */
+  const [sidebarGap, setSidebarGap] = useState(false);
+  useEffect(() => {
+    try { setSidebarGap(window.localStorage.getItem('notes-sidebar-gap') === '1'); } catch { /* ignore */ }
+  }, []);
+  useEffect(() => {
+    try { window.localStorage.setItem('notes-sidebar-gap', sidebarGap ? '1' : '0'); } catch { /* ignore */ }
+  }, [sidebarGap]);
   useEffect(() => {
     const raw = window.localStorage.getItem('notes-sidebar-width');
     if (raw) { const n = parseInt(raw, 10); if (!Number.isNaN(n)) setSidebarWidth(Math.min(560, Math.max(240, n))); }
@@ -807,6 +825,7 @@ function NotesPageInner() {
       <NoteQuickOpen onOpen={(id) => { void selectNote(id); }} />
       <div className="flex h-full">
         {/* Desktop sidebar — resizable (drag the right edge, Notion-style) */}
+        {!sidebarGap && (
         <aside
           style={{ width: sidebarWidth }}
           className="relative hidden shrink-0 border-r
@@ -822,6 +841,7 @@ function NotesPageInner() {
             className="absolute -right-0.5 top-0 z-20 h-full w-1.5 cursor-col-resize hover:bg-teal-500/40 active:bg-teal-500/60"
           />
         </aside>
+        )}
 
         {/* Editor pane */}
         <main className="relative min-w-0 flex-1 overflow-y-auto pb-24 sm:pb-0">
@@ -834,6 +854,17 @@ function NotesPageInner() {
               đẩy mọi thứ khác đi. */}
           <div className="sticky top-0 z-10 flex flex-wrap items-center gap-2 border-b border-[var(--notes-border,#e2e8f0)] bg-[var(--notes-toolbar-bg,#ffffff)]/90 px-3 py-2 backdrop-blur
             dark:border-white/[0.06] dark:bg-[#0c0f14]/90">
+            {/* Gập/mở cột Sổ tay. CHỈ hiện trên desktop (`hidden md:flex`) — trên
+                mobile cột đó vốn là ngăn kéo, đã có nút Menu ngay bên cạnh. */}
+            <button
+              onClick={() => setSidebarGap((v) => !v)}
+              className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05] md:flex"
+              title={sidebarGap ? 'Hiện cột Sổ tay' : 'Ẩn cột Sổ tay cho rộng'}
+              aria-label={sidebarGap ? 'Hiện cột Sổ tay' : 'Ẩn cột Sổ tay'}
+              aria-expanded={!sidebarGap}
+            >
+              {sidebarGap ? <PanelLeftOpen className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
+            </button>
             <button onClick={() => setDrawerOpen(true)} className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05] md:hidden" aria-label="Mở danh sách">
               <Menu className="h-5 w-5" />
             </button>

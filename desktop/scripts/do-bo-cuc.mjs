@@ -161,6 +161,15 @@ const CHUAN_BI = {
       await p.waitForTimeout(120);
     }
   },
+  '/notes': async (p) => {
+    // Gập cột Sổ tay rồi mở lại — nút này phải có mặt và phải đổi được trạng
+    // thái, nếu không thì bản vá "cột che hết nội dung" chỉ nằm trên giấy.
+    const nut = p.locator('button[aria-label*="cột Sổ tay"]').first();
+    if (await nut.count()) {
+      await nut.click({ force: true }).catch(() => {});
+      await p.waitForTimeout(300);
+    }
+  },
   '/ai-templates': async (p) => {
     // Mở tấm chi tiết — cột thứ ba chỉ tồn tại khi có mẫu được chọn.
     await p.click('.ct-mau-the', { timeout: 2000 }).catch(() => {});

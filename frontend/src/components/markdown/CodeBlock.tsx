@@ -223,6 +223,23 @@ export default function CodeBlock({
  // Shiki already sets background per <pre>; we let it win.
  background: 'transparent',
  position: 'relative',
+ /*
+  * ⚠️ MÀU CHỮ PHẢI ĐẶT RÕ, KHÔNG ĐƯỢC KẾ THỪA.
+  *
+  * Nền của khối này ghim cứng `#0d1117` (nền của github-dark) ở div bọc
+  * ngay trên. Với mã CÓ tô màu thì Shiki gắn `color` inline vào từng token
+  * nên không sao. Nhưng `plaintext` KHÔNG đi qua Shiki — nó chỉ được thoát
+  * HTML rồi in ra, và màu chữ kế thừa từ trang cha.
+  *
+  * Trong Ghi chú, trang cha đặt `--notes-text` theo chủ đề: chủ đề Trắng là
+  * `#1e293b`, Nâu là `#43361f` — cả hai đều TỐI. Tối trên `#0d1117` là
+  * KHÔNG ĐỌC ĐƯỢC. Người dùng gửi ảnh 20/08/2026: "chuyển sang màu trắng
+  * hoặc nâu thì code block màu đen không thấy chữ gì".
+  *
+  * `#e6edf3` là màu chữ mặc định của chính github-dark, nên nó khớp với nền
+  * và với các token mà Shiki tô. Token có `color` inline vẫn thắng dòng này.
+  */
+ color: '#e6edf3',
  }}
  >
  {showLineNumbers ? (

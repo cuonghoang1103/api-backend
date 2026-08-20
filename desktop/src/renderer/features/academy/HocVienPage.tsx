@@ -538,12 +538,14 @@ function ChiTietMon({ slug, onQuayLai }: { slug: string; onQuayLai: () => void }
 /* ── Đọc một bài ─────────────────────────────────────────────────────────── */
 
 function DocBai({ bai, mon, onQuayLai }: { bai: Bai; mon: Mon; onQuayLai: () => void }) {
-  /* Video TẮT lúc mở bài. Bật sẵn nghĩa là mỗi lần bấm vào một bài là một lượt
-     tải YouTube, kể cả khi người ta chỉ định đọc chữ. */
-  const [xemVideo, datXemVideo] = useState(false);
-  /* Đổi bài thì đóng khung cũ: nếu không, video bài trước vẫn đang phát đè lên
-     bài mới — nó do main vẽ, React không tự dọn được. */
-  useEffect(() => { datXemVideo(false); }, [bai.id]);
+  /* Video HIỆN SẴN khi bài có video — người dùng yêu cầu 20/08/2026: "tôi muốn
+     vào video nó hiện cố định, chứ đừng phải ấn vào nó mới hiện".
+     Cái giá: mỗi lần mở một bài CÓ video là một lượt tải YouTube, kể cả khi họ
+     chỉ định đọc chữ. Đổi lại còn nút X để đóng, và lúc đó nút "Xem video trong
+     app" hiện lại. */
+  const [xemVideo, datXemVideo] = useState(true);
+  /* Đổi bài thì mở lại khung (nếu bài trước họ đã đóng). */
+  useEffect(() => { datXemVideo(true); }, [bai.id]);
 
   /* Lọc HTML trước khi dựng. Nội dung do quản trị viên soạn nên nó là HTML
      thật (không phải chữ thoát), mà một trình soạn thảo giàu định dạng thì có
@@ -595,7 +597,14 @@ function DocBai({ bai, mon, onQuayLai }: { bai: Bai; mon: Mon; onQuayLai: () => 
       {/* Khung video nằm NGOÀI vùng cuộn của bài — xem chú thích đầu KhungVideo:
           trang web do main vẽ đè, cuộn theo chữ là nó trùm lên chữ. */}
       {xemVideo && bai.videoUrl && (
-        <KhungVideo url={bai.videoUrl} onDong={() => datXemVideo(false)} />
+        /* `key` ở đây là PHÒNG XA, không phải bản vá cho một lỗi đang có.
+           Đo thật: gỡ nó ra thì đổi bài VẪN nạp đúng video mới, vì luồng hiện
+           tại bắt quay ra danh sách trước, và cú đó tháo cả trình đọc.
+           Nhưng `KhungVideo` chốt `daMoRef` để chỉ gọi `mo()` một lần mỗi lần
+           gắn. Ngày nào có ai thêm nút "bài kế tiếp" ngay trong trình đọc —
+           đổi bài mà KHÔNG tháo — thì thiếu `key` là khung kẹt video cũ, im
+           lặng, không lỗi nào để thấy. Một chữ, mua trước cái đó. */
+        <KhungVideo key={bai.id} url={bai.videoUrl} onDong={() => datXemVideo(false)} />
       )}
 
       {html

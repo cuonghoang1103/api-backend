@@ -7823,58 +7823,6 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
    đoán, và để khung không nhảy khi video đổi độ phân giải. */
 .ct-hv-video-o { aspect-ratio: 16 / 9; width: 100%; }
 
-/* ── Thẻ liên kết trong nội dung bài ────────────────────────
-   Chép từ `.rich-content .link-card` của web (`frontend/src/app/globals.css`).
-   App KHÔNG mang theo vùng `.rich-content` nào, nên trước 20/08/2026 thẻ này
-   mất sạch bố cục: tiêu đề và mô tả dính liền thành một dòng
-   "Luyện React trên trình duyệtChạy component & hooks trực tiếp…".
-   Các biến (`--text-primary`, `--bg-card`…) đã được ánh xạ sẵn ngay trên
-   `.ct-hv-noidung`, nên khối này dùng lại được nguyên văn. */
-.ct-hv-noidung .link-card {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 0.85rem 1rem;
-  margin: 0.9rem 0;
-  background: var(--bg-card, rgba(127, 127, 127, 0.04));
-  text-decoration: none !important;
-  transition: border-color 0.15s, transform 0.15s;
-}
-.ct-hv-noidung .link-card:hover { border-color: var(--neon-violet); transform: translateY(-1px); }
-.ct-hv-noidung .link-card .lc-ico { font-size: 1.4rem; line-height: 1; }
-/* `min-width: 0`: mặc định flex item cấm co dưới cỡ nội dung ⇒ mô tả dài đẩy
-   nút CTA tràn ra ngoài thẻ ở cửa sổ hẹp. */
-.ct-hv-noidung .link-card .lc-body { flex: 1; min-width: 0; }
-/* `display: block` không có trong bản web — thêm ở đây vì nếu nội dung dùng
-   <span> thì hai mẩu chữ nằm CÙNG một dòng và dính vào nhau. Web may mắn
-   không lộ; đặt hẳn ra thì đúng với cả <div> lẫn <span>. */
-.ct-hv-noidung .link-card .lc-title {
-  display: block;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-.ct-hv-noidung .link-card .lc-sub {
-  display: block;
-  margin-top: 2px;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-.ct-hv-noidung .link-card .lc-cta {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.ct-hv-noidung .link-card.codelab .lc-cta { background: rgba(99, 102, 241, 0.15); color: var(--neon-indigo); }
-.ct-hv-noidung .link-card.exphub .lc-cta { background: rgba(214, 146, 32, 0.15); color: #e0a44a; }
-.ct-hv-noidung .link-card.dl .lc-cta { background: rgba(47, 158, 107, 0.16); color: #3fb27f; }
-.ct-hv-noidung .link-card.dl:hover { border-color: #3fb27f; }
-
 /* ── Chuyển bài (cuối trình đọc) ────────────────────────── */
 .ct-hv-chuyen {
   display: flex;

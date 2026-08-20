@@ -1715,9 +1715,27 @@ aside ::-webkit-scrollbar-thumb:hover {
 }
 .rich-content .link-card:hover { border-color: var(--neon-violet, #8b5cf6); transform: translateY(-1px); }
 .rich-content .link-card .lc-ico { font-size: 1.4rem; line-height: 1; }
-.rich-content .link-card .lc-body { flex: 1; }
-.rich-content .link-card .lc-title { font-weight: 700; color: var(--text-primary); }
-.rich-content .link-card .lc-sub { font-size: 0.85rem; color: var(--text-muted); }
+/* `min-width: 0`: mặc định flex item CẤM co dưới cỡ nội dung, nên một mô tả
+   dài đẩy nút CTA tràn ra ngoài thẻ ở khung hẹp. */
+.rich-content .link-card .lc-body { flex: 1; min-width: 0; }
+/* ⚠️ `display: block` là BẮT BUỘC, không phải trang trí.
+   Nội dung bài viết `lc-title` và `lc-sub` bằng <span> (xem content/exphub/*.mjs).
+   Thẻ inline thì hai mẩu chữ CHẢY LIỀN NHAU trên cùng một dòng — đo thật
+   20/08/2026: title đáy 52px, sub đỉnh 36px, tức chồng lên nhau. Người dùng
+   đọc ra "Luyện React trên trình duyệtChạy component & hooks trực tiếp…".
+   Lỗi này có trên CẢ web lẫn app desktop; app cắt chính vùng CSS này ra dùng
+   (xem mốc `ct-desktop:` ở đầu vùng), nên sửa ở đây là sửa cả hai. */
+.rich-content .link-card .lc-title {
+  display: block;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.rich-content .link-card .lc-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
 .rich-content .link-card .lc-cta {
   font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
   font-size: 0.72rem;
@@ -1725,6 +1743,8 @@ aside ::-webkit-scrollbar-thumb:hover {
   padding: 0.3rem 0.7rem;
   border-radius: 999px;
   white-space: nowrap;
+  /* Không co: nhãn "MỞ →" mà xuống dòng thì thẻ trông như hỏng. */
+  flex-shrink: 0;
 }
 .rich-content .link-card.codelab .lc-cta { background: rgba(99,102,241,0.15); color: var(--neon-indigo, #818cf8); }
 .rich-content .link-card.exphub .lc-cta { background: rgba(214,146,32,0.15); color: #e0a44a; }

@@ -27,7 +27,7 @@
  * Độ dài câu trả lời: hai bậc này được đặt `max_tokens` CAO (10k/15k) — đó
  * chính là lý do tồn tại của chúng, câu trả lời không bị cụt như bậc nhanh.
  */
-import { chatCompletionsUrl, gatewayConfigured, gatewayKey, messagesUrl, modelFor } from './llm/gateway.js';
+import { chatCompletionsUrl, gatewayConfigured, gatewayKey, gatewayKeyFor, messagesUrl, modelFor } from './llm/gateway.js';
 
 /** A text block inside a multi-part message. */
 export interface ClaudeTextBlock {
@@ -192,8 +192,29 @@ function buildBody(p: ClaudeCallParams, stream: boolean): string {
   });
 }
 
-function requireKey(): string {
-  const key = gatewayKey();
+/**
+ * Khoá cho ĐÚNG NHÓM của model lượt này.
+ *
+ * ⛔ TRƯỚC ĐÂY LẤY KHOÁ MẶC ĐỊNH CHO MỌI MODEL, và đó là lý do bậc Max chết.
+ *
+ * Một token của cổng chỉ thuộc MỘT nhóm. Trên production khoá mặc định thuộc
+ * nhóm `claude`, còn `LLM_GATEWAY_API_KEY_GPT` mới mua được model `gpt-*`.
+ * Nên gọi `gpt-5.6-sol` bằng khoá mặc định trả `503 No available channel for
+ * model gpt-5.6-sol under group claude` — nghe như cổng đang bận, nhưng nó
+ * vĩnh viễn.
+ *
+ * Triệu chứng người dùng thấy: **Pro chạy, Max im**. Đúng như vậy:
+ *   Pro = claude-sonnet-5 → khoá mặc định → đúng nhóm → chạy
+ *   Max = gpt-5.6-sol     → khoá mặc định → SAI nhóm → 503
+ * Log prod 20/08/2026 lặp đúng ba dòng mỗi lượt: `openai route stream HTTP
+ * 503` → `openai route HTTP 503` → `claude gateway HTTP 503` → tụt về bậc
+ * mặc định. Không có dòng nào nói ra chuyện khoá, nên nhìn log không ra.
+ *
+ * `gatewayKeyFor()` đã có từ 18/08 và các nơi khác đã dùng; riêng file này —
+ * đúng file phục vụ hai bậc trả phí — thì bị bỏ sót.
+ */
+function requireKey(model?: string): string {
+  const key = gatewayKeyFor(model) ?? gatewayKey();
   if (!key) throw new Error('Thiếu khoá cổng LLM (LLM_GATEWAY_API_KEY / OPENAI_COMPAT_API_KEY)');
   return key;
 }
@@ -254,7 +275,7 @@ function toOpenAiBody(p: ClaudeCallParams, stream: boolean): string {
  * yielding some text, the caller keeps the partial answer.
  */
 export async function* streamClaudeChat(p: ClaudeCallParams): AsyncGenerator<string, void, unknown> {
-  const key = requireKey();
+  const key = requireKey(p.model);
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
   try {
@@ -309,7 +330,7 @@ export async function* streamClaudeChat(p: ClaudeCallParams): AsyncGenerator<str
  * One NON-streaming completion (fallback). Throws on any error.
  */
 export async function completeClaudeChat(p: ClaudeCallParams): Promise<string> {
-  const key = requireKey();
+  const key = requireKey(p.model);
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
   try {
@@ -346,7 +367,7 @@ export async function completeClaudeChat(p: ClaudeCallParams): Promise<string> {
  */
 export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator<ChatStreamPart, void, unknown> {
   if (hasDocument(p.messages)) throw new Error('tuyến OpenAI không đọc được PDF');
-  const key = requireKey();
+  const key = requireKey(p.model);
   const ctrl = new AbortController();
   // HAI đồng hồ, hai vai khác nhau — xem `claudeTimeoutMs` / `imLangMs`.
   const dongHoTran = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
@@ -435,7 +456,7 @@ export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator
  */
 export async function completeViaOpenAiRoute(p: ClaudeCallParams): Promise<string> {
   if (hasDocument(p.messages)) throw new Error('tuyến OpenAI không đọc được PDF — không hạ tuyến');
-  const key = requireKey();
+  const key = requireKey(p.model);
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
   try {

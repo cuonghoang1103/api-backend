@@ -157,6 +157,7 @@ model User {
   storyHighlights         StoryHighlight[]
   storyViews              StoryView[]
   storyHides              StoryHide[]
+  deviceTokens            DeviceToken[]
 
   // Notification graph — who is the receiver / sender on social
   // notifications. The reverse relations are defined on
@@ -8134,4 +8135,30 @@ model MakerPlanRun {
   @@unique([planId, ngay], map: "uk_maker_plan_run_day")
   @@index([ngay, state], map: "idx_maker_plan_run_day_state")
   @@map("maker_plan_runs")
+}
+
+// ============================================================
+// THÔNG BÁO ĐẨY — thẻ định danh thiết bị
+// ============================================================
+
+model DeviceToken {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  // Thẻ APNs dạng hex 64 ký tự. Để VarChar(200) vì Apple không cam kết
+  // độ dài này là vĩnh viễn, và thẻ FCM (nếu sau này thêm Android) dài hơn.
+  token      String   @unique(map: "uk_device_token") @db.VarChar(200)
+  // ios | android — để sau thêm nền tảng khác không phải đổi bảng.
+  platform   String   @default("ios") @db.VarChar(20)
+  // Bản đóng gói TestFlight/App Store dùng máy chủ push KHÁC bản chạy từ
+  // Xcode. Gửi nhầm máy chủ thì Apple trả `BadDeviceToken` và thông báo im
+  // lặng không tới nơi — nên phải nhớ thiết bị này thuộc môi trường nào.
+  sandbox    Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at")
+  // Mỗi lần app mở lại là cập nhật, để dọn thẻ chết sau này.
+  lastSeenAt DateTime @default(now()) @map("last_seen_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_device_token_user")
+  @@map("device_tokens")
 }

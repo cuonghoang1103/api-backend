@@ -723,7 +723,61 @@ export class MessagesService {
 
     const serialized = this.serializeMessage(message);
     this.emitNewMessage(thread, serialized);
+    // Đẩy thông báo cho người NHẬN. Cố ý KHÔNG `await`: Apple có thể mất vài
+    // trăm mili giây, mà người gửi thì đang chờ tin của mình hiện lên. Hàm này
+    // tự nuốt mọi lỗi nên không cần `.catch`.
+    void this.dayThongBaoTinMoi(thread, senderId, message);
     return serialized;
+  }
+
+  /**
+   * Thông báo đẩy cho tin nhắn mới.
+   *
+   * Người GỬI bị loại — nhận thông báo về tin của chính mình là vô nghĩa và
+   * gây khó chịu. Người đã TẮT THÔNG BÁO hội thoại cũng bị loại: họ tắt trong
+   * app rồi mà máy vẫn kêu thì đó là app hỏng, không phải tính năng.
+   */
+  private async dayThongBaoTinMoi(
+    thread: { id: number; type: string; userId: number | null; adminUserId: number | null; userAId: number | null; userBId: number | null; preferences?: unknown },
+    senderId: number,
+    message: { content: string | null; attachments?: unknown[] },
+  ) {
+    try {
+      const { guiThongBao, apnsSanSang } = await import('./push/apns.js');
+      if (!apnsSanSang()) return;
+
+      const nguoiNhan = this.collectParticipantIds(thread).filter((id) => id !== senderId);
+      if (nguoiNhan.length === 0) return;
+
+      const nguoiGui = await prisma.user.findUnique({
+        where: { id: senderId },
+        select: { username: true, displayName: true, fullName: true },
+      });
+      const ten = nguoiGui?.displayName ?? nguoiGui?.fullName ?? nguoiGui?.username ?? 'Tin nhắn mới';
+
+      // Tin chỉ có ảnh thì `content` rỗng — hiện dòng trống là người dùng mở ra
+      // mới biết có gì.
+      const than = message.content && message.content.trim().length > 0
+        ? message.content.slice(0, 180)
+        : 'Đã gửi một tệp đính kèm';
+
+      for (const uid of nguoiNhan) {
+        const pref = this.getPreferenceForViewer((thread as { preferences?: unknown }).preferences, uid);
+        const tatToi = pref?.mutedUntil ? new Date(pref.mutedUntil) : null;
+        if (tatToi && tatToi > new Date()) continue;
+
+        const chuaDoc = await this.getUnreadCount(uid).catch(() => 0);
+        await guiThongBao(uid, {
+          tieuDe: ten,
+          than,
+          huyHieu: typeof chuaDoc === 'number' ? chuaDoc : undefined,
+          nhom: `thread-${thread.id}`,
+          duLieu: { loai: 'tin-nhan', threadId: thread.id },
+        });
+      }
+    } catch {
+      // Đẩy hỏng KHÔNG được làm hỏng việc gửi tin.
+    }
   }
 
   /**

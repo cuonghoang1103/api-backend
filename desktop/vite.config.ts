@@ -92,9 +92,14 @@ export default defineConfig({
      * GitHub với `FATAL ERROR: Reached heap limit — JavaScript heap out of
      * memory`, thoát 134. Máy nhà dựng xanh trong 20 giây vì nhiều RAM hơn hẳn.
      * Sinh bản đồ nguồn cho một cây 4,7MB là phần ngốn bộ nhớ nặng nhất, và
-     * bản đồ nguồn KHÔNG đi kèm bản cài: `electron-builder.yml` đã loại chúng
-     * bằng `'!**/*.map'`. Tức là CI đang tốn bộ nhớ để sinh ra thứ chính nó
-     * vứt đi ngay sau đó — bỏ hẳn ở CI không mất gì cả.
+     * bản đồ nguồn KHÔNG đi kèm bản cài: `electron-builder.yml` đã có một mẫu
+     * loại trừ mọi tệp đuôi `.map` (xem mục `files:` trong tệp đó). Tức là CI
+     * đang tốn bộ nhớ để sinh ra thứ chính nó vứt đi ngay sau — bỏ hẳn ở CI
+     * không mất gì cả.
+     *
+     * (KHÔNG chép nguyên mẫu loại trừ ấy vào đây: chuỗi của nó chứa dấu sao
+     * kèm gạch chéo, và dấu đó ĐÓNG SỚM khối chú thích này. Đã dẫm đúng lần
+     * đầu viết, và CI đỏ ngay bước kiểm kiểu.)
      *
      * `build:renderer` cũng đã nâng heap lên 6GB. Cần cả hai: nâng heap một
      * mình vẫn sát trần, bỏ bản đồ nguồn một mình thì lần thêm trang sau lại

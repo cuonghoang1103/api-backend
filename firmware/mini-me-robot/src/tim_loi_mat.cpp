@@ -1,6 +1,6 @@
 /**
  * ============================================================
- * TÌM LỖI MÀN TRÒN — thử lần lượt 6 cấu hình, tự đổi mỗi 8 giây
+ * TÌM LỖI MÀN TRÒN — vẽ MỘT con mắt, một cấu hình, giữ nguyên
  * ============================================================
  *
  *     pio run -e tim-loi -t upload && pio device monitor
@@ -12,9 +12,14 @@
  * đọc mã chỉ chứng minh được cái gì KHÔNG sai — nó không chỉ ra cái
  * đang sai. Mỗi vòng đoán rồi nạp lại tốn một lượt hỏi người dùng.
  *
- * Bộ này thử SÁU cấu hình trong một lần nạp. Người dùng nhìn màn đúng
- * một lần rồi báo số hiệu cấu hình nào cho ra bốn ô màu sạch. Sáu lần
- * đoán gộp vào một lượt.
+ * ⚠️ BẢN ĐẦU thử SÁU cấu hình rồi để người dùng báo cái nào sạch. Bản
+ * hiện tại KHÔNG còn làm thế: nó chốt một cấu hình và vẽ một con mắt
+ * giữ nguyên mãi. Tiêu đề cũ không được sửa theo, và ngày 21/08/2026
+ * chính tôi đọc tiêu đề ấy rồi mô tả sai cho người dùng một phép thử
+ * không tồn tại — họ ngồi đếm sáu lượt ô màu không bao giờ tới.
+ *
+ * Với file gỡ lỗi thì phần chú thích trôi dạt còn nguy hơn mã sai: mã
+ * sai thì chạy ra kết quả lạ, chú thích sai thì người đọc tin nó.
  *
  * CHỈ lái MỘT màn tròn (mắt trái, CS = GPIO 9). Bỏ hẳn màn ngực ra
  * khỏi bức tranh — càng ít thứ trong mạch thì càng ít nghi phạm.
@@ -58,16 +63,19 @@ struct CauHinh {
 // xung reset thật, đúng cách datasheet yêu cầu.
 #define PIN_RST_THU 14
 
-// ⚠️ DC TẠM DỜI SANG GPIO 10 — chỉ trong bản tìm lỗi này.
+// DC nằm ở GPIO 13, ĐÚNG BẰNG `PIN_TFT_DC` trong config.h.
 //
-// Bản này không cắm màn ngực nên GPIO 10 (vốn là CS màn ngực) đang
-// rảnh. Dời `DC` sang đó loại được hai nghi phạm cùng lúc: bản thân
-// chân GPIO 13, và sợi dây đang cắm ở đó.
+// ⚠️ 16/08/2026 chân này từng bị TẠM DỜI sang GPIO 10 để loại nghi
+// phạm trong vụ màn cũ ra sọc, và **không ai dời lại**. Ngày 21/08 nó
+// làm mất một vòng: người dùng đấu dây theo `config.h` (DC→13), tôi
+// nạp file này (DC→10), màn đen thui và trông y như hỏng phần cứng.
 //
-// `DC` là chân đáng nghi nhất còn lại: nó là thứ DUY NHẤT phân biệt
-// LỆNH với DỮ LIỆU. Mà đo được 16/08 là "một cửa sổ địa chỉ thì đúng,
-// nhiều cửa sổ thì hỏng" — tức chỗ rơi bit nằm ở đường lệnh.
-#define PIN_DC_THU 10
+// Bài học: bàn thử phải dùng CHUNG hằng số với firmware thật. Lệch một
+// chân là phép thử đo nhầm thứ khác, mà nó không hề báo lỗi — `DC` sai
+// chỉ khiến màn im lặng, không sinh ra thông báo nào.
+//
+// Muốn thử dời chân thì đổi ở đây, chạy xong ĐỔI LẠI NGAY.
+#define PIN_DC_THU PIN_TFT_DC
 
 // ⚠️ MỘT cấu hình duy nhất, cố định.
 //
@@ -224,10 +232,10 @@ void setup() {
   Serial.begin(115200);
   delay(600);
   Serial.println("\n\n╔══════════════════════════════════════════╗");
-  Serial.println("║  TIM LOI MAN TRON — 6 cau hinh, 1 lan nap ║");
+  Serial.println("║  TIM LOI MAN TRON — 1 con mat, 1 cau hinh    ║");
   Serial.println("╚══════════════════════════════════════════╝");
   Serial.printf("  Chi lai MOT man: mat trai, CS = GPIO %d\n", PIN_EYE_CS_L);
-  Serial.printf("  DC=%d (TAM DOI tu 13)  SCLK=%d  MOSI=%d\n", PIN_DC_THU, PIN_TFT_SCLK, PIN_TFT_MOSI);
+  Serial.printf("  DC=%d (khop config.h)  SCLK=%d  MOSI=%d\n", PIN_DC_THU, PIN_TFT_SCLK, PIN_TFT_MOSI);
   Serial.printf("  RST -> GPIO %d (xung reset phan cung)\n\n", PIN_RST_THU);
   Serial.println("  ══ PHEP THU: DOI DAY VCC, PHAN MEM DUNG YEN ══");
   Serial.println("   Lan 1: VCC -> 3V3   (truoc day mau DA dung, chi mo)");

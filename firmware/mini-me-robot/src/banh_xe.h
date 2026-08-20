@@ -32,6 +32,26 @@
 
 namespace banhXe {
 
+/**
+ * ⛔ GỌI Ở DÒNG ĐẦU TIÊN CỦA `setup()`, TRƯỚC MỌI THỨ KHÁC.
+ *
+ * Chỉ làm đúng một việc: kéo bốn chân PWM xuống mức thấp. Không đụng
+ * I2C, không đụng LEDC, không in gì — để nó chạy được cả khi phần còn
+ * lại của robot chưa dựng xong.
+ *
+ * Lý do nó phải tách khỏi `begin()`: chân GPIO chưa cấu hình thì THẢ
+ * NỔI, mà đầu vào IBT-2 qua đệm 74HC244 trở kháng rất cao — nhiễu là
+ * nó đọc ra mức cao và động cơ chạy HẾT GA. `begin()` nằm mãi cuối
+ * `setup()` (sau WiFi, màn, âm thanh) nên khoảng thả nổi dài VÀI GIÂY.
+ * Đo thật 21/08/2026: cấp 12V với firmware không có mã động cơ thì một
+ * bánh tự quay ngay.
+ *
+ * ⚠️ Phần mềm KHÔNG bịt hết được: bộ nạp khởi động chạy trước `setup()`
+ * cỡ 200-300ms và không có mã nào của ta ở đó. Chốt chặn thật là TRỞ
+ * KÉO XUỐNG 10k từ `RPWM`/`LPWM` về `GND` trên mỗi bo IBT-2.
+ */
+void tatSom();
+
 /** Dựng PWM, đặt gyro về 0. Gọi một lần trong `setup()`. */
 bool begin();
 

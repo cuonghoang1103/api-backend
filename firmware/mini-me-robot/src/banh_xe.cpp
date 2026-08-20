@@ -156,6 +156,11 @@ static void xuat(int trai, int phai) {
 
 // ════════════════════════════════════════════════════════════
 
+void tatSom() {
+  const int chan[4] = {PIN_TRAI_TIEN, PIN_TRAI_LUI, PIN_PHAI_TIEN, PIN_PHAI_LUI};
+  for (int i = 0; i < 4; i++) { pinMode(chan[i], OUTPUT); digitalWrite(chan[i], LOW); }
+}
+
 bool begin() {
   const int chan[4]  = {PIN_TRAI_TIEN, PIN_TRAI_LUI, PIN_PHAI_TIEN, PIN_PHAI_LUI};
   const int kenh[4]  = {KENH_TRAI_TIEN, KENH_TRAI_LUI, KENH_PHAI_TIEN, KENH_PHAI_LUI};

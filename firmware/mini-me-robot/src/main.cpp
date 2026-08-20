@@ -1122,6 +1122,14 @@ __attribute__((unused)) static void probeNetwork() {
 // ─── Setup / loop ──────────────────────────────────────────
 
 void setup() {
+  // ⛔⛔ DÒNG ĐẦU TIÊN. ĐỪNG CHÈN GÌ LÊN TRÊN NÓ.
+  // Kéo bốn chân động cơ xuống mức thấp trước khi làm bất cứ việc gì
+  // khác. `banhXe::begin()` nằm mãi cuối hàm này — chờ tới đó là robot
+  // đã thả nổi chân điều khiển suốt cả quá trình dựng WiFi và màn hình,
+  // và IBT-2 hiểu chân thả nổi thành "chạy hết ga". Xem chú thích dài
+  // ở `banh_xe.h`.
+  banhXe::tatSom();
+
   Serial.begin(115200);
   delay(300);
   Serial.println("\nMini-Me Robot — chặng B");

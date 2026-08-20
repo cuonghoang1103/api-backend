@@ -135,6 +135,18 @@ static void menu() {
 }
 
 void setup() {
+  // ⛔⛔ DÒNG ĐẦU TIÊN, TRƯỚC CẢ `Serial.begin`. ĐỪNG CHÈN GÌ LÊN TRÊN.
+  //
+  // Chân GPIO chưa cấu hình thì THẢ NỔI, mà đầu vào IBT-2 đi qua đệm
+  // 74HC244 trở kháng rất cao — chỉ cần nhiễu là nó đọc ra mức cao và
+  // động cơ chạy HẾT GA. Đo thật 21/08/2026: nạp nhầm firmware không
+  // biết gì về động cơ, cấp 12V vào là một bánh tự quay ngay.
+  //
+  // `Serial.begin` + `delay(600)` ở bản trước nằm TRƯỚC vòng này, tức
+  // có 0,6 giây chân thả nổi mỗi lần bật nguồn. Kéo xuống mức thấp
+  // trước đã, rồi muốn in gì thì in.
+  for (int i = 0; i < 4; i++) { pinMode(CHAN[i], OUTPUT); digitalWrite(CHAN[i], LOW); }
+
   Serial.begin(115200);
   delay(600);
 

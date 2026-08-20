@@ -27,8 +27,16 @@
  *
  * ⚠️ Ba điều phải nhớ, chép từ bài học của `BrowserMode.tsx`:
  *  1. Trang web luôn NỔI TRÊN mọi thứ React vẽ — không `z-index` nào thắng.
- *     Vì thế khung này nằm ở một ô CỐ ĐỊNH phía trên, KHÔNG cuộn theo bài:
- *     để nó trong vùng cuộn thì cuộn xuống là video đè lên chữ.
+ *
+ *     ⚠️ ĐO LẠI KHI CUỘN, KHÔNG CHỈ KHI ĐỔI CỠ. Ô giữ chỗ nằm trong
+ *     `.ct-content`, vốn là `overflow-y: auto`. `ResizeObserver` KHÔNG bắn khi
+ *     cuộn (cỡ phần tử có đổi đâu), `window.resize` cũng không — nên cuộn bài
+ *     là ô giữ chỗ trôi đi còn lớp phủ đứng nguyên tại chỗ cũ, đè lên chữ.
+ *     Người dùng gửi ảnh khung hình lệch kèm một dải đen, 20/08/2026.
+ *
+ *     Hai việc, cần cả hai: `position: sticky` để khung ghim ở đầu vùng cuộn
+ *     (xem `.ct-hv-video` trong styles.css), và một bộ nghe `scroll` cho quãng
+ *     TRƯỚC khi nó ghim — lúc đó nó vẫn trôi thật.
  *  2. Quên gọi `an()` lúc tháo ⇒ video ở lại lơ lửng trên màn hình kế tiếp,
  *     trông y hệt app hỏng.
  *  3. Ô giữ chỗ đổi kích thước (kéo cửa sổ, ẩn thanh bên) thì phải đo lại.
@@ -102,11 +110,28 @@ export function KhungVideo({
   useEffect(() => {
     const el = oRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => doVaBao(false));
-    ro.observe(el);
     const doLai = () => doVaBao(false);
+
+    const ro = new ResizeObserver(doLai);
+    ro.observe(el);
     window.addEventListener('resize', doLai);
-    return () => { ro.disconnect(); window.removeEventListener('resize', doLai); };
+
+    /* Mọi tổ tiên CUỘN ĐƯỢC, không riêng `.ct-content`: thanh bên có thể mở
+       thêm một lớp cuộn nữa ngày nào đó, và bỏ sót một lớp là lỗi quay lại y
+       hệt. Gắn thẳng vào từng lớp cuộn thay vì nghe ở `document`: sự kiện
+       `scroll` của một phần tử KHÔNG nổi bọt lên document. */
+    const cuon: (Element | Window)[] = [window];
+    for (let n = el.parentElement; n; n = n.parentElement) {
+      const kieu = getComputedStyle(n).overflowY;
+      if (kieu === 'auto' || kieu === 'scroll') cuon.push(n);
+    }
+    for (const n of cuon) n.addEventListener('scroll', doLai, { passive: true });
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', doLai);
+      for (const n of cuon) n.removeEventListener('scroll', doLai);
+    };
   }, [doVaBao]);
 
   return (

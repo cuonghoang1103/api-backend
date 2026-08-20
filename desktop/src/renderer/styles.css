@@ -7782,6 +7782,13 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   overflow: hidden;
   background: #000;
   margin: 0 0 18px;
+  /* GHIM ở đầu vùng cuộn. Video do main vẽ đè bằng một lớp native, mà lớp đó
+     không cuộn cùng trang — để khung trôi theo chữ là lớp phủ lệch khỏi ô giữ
+     chỗ ngay khung hình đầu tiên. Ghim rồi thì toạ độ đứng yên, và người học
+     vẫn thấy video trong lúc đọc phần chữ bên dưới. */
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 .ct-hv-video-thanh {
   display: flex;

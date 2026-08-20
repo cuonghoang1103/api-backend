@@ -880,7 +880,13 @@ export const INVOKE_CHANNELS = {
 
   'robot:doiKichThuoc': z.object({ rong: z.boolean() }),
   /** Ba cỡ cửa sổ robot. Xem `NOI` trong robotNoi.ts để biết vì sao cần cỡ thứ ba. */
-  'robot:doiCo': z.object({ co: z.enum(['gon', 'noi', 'rong']) }),
+  /* `bong` = cỡ THẬT của bong bóng chữ, do renderer đo. Cửa sổ nổi trong
+     suốt vẫn NUỐT chuột ở phần rỗng, nên phình cố định là để lại một mảng
+     chết đè lên app khác. Có số đo thì cửa sổ vừa đúng chữ, không hơn. */
+  'robot:doiCo': z.object({
+    co: z.enum(['gon', 'noi', 'rong']),
+    bong: z.object({ rong: z.number(), cao: z.number() }).optional(),
+  }),
   'robot:moChinh': z.object({ duongDan: z.string().min(1).max(200) }),
   'robot:hoi': z.object({ chu: z.string().min(1).max(4000) }),
   /**
@@ -1280,7 +1286,7 @@ export interface DesktopBridge {
      * mất phần đầu — người dùng thấy những mẩu chữ cụt và tưởng model trả
      * lời cụt.
      */
-    doiCo(co: 'gon' | 'noi' | 'rong'): Promise<void>;
+    doiCo(co: 'gon' | 'noi' | 'rong', bong?: { rong: number; cao: number }): Promise<void>;
     /** Đưa cửa sổ chính ra trước và điều hướng tới `duongDan`. */
     moChinh(duongDan: string): Promise<void>;
     datCo(nac: number): Promise<void>;

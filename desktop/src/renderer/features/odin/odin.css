@@ -317,7 +317,10 @@
 
 .odin-bubble {
   position: relative;
-  max-width: 232px;
+  /* 232px cố định làm câu dài gãy thành cột hẹp 6 dòng (đo thật: 243×114).
+     `min()` cho nó rộng ra khi có chỗ và tự thu lại ở cửa sổ hẹp — dock neo
+     `right: 22px` nên phải chừa đủ hai lề, không thì bong bóng tràn trái. */
+  max-width: min(340px, calc(100vw - 64px));
   display: flex;
   align-items: flex-start;
   gap: 8px;

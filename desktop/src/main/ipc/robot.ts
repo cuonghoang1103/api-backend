@@ -16,7 +16,7 @@ import { handle } from './index';
 export function registerRobotHandlers(): void {
   handle('robot:doiKichThuoc', ({ rong }) => doiKichThuoc(rong));
 
-  handle('robot:doiCo', ({ co }) => doiCo(co));
+  handle('robot:doiCo', ({ co, bong }) => doiCo(co, bong));
 
   handle('robot:baoNhac', ({ ten }) => baoNhac(ten));
 

@@ -40,6 +40,19 @@ let khung: WebContentsView | null = null;
 let cuaSoChu: BrowserWindow | null = null;
 let vungHienTai = { x: 0, y: 0, width: 0, height: 0 };
 let dangHien = false;
+/**
+ * Trang đang ở chế độ TOÀN MÀN HÌNH của HTML (người dùng bấm nút ⛶ của YouTube).
+ *
+ * ⚠️ KHÔNG có cờ này thì nút toàn màn hình CHẾT CÂM. `requestFullscreen()`
+ * chạy bên trong `WebContentsView`, và view thì vẫn giữ nguyên khung 16:9 do
+ * React đo — nên trang tưởng nó đã fullscreen và giãn trình phát ra 100vh của
+ * view, còn người dùng thì "bấm mà không thấy gì xảy ra". Tệ hơn: trình phát
+ * giãn rồi mà khung không giãn theo ⇒ khung hình LỆCH, thừa một dải đen.
+ * Đúng hai thứ người dùng báo 20/08/2026.
+ */
+let toanManHinh = false;
+/** Ta có tự bật fullscreen cho CỬA SỔ không — để lúc thoát trả lại đúng cũ. */
+let taTuBatFullCuaSo = false;
 
 export interface TrangThaiTrinhDuyet {
   url: string;
@@ -128,6 +141,11 @@ function tao(): WebContentsView {
     });
   });
 
+  /* Nút ⛶ của trình phát. Chrome bắn hai sự kiện này; không nghe thì view
+     đứng yên và người dùng thấy nút "không ăn". */
+  wc.on('enter-html-full-screen', () => datToanManHinh(true));
+  wc.on('leave-html-full-screen', () => datToanManHinh(false));
+
   wc.on('did-navigate', () => { nhatKy.length = 0; });
 
   const doi = (): void => batTrangThai();
@@ -152,6 +170,47 @@ function tao(): WebContentsView {
   return v;
 }
 
+/** Phủ kín vùng nội dung của cửa sổ chủ. */
+function phuKinCuaSo(): void {
+  if (!khung || !cuaSoChu || cuaSoChu.isDestroyed()) return;
+  const b = cuaSoChu.getContentBounds();
+  khung.setBounds({ x: 0, y: 0, width: b.width, height: b.height });
+}
+
+/**
+ * Vào/ra toàn màn hình thật.
+ *
+ * Hai tầng, và cần cả hai: view phải phủ kín cửa sổ (nếu không thì trình phát
+ * giãn mà khung không giãn), và cửa sổ phải vào fullscreen (nếu không thì
+ * "toàn màn hình" chỉ to bằng cái cửa sổ đang mở).
+ *
+ * Chỉ trả cửa sổ về thường nếu CHÍNH TA đã bật nó: người dùng đang xem app ở
+ * chế độ toàn màn hình sẵn thì thoát video không được kéo họ ra khỏi đó.
+ */
+function datToanManHinh(bat: boolean): void {
+  if (!cuaSoChu || cuaSoChu.isDestroyed()) return;
+  toanManHinh = bat;
+  if (bat) {
+    if (!cuaSoChu.isFullScreen() && cuaSoChu.isFullScreenable()) {
+      taTuBatFullCuaSo = true;
+      cuaSoChu.setFullScreen(true);
+    }
+    phuKinCuaSo();
+  } else {
+    if (taTuBatFullCuaSo) {
+      taTuBatFullCuaSo = false;
+      cuaSoChu.setFullScreen(false);
+    }
+    // Trả về đúng ô giữ chỗ mà React đang đo.
+    khung?.setBounds({
+      x: Math.round(vungHienTai.x),
+      y: Math.round(vungHienTai.y),
+      width: Math.max(0, Math.round(vungHienTai.width)),
+      height: Math.max(0, Math.round(vungHienTai.height)),
+    });
+  }
+}
+
 /** Hiện trình duyệt ở một vùng của cửa sổ. Tạo mới nếu chưa có. */
 export function mo(cuaSo: BrowserWindow, vung: typeof vungHienTai, url?: string): void {
   cuaSoChu = cuaSo;
@@ -170,6 +229,10 @@ export function mo(cuaSo: BrowserWindow, vung: typeof vungHienTai, url?: string)
 
 export function datVung(vung: typeof vungHienTai): void {
   vungHienTai = vung;
+  /* Đang toàn màn hình thì GHI NHỚ vùng mới nhưng ĐỪNG áp dụng: ô giữ chỗ của
+     React vẫn 16:9 và `ResizeObserver` của nó vẫn bắn mỗi lần kéo cửa sổ —
+     áp vào là fullscreen bị bóp về 16:9 ngay khung hình kế tiếp. */
+  if (toanManHinh) { phuKinCuaSo(); return; }
   // Làm tròn: `getBoundingClientRect()` trả số thực, còn `setBounds` cần số
   // nguyên. Truyền số thực vào thì Electron tự cắt và khung lệch một pixel so
   // với ô giữ chỗ — đủ để thấy một vệt nền lộ ra ở mép.
@@ -250,6 +313,9 @@ export function tiaYouTube(): void {
 }
 
 export function an(): void {
+  // Đóng video giữa lúc đang toàn màn hình: phải hạ cờ, không thì lần mở sau
+  // `datVung` vẫn nghĩ đang fullscreen và phủ kín cửa sổ.
+  if (toanManHinh) datToanManHinh(false);
   if (khung && dangHien && cuaSoChu && !cuaSoChu.isDestroyed()) {
     cuaSoChu.contentView.removeChildView(khung);
   }

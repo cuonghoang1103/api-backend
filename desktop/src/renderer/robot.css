@@ -34,7 +34,10 @@ body {
  * quanh robot, còn bản thân robot là `no-drag`.
  */
 .rb { -webkit-app-region: drag; }
-.rb-than, .rb-chat { -webkit-app-region: no-drag; }
+/* ⚠️ `.rb` là vùng KÉO cửa sổ, và vùng kéo NUỐT sạch sự kiện chuột. Bong
+   bóng vừa dọn ra khỏi `.rb-than` nên phải tự khai no-drag, không thì nút
+   "bấm để đọc đầy đủ" chết câm — build vẫn xanh. */
+.rb-than, .rb-chat, .rb-bong { -webkit-app-region: no-drag; }
 
 /* ── Mở khoá kéo (ấn ba lần vào robot) ──
    Trả thân robot về vùng KÉO để túm được chính nó. Không thể vừa kéo vừa
@@ -85,6 +88,8 @@ body {
 
 .rb-than {
   position: relative;
+  /* Bong bóng co, robot thì KHÔNG — nếu không, câu dài sẽ bóp méo con robot. */
+  flex: 0 0 auto;
   cursor: pointer;
   filter: drop-shadow(0 8px 22px rgba(0, 0, 0, 0.45));
   transition: transform 0.18s ease;
@@ -113,24 +118,49 @@ body {
 
 /* Bong bóng thông báo. Neo BÊN TRÁI robot vì robot đứng ở mép phải màn hình —
    thả sang phải là nó tràn ra ngoài cửa sổ và bị cắt. */
+/*
+ * Bong bóng chữ nằm TRÊN robot, trong dòng chảy thường của `.rb`.
+ *
+ * ⚠️ TRƯỚC 20/08/2026 NÓ `position: absolute; right: calc(100% + 6px)`, và
+ * đó là một cái bẫy hình học. Khối chứa là `.rb-than`, mà `.rb-than` co vừa
+ * đúng con robot (110px). Với `right` = 110 + 6 và `left: auto`, bề rộng khả
+ * dụng cho hộp co-vừa-nội-dung là 110 − 116 = **−6px** ⇒ kẹp về 0 ⇒ trình
+ * duyệt lùi về bề rộng NHỎ NHẤT có thể: đúng bằng từ dài nhất trong câu.
+ * `max-width: 230px` chưa bao giờ có tác dụng.
+ *
+ * Đo thật ở cả ba cỡ cửa sổ: bong bóng rộng **71px** — 150×190, 300×250 và
+ * 380×520 đều ra 71px. Nên lần chữa trước (thêm cỡ cửa sổ `noi`) không thể
+ * ăn thua: bề rộng bong bóng chưa bao giờ phụ thuộc cửa sổ. Người dùng gửi
+ * ảnh "♪ SƠN TÙNG M-TP | SKY" gãy thành bốn chữ một dòng.
+ *
+ * Nằm trong dòng chảy thì bề rộng do CỬA SỔ quyết định, và `min-height: 0`
+ * cho phép flex CO nó lại khi cửa sổ hụt — thay vì để nó tràn ra ngoài biên
+ * và bị cắt câm. Không còn con số nào phải khớp tay giữa CSS và `robotNoi.ts`.
+ */
 .rb-bong {
-  position: absolute;
-  right: calc(100% + 6px);
-  top: 26px;
-  max-width: 230px;
+  position: relative;
+  align-self: flex-end;
+  max-width: 100%;
+  /* `auto` (mặc định của flex cột) CẤM co dưới cỡ nội dung ⇒ tràn biên ⇒ cắt. */
+  min-height: 0;
   padding: 8px 11px;
   border-radius: 12px;
   background: rgba(28, 28, 40, 0.97);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  /* ⚠️ Bong bóng "có tin" là một <button>, mà button KHÔNG kế thừa `color`
+     lẫn `font-family` từ `body`. Thiếu hai dòng này thì nó vẽ bằng font và
+     màu chữ mặc định của hệ điều hành — khác hẳn bong bóng "đang nghĩ" vốn
+     là <div>. Hai bong bóng cùng lớp CSS mà trông như hai thứ. */
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
   font-size: 12px;
   line-height: 1.45;
   white-space: normal;
   animation: rb-hien 0.22s ease;
-  /* Câu trả lời dài thì CUỘN trong bong bóng, đừng để nó cao vô tận rồi lại
-     bị biên cửa sổ cắt. Cửa sổ đã phình sang cỡ `noi` (300×250) khi có bong
-     bóng — xem `doiCo` trong robotNoi.ts. */
-  max-height: 190px;
+  /* Câu dài thì CUỘN. Trần chiều cao do flex đặt (`min-height: 0` ở trên),
+     không phải một con số chép tay — nên nó tự đúng ở mọi nấc cỡ robot. */
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -372,4 +402,24 @@ button.rb-bong:hover { border-color: rgba(167, 139, 250, 0.75); }
 
 @media (prefers-reduced-motion: reduce) {
   .rb-nghi-icon i { animation: none; opacity: 0.9; }
+}
+
+/*
+ * Ô ĐO — bản sao vô hình của bong bóng, dùng để lấy cỡ THẬT của chữ.
+ *
+ * ⚠️ KHÔNG đo chính bong bóng đang hiện. Nó bị bề rộng cửa sổ ép, nên số đo
+ * lấy về luôn nhỏ hơn hoặc bằng cửa sổ hiện tại ⇒ cửa sổ không bao giờ nở ra
+ * được nữa, và nó KHOÁ ở cỡ nhỏ vĩnh viễn. Ô này nằm ngoài màn hình với
+ * `max-width` cố định nên số đo là cỡ MONG MUỐN, độc lập với cửa sổ.
+ */
+.rb-do {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  max-width: 300px;
+  max-height: none;
+  overflow: visible;
+  visibility: hidden;
+  pointer-events: none;
+  animation: none;
 }

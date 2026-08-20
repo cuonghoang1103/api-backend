@@ -238,8 +238,8 @@ const bridge: DesktopBridge = {
   robot: {
     doiKichThuoc: (rong: boolean) =>
       ipcRenderer.invoke('robot:doiKichThuoc', { rong }) as Promise<void>,
-    doiCo: (co: 'gon' | 'noi' | 'rong') =>
-      ipcRenderer.invoke('robot:doiCo', { co }) as Promise<void>,
+    doiCo: (co: 'gon' | 'noi' | 'rong', bong?: { rong: number; cao: number }) =>
+      ipcRenderer.invoke('robot:doiCo', { co, bong }) as Promise<void>,
     datCo: (nac: number) => ipcRenderer.invoke('robot:datCo', { nac }) as Promise<void>,
     keoBatDau: () => ipcRenderer.invoke('robot:keoBatDau') as Promise<void>,
     keoToi: (dx: number, dy: number) => ipcRenderer.invoke('robot:keoToi', { dx, dy }) as Promise<void>,

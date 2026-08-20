@@ -16,12 +16,15 @@
  * rồi đóng khung chat trước khi kịp nhảy trang — người dùng thấy một cái nháy
  * vô nghĩa. 260ms là ngưỡng nhấp đúp quen thuộc của cả hai hệ điều hành.
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { OdinRobot } from './features/odin/OdinRobot';
 import { batDauThu, ngungPhat, phatBase64, type BoThu } from './features/odin/nghePhat';
 import './features/odin/odin.css';
 import './robot.css';
+
+/** Ô đo và bong bóng thật phải dùng CHUNG chuỗi này — lệch là đo sai. */
+const CHU_CHO = 'Chờ tớ suy nghĩ xíu nhé…';
 
 const TRE_NHAP_DUP_MS = 260;
 
@@ -55,17 +58,34 @@ function Robot() {
   }, []);
 
   /*
-   * Cửa sổ phải PHÌNH RA khi có bong bóng chữ.
+   * Cửa sổ ôm VỪA ĐÚNG bong bóng chữ.
    *
-   * ⚠️ Cửa sổ Electron CẮT mọi thứ tràn ra ngoài biên. Bong bóng rộng 230px
-   * nằm bên trái robot, mà cửa sổ gọn chỉ 150px — nên mọi câu trả lời dài
-   * đều bị xén mất phần đầu. Người dùng báo 18/08: "phần chữ đã bị cắt đi,
-   * không thấy hết". Không có lỗi nào để thấy, chỉ có chữ mất.
+   * ⚠️ Cửa sổ Electron CẮT mọi thứ tràn ra ngoài biên, và trước 20/08/2026
+   * chỗ này chỉ đổi sang một cỡ HẰNG (300×250). Nó không chữa được gì: lỗi
+   * thật nằm ở CSS — bong bóng `position: absolute` trong khối chứa co vừa
+   * con robot chỉ còn bề rộng khả dụng ÂM. Đo thật: **71px ở cả ba cỡ cửa
+   * sổ**. Người dùng gửi ảnh chữ gãy bốn ký tự một dòng, hai lần.
+   *
+   * Nay bong bóng nằm trong dòng chảy, và ta ĐO nó rồi báo cỡ sang main.
+   * Cửa sổ này trong suốt nhưng vẫn NUỐT chuột ở phần rỗng, nên mỗi pixel
+   * thừa là một pixel bấm vào app bên dưới không ăn — ôm vừa chữ, không hơn.
+   *
+   * `useLayoutEffect` chứ không phải `useEffect`: đo sau khi trình duyệt đã
+   * dựng xong bố cục nhưng TRƯỚC khi nó vẽ, nên người dùng không thấy một
+   * khung hình bong bóng bị xén rồi mới giãn ra.
    */
-  useEffect(() => {
+  const doRef = useRef<HTMLDivElement | null>(null);
+  const chuBong = tin ? tin.chu : tt === 'nghi' ? CHU_CHO : null;
+
+  useLayoutEffect(() => {
     if (rong) return;                       // đang mở khung chat, cỡ đã to sẵn
-    void window.cuongthai?.robot.doiCo(tin || tt === 'nghi' ? 'noi' : 'gon');
-  }, [tin, tt, rong]);
+    if (!chuBong) { void window.cuongthai?.robot.doiCo('gon'); return; }
+    const o = doRef.current?.getBoundingClientRect();
+    void window.cuongthai?.robot.doiCo(
+      'noi',
+      o && o.width > 0 ? { rong: o.width, cao: o.height } : undefined,
+    );
+  }, [chuBong, rong]);
 
   useEffect(() => {
     const cau = window.cuongthai;
@@ -284,6 +304,51 @@ function Robot() {
     <div className="rb" data-rong={rong} data-keo={keoDuoc} data-dang-keo={dangKeo}>
       {rong && <KhungChat onDong={() => doiRong(false)} />}
 
+      {/* Bản sao vô hình chỉ để ĐO. Cùng lớp `.rb-bong` nên cùng font, cùng
+          đệm, cùng viền — số đo mới khớp với bong bóng thật. */}
+      {chuBong && !rong && (
+        <div ref={doRef} className="rb-bong rb-do" aria-hidden>{chuBong}</div>
+      )}
+
+      {/*
+        Bong bóng nằm NGOÀI `.rb-than` và TRÊN robot.
+
+        Đặt trong `.rb-than` thì khối chứa co vừa con robot, và một bong bóng
+        `position: absolute; right: calc(100% + 6px)` trong khối chứa ấy chỉ
+        còn bề rộng khả dụng âm — trình duyệt lùi về từ dài nhất. Đo thật:
+        71px ở CẢ BA cỡ cửa sổ. Xem chú thích dài trong `robot.css`.
+
+        Ở đây nó là anh em của robot trong cột flex `.rb`, nên bề rộng do cửa
+        sổ định và flex tự co nó khi cửa sổ hụt.
+      */}
+      {/* Đang nghĩ mà KHÔNG nói gì thì người dùng không biết nó có nghe
+          thấy mình không. Trong app đã có câu này (`DangNghi`), ngoài app
+          thì trước đây chỉ có con quay trên nút micro — quá nhỏ và quá xa
+          tầm mắt. */}
+      {!tin && !rong && tt === 'nghi' && (
+        <div className="rb-bong" data-loai="cho">Chờ tớ suy nghĩ xíu nhé…</div>
+      )}
+      {tin && !rong && (
+        /*
+         * Bấm vào KHUNG CHỮ ⇒ mở thẳng trang AI Chat ở đúng cuộc trò
+         * chuyện. Bong bóng chỉ hiện MỘT câu đang đọc (cửa sổ nhỏ, cả bài
+         * thì bị biên cửa sổ cắt), nên nó phải là đường dẫn tới bản đầy đủ.
+         *
+         * `stopPropagation`: thân robot đã nhận bấm-một-lần (mở khung mini)
+         * và bấm-hai-lần. Không chặn thì một cú bấm vào chữ vừa mở khung
+         * mini vừa nhảy trang.
+         */
+        <button
+          type="button"
+          className="rb-bong"
+          data-loai={tin.loai}
+          title="Bấm để đọc đầy đủ trong AI Chat"
+          onClick={(e) => { e.stopPropagation(); bamDup(); }}
+          onDoubleClick={(e) => e.stopPropagation()}
+        >
+          {tin.chu}
+        </button>
+      )}
       <div
         className="rb-than"
         onPointerDown={(e) => {
@@ -298,34 +363,6 @@ function Robot() {
         onMouseLeave={() => datHover(false)}
         title={'Bấm một lần: mở khung chat nhanh\nBấm hai lần: mở trang AI Chat\nKéo để dời'}
       >
-        {/* Đang nghĩ mà KHÔNG nói gì thì người dùng không biết nó có nghe
-            thấy mình không. Trong app đã có câu này (`DangNghi`), ngoài app
-            thì trước đây chỉ có con quay trên nút micro — quá nhỏ và quá xa
-            tầm mắt. */}
-        {!tin && !rong && tt === 'nghi' && (
-          <div className="rb-bong" data-loai="cho">Chờ tớ suy nghĩ xíu nhé…</div>
-        )}
-        {tin && !rong && (
-          /*
-           * Bấm vào KHUNG CHỮ ⇒ mở thẳng trang AI Chat ở đúng cuộc trò
-           * chuyện. Bong bóng chỉ hiện MỘT câu đang đọc (cửa sổ nhỏ, cả bài
-           * thì bị biên cửa sổ cắt), nên nó phải là đường dẫn tới bản đầy đủ.
-           *
-           * `stopPropagation`: thân robot đã nhận bấm-một-lần (mở khung mini)
-           * và bấm-hai-lần. Không chặn thì một cú bấm vào chữ vừa mở khung
-           * mini vừa nhảy trang.
-           */
-          <button
-            type="button"
-            className="rb-bong"
-            data-loai={tin.loai}
-            title="Bấm để đọc đầy đủ trong AI Chat"
-            onClick={(e) => { e.stopPropagation(); bamDup(); }}
-            onDoubleClick={(e) => e.stopPropagation()}
-          >
-            {tin.chu}
-          </button>
-        )}
         {/* Có tin thì robot 'vui' — cùng bộ tâm trạng với con robot trong app,
             nên nó vẫn là MỘT nhân vật chứ không phải hai con giống nhau. */}
         {/* Bong bóng SUY NGHĨ trên đầu robot khi nó đang nói — ba chấm nở

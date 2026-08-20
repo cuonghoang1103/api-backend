@@ -187,6 +187,68 @@ export function datVung(vung: typeof vungHienTai): void {
  * Gỡ chứ không huỷ: người dùng chuyển sang tab Lập trình rồi quay lại thì trang
  * vẫn còn đó, không phải tải lại từ đầu. Huỷ hẳn chỉ khi đóng app.
  */
+/**
+ * Tỉa gọn trang xem YouTube để nó vừa một ô 16:9 trong bài học.
+ *
+ * ─── Vì sao phải là TRANG XEM, không phải `/embed/` ───
+ * Đo thật 20/08/2026, chụp chính lớp phủ bằng `capturePage()`:
+ *   • `youtube.com/embed/<id>` nạp ở cấp cao nhất → **Error 153, Video player
+ *     configuration error**. Khung nhúng chỉ chạy khi nằm TRONG một iframe của
+ *     trang cha có origin thật; nạp thẳng nó là sai cách dùng.
+ *   • `youtube.com/watch?v=<id>` → trình phát CHẠY, đủ nút, đúng thời lượng.
+ * Trước đó tôi đã kết luận nhầm là "chạy" chỉ vì trạng thái báo `loi: null` và
+ * tiêu đề "YouTube" — trang BÁO LỖI cũng là một trang YouTube nạp thành công.
+ * Từ nay đo trình phát bằng ẢNH của chính lớp phủ, không bằng trạng thái nạp.
+ *
+ * ─── Cái giá của việc tỉa bằng CSS ───
+ * Bộ chọn dưới đây bám vào tên thẻ của YouTube. Họ đổi tên thì phần tỉa mất
+ * tác dụng và thanh đầu YouTube hiện lại — XẤU, nhưng video VẪN CHẠY. Đó là
+ * kiểu hỏng chấp nhận được; đổi lại một ô xem sạch sẽ ở thời điểm này.
+ */
+const CSS_TIA_YOUTUBE = `
+  /* 1. Bỏ mọi thứ quanh trình phát. */
+  #masthead-container, ytd-masthead, #secondary, #secondary-inner, #comments,
+  #below, #related, tp-yt-app-drawer, ytd-mini-guide-renderer, #chips-wrapper,
+  ytd-merch-shelf-renderer, #donation-shelf { display: none !important; }
+
+  /* 2. Bỏ khoảng đệm mà trang chừa cho thanh đầu vừa bị ẩn. */
+  ytd-page-manager, #page-manager, ytd-watch-flexy #columns,
+  #primary, #primary-inner { margin: 0 !important; padding: 0 !important; }
+
+  /* 3. ÉP trình phát lấp đầy ô. Không có phần này thì nó chỉ chiếm ~60% chiều
+        cao và phần còn lại là một mảng đen — đo bằng ảnh chụp lớp phủ. */
+  ytd-watch-flexy #player, #player-container-outer, #player-container-inner,
+  #player-container, #movie_player, .html5-video-container {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    min-height: 100vh !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    /* player-container-inner giữ tỉ lệ bằng padding-top — để nguyên là nó cộng
+       thêm một khoảng trống bằng chiều cao khung.
+       (Không dùng dấu huyền ở đây: cả khối này nằm TRONG template literal, một
+       dấu huyền là cắt đứt chuỗi và hỏng cả file. Đã dẫm hai lần trong ngày.) */
+    padding-top: 0 !important;
+  }
+  video.html5-main-video {
+    height: 100% !important; width: 100% !important;
+    top: 0 !important; left: 0 !important;
+    object-fit: contain !important;
+  }
+
+  html, body { overflow: hidden !important; background: #000 !important; }
+`;
+
+/** Chèn CSS tỉa vào trang đang mở. Gọi sau khi trang nạp xong. */
+export function tiaYouTube(): void {
+  const wc = khung?.webContents;
+  if (!wc) return;
+  if (!/youtube\.com/.test(wc.getURL())) return;
+  void wc.insertCSS(CSS_TIA_YOUTUBE).catch(() => {
+    /* Tỉa hỏng thì thôi — video vẫn xem được, chỉ là có thêm thanh đầu. */
+  });
+}
+
 export function an(): void {
   if (khung && dangHien && cuaSoChu && !cuaSoChu.isDestroyed()) {
     cuaSoChu.contentView.removeChildView(khung);

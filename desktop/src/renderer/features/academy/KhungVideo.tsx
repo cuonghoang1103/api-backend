@@ -17,6 +17,14 @@
  * `WebContentsView` do MAIN giữ, vẽ ĐÈ lên cửa sổ theo toạ độ. Nó là Chromium
  * thật đang ở `https://www.youtube.com`, nên không có vấn đề origin nào.
  *
+ * ⛔ NHƯNG PHẢI LÀ TRANG XEM, KHÔNG PHẢI `/embed/`. Lần đầu tôi trỏ lớp phủ
+ * vào `/embed/<id>` và kết luận "chạy" vì trạng thái báo `loi: null` và tiêu
+ * đề "YouTube". SAI: trang BÁO LỖI cũng là một trang YouTube nạp thành công.
+ * Người dùng nhận về **Error 153 — Video player configuration error**.
+ * Chỉ khi chụp ẢNH của chính lớp phủ (`webContents.capturePage()` ở main) mới
+ * thấy sự thật. Từ nay đo trình phát bằng ẢNH, không bằng trạng thái nạp —
+ * xem [[feedback_phep_kiem_dat_vi_ly_do_sai]].
+ *
  * ⚠️ Ba điều phải nhớ, chép từ bài học của `BrowserMode.tsx`:
  *  1. Trang web luôn NỔI TRÊN mọi thứ React vẽ — không `z-index` nào thắng.
  *     Vì thế khung này nằm ở một ô CỐ ĐỊNH phía trên, KHÔNG cuộn theo bài:
@@ -56,9 +64,15 @@ export function KhungVideo({
     if (moLuon && !daMoRef.current) {
       daMoRef.current = true;
       const ma = maYouTube(url);
-      /* `youtube.com/embed/…` chứ không phải trang xem đầy đủ: trang xem kéo
-         theo gợi ý, bình luận, thanh bên — trong một ô 16:9 thì chỉ tổ rối. */
-      void cau.browser.mo(vung, ma ? `https://www.youtube.com/embed/${ma}?autoplay=1` : url);
+      /* ⚠️ TRANG XEM, KHÔNG PHẢI `/embed/`.
+         `youtube.com/embed/<id>` nạp ở cấp cao nhất trả **Error 153 — Video
+         player configuration error**: khung nhúng chỉ chạy khi nằm TRONG một
+         iframe của trang cha có origin thật. Đo bằng ảnh chụp chính lớp phủ,
+         không bằng trạng thái nạp — trang báo lỗi cũng "nạp thành công".
+         Trang xem thì kéo theo thanh đầu YouTube, nên tỉa bằng CSS ngay sau. */
+      void cau.browser
+        .mo(vung, ma ? `https://www.youtube.com/watch?v=${ma}` : url)
+        .then(() => cau.browser.tiaYouTube());
     } else {
       void cau.browser.datVung(vung);
     }
@@ -70,6 +84,17 @@ export function KhungVideo({
     const id = requestAnimationFrame(() => doVaBao(true));
     return () => cancelAnimationFrame(id);
   }, [doVaBao]);
+
+  /* Tỉa LẠI mỗi lần trang báo nạp xong. YouTube là ứng dụng một trang: bấm một
+     video gợi ý là nó thay nội dung mà không nạp lại tài liệu, và CSS chèn lần
+     đầu vẫn còn — nhưng lần điều hướng THẬT (tải lại, lùi/tới) thì mất. */
+  useEffect(() => {
+    const cau = window.cuongthai;
+    if (!cau) return;
+    return cau.on('browser:trangThai', (t) => {
+      if ((t as { dangTai?: boolean }).dangTai === false) void cau.browser.tiaYouTube();
+    });
+  }, []);
 
   /* Gỡ hẳn khi tháo. Không có nhánh này thì video ở lại trên trang kế tiếp. */
   useEffect(() => () => { void window.cuongthai?.browser.an(); }, []);

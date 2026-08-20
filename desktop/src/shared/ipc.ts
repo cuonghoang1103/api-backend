@@ -827,6 +827,9 @@ export const INVOKE_CHANNELS = {
   /* Đường dẫn tệp trong repo mẫu gốc. Tiến trình chính còn kiểm lại lần nữa —
      xem `duongAnToan()` — nên schema này chỉ là hàng rào đầu tiên. */
   'mau:noiDung': z.object({ duong: z.string().min(1).max(300) }),
+  /* Tỉa thanh đầu YouTube trong lớp phủ. Không tham số: main tự biết trang nào
+     đang mở, và renderer không được quyền bơm CSS tuỳ ý vào một trang lạ. */
+  'browser:tiaYouTube': null,
 
   /* Kéo-thả từ Finder: renderer chỉ gửi ĐƯỜNG DẪN, main đọc thẳng từ đĩa.
      Không có trần độ dài nhỏ ở đây vì đường dẫn thật có thể rất sâu; main mới
@@ -1313,6 +1316,8 @@ export interface DesktopBridge {
     napLai(): Promise<void>;
     /** Mở trang hiện tại bằng trình duyệt hệ thống. */
     moNgoai(): Promise<void>;
+    /** Ẩn thanh đầu YouTube để trang xem vừa một ô 16:9. Không phải YouTube thì không làm gì. */
+    tiaYouTube(): Promise<void>;
   };
 
   /** Trả về hàm huỷ đăng ký. Renderer PHẢI gọi nó khi unmount. */

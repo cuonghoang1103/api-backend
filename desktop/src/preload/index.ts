@@ -268,6 +268,7 @@ const bridge: DesktopBridge = {
     toi: () => ipcRenderer.invoke('browser:toi') as Promise<void>,
     napLai: () => ipcRenderer.invoke('browser:napLai') as Promise<void>,
     moNgoai: () => ipcRenderer.invoke('browser:moNgoai') as Promise<void>,
+    tiaYouTube: () => ipcRenderer.invoke('browser:tiaYouTube') as Promise<void>,
   },
 
   on: (channel: EventChannel, listener: (payload: unknown) => void) => {

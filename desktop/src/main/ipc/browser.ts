@@ -25,4 +25,5 @@ export function registerBrowserHandlers(): void {
   handle('browser:toi', () => td.toi());
   handle('browser:napLai', () => td.napLai());
   handle('browser:moNgoai', () => td.moNgoai());
+  handle('browser:tiaYouTube', () => td.tiaYouTube());
 }

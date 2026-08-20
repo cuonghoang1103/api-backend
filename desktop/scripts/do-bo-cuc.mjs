@@ -109,6 +109,37 @@ await ctx.addInitScript(() => {
           lessons: mang(3, (b) => ({ id: k * 10 + b, title: `L${b}|||Bài ${k}.${b}`,
             isFreePreview: k === 1, content: k === 1 ? '<h2>Nội dung</h2><p>Chữ bài học.</p>' : null,
             videoUrl: k === 1 ? 'https://youtu.be/x' : null })) })) })],
+    [/\/code-lab\/stats/, () => ({ groups: 12, tracks: 146, modules: 2122, exercises: 12549,
+        byDifficulty: [{ _count: 2381, difficulty: 'EASY' }, { _count: 7563, difficulty: 'MEDIUM' },
+                       { _count: 2605, difficulty: 'HARD' }] })],
+    [/\/code-lab\/groups/, () => mang(3, (i) => ({ id: i, slug: `nhom-${i}`, name: `Nhóm số ${i}`,
+        color: '#e11d48',
+        tracks: mang(6, (k) => ({ id: i * 10 + k, slug: `track-${i}-${k}`, name: `Lộ trình ${k}`,
+          description: '⟦ctv⟧Mô tả lộ trình đủ dài để tràn sang dòng thứ hai như thật.',
+          language: 'typescript', level: 'BEGINNER', moduleCount: 16, exerciseCount: 160 })) }))],
+    [/\/code-lab\/tracks\//, () => ({ id: 1, slug: 'track-1-1', name: 'Lộ trình thử',
+        description: '⟦ctv⟧Mô tả', language: 'sql', level: 'BEGINNER', exerciseCount: 210,
+        group: { name: 'CuongThai' },
+        modules: mang(4, (k) => ({ id: k, slug: `m${k}`, name: `Mục ${k}`,
+          exercises: mang(5, (b) => ({ id: k * 10 + b, slug: `bai-${k}-${b}`,
+            title: `Bài tập số ${b} với tiêu đề khá dài`, difficulty: 'EASY', language: 'sql',
+            estimatedMinutes: 10, points: 5, solveCount: 3 })) })) })],
+    [/\/code-lab\/exercises\//, () => ({ id: 1, slug: 'bai-1', title: 'Bài thử',
+        difficulty: 'EASY', language: 'sql', estimatedMinutes: 10, points: 5,
+        problemHtml: '<p>Đề bài.</p>', concepts: ['SELECT'], constraints: 'Dùng SELECT *',
+        inputSpec: 'Bảng products', outputSpec: 'Mọi cột',
+        examplesJson: [{ input: 'a', output: 'b' }],
+        starterCodeJson: [{ name: 's.sql', code: 'SELECT' }],
+        solutionCodeJson: [{ name: 's.sql', code: 'SELECT *' }],
+        hintsJson: ['Gợi ý một', 'Gợi ý hai'], track: { name: 'PostgreSQL', slug: 'postgresql' } })],
+    [/\/exams/, () => mang(12, (i) => ({ id: i, code: `FE-D${i}`,
+        title: `Exam ${i}|||Đề ${i} — Thi cuối kỳ SP26`, kind: i % 3 === 0 ? 'PE' : 'FE',
+        durationMinutes: 60, totalPoints: 10, passMark: 4, questionCount: 50,
+        course: { title: 'Programming Fundamentals', slug: 'prf', courseCode: 'PRF192' },
+        semester: { name: 'Kỳ 1', ordinal: 1 } }))],
+    [/\/courses\?|\/courses$/, () => mang(5, (i) => ({ id: i, slug: `khoa-${i}`,
+        title: `Course ${i}|||Khoá học số ${i}`, shortDescription: 'EN|||Mô tả ngắn của khoá.',
+        thumbnailUrl: null, level: 'BEGINNER', totalLessons: 54, isFree: true }))],
     [/\/dashboard$/, () => ({ level: 3, exp: 120, totalExp: 500, streak: 4,
         timeline: mang(24, (i) => ({ hour: i - 1, activity: i % 3 === 0 ? 'hoc' : null })),
         tasks: mang(4, (i) => ({ id: i, title: `Việc cần làm số ${i}`, done: i % 2 === 0 })),
@@ -170,6 +201,16 @@ const CHUAN_BI = {
       await p.waitForTimeout(300);
     }
   },
+  '/code-lab': async (p) => {
+    // Mở một lộ trình: cây mục + hàng bài tập chỉ tồn tại ở tầng đó.
+    await p.click('.ct-cl-track', { timeout: 4000 }).catch(() => {});
+    await p.waitForTimeout(700);
+  },
+  '/exam': async (p) => {
+    // Bung dải lọc theo môn — hàng chip dài nhất của trang này.
+    await p.click('.ct-gn-chip button:nth-child(2)', { timeout: 3000 }).catch(() => {});
+    await p.waitForTimeout(300);
+  },
   '/ai-templates': async (p) => {
     // Mở tấm chi tiết — cột thứ ba chỉ tồn tại khi có mẫu được chọn.
     await p.click('.ct-mau-the', { timeout: 2000 }).catch(() => {});
@@ -178,8 +219,9 @@ const CHUAN_BI = {
 };
 
 const DUONG = JSON.parse(process.env.CT_TRANG ?? 'null')
-  ?? ['/academy', '/dashboard', '/feed', '/messages', '/friends', '/chat', '/cv', '/music',
-      '/notes', '/pro', '/tech-trends', '/ai-templates', '/voice'];
+  ?? ['/academy', '/courses', '/code-lab', '/exam', '/dashboard', '/feed', '/messages',
+      '/friends', '/chat', '/cv', '/music', '/notes', '/pro', '/tech-trends',
+      '/ai-templates', '/voice'];
 
 let hong = 0;
 const bang = [];

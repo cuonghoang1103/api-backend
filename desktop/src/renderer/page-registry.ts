@@ -27,6 +27,9 @@ import { NotesPage } from './features/notes/NotesPage';
 import { ProPage } from './features/pro/ProPage';
 import { TechTrendsPage } from './features/tech-trends/TechTrendsPage';
 import { HocVienPage } from './features/academy/HocVienPage';
+import { KhoaHocPage } from './features/academy/KhoaHocPage';
+import { CodeLabPage } from './features/codelab/CodeLabPage';
+import { PhongThiPage } from './features/exam/PhongThiPage';
 import { GiongNoiPage } from './features/voice/GiongNoiPage';
 
 export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
@@ -43,6 +46,9 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/ai-templates': MauAIPage,
   '/voice': GiongNoiPage,
   '/academy': HocVienPage,
+  '/courses': KhoaHocPage,
+  '/code-lab': CodeLabPage,
+  '/exam': PhongThiPage,
 };
 
 export function nativePageFor(path: string): ComponentType | undefined {

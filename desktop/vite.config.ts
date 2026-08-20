@@ -84,7 +84,25 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, 'dist/renderer'),
     emptyOutDir: true,
-    sourcemap: true,
+    /**
+     * Bản đồ nguồn CHỈ ở máy nhà, không ở CI.
+     *
+     * ⚠️ 20/08/2026: sau khi app dùng lại thêm 51.000 dòng mã web (Thuật toán ·
+     * Mô phỏng · Lộ trình · Ngoại ngữ), `vite build` CHẾT trên runner macOS của
+     * GitHub với `FATAL ERROR: Reached heap limit — JavaScript heap out of
+     * memory`, thoát 134. Máy nhà dựng xanh trong 20 giây vì nhiều RAM hơn hẳn.
+     * Sinh bản đồ nguồn cho một cây 4,7MB là phần ngốn bộ nhớ nặng nhất, và
+     * bản đồ nguồn KHÔNG đi kèm bản cài: `electron-builder.yml` đã loại chúng
+     * bằng `'!**/*.map'`. Tức là CI đang tốn bộ nhớ để sinh ra thứ chính nó
+     * vứt đi ngay sau đó — bỏ hẳn ở CI không mất gì cả.
+     *
+     * `build:renderer` cũng đã nâng heap lên 6GB. Cần cả hai: nâng heap một
+     * mình vẫn sát trần, bỏ bản đồ nguồn một mình thì lần thêm trang sau lại
+     * chạm trần.
+     *
+     * Gỡ lỗi ở máy nhà thì vẫn có bản đồ nguồn như cũ.
+     */
+    sourcemap: !process.env.CI,
     target: 'chrome128',
     /**
      * HAI trang, không phải một.

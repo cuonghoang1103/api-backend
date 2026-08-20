@@ -226,10 +226,25 @@ export function buildSystemPrompt(opts: {
    • Bị TỪ CHỐI là câu trả lời hợp lệ, không phải lỗi: đừng gọi lại y hệt, hãy
      hỏi xem họ muốn khác chỗ nào.`);
   } else {
-    muc.push(`BẠN CHƯA SỬA ĐƯỢC GÌ Ở PHIÊN NÀY
+    muc.push(`BẠN CHƯA SỬA ĐƯỢC GÌ Ở PHIÊN NÀY — VÀ PHẢI CHỈ HỌ CÁCH BẬT
    Bạn KHÔNG có tool ghi file và KHÔNG sửa được ghi chú.
-   Người dùng nhờ sửa thì đừng vờ như đã sửa: hãy nói rõ, rồi đưa đoạn mã thay
-   thế trong khối \`\`\` kèm tên file và số dòng để họ tự dán.`);
+
+   ⚠️ Đây là một CÔNG TẮC, không phải giới hạn vĩnh viễn. Nói "tôi không có
+   tool ghi file trong phiên này" rồi dừng là bỏ người dùng lại giữa đường: họ
+   tưởng app không làm được, và đi copy-paste tay thứ lẽ ra một cú bấm là xong.
+   Người dùng báo đúng chuyện này ngày 20/08/2026.
+
+   Nhờ sửa hay nhờ TẠO FILE (mã, .md, .txt, cấu hình…) thì trả lời theo đúng
+   thứ tự này:
+   1. Nói thẳng là phiên đang ở chế độ chỉ đọc.
+   2. CHỈ ĐƯỜNG: bấm nút "Cho sửa" trên thanh công cụ phía trên khung chat (hoặc
+      đổi chế độ quyền sang "Hỏi từng việc" / "Tự sửa"). Bật xong nhắn lại là
+      bạn tạo file ngay.
+   3. Trong lúc chờ, vẫn đưa nội dung đầy đủ trong khối \`\`\` kèm tên file, để
+      họ tự dán nếu muốn nhanh.
+
+   ⛔ ĐỪNG bịa ra rằng app "chỉ đọc được thôi, không tạo file được" như một
+   tính chất của sản phẩm. Nó tạo được — chỉ là chưa bật.`);
   }
 
   if (coLenh) {

@@ -315,6 +315,41 @@ function luatNgonNgu(ngonNgu?: 'vi' | 'en'): string {
   return 'Mặc định trả lời bằng tiếng Việt; nếu người dùng viết bằng ngôn ngữ khác thì trả lời bằng ngôn ngữ đó.\n\n';
 }
 
+/**
+ * BẠN TẠO ĐƯỢC FILE CHO NGƯỜI DÙNG TẢI VỀ — nói cho model biết.
+ *
+ * ─── Vì sao có khối này ───
+ * Người dùng nhờ soạn một tài liệu; model trả lời "mình không có tool ghi file,
+ * bạn copy-paste khối code bên dưới vào file mới". Nhưng app CÓ hộp cát Python
+ * (Pyodide) ngay trong khung chat: mọi file mã Python ghi vào `/xuat/` được
+ * gom lại và hiện thành nút "Lưu". Model chưa bao giờ được cho biết, nên nó
+ * đẩy việc sang cho người dùng trong khi công cụ nằm ngay đó.
+ *
+ * ─── Danh sách gói là ĐO THẬT, không phải phỏng đoán ───
+ * Chạy hộp cát 20/08/2026 và xem kết quả: `.txt` ✔ · `.csv` qua pandas ✔ ·
+ * `.pdf` 8KB qua matplotlib ✔ · biểu đồ `.png` tự bắt ✔.
+ * Bản dựng chỉ đóng gói numpy · pandas · matplotlib · pillow (+ phụ thuộc).
+ * KHÔNG có reportlab, KHÔNG có openpyxl — hứa chúng là hứa hão, và người dùng
+ * nhận về `ModuleNotFoundError` sau khi đã tin.
+ */
+function luatTaoFile(): string {
+  return (
+    '\n## Tạo file cho người dùng tải về\n'
+    + 'Khung chat có hộp cát Python chạy ngay trên máy họ. Khối ```python có nút "Chạy", '
+    + 'và MỌI file mã ghi vào thư mục `/xuat/` sẽ hiện ra thành nút "Lưu" để họ tải xuống.\n'
+    + '- Khi người dùng nhờ "tạo file", "xuất PDF", "cho tôi file Word/Excel/CSV" — hãy VIẾT MÃ PYTHON '
+    + 'ghi vào `/xuat/`, đừng bảo họ tự copy-paste. Nhắc họ bấm "Chạy" rồi "Lưu".\n'
+    + '- Có sẵn: `numpy`, `pandas`, `matplotlib`, `pillow` và thư viện chuẩn của Python. '
+    + 'KHÔNG có `reportlab`, `fpdf`, `openpyxl`, `python-docx` — đừng import chúng.\n'
+    + '- PDF: dùng `matplotlib` (`fig.savefig("/xuat/ten.pdf")`). Với tài liệu nhiều trang thì dùng '
+    + '`matplotlib.backends.backend_pdf.PdfPages`.\n'
+    + '- Excel: KHÔNG làm được `.xlsx`; xuất `.csv` bằng pandas và nói rõ đó là CSV.\n'
+    + '- Word: KHÔNG làm được `.docx`; xuất `.md` hoặc `.txt` và nói rõ.\n'
+    + '- Biểu đồ matplotlib được tự lưu thành `.png`, không cần `savefig`.\n'
+    + '- Hộp cát KHÔNG có mạng và KHÔNG đọc được file trên máy họ. Cần dữ liệu thì đặt thẳng trong mã.\n'
+  );
+}
+
 function buildSystemPrompt(
   ragContext: string,
   deep = false,
@@ -332,6 +367,7 @@ function buildSystemPrompt(
     + '- Khi người dùng hỏi cách dùng một tính năng của web, hướng dẫn từng bước ngắn gọn và kèm đường dẫn trang (ví dụ: /interview, /cv, /language, /pro).\n'
     + '- Nếu tính năng người dùng cần thuộc gói Pro, cho biết điều đó một cách thân thiện và chỉ tới trang /pro.\n'
     + '- Công thức toán viết bằng LaTeX trong `$...$` (trong dòng) hoặc `$$...$$` (đứng riêng), không bọc trong khối code.\n'
+    + luatTaoFile()
     + '- Cần hình minh hoạ (hình học, sơ đồ) thì vẽ bằng khối ```svg — thẻ `<svg>` có `viewBox`, nét `stroke="currentColor" fill="none"`, tính toạ độ cho đúng chứ đừng vẽ áng chừng.\n'
     + (deep && !voice ? MATH_CODE_RULES : '')
     + (voice ? VOICE_RULES : '')

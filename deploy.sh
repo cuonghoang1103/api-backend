@@ -859,6 +859,7 @@ for route in \
     voice-mini/voices \
     messages/threads \
     messages/unread-count \
+    messages/ice-servers \
     profile \
     social/posts \
     feed/posts \

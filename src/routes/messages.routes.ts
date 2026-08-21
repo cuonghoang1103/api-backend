@@ -19,6 +19,8 @@
  */
 
 import { Router, type Response, type Request, type NextFunction } from 'express';
+import crypto from 'node:crypto';
+import { logger } from '../utils/logger.js';
 import multer from 'multer';
 import { authenticate, requireRole } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
@@ -367,6 +369,60 @@ router.patch('/threads/:id/preference', async (req: Request, res: Response, next
 // out of the default inbox until unarchived. Returns the
 // updated preference set so the client can update state
 // without a follow-up fetch.
+/**
+ * GET /api/v1/messages/ice-servers — danh sách máy chủ cho WebRTC.
+ *
+ * Trả về STUN (miễn phí, chỉ để máy tự biết địa chỉ công khai của mình) và
+ * TURN kèm KHOÁ TẠM hết hạn sau 10 phút.
+ *
+ * ⚠️ VÌ SAO KHÔNG DÙNG TÀI KHOẢN TURN CỐ ĐỊNH: client bắt buộc phải cầm được
+ * thông tin đăng nhập TURN để dùng nó — nghĩa là ai mở DevTools cũng đọc
+ * được, và họ có một máy chủ tiếp sức miễn phí do mình trả băng thông.
+ *
+ * Cơ chế khoá tạm (đúng chuẩn coturn `use-auth-secret`):
+ *   username = "<giây hết hạn>:<userId>"
+ *   password = base64( HMAC-SHA1( TURN_SECRET, username ) )
+ * coturn tự kiểm bằng cùng bí mật, không cần cơ sở dữ liệu, không cần gọi
+ * ngược lại backend.
+ */
+router.get('/ice-servers', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.userId!;
+    const secret = process.env.TURN_SECRET?.trim();
+    const host = process.env.TURN_HOST?.trim() || 'cuongthai.com';
+
+    // STUN công khai vẫn cấp kể cả khi chưa cấu hình TURN: phần lớn cuộc gọi
+    // chỉ cần STUN, nên gọi vẫn chạy được ở mạng thường. Thiếu TURN chỉ hỏng
+    // ở những mạng chặt (4G) — nói rõ bằng `turn: false` để client biết.
+    const iceServers: Array<{ urls: string | string[]; username?: string; credential?: string }> = [
+      { urls: ['stun:stun.l.google.com:19302', `stun:${host}:3478`] },
+    ];
+
+    if (secret) {
+      const hetHan = Math.floor(Date.now() / 1000) + 600;   // 10 phút
+      const username = `${hetHan}:${userId}`;
+      const credential = crypto.createHmac('sha1', secret).update(username).digest('base64');
+      iceServers.push({
+        urls: [
+          `turn:${host}:3478?transport=udp`,
+          `turn:${host}:3478?transport=tcp`,
+          // TLS trên 5349: mạng công ty hay chặn UDP lạ, đường này trông y
+          // như HTTPS nên qua được.
+          `turns:${host}:5349?transport=tcp`,
+        ],
+        username,
+        credential,
+      });
+    } else {
+      logger.warn('ice-servers: TURN_SECRET chưa đặt — chỉ cấp STUN, gọi qua 4G sẽ hỏng');
+    }
+
+    res.json({ success: true, data: { iceServers, turn: !!secret } });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.delete('/threads/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);

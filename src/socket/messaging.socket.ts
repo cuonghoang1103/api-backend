@@ -36,6 +36,7 @@ import { logger } from '../utils/logger.js';
 // Phase 3: Listen Together. Additive — registers its own listen:* socket
 // handlers + listen:<roomId> rooms; does not touch the messaging logic.
 import { registerListenTogether } from './listen-together.js';
+import { registerCallSignaling } from './call.socket.js';
 
 export interface MessageEventPayload {
   threadId: number;
@@ -463,6 +464,9 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     // connection. Self-contained (own rooms + own disconnect listener),
     // so it can't interfere with messaging/presence above.
     registerListenTogether(io!, socket, user);
+
+    // Gọi thoại 1-1 — cũng tự chứa như trên, xem `call.socket.ts`.
+    registerCallSignaling(io!, socket, user);
 
     // Typing indicator — broadcast to the other side of the
     // conversation (excludes the sender by default).

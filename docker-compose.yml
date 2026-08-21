@@ -123,6 +123,13 @@ services:
       # shipped to the browser. Optional: without it the picker
       # shows a clear "not configured" error instead of GIFs.
       GIPHY_API_KEY: ${GIPHY_API_KEY:-}
+      # Thông báo đẩy iOS. Trên VPS dùng APNS_KEY_P8 (nội dung file) chứ KHÔNG
+      # phải APNS_KEY_PATH — container không thấy được file nằm trên máy chủ.
+      APNS_KEY_ID: ${APNS_KEY_ID:-}
+      APNS_TEAM_ID: ${APNS_TEAM_ID:-}
+      APNS_KEY_P8: ${APNS_KEY_P8:-}
+      APNS_KEY_PATH: ${APNS_KEY_PATH:-}
+      APNS_BUNDLE_ID: ${APNS_BUNDLE_ID:-com.cuongthai.app}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
@@ -307,6 +314,60 @@ services:
       timeout: 5s
       retries: 3
       start_period: 20s
+
+  # ── TURN cho gọi thoại (21/08/2026) ──────────────────────────────
+  #
+  # ⚠️ `network_mode: host` là BẮT BUỘC, không phải cho tiện.
+  # TURN cấp một cổng UDP riêng cho mỗi phiên trong dải min-port..max-port;
+  # map từng cổng qua bridge của Docker là không khả thi. Nặng hơn: NAT của
+  # Docker làm hỏng địa chỉ mà TURN quảng bá cho client, nên client nhận về
+  # một địa chỉ nội bộ không nối tới được — cuộc gọi im lặng mà không báo lỗi.
+  #
+  # Vì chạy host network nên nó KHÔNG nằm trong mạng `backend`, và cũng không
+  # cần: TURN chỉ nói chuyện với client bên ngoài.
+  coturn:
+    image: coturn/coturn:4.6-alpine
+    container_name: cuonghoangdev_coturn
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      TURN_SECRET: ${TURN_SECRET:-}
+    # ⚠️ THIẾU BÍ MẬT THÌ KHÔNG KHỞI ĐỘNG, chứ không chạy với khoá rỗng.
+    #
+    # `use-auth-secret` với khoá rỗng nghĩa là coturn ký HMAC bằng khoá rỗng —
+    # ai biết cơ chế cũng tự làm được vé vào, và họ có một máy chủ tiếp sức
+    # miễn phí do bạn trả băng thông. Chết ồn ào còn hơn chạy mà hở.
+    #
+    # Bí mật đi bằng tham số dòng lệnh chứ không nằm trong file cấu hình: file
+    # đó nằm trong git, coturn lại không nở biến môi trường.
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        if [ -z "$$TURN_SECRET" ]; then
+          echo "coturn: TURN_SECRET chưa có trong /opt/cuonghoangdev/.env — KHÔNG khởi động." >&2
+          echo "coturn: thêm một dòng TURN_SECRET=<chuỗi ngẫu nhiên 32 byte> rồi dựng lại." >&2
+          exit 1
+        fi
+        exec turnserver -c /etc/coturn/turnserver.conf --static-auth-secret="$$TURN_SECRET"
+    volumes:
+      - ./coturn/turnserver.conf:/etc/coturn/turnserver.conf:ro
+      # Cùng chứng chỉ nginx đang dùng — certbot gia hạn là cả hai cùng có
+      # bản mới, không phải chép qua chép lại.
+      - /opt/certbot/conf/live/cuongthai.com/fullchain.pem:/etc/coturn/certs/fullchain.pem:ro
+      - /opt/certbot/conf/live/cuongthai.com/privkey.pem:/etc/coturn/certs/privkey.pem:ro
+      - /opt/certbot/conf/archive/cuongthai.com:/opt/certbot/conf/archive/cuongthai.com:ro
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    healthcheck:
+      # coturn không có endpoint HTTP; kiểm bằng cách xem cổng 3478 có ai nghe
+      # không. `-z` không gửi gì, chỉ thử mở.
+      test: ["CMD-SHELL", "nc -z -u -w1 127.0.0.1 3478 || exit 1"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
 
   nginx:
     image: nginx:1.27-alpine

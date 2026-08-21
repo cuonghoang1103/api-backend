@@ -196,3 +196,73 @@ describe('prompt phải dạy đúng THỨ TỰ tải', () => {
     expect(pr, 'prompt không cấm agent tự gõ mật khẩu').toContain('để điền mật khẩu');
   });
 });
+
+
+describe('tìm cửa sổ app — ĐỪNG ĐOÁN', () => {
+  /*
+   * 21/08/2026: `web_mo` dò cửa sổ bằng
+   *     BrowserWindow.getAllWindows().find((w) => w.isResizable())
+   * và trả "không tìm thấy cửa sổ app" trong khi app đang mở ngay trước mặt.
+   * Agent không mở nổi trình duyệt, rồi quay ra bảo người dùng "bạn tự mở
+   * khung trình duyệt giúp tôi" — nghe rất hợp lý, và sai hoàn toàn.
+   *
+   * `isResizable()` là thuộc tính của HỆ ĐIỀU HÀNH, đổi theo trạng thái cửa
+   * sổ. Nó chưa bao giờ là cách nhận dạng "cửa sổ chính".
+   */
+  it('không còn dò cửa sổ bằng isResizable()', () => {
+    expect(nguon, 'lại đi đoán cửa sổ bằng thuộc tính của hệ điều hành')
+      .not.toContain('isResizable()');
+  });
+
+  it('dùng tham chiếu thẳng tới cửa sổ chính', () => {
+    expect(nguon, 'không lấy cửa sổ qua layCuaSoChinh()').toContain('layCuaSoChinh()');
+    const w = readFileSync(join(goc, 'src/main/window.ts'), 'utf8');
+    expect(w, 'window.ts không xuất layCuaSoChinh').toContain('export function layCuaSoChinh');
+    expect(w, 'không dọn tham chiếu khi cửa sổ đóng ⇒ giữ cửa sổ đã huỷ')
+      .toMatch(/closed[\s\S]{0,120}cuaSoChinh = null/);
+  });
+});
+
+describe('cờ `ep` — url là MỆNH LỆNH hay MẶC ĐỊNH', () => {
+  /*
+   * Tab "Trình duyệt" gọi `mo(vùng, 'http://localhost:3000')` mỗi lần gắn lại,
+   * tức là NẠP ĐÈ. Người dùng đăng nhập FuOverflow, bấm sang tab Lập trình rồi
+   * quay lại — trang đăng nhập biến mất về localhost. Trông y như app tự đăng
+   * xuất họ; thật ra trang chỉ bị ghi đè.
+   */
+  it('BrowserMode KHÔNG ép nạp địa chỉ mặc định', () => {
+    const bm = readFileSync(join(goc, 'src/renderer/features/chat/BrowserMode.tsx'), 'utf8');
+    expect(bm, 'tab Trình duyệt lại ép nạp MAC_DINH mỗi lần gắn lại')
+      .toContain('mo(vung, MAC_DINH, false)');
+  });
+
+  it('mo() chỉ nạp url khi được ÉP hoặc khi chưa có trang nào', () => {
+    const b = readFileSync(join(goc, 'src/main/browser.ts'), 'utf8');
+    const i = b.indexOf('export function mo(');
+    expect(i, 'không thấy mo()').toBeGreaterThan(-1);
+    const than = b.slice(i, b.indexOf('\n}', i));
+    expect(than, 'mo() không nhận cờ ep').toContain('ep = true');
+    expect(than, 'mo() vẫn nạp vô điều kiện').toContain('ep || trong');
+  });
+
+  /*
+   * ⚠️ Phép kiểm ĐÁNG GIÁ NHẤT ở đây. Một cờ boolean phải khai ở NĂM nơi:
+   * hàm, handler IPC, preload, schema zod, và interface DesktopBridge. Thiếu
+   * riêng schema zod thì renderer gửi đi, main nhận `undefined`, cờ chết lặng
+   * giữa đường — `tsc` xanh vì kiểu vẫn hợp lệ.
+   */
+  it('`ep` được khai ĐỦ ở cả năm nơi', () => {
+    const ipc = readFileSync(join(goc, 'src/shared/ipc.ts'), 'utf8');
+    const pre = readFileSync(join(goc, 'src/preload/index.ts'), 'utf8');
+    const han = readFileSync(join(goc, 'src/main/ipc/browser.ts'), 'utf8');
+    const b = readFileSync(join(goc, 'src/main/browser.ts'), 'utf8');
+    expect(b, '1/5 hàm mo()').toContain('ep = true');
+    expect(han, '2/5 handler IPC không chuyển tiếp ep').toContain('ep !== false');
+    expect(pre, '3/5 preload không gửi ep').toContain('{ vung, url, ep }');
+    const i = ipc.indexOf('browserMoSchema');
+    expect(ipc.slice(i, i + 700), '4/5 schema zod thiếu ep ⇒ CỜ BỊ LỌC BỎ ÂM THẦM')
+      .toContain('ep: z.boolean().optional()');
+    const j = ipc.indexOf('mo(\n      vung:');
+    expect(j, '5/5 DesktopBridge chưa khai ep').toBeGreaterThan(-1);
+  });
+});

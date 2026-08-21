@@ -22,6 +22,26 @@ function isVisibleOnSomeDisplay(x: number, y: number, width: number, height: num
   });
 }
 
+/**
+ * Cửa sổ chính, giữ tham chiếu THẲNG.
+ *
+ * ⚠️ ĐỪNG đi tìm nó bằng `BrowserWindow.getAllWindows().find(...)`.
+ * 21/08/2026: `web_mo` dò cửa sổ bằng `.find((w) => w.isResizable())` và trả
+ * "không tìm thấy cửa sổ app" ngay cả khi app đang mở ngay trước mặt — nên
+ * agent không bao giờ mở nổi trình duyệt, và nó quay ra bảo người dùng "bạn
+ * tự mở khung trình duyệt giúp tôi". Không có lỗi nào ở tầng nào.
+ *
+ * `isResizable()` là một thuộc tính của hệ điều hành, đổi theo trạng thái cửa
+ * sổ (toàn màn hình, đang chuyển cảnh); nó không bao giờ là cách nhận dạng
+ * "cửa sổ chính". Cửa sổ robot thì `resizable: false` hẳn. Giữ tham chiếu là
+ * cách duy nhất đúng ở mọi trạng thái.
+ */
+let cuaSoChinh: BrowserWindow | null = null;
+
+export function layCuaSoChinh(): BrowserWindow | null {
+  return cuaSoChinh && !cuaSoChinh.isDestroyed() ? cuaSoChinh : null;
+}
+
 export function createMainWindow(): BrowserWindow {
   const state = getWindowState();
   const positionIsUsable =
@@ -59,6 +79,9 @@ export function createMainWindow(): BrowserWindow {
       spellcheck: true,
     },
   });
+
+  cuaSoChinh = window;
+  window.on('closed', () => { if (cuaSoChinh === window) cuaSoChinh = null; });
 
   hardenWebContents(window);
 

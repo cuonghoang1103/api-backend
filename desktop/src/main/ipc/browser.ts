@@ -13,9 +13,9 @@ function cuaSoCua(event: { sender: Electron.WebContents }): BrowserWindow | null
 }
 
 export function registerBrowserHandlers(): void {
-  handle('browser:mo', ({ vung, url }, event) => {
+  handle('browser:mo', ({ vung, url, ep }, event) => {
     const w = cuaSoCua(event);
-    if (w) td.mo(w, vung, url);
+    if (w) td.mo(w, vung, url, ep !== false);
   });
 
   handle('browser:an', () => td.an());

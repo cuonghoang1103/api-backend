@@ -257,8 +257,8 @@ const bridge: DesktopBridge = {
   },
 
   browser: {
-    mo: (vung: { x: number; y: number; width: number; height: number }, url?: string) =>
-      ipcRenderer.invoke('browser:mo', { vung, url }) as Promise<void>,
+    mo: (vung: { x: number; y: number; width: number; height: number }, url?: string, ep?: boolean) =>
+      ipcRenderer.invoke('browser:mo', { vung, url, ep }) as Promise<void>,
     an: () => ipcRenderer.invoke('browser:an') as Promise<void>,
     dungVideo: () => ipcRenderer.invoke('browser:dungVideo') as Promise<void>,
     datVung: (vung: { x: number; y: number; width: number; height: number }) =>

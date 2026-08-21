@@ -214,8 +214,22 @@ function datToanManHinh(bat: boolean): void {
   }
 }
 
-/** Hiện trình duyệt ở một vùng của cửa sổ. Tạo mới nếu chưa có. */
-export function mo(cuaSo: BrowserWindow, vung: typeof vungHienTai, url?: string): void {
+/**
+ * Hiện trình duyệt ở một vùng của cửa sổ. Tạo mới nếu chưa có.
+ *
+ * `ep` quyết định `url` là MỆNH LỆNH hay chỉ là MẶC ĐỊNH:
+ *
+ *  • `ep: true`  — điều hướng tới `url` cho bằng được. Đây là `web_mo` của
+ *    agent và khung chia đôi: người dùng vừa bảo "mở trang này".
+ *  • `ep: false` — chỉ hiện lại khung; `url` chỉ dùng khi CHƯA có trang nào.
+ *
+ * ⚠️ Tab "Trình duyệt" PHẢI dùng `ep: false`. 21/08/2026: nó gọi
+ * `mo(vùng, 'http://localhost:3000')` mỗi lần component gắn lại, nên người
+ * dùng đăng nhập FuOverflow xong, bấm sang tab Lập trình rồi quay lại là
+ * trang đăng nhập bị cuốn phăng về localhost — trông y như app tự đăng xuất
+ * họ. Trang không hề mất; nó bị NẠP ĐÈ.
+ */
+export function mo(cuaSo: BrowserWindow, vung: typeof vungHienTai, url?: string, ep = true): void {
   cuaSoChu = cuaSo;
   if (!khung) {
     khung = tao();
@@ -226,7 +240,9 @@ export function mo(cuaSo: BrowserWindow, vung: typeof vungHienTai, url?: string)
   dangHien = true;
   datVung(vung);
   const sach = url ? hopLe(url) : null;
-  if (sach) void khung.webContents.loadURL(sach);
+  const dangCo = khung.webContents.getURL();
+  const trong = !dangCo || dangCo === 'about:blank';
+  if (sach && (ep || trong)) void khung.webContents.loadURL(sach);
   batTrangThai();
 }
 

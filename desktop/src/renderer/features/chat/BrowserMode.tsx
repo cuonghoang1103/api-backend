@@ -45,7 +45,9 @@ export function BrowserMode({ hien }: { hien: boolean }) {
     const vung = { x: r.left, y: r.top, width: r.width, height: r.height };
     if (moLuon && !daMoRef.current) {
       daMoRef.current = true;
-      void cau.browser.mo(vung, MAC_DINH);
+      // `ep: false` — MAC_DINH chỉ dùng khi chưa có trang nào. Ép nạp ở đây là
+      // cuốn phăng trang người dùng vừa đăng nhập mỗi lần họ đổi tab.
+      void cau.browser.mo(vung, MAC_DINH, false);
     } else {
       void cau.browser.datVung(vung);
     }

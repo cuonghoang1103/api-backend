@@ -334,6 +334,15 @@ export const browserUrlSchema = z.object({ url: z.string().min(1).max(2048) });
 export const browserMoSchema = z.object({
   vung: browserVungSchema,
   url: z.string().max(2048).optional(),
+  /**
+   * `url` là MỆNH LỆNH hay chỉ là MẶC ĐỊNH.
+   *
+   * ⚠️ Trường này PHẢI có mặt ở đây. Schema zod lọc bỏ mọi khoá không khai,
+   * nên thiếu nó thì renderer gửi `ep: false` đi, main nhận được `undefined`,
+   * và cờ chết lặng giữa đường — không lỗi, không log, chỉ là trang người
+   * dùng vừa đăng nhập lại bị nạp đè về localhost.
+   */
+  ep: z.boolean().optional(),
 });
 
 export interface BrowserTrangThai {
@@ -1314,8 +1323,19 @@ export interface DesktopBridge {
   };
 
   browser: {
-    /** Hiện trình duyệt đè lên `vung` (toạ độ cửa sổ), tuỳ chọn mở luôn `url`. */
-    mo(vung: { x: number; y: number; width: number; height: number }, url?: string): Promise<void>;
+    /**
+     * Hiện trình duyệt đè lên `vung` (toạ độ cửa sổ), tuỳ chọn mở luôn `url`.
+     *
+     * `ep` (mặc định `true`): `url` là MỆNH LỆNH — điều hướng cho bằng được.
+     * `ep: false`: `url` chỉ là MẶC ĐỊNH, chỉ nạp khi chưa có trang nào mở.
+     * Tab "Trình duyệt" phải dùng `false`, không thì mỗi lần đổi tab là nó
+     * nạp đè lên trang người dùng đang đăng nhập.
+     */
+    mo(
+      vung: { x: number; y: number; width: number; height: number },
+      url?: string,
+      ep?: boolean,
+    ): Promise<void>;
     /** Gỡ khỏi cửa sổ nhưng GIỮ trang — quay lại không phải tải lại. */
     an(): Promise<void>;
     dungVideo(): Promise<void>;

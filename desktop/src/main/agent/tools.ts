@@ -15,7 +15,7 @@
  * Và mỗi khi cắt thì PHẢI ghi rõ còn bao nhiêu. Model không biết mình đang đọc
  * nửa file sẽ kết luận chắc nịch trên nửa file đó.
  */
-import { app, BrowserWindow, dialog } from 'electron';
+import { app, dialog } from 'electron';
 
 import { execFile } from 'node:child_process';
 import type { Dirent } from 'node:fs';
@@ -31,6 +31,7 @@ import { batLenhNen, docDauRaNen, dungLenhNen } from './lenhNen';
 import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
 import { toolNotesTao, toolNotesGhi, type BoiCanhNote } from './ghiNote';
 import * as trinhDuyet from '../browser';
+import { layCuaSoChinh } from '../window';
 import type { SoCuoc } from './so';
 
 const chay = promisify(execFile);
@@ -1008,7 +1009,7 @@ async function toolWebMo(args: Record<string, unknown>): Promise<KetQuaTool> {
   const url = typeof args.url === 'string' ? args.url.trim() : '';
   if (!url) return { noiDung: 'LỖI: thiếu "url".', tomTat: 'thiếu url' };
 
-  const cuaSo = BrowserWindow.getAllWindows().find((w) => w.isResizable());
+  const cuaSo = layCuaSoChinh();
   if (!cuaSo) return { noiDung: 'LỖI: không tìm thấy cửa sổ app.', tomTat: 'không có cửa sổ' };
 
   /* Chưa mở trình duyệt thì mở nó ra — nhưng KHÔNG tự đoán vùng hiển thị.
@@ -1138,7 +1139,7 @@ async function thuMucTaiCuaCuoc(so: SoCuoc): Promise<string | null> {
     buttonLabel: 'Lưu vào đây',
     properties: ['openDirectory', 'createDirectory'] as Array<'openDirectory' | 'createDirectory'>,
   };
-  const cuaSo = BrowserWindow.getAllWindows().find((w) => w.isResizable());
+  const cuaSo = layCuaSoChinh();
   const kq = cuaSo
     ? await dialog.showOpenDialog(cuaSo, tuyChon)
     : await dialog.showOpenDialog(tuyChon);

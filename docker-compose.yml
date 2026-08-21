@@ -351,11 +351,17 @@ services:
         exec turnserver -c /etc/coturn/turnserver.conf --static-auth-secret="$$TURN_SECRET"
     volumes:
       - ./coturn/turnserver.conf:/etc/coturn/turnserver.conf:ro
-      # Cùng chứng chỉ nginx đang dùng — certbot gia hạn là cả hai cùng có
-      # bản mới, không phải chép qua chép lại.
-      - /opt/certbot/conf/live/cuongthai.com/fullchain.pem:/etc/coturn/certs/fullchain.pem:ro
-      - /opt/certbot/conf/live/cuongthai.com/privkey.pem:/etc/coturn/certs/privkey.pem:ro
-      - /opt/certbot/conf/archive/cuongthai.com:/opt/certbot/conf/archive/cuongthai.com:ro
+      # ⚠️ Ảnh coturn chạy bằng `nobody`, mà khoá riêng của certbot là
+      # `root:root 600` — container KHÔNG đọc nổi. Triệu chứng rất dễ đọc
+      # nhầm: log ghi "Private key file found" ở một dòng và "cannot find
+      # private key file" ở dòng khác; STUN vẫn chạy bình thường nên nhìn
+      # ngoài tưởng ổn, chỉ TLS 5349 im lặng không bật.
+      #
+      # Mount CẢ THƯ MỤC chứng chỉ dành riêng cho coturn — `deploy-nha.sh`
+      # không tạo thư mục này, nên có một job chép + chỉnh quyền (xem
+      # `scripts/dong-bo-chung-chi-turn.sh`). KHÔNG nới quyền file gốc của
+      # certbot: nginx và mọi thứ khác đang dựa vào nó.
+      - /opt/coturn/certs:/etc/coturn/certs:ro
     deploy:
       resources:
         limits:

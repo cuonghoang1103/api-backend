@@ -36,6 +36,7 @@
 #include "audio.h"
 #include "face.h"
 #include "banh_xe.h"
+#include "servo.h"
 #include "net.h"
 #include "ota.h"
 #include "config.h"
@@ -639,6 +640,42 @@ static void handleCommand(JsonDocument& doc) {
   st.cmdCount++;
   st.lastCmd = String(type);
 
+  // ── SÁU KHỚP SERVO ──
+  //
+  // Giới hạn cơ khí được chặn lại LẦN NỮA trong `servo.cpp`, dù server
+  // đã kiểm cùng chuyện đó trong `commands.ts`. Cố ý trùng: firmware
+  // không được phép tin gói tin xuống tới nó đã đi qua bộ kiểm nào —
+  // một bản server cũ, một gói hỏng, hay chính tôi gõ nhầm lúc thử là
+  // đủ để đẩy khuỷu vượt 0° và cháy servo trong khoảng một phút.
+  if (!strcmp(type, "head")) {
+    const float pan  = doc["payload"]["pan"]  | 0.0f;
+    const float tilt = doc["payload"]["tilt"] | 0.0f;
+    servo::dau(pan, tilt);
+    st.lastNote = String("dau ") + (int)pan + "/" + (int)tilt;
+    sendAck(id, servo::co(), servo::co() ? nullptr : "khong thay PCA9685");
+    return;
+  }
+
+  if (!strcmp(type, "arm")) {
+    const char* ben = doc["payload"]["side"] | "both";
+    const int b = !strcmp(ben, "left") ? 0 : !strcmp(ben, "right") ? 1 : 2;
+    const float vai   = doc["payload"]["shoulder"] | 0.0f;
+    const float khuyu = doc["payload"]["elbow"]    | 0.0f;
+    const uint32_t ms = doc["payload"]["ms"]       | 400;
+    servo::tay(b, vai, khuyu, ms);
+    st.lastNote = String("tay ") + ben + " " + (int)vai + "/" + (int)khuyu;
+    sendAck(id, servo::co(), servo::co() ? nullptr : "khong thay PCA9685");
+    return;
+  }
+
+  if (!strcmp(type, "dance")) {
+    const char* ten = doc["payload"]["name"] | "";
+    const bool ok = servo::mua(ten);
+    st.lastNote = String("mua: ") + ten + (ok ? "" : " (khong nhan)");
+    sendAck(id, ok, ok ? nullptr : "khong co bai do hoac khong thay PCA9685");
+    return;
+  }
+
   // ── HAI BÁNH XÍCH ──
   //
   // `ms` là "chạy bao lâu rồi tự dừng", KHÔNG phải gợi ý. Server gửi
@@ -1155,6 +1192,10 @@ void setup() {
   // luôn ở trạng thái ĐỨNG YÊN xác định, kể cả khi mọi thứ khác hỏng.
   banhXe::begin();
 
+  // Sáu khớp servo. Không thấy PCA9685 thì `begin()` trả false và mọi
+  // lệnh cử động thành lệnh rỗng — robot vẫn nói và vẫn chạy được.
+  servo::begin();
+
   // Cảm biến chạm TTP223: ngõ ra push-pull, tự kéo về mức thấp khi
   // không ai chạm. Vẫn khai INPUT_PULLDOWN để lúc CHƯA cắm dây thì
   // chân không thả nổi — thả nổi là robot tự "bị vuốt đầu" liên tục.
@@ -1531,6 +1572,12 @@ void loop() {
   // chạy tiếp lệnh cuối cùng cho tới khi đâm vào cái gì đó.
   gStage = "banh-xe";
   banhXe::tick();
+
+  // ── SERVO ──
+  // Rẻ: tự ghìm ghi I2C xuống 50Hz nên phần lớn vòng loop nó chỉ so
+  // một cái đồng hồ rồi trả lại CPU ngay.
+  gStage = "servo";
+  servo::tick();
 
   // ── MÀN NGỰC ──
   if (!audio::speaking()) {

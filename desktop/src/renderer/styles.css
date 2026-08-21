@@ -8273,3 +8273,33 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   overflow-x: auto;
   white-space: pre-wrap;
 }
+
+/* ── Màn hình gọi thoại (21/08/2026) ─────────────────────────── */
+.ct-goi-phu {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px;
+  background: color-mix(in srgb, var(--ct-bg) 92%, black);
+  backdrop-filter: blur(10px);
+}
+.ct-an { display: none; }
+.ct-goi-anh {
+  width: 108px; height: 108px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 40px; font-weight: 700;
+  background: var(--ct-hover); color: var(--ct-text);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ct-text) 8%, transparent);
+}
+.ct-goi-ten { margin: 18px 0 0; font-size: 20px; font-weight: 650; color: var(--ct-text); }
+.ct-goi-trangthai { margin: 2px 0 0; font-size: 13.5px; color: var(--ct-muted); font-variant-numeric: tabular-nums; }
+.ct-goi-nut { margin-top: 36px; display: flex; align-items: center; gap: 18px; }
+.ct-goi-tron {
+  width: 62px; height: 62px; border-radius: 50%; border: 0;
+  display: grid; place-items: center; cursor: pointer;
+  transition: transform .12s ease, filter .12s ease;
+}
+.ct-goi-tron:active { transform: scale(.94); }
+.ct-goi-do   { background: #dc2626; color: #fff; }
+.ct-goi-xanh { background: #059669; color: #fff; }
+.ct-goi-mo   { width: 54px; height: 54px; background: var(--ct-hover); color: var(--ct-text); }
+.ct-goi-tat  { width: 54px; height: 54px; background: var(--ct-text); color: var(--ct-bg); }

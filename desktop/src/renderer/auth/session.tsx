@@ -27,6 +27,7 @@ import {
 } from 'react';
 import { ApiClient, ApiError } from '../api/client';
 import { countUnsynced } from '../offline/db';
+import { noiSocket, ngatSocket } from '../realtime/socket';
 
 export interface CurrentUser {
   userId: number;
@@ -93,6 +94,21 @@ export function SessionProvider({
   children: ReactNode;
 }) {
   const [phase, setPhase] = useState<SessionPhase>('dang-khoi-phuc');
+
+  // ── Kết nối thời gian thực theo vòng đời phiên ───────────────
+  //
+  // MỘT chỗ duy nhất, thay vì rắc `noiSocket()` vào từng nhánh đăng nhập —
+  // có bảy chỗ gọi `setPhase` trong file này và quên một chỗ nghĩa là người
+  // dùng vào được app mà không có socket, hỏng câm.
+  useEffect(() => {
+    if (phase === 'da-dang-nhap' && apiRef.current && apiOrigin) {
+      noiSocket(apiRef.current, apiOrigin);
+    } else if (phase === 'chua-dang-nhap') {
+      // Đăng xuất thì cắt hẳn: socket còn sống nghĩa là người vừa đăng xuất
+      // vẫn nhận được tin nhắn và cuộc gọi của tài khoản đó.
+      ngatSocket();
+    }
+  }, [phase, apiOrigin]);
   const [user, setUser] = useState<CurrentUser | null>(null);
   const apiRef = useRef<ApiClient | null>(null);
 

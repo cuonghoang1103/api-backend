@@ -73,6 +73,15 @@ export class ApiClient {
     ) => void,
   ) {}
 
+  /** Token đang dùng — socket cần nó để xác thực lúc bắt tay.
+   *
+   *  Đọc qua đây thay vì để socket tự giữ một bản: `ApiClient` tự làm mới
+   *  token khi hết hạn, và một bản sao ở chỗ khác sẽ cũ đi mà không ai biết
+   *  — socket nối lại bằng token chết thì im lặng không vào được. */
+  layToken(): string | null {
+    return this.token;
+  }
+
   setToken(token: string | null): void {
     this.token = token;
   }

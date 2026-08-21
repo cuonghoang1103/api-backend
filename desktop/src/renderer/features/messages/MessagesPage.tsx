@@ -23,9 +23,11 @@
  * khi người dùng đi chỗ khác. Đổi sang socket sau vẫn được, không đụng giao diện.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowLeft, CloudOff, MessageSquare, RefreshCw, Send } from 'lucide-react';
+import { ArrowLeft, CloudOff, MessageSquare, Phone, RefreshCw, Send } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
+import KhungGoi from './KhungGoi';
+import { laySocket } from '../../realtime/socket';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 
 interface NguoiKia {
@@ -58,7 +60,10 @@ interface TinNhan {
 }
 
 /** Nhịp hỏi lại khi trang đang mở. Đủ nhanh cho hội thoại, đủ chậm để không tốn gì. */
-const NHIP_MS = 8000;
+/** Lưới đỡ khi socket đứt mà không ai biết — xem ghi chú ở chỗ dùng.
+ *  Trước 21/08/2026 đây là nhịp CHÍNH và bằng 8 giây; nay socket lo phần
+ *  chính nên nó thưa hẳn. */
+const NHIP_LUOI_DO_MS = 45000;
 
 function ten(p?: NguoiKia | null): string {
   return p?.alias || p?.displayName || p?.username || 'Không rõ';
@@ -76,6 +81,8 @@ function gioNgan(iso: string): string {
 export function MessagesPage() {
   const { online } = useAppState();
   const { api, userId } = useSession();
+  /** Bộ đếm bấm nút gọi — xem ghi chú ở `KhungGoi`. */
+  const [lanBamGoi, datLanBamGoi] = useState(0);
 
   const [ds, datDs] = useState<Cuoc[]>([]);
   const [dangMo, datDangMo] = useState<number | null>(null);
@@ -129,10 +136,30 @@ export function MessagesPage() {
     void api.request(`/api/v1/messages/threads/${c.id}/read`, { method: 'PATCH' }).catch(() => {});
   };
 
-  // Hỏi lại khi đang mở một cuộc. Dừng hẳn khi rời trang — `useEffect` dọn hộ.
+  // ── Tin mới về NGAY qua socket ───────────────────────────────
+  //
+  // Trước 21/08/2026 màn này chỉ hỏi lại mỗi 8 giây (xem ghi chú đầu file).
+  // Gọi thoại buộc phải có socket, nên tin nhắn dùng ké luôn — hết cảnh trễ.
+  useEffect(() => {
+    const s = laySocket();
+    if (!s) return;
+    const coTinMoi = (p: { threadId: number }) => {
+      // Đang mở đúng cuộc đó thì nạp cả tin; cuộc khác thì chỉ cần danh sách
+      // đổi dòng xem trước là đủ.
+      if (p.threadId === dangMo) void napTin(dangMo);
+      void napDs();
+    };
+    s.on('thread:new-message', coTinMoi);
+    return () => { s.off('thread:new-message', coTinMoi); };
+  }, [dangMo, napTin, napDs]);
+
+  // Nhịp hỏi lại GIỮ NGUYÊN làm lưới đỡ, nhưng thưa hẳn: socket có thể đứt mà
+  // không ai biết (máy ngủ, mạng chập), và mất tin nhắn thì người dùng không
+  // có cách nào phát hiện. 8 giây → 45 giây: đủ để tự lành, đủ thưa để không
+  // phí băng thông khi socket đang chạy tốt.
   useEffect(() => {
     if (dangMo === null || !online) return;
-    const id = setInterval(() => { void napTin(dangMo); void napDs(); }, NHIP_MS);
+    const id = setInterval(() => { void napTin(dangMo); void napDs(); }, NHIP_LUOI_DO_MS);
     return () => clearInterval(id);
   }, [dangMo, online, napTin, napDs]);
 
@@ -242,6 +269,19 @@ export function MessagesPage() {
                 </button>
                 <Avatar p={cuocDangMo?.peer ?? null} nho />
                 <strong>{cuocDangMo?.type === 'ADMIN' ? 'Hỗ trợ CuongThai' : ten(cuocDangMo?.peer)}</strong>
+                {/* Không gọi được cho luồng HỖ TRỢ: bên kia là một vai trò,
+                    không phải một người đang ngồi trước máy. */}
+                {cuocDangMo?.type !== 'ADMIN' && cuocDangMo?.peer && (
+                  <button
+                    type="button"
+                    className="ct-btn ct-btn-ghost ct-tn-goi"
+                    onClick={() => datLanBamGoi((n) => n + 1)}
+                    aria-label="Gọi thoại"
+                    title="Gọi thoại"
+                  >
+                    <Phone size={15} aria-hidden />
+                  </button>
+                )}
               </header>
 
               <div className="ct-tn-cuon" ref={cuonRef}>
@@ -291,6 +331,12 @@ export function MessagesPage() {
           )}
         </section>
       </div>
+      <KhungGoi
+        threadId={dangMo}
+        peerId={cuocDangMo?.peer?.id ?? null}
+        peerTen={ten(cuocDangMo?.peer)}
+        lanBamGoi={lanBamGoi}
+      />
     </div>
   );
 }

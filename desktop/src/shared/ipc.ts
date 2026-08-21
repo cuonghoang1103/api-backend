@@ -151,6 +151,18 @@ export const settingKeySchema = z.enum([
   'odinCo',
   'odinPhai',
   'odinDuoi',
+  /**
+   * Thư mục người dùng đã chọn cho `web_tai` ở LẦN GẦN NHẤT.
+   *
+   * KHÔNG phải để bỏ qua hộp thoại — hộp thoại vẫn hiện mỗi cuộc, vì `web_tai`
+   * ghi ra ổ đĩa thật ngoài thư mục dự án và chỗ đó phải là một cú bấm của
+   * người dùng. Cái này chỉ để hộp thoại MỞ SẴN ở đúng nơi lần trước.
+   *
+   * 21/08/2026: hộp thoại mở ở `Downloads` mỗi lần, người dùng bấm nhầm vào
+   * một thư mục con, và `thu_muc` của model cộng dồn lên thành đường dẫn lồng
+   * năm tầng. Mở sẵn đúng chỗ là cách rẻ nhất để cái nhầm đó không xảy ra nữa.
+   */
+  'aiThuMucTaiCuoi',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 

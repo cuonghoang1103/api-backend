@@ -17,6 +17,8 @@
  */
 import { app, dialog } from 'electron';
 
+import { getSettings, setSetting } from '../store';
+
 import { execFile } from 'node:child_process';
 import type { Dirent } from 'node:fs';
 import fs from 'node:fs/promises';
@@ -1133,9 +1135,11 @@ const DUOI_CHAY_DUOC = /\.(exe|msi|bat|cmd|com|scr|ps1|vbs|jar|sh|command|app|dm
  */
 async function thuMucTaiCuaCuoc(so: SoCuoc): Promise<string | null> {
   if (so.thuMucTai) return so.thuMucTai;
+  /* Mở sẵn ở chỗ đã chọn lần trước. Vẫn HỎI — chỉ là hỏi ở đúng nơi. */
+  const lanTruoc = getSettings().aiThuMucTaiCuoi;
   const tuyChon = {
     title: 'Chọn thư mục để AI lưu file tải về',
-    defaultPath: app.getPath('downloads'),
+    defaultPath: typeof lanTruoc === 'string' && lanTruoc ? lanTruoc : app.getPath('downloads'),
     buttonLabel: 'Lưu vào đây',
     properties: ['openDirectory', 'createDirectory'] as Array<'openDirectory' | 'createDirectory'>,
   };
@@ -1146,6 +1150,7 @@ async function thuMucTaiCuaCuoc(so: SoCuoc): Promise<string | null> {
   const chon = kq.canceled ? undefined : kq.filePaths[0];
   if (!chon) return null;
   so.thuMucTai = chon;
+  setSetting('aiThuMucTaiCuoi', chon);
   return chon;
 }
 

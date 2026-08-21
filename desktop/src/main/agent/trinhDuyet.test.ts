@@ -405,3 +405,40 @@ describe('chống lồng thư mục khi tải', () => {
     expect(than, 'bỏ mất phép so lại với gốc').toContain('startsWith(gocGiai');
   });
 });
+
+
+describe('hộp thoại chọn thư mục tải', () => {
+  /*
+   * Hộp thoại VẪN phải hiện mỗi cuộc — `web_tai` ghi ra ổ đĩa thật, ngoài
+   * thư mục dự án, nên chỗ ghi phải là một cú bấm của người dùng chứ không
+   * phải chuỗi ký tự model tự nghĩ ra. Nhưng mở nó ở `Downloads` mỗi lần thì
+   * người dùng bấm nhầm vào thư mục con, và `thu_muc` cộng dồn thành đường
+   * dẫn lồng năm tầng. Đo thật 21/08/2026.
+   */
+  it('mở sẵn ở thư mục đã chọn lần trước', () => {
+    const i = nguon.indexOf('async function thuMucTaiCuaCuoc');
+    expect(i, 'không còn hàm thuMucTaiCuaCuoc').toBeGreaterThan(-1);
+    const than = nguon.slice(i, i + 1500);
+    expect(than, 'không đọc lại lựa chọn cũ').toContain('aiThuMucTaiCuoi');
+    expect(than, 'không dùng nó làm defaultPath').toMatch(/defaultPath:[\s\S]{0,80}lanTruoc/);
+  });
+
+  it('vẫn HỎI, không tự dùng lại', () => {
+    const i = nguon.indexOf('async function thuMucTaiCuaCuoc');
+    const than = nguon.slice(i, i + 1500);
+    expect(than, 'bỏ mất hộp thoại ⇒ mất luôn ranh giới cho phép')
+      .toContain('showOpenDialog');
+  });
+
+  it('ghi nhớ lựa chọn sau khi người dùng bấm', () => {
+    const i = nguon.indexOf('async function thuMucTaiCuaCuoc');
+    const than = nguon.slice(i, i + 1500);
+    expect(than, 'không lưu lại ⇒ lần sau lại mở ở Downloads')
+      .toContain("setSetting('aiThuMucTaiCuoi'");
+  });
+
+  it('khoá cài đặt được khai trong schema — thiếu là bị lọc bỏ ÂM THẦM', () => {
+    const ipc = readFileSync(join(goc, 'src/shared/ipc.ts'), 'utf8');
+    expect(ipc, 'settingKeySchema thiếu aiThuMucTaiCuoi').toContain("'aiThuMucTaiCuoi'");
+  });
+});

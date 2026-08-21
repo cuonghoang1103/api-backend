@@ -266,3 +266,71 @@ describe('cờ `ep` — url là MỆNH LỆNH hay MẶC ĐỊNH', () => {
     expect(j, '5/5 DesktopBridge chưa khai ep').toBeGreaterThan(-1);
   });
 });
+
+
+describe('đứt kết nối giữa lượt — phải THÀNH MÃ, không ném thô', () => {
+  /*
+   * 21/08/2026: giữa một lượt agent đang tải tài liệu, người dùng nhận đúng
+   * một chữ đỏ `terminated`. Đó là undici báo luồng SSE bị cắt — nhưng vì nó
+   * bay thẳng lên catch chung, nó vừa KHÔNG nói được gì cho người dùng, vừa
+   * KHÔNG có `ma` nên KHÔNG khớp `MA_DANG_THU_LAI` ⇒ không được thử lại, và
+   * cả lượt 20 bước chết vì một nhịp mạng.
+   *
+   * Backend dịch chuỗi này từ 17/08, nhưng chỉ cho chặng backend↔cổng.
+   */
+  const lp = readFileSync(join(goc, 'src/main/agent/loop.ts'), 'utf8');
+
+  it('bọc lời gọi lượt để bắt lỗi luồng', () => {
+    expect(lp, 'không còn hàm thật được bọc').toContain('mgoiMotLuotThat');
+  });
+
+  it('nhận diện `terminated` và trả mã CONNECTION_LOST', () => {
+    const i = lp.indexOf('return await mgoiMotLuotThat(o);');
+    expect(i, 'không thấy chỗ bọc').toBeGreaterThan(-1);
+    const than = lp.slice(i, i + 900);
+    expect(than, 'không nhận diện chuỗi undici').toContain('terminated');
+    expect(than, 'không trả mã đáng thử lại').toContain("ma: 'CONNECTION_LOST'");
+    expect(than, 'nuốt luôn cả lệnh Dừng của người dùng').toContain('o.signal.aborted');
+  });
+
+  it('CONNECTION_LOST nằm trong nhóm được thử lại', () => {
+    // Tìm chỗ KHAI BÁO, không phải chỗ dùng — `MA_DANG_THU_LAI.has(...)` xuất
+    // hiện trước trong file và slice từ đó thì không chứa danh sách.
+    const i = lp.indexOf('const MA_DANG_THU_LAI');
+    expect(i, 'không thấy khai báo MA_DANG_THU_LAI').toBeGreaterThan(-1);
+    expect(lp.slice(i, i + 400)).toContain("'CONNECTION_LOST'");
+  });
+});
+
+describe('tải file phục vụ dạng XEM TẠI CHỖ', () => {
+  /*
+   * FuOverflow trả PDF với Content-Type `application/pdf` dạng xem tại chỗ, nên
+   * Chromium đưa nó vào trình xem PDF dựng sẵn và `will-download` KHÔNG BAO GIỜ
+   * bắn. Màn hình hiện PDF đàng hoàng trong khi agent chỉ thấy "hết giờ chờ" —
+   * trông như lỗi vô lý.
+   */
+  const b = readFileSync(join(goc, 'src/main/browser.ts'), 'utf8');
+
+  it('có đường lùi bằng net.request', () => {
+    expect(b, 'không có đường lùi — PDF xem-tại-chỗ sẽ không bao giờ tải được')
+      .toContain('async function taiBangNet');
+    expect(b, 'đường lùi không dùng net.request').toMatch(/net\.request\(\{[\s\S]{0,120}session:/);
+  });
+
+  it('đường lùi vẫn mang cookie đăng nhập của khung', () => {
+    const i = b.indexOf('async function taiBangNet');
+    const than = b.slice(i, i + 1400);
+    expect(than, 'không dùng đúng phân vùng ⇒ tải về trang "vui lòng đăng nhập"')
+      .toContain('session.fromPartition(PHAN_VUNG)');
+    expect(than, 'không bật cookie phiên').toContain('useSessionCookies: true');
+  });
+
+  it('hết giờ chờ thì ĐI ĐƯỜNG LÙI, không trả lỗi luôn', () => {
+    const i = b.indexOf('gioBan = setTimeout');
+    expect(i, 'không thấy đồng hồ chờ will-download').toBeGreaterThan(-1);
+    const than = b.slice(i, i + 700);
+    expect(than, 'vẫn trả lỗi thẳng thay vì thử đường lùi').toContain('taiBangNet(');
+    expect(than, 'không gỡ khỏi hàng chờ ⇒ hai đường cùng ghi một file')
+      .toContain('choTaiHienTai = null');
+  });
+});

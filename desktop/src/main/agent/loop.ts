@@ -1109,6 +1109,51 @@ async function mgoiMotLuot(o: {
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
 }): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
+  /*
+   * ĐỨT KẾT NỐI PHẢI THÀNH MÃ, KHÔNG ĐƯỢC NÉM THÔ.
+   *
+   * `fetch` và `reader.read()` của undici ném `TypeError: terminated` khi luồng
+   * SSE bị cắt giữa chừng. Không bọc thì nó bay thẳng lên `catch` chung của
+   * `chayLuot` và thành hai cái sai cùng lúc:
+   *
+   *   • người dùng nhận đúng một chữ đỏ `terminated` — không nói được gì;
+   *   • và vì không có `ma`, nó KHÔNG khớp `MA_DANG_THU_LAI` nên KHÔNG được
+   *     thử lại — cả một lượt agent 20 bước chết vĩnh viễn vì một nhịp mạng.
+   *
+   * Backend đã dịch đúng chuỗi này từ 17/08 (`turn.ts` → `dutKetNoi`), nhưng
+   * đó chỉ là đứt ở chặng backend↔cổng. Chặng app↔backend thì chưa ai dịch.
+   * Gặp thật 21/08/2026 giữa một lượt tải tài liệu.
+   */
+  try {
+    return await mgoiMotLuotThat(o);
+  } catch (err) {
+    if (o.signal.aborted) throw err; // người dùng bấm Dừng — không phải lỗi mạng
+    const tin = (err as Error)?.message ?? '';
+    if (/terminated|aborted|ECONNRESET|socket hang up|fetch failed|ETIMEDOUT|network|EPIPE/i.test(tin)) {
+      return {
+        ok: false,
+        ma: 'CONNECTION_LOST',
+        thongDiep:
+          'Kết nối tới máy chủ đứt giữa chừng. Đang thử lại — phần đã làm vẫn còn trong hội thoại.',
+      };
+    }
+    throw err;
+  }
+}
+
+async function mgoiMotLuotThat(o: {
+  token: string;
+  messages: TinNhan[];
+  capabilities: string[];
+  workspace?: { name: string; platform: string; branch?: string };
+  ghiChuDuAn?: { ten: string; noiDung: string };
+  mucNoLuc?: string;
+  model?: string;
+  laPhu?: boolean;
+  toolMcp?: Array<{ name: string; description: string; parameters: Record<string, unknown> }>;
+  signal: AbortSignal;
+  phat: (e: SuKienAgent) => void;
+}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string }> {
   const res = await fetch(`${API_ORIGIN}/api/v1/agent/turn`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${o.token}` },

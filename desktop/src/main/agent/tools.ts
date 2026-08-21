@@ -1218,8 +1218,11 @@ async function toolWebTai(args: Record<string, unknown>, boiCanh: BoiCanhLenh): 
   if (!gocTai) {
     return {
       noiDung:
-        'NGƯỜI DÙNG ĐÃ BỎ hộp thoại chọn thư mục, nên chưa có chỗ nào để lưu. Đừng gọi lại ngay — '
-        + 'hãy hỏi họ muốn lưu vào đâu, hoặc họ có còn muốn tải nữa không.',
+        'Hộp thoại chọn thư mục bị bỏ qua, nên chưa có chỗ nào để lưu. '
+        + 'Nó là hộp thoại CỦA HỆ ĐIỀU HÀNH, gắn vào cửa sổ app — nếu người dùng đang nhìn cửa sổ khác '
+        + 'thì nó mở sau lưng và họ không thấy. '
+        + 'ĐỪNG hỏi họ gõ đường dẫn: thư mục CHỈ nhận được từ hộp thoại, không nhận từ chữ trong khung chat. '
+        + 'Hãy bảo họ đưa cửa sổ app lên trước rồi nói bạn thử lại, và gọi lại tool này khi họ đã sẵn sàng.',
       tomTat: 'chưa chọn thư mục',
     };
   }

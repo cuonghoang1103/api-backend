@@ -32,9 +32,9 @@
  * nó sẽ che mất trang mới và trông y như app hỏng. Vì thế mọi đường ra đều
  * phải gọi `an()`.
  */
-import { BrowserWindow, WebContentsView, session, shell } from 'electron';
+import { BrowserWindow, WebContentsView, net, session, shell } from 'electron';
 
-import { existsSync } from 'node:fs';
+import { existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const PHAN_VUNG = 'persist:browser-ngoai';
@@ -570,7 +570,7 @@ const HET_GIO_TAI_MS = 180_000;
  * thì trình duyệt điều hướng bình thường và không có sự kiện tải nào cả. Thiếu
  * hạn này thì lời hứa treo vĩnh viễn và cả lượt agent chết theo — im lặng.
  */
-const HET_GIO_BAN_MS = 20_000;
+const HET_GIO_BAN_MS = 8_000;
 
 interface ChoTai {
   url: string;
@@ -683,6 +683,54 @@ function ganBatTai(): void {
   });
 }
 
+/**
+ * ĐƯỜNG LÙI khi `will-download` KHÔNG BẮN.
+ *
+ * Gặp thật 21/08/2026 với file PDF của FuOverflow: máy chủ trả
+ * `Content-Type: application/pdf` dạng XEM TẠI CHỖ, nên Chromium đưa nó vào
+ * trình xem PDF dựng sẵn thay vì tải xuống — `session.downloadURL()` gọi xong
+ * mà không có sự kiện tải nào, và agent chỉ thấy "hết giờ chờ". Nhìn màn hình
+ * thì thấy PDF hiện ra đàng hoàng, nên nó trông như lỗi vô lý.
+ *
+ * `net.request` với `session` của chính khung ⇒ vẫn mang cookie đăng nhập,
+ * nhưng lấy thẳng byte về, không đi qua tầng quyết-định-hiển-thị của Chromium.
+ */
+async function taiBangNet(url: string, thuMuc: string, tenGoiY?: string): Promise<KetQuaTai> {
+  return await new Promise<KetQuaTai>((xong) => {
+    let daTraLoi = false;
+    const tra = (kq: KetQuaTai): void => { if (!daTraLoi) { daTraLoi = true; xong(kq); } };
+    const req = net.request({ url, session: session.fromPartition(PHAN_VUNG), useSessionCookies: true });
+    req.on('response', (res) => {
+      const ma = res.statusCode;
+      if (ma >= 400) { tra({ ok: false, loi: `máy chủ trả ${ma}` }); return; }
+      const cd = String(res.headers['content-disposition'] ?? '');
+      const khop = /filename\*?=(?:UTF-8'')?"?([^";]+)/i.exec(cd);
+      let ten = tenGoiY ?? '';
+      if (!ten && khop?.[1]) { try { ten = decodeURIComponent(khop[1]); } catch { ten = khop[1]; } }
+      if (!ten) ten = tenTuUrl(url);
+      const cuc: Buffer[] = [];
+      let tong = 0;
+      res.on('data', (c: Buffer) => {
+        tong += c.length;
+        if (tong > TRAN_BYTE_TAI) { req.abort(); tra({ ok: false, loi: 'vượt trần dung lượng' }); return; }
+        cuc.push(c);
+      });
+      res.on('end', () => {
+        try {
+          const dich = duongDanChuaCo(path.join(thuMuc, tenSach(ten)));
+          writeFileSync(dich, Buffer.concat(cuc));
+          tra({ ok: true, duongDan: dich, byte: tong });
+        } catch (e) {
+          tra({ ok: false, loi: `ghi đĩa hỏng: ${(e as Error).message}` });
+        }
+      });
+    });
+    req.on('error', (e) => tra({ ok: false, loi: e.message }));
+    setTimeout(() => tra({ ok: false, loi: 'đường lùi cũng hết giờ' }), HET_GIO_TAI_MS);
+    req.end();
+  });
+}
+
 export async function taiFile(url: string, thuMuc: string, tenGoiY?: string): Promise<KetQuaTai> {
   const wc = khung?.webContents;
   if (!wc) return { ok: false, loi: 'chưa mở trình duyệt — gọi `web_mo` trước' };
@@ -704,12 +752,19 @@ export async function taiFile(url: string, thuMuc: string, tenGoiY?: string): Pr
       if (choTaiHienTai?.xong === ketThuc) choTaiHienTai = null;
       traLoi(kq);
     };
-    gioBan = setTimeout(() => ketThuc({
-      ok: false,
-      loi:
-        'máy chủ không trả về file nào để tải (chờ 20 giây). Địa chỉ này nhiều khả năng là một '
-        + 'TRANG chứ không phải file: hãy `web_mo` nó rồi `web_lien_ket` để lấy đúng link tải.',
-    }), HET_GIO_BAN_MS);
+    gioBan = setTimeout(() => {
+      /* Gỡ khỏi hàng chờ TRƯỚC khi đi đường lùi: `will-download` đến muộn mà
+         vẫn còn chỗ trong hàng thì hai đường cùng ghi một file. */
+      if (choTaiHienTai?.xong === ketThuc) choTaiHienTai = null;
+      void taiBangNet(sach, thuMuc, tenGoiY).then((kq) => ketThuc(
+        kq.ok ? kq : {
+          ok: false,
+          loi:
+            `${kq.loi ?? 'không tải được'}. Địa chỉ này có thể là một TRANG chứ không phải file: `
+            + 'hãy `web_mo` nó rồi `web_lien_ket` để lấy đúng link tải.',
+        },
+      ));
+    }, HET_GIO_BAN_MS);
     choTaiHienTai = { url: sach, thuMuc, tenGoiY, xong: ketThuc };
     wc.session.downloadURL(sach);
   });

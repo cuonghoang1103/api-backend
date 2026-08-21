@@ -724,6 +724,23 @@ export async function checkTokenQuota(userId: number): Promise<boolean> {
   const explicit = raw !== undefined && raw !== '' ? Number(raw) : NaN;
   if (Number.isFinite(explicit) && explicit <= 0) return true;   // 0 = tắt trần, có chủ ý
 
+  // ── ADMIN KHÔNG BỊ TRẦN TOKEN (21/08/2026) ───────────────────────
+  //
+  // Trần này sinh ra để một người dùng thường không đốt hết tiền của web.
+  // Admin là chủ web, và họ là người phải THỬ tính năng mới — chặn họ là
+  // chặn đúng việc phát triển.
+  //
+  // Trước đó admin chỉ được xếp vào bậc Pro (1 triệu token/ngày) qua
+  // `isProEffective`, không phải vô hạn. Đo thật hôm nay: user 1 dùng
+  // 1.062.196 token / 219 lượt trong lúc thử phần luyện nói trên iOS rồi
+  // bị chặn giữa chừng.
+  //
+  // ⚠️ Bỏ trần TOKEN không có nghĩa là bỏ mọi chốt chặn: trần TIỀN theo
+  // ngày trong `src/services/llm/budget.ts` (mềm 15 $ / cứng 40 $) vẫn áp
+  // cho tất cả, kể cả admin. Đó mới là lưới đỡ thật khi có gì chạy loạn.
+  const { laAdmin } = await import('../../pro.service.js');
+  if (await laAdmin(userId).catch(() => false)) return true;
+
   let cap = Number.isFinite(explicit) ? explicit : DEFAULT_DAILY_TOKEN_CAP;
   if (!Number.isFinite(explicit)) {
     // Chỉ hỏi trạng thái Pro khi đang dùng mức mặc định — một biến env đặt tay

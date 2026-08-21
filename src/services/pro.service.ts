@@ -77,6 +77,20 @@ export async function isProEffective(userId?: number | null): Promise<boolean> {
   return proActive(u.isPro, u.proExpiresAt);
 }
 
+/**
+ * Người này có phải admin không.
+ *
+ * `isProEffective` cũng trả true cho admin, nhưng nó trộn hai câu hỏi khác
+ * nhau ("có quyền Pro không" và "có phải admin không") vào một hàm. Chỗ nào
+ * cần phân biệt rõ — như trần token — phải hỏi đúng câu.
+ */
+export async function laAdmin(userId?: number | null): Promise<boolean> {
+  if (!userId) return false;
+  const u = await loadUserPro(userId);
+  if (!u) return false;
+  return isAdminRoles(u.roles.map((r) => r.role.name));
+}
+
 /** Whether a given user id is effectively Pro — for public profile badges.
  *  (Same as isProEffective but named for the display use-case.) */
 export const isProForDisplay = isProEffective;

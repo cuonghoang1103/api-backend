@@ -492,6 +492,53 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
   {
+    name: 'web_lien_ket',
+    ring: 'client',
+    capability: 'browser',
+    description:
+      'Liệt kê MỌI liên kết trên trang đang mở, kèm địa chỉ thật (`href`) và chữ hiển thị. '
+      + 'ĐÂY LÀ BƯỚC BẮT BUỘC TRƯỚC `web_tai`: `web_doc` chỉ trả về CHỮ, mà chữ không mang theo địa chỉ — '
+      + 'tự dựng URL theo tên file là đoán, và đoán sai thì bạn tải về một trang báo lỗi mang tên `.pdf`. '
+      + 'Dùng "loc" để thu hẹp khi trang có hàng trăm liên kết (ví dụ loc="attachment" hoặc loc=".pdf").',
+    parameters: {
+      type: 'object',
+      properties: {
+        loc: {
+          type: 'string',
+          description: 'Chuỗi con để lọc, khớp trong địa chỉ HOẶC trong chữ. Bỏ trống = lấy hết.',
+        },
+      },
+    },
+  },
+  {
+    name: 'web_tai',
+    ring: 'client',
+    capability: 'browser',
+    description:
+      'TẢI một file về máy người dùng, đi qua ĐÚNG phiên đăng nhập của trang đang mở — nên tải được '
+      + 'cả tài liệu sau đăng nhập. Lần đầu trong cuộc, người dùng sẽ tự chọn thư mục lưu; những lần '
+      + 'sau rơi vào đúng thư mục đó, không hỏi lại. '
+      + 'LẤY ĐỊA CHỈ TỪ `web_lien_ket`, ĐỪNG TỰ NGHĨ RA. '
+      + 'Dùng "thu_muc" để xếp theo nhóm (ví dụ mỗi môn học một thư mục con). '
+      + 'Kết quả trả về đường dẫn thật và DUNG LƯỢNG — hãy nhìn dung lượng: một file tài liệu chỉ vài KB '
+      + 'thường là trang báo lỗi hoặc trang đăng nhập bị lưu nhầm, không phải tài liệu.',
+    parameters: {
+      type: 'object',
+      properties: {
+        url: { type: 'string', description: 'Địa chỉ file, lấy từ `web_lien_ket`.' },
+        thu_muc: {
+          type: 'string',
+          description: 'Thư mục con để xếp file vào, tương đối so với thư mục người dùng đã chọn. Ví dụ "PRF192".',
+        },
+        ten_file: {
+          type: 'string',
+          description: 'Đặt tên khác cho file. Bỏ trống thì lấy tên máy chủ trả về.',
+        },
+      },
+      required: ['url'],
+    },
+  },
+  {
     /**
      * Đọc một trang web.
      *

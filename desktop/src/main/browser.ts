@@ -32,7 +32,10 @@
  * nó sẽ che mất trang mới và trông y như app hỏng. Vì thế mọi đường ra đều
  * phải gọi `an()`.
  */
-import { BrowserWindow, WebContentsView, shell } from 'electron';
+import { BrowserWindow, WebContentsView, session, shell } from 'electron';
+
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 
 const PHAN_VUNG = 'persist:browser-ngoai';
 
@@ -464,6 +467,236 @@ export async function goChu(boChon: string, chu: string): Promise<{ ok: boolean;
     return 'ok'; })()`;
   const kq = await wc.executeJavaScript(ma, true) as string;
   return kq === 'ok' ? { ok: true } : { ok: false, loi: `không thấy ô nhập "${boChon}"` };
+}
+
+// ═══════════════════════════════════════════════════════════
+// LIỆT KÊ LIÊN KẾT
+// ═══════════════════════════════════════════════════════════
+
+export interface LienKet { href: string; chu: string }
+
+/**
+ * Mọi liên kết trên trang đang mở.
+ *
+ * ─── VÌ SAO KHÔNG ĐỂ AGENT TỰ ĐOÁN LINK TỪ `web_doc` ───
+ * `web_doc` trả về CHỮ, mà chữ thì không mang theo `href`. Một trang tài liệu
+ * có 40 file đính kèm hiện ra thành 40 dòng tên file — agent đọc xong vẫn
+ * không có địa chỉ nào để tải, nên nó sẽ dựng URL theo suy đoán. Suy đoán sai
+ * thì server trả về một trang HTML báo lỗi, `web_tai` lưu đúng trang đó thành
+ * một file `.pdf` hỏng, và không tầng nào kêu lên.
+ *
+ * Lấy thẳng `a.href` (thuộc tính DOM, đã được trình duyệt giải tuyệt đối) là
+ * cách duy nhất chắc chắn đúng.
+ */
+export async function lietKeLienKet(): Promise<LienKet[]> {
+  const wc = khung?.webContents;
+  if (!wc) return [];
+  /* ⚠️ `\\s` PHẢI nhân đôi. Đây là template literal của TypeScript, và trong
+     chuỗi thì `\\s` rụng mất dấu chéo — mã chạy trên trang sẽ nhận `/s+/g`,
+     tức là thay mọi chữ "s" bằng dấu cách. Build xanh, kiểu xanh, chỉ có chữ
+     hiển thị của link là sai. ESLint bắt được cái này (`no-useless-escape`). */
+  const ma = `(() => {
+    const ra = [];
+    for (const a of document.querySelectorAll('a[href]')) {
+      const h = a.href;
+      if (typeof h !== 'string' || !/^https?:/i.test(h)) continue;
+      const chu = (a.innerText || a.getAttribute('title') || a.getAttribute('aria-label') || '')
+        .replace(/\\s+/g, ' ').trim().slice(0, 140);
+      ra.push({ href: h, chu });
+    }
+    return ra;
+  })()`;
+  const tho = await wc.executeJavaScript(ma, true) as unknown;
+  if (!Array.isArray(tho)) return [];
+
+  // Gộp trùng: một trang forum hay lặp cùng một link ở đầu bài, cuối bài và
+  // trong khối "tệp đính kèm". Giữ bản có CHỮ dài hơn — nó mô tả rõ hơn.
+  const theoHref = new Map<string, LienKet>();
+  for (const m of tho as LienKet[]) {
+    if (!m || typeof m.href !== 'string') continue;
+    const cu = theoHref.get(m.href);
+    if (!cu || (m.chu?.length ?? 0) > cu.chu.length) {
+      theoHref.set(m.href, { href: m.href, chu: String(m.chu ?? '') });
+    }
+    if (theoHref.size >= 600) break;
+  }
+  return [...theoHref.values()];
+}
+
+// ═══════════════════════════════════════════════════════════
+// TẢI FILE — qua ĐÚNG phiên của trình duyệt trong app
+// ═══════════════════════════════════════════════════════════
+
+/**
+ * ─── VÌ SAO PHẢI LÀ `session.downloadURL`, KHÔNG PHẢI `fetch`/`curl` ───
+ * Cookie đăng nhập nằm trong phân vùng `persist:browser-ngoai` của view này.
+ * Một `fetch` ở main hay một `curl` qua `run_command` đi ra bằng phiên KHÁC,
+ * không có cookie đó — server trả về trang "vui lòng đăng nhập" với mã 200, và
+ * ta lưu nguyên trang ấy thành file. Hỏng CÂM: đúng tên, đúng đuôi, sai ruột.
+ * `downloadURL` trên chính session này thì mang theo cookie như người dùng tự
+ * bấm.
+ *
+ * ─── VÌ SAO PHẢI `setSavePath` ───
+ * Không đặt thì Electron bật hộp thoại lưu file của hệ điều hành. Agent không
+ * với tới hộp thoại đó, nên lượt sẽ treo tới lúc hết giờ, còn người dùng thì
+ * thấy một cửa sổ bật lên không rõ của ai.
+ */
+export interface KetQuaTai { ok: boolean; duongDan?: string; byte?: number; loi?: string }
+
+/** Trần một file. Đủ cho video bài giảng, chặn được việc tải nhầm cả ổ đĩa. */
+const TRAN_BYTE_TAI = 300 * 1024 * 1024;
+/** Hạn cho MỘT file đang chảy. Mạng trường học chậm, nên rộng tay. */
+const HET_GIO_TAI_MS = 180_000;
+/**
+ * Hạn chờ `will-download` BẮN.
+ *
+ * Đây là cái bẫy hay gặp nhất: đưa vào một URL là TRANG chứ không phải file
+ * thì trình duyệt điều hướng bình thường và không có sự kiện tải nào cả. Thiếu
+ * hạn này thì lời hứa treo vĩnh viễn và cả lượt agent chết theo — im lặng.
+ */
+const HET_GIO_BAN_MS = 20_000;
+
+interface ChoTai {
+  url: string;
+  thuMuc: string;
+  tenGoiY: string | undefined;
+  xong: (kq: KetQuaTai) => void;
+}
+
+let choTaiHienTai: ChoTai | null = null;
+let daGanBatTai = false;
+
+/**
+ * Tên file an toàn để ghi xuống đĩa.
+ *
+ * Nguồn của cái tên này là `Content-Disposition` của server hoặc `href` — tức
+ * là CHỮ CỦA NGƯỜI KHÁC. `../../.ssh/authorized_keys` là một tên file hợp lệ
+ * với server và là một thảm hoạ với ta, nên mọi dấu tách thư mục bị ĐỔI thành
+ * gạch ngang chứ không phải bị bỏ (bỏ thì `..%2f..` gộp lại vẫn thành `....`).
+ */
+export function tenSach(tho: string): string {
+  let t = String(tho ?? '')
+    // Ký tự điều khiển: chúng vô hình trong tên file và làm hỏng mọi thứ đọc nó sau này.
+    .replace(/[\u0000-\u001F\u007F]/g, '')
+    .replace(/[/\\]/g, '-')
+    .replace(/[<>:"|?*]/g, '-')
+    .replace(/^[.\s]+/, '')
+    .trim();
+  if (!t) t = 'tai-ve.bin';
+  if (t.length > 120) {
+    const duoi = path.extname(t).slice(0, 12);
+    t = t.slice(0, 120 - duoi.length) + duoi;
+  }
+  return t;
+}
+
+/** Tên rút từ URL khi server không nói tên. */
+function tenTuUrl(url: string): string {
+  try {
+    const cuoi = decodeURIComponent(new URL(url).pathname.split('/').filter(Boolean).pop() ?? '');
+    return cuoi || 'tai-ve.bin';
+  } catch {
+    return 'tai-ve.bin';
+  }
+}
+
+/**
+ * Đường dẫn chưa bị chiếm.
+ *
+ * KHÔNG ghi đè. Tải lại một file đã có thường là agent đang đi lặp vòng, và
+ * ghi đè thì bản tốt của người dùng biến mất không dấu vết.
+ */
+export function duongDanChuaCo(dich: string): string {
+  if (!existsSync(dich)) return dich;
+  const thuMuc = path.dirname(dich);
+  const duoi = path.extname(dich);
+  const than = path.basename(dich, duoi);
+  for (let i = 2; i < 500; i += 1) {
+    const thu = path.join(thuMuc, `${than} (${i})${duoi}`);
+    if (!existsSync(thu)) return thu;
+  }
+  return path.join(thuMuc, `${than}-${Date.now()}${duoi}`);
+}
+
+function ganBatTai(): void {
+  if (daGanBatTai) return;
+  daGanBatTai = true;
+  session.fromPartition(PHAN_VUNG).on('will-download', (_e, muc) => {
+    const cho = choTaiHienTai;
+    /* KHÔNG phải ta gọi ⇒ để nguyên hành vi mặc định (hộp thoại lưu của hệ
+       điều hành). Người dùng tự bấm nút tải trên trang là việc của họ; agent
+       không được lặng lẽ ghi hộ vào một thư mục họ không chọn. */
+    if (!cho) return;
+    choTaiHienTai = null;
+
+    const ten = tenSach(cho.tenGoiY || muc.getFilename() || tenTuUrl(muc.getURL()));
+    const dich = duongDanChuaCo(path.join(cho.thuMuc, ten));
+    muc.setSavePath(dich);
+
+    const tong = muc.getTotalBytes();
+    if (tong > TRAN_BYTE_TAI) {
+      muc.cancel();
+      cho.xong({
+        ok: false,
+        loi: `file ${(tong / 1048576).toFixed(1)}MB vượt trần ${TRAN_BYTE_TAI / 1048576}MB`,
+      });
+      return;
+    }
+
+    const gio = setTimeout(() => {
+      try { muc.cancel(); } catch { /* đã xong trước đó */ }
+    }, HET_GIO_TAI_MS);
+
+    /* Server không khai `Content-Length` thì `getTotalBytes()` là 0 và lớp
+       chặn ở trên vô hiệu — nên phải canh cả lúc đang chảy. */
+    muc.on('updated', () => {
+      if (muc.getReceivedBytes() > TRAN_BYTE_TAI) muc.cancel();
+    });
+
+    muc.once('done', (_ev, trangThai) => {
+      clearTimeout(gio);
+      if (trangThai === 'completed') {
+        cho.xong({ ok: true, duongDan: dich, byte: muc.getReceivedBytes() });
+      } else {
+        cho.xong({
+          ok: false,
+          loi: trangThai === 'cancelled' ? 'bị huỷ (vượt trần dung lượng hoặc quá lâu)' : 'tải gián đoạn',
+        });
+      }
+    });
+  });
+}
+
+export async function taiFile(url: string, thuMuc: string, tenGoiY?: string): Promise<KetQuaTai> {
+  const wc = khung?.webContents;
+  if (!wc) return { ok: false, loi: 'chưa mở trình duyệt — gọi `web_mo` trước' };
+  const sach = hopLe(url);
+  if (!sach) return { ok: false, loi: 'chỉ tải được địa chỉ http:// hoặc https://' };
+  /* Một file một lúc. `will-download` không nói được nó thuộc lời gọi nào, nên
+     hai lời gọi chồng nhau là hai kết quả tráo chỗ cho nhau — mà tráo xong thì
+     nhìn đâu cũng thấy "đã tải xong". */
+  if (choTaiHienTai) return { ok: false, loi: 'đang tải một file khác, chờ nó xong rồi gọi lại' };
+  ganBatTai();
+
+  return await new Promise<KetQuaTai>((traLoi) => {
+    let daXong = false;
+    let gioBan: NodeJS.Timeout | null = null;
+    const ketThuc = (kq: KetQuaTai): void => {
+      if (daXong) return;
+      daXong = true;
+      if (gioBan) clearTimeout(gioBan);
+      if (choTaiHienTai?.xong === ketThuc) choTaiHienTai = null;
+      traLoi(kq);
+    };
+    gioBan = setTimeout(() => ketThuc({
+      ok: false,
+      loi:
+        'máy chủ không trả về file nào để tải (chờ 20 giây). Địa chỉ này nhiều khả năng là một '
+        + 'TRANG chứ không phải file: hãy `web_mo` nó rồi `web_lien_ket` để lấy đúng link tải.',
+    }), HET_GIO_BAN_MS);
+    choTaiHienTai = { url: sach, thuMuc, tenGoiY, xong: ketThuc };
+    wc.session.downloadURL(sach);
+  });
 }
 
 export function huy(): void {

@@ -15,7 +15,7 @@
  * Và mỗi khi cắt thì PHẢI ghi rõ còn bao nhiêu. Model không biết mình đang đọc
  * nửa file sẽ kết luận chắc nịch trên nửa file đó.
  */
-import { BrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog } from 'electron';
 
 import { execFile } from 'node:child_process';
 import type { Dirent } from 'node:fs';
@@ -255,6 +255,7 @@ export async function chayToolAgent(
       case 'web_doc': return await toolWebDoc();
       case 'web_anh': return await toolWebAnh();
       case 'web_console': return await toolWebConsole();
+      case 'web_lien_ket': return await toolWebLienKet(args);
 
       // Bấm / gõ: ĐỔI trạng thái trang, và trang đang chạy bằng phiên đăng
       // nhập THẬT của người dùng. Một cú bấm nhầm vào nút xoá thì không có
@@ -263,6 +264,13 @@ export async function chayToolAgent(
       case 'web_go': {
         if (!lenh) return { noiDung: 'LỖI: phiên này chưa bật quyền trình duyệt.', tomTat: 'không có quyền' };
         return await toolWebTacDong(ten, args, lenh);
+      }
+
+      // Tải file: GHI RA ĐĨA THẬT, ngoài thư mục dự án. Ranh giới cho phép là
+      // thư mục người dùng tự chọn ở lần tải đầu (xem `thuMucTaiCuaCuoc`).
+      case 'web_tai': {
+        if (!lenh) return { noiDung: 'LỖI: phiên này chưa bật quyền trình duyệt.', tomTat: 'không có quyền' };
+        return await toolWebTai(args, lenh);
       }
 
       default:
@@ -1100,6 +1108,165 @@ async function toolWebTacDong(
   if (!kq.ok) return { noiDung: `LỖI: ${kq.loi}`, tomTat: 'không thấy phần tử' };
   await trinhDuyet.choTai(4000);
   return { noiDung: `${moTa} — xong.`, tomTat: 'xong' };
+}
+
+/**
+ * Đuôi file CHẠY ĐƯỢC.
+ *
+ * Tải về là một bước vô hại; mở ra là bước sau, và ở bước sau thì KHÔNG CÒN AI
+ * HỎI nữa. Mà URL để tải thường đến từ chữ trên một trang web — tức là chữ của
+ * người lạ. Nên nhóm đuôi này bị tách ra hỏi riêng, dù thư mục đã được duyệt.
+ */
+const DUOI_CHAY_DUOC = /\.(exe|msi|bat|cmd|com|scr|ps1|vbs|jar|sh|command|app|dmg|pkg|deb|rpm|apk)$/i;
+
+/**
+ * Thư mục tải của cuộc này — hỏi người dùng đúng MỘT lần.
+ *
+ * ⚠️ `web_tai` ghi ra ổ đĩa thật, NGOÀI thư mục dự án, nên `jail.ts` không đỡ
+ * được gì ở đây. Ranh giới thay thế là hộp thoại này: người dùng tự trỏ vào
+ * một thư mục, và mọi file của cuộc chỉ rơi vào trong đó.
+ *
+ * Hỏi một lần chứ không hỏi từng file: 200 file là 200 thẻ duyệt, và tới thẻ
+ * thứ mười thì người ta bấm Cho phép mà không đọc — lúc đó cái duyệt còn tệ
+ * hơn không có, vì nó tạo cảm giác đã kiểm soát.
+ */
+async function thuMucTaiCuaCuoc(so: SoCuoc): Promise<string | null> {
+  if (so.thuMucTai) return so.thuMucTai;
+  const tuyChon = {
+    title: 'Chọn thư mục để AI lưu file tải về',
+    defaultPath: app.getPath('downloads'),
+    buttonLabel: 'Lưu vào đây',
+    properties: ['openDirectory', 'createDirectory'] as Array<'openDirectory' | 'createDirectory'>,
+  };
+  const cuaSo = BrowserWindow.getAllWindows().find((w) => w.isResizable());
+  const kq = cuaSo
+    ? await dialog.showOpenDialog(cuaSo, tuyChon)
+    : await dialog.showOpenDialog(tuyChon);
+  const chon = kq.canceled ? undefined : kq.filePaths[0];
+  if (!chon) return null;
+  so.thuMucTai = chon;
+  return chon;
+}
+
+/**
+ * Thư mục con hợp lệ bên trong thư mục tải, hoặc `null`.
+ *
+ * Tên thư mục do MODEL đặt, mà model đặt tên theo chữ nó đọc trên trang web.
+ * `../..` hay một đường dẫn tuyệt đối lọt qua đây là agent ghi được ra bất kỳ
+ * đâu trên máy — nên kiểm hai lớp: chặn `..` theo từng đoạn, rồi so lại đường
+ * dẫn đã giải xem có còn nằm trong gốc không.
+ */
+function duongDanCon(goc: string, con: string): string | null {
+  const doan = con.split(/[/\\]/).map((d) => d.trim()).filter((d) => d && d !== '.');
+  if (!doan.length || doan.some((d) => d === '..')) return null;
+  const dich = path.resolve(goc, ...doan.map((d) => trinhDuyet.tenSach(d)));
+  const gocGiai = path.resolve(goc);
+  return dich === gocGiai || dich.startsWith(gocGiai + path.sep) ? dich : null;
+}
+
+async function toolWebLienKet(args: Record<string, unknown>): Promise<KetQuaTool> {
+  if (!trinhDuyet.dangMo()) return { noiDung: 'LỖI: chưa mở trang nào. Gọi web_mo trước.', tomTat: 'chưa mở' };
+  const ds = await trinhDuyet.lietKeLienKet();
+  if (!ds.length) {
+    return {
+      noiDung:
+        'Trang này không có liên kết nào đọc được. Có thể nội dung chưa tải xong, hoặc nó nằm sau '
+        + 'một nút phải bấm — thử `web_anh` để nhìn, hoặc `web_console` xem trang có lỗi không.',
+      tomTat: 'không có liên kết',
+    };
+  }
+
+  const loc = typeof args.loc === 'string' ? args.loc.trim().toLowerCase() : '';
+  const hop = loc
+    ? ds.filter((m) => m.href.toLowerCase().includes(loc) || m.chu.toLowerCase().includes(loc))
+    : ds;
+  if (!hop.length) {
+    return {
+      noiDung: `Không liên kết nào khớp "${loc}". Trang có ${ds.length} liên kết — gọi lại không kèm "loc" để xem hết.`,
+      tomTat: '0 khớp',
+    };
+  }
+
+  /* Trần 120: kết quả tool chở theo trong MỌI lượt sau đó. Và khi cắt thì phải
+     NÓI là đã cắt — model không biết mình đang nhìn một phần sẽ kết luận chắc
+     nịch rằng trang chỉ có 120 file. */
+  const TRAN = 120;
+  const hien = hop.slice(0, TRAN);
+  const dong = hien.map((m, i) => `${i + 1}. ${m.chu || '(link không có chữ)'}\n   ${m.href}`).join('\n');
+  const conLai = hop.length - hien.length;
+  const duoi = conLai > 0
+    ? `\n\n… CÒN ${conLai} LIÊN KẾT NỮA chưa liệt kê. Thu hẹp bằng tham số "loc" để thấy phần còn lại.`
+    : '';
+  return {
+    noiDung: `${hop.length} liên kết trên ${trinhDuyet.urlHienTai()}${loc ? ` (lọc "${loc}")` : ''}:\n\n${dong}${duoi}`,
+    tomTat: `${hop.length} liên kết`,
+  };
+}
+
+async function toolWebTai(args: Record<string, unknown>, boiCanh: BoiCanhLenh): Promise<KetQuaTool> {
+  if (!trinhDuyet.dangMo()) {
+    return {
+      noiDung: 'LỖI: chưa mở trang nào. Gọi `web_mo` trước — file tải bằng ĐÚNG phiên đăng nhập của trang đó.',
+      tomTat: 'chưa mở',
+    };
+  }
+  const url = typeof args.url === 'string' ? args.url.trim() : '';
+  if (!url) return { noiDung: 'LỖI: thiếu "url".', tomTat: 'thiếu url' };
+
+  const gocTai = await thuMucTaiCuaCuoc(boiCanh.so);
+  if (!gocTai) {
+    return {
+      noiDung:
+        'NGƯỜI DÙNG ĐÃ BỎ hộp thoại chọn thư mục, nên chưa có chỗ nào để lưu. Đừng gọi lại ngay — '
+        + 'hãy hỏi họ muốn lưu vào đâu, hoặc họ có còn muốn tải nữa không.',
+      tomTat: 'chưa chọn thư mục',
+    };
+  }
+
+  const con = typeof args.thu_muc === 'string' ? args.thu_muc.trim() : '';
+  const thuMucDich = con ? duongDanCon(gocTai, con) : gocTai;
+  if (!thuMucDich) {
+    return {
+      noiDung: `LỖI: "${con}" không phải thư mục con hợp lệ. Chỉ nhận đường dẫn tương đối, không có "..".`,
+      tomTat: 'thư mục sai',
+    };
+  }
+  await fs.mkdir(thuMucDich, { recursive: true });
+
+  const tenGoiY = typeof args.ten_file === 'string' && args.ten_file.trim() ? args.ten_file.trim() : undefined;
+
+  /* Đuôi chạy được ⇒ hỏi riêng, kể cả khi thư mục đã duyệt. */
+  const doanKiem = (tenGoiY ?? url.split('?')[0] ?? '').trim();
+  if (DUOI_CHAY_DUOC.test(doanKiem)) {
+    const moTa = `Tải FILE CHẠY ĐƯỢC ${doanKiem} về ${thuMucDich}`;
+    const quyet = await hoiNguoiDung(
+      { ten: 'web_tai', duongDan: moTa, khoa: `web_tai:${url}`, choNho: false },
+      (y) => boiCanh.xinPhepLenh({
+        ...y,
+        phanLoai: { muc: 'nguyhiem', lyDo: ['file chạy được, tải từ một địa chỉ trên trang web'], choNho: false },
+      }),
+      boiCanh.signal,
+      boiCanh.so.quyenDaCap,
+    );
+    if (quyet === 'tuChoi') {
+      return {
+        noiDung: `NGƯỜI DÙNG TỪ CHỐI tải ${doanKiem}. Đừng thử lại bằng đường khác.`,
+        tomTat: 'bị từ chối',
+      };
+    }
+  }
+
+  const kq = await trinhDuyet.taiFile(url, thuMucDich, tenGoiY);
+  if (!kq.ok) return { noiDung: `LỖI tải ${url}: ${kq.loi}`, tomTat: 'tải hỏng' };
+
+  const byte = kq.byte ?? 0;
+  const co = byte >= 1048576 ? `${(byte / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(byte / 1024))} KB`;
+  /* Báo cỡ THẬT, không chỉ "đã tải xong": một trang HTML báo lỗi lưu thành
+     `.pdf` cũng "xong", và nó thường chỉ vài KB. Con số là thứ để nhận ra. */
+  return {
+    noiDung: `Đã lưu ${kq.duongDan} (${co}).`,
+    tomTat: `${trinhDuyet.tenSach(path.basename(kq.duongDan ?? ''))} · ${co}`,
+  };
 }
 
 async function toolWebAnh(): Promise<KetQuaTool> {

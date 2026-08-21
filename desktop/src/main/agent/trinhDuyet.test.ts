@@ -374,3 +374,34 @@ describe('đồng hồ chờ không được biến thành hạn TẢI XONG', ()
     expect(than, 'không đặt lại null ⇒ có thể huỷ nhầm lần sau').toContain('gioBan = null');
   });
 });
+
+
+describe('chống lồng thư mục khi tải', () => {
+  /*
+   * Model đặt `thu_muc` theo cây nó hình dung; GỐC tải thì do người dùng bấm
+   * chọn — mà hộp thoại macOS nhớ chỗ mở lần trước. Cộng lại ra:
+   *   Kì 3/DBI202/DBI202 - PE - FA25 - 2/Kì 3/DBI202/6319 - SP26 - RE/q1.jpg
+   * Đo thật 21/08/2026. Không ai báo lỗi — file về đủ, đúng tên, chỉ nằm sai chỗ.
+   */
+  it('bỏ đoạn đầu đã có sẵn trong đường dẫn gốc', () => {
+    const i = nguon.indexOf('function duongDanCon');
+    expect(i).toBeGreaterThan(-1);
+    const than = nguon.slice(i, nguon.indexOf('\n}', i));
+    expect(than, 'không có bộ tên của gốc để đối chiếu').toContain('gocGiai.split(path.sep)');
+    expect(than, 'không bỏ đoạn đầu trùng ⇒ vẫn lồng').toContain('tenGoc.has(');
+  });
+
+  it('vẫn GIỮ đoạn cuối — không được bỏ sạch thành ghi thẳng vào gốc', () => {
+    const i = nguon.indexOf('function duongDanCon');
+    const than = nguon.slice(i, nguon.indexOf('\n}', i));
+    expect(than, 'thiếu chặn `doan.length - 1` ⇒ thư mục con biến mất')
+      .toContain('doan.length - 1');
+  });
+
+  it('vẫn chặn leo ra ngoài gốc', () => {
+    const i = nguon.indexOf('function duongDanCon');
+    const than = nguon.slice(i, nguon.indexOf('\n}', i));
+    expect(than, "bỏ mất chặn '..'").toContain("=== '..'");
+    expect(than, 'bỏ mất phép so lại với gốc').toContain('startsWith(gocGiai');
+  });
+});

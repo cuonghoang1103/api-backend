@@ -1160,8 +1160,31 @@ async function thuMucTaiCuaCuoc(so: SoCuoc): Promise<string | null> {
 function duongDanCon(goc: string, con: string): string | null {
   const doan = con.split(/[/\\]/).map((d) => d.trim()).filter((d) => d && d !== '.');
   if (!doan.length || doan.some((d) => d === '..')) return null;
-  const dich = path.resolve(goc, ...doan.map((d) => trinhDuyet.tenSach(d)));
   const gocGiai = path.resolve(goc);
+
+  /*
+   * CHỐNG LỒNG THƯ MỤC.
+   *
+   * Model đặt `thu_muc` theo cây nó hình dung ("Kì 3/DBI202/<bài>"), nhưng GỐC
+   * tải thì do người dùng bấm chọn trong hộp thoại — mà hộp thoại của macOS
+   * NHỚ CHỖ MỞ LẦN TRƯỚC. Cuộc thứ hai họ bấm chọn khi nó đang đứng sẵn trong
+   * một thư mục con, và hai thứ cộng lại thành:
+   *
+   *   Kì 3/DBI202/DBI202 - PE - FA25 - 2/Kì 3/DBI202/6319 - SP26 - RE/q1.jpg
+   *
+   * Đo thật 21/08/2026. Không ai báo lỗi: file về đủ, đúng tên, mở được — chỉ
+   * nằm sai chỗ, và người dùng chỉ phát hiện khi đi tìm.
+   *
+   * Luật: bỏ các đoạn ĐẦU của `thu_muc` nếu tên đó ĐÃ có sẵn trong đường dẫn
+   * gốc. Một thư mục tên "DBI202" nằm bên trong một đường dẫn vốn đã chứa
+   * "DBI202" gần như luôn là lồng ngoài ý muốn.
+   */
+  const tenGoc = new Set(gocGiai.split(path.sep).filter(Boolean));
+  let batDau = 0;
+  while (batDau < doan.length - 1 && tenGoc.has(doan[batDau] as string)) batDau += 1;
+  const conLai = doan.slice(batDau);
+
+  const dich = path.resolve(gocGiai, ...conLai.map((d) => trinhDuyet.tenSach(d)));
   return dich === gocGiai || dich.startsWith(gocGiai + path.sep) ? dich : null;
 }
 

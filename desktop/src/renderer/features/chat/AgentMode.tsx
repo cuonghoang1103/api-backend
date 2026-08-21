@@ -17,6 +17,12 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  Keyboard,
+  MousePointerClick,
+  Bug,
+  Camera,
+  Download,
+  Link2,
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
   Sparkles, SquareTerminal, Terminal, Undo2, X, ChevronDown, Cpu, Globe, Zap,
@@ -683,7 +689,9 @@ export function AgentMode({
             <div key={i} className="ct-agent-tool" data-vong={m.vong} data-ten={m.ten}>
               <IconTool ten={m.ten} vong={m.vong} />
               <code>{m.ten}</code>
-              <span className="ct-agent-tool-tomtat">{m.tomTat}</span>
+              {/* `title`: cột hẹp lại khi mở khung trình duyệt nên tóm tắt hay bị
+                  cắt cụt — rê chuột đọc được nguyên văn là đủ, không cần nới cột. */}
+              <span className="ct-agent-tool-tomtat" title={m.tomTat}>{m.tomTat}</span>
             </div>
           );
         })}
@@ -1323,8 +1331,25 @@ function IconTool({ ten, vong }: { ten: string; vong: 'may' | 'notes' }) {
     case 'edit_file': return <FilePen {...p} />;
     case 'create_file': return <FilePlus2 {...p} />;
     case 'run_command': return <SquareTerminal {...p} />;
+    case 'chay_lenh_nen':
+    case 'doc_dau_ra_nen':
+    case 'dung_lenh_nen': return <SquareTerminal {...p} />;
     case 'git_status':
-    case 'git_diff': return <GitBranch {...p} />;
+    case 'git_diff':
+    case 'git_commit':
+    case 'tao_pr': return <GitBranch {...p} />;
+    /* Nhóm trình duyệt: trước đây rơi hết vào icon `Terminal` chung, nên bảy
+       dòng web trông y hệt bảy dòng chạy lệnh. Mỗi việc một hình thì đọc lướt
+       một cột icon là biết agent đang làm gì. */
+    case 'web_mo':
+    case 'doc_web': return <Globe {...p} />;
+    case 'web_doc': return <FileCode2 {...p} />;
+    case 'web_lien_ket': return <Link2 {...p} />;
+    case 'web_tai': return <Download {...p} />;
+    case 'web_anh': return <Camera {...p} />;
+    case 'web_console': return <Bug {...p} />;
+    case 'web_bam': return <MousePointerClick {...p} />;
+    case 'web_go': return <Keyboard {...p} />;
     default: return ten.endsWith('.md') ? <BookOpen {...p} /> : <Terminal {...p} />;
   }
 }

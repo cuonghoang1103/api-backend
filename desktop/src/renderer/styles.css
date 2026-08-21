@@ -8303,3 +8303,116 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-goi-xanh { background: #059669; color: #fff; }
 .ct-goi-mo   { width: 54px; height: 54px; background: var(--ct-hover); color: var(--ct-text); }
 .ct-goi-tat  { width: 54px; height: 54px; background: var(--ct-text); color: var(--ct-bg); }
+
+/* ═══════════════════════════════════════════════════════════════
+   BẢNG GHI AGENT — đọc lướt được thay vì bảy dòng xám giống nhau
+   ═══════════════════════════════════════════════════════════════
+
+   Người dùng ngồi nhìn màn hình này hàng giờ khi agent chạy việc dài, và bản
+   trước mọi dòng tool đều cùng một màu xám, cùng một icon `Terminal`, tóm tắt
+   thì cắt cụt. Nhìn vào không biết agent đang ĐỌC, đang GHI, hay đang ra
+   MẠNG — mà ba việc đó khác nhau hoàn toàn về hậu quả.
+
+   Ba thay đổi, không thêm chữ nào lên màn hình:
+     1. MÀU theo NHÓM VIỆC (đọc/ghi/chạy/mạng/git) — nhận ra bằng ngoại vi mắt.
+     2. Tên tool có bề rộng tối thiểu ⇒ tóm tắt xếp thành MỘT CỘT thẳng.
+     3. Đầu ra lệnh thành khối terminal thật, tối, để nó tách hẳn khỏi lời văn. */
+
+:root {
+  --ct-tool-doc: #0e7490;   /* đọc, tra cứu — cyan */
+  --ct-tool-ghi: #b45309;   /* ghi file — hổ phách */
+  --ct-tool-chay: #15803d;  /* chạy lệnh — lục */
+  --ct-tool-web: #7c3aed;   /* ra mạng — tím */
+  --ct-tool-git: #be123c;   /* git — đỏ hồng */
+}
+
+:root[data-ct-theme='dark'] {
+  /* Đo bằng ảnh chụp thật: bậc 300 của cyan/tím (#67e8f9, #c4b5fd) ở cỡ 12px
+     trên nền tối đọc ra TRẮNG XÁM — tức là mất sạch tác dụng phân biệt nhóm.
+     Xuống bậc 400 thì nhận ra ngay bằng ngoại vi mắt mà vẫn không chói. */
+  --ct-tool-doc: #22d3ee;
+  --ct-tool-ghi: #fbbf24;
+  --ct-tool-chay: #4ade80;
+  --ct-tool-web: #a78bfa;
+  --ct-tool-git: #fb7185;
+}
+
+.ct-agent-tool[data-ten='list_dir'] > svg,
+.ct-agent-tool[data-ten='glob'] > svg,
+.ct-agent-tool[data-ten='grep'] > svg,
+.ct-agent-tool[data-ten='read_file'] > svg { color: var(--ct-tool-doc); }
+
+.ct-agent-tool[data-ten='edit_file'] > svg,
+.ct-agent-tool[data-ten='create_file'] > svg { color: var(--ct-tool-ghi); }
+
+.ct-agent-tool[data-ten='run_command'] > svg,
+.ct-agent-tool[data-ten='chay_lenh_nen'] > svg,
+.ct-agent-tool[data-ten='doc_dau_ra_nen'] > svg,
+.ct-agent-tool[data-ten='dung_lenh_nen'] > svg { color: var(--ct-tool-chay); }
+
+.ct-agent-tool[data-ten^='web_'] > svg,
+.ct-agent-tool[data-ten='doc_web'] > svg { color: var(--ct-tool-web); }
+
+.ct-agent-tool[data-ten^='git_'] > svg,
+.ct-agent-tool[data-ten='tao_pr'] > svg { color: var(--ct-tool-git); }
+
+/* Tên tool: bề rộng tối thiểu để mọi TÓM TẮT bắt đầu ở cùng một cột. Đây là
+   thứ biến một chuỗi dòng lộn xộn thành một bảng đọc lướt được. Không đặt
+   `max-width` — tên dài hơn thì cứ đẩy cột ra, thà lệch còn hơn cắt tên. */
+.ct-agent-tool > code {
+  min-width: 13ch;   /* `web_lien_ket` đúng 12 ký tự — 12ch là vừa khít, hụt một nhịp */
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Tóm tắt: chữ đơn cách + số bảng ⇒ dung lượng, số dòng, số kết quả thẳng cột
+   và so sánh được bằng mắt mà không phải đọc từng chữ. */
+.ct-agent-tool-tomtat {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Đầu ra lệnh: khối terminal THẬT ──
+   Giữ nền tối ở CẢ HAI chủ đề. Đây là chữ do một tiến trình trên máy in ra,
+   không phải lời của agent — nền tối là dấu hiệu rẻ nhất nói lên điều đó, và
+   nó cũng đúng thứ người dùng đã quen nhìn trong iTerm.
+   Vạch lục bên trái vẽ bằng `inset box-shadow` chứ không phải `border-left`:
+   border làm lệch mọi thứ bên trong đi 2px so với các khối khác. */
+.ct-lenh-ra {
+  padding: 10px 13px;
+  border: 1px solid #1f2430;
+  border-left: 0;
+  border-radius: var(--ct-radius-sm);
+  background: #0b0e14;
+  color: #c9d1d9;
+  box-shadow: inset 2px 0 0 var(--ct-tool-chay);
+  font-size: 12px;
+  line-height: 1.55;
+  tab-size: 4;
+}
+
+/* Thanh cuộn của khối tối phải tối theo, không thì hiện ra một vệt sáng ở mép
+   mỗi lần đầu ra dài hơn 260px. */
+.ct-lenh-ra::-webkit-scrollbar { width: 9px; height: 9px; }
+.ct-lenh-ra::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: #2b3242;
+  background-clip: content-box;
+}
+.ct-lenh-ra::-webkit-scrollbar-thumb:hover { background: #3a4356; background-clip: content-box; }
+
+/* ── Khối mã trong câu trả lời: nhãn ngôn ngữ đọc được ──
+   Trước đây nhãn cùng màu với chữ mờ nên "MÃ" trông như rác. Cho nó chữ đơn
+   cách + màu nhóm-đọc thì nó thành thông tin: bạn biết ngay đó là bash hay ts. */
+.ct-md-ma-ngon {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ct-tool-doc);
+}

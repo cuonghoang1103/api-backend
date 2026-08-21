@@ -120,10 +120,110 @@ async function pushNotification(args: {
       // the avatar + name without an extra /users/:id round-trip.
       sender: row.sender,
     });
+    // ─── Đẩy ra ngoài app (2026-08-21) ────────────────────────
+    //
+    // Trước bản này `guiThongBao` CHỈ được gọi từ `messages.service.ts`, nên
+    // app chỉ báo tin nhắn. Bình luận, cảm xúc, lời mời kết bạn… chỉ tạo hàng
+    // trong bảng + bắn socket — người dùng không mở app thì không biết gì.
+    //
+    // Cắm ở ĐÂY chứ không ở từng chỗ gọi: cả 16 loại đều đi qua hàm này, nên
+    // một chỗ sửa là đủ, và loại thứ 17 thêm sau tự có đẩy mà không phải nhớ.
+    //
+    // KHÔNG `await`: đẩy hỏng, chậm, hay APNs sập đều không được phép làm hỏng
+    // việc người dùng vừa bấm — cùng lối với `dayThongBaoTinMoi`.
+    void dayRaNgoaiApp(row);
   } catch (err) {
     // Never let a notification failure break the user-visible
     // action (like / comment / etc.). Just log and move on.
     logger.warn('pushNotification failed', { error: (err as Error).message });
+  }
+}
+
+/** Tên hiển thị của người gây ra thông báo. */
+function tenNguoiGui(s: { displayName?: string | null; fullName?: string | null; username?: string | null } | null): string {
+  return s?.displayName?.trim() || s?.fullName?.trim() || s?.username?.trim() || 'Ai đó';
+}
+
+/**
+ * Câu chữ trên thông báo đẩy — chép ĐÚNG bộ chữ của web
+ * (`frontend/src/app/notifications/page.tsx`) để hai nơi nói giống nhau.
+ * Lệch chữ giữa web và app là thứ người dùng nhận ra ngay.
+ */
+function chuThongBao(type: string, ten: string, payload: unknown): string {
+  const p = (payload ?? {}) as Record<string, unknown>;
+  switch (type) {
+    case 'NEW_REACTION': {
+      const t = String(p.reactionType ?? '');
+      const dong = t === 'LOVE' ? 'đã thả ❤️ vào'
+        : t === 'HAHA' ? 'đã thả 😆 vào'
+        : t === 'SAD' ? 'đã thả 😢 vào'
+        : t === 'ANGRY' ? 'đã thả 😡 vào'
+        : t === 'WOW' ? 'đã thả 😮 vào'
+        : t === 'CARE' ? 'đã thả 🥰 vào'
+        : 'đã thích';
+      return `${ten} ${dong} bài viết của bạn`;
+    }
+    case 'NEW_COMMENT': return `${ten} đã bình luận về bài viết của bạn`;
+    case 'NEW_REPLY': return `${ten} đã trả lời bình luận của bạn`;
+    case 'NEW_MENTION': return `${ten} đã nhắc đến bạn trong một bình luận`;
+    case 'FRIEND_REQUEST': return `${ten} đã gửi cho bạn lời mời kết bạn`;
+    case 'FRIEND_ACCEPT': return `${ten} đã chấp nhận lời mời kết bạn`;
+    case 'NEW_FOLLOW': return `${ten} đã bắt đầu theo dõi bạn`;
+    case 'NOTE_SHARE': return `${ten} đã chia sẻ một ghi chú với bạn`;
+    case 'NOTE_COMMENT': return `${ten} đã bình luận trên ghi chú của bạn`;
+    case 'NOTE_REPLY': return `${ten} đã trả lời thảo luận trong ghi chú`;
+    case 'NOTE_MENTION': return `${ten} đã nhắc đến bạn trong một ghi chú`;
+    case 'HUB_SHARE': return `${ten} đã chia sẻ một thư mục tài liệu với bạn`;
+    case 'ADMIN_ANNOUNCEMENT': return String(p.title ?? 'Thông báo mới từ Admin');
+    case 'NEW_POST':
+    default: return `${ten} đã đăng bài viết mới`;
+  }
+}
+
+/**
+ * Gửi thông báo đẩy cho một hàng vừa tạo.
+ *
+ * Huy hiệu = tin chưa đọc + thông báo chưa đọc, khớp cách app tự tính
+ * (`AppState.dongBoHuyHieu`). Sai lệch ở đây là biểu tượng app nhảy số lung
+ * tung mỗi lần có đẩy.
+ */
+async function dayRaNgoaiApp(row: {
+  id: number; type: string; receiverId: number; entityId: number | null;
+  payload: unknown;
+  sender: { displayName?: string | null; fullName?: string | null; username?: string | null } | null;
+}): Promise<void> {
+  try {
+    const { guiThongBao, apnsSanSang } = await import('./push/apns.js');
+    if (!apnsSanSang()) return;
+
+    const ten = tenNguoiGui(row.sender);
+    const [soTin, soTb] = await Promise.all([
+      // `messagesService` là bản dựng sẵn được xuất ra ở cuối file đó —
+      // không có `default`, nên gọi thẳng tên.
+      import('./messages.service.js')
+        .then((m) => m.messagesService.getUnreadCount(row.receiverId))
+        .catch(() => 0),
+      prisma.socialNotification.count({ where: { receiverId: row.receiverId, isRead: false } }),
+    ]);
+
+    await guiThongBao(row.receiverId, {
+      tieuDe: row.type === 'ADMIN_ANNOUNCEMENT' ? 'Thông báo từ Admin' : ten,
+      than: chuThongBao(row.type, ten, row.payload),
+      huyHieu: (typeof soTin === 'number' ? soTin : 0) + soTb,
+      // Gom theo LOẠI để iOS xếp chồng thông báo cùng nhóm, thay vì rải ra
+      // 20 dòng riêng khi ai đó thả cảm xúc hàng loạt.
+      nhom: `xh-${row.type}`,
+      // `loai` khác `tin-nhan` để app biết đây là thông báo mạng xã hội và
+      // định tuyến khác — xem `ThongBaoDay.didReceive`.
+      duLieu: {
+        loai: 'xa-hoi',
+        kieu: row.type,
+        thongBaoId: row.id,
+        entityId: row.entityId ?? 0,
+      },
+    });
+  } catch (err) {
+    logger.warn('đẩy thông báo xã hội hỏng', { error: (err as Error).message });
   }
 }
 

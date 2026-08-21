@@ -85,6 +85,29 @@ export async function xemHanMuc(userId: number): Promise<HanMuc> {
 
   if (tran <= 0) return trong(); // 0 = tắt trần
 
+  /*
+   * ── ADMIN KHÔNG BỊ CHẶN, NHƯNG VẪN BỊ ĐẾM ──────────────────────────
+   *
+   * Cùng lối với trần token NGÀY (`pro.service.ts` → `laAdmin`, 21/08/2026):
+   * admin là chủ web và là người phải THỬ tính năng — chặn họ là chặn đúng
+   * việc phát triển. 21/08 một việc tải tài liệu dài chạm 4,12/4 triệu token
+   * rồi dừng giữa chừng, đúng lúc đang cần chạy nhất.
+   *
+   * ⚠️ Nhưng CHỈ hạ `hetHan`, KHÔNG đặt `daDung` về 0. Con số vẫn phải hiện
+   * đúng trên thanh đo, vì trần TIỀN 20 $/ngày ở dưới là ví CHUNG CỦA CẢ
+   * SITE — admin tiêu cạn nó là agent của mọi người cùng tắt. Giấu mức tiêu
+   * đi thì người duy nhất sửa được lại là người duy nhất không nhìn thấy.
+   *
+   * Trần tiền vẫn áp cho admin. Đó mới là lưới đỡ thật.
+   */
+  let miemTran = false;
+  try {
+    const { laAdmin } = await import('../pro.service.js');
+    miemTran = await laAdmin(userId);
+  } catch {
+    /* Không tra được vai trò ⇒ coi như người thường. Trần là mặc định an toàn. */
+  }
+
   const tu = new Date(Date.now() - soGio * 3_600_000);
   try {
     const [tong, cuNhat, moiNhat] = await Promise.all([
@@ -115,7 +138,7 @@ export async function xemHanMuc(userId: number): Promise<HanMuc> {
       conLai: Math.max(0, tran - daDung),
       phanTram: Math.min(100, Math.round((daDung / tran) * 100)),
       soGio,
-      hetHan: daDung >= tran,
+      hetHan: !miemTran && daDung >= tran,
       hoiLucNao: cuNhat ? new Date(cuNhat.createdAt.getTime() + ms) : null,
       hoiHetLuc: moiNhat ? new Date(moiNhat.createdAt.getTime() + ms) : null,
     };

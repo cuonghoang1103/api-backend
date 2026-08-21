@@ -577,6 +577,20 @@ interface ChoTai {
   thuMuc: string;
   tenGoiY: string | undefined;
   xong: (kq: KetQuaTai) => void;
+  /**
+   * Gọi ngay khi việc tải THẬT SỰ BẮT ĐẦU.
+   *
+   * ⚠️ Thiếu cái này là lỗi tệ nhất của cả module. Đồng hồ `gioBan` sinh ra để
+   * hỏi "máy chủ có trả file không", nhưng nếu không tắt nó lúc tải bắt đầu
+   * thì nó biến thành "tải xong trong bao lâu" — và mọi file lớn đều bị báo
+   * hỏng TRONG KHI đang chảy về bình thường.
+   *
+   * Đo thật 21/08/2026: `paper.pdf` 860KB của DBI202 về đĩa đầy đủ, đúng tên,
+   * mở được 3 trang — agent vẫn báo "máy chủ không trả file". Tệ hơn nữa, từ
+   * khi có đường lùi `taiBangNet`, một báo-hỏng-nhầm như vậy làm file được tải
+   * LẦN THỨ HAI và sinh ra bản trùng `paper (2).pdf`.
+   */
+  batDau: () => void;
 }
 
 let choTaiHienTai: ChoTai | null = null;
@@ -648,6 +662,9 @@ function ganBatTai(): void {
     const ten = tenSach(cho.tenGoiY || muc.getFilename() || tenTuUrl(muc.getURL()));
     const dich = duongDanChuaCo(path.join(cho.thuMuc, ten));
     muc.setSavePath(dich);
+    /* Việc tải ĐÃ bắt đầu ⇒ tắt đồng hồ "máy chủ có trả file không".
+       Từ đây trở đi chỉ còn `HET_GIO_TAI_MS` canh việc tải chảy xong. */
+    cho.batDau();
 
     const tong = muc.getTotalBytes();
     if (tong > TRAN_BYTE_TAI) {
@@ -765,7 +782,13 @@ export async function taiFile(url: string, thuMuc: string, tenGoiY?: string): Pr
         },
       ));
     }, HET_GIO_BAN_MS);
-    choTaiHienTai = { url: sach, thuMuc, tenGoiY, xong: ketThuc };
+    choTaiHienTai = {
+      url: sach,
+      thuMuc,
+      tenGoiY,
+      xong: ketThuc,
+      batDau: () => { if (gioBan) { clearTimeout(gioBan); gioBan = null; } },
+    };
     wc.session.downloadURL(sach);
   });
 }

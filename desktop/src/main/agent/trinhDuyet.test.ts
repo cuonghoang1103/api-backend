@@ -334,3 +334,43 @@ describe('tải file phục vụ dạng XEM TẠI CHỖ', () => {
       .toContain('choTaiHienTai = null');
   });
 });
+
+
+describe('đồng hồ chờ không được biến thành hạn TẢI XONG', () => {
+  /*
+   * `gioBan` hỏi "máy chủ có trả file không". Không tắt nó lúc việc tải BẮT
+   * ĐẦU thì nó âm thầm trở thành "phải tải xong trong ngần ấy giây", và mọi
+   * file lớn đều bị báo hỏng trong khi đang chảy về bình thường.
+   *
+   * Đo thật 21/08/2026: `paper.pdf` 860KB về đĩa đầy đủ, đúng tên, mở được 3
+   * trang — agent vẫn báo "máy chủ không trả file". Chỉ phát hiện được vì đi
+   * NHÌN FILE TRÊN ĐĨA thay vì tin lời agent tường thuật.
+   *
+   * Và từ khi có đường lùi `taiBangNet`, một báo-hỏng-nhầm như thế làm file
+   * được tải LẦN HAI ⇒ sinh bản trùng `paper (2).pdf`.
+   */
+  const b = readFileSync(join(goc, 'src/main/browser.ts'), 'utf8');
+
+  it('hàng chờ mang theo callback `batDau`', () => {
+    const i = b.indexOf('interface ChoTai');
+    expect(i).toBeGreaterThan(-1);
+    expect(b.slice(i, b.indexOf('\n}', i)), 'ChoTai không có batDau').toContain('batDau: () => void');
+  });
+
+  it('`will-download` gọi batDau ngay sau setSavePath', () => {
+    const i = b.indexOf('muc.setSavePath(dich);');
+    expect(i, 'không thấy setSavePath').toBeGreaterThan(-1);
+    expect(b.slice(i, i + 400), 'tải bắt đầu rồi mà đồng hồ chờ vẫn chạy')
+      .toContain('cho.batDau()');
+  });
+
+  it('batDau TẮT HẲN đồng hồ chờ', () => {
+    // Tìm chỗ CÀI ĐẶT (`{`), không phải dòng khai kiểu trong interface —
+    // `batDau: () => void` xuất hiện trước và slice từ đó thì rỗng.
+    const i = b.indexOf('batDau: () => {');
+    expect(i, 'taiFile không cung cấp batDau').toBeGreaterThan(-1);
+    const than = b.slice(i, i + 160);
+    expect(than, 'không huỷ đồng hồ').toContain('clearTimeout(gioBan)');
+    expect(than, 'không đặt lại null ⇒ có thể huỷ nhầm lần sau').toContain('gioBan = null');
+  });
+});

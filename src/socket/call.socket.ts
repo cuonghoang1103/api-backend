@@ -1,5 +1,6 @@
 import type { Server, Socket } from 'socket.io';
 import { logger } from '../utils/logger.js';
+import { prisma } from '../config/database.js';
 
 // ════════════════════════════════════════════════════════════════
 // BÁO HIỆU GỌI THOẠI 1-1
@@ -116,9 +117,25 @@ export function registerCallSignaling(io: Server, socket: Socket, user: { id: nu
 
     // Gửi vào phòng CÁ NHÂN của người nhận, không phải phòng hội thoại: họ
     // phải đổ chuông kể cả khi đang ở màn hình khác.
-    io.to(phong(p.toUserId)).emit('call:incoming', {
-      callId: c.id, threadId: c.threadId, fromUserId: user.id, sdp: p.sdp,
-    });
+    //
+    // Kèm TÊN người gọi: bên nhận có thể đang mở một hội thoại khác, nên
+    // không tra ra tên từ dữ liệu họ đang có. Một truy vấn cho mỗi cuộc gọi
+    // là không đáng kể — khác hẳn nếu làm thế ở mỗi lượt trao ICE.
+    void (async () => {
+      const nguoi = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { displayName: true, fullName: true, username: true, avatarUrl: true },
+      }).catch(() => null);
+      io.to(phong(p.toUserId)).emit('call:incoming', {
+        callId: c.id,
+        threadId: c.threadId,
+        fromUserId: user.id,
+        sdp: p.sdp,
+        tenNguoiGoi: nguoi?.displayName?.trim() || nguoi?.fullName?.trim()
+          || nguoi?.username?.trim() || 'Người dùng',
+        anhNguoiGoi: nguoi?.avatarUrl ?? null,
+      });
+    })();
     logger.info('cuộc gọi bắt đầu', { callId: c.id, tu: user.id, den: p.toUserId });
   });
 

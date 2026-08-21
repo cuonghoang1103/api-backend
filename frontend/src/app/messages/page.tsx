@@ -29,6 +29,7 @@ import MessageList from '@/components/messaging/MessageList';
 import MessageInput from '@/components/messaging/MessageInput';
 import NicknamePopover from '@/components/messaging/NicknamePopover';
 import ThreadHeaderMenu from '@/components/messaging/ThreadHeaderMenu';
+import CuocGoiOverlay from '@/components/messaging/CuocGoiOverlay';
 import BlockedUsersModal from '@/components/messaging/BlockedUsersModal';
 import ChatInfoPanel from '@/components/messaging/ChatInfoPanel';
 // (GalaxyBackground removed — messages now uses a soft, eye-friendly dark
@@ -74,6 +75,8 @@ function MessagesPageInner() {
   // Desktop (xl+) Messenger-style details column; toggled by the ⓘ button
   // in the thread header. Open by default like facebook.com/messages.
   const [infoOpen, setInfoOpen] = useState(false);
+  /** Bộ đếm số lần bấm nút gọi — xem ghi chú ở chỗ truyền `onGoi`. */
+  const [lanBamGoi, setLanBamGoi] = useState(0);
   // iOS on-screen keyboard: shrink the fixed-height shell so the composer
   // rides above the keyboard (the keyboard also covers the bottom nav, so
   // the shell reclaims that band while typing).
@@ -381,6 +384,10 @@ function MessagesPageInner() {
                   getPresence={getPresence}
                   onBack={closeThread}
                   onToggleInfo={() => setInfoOpen((v) => !v)}
+                  // Bộ ĐẾM TĂNG DẦN, không phải cờ bật/tắt: bấm gọi lần thứ
+                  // hai sau khi cúp máy vẫn phải kích hoạt lại, mà cờ `true`
+                  // thì lần hai không đổi giá trị nên `useEffect` không chạy.
+                  onGoi={() => setLanBamGoi((n) => n + 1)}
                 />
                 <div className="min-h-0 flex-1">
                   <MessageList />
@@ -424,6 +431,17 @@ function MessagesPageInner() {
       <BlockedUsersModal
         open={blockedModalOpen}
         onClose={() => setBlockedModalOpen(false)}
+      />
+
+      {/* Màn hình gọi. Gắn Ở ĐÂY, ngoài khung chat: nó phải sống kể cả khi
+          người dùng chuyển sang hội thoại khác giữa cuộc gọi, và phải nghe
+          `call:incoming` ngay cả khi chưa mở hội thoại nào. */}
+      <CuocGoiOverlay
+        threadId={currentThread?.id}
+        peerId={currentThread?.peer?.id}
+        peerName={currentThread?.peer?.displayName ?? currentThread?.peer?.username}
+        peerAvatar={currentThread?.peer?.avatarUrl ?? null}
+        goiDi={lanBamGoi}
       />
     </div>
   );
@@ -501,11 +519,13 @@ function ThreadHeader({
   getPresence,
   onBack,
   onToggleInfo,
+  onGoi,
 }: {
   thread: ReturnType<typeof useMessagingStore.getState>['currentThread'];
   getPresence: (uid: number) => { online: boolean; lastSeen: number };
   onBack?: () => void;
   onToggleInfo?: () => void;
+  onGoi?: () => void;
 }) {
   const peer = thread?.peer;
   const presence = peer ? getPresence(peer.id) : null;
@@ -618,6 +638,17 @@ function ThreadHeader({
             className="hidden h-9 w-9 items-center justify-center rounded-full text-cyan-400 transition-colors hover:bg-white/[0.06] xl:flex"
           >
             <Info className="h-[18px] w-[18px]" />
+          </button>
+        )}
+        {peer && onGoi && (
+          <button
+            type="button"
+            onClick={onGoi}
+            title="Gọi thoại"
+            aria-label="Gọi thoại"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-emerald-400 transition-colors hover:bg-white/[0.06]"
+          >
+            <Phone className="h-[18px] w-[18px]" />
           </button>
         )}
         {peer && <ThreadHeaderMenu threadId={thread!.id} peerId={peer.id} />}

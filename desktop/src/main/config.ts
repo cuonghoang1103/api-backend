@@ -73,5 +73,13 @@ export const ALLOWED_CONNECT_ORIGINS: readonly string[] = [
   WEB_ORIGIN,
   API_ORIGIN.replace(/^https:/, 'wss:'),
   WEB_ORIGIN.replace(/^https:/, 'wss:'),
+  // Gọi thoại: WebRTC phải với được máy chủ TURN. CSP `connect-src` chặn cả
+  // `stun:`/`turn:` — thiếu mấy dòng này thì cuộc gọi CHỈ hỏng ở mạng chặt
+  // (4G), còn cùng Wi-Fi vẫn nối thẳng được nên thử trong nhà thấy chạy ngon.
+  // Đúng loại lỗi chỉ lộ ra ở nhà người dùng.
+  'stun:cuongthai.com:3478',
+  'turn:cuongthai.com:3478',
+  'turns:cuongthai.com:5349',
+  'stun:stun.l.google.com:19302',
   ...(IS_DEV ? [DEV_SERVER_URL, DEV_SERVER_URL.replace(/^http:/, 'ws:')] : []),
 ];

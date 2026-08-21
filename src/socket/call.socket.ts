@@ -148,6 +148,26 @@ export function registerCallSignaling(io: Server, socket: Socket, user: { id: nu
       return;
     }
 
+    // ⚠️ NGƯỜI KIA CÓ ĐANG NỐI SOCKET KHÔNG?
+    //
+    // `io.to(phòng).emit(...)` vào một phòng RỖNG là lệnh hợp lệ và **không
+    // báo gì cả** — không lỗi, không giá trị trả về, không log. Thiếu chốt
+    // này thì người gọi ngồi nhìn "Đang gọi…" cho tới hết 45 giây mà không
+    // hiểu vì sao, còn ta đọc log chỉ thấy 'cuộc gọi bắt đầu' rồi 'kết thúc'
+    // — trông y như bên kia cố tình không nghe máy.
+    //
+    // Đúng cái người dùng gặp 21/08/2026: 5 lượt gọi, log máy chủ SẠCH, mà
+    // bên nhận không hề thấy gì. Họ đơn giản là không online.
+    const phongBenKia = io.sockets.adapter.rooms.get(phong(p.toUserId));
+    if (!phongBenKia || phongBenKia.size === 0) {
+      socket.emit('call:end', {
+        callId: null, threadId: p.threadId, boi: null,
+        lyDo: 'khong-truc-tuyen', giay: 0, daNhan: false,
+      });
+      logger.info('gọi hụt — người nhận không online', { tu: user.id, den: p.toUserId });
+      return;
+    }
+
     const c: CuocGoi = {
       // `randomUUID` có sẵn trong Node 22 — không cần thư viện.
       id: crypto.randomUUID(),

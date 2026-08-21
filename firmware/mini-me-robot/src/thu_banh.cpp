@@ -99,24 +99,53 @@ static float docGyroZ() {
  */
 static void doNguongKhoiDong() {
   Serial.println("\n╔════════════════════════════════════════════════╗");
-  Serial.println("║  DO NGUONG KHOI DONG — dat xe XUONG SAN        ║");
+  Serial.println("║  DO NGUONG KHOI DONG                           ║");
   Serial.println("╚════════════════════════════════════════════════╝");
-  Serial.println("  Tang dan tung nac 5. Nhin ky BANH NAO nhuc nhich TRUOC.");
-  Serial.println("  Ghi lai con so luc no BAT DAU quay deu (khong phai rung).\n");
-  delay(2500);
+  Serial.println("  1. Dat xe XUONG SAN (khong ke hop) — can ma sat co tai.");
+  Serial.println("  2. Nhin BANH XE. PWM se tang dan tung nac 5.");
+  Serial.println("  3. Banh vua NHUC NHICH  -> bam phim BAT KY (lan 1)");
+  Serial.println("  4. Banh QUAY DEU        -> bam phim BAT KY (lan 2)");
+  Serial.println("\n  Bat dau sau 3 giay...\n");
+  delay(3000);
+  while (Serial.available()) Serial.read();   // bỏ phím gõ nhầm lúc chờ
 
-  for (int v = 20; v <= 200; v += 5) {
+  int nhucNhich = 0, quayDeu = 0;
+  for (int v = 20; v <= 220; v += 5) {
     xuat(v, v);
-    Serial.printf("  PWM %3d  (%2d%%)", v, v * 100 / 255);
-    if (_coGyro) Serial.printf("   gyro %+6.1f d/s", docGyroZ());
-    Serial.println();
-    delay(900);
+    Serial.printf("  PWM %3d  (%2d%%)%s\n", v, v * 100 / 255,
+                  nhucNhich ? "   [dang cho moc 2]" : "");
+    // Chia nhỏ nhịp chờ để bắt phím ngay, không để người dùng bấm xong
+    // còn phải đợi gần một giây mới thấy phản hồi.
+    for (int k = 0; k < 18 && !Serial.available(); k++) delay(50);
+
+    if (Serial.available()) {
+      while (Serial.available()) Serial.read();
+      if (!nhucNhich) {
+        nhucNhich = v;
+        Serial.printf("\n  ✱ MOC 1 — banh bat dau nhuc nhich o PWM %d (%d%%)\n\n",
+                      v, v * 100 / 255);
+      } else {
+        quayDeu = v;
+        Serial.printf("\n  ✱ MOC 2 — banh quay deu o PWM %d (%d%%)\n", v, v * 100 / 255);
+        break;
+      }
+    }
   }
   dung();
-  Serial.println("\n  Xong. Bao toi hai con so:");
-  Serial.println("   1. PWM luc banh BAT DAU quay deu  -> thay DAP_MOI_MUC");
-  Serial.println("   2. PWM thap nhat con GIU duoc toc -> tran duoi khi bo");
-  Serial.println("  Hai banh lech nhau nhieu (>15) thi bao luon, toi bu trong ma.\n");
+
+  Serial.println("\n╔════════════════════════════════════════════════╗");
+  Serial.println("║  KET QUA                                       ║");
+  Serial.println("╠════════════════════════════════════════════════╣");
+  Serial.printf ("║  Nhuc nhich : PWM %-3d  (%2d%%)                  ║\n",
+                 nhucNhich, nhucNhich * 100 / 255);
+  Serial.printf ("║  Quay deu   : PWM %-3d  (%2d%%)                  ║\n",
+                 quayDeu, quayDeu * 100 / 255);
+  Serial.println("╚════════════════════════════════════════════════╝");
+  if (!nhucNhich)
+    Serial.println("  (khong bam moc nao — chay lai lenh r)");
+  else
+    Serial.printf("  -> DAP_MOI_MUC nen dat khoang %d\n", quayDeu ? quayDeu : nhucNhich + 15);
+  Serial.println();
 }
 
 static void menu() {

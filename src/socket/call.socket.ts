@@ -66,6 +66,56 @@ function ketThuc(io: Server, c: CuocGoi, boi: number | null, lyDo: string): void
     });
   }
   logger.info('cuộc gọi kết thúc', { callId: c.id, lyDo, giay, daNhan: c.daNhan });
+  void ghiLichSu(io, c, giay);
+}
+
+/** Số giây thành "2 phút 5 giây". */
+function doDai(giay: number): string {
+  if (giay < 60) return `${giay} giây`;
+  const p = Math.floor(giay / 60), g = giay % 60;
+  return g ? `${p} phút ${g} giây` : `${p} phút`;
+}
+
+/**
+ * Ghi cuộc gọi vào dòng thời gian hội thoại.
+ *
+ * Dùng lại bảng `Message` với `mediaKind = 'call'` thay vì dựng bảng riêng:
+ * cuộc gọi thuộc về đúng chỗ nó xảy ra trong mạch trò chuyện, và cách này
+ * không cần migration.
+ *
+ * ⚠️ Ghi cả cuộc gọi NHỠ — đó mới là thứ người ta cần thấy nhất khi mở máy ra.
+ */
+async function ghiLichSu(io: Server, c: CuocGoi, giay: number): Promise<void> {
+  try {
+    const noiDung = c.daNhan
+      ? `Cuộc gọi thoại · ${doDai(giay)}`
+      : 'Cuộc gọi nhỡ';
+    const tin = await prisma.message.create({
+      data: {
+        threadId: c.threadId,
+        senderId: c.nguoiGoi,
+        content: noiDung,
+        mediaKind: 'call',
+      },
+      include: {
+        sender: {
+          select: { id: true, username: true, displayName: true, fullName: true, avatarUrl: true },
+        },
+      },
+    });
+    // Đẩy vào phòng hội thoại để hai bên thấy ngay, không phải tải lại.
+    io.to(`thread:${c.threadId}`).emit('thread:new-message', {
+      threadId: c.threadId, message: tin,
+    });
+    // Dời hội thoại lên đầu danh sách, như một tin nhắn thường.
+    await prisma.messageThread.update({
+      where: { id: c.threadId },
+      data: { updatedAt: new Date() },
+    }).catch(() => {});
+  } catch (err) {
+    // Ghi hỏng KHÔNG được làm hỏng việc kết thúc cuộc gọi.
+    logger.warn('ghi lịch sử cuộc gọi hỏng', { error: (err as Error).message });
+  }
 }
 
 export function registerCallSignaling(io: Server, socket: Socket, user: { id: number }): void {
@@ -109,6 +159,17 @@ export function registerCallSignaling(io: Server, socket: Socket, user: { id: nu
     };
     dangGoi.set(user.id, c);
     dangGoi.set(p.toUserId, c);
+
+    // ⚠️ BÁO MÃ CHO NGƯỜI GỌI NGAY LẬP TỨC.
+    //
+    // Máy chủ sinh `callId`, nhưng người gọi cần nó để gửi ứng viên ICE —
+    // mà ICE bắt đầu bay ra NGAY sau `createOffer`, tức trước khi bên kia
+    // bắt máy nhiều giây. Không có mã thì client vứt sạch số ứng viên đó, và
+    // cuộc gọi nối được về mặt báo hiệu nhưng KHÔNG BAO GIỜ có tiếng.
+    //
+    // Triệu chứng đúng như người dùng gặp 21/08/2026: bên nhận đếm 0:38 còn
+    // bên gọi vẫn "Đang gọi…", cả hai im lặng.
+    socket.emit('call:ringing', { callId: c.id, threadId: c.threadId });
 
     hanDoChuong.set(c.id, setTimeout(() => {
       // Vẫn còn trong bảng nghĩa là chưa ai bắt máy.

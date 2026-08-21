@@ -102,12 +102,17 @@ export default function CuocGoiOverlay({ threadId, peerId, peerName, peerAvatar,
     };
 
     s.on('call:incoming', coNguoiGoi);
+    // Máy chủ báo mã cuộc gọi NGAY khi bắt đầu đổ chuông — người gọi cần nó
+    // để gửi ứng viên ICE, vốn bay ra trước lúc bên kia bắt máy nhiều giây.
+    const coMa = (p: { callId: string }) => goi.datCallId(p.callId);
+    s.on('call:ringing', coMa);
     s.on('call:answered', daNhan);
     s.on('call:ice', themIce);
     s.on('call:end', ketThuc);
     s.on('call:busy', ban);
     return () => {
       s.off('call:incoming', coNguoiGoi);
+      s.off('call:ringing', coMa);
       s.off('call:answered', daNhan);
       s.off('call:ice', themIce);
       s.off('call:end', ketThuc);

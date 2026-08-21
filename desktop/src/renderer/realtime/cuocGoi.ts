@@ -39,6 +39,8 @@ export class CuocGoi {
   private iceChoXuLy: RTCIceCandidateInit[] = [];
   private daCoMoTaXa = false;
   private thuNoiLai = false;
+  /** Ứng viên ICE của CHÍNH MÌNH, chờ có `callId` mới gửi được. */
+  private iceGuiCho: RTCIceCandidateInit[] = [];
 
   constructor(
     private socket: Socket,
@@ -50,7 +52,14 @@ export class CuocGoi {
     const pc = new RTCPeerConnection({ iceServers: await this.layIce() });
 
     pc.onicecandidate = (e) => {
-      if (!e.candidate || !this.callId) return;
+      if (!e.candidate) return;
+      // ⚠️ Chưa có mã cuộc gọi thì XẾP HÀNG, KHÔNG vứt.
+      //
+      // Máy chủ sinh `callId` và báo về bằng `call:ringing`, nhưng ICE bắt
+      // đầu bay ra ngay sau `createOffer` — sớm hơn vài trăm mili giây. Bản
+      // trước `return` thẳng ở đây nên người gọi vứt sạch ứng viên của mình:
+      // báo hiệu xong xuôi mà hai bên KHÔNG BAO GIỜ nghe được nhau.
+      if (!this.callId) { this.iceGuiCho.push(e.candidate.toJSON()); return; }
       this.socket.emit('call:ice', { callId: this.callId, candidate: e.candidate.toJSON() });
     };
     pc.ontrack = (e) => { if (e.streams[0]) this.su.coTiengNoi(e.streams[0]); };
@@ -123,7 +132,11 @@ export class CuocGoi {
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer);
       this.socket.emit('call:answer', { callId: this.callId, sdp: answer });
-      this.su.doiTrangThai('dang-noi');
+      // KHÔNG báo 'dang-noi' ở đây. Gửi lời đáp xong không có nghĩa là đã
+      // nghe được nhau — ICE còn phải bắt cặp xong. Báo sớm thì đồng hồ chạy
+      // trong khi hai bên im lặng, đúng thứ người dùng gặp: một bên đếm 0:38
+      // còn bên kia vẫn "Đang gọi…". `oniceconnectionstatechange` mới là chỗ
+      // biết thật, và nó đã lo việc này.
     } catch (e) {
       this.su.loi((e as Error).message);
       this.tuChoi();
@@ -150,7 +163,13 @@ export class CuocGoi {
     }
   }
 
-  datCallId(id: string): void { this.callId = id; }
+  /** Máy chủ vừa cho biết mã cuộc gọi — đổ hết ứng viên đang xếp hàng đi. */
+  datCallId(id: string): void {
+    this.callId = id;
+    const ds = this.iceGuiCho;
+    this.iceGuiCho = [];
+    for (const c of ds) this.socket.emit('call:ice', { callId: id, candidate: c });
+  }
 
   tuChoi(): void {
     if (this.callId) this.socket.emit('call:reject', { callId: this.callId });
@@ -174,6 +193,7 @@ export class CuocGoi {
     this.callId = null;
     this.sdpCho = null;
     this.iceChoXuLy = [];
+    this.iceGuiCho = [];
     this.daCoMoTaXa = false;
     this.thuNoiLai = false;
     this.su.doiTrangThai('roi');

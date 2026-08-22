@@ -6,6 +6,22 @@ https://cuongthai.com/maker-lab/mini-me-robot?tab=shell
 
 ---
 
+## Sổ lắp ráp — trang HTML đọc lúc cầm tua vít
+
+`lap-rap.html` là nguồn: 14 thẻ mảnh, bốn sơ đồ đúng tỉ lệ, bảng nối dây
+toàn bộ 21 chân, và hai mối nối mà bộ mảnh KHÔNG có sẵn (thân↔khung
+TP101, càng servo cho tay). Ảnh nhúng lúc dựng, không nằm trong kho:
+
+```bash
+node gen-stl.mjs ./stl        # 14 file STL
+python3 xem-stl.py stl anh    # ảnh hai góc mỗi mảnh
+node dung-trang.mjs           # → trang-lap-rap.html, tự chứa, mở offline
+```
+
+⚠️ Số chân trong đó lấy thẳng từ `src/config.h`. Tab **Nối dây** trên web
+thì LỖI THỜI — còn nói DRV8833, encoder GPIO 47/48, và đo pin ở GPIO 3
+(thật là GPIO 1, vì GPIO 3 là chân định đoạt nguồn JTAG lúc khởi động).
+
 ## Xem trước trước khi gửi đi in
 
 ```bash

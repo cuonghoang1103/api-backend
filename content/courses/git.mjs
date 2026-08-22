@@ -21,6 +21,7 @@ import s09 from './git/s09-ruot-gan.mjs';
 import s10 from './git/s10-kho-lon.mjs';
 import s11 from './git/s11-nen-tang-github.mjs';
 import s12 from './git/s12-hook-ky.mjs';
+import s13 from './git/s13-cuu-ho.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Rocket', sortOrder: 4 },
@@ -56,5 +57,6 @@ export default {
     s10,
     s11,
     s12,
+    s13,
   ],
 };

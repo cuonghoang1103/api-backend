@@ -89,6 +89,10 @@ export default function CuocGoiOverlay({ threadId, peerId, peerName, peerAvatar,
       const chu: Record<string, string> = {
         'tu-choi': 'Cuộc gọi bị từ chối',
         'khong-tra-loi': 'Không có ai trả lời',
+        // Cuộc gọi chỉ reo khi app/tab bên kia ĐANG MỞ — chưa có CallKit
+        // (iOS) hay thông báo đẩy đánh thức. Nói thẳng ra, đừng để người
+        // dùng nhìn "Đang gọi…" 45 giây rồi tưởng app hỏng.
+        'khong-truc-tuyen': 'Người này hiện không online',
         'mat-ket-noi': 'Mất kết nối',
         'cup-may': '',
       };

@@ -13,6 +13,7 @@ import s01 from './linux-bash/s01-shell-he-thong-file.mjs';
 import s02 from './linux-bash/s02-file-thu-muc.mjs';
 import s03 from './linux-bash/s03-van-ban-ong-dan.mjs';
 import s04 from './linux-bash/s04-quyen-nguoi-dung.mjs';
+import s05 from './linux-bash/s05-tien-trinh-tin-hieu.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Rocket', sortOrder: 4 },
@@ -40,5 +41,6 @@ export default {
     s02,
     s03,
     s04,
+    s05,
   ],
 };

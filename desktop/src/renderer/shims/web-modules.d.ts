@@ -295,3 +295,38 @@ declare module '@/components/simulation/SimulationStudio' {
   const Trang: ComponentType;
   export default Trang;
 }
+
+/* ── Phỏng vấn (22/08/2026) ──────────────────────────────────
+   Năm màn của `/interview`. Cùng hình dạng như cây Ngoại ngữ: mỗi tệp
+   `export default` một component không nhận prop — tham số động (`:id`) đi
+   qua `useParams()` của shim, không qua prop, y như trên Next. */
+
+declare module '@/app/interview/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/interview/drill/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/interview/history/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/interview/session/[id]/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/interview/report/[id]/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}

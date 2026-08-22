@@ -72,6 +72,39 @@ await ctx.addInitScript(() => {
   const mang = (n, f) => Array.from({ length: n }, (_, i) => f(i + 1));
 
   const BANG = [
+    /* ── Phỏng vấn (22/08/2026) ──
+       Đặt TRƯỚC mọi mẫu khác: `/interview/history` cũng khớp được những mẫu
+       rộng phía dưới, và cái khớp đầu tiên thắng. Dữ liệu phải ĐỦ ĐÔNG —
+       trang rỗng vẽ ra trạng thái "chưa có gì", vốn là trạng thái ít phần tử
+       nhất và dễ qua nhất. */
+    [/\/interview\/tracks/, () => ({
+        domains: mang(4, (i) => ({ id: i, slug: `linh-vuc-${i}`,
+          name: `Domain ${i}`, nameVi: `Lĩnh vực số ${i} có tên khá dài`,
+          tracks: mang(5, (k) => ({ id: i * 10 + k, slug: `track-${i}-${k}`,
+            name: `Track ${k}`, nameVi: `Hướng phỏng vấn số ${k} tên dài vừa đủ tràn dòng`,
+            questionCount: 20 + k,
+            topics: mang(6, (b) => ({ id: b, slug: `chu-de-${b}`, name: `Topic ${b}`,
+              nameVi: `Chủ đề số ${b}` })) })) })),
+        companyProfiles: mang(6, (i) => ({ id: i, slug: `cty-${i}`, name: `Công ty số ${i}`,
+          styleDescriptor: 'Hỏi sâu về hệ thống, ưu tiên ví dụ thực tế.', rigor: i })),
+        aiAvailable: true, aiAllowed: true })],
+    [/\/interview\/history/, () => mang(8, (i) => ({ id: i,
+        track: `Hướng phỏng vấn số ${i} với tên khá dài`, level: 'MID',
+        status: i % 2 ? 'COMPLETED' : 'IN_PROGRESS', engineMode: 'STATIC',
+        createdAt: '2026-08-20T00:00:00Z',
+        overallScore: i % 2 ? 70 + i : null, letterGrade: i % 2 ? 'B+' : null }))],
+    [/\/interview\/mastery/, () => ({ totalCards: 120, totalDue: 14,
+        topics: mang(7, (i) => ({ topicId: i, topic: `Chủ đề số ${i} tên dài vừa đủ`,
+          total: 20, due: i,
+          byMastery: { UNSEEN: 4, SHAKY: 3, LEARNING: 5, SOLID: 6, MASTERED: 2 } })) })],
+    [/\/interview\/drill/, () => ({ totalDue: 9,
+        cards: mang(9, (i) => ({ cardId: i, concept: `Khái niệm ${i}`, topic: `Chủ đề ${i}`,
+          masteryLevel: 'LEARNING', variantGap: false,
+          question: { id: i, type: 'SHORT_ANSWER',
+            body: `Câu hỏi số ${i}: giải thích cơ chế và đánh đổi của nó trong hệ thống thật.`,
+            referenceAnswer: 'Đáp án mẫu đủ dài để chiếm vài dòng trên màn hình.',
+            rubric: mang(4, (k) => ({ id: `c${k}`, label: `Tiêu chí ${k}`, weight: 25,
+              description: 'Mô tả tiêu chí chấm.' })) } })) })],
     [/\/voice\/series/, () => mang(3, (i) => ({ id: i, title: `Chuỗi số ${i}`, slug: `chuoi-${i}`, postCount: i }))],
     [/\/voice\/posts\//, () => ({ post: null, related: [] })],
     [/\/voice/, () => ({ posts: mang(6, (i) => ({
@@ -240,7 +273,13 @@ const DUONG = JSON.parse(process.env.CT_TRANG ?? 'null')
       /* Và một trang CON, để chắc bảng tra `dinhTuyenWeb` khớp thật chứ không
          chỉ đúng trong test đơn vị. `ja` có thật: `/api/v1/my-language` trả 6
          ngôn ngữ, đo ngày 20/08/2026. */
-      '/language/ja'];
+      '/language/ja',
+      /* Phỏng vấn (22/08/2026) — cây web thứ năm. Đo cả ba màn KHÔNG cần id:
+         trang chọn (lưới nhiều cột + form dài), lịch sử, và phòng luyện.
+         Hai màn còn lại (`session/:id`, `report/:id`) cần một phiên có thật
+         nên không đo được ở đây; chúng đi qua cùng một bảng tra và cùng một
+         lớp bọc, và có phép kiểm đơn vị riêng trong `dinhTuyenWeb.test.ts`. */
+      '/interview', '/interview/history', '/interview/drill'];
 
 let hong = 0;
 const bang = [];

@@ -35,6 +35,7 @@ import { ThuatToanPage } from './features/algorithms/ThuatToanPage';
 import { MoPhongPage } from './features/simulation/MoPhongPage';
 import { LoTrinhPage } from './features/roadmap/LoTrinhPage';
 import { NgoaiNguPage } from './features/language/NgoaiNguPage';
+import { PhongVanPage } from './features/interview/PhongVanPage';
 import { thuocCayWeb } from './features/web/dinhTuyenWeb';
 
 export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
@@ -58,15 +59,17 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/simulation': MoPhongPage,
   '/roadmap': LoTrinhPage,
   '/language': NgoaiNguPage,
+  '/interview': PhongVanPage,
 };
 
 /**
  * Trang SỞ HỮU CẢ CÂY con của nó, không chỉ đúng một đường dẫn.
  *
- * `/language` và `/roadmap` dùng lại cây web vốn có đường dẫn động
- * (`/language/ja/vocab`, `/roadmap/frontend`). Bảng `NATIVE_PAGES` khớp chính
- * xác, nên thiếu phần này thì bấm vào một ngôn ngữ là rơi thẳng vào màn hình
- * "Không tìm thấy" — đúng lúc trang vừa mới chạy được.
+ * `/language`, `/roadmap` và `/interview` dùng lại cây web vốn có đường dẫn
+ * động (`/language/ja/vocab`, `/roadmap/frontend`, `/interview/report/12`).
+ * Bảng `NATIVE_PAGES` khớp chính xác, nên thiếu phần này thì bấm vào một ngôn
+ * ngữ — hay mở một bản báo cáo phỏng vấn — là rơi thẳng vào màn hình "Không
+ * tìm thấy", đúng lúc trang vừa mới chạy được.
  *
  * Ranh giới nằm ở `thuocCayWeb()`: nó so theo ĐOẠN đường dẫn chứ không so
  * chuỗi trần, nên `/languages` không bị nuốt vào cây Ngoại ngữ.
@@ -74,6 +77,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
 const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/language', NgoaiNguPage],
   ['/roadmap', LoTrinhPage],
+  ['/interview', PhongVanPage],
 ];
 
 export function nativePageFor(path: string): ComponentType | undefined {

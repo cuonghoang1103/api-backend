@@ -20,7 +20,10 @@
  *
  * Đối chiếu ngày 20/08/2026 bằng:
  *   find frontend/src/app/language frontend/src/app/roadmap -name page.tsx
- * ra đúng 21 đường dẫn dưới đây.
+ * ra đúng 21 đường dẫn. Ngày 22/08/2026 thêm cây Phỏng vấn (5 đường), đối
+ * chiếu bằng:
+ *   find frontend/src/app/interview -name page.tsx
+ * ⇒ 26 đường dẫn dưới đây.
  */
 import type { ComponentType } from 'react';
 
@@ -57,6 +60,21 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   /* ── Lộ trình ── */
   { mau: '/roadmap', nap: () => import('@/components/roadmap/RoadmapLanding') },
   { mau: '/roadmap/:slug', nap: () => import('@/app/roadmap/[slug]/page') },
+
+  /* ── Phỏng vấn ──
+     Đo 22/08/2026: 6 tệp, 1.983 dòng, dính Next.js 7 chỗ (4 link, 3
+     navigation) — đều đã có shim. `layout.tsx` chỉ khai `metadata`, không có
+     bố cục nào để dựng lại.
+
+     Ở đây tĩnh và động KHÔNG tranh nhau như bên `/language`: `khopTuyenWeb`
+     đòi bằng SỐ ĐOẠN, mà `/interview/drill` dài 2 đoạn còn
+     `/interview/session/:id` dài 3. Vẫn xếp tĩnh trước để ai thêm
+     `/interview/:x` sau này không phải nhớ lại luật. */
+  { mau: '/interview', nap: () => import('@/app/interview/page') },
+  { mau: '/interview/drill', nap: () => import('@/app/interview/drill/page') },
+  { mau: '/interview/history', nap: () => import('@/app/interview/history/page') },
+  { mau: '/interview/session/:id', nap: () => import('@/app/interview/session/[id]/page') },
+  { mau: '/interview/report/:id', nap: () => import('@/app/interview/report/[id]/page') },
 ];
 
 export interface KhopTuyen {
@@ -89,7 +107,7 @@ export function khopTuyenWeb(duong: string): KhopTuyen | null {
 }
 
 /** Gốc của những cây route mà trang web sở hữu — dùng cho router của app. */
-export const GOC_WEB: readonly string[] = ['/language', '/roadmap'];
+export const GOC_WEB: readonly string[] = ['/language', '/roadmap', '/interview'];
 
 /** Đường dẫn này có thuộc một cây web không (kể cả các trang con động). */
 export function thuocCayWeb(duong: string): boolean {

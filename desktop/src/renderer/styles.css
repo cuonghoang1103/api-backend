@@ -2582,6 +2582,42 @@ code {
   min-width: 0;
 }
 
+/* ── Gỡ hai thứ trang web mang theo mà app KHÔNG có ──────────
+ *
+ * Chỉ nhắm CON TRỰC TIẾP của `.ct-web-host` — đó đúng là phần tử gốc của trang
+ * web (xem `TrangWebTheoTuyen`: Provider và Suspense không sinh DOM). Nhắm rộng
+ * hơn là chạm vào bố cục BÊN TRONG trang, thứ không liên quan gì tới vỏ app.
+ *
+ * Đo thật 22/08/2026, cửa sổ 1280×900, cả chủ đề sáng lẫn tối:
+ *   trước: padding-top 64px · phần tử gốc cao 900px trong khung 826px
+ *          ⇒ 74px CUỘN THỪA ở mọi trang, kể cả trang không có gì để cuộn
+ *   sau:   padding-top 0    · cao 826px ⇒ cuộn thừa 0
+ */
+
+/* `pt-16` trong hai cây này LUÔN là chừa chỗ cho thanh điều hướng CỐ ĐỊNH của
+   web — mã web tự ghi vậy ("the bar below should abut the nav"). App desktop
+   không có thanh đó, nên nó chỉ còn là 64px trống ở đỉnh.
+
+   ⚠️ Nhắm ĐÚNG lớp `pt-16`, KHÔNG nhắm padding-top nói chung: `/language` dùng
+   `py-16` cho khoảng thở bên trong, và nó cũng tính ra padding-top 64px. Gộp
+   hai thứ đó làm một là bóp nát bố cục của một trang đang chạy tốt.
+   (`pt-20` của trang chủ Ngoại ngữ để NGUYÊN — mã web ghi rõ nó cố ý rộng hơn
+   thanh nav để lấy thêm khoảng thở, nên nó không thuần tuý là chỗ chừa.)
+
+   Nội dung không bị dính sát mép: lớp bên trong đã có `py-10`. */
+.ct-web-host > .pt-16 {
+  padding-top: 0;
+}
+
+/* `min-h-screen` là 100vh — chiều cao TOÀN MÀN HÌNH. Nhưng ở đây trang nằm
+   trong `.ct-content`, vốn đã trừ thanh tiêu đề và thanh trạng thái. Lấy
+   nguyên 100vh thì trang luôn cao hơn khung đúng ngần ấy, và thanh cuộn hiện
+   ra ở cả những trang chẳng có gì để cuộn — trông như trang bị cắt cụt.
+   `100%` ở đây là 100% của `.ct-web-host`, tức đúng vùng nội dung thật. */
+.ct-web-host > .min-h-screen {
+  min-height: 100%;
+}
+
 .ct-notes-host {
   height: 100%;
   overflow: hidden;

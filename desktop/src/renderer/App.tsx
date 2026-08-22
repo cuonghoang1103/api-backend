@@ -23,27 +23,40 @@ function Content() {
   if (route === INTERNAL_ROUTES.settings) return <Settings />;
   if (route === INTERNAL_ROUTES.about) return <About />;
 
+  /*
+   * ⚠️ HỎI `nativePageFor` BẰNG CHÍNH `route`, KHÔNG PHẢI `definition.path`.
+   *
+   * `findRoute` khớp CHÍNH XÁC, mà `ROUTES` chỉ liệt kê gốc của mỗi cây. Bản
+   * trước bỏ cuộc ngay khi `findRoute` trả `undefined`, nên MỌI đường con của
+   * cây web rơi vào màn "Không tìm thấy" dù sổ đăng ký dựng được chúng:
+   *   `/language/ja` · `/roadmap/frontend` (hỏng từ 20/08/2026)
+   *   `/interview/drill` · `/interview/history` · `/interview/session/:id`
+   *   `/interview/report/:id` (hỏng từ v0.5.63)
+   *
+   * Bộ đo bố cục KHÔNG BAO GIỜ bắt được: `scripts/bo-cuc/trang-thu.tsx` gọi
+   * thẳng `nativePageFor(duong)` nên nó đo sổ đăng ký, không đo đường mà app
+   * thật đi qua. Xem [[feedback_verify_the_checker_before_the_content]] — và
+   * `App.test.ts` nay canh đúng chỗ này.
+   */
   const definition = findRoute(route);
-  if (!definition) {
-    // Route lạ — chỉ xảy ra nếu deep link trỏ vào đường dẫn không có trong
-    // bảng. Không dựng trang trống: nói thẳng ra là app không biết đường này.
-    return (
-      <div className="ct-page">
-        <div className="ct-empty">
-          <h1>Không tìm thấy</h1>
-          <p>
-            Ứng dụng không có trang cho đường dẫn <code>{route}</code>.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Một tra cứu duy nhất. Không có bảng `if` nào để quên cập nhật.
-  const NativePage = nativePageFor(definition.path);
+  const NativePage = nativePageFor(definition?.path ?? route);
   if (NativePage) return <NativePage />;
 
-  return <NotPorted route={definition} />;
+  // Có trong bảng nhưng chưa có màn hình native → lời mời mở trên web.
+  if (definition) return <NotPorted route={definition} />;
+
+  // Không thuộc bảng và cũng không thuộc cây web nào — deep link hỏng.
+  // Không dựng trang trống: nói thẳng ra là app không biết đường này.
+  return (
+    <div className="ct-page">
+      <div className="ct-empty">
+        <h1>Không tìm thấy</h1>
+        <p>
+          Ứng dụng không có trang cho đường dẫn <code>{route}</code>.
+        </p>
+      </div>
+    </div>
+  );
 }
 
 function Shell() {

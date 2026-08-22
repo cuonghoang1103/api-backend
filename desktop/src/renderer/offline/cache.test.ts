@@ -37,11 +37,26 @@ describe('cache — tách theo người dùng', () => {
 });
 
 describe('cache — cũ/mới', () => {
+  /*
+   * ⚠️ KHÔNG dùng TTL ngắn + `setTimeout` để thử "đã cũ chưa".
+   *
+   * Bản trước ghi với TTL 50ms rồi khẳng định NGAY là chưa cũ. Trên máy rảnh
+   * thì qua; trên máy đang dựng thứ khác thì 50ms đó trôi mất TRƯỚC khi đọc, và
+   * phép kiểm đỏ vì lý do chẳng liên quan gì tới cache. Đo thật 22/08/2026: nó
+   * đỏ khi chạy song song với `next build`, xanh ở bốn lượt chạy sau — tức là
+   * một phép kiểm CHỚP, loại tệ nhất, vì người ta chạy lại cho tới khi nó xanh
+   * rồi đi tiếp.
+   *
+   * Cách chắc chắn là LÙI MỐC GHI, đúng như phép kiểm `pruneCache` ngay dưới:
+   * không phụ thuộc bộ lập lịch, và nhanh hơn vì bỏ luôn 80ms ngủ.
+   */
   it('đánh dấu cũ sau khi hết TTL', async () => {
-    await writeCache(USER, 'k', { v: 1 }, 50);
+    await writeCache(USER, 'k', { v: 1 }, 60_000);
     expect((await readCache(USER, 'k'))?.isStale).toBe(false);
 
-    await new Promise((resolve) => setTimeout(resolve, 80));
+    // ⚠️ `isStale` đọc `staleAt`, KHÔNG đọc `cachedAt` (xem `cache.ts`) —
+    // lùi nhầm trường thì phép kiểm đỏ mà chẳng có gì hỏng.
+    await db.cache.update(`${USER}:k`, { staleAt: Date.now() - 1 });
     expect((await readCache(USER, 'k'))?.isStale).toBe(true);
   });
 

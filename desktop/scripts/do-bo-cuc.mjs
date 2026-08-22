@@ -66,17 +66,49 @@ const ctx = await trinh.newContext();
  * qua nhất. Muốn bắt được thanh công cụ bị cắt thì phải cho trang đủ dữ liệu để
  * nó vẽ ra thanh công cụ.
  */
-await ctx.addInitScript(() => {
-  const nguoi = (i) => ({ id: i, username: `nguoi${i}`, displayName: `Người dùng ${i}`,
-                          fullName: `Người dùng ${i}`, avatarUrl: null });
-  const mang = (n, f) => Array.from({ length: n }, (_, i) => f(i + 1));
+const nguoi = (i) => ({ id: i, username: `nguoi${i}`, displayName: `Người dùng ${i}`,
+                        fullName: `Người dùng ${i}`, avatarUrl: null });
+const mang = (n, f) => Array.from({ length: n }, (_, i) => f(i + 1));
 
-  const BANG = [
+const BANG = [
     /* ── Phỏng vấn (22/08/2026) ──
        Đặt TRƯỚC mọi mẫu khác: `/interview/history` cũng khớp được những mẫu
        rộng phía dưới, và cái khớp đầu tiên thắng. Dữ liệu phải ĐỦ ĐÔNG —
        trang rỗng vẽ ra trạng thái "chưa có gì", vốn là trạng thái ít phần tử
        nhất và dễ qua nhất. */
+    /* Báo cáo phải đứng TRƯỚC `sessions/:id`: đường của nó là
+       `/interview/sessions/12/report`, tức cũng khớp mẫu phiên. */
+    [/\/interview\/sessions\/\d+\/report/, () => ({
+        language: 'VI',
+        report: { id: 1, sessionId: 1, overallScore: 74, letterGrade: 'B+',
+          scoreBreakdown: { self: 78, deterministic: 71, divergence: 7, redFlagTotal: 1,
+            answered: 6, total: 6,
+            byTopic: mang(5, (i) => ({ topicId: i, topic: `Chủ đề số ${i} tên dài vừa đủ tràn dòng`,
+              avgScore: 60 + i * 5, questions: 2, redFlags: i === 3 ? 1 : 0 })) },
+          strengths: mang(4, (i) => `Điểm mạnh số ${i}: trình bày mạch lạc, có ví dụ thực tế đi kèm.`),
+          weaknesses: mang(4, (i) => `Điểm yếu số ${i}: chưa nêu được đánh đổi khi hệ thống lớn dần.`),
+          actionableAdvice: 'Lời khuyên đủ dài để chiếm vài dòng và kiểm được chỗ xuống dòng của khối chữ.',
+          hireRecommendation: 'LEAN_HIRE',
+          suggestedResources: mang(3, (i) => ({ topicId: i, topic: `Chủ đề ${i}`,
+            note: 'Đọc thêm phần này trước buổi phỏng vấn kế tiếp.', sources: [] })) },
+        turns: mang(6, (i) => ({ order: i, topic: `Chủ đề ${i}`,
+          questionText: `Câu hỏi số ${i}: giải thích cơ chế và nêu đánh đổi trong hệ thống thật.`,
+          userAnswer: 'Câu trả lời của người dùng, dài vừa đủ để tràn sang vài dòng như thật.',
+          referenceAnswer: 'Đáp án mẫu, cũng dài tương đương.',
+          rubric: mang(4, (k) => ({ id: `c${k}`, criterion: `Tiêu chí chấm số ${k}`, weight: 25 })),
+          deterministicScore: { mustHit: ['A', 'B'], hit: ['A'], missed: ['B'], score: 70, redFlags: [] },
+          selfScore: { total: 78 }, turnScore: { deterministic: 70, self: 78, divergence: 8, grade: 'B' },
+          needsReview: i === 2, injectionAttempted: false })) })],
+    [/\/interview\/sessions\/\d+/, () => ({ id: 1, status: 'IN_PROGRESS',
+        trackName: 'Hướng phỏng vấn có tên khá dài để thử tràn', level: 'MID', language: 'VI',
+        engineMode: 'STATIC', focusedMode: false, companyStyle: 'Công ty số 1',
+        total: 6, hasReport: false, sttProvider: 'browser', aiAvailable: false,
+        turns: mang(6, (i) => ({ order: i,
+          questionText: `Câu hỏi số ${i}: giải thích cơ chế, nêu đánh đổi, cho một ví dụ thực tế bạn từng gặp.`,
+          type: 'SHORT_ANSWER', answered: i <= 2,
+          userAnswer: i <= 2 ? 'Câu trả lời đã gửi, dài vừa đủ để tràn dòng.' : null,
+          referenceAnswer: i <= 2 ? 'Đáp án mẫu hiện ra sau khi đã trả lời.' : null,
+          rubric: i <= 2 ? mang(4, (k) => ({ id: `c${k}`, criterion: `Tiêu chí số ${k}`, weight: 25 })) : null })) })],
     [/\/interview\/tracks/, () => ({
         domains: mang(4, (i) => ({ id: i, slug: `linh-vuc-${i}`,
           name: `Domain ${i}`, nameVi: `Lĩnh vực số ${i} có tên khá dài`,
@@ -180,9 +212,61 @@ await ctx.addInitScript(() => {
     [/\/pro|\/membership/, () => ({ isPro: true, plan: 'PRO', expiresAt: '2027-01-01T00:00:00Z' })],
   ];
 
+/*
+ * ⚠️⚠️ HAI CLIENT KHÁC NHAU CÙNG GỌI API — chặn ở TẦNG MẠNG để phủ cả hai.
+ *
+ * App desktop có api client riêng; `vite.bo-cuc.config.ts` thay hẳn
+ * `auth/session.tsx` bằng một phiên giả trỏ `api.request` vào `window.__giaApi`
+ * (module ẢO, sinh lúc dựng — nên `grep __giaApi desktop/src` KHÔNG thấy gì,
+ * xem [[feedback_grep_khong_thay_khong_nghia_la_khong_co]]). Đường đó chạy tốt
+ * cho mọi trang native.
+ *
+ * Nhưng những trang DÙNG LẠI MÃ WEB (`/language`, `/interview`…) không đi qua
+ * client đó — chúng gọi axios của web, và phiên giả trả `baseUrlForForms()`
+ * rỗng nên lời gọi đi tới `/api/v1/...` tương đối ⇒ máy chủ tĩnh trả 404 ⇒
+ * trang vẽ ra trạng thái RỖNG. Đúng cái bẫy đầu tệp này cảnh báo: "trang rỗng
+ * vẽ ra trạng thái 'chưa có gì' — mà đó lại là trạng thái ÍT phần tử nhất,
+ * tức là trạng thái dễ qua nhất". Phát hiện 22/08/2026 khi thêm trang Phỏng
+ * vấn: hai màn động vẽ ra "Phiên không tồn tại." / "Chưa có báo cáo." rồi vẫn
+ * suýt được tính là qua.
+ *
+ * `ctx.route` chặn ở tầng mạng nên nó tóm được axios, `fetch`, và cả
+ * `__giaApi` (nay cũng đi ra mạng, ngay dưới) — MỘT bảng dữ liệu giả phục vụ
+ * cả hai client, thay vì hai bảng phải giữ cho khớp nhau.
+ */
+await ctx.route('**/api/v1/**', async (tuyen) => {
+  const duong = new URL(tuyen.request().url()).pathname;
+  const khop = BANG.find(([re]) => re.test(duong));
+  /* ⚠️ KHÔNG bịa payload cho đường chưa có mock.
+     Bản đầu trả `[]` cho mọi đường không khớp, và nó làm `/notes` NỔ THẬT
+     (`NotesSidebar` đọc `.filter` của undefined) — một lỗi do BỘ ĐO tự tạo ra,
+     không phải lỗi của trang. Để nguyên đường chưa có mock đi tiếp ra máy chủ
+     tĩnh (404) nghĩa là những trang đó hành xử ĐÚNG NHƯ TRƯỚC: thêm mock là
+     thêm độ phủ, không bao giờ là thêm lỗi giả. */
+  if (!khop) { await tuyen.continue(); return; }
+  const payload = khop[1]();
+  await tuyen.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    /* Envelope thật của backend (`ApiResponse<T>`): người gọi đọc
+       `res.data.data`. Trả trần payload là mọi trang nhận `undefined`. */
+    body: JSON.stringify({ success: true, message: 'ok', data: payload, timestamp: '2026-08-22T00:00:00Z' }),
+  });
+});
+
+await ctx.addInitScript(() => {
+  /* API client của chính app desktop (xem chú thích trên). Cho nó đi RA MẠNG
+     để `ctx.route` phía Node trả lời, thay vì mang một bản sao bảng dữ liệu
+     thứ hai vào trong trang. Người gọi mong nhận payload TRẦN, nên bóc
+     envelope ở đây. Đường không có mock vẫn trả về hình dạng rỗng cũ. */
+  const RONG = { data: [], items: [], results: [] };
   window.__giaApi = async (duong) => {
-    for (const [re, f] of BANG) if (re.test(duong)) return f();
-    return { data: [], items: [], results: [] };
+    try {
+      const d = String(duong ?? '');
+      const r = await fetch(`/api/v1${d.startsWith('/') ? d : `/${d}`}`);
+      if (!r.ok) return RONG;
+      return (await r.json()).data ?? RONG;
+    } catch { return RONG; }
   };
 
   /* Cầu nối Electron giả. Mỗi nhóm trả thứ HỢP KIỂU cho nhóm đó — `undefined`
@@ -214,7 +298,29 @@ await ctx.addInitScript(() => {
  * Nên mỗi trang có quyền khai một bước đưa nó tới trạng thái đông nhất: mở
  * thêm tab, bung bộ lọc, mở thanh bên. Trang nào không khai thì đo như lúc mở.
  */
+/*
+ * Chờ tới khi trang có NỘI DUNG THẬT, thay cho mốc chờ cứng 1200ms.
+ *
+ * Đo 22/08/2026: `/interview/session/1` còn là "Đang vào phòng…" ở 1200ms và
+ * chỉ đủ nội dung ở ~2500ms; `/interview/report/1` thì nằm ngay sát mốc nên
+ * lúc xanh lúc đỏ. Cả hai KHÔNG hỏng — bộ đo chụp quá sớm. Một phép kiểm lúc
+ * xanh lúc đỏ còn tệ hơn một phép kiểm đỏ hẳn: người ta chạy lại cho tới khi
+ * nó xanh.
+ *
+ * ⚠️ `{timeout}` phải là đối số THỨ BA của `waitForFunction`. Đặt ở vị trí thứ
+ * hai thì nó thành tham số của HÀM, và timeout rơi về mặc định 30s.
+ */
+const choNoiDung = async (p) => {
+  await p.waitForFunction(
+    () => (document.querySelector('.ct-content')?.textContent ?? '').trim().length > 80,
+    undefined,
+    { timeout: 8000 },
+  ).catch(() => { /* hết giờ thì cứ đo — để phép kiểm nói ra, đừng giấu */ });
+};
+
 const CHUAN_BI = {
+  '/interview/session/1': choNoiDung,
+  '/interview/report/1': choNoiDung,
   '/chat': async (p) => {
     // Bật chế độ Lập trình rồi mở thêm tab: đây đúng là thao tác người dùng
     // làm khi họ báo lỗi ("tôi ấn tạo task mới thì nó lại bị").
@@ -279,7 +385,12 @@ const DUONG = JSON.parse(process.env.CT_TRANG ?? 'null')
          Hai màn còn lại (`session/:id`, `report/:id`) cần một phiên có thật
          nên không đo được ở đây; chúng đi qua cùng một bảng tra và cùng một
          lớp bọc, và có phép kiểm đơn vị riêng trong `dinhTuyenWeb.test.ts`. */
-      '/interview', '/interview/history', '/interview/drill'];
+      '/interview', '/interview/history', '/interview/drill',
+      /* Hai màn ĐỘNG. Chúng là hai màn NẶNG NHẤT của cây (762 và 360 dòng) và
+         là chỗ người dùng ngồi lâu nhất, nên bỏ qua vì "cần phiên thật" là bỏ
+         đúng phần đáng đo. Máy chủ giả ở trên trả phiên 6 câu + báo cáo đầy đủ,
+         nên chúng vẽ ra trạng thái ĐÔNG chứ không phải màn rỗng. */
+      '/interview/session/1', '/interview/report/1'];
 
 let hong = 0;
 const bang = [];

@@ -30,7 +30,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 3 | `typescript` | `typescript` — TypeScript | ✅ có (17 mục · 84 bài · 649k) — *thiếu sơ đồ* |
 | 4 | `postgresql` | `postgresql` — PostgreSQL | ✅ có (11 mục · 54 bài · 488k) |
 | 5 | `javascript` + `html-css` | `web-foundations` — Nền tảng Lập trình Web | ✅ có (11 mục · 64 bài · 333k) — *0 sơ đồ* |
-| 6 | `git` | — | ❌ **THIẾU** |
+| 6 | `git` | `git` — Git & GitHub | ✅ **XONG** (14 mục · 63 bài · 889k · TB 14.109) |
 | 7 | `linux-bash` | — | ❌ **THIẾU** |
 | 8 | `docker` | — | ❌ **THIẾU** |
 | 9 | `redis` | — | ❌ **THIẾU** |
@@ -50,7 +50,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 23 | `domains-dns-tls` | — | ❌ **THIẾU** |
 | 24 | `cuongthai-roadmap` | *(lộ trình, không phải khoá)* | — bỏ qua |
 
-**Tổng: 5 khoá đã có · 18 khoá còn thiếu.**
+**Tổng: 6 khoá đã có · 17 khoá còn thiếu.**
 
 ### Thứ tự ưu tiên (đã chốt)
 
@@ -153,59 +153,44 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 
 ---
 
-## 6. ⏸️ ĐIỂM DỪNG — đọc mục này trước khi soạn tiếp
+## 6. Việc chưa chạy được từ sandbox (áp cho MỌI khoá mới)
 
-**Trạng thái:** khoá **Git & GitHub** đã xong **14/14 mục**, còn **2 bài cuối** của
-Chương 13. Mọi thứ đã commit và push lên `claude/intelligent-cori-pt8zxp`.
-
-### Còn nợ ngay trong khoá Git (2 bài)
-
-| Bài | Nội dung dự kiến | File |
-|---|---|---|
-| **13.2** | Git trong quy trình THẬT của cuongthai.com: GitHub flow nhưng push vào `main` KHÔNG deploy (`deploy-nha.sh` mới deploy), tự review diff của mình trước khi push, làm việc cùng agent AI trên cùng kho mã (đừng `git add -A` khi có phiên khác đang gõ dở), và **bảng tra nhanh gói cả khoá** | `content/courses/git/s13-cuu-ho.mjs` |
-| **13.3** | **Bài kiểm tra cuối khoá** — 12 câu rút từ cả 14 mục (không phải 8 như quiz chương) | cùng file |
-
-Cách soạn tiếp (đúng quy trình đã dùng suốt khoá):
+Hai bước cuối của mỗi khoá cần môi trường mà sandbox không có — hãy chạy khi ở máy nhà:
 
 ```bash
-# 1. Viết fragment bài mới vào /tmp/frag.mjs (nhớ ĐỦ CẢ ml-en LẪN ml-vi)
-# 2. Chèn vào trước dấu đóng "  ],\n};" của file section:
-python3 /tmp/splice.py content/courses/git/s13-cuu-ho.mjs /tmp/frag.mjs
-# 3. Kiểm — bộ kiểm nay THOÁT KHÁC 0 nên chuỗi && sẽ dừng đúng lúc:
-node scripts/course-content-check.mjs ./content/courses/git.mjs
-node scripts/course-depth-audit.mjs   ./content/courses/git.mjs
+# 1. Ảnh bìa — cần sharp + biến R2_*, phải chạy TRONG container backend.
+#    Chưa chạy thì thumbnailUrl trỏ vào URL chưa tồn tại → thẻ khoá vỡ ảnh trên /courses.
+docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+  --slug git --icon git --color F05032 --title "Git & GitHub" --subtitle "Zero → Production"
+
+# 2. Seed lên DB — cần DATABASE_URL. Idempotent: chạy lại chỉ cập nhật,
+#    không nhân bản, không mất tiến độ học viên.
+node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
+node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ```
 
-`/tmp/splice.py` và `/tmp/addvi.py` là script tạm của phiên trước, **sẽ mất khi
-container khởi động lại** — dựng lại chúng bằng vài dòng Python (đọc file, cắt
-đuôi `"  ],\n};\n"`, nối fragment vào, ghi lại).
+⚠️ Khoá Git tạo **category mới `devops`** (`DevOps & Vận hành`), chưa từng có trong
+DB — lần seed đầu sẽ thêm một mục lọc mới trên trang `/courses`.
 
-### Hai việc còn lại của khoá Git (không chặn việc soạn tiếp)
+---
 
-1. **Sinh ảnh bìa** — phải chạy TRONG container backend (cần `sharp` + biến `R2_*`):
-   ```bash
-   docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
-     --slug git --icon git --color F05032 --title "Git & GitHub" --subtitle "Zero → Production"
-   ```
-   Chưa chạy thì `thumbnailUrl` trong `content/courses/git.mjs` đang trỏ vào một
-   URL chưa tồn tại → thẻ khoá học sẽ vỡ ảnh trên `/courses`.
-2. **Seed lên DB** (sau khi 13.2 + 13.3 xong):
-   ```bash
-   node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
-   node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
-   ```
-   Seeder idempotent — chạy lại chỉ cập nhật, không nhân bản, không mất tiến độ học viên.
-   Lưu ý: khoá này tạo **category mới `devops`** (`DevOps & Vận hành`), chưa từng
-   có trong DB, nên lần seed đầu sẽ tạo thêm một mục lọc mới trên trang `/courses`.
+## 7. Khuôn dựng một khoá mới
 
-### Thứ tự khoá tiếp theo (đã chốt ở §2, nhắc lại cho gọn)
+```
+content/courses/<slug>.mjs          ← file gom: category + course + mảng sections
+content/courses/<slug>/s00-*.mjs    ← mỗi mục một file
+content/courses/<slug>/s01-*.mjs
+```
 
-**Linux & Bash** → **Docker** → Redis → Prisma ORM → Authentication → Nginx →
-Deploy VPS → GitHub Actions → Tailwind CSS → Socket.IO → Object Storage (S3/R2) →
-Media Processing → Observability → Payment Integration (+ VNPay, PayOS) →
-Domains/DNS/TLS.
+Thêm một mục = sửa **hai chỗ** trong file gom (dòng `import` và mảng `sections`).
+Soạn xong mỗi mục thì chạy ngay hai bộ kiểm — bộ đầu nay **thoát khác 0** khi có lỗi
+nên chuỗi `&&` sẽ dừng đúng lúc:
 
-Mỗi khoá dựng theo đúng khuôn của khoá Git: một file `content/courses/<slug>.mjs`
-gom các section, mỗi section một file `content/courses/<slug>/sNN-*.mjs`, và mỗi
-lần thêm section thì cập nhật hai chỗ trong file gom (dòng `import` và mảng
-`sections`).
+```bash
+node scripts/course-content-check.mjs ./content/courses/<slug>.mjs
+node scripts/course-depth-audit.mjs   ./content/courses/<slug>.mjs
+```
+
+Ba lỗi mà bộ kiểm đã bắt được trong lúc soạn khoá Git, đều là loại đọc bằng mắt sẽ sót:
+thiếu hẳn nửa `ml-vi` của một bài 12k ký tự · khối `.out` đóng bằng `</code></pre>`
+thay vì `</div>` (hai lần) · quiz có phương án thuần code mang dấu tiếng Việt.

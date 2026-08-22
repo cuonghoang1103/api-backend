@@ -14,6 +14,7 @@
  */
 import s00 from './redis/s00-intro.mjs';
 import s01 from './redis/s01-mo-hinh.mjs';
+import s02 from './redis/s02-khoa-ttl.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -38,5 +39,6 @@ export default {
   sections: [
     s00,
     s01,
+    s02,
   ],
 };

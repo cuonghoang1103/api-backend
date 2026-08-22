@@ -141,7 +141,7 @@ sudo tcpdump -i any -n -c 20 'tcp[tcpflags] &amp; tcp-syn != 0'   <span class="t
   <span class="lc-ico">🌐</span>
   <span class="lc-body"><span class="lc-title">Cloudflare Learning — How DNS works</span><span class="lc-sub">Recursive resolvers, authoritative servers, TTLs and caching, explained clearly. The background that makes <code>dig +trace</code> readable.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: diagnose four outages</span><span class="lc-sub">Four scenarios with the same symptom — no route, broken DNS, bound to loopback, blocked port. Identify each using the layered checklist.</span></span>
 </a>
@@ -271,7 +271,7 @@ sudo tcpdump -i any -n -c 20 'tcp[tcpflags] &amp; tcp-syn != 0'   <span class="t
   <span class="lc-ico">🌐</span>
   <span class="lc-body"><span class="lc-title">Cloudflare Learning — DNS hoạt động thế nào</span><span class="lc-sub">Bộ phân giải đệ quy, máy chủ có thẩm quyền, TTL và bộ đệm, giải thích rõ ràng. Đây là phần nền làm cho <code>dig +trace</code> đọc được.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: chẩn đoán bốn sự cố</span><span class="lc-sub">Bốn tình huống cùng một triệu chứng — không có đường đi, DNS hỏng, gắn vào loopback, cổng bị chặn. Hãy nhận diện từng cái bằng bảng kiểm theo tầng.</span></span>
 </a>
@@ -458,7 +458,7 @@ exit \$rc</code></pre>
   <span class="lc-ico">🔢</span>
   <span class="lc-body"><span class="lc-title">curl exit codes</span><span class="lc-sub">All of them, with meanings. Worth a bookmark: an exit code turns "the request failed" into a specific, searchable cause.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: write a health check</span><span class="lc-sub">Graded tasks: use <code>-w</code> for a status code, branch on curl exit codes, set sensible timeouts, and test a vhost with <code>--resolve</code>.</span></span>
 </a>
@@ -636,7 +636,7 @@ exit \$rc</code></pre>
   <span class="lc-ico">🔢</span>
   <span class="lc-body"><span class="lc-title">Mã thoát của curl</span><span class="lc-sub">Tất cả, kèm ý nghĩa. Đáng đánh dấu lại: một mã thoát biến "yêu cầu thất bại" thành một nguyên nhân cụ thể và tra được.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: viết một phép kiểm sức khoẻ</span><span class="lc-sub">Bài chấm điểm: dùng <code>-w</code> để lấy mã trạng thái, rẽ nhánh theo mã thoát của curl, đặt thời gian chờ hợp lý, và kiểm một vhost bằng <code>--resolve</code>.</span></span>
 </a>
@@ -817,7 +817,7 @@ Permission denied (publickey).</div>
   <span class="lc-ico">🛡️</span>
   <span class="lc-body"><span class="lc-title">SSH hardening guides</span><span class="lc-sub">Per-distribution configuration with the reasoning for each setting, and an auditing tool to check what you ended up with.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: set up SSH properly</span><span class="lc-sub">Graded tasks: generate a key, write a config with <code>ProxyJump</code>, forward a database port, and diagnose a "Permission denied (publickey)" caused by permissions.</span></span>
 </a>
@@ -989,7 +989,7 @@ Permission denied (publickey).</div>
   <span class="lc-ico">🛡️</span>
   <span class="lc-body"><span class="lc-title">Hướng dẫn gia cố SSH</span><span class="lc-sub">Cấu hình theo từng bản phân phối kèm lý lẽ cho từng thiết lập, và một công cụ rà soát để kiểm lại thứ bạn vừa dựng ra.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: dựng SSH cho tử tế</span><span class="lc-sub">Bài chấm điểm: sinh một khoá, viết một file cấu hình có <code>ProxyJump</code>, chuyển tiếp một cổng cơ sở dữ liệu, và chẩn đoán một lỗi "Permission denied (publickey)" gây ra bởi quyền file.</span></span>
 </a>
@@ -1140,7 +1140,7 @@ rsync -avzn --itemize-changes ./dist/ vps:/srv/app/   <span class="tok-comment">
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">rsync examples — backups and mirrors</span><span class="lc-sub">Including the <code>--link-dest</code> pattern for snapshot backups that share unchanged files via hard links (Lesson 2.4).</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: sync without losing anything</span><span class="lc-sub">Graded tasks on the trailing slash, <code>--delete</code> with a guard, excluding <code>.env</code>, and reading <code>--itemize-changes</code> output.</span></span>
 </a>
@@ -1282,7 +1282,7 @@ rsync -avzn --itemize-changes ./dist/ vps:/srv/app/   <span class="tok-comment">
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">Ví dụ rsync — sao lưu và soi gương</span><span class="lc-sub">Gồm cả khuôn mẫu <code>--link-dest</code> cho những bản sao lưu ảnh chụp dùng chung file không đổi thông qua liên kết cứng (Bài 2.4).</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đồng bộ mà không mất gì</span><span class="lc-sub">Bài chấm điểm về dấu gạch chéo cuối, <code>--delete</code> có chốt chặn, loại trừ <code>.env</code>, và đọc output của <code>--itemize-changes</code>.</span></span>
 </a>
@@ -1433,7 +1433,7 @@ sudo ufw allow out 25,587/tcp           <span class="tok-comment"># mail, if thi
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">nftables wiki</span><span class="lc-sub">The layer underneath ufw and firewalld. Useful when you need to read rules another program wrote — which is exactly the Docker case.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: find the block</span><span class="lc-sub">Four unreachable services: one bound to loopback, one blocked by ufw, one blocked upstream, one published past ufw by Docker. Identify each with the six-step checklist.</span></span>
 </a>
@@ -1575,7 +1575,7 @@ sudo ufw allow out 25,587/tcp           <span class="tok-comment"># thư, nếu 
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Wiki nftables</span><span class="lc-sub">Cái tầng nằm dưới ufw và firewalld. Hữu ích khi bạn cần ĐỌC những luật do một chương trình khác viết ra — đúng là trường hợp của Docker.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: tìm ra chỗ bị chặn</span><span class="lc-sub">Bốn dịch vụ không với tới được: một cái gắn vào loopback, một bị ufw chặn, một bị chặn ở phía trên, một bị Docker công bố vượt mặt ufw. Hãy nhận diện từng cái bằng bảng kiểm sáu bước.</span></span>
 </a>

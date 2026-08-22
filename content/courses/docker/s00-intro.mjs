@@ -133,7 +133,7 @@ Error: libssl.so.3: cannot open shared object file: No such file or directory</d
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">Dockerfile reference</span><span class="lc-sub">Every instruction with its exact semantics. You will come back to this many times — bookmark it now rather than searching for it later.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: the Docker track on Code Lab</span><span class="lc-sub">Graded exercises for every chapter, in a real environment. Start here after Lesson 0.3 and keep the tab open as you read.</span></span>
 </a>
@@ -256,7 +256,7 @@ Error: libssl.so.3: cannot open shared object file: No such file or directory</d
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">Tài liệu tra cứu Dockerfile</span><span class="lc-sub">Mọi chỉ thị kèm ngữ nghĩa chính xác. Bạn sẽ quay lại đây nhiều lần — hãy đánh dấu nó ngay bây giờ thay vì đi tìm sau.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: track Docker trên Code Lab</span><span class="lc-sub">Bài chấm điểm cho mọi chương, trong một môi trường thật. Hãy bắt đầu ở đây sau Bài 0.3 và để tab đó mở suốt lúc đọc.</span></span>
 </a>
@@ -418,7 +418,7 @@ hello-world   latest    d2c94e258dcb   14 months ago  13.3kB</div>
   <span class="lc-ico">🪟</span>
   <span class="lc-body"><span class="lc-title">WSL — working across filesystems</span><span class="lc-sub">Microsoft's own explanation of why <code>/mnt/c</code> is slow and where to keep your files. Read it once if you develop on Windows; it saves hours a week.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: verify your setup</span><span class="lc-sub">Graded exercises: read a <code>docker version</code> output and say what is wrong, interpret <code>docker system df</code>, and explain why one machine needs <code>sudo</code> and another does not.</span></span>
 </a>
@@ -570,7 +570,7 @@ hello-world   latest    d2c94e258dcb   14 months ago  13.3kB</div>
   <span class="lc-ico">🪟</span>
   <span class="lc-body"><span class="lc-title">WSL — làm việc xuyên hệ thống file</span><span class="lc-sub">Giải thích của chính Microsoft về việc vì sao <code>/mnt/c</code> chậm và nên để file ở đâu. Đọc một lần nếu bạn lập trình trên Windows; nó tiết kiệm cho bạn vài giờ mỗi tuần.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: kiểm lại bản cài của bạn</span><span class="lc-sub">Bài chấm điểm: đọc một output <code>docker version</code> rồi nói xem sai ở đâu, diễn giải <code>docker system df</code>, và giải thích vì sao máy này cần <code>sudo</code> còn máy kia thì không.</span></span>
 </a>
@@ -724,7 +724,7 @@ hello-world   latest       d2c94e258dcb   14 months ago 13.3kB</div>
   <span class="lc-ico">🐘</span>
   <span class="lc-body"><span class="lc-title">postgres on Docker Hub</span><span class="lc-sub">Every <code>POSTGRES_*</code> environment variable, the initialisation-script directory, and exactly which path holds the data. You will come back to this in Chapter 7.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: your first containers</span><span class="lc-sub">Graded exercises: publish a port and prove it works, find the process on the host that corresponds to PID 1 inside, serve your own file with a bind mount, and leave the machine clean.</span></span>
 </a>
@@ -868,7 +868,7 @@ hello-world   latest       d2c94e258dcb   14 months ago 13.3kB</div>
   <span class="lc-ico">🐘</span>
   <span class="lc-body"><span class="lc-title">postgres trên Docker Hub</span><span class="lc-sub">Mọi biến môi trường <code>POSTGRES_*</code>, thư mục chứa script khởi tạo, và chính xác đường dẫn nào giữ dữ liệu. Bạn sẽ quay lại đây ở Chương 7.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: những container đầu tiên</span><span class="lc-sub">Bài chấm điểm: publish một cổng rồi chứng minh nó chạy, tìm tiến trình trên máy chủ ứng với PID 1 bên trong, phục vụ file của chính bạn bằng bind mount, và để lại một cái máy sạch.</span></span>
 </a>

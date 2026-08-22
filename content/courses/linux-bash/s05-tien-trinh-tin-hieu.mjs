@@ -132,7 +132,7 @@ lrwx------ 1 root root 64 Aug 22 12:31 /proc/812/fd/6 -> /var/log/nginx/access.l
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">File descriptors, pipes, sessions and terminals</span><span class="lc-sub">A deep, readable series tying together fds, process groups, sessions and controlling terminals — the model behind both this chapter and Chapter 3.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: find the process</span><span class="lc-sub">Graded tasks: identify what holds a port, what is using the most memory, which process keeps a deleted file open, and which parent is leaking zombies.</span></span>
 </a>
@@ -253,7 +253,7 @@ lrwx------ 1 root root 64 Aug 22 12:31 /proc/812/fd/6 -> /var/log/nginx/access.l
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">File descriptor, ống dẫn, phiên và terminal</span><span class="lc-sub">Một loạt bài sâu và dễ đọc, nối liền fd, nhóm tiến trình, phiên và terminal điều khiển — chính là mô hình nằm sau cả chương này lẫn Chương 3.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: tìm cho ra cái tiến trình</span><span class="lc-sub">Bài chấm điểm: xác định cái gì đang giữ một cổng, cái gì ngốn nhiều bộ nhớ nhất, tiến trình nào giữ một file đã xoá, và tiến trình cha nào đang rò xác sống.</span></span>
 </a>
@@ -371,7 +371,7 @@ sudo smem -tk -c 'pid user pss rss command' | tail -6</code></pre>
   <span class="lc-ico">⚡</span>
   <span class="lc-body"><span class="lc-title">Linux Performance Analysis in 60 Seconds</span><span class="lc-sub">Netflix's checklist: ten commands, in order, to triage an unfamiliar server. Chapter 12 builds on exactly this.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: read four sick servers</span><span class="lc-sub">Four <code>top</code> snapshots — CPU-bound, I/O-bound, memory-starved, and stolen CPU. Diagnose each from the numbers alone.</span></span>
 </a>
@@ -480,7 +480,7 @@ sudo smem -tk -c 'pid user pss rss command' | tail -6</code></pre>
   <span class="lc-ico">⚡</span>
   <span class="lc-body"><span class="lc-title">Linux Performance Analysis in 60 Seconds</span><span class="lc-sub">Bảng kiểm của Netflix: mười lệnh, theo đúng thứ tự, để phân loại nhanh một máy chủ lạ. Chương 12 dựng thẳng lên cái này.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đọc bốn máy chủ đang ốm</span><span class="lc-sub">Bốn lát cắt <code>top</code> — nghẽn CPU, nghẽn I/O, đói bộ nhớ, và bị cướp CPU. Chẩn đoán từng cái chỉ bằng các con số.</span></span>
 </a>
@@ -600,7 +600,7 @@ SigCgt: 0000000180014a03</div>
   <span class="lc-ico">☸️</span>
   <span class="lc-body"><span class="lc-title">Terminating with grace</span><span class="lc-sub">The SIGTERM → grace period → SIGKILL sequence as containers and orchestrators implement it, with the timing diagrams. Explains exit code 137 for good.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: stop it properly</span><span class="lc-sub">Graded tasks: a script that traps SIGTERM and cleans up, a stuck process to escalate on, and reading exit codes 130 / 137 / 143 back to their causes.</span></span>
 </a>
@@ -711,7 +711,7 @@ SigCgt: 0000000180014a03</div>
   <span class="lc-ico">☸️</span>
   <span class="lc-body"><span class="lc-title">Terminating with grace</span><span class="lc-sub">Chuỗi SIGTERM → thời gian ân hạn → SIGKILL đúng như container và bộ điều phối cài đặt nó, kèm sơ đồ thời gian. Giải thích dứt điểm mã thoát 137.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: dừng nó cho đúng cách</span><span class="lc-sub">Bài chấm điểm: một script bẫy SIGTERM rồi dọn dẹp, một tiến trình kẹt cần leo thang, và đọc ngược các mã thoát 130 / 137 / 143 về đúng nguyên nhân.</span></span>
 </a>
@@ -843,7 +843,7 @@ journalctl -u myapp -f</code></pre>
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">credentials(7) — sessions and process groups</span><span class="lc-sub">The kernel's definition of session leader, process group and controlling terminal — the model that explains exactly why SIGHUP reaches your background job.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: keep it running</span><span class="lc-sub">Graded tasks: suspend and background a running job, rescue a forgotten one with <code>disown</code>, and detach a tmux session then reattach and read its scrollback.</span></span>
 </a>
@@ -966,7 +966,7 @@ journalctl -u myapp -f</code></pre>
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">credentials(7) — phiên và nhóm tiến trình</span><span class="lc-sub">Định nghĩa của nhân về trưởng phiên, nhóm tiến trình và terminal điều khiển — chính là mô hình giải thích vì sao SIGHUP với tới được job nền của bạn.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: giữ cho nó chạy tiếp</span><span class="lc-sub">Bài chấm điểm: treo rồi đẩy một job đang chạy xuống nền, cứu một job đã quên bằng <code>disown</code>, và tách một phiên tmux rồi gắn lại đọc phần đã cuộn qua.</span></span>
 </a>

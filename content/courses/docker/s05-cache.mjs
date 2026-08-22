@@ -134,7 +134,7 @@ Build Cache	412.4MB	412.4MB (100%)</div>
   <span class="lc-ico">🏗️</span>
   <span class="lc-body"><span class="lc-title">BuildKit</span><span class="lc-sub">The builder itself. Worth knowing it parallelises independent stages automatically — one of the reasons multi-stage builds are often faster, not slower, than single-stage ones.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: predict the cache</span><span class="lc-sub">Graded exercises: say which steps rebuild after four different edits, fix a Dockerfile where a README change triggers a dependency install, and explain a 404 from a cached <code>apt-get update</code>.</span></span>
 </a>
@@ -257,7 +257,7 @@ Build Cache	412.4MB	412.4MB (100%)</div>
   <span class="lc-ico">🏗️</span>
   <span class="lc-body"><span class="lc-title">BuildKit</span><span class="lc-sub">Chính cái bộ dựng. Đáng biết rằng nó TỰ ĐỘNG chạy song song các stage độc lập — một trong những lý do khiến dựng nhiều tầng thường NHANH HƠN chứ không chậm hơn dựng một tầng.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đoán trước cái cache</span><span class="lc-sub">Bài chấm điểm: nói xem bước nào dựng lại sau bốn kiểu sửa khác nhau, sửa một Dockerfile mà đổi README lại kích hoạt cài thư viện, và giải thích một cú 404 đến từ <code>apt-get update</code> đã bị lưu đệm.</span></span>
 </a>
@@ -405,7 +405,7 @@ docker build --progress=plain -f Dockerfile.fast -t o:m . 2&gt;&amp;1 \\
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">RUN --mount=type=bind</span><span class="lc-sub">Reading files during a build without copying them into a layer. The clean solution to the monorepo manifest problem, and it keeps the image smaller too.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: reorder for speed</span><span class="lc-sub">Graded exercises: measure a slow Dockerfile, reorder it and measure again, fix a workspace build that misses the cache on every commit, and decide whether to group or split a pair of <code>RUN</code>s.</span></span>
 </a>
@@ -544,7 +544,7 @@ docker build --progress=plain -f Dockerfile.fast -t o:m . 2&gt;&amp;1 \\
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">RUN --mount=type=bind</span><span class="lc-sub">Đọc file trong lúc dựng mà không chép chúng vào một tầng. Giải pháp sạch cho bài toán file khai báo trong monorepo, và nó còn giữ cho ảnh nhỏ hơn.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: sắp lại cho nhanh</span><span class="lc-sub">Bài chấm điểm: đo một Dockerfile chậm, sắp lại rồi đo lần nữa, sửa một lượt dựng workspace trượt cache ở mọi commit, và quyết định nên gộp hay tách một cặp <code>RUN</code>.</span></span>
 </a>
@@ -712,7 +712,7 @@ Total reclaimed space: 318.4MB</div>
   <span class="lc-ico">♻️</span>
   <span class="lc-body"><span class="lc-title">BuildKit garbage collection</span><span class="lc-sub">Setting size ceilings and retention policies in <code>daemon.json</code> so cache mounts cannot fill a disk. Better than remembering to prune.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: mount the cache</span><span class="lc-sub">Graded exercises: add a cache mount and measure the difference, fix an apt cache mount that stays empty, repair a mount that fails with permission denied under <code>USER node</code>, and find the cache mounts eating disk.</span></span>
 </a>
@@ -871,7 +871,7 @@ Total reclaimed space: 318.4MB</div>
   <span class="lc-ico">♻️</span>
   <span class="lc-body"><span class="lc-title">Thu gom rác của BuildKit</span><span class="lc-sub">Đặt trần dung lượng và chính sách giữ lại trong <code>daemon.json</code> để cache mount không thể làm đầy một cái đĩa. Tốt hơn việc nhớ đi tỉa.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: gắn cái cache vào</span><span class="lc-sub">Bài chấm điểm: thêm một cache mount rồi đo khác biệt, sửa một cache mount apt cứ rỗng mãi, chữa một mount hỏng với permission denied dưới <code>USER node</code>, và tìm ra những cache mount đang ăn đĩa.</span></span>
 </a>
@@ -1012,7 +1012,7 @@ docker buildx build --cache-from type=local,src=/tmp/bc --progress=plain -t t:1 
   <span class="lc-ico">🏷️</span>
   <span class="lc-body"><span class="lc-title">docker/metadata-action</span><span class="lc-sub">Generates tags and OCI labels from git context. Replaces a page of shell and gets the tagging strategy from Lesson 3.2 right by default.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: warm the CI cache</span><span class="lc-sub">Graded exercises: prove a cache export works by deleting the builder, pick the right backend for three scenarios, explain why <code>mode=min</code> caches nothing useful in a multi-stage build, and spot the missing <code>setup-buildx-action</code>.</span></span>
 </a>
@@ -1144,7 +1144,7 @@ docker buildx build --cache-from type=local,src=/tmp/bc --progress=plain -t t:1 
   <span class="lc-ico">🏷️</span>
   <span class="lc-body"><span class="lc-title">docker/metadata-action</span><span class="lc-sub">Sinh tag và nhãn OCI từ ngữ cảnh git. Thay được cả một trang shell và mặc định làm ĐÚNG chiến lược đặt tag ở Bài 3.2.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: làm ấm cache của CI</span><span class="lc-sub">Bài chấm điểm: chứng minh một lượt xuất cache có hoạt động bằng cách xoá bộ dựng, chọn backend đúng cho ba tình huống, giải thích vì sao <code>mode=min</code> chẳng lưu đệm được gì hữu ích trong một lượt dựng nhiều tầng, và phát hiện chỗ thiếu <code>setup-buildx-action</code>.</span></span>
 </a>
@@ -1286,7 +1286,7 @@ Private:	1.204GB
   <span class="lc-ico">🎯</span>
   <span class="lc-body"><span class="lc-title">--target: build one stage</span><span class="lc-sub">Stopping at a named stage. Invaluable for timing a single stage in isolation, and for shipping a <code>:debug</code> variant of the same Dockerfile.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: find the slow step</span><span class="lc-sub">Graded exercises: take the three measurements and name which cause you have, read a timing list and pick the one step worth optimising, and fix a Dockerfile where the warm build takes forty seconds.</span></span>
 </a>
@@ -1419,7 +1419,7 @@ Private:	1.204GB
   <span class="lc-ico">🎯</span>
   <span class="lc-body"><span class="lc-title">--target: dựng đúng một stage</span><span class="lc-sub">Dừng lại ở một stage có tên. Vô giá để bấm giờ một stage riêng lẻ, và để đem đi một biến thể <code>:debug</code> từ cùng một Dockerfile.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: tìm ra cái bước chậm</span><span class="lc-sub">Bài chấm điểm: lấy ba phép đo rồi gọi tên nguyên nhân bạn đang gặp, đọc một bảng thời gian rồi chọn ĐÚNG MỘT bước đáng tối ưu, và sửa một Dockerfile mà lượt dựng ấm mất bốn mươi giây.</span></span>
 </a>
@@ -1456,7 +1456,7 @@ Private:	1.204GB
             question: 'What does BuildKit use as the cache key for a RUN instruction?|||BuildKit dùng gì làm khoá cache cho một chỉ thị RUN?',
             options: [
               'A checksum of the files the command touches|||Một tổng kiểm tra của những file mà câu lệnh đó đụng tới',
-              'The command STRING itself (plus the previous step\\u2019s key) — BuildKit has no idea what the command does, which is why a cached apt-get update stays stale forever|||Chính CHUỖI câu lệnh (cộng khoá của bước trước) — BuildKit hoàn toàn không biết câu lệnh đó làm gì, và đó là lý do một apt-get update đã lưu đệm cứ cũ mãi',
+              'The command STRING itself (plus the previous step’s key) — BuildKit has no idea what the command does, which is why a cached apt-get update stays stale forever|||Chính CHUỖI câu lệnh (cộng khoá của bước trước) — BuildKit hoàn toàn không biết câu lệnh đó làm gì, và đó là lý do một apt-get update đã lưu đệm cứ cũ mãi',
               'The exit code of the command|||Mã thoát của câu lệnh',
               'The timestamp of the last build|||Mốc thời gian của lượt dựng gần nhất',
             ],
@@ -1478,7 +1478,7 @@ Private:	1.204GB
             question: 'Editing a README triggers a full npm ci. What is wrong with the Dockerfile?|||Sửa một cái README lại kích hoạt npm ci chạy lại toàn bộ. Dockerfile sai ở đâu?',
             options: [
               'The base image is not pinned|||Ảnh nền chưa được ghim',
-              'COPY . . appears before the install step, so every file in the context is part of that step\\u2019s key and invalidation cascades downward — copy package.json and the lockfile first|||COPY . . đứng TRƯỚC bước cài, nên mọi file trong ngữ cảnh đều là một phần của khoá bước đó và việc vô hiệu hoá lan xuống dưới — hãy chép package.json với lockfile trước',
+              'COPY . . appears before the install step, so every file in the context is part of that step’s key and invalidation cascades downward — copy package.json and the lockfile first|||COPY . . đứng TRƯỚC bước cài, nên mọi file trong ngữ cảnh đều là một phần của khoá bước đó và việc vô hiệu hoá lan xuống dưới — hãy chép package.json với lockfile trước',
               'npm ci always ignores the cache|||npm ci luôn bỏ qua cache',
               'The README is too large|||File README quá lớn',
             ],
@@ -1511,7 +1511,7 @@ Private:	1.204GB
             question: 'Your CI uses --cache-to type=gha with the default mode on a multi-stage Dockerfile. Why is the build still cold every time?|||CI của bạn dùng --cache-to type=gha với mode mặc định trên một Dockerfile nhiều tầng. Vì sao lượt dựng vẫn nguội mỗi lần?',
             options: [
               'GitHub Actions caches expire after one hour|||Cache của GitHub Actions hết hạn sau một giờ',
-              'The default mode=min exports only the FINAL image\\u2019s layers, and the expensive build stage is not in the final image — use mode=max|||mode=min mặc định chỉ xuất những tầng của ảnh CUỐI, mà cái stage dựng đắt tiền thì không nằm trong ảnh cuối — hãy dùng mode=max',
+              'The default mode=min exports only the FINAL image’s layers, and the expensive build stage is not in the final image — use mode=max|||mode=min mặc định chỉ xuất những tầng của ảnh CUỐI, mà cái stage dựng đắt tiền thì không nằm trong ảnh cuối — hãy dùng mode=max',
               'type=gha does not support multi-stage builds|||type=gha không hỗ trợ dựng nhiều tầng',
               'The cache must be named the same as the image tag|||Cache phải đặt tên giống hệt tag của ảnh',
             ],

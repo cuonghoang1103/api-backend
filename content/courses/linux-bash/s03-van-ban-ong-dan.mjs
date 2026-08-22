@@ -135,7 +135,7 @@ echo hi &gt; existing.txt</code></pre>
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">BashFAQ — "How can I redirect stdout and stderr?"</span><span class="lc-sub">Walks through the <code>2&gt;&amp;1</code> ordering trap step by step, with the fd table drawn out at each stage.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: capture exactly the output you meant</span><span class="lc-sub">Graded tasks on stream separation, <code>2&gt;&amp;1</code> ordering, heredoc quoting and <code>sudo tee</code>.</span></span>
 </a>
@@ -260,7 +260,7 @@ echo hi &gt; existing.txt</code></pre>
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">BashFAQ — "Chuyển hướng stdout và stderr thế nào?"</span><span class="lc-sub">Đi từng bước qua cái bẫy thứ tự của <code>2&gt;&amp;1</code>, có vẽ ra bảng fd ở mỗi giai đoạn.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: hứng đúng cái output bạn định hứng</span><span class="lc-sub">Bài chấm điểm về tách dòng chuẩn, thứ tự <code>2&gt;&amp;1</code>, dấu nháy trong heredoc và <code>sudo tee</code>.</span></span>
 </a>
@@ -407,7 +407,7 @@ find . -name "*.log" | xargs -r gzip                <span class="tok-comment"># 
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">GNU xargs — invocation and safety</span><span class="lc-sub">Why <code>-0</code> and <code>-r</code> exist, and how <code>-P</code> interacts with output interleaving.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: build and debug a pipeline</span><span class="lc-sub">Graded tasks on pipefail, the subshell trap, line buffering, and parallel <code>xargs -P</code> on a real log file.</span></span>
 </a>
@@ -545,7 +545,7 @@ find . -name "*.log" | xargs -r gzip                <span class="tok-comment"># 
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">GNU xargs — cách gọi và các chốt an toàn</span><span class="lc-sub">Vì sao <code>-0</code> và <code>-r</code> tồn tại, và <code>-P</code> tương tác thế nào với việc output xen kẽ nhau.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: dựng và gỡ lỗi một chuỗi ống</span><span class="lc-sub">Bài chấm điểm về pipefail, bẫy shell con, đệm theo dòng, và <code>xargs -P</code> song song trên một file log thật.</span></span>
 </a>
@@ -666,7 +666,7 @@ src/lib/client.ts
   <span class="lc-ico">⚡</span>
   <span class="lc-body"><span class="lc-title">ripgrep — the user guide</span><span class="lc-sub">Written by its author, and unusually good at explaining the gitignore rules and file-type filters that make it fast.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: find it in the log</span><span class="lc-sub">Graded tasks on BRE vs ERE, <code>-o</code>, context flags and <code>-Fxf</code>, on a 200k-line access log.</span></span>
 </a>
@@ -778,7 +778,7 @@ src/lib/client.ts
   <span class="lc-ico">⚡</span>
   <span class="lc-body"><span class="lc-title">ripgrep — sách hướng dẫn người dùng</span><span class="lc-sub">Do chính tác giả viết, và giải thích cực tốt về luật gitignore cùng bộ lọc theo loại file — hai thứ làm nên tốc độ của nó.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: tìm cho ra nó trong log</span><span class="lc-sub">Bài chấm điểm về BRE với ERE, <code>-o</code>, các cờ ngữ cảnh và <code>-Fxf</code>, trên một file access log 200 nghìn dòng.</span></span>
 </a>
@@ -924,7 +924,7 @@ deploy /bin/bash
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">explainshell — paste a pipeline, get it annotated</span><span class="lc-sub">Paste any command from this lesson and it breaks down every flag against the real man pages. The fastest way to read someone else's one-liner.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: answer questions with one line</span><span class="lc-sub">Graded exercises that give you a log file and a question, and expect a single pipeline. <code>sort -k</code> and <code>uniq -d</code> feature heavily.</span></span>
 </a>
@@ -1061,7 +1061,7 @@ deploy /bin/bash
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">explainshell — dán một chuỗi ống vào, nhận về bản chú giải</span><span class="lc-sub">Dán bất kỳ lệnh nào trong bài này, nó tách ra từng cờ và đối chiếu với trang man thật. Cách nhanh nhất để đọc một dòng lệnh của người khác.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: trả lời câu hỏi bằng đúng một dòng</span><span class="lc-sub">Bài chấm điểm đưa cho bạn một file log và một câu hỏi, và chờ đợi đúng một chuỗi ống. <code>sort -k</code> và <code>uniq -d</code> xuất hiện rất nhiều.</span></span>
 </a>
@@ -1198,7 +1198,7 @@ X11Forwarding no</div>
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">BashFAQ — "How can I replace a string with another string?"</span><span class="lc-sub">Covers the escaping problem properly: what to do when the string you are inserting contains slashes, ampersands or newlines.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: rewrite a config with sed</span><span class="lc-sub">Graded tasks on addresses, capture groups, <code>-i</code> safety and the <code>&amp;</code> escaping trap.</span></span>
 </a>
@@ -1326,7 +1326,7 @@ X11Forwarding no</div>
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">BashFAQ — "Thay một chuỗi bằng một chuỗi khác thế nào?"</span><span class="lc-sub">Nói tử tế về vấn đề thoát ký tự: phải làm gì khi chuỗi bạn chèn vào có chứa gạch chéo, dấu và, hoặc ký tự xuống dòng.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: viết lại một file cấu hình bằng sed</span><span class="lc-sub">Bài chấm điểm về địa chỉ, nhóm bắt giữ, chốt an toàn của <code>-i</code> và cái bẫy thoát ký tự <code>&amp;</code>.</span></span>
 </a>
@@ -1490,7 +1490,7 @@ cherry</div>
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">learn_gnuawk — book with exercises</span><span class="lc-sub">Free, exercise-driven, and each chapter has solutions. The best way to actually retain awk rather than re-Googling it.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: aggregate a log with awk</span><span class="lc-sub">Graded tasks on fields, <code>NR</code>/<code>NF</code>, associative arrays and <code>END</code> blocks, against a real nginx access log.</span></span>
 </a>
@@ -1645,7 +1645,7 @@ cherry</div>
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">learn_gnuawk — sách kèm bài tập</span><span class="lc-sub">Miễn phí, dẫn dắt bằng bài tập, và mỗi chương đều có lời giải. Cách tốt nhất để thật sự nhớ awk thay vì tra Google lại từ đầu mỗi lần.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: cộng dồn một file log bằng awk</span><span class="lc-sub">Bài chấm điểm về trường, <code>NR</code>/<code>NF</code>, mảng liên kết và khối <code>END</code>, trên một access log nginx thật.</span></span>
 </a>

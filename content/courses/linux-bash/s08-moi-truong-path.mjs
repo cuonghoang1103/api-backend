@@ -143,7 +143,7 @@ env -i bash -c 'echo \$PATH'      <span class="tok-comment"># 6. what does a bar
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">pam_env(8) — how /etc/environment is read</span><span class="lc-sub">Explains why that file is not a shell script and why <code>PATH=\$PATH:/opt/bin</code> in it silently produces a literal dollar sign.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: find the command</span><span class="lc-sub">Graded scenarios: a shadowed binary, a stale hash entry, a directory missing from PATH, and a script that works interactively but not under <code>env -i</code>.</span></span>
 </a>
@@ -275,7 +275,7 @@ env -i bash -c 'echo \$PATH'      <span class="tok-comment"># 6. một môi trư
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">pam_env(8) — /etc/environment được đọc ra sao</span><span class="lc-sub">Giải thích vì sao file đó không phải một script shell và vì sao <code>PATH=\$PATH:/opt/bin</code> viết trong đó lại âm thầm sinh ra một dấu đô la nguyên văn.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: tìm cho ra cái lệnh</span><span class="lc-sub">Các tình huống chấm điểm: một chương trình bị che khuất, một mục băm đã cũ, một thư mục thiếu khỏi PATH, và một script chạy tay thì được mà chạy dưới <code>env -i</code> thì hỏng.</span></span>
 </a>
@@ -432,7 +432,7 @@ read: ~/.bashrc
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">crontab(5) — the environment cron provides</span><span class="lc-sub">Exactly which variables cron sets and how to override them from the crontab itself. Short, and it prevents the most common cron failure.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: put it in the right file</span><span class="lc-sub">Graded scenarios: a PATH that vanishes over SSH, an alias that does not work in a script, an rc file that breaks scp, and a cron job that cannot find node.</span></span>
 </a>
@@ -580,7 +580,7 @@ bash -c true       <span class="tok-comment"># không tương tác</span></code>
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">crontab(5) — môi trường mà cron cung cấp</span><span class="lc-sub">Chính xác những biến nào cron đặt và cách ghi đè chúng ngay từ crontab. Ngắn, và nó ngăn được kiểu hỏng phổ biến nhất của cron.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đặt nó vào đúng file</span><span class="lc-sub">Các tình huống chấm điểm: một PATH biến mất khi qua SSH, một bí danh không chạy trong script, một file rc làm hỏng scp, và một công việc cron không tìm thấy node.</span></span>
 </a>
@@ -724,7 +724,7 @@ DATABASE_URL=postgres://app:...@localhost:5432/app</div>
   <span class="lc-ico">🔐</span>
   <span class="lc-body"><span class="lc-title">Docker — build secrets</span><span class="lc-sub">Why <code>ARG</code> and <code>ENV</code> leak into image history, and the <code>--mount=type=secret</code> alternative that does not.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: get the value into the process</span><span class="lc-sub">Graded scenarios: a variable set in the wrong file, a <code>.env</code> with a space in a value that breaks the xargs form, and a secret readable via <code>ps</code>.</span></span>
 </a>
@@ -859,7 +859,7 @@ DATABASE_URL=postgres://app:...@localhost:5432/app</div>
   <span class="lc-ico">🔐</span>
   <span class="lc-body"><span class="lc-title">Docker — bí mật lúc dựng ảnh</span><span class="lc-sub">Vì sao <code>ARG</code> và <code>ENV</code> rò rỉ vào lịch sử ảnh, và phương án <code>--mount=type=secret</code> thì không.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đưa cho được giá trị vào tiến trình</span><span class="lc-sub">Các tình huống chấm điểm: một biến đặt nhầm file, một <code>.env</code> có dấu cách trong giá trị làm vỡ cách dùng xargs, và một bí mật đọc được qua <code>ps</code>.</span></span>
 </a>
@@ -1051,7 +1051,7 @@ unset f</code></pre>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Readline User Manual</span><span class="lc-sub">Every editing key and every <code>~/.inputrc</code> setting. Applies to bash, psql, python, gdb and anything else linked against readline.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: build a bashrc</span><span class="lc-sub">Graded tasks: convert a broken alias into a function, fix a prompt that wraps wrongly, and configure history so nothing is lost when a terminal is killed.</span></span>
 </a>
@@ -1234,7 +1234,7 @@ unset f</code></pre>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Readline User Manual</span><span class="lc-sub">Mọi phím soạn thảo và mọi thiết lập của <code>~/.inputrc</code>. Áp dụng cho bash, psql, python, gdb và mọi thứ khác có liên kết với readline.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: dựng một file bashrc</span><span class="lc-sub">Bài chấm điểm: chuyển một bí danh hỏng thành một hàm, chữa một dấu nhắc bẻ dòng sai, và cấu hình lịch sử sao cho không mất gì khi một terminal bị giết.</span></span>
 </a>

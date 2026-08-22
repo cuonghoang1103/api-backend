@@ -119,7 +119,7 @@ rw- = 4+2+0 = 6        -wx = 0+2+1 = 3        --- = 0</code></pre>
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Coreutils — Mode Structure</span><span class="lc-sub">GNU's own explanation of the permission bits, including how they differ on directories and what the special bits do.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: read a permission line</span><span class="lc-sub">Graded exercises that give you an <code>ls -l</code> output and a user, and ask what that user can actually do.</span></span>
 </a>
@@ -227,7 +227,7 @@ rw- = 4+2+0 = 6        -wx = 0+2+1 = 3        --- = 0</code></pre>
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Coreutils — Mode Structure</span><span class="lc-sub">Lời giải thích của chính GNU về các bit quyền, gồm cả chỗ chúng khác nhau trên thư mục và các bit đặc biệt làm gì.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đọc một dòng quyền</span><span class="lc-sub">Bài chấm điểm đưa cho bạn một output <code>ls -l</code> và một người dùng, rồi hỏi người đó thật sự làm được gì.</span></span>
 </a>
@@ -352,7 +352,7 @@ drwx------ deploy deploy config      ← here
   <span class="lc-ico">🔑</span>
   <span class="lc-body"><span class="lc-title">OpenSSH — required permissions for keys</span><span class="lc-sub">The exact modes SSH insists on for <code>~/.ssh</code>, private keys and <code>authorized_keys</code>, and why it refuses rather than warns.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: fix a broken permission set</span><span class="lc-sub">Graded tasks: an app tree with wrong modes and ownership, to be repaired with <code>chmod -R …X</code>, <code>find -type</code> and <code>chown</code>.</span></span>
 </a>
@@ -468,7 +468,7 @@ drwx------ deploy deploy config      ← chỗ này
   <span class="lc-ico">🔑</span>
   <span class="lc-body"><span class="lc-title">OpenSSH — các quyền bắt buộc cho khoá</span><span class="lc-sub">Chính xác những chế độ SSH đòi hỏi cho <code>~/.ssh</code>, khoá riêng và <code>authorized_keys</code>, cùng lý do nó từ chối thay vì chỉ cảnh báo.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: sửa một bộ quyền đã hỏng</span><span class="lc-sub">Bài chấm điểm: một cây thư mục ứng dụng sai chế độ và sai quyền sở hữu, cần chữa bằng <code>chmod -R …X</code>, <code>find -type</code> và <code>chown</code>.</span></span>
 </a>
@@ -586,7 +586,7 @@ chmod 0755 prog        <span class="tok-comment"># clear ALL special bits (leadi
   <span class="lc-ico">⚠️</span>
   <span class="lc-body"><span class="lc-title">GTFOBins — why a stray setuid binary matters</span><span class="lc-sub">A catalogue of ordinary commands that become root shells when setuid. Read it as the argument for auditing <code>find / -perm -4000</code>, not as a toolkit.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: build a shared directory that works</span><span class="lc-sub">Graded task: two users, one directory, files each can edit — using group + setgid + umask, and verified by actually writing as both.</span></span>
 </a>
@@ -695,7 +695,7 @@ chmod 0755 prog        <span class="tok-comment"># xoá TẤT CẢ bit đặc bi
   <span class="lc-ico">⚠️</span>
   <span class="lc-body"><span class="lc-title">GTFOBins — vì sao một file setuid lạc chỗ lại nghiêm trọng</span><span class="lc-sub">Một danh mục những lệnh bình thường sẽ trở thành shell root khi mang setuid. Hãy đọc nó như lý lẽ cho việc rà soát <code>find / -perm -4000</code>, không phải như một bộ đồ nghề.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: dựng một thư mục dùng chung thật sự chạy được</span><span class="lc-sub">Bài chấm điểm: hai người dùng, một thư mục, file mà cả hai đều sửa được — bằng nhóm + setgid + umask, và được kiểm bằng cách ghi thật với cả hai tài khoản.</span></span>
 </a>
@@ -821,7 +821,7 @@ sudo grep sudo /var/log/auth.log | tail -20</code></pre>
   <span class="lc-ico">🐧</span>
   <span class="lc-body"><span class="lc-title">Ubuntu Server — User Management</span><span class="lc-sub">The distribution's own guidance, including why root has no password by default and how <code>adduser</code> differs from <code>useradd</code>.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: set up a deploy account</span><span class="lc-sub">Graded task: create a service user, put it in a group, write a narrow sudoers rule, and verify it can do exactly one thing and nothing more.</span></span>
 </a>
@@ -938,7 +938,7 @@ sudo grep sudo /var/log/auth.log | tail -20</code></pre>
   <span class="lc-ico">🐧</span>
   <span class="lc-body"><span class="lc-title">Ubuntu Server — Quản lý người dùng</span><span class="lc-sub">Hướng dẫn của chính bản phân phối, gồm cả lý do root mặc định không có mật khẩu và <code>adduser</code> khác <code>useradd</code> ra sao.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: dựng một tài khoản deploy</span><span class="lc-sub">Bài chấm điểm: tạo một người dùng dịch vụ, đưa vào một nhóm, viết một luật sudoers hẹp, rồi kiểm rằng nó làm được đúng một việc và không làm được gì hơn.</span></span>
 </a>
@@ -1070,7 +1070,7 @@ sudo -u www-data touch /srv/app/uploads/test.txt &amp;&amp; echo OK</code></pre>
   <span class="lc-ico">🔒</span>
   <span class="lc-body"><span class="lc-title">chattr(1) / lsattr(1) — file attributes</span><span class="lc-sub">The immutable and append-only flags: what they block, and why even root has to remove them deliberately.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: five broken permissions, five diagnoses</span><span class="lc-sub">Each scenario fails with the same message and has a different cause — path traversal, wrong user, missing <code>x</code>, read-only mount, immutable bit. Graded on the fix, not the symptom.</span></span>
 </a>
@@ -1193,7 +1193,7 @@ sudo -u www-data touch /srv/app/uploads/test.txt &amp;&amp; echo OK</code></pre>
   <span class="lc-ico">🔒</span>
   <span class="lc-body"><span class="lc-title">chattr(1) / lsattr(1) — thuộc tính file</span><span class="lc-sub">Các cờ bất biến và chỉ-nối-thêm: chúng chặn những gì, và vì sao ngay cả root cũng phải cố ý gỡ chúng.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: năm chỗ hỏng quyền, năm chẩn đoán</span><span class="lc-sub">Mỗi tình huống đều hỏng với cùng một thông báo và có một nguyên nhân khác nhau — đi xuyên đường dẫn, sai người dùng, thiếu <code>x</code>, gắn chỉ-đọc, bit bất biến. Chấm điểm theo CÁCH CHỮA, không theo triệu chứng.</span></span>
 </a>

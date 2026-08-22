@@ -149,7 +149,7 @@ no postgres:16-alpine</div>
   <span class="lc-ico">🏃</span>
   <span class="lc-body"><span class="lc-title">Running containers — the concept guide</span><span class="lc-sub">The narrative version: how the flags interact, what the defaults are, and the ENTRYPOINT/CMD table that everyone bookmarks eventually.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: build the command</span><span class="lc-sub">Graded exercises: publish a port to loopback only, override an entrypoint to get a shell, pass an env file, and reconstruct a <code>docker run</code> from <code>docker inspect</code> output.</span></span>
 </a>
@@ -286,7 +286,7 @@ no postgres:16-alpine</div>
   <span class="lc-ico">🏃</span>
   <span class="lc-body"><span class="lc-title">Chạy container — hướng dẫn khái niệm</span><span class="lc-sub">Bản kể chuyện: các cờ tương tác với nhau ra sao, mặc định là gì, và cái bảng ENTRYPOINT/CMD mà rồi ai cũng đánh dấu trang.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: tự dựng câu lệnh</span><span class="lc-sub">Bài chấm điểm: publish một cổng chỉ vào loopback, ghi đè entrypoint để lấy một cái shell, truyền một file env, và dựng lại một lệnh <code>docker run</code> từ output của <code>docker inspect</code>.</span></span>
 </a>
@@ -435,7 +435,7 @@ web: 2026/08/22 21:31:04 [error] 31#31: *2 open() "/usr/share/nginx/html/missing
   <span class="lc-ico">🚰</span>
   <span class="lc-body"><span class="lc-title">Configure logging drivers</span><span class="lc-sub">json-file, local, journald, syslog and the cloud drivers, with the rotation options. Read the <code>max-size</code>/<code>max-file</code> section today, before a log file fills a disk.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: make a container transparent</span><span class="lc-sub">Graded exercises: bound a log search to a five-minute window, extract the exit code and OOM flag with a template, find a process writing outside a volume with <code>docker diff</code>, and explain why one container's logs are empty.</span></span>
 </a>
@@ -575,7 +575,7 @@ web: 2026/08/22 21:31:04 [error] 31#31: *2 open() "/usr/share/nginx/html/missing
   <span class="lc-ico">🚰</span>
   <span class="lc-body"><span class="lc-title">Cấu hình trình ghi log</span><span class="lc-sub">json-file, local, journald, syslog và các trình của đám mây, kèm tuỳ chọn xoay vòng. Hãy đọc phần <code>max-size</code>/<code>max-file</code> ngay hôm nay, trước khi một file log làm đầy một cái đĩa.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: làm cho một container trở nên trong suốt</span><span class="lc-sub">Bài chấm điểm: khoanh một cuộc tìm log vào khung năm phút, moi mã thoát và cờ OOM ra bằng một khuôn, tìm một tiến trình đang ghi ngoài volume bằng <code>docker diff</code>, và giải thích vì sao log của một container lại rỗng.</span></span>
 </a>
@@ -712,7 +712,7 @@ mime.types</div>
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">nsenter(1)</span><span class="lc-sub">Entering namespaces from the host, one flag per namespace. The escape hatch when the container has no tools and you cannot add any.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: get inside anything</span><span class="lc-sub">Graded exercises: pipe JSON into a container correctly, detach from an attached session without killing it, read a file out of a distroless container, and use a sidecar to find what a shell-less image is listening on.</span></span>
 </a>
@@ -840,7 +840,7 @@ mime.types</div>
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">nsenter(1)</span><span class="lc-sub">Vào namespace từ máy chủ, mỗi namespace một cái cờ. Lối thoát khi container không có công cụ nào và bạn không thêm được cái nào.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: vào được bên trong bất cứ thứ gì</span><span class="lc-sub">Bài chấm điểm: đổ JSON vào một container cho đúng, tách khỏi một phiên đã attach mà không giết nó, đọc một file ra từ một container distroless, và dùng một container phụ để tìm xem một ảnh không-shell đang lắng nghe cái gì.</span></span>
 </a>
@@ -956,7 +956,7 @@ entrypoint replaced</div>
   <span class="lc-ico">👤</span>
   <span class="lc-body"><span class="lc-title">User namespace remapping</span><span class="lc-sub">The daemon-wide setting that maps container root to an unprivileged host UID, solving the bind-mount ownership problem at the source — with an honest list of what it breaks.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: env, users, arguments</span><span class="lc-sub">Graded exercises: predict the winning value across an env-file and a flag, fix a password that arrived with quotes attached, make a container write files you can delete, and say which program receives an argument.</span></span>
 </a>
@@ -1063,7 +1063,7 @@ docker run --rm --entrypoint "" postgres:16-alpine ls /docker-entrypoint-initdb.
   <span class="lc-ico">👤</span>
   <span class="lc-body"><span class="lc-title">Ánh xạ lại user namespace</span><span class="lc-sub">Thiết lập ở mức tiến trình nền, ánh xạ root trong container sang một UID không đặc quyền của máy chủ, giải quyết bài toán quyền sở hữu bind mount từ gốc — kèm một danh sách trung thực những thứ nó làm hỏng.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: môi trường, người dùng, tham số</span><span class="lc-sub">Bài chấm điểm: đoán giá trị nào thắng giữa một env-file và một cái cờ, sửa một mật khẩu bị dính dấu nháy, làm cho một container ghi ra những file bạn xoá được, và nói xem chương trình nào nhận một tham số.</span></span>
 </a>
@@ -1191,7 +1191,7 @@ unhealthy · restarts=0
   <span class="lc-ico">🩺</span>
   <span class="lc-body"><span class="lc-title">HEALTHCHECK in the Dockerfile</span><span class="lc-sub">The instruction form, the exit-code contract (0 healthy, 1 unhealthy), and the explicit note that Docker itself takes no action on unhealthy.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: limits and restarts</span><span class="lc-sub">Graded exercises: prove a memory limit with <code>OOMKilled</code>, pick the right restart policy for three scenarios, add a healthcheck that catches a wedged process, and explain why the container did not restart.</span></span>
 </a>
@@ -1310,7 +1310,7 @@ unhealthy · restarts=0
   <span class="lc-ico">🩺</span>
   <span class="lc-body"><span class="lc-title">HEALTHCHECK trong Dockerfile</span><span class="lc-sub">Dạng chỉ thị, bản hợp đồng về mã thoát (0 khoẻ, 1 không khoẻ), và ghi chú tường minh rằng chính Docker KHÔNG hành động gì khi không khoẻ.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: giới hạn và khởi động lại</span><span class="lc-sub">Bài chấm điểm: chứng minh một trần bộ nhớ bằng <code>OOMKilled</code>, chọn chính sách khởi động lại đúng cho ba tình huống, thêm một healthcheck bắt được một tiến trình kẹt cứng, và giải thích vì sao container KHÔNG khởi động lại.</span></span>
 </a>
@@ -1358,7 +1358,7 @@ unhealthy · restarts=0
             question: 'You run a database with -p 5432:5432 on a public VPS with ufw configured to deny that port. Is it exposed?|||Bạn chạy một cơ sở dữ liệu với -p 5432:5432 trên một VPS công khai có ufw cấu hình chặn cổng đó. Nó có bị phơi ra không?',
             options: [
               'No — ufw denies the port, so the rule protects it|||Không — ufw chặn cổng đó nên luật ấy bảo vệ được nó',
-              'Yes — Docker writes its rules into the DOCKER iptables chain, which is evaluated BEFORE ufw\\u2019s; bind to loopback with -p 127.0.0.1:5432:5432 instead|||CÓ — Docker ghi luật của nó vào chuỗi iptables DOCKER, và chuỗi đó được duyệt TRƯỚC luật của ufw; hãy gắn vào loopback bằng -p 127.0.0.1:5432:5432',
+              'Yes — Docker writes its rules into the DOCKER iptables chain, which is evaluated BEFORE ufw’s; bind to loopback with -p 127.0.0.1:5432:5432 instead|||CÓ — Docker ghi luật của nó vào chuỗi iptables DOCKER, và chuỗi đó được duyệt TRƯỚC luật của ufw; hãy gắn vào loopback bằng -p 127.0.0.1:5432:5432',
               'Only if the container also has --network host|||Chỉ khi container còn có thêm --network host',
               'Only on IPv6|||Chỉ trên IPv6',
             ],
@@ -1380,7 +1380,7 @@ unhealthy · restarts=0
             question: 'What is the practical difference between docker exec -it c sh and docker attach c?|||Khác biệt thực tế giữa docker exec -it c sh và docker attach c là gì?',
             options: [
               'They are equivalent; attach is the older spelling|||Chúng tương đương; attach chỉ là cách viết cũ',
-              'exec starts a NEW process inside the container, so exiting is harmless; attach connects to PID 1\\u2019s stdio, so Ctrl-C signals the application and usually stops the container (detach with Ctrl-P Ctrl-Q)|||exec khởi chạy một tiến trình MỚI bên trong container nên thoát ra là vô hại; attach nối vào stdio của PID 1 nên Ctrl-C gửi tín hiệu cho ứng dụng và thường là dừng container (tách ra bằng Ctrl-P Ctrl-Q)',
+              'exec starts a NEW process inside the container, so exiting is harmless; attach connects to PID 1’s stdio, so Ctrl-C signals the application and usually stops the container (detach with Ctrl-P Ctrl-Q)|||exec khởi chạy một tiến trình MỚI bên trong container nên thoát ra là vô hại; attach nối vào stdio của PID 1 nên Ctrl-C gửi tín hiệu cho ứng dụng và thường là dừng container (tách ra bằng Ctrl-P Ctrl-Q)',
               'attach works on stopped containers; exec does not|||attach chạy được với container đã dừng; exec thì không',
               'exec requires the container to have bash installed|||exec đòi container phải có cài bash',
             ],

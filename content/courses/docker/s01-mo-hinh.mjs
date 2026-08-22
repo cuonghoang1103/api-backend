@@ -128,7 +128,7 @@ vps-1
   <span class="lc-ico">🔒</span>
   <span class="lc-body"><span class="lc-title">Docker security</span><span class="lc-sub">The vendor's honest account of what the container boundary does and does not protect, including the default capability set and the seccomp profile. Read before running anything untrusted.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: see the boundary</span><span class="lc-sub">Graded exercises: match a container's namespace IDs against the host's, read a memory limit out of cgroup v2, trigger an exit 137 deliberately, and explain what <code>--net=host</code> gives up.</span></span>
 </a>
@@ -245,7 +245,7 @@ vps-1
   <span class="lc-ico">🔒</span>
   <span class="lc-body"><span class="lc-title">An ninh của Docker</span><span class="lc-sub">Bản tường thuật trung thực của nhà phát hành về việc ranh giới container bảo vệ và KHÔNG bảo vệ được gì, gồm bộ capability mặc định và hồ sơ seccomp. Đọc trước khi chạy bất cứ thứ gì không đáng tin.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: nhìn thấy cái ranh giới</span><span class="lc-sub">Bài chấm điểm: đối chiếu ID namespace của một container với của máy chủ, đọc một giới hạn bộ nhớ ra từ cgroup v2, cố ý tạo ra một cú exit 137, và giải thích <code>--net=host</code> vứt đi cái gì.</span></span>
 </a>
@@ -377,7 +377,7 @@ docker image inspect node:22-alpine --format '{{len .RootFS.Layers}} layers'</co
   <span class="lc-ico">🔬</span>
   <span class="lc-body"><span class="lc-title">dive — explore an image layer by layer</span><span class="lc-sub">A terminal UI showing each layer's file tree and what it added. <code>dive node:22-alpine</code> makes everything in this lesson visible, and finding the 200MB you did not mean to ship takes about ten seconds.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: read the stack</span><span class="lc-sub">Graded exercises: reconstruct a Dockerfile from <code>docker history</code>, explain why three images totalling 415MB occupy 281MB, and extract a "deleted" file from a published image's layers.</span></span>
 </a>
@@ -499,7 +499,7 @@ docker image inspect node:22-alpine --format '{{len .RootFS.Layers}} tầng'</co
   <span class="lc-ico">🔬</span>
   <span class="lc-body"><span class="lc-title">dive — soi một ảnh theo từng tầng</span><span class="lc-sub">Một giao diện terminal cho thấy cây file của từng tầng và tầng đó thêm vào những gì. <code>dive node:22-alpine</code> làm mọi thứ trong bài này hiện ra trước mắt, và tìm ra 200MB bạn không định đem đi chỉ mất khoảng mười giây.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đọc cái chồng tầng</span><span class="lc-sub">Bài chấm điểm: dựng lại một Dockerfile từ <code>docker history</code>, giải thích vì sao ba ảnh cộng lại 415MB mà chỉ chiếm 281MB, và moi một file "đã xoá" ra từ các tầng của một ảnh đã công bố.</span></span>
 </a>
@@ -644,7 +644,7 @@ sleep 4; kill %1</code></pre>
   <span class="lc-ico">📡</span>
   <span class="lc-body"><span class="lc-title">docker events</span><span class="lc-sub">Every event type the daemon emits and every filter you can apply. Underused, and the right tool the moment you need to know what happened while you were not watching.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: lifecycle and signals</span><span class="lc-sub">Graded exercises: create a container without starting it, make <code>docker stop</code> take ten seconds and then fix it, read an exit code and name the cause, and catch a crash loop in <code>docker events</code>.</span></span>
 </a>
@@ -781,7 +781,7 @@ sleep 4; kill %1</code></pre>
   <span class="lc-ico">📡</span>
   <span class="lc-body"><span class="lc-title">docker events</span><span class="lc-sub">Mọi loại sự kiện tiến trình nền phát ra và mọi bộ lọc bạn áp được. Ít người dùng, và là công cụ đúng ngay khoảnh khắc bạn cần biết chuyện gì đã xảy ra lúc bạn không nhìn.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: vòng đời và tín hiệu</span><span class="lc-sub">Bài chấm điểm: tạo một container mà không khởi chạy nó, làm cho <code>docker stop</code> mất mười giây rồi sửa lại, đọc một mã thoát và gọi tên nguyên nhân, và bắt một vòng lặp sập trong <code>docker events</code>.</span></span>
 </a>
@@ -908,7 +908,7 @@ etc/alpine-release</div>
   <span class="lc-ico">📋</span>
   <span class="lc-body"><span class="lc-title">docker cp — reference</span><span class="lc-sub">The exact path semantics (the trailing-slash rules bite everyone once), and the note that it works on stopped containers — which is what makes it a rescue tool.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: lose some data, then rescue it</span><span class="lc-sub">Graded exercises: destroy a database the way a deploy would, recover a file from a crash-looping container with <code>docker cp</code>, and explain what <code>docker commit</code> lost that a Dockerfile keeps.</span></span>
 </a>
@@ -1026,7 +1026,7 @@ etc/alpine-release</div>
   <span class="lc-ico">📋</span>
   <span class="lc-body"><span class="lc-title">docker cp — tài liệu tra cứu</span><span class="lc-sub">Ngữ nghĩa đường dẫn chính xác (luật dấu gạch chéo cuối cắn ai cũng đúng một lần), và ghi chú rằng nó chạy được với container đã dừng — chính điều đó khiến nó thành công cụ cứu hộ.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: làm mất dữ liệu, rồi cứu nó về</span><span class="lc-sub">Bài chấm điểm: phá một cơ sở dữ liệu đúng theo cách một bản deploy sẽ làm, cứu một file ra khỏi một container đang quay vòng sập bằng <code>docker cp</code>, và giải thích <code>docker commit</code> đã đánh mất thứ gì mà Dockerfile giữ được.</span></span>
 </a>
@@ -1129,7 +1129,7 @@ sudo ctr --namespace moby containers info \$(docker inspect -f '{{.Id}}' w) \\
   <span class="lc-ico">☸️</span>
   <span class="lc-body"><span class="lc-title">Kubernetes — the dockershim removal FAQ</span><span class="lc-sub">The clearest explanation of what was actually deprecated and why your images were never affected. Useful the next time someone tells you Docker is dead.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: trace the stack</span><span class="lc-sub">Graded exercises: find the shim that is the parent of a container's process, explain why <code>runc</code> is absent from <code>ps</code>, and predict what a daemon restart does with and without <code>live-restore</code>.</span></span>
 </a>
@@ -1223,7 +1223,7 @@ sudo ctr --namespace moby containers info \$(docker inspect -f '{{.Id}}' w) \\
   <span class="lc-ico">☸️</span>
   <span class="lc-body"><span class="lc-title">Kubernetes — hỏi đáp về việc gỡ dockershim</span><span class="lc-sub">Lời giải thích rõ ràng nhất về việc thật ra cái gì bị khai tử và vì sao ảnh của bạn chưa bao giờ bị ảnh hưởng. Hữu ích cho lần tới khi có ai bảo bạn Docker chết rồi.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: lần theo cái chồng</span><span class="lc-sub">Bài chấm điểm: tìm ra cái shim là cha của tiến trình một container, giải thích vì sao <code>runc</code> vắng mặt trong <code>ps</code>, và dự đoán một lần khởi động lại tiến trình nền sẽ làm gì khi có và khi không có <code>live-restore</code>.</span></span>
 </a>
@@ -1271,7 +1271,7 @@ sudo ctr --namespace moby containers info \$(docker inspect -f '{{.Id}}' w) \\
             question: 'docker images lists three images totalling 415MB, but docker system df reports 281MB on disk. Which is wrong?|||docker images liệt kê ba ảnh cộng lại 415MB, nhưng docker system df báo 281MB trên đĩa. Cái nào sai?',
             options: [
               'docker images is wrong; it double-counts compressed layers|||docker images sai; nó đếm hai lần các tầng đã nén',
-              'Neither — docker images shows each image\\u2019s LOGICAL size, counting shared layers in every image that uses them; system df shows what the disk actually holds|||Không cái nào sai — docker images cho thấy kích thước LOGIC của từng ảnh, tính cả tầng dùng chung vào mọi ảnh dùng chúng; system df cho thấy đĩa thật sự chứa bao nhiêu',
+              'Neither — docker images shows each image’s LOGICAL size, counting shared layers in every image that uses them; system df shows what the disk actually holds|||Không cái nào sai — docker images cho thấy kích thước LOGIC của từng ảnh, tính cả tầng dùng chung vào mọi ảnh dùng chúng; system df cho thấy đĩa thật sự chứa bao nhiêu',
               'system df is wrong; it ignores the build cache|||system df sai; nó bỏ qua bộ đệm dựng',
               'The difference is filesystem compression|||Khác biệt là do nén của hệ thống file',
             ],
@@ -1327,7 +1327,7 @@ sudo ctr --namespace moby containers info \$(docker inspect -f '{{.Id}}' w) \\
             options: [
               'docker restart — restarting resets the writable layer|||docker restart — khởi động lại là đặt lại tầng ghi được',
               'docker rm (and therefore every deploy and every docker compose down) — the writable layer is deleted with the container, unless the data path is on a volume|||docker rm (và do đó là mọi bản deploy lẫn mọi lệnh docker compose down) — tầng ghi được bị xoá cùng container, trừ khi đường dẫn dữ liệu nằm trên một volume',
-              'docker stop — stopping frees the container\\u2019s storage|||docker stop — dừng lại là giải phóng kho lưu của container',
+              'docker stop — stopping frees the container’s storage|||docker stop — dừng lại là giải phóng kho lưu của container',
               'docker pause — pausing flushes the writable layer|||docker pause — tạm dừng là xả sạch tầng ghi được',
             ],
             correctIndex: 1,
@@ -1336,8 +1336,8 @@ sudo ctr --namespace moby containers info \$(docker inspect -f '{{.Id}}' w) \\
           {
             question: 'Why can the Docker daemon be restarted without killing running containers when live-restore is on?|||Vì sao tiến trình nền Docker khởi động lại được mà không giết container đang chạy khi live-restore đang bật?',
             options: [
-              'The daemon saves and reloads each container\\u2019s memory to disk|||Tiến trình nền lưu rồi nạp lại bộ nhớ của từng container xuống đĩa',
-              'Because each container\\u2019s parent is a small per-container shim started by containerd, not dockerd — so the daemon is not in the process tree at all|||Vì cha của mỗi container là một cái shim nhỏ riêng cho từng container do containerd khởi chạy, không phải dockerd — nên tiến trình nền hoàn toàn không nằm trong cây tiến trình đó',
+              'The daemon saves and reloads each container’s memory to disk|||Tiến trình nền lưu rồi nạp lại bộ nhớ của từng container xuống đĩa',
+              'Because each container’s parent is a small per-container shim started by containerd, not dockerd — so the daemon is not in the process tree at all|||Vì cha của mỗi container là một cái shim nhỏ riêng cho từng container do containerd khởi chạy, không phải dockerd — nên tiến trình nền hoàn toàn không nằm trong cây tiến trình đó',
               'Containers are frozen by the cgroup freezer during the restart|||Container bị bộ đông lạnh của cgroup đóng băng trong lúc khởi động lại',
               'runc keeps running and re-attaches the containers afterwards|||runc vẫn chạy tiếp rồi gắn lại các container sau đó',
             ],

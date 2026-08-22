@@ -157,7 +157,7 @@ read -r -t 10 -p "Continue? [y/N] " answer <span class="tok-comment"># -t: timeo
   <span class="lc-ico">✅</span>
   <span class="lc-body"><span class="lc-title">ShellCheck — paste a script, get the bugs</span><span class="lc-sub">Catches unquoted variables, missing <code>-r</code>, and the parsing traps in this chapter. Run it on every script you write; Chapter 7 makes it part of the workflow.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: variables that behave</span><span class="lc-sub">Graded tasks on assignment syntax, <code>\$(…)</code> nesting, integer-division surprises and the shell-vs-environment distinction.</span></span>
 </a>
@@ -303,7 +303,7 @@ read -r -t 10 -p "Tiếp tục? [y/N] " answer <span class="tok-comment"># -t: h
   <span class="lc-ico">✅</span>
   <span class="lc-body"><span class="lc-title">ShellCheck — dán một script vào, nhận về các lỗi</span><span class="lc-sub">Bắt được biến thiếu nháy, <code>read</code> thiếu <code>-r</code>, và các bẫy phân tích cú pháp trong chương này. Hãy chạy nó với mọi script bạn viết; Chương 7 đưa nó thành một phần của quy trình.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: những biến biết cư xử</span><span class="lc-sub">Bài chấm điểm về cú pháp gán, lồng <code>\$(…)</code>, những bất ngờ của phép chia số nguyên, và phân biệt biến shell với biến môi trường.</span></span>
 </a>
@@ -457,7 +457,7 @@ if [ "\$a" -gt "\$b" ]        →  if (( a &gt; b ))</code></pre>
   <span class="lc-ico">✅</span>
   <span class="lc-body"><span class="lc-title">ShellCheck SC2086 — "Double quote to prevent globbing and word splitting"</span><span class="lc-sub">The single most-triggered ShellCheck warning, with worked examples of what actually goes wrong. Every wiki page is linked from the tool's output.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: break it with a space</span><span class="lc-sub">Graded tasks on a fixture directory full of filenames containing spaces, quotes and asterisks. Every unquoted expansion fails visibly.</span></span>
 </a>
@@ -602,7 +602,7 @@ if [ "\$a" -gt "\$b" ]        →  if (( a &gt; b ))</code></pre>
   <span class="lc-ico">✅</span>
   <span class="lc-body"><span class="lc-title">ShellCheck SC2086 — "Double quote to prevent globbing and word splitting"</span><span class="lc-sub">Cảnh báo bị kích hoạt nhiều nhất của ShellCheck, kèm ví dụ cụ thể về chuyện thật sự hỏng ra sao. Mọi trang wiki đều được liên kết thẳng từ output của công cụ.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: làm nó vỡ bằng một dấu cách</span><span class="lc-sub">Bài chấm điểm trên một thư mục mẫu đầy tên file chứa dấu cách, dấu nháy và dấu sao. Mọi phép khai triển thiếu nháy đều hỏng lộ liễu.</span></span>
 </a>
@@ -808,7 +808,7 @@ done</code></pre>
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">Bash Hackers — Parameter Expansion reference</span><span class="lc-sub">A compact table you can scan in seconds when you remember there is an operator for this but not which one.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: strings without sed</span><span class="lc-sub">Graded tasks: extract extensions, strip prefixes, build a slug, and validate required environment variables using <code>:?</code>.</span></span>
 </a>
@@ -1005,7 +1005,7 @@ done</code></pre>
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">Bash Hackers — bảng tra Parameter Expansion</span><span class="lc-sub">Một bảng gọn mà bạn lướt mắt vài giây là ra, dành cho lúc nhớ rằng có một toán tử làm việc này nhưng không nhớ là cái nào.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: xử lý chuỗi mà không cần sed</span><span class="lc-sub">Bài chấm điểm: rút phần đuôi file, cắt tiền tố, dựng một slug, và kiểm các biến môi trường bắt buộc bằng <code>:?</code>.</span></span>
 </a>
@@ -1187,7 +1187,7 @@ unknown env: prod</div>
   <span class="lc-ico">🔢</span>
   <span class="lc-body"><span class="lc-title">Advanced Bash Scripting — Exit Codes With Special Meanings</span><span class="lc-sub">The conventional meanings of 1, 2, 126, 127 and 128+N, so your own scripts follow the same conventions everything else does.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: write the guard clauses</span><span class="lc-sub">Graded tasks: validate arguments with <code>case</code>, check preconditions with file tests, and return the conventional exit codes.</span></span>
 </a>
@@ -1360,7 +1360,7 @@ env không hợp lệ: prod</div>
   <span class="lc-ico">🔢</span>
   <span class="lc-body"><span class="lc-title">Advanced Bash Scripting — Exit Codes With Special Meanings</span><span class="lc-sub">Ý nghĩa theo quy ước của 1, 2, 126, 127 và 128+N, để script của bạn theo đúng quy ước mà mọi thứ khác đang theo.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: viết các chốt chặn đầu script</span><span class="lc-sub">Bài chấm điểm: kiểm tham số bằng <code>case</code>, kiểm điều kiện tiên quyết bằng các phép thử file, và trả về đúng những mã thoát theo quy ước.</span></span>
 </a>
@@ -1564,7 +1564,7 @@ kern.log                 892K      0 errors</div>
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Bash Manual — Shell Functions</span><span class="lc-sub">Scoping rules, <code>local</code>, <code>return</code>, and how functions interact with <code>trap</code> and subshells.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: loops that survive bad filenames</span><span class="lc-sub">Graded tasks on a directory of hostile names: glob loops, <code>while IFS= read -r</code>, <code>mapfile</code>, and a function that returns both data and a status.</span></span>
 </a>
@@ -1759,7 +1759,7 @@ kern.log                 892K      0 lỗi</div>
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Bash Manual — Shell Functions</span><span class="lc-sub">Luật phạm vi biến, <code>local</code>, <code>return</code>, và hàm tương tác thế nào với <code>trap</code> và shell con.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: những vòng lặp sống sót qua tên file hiểm ác</span><span class="lc-sub">Bài chấm điểm trên một thư mục toàn tên hiểm: vòng lặp qua glob, <code>while IFS= read -r</code>, <code>mapfile</code>, và một hàm vừa trả dữ liệu vừa trả trạng thái.</span></span>
 </a>

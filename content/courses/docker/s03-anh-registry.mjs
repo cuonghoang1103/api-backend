@@ -113,7 +113,7 @@ docker image inspect nginx:1.27-alpine --format '{{json .Config.Labels}}' | tr '
   <span class="lc-ico">🏷️</span>
   <span class="lc-body"><span class="lc-title">OCI standard annotations</span><span class="lc-sub">The full list of <code>org.opencontainers.image.*</code> labels. Adopt these names rather than inventing your own; tooling already understands them.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: read the name</span><span class="lc-sub">Graded exercises: expand five short references to their full form, say which of two similar names is the official image, and find the source repository of an image from its labels alone.</span></span>
 </a>
@@ -215,7 +215,7 @@ docker image inspect nginx:1.27-alpine --format '{{json .Config.Labels}}' | tr '
   <span class="lc-ico">🏷️</span>
   <span class="lc-body"><span class="lc-title">Nhãn chuẩn của OCI</span><span class="lc-sub">Danh sách đầy đủ các nhãn <code>org.opencontainers.image.*</code>. Hãy dùng những cái tên này thay vì tự đặt tên riêng; công cụ đã hiểu sẵn chúng.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đọc cái tên</span><span class="lc-sub">Bài chấm điểm: khai triển năm tham chiếu ngắn thành dạng đầy đủ, nói xem trong hai cái tên na ná thì cái nào là ảnh chính thức, và tìm ra kho mã nguồn của một ảnh chỉ từ nhãn của nó.</span></span>
 </a>
@@ -339,7 +339,7 @@ a1b2c3d      7f3a2b1c9d8e
   <span class="lc-ico">📐</span>
   <span class="lc-body"><span class="lc-title">OCI Distribution Specification</span><span class="lc-sub">How tags and digests are resolved over HTTP. Short, and it makes concrete why a digest is verifiable end to end while a tag is just a name in someone else's database.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: pin it down</span><span class="lc-sub">Graded exercises: move a tag and find the dangling image it left, pin a base image by index digest, spot the platform-specific digest that would break ARM, and design a tag set for a CI build.</span></span>
 </a>
@@ -454,7 +454,7 @@ a1b2c3d      7f3a2b1c9d8e
   <span class="lc-ico">📐</span>
   <span class="lc-body"><span class="lc-title">Đặc tả phân phối OCI</span><span class="lc-sub">Tag và digest được phân giải qua HTTP ra sao. Ngắn, và nó cụ thể hoá vì sao một digest kiểm chứng được từ đầu tới cuối còn một cái tag chỉ là một cái tên trong cơ sở dữ liệu của người khác.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: ghim nó lại</span><span class="lc-sub">Bài chấm điểm: dịch một cái tag rồi tìm ra cái ảnh mồ côi nó để lại, ghim một ảnh nền bằng digest chỉ mục, phát hiện cái digest riêng-nền-tảng sẽ làm hỏng ARM, và thiết kế một bộ tag cho một lượt dựng CI.</span></span>
 </a>
@@ -579,7 +579,7 @@ docker rmi localhost:5000/alpine:3.20 cuonghoang1103/demo:1.0 &gt;/dev/null 2&gt
   <span class="lc-ico">🏠</span>
   <span class="lc-body"><span class="lc-title">Running a self-hosted registry</span><span class="lc-sub">The full configuration for <code>registry:2</code>, including proxy/mirror mode, storage backends (S3, filesystem) and garbage collection — which you will need once it fills a disk.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: push and pull</span><span class="lc-sub">Graded exercises: retag an image for two registries, read your remaining pull quota from the response headers, stand up a local registry and push to it, and explain why <code>Mounted from</code> appeared instead of an upload.</span></span>
 </a>
@@ -695,7 +695,7 @@ docker rmi localhost:5000/alpine:3.20 cuonghoang1103/demo:1.0 &gt;/dev/null 2&gt
   <span class="lc-ico">🏠</span>
   <span class="lc-body"><span class="lc-title">Chạy một registry tự dựng</span><span class="lc-sub">Cấu hình đầy đủ cho <code>registry:2</code>, gồm chế độ proxy/gương, các nền lưu trữ (S3, hệ thống file) và thu gom rác — thứ bạn sẽ cần một khi nó làm đầy một cái đĩa.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đẩy và kéo</span><span class="lc-sub">Bài chấm điểm: gắn lại tag một cái ảnh cho hai registry, đọc hạn mức kéo còn lại từ tiêu đề phản hồi, dựng một registry cục bộ rồi đẩy lên nó, và giải thích vì sao <code>Mounted from</code> hiện ra thay cho một lượt tải lên.</span></span>
 </a>
@@ -831,7 +831,7 @@ services:
   <span class="lc-ico">⚙️</span>
   <span class="lc-body"><span class="lc-title">Buildx drivers</span><span class="lc-sub">docker, docker-container, kubernetes and remote — what each can do, and specifically which ones support multi-platform output and external cache.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: cross the architectures</span><span class="lc-sub">Graded exercises: diagnose an <code>exec format error</code> from two commands, list the platforms in a published index, measure the emulation penalty yourself, and explain why <code>--load</code> fails on a multi-platform build.</span></span>
 </a>
@@ -958,7 +958,7 @@ services:
   <span class="lc-ico">⚙️</span>
   <span class="lc-body"><span class="lc-title">Trình điều khiển của Buildx</span><span class="lc-sub">docker, docker-container, kubernetes và remote — cái nào làm được gì, và cụ thể là cái nào hỗ trợ output đa nền tảng cùng bộ đệm bên ngoài.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: vượt qua ranh giới kiến trúc</span><span class="lc-sub">Bài chấm điểm: chẩn đoán một cú <code>exec format error</code> chỉ bằng hai câu lệnh, liệt kê các nền tảng trong một chỉ mục đã công bố, tự đo mức phạt của mô phỏng, và giải thích vì sao <code>--load</code> hỏng với một lượt dựng đa nền tảng.</span></span>
 </a>
@@ -1108,7 +1108,7 @@ Sun 2026-08-24 04:00:00 UTC 1 day 6h  -     -       docker-prune.timer  docker-p
   <span class="lc-ico">♻️</span>
   <span class="lc-body"><span class="lc-title">BuildKit cache garbage collection</span><span class="lc-sub">Configuring automatic cache limits in <code>/etc/docker/daemon.json</code> so the build cache never grows past a ceiling you choose — better than remembering to prune.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: reclaim the disk</span><span class="lc-sub">Graded exercises: read <code>docker system df</code> and say what to clear first, identify an anonymous volume's contents without root, write a prune filter that keeps the last two releases, and explain what <code>system prune -a</code> would have cost.</span></span>
 </a>
@@ -1249,7 +1249,7 @@ Sun 2026-08-24 04:00:00 UTC 1 day 6h  -     -       docker-prune.timer  docker-p
   <span class="lc-ico">♻️</span>
   <span class="lc-body"><span class="lc-title">Thu gom rác cho bộ đệm BuildKit</span><span class="lc-sub">Cấu hình giới hạn bộ đệm tự động trong <code>/etc/docker/daemon.json</code> để bộ đệm dựng không bao giờ vượt một cái trần do bạn chọn — tốt hơn việc nhớ đi tỉa.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: thu hồi lại cái đĩa</span><span class="lc-sub">Bài chấm điểm: đọc <code>docker system df</code> rồi nói nên dọn cái gì trước, xác định nội dung một volume vô danh mà không cần root, viết một bộ lọc prune giữ lại hai bản phát hành gần nhất, và giải thích <code>system prune -a</code> hẳn đã lấy đi cái gì.</span></span>
 </a>

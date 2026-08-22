@@ -170,7 +170,7 @@ docker build -t demo:1.0 . 2&gt;&amp;1 | grep -E 'transferring context|FINISHED'
   <span class="lc-ico">⭐</span>
   <span class="lc-body"><span class="lc-title">Dockerfile best practices</span><span class="lc-sub">Docker's own list, and it is genuinely good. Much of Chapters 4–6 is this document with the reasoning filled in and the outputs shown.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: write and build</span><span class="lc-sub">Graded exercises: build a working image for a small app, cut the build context by 99% with <code>.dockerignore</code>, explain why <code>COPY ../file</code> cannot work, and read a build log to say which steps were cached.</span></span>
 </a>
@@ -328,7 +328,7 @@ docker build -t demo:1.0 . 2&gt;&amp;1 | grep -E 'transferring context|FINISHED'
   <span class="lc-ico">⭐</span>
   <span class="lc-body"><span class="lc-title">Thực hành tốt cho Dockerfile</span><span class="lc-sub">Danh sách của chính Docker, và nó thật sự tốt. Phần lớn Chương 4–6 là tài liệu này với phần lý lẽ được điền vào và output được bày ra.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: viết rồi dựng</span><span class="lc-sub">Bài chấm điểm: dựng một cái ảnh chạy được cho một ứng dụng nhỏ, cắt ngữ cảnh dựng đi 99% bằng <code>.dockerignore</code>, giải thích vì sao <code>COPY ../file</code> không thể chạy, và đọc một log dựng để nói bước nào đã được lưu đệm.</span></span>
 </a>
@@ -459,7 +459,7 @@ docker volume ls -f dangling=true --format '{{.Name}}' | head -2</code></pre>
   <span class="lc-ico">🔎</span>
   <span class="lc-body"><span class="lc-title">hadolint — a Dockerfile linter</span><span class="lc-sub"><code>docker run --rm -i hadolint/hadolint &lt; Dockerfile</code> catches unpinned versions, <code>ADD</code> misuse, missing <code>--no-install-recommends</code> and more. Add it to CI; it pays for itself immediately.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: the instruction set</span><span class="lc-sub">Graded exercises: replace an <code>ADD</code> with a verifiable <code>RUN curl</code>, fix an image that loses files to a <code>VOLUME</code>, add a healthcheck and labels, and explain why <code>USER</code> is placed where it is.</span></span>
 </a>
@@ -581,7 +581,7 @@ docker volume ls -f dangling=true --format '{{.Name}}' | head -2</code></pre>
   <span class="lc-ico">🔎</span>
   <span class="lc-body"><span class="lc-title">hadolint — bộ soát lỗi Dockerfile</span><span class="lc-sub"><code>docker run --rm -i hadolint/hadolint &lt; Dockerfile</code> bắt được phiên bản không ghim, việc dùng sai <code>ADD</code>, thiếu <code>--no-install-recommends</code> và hơn thế. Hãy thêm nó vào CI; nó hoàn vốn ngay lập tức.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: bộ chỉ thị</span><span class="lc-sub">Bài chấm điểm: thay một lệnh <code>ADD</code> bằng một <code>RUN curl</code> kiểm chứng được, sửa một cái ảnh làm mất file vì <code>VOLUME</code>, thêm healthcheck và nhãn, và giải thích vì sao <code>USER</code> lại đặt ở đúng chỗ đó.</span></span>
 </a>
@@ -740,7 +740,7 @@ docker rmi sf ef ep noexp tt &gt;/dev/null 2&gt;&amp;1; rm -f entrypoint.sh</cod
   <span class="lc-ico">🧬</span>
   <span class="lc-body"><span class="lc-title">dumb-init</span><span class="lc-sub">A minimal init for when your process genuinely spawns children. Its README explains signal forwarding and process groups more clearly than most operating-systems textbooks.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: make it start and stop cleanly</span><span class="lc-sub">Graded exercises: predict the output of six ENTRYPOINT/CMD combinations, fix an image that takes ten seconds to stop, write an entrypoint that keeps <code>CMD</code> overridable, and explain why a variable did not expand.</span></span>
 </a>
@@ -890,7 +890,7 @@ docker rmi sf ef ep noexp tt &gt;/dev/null 2&gt;&amp;1; rm -f entrypoint.sh</cod
   <span class="lc-ico">🧬</span>
   <span class="lc-body"><span class="lc-title">dumb-init</span><span class="lc-sub">Một init tối giản cho khi tiến trình của bạn thật sự sinh con. README của nó giải thích việc chuyển tiếp tín hiệu và nhóm tiến trình rõ ràng hơn phần lớn giáo trình hệ điều hành.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: khởi động và dừng cho sạch</span><span class="lc-sub">Bài chấm điểm: đoán output của sáu tổ hợp ENTRYPOINT/CMD, sửa một cái ảnh mất mười giây để dừng, viết một entrypoint giữ cho <code>CMD</code> vẫn ghi đè được, và giải thích vì sao một biến không được khai triển.</span></span>
 </a>
@@ -1053,7 +1053,7 @@ ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit co
   <span class="lc-ico">🌍</span>
   <span class="lc-body"><span class="lc-title">Predefined build arguments</span><span class="lc-sub">The full <code>TARGET*</code> / <code>BUILD*</code> table and the proxy variables. Bookmark it for the day you write your first cross-compiling Dockerfile.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: build time or run time</span><span class="lc-sub">Graded exercises: predict which variables are empty at run time, fix an <code>ARG</code> that is blank inside a stage, extract a leaked token from an image's history, and repair a build broken by an early <code>NODE_ENV</code>.</span></span>
 </a>
@@ -1207,7 +1207,7 @@ ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit co
   <span class="lc-ico">🌍</span>
   <span class="lc-body"><span class="lc-title">Các build argument định sẵn</span><span class="lc-sub">Bảng <code>TARGET*</code> / <code>BUILD*</code> đầy đủ và các biến proxy. Hãy đánh dấu trang cho cái ngày bạn viết Dockerfile biên dịch chéo đầu tiên.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: lúc dựng hay lúc chạy</span><span class="lc-sub">Bài chấm điểm: đoán biến nào rỗng lúc chạy, sửa một <code>ARG</code> trống trơn bên trong một stage, moi một token bị rò ra từ history của một cái ảnh, và chữa một lượt dựng hỏng vì <code>NODE_ENV</code> đặt sớm.</span></span>
 </a>
@@ -1400,7 +1400,7 @@ server {
   <span class="lc-ico">🪶</span>
   <span class="lc-body"><span class="lc-title">distroless base images</span><span class="lc-sub">The variants (static, base, cc, nodejs, python), what each includes, and the <code>:debug</code> tags that add a busybox shell for when you need one.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: write the five</span><span class="lc-sub">Graded exercises: containerise a Node API, fix a Next.js image that 404s its own CSS, diagnose a Python container with empty logs, and get a Go binary into an image under 15MB.</span></span>
 </a>
@@ -1584,7 +1584,7 @@ server {
   <span class="lc-ico">🪶</span>
   <span class="lc-body"><span class="lc-title">Ảnh nền distroless</span><span class="lc-sub">Các biến thể (static, base, cc, nodejs, python), mỗi cái gồm những gì, và những tag <code>:debug</code> có thêm một cái shell busybox cho lúc bạn cần.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/docker\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/docker${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: viết cả năm cái</span><span class="lc-sub">Bài chấm điểm: đóng gói một API Node, sửa một ảnh Next.js 404 chính CSS của nó, chẩn đoán một container Python có log rỗng, và đưa một chương trình Go vào một cái ảnh dưới 15MB.</span></span>
 </a>

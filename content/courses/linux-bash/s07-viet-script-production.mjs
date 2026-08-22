@@ -155,7 +155,7 @@ sudo mv deploy.sh /usr/local/bin/      <span class="tok-comment"># system-wide (
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Google Shell Style Guide</span><span class="lc-sub">Where to use bash at all, the <code>main "\$@"</code> convention, naming, and when a script has outgrown the shell. Opinionated and well argued.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: harden a fragile script</span><span class="lc-sub">You are given a working script with no strict mode and three latent bugs. Add the skeleton, and watch each bug become a clear error.</span></span>
 </a>
@@ -299,7 +299,7 @@ sudo mv deploy.sh /usr/local/bin/      <span class="tok-comment"># cho toàn h�
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Google Shell Style Guide</span><span class="lc-sub">Khi nào nên dùng bash, quy ước <code>main "\$@"</code>, cách đặt tên, và khi nào một script đã vượt quá tầm của shell. Có quan điểm rõ và lập luận tốt.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: gia cố một script mong manh</span><span class="lc-sub">Bạn được đưa một script đang chạy được, không có chế độ nghiêm ngặt và mang ba lỗi tiềm ẩn. Hãy thêm bộ khung vào, rồi nhìn từng lỗi hiện ra thành một thông báo rõ ràng.</span></span>
 </a>
@@ -507,7 +507,7 @@ run ssh "\$host" "docker pull myapp:\$tag &amp;&amp; docker compose up -d"</code
   <span class="lc-ico">📐</span>
   <span class="lc-body"><span class="lc-title">Command Line Interface Guidelines</span><span class="lc-sub">What users expect from a CLI: <code>--help</code>, exit codes, stderr versus stdout, <code>--dry-run</code>, colour. Language-agnostic and genuinely worth reading once.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: build the front door</span><span class="lc-sub">Graded tasks: parse short and long options, support <code>--</code>, validate an enum and a port number, and add a working <code>--dry-run</code>.</span></span>
 </a>
@@ -706,7 +706,7 @@ run ssh "\$host" "docker pull myapp:\$tag &amp;&amp; docker compose up -d"</code
   <span class="lc-ico">📐</span>
   <span class="lc-body"><span class="lc-title">Command Line Interface Guidelines</span><span class="lc-sub">Người dùng mong đợi gì ở một CLI: <code>--help</code>, mã thoát, stderr so với stdout, <code>--dry-run</code>, màu sắc. Không phụ thuộc ngôn ngữ và thật sự đáng đọc một lần.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: dựng cái cửa trước</span><span class="lc-sub">Bài chấm điểm: phân tích cờ ngắn và cờ dài, hỗ trợ <code>--</code>, kiểm một danh sách liệt kê và một số cổng, và thêm một <code>--dry-run</code> chạy được.</span></span>
 </a>
@@ -866,7 +866,7 @@ backup already running</div>
   <span class="lc-ico">⚠️</span>
   <span class="lc-body"><span class="lc-title">CWE-377 — Insecure Temporary File</span><span class="lc-sub">The formal description of the symlink attack that <code>mktemp</code> prevents, with real examples. Short, and it makes the rule stick.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: clean up after yourself</span><span class="lc-sub">Graded tasks: add an EXIT trap that survives Ctrl-C, replace a hand-built temp path with <code>mktemp</code>, add a <code>flock</code> guard, and make a setup script idempotent.</span></span>
 </a>
@@ -1017,7 +1017,7 @@ sao lưu đang chạy rồi</div>
   <span class="lc-ico">⚠️</span>
   <span class="lc-body"><span class="lc-title">CWE-377 — Insecure Temporary File</span><span class="lc-sub">Mô tả chính thức về cuộc tấn công qua symlink mà <code>mktemp</code> ngăn chặn, kèm ví dụ thật. Ngắn, và nó làm cái luật đó dính vào đầu.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: tự dọn dẹp sau mình</span><span class="lc-sub">Bài chấm điểm: thêm một trap EXIT sống sót qua Ctrl-C, thay một đường dẫn tạm tự dựng bằng <code>mktemp</code>, thêm một chốt <code>flock</code>, và làm một script cài đặt trở nên bền vững khi chạy lại.</span></span>
 </a>
@@ -1197,7 +1197,7 @@ sudo apt install bats
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">bats-core — testing bash</span><span class="lc-sub">Setup, teardown, mocking commands with PATH tricks, and running in CI. Enough to test a deploy script properly.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">Practice: find the bug with the tools</span><span class="lc-sub">Four broken scripts, one per failure mode above. Diagnose each using <code>set -x</code>, <code>bash -n</code>, ShellCheck and <code>env -i</code> — not by reading.</span></span>
 </a>
@@ -1368,7 +1368,7 @@ sudo apt install bats
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">bats-core — kiểm thử bash</span><span class="lc-sub">Thiết lập, dọn dẹp, giả lập lệnh bằng mẹo PATH, và chạy trong CI. Đủ để kiểm thử một script deploy cho tử tế.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">Luyện: tìm ra lỗi bằng công cụ</span><span class="lc-sub">Bốn script hỏng, mỗi cái một kiểu trong bốn kiểu ở trên. Hãy chẩn đoán từng cái bằng <code>set -x</code>, <code>bash -n</code>, ShellCheck và <code>env -i</code> — đừng chẩn đoán bằng cách đọc.</span></span>
 </a>
@@ -1612,7 +1612,7 @@ run docker build --build-arg "MANIFEST=\$manifest" .</code></pre>
   <span class="lc-ico">🧰</span>
   <span class="lc-body"><span class="lc-title">Awesome Bash</span><span class="lc-sub">Curated tooling: linters, formatters (<code>shfmt</code>), test frameworks and libraries worth knowing before you write your own.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: ship a script</span><span class="lc-sub">Build a deploy script from the skeleton up, passing every item on the checklist above. Graded on the checks, not the output.</span></span>
 </a>
@@ -1847,7 +1847,7 @@ run docker build --build-arg "MANIFEST=\$manifest" .</code></pre>
   <span class="lc-ico">🧰</span>
   <span class="lc-body"><span class="lc-title">Awesome Bash</span><span class="lc-sub">Bộ công cụ được tuyển chọn: bộ soi lỗi, bộ định dạng (<code>shfmt</code>), khung kiểm thử và thư viện đáng biết trước khi bạn tự viết cái của mình.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đưa một script lên bờ</span><span class="lc-sub">Dựng một script deploy từ bộ khung lên, qua được mọi mục trong bảng kiểm ở trên. Chấm điểm theo các phép kiểm, không theo output.</span></span>
 </a>

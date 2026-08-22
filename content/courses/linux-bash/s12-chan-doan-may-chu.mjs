@@ -173,7 +173,7 @@ ls -l "\$T"</code></pre>
   <span class="lc-ico">📕</span>
   <span class="lc-body"><span class="lc-title">Google SRE Book — Effective Troubleshooting</span><span class="lc-sub">Free online. The hypothesis-and-bisect loop, common traps, and why "what changed" beats "what is broken" as an opening question.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: read a sweep and name the fault</span><span class="lc-sub">Graded exercises: four real sweeps from broken machines — say what is wrong, which single command you would run next, and which finding is a symptom rather than a cause.</span></span>
 </a>
@@ -335,7 +335,7 @@ ls -l "\$T"</code></pre>
   <span class="lc-ico">📕</span>
   <span class="lc-body"><span class="lc-title">Google SRE Book — Effective Troubleshooting</span><span class="lc-sub">Đọc miễn phí trên web. Vòng lặp giả thuyết-và-chia đôi, những cái bẫy thường gặp, và vì sao "cái gì đã đổi" là câu mở đầu tốt hơn "cái gì đang hỏng".</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đọc một cuộc quét và gọi tên cái hỏng</span><span class="lc-sub">Bài chấm điểm: bốn cuộc quét thật từ những cái máy đang hỏng — nói xem sai ở đâu, câu lệnh DUY NHẤT bạn sẽ chạy tiếp theo, và phát hiện nào là triệu chứng chứ không phải nguyên nhân.</span></span>
 </a>
@@ -487,7 +487,7 @@ Aug 22 19:22:31 vps-1 sshd[45012]: Connection closed by authenticating user depl
   <span class="lc-ico">🌐</span>
   <span class="lc-body"><span class="lc-title">nginx — ngx_http_proxy_module</span><span class="lc-sub">Where <code>proxy_pass</code>, <code>proxy_read_timeout</code> and <code>proxy_next_upstream</code> are defined. The reference for turning a 502 or 504 into a specific configuration line.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: six machines, six outages</span><span class="lc-sub">Graded exercises: name the fault from an exit code alone, free a held port without <code>kill -9</code>, tell refused from timeout from reset given only <code>nc</code> output, and find the 502 whose cause is IPv6.</span></span>
 </a>
@@ -630,7 +630,7 @@ Aug 22 19:22:31 vps-1 sshd[45012]: Connection closed by authenticating user depl
   <span class="lc-ico">🌐</span>
   <span class="lc-body"><span class="lc-title">nginx — ngx_http_proxy_module</span><span class="lc-sub">Nơi định nghĩa <code>proxy_pass</code>, <code>proxy_read_timeout</code> và <code>proxy_next_upstream</code>. Tài liệu để biến một cú 502 hay 504 thành một dòng cấu hình cụ thể.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: sáu cái máy, sáu sự cố</span><span class="lc-sub">Bài chấm điểm: gọi tên cái hỏng chỉ từ một mã thoát, giải phóng một cổng bị giữ mà không dùng <code>kill -9</code>, phân biệt refused với timeout với reset khi chỉ có output của <code>nc</code>, và tìm ra cú 502 mà nguyên nhân là IPv6.</span></span>
 </a>
@@ -805,7 +805,7 @@ LISTEN 0      511          0.0.0.0:80</div>
   <span class="lc-ico">💽</span>
   <span class="lc-body"><span class="lc-title">iostat(1) — every column explained</span><span class="lc-sub">What <code>await</code>, <code>aqu-sz</code> and <code>%util</code> actually measure, and why <code>%util</code> alone is misleading on SSDs and virtualised storage.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: four slow machines</span><span class="lc-sub">Graded exercises: separate CPU-bound from I/O-bound from D-state using only <code>vmstat</code>, read a <code>curl -w</code> breakdown and name the guilty layer, and spot the exhausted connection pool from <code>ss</code> output alone.</span></span>
 </a>
@@ -971,7 +971,7 @@ LISTEN 0      511          0.0.0.0:80</div>
   <span class="lc-ico">💽</span>
   <span class="lc-body"><span class="lc-title">iostat(1) — giải thích từng cột</span><span class="lc-sub"><code>await</code>, <code>aqu-sz</code> và <code>%util</code> thật ra đo cái gì, và vì sao riêng <code>%util</code> thì gây hiểu nhầm trên SSD và trên ổ đĩa ảo hoá.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: bốn cái máy chậm</span><span class="lc-sub">Bài chấm điểm: phân tách nghẽn-CPU với nghẽn-I/O với trạng thái D chỉ bằng <code>vmstat</code>, đọc một bản chẻ pha của <code>curl -w</code> và gọi tên tầng có tội, và nhận ra cái bể kết nối đã cạn chỉ từ output của <code>ss</code>.</span></span>
 </a>
@@ -1132,7 +1132,7 @@ case-sensitive: YES</div>
   <span class="lc-ico">🧱</span>
   <span class="lc-body"><span class="lc-title">AppArmor on Ubuntu</span><span class="lc-sub">How profiles work, how to read a DENIED line from <code>dmesg</code>, and how to put one profile in complain mode while you investigate — without disabling the whole system.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: six impossible bugs</span><span class="lc-sub">Graded exercises: find the traversal bit with <code>namei</code>, diagnose a CRLF shebang from the error message alone, prove a running process is executing an old release, and explain why <code>dig</code> and the app disagree.</span></span>
 </a>
@@ -1284,7 +1284,7 @@ phan biet hoa thuong: CO</div>
   <span class="lc-ico">🧱</span>
   <span class="lc-body"><span class="lc-title">AppArmor trên Ubuntu</span><span class="lc-sub">Hồ sơ hoạt động thế nào, đọc một dòng DENIED trong <code>dmesg</code> ra sao, và cách chuyển MỘT hồ sơ sang chế độ chỉ-ghi-nhận trong lúc bạn điều tra — mà không phải tắt cả hệ thống.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: sáu con bọ bất khả thi</span><span class="lc-sub">Bài chấm điểm: tìm ra bit đi-xuyên bằng <code>namei</code>, chẩn đoán một shebang dính CRLF chỉ từ thông báo lỗi, chứng minh một tiến trình đang chạy bản phát hành cũ, và giải thích vì sao <code>dig</code> với ứng dụng lại bất đồng.</span></span>
 </a>
@@ -1388,7 +1388,7 @@ phan biet hoa thuong: CO</div>
   <span class="lc-ico">✅</span>
   <span class="lc-body"><span class="lc-title">ShellCheck</span><span class="lc-sub">Static analysis for shell scripts, in the browser or as <code>apt install shellcheck</code>. It catches unquoted variables, useless <code>cat</code>s and the pipeline exit-code traps from Chapter 7 — automatically, every time.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: the whole course, one lab at a time</span><span class="lc-sub">Every chapter's graded exercises in one place. If you skipped them while reading, this is the version of the course that actually sticks — reading about <code>awk</code> and using <code>awk</code> are different skills.</span></span>
 </a>
@@ -1492,7 +1492,7 @@ phan biet hoa thuong: CO</div>
   <span class="lc-ico">✅</span>
   <span class="lc-body"><span class="lc-title">ShellCheck</span><span class="lc-sub">Phân tích tĩnh cho script shell, chạy trên trình duyệt hoặc <code>apt install shellcheck</code>. Nó bắt biến không bọc nháy, những cú <code>cat</code> vô ích và các bẫy mã thoát của ống dẫn ở Chương 7 — tự động, lần nào cũng vậy.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: cả khoá học, từng phòng lab một</span><span class="lc-sub">Toàn bộ bài chấm điểm của mọi chương gom về một chỗ. Nếu bạn bỏ qua chúng trong lúc đọc thì đây mới là phiên bản khoá học ĐỌNG LẠI — đọc về <code>awk</code> và DÙNG <code>awk</code> là hai kỹ năng khác nhau.</span></span>
 </a>

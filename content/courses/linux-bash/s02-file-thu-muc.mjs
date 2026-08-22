@@ -397,7 +397,7 @@ LC_ALL=C sh -c 'echo *'
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">Greg's Wiki — Globs</span><span class="lc-sub">The best practical write-up on extglob, nullglob and the "why not to parse ls" argument, from the people who answer these questions daily.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: select exactly the right files</span><span class="lc-sub">Graded exercises on <code>?</code>, bracket ranges, dotglob and nullglob, using a fixture directory built to punish guesses.</span></span>
 </a>
@@ -550,7 +550,7 @@ LC_ALL=C sh -c 'echo *'
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">Greg's Wiki — Globs</span><span class="lc-sub">Bài viết thực dụng hay nhất về extglob, nullglob và lý do "đừng phân tích kết quả ls", từ chính những người trả lời các câu hỏi này mỗi ngày.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: chọn đúng những file cần chọn</span><span class="lc-sub">Bài tập chấm điểm về <code>?</code>, khoảng trong ngoặc, dotglob và nullglob, trên một thư mục mẫu dựng ra để trừng phạt việc đoán mò.</span></span>
 </a>
@@ -706,7 +706,7 @@ find . -name "*.env*" -type f -exec grep -l "SECRET" {} +</code></pre>
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">GNU Findutils Manual — Security Considerations</span><span class="lc-sub">Explains precisely why <code>-execdir</code> and <code>-print0</code> exist, with the race conditions spelled out. Rare, genuinely useful documentation.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: query a messy filesystem</span><span class="lc-sub">Graded tasks on <code>-prune</code>, <code>-mtime</code> boundaries and <code>-exec … +</code>, on a fixture tree containing filenames with spaces and leading dashes.</span></span>
 </a>
@@ -853,7 +853,7 @@ find . -name "*.env*" -type f -exec grep -l "SECRET" {} +</code></pre>
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">GNU Findutils Manual — Security Considerations</span><span class="lc-sub">Giải thích chính xác vì sao <code>-execdir</code> và <code>-print0</code> tồn tại, với các tình huống tranh chấp được viết ra rõ ràng. Một tài liệu hiếm và thật sự hữu ích.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: truy vấn một hệ thống file bừa bộn</span><span class="lc-sub">Bài chấm điểm về <code>-prune</code>, các mốc <code>-mtime</code> và <code>-exec … +</code>, trên một cây mẫu có cả tên file chứa dấu cách lẫn tên bắt đầu bằng gạch ngang.</span></span>
 </a>
@@ -1029,7 +1029,7 @@ zgrep -c ERROR big.log.gz       <span class="tok-comment"># grep straight into t
   <span class="lc-ico">⚡</span>
   <span class="lc-body"><span class="lc-title">zstd — benchmarks and level guide</span><span class="lc-sub">The README's comparison table shows why zstd replaced gzip as the sensible default, with numbers you can reproduce.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: links, atomic swaps, and archives</span><span class="lc-sub">Build a releases/current deploy layout, swap it atomically, then pack and restore it while preserving permissions.</span></span>
 </a>
@@ -1196,7 +1196,7 @@ zgrep -c ERROR big.log.gz       <span class="tok-comment"># grep thẳng vào tr
   <span class="lc-ico">⚡</span>
   <span class="lc-body"><span class="lc-title">zstd — số đo và hướng dẫn chọn mức nén</span><span class="lc-sub">Bảng so sánh trong README cho thấy vì sao zstd thay chỗ gzip làm mặc định hợp lý, với những con số bạn tự dựng lại được.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: liên kết, tráo nguyên tử, và kho nén</span><span class="lc-sub">Dựng bố cục deploy kiểu releases/current, tráo nó một cách nguyên tử, rồi đóng gói và khôi phục mà vẫn giữ nguyên quyền.</span></span>
 </a>

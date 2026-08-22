@@ -164,7 +164,7 @@ free_gb=\$(df --output=avail -BG / | tail -1 | tr -dc '0-9')
   <span class="lc-ico">🐳</span>
   <span class="lc-body"><span class="lc-title">Docker — pruning unused objects</span><span class="lc-sub">Exactly what each prune command removes, and the warning about <code>--volumes</code>. Read it before running the one that deletes data.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: reclaim the disk</span><span class="lc-sub">Four full-disk scenarios: a huge log, exhausted inodes, a deleted-but-open file, and a volume mounted over existing data. Diagnose each before deleting anything.</span></span>
 </a>
@@ -317,7 +317,7 @@ free_gb=\$(df --output=avail -BG / | tail -1 | tr -dc '0-9')
   <span class="lc-ico">🐳</span>
   <span class="lc-body"><span class="lc-title">Docker — tỉa bỏ các đối tượng không dùng</span><span class="lc-sub">Chính xác từng lệnh prune gỡ bỏ những gì, và lời cảnh báo về <code>--volumes</code>. Hãy đọc trước khi chạy cái lệnh có thể xoá dữ liệu.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: đòi lại cái đĩa</span><span class="lc-sub">Bốn tình huống đĩa đầy: một file log khổng lồ, cạn inode, một file đã xoá mà vẫn mở, và một ổ đĩa gắn đè lên dữ liệu có sẵn. Hãy chẩn đoán từng cái TRƯỚC KHI xoá bất cứ thứ gì.</span></span>
 </a>
@@ -482,7 +482,7 @@ export PATH="\$HOME/.npm-global/bin:\$PATH"</code></pre>
   <span class="lc-ico">🐍</span>
   <span class="lc-body"><span class="lc-title">PEP 668 — externally managed environments</span><span class="lc-sub">The reasoning behind the error you get from <code>sudo pip install</code>, and the sanctioned alternatives.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: manage packages properly</span><span class="lc-sub">Graded tasks: find which package owns a file, add a third-party repo with <code>signed-by</code>, diagnose a dpkg lock, and reclaim space from the package cache.</span></span>
 </a>
@@ -638,7 +638,7 @@ export PATH="\$HOME/.npm-global/bin:\$PATH"</code></pre>
   <span class="lc-ico">🐍</span>
   <span class="lc-body"><span class="lc-title">PEP 668 — môi trường do bên ngoài quản lý</span><span class="lc-sub">Lý lẽ đằng sau cái lỗi bạn nhận được từ <code>sudo pip install</code>, và những phương án được chấp thuận.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: quản lý gói cho tử tế</span><span class="lc-sub">Bài chấm điểm: tìm gói nào sở hữu một file, thêm một kho bên thứ ba bằng <code>signed-by</code>, chẩn đoán một lỗi khoá dpkg, và đòi lại chỗ trống từ bộ đệm gói.</span></span>
 </a>
@@ -801,7 +801,7 @@ journalctl -u myapp --since '30 min ago' | grep -B10 -m1 ERROR</code></pre>
   <span class="lc-ico">🔄</span>
   <span class="lc-body"><span class="lc-title">logrotate(8)</span><span class="lc-sub">Every directive, and the precise difference between <code>postrotate</code> and <code>copytruncate</code> including the race the latter accepts.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: find it in the journal</span><span class="lc-sub">Graded tasks: locate an OOM kill, correlate a deploy with an error spike, bound a query by time and priority, and write a logrotate config that does not lose lines.</span></span>
 </a>
@@ -955,7 +955,7 @@ journalctl -u myapp --since '30 min ago' | grep -B10 -m1 ERROR</code></pre>
   <span class="lc-ico">🔄</span>
   <span class="lc-body"><span class="lc-title">logrotate(8)</span><span class="lc-sub">Mọi chỉ thị, và khác biệt chính xác giữa <code>postrotate</code> với <code>copytruncate</code>, gồm cả tình huống tranh chấp mà cái sau chấp nhận.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: tìm cho ra trong journal</span><span class="lc-sub">Bài chấm điểm: định vị một lần bị OOM giết, đối chiếu một lần deploy với một đợt lỗi tăng vọt, chặn khung truy vấn theo thời gian và mức ưu tiên, và viết một cấu hình logrotate không làm mất dòng.</span></span>
 </a>

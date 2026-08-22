@@ -232,7 +232,7 @@ ready</div>
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Understanding systemd units and unit files</span><span class="lc-sub">A readable walkthrough of unit types, targets and dependency ordering — good background before writing your first unit.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: turn a script into a service</span><span class="lc-sub">Graded tasks: write a unit with a dedicated user, diagnose 203/EXEC and 200/CHDIR, add a drop-in override, and clear a rate-limited crash loop.</span></span>
 </a>
@@ -453,7 +453,7 @@ ready</div>
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Hiểu về unit và file unit của systemd</span><span class="lc-sub">Một bài dẫn dắt dễ đọc về các loại unit, target và thứ tự phụ thuộc — nền tốt để đọc trước khi viết cái unit đầu tiên.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: biến một script thành một dịch vụ</span><span class="lc-sub">Bài chấm điểm: viết một unit có người dùng riêng, chẩn đoán lỗi 203/EXEC và 200/CHDIR, thêm một drop-in ghi đè, và gỡ một vòng lặp sập đã bị chặn tần suất.</span></span>
 </a>
@@ -763,7 +763,7 @@ Aug 22 18:02:49 vps-1 systemd[1]: Finished backup.service - Nightly database bac
   <span class="lc-ico">🔎</span>
   <span class="lc-body"><span class="lc-title">crontab.guru</span><span class="lc-sub">Paste an expression, read it back in English, see the next runs. The cron equivalent of <code>systemd-analyze calendar</code>, and the fastest way to check a line before you install it.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: schedule a job that actually runs</span><span class="lc-sub">Graded exercises: read six crontab lines back in English, fix a job broken by cron's PATH, convert it to a timer with <code>Persistent=</code>, and stop a slow job from overlapping itself.</span></span>
 </a>
@@ -1064,7 +1064,7 @@ Aug 22 18:02:49 vps-1 systemd[1]: Finished backup.service - Nightly database bac
   <span class="lc-ico">🔎</span>
   <span class="lc-body"><span class="lc-title">crontab.guru</span><span class="lc-sub">Dán một biểu thức vào, đọc lại nó bằng tiếng Anh, xem các lần chạy kế tiếp. Bản tương đương của <code>systemd-analyze calendar</code> cho cron, và là cách nhanh nhất để kiểm một dòng trước khi cài nó.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: hẹn giờ một công việc CHẠY THẬT</span><span class="lc-sub">Bài chấm điểm: đọc lại sáu dòng crontab bằng tiếng Việt, sửa một công việc hỏng vì PATH của cron, chuyển nó thành timer có <code>Persistent=</code>, và chặn một công việc chậm chồng lên chính nó.</span></span>
 </a>
@@ -1315,7 +1315,7 @@ deploy   pts/0   203.0.113.55  Fri Aug 22 17:58   still logged in</div>
   <span class="lc-ico">🔄</span>
   <span class="lc-body"><span class="lc-title">UnattendedUpgrades — Debian wiki</span><span class="lc-sub">Applies directly to Ubuntu. Covers origins, blacklists, the reboot options and how to test without waiting for the timer.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practice: harden a server without locking yourself out</span><span class="lc-sub">Graded exercises: fix a drop-in that silently re-enables password login, repair <code>authorized_keys</code> permissions from the sshd log alone, add swap that survives a reboot, and run the five-minute audit on a machine with three deliberate problems.</span></span>
 </a>
@@ -1557,7 +1557,7 @@ deploy   pts/0   203.0.113.55  Fri Aug 22 17:58   still logged in</div>
   <span class="lc-ico">🔄</span>
   <span class="lc-body"><span class="lc-title">UnattendedUpgrades — wiki của Debian</span><span class="lc-sub">Áp dụng trực tiếp cho Ubuntu. Nói về nguồn gói, danh sách loại trừ, các lựa chọn khởi động lại và cách thử mà không phải chờ tới giờ hẹn.</span></span>
 </a>
-<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/linux-bash${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: gia cố một máy chủ mà không tự nhốt mình ở ngoài</span><span class="lc-sub">Bài chấm điểm: sửa một drop-in âm thầm bật lại đăng nhập mật khẩu, chữa quyền của <code>authorized_keys</code> chỉ dựa vào log của sshd, thêm swap sống sót qua khởi động lại, và chạy cuộc soát năm phút trên một máy có ba lỗi cố ý.</span></span>
 </a>

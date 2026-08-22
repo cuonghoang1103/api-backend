@@ -157,6 +157,11 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 | 22/08/2026 | Khoá Linux & Bash — Chương 8 (PATH), 9 (mạng), 10 (đĩa/gói/log) | 59 bài · 1.319k ký tự · TB 22.349 |
 | 22/08/2026 | Khoá Linux & Bash — Chương 11 (systemd/cron/gia cố) | **63 bài · 1.478k ký tự · TB 23.464 · 158 sơ đồ · đạt mọi sàn** |
 | 22/08/2026 | **Khoá Linux & Bash — HOÀN THÀNH** (Chương 12, chẩn đoán) | **69 bài · 1.660k ký tự · TB 24.064 · 182 sơ đồ · 424 nguồn · 130 bẫy · đạt mọi sàn** |
+| 22/08/2026 | Vá 2 lỗi ngầm lọt qua cả hai checker | `\${REF}` bị thoát → 172 thẻ thực hành 404 (Docker + Linux&Bash); quiz sai hình dạng → seeder bỏ qua câm |
+| 22/08/2026 | Khoá Docker — Mục 0 → Chương 6 | 40 bài · 895k ký tự · 86 sơ đồ |
+| 22/08/2026 | Khoá Docker — Chương 7 (dữ liệu), 8 (mạng), 9 (Compose) | 58 bài · 1.227k ký tự · 124 sơ đồ |
+| 22/08/2026 | Khoá Docker — Chương 10 (stack thật), 11 (production) | 70 bài · 1.467k ký tự · 148 sơ đồ |
+| 22/08/2026 | **Khoá Docker — HOÀN THÀNH** (Chương 12, chẩn đoán + kết khoá) | **76 bài · 1.584k ký tự · TB 20.842 · 162 sơ đồ · 454 nguồn · 130 bẫy · 13 quiz · đạt mọi sàn** |
 
 
 ### Khoá Linux & Bash — XONG (22/08/2026)
@@ -165,6 +170,24 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 182 sơ đồ `lz-*` · 424 thẻ nguồn học · 130 bẫy · 1.022 khối code ·
 568 khối output · 12 quiz**. Qua `course-content-check.mjs` và
 `course-depth-audit.mjs`. Còn hai bước phải chạy ở máy nhà — xem §6.
+
+### Khoá Docker — XONG (22/08/2026)
+
+13 mục (Mục 0 + Chương 1–12), **76 bài · 1.584k ký tự · TB 20.842 ký tự/bài ·
+162 sơ đồ `lz-*` · 454 thẻ nguồn học · 130 bẫy · 852 khối code ·
+618 khối output · 13 quiz · 126 liên kết thực hành Code Lab**.
+
+Đường đi: mô hình tinh thần (namespace/lớp/OCI) → chạy container → ảnh &
+registry → Dockerfile → cache → ảnh nhỏ & an toàn → dữ liệu → mạng →
+Compose → một stack năm dịch vụ chạy thật → production → chẩn đoán.
+
+Bốn sự cố có thật của chính kho này được dệt vào bài học thay vì kể ngoài lề:
+engine Prisma glibc trong ảnh musl (7 phút 502), `dist/` cũ khiến router GIF
+404, cache dựng 7,6GB làm đầy đĩa chứa Postgres, và một healthcheck gọi `wget`
+trong ảnh không có `wget`. Cả bốn đều **xanh lúc dựng, xanh lúc đẩy, hỏng trên
+production** — đó là luận điểm xuyên suốt khoá.
+
+Còn hai bước phải chạy ở máy nhà — xem §6.
 
 ---
 
@@ -184,7 +207,7 @@ node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
 node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ```
 
-**Đang chờ chạy — hai khoá:**
+**Đang chờ chạy — ba khoá:**
 
 ```bash
 # Git & GitHub
@@ -196,6 +219,11 @@ node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
   --slug linux-bash --icon linux --color FCC624 --title "Linux & Bash" --subtitle "Terminal → Server"
 node scripts/course-seed.mjs --file ./content/courses/linux-bash.mjs --apply
+
+# Docker
+docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+  --slug docker --icon docker --color 2496ED --title "Docker" --subtitle "Container → Production"
+node scripts/course-seed.mjs --file ./content/courses/docker.mjs --apply
 ```
 
 ⚠️ Cả hai khoá dùng **category mới `devops`** (`DevOps & Vận hành`), chưa từng có trong

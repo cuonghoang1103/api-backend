@@ -10,6 +10,7 @@
  */
 import s00 from './git/s00-intro.mjs';
 import s01 from './git/s01-mo-hinh.mjs';
+import s02 from './git/s02-doc-lich-su.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Rocket', sortOrder: 4 },
@@ -34,5 +35,6 @@ export default {
   sections: [
     s00,
     s01,
+    s02,
   ],
 };

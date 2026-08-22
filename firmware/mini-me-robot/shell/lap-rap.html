@@ -497,14 +497,7 @@ details[open] summary{border-bottom:1px solid var(--line)}
       <tr><td class="mono">Vin</td><td class="num">5 V</td><td>từ LM2596. Chạy 3V3 cũng kêu nhưng không đủ 3 W</td></tr>
       <tr><td class="mono">+ / −</td><td class="num">loa ⌀65</td><td>chân <b>−</b> nối cực âm loa, <b>KHÔNG</b> nối đất</td></tr>
 
-      <tr><td rowspan="8"><b>Ba màn</b><br><span style="opacity:.7;font-size:13px">chung một bus SPI</span></td><td class="mono">SCLK</td><td class="num">GPIO 12</td><td rowspan="3">ba sợi này <b>đi chung cả ba màn</b> — nối song song</td></tr>
-      <tr><td class="mono">SDA / MOSI</td><td class="num">GPIO 11</td></tr>
-      <tr><td class="mono">DC</td><td class="num">GPIO 13</td></tr>
-      <tr><td class="mono">CS ngực</td><td class="num">GPIO 10</td><td>ILI9488 3.5"</td></tr>
-      <tr><td class="mono">CS mắt trái</td><td class="num">GPIO 9</td><td>GC9A01</td></tr>
-      <tr><td class="mono">CS mắt phải</td><td class="num">GPIO 14</td><td>GC9A01</td></tr>
-      <tr><td class="mono">RST ×3</td><td class="num">3V3</td><td><b>cả ba nối cứng 3V3</b>, reset bằng lệnh mềm. Cắm RST vào GPIO 14 là màn ngực reset liên tục theo nhịp chọn chip</td></tr>
-      <tr><td class="mono">BLK ×3</td><td class="num">để hở</td><td>hở = đèn nền sáng luôn</td></tr>
+      <tr><td><b>Ba màn</b></td><td class="mono">—</td><td class="num">xem mục riêng</td><td>Hai mắt và màn bụng là <b>hai loại chip khác nhau, tên chân khác nhau</b> — có mục <b>Ba màn hình</b> ngay dưới bảng này</td></tr>
 
       <tr><td rowspan="4"><b>I2C</b><br><span style="opacity:.7;font-size:13px">ba thiết bị chung bus</span></td><td class="mono">SDA</td><td class="num">GPIO 8</td><td rowspan="2">nối song song cả ba thiết bị</td></tr>
       <tr><td class="mono">SCL</td><td class="num">GPIO 18</td></tr>
@@ -538,6 +531,111 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <li>Mic, rồi ampli, rồi ba màn, rồi I2C, rồi PCA9685, rồi động cơ — hết module này sang module khác.</li>
     <li><b>Chạy <code>kiem-day</code> trước khi đóng nắp.</b> Đây là chỗ dừng thứ hai.</li>
   </ol>
+</section>
+
+<section>
+  <h2>Ba màn hình — hai loại chip, tên chân khác nhau</h2>
+  <p>Đây là chỗ dễ nối sai nhất của cả robot, vì <b>hai con mắt giống hệt nhau còn màn bụng thì khác hẳn</b>: khác chip, khác số chân, và cùng một sợi dây lại mang tên khác nhau ở hai đầu.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 420 250" role="img" aria-label="Ba màn dùng chung ba sợi SCLK, MOSI, DC, nhưng mỗi màn có một sợi CS riêng đi tới GPIO khác nhau: mắt trái GPIO 9, màn bụng GPIO 10, mắt phải GPIO 14">
+      <defs><marker id="ar5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+      <g stroke="currentColor" fill="none" stroke-width="1.3">
+        <rect x="16" y="86" width="78" height="72"/>
+        <circle cx="300" cy="46" r="30"/>
+        <circle cx="300" cy="200" r="30"/>
+        <rect x="266" y="98" width="68" height="48"/>
+      </g>
+      <g stroke="currentColor" fill="none" stroke-width="1.5">
+        <path d="M94,104 L170,104" />
+        <path d="M170,104 L170,40 L268,40" marker-end="url(#ar5)"/>
+        <path d="M170,104 L170,118 L264,118" marker-end="url(#ar5)"/>
+        <path d="M170,104 L170,194 L268,194" marker-end="url(#ar5)"/>
+      </g>
+      <g stroke="#B8860B" fill="none" stroke-width="1.5">
+        <path d="M94,126 L140,126 L140,58 L268,58" marker-end="url(#ar5)"/>
+        <path d="M94,134 L128,134 L128,132 L264,132" marker-end="url(#ar5)"/>
+        <path d="M94,142 L116,142 L116,212 L268,212" marker-end="url(#ar5)"/>
+      </g>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" text-anchor="middle">
+        <text x="55" y="112" font-weight="600">ESP32</text>
+        <text x="55" y="127" font-size="9.5" opacity=".75">HSPI</text>
+        <text x="300" y="44" font-size="10">mắt trái</text><text x="300" y="56" font-size="9" opacity=".7">GC9A01</text>
+        <text x="300" y="118" font-size="10">màn bụng</text><text x="300" y="130" font-size="9" opacity=".7">ILI9488</text>
+        <text x="300" y="198" font-size="10">mắt phải</text><text x="300" y="210" font-size="9" opacity=".7">GC9A01</text>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="9.5" fill="currentColor" opacity=".8">
+        <text x="176" y="34">SCLK 12 · MOSI 11 · DC 13 — DÙNG CHUNG</text>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#B8860B" font-weight="600">
+        <text x="146" y="54">CS 9</text><text x="146" y="146">CS 10</text><text x="122" y="228">CS 14</text>
+      </g>
+      <text x="210" y="243" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity=".75" text-anchor="middle">RST cả ba nối 3V3 · MISO không nối · BLK để hở</text>
+    </svg>
+    <figcaption>Ba sợi <code>SCLK</code>, <code>MOSI</code>, <code>DC</code> đi <b>song song tới cả ba màn</b> — một chân ESP32 nuôi ba đầu vào là bình thường. Chỉ <code>CS</code> là riêng, và chính nó quyết định con nào đang nghe. Đấu chung CS cho hai màn thì <b>không phải màn đen</b> mà là hai hình chồng nhau nhấp nháy — rất dễ đổ oan cho nhiễu rồi đi hạ tốc độ SPI.</figcaption>
+  </figure>
+
+  <h3>Cùng một sợi, hai cái tên</h3>
+  <p>Nhà sản xuất in tên khác nhau trên bo. Đây là bảng quy đổi — <b>đọc chữ in trên chính bo màn của bạn</b> rồi tra sang cột giữa:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Trên bo có thể ghi</th><th>Là chân gì</th><th class="num">Về đâu</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">SCL · SCK · SCLK · CLK</td><td>xung nhịp</td><td class="num">GPIO 12</td></tr>
+      <tr><td class="mono">SDA · MOSI · SDI · DIN</td><td>dữ liệu vào màn</td><td class="num">GPIO 11</td></tr>
+      <tr><td class="mono">DC · RS · A0</td><td>lệnh hay dữ liệu</td><td class="num">GPIO 13</td></tr>
+      <tr><td class="mono">CS · SS</td><td>chọn chip</td><td class="num">9 / 10 / 14 — <b>mỗi màn một chân</b></td></tr>
+      <tr><td class="mono">RES · RST · RESET</td><td>khởi động lại</td><td class="num">3V3 (cả ba)</td></tr>
+      <tr><td class="mono">BLK · LED · BL</td><td>đèn nền</td><td class="num">để hở</td></tr>
+      <tr><td class="mono">SDO · MISO</td><td>dữ liệu ra khỏi màn</td><td class="num"><b>KHÔNG nối</b></td></tr>
+      <tr><td class="mono">VCC · VDD</td><td>nguồn</td><td class="num">3V3</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Hai con mắt — GC9A01, tám chân, giống hệt nhau</h3>
+  <p>Hai mắt nối <b>y như nhau, khác đúng một sợi</b> là CS.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Chân trên bo</th><th class="num">Mắt trái</th><th class="num">Mắt phải</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">GND</td><td class="num">GND</td><td class="num">GND</td><td></td></tr>
+      <tr><td class="mono">VCC</td><td class="num">3V3</td><td class="num">3V3</td><td><b>không bao giờ 5 V</b> — hoặc 3,8–4,2 V nếu muốn đèn nền sáng hơn mà vẫn mát</td></tr>
+      <tr><td class="mono">SCL</td><td class="num">GPIO 12</td><td class="num">GPIO 12</td><td rowspan="3">ba sợi này nối song song cả hai mắt <b>và</b> màn bụng</td></tr>
+      <tr><td class="mono">SDA</td><td class="num">GPIO 11</td><td class="num">GPIO 11</td></tr>
+      <tr><td class="mono">DC</td><td class="num">GPIO 13</td><td class="num">GPIO 13</td></tr>
+      <tr><td class="mono">CS</td><td class="num"><b>GPIO 9</b></td><td class="num"><b>GPIO 14</b></td><td>← <b>chỗ duy nhất hai mắt khác nhau</b></td></tr>
+      <tr><td class="mono">RES</td><td class="num">3V3</td><td class="num">3V3</td><td>nối cứng, firmware reset bằng lệnh <code>0x01</code></td></tr>
+      <tr><td class="mono">BLK</td><td class="num">để hở</td><td class="num">để hở</td><td>hở = đèn nền sáng luôn</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Màn bụng — ILI9488 3.5", nhiều chân hơn, phần lớn bỏ trống</h3>
+  <p>Module 3.5" thường có <b>hai nhóm chân</b>: nhóm màn hình và nhóm cảm ứng. <b>Firmware không dùng cảm ứng</b>, nên cả nhóm sau để trống.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Chân trên bo</th><th class="num">Về đâu</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">VCC</td><td class="num">3V3</td><td>module 3.5" thường có sẵn ổn áp và chịu được 5 V, nhưng đi 3V3 cho đồng bộ với hai mắt</td></tr>
+      <tr><td class="mono">GND</td><td class="num">GND</td><td></td></tr>
+      <tr><td class="mono">CS</td><td class="num"><b>GPIO 10</b></td><td>riêng của màn bụng</td></tr>
+      <tr><td class="mono">RESET</td><td class="num">3V3</td><td><b>không cắm vào GPIO 14</b> — đó là CS mắt phải, cắm nhầm là màn bụng reset liên tục theo nhịp chọn chip và không bao giờ hiện gì</td></tr>
+      <tr><td class="mono">DC · RS</td><td class="num">GPIO 13</td><td>dùng chung</td></tr>
+      <tr><td class="mono">SDI · MOSI</td><td class="num">GPIO 11</td><td>dùng chung</td></tr>
+      <tr><td class="mono">SCK</td><td class="num">GPIO 12</td><td>dùng chung</td></tr>
+      <tr><td class="mono">LED · BL</td><td class="num">3V3 hoặc để hở</td><td>tuỳ lô: có bo cần cấp nguồn cho đèn nền, có bo tự nối sẵn</td></tr>
+      <tr><td class="mono">SDO · MISO</td><td class="num"><b>không nối</b></td><td>firmware khai <code>GFX_NOT_DEFINED</code> cho MISO — nó không bao giờ đọc ngược từ màn</td></tr>
+      <tr><td class="mono">T_CLK T_CS T_DIN T_DO T_IRQ</td><td class="num"><b>không nối</b></td><td>cả nhóm cảm ứng. Firmware không có mã đọc touch</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="warn">
+    <span class="warn-h">Đọc chữ in trên bo, đừng tin thứ tự chân</span>
+    <p>Bo màn tròn <b>in tên chân ở MẶT SAU</b>. Nhìn từ mặt trước thì thứ tự đảo ngược, và đấu theo mặt này rồi cắm theo mặt kia là cả bảy sợi bị lật gương quanh chân giữa: <code>RST↔VCC</code>, <code>CS↔GND</code>, <code>DC↔SCL</code>, riêng <code>SDA</code> đứng yên.</p>
+    <p>Hậu quả: VCC vào chân RST, GND vào chân CS. Đèn nền <b>vẫn sáng</b> qua đường bảo vệ nên nhìn tưởng đúng, mà không một lệnh nào tới được chip — đúng triệu chứng "sáng mà đen".</p>
+  </div>
+
+  <div class="note">
+    <span class="warn-h">Hai màn xoay khác nhau, và đó là cố ý</span>
+    <p>Firmware khởi tạo màn bụng với hướng <b>1</b> (xoay 90°, hình nằm ngang) và hai mắt với hướng <b>0</b>. Hai mắt còn bật cờ <b>IPS</b>, màn bụng thì không — sai cờ này thì màu bị đảo âm bản chứ không phải màn hỏng.</p>
+    <p>Nếu lắp xong thấy hình màn bụng nằm sai chiều, sửa con số <code>1</code> trong <code>man_hinh.h</code> chứ đừng xoay cả tấm ngực.</p>
+  </div>
 </section>
 
 <section>

@@ -542,7 +542,7 @@ exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất �
 </div>
 
 <h3>Health checks that the orchestrator can act on</h3>
-<pre><code>HEALTHCHECK --interval=30s --timeout=3s --start-period=20s --retries=3 \
+<pre><code>HEALTHCHECK --interval=30s --timeout=3s --start-period=20s --retries=3 \\
   CMD node -e "fetch('http://127.0.0.1:3000/health/live').then(r=&gt;process.exit(r.ok?0:1)).catch(()=&gt;process.exit(1))"</code></pre>
 
 <p><code>--start-period</code> is the parameter people omit and then get paged about: during it, failures do not count towards <code>--retries</code>. Without it, a service that takes 15 seconds to boot is marked unhealthy and restarted, and restarts forever. And per chapter 15: the health check URL must be the <em>liveness</em> probe, not one that touches the database — otherwise a database blip restarts every container at once.</p>
@@ -640,7 +640,7 @@ exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất �
 </div>
 
 <h3>Health check mà bộ điều phối hành động được</h3>
-<pre><code>HEALTHCHECK --interval=30s --timeout=3s --start-period=20s --retries=3 \
+<pre><code>HEALTHCHECK --interval=30s --timeout=3s --start-period=20s --retries=3 \\
   CMD node -e "fetch('http://127.0.0.1:3000/health/live').then(r=&gt;process.exit(r.ok?0:1)).catch(()=&gt;process.exit(1))"</code></pre>
 
 <p><code>--start-period</code> là tham số người ta hay bỏ qua rồi bị gọi dậy vì nó: trong khoảng đó, các lần trượt <em>không</em> tính vào <code>--retries</code>. Không có nó, một dịch vụ mất 15 giây để khởi động sẽ bị đánh dấu là không khoẻ và bị khởi động lại, rồi khởi động lại mãi mãi. Và theo chương 15: URL của health check phải là probe <em>liveness</em>, đừng là cái chạm vào cơ sở dữ liệu — nếu không một cú nấc của database sẽ khởi động lại toàn bộ container cùng lúc.</p>

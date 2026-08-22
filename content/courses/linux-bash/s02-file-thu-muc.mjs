@@ -1263,11 +1263,11 @@ zgrep -c ERROR big.log.gz       <span class="tok-comment"># grep thẳng vào tr
             points: 1,
           },
           {
-            question: 'What is the practical difference between "-exec gzip {} \\\;" and "-exec gzip {} +"?|||Khác biệt thực tế giữa "-exec gzip {} \\\;" và "-exec gzip {} +" là gì?',
+            question: 'What is the practical difference between "-exec gzip {} \\;" and "-exec gzip {} +"?|||Khác biệt thực tế giữa "-exec gzip {} \\;" và "-exec gzip {} +" là gì?',
             options: [
-              'The + version starts one process per file; the \\\; version starts one total|||Bản + khởi động một tiến trình mỗi file; bản \\\; khởi động tổng cộng một tiến trình',
+              'The + version starts one process per file; the \\; version starts one total|||Bản + khởi động một tiến trình mỗi file; bản \\; khởi động tổng cộng một tiến trình',
               'They are identical; + is just newer syntax|||Chúng y hệt nhau; + chỉ là cú pháp mới hơn',
-              'The \\\; version starts one process PER FILE; + batches many paths into one command line, usually far faster|||Bản \\\; khởi động một tiến trình MỖI FILE; còn + gom nhiều đường dẫn vào một dòng lệnh, thường nhanh hơn rất nhiều',
+              'The \\; version starts one process PER FILE; + batches many paths into one command line, usually far faster|||Bản \\; khởi động một tiến trình MỖI FILE; còn + gom nhiều đường dẫn vào một dòng lệnh, thường nhanh hơn rất nhiều',
               '+ only works with -delete|||+ chỉ chạy được với -delete',
             ],
             correctIndex: 2,

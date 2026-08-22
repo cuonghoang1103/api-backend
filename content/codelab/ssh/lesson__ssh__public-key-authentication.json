@@ -1,0 +1,259 @@
+{
+  "trackSlug": "ssh",
+  "moduleSlug": "public-key-authentication",
+  "blocks": [
+    { "type": "heading", "text": "It said the key was added. It still wants a password.", "textVi": "Nó báo đã thêm khoá. Nó vẫn đòi mật khẩu." },
+
+    { "type": "prose",
+      "html": "<p>You ran <code>ssh-copy-id</code>. It printed <code>Number of key(s) added: 1</code>. You connect again and the server asks for a password as though nothing happened. Nothing errored. Nothing warned you. The key is sitting in the right file on the right machine and it is being ignored.</p><p>That silence is not a bug — it is a deliberate design choice, and understanding <em>why</em> a server refuses a key without saying so is what separates people who fix this in thirty seconds from people who spend an evening on it.</p><p>This module builds the machinery: what the two files actually contain, why one of them can be published on the internet, and what the server and client say to each other to prove you hold a secret without you ever sending it. Module 3 then takes the four different reasons a key gets refused and shows how to tell them apart.</p>",
+      "htmlVi": "<p>Bạn chạy <code>ssh-copy-id</code>. Nó in ra <code>Number of key(s) added: 1</code>. Bạn kết nối lại và máy chủ hỏi mật khẩu như thể chẳng có gì xảy ra. Không lỗi. Không cảnh báo. Cái khoá đang nằm đúng file, đúng máy, và bị phớt lờ.</p><p>Sự im lặng đó không phải lỗi — nó là một lựa chọn thiết kế có chủ đích, và hiểu được <em>vì sao</em> một máy chủ từ chối khoá mà không nói gì chính là thứ phân biệt người sửa xong trong ba mươi giây với người mất cả buổi tối.</p><p>Module này dựng phần máy móc: hai cái file thật ra chứa gì, vì sao một trong hai công bố lên Internet cũng được, và máy chủ với client nói gì với nhau để chứng minh bạn đang giữ một bí mật mà bạn không hề gửi nó đi. Module 3 sẽ lấy bốn lý do khác nhau khiến một cái khoá bị từ chối và chỉ cách phân biệt chúng.</p>" },
+
+    { "type": "heading", "text": "Refresher: where authentication sits", "textVi": "Ôn lại: xác thực nằm ở đâu" },
+
+    { "type": "prose",
+      "html": "<p>From Module 1: a connection passes through six phases. Authentication is phase five — it happens <strong>after</strong> the encrypted tunnel exists and after the server has proved its own identity with its host key. Two consequences follow.</p><ul><li>Your key material is exchanged inside encryption that is already in place. Nobody on the wire sees any of it.</li><li>Host key verification and user authentication are separate mechanisms answering opposite questions. The host key answers &quot;is this the machine I meant?&quot;. Your key answers &quot;am I the person I claim to be?&quot;. Mixing them up is common and makes error messages impossible to read.</li></ul>",
+      "htmlVi": "<p>Từ Module 1: một kết nối đi qua sáu pha. Xác thực là pha năm — nó diễn ra <strong>sau khi</strong> đường hầm mã hoá đã có và sau khi máy chủ đã chứng minh danh tính của chính nó bằng khoá máy. Hai hệ quả theo sau.</p><ul><li>Vật liệu khoá của bạn được trao đổi bên trong lớp mã hoá đã dựng sẵn. Không ai trên đường dây thấy được gì.</li><li>Xác minh khoá máy chủ và xác thực người dùng là hai cơ chế riêng biệt trả lời hai câu hỏi ngược nhau. Khoá máy chủ trả lời &quot;đây có đúng cái máy tôi định vào không?&quot;. Khoá của bạn trả lời &quot;tôi có đúng là người tôi khai không?&quot;. Lẫn hai thứ đó là chuyện thường gặp và làm cho thông báo lỗi không đọc nổi.</li></ul>" },
+
+    { "type": "part", "number": "1", "text": "Two files, one secret", "textVi": "Hai cái file, một bí mật" },
+
+    { "type": "heading", "text": "Make a pair and look at it", "textVi": "Tạo một cặp rồi nhìn thẳng vào nó" },
+
+    { "type": "code", "title": "Real run", "titleVi": "Chạy thật", "language": "bash",
+      "code": "$ ssh-keygen -t ed25519 -C \"cuong@macbook\" -f ~/.ssh/id_ed25519\nGenerating public/private ed25519 key pair.\nEnter passphrase (empty for no passphrase):\nEnter same passphrase again:\nYour identification has been saved in /Users/admin/.ssh/id_ed25519\nYour public key has been saved in /Users/admin/.ssh/id_ed25519.pub\nThe key fingerprint is:\nSHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8 cuong@macbook\nThe key's randomart image is:\n+--[ED25519 256]--+\n|.                |\n|=                |\n|o+    . . .      |\n|o.   o   + .     |\n|o . o + S o .    |\n|.. * o * + o.    |\n|  = + + * o  = o.|\n|   + . o *..+.+Eo|\n|        ..+==+=oo|\n+----[SHA256]-----+" },
+
+    { "type": "prose",
+      "html": "<p>Three flags worth knowing, because the defaults are not always what you want:</p><ul><li><code>-t ed25519</code> — the algorithm. Covered below; it is the right default today.</li><li><code>-C \"cuong@macbook\"</code> — a free-text <strong>comment</strong>. It is not used for anything cryptographic; it exists so that a year later, looking at eight lines in <code>authorized_keys</code>, you can tell which laptop each one belongs to. Leave it out and <code>ssh-keygen</code> fills in <code>user@hostname</code>, which is why keys often leak a machine name.</li><li><code>-f</code> — the output path. Naming a key after its purpose (<code>~/.ssh/id_deploy_vps</code>) rather than accepting the default is how you avoid ending up with one key that opens everything.</li></ul><p>The randomart is a visual fingerprint. It exists because humans compare pictures faster than base64. Almost nobody uses it. The line above it — the SHA256 fingerprint — is the one that matters.</p>",
+      "htmlVi": "<p>Ba cờ đáng biết, vì mặc định không phải lúc nào cũng là thứ bạn muốn:</p><ul><li><code>-t ed25519</code> — thuật toán. Bàn ở dưới; hiện nay đây là mặc định đúng.</li><li><code>-C \"cuong@macbook\"</code> — một <strong>chú thích</strong> chữ tự do. Nó không tham gia gì vào phần mật mã; nó tồn tại để một năm sau, nhìn tám dòng trong <code>authorized_keys</code>, bạn còn biết dòng nào của máy nào. Bỏ trống thì <code>ssh-keygen</code> tự điền <code>user@hostname</code>, và đó là lý do các khoá hay lộ tên máy.</li><li><code>-f</code> — đường dẫn file. Đặt tên khoá theo mục đích (<code>~/.ssh/id_deploy_vps</code>) thay vì nhận mặc định chính là cách bạn tránh kết cục có một cái khoá mở được mọi thứ.</li></ul><p>Cái hình randomart là dấu vân tay dạng ảnh. Nó có mặt vì người so ảnh nhanh hơn so base64. Gần như không ai dùng. Dòng ngay trên nó — dấu vân tay SHA256 — mới là dòng quan trọng.</p>" },
+
+    { "type": "heading", "text": "What is actually inside each file", "textVi": "Bên trong mỗi file thật ra có gì" },
+
+    { "type": "code", "title": "The public key: one line, 95 bytes", "titleVi": "Khoá công khai: một dòng, 95 byte", "language": "bash",
+      "code": "$ cat ~/.ssh/id_ed25519.pub\nssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGw2pKaViomw2P5pxizI9DoBKD7YTkI//q1xtri0SJCW cuong@macbook\n\n$ wc -c ~/.ssh/id_ed25519.pub\n      95 /Users/admin/.ssh/id_ed25519.pub" },
+
+    { "type": "prose",
+      "html": "<p>Three space-separated fields, and that is the entire format:</p><ol><li><code>ssh-ed25519</code> — the key type.</li><li>The base64 blob — the actual public key, 68 characters here.</li><li><code>cuong@macbook</code> — the comment. Purely for humans.</li></ol><p>Ninety-five bytes. This is the part you paste into GitHub, email to a colleague, or commit to a configuration repository.</p>",
+      "htmlVi": "<p>Ba trường cách nhau bằng dấu cách, và đó là toàn bộ định dạng:</p><ol><li><code>ssh-ed25519</code> — loại khoá.</li><li>Khối base64 — bản thân khoá công khai, ở đây là 68 ký tự.</li><li><code>cuong@macbook</code> — chú thích. Thuần cho người đọc.</li></ol><p>Chín mươi lăm byte. Đây là phần bạn dán lên GitHub, gửi email cho đồng nghiệp, hoặc commit vào một kho cấu hình.</p>" },
+
+    { "type": "code", "title": "The private key: seven lines, 399 bytes, never leaves", "titleVi": "Khoá riêng: bảy dòng, 399 byte, không bao giờ rời máy", "language": "bash",
+      "code": "$ head -2 ~/.ssh/id_ed25519\n-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQ...\n\n$ tail -1 ~/.ssh/id_ed25519\n-----END OPENSSH PRIVATE KEY-----\n\n$ wc -lc ~/.ssh/id_ed25519\n       7     399 /Users/admin/.ssh/id_ed25519" },
+
+    { "type": "prose",
+      "html": "<p>Note what <code>b3BlbnNzaC1rZXktdjEA…</code> decodes to: the literal ASCII <code>openssh-key-v1</code>. The file is a container format, not raw key bytes, and the header being readable base64 is why a truncated or line-wrapped private key produces such unhelpful errors — the parser fails on structure long before it reaches anything cryptographic.</p><p>Also note the size. Four hundred bytes is the whole of your identity on every server you can reach. It is small enough to fit in a chat message, which is exactly why it must never be in one.</p>",
+      "htmlVi": "<p>Để ý <code>b3BlbnNzaC1rZXktdjEA…</code> giải ra thành gì: đúng chuỗi ASCII <code>openssh-key-v1</code>. File này là một định dạng bao bọc, không phải byte khoá thô, và việc phần đầu là base64 đọc được chính là lý do một khoá riêng bị cắt cụt hoặc bị bẻ dòng lại sinh ra những thông báo lỗi vô dụng đến thế — bộ phân tích chết vì cấu trúc từ rất lâu trước khi nó chạm tới phần mật mã.</p><p>Cũng để ý kích thước. Bốn trăm byte là toàn bộ danh tính của bạn trên mọi máy chủ bạn với tới được. Nó đủ nhỏ để lọt vào một tin nhắn chat, và chính vì thế nó không bao giờ được nằm trong một tin nhắn chat.</p>" },
+
+    { "type": "heading", "text": "The one-way street, shown rather than asserted", "textVi": "Con đường một chiều, cho xem chứ không nói suông" },
+
+    { "type": "prose",
+      "html": "<p>The whole scheme rests on one asymmetry: deriving the public key from the private key is trivial, and going the other way is not feasible. You can watch the easy direction happen:</p>",
+      "htmlVi": "<p>Toàn bộ cơ chế dựa trên một sự bất đối xứng: suy khoá công khai từ khoá riêng thì dễ như bỡn, còn đi ngược lại thì không khả thi. Bạn xem được chiều dễ diễn ra ngay trước mắt:</p>" },
+
+    { "type": "code", "title": "Public key regenerated from the private key alone", "titleVi": "Khoá công khai được dựng lại chỉ từ khoá riêng", "language": "bash",
+      "code": "$ rm ~/.ssh/id_ed25519.pub          # vut bo khoa cong khai\n\n$ ssh-keygen -y -f ~/.ssh/id_ed25519\nssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGw2pKaViomw2P5pxizI9DoBKD7YTkI//q1xtri0SJCW\n\n# Y het ban cu. Khoa cong khai KHONG phai thong tin them —\n# no da nam san trong khoa rieng roi.\n\n# Chieu nguoc lai? Khong co co ma nao, khong co lenh nao.\n# Do khong phai vi OpenSSH khong them tinh nang do." },
+
+    { "type": "prose",
+      "html": "<p>Losing a <code>.pub</code> file is a non-event: <code>ssh-keygen -y</code> reconstructs it. Losing the private key is total — there is no command that recovers it, because recovering it is the thing the mathematics is built to prevent.</p><p>This is also why both files report the <strong>same</strong> fingerprint. The fingerprint is a hash of the public key, and the public key is contained in the private one:</p>",
+      "htmlVi": "<p>Mất file <code>.pub</code> chẳng là gì cả: <code>ssh-keygen -y</code> dựng lại được. Mất khoá riêng là mất trắng — không có lệnh nào lấy lại được, vì lấy lại được chính là thứ mà toán học ở đây sinh ra để ngăn chặn.</p><p>Đây cũng là lý do cả hai file báo <strong>cùng một</strong> dấu vân tay. Dấu vân tay là băm của khoá công khai, mà khoá công khai thì nằm sẵn trong khoá riêng:</p>" },
+
+    { "type": "mermaid",
+      "code": "flowchart LR\n  P[Khoa rieng 399 byte] -->|ssh-keygen -y, tuc thi| U[Khoa cong khai 95 byte]\n  U -.->|khong co lenh nao, khong kha thi| P\n  P --> S[Ky duoc]\n  U --> V[Chi kiem chung duoc]\n  S --> A[Vao duoc may chu]\n  V --> B[Khong vao duoc gi]" },
+
+    { "type": "code", "title": "Same fingerprint from either file", "titleVi": "Cùng một dấu vân tay dù đọc từ file nào", "language": "bash",
+      "code": "$ ssh-keygen -lf ~/.ssh/id_ed25519.pub\n256 SHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8 cuong@macbook (ED25519)\n\n$ ssh-keygen -lf ~/.ssh/id_ed25519\n256 SHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8 cuong@macbook (ED25519)" },
+
+    { "type": "prose",
+      "html": "<p>That equality is a practical tool. When <code>ssh -v</code> prints <code>Offering public key: … SHA256:KzVx…</code> and the server's <code>authorized_keys</code> contains a key whose fingerprint you can print, comparing those two strings answers &quot;is the right key even installed?&quot; without any guessing.</p>",
+      "htmlVi": "<p>Sự bằng nhau đó là một công cụ thực dụng. Khi <code>ssh -v</code> in ra <code>Offering public key: … SHA256:KzVx…</code> và file <code>authorized_keys</code> trên máy chủ chứa một khoá mà bạn in được dấu vân tay của nó, so hai chuỗi đó là trả lời được câu &quot;khoá đúng có được cài hay không?&quot; mà không cần đoán chút nào.</p>" },
+
+    { "type": "part", "number": "2", "text": "Proving it without sending it", "textVi": "Chứng minh mà không gửi đi" },
+
+    { "type": "heading", "text": "Challenge and response", "textVi": "Thử thách và đáp án" },
+
+    { "type": "prose",
+      "html": "<p>Here is the question the protocol has to answer: how does the server become convinced you hold the private key, given that you will never send it, and given that a replay of last time's proof must not work?</p><p>The answer is a signature over data the server chose. The server does not send a literal &quot;challenge&quot; message in modern SSH — instead the client signs a blob that includes the <strong>session identifier</strong>, a value derived from the key exchange that is unique to this connection. Signing that proves two things at once: you hold the key, and the proof belongs to <em>this</em> session and cannot be replayed into another.</p>",
+      "htmlVi": "<p>Đây là câu hỏi giao thức phải trả lời: làm sao máy chủ tin được rằng bạn đang giữ khoá riêng, trong khi bạn sẽ không bao giờ gửi nó đi, và trong khi việc phát lại bằng chứng của lần trước phải không có tác dụng?</p><p>Câu trả lời là một chữ ký lên dữ liệu do máy chủ định đoạt. Trong SSH hiện đại, máy chủ không gửi một thông điệp &quot;thử thách&quot; theo nghĩa đen — thay vào đó client ký lên một khối dữ liệu có chứa <strong>định danh phiên</strong>, một giá trị suy ra từ bước trao đổi khoá và là duy nhất cho kết nối này. Ký lên đó chứng minh hai điều cùng lúc: bạn giữ khoá, và bằng chứng này thuộc về <em>đúng</em> phiên này chứ không phát lại sang phiên khác được.</p>" },
+
+    { "type": "mermaid",
+      "code": "sequenceDiagram\n  participant C as Client\n  participant S as Server\n  Note over C,S: Duong ham da ma hoa xong tu pha truoc\n  C->>S: Toi la cuong, day la khoa cong khai cua toi\n  S->>S: Tim khoa do trong authorized_keys cua cuong\n  alt Khong tim thay\n    S-->>C: Cach nay khong dung duoc\n  else Tim thay\n    S-->>C: Duoc, khoa do chap nhan duoc\n    C->>C: Ky len khoi du lieu chua dinh danh phien\n    C->>S: Day la chu ky\n    S->>S: Kiem chu ky bang khoa CONG KHAI\n    S-->>C: Chap nhan\n  end" },
+
+    { "type": "prose",
+      "html": "<p>Notice the two-round shape, which you can see directly in a verbose trace. The client first asks whether a key <em>would</em> be acceptable, and only signs after being told yes:</p>",
+      "htmlVi": "<p>Để ý hình dạng hai vòng, thứ bạn nhìn thấy trực tiếp trong một vết chạy chi tiết. Client hỏi trước xem một cái khoá <em>có</em> được chấp nhận không, rồi mới ký sau khi được trả lời là có:</p>" },
+
+    { "type": "code", "title": "Real trace", "titleVi": "Vết chạy thật", "language": "text",
+      "code": "debug1: Authentications that can continue: publickey,password\ndebug1: Next authentication method: publickey\ndebug1: Offering public key: /Users/admin/.ssh/id_rsa RSA SHA256:Gx/NR7T/VBl0unlxSrJGdFGjEwXTcUgrPtJo2idWDBM\ndebug1: Server accepts key: /Users/admin/.ssh/id_rsa RSA SHA256:Gx/NR7T/VBl0unlxSrJGdFGjEwXTcUgrPtJo2idWDBM\ndebug1: Remote: /root/.ssh/authorized_keys:42: key options: agent-forwarding port-forwarding pty user-rc x11-forwarding" },
+
+    { "type": "prose",
+      "html": "<p>The reason for two rounds is economy of secrecy: signing costs a real cryptographic operation, and more importantly, producing a signature for a server that had no interest in your key hands that server a valid signature it can keep. Asking first means you only ever prove possession to someone who was already going to accept it.</p><p>The pair of lines is also the most useful diagnostic in this whole module. <code>Offering</code> without a following <code>Server accepts key</code> means the server looked and said no — the key is not installed, or the server would not read the file. <code>Server accepts key</code> followed by a disconnect means something after authentication went wrong. Two lines, two completely different investigations.</p>",
+      "htmlVi": "<p>Lý do phải hai vòng là tiết kiệm bí mật: ký tốn một phép mật mã thật, và quan trọng hơn, sinh ra một chữ ký cho một máy chủ vốn chẳng quan tâm tới khoá của bạn là trao cho máy chủ đó một chữ ký hợp lệ để nó giữ lại. Hỏi trước nghĩa là bạn chỉ chứng minh quyền sở hữu cho người vốn đã định chấp nhận.</p><p>Cặp dòng đó cũng là công cụ chẩn đoán hữu ích nhất trong cả module này. Có <code>Offering</code> mà không có <code>Server accepts key</code> theo sau nghĩa là máy chủ đã nhìn và nói không — khoá chưa được cài, hoặc máy chủ không chịu đọc cái file đó. Có <code>Server accepts key</code> rồi bị ngắt nghĩa là có gì đó sau bước xác thực bị hỏng. Hai dòng, hai hướng điều tra hoàn toàn khác nhau.</p>" },
+
+    { "type": "heading", "text": "So why is publishing the .pub safe?", "textVi": "Vậy vì sao công bố file .pub lại an toàn?" },
+
+    { "type": "prose",
+      "html": "<p>Because everything an attacker can do with a public key is verification, and verification is the useless half of the operation. With your <code>.pub</code> somebody can check a signature you produced. They cannot produce one. Signing requires the private half, and the private half is not derivable from the public half.</p><p>This is not an appeal to authority — it is checkable. GitHub publishes every user's SSH public keys at a URL, deliberately:</p>",
+      "htmlVi": "<p>Bởi vì mọi thứ kẻ tấn công làm được với một khoá công khai đều là kiểm chứng, và kiểm chứng là nửa vô dụng của phép toán. Có file <code>.pub</code> của bạn, người ta kiểm được một chữ ký bạn đã tạo. Người ta không tạo ra được chữ ký. Ký cần nửa riêng tư, mà nửa riêng tư thì không suy ra được từ nửa công khai.</p><p>Đây không phải viện dẫn uy tín — nó kiểm được. GitHub công bố khoá công khai SSH của mọi người dùng tại một địa chỉ, một cách có chủ đích:</p>" },
+
+    { "type": "code", "title": "Public by design", "titleVi": "Công khai theo thiết kế", "language": "bash",
+      "code": "$ curl -s https://github.com/torvalds.keys\n# tra ve cac khoa cong khai SSH cua tai khoan do\n\n# Bat cu ai cung lay duoc. Khong ai vao duoc may nao bang chung.\n# Cai nay con la mot cach cai khoa tien loi that su:\n$ curl -s https://github.com/cuonghoang.keys >> ~/.ssh/authorized_keys" },
+
+    { "type": "prose",
+      "html": "<p>What the public key <em>does</em> leak is worth naming, because it is not nothing: the comment field usually contains <code>username@hostname</code>, which tells a reader your account name and often your machine's name. That is reconnaissance, not access. If it matters for your threat model, set <code>-C</code> to something neutral.</p>",
+      "htmlVi": "<p>Thứ mà khoá công khai <em>có</em> làm lộ thì đáng gọi tên, vì nó không phải là không có gì: trường chú thích thường chứa <code>tênngườidùng@têmmáy</code>, cho người đọc biết tên tài khoản và thường là cả tên máy của bạn. Đó là do thám, không phải quyền truy cập. Nếu điều đó có ý nghĩa với mô hình rủi ro của bạn, hãy đặt <code>-C</code> thành một chuỗi trung tính.</p>" },
+
+    { "type": "part", "number": "3", "text": "authorized_keys", "textVi": "authorized_keys" },
+
+    { "type": "heading", "text": "The file that decides", "textVi": "Cái file quyết định tất cả" },
+
+    { "type": "prose",
+      "html": "<p>On the server, one file per user lists every public key allowed to log in as that user. Its default location comes from the server config, and on the production VPS it is:</p>",
+      "htmlVi": "<p>Trên máy chủ, mỗi người dùng có một file liệt kê mọi khoá công khai được phép đăng nhập với tư cách người đó. Vị trí mặc định lấy từ cấu hình máy chủ, và trên VPS production nó là:</p>" },
+
+    { "type": "code", "title": "Where the server looks", "titleVi": "Máy chủ tìm ở đâu", "language": "bash",
+      "code": "$ sshd -T | grep -i authorizedkeysfile\nauthorizedkeysfile .ssh/authorized_keys .ssh/authorized_keys2\n\n# Duong dan TUONG DOI so voi thu muc nha cua NGUOI DUNG DANG DANG NHAP.\n# Vao bang root -> /root/.ssh/authorized_keys\n# Vao bang cuong -> /home/cuong/.ssh/authorized_keys" },
+
+    { "type": "prose",
+      "html": "<p>That relative path is the source of a very common mistake: installing your key into <code>/root/.ssh/authorized_keys</code> and then connecting as <code>cuong@server</code>. The key is on the machine, in a valid file, and completely irrelevant — the server only ever reads the home directory of the user you are logging in as.</p><p>The file itself is plain text, one key per line:</p>",
+      "htmlVi": "<p>Đường dẫn tương đối đó là nguồn của một lỗi rất hay gặp: cài khoá vào <code>/root/.ssh/authorized_keys</code> rồi kết nối bằng <code>cuong@server</code>. Cái khoá có trên máy, nằm trong một file hợp lệ, và hoàn toàn vô nghĩa — máy chủ chỉ đọc thư mục nhà của đúng người dùng mà bạn đang đăng nhập vào.</p><p>Bản thân file là chữ thường, mỗi dòng một khoá:</p>" },
+
+    { "type": "code", "title": "Real file on the lab server", "titleVi": "File thật trên máy chủ thí nghiệm", "language": "bash",
+      "code": "$ cat -n ~/.ssh/authorized_keys\n     1\tssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGw2pKaViomw2P5pxizI9DoBKD7YTkI//q1xtri0SJCW cuong@macbook" },
+
+    { "type": "prose",
+      "html": "<p>The line number matters more than it looks. When a key is accepted, the server tells you which line matched — <code>Remote: /root/.ssh/authorized_keys:42</code> in the trace above. With eight keys installed across three people, that number is how you know whose key just opened the door.</p>",
+      "htmlVi": "<p>Số dòng quan trọng hơn vẻ ngoài của nó. Khi một khoá được chấp nhận, máy chủ nói cho bạn biết dòng nào đã khớp — <code>Remote: /root/.ssh/authorized_keys:42</code> trong vết chạy ở trên. Với tám cái khoá của ba người, con số đó là cách bạn biết khoá của ai vừa mở cửa.</p>" },
+
+    { "type": "mermaid",
+      "code": "flowchart TD\n  A[Client chao mot khoa cong khai] --> B[sshd xac dinh thu muc nha cua NGUOI DUNG DICH]\n  B --> C{Doc duoc authorized_keys khong}\n  C -->|Khong, quyen sai| X[Tu choi im lang. Ly do chi co trong log may chu]\n  C -->|Doc duoc| D{Co dong nao khop khoa nay khong}\n  D -->|Khong| X\n  D -->|Co| E[Doc cac tuy chon dau dong]\n  E --> F[Yeu cau ky, roi kiem chu ky]\n  F --> G[Chap nhan va ap dung rang buoc]" },
+
+    { "type": "heading", "text": "What ssh-copy-id actually does", "textVi": "ssh-copy-id thật ra làm gì" },
+
+    { "type": "prose",
+      "html": "<p>It is not a special protocol feature. <code>ssh-copy-id</code> is a shell script that logs in the normal way — usually with a password, because that is the situation you are in — and appends your public key to the file. Roughly:</p>",
+      "htmlVi": "<p>Nó không phải một tính năng đặc biệt nào của giao thức. <code>ssh-copy-id</code> là một script shell đăng nhập theo cách bình thường — thường là bằng mật khẩu, vì đó chính là tình huống bạn đang ở — rồi nối khoá công khai của bạn vào file. Đại khái là:</p>" },
+
+    { "type": "code", "title": "The same thing by hand", "titleVi": "Làm tay đúng thứ đó", "language": "bash",
+      "code": "# Cach tien:\nssh-copy-id -i ~/.ssh/id_ed25519.pub cuong@may\n\n# Chinh xac la no lam viec nay:\ncat ~/.ssh/id_ed25519.pub | ssh cuong@may \\\n  'mkdir -p ~/.ssh && chmod 700 ~/.ssh && \\\n   cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys'\n\n# Chu y DAU NOI THEM >>. Dung mot dau > la XOA SACH khoa cua\n# nguoi khac — ke ca cai khoa dang giu cho ban ket noi hien tai." },
+
+    { "type": "prose",
+      "html": "<p><strong>Common mistake.</strong> Using <code>&gt;</code> instead of <code>&gt;&gt;</code>. The connection you are using stays alive, everything looks fine, and every other key on that account is gone. If one of them was a colleague's or a CI deploy key, you find out when their next job fails. Keep the session open and verify with <code>cat</code> before you disconnect.</p><p><strong>The other common mistake</strong> is worth stating because <code>ssh-copy-id</code> hides it: the command needs a way in <em>first</em>. On a server where password authentication is already disabled and you have no key installed, there is no route — you need the provider's web console, or a cloud-init / rescue-mode path. That ordering is the entire reason Module 9 insists on installing and testing a key <em>before</em> turning passwords off.</p>",
+      "htmlVi": "<p><strong>Lỗi thường gặp.</strong> Dùng <code>&gt;</code> thay vì <code>&gt;&gt;</code>. Kết nối bạn đang dùng vẫn sống, mọi thứ trông vẫn ổn, và mọi khoá khác trên tài khoản đó biến mất. Nếu một trong số đó là khoá của đồng nghiệp hay khoá deploy của CI, bạn sẽ biết khi job kế tiếp của họ hỏng. Hãy giữ phiên đang mở và kiểm bằng <code>cat</code> trước khi ngắt.</p><p><strong>Lỗi thường gặp thứ hai</strong> đáng nói ra vì <code>ssh-copy-id</code> che nó đi: lệnh này cần một đường vào <em>trước đã</em>. Trên một máy chủ đã tắt xác thực mật khẩu mà bạn chưa cài khoá nào thì không có đường nào cả — bạn cần bảng điều khiển web của nhà cung cấp, hoặc một lối cloud-init / chế độ cứu hộ. Đúng cái thứ tự đó là toàn bộ lý do Module 9 khăng khăng phải cài và thử khoá <em>trước khi</em> tắt mật khẩu.</p>" },
+
+    { "type": "heading", "text": "Restricting what a key may do", "textVi": "Siết lại việc một cái khoá được phép làm gì" },
+
+    { "type": "prose",
+      "html": "<p>A key does not have to grant a shell. Options at the start of a line constrain what that specific key can do, which turns <code>authorized_keys</code> from an access list into an authorisation policy. This matters most for automation: a backup job needs to run one command and nothing else.</p>",
+      "htmlVi": "<p>Một cái khoá không nhất thiết phải cấp một shell. Các tuỳ chọn đặt ở đầu dòng sẽ ràng buộc đúng cái khoá đó được làm gì, biến <code>authorized_keys</code> từ một danh sách truy cập thành một chính sách phân quyền. Điều này quan trọng nhất với tự động hoá: một job sao lưu chỉ cần chạy một lệnh và không cần gì thêm.</p>" },
+
+    { "type": "code", "title": "One key, one command", "titleVi": "Một khoá, một lệnh", "language": "bash",
+      "code": "# Tren MAY CHU, dat truoc khoa tren cung mot dong:\ncommand=\"echo CHI-DUOC-CHAY-CAI-NAY\",no-pty,no-port-forwarding,no-agent-forwarding ssh-ed25519 AAAAC3Nza... cuong@macbook" },
+
+    { "type": "code", "title": "Reproduced: the user asks for something else and does not get it", "titleVi": "Tái hiện thật: người dùng xin thứ khác và không được", "language": "bash",
+      "code": "$ ssh -i ~/.ssh/id_ed25519 cuong@may 'rm -rf /'\nCHI-DUOC-CHAY-CAI-NAY\n\n$ ssh -i ~/.ssh/id_ed25519 -tt cuong@may\nPTY allocation request failed on channel 0" },
+
+    { "type": "prose",
+      "html": "<p>The user held a valid key, authenticated successfully, and asked the server to delete everything. The server ran the <em>forced command</em> instead and printed its output. The requested command was never executed — it is available to the forced command in <code>$SSH_ORIGINAL_COMMAND</code> if the script wants to inspect it, and ignored otherwise.</p><p>The second attempt asked for an interactive terminal and was refused by <code>no-pty</code>. A stolen key restricted this way is worth very little.</p>",
+      "htmlVi": "<p>Người dùng cầm một cái khoá hợp lệ, xác thực thành công, và bảo máy chủ xoá sạch mọi thứ. Máy chủ chạy <em>lệnh bị ép</em> thay vào đó rồi in kết quả ra. Lệnh được yêu cầu không bao giờ được chạy — nó nằm sẵn trong biến <code>$SSH_ORIGINAL_COMMAND</code> cho lệnh bị ép soi nếu script muốn, còn không thì bị bỏ qua.</p><p>Lần thử thứ hai xin một terminal tương tác và bị <code>no-pty</code> từ chối. Một cái khoá bị đánh cắp mà đã siết như thế thì gần như không đáng gì.</p>" },
+
+    { "type": "prose",
+      "html": "<table><tr><th>Option</th><th>What it does</th><th>When to use it</th></tr><tr><td><code>command=\"…\"</code></td><td>Forces this command; the requested one lands in <code>$SSH_ORIGINAL_COMMAND</code></td><td>Backup, deploy and monitoring keys</td></tr><tr><td><code>restrict</code></td><td>Turns off <em>all</em> forwarding, pty and agent features at once</td><td>Start here, then re-enable what you need</td></tr><tr><td><code>no-pty</code></td><td>No interactive terminal</td><td>Any non-human key</td></tr><tr><td><code>no-port-forwarding</code></td><td>No tunnels through this key</td><td>Keys that must not become network entry points</td></tr><tr><td><code>from=\"10.0.0.0/8\"</code></td><td>Only from these addresses</td><td>CI runners with fixed egress IPs</td></tr><tr><td><code>expiry-time=\"20261231\"</code></td><td>Stops working after that date</td><td>Contractor and temporary access</td></tr></table><p><code>restrict</code> is the one to reach for first — it is deny-by-default, so options added to OpenSSH after you wrote the line are also disabled, rather than silently becoming available.</p>",
+      "htmlVi": "<table><tr><th>Tuỳ chọn</th><th>Nó làm gì</th><th>Dùng khi nào</th></tr><tr><td><code>command=\"…\"</code></td><td>Ép chạy lệnh này; lệnh được yêu cầu rơi vào <code>$SSH_ORIGINAL_COMMAND</code></td><td>Khoá cho sao lưu, deploy, giám sát</td></tr><tr><td><code>restrict</code></td><td>Tắt <em>toàn bộ</em> chuyển tiếp, pty và agent cùng lúc</td><td>Bắt đầu từ đây, rồi bật lại đúng thứ cần</td></tr><tr><td><code>no-pty</code></td><td>Không cấp terminal tương tác</td><td>Mọi khoá không phải của con người</td></tr><tr><td><code>no-port-forwarding</code></td><td>Không mở đường hầm qua khoá này</td><td>Khoá không được phép thành cửa ngõ mạng</td></tr><tr><td><code>from=\"10.0.0.0/8\"</code></td><td>Chỉ chấp nhận từ các địa chỉ này</td><td>CI runner có IP đi ra cố định</td></tr><tr><td><code>expiry-time=\"20261231\"</code></td><td>Hết hạn sau ngày đó</td><td>Truy cập tạm thời, nhà thầu</td></tr></table><p><code>restrict</code> là thứ nên với tay tới trước — nó là chặn-mặc-định, nên những tuỳ chọn mà OpenSSH thêm vào sau khi bạn viết dòng đó cũng bị tắt luôn, thay vì âm thầm trở nên khả dụng.</p>" },
+
+    { "type": "part", "number": "4", "text": "Choosing and protecting keys", "textVi": "Chọn khoá và bảo vệ khoá" },
+
+    { "type": "heading", "text": "Which algorithm", "textVi": "Chọn thuật toán nào" },
+
+    { "type": "prose",
+      "html": "<table><tr><th>Type</th><th>Public key size</th><th>Verdict</th></tr><tr><td><code>ed25519</code></td><td>~95 bytes</td><td><strong>Default choice.</strong> Fast, short, no parameter choices to get wrong. Supported since OpenSSH 6.5 (2014).</td></tr><tr><td><code>rsa</code> 4096-bit</td><td>~740 bytes</td><td>Use only for something too old to accept ed25519. Generate with <code>-b 4096</code>; the 2048 default is weaker than it should be.</td></tr><tr><td><code>ecdsa</code></td><td>~180 bytes</td><td>Avoid. It works, but it depends on curves many people distrust and on a nonce that is catastrophic if a device generates it badly.</td></tr><tr><td><code>*-sk</code></td><td>varies</td><td>Hardware-backed (YubiKey and similar). The private key cannot be copied off the device at all. The strongest option where the workflow allows it.</td></tr></table><p>A detail that trips people up: the production VPS in the traces throughout this track negotiates <code>rsa-sha2-512</code> for its <em>host</em> key. That is the server's own key type and has nothing to do with which type you choose for yourself.</p>",
+      "htmlVi": "<table><tr><th>Loại</th><th>Cỡ khoá công khai</th><th>Kết luận</th></tr><tr><td><code>ed25519</code></td><td>~95 byte</td><td><strong>Lựa chọn mặc định.</strong> Nhanh, ngắn, không có tham số nào để chọn sai. Hỗ trợ từ OpenSSH 6.5 (2014).</td></tr><tr><td><code>rsa</code> 4096 bit</td><td>~740 byte</td><td>Chỉ dùng cho thứ gì quá cũ không nhận ed25519. Tạo bằng <code>-b 4096</code>; mặc định 2048 yếu hơn mức đáng có.</td></tr><tr><td><code>ecdsa</code></td><td>~180 byte</td><td>Nên tránh. Nó chạy được, nhưng phụ thuộc vào những đường cong nhiều người không tin và vào một số nonce mà nếu thiết bị sinh ra kém thì hậu quả là thảm hoạ.</td></tr><tr><td><code>*-sk</code></td><td>tuỳ</td><td>Có phần cứng đỡ (YubiKey và tương tự). Khoá riêng không sao chép ra khỏi thiết bị được, chấm hết. Là lựa chọn mạnh nhất khi quy trình cho phép.</td></tr></table><p>Một chi tiết hay làm người ta vấp: con VPS production trong các vết chạy xuyên suốt track này thương lượng <code>rsa-sha2-512</code> cho khoá <em>máy chủ</em> của nó. Đó là loại khoá của bản thân máy chủ và không liên quan gì tới loại bạn chọn cho mình.</p>" },
+
+    { "type": "heading", "text": "Passphrases and the agent", "textVi": "Mật khẩu bảo vệ và ssh-agent" },
+
+    { "type": "prose",
+      "html": "<p>A passphrase encrypts the private key file on disk. Without one, anyone who reads that 399-byte file — a stolen laptop, a backup, a misconfigured sync folder — has your access. With one, they have an encrypted blob.</p><p>The obvious objection is that typing it on every connection is intolerable. That is what <code>ssh-agent</code> solves: it holds the decrypted key in memory and signs on your behalf, so you type the passphrase once per session.</p>",
+      "htmlVi": "<p>Mật khẩu bảo vệ mã hoá file khoá riêng trên đĩa. Không có nó, bất kỳ ai đọc được cái file 399 byte đó — laptop bị trộm, một bản sao lưu, một thư mục đồng bộ cấu hình sai — là có quyền truy cập của bạn. Có nó, thứ họ cầm là một khối đã mã hoá.</p><p>Phản đối hiển nhiên là gõ nó ở mỗi lần kết nối thì không chịu nổi. Đó chính là thứ <code>ssh-agent</code> giải quyết: nó giữ khoá đã giải mã trong bộ nhớ và ký thay bạn, nên bạn chỉ gõ mật khẩu một lần cho mỗi phiên làm việc.</p>" },
+
+    { "type": "code", "title": "Agent basics", "titleVi": "Dùng agent", "language": "bash",
+      "code": "$ ssh-add ~/.ssh/id_ed25519\nEnter passphrase for /Users/admin/.ssh/id_ed25519:\nIdentity added: /Users/admin/.ssh/id_ed25519 (cuong@macbook)\n\n$ ssh-add -l                    # agent dang giu nhung gi\n256 SHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8 cuong@macbook (ED25519)\n\n$ ssh-add -D                    # xoa het khoi bo nho\n\n# Tren macOS, luu mat khau vao Keychain de khong phai go lai sau reboot:\n$ ssh-add --apple-use-keychain ~/.ssh/id_ed25519" },
+
+    { "type": "prose",
+      "html": "<p>An empty agent is a real diagnostic, and it appears in the traces from Module 1:</p>",
+      "htmlVi": "<p>Một agent rỗng là một dấu hiệu chẩn đoán thật, và nó có xuất hiện trong các vết chạy ở Module 1:</p>" },
+
+    { "type": "code", "title": "Real trace", "titleVi": "Vết chạy thật", "language": "text",
+      "code": "debug1: get_agent_identities: ssh_fetch_identitylist: agent contains no identities" },
+
+    { "type": "prose",
+      "html": "<p><strong>Common mistake.</strong> A passphrase-protected key in a script or CI job. There is no terminal to prompt on (Module 5), so it fails — and with <code>BatchMode=yes</code> it fails in the least helpful way possible, giving the same message as a key that was never installed:</p>",
+      "htmlVi": "<p><strong>Lỗi thường gặp.</strong> Dùng khoá có mật khẩu bảo vệ trong script hay job CI. Không có terminal nào để hỏi (Module 5), nên nó hỏng — và với <code>BatchMode=yes</code> thì nó hỏng theo cách vô ích nhất có thể, cho ra đúng cái thông báo giống hệt trường hợp khoá chưa từng được cài:</p>" },
+
+    { "type": "code", "title": "Reproduced with a passphrase-protected key", "titleVi": "Tái hiện với khoá có mật khẩu bảo vệ", "language": "bash",
+      "code": "$ ssh -i ~/.ssh/key_co_mat_khau -o BatchMode=yes cuong@may 'true'\ncuong@may: Permission denied (publickey,password).\n\n# Y HET thong bao khi khoa chua duoc cai.\n# Phan biet: `ssh-keygen -y -f <khoa>` — neu no HOI mat khau\n# thi khoa co mat khau bao ve, va do moi la nguyen nhan." },
+
+    { "type": "prose",
+      "html": "<p>For automation, the right answer is a dedicated key with no passphrase, locked down with <code>restrict</code> and <code>command=</code> as shown above, rather than a human key that CI has to unlock. The key's power comes from the restrictions, not from the passphrase.</p>",
+      "htmlVi": "<p>Với tự động hoá, câu trả lời đúng là một cái khoá riêng biệt không đặt mật khẩu, được siết bằng <code>restrict</code> và <code>command=</code> như ở trên, chứ không phải một cái khoá của người mà CI phải đi mở. Sức mạnh của cái khoá đó đến từ các ràng buộc, không phải từ mật khẩu bảo vệ.</p>" },
+
+    { "type": "heading", "text": "Agent forwarding, and why to prefer ProxyJump", "textVi": "Chuyển tiếp agent, và vì sao nên chọn ProxyJump" },
+
+    { "type": "prose",
+      "html": "<p><code>ssh -A</code> forwards your agent to the server, so that from there you can reach a third machine using keys that stay on your laptop. Convenient, and it hands the remote machine's root user a live socket that signs with your key for as long as you are connected. They cannot copy the key; they can use it, on anything you can reach, while you are logged in.</p><p>The safer construct reaches the same goal without exposing anything:</p>",
+      "htmlVi": "<p><code>ssh -A</code> chuyển tiếp agent của bạn tới máy chủ, để từ đó bạn với tới máy thứ ba bằng những cái khoá vẫn nằm yên trên laptop. Tiện, và nó trao cho người dùng root của máy từ xa một socket sống có thể ký bằng khoá của bạn suốt thời gian bạn còn kết nối. Họ không sao chép được khoá; họ dùng được nó, trên bất cứ thứ gì bạn với tới, trong lúc bạn đang đăng nhập.</p><p>Cấu trúc an toàn hơn đạt đúng mục tiêu đó mà không phơi bày gì:</p>" },
+
+    { "type": "code", "title": "ProxyJump instead of agent forwarding", "titleVi": "ProxyJump thay cho chuyển tiếp agent", "language": "bash",
+      "code": "# Rui ro: agent cua ban song tren may trung gian\nssh -A cuong@may-trung-gian\nssh cuong@may-trong          # ky bang agent DANG O may trung gian\n\n# An toan: may trung gian chi la ong dan, khong bao gio thay khoa\nssh -J cuong@may-trung-gian cuong@may-trong\n\n# Trong ~/.ssh/config (Module 4):\n# Host may-trong\n#   ProxyJump cuong@may-trung-gian" },
+
+    { "type": "mermaid",
+      "code": "flowchart TD\n  subgraph Chuyen tiep agent voi -A\n    A1[Laptop giu khoa] --> A2[May trung gian co socket agent song]\n    A2 --> A3[Root o may trung gian ky duoc bang khoa cua ban]\n    A2 --> A4[May trong]\n  end\n  subgraph ProxyJump voi -J\n    B1[Laptop giu khoa] --> B2[May trung gian chi chuyen byte da ma hoa]\n    B2 --> B3[May trong]\n    B1 -->|trao doi khoa va ky truc tiep xuyen ong| B3\n  end" },
+
+    { "type": "prose",
+      "html": "<p>With <code>-J</code> the intermediate host forwards encrypted bytes and never participates in authentication. Your client does the key exchange and the signing directly with the final destination, through the tunnel. Same convenience, none of the exposure.</p>",
+      "htmlVi": "<p>Với <code>-J</code>, máy trung gian chỉ chuyển tiếp byte đã mã hoá và không hề tham gia vào việc xác thực. Client của bạn trao đổi khoá và ký trực tiếp với máy đích cuối, xuyên qua đường hầm. Vẫn tiện y như thế, mà không phơi bày gì cả.</p>" },
+
+    { "type": "heading", "text": "Best practices", "textVi": "Thực hành tốt" },
+
+    { "type": "prose",
+      "html": "<ol><li><strong>One key per device, not one key per person.</strong> When a laptop is lost you delete one line on each server instead of re-keying everywhere.</li><li><strong>Name keys after their purpose.</strong> <code>id_deploy_vps</code> tells you what removing it will break; <code>id_ed25519</code> tells you nothing.</li><li><strong>Human keys get a passphrase; automation keys get restrictions.</strong> A passphrase is useless to CI and restrictions are what actually limit damage.</li><li><strong>Start automation keys with <code>restrict</code>, then add back what is needed.</strong> Deny-by-default also covers features added to OpenSSH after you wrote the line.</li><li><strong>Append with <code>&gt;&gt;</code>, and verify before disconnecting.</strong> A single <code>&gt;</code> silently deletes everyone else's access.</li><li><strong>Compare fingerprints instead of eyeballing base64.</strong> <code>ssh-keygen -lf</code> on both ends turns &quot;is the right key installed?&quot; into a string comparison.</li><li><strong>Prefer <code>-J</code> over <code>-A</code>.</strong> Agent forwarding lends your identity to whoever controls the middle machine.</li></ol>",
+      "htmlVi": "<ol><li><strong>Mỗi thiết bị một khoá, không phải mỗi người một khoá.</strong> Khi mất laptop, bạn xoá một dòng trên mỗi máy chủ thay vì phải làm lại khoá ở khắp nơi.</li><li><strong>Đặt tên khoá theo mục đích.</strong> <code>id_deploy_vps</code> cho bạn biết xoá nó thì hỏng cái gì; <code>id_ed25519</code> chẳng nói lên điều gì.</li><li><strong>Khoá của người thì đặt mật khẩu; khoá tự động hoá thì đặt ràng buộc.</strong> Mật khẩu bảo vệ vô dụng với CI, còn ràng buộc mới là thứ thực sự giới hạn thiệt hại.</li><li><strong>Khoá tự động hoá bắt đầu bằng <code>restrict</code>, rồi mở lại đúng thứ cần.</strong> Chặn-mặc-định còn phủ luôn những tính năng OpenSSH thêm vào sau khi bạn viết dòng đó.</li><li><strong>Nối bằng <code>&gt;&gt;</code>, và kiểm trước khi ngắt kết nối.</strong> Một dấu <code>&gt;</code> đơn lẻ âm thầm xoá quyền truy cập của tất cả những người khác.</li><li><strong>So dấu vân tay thay vì nhìn base64 bằng mắt.</strong> Chạy <code>ssh-keygen -lf</code> ở hai đầu là biến câu &quot;khoá đúng có được cài không?&quot; thành một phép so chuỗi.</li><li><strong>Ưu tiên <code>-J</code> hơn <code>-A</code>.</strong> Chuyển tiếp agent là cho mượn danh tính của bạn cho bất cứ ai kiểm soát cái máy ở giữa.</li></ol>" },
+
+    { "type": "heading", "text": "Worked example: a locked-down backup key", "textVi": "Ví dụ trọn vẹn: một cái khoá sao lưu đã siết chặt" },
+
+    { "type": "prose",
+      "html": "<p>Putting the module together. The goal: a laptop can pull a database dump from the VPS and can do nothing else, even if the key file is stolen.</p>",
+      "htmlVi": "<p>Ghép cả module lại. Mục tiêu: một cái laptop kéo được bản dump cơ sở dữ liệu từ VPS về và không làm được gì khác, kể cả khi file khoá bị đánh cắp.</p>" },
+
+    { "type": "code", "title": "Step 1 — a dedicated key, on the laptop", "titleVi": "Bước 1 — một khoá riêng biệt, trên laptop", "language": "bash",
+      "code": "ssh-keygen -t ed25519 -C 'backup-puller' -f ~/.ssh/id_backup -N ''\n# -N '' : khong dat mat khau — day la khoa cho tu dong hoa.\n# An toan cua no den tu RANG BUOC o buoc 3, khong phai tu mat khau." },
+
+    { "type": "code", "title": "Step 2 — the forced command, on the server", "titleVi": "Bước 2 — lệnh bị ép, trên máy chủ", "language": "bash",
+      "code": "# /usr/local/bin/backup-only.sh\n#!/usr/bin/env bash\nset -euo pipefail\n# Bo qua hoan toan lenh ma client yeu cau. Chi lam DUNG mot viec.\nexec docker exec cuonghoangdev_postgres \\\n     pg_dump -U postgres cuonghoangdev_db" },
+
+    { "type": "code", "title": "Step 3 — the authorized_keys line", "titleVi": "Bước 3 — dòng trong authorized_keys", "language": "bash",
+      "code": "restrict,command=\"/usr/local/bin/backup-only.sh\" ssh-ed25519 AAAAC3Nza...  backup-puller" },
+
+    { "type": "code", "title": "Step 4 — use it, and try to abuse it", "titleVi": "Bước 4 — dùng nó, rồi thử lạm dụng nó", "language": "bash",
+      "code": "# Dung dung muc dich: dong thang vao file o may minh (Module 1)\n$ ssh -i ~/.ssh/id_backup root@160.187.1.208 | gzip > backup.sql.gz\n\n# Lam dung: xin mot shell\n$ ssh -i ~/.ssh/id_backup -tt root@160.187.1.208\nPTY allocation request failed on channel 0\n\n# Lam dung: xin chay lenh khac\n$ ssh -i ~/.ssh/id_backup root@160.187.1.208 'cat /etc/shadow'\n# -> van chi ra ban dump CSDL. Lenh yeu cau bi bo qua.\n\n# Lam dung: mo duong ham\n$ ssh -i ~/.ssh/id_backup -L 5432:localhost:5432 root@160.187.1.208\n# -> bi restrict chan" },
+
+    { "type": "prose",
+      "html": "<p>The key has no passphrase and grants root on a production server, and it is still a poor prize: it produces one database dump and refuses everything else. That is the shift worth taking from this module — access control lives in what the key is <em>allowed to do</em>, not only in who holds it.</p>",
+      "htmlVi": "<p>Cái khoá này không có mật khẩu bảo vệ và cấp quyền root trên một máy chủ production, vậy mà nó vẫn là một chiến lợi phẩm tồi: nó cho ra đúng một bản dump cơ sở dữ liệu và từ chối mọi thứ khác. Đó là bước chuyển đáng mang theo từ module này — kiểm soát truy cập nằm ở chỗ cái khoá <em>được phép làm gì</em>, chứ không chỉ ở chỗ ai đang giữ nó.</p>" },
+
+    { "type": "heading", "text": "Recap, and the question this module leaves open", "textVi": "Tóm lại, và câu hỏi module này để ngỏ" },
+
+    { "type": "prose",
+      "html": "<p>A key pair is two files: 399 bytes that never move, and 95 bytes you may publish. The public half can only verify signatures, which is why publishing it is safe. Authentication is a signature over data unique to this session, made in two rounds so you never prove possession to a server that did not ask. The server decides using one plain-text file in the target user's home directory, where each line may carry options that reduce a key from &quot;full shell&quot; to &quot;one command&quot;.</p><p>Now back to the symptom this module opened with. The key is installed, the fingerprints match, and the server still asks for a password. Nothing above explains that — and there are <strong>four different causes</strong>, all producing the identical <code>Permission denied (publickey,password)</code>: the wrong network, wrong file permissions, wrong SELinux labels, or wrong sshd configuration. Module 3 shows how to tell them apart, starting from a real failure where the client said nothing useful and the server log said everything.</p>",
+      "htmlVi": "<p>Một cặp khoá là hai file: 399 byte không bao giờ di chuyển, và 95 byte bạn công bố cũng được. Nửa công khai chỉ kiểm chứng được chữ ký, và đó là lý do công bố nó vẫn an toàn. Xác thực là một chữ ký lên dữ liệu duy nhất của phiên này, thực hiện qua hai vòng để bạn không bao giờ phải chứng minh quyền sở hữu cho một máy chủ vốn không hỏi. Máy chủ quyết định dựa vào một file chữ thường nằm trong thư mục nhà của đúng người dùng đích, nơi mỗi dòng có thể mang thêm tuỳ chọn hạ một cái khoá từ &quot;shell đầy đủ&quot; xuống &quot;một lệnh duy nhất&quot;.</p><p>Giờ quay lại triệu chứng mở đầu module. Khoá đã cài, dấu vân tay khớp, mà máy chủ vẫn hỏi mật khẩu. Không có gì ở trên giải thích được chuyện đó — và có <strong>bốn nguyên nhân khác nhau</strong>, tất cả đều cho ra đúng một dòng <code>Permission denied (publickey,password)</code>: sai mạng, sai quyền file, sai nhãn SELinux, hoặc sai cấu hình sshd. Module 3 chỉ cách phân biệt chúng, bắt đầu từ một lần hỏng thật nơi client không nói gì hữu ích còn log máy chủ thì nói ra tất cả.</p>" },
+
+    { "type": "practice", "items": [
+      { "label": "Deploy: Docker on a VPS — securing the server", "labelVi": "Deploy: Docker trên VPS — làm cứng máy chủ", "url": "/code-lab/deploy-vps", "note": "Where these keys get installed for real.", "noteVi": "Nơi những cái khoá này được cài thật." },
+      { "label": "GitHub Actions CI/CD", "labelVi": "GitHub Actions CI/CD", "url": "/code-lab/github-actions", "note": "Deploy keys and secrets in a pipeline.", "noteVi": "Khoá deploy và secret trong một pipeline." }
+    ]},
+
+    { "type": "links", "items": [
+      { "label": "ssh-keygen(1)", "url": "https://man.openbsd.org/ssh-keygen.1" },
+      { "label": "sshd(8) — AUTHORIZED_KEYS FILE FORMAT", "url": "https://man.openbsd.org/sshd.8#AUTHORIZED_KEYS_FILE_FORMAT" },
+      { "label": "ssh-agent(1)", "url": "https://man.openbsd.org/ssh-agent.1" },
+      { "label": "RFC 4252 — SSH Authentication Protocol", "url": "https://www.rfc-editor.org/rfc/rfc4252" },
+      { "label": "RFC 8709 — Ed25519 and Ed448 for SSH", "url": "https://www.rfc-editor.org/rfc/rfc8709" },
+      { "label": "GitHub — adding an SSH key to your account", "url": "https://docs.github.com/en/authentication/connecting-to-github-with-ssh" }
+    ]}
+  ]
+}

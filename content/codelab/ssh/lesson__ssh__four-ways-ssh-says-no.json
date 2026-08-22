@@ -1,0 +1,258 @@
+{
+  "trackSlug": "ssh",
+  "moduleSlug": "four-ways-ssh-says-no",
+  "blocks": [
+    { "type": "heading", "text": "One message, four completely different problems", "textVi": "Một dòng thông báo, bốn vấn đề khác hẳn nhau" },
+
+    { "type": "prose",
+      "html": "<p>Here is the message. It is the same message every time:</p>",
+      "htmlVi": "<p>Đây là dòng thông báo. Lần nào nó cũng đúng là dòng này:</p>" },
+
+    { "type": "code", "title": "Every failure below produced exactly this", "titleVi": "Mọi lần hỏng dưới đây đều ra đúng dòng này", "language": "text",
+      "code": "cuong@127.0.0.1: Permission denied (publickey,password)." },
+
+    { "type": "prose",
+      "html": "<p>The key is installed. The fingerprints match. The file is in the right place with the right name. And the server says no, without a hint about which of at least four unrelated causes applies:</p><ol><li><strong>Wrong network</strong> — the packets are not reaching the machine you think they are.</li><li><strong>Wrong file permissions</strong> — sshd found the key and refused to trust the file it was in.</li><li><strong>Wrong SELinux label</strong> — the file is correct and the kernel will not let sshd read it.</li><li><strong>Wrong sshd configuration</strong> — the server is not accepting keys, or not from this user.</li></ol><p>They have nothing in common except the message. This module is about telling them apart quickly, and it is the most useful thing in the whole track.</p><p>Everything here was reproduced on purpose against a real sshd and copied from the terminal. The permission failure, the two-network failure, and the fix for each were run on 11 August 2026; the SELinux and firewall cases come from a Fedora machine rebuilt the same day.</p>",
+      "htmlVi": "<p>Khoá đã cài. Dấu vân tay khớp. File nằm đúng chỗ, đúng tên. Và máy chủ nói không, mà không hé ra tí gì về việc trong ít nhất bốn nguyên nhân chẳng liên quan gì tới nhau, cái nào đang xảy ra:</p><ol><li><strong>Sai mạng</strong> — gói tin không hề tới được cái máy bạn tưởng.</li><li><strong>Sai quyền file</strong> — sshd tìm thấy khoá rồi từ chối tin cái file chứa nó.</li><li><strong>Sai nhãn SELinux</strong> — file đúng hoàn toàn, và nhân hệ điều hành không cho sshd đọc.</li><li><strong>Sai cấu hình sshd</strong> — máy chủ không nhận khoá, hoặc không nhận từ người dùng này.</li></ol><p>Chúng chẳng có gì chung ngoài dòng thông báo. Module này nói về chuyện phân biệt chúng cho nhanh, và đó là thứ hữu ích nhất trong cả track.</p><p>Mọi thứ ở đây đều được cố ý tái hiện trên một sshd thật rồi chép từ terminal ra. Lỗi quyền file, lỗi hai mạng, và cách sửa từng cái đều chạy ngày 11/08/2026; phần SELinux và tường lửa đến từ một máy Fedora dựng lại cùng ngày.</p>" },
+
+    { "type": "mermaid",
+      "code": "flowchart TD\n  S[Permission denied publickey password] --> A{Goi tin co toi may khong}\n  A -->|Khong| N[Nguyen nhan 1 sai mang]\n  A -->|Co| B{Log may chu noi gi}\n  B -->|bad ownership or modes| P[Nguyen nhan 2 sai quyen file]\n  B -->|khong noi gi ve khoa| E[Nguyen nhan 3 nhan SELinux]\n  B -->|Authentication refused hoac khong co dong nao| C[Nguyen nhan 4 cau hinh sshd]\n  N --> F[Sua bang duong di]\n  P --> G[Sua bang chmod]\n  E --> H[Sua bang restorecon]\n  C --> I[Sua bang sshd -T]" },
+
+    { "type": "part", "number": "1", "text": "The rule that saves the evening", "textVi": "Cái luật cứu cả buổi tối" },
+
+    { "type": "heading", "text": "The client cannot know why", "textVi": "Client không thể nào biết được lý do" },
+
+    { "type": "prose",
+      "html": "<p>Start here, because it reframes everything: <strong>the client is structurally incapable of telling you why a key was refused.</strong> This is deliberate. Explaining the reason would let anyone on the internet probe your server — learning whether a username exists, whether a key is installed, whether a file has the wrong mode — so sshd refuses everything with one uninformative sentence.</p><p>The consequence is a rule worth writing on the wall:</p>",
+      "htmlVi": "<p>Bắt đầu từ đây, vì nó sắp xếp lại mọi thứ: <strong>client về mặt cấu trúc là không thể nói cho bạn biết vì sao một cái khoá bị từ chối.</strong> Điều này là cố ý. Giải thích lý do là cho phép bất kỳ ai trên Internet dò máy chủ của bạn — biết được một tên người dùng có tồn tại không, một cái khoá có được cài không, một cái file có sai quyền không — nên sshd từ chối tất cả bằng đúng một câu không mang thông tin gì.</p><p>Hệ quả là một cái luật đáng viết lên tường:</p>" },
+
+    { "type": "prose",
+      "html": "<blockquote><p><strong>The answer is in the server log. It is never in the client output.</strong></p></blockquote><p>Here is that claim demonstrated. A key was installed correctly and then the home directory was made group- and world-writable with <code>chmod 777</code>. Both sides of the same connection attempt, at the same moment:</p>",
+      "htmlVi": "<blockquote><p><strong>Câu trả lời nằm trong log máy chủ. Nó không bao giờ nằm trong output của client.</strong></p></blockquote><p>Đây là bằng chứng cho khẳng định đó. Một cái khoá được cài đúng, rồi thư mục nhà bị đặt cho nhóm và mọi người ghi được bằng <code>chmod 777</code>. Hai phía của cùng một lần kết nối, cùng một thời điểm:</p>" },
+
+    { "type": "code", "title": "What the client sees", "titleVi": "Client nhìn thấy gì", "language": "bash",
+      "code": "$ ssh -v -i ~/.ssh/id_ed25519 cuong@may\ndebug1: Authentications that can continue: publickey,password\ndebug1: Offering public key: /Users/admin/.ssh/id_ed25519 ED25519 SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0\ndebug1: Authentications that can continue: publickey,password\ncuong@127.0.0.1: Permission denied (publickey,password)." },
+
+    { "type": "code", "title": "What the server log says at the same instant", "titleVi": "Log máy chủ nói gì cùng lúc đó", "language": "text",
+      "code": "Authentication refused: bad ownership or modes for directory /home/cuong\nConnection closed by authenticating user cuong 172.17.0.1 port 55200 [preauth]" },
+
+    { "type": "prose",
+      "html": "<p>The server names the exact directory and the exact reason. The client gets four words. Everything else in this module is a way of getting at that log, or of narrowing the problem down when you cannot.</p>",
+      "htmlVi": "<p>Máy chủ gọi tên chính xác thư mục và chính xác lý do. Client nhận được bốn chữ. Mọi thứ còn lại trong module này đều là cách để chạm tới cái log đó, hoặc để thu hẹp vấn đề lại khi bạn không chạm tới được.</p>" },
+
+    { "type": "code", "title": "Where the log lives", "titleVi": "Log nằm ở đâu", "language": "bash",
+      "code": "# Ubuntu / Debian — dich vu ten la 'ssh'\nsudo journalctl -u ssh -n 30 --no-pager\n\n# Fedora / RHEL — dich vu ten la 'sshd'\nsudo journalctl -u sshd -n 30 --no-pager\n\n# May khong dung systemd\nsudo tail -30 /var/log/auth.log      # Debian\nsudo tail -30 /var/log/secure        # RHEL\n\n# sshd chay trong container\ndocker logs <ten-container> 2>&1 | tail -30\n\n# Xem TRUC TIEP trong luc thu ket noi tu mot cua so khac:\nsudo journalctl -u ssh -f" },
+
+    { "type": "prose",
+      "html": "<p>The last one is the technique to build a habit around. Open the log in one window with <code>-f</code>, attempt the connection in another, and watch the line appear as it happens. That turns a guessing game into reading.</p><p><strong>When you have no access to the server at all</strong> — which is common, since being locked out is the whole problem — the fallback is to narrow by elimination, and the rest of this module is that procedure.</p>",
+      "htmlVi": "<p>Cái cuối cùng là kỹ thuật đáng tập thành thói quen. Mở log ở một cửa sổ với <code>-f</code>, thử kết nối ở cửa sổ khác, và nhìn cái dòng đó hiện ra ngay lúc nó xảy ra. Việc đó biến một trò đoán mò thành việc đọc.</p><p><strong>Khi bạn hoàn toàn không vào được máy chủ</strong> — chuyện rất hay xảy ra, vì bị khoá ở ngoài chính là vấn đề — thì phương án dự phòng là thu hẹp bằng loại trừ, và phần còn lại của module này chính là quy trình đó.</p>" },
+
+    { "type": "part", "number": "2", "text": "Cause 1 — the wrong network", "textVi": "Nguyên nhân 1 — sai mạng" },
+
+    { "type": "heading", "text": "Why the VPS works from anywhere and the machine at home does not", "textVi": "Vì sao VPS thì vào được từ đâu cũng được, còn máy Linux ở nhà thì không" },
+
+    { "type": "prose",
+      "html": "<p>This is the question worth answering properly, because the intuitive answer is wrong and the wrong answer costs hours.</p><blockquote><p>A VPS is also just Linux. Why can I SSH into a VPS from anywhere, but SSH into the Linux machine at home only from the same network?</p></blockquote><p>Two commands, run on three machines, settle it. The first asks the machine what address it thinks it has; the second asks the internet what address it sees.</p>",
+      "htmlVi": "<p>Đây là câu hỏi đáng trả lời cho đến nơi đến chốn, vì câu trả lời theo trực giác là sai và cái sai đó tốn hàng giờ.</p><blockquote><p>VPS cũng là Linux thôi. Sao SSH vào VPS thì từ đâu cũng được, mà SSH vào máy Linux ở nhà lại phải cùng mạng?</p></blockquote><p>Hai câu lệnh, chạy trên ba cái máy, là ngã ngũ. Câu đầu hỏi máy xem nó nghĩ mình có địa chỉ gì; câu sau hỏi Internet xem nó nhìn thấy địa chỉ gì.</p>" },
+
+    { "type": "code", "title": "The two commands", "titleVi": "Hai câu lệnh", "language": "bash",
+      "code": "hostname -I                      # dia chi may TU BIET ve minh (Linux)\nifconfig | grep 'inet '          # tuong duong tren macOS\ncurl -s https://api.ipify.org    # dia chi THE GIOI nhin thay" },
+
+    { "type": "code", "title": "Real results, 11 August 2026", "titleVi": "Kết quả thật, ngày 11/08/2026", "language": "text",
+      "code": "May Linux o nha :  noi bo 192.168.1.102   the gioi thay 123.16.55.115\nMay Mac o nha   :  noi bo 192.168.1.101   the gioi thay 123.16.55.115   <-- giong het\nVPS             :  noi bo 160.187.1.208   the gioi thay 160.187.1.208   <-- hai so TRUNG NHAU" },
+
+    { "type": "prose",
+      "html": "<p>Read those three lines slowly, because they contain the whole answer.</p><p>The first two machines report <strong>the same outside address</strong>. Two different computers, one address to the world. Everything in that house leaves through a single gate, and that gate is what NAT means.</p><p>The VPS reports <strong>the same number twice</strong>. What it calls itself and what the world calls it are identical. There is no gate. It is directly on the street.</p>",
+      "htmlVi": "<p>Đọc ba dòng đó thật chậm, vì chúng chứa toàn bộ câu trả lời.</p><p>Hai máy đầu báo <strong>cùng một địa chỉ bên ngoài</strong>. Hai cái máy khác nhau, một địa chỉ với thế giới. Mọi thứ trong nhà đó đi ra qua đúng một cái cổng, và cái cổng đó chính là ý nghĩa của NAT.</p><p>Con VPS báo <strong>cùng một con số hai lần</strong>. Cái nó tự gọi mình và cái thế giới gọi nó là một. Không có cổng nào cả. Nó nằm thẳng ngoài mặt phố.</p>" },
+
+    { "type": "heading", "text": "The trap: it is not that you do not know the address", "textVi": "Cái bẫy: vấn đề không phải là bạn chưa biết địa chỉ" },
+
+    { "type": "prose",
+      "html": "<p>Everyone's first conclusion is &quot;I just need the right address&quot;. That conclusion is wrong, and the evidence was already on the table. The address <code>192.168.1.102</code> had been supplied. It had been tried. It failed:</p>",
+      "htmlVi": "<p>Kết luận đầu tiên của ai cũng là &quot;chỉ cần đúng địa chỉ là được&quot;. Kết luận đó sai, và bằng chứng thì đã có sẵn trên bàn. Địa chỉ <code>192.168.1.102</code> đã được đưa. Đã thử. Vẫn hỏng:</p>" },
+
+    { "type": "code", "title": "Reproduced with two Docker networks, exactly the original addresses", "titleVi": "Tái hiện bằng hai mạng Docker, đúng cặp địa chỉ ban đầu", "language": "bash",
+      "code": "# May Mac o dai 192.168.83.x, may Linux o dai 192.168.1.x\n$ hostname -I           # tren may-mac\n192.168.83.101\n$ ip route\ndefault via 192.168.83.1 dev eth0\n192.168.83.0/24 dev eth0 proto kernel scope link src 192.168.83.101\n\n# Tu may-mac, go cua may Linux:\n$ ping -c 2 -W 2 192.168.1.102\n--- 192.168.1.102 ping statistics ---\n2 packets transmitted, 0 received, 100% packet loss, time 1009ms\n\n$ nc -z -v -w 3 192.168.1.102 22\nnc: connect to 192.168.1.102 port 22 (tcp) timed out: Operation now in progress" },
+
+    { "type": "prose",
+      "html": "<p>Address: known. Key: installed. Result: nothing. What was missing was not information — it was <strong>a route</strong>. And the proof is what happens when you change only that:</p>",
+      "htmlVi": "<p>Địa chỉ: biết rồi. Khoá: đã cài. Kết quả: không gì cả. Thứ thiếu không phải là thông tin — mà là <strong>một con đường</strong>. Và bằng chứng là điều xảy ra khi bạn chỉ đổi đúng thứ đó:</p>" },
+
+    { "type": "code", "title": "Same address, same key, only the route changed", "titleVi": "Cùng địa chỉ, cùng khoá, chỉ đổi con đường", "language": "bash",
+      "code": "# Dua may Mac vao CUNG mot mang. Khong dong toi khoa, khong doi dia chi.\n$ hostname -I           # tren may-mac, gio co them mot dia chi\n192.168.83.101 192.168.1.101\n$ ip route | grep 192.168.1\ndefault via 192.168.1.1 dev eth1\n192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.101\n\n$ ping -c 2 -W 2 192.168.1.102\n2 packets transmitted, 2 received, 0% packet loss, time 1006ms\nrtt min/avg/max/mdev = 0.097/0.884/1.672/0.787 ms\n\n$ nc -z -v -w 3 192.168.1.102 22\nConnection to 192.168.1.102 22 port [tcp/*] succeeded!" },
+
+    { "type": "prose",
+      "html": "<p>Nothing about the key changed. Nothing about the address changed. One route appeared and the problem vanished.</p>",
+      "htmlVi": "<p>Không có gì về cái khoá thay đổi. Không có gì về địa chỉ thay đổi. Một con đường xuất hiện và vấn đề biến mất.</p>" },
+
+    { "type": "heading", "text": "The three-part model", "textVi": "Mô hình ba phần" },
+
+    { "type": "prose",
+      "html": "<p>Getting into a machine needs three separate things, and they fail independently. Almost every &quot;I cannot SSH in&quot; is exactly one of these being absent while the other two are fine — which is why the situation feels so baffling.</p>",
+      "htmlVi": "<p>Vào được một cái máy cần ba thứ riêng biệt, và chúng hỏng độc lập với nhau. Gần như mọi ca &quot;không SSH vào được&quot; đều là đúng một trong ba thứ này vắng mặt trong khi hai thứ kia vẫn ổn — và đó là lý do tình huống làm người ta hoang mang đến thế.</p>" },
+
+    { "type": "prose",
+      "html": "<table><tr><th></th><th></th><th>Home machine, before</th><th>VPS</th></tr><tr><td>1</td><td><strong>Address</strong> — which door to knock on</td><td>✅ had it</td><td>✅</td></tr><tr><td>2</td><td><strong>Route</strong> — a way to reach that door</td><td>❌ <strong>missing</strong></td><td>✅</td></tr><tr><td>3</td><td><strong>Key</strong> — it opens when you get there</td><td>✅ had it</td><td>✅</td></tr></table><p>Three things were done to fix it, and they map onto those rows exactly: move the Mac onto the same network (<strong>route</strong> — the one that mattered), send <code>hostname -I</code> (<strong>address</strong>), paste the key into <code>authorized_keys</code> (<strong>key</strong>). <strong>Skip the first and the other two are pointless.</strong></p>",
+      "htmlVi": "<table><tr><th></th><th></th><th>Máy ở nhà, lúc trước</th><th>VPS</th></tr><tr><td>1</td><td><strong>Địa chỉ</strong> — gõ cửa số mấy</td><td>✅ có</td><td>✅</td></tr><tr><td>2</td><td><strong>Đường đi</strong> — có lối tới cửa đó</td><td>❌ <strong>thiếu</strong></td><td>✅</td></tr><tr><td>3</td><td><strong>Chìa khoá</strong> — tới nơi thì mở được</td><td>✅ có</td><td>✅</td></tr></table><p>Ba việc đã làm để sửa, và chúng ánh xạ đúng ba dòng trên: chuyển Mac sang cùng mạng (<strong>đường đi</strong> — cái then chốt), gửi <code>hostname -I</code> (<strong>địa chỉ</strong>), dán khoá vào <code>authorized_keys</code> (<strong>chìa khoá</strong>). <strong>Bỏ việc đầu thì hai việc sau vô nghĩa.</strong></p>" },
+
+    { "type": "heading", "text": "It is not a street address — it is a room number", "textVi": "Đó không phải địa chỉ nhà — đó là số phòng" },
+
+    { "type": "prose",
+      "html": "<p>The analogy that makes this stick, with the correction that is the whole point:</p><blockquote><p><code>192.168.1.102</code> <strong>is not a street address. It is a room number.</strong> The real address is <code>123.16.55.115</code>, and the entire house shares exactly that one. Inside there is a Mac in room .101 and a Linux box in room .102, but people out on the street see <strong>one gate</strong>. Standing outside and sending a letter &quot;to room 102&quot; gets you a shrug from the guard — he has no idea who to give it to. Standing in the courtyard, you can knock on any door you like. The VPS has no shared gate at all — it <strong>is</strong> the house on the street.</p></blockquote>",
+      "htmlVi": "<p>Ví von làm cho điều này dính lại trong đầu, kèm chỗ chỉnh lại vốn chính là chỗ sáng ra:</p><blockquote><p><code>192.168.1.102</code> <strong>không phải địa chỉ nhà — nó là số phòng.</strong> Địa chỉ thật là <code>123.16.55.115</code>, và cả nhà dùng chung đúng một cái đó. Bên trong có Mac phòng .101, Linux phòng .102, nhưng người ngoài phố chỉ thấy <strong>một cái cổng</strong>. Đứng ngoài gửi thư &quot;cho phòng 102&quot; thì bảo vệ chịu, không biết đưa ai. Đứng trong sân thì gõ cửa phòng nào cũng được. VPS thì không có cổng chung nào — nó <strong>là</strong> căn nhà mặt phố.</p></blockquote>" },
+
+    { "type": "mermaid",
+      "code": "flowchart TD\n  I[Internet] --> R[Router nha 123.16.55.115]\n  R --> M[Mac phong 192.168.1.101]\n  R --> L[Linux phong 192.168.1.102]\n  I --> V[VPS 160.187.1.208 khong co cong chung]\n  X[Nguoi la gui goi toi 123.16.55.115 cong 22] --> R\n  R --> D[Router khong biet dua cho Mac hay Linux nen vut di]" },
+
+    { "type": "heading", "text": "NAT only works in one direction", "textVi": "NAT chỉ hoạt động một chiều" },
+
+    { "type": "prose",
+      "html": "<ul><li><strong>Inside going out — fine.</strong> The router remembers who asked, so it knows which machine the reply belongs to.</li><li><strong>Outside coming in — no.</strong> A packet arrives at <code>123.16.55.115</code> port 22. Should the router hand it to the Mac or to the Linux box? There is nothing to decide on, so it drops it.</li></ul><p>That asymmetry is why a reverse tunnel is not a trick but a <em>direct consequence</em>: someone inside the house may walk out past the guard, so tell the Linux machine to <strong>walk out first</strong> and keep that path open. A path that is open can be used in both directions. TeamViewer, Tailscale and ngrok all do exactly this and wrap it in a nicer package. Module 7 builds one by hand with <code>ssh -R</code>.</p>",
+      "htmlVi": "<ul><li><strong>Trong ra ngoài — được.</strong> Router nhớ ai đã gọi, nên nó biết câu trả lời thuộc về máy nào.</li><li><strong>Ngoài vào trong — không.</strong> Một gói tin tới <code>123.16.55.115</code> cổng 22. Router nên đưa cho Mac hay cho máy Linux? Không có căn cứ nào để quyết, nên nó vứt đi.</li></ul><p>Sự bất đối xứng đó là lý do đường hầm ngược không phải mẹo vặt mà là <em>hệ quả trực tiếp</em>: người trong nhà đi ra thì bảo vệ cho qua, vậy bảo máy Linux <strong>tự đi ra</strong> trước rồi giữ nguyên đường đó. Đường đã mở thì đi được cả hai chiều. TeamViewer, Tailscale, ngrok đều làm đúng thế và gói lại cho đẹp. Module 7 sẽ dựng một cái bằng tay với <code>ssh -R</code>.</p>" },
+
+    { "type": "heading", "text": "Refused and timeout are opposite diagnoses", "textVi": "Bị từ chối và hết giờ là hai chẩn đoán ngược nhau" },
+
+    { "type": "prose",
+      "html": "<p>Within &quot;cause 1&quot; there are two outcomes that look identical from a distance and have opposite cures. Learning to read them is the highest-value thirty seconds in this module.</p>",
+      "htmlVi": "<p>Ngay trong &quot;nguyên nhân 1&quot; đã có hai kết cục nhìn xa thì giống hệt nhau mà cách chữa thì ngược nhau. Học đọc chúng là ba mươi giây đáng giá nhất trong module này.</p>" },
+
+    { "type": "code", "title": "Both reproduced", "titleVi": "Cả hai đều đã tái hiện", "language": "bash",
+      "code": "# A) BI TU CHOI — co may tra loi, khong ai nghe cong do\n$ ssh -o ConnectTimeout=5 -p 2223 cuong@127.0.0.1\nssh: connect to host 127.0.0.1 port 2223: Connection refused\n# ...tra loi tuc thi\n\n# B) HET GIO — goi tin di vao hu vo\n$ time ssh -o ConnectTimeout=5 cuong@10.255.255.1 true\nssh: connect to host 10.255.255.1 port 22: Operation timed out\nreal 5.01\n# ...mat DUNG bang ConnectTimeout" },
+
+    { "type": "prose",
+      "html": "<table><tr><th></th><th>Connection refused</th><th>Timed out</th></tr><tr><td>Đã xảy ra chuyện gì</td><td>Máy nhận gói và chủ động gửi RST</td><td>Không có gì quay lại</td></tr><tr><td>Nhanh hay chậm</td><td>Tức thì</td><td>Đúng bằng thời gian chờ</td></tr><tr><td>Máy có sống không</td><td><strong>Có</strong>, và với tới được</td><td>Không biết</td></tr><tr><td>Nguyên nhân thường gặp</td><td>Dịch vụ chưa chạy, hoặc gắn vào 127.0.0.1, hoặc sai cổng</td><td>Khác dải mạng, tường lửa vứt gói, máy tắt</td></tr><tr><td>Sửa ở đâu</td><td><strong>Trên chính máy đó</strong></td><td><strong>Trên đường đi</strong> — định tuyến, tường lửa</td></tr></table><p>Reaching for keys and permissions when you got a timeout is wasted effort: sshd never saw you. That is precisely the mistake the two-network failure invites, because the message says nothing about networks.</p>",
+      "htmlVi": "<table><tr><th></th><th>Connection refused</th><th>Timed out</th></tr><tr><td>Đã xảy ra chuyện gì</td><td>Máy nhận gói và chủ động gửi RST</td><td>Không có gì quay lại</td></tr><tr><td>Nhanh hay chậm</td><td>Tức thì</td><td>Đúng bằng thời gian chờ</td></tr><tr><td>Máy có sống không</td><td><strong>Có</strong>, và với tới được</td><td>Không biết</td></tr><tr><td>Nguyên nhân thường gặp</td><td>Dịch vụ chưa chạy, hoặc gắn vào 127.0.0.1, hoặc sai cổng</td><td>Khác dải mạng, tường lửa vứt gói, máy tắt</td></tr><tr><td>Sửa ở đâu</td><td><strong>Trên chính máy đó</strong></td><td><strong>Trên đường đi</strong> — định tuyến, tường lửa</td></tr></table><p>Đi mò khoá với quyền file trong khi bạn nhận được timeout là công cốc: sshd chưa từng nhìn thấy bạn. Đó đúng là cái sai mà lỗi hai-mạng dụ người ta mắc, vì thông báo chẳng nói gì về mạng cả.</p>" },
+
+    { "type": "mermaid",
+      "code": "flowchart TD\n  A[ssh toi mot may] --> B{Bao nhieu lau moi bao loi}\n  B -->|Tuc thi| C[Connection refused]\n  B -->|Dung bang thoi gian cho| D[Timed out]\n  C --> E[May SONG va toi duoc]\n  D --> F[Khong biet may co song khong]\n  E --> G[Sua TREN CHINH MAY DO chay ss -tlnp]\n  F --> H[Sua TREN DUONG DI so ip route va tuong lua]" },
+
+    { "type": "part", "number": "2", "text": "Cause 2 — the wrong file permissions", "textVi": "Nguyên nhân 2 — sai quyền file" },
+
+    { "type": "heading", "text": "Why sshd refuses a file it can read perfectly well", "textVi": "Vì sao sshd từ chối một cái file mà nó đọc được ngon lành" },
+
+    { "type": "prose",
+      "html": "<p>The reasoning is worth understanding, because it makes the rule memorable instead of arbitrary. If <em>anyone else</em> can write to your <code>authorized_keys</code> — or to any directory on the path to it — then that person can add their own key and become you. sshd cannot verify that nobody has done so, so it refuses to trust the file at all.</p><p>Note the scope: it is not only the file. <strong>The home directory counts too.</strong> Someone who can write to <code>/home/cuong</code> can delete <code>.ssh</code> and replace it with their own, no matter how strictly the old files were locked down. That is the case reproduced at the top of this module, and it is the one people miss because the file itself looks perfect:</p>",
+      "htmlVi": "<p>Lý lẽ ở đây đáng hiểu, vì nó làm cho cái luật trở nên dễ nhớ thay vì tuỳ tiện. Nếu <em>bất kỳ ai khác</em> ghi được vào file <code>authorized_keys</code> của bạn — hoặc vào bất kỳ thư mục nào trên đường tới nó — thì người đó thêm khoá của họ vào và trở thành bạn. sshd không có cách nào xác minh chuyện đó chưa xảy ra, nên nó từ chối tin cái file đó, chấm hết.</p><p>Chú ý phạm vi: không chỉ riêng cái file. <strong>Thư mục nhà cũng tính.</strong> Ai ghi được vào <code>/home/cuong</code> thì xoá được <code>.ssh</code> rồi thay bằng thư mục của họ, bất kể mấy file cũ được khoá chặt tới đâu. Đó chính là ca đã tái hiện ở đầu module này, và là ca người ta hay bỏ sót vì bản thân cái file trông hoàn hảo:</p>" },
+
+    { "type": "code", "title": "The file is flawless. The directory is not.", "titleVi": "File thì hoàn hảo. Thư mục thì không.", "language": "bash",
+      "code": "$ ls -ld /home/cuong /home/cuong/.ssh /home/cuong/.ssh/authorized_keys\ndrwxrwxrwx 1 cuong cuong 4096 Aug 11 06:23 /home/cuong                       <-- 777, day la thu pham\ndrwx------ 2 cuong cuong 4096 Aug 11 06:23 /home/cuong/.ssh                  <-- 700, dung\n-rw------- 1 cuong cuong   89 Aug 11 06:23 /home/cuong/.ssh/authorized_keys  <-- 600, dung\n\n# Log may chu:\n# Authentication refused: bad ownership or modes for directory /home/cuong" },
+
+    { "type": "code", "title": "The fix, and it works immediately", "titleVi": "Cách sửa, và nó ăn ngay", "language": "bash",
+      "code": "$ chmod 755 /home/cuong\n\n$ ssh -i ~/.ssh/id_ed25519 cuong@may 'echo vao duoc; id'\nvao duoc\nuid=1001(cuong) gid=1001(cuong) groups=1001(cuong),27(sudo)\n\n# Log may chu:\n# Accepted publickey for cuong from 172.17.0.1 port 63108 ssh2: ED25519 SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0" },
+
+    { "type": "prose",
+      "html": "<p>No restart, no reload, no reconnecting anything. sshd checks the modes on every authentication attempt, so the next connection simply works.</p>",
+      "htmlVi": "<p>Không khởi động lại, không reload, không phải kết nối lại thứ gì. sshd kiểm quyền ở mỗi lần xác thực, nên lần kết nối kế tiếp là chạy.</p>" },
+
+    { "type": "code", "title": "The whole rule in four commands", "titleVi": "Trọn cái luật trong bốn câu lệnh", "language": "bash",
+      "code": "chmod 700 ~/.ssh                      # chi minh vao duoc thu muc\nchmod 600 ~/.ssh/authorized_keys      # chi minh doc/ghi duoc file\nchmod 600 ~/.ssh/id_ed25519           # khoa RIENG: bat buoc 600\nchmod 644 ~/.ssh/id_ed25519.pub       # khoa cong khai: ai doc cung duoc\nchmod 755 ~                           # thu muc nha: NGUOI KHAC KHONG DUOC GHI\nchown -R \"$USER:$USER\" ~/.ssh         # va phai DUNG CHU SO HUU\n\n# Kiem lai toan bo duong dan mot lan:\nnamei -l ~/.ssh/authorized_keys" },
+
+    { "type": "prose",
+      "html": "<p><code>namei -l</code> is the tool worth remembering: it walks every component of the path and prints the owner and mode of each, so a group-writable directory three levels up shows itself instead of hiding.</p><p><strong>The mirror-image mistake, on the client side.</strong> A private key that others can read is refused by <code>ssh</code> itself, and this one <em>does</em> give a clear message — a useful reminder that the silence is a server-side policy, not a general rule:</p>",
+      "htmlVi": "<p><code>namei -l</code> là công cụ đáng nhớ: nó đi qua từng thành phần của đường dẫn và in ra chủ sở hữu cùng quyền của mỗi cái, nên một thư mục cho nhóm ghi được ở ba tầng trên sẽ tự lộ ra thay vì nấp.</p><p><strong>Lỗi soi gương, ở phía client.</strong> Một khoá riêng mà người khác đọc được sẽ bị chính <code>ssh</code> từ chối, và lần này thì nó <em>có</em> báo rõ ràng — một lời nhắc hữu ích rằng sự im lặng kia là chính sách của phía máy chủ, không phải luật chung:</p>" },
+
+    { "type": "code", "title": "The client is allowed to explain itself", "titleVi": "Client thì được phép giải thích", "language": "text",
+      "code": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\nPermissions 0644 for '/Users/admin/.ssh/id_ed25519' are too open.\nIt is required that your private key files are NOT accessible by others.\nThis private key will be ignored." },
+
+    { "type": "part", "number": "3", "text": "Cause 3 — the wrong SELinux label", "textVi": "Nguyên nhân 3 — sai nhãn SELinux" },
+
+    { "type": "heading", "text": "Correct permissions, correct owner, still refused", "textVi": "Quyền đúng, chủ sở hữu đúng, vẫn bị từ chối" },
+
+    { "type": "prose",
+      "html": "<p>This is the one that convinces people their machine is haunted, and it only happens on Fedora, RHEL, CentOS and Rocky — SELinux is not enabled by default on Ubuntu or Debian.</p><p>SELinux adds a second, independent permission system. Beyond owner and mode, every file carries a <strong>label</strong>, and the kernel enforces rules about which labels a given process may touch. sshd is only allowed to read <code>authorized_keys</code> when that file is labelled <code>ssh_home_t</code>. Get the label wrong and the file has perfect <code>ls -l</code> output and is unreadable by the one process that needs it.</p><p>The classic way to arrive here is exactly what happened on 11 August: a forgotten password, a rescue boot, a password reset from a chroot — and no <code>/.autorelabel</code>. Files created or modified in that state get whatever label the rescue environment assigned, which is not the label sshd expects.</p>",
+      "htmlVi": "<p>Đây là cái làm người ta tin rằng máy mình bị ma ám, và nó chỉ xảy ra trên Fedora, RHEL, CentOS và Rocky — SELinux không bật mặc định trên Ubuntu hay Debian.</p><p>SELinux thêm vào một hệ thống phân quyền thứ hai, độc lập. Ngoài chủ sở hữu và quyền, mỗi file còn mang một <strong>nhãn</strong>, và nhân hệ điều hành áp luật về việc một tiến trình được chạm vào những nhãn nào. sshd chỉ được phép đọc <code>authorized_keys</code> khi file đó mang nhãn <code>ssh_home_t</code>. Sai nhãn là file có output <code>ls -l</code> hoàn hảo mà đúng cái tiến trình cần nó thì không đọc được.</p><p>Con đường kinh điển dẫn tới đây chính xác là chuyện đã xảy ra ngày 11/08: quên mật khẩu, khởi động cứu hộ, đặt lại mật khẩu từ chroot — và quên <code>/.autorelabel</code>. File được tạo hay sửa trong trạng thái đó mang cái nhãn mà môi trường cứu hộ gán cho, chứ không phải nhãn sshd mong đợi.</p>" },
+
+    { "type": "code", "title": "Seeing labels, and spotting the wrong one", "titleVi": "Nhìn thấy nhãn, và bắt được cái sai", "language": "bash",
+      "code": "# SELinux co dang bat khong?\n$ getenforce\nEnforcing                 # Enforcing = dang ap. Permissive = chi ghi log. Disabled = tat.\n\n# Nhan cua file — dung -Z\n$ ls -Z ~/.ssh/authorized_keys\nunconfined_u:object_r:ssh_home_t:s0    authorized_keys      # DUNG\nunconfined_u:object_r:user_home_t:s0   authorized_keys      # SAI - sshd khong doc duoc\nunconfined_u:object_r:admin_home_t:s0  authorized_keys      # SAI - hay gap sau khi chroot" },
+
+    { "type": "code", "title": "The fix", "titleVi": "Cách sửa", "language": "bash",
+      "code": "# Dat lai nhan theo dung chinh sach he thong\nrestorecon -Rv ~/.ssh\n\n# Kiem lai\nls -Z ~/.ssh/authorized_keys\n\n# Neu sau khi cuu ho ma CA HE THONG bi lech nhan:\nsudo touch /.autorelabel && sudo reboot\n# Lan khoi dong ke tiep se dat lai nhan cho toan bo he thong (lau, nhung triet de)" },
+
+    { "type": "prose",
+      "html": "<p><strong>How to identify this without knowing anything about SELinux.</strong> The trick is that SELinux keeps its own log, and it names the process and the file:</p>",
+      "htmlVi": "<p><strong>Cách nhận ra ca này mà không cần biết gì về SELinux.</strong> Mẹo là SELinux giữ log riêng của nó, và log đó gọi tên cả tiến trình lẫn file:</p>" },
+
+    { "type": "code", "title": "The decisive test", "titleVi": "Phép thử quyết định", "language": "bash",
+      "code": "# Nhat ky tu choi cua SELinux\nsudo ausearch -m avc -ts recent\nsudo grep -i denied /var/log/audit/audit.log | tail -5\n\n# PHEP THU DUT KHOAT — tam chuyen sang chi-ghi-log roi thu lai:\nsudo setenforce 0        # Permissive: van ghi log, khong con chan\n# ...thu ssh lai...\n# VAO DUOC ngay lap tuc? -> chac chan la SELinux. Chay restorecon.\n# VAN hong?             -> khong phai SELinux, di tim tiep.\nsudo setenforce 1        # BAT LAI NGAY. Dung bao gio de Permissive qua dem." },
+
+    { "type": "prose",
+      "html": "<p>That <code>setenforce 0</code> / <code>setenforce 1</code> pair is a decisive test rather than a fix — it converts a mystery into a yes-or-no answer in about ten seconds. The important discipline is turning it straight back on: leaving a production machine permissive because it &quot;made the problem go away&quot; is how a temporary diagnostic becomes a permanent hole.</p>",
+      "htmlVi": "<p>Cặp <code>setenforce 0</code> / <code>setenforce 1</code> đó là một phép thử dứt khoát chứ không phải cách sửa — nó biến một bí ẩn thành câu trả lời có-hay-không trong khoảng mười giây. Kỷ luật quan trọng là bật lại ngay: để một máy production ở chế độ permissive vì nó &quot;làm vấn đề biến mất&quot; chính là cách một phép chẩn đoán tạm thời trở thành một cái lỗ vĩnh viễn.</p>" },
+
+    { "type": "mermaid",
+      "code": "flowchart TD\n  A[sshd muon doc authorized_keys] --> B{Quyen Unix cho phep khong}\n  B -->|Khong| X[Tu choi. Log ghi bad ownership or modes]\n  B -->|Cho phep| C{Co SELinux dang Enforcing khong}\n  C -->|Khong| K[Doc duoc]\n  C -->|Co| D{Nhan file co phai ssh_home_t khong}\n  D -->|Phai| K\n  D -->|Khong| Y[Nhan bi chan. Log SSH khong noi gi ve khoa]\n  Y --> Z[Dau vet nam trong audit.log chu khong nam trong log ssh]" },
+
+    { "type": "part", "number": "4", "text": "Cause 4 — the wrong sshd configuration", "textVi": "Nguyên nhân 4 — sai cấu hình sshd" },
+
+    { "type": "heading", "text": "The file is fine; the server was told not to care", "textVi": "File thì ổn; máy chủ được bảo là đừng quan tâm" },
+
+    { "type": "prose",
+      "html": "<p>The fourth family is the server refusing by policy. Read the <em>effective</em> configuration with <code>sshd -T</code>, never the file — Module 1 covers why includes and defaults make the file an incomplete picture.</p>",
+      "htmlVi": "<p>Họ thứ tư là máy chủ từ chối theo chính sách. Đọc cấu hình <em>đang có hiệu lực</em> bằng <code>sshd -T</code>, đừng đọc file — Module 1 đã nói vì sao các dòng include và giá trị mặc định làm cho file chỉ là một bức tranh thiếu.</p>" },
+
+    { "type": "code", "title": "The six settings that cause this", "titleVi": "Sáu thiết lập gây ra chuyện này", "language": "bash",
+      "code": "$ sudo sshd -T | grep -iE '^(pubkeyauthentication|authorizedkeysfile|permitrootlogin|allowusers|denyusers|allowgroups|usedns|maxauthtries) '\npubkeyauthentication yes                                        # 'no' -> moi khoa bi bo qua\nauthorizedkeysfile .ssh/authorized_keys .ssh/authorized_keys2   # duong dan khac -> khoa cua ban vo hinh\npermitrootlogin yes                                             # 'no' -> root bi chan du khoa dung\nmaxauthtries 6                                                  # nhieu khoa qua -> bi ngat truoc khi toi khoa dung" },
+
+    { "type": "prose",
+      "html": "<p>Four traps in that list, in order of how often they catch people:</p><ol><li><strong><code>PermitRootLogin no</code>.</strong> Your key is fine and root is simply not allowed. Log in as a normal user and use <code>sudo</code>.</li><li><strong><code>AllowUsers</code> / <code>AllowGroups</code>.</strong> If either is present it is an allow-list, and anyone not named is refused regardless of keys. These do not appear in <code>sshd -T</code> output when unset, so their <em>absence</em> from the output is itself informative.</li><li><strong><code>AuthorizedKeysFile</code> pointing somewhere else.</strong> Some hardened builds centralise it, for example to <code>/etc/ssh/authorized_keys/%u</code>. You may then edit <code>~/.ssh/authorized_keys</code> forever with no effect at all.</li><li><strong><code>MaxAuthTries</code>.</strong> The client offers every key it can find (Module 2). With eight keys and a limit of 6, you can be disconnected before the right one is reached. The tell is a trace showing several <code>Offering public key</code> lines and then a disconnect — and the cure is <code>IdentitiesOnly yes</code> plus an explicit <code>IdentityFile</code>, which is Module 4.</li></ol>",
+      "htmlVi": "<p>Bốn cái bẫy trong danh sách đó, xếp theo mức độ hay bắt được người:</p><ol><li><strong><code>PermitRootLogin no</code>.</strong> Khoá của bạn không sao cả, chỉ là root không được phép. Đăng nhập bằng người dùng thường rồi dùng <code>sudo</code>.</li><li><strong><code>AllowUsers</code> / <code>AllowGroups</code>.</strong> Chỉ cần có mặt một trong hai là nó thành danh sách cho phép, và ai không được gọi tên đều bị từ chối bất kể khoá. Hai dòng này không xuất hiện trong output <code>sshd -T</code> khi chưa đặt, nên chính sự <em>vắng mặt</em> của chúng cũng là thông tin.</li><li><strong><code>AuthorizedKeysFile</code> trỏ đi chỗ khác.</strong> Một số bản dựng đã làm cứng gom nó về một chỗ, ví dụ <code>/etc/ssh/authorized_keys/%u</code>. Lúc đó bạn có sửa <code>~/.ssh/authorized_keys</code> tới muôn đời cũng không tác dụng gì.</li><li><strong><code>MaxAuthTries</code>.</strong> Client chào mọi cái khoá nó tìm thấy (Module 2). Có tám khoá mà hạn mức là 6 thì bạn có thể bị ngắt trước khi tới được khoá đúng. Dấu hiệu là một vết chạy có vài dòng <code>Offering public key</code> rồi bị ngắt — và cách chữa là <code>IdentitiesOnly yes</code> cộng một <code>IdentityFile</code> tường minh, tức Module 4.</li></ol>" },
+
+    { "type": "heading", "text": "The firewall case: service running, port closed", "textVi": "Ca tường lửa: dịch vụ chạy, cổng đóng" },
+
+    { "type": "prose",
+      "html": "<p>One more that belongs here because it wastes so much time, and because the two distributions behave differently out of the box. On Fedora, installing and enabling sshd is <strong>not enough</strong> — <code>firewalld</code> blocks port 22 by default. On Ubuntu, the same two commands are all you need.</p>",
+      "htmlVi": "<p>Còn một ca nữa thuộc về đây vì nó ngốn quá nhiều thời gian, và vì hai bản phân phối hành xử khác nhau ngay từ lúc cài. Trên Fedora, cài và bật sshd là <strong>chưa đủ</strong> — <code>firewalld</code> chặn sẵn cổng 22. Trên Ubuntu, đúng hai câu lệnh đó là xong.</p>" },
+
+    { "type": "code", "title": "Fedora needs a third command", "titleVi": "Fedora cần câu lệnh thứ ba", "language": "bash",
+      "code": "# Fedora / RHEL\nsudo dnf install -y openssh-server\nsudo systemctl enable --now sshd\nsudo firewall-cmd --permanent --add-service=ssh    # <-- BUOC BI QUEN\nsudo firewall-cmd --reload\n\n# Ubuntu / Debian\nsudo apt install -y openssh-server\nsudo systemctl enable --now ssh\n# xong. ufw thuong khong bat san." },
+
+    { "type": "prose",
+      "html": "<p><strong>The distinguishing test</strong>, and it must be run <em>on the machine itself</em>:</p>",
+      "htmlVi": "<p><strong>Phép thử phân biệt</strong>, và nó phải được chạy <em>trên chính cái máy đó</em>:</p>" },
+
+    { "type": "code", "title": "Service down or port blocked?", "titleVi": "Dịch vụ chết hay cổng bị chặn?", "language": "bash",
+      "code": "# CHAY TREN MAY CHU:\nss -tlnp | grep ':22'\n\n#  -> khong ra gi   : dich vu KHONG chay. Sua bang systemctl.\n#  -> co dong LISTEN: dich vu DANG chay. Vay thi tuong lua chan tu ben ngoai.\n\n# Xac nhan: tu chinh may do, goi vao chinh no\nssh -o ConnectTimeout=5 localhost 'echo tu ben trong thi vao duoc'\n# Vao duoc tu localhost ma tu ngoai thi timeout = TUONG LUA, gan nhu chac chan.\n\nsudo firewall-cmd --list-all       # Fedora\nsudo ufw status verbose            # Ubuntu\nsudo iptables -L -n | head -20     # dau cung dung duoc" },
+
+    { "type": "part", "number": "5", "text": "The procedure", "textVi": "Quy trình" },
+
+    { "type": "heading", "text": "Six steps, in this order", "textVi": "Sáu bước, đúng thứ tự này" },
+
+    { "type": "prose",
+      "html": "<p>The order is chosen so each step is cheap and eliminates whole families of causes. Do not skip ahead — every step you skip is a family you will keep suspecting.</p>",
+      "htmlVi": "<p>Thứ tự được chọn sao cho mỗi bước đều rẻ và loại được cả một họ nguyên nhân. Đừng nhảy cóc — mỗi bước bạn bỏ qua là một họ mà bạn sẽ cứ tiếp tục nghi ngờ.</p>" },
+
+    { "type": "code", "title": "The checklist", "titleVi": "Danh sách kiểm", "language": "bash",
+      "code": "# 1. GOI TIN CO TOI KHONG?  (loai bo NGUYEN NHAN 1)\nnc -z -v -w 5 <may> 22\n#    refused -> may song, dich vu khong nghe cong do\n#    timeout -> khac dai mang hoac tuong lua. DUNG dong toi khoa.\n\n# 2. THU DANG TRA LOI CO PHAI SSH KHONG?\nnc <may> 22\n#    -> SSH-2.0-OpenSSH_9.6p1 ...  la dung roi\n\n# 3. CLIENT DANG CHAO KHOA NAO?\nssh -v -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519 <nguoidung>@<may> 2>&1 | grep -E 'Offering|accepts'\n#    khong co dong \"Server accepts key\" -> may chu da nhin va noi khong\n\n# 4. KHOA DO CO NAM TRONG FILE TREN MAY CHU KHONG?\nssh-keygen -lf ~/.ssh/id_ed25519.pub          # dau van tay o may minh\n#    doi chieu voi dau van tay tung dong trong authorized_keys cua NGUOI DUNG DICH\n\n# 5. DOC LOG MAY CHU  (day la buoc thuong ket thuc cuoc dieu tra)\nsudo journalctl -u ssh -n 30 --no-pager | grep -iE 'refused|denied|accepted|bad ownership'\n\n# 6. NEU LOG KHONG NOI GI VE KHOA — cau hinh, hoac SELinux\nsudo sshd -T | grep -iE 'pubkeyauth|authorizedkeysfile|permitrootlogin|allowusers'\ngetenforce && ls -Z ~/.ssh/authorized_keys     # chi tren Fedora/RHEL" },
+
+    { "type": "prose",
+      "html": "<table><tr><th>What you observe</th><th>Cause</th><th>Fix</th></tr><tr><td>Timeout, no <code>Connection established</code></td><td>1 — network</td><td>Compare <code>ip route</code> on both machines; same network, or open the firewall</td></tr><tr><td>Connection refused, instant</td><td>1 — service</td><td><code>ss -tlnp | grep :22</code> <em>on that machine</em></td></tr><tr><td>Log says <code>bad ownership or modes</code></td><td>2 — permissions</td><td><code>chmod 755 ~</code>, <code>700 ~/.ssh</code>, <code>600 authorized_keys</code></td></tr><tr><td>Permissions correct, log never mentions the key, Fedora host</td><td>3 — SELinux</td><td><code>restorecon -Rv ~/.ssh</code></td></tr><tr><td>No <code>Server accepts key</code>, yet the key is in the file</td><td>4 — configuration</td><td><code>sshd -T</code>: pubkeyauth, allowusers, file path</td></tr><tr><td>Several <code>Offering</code> lines then a disconnect</td><td>4 — MaxAuthTries</td><td><code>IdentitiesOnly yes</code> + <code>IdentityFile</code> (Module 4)</td></tr></table>",
+      "htmlVi": "<table><tr><th>Điều bạn quan sát được</th><th>Nguyên nhân</th><th>Sửa</th></tr><tr><td>Timeout, không có <code>Connection established</code></td><td>1 — mạng</td><td>So <code>ip route</code> ở hai máy; đưa về cùng mạng hoặc mở tường lửa</td></tr><tr><td>Connection refused, tức thì</td><td>1 — dịch vụ</td><td><code>ss -tlnp | grep :22</code> <em>trên máy đó</em></td></tr><tr><td>Log: <code>bad ownership or modes</code></td><td>2 — quyền</td><td><code>chmod 755 ~</code>, <code>700 ~/.ssh</code>, <code>600 authorized_keys</code></td></tr><tr><td>Quyền đúng, log không nhắc gì tới khoá, máy Fedora</td><td>3 — SELinux</td><td><code>restorecon -Rv ~/.ssh</code></td></tr><tr><td>Không có <code>Server accepts key</code>, khoá lại có trong file</td><td>4 — cấu hình</td><td><code>sshd -T</code>: pubkeyauth, allowusers, đường dẫn file</td></tr><tr><td>Nhiều dòng <code>Offering</code> rồi bị ngắt</td><td>4 — MaxAuthTries</td><td><code>IdentitiesOnly yes</code> + <code>IdentityFile</code> (Module 4)</td></tr></table>" },
+
+    { "type": "heading", "text": "Best practices", "textVi": "Thực hành tốt" },
+
+    { "type": "prose",
+      "html": "<ol><li><strong>Read the server log before changing anything.</strong> One line there replaces an hour of guessing, and every change you make while guessing adds a variable.</li><li><strong>Establish that packets arrive before touching keys.</strong> <code>nc -z</code> costs one second and eliminates the largest family of causes.</li><li><strong>Treat refused and timeout as different diagnoses.</strong> They point at opposite machines.</li><li><strong>Check the home directory, not only <code>.ssh</code>.</strong> The most-missed permission problem is one level above where people look.</li><li><strong>On Fedora, suspect SELinux the moment permissions look right.</strong> <code>setenforce 0</code>, retest, <code>setenforce 1</code> — ten seconds for a definite answer.</li><li><strong>Never leave SELinux permissive or a firewall open after a test.</strong> A diagnostic that becomes permanent is a hole nobody remembers making.</li><li><strong>Keep a second session open whenever you edit sshd_config, and use <code>reload</code>, not <code>restart</code>.</strong> This module is much less fun when it happens to you on a machine you cannot reach.</li></ol>",
+      "htmlVi": "<ol><li><strong>Đọc log máy chủ trước khi đổi bất cứ thứ gì.</strong> Một dòng ở đó thay được một giờ đoán mò, và mỗi thay đổi bạn làm trong lúc đoán là thêm một biến số.</li><li><strong>Xác lập rằng gói tin có tới nơi trước khi động vào khoá.</strong> <code>nc -z</code> tốn một giây và loại được họ nguyên nhân lớn nhất.</li><li><strong>Coi refused và timeout là hai chẩn đoán khác nhau.</strong> Chúng chỉ về hai cái máy ngược nhau.</li><li><strong>Kiểm thư mục nhà, không chỉ <code>.ssh</code>.</strong> Lỗi quyền bị bỏ sót nhiều nhất nằm cao hơn chỗ người ta nhìn một tầng.</li><li><strong>Trên Fedora, nghi SELinux ngay khi quyền trông đã đúng.</strong> <code>setenforce 0</code>, thử lại, <code>setenforce 1</code> — mười giây cho một câu trả lời dứt khoát.</li><li><strong>Đừng bao giờ để SELinux ở permissive hay để tường lửa mở sau khi thử.</strong> Một phép chẩn đoán trở thành vĩnh viễn là một cái lỗ không ai nhớ mình đã tạo.</li><li><strong>Luôn giữ một phiên thứ hai khi sửa sshd_config, và dùng <code>reload</code> chứ đừng <code>restart</code>.</strong> Module này bớt vui đi rất nhiều khi nó xảy đến với chính bạn trên một cái máy bạn không với tới được.</li></ol>" },
+
+    { "type": "heading", "text": "Recap", "textVi": "Tóm lại" },
+
+    { "type": "prose",
+      "html": "<p>One message covers four unrelated failures, and the client cannot tell them apart because sshd deliberately refuses to say. The server log can, and reaching it is step one whenever you can. When you cannot, the procedure narrows by elimination in a fixed order: do packets arrive, is it SSH answering, which key is being offered, is that key in the file, what does the log say, and finally configuration and labels.</p><p>The deepest idea here is the three-part model — address, route, key — because it explains the failure that looks most like a key problem and is not one at all. Knowing the address and holding the key are worth nothing without a path between the two machines, and that is why a VPS is reachable from anywhere while a machine behind NAT at home is not.</p><p>Module 4 removes a whole class of these problems before they happen, by making <code>~/.ssh/config</code> state exactly which key, which user and which port to use for each host — which also fixes the <code>MaxAuthTries</code> trap that ends this module.</p>",
+      "htmlVi": "<p>Một dòng thông báo phủ lên bốn kiểu hỏng chẳng liên quan gì tới nhau, và client không phân biệt được vì sshd cố ý không nói. Log máy chủ thì phân biệt được, và chạm tới nó là bước một mỗi khi bạn còn chạm được. Khi không chạm được, quy trình thu hẹp bằng loại trừ theo một thứ tự cố định: gói tin có tới không, có phải SSH đang trả lời không, khoá nào đang được chào, khoá đó có trong file không, log nói gì, và cuối cùng là cấu hình với nhãn.</p><p>Ý sâu nhất ở đây là mô hình ba phần — địa chỉ, đường đi, chìa khoá — vì nó giải thích được cái lỗi trông giống lỗi khoá nhất mà lại hoàn toàn không phải. Biết địa chỉ và cầm chìa khoá chẳng đáng gì nếu không có lối đi giữa hai cái máy, và đó là lý do một con VPS thì vào được từ đâu cũng được còn một cái máy sau NAT ở nhà thì không.</p><p>Module 4 xoá bỏ cả một lớp những vấn đề này từ trước khi chúng xảy ra, bằng cách để <code>~/.ssh/config</code> nói rõ mỗi máy dùng khoá nào, người dùng nào, cổng nào — và cũng chính là cách chữa cái bẫy <code>MaxAuthTries</code> khép lại module này.</p>" },
+
+    { "type": "practice", "items": [
+      { "label": "Networking Fundamentals", "labelVi": "Nền tảng mạng máy tính", "url": "/code-lab/networking-fundamentals", "note": "Subnets, routing tables and NAT in depth.", "noteVi": "Subnet, bảng định tuyến và NAT nói cho sâu." },
+      { "label": "Linux & Bash — permissions", "labelVi": "Linux & Bash — quyền hạn", "url": "/code-lab/linux-bash", "note": "Where chmod, chown and the mode bits come from.", "noteVi": "Gốc gác của chmod, chown và các bit quyền." }
+    ]},
+
+    { "type": "links", "items": [
+      { "label": "sshd(8) — the AUTHORIZED_KEYS file and permission rules", "url": "https://man.openbsd.org/sshd.8" },
+      { "label": "sshd_config(5) — every server option", "url": "https://man.openbsd.org/sshd_config.5" },
+      { "label": "Fedora — SELinux troubleshooting", "url": "https://docs.fedoraproject.org/en-US/quick-docs/selinux-troubleshooting/" },
+      { "label": "firewalld documentation", "url": "https://firewalld.org/documentation/" },
+      { "label": "RFC 1918 — private address ranges", "url": "https://www.rfc-editor.org/rfc/rfc1918" },
+      { "label": "RFC 3022 — Network Address Translation", "url": "https://www.rfc-editor.org/rfc/rfc3022" },
+      { "label": "ip-route(8) — routing tables", "url": "https://man7.org/linux/man-pages/man8/ip-route.8.html" }
+    ]}
+  ]
+}

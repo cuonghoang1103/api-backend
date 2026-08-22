@@ -1,0 +1,547 @@
+{
+  "trackSlug": "ssh",
+  "moduleSlug": "what-ssh-actually-is",
+  "exercises": [
+    {
+      "title": "Prove sshd Is Listening Before Blaming SSH",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": ["listening sockets", "ss output fields", "bind address vs interface", "service state"],
+      "prerequisites": ["running shell commands", "reading command output"],
+      "tags": ["ssh", "diagnostics", "sockets", "bash"],
+      "problemHtml": "<p>A colleague messages you: <em>&quot;SSH is broken on the build box.&quot;</em> Before touching keys, firewalls or config, there is one question worth answering first: is anything actually listening on port 22 on that machine? An installed package proves nothing — the process has to be alive and bound to a reachable address.</p><p>There is a second trap hiding here. A daemon bound to <code>127.0.0.1:22</code> is running perfectly and is still unreachable from anywhere else, because that address means &quot;this machine only&quot;. Reporting &quot;yes it is listening&quot; without checking the bind address sends the next person down the wrong path.</p><p>Write <code>check-sshd.sh</code>, which runs <strong>on the server being checked</strong> and prints a verdict.</p><ul><li>Use <code>ss -tlnp</code> to look for a socket in state <code>LISTEN</code> on port 22.</li><li>If nothing is listening, print exactly <code>DOWN: nothing is listening on port 22</code> and exit with status <code>1</code>.</li><li>If something is listening only on <code>127.0.0.1</code> (and not on <code>0.0.0.0</code> or <code>[::]</code>), print exactly <code>LOCAL-ONLY: sshd is bound to 127.0.0.1, remote clients cannot reach it</code> and exit with status <code>2</code>.</li><li>Otherwise print <code>UP: listening on &lt;address&gt;</code> for each listening address found, then exit with status <code>0</code>.</li><li>Match port 22 exactly. A service on port 2222 or 8022 must not count as a match.</li></ul><p>The scaffold gives you the file skeleton and the exit-code contract. Prefer parsing the fourth column of <code>ss</code> output over grepping the whole line, so that a client connection to some other host on port 22 never gets mistaken for a listener.</p>",
+      "inputSpec": "No arguments. The script inspects the machine it runs on, using ss(8) from the iproute2 package.",
+      "outputSpec": "One of three verdicts on stdout: 'DOWN: nothing is listening on port 22' (exit 1), 'LOCAL-ONLY: sshd is bound to 127.0.0.1, remote clients cannot reach it' (exit 2), or one 'UP: listening on <address>' line per listening address (exit 0).",
+      "constraints": "Use ss, not netstat (deprecated and often absent). Do not use lsof. Do not connect to the network — this is a purely local check. The script must not require root: it may print fewer process names without it, but the verdict must still be correct.",
+      "examplesJson": [
+        {
+          "input": "ss -tlnp reports:\nLISTEN 0 4096 0.0.0.0:22 0.0.0.0:* users:((\"sshd\",pid=1642384,fd=3))\nLISTEN 0 4096 [::]:22 [::]:* users:((\"sshd\",pid=1642384,fd=4))",
+          "output": "UP: listening on 0.0.0.0:22\nUP: listening on [::]:22",
+          "explanation": "Both an IPv4 and an IPv6 wildcard socket are open, so remote clients on either stack can reach the daemon. Exit status 0."
+        },
+        {
+          "input": "ss -tlnp reports:\nLISTEN 0 128 127.0.0.1:22 0.0.0.0:* users:((\"sshd\",pid=811,fd=3))",
+          "output": "LOCAL-ONLY: sshd is bound to 127.0.0.1, remote clients cannot reach it",
+          "explanation": "The daemon is healthy but bound to the loopback interface. Every remote connection is refused, which looks identical to 'SSH is down' from the outside. Exit status 2."
+        },
+        {
+          "input": "ss -tlnp reports only:\nLISTEN 0 4096 0.0.0.0:5432 0.0.0.0:* users:((\"postgres\",pid=900,fd=5))",
+          "output": "DOWN: nothing is listening on port 22",
+          "explanation": "Postgres is listening but nothing holds port 22. Exit status 1. Note that a naive grep for '22' would have matched nothing here but would match 2222 on another machine — parse the port field exactly."
+        }
+      ],
+      "hintsJson": [
+        "The state you care about is LISTEN, and ss -tlnp already filters to listening TCP sockets. What is left is picking the right column.",
+        "In ss output the local address and port live in the fourth whitespace-separated field, formatted as ADDRESS:PORT. Splitting on the last colon separates them.",
+        "awk is a good fit: `ss -tlnp | awk 'NR>1 {n=split($4,a,\":\"); if (a[n]==\"22\") print $4}'` collects the matching local addresses.",
+        "Store the matches in an array. If the array is empty print DOWN and exit 1; if every element starts with 127. print LOCAL-ONLY and exit 2; otherwise loop and print one UP line each, then exit 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "check-sshd.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Kiem tra: co tien trinh nao dang NGHE cong 22 tren MAY NAY khong?\n# Hop dong ma thoat:  0 = UP   1 = DOWN   2 = LOCAL-ONLY\nset -uo pipefail\n\n# TODO 1: thu thap moi dia chi cuc bo dang LISTEN o dung cong 22.\n#         Goi y: ss -tlnp | awk ...   (so sanh CHINH XAC voi \"22\")\naddrs=()\n\n# TODO 2: khong co gi -> in DOWN va thoat 1\n\n# TODO 3: chi co dia chi 127.* -> in LOCAL-ONLY va thoat 2\n\n# TODO 4: con lai -> in mot dong UP cho moi dia chi, thoat 0\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "check-sshd.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Kiem tra: co tien trinh nao dang NGHE cong 22 tren MAY NAY khong?\n# Hop dong ma thoat:  0 = UP   1 = DOWN   2 = LOCAL-ONLY\nset -uo pipefail\n\n# 1) Thu thap dia chi cuc bo cua moi socket LISTEN o DUNG cong 22.\n#    $4 la truong \"dia chi:cong\". Tach o dau HAI CHAM CUOI CUNG vi dia chi\n#    IPv6 nhu [::] cung chua dau hai cham -> khong duoc dung $4 ~ /22/.\n#    Dung vong lap while chu khong dung `mapfile`: mapfile la bash 4, con\n#    macOS van ship bash 3.2 — script he thong nen chay duoc o ca hai noi.\naddrs=()\nwhile IFS= read -r a; do\n  [ -n \"$a\" ] && addrs+=(\"$a\")\ndone < <(\n  ss -tlnp 2>/dev/null | awk 'NR > 1 {\n    n = split($4, parts, \":\")\n    if (parts[n] == \"22\") print $4\n  }'\n)\n\n# 2) Khong co socket nao -> dich vu khong chay (hoac chay o cong khac).\nif [ ${#addrs[@]} -eq 0 ]; then\n  echo \"DOWN: nothing is listening on port 22\"\n  exit 1\nfi\n\n# 3) Chi gan loopback -> daemon SONG nhung KHONG voi toi duoc tu xa.\n#    Day la truong hop nguy hiem nhat vi tu ben ngoai no giong het \"sap\".\nlocal_only=1\nfor a in \"${addrs[@]}\"; do\n  case \"$a\" in\n    127.*|\"[::1]\":*) ;;      # van chi la loopback\n    *) local_only=0 ;;        # co it nhat mot dia chi voi toi duoc\n  esac\ndone\n\nif [ \"$local_only\" -eq 1 ]; then\n  echo \"LOCAL-ONLY: sshd is bound to 127.0.0.1, remote clients cannot reach it\"\n  exit 2\nfi\n\n# 4) Lanh manh: bao cao tung dia chi dang nghe.\nfor a in \"${addrs[@]}\"; do\n  echo \"UP: listening on $a\"\ndone\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The whole exercise turns on one decision: comparing the port <em>field</em> for equality instead of searching the line for the characters <code>22</code>. <code>split($4, parts, \":\")</code> followed by <code>parts[n] == \"22\"</code> takes the segment after the final colon, which is correct for both <code>0.0.0.0:22</code> and <code>[::]:22</code>. A substring match would also fire on <code>0.0.0.0:2222</code>, on <code>10.0.0.22:80</code>, and on the PID <code>pid=22</code> — three false positives that all produce a confidently wrong verdict.</p><p>The three-way exit contract is the part worth carrying into real work. <code>DOWN</code> and <code>LOCAL-ONLY</code> look identical from a client (both give a refused connection or a timeout) but have completely different cures: one needs the service started, the other needs <code>ListenAddress</code> changed in <code>sshd_config</code>. Encoding that difference in an exit code lets a monitoring script branch on it without parsing English.</p><p><code>mapfile -t</code> with process substitution is used rather than <code>addrs=$(...)</code> so that addresses containing no spaces still arrive as separate array elements and an empty result yields a genuinely empty array — <code>$(...)</code> in a plain assignment would give you a one-element array holding an empty string, and <code>${#addrs[@]}</code> would wrongly report 1.</p><p>Note the deliberate absence of <code>set -e</code>: the script <em>wants</em> to survive a non-zero <code>ss</code> and reach its own verdict. <code>set -uo pipefail</code> keeps the useful protections (undefined variables, failures inside a pipeline) without letting the shell exit before the report is printed.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Chay ss -tlnp] --> B{Co socket LISTEN o cong 22 khong}\n  B -->|Khong| C[DOWN thoat 1]\n  B -->|Co| D{Moi dia chi deu la loopback}\n  D -->|Dung| E[LOCAL-ONLY thoat 2]\n  D -->|Khong| F[UP mot dong moi dia chi thoat 0]",
+      "referenceUrl": "https://man7.org/linux/man-pages/man8/ss.8.html"
+    },
+
+    {
+      "title": "Read the Version Banner Without an SSH Client",
+      "difficulty": "EASY",
+      "estimatedMinutes": 25,
+      "points": 10,
+      "concepts": ["plaintext version exchange", "TCP without an SSH client", "banner grabbing", "timeouts"],
+      "prerequisites": ["listening sockets", "basic string handling in bash"],
+      "tags": ["ssh", "protocol", "networking", "bash"],
+      "problemHtml": "<p>The first thing an SSH server sends is its version, in plain text, before any encryption exists. That single fact has two uses. It lets you confirm that the thing answering port 22 really speaks SSH rather than being some other service parked on that port, and it lets you audit which OpenSSH builds your fleet is running without logging in anywhere.</p><p>It also has a consequence worth internalising: anyone who can reach your port learns your exact build number for free, before authenticating. That is why version banners appear in every vulnerability scan report.</p><p>Write <code>banner.sh HOST [PORT]</code> that grabs the banner using nothing but bash's own <code>/dev/tcp</code> feature — no <code>ssh</code>, no <code>nc</code>.</p><ul><li><code>PORT</code> defaults to <code>22</code> when omitted.</li><li>On success print exactly two lines: <code>banner: &lt;the raw banner line&gt;</code> then <code>software: &lt;the software version field&gt;</code>, and exit <code>0</code>.</li><li>An SSH banner has the shape <code>SSH-&lt;protoversion&gt;-&lt;softwareversion&gt;[ comments]</code>. For <code>SSH-2.0-OpenSSH_9.6p1 Ubuntu-3ubuntu13.18</code> the software version field is <code>OpenSSH_9.6p1</code>.</li><li>If the connection cannot be opened within 5 seconds, print <code>unreachable: &lt;host&gt;:&lt;port&gt;</code> and exit <code>1</code>.</li><li>If something answers but the first line does not start with <code>SSH-</code>, print <code>not-ssh: &lt;first line&gt;</code> and exit <code>2</code>. A web server on port 22 must land here, not crash the script.</li></ul><p>Strip the trailing carriage return: the protocol terminates the banner with CR-LF, and leaving the CR in place produces output that looks correct in a terminal and compares unequal in a test.</p>",
+      "inputSpec": "argv[1] is a hostname or IP address (required). argv[2] is a TCP port (optional, default 22).",
+      "outputSpec": "Two lines on success ('banner: ...' and 'software: ...', exit 0); one line 'unreachable: host:port' (exit 1); or one line 'not-ssh: <first line received>' (exit 2).",
+      "constraints": "Use bash's /dev/tcp virtual device only. Do not invoke ssh, nc, ncat, telnet, curl or python. The 5-second cap applies to opening the connection. The script must never hang forever on a host that accepts a connection and then stays silent.",
+      "examplesJson": [
+        {
+          "input": "./banner.sh 160.187.1.208",
+          "output": "banner: SSH-2.0-OpenSSH_9.6p1 Ubuntu-3ubuntu13.18\nsoftware: OpenSSH_9.6p1",
+          "explanation": "The production VPS answers with its protocol version (2.0), its software version, and an OS-vendor comment. Only the middle field is the software version; the Ubuntu suffix is a comment."
+        },
+        {
+          "input": "./banner.sh 160.187.1.208 443",
+          "output": "not-ssh: ",
+          "explanation": "Port 443 accepts the TCP connection but sends nothing until the client speaks TLS first. The read times out, the first line is empty, it does not start with SSH-, so the script reports not-ssh and exits 2 rather than hanging."
+        },
+        {
+          "input": "./banner.sh 10.255.255.1",
+          "output": "unreachable: 10.255.255.1:22",
+          "explanation": "Packets to that address have no route back, so the connection attempt hits the 5-second cap. This is the timeout case, distinct from a refused connection — both land here, and both mean 'no TCP session', which is exactly what the caller needs to know."
+        }
+      ],
+      "hintsJson": [
+        "Bash can open a TCP socket by itself: `exec 3<>/dev/tcp/HOST/PORT` binds file descriptor 3 to the connection. Redirecting from fd 3 reads what the server sent.",
+        "Guard the open with a brace group: `if ! { exec 3<>\"/dev/tcp/$HOST/$PORT\"; } 2>/dev/null; then`. Writing `exec ... 2>/dev/null` instead fails to hide bash's own 'Connection refused' line and permanently redirects the script's stderr on success. Use `read -t` for the read timeout so a silent server cannot hang you. /dev/tcp is a bash feature — the shebang must be bash, not sh.",
+        "Strip the CR with parameter expansion: `line=${line%$'\\r'}`. The protocol ends the banner with CR-LF and the stray CR will make your string comparisons fail invisibly.",
+        "The three fields are separated by '-', but the software version itself may contain '-', so do not split on every dash. Use `IFS=-  read -r _ proto rest` semantics, or cut the known prefix `SSH-2.0-` off and then take the first whitespace-separated word of the remainder."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "banner.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Lay banner phien ban SSH ma KHONG dung ssh/nc — chi dung /dev/tcp cua bash.\nset -uo pipefail\n\nHOST=${1:?usage: banner.sh HOST [PORT]}\nPORT=${2:-22}\n\n# TODO 1: mo socket toi $HOST:$PORT bang exec 3<>/dev/tcp/... , gioi han 5 giay.\n#         Mo khong duoc -> in \"unreachable: $HOST:$PORT\" va thoat 1.\n\n# TODO 2: doc DONG DAU TIEN tu fd 3 (nho -t de khong treo mai).\n#         Cat bo ky tu CR o cuoi.\n\n# TODO 3: khong bat dau bang \"SSH-\" -> in \"not-ssh: <dong do>\" va thoat 2.\n\n# TODO 4: tach truong software version va in hai dong theo dung dinh dang.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "banner.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Lay banner phien ban SSH ma KHONG dung ssh/nc — chi dung /dev/tcp cua bash.\nset -uo pipefail\n\nHOST=${1:?usage: banner.sh HOST [PORT]}\nPORT=${2:-22}\n\n# 1) Mo socket. /dev/tcp la tinh nang CUA BASH (khong phai file that), nen\n#    shebang bat buoc la bash.\n#    Chu y cap ngoac nhon: khi mo that bai, chinh BASH in ra mot dong loi\n#    (\".../banner.sh: line 11: /dev/tcp/...: Connection refused\"). Viet\n#    `exec ... 2>/dev/null` KHONG chan duoc dong do, va con lam stderr cua\n#    ca script bi chuyen huong vinh vien khi mo thanh cong. `{ ...; } 2>/dev/null`\n#    ap dung chuyen huong cho RIENG nhom lenh, nen vua im tieng vua khong\n#    de lai tac dung phu.\nif ! { exec 3<>\"/dev/tcp/$HOST/$PORT\"; } 2>/dev/null; then\n  echo \"unreachable: $HOST:$PORT\"\n  exit 1\nfi\n\n# 2) Doc dong dau tien, co han 5 giay. Mot may chu chap nhan ket noi roi im\n#    lang (vi du cong 443 dang doi TLS) se roi vao nhanh nay thay vi treo.\nif ! IFS= read -r -t 5 line <&3; then\n  line=\"\"\nfi\nexec 3<&-\nexec 3>&-\n\n# Giao thuc ket thuc banner bang CR-LF. Bo chu CR con sot lai: no vo hinh\n# tren man hinh nhung lam moi phep so sanh chuoi that bai mot cach im lang.\nline=${line%$'\\r'}\n\n# 3) Thu tra loi nhung khong phai SSH.\ncase \"$line\" in\n  SSH-*) ;;\n  *) echo \"not-ssh: $line\"; exit 2 ;;\nesac\n\n# 4) Tach truong software version.\n#    Dang: SSH-<protoversion>-<softwareversion>[ <comments>]\n#    Chi hai dau gach NOI dau tien la ky tu phan cach; ban than\n#    softwareversion van co the chua dau gach, nen khong duoc split het.\nrest=${line#SSH-}          # bo tien to \"SSH-\"\nrest=${rest#*-}            # bo \"<protoversion>-\"\nsoftware=${rest%% *}       # lay tu dau tien, bo phan comment\n\necho \"banner: $line\"\necho \"software: $software\"\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Three details separate a script that works from one that only appears to.</p><p><strong>The carriage return.</strong> RFC 4253 terminates the identification string with CR-LF. <code>read</code> consumes the LF and hands you the CR. On screen it is invisible; in a comparison it is fatal, and in a log file it silently overwrites the start of the line. <code>${line%$'\\r'}</code> removes exactly one trailing CR and is the habit to keep for any line-oriented protocol read from a socket.</p><p><strong>The read timeout, separate from the connect timeout.</strong> Opening the socket and receiving data are two failure modes. Port 443 on the same VPS accepts the TCP connection instantly and then waits for the client to start TLS — so a script that guards only the connect step hangs forever on a host that is up. <code>read -t 5</code> is what turns that hang into the <code>not-ssh</code> verdict shown in the examples.</p><p><strong>Not splitting on every dash.</strong> <code>OpenSSH_9.6p1</code> is dash-free, but plenty of real banners are not — <code>SSH-2.0-Go</code>, <code>SSH-2.0-dropbear_2022.83</code>, and vendor builds with hyphenated names all exist. Peeling the two known prefixes with <code>${rest#*-}</code> and then taking the first word with <code>${rest%% *}</code> follows the grammar the RFC actually specifies instead of guessing at it.</p><p>Closing both directions of the descriptor (<code>exec 3&lt;&amp;-</code> and <code>exec 3&gt;&amp;-</code>) matters because <code>&lt;&gt;</code> opened it read-write. Leaving it open would keep the TCP session alive for the life of the script, which on a server with a low <code>MaxStartups</code> is a way to become the problem you are diagnosing.</p>",
+      "referenceUrl": "https://www.rfc-editor.org/rfc/rfc4253#section-4.2"
+    },
+
+    {
+      "title": "Name the Failing Phase From a Verbose Trace",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 15,
+      "concepts": ["handshake phases", "trace analysis", "failure localisation", "text classification in bash"],
+      "prerequisites": ["listening sockets", "the six-phase handshake"],
+      "tags": ["ssh", "debugging", "diagnostics", "bash"],
+      "problemHtml": "<p>The reason <code>ssh -v</code> is worth learning is that a connection fails in exactly one of six ordered phases, and the trace always names the last phase that succeeded. Everything after that is guesswork you no longer need to do. This exercise turns that reading skill into a script, which forces you to state the rules precisely.</p><p>Write <code>phase.sh</code>, which reads an <code>ssh -v</code> trace on <strong>stdin</strong> and prints which phase failed.</p><ul><li><code>PHASE-1-NETWORK</code> — the trace never contains <code>Connection established</code>. The packets never arrived; SSH is not the problem.</li><li><code>PHASE-2-ALGORITHMS</code> — <code>Connection established</code> is present but the trace contains <code>no matching</code> (as in <code>no matching key exchange method found</code>).</li><li><code>PHASE-3-HOSTKEY</code> — the trace contains <code>Host key verification failed</code> or <code>REMOTE HOST IDENTIFICATION HAS CHANGED</code>.</li><li><code>PHASE-4-AUTH</code> — the trace contains <code>Offering public key</code> but never <code>Server accepts key</code>, or it contains <code>Permission denied</code>.</li><li><code>PHASE-5-SESSION</code> — authentication succeeded (<code>Server accepts key</code> is present) but the trace also contains <code>Connection closed by</code> or <code>Connection reset by</code>.</li><li><code>OK</code> — the trace contains <code>Exit status</code>, meaning a command ran to completion.</li></ul><p>Check the rules in the order listed and print the <strong>first</strong> that matches, then exit <code>0</code>. If none matches, print <code>UNKNOWN</code> and exit <code>3</code>. Order matters: a host-key failure also lacks <code>Server accepts key</code>, so testing for the authentication phase first would misclassify it — and misclassifying is worse than saying nothing, because it sends the reader to the wrong module.</p>",
+      "inputSpec": "A full 'ssh -v' (or -vvv) trace arriving on stdin, typically produced by 'ssh -v host cmd 2>&1 | ./phase.sh'. Traces may be thousands of lines and contain both debug lines and human-readable errors.",
+      "outputSpec": "Exactly one token on stdout, one of: PHASE-1-NETWORK, PHASE-2-ALGORITHMS, PHASE-3-HOSTKEY, PHASE-4-AUTH, PHASE-5-SESSION, OK, UNKNOWN. Exit 0 for a recognised phase, exit 3 for UNKNOWN.",
+      "constraints": "Read stdin exactly once — the input may be a pipe, so you cannot rewind it. Do not run ssh yourself. Matching is plain substring matching, case sensitive. The script must handle a trace of several thousand lines without loading assumptions about line order beyond the rules given.",
+      "examplesJson": [
+        {
+          "input": "debug1: Connecting to 10.255.255.1 [10.255.255.1] port 22.\nssh: connect to host 10.255.255.1 port 22: Operation timed out",
+          "output": "PHASE-1-NETWORK",
+          "explanation": "The client tried and never got a TCP session, so 'Connection established' is absent. No amount of key fixing helps; the problem is routing or a firewall."
+        },
+        {
+          "input": "debug1: Connection established.\ndebug1: Authentications that can continue: publickey,password\ndebug1: Offering public key: /Users/admin/.ssh/id_ed25519 ED25519 SHA256:sud5pPJ\ndebug1: Authentications that can continue: publickey,password\ncuong@127.0.0.1: Permission denied (publickey,password).",
+          "output": "PHASE-4-AUTH",
+          "explanation": "This is the real trace from a key rejected because the home directory was group-writable. The key was offered and never accepted — the client cannot tell you why, which is exactly why the server log matters."
+        },
+        {
+          "input": "debug1: Connection established.\ndebug1: Server accepts key: /Users/admin/.ssh/id_rsa RSA SHA256:Gx/NR7T\ndebug1: channel 0: new session [client-session]\ndebug1: Exit status 0",
+          "output": "OK",
+          "explanation": "All phases passed and a command ran. If the user still complains, the problem is inside the command's environment — no TTY, a different PATH — which is Module 5, not a connection failure."
+        }
+      ],
+      "hintsJson": [
+        "Read stdin once into a single variable: `trace=$(cat)`. The input is a pipe and cannot be re-read, so repeated greps on stdin would each see an empty stream after the first.",
+        "A helper keeps the rules readable: `has() { case \"$trace\" in *\"$1\"*) return 0;; *) return 1;; esac; }`. Using a case pattern avoids spawning grep six times.",
+        "Encode the ordering literally as an if/elif chain in the order the requirements list. The OK rule must come before PHASE-5, otherwise a successful session that also printed 'Connection closed by' at the end would be misfiled.",
+        "PHASE-4 has two independent triggers joined by OR: ('Offering public key' present AND 'Server accepts key' absent) OR 'Permission denied' present. Write it as one condition so the ordering stays a flat chain."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "phase.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Doc mot vet 'ssh -v' tren stdin, in ra PHA nao that bai.\nset -uo pipefail\n\ntrace=$(cat)\n\n# Ham tro giup: chuoi con co xuat hien trong vet khong?\nhas() { case \"$trace\" in *\"$1\"*) return 0;; *) return 1;; esac; }\n\n# TODO: viet chuoi if/elif THEO DUNG THU TU de bai neu.\n#       Thu tu quan trong: sai thu tu la phan loai nham,\n#       ma phan loai nham con te hon khong tra loi.\n\necho \"UNKNOWN\"\nexit 3\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "phase.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Doc mot vet 'ssh -v' tren stdin, in ra PHA nao that bai.\nset -uo pipefail\n\n# stdin la mot ONG: chi doc duoc MOT lan. Hut het vao bien roi moi xet.\ntrace=$(cat)\n\nhas() { case \"$trace\" in *\"$1\"*) return 0;; *) return 1;; esac; }\n\n# ── Luat xet theo DUNG thu tu. Moi nhanh loai tru cac nhanh sau no. ──\n\n# 1) Chua tung co phien TCP nao -> loi nam o mang, khong phai o SSH.\nif ! has \"Connection established\"; then\n  echo \"PHASE-1-NETWORK\"\n\n# 2) Bat tay duoc nhung khong thong nhat noi thuat toan.\nelif has \"no matching\"; then\n  echo \"PHASE-2-ALGORITHMS\"\n\n# 3) Danh tinh may chu khong khop. Phai xet TRUOC pha xac thuc, vi mot loi\n#    khoa may chu cung khong bao gio co \"Server accepts key\" -> neu xet\n#    PHASE-4 truoc thi ca hai deu bi doc thanh \"sai khoa\".\nelif has \"Host key verification failed\" || has \"REMOTE HOST IDENTIFICATION HAS CHANGED\"; then\n  echo \"PHASE-3-HOSTKEY\"\n\n# 4) Da chao khoa ma khong duoc nhan, hoac bi tu choi thang.\nelif { has \"Offering public key\" && ! has \"Server accepts key\"; } || has \"Permission denied\"; then\n  echo \"PHASE-4-AUTH\"\n\n# 5) Chay tron ven: co ma thoat tra ve. Xet TRUOC PHASE-5 vi mot phien\n#    thanh cong van thuong ket thuc bang mot dong \"Connection closed by\".\nelif has \"Exit status\"; then\n  echo \"OK\"\n\n# 6) Xac thuc xong roi moi dut -> loi sau dang nhap (shell hong, day dia...).\nelif has \"Server accepts key\" && { has \"Connection closed by\" || has \"Connection reset by\"; }; then\n  echo \"PHASE-5-SESSION\"\n\nelse\n  echo \"UNKNOWN\"\n  exit 3\nfi\n\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The code is a flat if/elif chain, and that flatness is the point: the ordering <em>is</em> the algorithm. Two orderings in particular are load-bearing.</p><p><strong>Host key before authentication.</strong> A trace that dies at the host-key check never reaches the authentication round, so it also lacks <code>Server accepts key</code>. Test the authentication rule first and every host-key failure is reported as a key problem — sending the reader to regenerate keys and re-run <code>ssh-copy-id</code> for a fault that lives in <code>known_hosts</code>. This is not a hypothetical: it is the single most common misdiagnosis of the <code>REMOTE HOST IDENTIFICATION HAS CHANGED</code> banner.</p><p><strong>OK before PHASE-5.</strong> A perfectly successful session frequently ends with <code>Connection closed by 10.0.0.5 port 22</code> in the trace, because that is what a normal disconnect looks like from the client side. Checking for a session failure before checking for <code>Exit status</code> would classify every healthy run as broken.</p><p>The <code>has()</code> helper uses a <code>case</code> pattern rather than <code>grep -q</code>. Beyond avoiding six subprocesses, it sidesteps a real hazard: the search strings contain characters such as <code>[</code> and <code>.</code> that a regex engine would interpret. <code>case</code> globbing treats them literally here because the needle is quoted inside the pattern.</p><p><code>trace=$(cat)</code> reading stdin exactly once is the structural requirement. Piping a trace into a script that greps stdin repeatedly gives a correct answer on the first grep and an empty stream on the rest, so every later rule silently evaluates false — a bug that shows up only on the traces that need the later rules.</p>",
+      "diagramMermaid": "flowchart TD\n  S[Vet ssh -v tren stdin] --> P1{Co Connection established}\n  P1 -->|Khong| N[PHASE-1-NETWORK]\n  P1 -->|Co| P2{Co no matching}\n  P2 -->|Co| A[PHASE-2-ALGORITHMS]\n  P2 -->|Khong| P3{Loi khoa may chu}\n  P3 -->|Co| H[PHASE-3-HOSTKEY]\n  P3 -->|Khong| P4{Chao khoa ma khong duoc nhan}\n  P4 -->|Co| U[PHASE-4-AUTH]\n  P4 -->|Khong| P5{Co Exit status}\n  P5 -->|Co| K[OK]\n  P5 -->|Khong| E[PHASE-5-SESSION hoac UNKNOWN]",
+      "referenceUrl": "https://man.openbsd.org/ssh.1"
+    },
+
+    {
+      "title": "Predict Which Machine Expands the Variable",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 15,
+      "concepts": ["shell quoting", "local vs remote expansion", "heredoc quoting", "command string construction"],
+      "prerequisites": ["running commands over ssh", "shell variables"],
+      "tags": ["ssh", "bash", "quoting", "scripting"],
+      "problemHtml": "<p>The command you pass to <code>ssh</code> is a string, and your <em>local</em> shell reads it before it ever leaves the machine. Whether a variable is expanded at home or on the far side depends entirely on which quotes you used, and the failure mode is nasty: nothing errors, output looks plausible, and a deploy script confidently <code>cd</code>s to a path that exists only on your laptop.</p><p>Here is the difference, measured on a real connection:</p><pre>$ ssh cuong@may 'echo $HOME va $(hostname)'\n/home/cuong va 1592a753e25f\n\n$ ssh cuong@may \"echo $HOME va $(hostname)\"\n/Users/admin va Cuong-Hoang.local</pre><p>Write <code>where.sh</code>, which takes one command string as <code>argv[1]</code> and reports where each expansion will happen.</p><ul><li>Print <code>LOCAL</code> if the string is such that your shell expands it before sending — that is, the whole argument was written inside double quotes and contains an unescaped <code>$</code>.</li><li>Print <code>REMOTE</code> if the string reaches the server intact — single-quoted, or double-quoted with every <code>$</code> escaped as <code>\\$</code>.</li><li>Print <code>MIXED</code> if it contains both an unescaped <code>$</code> and an escaped <code>\\$</code>, which is the deliberate pattern for passing one local value into an otherwise-remote command.</li><li>Print <code>NONE</code> if there is no <code>$</code> at all.</li></ul><p>Because your script receives the string <em>after</em> the calling shell has already processed it, the caller must pass it in a way that preserves the dollars — the scaffold's test block shows the convention. Then rewrite the two-line snippet in the second part of the scaffold so that <code>TAG</code> comes from the local machine while <code>PWD</code> comes from the remote one, and prove it by printing both.</p>",
+      "inputSpec": "argv[1] is a single command string, passed with single quotes by the caller so that dollars survive to reach the script.",
+      "outputSpec": "One token on stdout: LOCAL, REMOTE, MIXED or NONE. Exit 0 in all four cases. The second part additionally prints two lines showing a local TAG and a remote PWD.",
+      "constraints": "Do not use eval on the input. Classify by inspecting characters only. An escaped dollar is the two-character sequence backslash followed by dollar. Treat a dollar immediately followed by nothing (end of string) as unescaped.",
+      "examplesJson": [
+        {
+          "input": "./where.sh 'echo $HOME'",
+          "output": "LOCAL",
+          "explanation": "An unescaped dollar with no escaped counterpart. Had this been embedded in an ssh command written with double quotes, the caller's own HOME would have been substituted before transmission."
+        },
+        {
+          "input": "./where.sh 'echo \\$HOME'",
+          "output": "REMOTE",
+          "explanation": "Every dollar is escaped, so the local shell passes the text through and the remote shell performs the expansion. This is what single quotes achieve without any backslashes at all."
+        },
+        {
+          "input": "./where.sh 'cd /opt/app && git checkout $TAG && echo \\$PWD'",
+          "output": "MIXED",
+          "explanation": "TAG is taken from the calling machine, PWD from the server. This is the intentional pattern, and the reason the classifier needs a third answer instead of a boolean."
+        }
+      ],
+      "hintsJson": [
+        "Work through the string one character at a time with an index, rather than reaching for a regex. Regexes struggle to express 'a dollar not preceded by a backslash' without lookbehind, which bash's =~ does not support.",
+        "Two flags are enough: saw_plain and saw_escaped. Walk the string; when you meet a backslash, look at the next character and skip it; when you meet a bare dollar, set saw_plain.",
+        "For the second part, the readable pattern is `ssh host \"TAG='$TAG' bash -s\" <<'REMOTE'`. The quoted heredoc delimiter stops local expansion of the whole body, while TAG crosses explicitly on the command line.",
+        "Verify your rewrite by having the remote block print both values. If PWD shows a path under /Users you expanded on the wrong machine."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "where.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Phan loai: chuoi lenh nay se duoc gian bien o MAY NAO?\nset -uo pipefail\n\ns=${1:?usage: where.sh 'command string'}\n\nsaw_plain=0     # co dau $ TRAN (may nha gian)\nsaw_escaped=0   # co dau \\$ (may xa gian)\n\n# TODO 1: di qua tung ky tu cua \"$s\".\n#         Gap '\\' -> nhin ky tu ke tiep; neu la '$' thi saw_escaped=1,\n#         va NHAY QUA ky tu do.\n#         Gap '$' tran -> saw_plain=1.\n\n# TODO 2: in LOCAL / REMOTE / MIXED / NONE theo hai co tren.\n\n# ── Phan 2: viet lai doan duoi cho dung ──────────────────────────────\n# TAG phai lay tu MAY NHA, PWD phai lay tu MAY XA.\n# Hien tai CA HAI deu gian o may nha — sua lai:\n#\n#   TAG=v1.4.2\n#   ssh cuong@may \"cd /opt/app && echo tag=$TAG && echo pwd=$PWD\"\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "where.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Phan loai: chuoi lenh nay se duoc gian bien o MAY NAO?\nset -uo pipefail\n\ns=${1:?usage: where.sh 'command string'}\n\nsaw_plain=0     # co dau $ TRAN (may nha gian)\nsaw_escaped=0   # co dau \\$ (may xa gian)\n\n# 1) Duyet tung ky tu. Khong dung regex: bash khong ho tro lookbehind,\n#    nen \"dau $ khong dung sau dau \\\" khong viet duoc gon bang =~.\ni=0\nn=${#s}\nwhile [ \"$i\" -lt \"$n\" ]; do\n  c=${s:i:1}\n  if [ \"$c\" = '\\' ]; then\n    nxt=${s:i+1:1}\n    [ \"$nxt\" = '$' ] && saw_escaped=1\n    i=$((i + 2))          # nhay qua CA dau \\ lan ky tu no bao ve\n    continue\n  fi\n  [ \"$c\" = '$' ] && saw_plain=1\n  i=$((i + 1))\ndone\n\n# 2) Bon ket qua, khong phai hai — vi \"vua nha vua xa\" la mau CO Y.\nif   [ \"$saw_plain\" -eq 1 ] && [ \"$saw_escaped\" -eq 1 ]; then echo \"MIXED\"\nelif [ \"$saw_plain\" -eq 1 ];                              then echo \"LOCAL\"\nelif [ \"$saw_escaped\" -eq 1 ];                            then echo \"REMOTE\"\nelse                                                            echo \"NONE\"\nfi\nexit 0\n"
+        },
+        {
+          "name": "deploy-tag.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Phan 2 da sua: TAG lay tu MAY NHA, PWD lay tu MAY XA.\nset -euo pipefail\n\nTAG=v1.4.2\nHOST=cuong@may\n\n# SAI (ca hai deu gian o may nha — PWD se ra duong dan cua macOS):\n#   ssh \"$HOST\" \"cd /opt/app && echo tag=$TAG && echo pwd=$PWD\"\n\n# DUNG: than script di qua heredoc CO NHAY <<'REMOTE' nen KHONG bi gian o\n# may nha chut nao; rieng TAG duoc truyen tuong minh qua bien moi truong.\n# Cach nay con de doc hon nhieu so voi mot chuoi mot dong day dau \\\" va \\$.\nssh \"$HOST\" \"TAG='$TAG' bash -s\" <<'REMOTE'\n  set -euo pipefail\n  cd /opt/app\n  echo \"tag=$TAG\"      # den tu may nha, qua bien moi truong\n  echo \"pwd=$PWD\"      # do shell o MAY XA gian ra\n  echo \"host=$(hostname)\"\nREMOTE\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The classifier walks the string by index because the rule — a dollar <em>not</em> preceded by a backslash — needs lookbehind, and bash's <code>=~</code> operator has none. Skipping two positions when a backslash is found (<code>i=$((i + 2))</code>) is what makes <code>\\\\$HOME</code> classify correctly: the first backslash escapes the second, so the dollar that follows is genuinely bare. Advancing by one and re-examining would get that case backwards.</p><p>Four outcomes rather than a boolean is the substantive design decision. <code>MIXED</code> is not a degenerate case to be warned about — it is the correct pattern for the common real task of injecting one local value into an otherwise remote command. A tool that only said &quot;local or remote&quot; would flag correct code as suspicious.</p><p>The second file is where the lesson pays off. <code>ssh host \"TAG='$TAG' bash -s\" &lt;&lt;'REMOTE'</code> splits the problem cleanly in two: the quoted heredoc delimiter (<code>&lt;&lt;'REMOTE'</code>, with quotes) suppresses <em>all</em> local expansion of the body, so <code>$PWD</code> and <code>$(hostname)</code> are evaluated by the remote shell exactly as written; meanwhile <code>TAG</code> crosses explicitly as an environment assignment on the command line, where the single pair of quotes around <code>'$TAG'</code> also protects a tag containing spaces.</p><p>The alternative — one long double-quoted string with <code>\\$PWD</code> and <code>\\\\\"</code> sprinkled through it — is what most scripts start as, and every added line raises the chance of an escaping bug that produces plausible wrong output instead of an error. Choosing the heredoc form is choosing a construct where the failure mode is a syntax error rather than a silent one.</p>",
+      "referenceUrl": "https://www.gnu.org/software/bash/manual/bash.html#Quoting"
+    },
+
+    {
+      "title": "Exit Codes a Deploy Script Can Trust",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": ["exit status propagation", "exit code 255", "connection failure vs command failure", "retry logic"],
+      "prerequisites": ["running commands over ssh", "shell conditionals"],
+      "tags": ["ssh", "bash", "ci", "reliability"],
+      "problemHtml": "<p>SSH hands you the remote command's exit status as its own, which is what makes it usable in scripts. There is one reserved value: <strong>255</strong> means the connection itself failed — DNS, routing, refused, authentication — so the command never ran at all.</p><p>Conflating the two is how a deploy pipeline reports success on a server it never reached. &quot;The health check did not fail&quot; and &quot;the health check did not run&quot; are opposite facts, and both come back as non-zero if you do not separate them.</p><p>Write <code>remote-run.sh HOST COMMAND...</code>:</p><ul><li>Run <code>COMMAND...</code> on <code>HOST</code> over SSH with <code>BatchMode=yes</code> and a connect timeout of 10 seconds, so it can never sit waiting for a password prompt in CI.</li><li>If SSH exits <code>255</code>, print <code>UNREACHABLE &lt;host&gt;</code> to stderr and <strong>retry up to 3 times total</strong> with a 2-second pause between attempts. A connection failure is often transient; a command failure never is.</li><li>If all attempts return <code>255</code>, exit <code>255</code>.</li><li>If SSH returns any other status <code>N</code>, do <strong>not</strong> retry — print <code>REMOTE-EXIT &lt;N&gt;</code> to stderr and exit with that same <code>N</code>, so the caller sees the remote command's own status.</li><li>On success print <code>OK</code> to stderr and exit <code>0</code>.</li><li>The remote command's own stdout must reach the caller's stdout untouched. All of your own messages go to stderr.</li></ul><p>Keeping your diagnostics on stderr is what allows <code>./remote-run.sh box 'cat /etc/hostname' &gt; name.txt</code> to produce a file containing only the hostname.</p>",
+      "inputSpec": "argv[1] is the SSH destination (user@host). argv[2..] form the remote command; they are passed to ssh as-is so the remote shell sees them as one command line.",
+      "outputSpec": "The remote command's stdout is forwarded verbatim to stdout. Status messages ('UNREACHABLE <host>', 'REMOTE-EXIT <N>', 'OK') go to stderr. The script's exit status is 0 on success, 255 when unreachable after all retries, or the remote command's own status otherwise.",
+      "constraints": "Use BatchMode=yes and ConnectTimeout=10. Exactly 3 attempts maximum, only for status 255. Never retry a non-255 status. Do not use sshpass or embed credentials. Do not swallow the remote stdout or merge it into stderr.",
+      "examplesJson": [
+        {
+          "input": "./remote-run.sh cuong@may 'exit 3'",
+          "output": "REMOTE-EXIT 3   (on stderr)\n$? = 3",
+          "explanation": "The remote command ran and chose to fail with 3. Verified on a real connection: ssh propagates the status unchanged. No retry happens, because re-running a command that deliberately failed would just fail again."
+        },
+        {
+          "input": "./remote-run.sh cuong@10.255.255.1 'echo hi'",
+          "output": "UNREACHABLE cuong@10.255.255.1   (three times, on stderr)\n$? = 255",
+          "explanation": "The address has no route, so ssh gives up after ConnectTimeout with 255 on each of the three attempts. The command never ran, and the exit status says so distinctly."
+        },
+        {
+          "input": "./remote-run.sh cuong@may 'echo production' > name.txt",
+          "output": "OK   (on stderr)\nname.txt contains exactly: production\n$? = 0",
+          "explanation": "Because status messages go to stderr, redirecting stdout captures only the remote output. Mixing the two would put the word OK into the file."
+        }
+      ],
+      "hintsJson": [
+        "Capture the status immediately after the call: `ssh ... ; rc=$?`. Any command in between — even an echo — overwrites $?.",
+        "Do not use `set -e` in this script. You need to inspect a non-zero status rather than exit on it; `set -e` would terminate before your classification runs.",
+        "Structure it as `for attempt in 1 2 3; do ... done`, and `break` out on any status that is not 255 so a genuine command failure is reported on the first attempt.",
+        "Send messages with `echo >&2` (or `printf >&2`). Verify by running the script with stdout redirected to a file — the file must contain only the remote command's output."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "remote-run.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Chay mot lenh tren may xa, PHAN BIET \"khong toi duoc may\" voi \"lenh that bai\".\n# KHONG dung set -e: ta CAN doc ma thoat khac 0 chu khong thoat ngay.\nset -uo pipefail\n\nHOST=${1:?usage: remote-run.sh HOST COMMAND...}\nshift\n\n# TODO 1: lap toi da 3 lan.\n# TODO 2: goi ssh voi BatchMode=yes va ConnectTimeout=10, bat ma thoat NGAY\n#         sau lenh (rc=$?), vi bat cu lenh nao chen giua cung ghi de $?.\n# TODO 3: rc == 255 -> bao UNREACHABLE ra stderr, nghi 2 giay, thu lai.\n#         rc != 255 -> KHONG thu lai, bao REMOTE-EXIT roi thoat voi chinh rc.\n# TODO 4: het 3 lan van 255 -> thoat 255.\n# LUU Y: stdout cua lenh may xa phai di thang ra stdout, khong duoc lan\n#        voi thong bao cua ban.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "remote-run.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Chay mot lenh tren may xa, PHAN BIET \"khong toi duoc may\" voi \"lenh that bai\".\n# KHONG dung set -e: ta CAN doc ma thoat khac 0 chu khong thoat ngay.\nset -uo pipefail\n\nHOST=${1:?usage: remote-run.sh HOST COMMAND...}\nshift\n\nMAX_TRIES=3\nSLEEP_BETWEEN=2\n\nrc=255\nfor attempt in $(seq 1 \"$MAX_TRIES\"); do\n  # BatchMode=yes: khong bao gio hoi mat khau -> trong CI khong bao gio treo.\n  # ConnectTimeout=10: gioi han pha BAT TAY, khong gioi han thoi gian chay lenh.\n  ssh -o BatchMode=yes \\\n      -o ConnectTimeout=10 \\\n      \"$HOST\" \"$@\"\n  rc=$?          # phai bat NGAY: moi lenh sau day deu ghi de $?\n\n  if [ \"$rc\" -ne 255 ]; then\n    break        # lenh DA chay. Ket qua nao cung la ket qua that -> khong thu lai.\n  fi\n\n  echo \"UNREACHABLE $HOST (lan $attempt/$MAX_TRIES)\" >&2\n  [ \"$attempt\" -lt \"$MAX_TRIES\" ] && sleep \"$SLEEP_BETWEEN\"\ndone\n\n# Phan loai ket qua cuoi cung.\nif [ \"$rc\" -eq 255 ]; then\n  # Chua bao gio chay duoc lenh. KHAC HAN voi \"lenh chay roi that bai\".\n  echo \"UNREACHABLE $HOST\" >&2\n  exit 255\nelif [ \"$rc\" -ne 0 ]; then\n  echo \"REMOTE-EXIT $rc\" >&2\n  exit \"$rc\"      # tra ve DUNG ma thoat cua lenh o may xa\nfi\n\necho \"OK\" >&2\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Three decisions carry this script.</p><p><strong>Retry only on 255.</strong> A transient network blip deserves another attempt; a command that exited 3 will exit 3 again, and retrying it wastes time while making logs harder to read. Worse, retrying a non-idempotent remote command — a migration, a container recreate — turns a clean failure into a partially-applied mess. The single <code>if [ \"$rc\" -ne 255 ]; then break; fi</code> encodes that policy in one place.</p><p><strong>Capturing <code>$?</code> on the very next line.</strong> <code>$?</code> holds the status of the most recent command, so an <code>echo</code>, a <code>[</code> test, or even a debugging <code>date</code> between the call and the capture silently replaces it with the status of <em>that</em> command. This bug is invisible in the happy path — <code>echo</code> succeeds, so the script reports 0 — and only shows up when something genuinely fails, which is the worst possible time to learn about it.</p><p><strong>No <code>set -e</code>.</strong> Every other script in this track wants it; this one cannot have it. The whole purpose here is to observe and classify a non-zero status, and <code>set -e</code> would terminate the script the moment ssh returned one, before any classification ran. Knowing when a habitual safety net is the wrong tool is worth more than the habit.</p><p><code>BatchMode=yes</code> deserves its own note: without it, an <code>ssh</code> whose key is not accepted falls back to prompting for a password. In an interactive terminal that is a mild annoyance; in CI it is a job that hangs until the runner's global timeout kills it, typically an hour later, with no useful log. <code>ConnectTimeout=10</code> bounds only the handshake, so a legitimately long-running remote command is not cut off.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Goi ssh] --> B{Ma thoat}\n  B -->|255| C{Con luot thu khong}\n  C -->|Co| D[Nghi 2 giay roi thu lai]\n  D --> A\n  C -->|Het| E[UNREACHABLE thoat 255]\n  B -->|0| F[OK thoat 0]\n  B -->|N khac| G[REMOTE-EXIT N thoat N khong thu lai]",
+      "referenceUrl": "https://man.openbsd.org/ssh.1#EXIT_STATUS"
+    },
+
+    {
+      "title": "Stream a Database Backup With No Temporary File",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 45,
+      "points": 20,
+      "concepts": ["ssh as a pipe", "pipefail", "streaming vs staging", "disk-space safety"],
+      "prerequisites": ["stdin and stdout over ssh", "pipes and redirection"],
+      "tags": ["ssh", "backup", "pipes", "bash"],
+      "problemHtml": "<p>The standard way to back up a remote database is to dump it to a file on the server, compress it, copy it down, then delete the remote copy. Four steps, and the first one needs as much free disk on the server as the dump is large. On a VPS that has previously run out of disk and taken Postgres down with it, that requirement is not academic.</p><p>Because SSH is a byte channel, none of the intermediate files are necessary. The dump can flow from the remote process, through the encrypted connection, into a local file, never touching the server's disk.</p><p>Write <code>backup-db.sh HOST OUTDIR</code>:</p><ul><li>Run <code>pg_dump</code> inside the remote Postgres container and stream the output to <code>OUTDIR/backup-YYYY-MM-DD.sql.gz</code>, compressing <strong>locally</strong>.</li><li>Nothing may be written to the remote filesystem. No temp file, no redirect on the far side.</li><li>Set <code>pipefail</code> so that a failure of the remote <code>pg_dump</code> is not hidden by a successful local <code>gzip</code>. This is the crux: without it, a dump that dies halfway produces a valid, complete-looking, truncated <code>.gz</code> and an exit status of 0.</li><li>Write to a temporary name first and rename it into place only after the pipeline succeeds, so a failed run never leaves a half-written file that looks like a backup.</li><li>On failure, delete the partial file, print <code>BACKUP FAILED</code> to stderr and exit non-zero.</li><li>On success print the final path and its size in bytes.</li></ul><p>The container name on the production host is <code>cuonghoangdev_postgres</code>, the database user is <code>postgres</code> and the database is <code>cuonghoangdev_db</code>.</p>",
+      "inputSpec": "argv[1] is the SSH destination. argv[2] is a local directory that must already exist. No stdin.",
+      "outputSpec": "On success: one line 'saved: <path> (<bytes> bytes)'. On failure: 'BACKUP FAILED' on stderr, a non-zero exit status, and no file left behind in OUTDIR.",
+      "constraints": "Compression must happen on the local machine. No file may be created on the remote host. pipefail is mandatory. The final filename must only exist once the backup is known-good. Do not use scp or rsync — this is a streaming exercise.",
+      "examplesJson": [
+        {
+          "input": "./backup-db.sh root@160.187.1.208 ./backups",
+          "output": "saved: ./backups/backup-2026-08-11.sql.gz (4182934 bytes)",
+          "explanation": "The dump streamed straight from the container's stdout into a local gzip. Remote disk usage during the run: zero bytes."
+        },
+        {
+          "input": "./backup-db.sh root@160.187.1.208 ./backups   # container stopped",
+          "output": "BACKUP FAILED   (on stderr)\n$? = 1\nls ./backups → (no new file)",
+          "explanation": "docker exec fails, pg_dump never runs, and pipefail makes the pipeline non-zero even though gzip exited cleanly on its empty input. The partial file is removed, so a later run cannot mistake it for a real backup."
+        },
+        {
+          "input": "./backup-db.sh root@10.255.255.1 ./backups",
+          "output": "BACKUP FAILED   (on stderr)\n$? = 1",
+          "explanation": "ssh returns 255 without ever reaching the database. pipefail surfaces it as the pipeline's status; the temporary file is cleaned up."
+        }
+      ],
+      "hintsJson": [
+        "The shape is: ssh HOST 'remote command producing bytes on stdout' | gzip > local-file. Only the part inside the quotes runs remotely.",
+        "`set -o pipefail` makes a pipeline return the rightmost non-zero status instead of only the last command's. Without it, `false | gzip > f` exits 0 and leaves you with a valid empty archive.",
+        "Use PIPESTATUS if you want to report which stage failed: after the pipeline, `${PIPESTATUS[0]}` holds ssh's status and `${PIPESTATUS[1]}` holds gzip's.",
+        "Write to \"$out.partial\" and `mv` it to \"$out\" only after the pipeline succeeds. A trap on EXIT that removes the partial file covers interruption — but end that trap handler with `return 0`. Under `set -e`, a failing last command inside an EXIT trap exits from within the trap and overwrites your real exit status."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "backup-db.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Dump CSDL tu container tren VPS ve THANG may minh, KHONG tao file nao o may xa.\nset -euo pipefail\n\nHOST=${1:?usage: backup-db.sh HOST OUTDIR}\nOUTDIR=${2:?usage: backup-db.sh HOST OUTDIR}\n[ -d \"$OUTDIR\" ] || { echo \"khong co thu muc: $OUTDIR\" >&2; exit 1; }\n\nCONTAINER=cuonghoangdev_postgres\nDBUSER=postgres\nDBNAME=cuonghoangdev_db\nout=\"$OUTDIR/backup-$(date +%F).sql.gz\"\n\n# TODO 1: bat pipefail. Khong co no thi pg_dump chet giua chung van cho\n#         ma thoat 0, va ban co mot file .gz hop le nhung CUT DAU.\n\n# TODO 2: dat bay don dep file \"$out.partial\" khi thoat bat thuong.\n\n# TODO 3: chay pipeline:\n#         ssh \"$HOST\" '<lenh docker exec pg_dump>' | gzip > \"$out.partial\"\n#         Nen chu y: nen o MAY MINH, khong nen o may xa.\n\n# TODO 4: chi khi pipeline thanh cong moi mv sang ten that, roi in duong dan\n#         va kich thuoc. That bai -> in BACKUP FAILED ra stderr, thoat khac 0.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "backup-db.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Dump CSDL tu container tren VPS ve THANG may minh, KHONG tao file nao o may xa.\nset -euo pipefail\nset -o pipefail   # BAT BUOC: xem giai thich ben duoi\n\nHOST=${1:?usage: backup-db.sh HOST OUTDIR}\nOUTDIR=${2:?usage: backup-db.sh HOST OUTDIR}\n[ -d \"$OUTDIR\" ] || { echo \"khong co thu muc: $OUTDIR\" >&2; exit 1; }\n\nCONTAINER=cuonghoangdev_postgres\nDBUSER=postgres\nDBNAME=cuonghoangdev_db\nout=\"$OUTDIR/backup-$(date +%F).sql.gz\"\npartial=\"$out.partial\"\n\n# Bay don dep: ke ca khi bi Ctrl-C hay bi kill, khong bao gio de lai mot file\n# do dang trong thu muc backup. Mot file cut dau nhung \"trong nhu that\" la\n# thu nguy hiem nhat trong mot thu muc sao luu.\n#\n# CHU Y `return 0`: voi `set -e` dang bat, neu LENH CUOI trong bay EXIT tra ve\n# khac 0 thi shell thoat NGAY tu trong bay va GHI DE ma thoat that. Viet\n# `[ -f \"$partial\" ] && rm -f \"$partial\"` trong ay se lam mot ban sao luu\n# THANH CONG thoat voi ma 1 — vi sau khi mv thi file .partial khong con,\n# nen phep `[ -f ]` that bai. Ban sao luu tot bi bao la hong.\ncleanup() { rm -f \"$partial\" 2>/dev/null; return 0; }\ntrap cleanup EXIT\n\n# Ong chay thang: byte di tu stdout cua pg_dump trong container, qua duong\n# ham SSH, vao gzip o MAY MINH, roi vao file. Dia cua may chu khong he\n# duoc ghi mot byte nao — dieu do quan trong tren mot VPS tung day dia.\nif ssh -o BatchMode=yes -o ConnectTimeout=10 \"$HOST\" \\\n      \"docker exec $CONTAINER pg_dump -U $DBUSER $DBNAME\" \\\n      | gzip -9 > \"$partial\"; then\n  mv \"$partial\" \"$out\"          # doi ten CHI KHI da chac chan tot\n  bytes=$(wc -c < \"$out\" | tr -d ' ')\n  echo \"saved: $out ($bytes bytes)\"\n  exit 0\nelse\n  # Nho pipefail, nhanh nay bat duoc CA loi ssh (255) lan loi pg_dump,\n  # chu khong chi loi cua gzip o cuoi ong.\n  echo \"BACKUP FAILED\" >&2\n  exit 1\nfi\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>pipefail</code> is the entire exercise. In a pipeline, bash reports the status of the <em>last</em> command by default. <code>gzip</code> sits last, and gzip compressing zero bytes or half a dump is a complete success from gzip's point of view — it exits 0 and writes a structurally valid archive. So without <code>pipefail</code>, a <code>pg_dump</code> that died on a permissions error, and even an <code>ssh</code> that returned 255 having never connected, both yield exit status 0 and a plausible-looking <code>.sql.gz</code> in the backup directory. The failure surfaces months later, during a restore, which is the one moment you cannot afford it.</p><p><strong>The trap must end with <code>return 0</code>, and finding out why costs a real debugging session.</strong> The natural handler is <code>cleanup() { [ -f \"$partial\" ] &amp;&amp; rm -f \"$partial\"; }</code>. On the success path the <code>mv</code> has already happened, so <code>$partial</code> no longer exists, the <code>[ -f ]</code> test fails, and that failing test is the last command in the handler. With <code>set -e</code> active the shell exits from inside the trap with status 1 — <em>overriding the <code>exit 0</code> that triggered it</em>. The observable result: a backup that streamed 71 MB of valid SQL, renamed correctly, printed its success line, and reported failure. Any pipeline branching on that status would delete a perfectly good backup or fire an alert. Ending the handler with an explicit <code>return 0</code> is the whole fix, and the general rule is worth keeping: an EXIT trap can change your exit status, so make its last command unconditionally succeed.</p><p>The write-then-rename pattern is the second guard. <code>mv</code> within one filesystem is atomic, so the final filename either does not exist or refers to a complete file — there is no window in which a partial file is sitting under the name a restore script would pick up. The <code>trap cleanup EXIT</code> extends that guarantee to interruption: Ctrl-C, a dropped connection or a laptop lid closing all remove the partial rather than leaving debris.</p><p>Compressing locally rather than remotely is a deliberate trade. <code>gzip -9</code> on the far side would cut bandwidth, but it spends the <em>server's</em> CPU — on a 4-core VPS that is also serving requests, that is CPU taken from users. Compressing at home spends bandwidth you have and CPU nobody is waiting on. If the link were the bottleneck rather than the server, the correct choice would flip; the point is that it is a choice, not a default.</p><p>Finally, note what is <em>not</em> in the remote command: no redirect, no <code>&gt;</code>, no temp path. Everything after <code>pg_dump</code> happens on this side of the wire. That is the whole reason a database several times larger than the server's free disk can still be backed up.</p>",
+      "diagramMermaid": "flowchart LR\n  A[pg_dump trong container] -->|stdout| B[docker exec]\n  B --> C[sshd tren VPS]\n  C -->|duong ham ma hoa| D[ssh tren may ban]\n  D --> E[gzip tai may ban]\n  E --> F[file partial]\n  F -->|chi khi thanh cong| G[doi ten thanh file that]",
+      "referenceUrl": "https://www.postgresql.org/docs/current/app-pgdump.html"
+    },
+
+    {
+      "title": "Audit a Server's Exposure With sshd -T",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": ["effective vs written configuration", "security posture", "parsing key-value output", "risk scoring"],
+      "prerequisites": ["sshd_config basics", "reading command output"],
+      "tags": ["ssh", "security", "audit", "bash"],
+      "problemHtml": "<p><code>sshd_config</code> tells you what somebody intended. <code>sshd -T</code> tells you what is true: every option with the value actually in force, including defaults nobody wrote and overrides from <code>Include</code>d files that land later in the parse order. When those two disagree — and on a machine that has been administered by more than one person they eventually do — only the second one matters.</p><p>Here is the real effective config of the production VPS on 11 August 2026:</p><pre>port 22\nlogingracetime 120\nmaxauthtries 6\npermitrootlogin yes\npubkeyauthentication yes\npasswordauthentication yes\nauthorizedkeysfile .ssh/authorized_keys .ssh/authorized_keys2</pre><p>Write <code>audit-sshd.sh</code> that reads <code>sshd -T</code> output on <strong>stdin</strong> and prints one finding per line, then a verdict.</p><ul><li><code>HIGH permitrootlogin=yes</code> — root may log in directly, so every brute-force attempt starts with a username it knows exists.</li><li><code>HIGH passwordauthentication=yes</code> — guessable secrets are accepted from the whole internet.</li><li><code>MEDIUM maxauthtries&gt;6</code> — more guesses allowed per connection than the default.</li><li><code>LOW port=22</code> — the default port collects constant background scanning. Noise, not a vulnerability.</li><li><code>INFO pubkeyauthentication=no</code> — keys are disabled, which usually means somebody is relying on passwords deliberately.</li></ul><p>After the findings, print <code>VERDICT: &lt;n&gt; high, &lt;n&gt; medium, &lt;n&gt; low</code>. Exit <code>1</code> if there is at least one HIGH finding, otherwise <code>0</code>, so the script can be dropped into a pipeline as a gate. Keys in <code>sshd -T</code> output are always lowercase and the format is <code>key value</code> separated by a single space.</p>",
+      "inputSpec": "The output of 'sshd -T' on stdin, one 'key value' pair per line, keys lowercased by sshd itself. Options not present in the input are simply absent and must not produce findings.",
+      "outputSpec": "Zero or more finding lines in the order the rules are listed, then one line 'VERDICT: <h> high, <m> medium, <l> low'. Exit 1 when h is greater than zero, else 0.",
+      "constraints": "Read stdin once. Do not run sshd yourself — the script must work on a saved capture from another machine. Do not report a finding for an option that is absent from the input. Comparisons on maxauthtries must be numeric, not lexical.",
+      "examplesJson": [
+        {
+          "input": "port 22\nlogingracetime 120\nmaxauthtries 6\npermitrootlogin yes\npubkeyauthentication yes\npasswordauthentication yes",
+          "output": "HIGH permitrootlogin=yes\nHIGH passwordauthentication=yes\nLOW port=22\nVERDICT: 2 high, 0 medium, 1 low",
+          "explanation": "The real production VPS. maxauthtries is exactly 6, which is the default and not greater than 6, so it produces no finding. Exit status 1 because of the two HIGH items."
+        },
+        {
+          "input": "port 2222\nmaxauthtries 10\npermitrootlogin prohibit-password\npasswordauthentication no\npubkeyauthentication yes",
+          "output": "MEDIUM maxauthtries=10\nVERDICT: 0 high, 1 medium, 0 low",
+          "explanation": "A hardened host. 'prohibit-password' is not 'yes', so root login by key only is not flagged. Non-default port, no passwords. Exit status 0 — the gate passes."
+        },
+        {
+          "input": "port 22\npermitrootlogin no\npasswordauthentication no\npubkeyauthentication no",
+          "output": "LOW port=22\nINFO pubkeyauthentication=no\nVERDICT: 0 high, 0 medium, 1 low",
+          "explanation": "Both login routes are closed, which usually means authentication happens some other way such as Kerberos. INFO items are reported but counted in no bucket, so the verdict line shows zeros and the gate passes."
+        }
+      ],
+      "hintsJson": [
+        "Slurp stdin once into a variable (`input=$(cat)`), then write a small `get()` helper that pulls one key's value out of it. Resist `declare -A`: macOS ships bash 3.2, which has no associative arrays, and a security tool that only runs on Linux is half a tool.",
+        "A one-line get() with awk covers it: `awk -v k=\"$1\" '$1 == k { sub(/^[^ ]+ +/, \"\"); print; exit }'`. Taking the whole remainder as the value matters — authorizedkeysfile has two values on one line.",
+        "permitrootlogin has four legal values: yes, no, prohibit-password and forced-commands-only. Only the literal 'yes' is the HIGH case; comparing for 'not no' would wrongly flag the key-only setting.",
+        "Count into three integers as you print, then emit the verdict from those counters. Exit 1 only when the high counter is above zero — INFO must not affect the exit status."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "audit-sshd.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Doc output cua `sshd -T` tren stdin -> bao cao muc do phoi bay.\n# Dung duoc: ssh may 'sudo sshd -T' | ./audit-sshd.sh\n#\n# RANG BUOC: script phai chay duoc CA tren macOS. /bin/bash o do la ban 3.2\n# (nam 2007) — KHONG co `declare -A`. Kiem bang `bash --version` truoc khi\n# ban dinh dung mang lien ket.\nset -uo pipefail\n\nhigh=0; medium=0; low=0\n\n# TODO 1: hut stdin MOT lan vao mot bien (stdin la ong, khong doc lai duoc).\n\n# TODO 2: viet ham get <khoa> tra ve gia tri, hoac chuoi rong neu khong co.\n#         Dinh dang moi dong: \"key value\", khoa da duoc sshd viet thuong san.\n\n# TODO 3: ap tung luat THEO DUNG THU TU de bai.\n#         Nho: chi bao khi khoa CO TON TAI trong input.\n#         Nho: permitrootlogin co 4 gia tri hop le, chi rieng \"yes\" la HIGH.\n#         Nho: so sanh maxauthtries bang SO HOC (-gt), khong phai chuoi.\n\n# TODO 4: in dong VERDICT, roi thoat 1 neu co it nhat mot HIGH.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "audit-sshd.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Doc output cua `sshd -T` tren stdin -> bao cao muc do phoi bay.\n# Dung duoc: ssh may 'sudo sshd -T' | ./audit-sshd.sh\n#\n# KHONG dung `declare -A`: macOS van ship bash 3.2 (2007) lam /bin/bash, ma\n# mang lien ket chi co tu bash 4. Script kiem tra bao mat ma chi chay duoc\n# tren mot nua so may thi khong dung duoc. Xem giai thich ben duoi.\nset -uo pipefail\n\nhigh=0; medium=0; low=0\n\n# 1) Hut het stdin MOT lan (stdin la ong, khong tua lai duoc).\ninput=$(cat)\n\n# Tra ve gia tri cua mot khoa, hoac chuoi rong neu khoa khong co mat.\n# awk lay tu dau lam khoa va TOAN BO phan con lai lam gia tri — dung y ta,\n# vi authorizedkeysfile co hai gia tri tren cung mot dong.\nget() {\n  printf '%s\\n' \"$input\" | awk -v k=\"$1\" '$1 == k { sub(/^[^ ]+ +/, \"\"); print; exit }'\n}\n\n# 2) Cac luat, dung thu tu de bai.\n\n# permitrootlogin co BON gia tri hop le: yes / no / prohibit-password /\n# forced-commands-only. Chi rieng \"yes\" moi la HIGH. So sanh kieu\n# \"khac no\" se bao dong nham cho prohibit-password — von la cau hinh DUNG.\nif [ \"$(get permitrootlogin)\" = \"yes\" ]; then\n  echo \"HIGH permitrootlogin=yes\"; high=$((high + 1))\nfi\n\nif [ \"$(get passwordauthentication)\" = \"yes\" ]; then\n  echo \"HIGH passwordauthentication=yes\"; high=$((high + 1))\nfi\n\n# So sanh SO HOC. Dung [ \"$v\" \\> \"6\" ] la so sanh CHUOI: \"10\" < \"6\".\nmat=$(get maxauthtries)\nif [ -n \"$mat\" ] && [ \"$mat\" -gt 6 ] 2>/dev/null; then\n  echo \"MEDIUM maxauthtries=$mat\"; medium=$((medium + 1))\nfi\n\nif [ \"$(get port)\" = \"22\" ]; then\n  echo \"LOW port=22\"; low=$((low + 1))\nfi\n\n# INFO: co bao cao nhung KHONG tinh vao bat ky bo dem nao, nen khong\n# lam thay doi ma thoat. Day la ghi chu, khong phai phat hien rui ro.\nif [ \"$(get pubkeyauthentication)\" = \"no\" ]; then\n  echo \"INFO pubkeyauthentication=no\"\nfi\n\n# 3) Ket luan + cong tac cong/tat cho pipeline.\necho \"VERDICT: $high high, $medium medium, $low low\"\n[ \"$high\" -gt 0 ] && exit 1\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two comparisons in this script are the ones people get wrong, and both fail quietly.</p><p><strong><code>permitrootlogin</code> has four values, not two.</strong> Writing the rule as &quot;flag it unless it is <code>no</code>&quot; produces a HIGH finding for <code>prohibit-password</code> — which is root login by key only, a perfectly sound configuration and the default on many distributions. An audit tool that cries wolf on correct settings gets ignored, and then it misses the real one. Matching the literal string <code>yes</code> is both simpler and correct.</p><p><strong><code>maxauthtries</code> must be compared numerically.</strong> <code>[ \"$v\" \\&gt; \"6\" ]</code> is a <em>string</em> comparison, under which <code>\"10\"</code> sorts before <code>\"6\"</code> because <code>1</code> precedes <code>6</code> in ASCII. The one value most worth catching — a server that allows ten guesses per connection — is the one a lexical comparison silently lets through. <code>-gt</code> is arithmetic and gets it right.</p><p><strong>No associative array.</strong> The natural way to write this is <code>declare -A cfg</code>, and it would fail on the machine most likely to run it. macOS still ships <strong>bash 3.2.57 from 2007</strong> as <code>/bin/bash</code> — Apple stopped updating it when bash moved to GPLv3 — and associative arrays arrived in bash 4. Because <code>#!/usr/bin/env bash</code> resolves to that same 3.2, the script dies with <code>declare: -A: invalid option</code> before printing a single finding, while working perfectly on every Linux box you test it on. <code>mapfile</code>, <code>[[ -v ]]</code> and <code>${var^^}</code> are in the same category. The <code>get()</code> helper avoids all of them, and this constraint is worth remembering well beyond this exercise: your laptop's shell is older than the servers you administer with it.</p><p>The <code>get()</code> function returning an empty string for an absent key is what makes each rule safe against a capture from a host running a different OpenSSH version, where an option simply does not exist. Every rule tests for a specific value, so a missing key falls through and produces no finding — an incomplete audit is reported as fewer findings, never as a crash.</p><p>Separating INFO from the counters is a small design point with a real consequence: the exit status is a gate. Anything that raises the count changes whether a pipeline stops. Notes worth printing but not worth blocking on must therefore live outside the counting, or the gate becomes something people learn to bypass.</p><p>Read against the real capture, this tool says something concrete about the production VPS: root login and password login are both open, which means the six-guess limit and <code>fail2ban</code> are the only things standing between the internet and a shell. Module 9 closes both doors, in the order that avoids locking yourself out.</p>",
+      "referenceUrl": "https://man.openbsd.org/sshd_config.5"
+    },
+
+    {
+      "title": "A Remote Script Runner That Survives Quoting",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 50,
+      "points": 25,
+      "concepts": ["bash -s", "quoted heredocs", "environment passing", "strict mode on the remote side"],
+      "prerequisites": ["shell quoting", "exit status propagation"],
+      "tags": ["ssh", "bash", "deployment", "scripting"],
+      "problemHtml": "<p>Remote logic starts as a one-liner, grows to three commands joined by <code>&amp;&amp;</code>, and ends as an unreadable string of nested quotes and backslashes where a single misplaced character changes which machine evaluates what. The fix is structural: stop building a command string, and send a script body instead.</p><p><code>ssh HOST \"bash -s\" &lt;&lt;'EOF'</code> feeds the heredoc to a remote shell on stdin. Because the delimiter is quoted, your local shell does not touch the body at all — no expansion, no escaping. Variables you genuinely want from the local side cross explicitly as environment assignments.</p><p>Write <code>deploy-step.sh HOST TAG</code> that runs a small deployment on the far side:</p><ul><li>Send the remote body with <code>bash -s</code> and a <strong>quoted</strong> heredoc delimiter.</li><li>Pass <code>TAG</code> across explicitly. It must be usable on the remote side and must survive containing spaces.</li><li>The remote body must begin with <code>set -euo pipefail</code> so a failing step aborts instead of continuing into a broken state.</li><li>The remote body must: print the hostname it is running on; verify that <code>/opt/app</code> exists and abort with a clear message if not; print the tag it was given; and print the current working directory after changing into <code>/opt/app</code>.</li><li>Any non-zero status from the remote body must become the exit status of your script. Print <code>STEP FAILED (&lt;n&gt;)</code> to stderr in that case.</li><li>Pass <code>-o BatchMode=yes</code> so the script can never stall on a prompt.</li></ul><p>Prove the quoting is right: the hostname and the working directory must come from the <strong>server</strong>, while the tag comes from <strong>your</strong> machine. If <code>pwd</code> reports a path under <code>/Users</code>, the heredoc was not quoted.</p>",
+      "inputSpec": "argv[1] is the SSH destination. argv[2] is a release tag, which may contain spaces. No stdin — stdin is consumed by the heredoc.",
+      "outputSpec": "The remote body's output on stdout: a host line, a tag line and a pwd line. On failure, 'STEP FAILED (<n>)' on stderr and exit status n.",
+      "constraints": "The heredoc delimiter must be quoted. Do not build the remote command by string concatenation. Do not use eval anywhere. The remote body must run under set -euo pipefail. Do not use scp to copy a script file first — the body travels on stdin.",
+      "examplesJson": [
+        {
+          "input": "./deploy-step.sh cuong@may v1.4.2",
+          "output": "host=1592a753e25f\ntag=v1.4.2\npwd=/opt/app",
+          "explanation": "host and pwd were produced by the remote shell; tag came from the local command line. This combination is the proof that the heredoc was quoted and the environment assignment worked."
+        },
+        {
+          "input": "./deploy-step.sh cuong@may 'release 2026 08'",
+          "output": "host=1592a753e25f\ntag=release 2026 08\npwd=/opt/app",
+          "explanation": "The tag contains spaces and arrives intact, because it was quoted when placed into the environment assignment. An unquoted assignment would have split it into three words and lost two of them."
+        },
+        {
+          "input": "./deploy-step.sh cuong@may v1.4.2   # /opt/app missing",
+          "output": "host=1592a753e25f\nkhong tim thay /opt/app   (on stderr)\nSTEP FAILED (2)   (on stderr)\n$? = 2",
+          "explanation": "The remote body aborts with its own status 2, ssh propagates it, and the wrapper reports it without retrying. The tag line never prints because set -e stopped the body at the failing check."
+        }
+      ],
+      "hintsJson": [
+        "The skeleton is: ssh -o BatchMode=yes \"$HOST\" \"TAG='$TAG' bash -s\" <<'REMOTE' ... REMOTE. Note the quotes around 'REMOTE' — without them the local shell expands the entire body.",
+        "Quote the value inside the environment assignment: TAG='$TAG'. Without those inner single quotes a tag containing spaces becomes three separate words and the remote shell sees only the first.",
+        "Capture ssh's status right after the heredoc closes: `rc=$?` on the line following the delimiter. Do not put set -e on the local script, or it will exit before you can report.",
+        "Inside the remote body, use `command -v` or a `[ -d /opt/app ]` test with an explicit `exit 2`, so the failing status is one you chose rather than whatever the last command happened to return."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "deploy-step.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Gui THAN SCRIPT qua stdin thay vi noi chuoi lenh.\n# KHONG dung set -e o day: ta can doc ma thoat cua phia xa.\nset -uo pipefail\n\nHOST=${1:?usage: deploy-step.sh HOST TAG}\nTAG=${2:?usage: deploy-step.sh HOST TAG}\n\n# TODO 1: goi ssh voi BatchMode=yes, truyen TAG qua bien moi truong\n#         (nho nhay quanh gia tri de tag co dau cach khong bi vo).\n#         Than script di qua heredoc CO NHAY: <<'REMOTE' ... REMOTE\n\n# TODO 2: than script phia xa phai:\n#         - mo dau bang set -euo pipefail\n#         - in host=<hostname cua MAY XA>\n#         - kiem /opt/app, khong co thi bao loi ra stderr va exit 2\n#         - in tag=<TAG tu MAY NHA>\n#         - cd /opt/app roi in pwd=<thu muc hien tai o MAY XA>\n\n# TODO 3: bat ma thoat NGAY sau heredoc; khac 0 thi in\n#         \"STEP FAILED (<n>)\" ra stderr va thoat voi chinh n do.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "deploy-step.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Gui THAN SCRIPT qua stdin thay vi noi chuoi lenh.\n# KHONG dung set -e o day: ta can doc ma thoat cua phia xa.\nset -uo pipefail\n\nHOST=${1:?usage: deploy-step.sh HOST TAG}\nTAG=${2:?usage: deploy-step.sh HOST TAG}\n\n# 'REMOTE' CO NHAY  ->  shell o may nha KHONG dong vao than script mot chu.\n# Moi $ ben trong deu do shell o MAY XA gian ra.\n# Rieng TAG di qua tuong minh bang gan bien moi truong trong chuoi lenh;\n# cap nhay don quanh '$TAG' giu nguyen tag co dau cach.\nssh -o BatchMode=yes -o ConnectTimeout=10 \"$HOST\" \"TAG='$TAG' bash -s\" <<'REMOTE'\n  set -euo pipefail\n\n  # $(hostname) gian o MAY XA vi heredoc duoc nhay.\n  echo \"host=$(hostname)\"\n\n  # Kiem TRUOC khi lam gi. Chon ma thoat cua RIENG minh (2) thay vi de\n  # ma thoat cua lenh cuoi quyet dinh — phia goi can phan biet duoc.\n  if [ ! -d /opt/app ]; then\n    echo \"khong tim thay /opt/app\" >&2\n    exit 2\n  fi\n\n  echo \"tag=$TAG\"        # den tu MAY NHA, qua bien moi truong\n\n  cd /opt/app\n  echo \"pwd=$PWD\"        # gian o MAY XA. Neu thay /Users/... la heredoc chua nhay.\nREMOTE\nrc=$?                    # bat NGAY: bat ky lenh nao chen giua deu ghi de $?\n\nif [ \"$rc\" -ne 0 ]; then\n  echo \"STEP FAILED ($rc)\" >&2\n  exit \"$rc\"\nfi\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The quotes around the heredoc delimiter are the whole mechanism. <code>&lt;&lt;'REMOTE'</code> tells bash to pass the body through byte for byte; <code>&lt;&lt;REMOTE</code> without quotes tells it to expand the body <em>locally</em> first, at which point <code>$(hostname)</code> runs on your laptop and <code>$PWD</code> becomes a macOS path that is then shipped to a Linux server as a literal string. Nothing errors. The output looks like a successful deployment against the wrong directory.</p><p>The inner quoting in <code>TAG='$TAG'</code> is the second load-bearing detail, and it is easy to miss because it only fails for some inputs. With <code>TAG=$TAG</code> and a tag of <code>release 2026 08</code>, the remote shell parses <code>TAG=release</code> as the environment assignment and then tries to execute <code>2026</code> as a command. Tags with spaces are rare enough that this bug ships and then surfaces once, confusingly, months later.</p><p>Choosing an explicit <code>exit 2</code> for the missing-directory case rather than letting <code>set -e</code> propagate whatever <code>[ -d ... ]</code> returned gives the caller a status it can branch on. &quot;The directory is missing&quot; and &quot;git checkout failed&quot; are different operational problems, and encoding them as different numbers is what lets an outer pipeline handle them differently.</p><p><code>set -euo pipefail</code> belongs <em>inside</em> the remote body, not only on the local script. Strict mode is per-shell: the remote shell is a completely separate process that inherits none of your local settings. Without that line, a failing <code>cd</code> lets the following command run in the wrong directory — which is precisely the class of accident that makes a half-applied deployment.</p><p>One property worth noticing: because the body arrives on stdin, the remote script cannot itself read stdin. If a step needs piped input, it has to come from a file or a command substitution on the remote side. That is the one real cost of this pattern, and it is a fair trade for never fighting quotes again.</p>",
+      "diagramMermaid": "flowchart TD\n  A[deploy-step.sh tren may ban] --> B[ssh HOST TAG=... bash -s]\n  B --> C[Than heredoc co nhay di nguyen ven]\n  C --> D[bash -s tren may xa doc tu stdin]\n  D --> E[set -euo pipefail]\n  E --> F{Co thu muc opt app khong}\n  F -->|Khong| G[exit 2 ve nguoc qua ssh]\n  F -->|Co| H[In host tag va pwd]\n  G --> I[STEP FAILED 2]\n  H --> J[Thoat 0]",
+      "referenceUrl": "https://www.gnu.org/software/bash/manual/bash.html#Here-Documents"
+    },
+
+    {
+      "title": "Host Key Change Triage Without Reflexively Deleting It",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 25,
+      "concepts": ["host key verification", "out-of-band trust", "known_hosts management", "fail-closed design"],
+      "prerequisites": ["host keys and known_hosts", "ssh exit statuses"],
+      "tags": ["ssh", "security", "mitm", "bash"],
+      "problemHtml": "<p>When SSH prints <code>REMOTE HOST IDENTIFICATION HAS CHANGED</code>, the reflex is to run <code>ssh-keygen -R host</code> and move on. That command is correct <em>after</em> you know why the key changed — and it is exactly what an attacker performing a man-in-the-middle needs you to type when you do not. The warning is the only moment SSH can catch that attack, and clearing it by habit throws the alarm away.</p><p>The discipline is to compare the key the server now presents against a fingerprint obtained through a <strong>different channel</strong> — your hosting provider's console, a record from when the machine was built, a configuration management repository. Build a tool that enforces that discipline instead of relying on you to remember it.</p><p>Write <code>hostkey-triage.sh HOST EXPECTED_FILE</code>:</p><ul><li>Fetch the key the server currently presents with <code>ssh-keyscan</code>, and compute its SHA256 fingerprint with <code>ssh-keygen -lf</code>.</li><li><code>EXPECTED_FILE</code> contains known-good fingerprints, one per line, in the form <code>SHA256:...</code>. Lines starting with <code>#</code> and blank lines are comments.</li><li>If the presented fingerprint appears in the file, print <code>MATCH &lt;fingerprint&gt;</code> and exit <code>0</code>.</li><li>If it does not, print <code>MISMATCH presented=&lt;fp&gt;</code> and, on the following lines, <code>expected=&lt;fp&gt;</code> for each entry in the file. Exit <code>4</code>. Do <strong>not</strong> modify <code>known_hosts</code>, and do not offer to.</li><li>If <code>ssh-keyscan</code> returns nothing — host down, port filtered, name does not resolve — print <code>NO-KEY &lt;host&gt;</code> and exit <code>3</code>. Absence of evidence must never be treated as a match.</li><li>If <code>EXPECTED_FILE</code> is missing or contains no usable fingerprints, print <code>NO-BASELINE</code> and exit <code>5</code>.</li></ul><p>Every failure path must fail closed: the only route to exit <code>0</code> is a positive match against a fingerprint that was recorded in advance.</p>",
+      "inputSpec": "argv[1] is a hostname or IP. argv[2] is a path to a baseline file of SHA256 fingerprints, one per line, with # comments and blank lines allowed.",
+      "outputSpec": "'MATCH <fp>' (exit 0); 'MISMATCH presented=<fp>' plus one 'expected=<fp>' line per baseline entry (exit 4); 'NO-KEY <host>' (exit 3); or 'NO-BASELINE' (exit 5).",
+      "constraints": "Never write to ~/.ssh/known_hosts. Never call ssh-keygen -R. Do not connect with ssh itself — ssh-keyscan is the right tool because it retrieves the key without authenticating. Handle a host presenting several key types by checking each presented fingerprint against the baseline and matching if any one matches.",
+      "examplesJson": [
+        {
+          "input": "./hostkey-triage.sh 160.187.1.208 baseline.txt\n# baseline.txt holds: SHA256:hMGOTOwxXU92ZACytl3LlCRWllPybXBwnL7Scq0tARg",
+          "output": "MATCH SHA256:hMGOTOwxXU92ZACytl3LlCRWllPybXBwnL7Scq0tARg",
+          "explanation": "The RSA host key the production VPS presents matches the recorded baseline, so the connection is to the machine that was originally recorded. Exit 0."
+        },
+        {
+          "input": "./hostkey-triage.sh 127.0.0.1 baseline.txt   # after the test server's host keys were regenerated",
+          "output": "MISMATCH presented=SHA256:iiEpJaEz7bmBFRw/+yo9mf6qZkPAur/lFgZ+UDSzzes\nexpected=SHA256:hMGOTOwxXU92ZACytl3LlCRWllPybXBwnL7Scq0tARg",
+          "explanation": "Reproduced by deleting /etc/ssh/ssh_host_* and running ssh-keygen -A. The tool reports both fingerprints and refuses to act. A human now decides whether a rebuild explains it. Exit 4."
+        },
+        {
+          "input": "./hostkey-triage.sh 10.255.255.1 baseline.txt",
+          "output": "NO-KEY 10.255.255.1",
+          "explanation": "ssh-keyscan produced no output because nothing answered. This is neither a match nor a mismatch, and treating silence as either would be wrong. Exit 3."
+        }
+      ],
+      "hintsJson": [
+        "`ssh-keyscan -T 5 HOST 2>/dev/null` writes known_hosts-format lines to stdout. Piping them into `ssh-keygen -lf -` prints one line per key as: bits SHA256:fingerprint comment (type).",
+        "Extract the fingerprint field with awk: `ssh-keygen -lf - | awk '{print $2}'` gives the SHA256:... token for each key the host presented.",
+        "Filter the baseline before using it: `grep -E '^SHA256:' file` drops comments and blank lines in one step, and also rejects a file that happens to be prose.",
+        "Structure it as fail-closed: initialise a `matched=0` flag, set it only inside the positive comparison, and let every other path fall through to a non-zero exit. Never write the success branch as an else. Collect lines with a `while IFS= read -r` loop rather than `mapfile` — this script runs on your own laptop, and macOS ships bash 3.2, where mapfile does not exist."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "hostkey-triage.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# So khoa may chu HIEN TAI voi mot danh sach van tay da ghi TRUOC.\n# Nguyen tac: HONG THI DONG. Chi mot duong duy nhat dan toi ma thoat 0.\nset -uo pipefail\n\nHOST=${1:?usage: hostkey-triage.sh HOST EXPECTED_FILE}\nEXPECTED=${2:?usage: hostkey-triage.sh HOST EXPECTED_FILE}\n\n# TODO 1: doc duong co so. Loc lay cac dong bat dau bang SHA256:\n#         Khong co file hoac khong co dong nao hop le -> NO-BASELINE, thoat 5.\n\n# TODO 2: lay khoa may chu dang trinh ra bang ssh-keyscan (dat -T 5),\n#         doi thanh van tay bang ssh-keygen -lf -\n#         Khong lay duoc gi -> NO-KEY, thoat 3. (IM LANG KHONG PHAI LA KHOP.)\n\n# TODO 3: neu BAT KY van tay nao trinh ra co trong duong co so -> MATCH, thoat 0.\n\n# TODO 4: nguoc lai -> MISMATCH + liet ke cac van tay mong doi, thoat 4.\n#         TUYET DOI khong sua known_hosts, khong goi ssh-keygen -R.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "hostkey-triage.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# So khoa may chu HIEN TAI voi mot danh sach van tay da ghi TRUOC.\n# Nguyen tac: HONG THI DONG. Chi mot duong duy nhat dan toi ma thoat 0.\nset -uo pipefail\n\nHOST=${1:?usage: hostkey-triage.sh HOST EXPECTED_FILE}\nEXPECTED=${2:?usage: hostkey-triage.sh HOST EXPECTED_FILE}\n\n# 1) Duong co so. Khong co duong co so thi KHONG the ket luan gi ca —\n#    va \"khong ket luan duoc\" phai la that bai, khong phai thanh cong.\nif [ ! -f \"$EXPECTED\" ]; then\n  echo \"NO-BASELINE\"; exit 5\nfi\n#    Vong lap while thay cho `mapfile`: mapfile chi co tu bash 4, ma macOS\n#    van ship bash 3.2 — day la script chay tren MAY CUA BAN, nen no phai\n#    song duoc o do.\nbaseline=()\nwhile IFS= read -r b; do\n  [ -n \"$b\" ] && baseline+=(\"$b\")\ndone < <(grep -E '^SHA256:' \"$EXPECTED\" 2>/dev/null || true)\n\nif [ ${#baseline[@]} -eq 0 ]; then\n  echo \"NO-BASELINE\"; exit 5\nfi\n\n# 2) Lay khoa may chu dang trinh ra. ssh-keyscan lay duoc khoa MA KHONG\n#    xac thuc va KHONG ghi vao known_hosts — dung cong cu cho viec nay.\n#    Mot may co the trinh nhieu loai khoa (rsa, ecdsa, ed25519) cung luc.\npresented=()\nwhile IFS= read -r p; do\n  [ -n \"$p\" ] && presented+=(\"$p\")\ndone < <(\n  ssh-keyscan -T 5 \"$HOST\" 2>/dev/null | ssh-keygen -lf - 2>/dev/null | awk '{print $2}'\n)\n\n# Im lang KHONG phai la khop. May tat, cong bi chan, ten khong phan giai\n# duoc — tat ca deu ra day, va tat ca deu KHONG duoc coi la an toan.\nif [ ${#presented[@]} -eq 0 ]; then\n  echo \"NO-KEY $HOST\"; exit 3\nfi\n\n# 3) Khop khi co BAT KY van tay nao trung. Co mac dinh la 0 (that bai);\n#    chi mot nhanh duy nhat dat no thanh 1.\nmatched=0\nmatch_fp=\"\"\nfor p in \"${presented[@]}\"; do\n  for b in \"${baseline[@]}\"; do\n    if [ \"$p\" = \"$b\" ]; then\n      matched=1; match_fp=$p; break 2\n    fi\n  done\ndone\n\nif [ \"$matched\" -eq 1 ]; then\n  echo \"MATCH $match_fp\"\n  exit 0\nfi\n\n# 4) Khong khop: BAO CAO, khong SUA. Quyet dinh la cua con nguoi, sau khi\n#    da xac minh bang duong khac. Script tu xoa known_hosts chinh la thu\n#    ma ke tan cong dung giua can.\necho \"MISMATCH presented=${presented[0]}\"\nfor b in \"${baseline[@]}\"; do\n  echo \"expected=$b\"\ndone\nexit 4\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The security property this script provides comes from its <em>shape</em>, not from any individual command: there is exactly one assignment of <code>matched=1</code>, it lives inside a positive string comparison, and every other path in the script reaches a non-zero exit. That is what fail-closed means in practice. Written the other way round — an <code>else</code> branch that succeeds when nothing suspicious was found — a missing baseline file, an unresolvable hostname or a <code>ssh-keyscan</code> that timed out would all land in the success branch.</p><p><code>NO-KEY</code> existing as a separate outcome from <code>MISMATCH</code> is the sharpest point here. Silence is not evidence of safety. A host that is down, a port that a firewall drops, and a DNS name that no longer resolves all produce zero output from <code>ssh-keyscan</code>, and a tool that folded those into &quot;no mismatch detected&quot; would return 0 for a machine it never contacted — the same class of error as trusting an empty vulnerability scan.</p><p><code>ssh-keyscan</code> is the correct tool rather than <code>ssh</code> for two reasons. It retrieves host keys without authenticating, so it works before you have any access, and it writes nothing to <code>known_hosts</code>, so running the audit cannot itself create the trust it is meant to verify.</p><p>Handling several presented keys with a match-any rule reflects how servers actually behave: a modern sshd offers RSA, ECDSA and Ed25519 host keys simultaneously, and which one a given client negotiates depends on that client's preferences. A baseline recording only the Ed25519 fingerprint would report a false mismatch for a client that negotiated RSA. Checking every presented fingerprint against every baseline entry removes that dependence on negotiation order.</p><p>What the script deliberately does <em>not</em> do is as important as what it does. No <code>ssh-keygen -R</code>, no offer to update the baseline, no interactive prompt. The decision to accept a changed key requires information the script cannot have — whether the machine was rebuilt this morning — and a tool that makes that decision easy to click through is a tool that trains the habit the warning exists to prevent.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Bat dau] --> B{File duong co so co hop le khong}\n  B -->|Khong| C[NO-BASELINE thoat 5]\n  B -->|Co| D[ssh-keyscan lay khoa hien tai]\n  D --> E{Co lay duoc van tay nao khong}\n  E -->|Khong| F[NO-KEY thoat 3]\n  E -->|Co| G{Co van tay nao nam trong duong co so}\n  G -->|Co| H[MATCH thoat 0]\n  G -->|Khong| I[MISMATCH thoat 4 khong sua gi]",
+      "referenceUrl": "https://man.openbsd.org/ssh-keyscan.1"
+    },
+
+    {
+      "title": "Connection Doctor: The Six-Phase Diagnostic",
+      "difficulty": "HARD",
+      "estimatedMinutes": 90,
+      "points": 30,
+      "concepts": ["layered diagnosis", "ordered checks", "actionable output", "composing the module's tools"],
+      "prerequisites": ["the six-phase handshake", "exit status handling", "trace reading"],
+      "tags": ["ssh", "diagnostics", "capstone", "bash"],
+      "problemHtml": "<p>This is the module's capstone: a single tool that answers &quot;why can I not get in?&quot; in the order the protocol actually fails, and stops at the first layer that is broken. Stopping matters. A diagnostic that reports six problems when one of them causes the other five sends the reader off fixing symptoms.</p><p>Write <code>ssh-doctor.sh [user@]HOST [PORT]</code> that runs four checks in order and stops at the first failure.</p><ul><li><strong>Check 1 — name resolution.</strong> Can the host be resolved to an address? On failure print <code>FAIL 1 dns: cannot resolve &lt;host&gt;</code> plus a <code>FIX:</code> line, and exit <code>1</code>. Skip this check when the argument is already a literal IPv4 address.</li><li><strong>Check 2 — TCP reachability.</strong> Can a TCP connection to the port be opened within 5 seconds? Distinguish the two outcomes: a <em>refused</em> connection means the machine answered and nothing is listening; a <em>timeout</em> means the packets went nowhere. Print <code>FAIL 2 tcp: refused</code> or <code>FAIL 2 tcp: timeout</code> with the matching <code>FIX:</code> line, and exit <code>2</code>.</li><li><strong>Check 3 — is it SSH?</strong> Read the banner. If it does not begin with <code>SSH-</code>, print <code>FAIL 3 protocol: not an SSH server</code> and exit <code>3</code>.</li><li><strong>Check 4 — authentication.</strong> Attempt <code>ssh -o BatchMode=yes -o ConnectTimeout=5</code> running <code>true</code>. On success print <code>OK &lt;banner&gt;</code> and exit <code>0</code>. On failure print <code>FAIL 4 auth: key not accepted</code> and a <code>FIX:</code> line, and exit <code>4</code>.</li></ul><p>Every <code>FAIL</code> line must be followed by a <code>FIX:</code> line naming the <em>specific</em> next command to run. The distinction in check 2 is the one that earns the tool its keep: <em>refused</em> and <em>timeout</em> look equally like &quot;SSH is broken&quot; and have opposite cures — one is a service or bind-address problem on a machine you can reach, the other is a routing or firewall problem where your packets never arrive. That is exactly the pair that cost a full evening when a Mac on <code>192.168.83.101</code> could not see a Linux box on <code>192.168.1.102</code>: the address was known and correct, and the route did not exist.</p>",
+      "inputSpec": "argv[1] is [user@]host. argv[2] is an optional port, default 22. No stdin.",
+      "outputSpec": "On success one line: 'OK <banner>'. On failure a 'FAIL <n> <layer>: <detail>' line followed by a 'FIX: <command or action>' line. Exit status equals the failing check number, or 0 on success.",
+      "constraints": "Checks must run in order and stop at the first failure. Do not report later failures once an earlier one is found. Use getent or host/dig for resolution, bash /dev/tcp or nc for reachability, and ssh only in check 4. BatchMode=yes is mandatory so the tool never prompts.",
+      "examplesJson": [
+        {
+          "input": "./ssh-doctor.sh cuong@192.168.1.102   # run from a Mac on 192.168.83.x",
+          "output": "FAIL 2 tcp: timeout\nFIX: khac dai mang. Chay `ip route` o hai may va so sanh; dua hai may ve cung mot mang truoc khi lam gi khac.",
+          "explanation": "The exact failure from 11 August 2026. The address was correct and the key was installed; there was no route. Reporting 'timeout' rather than a generic failure points straight at routing instead of at keys."
+        },
+        {
+          "input": "./ssh-doctor.sh cuong@127.0.0.1 2223",
+          "output": "FAIL 2 tcp: refused\nFIX: may TRA LOI nhung khong co gi nghe cong 2223. Chay `ss -tlnp | grep :2223` TREN CHINH MAY DO.",
+          "explanation": "Refused means a machine answered and actively rejected the connection — a completely different cure from a timeout. Verified against a port with nothing bound to it."
+        },
+        {
+          "input": "./ssh-doctor.sh cuong@127.0.0.1 2222   # key installed but home dir is 0777",
+          "output": "FAIL 4 auth: key not accepted\nFIX: doc log PHIA MAY CHU (`journalctl -u ssh -n 20` hoac `docker logs`). Client khong bao gio biet ly do that.",
+          "explanation": "Reproduced by chmod 777 on the home directory. The client sees only 'Permission denied (publickey,password)'; the server log says 'Authentication refused: bad ownership or modes for directory /home/cuong'. The FIX line sends the reader to the only place the truth exists."
+        }
+      ],
+      "hintsJson": [
+        "Strip any 'user@' prefix before resolving or opening a socket: `hostonly=${dest#*@}`. Leaving it in makes getent fail on a host that resolves perfectly well.",
+        "Do not reach for `getent hosts` alone — on macOS it consults only /etc/hosts, so a name that resolves perfectly through DNS still returns non-zero and you report a DNS failure that does not exist. Write a small cascade that tries `host`, then `dig +short`, then `getent ahosts`. Skip the check entirely when the argument is already a literal IPv4 address.",
+        "To tell refused from timeout, time the attempt: a refused connection fails almost immediately, a dropped packet takes the full timeout. More robustly, capture the error text from `nc -w 5 -z` or from bash's /dev/tcp failure message and look for the word 'refused'.",
+        "Check 4 should run `ssh -o BatchMode=yes -o ConnectTimeout=5 \"$dest\" true`. BatchMode is what turns a password fallback into an immediate, scriptable failure instead of a hanging prompt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "ssh-doctor.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Chan doan \"vi sao khong vao duoc\" theo DUNG thu tu giao thuc that su hong,\n# va DUNG LAI o tang hong dau tien.\nset -uo pipefail\n\nDEST=${1:?usage: ssh-doctor.sh [user@]HOST [PORT]}\nPORT=${2:-22}\nHOSTONLY=${DEST#*@}      # bo phan user@ truoc khi phan giai / mo socket\n\nfail() { echo \"FAIL $1 $2\"; echo \"FIX: $3\"; exit \"$1\"; }\n\n# TODO 1: phan giai ten. La dia chi IPv4 san thi BO QUA buoc nay.\n#         Hong -> fail 1 \"dns: cannot resolve $HOSTONLY\" + cach sua.\n#         CANH BAO: dung `getent hosts` mot minh la SAI — tren macOS no chi\n#         doc /etc/hosts chu khong hoi DNS. Viet mot thang do:\n#         host -> dig +short -> getent ahosts.\n#         Kiem chinh PHEP KIEM cua ban truoc khi tin no.\n\n# TODO 2: mo TCP toi $HOSTONLY:$PORT, han 5 giay.\n#         PHAN BIET \"refused\" (may tra loi, khong ai nghe) voi\n#         \"timeout\" (goi tin di vao hu vo). Hai thu chua khac han nhau.\n\n# TODO 3: doc banner. Khong bat dau bang \"SSH-\" -> fail 3.\n\n# TODO 4: thu xac thuc that bang ssh -o BatchMode=yes.\n#         Duoc -> in \"OK <banner>\" va thoat 0. Khong -> fail 4.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "ssh-doctor.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Chan doan \"vi sao khong vao duoc\" theo DUNG thu tu giao thuc that su hong,\n# va DUNG LAI o tang hong dau tien.\nset -uo pipefail\n\nDEST=${1:?usage: ssh-doctor.sh [user@]HOST [PORT]}\nPORT=${2:-22}\nHOSTONLY=${DEST#*@}      # bo phan user@ truoc khi phan giai / mo socket\n\nfail() { echo \"FAIL $1 $2\"; echo \"FIX: $3\"; exit \"$1\"; }\n\n# ── Tang 1: PHAN GIAI TEN ────────────────────────────────────────────\n# CAI BAY: `getent hosts` KHONG phai phep kiem di duoc khap noi.\n# Tren macOS no chi doc /etc/hosts chu khong hoi DNS, nen mot ten phan giai\n# hoan hao van tra ve khac 0 -> bao cao \"DNS hong\" cho mot ten hoan toan lanh.\n# Vi vay dung mot THANG DO, va lay cong cu THAT SU hoi DNS truoc.\nresolves() {\n  h=$1\n  if command -v host >/dev/null 2>&1; then host \"$h\" >/dev/null 2>&1 && return 0; fi\n  if command -v dig  >/dev/null 2>&1; then [ -n \"$(dig +short \"$h\" 2>/dev/null)\" ] && return 0; fi\n  if command -v getent >/dev/null 2>&1; then getent ahosts \"$h\" 2>/dev/null | grep -q '^[0-9]' && return 0; fi\n  return 1\n}\n\n# Dia chi IPv4 san thi khong co gi de phan giai.\nif ! [[ $HOSTONLY =~ ^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+$ ]]; then\n  if ! resolves \"$HOSTONLY\"; then\n    fail 1 \"dns: cannot resolve $HOSTONLY\" \\\n      \"kiem /etc/hosts va DNS: \\`host $HOSTONLY\\`, \\`dig +short $HOSTONLY\\`\"\n  fi\nfi\n\n# ── Tang 2: TOI DUOC BANG TCP KHONG ─────────────────────────────────\n# Day la tang quan trong nhat, vi hai ket cuc cua no trong GIONG NHAU\n# tu ngoai nhin vao ma cach chua thi NGUOC NHAU.\nstart=$SECONDS\nif { exec 3<>\"/dev/tcp/$HOSTONLY/$PORT\"; } 2>/dev/null; then\n  connected=1\nelse\n  connected=0\nfi\nelapsed=$(( SECONDS - start ))\n\nif [ \"$connected\" -eq 0 ]; then\n  if [ \"$elapsed\" -ge 4 ]; then\n    # Goi tin di ra va khong co gi tro ve. Khong ai TU CHOI ca — chung\n    # bien mat. Nghia la thieu DUONG DI, hoac tuong lua dang vut goi.\n    fail 2 \"tcp: timeout\" \\\n      \"khac dai mang hoac bi tuong lua chan. Chay \\`ip route\\` o CA HAI may va so sanh; dua hai may ve cung mot mang truoc khi lam gi khac\"\n  else\n    # Co may TRA LOI ngay va noi \"khong\". May song, chi la khong ai nghe\n    # cong do — dich vu chua chay, hoac dang gan vao 127.0.0.1.\n    fail 2 \"tcp: refused\" \\\n      \"may TRA LOI nhung khong co gi nghe cong $PORT. Chay \\`ss -tlnp | grep :$PORT\\` TREN CHINH MAY DO\"\n  fi\nfi\n\n# ── Tang 3: THU DANG TRA LOI CO PHAI SSH KHONG ──────────────────────\nif ! IFS= read -r -t 5 banner <&3; then\n  banner=\"\"\nfi\nexec 3<&-; exec 3>&-\nbanner=${banner%$'\\r'}\n\ncase \"$banner\" in\n  SSH-*) ;;\n  *) fail 3 \"protocol: not an SSH server\" \\\n       \"co thu gi do dang nghe cong $PORT nhung khong noi SSH. Kiem lai so cong, hoac xem co proxy nao dang dung o do khong\" ;;\nesac\n\n# ── Tang 4: XAC THUC ────────────────────────────────────────────────\n# BatchMode=yes: bien \"quay ve hoi mat khau\" thanh mot that bai co the\n# doc duoc bang script, thay vi mot dau nhac treo mai trong CI.\nif ssh -o BatchMode=yes -o ConnectTimeout=5 -p \"$PORT\" \"$DEST\" true 2>/dev/null; then\n  echo \"OK $banner\"\n  exit 0\nfi\n\nfail 4 \"auth: key not accepted\" \\\n  \"doc log PHIA MAY CHU (\\`journalctl -u ssh -n 20\\` hoac \\`docker logs <ten>\\`). Client CHI BAO 'Permission denied' va khong bao gio biet ly do that — quyen thu muc, nhan SELinux hay khoa chua cai deu ra cung mot dong do\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The value of this tool is concentrated in one branch: separating <em>refused</em> from <em>timeout</em> in check 2.</p><p>Refused means a machine received your packet and sent back a TCP RST — it is alive, reachable, and nothing is listening on that port. The cure is on that machine: start the service, or change <code>ListenAddress</code> if it is bound to loopback. Timeout means nothing came back at all. Your packets either had no route or were silently dropped by a firewall, and no amount of work on the destination host helps, because your traffic is not arriving.</p><p>From the outside those two are indistinguishable — both present as &quot;SSH does not work&quot; — and they have opposite cures. That is precisely the pair behind the evening described in this track's source material: a Mac on <code>192.168.83.101</code> could not reach a Linux machine on <code>192.168.1.102</code>. The address was known, correct and already tried; the key was installed. What was missing was a route. A diagnostic that prints <code>timeout</code> instead of a generic failure points at that immediately.</p><p>Timing is used to tell them apart because bash's <code>/dev/tcp</code> failure does not expose the reason. A refused connection fails in milliseconds; a dropped packet takes the full timeout. The four-second threshold gives margin on a slow link while remaining well below the five-second cap. Where <code>nc</code> is available, reading the word <code>refused</code> from its stderr is more direct, and both approaches are worth knowing since one of them is always available.</p><p><strong>The resolution check needed checking itself.</strong> The obvious implementation of layer 1 is <code>getent hosts \"$h\"</code>, and it is wrong on macOS: there <code>getent hosts</code> reads only <code>/etc/hosts</code> and never queries DNS, so a perfectly resolvable name returns non-zero and the doctor confidently diagnoses a DNS failure that does not exist. A diagnostic tool that invents faults is worse than no tool, because you now debug the wrong layer. The cascade — <code>host</code>, then <code>dig +short</code>, then <code>getent ahosts</code> — asks a tool that actually speaks DNS first and degrades gracefully on a minimal container where none of the first two are installed. The general rule this illustrates is worth more than the specific fix: <em>verify the checker before you trust what it says about the thing being checked.</em></p><p>Two structural choices support the rest. <strong>Stopping at the first failure</strong> keeps the output honest: a host that fails DNS will also fail TCP, banner and auth, and printing four failures buries the one that matters. <strong>Every FAIL carrying a FIX</strong> naming a specific command turns a verdict into a next step — and the check-4 fix is the most valuable line in the script, because it sends the reader to the server log. The client is structurally incapable of knowing why a key was refused: wrong permissions, wrong SELinux label, and a key that was never installed all produce the identical <code>Permission denied (publickey,password)</code>. Those four causes are Module 3.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Bat dau] --> B{Phan giai duoc ten khong}\n  B -->|Khong| B1[FAIL 1 dns]\n  B -->|Co| C{Mo duoc TCP khong}\n  C -->|Bi tu choi ngay| C1[FAIL 2 refused kiem dich vu tren may do]\n  C -->|Het gio| C2[FAIL 2 timeout kiem duong di va tuong lua]\n  C -->|Duoc| D{Banner co bat dau bang SSH khong}\n  D -->|Khong| D1[FAIL 3 khong phai may chu SSH]\n  D -->|Co| E{Xac thuc duoc khong}\n  E -->|Khong| E1[FAIL 4 doc log phia may chu]\n  E -->|Duoc| F[OK thoat 0]",
+      "referenceUrl": "https://man.openbsd.org/ssh.1"
+    }
+  ]
+}

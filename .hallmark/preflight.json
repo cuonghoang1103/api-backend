@@ -1,0 +1,26 @@
+{
+  "scannedAt": "2026-08-16",
+  "scope": "frontend/src/app/notes and frontend/src/components/notes",
+  "framework": "Next.js 14 App Router with React 18 and Tailwind CSS 3",
+  "fonts": [
+    "Inter",
+    "Poppins",
+    "Nunito",
+    "JetBrains Mono",
+    "Fraunces Variable"
+  ],
+  "palette": "Existing semantic Notes CSS variables with light, dark, and brown themes",
+  "motion": "framer-motion 11 is installed and already used for drawers and dialogs",
+  "spacing": "Existing Tailwind 4px-based spacing scale",
+  "preserve": [
+    "NotesThemeProvider scoped .dark behavior",
+    "current /notes route and component ownership",
+    "existing subject/chapter/note information architecture",
+    "existing user data and APIs"
+  ],
+  "introduce": [
+    "clearer page context and properties",
+    "accessible interaction states",
+    "incremental Business-grade collaboration architecture"
+  ]
+}

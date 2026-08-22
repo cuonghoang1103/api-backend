@@ -1,0 +1,22 @@
+{
+  "groupSlug": "cuongthai",
+  "slug": "ssh",
+  "name": "SSH & Remote Server",
+  "language": "bash",
+  "color": "#0e7490",
+  "docsUrl": "https://www.openssh.com/manual.html",
+  "status": "DRAFT",
+  "level": "BEGINNER",
+  "description": "⟦ctv⟧Control a machine you cannot touch. Every failure in this track was reproduced on a real sshd and every log line is copied from a real terminal — including the four different reasons SSH refuses you while showing the exact same message.",
+  "modules": [
+    { "name": "What SSH Actually Is", "level": "BEGINNER", "description": "A process listening on port 22 that turns bytes into a shell. The handshake read line by line from a real ssh -vvv." },
+    { "name": "Public Key Authentication", "level": "BEGINNER", "description": "Why publishing your .pub is safe, why the private key never moves, and what authorized_keys really is." },
+    { "name": "Four Ways SSH Says No", "level": "INTERMEDIATE", "description": "Wrong network, wrong file mode, wrong SELinux label, wrong sshd config — one symptom, four cures." },
+    { "name": "The SSH Config File", "level": "BEGINNER", "description": "Aliases, IdentityFile, ServerAliveInterval, ProxyJump — turning a 90-character command into three letters." },
+    { "name": "No TTY: Why sudo Dies Over SSH", "level": "INTERMEDIATE", "description": "ssh host 'cmd' gives you no terminal. What that breaks, and how to write scripts that never need sudo." },
+    { "name": "Moving Files: scp and rsync", "level": "BEGINNER", "description": "scp, rsync, deletion semantics, and why deploy.sh rsyncs the working tree instead of a commit." },
+    { "name": "Tunnels and Port Forwarding", "level": "INTERMEDIATE", "description": "Forward and reverse tunnels, and how a machine behind NAT reaches the world by dialling out first." },
+    { "name": "Keeping Sessions Alive", "level": "INTERMEDIATE", "description": "tmux, nohup and systemd units — three answers to 'my build died when the laptop slept'." },
+    { "name": "Hardening the Server", "level": "INTERMEDIATE", "description": "Turning off password login, fail2ban, port choice, and why disabling the sudo password is the wrong trade." }
+  ]
+}

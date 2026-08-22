@@ -1,0 +1,307 @@
+{
+  "trackSlug": "ssh",
+  "moduleSlug": "what-ssh-actually-is",
+  "blocks": [
+    { "type": "heading", "text": "You did not get a terminal", "textVi": "Bạn không hề nhận được một cái terminal" },
+
+    { "type": "prose",
+      "html": "<p>Run a command on a server and it works. Run one more, and the ground moves:</p>",
+      "htmlVi": "<p>Chạy một lệnh trên máy chủ, nó chạy ngon. Chạy thêm một lệnh nữa, và mặt đất chuyển động:</p>" },
+
+    { "type": "code", "title": "Two commands, one surprise", "titleVi": "Hai câu lệnh, một cú bất ngờ", "language": "bash",
+      "code": "$ ssh root@160.187.1.208 'echo hello'\nhello\n\n$ ssh root@160.187.1.208 'tty'\nnot a tty\n\n$ ssh root@160.187.1.208 'echo \"TERM=[$TERM] SSH_TTY=[$SSH_TTY]\"'\nTERM=[dumb] SSH_TTY=[]" },
+
+    { "type": "prose",
+      "html": "<p>The word <em>terminal</em> is in the name — Secure <strong>Shell</strong> — and yet the server just told you there is no terminal attached. That is not a bug and not a misconfiguration. It is the single most useful fact about SSH: <strong>what you get is a byte channel, and a terminal is an optional extra you must ask for.</strong></p><p>Almost every confusing SSH failure a beginner meets comes from assuming the opposite. A script that works when you paste it into a session and dies when the same script runs over <code>ssh</code>. A progress bar that prints ten thousand lines of garbage. <code>sudo</code> refusing to ask for a password. All one cause. This module builds the correct mental model so those failures become obvious instead of mysterious.</p>",
+      "htmlVi": "<p>Chữ <em>terminal</em> nằm ngay trong cái tên — Secure <strong>Shell</strong> — vậy mà máy chủ vừa nói thẳng rằng không có terminal nào gắn vào cả. Đó không phải lỗi, cũng không phải cấu hình sai. Đó là sự thật hữu ích nhất về SSH: <strong>thứ bạn nhận được là một đường ống byte, còn terminal là món thêm tuỳ chọn mà bạn phải xin.</strong></p><p>Gần như mọi lỗi SSH khó hiểu mà người mới gặp đều sinh ra từ việc tưởng ngược lại. Một script chạy ngon khi bạn dán vào phiên đăng nhập nhưng chết khi chính script đó chạy qua <code>ssh</code>. Một thanh tiến trình in ra mười nghìn dòng rác. <code>sudo</code> từ chối hỏi mật khẩu. Cùng một nguyên nhân. Module này dựng đúng mô hình trong đầu để những lỗi đó trở nên hiển nhiên thay vì bí ẩn.</p>" },
+
+    { "type": "prose",
+      "html": "<p>Everything printed in this lesson was copied from a real terminal on 11 August 2026 — a MacBook running <code>OpenSSH_10.2p1</code> talking to an Ubuntu 24.04 VPS running <code>OpenSSH_9.6p1</code>, plus a throwaway Ubuntu container used to reproduce the failures on purpose. No output here was invented.</p>",
+      "htmlVi": "<p>Mọi thứ in ra trong bài này đều được chép từ một terminal thật ngày 11/08/2026 — một MacBook chạy <code>OpenSSH_10.2p1</code> nói chuyện với một VPS Ubuntu 24.04 chạy <code>OpenSSH_9.6p1</code>, cộng thêm một container Ubuntu dùng một lần để cố tình tái hiện các lỗi. Không có output nào ở đây là bịa.</p>" },
+
+    { "type": "heading", "text": "Refresher: process, port, listening", "textVi": "Ôn lại: tiến trình, cổng, và trạng thái nghe" },
+
+    { "type": "prose",
+      "html": "<p>Three words have to be solid before the rest makes sense.</p><ul><li>A <strong>process</strong> is a running program. It has a number, the PID.</li><li>A <strong>port</strong> is a 16-bit number (1 to 65535) that lets one machine run many network services on one IP address. Port 22 is SSH by convention, the way 80 is HTTP and 443 is HTTPS.</li><li><strong>Listening</strong> means a process has told the kernel: any TCP connection arriving on this port is mine, wake me up. Until some process does that, the port is dead — nothing answers.</li></ul><p>So &quot;the server has SSH&quot; is really the claim &quot;a process called <code>sshd</code> is alive on that machine and listening on port 22&quot;. You can check that claim directly:</p>",
+      "htmlVi": "<p>Ba từ này phải chắc thì phần sau mới có nghĩa.</p><ul><li><strong>Tiến trình</strong> là một chương trình đang chạy. Nó có một con số, gọi là PID.</li><li><strong>Cổng</strong> là một số 16 bit (1 tới 65535) cho phép một máy chạy nhiều dịch vụ mạng trên cùng một địa chỉ IP. Cổng 22 là SSH theo quy ước, giống 80 là HTTP và 443 là HTTPS.</li><li><strong>Nghe</strong> nghĩa là một tiến trình đã nói với nhân hệ điều hành: mọi kết nối TCP tới cổng này là của tôi, hãy đánh thức tôi. Chừng nào chưa có tiến trình nào làm thế thì cổng đó chết — không ai trả lời.</li></ul><p>Vậy câu &quot;máy chủ có SSH&quot; thực ra là khẳng định &quot;một tiến trình tên <code>sshd</code> đang sống trên máy đó và đang nghe cổng 22&quot;. Bạn kiểm được khẳng định đó trực tiếp:</p>" },
+
+    { "type": "code", "title": "Real output from the VPS", "titleVi": "Output thật trên VPS", "language": "bash",
+      "code": "$ ss -tlnp | grep ':22'\nLISTEN 0  4096   0.0.0.0:22   0.0.0.0:*   users:((\"sshd\",pid=1642384,fd=3),(\"systemd\",pid=1,fd=168))\nLISTEN 0  4096      [::]:22      [::]:*   users:((\"sshd\",pid=1642384,fd=4),(\"systemd\",pid=1,fd=169))" },
+
+    { "type": "prose",
+      "html": "<p>Read it left to right, because every field answers a question you will need later:</p><ul><li><code>LISTEN</code> — the socket state. This is the proof that someone is home.</li><li><code>0.0.0.0:22</code> — the address it is bound to. <code>0.0.0.0</code> means <em>every</em> network interface on the machine. If this said <code>127.0.0.1:22</code> instead, sshd would answer only connections originating on the machine itself, and every remote attempt would be refused. That is a real and easy-to-miss misconfiguration.</li><li><code>[::]:22</code> — the same thing for IPv6.</li><li><code>users:((&quot;sshd&quot;,pid=1642384…))</code> — the actual process holding the socket, by name and PID.</li></ul><p>Note that <code>systemd</code> also appears. On Ubuntu 24.04 sshd is socket-activated: systemd holds the listening socket and starts an sshd process when a connection arrives. That detail explains a surprise you may hit later — <code>systemctl stop ssh</code> may not close port 22, because <code>ssh.socket</code> is still holding it.</p>",
+      "htmlVi": "<p>Đọc từ trái sang phải, vì mỗi trường đều trả lời một câu hỏi bạn sẽ cần sau này:</p><ul><li><code>LISTEN</code> — trạng thái socket. Đây là bằng chứng có người ở nhà.</li><li><code>0.0.0.0:22</code> — địa chỉ nó gắn vào. <code>0.0.0.0</code> nghĩa là <em>mọi</em> giao diện mạng trên máy. Nếu chỗ này ghi <code>127.0.0.1:22</code> thì sshd chỉ trả lời những kết nối xuất phát từ chính máy đó, còn mọi lần thử từ xa đều bị từ chối. Đó là một cấu hình sai có thật và rất dễ bỏ sót.</li><li><code>[::]:22</code> — y như trên nhưng cho IPv6.</li><li><code>users:((&quot;sshd&quot;,pid=1642384…))</code> — tiến trình thật đang giữ socket, có tên và PID.</li></ul><p>Để ý <code>systemd</code> cũng xuất hiện. Trên Ubuntu 24.04, sshd được kích hoạt qua socket: systemd giữ socket nghe và chỉ khởi động một tiến trình sshd khi có kết nối tới. Chi tiết đó giải thích một bất ngờ bạn có thể gặp sau này — <code>systemctl stop ssh</code> có khi không đóng được cổng 22, vì <code>ssh.socket</code> vẫn đang giữ nó.</p>" },
+
+    { "type": "prose",
+      "html": "<p><strong>Common mistake.</strong> Confusing <em>installed</em> with <em>running</em>. These two commands answer completely different questions, and only the second one matters when you cannot connect:</p>",
+      "htmlVi": "<p><strong>Lỗi thường gặp.</strong> Nhầm <em>đã cài</em> với <em>đang chạy</em>. Hai lệnh sau trả lời hai câu hỏi hoàn toàn khác nhau, và chỉ lệnh thứ hai mới có nghĩa khi bạn không kết nối được:</p>" },
+
+    { "type": "code", "title": "Installed is not running", "titleVi": "Đã cài không phải là đang chạy", "language": "bash",
+      "code": "# Câu hỏi 1: gói phần mềm có trên đĩa không?\ndpkg -l | grep openssh-server      # Ubuntu/Debian\nrpm -q openssh-server              # Fedora/RHEL\n\n# Câu hỏi 2: có tiến trình nào đang NGHE cổng 22 không?  <-- câu hỏi đúng\nss -tlnp | grep ':22'\nsystemctl status ssh   # Ubuntu goi la 'ssh'\nsystemctl status sshd  # Fedora goi la 'sshd'" },
+
+    { "type": "mermaid",
+      "code": "flowchart LR\n  A[ssh tren may ban] -->|TCP toi cong 22| B[Nhan he dieu hanh cua may chu]\n  B --> C[Tien trinh sshd dang LISTEN]\n  C --> D[Tien trinh con cho phien nay]\n  D --> E[bash hoac lenh ban gui]" },
+
+    { "type": "part", "number": "1", "text": "The handshake, line by line", "textVi": "Cái bắt tay, đọc từng dòng",
+      "subtitle": "Everything below is a real ssh -vvv trace against the production VPS.",
+      "subtitleVi": "Toàn bộ phần dưới là một phiên ssh -vvv thật chạy vào VPS production." },
+
+    { "type": "heading", "text": "The order of events", "textVi": "Thứ tự các sự kiện" },
+
+    { "type": "prose",
+      "html": "<p>Between pressing Enter and seeing a prompt, six things happen in a fixed order. The order matters because it tells you <strong>where</strong> a failure happened, which is most of the diagnosis. A failure during algorithm negotiation and a failure during authentication look nothing alike once you know to look.</p>",
+      "htmlVi": "<p>Giữa lúc bạn bấm Enter và lúc thấy dấu nhắc, có sáu việc xảy ra theo một thứ tự cố định. Thứ tự đó quan trọng vì nó cho biết lỗi xảy ra ở <strong>chỗ nào</strong> — mà biết chỗ đã là phần lớn của chẩn đoán. Một lỗi ở bước thương lượng thuật toán và một lỗi ở bước xác thực trông chẳng giống nhau chút nào, một khi bạn biết phải nhìn vào đâu.</p>" },
+
+    { "type": "mermaid",
+      "code": "sequenceDiagram\n  participant C as Client ssh\n  participant S as Server sshd\n  C->>S: Mo ket noi TCP toi cong 22\n  S-->>C: SSH-2.0-OpenSSH_9.6p1\n  C->>S: SSH-2.0-OpenSSH_10.2\n  C->>S: KEXINIT danh sach thuat toan\n  S-->>C: KEXINIT danh sach thuat toan\n  C->>S: Trao doi khoa ECDH\n  S-->>C: Khoa may chu va chu ky\n  Note over C,S: Tu day moi byte deu ma hoa\n  S-->>C: Cac cach xac thuc con dung duoc\n  C->>S: Chao khoa cong khai\n  S-->>C: Chap nhan\n  C->>S: Mo kenh session\n  S-->>C: Chay lenh hoac shell" },
+
+    { "type": "heading", "text": "Step 1 — version exchange", "textVi": "Bước 1 — chào phiên bản" },
+
+    { "type": "prose",
+      "html": "<p>Before any cryptography, both sides shout their version in plain text. This is deliberately readable: it lets each side enable workarounds for known bugs in the other.</p>",
+      "htmlVi": "<p>Trước mọi thứ mã hoá, hai bên hô to phiên bản của mình bằng chữ thường không mã hoá. Điều đó là cố ý: nó cho phép mỗi bên bật các cách lách lỗi đã biết của bên kia.</p>" },
+
+    { "type": "code", "title": "Real trace", "titleVi": "Vết chạy thật", "language": "text",
+      "code": "debug1: Local version string SSH-2.0-OpenSSH_10.2\ndebug1: Remote protocol version 2.0, remote software version OpenSSH_9.6p1 Ubuntu-3ubuntu13.18\ndebug1: compat_banner: match: OpenSSH_9.6p1 Ubuntu-3ubuntu13.18 pat OpenSSH* compat 0x04000000\ndebug1: Authenticating to 160.187.1.208:22 as 'root'" },
+
+    { "type": "prose",
+      "html": "<p>Two consequences worth carrying with you. First, <strong>anyone who can reach port 22 learns your exact OpenSSH build</strong>, before authenticating — that is why version banners show up in vulnerability scans. Second, <code>compat 0x04000000</code> is a bug-compatibility bitmask: the client just decided which quirks to work around based on that string.</p><p>You can see the banner yourself without an SSH client at all, which is a handy trick when you are not sure whether the thing answering port 22 is really sshd:</p>",
+      "htmlVi": "<p>Hai hệ quả đáng mang theo. Thứ nhất, <strong>bất kỳ ai chạm được cổng 22 đều biết chính xác bản dựng OpenSSH của bạn</strong>, trước cả khi xác thực — đó là lý do banner phiên bản luôn xuất hiện trong các bản quét lỗ hổng. Thứ hai, <code>compat 0x04000000</code> là một mặt nạ bit tương thích lỗi: client vừa quyết định sẽ lách những quirk nào dựa trên chuỗi đó.</p><p>Bạn tự xem được banner mà không cần client SSH nào, một mẹo tiện khi bạn chưa chắc thứ đang trả lời cổng 22 có thật là sshd hay không:</p>" },
+
+    { "type": "code", "title": "Ask port 22 who it is", "titleVi": "Hỏi thẳng cổng 22 xem nó là ai", "language": "bash",
+      "code": "$ nc 160.187.1.208 22\nSSH-2.0-OpenSSH_9.6p1 Ubuntu-3ubuntu13.18\n# Ctrl-C de thoat" },
+
+    { "type": "heading", "text": "Step 2 — algorithm negotiation", "textVi": "Bước 2 — thương lượng thuật toán" },
+
+    { "type": "prose",
+      "html": "<p>Each side sends the list of algorithms it supports, in preference order, for four separate jobs: key exchange, host key signature, symmetric cipher, and message authentication. The <em>client's</em> preference wins: for each job, SSH picks the client's most-preferred algorithm that the server also supports.</p>",
+      "htmlVi": "<p>Mỗi bên gửi danh sách thuật toán mình hỗ trợ, xếp theo thứ tự ưu tiên, cho bốn việc riêng biệt: trao đổi khoá, chữ ký khoá máy chủ, mã hoá đối xứng, và xác thực thông điệp. Ưu tiên của <em>client</em> thắng: với mỗi việc, SSH chọn thuật toán mà client thích nhất trong số server cũng hỗ trợ.</p>" },
+
+    { "type": "code", "title": "Real trace", "titleVi": "Vết chạy thật", "language": "text",
+      "code": "debug1: SSH2_MSG_KEXINIT sent\ndebug1: SSH2_MSG_KEXINIT received\ndebug1: kex: algorithm: ecdh-sha2-nistp256\ndebug1: kex: host key algorithm: rsa-sha2-512\ndebug1: kex: server->client cipher: aes128-gcm@openssh.com MAC: <implicit> compression: none\ndebug1: kex: client->server cipher: aes128-gcm@openssh.com MAC: <implicit> compression: none" },
+
+    { "type": "prose",
+      "html": "<p>Four things in that block, and each is worth naming:</p><ul><li><code>ecdh-sha2-nistp256</code> — how the two sides will agree on a shared secret. Elliptic-curve Diffie-Hellman; see the next section.</li><li><code>rsa-sha2-512</code> — how the server proves it is the machine you meant. Note the algorithm here belongs to the <em>server's</em> key, not yours.</li><li><code>aes128-gcm@openssh.com</code> — the symmetric cipher that actually encrypts your keystrokes.</li><li><code>MAC: &lt;implicit&gt;</code> — this is not &quot;no integrity check&quot;. GCM is an AEAD mode: it encrypts and authenticates in one pass, so a separate MAC algorithm is not negotiated. Seeing <code>&lt;implicit&gt;</code> here is a good sign, not a missing feature.</li></ul><p>Notice both directions are listed separately. Client-to-server and server-to-client each get their own cipher and their own keys; they merely happen to have chosen the same algorithm.</p>",
+      "htmlVi": "<p>Bốn thứ trong khối đó, và mỗi thứ đều đáng gọi tên:</p><ul><li><code>ecdh-sha2-nistp256</code> — cách hai bên thoả thuận một bí mật chung. Diffie-Hellman trên đường cong elliptic; xem phần kế tiếp.</li><li><code>rsa-sha2-512</code> — cách máy chủ chứng minh nó đúng là cái máy bạn định vào. Chú ý thuật toán ở đây thuộc về khoá của <em>máy chủ</em>, không phải khoá của bạn.</li><li><code>aes128-gcm@openssh.com</code> — mã đối xứng thật sự dùng để mã hoá từng phím bạn gõ.</li><li><code>MAC: &lt;implicit&gt;</code> — đây <em>không</em> phải &quot;không kiểm toàn vẹn&quot;. GCM là chế độ AEAD: nó mã hoá và xác thực trong cùng một lượt, nên không cần thương lượng thuật toán MAC riêng. Thấy <code>&lt;implicit&gt;</code> ở đây là dấu hiệu tốt, không phải thiếu tính năng.</li></ul><p>Để ý hai chiều được liệt kê riêng. Chiều client tới server và chiều server tới client mỗi chiều có mã riêng và khoá riêng; chúng chỉ tình cờ chọn cùng một thuật toán.</p>" },
+
+    { "type": "prose",
+      "html": "<p><strong>Common mistake.</strong> When a very old client meets a modern server (or the reverse), negotiation fails and the error names the exact job that could not be agreed:</p><pre>Unable to negotiate with 10.0.0.5 port 22: no matching key exchange method found.\nTheir offer: diffie-hellman-group1-sha1</pre><p>The instinct is to re-enable the ancient algorithm with <code>-oKexAlgorithms=+diffie-hellman-group1-sha1</code>. That works and it is the wrong first move — those algorithms were removed because they are broken. Upgrade the old side. Re-enable only for a device you cannot upgrade, such as a switch or an IPMI card, and only for that one host in <code>~/.ssh/config</code>.</p>",
+      "htmlVi": "<p><strong>Lỗi thường gặp.</strong> Khi một client rất cũ gặp một server hiện đại (hoặc ngược lại), thương lượng thất bại và thông báo lỗi gọi tên đúng cái việc không thoả thuận được:</p><pre>Unable to negotiate with 10.0.0.5 port 22: no matching key exchange method found.\nTheir offer: diffie-hellman-group1-sha1</pre><p>Phản xạ đầu tiên là bật lại thuật toán cổ bằng <code>-oKexAlgorithms=+diffie-hellman-group1-sha1</code>. Cách đó chạy được và là nước đi đầu tiên sai — những thuật toán đó bị gỡ vì chúng đã vỡ. Hãy nâng cấp bên cũ. Chỉ bật lại cho thiết bị bạn không nâng cấp được, ví dụ một con switch hay một card IPMI, và chỉ bật cho riêng host đó trong <code>~/.ssh/config</code>.</p>" },
+
+    { "type": "heading", "text": "Step 3 — agreeing on a secret in public", "textVi": "Bước 3 — thoả thuận một bí mật giữa thanh thiên bạch nhật" },
+
+    { "type": "prose",
+      "html": "<p>Here is the part that sounds impossible. Two machines that have never met, shouting across a wire that anyone can read, end up holding the same secret number — and the listener does not.</p><p>The mechanism is Diffie-Hellman. Each side invents a private random number, derives a public value from it, and sends only the public value. Each then combines its own private number with the other's public value. The arithmetic is built so both combinations land on the same result, while an eavesdropper holding only the two public values cannot get there.</p><p>The usual analogy is paint: you each keep a secret colour, publicly swap mixtures, and both end up with the same final blend, which nobody watching can separate back out. The analogy is fine for intuition and it hides the real reason it works — reversing the operation (given the public value, find the private number) is the discrete logarithm problem, and no one knows how to do it quickly for the curve sizes in use.</p><p>What matters operationally: <strong>the resulting session keys are fresh for every connection.</strong> They are not derived from your SSH key or from a password. Record today's encrypted traffic, steal the server's private key next year, and you still cannot read it — that property is called forward secrecy.</p>",
+      "htmlVi": "<p>Đây là đoạn nghe như bất khả thi. Hai cái máy chưa từng gặp nhau, hò hét qua một sợi dây ai cũng đọc được, cuối cùng lại cùng nắm một con số bí mật — còn người nghe lén thì không.</p><p>Cơ chế là Diffie-Hellman. Mỗi bên tự nghĩ ra một số ngẫu nhiên riêng tư, suy ra từ đó một giá trị công khai, rồi chỉ gửi đi giá trị công khai. Sau đó mỗi bên kết hợp số riêng của mình với giá trị công khai của bên kia. Phép toán được thiết kế sao cho hai phép kết hợp đó cho ra cùng một kết quả, trong khi kẻ nghe lén chỉ có hai giá trị công khai thì không tới được.</p><p>Ví von quen thuộc là sơn: mỗi người giữ một màu bí mật, công khai đổi hỗn hợp cho nhau, và cả hai cùng ra một màu pha cuối giống nhau mà người đứng xem không tách ngược lại được. Ví von đó ổn để nắm ý và nó giấu mất lý do thật khiến nó hoạt động — đảo ngược phép toán (biết giá trị công khai, tìm ra số riêng) chính là bài toán logarit rời rạc, và chưa ai biết cách giải nhanh với cỡ đường cong đang dùng.</p><p>Điều quan trọng về mặt vận hành: <strong>khoá phiên sinh ra là mới tinh cho từng kết nối.</strong> Chúng không suy ra từ khoá SSH của bạn, cũng không từ mật khẩu. Kẻ địch ghi lại lưu lượng mã hoá hôm nay, sang năm trộm được khoá riêng của máy chủ, vẫn không đọc được — tính chất đó gọi là forward secrecy.</p>" },
+
+    { "type": "mermaid",
+      "code": "flowchart TD\n  subgraph Client\n    a[So rieng a] --> A[Gia tri cong khai cua client]\n  end\n  subgraph Server\n    b[So rieng b] --> B[Gia tri cong khai cua server]\n  end\n  A -->|gui cong khai| S1[Server ket hop b voi A]\n  B -->|gui cong khai| C1[Client ket hop a voi B]\n  S1 --> K[Cung mot bi mat phien]\n  C1 --> K\n  K --> N[Sinh khoa cho tung chieu]" },
+
+    { "type": "code", "title": "The moment the tunnel becomes real", "titleVi": "Khoảnh khắc đường hầm thành hình", "language": "text",
+      "code": "debug1: expecting SSH2_MSG_KEX_ECDH_REPLY\ndebug1: SSH2_MSG_KEX_ECDH_REPLY received\ndebug1: Server host key: ssh-rsa SHA256:hMGOTOwxXU92ZACytl3LlCRWllPybXBwnL7Scq0tARg\ndebug1: SSH2_MSG_NEWKEYS sent\ndebug1: SSH2_MSG_NEWKEYS received\ndebug1: rekey in after 4294967296 blocks" },
+
+    { "type": "prose",
+      "html": "<p><code>NEWKEYS</code> is the line to remember. <strong>Every byte after it is encrypted.</strong> Everything before it — the version banners, the algorithm lists — went across in the clear. That is why your <em>username</em> is protected but the fact that you are speaking SSH is not.</p><p><code>rekey in after 4294967296 blocks</code> is SSH deciding in advance to throw those keys away and negotiate new ones after about 4 billion blocks of traffic, limiting how much data ever rides on one key.</p>",
+      "htmlVi": "<p><code>NEWKEYS</code> là dòng cần nhớ. <strong>Mọi byte sau nó đều được mã hoá.</strong> Mọi thứ trước nó — banner phiên bản, danh sách thuật toán — đi qua dưới dạng chữ trần. Đó là lý do <em>tên đăng nhập</em> của bạn được bảo vệ, còn việc bạn đang nói giao thức SSH thì không.</p><p><code>rekey in after 4294967296 blocks</code> là SSH quyết định trước rằng sẽ vứt bộ khoá đó đi và thương lượng bộ mới sau khoảng 4 tỉ khối dữ liệu, để giới hạn lượng dữ liệu từng đi trên một khoá.</p>" },
+
+    { "type": "heading", "text": "Step 4 — the host key, and the only attack SSH cannot solve alone", "textVi": "Bước 4 — khoá máy chủ, và cuộc tấn công duy nhất SSH không tự giải được" },
+
+    { "type": "prose",
+      "html": "<p>Diffie-Hellman gives you a private channel to <em>somebody</em>. It does not tell you that somebody is the machine you meant. An attacker sitting in the middle can run a perfect key exchange with you and another with the real server, decrypting and re-encrypting in between. Every byte still looks encrypted; every byte is also read.</p><p>SSH closes this by making the server sign the handshake with a long-lived private key it never sends. Your client checks the signature against a copy of the server's <em>public</em> key it saved earlier, in <code>~/.ssh/known_hosts</code>. That is what these lines mean:</p>",
+      "htmlVi": "<p>Diffie-Hellman cho bạn một kênh riêng tư tới <em>một ai đó</em>. Nó không nói cho bạn biết ai đó chính là cái máy bạn định vào. Kẻ tấn công ngồi ở giữa hoàn toàn có thể chạy một phiên trao đổi khoá hoàn hảo với bạn và một phiên nữa với máy chủ thật, giải mã rồi mã hoá lại ở giữa. Mọi byte vẫn trông như đã mã hoá; mọi byte cũng đồng thời bị đọc.</p><p>SSH bịt lỗ này bằng cách bắt máy chủ ký lên cái bắt tay bằng một khoá riêng sống lâu mà nó không bao giờ gửi đi. Client của bạn đối chiếu chữ ký đó với bản sao khoá <em>công khai</em> của máy chủ đã lưu từ trước, trong <code>~/.ssh/known_hosts</code>. Đó là ý nghĩa của mấy dòng này:</p>" },
+
+    { "type": "code", "title": "Real trace", "titleVi": "Vết chạy thật", "language": "text",
+      "code": "debug1: Server host key: ssh-rsa SHA256:hMGOTOwxXU92ZACytl3LlCRWllPybXBwnL7Scq0tARg\ndebug1: Host '160.187.1.208' is known and matches the RSA host key.\ndebug1: Found key in /Users/admin/.ssh/known_hosts:2" },
+
+    { "type": "prose",
+      "html": "<p>This is why the first connection asks you a question no other connection asks. On first contact there is nothing to compare against — that is the one moment a man-in-the-middle would succeed, and SSH honestly hands the decision to you. Accepting blindly is what almost everyone does; verifying out of band (reading the fingerprint from your hosting provider's console) is what you do for a machine that matters.</p><p>And here is the alarm, reproduced on purpose by wiping a test server's host keys and reconnecting with the old <code>known_hosts</code> entry still in place:</p>",
+      "htmlVi": "<p>Đây là lý do lần kết nối đầu tiên hỏi bạn một câu mà những lần sau không hỏi. Lần đầu chạm mặt thì chẳng có gì để đối chiếu — đó đúng là khoảnh khắc duy nhất kẻ đứng giữa có thể thành công, và SSH thành thật giao quyết định đó cho bạn. Bấm chấp nhận không nhìn là điều gần như ai cũng làm; xác minh bằng đường khác (đọc dấu vân tay trong bảng điều khiển của nhà cung cấp) là điều bạn làm với một cái máy quan trọng.</p><p>Và đây là tiếng chuông báo động, được tái hiện có chủ đích bằng cách xoá khoá máy của một server thử nghiệm rồi kết nối lại trong khi mục <code>known_hosts</code> cũ vẫn còn:</p>" },
+
+    { "type": "code", "title": "Reproduced, not copied from a manual", "titleVi": "Tái hiện thật, không chép từ sách", "language": "text",
+      "code": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\nIT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!\nSomeone could be eavesdropping on you right now (man-in-the-middle attack)!\nIt is also possible that a host key has just been changed.\nThe fingerprint for the ED25519 key sent by the remote host is\nSHA256:iiEpJaEz7bmBFRw/+yo9mf6qZkPAur/lFgZ+UDSzzes.\nOffending ED25519 key in /Users/admin/.ssh/known_hosts:1\nHost key verification failed." },
+
+    { "type": "prose",
+      "html": "<p><strong>Common mistake.</strong> Reaching straight for <code>ssh-keygen -R host</code> to make the warning go away. That command is correct <em>after</em> you know why the key changed, and it is exactly what an attacker needs you to type when they do not. Three legitimate causes cover almost every real case: the server was rebuilt or reinstalled, the IP address was reassigned to a different machine, or you are connecting through a new proxy or load balancer. Confirm one of those first, then:</p>",
+      "htmlVi": "<p><strong>Lỗi thường gặp.</strong> Chộp ngay <code>ssh-keygen -R host</code> để cảnh báo biến mất. Lệnh đó đúng <em>sau khi</em> bạn đã biết vì sao khoá đổi, và nó cũng chính là thứ kẻ tấn công cần bạn gõ khi bạn chưa biết. Ba nguyên nhân chính đáng phủ gần hết trường hợp thật: máy chủ vừa được dựng lại hoặc cài lại, địa chỉ IP được cấp lại cho một máy khác, hoặc bạn đang đi qua một proxy/cân bằng tải mới. Xác nhận được một trong ba rồi hãy làm:</p>" },
+
+    { "type": "code", "title": "The safe sequence", "titleVi": "Trình tự an toàn", "language": "bash",
+      "code": "# 1) Lay dau van tay THAT tu chinh may chu, qua duong khac\n#    (bang dieu khien cua nha cung cap, hoac chay tren may do)\nssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub\n\n# 2) Chi khi khop moi xoa muc cu\nssh-keygen -R 160.187.1.208\n\n# 3) Ket noi lai, doi chieu dau van tay lan nua truoc khi go yes\nssh root@160.187.1.208" },
+
+    { "type": "heading", "text": "Step 5 — authentication", "textVi": "Bước 5 — xác thực" },
+
+    { "type": "prose",
+      "html": "<p>Only now, inside the encrypted tunnel, does the server ask who you are. It first tells you which methods it will accept:</p>",
+      "htmlVi": "<p>Chỉ đến lúc này, bên trong đường hầm đã mã hoá, máy chủ mới hỏi bạn là ai. Trước tiên nó cho biết những cách nào nó chấp nhận:</p>" },
+
+    { "type": "code", "title": "Real trace", "titleVi": "Vết chạy thật", "language": "text",
+      "code": "debug1: Authentications that can continue: publickey,password\ndebug1: Next authentication method: publickey\ndebug1: Will attempt key: /Users/admin/.ssh/id_rsa RSA SHA256:Gx/NR7T/VBl0unlxSrJGdFGjEwXTcUgrPtJo2idWDBM\ndebug1: Will attempt key: /Users/admin/.ssh/id_ed25519 ED25519 SHA256:I5CqeFF1hsQMG6qNzGavN2zPr6ppcCSYo/aEPmoaarY\ndebug1: Offering public key: /Users/admin/.ssh/id_rsa RSA SHA256:Gx/NR7T/VBl0unlxSrJGdFGjEwXTcUgrPtJo2idWDBM\ndebug1: Server accepts key: /Users/admin/.ssh/id_rsa RSA SHA256:Gx/NR7T/VBl0unlxSrJGdFGjEwXTcUgrPtJo2idWDBM\ndebug1: Remote: /root/.ssh/authorized_keys:42: key options: agent-forwarding port-forwarding pty user-rc x11-forwarding" },
+
+    { "type": "prose",
+      "html": "<p>Three details in that trace repay attention:</p><ul><li><code>Will attempt key</code> lists <em>every</em> key the client found, and it tries them one at a time. The server counts each attempt against <code>MaxAuthTries</code>, which is <strong>6</strong> on this VPS. Carry eight keys and you can be disconnected before your correct one is ever offered — a genuinely confusing failure, and the reason <code>IdentityFile</code> plus <code>IdentitiesOnly yes</code> exists (Module 4).</li><li><code>Offering public key</code> then <code>Server accepts key</code> are two separate rounds. The client first asks &quot;would this key be acceptable?&quot; and only signs when told yes. That avoids proving possession of a key to a server that had no interest in it.</li><li><code>Remote: /root/.ssh/authorized_keys:42</code> — the server names the file and the <strong>line number</strong> that matched. When several keys are installed, that number tells you exactly which one let you in.</li></ul>",
+      "htmlVi": "<p>Ba chi tiết trong vết chạy đó đáng để ý:</p><ul><li><code>Will attempt key</code> liệt kê <em>mọi</em> khoá mà client tìm thấy, và nó thử lần lượt từng cái. Máy chủ tính mỗi lần thử vào hạn mức <code>MaxAuthTries</code>, trên VPS này là <strong>6</strong>. Mang theo tám khoá là bạn có thể bị ngắt trước khi khoá đúng kịp được chào — một lỗi thật sự khó hiểu, và là lý do tồn tại của <code>IdentityFile</code> cùng <code>IdentitiesOnly yes</code> (Module 4).</li><li><code>Offering public key</code> rồi mới <code>Server accepts key</code> là hai vòng riêng biệt. Client hỏi trước &quot;khoá này có được chấp nhận không?&quot; và chỉ ký khi được trả lời có. Cách đó tránh việc chứng minh mình sở hữu một khoá cho một máy chủ vốn chẳng quan tâm tới nó.</li><li><code>Remote: /root/.ssh/authorized_keys:42</code> — máy chủ nói rõ tên file và <strong>số dòng</strong> đã khớp. Khi có nhiều khoá được cài, con số đó cho bạn biết chính xác cái nào đã cho bạn vào.</li></ul>" },
+
+    { "type": "heading", "text": "Step 6 — channels", "textVi": "Bước 6 — các kênh" },
+
+    { "type": "prose",
+      "html": "<p>Authentication finished, and still nothing has run. What SSH opens now is a <strong>channel</strong> — and this is the design decision that explains half of what SSH can do.</p><p>One authenticated TCP connection can carry many independent channels at once, multiplexed over the same encrypted stream. A shell is one channel. A forwarded port is another. An SFTP transfer is another. They share the connection and cannot see each other.</p>",
+      "htmlVi": "<p>Xác thực xong, mà vẫn chưa có gì chạy. Thứ SSH mở ra lúc này là một <strong>kênh</strong> — và đây chính là quyết định thiết kế giải thích được một nửa những gì SSH làm được.</p><p>Một kết nối TCP đã xác thực có thể chở nhiều kênh độc lập cùng lúc, dồn chung trên một dòng mã hoá. Một shell là một kênh. Một cổng được chuyển tiếp là một kênh khác. Một lượt truyền SFTP là kênh khác nữa. Chúng dùng chung kết nối và không nhìn thấy nhau.</p>" },
+
+    { "type": "code", "title": "Real trace", "titleVi": "Vết chạy thật", "language": "text",
+      "code": "debug1: channel 0: new session [client-session] (inactive timeout: 0)\ndebug1: Requesting no-more-sessions@openssh.com\ndebug1: Entering interactive session.\ndebug1: Sending command: exit\ndebug1: client_input_channel_req: channel 0 rtype exit-status reply 0\ndebug1: channel 0: free: client-session, nchannels 1\ndebug1: Exit status 0" },
+
+    { "type": "mermaid",
+      "code": "flowchart TD\n  T[Mot ket noi TCP da xac thuc] --> C0[Kenh 0 shell hoac lenh]\n  T --> C1[Kenh 1 chuyen tiep cong -L]\n  T --> C2[Kenh 2 chuyen tiep nguoc -R]\n  T --> C3[Kenh 3 SFTP]\n  C0 --> N[Tat ca dung chung mot lop ma hoa]\n  C1 --> N\n  C2 --> N\n  C3 --> N" },
+
+    { "type": "prose",
+      "html": "<p>Two practical consequences follow immediately. A tunnel (Module 7) costs no extra login, because it is just another channel on a connection you already have. And connection multiplexing — <code>ControlMaster</code> in Module 4 — makes the second, third and fourth <code>ssh</code> command to the same host almost instant, because they skip the entire handshake above and open a channel on the existing connection.</p>",
+      "htmlVi": "<p>Hai hệ quả thực tế theo ngay sau đó. Một đường hầm (Module 7) không tốn thêm lần đăng nhập nào, vì nó chỉ là một kênh nữa trên kết nối bạn đã có. Và việc dồn kênh kết nối — <code>ControlMaster</code> ở Module 4 — làm cho lệnh <code>ssh</code> thứ hai, thứ ba, thứ tư tới cùng một máy gần như tức thì, vì chúng bỏ qua toàn bộ cái bắt tay ở trên và chỉ mở một kênh trên kết nối sẵn có.</p>" },
+
+    { "type": "part", "number": "2", "text": "SSH as a pipe", "textVi": "SSH nhìn như một cái ống",
+      "subtitle": "The part that turns SSH from a login tool into a building block.",
+      "subtitleVi": "Phần biến SSH từ công cụ đăng nhập thành một viên gạch xây dựng." },
+
+    { "type": "heading", "text": "Three ways to run it", "textVi": "Ba cách chạy" },
+
+    { "type": "prose",
+      "html": "<p>Same program, three different shapes, and the difference decides whether you get a terminal.</p>",
+      "htmlVi": "<p>Cùng một chương trình, ba hình dạng khác nhau, và khác biệt đó quyết định bạn có được cấp terminal hay không.</p>" },
+
+    { "type": "code", "title": "Real session, real output", "titleVi": "Phiên thật, output thật", "language": "bash",
+      "code": "# 1) Shell tuong tac: CO terminal, co doc file khoi dong, co banner\n$ ssh cuong@may\nWelcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.12.76-linuxkit aarch64)\ncuong@may:~$\n\n# 2) Chay mot lenh roi thoat: KHONG co terminal\n$ ssh cuong@may 'tty'\nnot a tty\n\n# 3) Ep cap terminal cho dang so 2\n$ ssh -tt cuong@may 'tty'\n/dev/pts/0\nConnection to may closed.\n\n# 4) Khong chay gi ca — chi giu ket noi (dung cho duong ham, Module 7)\n$ ssh -N cuong@may" },
+
+    { "type": "prose",
+      "html": "<p>Form 2 is the one that surprises people, and it is the form every deploy script uses. No terminal means no <code>~/.bashrc</code> in most setups, a <code>PATH</code> that may differ from your interactive one, <code>TERM=dumb</code>, and no password prompt possible. Module 5 is entirely about the consequences.</p><p>One detail on <code>-t</code>: a single <code>-t</code> only allocates a terminal if your <em>local</em> side already has one. Inside a script or a CI job, stdin is a pipe, so you get:</p><pre>Pseudo-terminal will not be allocated because stdin is not a terminal.</pre><p><code>-tt</code> forces it regardless. That is a real distinction, not a typo in someone's blog post.</p>",
+      "htmlVi": "<p>Dạng số 2 là dạng làm người ta bất ngờ, và cũng là dạng mà mọi script deploy đều dùng. Không có terminal nghĩa là phần lớn trường hợp không nạp <code>~/.bashrc</code>, biến <code>PATH</code> có thể khác với lúc bạn ngồi gõ, <code>TERM=dumb</code>, và không thể hỏi mật khẩu. Module 5 dành trọn cho các hệ quả này.</p><p>Một chi tiết về <code>-t</code>: một chữ <code>-t</code> chỉ cấp terminal nếu phía <em>máy bạn</em> vốn đã có một cái. Bên trong một script hay một job CI, stdin là một cái ống, nên bạn nhận được:</p><pre>Pseudo-terminal will not be allocated because stdin is not a terminal.</pre><p><code>-tt</code> thì ép bằng được. Đó là một khác biệt có thật, không phải lỗi gõ trong bài blog của ai đó.</p>" },
+
+    { "type": "heading", "text": "Exit codes travel", "textVi": "Mã thoát đi xuyên qua" },
+
+    { "type": "prose",
+      "html": "<p>The remote command's exit status becomes the exit status of your local <code>ssh</code>. That one sentence is what makes SSH usable inside scripts and CI at all.</p>",
+      "htmlVi": "<p>Mã thoát của lệnh chạy ở máy xa trở thành mã thoát của lệnh <code>ssh</code> ở máy bạn. Đúng một câu đó là thứ khiến SSH dùng được bên trong script và CI.</p>" },
+
+    { "type": "code", "title": "Verified, not assumed", "titleVi": "Đã kiểm chứng, không phải suy đoán", "language": "bash",
+      "code": "$ ssh cuong@may 'exit 3'\n$ echo $?\n3\n\n# Vi vay ban viet duoc the nay va no that su hoat dong:\nif ssh cuong@may 'test -f /opt/app/.env'; then\n  echo \"file env co tren may chu\"\nelse\n  echo \"THIEU file env — dung deploy\"\n  exit 1\nfi" },
+
+    { "type": "prose",
+      "html": "<p>There is one exit code you should learn to read as a special case: <strong>255</strong>. SSH reserves it for &quot;the connection itself failed&quot; — could not resolve, could not connect, authentication refused. So <code>255</code> means &quot;I never got to run your command&quot;, while any other value came from the remote command. A deploy script that treats them the same will happily report success on a machine it never reached.</p>",
+      "htmlVi": "<p>Có một mã thoát bạn nên học để đọc như trường hợp đặc biệt: <strong>255</strong>. SSH giữ riêng số này cho tình huống &quot;bản thân kết nối hỏng&quot; — không phân giải được tên, không kết nối được, xác thực bị từ chối. Vậy <code>255</code> nghĩa là &quot;tôi chưa từng chạy được lệnh của bạn&quot;, còn mọi giá trị khác là do lệnh ở máy xa trả về. Một script deploy đối xử hai thứ đó như nhau sẽ vui vẻ báo thành công trên một cái máy mà nó chưa từng chạm tới.</p>" },
+
+    { "type": "heading", "text": "stdin and stdout are real pipes", "textVi": "stdin và stdout là ống thật" },
+
+    { "type": "prose",
+      "html": "<p>Because SSH is a byte channel, it composes with every other Unix tool. Your local shell's pipes reach straight through to the remote process.</p>",
+      "htmlVi": "<p>Vì SSH là một đường ống byte, nó ghép được với mọi công cụ Unix khác. Ống của shell trên máy bạn xuyên thẳng tới tiến trình ở máy xa.</p>" },
+
+    { "type": "code", "title": "Real run", "titleVi": "Chạy thật", "language": "bash",
+      "code": "$ echo \"xin chao tu mac\" | ssh cuong@may 'cat > /tmp/tu-mac.txt; wc -c /tmp/tu-mac.txt'\n16 /tmp/tu-mac.txt\n\n# Vi stdout va stderr van tach rieng, ban loc duoc phia may minh:\n$ ssh cuong@may 'echo RA-CHUAN; echo RA-LOI >&2' 2>/dev/null\nRA-CHUAN" },
+
+    { "type": "prose",
+      "html": "<p>That composability is where the classic idioms come from — copying a directory tree without a temp file, or streaming a database dump straight into a local file:</p>",
+      "htmlVi": "<p>Chính khả năng ghép nối đó sinh ra các thành ngữ kinh điển — sao chép cả cây thư mục mà không cần file tạm, hoặc chảy thẳng một bản dump cơ sở dữ liệu vào file trên máy mình:</p>" },
+
+    { "type": "code", "title": "Idioms that only work because SSH is a pipe", "titleVi": "Những thành ngữ chỉ chạy được vì SSH là cái ống", "language": "bash",
+      "code": "# Cay thu muc di thang qua mang, khong file tam o hai dau\ntar czf - ./uploads | ssh cuong@may 'tar xzf - -C /opt/app'\n\n# Dump CSDL tu container tren VPS ve thang may minh\nssh root@160.187.1.208 'docker exec cuonghoangdev_postgres pg_dump -U postgres cuonghoangdev_db' \\\n  | gzip > backup-$(date +%F).sql.gz\n\n# Xem log dang chay theo thoi gian thuc, loc o may minh\nssh root@160.187.1.208 'docker logs -f cuonghoangdev_backend' 2>&1 | grep -i error" },
+
+    { "type": "heading", "text": "The quoting trap", "textVi": "Cái bẫy dấu nháy" },
+
+    { "type": "prose",
+      "html": "<p>Your command is a string that gets handed to a shell on the far side — but your <em>local</em> shell reads it first. Which quotes you use decides which machine expands the variables, and the two give different answers:</p>",
+      "htmlVi": "<p>Câu lệnh của bạn là một chuỗi rồi được trao cho một shell ở đầu bên kia — nhưng shell ở <em>máy bạn</em> đọc nó trước. Bạn dùng loại nháy nào sẽ quyết định máy nào giãn biến, và hai máy cho hai đáp án khác nhau:</p>" },
+
+    { "type": "code", "title": "Same command, two different machines answer", "titleVi": "Cùng một lệnh, hai máy khác nhau trả lời", "language": "bash",
+      "code": "# Nhay DON: chuoi di nguyen ven, may XA gian bien\n$ ssh cuong@may 'echo $HOME va $(hostname)'\n/home/cuong va 1592a753e25f\n\n# Nhay KEP: shell o MAY BAN gian truoc roi moi gui di\n$ ssh cuong@may \"echo $HOME va $(hostname)\"\n/Users/admin va Cuong-Hoang.local" },
+
+    { "type": "prose",
+      "html": "<p>The second one never touched the remote machine's environment at all — it shipped your Mac's values across the wire and asked the server to echo them back. Nothing errors, the output looks plausible, and a deploy script written that way will cheerfully <code>cd /Users/admin/app</code> on a Linux server and fail with a path nobody can explain.</p><p><strong>Rule:</strong> single quotes by default. Reach for double quotes only when you deliberately want a local value inside the remote command, and when you do, make it obvious:</p>",
+      "htmlVi": "<p>Cái thứ hai chưa hề chạm vào môi trường của máy xa — nó chở giá trị trên máy Mac của bạn qua dây rồi bảo máy chủ đọc lại. Không có lỗi nào, output trông hợp lý, và một script deploy viết kiểu đó sẽ vui vẻ <code>cd /Users/admin/app</code> trên một máy chủ Linux rồi thất bại với một đường dẫn không ai giải thích nổi.</p><p><strong>Luật:</strong> mặc định dùng nháy đơn. Chỉ với tay sang nháy kép khi bạn <em>cố ý</em> muốn nhét một giá trị của máy mình vào lệnh chạy ở máy xa, và khi làm thế thì làm cho nó lộ rõ ra:</p>" },
+
+    { "type": "code", "title": "Being explicit about which side expands", "titleVi": "Nói rõ bên nào giãn biến", "language": "bash",
+      "code": "TAG=v1.4.2\n\n# Co y: TAG lay tu may minh, PWD lay tu may xa\nssh cuong@may \"cd /opt/app && git checkout '$TAG' && echo \\\"dang o: \\$PWD\\\"\"\n\n# De doc hon: truyen bang bien moi truong thay vi noi chuoi\nssh cuong@may \"TAG='$TAG' bash -s\" <<'REMOTE'\n  set -euo pipefail\n  cd /opt/app\n  git checkout \"$TAG\"\n  echo \"dang o: $PWD\"\nREMOTE" },
+
+    { "type": "prose",
+      "html": "<p>The second form is worth adopting as a habit. <code>bash -s</code> with a quoted heredoc (<code>&lt;&lt;'REMOTE'</code>) sends the script body untouched — no local expansion, no escaping war — while named variables cross explicitly on the command line. Ten lines of remote logic stay readable instead of turning into a wall of backslashes.</p>",
+      "htmlVi": "<p>Dạng thứ hai đáng tập thành thói quen. <code>bash -s</code> với heredoc có nháy (<code>&lt;&lt;'REMOTE'</code>) gửi thân script đi nguyên vẹn — không giãn ở máy nhà, không phải đánh nhau với dấu escape — trong khi các biến có tên thì đi qua một cách tường minh trên dòng lệnh. Mười dòng logic chạy ở máy xa vẫn đọc được thay vì biến thành một bức tường dấu gạch chéo ngược.</p>" },
+
+    { "type": "part", "number": "3", "text": "The two config files", "textVi": "Hai file cấu hình" },
+
+    { "type": "heading", "text": "Client side and server side never mix", "textVi": "Phía client và phía server không bao giờ lẫn nhau" },
+
+    { "type": "prose",
+      "html": "<p>Beginners lose hours to this because the filenames differ by one letter.</p>",
+      "htmlVi": "<p>Người mới mất hàng giờ vì chuyện này, vì hai tên file chỉ khác nhau đúng một chữ.</p>" },
+
+    { "type": "prose",
+      "html": "<table><tr><th></th><th>Client (the machine you sit at)</th><th>Server (the machine you enter)</th></tr><tr><td>Program</td><td><code>ssh</code></td><td><code>sshd</code> — the d is for daemon</td></tr><tr><td>System-wide file</td><td><code>/etc/ssh/ssh_config</code></td><td><code>/etc/ssh/sshd_config</code></td></tr><tr><td>Per-user file</td><td><code>~/.ssh/config</code></td><td>none</td></tr><tr><td>Your key</td><td><code>~/.ssh/id_ed25519</code> (private)</td><td><code>~/.ssh/authorized_keys</code> (public)</td></tr><tr><td>The machine's key</td><td><code>~/.ssh/known_hosts</code> (public copy)</td><td><code>/etc/ssh/ssh_host_*_key</code> (private)</td></tr><tr><td>Show the config actually in force</td><td><code>ssh -G host</code></td><td><code>sshd -T</code></td></tr><tr><td>Restart needed after editing?</td><td>No</td><td>Yes — <code>systemctl reload ssh</code></td></tr></table>",
+      "htmlVi": "<table><tr><th></th><th>Client (máy bạn ngồi)</th><th>Server (máy bạn vào)</th></tr><tr><td>Chương trình</td><td><code>ssh</code></td><td><code>sshd</code> — chữ d là daemon</td></tr><tr><td>File hệ thống</td><td><code>/etc/ssh/ssh_config</code></td><td><code>/etc/ssh/sshd_config</code></td></tr><tr><td>File cá nhân</td><td><code>~/.ssh/config</code></td><td>không có</td></tr><tr><td>Khoá của bạn</td><td><code>~/.ssh/id_ed25519</code> (riêng)</td><td><code>~/.ssh/authorized_keys</code> (công khai)</td></tr><tr><td>Khoá của máy</td><td><code>~/.ssh/known_hosts</code> (bản sao công khai)</td><td><code>/etc/ssh/ssh_host_*_key</code> (riêng)</td></tr><tr><td>Xem cấu hình đang có hiệu lực</td><td><code>ssh -G host</code></td><td><code>sshd -T</code></td></tr><tr><td>Sửa xong có cần khởi động lại?</td><td>Không</td><td>Có — <code>systemctl reload ssh</code></td></tr></table>" },
+
+    { "type": "prose",
+      "html": "<p>The last two rows are the ones that save real time. <code>sshd -T</code> prints the <strong>effective</strong> configuration — every setting with the value actually in force, including defaults you never wrote and overrides from files included later. Reading <code>sshd_config</code> tells you what someone intended; <code>sshd -T</code> tells you what is true.</p>",
+      "htmlVi": "<p>Hai dòng cuối là hai dòng tiết kiệm thời gian thật. <code>sshd -T</code> in ra cấu hình <strong>đang có hiệu lực</strong> — mọi thiết lập với giá trị thật sự đang áp dụng, kể cả những mặc định bạn chưa từng viết và những dòng ghi đè từ các file được include về sau. Đọc <code>sshd_config</code> cho bạn biết ai đó <em>định</em> làm gì; <code>sshd -T</code> cho bạn biết sự thật.</p>" },
+
+    { "type": "code", "title": "Effective config on the production VPS", "titleVi": "Cấu hình đang có hiệu lực trên VPS production", "language": "bash",
+      "code": "$ sshd -T | grep -iE '^(port|permitrootlogin|pubkeyauthentication|passwordauthentication|maxauthtries|logingracetime|authorizedkeysfile) '\nport 22\nlogingracetime 120\nmaxauthtries 6\npermitrootlogin yes\npubkeyauthentication yes\npasswordauthentication yes\nauthorizedkeysfile .ssh/authorized_keys .ssh/authorized_keys2" },
+
+    { "type": "prose",
+      "html": "<p>Read as a security posture, that output says something specific: this server accepts <strong>root login</strong> and accepts <strong>passwords</strong>, so anyone on the internet may guess <code>root</code> plus a password, six tries per connection, unlimited connections. Module 9 turns those two lines off and explains what has to be in place first so you do not lock yourself out. For now, note that you can read a server's exposure in one command.</p><p><code>logingracetime 120</code> is the other one to know: you have 120 seconds from TCP connect to finish authenticating, after which sshd hangs up. That is what limits how long a half-open connection can hold a slot.</p>",
+      "htmlVi": "<p>Đọc như một tư thế bảo mật, output đó nói một điều rất cụ thể: máy chủ này cho <strong>đăng nhập root</strong> và cho <strong>dùng mật khẩu</strong>, nên bất kỳ ai trên Internet cũng có thể đoán <code>root</code> cộng mật khẩu, sáu lần mỗi kết nối, và số kết nối thì không giới hạn. Module 9 sẽ tắt hai dòng đó và giải thích cần chuẩn bị gì trước để bạn không tự khoá mình ở ngoài. Bây giờ chỉ cần ghi nhận: bạn đọc được mức phơi bày của một máy chủ chỉ bằng một câu lệnh.</p><p><code>logingracetime 120</code> là con số thứ hai nên biết: bạn có 120 giây kể từ lúc kết nối TCP để xác thực xong, quá hạn thì sshd cúp máy. Đó là thứ giới hạn thời gian một kết nối dở dang chiếm chỗ.</p>" },
+
+    { "type": "prose",
+      "html": "<p><strong>Common mistake.</strong> Editing <code>sshd_config</code>, running <code>systemctl restart ssh</code>, and getting locked out because the file had a typo — sshd refuses to start and now nothing is listening on port 22. Always validate first, and keep a second session open while you test:</p>",
+      "htmlVi": "<p><strong>Lỗi thường gặp.</strong> Sửa <code>sshd_config</code>, chạy <code>systemctl restart ssh</code>, rồi bị khoá ở ngoài vì file có lỗi gõ — sshd không khởi động nổi và bây giờ chẳng còn gì nghe cổng 22. Luôn kiểm tra cú pháp trước, và giữ một phiên thứ hai đang mở trong lúc bạn thử:</p>" },
+
+    { "type": "code", "title": "The habit that prevents lockouts", "titleVi": "Thói quen giúp không tự khoá mình ở ngoài", "language": "bash",
+      "code": "sudo sshd -t                    # chi kiem cu phap, khong sua gi. Im lang = OK\nsudo systemctl reload ssh       # reload, KHONG phai restart: phien dang mo song sot\n\n# Roi tu MOT CUA SO KHAC, thu dang nhap moi TRUOC KHI dong cua so cu:\nssh -o BatchMode=yes cuong@may 'echo van vao duoc'" },
+
+    { "type": "part", "number": "4", "text": "Reading a whole session", "textVi": "Đọc trọn một phiên" },
+
+    { "type": "heading", "text": "The full trace, annotated", "textVi": "Toàn bộ vết chạy, có chú giải" },
+
+    { "type": "prose",
+      "html": "<p>Here is one real connection from start to finish, trimmed to the <code>debug1</code> lines and grouped by phase. When SSH misbehaves, you will run this exact command and look for the last phase that completed — the failure is always in the phase after it.</p>",
+      "htmlVi": "<p>Đây là một kết nối thật từ đầu tới cuối, đã lọc còn các dòng <code>debug1</code> và gom theo từng pha. Khi SSH giở chứng, bạn sẽ chạy đúng lệnh này và tìm pha cuối cùng chạy xong — lỗi luôn nằm ở pha ngay sau đó.</p>" },
+
+    { "type": "code", "title": "Phase 1-2: TCP and identity files", "titleVi": "Pha 1-2: TCP và các file khoá", "language": "bash",
+      "code": "$ ssh -vvv root@160.187.1.208 'exit' 2>&1 | grep '^debug1'\n\ndebug1: Reading configuration data /Users/admin/.ssh/config\ndebug1: Reading configuration data /etc/ssh/ssh_config\ndebug1: Connecting to 160.187.1.208 [160.187.1.208] port 22.\ndebug1: Connection established.\ndebug1: identity file /Users/admin/.ssh/id_rsa type 0\ndebug1: identity file /Users/admin/.ssh/id_ecdsa type -1\ndebug1: identity file /Users/admin/.ssh/id_ed25519 type 2" },
+
+    { "type": "prose",
+      "html": "<p><code>Connection established</code> is the first checkpoint: TCP reached the machine and something accepted. If you never see this line, stop reading the rest — your problem is network or firewall, not SSH, and Module 3 is where you go.</p><p><code>type -1</code> means &quot;that key file does not exist&quot;. It is normal noise, not an error; <code>type 0</code> is RSA and <code>type 2</code> is Ed25519.</p>",
+      "htmlVi": "<p><code>Connection established</code> là trạm kiểm soát đầu tiên: TCP đã tới được máy và có thứ gì đó chấp nhận. Nếu bạn không bao giờ thấy dòng này thì đừng đọc tiếp phần còn lại — vấn đề của bạn là mạng hoặc tường lửa, không phải SSH, và Module 3 là chỗ cần tới.</p><p><code>type -1</code> nghĩa là &quot;file khoá đó không tồn tại&quot;. Đó là tiếng ồn bình thường, không phải lỗi; <code>type 0</code> là RSA còn <code>type 2</code> là Ed25519.</p>" },
+
+    { "type": "code", "title": "Phase 3-4: crypto and host identity", "titleVi": "Pha 3-4: mã hoá và danh tính máy chủ", "language": "text",
+      "code": "debug1: Local version string SSH-2.0-OpenSSH_10.2\ndebug1: Remote protocol version 2.0, remote software version OpenSSH_9.6p1 Ubuntu-3ubuntu13.18\ndebug1: kex: algorithm: ecdh-sha2-nistp256\ndebug1: kex: server->client cipher: aes128-gcm@openssh.com MAC: <implicit> compression: none\ndebug1: Server host key: ssh-rsa SHA256:hMGOTOwxXU92ZACytl3LlCRWllPybXBwnL7Scq0tARg\ndebug1: Host '160.187.1.208' is known and matches the RSA host key.\ndebug1: Found key in /Users/admin/.ssh/known_hosts:2\ndebug1: SSH2_MSG_NEWKEYS sent\ndebug1: SSH2_MSG_NEWKEYS received" },
+
+    { "type": "code", "title": "Phase 5-6: who you are, then what runs", "titleVi": "Pha 5-6: bạn là ai, rồi chạy cái gì", "language": "text",
+      "code": "debug1: Authentications that can continue: publickey,password\ndebug1: Next authentication method: publickey\ndebug1: get_agent_identities: ssh_fetch_identitylist: agent contains no identities\ndebug1: Offering public key: /Users/admin/.ssh/id_rsa RSA SHA256:Gx/NR7T/VBl0unlxSrJGdFGjEwXTcUgrPtJo2idWDBM\ndebug1: Server accepts key: /Users/admin/.ssh/id_rsa RSA SHA256:Gx/NR7T/VBl0unlxSrJGdFGjEwXTcUgrPtJo2idWDBM\ndebug1: channel 0: new session [client-session]\ndebug1: Sending command: exit\ndebug1: Exit status 0" },
+
+    { "type": "prose",
+      "html": "<p>Six phases, six places to fail, and the trace tells you which one every time:</p><ol><li>No <code>Connection established</code> → network, routing or firewall. Module 3.</li><li>Fails right after the version strings → algorithm mismatch, one side too old.</li><li>Fails at the host key → <code>known_hosts</code> mismatch, or you are on the wrong machine.</li><li><code>Offering public key</code> but never <code>Server accepts key</code> → the key is not installed, or file permissions are wrong. Modules 2 and 3.</li><li><code>Server accepts key</code> then disconnect → something after auth, such as a broken shell or a full disk on the server.</li><li>All six phases pass and your command still misbehaves → you are in Module 5 territory: no TTY, different <code>PATH</code>, missing environment.</li></ol>",
+      "htmlVi": "<p>Sáu pha, sáu chỗ có thể hỏng, và vết chạy luôn nói cho bạn biết là chỗ nào:</p><ol><li>Không thấy <code>Connection established</code> → mạng, định tuyến hoặc tường lửa. Module 3.</li><li>Hỏng ngay sau phần chuỗi phiên bản → lệch thuật toán, một bên quá cũ.</li><li>Hỏng ở khoá máy chủ → <code>known_hosts</code> không khớp, hoặc bạn đang vào nhầm máy.</li><li>Có <code>Offering public key</code> nhưng không bao giờ có <code>Server accepts key</code> → khoá chưa được cài, hoặc quyền file sai. Module 2 và 3.</li><li>Có <code>Server accepts key</code> rồi ngắt → lỗi sau xác thực, ví dụ shell hỏng hoặc đĩa đầy trên máy chủ.</li><li>Sáu pha đều qua mà lệnh của bạn vẫn giở chứng → bạn đang ở địa hạt Module 5: không có TTY, <code>PATH</code> khác, thiếu biến môi trường.</li></ol>" },
+
+    { "type": "heading", "text": "Best practices", "textVi": "Thực hành tốt" },
+
+    { "type": "prose",
+      "html": "<ol><li><strong>Reach for <code>ssh -v</code> before guessing.</strong> One <code>-v</code> is enough for 90% of problems; <code>-vvv</code> adds packet detail you rarely need. Guessing costs more than reading.</li><li><strong>Single-quote remote commands.</strong> Double quotes hand the job to your local shell, and the output still looks plausible when it is wrong.</li><li><strong>Treat exit code 255 as a distinct case.</strong> It means the command never ran, which is not the same as the command failing.</li><li><strong>Use <code>reload</code>, not <code>restart</code>, on a live server, and keep a second session open.</strong> A typo in <code>sshd_config</code> plus a restart equals a support ticket with your hosting provider.</li><li><strong>Verify a changed host key out of band before deleting it.</strong> The warning is the only moment SSH can catch a man-in-the-middle; clearing it reflexively throws away the alarm.</li><li><strong>Read <code>sshd -T</code>, not <code>sshd_config</code>, when you want the truth.</strong> Includes and defaults make the file an incomplete picture.</li><li><strong>Prefer <code>bash -s</code> with a quoted heredoc over long quoted one-liners.</strong> Escaping bugs in remote command strings are silent and expensive.</li></ol>",
+      "htmlVi": "<ol><li><strong>Với tay tới <code>ssh -v</code> trước khi đoán.</strong> Một chữ <code>-v</code> là đủ cho 90% ca bệnh; <code>-vvv</code> thêm chi tiết gói tin mà bạn hiếm khi cần. Đoán mò tốn hơn đọc.</li><li><strong>Dùng nháy đơn cho lệnh chạy ở máy xa.</strong> Nháy kép giao việc cho shell ở máy bạn, và output vẫn trông hợp lý ngay cả khi nó sai.</li><li><strong>Coi mã thoát 255 là một trường hợp riêng.</strong> Nó nghĩa là lệnh chưa từng chạy, khác hẳn với lệnh chạy rồi thất bại.</li><li><strong>Trên máy chủ đang sống thì dùng <code>reload</code>, đừng dùng <code>restart</code>, và giữ một phiên thứ hai đang mở.</strong> Một lỗi gõ trong <code>sshd_config</code> cộng với một lần restart bằng một cái ticket gửi nhà cung cấp.</li><li><strong>Xác minh khoá máy chủ đã đổi bằng đường khác trước khi xoá nó.</strong> Cảnh báo đó là khoảnh khắc duy nhất SSH bắt được kẻ đứng giữa; xoá theo phản xạ là vứt luôn cái chuông báo động.</li><li><strong>Muốn biết sự thật thì đọc <code>sshd -T</code>, đừng đọc <code>sshd_config</code>.</strong> Các dòng include và giá trị mặc định làm cho file cấu hình chỉ là một bức tranh thiếu.</li><li><strong>Ưu tiên <code>bash -s</code> với heredoc có nháy hơn là chuỗi một dòng dài đầy dấu nháy.</strong> Lỗi escape trong chuỗi lệnh chạy ở máy xa vừa im lặng vừa đắt.</li></ol>" },
+
+    { "type": "heading", "text": "Recap, and what the exercises drill", "textVi": "Tóm lại, và bài tập sẽ luyện cái gì" },
+
+    { "type": "prose",
+      "html": "<p>SSH is a process listening on port 22. A connection to it goes through six ordered phases — version, algorithms, key exchange, host identity, authentication, channels — and knowing the order converts a vague &quot;it does not work&quot; into a specific question. What you get out the far end is a byte channel, not a terminal; a terminal is an option you request with <code>-t</code>. Because it is a byte channel, exit codes travel, pipes compose, and a tunnel is just one more channel on a connection you already paid for.</p><p>The exercises drill exactly that: reading a trace to name the failing phase, proving a port is listening before blaming SSH, predicting which machine expands a variable, and writing remote commands whose exit codes a script can trust.</p><p>Module 2 takes the one phase we passed over quickly — authentication — and answers the question that makes the whole scheme work: why is it safe to publish a key?</p>",
+      "htmlVi": "<p>SSH là một tiến trình đang nghe cổng 22. Một kết nối tới nó đi qua sáu pha theo thứ tự — phiên bản, thuật toán, trao đổi khoá, danh tính máy chủ, xác thực, kênh — và biết thứ tự đó biến một câu &quot;nó không chạy&quot; mơ hồ thành một câu hỏi cụ thể. Thứ bạn nhận được ở đầu bên kia là một đường ống byte, không phải terminal; terminal là món bạn phải xin bằng <code>-t</code>. Chính vì là đường ống byte nên mã thoát đi xuyên qua được, ống ghép nối được, và một đường hầm chỉ là thêm một kênh nữa trên kết nối bạn đã trả tiền rồi.</p><p>Bài tập luyện đúng những thứ đó: đọc vết chạy để gọi tên pha đang hỏng, chứng minh một cổng đang nghe trước khi đổ lỗi cho SSH, đoán xem máy nào giãn biến, và viết lệnh chạy ở máy xa với mã thoát mà script tin được.</p><p>Module 2 lấy đúng cái pha ta lướt qua nhanh — xác thực — và trả lời câu hỏi làm cho cả cơ chế đứng vững: vì sao công bố một cái khoá lại an toàn?</p>" },
+
+    { "type": "practice", "items": [
+      { "label": "Linux & Bash — processes and pipes", "labelVi": "Linux & Bash — tiến trình và ống", "url": "/code-lab/linux-bash", "note": "Prerequisite muscle memory for everything here.", "noteVi": "Phản xạ nền cho mọi thứ trong track này." },
+      { "label": "Deploy: Docker on a VPS", "labelVi": "Deploy: Docker trên VPS", "url": "/code-lab/deploy-vps", "note": "Where these SSH skills get used for real.", "noteVi": "Nơi những kỹ năng SSH này được dùng thật." }
+    ]},
+
+    { "type": "links", "items": [
+      { "label": "OpenSSH — official manual pages", "url": "https://www.openssh.com/manual.html" },
+      { "label": "ssh(1) — client manual", "url": "https://man.openbsd.org/ssh.1" },
+      { "label": "sshd_config(5) — server options", "url": "https://man.openbsd.org/sshd_config.5" },
+      { "label": "RFC 4253 — SSH Transport Layer Protocol", "url": "https://www.rfc-editor.org/rfc/rfc4253" },
+      { "label": "RFC 4252 — SSH Authentication Protocol", "url": "https://www.rfc-editor.org/rfc/rfc4252" },
+      { "label": "RFC 4254 — SSH Connection Protocol (channels)", "url": "https://www.rfc-editor.org/rfc/rfc4254" },
+      { "label": "ss(8) — socket statistics", "url": "https://man7.org/linux/man-pages/man8/ss.8.html" }
+    ]}
+  ]
+}

@@ -1,0 +1,661 @@
+{
+  "trackSlug": "ssh",
+  "moduleSlug": "four-ways-ssh-says-no",
+  "exercises": [
+    {
+      "title": "Refused or Timed Out: Two Words That Point at Different Machines",
+      "difficulty": "EASY",
+      "estimatedMinutes": 25,
+      "points": 10,
+      "concepts": [
+        "TCP RST vs dropped packets",
+        "timing as a signal",
+        "narrowing before fixing"
+      ],
+      "prerequisites": [
+        "running shell commands",
+        "ports and listening sockets"
+      ],
+      "tags": [
+        "ssh",
+        "networking",
+        "diagnostics",
+        "bash"
+      ],
+      "problemHtml": "<p>Two failures, both of which a user will report as &quot;SSH is broken&quot;, and they need opposite work. <em>Connection refused</em> means a machine received your packet and actively rejected it: it is alive, it is reachable, and nothing is listening on that port. <em>Timed out</em> means nothing came back at all: your packets had no route or a firewall dropped them, and no amount of work on the destination helps because your traffic never arrives.</p><p>Getting this backwards costs an evening. It is exactly what happened on 11 August 2026, when a Mac on <code>192.168.83.101</code> could not reach a Linux machine on <code>192.168.1.102</code>: the address was correct, the key was installed, and the failure was a timeout — the missing piece was a route.</p><p>Write <code>reach.sh HOST [PORT]</code>:</p><ul><li>Attempt a TCP connection with a 5-second cap. <code>PORT</code> defaults to <code>22</code>.</li><li>On success print <code>OPEN &lt;host&gt;:&lt;port&gt;</code> and exit <code>0</code>.</li><li>On an immediate failure print <code>REFUSED &lt;host&gt;:&lt;port&gt;</code> then a second line <code>FIX: run 'ss -tlnp | grep :&lt;port&gt;' on that machine</code>, and exit <code>1</code>.</li><li>On a failure that consumed the whole timeout print <code>TIMEOUT &lt;host&gt;:&lt;port&gt;</code> then <code>FIX: compare 'ip route' on both machines; this is a path problem, not a key problem</code>, and exit <code>2</code>.</li><li>Impose the 5-second cap <strong>yourself</strong>. <code>/dev/tcp</code> has no timeout option, so calling it directly means waiting for the kernel’s connect timeout — measured at <strong>75 seconds</strong> on macOS for an address with no route. Open the socket in a background subshell and kill it when the time is up.</li><li>Distinguish the two by whether you had to kill it: a connection that failed on its own was refused; one you had to cut off timed out.</li></ul><p>Print the elapsed seconds as a third line, <code>elapsed: &lt;n&gt;s</code>, so the reader can see the evidence the verdict was based on rather than having to trust it.</p>",
+      "inputSpec": "argv[1] is a hostname or IP address. argv[2] is an optional TCP port, default 22.",
+      "outputSpec": "'OPEN host:port' (exit 0), or 'REFUSED host:port' / 'TIMEOUT host:port' plus a 'FIX: ...' line (exit 1 or 2), always followed by 'elapsed: <n>s'.",
+      "constraints": "Use bash /dev/tcp so no external tool is required. The 5-second cap must be enforced by the script itself, not left to the kernel. Do not attempt authentication — this is a reachability test only, and it must work against a host you have no credentials for.",
+      "examplesJson": [
+        {
+          "input": "./reach.sh 127.0.0.1 2223",
+          "output": "REFUSED 127.0.0.1:2223\nFIX: run 'ss -tlnp | grep :2223' on that machine\nelapsed: 0s",
+          "explanation": "Nothing is bound to port 2223, so the kernel replies with a TCP RST immediately. The machine is fine; the service is the problem."
+        },
+        {
+          "input": "./reach.sh 10.255.255.1",
+          "output": "TIMEOUT 10.255.255.1:22\nFIX: compare 'ip route' on both machines; this is a path problem, not a key problem\nelapsed: 5s",
+          "explanation": "Measured: packets go nowhere, nothing replies, and the script cuts the attempt at its own 5-second limit. Left to the kernel this same call took 75 seconds on macOS — which is why the cap has to be imposed by the script. This is the same signature as the two-subnet failure from the lesson."
+        },
+        {
+          "input": "./reach.sh 160.187.1.208",
+          "output": "OPEN 160.187.1.208:22\nelapsed: 0s",
+          "explanation": "The production VPS answers immediately. Reachability is established, so any remaining problem is authentication and belongs to the later steps of the triage."
+        }
+      ],
+      "hintsJson": [
+        "`{ exec 3<>\"/dev/tcp/$HOST/$PORT\"; } 2>/dev/null` opens the socket without printing bash's own error line. Writing `exec ... 2>/dev/null` instead fails to suppress it and permanently redirects your script's stderr on success.",
+        "Bash's SECONDS variable is the simplest timer: record it before the attempt and subtract afterwards. Whole-second resolution is enough for a 4-second threshold.",
+        "There is no timeout option for /dev/tcp. Run the open in a background subshell — `( exec 3<>\"/dev/tcp/$HOST/$PORT\" ) 2>/dev/null &` — then poll `kill -0 $pid` in a loop with `sleep 0.1` and kill it once the limit passes. `wait $pid` afterwards gives you the real status when it finished on its own.",
+        "Close both directions of the descriptor when you are done: `exec 3<&-; exec 3>&-`. Leaving it open holds a TCP session for the life of the script."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "reach.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Goi tin co toi noi khong? Va neu khong thi HONG O DAU?\n# REFUSED va TIMEOUT chi ve HAI CAI MAY NGUOC NHAU.\nset -uo pipefail\n\nHOST=${1:?usage: reach.sh HOST [PORT]}\nPORT=${2:-22}\nLIMIT=5\n\n# TODO 1: CANH BAO — /dev/tcp KHONG co thoi gian cho rieng. Goi thang no\n#         la ban dang cho theo thoi gian cho cua nhan: do that tren macOS\n#         la 75 GIAY. Ban phai TU AP HAN:\n#         mo socket trong mot tien trinh con ( ... ) & roi tu bam gio,\n#         het han thi kill no.\n\n# TODO 2: do thoi gian bang bien SECONDS cua bash.\n\n# TODO 3: thanh cong        -> OPEN, thoat 0\n#         bi cat vi het han -> TIMEOUT + FIX, thoat 2\n#         that bai ngay     -> REFUSED + FIX, thoat 1\n\n# TODO 4: luon in dong \"elapsed: <n>s\" de nguoi doc thay BANG CHUNG.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "reach.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Goi tin co toi noi khong? Va neu khong thi HONG O DAU?\n# REFUSED va TIMEOUT chi ve HAI CAI MAY NGUOC NHAU.\nset -uo pipefail\n\nHOST=${1:?usage: reach.sh HOST [PORT]}\nPORT=${2:-22}\nLIMIT=5\n\n# ── Vi sao phai tu ap han gio ───────────────────────────────────────\n# /dev/tcp KHONG co tuy chon thoi gian cho. Neu chi goi thang no thi ta\n# dang cho theo thoi gian cho cua NHAN he dieu hanh, va con so do dai hon\n# nhieu so voi ky vong: do that tren macOS la 75 GIAY cho mot dia chi\n# khong co duong ve. Mot cong cu chan doan treo 75 giay thi khong ai dung.\n# Vi vay: mo socket trong mot tien trinh con, va tu minh bam gio.\nstart=$SECONDS\n( exec 3<>\"/dev/tcp/$HOST/$PORT\" ) 2>/dev/null &\npid=$!\n\nwaited=0\nwhile kill -0 \"$pid\" 2>/dev/null; do\n  [ \"$waited\" -ge \"$((LIMIT * 10))\" ] && break\n  sleep 0.1\n  waited=$((waited + 1))\ndone\n\nif kill -0 \"$pid\" 2>/dev/null; then\n  # Van dang treo sau khi het han -> khong co gi tro ve.\n  kill \"$pid\" 2>/dev/null\n  wait \"$pid\" 2>/dev/null\n  rc=124                 # quy uoc: 124 = het gio, giong lenh timeout\nelse\n  wait \"$pid\"; rc=$?\nfi\nelapsed=$(( SECONDS - start ))\n\nif [ \"$rc\" -eq 0 ]; then\n  echo \"OPEN $HOST:$PORT\"\n  echo \"elapsed: ${elapsed}s\"\n  exit 0\nfi\n\n# Toan bo phep phan biet nam o day, va no dua tren VAT LY chu khong phai\n# tren thong bao loi (bash khong cho ta ly do that bai).\n#  - Co may nhan goi va tra RST  -> that bai gan nhu tuc thi.\n#  - Goi tin bi vut di           -> khong co gi tro ve, ta phai tu cat.\nif [ \"$rc\" -eq 124 ]; then\n  echo \"TIMEOUT $HOST:$PORT\"\n  echo \"FIX: compare 'ip route' on both machines; this is a path problem, not a key problem\"\n  echo \"elapsed: ${elapsed}s\"\n  exit 2\nfi\n\necho \"REFUSED $HOST:$PORT\"\necho \"FIX: run 'ss -tlnp | grep :$PORT' on that machine\"\necho \"elapsed: ${elapsed}s\"\nexit 1\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>The timeout has to be imposed by the script.</strong> <code>/dev/tcp</code> accepts no timeout option, so a direct call waits for the kernel’s own connect timeout — measured at <strong>75 seconds</strong> on macOS against an address with no route. A diagnostic that hangs for over a minute is one nobody runs, and worse, it makes a timeout indistinguishable from a hung terminal. Running the open in a background subshell and killing it after five seconds puts the limit under your control, and the conventional exit code 124 for &quot;timed out&quot; matches what the <code>timeout</code> command uses, so the classification stays readable.</p><p>The verdict comes from whether the attempt had to be killed, because bash gives no other signal. <code>/dev/tcp</code> reports failure as a non-zero status with no reason attached, so the script has to infer the reason from physics: a machine that receives your packet and rejects it sends a TCP RST that arrives in milliseconds, while a packet that is dropped produces nothing and the attempt runs until the kernel gives up. Those two behaviours are far apart in time, which makes a four-second threshold reliable in practice even though it is a heuristic.</p><p>The distinction earns its place because the two cures point at different machines. <em>Refused</em> means the destination is alive and reachable — the work is on that host, checking whether sshd is running and what address it bound to. <em>Timeout</em> means your packets never arrived, so inspecting the destination is wasted effort; the work is on the path between you, in routing tables and firewalls. This is exactly the failure from the lesson: a Mac on <code>192.168.83.101</code> could not reach <code>192.168.1.102</code> and every instinct said &quot;check the key&quot;, when the timeout was already saying &quot;there is no route&quot;.</p><p>Printing <code>elapsed</code> unconditionally is a small thing with real value. It shows the evidence the verdict rests on, so a reader who sees <code>REFUSED</code> with <code>elapsed: 4s</code> knows the classification is borderline and worth a second run, rather than trusting a label that happens to be wrong on an unusually slow link.</p><p>Closing both directions of file descriptor 3 matters because <code>&lt;&gt;</code> opened it read-write. An unclosed descriptor holds the TCP session open for the script's lifetime, and running this in a loop over a fleet would accumulate connections against the server's <code>MaxStartups</code> — turning your diagnostic into the outage.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Thu mo TCP] --> B{Co mo duoc khong}\n  B -->|Duoc| C[OPEN thoat 0]\n  B -->|Khong| D{Mat bao lau}\n  D -->|Duoi 4 giay| E[REFUSED may song sua TREN MAY DO]\n  D -->|Tu 4 giay tro len| F[TIMEOUT khong co duong sua TREN DUONG DI]",
+      "referenceUrl": "https://www.rfc-editor.org/rfc/rfc9293"
+    },
+    {
+      "title": "Walk Every Permission on the Path to authorized_keys",
+      "difficulty": "EASY",
+      "estimatedMinutes": 30,
+      "points": 10,
+      "concepts": [
+        "path traversal permissions",
+        "group and other write bits",
+        "ownership",
+        "why sshd refuses"
+      ],
+      "prerequisites": [
+        "Unix file modes",
+        "authorized_keys location"
+      ],
+      "tags": [
+        "ssh",
+        "permissions",
+        "diagnostics",
+        "bash"
+      ],
+      "problemHtml": "<p>sshd refuses to trust <code>authorized_keys</code> if anyone other than the owner can write to it <em>or to any directory on the way to it</em>. That second half is what people miss: the file can be a perfect <code>600</code> and the login still fails because the home directory two levels up is <code>777</code>.</p><p>The real failure from the lesson looked exactly like this — <code>authorized_keys</code> at <code>600</code>, <code>.ssh</code> at <code>700</code>, and <code>/home/cuong</code> at <code>777</code>. The server log named the directory; the client said only <code>Permission denied</code>.</p><p>Write <code>checkperms.sh [PATH]</code>, defaulting to <code>~/.ssh/authorized_keys</code>:</p><ul><li>Walk every component of the absolute path, from <code>/</code> down to the file itself.</li><li>For each component print <code>&lt;mode&gt; &lt;owner&gt; &lt;path&gt; &lt;OK|BAD: reason&gt;</code>.</li><li>A directory is <strong>BAD</strong> if group or other has write permission, unless it is <code>/tmp</code>-style sticky — for this exercise, treat any group- or other-writable directory as bad and say <code>group/other writable</code>.</li><li>A component is <strong>BAD</strong> if it is owned by neither the current user nor <code>root</code>; say <code>wrong owner</code>.</li><li>The final file is <strong>BAD</strong> if group or other can read or write it; say <code>must be 600</code>.</li><li>Finish with <code>verdict: sshd will accept this path</code> or <code>verdict: sshd will refuse — &lt;n&gt; problem(s)</code>, exiting <code>0</code> or <code>1</code>.</li></ul><p>Root-owned directories such as <code>/</code> and <code>/home</code> are normal and must not be flagged as wrong-owner; only their write bits matter.</p>",
+      "inputSpec": "argv[1] is an optional path, defaulting to ~/.ssh/authorized_keys. The path need not exist — a missing final component should be reported rather than crashing.",
+      "outputSpec": "One line per path component: '<mode> <owner> <path> OK' or '... BAD: <reason>'. Then a verdict line. Exit 0 when everything is acceptable, 1 otherwise.",
+      "constraints": "Must run on both Linux and macOS: stat(1) takes different flags on each, so detect or use a portable fallback. Do not shell out to namei, which is Linux-only. Do not modify anything — this is read-only diagnosis.",
+      "examplesJson": [
+        {
+          "input": "./checkperms.sh /home/cuong/.ssh/authorized_keys   # the reproduced failure",
+          "output": "755 root /                      OK\n755 root /home                  OK\n777 cuong /home/cuong           BAD: group/other writable\n700 cuong /home/cuong/.ssh      OK\n600 cuong /home/cuong/.ssh/authorized_keys OK\nverdict: sshd will refuse — 1 problem(s)",
+          "explanation": "The exact situation from the lesson. Both files are flawless and the home directory sinks it. The server logged 'Authentication refused: bad ownership or modes for directory /home/cuong'."
+        },
+        {
+          "input": "./checkperms.sh /home/cuong/.ssh/authorized_keys   # after chmod 755 /home/cuong",
+          "output": "755 root /                      OK\n755 root /home                  OK\n755 cuong /home/cuong           OK\n700 cuong /home/cuong/.ssh      OK\n600 cuong /home/cuong/.ssh/authorized_keys OK\nverdict: sshd will accept this path",
+          "explanation": "One chmod, and the next connection succeeds with no restart — sshd re-checks the modes on every authentication attempt. Exit 0."
+        },
+        {
+          "input": "./checkperms.sh /home/cuong/.ssh/authorized_keys   # file left at 644",
+          "output": "644 cuong /home/cuong/.ssh/authorized_keys BAD: must be 600\nverdict: sshd will refuse — 1 problem(s)",
+          "explanation": "A world-readable authorized_keys is refused even though reading it grants nobody anything — the rule is about the file being trustworthy, not about secrecy of public keys."
+        }
+      ],
+      "hintsJson": [
+        "Build the component list by splitting the absolute path on '/' and accumulating: '', '/home', '/home/cuong', and so on. Resolve a relative path or a ~ first, for example with `cd $(dirname ...) && pwd`.",
+        "stat differs by platform: Linux uses `stat -c '%a %U'` and macOS uses `stat -f '%OLp %Su'`. Try one and fall back to the other, or branch on `uname`.",
+        "Test the write bits arithmetically. With mode in octal, `$(( 8#$mode & 8#022 ))` is non-zero when group or other can write; `8#044` covers group/other read for the final-file check.",
+        "Count problems in a variable rather than exiting on the first one — the whole value of this tool is showing every bad component at once, since fixing one and rediscovering the next is what makes this failure feel endless."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "checkperms.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# sshd tu choi neu NGUOI KHAC ghi duoc vao file — hoac vao BAT KY thu muc\n# nao tren duong toi no. Cai thu hai moi la cai hay bi bo sot.\nset -uo pipefail\n\nTARGET=${1:-$HOME/.ssh/authorized_keys}\n\n# TODO 0: viet ham lay quyen (dang so bat phan) va chu so huu, chay duoc\n#         tren CA Linux lan macOS — stat cua hai he dung co khac nhau:\n#           Linux : stat -c '%a %U'\n#           macOS : stat -f '%OLp %Su'\n\n# TODO 1: dung danh sach tung thanh phan cua duong dan tuyet doi:\n#         /  /home  /home/cuong  /home/cuong/.ssh  ...\n\n# TODO 2: voi moi thu muc: XAU neu nhom hoac nguoi khac GHI duoc,\n#         hoac chu so huu khong phai minh va cung khong phai root.\n\n# TODO 3: voi file cuoi cung: XAU neu nhom hoac nguoi khac doc/ghi duoc.\n\n# TODO 4: dem so loi, in verdict, thoat 0 hoac 1.\n#         DUNG dung lai o loi dau tien — sua mot cai roi phat hien cai\n#         tiep theo chinh la thu lam cho loi nay tuong nhu vo tan.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "checkperms.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# sshd tu choi neu NGUOI KHAC ghi duoc vao file — hoac vao BAT KY thu muc\n# nao tren duong toi no. Cai thu hai moi la cai hay bi bo sot.\nset -uo pipefail\n\nTARGET=${1:-$HOME/.ssh/authorized_keys}\nME=$(id -un)\nproblems=0\n\n# stat khong thong nhat giua cac he. Thu kieu GNU truoc, khong duoc thi\n# quay sang kieu BSD (macOS). Kiem CONG CU truoc khi tin ket qua cua no.\nstat_of() {\n  stat -c '%a %U' \"$1\" 2>/dev/null || stat -f '%OLp %Su' \"$1\" 2>/dev/null\n}\n\n# Chuyen ve duong dan tuyet doi, ke ca khi file cuoi chua ton tai.\ndir=$(cd \"$(dirname \"$TARGET\")\" 2>/dev/null && pwd) || {\n  echo \"khong tim thay thu muc chua $TARGET\" >&2; exit 1; }\nABS=\"$dir/$(basename \"$TARGET\")\"\n\n# Dung danh sach thanh phan: /  /home  /home/cuong  ...\ncomponents=(\"/\")\nacc=\"\"\nIFS='/' read -r -a parts <<< \"${ABS#/}\"\nfor part in ${parts[@]+\"${parts[@]}\"}; do\n  [ -z \"$part\" ] && continue\n  acc=\"$acc/$part\"\n  components+=(\"$acc\")\ndone\n\nfor c in \"${components[@]}\"; do\n  if [ ! -e \"$c\" ]; then\n    printf '%-4s %-8s %s BAD: khong ton tai\\n' '?' '?' \"$c\"\n    problems=$((problems + 1))\n    continue\n  fi\n\n  info=$(stat_of \"$c\")\n  mode=${info%% *}\n  owner=${info##* }\n  reason=\"\"\n\n  if [ \"$c\" = \"$ABS\" ] && [ -f \"$c\" ]; then\n    # File cuoi: nhom/nguoi khac khong duoc DOC lan GHI -> mat na 077\n    [ $(( 8#$mode & 8#077 )) -ne 0 ] && reason=\"must be 600\"\n  else\n    # Thu muc: chi cam GHI. Doc va di qua thi binh thuong — /home phai\n    # cho moi nguoi di qua, neu khong thi khong ai dang nhap duoc.\n    [ $(( 8#$mode & 8#022 )) -ne 0 ] && reason=\"group/other writable\"\n  fi\n\n  # Chu so huu: chinh minh, hoac root. /  va /home la cua root — binh thuong.\n  if [ -z \"$reason\" ] && [ \"$owner\" != \"$ME\" ] && [ \"$owner\" != \"root\" ]; then\n    reason=\"wrong owner\"\n  fi\n\n  if [ -n \"$reason\" ]; then\n    printf '%-4s %-8s %s BAD: %s\\n' \"$mode\" \"$owner\" \"$c\" \"$reason\"\n    problems=$((problems + 1))\n  else\n    printf '%-4s %-8s %s OK\\n' \"$mode\" \"$owner\" \"$c\"\n  fi\ndone\n\nif [ \"$problems\" -eq 0 ]; then\n  echo \"verdict: sshd will accept this path\"\n  exit 0\nfi\necho \"verdict: sshd will refuse — $problems problem(s)\"\nexit 1\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>Directories are checked for write only; the final file is checked for read as well.</strong> That asymmetry is not arbitrary. A directory has to be traversable by everyone — <code>/home</code> at <code>755</code> is correct and necessary, because every user's login walks through it. What must not be true is that a stranger can <em>modify</em> the directory, since that lets them replace <code>.ssh</code> wholesale. For the file itself sshd is stricter and rejects group or other access of any kind, which is why the mask is <code>077</code> there and <code>022</code> for directories.</p><p><strong>The arithmetic test beats string matching on the mode.</strong> <code>$(( 8#$mode &amp; 8#022 ))</code> asks exactly the right question — is any write bit set for group or other — and stays correct for modes people rarely think about, such as <code>2755</code> with setgid or <code>1777</code> with the sticky bit. Comparing against a list of &quot;good&quot; strings like <code>755</code> and <code>700</code> misses those and produces false alarms on directories that are perfectly fine.</p><p><strong><code>stat</code> is not portable, and the script checks its own tool before trusting it.</strong> GNU <code>stat -c</code> and BSD <code>stat -f</code> take different flags, so a script written on Linux silently produces empty output on macOS — and empty output parsed as a mode yields an arithmetic error or, worse, a confident &quot;OK&quot; for every component. Trying one form and falling back to the other keeps the tool honest on the machine the learner is most likely sitting at.</p><p><strong>Not stopping at the first problem</strong> is what makes this usable. This failure has a reputation for feeling endless precisely because people fix one component, retry, fail again, fix the next, and retry — three round trips for a problem that a single listing exposes at once. Counting into a variable and printing every line gives the whole picture in one run.</p><p>One deliberate omission: sticky-bit directories such as <code>/tmp</code> are treated as bad here even though they are safe in practice, because <code>authorized_keys</code> should never live under one. Flagging it is the conservative choice, and the reason is worth knowing rather than silently special-casing.</p>",
+      "referenceUrl": "https://man.openbsd.org/sshd.8"
+    },
+    {
+      "title": "Read the Server Log and Name the Cause",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 15,
+      "concepts": [
+        "server-side log messages",
+        "mapping symptom to cause",
+        "the client cannot know"
+      ],
+      "prerequisites": [
+        "the four causes",
+        "reading command output"
+      ],
+      "tags": [
+        "ssh",
+        "logs",
+        "diagnostics",
+        "bash"
+      ],
+      "problemHtml": "<p>The client says <code>Permission denied (publickey,password)</code> for four unrelated reasons. The server log distinguishes them, and it does so in one line. Learning which line means what is the single highest-value skill in this module — so encode it as a classifier, which forces the rules to be stated precisely.</p><p>Write <code>whylog.sh</code>, reading sshd log output on <strong>stdin</strong> and printing a verdict for the most recent failure.</p><ul><li><code>PERMISSIONS</code> — a line containing <code>bad ownership or modes</code>. Print the directory or file it names.</li><li><code>NO-SUCH-USER</code> — <code>Invalid user</code> or <code>invalid user</code>.</li><li><code>KEY-NOT-ACCEPTED</code> — <code>Failed publickey</code> with no <code>bad ownership</code> line present. The key was offered and did not match.</li><li><code>CONFIG-DENIED</code> — <code>User ... not allowed because</code>, which is <code>AllowUsers</code>, <code>DenyUsers</code> or a shell restriction.</li><li><code>ROOT-DENIED</code> — <code>ROOT LOGIN REFUSED</code> or <code>Root login refused</code>.</li><li><code>MAX-TRIES</code> — <code>Too many authentication failures</code>.</li><li><code>OK</code> — an <code>Accepted publickey</code> or <code>Accepted password</code> line is present and no failure follows it.</li><li><code>NO-EVIDENCE</code> — nothing recognisable. Exit <code>3</code>; every other verdict exits <code>0</code>.</li></ul><p>Check the rules in the order listed and print the <strong>first</strong> that matches. Order matters: a permissions failure also produces <code>Failed publickey</code>, so testing for the key rule first would misfile every permission problem as a missing key — and send the reader to reinstall a key that was never the issue.</p>",
+      "inputSpec": "sshd log lines on stdin, typically from 'journalctl -u ssh -n 50 --no-pager' or 'docker logs <container>'. May contain thousands of unrelated lines.",
+      "outputSpec": "One verdict token, optionally followed by a detail line 'detail: <path or user>' for PERMISSIONS and NO-SUCH-USER. Exit 0 for a recognised verdict, 3 for NO-EVIDENCE.",
+      "constraints": "Read stdin once. Match by substring, case sensitive except where the rule lists both spellings. Do not run journalctl yourself — the script must work on a log captured from another machine or pasted from a colleague.",
+      "examplesJson": [
+        {
+          "input": "Authentication refused: bad ownership or modes for directory /home/cuong\nConnection closed by authenticating user cuong 172.17.0.1 port 55200 [preauth]",
+          "output": "PERMISSIONS\ndetail: /home/cuong",
+          "explanation": "The real log from the reproduced failure. The client saw only 'Permission denied'; this line names the directory and the reason, which is the whole point of reading the server side."
+        },
+        {
+          "input": "Accepted publickey for cuong from 172.17.0.1 port 63108 ssh2: ED25519 SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0",
+          "output": "OK",
+          "explanation": "Captured after chmod 755 on the home directory. Authentication succeeded and the server names the exact key fingerprint that opened the door."
+        },
+        {
+          "input": "Connection closed by authenticating user cuong 172.17.0.1 port 55200 [preauth]\nFailed publickey for cuong from 172.17.0.1 port 55200 ssh2: ED25519 SHA256:sud5pPJ",
+          "output": "KEY-NOT-ACCEPTED",
+          "explanation": "A Failed publickey line with no bad-ownership line anywhere means the key genuinely did not match anything in authorized_keys — the only case where reinstalling the key is the right response."
+        }
+      ],
+      "hintsJson": [
+        "Slurp stdin once into a variable (`log=$(cat)`), then write a `has()` helper using a case pattern. Repeated greps on stdin see an empty stream after the first one.",
+        "Extract the detail with sed or awk on the matching line: for the permissions case, everything after 'bad ownership or modes for directory ' (or '... for file ').",
+        "Encode the ordering as a flat if/elif chain in exactly the order the requirements list. Put PERMISSIONS before KEY-NOT-ACCEPTED, because a permission failure emits both kinds of line.",
+        "For OK, it is not enough that an Accepted line exists — a log may contain an old success followed by a new failure. Take the last matching line of either kind and decide from that one."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "whylog.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Doc log sshd tren stdin -> goi ten NGUYEN NHAN.\n# Dung: ssh may 'sudo journalctl -u ssh -n 50 --no-pager' | ./whylog.sh\nset -uo pipefail\n\nlog=$(cat)\nhas() { case \"$log\" in *\"$1\"*) return 0;; *) return 1;; esac; }\n\n# TODO 1: viet chuoi if/elif THEO DUNG THU TU de bai.\n#         Quan trong: PERMISSIONS phai xet TRUOC KEY-NOT-ACCEPTED, vi mot\n#         loi quyen file cung sinh ra dong \"Failed publickey\" — xet nguoc\n#         thu tu la moi loi quyen deu bi doc thanh \"sai khoa\".\n\n# TODO 2: voi PERMISSIONS va NO-SUCH-USER, in them dong\n#         \"detail: <duong dan hoac ten nguoi dung>\".\n\n# TODO 3: khong nhan ra gi -> NO-EVIDENCE, thoat 3.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "whylog.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Doc log sshd tren stdin -> goi ten NGUYEN NHAN.\n# Dung: ssh may 'sudo journalctl -u ssh -n 50 --no-pager' | ./whylog.sh\nset -uo pipefail\n\n# stdin la ong: chi doc duoc MOT lan.\nlog=$(cat)\nhas() { case \"$log\" in *\"$1\"*) return 0;; *) return 1;; esac; }\n\n# Voi OK: khong du khi chi co dong Accepted o dau do — mot cuon log co the\n# chua lan thanh cong cu roi den lan that bai moi. Lay dong CUOI CUNG\n# thuoc mot trong hai loai va quyet dinh theo no.\nlast_verdict=$(printf '%s\\n' \"$log\" \\\n  | grep -E 'Accepted (publickey|password)|Failed (publickey|password)|Authentication refused|not allowed because|ROOT LOGIN REFUSED|Root login refused|Too many authentication failures|Invalid user|invalid user' \\\n  | tail -1)\n\n# ── Cac luat, dung thu tu de bai ────────────────────────────────────\n\n# 1) Quyen file. PHAI xet truoc KEY-NOT-ACCEPTED: mot loi quyen cung sinh\n#    ra dong \"Failed publickey\", nen xet nguoc lai la moi loi quyen deu bi\n#    doc thanh \"sai khoa\" — va nguoi doc di cai lai mot cai khoa von khong\n#    he co van de gi.\nif has \"bad ownership or modes\"; then\n  echo \"PERMISSIONS\"\n  detail=$(printf '%s\\n' \"$log\" | grep -m1 'bad ownership or modes' \\\n           | sed -E 's/.*bad ownership or modes for (directory|file) //')\n  [ -n \"$detail\" ] && echo \"detail: $detail\"\n\nelif has \"Invalid user\" || has \"invalid user\"; then\n  echo \"NO-SUCH-USER\"\n  detail=$(printf '%s\\n' \"$log\" | grep -m1 -iE 'invalid user' \\\n           | sed -E 's/.*[Ii]nvalid user ([^ ]+).*/\\1/')\n  [ -n \"$detail\" ] && echo \"detail: $detail\"\n\nelif has \"not allowed because\"; then\n  echo \"CONFIG-DENIED\"\n\nelif has \"ROOT LOGIN REFUSED\" || has \"Root login refused\"; then\n  echo \"ROOT-DENIED\"\n\nelif has \"Too many authentication failures\"; then\n  echo \"MAX-TRIES\"\n\nelif has \"Failed publickey\"; then\n  echo \"KEY-NOT-ACCEPTED\"\n\nelif case \"$last_verdict\" in Accepted*|*\" Accepted \"*|*Accepted\\ publickey*|*Accepted\\ password*) true;; *) false;; esac; then\n  echo \"OK\"\n\nelse\n  echo \"NO-EVIDENCE\"\n  exit 3\nfi\n\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>The ordering is the algorithm, and one pair carries almost all the value.</strong> A permission failure writes <em>two</em> kinds of line: <code>Authentication refused: bad ownership or modes for directory /home/cuong</code> and, depending on version and configuration, a <code>Failed publickey</code> line as well. A classifier that checks for <code>Failed publickey</code> first therefore reports <code>KEY-NOT-ACCEPTED</code> for every permission problem. The reader then regenerates keys, re-runs <code>ssh-copy-id</code>, and fails again — because the key was never the issue. Putting the permissions rule first costs nothing and removes that entire wrong path.</p><p><strong><code>OK</code> needs the last line, not any line.</strong> Logs accumulate. A window fetched with <code>journalctl -n 50</code> routinely contains a successful login from an hour ago followed by the failure you are investigating. Testing &quot;does an Accepted line exist&quot; would answer &quot;everything is fine&quot; while looking straight at the failure. Selecting the last line matching either outcome and deciding from that one is what makes the verdict describe the present rather than the past.</p><p><strong><code>NO-EVIDENCE</code> is a real answer, not a fallback.</strong> It usually means the log window did not cover the attempt — <code>-n 50</code> on a busy server can be a few seconds — or that sshd is logging somewhere else entirely. Both are actionable, and both are different from &quot;nothing is wrong&quot;. Giving it its own exit status keeps a caller from treating &quot;I could not tell&quot; as &quot;no problem found&quot;.</p><p>The <code>has()</code> helper uses <code>case</code> patterns rather than <code>grep -q</code>: it avoids six subprocesses, and more importantly it treats the needles literally, so characters like <code>[</code> in <code>[preauth]</code> are not interpreted as regex. <code>log=$(cat)</code> reading stdin exactly once is structural — stdin is a pipe, and a script that greps it repeatedly gets the right answer from the first grep and an empty stream for every rule after it.</p>",
+      "diagramMermaid": "flowchart TD\n  L[Log sshd tren stdin] --> A{bad ownership or modes}\n  A -->|Co| P[PERMISSIONS in ca duong dan]\n  A -->|Khong| B{Invalid user}\n  B -->|Co| U[NO-SUCH-USER]\n  B -->|Khong| C{not allowed because}\n  C -->|Co| D[CONFIG-DENIED]\n  C -->|Khong| E{ROOT LOGIN REFUSED}\n  E -->|Co| F[ROOT-DENIED]\n  E -->|Khong| G{Too many authentication failures}\n  G -->|Co| H[MAX-TRIES]\n  G -->|Khong| I{Failed publickey}\n  I -->|Co| J[KEY-NOT-ACCEPTED]\n  I -->|Khong| K{Dong CUOI la Accepted}\n  K -->|Phai| M[OK]\n  K -->|Khong| N[NO-EVIDENCE thoat 3]",
+      "referenceUrl": "https://man.openbsd.org/sshd.8"
+    },
+    {
+      "title": "Are These Two Machines Even On the Same Network?",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 15,
+      "concepts": [
+        "subnets and masks",
+        "CIDR arithmetic",
+        "routing tables",
+        "same-network test"
+      ],
+      "prerequisites": [
+        "IP addresses",
+        "reading ip route output"
+      ],
+      "tags": [
+        "ssh",
+        "networking",
+        "subnet",
+        "bash"
+      ],
+      "problemHtml": "<p>&quot;We are both on the Wi-Fi&quot; is not the same claim as &quot;we are on the same network&quot;, and the difference is what cost an evening on 11 August 2026. A Mac reported <code>192.168.83.101</code> and a Linux machine reported <code>192.168.1.102</code>. Both were on Wi-Fi. Neither could see the other, because <code>192.168.83.x</code> and <code>192.168.1.x</code> are different networks and nothing routed between them.</p><p>Two addresses are on the same network when the network portion — the bits selected by the subnet mask — is identical. Write <code>samenet.sh IP1 IP2 [PREFIX]</code> that decides it arithmetically instead of by eye.</p><ul><li><code>PREFIX</code> is a CIDR length, defaulting to <code>24</code>.</li><li>Compute the network address of each input by masking off the host bits.</li><li>Print <code>net1: &lt;network&gt;/&lt;prefix&gt;</code> and <code>net2: &lt;network&gt;/&lt;prefix&gt;</code>.</li><li>Print <code>SAME-NETWORK</code> and exit <code>0</code> when they match, or <code>DIFFERENT-NETWORK</code> plus a line <code>FIX: they cannot reach each other directly; put both on one network or route between them</code> and exit <code>1</code>.</li><li>Reject malformed input with <code>BAD-INPUT</code> and exit <code>2</code>: four octets, each 0-255, and a prefix between 0 and 32.</li></ul><p>Do the masking with integer arithmetic on the 32-bit value, not by comparing the first three octets as text. String comparison happens to work for <code>/24</code> and gives silently wrong answers for every other prefix — and <code>/16</code> and <code>/22</code> are both common on real networks.</p>",
+      "inputSpec": "argv[1] and argv[2] are IPv4 addresses in dotted-quad form. argv[3] is an optional CIDR prefix length, default 24.",
+      "outputSpec": "'net1: <addr>/<prefix>', 'net2: <addr>/<prefix>', then 'SAME-NETWORK' (exit 0) or 'DIFFERENT-NETWORK' plus a FIX line (exit 1). 'BAD-INPUT' and exit 2 for malformed input.",
+      "constraints": "Pure arithmetic — no ping, no network access at all. Must handle any prefix from 0 to 32 correctly, not just /24. Bash arithmetic is 64-bit signed here, so a naive left shift can produce a negative mask if you are not careful.",
+      "examplesJson": [
+        {
+          "input": "./samenet.sh 192.168.83.101 192.168.1.102",
+          "output": "net1: 192.168.83.0/24\nnet2: 192.168.1.0/24\nDIFFERENT-NETWORK\nFIX: they cannot reach each other directly; put both on one network or route between them",
+          "explanation": "The exact pair from the real failure. The third octet differs, so under a /24 mask these are two separate networks — which is why ping got 100% packet loss and port 22 timed out."
+        },
+        {
+          "input": "./samenet.sh 192.168.83.101 192.168.1.102 16",
+          "output": "net1: 192.168.0.0/16\nnet2: 192.168.0.0/16\nSAME-NETWORK",
+          "explanation": "Same two addresses, different mask, opposite answer. This is why the prefix cannot be assumed: whether two addresses are 'on the same network' is a property of the mask, not of the addresses alone."
+        },
+        {
+          "input": "./samenet.sh 192.168.1.300 192.168.1.2",
+          "output": "BAD-INPUT",
+          "explanation": "300 is not a valid octet. Rejecting it explicitly matters because silently treating it as 300 mod 256 = 44 would produce a confident answer about a network nobody asked about."
+        }
+      ],
+      "hintsJson": [
+        "Convert dotted quad to a 32-bit integer: `(a<<24) + (b<<16) + (c<<8) + d`. Convert back by shifting and masking with 255.",
+        "Build the mask from the prefix as `mask=$(( 0xFFFFFFFF << (32 - prefix) & 0xFFFFFFFF ))`. The second AND is essential — bash integers are 64-bit, so without it the shift leaves high bits set and every comparison is wrong.",
+        "A prefix of 0 is legal and means 'everything is one network'. Guard the shift: shifting by 32 is undefined in C and bash inherits the surprise, so special-case prefix 0 with a mask of 0.",
+        "Validate before computing. Check the address matches four dot-separated numbers and each is between 0 and 255, and that the prefix is 0-32."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "samenet.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Hai dia chi nay co CUNG mot mang khong? Tinh bang SO HOC, khong nhin bang mat.\n# \"Cung Wi-Fi\" KHONG dong nghia voi \"cung mang\".\nset -uo pipefail\n\nIP1=${1:?usage: samenet.sh IP1 IP2 [PREFIX]}\nIP2=${2:?usage: samenet.sh IP1 IP2 [PREFIX]}\nPREFIX=${3:-24}\n\n# TODO 1: viet ham kiem tra mot dia chi IPv4 hop le:\n#         bon so cach nhau bang dau cham, moi so tu 0 den 255.\n#         Prefix phai tu 0 den 32. Sai -> BAD-INPUT, thoat 2.\n\n# TODO 2: doi dia chi thanh so 32 bit, va doi nguoc lai.\n\n# TODO 3: dung MAT NA tu prefix.\n#         BAY: so nguyen cua bash la 64 bit, nen phai AND them 0xFFFFFFFF,\n#         khong thi cac bit cao con sot lai va moi phep so deu sai.\n#         Prefix = 0 phai xu ly rieng (dich 32 bit la khong xac dinh).\n\n# TODO 4: in net1, net2 roi ket luan.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "samenet.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Hai dia chi nay co CUNG mot mang khong? Tinh bang SO HOC, khong nhin bang mat.\n# \"Cung Wi-Fi\" KHONG dong nghia voi \"cung mang\".\nset -uo pipefail\n\nIP1=${1:?usage: samenet.sh IP1 IP2 [PREFIX]}\nIP2=${2:?usage: samenet.sh IP1 IP2 [PREFIX]}\nPREFIX=${3:-24}\n\nbad() { echo \"BAD-INPUT\"; exit 2; }\n\nvalid_ip() {\n  case \"$1\" in\n    *[!0-9.]*|*..*|.*|*.) return 1 ;;\n  esac\n  local n=0 o\n  local IFS=.\n  for o in $1; do\n    [ -z \"$o\" ] && return 1\n    [ \"$o\" -gt 255 ] 2>/dev/null || [ \"$o\" -lt 0 ] 2>/dev/null && return 1\n    [ \"$o\" -gt 255 ] && return 1\n    n=$((n + 1))\n  done\n  [ \"$n\" -eq 4 ]\n}\n\nvalid_ip \"$IP1\" || bad\nvalid_ip \"$IP2\" || bad\ncase \"$PREFIX\" in *[!0-9]*|'') bad ;; esac\n[ \"$PREFIX\" -gt 32 ] && bad\n\nto_int() {\n  local IFS=. ; set -- $1\n  echo $(( ($1 << 24) + ($2 << 16) + ($3 << 8) + $4 ))\n}\n\nto_ip() {\n  local v=$1\n  echo \"$(( (v >> 24) & 255 )).$(( (v >> 16) & 255 )).$(( (v >> 8) & 255 )).$(( v & 255 ))\"\n}\n\n# Mat na. HAI cai bay o day:\n#  1) So nguyen cua bash la 64 bit co dau, nen `0xFFFFFFFF << 8` de lai\n#     cac bit cao ngoai 32 bit. Phai AND lai voi 0xFFFFFFFF.\n#  2) Dich 32 bit la hanh vi khong xac dinh — prefix 0 phai xu ly rieng.\nif [ \"$PREFIX\" -eq 0 ]; then\n  mask=0\nelse\n  mask=$(( (0xFFFFFFFF << (32 - PREFIX)) & 0xFFFFFFFF ))\nfi\n\nn1=$(( $(to_int \"$IP1\") & mask ))\nn2=$(( $(to_int \"$IP2\") & mask ))\n\necho \"net1: $(to_ip $n1)/$PREFIX\"\necho \"net2: $(to_ip $n2)/$PREFIX\"\n\nif [ \"$n1\" -eq \"$n2\" ]; then\n  echo \"SAME-NETWORK\"\n  exit 0\nfi\n\necho \"DIFFERENT-NETWORK\"\necho \"FIX: they cannot reach each other directly; put both on one network or route between them\"\nexit 1\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>The 64-bit mask trap is the one that bites.</strong> Bash arithmetic is 64-bit signed, so <code>0xFFFFFFFF &lt;&lt; 8</code> is <code>0xFFFFFFFF00</code>, not <code>0xFFFFFF00</code>. Every high bit outside the 32-bit range stays set, and because both operands carry the same garbage the comparison sometimes still gives the right answer — which is worse than always failing, since the bug survives casual testing and surfaces on some other prefix months later. The trailing <code>&amp; 0xFFFFFFFF</code> truncates back to 32 bits and makes the result mean what it says.</p><p><strong>Prefix 0 needs its own branch</strong> because shifting a 32-bit quantity by 32 is undefined behaviour in C, and bash inherits the surprise from the platform rather than defining it away. <code>/0</code> is legal CIDR meaning &quot;the whole address space is one network&quot;, so the correct mask is 0 and the answer is always SAME-NETWORK.</p><p><strong>Why arithmetic rather than comparing octets as text.</strong> Comparing the first three octets is correct for <code>/24</code> and silently wrong for everything else. On a <code>/16</code> the same two addresses from the real failure — <code>192.168.83.101</code> and <code>192.168.1.102</code> — <em>are</em> on one network, and the text comparison says they are not. On a <code>/22</code>, addresses whose third octets differ can still share a network. Both prefixes are ordinary on real corporate and home networks, so the shortcut is a bug waiting for a different building.</p><p><strong>Validating before computing</strong> matters more than it looks. Bash arithmetic on <code>300</code> happily produces a number, so an invalid octet yields a confident verdict about a network that does not exist. Rejecting it up front is the difference between a tool that says &quot;I cannot answer that&quot; and one that misleads.</p><p>The practical takeaway is the one the lesson makes: two machines share a network only when their masked addresses match, and knowing an address tells you nothing about whether a route exists. On a real host the prefix comes from <code>ip route</code> — the <code>192.168.1.0/24 dev eth0</code> line — rather than being assumed, and this tool is what you feed those numbers into.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Hai dia chi IPv4] --> B[Doi moi cai thanh so 32 bit]\n  B --> C[Dung mat na tu prefix]\n  C --> D[AND lai voi 0xFFFFFFFF vi bash la 64 bit]\n  D --> E[AND dia chi voi mat na duoc dia chi mang]\n  E --> F{Hai dia chi mang co bang nhau khong}\n  F -->|Co| G[SAME-NETWORK]\n  F -->|Khong| H[DIFFERENT-NETWORK khong voi toi nhau truc tiep]",
+      "referenceUrl": "https://www.rfc-editor.org/rfc/rfc4632"
+    },
+    {
+      "title": "Am I Behind NAT? Ask the Machine and Ask the Internet",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 15,
+      "concepts": [
+        "NAT detection",
+        "private address ranges",
+        "inbound reachability",
+        "RFC 1918"
+      ],
+      "prerequisites": [
+        "IP addresses",
+        "the three-part model"
+      ],
+      "tags": [
+        "ssh",
+        "networking",
+        "nat",
+        "bash"
+      ],
+      "problemHtml": "<p>Two commands answer the question &quot;can anyone reach this machine from outside?&quot; — one asks the machine what address it believes it has, the other asks the internet what address it sees. When the two agree, the machine is directly on the internet and inbound connections can reach it. When they differ, it sits behind NAT and no amount of correct addressing or key installation will let someone outside connect to it.</p><p>Measured on 11 August 2026: a Linux machine at home said <code>192.168.1.102</code> while the world saw <code>123.16.55.115</code>. A Mac in the same house said <code>192.168.1.101</code> and the world saw <code>123.16.55.115</code> — the same number, because everything in that house leaves through one gate. The VPS said <code>160.187.1.208</code> and the world saw <code>160.187.1.208</code>: one number, no gate.</p><p>Write <code>whereami.sh</code>:</p><ul><li>Collect every non-loopback IPv4 address the machine has, and print them as <code>local: &lt;addr&gt;</code> lines.</li><li>Fetch the address the internet sees and print <code>public: &lt;addr&gt;</code>. If it cannot be fetched within 8 seconds, print <code>public: unknown</code> and exit <code>3</code> — an unknown public address must never be reported as &quot;not behind NAT&quot;.</li><li>Print <code>DIRECT</code> when the public address is one of the local ones, or <code>BEHIND-NAT</code> otherwise, followed by <code>note: inbound connections cannot reach this machine without a tunnel or port forward</code>.</li><li>Also classify each local address as private or public using the RFC 1918 ranges — <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, <code>192.168.0.0/16</code> — plus the CGNAT range <code>100.64.0.0/10</code>, printing <code>(private)</code> or <code>(public)</code> after it.</li><li>Exit <code>0</code> for DIRECT and <code>1</code> for BEHIND-NAT.</li></ul><p>The <code>172.16.0.0/12</code> range is the one people get wrong: it covers <code>172.16.x.x</code> through <code>172.31.x.x</code>, not all of <code>172.x</code>. Docker's default bridge lives at <code>172.17.0.1</code>, squarely inside it.</p>",
+      "inputSpec": "No arguments. The script inspects the machine it runs on and makes one outbound HTTPS request to an address-echo service.",
+      "outputSpec": "One 'local: <addr> (private|public)' line per interface address, then 'public: <addr>' or 'public: unknown', then 'DIRECT' (exit 0), 'BEHIND-NAT' plus a note (exit 1), or exit 3 when the public address could not be determined.",
+      "constraints": "Must work on both Linux and macOS: 'hostname -I' does not exist on macOS. Skip loopback. The public lookup must have an 8-second cap and must not hang. Never conclude DIRECT when the public address is unknown.",
+      "examplesJson": [
+        {
+          "input": "./whereami.sh   # on the MacBook at home",
+          "output": "local: 192.168.1.101 (private)\npublic: 123.16.55.115\nBEHIND-NAT\nnote: inbound connections cannot reach this machine without a tunnel or port forward",
+          "explanation": "Measured. The machine's own address is private and the world sees a different, public one — that gap is NAT, and it is why the Linux box in the same house could not be reached from outside."
+        },
+        {
+          "input": "./whereami.sh   # on the production VPS",
+          "output": "local: 160.187.1.208 (public)\nlocal: 172.17.0.1 (private)\nlocal: 172.18.0.1 (private)\npublic: 160.187.1.208\nDIRECT",
+          "explanation": "Measured with hostname -I on the VPS, which reports the Docker bridge addresses alongside the real one. The public address appears in the local list, so the machine is directly reachable. Exit 0."
+        },
+        {
+          "input": "./whereami.sh   # with no internet access",
+          "output": "local: 192.168.1.101 (private)\npublic: unknown\n$? = 3",
+          "explanation": "No verdict is printed. Reporting DIRECT here would be the dangerous failure: it would suggest inbound connections work on a machine nobody can reach."
+        }
+      ],
+      "hintsJson": [
+        "For local addresses, `hostname -I` works on Linux only. A portable approach is `ifconfig | awk '/inet /{print $2}'` on macOS and `ip -4 -o addr show | awk '{print $4}'` on Linux — try one, fall back to the other, and strip any /prefix suffix.",
+        "Use `curl -s --max-time 8 https://api.ipify.org` for the public address. Check the result is a valid dotted quad before trusting it — a captive portal returns an HTML page with exit status 0.",
+        "For the private-range test, convert to a 32-bit integer and compare against range bounds. Remember 172.16.0.0/12 spans 172.16.0.0 through 172.31.255.255, so a check on '172.*' alone is wrong.",
+        "Structure the NAT verdict as fail-closed: only print DIRECT after positively finding the public address in the local list. Anything else — unknown, unparseable, empty — must not reach that branch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "whereami.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# May nay TU BIET dia chi gi, va THE GIOI nhin thay dia chi gi?\n# Hai so khac nhau = dang o sau NAT = ben ngoai KHONG goi vao duoc.\nset -uo pipefail\n\n# TODO 1: lay moi dia chi IPv4 khong phai loopback.\n#         `hostname -I` KHONG co tren macOS — phai co duong lui.\n\n# TODO 2: phan loai rieng tu / cong khai theo RFC 1918:\n#         10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, va CGNAT 100.64.0.0/10\n#         BAY: 172.16.0.0/12 la 172.16.x.x DEN 172.31.x.x, khong phai ca 172.x\n\n# TODO 3: hoi the gioi (curl, gioi han 8 giay).\n#         Khong lay duoc -> \"public: unknown\", thoat 3.\n#         TUYET DOI khong duoc ket luan DIRECT khi chua biet.\n\n# TODO 4: dia chi cong khai co nam trong danh sach cuc bo khong?\n#         Co -> DIRECT (thoat 0). Khong -> BEHIND-NAT + note (thoat 1).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "whereami.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# May nay TU BIET dia chi gi, va THE GIOI nhin thay dia chi gi?\n# Hai so khac nhau = dang o sau NAT = ben ngoai KHONG goi vao duoc.\nset -uo pipefail\n\nto_int() { local IFS=. ; set -- $1; echo $(( ($1 << 24) + ($2 << 16) + ($3 << 8) + $4 )); }\n\nis_ipv4() {\n  case \"$1\" in *[!0-9.]*|'') return 1 ;; esac\n  local n=0 o; local IFS=.\n  for o in $1; do [ -z \"$o\" ] && return 1; [ \"$o\" -gt 255 ] && return 1; n=$((n+1)); done\n  [ \"$n\" -eq 4 ]\n}\n\n# RFC 1918 + CGNAT. BAY: 172.16.0.0/12 la 172.16.x.x DEN 172.31.x.x.\n# Kiem bang \"172.*\" se bao nham ca 172.32.x.x (cong khai) la rieng tu.\nis_private() {\n  local v; v=$(to_int \"$1\")\n  [ \"$v\" -ge $(to_int 10.0.0.0)    ] && [ \"$v\" -le $(to_int 10.255.255.255)  ] && return 0\n  [ \"$v\" -ge $(to_int 172.16.0.0)  ] && [ \"$v\" -le $(to_int 172.31.255.255)  ] && return 0\n  [ \"$v\" -ge $(to_int 192.168.0.0) ] && [ \"$v\" -le $(to_int 192.168.255.255) ] && return 0\n  [ \"$v\" -ge $(to_int 100.64.0.0)  ] && [ \"$v\" -le $(to_int 100.127.255.255) ] && return 0\n  return 1\n}\n\n# 1) Dia chi cuc bo. hostname -I chi co tren Linux -> phai co duong lui.\nlocals=()\nif command -v ip >/dev/null 2>&1; then\n  while IFS= read -r a; do [ -n \"$a\" ] && locals+=(\"${a%%/*}\"); done \\\n    < <(ip -4 -o addr show scope global 2>/dev/null | awk '{print $4}')\nfi\nif [ ${#locals[@]} -eq 0 ] && command -v ifconfig >/dev/null 2>&1; then\n  while IFS= read -r a; do [ -n \"$a\" ] && locals+=(\"$a\"); done \\\n    < <(ifconfig 2>/dev/null | awk '/inet /{print $2}' | grep -v '^127\\.')\nfi\n\nfor a in ${locals[@]+\"${locals[@]}\"}; do\n  is_private \"$a\" && echo \"local: $a (private)\" || echo \"local: $a (public)\"\ndone\n\n# 2) Hoi the gioi. Cong bat buoc: chua biet thi KHONG duoc ket luan.\npublic=$(curl -s --max-time 8 https://api.ipify.org 2>/dev/null || true)\nif ! is_ipv4 \"$public\"; then\n  # Cong tiep nhan bat coc (captive portal) tra ve mot trang HTML kem\n  # ma thoat 0 — nen phai kiem NOI DUNG chu khong chi kiem ma thoat.\n  echo \"public: unknown\"\n  exit 3\nfi\necho \"public: $public\"\n\n# 3) Ket luan. Chi mot duong duy nhat dan toi DIRECT.\nfor a in ${locals[@]+\"${locals[@]}\"}; do\n  if [ \"$a\" = \"$public\" ]; then\n    echo \"DIRECT\"\n    exit 0\n  fi\ndone\n\necho \"BEHIND-NAT\"\necho \"note: inbound connections cannot reach this machine without a tunnel or port forward\"\nexit 1\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>The whole diagnosis is a comparison between two numbers, and it is decisive.</strong> If what the machine calls itself and what the internet calls it are the same string, packets addressed to that number arrive here. If they differ, something in between is rewriting addresses, and an inbound connection to the public address has no way of knowing which machine behind the gate it was meant for. That is the measured difference between the VPS (<code>160.187.1.208</code> twice) and the machines at home (<code>192.168.1.x</code> locally, <code>123.16.55.115</code> outside).</p><p><strong>Unknown must never become DIRECT.</strong> The public lookup fails for ordinary reasons — no connectivity, a blocked outbound request, a captive portal. A tool that treated failure as &quot;no NAT detected&quot; would report that inbound connections work on a machine nobody can reach, which is the most expensive possible wrong answer here. The check is written fail-closed: <code>DIRECT</code> is printed only from inside a positive match, and every other path exits non-zero.</p><p><strong>Validating the response body, not just the exit status.</strong> A captive portal answers any HTTPS request with its own login page and <code>curl</code> exits 0. Testing that the body parses as a dotted quad is what stops an HTML document being compared against the local addresses and yielding a confident BEHIND-NAT for a machine that is merely unable to ask.</p><p><strong>The <code>172.16.0.0/12</code> range is the trap worth internalising.</strong> It spans <code>172.16.x.x</code> through <code>172.31.x.x</code> — not all of <code>172.x</code>. A shortcut matching <code>172.*</code> misclassifies genuinely public addresses in <code>172.32.0.0</code> and above as private. This matters in practice on any Docker host: the VPS reports <code>172.17.0.1</code> and <code>172.18.0.1</code> alongside its real address, both inside the range, and both correctly reported as private by the arithmetic test.</p><p>Reading the VPS example closely shows why the verdict searches the whole local list rather than taking the first address: <code>hostname -I</code> returns three addresses there, and only one of them matches the public one. Comparing against just the first would have been correct by luck and wrong on a host whose bridge came up first.</p>",
+      "referenceUrl": "https://www.rfc-editor.org/rfc/rfc1918"
+    },
+    {
+      "title": "Fix the Permissions, Idempotently, and Report Every Change",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": [
+        "idempotent repair",
+        "reporting changes",
+        "dry-run mode",
+        "not over-reaching"
+      ],
+      "prerequisites": [
+        "the permission rules",
+        "file modes"
+      ],
+      "tags": [
+        "ssh",
+        "permissions",
+        "automation",
+        "bash"
+      ],
+      "problemHtml": "<p>Once you know the rule, fixing it is four <code>chmod</code> calls. Doing it safely as a script is more interesting, because a repair tool that silently changes things is how a small problem becomes a confusing one — and because the natural implementation over-reaches in a way that can lock a different user out.</p><p>Write <code>fixperms.sh [--apply]</code>:</p><ul><li>Default to a <strong>dry run</strong>: print what would change and change nothing. Only <code>--apply</code> modifies the filesystem.</li><li>Ensure <code>~</code> is not group- or other-writable, <code>~/.ssh</code> is <code>700</code>, <code>~/.ssh/authorized_keys</code> is <code>600</code>, private keys (files in <code>~/.ssh</code> whose first line contains <code>PRIVATE KEY</code>) are <code>600</code>, and <code>.pub</code> files are <code>644</code>.</li><li>For the home directory, <strong>remove only the group and other write bits</strong> — do not set it to a fixed <code>755</code>. A home directory that is legitimately <code>750</code> must stay <code>750</code>; forcing <code>755</code> would widen it.</li><li>Print one line per item: <code>would-change &lt;path&gt; &lt;from&gt; -&gt; &lt;to&gt;</code>, or <code>changed &lt;path&gt; &lt;from&gt; -&gt; &lt;to&gt;</code> under <code>--apply</code>, or nothing at all for items already correct.</li><li>Finish with <code>summary: &lt;n&gt; item(s) need attention</code> or <code>summary: nothing to do</code>.</li><li>Exit <code>0</code> when nothing needs changing, <code>1</code> when something does — so the dry run doubles as a check in a pipeline.</li></ul><p>Identify private keys by content rather than by filename. Naming conventions vary — <code>id_deploy</code>, <code>vps_key</code>, <code>work.pem</code> — and a tool that guesses from names will chmod the wrong files.</p>",
+      "inputSpec": "No positional arguments. The single optional flag --apply switches from dry run to making changes. Operates on $HOME and $HOME/.ssh.",
+      "outputSpec": "Zero or more 'would-change <path> <from> -> <to>' (or 'changed ...') lines, then a summary line. Exit 0 when nothing needs changing, 1 otherwise.",
+      "constraints": "Dry run is the default; --apply is required to modify anything. Never widen a permission — the home directory fix must clear bits, not assign a fixed mode. Detect private keys by reading the first line, not by filename. Skip files you cannot read rather than failing.",
+      "examplesJson": [
+        {
+          "input": "./fixperms.sh   # home is 777, authorized_keys is 644",
+          "output": "would-change /home/cuong 777 -> 755\nwould-change /home/cuong/.ssh/authorized_keys 644 -> 600\nsummary: 2 item(s) need attention",
+          "explanation": "Nothing was modified. Exit 1, so this doubles as a pre-flight check. The home directory goes to 755 here because 777 minus the group and other write bits is 755."
+        },
+        {
+          "input": "./fixperms.sh --apply   # same starting state",
+          "output": "changed /home/cuong 777 -> 755\nchanged /home/cuong/.ssh/authorized_keys 644 -> 600\nsummary: 2 item(s) need attention",
+          "explanation": "The same two changes, applied. The next SSH connection succeeds with no restart — sshd re-checks modes on every authentication attempt."
+        },
+        {
+          "input": "./fixperms.sh   # home is 750, everything else correct",
+          "output": "summary: nothing to do",
+          "explanation": "Exit 0. A 750 home directory has no group or other write bits, so it is already acceptable and is left alone. Forcing 755 would have granted every user on the machine read access to this home directory — a repair tool making things worse."
+        }
+      ],
+      "hintsJson": [
+        "Compute the home directory's target as `printf '%o' $(( 8#$mode & ~8#022 ))` — clear the two write bits and keep everything else. Assigning a literal 755 is the bug this exercise is built around.",
+        "Detect private keys by content: `head -1 \"$f\" | grep -q 'PRIVATE KEY'`. That matches both the OPENSSH and the older PEM headers, and it does not care what the file is called.",
+        "Write one `want()` helper taking a path and a target mode: it compares, prints the right verb depending on the mode flag, increments the counter, and chmods only under --apply. Repeating that logic five times invites the branches to drift.",
+        "Skip missing files quietly but never skip silently when a file exists and cannot be read — that is a finding, not a non-event."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "fixperms.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Sua quyen cho SSH — mac dinh CHI XEM TRUOC, phai co --apply moi doi that.\nset -uo pipefail\n\nAPPLY=0\n[ \"${1:-}\" = \"--apply\" ] && APPLY=1\n\nneed=0\n\n# TODO 0: ham lay quyen bat phan, chay duoc tren ca Linux lan macOS.\n\n# TODO 1: ham want <duong dan> <quyen dich>:\n#         bang nhau -> im lang; khac -> in would-change / changed,\n#         tang bo dem, va chi chmod khi APPLY=1.\n\n# TODO 2: thu muc nha: CHI XOA bit ghi cua nhom va nguoi khac.\n#         KHONG duoc gan cung 755 — mot thu muc nha 750 hop le phai\n#         duoc giu nguyen 750, gan 755 la MO RONG quyen.\n\n# TODO 3: ~/.ssh -> 700 ; authorized_keys -> 600\n\n# TODO 4: khoa rieng -> 600, file .pub -> 644.\n#         Nhan dien khoa rieng bang NOI DUNG (dong dau co PRIVATE KEY),\n#         khong bang ten file — ten dat kieu gi cung co.\n\n# TODO 5: in summary, thoat 0 neu khong co gi phai sua, nguoc lai 1.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "fixperms.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Sua quyen cho SSH — mac dinh CHI XEM TRUOC, phai co --apply moi doi that.\nset -uo pipefail\n\nAPPLY=0\n[ \"${1:-}\" = \"--apply\" ] && APPLY=1\n\nneed=0\n\nmode_of() { stat -c '%a' \"$1\" 2>/dev/null || stat -f '%OLp' \"$1\" 2>/dev/null; }\n\nwant() {\n  local path=$1 target=$2 cur\n  [ -e \"$path\" ] || return 0\n  cur=$(mode_of \"$path\")\n  [ -z \"$cur\" ] && return 0\n  # So sanh SO HOC: \"0600\" va \"600\" la cung mot quyen nhung khac chuoi.\n  if [ $(( 8#$cur )) -eq $(( 8#$target )) ]; then\n    return 0\n  fi\n  need=$((need + 1))\n  if [ \"$APPLY\" -eq 1 ]; then\n    chmod \"$target\" \"$path\" && echo \"changed $path $cur -> $target\"\n  else\n    echo \"would-change $path $cur -> $target\"\n  fi\n}\n\n# ── Thu muc nha: CHI XOA hai bit ghi ────────────────────────────────\n# Day la cho de sai nhat trong ca bai. Gan cung 755 se BIEN MOT thu muc\n# nha 750 (chi minh va nhom doc duoc) thanh 755 — tuc la moi nguoi dung\n# tren may deu doc duoc thu muc nha cua ban. Mot cong cu \"sua bao mat\"\n# ma lai noi rong quyen thi te hon la khong chay gi.\nhome_mode=$(mode_of \"$HOME\")\nif [ -n \"$home_mode\" ]; then\n  target_home=$(printf '%o' $(( 8#$home_mode & ~8#022 )))\n  want \"$HOME\" \"$target_home\"\nfi\n\nwant \"$HOME/.ssh\" 700\nwant \"$HOME/.ssh/authorized_keys\" 600\nwant \"$HOME/.ssh/known_hosts\" 644\n\n# ── Khoa: nhan dien theo NOI DUNG ───────────────────────────────────\n# Ten file khong dang tin: id_deploy, vps_key, work.pem, deploy-2024...\n# Dong dau tien thi noi that.\nif [ -d \"$HOME/.ssh\" ]; then\n  for f in \"$HOME\"/.ssh/*; do\n    [ -f \"$f\" ] || continue\n    case \"$f\" in *.pub) want \"$f\" 644; continue ;; esac\n    if head -1 \"$f\" 2>/dev/null | grep -q 'PRIVATE KEY'; then\n      want \"$f\" 600\n    fi\n  done\nfi\n\nif [ \"$need\" -eq 0 ]; then\n  echo \"summary: nothing to do\"\n  exit 0\nfi\necho \"summary: $need item(s) need attention\"\nexit 1\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>Clearing bits instead of assigning a mode is the substantive idea.</strong> The rule sshd enforces is &quot;nobody else may write here&quot;, and the natural implementation — <code>chmod 755 ~</code> — satisfies it while also granting read and execute to every user on the machine. On a shared host with a home directory deliberately set to <code>750</code>, that is a repair tool quietly widening access. <code>$(( 8#$mode &amp; ~8#022 ))</code> removes exactly the two offending bits and preserves everything else, so <code>777</code> becomes <code>755</code> and <code>750</code> is recognised as already correct and left alone.</p><p><strong>Dry run as the default</strong> follows from the same instinct. A tool that changes filesystem permissions the moment it runs cannot be used to investigate, and investigating is what you are doing when you reach for it. Making <code>--apply</code> explicit also gives the dry run a second job: with exit 1 when anything needs attention, it works unchanged as a check in CI or a pre-deploy step.</p><p><strong>Detecting private keys by content.</strong> Filenames vary wildly — <code>id_ed25519</code>, <code>vps_key</code>, <code>work.pem</code>, <code>deploy-2024</code> — and a pattern match on names either misses real keys or chmods unrelated files to <code>600</code>. Reading the first line and looking for <code>PRIVATE KEY</code> matches both the modern <code>-----BEGIN OPENSSH PRIVATE KEY-----</code> header and the older PEM forms, and it cannot be fooled by naming.</p><p><strong>Comparing modes numerically.</strong> <code>stat</code> may report <code>600</code> or <code>0600</code> depending on the platform and the flags, and those are different strings for the same permission. <code>$(( 8#$cur )) -eq $(( 8#$target ))</code> compares values, so the tool does not report a change that would change nothing — which matters because a repair tool that always claims to have fixed something trains people to ignore its output.</p><p>One deliberate limitation worth stating: this only fixes the user's own home directory and <code>.ssh</code>. A group-writable <code>/home</code> two levels up would still block logins and is not touched here, because fixing it needs root and affects every user on the machine. The previous exercise's path walker is the tool that finds that case; deciding what to do about it is a judgement a script should not make on its own.</p>",
+      "referenceUrl": "https://man.openbsd.org/sshd.8"
+    },
+    {
+      "title": "The SELinux Decisive Test That Always Turns Enforcement Back On",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 45,
+      "points": 20,
+      "concepts": [
+        "SELinux labels",
+        "temporary permissive mode",
+        "guaranteed restore with trap",
+        "decisive tests"
+      ],
+      "prerequisites": [
+        "the four causes",
+        "trap and exit handling"
+      ],
+      "tags": [
+        "ssh",
+        "selinux",
+        "fedora",
+        "bash"
+      ],
+      "problemHtml": "<p>On Fedora, RHEL and Rocky, a file can have perfect ownership and modes and still be unreadable by sshd, because SELinux labels are a second and independent permission system. The symptom is maddening: <code>ls -l</code> looks right, the log says nothing about the key, and the login fails anyway. The usual cause is a password reset or file edit done from a rescue environment without <code>touch /.autorelabel</code> — exactly the sequence that happened on 11 August 2026.</p><p>There is a ten-second test that settles it: put SELinux in permissive mode, retry, and put it straight back. The danger is obvious — a script that turns enforcement off and then dies leaves a production machine unprotected, and nobody notices for months.</p><p>Write <code>selinux-test.sh USER@HOST</code>, to be run <strong>on the server</strong>:</p><ul><li>If <code>getenforce</code> is absent or reports <code>Disabled</code>, print <code>NOT-APPLICABLE</code> and exit <code>0</code>. SELinux is not the problem on Ubuntu.</li><li>If it reports <code>Permissive</code>, print <code>ALREADY-PERMISSIVE — SELinux is not blocking anything</code> and exit <code>0</code>.</li><li>Otherwise: record the current mode, switch to permissive, run a key-only login test against <code>USER@HOST</code>, and <strong>restore enforcing no matter what happens</strong> — including if the script is interrupted or the test crashes.</li><li>Print <code>SELINUX-IS-THE-CAUSE</code> plus <code>FIX: restorecon -Rv ~/.ssh</code> when the login works in permissive mode, or <code>NOT-SELINUX</code> when it fails in both modes.</li><li>Print the labels of <code>~/.ssh</code> and <code>~/.ssh/authorized_keys</code> either way, since the expected label is <code>ssh_home_t</code> and seeing the wrong one is itself the answer.</li><li>Always print <code>restored: Enforcing</code> as the last line, and verify it by reading <code>getenforce</code> again rather than assuming the restore worked.</li></ul><p>The restore must be in a trap on EXIT so that Ctrl-C, a failing command under <code>set -e</code>, or an unexpected error cannot leave enforcement off.</p>",
+      "inputSpec": "argv[1] is a user@host destination used for the login test, normally the same machine over localhost. The script must be run as root or with sudo, since setenforce requires it.",
+      "outputSpec": "'NOT-APPLICABLE' or 'ALREADY-PERMISSIVE ...' (exit 0), or label lines plus 'SELINUX-IS-THE-CAUSE' with a FIX line (exit 1) or 'NOT-SELINUX' (exit 2), always ending with a verified 'restored: <mode>' line.",
+      "constraints": "Enforcement must be restored on every exit path, including signals. Verify the restore by re-reading getenforce; do not assume setenforce succeeded. Never leave the machine permissive. Do not run restorecon automatically — diagnose, then let a human decide.",
+      "examplesJson": [
+        {
+          "input": "sudo ./selinux-test.sh cuong@localhost   # labels wrong after a chroot password reset",
+          "output": "label .ssh: unconfined_u:object_r:user_home_t:s0\nlabel authorized_keys: unconfined_u:object_r:user_home_t:s0\nSELINUX-IS-THE-CAUSE\nFIX: restorecon -Rv ~/.ssh\nrestored: Enforcing",
+          "explanation": "The label is user_home_t where sshd requires ssh_home_t. The login succeeded the moment enforcement was relaxed, which is conclusive. Exit 1."
+        },
+        {
+          "input": "sudo ./selinux-test.sh cuong@localhost   # on Ubuntu",
+          "output": "NOT-APPLICABLE",
+          "explanation": "getenforce does not exist, so SELinux cannot be the cause and the script does not touch anything. Exit 0 — this branch exists so the tool is safe to run from a distribution-agnostic playbook."
+        },
+        {
+          "input": "sudo ./selinux-test.sh cuong@localhost   # labels correct, key genuinely missing",
+          "output": "label .ssh: unconfined_u:object_r:ssh_home_t:s0\nlabel authorized_keys: unconfined_u:object_r:ssh_home_t:s0\nNOT-SELINUX\nrestored: Enforcing",
+          "explanation": "The login failed in permissive mode too, so relaxing enforcement changed nothing and SELinux is exonerated. Exit 2, and the investigation moves to causes 1, 2 and 4."
+        }
+      ],
+      "hintsJson": [
+        "Set the trap before the first setenforce, not after. A trap installed afterwards leaves a window in which an interrupt permanently disables enforcement.",
+        "End the trap handler with an unconditional success — `return 0` or a final `:` — because under set -e a failing last command inside an EXIT trap replaces your real exit status.",
+        "Read labels with `ls -Zd ~/.ssh` and `ls -Z ~/.ssh/authorized_keys`, taking the field containing 'object_r'. The expected value is ssh_home_t; user_home_t and admin_home_t are the two wrong values you will actually see.",
+        "Verify the restore by re-reading getenforce and printing what it says, rather than printing 'restored' unconditionally. A setenforce that failed silently is precisely the outcome the whole design is trying to prevent."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "selinux-test.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Phep thu DUT KHOAT cho SELinux — va no PHAI bat lai che do Enforcing\n# tren MOI duong thoat, ke ca khi bi Ctrl-C.\nset -uo pipefail\n\nDEST=${1:?usage: selinux-test.sh USER@HOST}\n\n# TODO 1: khong co getenforce, hoac dang Disabled -> NOT-APPLICABLE, thoat 0.\n#         Dang Permissive san -> ALREADY-PERMISSIVE, thoat 0.\n\n# TODO 2: DAT BAY TRUOC khi goi setenforce 0.\n#         Dat bay sau la de ho mot khe thoi gian ma neu bi ngat thi may\n#         nam vinh vien o che do khong bao ve.\n#         Ket thuc than bay bang lenh LUON THANH CONG (return 0).\n\n# TODO 3: in nhan cua ~/.ssh va ~/.ssh/authorized_keys.\n\n# TODO 4: chuyen sang permissive, thu dang nhap chi bang khoa, roi ket luan.\n\n# TODO 5: dong cuoi phai la \"restored: <che do>\", doc LAI tu getenforce\n#         chu khong phai in bua — mot lenh setenforce that bai am tham\n#         chinh la dieu ca thiet ke nay muon ngan.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "selinux-test.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Phep thu DUT KHOAT cho SELinux — va no PHAI bat lai che do Enforcing\n# tren MOI duong thoat, ke ca khi bi Ctrl-C.\nset -uo pipefail\n\nDEST=${1:?usage: selinux-test.sh USER@HOST}\n\n# ── 1) Co ap dung duoc khong? ───────────────────────────────────────\nif ! command -v getenforce >/dev/null 2>&1; then\n  echo \"NOT-APPLICABLE\"        # Ubuntu/Debian: khong co SELinux\n  exit 0\nfi\n\nORIG=$(getenforce 2>/dev/null || echo Disabled)\ncase \"$ORIG\" in\n  Disabled)   echo \"NOT-APPLICABLE\"; exit 0 ;;\n  Permissive) echo \"ALREADY-PERMISSIVE — SELinux is not blocking anything\"; exit 0 ;;\nesac\n\n# ── 2) BAY, dat TRUOC khi ha che do ─────────────────────────────────\n# Thu tu o day khong phai chuyen phong cach. Dat bay SAU khi goi\n# setenforce 0 la de ho mot khe thoi gian — bi ngat trong khe do la may\n# nam vinh vien o che do khong bao ve, va khong ai nho ra de bat lai.\n#\n# `return 0` o cuoi: voi set -e, mot lenh cuoi that bai trong bay EXIT se\n# thoat ngay tu trong bay va GHI DE ma thoat that cua script.\nrestore() {\n  setenforce 1 2>/dev/null\n  now=$(getenforce 2>/dev/null || echo unknown)\n  echo \"restored: $now\"        # DOC LAI, khong in bua\n  return 0\n}\ntrap restore EXIT INT TERM\n\n# ── 3) Nhan — thuong thi nhin nhan la biet ngay ─────────────────────\nlbl() { ls -Zd \"$1\" 2>/dev/null | awk '{for(i=1;i<=NF;i++) if($i ~ /object_r/) print $i}'; }\necho \"label .ssh: $(lbl \"$HOME/.ssh\")\"\necho \"label authorized_keys: $(lbl \"$HOME/.ssh/authorized_keys\")\"\n\n# ── 4) Phep thu ─────────────────────────────────────────────────────\ntry_login() {\n  ssh -o BatchMode=yes \\\n      -o PreferredAuthentications=publickey \\\n      -o StrictHostKeyChecking=no \\\n      -o ConnectTimeout=10 \\\n      \"$DEST\" true 2>/dev/null\n}\n\nif try_login; then\n  # Dang Enforcing ma van vao duoc -> SELinux khong chan gi ca.\n  echo \"NOT-SELINUX\"\n  exit 2\nfi\n\nsetenforce 0\nif try_login; then\n  echo \"SELINUX-IS-THE-CAUSE\"\n  echo \"FIX: restorecon -Rv ~/.ssh\"\n  exit 1\nfi\n\n# Ha che do ma van hong -> SELinux vo can, di tim nguyen nhan 1, 2 hoac 4.\necho \"NOT-SELINUX\"\nexit 2\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>The trap goes in before the first <code>setenforce 0</code>, and the ordering is the entire safety property.</strong> Installing it afterwards leaves a window — short, but real — in which an interrupt or an unexpected failure leaves the machine permissive with nothing scheduled to change it back. Since the whole reason this test is acceptable is that enforcement returns automatically, a window where that guarantee does not hold undermines the design. Trapping <code>INT</code> and <code>TERM</code> as well as <code>EXIT</code> covers Ctrl-C and a supervisor killing the script.</p><p><strong>The restore verifies itself.</strong> Printing <code>restored: Enforcing</code> unconditionally would be a lie in exactly the case that matters — a <code>setenforce 1</code> that failed because the process lost privileges, or because SELinux was switched to disabled at boot. Re-reading <code>getenforce</code> and printing what it actually says means the last line of output is evidence rather than an assertion, and a human scanning the log can see the machine is protected.</p><p><strong><code>return 0</code> at the end of the handler</strong> is the same trap documented in Module 1's backup exercise: under <code>set -e</code>, a failing final command inside an EXIT handler exits from within the handler and overwrites the script's real exit status. Here that would turn <code>SELINUX-IS-THE-CAUSE</code> (exit 1) into whatever <code>getenforce</code> happened to return, and the caller would lose the verdict entirely.</p><p><strong>Testing enforcing first, then permissive,</strong> makes the result conclusive rather than suggestive. If the login already works under enforcement, SELinux is exonerated without ever relaxing it — the cheapest possible answer, and it avoids touching security state at all. Only when it fails is enforcement relaxed, and only then does a success prove causation: one variable changed, the outcome flipped.</p><p><strong>Not running <code>restorecon</code> automatically</strong> is deliberate. The tool's job is to name the cause; relabelling touches files and, on a machine where labels are broadly wrong, <code>restorecon -R</code> across the wrong directory can take a long time or change more than intended. Printing the command a human can read, understand and run keeps the decision where it belongs — the same reasoning as the host-key triage in Module 1, which reports a mismatch and refuses to fix it.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Bat dau] --> B{Co getenforce khong}\n  B -->|Khong| C[NOT-APPLICABLE thoat 0]\n  B -->|Co| D{Dang o che do nao}\n  D -->|Disabled| C\n  D -->|Permissive| E[ALREADY-PERMISSIVE thoat 0]\n  D -->|Enforcing| F[DAT BAY khoi phuc TRUOC da]\n  F --> G[In nhan cua thu muc va file]\n  G --> H{Vao duoc khi dang Enforcing khong}\n  H -->|Duoc| I[NOT-SELINUX thoat 2]\n  H -->|Khong| J[Ha xuong Permissive roi thu lai]\n  J --> K{Gio vao duoc chua}\n  K -->|Duoc| L[SELINUX-IS-THE-CAUSE thoat 1]\n  K -->|Khong| I\n  I --> M[Bay chay bat lai Enforcing va DOC LAI de xac nhan]\n  L --> M",
+      "referenceUrl": "https://docs.fedoraproject.org/en-US/quick-docs/selinux-troubleshooting/"
+    },
+    {
+      "title": "Check sshd_config for Lockout Risks Before You Reload",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 45,
+      "points": 25,
+      "concepts": [
+        "effective configuration",
+        "pre-flight validation",
+        "lockout prevention",
+        "reload vs restart"
+      ],
+      "prerequisites": [
+        "sshd -T",
+        "the four causes"
+      ],
+      "tags": [
+        "ssh",
+        "security",
+        "operations",
+        "bash"
+      ],
+      "problemHtml": "<p>Editing <code>sshd_config</code> on a remote machine is the one routine task that can end with nobody able to log in. Two mistakes account for almost all of it: a syntax error, so sshd refuses to start and port 22 goes dark; and a semantic change that is perfectly valid and locks out the person making it — turning off password authentication when no key is installed, or adding an <code>AllowUsers</code> line that omits your own account.</p><p>Write <code>preflight-sshd.sh [USER]</code>, run <strong>on the server</strong> before reloading, where <code>USER</code> defaults to the invoking user's name.</p><ul><li><strong>Syntax.</strong> Run <code>sshd -t</code>. On failure print <code>FAIL syntax</code>, the error, and exit <code>1</code> — reloading now takes the server down.</li><li><strong>Password fallback.</strong> If the pending config has <code>passwordauthentication no</code>, check that <code>USER</code> has at least one key in their <code>authorized_keys</code>. If not, print <code>FAIL lockout: passwords off and no key installed for &lt;user&gt;</code> and exit <code>2</code>.</li><li><strong>Allow lists.</strong> If <code>AllowUsers</code> or <code>AllowGroups</code> is set and <code>USER</code> matches neither, print <code>FAIL lockout: &lt;user&gt; is not in AllowUsers/AllowGroups</code> and exit <code>3</code>.</li><li><strong>Root.</strong> If <code>USER</code> is <code>root</code> and <code>permitrootlogin</code> is <code>no</code>, print <code>FAIL lockout: root login disabled and you are root</code> and exit <code>4</code>.</li><li><strong>Listening.</strong> Warn if the configured <code>port</code> differs from a port currently in <code>LISTEN</code> state — a port change needs the firewall opened first. Print <code>WARN port &lt;n&gt; is not currently listening; open the firewall before reloading</code> but do not fail.</li><li>If everything passes print <code>OK safe to reload</code> and, as the final line, <code>reminder: use 'systemctl reload ssh', keep this session open, and test from a second terminal</code>. Exit <code>0</code>.</li></ul><p>Each check must fail with its own exit code so an automation wrapper can distinguish &quot;this would break the server&quot; from &quot;this would lock out this particular person&quot;.</p>",
+      "inputSpec": "argv[1] is an optional username to validate access for, defaulting to the invoking user (or SUDO_USER when run under sudo). The script reads the pending configuration with sshd -T and inspects that user's authorized_keys.",
+      "outputSpec": "'FAIL <kind>: <detail>' with a distinct exit code per check, optional 'WARN ...' lines, or 'OK safe to reload' plus a reminder line and exit 0.",
+      "constraints": "Read the effective config with sshd -T, never by parsing sshd_config directly. Do not reload or restart anything — this validates only. When run under sudo, default to SUDO_USER rather than root, since root is rarely the account being locked out.",
+      "examplesJson": [
+        {
+          "input": "sudo ./preflight-sshd.sh cuong   # PasswordAuthentication no, no key installed",
+          "output": "FAIL lockout: passwords off and no key installed for cuong",
+          "explanation": "Exit 2. This is the classic self-lockout: the config is completely valid, sshd starts happily, and the next connection has no way to authenticate. Catching it before the reload is the difference between an edit and a support ticket."
+        },
+        {
+          "input": "sudo ./preflight-sshd.sh cuong   # everything in order",
+          "output": "OK safe to reload\nreminder: use 'systemctl reload ssh', keep this session open, and test from a second terminal",
+          "explanation": "Exit 0. The reminder is part of the output because the procedure matters as much as the check — reload preserves existing sessions where restart does not."
+        },
+        {
+          "input": "sudo ./preflight-sshd.sh cuong   # Port changed to 2222, firewall not opened",
+          "output": "WARN port 2222 is not currently listening; open the firewall before reloading\nOK safe to reload\nreminder: use 'systemctl reload ssh', keep this session open, and test from a second terminal",
+          "explanation": "Exit 0, because the config is valid and the user can still authenticate — but the warning names the exact next step. On Fedora this is the firewalld trap from the lesson, where enabling sshd is not enough on its own."
+        }
+      ],
+      "hintsJson": [
+        "`sshd -t` validates syntax and prints nothing when the file is clean. Capture both its output and its status: `err=$(sshd -t 2>&1); rc=$?`.",
+        "Default the username from SUDO_USER when present, falling back to `id -un`. Under sudo the invoking user is the one at risk of lockout, not root.",
+        "Resolve the user's home with `getent passwd \"$USER\" | cut -d: -f6` on Linux; falling back to /home/$USER is acceptable but say so in a comment. Then count non-comment, non-blank lines in that home's authorized_keys.",
+        "AllowGroups needs group membership, not just a name match: compare against the output of `id -nG \"$USER\"`. A user in an allowed group passes even though their username appears nowhere."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "preflight-sshd.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Kiem TRUOC KHI reload sshd. Hai kieu tu khoa minh o ngoai:\n#   1) sai cu phap -> sshd khong khoi dong -> cong 22 tat ngum\n#   2) cau hinh HOP LE nhung khoa chinh ban -> tat mat khau khi chua co khoa\nset -uo pipefail\n\nUSER_CHECK=${1:-${SUDO_USER:-$(id -un)}}\n\n# TODO 1: sshd -t. Hong -> FAIL syntax + thong bao loi, thoat 1.\n\n# TODO 2: doc cau hinh DANG CO HIEU LUC bang `sshd -T` (dung doc file).\n\n# TODO 3: passwordauthentication no MA nguoi dung chua co khoa nao\n#         -> FAIL lockout, thoat 2.\n\n# TODO 4: co AllowUsers/AllowGroups ma nguoi dung khong khop\n#         -> FAIL lockout, thoat 3.\n#         Nho: AllowGroups xet THANH VIEN NHOM, dung `id -nG`.\n\n# TODO 5: root + permitrootlogin no -> FAIL lockout, thoat 4.\n\n# TODO 6: cong cau hinh khac cong dang LISTEN -> WARN (khong fail).\n\n# TODO 7: qua het -> OK + dong nhac dung reload va giu phien thu hai.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "preflight-sshd.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Kiem TRUOC KHI reload sshd. Hai kieu tu khoa minh o ngoai:\n#   1) sai cu phap -> sshd khong khoi dong -> cong 22 tat ngum\n#   2) cau hinh HOP LE nhung khoa chinh ban -> tat mat khau khi chua co khoa\nset -uo pipefail\n\n# Duoi sudo, nguoi co nguy co bi khoa la NGUOI GOI, khong phai root.\nUSER_CHECK=${1:-${SUDO_USER:-$(id -un)}}\n\n# ── 1) Cu phap ──────────────────────────────────────────────────────\nerr=$(sshd -t 2>&1); rc=$?\nif [ \"$rc\" -ne 0 ]; then\n  echo \"FAIL syntax\"\n  echo \"$err\"\n  exit 1\nfi\n\n# ── 2) Cau hinh DANG CO HIEU LUC ────────────────────────────────────\n# sshd -T, khong phai doc file: cac dong Include va gia tri mac dinh\n# lam cho file chi la mot buc tranh thieu.\ncfg=$(sshd -T 2>/dev/null)\nget() { printf '%s\\n' \"$cfg\" | awk -v k=\"$1\" '$1==k { $1=\"\"; sub(/^ /,\"\"); print; exit }'; }\n\n# Dem so khoa cua nguoi dung do.\nhome=$(getent passwd \"$USER_CHECK\" 2>/dev/null | cut -d: -f6)\n[ -z \"$home\" ] && home=\"/home/$USER_CHECK\"      # duong lui khi khong co getent\nak=\"$home/.ssh/authorized_keys\"\nnkeys=0\nif [ -r \"$ak\" ]; then\n  nkeys=$(grep -cE '^[[:space:]]*[^#[:space:]]' \"$ak\" 2>/dev/null || echo 0)\nfi\n\n# ── 3) Tat mat khau ma chua co khoa ─────────────────────────────────\nif [ \"$(get passwordauthentication)\" = \"no\" ] && [ \"$nkeys\" -eq 0 ]; then\n  echo \"FAIL lockout: passwords off and no key installed for $USER_CHECK\"\n  exit 2\nfi\n\n# ── 4) Danh sach cho phep ───────────────────────────────────────────\n# Chi can CO MAT la no thanh danh sach cho phep: ai khong duoc goi ten\n# thi bi tu choi, bat ke khoa dung hay sai.\nallow_users=$(get allowusers)\nallow_groups=$(get allowgroups)\nif [ -n \"$allow_users\" ] || [ -n \"$allow_groups\" ]; then\n  ok=0\n  for u in $allow_users; do [ \"$u\" = \"$USER_CHECK\" ] && ok=1; done\n  if [ \"$ok\" -eq 0 ] && [ -n \"$allow_groups\" ]; then\n    # AllowGroups xet THANH VIEN NHOM — mot nguoi co the qua duoc du ten\n    # ho khong xuat hien o dau ca.\n    mygroups=$(id -nG \"$USER_CHECK\" 2>/dev/null)\n    for g in $allow_groups; do\n      for mg in $mygroups; do [ \"$g\" = \"$mg\" ] && ok=1; done\n    done\n  fi\n  if [ \"$ok\" -eq 0 ]; then\n    echo \"FAIL lockout: $USER_CHECK is not in AllowUsers/AllowGroups\"\n    exit 3\n  fi\nfi\n\n# ── 5) Root ─────────────────────────────────────────────────────────\nif [ \"$USER_CHECK\" = \"root\" ] && [ \"$(get permitrootlogin)\" = \"no\" ]; then\n  echo \"FAIL lockout: root login disabled and you are root\"\n  exit 4\nfi\n\n# ── 6) Cong (canh bao, khong chan) ──────────────────────────────────\n# Doi cong ma quen mo tuong lua la cai bay firewalld cua Fedora.\nport=$(get port)\nif [ -n \"$port\" ] && ! ss -tln 2>/dev/null | awk '{print $4}' | grep -q \":$port\\$\"; then\n  echo \"WARN port $port is not currently listening; open the firewall before reloading\"\nfi\n\necho \"OK safe to reload\"\necho \"reminder: use 'systemctl reload ssh', keep this session open, and test from a second terminal\"\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>The two failure modes are genuinely different and need separate handling.</strong> A syntax error is loud: sshd refuses to start and every connection dies, but it is also easy to see coming because <code>sshd -t</code> reports it. A semantic lockout is silent: the config is valid, sshd starts cleanly, existing sessions keep working, and the failure appears only when someone tries to make a <em>new</em> connection — often long after the person who made the change has closed their terminal. Distinct exit codes let a wrapper treat &quot;the server would go down&quot; and &quot;this person would lose access&quot; as the different problems they are.</p><p><strong>Defaulting to <code>SUDO_USER</code> rather than root</strong> reflects who is actually at risk. The command is almost always run with <code>sudo</code>, so <code>id -un</code> returns <code>root</code> — and root frequently has keys installed and <code>PermitRootLogin</code> configured while the human's own account does not. Checking the wrong account produces a confident pass for precisely the person about to be locked out.</p><p><strong><code>AllowGroups</code> requires group membership, not a name match.</strong> Comparing the username against the <code>AllowGroups</code> list finds nothing and reports a lockout for a user who is a member of an allowed group and would connect perfectly well. <code>id -nG</code> expands the user's groups so the check answers the question sshd will actually ask. This is the check most likely to produce a false alarm if written carelessly — and a pre-flight tool that cries wolf gets bypassed, which removes its value entirely.</p><p><strong>The port check warns rather than fails</strong> because a mismatch is not always wrong: you may be about to open the firewall as the next step. But it is worth surfacing, because on Fedora installing and enabling sshd is not sufficient — <code>firewalld</code> blocks the port by default, and a port change without <code>firewall-cmd --add-port</code> produces a timeout that looks exactly like the network failures in cause 1.</p><p><strong>The reminder line is part of the deliverable.</strong> <code>reload</code> re-reads the configuration without dropping established connections; <code>restart</code> kills them, so a bad config plus a restart severs the session you would have used to fix it. Keeping a second terminal open and testing from it before closing the first is the habit that makes every other mistake in this exercise recoverable.</p>",
+      "referenceUrl": "https://man.openbsd.org/sshd_config.5"
+    },
+    {
+      "title": "Reproduce the Silent Refusal, Then Fix It",
+      "difficulty": "HARD",
+      "estimatedMinutes": 70,
+      "points": 25,
+      "concepts": [
+        "building a reproduction",
+        "controlled experiments",
+        "client vs server evidence",
+        "one variable at a time"
+      ],
+      "prerequisites": [
+        "Docker basics",
+        "the permission rules",
+        "reading server logs"
+      ],
+      "tags": [
+        "ssh",
+        "docker",
+        "diagnostics",
+        "bash"
+      ],
+      "problemHtml": "<p>The most reliable way to understand a failure is to cause it on purpose, somewhere it does not matter. This exercise builds a throwaway SSH server in a container, breaks it in a specific way, captures what each side reports, then fixes it and captures the difference — the same procedure used to produce the real log lines quoted throughout this module.</p><p>Write <code>repro.sh</code> that runs the whole experiment end to end and prints a report.</p><ul><li>Start a container running <code>sshd</code> with a user <code>cuong</code>, publishing port 22 on <code>127.0.0.1:2222</code>. Remove any previous container of the same name first so the script is re-runnable.</li><li>Generate a throwaway key pair in a temp directory. Never touch <code>~/.ssh</code>.</li><li>Install the public key correctly, then <strong>break exactly one thing</strong>: <code>chmod 777</code> on the home directory.</li><li>Attempt a key-only login. Capture the client's last line and the server's last log line, and print them as <code>client: ...</code> and <code>server: ...</code>.</li><li>Fix it with <code>chmod 755</code>, attempt again, and print the same two lines for the fixed state.</li><li>Print <code>RESULT reproduced and fixed</code> when the first attempt failed and the second succeeded; otherwise print <code>RESULT experiment inconclusive</code> and exit <code>1</code>.</li><li>Clean up the container on exit, whatever happens.</li></ul><p>Changing one variable and nothing else is what makes the result mean something. If the script fixed permissions <em>and</em> reinstalled the key, a success would not tell you which change mattered — and that ambiguity is the reason so much SSH debugging goes in circles.</p>",
+      "inputSpec": "argv[1] is an optional host port to publish the container on, default 2222. Requires Docker; the script builds a minimal image itself. All state lives in a temp directory and a container, never in the user's real SSH configuration.",
+      "outputSpec": "Four evidence lines — 'client:' and 'server:' for the broken state and again for the fixed state — then 'RESULT reproduced and fixed' (exit 0) or 'RESULT experiment inconclusive' (exit 1).",
+      "constraints": "Never read or modify ~/.ssh. Use StrictHostKeyChecking=no with UserKnownHostsFile=/dev/null so the experiment does not pollute known_hosts. Remove the container in an EXIT trap. Change exactly one variable between the two attempts. When the container cannot start, print docker's own error text rather than a generic message — a swallowed \"port is already allocated\" is exactly the kind of avoidable mystery this module is about.",
+      "examplesJson": [
+        {
+          "input": "./repro.sh",
+          "output": "--- broken: home directory is 777 ---\nclient: cuong@127.0.0.1: Permission denied (publickey,password).\nserver: Authentication refused: bad ownership or modes for directory /home/cuong\n--- fixed: chmod 755 /home/cuong ---\nclient: vao duoc\nserver: Accepted publickey for cuong from 172.17.0.1 port 63108 ssh2: ED25519 SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0\nRESULT reproduced and fixed",
+          "explanation": "This is the actual captured output. Side by side, the two lines make the module's central claim concrete: the client says four words, the server names the directory and the reason."
+        },
+        {
+          "input": "./repro.sh   # port 2222 already used by another container",
+          "output": "khong khoi dong duoc container thi nghiem:\ndocker: Error response from daemon: ... Bind for 127.0.0.1:2222 failed: port is already allocated\ngoi y: cong 2222 co the dang bi chiem. Thu: ./repro.sh 2223\n$? = 1",
+          "explanation": "Measured. The original version printed only \"khong khoi dong duoc container thi nghiem\" and the real cause — a port collision — was invisible. Passing docker's own line through turns a dead end into a one-line fix."
+        },
+        {
+          "input": "./repro.sh   # run twice in a row",
+          "output": "(identical output both times)",
+          "explanation": "Re-runnable: the previous container is removed at startup and again in the EXIT trap, and all keys live in a fresh temp directory. An experiment you cannot repeat is an anecdote."
+        }
+      ],
+      "hintsJson": [
+        "Build the image inline with a heredoc into `docker build -t sshlab -`, installing openssh-server and running `ssh-keygen -A`. Keep it minimal — this is a fixture, not a product.",
+        "Capture the client's last line with `2>&1 | tail -1` and the server's with `docker logs <name> 2>&1 | tail -N`. Take the server log AFTER the attempt, and grep for 'refused|Accepted' so unrelated startup lines do not win.",
+        "Use -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentitiesOnly=yes -o BatchMode=yes on every attempt. BatchMode is what turns a rejected key into an immediate failure rather than a password prompt.",
+        "Put `docker rm -f` in an EXIT trap and end the handler with `return 0`, so an interrupted run leaves nothing behind and the trap does not overwrite your exit status."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "repro.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Gay ra loi CO CHU DICH o mot noi khong quan trong, roi sua no.\n# Doi DUNG MOT bien so — neu khong thi ket qua khong noi len dieu gi.\nset -uo pipefail\n\nNAME=sshlab-repro\nPORT=${1:-2222}      # cho doi duoc — cong 2222 hay bi thu khac chiem\nWORK=$(mktemp -d)\n\n# TODO 0: bay don dep — xoa container va thu muc tam khi thoat.\n#         Ket thuc than bay bang lenh luon thanh cong.\n\n# TODO 1: dung image toi gian co openssh-server + nguoi dung cuong.\n#         Chay container, publish 127.0.0.1:$PORT -> 22.\n#         Hong thi IN NGUYEN VAN loi cua docker — dung nuot no roi thay\n#         bang mot cau chung chung. \"port is already allocated\" la mot\n#         nguyen nhan cu the, va giau no di la tu tao ra dung cai loai\n#         bi an ma ca module nay day cach tranh.\n\n# TODO 2: sinh cap khoa dung mot lan trong $WORK.\n#         TUYET DOI khong dung toi ~/.ssh.\n\n# TODO 3: cai khoa DUNG CACH, roi pha DUNG MOT thu: chmod 777 thu muc nha.\n\n# TODO 4: thu dang nhap. Ghi lai dong cuoi cua CLIENT va dong cuoi cua LOG.\n\n# TODO 5: chmod 755, thu lai, ghi lai hai dong do lan nua.\n\n# TODO 6: lan dau hong VA lan sau duoc -> RESULT reproduced and fixed.\n#         Nguoc lai -> inconclusive, thoat 1.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "repro.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Gay ra loi CO CHU DICH o mot noi khong quan trong, roi sua no.\n# Doi DUNG MOT bien so — neu khong thi ket qua khong noi len dieu gi.\nset -uo pipefail\n\nNAME=sshlab-repro\nPORT=${1:-2222}      # doi duoc, vi cong 2222 rat hay bi thu khac chiem\nWORK=$(mktemp -d)\n\ncleanup() {\n  docker rm -f \"$NAME\" >/dev/null 2>&1\n  rm -rf \"$WORK\" 2>/dev/null\n  return 0        # bay EXIT khong duoc phep ghi de ma thoat that\n}\ntrap cleanup EXIT INT TERM\n\n# ── 1) Do gia ───────────────────────────────────────────────────────\n# CU PHAP: than heredoc bat dau ngay DONG KE TIEP, nen khong duoc treo\n# `|| { ...; }` o cuoi dong nay — dau ngoac dong se bi nuot vao than\n# heredoc, va bash bao \"unexpected end of file\" o tan cuoi file.\n# Dat phep kiem SAU dau ket thuc heredoc.\nif docker build -q -t sshlab-repro-img - >/dev/null <<'DOCKERFILE'\nFROM ubuntu:24.04\nRUN apt-get update && apt-get install -y --no-install-recommends openssh-server \\\n && rm -rf /var/lib/apt/lists/* && mkdir -p /run/sshd\nRUN useradd -m -s /bin/bash cuong && ssh-keygen -A\nCMD [\"/usr/sbin/sshd\",\"-D\",\"-e\"]\nDOCKERFILE\nthen\n  :\nelse\n  echo \"khong dung duoc image thi nghiem\"\n  exit 1\nfi\n\ndocker rm -f \"$NAME\" >/dev/null 2>&1\n# Giu lai NGUYEN VAN loi cua docker. Nuot no di roi in mot cau chung chung\n# la bien mot loi cu the (\"port is already allocated\") thanh mot bi an —\n# dung cai loi ma ca module nay noi ve.\nif ! runerr=$(docker run -d --name \"$NAME\" -p \"127.0.0.1:$PORT:22\" sshlab-repro-img 2>&1); then\n  echo \"khong khoi dong duoc container thi nghiem:\"\n  printf '%s\\n' \"$runerr\" | tail -2\n  echo \"goi y: cong $PORT co the dang bi chiem. Thu: $0 2223\"\n  exit 1\nfi\nsleep 3\n\n# ── 2) Khoa dung mot lan. KHONG dung toi ~/.ssh cua nguoi dung. ─────\nssh-keygen -t ed25519 -f \"$WORK/key\" -N '' -q -C repro\nPUB=$(cat \"$WORK/key.pub\")\n\n# ── 3) Cai DUNG, roi pha DUNG MOT thu ───────────────────────────────\ndocker exec \"$NAME\" bash -c \"\n  mkdir -p /home/cuong/.ssh\n  echo '$PUB' > /home/cuong/.ssh/authorized_keys\n  chown -R cuong:cuong /home/cuong/.ssh\n  chmod 700 /home/cuong/.ssh\n  chmod 600 /home/cuong/.ssh/authorized_keys\n  chmod 777 /home/cuong                       # <-- BIEN SO DUY NHAT\n\" >/dev/null\n\nattempt() {\n  ssh -i \"$WORK/key\" -p \"$PORT\" \\\n      -o BatchMode=yes -o IdentitiesOnly=yes \\\n      -o PreferredAuthentications=publickey \\\n      -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \\\n      -o ConnectTimeout=10 \\\n      cuong@127.0.0.1 'echo vao duoc' 2>&1 | tail -1\n}\nserver_line() {\n  docker logs \"$NAME\" 2>&1 | grep -E 'Authentication refused|Accepted publickey' | tail -1\n}\n\n# ── 4) Trang thai HONG ──────────────────────────────────────────────\necho \"--- broken: home directory is 777 ---\"\nc1=$(attempt); echo \"client: $c1\"\ns1=$(server_line); echo \"server: $s1\"\n\n# ── 5) Doi DUNG MOT bien so ─────────────────────────────────────────\ndocker exec \"$NAME\" chmod 755 /home/cuong\necho \"--- fixed: chmod 755 /home/cuong ---\"\nc2=$(attempt); echo \"client: $c2\"\ns2=$(server_line); echo \"server: $s2\"\n\n# ── 6) Ket luan ─────────────────────────────────────────────────────\n# Chi ket luan khi lan dau HONG va lan sau DUOC. Neu ca hai deu duoc thi\n# ta chua he tai hien duoc loi, va bao \"da sua xong\" luc do la noi doi.\nbroken=0; fixed=0\ncase \"$c1\" in *\"Permission denied\"*) broken=1 ;; esac\ncase \"$c2\" in *\"vao duoc\"*) fixed=1 ;; esac\n\nif [ \"$broken\" -eq 1 ] && [ \"$fixed\" -eq 1 ]; then\n  echo \"RESULT reproduced and fixed\"\n  exit 0\nfi\necho \"RESULT experiment inconclusive\"\nexit 1\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>One variable.</strong> The script installs the key correctly, verifies nothing else is wrong, and then changes exactly one thing: the mode on the home directory. When the second attempt succeeds after a single <code>chmod</code>, the conclusion is forced — no other explanation is available. A script that fixed permissions and reinstalled the key at the same time would produce the same happy output and prove nothing, and that ambiguity is why so much SSH debugging goes round in circles: several things get changed between attempts and the one that mattered is never identified.</p><p><strong>The verdict requires the failure as well as the success.</strong> Checking only that the second attempt worked would report success on a run where the break never took effect — for instance if <code>chmod 777</code> silently failed. Requiring <code>Permission denied</code> first and <code>vao duoc</code> second means the experiment confirms it actually tested something. This is the same discipline as the connectivity pre-check in Module 2's provisioning exercise: a test that did not run must never resemble a test that passed.</p><p><strong>The two evidence lines are the deliverable.</strong> Printing the client's last line beside the server's makes the module's central claim impossible to forget: <code>Permission denied (publickey,password).</code> against <code>Authentication refused: bad ownership or modes for directory /home/cuong</code>. Reading that once is worth more than being told the client is uninformative, because you can see precisely how much information exists and precisely where it lives.</p><p><strong>Isolation is what makes the experiment safe to run.</strong> Keys live in a <code>mktemp -d</code> directory, <code>UserKnownHostsFile=/dev/null</code> keeps the throwaway host key out of the real <code>known_hosts</code>, and the container is removed by an EXIT trap that also fires on Ctrl-C. Nothing in the user's actual SSH configuration is read or written, so the script can be run repeatedly while learning — and an experiment you cannot repeat is an anecdote.</p><p><code>grep -E 'Authentication refused|Accepted publickey'</code> before <code>tail -1</code> matters because the container log opens with startup lines and closes each session with disconnect messages. Taking the raw last line would usually capture <code>Disconnected from user cuong</code>, which is true and says nothing about why.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Dung container sshd dung mot lan] --> B[Sinh cap khoa trong thu muc tam]\n  B --> C[Cai khoa DUNG CACH]\n  C --> D[Pha DUNG MOT thu chmod 777 thu muc nha]\n  D --> E[Thu dang nhap lan 1]\n  E --> F[Ghi lai dong cua client va dong cua log]\n  F --> G[chmod 755 — doi DUNG MOT bien so]\n  G --> H[Thu dang nhap lan 2]\n  H --> I{Lan 1 hong va lan 2 duoc}\n  I -->|Dung| J[reproduced and fixed]\n  I -->|Khong| K[inconclusive thoat 1]",
+      "referenceUrl": "https://man.openbsd.org/sshd.8"
+    },
+    {
+      "title": "The Six-Step Triage Tool",
+      "difficulty": "HARD",
+      "estimatedMinutes": 90,
+      "points": 30,
+      "concepts": [
+        "ordered elimination",
+        "cheap checks first",
+        "actionable output",
+        "composing the module"
+      ],
+      "prerequisites": [
+        "all four causes",
+        "reading traces and logs"
+      ],
+      "tags": [
+        "ssh",
+        "diagnostics",
+        "capstone",
+        "bash"
+      ],
+      "problemHtml": "<p>The module's capstone: one command that answers &quot;why can I not get in?&quot; by running the six checks in the order the lesson establishes, stopping at the first that fails, and naming a specific next command rather than a category.</p><p>Write <code>triage.sh [user@]HOST [PORT]</code>. Each step ends the run when it fails.</p><ol><li><strong>Reachability.</strong> Open TCP to the port with a 5-second cap. Distinguish refused from timeout as in the first exercise. Exit <code>1</code>.</li><li><strong>Is it SSH?</strong> Read the banner; it must start with <code>SSH-</code>. Exit <code>2</code>.</li><li><strong>Which key is offered?</strong> Run <code>ssh -v</code> with <code>BatchMode=yes</code>. If the trace has no <code>Offering public key</code> line at all, the client found no key to try — exit <code>3</code> and say so.</li><li><strong>Was it accepted?</strong> If <code>Offering</code> appears but <code>Server accepts key</code> never does, the server looked and said no. Print the offered fingerprint, exit <code>4</code>, and point at the server log.</li><li><strong>Too many keys?</strong> If three or more <code>Offering</code> lines appear before the failure, warn that <code>MaxAuthTries</code> may be cutting the attempt short and recommend <code>IdentitiesOnly yes</code>.</li><li><strong>Success.</strong> If the trace contains <code>Server accepts key</code>, print <code>OK authenticated as &lt;user&gt;</code> and exit <code>0</code>.</li></ol><p>Every failing step must print a <code>FIX:</code> line naming the command to run next, and every one of them should be runnable without already having access — this tool is for the situation where you are locked out, so a fix that begins &quot;log in and…&quot; is useless.</p><p>Steps 1 and 2 need no credentials at all, which is what makes the ordering valuable: two seconds of work eliminates the largest family of causes before any authentication is attempted.</p>",
+      "inputSpec": "argv[1] is [user@]host; the user defaults to the local username. argv[2] is an optional port, default 22. No stdin.",
+      "outputSpec": "A 'FAIL <n> <layer>: <detail>' line plus a 'FIX: <command>' line for the first failing step, or 'OK authenticated as <user>' on success. Exit status equals the failing step number, or 0.",
+      "constraints": "Steps must run in order and stop at the first failure. Never report a later failure once an earlier one is found. BatchMode=yes is mandatory so the tool cannot hang on a prompt. Do not modify anything — this diagnoses only.",
+      "examplesJson": [
+        {
+          "input": "./triage.sh cuong@192.168.1.102   # from a machine on 192.168.83.x",
+          "output": "FAIL 1 tcp: timeout\nFIX: khac dai mang. Chay `ip route` o CA HAI may va so sanh — day la loi DUONG DI, khong phai loi khoa.",
+          "explanation": "The failure from 11 August 2026. The address was correct and the key was installed; stopping at step 1 prevents an hour spent on keys and permissions that were never wrong."
+        },
+        {
+          "input": "./triage.sh cuong@127.0.0.1 2222   # key installed, home directory 777",
+          "output": "FAIL 4 auth: key offered but not accepted (SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0)\nFIX: doc log PHIA MAY CHU: `journalctl -u ssh -n 30 | grep -iE 'refused|denied'`. Client khong bao gio biet ly do that.",
+          "explanation": "Reproduced. The client cannot distinguish wrong permissions from a missing key from an SELinux label, so the fix line sends the reader to the only place the answer exists."
+        },
+        {
+          "input": "./triage.sh root@160.187.1.208",
+          "output": "OK authenticated as root",
+          "explanation": "All six steps pass against the production VPS. Any remaining complaint is about what happens after login — environment, TTY, PATH — which is Module 5, not a connection problem."
+        }
+      ],
+      "hintsJson": [
+        "Strip the user prefix before opening a socket: `hostonly=${dest#*@}`. Derive the username with `case \"$dest\" in *@*) user=${dest%@*};; *) user=$(id -un);; esac`.",
+        "Run the verbose attempt once and reuse the captured text for steps 3, 4, 5 and 6. Running ssh four times is slow, and worse, a server with MaxAuthTries may behave differently on later attempts.",
+        "Count offering lines with `grep -c 'Offering public key'` on the captured trace. Extract the fingerprint from the last such line with awk, taking the field that starts with SHA256:.",
+        "Steps 1 and 2 must not need credentials — that is the whole reason they come first. Use bash /dev/tcp for both, and read the banner from the same socket you opened for the reachability check to avoid a second connection."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "triage.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Sau buoc, DUNG thu tu, va DUNG LAI o buoc hong dau tien.\n# Hai buoc dau khong can thong tin dang nhap — do la ly do chung dung truoc.\nset -uo pipefail\n\nDEST=${1:?usage: triage.sh [user@]HOST [PORT]}\nPORT=${2:-22}\nHOSTONLY=${DEST#*@}\ncase \"$DEST\" in *@*) USERNAME=${DEST%@*} ;; *) USERNAME=$(id -un) ;; esac\n\nfail() { echo \"FAIL $1 $2\"; echo \"FIX: $3\"; exit \"$1\"; }\n\n# TODO 1: mo TCP, han 5 giay. Phan biet refused (nhanh) va timeout (cham).\n\n# TODO 2: doc banner tu CHINH socket vua mo. Khong bat dau bang SSH- -> fail 2.\n\n# TODO 3-6: chay ssh -v MOT LAN, giu lai vet chay, roi xet:\n#   - khong co dong \"Offering public key\"     -> fail 3 (client khong co khoa nao)\n#   - co Offering ma khong co \"Server accepts\" -> fail 4 (may chu nhin roi noi khong)\n#   - tu 3 dong Offering tro len               -> canh bao MaxAuthTries\n#   - co \"Server accepts key\"                  -> OK, thoat 0\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "triage.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Sau buoc, DUNG thu tu, va DUNG LAI o buoc hong dau tien.\n# Hai buoc dau khong can thong tin dang nhap — do la ly do chung dung truoc.\nset -uo pipefail\n\nDEST=${1:?usage: triage.sh [user@]HOST [PORT]}\nPORT=${2:-22}\nHOSTONLY=${DEST#*@}\ncase \"$DEST\" in *@*) USERNAME=${DEST%@*} ;; *) USERNAME=$(id -un) ;; esac\n\nfail() { echo \"FAIL $1 $2\"; echo \"FIX: $3\"; exit \"$1\"; }\n\n# ── Buoc 1: goi tin co toi khong ────────────────────────────────────\n# Re nhat, khong can thong tin dang nhap, va loai duoc ho nguyen nhan\n# lon nhat. Chay no truoc la ly do ca cong cu nay dang gia.\nstart=$SECONDS\nif { exec 3<>\"/dev/tcp/$HOSTONLY/$PORT\"; } 2>/dev/null; then\n  connected=1\nelse\n  connected=0\nfi\nelapsed=$(( SECONDS - start ))\n\nif [ \"$connected\" -eq 0 ]; then\n  if [ \"$elapsed\" -ge 4 ]; then\n    fail 1 \"tcp: timeout\" \\\n      \"khac dai mang. Chay \\`ip route\\` o CA HAI may va so sanh — day la loi DUONG DI, khong phai loi khoa.\"\n  fi\n  fail 1 \"tcp: refused\" \\\n    \"may TRA LOI nhung khong co gi nghe cong $PORT. Chay \\`ss -tlnp | grep :$PORT\\` TREN CHINH MAY DO.\"\nfi\n\n# ── Buoc 2: co phai SSH khong ───────────────────────────────────────\n# Doc tu CHINH socket vua mo — khong ton them mot ket noi nua.\nif ! IFS= read -r -t 5 banner <&3; then banner=\"\"; fi\nexec 3<&-; exec 3>&-\nbanner=${banner%$'\\r'}\ncase \"$banner\" in\n  SSH-*) ;;\n  *) fail 2 \"protocol: not an SSH server\" \\\n       \"co thu gi do dang nghe cong $PORT nhung khong noi SSH. Kiem lai so cong.\" ;;\nesac\n\n# ── Chay ssh -v MOT LAN roi tai su dung ─────────────────────────────\n# Chay bon lan vua cham, vua co the ra ket qua khac nhau: may chu co\n# MaxAuthTries se hanh xu khac o nhung lan sau.\ntrace=$(ssh -v -p \"$PORT\" \\\n            -o BatchMode=yes \\\n            -o PreferredAuthentications=publickey \\\n            -o ConnectTimeout=10 \\\n            \"$DEST\" true 2>&1)\n\noffers=$(printf '%s\\n' \"$trace\" | grep -c 'Offering public key' || true)\n\n# ── Buoc 3: client co khoa nao de chao khong ────────────────────────\nif [ \"$offers\" -eq 0 ]; then\n  fail 3 \"auth: client offered no key at all\" \\\n    \"khong tim thay khoa nao. Kiem \\`ls -l ~/.ssh/id_*\\` va chi ro bang \\`ssh -i <khoa> ...\\` hoac IdentityFile trong ~/.ssh/config.\"\nfi\n\n# ── Buoc 6 (xet truoc): thanh cong ──────────────────────────────────\n# Phai xet TRUOC buoc 4, vi mot phien thanh cong cung co dong Offering.\nif printf '%s\\n' \"$trace\" | grep -q 'Server accepts key'; then\n  echo \"OK authenticated as $USERNAME\"\n  exit 0\nfi\n\n# ── Buoc 5: qua nhieu khoa ──────────────────────────────────────────\n# Canh bao, khong ket thuc: day la mot nguyen nhan CO THE, khong chac chan.\nif [ \"$offers\" -ge 3 ]; then\n  echo \"WARN client offered $offers keys; MaxAuthTries (mac dinh 6) co the ngat truoc khi toi khoa dung\"\n  echo \"     dat 'IdentitiesOnly yes' va mot 'IdentityFile' cu the trong ~/.ssh/config\"\nfi\n\n# ── Buoc 4: da chao ma khong duoc nhan ──────────────────────────────\nfp=$(printf '%s\\n' \"$trace\" | grep 'Offering public key' | tail -1 \\\n     | awk '{for(i=1;i<=NF;i++) if($i ~ /^SHA256:/) print $i}')\nfail 4 \"auth: key offered but not accepted (${fp:-khong doc duoc dau van tay})\" \\\n  \"doc log PHIA MAY CHU: \\`journalctl -u ssh -n 30 | grep -iE 'refused|denied'\\`. Client khong bao gio biet ly do that — quyen thu muc, nhan SELinux, khoa chua cai deu ra cung mot dong.\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>The ordering is the tool.</strong> Steps 1 and 2 need no credentials and cost about two seconds, and between them they eliminate the largest family of causes — everything to do with routing, firewalls and services that are not running. Only after packets are known to arrive and the thing answering is known to be sshd does the tool spend an authentication attempt. Running the expensive check first is how people end up investigating keys for an hour on a machine their packets never reached, which is exactly the 11 August failure.</p><p><strong>Success is tested before failure.</strong> A successful session contains <code>Offering public key</code> lines too, so checking &quot;offered but not accepted&quot; before checking for <code>Server accepts key</code> would report failure on every working connection. Ordering these two correctly is a one-line decision that determines whether the tool is usable at all.</p><p><strong>One verbose attempt, reused four times.</strong> Beyond being four times faster, this avoids a real correctness problem: a server enforcing <code>MaxAuthTries</code> — 6 on the production VPS — behaves differently on repeated attempts, and a client carrying several keys can exhaust the budget. A tool that ran <code>ssh</code> once per check could produce a different verdict on step 5 than on step 3 for reasons that have nothing to do with the fault being diagnosed.</p><p><strong>Step 5 warns rather than concludes.</strong> Offering three or more keys is a plausible cause of a truncated attempt, not a proven one — the server might have accepted the fourth key had it been reached, or might have rejected all of them. Printing a warning and continuing to the definite verdict keeps the tool honest about the difference between a suspicion and a finding.</p><p><strong>Every FIX line is runnable from outside.</strong> This tool exists for the case where you are locked out, so a fix beginning &quot;log in and check&quot; is worthless. Step 1 sends you to <code>ip route</code> on machines you can reach; step 4 sends you to the server log, and says plainly why: the client is structurally incapable of distinguishing wrong permissions from a missing key from an SELinux label, because sshd deliberately refuses to say. That single sentence is the most useful thing in the module, and putting it in the output means the tool teaches while it diagnoses.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Bat dau] --> B{Mo duoc TCP khong}\n  B -->|Tu choi ngay| C[FAIL 1 refused kiem dich vu tren may do]\n  B -->|Het gio| D[FAIL 1 timeout kiem duong di]\n  B -->|Duoc| E{Banner co bat dau bang SSH khong}\n  E -->|Khong| F[FAIL 2 khong phai may chu SSH]\n  E -->|Co| G[Chay ssh -v MOT lan]\n  G --> H{Co dong Offering public key khong}\n  H -->|Khong| I[FAIL 3 client khong co khoa nao]\n  H -->|Co| J{Co dong Server accepts key khong}\n  J -->|Co| K[OK thoat 0]\n  J -->|Khong| L{Chao tu ba khoa tro len}\n  L -->|Co| M[WARN MaxAuthTries]\n  L -->|Khong| N[FAIL 4 doc log phia may chu]\n  M --> N",
+      "referenceUrl": "https://man.openbsd.org/sshd.8"
+    }
+  ]
+}

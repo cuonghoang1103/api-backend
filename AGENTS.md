@@ -1,0 +1,363 @@
+# Codex Instructions - api-backend
+
+## Project Overview
+
+Full-stack application:
+- **Backend**: Node.js + Express + TypeScript (project root)
+- **Frontend**: Next.js (in `frontend/`)
+- **Database**: PostgreSQL with Prisma ORM
+- **Storage**: Cloudflare R2
+- **Deployment**: Docker containers on VPS, deployed by running `bash deploy.sh` from the local machine. A push to `main` does NOT deploy — see "Docker & Deploy" below
+
+## Environment
+
+- Node version: 22.x (see `package.json engines`)
+- Local dev: `npm run dev` (backend), `cd frontend && npm run dev` (frontend)
+- Local DB: PostgreSQL via `docker compose up -d postgres` (or local install)
+- Env files: `.env` (backend), `frontend/.env.local` — NEVER commit these
+
+---
+
+## NEVER DO - Forbidden Actions
+
+**These actions are forbidden without explicit user approval:**
+
+- **NEVER** run `npx prisma migrate reset` — it wipes ALL data
+- **NEVER** run `npx prisma db push` against production/VPS — bypasses migration history
+- **NEVER** run `git push --force` or `--force-with-lease` to `main`
+- **NEVER** push to `main` without completing the pre-push checklist below, and always ask the user for confirmation first. (A push no longer deploys — `deploy.sh` does — but `main` is still the shared trunk, so it stays a confirm-first action)
+- **NEVER** auto-resolve failed migrations (`prisma migrate resolve`) — see Migration Failure Protocol
+- **NEVER** commit `.env`, `.env.local`, secrets, API keys, or credentials
+- **NEVER** SSH into VPS to modify database or containers directly, unless user explicitly asks
+- **NEVER** delete or edit files in `prisma/migrations/` that have already been deployed
+- **NEVER** downgrade or remove dependencies to "fix" a type error without asking first
+
+---
+
+## Pre-Push Checklist (Conditional)
+
+Run checks based on what changed. **All commands run from project root.**
+
+### If backend code changed (`src/**`):
+```bash
+npx tsc --noEmit
+```
+
+### If frontend code changed (`frontend/**`):
+```bash
+(cd frontend && npx tsc --noEmit)
+(cd frontend && npm run build)
+```
+
+### If Prisma schema changed (`prisma/schema.prisma`):
+```bash
+npx prisma format
+npx prisma generate
+npx prisma migrate dev --name descriptive_name   # verify migration file is created
+npx tsc --noEmit                                  # schema changes affect backend types
+npm run typecheck:seed                            # tsconfig excludes prisma/** from the line above
+npx prisma db seed                                # the ONLY way to catch runtime-only seed breakage
+```
+
+⚠️ **`npx tsc --noEmit` does NOT check the seed scripts.** The main
+tsconfig has `rootDir: "./src"`, so `prisma/**` cannot live in its
+`include` — it sat in `exclude` instead, and nothing type-checked it.
+On 2026-08-08 renaming the `ContentType` enum value `CODE` →
+`CODE_REVIEW` passed the entire checklist and still broke the seed on
+**production**, because `seed.ts` carried its own hand-written copy of
+the union and type-checked against itself. `tsconfig.seed.json` +
+`npm run typecheck:seed` exist to close that hole — run both lines
+above whenever an enum or model changes.
+
+⚠️ **`npx prisma migrate dev` is broken in this repo** (pre-existing,
+not worth fixing): migration `20260706130000_add_music_and_profile`
+adds a UNIQUE constraint named `post_music_post_id_key` and then a
+plain index with the *same name*, so it can never replay on the shadow
+database → `P3006`. It is already deployed, so per the rules above it
+must not be edited. **To add a migration: hand-write the SQL under
+`prisma/migrations/<timestamp>_<name>/migration.sql` and apply with
+`npx prisma migrate deploy`** (no shadow DB). Verify with:
+```bash
+npx prisma migrate diff --from-schema-datasource prisma/schema.prisma \
+  --to-schema-datamodel prisma/schema.prisma --script   # empty = no drift
+```
+
+### If Dockerfile / docker-compose / CI workflow changed:
+```bash
+docker build -t backend-test .                          # test backend image builds
+docker build -t frontend-test ./frontend                 # test frontend image builds
+```
+
+### If both backend and frontend changed: run all of the above.
+
+Final step before push, always:
+- [ ] `git status` — verify no unintended files (especially `.env`, build artifacts)
+- [ ] Confirm with user before pushing to `main` (push triggers production deploy)
+
+---
+
+## Prisma Rules
+
+### Adding/Changing Models
+
+1. Define the model with all fields
+2. Add back-relations in parent models. Use unique `@relation("Name")` when a model has multiple relations to the same target
+3. `npx prisma format` (catches validation errors early)
+4. `npx prisma generate`
+5. `npx prisma migrate dev --name descriptive_name`
+6. Verify the migration file exists in `prisma/migrations/`
+
+**Back-relation pattern:**
+```prisma
+model Parent {
+  id       Int     @id
+  children Child[] @relation("ChildRelation")
+}
+
+model Child {
+  id       Int    @id
+  parentId Int
+  parent   Parent @relation("ChildRelation", fields: [parentId], references: [id])
+}
+```
+
+**Common pitfalls:**
+- Missing opposite relation field in parent model → `prisma generate` fails
+- Duplicate or ambiguous `@relation()` names
+- When using `@@unique([a, b], name: "custom_name")`, queries must use `custom_name`, NOT the default `a_b` compound key:
+```typescript
+// Wrong:   where: { subjectId_recipientId: { subjectId, recipientId } }
+// Correct: where: { uk_note_subject_share: { subjectId, recipientId } }
+```
+
+### Migration Failure Protocol
+
+**If a migration fails on deploy (including P3009 "migration failed to apply"):**
+
+1. **STOP. Do not attempt to auto-fix.**
+2. Do NOT run `prisma migrate resolve --rolled-back` or `--applied` automatically
+3. Do NOT rewrite the migration with `CREATE TABLE IF NOT EXISTS` hacks to force it through
+4. Instead, report to the user:
+   - The exact error message and migration name
+   - Whether the migration partially applied (check which statements ran)
+   - A recommended fix, and wait for user approval
+5. If schema drift is suspected (DB doesn't match migration history), suggest running:
+   ```bash
+   npx prisma migrate diff --from-migrations ./prisma/migrations --to-database-url "$DATABASE_URL" --script
+   ```
+   to see the actual difference before deciding anything.
+
+Rationale: auto-resolving partially-applied migrations can silently corrupt schema/data on production.
+
+---
+
+## Frontend JSX/TSX Rules
+
+- Match every opening tag with a closing tag; no duplicate closing tags
+- Verify structure of conditional render blocks especially (`{condition && (...)}`)
+- `(cd frontend && npm run build)` is the source of truth — TypeScript passing does not guarantee the build passes
+
+---
+
+## Docker & Deploy
+
+**STANDARD deploy + push flow (2026-07-06 — follow this order):**
+1. Run the conditional pre-push checklist locally (tsc / build)
+2. Commit to **local `main`**
+3. Deploy with a full **`bash deploy.sh`** from the local machine (rsync → sequential image builds on VPS → zero-downtime swap → smoke-test). This is the ONLY deploy path — do NOT deploy by pushing to GitHub
+4. **Wait for the user to test production and confirm the fix works**
+5. Only THEN `git push` to origin (with user confirmation, per Forbidden Actions). At this point the push is just syncing GitHub with what prod already runs
+
+Why not push-to-deploy: `deploy-ghcr.yml` and `backend-vps` once ran on every push to `main` and raced each other into real outages (2026-07-03: feed 500 while schema lagged the image; 2026-07-06: backend recreate race → `Exited(137)` + orphan containers, recovered via `docker start cuonghoangdev_backend`). `deploy.sh` stays the only deploy path regardless — it is the one that rsyncs the working tree, builds sequentially, swaps with zero downtime and smoke-tests.
+
+**What a push to `main` actually triggers (verified 2026-08-07):** only `ci-lint.yml` — "CI - Lint & Type Check". **Both deploy workflows are now `on: workflow_dispatch:` only**, i.e. manual-run, so a push cannot start a deploy and cannot re-run the race above. Don't re-add a `push:` trigger to either without a plan for the concurrency problem.
+
+Verify before trusting this line — the trigger is one grep, and the whole outage story above came from it being wrong:
+```bash
+/usr/bin/grep -A4 '^on:' .github/workflows/deploy-ghcr.yml .github/workflows/backend-vps.yml
+gh run list --limit 8 --branch main   # what really fired on the last pushes
+```
+
+**Deploy workflows (manual dispatch only — `gh workflow run <name>`):**
+- `deploy-ghcr.yml` "Deploy via GHCR (fast path)" — build images → GHCR → deploy backend → Prisma migrations on VPS
+- `backend-vps.yml` "Deploy Backend to VPS"
+
+**`CV critique fabrication test` is deliberately dormant (07/08/2026 — do NOT "fix" it).** The repo secret `ANTHROPIC_API_KEY` was **removed on purpose**: the Anthropic account ran out of credit, so re-adding a key would only trade `HTTP 403` for an out-of-credit error and leave CI red either way. With the secret gone the step SKIPs and exits 0, so **CI is green**. Do not suggest re-adding the key unless the user says the account has been topped up.
+
+What that costs: nothing watches for the AI inventing metrics in CV critiques any more (feed a metric-less CV, fail if a `suggestedFix` asserts a number without `needsUserInput`). Run it by hand with `npm run eval:cv-fabrication` — needs an AI key in the local `.env`, which is currently absent, so today it just prints SKIPPED.
+
+To re-arm it later: create a repo secret named exactly `ANTHROPIC_API_KEY` (put the **modelapi.vn** key in it — since 11/08/2026 that variable is just one of three names the gateway reads). No code or workflow edit — `ci-lint.yml` still references it and GitHub substitutes an empty string while it's missing. The gate is `keyForProvider()` in `src/services/cv/llm/index.ts` → `gatewayKey()` in `src/services/llm/gateway.ts`, which reads `LLM_GATEWAY_API_KEY` → `OPENAI_COMPAT_API_KEY` → `ANTHROPIC_API_KEY`; CI passes none of them, so the step still SKIPs and CI stays green.
+
+⛔ **Never delete `VPS_HOST` / `VPS_USER` / `VPS_SSH_PRIVATE_KEY`** — 10 workflows use them, and `vps-cleanup-weekly.yml` runs on a **weekly cron** to reclaim VPS disk (the guard against the disk-full outage that killed Postgres once). Deleting them kills that job silently.
+
+**When CI does go red, check *which step* failed and whether your commit even touches that side of the tree (`git show --stat`) before blaming your own diff.**
+
+**When adding a new environment variable:**
+1. Add to local `.env` / `frontend/.env.local`
+2. Add to `.env.example` (documentation)
+3. Add to docker-compose / Dockerfile `ENV`/`ARG` if needed
+4. **Remind the user** to add it to GitHub Actions secrets and the VPS environment — Codex cannot do this; missing this step is a common cause of deploy failures that local CI won't catch
+5. For Next.js: `NEXT_PUBLIC_*` vars are baked in at **build time** — changing them requires a rebuild, not just a restart
+6. **Third-party API keys must NOT be `NEXT_PUBLIC_*`** — never ship keys in the client bundle. Add a small authenticated backend proxy route instead (pattern: `src/routes/gifs.routes.ts` for GIPHY) and read the key from runtime env
+7. **Production runtime env lives in `/opt/cuonghoangdev/.env` on the VPS.** `deploy.sh` loads it on every deploy and rsync EXCLUDES `.env*`, so values there survive deploys permanently. Caveat: if you append a var while a deploy is already running, that deploy loaded env before your change — recreate the container (`docker compose -p cuonghoangdev up -d --no-build <service>` with env loaded) or redeploy
+
+**When adding a new dependency:**
+- Verify it installs in the Docker build (some packages need system libs) — test with `docker build` locally if unsure
+
+**Deploy hygiene (avoid stale/partial builds):**
+- **Always run a FULL `bash deploy.sh`** after any code change. **NEVER** use `bash deploy.sh --no-build` after changing code — it only rsyncs, does NOT rebuild, so the container keeps running the OLD image (this caused the 2026-07-02 GIF 404 below) and it also **skips the smoke-test**.
+- `deploy.sh` builds backend and frontend images **sequentially** (Step 2a) — an OOM guard for the 6GB VPS: parallel cold builds (cache is pruned after every deploy) killed `next build` with exit 137 on 2026-07-06. Keep it sequential; with a warm cache both builds are near-instant no-ops. If a deploy still fails on `npm ci`/network fetching prebuilt binaries (e.g. sharp), a simple retry usually succeeds and reuses the cached layers.
+- `deploy.sh` runs a **post-deploy smoke-test**: it hits core GET routes on the internal backend and **FAILS the deploy if any returns 404** (404 = route not mounted → stale/partial build). 401/200 = healthy.
+- **When you add a new feature module/router**, add one of its param-less, unauth GET routes to the smoke-test list in `deploy.sh` (search `Smoke-testing core API routes`). Only add routes that return **non-404** on a bare unauth GET — do NOT add POST-only or param-required routes (e.g. `/stickers`, `/auth/login`) or every deploy will false-fail.
+- Diagnose "is a route actually live?" with: `curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/api/v1/<route>` → **401 = mounted (needs auth), 200 = mounted (public), 404 = NOT mounted / stale build**.
+
+**If deploy fails:**
+1. Check GitHub Actions logs (`gh run list`, `gh run view <id> --log-failed`)
+2. Map error to fix:
+   - TypeScript errors → run the relevant `tsc --noEmit` locally
+   - Frontend build errors → `(cd frontend && npm run build)`
+   - Prisma errors → see Migration Failure Protocol above; do NOT auto-resolve
+   - Missing env var → check GitHub secrets / VPS env (ask user)
+
+**Rollback procedure (if a bad deploy reaches production):**
+```bash
+git revert <bad_commit_sha>
+# run pre-push checklist, then push (with user confirmation)
+```
+- NEVER `git push --force` to roll back
+- If the bad deploy included a migration, discuss with the user before reverting — reverting code does not revert the database
+
+---
+
+## Cổng LLM — modelapi.vn (11/08/2026)
+
+**MỘT khoá, MỘT base URL, MỘT bảng model cho cả web.** Nguồn sự thật:
+`src/services/llm/gateway.ts`. Cổng chạy phần mềm **New API**, mở đồng thời
+`/v1/chat/completions` (tuyến OpenAI — ĐƯỜNG MẶC ĐỊNH) và `/v1/messages`
+(tuyến Anthropic — chỉ AI Chat Pro/Max dùng, vì đó là chỗ duy nhất gửi **ảnh
++ PDF**; tuyến OpenAI không có khối `document`, đổi sang đó là âm thầm vứt
+file người dùng vừa đính kèm).
+
+```bash
+LLM_GATEWAY_BASE_URL=https://modelapi.vn/v1
+LLM_GATEWAY_API_KEY=sk-...      # cũng đọc OPENAI_COMPAT_API_KEY / ANTHROPIC_API_KEY
+```
+
+⚠️ **Cổng Rambo (`LLM_BASE_URL`, model `rb-*`) ĐÃ CHẾT.** Thấy `rb-` ở đâu là
+chỗ đó đang trỏ vào đường chết.
+
+⚠️⚠️ **TRANG `/rankings` NÓI DỐI VỀ CÁI KHOÁ NÀY MUA ĐƯỢC.** Nó liệt kê model
+của toàn cổng. Khoá của web, đo thật 11/08/2026 bằng `GET /v1/models`, chỉ có
+**8**: `gpt-5.6-sol` · `gpt-5.6-terra` · `gpt-5.5` · `gpt-5.4` ·
+`gpt-5.4-mini` · `codex-auto-review` · `gpt-image-2` · `gpt-image-1.5`.
+**KHÔNG có model Codex nào** — gọi `Codex-sonnet-5` trả
+`HTTP 503 "No available channel … under group default"`, nghe như cổng bận
+nhưng nó vĩnh viễn cho tới khi có người mở kênh Anthropic trong Console.
+
+**Phân model theo VIỆC, không theo module** — `PURPOSE_MODEL` trong
+`gateway.ts`, đổi bằng `LLM_MODEL_<TÊN VIỆC>` chứ không sửa mã. Việc người
+dùng đọc từng chữ (báo cáo phỏng vấn, mổ CV, sinh câu hỏi) → `gpt-5.6-sol`.
+Việc tương tác cần nhanh (chấm bài, gia sư, kèm code, chat Pro) → `gpt-5.5`
+(2s so với 5,5s của sol). Việc máy đọc (tách JSON) → `gpt-5.4-mini`. Việc
+chạy nền → `gpt-5.6-terra`.
+
+**Ảnh: CHỈ `gpt-5.6-sol` nhìn được thật.** Đo bằng ảnh 1×1 px: sol trả lời
+đúng; `gpt-5.5` / `gpt-5.6-terra` / `gpt-5.4-mini` nhận ảnh, không báo lỗi, và
+bịa ("16×16", lần sau "48×48"). Vì thế mọi lượt chat có ảnh bị ép lên
+`chat_vision` = sol, bất kể người dùng chọn bậc nào.
+
+**PDF: KHÔNG model nào của khoá này đọc được file gốc** — cả khối `document`
+(tuyến Anthropic) lẫn khối `file` (tuyến OpenAI) đều trả về "Vui lòng tải lên
+file PDF". Trước 11/08 PDF đi thẳng vào Codex dạng gốc; đường đó không còn.
+Thay thế: `buildUserContent()` trong `ai.service.ts` **rút chữ ở backend**
+bằng `extractPdf()` của CV Builder (dựng lại dòng từ toạ độ chữ, nhận ra bản
+scan) rồi gửi dạng văn bản, trần 60k ký tự cả lượt. Mất bố cục/bảng/ảnh trong
+file, nhưng đọc được — đã kiểm end-to-end: PDF chứa "MA SO: 4242" +
+"1.750.000.000", `gpt-5.6-sol` trả lời đúng cả hai. Cờ bật/tắt là
+`isAnthropicModel(model)`: cắm kênh Codex vào là đường gốc tự quay lại.
+
+**BA chốt chặn chi phí:**
+
+0. **Việc chạy nền mặc định TẮT** (11/08/2026). `LLM_BACKGROUND_ENABLED`
+   (mọi lời gọi `feature: 'bulk_gen' | 'news'`) và `TECH_NEWS_AUTOPOST` (bản
+   tin 07:30) đều mặc định `false`. Trước đó bản tin mặc định BẬT — một biến
+   bị quên là mỗi sáng tự sinh một bài báo và tự tính tiền. Chạy một đợt sinh
+   nội dung: `docker exec -e LLM_BACKGROUND_ENABLED=true … node scripts/…`.
+   Việc người dùng bấm (chat, chấm bài, gia sư, CV) KHÔNG bị ảnh hưởng.
+
+1. `checkTokenQuota` — 300k token/người/ngày, Pro 1 triệu. **Không đặt env
+   cũng có trần** (trước 11/08 để trống nghĩa là vô hạn, và đó là chốt chặn
+   duy nhất của cả web).
+2. `src/services/llm/budget.ts` — trần TIỀN theo ngày, hai mức: **mềm 15 $**
+   cắt việc chạy nền (`feature: 'bulk_gen' | 'news'`), **cứng 40 $** cắt tất.
+   Chi phí là ƯỚC LƯỢNG (cổng không công khai giá) → chỉ để bắt bất thường;
+   có số thật thì đặt `LLM_PRICE_OVERRIDES`.
+
+**Kiểm tra thật, đừng đọc mã mà đoán** — một model đổi tên hay một tuyến bị
+đóng không hiện ra lúc build, nó hiện ra khi người dùng nhận câu trả lời trống:
+```bash
+npm run llm:check          # gọi thật mọi model đang phân cho các tính năng
+npm run llm:check -- --models   # cổng đang bán những gì
+```
+Xem cấu hình đang chạy trên prod: `GET /api/v1/ai/admin/llm-config` (admin).
+
+---
+
+## Feature Implementation Workflow
+
+1. **Plan first** — understand full scope, list files to change
+2. **Backend first**: Prisma models (+ relations) → generate → migration → service layer → routes
+3. **Frontend second**: API methods in `frontend/src/lib/api.ts` → components → test locally
+4. **Verify**: run conditional pre-push checklist → confirm with user → push
+
+---
+
+## Known Error Patterns (History)
+
+Condensed log of past failures — do not repeat:
+
+| Date | Error | Lesson |
+|------|-------|--------|
+| 2026-06-29 | JSX missing closing `</div>` in conditional block broke frontend build | Always run frontend build before push |
+| 2026-06-29 | Missing Prisma back-relations (`NoteSubjectShare`, `NoteSubjectShareRecipient`) | Every relation needs its opposite field |
+| 2026-06-29 | Used default compound key name instead of custom `@@unique` name in queries | Use the custom constraint name |
+| 2026-06-29 | Migration failed: table already exists; then P3009 blocked deploys | DB had drifted from migration history — follow Migration Failure Protocol, don't hack around it |
+| 2026-07-02 | GIF picker flaky then dead: client called GIPHY directly with `NEXT_PUBLIC_GIPHY_API_KEY` (baked at build time), fell back to GIPHY's revoked public beta key (403) when the env was missing at build | Browser-facing third-party APIs go through a backend proxy (see `/api/v1/gifs` in `src/routes/gifs.routes.ts`): key stays server-side as runtime env, responses cached, key rotation = container restart, no rebuild |
+| 2026-07-02 | Global theme put `.dark` class on `<html>` → force-activated every Tailwind `dark:` utility inside Notes, breaking its own 3-theme (light/dark/brown) switcher | The global dark theme class is **`theme-dark`**, NEVER `dark`. Tailwind `dark:` variants are RESERVED for the Notes wrapper (`NotesThemeProvider` puts `.dark` on `.notes-theme-root`). Global theme-dependent styles use `html.theme-dark ...` CSS or the theme CSS variables (`var(--text-primary)` etc.), not `dark:` |
+| 2026-07-02 | Admin's support chat history "disappeared" from /messages — it was never lost, just filtered out (`listThreadsForUser` only matched the user side of `type='ADMIN'` threads) | Support chats and DMs share ONE system (`MessageThread`, type `ADMIN`/`USER`). Before assuming data loss, check the query filters. The old `/admin/messages` page was removed on purpose — do not recreate it; admin handles support threads in /messages |
+| 2026-07-02 | GIF picker dead + "chats disappearing" together, survived re-login. Root cause: prod ran a **stale `dist/index.js`** that never mounted `/api/v1/gifs` (route 404'd) while `/messages/threads` 401'd — a partial/`--no-build` deploy shipped an old image even though `dist/routes/gifs.routes.js` existed. Fixed by a full clean `bash deploy.sh` | Diagnose route health with unauth `curl` (401/200 = mounted, **404 = stale build**), not the browser. Always full `deploy.sh` (never `--no-build` after code changes). `deploy.sh` now smoke-tests core routes and fails on 404. Chats "disappearing" was separate: per-viewer `deletedAt` (delete-for-me) — now recoverable via the "Đã xoá" tab (`restoreThreadForViewer` + `GET /threads?view=deleted` + `POST /threads/:id/restore`) |
+| 2026-07-02 | `getMediaUrl` (frontend `lib/utils.ts`) prefixed the R2 CDN base onto `blob:`/`data:` preview URLs → `https://<r2>/blob:...` → 400 when rendering optimistic upload previews | Object/data URLs are already renderable — return them as-is; only prepend the CDN base to bare R2 keys |
+| 2026-07-02 | Session died silently after 24h: JWT `JWT_EXPIRES_IN=24h` but `backend_token` cookie lives 7d, and there was **no working `/auth/refresh`** (FE proxy called a non-existent backend route) → every authed call 401'd (GIF, messenger) though the cookie was present | Added `POST /api/v1/auth/refresh` (`authService.refreshToken`: verify `ignoreExpiration` + re-check account) + axios 401 interceptor that refreshes once and retries. Sessions self-heal; no env change needed |
+| 2026-07-02 | Landscape feed videos letterboxed with huge black bars top/bottom: the all-video carousel (`PostCard.tsx` MediaGrid) forced a FIXED tall TikTok frame `min(88vh, 880px)` + `object-contain` regardless of orientation | Measure the video's real ratio (`loadedmetadata` → `videoWidth/videoHeight`, thumbnail `naturalWidth/Height`, or server `width/height` metadata) and size the frame to the video's own `aspectRatio` when landscape/square; the tall frame is ONLY for portrait |
+| 2026-07-02 | Shared notes: clicking a note inside a shared-subject view did nothing, and switching note 1 → note 2 kept showing note 1's body. Two causes: render ternary checked list view (`sharedSubject`) BEFORE detail view (`sharedSelectedNote`), and `SharedNoteViewer` had no `key` — TipTap `useEditor` only loads `content` on mount | Detail view must come before list view in the render chain (opening detail doesn't clear the list state — that's what makes "back" work). Any read-only TipTap viewer must get `key={note.id}` so it remounts per note |
+| 2026-07-30 | Sân chơi 3D `/playground` "kẹt mãi ở màn hình tải, không lỗi nào" suốt hai phiên. Thủ phạm: **Next.js chốt danh sách file trong `public/` ngay lúc SERVER KHỞI ĐỘNG**. Dựng lại sân chơi ⇒ gói JS đổi tên (mã băm nội dung) ⇒ server đang chạy trả **404** dù file có thật trên đĩa ⇒ không có JS nào chạy ⇒ màn hình tải (HTML/CSS thuần) quay mãi và **không có lỗi nào để thấy**. Preload `.ktx` vẫn 200 (tên không đổi) nên nhìn Network lại tưởng ổn | Đổi bất cứ thứ gì trong `frontend/public/**` thì **PHẢI khởi động lại Next**. Và **diệt server theo CỔNG** (`lsof -ti:3000 \| xargs -r kill -9`) — `pkill -f "next start"` và `pkill -f "standalone/server.js"` đều KHÔNG khớp vì Node đổi tên tiến trình thành `next-server`; server mới chết vì `EADDRINUSE` còn server cũ vẫn sống, làm lỗi trông như bất trị. **Production không dính** (Dockerfile `COPY . .` rồi mới `next build`, mỗi deploy là container mới) |
+| 2026-08-08 | Đổi tên giá trị enum `ContentType.CODE` → `CODE_REVIEW` (để khớp frontend vốn đã nói `CODE_REVIEW`). Qua sạch toàn bộ pre-push checklist, vẫn **vỡ seed trên production**: `prisma/seed.ts` tự chép lại union `'VLOG' \| ... \| 'CODE' \| ...` nên nó tự kiểm với chính nó, và `tsconfig.json` lại **exclude `prisma/seed.ts`** | Union enum chép tay là mầm trôi dạt — import thẳng từ `@prisma/client`. Và `tsc --noEmit` KHÔNG đụng tới `prisma/**`: thêm `npm run typecheck:seed` + `npx prisma db seed` vào checklist khi đổi schema. Chạy thật mới biết, đọc không ra |
+| 2026-07-30 | Chốt kiểm frontend trong `deploy.sh` gọi `wget` bên trong container frontend — image đó **không cài wget lẫn curl** (Dockerfile cố ý bỏ, healthcheck của compose dùng module http của node). Lệnh luôn thất bại ⇒ vòng lặp quay đủ 6 lần, tốn không ~25s mỗi deploy và không kiểm được gì | Mọi phép kiểm HTTP **bên trong container frontend** phải dùng `node -e` + `require('http')`. Container backend thì có `curl`. Kiểm bộ kiểm trước khi tin nó — xem [[feedback_verify_the_checker_before_the_content]] |
+
+---
+
+## Useful Commands
+
+```bash
+# Backend (from project root)
+npx tsc --noEmit                       # type check
+npx prisma format                      # format & validate schema
+npx prisma generate                    # generate client
+npx prisma migrate dev --name <name>   # create migration
+npx prisma migrate status              # check migration state
+
+# Frontend (subshell so cwd stays at root)
+(cd frontend && npx tsc --noEmit)
+(cd frontend && npm run build)
+(cd frontend && npm run lint)
+
+# Docker
+docker build -t backend-test .
+docker compose up -d
+
+# Git / CI
+git status
+git log --oneline -5
+gh run list
+gh run view <run_id> --log-failed
+```

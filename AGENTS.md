@@ -1,5 +1,13 @@
 # Codex Instructions - api-backend
 
+> ⚠️ File này là **bản sao của `CLAUDE.md`**, chỉ khác đúng hai chỗ: tiêu đề
+> trên và câu "Codex cannot do this" ở mục thêm biến môi trường. Đồng bộ bằng
+> cách chép `CLAUDE.md` đè lên rồi sửa lại HAI chỗ đó — **tuyệt đối không
+> tìm-thay "Claude" → "Codex" hàng loạt**: mọi chỗ còn lại nhắc "Claude" đều
+> là TÊN MODEL (`claude-sonnet-5`, `claude-opus-4-8`, nhóm khoá `claude`,
+> kênh Anthropic) hoặc ghi chép sự việc đã xảy ra. Bản trước file này đã dính
+> đúng lỗi ấy và đẻ ra `Codex-sonnet-5`, một model không tồn tại.
+
 ## Project Overview
 
 Full-stack application:
@@ -7,7 +15,7 @@ Full-stack application:
 - **Frontend**: Next.js (in `frontend/`)
 - **Database**: PostgreSQL with Prisma ORM
 - **Storage**: Cloudflare R2
-- **Deployment**: Docker containers on VPS, deployed by running `bash deploy.sh` from the local machine. A push to `main` does NOT deploy — see "Docker & Deploy" below
+- **Deployment**: Docker containers on VPS, deployed by running `bash deploy-nha.sh` from the local machine (máy nhà builds, VPS only swaps). A push to `main` does NOT deploy — see "Docker & Deploy" below
 
 ## Environment
 
@@ -25,7 +33,7 @@ Full-stack application:
 - **NEVER** run `npx prisma migrate reset` — it wipes ALL data
 - **NEVER** run `npx prisma db push` against production/VPS — bypasses migration history
 - **NEVER** run `git push --force` or `--force-with-lease` to `main`
-- **NEVER** push to `main` without completing the pre-push checklist below, and always ask the user for confirmation first. (A push no longer deploys — `deploy.sh` does — but `main` is still the shared trunk, so it stays a confirm-first action)
+- **NEVER** push to `main` without completing the pre-push checklist below, and always ask the user for confirmation first. (A push no longer deploys — `deploy-nha.sh` does — but `main` is still the shared trunk, so it stays a confirm-first action)
 - **NEVER** auto-resolve failed migrations (`prisma migrate resolve`) — see Migration Failure Protocol
 - **NEVER** commit `.env`, `.env.local`, secrets, API keys, or credentials
 - **NEVER** SSH into VPS to modify database or containers directly, unless user explicitly asks
@@ -164,11 +172,59 @@ Rationale: auto-resolving partially-applied migrations can silently corrupt sche
 **STANDARD deploy + push flow (2026-07-06 — follow this order):**
 1. Run the conditional pre-push checklist locally (tsc / build)
 2. Commit to **local `main`**
-3. Deploy with a full **`bash deploy.sh`** from the local machine (rsync → sequential image builds on VPS → zero-downtime swap → smoke-test). This is the ONLY deploy path — do NOT deploy by pushing to GitHub
+3. Deploy with **`bash deploy-nha.sh`** (máy nhà build → GHCR → VPS chỉ tráo). This is the standard path since 2026-08-18. Do NOT deploy by pushing to GitHub
 4. **Wait for the user to test production and confirm the fix works**
 5. Only THEN `git push` to origin (with user confirmation, per Forbidden Actions). At this point the push is just syncing GitHub with what prod already runs
 
-Why not push-to-deploy: `deploy-ghcr.yml` and `backend-vps` once ran on every push to `main` and raced each other into real outages (2026-07-03: feed 500 while schema lagged the image; 2026-07-06: backend recreate race → `Exited(137)` + orphan containers, recovered via `docker start cuonghoangdev_backend`). `deploy.sh` stays the only deploy path regardless — it is the one that rsyncs the working tree, builds sequentially, swaps with zero downtime and smoke-tests.
+Why not push-to-deploy: `deploy-ghcr.yml` and `backend-vps` once ran on every push to `main` and raced each other into real outages (2026-07-03: feed 500 while schema lagged the image; 2026-07-06: backend recreate race → `Exited(137)` + orphan containers, recovered via `docker start cuonghoangdev_backend`). Deploying stays a script you run, never a side effect of pushing.
+
+### `deploy-nha.sh` — đường CHUẨN (từ 18/08/2026)
+
+Máy nhà (12 nhân/31GB) build cả hai ảnh SONG SONG rồi đẩy lên GHCR; VPS chỉ kéo
+ảnh về và tráo. Hai cái lợi lớn:
+
+- **Nhanh hơn ~3×.** Build song song ở nhà ~3-6 phút; VPS build tuần tự ~15 phút
+  (nó buộc phải tuần tự vì build song song từng bị OOM giết, exit 137).
+- **VPS KHÔNG còn cache build.** Đây mới là điều quan trọng: cache build từng
+  phình 7,6GB trên chính cái đĩa chứa Postgres, và 18/08/2026 một lần
+  `deploy.sh` chết giữa chừng với `no space left on device` (đĩa tụt xuống
+  còn 1,8GB trong lúc `next build` chạy).
+- Chỉ nội dung **đã commit** đi qua (`git push` vào kho trần ở máy nhà), nên nó
+  không thể chộp trúng file phiên khác đang lưu dở như `deploy.sh` từng làm.
+
+```bash
+bash deploy-nha.sh              # chuẩn; máy nhà hỏng thì tự lùi về deploy.sh
+bash deploy-nha.sh --khong-lui  # hỏng thì dừng hẳn
+bash deploy-nha.sh --khong-day  # chỉ build ở nhà, không đẩy, không tráo
+```
+
+⚠️ Nó **hỏi `[y/N]`** khi cây làm việc còn thay đổi chưa commit (những thay đổi
+đó sẽ KHÔNG lên production). Chạy nền thì phải `echo y | bash deploy-nha.sh`,
+không thì nó dừng im với exit 0.
+
+⚠️ **Dựng ảnh ngoài compose thì PHẢI `-f <đúng file compose dùng>`.**
+18/08/2026 script chạy `docker build .` — lấy `Dockerfile` mặc định thay vì
+`Dockerfile.backend` mà compose dùng. Kết quả: nền `node:22-alpine` (musl) mang
+engine Prisma bản `debian-openssl-3.0.x` (glibc) ⇒ build xanh, đẩy xanh, tráo
+xanh, rồi backend restart vô tận và **API chết 502 bảy phút**. Đã vá, và đã
+thêm chốt kiểm libc ↔ engine **trước khi đẩy**. Bài học: *build xanh không có
+nghĩa là ảnh chạy được.*
+
+**Khôi phục nhanh khi tráo trúng ảnh chết:** ảnh cũ thường vẫn còn dạng mồ côi.
+```bash
+ssh root@<vps> "docker images -a --filter dangling=true"   # đối chiếu kích thước
+ssh root@<vps> "docker tag <id> cuonghoangdev-backend:latest"
+ssh root@<vps> "cd /home/deployer/repo && set -a && . /opt/cuonghoangdev/.env; set +a; \
+                docker compose -p cuonghoangdev up -d --no-build backend"
+```
+Mất ~40 giây, thay vì dựng lại 15 phút.
+
+### `deploy.sh` — đường LÙI
+
+Vẫn giữ nguyên và vẫn dùng được: nó rsync cây làm việc rồi build ngay trên VPS,
+nên không phụ thuộc máy nhà. Dùng khi máy nhà tắt/mất mạng, hoặc khi cần deploy
+thứ CHƯA commit. Đổi lại: chậm hơn, và nó là đường đã ba lần chộp trúng file
+phiên khác đang gõ dở.
 
 **What a push to `main` actually triggers (verified 2026-08-07):** only `ci-lint.yml` — "CI - Lint & Type Check". **Both deploy workflows are now `on: workflow_dispatch:` only**, i.e. manual-run, so a push cannot start a deploy and cannot re-run the race above. Don't re-add a `push:` trigger to either without a plan for the concurrency problem.
 
@@ -205,7 +261,7 @@ To re-arm it later: create a repo secret named exactly `ANTHROPIC_API_KEY` (put 
 - Verify it installs in the Docker build (some packages need system libs) — test with `docker build` locally if unsure
 
 **Deploy hygiene (avoid stale/partial builds):**
-- **Always run a FULL `bash deploy.sh`** after any code change. **NEVER** use `bash deploy.sh --no-build` after changing code — it only rsyncs, does NOT rebuild, so the container keeps running the OLD image (this caused the 2026-07-02 GIF 404 below) and it also **skips the smoke-test**.
+- Dùng `deploy-nha.sh`. Nếu phải lùi về `deploy.sh` thì **luôn chạy FULL**, **NEVER** `bash deploy.sh --no-build` after changing code — it only rsyncs, does NOT rebuild, so the container keeps running the OLD image (this caused the 2026-07-02 GIF 404 below) and it also **skips the smoke-test**.
 - `deploy.sh` builds backend and frontend images **sequentially** (Step 2a) — an OOM guard for the 6GB VPS: parallel cold builds (cache is pruned after every deploy) killed `next build` with exit 137 on 2026-07-06. Keep it sequential; with a warm cache both builds are near-instant no-ops. If a deploy still fails on `npm ci`/network fetching prebuilt binaries (e.g. sharp), a simple retry usually succeeds and reuses the cached layers.
 - `deploy.sh` runs a **post-deploy smoke-test**: it hits core GET routes on the internal backend and **FAILS the deploy if any returns 404** (404 = route not mounted → stale/partial build). 401/200 = healthy.
 - **When you add a new feature module/router**, add one of its param-less, unauth GET routes to the smoke-test list in `deploy.sh` (search `Smoke-testing core API routes`). Only add routes that return **non-404** on a bare unauth GET — do NOT add POST-only or param-required routes (e.g. `/stickers`, `/auth/login`) or every deploy will false-fail.
@@ -229,6 +285,43 @@ git revert <bad_commit_sha>
 
 ---
 
+## Phát hành app desktop — MỘT CHỖ DUY NHẤT (20/08/2026)
+
+```bash
+(cd desktop && npm run phat-hanh -- "mô tả ngắn")   # bump + push + dựng + KIỂM LẠI
+(cd desktop && npm run phat-hanh -- --tiep)          # ship số đang có, không bump
+```
+
+⛔ **ĐỪNG bump `desktop/package.json` bằng tay rồi `gh workflow run`.** Đó là
+cách cũ, và nó đã hỏng hai kiểu — đo thật đêm 19-20/08/2026, **11 lần bump
+trong 4,5 giờ** từ nhiều phiên Claude cùng làm app:
+
+- **0.5.39 bump rồi KHÔNG BAO GIỜ được phát hành.** Người dùng nằm lại 0.5.38,
+  trong khi mọi phiên đều tin là đã ship. Không có chỗ nào đối chiếu "số trong
+  `package.json`" với "số đã lên GitHub Releases" nên không ai thấy.
+- **v0.5.40 bị dựng HAI lượt.** Lượt A công bố 18:08:17, lượt B xong 18:15:37
+  và **tải đè** lên đúng release đó. Lần ấy vô hại vì cùng một commit — khác
+  commit thì người dùng đã tải một bản cài mang số hiệu của bản khác, hỏng câm.
+  `concurrency:` trong workflow chỉ XẾP HÀNG, không chặn.
+
+`phat-hanh.mjs` chặn đúng những cửa đã từng lọt, theo thứ tự:
+nhánh phải là `main` · `desktop/` phải **sạch** (workflow lấy mã TỪ GITHUB, thứ
+sửa dở trên máy không vào bản cài mà bản cài vẫn ra) · không được sau
+`origin/main` · **không có lượt dựng nào đang chạy** (đây là chỗ chặn hai phiên
+giẫm nhau) · số phiên bản **chưa từng công bố** · và sau khi dựng xanh thì
+**kiểm lại danh sách file** — thiếu `latest-mac.yml` hoặc một trong hai `.zip`
+macOS là tự-cập-nhật chết câm trong khi release nhìn vẫn đầy đủ.
+
+Lớp thứ hai nằm trong `desktop-release.yml` (bước *"Chặn dựng đè bản đã công
+bố"*): nó giữ được cả người gõ tay `gh workflow run`. Bản **nháp** vẫn cho dựng
+tiếp — một lượt chết giữa chừng để lại nháp, chạy lại để hoàn tất là đúng.
+
+⚠️ Bản phát hành nằm ở kho **`cuonghoang1103/cuongthai-desktop`** (công khai),
+không phải kho này — `electron-updater` tải bản mới KHÔNG kèm token nên kho
+phát hành bắt buộc phải public.
+
+---
+
 ## Cổng LLM — modelapi.vn (11/08/2026)
 
 **MỘT khoá, MỘT base URL, MỘT bảng model cho cả web.** Nguồn sự thật:
@@ -241,25 +334,133 @@ file người dùng vừa đính kèm).
 ```bash
 LLM_GATEWAY_BASE_URL=https://modelapi.vn/v1
 LLM_GATEWAY_API_KEY=sk-...      # cũng đọc OPENAI_COMPAT_API_KEY / ANTHROPIC_API_KEY
+LLM_GATEWAY_API_KEY_GPT=sk-...  # khoá nhóm GPT (18/08) — xem "HAI KHOÁ" ngay dưới
 ```
 
-⚠️ **Cổng Rambo (`LLM_BASE_URL`, model `rb-*`) ĐÃ CHẾT.** Thấy `rb-` ở đâu là
-chỗ đó đang trỏ vào đường chết.
+### ⚠️ HAI KHOÁ, MỘT CHO MỖI NHÓM (18/08/2026)
+
+**Một token của cổng thuộc về ĐÚNG MỘT nhóm, và `GET /v1/models` chỉ liệt kê
+model của nhóm đó.** Đo thật: khoá cũ (nhóm `claude`) thấy 6 model
+`claude-*` và KHÔNG thấy model `gpt-*` nào; khoá GPT mới thì ngược lại. Gọi
+model của nhóm khác trả `503 No available channel for model X under group Y` —
+nghe như cổng đang bận, nhưng nó vĩnh viễn.
+
+`gatewayKeyFor(model)` trong `gateway.ts` chọn khoá theo **tiền tố tên model**:
+`gpt-5.6-sol` → tìm `LLM_GATEWAY_API_KEY_GPT`, không có thì rơi về khoá mặc
+định. Nhóm mà khoá MẶC ĐỊNH phục vụ được khai bằng `LLM_GATEWAY_GROUP`
+(mặc định `claude` — đúng với production).
+
+**Thiếu khoá thì KHÔNG chết, mà LÙI.** `modelGoiDuoc()` đổi sang model Claude
+tương đương và ghi một dòng WARN. Lưới đỡ này có vì bản đồ model sống trong mã
+(đi theo mỗi deploy) còn khoá sống trong `/opt/cuonghoangdev/.env` (người thêm
+tay) — hai thứ lệch nhịp một lần là chín tính năng cùng trả 503. Cái giá của
+việc quên: `cv_parse`/`news_bulletin`/… chạy đắt gấp 5,1 lần.
+
+Kiểm bản đồ đang hiệu lực: `npx tsx --test src/services/llm/gateway.test.ts`
+(4 phép kiểm, trong đó có một cái bắt lỗi gọi vòng `endpointFor ↔ modelFor` mà
+`tsc` KHÔNG thấy).
+
+⚠️ **Model `rb-*` cũ ĐÃ CHẾT.** Thấy `rb-` ở đâu là chỗ đó đang trỏ vào
+đường chết.
+
+### 🤖 AI Code chạy cổng RIÊNG (19/08/2026)
+
+`agent_code` — và CHỈ nó — đi qua cổng riêng của người dùng. Chat, CV, bản
+tin… vẫn đi modelapi. Cắm bằng hai biến ở `/opt/cuonghoangdev/.env`:
+
+```bash
+AGENT_GATEWAY_BASE_URL=https://rambo.ai.vn/api/claude
+AGENT_GATEWAY_API_KEY=sk-...
+```
+
+Thiếu một trong hai thì `congAgent()` trả `null` và agent tự về modelapi —
+không chết, chỉ đổi bảng model.
+
+⚠️ **Đường đúng KHÔNG phải gốc `/v1`.** Nó là `/api/claude/v1/...`, tìm ra
+nhờ đọc trang `/huong-dan` của chính họ. Gốc `GET /v1/models` trả **200 kể
+cả khi KHÔNG có khoá** — danh sách model ở đó chỉ là quảng cáo, đừng lấy nó
+làm bằng chứng cổng chạy được.
+
+⚠️ **Cổng này KHÔNG tôn trọng `max_tokens`** (đo: đặt 24, trả 103 token,
+`finish_reason: stop`). Mọi trần chi phí trong mã đều vô hiệu với nó.
+
+✅ Nó **chảy dần THẬT** — trải 308–950ms giữa mẩu đầu và mẩu cuối, khác hẳn
+modelapi (121 mẩu về cùng một mili giây). Nhận cả `Bearer` lẫn `x-api-key`.
+
+Sáu model, đo thật (thời gian tới mẩu chữ đầu, có gọi tool):
+`claude-sonnet-4-6` 2,4s · `claude-sonnet-5` 2,5s (**mặc định**) ·
+`claude-haiku-4-5` 2,9s · `claude-opus-4-6` 3,2s · `claude-opus-4-7` 3,5s ·
+`claude-opus-4-8` 4,7s. Bảng ở `src/services/agent/models.ts`.
 
 ⚠️⚠️ **TRANG `/rankings` NÓI DỐI VỀ CÁI KHOÁ NÀY MUA ĐƯỢC.** Nó liệt kê model
 của toàn cổng. Khoá của web, đo thật 11/08/2026 bằng `GET /v1/models`, chỉ có
 **8**: `gpt-5.6-sol` · `gpt-5.6-terra` · `gpt-5.5` · `gpt-5.4` ·
 `gpt-5.4-mini` · `codex-auto-review` · `gpt-image-2` · `gpt-image-1.5`.
-**KHÔNG có model Codex nào** — gọi `Codex-sonnet-5` trả
+**KHÔNG có model Claude nào** — gọi `claude-sonnet-5` trả
 `HTTP 503 "No available channel … under group default"`, nghe như cổng bận
 nhưng nó vĩnh viễn cho tới khi có người mở kênh Anthropic trong Console.
 
 **Phân model theo VIỆC, không theo module** — `PURPOSE_MODEL` trong
-`gateway.ts`, đổi bằng `LLM_MODEL_<TÊN VIỆC>` chứ không sửa mã. Việc người
-dùng đọc từng chữ (báo cáo phỏng vấn, mổ CV, sinh câu hỏi) → `gpt-5.6-sol`.
-Việc tương tác cần nhanh (chấm bài, gia sư, kèm code, chat Pro) → `gpt-5.5`
-(2s so với 5,5s của sol). Việc máy đọc (tách JSON) → `gpt-5.4-mini`. Việc
-chạy nền → `gpt-5.6-terra`.
+`gateway.ts`, đổi bằng `LLM_MODEL_<TÊN VIỆC>` chứ không sửa mã.
+
+Giá đo thật 18/08/2026 (chênh lệch sổ của cổng, 3 lượt cùng một câu ~70 token
+vào; cả 9 model đều qua hai bẫy suy luận và gọi tool đúng tham số):
+
+| Model | Giá/lượt | Độ trễ | Trần token |
+|---|---|---|---|
+| `gpt-5.4-mini` | **0,116** | 5,8s | ✅ |
+| `grok-4.6` | 0,341 | 65,7s | ❌ vượt 41× |
+| `gpt-5.6-terra` | 0,484 | 7,3s | ✅ |
+| `claude-sonnet-4-6` | 0,597 | ~12s | ✅ |
+| `claude-sonnet-5` | 0,801 | ~9,8s | ✅ |
+| `grok-4.5` | 1,058 | 24,5s | ❌ vượt 30× |
+| `gpt-5.5` | 1,144 | 9,6s | ⚠️ vượt 5× |
+| `gpt-5.6-sol` | 1,222 | 9,6s | ✅ |
+| `claude-opus-4-8` | 2,003 | 12,3s | ✅ |
+
+Phân hiện tại: việc chạy nền + việc máy đọc (`cv_parse`, `exphub_doc`,
+`language_bulk`, `codelab_bulk`, `news_bulletin`, `robot_voice`) →
+**`gpt-5.4-mini`** (rẻ hơn `sonnet-4-6` 5,1 lần). Việc người dùng đọc từng chữ
+(`chat_max`, `cv_critique`, `interview_report`) → **`gpt-5.6-sol`** (rẻ hơn
+opus 39%). Việc tương tác (`chat_pro`, `exam_grade`, `language_tutor`,
+`codelab_coach`, `cv_writing`) và **`agent_code`** → giữ **`claude-sonnet-5`**.
+
+⛔ **`doc_ocr` KHÔNG hạ.** Model rẻ rụng mũi tên vector `AB` → `|AB|`, và một
+ký hiệu sai là hỏng cả bài toán.
+
+⚠️ **`Upstream stream ended without a terminal response event` là lỗi TẢI,
+không phải tính chất của model.** 18/08 thấy `gpt-5.6-terra` trả lỗi đó ngay
+lời gọi tool đầu tiên, và suýt ghi vào đây là "model vỡ". Đo lại lúc không có
+phép đo nào chạy song song: nó hoàn thành 5 lời gọi tool và trả lời đúng. Thấy
+lỗi này thì đi kiểm xem có gì đang chạy chồng, đừng đổi model.
+
+⛔ **Grok loại hẳn.** Không tôn trọng `max_tokens` (vượt 30–41×) ⇒ mọi trần chi
+phí của web mất tác dụng với nó.
+
+**GPT tính tiền cả token suy luận người dùng không thấy**: đo `usage` thật,
+`gpt-5.5` 79/365 và `gpt-5.6-sol` 93/433 token ra là `reasoning_tokens`
+(~21%); Claude báo 0. Nên "gpt rẻ hơn theo hệ số của shop" không suy ra được
+từ hệ số — phải đo bằng sổ của cổng.
+
+**Model cho agent (AI Code) người dùng CHỌN ĐƯỢC** — danh sách trắng ở
+`src/services/agent/models.ts`, app chỉ gửi mã ngắn (`sonnet-5` / `opus-4-8` /
+`gpt-sol`).
+
+⚠️⚠️ **GIÁ LẺ MỘT LƯỢT KHÔNG SUY RA ĐƯỢC GIÁ TRONG VÒNG LẶP GỌI TOOL.** Đo 3
+lượt trên đúng vòng lặp của agent (cùng câu hỏi, kho mã giả cố định):
+
+| Model | 3 lượt | TB | Token **vào** TB |
+|---|---|---|---|
+| `claude-sonnet-5` | 1,23 · 2,28 · 1,77 | **1,76** | 3.719 |
+| `gpt-5.6-terra` | 2,58 · 3,05 · 2,78 | 2,80 | 15.829 |
+| `claude-opus-4-8` | 3,70 · 2,80 · 5,73 | 4,07 | 3.622 |
+| `gpt-5.6-sol` | 13,49 · 13,21 · 11,59 | **12,77** | 19.215 |
+
+Theo bảng giá lẻ thì `gpt-5.6-sol` (1,22) rẻ hơn `claude-opus-4-8` (2,00).
+Trong vòng lặp thì NGƯỢC LẠI, và ngược tới ba lần. Lý do nằm ở cột token vào:
+cổng bọc model GPT trong ~15k token ẩn mỗi việc, và phần bọc đó nhân theo số
+vòng. Nên mặc định là **`claude-sonnet-5`**, rẻ hơn `gpt-5.6-sol` **7,3 lần**.
+Nhãn trong app nói thẳng con số này để người dùng chọn có cơ sở.
 
 **Ảnh: CHỈ `gpt-5.6-sol` nhìn được thật.** Đo bằng ảnh 1×1 px: sol trả lời
 đúng; `gpt-5.5` / `gpt-5.6-terra` / `gpt-5.4-mini` nhận ảnh, không báo lỗi, và
@@ -268,13 +469,13 @@ bịa ("16×16", lần sau "48×48"). Vì thế mọi lượt chat có ảnh b�
 
 **PDF: KHÔNG model nào của khoá này đọc được file gốc** — cả khối `document`
 (tuyến Anthropic) lẫn khối `file` (tuyến OpenAI) đều trả về "Vui lòng tải lên
-file PDF". Trước 11/08 PDF đi thẳng vào Codex dạng gốc; đường đó không còn.
+file PDF". Trước 11/08 PDF đi thẳng vào Claude dạng gốc; đường đó không còn.
 Thay thế: `buildUserContent()` trong `ai.service.ts` **rút chữ ở backend**
 bằng `extractPdf()` của CV Builder (dựng lại dòng từ toạ độ chữ, nhận ra bản
 scan) rồi gửi dạng văn bản, trần 60k ký tự cả lượt. Mất bố cục/bảng/ảnh trong
 file, nhưng đọc được — đã kiểm end-to-end: PDF chứa "MA SO: 4242" +
 "1.750.000.000", `gpt-5.6-sol` trả lời đúng cả hai. Cờ bật/tắt là
-`isAnthropicModel(model)`: cắm kênh Codex vào là đường gốc tự quay lại.
+`isAnthropicModel(model)`: cắm kênh Claude vào là đường gốc tự quay lại.
 
 **BA chốt chặn chi phí:**
 

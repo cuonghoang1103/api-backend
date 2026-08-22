@@ -10,6 +10,7 @@
  * Seed: node scripts/course-seed.mjs --file ./content/courses/docker.mjs --apply
  */
 import s00 from './docker/s00-intro.mjs';
+import s01 from './docker/s01-mo-hinh.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Rocket', sortOrder: 4 },
@@ -33,5 +34,6 @@ export default {
   },
   sections: [
     s00,
+    s01,
   ],
 };

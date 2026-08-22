@@ -699,7 +699,7 @@ ESM  : top-level await chạy được</div>
           {
             question: 'Given const user = { name: "An" }, which line throws?|||Cho const user = { name: "An" }, dòng nào ném lỗi?',
             options: [
-              'user.name = "Bình"',
+              'user.name = "Binh"',
               'user = {}',
               'Object.freeze(user)',
               'delete user.name',

@@ -154,19 +154,17 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 | 22/08/2026 | `course-content-check.mjs` bắt gạch chéo ngược đơn | Đọc MÃ NGUỒN; tìm ra 2 lỗi thật, 1 trong khoá Node.js đã ship |
 | 22/08/2026 | Khoá Linux & Bash — Chương 3 (văn bản/ống dẫn), Chương 4 (quyền) | 27 bài · 547k ký tự |
 | 22/08/2026 | Khoá Linux & Bash — Chương 5 (tiến trình), 6 (biến/nháy), 7 (script) | **44 bài · 933k ký tự · TB 21.197 · đạt mọi sàn** |
+| 22/08/2026 | Khoá Linux & Bash — Chương 8 (PATH), 9 (mạng), 10 (đĩa/gói/log) | 59 bài · 1.319k ký tự · TB 22.349 |
+| 22/08/2026 | Khoá Linux & Bash — Chương 11 (systemd/cron/gia cố) | **63 bài · 1.478k ký tự · TB 23.464 · 158 sơ đồ · đạt mọi sàn** |
 
 
 ### Khoá Linux & Bash — đang làm dở
 
-13 chương + Mục 0. **Xong: Mục 0, Chương 1–7.** Còn lại, theo đúng
+13 chương + Mục 0. **Xong: Mục 0, Chương 1–11.** Còn lại, theo đúng
 lộ trình đã in trong bài 0.1 (đừng đổi tên chương, học viên đã đọc bảng đó):
 
 | # | Chương | Nội dung đã hứa ở bài 0.1 |
 |---|---|---|
-| 8 | Môi trường, PATH & file khởi động | "command not found", sửa file nào, login vs interactive |
-| 9 | Mạng & máy từ xa | ss, ip, curl, dig, ssh, scp, rsync, tường lửa |
-| 10 | Đĩa, gói phần mềm & log | df vs du, apt/dnf, journalctl, xoay vòng log |
-| 11 | systemd, cron & quản trị | dịch vụ tự khởi động lại, hẹn giờ, gia cố SSH |
 | 12 | Chẩn đoán một máy chủ thật | sách công thức: đĩa đầy, cổng bị chiếm, dịch vụ không lên |
 
 Khuôn mỗi chương: 4–6 bài LESSON (~20k ký tự/bài, song ngữ, ≥1 sơ đồ `lz-*`,

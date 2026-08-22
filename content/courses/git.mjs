@@ -14,6 +14,7 @@ import s02 from './git/s02-doc-lich-su.mjs';
 import s03 from './git/s03-nhanh-hop-nhat.mjs';
 import s04 from './git/s04-hoan-tac.mjs';
 import s05 from './git/s05-remote-github.mjs';
+import s06 from './git/s06-pull-request.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Rocket', sortOrder: 4 },
@@ -42,5 +43,6 @@ export default {
     s03,
     s04,
     s05,
+    s06,
   ],
 };

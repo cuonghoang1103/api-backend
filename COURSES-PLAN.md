@@ -156,20 +156,15 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 | 22/08/2026 | Khoá Linux & Bash — Chương 5 (tiến trình), 6 (biến/nháy), 7 (script) | **44 bài · 933k ký tự · TB 21.197 · đạt mọi sàn** |
 | 22/08/2026 | Khoá Linux & Bash — Chương 8 (PATH), 9 (mạng), 10 (đĩa/gói/log) | 59 bài · 1.319k ký tự · TB 22.349 |
 | 22/08/2026 | Khoá Linux & Bash — Chương 11 (systemd/cron/gia cố) | **63 bài · 1.478k ký tự · TB 23.464 · 158 sơ đồ · đạt mọi sàn** |
+| 22/08/2026 | **Khoá Linux & Bash — HOÀN THÀNH** (Chương 12, chẩn đoán) | **69 bài · 1.660k ký tự · TB 24.064 · 182 sơ đồ · 424 nguồn · 130 bẫy · đạt mọi sàn** |
 
 
-### Khoá Linux & Bash — đang làm dở
+### Khoá Linux & Bash — XONG (22/08/2026)
 
-13 chương + Mục 0. **Xong: Mục 0, Chương 1–11.** Còn lại, theo đúng
-lộ trình đã in trong bài 0.1 (đừng đổi tên chương, học viên đã đọc bảng đó):
-
-| # | Chương | Nội dung đã hứa ở bài 0.1 |
-|---|---|---|
-| 12 | Chẩn đoán một máy chủ thật | sách công thức: đĩa đầy, cổng bị chiếm, dịch vụ không lên |
-
-Khuôn mỗi chương: 4–6 bài LESSON (~20k ký tự/bài, song ngữ, ≥1 sơ đồ `lz-*`,
-≥1 `pitfall`, ≥2 `link-card`) + 1 QUIZ 8 câu. Đăng ký `sNN` vào
-`content/courses/linux-bash.mjs` sau khi viết xong bài cuối của chương.
+13 mục (Mục 0 + Chương 1–12), **69 bài · 1.660k ký tự · TB 24.064 ký tự/bài ·
+182 sơ đồ `lz-*` · 424 thẻ nguồn học · 130 bẫy · 1.022 khối code ·
+568 khối output · 12 quiz**. Qua `course-content-check.mjs` và
+`course-depth-audit.mjs`. Còn hai bước phải chạy ở máy nhà — xem §6.
 
 ---
 
@@ -189,7 +184,21 @@ node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
 node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ```
 
-⚠️ Khoá Git tạo **category mới `devops`** (`DevOps & Vận hành`), chưa từng có trong
+**Đang chờ chạy — hai khoá:**
+
+```bash
+# Git & GitHub
+docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+  --slug git --icon git --color F05032 --title "Git & GitHub" --subtitle "Zero → Production"
+node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
+
+# Linux & Bash
+docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+  --slug linux-bash --icon linux --color FCC624 --title "Linux & Bash" --subtitle "Terminal → Server"
+node scripts/course-seed.mjs --file ./content/courses/linux-bash.mjs --apply
+```
+
+⚠️ Cả hai khoá dùng **category mới `devops`** (`DevOps & Vận hành`), chưa từng có trong
 DB — lần seed đầu sẽ thêm một mục lọc mới trên trang `/courses`.
 
 ---

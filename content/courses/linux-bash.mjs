@@ -20,6 +20,7 @@ import s08 from './linux-bash/s08-moi-truong-path.mjs';
 import s09 from './linux-bash/s09-mang-may-tu-xa.mjs';
 import s10 from './linux-bash/s10-dia-goi-log.mjs';
 import s11 from './linux-bash/s11-systemd-cron.mjs';
+import s12 from './linux-bash/s12-chan-doan-may-chu.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Rocket', sortOrder: 4 },
@@ -54,5 +55,6 @@ export default {
     s09,
     s10,
     s11,
+    s12,
   ],
 };

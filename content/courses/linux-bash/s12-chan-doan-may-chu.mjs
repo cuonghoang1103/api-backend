@@ -981,5 +981,671 @@ LISTEN 0      511          0.0.0.0:80</div>
 </div>
 `,
     },
+    /* ─────────────────────────── 12.4 ─────────────────────────── */
+    {
+      title: '12.4 — Cookbook: it is weird|||12.4 — Sách công thức: nó lạ',
+      slug: 'lnx-12-4-no-la',
+      type: 'LESSON',
+      description: 'Permission denied mà quyền vẫn đúng, command not found với file có thật, bản dựng cũ trả 404, chứng chỉ TLS và lệch đồng hồ, DNS chạy bằng IP mà không chạy bằng tên, và "máy tôi chạy được".',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 12 · Lesson 12.4</span>
+<h2>Cookbook: it is weird</h2>
+<p class="lead">The failures in this lesson share one property: the obvious explanation is wrong. The permissions are correct and it still says denied. The file exists and the shell says not found. The code is deployed and the old behaviour persists. Six recipes for the bugs that make people distrust the machine.</p>
+
+<h3>Recipe 1 — "Permission denied" with correct permissions</h3>
+<pre><code>ls -l /srv/app/run.sh
+namei -l /srv/app/run.sh          <span class="tok-comment"># EVERY component of the path, with modes</span>
+findmnt -T /srv/app               <span class="tok-comment"># mount options for this path</span>
+sudo dmesg -T | grep -iE 'apparmor|audit|denied' | tail -5</code></pre>
+<div class="out">$ ls -l /srv/app/run.sh
+-rwxr-xr-x 1 deploy deploy 412 Aug 22 14:05 /srv/app/run.sh
+$ namei -l /srv/app/run.sh
+f: /srv/app/run.sh
+drwxr-xr-x root  root  /
+drwxr-x--- root  root  srv
+drwxr-xr-x deploy deploy app
+-rwxr-xr-x deploy deploy run.sh</div>
+<p>The file is world-executable and the failure is two levels up: <code>/srv</code> is <code>drwxr-x---</code> owned by <code>root:root</code>, so a user who is not root and not in group <code>root</code> cannot traverse into it (Lesson 4.1). <code>ls -l</code> on the file can never show you this; <code>namei -l</code> shows the whole chain at once and is the fastest permission tool on the machine.</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">A parent directory lacks <code>x</code></span><span class="v">The classic. Every directory in the path needs the execute bit for the user to pass through it. <code>namei -l</code> finds it in one command.</span></div>
+  <div class="kv"><span class="k">Mounted <code>noexec</code></span><span class="v"><code>findmnt -T</code> shows the options. Scripts under <code>/tmp</code> or <code>/home</code> on a hardened server frequently cannot be executed at all, regardless of mode bits.</span></div>
+  <div class="kv"><span class="k">Mounted read-only</span><span class="v">A filesystem remounts read-only after an I/O error. Writes fail with <code>EROFS</code>, which many programs report as a permission problem. Check <code>dmesg -T</code> for the error that caused it.</span></div>
+  <div class="kv"><span class="k">systemd sandboxing</span><span class="v"><code>ProtectSystem=strict</code>, <code>ProtectHome=</code>, <code>ReadWritePaths=</code> — the service sees a different filesystem than your shell does (Lesson 11.1). Exit code 226/NAMESPACE, or plain <code>EACCES</code> at runtime.</span></div>
+  <div class="kv"><span class="k">AppArmor</span><span class="v">Ubuntu's default MAC layer. <code>dmesg</code> shows <code>apparmor="DENIED"</code> with the profile name. It applies to specific programs — <code>mysqld</code>, <code>nginx</code>, snaps — and is invisible to <code>ls</code>.</span></div>
+  <div class="kv"><span class="k">Immutable attribute</span><span class="v"><code>lsattr file</code> showing <code>----i---------</code> means even root cannot modify it until <code>chattr -i</code>. Rare, memorable, and it makes people question reality for twenty minutes.</span></div>
+</div>
+
+<h3>Recipe 2 — "command not found" for a file that exists</h3>
+<pre><code>ls -l ./deploy.sh &amp;&amp; ./deploy.sh
+file ./deploy.sh
+head -c 40 ./deploy.sh | cat -A | head -2       <span class="tok-comment"># -A shows \\r as ^M</span>
+ldd \$(command -v node) | grep 'not found'</code></pre>
+<div class="out">$ ./deploy.sh
+bash: ./deploy.sh: cannot execute: required file not found
+$ head -c 40 ./deploy.sh | cat -A | head -1
+#!/bin/bash^M\$</div>
+<p>The shebang line ends in <code>^M</code> — a carriage return, from a file edited on Windows or checked out with the wrong git line-ending setting. The kernel dutifully looks for an interpreter literally named <code>/bin/bash\\r</code>, does not find it, and reports "required file not found" while pointing at your script. The error names the script; the missing file is the interpreter.</p>
+<pre><code>sed -i 's/\\r\$//' ./deploy.sh          <span class="tok-comment"># or: dos2unix ./deploy.sh</span>
+file ./deploy.sh</code></pre>
+<div class="out">./deploy.sh: Bourne-Again shell script, ASCII text executable</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">CRLF in the shebang</span><span class="v">"cannot execute: required file not found" on a file you can see. <code>cat -A</code> proves it in one line.</span></div>
+  <div class="kv"><span class="k">Wrong architecture</span><span class="v"><code>file</code> says <code>ARM aarch64</code> on an x86 machine. Common with binaries built on an Apple Silicon laptop and copied to a VPS.</span></div>
+  <div class="kv"><span class="k">Missing shared library</span><span class="v"><code>ldd</code> prints <code>=&gt; not found</code>. The binary exists and cannot start. Install the package, or you built against a libc the target does not have — the musl/glibc trap from this project's own deploy history.</span></div>
+  <div class="kv"><span class="k">Not on PATH at all</span><span class="v">The boring answer, and still the most common. <code>command -v x</code>, then <code>echo "\$PATH" | tr ':' '\\n'</code> (Lesson 8.1). Remember that <code>sudo</code> and cron have different PATHs than you do.</span></div>
+  <div class="kv"><span class="k">A stale shell hash</span><span class="v">You moved a binary and bash still remembers the old location. <code>hash -r</code> clears it. Symptom: the error names a path that no longer exists.</span></div>
+</div>
+
+<h3>Recipe 3 — the code is deployed and the old behaviour persists</h3>
+<p>A route returns 404 after you added it; a fix does not appear; a bug you deleted still happens. In every case, the question is not "is the code right" but <strong>"is this process running the code I think it is?"</strong></p>
+<pre><code><span class="tok-comment"># Is the route mounted at all? 401/200 = live, 404 = stale build</span>
+curl -s -o /dev/null -w '%{http_code}\\n' https://example.com/api/v1/reports
+
+<span class="tok-comment"># What is the running process actually executing?</span>
+pgrep -af 'node|python' | head
+sudo ls -l /proc/41288/cwd /proc/41288/exe
+sudo stat -c '%y %n' /srv/app/dist/index.js
+ps -o lstart= -p 41288                         <span class="tok-comment"># when did it start?</span></code></pre>
+<div class="out">404
+41288 node /srv/app/dist/index.js
+lrwxrwxrwx 1 deploy deploy 0 Aug 22 19:52 /proc/41288/cwd -> /srv/releases/2026-08-19
+2026-08-22 14:05:11.000000000 +0000 /srv/app/dist/index.js
+Mon Aug 19 09:12:44 2026</div>
+<p>Three facts and the mystery is over: the build on disk is from 22 August, the process started on 19 August, and its working directory is an old release directory. The deploy copied new files and nobody restarted the service. The code is correct and irrelevant.</p>
+<div class="callout ok"><strong>Diagnose "is it live?" with an unauthenticated <code>curl</code>, never with the browser.</strong> <strong>401</strong> means the route is mounted and wants auth. <strong>200</strong> means mounted and public. <strong>404</strong> means the route does not exist in the running process — a stale or partial build. The browser adds caches, service workers and cookies to a question that has a one-word answer, and this project's own history includes a day lost to "the GIF picker is broken" that was a stale <code>dist/index.js</code> not mounting a route.</div>
+<div class="pitfall"><strong>Pitfall:</strong> a static asset server that indexed its files at startup. Next.js decides what exists under <code>public/</code> when the <em>server process starts</em>; rebuild the assets while it runs and it returns 404 for files that are visibly on disk — no error, no log line, just a page that never finishes loading because its JavaScript never arrives. Anything under <code>public/</code> changing means restarting the server. And kill it by PORT (<code>lsof -ti:3000 | xargs -r kill -9</code>), because Node renames its own process to <code>next-server</code> and every <code>pkill -f</code> pattern you would naturally try silently matches nothing.</div>
+
+<h3>Recipe 4 — TLS and the clock</h3>
+<pre><code>curl -vI https://example.com 2&gt;&amp;1 | grep -E 'expire|subject|issuer|SSL'
+echo | openssl s_client -connect example.com:443 -servername example.com 2&gt;/dev/null \\
+  | openssl x509 -noout -dates -subject -issuer
+timedatectl | head -4</code></pre>
+<div class="out">notBefore=Aug  9 00:00:00 2026 GMT
+notAfter=Nov  7 23:59:59 2026 GMT
+subject=CN = example.com
+issuer=C = US, O = Let's Encrypt, CN = R11</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">certificate has expired</span><span class="v">Check <code>notAfter</code> against the real date. Then check the renewal timer that should have prevented it: <code>systemctl list-timers | grep certbot</code> (Lesson 11.2). An expired certificate is nearly always a broken renewal job, not a certificate problem.</span></div>
+  <div class="kv"><span class="k">certificate is not yet valid</span><span class="v">Almost never the certificate — it is the CLIENT's clock. A container or VM with a wrong date rejects perfectly good certificates. <code>timedatectl</code> on the machine doing the complaining.</span></div>
+  <div class="kv"><span class="k">unable to get local issuer certificate</span><span class="v">The chain is incomplete: the server is serving the leaf without its intermediate. Browsers often paper over this by caching intermediates; <code>curl</code> and your backend do not, which is why "it works in Chrome" is not a test.</span></div>
+  <div class="kv"><span class="k">hostname mismatch</span><span class="v">Compare <code>subject</code>/SAN with the name you requested. Usually the wrong vhost answered — pass <code>-servername</code> to <code>openssl s_client</code>, or you will test the default certificate instead of the one you meant.</span></div>
+  <div class="kv"><span class="k">Works with curl, fails in the app</span><span class="v">Different trust store. Node has its own CA bundle; a container may have none installed at all (<code>ca-certificates</code>). The system trusting a certificate does not mean your runtime does.</span></div>
+  <div class="kv"><span class="k">JWTs "expired" immediately</span><span class="v">Clock skew again. A machine minutes ahead issues tokens that another machine considers already dead. Fix NTP (Lesson 11.3), not the token lifetime.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Days until expiry, as one number — worth putting in a monitor</span>
+echo | openssl s_client -connect example.com:443 -servername example.com 2&gt;/dev/null \\
+  | openssl x509 -noout -enddate | cut -d= -f2 \\
+  | { read d; echo \$(( (\$(date -d "\$d" +%s) - \$(date +%s)) / 86400 )) days; }</code></pre>
+<div class="out">77 days</div>
+
+<h3>Recipe 5 — works by IP, not by name</h3>
+<pre><code>dig +short api.example.com
+dig +short api.example.com @1.1.1.1        <span class="tok-comment"># bypass the local resolver</span>
+cat /etc/resolv.conf; cat /etc/hosts
+getent hosts api.example.com               <span class="tok-comment"># what the SYSTEM resolves, not just DNS</span>
+resolvectl status | head -20</code></pre>
+<div class="out">$ dig +short api.example.com
+10.0.0.9
+$ dig +short api.example.com @1.1.1.1
+203.0.113.44
+$ getent hosts api.example.com
+10.0.0.9        api.example.com</div>
+<p>Two different answers for the same name. The local resolver returns a private address that a public resolver does not know about — either a deliberate split-horizon setup, a leftover <code>/etc/hosts</code> entry from someone's testing, or a VPN's DNS. <code>getent hosts</code> is the important one: it follows <code>/etc/nsswitch.conf</code> exactly as your application will, including <code>/etc/hosts</code>, which <code>dig</code> ignores entirely.</p>
+<div class="callout"><strong><code>dig</code> and your app do not resolve names the same way.</strong> <code>dig</code> talks to a DNS server. Your application calls <code>getaddrinfo()</code>, which consults <code>/etc/hosts</code> first, then possibly mDNS, then DNS, in the order given by <code>/etc/nsswitch.conf</code>. When <code>dig</code> gives the right answer and the app still connects to the wrong place, the difference is a <code>hosts</code> entry — and <code>getent hosts</code> is the command that sees it.</div>
+
+<h3>Recipe 6 — "but it works on my machine"</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Case sensitivity</span><span class="lz-lnote">macOS filesystems are case-INSENSITIVE by default; Linux is not. <code>import './Button'</code> resolving a file named <code>button.tsx</code> works locally and fails in the container. It is the single most common cause of "the build passed on my laptop".</span></div>
+  <div class="lz-layer"><span class="lz-lname">Locale</span><span class="lz-lnote"><code>LANG</code> and <code>LC_ALL</code> change how <code>sort</code> orders, how <code>printf</code> formats decimals, and how some tools parse dates. Servers often run <code>C.UTF-8</code>; your terminal does not. Set <code>LC_ALL=C</code> in scripts that parse output (Lesson 8.3).</span></div>
+  <div class="lz-layer"><span class="lz-lname">Timezone</span><span class="lz-lnote">Your machine is local time, the server is UTC. Every date-boundary bug, every "the report is empty" at the wrong hour, and every off-by-seven-hours cron (Lesson 11.2) starts here.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Environment variables</span><span class="lz-lnote">Your shell has fifty that the service does not — because systemd and cron read none of your startup files (Lesson 8.2). <code>systemctl show app -p Environment</code> shows what the service really gets.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Version drift</span><span class="lz-lnote">Node 22 locally, Node 18 in the image; a different OpenSSL; a different libc. <code>node -v</code>, <code>openssl version</code> and <code>ldd --version</code> in BOTH places, side by side.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Files git does not carry</span><span class="lz-lnote"><code>.env</code>, generated clients, symlinks, an <code>uploads/</code> directory that exists only on your disk. <code>git status --ignored</code> shows what your working copy has that a fresh clone would not.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Run this on both machines and diff the output — twenty seconds, ends most arguments</span>
+{ uname -srm; . /etc/os-release 2&gt;/dev/null &amp;&amp; echo "\$PRETTY_NAME"
+  node -v 2&gt;/dev/null; npm -v 2&gt;/dev/null; openssl version
+  echo "TZ=\$(timedatectl show -p Timezone --value 2&gt;/dev/null)"
+  echo "LANG=\$LANG LC_ALL=\$LC_ALL"; locale charmap
+  echo "case-sensitive: \$(touch /tmp/A_ 2&gt;/dev/null; [ -e /tmp/a_ ] &amp;&amp; echo NO || echo YES; rm -f /tmp/A_)"
+} 2&gt;&amp;1</code></pre>
+<div class="out">Linux 6.8.0-45-generic x86_64
+Ubuntu 24.04.1 LTS
+v22.11.0
+10.9.0
+OpenSSL 3.0.13 30 Jan 2024
+TZ=Etc/UTC
+LANG=C.UTF-8 LC_ALL=
+UTF-8
+case-sensitive: YES</div>
+
+<a class="link-card" href="https://man7.org/linux/man-pages/man1/namei.1.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🧭</span>
+  <span class="lc-body"><span class="lc-title">namei(1)</span><span class="lc-sub">Walks a path and prints the mode of every component, including symlinks. The right first command for any "permission denied" where the file's own mode looks fine.</span></span>
+</a>
+<a class="link-card" href="https://www.openssl.org/docs/man3.0/man1/openssl-s_client.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">openssl s_client</span><span class="lc-sub">The tool for looking at a live TLS connection: chain, dates, SNI, protocol version. <code>-servername</code> is the flag people forget, and forgetting it tests the wrong certificate.</span></span>
+</a>
+<a class="link-card" href="https://ubuntu.com/server/docs/how-to-use-apparmor" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">AppArmor on Ubuntu</span><span class="lc-sub">How profiles work, how to read a DENIED line from <code>dmesg</code>, and how to put one profile in complain mode while you investigate — without disabling the whole system.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Practice: six impossible bugs</span><span class="lc-sub">Graded exercises: find the traversal bit with <code>namei</code>, diagnose a CRLF shebang from the error message alone, prove a running process is executing an old release, and explain why <code>dig</code> and the app disagree.</span></span>
+</a>
+
+<div class="pitfall"><strong>Pitfall:</strong> concluding "the machine is broken" or "it must be a caching thing". Neither is ever the finding. Every recipe here is a mundane mechanism that is simply invisible from where you were looking — a mode bit two directories up, a carriage return, a process older than its own code, a clock. When a system seems to be behaving impossibly, one of your assumptions is false, and the fastest way forward is to verify the assumption you have not checked because it is "obviously" true.</div>
+<p class="note-ct"><strong>Three things to remember.</strong> <code>namei -l</code> before you argue about permissions — the answer is usually a parent directory, and <code>ls -l</code> on the file cannot show it. Before you debug behaviour, prove the process is running the code you think it is: <code>/proc/PID/cwd</code>, <code>/proc/PID/exe</code> and the start time answer that in three commands. And when something is impossible, the false assumption is the one you never tested — the clock, the line endings, the resolver, the case of a filename.</p>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 12 · Bài 12.4</span>
+<h2>Sách công thức: nó lạ</h2>
+<p class="lead">Những cú hỏng trong bài này có chung một tính chất: lời giải thích hiển nhiên thì SAI. Quyền đúng cả rồi mà nó vẫn nói denied. File có thật mà shell bảo không tìm thấy. Mã đã deploy rồi mà hành vi cũ vẫn còn. Sáu công thức cho những con bọ khiến người ta mất lòng tin vào cái máy.</p>
+
+<h3>Công thức 1 — "Permission denied" trong khi quyền vẫn đúng</h3>
+<pre><code>ls -l /srv/app/run.sh
+namei -l /srv/app/run.sh          <span class="tok-comment"># MỌI thành phần của đường dẫn, kèm quyền</span>
+findmnt -T /srv/app               <span class="tok-comment"># tuỳ chọn gắn cho đường dẫn này</span>
+sudo dmesg -T | grep -iE 'apparmor|audit|denied' | tail -5</code></pre>
+<div class="out">$ ls -l /srv/app/run.sh
+-rwxr-xr-x 1 deploy deploy 412 Aug 22 14:05 /srv/app/run.sh
+$ namei -l /srv/app/run.sh
+f: /srv/app/run.sh
+drwxr-xr-x root  root  /
+drwxr-x--- root  root  srv
+drwxr-xr-x deploy deploy app
+-rwxr-xr-x deploy deploy run.sh</div>
+<p>Cái file thì ai cũng chạy được, còn chỗ hỏng nằm cao hơn hai tầng: <code>/srv</code> là <code>drwxr-x---</code> thuộc <code>root:root</code>, nên một người dùng không phải root và không thuộc nhóm <code>root</code> thì không đi xuyên vào được (Bài 4.1). <code>ls -l</code> lên cái file không bao giờ cho bạn thấy điều đó; <code>namei -l</code> bày ra cả chuỗi cùng một lúc và là công cụ kiểm quyền nhanh nhất trên máy.</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Một thư mục cha thiếu bit <code>x</code></span><span class="v">Kinh điển. Mọi thư mục trên đường dẫn đều cần bit thực thi thì người dùng mới đi qua được. <code>namei -l</code> tìm ra nó bằng một câu lệnh.</span></div>
+  <div class="kv"><span class="k">Gắn với <code>noexec</code></span><span class="v"><code>findmnt -T</code> cho thấy các tuỳ chọn. Script nằm dưới <code>/tmp</code> hay <code>/home</code> trên một máy chủ đã gia cố thường KHÔNG chạy được, bất kể bit quyền là gì.</span></div>
+  <div class="kv"><span class="k">Gắn ở chế độ chỉ đọc</span><span class="v">Một hệ thống file tự gắn lại thành chỉ-đọc sau một lỗi I/O. Lệnh ghi hỏng với <code>EROFS</code>, và nhiều chương trình báo cái đó thành lỗi quyền. Hãy xem <code>dmesg -T</code> tìm lỗi đã gây ra nó.</span></div>
+  <div class="kv"><span class="k">Hộp cát của systemd</span><span class="v"><code>ProtectSystem=strict</code>, <code>ProtectHome=</code>, <code>ReadWritePaths=</code> — dịch vụ nhìn thấy một hệ thống file KHÁC với cái shell của bạn nhìn thấy (Bài 11.1). Mã thoát 226/NAMESPACE, hoặc một cú <code>EACCES</code> thuần lúc chạy.</span></div>
+  <div class="kv"><span class="k">AppArmor</span><span class="v">Tầng kiểm soát truy cập bắt buộc mặc định của Ubuntu. <code>dmesg</code> hiện <code>apparmor="DENIED"</code> kèm tên hồ sơ. Nó áp cho những chương trình cụ thể — <code>mysqld</code>, <code>nginx</code>, snap — và vô hình với <code>ls</code>.</span></div>
+  <div class="kv"><span class="k">Thuộc tính bất biến</span><span class="v"><code>lsattr file</code> hiện <code>----i---------</code> nghĩa là ngay cả root cũng không sửa được cho tới khi <code>chattr -i</code>. Hiếm, dễ nhớ, và nó khiến người ta nghi ngờ thực tại trong hai mươi phút.</span></div>
+</div>
+
+<h3>Công thức 2 — "command not found" với một file CÓ THẬT</h3>
+<pre><code>ls -l ./deploy.sh &amp;&amp; ./deploy.sh
+file ./deploy.sh
+head -c 40 ./deploy.sh | cat -A | head -2       <span class="tok-comment"># -A hiện \\r thành ^M</span>
+ldd \$(command -v node) | grep 'not found'</code></pre>
+<div class="out">$ ./deploy.sh
+bash: ./deploy.sh: cannot execute: required file not found
+$ head -c 40 ./deploy.sh | cat -A | head -1
+#!/bin/bash^M\$</div>
+<p>Dòng shebang kết thúc bằng <code>^M</code> — một ký tự xuống dòng kiểu Windows, từ một file soạn trên Windows hoặc lấy về với cấu hình xuống dòng sai của git. Nhân ngoan ngoãn đi tìm một trình thông dịch có tên đúng nghĩa đen là <code>/bin/bash\\r</code>, không thấy, rồi báo "required file not found" trong khi chỉ tay vào script của bạn. Thông báo gọi tên cái script; cái file thiếu là TRÌNH THÔNG DỊCH.</p>
+<pre><code>sed -i 's/\\r\$//' ./deploy.sh          <span class="tok-comment"># hoặc: dos2unix ./deploy.sh</span>
+file ./deploy.sh</code></pre>
+<div class="out">./deploy.sh: Bourne-Again shell script, ASCII text executable</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">CRLF trong shebang</span><span class="v">"cannot execute: required file not found" trên một file bạn nhìn thấy rành rành. <code>cat -A</code> chứng minh nó trong một dòng.</span></div>
+  <div class="kv"><span class="k">Sai kiến trúc</span><span class="v"><code>file</code> nói <code>ARM aarch64</code> trên một cái máy x86. Hay gặp với chương trình dựng trên laptop Apple Silicon rồi chép lên VPS.</span></div>
+  <div class="kv"><span class="k">Thiếu thư viện chia sẻ</span><span class="v"><code>ldd</code> in ra <code>=&gt; not found</code>. File có thật mà không khởi động được. Hãy cài gói đó, hoặc bạn đã dựng dựa trên một libc mà máy đích không có — chính cái bẫy musl/glibc trong lịch sử deploy của dự án này.</span></div>
+  <div class="kv"><span class="k">Đơn giản là không có trên PATH</span><span class="v">Câu trả lời buồn tẻ, và vẫn là phổ biến nhất. <code>command -v x</code>, rồi <code>echo "\$PATH" | tr ':' '\\n'</code> (Bài 8.1). Nhớ rằng <code>sudo</code> và cron có PATH KHÁC với bạn.</span></div>
+  <div class="kv"><span class="k">Bộ nhớ băm cũ của shell</span><span class="v">Bạn dời một chương trình đi mà bash vẫn nhớ chỗ cũ. <code>hash -r</code> xoá nó đi. Triệu chứng: thông báo lỗi gọi tên một đường dẫn không còn tồn tại.</span></div>
+</div>
+
+<h3>Công thức 3 — mã đã deploy mà hành vi cũ vẫn còn</h3>
+<p>Một route trả 404 sau khi bạn vừa thêm nó; một bản vá không hiện ra; một con bọ bạn đã xoá vẫn xảy ra. Trong mọi trường hợp, câu hỏi không phải "mã có đúng không" mà là <strong>"tiến trình này có đang chạy đúng cái mã tôi nghĩ không?"</strong></p>
+<pre><code><span class="tok-comment"># Route đã được gắn chưa? 401/200 = còn sống, 404 = bản dựng cũ</span>
+curl -s -o /dev/null -w '%{http_code}\\n' https://example.com/api/v1/reports
+
+<span class="tok-comment"># Tiến trình đang chạy thật ra đang thực thi cái gì?</span>
+pgrep -af 'node|python' | head
+sudo ls -l /proc/41288/cwd /proc/41288/exe
+sudo stat -c '%y %n' /srv/app/dist/index.js
+ps -o lstart= -p 41288                         <span class="tok-comment"># nó khởi động lúc nào?</span></code></pre>
+<div class="out">404
+41288 node /srv/app/dist/index.js
+lrwxrwxrwx 1 deploy deploy 0 Aug 22 19:52 /proc/41288/cwd -> /srv/releases/2026-08-19
+2026-08-22 14:05:11.000000000 +0000 /srv/app/dist/index.js
+Mon Aug 19 09:12:44 2026</div>
+<p>Ba sự kiện và bí ẩn kết thúc: bản dựng trên đĩa là ngày 22 tháng 8, tiến trình khởi động ngày 19 tháng 8, và thư mục làm việc của nó là một thư mục phát hành cũ. Bản deploy đã chép file mới lên và không ai khởi động lại dịch vụ. Mã thì đúng và chẳng liên quan gì.</p>
+<div class="callout ok"><strong>Hãy chẩn đoán "nó còn sống không?" bằng một lệnh <code>curl</code> không xác thực, đừng bao giờ bằng trình duyệt.</strong> <strong>401</strong> nghĩa là route đã được gắn và đòi xác thực. <strong>200</strong> nghĩa là đã gắn và công khai. <strong>404</strong> nghĩa là route KHÔNG tồn tại trong tiến trình đang chạy — một bản dựng cũ hoặc dở dang. Trình duyệt thêm bộ đệm, service worker và cookie vào một câu hỏi vốn chỉ có một từ để trả lời, và lịch sử của chính dự án này có một ngày mất trắng cho "cái chọn ảnh GIF hỏng rồi" mà thật ra là một <code>dist/index.js</code> cũ không gắn route.</div>
+<div class="pitfall"><strong>Bẫy:</strong> một máy chủ tài nguyên tĩnh chốt danh sách file lúc khởi động. Next.js quyết định có những gì dưới <code>public/</code> ngay khi <em>TIẾN TRÌNH SERVER KHỞI ĐỘNG</em>; dựng lại tài nguyên trong lúc nó đang chạy thì nó trả 404 cho những file nằm sờ sờ trên đĩa — không lỗi, không dòng log nào, chỉ có một trang không bao giờ tải xong vì JavaScript của nó không bao giờ tới. Đổi bất cứ thứ gì dưới <code>public/</code> thì phải khởi động lại server. Và hãy diệt nó theo CỔNG (<code>lsof -ti:3000 | xargs -r kill -9</code>), bởi vì Node tự đổi tên tiến trình của nó thành <code>next-server</code> và mọi mẫu <code>pkill -f</code> bạn thử một cách tự nhiên đều khớp trúng con số không.</div>
+
+<h3>Công thức 4 — TLS và cái đồng hồ</h3>
+<pre><code>curl -vI https://example.com 2&gt;&amp;1 | grep -E 'expire|subject|issuer|SSL'
+echo | openssl s_client -connect example.com:443 -servername example.com 2&gt;/dev/null \\
+  | openssl x509 -noout -dates -subject -issuer
+timedatectl | head -4</code></pre>
+<div class="out">notBefore=Aug  9 00:00:00 2026 GMT
+notAfter=Nov  7 23:59:59 2026 GMT
+subject=CN = example.com
+issuer=C = US, O = Let's Encrypt, CN = R11</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">certificate has expired</span><span class="v">Hãy đối chiếu <code>notAfter</code> với ngày thật. Rồi kiểm cái timer gia hạn lẽ ra đã phải ngăn chuyện đó: <code>systemctl list-timers | grep certbot</code> (Bài 11.2). Một chứng chỉ hết hạn gần như luôn là một công việc gia hạn hỏng, không phải một vấn đề về chứng chỉ.</span></div>
+  <div class="kv"><span class="k">certificate is not yet valid</span><span class="v">Gần như không bao giờ là chứng chỉ — đó là ĐỒNG HỒ CỦA MÁY KHÁCH. Một container hay máy ảo sai ngày sẽ từ chối những chứng chỉ hoàn toàn tốt. Hãy chạy <code>timedatectl</code> trên cái máy đang phàn nàn.</span></div>
+  <div class="kv"><span class="k">unable to get local issuer certificate</span><span class="v">Chuỗi chứng chỉ thiếu: máy chủ chỉ đưa lá cuối mà không kèm chứng chỉ trung gian. Trình duyệt hay che lấp chuyện này bằng cách lưu sẵn trung gian; <code>curl</code> và backend của bạn thì không, và đó là lý do "trên Chrome chạy được" không phải một phép kiểm.</span></div>
+  <div class="kv"><span class="k">hostname mismatch</span><span class="v">Hãy so <code>subject</code>/SAN với cái tên bạn vừa yêu cầu. Thường là nhầm vhost trả lời — hãy truyền <code>-servername</code> cho <code>openssl s_client</code>, không thì bạn đang kiểm chứng chỉ mặc định chứ không phải cái bạn định kiểm.</span></div>
+  <div class="kv"><span class="k">curl chạy được, ứng dụng thì không</span><span class="v">Kho tin cậy khác nhau. Node có bộ CA riêng của nó; một container có thể chẳng cài cái nào (<code>ca-certificates</code>). Hệ thống tin một chứng chỉ không có nghĩa là môi trường chạy của bạn cũng tin.</span></div>
+  <div class="kv"><span class="k">JWT "hết hạn" ngay lập tức</span><span class="v">Lại là lệch đồng hồ. Một cái máy chạy nhanh vài phút phát ra token mà máy khác coi là đã chết. Hãy sửa NTP (Bài 11.3), đừng sửa thời hạn của token.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Còn bao nhiêu ngày nữa hết hạn, dưới dạng một con số — đáng đưa vào hệ giám sát</span>
+echo | openssl s_client -connect example.com:443 -servername example.com 2&gt;/dev/null \\
+  | openssl x509 -noout -enddate | cut -d= -f2 \\
+  | { read d; echo \$(( (\$(date -d "\$d" +%s) - \$(date +%s)) / 86400 )) ngày; }</code></pre>
+<div class="out">77 ngày</div>
+
+<h3>Công thức 5 — chạy bằng IP, không chạy bằng tên</h3>
+<pre><code>dig +short api.example.com
+dig +short api.example.com @1.1.1.1        <span class="tok-comment"># đi vòng qua trình phân giải cục bộ</span>
+cat /etc/resolv.conf; cat /etc/hosts
+getent hosts api.example.com               <span class="tok-comment"># thứ HỆ THỐNG phân giải ra, không chỉ DNS</span>
+resolvectl status | head -20</code></pre>
+<div class="out">$ dig +short api.example.com
+10.0.0.9
+$ dig +short api.example.com @1.1.1.1
+203.0.113.44
+$ getent hosts api.example.com
+10.0.0.9        api.example.com</div>
+<p>Hai câu trả lời khác nhau cho cùng một cái tên. Trình phân giải cục bộ trả về một địa chỉ riêng tư mà trình phân giải công cộng không biết tới — hoặc là một thiết lập split-horizon có chủ ý, hoặc một dòng <code>/etc/hosts</code> còn sót từ lúc ai đó thử nghiệm, hoặc DNS của một VPN. <code>getent hosts</code> mới là cái quan trọng: nó đi theo <code>/etc/nsswitch.conf</code> ĐÚNG như ứng dụng của bạn sẽ làm, gồm cả <code>/etc/hosts</code>, thứ mà <code>dig</code> hoàn toàn phớt lờ.</p>
+<div class="callout"><strong><code>dig</code> và ứng dụng của bạn KHÔNG phân giải tên theo cùng một cách.</strong> <code>dig</code> nói chuyện với một máy chủ DNS. Ứng dụng của bạn gọi <code>getaddrinfo()</code>, hàm này tra <code>/etc/hosts</code> trước, rồi có thể tới mDNS, rồi mới tới DNS, theo đúng thứ tự ghi trong <code>/etc/nsswitch.conf</code>. Khi <code>dig</code> cho câu trả lời đúng mà ứng dụng vẫn nối tới nhầm chỗ, khác biệt nằm ở một dòng trong <code>hosts</code> — và <code>getent hosts</code> là câu lệnh nhìn thấy nó.</div>
+
+<h3>Công thức 6 — "nhưng máy tôi chạy được mà"</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Phân biệt hoa thường</span><span class="lz-lnote">Hệ thống file của macOS mặc định KHÔNG phân biệt hoa thường; Linux thì có. <code>import './Button'</code> khớp trúng một file tên <code>button.tsx</code> thì chạy ngon ở máy bạn và hỏng trong container. Đây là nguyên nhân số một của "bản build qua được trên laptop tôi mà".</span></div>
+  <div class="lz-layer"><span class="lz-lname">Bản địa (locale)</span><span class="lz-lnote"><code>LANG</code> và <code>LC_ALL</code> đổi cách <code>sort</code> sắp xếp, cách <code>printf</code> định dạng số thập phân, và cách vài công cụ đọc ngày tháng. Máy chủ thường chạy <code>C.UTF-8</code>; terminal của bạn thì không. Hãy đặt <code>LC_ALL=C</code> trong những script phải đọc output (Bài 8.3).</span></div>
+  <div class="lz-layer"><span class="lz-lname">Múi giờ</span><span class="lz-lnote">Máy bạn là giờ địa phương, máy chủ là UTC. Mọi con bọ ở ranh giới ngày, mọi lần "báo cáo rỗng" vào sai giờ, và mọi cái cron lệch bảy tiếng (Bài 11.2) đều bắt đầu từ đây.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Biến môi trường</span><span class="lz-lnote">Shell của bạn có năm mươi biến mà dịch vụ thì không — vì systemd và cron chẳng đọc file khởi động nào của bạn (Bài 8.2). <code>systemctl show app -p Environment</code> cho thấy dịch vụ thật sự nhận được gì.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Lệch phiên bản</span><span class="lz-lnote">Node 22 ở máy bạn, Node 18 trong ảnh; một OpenSSL khác; một libc khác. Hãy chạy <code>node -v</code>, <code>openssl version</code> và <code>ldd --version</code> ở CẢ HAI nơi, đặt cạnh nhau.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Những file git không mang theo</span><span class="lz-lnote"><code>.env</code>, client được sinh ra, liên kết mềm, một thư mục <code>uploads/</code> chỉ tồn tại trên đĩa của bạn. <code>git status --ignored</code> cho thấy bản làm việc của bạn có gì mà một bản clone mới thì không.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Chạy cái này ở CẢ HAI máy rồi so output — hai mươi giây, kết thúc phần lớn cuộc tranh cãi</span>
+{ uname -srm; . /etc/os-release 2&gt;/dev/null &amp;&amp; echo "\$PRETTY_NAME"
+  node -v 2&gt;/dev/null; npm -v 2&gt;/dev/null; openssl version
+  echo "TZ=\$(timedatectl show -p Timezone --value 2&gt;/dev/null)"
+  echo "LANG=\$LANG LC_ALL=\$LC_ALL"; locale charmap
+  echo "phan biet hoa thuong: \$(touch /tmp/A_ 2&gt;/dev/null; [ -e /tmp/a_ ] &amp;&amp; echo KHONG || echo CO; rm -f /tmp/A_)"
+} 2&gt;&amp;1</code></pre>
+<div class="out">Linux 6.8.0-45-generic x86_64
+Ubuntu 24.04.1 LTS
+v22.11.0
+10.9.0
+OpenSSL 3.0.13 30 Jan 2024
+TZ=Etc/UTC
+LANG=C.UTF-8 LC_ALL=
+UTF-8
+phan biet hoa thuong: CO</div>
+
+<a class="link-card" href="https://man7.org/linux/man-pages/man1/namei.1.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🧭</span>
+  <span class="lc-body"><span class="lc-title">namei(1)</span><span class="lc-sub">Đi dọc một đường dẫn và in quyền của từng thành phần, gồm cả liên kết mềm. Câu lệnh đầu tiên đúng đắn cho mọi cú "permission denied" mà quyền của chính cái file thì trông vẫn ổn.</span></span>
+</a>
+<a class="link-card" href="https://www.openssl.org/docs/man3.0/man1/openssl-s_client.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">openssl s_client</span><span class="lc-sub">Công cụ để soi một kết nối TLS đang sống: chuỗi chứng chỉ, ngày tháng, SNI, phiên bản giao thức. <code>-servername</code> là cái cờ người ta hay quên, và quên nó là kiểm nhầm chứng chỉ.</span></span>
+</a>
+<a class="link-card" href="https://ubuntu.com/server/docs/how-to-use-apparmor" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">AppArmor trên Ubuntu</span><span class="lc-sub">Hồ sơ hoạt động thế nào, đọc một dòng DENIED trong <code>dmesg</code> ra sao, và cách chuyển MỘT hồ sơ sang chế độ chỉ-ghi-nhận trong lúc bạn điều tra — mà không phải tắt cả hệ thống.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Luyện: sáu con bọ bất khả thi</span><span class="lc-sub">Bài chấm điểm: tìm ra bit đi-xuyên bằng <code>namei</code>, chẩn đoán một shebang dính CRLF chỉ từ thông báo lỗi, chứng minh một tiến trình đang chạy bản phát hành cũ, và giải thích vì sao <code>dig</code> với ứng dụng lại bất đồng.</span></span>
+</a>
+
+<div class="pitfall"><strong>Bẫy:</strong> kết luận "cái máy hỏng rồi" hoặc "chắc tại bộ đệm gì đó". Không cái nào từng là một phát hiện cả. Mọi công thức ở đây đều là một cơ chế TẦM THƯỜNG, chỉ là nó vô hình từ cái chỗ bạn đang đứng nhìn — một bit quyền cách hai thư mục, một ký tự về đầu dòng, một tiến trình già hơn chính mã của nó, một cái đồng hồ. Khi một hệ thống có vẻ đang hành xử bất khả thi thì một giả định nào đó của bạn đang sai, và cách đi tiếp nhanh nhất là kiểm chính cái giả định bạn chưa kiểm vì nó "hiển nhiên" đúng.</div>
+<p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Hãy <code>namei -l</code> trước khi tranh cãi về quyền — câu trả lời thường là một thư mục cha, và <code>ls -l</code> lên cái file không cho thấy được. Trước khi gỡ lỗi hành vi, hãy CHỨNG MINH tiến trình đang chạy đúng cái mã bạn nghĩ: <code>/proc/PID/cwd</code>, <code>/proc/PID/exe</code> và thời điểm khởi động trả lời chuyện đó bằng ba câu lệnh. Và khi một chuyện là bất khả thi thì giả định sai chính là cái bạn chưa bao giờ kiểm — cái đồng hồ, ký tự xuống dòng, trình phân giải tên, hay chữ hoa chữ thường của một cái tên file.</p>
+</div>
+`,
+    },
+    /* ─────────────────────────── 12.5 ─────────────────────────── */
+    {
+      title: '12.5 — What you can do now, and what to learn next|||12.5 — Giờ bạn làm được gì, và học tiếp cái gì',
+      slug: 'lnx-12-5-tong-ket',
+      type: 'LESSON',
+      description: 'Tổng kết cả khoá theo bốn cung đường, một thẻ tra cứu các câu lệnh gánh phần lớn công việc, năm thói quen phân biệt người thạo terminal, và lộ trình học tiếp.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 12 · Lesson 12.5</span>
+<h2>What you can do now, and what to learn next</h2>
+<p class="lead">Sixty-something lessons ago this course opened with a claim: that a terminal is not a place where you memorise incantations, but a place where a small number of ideas compose into everything else. This lesson is the receipt. It is a map of what you covered, a reference card for the commands that carry most of the work, and an honest answer to "what now".</p>
+
+<h3>The four arcs</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Arc 1 · Chapters 0–2 — Moving around</span><span class="lz-lnote">What a shell is, the filesystem as one tree, paths, and creating, copying, moving and deleting files without fear. The arc that turns the terminal from a black box into a place you can navigate.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Arc 2 · Chapters 3–6 — Composing</span><span class="lz-lnote">Streams, pipes and redirection; <code>grep</code>, <code>sed</code>, <code>awk</code>; permissions and users; processes and signals; variables, quoting and expansion. This is the arc where the shell stops being a file browser and becomes a language.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Arc 3 · Chapters 7–9 — Building and reaching out</span><span class="lz-lnote">Scripts that fail loudly instead of silently; <code>PATH</code> and startup files; networking, SSH, <code>curl</code>, <code>rsync</code> and firewalls. The arc that lets you automate work and operate machines you cannot touch.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Arc 4 · Chapters 10–12 — Running things for real</span><span class="lz-lnote">Disk, packages and logs; services, schedules and hardening; and a diagnostic method that works on a machine you have never seen. The arc that separates "I can use Linux" from "I can be responsible for a server".</span></div>
+</div>
+<p>If you can open a terminal on an unfamiliar server, find out what it runs, read why something failed, fix it, and leave behind a change that will still be correct after a reboot — that is the whole course, and it is a genuinely portable skill. Nothing here expires with a framework.</p>
+
+<h3>The commands that carry the work</h3>
+<p>There are thousands of commands on a Linux box. In practice a few dozen do almost everything. Keep this card; the rest you can look up.</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Move and look</span><span class="v"><code>cd</code> · <code>ls -la</code> · <code>pwd</code> · <code>tree -L 2</code> · <code>less</code> · <code>tail -f</code> · <code>file</code> · <code>stat</code> · <code>realpath</code></span></div>
+  <div class="kv"><span class="k">Find</span><span class="v"><code>find . -name … -mtime …</code> · <code>grep -rn</code> · <code>which</code> / <code>command -v</code> · <code>locate</code> · <code>namei -l</code></span></div>
+  <div class="kv"><span class="k">Change files</span><span class="v"><code>cp -a</code> · <code>mv</code> · <code>rm -i</code> · <code>mkdir -p</code> · <code>ln -s</code> · <code>tar czf</code> / <code>tar xzf</code> · <code>install -d -m</code></span></div>
+  <div class="kv"><span class="k">Text</span><span class="v"><code>cat</code> · <code>head</code>/<code>tail</code> · <code>sort</code> · <code>uniq -c</code> · <code>cut</code> · <code>tr</code> · <code>wc -l</code> · <code>sed -i</code> · <code>awk '{print \$2}'</code> · <code>jq</code></span></div>
+  <div class="kv"><span class="k">Permissions</span><span class="v"><code>chmod</code> · <code>chown</code> · <code>umask</code> · <code>sudo -u</code> · <code>id</code> · <code>groups</code> · <code>visudo</code></span></div>
+  <div class="kv"><span class="k">Processes</span><span class="v"><code>ps aux --sort=-%cpu</code> · <code>top</code>/<code>htop</code> · <code>pgrep -af</code> · <code>kill</code> · <code>jobs</code>/<code>bg</code>/<code>fg</code> · <code>nohup</code> · <code>timeout</code></span></div>
+  <div class="kv"><span class="k">Resources</span><span class="v"><code>df -h</code> · <code>df -i</code> · <code>du -xh --max-depth=1</code> · <code>free -h</code> · <code>vmstat 1</code> · <code>iostat -xz 1</code> · <code>uptime</code></span></div>
+  <div class="kv"><span class="k">Network</span><span class="v"><code>ss -tlnp</code> · <code>curl -sS -w</code> · <code>dig +short</code> · <code>getent hosts</code> · <code>nc -vz</code> · <code>ssh</code> · <code>scp</code> · <code>rsync -avz</code> · <code>ufw</code></span></div>
+  <div class="kv"><span class="k">Services and logs</span><span class="v"><code>systemctl status/cat/show</code> · <code>journalctl -u -p -b --since</code> · <code>systemctl --failed</code> · <code>systemd-analyze calendar</code></span></div>
+  <div class="kv"><span class="k">Scripting</span><span class="v"><code>set -Eeuo pipefail</code> · <code>trap</code> · <code>mktemp</code> · <code>flock</code> · <code>\${var:?}</code> · <code>case</code> · <code>while read -r</code> · <code>shellcheck</code></span></div>
+</div>
+<div class="callout ok"><strong>You are not expected to remember flags.</strong> You are expected to remember that the capability exists — that <code>df</code> has an inode mode, that <code>curl</code> can print timings, that <code>ss</code> can filter by state. Knowing a thing is possible is the hard part; <code>man</code>, <code>--help</code> and <code>tldr</code> supply the rest in five seconds. Every experienced person you have watched work fast is doing exactly this.</div>
+
+<h3>Five habits worth more than any command</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1 · Look before you change</span><span class="lz-t">ls before rm · --dry-run before rsync · print before delete</span><span class="lz-d">Every destructive command has a rehearsal mode. Using it costs two seconds and has saved more data than every backup system ever written.</span></div>
+  <div class="lz-step"><span class="lz-k">2 · Make failure loud</span><span class="lz-t">set -Eeuo pipefail · exit codes · check the return value</span><span class="lz-d">The default in shell is to carry on after an error. Almost every scripting disaster in Chapter 7 is a script that kept going after step three failed.</span></div>
+  <div class="lz-step"><span class="lz-k">3 · Prefer the boring, verifiable answer</span><span class="lz-t">sshd -T over reading the config · curl over the browser · systemctl cat over the file</span><span class="lz-d">Ask the system what it actually resolved, not what you believe you configured. Files lie by omission; resolved state does not.</span></div>
+  <div class="lz-step"><span class="lz-k">4 · Leave it better documented than you found it</span><span class="lz-t">a comment in the unit · a line in the README · a follow-up note</span><span class="lz-d">The next person to debug this is you, in eight months, with no memory of any of it.</span></div>
+  <div class="lz-step"><span class="lz-k">5 · Never close the working session</span><span class="lz-t">the second terminal, before a risky change</span><span class="lz-d">Firewall rules, sshd config, permission changes on a home directory. Ten seconds of preparation is the difference between an oops and a rebuild.</span></div>
+</div>
+
+<h3>Where to go next</h3>
+<p>Three directions, depending on what you want to be able to do. None of them require finishing the others first.</p>
+<div class="lz-map">
+  <div class="lz-stage">
+    <span class="lz-badge">Run things</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Containers, proxies, deployment</span><span class="lz-nsub">Docker gives you reproducible environments; nginx or Caddy puts them behind TLS; a CI pipeline builds and ships them. Everything in Chapter 11 and 12 applies unchanged — a container is a process with a restricted view.</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Store things</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Databases, backups, migrations</span><span class="lz-nsub">PostgreSQL is the default answer and worth learning deeply. The operational half — backups you have restored, migrations that roll forward, connection pools that do not deadlock — is where Chapter 12's Recipe 6 comes back.</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">See things</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Monitoring and observability</span><span class="lz-nsub">Prometheus, Grafana, structured logs, alerts that fire before users notice. Every "why did nothing tell us?" in this chapter is answered here, and it is the highest-leverage thing to learn after this course.</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Go deeper in the shell</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Bash mastery, then when to stop</span><span class="lz-nsub">Arrays, associative arrays, coprocesses, <code>shellcheck</code> as a habit. And the judgement to move to Python when a script passes about two hundred lines — knowing the boundary is part of knowing the tool.</span></div></div>
+  </div>
+</div>
+<a class="link-card codelab" href="/courses/nodejs/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🟩</span>
+  <span class="lc-body"><span class="lc-title">Node.js — the full course on this site</span><span class="lc-sub">The application layer that sits on top of everything you just learned: processes, streams, event loop, HTTP, deployment. Chapter 11's service units run exactly this.</span></span>
+</a>
+<a class="link-card codelab" href="/courses/postgresql/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🐘</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL — the full course on this site</span><span class="lc-sub">Schema design, indexes, transactions, and the operational side: backups, <code>EXPLAIN</code>, connection limits. The natural companion to this course.</span></span>
+</a>
+<a class="link-card codelab" href="/courses/git/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🔀</span>
+  <span class="lc-body"><span class="lc-title">Git & GitHub — the full course on this site</span><span class="lc-sub">If Chapter 12's "what changed at 14:07" made you wish for better history, this is that skill: branches, rebases, bisect, and reading a repository like a log.</span></span>
+</a>
+<a class="link-card" href="https://linuxjourney.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">🧭</span>
+  <span class="lc-body"><span class="lc-title">Linux Journey</span><span class="lc-sub">Free, short, well-sequenced lessons that overlap this course and go further into kernel internals, networking and filesystems. A good second pass on anything that stayed fuzzy.</span></span>
+</a>
+<a class="link-card" href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener">
+  <span class="lc-ico">🎮</span>
+  <span class="lc-body"><span class="lc-title">OverTheWire — Bandit</span><span class="lc-sub">Thirty-odd levels solved entirely over SSH, each one a small puzzle in finding and reading files. The single best way to make Chapters 1–3 automatic rather than remembered.</span></span>
+</a>
+<a class="link-card" href="https://explainshell.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">🔍</span>
+  <span class="lc-body"><span class="lc-title">explainshell.com</span><span class="lc-sub">Paste any command line and it annotates every flag with the relevant man-page fragment. The fastest way to understand a command you found in someone else's script instead of pasting it blind.</span></span>
+</a>
+<a class="link-card" href="https://www.shellcheck.net/" target="_blank" rel="noopener">
+  <span class="lc-ico">✅</span>
+  <span class="lc-body"><span class="lc-title">ShellCheck</span><span class="lc-sub">Static analysis for shell scripts, in the browser or as <code>apt install shellcheck</code>. It catches unquoted variables, useless <code>cat</code>s and the pipeline exit-code traps from Chapter 7 — automatically, every time.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Practice: the whole course, one lab at a time</span><span class="lc-sub">Every chapter's graded exercises in one place. If you skipped them while reading, this is the version of the course that actually sticks — reading about <code>awk</code> and using <code>awk</code> are different skills.</span></span>
+</a>
+
+<h3>How to keep it</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Own a server</span><span class="v">The cheapest VPS you can find, for the price of a coffee a month. Break it, harden it, rebuild it. Nothing in this course becomes real until something you care about is running on a machine you are responsible for.</span></div>
+  <div class="kv"><span class="k">Do the boring thing with a script</span><span class="v">Every task you do twice by hand is a script. It does not need to be good — it needs to exist, with <code>set -Eeuo pipefail</code> at the top. Ten small scripts teach more than one large one.</span></div>
+  <div class="kv"><span class="k">Read your own logs</span><span class="v">Once a week, <code>journalctl -p warning --since '7 days ago'</code> on something you run. You will find things nobody reported, and you will learn what normal looks like — which is the only way to recognise abnormal.</span></div>
+  <div class="kv"><span class="k">Keep a snippets file</span><span class="v">One plain-text file of commands that took you more than five minutes to work out. It beats searching the internet again, and re-reading it occasionally is genuine revision.</span></div>
+  <div class="kv"><span class="k">Teach one thing</span><span class="v">Explain pipes, or permissions, or why <code>rm</code> on an open log frees nothing, to somebody who does not know. The gaps show up instantly, and they are always the parts you thought you understood.</span></div>
+</div>
+
+<div class="pitfall"><strong>Pitfall:</strong> treating "I finished the course" as the finish line. The skill decays if it is never used, and it consolidates fast if it is: two weeks of running something real will fix more of what stayed fuzzy than re-reading any chapter. The failure mode is not forgetting commands — commands are searchable. It is losing the confidence to open a terminal on an unfamiliar machine and start looking, and that only comes back by doing it.</div>
+<p class="note-ct"><strong>Three things to remember.</strong> Composition is the whole idea: small tools, one job each, joined by pipes — that is why sixty lessons fit in a few dozen commands. Verified state beats configuration you believe in, whether that is <code>sshd -T</code>, <code>systemctl cat</code> or an unauthenticated <code>curl</code>. And the most valuable habit in this entire course costs two seconds: look before you change, and keep the second terminal open.</p>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 12 · Bài 12.5</span>
+<h2>Giờ bạn làm được gì, và học tiếp cái gì</h2>
+<p class="lead">Hơn sáu mươi bài trước, khoá học này mở đầu bằng một lời khẳng định: terminal không phải chỗ để thuộc lòng những câu thần chú, mà là nơi một số ít ý tưởng ghép lại thành mọi thứ còn lại. Bài này là cái biên nhận. Nó là bản đồ những gì bạn đã đi qua, một thẻ tra cứu các câu lệnh gánh phần lớn công việc, và một câu trả lời thành thật cho "giờ thì sao".</p>
+
+<h3>Bốn cung đường</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Cung 1 · Chương 0–2 — Đi lại được</span><span class="lz-lnote">Shell là gì, hệ thống file như MỘT cái cây, đường dẫn, và tạo/chép/dời/xoá file mà không sợ. Cung đường biến terminal từ một cái hộp đen thành một nơi bạn đi lại được.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Cung 2 · Chương 3–6 — Ghép nối</span><span class="lz-lnote">Luồng, ống dẫn và chuyển hướng; <code>grep</code>, <code>sed</code>, <code>awk</code>; quyền hạn và người dùng; tiến trình và tín hiệu; biến, dấu nháy và khai triển. Đây là cung đường mà shell thôi làm một trình duyệt file và trở thành một NGÔN NGỮ.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Cung 3 · Chương 7–9 — Dựng và vươn ra</span><span class="lz-lnote">Script hỏng thì kêu to chứ không hỏng trong im lặng; <code>PATH</code> và file khởi động; mạng, SSH, <code>curl</code>, <code>rsync</code> và tường lửa. Cung đường cho phép bạn tự động hoá công việc và vận hành những cái máy bạn không chạm tay vào được.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Cung 4 · Chương 10–12 — Chạy thật</span><span class="lz-lnote">Đĩa, gói phần mềm và log; dịch vụ, lịch chạy và gia cố; và một phương pháp chẩn đoán dùng được trên cái máy bạn chưa từng thấy. Cung đường tách "tôi biết dùng Linux" khỏi "tôi chịu trách nhiệm được cho một máy chủ".</span></div>
+</div>
+<p>Nếu bạn mở được một terminal trên một máy chủ lạ, tìm ra nó chạy những gì, đọc được vì sao có thứ hỏng, sửa nó, và để lại một thay đổi vẫn còn đúng sau khi máy khởi động lại — thì đó là toàn bộ khoá học, và đó là một kỹ năng MANG ĐI ĐƯỢC thật sự. Không có gì ở đây hết hạn cùng một framework.</p>
+
+<h3>Những câu lệnh gánh phần lớn công việc</h3>
+<p>Một máy Linux có hàng nghìn câu lệnh. Trên thực tế vài chục cái làm gần như mọi thứ. Hãy giữ cái thẻ này; phần còn lại tra cứu được.</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Đi lại và nhìn</span><span class="v"><code>cd</code> · <code>ls -la</code> · <code>pwd</code> · <code>tree -L 2</code> · <code>less</code> · <code>tail -f</code> · <code>file</code> · <code>stat</code> · <code>realpath</code></span></div>
+  <div class="kv"><span class="k">Tìm</span><span class="v"><code>find . -name … -mtime …</code> · <code>grep -rn</code> · <code>which</code> / <code>command -v</code> · <code>locate</code> · <code>namei -l</code></span></div>
+  <div class="kv"><span class="k">Đổi file</span><span class="v"><code>cp -a</code> · <code>mv</code> · <code>rm -i</code> · <code>mkdir -p</code> · <code>ln -s</code> · <code>tar czf</code> / <code>tar xzf</code> · <code>install -d -m</code></span></div>
+  <div class="kv"><span class="k">Văn bản</span><span class="v"><code>cat</code> · <code>head</code>/<code>tail</code> · <code>sort</code> · <code>uniq -c</code> · <code>cut</code> · <code>tr</code> · <code>wc -l</code> · <code>sed -i</code> · <code>awk '{print \$2}'</code> · <code>jq</code></span></div>
+  <div class="kv"><span class="k">Quyền hạn</span><span class="v"><code>chmod</code> · <code>chown</code> · <code>umask</code> · <code>sudo -u</code> · <code>id</code> · <code>groups</code> · <code>visudo</code></span></div>
+  <div class="kv"><span class="k">Tiến trình</span><span class="v"><code>ps aux --sort=-%cpu</code> · <code>top</code>/<code>htop</code> · <code>pgrep -af</code> · <code>kill</code> · <code>jobs</code>/<code>bg</code>/<code>fg</code> · <code>nohup</code> · <code>timeout</code></span></div>
+  <div class="kv"><span class="k">Tài nguyên</span><span class="v"><code>df -h</code> · <code>df -i</code> · <code>du -xh --max-depth=1</code> · <code>free -h</code> · <code>vmstat 1</code> · <code>iostat -xz 1</code> · <code>uptime</code></span></div>
+  <div class="kv"><span class="k">Mạng</span><span class="v"><code>ss -tlnp</code> · <code>curl -sS -w</code> · <code>dig +short</code> · <code>getent hosts</code> · <code>nc -vz</code> · <code>ssh</code> · <code>scp</code> · <code>rsync -avz</code> · <code>ufw</code></span></div>
+  <div class="kv"><span class="k">Dịch vụ và log</span><span class="v"><code>systemctl status/cat/show</code> · <code>journalctl -u -p -b --since</code> · <code>systemctl --failed</code> · <code>systemd-analyze calendar</code></span></div>
+  <div class="kv"><span class="k">Viết script</span><span class="v"><code>set -Eeuo pipefail</code> · <code>trap</code> · <code>mktemp</code> · <code>flock</code> · <code>\${var:?}</code> · <code>case</code> · <code>while read -r</code> · <code>shellcheck</code></span></div>
+</div>
+<div class="callout ok"><strong>Không ai đòi bạn thuộc lòng mấy cái cờ.</strong> Thứ bạn cần nhớ là KHẢ NĂNG ĐÓ CÓ TỒN TẠI — rằng <code>df</code> có chế độ đếm inode, rằng <code>curl</code> in được các mốc thời gian, rằng <code>ss</code> lọc được theo trạng thái. Biết một chuyện là làm được mới là phần khó; <code>man</code>, <code>--help</code> và <code>tldr</code> lo nốt phần còn lại trong năm giây. Mọi người có kinh nghiệm mà bạn từng thấy làm việc nhanh đều đang làm đúng như vậy.</div>
+
+<h3>Năm thói quen đáng giá hơn mọi câu lệnh</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1 · Nhìn trước khi đổi</span><span class="lz-t">ls trước rm · --dry-run trước rsync · in ra trước khi xoá</span><span class="lz-d">Mọi câu lệnh có tính phá huỷ đều có một chế độ diễn thử. Dùng nó tốn hai giây và đã cứu được nhiều dữ liệu hơn mọi hệ thống sao lưu từng được viết ra.</span></div>
+  <div class="lz-step"><span class="lz-k">2 · Cho cái hỏng kêu to</span><span class="lz-t">set -Eeuo pipefail · mã thoát · kiểm giá trị trả về</span><span class="lz-d">Mặc định của shell là ĐI TIẾP sau khi có lỗi. Gần như mọi thảm hoạ script trong Chương 7 đều là một script cứ chạy tiếp sau khi bước ba đã hỏng.</span></div>
+  <div class="lz-step"><span class="lz-k">3 · Ưu tiên câu trả lời buồn tẻ nhưng KIỂM ĐƯỢC</span><span class="lz-t">sshd -T thay vì đọc file cấu hình · curl thay vì trình duyệt · systemctl cat thay vì cái file</span><span class="lz-d">Hãy hỏi hệ thống nó thật sự hiểu thành gì, đừng hỏi thứ bạn tin là mình đã cấu hình. File nói dối bằng cách bỏ sót; trạng thái đã được giải quyết thì không.</span></div>
+  <div class="lz-step"><span class="lz-k">4 · Để lại chỗ đó có tài liệu hơn lúc bạn tới</span><span class="lz-t">một dòng chú thích trong unit · một dòng trong README · một ghi chú việc-sau</span><span class="lz-d">Người tiếp theo gỡ lỗi chỗ này là BẠN, tám tháng nữa, không nhớ nổi một chút gì.</span></div>
+  <div class="lz-step"><span class="lz-k">5 · Đừng bao giờ đóng cái phiên đang chạy được</span><span class="lz-t">cái terminal thứ hai, trước một thay đổi rủi ro</span><span class="lz-d">Luật tường lửa, cấu hình sshd, đổi quyền trên một thư mục nhà. Mười giây chuẩn bị là khác biệt giữa một tiếng "ối" và một lần dựng lại từ đầu.</span></div>
+</div>
+
+<h3>Đi tiếp hướng nào</h3>
+<p>Ba hướng, tuỳ vào việc bạn muốn làm được gì. Không hướng nào bắt bạn học xong hướng kia trước.</p>
+<div class="lz-map">
+  <div class="lz-stage">
+    <span class="lz-badge">Chạy các thứ</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Container, proxy, triển khai</span><span class="lz-nsub">Docker cho bạn môi trường tái lập được; nginx hay Caddy đặt chúng sau TLS; một quy trình CI dựng và đưa chúng đi. Mọi thứ trong Chương 11 và 12 áp dụng nguyên vẹn — một container là một tiến trình với tầm nhìn bị hạn chế.</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Lưu các thứ</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Cơ sở dữ liệu, sao lưu, migration</span><span class="lz-nsub">PostgreSQL là câu trả lời mặc định và đáng học sâu. Nửa vận hành của nó — những bản sao lưu bạn ĐÃ phục hồi, những migration tiến tới được, những bể kết nối không bế tắc — chính là chỗ Công thức 6 của Chương 12 quay lại.</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Nhìn thấy các thứ</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Giám sát và khả quan sát</span><span class="lz-nsub">Prometheus, Grafana, log có cấu trúc, cảnh báo nổ trước khi người dùng nhận ra. Mọi câu "tại sao không có gì báo cho chúng ta?" trong chương này được trả lời ở đây, và đó là thứ đáng học nhất ngay sau khoá này.</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Đi sâu hơn vào shell</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Thạo Bash, rồi biết khi nào dừng</span><span class="lz-nsub">Mảng, mảng liên kết, coprocess, <code>shellcheck</code> thành thói quen. Và cái phán đoán để chuyển sang Python khi một script vượt khoảng hai trăm dòng — biết cái ranh giới đó cũng là một phần của việc biết dùng công cụ.</span></div></div>
+  </div>
+</div>
+<a class="link-card codelab" href="/courses/nodejs/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🟩</span>
+  <span class="lc-body"><span class="lc-title">Node.js — khoá đầy đủ trên trang này</span><span class="lc-sub">Tầng ứng dụng nằm trên mọi thứ bạn vừa học: tiến trình, luồng, vòng lặp sự kiện, HTTP, triển khai. Những unit dịch vụ ở Chương 11 chạy chính xác cái này.</span></span>
+</a>
+<a class="link-card codelab" href="/courses/postgresql/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🐘</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL — khoá đầy đủ trên trang này</span><span class="lc-sub">Thiết kế lược đồ, chỉ mục, giao dịch, và mặt vận hành: sao lưu, <code>EXPLAIN</code>, giới hạn kết nối. Người bạn đồng hành tự nhiên của khoá này.</span></span>
+</a>
+<a class="link-card codelab" href="/courses/git/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🔀</span>
+  <span class="lc-body"><span class="lc-title">Git & GitHub — khoá đầy đủ trên trang này</span><span class="lc-sub">Nếu câu "cái gì đã đổi lúc 14:07" ở Chương 12 khiến bạn ước gì lịch sử tốt hơn thì đây chính là kỹ năng đó: nhánh, rebase, bisect, và đọc một kho mã như đọc một cuốn nhật ký.</span></span>
+</a>
+<a class="link-card" href="https://linuxjourney.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">🧭</span>
+  <span class="lc-body"><span class="lc-title">Linux Journey</span><span class="lc-sub">Miễn phí, ngắn, sắp xếp mạch lạc, chồng lấn với khoá này và đi xa hơn vào ruột nhân, mạng và hệ thống file. Một lượt đọc thứ hai tốt cho bất cứ chỗ nào còn mờ.</span></span>
+</a>
+<a class="link-card" href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener">
+  <span class="lc-ico">🎮</span>
+  <span class="lc-body"><span class="lc-title">OverTheWire — Bandit</span><span class="lc-sub">Hơn ba mươi màn giải HOÀN TOÀN qua SSH, mỗi màn là một câu đố nhỏ về việc tìm và đọc file. Cách tốt nhất để biến Chương 1–3 thành phản xạ thay vì thành trí nhớ.</span></span>
+</a>
+<a class="link-card" href="https://explainshell.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">🔍</span>
+  <span class="lc-body"><span class="lc-title">explainshell.com</span><span class="lc-sub">Dán một dòng lệnh bất kỳ vào và nó chú giải từng cái cờ bằng đúng mẩu man tương ứng. Cách nhanh nhất để HIỂU một câu lệnh bạn nhặt trong script của người khác thay vì dán nó vào một cách mù quáng.</span></span>
+</a>
+<a class="link-card" href="https://www.shellcheck.net/" target="_blank" rel="noopener">
+  <span class="lc-ico">✅</span>
+  <span class="lc-body"><span class="lc-title">ShellCheck</span><span class="lc-sub">Phân tích tĩnh cho script shell, chạy trên trình duyệt hoặc <code>apt install shellcheck</code>. Nó bắt biến không bọc nháy, những cú <code>cat</code> vô ích và các bẫy mã thoát của ống dẫn ở Chương 7 — tự động, lần nào cũng vậy.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Luyện: cả khoá học, từng phòng lab một</span><span class="lc-sub">Toàn bộ bài chấm điểm của mọi chương gom về một chỗ. Nếu bạn bỏ qua chúng trong lúc đọc thì đây mới là phiên bản khoá học ĐỌNG LẠI — đọc về <code>awk</code> và DÙNG <code>awk</code> là hai kỹ năng khác nhau.</span></span>
+</a>
+
+<h3>Làm sao để giữ được</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sở hữu một máy chủ</span><span class="v">Cái VPS rẻ nhất bạn tìm được, giá bằng một ly cà phê mỗi tháng. Phá nó, gia cố nó, dựng lại nó. Không có gì trong khoá này trở thành THẬT cho tới khi có một thứ bạn quan tâm đang chạy trên một cái máy bạn chịu trách nhiệm.</span></div>
+  <div class="kv"><span class="k">Làm cái việc buồn tẻ bằng một script</span><span class="v">Mọi việc bạn làm tay tới lần thứ hai đều là một script. Nó không cần hay — nó cần TỒN TẠI, với <code>set -Eeuo pipefail</code> ở đầu. Mười script nhỏ dạy nhiều hơn một script lớn.</span></div>
+  <div class="kv"><span class="k">Đọc log của chính mình</span><span class="v">Mỗi tuần một lần, <code>journalctl -p warning --since '7 days ago'</code> trên một thứ bạn đang chạy. Bạn sẽ thấy những chuyện chẳng ai báo, và bạn sẽ học được thế nào là BÌNH THƯỜNG — cách duy nhất để nhận ra thứ bất thường.</span></div>
+  <div class="kv"><span class="k">Giữ một file mẩu lệnh</span><span class="v">Một file văn bản thuần chứa những câu lệnh khiến bạn mất hơn năm phút để nghĩ ra. Nó hơn việc đi tìm lại trên internet, và đọc lại nó thi thoảng chính là ôn tập thật sự.</span></div>
+  <div class="kv"><span class="k">Dạy một thứ</span><span class="v">Hãy giải thích ống dẫn, hoặc quyền hạn, hoặc vì sao <code>rm</code> lên một file log đang mở chẳng giải phóng được gì, cho một người chưa biết. Những chỗ hổng lộ ra ngay lập tức, và chúng luôn là những phần bạn tưởng mình đã hiểu.</span></div>
+</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> coi "tôi học xong khoá rồi" là vạch đích. Kỹ năng này rơi rụng nếu không dùng, và nó đóng rắn rất nhanh nếu có dùng: hai tuần vận hành một thứ có thật sẽ chữa được nhiều chỗ còn mờ hơn là đọc lại bất cứ chương nào. Kiểu hỏng ở đây không phải quên câu lệnh — câu lệnh thì tra được. Nó là mất đi sự tự tin để mở một terminal trên một cái máy lạ và bắt đầu nhìn, và thứ đó chỉ quay lại bằng cách LÀM.</div>
+<p class="note-ct"><strong>Ba thứ cần nhớ.</strong> GHÉP NỐI là toàn bộ ý tưởng: công cụ nhỏ, mỗi cái một việc, nối với nhau bằng ống dẫn — đó là lý do sáu mươi bài học gói gọn trong vài chục câu lệnh. Trạng thái đã kiểm chứng thắng cấu hình mà bạn tin tưởng, dù đó là <code>sshd -T</code>, <code>systemctl cat</code> hay một lệnh <code>curl</code> không xác thực. Và thói quen giá trị nhất trong cả khoá này tốn hai giây: nhìn trước khi đổi, và giữ cái terminal thứ hai luôn mở.</p>
+</div>
+`,
+    },
+    /* ─────────────────────────── 12.6 ─────────────────────────── */
+    {
+      title: '12.6 — Final quiz: diagnosing a real server|||12.6 — Kiểm tra cuối khoá: chẩn đoán một máy chủ thật',
+      slug: 'lnx-12-6-quiz',
+      type: 'QUIZ',
+      description: 'Mười câu cuối khoá: load so với CPU, available so với free, refused so với timeout, 203/EXEC, bản dựng cũ, chẻ pha bằng curl, shebang dính CRLF, namei, lệch đồng hồ, và thu giữ bằng chứng.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 12 · Final quiz</span>
+<h2>The last one</h2>
+<p class="lead">Ten questions, drawn from the whole diagnostic chapter. They are written the way the problems arrive in real life: a symptom and some output, and you decide what it means.</p>
+<div class="callout ok">Aim for 8/10. The three that matter most on a real incident: telling refused from timed out (12.2), reading <code>available</code> rather than <code>free</code> (12.3), and proving that the running process is executing the code you think it is (12.4).</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 12 · Kiểm tra cuối khoá</span>
+<h2>Bài cuối cùng</h2>
+<p class="lead">Mười câu, rút từ cả chương chẩn đoán. Chúng được viết theo đúng cách các vấn đề xuất hiện ngoài đời thật: một triệu chứng và một ít output, còn bạn quyết định nó nghĩa là gì.</p>
+<div class="callout ok">Hãy nhắm 8/10. Ba câu quan trọng nhất trong một sự cố thật: phân biệt refused với timed out (bài 12.2), đọc <code>available</code> chứ không đọc <code>free</code> (bài 12.3), và chứng minh tiến trình đang chạy đúng cái mã bạn nghĩ (bài 12.4).</div>
+</div>
+`,
+      quiz: {
+        timeLimitSeconds: 900,
+        questions: [
+          {
+            question: 'Load average is 8.2 on a 2-core machine, but top shows the CPU almost idle. What does that mean?|||Load average là 8,2 trên một máy 2 nhân, nhưng top cho thấy CPU gần như rảnh. Điều đó nghĩa là gì?',
+            options: [
+              'The load average is stale; it updates only every 5 minutes|||Load average đã cũ; nó chỉ cập nhật mỗi 5 phút',
+              'On Linux, load counts processes in uninterruptible sleep too — the machine is WAITING, almost always on disk or network storage; check %wa and /proc/pressure/io|||Trên Linux, load đếm cả tiến trình đang ngủ không ngắt được — cái máy đang CHỜ, gần như luôn là chờ đĩa hoặc ổ lưu trữ qua mạng; hãy xem %wa và /proc/pressure/io',
+              'top is reporting per-core percentages, so 8.2 is really 410%|||top báo phần trăm theo từng nhân, nên 8,2 thật ra là 410%',
+              'The kernel is miscounting; reboot to reset it|||Nhân đếm sai; hãy khởi động lại để đặt lại',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'free -h reports 197Mi free, 5.5Gi buff/cache and 5.3Gi available on an 8GB machine. Is memory a problem?|||free -h báo 197Mi free, 5,5Gi buff/cache và 5,3Gi available trên một máy 8GB. Bộ nhớ có phải vấn đề không?',
+            options: [
+              'Yes — under 200Mi free means the machine is about to start swapping|||Có — dưới 200Mi free nghĩa là máy sắp bắt đầu swap',
+              'No — buff/cache is reclaimable page cache, and available (5.3Gi) is the honest number; real pressure shows as sustained si/so in vmstat|||Không — buff/cache là bộ đệm trang thu hồi được, và available (5,3Gi) mới là con số trung thực; sức ép thật hiện ra dưới dạng si/so khác 0 liên tục trong vmstat',
+              'Yes — buff/cache means memory leaked into the kernel|||Có — buff/cache nghĩa là bộ nhớ đã rò vào nhân',
+              'It cannot be determined without running top|||Không thể kết luận nếu chưa chạy top',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'nc -vz 10.0.0.9 3000 says "Connection refused" while nc -vz 10.0.0.9 5432 says "timed out". What do those two answers tell you?|||nc -vz 10.0.0.9 3000 nói "Connection refused" còn nc -vz 10.0.0.9 5432 nói "timed out". Hai câu trả lời đó nói cho bạn biết gì?',
+            options: [
+              'Both mean the service is down; the wording is arbitrary|||Cả hai đều nghĩa là dịch vụ đang chết; cách diễn đạt chỉ là ngẫu nhiên',
+              'Refused = you reached the host and nothing is listening (fix on the server). Timed out = packets are being dropped (fix in the firewall/network). Same machine, two different investigations|||Refused = bạn tới được máy và không có gì lắng nghe (sửa ở máy chủ). Timed out = gói tin bị thả (sửa ở tường lửa/mạng). Cùng một cái máy, hai cuộc điều tra khác nhau',
+              'Refused means DNS failed; timed out means the route is wrong|||Refused nghĩa là DNS hỏng; timed out nghĩa là định tuyến sai',
+              'Refused is IPv4 and timed out is IPv6|||Refused là IPv4 còn timed out là IPv6',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'systemctl status shows status=203/EXEC and journalctl -u shows nothing from the app. What is the fastest correct next step?|||systemctl status hiện status=203/EXEC và journalctl -u không có dòng nào từ ứng dụng. Bước tiếp theo đúng và nhanh nhất là gì?',
+            options: [
+              'Increase the log level and restart to capture more output|||Tăng mức ghi log rồi khởi động lại để bắt thêm output',
+              'Stop reading app logs — 203/EXEC means the binary could not be executed at all; ls -l the exact ExecStart path and make it absolute|||Thôi đọc log ứng dụng — 203/EXEC nghĩa là hoàn toàn không chạy được cái chương trình; hãy ls -l đúng đường dẫn trong ExecStart và cho nó thành tuyệt đối',
+              'Run daemon-reload; the unit is cached|||Chạy daemon-reload; unit đang bị nạp sẵn',
+              'Check the database connection string|||Kiểm chuỗi kết nối cơ sở dữ liệu',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'You deployed a new route an hour ago and an unauthenticated curl to it returns 404. What does that tell you, and what do you check first?|||Bạn vừa deploy một route mới một giờ trước và một lệnh curl không xác thực tới nó trả về 404. Điều đó nói lên gì, và bạn kiểm cái gì đầu tiên?',
+            options: [
+              'The route exists but requires auth; 404 is normal for protected routes|||Route có tồn tại nhưng đòi xác thực; 404 là bình thường với route được bảo vệ',
+              '404 means the route is not mounted in the RUNNING process — check whether the service was restarted after the deploy (ps -o lstart, /proc/PID/cwd, file mtime)|||404 nghĩa là route KHÔNG được gắn trong tiến trình ĐANG CHẠY — hãy kiểm xem dịch vụ có được khởi động lại sau khi deploy không (ps -o lstart, /proc/PID/cwd, mtime của file)',
+              'The browser cache needs clearing|||Cần xoá bộ đệm trình duyệt',
+              'nginx needs a new proxy_pass entry for every route|||nginx cần một dòng proxy_pass mới cho mỗi route',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'curl -w reports dns=0.004 connect=0.021 tls=0.061 ttfb=8.402 total=8.409. Where is the time going?|||curl -w báo dns=0,004 connect=0,021 tls=0,061 ttfb=8,402 total=8,409. Thời gian đi đâu?',
+            options: [
+              'Into the network — 8 seconds of latency between client and server|||Vào mạng — 8 giây độ trễ giữa máy khách và máy chủ',
+              'Into the application after the connection was established: it is thinking, or waiting on a database, cache or upstream API. The machine and the network are innocent|||Vào ỨNG DỤNG sau khi kết nối đã thiết lập: nó đang nghĩ, hoặc đang chờ cơ sở dữ liệu, bộ đệm hay một API bên trên. Máy và mạng đều vô can',
+              'Into TLS negotiation|||Vào quá trình thương lượng TLS',
+              'Into transferring a very large response body|||Vào việc truyền một thân phản hồi rất lớn',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: './deploy.sh exists and is executable, but running it says "cannot execute: required file not found". What is the most likely cause?|||./deploy.sh có thật và chạy được, nhưng gọi nó thì báo "cannot execute: required file not found". Nguyên nhân khả dĩ nhất là gì?',
+            options: [
+              'The script is empty|||Script rỗng',
+              'The shebang line ends with a carriage return (CRLF), so the kernel looks for an interpreter literally named /bin/bash\\r — check with cat -A, fix with dos2unix|||Dòng shebang kết thúc bằng ký tự về đầu dòng (CRLF), nên nhân đi tìm một trình thông dịch tên đúng nghĩa đen là /bin/bash\\r — kiểm bằng cat -A, chữa bằng dos2unix',
+              'You need sudo to run scripts in the current directory|||Bạn cần sudo mới chạy được script trong thư mục hiện tại',
+              'The filesystem is mounted read-only|||Hệ thống file đang được gắn ở chế độ chỉ đọc',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'ls -l shows -rwxr-xr-x deploy deploy on /srv/app/run.sh, but user deploy gets "Permission denied". What single command finds the cause fastest?|||ls -l hiện -rwxr-xr-x deploy deploy trên /srv/app/run.sh, nhưng người dùng deploy vẫn nhận "Permission denied". Một câu lệnh duy nhất nào tìm ra nguyên nhân nhanh nhất?',
+            options: [
+              'chmod 777 /srv/app/run.sh, then narrow it down|||chmod 777 /srv/app/run.sh, rồi thu hẹp dần',
+              'namei -l /srv/app/run.sh — it prints the mode of EVERY component of the path, exposing a parent directory missing the x (traverse) bit|||namei -l /srv/app/run.sh — nó in quyền của MỌI thành phần trên đường dẫn, lộ ra một thư mục cha thiếu bit x (đi xuyên)',
+              'stat /srv/app/run.sh|||stat /srv/app/run.sh',
+              'id deploy|||id deploy',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'A container reports "certificate is not yet valid" when calling an HTTPS API that works fine from your laptop. What is almost certainly wrong?|||Một container báo "certificate is not yet valid" khi gọi một API HTTPS vốn chạy tốt từ laptop của bạn. Gần như chắc chắn sai ở đâu?',
+            options: [
+              'The API rotated its certificate and the new one has a future start date|||API vừa xoay chứng chỉ và cái mới có ngày bắt đầu ở tương lai',
+              "The CLIENT's clock is wrong — a container or VM with a skewed date rejects valid certificates; check timedatectl and NTP on the machine that is complaining|||ĐỒNG HỒ CỦA MÁY KHÁCH sai — một container hay máy ảo lệch ngày sẽ từ chối những chứng chỉ hợp lệ; hãy kiểm timedatectl và NTP trên chính cái máy đang phàn nàn",
+              'The container is missing the ca-certificates package|||Container thiếu gói ca-certificates',
+              'TLS 1.3 is not supported inside containers|||TLS 1.3 không được hỗ trợ bên trong container',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'The outage is costing money and you decide to restart the failing service. What should you do in the fifteen seconds before that?|||Sự cố đang tiêu tiền và bạn quyết định khởi động lại cái dịch vụ đang hỏng. Bạn nên làm gì trong mười lăm giây trước đó?',
+            options: [
+              'Nothing — speed matters more than anything else during an outage|||Không gì cả — trong lúc sự cố thì tốc độ quan trọng hơn mọi thứ',
+              'Capture the evidence a restart destroys: ps auxww, ss -tanp, free/df, and journalctl -u -n 500 into a directory — restarting without it converts a diagnosable failure into one that will return|||Thu giữ cái bằng chứng mà một cú khởi động lại sẽ phá: ps auxww, ss -tanp, free/df, và journalctl -u -n 500 vào một thư mục — khởi động lại mà không có nó là biến một cú hỏng chẩn đoán được thành một cú hỏng sẽ quay lại',
+              'Take a full disk snapshot first|||Chụp ảnh toàn bộ đĩa trước',
+              'Disable the service so it cannot restart itself|||Vô hiệu hoá dịch vụ để nó không tự khởi động lại được',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+        ],
+      },
+    },
   ],
 };

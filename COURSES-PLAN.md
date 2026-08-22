@@ -152,19 +152,17 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 | 22/08/2026 | **Khoá Git & GitHub — HOÀN THÀNH** | 63 bài · 889k ký tự · TB 14.109 · đạt mọi sàn |
 | 22/08/2026 | Khoá Linux & Bash — Mục 0, Chương 1, 2 | 14 bài · 262k ký tự |
 | 22/08/2026 | `course-content-check.mjs` bắt gạch chéo ngược đơn | Đọc MÃ NGUỒN; tìm ra 2 lỗi thật, 1 trong khoá Node.js đã ship |
-| 22/08/2026 | Khoá Linux & Bash — Chương 3 (văn bản/ống dẫn), Chương 4 (quyền) | **27 bài · 547k ký tự · TB 20.269 · đạt mọi sàn** |
+| 22/08/2026 | Khoá Linux & Bash — Chương 3 (văn bản/ống dẫn), Chương 4 (quyền) | 27 bài · 547k ký tự |
+| 22/08/2026 | Khoá Linux & Bash — Chương 5 (tiến trình), 6 (biến/nháy), 7 (script) | **44 bài · 933k ký tự · TB 21.197 · đạt mọi sàn** |
 
 
 ### Khoá Linux & Bash — đang làm dở
 
-13 chương + Mục 0. **Xong: Mục 0, Chương 1, 2, 3, 4.** Còn lại, theo đúng
+13 chương + Mục 0. **Xong: Mục 0, Chương 1–7.** Còn lại, theo đúng
 lộ trình đã in trong bài 0.1 (đừng đổi tên chương, học viên đã đọc bảng đó):
 
 | # | Chương | Nội dung đã hứa ở bài 0.1 |
 |---|---|---|
-| 5 | Tiến trình, job & tín hiệu | ps, top, kill, chạy nền, nohup — Ctrl-C thật ra gửi gì |
-| 6 | Biến, dấu nháy & khai triển | mã thoát, rẽ nhánh, vì sao lệnh vỡ vì một dấu cách |
-| 7 | Viết script cho production | set -euo pipefail, tham số, kiểm hợp lệ, trap |
 | 8 | Môi trường, PATH & file khởi động | "command not found", sửa file nào, login vs interactive |
 | 9 | Mạng & máy từ xa | ss, ip, curl, dig, ssh, scp, rsync, tường lửa |
 | 10 | Đĩa, gói phần mềm & log | df vs du, apt/dnf, journalctl, xoay vòng log |

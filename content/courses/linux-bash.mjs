@@ -9,6 +9,7 @@
  * Seed: node scripts/course-seed.mjs --file ./content/courses/linux-bash.mjs --apply
  */
 import s00 from './linux-bash/s00-intro.mjs';
+import s01 from './linux-bash/s01-shell-he-thong-file.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Rocket', sortOrder: 4 },
@@ -32,5 +33,6 @@ export default {
   },
   sections: [
     s00,
+    s01,
   ],
 };

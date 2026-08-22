@@ -321,6 +321,30 @@ details[open] summary{border-bottom:1px solid var(--line)}
 </section>
 
 <section>
+  <h2>Thứ tự lắp — bản đồ tổng thể</h2>
+  <p>Mỗi bước che mất chỗ để tay của bước trước. Ghi lại để lần sau, hoặc để người khác lắp con thứ hai.</p>
+  <div class="order">
+    <div class="order-row"><div class="order-key">A</div><div class="order-body"><b>Khung xích và hai tấm ốp</b>
+      <span>TP101 + hai động cơ 33GB-520 + hai bo IBT-2. <code>08-op-xich</code> xỏ trục hai đầu, hở gầm 10 mm.</span></div></div>
+    <div class="order-row"><div class="order-key">B</div><div class="order-body"><b>Nối thân với khung</b>
+      <span>Không mảnh nào làm sẵn mối nối này. Khoan đáy thân <b>một lượt cả hai loại lỗ</b>: bốn lỗ ⌀3,2 bắt xuống khung (chấm qua lỗ sẵn có của TP101) và một lỗ ⌀12 luồn dây, đặt ở dải sau. Đáy chỉ dày 2,4 mm nên phải có đai ốc hoặc trụ đồng M3 ở mặt trong.</span></div></div>
+    <div class="order-row"><div class="order-key">C</div><div class="order-body"><b>Xếp mạch vào lòng thân</b>
+      <span>Luồn dây động cơ lên trước khi siết vít đáy · đế pin · ESP32 áp thành sau, USB chĩa ra cửa bảo trì · PCA9685 và LM2596 ở tầng trên.</span></div></div>
+    <div class="order-row"><div class="order-key">D</div><div class="order-body"><b>Tấm ngực</b>
+      <span>Loa ⌀65 lên bốn trụ, màn 3.5" áp từ mặt trong. Luồn dây vào trong rồi mới bắt hai vít góc dưới.</span></div></div>
+    <div class="order-row"><div class="order-key">E</div><div class="order-body"><b>Đầu và hai mắt</b>
+      <span>Bo GC9A01 luồn từ phía sau, bốn vấu giữ, chêm bằng tấm phôi · ống mắt úp ngoài · khoan lỗ ⌀12 ở đáy đầu để luồn cáp.</span></div></div>
+    <div class="order-row"><div class="order-key">F</div><div class="order-body"><b>Cổ</b>
+      <span><code>10-tam-co</code> bắc qua nóc thân, khoan xuyên từ ngoài · khung pan-tilt · đặt đầu lên.</span></div></div>
+    <div class="order-row"><div class="order-key">G</div><div class="order-body"><b>Hai tay</b>
+      <span><code>11-khoi-vai</code> áp thành bên · cánh tay trượt lên mộng tới khi <b>tì vào đế</b> thì lỗ chốt trùng khít · <code>12-khop-khuyu</code> nối xuống cẳng tay.</span></div></div>
+    <div class="order-row"><div class="order-key">H</div><div class="order-body"><b>Dò dây rồi mới đóng nắp</b>
+      <span>Chạy <code>kiem-day</code> lúc dây đã cắm mà nắp còn mở. Xong thì úp <code>02-nap-sau</code>, khoan lưới loa 7–9 lỗ ⌀3 và hai lỗ micro ⌀2.</span></div></div>
+  </div>
+  <p>Ba lỗ khoan tay — cáp qua cổ ⌀12, lưới loa, micro — cố ý không có trong file STL: dễ khoan hơn là in, và khoan thì chỉnh được vị trí sau khi đã lắp thử.</p>
+</section>
+
+<section>
   <h2>Nhét mạch vào thân</h2>
   <p>Lòng thân là <b>145,2 rộng × 117,6 sâu × 130 cao</b>. Chỗ nào đã có chủ, tính theo chiều sâu từ mặt trước:</p>
 
@@ -492,7 +516,7 @@ details[open] summary{border-bottom:1px solid var(--line)}
       <tr><td class="mono">GND</td><td class="num">GND</td><td>chung với đất toàn robot</td></tr>
       <tr><td class="mono">kênh 0–5</td><td class="num">servo</td><td>cổ quay · cổ gật · vai T · khuỷu T · vai P · khuỷu P</td></tr>
 
-      <tr><td rowspan="6"><b>2× IBT-2</b><br><span style="opacity:.7;font-size:13px">mỗi bo một bánh</span></td><td class="mono">RPWM trái</td><td class="num">GPIO 39</td><td>tiến</td></tr>
+      <tr><td rowspan="6"><b>2× IBT-2</b><br><span style="opacity:.7;font-size:13px">chip BTS7960 · mỗi bo một bánh</span></td><td class="mono">RPWM trái</td><td class="num">GPIO 39</td><td>tiến</td></tr>
       <tr><td class="mono">LPWM trái</td><td class="num">GPIO 40</td><td>lùi</td></tr>
       <tr><td class="mono">RPWM phải</td><td class="num">GPIO 41</td><td>tiến</td></tr>
       <tr><td class="mono">LPWM phải</td><td class="num">GPIO 42</td><td>lùi</td></tr>
@@ -729,9 +753,9 @@ details[open] summary{border-bottom:1px solid var(--line)}
   <div class="part">
     <div class="part-img"><img alt="Chốt: trụ tròn có mũ chặn ở một đầu" src="__IMG_13-chot__"></div>
     <div class="part-info">
-      <div class="part-head"><span class="part-id">13-chot</span><span class="qty">×4</span><span class="dims">⌀5,8 × 20 dài</span></div>
+      <div class="part-head"><span class="part-id">13-chot</span><span class="qty">×4</span><span class="dims">thân ⌀5,8 · mũ ⌀9 · dài 20</span></div>
       <div class="part-role">Chốt xoay có mũ chặn</div>
-      <p><b>⌀5,8 chứ không ⌀6</b> — nhựa in nở ra, đúng 6 thì khớp không xoay được.</p>
+      <p><b>Thân ⌀5,8 chứ không ⌀6</b> — nhựa in nở ra, đúng 6 thì chốt chặt cứng và khớp không xoay được. Mũ chặn rộng ⌀9, nên cầm mảnh nhựa lên đo bề ngang sẽ ra 9 mm chứ không phải 5,8.</p>
     </div>
   </div>
 
@@ -749,6 +773,84 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <p><b>Nối thân với khung TP101</b> — đáy thân là tấm đặc không lỗ, không mảnh nào làm mối nối này.</p>
     <p><b>Càng servo cho tay</b> — mộng + chốt chỉ tạo khớp xoay <b>tự do</b>. Muốn servo kéo được thì cắt càng nối từ <code>14-tam-phoi</code>.</p>
   </div>
+</section>
+
+
+<section>
+  <h2>Bảy thứ trong hộp mà thiết kế này không dùng</h2>
+  <p>Bạn đã mua chúng ở các đợt trước, và chúng vẫn nằm trong hộp linh kiện. Không mảnh vỏ nào giữ chúng, firmware không khai chân nào cho chúng, và bảng nối dây ở trên cố ý không kể — <b>để nguyên trong hộp là đúng</b>, đừng đi tìm chỗ cắm.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Linh kiện</th><th>Vốn định làm gì</th><th>Vì sao không dùng nữa</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">DRV8833</td><td>cầu H hai bánh</td><td>dòng kẹt của 33GB-520 vượt xa mức 1,5 A nó chịu được — cắm vào là cháy mạch chứ không phải chạy chậm. Thay bằng 2× IBT-2</td></tr>
+      <tr><td class="mono">TB6612</td><td>cầu H hai bánh</td><td>cùng lý do với DRV8833</td></tr>
+      <tr><td class="mono">HC-SR04</td><td>đo khoảng cách siêu âm</td><td>thay bằng VL53L0X (laser): nhỏ hơn, đi I2C nên không tốn hai chân riêng, và không bị vải với thảm nuốt mất tiếng dội</td></tr>
+      <tr><td class="mono">PCF8575</td><td>mở rộng thêm 16 chân I/O</td><td>sau khi dời sáu servo sang PCA9685 thì ESP32 còn dư chân — <code>config.h</code> ghi rõ GPIO 38 và 45 vẫn trống</td></tr>
+      <tr><td class="mono">XL6009</td><td>tăng áp</td><td>không có rail nào cần điện áp cao hơn nguồn vào; cả ba mức 12 / 5 / 3V3 đều là hạ áp</td></tr>
+      <tr><td class="mono">ESP32-CAM</td><td>mắt nhìn</td><td>chưa có trong thiết kế hiện tại. Đầu đã kín chỗ vì hai màn tròn</td></tr>
+      <tr><td class="mono">TP5100 · BMS 2S</td><td>sạc và bảo vệ pin</td><td>chỉ cần khi chạy pin thật. Lắp thử và mọi phép đo trên bàn đều dùng adapter 12 V</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">
+    <span class="warn-h">Hai con encoder cũng vậy</span>
+    <p><code>config.h</code> còn khai <code>PIN_ENC_L</code> = 47 và <code>PIN_ENC_R</code> = 48 nhưng đánh dấu <b>KHÔNG DÙNG</b>: động cơ 33GB-520 mua về chỉ ra <b>2 dây</b>, bản có encoder là mã khác 6 dây. Giữ hướng bằng con quay MPU6050 — với xe xích thì đó còn đúng hơn encoder, vì xích trượt mà encoder vẫn đếm đủ vòng trong khi thân đã lệch.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Tra nhanh</h2>
+
+  <details>
+    <summary>Giới hạn góc sáu khớp</summary>
+    <div class="details-body">
+      <div class="tw"><table>
+        <thead><tr><th>Khớp</th><th class="num">Nhỏ nhất</th><th class="num">Lớn nhất</th><th class="num">Kênh</th></tr></thead>
+        <tbody>
+          <tr><td>Cổ quay (pan)</td><td class="num">−90°</td><td class="num">+90°</td><td class="num">0</td></tr>
+          <tr><td>Cổ gật (tilt)</td><td class="num">−35°</td><td class="num">+35°</td><td class="num">1</td></tr>
+          <tr><td>Vai trái / phải</td><td class="num">−90°</td><td class="num">+90°</td><td class="num">2 · 4</td></tr>
+          <tr><td>Khuỷu trái / phải</td><td class="num">−120°</td><td class="num">0°</td><td class="num">3 · 5</td></tr>
+        </tbody>
+      </table></div>
+      <p>Lắp xong thấy khuỷu đụng sớm hơn thì nới <code>ELBOW_MIN</code> lên −100. <b>Đừng nới <code>ELBOW_MAX</code> quá 0.</b> Xung 500–2500 µs cho ±90°, 12 bit ở 50 Hz.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Vài con số hay phải tra</summary>
+    <div class="details-body">
+      <div class="tw"><table>
+        <tbody>
+          <tr><td>Ngưỡng bứt động cơ</td><td class="num">PWM 100</td><td>đo thật trên sàn có tải; 115 là số đang dùng</td></tr>
+          <tr><td>Watchdog động cơ</td><td class="num">500 ms</td><td>không có lệnh mới thì cắt — nằm trong firmware, không phải server</td></tr>
+          <tr><td>Tốc độ bus SPI</td><td class="num">4 MHz</td><td>cả ba màn</td></tr>
+          <tr><td>Lấy mẫu mic</td><td class="num">16 kHz</td><td>đúng mức Whisper cần</td></tr>
+          <tr><td>Pin đầy / cạn</td><td class="num">8400 / 6000 mV</td><td>2S, chia áp 100k/47k hệ số 3,128</td></tr>
+          <tr><td>Brownout ESP32</td><td class="num">dưới 4,5 V</td><td>ngưỡng để tính tụ khối</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Thông số in, nếu phải in lại mảnh nào</summary>
+    <div class="details-body">
+      <div class="tw"><table>
+        <tbody>
+          <tr><td>Lớp</td><td class="num">0,2 mm</td></tr>
+          <tr><td>Thành</td><td>3 lớp — riêng thân và giá cổ 6 lớp</td></tr>
+          <tr><td>Đặc ruột</td><td>20 % gyroid — riêng cánh tay và cẳng tay 12 %</td></tr>
+          <tr><td>Vật liệu đỡ</td><td>chỉ cho <code>01-than</code> và <code>04-dau</code></td></tr>
+          <tr><td>Bám bàn</td><td>brim 5 mm cho <code>08-op-xich</code> — dài và mỏng, dễ vênh góc</td></tr>
+        </tbody>
+      </table></div>
+      <pre><code>cd firmware/mini-me-robot/shell
+node gen-stl.mjs ./stl        # sinh lại cả 14 mảnh
+python3 xem-stl.py stl anh    # dựng lại ảnh xem trước
+node dung-trang.mjs           # dựng lại chính trang này</code></pre>
+      <p>Mọi kích thước nằm trong khối <code>P</code> ở đầu <code>gen-stl.mjs</code>. Hay phải chỉnh sau khi cầm linh kiện thật: <code>eyeInnerD</code> (bo màn không lọt hoặc lỏng), <code>screwD</code> (vít M3 chặt quá), <code>postInnerD</code> (lỗ mồi vít tự ren — máy in khác nhau co khác nhau).</p>
+    </div>
+  </details>
 </section>
 
 </div>

@@ -2609,6 +2609,21 @@ code {
   padding-top: 0;
 }
 
+/* `pt-20` và `pt-24` là chỗ chừa cho nav CỘNG khoảng thở cố ý — mã web nói
+   thẳng điều đó ("pt-16 was exactly the nav's 4rem — zero clearance … this just
+   buys a gap"). Nên TRỪ ĐI đúng 4rem của thanh nav, giữ lại phần còn lại, chứ
+   không xoá sạch như `pt-16`.
+   Dính ở: `/cv/xem` (pt-24, cả ba nhánh), `/language` (pt-20),
+   Xưởng mô phỏng (pt-20). Đo trước khi vá: `/cv/xem` bỏ trống 96px ở đỉnh
+   trong một khung cao 826px — 12% chiều cao khung. */
+.ct-web-host > .pt-20 {
+  padding-top: 1rem;
+}
+
+.ct-web-host > .pt-24 {
+  padding-top: 2rem;
+}
+
 /* `min-h-screen` là 100vh — chiều cao TOÀN MÀN HÌNH. Nhưng ở đây trang nằm
    trong `.ct-content`, vốn đã trừ thanh tiêu đề và thanh trạng thái. Lấy
    nguyên 100vh thì trang luôn cao hơn khung đúng ngần ấy, và thanh cuộn hiện

@@ -53,6 +53,17 @@ describe('khopTuyenWeb', () => {
     expect(r?.thamSo).toEqual({ id: '42' });
   });
 
+  it('CV Builder: tám màn tĩnh và một màn động', () => {
+    expect(khopTuyenWeb('/cv')?.tuyen.mau).toBe('/cv');
+    for (const m of ['import', 'intake', 'profile', 'recruiter-view', 'review', 'target', 'xem']) {
+      expect(khopTuyenWeb(`/cv/${m}`)?.tuyen.mau, `/cv/${m}`).toBe(`/cv/${m}`);
+      expect(khopTuyenWeb(`/cv/${m}`)?.thamSo).toEqual({});
+    }
+    const b = khopTuyenWeb('/cv/builder/7');
+    expect(b?.tuyen.mau).toBe('/cv/builder/:id');
+    expect(b?.thamSo).toEqual({ id: '7' });
+  });
+
   it('không khớp thì trả null, không đoán bừa', () => {
     expect(khopTuyenWeb('/language/ja/khong-co-trang-nay')).toBeNull();
     expect(khopTuyenWeb('/chat')).toBeNull();
@@ -77,7 +88,7 @@ describe('khopTuyenWeb', () => {
       expect(thay.has(t.mau), `mẫu trùng: ${t.mau}`).toBe(false);
       thay.add(t.mau);
     }
-    expect(thay.size).toBe(26);
+    expect(thay.size).toBe(35);
   });
 });
 
@@ -94,12 +105,19 @@ describe('thuocCayWeb', () => {
     expect(thuocCayWeb('/interview/report/42')).toBe(true);
   });
 
+  it('nhận cả cây CV', () => {
+    expect(thuocCayWeb('/cv')).toBe(true);
+    expect(thuocCayWeb('/cv/intake')).toBe(true);
+    expect(thuocCayWeb('/cv/builder/7')).toBe(true);
+  });
+
   it('KHÔNG nhận route chỉ trùng tiền tố chuỗi', () => {
     // `/languages` bắt đầu bằng `/language` nếu so chuỗi trần — phải so theo
     // ranh giới đoạn, không thì một route khác bị nuốt vào cây Ngoại ngữ.
     expect(thuocCayWeb('/languages')).toBe(false);
     expect(thuocCayWeb('/roadmapper')).toBe(false);
     expect(thuocCayWeb('/interviews')).toBe(false);
+    expect(thuocCayWeb('/cvs')).toBe(false);
     expect(thuocCayWeb('/chat')).toBe(false);
   });
 });

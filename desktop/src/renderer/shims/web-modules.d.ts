@@ -330,3 +330,61 @@ declare module '@/app/interview/report/[id]/page' {
   const Trang: ComponentType;
   export default Trang;
 }
+
+/* ── CV Builder (22/08/2026) ─────────────────────────────────
+   Chín màn của `/cv`, thay cho màn native cũ. Cùng hình dạng như hai cây
+   trước: mỗi tệp `export default` một component không nhận prop. */
+
+declare module '@/app/cv/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/cv/import/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/cv/intake/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/cv/profile/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/cv/recruiter-view/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/cv/review/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/cv/target/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/cv/xem/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}
+
+declare module '@/app/cv/builder/[id]/page' {
+  import type { ComponentType } from 'react';
+  const Trang: ComponentType;
+  export default Trang;
+}

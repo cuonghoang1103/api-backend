@@ -36,8 +36,15 @@ describe('vỏ app ôm đúng trang web dùng lại', () => {
    * chung, thì sẽ bóp nát bố cục một trang đang chạy tốt — và bóp im lặng,
    * vì không có gì tràn ra ngoài để `do:bo-cuc` bắt được.
    */
+  it('trừ đúng 4rem nav cho pt-20/pt-24, không xoá sạch', () => {
+    /* Hai lớp này là chừa-cho-nav CỘNG khoảng thở cố ý. Xoá sạch là bóp mất
+       phần thứ hai; giữ nguyên là để lại 80-96px trống ở đỉnh. */
+    expect(css).toMatch(/\.ct-web-host > \.pt-20\s*\{\s*padding-top:\s*1rem/);
+    expect(css).toMatch(/\.ct-web-host > \.pt-24\s*\{\s*padding-top:\s*2rem/);
+  });
+
   it('KHÔNG được nhắm rộng hơn con trực tiếp', () => {
-    for (const lop of ['pt-16', 'min-h-screen']) {
+    for (const lop of ['pt-16', 'pt-20', 'pt-24', 'min-h-screen']) {
       const rong = new RegExp(`\\.ct-web-host\\s+\\.${lop.replace('-', '\\-')}`);
       expect(rong.test(css), `\`.ct-web-host .${lop}\` (thiếu dấu >) chạm cả bố cục BÊN TRONG trang`)
         .toBe(false);

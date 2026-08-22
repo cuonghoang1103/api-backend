@@ -1,4 +1,25 @@
 /**
+ * ⛔ KHÔNG CÒN ĐƯỢC ĐĂNG KÝ (22/08/2026). `/cv` nay dùng cây web đầy đủ —
+ *    xem `CvWebPage.tsx` ngay cạnh.
+ *
+ * Giữ tệp này lại có chủ đích, không phải quên dọn:
+ *  • Nó là bản mẫu ĐẦY ĐỦ NHẤT của lối "đọc bằng cache · ghi ngay · xếp hàng
+ *    đồng bộ · phân biệt 'đã lưu trên máy' với 'đã đồng bộ'". Trang nào cần
+ *    sửa-được-khi-mất-mạng sau này thì chép từ đây.
+ *  • Nó là đường lùi nếu người dùng thấy mất sửa-offline là quá đắt: đăng ký
+ *    lại nó ở một đường riêng là xong, KHÔNG được để nó chiếm `/cv/profile`
+ *    (màn đó của web 760 dòng, gấp đôi tệp này, và là màn chính).
+ *
+ * Hàng đợi đồng bộ KHÔNG phụ thuộc tệp này: handler `cv-profile` nằm ở
+ * `offline/transport.ts` và có phép kiểm riêng, nên sửa đổi còn kẹt trong hàng
+ * đợi của bản app cũ vẫn được đẩy lên sau khi cập nhật.
+ *
+ * ⚠️ Nó chỉ sửa được KHỐI LIÊN HỆ (tên · chức danh · email · điện thoại · nơi
+ * ở · liên kết · tóm tắt). Không có kinh nghiệm, dự án, học vấn, kỹ năng —
+ * đó là lý do nó bị thay, chứ không phải vì viết dở.
+ *
+ * ─────────────────────────────────────────────────────────────
+ *
  * CV Builder — màn hình native đầu tiên.
  *
  * Chọn module này để port trước vì nó là thứ HỢP OFFLINE NHẤT trong cả web:

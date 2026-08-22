@@ -23,7 +23,8 @@
  * ra đúng 21 đường dẫn. Ngày 22/08/2026 thêm cây Phỏng vấn (5 đường), đối
  * chiếu bằng:
  *   find frontend/src/app/interview -name page.tsx
- * ⇒ 26 đường dẫn dưới đây.
+ * ⇒ 26 đường dẫn. Ngày 22/08/2026 thêm cây CV Builder (9 đường), đối chiếu
+ * bằng `find frontend/src/app/cv -name page.tsx` ⇒ 35 đường dẫn dưới đây.
  */
 import type { ComponentType } from 'react';
 
@@ -75,6 +76,27 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/interview/history', nap: () => import('@/app/interview/history/page') },
   { mau: '/interview/session/:id', nap: () => import('@/app/interview/session/[id]/page') },
   { mau: '/interview/report/:id', nap: () => import('@/app/interview/report/[id]/page') },
+
+  /* ── CV Builder ──
+     Đo 22/08/2026: 12 tệp, 3.048 dòng, dính Next.js 16 chỗ (9 `next/link`,
+     14 `useRouter`, 2 `useParams`) — shim đã đủ, không phải viết thêm.
+
+     Chín màn, thay cho MỘT màn native cũ (`features/cv/CvPage.tsx`) vốn chỉ
+     sửa được khối liên hệ. Riêng `/cv/profile` của web đã 760 dòng và có đủ
+     kinh nghiệm · dự án · học vấn · giải thưởng · kỹ năng · chứng chỉ ·
+     ngoại ngữ.
+
+     `/cv/builder/:id` dài 3 đoạn, tám màn còn lại dài 2 — không tranh nhau,
+     nhưng vẫn xếp tĩnh trước cho khỏi phải nhớ luật. */
+  { mau: '/cv', nap: () => import('@/app/cv/page') },
+  { mau: '/cv/import', nap: () => import('@/app/cv/import/page') },
+  { mau: '/cv/intake', nap: () => import('@/app/cv/intake/page') },
+  { mau: '/cv/profile', nap: () => import('@/app/cv/profile/page') },
+  { mau: '/cv/recruiter-view', nap: () => import('@/app/cv/recruiter-view/page') },
+  { mau: '/cv/review', nap: () => import('@/app/cv/review/page') },
+  { mau: '/cv/target', nap: () => import('@/app/cv/target/page') },
+  { mau: '/cv/xem', nap: () => import('@/app/cv/xem/page') },
+  { mau: '/cv/builder/:id', nap: () => import('@/app/cv/builder/[id]/page') },
 ];
 
 export interface KhopTuyen {
@@ -107,7 +129,7 @@ export function khopTuyenWeb(duong: string): KhopTuyen | null {
 }
 
 /** Gốc của những cây route mà trang web sở hữu — dùng cho router của app. */
-export const GOC_WEB: readonly string[] = ['/language', '/roadmap', '/interview'];
+export const GOC_WEB: readonly string[] = ['/language', '/roadmap', '/interview', '/cv'];
 
 /** Đường dẫn này có thuộc một cây web không (kể cả các trang con động). */
 export function thuocCayWeb(duong: string): boolean {

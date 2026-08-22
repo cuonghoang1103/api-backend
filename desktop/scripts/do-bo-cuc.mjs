@@ -157,7 +157,43 @@ const BANG = [
         audioUrl: '', coverUrl: null, durationSec: 200 })), total: 8 })],
     [/\/tech-trends\/articles/, () => mang(6, (i) => ({ id: i, title: `Bài công nghệ ${i}`, slug: `bai-${i}`,
         summary: 'Tóm tắt bài viết.', publishedAt: '2026-08-20T00:00:00Z', category: { name: 'AI' } }))],
-    [/\/cv/, () => mang(3, (i) => ({ id: i, title: `CV số ${i}`, updatedAt: '2026-08-20T00:00:00Z' }))],
+    /* ── CV Builder (22/08/2026) ──
+       Mock CŨ ở đây trả một DANH SÁCH CV (`[{id,title,updatedAt}]`) — sai hình
+       dạng với cây web: `/cv/profile` trả MỘT hồ sơ có `items`/`skills`/…
+       Xếp `completeness` trước `profile`, và cả hai trước mẫu `/cv` chung. */
+    [/\/cv\/profile\/completeness/, () => ({ percent: 72,
+        checks: mang(7, (i) => ({ key: `k${i}`, label: `Mục cần hoàn thiện số ${i}`, done: i % 2 === 0 })),
+        counts: { items: 6, bullets: 18, skills: 12, certifications: 3, languageSkills: 2, documents: 1 } })],
+    [/\/cv\/profile/, () => ({ id: 1, userId: 1,
+        fullName: 'Nguyễn Văn Cường', headline: 'Kỹ sư phần mềm — Node.js & PostgreSQL',
+        email: 'cuong@example.com', phone: '0900000000', location: 'Hà Nội',
+        links: { github: 'https://github.com/x', linkedin: 'https://linkedin.com/in/x' },
+        photoR2Key: null, dateOfBirth: null,
+        summary: 'Tóm tắt nghề nghiệp dài vừa đủ để tràn sang vài dòng như hồ sơ thật.',
+        targetRoles: ['Backend Engineer', 'Full-stack Engineer'], seniority: 'MID',
+        locationsPref: ['Hà Nội', 'Remote'], remotePref: 'HYBRID',
+        items: mang(6, (i) => ({ id: i,
+          kind: ['EXPERIENCE', 'PROJECT', 'EDUCATION', 'OPEN_SOURCE', 'AWARD', 'VOLUNTEER'][i - 1],
+          title: `Vị trí hoặc dự án số ${i} với tên khá dài để thử tràn`,
+          organization: `Công ty số ${i}`, location: 'Hà Nội', employmentType: 'FULL_TIME',
+          startDate: '2024-01-01', endDate: i === 1 ? null : '2025-06-01', isCurrent: i === 1,
+          url: null, techStack: ['TypeScript', 'Node.js', 'PostgreSQL'],
+          context: 'Bối cảnh ngắn của mục này.', gpa: null, sortOrder: i,
+          bullets: mang(3, (k) => ({ id: i * 10 + k, itemId: i,
+            text: `Gạch đầu dòng số ${k}: mô tả việc đã làm và kết quả đo được, dài như thật.`,
+            userStatedFacts: null, verified: k === 1, aiGenerated: k === 3,
+            skillsEvidenced: ['Node.js'], strength: ['WEAK', 'OK', 'STRONG'][k - 1], sortOrder: k })) })),
+        skills: mang(12, (i) => ({ id: i, name: `Kỹ năng ${i}`,
+          category: ['LANGUAGE', 'FRAMEWORK', 'DATABASE', 'INFRA', 'TOOL', 'PRACTICE', 'SOFT'][i % 7],
+          proficiency: 'ADVANCED', yearsUsed: 3, sortOrder: i })),
+        certifications: mang(3, (i) => ({ id: i, name: `Chứng chỉ số ${i}`, issuer: `Tổ chức ${i}`,
+          issuedAt: '2025-01-01', expiresAt: null, credentialUrl: null, sortOrder: i })),
+        languageSkills: mang(2, (i) => ({ id: i, language: i === 1 ? 'Tiếng Anh' : 'Tiếng Nhật',
+          level: 'B2', note: null, sortOrder: i })) })],
+    [/\/cv\/import/, () => mang(3, (i) => ({ id: i, status: 'DONE', source: 'PASTE',
+        createdAt: '2026-08-20T00:00:00Z', fileName: `ho-so-${i}.pdf`, error: null }))],
+    [/\/cv\/documents/, () => mang(2, (i) => ({ id: i, name: `Tài liệu ${i}`,
+        createdAt: '2026-08-20T00:00:00Z' }))],
     [/\/academy\/semesters/, () => mang(9, (i) => ({ id: i, name: `Kỳ ${i}`, code: `KY${i}`, ordinal: i }))],
     [/\/courses\/semester\//, () => mang(5, (i) => ({
         id: i, slug: `mon-${i}`, title: `Course Title ${i}|||Tên môn học số ${i}`,
@@ -319,8 +355,16 @@ const choNoiDung = async (p) => {
 };
 
 const CHUAN_BI = {
-  '/interview/session/1': choNoiDung,
-  '/interview/report/1': choNoiDung,
+  /* MỌI trang dùng lại mã web đều phải chờ nội dung, không chỉ hai màn động.
+     Chúng nạp chậm bằng `import()` RỒI mới gọi API, nên mốc 1200ms bắt trúng
+     chữ "Đang mở …" tuỳ máy và tuỳ bề rộng — đo được: `/interview` xanh ở
+     1440/1180/1000px nhưng đỏ ở 860px, cùng một lần chạy. */
+  ...Object.fromEntries([
+    '/interview', '/interview/history', '/interview/drill',
+    '/interview/session/1', '/interview/report/1',
+    '/cv', '/cv/profile', '/cv/import', '/cv/intake', '/cv/target', '/cv/xem',
+    '/language', '/language/ja', '/roadmap',
+  ].map((d) => [d, choNoiDung])),
   '/chat': async (p) => {
     // Bật chế độ Lập trình rồi mở thêm tab: đây đúng là thao tác người dùng
     // làm khi họ báo lỗi ("tôi ấn tạo task mới thì nó lại bị").
@@ -386,6 +430,9 @@ const DUONG = JSON.parse(process.env.CT_TRANG ?? 'null')
          nên không đo được ở đây; chúng đi qua cùng một bảng tra và cùng một
          lớp bọc, và có phép kiểm đơn vị riêng trong `dinhTuyenWeb.test.ts`. */
       '/interview', '/interview/history', '/interview/drill',
+      /* CV Builder (22/08/2026) — cây web thứ sáu, 9 màn. Đo 6 màn không cần
+         id; `/cv/builder/:id` cần một bản CV có thật nên để phép kiểm đơn vị lo. */
+      '/cv', '/cv/profile', '/cv/import', '/cv/intake', '/cv/target', '/cv/xem',
       /* Hai màn ĐỘNG. Chúng là hai màn NẶNG NHẤT của cây (762 và 360 dòng) và
          là chỗ người dùng ngồi lâu nhất, nên bỏ qua vì "cần phiên thật" là bỏ
          đúng phần đáng đo. Máy chủ giả ở trên trả phiên 6 câu + báo cáo đầy đủ,

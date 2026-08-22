@@ -21,7 +21,7 @@ import { DashboardPage } from './features/dashboard/DashboardPage';
 import { FeedPage } from './features/feed/FeedPage';
 import { FriendsPage } from './features/friends/FriendsPage';
 import { MessagesPage } from './features/messages/MessagesPage';
-import { CvPage } from './features/cv/CvPage';
+import { CvWebPage } from './features/cv/CvWebPage';
 import { MusicPage } from './features/music/MusicPage';
 import { NotesPage } from './features/notes/NotesPage';
 import { ProPage } from './features/pro/ProPage';
@@ -44,7 +44,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/messages': MessagesPage,
   '/friends': FriendsPage,
   '/chat': ChatPage,
-  '/cv': CvPage,
+  '/cv': CvWebPage,
   '/music': MusicPage,
   '/notes': NotesPage,
   '/pro': ProPage,
@@ -65,8 +65,9 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
 /**
  * Trang SỞ HỮU CẢ CÂY con của nó, không chỉ đúng một đường dẫn.
  *
- * `/language`, `/roadmap` và `/interview` dùng lại cây web vốn có đường dẫn
- * động (`/language/ja/vocab`, `/roadmap/frontend`, `/interview/report/12`).
+ * `/language`, `/roadmap`, `/interview` và `/cv` dùng lại cây web vốn có đường
+ * dẫn động (`/language/ja/vocab`, `/roadmap/frontend`, `/interview/report/12`,
+ * `/cv/builder/7`).
  * Bảng `NATIVE_PAGES` khớp chính xác, nên thiếu phần này thì bấm vào một ngôn
  * ngữ — hay mở một bản báo cáo phỏng vấn — là rơi thẳng vào màn hình "Không
  * tìm thấy", đúng lúc trang vừa mới chạy được.
@@ -78,6 +79,7 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/language', NgoaiNguPage],
   ['/roadmap', LoTrinhPage],
   ['/interview', PhongVanPage],
+  ['/cv', CvWebPage],
 ];
 
 export function nativePageFor(path: string): ComponentType | undefined {

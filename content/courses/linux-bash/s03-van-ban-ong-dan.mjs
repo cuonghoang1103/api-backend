@@ -1071,5 +1071,703 @@ deploy /bin/bash
 </div>
 `,
     },
+    /* ─────────────────────────── 3.5 ─────────────────────────── */
+    {
+      title: '3.5 — sed: editing a stream you never open|||3.5 — sed: sửa một dòng dữ liệu mà bạn không hề mở ra',
+      slug: 'lnx-3-5-sed',
+      type: 'LESSON',
+      description: 'Lệnh s với đầy đủ cờ, địa chỉ dòng và khoảng, nhóm bắt giữ, -i và cái bẫy sao lưu, sed trên nhiều file bằng find, và những công thức thay thế đáng giữ.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Lesson 3.5</span>
+<h2>sed: editing a stream you never open</h2>
+<p class="lead"><code>grep</code> selects lines. <code>sed</code> <em>changes</em> them. It reads input one line at a time, applies a small program to each, and prints the result — which means it can edit a 40 GB file using a few kilobytes of memory, and can edit a stream that has no file at all. Ninety per cent of real <code>sed</code> use is one command, <code>s</code>, so start there and add the rest as you need it.</p>
+
+<h3>The substitute command</h3>
+<pre><code>sed 's/old/new/' file.txt          <span class="tok-comment"># first match ON EACH LINE</span>
+sed 's/old/new/g' file.txt         <span class="tok-comment"># g = global: every match on each line</span>
+sed 's/old/new/2' file.txt         <span class="tok-comment"># only the 2nd match on each line</span>
+sed 's/old/new/gi' file.txt        <span class="tok-comment"># g + case-Insensitive</span>
+sed 's/old/new/w hits.txt' f.txt   <span class="tok-comment"># w: also write changed lines to a file</span></code></pre>
+<div class="out">$ echo "cat cat cat" | sed 's/cat/dog/'
+dog cat cat
+$ echo "cat cat cat" | sed 's/cat/dog/g'
+dog dog dog</div>
+<div class="callout">Without <code>g</code>, <code>sed</code> replaces the <strong>first match per line</strong>, not the first match in the file. That is the single most common surprise, and it is the reason a "sed did not replace everything" bug is almost always a missing <code>g</code>.</div>
+
+<h3>The delimiter is not always a slash</h3>
+<pre><code>sed 's/\\/usr\\/local/\\/opt/g' paths.txt      <span class="tok-comment"># unreadable</span>
+sed 's|/usr/local|/opt|g' paths.txt        <span class="tok-comment"># same thing, legible</span>
+sed 's#http://#https://#g' urls.txt        <span class="tok-comment"># # works too</span></code></pre>
+<p>Any character can be the delimiter — <code>sed</code> takes whatever follows the <code>s</code>. When your pattern contains slashes (paths, URLs), switch to <code>|</code> or <code>#</code>. This is not a style preference; escaped-slash patterns are where sed bugs hide.</p>
+
+<h3>Addresses: which lines to act on</h3>
+<pre><code>sed '3s/old/new/' file            <span class="tok-comment"># only line 3</span>
+sed '2,5s/old/new/' file          <span class="tok-comment"># lines 2 through 5</span>
+sed '\$s/old/new/' file            <span class="tok-comment"># the last line</span>
+sed '2,\$s/old/new/' file          <span class="tok-comment"># line 2 to the end</span>
+sed '/^#/s/old/new/' file         <span class="tok-comment"># only lines starting with #</span>
+sed '/BEGIN/,/END/s/old/new/' f   <span class="tok-comment"># between two markers</span>
+sed '/^#/!s/old/new/' file        <span class="tok-comment"># ! inverts: lines NOT starting with #</span></code></pre>
+<p>An address before a command restricts it. That composability is what makes <code>sed</code> more than search-and-replace: "change this word, but only inside the <code>[database]</code> section of the config" is one expression.</p>
+
+<h3>Commands other than s</h3>
+<pre><code>sed -n '5p' file                  <span class="tok-comment"># -n suppresses output, p prints → just line 5</span>
+sed -n '10,20p' file              <span class="tok-comment"># a line range, like head+tail combined</span>
+sed -n '/ERROR/p' file            <span class="tok-comment"># behaves like grep</span>
+sed '/^\$/d' file                  <span class="tok-comment"># d: delete blank lines</span>
+sed '/^#/d' config.ini            <span class="tok-comment"># delete comment lines</span>
+sed '5q' bigfile                  <span class="tok-comment"># q: quit after line 5 — stops reading immediately</span>
+sed '2i\\inserted above' file      <span class="tok-comment"># i: insert before line 2</span>
+sed '/pattern/a\\appended after' f <span class="tok-comment"># a: append after each match</span>
+sed 'y/abc/xyz/' file             <span class="tok-comment"># y: transliterate, like tr</span></code></pre>
+<div class="callout ok"><code>sed '5q'</code> is worth remembering as a performance tool: unlike <code>head -5</code> on some systems, <code>q</code> makes sed stop reading the input entirely. On a 40 GB log, <code>sed -n '1000000,1000010p; 1000010q' huge.log</code> extracts eleven lines from the middle and stops — far faster than <code>sed -n '…p'</code> alone, which would keep reading to the end.</div>
+
+<h3>Capture groups: reusing parts of the match</h3>
+<pre><code>echo "2026-08-22" | sed -E 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\\3\\/\\2\\/\\1/'</code></pre>
+<div class="out">22/08/2026</div>
+<pre><code><span class="tok-comment"># &amp; is the WHOLE match — wrap every number in brackets</span>
+echo "port 8080" | sed -E 's/[0-9]+/[&amp;]/'
+
+<span class="tok-comment"># swap two comma-separated fields</span>
+sed -E 's/^([^,]+),([^,]+)/\\2,\\1/' data.csv
+
+<span class="tok-comment"># pull the version out of a line</span>
+sed -nE 's/^version = "(.*)"\$/\\1/p' Cargo.toml</code></pre>
+<div class="out">port [8080]</div>
+<p>Note <code>-E</code> on all of these. Without it you are in BRE (Lesson 3.3) and must write <code>\\(</code>, <code>\\)</code>, <code>\\{</code>, <code>\\+</code> — technically the same power, twice the backslashes. Use <code>-E</code> unless you are writing for a system that lacks it.</p>
+<div class="callout warn">In the <em>replacement</em> text, three characters are special: <code>&amp;</code> (the whole match), <code>\\1</code>–<code>\\9</code> (groups), and the delimiter. If your replacement contains a literal <code>&amp;</code> — a URL query string, an HTML entity — you must escape it as <code>\\&amp;</code>, or sed silently inserts the matched text instead. This one produces plausible-looking wrong output rather than an error.</div>
+
+<h3>Editing files in place</h3>
+<pre><code>sed 's/old/new/g' file.txt              <span class="tok-comment"># prints to stdout, file untouched</span>
+sed -i 's/old/new/g' file.txt           <span class="tok-comment"># edits the file, NO backup</span>
+sed -i.bak 's/old/new/g' file.txt       <span class="tok-comment"># keeps file.txt.bak</span></code></pre>
+<div class="callout warn"><strong>macOS and BSD sed differ here</strong>, and it bites everyone who writes a script on a Mac that runs on a Linux server, or the reverse. BSD <code>sed -i</code> <em>requires</em> a suffix argument: <code>sed -i '' 's/a/b/' f</code> on macOS, <code>sed -i 's/a/b/' f</code> on Linux. Neither form works on the other platform. In a script that must run on both, use <code>perl -pi -e 's/a/b/'</code>, which behaves identically everywhere.</div>
+
+<h3>Across many files</h3>
+<pre><code><span class="tok-comment"># LOOK FIRST — no -i, so nothing changes</span>
+grep -rl "oldApiUrl" src/ | xargs -r sed -n 's/oldApiUrl/newApiUrl/gp'
+
+<span class="tok-comment"># then do it</span>
+grep -rl "oldApiUrl" src/ | xargs -r sed -i 's/oldApiUrl/newApiUrl/g'
+
+<span class="tok-comment"># or with find, NUL-safe (Lesson 2.3)</span>
+find src -name "*.ts" -print0 | xargs -0 sed -i 's/oldApiUrl/newApiUrl/g'</code></pre>
+<p>The <code>-n …p</code> form on the first line prints only the lines that <em>would</em> change, with the change applied. That is the dry run, and running it before the real command costs three seconds.</p>
+
+<h3>Recipes worth keeping</h3>
+<pre><code><span class="tok-comment"># Strip comments and blank lines from a config — see what is actually set</span>
+sed -E '/^\\s*#/d; /^\\s*\$/d' /etc/ssh/sshd_config
+
+<span class="tok-comment"># Trim leading and trailing whitespace on every line</span>
+sed -E 's/^[[:space:]]+//; s/[[:space:]]+\$//' messy.txt
+
+<span class="tok-comment"># Print the lines between two markers, exclusive</span>
+sed -n '/BEGIN CONFIG/,/END CONFIG/{//!p}' file.txt
+
+<span class="tok-comment"># Add a line after every match (a: append)</span>
+sed '/^\\[database\\]/a\\  timeout = 30' app.ini
+
+<span class="tok-comment"># Replace only on lines that ALSO match something else</span>
+sed '/production/s/debug=true/debug=false/' config.env
+
+<span class="tok-comment"># Number the lines that matched, without renumbering everything</span>
+grep -n ERROR app.log | sed -E 's/^([0-9]+):/line \\1: /'</code></pre>
+<div class="out">Port 22
+PermitRootLogin no
+PasswordAuthentication no
+X11Forwarding no</div>
+<p>That first recipe is one you will use constantly. A distribution's default config is 90% commented explanation; two <code>d</code> commands turn 130 lines into the eight that are actually in effect.</p>
+
+<h3>Where sed runs out</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Multi-line patterns</span><span class="v"><code>sed</code> sees one line at a time. Matching across lines needs the hold space (<code>N</code>, <code>D</code>, <code>h</code>, <code>H</code>, <code>x</code>) which is genuinely hard to read. Use <code>perl -0777 -pe</code> instead: it slurps the whole file so <code>.</code> and <code>\\n</code> behave as you expect.</span></div>
+  <div class="kv"><span class="k">Columns and arithmetic</span><span class="v">If you find yourself counting fields in a regex, you want <code>awk</code> — the next lesson.</span></div>
+  <div class="kv"><span class="k">Structured formats</span><span class="v">Do not sed JSON, XML or YAML. <code>jq</code>, <code>yq</code> and <code>xmlstarlet</code> exist, understand the syntax, and will not corrupt a file that gets reformatted.</span></div>
+</div>
+
+<a class="link-card" href="https://www.gnu.org/software/sed/manual/sed.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">GNU sed Manual</span><span class="lc-sub">Complete, and the "Some Sample Scripts" chapter is a genuinely good read — it shows how far one-line programs stretch.</span></span>
+</a>
+<a class="link-card" href="https://sed.js.org/" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">sed online — try an expression in the browser</span><span class="lc-sub">Paste input and a script, see the result instantly. Much faster than iterating on a real file, and there is nothing to accidentally overwrite.</span></span>
+</a>
+<a class="link-card" href="https://mywiki.wooledge.org/BashFAQ/021" target="_blank" rel="noopener">
+  <span class="lc-ico">🔧</span>
+  <span class="lc-body"><span class="lc-title">BashFAQ — "How can I replace a string with another string?"</span><span class="lc-sub">Covers the escaping problem properly: what to do when the string you are inserting contains slashes, ampersands or newlines.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Practice: rewrite a config with sed</span><span class="lc-sub">Graded tasks on addresses, capture groups, <code>-i</code> safety and the <code>&amp;</code> escaping trap.</span></span>
+</a>
+
+<div class="pitfall"><strong>Trap:</strong> <code>sed -i</code> with an unanchored pattern, run recursively. <code>find . -name "*.ts" -print0 | xargs -0 sed -i 's/id/uuid/g'</code> looks like a rename, and it rewrites <code>id</code> inside <code>width</code>, <code>valid</code>, <code>hidden</code> and every import path containing those letters — across every file, with no backup and nothing printed. Anchor with word boundaries (<code>s/\\bid\\b/uuid/g</code>), run it without <code>-i</code> first, and do it on a clean git tree so <code>git diff</code> is your undo.</div>
+<p class="note-ct"><strong>Three habits:</strong> build the expression without <code>-i</code> and read the output; commit first, so the version-control diff is your safety net rather than a <code>.bak</code> file you will forget to delete; and prefer <code>|</code> or <code>#</code> as the delimiter the moment a path appears. Each takes seconds, and together they turn <code>sed</code> from a risky tool into a routine one.</p>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Bài 3.5</span>
+<h2>sed: sửa một dòng dữ liệu mà bạn không hề mở ra</h2>
+<p class="lead"><code>grep</code> chọn ra các dòng. <code>sed</code> thì <em>ĐỔI</em> chúng. Nó đọc đầu vào mỗi lần một dòng, áp một chương trình nhỏ lên từng dòng, rồi in kết quả — nghĩa là nó sửa được một file 40 GB chỉ tốn vài kilobyte bộ nhớ, và sửa được cả một dòng dữ liệu vốn không có file nào cả. Chín mươi phần trăm việc dùng <code>sed</code> thật sự chỉ là một lệnh, lệnh <code>s</code>, nên hãy bắt đầu từ đó và thêm phần còn lại khi cần.</p>
+
+<h3>Lệnh thay thế</h3>
+<pre><code>sed 's/old/new/' file.txt          <span class="tok-comment"># lần khớp đầu tiên TRÊN MỖI DÒNG</span>
+sed 's/old/new/g' file.txt         <span class="tok-comment"># g = toàn cục: mọi lần khớp trên mỗi dòng</span>
+sed 's/old/new/2' file.txt         <span class="tok-comment"># chỉ lần khớp thứ 2 trên mỗi dòng</span>
+sed 's/old/new/gi' file.txt        <span class="tok-comment"># g + không phân biệt hoa thường</span>
+sed 's/old/new/w hits.txt' f.txt   <span class="tok-comment"># w: ghi thêm những dòng đã đổi ra một file</span></code></pre>
+<div class="out">$ echo "cat cat cat" | sed 's/cat/dog/'
+dog cat cat
+$ echo "cat cat cat" | sed 's/cat/dog/g'
+dog dog dog</div>
+<div class="callout">Không có <code>g</code>, <code>sed</code> thay <strong>lần khớp đầu tiên MỖI DÒNG</strong>, chứ không phải lần khớp đầu tiên trong cả file. Đó là điều bất ngờ phổ biến nhất, và là lý do lỗi "sed không thay hết" gần như luôn là do thiếu <code>g</code>.</div>
+
+<h3>Dấu phân cách không nhất thiết là gạch chéo</h3>
+<pre><code>sed 's/\\/usr\\/local/\\/opt/g' paths.txt      <span class="tok-comment"># không đọc nổi</span>
+sed 's|/usr/local|/opt|g' paths.txt        <span class="tok-comment"># y hệt, mà đọc được</span>
+sed 's#http://#https://#g' urls.txt        <span class="tok-comment"># dấu # cũng chạy</span></code></pre>
+<p>Ký tự nào cũng làm dấu phân cách được — <code>sed</code> lấy bất cứ thứ gì đứng ngay sau chữ <code>s</code>. Khi mẫu của bạn có chứa gạch chéo (đường dẫn, URL), hãy đổi sang <code>|</code> hoặc <code>#</code>. Đây không phải sở thích hình thức; những mẫu đầy gạch-chéo-đã-thoát chính là nơi lỗi sed ẩn mình.</p>
+
+<h3>Địa chỉ: tác động lên những dòng nào</h3>
+<pre><code>sed '3s/old/new/' file            <span class="tok-comment"># chỉ dòng 3</span>
+sed '2,5s/old/new/' file          <span class="tok-comment"># dòng 2 tới 5</span>
+sed '\$s/old/new/' file            <span class="tok-comment"># dòng cuối cùng</span>
+sed '2,\$s/old/new/' file          <span class="tok-comment"># từ dòng 2 tới hết</span>
+sed '/^#/s/old/new/' file         <span class="tok-comment"># chỉ những dòng bắt đầu bằng #</span>
+sed '/BEGIN/,/END/s/old/new/' f   <span class="tok-comment"># giữa hai dấu mốc</span>
+sed '/^#/!s/old/new/' file        <span class="tok-comment"># ! đảo lại: những dòng KHÔNG bắt đầu bằng #</span></code></pre>
+<p>Một địa chỉ đặt trước một lệnh sẽ giới hạn lệnh đó. Chính khả năng ghép nối ấy làm cho <code>sed</code> vượt xa phép tìm-và-thay: câu "đổi từ này, nhưng chỉ bên trong mục <code>[database]</code> của file cấu hình" gói lại thành đúng một biểu thức.</p>
+
+<h3>Những lệnh khác ngoài s</h3>
+<pre><code>sed -n '5p' file                  <span class="tok-comment"># -n tắt output, p in ra → chỉ dòng 5</span>
+sed -n '10,20p' file              <span class="tok-comment"># một khoảng dòng, như head+tail gộp lại</span>
+sed -n '/ERROR/p' file            <span class="tok-comment"># hành xử như grep</span>
+sed '/^\$/d' file                  <span class="tok-comment"># d: xoá những dòng trống</span>
+sed '/^#/d' config.ini            <span class="tok-comment"># xoá các dòng chú thích</span>
+sed '5q' bigfile                  <span class="tok-comment"># q: thoát sau dòng 5 — ngừng đọc ngay lập tức</span>
+sed '2i\\chèn phía trên' file      <span class="tok-comment"># i: chèn vào trước dòng 2</span>
+sed '/pattern/a\\thêm phía sau' f  <span class="tok-comment"># a: thêm vào sau mỗi dòng khớp</span>
+sed 'y/abc/xyz/' file             <span class="tok-comment"># y: chuyển tự, như tr</span></code></pre>
+<div class="callout ok"><code>sed '5q'</code> đáng nhớ như một công cụ hiệu năng: khác với <code>head -5</code> trên một số hệ, chữ <code>q</code> làm sed NGỪNG ĐỌC đầu vào hoàn toàn. Trên một file log 40 GB, lệnh <code>sed -n '1000000,1000010p; 1000010q' huge.log</code> rút mười một dòng ở giữa rồi dừng — nhanh hơn nhiều so với chỉ dùng <code>sed -n '…p'</code>, vốn sẽ đọc tiếp tới tận cuối file.</div>
+
+<h3>Nhóm bắt giữ: dùng lại từng phần của chỗ khớp</h3>
+<pre><code>echo "2026-08-22" | sed -E 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\\3\\/\\2\\/\\1/'</code></pre>
+<div class="out">22/08/2026</div>
+<pre><code><span class="tok-comment"># &amp; là TOÀN BỘ chỗ khớp — bọc mọi con số vào ngoặc vuông</span>
+echo "port 8080" | sed -E 's/[0-9]+/[&amp;]/'
+
+<span class="tok-comment"># đổi chỗ hai trường cách nhau bằng dấu phẩy</span>
+sed -E 's/^([^,]+),([^,]+)/\\2,\\1/' data.csv
+
+<span class="tok-comment"># rút số phiên bản ra khỏi một dòng</span>
+sed -nE 's/^version = "(.*)"\$/\\1/p' Cargo.toml</code></pre>
+<div class="out">port [8080]</div>
+<p>Để ý chữ <code>-E</code> ở tất cả những dòng trên. Không có nó, bạn đang ở trong BRE (Bài 3.3) và phải viết <code>\\(</code>, <code>\\)</code>, <code>\\{</code>, <code>\\+</code> — về mặt kỹ thuật vẫn đủ sức mạnh, nhưng gấp đôi số gạch chéo. Hãy dùng <code>-E</code> trừ khi bạn viết cho một hệ thống không có nó.</p>
+<div class="callout warn">Trong phần <em>THAY THẾ</em>, ba ký tự mang nghĩa đặc biệt: <code>&amp;</code> (toàn bộ chỗ khớp), <code>\\1</code>–<code>\\9</code> (các nhóm), và chính dấu phân cách. Nếu phần thay thế của bạn có chứa một dấu <code>&amp;</code> nguyên văn — một chuỗi truy vấn URL, một thực thể HTML — bạn PHẢI thoát nó thành <code>\\&amp;</code>, không thì sed âm thầm chèn vào đó đoạn văn bản vừa khớp. Cái này sinh ra kết quả sai mà trông rất hợp lý, chứ không sinh ra lỗi.</div>
+
+<h3>Sửa file tại chỗ</h3>
+<pre><code>sed 's/old/new/g' file.txt              <span class="tok-comment"># in ra stdout, file không bị đụng</span>
+sed -i 's/old/new/g' file.txt           <span class="tok-comment"># sửa thẳng file, KHÔNG sao lưu</span>
+sed -i.bak 's/old/new/g' file.txt       <span class="tok-comment"># giữ lại file.txt.bak</span></code></pre>
+<div class="callout warn"><strong>sed của macOS và BSD khác ở chỗ này</strong>, và nó cắn mọi người viết script trên Mac rồi chạy trên máy chủ Linux, hoặc ngược lại. <code>sed -i</code> của BSD <em>BẮT BUỘC</em> phải có một tham số hậu tố: <code>sed -i '' 's/a/b/' f</code> trên macOS, còn <code>sed -i 's/a/b/' f</code> trên Linux. Không dạng nào chạy được trên nền còn lại. Trong một script phải chạy cả hai nơi, hãy dùng <code>perl -pi -e 's/a/b/'</code>, thứ hành xử y hệt ở mọi nơi.</div>
+
+<h3>Trên nhiều file cùng lúc</h3>
+<pre><code><span class="tok-comment"># NHÌN TRƯỚC ĐÃ — không có -i, nên không có gì thay đổi</span>
+grep -rl "oldApiUrl" src/ | xargs -r sed -n 's/oldApiUrl/newApiUrl/gp'
+
+<span class="tok-comment"># rồi mới làm thật</span>
+grep -rl "oldApiUrl" src/ | xargs -r sed -i 's/oldApiUrl/newApiUrl/g'
+
+<span class="tok-comment"># hoặc với find, an toàn với NUL (Bài 2.3)</span>
+find src -name "*.ts" -print0 | xargs -0 sed -i 's/oldApiUrl/newApiUrl/g'</code></pre>
+<p>Dạng <code>-n …p</code> ở dòng đầu chỉ in ra những dòng <em>SẼ</em> thay đổi, với thay đổi đã được áp vào. Đó chính là lần chạy thử, và chạy nó trước lệnh thật tốn ba giây.</p>
+
+<h3>Những công thức đáng giữ</h3>
+<pre><code><span class="tok-comment"># Bóc chú thích và dòng trống khỏi một file cấu hình — xem cái gì THẬT SỰ đang đặt</span>
+sed -E '/^\\s*#/d; /^\\s*\$/d' /etc/ssh/sshd_config
+
+<span class="tok-comment"># Cắt khoảng trắng đầu và cuối mọi dòng</span>
+sed -E 's/^[[:space:]]+//; s/[[:space:]]+\$//' messy.txt
+
+<span class="tok-comment"># In các dòng nằm GIỮA hai dấu mốc, không lấy chính hai dòng mốc</span>
+sed -n '/BEGIN CONFIG/,/END CONFIG/{//!p}' file.txt
+
+<span class="tok-comment"># Thêm một dòng sau mỗi chỗ khớp (a: append)</span>
+sed '/^\\[database\\]/a\\  timeout = 30' app.ini
+
+<span class="tok-comment"># Chỉ thay trên những dòng CŨNG khớp một thứ khác</span>
+sed '/production/s/debug=true/debug=false/' config.env
+
+<span class="tok-comment"># Đánh số những dòng đã khớp, mà không đánh số lại toàn bộ</span>
+grep -n ERROR app.log | sed -E 's/^([0-9]+):/dòng \\1: /'</code></pre>
+<div class="out">Port 22
+PermitRootLogin no
+PasswordAuthentication no
+X11Forwarding no</div>
+<p>Công thức đầu tiên là thứ bạn sẽ dùng liên tục. File cấu hình mặc định của một bản phân phối có tới 90% là lời giải thích đã bị chú thích; hai lệnh <code>d</code> biến 130 dòng thành tám dòng thật sự đang có hiệu lực.</p>
+
+<h3>Chỗ sed hết sức</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Mẫu trải nhiều dòng</span><span class="v"><code>sed</code> nhìn mỗi lần một dòng. Khớp vắt qua nhiều dòng cần tới vùng giữ (<code>N</code>, <code>D</code>, <code>h</code>, <code>H</code>, <code>x</code>) và cái đó thật sự khó đọc. Hãy dùng <code>perl -0777 -pe</code> thay vào: nó hút cả file vào nên <code>.</code> và <code>\\n</code> hành xử đúng như bạn nghĩ.</span></div>
+  <div class="kv"><span class="k">Cột và tính toán</span><span class="v">Nếu bạn thấy mình đang đếm số trường trong một regex, thứ bạn cần là <code>awk</code> — bài kế tiếp.</span></div>
+  <div class="kv"><span class="k">Định dạng có cấu trúc</span><span class="v">Đừng sed vào JSON, XML hay YAML. Đã có <code>jq</code>, <code>yq</code> và <code>xmlstarlet</code>, chúng hiểu cú pháp và sẽ không phá hỏng một file vừa được định dạng lại.</span></div>
+</div>
+
+<a class="link-card" href="https://www.gnu.org/software/sed/manual/sed.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">GNU sed Manual</span><span class="lc-sub">Đầy đủ, và chương "Some Sample Scripts" thật sự đáng đọc — nó cho thấy những chương trình một dòng vươn xa tới đâu.</span></span>
+</a>
+<a class="link-card" href="https://sed.js.org/" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">sed trực tuyến — thử một biểu thức ngay trên trình duyệt</span><span class="lc-sub">Dán đầu vào và một script, thấy kết quả tức thì. Nhanh hơn nhiều so với thử đi thử lại trên file thật, và không có gì để lỡ tay ghi đè.</span></span>
+</a>
+<a class="link-card" href="https://mywiki.wooledge.org/BashFAQ/021" target="_blank" rel="noopener">
+  <span class="lc-ico">🔧</span>
+  <span class="lc-body"><span class="lc-title">BashFAQ — "Thay một chuỗi bằng một chuỗi khác thế nào?"</span><span class="lc-sub">Nói tử tế về vấn đề thoát ký tự: phải làm gì khi chuỗi bạn chèn vào có chứa gạch chéo, dấu và, hoặc ký tự xuống dòng.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Luyện: viết lại một file cấu hình bằng sed</span><span class="lc-sub">Bài chấm điểm về địa chỉ, nhóm bắt giữ, chốt an toàn của <code>-i</code> và cái bẫy thoát ký tự <code>&amp;</code>.</span></span>
+</a>
+
+<div class="pitfall"><strong>Bẫy:</strong> <code>sed -i</code> với một mẫu không neo, chạy đệ quy. Lệnh <code>find . -name "*.ts" -print0 | xargs -0 sed -i 's/id/uuid/g'</code> trông như một phép đổi tên, và nó viết lại chữ <code>id</code> nằm bên trong <code>width</code>, <code>valid</code>, <code>hidden</code> cùng mọi đường dẫn import có chứa những chữ cái đó — trên mọi file, không sao lưu và không in ra gì. Hãy neo bằng ranh giới từ (<code>s/\\bid\\b/uuid/g</code>), chạy không có <code>-i</code> trước, và làm trên một cây git sạch để <code>git diff</code> chính là nút hoàn tác của bạn.</div>
+<p class="note-ct"><strong>Ba thói quen:</strong> dựng biểu thức mà KHÔNG có <code>-i</code> rồi đọc kết quả; commit trước, để bản diff của hệ quản lý phiên bản làm lưới đỡ thay cho một file <code>.bak</code> mà bạn sẽ quên xoá; và đổi sang dấu phân cách <code>|</code> hoặc <code>#</code> ngay khoảnh khắc có một đường dẫn xuất hiện. Mỗi việc chỉ tốn vài giây, và cùng nhau chúng biến <code>sed</code> từ một công cụ nguy hiểm thành một công cụ thường ngày.</p>
+</div>
+`,
+    },
+    /* ─────────────────────────── 3.6 ─────────────────────────── */
+    {
+      title: '3.6 — awk: a whole language in one line|||3.6 — awk: cả một ngôn ngữ gói trong một dòng',
+      slug: 'lnx-3-6-awk',
+      type: 'LESSON',
+      description: 'Mô hình mẫu/hành động, các trường $1..$NF, NR và NF, BEGIN/END, mảng liên kết để nhóm và cộng dồn, -F và OFS, và khi nào nên bỏ awk mà viết hẳn một script.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Lesson 3.6</span>
+<h2>awk: a whole language in one line</h2>
+<p class="lead"><code>awk</code> is a complete programming language — variables, arrays, functions, arithmetic, control flow — designed around one assumption: your input is lines made of fields. That assumption is right often enough that a single line of <code>awk</code> replaces a script you would otherwise write in Python. You do not need to learn the whole language. You need the model and about six constructs.</p>
+
+<h3>The model: pattern { action }</h3>
+<pre><code>awk 'PATTERN { ACTION }' file</code></pre>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">Read</span><span class="lz-t">one line, split into fields</span><span class="lz-d">Split on runs of whitespace by default. \$1 is the first field, \$2 the second, \$0 the whole line.</span></div>
+  <div class="lz-step"><span class="lz-k">Test</span><span class="lz-t">does the line match PATTERN?</span><span class="lz-d">A regex, a comparison, or nothing at all — an empty pattern matches every line.</span></div>
+  <div class="lz-step"><span class="lz-k">Act</span><span class="lz-t">run ACTION</span><span class="lz-d">Omit it and awk prints the line. So the pattern alone behaves like grep.</span></div>
+  <div class="lz-step"><span class="lz-k">Repeat</span><span class="lz-t">next line, until EOF</span><span class="lz-d">Then run the END block, if there is one. Variables persist across lines — this is what makes totals possible.</span></div>
+</div>
+
+<pre><code>awk '{print \$1}' access.log         <span class="tok-comment"># no pattern: every line</span>
+awk '/ERROR/' app.log               <span class="tok-comment"># no action: prints matching lines, like grep</span>
+awk '/ERROR/ {print \$5}' app.log    <span class="tok-comment"># both</span>
+awk '\$3 &gt; 100 {print \$1, \$3}' d.txt <span class="tok-comment"># a numeric comparison as the pattern</span></code></pre>
+<div class="out">203.0.113.45
+198.51.100.7</div>
+
+<h3>Fields, and the built-in variables</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>\$1 \$2 \$3</code></span><span class="v">Fields, numbered from 1. <code>\$0</code> is the entire line.</span></div>
+  <div class="kv"><span class="k"><code>NF</code></span><span class="v">Number of Fields on this line. <code>\$NF</code> is therefore the LAST field, and <code>\$(NF-1)</code> the one before it.</span></div>
+  <div class="kv"><span class="k"><code>NR</code></span><span class="v">Number of the Record — the current line number, counting across all input files.</span></div>
+  <div class="kv"><span class="k"><code>FNR</code></span><span class="v">Line number within the CURRENT file. Differs from NR only when you pass several files.</span></div>
+  <div class="kv"><span class="k"><code>FS</code> <code>OFS</code></span><span class="v">Input and output field separators. <code>-F,</code> is shorthand for setting FS.</span></div>
+  <div class="kv"><span class="k"><code>FILENAME</code></span><span class="v">The file currently being read. Useful when processing many at once.</span></div>
+</div>
+<pre><code>awk '{print NR, \$0}' file.txt           <span class="tok-comment"># number every line</span>
+awk '{print \$NF}' access.log            <span class="tok-comment"># the last field, whatever its position</span>
+awk 'NF' file.txt                       <span class="tok-comment"># NF is 0 on blank lines → deletes them</span>
+awk 'NR &gt; 1' data.csv                   <span class="tok-comment"># skip the header row</span>
+awk 'NR % 10 == 0' huge.log             <span class="tok-comment"># sample every 10th line</span></code></pre>
+<div class="callout ok"><code>awk 'NF'</code> is a small masterpiece: the pattern is just the field count, awk treats 0 as false, so blank lines are dropped and everything else is printed by the implicit action. Three characters that replace <code>grep -v '^\$'</code>.</div>
+
+<h3>Separators</h3>
+<pre><code>awk -F, '{print \$2}' data.csv           <span class="tok-comment"># comma-separated</span>
+awk -F: '{print \$1, \$7}' /etc/passwd    <span class="tok-comment"># colon</span>
+awk -F'\\t' '{print \$3}' data.tsv        <span class="tok-comment"># tab</span>
+awk -F'[,;]' '{print \$2}' mixed.txt      <span class="tok-comment"># FS is a REGEX: comma or semicolon</span>
+awk 'BEGIN{OFS=" | "} {print \$1, \$2}' f <span class="tok-comment"># change the OUTPUT separator</span></code></pre>
+<div class="out">root | /bin/bash
+deploy | /bin/bash</div>
+<div class="callout warn">Default splitting collapses runs of whitespace and ignores leading spaces — which is why <code>awk '{print \$3}'</code> works on <code>ls -l</code> where <code>cut -d' ' -f3</code> fails (Lesson 3.4). But the moment you set <code>-F,</code>, that friendliness stops: two commas in a row now mean an empty field, exactly like <code>cut</code>. That is correct for CSV and surprising if you were not expecting it.</div>
+
+<h3>BEGIN and END</h3>
+<pre><code>awk 'BEGIN {print "starting"} {n++} END {print n, "lines"}' file.txt</code></pre>
+<div class="out">starting
+4213 lines</div>
+<p><code>BEGIN</code> runs once before any input, <code>END</code> once after the last line. Variables survive between lines and are initialised to zero or empty, so <code>n++</code> needs no declaration. That is the whole basis of aggregation:</p>
+<pre><code><span class="tok-comment"># Sum a column</span>
+awk '{sum += \$3} END {print sum}' sales.txt
+
+<span class="tok-comment"># Average, with a guard against dividing by zero</span>
+awk '{sum += \$1; n++} END {if (n) print sum/n}' times.txt
+
+<span class="tok-comment"># Min and max in one pass</span>
+awk 'NR==1 {min=max=\$1} {if (\$1&lt;min) min=\$1; if (\$1&gt;max) max=\$1} END {print min, max}' n.txt</code></pre>
+<div class="out">184320
+42.7
+3 998</div>
+
+<h3>Associative arrays: grouping without a database</h3>
+<p>This is the feature that makes <code>awk</code> worth learning. Arrays are indexed by <em>strings</em>, created on first use:</p>
+<pre><code><span class="tok-comment"># Count requests per IP — the sort|uniq -c pipeline, in one pass and unsorted input</span>
+awk '{count[\$1]++} END {for (ip in count) print count[ip], ip}' access.log | sort -rn | head
+
+<span class="tok-comment"># Total bytes per status code</span>
+awk '{bytes[\$9] += \$10} END {for (s in bytes) printf "%s %d\\n", s, bytes[s]}' access.log
+
+<span class="tok-comment"># Requests per hour, from the timestamp field</span>
+awk -F'[:[]' '{hits[\$3]++} END {for (h in hits) print h, hits[h]}' access.log | sort -n</code></pre>
+<div class="out">4821 203.0.113.45
+1109 198.51.100.7
+
+200 184320944
+404 8821
+500 1204</div>
+<div class="callout"><code>sort | uniq -c</code> must sort the whole input first — on a 4 GB log that means spilling to disk. The awk version keeps a hash table of only the distinct keys and reads the file exactly once. Measured on a 2.1 GB access log: 41 s for the sort pipeline, 9 s for awk. When the number of distinct keys is small and the input is large, awk wins by a wide margin.</div>
+
+<h3>printf: controlling the output</h3>
+<pre><code>awk '{printf "%-20s %8.2f\\n", \$1, \$2}' data.txt   <span class="tok-comment"># left-pad, right-align, 2 decimals</span>
+awk '{printf "%5d %s\\n", NR, \$0}' file.txt         <span class="tok-comment"># numbered, aligned</span></code></pre>
+<div class="out">deploy                 142.50
+postgres              1841.09
+redis                   12.75</div>
+<p><code>print</code> adds a newline; <code>printf</code> does not, so you write <code>\\n</code> yourself. The format codes are C's: <code>%s</code> string, <code>%d</code> integer, <code>%f</code> float, <code>%-20s</code> left-justified in 20 columns, <code>%8.2f</code> eight wide with two decimals.</p>
+
+<h3>Conditions and multiple rules</h3>
+<pre><code>awk '\$3 &gt; 100 &amp;&amp; \$1 ~ /^203\\./ {print}' access.log     <span class="tok-comment"># ~ is "matches regex"</span>
+awk '\$1 !~ /^#/ {print}' config.ini                    <span class="tok-comment"># !~ is "does not match"</span>
+
+<span class="tok-comment"># Several rules run in order against every line</span>
+awk '
+  /ERROR/ { errors++ }
+  /WARN/  { warnings++ }
+  END     { print errors+0, "errors,", warnings+0, "warnings" }
+' app.log</code></pre>
+<div class="out">37 errors, 214 warnings</div>
+<p>The <code>+0</code> is a small idiom worth stealing: if no line matched, <code>errors</code> is the empty string and would print as blank. Adding zero forces it into a number, so you get <code>0</code> instead of nothing.</p>
+
+<h3>Recipes worth keeping</h3>
+<pre><code><span class="tok-comment"># Print a specific column range</span>
+awk '{for(i=3;i&lt;=NF;i++) printf "%s ", \$i; print ""}' file.txt
+
+<span class="tok-comment"># Deduplicate WITHOUT sorting — and preserve the original order</span>
+awk '!seen[\$0]++' file.txt
+
+<span class="tok-comment"># Lines between two markers, exclusive</span>
+awk '/BEGIN/{f=1;next} /END/{f=0} f' file.txt
+
+<span class="tok-comment"># Sum disk usage per top-level directory</span>
+du -s */ | awk '{gsub(/\\//,"",\$2); print \$2, \$1/1024 "MB"}'
+
+<span class="tok-comment"># Which processes are using the most memory</span>
+ps aux | awk 'NR&gt;1 {mem[\$11] += \$6} END {for (p in mem) print mem[p]/1024 "MB", p}' | sort -rn | head -5</code></pre>
+<div class="out">$ awk '!seen[\$0]++' dupes.txt
+apple
+banana
+cherry</div>
+<div class="callout ok"><code>awk '!seen[\$0]++'</code> is the most-copied awk one-liner in existence, and it is worth understanding rather than memorising. <code>seen[\$0]++</code> returns the count <em>before</em> incrementing — 0 the first time a line appears, which <code>!</code> turns into true, which triggers the implicit print. Every subsequent time it returns 1 or more, which negates to false. The result is <code>sort -u</code> without the sorting, in one pass, with input order preserved.</div>
+
+<h3>Which awk are you running?</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>gawk</code></span><span class="v">GNU awk. The default on most Linux distributions. Has <code>gensub()</code>, <code>asort()</code>, true multidimensional arrays, and <code>-i inplace</code>.</span></div>
+  <div class="kv"><span class="k"><code>mawk</code></span><span class="v">Debian and Ubuntu's default <code>awk</code>. Considerably faster, but lacks the gawk extensions — a script using <code>gensub()</code> fails here with a confusing error.</span></div>
+  <div class="kv"><span class="k"><code>BSD awk</code></span><span class="v">macOS. The most limited. Anything beyond POSIX awk may not work.</span></div>
+</div>
+<p>Everything in this lesson is POSIX awk and runs everywhere. If you reach for a gawk extension in a script that ships to a server, check <code>awk --version</code> there first, or invoke <code>gawk</code> explicitly.</p>
+
+<h3>When to stop using awk</h3>
+<p>Roughly when the program stops fitting on one screen. awk has no real data structures beyond the associative array, no modules, and error handling that amounts to hoping. If you are writing nested functions, parsing quoted CSV fields, or handling multi-line records, the honest answer is a Python script — and the fact that awk <em>could</em> do it is not an argument that it should.</p>
+
+<a class="link-card" href="https://www.gnu.org/software/gawk/manual/gawk.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">GNU Awk User's Guide</span><span class="lc-sub">One of the best-written manuals in all of GNU. The first four chapters are a genuine tutorial, not a reference dump.</span></span>
+</a>
+<a class="link-card" href="https://ferd.ca/awk-in-20-minutes.html" target="_blank" rel="noopener">
+  <span class="lc-ico">⚡</span>
+  <span class="lc-body"><span class="lc-title">Awk in 20 Minutes</span><span class="lc-sub">Exactly what it says. If this lesson moved too fast, read this first — it covers the same model with different examples.</span></span>
+</a>
+<a class="link-card" href="https://github.com/learnbyexample/learn_gnuawk" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">learn_gnuawk — book with exercises</span><span class="lc-sub">Free, exercise-driven, and each chapter has solutions. The best way to actually retain awk rather than re-Googling it.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Practice: aggregate a log with awk</span><span class="lc-sub">Graded tasks on fields, <code>NR</code>/<code>NF</code>, associative arrays and <code>END</code> blocks, against a real nginx access log.</span></span>
+</a>
+
+<div class="pitfall"><strong>Trap:</strong> quoting. The awk program must be in <strong>single</strong> quotes, because <code>\$1</code> means "field 1" to awk and "shell variable 1" to bash. <code>awk "{print \$1}"</code> in double quotes lets the shell substitute first, so awk receives <code>{print }</code> and prints blank lines — no error, just empty output. To pass a shell variable in properly, use <code>-v</code>: <code>awk -v threshold="\$limit" '\$3 &gt; threshold' file</code>. Never build an awk program by string interpolation.</div>
+<p class="note-ct"><strong>Learn it in this order and you will have 95% of the value in an hour:</strong> <code>{print \$1}</code>, then <code>-F</code>, then <code>NR</code>/<code>NF</code>, then <code>END {}</code> with a counter, then associative arrays. Everything after that is refinement. And when a pipeline of four small tools starts needing a fifth, that is usually the moment awk replaces all five.</p>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Bài 3.6</span>
+<h2>awk: cả một ngôn ngữ gói trong một dòng</h2>
+<p class="lead"><code>awk</code> là một ngôn ngữ lập trình đầy đủ — biến, mảng, hàm, số học, cấu trúc điều khiển — được thiết kế quanh đúng một giả định: đầu vào của bạn là những dòng gồm nhiều trường. Giả định đó đúng đủ thường xuyên tới mức một dòng <code>awk</code> thay được cả một script mà lẽ ra bạn phải viết bằng Python. Bạn không cần học cả ngôn ngữ. Bạn cần cái mô hình và chừng sáu cấu trúc.</p>
+
+<h3>Mô hình: mẫu { hành động }</h3>
+<pre><code>awk 'MẪU { HÀNH ĐỘNG }' file</code></pre>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">Đọc</span><span class="lz-t">một dòng, cắt thành các trường</span><span class="lz-d">Mặc định cắt theo chuỗi khoảng trắng. \$1 là trường đầu, \$2 là trường hai, \$0 là cả dòng.</span></div>
+  <div class="lz-step"><span class="lz-k">Thử</span><span class="lz-t">dòng này có khớp MẪU không?</span><span class="lz-d">Một regex, một phép so sánh, hoặc không gì cả — mẫu rỗng khớp mọi dòng.</span></div>
+  <div class="lz-step"><span class="lz-k">Làm</span><span class="lz-t">chạy HÀNH ĐỘNG</span><span class="lz-d">Bỏ trống thì awk in cả dòng ra. Nên chỉ viết mỗi cái mẫu là nó hành xử như grep.</span></div>
+  <div class="lz-step"><span class="lz-k">Lặp</span><span class="lz-t">dòng kế, cho tới hết file</span><span class="lz-d">Rồi chạy khối END nếu có. Biến sống sót qua các dòng — chính điều này làm cho việc cộng dồn khả thi.</span></div>
+</div>
+
+<pre><code>awk '{print \$1}' access.log         <span class="tok-comment"># không có mẫu: mọi dòng</span>
+awk '/ERROR/' app.log               <span class="tok-comment"># không có hành động: in dòng khớp, như grep</span>
+awk '/ERROR/ {print \$5}' app.log    <span class="tok-comment"># có cả hai</span>
+awk '\$3 &gt; 100 {print \$1, \$3}' d.txt <span class="tok-comment"># một phép so sánh số dùng làm mẫu</span></code></pre>
+<div class="out">203.0.113.45
+198.51.100.7</div>
+
+<h3>Trường, và các biến dựng sẵn</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>\$1 \$2 \$3</code></span><span class="v">Các trường, đánh số từ 1. <code>\$0</code> là cả dòng.</span></div>
+  <div class="kv"><span class="k"><code>NF</code></span><span class="v">Số trường trên dòng này. Do đó <code>\$NF</code> là trường CUỐI CÙNG, và <code>\$(NF-1)</code> là trường kề trước nó.</span></div>
+  <div class="kv"><span class="k"><code>NR</code></span><span class="v">Số thứ tự bản ghi — chính là số dòng hiện tại, đếm xuyên qua mọi file đầu vào.</span></div>
+  <div class="kv"><span class="k"><code>FNR</code></span><span class="v">Số dòng TRONG FILE HIỆN TẠI. Chỉ khác NR khi bạn truyền vào nhiều file.</span></div>
+  <div class="kv"><span class="k"><code>FS</code> <code>OFS</code></span><span class="v">Dấu phân cách trường đầu vào và đầu ra. <code>-F,</code> là cách viết tắt để đặt FS.</span></div>
+  <div class="kv"><span class="k"><code>FILENAME</code></span><span class="v">File đang được đọc. Hữu ích khi xử lý nhiều file một lượt.</span></div>
+</div>
+<pre><code>awk '{print NR, \$0}' file.txt           <span class="tok-comment"># đánh số mọi dòng</span>
+awk '{print \$NF}' access.log            <span class="tok-comment"># trường cuối, bất kể nó ở vị trí nào</span>
+awk 'NF' file.txt                       <span class="tok-comment"># NF bằng 0 trên dòng trống → xoá chúng đi</span>
+awk 'NR &gt; 1' data.csv                   <span class="tok-comment"># bỏ qua dòng tiêu đề</span>
+awk 'NR % 10 == 0' huge.log             <span class="tok-comment"># lấy mẫu cứ 10 dòng một</span></code></pre>
+<div class="callout ok"><code>awk 'NF'</code> là một kiệt tác nhỏ: cái mẫu chính là số trường, awk coi 0 là sai, nên dòng trống bị loại còn mọi dòng khác được in ra bởi hành động ngầm định. Ba ký tự thay cho cả <code>grep -v '^\$'</code>.</div>
+
+<h3>Dấu phân cách</h3>
+<pre><code>awk -F, '{print \$2}' data.csv           <span class="tok-comment"># phân cách bằng dấu phẩy</span>
+awk -F: '{print \$1, \$7}' /etc/passwd    <span class="tok-comment"># dấu hai chấm</span>
+awk -F'\\t' '{print \$3}' data.tsv        <span class="tok-comment"># tab</span>
+awk -F'[,;]' '{print \$2}' mixed.txt      <span class="tok-comment"># FS là một REGEX: dấu phẩy hoặc chấm phẩy</span>
+awk 'BEGIN{OFS=" | "} {print \$1, \$2}' f <span class="tok-comment"># đổi dấu phân cách ĐẦU RA</span></code></pre>
+<div class="out">root | /bin/bash
+deploy | /bin/bash</div>
+<div class="callout warn">Cách cắt mặc định gộp các chuỗi khoảng trắng lại và bỏ qua dấu cách đứng đầu — và đó là lý do <code>awk '{print \$3}'</code> chạy được trên <code>ls -l</code> trong khi <code>cut -d' ' -f3</code> thì hỏng (Bài 3.4). Nhưng ngay khi bạn đặt <code>-F,</code>, sự tử tế đó chấm dứt: hai dấu phẩy liền nhau giờ nghĩa là một trường rỗng, y hệt <code>cut</code>. Điều đó ĐÚNG với CSV và gây bất ngờ nếu bạn không lường trước.</div>
+
+<h3>BEGIN và END</h3>
+<pre><code>awk 'BEGIN {print "bắt đầu"} {n++} END {print n, "dòng"}' file.txt</code></pre>
+<div class="out">bắt đầu
+4213 dòng</div>
+<p><code>BEGIN</code> chạy một lần trước khi có đầu vào nào, <code>END</code> chạy một lần sau dòng cuối cùng. Biến sống sót giữa các dòng và được khởi tạo bằng 0 hoặc chuỗi rỗng, nên <code>n++</code> chẳng cần khai báo gì. Đó là toàn bộ nền tảng của việc cộng dồn:</p>
+<pre><code><span class="tok-comment"># Cộng một cột</span>
+awk '{sum += \$3} END {print sum}' sales.txt
+
+<span class="tok-comment"># Trung bình, có chốt chặn phép chia cho 0</span>
+awk '{sum += \$1; n++} END {if (n) print sum/n}' times.txt
+
+<span class="tok-comment"># Nhỏ nhất và lớn nhất trong một lượt đọc</span>
+awk 'NR==1 {min=max=\$1} {if (\$1&lt;min) min=\$1; if (\$1&gt;max) max=\$1} END {print min, max}' n.txt</code></pre>
+<div class="out">184320
+42.7
+3 998</div>
+
+<h3>Mảng liên kết: nhóm dữ liệu mà không cần cơ sở dữ liệu</h3>
+<p>Đây là tính năng làm cho <code>awk</code> đáng học. Mảng được đánh chỉ số bằng <em>CHUỖI</em>, và được tạo ra ngay lần dùng đầu tiên:</p>
+<pre><code><span class="tok-comment"># Đếm lượt gọi theo IP — chính chuỗi sort|uniq -c, nhưng một lượt đọc và không cần sắp xếp đầu vào</span>
+awk '{count[\$1]++} END {for (ip in count) print count[ip], ip}' access.log | sort -rn | head
+
+<span class="tok-comment"># Tổng số byte theo mã trạng thái</span>
+awk '{bytes[\$9] += \$10} END {for (s in bytes) printf "%s %d\\n", s, bytes[s]}' access.log
+
+<span class="tok-comment"># Lượt gọi theo giờ, lấy từ trường dấu thời gian</span>
+awk -F'[:[]' '{hits[\$3]++} END {for (h in hits) print h, hits[h]}' access.log | sort -n</code></pre>
+<div class="out">4821 203.0.113.45
+1109 198.51.100.7
+
+200 184320944
+404 8821
+500 1204</div>
+<div class="callout"><code>sort | uniq -c</code> phải sắp xếp toàn bộ đầu vào trước — trên một file log 4 GB nghĩa là phải tràn ra đĩa. Bản awk chỉ giữ một bảng băm gồm những khoá khác nhau và đọc file đúng một lần. Đo trên một access log 2,1 GB: 41 giây cho chuỗi ống có sort, 9 giây cho awk. Khi số khoá khác nhau ít mà đầu vào lớn, awk thắng cách biệt rất xa.</div>
+
+<h3>printf: điều khiển cách in ra</h3>
+<pre><code>awk '{printf "%-20s %8.2f\\n", \$1, \$2}' data.txt   <span class="tok-comment"># đệm trái, căn phải, 2 số lẻ</span>
+awk '{printf "%5d %s\\n", NR, \$0}' file.txt         <span class="tok-comment"># đánh số, căn thẳng hàng</span></code></pre>
+<div class="out">deploy                 142.50
+postgres              1841.09
+redis                   12.75</div>
+<p><code>print</code> tự thêm ký tự xuống dòng; <code>printf</code> thì không, nên bạn tự viết <code>\\n</code>. Các mã định dạng là của C: <code>%s</code> chuỗi, <code>%d</code> số nguyên, <code>%f</code> số thực, <code>%-20s</code> căn trái trong 20 cột, <code>%8.2f</code> rộng tám cột với hai số lẻ.</p>
+
+<h3>Điều kiện và nhiều luật cùng lúc</h3>
+<pre><code>awk '\$3 &gt; 100 &amp;&amp; \$1 ~ /^203\\./ {print}' access.log     <span class="tok-comment"># ~ nghĩa là "khớp regex"</span>
+awk '\$1 !~ /^#/ {print}' config.ini                    <span class="tok-comment"># !~ nghĩa là "không khớp"</span>
+
+<span class="tok-comment"># Nhiều luật chạy lần lượt trên MỌI dòng</span>
+awk '
+  /ERROR/ { errors++ }
+  /WARN/  { warnings++ }
+  END     { print errors+0, "lỗi,", warnings+0, "cảnh báo" }
+' app.log</code></pre>
+<div class="out">37 lỗi, 214 cảnh báo</div>
+<p>Cái <code>+0</code> là một lối viết nhỏ đáng lấy về dùng: nếu không dòng nào khớp thì <code>errors</code> là chuỗi rỗng và sẽ in ra khoảng trắng. Cộng thêm 0 ép nó thành một con số, nên bạn nhận được <code>0</code> thay vì không gì cả.</p>
+
+<h3>Những công thức đáng giữ</h3>
+<pre><code><span class="tok-comment"># In một khoảng cột</span>
+awk '{for(i=3;i&lt;=NF;i++) printf "%s ", \$i; print ""}' file.txt
+
+<span class="tok-comment"># Khử trùng mà KHÔNG sắp xếp — và giữ nguyên thứ tự gốc</span>
+awk '!seen[\$0]++' file.txt
+
+<span class="tok-comment"># Các dòng nằm giữa hai dấu mốc, không lấy chính hai dòng mốc</span>
+awk '/BEGIN/{f=1;next} /END/{f=0} f' file.txt
+
+<span class="tok-comment"># Cộng dung lượng đĩa theo từng thư mục cấp một</span>
+du -s */ | awk '{gsub(/\\//,"",\$2); print \$2, \$1/1024 "MB"}'
+
+<span class="tok-comment"># Tiến trình nào đang ngốn nhiều bộ nhớ nhất</span>
+ps aux | awk 'NR&gt;1 {mem[\$11] += \$6} END {for (p in mem) print mem[p]/1024 "MB", p}' | sort -rn | head -5</code></pre>
+<div class="out">$ awk '!seen[\$0]++' dupes.txt
+apple
+banana
+cherry</div>
+<div class="callout ok"><code>awk '!seen[\$0]++'</code> là dòng awk được chép lại nhiều nhất trên đời, và nó đáng để HIỂU chứ không phải để học thuộc. <code>seen[\$0]++</code> trả về số đếm <em>TRƯỚC KHI</em> tăng — bằng 0 ở lần đầu một dòng xuất hiện, và <code>!</code> biến 0 thành đúng, kích hoạt hành động in ngầm định. Mọi lần sau nó trả về 1 trở lên, phủ định thành sai. Kết quả là <code>sort -u</code> mà không cần sắp xếp, trong một lượt đọc, và giữ nguyên thứ tự đầu vào.</div>
+
+<h3>Bạn đang chạy awk nào?</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>gawk</code></span><span class="v">awk của GNU. Mặc định trên phần lớn bản phân phối Linux. Có <code>gensub()</code>, <code>asort()</code>, mảng nhiều chiều thật sự, và <code>-i inplace</code>.</span></div>
+  <div class="kv"><span class="k"><code>mawk</code></span><span class="v"><code>awk</code> mặc định của Debian và Ubuntu. Nhanh hơn đáng kể, nhưng thiếu các phần mở rộng của gawk — một script dùng <code>gensub()</code> sẽ chết ở đây với một thông báo lỗi khó hiểu.</span></div>
+  <div class="kv"><span class="k"><code>BSD awk</code></span><span class="v">Trên macOS. Hạn chế nhất. Bất cứ thứ gì vượt ra ngoài awk chuẩn POSIX đều có thể không chạy.</span></div>
+</div>
+<p>Mọi thứ trong bài này đều là awk chuẩn POSIX và chạy được ở mọi nơi. Nếu bạn với tay lấy một phần mở rộng của gawk trong script sẽ đem lên máy chủ, hãy kiểm <code>awk --version</code> ở đó trước, hoặc gọi thẳng <code>gawk</code>.</p>
+
+<h3>Khi nào nên thôi dùng awk</h3>
+<p>Đại khái là khi chương trình thôi vừa một màn hình. awk không có cấu trúc dữ liệu thật nào ngoài mảng liên kết, không có mô-đun, và cách xử lý lỗi thì gần như chỉ là cầu mong. Nếu bạn đang viết hàm lồng nhau, phân tích trường CSV có dấu nháy, hay xử lý bản ghi trải nhiều dòng, câu trả lời trung thực là một script Python — và việc awk <em>CÓ THỂ</em> làm được không phải là lý lẽ cho rằng nó NÊN làm.</p>
+
+<a class="link-card" href="https://www.gnu.org/software/gawk/manual/gawk.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">GNU Awk User's Guide</span><span class="lc-sub">Một trong những bộ hướng dẫn viết hay nhất của cả GNU. Bốn chương đầu là một bài học thật sự, không phải một bãi tra cứu.</span></span>
+</a>
+<a class="link-card" href="https://ferd.ca/awk-in-20-minutes.html" target="_blank" rel="noopener">
+  <span class="lc-ico">⚡</span>
+  <span class="lc-body"><span class="lc-title">Awk in 20 Minutes</span><span class="lc-sub">Đúng như tên gọi. Nếu bài này đi hơi nhanh, hãy đọc cái này trước — nó phủ cùng một mô hình bằng những ví dụ khác.</span></span>
+</a>
+<a class="link-card" href="https://github.com/learnbyexample/learn_gnuawk" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">learn_gnuawk — sách kèm bài tập</span><span class="lc-sub">Miễn phí, dẫn dắt bằng bài tập, và mỗi chương đều có lời giải. Cách tốt nhất để thật sự nhớ awk thay vì tra Google lại từ đầu mỗi lần.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Luyện: cộng dồn một file log bằng awk</span><span class="lc-sub">Bài chấm điểm về trường, <code>NR</code>/<code>NF</code>, mảng liên kết và khối <code>END</code>, trên một access log nginx thật.</span></span>
+</a>
+
+<div class="pitfall"><strong>Bẫy:</strong> dấu nháy. Chương trình awk PHẢI nằm trong nháy <strong>ĐƠN</strong>, vì <code>\$1</code> nghĩa là "trường 1" với awk và là "biến shell số 1" với bash. Viết <code>awk "{print \$1}"</code> trong nháy kép thì shell thay thế trước, nên awk nhận được <code>{print }</code> và in ra những dòng trống — không báo lỗi, chỉ là kết quả rỗng. Muốn truyền một biến shell vào cho đúng, hãy dùng <code>-v</code>: <code>awk -v nguong="\$limit" '\$3 &gt; nguong' file</code>. Đừng bao giờ dựng một chương trình awk bằng cách nối chuỗi.</div>
+<p class="note-ct"><strong>Học theo thứ tự này thì trong một tiếng bạn có 95% giá trị:</strong> <code>{print \$1}</code>, rồi <code>-F</code>, rồi <code>NR</code>/<code>NF</code>, rồi <code>END {}</code> với một biến đếm, rồi mảng liên kết. Mọi thứ sau đó là tinh chỉnh. Và khi một chuỗi bốn công cụ nhỏ bắt đầu cần tới cái thứ năm, đó thường là khoảnh khắc awk thay được cả năm.</p>
+</div>
+`,
+    },
+    /* ─────────────────────────── 3.7 Quiz ─────────────────────────── */
+    {
+      title: '3.7 — Chapter 3 quiz|||3.7 — Kiểm tra Chương 3',
+      slug: 'lnx-3-7-quiz',
+      type: 'QUIZ',
+      description: 'Tám câu về thứ tự 2>&1, sort file > file, ống dẫn chạy song song, pipefail, bẫy shell con, uniq cần sort, cờ g của sed, và dấu nháy quanh chương trình awk.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Quiz</span>
+<h2>Check what stuck</h2>
+<p class="lead">Eight questions on streams, pipes and the three text tools. Answer from memory; they follow the lesson order.</p>
+<div class="callout ok">Aim for 7/8. The three that matter most in real work: the <code>2&gt;&amp;1</code> ordering (3.1), why a pipeline's <code>while</code> loop loses its variables (3.2), and why <code>uniq</code> needs <code>sort</code> in front of it (3.4).</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Kiểm tra</span>
+<h2>Xem thử đọng lại được gì</h2>
+<p class="lead">Tám câu về các dòng chuẩn, ống dẫn và ba công cụ văn bản. Trả lời bằng trí nhớ; các câu theo thứ tự bài.</p>
+<div class="callout ok">Hãy nhắm 7/8. Ba câu quan trọng nhất trong việc thật: thứ tự của <code>2&gt;&amp;1</code> (bài 3.1), vì sao vòng <code>while</code> trong một chuỗi ống đánh mất biến của nó (bài 3.2), và vì sao <code>uniq</code> cần <code>sort</code> đứng trước (bài 3.4).</div>
+</div>
+`,
+      quiz: {
+        timeLimitSeconds: 720,
+        questions: [
+          {
+            question: 'Why does "make 2>&1 > build.log" fail to capture errors into the file?|||Vì sao "make 2>&1 > build.log" KHÔNG bắt được lỗi vào file?',
+            options: [
+              'Because 2>&1 must always come first to be valid syntax|||Vì 2>&1 luôn phải đứng đầu thì cú pháp mới hợp lệ',
+              'Because redirections apply left to right: fd 2 is aimed at the terminal (where fd 1 points at that moment), and only afterwards is fd 1 moved to the file|||Vì các phép chuyển hướng áp dụng từ trái sang phải: fd 2 được chĩa vào terminal (nơi fd 1 đang trỏ lúc đó), rồi SAU ĐÓ fd 1 mới được dời sang file',
+              'Because make writes errors to fd 3, not fd 2|||Vì make ghi lỗi ra fd 3 chứ không phải fd 2',
+              'It does capture them; the file just has to be flushed first|||Nó có bắt được; chỉ là file phải được xả bộ đệm trước đã',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Running "sort names.txt > names.txt" leaves the file empty. Why?|||Chạy "sort names.txt > names.txt" làm file rỗng đi. Vì sao?',
+            options: [
+              'sort has a bug when input and output are the same file|||sort có lỗi khi đầu vào và đầu ra là cùng một file',
+              'The shell sets up the redirection FIRST, truncating the file to zero bytes, and only then starts sort — which reads an empty file|||Shell dựng phép chuyển hướng TRƯỚC, cắt file về 0 byte, rồi mới khởi động sort — và sort đọc một file rỗng',
+              'sort writes its output before it finishes reading|||sort ghi kết quả ra trước khi nó đọc xong',
+              'The file is locked, so the write silently fails|||File bị khoá, nên lệnh ghi thất bại trong im lặng',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Why does "grep pattern 10GB.log | head -5" return almost instantly?|||Vì sao "grep pattern 10GB.log | head -5" trả về gần như tức thì?',
+            options: [
+              'grep reads the file backwards from the end|||grep đọc file ngược từ cuối lên',
+              'head tells grep in advance that it only needs 5 lines|||head báo trước cho grep rằng nó chỉ cần 5 dòng',
+              'Both run concurrently; head exits after 5 lines, so grep gets SIGPIPE on its next write and dies — the file is never fully read|||Cả hai chạy song song; head thoát sau 5 dòng, nên grep lãnh SIGPIPE ở lần ghi kế tiếp rồi chết — file không bao giờ được đọc hết',
+              'The pipe caches the file in memory after the first run|||Ống dẫn lưu tạm file vào bộ nhớ sau lần chạy đầu',
+            ],
+            correctIndex: 2,
+            points: 1,
+          },
+          {
+            question: 'After "count=0; cat f | while read -r l; do count=$((count+1)); done", echo "$count" prints 0. Why?|||Sau "count=0; cat f | while read -r l; do count=$((count+1)); done", lệnh echo "$count" in ra 0. Vì sao?',
+            options: [
+              'read -r cannot modify variables|||read -r không sửa được biến',
+              'Each stage of a pipeline runs in its own subshell, so the loop incremented a copy in a child process that then exited|||Mỗi khâu của chuỗi ống chạy trong shell con riêng, nên vòng lặp tăng một bản sao nằm trong tiến trình con, và tiến trình đó đã thoát',
+              'count must be declared with export first|||count phải được khai báo bằng export trước đã',
+              'The arithmetic syntax $(( )) does not work inside while loops|||Cú pháp số học $(( )) không chạy được bên trong vòng while',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Why must "sort" come before "uniq -c" in a counting pipeline?|||Vì sao "sort" phải đứng trước "uniq -c" trong một chuỗi ống dùng để đếm?',
+            options: [
+              'uniq only collapses ADJACENT identical lines, so unsorted input silently under-counts|||uniq chỉ gộp những dòng giống nhau NẰM KỀ NHAU, nên đầu vào chưa sắp xếp sẽ âm thầm đếm thiếu',
+              'uniq requires its input to be a file, and sort creates one|||uniq đòi đầu vào phải là một file, còn sort thì tạo ra một file',
+              'uniq errors out on unsorted input|||uniq báo lỗi khi đầu vào chưa sắp xếp',
+              'It does not matter; the order is only a convention|||Chuyện đó không quan trọng; thứ tự chỉ là quy ước',
+            ],
+            correctIndex: 0,
+            points: 1,
+          },
+          {
+            question: 'echo "cat cat cat" | sed \'s/cat/dog/\' prints "dog cat cat". Why not three dogs?|||echo "cat cat cat" | sed \'s/cat/dog/\' in ra "dog cat cat". Vì sao không phải ba con dog?',
+            options: [
+              'sed stops after the first line of input|||sed dừng lại sau dòng đầu tiên của đầu vào',
+              'Without the g flag, s replaces only the FIRST match on each line|||Không có cờ g, lệnh s chỉ thay lần khớp ĐẦU TIÊN trên mỗi dòng',
+              'sed needs -E to replace repeated words|||sed cần -E mới thay được từ lặp lại',
+              'The pattern must be anchored with ^ to repeat|||Cái mẫu phải được neo bằng ^ thì mới lặp được',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'What does awk \'!seen[$0]++\' do?|||awk \'!seen[$0]++\' làm gì?',
+            options: [
+              'Prints only lines that appear more than once|||Chỉ in những dòng xuất hiện nhiều hơn một lần',
+              'Counts the lines and prints the total at the end|||Đếm số dòng rồi in tổng ở cuối',
+              'Removes duplicate lines in one pass WITHOUT sorting, preserving the original order|||Loại bỏ dòng trùng trong một lượt đọc mà KHÔNG cần sắp xếp, giữ nguyên thứ tự gốc',
+              'Sorts the input and removes duplicates, like sort -u|||Sắp xếp đầu vào rồi loại trùng, giống sort -u',
+            ],
+            correctIndex: 2,
+            points: 1,
+          },
+          {
+            question: 'Why must an awk program be wrapped in SINGLE quotes?|||Vì sao chương trình awk phải bọc trong nháy ĐƠN?',
+            options: [
+              'awk cannot parse double-quoted programs at all|||awk hoàn toàn không phân tích được chương trình đặt trong nháy kép',
+              'Because $1 means "field 1" to awk but "shell positional parameter 1" to bash — double quotes let the shell substitute it away first, and awk silently prints blanks|||Vì $1 nghĩa là "trường 1" với awk nhưng là "tham số vị trí 1 của shell" với bash — nháy kép để shell thay thế mất nó trước, và awk âm thầm in ra dòng trống',
+              'Single quotes make awk run faster|||Nháy đơn làm awk chạy nhanh hơn',
+              'It is only a style convention; both behave identically|||Đó chỉ là quy ước hình thức; cả hai hành xử y hệt nhau',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+        ],
+      },
+    },
   ],
 };

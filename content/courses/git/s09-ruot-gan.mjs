@@ -456,7 +456,7 @@ ls -lh .git/objects/pack/</code></pre>
 <div class="out">info  pack
 
 -r--r--r-- 1 an an  38M pack-a7c2f91d8e0b2c4a6f8e0d2b4c6a8e0f2d4b6c8e.pack
--r--r--r-- 1 an an 2.1M pack-a7c2f91d8e0b2c4a6f8e0d2b4c6a8e0f2d4b6c8e.idx</code></pre>
+-r--r--r-- 1 an an 2.1M pack-a7c2f91d8e0b2c4a6f8e0d2b4c6a8e0f2d4b6c8e.idx</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">.pack</span><span class="v">All the objects, concatenated and delta-compressed.</span></div>
   <div class="kv"><span class="k">.idx</span><span class="v">The index: which hash lives at which byte offset, so any object is one seek away.</span></div>

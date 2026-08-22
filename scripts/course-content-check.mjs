@@ -56,3 +56,6 @@ for (const sec of sections) {
   }
 }
 console.log(`${bad ? '❌' : '✅'} ${n} bài, ${chars.toLocaleString('vi-VN')} ký tự, ${bad} bài lỗi`);
+// Thoát khác 0 khi có lỗi: nếu không, một chuỗi `check && git commit` sẽ commit
+// đè lên lỗi mà bộ kiểm vừa in ra. Đo thật 22/08/2026 — đúng chuyện đó đã xảy ra.
+process.exit(bad ? 1 : 0);

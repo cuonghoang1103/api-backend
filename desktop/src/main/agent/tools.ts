@@ -20,6 +20,7 @@ import { app, dialog } from 'electron';
 import { getSettings, setSetting } from '../store';
 
 import { execFile } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import type { Dirent } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -274,6 +275,10 @@ export async function chayToolAgent(
       case 'web_tai': {
         if (!lenh) return { noiDung: 'LỖI: phiên này chưa bật quyền trình duyệt.', tomTat: 'không có quyền' };
         return await toolWebTai(args, lenh);
+      }
+      case 'web_tai_nhieu': {
+        if (!lenh) return { noiDung: 'LỖI: phiên này chưa bật quyền trình duyệt.', tomTat: 'không có quyền' };
+        return await toolWebTaiNhieu(args, lenh);
       }
 
       default:
@@ -1298,6 +1303,151 @@ async function toolWebTai(args: Record<string, unknown>, boiCanh: BoiCanhLenh): 
   return {
     noiDung: `Đã lưu ${kq.duongDan} (${co}).`,
     tomTat: `${trinhDuyet.tenSach(path.basename(kq.duongDan ?? ''))} · ${co}`,
+  };
+}
+
+/**
+ * Tải CẢ LÔ trong một lời gọi.
+ *
+ * ─── VÌ SAO CẦN, KHI ĐÃ CÓ `web_tai` ───
+ * Mỗi lời gọi tool chở theo TOÀN BỘ hội thoại lên cổng. Tải 50 ảnh bằng 50 lần
+ * gọi `web_tai` (kèm 50 lần `sleep`) nghĩa là 100 lượt, mỗi lượt trả tiền cho
+ * cả lịch sử. Đo thật 21/08/2026: một việc tải tài liệu ăn 4,12 triệu token
+ * trong 5 giờ và chạm trần — trong khi nội dung thật tải về chỉ vài MB.
+ *
+ * Gộp lại thì cùng ngần ấy file chỉ tốn MỘT lượt.
+ *
+ * Ba việc tool tự lo, để model khỏi phải nhớ:
+ *  • nghỉ giữa các file (điều kiện của chủ trang, không phải tuỳ chọn);
+ *  • BỎ QUA file đã có trên đĩa — `web_tai` chỉ "không ghi đè", tức là chạy
+ *    lại một lô là nhân đôi dữ liệu thành `(2)`. Ở đây phải bỏ hẳn;
+ *  • DỪNG NGAY khi gặp 403 và nói rõ dừng ở đâu, thay vì để model tự canh
+ *    rồi quên.
+ */
+const MAX_LO = 80;
+
+async function toolWebTaiNhieu(args: Record<string, unknown>, boiCanh: BoiCanhLenh): Promise<KetQuaTool> {
+  if (!trinhDuyet.dangMo()) {
+    return { noiDung: 'LỖI: chưa mở trang nào. Gọi `web_mo` trước.', tomTat: 'chưa mở' };
+  }
+  const tho = Array.isArray(args.files) ? args.files : [];
+  const ds = tho
+    .filter((x): x is Record<string, unknown> => !!x && typeof x === 'object')
+    .map((x) => ({
+      url: typeof x.url === 'string' ? x.url.trim() : '',
+      ten: typeof x.ten_file === 'string' && x.ten_file.trim() ? x.ten_file.trim() : undefined,
+    }))
+    .filter((x) => x.url);
+  if (!ds.length) return { noiDung: 'LỖI: "files" rỗng hoặc không có mục nào có "url".', tomTat: 'rỗng' };
+  const duocLam = ds.slice(0, MAX_LO).map((m) => ({
+    ...m,
+    /* Tên ĐOÁN TRƯỚC khi gửi request — nó phải có mặt sớm để làm hai việc:
+       dò file đã có trên đĩa, và soi đuôi chạy được. Bỏ phần `?...` vì chữ
+       ký tải (`?fuo_h=…`) không phải một phần của tên. */
+    tenDoan: trinhDuyet.tenSach(m.ten ?? (m.url.split('?')[0] ?? '').split('/').filter(Boolean).pop() ?? ''),
+  }));
+
+  const gocTai = await thuMucTaiCuaCuoc(boiCanh.so);
+  if (!gocTai) {
+    return {
+      noiDung:
+        'Hộp thoại chọn thư mục bị bỏ qua, nên chưa có chỗ nào để lưu. Nó là hộp thoại CỦA HỆ ĐIỀU HÀNH, '
+        + 'gắn vào cửa sổ app — nếu người dùng đang nhìn cửa sổ khác thì nó mở sau lưng. '
+        + 'Bảo họ đưa cửa sổ app lên trước rồi gọi lại.',
+      tomTat: 'chưa chọn thư mục',
+    };
+  }
+  const con = typeof args.thu_muc === 'string' ? args.thu_muc.trim() : '';
+  const thuMucDich = con ? duongDanCon(gocTai, con) : gocTai;
+  if (!thuMucDich) {
+    return { noiDung: `LỖI: "${con}" không phải thư mục con hợp lệ.`, tomTat: 'thư mục sai' };
+  }
+  await fs.mkdir(thuMucDich, { recursive: true });
+
+  /* Sàn 2 giây. Model hay tự hạ nhịp khi thấy việc còn dài, mà nhịp ở đây là
+     điều kiện của chủ trang chứ không phải tham số hiệu năng. */
+  const nghi = Math.max(2, typeof args.nghi_giay === 'number' ? args.nghi_giay : 3) * 1000;
+
+  /* ─── CHỐT FILE CHẠY ĐƯỢC ───
+     `web_tai` hỏi người dùng trước khi ghi một `.exe`/`.sh`/`.dmg` xuống đĩa.
+     Gộp lô mà bỏ chốt đó thì `web_tai_nhieu` thành ĐƯỜNG VÒNG QUA CHÍNH NÓ:
+     cùng một model, cùng một quyền `browser`, nhưng một lời gọi mang 80 địa
+     chỉ và không ai kịp nhìn cái nào.
+     Hỏi MỘT lần cho cả lô, không hỏi từng file — hỏi 80 lần thì người dùng
+     bấm cho xong chứ không đọc, và cái chốt tự nó thành vô nghĩa.
+     Bị từ chối thì BỎ RIÊNG những file đó rồi tải tiếp phần còn lại: cả lô
+     thường là tài liệu lẫn một hai file cài đặt, huỷ hết là phạt nhầm chỗ. */
+  const chayDuoc = duocLam.filter((m) => DUOI_CHAY_DUOC.test(m.tenDoan));
+  let tuChoiChay = false;
+  if (chayDuoc.length) {
+    const ke = chayDuoc.slice(0, 10).map((m) => m.tenDoan).join(', ');
+    const quyet = await hoiNguoiDung(
+      {
+        ten: 'web_tai_nhieu',
+        duongDan: `Tải ${chayDuoc.length} FILE CHẠY ĐƯỢC về ${thuMucDich}: ${ke}${chayDuoc.length > 10 ? '…' : ''}`,
+        khoa: `web_tai_nhieu:chay:${thuMucDich}`,
+        choNho: false,
+      },
+      (y) => boiCanh.xinPhepLenh({
+        ...y,
+        phanLoai: {
+          muc: 'nguyhiem',
+          lyDo: [`${chayDuoc.length} file chạy được, tải từ một địa chỉ trên trang web`],
+          choNho: false,
+        },
+      }),
+      boiCanh.signal,
+      boiCanh.so.quyenDaCap,
+    );
+    if (quyet === 'tuChoi') tuChoiChay = true;
+  }
+
+  const xong: string[] = [];
+  const biTuChoi: string[] = [];
+  const boQua: string[] = [];
+  const hong: string[] = [];
+  let tongByte = 0;
+  let dungVi: string | null = null;
+
+  for (let i = 0; i < duocLam.length; i += 1) {
+    if (boiCanh.signal.aborted) { dungVi = 'người dùng bấm Dừng'; break; }
+    const m = duocLam[i] as { url: string; ten?: string; tenDoan: string };
+    const tenDoan = m.tenDoan;
+
+    if (tuChoiChay && DUOI_CHAY_DUOC.test(tenDoan)) { biTuChoi.push(tenDoan); continue; }
+    if (existsSync(path.join(thuMucDich, tenDoan))) { boQua.push(tenDoan); continue; }
+
+    if (xong.length + hong.length > 0) {
+      await new Promise((x) => { setTimeout(x, nghi); });
+    }
+    const kq = await trinhDuyet.taiFile(m.url, thuMucDich, m.ten);
+    if (kq.ok) {
+      tongByte += kq.byte ?? 0;
+      xong.push(`${path.basename(kq.duongDan ?? tenDoan)} ${Math.max(1, Math.round((kq.byte ?? 0) / 1024))}KB`);
+      continue;
+    }
+    hong.push(`${tenDoan}: ${kq.loi ?? 'không rõ'}`);
+    /* 403 = chủ trang đang chặn. Đi tiếp là đổ thêm dầu — dừng cả lô. */
+    if (/\b403\b/.test(kq.loi ?? '')) { dungVi = `403 ở ${tenDoan}`; break; }
+  }
+
+  const mb = (tongByte / 1048576).toFixed(1);
+  const dong = [
+    `Tải xong ${xong.length}/${duocLam.length} file vào ${thuMucDich} (${mb} MB).`,
+    boQua.length ? `Bỏ qua ${boQua.length} file ĐÃ CÓ trên đĩa: ${boQua.slice(0, 12).join(', ')}${boQua.length > 12 ? '…' : ''}` : '',
+    hong.length ? `HỎNG ${hong.length}: ${hong.slice(0, 10).join(' · ')}${hong.length > 10 ? '…' : ''}` : '',
+    biTuChoi.length
+      ? `⛔ NGƯỜI DÙNG TỪ CHỐI ${biTuChoi.length} file chạy được, đã BỎ QUA: `
+        + `${biTuChoi.slice(0, 10).join(', ')}${biTuChoi.length > 10 ? '…' : ''}. Đừng thử lại bằng đường khác.`
+      : '',
+    dungVi ? `⛔ DỪNG GIỮA CHỪNG (${dungVi}). Những file sau đó CHƯA tải. Báo người dùng, đừng tự chạy lại.` : '',
+    ds.length > MAX_LO ? `⚠️ Danh sách bạn gửi có ${ds.length} mục, tool chỉ nhận ${MAX_LO} mỗi lần — còn ${ds.length - MAX_LO} mục CHƯA làm.` : '',
+    xong.length ? `Chi tiết: ${xong.slice(0, 60).join(' · ')}${xong.length > 60 ? '…' : ''}` : '',
+  ].filter(Boolean);
+  return {
+    noiDung: dong.join('\n'),
+    tomTat: `${xong.length} tải · ${boQua.length} bỏ qua · ${hong.length} hỏng`
+      + (biTuChoi.length ? ` · ${biTuChoi.length} bị từ chối` : ''),
   };
 }
 

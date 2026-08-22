@@ -1346,6 +1346,7 @@ function IconTool({ ten, vong }: { ten: string; vong: 'may' | 'notes' }) {
     case 'web_doc': return <FileCode2 {...p} />;
     case 'web_lien_ket': return <Link2 {...p} />;
     case 'web_tai': return <Download {...p} />;
+    case 'web_tai_nhieu': return <Download {...p} />;
     case 'web_anh': return <Camera {...p} />;
     case 'web_console': return <Bug {...p} />;
     case 'web_bam': return <MousePointerClick {...p} />;

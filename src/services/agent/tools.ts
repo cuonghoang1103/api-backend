@@ -539,6 +539,50 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
   {
+    name: 'web_tai_nhieu',
+    ring: 'client',
+    capability: 'browser',
+    description:
+      'Tải NHIỀU file trong MỘT lời gọi. DÙNG CÁI NÀY thay vì gọi `web_tai` lặp đi lặp lại — '
+      + 'mỗi lời gọi tool chở theo TOÀN BỘ hội thoại, nên tải 50 file bằng 50 lượt tốn gấp hàng chục lần '
+      + 'so với một lượt. Tool tự nghỉ giữa các file, tự BỎ QUA file đã có trên đĩa, và trả về bảng kết quả. '
+      + 'Nó DỪNG NGAY giữa chừng nếu gặp 403 và nói rõ đã dừng ở file nào — bạn không phải tự canh. '
+      + 'Lấy địa chỉ từ `web_lien_ket`, đừng tự nghĩ ra.',
+    parameters: {
+      type: 'object',
+      properties: {
+        files: {
+          type: 'array',
+          description: 'Danh sách file cần tải, tối đa 80 mục mỗi lần gọi.',
+          items: {
+            type: 'object',
+            properties: {
+              url: { type: 'string', description: 'Địa chỉ file, lấy từ `web_lien_ket`.' },
+              ten_file: {
+                type: 'string',
+                description:
+                  'Tên lưu. NÊN ĐẶT: việc bỏ qua file đã có trên đĩa so bằng CHÍNH TÊN NÀY. '
+                  + 'Bỏ trống thì tool đoán tên từ URL, mà tên đoán thường khác tên máy chủ trả về '
+                  + '(vd `/attachments/paper-pdf.5139/` → máy chủ lưu là `paper.pdf`), nên chạy lại '
+                  + 'cùng một lô sẽ tải lại từ đầu và sinh ra bản `(2)`.',
+              },
+            },
+            required: ['url'],
+          },
+        },
+        thu_muc: {
+          type: 'string',
+          description: 'Thư mục con để xếp cả lô vào, tương đối so với thư mục người dùng đã chọn.',
+        },
+        nghi_giay: {
+          type: 'number',
+          description: 'Số giây nghỉ giữa hai file. Mặc định 3. Đừng hạ xuống dưới 2.',
+        },
+      },
+      required: ['files'],
+    },
+  },
+  {
     /**
      * Đọc một trang web.
      *

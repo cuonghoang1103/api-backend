@@ -55,10 +55,11 @@ describe('quyền trình duyệt', () => {
     }
   });
 
-  it('máy chủ khai đủ 8 tool trình duyệt, đều thuộc quyền `browser`', () => {
+  it('máy chủ khai đủ 9 tool trình duyệt, đều thuộc quyền `browser`', () => {
     const mc = readFileSync(join(goc, '../src/services/agent/tools.ts'), 'utf8');
     for (const t of [
       'web_mo', 'web_doc', 'web_anh', 'web_console', 'web_bam', 'web_go', 'web_lien_ket', 'web_tai',
+      'web_tai_nhieu',
     ]) {
       const i = mc.indexOf(`name: '${t}'`);
       expect(i, `máy chủ chưa khai ${t}`).toBeGreaterThan(-1);
@@ -174,6 +175,61 @@ describe('quyền tải file', () => {
     const than = nguon.slice(i, i + 4500);
     expect(than, 'tải .exe/.dmg mà không hỏi gì thêm').toContain('DUOI_CHAY_DUOC');
     expect(than, 'không xin duyệt cho file chạy được').toContain('hoiNguoiDung');
+  });
+
+  /*
+   * ─── VÌ SAO BÀI KIỂM NÀY TỒN TẠI ───
+   *
+   * `web_tai_nhieu` ra đời để gộp lô cho rẻ, và bản đầu tiên của nó KHÔNG có
+   * chốt file chạy được — trong khi `web_tai` ngay bên trên thì có. Hai đường
+   * cùng ghi ra một ổ đĩa, cùng một quyền `browser`, mà chỉ một đường bị canh:
+   * thêm tool mới chính là lúc cái chốt lặng lẽ rơi ra.
+   *
+   * Nên đừng kiểm "toolWebTai có chốt" nữa — kiểm MỌI đường tải đều có.
+   */
+  it('MỌI đường tải đều qua chốt file chạy được — kể cả đường gộp lô', () => {
+    const duong = [...nguon.matchAll(/async function (toolWebTai\w*)\(/g)].map((m) => m[1]!);
+    expect(duong.length, 'không tìm thấy hàm tải nào — bài kiểm này đang tự lừa mình')
+      .toBeGreaterThanOrEqual(2);
+    for (const ten of duong) {
+      const i = nguon.indexOf(`async function ${ten}(`);
+      const sau = nguon.indexOf('\nasync function ', i + 1);
+      const than = nguon.slice(i, sau === -1 ? nguon.length : sau);
+      expect(than, `${ten} ghi ra đĩa mà KHÔNG soi đuôi chạy được`).toContain('DUOI_CHAY_DUOC');
+      expect(than, `${ten} không xin duyệt cho file chạy được`).toContain('hoiNguoiDung');
+    }
+  });
+
+  it('gộp lô hỏi MỘT lần cho cả lô, không hỏi từng file', () => {
+    const i = nguon.indexOf('async function toolWebTaiNhieu(');
+    expect(i, 'không còn hàm toolWebTaiNhieu').toBeGreaterThan(-1);
+    const sau = nguon.indexOf('\nasync function ', i + 1);
+    const than = nguon.slice(i, sau === -1 ? nguon.length : sau);
+    /* Lời hỏi phải nằm NGOÀI vòng `for` chạy qua từng file. Hỏi 80 lần thì
+       người dùng bấm cho xong chứ không đọc, và cái chốt thành vô nghĩa.
+       ⚠️ Phải khẳng định CẢ HAI mốc có thật trước khi so vị trí: `indexOf`
+       trả -1 khi không tìm thấy, nên "tháo sạch hoiNguoiDung" cũng thoả
+       `-1 < vị-trí-vòng-lặp` — bài kiểm sẽ ĐẠT đúng lúc chốt biến mất. */
+    const viHoi = than.indexOf('hoiNguoiDung');
+    const viVong = than.indexOf('for (let i = 0');
+    expect(viHoi, 'đường gộp lô không xin duyệt gì cả').toBeGreaterThan(-1);
+    expect(viVong, 'không còn vòng lặp qua từng file').toBeGreaterThan(-1);
+    expect(viHoi, 'đang hỏi BÊN TRONG vòng lặp từng file').toBeLessThan(viVong);
+    expect(than, 'bị từ chối mà vẫn tải — hoặc im lặng bỏ qua, không báo người dùng')
+      .toContain('biTuChoi');
+  });
+
+  it('gộp lô tôn trọng nhịp nghỉ và DỪNG khi gặp 403', () => {
+    const i = nguon.indexOf('async function toolWebTaiNhieu(');
+    const sau = nguon.indexOf('\nasync function ', i + 1);
+    const than = nguon.slice(i, sau === -1 ? nguon.length : sau);
+    /* Nhịp là điều kiện của chủ trang, không phải tham số hiệu năng: tài khoản
+       trước đã bị khoá vì crawl 6 kết nối song song. Sàn phải nằm trong mã,
+       không phụ thuộc con số model gửi lên. */
+    expect(than, 'không có sàn cho nhịp nghỉ — model tự hạ xuống 0 là bị khoá tài khoản')
+      .toContain('Math.max(2,');
+    expect(than, 'gặp 403 vẫn đi tiếp — đó là đổ thêm dầu vào chỗ đang bị chặn')
+      .toContain('403');
   });
 });
 

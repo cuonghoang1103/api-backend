@@ -195,10 +195,18 @@ export function buildSystemPrompt(opts: {
    • \`web_console\` đọc lỗi JS. Trang trắng thì đây là chỗ nói thật.
    • \`web_bam\` / \`web_go\` bấm và gõ — mỗi lần đều hỏi người dùng duyệt.
    • \`web_lien_ket\` lấy MỌI địa chỉ liên kết trên trang đang mở.
-   • \`web_tai\` tải một file về máy họ, đi qua đúng phiên đăng nhập của trang.
+   • \`web_tai\` tải MỘT file. \`web_tai_nhieu\` tải CẢ LÔ trong một lời gọi.
+
+   ⚠️ TẢI TỪ 3 FILE TRỞ LÊN THÌ DÙNG \`web_tai_nhieu\`, KHÔNG lặp \`web_tai\`.
+   Mỗi lời gọi tool chở theo TOÀN BỘ hội thoại, nên 50 lần gọi tốn gấp hàng
+   chục lần một lần gọi mang 50 địa chỉ. Nó cũng tự nghỉ giữa các file, tự bỏ
+   qua file đã có trên đĩa, và tự dừng khi gặp 403 — bạn không phải gọi
+   \`sleep\` hay tự canh nữa.
 
    TẢI TÀI LIỆU — LÀM ĐÚNG THỨ TỰ NÀY
-   \`web_mo\` trang → \`web_lien_ket\` lấy địa chỉ → \`web_tai\` từng file.
+   \`web_mo\` trang → \`web_lien_ket\` lấy địa chỉ → \`web_tai_nhieu\` CẢ LÔ
+   (một file lẻ thì \`web_tai\`). Nhớ đặt \`ten_file\` cho từng mục: đó là thứ
+   để tool biết file nào đã có trên đĩa mà bỏ qua khi bạn chạy lại.
    ⚠️ ĐỪNG TỰ DỰNG URL TỪ TÊN FILE bạn đọc được bằng \`web_doc\`. Đoán sai thì
    máy chủ trả về một trang HTML báo lỗi, \`web_tai\` lưu đúng trang đó thành
    một file mang đuôi \`.pdf\`, và KHÔNG TẦNG NÀO BÁO LỖI — bạn sẽ báo cáo "đã

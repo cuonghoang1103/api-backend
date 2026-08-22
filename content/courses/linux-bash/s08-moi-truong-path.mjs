@@ -590,5 +590,773 @@ bash -c true       <span class="tok-comment"># không tương tác</span></code>
 </div>
 `,
     },
+    /* ─────────────────────────── 8.3 ─────────────────────────── */
+    {
+      title: '8.3 — Environment variables in practice, and where secrets go|||8.3 — Biến môi trường trong thực tế, và bí mật thì đặt ở đâu',
+      slug: 'lnx-8-3-bien-moi-truong-bi-mat',
+      type: 'LESSON',
+      description: 'Đặt biến cho một lệnh, cho một script, cho một dịch vụ và cho một container; file .env và cách nạp nó cho đúng; vì sao /proc/PID/environ làm bí mật lộ ra; và những chỗ NÊN đặt bí mật.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 8 · Lesson 8.3</span>
+<h2>Environment variables in practice</h2>
+<p class="lead">"Put it in an environment variable" is the standard answer for configuration, and it is usually right. But <em>which</em> environment, set <em>where</em>, and inherited by <em>what</em> — those are four different questions, and getting them confused is why a value that works in your terminal is missing inside the container.</p>
+
+<h3>Setting a variable for exactly one command</h3>
+<pre><code>NODE_ENV=production node server.js       <span class="tok-comment"># only this invocation</span>
+LOG_LEVEL=debug ./deploy.sh staging
+LC_ALL=C sort data.txt                   <span class="tok-comment"># Lesson 3.4's locale fix</span>
+
+echo "\$NODE_ENV"                         <span class="tok-comment"># still unset afterwards</span></code></pre>
+<div class="out">
+</div>
+<p>A <code>KEY=value</code> prefix on a command line puts the variable into <em>that command's</em> environment only. Nothing leaks into your shell, which makes it the safest way to try something — and the right way to pass a one-off setting in a script.</p>
+<pre><code>env NODE_ENV=production node server.js   <span class="tok-comment"># explicit, same effect</span>
+env -u DEBUG node server.js              <span class="tok-comment"># -u: REMOVE a variable for this command</span>
+env -i PATH=/usr/bin node server.js      <span class="tok-comment"># -i: start from an empty environment</span></code></pre>
+
+<h3>Four places a variable can come from</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Command prefix</span><span class="lz-lnote"><code>KEY=value cmd</code> — one process, nothing inherited by your shell. Use for experiments and per-invocation overrides.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Shell session</span><span class="lz-lnote"><code>export KEY=value</code> in <code>~/.profile</code> — this shell and everything it starts, for the whole session (Lesson 8.2).</span></div>
+  <div class="lz-layer"><span class="lz-lname">Service unit</span><span class="lz-lnote"><code>Environment=</code> or <code>EnvironmentFile=</code> in a systemd unit — the only thing a daemon reads. No shell files apply.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Container</span><span class="lz-lnote"><code>ENV</code> in a Dockerfile (baked into the image), <code>-e</code> / <code>env_file</code> at run time (not baked). Two very different lifetimes.</span></div>
+</div>
+<div class="callout warn">The container distinction matters and is regularly got wrong. <code>ENV API_KEY=…</code> in a Dockerfile is stored <em>in the image layer</em> — anyone who can pull the image can read it with <code>docker history</code>, forever, including after you rotate the key. Same for <code>ARG</code> passed with <code>--build-arg</code>: it appears in the build history. Secrets belong at <em>run</em> time, via <code>-e</code>, <code>--env-file</code> or a secrets mount — never in the image.</div>
+
+<h3>.env files: what they are and are not</h3>
+<pre><code><span class="tok-comment"># .env — plain KEY=value, no export, no spaces around =</span>
+DATABASE_URL=postgres://user:pass@localhost:5432/app
+PORT=3000
+LOG_LEVEL=info</code></pre>
+<p>A <code>.env</code> file is a <em>convention</em>, not a feature of the shell. Nothing reads it automatically. Three common ways to load one, each with a catch:</p>
+<pre><code><span class="tok-comment"># 1. Application-level (dotenv, Prisma, docker compose) — safest</span>
+<span class="tok-comment">#    The library parses the file itself; quoting and '#' are handled properly.</span>
+
+<span class="tok-comment"># 2. In a script: source it, with automatic export</span>
+set -a                <span class="tok-comment"># allexport: every assignment becomes exported</span>
+source .env
+set +a
+
+<span class="tok-comment"># 3. For one command, without touching the shell</span>
+env \$(grep -v '^#' .env | xargs) node server.js     <span class="tok-comment"># FRAGILE — see below</span></code></pre>
+<div class="callout warn">Form 3 is widely copied and quietly broken. It goes through word splitting (Lesson 6.2), so any value containing a space — a password, a connection string with parameters — is torn into several arguments. It also cannot handle quotes or <code>#</code> inside a value. Use form 2, or better, let the application load the file. If you must do it in the shell, <code>set -a; source .env; set +a</code> is the correct incantation, because <code>source</code> uses the shell's own parser.</div>
+<pre><code><span class="tok-comment"># And source only trusted files: .env is EXECUTED as shell code</span>
+echo 'rm -rf /tmp/important' &gt;&gt; .env
+source .env          <span class="tok-comment"># that line runs</span></code></pre>
+<p><code>source</code> does not parse key–value pairs; it runs the file as a bash script. A <code>.env</code> that came from a colleague, a CI artefact or an unfamiliar repository is code you are about to execute as yourself. That is fine for a file you wrote; it is not a safe way to consume a file you did not.</p>
+
+<h3>Why secrets in the environment are not actually secret</h3>
+<pre><code><span class="tok-comment"># A process's full environment, readable by its owner (and root)</span>
+tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'node server.js')/environ | grep -i key</code></pre>
+<div class="out">API_KEY=sk-live-4f9a2b7c1e8d
+DATABASE_URL=postgres://user:hunter2@localhost/app</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Visible in <code>/proc</code></span><span class="v">Any process you own — and every process root owns — can read the environment of your processes. On a shared machine that is a real exposure.</span></div>
+  <div class="kv"><span class="k">Inherited by children</span><span class="v">Every subprocess gets a copy, including things you did not think about: a crash reporter, a build tool, a package's postinstall script.</span></div>
+  <div class="kv"><span class="k">Appears in crash dumps and logs</span><span class="v">Many error reporters attach the environment. A stack trace uploaded to a monitoring service can carry the whole thing.</span></div>
+  <div class="kv"><span class="k">Leaks via <code>set -x</code></span><span class="v">Lesson 7.4: tracing prints expanded values, so a token ends up in the journal or in a cron email.</span></div>
+</div>
+<div class="callout">This is not an argument against environment variables — they remain far better than hard-coding a secret in source control, and they are what twelve-factor deployment assumes. It is an argument for knowing the exposure: <strong>environment variables are protected from other <em>users</em>, not from other <em>code running as you</em></strong>. Choose accordingly.</div>
+
+<h3>Where secrets should go, roughly best first</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1 · A secrets manager</span><span class="lz-t">Vault, AWS/GCP Secrets Manager, SOPS + age</span><span class="lz-d">Fetched at start-up, rotatable without a redeploy, access is audited. The right answer once more than one person is involved.</span></div>
+  <div class="lz-step"><span class="lz-k">2 · A file with tight permissions</span><span class="lz-t">/opt/app/.env, chmod 600, owned by the service user</span><span class="lz-d">Read once at start-up. Not visible in /proc, not inherited by children, survives deploys. Good for a single VPS.</span></div>
+  <div class="lz-step"><span class="lz-k">3 · systemd EnvironmentFile</span><span class="lz-t">EnvironmentFile=/opt/app/.env in the unit</span><span class="lz-d">systemd reads the file as root and hands only that service its values. The file itself stays 600.</span></div>
+  <div class="lz-step"><span class="lz-k">4 · Environment variables</span><span class="lz-t">-e / Environment= / export</span><span class="lz-d">Acceptable, and the twelve-factor default — with the /proc exposure above understood.</span></div>
+  <div class="lz-step"><span class="lz-k">Never</span><span class="lz-t">committed to git · in a Dockerfile ENV · on a command line</span><span class="lz-d">A command line is world-readable via ps. git history is forever. An image layer keeps the value after rotation.</span></div>
+</div>
+<pre><code><span class="tok-comment"># A command line is visible to EVERY user on the machine</span>
+mysql -u root -phunter2 mydb &amp;
+ps aux | grep mysql</code></pre>
+<div class="out">deploy  8123  mysql -u root -phunter2 mydb</div>
+<p>That is why database clients read a config file (<code>~/.my.cnf</code>, <code>~/.pgpass</code>) or prompt, and why <code>curl</code> has <code>--netrc</code> and <code>-H @file</code>. Whenever a tool offers a way to pass a credential that is <em>not</em> an argument, that alternative exists for this reason.</p>
+
+<h3>Practical setup for one server</h3>
+<pre><code><span class="tok-comment"># The file: owned by the service user, readable by nobody else</span>
+sudo install -o appuser -g appuser -m 600 /dev/null /opt/app/.env
+sudo -u appuser tee -a /opt/app/.env &gt;/dev/null &lt;&lt;'EOF'
+DATABASE_URL=postgres://app:REDACTED@localhost:5432/app
+API_KEY=REDACTED
+EOF
+
+<span class="tok-comment"># The unit reads it; the app never sees the path</span>
+sudo tee /etc/systemd/system/myapp.service &gt;/dev/null &lt;&lt;'EOF'
+[Service]
+User=appuser
+EnvironmentFile=/opt/app/.env
+ExecStart=/usr/bin/node /opt/app/dist/index.js
+EOF
+
+sudo systemctl daemon-reload &amp;&amp; sudo systemctl restart myapp</code></pre>
+<div class="callout ok">Two properties worth noticing. The <code>.env</code> lives <em>outside</em> the deployment directory, so a deploy that rsyncs or replaces the app tree cannot overwrite or delete it — the same reasoning behind keeping production env in <code>/opt/&lt;app&gt;/.env</code> rather than in the repo checkout. And <code>install -m 600</code> creates the file with the right mode from the start, rather than creating it world-readable and fixing it afterwards, which leaves a window where it was exposed.</div>
+
+<h3>Checking what a running process actually has</h3>
+<pre><code>systemctl show myapp -p Environment
+sudo tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'dist/index.js')/environ | sort
+docker exec myapp env | sort
+docker inspect myapp --format '{{range .Config.Env}}{{println .}}{{end}}'</code></pre>
+<div class="out">NODE_ENV=production
+PORT=3000
+DATABASE_URL=postgres://app:...@localhost:5432/app</div>
+<p>When an application says a variable is missing, do not reason about which file should have set it — look at what the process actually received. These four commands cover a systemd service, any Linux process, a running container and a container's configuration, and one of them answers the question directly in a couple of seconds.</p>
+
+<h3>Variables worth knowing</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>HOME</code> · <code>USER</code> · <code>SHELL</code></span><span class="v">Set at login. In cron <code>HOME</code> exists but <code>USER</code> may not; in a container they are often absent entirely, which breaks tools that assume a home directory.</span></div>
+  <div class="kv"><span class="k"><code>LANG</code> · <code>LC_ALL</code></span><span class="v">Locale. Changes sorting (Lesson 3.4), date formats and how tools interpret bytes. <code>LC_ALL=C</code> forces predictable byte-order behaviour in scripts.</span></div>
+  <div class="kv"><span class="k"><code>TZ</code></span><span class="v">Timezone for this process. <code>TZ=UTC date</code> without changing the system. Containers default to UTC, which is why log timestamps differ from the host.</span></div>
+  <div class="kv"><span class="k"><code>TERM</code></span><span class="v">Terminal type. Absent in cron and in many containers — which is why <code>clear</code>, <code>less</code> and coloured output misbehave there.</span></div>
+  <div class="kv"><span class="k"><code>http_proxy</code> · <code>NO_PROXY</code></span><span class="v">Honoured by curl, wget, apt and most language runtimes. The first thing to check when downloads work for you and not for a service.</span></div>
+  <div class="kv"><span class="k"><code>TMPDIR</code></span><span class="v">Where <code>mktemp</code> and most tools put temporary files. Redirecting it is how you keep a big build off a small <code>/tmp</code>.</span></div>
+</div>
+
+<a class="link-card" href="https://12factor.net/config" target="_blank" rel="noopener">
+  <span class="lc-ico">📐</span>
+  <span class="lc-body"><span class="lc-title">The Twelve-Factor App — Config</span><span class="lc-sub">The argument for keeping configuration in the environment rather than in code, and the distinction between config and code that makes it work.</span></span>
+</a>
+<a class="link-card" href="https://man7.org/linux/man-pages/man7/environ.7.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">environ(7) — the environment, and /proc/PID/environ</span><span class="lc-sub">How the environment is stored and who can read it. The page that makes the exposure concrete rather than theoretical.</span></span>
+</a>
+<a class="link-card" href="https://docs.docker.com/build/building/secrets/" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">Docker — build secrets</span><span class="lc-sub">Why <code>ARG</code> and <code>ENV</code> leak into image history, and the <code>--mount=type=secret</code> alternative that does not.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Practice: get the value into the process</span><span class="lc-sub">Graded scenarios: a variable set in the wrong file, a <code>.env</code> with a space in a value that breaks the xargs form, and a secret readable via <code>ps</code>.</span></span>
+</a>
+
+<div class="pitfall"><strong>Trap:</strong> appending a variable to the production <code>.env</code> while a deploy is already running. The deploy loaded the environment when it started, so the new value is not in the running container — but the file <em>does</em> contain it, so every check you make afterwards says the configuration is correct while the application behaves as though it is missing. The fix is to recreate the container (<code>docker compose up -d --no-build &lt;service&gt;</code> with the env loaded) or redeploy. Whenever a setting "is definitely there but has no effect", check whether the process was started before the value existed.</div>
+<p class="note-ct"><strong>The question to ask is always "which process, and what did it inherit".</strong> A variable is not set on a machine or on a user — it is set on a process, copied to its children at <code>fork</code>, and frozen from that moment (Lesson 5.1). <code>tr '\\0' '\\n' &lt; /proc/&lt;pid&gt;/environ</code> shows the truth for any process, and it beats reasoning about which file should have been read every single time.</p>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 8 · Bài 8.3</span>
+<h2>Biến môi trường trong thực tế</h2>
+<p class="lead">"Cứ đặt nó vào biến môi trường" là câu trả lời chuẩn cho việc cấu hình, và thường thì nó đúng. Nhưng <em>MÔI TRƯỜNG NÀO</em>, đặt <em>Ở ĐÂU</em>, và được <em>CÁI GÌ</em> thừa kế — đó là bốn câu hỏi khác nhau, và lẫn lộn chúng chính là lý do một giá trị chạy tốt trong terminal của bạn lại vắng mặt bên trong container.</p>
+
+<h3>Đặt biến cho đúng một lệnh</h3>
+<pre><code>NODE_ENV=production node server.js       <span class="tok-comment"># chỉ lần gọi này</span>
+LOG_LEVEL=debug ./deploy.sh staging
+LC_ALL=C sort data.txt                   <span class="tok-comment"># cách chữa locale ở Bài 3.4</span>
+
+echo "\$NODE_ENV"                         <span class="tok-comment"># sau đó vẫn chưa được đặt</span></code></pre>
+<div class="out">
+</div>
+<p>Một tiền tố <code>KHOÁ=giá trị</code> trên dòng lệnh đưa biến vào môi trường của <em>ĐÚNG LỆNH ĐÓ</em> thôi. Không gì rò rỉ sang shell của bạn, và điều đó làm nó thành cách an toàn nhất để thử một thứ gì — cũng là cách đúng để truyền một thiết lập dùng một lần trong script.</p>
+<pre><code>env NODE_ENV=production node server.js   <span class="tok-comment"># tường minh, cùng tác dụng</span>
+env -u DEBUG node server.js              <span class="tok-comment"># -u: GỠ BỎ một biến cho lệnh này</span>
+env -i PATH=/usr/bin node server.js      <span class="tok-comment"># -i: bắt đầu từ một môi trường rỗng</span></code></pre>
+
+<h3>Bốn nơi một biến có thể đến từ đó</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Tiền tố dòng lệnh</span><span class="lz-lnote"><code>KHOÁ=giá trị lệnh</code> — một tiến trình, shell của bạn không thừa kế gì. Dùng cho thử nghiệm và cho việc ghi đè theo từng lần gọi.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Phiên shell</span><span class="lz-lnote"><code>export KHOÁ=giá trị</code> trong <code>~/.profile</code> — shell này và mọi thứ nó khởi động, suốt cả phiên (Bài 8.2).</span></div>
+  <div class="lz-layer"><span class="lz-lname">Unit của dịch vụ</span><span class="lz-lnote"><code>Environment=</code> hoặc <code>EnvironmentFile=</code> trong một unit systemd — thứ DUY NHẤT mà một daemon đọc. Không file shell nào áp dụng.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Container</span><span class="lz-lnote"><code>ENV</code> trong Dockerfile (nung vào ảnh), <code>-e</code> / <code>env_file</code> lúc chạy (không nung vào). Hai vòng đời rất khác nhau.</span></div>
+</div>
+<div class="callout warn">Chỗ phân biệt của container là quan trọng và thường xuyên bị làm sai. <code>ENV API_KEY=…</code> trong một Dockerfile được lưu <em>NGAY TRONG LỚP CỦA ẢNH</em> — ai kéo được ảnh về đều đọc ra bằng <code>docker history</code>, vĩnh viễn, kể cả sau khi bạn xoay khoá. Tương tự với <code>ARG</code> truyền qua <code>--build-arg</code>: nó hiện trong lịch sử dựng. Bí mật thuộc về lúc <em>CHẠY</em>, qua <code>-e</code>, <code>--env-file</code> hay một mount bí mật — không bao giờ nằm trong ảnh.</div>
+
+<h3>File .env: nó là gì và không là gì</h3>
+<pre><code><span class="tok-comment"># .env — KHOÁ=giá trị thuần, không export, không dấu cách quanh dấu =</span>
+DATABASE_URL=postgres://user:pass@localhost:5432/app
+PORT=3000
+LOG_LEVEL=info</code></pre>
+<p>Một file <code>.env</code> là một <em>QUY ƯỚC</em>, không phải một tính năng của shell. Không gì đọc nó một cách tự động. Ba cách nạp thường gặp, mỗi cách một điểm cần lưu ý:</p>
+<pre><code><span class="tok-comment"># 1. Ở tầng ứng dụng (dotenv, Prisma, docker compose) — an toàn nhất</span>
+<span class="tok-comment">#    Thư viện tự phân tích file; dấu nháy và dấu '#' được xử lý tử tế.</span>
+
+<span class="tok-comment"># 2. Trong một script: source nó, có tự động export</span>
+set -a                <span class="tok-comment"># allexport: mọi phép gán đều được export</span>
+source .env
+set +a
+
+<span class="tok-comment"># 3. Cho đúng một lệnh, không đụng tới shell</span>
+env \$(grep -v '^#' .env | xargs) node server.js     <span class="tok-comment"># MONG MANH — xem bên dưới</span></code></pre>
+<div class="callout warn">Cách 3 được chép đi chép lại khắp nơi và hỏng một cách âm thầm. Nó đi qua phép cắt từ (Bài 6.2), nên mọi giá trị có chứa dấu cách — một mật khẩu, một chuỗi kết nối có tham số — đều bị xé thành nhiều tham số. Nó cũng không xử lý nổi dấu nháy hay dấu <code>#</code> nằm bên trong một giá trị. Hãy dùng cách 2, hoặc tốt hơn là để ứng dụng tự nạp file. Nếu buộc phải làm trong shell thì <code>set -a; source .env; set +a</code> mới là câu thần chú đúng, vì <code>source</code> dùng chính bộ phân tích của shell.</div>
+<pre><code><span class="tok-comment"># Và chỉ source những file tin được: .env được THỰC THI như mã shell</span>
+echo 'rm -rf /tmp/important' &gt;&gt; .env
+source .env          <span class="tok-comment"># dòng đó chạy thật</span></code></pre>
+<p><code>source</code> KHÔNG phân tích các cặp khoá–giá trị; nó CHẠY cái file như một script bash. Một file <code>.env</code> đến từ một đồng nghiệp, từ một tệp phẩm CI hay từ một kho mã lạ chính là MÃ mà bạn sắp thực thi với danh nghĩa của mình. Với một file do chính bạn viết thì không sao; nhưng đó không phải cách an toàn để tiêu thụ một file không phải của bạn.</p>
+
+<h3>Vì sao bí mật đặt trong môi trường thật ra không bí mật</h3>
+<pre><code><span class="tok-comment"># Toàn bộ môi trường của một tiến trình, chủ của nó (và root) đọc được</span>
+tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'node server.js')/environ | grep -i key</code></pre>
+<div class="out">API_KEY=sk-live-4f9a2b7c1e8d
+DATABASE_URL=postgres://user:hunter2@localhost/app</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hiện ra trong <code>/proc</code></span><span class="v">Mọi tiến trình bạn sở hữu — và mọi tiến trình root sở hữu — đều đọc được môi trường của các tiến trình của bạn. Trên một máy dùng chung, đó là một mức phơi bày có thật.</span></div>
+  <div class="kv"><span class="k">Tiến trình con thừa kế</span><span class="v">Mọi tiến trình con đều nhận một bản sao, kể cả những thứ bạn không nghĩ tới: một bộ báo cáo sự cố, một công cụ dựng, một script postinstall của gói nào đó.</span></div>
+  <div class="kv"><span class="k">Hiện trong bản kết xuất sự cố và trong log</span><span class="v">Nhiều bộ báo lỗi đính kèm cả môi trường. Một vệt gọi hàm lỗi tải lên dịch vụ giám sát có thể mang theo trọn bộ.</span></div>
+  <div class="kv"><span class="k">Rò qua <code>set -x</code></span><span class="v">Bài 7.4: việc lần theo in ra các giá trị ĐÃ khai triển, nên một token rơi thẳng vào journal hoặc vào một email của cron.</span></div>
+</div>
+<div class="callout">Đây không phải lý lẽ chống lại biến môi trường — chúng vẫn tốt hơn nhiều so với việc nhúng cứng một bí mật vào hệ quản lý mã nguồn, và chúng là thứ mà lối triển khai mười hai yếu tố giả định. Đây là lý lẽ cho việc BIẾT rõ mức phơi bày: <strong>biến môi trường được bảo vệ khỏi những NGƯỜI DÙNG khác, không được bảo vệ khỏi MÃ KHÁC ĐANG CHẠY VỚI DANH NGHĨA CỦA BẠN</strong>. Hãy chọn cho phù hợp.</div>
+
+<h3>Bí mật nên đặt ở đâu, đại khái tốt nhất xếp trước</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1 · Một trình quản lý bí mật</span><span class="lz-t">Vault, AWS/GCP Secrets Manager, SOPS + age</span><span class="lz-d">Lấy về lúc khởi động, xoay khoá được mà không cần deploy lại, việc truy cập được ghi lại. Câu trả lời đúng khi đã có nhiều hơn một người tham gia.</span></div>
+  <div class="lz-step"><span class="lz-k">2 · Một file có quyền siết chặt</span><span class="lz-t">/opt/app/.env, chmod 600, thuộc về người dùng của dịch vụ</span><span class="lz-d">Đọc một lần lúc khởi động. Không hiện trong /proc, tiến trình con không thừa kế, sống sót qua các lần deploy. Tốt cho một VPS đơn lẻ.</span></div>
+  <div class="lz-step"><span class="lz-k">3 · EnvironmentFile của systemd</span><span class="lz-t">EnvironmentFile=/opt/app/.env trong unit</span><span class="lz-d">systemd đọc file với quyền root rồi chỉ trao giá trị cho đúng dịch vụ đó. Bản thân file vẫn giữ chế độ 600.</span></div>
+  <div class="lz-step"><span class="lz-k">4 · Biến môi trường</span><span class="lz-t">-e / Environment= / export</span><span class="lz-d">Chấp nhận được, và là mặc định của mười hai yếu tố — với điều kiện đã hiểu rõ mức phơi bày qua /proc ở trên.</span></div>
+  <div class="lz-step"><span class="lz-k">Không bao giờ</span><span class="lz-t">commit vào git · trong ENV của Dockerfile · trên một dòng lệnh</span><span class="lz-d">Một dòng lệnh thì cả thế giới đọc được qua ps. Lịch sử git là vĩnh viễn. Một lớp ảnh giữ nguyên giá trị đó kể cả sau khi xoay khoá.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Một dòng lệnh thì MỌI người dùng trên máy đều nhìn thấy</span>
+mysql -u root -phunter2 mydb &amp;
+ps aux | grep mysql</code></pre>
+<div class="out">deploy  8123  mysql -u root -phunter2 mydb</div>
+<p>Đó là lý do các trình khách cơ sở dữ liệu đọc một file cấu hình (<code>~/.my.cnf</code>, <code>~/.pgpass</code>) hoặc hỏi trực tiếp, và là lý do <code>curl</code> có <code>--netrc</code> cùng <code>-H @file</code>. Hễ một công cụ đưa ra một cách truyền thông tin xác thực mà <em>KHÔNG</em> phải qua tham số, cách đó tồn tại chính vì lý do này.</p>
+
+<h3>Thiết lập thực tế cho một máy chủ</h3>
+<pre><code><span class="tok-comment"># Cái file: thuộc về người dùng của dịch vụ, không ai khác đọc được</span>
+sudo install -o appuser -g appuser -m 600 /dev/null /opt/app/.env
+sudo -u appuser tee -a /opt/app/.env &gt;/dev/null &lt;&lt;'EOF'
+DATABASE_URL=postgres://app:DA_CHE@localhost:5432/app
+API_KEY=DA_CHE
+EOF
+
+<span class="tok-comment"># Unit đọc nó; ứng dụng không bao giờ thấy cái đường dẫn</span>
+sudo tee /etc/systemd/system/myapp.service &gt;/dev/null &lt;&lt;'EOF'
+[Service]
+User=appuser
+EnvironmentFile=/opt/app/.env
+ExecStart=/usr/bin/node /opt/app/dist/index.js
+EOF
+
+sudo systemctl daemon-reload &amp;&amp; sudo systemctl restart myapp</code></pre>
+<div class="callout ok">Có hai tính chất đáng để ý. File <code>.env</code> nằm <em>NGOÀI</em> thư mục triển khai, nên một lần deploy có rsync hoặc thay cả cây ứng dụng cũng không thể ghi đè hay xoá mất nó — cũng chính là lý lẽ đằng sau việc giữ env của production ở <code>/opt/&lt;app&gt;/.env</code> thay vì trong bản checkout của kho mã. Và <code>install -m 600</code> tạo file với đúng chế độ ngay từ đầu, thay vì tạo ra một file cả thế giới đọc được rồi mới đi sửa, thứ để lại một khoảng thời gian mà nó đã bị phơi ra.</div>
+
+<h3>Kiểm xem một tiến trình đang chạy THẬT SỰ có gì</h3>
+<pre><code>systemctl show myapp -p Environment
+sudo tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'dist/index.js')/environ | sort
+docker exec myapp env | sort
+docker inspect myapp --format '{{range .Config.Env}}{{println .}}{{end}}'</code></pre>
+<div class="out">NODE_ENV=production
+PORT=3000
+DATABASE_URL=postgres://app:...@localhost:5432/app</div>
+<p>Khi một ứng dụng nói thiếu một biến, đừng ngồi suy luận xem file nào lẽ ra phải đặt nó — hãy NHÌN xem tiến trình thật sự nhận được gì. Bốn lệnh trên phủ một dịch vụ systemd, một tiến trình Linux bất kỳ, một container đang chạy và cấu hình của một container, và một trong số đó trả lời thẳng câu hỏi chỉ trong vài giây.</p>
+
+<h3>Những biến đáng biết</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>HOME</code> · <code>USER</code> · <code>SHELL</code></span><span class="v">Được đặt lúc đăng nhập. Trong cron thì <code>HOME</code> có nhưng <code>USER</code> có thể không; trong container thì chúng thường vắng mặt hoàn toàn, và điều đó làm hỏng những công cụ giả định là có thư mục nhà.</span></div>
+  <div class="kv"><span class="k"><code>LANG</code> · <code>LC_ALL</code></span><span class="v">Locale. Làm đổi cách sắp xếp (Bài 3.4), định dạng ngày tháng và cách công cụ diễn giải byte. <code>LC_ALL=C</code> ép hành vi theo đúng thứ tự byte, đoán trước được, trong script.</span></div>
+  <div class="kv"><span class="k"><code>TZ</code></span><span class="v">Múi giờ cho tiến trình này. <code>TZ=UTC date</code> mà không đổi cả hệ thống. Container mặc định UTC, và đó là lý do dấu thời gian trong log khác với máy chủ.</span></div>
+  <div class="kv"><span class="k"><code>TERM</code></span><span class="v">Loại terminal. Vắng mặt trong cron và trong nhiều container — và đó là lý do <code>clear</code>, <code>less</code> cùng output có màu cư xử kỳ quặc ở đó.</span></div>
+  <div class="kv"><span class="k"><code>http_proxy</code> · <code>NO_PROXY</code></span><span class="v">Được curl, wget, apt và phần lớn môi trường chạy của các ngôn ngữ tôn trọng. Thứ đầu tiên cần kiểm khi việc tải về chạy được với bạn mà không chạy với một dịch vụ.</span></div>
+  <div class="kv"><span class="k"><code>TMPDIR</code></span><span class="v">Chỗ <code>mktemp</code> và phần lớn công cụ đặt file tạm. Chuyển hướng nó là cách bạn giữ một bản dựng lớn ra khỏi một <code>/tmp</code> nhỏ.</span></div>
+</div>
+
+<a class="link-card" href="https://12factor.net/config" target="_blank" rel="noopener">
+  <span class="lc-ico">📐</span>
+  <span class="lc-body"><span class="lc-title">The Twelve-Factor App — Config</span><span class="lc-sub">Lý lẽ cho việc giữ cấu hình trong môi trường thay vì trong mã, và chỗ phân biệt cấu hình với mã đã làm cho cách đó hoạt động.</span></span>
+</a>
+<a class="link-card" href="https://man7.org/linux/man-pages/man7/environ.7.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">environ(7) — môi trường, và /proc/PID/environ</span><span class="lc-sub">Môi trường được lưu ra sao và ai đọc được nó. Trang làm cho mức phơi bày trở nên cụ thể thay vì chỉ là lý thuyết.</span></span>
+</a>
+<a class="link-card" href="https://docs.docker.com/build/building/secrets/" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">Docker — bí mật lúc dựng ảnh</span><span class="lc-sub">Vì sao <code>ARG</code> và <code>ENV</code> rò rỉ vào lịch sử ảnh, và phương án <code>--mount=type=secret</code> thì không.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Luyện: đưa cho được giá trị vào tiến trình</span><span class="lc-sub">Các tình huống chấm điểm: một biến đặt nhầm file, một <code>.env</code> có dấu cách trong giá trị làm vỡ cách dùng xargs, và một bí mật đọc được qua <code>ps</code>.</span></span>
+</a>
+
+<div class="pitfall"><strong>Bẫy:</strong> nối thêm một biến vào file <code>.env</code> của production trong khi một lần deploy ĐANG chạy. Lần deploy đó đã nạp môi trường lúc nó khởi động, nên giá trị mới không nằm trong container đang chạy — nhưng cái file thì <em>CÓ</em> chứa nó, nên mọi phép kiểm bạn làm sau đó đều nói cấu hình là đúng trong khi ứng dụng cư xử như thể nó đang thiếu. Cách chữa là dựng lại container (<code>docker compose up -d --no-build &lt;dịch vụ&gt;</code> với env đã nạp) hoặc deploy lại. Hễ một thiết lập "rõ ràng là có mà chẳng có tác dụng gì", hãy kiểm xem tiến trình có được khởi động TRƯỚC khi giá trị đó tồn tại hay không.</div>
+<p class="note-ct"><strong>Câu hỏi cần đặt ra luôn là "TIẾN TRÌNH NÀO, và nó đã thừa kế được gì".</strong> Một biến không được đặt lên một cái máy hay lên một người dùng — nó được đặt lên một TIẾN TRÌNH, được chép sang các tiến trình con lúc <code>fork</code>, và đóng băng từ khoảnh khắc đó (Bài 5.1). Lệnh <code>tr '\\0' '\\n' &lt; /proc/&lt;pid&gt;/environ</code> cho thấy sự thật với mọi tiến trình, và nó luôn thắng việc ngồi suy luận xem file nào lẽ ra đã được đọc.</p>
+</div>
+`,
+    },
+    /* ─────────────────────────── 8.4 ─────────────────────────── */
+    {
+      title: '8.4 — Customising the shell: aliases, functions, prompt, history|||8.4 — Tuỳ biến shell: bí danh, hàm, dấu nhắc, lịch sử',
+      slug: 'lnx-8-4-tuy-bien-shell',
+      type: 'LESSON',
+      description: 'Bí danh với hàm khác nhau ở đâu và khi nào dùng cái nào, PS1 đọc thế nào, thiết lập lịch sử làm terminal đáng tin hơn, các shopt đáng bật, và gợi ý hoàn tất lệnh.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 8 · Lesson 8.4</span>
+<h2>Customising the shell</h2>
+<p class="lead">Everything in this lesson goes in <code>~/.bashrc</code>, below the interactive guard from Lesson 8.2. None of it affects scripts, none of it should contain a secret, and all of it is optional — but a few of these settings genuinely change how much you trust your own terminal, particularly the history ones.</p>
+
+<h3>Aliases: a shorthand, not a function</h3>
+<pre><code>alias ll='ls -alF'
+alias ..='cd ..'
+alias gs='git status -sb'
+alias grep='grep --color=auto'
+alias df='df -h'
+alias please='sudo'
+
+alias                     <span class="tok-comment"># list every alias</span>
+alias ll                  <span class="tok-comment"># show just this one</span>
+unalias ll                <span class="tok-comment"># remove it</span>
+\\ls                       <span class="tok-comment"># backslash bypasses the alias for one call</span>
+command ls                <span class="tok-comment"># same idea, clearer</span></code></pre>
+<div class="callout">An alias is pure text substitution at the <em>start</em> of a command, performed before anything else (Lesson 8.1). That is its entire mechanism, and it explains both limits: it cannot take arguments in the middle, and it does not exist in scripts, because aliases are disabled in non-interactive shells. If you find yourself wanting <code>\$1</code>, you want a function.</div>
+<pre><code><span class="tok-comment"># Arguments only ever land at the END</span>
+alias gc='git commit -m'
+gc "fix the thing"              <span class="tok-comment"># works: git commit -m "fix the thing"</span>
+
+alias mkcd='mkdir -p \$1 &amp;&amp; cd \$1'
+mkcd newdir                     <span class="tok-comment"># BROKEN: \$1 is empty, newdir lands at the end</span></code></pre>
+<div class="out">mkdir: missing operand</div>
+
+<h3>Functions: when you need arguments or logic</h3>
+<pre><code>mkcd() { mkdir -p -- "\$1" &amp;&amp; cd -- "\$1"; }
+
+extract() {
+  [[ -f \$1 ]] || { echo "no such file: \$1" &gt;&amp;2; return 1; }
+  case \$1 in
+    *.tar.gz|*.tgz) tar -xzf "\$1" ;;
+    *.tar.xz)       tar -xJf "\$1" ;;
+    *.tar.zst)      tar --zstd -xf "\$1" ;;
+    *.zip)          unzip "\$1" ;;
+    *.gz)           gunzip "\$1" ;;
+    *) echo "unknown archive type: \$1" &gt;&amp;2; return 1 ;;
+  esac
+}
+
+<span class="tok-comment"># Wrap a command, keeping every argument (Lesson 6.2)</span>
+d() { docker "\$@"; }
+
+<span class="tok-comment"># A git log worth having</span>
+gl() { git log --oneline --graph --decorate -"\${1:-20}"; }</code></pre>
+<div class="out">$ gl 5
+* a1b2c3d (HEAD -> main) feat: add smoke test
+* 9f8e7d6 fix: quote the path
+* 4c5b6a7 docs: update README</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Use an alias</span><span class="v">Pure shorthand where arguments naturally go at the end. Two words, no logic.</span></div>
+  <div class="kv"><span class="k">Use a function</span><span class="v">Anything with <code>\$1</code>, a conditional, a loop, or more than one command. Also anything you might want to reuse from a script — a function can be <code>source</code>d, an alias effectively cannot.</span></div>
+</div>
+<div class="callout warn">Be careful shadowing a real command. <code>alias rm='rm -i'</code> is a common safety habit, and it builds a dangerous reflex: you become used to being asked, so on a machine without the alias — a server, a container, a colleague's laptop — you delete without the prompt you expected. Prefer a <em>differently named</em> safety command (<code>alias rmi='rm -i'</code>), and keep the real name behaving the way it does everywhere else.</div>
+
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">Alias</span><span class="lz-t">text substitution at the start of a command</span><span class="lz-d">Two words, no arguments in the middle, invisible to scripts. <code>alias gs='git status'</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">Function</span><span class="lz-t">a real shell function with \$1 and logic</span><span class="lz-d">Anything with arguments, a conditional, or more than one command. Can be sourced by a script.</span></div>
+  <div class="lz-step"><span class="lz-k">Script on PATH</span><span class="lz-t">a file in ~/.local/bin</span><span class="lz-d">Once it is longer than a few lines, or you want it available to cron and other users. Chapter 7's skeleton.</span></div>
+  <div class="lz-step"><span class="lz-k">A real program</span><span class="lz-t">Python, Go, whatever fits</span><span class="lz-d">When it computes rather than coordinates (Lesson 7.5). The progression is one-way — things move down this list, rarely back up.</span></div>
+</div>
+<h3>The prompt</h3>
+<pre><code>PS1='\\u@\\h:\\w\\\$ '                     <span class="tok-comment"># user@host:path\$</span>
+PS1='\\[\\e[32m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[34m\\]\\w\\[\\e[0m\\]\\\$ '   <span class="tok-comment"># with colour</span></code></pre>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>\\u</code> <code>\\h</code> <code>\\H</code></span><span class="v">Username · short hostname · full hostname.</span></div>
+  <div class="kv"><span class="k"><code>\\w</code> <code>\\W</code></span><span class="v">Full working directory (with <code>~</code>) · just the last component.</span></div>
+  <div class="kv"><span class="k"><code>\\\$</code></span><span class="v"><code>#</code> when root, <code>\$</code> otherwise — the distinction from Lesson 1.1, built in.</span></div>
+  <div class="kv"><span class="k"><code>\\t</code> <code>\\d</code></span><span class="v">Time · date. Surprisingly useful: your scrollback becomes a timeline of when each command ran.</span></div>
+  <div class="kv"><span class="k"><code>\\[</code> … <code>\\]</code></span><span class="v">Wraps non-printing characters. <strong>Required</strong> around colour codes — see the trap below.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Show the exit code of the last command, only when it failed</span>
+PS1='\${?#0}\\u@\\h:\\w\\\$ '
+
+<span class="tok-comment"># Make production hosts unmistakable</span>
+case \$(hostname) in
+  *prod*) PS1='\\[\\e[41;97m\\] PRODUCTION \\[\\e[0m\\] \\u@\\h:\\w\\\$ ' ;;
+  *)      PS1='\\u@\\h:\\w\\\$ ' ;;
+esac</code></pre>
+<div class="callout ok">A red banner on production prompts is one of the cheapest operational safeguards there is. It does not prevent anything technically, but "am I on the right server" is a question people answer wrongly under time pressure, and a prompt that answers it without being asked costs three lines in a shared <code>/etc/profile.d/</code> file.</div>
+<div class="callout warn"><strong>Colour codes must be wrapped in <code>\\[</code> and <code>\\]</code>.</strong> Those markers tell readline "these bytes take no screen width". Without them bash miscounts the prompt length, so long command lines wrap in the wrong place, the cursor lands on the wrong character, and Ctrl-R history search redraws over your text. It looks like a terminal bug and is a missing bracket.</div>
+
+<h3>History: the settings that matter</h3>
+<pre><code><span class="tok-comment"># In ~/.bashrc</span>
+HISTSIZE=100000                  <span class="tok-comment"># lines kept in memory</span>
+HISTFILESIZE=200000              <span class="tok-comment"># lines kept in the file</span>
+HISTCONTROL=ignoreboth:erasedups <span class="tok-comment"># skip dups and lines starting with a space</span>
+HISTIGNORE='ls:ll:cd:pwd:exit:clear:history'
+HISTTIMEFORMAT='%F %T '          <span class="tok-comment"># timestamp each entry</span>
+shopt -s histappend              <span class="tok-comment"># APPEND on exit, do not overwrite</span>
+PROMPT_COMMAND='history -a'      <span class="tok-comment"># write after every command</span></code></pre>
+<div class="out">$ history 3
+ 4821  2026-08-22 15:41:02 docker compose up -d
+ 4822  2026-08-22 15:41:19 curl -s localhost:3000/health
+ 4823  2026-08-22 15:42:03 history 3</div>
+<div class="callout ok">The last two lines are the important ones. By default bash writes history <em>only on clean exit</em> and <strong>overwrites</strong> the file — so several terminals open at once means the last one to close wins and the others' history is lost, and any terminal that crashes or is killed loses everything. <code>histappend</code> plus <code>history -a</code> makes each command durable the moment you run it. If you have ever thought "I definitely ran that command yesterday and it is not in my history", this is why.</div>
+<pre><code>Ctrl-R                     <span class="tok-comment"># search backwards; Ctrl-R again for the next match</span>
+Ctrl-G                     <span class="tok-comment"># cancel the search</span>
+!!                         <span class="tok-comment"># the previous command — sudo !! is the classic</span>
+!\$                         <span class="tok-comment"># last argument of the previous command</span>
+Alt-.                      <span class="tok-comment"># same, but inserted so you can edit it</span>
+!docker                    <span class="tok-comment"># most recent command starting with 'docker'</span>
+history | grep rsync       <span class="tok-comment"># search without re-running anything</span></code></pre>
+<pre><code><span class="tok-comment"># A space before a command keeps it out of history — for one-off secrets</span>
+ export TOKEN=sk-live-secret        <span class="tok-comment"># note the leading space</span></code></pre>
+<p>That works because of <code>ignorespace</code>, included in the <code>ignoreboth</code> setting above. It is a convenience, not a security control — the value is still in the process environment (Lesson 8.3) and visible in <code>/proc</code> — but it does keep a credential out of a file that gets backed up and read over your shoulder.</p>
+
+<h3>shopt: options worth turning on</h3>
+<pre><code>shopt -s globstar        <span class="tok-comment"># ** matches recursively (Lesson 2.2)</span>
+shopt -s nullglob        <span class="tok-comment"># unmatched glob expands to nothing, not itself</span>
+shopt -s extglob         <span class="tok-comment"># !(pattern), +(pattern), @(a|b)</span>
+shopt -s checkwinsize    <span class="tok-comment"># update LINES/COLUMNS after each command</span>
+shopt -s cdspell         <span class="tok-comment"># fix minor typos in cd arguments</span>
+shopt -s autocd          <span class="tok-comment"># typing a directory name cds into it</span>
+shopt -s cmdhist         <span class="tok-comment"># keep a multi-line command as ONE history entry</span>
+
+shopt                    <span class="tok-comment"># show everything and its state</span>
+shopt -p globstar        <span class="tok-comment"># print it in a form you can paste back</span></code></pre>
+<div class="callout warn"><code>nullglob</code> is genuinely useful in scripts and mildly hazardous interactively: with it set, <code>ls *.nonexistent</code> becomes a bare <code>ls</code> and lists the whole directory rather than reporting nothing found. Set it inside scripts where you control the code (Lesson 2.2); think twice before making it a global interactive default.</div>
+
+<h3>Completion</h3>
+<pre><code><span class="tok-comment"># Usually already enabled by /etc/bash.bashrc; if not:</span>
+if ! shopt -oq posix; then
+  [[ -f /usr/share/bash-completion/bash_completion ]] &amp;&amp; . /usr/share/bash-completion/bash_completion
+fi
+
+sudo apt install bash-completion
+
+<span class="tok-comment"># Many tools generate their own</span>
+docker completion bash | sudo tee /etc/bash_completion.d/docker &gt;/dev/null
+kubectl completion bash &gt; ~/.local/share/bash-completion/completions/kubectl</code></pre>
+<div class="out">$ git che&lt;TAB&gt;
+checkout    cherry      cherry-pick
+$ git checkout ma&lt;TAB&gt;
+main</div>
+<p>Completion goes well beyond filenames: with the package installed, <code>git</code> completes branch names, <code>docker</code> completes container names, <code>systemctl</code> completes unit names, and <code>ssh</code> completes hosts from your config. That last one alone removes a class of typo from your day.</p>
+
+<h3>Readline: the editing keys</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ctrl-A · Ctrl-E</span><span class="v">Start of line · end of line.</span></div>
+  <div class="kv"><span class="k">Ctrl-W · Alt-D</span><span class="v">Delete the word before · after the cursor.</span></div>
+  <div class="kv"><span class="k">Ctrl-U · Ctrl-K</span><span class="v">Delete to start · to end. <code>Ctrl-U</code> is how you clear a half-typed command.</span></div>
+  <div class="kv"><span class="k">Ctrl-Y</span><span class="v">Paste back whatever the last delete removed.</span></div>
+  <div class="kv"><span class="k">Ctrl-L</span><span class="v">Clear the screen, keeping the current line.</span></div>
+  <div class="kv"><span class="k">Ctrl-X Ctrl-E</span><span class="v">Open the current command line in <code>\$EDITOR</code>. Invaluable for a long pipeline.</span></div>
+</div>
+<pre><code><span class="tok-comment"># ~/.inputrc — readline settings, used by bash, psql, python and more</span>
+set completion-ignore-case on
+set show-all-if-ambiguous on
+"\\e[A": history-search-backward        <span class="tok-comment"># Up arrow searches by prefix</span>
+"\\e[B": history-search-forward</code></pre>
+<div class="callout ok">Those last two lines are the single best terminal ergonomics change available. Type <code>doc</code>, press Up, and you cycle through only the commands that started with <code>doc</code> — instead of walking backwards through everything. It takes one file and applies to every readline program on the machine, not just bash.</div>
+
+<h3>Keeping it manageable</h3>
+<pre><code><span class="tok-comment"># Split by topic, source what exists</span>
+for f in ~/.bashrc.d/*.sh; do
+  [[ -r \$f ]] &amp;&amp; . "\$f"
+done
+unset f</code></pre>
+<div class="callout">Once <code>~/.bashrc</code> passes a couple of hundred lines, split it: <code>10-env.sh</code>, <code>20-aliases.sh</code>, <code>30-prompt.sh</code>, <code>40-work.sh</code>. It makes the whole thing versionable in git, and it means a machine-specific piece can simply be absent rather than wrapped in a conditional. Keep the files idempotent (Lesson 7.3) so re-sourcing is harmless — you will do it often while editing them.</div>
+
+<a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Bash Manual — Controlling the Prompt</span><span class="lc-sub">Every <code>PS1</code> escape, and the explanation of why <code>\\[</code> and <code>\\]</code> exist. Short, and it fixes the wrapping problem for good.</span></span>
+</a>
+<a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Bash-History-Facilities.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🕘</span>
+  <span class="lc-body"><span class="lc-title">Bash Manual — History Facilities</span><span class="lc-sub">All the <code>HIST*</code> variables and the history-expansion syntax (<code>!!</code>, <code>!\$</code>, <code>^old^new</code>), stated precisely.</span></span>
+</a>
+<a class="link-card" href="https://tiswww.case.edu/php/chet/readline/rluserman.html" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Readline User Manual</span><span class="lc-sub">Every editing key and every <code>~/.inputrc</code> setting. Applies to bash, psql, python, gdb and anything else linked against readline.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Practice: build a bashrc</span><span class="lc-sub">Graded tasks: convert a broken alias into a function, fix a prompt that wraps wrongly, and configure history so nothing is lost when a terminal is killed.</span></span>
+</a>
+
+<div class="pitfall"><strong>Trap:</strong> putting anything that <em>prints</em> in <code>~/.bashrc</code> — a welcome message, <code>neofetch</code>, a fortune, a "you have N updates" line. Interactive logins look fine, and then <code>scp</code>, <code>rsync</code> and <code>git push</code> over SSH start failing with protocol errors, because those tools expect the stream to contain only their own data (Lesson 8.2). The interactive guard at the top of the file is what protects you, so anything that prints must go <em>below</em> it — and ideally in <code>~/.profile</code>, which non-interactive sessions never read at all.</div>
+<p class="note-ct"><strong>If you adopt only three things from this lesson:</strong> <code>shopt -s histappend</code> with <code>PROMPT_COMMAND='history -a'</code>, so history survives a killed terminal and multiple sessions; the two <code>history-search-backward</code> lines in <code>~/.inputrc</code>, so Up arrow filters by what you have already typed; and a coloured or banner prompt on any production host. The first two you will notice within a day, and the third the one time it matters.</p>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 8 · Bài 8.4</span>
+<h2>Tuỳ biến shell</h2>
+<p class="lead">Mọi thứ trong bài này đều đi vào <code>~/.bashrc</code>, nằm DƯỚI cái chốt tương tác ở Bài 8.2. Không thứ nào ảnh hưởng tới script, không thứ nào nên chứa bí mật, và tất cả đều là tuỳ chọn — nhưng vài thiết lập trong đó thật sự làm đổi mức độ bạn tin được cái terminal của mình, nhất là mấy thiết lập về lịch sử.</p>
+
+<h3>Bí danh: một lối viết tắt, không phải một hàm</h3>
+<pre><code>alias ll='ls -alF'
+alias ..='cd ..'
+alias gs='git status -sb'
+alias grep='grep --color=auto'
+alias df='df -h'
+alias please='sudo'
+
+alias                     <span class="tok-comment"># liệt kê mọi bí danh</span>
+alias ll                  <span class="tok-comment"># chỉ hiện cái này</span>
+unalias ll                <span class="tok-comment"># gỡ nó đi</span>
+\\ls                       <span class="tok-comment"># gạch chéo ngược bỏ qua bí danh cho đúng một lần gọi</span>
+command ls                <span class="tok-comment"># cùng ý tưởng, rõ hơn</span></code></pre>
+<div class="callout">Một bí danh là phép thay thế văn bản thuần tuý ở <em>ĐẦU</em> một lệnh, thực hiện trước mọi thứ khác (Bài 8.1). Đó là toàn bộ cơ chế của nó, và nó giải thích cả hai giới hạn: nó không nhận được tham số ở giữa, và nó không tồn tại trong script, vì bí danh bị tắt trong shell không tương tác. Nếu bạn thấy mình muốn có <code>\$1</code>, thứ bạn muốn là một HÀM.</div>
+<pre><code><span class="tok-comment"># Tham số luôn luôn chỉ rơi vào CUỐI</span>
+alias gc='git commit -m'
+gc "sửa cái đó"                 <span class="tok-comment"># chạy được: git commit -m "sửa cái đó"</span>
+
+alias mkcd='mkdir -p \$1 &amp;&amp; cd \$1'
+mkcd newdir                     <span class="tok-comment"># HỎNG: \$1 rỗng, newdir rơi xuống cuối</span></code></pre>
+<div class="out">mkdir: missing operand</div>
+
+<h3>Hàm: khi bạn cần tham số hoặc cần logic</h3>
+<pre><code>mkcd() { mkdir -p -- "\$1" &amp;&amp; cd -- "\$1"; }
+
+extract() {
+  [[ -f \$1 ]] || { echo "không có file: \$1" &gt;&amp;2; return 1; }
+  case \$1 in
+    *.tar.gz|*.tgz) tar -xzf "\$1" ;;
+    *.tar.xz)       tar -xJf "\$1" ;;
+    *.tar.zst)      tar --zstd -xf "\$1" ;;
+    *.zip)          unzip "\$1" ;;
+    *.gz)           gunzip "\$1" ;;
+    *) echo "không rõ loại kho nén: \$1" &gt;&amp;2; return 1 ;;
+  esac
+}
+
+<span class="tok-comment"># Bọc một lệnh, giữ nguyên mọi tham số (Bài 6.2)</span>
+d() { docker "\$@"; }
+
+<span class="tok-comment"># Một lệnh git log đáng có</span>
+gl() { git log --oneline --graph --decorate -"\${1:-20}"; }</code></pre>
+<div class="out">$ gl 5
+* a1b2c3d (HEAD -> main) feat: add smoke test
+* 9f8e7d6 fix: quote the path
+* 4c5b6a7 docs: update README</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Dùng bí danh</span><span class="v">Lối viết tắt thuần tuý, nơi tham số tự nhiên rơi vào cuối. Hai chữ, không logic.</span></div>
+  <div class="kv"><span class="k">Dùng hàm</span><span class="v">Mọi thứ có <code>\$1</code>, có điều kiện, có vòng lặp, hay có nhiều hơn một lệnh. Cũng dùng cho mọi thứ bạn có thể muốn dùng lại từ một script — một hàm thì <code>source</code> được, còn bí danh thì về cơ bản là không.</span></div>
+</div>
+<div class="callout warn">Hãy cẩn thận khi che khuất một lệnh thật. <code>alias rm='rm -i'</code> là thói quen an toàn thường gặp, và nó xây nên một phản xạ nguy hiểm: bạn quen với việc ĐƯỢC HỎI, nên trên một cái máy không có bí danh đó — một máy chủ, một container, laptop của đồng nghiệp — bạn xoá mà không có lời hỏi mà bạn đang chờ đợi. Hãy ưu tiên một lệnh an toàn mang <em>TÊN KHÁC</em> (<code>alias rmi='rm -i'</code>), và để cái tên thật cư xử đúng như nó vẫn cư xử ở mọi nơi khác.</div>
+
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">Bí danh</span><span class="lz-t">thay thế văn bản ở đầu một lệnh</span><span class="lz-d">Hai chữ, không nhận tham số ở giữa, vô hình với script. <code>alias gs='git status'</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">Hàm</span><span class="lz-t">một hàm shell thật sự, có \$1 và có logic</span><span class="lz-d">Mọi thứ có tham số, có điều kiện, hoặc có nhiều hơn một lệnh. Một script source lại được nó.</span></div>
+  <div class="lz-step"><span class="lz-k">Script nằm trên PATH</span><span class="lz-t">một file trong ~/.local/bin</span><span class="lz-d">Khi nó dài hơn dăm dòng, hoặc khi bạn muốn cron và người khác dùng được. Chính là bộ khung ở Chương 7.</span></div>
+  <div class="lz-step"><span class="lz-k">Một chương trình thật</span><span class="lz-t">Python, Go, thứ nào hợp thì dùng</span><span class="lz-d">Khi nó TÍNH TOÁN thay vì ĐIỀU PHỐI (Bài 7.5). Bước tiến này một chiều — mọi thứ đi xuống danh sách này, hiếm khi quay ngược lên.</span></div>
+</div>
+<h3>Dấu nhắc</h3>
+<pre><code>PS1='\\u@\\h:\\w\\\$ '                     <span class="tok-comment"># người dùng@máy:đường dẫn\$</span>
+PS1='\\[\\e[32m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[34m\\]\\w\\[\\e[0m\\]\\\$ '   <span class="tok-comment"># có màu</span></code></pre>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>\\u</code> <code>\\h</code> <code>\\H</code></span><span class="v">Tên người dùng · tên máy ngắn · tên máy đầy đủ.</span></div>
+  <div class="kv"><span class="k"><code>\\w</code> <code>\\W</code></span><span class="v">Thư mục làm việc đầy đủ (có <code>~</code>) · chỉ phần cuối cùng.</span></div>
+  <div class="kv"><span class="k"><code>\\\$</code></span><span class="v">Dấu <code>#</code> khi là root, còn lại là <code>\$</code> — chính chỗ phân biệt ở Bài 1.1, được dựng sẵn.</span></div>
+  <div class="kv"><span class="k"><code>\\t</code> <code>\\d</code></span><span class="v">Giờ · ngày. Hữu ích một cách bất ngờ: phần đã cuộn qua của bạn trở thành một dòng thời gian ghi lại lúc nào chạy lệnh nào.</span></div>
+  <div class="kv"><span class="k"><code>\\[</code> … <code>\\]</code></span><span class="v">Bọc quanh những ký tự không in ra. <strong>BẮT BUỘC</strong> phải có quanh mã màu — xem cái bẫy bên dưới.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Hiện mã thoát của lệnh vừa rồi, chỉ khi nó hỏng</span>
+PS1='\${?#0}\\u@\\h:\\w\\\$ '
+
+<span class="tok-comment"># Làm cho máy production không thể nhầm lẫn được</span>
+case \$(hostname) in
+  *prod*) PS1='\\[\\e[41;97m\\] PRODUCTION \\[\\e[0m\\] \\u@\\h:\\w\\\$ ' ;;
+  *)      PS1='\\u@\\h:\\w\\\$ ' ;;
+esac</code></pre>
+<div class="callout ok">Một dải băng đỏ trên dấu nhắc của máy production là một trong những lớp bảo vệ vận hành rẻ nhất từng có. Về mặt kỹ thuật nó chẳng ngăn được gì, nhưng "mình đang ở đúng máy chủ chưa" là câu hỏi mà người ta trả lời SAI khi bị áp lực thời gian, và một dấu nhắc trả lời câu đó mà chẳng cần ai hỏi thì tốn ba dòng trong một file dùng chung ở <code>/etc/profile.d/</code>.</div>
+<div class="callout warn"><strong>Mã màu BẮT BUỘC phải bọc trong <code>\\[</code> và <code>\\]</code>.</strong> Hai dấu đó nói với readline rằng "mấy byte này không chiếm chiều rộng màn hình nào". Thiếu chúng thì bash đếm sai độ dài dấu nhắc, nên dòng lệnh dài bẻ dòng sai chỗ, con trỏ nhảy vào nhầm ký tự, và phép tìm lịch sử Ctrl-R vẽ đè lên chữ của bạn. Nó TRÔNG như một lỗi của terminal mà thật ra là thiếu một cặp ngoặc.</div>
+
+<h3>Lịch sử: những thiết lập có ý nghĩa</h3>
+<pre><code><span class="tok-comment"># Trong ~/.bashrc</span>
+HISTSIZE=100000                  <span class="tok-comment"># số dòng giữ trong bộ nhớ</span>
+HISTFILESIZE=200000              <span class="tok-comment"># số dòng giữ trong file</span>
+HISTCONTROL=ignoreboth:erasedups <span class="tok-comment"># bỏ dòng trùng và dòng bắt đầu bằng dấu cách</span>
+HISTIGNORE='ls:ll:cd:pwd:exit:clear:history'
+HISTTIMEFORMAT='%F %T '          <span class="tok-comment"># gắn dấu thời gian cho từng mục</span>
+shopt -s histappend              <span class="tok-comment"># NỐI THÊM lúc thoát, không ghi đè</span>
+PROMPT_COMMAND='history -a'      <span class="tok-comment"># ghi ra sau MỖI lệnh</span></code></pre>
+<div class="out">$ history 3
+ 4821  2026-08-22 15:41:02 docker compose up -d
+ 4822  2026-08-22 15:41:19 curl -s localhost:3000/health
+ 4823  2026-08-22 15:42:03 history 3</div>
+<div class="callout ok">Hai dòng cuối mới là hai dòng quan trọng. Mặc định, bash ghi lịch sử <em>CHỈ KHI THOÁT SẠCH SẼ</em> và <strong>GHI ĐÈ</strong> lên file — nên mở vài terminal cùng lúc nghĩa là cái đóng sau cùng thắng còn lịch sử của những cái kia mất trắng, và bất kỳ terminal nào sập hoặc bị giết đều mất sạch. <code>histappend</code> cộng với <code>history -a</code> làm mỗi lệnh bền vững ngay khoảnh khắc bạn chạy nó. Nếu có lúc nào bạn nghĩ "rõ ràng hôm qua mình đã chạy lệnh đó mà giờ không thấy trong lịch sử", lý do là đây.</div>
+<pre><code>Ctrl-R                     <span class="tok-comment"># tìm ngược; nhấn Ctrl-R lần nữa để tới kết quả kế</span>
+Ctrl-G                     <span class="tok-comment"># huỷ phép tìm</span>
+!!                         <span class="tok-comment"># lệnh trước đó — sudo !! là kinh điển</span>
+!\$                         <span class="tok-comment"># tham số cuối của lệnh trước đó</span>
+Alt-.                      <span class="tok-comment"># y hệt, nhưng chèn ra để bạn sửa được</span>
+!docker                    <span class="tok-comment"># lệnh gần nhất bắt đầu bằng 'docker'</span>
+history | grep rsync       <span class="tok-comment"># tìm mà không chạy lại gì cả</span></code></pre>
+<pre><code><span class="tok-comment"># Một dấu cách đứng trước lệnh giữ nó ra khỏi lịch sử — cho bí mật dùng một lần</span>
+ export TOKEN=sk-live-secret        <span class="tok-comment"># để ý dấu cách đứng đầu</span></code></pre>
+<p>Nó chạy được nhờ <code>ignorespace</code>, vốn nằm trong thiết lập <code>ignoreboth</code> ở trên. Đó là một tiện nghi, không phải một biện pháp an ninh — giá trị đó vẫn nằm trong môi trường tiến trình (Bài 8.3) và vẫn nhìn thấy được trong <code>/proc</code> — nhưng nó giữ được một thông tin xác thực ra khỏi một file vốn hay được sao lưu và bị người ngồi sau lưng đọc thấy.</p>
+
+<h3>shopt: những tuỳ chọn đáng bật</h3>
+<pre><code>shopt -s globstar        <span class="tok-comment"># ** khớp đệ quy (Bài 2.2)</span>
+shopt -s nullglob        <span class="tok-comment"># glob không khớp thì thành rỗng, không thành chính nó</span>
+shopt -s extglob         <span class="tok-comment"># !(mẫu), +(mẫu), @(a|b)</span>
+shopt -s checkwinsize    <span class="tok-comment"># cập nhật LINES/COLUMNS sau mỗi lệnh</span>
+shopt -s cdspell         <span class="tok-comment"># sửa lỗi gõ nhẹ trong tham số của cd</span>
+shopt -s autocd          <span class="tok-comment"># gõ tên một thư mục là cd luôn vào đó</span>
+shopt -s cmdhist         <span class="tok-comment"># giữ một lệnh nhiều dòng thành MỘT mục lịch sử</span>
+
+shopt                    <span class="tok-comment"># xem tất cả và trạng thái của chúng</span>
+shopt -p globstar        <span class="tok-comment"># in ra ở dạng dán lại được</span></code></pre>
+<div class="callout warn"><code>nullglob</code> thật sự hữu ích trong script và hơi nguy khi gõ tay: khi bật nó, <code>ls *.khongtontai</code> trở thành một lệnh <code>ls</code> trần và liệt kê cả thư mục thay vì báo là không tìm thấy gì. Hãy bật nó BÊN TRONG script nơi bạn kiểm soát được mã (Bài 2.2); còn hãy nghĩ hai lần trước khi lấy nó làm mặc định toàn cục cho lúc gõ tay.</div>
+
+<h3>Gợi ý hoàn tất lệnh</h3>
+<pre><code><span class="tok-comment"># Thường đã được /etc/bash.bashrc bật sẵn; nếu chưa:</span>
+if ! shopt -oq posix; then
+  [[ -f /usr/share/bash-completion/bash_completion ]] &amp;&amp; . /usr/share/bash-completion/bash_completion
+fi
+
+sudo apt install bash-completion
+
+<span class="tok-comment"># Nhiều công cụ tự sinh ra phần gợi ý của chúng</span>
+docker completion bash | sudo tee /etc/bash_completion.d/docker &gt;/dev/null
+kubectl completion bash &gt; ~/.local/share/bash-completion/completions/kubectl</code></pre>
+<div class="out">$ git che&lt;TAB&gt;
+checkout    cherry      cherry-pick
+$ git checkout ma&lt;TAB&gt;
+main</div>
+<p>Gợi ý hoàn tất đi xa hơn tên file rất nhiều: khi đã cài gói, <code>git</code> gợi ý tên nhánh, <code>docker</code> gợi ý tên container, <code>systemctl</code> gợi ý tên unit, và <code>ssh</code> gợi ý các máy lấy từ file cấu hình của bạn. Riêng cái cuối đã gỡ được cả một loại lỗi gõ sai khỏi ngày làm việc của bạn.</p>
+
+<h3>Readline: các phím soạn thảo</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ctrl-A · Ctrl-E</span><span class="v">Về đầu dòng · về cuối dòng.</span></div>
+  <div class="kv"><span class="k">Ctrl-W · Alt-D</span><span class="v">Xoá từ đứng trước · đứng sau con trỏ.</span></div>
+  <div class="kv"><span class="k">Ctrl-U · Ctrl-K</span><span class="v">Xoá về đầu · về cuối. <code>Ctrl-U</code> là cách bạn xoá sạch một lệnh gõ dở.</span></div>
+  <div class="kv"><span class="k">Ctrl-Y</span><span class="v">Dán lại thứ mà lần xoá vừa rồi đã gỡ đi.</span></div>
+  <div class="kv"><span class="k">Ctrl-L</span><span class="v">Xoá màn hình, giữ nguyên dòng đang gõ.</span></div>
+  <div class="kv"><span class="k">Ctrl-X Ctrl-E</span><span class="v">Mở dòng lệnh hiện tại trong <code>\$EDITOR</code>. Vô giá với một chuỗi ống dài.</span></div>
+</div>
+<pre><code><span class="tok-comment"># ~/.inputrc — thiết lập của readline, dùng bởi bash, psql, python và nhiều thứ khác</span>
+set completion-ignore-case on
+set show-all-if-ambiguous on
+"\\e[A": history-search-backward        <span class="tok-comment"># Mũi tên lên tìm theo tiền tố</span>
+"\\e[B": history-search-forward</code></pre>
+<div class="callout ok">Hai dòng cuối đó là thay đổi công thái học terminal tốt nhất mà bạn có được. Gõ <code>doc</code>, nhấn phím Lên, và bạn chỉ đi qua những lệnh từng bắt đầu bằng <code>doc</code> — thay vì lùi ngược qua mọi thứ. Nó chỉ tốn một file và áp dụng cho MỌI chương trình dùng readline trên máy, không chỉ bash.</div>
+
+<h3>Giữ cho nó còn quản được</h3>
+<pre><code><span class="tok-comment"># Chia theo chủ đề, source những cái có tồn tại</span>
+for f in ~/.bashrc.d/*.sh; do
+  [[ -r \$f ]] &amp;&amp; . "\$f"
+done
+unset f</code></pre>
+<div class="callout">Khi <code>~/.bashrc</code> vượt vài trăm dòng, hãy chia nó ra: <code>10-env.sh</code>, <code>20-aliases.sh</code>, <code>30-prompt.sh</code>, <code>40-work.sh</code>. Nó làm cả bộ quản lý được bằng git, và nghĩa là một mảnh chỉ dành cho một máy cụ thể có thể đơn giản là VẮNG MẶT thay vì phải bọc trong một câu điều kiện. Hãy giữ các file bền vững khi chạy lại (Bài 7.3) để việc source lại là vô hại — bạn sẽ làm việc đó luôn tay trong lúc sửa chúng.</div>
+
+<a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Controlling-the-Prompt.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Bash Manual — Controlling the Prompt</span><span class="lc-sub">Mọi ký hiệu thoát của <code>PS1</code>, và lời giải thích vì sao <code>\\[</code> và <code>\\]</code> tồn tại. Ngắn, và nó chữa dứt điểm vấn đề bẻ dòng sai.</span></span>
+</a>
+<a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Bash-History-Facilities.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🕘</span>
+  <span class="lc-body"><span class="lc-title">Bash Manual — History Facilities</span><span class="lc-sub">Toàn bộ các biến <code>HIST*</code> và cú pháp khai triển lịch sử (<code>!!</code>, <code>!\$</code>, <code>^cũ^mới</code>), phát biểu chính xác.</span></span>
+</a>
+<a class="link-card" href="https://tiswww.case.edu/php/chet/readline/rluserman.html" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Readline User Manual</span><span class="lc-sub">Mọi phím soạn thảo và mọi thiết lập của <code>~/.inputrc</code>. Áp dụng cho bash, psql, python, gdb và mọi thứ khác có liên kết với readline.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/linux-bash\${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">Luyện: dựng một file bashrc</span><span class="lc-sub">Bài chấm điểm: chuyển một bí danh hỏng thành một hàm, chữa một dấu nhắc bẻ dòng sai, và cấu hình lịch sử sao cho không mất gì khi một terminal bị giết.</span></span>
+</a>
+
+<div class="pitfall"><strong>Bẫy:</strong> đặt bất cứ thứ gì có <em>IN RA</em> vào <code>~/.bashrc</code> — một lời chào mừng, <code>neofetch</code>, một câu danh ngôn, một dòng "bạn có N bản cập nhật". Đăng nhập tương tác thì trông vẫn ổn, rồi <code>scp</code>, <code>rsync</code> và <code>git push</code> qua SSH bắt đầu hỏng với lỗi giao thức, vì mấy công cụ đó chờ đợi dòng dữ liệu chỉ chứa đúng dữ liệu của chúng (Bài 8.2). Cái chốt tương tác ở đầu file mới là thứ bảo vệ bạn, nên mọi thứ có in ra đều phải nằm <em>DƯỚI</em> nó — và tốt nhất là nằm trong <code>~/.profile</code>, thứ mà các phiên không tương tác không bao giờ đọc.</div>
+<p class="note-ct"><strong>Nếu bạn chỉ lấy ba thứ từ bài này:</strong> <code>shopt -s histappend</code> đi cùng <code>PROMPT_COMMAND='history -a'</code>, để lịch sử sống sót qua một terminal bị giết và qua nhiều phiên cùng lúc; hai dòng <code>history-search-backward</code> trong <code>~/.inputrc</code>, để phím Lên lọc theo đúng thứ bạn đã gõ; và một dấu nhắc có màu hoặc có dải băng trên mọi máy production. Hai cái đầu bạn sẽ thấy tác dụng trong vòng một ngày, còn cái thứ ba thì thấy đúng một lần — cái lần mà nó quan trọng.</p>
+</div>
+`,
+    },
+    /* ─────────────────────────── 8.5 Quiz ─────────────────────────── */
+    {
+      title: '8.5 — Chapter 8 quiz|||8.5 — Kiểm tra Chương 8',
+      slug: 'lnx-8-5-quiz',
+      type: 'QUIZ',
+      description: 'Tám câu về thứ tự tra cứu lệnh, bảng băm, dấu chấm trong PATH, file profile đầu tiên thắng, vì sao ssh host cmd khác ssh host, ENV của Dockerfile, /proc/PID/environ, và histappend.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 8 · Quiz</span>
+<h2>Check what stuck</h2>
+<p class="lead">Eight questions on PATH, startup files, environment variables and shell customisation. Answer from memory; they follow the lesson order.</p>
+<div class="callout ok">Aim for 7/8. The three that matter most in real work: why <code>ssh host 'cmd'</code> sees a different <code>PATH</code> from <code>ssh host</code> (8.2), why a secret in a Dockerfile <code>ENV</code> survives rotation (8.3), and what <code>histappend</code> actually fixes (8.4).</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 8 · Kiểm tra</span>
+<h2>Xem thử đọng lại được gì</h2>
+<p class="lead">Tám câu về PATH, file khởi động, biến môi trường và việc tuỳ biến shell. Trả lời bằng trí nhớ; các câu theo thứ tự bài.</p>
+<div class="callout ok">Hãy nhắm 7/8. Ba câu quan trọng nhất trong việc thật: vì sao <code>ssh host 'cmd'</code> thấy một <code>PATH</code> khác với <code>ssh host</code> (bài 8.2), vì sao một bí mật đặt trong <code>ENV</code> của Dockerfile vẫn sống sót sau khi xoay khoá (bài 8.3), và <code>histappend</code> thật ra chữa cái gì (bài 8.4).</div>
+</div>
+`,
+      quiz: {
+        timeLimitSeconds: 720,
+        questions: [
+          {
+            question: 'You define a function named ls. What runs when you type ls?|||Bạn định nghĩa một hàm tên là ls. Khi bạn gõ ls thì cái gì chạy?',
+            options: [
+              '/bin/ls, because a real program always wins over a function|||/bin/ls, vì một chương trình thật luôn thắng một hàm',
+              'Your function — the lookup order is alias, function, builtin, hash, then PATH|||Hàm của bạn — thứ tự tra cứu là bí danh, hàm, lệnh dựng sẵn, bảng băm, rồi mới tới PATH',
+              'Bash reports an ambiguous command error|||Bash báo lỗi lệnh mơ hồ',
+              'Whichever was defined most recently|||Cái nào được định nghĩa gần đây nhất',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'You move a binary and update PATH, but bash still reports the OLD path in its error. Why?|||Bạn di chuyển một chương trình và cập nhật PATH, nhưng bash vẫn báo lỗi kèm đường dẫn CŨ. Vì sao?',
+            options: [
+              'PATH changes need a reboot to take effect|||Thay đổi PATH cần khởi động lại máy mới có hiệu lực',
+              'Bash caches where it found each command in a hash table and did not look again — run hash -r|||Bash lưu chỗ nó tìm thấy mỗi lệnh vào một bảng băm và không đi tìm lại — hãy chạy hash -r',
+              'The new directory must be listed last in PATH|||Thư mục mới bắt buộc phải được liệt kê cuối cùng trong PATH',
+              'The binary kept a symlink to its old location|||Chương trình đó giữ lại một liên kết tượng trưng tới chỗ cũ',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Why is a "." (or an empty entry) in PATH a security problem?|||Vì sao một dấu "." (hoặc một mục rỗng) trong PATH là một vấn đề an ninh?',
+            options: [
+              'It makes command lookup measurably slower|||Nó làm việc tra cứu lệnh chậm đi một cách đo được',
+              'It breaks relative paths in scripts|||Nó làm hỏng các đường dẫn tương đối trong script',
+              'cd-ing into a directory someone else controls and typing a normal command like ls can run THEIR file with your privileges|||cd vào một thư mục do người khác kiểm soát rồi gõ một lệnh bình thường như ls có thể chạy FILE CỦA HỌ với đặc quyền của bạn',
+              'It prevents sudo from working|||Nó làm sudo không chạy được',
+            ],
+            correctIndex: 2,
+            points: 1,
+          },
+          {
+            question: 'For a LOGIN shell, which of ~/.bash_profile, ~/.bash_login and ~/.profile are read?|||Với một shell ĐĂNG NHẬP, những file nào trong ~/.bash_profile, ~/.bash_login và ~/.profile được đọc?',
+            options: [
+              'All three, in that order|||Cả ba, theo đúng thứ tự đó',
+              'Only the FIRST one that exists — the others are ignored entirely, which is why creating ~/.bash_profile can silently disable ~/.profile|||Chỉ cái ĐẦU TIÊN tồn tại — những cái còn lại bị bỏ qua hoàn toàn, và đó là lý do tạo ra ~/.bash_profile có thể âm thầm vô hiệu hoá ~/.profile',
+              'Only ~/.profile, since it is the POSIX name|||Chỉ ~/.profile, vì đó là cái tên chuẩn POSIX',
+              'None — login shells read ~/.bashrc|||Không cái nào — shell đăng nhập đọc ~/.bashrc',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: '"ssh vps" finds node, but "ssh vps \'node --version\'" says command not found. Why?|||"ssh vps" thì tìm thấy node, nhưng "ssh vps \'node --version\'" lại báo command not found. Vì sao?',
+            options: [
+              'The second form runs as a different user|||Dạng thứ hai chạy với một người dùng khác',
+              'Passing a command makes it a NON-interactive, non-login shell, which reads no startup files at all — so a PATH set by a version manager is absent|||Truyền vào một lệnh làm nó thành shell KHÔNG tương tác, không đăng nhập, và loại đó không đọc file khởi động nào cả — nên PATH do một trình quản lý phiên bản dựng lên là vắng mặt',
+              'SSH strips environment variables for security|||SSH bóc bỏ biến môi trường vì lý do an ninh',
+              'node must be reinstalled system-wide|||node phải được cài lại cho toàn hệ thống',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Why should a secret never go in a Dockerfile ENV or --build-arg?|||Vì sao một bí mật không bao giờ nên nằm trong ENV của Dockerfile hay trong --build-arg?',
+            options: [
+              'Those values are too long for the image format|||Những giá trị đó quá dài so với định dạng ảnh',
+              'They are stored in the image layer and readable with docker history by anyone who can pull the image — forever, including after you rotate the key|||Chúng được lưu ngay trong lớp của ảnh và ai kéo được ảnh cũng đọc ra bằng docker history — vĩnh viễn, kể cả sau khi bạn đã xoay khoá',
+              'ENV values are not available to the running process|||Giá trị ENV không dùng được với tiến trình đang chạy',
+              'Docker refuses to build if ENV contains a key-like string|||Docker từ chối dựng nếu ENV chứa một chuỗi trông giống khoá',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'What does "env $(grep -v \'^#\' .env | xargs) node app.js" get wrong?|||Lệnh "env $(grep -v \'^#\' .env | xargs) node app.js" sai ở chỗ nào?',
+            options: [
+              'Nothing — it is the standard way to load a .env file|||Không sai gì — đó là cách chuẩn để nạp một file .env',
+              'It goes through word splitting, so any value containing a space (a password, a connection string) is torn into several arguments|||Nó đi qua phép cắt từ, nên mọi giá trị có chứa dấu cách (một mật khẩu, một chuỗi kết nối) bị xé thành nhiều tham số',
+              'grep -v cannot match comment lines|||grep -v không khớp được các dòng chú thích',
+              'env cannot set more than one variable at a time|||env không đặt được nhiều hơn một biến một lúc',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'What problem do "shopt -s histappend" and PROMPT_COMMAND=\'history -a\' solve?|||Cặp "shopt -s histappend" và PROMPT_COMMAND=\'history -a\' giải quyết vấn đề gì?',
+            options: [
+              'They make history searches faster|||Chúng làm việc tìm trong lịch sử nhanh hơn',
+              'By default bash writes history only on clean exit and OVERWRITES the file — so a killed terminal loses everything and the last session to close wins|||Mặc định bash chỉ ghi lịch sử khi thoát sạch sẽ và GHI ĐÈ lên file — nên một terminal bị giết mất sạch, và phiên đóng sau cùng thì thắng',
+              'They deduplicate the history file|||Chúng khử trùng lặp trong file lịch sử',
+              'They add timestamps to each entry|||Chúng thêm dấu thời gian cho từng mục',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+        ],
+      },
+    },
   ],
 };

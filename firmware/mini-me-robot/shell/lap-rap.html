@@ -517,6 +517,55 @@ details[open] summary{border-bottom:1px solid var(--line)}
 </section>
 
 <section>
+  <h2>Tụ — gắn ở đâu và vì sao</h2>
+  <p>Không mảnh nào của bộ vỏ giữ tụ, và bảng nối dây ở trên cũng không kể chúng: tụ không nối vào chân GPIO nào cả, chúng <b>bắc ngang giữa một rail nguồn và đất</b>. Nhưng thiếu chúng thì robot reset giữa câu đang nói, và triệu chứng trông y như lỗi phần mềm.</p>
+
+  <h3>Hai họ tụ làm hai việc khác hẳn nhau</h3>
+  <p><b>Tụ gốm 104</b> (đọc là 10 × 10⁴ pF = <b>100 nF</b>) lọc nhiễu cao tần. Nó phải nằm <b>sát chân VCC–GND của con chip</b> — cách vài centimet là gần như mất tác dụng, vì chính đoạn dây ấy có điện cảm.</p>
+  <p><b>Tụ hoá 470 / 1000 / 2200 µF</b> là kho điện tại chỗ. Khi động cơ bứt hoặc sáu servo cùng gồng, chúng xả ra trong khoảng mili giây đầu — đúng lúc mạch hạ áp chưa kịp phản hồi.</p>
+
+  <h3>Cần bao nhiêu — tính chứ không đoán</h3>
+  <p>ΔV = I × Δt / C, với Δt là thời gian mạch hạ áp cần để phản hồi. ESP32 bị brownout khi bus tụt dưới <b>4,5 V</b>.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Rail</th><th class="num">Xung</th><th class="num">470 µF</th><th class="num">1000 µF</th><th class="num">2200 µF</th></tr></thead>
+    <tbody>
+      <tr><td>5 V servo (6× MG90S gồng)</td><td class="num">4,2 A</td><td class="num">sụt 0,89 V ❌</td><td class="num">sụt 0,42 V ✅</td><td class="num">—</td></tr>
+      <tr><td>12 V động cơ (2× 33GB-520 bứt)</td><td class="num">6,0 A</td><td class="num">sụt 1,91 V ❌</td><td class="num">sụt 0,90 V ⚠️</td><td class="num">sụt 0,41 V ✅</td></tr>
+      <tr><td>5 V ampli (MAX98357A 3 W)</td><td class="num">1,2 A</td><td class="num">sụt 0,51 V ❌</td><td class="num">sụt 0,24 V ✅</td><td class="num">—</td></tr>
+    </tbody>
+  </table></div>
+  <div class="warn">
+    <span class="warn-h">470 µF KHÔNG đủ cho rail servo</span>
+    <p>Sụt 0,89 V nghĩa là 5 V tụt còn 4,1 V mỗi lần sáu khớp cùng động — servo giật và ESP32 có thể theo đó mà reset. Dùng <b>1000 µF</b>, hoặc ghép <b>hai con 470 µF song song</b> (= 940 µF, dung lượng cộng lại khi mắc song song).</p>
+  </div>
+
+  <h3>Bảng gắn</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Tụ</th><th>Gắn ở đâu</th><th>Vì sao chỗ đó</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">2200 µF + 104</td><td><b>12 V, sát jack nguồn</b></td><td>động cơ là thứ rút xung mạnh nhất; đặt trước cả MKE-B01 lẫn hai IBT-2</td></tr>
+      <tr><td class="mono">1000 µF + 104</td><td><b>5 V, sát <code>V+</code> của PCA9685</b></td><td>sáu servo. Đặt ở đầu PCA9685 chứ không ở đầu LM2596 — dây giữa hai nơi mới là chỗ sinh sụt áp</td></tr>
+      <tr><td class="mono">1000 µF + 104</td><td><b>5 V, sát <code>Vin</code> MAX98357A</b></td><td>ampli lớp D rút dòng theo nhịp nhạc; thiếu tụ thì tiếng méo ở đoạn to</td></tr>
+      <tr><td class="mono">470 µF + 104</td><td><b>5 V, sát vòng LED</b></td><td>16 LED sáng trắng hết cỡ kéo gần 1 A</td></tr>
+      <tr><td class="mono">470 µF + 104</td><td><b>3V3, sát MKE-B01</b></td><td><code>AMS1117</code> đốt phần chênh áp nên thực tế chỉ chịu ~300–400 mA liên tục</td></tr>
+      <tr><td class="mono">104 (còn lại)</td><td><b>đầu MODULE, cuối sợi dupont</b></td><td>module mua sẵn thường đã có tụ 104 trên bo, nhưng dupont 10 cm có điện cảm đủ để làm nó mất tác dụng. Thêm một con ngay tại module: ba màn, mic, MPU6050, hai IBT-2</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="warn">
+    <span class="warn-h">Tụ hoá có cực tính — cắm ngược là nổ thật</span>
+    <p>Dải màu nhạt in dọc thân tụ đánh dấu <b>cực ÂM</b>, và chân âm cũng ngắn hơn. Cắm ngược vào 12 V thì nó nổ trong vài giây, kêu to và bắn giấy bạc ra khắp nơi. Tụ gốm 104 thì không phân cực, cắm chiều nào cũng được.</p>
+    <p><b>Điện áp chịu đựng phải dư gấp rưỡi:</b> tụ ở rail 12 V lấy loại <b>≥25 V</b>, ở rail 5 V lấy <b>≥10 V</b>. Con số này in ngay trên thân tụ cạnh dung lượng.</p>
+    <p>Lần cắm điện đầu sau khi gắn 2200 µF sẽ thấy <b>một tia lửa nhỏ ở jack</b> — đó là dòng nạp tụ, bình thường, không phải chập.</p>
+  </div>
+
+  <div class="note">
+    <span class="warn-h">Cách kiểm tụ có tác dụng thật</span>
+    <p>Để đồng hồ ở thang một chiều, kẹp vào rail đang đo, rồi cho robot làm việc nặng nhất — sáu servo cùng về 0° hoặc hai bánh bứt từ đứng yên. Nhìn số tụt bao nhiêu. Nếu rail 5 V tụt xuống dưới <b>4,5 V</b> thì tụ chưa đủ; ghép thêm một con song song rồi đo lại.</p>
+  </div>
+</section>
+
+<section>
   <h2>Dò dây — trước khi đóng nắp</h2>
   <pre><code>cd firmware/mini-me-robot &amp;&amp; pio run -e kiem-day -t upload -t monitor</code></pre>
   <p>Nó kéo lần lượt từng chân lên 3,3 V trong 6 giây và đọc tên chân ra Serial. Bạn kẹp que đo ở <b>đầu bên kia sợi dây, trên bo màn</b>. Lên đúng lúc gọi tên → sợi tốt. Lên sai lúc → Serial cho biết nó đang nối nhầm sang chân nào. Không bao giờ lên → đứt hoặc tiếp xúc hỏng.</p>

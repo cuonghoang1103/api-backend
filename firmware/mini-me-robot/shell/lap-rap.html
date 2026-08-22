@@ -612,7 +612,7 @@ details[open] summary{border-bottom:1px solid var(--line)}
   <div class="tw"><table>
     <thead><tr><th>Chân trên bo</th><th class="num">Về đâu</th><th>Ghi chú</th></tr></thead>
     <tbody>
-      <tr><td class="mono">VCC</td><td class="num">3V3</td><td>module 3.5" thường có sẵn ổn áp và chịu được 5 V, nhưng đi 3V3 cho đồng bộ với hai mắt</td></tr>
+      <tr><td class="mono">VCC</td><td class="num"><b>tuỳ bo</b></td><td>3V3 hay 5 V phụ thuộc vào con chip đệm trên bo — <b>đọc ô "Màn bụng cấp 3,3 V hay 5 V" ngay dưới bảng</b>, đừng đoán</td></tr>
       <tr><td class="mono">GND</td><td class="num">GND</td><td></td></tr>
       <tr><td class="mono">CS</td><td class="num"><b>GPIO 10</b></td><td>riêng của màn bụng</td></tr>
       <tr><td class="mono">RESET</td><td class="num">3V3</td><td><b>không cắm vào GPIO 14</b> — đó là CS mắt phải, cắm nhầm là màn bụng reset liên tục theo nhịp chọn chip và không bao giờ hiện gì</td></tr>
@@ -624,6 +624,30 @@ details[open] summary{border-bottom:1px solid var(--line)}
       <tr><td class="mono">T_CLK T_CS T_DIN T_DO T_IRQ</td><td class="num"><b>không nối</b></td><td>cả nhóm cảm ứng. Firmware không có mã đọc touch</td></tr>
     </tbody>
   </table></div>
+
+
+  <h3>Màn bụng cấp 3,3 V hay 5 V — lật bo lên nhìn</h3>
+  <p>Phần lớn module 3.5" in chữ <code>5V</code> cạnh chân nguồn và bán kèm ví dụ cho Arduino Uno. Nhưng chữ đó đúng cho <b>Arduino 5 V</b>; với ESP32 thì câu trả lời phụ thuộc vào việc bo có con <b>74HC245</b> hay không — và lý do nằm ở con đệm ấy, không ở chip màn.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Lật mặt sau bo, tìm</th><th class="num">Cấp VCC</th><th>Vì sao</th></tr></thead>
+    <tbody>
+      <tr><td>Có IC 20 chân ghi <code>74HC245</code> / <code>HC245</code><br><span style="opacity:.7;font-size:13px">thường kèm cả <code>AMS1117-3.3</code></span></td><td class="num"><b>3,3 V</b></td><td>ngưỡng nhận mức cao của 74HC245 là 0,7 × VCC. Cấp 5 V ⇒ ngưỡng <b>3,5 V</b> mà ESP32 chỉ ra 3,3 V — <b>dưới ngưỡng</b>. Cấp 3,3 V ⇒ ngưỡng còn 2,31 V, vượt thoải mái</td></tr>
+      <tr><td>Chỉ có <code>AMS1117-3.3</code>, <b>không</b> có 74HC245</td><td class="num"><b>5 V</b></td><td>không có đệm thì tín hiệu 3,3 V vào thẳng chip màn 3,3 V — không vướng ngưỡng nào. Cấp 5 V để ổn áp có chênh áp mà làm việc, đèn nền sáng đủ</td></tr>
+      <tr><td>Không có con nào trong hai con trên</td><td class="num"><b>3,3 V</b></td><td>bo thuần 3,3 V, cấp 5 V là cấp thẳng vào chip màn — cháy như con GC9A01 hôm 16/08</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="warn">
+    <span class="warn-h">Cấp 5 V cho bo CÓ 74HC245 hỏng theo kiểu tệ nhất</span>
+    <p>Nó <b>không chết ngay</b>. 3,3 V nằm ngay sát dưới ngưỡng 3,5 V nên bo chạy được trên bàn lúc nguội, rồi nhiễu dần hoặc chết hẳn khi nóng lên. Màn trắng, hình rác, hoặc lúc được lúc không — và bạn sẽ đi tìm lỗi ở dây, ở tốc độ SPI, ở firmware.</p>
+    <p>Đây <b>đúng bằng cái bẫy của IBT-2</b> đã ghi ở đầu sổ: cùng một con đệm 74HC, cùng một phép tính 0,7 × VCC, cùng một triệu chứng "đo chân nào cũng thấy có tín hiệu mà không chạy".</p>
+  </div>
+
+  <div class="note">
+    <span class="warn-h">Cấp 3,3 V cho bo có ổn áp thì mất gì</span>
+    <p><code>AMS1117</code> bị dropout, ra khoảng <b>3,0–3,2 V</b> thay vì 3,3 V. Chip ILI9488 chạy được từ 2,5 V nên vẫn đủ — chỉ <b>đèn nền hơi mờ</b>. Đúng tình huống của màn tròn GC9A01, và ở đó cách chữa sạch là cấp <b>3,8–4,2 V</b>: đủ chênh áp cho ổn áp mà vẫn dưới ngưỡng nguy hiểm. Với màn bụng cũng dùng được mẹo ấy nếu thấy tối quá.</p>
+  </div>
 
   <div class="warn">
     <span class="warn-h">Đọc chữ in trên bo, đừng tin thứ tự chân</span>

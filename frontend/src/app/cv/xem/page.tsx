@@ -21,6 +21,15 @@
  * Nền tối theo phần còn lại của site, nhưng TỜ CV thì nền sáng cố ý: CV là thứ
  * người ta in ra và đọc trên giấy, và bản in trắng-đen là bản mà nhà tuyển dụng
  * thực sự cầm. Xem trên web giống bản in thì không có bất ngờ nào.
+ *
+ * ⚠️ VÌ nền ở đây là CỐ ĐỊNH TỐI (`#0a0a0f` và `bg-darkcard`), chữ trên nó phải
+ * là màu TƯỜNG MINH SÁNG — KHÔNG được dùng `text-text-primary`/`-secondary`/
+ * `-muted`. Ba lớp đó trỏ vào `var(--text-*)`, vốn ĐỔI THEO CHỦ ĐỀ: ở chủ đề
+ * sáng chúng thành gần-đen, tức chữ gần-đen trên nền gần-đen.
+ * Đo thật 22/08/2026 (app desktop, cả hai chủ đề): tỉ lệ tương phản của tiêu đề
+ * "CV chưa được công khai" là **1,08** — WCAG đòi tối thiểu 4,5. Tám chỗ dính,
+ * gồm cả thanh công cụ Tải/In/Quay lại, nên cả trang gần như vô hình.
+ * Xem [[feedback_dark_surface_needs_color_not_just_vars]].
  */
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -98,10 +107,10 @@ export default function PublicCvPage() {
     return (
       <div className="min-h-screen pt-24 pb-16" style={{ background: '#0a0a0f' }}>
         <div className="mx-auto max-w-2xl px-4 text-center">
-          <h1 className="text-2xl font-heading font-bold text-text-primary">
+          <h1 className="text-2xl font-heading font-bold text-slate-100">
             {L('CV chưa được công khai', 'The CV is not public yet')}
           </h1>
-          <p className="mt-3 text-text-secondary">
+          <p className="mt-3 text-slate-400">
             {L(
               'Chủ trang chưa bật chia sẻ CV. Bạn có thể liên hệ trực tiếp qua trang giới thiệu.',
               'The owner has not enabled CV sharing. You can get in touch from the about page.',
@@ -109,7 +118,7 @@ export default function PublicCvPage() {
           </p>
           <Link
             href="/about"
-            className="mt-6 inline-flex items-center gap-2 rounded-xl border border-darkborder bg-darkcard px-5 py-3 text-sm font-semibold text-text-primary transition-colors hover:border-neon-violet hover:text-neon-violet"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl border border-darkborder bg-darkcard px-5 py-3 text-sm font-semibold text-slate-100 transition-colors hover:border-neon-violet hover:text-neon-violet"
           >
             <ArrowLeft className="h-4 w-4" />
             {L('Về trang giới thiệu', 'Back to about')}
@@ -138,7 +147,7 @@ export default function PublicCvPage() {
         <div className="flex flex-wrap items-center gap-3">
           <Link
             href="/about"
-            className="inline-flex items-center gap-2 rounded-xl border border-darkborder bg-darkcard px-4 py-2.5 text-sm font-medium text-text-primary transition-colors hover:border-neon-violet hover:text-neon-violet"
+            className="inline-flex items-center gap-2 rounded-xl border border-darkborder bg-darkcard px-4 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-neon-violet hover:text-neon-violet"
           >
             <ArrowLeft className="h-4 w-4" />
             {L('Giới thiệu', 'About')}
@@ -146,7 +155,7 @@ export default function PublicCvPage() {
 
           <a
             href="/api/v1/cv/public/download/pdf"
-            className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-500/40 bg-darkcard px-4 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:border-emerald-400 hover:bg-emerald-500/5"
+            className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-500/40 bg-darkcard px-4 py-2.5 text-sm font-semibold text-slate-100 transition-colors hover:border-emerald-400 hover:bg-emerald-500/5"
           >
             <Download className="h-4 w-4 text-emerald-400" />
             {L('Tải PDF', 'Download PDF')}
@@ -156,7 +165,7 @@ export default function PublicCvPage() {
             <a
               key={f}
               href={`/api/v1/cv/public/download/${f}`}
-              className="inline-flex items-center gap-2 rounded-xl border border-darkborder bg-darkcard px-4 py-2.5 text-sm font-medium text-text-muted transition-colors hover:border-neon-violet hover:text-neon-violet"
+              className="inline-flex items-center gap-2 rounded-xl border border-darkborder bg-darkcard px-4 py-2.5 text-sm font-medium text-slate-500 transition-colors hover:border-neon-violet hover:text-neon-violet"
             >
               {f.toUpperCase()}
             </a>
@@ -164,13 +173,13 @@ export default function PublicCvPage() {
 
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center gap-2 rounded-xl border border-darkborder bg-darkcard px-4 py-2.5 text-sm font-medium text-text-primary transition-colors hover:border-neon-violet hover:text-neon-violet"
+            className="inline-flex items-center gap-2 rounded-xl border border-darkborder bg-darkcard px-4 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:border-neon-violet hover:text-neon-violet"
           >
             <Printer className="h-4 w-4" />
             {L('In', 'Print')}
           </button>
 
-          <span className="ml-auto font-mono text-[11px] text-text-muted">
+          <span className="ml-auto font-mono text-[11px] text-slate-500">
             {L('Cập nhật', 'Updated')} {dateStr}
           </span>
         </div>

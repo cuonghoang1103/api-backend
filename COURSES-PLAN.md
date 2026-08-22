@@ -31,8 +31,8 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 4 | `postgresql` | `postgresql` — PostgreSQL | ✅ có (11 mục · 54 bài · 488k) |
 | 5 | `javascript` + `html-css` | `web-foundations` — Nền tảng Lập trình Web | ✅ có (11 mục · 64 bài · 333k) — *0 sơ đồ* |
 | 6 | `git` | `git` — Git & GitHub | ✅ **XONG** (14 mục · 63 bài · 889k · TB 14.109) |
-| 7 | `linux-bash` | — | ❌ **THIẾU** |
-| 8 | `docker` | — | ❌ **THIẾU** |
+| 7 | `linux-bash` | `linux-bash` — Linux & Bash | ✅ **XONG** (13 mục · 69 bài · 1.660k · TB 24.064) |
+| 8 | `docker` | `docker` — Docker | ✅ **XONG** (13 mục · 76 bài · 1.584k · TB 20.842) |
 | 9 | `redis` | — | ❌ **THIẾU** |
 | 10 | `prisma-orm` | — | ❌ **THIẾU** |
 | 11 | `authentication` | — | ❌ **THIẾU** |
@@ -50,7 +50,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 23 | `domains-dns-tls` | — | ❌ **THIẾU** |
 | 24 | `cuongthai-roadmap` | *(lộ trình, không phải khoá)* | — bỏ qua |
 
-**Tổng: 6 khoá đã có · 17 khoá còn thiếu.**
+**Tổng: 8 khoá đã có · 15 khoá còn thiếu.**
 
 ### Thứ tự ưu tiên (đã chốt)
 

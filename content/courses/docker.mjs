@@ -17,6 +17,7 @@ import s04 from './docker/s04-dockerfile.mjs';
 import s05 from './docker/s05-cache.mjs';
 import s06 from './docker/s06-anh-nho-an-toan.mjs';
 import s07 from './docker/s07-du-lieu.mjs';
+import s08 from './docker/s08-mang.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Rocket', sortOrder: 4 },
@@ -47,5 +48,6 @@ export default {
     s05,
     s06,
     s07,
+    s08,
   ],
 };

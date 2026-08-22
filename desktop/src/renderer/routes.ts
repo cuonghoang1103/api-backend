@@ -61,7 +61,15 @@ export interface RouteDef {
   label: string;
   icon: LucideIcon;
   group: RouteGroup;
-  /** Cần tài khoản Pro — chỉ để hiển thị; quyền thật do server quyết. */
+  /**
+   * Cần tài khoản Pro — CHỈ để hiển thị; quyền thật do server quyết.
+   *
+   * ⚠️ Hiện KHÔNG route nào đặt cờ này (22/08/2026). `/interview` từng đặt và
+   * đã gỡ: nhãn nói quá, vì phần lõi của trang đó miễn phí. Cơ chế giữ lại vì
+   * nó đúng và sẽ cần khi có trang thật sự chỉ dành cho Pro — nhưng gắn nó thì
+   * phải chắc CẢ TRANG cần Pro, không phải một vài tính năng trong đó. Nhãn
+   * sai làm người dùng free bỏ qua thứ họ dùng được.
+   */
   pro?: boolean;
   /** Từ khoá phụ cho command palette. Viết cả dạng KHÔNG DẤU vì gõ nhanh hay bỏ dấu. */
   keywords?: string[];
@@ -105,8 +113,14 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['simulation', 'mo phong', 'kich ban'] },
   { path: '/roadmap', label: 'Lộ trình', icon: RouteIcon, group: 'hoc',
     keywords: ['roadmap', 'lo trinh'] },
-  { path: '/interview', label: 'Phỏng vấn', icon: MessageSquareCode, group: 'hoc', pro: true,
-    keywords: ['interview', 'luyện phỏng vấn', 'phong van'] },
+  /* ⚠️ KHÔNG gắn `pro: true`. Nhãn đó từng ở đây và nó NÓI QUÁ: chế độ `STATIC`
+     (ngân hàng câu hỏi + đáp án mẫu + rubric + tự chấm + máy chấm) hoàn toàn
+     MIỄN PHÍ — chỉ chấm-bằng-AI, cá nhân hoá từ CV và chế độ dự án mới cần Pro
+     (`tax.aiAllowed` trong `app/interview/page.tsx`). Một nhãn "Cần tài khoản
+     Pro" ở thanh bên làm người dùng free bỏ qua thứ họ dùng được đầy đủ.
+     Bản thân trang đã nói đúng chuyện này: nó khoá riêng từng chế độ AI. */
+  { path: '/interview', label: 'Phỏng vấn', icon: MessageSquareCode, group: 'hoc',
+    keywords: ['interview', 'luyện phỏng vấn', 'phong van', 'mock interview', 'luyen phong van'] },
 
   // ── Làm & sáng tạo ───────────────────────────────────────
   { path: '/maker-lab', label: 'Maker Lab', icon: Cpu, group: 'lam',

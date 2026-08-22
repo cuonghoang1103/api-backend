@@ -257,11 +257,17 @@ export default function InterviewReportPage() {
           {turns.map((tn) => <TurnRow key={tn.order} turn={tn} sessionId={sessionId} lang={displayLang} />)}
         </div>
 
-        {/* Interview → CV (P9): a topic you explained well here may be worth adding to your CV. */}
-        <a href="/cv/intake" className="mt-4 block rounded-2xl border border-amber-500/30 bg-amber-500/[0.06] p-4 hover:border-amber-500/60">
+        {/* Interview → CV (P9): a topic you explained well here may be worth adding to your CV.
+            Must be <Link>, not a bare <a>: a bare <a> is a full document load. On the web that
+            just throws away the SPA; inside the desktop app (origin app://cuongthai) it RELOADS
+            THE WHOLE APP — the protocol handler serves index.html for any extensionless path —
+            so every other tab's in-flight work is lost. This was the only bare internal anchor
+            in any page the desktop reuses (checked 22/08/2026; the rest are target="_blank",
+            which Electron routes to the system browser). */}
+        <Link href="/cv/intake" className="mt-4 block rounded-2xl border border-amber-500/30 bg-amber-500/[0.06] p-4 hover:border-amber-500/60">
           <div className="text-sm font-semibold text-amber-200">Vừa giải thích tốt một chủ đề?</div>
           <div className="mt-1 text-xs text-slate-300">Nếu điều bạn vừa trình bày là từ một dự án thật mà CV chưa nhắc tới, hãy đưa nó vào — mở CV Builder để AI phỏng vấn lấy nội dung →</div>
-        </a>
+        </Link>
       </div>
     </div>
   );

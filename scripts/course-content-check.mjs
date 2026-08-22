@@ -11,8 +11,9 @@
  *   4. cân bằng <pre>/</pre>, <code>/</code>, <span>/</span>
  *   5. title bài có dấu ngăn |||
  *   6. quiz: câu hỏi có |||, correctIndex nằm trong khoảng options
- *   7. dấu gạch chéo ngược đơn trong template literal (đọc MÃ NGUỒN, không
- *      phải module đã nạp — lúc nạp xong thì JS đã ăn mất chúng rồi)
+ *   7. dấu gạch chéo ngược đơn VÀ backtick trần trong template literal (đọc
+ *      MÃ NGUỒN, không phải module đã nạp — lúc nạp xong thì JS đã ăn mất
+ *      gạch chéo, còn backtick trần thì làm cả file không phân tích được)
  *
  * Lưu ý dương tính giả đã xử lý: phương án quiz chỉ gồm code/output
  * ("3, 3, 3", "undefined") cố tình giống nhau ở 2 ngôn ngữ nên KHÔNG cần |||;
@@ -74,10 +75,20 @@ for (const m of fs.readFileSync(file, 'utf8').matchAll(/^import\s+\w+\s+from\s+'
 let esc = 0;
 for (const f of srcFiles) {
   if (!fs.existsSync(f)) continue;
+  // Chỉ soi PHẦN THÂN của template literal: backtick mở/đóng của chính nó là hợp lệ.
+  let inside = false;
   fs.readFileSync(f, 'utf8').split('\n').forEach((line, i) => {
     const t = line.trimStart();
     if (t.startsWith('//') || t.startsWith('*') || t.startsWith('/*')) return;
+    const s2 = line.replace(/\s+$/, '');
+    if (!inside) { if (s2.endsWith('`')) inside = true; return; }
+    if (['`,', '`;', '`'].includes(s2.trim())) { inside = false; return; }
     for (let k = 0; k < line.length; k++) {
+      if (line[k] === '`') {
+        esc++;
+        console.log(`❌ ${path.basename(f)}:${i + 1} backtick trần — hãy viết &#96;`);
+        continue;
+      }
       if (line[k] !== '\\') continue;
       const nxt = k + 1 < line.length ? line[k + 1] : '\n';
       if (SAFE_AFTER.has(nxt)) { k++; continue; }
@@ -88,7 +99,7 @@ for (const f of srcFiles) {
 }
 
 console.log(`${bad || esc ? '❌' : '✅'} ${n} bài, ${chars.toLocaleString('vi-VN')} ký tự, `
-  + `${bad} bài lỗi, ${esc} chỗ gạch chéo đơn`);
+  + `${bad} bài lỗi, ${esc} chỗ thoát ký tự sai`);
 // Thoát khác 0 khi có lỗi: nếu không, một chuỗi `check && git commit` sẽ commit
 // đè lên lỗi mà bộ kiểm vừa in ra. Đo thật 22/08/2026 — đúng chuyện đó đã xảy ra.
 process.exit(bad || esc ? 1 : 0);

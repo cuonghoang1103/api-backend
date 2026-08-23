@@ -165,5 +165,158 @@ nginx -T | grep -nE '^\\\\s*(listen|server_name)'</code></pre>
 </div>
 `,
     },
+
+    /* ─────────────────────────── 1.2 ─────────────────────────── */
+    {
+      title: '1.2 — server_name, and the four levels of precedence|||1.2 — server_name, và bốn mức ưu tiên',
+      slug: 'nginx-1-2-server-name',
+      type: 'LESSON',
+      description: 'Bốn mức, một thứ tự cố định, và cái mức mà ai cũng đoán sai: một biểu thức chính quy KHÔNG thắng một ký tự đại diện. Bài này chạy sáu cái Host thật vào sáu khối server thật rồi in ra khối nào trả lời — trong đó có một dòng làm phần lớn người đọc phải nhìn lại lần hai.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 1 · Lesson 1.2</span>
+<h2>server_name, and the four levels of precedence</h2>
+<p class="lead">Once Nginx has the candidate blocks for a socket, it compares the <code>Host</code> header against their names — and it does so in a fixed order that has nothing to do with the order the blocks appear in your file. Four levels, checked in sequence, first match wins.</p>
+
+<h3>Six hosts, six blocks, measured</h3>
+<pre><code>server { listen 8080; server_name mot.vidu.com;   … }  <span class="tok-comment"># 1 · khớp chính xác</span>
+server { listen 8080; server_name *.vidu.com;     … }  <span class="tok-comment"># 2 · đại diện ở ĐẦU</span>
+server { listen 8080; server_name www.vidu.*;     … }  <span class="tok-comment"># 3 · đại diện ở CUỐI</span>
+server { listen 8080; server_name ~^may(?&lt;so&gt;\\\\d+)\\\\.vidu\\\\.com$; … } <span class="tok-comment"># 4 · regex</span></code></pre>
+<div class="out">Host gui len             cong   khoi server nao tra loi
+------------------------ -----  ------------------------------------
+mot.vidu.com             8080   1 · ten CHINH XAC: mot.vidu.com
+bat-ky.vidu.com          8080   2 · dai dien DAU: *.vidu.com
+www.vidu.net             8080   3 · dai dien CUOI: www.vidu.*
+may42.vidu.com           8080   2 · dai dien DAU: *.vidu.com     &lt;- KHONG phai regex!
+khong-khop.com           8080   1 · ten CHINH XAC: mot.vidu.com  &lt;- may chu MAC DINH</div>
+<div class="lz-map">
+  <div class="lz-stage">
+    <span class="lz-badge">Level 1</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Exact name</span><span class="lz-nsub">vidu.com · www.vidu.com · stored in a hash table, so it costs nothing however many you have</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Level 2</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Leading wildcard</span><span class="lz-nsub">*.vidu.com · the longest matching one wins · covers any single label in front</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Level 3</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Trailing wildcard</span><span class="lz-nsub">www.vidu.* · again longest first · for one site across several top-level domains</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Level 4</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Regular expression</span><span class="lz-nsub">~^may\\\\d+\\\\.vidu\\\\.com$ · LAST, and here in FILE ORDER, first match wins</span></div></div>
+  </div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — a regular expression does NOT beat a wildcard, and the fourth row above is the proof.</strong> <code>may42.vidu.com</code> matches both <code>*.vidu.com</code> and <code>~^may(\\\\d+)\\\\.vidu\\\\.com$</code>, and the wildcard wins because leading wildcards are level 2 and regexes are level 4. People expect the "more specific" pattern to win; Nginx does not rank by specificity, it ranks by <em>kind</em>. So a catch-all <code>*.example.com</code> block silently swallows every regex block for that domain — and the regex block, which you can see right there in the file, never runs. If you need a regex to win, remove the wildcard that shadows it.</p>
+</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Exact names are free</span><span class="v">Nginx puts them in hash tables, so a thousand exact names cost the same as one. If you find yourself reaching for a regex to avoid listing names, list the names — one <code>server_name</code> directive takes as many as you like, space-separated.</span></div>
+  <div class="kv"><span class="k">Wildcards cover exactly one label</span><span class="v"><code>*.vidu.com</code> matches <code>a.vidu.com</code> and it does <em>not</em> match <code>vidu.com</code> itself, nor does the star span dots the way a shell glob would. Sites that need both list both: <code>server_name vidu.com *.vidu.com;</code>.</span></div>
+  <div class="kv"><span class="k">The star must be at one end</span><span class="v"><code>*.vidu.com</code> and <code>www.vidu.*</code> are valid; <code>www.*.com</code> is not, and Nginx rejects it at startup. Anything in the middle is a job for a regular expression.</span></div>
+  <div class="kv"><span class="k">Regexes are the only level with capture groups</span><span class="v"><code>~^(?&lt;khach&gt;.+)\\\\.vidu\\\\.com$</code> makes <code>$khach</code> usable inside that block — for a <code>root</code> path, a <code>proxy_pass</code> target or a log field. That is the real reason to use one, not specificity.</span></div>
+</div>
+
+<h3>Details worth knowing before they bite</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Matching is case-insensitive, and the port is ignored</span><span class="lz-lnote">A <code>Host</code> of <code>VIDU.com:8080</code> matches <code>server_name vidu.com;</code> — Nginx lowercases and strips the port before comparing. So you never need to list case variants or port suffixes.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Regexes are checked in file order, unlike everything else</span><span class="lz-lnote">Levels 1 to 3 use lookup structures where order is irrelevant. Level 4 is a list walked top to bottom, so two overlapping regexes are resolved by which one you wrote first — the only place in server selection where file order matters.</span></div>
+  <div class="lz-layer"><span class="lz-lname">An empty server_name matches a missing Host</span><span class="lz-lnote"><code>server_name "";</code> catches requests that arrive with no <code>Host</code> header at all, which HTTP/1.0 clients and some scanners still do. Useful for returning 444 to junk traffic rather than letting it reach the default server.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Long names need a bigger bucket</span><span class="lz-lnote"><code>could not build server_names_hash, you should increase server_names_hash_bucket_size</code> is a startup error, not a warning, and it means exactly what it says. Raise it to the next power of two; it is not a sign that anything else is wrong.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Bắt được tên miền con và DÙNG nó — lý do thật để viết regex</span>
+server {
+  listen 8080;
+  server_name ~^(?&lt;khach&gt;[a-z0-9-]+)\\\\.vidu\\\\.com$;
+
+  root /srv/khach/$khach;              <span class="tok-comment"># mỗi khách một thư mục</span>
+  access_log /var/log/nginx/$khach.log;
+}</code></pre>
+<div class="note-ct">
+<p><strong>The rule to carry away.</strong> Nginx ranks by KIND, not by how specific a pattern looks: exact, then leading wildcard, then trailing wildcard, then regex — and the first hit ends the search. When a request lands on a block you did not expect, the question is never "which pattern is more precise" but "which level does each pattern belong to", and the answer is usually that something two levels higher matched first. Reach for a regular expression when you need a capture group, and reach for a plain list of names the rest of the time.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/server_names.html" target="_blank" rel="noopener"><span class="lc-ico">🏷️</span><span class="lc-body"><span class="lc-title">nginx — server names</span><span class="lc-sub">nginx.org · The precedence list, wildcards, regexes and the hash sizing</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/request_processing.html" target="_blank" rel="noopener"><span class="lc-ico">🧭</span><span class="lc-body"><span class="lc-title">nginx — how nginx processes a request</span><span class="lc-sub">nginx.org · Where name matching sits in the four-step sequence</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#server_names_hash_bucket_size" target="_blank" rel="noopener"><span class="lc-ico">🪣</span><span class="lc-body"><span class="lc-title">nginx — server_names_hash_bucket_size</span><span class="lc-sub">nginx.org · The startup error, and what to set it to</span></span></a>
+<a class="link-card" href="/courses/web-foundations/learn${REF}"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">CuongThai course — Web Foundations</span><span class="lc-sub">The Host header, virtual hosting, and reading a hostname right to left</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Write a regex block, watch a wildcard shadow it, then remove the wildcard</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 1 · Bài 1.2</span>
+<h2>server_name, và bốn mức ưu tiên</h2>
+<p class="lead">Khi Nginx đã có danh sách khối ứng viên cho một socket, nó đem header <code>Host</code> ra so với tên của chúng — và nó so theo một thứ tự CỐ ĐỊNH chẳng liên quan gì tới thứ tự các khối xuất hiện trong tệp của bạn. Bốn mức, kiểm tuần tự, khớp đầu tiên là thắng.</p>
+
+<h3>Sáu cái Host, sáu khối, đo thật</h3>
+<pre><code>server { listen 8080; server_name mot.vidu.com;   … }  <span class="tok-comment"># 1 · khớp chính xác</span>
+server { listen 8080; server_name *.vidu.com;     … }  <span class="tok-comment"># 2 · đại diện ở ĐẦU</span>
+server { listen 8080; server_name www.vidu.*;     … }  <span class="tok-comment"># 3 · đại diện ở CUỐI</span>
+server { listen 8080; server_name ~^may(?&lt;so&gt;\\\\d+)\\\\.vidu\\\\.com$; … } <span class="tok-comment"># 4 · regex</span></code></pre>
+<div class="out">Host gui len             cong   khoi server nao tra loi
+------------------------ -----  ------------------------------------
+mot.vidu.com             8080   1 · ten CHINH XAC: mot.vidu.com
+bat-ky.vidu.com          8080   2 · dai dien DAU: *.vidu.com
+www.vidu.net             8080   3 · dai dien CUOI: www.vidu.*
+may42.vidu.com           8080   2 · dai dien DAU: *.vidu.com     &lt;- KHONG phai regex!
+khong-khop.com           8080   1 · ten CHINH XAC: mot.vidu.com  &lt;- may chu MAC DINH</div>
+<div class="lz-map">
+  <div class="lz-stage">
+    <span class="lz-badge">Mức 1</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Tên CHÍNH XÁC</span><span class="lz-nsub">vidu.com · www.vidu.com · lưu trong bảng băm, nên có bao nhiêu cái cũng không tốn gì</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Mức 2</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Đại diện ở ĐẦU</span><span class="lz-nsub">*.vidu.com · cái khớp DÀI NHẤT thắng · phủ được đúng một nhãn ở phía trước</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Mức 3</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Đại diện ở CUỐI</span><span class="lz-nsub">www.vidu.* · cũng dài nhất trước · dành cho một trang trải trên nhiều tên miền cấp cao</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Mức 4</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Biểu thức chính quy</span><span class="lz-nsub">~^may\\\\d+\\\\.vidu\\\\.com$ · CUỐI CÙNG, và ở đây thì theo THỨ TỰ TRONG TỆP, cái khớp đầu tiên thắng</span></div></div>
+  </div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — một biểu thức chính quy KHÔNG thắng một ký tự đại diện, và hàng thứ tư ở trên là bằng chứng.</strong> <code>may42.vidu.com</code> khớp CẢ <code>*.vidu.com</code> lẫn <code>~^may(\\\\d+)\\\\.vidu\\\\.com$</code>, và cái đại diện THẮNG, vì đại diện ở đầu là mức 2 còn regex là mức 4. Người ta trông đợi cái mẫu "cụ thể hơn" sẽ thắng; Nginx thì KHÔNG xếp hạng theo độ cụ thể, nó xếp hạng theo <em>LOẠI</em>. Nên một khối bắt-tất <code>*.example.com</code> sẽ lặng lẽ nuốt mọi khối regex của tên miền đó — còn cái khối regex, thứ bạn nhìn thấy ngay đó trong tệp, thì chẳng bao giờ chạy. Nếu bạn cần regex thắng thì phải GỠ cái đại diện đang che nó đi.</p>
+</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Tên chính xác thì MIỄN PHÍ</span><span class="v">Nginx đặt chúng vào bảng băm, nên một nghìn tên chính xác tốn đúng bằng một cái. Nếu bạn thấy mình với tay lấy regex chỉ để khỏi phải liệt kê tên thì hãy cứ LIỆT KÊ — một directive <code>server_name</code> nhận bao nhiêu tên cũng được, cách nhau bằng dấu cách.</span></div>
+  <div class="kv"><span class="k">Ký tự đại diện phủ ĐÚNG MỘT nhãn</span><span class="v"><code>*.vidu.com</code> khớp <code>a.vidu.com</code> và nó <em>KHÔNG</em> khớp chính <code>vidu.com</code>, mà dấu sao cũng không nhảy qua được dấu chấm theo kiểu glob của shell. Trang nào cần cả hai thì liệt kê cả hai: <code>server_name vidu.com *.vidu.com;</code>.</span></div>
+  <div class="kv"><span class="k">Dấu sao phải nằm ở MỘT ĐẦU</span><span class="v"><code>*.vidu.com</code> và <code>www.vidu.*</code> thì hợp lệ; <code>www.*.com</code> thì không, và Nginx từ chối nó ngay lúc khởi động. Bất cứ thứ gì nằm ở GIỮA đều là việc của một biểu thức chính quy.</span></div>
+  <div class="kv"><span class="k">Regex là mức DUY NHẤT có nhóm bắt</span><span class="v"><code>~^(?&lt;khach&gt;.+)\\\\.vidu\\\\.com$</code> làm cho <code>$khach</code> dùng được bên trong khối đó — cho một đường dẫn <code>root</code>, một đích <code>proxy_pass</code> hay một trường trong log. ĐÓ mới là lý do THẬT để dùng regex, không phải chuyện độ cụ thể.</span></div>
+</div>
+
+<h3>Vài chi tiết đáng biết trước khi bị chúng cắn</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Việc khớp KHÔNG phân biệt hoa thường, và cổng thì bị bỏ qua</span><span class="lz-lnote">Một cái <code>Host</code> là <code>VIDU.com:8080</code> vẫn khớp <code>server_name vidu.com;</code> — Nginx hạ chữ và cắt phần cổng đi TRƯỚC khi so. Nên bạn chẳng bao giờ phải liệt kê các biến thể hoa thường hay các đuôi cổng.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Regex được kiểm theo THỨ TỰ TRONG TỆP, khác với mọi mức còn lại</span><span class="lz-lnote">Mức 1 tới 3 dùng cấu trúc tra cứu nên thứ tự chẳng liên quan gì. Mức 4 là một DANH SÁCH duyệt từ trên xuống, nên hai regex chồng lấn nhau được phân xử bằng việc bạn viết cái nào TRƯỚC — chỗ DUY NHẤT trong việc chọn server mà thứ tự trong tệp có ý nghĩa.</span></div>
+  <div class="lz-layer"><span class="lz-lname">server_name rỗng khớp với request KHÔNG có Host</span><span class="lz-lnote"><code>server_name "";</code> bắt những request tới mà hoàn toàn không có header <code>Host</code> nào, thứ mà client HTTP/1.0 và vài bộ quét vẫn còn gửi. Hữu ích để trả 444 cho lưu lượng rác thay vì để nó chạm tới máy chủ mặc định.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Tên dài thì cần cái xô to hơn</span><span class="lz-lnote"><code>could not build server_names_hash, you should increase server_names_hash_bucket_size</code> là một LỖI lúc khởi động chứ không phải cảnh báo, và nó nghĩa đúng như nó viết. Hãy nâng lên luỹ thừa hai kế tiếp; nó KHÔNG phải dấu hiệu rằng có gì khác đang hỏng.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Bắt được tên miền con và DÙNG nó — lý do thật để viết regex</span>
+server {
+  listen 8080;
+  server_name ~^(?&lt;khach&gt;[a-z0-9-]+)\\\\.vidu\\\\.com$;
+
+  root /srv/khach/$khach;              <span class="tok-comment"># mỗi khách một thư mục</span>
+  access_log /var/log/nginx/$khach.log;
+}</code></pre>
+<div class="note-ct">
+<p><strong>Cái luật đáng mang theo.</strong> Nginx xếp hạng theo LOẠI, không theo việc một cái mẫu trông cụ thể tới đâu: chính xác, rồi đại diện đầu, rồi đại diện cuối, rồi regex — và cái khớp đầu tiên kết thúc cuộc tìm kiếm. Khi một request rơi vào cái khối mà bạn không ngờ tới, câu hỏi KHÔNG BAO GIỜ là "mẫu nào chính xác hơn" mà là "mỗi mẫu thuộc về MỨC nào", và câu trả lời thường là có thứ gì đó ở mức cao hơn hai bậc đã khớp trước. Hãy với tay lấy biểu thức chính quy khi bạn cần một NHÓM BẮT, và với tay lấy một danh sách tên thường trong mọi trường hợp còn lại.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/server_names.html" target="_blank" rel="noopener"><span class="lc-ico">🏷️</span><span class="lc-body"><span class="lc-title">nginx — tên máy chủ</span><span class="lc-sub">nginx.org · Danh sách ưu tiên, ký tự đại diện, regex và cách chỉnh kích thước bảng băm</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/request_processing.html" target="_blank" rel="noopener"><span class="lc-ico">🧭</span><span class="lc-body"><span class="lc-title">nginx — nginx xử lý một request thế nào</span><span class="lc-sub">nginx.org · Việc khớp tên nằm ở đâu trong chuỗi bốn bước</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#server_names_hash_bucket_size" target="_blank" rel="noopener"><span class="lc-ico">🪣</span><span class="lc-body"><span class="lc-title">nginx — server_names_hash_bucket_size</span><span class="lc-sub">nginx.org · Cái lỗi lúc khởi động, và nên đặt nó bằng bao nhiêu</span></span></a>
+<a class="link-card" href="/courses/web-foundations/learn${REF}"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Nền tảng Web</span><span class="lc-sub">Header Host, máy chủ ảo, và cách đọc một hostname từ phải sang trái</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Viết một khối regex, nhìn một ký tự đại diện che mất nó, rồi gỡ cái đại diện đi</span></span></a>
+</div>
+`,
+    },
   ],
 };

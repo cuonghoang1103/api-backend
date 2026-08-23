@@ -23,6 +23,7 @@ import s02 from './deploy-vps/s02-van-chuyen.mjs';
 import s03 from './deploy-vps/s03-trao.mjs';
 import s04 from './deploy-vps/s04-cau-hinh.mjs';
 import s05 from './deploy-vps/s05-migration.mjs';
+import s06 from './deploy-vps/s06-lui-ban.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -51,5 +52,6 @@ export default {
     s03,
     s04,
     s05,
+    s06,
   ],
 };

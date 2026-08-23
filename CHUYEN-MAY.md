@@ -143,40 +143,210 @@ grep -c '=' "$USB/bi-mat/env-backend"        # kỳ vọng ~136 dòng biến
 grep -q 'linux-nha' "$USB/bi-mat/ssh/config" && echo "✅ có Host linux-nha" || echo "⚠️ THIẾU Host linux-nha"
 ```
 
-### A3.1 — Mã hoá trước khi rút USB (BẮT BUỘC)
+---
 
-Trong đó có khoá riêng SSH vào production. Đánh rơi USB = mất VPS.
+## A4. Xuất chứng thư Developer ID của Apple
+
+### A4.0 — Vì sao phải làm BÂY GIỜ
+
+`npm run dist:mac:ky` cần **hai** thứ. Chỉ một trong hai lấy ra được thành file:
+
+| Thứ | Ở đâu | Xuất ra file được? | Mất thì sao |
+|---|---|---|---|
+| Chứng thư `Developer ID Application` **+ khoá riêng** | Keychain `login` | ✅ `.p12` | **Khoá riêng KHÔNG tải lại được.** Tải `.cer` từ Apple chỉ được phần công khai. Phải tạo chứng thư MỚI, mà Apple giới hạn số chứng thư Developer ID mỗi tài khoản |
+| Hồ sơ notarytool `cuongthai-notary` | keychain được bảo vệ dữ liệu | ❌ **không** | Dựng lại được trong 2 phút — xem A4.5 |
+
+Nói cách khác: **chỉ có một thứ thật sự không thay thế được, là khoá riêng.**
+Phần này lấy nó ra.
+
+> `ky-mac.mjs` đã ghi sẵn một bài học liên quan: `security dump-keychain`
+> **không** liệt kê hồ sơ notarytool, và bản kiểm đầu tiên vì thế báo thiếu
+> trong khi hồ sơ vẫn dùng tốt (20/08/2026). Nên bên dưới không dò keychain
+> để kết luận gì cả — hỏi thẳng công cụ.
+
+### A4.1 — Ghi lại danh tính trước khi xuất
+
+```bash
+mkdir -p "$USB/bi-mat/apple"
+security find-identity -v -p codesigning | tee "$USB/bi-mat/apple/danh-sach-chung-thu.txt"
+```
+✅ Mong đợi ít nhất một dòng dạng:
+`1) A1B2C3…(40 ký tự) "Developer ID Application: Tên Bạn (ABCDE12345)"`
+
+- `ABCDE12345` trong ngoặc là **Team ID** — `ky-mac.mjs` đọc chính chỗ này.
+- Chỉ thấy `Apple Development` mà **không** thấy `Developer ID Application`
+  ⇒ bạn chưa từng có chứng thư phát hành. Bỏ qua cả phần A4, không mất gì.
+
+Xem hạn dùng (chứng thư Developer ID sống 5 năm):
+
+```bash
+security find-certificate -c "Developer ID Application" -p |   openssl x509 -noout -subject -enddate | tee -a "$USB/bi-mat/apple/danh-sach-chung-thu.txt"
+```
+
+⚠️ Nếu lệnh in ra **nhiều** chứng thư trùng tên: đó là chuyện đã xảy ra thật
+ngày 19/08/2026 — Apple cấp chứng thư gia hạn mà **không đổi tên**, nên keychain
+có hai mục y hệt và `codesign -s <tên>` chết vì *"ambiguous"*. Xuất **cả hai**,
+đừng đoán cái nào còn hạn.
+
+### A4.2 — Xuất `.p12` bằng Keychain Access (đường chính)
+
+1. Mở **Keychain Access** (⌘Space → gõ `Keychain Access`)
+2. Cột trái: chọn keychain **login** → mục **My Certificates**
+   > Phải là **My Certificates**, không phải *Certificates*. Chỉ tab này hiện
+   > những chứng thư **có khoá riêng** đi kèm — đúng thứ ta cần.
+3. Tìm dòng `Developer ID Application: <tên bạn> (<Team ID>)`
+4. Bấm mũi tên ▸ bên trái nó để bung ra. **Phải thấy một dòng khoá con** dạng
+   `<tên bạn>` với biểu tượng chìa khoá. **Không thấy chìa khoá ⇒ máy này chỉ
+   có phần công khai, xuất ra sẽ vô dụng** — dừng lại, đừng tưởng đã xong.
+5. Chuột phải vào **dòng chứng thư** (không phải dòng chìa khoá) → **Export
+   "Developer ID Application: …"**
+6. File Format: **Personal Information Exchange (.p12)**
+7. Lưu vào `$USB/bi-mat/apple/` với tên `developer-id.p12`
+8. macOS hỏi **mật khẩu bảo vệ file** → đặt một mật khẩu và **ghi nhớ**
+9. macOS hỏi tiếp **mật khẩu đăng nhập máy Mac** (để mở keychain) → nhập
+
+> Bước 8 và 9 là **hai mật khẩu khác nhau**. Bước 8 do bạn tự đặt cho file;
+> bước 9 là mật khẩu máy. Nhầm chỗ này là lỗi hay gặp nhất.
+
+Có nhiều chứng thư trùng tên (cảnh báo ở A4.1)? Giữ Command và chọn hết, rồi
+Export — macOS gộp vào một `.p12`. Tên file vẫn để `developer-id.p12`.
+
+### A4.3 — Cách CLI (nếu không muốn dùng chuột)
+
+Lệnh này xuất **mọi** identity có khoá riêng trong keychain `login`:
+
+```bash
+security export -k ~/Library/Keychains/login.keychain-db \
+  -t identities -f pkcs12 -o "$USB/bi-mat/apple/tat-ca-identity.p12"
+```
+macOS sẽ hỏi mật khẩu đặt cho file, rồi hiện hộp thoại xin quyền — bấm
+**Allow** (hoặc *Always Allow*). Cách này chắc ăn hơn ở chỗ nó không bỏ sót
+chứng thư nào, đổi lại file gồm cả những chứng thư bạn không cần.
+
+### A4.4 — KIỂM bản vừa xuất (đừng bỏ bước này)
+
+Một file `.p12` **không có khoá riêng** trông y hệt file có — cùng đuôi, cùng
+mở được, chỉ vô dụng lúc cần. Kiểm bằng chính nội dung nó:
+
+```bash
+P12="$USB/bi-mat/apple/developer-id.p12"     # hoặc tat-ca-identity.p12
+openssl pkcs12 -in "$P12" -nodes -legacy 2>/dev/null | grep -E 'friendlyName|PRIVATE KEY' \
+  || openssl pkcs12 -in "$P12" -nodes | grep -E 'friendlyName|PRIVATE KEY'
+```
+Nó hỏi mật khẩu bạn đặt ở bước 8. Kết quả **bắt buộc** phải có đủ hai loại dòng:
+
+```
+friendlyName: Developer ID Application: <tên bạn> (<Team ID>)
+-----BEGIN PRIVATE KEY-----
+-----END PRIVATE KEY-----
+```
+
+Đọc kết quả (đo thật trên `.p12` dựng để thử):
+
+- ✅ **Có dòng `PRIVATE KEY`** ⇒ khoá riêng đã nằm trong file. Xong.
+- ❌ **Không in ra gì cả** ⇒ file không có khoá riêng. Đây chính là ca hỏng cần
+  bắt, và nó im lặng hoàn toàn — không báo lỗi, không cảnh báo. Quay lại A4.2,
+  kiểm kỹ bước 4 (dòng chìa khoá dưới chứng thư).
+- ❌ `Mac verify error: invalid password?` ⇒ gõ sai mật khẩu bước 8.
+
+Muốn một câu trả lời gọn hơn, đếm thẳng:
+
+```bash
+openssl pkcs12 -in "$P12" -nodes 2>/dev/null | grep -c 'BEGIN PRIVATE KEY'
+```
+✅ Mong đợi **≥ 1**. Ra `0` là hỏng.
+
+> Lệnh trên lọc qua `grep` có chủ ý: `openssl pkcs12 -nodes` in **nguyên khoá
+> riêng ra màn hình**. `grep` giữ lại đúng dòng BEGIN/END, phần ruột không
+> hiện. Đừng bỏ `grep` đi.
+>
+> Hai vế `||` là vì macOS dùng LibreSSL — bản có `-legacy`, bản không. Vế nào
+> chạy được thì thôi.
+
+Ghi lại vân tay để sau này đối chiếu đúng file:
+
+```bash
+shasum -a 256 "$P12" | tee "$USB/bi-mat/apple/van-tay.txt"
+```
+
+### A4.5 — Hồ sơ notarytool: KHÔNG xuất, mà ghi lại cách dựng lại
+
+Hồ sơ `cuongthai-notary` nằm trong kho khoá được bảo vệ dữ liệu — `security`
+không đọc ra được, nên **không có cách xuất nó thành file**. Nhưng dựng lại chỉ
+mất 2 phút, miễn là bạn còn ba mẩu tin dưới đây.
+
+Xác nhận hồ sơ hiện đang dùng được (đây là phép kiểm ĐÚNG, theo chú thích trong
+`ky-mac.mjs`):
+
+```bash
+xcrun notarytool history --keychain-profile cuongthai-notary >/dev/null 2>&1 \
+  && echo "✅ hồ sơ đang dùng được" || echo "⚠️ chưa có hồ sơ (mã 69) — không sao, dựng lại sau"
+```
+
+Ghi lại ba mẩu tin để dựng lại trên máy mới:
+
+```bash
+cat > "$USB/bi-mat/apple/notary.txt" <<'EOF'
+Tên hồ sơ  : cuongthai-notary        (mặc định của KY_MAC_PROFILE)
+Apple ID   : cuongthaihnhe176322@gmail.com
+Team ID    : <chép từ ngoặc trong danh-sach-chung-thu.txt>
+Mật khẩu   : app-specific password — KHÔNG phải mật khẩu Apple ID thường
+             tạo/thu hồi tại appleid.apple.com → Sign-In and Security
+             → App-Specific Passwords
+Dựng lại   : xcrun notarytool store-credentials "cuongthai-notary"                --apple-id "cuongthaihnhe176322@gmail.com" --team-id "<Team ID>"
+EOF
+```
+
+**Nên làm luôn:** vào appleid.apple.com tạo một app-specific password mới, dán
+vào cuối `notary.txt`. Nó nằm trong gói mã hoá ở A5. Không làm cũng được — loại
+mật khẩu này tạo lại bất cứ lúc nào, khác hẳn khoá riêng.
+
+### A4.6 — Chứng thư khác (thường không cần)
+
+```bash
+security find-identity -v | grep -E 'Developer ID Installer|Mac Developer|3rd Party'
+```
+Có `Developer ID Installer` thì xuất y hệt A4.2 — nó dùng để ký gói `.pkg`.
+Dự án này chỉ dựng `dmg` + `zip` (xem `electron-builder.yml`), nên **không cần**.
+Chứng thư trung gian WWDR không cần xuất: tải lại tự do từ Apple.
+
+---
+
+## A5. Mã hoá toàn bộ trước khi rút USB (BẮT BUỘC)
+
+Giờ trong `bi-mat/` có: khoá riêng SSH vào production, khoá Google
+service-account, **và khoá riêng ký app của bạn**. Đánh rơi USB lúc này là mất
+cả VPS lẫn danh tính nhà phát hành.
 
 ```bash
 cd "$USB"
+ls -R bi-mat                 # nhìn lại lần cuối xem đủ chưa
 tar czf - bi-mat | gpg -c --cipher-algo AES256 -o bi-mat.tar.gz.gpg
 # Nhập mật khẩu 2 lần. NHỚ KỸ — không có cách khôi phục.
-rm -rf "$USB/bi-mat"          # ← lệnh xoá DUY NHẤT, và nó xoá trên USB, KHÔNG phải trên Mac
+rm -rf "$USB/bi-mat"      # ← lệnh xoá DUY NHẤT trong tài liệu này,
+                          #   và nó xoá trên USB, KHÔNG phải trên Mac
 ls -la "$USB"
 ```
-✅ Mong đợi: còn `bi-mat.tar.gz.gpg` và thư mục `viec-do-dang/`, **không còn**
-thư mục `bi-mat/`.
+✅ Mong đợi: còn `bi-mat.tar.gz.gpg` + `viec-do-dang/`, **không còn** `bi-mat/`.
+
+Thử giải mã ngay, trước khi rút USB — đừng để phát hiện hỏng lúc đã ở máy khác:
+
+```bash
+gpg -d "$USB/bi-mat.tar.gz.gpg" | tar tzf - | head -20
+```
+✅ Mong đợi: liệt kê ra `bi-mat/env-backend`, `bi-mat/ssh/id_rsa`,
+`bi-mat/apple/developer-id.p12`…
+
+### 📌 Giữ BẢN THỨ HAI của gói này
+
+USB hỏng là chuyện thường, và khoá riêng ký app thì **không tạo lại được**.
+File `bi-mat.tar.gz.gpg` đã mã hoá AES256, nên chép thêm một bản vào trình quản
+lý mật khẩu, ổ cứng ngoài, hoặc cloud riêng đều an toàn. **Đừng** đưa nó vào
+git — repo này có `gitleaks` canh, nhưng đừng thử.
 
 ---
 
-## A4. Xuất chứng thư Apple (chỉ làm nếu bạn từng ký app macOS)
-
-Chứng thư Developer ID nằm trong Keychain. **Nếu tiệm thay máy hoặc wipe đĩa
-thì mất vĩnh viễn** — Apple không cấp lại, phải tạo chứng thư mới.
-
-1. Mở **Keychain Access** → **login** → **My Certificates**
-2. Tìm `Developer ID Application: ...`
-3. Chuột phải → **Export** → định dạng `.p12` → đặt mật khẩu
-4. Lưu vào `$USB/` rồi mã hoá tiếp như A3.1
-
-> Không xuất được cũng **không chặn** việc gì: đường phát hành chuẩn
-> `npm run phat-hanh` dựng bản macOS trên runner `macos-latest` của GitHub với
-> `CSC_IDENTITY_AUTO_DISCOVERY=false` — tức là không ký. Chứng thư chỉ cần cho
-> `npm run dist:mac:ky` chạy tay.
-
----
-
-## A5. Kiểm lần cuối rồi mới rút USB
+## A6. Kiểm lần cuối rồi mới rút USB
 
 ```bash
 ls -R "$USB" | head -40
@@ -328,6 +498,11 @@ cat /tmp/bi-mat/ssh/known_hosts >> ~/.ssh/known_hosts 2>/dev/null
 chmod 600 .env frontend/.env.local
 ```
 
+> ⚠️ **Không chép `bi-mat/apple/` ra máy Linux.** Chứng thư Developer ID chỉ
+> dùng được trên macOS (`codesign`, `notarytool` không tồn tại ở đây), và để
+> khoá riêng nằm giải mã trên một máy đang gánh production là rủi ro thừa. Nó
+> cứ nằm yên trong gói `.gpg`, chờ Mac về — xem PHẦN D.
+
 ### 🔥 XOÁ BẢN GIẢI MÃ NGAY
 
 ```bash
@@ -443,6 +618,58 @@ bạn đã làm xong phần đó ở máy nhà rồi thì lúc này mới quyế
 
 Chỉ cần copy tay sang Mac nếu ở máy nhà có **thêm biến env mới**.
 
+## D1. Nếu tiệm đã wipe đĩa / đổi máy — nhập lại chứng thư Apple
+
+Chỉ làm khi `security find-identity -v -p codesigning` **không còn** dòng
+`Developer ID Application`. Còn nguyên thì bỏ qua, đừng nhập chồng.
+
+```bash
+cd /tmp && gpg -d /Volumes/CHUYEN-MAY/bi-mat.tar.gz.gpg | tar xzf -
+shasum -a 256 /tmp/bi-mat/apple/developer-id.p12   # đối chiếu với van-tay.txt
+```
+
+Nhập vào keychain — `-T` khai trước những chương trình được dùng khoá này, nếu
+không thì mỗi lần ký macOS lại hiện hộp thoại xin phép giữa chừng bản dựng:
+
+```bash
+security import /tmp/bi-mat/apple/developer-id.p12 \
+  -k ~/Library/Keychains/login.keychain-db \
+  -T /usr/bin/codesign -T /usr/bin/security
+```
+Nó hỏi mật khẩu bạn đặt ở bước A4.2/8.
+
+Kiểm đã vào chưa — **đây mới là phép kiểm thật**, vì nó hỏi đúng công cụ mà
+`ky-mac.mjs` sẽ hỏi:
+
+```bash
+security find-identity -v -p codesigning | grep 'Developer ID Application'
+```
+✅ Mong đợi: một dòng có mã SHA-1 40 ký tự + tên chứng thư + Team ID trong ngoặc.
+
+Dựng lại hồ sơ notarytool (không nhập được, phải tạo mới — xem A4.5):
+
+```bash
+xcrun notarytool store-credentials "cuongthai-notary" \
+  --apple-id "cuongthaihnhe176322@gmail.com" --team-id "<Team ID>"
+# Nó hỏi app-specific password (trong notary.txt, hoặc tạo mới ở appleid.apple.com)
+xcrun notarytool history --keychain-profile cuongthai-notary >/dev/null && echo "✅ hồ sơ dùng được"
+```
+
+Xoá bản giải mã:
+
+```bash
+rm -rf /tmp/bi-mat && ls /tmp/bi-mat 2>&1     # ✅ "No such file"
+```
+
+Thử ký mà **không** tốn lượt công chứng nào của Apple:
+
+```bash
+(cd desktop && npm run dist:mac:thu)
+```
+Chế độ thử ký bằng chứng thư bất kỳ đang có, bỏ công chứng, rồi mở thử app —
+nó tồn tại để bắt lỗi Hardened Runtime, thứ hay làm hỏng bản ký hơn cả bước
+công chứng. Xanh rồi mới chạy `npm run dist:mac:ky` thật.
+
 ---
 
 # PHỤ LỤC — PROMPT GỬI CHO CLAUDE CODE TRÊN MÁY NHÀ
@@ -483,6 +710,9 @@ Nó cũng là máy build ảnh Docker cho mọi lần deploy (~/cuongthai-build/
 8. KHÔNG chạy gì ăn VRAM. Card chỉ còn ~0,7 GB trống.
 9. KHÔNG commit .env, .env.local, google-key*.json, secrets.h, hay khoá nào.
 10. KHÔNG sửa file trong prisma/migrations/ đã deploy.
+11. KHÔNG giải mã hay đụng tới phần `bi-mat/apple/` (chứng thư ký app của
+    Apple). Nó chỉ dùng được trên macOS và không liên quan gì tới máy này.
+    Nếu thấy file .p12 nằm giải mã đâu đó trên máy, báo tôi để tôi xoá.
 
 ════ VIỆC CẦN LÀM ════
 GIAI ĐOẠN 1 — KIỂM TRA (chỉ đọc, làm hết rồi mới sang giai đoạn 2):

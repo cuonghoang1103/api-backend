@@ -22,7 +22,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Software Requirements Specification (SRS) is also known as specification/source of</p></div><div class=\"ml-vi\"><p>Đặc tả yêu cầu phần mềm (SRS) còn được coi là đặc tả/nguồn của</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q1.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q1.png",
           "options": [
             {
               "text": "Black box testing|||Kiểm thử hộp đen"
@@ -46,7 +46,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a comparison of functionality between an existing system and a desired new system?</p></div><div class=\"ml-vi\"><p>Đâu là việc so sánh chức năng giữa hệ thống hiện có và hệ thống mới mong muốn?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q2.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q2.png",
           "options": [
             {
               "text": "Requirement elicitation|||Khai thác yêu cầu"
@@ -70,7 +70,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>To understand user tasks and goals and the business objectives with which those tasks align, the BA should discuss with users at which stage?</p></div><div class=\"ml-vi\"><p>Để hiểu các tác vụ, mục tiêu của người dùng và mục tiêu nghiệp vụ mà các tác vụ đó hướng tới, BA nên trao đổi với người dùng ở giai đoạn nào?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q3.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q3.png",
           "options": [
             {
               "text": "Analysis|||Phân tích"
@@ -94,7 +94,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>How to resolve requirements disputes between individual users?</p></div><div class=\"ml-vi\"><p>Làm thế nào để giải quyết tranh chấp yêu cầu giữa các người dùng cá nhân?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q4.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q4.png",
           "options": [
             {
               "text": "Segment with greatest impact on business success gets preference|||Phân khúc có tác động lớn nhất tới thành công nghiệp vụ được ưu tiên"
@@ -118,7 +118,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which is NOT a dimension in requirements engineering?</p></div><div class=\"ml-vi\"><p>Đâu KHÔNG phải là một chiều (dimension) trong kỹ nghệ yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q5.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q5.png",
           "options": [
             {
               "text": "WHO|||AI (WHO)"
@@ -142,7 +142,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which is the type of the following requirement: &quot;The CMS system must be easy to use&quot; ?</p></div><div class=\"ml-vi\"><p>Yêu cầu sau thuộc loại nào: &quot;Hệ thống CMS phải dễ sử dụng&quot;?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q6.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q6.png",
           "options": [
             {
               "text": "Functional requirement|||Yêu cầu chức năng"
@@ -166,7 +166,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is NOT TRUE for the customer during the requirements discussions with business analysts</p></div><div class=\"ml-vi\"><p>Điều nào sau đây KHÔNG ĐÚNG với khách hàng trong các buổi trao đổi yêu cầu với business analyst</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q7.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q7.png",
           "options": [
             {
               "text": "Expect business analysts to speak his/her language|||Mong đợi business analyst nói bằng ngôn ngữ của mình"
@@ -193,7 +193,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which one of the following is NOT the prioritization technique?</p></div><div class=\"ml-vi\"><p>Đâu KHÔNG phải là kỹ thuật xếp thứ tự ưu tiên?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q8.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q8.png",
           "options": [
             {
               "text": "$100|||$100 (chia 100 đô)"
@@ -220,7 +220,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Requirements validation activity occurs primarily after</p></div><div class=\"ml-vi\"><p>Hoạt động thẩm định yêu cầu (validation) chủ yếu diễn ra sau</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q9.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q9.png",
           "options": [
             {
               "text": "Elicitation activity|||Hoạt động khai thác yêu cầu"
@@ -244,7 +244,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of following regarding to the action where a BA examines the potential consequences of specific risks to his/her project?</p></div><div class=\"ml-vi\"><p>Hành động mà BA xem xét hậu quả tiềm tàng của các rủi ro cụ thể đối với dự án của mình được gọi là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q10.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q10.png",
           "options": [
             {
               "text": "Risk analysis|||Phân tích rủi ro"
@@ -268,7 +268,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>User Interface Analysis does NOT include</p></div><div class=\"ml-vi\"><p>Phân tích giao diện người dùng KHÔNG bao gồm</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q11.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q11.png",
           "options": [
             {
               "text": "Study existing systems to discover user and functional requirements|||Nghiên cứu các hệ thống hiện có để tìm ra yêu cầu người dùng và yêu cầu chức năng"
@@ -292,7 +292,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which informal approach you could invite several colleagues to examine a deliverable concurrently when we review requirements?</p></div><div class=\"ml-vi\"><p>Cách tiếp cận phi chính thức nào cho phép bạn mời nhiều đồng nghiệp cùng lúc xem xét một sản phẩm bàn giao khi rà soát yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q12.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q12.png",
           "options": [
             {
               "text": "a pass-around|||pass-around (chuyền tay)"
@@ -316,7 +316,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is true regarding to the requirements engineering process?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây đúng về quy trình kỹ nghệ yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q13.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q13.png",
           "options": [
             {
               "text": "It is initiated at the beginning of a project and continued to be refined throughout the lifecycle|||Nó bắt đầu từ đầu dự án và tiếp tục được tinh chỉnh trong suốt vòng đời"
@@ -340,7 +340,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following statements belong to software specification?</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây thuộc về hoạt động đặc tả phần mềm?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q14.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q14.png",
           "options": [
             {
               "text": "The software to meet the specification must be produced.|||Phải tạo ra phần mềm đáp ứng đặc tả."
@@ -367,7 +367,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which one of the following is NOT the requirements elicitation techniques</p></div><div class=\"ml-vi\"><p>Đâu KHÔNG phải là kỹ thuật khai thác yêu cầu</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q15.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q15.png",
           "options": [
             {
               "text": "Questionnaire|||Bảng hỏi"
@@ -394,7 +394,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Select INCORRECT statement about nonfunctional requirements</p></div><div class=\"ml-vi\"><p>Chọn phát biểu SAI về yêu cầu phi chức năng</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q16.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q16.png",
           "options": [
             {
               "text": "Non-functional requirements define system attributes such as security, reliability, performance, maintainability...|||Yêu cầu phi chức năng định nghĩa các thuộc tính hệ thống như bảo mật, độ tin cậy, hiệu năng, khả năng bảo trì..."
@@ -418,7 +418,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What are the external interface requirements?</p></div><div class=\"ml-vi\"><p>Yêu cầu giao diện ngoài (external interface requirements) là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q17.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q17.png",
           "options": [
             {
               "text": "Interactions with external users, outside the organization that own the software.|||Tương tác với người dùng bên ngoài, ngoài tổ chức sở hữu phần mềm."
@@ -442,7 +442,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which are NOT the most common challenges with packaged solutions?</p></div><div class=\"ml-vi\"><p>Đâu KHÔNG phải là thách thức phổ biến nhất với các giải pháp đóng gói (packaged solutions)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q18.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q18.png",
           "options": [
             {
               "text": "Vendor misrepresents package capabilities|||Nhà cung cấp mô tả sai năng lực của gói phần mềm"
@@ -466,7 +466,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is the format of a user story?</p></div><div class=\"ml-vi\"><p>Định dạng của một user story là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q19.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q19.png",
           "options": [
             {
               "text": "As a [type of user], I want [functionality] that is done [how]|||Là một [loại người dùng], tôi muốn [chức năng] được thực hiện [như thế nào]"
@@ -490,7 +490,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>How to identify user classes?</p></div><div class=\"ml-vi\"><p>Làm thế nào để xác định các lớp người dùng (user class)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q20.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q20.png",
           "options": [
             {
               "text": "Base on the jobs that various users will do with the system|||Dựa trên công việc mà các người dùng khác nhau sẽ làm với hệ thống"
@@ -514,7 +514,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>The best way to conduct a requirements validation review is to</p></div><div class=\"ml-vi\"><p>Cách tốt nhất để tiến hành một buổi rà soát thẩm định yêu cầu là</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q21.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q21.png",
           "options": [
             {
               "text": "examine the system model for errors|||xem xét mô hình hệ thống để tìm lỗi"
@@ -538,7 +538,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Non-functional requirements are</p></div><div class=\"ml-vi\"><p>Yêu cầu phi chức năng là</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q22.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q22.png",
           "options": [
             {
               "text": "Requirements related to non-technical needs (such as, cost of licenses) of software product.|||Yêu cầu liên quan tới nhu cầu phi kỹ thuật (như chi phí bản quyền) của sản phẩm phần mềm."
@@ -562,7 +562,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of these doesn&#39;t belongs to requirements techniques when there is an existing system that you want to replace or enhance?</p></div><div class=\"ml-vi\"><p>Đâu KHÔNG thuộc các kỹ thuật lấy yêu cầu khi đã có một hệ thống hiện hữu mà bạn muốn thay thế hoặc nâng cấp?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q23.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q23.png",
           "options": [
             {
               "text": "Design ERD|||Thiết kế ERD"
@@ -586,7 +586,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>&#39;Quality attributes trade-offs&#39; means</p></div><div class=\"ml-vi\"><p>&#39;Đánh đổi giữa các thuộc tính chất lượng&#39; nghĩa là</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q24.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q24.png",
           "options": [
             {
               "text": "We have to negotiate with customer about the quality attributes of the software.|||Chúng ta phải thương lượng với khách hàng về các thuộc tính chất lượng của phần mềm."
@@ -610,7 +610,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>How to reduce the gap between what the customer needs and what the developer builds?</p></div><div class=\"ml-vi\"><p>Làm sao thu hẹp khoảng cách giữa thứ khách hàng cần và thứ lập trình viên xây dựng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q25.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q25.png",
           "options": [
             {
               "text": "developers should postpone the role of customer in project|||lập trình viên nên trì hoãn vai trò của khách hàng trong dự án"
@@ -634,7 +634,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>&quot;As the lead machine operator, I need to calibrate the pump controller first thing every morning&quot;. This is an example of</p></div><div class=\"ml-vi\"><p>&quot;Là thợ vận hành máy chính, tôi cần hiệu chuẩn bộ điều khiển bơm ngay đầu mỗi buổi sáng&quot;. Đây là ví dụ của</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q26.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q26.png",
           "options": [
             {
               "text": "Business requirement|||Yêu cầu nghiệp vụ"
@@ -658,7 +658,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is most TRUE about a non-functional requirement?</p></div><div class=\"ml-vi\"><p>Điều nào đúng nhất về một yêu cầu phi chức năng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q27.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q27.png",
           "options": [
             {
               "text": "Describes functions software to be executed|||Mô tả các hàm/chức năng phần mềm sẽ được thực thi"
@@ -682,7 +682,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of following is the definition of the product champions?</p></div><div class=\"ml-vi\"><p>Đâu là định nghĩa của product champion?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q28.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q28.png",
           "options": [
             {
               "text": "A group members of our user community to provide the requirements|||Một nhóm thành viên trong cộng đồng người dùng để cung cấp yêu cầu"
@@ -706,7 +706,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which is NOT the purpose of software prototype?</p></div><div class=\"ml-vi\"><p>Đâu KHÔNG phải mục đích của bản mẫu (prototype) phần mềm?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q29.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q29.png",
           "options": [
             {
               "text": "Create a subset that will grow into the ultimate product|||Tạo một phần nhỏ rồi phát triển dần thành sản phẩm cuối cùng"
@@ -730,7 +730,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of following is NOT TRUE for customer involvement during the project lifecycle?</p></div><div class=\"ml-vi\"><p>Điều nào KHÔNG ĐÚNG về sự tham gia của khách hàng trong vòng đời dự án?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q30.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q30.png",
           "options": [
             {
               "text": "On waterfall projects, customers typically dedicate considerable time up front|||Trong dự án thác nước, khách hàng thường dành nhiều thời gian ở giai đoạn đầu"
@@ -754,7 +754,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>In the process of validating the requirements, defect checklist is</p></div><div class=\"ml-vi\"><p>Trong quá trình thẩm định yêu cầu, danh sách kiểm tra lỗi (defect checklist) là</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q31.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q31.png",
           "options": [
             {
               "text": "The pre-defined list of typical kinds of errors in the products we may encounter frequently|||Danh sách định sẵn các loại lỗi điển hình thường gặp trong sản phẩm"
@@ -778,7 +778,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which is the best definition of enhancement project?</p></div><div class=\"ml-vi\"><p>Đâu là định nghĩa đúng nhất của dự án nâng cấp (enhancement project)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q32.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q32.png",
           "options": [
             {
               "text": "Enhancement project is one in which performance are enhanced|||Là dự án trong đó hiệu năng được cải thiện"
@@ -802,7 +802,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which is NOT a step of Requirements Engineering?</p></div><div class=\"ml-vi\"><p>Đâu KHÔNG phải một bước của kỹ nghệ yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q33.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q33.png",
           "options": [
             {
               "text": "Requirements documentation|||Lập tài liệu yêu cầu"
@@ -829,7 +829,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following does NOT belong to dimensions of requirements reuse</p></div><div class=\"ml-vi\"><p>Đâu KHÔNG thuộc các chiều (dimension) của việc tái sử dụng yêu cầu</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q34.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q34.png",
           "options": [
             {
               "text": "Reuse mechanism|||Cơ chế tái sử dụng"
@@ -853,7 +853,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of following is NOT TRUE for the Elicitation step?</p></div><div class=\"ml-vi\"><p>Điều nào KHÔNG ĐÚNG với bước khai thác yêu cầu (Elicitation)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q35.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q35.png",
           "options": [
             {
               "text": "Business analysts will ask customers questions|||Business analyst sẽ đặt câu hỏi cho khách hàng"
@@ -877,7 +877,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is the definition of the user personas?</p></div><div class=\"ml-vi\"><p>Đâu là định nghĩa của user persona?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q36.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q36.png",
           "options": [
             {
               "text": "A description of a group of users giving requirements|||Mô tả một nhóm người dùng cung cấp yêu cầu"
@@ -901,7 +901,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>When the BA prepare questions and straw man models in a single requirements elicitation?</p></div><div class=\"ml-vi\"><p>BA chuẩn bị câu hỏi và các mô hình nháp (straw man model) ở giai đoạn nào của một buổi khai thác yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q37.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q37.png",
           "options": [
             {
               "text": "Perform elicitation activities|||Thực hiện các hoạt động khai thác"
@@ -925,7 +925,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is the type of following requirement, &quot;The system should provide function converting measure units&quot; ?</p></div><div class=\"ml-vi\"><p>Yêu cầu sau thuộc loại nào: &quot;Hệ thống nên cung cấp chức năng chuyển đổi đơn vị đo&quot;?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q38.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q38.png",
           "options": [
             {
               "text": "Non-functional requirements|||Yêu cầu phi chức năng"
@@ -949,7 +949,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which question does non-functional requirements answer?</p></div><div class=\"ml-vi\"><p>Yêu cầu phi chức năng trả lời câu hỏi nào?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q39.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q39.png",
           "options": [
             {
               "text": "Where does the system do it?|||Hệ thống làm việc đó ở đâu?"
@@ -973,7 +973,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a non-functional requirement?</p></div><div class=\"ml-vi\"><p>Đâu là một yêu cầu phi chức năng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q40.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q40.png",
           "options": [
             {
               "text": "The system always responds to user clicks in less than one tenth of a second|||Hệ thống luôn phản hồi cú nhấp chuột của người dùng trong dưới một phần mười giây"
@@ -997,7 +997,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>A reader could interpret a requirement into several ways. This is a symptom of</p></div><div class=\"ml-vi\"><p>Một người đọc có thể hiểu một yêu cầu theo nhiều cách khác nhau. Đây là triệu chứng của</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q41.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q41.png",
           "options": [
             {
               "text": "Creeping user requirements|||Yêu cầu người dùng phình dần (creeping)"
@@ -1021,7 +1021,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is NOT included in SRS ?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây KHÔNG có trong SRS?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q42.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q42.png",
           "options": [
             {
               "text": "Functionality|||Chức năng"
@@ -1045,7 +1045,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is considered the traditional means of requirements elicitation?</p></div><div class=\"ml-vi\"><p>Đâu được coi là phương tiện truyền thống để khai thác yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q43.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q43.png",
           "options": [
             {
               "text": "Scenarios|||Kịch bản (scenario)"
@@ -1069,7 +1069,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Updating sets of requirements is an activity of</p></div><div class=\"ml-vi\"><p>Cập nhật các tập yêu cầu là hoạt động của</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q44.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q44.png",
           "options": [
             {
               "text": "requirements status tracking|||theo dõi trạng thái yêu cầu"
@@ -1093,7 +1093,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following should a user story NOT do?</p></div><div class=\"ml-vi\"><p>User story KHÔNG nên làm điều nào sau đây?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q45.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q45.png",
           "options": [
             {
               "text": "Discuss specific technologies|||Bàn về công nghệ cụ thể"
@@ -1117,7 +1117,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of following is used to refine requirements in the prototyping model?</p></div><div class=\"ml-vi\"><p>Đâu là thứ được dùng để tinh chỉnh yêu cầu trong mô hình prototyping?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q46.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q46.png",
           "options": [
             {
               "text": "Quick design|||Thiết kế nhanh"
@@ -1141,7 +1141,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Who is the customer?</p></div><div class=\"ml-vi\"><p>Khách hàng (customer) là ai?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q47.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q47.png",
           "options": [
             {
               "text": "Database Administrator|||Quản trị cơ sở dữ liệu"
@@ -1165,7 +1165,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>The work products produced during requirement elicitation will vary depending on the</p></div><div class=\"ml-vi\"><p>Các sản phẩm công việc tạo ra trong quá trình khai thác yêu cầu sẽ khác nhau tùy theo</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q48.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q48.png",
           "options": [
             {
               "text": "stakeholders needs|||nhu cầu của các bên liên quan"
@@ -1189,7 +1189,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is one or more software configuration items that have been formally reviewed and agreed upon and serve as a basis for further development?</p></div><div class=\"ml-vi\"><p>Một hoặc nhiều hạng mục cấu hình phần mềm đã được rà soát chính thức, được thống nhất và làm nền cho việc phát triển tiếp theo được gọi là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q49.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q49.png",
           "options": [
             {
               "text": "Change Control|||Kiểm soát thay đổi"
@@ -1213,7 +1213,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>CCB stands for</p></div><div class=\"ml-vi\"><p>CCB là viết tắt của</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q50.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q50.png",
           "options": [
             {
               "text": "Cumulative Changes in Baseline|||Cumulative Changes in Baseline"
@@ -1237,7 +1237,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is TRUE about the software prototyping?</p></div><div class=\"ml-vi\"><p>Điều nào ĐÚNG về bản mẫu (prototyping) phần mềm?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q51.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q51.png",
           "options": [
             {
               "text": "A partial, possible, or preliminary implementation of a proposed new product|||Một cài đặt một phần, khả dĩ hoặc sơ bộ của sản phẩm mới được đề xuất"
@@ -1261,7 +1261,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>The person who ensures that systems are developed on time, within budget, and with acceptable quality is</p></div><div class=\"ml-vi\"><p>Người đảm bảo hệ thống được phát triển đúng hạn, trong ngân sách và với chất lượng chấp nhận được là</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q52.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q52.png",
           "options": [
             {
               "text": "systems designer|||người thiết kế hệ thống"
@@ -1288,7 +1288,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of following statements are WRONG?</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây SAI?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q53.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q53.png",
           "options": [
             {
               "text": "Evolutionary prototype is incrementally developed to become part of the product.|||Prototype tiến hóa được phát triển tăng dần để trở thành một phần của sản phẩm."
@@ -1312,7 +1312,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>IEEE 830 is an IEEE recommended standard for</p></div><div class=\"ml-vi\"><p>IEEE 830 là chuẩn khuyến nghị của IEEE dành cho</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q54.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q54.png",
           "options": [
             {
               "text": "Testing Specification|||Đặc tả kiểm thử"
@@ -1336,7 +1336,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which one of the following is a functional requirement?</p></div><div class=\"ml-vi\"><p>Đâu là một yêu cầu chức năng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q55.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q55.png",
           "options": [
             {
               "text": "Maintainability|||Khả năng bảo trì"
@@ -1363,7 +1363,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of following is the purpose of the requirements validation process?</p></div><div class=\"ml-vi\"><p>Đâu là mục đích của quy trình thẩm định yêu cầu (validation)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q56.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q56.png",
           "options": [
             {
               "text": "Check if the source code conforms the coding convention|||Kiểm tra mã nguồn có tuân thủ quy ước viết mã không"
@@ -1387,7 +1387,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>A listed acceptance criterion to fulfil certain requirements of a user and normally written from the perspective of an end-user. This is a ...</p></div><div class=\"ml-vi\"><p>Một tiêu chí chấp nhận được liệt kê nhằm đáp ứng những yêu cầu nhất định của người dùng và thường được viết từ góc nhìn của người dùng cuối. Đó là ...</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q57.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q57.png",
           "options": [
             {
               "text": "release|||bản phát hành (release)"
@@ -1414,7 +1414,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>In Agile project, a single representative of stakeholders is called</p></div><div class=\"ml-vi\"><p>Trong dự án Agile, người đại diện duy nhất của các bên liên quan được gọi là</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q58.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q58.png",
           "options": [
             {
               "text": "product owner|||product owner"
@@ -1438,7 +1438,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which is NOT TRUE of Use Case approach?</p></div><div class=\"ml-vi\"><p>Điều nào KHÔNG ĐÚNG về cách tiếp cận Use Case?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q59.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q59.png",
           "options": [
             {
               "text": "The use cases describe the &#39;how&#39; of a system|||Use case mô tả &#39;làm thế nào&#39; (how) của hệ thống"
@@ -1462,7 +1462,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of following in the context diagram are used to represent a user&#39;s interaction with the system?</p></div><div class=\"ml-vi\"><p>Trong sơ đồ ngữ cảnh (context diagram), thành phần nào được dùng để biểu diễn tương tác của người dùng với hệ thống?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16/q60.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE16-v2/q60.png",
           "options": [
             {
               "text": "Users of the software and actors|||Người dùng phần mềm và các actor"

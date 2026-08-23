@@ -22,7 +22,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which type of requirement specifies a behavior or action that the system must exhibit?</p></div><div class=\"ml-vi\"><p>Loại yêu cầu nào đặc tả một hành vi hoặc hành động mà hệ thống phải thể hiện?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q1.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q1.png",
           "options": [
             {
               "text": "Business requirement|||Yêu cầu nghiệp vụ"
@@ -46,7 +46,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is NOT a typical activity in requirement management?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây KHÔNG phải là hoạt động điển hình trong quản lý yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q2.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q2.png",
           "options": [
             {
               "text": "Analyzing and prioritizing requirements|||Phân tích và sắp thứ tự ưu tiên các yêu cầu"
@@ -70,7 +70,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a key principle of Agile software development?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là một nguyên tắc cốt lõi của phát triển phần mềm Agile?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q3.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q3.png",
           "options": [
             {
               "text": "Contract negotiation over customer collaboration|||Đàm phán hợp đồng hơn là cộng tác với khách hàng"
@@ -94,7 +94,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Giving an example of quality requirements: &quot;Authorization of an ATM withdrawal request shall take no more than 2.0 seconds&quot;. This is a__________</p></div><div class=\"ml-vi\"><p>Ví dụ về yêu cầu chất lượng: &quot;Việc cấp phép cho một yêu cầu rút tiền ATM phải mất không quá 2,0 giây&quot;. Đây là một __________</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q4.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q4.png",
           "options": [
             {
               "text": "robustness requirement|||yêu cầu về tính bền vững (robustness)"
@@ -118,7 +118,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which document is commonly used to capture and communicate requirements?</p></div><div class=\"ml-vi\"><p>Tài liệu nào thường được dùng để ghi nhận và truyền đạt các yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q5.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q5.png",
           "options": [
             {
               "text": "Test plan|||Kế hoạch kiểm thử"
@@ -142,7 +142,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Mr Long is the business analyst for his company and he is performing the solution assessment process. When he assesses a solution, what is he actually looking for?</p></div><div class=\"ml-vi\"><p>Ông Long là chuyên viên phân tích nghiệp vụ của công ty và đang thực hiện quy trình đánh giá giải pháp. Khi đánh giá một giải pháp, thực chất ông đang tìm điều gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q6.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q6.png",
           "options": [
             {
               "text": "He is determining the quality of the proposed solution to the stakeholder requirements|||Ông xác định chất lượng của giải pháp đề xuất so với yêu cầu của bên liên quan"
@@ -166,7 +166,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is not a primary goal of requirement management in software development?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây KHÔNG phải mục tiêu chính của quản lý yêu cầu trong phát triển phần mềm?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q7.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q7.png",
           "options": [
             {
               "text": "Prioritizing requirements based on business value|||Ưu tiên các yêu cầu dựa trên giá trị nghiệp vụ"
@@ -190,7 +190,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>How to identify user classes?</p></div><div class=\"ml-vi\"><p>Làm thế nào để xác định các lớp người dùng (user classes)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q8.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q8.png",
           "options": [
             {
               "text": "Base on the roles that various users will take with the system|||Dựa trên các VAI TRÒ mà những người dùng khác nhau đảm nhận với hệ thống"
@@ -214,7 +214,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is traceability in the context of requirements validation?</p></div><div class=\"ml-vi\"><p>Truy vết (traceability) trong bối cảnh thẩm định yêu cầu là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q9.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q9.png",
           "options": [
             {
               "text": "The ability to trace requirements back to their source and forward to design and testing|||Khả năng truy ngược yêu cầu về nguồn gốc và truy xuôi tới thiết kế và kiểm thử"
@@ -238,7 +238,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is the primary goal of risk management in requirement management?</p></div><div class=\"ml-vi\"><p>Mục tiêu chính của quản lý rủi ro trong quản lý yêu cầu là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q10.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q10.png",
           "options": [
             {
               "text": "To create extensive documentation|||Tạo ra tài liệu thật đồ sộ"
@@ -262,7 +262,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What does the MoSCoW prioritization technique help with in requirement management?</p></div><div class=\"ml-vi\"><p>Kỹ thuật ưu tiên MoSCoW giúp ích gì trong quản lý yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q11.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q11.png",
           "options": [
             {
               "text": "Creating user stories|||Tạo user story"
@@ -286,7 +286,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>In the V model, the user requirements are detected by ___________</p></div><div class=\"ml-vi\"><p>Trong mô hình chữ V, các yêu cầu người dùng được kiểm chứng bằng ___________</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q12.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q12.png",
           "options": [
             {
               "text": "Unit testing|||Kiểm thử đơn vị"
@@ -310,7 +310,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is a user story in Agile methodology?</p></div><div class=\"ml-vi\"><p>User story trong phương pháp Agile là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q13.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q13.png",
           "options": [
             {
               "text": "A long narrative about the project development process|||Một bản tường thuật dài về quá trình phát triển dự án"
@@ -334,7 +334,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Requirements tracing is most likely concerned with the following(recovering the source of requirements from)</p></div><div class=\"ml-vi\"><p>Truy vết yêu cầu nhiều khả năng liên quan tới điều nào sau đây (lần lại nguồn gốc của yêu cầu từ)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q14.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q14.png",
           "options": [
             {
               "text": "Software requirement to validation test|||Yêu cầu phần mềm tới bài kiểm thử thẩm định"
@@ -358,7 +358,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>In Agile project, the product owner and product champion schemes are _______</p></div><div class=\"ml-vi\"><p>Trong dự án Agile, cơ chế product owner và product champion là _______</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q15.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q15.png",
           "options": [
             {
               "text": "not supported mutually|||không hỗ trợ lẫn nhau"
@@ -382,7 +382,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which technique is commonly used to elicit requirements from stakeholders?</p></div><div class=\"ml-vi\"><p>Kỹ thuật nào thường được dùng để khai thác yêu cầu từ các bên liên quan?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q16.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q16.png",
           "options": [
             {
               "text": "Risk analysis|||Phân tích rủi ro"
@@ -406,7 +406,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following best describes a non-functional requirement?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây mô tả đúng nhất một yêu cầu phi chức năng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q17.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q17.png",
           "options": [
             {
               "text": "The system should be compatible with Internet Explorer 11|||Hệ thống phải tương thích với Internet Explorer 11"
@@ -430,7 +430,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is crucial for both enhancement and replacement projects?</p></div><div class=\"ml-vi\"><p>Điều gì là then chốt cho cả dự án nâng cấp (enhancement) lẫn dự án thay thế (replacement)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q18.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q18.png",
           "options": [
             {
               "text": "Completing the project with the least cost|||Hoàn thành dự án với chi phí thấp nhất"
@@ -454,7 +454,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which is not the purpose of software prototype?</p></div><div class=\"ml-vi\"><p>Điều nào KHÔNG phải mục đích của bản mẫu phần mềm (prototype)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q19.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q19.png",
           "options": [
             {
               "text": "Specific technologies, tools, languages, and databases that must be used or avoided|||Các công nghệ, công cụ, ngôn ngữ, cơ sở dữ liệu cụ thể bắt buộc dùng hoặc phải tránh"
@@ -478,7 +478,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which factor is essential for the success of a business process automation project?</p></div><div class=\"ml-vi\"><p>Yếu tố nào là thiết yếu cho thành công của một dự án tự động hoá quy trình nghiệp vụ?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q20.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q20.png",
           "options": [
             {
               "text": "Avoiding stakeholder input and feedback|||Tránh lấy ý kiến và phản hồi của các bên liên quan"
@@ -502,7 +502,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is the primary goal of requirements specification?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là mục tiêu chính của đặc tả yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q21.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q21.png",
           "options": [
             {
               "text": "To document the system&#39;s behavior and constraints|||Ghi lại hành vi và các ràng buộc của hệ thống"
@@ -526,7 +526,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which requirement attribute refers to the ability of a system to be easily understood and operated by its users?</p></div><div class=\"ml-vi\"><p>Thuộc tính yêu cầu nào chỉ khả năng hệ thống dễ hiểu và dễ vận hành đối với người dùng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q22.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q22.png",
           "options": [
             {
               "text": "Testability|||Tính kiểm thử được"
@@ -550,7 +550,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which is(are) the main purpose of use cases?</p></div><div class=\"ml-vi\"><p>Đâu là mục đích chính của ca sử dụng (use case)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q23.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q23.png",
           "options": [
             {
               "text": "Exploring the requirements for business applications, websites, kiosks, and systems that let a user control a piece of hardware|||Khám phá yêu cầu cho ứng dụng nghiệp vụ, website, kiosk và các hệ thống cho phép người dùng điều khiển một thiết bị phần cứng"
@@ -574,7 +574,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which one of the following is a functional requirement ?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là một yêu cầu chức năng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q24.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q24.png",
           "options": [
             {
               "text": "Maintainability|||Tính bảo trì được"
@@ -598,7 +598,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which type of requirement is focused on describing the user interactions with the software?</p></div><div class=\"ml-vi\"><p>Loại yêu cầu nào tập trung mô tả tương tác của người dùng với phần mềm?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q25.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q25.png",
           "options": [
             {
               "text": "Functional requirement|||Yêu cầu chức năng"
@@ -622,7 +622,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of requirements analysis?</p></div><div class=\"ml-vi\"><p>Mục đích của phân tích yêu cầu là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q26.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q26.png",
           "options": [
             {
               "text": "To conduct user training|||Tổ chức đào tạo người dùng"
@@ -646,7 +646,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>When the BA prepare questions and straw man models in a single requirements elicitation?</p></div><div class=\"ml-vi\"><p>Chuyên viên phân tích nghiệp vụ chuẩn bị câu hỏi và mô hình nháp (straw man) ở giai đoạn nào của một buổi khai thác yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q27.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q27.png",
           "options": [
             {
               "text": "Follow up after elicitation|||Theo dõi sau buổi khai thác"
@@ -670,7 +670,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>The product champions is</p></div><div class=\"ml-vi\"><p>Product champion là</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q28.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q28.png",
           "options": [
             {
               "text": "a group members of our user community to provide the requirements|||một nhóm thành viên của cộng đồng người dùng cung cấp yêu cầu"
@@ -694,7 +694,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is typically used to develop embedded systems?</p></div><div class=\"ml-vi\"><p>Thứ gì thường được dùng để phát triển hệ thống nhúng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q29.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q29.png",
           "options": [
             {
               "text": "General-purpose programming languages only|||Chỉ dùng các ngôn ngữ lập trình đa dụng"
@@ -718,7 +718,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which requirement attribute refers to the degree to which a requirement is clear and unambiguous?</p></div><div class=\"ml-vi\"><p>Thuộc tính yêu cầu nào chỉ mức độ một yêu cầu rõ ràng và không nhập nhằng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q30.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q30.png",
           "options": [
             {
               "text": "Testability|||Tính kiểm thử được"
@@ -742,7 +742,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of a risk mitigation plan in requirements management?</p></div><div class=\"ml-vi\"><p>Mục đích của kế hoạch giảm thiểu rủi ro trong quản lý yêu cầu là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q31.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q31.png",
           "options": [
             {
               "text": "To identify potential risks during development|||Nhận diện các rủi ro tiềm tàng trong quá trình phát triển"
@@ -766,7 +766,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which statement(s) is/are correct for DFD (data flow diagram)?</p></div><div class=\"ml-vi\"><p>Phát biểu nào đúng về DFD (biểu đồ luồng dữ liệu)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q32.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q32.png",
           "options": [
             {
               "text": "Data flows are pipelines through which external entities flow|||Luồng dữ liệu là các đường ống mà qua đó các thực thể ngoài di chuyển"
@@ -790,7 +790,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>During requirements validation, what is the purpose of negotiation with stakeholders?</p></div><div class=\"ml-vi\"><p>Trong thẩm định yêu cầu, mục đích của việc thương lượng với các bên liên quan là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q33.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q33.png",
           "options": [
             {
               "text": "To force stakeholders to accept all requirements as-is|||Ép các bên liên quan chấp nhận mọi yêu cầu y nguyên"
@@ -814,7 +814,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>The COTS package implementation approach in that we install the software and use it as is, called</p></div><div class=\"ml-vi\"><p>Cách triển khai gói COTS mà ta cài đặt phần mềm rồi dùng nguyên trạng được gọi là</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q34.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q34.png",
           "options": [
             {
               "text": "Integrated|||Tích hợp (Integrated)"
@@ -838,7 +838,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is NOT a common technique used in requirements analysis?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây KHÔNG phải kỹ thuật phổ biến trong phân tích yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q35.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q35.png",
           "options": [
             {
               "text": "Interviews with stakeholders|||Phỏng vấn các bên liên quan"
@@ -862,7 +862,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Business requirements issues must be resolved:</p></div><div class=\"ml-vi\"><p>Các vấn đề về yêu cầu nghiệp vụ phải được giải quyết:</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q36.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q36.png",
           "options": [
             {
               "text": "After the functional and nonfunctional requirements can be fully specified.|||Sau khi các yêu cầu chức năng và phi chức năng có thể được đặc tả đầy đủ."
@@ -886,7 +886,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is NOT a common technique for requirements validation?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây KHÔNG phải kỹ thuật phổ biến để thẩm định yêu cầu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q37.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q37.png",
           "options": [
             {
               "text": "User acceptance testing|||Kiểm thử chấp nhận của người dùng"
@@ -910,7 +910,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which is not an activity for a single requirements elicitation session?</p></div><div class=\"ml-vi\"><p>Điều nào KHÔNG phải là hoạt động của một buổi khai thác yêu cầu đơn lẻ?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q38.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q38.png",
           "options": [
             {
               "text": "Follow up after elicitation|||Theo dõi sau buổi khai thác"
@@ -934,7 +934,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Embedded systems are often designed for:</p></div><div class=\"ml-vi\"><p>Hệ thống nhúng thường được thiết kế cho:</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q39.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q39.png",
           "options": [
             {
               "text": "Large-scale data analysis|||Phân tích dữ liệu quy mô lớn"
@@ -958,7 +958,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is NOT a common source of requirements in software development?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây KHÔNG phải nguồn yêu cầu phổ biến trong phát triển phần mềm?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q40.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q40.png",
           "options": [
             {
               "text": "Project managers|||Quản lý dự án"
@@ -982,7 +982,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is an example of a functional requirement?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là ví dụ về yêu cầu chức năng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q41.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q41.png",
           "options": [
             {
               "text": "The system should have a responsive user interface|||Hệ thống phải có giao diện người dùng phản hồi nhanh"
@@ -1006,7 +1006,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>How to reduce the gap between what the customer needs and what the developer builds?</p></div><div class=\"ml-vi\"><p>Làm sao thu hẹp khoảng cách giữa cái khách hàng cần và cái lập trình viên xây dựng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q42.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q42.png",
           "options": [
             {
               "text": "developers need to catch up with the demands of customers|||lập trình viên cần chạy theo cho kịp đòi hỏi của khách hàng"
@@ -1030,7 +1030,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which is a common programming language for embedded system development?</p></div><div class=\"ml-vi\"><p>Ngôn ngữ lập trình nào phổ biến cho phát triển hệ thống nhúng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q43.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q43.png",
           "options": [
             {
               "text": "HTML|||HTML"
@@ -1054,7 +1054,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which stakeholder group is often responsible for introducing changes to requirements that can lead to risks?</p></div><div class=\"ml-vi\"><p>Nhóm bên liên quan nào thường là nguồn đưa ra các thay đổi yêu cầu có thể dẫn tới rủi ro?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q44.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q44.png",
           "options": [
             {
               "text": "Project manager|||Quản lý dự án"
@@ -1078,7 +1078,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What type of testing is critical for real-time systems?</p></div><div class=\"ml-vi\"><p>Loại kiểm thử nào là then chốt cho hệ thống thời gian thực?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q45.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q45.png",
           "options": [
             {
               "text": "Cross-browser testing|||Kiểm thử đa trình duyệt"
@@ -1102,7 +1102,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of a requirements traceability matrix?</p></div><div class=\"ml-vi\"><p>Mục đích của ma trận truy vết yêu cầu là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q46.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q46.png",
           "options": [
             {
               "text": "To track changes made to requirements throughout the project|||Theo dõi các thay đổi của yêu cầu suốt dự án"
@@ -1126,7 +1126,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Change management can also be called</p></div><div class=\"ml-vi\"><p>Quản lý thay đổi còn được gọi là</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q47.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q47.png",
           "options": [
             {
               "text": "change prevention|||ngăn chặn thay đổi"
@@ -1150,7 +1150,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is the main focus of real-time operating systems (RTOS)?</p></div><div class=\"ml-vi\"><p>Trọng tâm chính của hệ điều hành thời gian thực (RTOS) là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q48.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q48.png",
           "options": [
             {
               "text": "Managing resource use efficiently|||Quản lý sử dụng tài nguyên hiệu quả"
@@ -1174,7 +1174,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>During the Monitor and Control Business Analysis Performance process, which of the following is performed?</p></div><div class=\"ml-vi\"><p>Trong quy trình Giám sát và Kiểm soát Hiệu quả Phân tích Nghiệp vụ, việc nào sau đây được thực hiện?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q49.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q49.png",
           "options": [
             {
               "text": "Analyzing and evaluating business analysis activities|||Phân tích và đánh giá các hoạt động phân tích nghiệp vụ"
@@ -1198,7 +1198,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which section of a use case description outlines the steps the actor takes to accomplish the use case?</p></div><div class=\"ml-vi\"><p>Phần nào của mô tả ca sử dụng liệt kê các bước tác nhân thực hiện để hoàn thành ca sử dụng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q50.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q50.png",
           "options": [
             {
               "text": "Preconditions|||Tiền điều kiện"
@@ -1222,7 +1222,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a characteristic of a good requirement?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là đặc trưng của một yêu cầu tốt?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q51.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q51.png",
           "options": [
             {
               "text": "Measurable and testable|||Đo được và kiểm thử được"
@@ -1246,7 +1246,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>&quot;Provide a description of the user actions and corresponding system responses that will take place during execution of the use case under normal, expected conditions&quot;. This activity belong the __________ section in use case document.</p></div><div class=\"ml-vi\"><p>&quot;Cung cấp mô tả các hành động của người dùng và phản hồi tương ứng của hệ thống diễn ra khi thực thi ca sử dụng trong điều kiện bình thường, như mong đợi&quot;. Hoạt động này thuộc phần __________ trong tài liệu ca sử dụng.</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q52.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q52.png",
           "options": [
             {
               "text": "Exceptions|||Ngoại lệ"
@@ -1270,7 +1270,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>&quot;If the editor fails before the user saves the file, it shall recover the contents of the file being edited as of, at most, thirsty seconds prior to the failure the next time the same user launches the application.&quot;. This is a sample of ....</p></div><div class=\"ml-vi\"><p>&quot;Nếu trình soạn thảo hỏng trước khi người dùng lưu tệp, nó phải khôi phục nội dung tệp đang soạn tại thời điểm nhiều nhất là ba mươi giây trước khi hỏng, vào lần tiếp theo chính người dùng đó khởi chạy ứng dụng.&quot; Đây là ví dụ về ....</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q53.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q53.png",
           "options": [
             {
               "text": "usability requirement|||yêu cầu về tính khả dụng (usability)"
@@ -1294,7 +1294,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>In Agile project, a single representative of stakeholders is called</p></div><div class=\"ml-vi\"><p>Trong dự án Agile, một người duy nhất đại diện cho các bên liên quan được gọi là</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q54.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q54.png",
           "options": [
             {
               "text": "product champion|||product champion"
@@ -1318,7 +1318,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>How to resolve requirements disputes between individual users?</p></div><div class=\"ml-vi\"><p>Giải quyết tranh chấp về yêu cầu giữa các cá nhân người dùng như thế nào?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q55.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q55.png",
           "options": [
             {
               "text": "Business objectives dictate direction|||Mục tiêu nghiệp vụ quyết định hướng đi"
@@ -1342,7 +1342,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>PFPT Software is a large outsourcing company in Vietnam. They develop various kinds of software for various customers. After the product goes live, a customer support ticket system will handle customer feedback. When a customer raises a ticket, the supporter will assign it to the relevant team to analyze and develop or fix it. The solution must be tested by the QA team before integrating it into the software. Each team has many team members, and they work 24/7 to give the best support to customers. Of course, they have to split shifts to do this. Then, when everything is done, the development team will resolve the ticket and the customer will be notified about that. Which of below statement is correct?</p></div><div class=\"ml-vi\"><p>PFPT Software là một công ty gia công phần mềm lớn ở Việt Nam. Họ phát triển nhiều loại phần mềm cho nhiều khách hàng. Sau khi sản phẩm chạy thật, một hệ thống ticket hỗ trợ khách hàng sẽ tiếp nhận phản hồi. Khi khách hàng mở một ticket, nhân viên hỗ trợ sẽ gán nó cho đội liên quan để phân tích và phát triển hoặc sửa lỗi. Giải pháp phải được đội QA kiểm thử trước khi tích hợp vào phần mềm. Mỗi đội có nhiều thành viên và họ làm việc 24/7 để hỗ trợ khách hàng tốt nhất. Dĩ nhiên họ phải chia ca để làm điều đó. Sau đó, khi mọi việc xong xuôi, đội phát triển sẽ đóng (resolve) ticket và khách hàng sẽ được thông báo. Phát biểu nào dưới đây là đúng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q56.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q56.png",
           "options": [
             {
               "text": "Open, assigned, worked, in progress, resolved, tested, closed are valid state of tiket|||Open, assigned, worked, in progress, resolved, tested, closed đều là các trạng thái hợp lệ của ticket"
@@ -1366,7 +1366,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>In Agile, the product backlog is:</p></div><div class=\"ml-vi\"><p>Trong Agile, product backlog là:</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q57.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q57.png",
           "options": [
             {
               "text": "Fixed at the beginning of the project and cannot be changed|||Được cố định từ đầu dự án và không thể thay đổi"
@@ -1390,7 +1390,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Change management in enhancement and replacement projects is important for:</p></div><div class=\"ml-vi\"><p>Quản lý thay đổi trong các dự án nâng cấp và thay thế quan trọng vì:</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q58.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q58.png",
           "options": [
             {
               "text": "Managing how changes to the project are approved and implemented|||Quản lý cách các thay đổi của dự án được phê duyệt và triển khai"
@@ -1414,7 +1414,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of the daily stand-up meeting in Agile?</p></div><div class=\"ml-vi\"><p>Mục đích của buổi họp đứng hằng ngày (daily stand-up) trong Agile là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q59.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q59.png",
           "options": [
             {
               "text": "To provide a status update to stakeholders|||Báo cáo tình trạng cho các bên liên quan"
@@ -1438,7 +1438,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which document is commonly used to capture and validate software requirements?</p></div><div class=\"ml-vi\"><p>Tài liệu nào thường được dùng để ghi nhận và thẩm định các yêu cầu phần mềm?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25/q60.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/SWR302/FE25-v2/q60.png",
           "options": [
             {
               "text": "Software Design Document (SDD)|||Tài liệu Thiết kế Phần mềm (SDD)"

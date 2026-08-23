@@ -18,6 +18,7 @@
  * Seed: node scripts/course-seed.mjs --file ./content/courses/prisma-orm.mjs --apply
  */
 import s00 from './prisma-orm/s00-intro.mjs';
+import s01 from './prisma-orm/s01-orm.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -41,5 +42,6 @@ export default {
   },
   sections: [
     s00,
+    s01,
   ],
 };

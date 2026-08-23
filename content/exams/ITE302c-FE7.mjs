@@ -471,9 +471,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            1
+            3
           ],
-          "explanation": "<div class=\"ml-en\"><p>An organizational philosophy is only meaningful if its ethical principles are actually put into practice, rather than merely copied or narrowly internal.</p></div><div class=\"ml-vi\"><p>Triết lý tổ chức chỉ có ý nghĩa khi các nguyên tắc đạo đức của nó thực sự được đưa vào thực hành, thay vì chỉ sao chép hay chỉ tập trung nội bộ hẹp.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Building a durable organizational philosophy requires anticipating its future implications, not just adopting others' philosophies or focusing narrowly on internal needs. (Verified against a reference-answer copy of this deck.)</p></div><div class=\"ml-vi\"><p>Xây dựng một triết lý tổ chức bền vững đòi hỏi phải dự liệu trước các tác động tương lai của nó, không chỉ đơn thuần áp dụng triết lý của tổ chức khác hay chỉ tập trung hẹp vào nhu cầu nội bộ. (Đã đối chiếu với bản đề có đáp án tham khảo.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -958,10 +958,10 @@ export default {
             }
           ],
           "correctIndexes": [
-            1,
-            2
+            2,
+            3
           ],
-          "explanation": "<div class=\"ml-en\"><p>EBITDA is a common high-level business KPI, and model performance metrics like accuracy/cost functions are the core technical KPIs for data-driven systems.</p></div><div class=\"ml-vi\"><p>EBITDA là một KPI kinh doanh cấp cao phổ biến, và các chỉ số hiệu năng mô hình như độ chính xác/hàm chi phí là các KPI kỹ thuật cốt lõi cho hệ thống dựa trên dữ liệu.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>For data-driven system dashboards specifically, the relevant KPIs are ML-ops metrics like model training time and performance/accuracy metrics — not generic business financials. (Verified against a reference-answer copy of this deck.)</p></div><div class=\"ml-vi\"><p>Đối với bảng điều khiển của hệ thống dựa trên dữ liệu cụ thể, các KPI liên quan là các chỉ số vận hành ML như thời gian huấn luyện mô hình và chỉ số hiệu năng/độ chính xác — không phải các chỉ số tài chính doanh nghiệp chung chung. (Đã đối chiếu với bản đề có đáp án tham khảo.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1176,9 +1176,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            3
+            0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Holding ethical risk reviews at the design stage allows issues to be caught before significant resources are invested in development.</p></div><div class=\"ml-vi\"><p>Tổ chức đánh giá rủi ro đạo đức ở giai đoạn thiết kế cho phép phát hiện vấn đề trước khi đầu tư nhiều nguồn lực vào phát triển.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Holding ethical risk reviews at the very conception of a project catches issues before any resources are committed to design or development. (Verified against a reference-answer copy of this deck.)</p></div><div class=\"ml-vi\"><p>Tổ chức đánh giá rủi ro đạo đức ngay từ khi hình thành ý tưởng dự án giúp phát hiện vấn đề trước khi bất kỳ nguồn lực nào được đầu tư vào thiết kế hay phát triển. (Đã đối chiếu với bản đề có đáp án tham khảo.)</p></div>"
         },
         {
           "kind": "MCQ",

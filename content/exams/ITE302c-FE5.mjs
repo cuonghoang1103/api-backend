@@ -1367,9 +1367,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            2
+            3
           ],
-          "explanation": "<div class=\"ml-en\"><p>Holding ethical risk reviews at the design stage allows issues to be caught before significant resources are invested in development.</p></div><div class=\"ml-vi\"><p>Tổ chức đánh giá rủi ro đạo đức ở giai đoạn thiết kế cho phép phát hiện vấn đề trước khi đầu tư nhiều nguồn lực vào phát triển.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Holding ethical risk reviews at the very conception of a project catches issues before any resources are committed to design or development. (Verified against a reference-answer copy of this deck.)</p></div><div class=\"ml-vi\"><p>Tổ chức đánh giá rủi ro đạo đức ngay từ khi hình thành ý tưởng dự án giúp phát hiện vấn đề trước khi bất kỳ nguồn lực nào được đầu tư vào thiết kế hay phát triển. (Đã đối chiếu với bản đề có đáp án tham khảo.)</p></div>"
         },
         {
           "kind": "MCQ",

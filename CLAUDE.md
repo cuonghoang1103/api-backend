@@ -184,6 +184,10 @@ Máy nhà (12 nhân/31GB) build cả hai ảnh SONG SONG rồi đẩy lên GHCR;
 - Chỉ nội dung **đã commit** đi qua (`git push` vào kho trần ở máy nhà), nên nó
   không thể chộp trúng file phiên khác đang lưu dở như `deploy.sh` từng làm.
 
+Từ 23/08/2026 nó **cũng đồng bộ `nginx/nginx.conf` và nạp lại nginx** (bước 6b,
+chạy sau smoke-test): so `sha256` nên không đổi thì không đụng tới, có đổi thì
+`nginx -t` trước, hỏng thì trả bản cũ về và dừng — ảnh vẫn đã tráo xong.
+
 ```bash
 bash deploy-nha.sh              # chuẩn; máy nhà hỏng thì tự lùi về deploy.sh
 bash deploy-nha.sh --khong-lui  # hỏng thì dừng hẳn
@@ -527,6 +531,7 @@ Condensed log of past failures — do not repeat:
 | 2026-08-08 | Đổi tên giá trị enum `ContentType.CODE` → `CODE_REVIEW` (để khớp frontend vốn đã nói `CODE_REVIEW`). Qua sạch toàn bộ pre-push checklist, vẫn **vỡ seed trên production**: `prisma/seed.ts` tự chép lại union `'VLOG' \| ... \| 'CODE' \| ...` nên nó tự kiểm với chính nó, và `tsconfig.json` lại **exclude `prisma/seed.ts`** | Union enum chép tay là mầm trôi dạt — import thẳng từ `@prisma/client`. Và `tsc --noEmit` KHÔNG đụng tới `prisma/**`: thêm `npm run typecheck:seed` + `npx prisma db seed` vào checklist khi đổi schema. Chạy thật mới biết, đọc không ra |
 | 2026-07-30 | Chốt kiểm frontend trong `deploy.sh` gọi `wget` bên trong container frontend — image đó **không cài wget lẫn curl** (Dockerfile cố ý bỏ, healthcheck của compose dùng module http của node). Lệnh luôn thất bại ⇒ vòng lặp quay đủ 6 lần, tốn không ~25s mỗi deploy và không kiểm được gì | Mọi phép kiểm HTTP **bên trong container frontend** phải dùng `node -e` + `require('http')`. Container backend thì có `curl`. Kiểm bộ kiểm trước khi tin nó — xem [[feedback_verify_the_checker_before_the_content]] |
 | 2026-08-23 | `next.config.js` khai `Cache-Control: public, max-age=604800` cho `/playground/**` (94MB tài nguyên) — và quy tắc đó **chưa từng có hiệu lực một ngày nào**. `location /` trong `nginx.conf` gọi `proxy_hide_header Cache-Control` rồi dán `no-store` lên MỌI response, nên nó gỡ đúng cái header Next vừa đặt. Cùng cơ chế đó nuốt luôn cache của cả `public/`: 12 logo SVG + robot.json tải lại mỗi lần điều hướng | **nginx thắng `next.config.js`, luôn luôn.** Đặt header cache trong Next mà không mở một `location` tương ứng ở nginx thì chỉ là trang trí. Muốn một nhánh giữ được header của chính nó thì phải cho nó `location` riêng và **không** `proxy_hide_header` ở đó. Kiểm bằng `curl -I`, đừng đọc config rồi tin |
+| 2026-08-23 | `deploy-nha.sh` **chưa bao giờ deploy thay đổi nginx**. Cả file nhắc chữ `nginx` đúng một lần, trong một dòng chú thích; bước trên VPS chỉ có `docker compose up -d --no-build backend frontend`. Mà `nginx/nginx.conf` là bind-mount từ `/home/deployer/repo`, và từ khi bỏ `deploy.sh` (thứ có rsync) thì không còn gì cập nhật thư mục đó. Mọi thay đổi nginx đều "deploy thành công" mà không có hiệu lực — log xanh, smoke-test sạch, config mới nằm im trên máy | Đã thêm bước 6b vào `deploy-nha.sh`: so `sha256`, chỉ đẩy khi khác, `nginx -t` rồi mới `reload`. **Hỏng thì TRẢ BẢN CŨ VỀ NGAY** — `reload` với config sai thì vô hại (nginx giữ config cũ trong bộ nhớ), nhưng để file sai nằm lại trên đĩa là bom hẹn giờ: container `restart: unless-stopped`, lần khởi động lại kế tiếp nginx không lên nổi và cả web chết, vào lúc không ai đang deploy. Bài học chung: **thứ gì bind-mount thì nằm NGOÀI ảnh, nên đẩy ảnh không đụng tới nó** |
 
 ---
 

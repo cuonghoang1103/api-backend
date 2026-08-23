@@ -66,6 +66,7 @@ MAY_NHA=""                                # chọn lúc chạy — xem bước 1
 THU_MUC_NHA="\$HOME/cuongthai-build"      # trên máy nhà
 KHO_TUONG_DOI="cuongthai-build/repo.git"  # kho git TRẦN ở máy nhà (tính từ $HOME)
 COMPOSE_PROJECT="cuonghoangdev"
+REPO_VPS="/home/deployer/repo"            # nơi docker-compose.yml + nginx.conf nằm
 GHCR_BE="ghcr.io/cuonghoang1103/api-backend-backend"
 GHCR_FE="ghcr.io/cuonghoang1103/api-backend-frontend"
 HEALTH_URL="http://localhost:3001/api/v1/system/health"
@@ -331,7 +332,7 @@ info "Tráo container trên VPS (có khoá chống hai phiên cùng tráo)..."
 # Heredoc ĐÓNG NGOẶC ĐƠN: không có gì nở ra ở máy Mac. Mọi giá trị thay đổi đi
 # vào bằng biến môi trường của `bash -s`, nên không phải đếm dấu `\$` — chỗ đó
 # sai một cái là câu lệnh chạy trên PRODUCTION với biến rỗng.
-TRAO_ENV="SHA='${SHA}' BE='${GHCR_BE}' FE='${GHCR_FE}' PROJ='${COMPOSE_PROJECT}' KHOA='${KHOA}' ENV_FILE='/opt/cuonghoangdev/.env' REPO_DIR='/home/deployer/repo'"
+TRAO_ENV="SHA='${SHA}' BE='${GHCR_BE}' FE='${GHCR_FE}' PROJ='${COMPOSE_PROJECT}' KHOA='${KHOA}' ENV_FILE='/opt/cuonghoangdev/.env' REPO_DIR='${REPO_VPS}'"
 if ! sshvps "${TRAO_ENV} bash -s" <<'EOF' 2>&1 | tee /tmp/trao.log
 set -e
 exec 9>"$KHOA"
@@ -425,6 +426,114 @@ if echo "$KET_QUA" | grep -q 'TONG_HONG=0'; then
 else
     fail "Có route 404 — ảnh có thể cũ/thiếu. Xem danh sách ngay trên."
     exit 1
+fi
+
+# ─── 6b. nginx: đồng bộ config rồi nạp lại ─────────────────────────────
+#
+# VÌ SAO CÓ BƯỚC NÀY (23/08/2026): trước đó file này KHÔNG hề đụng tới nginx.
+# Cả script nhắc chữ "nginx" đúng MỘT lần, trong một dòng chú thích, còn bước
+# tráo chỉ có `docker compose up -d --no-build backend frontend`.
+#
+# Mà `nginx/nginx.conf` là bind-mount từ `${REPO_VPS}/nginx/nginx.conf` trên
+# VPS, và từ khi bỏ `deploy.sh` thì KHÔNG còn gì cập nhật thư mục đó nữa
+# (deploy.sh rsync cây làm việc; file này chỉ đẩy ảnh). Hệ quả: mọi thay đổi
+# nginx — HTTP/2, header cache, location mới — đều "deploy thành công" mà
+# không bao giờ có hiệu lực. Im lặng tuyệt đối: log xanh, smoke-test sạch,
+# và cái config mới nằm im trên máy bạn.
+#
+# ⚠️⚠️ KHÔI PHỤC KHI `nginx -t` HỎNG LÀ PHẦN QUAN TRỌNG NHẤT Ở ĐÂY.
+# `nginx -s reload` với config sai thì AN TOÀN — nginx giữ nguyên config cũ
+# trong bộ nhớ và chạy tiếp. Nhưng để cái FILE sai nằm lại trên đĩa thì nó
+# thành bom hẹn giờ: container khai `restart: unless-stopped`, nên lần VPS
+# khởi động lại kế tiếp (hoặc một `docker restart` bất kỳ) nginx sẽ không lên
+# nổi và CẢ WEB chết — vào đúng lúc không ai đang deploy để mà nghi ngờ.
+# Nên hỏng là trả bản cũ về NGAY, không để lại dấu vết.
+#
+# Nội dung lấy bằng `git show HEAD:` chứ không đọc cây làm việc — đúng nguyên
+# tắc của cả file này: CHỈ thứ đã commit mới lên production.
+info "Kiểm nginx.conf trên VPS..."
+NGINX_TMP=$(mktemp)
+if ! git show "HEAD:nginx/nginx.conf" > "$NGINX_TMP" 2>/dev/null; then
+    rm -f "$NGINX_TMP"
+    warn "Không đọc được nginx/nginx.conf ở commit ${SHA} — bỏ qua bước nginx."
+    warn "(Ảnh backend/frontend ĐÃ tráo xong và smoke-test sạch.)"
+else
+    BAM_NHA=$(sha256sum "$NGINX_TMP" | cut -d' ' -f1)
+    BAM_VPS=$(sshvps "sha256sum '${REPO_VPS}/nginx/nginx.conf' 2>/dev/null | cut -d' ' -f1" 2>/dev/null | tr -d '\r\n')
+
+    if [ -n "$BAM_VPS" ] && [ "$BAM_NHA" = "$BAM_VPS" ]; then
+        rm -f "$NGINX_TMP"
+        info "nginx.conf không đổi — không nạp lại (nạp thừa cũng vô hại, nhưng"
+        info "  im lặng thì dễ đọc log hơn, và đỡ một nhịp đứt kết nối giữ sẵn)."
+    else
+        [ -z "$BAM_VPS" ] && warn "Không đọc được nginx.conf hiện tại trên VPS — vẫn đẩy bản mới."
+        info "nginx.conf CÓ thay đổi — đang đồng bộ..."
+
+        # Gửi vào tên TẠM trước. Không ghi đè thẳng: nếu đường truyền đứt giữa
+        # chừng thì `nginx.conf` thật đã cụt, và đó chính là kịch bản bom hẹn
+        # giờ ở trên — chỉ khác là ta tự gây ra.
+        if ! sshvps "cat > '${REPO_VPS}/nginx/nginx.conf.moi'" < "$NGINX_TMP"; then
+            rm -f "$NGINX_TMP"
+            fail "Không gửi được nginx.conf sang VPS."
+            fail "Ảnh ĐÃ tráo xong và web đang chạy — chỉ config nginx là chưa đổi."
+            exit 1
+        fi
+        rm -f "$NGINX_TMP"
+
+        NGINX_ENV="PROJ='${COMPOSE_PROJECT}' REPO='${REPO_VPS}' SHA='${SHA}'"
+        sshvps "${NGINX_ENV} bash -s" <<'EOF' 2>&1 | tee /tmp/nginx-nap.log | sed 's/^/         /'
+CONF="$REPO/nginx/nginx.conf"
+MOI="$CONF.moi"
+SAO="$CONF.sao.$SHA"
+
+[ -f "$MOI" ] || { echo "KQ=THIEU_FILE"; exit 1; }
+if ! docker ps --format '{{.Names}}' | grep -qx "${PROJ}_nginx"; then
+  rm -f "$MOI"; echo "KQ=NGINX_KHONG_CHAY"; exit 1
+fi
+
+cp -p "$CONF" "$SAO" 2>/dev/null || touch "$SAO"
+mv "$MOI" "$CONF"
+
+# `nginx -t` đọc file qua bind-mount nên nó kiểm ĐÚNG bản vừa đặt vào.
+if docker exec "${PROJ}_nginx" nginx -t 2>&1; then
+  if docker exec "${PROJ}_nginx" nginx -s reload 2>&1; then
+    # Giữ 3 bản sao gần nhất, dọn phần còn lại (cùng lối với bước 7).
+    ls -1t "$CONF".sao.* 2>/dev/null | tail -n +4 | xargs -r rm -f
+    echo "KQ=OK"
+  else
+    mv "$SAO" "$CONF"
+    echo "KQ=NAP_HONG"; exit 1
+  fi
+else
+  # ⚠️ Trả bản cũ về TRƯỚC khi thoát. Xem chú thích bom hẹn giờ ở phía Mac.
+  mv "$SAO" "$CONF"
+  echo "KQ=TEST_HONG"; exit 1
+fi
+EOF
+
+        case "$(grep -o 'KQ=[A-Z_]*' /tmp/nginx-nap.log | tail -1)" in
+            KQ=OK)
+                ok "nginx đã nạp config mới (bản cũ giữ ở nginx.conf.sao.*)" ;;
+            KQ=TEST_HONG)
+                fail "nginx.conf SAI cú pháp — ĐÃ TRẢ LẠI bản cũ trên VPS."
+                fail "nginx vẫn đang chạy config cũ, web KHÔNG gián đoạn."
+                fail "Ảnh backend/frontend thì đã tráo xong và smoke-test sạch."
+                fail "Sửa nginx/nginx.conf, commit, rồi chạy lại deploy."
+                exit 1 ;;
+            KQ=NAP_HONG)
+                fail "nginx -t xanh nhưng reload hỏng — ĐÃ TRẢ LẠI bản cũ."
+                fail "Kiểm: docker logs ${COMPOSE_PROJECT}_nginx"
+                exit 1 ;;
+            KQ=NGINX_KHONG_CHAY)
+                fail "Container ${COMPOSE_PROJECT}_nginx không chạy — chưa đổi gì cả."
+                fail "Kiểm: docker ps -a | grep nginx"
+                exit 1 ;;
+            *)
+                fail "Bước nginx thất bại không rõ lý do — xem /tmp/nginx-nap.log"
+                fail "Kiểm bằng tay xem ${REPO_VPS}/nginx/nginx.conf còn nguyên vẹn không."
+                exit 1 ;;
+        esac
+    fi
 fi
 
 # ─── 7. Dọn ─────────────────────────────────────────────────────────────

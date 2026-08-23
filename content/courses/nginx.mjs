@@ -25,6 +25,7 @@ import s07 from './nginx/s07-gioi-han.mjs';
 import s08 from './nginx/s08-rewrite-map.mjs';
 import s09 from './nginx/s09-can-bang-tai.mjs';
 import s10 from './nginx/s10-log-quan-sat.mjs';
+import s11 from './nginx/s11-chan-doan.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -58,5 +59,6 @@ export default {
     s08,
     s09,
     s10,
+    s11,
   ],
 };

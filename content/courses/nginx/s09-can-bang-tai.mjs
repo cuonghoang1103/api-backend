@@ -467,5 +467,395 @@ giet may-2 (chinh),   20 request : may-3=20        (backup vao cuoc)</div>
 </div>
 `,
     },
+
+    /* ─────────────────────────── 9.4 ─────────────────────────── */
+    {
+      title: '9.4 — 101 requests, one TCP connection|||9.4 — 101 request, một kết nối TCP',
+      slug: 'nginx-9-4-tai-dung-ket-noi',
+      type: 'LESSON',
+      description: 'Một upstream biết ĐẾM số kết nối TCP nó nhận được. Không có keepalive: 101 request, 101 kết nối. Có keepalive cộng hai dòng nữa: 101 request tiếp theo chỉ tốn ĐÚNG MỘT kết nối mới. Bài này đo cái đó, và giải thích vì sao ba dòng ấy phải đi cùng nhau.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 9 · Lesson 9.4</span>
+<h2>101 requests, one TCP connection</h2>
+<p class="lead">Lesson 6.3 measured what a connection costs on the client side. The same waste happens between Nginx and your backends, on every request, by default — and the fix is three lines that must all be present together.</p>
+
+<h3>An upstream that counts its own connections</h3>
+<div class="out">Upstream dem ca REQUEST lan KET NOI TCP no nhan duoc.
+
+  sau 100 request qua /dem-khong/ (KHONG keepalive):
+     req=101  conn=101          &lt;- moi request MOT ket noi moi
+
+  sau 100 request nua qua /dem-giu/ (CO keepalive):
+     req=202  conn=102          &lt;- 101 request, DUNG MOT ket noi moi</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Without keepalive, Nginx opens and closes per request</span><span class="lz-d">A TCP handshake, a request, a response, a close — for every single call to your own backend on your own network. 101 connections for 101 requests, measured by the backend itself.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The cost is not just the handshake</span><span class="lz-d">Every closed connection leaves a socket in <code>TIME_WAIT</code> for around a minute. At a few thousand requests per second that is tens of thousands of sockets held on both machines, and eventually ephemeral port exhaustion — which fails as a connection error, not as a message saying you ran out of ports.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Three directives, and all three are required</span><span class="lz-d"><code>keepalive N</code> in the upstream block, <code>proxy_http_version 1.1</code> and <code>proxy_set_header Connection ""</code> in the location. Missing any one of them and the pool is silently unused — this is the most common way keepalive is configured and does nothing.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Why the empty Connection header</span><span class="lz-d">Lesson 3.2: by default Nginx sends <code>Connection: close</code> upstream, which tells the backend to hang up after answering. Setting it to the empty string removes the header entirely, so HTTP/1.1's default of keeping the connection alive applies.</span></div>
+</div>
+<pre><code>upstream api {
+  server 10.0.1.11:3000;
+  server 10.0.1.12:3000;
+
+  keepalive          32;      <span class="tok-comment"># số kết nối RẢNH giữ lại cho MỖI worker</span>
+  keepalive_requests 1000;    <span class="tok-comment"># đóng và mở lại sau ngần này request</span>
+  keepalive_timeout  60s;     <span class="tok-comment"># đóng kết nối rảnh quá lâu</span>
+}
+
+location /api/ {
+  proxy_http_version 1.1;          <span class="tok-comment"># BẮT BUỘC</span>
+  proxy_set_header Connection "";  <span class="tok-comment"># BẮT BUỘC</span>
+  proxy_pass http://api/;
+}</code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — <code>keepalive 32</code> is not "32 connections", it is 32 <em>idle</em> connections per worker, and getting that wrong sizes the pool badly in both directions.</strong> It is not a limit on concurrency: Nginx opens as many connections as it needs to serve requests, and <code>keepalive</code> only says how many to keep around when they go idle. It is also per worker process, so <code>keepalive 32</code> with <code>worker_processes 8</code> is up to 256 idle connections to that upstream from one machine. Set it too low and busy periods keep closing and reopening; set it too high and each backend holds hundreds of idle sockets it will never use. A reasonable starting point is your steady-state concurrency divided by the worker count, then check the backend's connection count against its request count — the ratio in the measurement above is what "working" looks like.</p>
+</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">keepalive_requests exists to avoid unbounded reuse</span><span class="v">Default 1000. A connection that is reused forever accumulates whatever state the two ends have, and it prevents a rebalanced pool from taking effect. Recycling on a counter is cheap insurance.</span></div>
+  <div class="kv"><span class="k">The backend must also want to keep it alive</span><span class="v">Node's HTTP server closes idle connections after 5 seconds by default, which is shorter than Nginx's 60. The connection goes away, Nginx tries to reuse it, and you get an occasional <code>502</code>. Set the backend's keepalive timeout <em>higher</em> than Nginx's, not lower.</span></div>
+  <div class="kv"><span class="k">The keepalive line must come last in the upstream block</span><span class="v">Documented, easy to miss, and Nginx does not warn: <code>keepalive</code> after the <code>server</code> lines. It works either way in current versions but the documentation specifies the order, and following it costs nothing.</span></div>
+  <div class="kv"><span class="k">It does not conflict with load balancing</span><span class="v">Each backend gets its own idle pool, so round robin still distributes and keepalive still saves handshakes. The two features are independent, which is why the fix is safe to apply to any existing upstream.</span></div>
+</div>
+
+<h3>Checking whether yours is working</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Count connections against requests at the backend</span><span class="lz-lnote">The measurement in this lesson. Any server can count its own <code>connection</code> events; the ratio to request count tells you immediately. A ratio near 1:1 means keepalive is not in effect regardless of what the config says.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Watch TIME_WAIT on the Nginx host</span><span class="lz-lnote"><code>ss -tan state time-wait | wc -l</code>. Tens of thousands with modest traffic is the signature of per-request connections. It should drop sharply once keepalive is working.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Look for 502s that correlate with idleness</span><span class="lz-lnote">The backend-closes-first problem shows up as sporadic <code>502</code> after quiet periods, with <code>upstream prematurely closed connection</code> in the error log. That message plus keepalive enabled means the timeout mismatch above.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Do the same check for upstreams you did not write</span><span class="lz-lnote">A <code>proxy_pass</code> added by someone else, a FastCGI or gRPC block, a health-check target. Each one needs its own three lines, and <code>fastcgi_keep_conn on;</code> is the FastCGI equivalent of the empty <code>Connection</code> header.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Why this is worth doing before any other tuning.</strong> It is three lines, it needs no new infrastructure, and the measurement above is a hundredfold reduction in connection setup between two machines that talk constantly. Compared with anything else in this course it has the best ratio of effect to effort — and because the default is silently wasteful rather than broken, nothing will ever tell you it is missing.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive" target="_blank" rel="noopener"><span class="lc-ico">♻️</span><span class="lc-body"><span class="lc-title">nginx — upstream keepalive</span><span class="lc-sub">nginx.org · Including the note that all three directives are required</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_http_version" target="_blank" rel="noopener"><span class="lc-ico">1️⃣</span><span class="lc-body"><span class="lc-title">nginx — proxy_http_version</span><span class="lc-sub">nginx.org · Why the default is 1.0 and what that costs</span></span></a>
+<a class="link-card" href="https://en.wikipedia.org/wiki/Ephemeral_port" target="_blank" rel="noopener"><span class="lc-ico">🔌</span><span class="lc-body"><span class="lc-title">Ephemeral ports and TIME_WAIT</span><span class="lc-sub">wikipedia.org · The limit you hit when every request opens a connection</span></span></a>
+<a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">CuongThai course — Node.js</span><span class="lc-sub">server.keepAliveTimeout, and why it must exceed the proxy's</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Count connections at the backend, then add the three lines and count again</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 9 · Bài 9.4</span>
+<h2>101 request, một kết nối TCP</h2>
+<p class="lead">Bài 6.3 đo cái giá của một kết nối ở phía client. Đúng sự lãng phí đó cũng diễn ra giữa Nginx và các backend của bạn, ở MỌI request, theo mặc định — và cách chữa là BA dòng mà cả ba phải có mặt CÙNG NHAU.</p>
+
+<h3>Một upstream biết tự đếm kết nối của nó</h3>
+<div class="out">Upstream dem ca REQUEST lan KET NOI TCP no nhan duoc.
+
+  sau 100 request qua /dem-khong/ (KHONG keepalive):
+     req=101  conn=101          &lt;- moi request MOT ket noi moi
+
+  sau 100 request nua qua /dem-giu/ (CO keepalive):
+     req=202  conn=102          &lt;- 101 request, DUNG MOT ket noi moi</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Không có keepalive thì Nginx MỞ rồi ĐÓNG cho từng request</span><span class="lz-d">Một cái bắt tay TCP, một request, một phản hồi, một cú đóng — cho TỪNG lượt gọi tới backend CỦA CHÍNH BẠN trên mạng CỦA CHÍNH BẠN. 101 kết nối cho 101 request, do chính backend đếm ra.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Cái giá KHÔNG chỉ là cái bắt tay</span><span class="lz-d">Mỗi kết nối đã đóng để lại một socket ở trạng thái <code>TIME_WAIT</code> chừng một phút. Ở mức vài nghìn request mỗi giây thì đó là hàng chục nghìn socket bị giữ ở CẢ HAI máy, và cuối cùng là cạn cổng tạm — thứ hỏng dưới dạng một lỗi kết nối, chứ không phải một thông báo nói rằng bạn hết cổng.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Ba chỉ thị, và cả ba đều BẮT BUỘC</span><span class="lz-d"><code>keepalive N</code> trong khối upstream, <code>proxy_http_version 1.1</code> và <code>proxy_set_header Connection ""</code> trong location. Thiếu bất kỳ cái nào là cái bể KHÔNG được dùng, một cách âm thầm — và đây là cách phổ biến nhất mà keepalive được cấu hình rồi chẳng làm gì.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Vì sao phải có cái header Connection RỖNG</span><span class="lz-d">Bài 3.2: mặc định Nginx gửi <code>Connection: close</code> lên upstream, thứ bảo backend cúp máy sau khi trả lời. Đặt nó thành chuỗi rỗng là GỠ hẳn cái header đó đi, nên hành vi mặc định của HTTP/1.1 — giữ kết nối sống — được áp dụng.</span></div>
+</div>
+<pre><code>upstream api {
+  server 10.0.1.11:3000;
+  server 10.0.1.12:3000;
+
+  keepalive          32;      <span class="tok-comment"># số kết nối RẢNH giữ lại cho MỖI worker</span>
+  keepalive_requests 1000;    <span class="tok-comment"># đóng và mở lại sau ngần này request</span>
+  keepalive_timeout  60s;     <span class="tok-comment"># đóng kết nối rảnh quá lâu</span>
+}
+
+location /api/ {
+  proxy_http_version 1.1;          <span class="tok-comment"># BẮT BUỘC</span>
+  proxy_set_header Connection "";  <span class="tok-comment"># BẮT BUỘC</span>
+  proxy_pass http://api/;
+}</code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — <code>keepalive 32</code> KHÔNG phải "32 kết nối", nó là 32 kết nối ĐANG RẢNH cho MỖI worker, và hiểu sai chỗ đó là định cỡ cái bể sai theo cả hai hướng.</strong> Nó KHÔNG phải một giới hạn về số việc đồng thời: Nginx mở bao nhiêu kết nối cần thiết để phục vụ request, còn <code>keepalive</code> chỉ nói giữ lại bao nhiêu cái khi chúng RẢNH. Nó cũng tính theo TỪNG tiến trình worker, nên <code>keepalive 32</code> với <code>worker_processes 8</code> là tới 256 kết nối rảnh tới upstream đó từ MỘT máy. Đặt quá thấp thì lúc đông khách cứ đóng rồi mở lại; đặt quá cao thì mỗi backend ôm hàng trăm socket rảnh mà không bao giờ dùng tới. Điểm khởi đầu hợp lý là mức đồng thời ở trạng thái ổn định chia cho số worker, rồi đi kiểm số kết nối của backend đặt cạnh số request của nó — cái tỷ lệ trong phép đo ở trên chính là bộ mặt của chữ "đang chạy".</p>
+</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">keepalive_requests tồn tại để tránh tái dùng VÔ HẠN</span><span class="v">Mặc định 1000. Một kết nối được tái dùng mãi mãi sẽ tích luỹ mọi trạng thái mà hai đầu đang giữ, và nó ngăn một cái bể vừa được cân bằng lại có hiệu lực. Tái chế theo một bộ đếm là một khoản bảo hiểm rẻ.</span></div>
+  <div class="kv"><span class="k">Backend cũng phải MUỐN giữ nó sống</span><span class="v">Máy chủ HTTP của Node mặc định đóng kết nối rảnh sau 5 giây, ngắn hơn con số 60 của Nginx. Cái kết nối biến mất, Nginx thử tái dùng nó, và bạn nhận một cú <code>502</code> thỉnh thoảng. Hãy đặt keepalive timeout của backend CAO HƠN của Nginx, đừng thấp hơn.</span></div>
+  <div class="kv"><span class="k">Dòng keepalive phải đứng CUỐI trong khối upstream</span><span class="v">Có ghi trong tài liệu, dễ bỏ sót, và Nginx không cảnh báo: <code>keepalive</code> đặt SAU các dòng <code>server</code>. Các bản hiện tại thì viết kiểu nào cũng chạy, nhưng tài liệu quy định thứ tự đó, và làm theo thì chẳng tốn gì.</span></div>
+  <div class="kv"><span class="k">Nó KHÔNG xung đột với cân bằng tải</span><span class="v">Mỗi backend có bể kết nối rảnh của riêng nó, nên round robin vẫn phân phối và keepalive vẫn tiết kiệm bắt tay. Hai tính năng ĐỘC LẬP nhau, và đó là lý do cách chữa này an toàn để áp lên bất kỳ upstream nào đang có.</span></div>
+</div>
+
+<h3>Kiểm xem cái của bạn có đang chạy không</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Đếm KẾT NỐI đặt cạnh REQUEST ở phía backend</span><span class="lz-lnote">Đúng phép đo trong bài này. Máy chủ nào cũng đếm được sự kiện <code>connection</code> của chính nó; cái tỷ lệ so với số request nói cho bạn biết ngay lập tức. Tỷ lệ xấp xỉ 1:1 nghĩa là keepalive KHÔNG có hiệu lực, bất kể cấu hình nói gì.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Theo dõi TIME_WAIT trên máy chạy Nginx</span><span class="lz-lnote"><code>ss -tan state time-wait | wc -l</code>. Hàng chục nghìn với lưu lượng vừa phải chính là chữ ký của kiểu mỗi-request-một-kết-nối. Nó phải TỤT MẠNH một khi keepalive chạy.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Để ý những cú 502 tương quan với lúc RẢNH</span><span class="lz-lnote">Cái vấn đề backend-đóng-trước hiện ra thành những cú <code>502</code> rải rác sau các khoảng lặng, kèm <code>upstream prematurely closed connection</code> trong error log. Thông báo đó cộng với keepalive đang bật nghĩa là cái lệch timeout ở trên.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Làm đúng phép kiểm đó với những upstream KHÔNG do bạn viết</span><span class="lz-lnote">Một dòng <code>proxy_pass</code> ai đó thêm vào, một khối FastCGI hay gRPC, một đích health-check. Cái nào cũng cần ba dòng của riêng nó, và <code>fastcgi_keep_conn on;</code> là thứ tương đương với header <code>Connection</code> rỗng ở phía FastCGI.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Vì sao việc này đáng làm TRƯỚC mọi phép chỉnh tinh khác.</strong> Nó là BA dòng, nó không cần hạ tầng mới nào, và phép đo ở trên là mức giảm GẤP TRĂM LẦN chi phí thiết lập kết nối giữa hai cái máy nói chuyện với nhau liên tục. So với mọi thứ khác trong khoá này thì nó có tỷ lệ hiệu quả trên công sức tốt nhất — và vì cái mặc định là LÃNG PHÍ trong im lặng chứ không phải HỎNG, nên sẽ chẳng có gì báo cho bạn biết là nó đang thiếu.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive" target="_blank" rel="noopener"><span class="lc-ico">♻️</span><span class="lc-body"><span class="lc-title">nginx — keepalive của upstream</span><span class="lc-sub">nginx.org · Kèm ghi chú rằng cả ba chỉ thị đều bắt buộc</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_http_version" target="_blank" rel="noopener"><span class="lc-ico">1️⃣</span><span class="lc-body"><span class="lc-title">nginx — proxy_http_version</span><span class="lc-sub">nginx.org · Vì sao mặc định là 1.0 và điều đó tốn gì</span></span></a>
+<a class="link-card" href="https://en.wikipedia.org/wiki/Ephemeral_port" target="_blank" rel="noopener"><span class="lc-ico">🔌</span><span class="lc-body"><span class="lc-title">Cổng tạm và TIME_WAIT</span><span class="lc-sub">wikipedia.org · Cái trần bạn đụng phải khi mỗi request mở một kết nối</span></span></a>
+<a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Node.js</span><span class="lc-sub">server.keepAliveTimeout, và vì sao nó phải LỚN HƠN của con proxy</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Đếm kết nối ở backend, rồi thêm ba dòng và đếm lại</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 9.5 ─────────────────────────── */
+    {
+      title: '9.5 — Deploying without dropping a request|||9.5 — Deploy mà không rớt một request nào',
+      slug: 'nginx-9-5-deploy-khong-rot-request',
+      type: 'LESSON',
+      description: 'Nạp lại cấu hình BA lần trong khi bốn trăm request đang chạy: bốn trăm cú 200, không lỗi nào. Rồi đổi cả cái bể sang một bộ máy mới ngay giữa lúc có lưu lượng, và đếm lại. Bài này cũng kể về một cú "lỗi" trong phép đo hoá ra là số đếm của chính upstream.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 9 · Lesson 9.5</span>
+<h2>Deploying without dropping a request</h2>
+<p class="lead">Section 0 said <code>nginx -s reload</code> replaces the workers without dropping a connection. This is where that property becomes a deployment strategy: the upstream block is a list you can change under live traffic, and the reload is what publishes the change.</p>
+
+<h3>Reloading three times under load</h3>
+<div class="out">400 request dang chay, nap lai cau hinh BA lan giua chung:
+
+  400 x 200
+  ^^^^^^^^^ khong mot loi nao</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The master starts new workers with the new config</span><span class="lz-d">Section 0 measured the process model; this is what it buys. The listening sockets are inherited, so no connection is ever refused and no port is ever unbound.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Old workers finish what they were doing</span><span class="lz-d">They stop accepting new connections and keep serving the ones in flight until those complete, then exit. A request that started before the reload finishes under the old config, which is exactly right.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">So a reload is safe to run whenever you want</span><span class="lz-d">In a deploy script, from a certificate renewal hook, from a config-management tool. Three reloads inside a second produced no errors at all in the measurement above.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Always nginx -t first</span><span class="lz-d">A reload with a broken config fails and the old workers keep running — so you do not take the site down, but you also do not get the change, and the only sign is a line in the error log. <code>nginx -t &amp;&amp; nginx -s reload</code> as one command is the habit.</span></div>
+</div>
+
+<h3>Swapping the whole pool mid-traffic</h3>
+<div class="out">upstream deu { server 9501; server 9502; server 9503; }
+        -> upstream deu { server 9504; }          va nap lai
+
+200 request bac ngang qua lan doi:
+  may-1=22  may-2=23  may-3=22        (truoc khi nap lai)
+  may-4=133                           (sau khi nap lai)
+  loi: 0</div>
+<div class="callout warn">
+<p><strong>One line in that output looked like an error and was not.</strong> A first pass counted responses containing "502" and found one — which turned out to be <code>may-1 (lan 502)</code>, the backend's own request counter reaching 502. Checking every line against the expected shape found 200 well-formed responses and zero failures. It is a small thing, and it is exactly how a measurement produces a wrong conclusion: the grep was reasonable, the number was real, and the interpretation was nonsense. Verify what a pattern actually matched before reporting what it means.</p>
+</div>
+
+<h3>The deployment patterns this enables</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Rolling: take one node out, deploy it, put it back</span><span class="lz-lnote">Mark a server <code>down</code>, reload, deploy to it, remove <code>down</code>, reload. Capacity drops by one node at a time and no client sees an error. With <code>hash ... consistent</code> the users on that node move and come back (Lesson 9.2), which is the cost of doing it this way.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Blue-green: two full pools, switch the list</span><span class="lz-lnote">The measurement above. Deploy the new version to an idle set of machines, verify it directly, then change the <code>upstream</code> block to point at them and reload. Rollback is the same edit in reverse, and it takes as long as a reload.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Canary: weight the new version low</span><span class="lz-lnote"><code>server moi:3000 weight=1;</code> alongside <code>server cu:3000 weight=9;</code> sends a tenth of traffic to the new build. Watch the error rate, then shift the weights. It is crude compared with a real traffic-splitting system and it needs nothing you do not already have.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Draining: down plus a wait</span><span class="lz-lnote">Marking a server <code>down</code> stops new requests immediately, but requests already in flight continue. Wait for your longest expected request before shutting the process down, or you will cut off the exact users you were being careful about.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Blue-green trong một tệp include, đổi bằng một liên kết mềm</span>
+<span class="tok-comment"># /etc/nginx/be-hien-tai.conf  ->  be-xanh.conf hoặc be-luc.conf</span>
+upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
+
+<span class="tok-comment"># Đổi bể = đổi liên kết mềm rồi nạp lại. Lùi lại cũng y hệt thế.</span>
+<span class="tok-comment">#   ln -sfn be-luc.conf /etc/nginx/be-hien-tai.conf</span>
+<span class="tok-comment">#   nginx -t &amp;&amp; nginx -s reload</span></code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — a reload publishes the config, but it does not verify that the new backends actually work.</strong> The measurement above swapped to a pool that happened to be healthy. Point the same edit at a machine that is up but broken — wrong build, missing environment variable, database it cannot reach — and Nginx will happily send it every request, because passive health checks only notice connection failures and the status codes you listed (Lesson 9.3). The step that is missing from most deploy scripts is a direct request to the new backend, bypassing Nginx, checking something that only a correct build would return. That is one <code>curl</code> against the backend's own port, run before the reload rather than after it.</p>
+</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Reload does not re-resolve DNS names in proxy_pass</span><span class="v">It does re-resolve names inside an <code>upstream</code> block. If your deploy replaces containers and you use a bare hostname in <code>proxy_pass</code>, a reload will not pick up the new address — Lesson 3.1's caveat, arriving at the worst possible moment.</span></div>
+  <div class="kv"><span class="k">Old workers can linger a long time</span><span class="v">A WebSocket or a long download keeps its worker alive until it finishes. After a reload you will see old worker processes still running, which is correct — <code>worker_shutdown_timeout</code> bounds it if you need them gone.</span></div>
+  <div class="kv"><span class="k">Reloading is not restarting</span><span class="v"><code>reload</code> keeps the master, the listening sockets and every open connection. <code>restart</code> drops all of them. Anything in a deploy script that says <code>systemctl restart nginx</code> is causing a brief outage that a reload would not.</span></div>
+  <div class="kv"><span class="k">Test the reload path itself</span><span class="v">Run a request loop, reload three times, and count the failures. Four hundred requests and zero errors is what it should look like — and if it does not, that is a finding worth having before a deploy rather than during one.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>What makes all of this work.</strong> The upstream block is data, the reload is atomic and non-disruptive, and the two together mean changing which machines serve your traffic is a text edit and a signal. No load balancer to reconfigure, no DNS to wait for, no connection dropped — measured at four hundred requests across three reloads and again across a full pool swap.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/control.html" target="_blank" rel="noopener"><span class="lc-ico">🎛️</span><span class="lc-body"><span class="lc-title">nginx — Controlling nginx</span><span class="lc-sub">nginx.org · reload, reopen, quit, and what each signal does to the workers</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#server" target="_blank" rel="noopener"><span class="lc-ico">🔻</span><span class="lc-body"><span class="lc-title">nginx — the down parameter</span><span class="lc-sub">nginx.org · Draining a node without deleting its configuration</span></span></a>
+<a class="link-card" href="https://martinfowler.com/bliki/BlueGreenDeployment.html" target="_blank" rel="noopener"><span class="lc-ico">🔵</span><span class="lc-body"><span class="lc-title">Blue-green deployment</span><span class="lc-sub">martinfowler.com · The pattern the pool swap above implements</span></span></a>
+<a class="link-card" href="/courses/docker/learn${REF}"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">CuongThai course — Docker</span><span class="lc-sub">Starting the new containers before switching, and verifying them directly</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Reload three times under a request loop and count the failures yourself</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 9 · Bài 9.5</span>
+<h2>Deploy mà không rớt một request nào</h2>
+<p class="lead">Mục 0 nói rằng <code>nginx -s reload</code> thay đám worker mà không rớt một kết nối nào. Đây là chỗ tính chất ấy trở thành một CHIẾN LƯỢC TRIỂN KHAI: khối upstream là một DANH SÁCH mà bạn đổi được ngay giữa lúc có lưu lượng, và cú nạp lại là thứ CÔNG BỐ thay đổi đó.</p>
+
+<h3>Nạp lại BA lần trong lúc đang tải</h3>
+<div class="out">400 request dang chay, nap lai cau hinh BA lan giua chung:
+
+  400 x 200
+  ^^^^^^^^^ khong mot loi nao</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Master khởi động worker MỚI với cấu hình MỚI</span><span class="lz-d">Mục 0 đo cái mô hình tiến trình; đây là thứ nó mua được. Các socket đang nghe được KẾ THỪA, nên không kết nối nào bị từ chối và không cổng nào bị nhả ra.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Worker CŨ làm nốt việc chúng đang làm</span><span class="lz-d">Chúng thôi nhận kết nối mới và tiếp tục phục vụ những cái đang bay cho tới khi xong, rồi mới thoát. Một request bắt đầu TRƯỚC lúc nạp lại thì kết thúc dưới cấu hình CŨ, và thế là đúng.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nên nạp lại là việc chạy lúc nào cũng AN TOÀN</span><span class="lz-d">Trong một script deploy, từ một hook gia hạn chứng chỉ, từ một công cụ quản lý cấu hình. Ba lần nạp lại trong vòng một giây mà KHÔNG sinh ra lỗi nào trong phép đo ở trên.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">LUÔN chạy nginx -t trước</span><span class="lz-d">Một cú nạp lại với cấu hình hỏng thì THẤT BẠI và đám worker cũ vẫn chạy — nên bạn không làm site chết, nhưng bạn cũng KHÔNG có thay đổi, và dấu hiệu duy nhất là một dòng trong error log. <code>nginx -t &amp;&amp; nginx -s reload</code> viết thành một lệnh là thói quen nên có.</span></div>
+</div>
+
+<h3>Đổi cả cái bể ngay giữa lúc có lưu lượng</h3>
+<div class="out">upstream deu { server 9501; server 9502; server 9503; }
+        -> upstream deu { server 9504; }          va nap lai
+
+200 request bac ngang qua lan doi:
+  may-1=22  may-2=23  may-3=22        (truoc khi nap lai)
+  may-4=133                           (sau khi nap lai)
+  loi: 0</div>
+<div class="callout warn">
+<p><strong>Một dòng trong kết quả đó TRÔNG như một lỗi mà thật ra KHÔNG.</strong> Một lượt đếm ban đầu tìm những phản hồi có chứa "502" và thấy MỘT — hoá ra đó là <code>may-1 (lan 502)</code>, tức là bộ đếm request của chính backend vừa chạm 502. Kiểm lại TỪNG dòng theo đúng hình dạng mong đợi thì thấy 200 phản hồi hoàn chỉnh và KHÔNG thất bại nào. Đó là chuyện nhỏ, và nó ĐÚNG là cách một phép đo sinh ra một kết luận sai: cái lệnh grep hợp lý, con số có thật, và phần diễn giải thì vô nghĩa. Hãy KIỂM xem một cái mẫu thật sự khớp phải cái gì trước khi đi báo cáo nó có nghĩa gì.</p>
+</div>
+
+<h3>Những khuôn mẫu triển khai mà điều này mở ra</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Cuốn chiếu: rút một node ra, deploy nó, đưa nó về</span><span class="lz-lnote">Đánh dấu một máy chủ <code>down</code>, nạp lại, deploy lên nó, bỏ chữ <code>down</code>, nạp lại. Năng lực giảm MỘT node mỗi lần và không client nào thấy lỗi. Với <code>hash ... consistent</code> thì người dùng trên node đó dời đi rồi quay lại (Bài 9.2), và đó là cái giá của cách làm này.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Xanh-lục: hai cái bể đầy đủ, đổi cái danh sách</span><span class="lz-lnote">Đúng phép đo ở trên. Deploy phiên bản mới lên một bộ máy đang rảnh, kiểm nó TRỰC TIẾP, rồi đổi khối <code>upstream</code> trỏ sang chúng và nạp lại. Lùi lại là đúng cái sửa đó theo chiều ngược, và nó mất đúng bằng một cú nạp lại.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Canary: cho phiên bản mới trọng số thấp</span><span class="lz-lnote"><code>server moi:3000 weight=1;</code> đặt cạnh <code>server cu:3000 weight=9;</code> đẩy một phần mười lưu lượng sang bản dựng mới. Theo dõi tỷ lệ lỗi rồi dịch dần trọng số. Nó thô so với một hệ chia lưu lượng thật, và nó không cần thứ gì bạn chưa có.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Rút cạn: down cộng một khoảng CHỜ</span><span class="lz-lnote">Đánh dấu <code>down</code> là chặn request mới NGAY, nhưng những request ĐANG BAY vẫn tiếp tục. Hãy chờ đủ cái request dài nhất bạn dự kiến rồi mới tắt tiến trình, không thì bạn cắt đứt đúng những người dùng mà bạn đang cẩn thận vì họ.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Blue-green trong một tệp include, đổi bằng một liên kết mềm</span>
+<span class="tok-comment"># /etc/nginx/be-hien-tai.conf  ->  be-xanh.conf hoặc be-luc.conf</span>
+upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
+
+<span class="tok-comment"># Đổi bể = đổi liên kết mềm rồi nạp lại. Lùi lại cũng y hệt thế.</span>
+<span class="tok-comment">#   ln -sfn be-luc.conf /etc/nginx/be-hien-tai.conf</span>
+<span class="tok-comment">#   nginx -t &amp;&amp; nginx -s reload</span></code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — một cú nạp lại CÔNG BỐ cấu hình, nhưng nó KHÔNG kiểm xem đám backend mới có thật sự chạy được không.</strong> Phép đo ở trên đổi sang một cái bể tình cờ khoẻ mạnh. Chĩa đúng cái sửa đó vào một máy đang SỐNG nhưng HỎNG — sai bản dựng, thiếu một biến môi trường, không chạm nổi cơ sở dữ liệu — thì Nginx sẽ vui vẻ gửi cho nó MỌI request, vì kiểm sức khoẻ thụ động chỉ nhận ra lỗi kết nối và những mã trạng thái bạn liệt kê (Bài 9.3). Cái bước thiếu trong phần lớn script deploy là một request TRỰC TIẾP tới backend mới, đi VÒNG QUA Nginx, kiểm một thứ mà chỉ bản dựng ĐÚNG mới trả về được. Đó là MỘT lệnh <code>curl</code> nhắm vào chính cổng của backend, chạy TRƯỚC cú nạp lại chứ không phải sau.</p>
+</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Nạp lại KHÔNG phân giải lại tên miền trong proxy_pass</span><span class="v">Nó CÓ phân giải lại những tên nằm TRONG một khối <code>upstream</code>. Nếu lần deploy của bạn thay container mà bạn dùng một tên miền trần trong <code>proxy_pass</code> thì nạp lại sẽ KHÔNG lấy được địa chỉ mới — đúng cái cảnh báo ở Bài 3.1, ập tới vào thời điểm tệ nhất có thể.</span></div>
+  <div class="kv"><span class="k">Worker cũ có thể nán lại RẤT lâu</span><span class="v">Một WebSocket hay một lượt tải lớn giữ cho worker của nó sống tới khi xong. Sau một cú nạp lại bạn sẽ thấy các tiến trình worker cũ vẫn chạy, và thế là ĐÚNG — <code>worker_shutdown_timeout</code> chặn nó lại nếu bạn cần chúng biến mất.</span></div>
+  <div class="kv"><span class="k">Nạp lại KHÔNG phải khởi động lại</span><span class="v"><code>reload</code> giữ nguyên master, các socket đang nghe và mọi kết nối đang mở. <code>restart</code> vứt hết. Bất cứ dòng nào trong script deploy viết <code>systemctl restart nginx</code> đều đang gây ra một khoảng chết ngắn mà một cú nạp lại thì không.</span></div>
+  <div class="kv"><span class="k">Hãy THỬ chính cái đường nạp lại</span><span class="v">Chạy một vòng lặp request, nạp lại ba lần, rồi đếm số thất bại. Bốn trăm request và không lỗi nào là thứ nó PHẢI trông như thế — và nếu không phải thế thì đó là một phát hiện đáng có TRƯỚC một lần deploy chứ không phải GIỮA một lần deploy.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Cái gì làm cho tất cả chuyện này chạy được.</strong> Khối upstream là DỮ LIỆU, cú nạp lại là NGUYÊN TỬ và không gây gián đoạn, và hai thứ đó cộng lại nghĩa là việc đổi xem máy nào phục vụ lưu lượng của bạn chỉ là một lần sửa văn bản và một tín hiệu. Không có bộ cân bằng tải nào phải cấu hình lại, không có DNS nào phải chờ, không kết nối nào bị rớt — đo được ở bốn trăm request bắc qua ba lần nạp lại và một lần nữa bắc qua một cú đổi trọn cái bể.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/control.html" target="_blank" rel="noopener"><span class="lc-ico">🎛️</span><span class="lc-body"><span class="lc-title">nginx — Điều khiển nginx</span><span class="lc-sub">nginx.org · reload, reopen, quit, và mỗi tín hiệu làm gì với đám worker</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#server" target="_blank" rel="noopener"><span class="lc-ico">🔻</span><span class="lc-body"><span class="lc-title">nginx — tham số down</span><span class="lc-sub">nginx.org · Rút cạn một node mà không xoá cấu hình của nó</span></span></a>
+<a class="link-card" href="https://martinfowler.com/bliki/BlueGreenDeployment.html" target="_blank" rel="noopener"><span class="lc-ico">🔵</span><span class="lc-body"><span class="lc-title">Blue-green deployment</span><span class="lc-sub">martinfowler.com · Khuôn mẫu mà cú đổi bể ở trên đang cài đặt</span></span></a>
+<a class="link-card" href="/courses/docker/learn${REF}"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Docker</span><span class="lc-sub">Khởi động container mới TRƯỚC khi đổi, và kiểm chúng một cách trực tiếp</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Nạp lại ba lần dưới một vòng lặp request rồi tự đếm số thất bại</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 9.6 ─────────────────────────── */
+    {
+      title: '9.6 — Quiz: load balancing|||9.6 — Quiz: cân bằng tải',
+      slug: 'nginx-9-6-quiz',
+      type: 'QUIZ',
+      description: 'Tám câu về bốn thuật toán, chuyện 73% so với 26%, cú giết máy giữa chừng không sinh lỗi nào, và 101 request đi qua một kết nối.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 9 · Lesson 9.6</span>
+<h2>Quiz: load balancing</h2>
+<p class="lead">Eight questions from three real backends and a lot of counting. Two of them describe results that contradict what the theory alone would suggest.</p>
+<div class="callout">
+<p><strong>What this chapter established.</strong> Round robin split thirty requests 10/10/10, <code>weight=3</code> against <code>weight=1</code> gave 23/7, <code>least_conn</code> looked identical because every response was equally fast, and <code>ip_hash</code> from one address sent all thirty to one machine (9.1). Adding a fourth backend to a pool of three moved 73% of users with plain <code>hash</code> and only 26% with <code>hash ... consistent</code> — but a backend simply <em>failing</em> moved nobody in either mode, because the failed server keeps its ring position (9.2). Killing one of three mid-traffic produced thirty responses and zero errors, because Nginx retries the failed request elsewhere and then marks the server down for <code>fail_timeout</code> — and recovery is a timer, not a probe, so the machine sat idle for eleven seconds after it was healthy (9.3). Without upstream keepalive, 101 requests opened 101 TCP connections; with it plus HTTP/1.1 and an empty <code>Connection</code> header, the next 101 needed one (9.4). And three reloads during four hundred live requests produced four hundred <code>200</code>s (9.5).</p>
+</div>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 9 · Bài 9.6</span>
+<h2>Quiz: cân bằng tải</h2>
+<p class="lead">Tám câu ra từ ba backend thật và rất nhiều phép đếm. Hai câu mô tả những kết quả MÂU THUẪN với thứ mà chỉ đọc lý thuyết thì sẽ đoán ra.</p>
+<div class="callout">
+<p><strong>Chương này đã xác lập điều gì.</strong> Round robin chia ba mươi request thành 10/10/10, <code>weight=3</code> so với <code>weight=1</code> cho ra 23/7, <code>least_conn</code> trông y hệt vì mọi phản hồi đều nhanh như nhau, còn <code>ip_hash</code> từ MỘT địa chỉ dồn cả ba mươi vào một máy (9.1). Thêm backend thứ tư vào bể ba máy làm 73% người dùng đổi máy với <code>hash</code> thường và chỉ 26% với <code>hash ... consistent</code> — nhưng một backend chỉ đơn giản là CHẾT thì KHÔNG làm ai đổi cả, ở cả hai dạng, vì máy hỏng vẫn giữ vị trí trên vòng (9.2). Giết một trong ba giữa lúc có lưu lượng cho ra ba mươi phản hồi và KHÔNG lỗi nào, vì Nginx thử lại ở chỗ khác rồi đánh dấu máy đó chết trong <code>fail_timeout</code> — và việc hồi phục là một CÁI HẸN GIỜ chứ không phải thăm dò, nên cái máy ngồi chơi mười một giây sau khi đã khoẻ (9.3). Không có keepalive lên upstream thì 101 request mở 101 kết nối TCP; có nó cộng HTTP/1.1 và một header <code>Connection</code> rỗng thì 101 request tiếp theo chỉ cần MỘT (9.4). Và ba lần nạp lại giữa bốn trăm request đang chạy cho ra bốn trăm cú <code>200</code> (9.5).</p>
+</div>
+</div>
+`,
+      quiz: {
+        timeLimitSeconds: 720,
+        questions: [
+          {
+            question: 'least_conn and round robin gave identical distributions in the measurement. What does that prove?|||least_conn và round robin cho phân bố y hệt nhau trong phép đo. Điều đó chứng minh gì?',
+            options: [
+              'least_conn is useless|||least_conn vô dụng',
+              'Nothing about their difference — every response was equally fast, so no backend ever had a queue; they diverge when request durations vary|||Không chứng minh gì về khác biệt giữa chúng — mọi phản hồi đều nhanh như nhau nên chẳng máy nào có hàng đợi; chúng khác nhau khi thời lượng request chênh lệch',
+              'Round robin is faster|||Round robin nhanh hơn',
+              'The pool was misconfigured|||Cái bể bị cấu hình sai',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Adding a fourth server to a pool of three: how many users are remapped with hash versus hash ... consistent?|||Thêm máy chủ thứ tư vào bể ba máy: bao nhiêu người dùng bị ánh xạ lại với hash so với hash ... consistent?',
+            options: [
+              'About the same in both|||Xấp xỉ nhau ở cả hai',
+              '73% with plain hash, 26% with consistent — close to the theoretical minimum of 25%|||73% với hash thường, 26% với consistent — sát mức lý thuyết tối thiểu 25%',
+              '25% with plain hash, 73% with consistent|||25% với hash thường, 73% với consistent',
+              'None in either case|||Không ai cả, ở cả hai trường hợp',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'A backend in a hash pool fails. What happens to users pinned to the OTHER backends?|||Một backend trong một bể hash bị hỏng. Chuyện gì xảy ra với những người dùng đang ghim vào các backend KHÁC?',
+            options: [
+              'They are all remapped, which is why consistent matters|||Họ bị ánh xạ lại hết, và đó là lý do consistent quan trọng',
+              'Nothing — the failed server keeps its position, so only its own users move; consistent matters when the server LIST changes, not when one fails|||Không gì cả — máy hỏng GIỮ NGUYÊN vị trí, nên chỉ người dùng của chính nó phải dời; consistent có nghĩa lý khi DANH SÁCH máy chủ đổi, không phải khi một máy hỏng',
+              'They get 502 until it recovers|||Họ nhận 502 cho tới khi nó hồi phục',
+              'It depends on max_fails|||Tuỳ vào max_fails',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'One of three backends is killed mid-traffic. What did thirty subsequent requests receive?|||Một trong ba backend bị giết giữa lúc có lưu lượng. Ba mươi request tiếp theo nhận được gì?',
+            options: [
+              'Ten 502s and twenty 200s|||Mười cú 502 và hai mươi cú 200',
+              'Thirty 200s — the first failure was retried on another server, then the dead one was marked unavailable|||Ba mươi cú 200 — cú hỏng đầu tiên được thử lại ở máy khác, rồi cái máy chết bị đánh dấu là không dùng được',
+              'Thirty 502s until fail_timeout expires|||Ba mươi cú 502 cho tới khi fail_timeout hết',
+              'It depends on the balancing algorithm|||Tuỳ vào thuật toán cân bằng',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'You restart the killed backend. When does Nginx start using it again?|||Bạn khởi động lại cái backend vừa bị giết. Khi nào Nginx dùng lại nó?',
+            options: [
+              'Immediately; Nginx probes it|||Ngay lập tức; Nginx có thăm dò nó',
+              'After fail_timeout expires — recovery is a timer, not a probe, so it sat idle for eleven seconds while already healthy|||Sau khi fail_timeout hết — hồi phục là một CÁI HẸN GIỜ chứ không phải thăm dò, nên nó ngồi chơi mười một giây dù đã khoẻ',
+              'Only after a reload|||Chỉ sau khi nạp lại cấu hình',
+              'Never, until max_fails resets|||Không bao giờ, cho tới khi max_fails được đặt lại',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Why must proxy_next_upstream normally NOT include non_idempotent?|||Vì sao proxy_next_upstream bình thường KHÔNG được có non_idempotent?',
+            options: [
+              'It slows down retries|||Nó làm việc thử lại chậm đi',
+              'A timeout can mean the request already succeeded, so retrying a POST processes it twice — double order, double charge|||Một cú timeout có thể nghĩa là request ĐÃ thành công, nên thử lại một cú POST là xử lý nó HAI lần — đơn đôi, tiền đôi',
+              'It is only valid in NGINX Plus|||Nó chỉ hợp lệ ở NGINX Plus',
+              'It conflicts with keepalive|||Nó xung đột với keepalive',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Which three directives are ALL required for upstream connection reuse?|||Ba chỉ thị nào ĐỀU bắt buộc phải có để tái dùng kết nối lên upstream?',
+            options: [
+              'keepalive alone is enough|||Chỉ mỗi keepalive là đủ',
+              'keepalive N in the upstream block, proxy_http_version 1.1 and proxy_set_header Connection "" — missing any one and the pool is silently unused|||keepalive N trong khối upstream, proxy_http_version 1.1 và proxy_set_header Connection "" — thiếu bất kỳ cái nào là cái bể KHÔNG được dùng, một cách âm thầm',
+              'keepalive plus proxy_buffering|||keepalive cộng proxy_buffering',
+              'keepalive plus least_conn|||keepalive cộng least_conn',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'What is the difference between nginx -s reload and systemctl restart nginx during a deploy?|||Khác biệt giữa nginx -s reload và systemctl restart nginx trong một lần deploy là gì?',
+            options: [
+              'None; they do the same thing|||Không có; chúng làm cùng một việc',
+              'reload keeps the master, the listening sockets and every open connection — measured at 400 requests across 3 reloads with zero errors; restart drops all of them|||reload GIỮ master, các socket đang nghe và mọi kết nối đang mở — đo được 400 request bắc qua 3 lần nạp lại với KHÔNG lỗi nào; còn restart thì vứt hết',
+              'restart is faster and equally safe|||restart nhanh hơn và an toàn ngang nhau',
+              'reload requires downtime|||reload đòi phải có khoảng chết',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+        ],
+      },
+    },
   ],
 };

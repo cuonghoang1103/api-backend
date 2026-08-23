@@ -16,6 +16,7 @@ import { NotPorted } from './pages/NotPorted';
 import { Settings } from './pages/Settings';
 import { nativePageFor } from './page-registry';
 import { findRoute, INTERNAL_ROUTES } from './routes';
+import { Toaster } from 'sonner';
 
 function Content() {
   const { route } = useAppState();
@@ -61,7 +62,7 @@ function Content() {
 
 function Shell() {
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const { settings, setSetting } = useAppState();
+  const { settings, setSetting, resolvedTheme } = useAppState();
 
   // Phím tắt chỉ đảo giữa 'full' và 'hidden' — bỏ qua 'icons'. Người bấm ⌘B
   // muốn CHỖ, không muốn đi qua một trạng thái trung gian rồi phải bấm tiếp.
@@ -120,6 +121,48 @@ function Shell() {
         {/* Chỉ hiện khi bản mới đã TẢI XONG và chờ một cú bấm. Ngoài vùng nội
             dung nên thấy ở mọi trang, và không chặn thao tác. */}
         <UpdateToast />
+        {/*
+         * ⚠️ TOAST CỦA CÂY WEB — thiếu nó thì 226 lời gọi `toast.*` IM LẶNG.
+         *
+         * Đo 24/08/2026 trên các cây desktop dùng lại: 46 tệp gọi `toast.*`,
+         * tổng 226 lời gọi — trong đó **143 là `toast.error`**. Không mount
+         * `<Toaster>` thì sonner không có chỗ vẽ, và MỌI phản hồi đó biến mất:
+         * người dùng bấm Lưu, việc hỏng, và màn hình không nói gì cả. Hỏng câm
+         * đúng nghĩa — không lỗi, không cảnh báo, chỉ là im lặng.
+         *
+         * `sonner` đã nằm sẵn trong `dependencies` của desktop từ trước; chỉ
+         * chưa ai dựng nó.
+         *
+         * ⛔ Đặt ở ĐÂY chứ không trong `VoWeb`: Notes dùng host riêng
+         * (`ct-notes-host`), không đi qua `VoWeb`, mà riêng cây Notes đã có 11
+         * tệp gọi toast. Ở `Shell` thì phủ mọi trang, kể cả trang native sau
+         * này, và chỉ có ĐÚNG MỘT bản — mount trong `VoWeb` là mỗi lần đổi
+         * route lại dựng lại một cái.
+         *
+         * ⚠️ KHÔNG chép nguyên cấu hình của web (`ToasterProvider.tsx`). Bản
+         * đó đặt cứng `theme="dark"` và nền `--darkcard`, hợp lý trên web vì
+         * web luôn tối; app thì có cả chủ đề SÁNG, và toast tối cố định trên
+         * nền sáng là đúng họ lỗi 02/07/2026. Nên theo `resolvedTheme` và dùng
+         * biến màu của app.
+         *
+         * Lề tính theo `--ct-titlebar-h` (44px) chứ không phải `--app-nav-h`
+         * của web — app không có thanh nav đó, để nguyên thì toast rơi lên
+         * thanh tiêu đề.
+         */}
+        <Toaster
+          position="top-right"
+          offset="calc(var(--ct-titlebar-h) + 12px)"
+          theme={resolvedTheme}
+          richColors
+          closeButton
+          toastOptions={{
+            style: {
+              background: 'var(--ct-surface)',
+              border: '1px solid var(--ct-border)',
+              color: 'var(--ct-text)',
+            },
+          }}
+        />
         {/* Odin nằm NGOÀI vùng nội dung để không bị cuộn theo trang, và ngoài
             ErrorBoundary của nội dung để một trang hỏng không kéo nó chết theo. */}
         <OdinDock />

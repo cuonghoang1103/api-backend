@@ -77,7 +77,7 @@ Internet → :443 nginx ─┬→ 127.0.0.1:3000  /api
                        ├→ 127.0.0.1:4000  /ai
                        └→ /var/www        /static  (nginx tự phục vụ)</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — "Nginx nhanh hơn" là một câu nói bị dùng sai nhiều hơn cả.</strong> Nginx không làm ứng dụng của bạn nhanh lên: một request đi qua proxy thì luôn CHẬM HƠN một request đi thẳng, vì có thêm một chặng. Cái nó làm là bóc phần việc mà ứng dụng làm dở — giữ hàng nghìn kết nối chậm, đọc tệp từ đĩa, kết thúc TLS, nuốt các request rác — để cái event loop hay cái pool luồng của bạn chỉ còn làm phần việc RIÊNG của nó. Đo một endpoint API duy nhất trước và sau khi thêm proxy thì bạn sẽ thấy nó chậm đi vài mili giây, và đó là một cuộc trao đổi có lời, không phải một phép màu.</p>
+<p><strong>Bẫy — "Nginx is faster" is the most misused sentence about it.</strong> Nginx does not make your application faster: a proxied request is always SLOWER than a direct one, because there is an extra hop. What it does is take away the work your application does badly — holding thousands of slow connections, reading files off disk, terminating TLS, absorbing junk requests — so your event loop or thread pool only does its OWN job. Measure one API endpoint before and after adding a proxy and you will see it get a few milliseconds slower, and that is a trade worth making, not a magic trick.</p>
 </div>
 
 <h3>When you do not need it</h3>
@@ -242,7 +242,7 @@ $ nproc
   </div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — "Permission denied" ở Nginx gần như luôn là chuyện WORKER, không phải chuyện master.</strong> Master chạy bằng root nên nó mở được cổng 80 và đọc được mọi thứ; còn worker thì chạy bằng <code>www-data</code> hoặc <code>nobody</code> và mới là cái đi đọc tệp của bạn. Nên một thư mục mà chỉ chủ sở hữu đọc được sẽ cho ra <code>13: Permission denied</code> trong error log dù bạn <code>cat</code> tệp đó bằng root vẫn thấy. Và nó không chỉ là quyền của bản thân tệp: worker cần quyền THỰC THI trên MỌI thư mục cha trên đường dẫn — một chỗ hay hỏng khi <code>root</code> trỏ vào một thư mục nằm dưới <code>/home/ai-do</code>.</p>
+<p><strong>Bẫy — "Permission denied" from Nginx is almost always about the WORKER, not the master.</strong> The master runs as root, so it can bind port 80 and read anything; the workers run as <code>www-data</code> or <code>nobody</code> and they are the ones reading your files. So a directory readable only by its owner produces <code>13: Permission denied</code> in the error log even though <code>cat</code> as root works fine. And it is not only the file's own permissions: the worker needs EXECUTE permission on EVERY parent directory along the path — a frequent failure when <code>root</code> points somewhere under <code>/home/someone</code>.</p>
 </div>
 
 <h3>Reload: the property that makes it operable</h3>

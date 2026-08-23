@@ -75,16 +75,17 @@ pio run -t upload
 pio device monitor
 ```
 
-Mở Serial Monitor, gõ số để chọn phép kiểm:
+Mở Serial Monitor, gõ số để chọn phép kiểm. **Số dưới đây lấy từ `menu()` trong mã** — bản trước của README đánh số 1–7 lệch một bậc, nên "3 = kiểm loa" thực ra chạy quét I2C:
 
 ```
-1  Kiểm bo mạch      — PSRAM, flash, tần số, chân còn trống
-2  Kiểm micro        — đọc mức âm lượng, nói vào xem số có nhảy không
-3  Kiểm loa          — phát chuỗi nốt nhạc
-4  Kiểm màn hình     — sọc màu, rồi vẽ thử hai con mắt
-5  Kiểm WiFi         — quét mạng, đo cường độ sóng
-6  Kiểm nguồn        — đo điện áp pin qua chia áp
-7  Chạy TẤT CẢ
+0  Khám tổng quát bo mạch  — PSRAM, flash, tần số, chân còn trống
+1  Kiểm micro INMP441      — nói vào xem mức âm lượng có nhảy không
+2  Kiểm loa MAX98357A      — phát chuỗi nốt nhạc
+3  Quét bus I2C            — tìm cảm biến, PCA9685
+4  Kiểm nguồn / ADC        — đo điện áp pin qua chia áp
+5  Kiểm loa BẰNG MICRO     — máy tự phát rồi tự nghe, không cần tai
+6  Kiểm màn hình 3.5 inch  — chỉ có ở env `test-ili9488` / `test-st7796`
+9  In lại menu
 ```
 
 ---

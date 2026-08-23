@@ -507,5 +507,481 @@ location /               F
 </div>
 `,
     },
+
+    /* ─────────────────────────── 2.4 ─────────────────────────── */
+    {
+      title: '2.4 — root and alias, and the missing slash that leaks files|||2.4 — root và alias, và cái dấu gạch chéo thiếu làm rò rỉ tệp',
+      slug: 'nginx-2-4-root-va-alias',
+      type: 'LESSON',
+      description: 'Hai chỉ thị dựng nên đường dẫn hệ tệp mà Nginx sẽ mở, và chúng ghép đường dẫn theo hai cách KHÁC HẲN nhau. Bài này đo cả hai, rồi dựng lại một cấu hình sai đúng MỘT ký tự và đọc được một tệp nằm NGOÀI thư mục công khai — sau đó vá và đo lại.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 2 · Lesson 2.4</span>
+<h2>root and alias, and the missing slash that leaks files</h2>
+<p class="lead">Once a block is chosen, something has to turn the URI into a path on disk. Two directives do that, they look interchangeable, and they are not: one appends, the other substitutes. The difference is the reason a well-known misconfiguration lets a request read files above the directory you meant to publish.</p>
+
+<h3>The one-sentence difference</h3>
+<div class="lz-map">
+  <div class="lz-stage">
+    <span class="lz-badge">root</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Appends the WHOLE URI</span><span class="lz-nsub">path = root + $uri · the location name stays part of the path on disk</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">alias</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">REPLACES the matched part</span><span class="lz-nsub">path = alias + (whatever the location did not match) · the location name disappears</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Consequence</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">root needs the directory to exist under it</span><span class="lz-nsub">Serving <code>/tinh/</code> from <code>root /var/www</code> requires a real <code>/var/www/tinh</code> directory</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Consequence</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">alias maps a URL onto any directory</span><span class="lz-nsub">The URL prefix and the directory name are free to differ · which is the only reason to use it</span></div></div>
+  </div>
+</div>
+<div class="out">location /r1/ { root  /tmp/nxloc/www;   }   +  /r1/anh/a.txt
+location /r2/ { root  /tmp/nxloc/www/;  }   +  /r2/anh/a.txt
+location /a1/ { alias /tmp/nxloc/www2/; }   +  /a1/anh/a.txt
+location /a2/ { alias /tmp/nxloc/www2;  }   +  /a2/anh/a.txt
+
+do that — duong dan Nginx dung len:
+
+/r1/anh/a.txt   document_root=[/tmp/nxloc/www]  + uri=[/r1/anh/a.txt]
+/r2/anh/a.txt   document_root=[/tmp/nxloc/www]  + uri=[/r2/anh/a.txt]
+                                ^^^^ y HET nhau: root TU BO dau / cuoi
+
+/a1/anh/a.txt   request_filename=[/tmp/nxloc/www2/anh/a.txt]      OK
+/a2/anh/a.txt   request_filename=[/tmp/nxloc/www2anh/a.txt]       404
+                                             ^ thieu dau /, hai manh DINH LIEN</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">root forgives the trailing slash, alias does not</span><span class="v">Both <code>root</code> spellings produced the identical <code>$document_root</code> — Nginx strips it. <code>alias</code> is a literal string substitution, so a missing slash produces <code>www2anh</code>, a directory that does not exist, and a <code>404</code> whose cause is invisible until you read the error log.</span></div>
+  <div class="kv"><span class="k">Prefer root; reach for alias only when the names must differ</span><span class="v">If the URL prefix and the directory have the same name, <code>root</code> does the job with one fewer way to be wrong. <code>alias</code> earns its keep when <code>/tai-lieu/</code> must serve <code>/srv/docs-build/output/</code>, and nowhere else.</span></div>
+  <div class="kv"><span class="k">alias inside a regex location needs captures</span><span class="v">There is no literal "matched part" to remove, so you must rebuild the path yourself: <code>location ~ ^/anh/(.+)\$ { alias /srv/media/\$1; }</code>. If you find yourself writing that, check whether a prefix location would have done.</span></div>
+  <div class="kv"><span class="k">Read $request_filename when in doubt</span><span class="v">It is the final path Nginx will open, after <code>root</code> or <code>alias</code> has been applied. A temporary <code>return 200 "\$request_filename"</code> answers "where is it actually looking" in one request, which is faster than reasoning about it.</span></div>
+</div>
+
+<h3>The missing slash, and what it leaks</h3>
+<pre><code><span class="tok-comment"># SAI — location thiếu dấu / ở cuối</span>
+location /tep { alias /tmp/nxloc/kho/cong-khai/; }
+
+<span class="tok-comment"># Cây thư mục:</span>
+<span class="tok-comment">#   /tmp/nxloc/kho/bi-mat.txt          &lt;- KHÔNG được phép công khai</span>
+<span class="tok-comment">#   /tmp/nxloc/kho/cong-khai/ok.txt    &lt;- thư mục định phục vụ</span></code></pre>
+<div class="out">=== location /tep  (THIEU dau / cuoi) ===
+/tep/ok.txt                -> 200  OK          (dung nhu y dinh)
+/tep../bi-mat.txt          -> 200  BI-MAT      &lt;- DOC DUOC TEP NGOAI THU MUC
+/tep../../etc/hostname     -> 200  khong khop  (mot doan .. that thi bi rut gon)
+
+=== SAU KHI VA: location /tep/  (CO dau / cuoi) ===
+/tep/ok.txt                -> 200  OK
+/tep../bi-mat.txt          -> 200  khong khop  &lt;- khong con khop khoi alias nua</div>
+<div class="pitfall">
+<p><strong>Bẫy — this is the best-known Nginx misconfiguration, and it is one character wide.</strong> <code>location /tep</code> is a prefix, and prefixes do not stop at a separator (Lesson 2.1), so it matches <code>/tep../bi-mat.txt</code>. <code>alias</code> then removes the matched <code>/tep</code> and prepends the alias, giving <code>/tmp/nxloc/kho/cong-khai/../bi-mat.txt</code> — which the filesystem resolves to the parent directory. The <code>..</code> survived normalisation because <code>tep..</code> is not a path segment, so Lesson 2.2's cleanup never applied to it. Writing <code>location /tep/</code> closes it, measured above: the crafted request no longer matches the block at all. <strong>The rule: when a location is paired with <code>alias</code>, both the location and the alias must end in <code>/</code>, or neither may.</strong> The mixed spelling is the vulnerable one.</p>
+</div>
+<pre><code><span class="tok-comment"># ĐÚNG — cả hai cùng có dấu / ở cuối</span>
+location /tep/ { alias /tmp/nxloc/kho/cong-khai/; }
+
+<span class="tok-comment"># Cũng đúng, và thường tốt hơn: đổi tên thư mục cho khớp rồi dùng root</span>
+location /tep/ { root /tmp/nxloc/kho/cong-khai-goc; }
+<span class="tok-comment">#   -&gt; mở /tmp/nxloc/kho/cong-khai-goc/tep/... — không có phép thay thế nào</span></code></pre>
+
+<h3>Checking your own config for this</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Find every alias and look at the line above it</span><span class="lz-lnote"><code>grep -rn -B1 'alias ' /etc/nginx/</code>. For each hit, confirm the <code>location</code> and the <code>alias</code> path either both end in <code>/</code> or both do not. Any mismatch is either a broken path or the hole above.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Then try the request that would prove it</span><span class="lz-lnote"><code>curl --path-as-is -i http://host/prefix../</code> for each prefix. A <code>200</code> or a directory listing where you expected <code>404</code> is the bug. <code>--path-as-is</code> matters: without it curl tidies the path before sending and you test nothing.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Do not rely on the filesystem to save you</span><span class="lz-lnote">It happened to be readable here because the worker user could read the parent. Tight permissions reduce the blast radius but the request still escapes the intended directory — fix the config, then also make sure the worker cannot read what it should not.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Watch for the same shape without alias</span><span class="lz-lnote"><code>location /static</code> with a <code>root</code> is not vulnerable in this way, because <code>root</code> keeps the whole URI — but it still catches <code>/staticfoo</code> and hands it to the static handler. The trailing slash is worth adding either way.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Remember it as a shape, not a rule.</strong> <code>alias</code> performs a textual cut-and-paste on the path, so anything that changes what "the matched part" is changes where the file comes from. That is why the trailing slash matters, why regex locations need explicit captures, and why <code>root</code> — which never cuts anything — has none of these failure modes. When you can use <code>root</code>, use <code>root</code>.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#alias" target="_blank" rel="noopener"><span class="lc-ico">🔀</span><span class="lc-body"><span class="lc-title">nginx — alias</span><span class="lc-sub">nginx.org · Including the note about regex locations and captures</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#root" target="_blank" rel="noopener"><span class="lc-ico">📁</span><span class="lc-body"><span class="lc-title">nginx — root</span><span class="lc-sub">nginx.org · The append rule, in one paragraph</span></span></a>
+<a class="link-card" href="https://owasp.org/www-community/attacks/Path_Traversal" target="_blank" rel="noopener"><span class="lc-ico">🕳️</span><span class="lc-body"><span class="lc-title">OWASP — Path traversal</span><span class="lc-sub">owasp.org · The attack class the missing slash belongs to</span></span></a>
+<a class="link-card" href="/courses/linux-bash/learn${REF}"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">CuongThai course — Linux &amp; Bash</span><span class="lc-sub">How the kernel resolves .. and why permissions are the second line of defence</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Reproduce the leak on a sandbox tree, then close it and re-run the same curl</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 2 · Bài 2.4</span>
+<h2>root và alias, và cái dấu gạch chéo thiếu làm rò rỉ tệp</h2>
+<p class="lead">Khối đã chọn xong thì phải có thứ gì đó biến URI thành một đường dẫn trên đĩa. Hai chỉ thị làm việc đó, chúng trông như thay nhau được, và chúng KHÔNG thay nhau được: một cái NỐI THÊM, cái kia THAY THẾ. Chính khác biệt đó là lý do một cấu hình sai nổi tiếng cho phép một request đọc tệp nằm TRÊN thư mục bạn định công bố.</p>
+
+<h3>Khác biệt gói trong một câu</h3>
+<div class="lz-map">
+  <div class="lz-stage">
+    <span class="lz-badge">root</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">NỐI THÊM nguyên cả URI</span><span class="lz-nsub">đường dẫn = root + $uri · cái tên location VẪN nằm trong đường dẫn trên đĩa</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">alias</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">THAY THẾ phần đã khớp</span><span class="lz-nsub">đường dẫn = alias + (phần location KHÔNG khớp) · cái tên location BIẾN MẤT</span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Hệ quả</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">root đòi thư mục phải TỒN TẠI bên dưới nó</span><span class="lz-nsub">Phục vụ <code>/tinh/</code> từ <code>root /var/www</code> đòi phải có thư mục thật <code>/var/www/tinh</code></span></div></div>
+  </div>
+  <div class="lz-stage">
+    <span class="lz-badge">Hệ quả</span>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">alias ánh xạ một URL vào thư mục BẤT KỲ</span><span class="lz-nsub">Tiền tố URL và tên thư mục được tự do khác nhau · và đó là lý do DUY NHẤT để dùng nó</span></div></div>
+  </div>
+</div>
+<div class="out">location /r1/ { root  /tmp/nxloc/www;   }   +  /r1/anh/a.txt
+location /r2/ { root  /tmp/nxloc/www/;  }   +  /r2/anh/a.txt
+location /a1/ { alias /tmp/nxloc/www2/; }   +  /a1/anh/a.txt
+location /a2/ { alias /tmp/nxloc/www2;  }   +  /a2/anh/a.txt
+
+do that — duong dan Nginx dung len:
+
+/r1/anh/a.txt   document_root=[/tmp/nxloc/www]  + uri=[/r1/anh/a.txt]
+/r2/anh/a.txt   document_root=[/tmp/nxloc/www]  + uri=[/r2/anh/a.txt]
+                                ^^^^ y HET nhau: root TU BO dau / cuoi
+
+/a1/anh/a.txt   request_filename=[/tmp/nxloc/www2/anh/a.txt]      OK
+/a2/anh/a.txt   request_filename=[/tmp/nxloc/www2anh/a.txt]       404
+                                             ^ thieu dau /, hai manh DINH LIEN</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">root tha thứ cho cái dấu gạch chéo cuối, alias thì KHÔNG</span><span class="v">Cả hai cách viết <code>root</code> đều cho ra <code>$document_root</code> y hệt nhau — Nginx tự cắt nó đi. Còn <code>alias</code> là một phép thay chuỗi theo nghĩa đen, nên thiếu một dấu gạch chéo là ra <code>www2anh</code>, một thư mục không tồn tại, và một cú <code>404</code> mà nguyên nhân vô hình cho tới khi bạn đọc error log.</span></div>
+  <div class="kv"><span class="k">Ưu tiên root; chỉ với tới alias khi hai cái tên BẮT BUỘC phải khác nhau</span><span class="v">Nếu tiền tố URL và thư mục cùng tên thì <code>root</code> làm xong việc với ít hơn một cách để sai. <code>alias</code> chỉ đáng công khi <code>/tai-lieu/</code> phải phục vụ <code>/srv/docs-build/output/</code>, và không ở đâu khác.</span></div>
+  <div class="kv"><span class="k">alias bên trong một location regex thì cần nhóm bắt</span><span class="v">Không có "phần đã khớp" theo nghĩa đen nào để bỏ đi, nên bạn phải tự dựng lại đường dẫn: <code>location ~ ^/anh/(.+)\$ { alias /srv/media/\$1; }</code>. Thấy mình đang viết như thế thì hãy kiểm xem một location tiền tố có làm được không đã.</span></div>
+  <div class="kv"><span class="k">Nghi ngờ thì ĐỌC $request_filename</span><span class="v">Nó là đường dẫn CUỐI CÙNG Nginx sẽ mở, sau khi <code>root</code> hay <code>alias</code> đã áp dụng xong. Một dòng <code>return 200 "\$request_filename"</code> tạm thời trả lời câu "nó đang tìm ở đâu" chỉ trong một request, nhanh hơn ngồi suy luận.</span></div>
+</div>
+
+<h3>Cái dấu gạch chéo thiếu, và nó làm rò rỉ cái gì</h3>
+<pre><code><span class="tok-comment"># SAI — location thiếu dấu / ở cuối</span>
+location /tep { alias /tmp/nxloc/kho/cong-khai/; }
+
+<span class="tok-comment"># Cây thư mục:</span>
+<span class="tok-comment">#   /tmp/nxloc/kho/bi-mat.txt          &lt;- KHÔNG được phép công khai</span>
+<span class="tok-comment">#   /tmp/nxloc/kho/cong-khai/ok.txt    &lt;- thư mục định phục vụ</span></code></pre>
+<div class="out">=== location /tep  (THIEU dau / cuoi) ===
+/tep/ok.txt                -> 200  OK          (dung nhu y dinh)
+/tep../bi-mat.txt          -> 200  BI-MAT      &lt;- DOC DUOC TEP NGOAI THU MUC
+/tep../../etc/hostname     -> 200  khong khop  (mot doan .. that thi bi rut gon)
+
+=== SAU KHI VA: location /tep/  (CO dau / cuoi) ===
+/tep/ok.txt                -> 200  OK
+/tep../bi-mat.txt          -> 200  khong khop  &lt;- khong con khop khoi alias nua</div>
+<div class="pitfall">
+<p><strong>Bẫy — đây là cấu hình sai NỔI TIẾNG NHẤT của Nginx, và nó rộng đúng một ký tự.</strong> <code>location /tep</code> là một tiền tố, và tiền tố không dừng ở dấu gạch chéo (Bài 2.1), nên nó khớp luôn <code>/tep../bi-mat.txt</code>. <code>alias</code> sau đó bỏ đi phần <code>/tep</code> đã khớp rồi ghép alias vào đầu, ra <code>/tmp/nxloc/kho/cong-khai/../bi-mat.txt</code> — mà hệ tệp rút gọn thành thư mục CHA. Cái <code>..</code> sống sót qua bộ chuẩn hoá vì <code>tep..</code> không phải một ĐOẠN đường dẫn, nên phép dọn dẹp ở Bài 2.2 chưa từng đụng tới nó. Viết <code>location /tep/</code> là bịt được, đã đo ở trên: cái request bịa ra kia không còn khớp cái khối đó nữa. <strong>Luật: khi một location đi cùng <code>alias</code> thì CẢ location LẪN alias phải cùng kết thúc bằng <code>/</code>, hoặc cùng không.</strong> Cách viết lẫn lộn mới là cách có lỗ.</p>
+</div>
+<pre><code><span class="tok-comment"># ĐÚNG — cả hai cùng có dấu / ở cuối</span>
+location /tep/ { alias /tmp/nxloc/kho/cong-khai/; }
+
+<span class="tok-comment"># Cũng đúng, và thường tốt hơn: đổi tên thư mục cho khớp rồi dùng root</span>
+location /tep/ { root /tmp/nxloc/kho/cong-khai-goc; }
+<span class="tok-comment">#   -&gt; mở /tmp/nxloc/kho/cong-khai-goc/tep/... — không có phép thay thế nào</span></code></pre>
+
+<h3>Tự soi cấu hình của mình xem có dính không</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Tìm mọi alias rồi nhìn cái dòng ngay TRÊN nó</span><span class="lz-lnote"><code>grep -rn -B1 'alias ' /etc/nginx/</code>. Với mỗi kết quả, xác nhận cái <code>location</code> và cái đường dẫn <code>alias</code> hoặc CÙNG kết thúc bằng <code>/</code> hoặc CÙNG không. Lệch nhau thì hoặc là đường dẫn hỏng, hoặc là cái lỗ ở trên.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Rồi thử đúng cái request chứng minh được nó</span><span class="lz-lnote"><code>curl --path-as-is -i http://host/tien-to../</code> cho từng tiền tố. Nhận <code>200</code> hay một danh sách thư mục ở chỗ lẽ ra phải <code>404</code> thì đó là lỗi. <code>--path-as-is</code> rất quan trọng: thiếu nó thì curl tự dọn đường dẫn trước khi gửi và bạn chẳng kiểm được gì.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Đừng trông vào hệ tệp cứu bạn</span><span class="lz-lnote">Ở đây đọc được là vì user chạy worker tình cờ đọc được thư mục cha. Quyền chặt làm hẹp bán kính vụ nổ, nhưng request VẪN thoát ra khỏi thư mục định phục vụ — hãy vá cấu hình trước, rồi hẵng lo cho worker không đọc được thứ nó không nên đọc.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Để ý cùng hình dạng đó nhưng KHÔNG có alias</span><span class="lz-lnote"><code>location /static</code> đi với <code>root</code> thì không dính lỗ kiểu này, vì <code>root</code> giữ nguyên cả URI — nhưng nó VẪN vớ luôn <code>/staticfoo</code> và ném cho bộ xử lý tệp tĩnh. Thêm dấu gạch chéo cuối vẫn đáng, ở cả hai trường hợp.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Hãy nhớ nó như một HÌNH DẠNG, đừng nhớ như một luật.</strong> <code>alias</code> thực hiện một phép cắt-dán theo văn bản trên đường dẫn, nên bất cứ thứ gì làm đổi "phần đã khớp" là đổi luôn chỗ tệp được lấy ra. Đó là lý do dấu gạch chéo cuối quan trọng, là lý do location regex cần nhóm bắt tường minh, và là lý do <code>root</code> — thứ chẳng cắt gì cả — không có kiểu hỏng nào trong số này. Khi nào dùng được <code>root</code> thì hãy dùng <code>root</code>.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#alias" target="_blank" rel="noopener"><span class="lc-ico">🔀</span><span class="lc-body"><span class="lc-title">nginx — alias</span><span class="lc-sub">nginx.org · Kèm cả ghi chú về location regex và nhóm bắt</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#root" target="_blank" rel="noopener"><span class="lc-ico">📁</span><span class="lc-body"><span class="lc-title">nginx — root</span><span class="lc-sub">nginx.org · Luật nối thêm, gói trong một đoạn</span></span></a>
+<a class="link-card" href="https://owasp.org/www-community/attacks/Path_Traversal" target="_blank" rel="noopener"><span class="lc-ico">🕳️</span><span class="lc-body"><span class="lc-title">OWASP — Path traversal</span><span class="lc-sub">owasp.org · Lớp tấn công mà cái dấu gạch chéo thiếu thuộc về</span></span></a>
+<a class="link-card" href="/courses/linux-bash/learn${REF}"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Linux &amp; Bash</span><span class="lc-sub">Nhân hệ điều hành rút gọn .. thế nào và vì sao quyền là tuyến phòng thủ thứ hai</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Dựng lại vụ rò rỉ trên một cây thư mục hộp cát, rồi bịt nó và chạy lại đúng lệnh curl đó</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 2.5 ─────────────────────────── */
+    {
+      title: '2.5 — try_files, and the internal redirect that restarts everything|||2.5 — try_files, và cú chuyển hướng nội bộ chạy lại tất cả từ đầu',
+      slug: 'nginx-2-5-try-files-chuyen-huong-noi-bo',
+      type: 'LESSON',
+      description: 'Ba thứ trong Nginx âm thầm ĐỔI $uri rồi chạy LẠI toàn bộ phép khớp location từ đầu: try_files, index và error_page. Bài này chứng minh cả ba bằng đo đạc, rồi dựng một vòng lặp chuyển hướng nội bộ thật để xem nó chết ra sao và error log nói gì.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 2 · Lesson 2.5</span>
+<h2>try_files, and the internal redirect that restarts everything</h2>
+<p class="lead">Everything so far treated location selection as a single decision. It is not always: three ordinary directives can rewrite <code>$uri</code> mid-request and send the whole matching algorithm back to step one. Once you can see that happening, a large class of "impossible" Nginx behaviour becomes obvious.</p>
+
+<h3>try_files, in the order it tries</h3>
+<pre><code>location /spa/  { try_files \$uri \$uri/ /index.html; }   <span class="tok-comment"># dự phòng là một URI</span>
+location /chat/ { try_files \$uri =404; }                <span class="tok-comment"># dự phòng là một MÃ</span>
+location /di-vong/ { try_files \$uri /dich-cuoi; }
+location /dich-cuoi { return 200 "DA CHAY LAI KHOP LOCATION: uri=[\$uri]"; }</code></pre>
+<div class="out">=== A: du phong la mot URI ===
+/spa/khong-co-gi       -> 200 INDEX SPA
+/spa/sau/nua/nua       -> 200 INDEX SPA
+
+=== B: du phong la =404 ===
+/chat/khong-co         -> 404          (KHONG chuyen huong, dung tai cho)
+
+=== C: du phong tro toi mot location KHAC ===
+/di-vong/khong-co      -> DA CHAY LAI KHOP LOCATION: uri=[/dich-cuoi]
+                          ^^^ khoi /dich-cuoi DA chay, va $uri DA doi</div>
+<p>Row C is the whole point. The fallback did not merely read a different file — it changed <code>$uri</code> to <code>/dich-cuoi</code> and ran location matching again, which landed in a completely different block. That is an <em>internal</em> redirect: no <code>3xx</code>, no second request, nothing the browser can see.</p>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">try_files walks its arguments left to right</span><span class="lz-d">Each one is turned into a filesystem path and tested. <code>\$uri</code> means "the file itself", <code>\$uri/</code> means "a directory of that name". The first that exists is served and the walk stops.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The LAST argument is special</span><span class="lz-d">It is not tested — it is used. If it looks like <code>=404</code> the request ends with that status right here. If it looks like a URI, Nginx performs an internal redirect to it.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">An internal redirect resets $uri and re-matches</span><span class="lz-d">The five steps of Lesson 2.1 run again against the new <code>\$uri</code>. A different block can win, with a different <code>root</code>, different headers and a different handler.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Ten of those and Nginx gives up</span><span class="lz-d">There is a hard cap on redirect cycles. Exceed it and the request dies with <code>500</code> and one specific line in the error log — measured below.</span></div>
+</div>
+
+<h3>The other two directives that do the same thing</h3>
+<div class="out">=== index: /thu-muc/ co file index.html ben trong ===
+/thu-muc/    -> DA VAO KHOI = /thu-muc/index.html
+                => index DA chuyen huong noi bo, uri gio la [/thu-muc/index.html]
+
+=== error_page 404 /loi-404 ===
+/chat/khong-co  -> 404  KHOI error_page: uri=[/loi-404] status ban dau van la 404</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">index rewrites the URI before serving</span><span class="v">A dedicated <code>location = /thu-muc/index.html</code> block fired, proving <code>index</code> did not just open a file — it set <code>\$uri</code> to the index path and re-matched. So a <code>location ~ \\.html\$</code> elsewhere in your config <em>will</em> catch directory requests, which surprises people who never asked for that.</span></div>
+  <div class="kv"><span class="k">error_page re-matches too, and keeps the original status</span><span class="v">The response was still <code>404</code> even though the handling block ended in <code>return 200</code>. Nginx preserves the status that triggered the page unless you write <code>error_page 404 =200 /loi-404;</code>. That equals sign is the difference between a proper 404 and a soft-404 that search engines index.</span></div>
+  <div class="kv"><span class="k">None of the three is visible to the client</span><span class="v">No <code>Location</code> header, no extra round trip, nothing in the browser network tab. The only evidence is in <code>\$uri</code>, in which block ran, and in the access log if you log <code>\$uri</code> alongside <code>\$request_uri</code>.</span></div>
+  <div class="kv"><span class="k">=404 is not the same as a URI fallback</span><span class="v">Row B stopped immediately. Use the code form whenever there is nothing sensible to fall back to — it is cheaper, it cannot loop, and it gives an honest status instead of a page pretending the resource exists.</span></div>
+</div>
+
+<h3>Building the loop on purpose</h3>
+<pre><code><span class="tok-comment"># Dự phòng trỏ tới một tệp KHÔNG tồn tại, mà đường dẫn đó lại rơi</span>
+<span class="tok-comment"># đúng vào CHÍNH khối này — nên nó thử lại, và lại, và lại</span>
+location /vong-lap/ { try_files \$uri /vong-lap/khong-bao-gio-co.html; }</code></pre>
+<div class="out">/vong-lap/x              -> 500
+
+$ grep 'cycle' error.log
+rewrite or internal redirection cycle while internally redirecting to
+"/vong-lap/khong-bao-gio-co.html"</div>
+<div class="pitfall">
+<p><strong>Bẫy — a <code>500</code> with no application involved, and the config that causes it looks completely reasonable.</strong> The fallback URI has to be servable by a block that does <em>not</em> send it back through the same <code>try_files</code>. Here <code>/vong-lap/khong-bao-gio-co.html</code> re-matched <code>location /vong-lap/</code>, the file still did not exist, and the fallback fired again — ten times, then <code>500</code>. The classic production version is an SPA config where <code>/index.html</code> is genuinely missing after a bad deploy: every URL on the site returns <code>500</code> instead of a <code>404</code>, and the error log line above is the only thing that says why. Two habits prevent it: make the fallback a path that a <code>location =</code> block handles directly, and make sure the file exists as part of the deploy check rather than assuming it.</p>
+</div>
+<pre><code><span class="tok-comment"># An toàn: dự phòng đi vào một khối KHÔNG thể quay lại try_files</span>
+location /spa/ { try_files \$uri \$uri/ /spa-index; }
+location = /spa-index {
+  root /srv/spa;
+  try_files /index.html =404;   <span class="tok-comment"># thiếu tệp thì 404 THẬT, không phải 500</span>
+}</code></pre>
+
+<h3>Reading a request that redirected internally</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Log both URIs, always</span><span class="lz-lnote">A log format with <code>"\$request_uri" -&gt; "\$uri"</code> shows the original and the final path on one line. Without it an internal redirect is invisible in the logs and you will argue with someone about what was requested.</span></div>
+  <div class="lz-layer"><span class="lz-lname">$request_uri never changes</span><span class="lz-lnote">It stays what the client sent, through every internal redirect. That makes it the right variable for anything that must reflect the real request — logging, rate-limit keys, signatures — and the wrong one for deciding what to serve.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Directives are re-resolved from the new block</span><span class="lz-lnote">After a redirect, <code>root</code>, <code>add_header</code> and everything else come from the block that matched the NEW uri. A header you set in the first block is gone unless the second block sets it too — Lesson 2.3, arriving from an unexpected direction.</span></div>
+  <div class="lz-layer"><span class="lz-lname">internal; marks a block as unreachable from outside</span><span class="lz-lnote">Adding <code>internal;</code> to a location makes it answer only internal redirects and return <code>404</code> to a direct request. It is the right guard on error pages, <code>X-Accel-Redirect</code> targets and anything else meant to be reached only from inside your own config.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>The mental model.</strong> Location matching is not one decision per request — it is one decision per <em>internal redirect</em>, and a request can have several. When a block you are certain about does not seem to run, ask whether something before it changed <code>\$uri</code>: a <code>try_files</code> fallback, an <code>index</code> on a directory, an <code>error_page</code>. Print <code>\$uri</code> in the block you land in and the answer takes one request.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files" target="_blank" rel="noopener"><span class="lc-ico">🗂️</span><span class="lc-body"><span class="lc-title">nginx — try_files</span><span class="lc-sub">nginx.org · The special treatment of the last argument, stated normatively</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#error_page" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">nginx — error_page and internal</span><span class="lc-sub">nginx.org · Including the = form that changes the returned status</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_index_module.html" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nginx — the index module</span><span class="lc-sub">nginx.org · Where it says plainly that index performs an internal redirect</span></span></a>
+<a class="link-card" href="/courses/nextjs/learn${REF}"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">CuongThai course — Next.js</span><span class="lc-sub">Why a client-routed app needs the fallback, and what it breaks if you get it wrong</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Build the redirect cycle, read the error log line, then make it a 404 instead</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 2 · Bài 2.5</span>
+<h2>try_files, và cú chuyển hướng nội bộ chạy lại tất cả từ đầu</h2>
+<p class="lead">Từ đầu tới giờ ta coi việc chọn location là MỘT quyết định. Không phải lúc nào cũng thế: ba chỉ thị rất bình thường có thể viết lại <code>$uri</code> ngay giữa request và đẩy cả thuật toán khớp quay về bước một. Nhìn thấy được chuyện đó là cả một lớp hành vi "không thể nào" của Nginx trở nên hiển nhiên.</p>
+
+<h3>try_files, theo đúng thứ tự nó thử</h3>
+<pre><code>location /spa/  { try_files \$uri \$uri/ /index.html; }   <span class="tok-comment"># dự phòng là một URI</span>
+location /chat/ { try_files \$uri =404; }                <span class="tok-comment"># dự phòng là một MÃ</span>
+location /di-vong/ { try_files \$uri /dich-cuoi; }
+location /dich-cuoi { return 200 "DA CHAY LAI KHOP LOCATION: uri=[\$uri]"; }</code></pre>
+<div class="out">=== A: du phong la mot URI ===
+/spa/khong-co-gi       -> 200 INDEX SPA
+/spa/sau/nua/nua       -> 200 INDEX SPA
+
+=== B: du phong la =404 ===
+/chat/khong-co         -> 404          (KHONG chuyen huong, dung tai cho)
+
+=== C: du phong tro toi mot location KHAC ===
+/di-vong/khong-co      -> DA CHAY LAI KHOP LOCATION: uri=[/dich-cuoi]
+                          ^^^ khoi /dich-cuoi DA chay, va $uri DA doi</div>
+<p>Dòng C mới là toàn bộ ý nghĩa. Cái dự phòng KHÔNG chỉ đọc một tệp khác — nó đổi <code>$uri</code> thành <code>/dich-cuoi</code> rồi chạy LẠI phép khớp location, và rơi vào một khối hoàn toàn khác. Đó là một cú chuyển hướng NỘI BỘ: không có <code>3xx</code> nào, không có request thứ hai nào, không có gì trình duyệt nhìn thấy được.</p>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">try_files duyệt các đối số từ TRÁI sang PHẢI</span><span class="lz-d">Mỗi cái được biến thành một đường dẫn hệ tệp rồi đem thử. <code>\$uri</code> nghĩa là "chính cái tệp đó", <code>\$uri/</code> nghĩa là "một thư mục tên như thế". Cái đầu tiên TỒN TẠI được đem ra phục vụ và cuộc duyệt dừng.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Đối số CUỐI CÙNG thì đặc biệt</span><span class="lz-d">Nó KHÔNG được đem thử — nó được ĐEM DÙNG. Trông giống <code>=404</code> thì request kết thúc ngay tại chỗ với mã đó. Trông giống một URI thì Nginx thực hiện một cú chuyển hướng nội bộ tới nó.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Chuyển hướng nội bộ ĐẶT LẠI $uri rồi KHỚP LẠI</span><span class="lz-d">Năm bước của Bài 2.1 chạy lại với cái <code>\$uri</code> mới. Một khối KHÁC có thể thắng, với một <code>root</code> khác, header khác và bộ xử lý khác.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Mười lần như thế là Nginx bỏ cuộc</span><span class="lz-d">Có một trần cứng cho số vòng chuyển hướng. Vượt qua là request chết với <code>500</code> kèm đúng MỘT dòng trong error log — đo ở dưới.</span></div>
+</div>
+
+<h3>Hai chỉ thị còn lại cũng làm y như thế</h3>
+<div class="out">=== index: /thu-muc/ co file index.html ben trong ===
+/thu-muc/    -> DA VAO KHOI = /thu-muc/index.html
+                => index DA chuyen huong noi bo, uri gio la [/thu-muc/index.html]
+
+=== error_page 404 /loi-404 ===
+/chat/khong-co  -> 404  KHOI error_page: uri=[/loi-404] status ban dau van la 404</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">index viết lại URI TRƯỚC khi phục vụ</span><span class="v">Một khối riêng <code>location = /thu-muc/index.html</code> đã nổ, chứng minh <code>index</code> không chỉ mở một tệp — nó đặt <code>\$uri</code> thành đường dẫn của tệp index rồi khớp lại. Nên một <code>location ~ \\.html\$</code> nằm đâu đó trong cấu hình của bạn SẼ vớ luôn các request tới thư mục, điều làm ngạc nhiên những người chưa từng yêu cầu như thế.</span></div>
+  <div class="kv"><span class="k">error_page cũng khớp lại, và GIỮ nguyên mã trạng thái ban đầu</span><span class="v">Phản hồi vẫn là <code>404</code> dù cái khối xử lý kết thúc bằng <code>return 200</code>. Nginx giữ lại mã đã kích hoạt trang lỗi trừ khi bạn viết <code>error_page 404 =200 /loi-404;</code>. Cái dấu bằng ấy là khác biệt giữa một cú 404 tử tế và một cú 404-mềm mà máy tìm kiếm đem đi lập chỉ mục.</span></div>
+  <div class="kv"><span class="k">Cả ba đều VÔ HÌNH với client</span><span class="v">Không header <code>Location</code>, không thêm vòng đi về, không gì trong tab Network của trình duyệt. Bằng chứng duy nhất nằm ở <code>\$uri</code>, ở chỗ khối nào đã chạy, và ở access log nếu bạn ghi <code>\$uri</code> cạnh <code>\$request_uri</code>.</span></div>
+  <div class="kv"><span class="k">=404 KHÔNG giống một URI dự phòng</span><span class="v">Dòng B dừng ngay lập tức. Hãy dùng dạng mã bất cứ khi nào không có gì hợp lý để rơi vào — nó rẻ hơn, nó không thể lặp vòng, và nó cho một mã trạng thái THẬT THÀ thay vì một trang giả vờ rằng tài nguyên có tồn tại.</span></div>
+</div>
+
+<h3>Dựng cái vòng lặp một cách cố ý</h3>
+<pre><code><span class="tok-comment"># Dự phòng trỏ tới một tệp KHÔNG tồn tại, mà đường dẫn đó lại rơi</span>
+<span class="tok-comment"># đúng vào CHÍNH khối này — nên nó thử lại, và lại, và lại</span>
+location /vong-lap/ { try_files \$uri /vong-lap/khong-bao-gio-co.html; }</code></pre>
+<div class="out">/vong-lap/x              -> 500
+
+$ grep 'cycle' error.log
+rewrite or internal redirection cycle while internally redirecting to
+"/vong-lap/khong-bao-gio-co.html"</div>
+<div class="pitfall">
+<p><strong>Bẫy — một cú <code>500</code> mà chẳng có ứng dụng nào tham gia, và cái cấu hình gây ra nó trông hoàn toàn hợp lý.</strong> Cái URI dự phòng BẮT BUỘC phải phục vụ được bởi một khối KHÔNG đẩy nó quay lại chính cái <code>try_files</code> ấy. Ở đây <code>/vong-lap/khong-bao-gio-co.html</code> khớp lại <code>location /vong-lap/</code>, tệp vẫn không tồn tại, và cái dự phòng lại nổ — mười lần, rồi <code>500</code>. Bản kinh điển ngoài production là một cấu hình SPA mà <code>/index.html</code> thật sự biến mất sau một lần deploy hỏng: MỌI URL trên site trả <code>500</code> thay vì <code>404</code>, và cái dòng error log ở trên là thứ duy nhất nói vì sao. Hai thói quen chặn được nó: cho dự phòng trỏ tới một đường dẫn mà một khối <code>location =</code> xử lý TRỰC TIẾP, và kiểm tệp đó có tồn tại như một phần của bước kiểm deploy chứ đừng cho là nhiên.</p>
+</div>
+<pre><code><span class="tok-comment"># An toàn: dự phòng đi vào một khối KHÔNG thể quay lại try_files</span>
+location /spa/ { try_files \$uri \$uri/ /spa-index; }
+location = /spa-index {
+  root /srv/spa;
+  try_files /index.html =404;   <span class="tok-comment"># thiếu tệp thì 404 THẬT, không phải 500</span>
+}</code></pre>
+
+<h3>Đọc một request đã chuyển hướng nội bộ</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">LUÔN ghi log cả hai cái URI</span><span class="lz-lnote">Một định dạng log có <code>"\$request_uri" -&gt; "\$uri"</code> cho thấy đường dẫn gốc và đường dẫn cuối trên cùng một dòng. Thiếu nó thì một cú chuyển hướng nội bộ vô hình trong log và bạn sẽ đi cãi nhau với ai đó về chuyện cái gì đã được gọi.</span></div>
+  <div class="lz-layer"><span class="lz-lname">$request_uri KHÔNG BAO GIỜ đổi</span><span class="lz-lnote">Nó giữ nguyên cái client gửi, qua mọi cú chuyển hướng nội bộ. Điều đó làm nó thành biến ĐÚNG cho mọi thứ phải phản ánh request thật — ghi log, khoá giới hạn tần suất, chữ ký — và là biến SAI để quyết định phục vụ cái gì.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Các chỉ thị được giải LẠI từ khối MỚI</span><span class="lz-lnote">Sau một cú chuyển hướng, <code>root</code>, <code>add_header</code> và mọi thứ khác đều tới từ cái khối khớp với uri MỚI. Một header bạn đặt ở khối đầu là mất, trừ khi khối thứ hai cũng đặt nó — Bài 2.3, ập tới từ một hướng không ai ngờ.</span></div>
+  <div class="lz-layer"><span class="lz-lname">internal; đánh dấu một khối là KHÔNG chạm được từ bên ngoài</span><span class="lz-lnote">Thêm <code>internal;</code> vào một location là nó chỉ trả lời các cú chuyển hướng nội bộ và trả <code>404</code> cho request gọi thẳng. Đó là cái chốt đúng cho các trang lỗi, các đích của <code>X-Accel-Redirect</code> và mọi thứ chỉ nên được chạm tới từ bên trong cấu hình của chính bạn.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Mô hình trong đầu.</strong> Khớp location KHÔNG phải một quyết định cho mỗi request — nó là một quyết định cho mỗi CÚ CHUYỂN HƯỚNG NỘI BỘ, và một request có thể có vài cú. Khi một khối bạn chắc chắn về nó lại có vẻ không chạy, hãy hỏi xem có thứ gì trước đó đã đổi <code>\$uri</code> chưa: một cú dự phòng của <code>try_files</code>, một cái <code>index</code> trên thư mục, một cái <code>error_page</code>. In <code>\$uri</code> ra ở cái khối bạn rơi vào là câu trả lời tốn đúng một request.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files" target="_blank" rel="noopener"><span class="lc-ico">🗂️</span><span class="lc-body"><span class="lc-title">nginx — try_files</span><span class="lc-sub">nginx.org · Cách đối xử đặc biệt với đối số cuối, nói theo chuẩn</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#error_page" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">nginx — error_page và internal</span><span class="lc-sub">nginx.org · Kèm cả dạng = làm đổi mã trạng thái trả về</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_index_module.html" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nginx — module index</span><span class="lc-sub">nginx.org · Chỗ nói thẳng rằng index thực hiện một cú chuyển hướng nội bộ</span></span></a>
+<a class="link-card" href="/courses/nextjs/learn${REF}"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Next.js</span><span class="lc-sub">Vì sao ứng dụng định tuyến ở client cần cái dự phòng, và làm sai thì hỏng gì</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Dựng cái vòng lặp, đọc dòng error log, rồi biến nó thành một cú 404 tử tế</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 2.6 ─────────────────────────── */
+    {
+      title: '2.6 — Quiz: which location wins|||2.6 — Quiz: location nào thắng',
+      slug: 'nginx-2-6-quiz',
+      type: 'QUIZ',
+      description: 'Tám câu về thuật toán năm bước, phép chuẩn hoá URI, luật thừa hưởng dạng mảng, root và alias, cùng ba chỉ thị âm thầm chạy lại mọi thứ từ đầu.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 2 · Lesson 2.6</span>
+<h2>Quiz: which location wins</h2>
+<p class="lead">Eight questions, all answerable from measurements in this chapter. Two of them are about failures you can reproduce in a sandbox in under a minute, which is the best reason to trust the answer.</p>
+<div class="callout">
+<p><strong>What this chapter established.</strong> Location selection is five steps, not a top-to-bottom scan: exact match short-circuits everything, then the longest matching prefix is remembered, then <code>^~</code> decides whether the regexes run at all, then the first matching regex wins outright, then the remembered prefix is used (2.1). Those steps run against <code>$uri</code>, which has already been percent-decoded, had repeated slashes collapsed and <code>../</code> resolved — but never case-folded, which is why a case-sensitive <code>~ \\.php</code> lets <code>.PHP</code> escape its handler (2.2). Choosing a block also chooses its configuration, and for list-valued directives like <code>add_header</code> one line in a child throws away the whole inherited list — measured as three URLs on one server returning three different header sets (2.3). <code>root</code> appends the whole URI while <code>alias</code> substitutes the matched part, which is why a location missing its trailing slash next to an <code>alias</code> served a file from outside the published directory (2.4). And <code>try_files</code>, <code>index</code> and <code>error_page</code> can all rewrite <code>$uri</code> and restart the entire algorithm, up to ten times before the request dies with <code>500</code> (2.5).</p>
+</div>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 2 · Bài 2.6</span>
+<h2>Quiz: location nào thắng</h2>
+<p class="lead">Tám câu, tất cả đều trả lời được từ những phép đo trong chương này. Hai câu nói về những kiểu hỏng bạn dựng lại được trong hộp cát chưa tới một phút, và đó là lý do tốt nhất để tin câu trả lời.</p>
+<div class="callout">
+<p><strong>Chương này đã xác lập điều gì.</strong> Chọn location là NĂM bước chứ không phải một lượt quét từ trên xuống: khớp chính xác đoản mạch mọi thứ, rồi tiền tố khớp DÀI NHẤT được ghi nhớ, rồi <code>^~</code> quyết định đám regex có chạy hay không, rồi regex ĐẦU TIÊN khớp thắng dứt điểm, rồi mới dùng tới cái tiền tố đã nhớ (2.1). Những bước đó chạy trên <code>$uri</code>, thứ đã được giải mã phần trăm, đã dẹp gạch chéo lặp và đã rút gọn <code>../</code> — nhưng KHÔNG BAO GIỜ hạ chữ hoa, và đó là lý do một cái <code>~ \\.php</code> phân biệt hoa thường để cho <code>.PHP</code> thoát khỏi bộ xử lý của nó (2.2). Chọn một khối cũng là chọn luôn cấu hình của nó, và với chỉ thị dạng danh sách như <code>add_header</code> thì MỘT dòng ở con vứt đi NGUYÊN danh sách thừa hưởng — đo được bằng ba URL trên cùng một server trả về ba bộ header khác nhau (2.3). <code>root</code> NỐI nguyên cả URI còn <code>alias</code> THAY THẾ phần đã khớp, và đó là lý do một location thiếu dấu gạch chéo cuối nằm cạnh một <code>alias</code> đã phục vụ một tệp NGOÀI thư mục được công bố (2.4). Và <code>try_files</code>, <code>index</code>, <code>error_page</code> đều có thể viết lại <code>$uri</code> rồi chạy lại toàn bộ thuật toán, tối đa mười lần trước khi request chết với <code>500</code> (2.5).</p>
+</div>
+</div>
+`,
+      quiz: {
+        timeLimitSeconds: 720,
+        questions: [
+          {
+            question: 'A config has location /api and location ~ \\\\.json in that order. A request for /api/x.json arrives. Which wins?|||Một cấu hình có location /api rồi location ~ \\\\.json theo thứ tự đó. Một request tới /api/x.json. Cái nào thắng?',
+            options: [
+              'location /api, because it appears first in the file|||location /api, vì nó đứng trước trong file',
+              'The regex — the longest matching prefix was plain (no ^~), so the regexes are tried and the first match beats it|||Cái regex — tiền tố khớp dài nhất là loại THƯỜNG (không có ^~), nên đám regex được thử và cái khớp đầu tiên thắng nó',
+              'location /api, because a prefix is always more specific|||location /api, vì tiền tố thì luôn cụ thể hơn',
+              'Nginx returns 500 because the two overlap|||Nginx trả 500 vì hai cái chồng lấn nhau',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'You move a prefix location block to the top of the file. What changes?|||Bạn kéo một khối location TIỀN TỐ lên đầu file. Cái gì thay đổi?',
+            options: [
+              'It now matches before the others|||Giờ nó khớp trước những cái khác',
+              'Nothing — prefix locations compete on length, not position; only regex blocks are order-sensitive|||Không gì cả — location tiền tố đua nhau bằng ĐỘ DÀI chứ không phải vị trí; chỉ khối regex mới nhạy với thứ tự',
+              'It becomes the default location|||Nó trở thành location mặc định',
+              'All regex blocks below it stop working|||Mọi khối regex bên dưới nó ngừng hoạt động',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'You have location ^~ /tinh/ to keep a subtree away from a PHP regex. A colleague adds location /tinh/anh/ (plain). What happens to requests for /tinh/anh/x.php?|||Bạn có location ^~ /tinh/ để giữ một cây con tránh xa cái regex PHP. Một đồng nghiệp thêm location /tinh/anh/ (loại thường). Chuyện gì xảy ra với request tới /tinh/anh/x.php?',
+            options: [
+              'Nothing; ^~ protects the whole subtree|||Không gì cả; ^~ che chở cả cây con',
+              'The longest matching prefix is now the plain block, so ^~ no longer applies and the PHP regex runs again — measured|||Tiền tố khớp dài nhất giờ là cái khối THƯỜNG, nên ^~ hết hiệu lực và cái regex PHP chạy lại — đã đo',
+              'Nginx refuses to start|||Nginx từ chối khởi động',
+              'The request gets a 404|||Request nhận 404',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'A request arrives for /cong-khai/../quan-tri. Which location matches?|||Một request tới /cong-khai/../quan-tri. Location nào khớp?',
+            options: [
+              'location /cong-khai, because that is what the client sent|||location /cong-khai, vì đó là cái client gửi lên',
+              'location /quan-tri — the ../ is resolved before matching, so a location name confines nothing to a subtree|||location /quan-tri — cái ../ được rút gọn TRƯỚC khi khớp, nên một cái tên location không giam được thứ gì trong một cây con',
+              'Neither; Nginx rejects the request with 400|||Không cái nào; Nginx đá request với 400',
+              'Both, in sequence|||Cả hai, lần lượt',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'server has four add_header security headers. You add one add_header Cache-Control line inside location /static/. What does a static asset now return?|||Khối server có bốn dòng add_header header bảo mật. Bạn thêm MỘT dòng add_header Cache-Control vào trong location /static/. Giờ một tệp tĩnh trả về gì?',
+            options: [
+              'All five headers|||Cả năm header',
+              'Only Cache-Control — a child list REPLACES the inherited list rather than adding to it, so the four security headers are gone|||Chỉ Cache-Control — danh sách ở con THAY THẾ danh sách thừa hưởng chứ không cộng thêm, nên bốn header bảo mật biến mất',
+              'The four security headers only|||Chỉ bốn header bảo mật',
+              'It depends on whether always is used|||Tuỳ vào việc có dùng always hay không',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'location /tep { alias /srv/cong-khai/; } — with no trailing slash on the location. Why is this dangerous?|||location /tep { alias /srv/cong-khai/; } — location KHÔNG có dấu gạch chéo cuối. Vì sao nó nguy hiểm?',
+            options: [
+              'It is only a style issue; Nginx normalises it|||Chỉ là vấn đề phong cách; Nginx tự chuẩn hoá',
+              '/tep../bi-mat.txt matches the prefix, alias replaces /tep, and the resulting path resolves into the PARENT directory — measured returning a file outside the published tree|||/tep../bi-mat.txt khớp cái tiền tố, alias thay chỗ /tep, và đường dẫn ra được rút gọn vào thư mục CHA — đo thật đã trả về một tệp ngoài cây được công bố',
+              'It makes Nginx slower|||Nó làm Nginx chậm đi',
+              'It breaks only when the directory is empty|||Nó chỉ hỏng khi thư mục rỗng',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'try_files $uri /index.html; and /index.html does not exist. What does a request for a missing path return?|||try_files $uri /index.html; và /index.html KHÔNG tồn tại. Một request tới một đường dẫn không có sẽ trả về gì?',
+            options: [
+              '404, because nothing was found|||404, vì chẳng tìm thấy gì',
+              '500 — the fallback re-matches the same block, fires again, and hits the internal-redirect cycle limit; the error log says "rewrite or internal redirection cycle"|||500 — cái dự phòng khớp lại chính khối đó, nổ lại, và chạm trần vòng chuyển hướng nội bộ; error log ghi "rewrite or internal redirection cycle"',
+              '200 with an empty body|||200 với thân rỗng',
+              '301 to /index.html|||301 về /index.html',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'error_page 404 /loi-404; and the block at /loi-404 ends with return 200. What status does the client see?|||error_page 404 /loi-404; và cái khối ở /loi-404 kết thúc bằng return 200. Client nhìn thấy mã trạng thái nào?',
+            options: [
+              '200, because that is what the handling block returned|||200, vì đó là cái khối xử lý trả về',
+              '404 — Nginx preserves the status that triggered the error page unless you write error_page 404 =200 /loi-404;|||404 — Nginx GIỮ lại mã đã kích hoạt trang lỗi, trừ khi bạn viết error_page 404 =200 /loi-404;',
+              '500, because the two statuses conflict|||500, vì hai mã trạng thái xung đột',
+              'It alternates between the two|||Nó luân phiên giữa hai cái',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+        ],
+      },
+    },
   ],
 };

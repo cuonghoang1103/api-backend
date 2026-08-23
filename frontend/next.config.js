@@ -71,6 +71,28 @@ const nextConfig = {
     { protocol: 'https', hostname: 'yt3.ggpht.com' },
   ],
   },
+  // ─── lottie-web → bản "light" ────────────────────────────────────────────
+  // `lottie-react` gọi thẳng `require('lottie-web')`, và mặc định đó là bản
+  // ĐẦY ĐỦ: 299KB đã minify (đo trên chunk dc112a36….js của bản dựng thật).
+  // Bản `lottie_light` là 164KB — rẻ hơn 135KB cho cùng một con robot.
+  //
+  // Khác biệt DUY NHẤT giữa hai bản là hỗ trợ EXPRESSION (biểu thức kiểu
+  // After Effects nhúng trong file .json). Đã quét `public/animations/
+  // robot.json`: 0 expression, 0 effect, 18 layer hình học thuần. Nên phần bị
+  // cắt là phần không ai dùng.
+  //
+  // ⚠️ Trước khi thêm một file .lottie/.json MỚI vào web, quét nó đã:
+  //     python3 -c "import json;d=json.load(open('f.json'));..."  (tìm khoá
+  //     "x" mang chuỗi, và khoá "ef")
+  // Có expression mà vẫn dùng bản light thì hoạt hình chạy SAI CÂM — không
+  // lỗi, không cảnh báo, chỉ là các lớp đứng im sai chỗ.
+  webpack(config) {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'lottie-web': require.resolve('lottie-web/build/player/lottie_light.js'),
+    };
+    return config;
+  },
   async headers() {
     return [
       {

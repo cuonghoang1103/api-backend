@@ -62,6 +62,10 @@ export default function FloatingAIAssistant() {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipMessage, setTooltipMessage] = useState('');
   const [robotData, setRobotData] = useState<object | null>(null);
+  // "Người dùng đã tỏ ý quan tâm tới con robot chưa?" — cờ mở cửa cho 360KB
+  // Lottie. Bật bởi: rê chuột vào, focus bàn phím, bấm mở chat, hoặc AI bắt
+  // đầu trả lời. Xem khối useEffect nạp hoạt hình để biết vì sao.
+  const [wantsAnim, setWantsAnim] = useState(false);
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tooltipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -71,69 +75,75 @@ export default function FloatingAIAssistant() {
     ? 'typing'
     : 'idle';
 
-  // ─── Nạp hoạt hình robot: MUỘN, và chỉ khi thật sự cần ────────────────────
+  // ─── Nạp hoạt hình robot: CHỈ KHI NGƯỜI DÙNG CHẠM TỚI NÓ ──────────────────
   //
-  // Con robot này là TRANG TRÍ. Nhưng nó được gắn trong layout gốc, nên trước
-  // 23/08/2026 nó kéo theo chuỗi sau ngay khi component mount, trên MỌI trang:
+  // Con robot là TRANG TRÍ, nhưng nó gắn trong layout gốc, nên trước
+  // 23/08/2026 nó kéo nguyên chuỗi này ngay khi mount, trên MỌI trang:
   //
   //   fetch('/animations/robot.json')  → 60KB
   //   → setRobotData → LottieClient render → import('lottie-react')
   //   → chunk lottie-web              → 300KB   (đo thật: dc112a36….js)
   //
-  //  360KB tranh băng thông với chính nội dung trang, ngay lúc trang đang cố
-  //  vẽ màn hình đầu tiên.
+  // Bước đầu (cùng ngày) là hoãn tới `requestIdleCallback`. Đo lại bằng
+  // Chromium thật cho thấy hoãn KHÔNG ĐỦ: máy để không thì trình duyệt rảnh
+  // gần như tức thì, chunk vẫn về ở mốc +740ms. Ra khỏi đường găng, nhưng
+  // 360KB vẫn đi — mà đại đa số khách chẳng bao giờ đụng vào con robot.
   //
-  // Ba lớp hoãn, theo thứ tự đắt dần:
+  // Nay nó đợi một TÍN HIỆU QUAN TÂM. Bốn cửa mở, phủ hết các lối vào thật:
   //
-  // 1. `hidden` → KHÔNG tải gì cả. Trên /admin, /creator, và trên điện thoại ở
-  //    mọi trang không phải '/', con robot còn không được vẽ ra. Tải hoạt hình
-  //    cho một thứ `return null` là lãng phí thuần tuý.
+  //   · rê chuột vào nút   → `onMouseEnter`
+  //   · đi bằng bàn phím   → `onFocus`   (không có cái này thì người dùng
+  //                          bàn phím vĩnh viễn thấy ảnh tĩnh)
+  //   · bấm mở chat        → `handleOpen`
+  //   · AI bắt đầu trả lời → `robotState !== 'idle'` ở effect ngay dưới; lúc
+  //                          này con robot đang DIỄN ĐẠT trạng thái (nghĩ /
+  //                          gõ), nên hoạt hình mới có nghĩa
   //
-  // 2. `reduceAnim` → KHÔNG tải gì cả. Máy cảm ứng và người bật
-  //    prefers-reduced-motion vốn đã không được xem hoạt hình lặp (xem các
-  //    `animate={reduceAnim ? undefined : …}` ở dưới). Với họ Lottie chỉ vẽ ra
-  //    một khung hình đứng yên — đúng bằng thứ mà `/robot-avatar.png` (16KB)
-  //    làm được. Đây là nhóm hưởng lợi nhiều nhất: máy yếu, mạng chậm.
+  // Rê chuột tới lúc bấm thường cách nhau vài trăm ms, đủ để chunk về kịp —
+  // và trong lúc chờ thì `/robot-avatar.png` (16KB) vẫn đang hiển thị, nên
+  // không có khoảng trống nào.
   //
-  // 3. Còn lại → tải khi trình duyệt RẢNH (`requestIdleCallback`). Vẫn là con
-  //    robot động y như cũ, chỉ khác là nó xếp hàng SAU nội dung trang chứ
-  //    không giành chỗ. `timeout: 4000` là chốt chặn: trang bận liên tục thì
-  //    sau 4 giây cứ nạp, đừng để robot không bao giờ động.
+  // Hai cửa chặn TUYỆT ĐỐI, đặt trước cả `wantsAnim`:
   //
-  // ⚠️ ĐỪNG gỡ điều kiện `hidden`/`reduceAnim` rồi để lại mỗi fetch. Chuỗi
-  // `robotData → LottieClient → import()` mới là chỗ tốn 300KB; cái fetch 60KB
+  // 1. `hidden` → trên /admin, /creator, và trên điện thoại ở mọi trang không
+  //    phải '/', con robot còn không được vẽ. Tải hoạt hình cho một thứ
+  //    `return null` là lãng phí thuần tuý.
+  //
+  // 2. `reduceAnim` → máy cảm ứng và người bật prefers-reduced-motion vốn đã
+  //    không được xem hoạt hình lặp (xem các `animate={reduceAnim ? undefined
+  //    : …}` ở dưới). Với họ Lottie chỉ vẽ ra một khung hình đứng yên — đúng
+  //    bằng thứ ảnh PNG đang làm. Đây là nhóm hưởng lợi nhiều nhất: máy yếu,
+  //    mạng chậm, và trên cảm ứng thì "rê chuột" cũng không tồn tại.
+  //
+  // ⚠️ ĐỪNG gỡ mấy điều kiện này rồi để lại mỗi cái fetch. Chuỗi
+  // `robotData → LottieClient → import()` mới là chỗ tốn 300KB; fetch 60KB
   // chỉ là ngòi nổ.
   useEffect(() => {
-    if (hidden || reduceAnim || robotData) return;
+    if (hidden || reduceAnim || robotData || !wantsAnim) return;
 
     let alive = true;
-    const load = () => {
-      fetch('/animations/robot.json')
-        .then((res) => res.json())
-        .then((data) => {
-          if (alive) setRobotData(data);
-        })
-        // Im lặng: robot là trang trí, hỏng nó không đáng bẩn console của
-        // người dùng. Không có robotData thì LottieClient vẽ ô trong suốt và
-        // nút vẫn bấm được — xem lớp dự phòng <img> ở dưới.
-        .catch(() => {});
-    };
-
-    // `typeof … === 'function'` chứ không phải `if (window.requestIdleCallback)`:
-    // lib.dom khai nó là LUÔN có, nên dạng kiểm tra tính đúng-sai bị tsc chặn
-    // bằng TS2774. Guard vẫn cần thật — Safari mới hỗ trợ requestIdleCallback
-    // từ 16.4, và ở đó nhánh setTimeout là thứ giữ cho robot vẫn động.
-    const supportsIdle = typeof window.requestIdleCallback === 'function';
-    const handle: number = supportsIdle
-      ? window.requestIdleCallback(load, { timeout: 4000 })
-      : window.setTimeout(load, 1500);
+    fetch('/animations/robot.json')
+      .then((res) => res.json())
+      .then((data) => {
+        if (alive) setRobotData(data);
+      })
+      // Im lặng: robot là trang trí, hỏng nó không đáng bẩn console của người
+      // dùng. Không có robotData thì ảnh PNG ở dưới vẫn hiển thị và nút vẫn
+      // bấm được — mất hoạt hình, không mất chức năng.
+      .catch(() => {});
 
     return () => {
       alive = false;
-      if (supportsIdle) window.cancelIdleCallback(handle);
-      else window.clearTimeout(handle);
     };
-  }, [hidden, reduceAnim, robotData]);
+  }, [hidden, reduceAnim, robotData, wantsAnim]);
+
+  // AI đang nghĩ / đang gõ ⇒ mở cửa cho hoạt hình dù người dùng chưa rê chuột.
+  // Đây là lúc DUY NHẤT con robot mang thông tin chứ không chỉ trang trí:
+  // `robotState` điều khiển pause/tốc độ ở effect ngay dưới, và một ảnh tĩnh
+  // thì không nói được "đang xử lý".
+  useEffect(() => {
+    if (robotState !== 'idle') setWantsAnim(true);
+  }, [robotState]);
 
   // Control Lottie playback based on state
   useEffect(() => {
@@ -182,6 +192,8 @@ export default function FloatingAIAssistant() {
   }, [hidden, isOpen, scheduleTooltip]);
 
   const handleMouseEnter = () => {
+    // Tín hiệu quan tâm đầu tiên và phổ biến nhất — bắt đầu kéo Lottie về.
+    setWantsAnim(true);
     if (!isOpen) {
       setShowTooltip(false);
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
@@ -194,6 +206,9 @@ export default function FloatingAIAssistant() {
   };
 
   const handleOpen = () => {
+    // Bấm thẳng mà không rê (bàn phím, hoặc chuột đi rất nhanh) vẫn phải mở
+    // cửa cho hoạt hình.
+    setWantsAnim(true);
     setIsOpen(true);
     setShowTooltip(false);
   };
@@ -274,6 +289,9 @@ export default function FloatingAIAssistant() {
             onClick={handleOpen}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            // Người đi bằng Tab không bao giờ bắn `mouseenter`. Thiếu dòng này
+            // thì họ vĩnh viễn chỉ thấy ảnh tĩnh.
+            onFocus={() => setWantsAnim(true)}
             whileHover={{ scale: 1.12 }}
             whileTap={{ scale: 0.92 }}
             animate={
@@ -294,13 +312,12 @@ export default function FloatingAIAssistant() {
               className="absolute inset-0 rounded-3xl bg-gradient-to-br from-neon-indigo via-neon-violet to-neon-fuchsia"
             />
 
-            {/* Robot: ảnh tĩnh trước, hoạt hình sau (hoặc không bao giờ).
-                `robot-avatar.png` nặng 16KB và nằm sẵn trong `public/`, nên
-                nút có mặt mũi NGAY khung hình đầu — không còn khoảng trống
-                trong suốt trong lúc chờ 360KB Lottie như trước.
-                Với `reduceAnim` thì ảnh này là bản cuối cùng, đúng chủ ý:
-                người đã xin bớt chuyển động thì không nhận hoạt hình lặp vô
-                hạn, và cũng không phải tải nó về. */}
+            {/* Ảnh tĩnh là TRẠNG THÁI MẶC ĐỊNH, không phải khung chờ.
+                `robot-avatar.png` (16KB, có sẵn trong `public/`) là thứ khách
+                thấy cho tới khi họ rê chuột / focus / mở chat — xem effect nạp
+                hoạt hình ở trên. Với `reduceAnim` (cảm ứng, hoặc đã xin bớt
+                chuyển động) thì đây là bản CUỐI CÙNG: không hoạt hình, và cũng
+                không tải 360KB về. */}
             <div className="relative w-full h-full rounded-3xl overflow-hidden">
               {robotData ? (
                 <LottieClient

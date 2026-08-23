@@ -364,6 +364,9 @@ const CHUAN_BI = {
     '/interview/session/1', '/interview/report/1',
     '/cv', '/cv/profile', '/cv/import', '/cv/intake', '/cv/target', '/cv/xem',
     '/language', '/language/ja', '/roadmap',
+    '/maker-lab', '/creator', '/projects', '/repos', '/exp-hub',
+    '/games', '/finance', '/forum', '/saved', '/profile',
+    '/projects/search', '/games/leaderboard', '/finance/debts/calendar',
   ].map((d) => [d, choNoiDung])),
   '/chat': async (p) => {
     // Bật chế độ Lập trình rồi mở thêm tab: đây đúng là thao tác người dùng
@@ -437,7 +440,13 @@ const DUONG = JSON.parse(process.env.CT_TRANG ?? 'null')
          là chỗ người dùng ngồi lâu nhất, nên bỏ qua vì "cần phiên thật" là bỏ
          đúng phần đáng đo. Máy chủ giả ở trên trả phiên 6 câu + báo cáo đầy đủ,
          nên chúng vẽ ra trạng thái ĐÔNG chứ không phải màn rỗng. */
-      '/interview/session/1', '/interview/report/1'];
+      '/interview/session/1', '/interview/report/1',
+      /* Mười cây cuối (22/08/2026). Đo GỐC của từng cây, cộng bốn đường TĨNH
+         từng đụng ĐỘNG — nếu bảng tra xếp sai thứ tự thì chúng mở ra trang
+         chi tiết rỗng chứ không phải trang danh sách, và chỉ nhìn mới biết. */
+      '/maker-lab', '/creator', '/projects', '/repos', '/exp-hub',
+      '/games', '/finance', '/forum', '/saved', '/profile',
+      '/projects/search', '/games/leaderboard', '/finance/debts/calendar'];
 
 let hong = 0;
 const bang = [];

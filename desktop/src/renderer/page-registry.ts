@@ -22,6 +22,16 @@ import { FeedPage } from './features/feed/FeedPage';
 import { FriendsPage } from './features/friends/FriendsPage';
 import { MessagesPage } from './features/messages/MessagesPage';
 import { CvWebPage } from './features/cv/CvWebPage';
+import { MakerLabPage } from './features/maker-lab/MakerLabPage';
+import { XuongNoiDungPage } from './features/creator/XuongNoiDungPage';
+import { DuAnPage } from './features/projects/DuAnPage';
+import { KhoMaPage } from './features/repos/KhoMaPage';
+import { ExpHubPage } from './features/exp-hub/ExpHubPage';
+import { TroChoiPage } from './features/games/TroChoiPage';
+import { TaiChinhPage } from './features/finance/TaiChinhPage';
+import { DienDanPage } from './features/forum/DienDanPage';
+import { DaLuuPage } from './features/saved/DaLuuPage';
+import { TrangCaNhanPage } from './features/profile/TrangCaNhanPage';
 import { MusicPage } from './features/music/MusicPage';
 import { NotesPage } from './features/notes/NotesPage';
 import { ProPage } from './features/pro/ProPage';
@@ -80,6 +90,16 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/roadmap', LoTrinhPage],
   ['/interview', PhongVanPage],
   ['/cv', CvWebPage],
+  ['/maker-lab', MakerLabPage],
+  ['/creator', XuongNoiDungPage],
+  ['/projects', DuAnPage],
+  ['/repos', KhoMaPage],
+  ['/exp-hub', ExpHubPage],
+  ['/games', TroChoiPage],
+  ['/finance', TaiChinhPage],
+  ['/forum', DienDanPage],
+  ['/saved', DaLuuPage],
+  ['/profile', TrangCaNhanPage],
 ];
 
 export function nativePageFor(path: string): ComponentType | undefined {

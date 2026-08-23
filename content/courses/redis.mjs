@@ -20,6 +20,7 @@ import s04 from './redis/s04-list-set-zset.mjs';
 import s05 from './redis/s05-hash.mjs';
 import s06 from './redis/s06-cache.mjs';
 import s07 from './redis/s07-nguyen-tu.mjs';
+import s08 from './redis/s08-pubsub-stream.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -50,5 +51,6 @@ export default {
     s05,
     s06,
     s07,
+    s08,
   ],
 };

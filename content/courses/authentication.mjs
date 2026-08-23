@@ -20,6 +20,7 @@ import s01 from './authentication/s01-tin-vat.mjs';
 import s02 from './authentication/s02-mat-khau.mjs';
 import s03 from './authentication/s03-phien-cookie.mjs';
 import s04 from './authentication/s04-jwt.mjs';
+import s05 from './authentication/s05-refresh.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -49,5 +50,6 @@ export default {
     s02,
     s03,
     s04,
+    s05,
   ],
 };

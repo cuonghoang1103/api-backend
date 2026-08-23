@@ -499,5 +499,485 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 </div>
 `,
     },
+
+    /* ─────────────────────────── 7.4 ─────────────────────────── */
+    {
+      title: '7.4 — Request size, and the rejection that arrives before the upload|||7.4 — Kích thước request, và cú từ chối tới TRƯỚC lượt tải lên',
+      slug: 'nginx-7-4-kich-thuoc-request',
+      type: 'LESSON',
+      description: 'client_max_body_size trả về 413 sau khi client mới gửi lên ĐÚNG 0 byte — nếu client khai Content-Length. Bỏ cái header đó đi và cùng một request ấy đẩy được 23,7MB lên dây trước khi bị đá. Bài này đo cả hai, và đó là khác biệt giữa một giới hạn bảo vệ băng thông và một giới hạn chỉ bảo vệ đĩa.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 7 · Lesson 7.4</span>
+<h2>Request size, and the rejection that arrives before the upload</h2>
+<p class="lead">A size limit sounds like the simplest of the four. It has one property worth knowing exactly, because it decides whether the limit is protecting your bandwidth or only your disk — and the answer depends on something the client chooses.</p>
+
+<h3>Three uploads against a 20MB limit</h3>
+<div class="out">client_max_body_size 20m;
+
+  25MB, co Content-Length  -> 413, da GUI LEN 0 byte,           mat 0,0006s
+  19MB, co Content-Length  -> 200, da gui len 19.000.000 byte,  mat 0,12s
+  25MB, chunked (KHONG khai do dai)
+                           -> 413, da GUI LEN 23.788.116 byte,  mat 0,17s
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">With Content-Length, the rejection is instant</span><span class="lz-d">Nginx reads the request headers, compares the declared length to the limit, and answers <code>413</code> before a single byte of body is accepted. Zero bytes uploaded, under a millisecond. The client's own upload is cancelled by the response.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">With chunked encoding it cannot know in advance</span><span class="lz-d">There is no declared length, so Nginx reads until the running total crosses the limit and only then rejects. Nearly 24MB had already crossed the network. The limit still holds — nothing oversized reaches your application — but the bandwidth was spent.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">So the limit protects the backend always, and bandwidth usually</span><span class="lz-d">Which is the right way to think about it. An attacker who wants to waste your transfer costs simply omits <code>Content-Length</code>. If that matters, the defence is upstream of Nginx — a CDN or firewall rule — not this directive.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The default is 1MB, and it is the wrong default for uploads</span><span class="lz-d"><code>client_max_body_size 1m;</code> is what you get if you say nothing, and it produces a <code>413</code> on the first photo somebody uploads. It is also the right default for an API that only receives JSON, so this is a per-location decision rather than a global one.</span></div>
+</div>
+<pre><code>http {
+  client_max_body_size 1m;              <span class="tok-comment"># mặc định chặt cho toàn site</span>
+
+  server {
+    location /api/ { }                  <span class="tok-comment"># JSON: 1MB là quá đủ</span>
+
+    location /tai-len/ {
+      client_max_body_size 50m;         <span class="tok-comment"># CHỈ ở đây mới nới</span>
+      client_body_buffer_size 128k;     <span class="tok-comment"># lớn hơn thì tràn ra đĩa</span>
+      proxy_request_buffering on;       <span class="tok-comment"># đọc XONG rồi mới gọi backend</span>
+      proxy_pass http://api;
+    }
+  }
+}</code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — a <code>413</code> from Nginx never reaches your application, so it never appears in your application's logs and your error tracking will not know it happened.</strong> The user sees an upload fail; your dashboard shows nothing; the backend was never called. It looks like a client-side bug and it is a one-line config difference. Two habits fix it: log <code>\$status</code> at the Nginx level into whatever aggregates your errors, so a spike of <code>413</code> is visible; and return a body the frontend can recognise — <code>error_page 413 = @qua-lon;</code> with a named location returning JSON means your upload UI can say "file too large" instead of "something went wrong". The default <code>413</code> is an HTML page, which a JSON client cannot parse and will report as a parsing error.</p>
+</div>
+
+<h3>The buffers behind it</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">client_body_buffer_size decides memory versus disk</span><span class="v">Bodies up to this size stay in memory; larger ones are written to <code>client_body_temp_path</code>. The default is two pages — 8 or 16KB — so most file uploads go through the disk. Raising it trades memory per concurrent upload for fewer writes, and the multiplication matters: 100 concurrent uploads at 1MB of buffer is 100MB.</span></div>
+  <div class="kv"><span class="k">proxy_request_buffering on protects the backend</span><span class="v">The default. Nginx reads the whole body before opening the upstream connection, so a slow uploader never holds a backend worker — the mirror image of <code>proxy_buffering</code> for responses (Lesson 3.3). Turning it off is for streaming uploads, and it hands the slow-client problem straight to your application.</span></div>
+  <div class="kv"><span class="k">large_client_header_buffers is a separate limit</span><span class="v">Headers, not body. The default is four buffers of 8KB, and a request exceeding it gets <code>414</code> or <code>400</code>. The usual cause is an enormous cookie or a very long URL, and the error log says <code>too big header</code> or <code>too long URI</code> in those words.</span></div>
+  <div class="kv"><span class="k">The upload limit lives in two places</span><span class="v">Nginx and your application framework both have one, and the smaller wins. A <code>413</code> that persists after raising <code>client_max_body_size</code> is usually the framework's limit — Express, Nest and Multer all have their own default, and it is usually 100KB or 1MB.</span></div>
+</div>
+
+<h3>Sizing it for a real site</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Start from what you actually accept</span><span class="lz-lnote">A photo from a modern phone is 3 to 12MB; a video is anything. Pick the number from the largest file you intend to support, add a margin, and enforce the real rule in the application where you can give a good error message.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Put the generous limit on one location only</span><span class="lz-lnote">If <code>50m</code> is at <code>http</code> level, every endpoint accepts 50MB — including the login form, which now lets one request occupy 50MB of disk before authentication has happened. Scope it to the upload route.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Combine it with limit_conn on the same location</span><span class="lz-lnote">A large limit plus no connection limit means one client can start twenty 50MB uploads at once. The two directives together bound the total — this is the pairing Lesson 7.3 was pointing at.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Check the disk the temp path is on</span><span class="lz-lnote"><code>client_body_temp_path</code> defaults to a directory under the Nginx prefix, which on many systems is the same disk as everything else. Concurrent large uploads can fill it, and a full disk takes down more than uploads.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>The measurement worth repeating on your own server.</strong> Send one request that exceeds your limit with <code>Content-Length</code>, and one without it, and compare <code>%{size_upload}</code>. The first should be zero. If both transfer the whole body, something between you and Nginx is buffering the request — a CDN, a load balancer — and your size limit is not saving the bandwidth you think it is.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size" target="_blank" rel="noopener"><span class="lc-ico">📏</span><span class="lc-body"><span class="lc-title">nginx — client_max_body_size and the body buffers</span><span class="lc-sub">nginx.org · Including the note about when 413 is returned</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_request_buffering" target="_blank" rel="noopener"><span class="lc-ico">📥</span><span class="lc-body"><span class="lc-title">nginx — proxy_request_buffering</span><span class="lc-sub">nginx.org · The upload-side mirror of response buffering</span></span></a>
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">MDN — Transfer-Encoding: chunked</span><span class="lc-sub">developer.mozilla.org · Why there is no Content-Length to check against</span></span></a>
+<a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">CuongThai course — Node.js</span><span class="lc-sub">The framework's own body limit, and why raising Nginx's alone does not help</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Send an oversized upload with and without Content-Length and compare the bytes sent</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 7 · Bài 7.4</span>
+<h2>Kích thước request, và cú từ chối tới TRƯỚC lượt tải lên</h2>
+<p class="lead">Một giới hạn kích thước nghe như cái đơn giản nhất trong bốn cái. Nó có MỘT tính chất đáng biết cho chính xác, vì tính chất đó quyết định giới hạn ấy đang bảo vệ BĂNG THÔNG của bạn hay chỉ bảo vệ cái ĐĨA — và câu trả lời tuỳ vào một thứ do CLIENT chọn.</p>
+
+<h3>Ba lượt tải lên với trần 20MB</h3>
+<div class="out">client_max_body_size 20m;
+
+  25MB, co Content-Length  -> 413, da GUI LEN 0 byte,           mat 0,0006s
+  19MB, co Content-Length  -> 200, da gui len 19.000.000 byte,  mat 0,12s
+  25MB, chunked (KHONG khai do dai)
+                           -> 413, da GUI LEN 23.788.116 byte,  mat 0,17s
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Có Content-Length thì cú từ chối là TỨC THÌ</span><span class="lz-d">Nginx đọc header của request, so cái độ dài đã khai với cái trần, rồi đáp <code>413</code> TRƯỚC khi nhận lấy một byte thân nào. Không byte nào được tải lên, chưa tới một mili giây. Lượt tải lên của chính client bị chính cái phản hồi ấy huỷ.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Với mã hoá chunked thì nó KHÔNG biết trước được</span><span class="lz-d">Không có độ dài nào được khai, nên Nginx đọc cho tới khi tổng đang chạy vượt trần rồi mới từ chối. Gần 24MB đã kịp băng qua mạng. Cái giới hạn vẫn ĐỨNG — không có gì quá cỡ tới được ứng dụng của bạn — nhưng băng thông thì đã tiêu.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nên giới hạn này LUÔN bảo vệ backend, còn băng thông thì THƯỜNG THƯỜNG</span><span class="lz-d">Đó là cách nghĩ đúng về nó. Một kẻ tấn công muốn đốt phí truyền dữ liệu của bạn chỉ việc BỎ <code>Content-Length</code> đi. Nếu điều đó có nghĩa lý thì tuyến phòng thủ nằm ở TRƯỚC Nginx — một CDN hay một luật tường lửa — chứ không phải ở chỉ thị này.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Mặc định là 1MB, và đó là mặc định SAI cho việc tải file</span><span class="lz-d"><code>client_max_body_size 1m;</code> là thứ bạn nhận nếu không nói gì, và nó sinh ra một cú <code>413</code> ngay tấm ảnh đầu tiên ai đó tải lên. Nó cũng là mặc định ĐÚNG cho một API chỉ nhận JSON, nên đây là quyết định theo TỪNG location chứ không phải toàn cục.</span></div>
+</div>
+<pre><code>http {
+  client_max_body_size 1m;              <span class="tok-comment"># mặc định chặt cho toàn site</span>
+
+  server {
+    location /api/ { }                  <span class="tok-comment"># JSON: 1MB là quá đủ</span>
+
+    location /tai-len/ {
+      client_max_body_size 50m;         <span class="tok-comment"># CHỈ ở đây mới nới</span>
+      client_body_buffer_size 128k;     <span class="tok-comment"># lớn hơn thì tràn ra đĩa</span>
+      proxy_request_buffering on;       <span class="tok-comment"># đọc XONG rồi mới gọi backend</span>
+      proxy_pass http://api;
+    }
+  }
+}</code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — một cú <code>413</code> do Nginx trả thì KHÔNG BAO GIỜ tới được ứng dụng của bạn, nên nó không xuất hiện trong log của ứng dụng và hệ theo dõi lỗi của bạn cũng chẳng biết là nó đã xảy ra.</strong> Người dùng thấy lượt tải lên thất bại; bảng điều khiển của bạn chẳng hiện gì; backend chưa từng bị gọi. Nó trông như một con lỗi ở phía client và nó là một khác biệt cấu hình MỘT dòng. Hai thói quen chữa được: hãy ghi <code>\$status</code> ở tầng Nginx vào bất cứ thứ gì đang gom lỗi của bạn, để một chùm <code>413</code> hiện ra được; và trả về một cái THÂN mà frontend nhận ra được — <code>error_page 413 = @qua-lon;</code> với một named location trả về JSON nghĩa là giao diện tải file của bạn nói được "tệp quá lớn" thay vì "có gì đó sai sai". Cú <code>413</code> mặc định là một trang HTML, thứ mà một client JSON không phân tích nổi và sẽ báo là lỗi phân tích cú pháp.</p>
+</div>
+
+<h3>Đám đệm đứng sau nó</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">client_body_buffer_size quyết định BỘ NHỚ hay ĐĨA</span><span class="v">Thân nhỏ hơn cỡ này thì nằm trong bộ nhớ; lớn hơn thì được ghi ra <code>client_body_temp_path</code>. Mặc định là hai trang bộ nhớ — 8 hoặc 16KB — nên phần lớn lượt tải file đều đi qua đĩa. Nâng nó lên là đổi bộ nhớ theo TỪNG lượt tải đồng thời lấy ít lượt ghi hơn, và phép nhân rất quan trọng: 100 lượt tải đồng thời với đệm 1MB là 100MB.</span></div>
+  <div class="kv"><span class="k">proxy_request_buffering on bảo vệ backend</span><span class="v">Đây là mặc định. Nginx đọc TRỌN cái thân rồi mới mở kết nối lên upstream, nên một người tải lên chậm KHÔNG BAO GIỜ giữ một worker của backend — đúng hình ảnh soi gương của <code>proxy_buffering</code> ở phía phản hồi (Bài 3.3). Tắt nó đi là dành cho tải lên dạng chảy dần, và nó ném thẳng bài toán client-chậm sang cho ứng dụng của bạn.</span></div>
+  <div class="kv"><span class="k">large_client_header_buffers là một giới hạn RIÊNG</span><span class="v">Cho HEADER, không phải cho thân. Mặc định là bốn cái đệm 8KB, và một request vượt qua đó nhận <code>414</code> hoặc <code>400</code>. Nguyên nhân thường gặp là một cái cookie khổng lồ hay một cái URL rất dài, và error log nói đúng chữ <code>too big header</code> hoặc <code>too long URI</code>.</span></div>
+  <div class="kv"><span class="k">Giới hạn tải lên nằm ở HAI chỗ</span><span class="v">Nginx và framework của ứng dụng đều có một cái, và cái NHỎ hơn thắng. Một cú <code>413</code> vẫn còn sau khi bạn đã nâng <code>client_max_body_size</code> thì thường là giới hạn của framework — Express, Nest và Multer đều có mặc định riêng, và nó thường là 100KB hoặc 1MB.</span></div>
+</div>
+
+<h3>Định cỡ nó cho một site thật</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Hãy xuất phát từ thứ bạn THẬT SỰ nhận</span><span class="lz-lnote">Một tấm ảnh từ điện thoại hiện đại là 3 tới 12MB; một cái video thì bao nhiêu cũng có. Hãy chọn con số theo tệp LỚN NHẤT bạn định hỗ trợ, cộng một khoảng dư, rồi thi hành cái luật THẬT ở trong ứng dụng nơi bạn báo lỗi tử tế được.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Đặt cái trần rộng rãi vào ĐÚNG MỘT location</span><span class="lz-lnote">Nếu <code>50m</code> nằm ở tầng <code>http</code> thì MỌI điểm cuối đều nhận 50MB — kể cả cái biểu mẫu đăng nhập, thứ mà giờ cho phép một request chiếm 50MB đĩa TRƯỚC KHI có bất kỳ phép xác thực nào. Hãy khoanh nó vào đúng tuyến tải file.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Ghép nó với limit_conn trên cùng location đó</span><span class="lz-lnote">Một cái trần lớn cộng không có giới hạn kết nối nghĩa là MỘT client mở được hai mươi lượt tải 50MB cùng lúc. Hai chỉ thị đi cùng nhau mới chặn được tổng — đó chính là cặp mà Bài 7.3 đang chỉ tới.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Hãy kiểm cái ĐĨA mà đường tạm nằm trên đó</span><span class="lz-lnote"><code>client_body_temp_path</code> mặc định là một thư mục nằm dưới tiền tố cài Nginx, mà trên nhiều hệ thống thì đó cũng là cái đĩa chứa mọi thứ khác. Nhiều lượt tải lớn đồng thời có thể làm đầy nó, và một cái đĩa đầy thì hạ gục nhiều thứ hơn là chỉ mỗi việc tải file.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Phép đo đáng lặp lại trên máy chủ của bạn.</strong> Gửi một request vượt trần CÓ <code>Content-Length</code>, và một cái KHÔNG có, rồi so <code>%{size_upload}</code>. Cái đầu tiên PHẢI bằng không. Nếu cả hai đều đẩy trọn cái thân đi thì có thứ gì đó nằm giữa bạn và Nginx đang đệm cái request — một CDN, một bộ cân bằng tải — và cái giới hạn kích thước của bạn không tiết kiệm được lượng băng thông mà bạn tưởng.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size" target="_blank" rel="noopener"><span class="lc-ico">📏</span><span class="lc-body"><span class="lc-title">nginx — client_max_body_size và các đệm thân</span><span class="lc-sub">nginx.org · Kèm ghi chú về việc khi nào 413 được trả về</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_request_buffering" target="_blank" rel="noopener"><span class="lc-ico">📥</span><span class="lc-body"><span class="lc-title">nginx — proxy_request_buffering</span><span class="lc-sub">nginx.org · Ảnh soi gương phía tải-lên của việc đệm phản hồi</span></span></a>
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">MDN — Transfer-Encoding: chunked</span><span class="lc-sub">developer.mozilla.org · Vì sao không có Content-Length nào để đem ra so</span></span></a>
+<a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Node.js</span><span class="lc-sub">Giới hạn thân của chính framework, và vì sao chỉ nâng của Nginx thì không đủ</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Gửi một lượt tải quá cỡ có và không có Content-Length rồi so số byte đã gửi</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 7.5 ─────────────────────────── */
+    {
+      title: '7.5 — A protection layer, assembled and measured|||7.5 — Một lớp phòng thủ, ráp lại và đem đo',
+      slug: 'nginx-7-5-lop-phong-thu',
+      type: 'LESSON',
+      description: 'Ghép cả bốn trục thành một cấu hình cho một API thật rồi đo từng tuyến. Kết quả đúng như thiết kế ở bốn dòng, và ở dòng thứ năm thì một lượt tải file hợp lệ ăn 429 — vì nó dùng CHUNG vùng với API, một chi tiết chỉ lộ ra khi đem đo.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 7 · Lesson 7.5</span>
+<h2>A protection layer, assembled and measured</h2>
+<p class="lead">Four axes, four lessons, and the only way to know they work together is to build the thing and probe it. This is that config, and one of the probes found a real interaction that reading the file would not have shown.</p>
+
+<h3>The config</h3>
+<pre><code>http {
+  <span class="tok-comment"># 1) DANH TÍNH — sửa $remote_addr TRƯỚC, rồi mọi giới hạn mới đúng (7.2)</span>
+  set_real_ip_from 10.0.0.0/8;      <span class="tok-comment"># CHỈ proxy của bạn</span>
+  real_ip_header    X-Forwarded-For;
+  real_ip_recursive on;
+
+  <span class="tok-comment"># 2) VÙNG — mỗi mục đích một vùng riêng</span>
+  limit_req_zone  \$binary_remote_addr zone=chung:10m     rate=20r/s;
+  limit_req_zone  \$binary_remote_addr zone=dangnhap:10m  rate=10r/m;
+  limit_req_zone  \$binary_remote_addr zone=tailen:10m    rate=2r/s;
+  limit_conn_zone \$binary_remote_addr zone=ket:10m;
+
+  <span class="tok-comment"># 3) MÃ TRẢ VỀ đúng nghĩa (7.1)</span>
+  limit_req_status  429;
+  limit_conn_status 429;
+
+  <span class="tok-comment"># 4) THỜI GIAN — chống nhỏ giọt (7.3)</span>
+  client_header_timeout 10s;
+  client_body_timeout   10s;
+  send_timeout          10s;
+  keepalive_timeout     30s;
+
+  <span class="tok-comment"># 5) KÍCH THƯỚC — chặt ở mặc định, nới đúng chỗ cần (7.4)</span>
+  client_max_body_size 1m;
+
+  server {
+    limit_conn ket 20;                        <span class="tok-comment"># trần chung cho mỗi IP</span>
+
+    location /api/dang-nhap {
+      limit_req zone=dangnhap burst=3 nodelay;
+      add_header Retry-After 6 always;
+      proxy_pass http://api;
+    }
+    location /api/ {
+      limit_req zone=chung burst=40 nodelay;  <span class="tok-comment"># cho cả trang nạp qua</span>
+      proxy_pass http://api;
+    }
+    location /tai-len/ {
+      limit_req zone=tailen burst=5;          <span class="tok-comment"># VÙNG RIÊNG — xem bên dưới</span>
+      limit_conn ket 2;
+      client_max_body_size 50m;
+      proxy_pass http://api;
+    }
+  }
+}</code></pre>
+
+<h3>Every route, probed</h3>
+<div class="out">/api/ (20r/s, burst 40 nodelay), ban 50 request nhanh
+   -> 200: 48   429: 2
+
+/api/dang-nhap (10r/phut, burst 3 nodelay), ban 8 request
+   -> 200 200 200 200 429 429 429 429
+      Retry-After: 6
+
+/tai-len/ voi than 2MB (tran 50m)   -> 200
+/tai-len/ voi than 60MB             -> 413, da GUI LEN 0 byte
+/api/ voi than 2MB (tran 1m)        -> 413</div>
+<div class="callout ok">
+<p><strong>Four of the five are exactly what the config says.</strong> The general API absorbs a fifty-request page load and only trims the tail. The login route allows four attempts and then refuses with a <code>Retry-After</code> the client can act on. The upload route accepts a real file and rejects an absurd one before a byte of it leaves the client. And the same absurd file sent to the API route is rejected by the tighter default, because the generous limit is scoped to one location rather than sitting at <code>http</code> level.</p>
+</div>
+
+<h3>And the row that was not</h3>
+<div class="out">Ban 45 request vao /api/, roi NGAY LAP TUC mot lan tai len 2MB:
+
+   /tai-len/  ->  429        &lt;-- mot luot tai len HOP LE bi tu choi
+   error.log: limiting requests, excess: 39.420 by zone "chung",
+              request: "POST /tai-len/x"
+
+Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
+   /tai-len/  ->  200</div>
+<div class="pitfall">
+<p><strong>Bẫy — two locations that name the same <code>limit_req</code> zone share one bucket, so traffic to one can exhaust the other.</strong> The first version of the config above used <code>zone=chung</code> in both <code>/api/</code> and <code>/tai-len/</code>, and the error log names it: a <code>POST</code> to the upload route rejected "by zone chung" with an excess accumulated entirely by API calls. In production that is a user whose upload fails because the page they were on made a lot of API requests — a bug report that will be filed as "uploads are flaky" and will not reproduce when tested alone. The fix is one word: a separate zone per purpose, as the config now shows. The general rule is that a zone is a shared budget, so two things should only share one when you actively want them to compete.</p>
+</div>
+
+<h3>Two other things the probes showed</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">The body spill is visible in the error log</span><span class="v"><code>a client request body is buffered to a temporary file /tmp/.../0000000002</code> at <code>warn</code> level. That message names the file <code>client_body_buffer_size</code> was too small for, and a lot of them means the buffer is undersized for what you actually receive — Lesson 7.4's setting, with a signal to tune it by.</span></div>
+  <div class="kv"><span class="k">An upstream that answers without reading the body breaks the upload</span><span class="v">One probe returned <code>502</code> with <code>writev() failed (32: Broken pipe) while sending request to upstream</code>. That was the test upstream replying and closing before Nginx finished sending 2MB — an artefact of a three-line handler, and also a real pattern: a backend that rejects a request early must still drain the body or the proxy sees a broken pipe.</span></div>
+  <div class="kv"><span class="k">limit_conn at server level and location level both apply</span><span class="v">The upload route has <code>limit_conn ket 2</code> and inherits nothing — it replaces, per the array rule from Lesson 2.3. The <code>server</code>-level <code>limit_conn ket 20</code> does not stack with it; the location's own directive is the one in force.</span></div>
+  <div class="kv"><span class="k">Every limit here is per Nginx instance</span><span class="v">Three servers behind a load balancer enforce three copies of each number. If the limit exists to protect a shared backend, divide the configured value by the number of instances, or move the limit to something both instances can see.</span></div>
+</div>
+
+<h3>What this layer does not do</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">It does not stop a distributed attack</span><span class="lz-lnote">Every limit here is per client key. Ten thousand addresses each making one request per second are, individually, all within every limit. That is what a CDN or a scrubbing service is for, and no amount of Nginx configuration substitutes for it.</span></div>
+  <div class="lz-layer"><span class="lz-lname">It does not know what a request means</span><span class="lz-lnote">Nginx cannot tell a login attempt that succeeded from one that failed, so "five failed logins then lock the account" belongs in the application. The proxy limit is a blunt ceiling underneath that, not a replacement for it.</span></div>
+  <div class="lz-layer"><span class="lz-lname">It does not protect what it does not see</span><span class="lz-lnote">A backend reachable on its own port bypasses all of this. Bind application servers to localhost or a private network, and check with <code>ss -ltn</code> that nothing is listening on a public interface — the strongest limit is irrelevant if there is a way around it.</span></div>
+  <div class="lz-layer"><span class="lz-lname">It is not finished until you have tested it</span><span class="lz-lnote">Five probes found four correct behaviours and one wrong one. That ratio is normal, and it is the argument for probing rather than reviewing — the shared-zone bug was fully visible in the config and nobody reading it would have noticed.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>The order to build this in.</strong> Identity first (<code>real_ip</code>), because every limit keyed on the wrong address is wrong in a way that looks like it is working. Then sizes and timeouts, which have no downside and no tuning. Then rate limits, one zone per purpose, with numbers taken from your own access log. Then probe every route — including the failures — and read the error log while you do it, because it names the zone, the excess and the file in words you can act on.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_limit_req_module.html" target="_blank" rel="noopener"><span class="lc-ico">🚦</span><span class="lc-body"><span class="lc-title">nginx — limit_req and limit_conn</span><span class="lc-sub">nginx.org · The two modules the whole layer is built from</span></span></a>
+<a class="link-card" href="https://blog.nginx.org/blog/rate-limiting-nginx" target="_blank" rel="noopener"><span class="lc-ico">📘</span><span class="lc-body"><span class="lc-title">nginx blog — Rate limiting with NGINX</span><span class="lc-sub">blog.nginx.org · The reference article, with the burst diagrams</span></span></a>
+<a class="link-card" href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">OWASP Top Ten</span><span class="lc-sub">owasp.org · Where a proxy limit helps and where it is the wrong layer entirely</span></span></a>
+<a class="link-card" href="/courses/authentication/learn${REF}"><span class="lc-ico">🔑</span><span class="lc-body"><span class="lc-title">CuongThai course — Authentication</span><span class="lc-sub">Account lockout and credential stuffing, which belong above this layer</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Build the layer, then make an upload fail by hammering an unrelated endpoint</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 7 · Bài 7.5</span>
+<h2>Một lớp phòng thủ, ráp lại và đem đo</h2>
+<p class="lead">Bốn trục, bốn bài, và cách DUY NHẤT để biết chúng hợp tác được với nhau là dựng cái đó lên rồi đem dò. Đây là cấu hình ấy, và một trong những phép dò đã tìm ra một tương tác CÓ THẬT mà đọc file thì không thấy.</p>
+
+<h3>Cấu hình</h3>
+<pre><code>http {
+  <span class="tok-comment"># 1) DANH TÍNH — sửa $remote_addr TRƯỚC, rồi mọi giới hạn mới đúng (7.2)</span>
+  set_real_ip_from 10.0.0.0/8;      <span class="tok-comment"># CHỈ proxy của bạn</span>
+  real_ip_header    X-Forwarded-For;
+  real_ip_recursive on;
+
+  <span class="tok-comment"># 2) VÙNG — mỗi mục đích một vùng riêng</span>
+  limit_req_zone  \$binary_remote_addr zone=chung:10m     rate=20r/s;
+  limit_req_zone  \$binary_remote_addr zone=dangnhap:10m  rate=10r/m;
+  limit_req_zone  \$binary_remote_addr zone=tailen:10m    rate=2r/s;
+  limit_conn_zone \$binary_remote_addr zone=ket:10m;
+
+  <span class="tok-comment"># 3) MÃ TRẢ VỀ đúng nghĩa (7.1)</span>
+  limit_req_status  429;
+  limit_conn_status 429;
+
+  <span class="tok-comment"># 4) THỜI GIAN — chống nhỏ giọt (7.3)</span>
+  client_header_timeout 10s;
+  client_body_timeout   10s;
+  send_timeout          10s;
+  keepalive_timeout     30s;
+
+  <span class="tok-comment"># 5) KÍCH THƯỚC — chặt ở mặc định, nới đúng chỗ cần (7.4)</span>
+  client_max_body_size 1m;
+
+  server {
+    limit_conn ket 20;                        <span class="tok-comment"># trần chung cho mỗi IP</span>
+
+    location /api/dang-nhap {
+      limit_req zone=dangnhap burst=3 nodelay;
+      add_header Retry-After 6 always;
+      proxy_pass http://api;
+    }
+    location /api/ {
+      limit_req zone=chung burst=40 nodelay;  <span class="tok-comment"># cho cả trang nạp qua</span>
+      proxy_pass http://api;
+    }
+    location /tai-len/ {
+      limit_req zone=tailen burst=5;          <span class="tok-comment"># VÙNG RIÊNG — xem bên dưới</span>
+      limit_conn ket 2;
+      client_max_body_size 50m;
+      proxy_pass http://api;
+    }
+  }
+}</code></pre>
+
+<h3>Từng tuyến, đem dò</h3>
+<div class="out">/api/ (20r/s, burst 40 nodelay), ban 50 request nhanh
+   -> 200: 48   429: 2
+
+/api/dang-nhap (10r/phut, burst 3 nodelay), ban 8 request
+   -> 200 200 200 200 429 429 429 429
+      Retry-After: 6
+
+/tai-len/ voi than 2MB (tran 50m)   -> 200
+/tai-len/ voi than 60MB             -> 413, da GUI LEN 0 byte
+/api/ voi than 2MB (tran 1m)        -> 413</div>
+<div class="callout ok">
+<p><strong>Bốn trên năm dòng đúng CHÍNH XÁC như cấu hình nói.</strong> Cái API chung nuốt trọn một lượt nạp trang năm mươi request và chỉ tỉa mất cái đuôi. Tuyến đăng nhập cho phép bốn lần thử rồi từ chối kèm một cái <code>Retry-After</code> mà client hành động theo được. Tuyến tải file nhận một tệp thật và đá một tệp phi lý TRƯỚC KHI có byte nào của nó rời khỏi client. Và đúng cái tệp phi lý ấy gửi vào tuyến API thì bị đá bởi cái mặc định chặt hơn, vì cái trần rộng rãi được KHOANH vào một location chứ không nằm ở tầng <code>http</code>.</p>
+</div>
+
+<h3>Và cái dòng KHÔNG đúng</h3>
+<div class="out">Ban 45 request vao /api/, roi NGAY LAP TUC mot lan tai len 2MB:
+
+   /tai-len/  ->  429        &lt;-- mot luot tai len HOP LE bi tu choi
+   error.log: limiting requests, excess: 39.420 by zone "chung",
+              request: "POST /tai-len/x"
+
+Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
+   /tai-len/  ->  200</div>
+<div class="pitfall">
+<p><strong>Bẫy — hai location cùng gọi tên MỘT vùng <code>limit_req</code> thì dùng CHUNG một cái xô, nên lưu lượng vào cái này có thể vét cạn cái kia.</strong> Bản đầu của cấu hình trên dùng <code>zone=chung</code> ở CẢ <code>/api/</code> lẫn <code>/tai-len/</code>, và error log gọi tên nó ra: một cú <code>POST</code> lên tuyến tải file bị từ chối "by zone chung" với phần vượt do TOÀN BỘ các lượt gọi API tích lại. Ngoài production thì đó là một người dùng có lượt tải file thất bại vì cái trang họ đang mở vừa gọi nhiều API — một báo cáo lỗi sẽ được ghi là "tải file phập phù" và sẽ KHÔNG tái hiện được khi đem thử riêng. Cách chữa là MỘT chữ: mỗi mục đích một vùng riêng, đúng như cấu hình giờ đang viết. Luật tổng quát là một VÙNG là một NGÂN SÁCH DÙNG CHUNG, nên hai thứ chỉ nên chia nhau một vùng khi bạn CHỦ ĐỘNG muốn chúng cạnh tranh nhau.</p>
+</div>
+
+<h3>Hai thứ nữa mà các phép dò cho thấy</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Việc thân tràn ra đĩa HIỆN RA trong error log</span><span class="v"><code>a client request body is buffered to a temporary file /tmp/.../0000000002</code> ở mức <code>warn</code>. Thông báo đó gọi tên đúng cái tệp mà <code>client_body_buffer_size</code> quá nhỏ để chứa, và thấy nhiều dòng như thế nghĩa là cái đệm đang bị đặt nhỏ hơn thứ bạn thật sự nhận — thiết lập ở Bài 7.4, kèm một tín hiệu để chỉnh theo.</span></div>
+  <div class="kv"><span class="k">Một upstream trả lời mà KHÔNG đọc thân sẽ phá lượt tải lên</span><span class="v">Một phép dò trả về <code>502</code> kèm <code>writev() failed (32: Broken pipe) while sending request to upstream</code>. Đó là cái upstream thử nghiệm trả lời rồi đóng TRƯỚC khi Nginx gửi xong 2MB — một hệ quả của cái handler ba dòng, và cũng là một khuôn mẫu CÓ THẬT: một backend từ chối request sớm thì vẫn PHẢI hút cạn cái thân, không thì con proxy nhìn thấy một ống nước bị vỡ.</span></div>
+  <div class="kv"><span class="k">limit_conn ở tầng server và ở tầng location KHÔNG cộng dồn</span><span class="v">Tuyến tải file có <code>limit_conn ket 2</code> và nó KHÔNG thừa hưởng gì — nó THAY THẾ, theo đúng luật mảng ở Bài 2.3. Cái <code>limit_conn ket 20</code> ở tầng <code>server</code> không chồng lên nó; chỉ thị của chính location mới là cái đang có hiệu lực.</span></div>
+  <div class="kv"><span class="k">MỌI giới hạn ở đây đều tính theo TỪNG con Nginx</span><span class="v">Ba máy chủ sau một bộ cân bằng tải thi hành BA bản của mỗi con số. Nếu cái giới hạn ấy tồn tại để bảo vệ một backend DÙNG CHUNG thì hãy chia giá trị cấu hình cho số máy, hoặc chuyển giới hạn sang một thứ mà cả hai máy cùng nhìn thấy.</span></div>
+</div>
+
+<h3>Lớp này KHÔNG làm được gì</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Nó KHÔNG chặn được một đòn phân tán</span><span class="lz-lnote">Mọi giới hạn ở đây đều theo từng KHOÁ client. Mười nghìn địa chỉ mỗi cái gửi một request mỗi giây thì XÉT RIÊNG đều nằm trong mọi giới hạn. Đó là việc của một CDN hay một dịch vụ lọc rửa, và không lượng cấu hình Nginx nào thay thế được.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Nó KHÔNG biết một request CÓ NGHĨA gì</span><span class="lz-lnote">Nginx không phân biệt nổi một lần đăng nhập THÀNH CÔNG với một lần THẤT BẠI, nên "năm lần sai thì khoá tài khoản" thuộc về ứng dụng. Giới hạn ở proxy là một cái trần THÔ nằm dưới đó, không phải một thứ thay thế nó.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Nó KHÔNG bảo vệ thứ nó KHÔNG nhìn thấy</span><span class="lz-lnote">Một backend chạm tới được qua chính cổng của nó thì đi vòng qua hết mọi thứ ở đây. Hãy buộc các máy chủ ứng dụng vào localhost hay một mạng riêng, và dùng <code>ss -ltn</code> kiểm xem không có gì đang nghe trên một giao diện công khai — cái giới hạn mạnh nhất cũng vô nghĩa nếu có một lối đi vòng.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Nó CHƯA XONG cho tới khi bạn đem THỬ</span><span class="lz-lnote">Năm phép dò tìm ra bốn hành vi đúng và một hành vi sai. Tỷ lệ đó là BÌNH THƯỜNG, và nó là lý lẽ cho việc ĐEM DÒ thay vì đi RÀ SOÁT — con lỗi dùng chung vùng hiện rõ mồn một trong cấu hình và chẳng ai đọc nó mà nhận ra.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Thứ tự để dựng cái này.</strong> DANH TÍNH trước (<code>real_ip</code>), vì mọi giới hạn khoá theo sai địa chỉ đều sai theo kiểu TRÔNG như đang chạy tốt. Rồi tới kích thước và timeout, những thứ không có mặt trái và không cần chỉnh tinh. Rồi tới giới hạn tần suất, MỘT vùng cho MỘT mục đích, với con số lấy từ access log của chính bạn. Rồi ĐEM DÒ mọi tuyến — kể cả các đường hỏng — và vừa dò vừa ĐỌC error log, vì nó gọi tên cái vùng, phần vượt và cái tệp bằng những chữ mà bạn hành động theo được.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_limit_req_module.html" target="_blank" rel="noopener"><span class="lc-ico">🚦</span><span class="lc-body"><span class="lc-title">nginx — limit_req và limit_conn</span><span class="lc-sub">nginx.org · Hai module dựng nên cả cái lớp này</span></span></a>
+<a class="link-card" href="https://blog.nginx.org/blog/rate-limiting-nginx" target="_blank" rel="noopener"><span class="lc-ico">📘</span><span class="lc-body"><span class="lc-title">nginx blog — Giới hạn tần suất với NGINX</span><span class="lc-sub">blog.nginx.org · Bài tham chiếu, kèm các sơ đồ về burst</span></span></a>
+<a class="link-card" href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">OWASP Top Ten</span><span class="lc-sub">owasp.org · Chỗ nào giới hạn ở proxy giúp được và chỗ nào nó là SAI tầng hoàn toàn</span></span></a>
+<a class="link-card" href="/courses/authentication/learn${REF}"><span class="lc-ico">🔑</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Authentication</span><span class="lc-sub">Khoá tài khoản và nhồi thông tin đăng nhập, những thứ thuộc về tầng TRÊN cái này</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Dựng cái lớp này, rồi làm một lượt tải file thất bại bằng cách nện vào một điểm cuối chẳng liên quan</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 7.6 ─────────────────────────── */
+    {
+      title: '7.6 — Quiz: limits|||7.6 — Quiz: giới hạn',
+      slug: 'nginx-7-6-quiz',
+      type: 'QUIZ',
+      description: 'Tám câu về ba chế độ burst, cái khoá giả mạo được, đòn mà limit_conn không chặn, và cú 413 tới trước lượt tải lên.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 7 · Lesson 7.6</span>
+<h2>Quiz: limits</h2>
+<p class="lead">Eight questions. Three of them are about limits that were configured correctly and still failed to do the thing they were deployed for, which is the most useful pattern in the chapter.</p>
+<div class="callout">
+<p><strong>What this chapter established.</strong> The same 2r/s written three ways gave three different sites: no burst refused nine of ten requests, <code>burst=5</code> served all ten over 4.93 seconds, and <code>burst=5 nodelay</code> served five instantly then refused — and the default rejection status is <code>503</code>, which lies to the client (7.1). The key decides everything: <code>$binary_remote_addr</code> behind a proxy made five users share one bucket, and reading <code>X-Forwarded-For</code> directly let an attacker rotate it and pass eight times out of eight — <code>real_ip</code> is the fix that avoids both (7.2). <code>limit_conn</code> held exactly at two of six concurrent slow requests, and then failed to close a single one of twenty slowloris connections, because it only counts connections that finished reading their headers; <code>client_header_timeout</code> closed all twenty (7.3). <code>client_max_body_size</code> returned <code>413</code> after zero bytes when the client declared <code>Content-Length</code>, and after 23.7MB when it did not (7.4). And assembling all of it produced one real bug: two locations sharing a <code>limit_req</code> zone, so API traffic made a legitimate upload fail (7.5).</p>
+</div>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 7 · Bài 7.6</span>
+<h2>Quiz: giới hạn</h2>
+<p class="lead">Tám câu. Ba câu nói về những giới hạn được cấu hình ĐÚNG mà vẫn KHÔNG làm được cái việc chúng được triển khai để làm, và đó là khuôn mẫu hữu ích nhất trong cả chương.</p>
+<div class="callout">
+<p><strong>Chương này đã xác lập điều gì.</strong> Cùng một mức 2r/s viết theo ba cách cho ra ba cái site khác nhau: không burst thì từ chối chín trên mười request, <code>burst=5</code> phục vụ cả mười trải trên 4,93 giây, còn <code>burst=5 nodelay</code> phục vụ năm cái tức thì rồi từ chối — và mã từ chối MẶC ĐỊNH là <code>503</code>, thứ NÓI DỐI với client (7.1). Cái KHOÁ quyết định tất cả: <code>$binary_remote_addr</code> đứng sau một proxy làm năm người dùng dùng chung một cái xô, còn đọc thẳng <code>X-Forwarded-For</code> thì để kẻ tấn công xoay nó và đi qua TÁM trên TÁM — <code>real_ip</code> là cách chữa tránh được CẢ HAI (7.2). <code>limit_conn</code> giữ đúng ở mức hai trên sáu request chậm đồng thời, rồi KHÔNG đóng nổi một cái nào trong hai mươi kết nối slowloris, vì nó chỉ đếm những kết nối đã ĐỌC XONG header; <code>client_header_timeout</code> đóng cả hai mươi (7.3). <code>client_max_body_size</code> trả <code>413</code> sau KHÔNG byte nào khi client khai <code>Content-Length</code>, và sau 23,7MB khi client không khai (7.4). Và ráp tất cả lại thì lòi ra một con lỗi thật: hai location dùng CHUNG một vùng <code>limit_req</code>, nên lưu lượng API làm một lượt tải file hợp lệ thất bại (7.5).</p>
+</div>
+</div>
+`,
+      quiz: {
+        timeLimitSeconds: 720,
+        questions: [
+          {
+            question: 'limit_req zone=z rate=2r/s; with no burst. A browser fires ten requests on page load. What happens?|||limit_req zone=z rate=2r/s; không có burst. Một trình duyệt bắn mười request lúc nạp trang. Chuyện gì xảy ra?',
+            options: [
+              'All ten succeed, spread over five seconds|||Cả mười thành công, trải trên năm giây',
+              'One succeeds and nine are refused — requests must arrive 500ms apart, which no real client does|||MỘT thành công và CHÍN bị từ chối — request phải tới cách nhau 500ms, mà không client thật nào làm thế',
+              'The first two succeed|||Hai cái đầu thành công',
+              'Nginx queues them automatically|||Nginx tự xếp hàng chúng lại',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'What is the difference between burst=5 and burst=5 nodelay, measured?|||Khác biệt giữa burst=5 và burst=5 nodelay, theo phép đo, là gì?',
+            options: [
+              'nodelay allows more requests through in total|||nodelay cho tổng cộng nhiều request đi qua hơn',
+              'burst=5 served all ten over 4.93s by delaying them; nodelay served five in 0.08s and refused the rest|||burst=5 phục vụ cả mười trong 4,93s bằng cách BẮT CHỜ; nodelay phục vụ năm cái trong 0,08s rồi từ chối phần còn lại',
+              'nodelay disables the rate limit|||nodelay tắt luôn giới hạn tần suất',
+              'They are identical|||Chúng giống hệt nhau',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Why is the default rejection status 503 a problem?|||Vì sao mã từ chối mặc định 503 lại là một vấn đề?',
+            options: [
+              'It is not standard HTTP|||Nó không phải HTTP chuẩn',
+              'It means "the server is having trouble", so monitoring counts it as an error and clients back off as if you are down — 429 is what you meant|||Nó nghĩa là "máy chủ đang trục trặc", nên hệ giám sát đếm nó là LỖI và client lùi lại như thể bạn đang chết — 429 mới là thứ bạn muốn nói',
+              'Browsers ignore it|||Trình duyệt bỏ qua nó',
+              'It cannot carry a Retry-After header|||Nó không mang được header Retry-After',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Your rate limit keys on a value taken from X-Forwarded-For. An attacker changes that header every request. What did the measurement show?|||Giới hạn của bạn khoá theo một giá trị lấy từ X-Forwarded-For. Kẻ tấn công đổi header đó ở mỗi request. Phép đo cho thấy gì?',
+            options: [
+              'The limit still applies; Nginx validates the header|||Giới hạn vẫn áp dụng; Nginx có kiểm cái header đó',
+              'Eight out of eight requests passed — every request gets a fresh bucket, so the limit is gone entirely|||TÁM trên TÁM request đều qua — mỗi request nhận một cái xô mới toanh, nên giới hạn BIẾN MẤT hoàn toàn',
+              'Only the first request passes|||Chỉ request đầu tiên đi qua',
+              'Nginx returns 400 for a changing header|||Nginx trả 400 khi header cứ đổi',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'You have limit_conn 2 per IP. Twenty slowloris connections arrive from one IP. How many get closed?|||Bạn có limit_conn 2 cho mỗi IP. Hai mươi kết nối slowloris tới từ một IP. Bao nhiêu cái bị đóng?',
+            options: [
+              'Eighteen — the limit refuses everything past two|||Mười tám — giới hạn từ chối mọi thứ vượt quá hai',
+              'None — limit_conn only counts connections that finished reading their headers, and a slowloris connection never does; client_header_timeout is what closes them|||KHÔNG cái nào — limit_conn chỉ đếm những kết nối đã ĐỌC XONG header, mà một kết nối slowloris thì không bao giờ xong; client_header_timeout mới là thứ đóng chúng',
+              'All twenty|||Cả hai mươi',
+              'Two|||Hai',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'client_max_body_size 20m. A client sends 25MB with Content-Length. How many body bytes cross the network?|||client_max_body_size 20m. Một client gửi 25MB kèm Content-Length. Bao nhiêu byte thân băng qua mạng?',
+            options: [
+              'All 25MB, then Nginx returns 413|||Cả 25MB, rồi Nginx mới trả 413',
+              'Zero — Nginx compares the declared length to the limit and returns 413 before accepting any body|||KHÔNG byte nào — Nginx so độ dài đã khai với cái trần rồi trả 413 TRƯỚC khi nhận bất kỳ phần thân nào',
+              '20MB, then it stops|||20MB, rồi nó dừng',
+              'It depends on client_body_buffer_size|||Tuỳ vào client_body_buffer_size',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'The same 25MB is sent with Transfer-Encoding: chunked instead. What changes?|||Cũng 25MB đó nhưng gửi bằng Transfer-Encoding: chunked. Cái gì thay đổi?',
+            options: [
+              'Nothing; the limit works the same way|||Không gì cả; giới hạn chạy y hệt',
+              'There is no declared length, so Nginx reads until the limit is crossed — 23.7MB had already been sent before the 413|||Không có độ dài nào được khai, nên Nginx đọc cho tới khi vượt trần — 23,7MB đã kịp gửi đi trước cú 413',
+              'Nginx rejects chunked uploads outright|||Nginx từ chối thẳng các lượt tải chunked',
+              'The limit no longer applies|||Giới hạn thôi có hiệu lực',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Two locations both say limit_req zone=chung. A user makes 45 API calls, then uploads a file. What happens to the upload?|||Hai location cùng viết limit_req zone=chung. Một người dùng gọi 45 lượt API, rồi tải lên một tệp. Lượt tải lên ra sao?',
+            options: [
+              'It succeeds; the two locations have separate budgets|||Nó thành công; hai location có ngân sách riêng',
+              'It gets 429 — a zone is one shared bucket, so the API traffic exhausted the upload route’s budget too|||Nó ăn 429 — một VÙNG là MỘT cái xô dùng chung, nên lưu lượng API vét cạn luôn ngân sách của tuyến tải file',
+              'It is queued until the bucket refills|||Nó được xếp hàng cho tới khi cái xô rót lại',
+              'Nginx refuses to start with a duplicate zone name|||Nginx từ chối khởi động khi trùng tên vùng',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+        ],
+      },
+    },
   ],
 };

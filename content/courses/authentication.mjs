@@ -27,6 +27,7 @@ import s08 from './authentication/s08-oauth-oidc.mjs';
 import s09 from './authentication/s09-phan-quyen.mjs';
 import s10 from './authentication/s10-tan-cong.mjs';
 import s11 from './authentication/s11-van-hanh.mjs';
+import s12 from './authentication/s12-chan-doan.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -63,5 +64,6 @@ export default {
     s09,
     s10,
     s11,
+    s12,
   ],
 };

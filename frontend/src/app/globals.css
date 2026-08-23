@@ -1270,6 +1270,42 @@ aside ::-webkit-scrollbar-thumb:hover {
 .rich-content pre .hljs-function { color: #d2a8ff; }
 .rich-content pre .tok-type,
 .rich-content pre .hljs-type { color: #ffa657; }
+/* The 6 rules above only cover Java/plain-code tokens (what the first exam
+ * decks — PRO192 — needed). JSX/HTML/TS-heavy decks (FER202, ITE302c, SWR302,
+ * SWT301, …) emit several more highlight.js token classes that were falling
+ * through unstyled (default text color) — most visibly JSX tag names and
+ * attributes rendering plain while keywords/strings around them were
+ * colored. Filling the rest of the github-dark token set so every language
+ * highlight.js supports reads consistently, matching the .rich-content pre
+ * background (#0d1117) already in place above. */
+.rich-content pre .hljs-name,
+.rich-content pre .hljs-selector-tag,
+.rich-content pre .hljs-tag { color: #7ee787; }
+.rich-content pre .hljs-attr,
+.rich-content pre .hljs-attribute,
+.rich-content pre .hljs-literal,
+.rich-content pre .hljs-meta,
+.rich-content pre .hljs-variable,
+.rich-content pre .hljs-selector-attr,
+.rich-content pre .hljs-selector-class,
+.rich-content pre .hljs-selector-id,
+.rich-content pre .hljs-operator { color: #79c0ff; }
+.rich-content pre .hljs-title,
+.rich-content pre .hljs-title.class_,
+.rich-content pre .hljs-title.function_,
+.rich-content pre .hljs-section { color: #d2a8ff; }
+.rich-content pre .hljs-built_in,
+.rich-content pre .hljs-symbol,
+.rich-content pre .hljs-class .hljs-title { color: #ffa657; }
+.rich-content pre .hljs-regexp,
+.rich-content pre .hljs-template-variable,
+.rich-content pre .hljs-template-tag,
+.rich-content pre .hljs-doctag { color: #a5d6ff; }
+.rich-content pre .hljs-bullet { color: #f2cc60; }
+.rich-content pre .hljs-emphasis { font-style: italic; }
+.rich-content pre .hljs-strong { font-weight: 700; }
+.rich-content pre .hljs-addition { color: #aff5b4; background-color: rgba(46, 160, 67, 0.15); }
+.rich-content pre .hljs-deletion { color: #ffdcd7; background-color: rgba(248, 81, 73, 0.15); }
 
 /* ══════════════════════════════════════════════════════════════════════
  * ACADEMY LESSON DESIGN SYSTEM

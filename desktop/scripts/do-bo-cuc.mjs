@@ -87,6 +87,9 @@ const BANG = [
         title: `Dự án nội dung số ${i}`, /* ⚠️ Giá trị PHẢI khớp `CONTENT_STATUS_META` trong `lib/studio-meta.ts` —
            trang tra `META[p.status].emoji`, sai khoá là `undefined.emoji`. */
         status: ['IDEA', 'SCRIPTING', 'FILMING', 'EDITING', 'PUBLISHED'][i - 1],
+        /* ⚠️ `TypePill` tra `CONTENT_TYPE_META[type].emoji` — THIẾU HẲN trường
+           này thì `undefined.emoji`. Giá trị lấy từ `lib/studio-meta.ts`. */
+        type: ['LECTURE', 'TUTORIAL', 'VLOG', 'SHORTS', 'REVIEW'][i - 1],
         platform: 'YOUTUBE', publishAt: '2026-09-01T00:00:00Z', thumbnailUrl: null,
         tags: ['ai'], updatedAt: '2026-08-20T00:00:00Z', notes: null }))],
     [/\/finance\/dashboard/, () => ({ month: '2026-08',
@@ -406,6 +409,10 @@ const CHUAN_BI = {
     '/interview/session/1', '/interview/report/1',
     '/cv', '/cv/profile', '/cv/import', '/cv/intake', '/cv/target', '/cv/xem',
     '/language', '/language/ja', '/roadmap',
+    /* Gói của Xưởng mô phỏng hơn 1MB — mốc chờ CỨNG 1200ms bắt trúng chữ
+       "Đang mở…" khi máy bận hoặc khi gói lớn thêm. Nó vốn xanh và đỏ lên
+       vì lý do chẳng liên quan gì tới bố cục. */
+    '/simulation', '/algorithms', '/notes',
     '/maker-lab', '/creator', '/projects', '/exp-hub',
     '/finance', '/forum', '/saved', '/profile',
     '/projects/search', '/finance/debts/calendar',

@@ -429,7 +429,12 @@ HEADER
     } | sshvps "cat > /tmp/deploy-nha-seed.sh"
     rm -f "$KHOI_SEED_FILE"
     sshvps "bash /tmp/deploy-nha-seed.sh; rm -f /tmp/deploy-nha-seed.sh" 2>&1 | tee /tmp/seed-nha.log
-    SO_LOI_SEED=$(grep -c '\[WARN\]' /tmp/seed-nha.log 2>/dev/null || echo 0)
+    # ⚠️ KHÔNG `|| echo 0`: `grep -c` LUÔN in ra một dòng đếm (kể cả "0") dù
+    # thoát mã 1 khi không khớp dòng nào — thêm `|| echo 0` in ĐÈ THÊM một
+    # dòng "0" nữa, biến kết quả thành "0\n0" và làm `[ -gt 0 ]` bên dưới lỗi
+    # "integer expression expected" (vô hại nhưng lộ trong log, bắt được ở
+    # lần deploy thật đầu tiên 24/08/2026).
+    SO_LOI_SEED=$(grep -c '\[WARN\]' /tmp/seed-nha.log 2>/dev/null)
     if [ "${SO_LOI_SEED:-0}" -gt 0 ]; then
         warn "Seed nội dung có ${SO_LOI_SEED} bước báo lỗi — không chặn deploy, xem chi tiết ở trên hoặc /tmp/seed-nha.log trên máy chạy script này"
     else

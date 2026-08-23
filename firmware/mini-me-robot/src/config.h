@@ -169,7 +169,7 @@
 #define PIN_CLIFF_L      38
 #define PIN_CLIFF_R      2
 
-// Đo pin qua chia áp 100k/47k.
+// Đo pin qua chia áp **100k/30k** (pack 3S — xem khối "Điện" bên dưới).
 //
 // GPIO 1 chứ KHÔNG phải GPIO 3, dù cả hai đều thuộc ADC1: GPIO 3 là
 // chân định đoạt nguồn JTAG lúc khởi động. Cắm chia áp vào đó nghĩa là
@@ -223,10 +223,31 @@
 #define ELBOW_MAX          0
 
 // ─── Điện ─────────────────────────────────────────────────
-// Chia áp 100k/47k: 8.4V → 2.68V, nằm gọn dưới trần 3.3V của ADC.
-#define BATTERY_DIVIDER  3.128f
-#define BATTERY_FULL_MV  8400
-#define BATTERY_EMPTY_MV 6000
+/**
+ * PACK **3S** — ba viên 18650 nối tiếp. Chốt 23/08/2026.
+ *
+ * ⛔⛔ BỘ CHIA ÁP CŨ 100k/47k SẼ GIẾT CHÂN ADC VỚI PACK NÀY.
+ * Hệ số 3,128 tính cho 2S (8,4V → 2,68V). Với 3S:
+ *
+ *     10,6V (đo thật) → 3,39V   ← đã vượt trần 3,3V
+ *     12,6V (sạc đầy) → 4,03V   ← cháy GPIO 1
+ *
+ * Bộ đúng là **100k/30k** (hệ số 4,33): 12,6V → 2,91V, còn dư 0,4V
+ * biên an toàn. 220k/68k cũng được (4,24 → 2,98V) và ăn ít dòng rò
+ * hơn. ĐỪNG dùng 150k/47k — nó ra 3,01V, sát trần quá, chỉ cần một
+ * viên pin sạc hơi quá là chạm 3,3V.
+ *
+ * ⚠️ Ba hằng số dưới đây đi LIỀN VỚI bộ trở đã hàn. Đổi trở mà quên
+ * đổi số thì robot báo pin sai — và một con số bịa tệ hơn hẳn không
+ * có số, vì người ta sẽ tin nó rồi đi xa nhà mà tưởng còn đầy pin.
+ *
+ * ⚠️ 3S KHÔNG dùng được BMS 2S lẫn TP5100 (sạc 2S) trong hộp linh
+ * kiện. Cần BMS 3S có cân bằng cell, và sạc 12,6V.
+ */
+#define BATTERY_CELLS     3      // số viên nối tiếp
+#define BATTERY_DIVIDER  4.33f   // (100k + 30k) / 30k
+#define BATTERY_FULL_MV  12600   // 3 × 4,20V
+#define BATTERY_EMPTY_MV  9000   // 3 × 3,00V — ngưỡng BMS cắt
 
 // ─── An toàn ──────────────────────────────────────────────
 // Nằm trong FIRMWARE, không phải trên server: mất mạng thì robot

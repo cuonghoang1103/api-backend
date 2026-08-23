@@ -24,6 +24,7 @@ import s08 from './redis/s08-pubsub-stream.mjs';
 import s09 from './redis/s09-bo-nho-luu-tru.mjs';
 import s10 from './redis/s10-van-hanh.mjs';
 import s11 from './redis/s11-mo-rong.mjs';
+import s12 from './redis/s12-chan-doan.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -58,5 +59,6 @@ export default {
     s09,
     s10,
     s11,
+    s12,
   ],
 };

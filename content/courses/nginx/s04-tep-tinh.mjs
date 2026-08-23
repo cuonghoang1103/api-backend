@@ -352,5 +352,656 @@ location /tinh/ {
 </div>
 `,
     },
+
+    /* ─────────────────────────── 4.3 ─────────────────────────── */
+    {
+      title: '4.3 — Compression: pay once at build time, not once per request|||4.3 — Nén: trả tiền MỘT lần lúc dựng, không phải mỗi request một lần',
+      slug: 'nginx-4-3-nen',
+      type: 'LESSON',
+      description: 'Nén tại chỗ tốn CPU ở MỖI request. Bài này đo cái giá đó trên một tệp 125KB thật, rồi cho thấy gzip_static cho ra tệp NHỎ HƠN với chi phí gần bằng không — kèm một khác biệt về ETag mà ít người biết.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.3</span>
+<h2>Compression: pay once at build time, not once per request</h2>
+<p class="lead">Turning on <code>gzip</code> is the first performance change everyone makes, and it is the right one. What follows it is less well known: the same bytes can be compressed once when you build the site instead of every single time somebody asks for them, and the result is both cheaper and smaller.</p>
+
+<h3>The cost, measured on a real 125KB file</h3>
+<div class="out">Tep: mot file .mjs that trong kho nay, 125.596 byte
+
+  khong nen                          125.596 byte
+  gzip tai cho, comp_level 5          32.317 byte   (25,7% cua goc)
+  gzip_static, gzip -9 dung san       31.327 byte   (24,9% — NHO HON 3,1%)
+
+Thoi gian moi request (200 luot, gom ca chi phi khoi dong curl ~6ms
+nen hay doc phan CHENH LECH chu dung doc so tuyet doi):
+
+  khong nen                            6,3 ms
+  gzip tai cho, comp_level 5          10,2 ms      (+3,9 ms)
+  gzip tai cho, comp_level 9          12,1 ms      (+5,8 ms)
+  gzip_static (doc tep .gz co san)     6,5 ms      (+0,2 ms)</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">On-the-fly compression costs CPU per request</span><span class="lz-d">Nearly four milliseconds of worker time for this file at level 5, and nearly six at level 9. Multiply by requests per second: at 200 rps that is most of a core doing nothing but re-compressing the same unchanged bytes.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Higher levels cost more and save little</span><span class="lz-d">Level 9 took 49% longer than level 5 here. For on-the-fly work the sweet spot is 4 to 6; anything higher is paying real CPU for a percent or two of bandwidth.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">gzip_static reads a file instead of compressing</span><span class="lz-d">If <code>trang.html.gz</code> sits next to <code>trang.html</code>, Nginx serves it directly to any client that accepts gzip. The overhead measured at 0.2ms — that is one more <code>open()</code>, not a compressor.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And the pre-made file is smaller</span><span class="lz-d">Because it was built at level 9 by a tool that had time to spare. You get better compression AND lower cost, which is unusual enough to be worth acting on.</span></div>
+</div>
+
+<h3>The ETag difference nobody mentions</h3>
+<div class="out">khong nen           Content-Length: 125596   ETag: "6a8b295e-1ea9c"
+gzip TAI CHO        (khong co Content-Length) ETag: W/"6a8b295e-1ea9c"
+                                                   ^^ YEU, va cung gia tri
+gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
+                                                   ^^ MANH, va tinh tu chinh tep .gz</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">On-the-fly compression weakens the ETag</span><span class="v">Nginx marks it <code>W/</code> because the bytes it is sending are no longer the bytes it hashed the metadata from. A weak validator still works for <code>304</code> but cannot be used for range requests, which is one reason ranges and on-the-fly gzip do not combine.</span></div>
+  <div class="kv"><span class="k">On-the-fly compression removes Content-Length</span><span class="v">The size is not known until compression finishes, so the response goes out chunked. Clients cannot show a progress bar, and any intermediary that wanted the length does not get it.</span></div>
+  <div class="kv"><span class="k">gzip_static keeps both</span><span class="v">A strong ETag computed from the <code>.gz</code> file's own inode, and a real <code>Content-Length</code>. It behaves like an ordinary static file because it is one.</span></div>
+  <div class="kv"><span class="k">Vary: Accept-Encoding is not optional</span><span class="v"><code>gzip_vary on;</code> tells every cache between you and the user that the response differs by encoding. Without it a shared cache can hand a gzipped body to a client that did not ask for one — a real breakage that shows up only behind a CDN or a corporate proxy.</span></div>
+</div>
+<pre><code>http {
+  gzip              on;
+  gzip_vary         on;          <span class="tok-comment"># BẮT BUỘC khi có bất cứ bộ đệm nào ở giữa</span>
+  gzip_comp_level   5;           <span class="tok-comment"># 4–6; cao hơn là trả CPU thật cho vài phần trăm</span>
+  gzip_min_length   256;         <span class="tok-comment"># dưới ngưỡng này nén xong còn to hơn</span>
+  gzip_proxied      any;         <span class="tok-comment"># nén cả phản hồi đến từ upstream</span>
+  gzip_types        text/css application/javascript application/json
+                    image/svg+xml application/xml;
+  <span class="tok-comment"># text/html LUÔN được nén, không cần khai — khai lại là một dòng WARN</span>
+
+  gzip_static       on;          <span class="tok-comment"># có tệp .gz kề bên thì dùng nó</span>
+}</code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — do not compress what is already compressed, and be careful what you compress at all.</strong> JPEG, PNG, MP4, WebP, WOFF2 and every archive format are already compressed; running gzip over them burns CPU to make the file very slightly larger. They are absent from the default <code>gzip_types</code> for that reason, and adding them "for completeness" is a pure loss. Separately, compressing a response that mixes a secret with attacker-influenced content is what BREACH exploits — the compressed length leaks whether a guess appeared in the body. That is a real concern for HTML pages containing CSRF tokens, and the practical mitigations are per-request token randomisation rather than turning compression off site-wide.</p>
+</div>
+
+<h3>Producing the .gz files</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">At build time, next to each asset</span><span class="lz-lnote"><code>find dist -type f \\( -name '*.js' -o -name '*.css' -o -name '*.html' \\) -exec gzip -9 -k {} \\;</code> as the last step of the build. Keep both files; Nginx picks per request based on <code>Accept-Encoding</code>.</span></div>
+  <div class="lz-layer"><span class="lz-lname">gzip_static always vs on</span><span class="lz-lnote"><code>on</code> serves the <code>.gz</code> only to clients that accept gzip and falls back otherwise. <code>always</code> serves it to everyone, which is only safe when nothing in your audience lacks gzip support — true in practice, but <code>on</code> costs nothing and cannot surprise you.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Brotli is smaller again, and is a module</span><span class="lz-lnote">Not built into stock Nginx; it needs <code>ngx_brotli</code> compiled in. Where you have it, <code>brotli_static</code> works the same way with <code>.br</code> files and typically lands 15 to 20 percent below gzip on text.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Keep the two files in sync or you will serve stale content</span><span class="lz-lnote">If a deploy updates <code>app.js</code> but not <code>app.js.gz</code>, every gzip-accepting client gets the old file and everyone else gets the new one — a bug that reproduces for some users and not others. Generating them in the same build step is what prevents it.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>What to do with this today.</strong> If your site compresses on the fly, keep doing it — it is a large win over not compressing. The upgrade is one line in the build and one line in the config, and the measurement above says it gives you a smaller payload for essentially no per-request cost. It matters most exactly where you feel it least: under load, when the CPU you are spending on re-compression is the CPU you needed for everything else.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_gzip_static_module.html" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">nginx — the gzip_static module</span><span class="lc-sub">nginx.org · on versus always, and how the file is located</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_gzip_module.html" target="_blank" rel="noopener"><span class="lc-ico">🗜️</span><span class="lc-body"><span class="lc-title">nginx — the gzip module</span><span class="lc-sub">nginx.org · Every directive in the block above, with defaults</span></span></a>
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary" target="_blank" rel="noopener"><span class="lc-ico">🔀</span><span class="lc-body"><span class="lc-title">MDN — Vary</span><span class="lc-sub">developer.mozilla.org · What a shared cache does with and without it</span></span></a>
+<a class="link-card" href="/courses/web-foundations/learn${REF}"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">CuongThai course — Web Foundations</span><span class="lc-sub">Content negotiation, and how Accept-Encoding is chosen</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Time 200 requests at each compression level, then switch to gzip_static and time it again</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.3</span>
+<h2>Nén: trả tiền MỘT lần lúc dựng, không phải mỗi request một lần</h2>
+<p class="lead">Bật <code>gzip</code> là thay đổi hiệu năng đầu tiên ai cũng làm, và nó đúng. Thứ đi sau nó thì ít người biết hơn: cũng đám byte đó có thể được nén MỘT lần lúc bạn dựng site thay vì nén lại mỗi lần có người hỏi tới, và kết quả vừa rẻ hơn vừa NHỎ hơn.</p>
+
+<h3>Cái giá, đo trên một tệp 125KB thật</h3>
+<div class="out">Tep: mot file .mjs that trong kho nay, 125.596 byte
+
+  khong nen                          125.596 byte
+  gzip tai cho, comp_level 5          32.317 byte   (25,7% cua goc)
+  gzip_static, gzip -9 dung san       31.327 byte   (24,9% — NHO HON 3,1%)
+
+Thoi gian moi request (200 luot, gom ca chi phi khoi dong curl ~6ms
+nen hay doc phan CHENH LECH chu dung doc so tuyet doi):
+
+  khong nen                            6,3 ms
+  gzip tai cho, comp_level 5          10,2 ms      (+3,9 ms)
+  gzip tai cho, comp_level 9          12,1 ms      (+5,8 ms)
+  gzip_static (doc tep .gz co san)     6,5 ms      (+0,2 ms)</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Nén tại chỗ tốn CPU ở MỖI request</span><span class="lz-d">Gần bốn mili giây thời gian worker cho tệp này ở mức 5, và gần sáu ở mức 9. Đem nhân với số request mỗi giây: ở 200 rps thì đó là gần trọn một nhân chỉ để nén đi nén lại đúng đám byte không hề đổi.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Mức cao hơn tốn hơn mà tiết kiệm chẳng bao nhiêu</span><span class="lz-d">Mức 9 ở đây lâu hơn mức 5 tới 49%. Với việc nén tại chỗ thì điểm ngọt là 4 tới 6; cao hơn nữa là trả CPU thật để đổi lấy một hai phần trăm băng thông.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">gzip_static ĐỌC một tệp thay vì đi nén</span><span class="lz-d">Nếu <code>trang.html.gz</code> nằm ngay cạnh <code>trang.html</code>, Nginx phục vụ thẳng nó cho mọi client chấp nhận gzip. Phí tổn đo được là 0,2ms — đó là thêm một lệnh <code>open()</code>, không phải một bộ nén.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và cái tệp dựng sẵn còn NHỎ HƠN</span><span class="lz-d">Vì nó được dựng ở mức 9 bởi một công cụ có dư thời gian. Bạn được nén tốt hơn VÀ tốn ít hơn, chuyện đủ hiếm để đáng đi làm.</span></div>
+</div>
+
+<h3>Khác biệt về ETag mà chẳng ai nhắc</h3>
+<div class="out">khong nen           Content-Length: 125596   ETag: "6a8b295e-1ea9c"
+gzip TAI CHO        (khong co Content-Length) ETag: W/"6a8b295e-1ea9c"
+                                                   ^^ YEU, va cung gia tri
+gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
+                                                   ^^ MANH, va tinh tu chinh tep .gz</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Nén tại chỗ làm ETag YẾU đi</span><span class="v">Nginx đánh dấu <code>W/</code> vì đám byte nó đang gửi không còn là đám byte nó đã băm siêu dữ liệu ra. Một bộ xác thực yếu vẫn dùng được cho <code>304</code> nhưng KHÔNG dùng được cho request theo dải byte, và đó là một lý do nữa để dải byte và gzip tại chỗ không đi với nhau.</span></div>
+  <div class="kv"><span class="k">Nén tại chỗ làm mất Content-Length</span><span class="v">Kích thước chưa biết được cho tới khi nén xong, nên phản hồi đi ra dạng chunked. Client không hiện được thanh tiến trình, và bất cứ trung gian nào cần biết độ dài đều không có.</span></div>
+  <div class="kv"><span class="k">gzip_static giữ được CẢ HAI</span><span class="v">Một ETag MẠNH tính từ chính inode của tệp <code>.gz</code>, và một <code>Content-Length</code> thật. Nó cư xử như một tệp tĩnh bình thường vì nó ĐÚNG LÀ một tệp tĩnh bình thường.</span></div>
+  <div class="kv"><span class="k">Vary: Accept-Encoding KHÔNG phải tuỳ chọn</span><span class="v"><code>gzip_vary on;</code> báo cho mọi bộ đệm nằm giữa bạn và người dùng rằng phản hồi KHÁC NHAU theo phép mã hoá. Thiếu nó thì một bộ đệm dùng chung có thể trao một thân đã nén cho một client chưa từng xin — một kiểu hỏng có thật và chỉ lộ ra khi đứng sau một CDN hay một proxy công ty.</span></div>
+</div>
+<pre><code>http {
+  gzip              on;
+  gzip_vary         on;          <span class="tok-comment"># BẮT BUỘC khi có bất cứ bộ đệm nào ở giữa</span>
+  gzip_comp_level   5;           <span class="tok-comment"># 4–6; cao hơn là trả CPU thật cho vài phần trăm</span>
+  gzip_min_length   256;         <span class="tok-comment"># dưới ngưỡng này nén xong còn to hơn</span>
+  gzip_proxied      any;         <span class="tok-comment"># nén cả phản hồi đến từ upstream</span>
+  gzip_types        text/css application/javascript application/json
+                    image/svg+xml application/xml;
+  <span class="tok-comment"># text/html LUÔN được nén, không cần khai — khai lại là một dòng WARN</span>
+
+  gzip_static       on;          <span class="tok-comment"># có tệp .gz kề bên thì dùng nó</span>
+}</code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — đừng nén thứ đã nén, và hãy cẩn thận với chuyện nén cái gì.</strong> JPEG, PNG, MP4, WebP, WOFF2 và mọi định dạng nén sẵn đều đã nén rồi; chạy gzip lên chúng là đốt CPU để làm tệp TO RA một tí. Chúng vắng mặt trong <code>gzip_types</code> mặc định đúng vì lý do đó, và thêm chúng vào "cho đủ bộ" là lỗ thuần tuý. Chuyện riêng: nén một phản hồi có trộn một BÍ MẬT với nội dung do kẻ tấn công chi phối chính là thứ BREACH khai thác — độ dài sau nén tiết lộ rằng một lần đoán có xuất hiện trong thân hay không. Đó là mối lo có thật với những trang HTML mang token CSRF, và cách giảm thiểu thực tế là NGẪU NHIÊN HOÁ token theo từng request, chứ không phải tắt nén cả site.</p>
+</div>
+
+<h3>Sinh ra đám tệp .gz thế nào</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Lúc dựng, đặt ngay cạnh từng tài nguyên</span><span class="lz-lnote"><code>find dist -type f \\( -name '*.js' -o -name '*.css' -o -name '*.html' \\) -exec gzip -9 -k {} \\;</code> làm bước CUỐI của quy trình dựng. Giữ CẢ HAI tệp; Nginx tự chọn theo từng request dựa vào <code>Accept-Encoding</code>.</span></div>
+  <div class="lz-layer"><span class="lz-lname">gzip_static always và on</span><span class="lz-lnote"><code>on</code> chỉ phục vụ tệp <code>.gz</code> cho client nào chấp nhận gzip, còn lại thì lùi về tệp gốc. <code>always</code> phục vụ nó cho TẤT CẢ, và điều đó chỉ an toàn khi không ai trong tệp khách của bạn thiếu hỗ trợ gzip — thực tế thì đúng thế, nhưng <code>on</code> chẳng tốn gì và nó không thể làm bạn bất ngờ.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Brotli còn nhỏ hơn nữa, và nó là một module</span><span class="lz-lnote">Không có sẵn trong Nginx bản gốc; nó cần biên dịch kèm <code>ngx_brotli</code>. Chỗ nào có thì <code>brotli_static</code> chạy theo đúng cách đó với tệp <code>.br</code>, và với văn bản thì nó thường thấp hơn gzip chừng 15 tới 20 phần trăm.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Giữ hai tệp ĐỒNG BỘ, không thì bạn phục vụ nội dung cũ</span><span class="lz-lnote">Nếu một lần deploy cập nhật <code>app.js</code> mà không cập nhật <code>app.js.gz</code> thì mọi client chấp nhận gzip nhận tệp CŨ còn những người khác nhận tệp MỚI — một con lỗi tái hiện được với một số người và không tái hiện với người khác. Sinh cả hai trong CÙNG một bước dựng là thứ chặn được nó.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Hôm nay làm gì với chuyện này.</strong> Nếu site của bạn đang nén tại chỗ thì cứ tiếp tục — nó là một cú thắng lớn so với không nén. Bước nâng cấp là một dòng trong quy trình dựng và một dòng trong cấu hình, và phép đo ở trên nói rằng nó cho bạn một gói tin nhỏ hơn với chi phí mỗi request gần như bằng không. Nó có nghĩa lý nhất đúng ở chỗ bạn cảm thấy nó ít nhất: lúc tải nặng, khi cái CPU bạn đang tiêu để nén đi nén lại chính là cái CPU bạn cần cho mọi thứ còn lại.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_gzip_static_module.html" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">nginx — module gzip_static</span><span class="lc-sub">nginx.org · on và always, và cách nó tìm ra cái tệp</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_gzip_module.html" target="_blank" rel="noopener"><span class="lc-ico">🗜️</span><span class="lc-body"><span class="lc-title">nginx — module gzip</span><span class="lc-sub">nginx.org · Mọi chỉ thị trong khối ở trên, kèm giá trị mặc định</span></span></a>
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary" target="_blank" rel="noopener"><span class="lc-ico">🔀</span><span class="lc-body"><span class="lc-title">MDN — Vary</span><span class="lc-sub">developer.mozilla.org · Một bộ đệm dùng chung làm gì khi có và khi không có nó</span></span></a>
+<a class="link-card" href="/courses/web-foundations/learn${REF}"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Web Foundations</span><span class="lc-sub">Thương lượng nội dung, và Accept-Encoding được chọn thế nào</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Bấm giờ 200 request ở từng mức nén, rồi chuyển sang gzip_static và bấm lại</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 4.4 ─────────────────────────── */
+    {
+      title: '4.4 — How the bytes leave the machine: sendfile and open_file_cache|||4.4 — Byte rời khỏi máy bằng đường nào: sendfile và open_file_cache',
+      slug: 'nginx-4-4-sendfile-va-open-file-cache',
+      type: 'LESSON',
+      description: 'Hai chỉ thị mà mọi cấu hình mẫu đều có và gần như không ai biết chúng làm gì. Bài này đếm SYSCALL bằng strace trên chính worker của Nginx: một cái biến 186 lời gọi thành 3, cái kia xoá sạch mọi lời gọi mở tệp — và một phép đo bằng đồng hồ KHÔNG thấy gì cả, điều đó cũng đáng nói.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.4</span>
+<h2>How the bytes leave the machine: sendfile and open_file_cache</h2>
+<p class="lead">Both of these appear in every example config, both are described as "makes it faster", and almost nobody has seen what they change. They are visible in one place — the system calls the worker makes — so that is where this lesson looks.</p>
+
+<h3>sendfile: 186 syscalls become 3</h3>
+<div class="out">strace tren dung worker cua Nginx, 3 request toi mot tep 2MB:
+
+  sendfile on     sendfile=3    writev=3      &lt;- 1 syscall / tep
+  sendfile off    sendfile=0    writev=186    &lt;- 62 syscall / request</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Without it: read into user space, write back out</span><span class="lz-d">The worker reads a buffer's worth of the file into its own memory, then writes that buffer to the socket, and repeats. 2MB in 32KB buffers is 62 round trips through user space per request — every byte crossing the kernel boundary twice.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">With it: one syscall, no copy through your process</span><span class="lz-d"><code>sendfile()</code> tells the kernel to move data from the page cache to the socket directly. The worker never touches the bytes. Three requests produced exactly three calls.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">tcp_nopush goes with it</span><span class="lz-d">It holds the response headers back until there is a full packet to send, so the headers and the first chunk of the file leave together instead of as two packets. It only does anything when <code>sendfile</code> is on, which is why the pair always appears together.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">It cannot be used when the body is transformed</span><span class="lz-d">On-the-fly <code>gzip</code>, <code>sub_filter</code> or SSI all need the bytes in user space to modify them, so those responses fall back to read-and-write. It is another quiet advantage of <code>gzip_static</code>: a pre-compressed file is still just a file.</span></div>
+</div>
+
+<h3>open_file_cache: the opens disappear entirely</h3>
+<div class="out">5 request toi cung mot tep nho:
+
+                        openat   fstat   sendfile   close
+  open_file_cache BAT      0       0        5         5
+  open_file_cache TAT     10       5        5        10
+                          ^^      ^^
+                   2 lan mo + 1 lan stat MOI REQUEST, bien mat sach</div>
+<div class="callout warn">
+<p><strong>And a measurement that found nothing, which is also information.</strong> Timing 500 sequential <code>curl</code> requests to the same small file gave 7.16ms with the cache on and 7.10ms with it off — no difference at all. That is not evidence the directive is useless; it is evidence the benchmark was wrong. Each <code>curl</code> spends about 7ms starting a process, so the microseconds of a saved <code>openat</code> were invisible under it. The syscall count is the honest measurement here, and the wall-clock number would have been the misleading one to publish.</p>
+</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">It caches descriptors and metadata, not contents</span><span class="v">The file's data still comes from the kernel page cache, which was already handling that. What is cached is the open descriptor, the <code>stat</code> result, and the fact that a path does or does not exist — the per-request bookkeeping, not the bytes.</span></div>
+  <div class="kv"><span class="k">Where it pays: many requests, many small files</span><span class="v">A page pulling forty small assets does forty opens and forty stats per visitor without it. On a busy static site that is a large share of the syscalls the process makes at all, and syscalls are where a static server's time actually goes.</span></div>
+  <div class="kv"><span class="k">open_file_cache_errors caches the misses too</span><span class="v">With it on, a repeated request for a missing file does not re-stat the filesystem every time. That matters under a scanner hammering non-existent paths, which is a load pattern you get whether you want it or not.</span></div>
+  <div class="kv"><span class="k">The cost is staleness for up to open_file_cache_valid</span><span class="v">A file replaced on disk may keep being served from the old descriptor until the entry is revalidated. With <code>30s</code> that is a half-minute window after a deploy — usually fine, and worth knowing before you spend an hour wondering why the new file is not appearing.</span></div>
+</div>
+<pre><code>http {
+  sendfile        on;
+  tcp_nopush      on;          <span class="tok-comment"># chỉ có tác dụng khi sendfile on</span>
+  tcp_nodelay     on;          <span class="tok-comment"># cho kết nối giữ-sống, gửi ngay gói cuối</span>
+
+  open_file_cache          max=10000 inactive=60s;
+  open_file_cache_valid    30s;      <span class="tok-comment"># cửa sổ cũ tối đa sau khi deploy</span>
+  open_file_cache_min_uses 2;        <span class="tok-comment"># chỉ cache thứ được hỏi tới ít nhất 2 lần</span>
+  open_file_cache_errors   on;       <span class="tok-comment"># cache cả 404 — chống đám quét dạo</span>
+}</code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — <code>open_file_cache</code> holds descriptors, so a deploy that replaces files can serve the old ones briefly, and a deploy that <em>deletes</em> them can serve deleted files for the whole validity window.</strong> The descriptor stays valid after an unlink on Unix — the data is still there until the last holder closes it. So a file you removed for a good reason can keep being served for up to <code>open_file_cache_valid</code>. If a removal is urgent — a leaked document, a bad build — reload Nginx after the deletion rather than assuming the file is gone. A reload replaces the workers and their caches with it, which is why the standard deploy script does one.</p>
+</div>
+
+<h3>The rest of the static tuning, in order of how much it matters</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">1. Compress well and cache correctly (4.2, 4.3)</span><span class="lz-lnote">Bytes not sent beat bytes sent efficiently, by a wide margin. A year-long cache on hashed assets removes the request entirely; that is worth more than every syscall optimisation in this lesson combined.</span></div>
+  <div class="lz-layer"><span class="lz-lname">2. sendfile and open_file_cache</span><span class="lz-lnote">Real and free, but they change how efficiently the machine does work it is already doing. Turn them on and stop thinking about them.</span></div>
+  <div class="lz-layer"><span class="lz-lname">3. worker_processes and worker_connections</span><span class="lz-lnote"><code>auto</code> for the first is correct on almost every machine. The second only matters when you are actually running out — the error log says <code>worker_connections are not enough</code> in plain words when you are.</span></div>
+  <div class="lz-layer"><span class="lz-lname">4. Everything else you read about</span><span class="lz-lnote"><code>aio</code>, <code>directio</code>, <code>thread_pool</code> — these solve real problems for large-media servers where files exceed RAM, and they can make an ordinary site slower. Do not copy them from a tuning article without the workload that motivated it.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>The habit this lesson is really about.</strong> When a directive claims to make something faster, ask what it changes rather than whether it helps — <code>strace</code> on the worker answers in thirty seconds and the answer is a count, not an opinion. It also protects you from the opposite error: the 500-request timing above would have let me report "no difference, do not bother", and that would have been wrong.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">nginx — sendfile, tcp_nopush, tcp_nodelay</span><span class="lc-sub">nginx.org · The three that belong together, with their interactions</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#open_file_cache" target="_blank" rel="noopener"><span class="lc-ico">🗄️</span><span class="lc-body"><span class="lc-title">nginx — open_file_cache</span><span class="lc-sub">nginx.org · Exactly what is cached, and the validity semantics</span></span></a>
+<a class="link-card" href="https://man7.org/linux/man-pages/man2/sendfile.2.html" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">man 2 sendfile</span><span class="lc-sub">man7.org · The syscall itself, and why it avoids the user-space copy</span></span></a>
+<a class="link-card" href="/courses/linux-bash/learn${REF}"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">CuongThai course — Linux &amp; Bash</span><span class="lc-sub">strace, file descriptors, and why an unlinked file stays readable</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Count the worker's syscalls yourself, with each directive on and off</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.4</span>
+<h2>Byte rời khỏi máy bằng đường nào: sendfile và open_file_cache</h2>
+<p class="lead">Cả hai đều xuất hiện trong mọi cấu hình mẫu, cả hai đều được mô tả là "cho nó nhanh hơn", và gần như chẳng ai từng NHÌN THẤY chúng đổi cái gì. Chúng chỉ hiện ra ở một chỗ — đám lời gọi hệ thống mà worker thực hiện — nên đó là chỗ bài này đi soi.</p>
+
+<h3>sendfile: 186 lời gọi thành 3</h3>
+<div class="out">strace tren dung worker cua Nginx, 3 request toi mot tep 2MB:
+
+  sendfile on     sendfile=3    writev=3      &lt;- 1 syscall / tep
+  sendfile off    sendfile=0    writev=186    &lt;- 62 syscall / request</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Không có nó: ĐỌC vào không gian người dùng rồi GHI ngược ra</span><span class="lz-d">Worker đọc một đệm đầy nội dung tệp vào bộ nhớ của chính nó, rồi ghi cái đệm đó ra socket, rồi lặp lại. 2MB chia theo đệm 32KB là 62 vòng đi qua không gian người dùng cho MỖI request — mỗi byte vượt ranh giới nhân HAI lần.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Có nó: một lời gọi, không chép qua tiến trình của bạn</span><span class="lz-d"><code>sendfile()</code> bảo nhân hệ điều hành chuyển dữ liệu thẳng từ bộ đệm trang ra socket. Worker KHÔNG hề chạm vào đám byte. Ba request sinh ra đúng ba lời gọi.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">tcp_nopush đi kèm với nó</span><span class="lz-d">Nó GIỮ header phản hồi lại cho tới khi có đủ một gói đầy để gửi, nên header và mẩu đầu của tệp rời đi CÙNG NHAU thay vì thành hai gói. Nó chỉ có tác dụng khi <code>sendfile</code> đang bật, và đó là lý do cặp này luôn xuất hiện cùng nhau.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nó KHÔNG dùng được khi thân bị biến đổi</span><span class="lz-d"><code>gzip</code> tại chỗ, <code>sub_filter</code> hay SSI đều cần đám byte nằm trong không gian người dùng mới sửa được, nên những phản hồi đó lùi về kiểu đọc-rồi-ghi. Đó là thêm một lợi thế lặng lẽ của <code>gzip_static</code>: một tệp đã nén sẵn thì vẫn chỉ là một cái TỆP.</span></div>
+</div>
+
+<h3>open_file_cache: đám lời gọi mở BIẾN MẤT hẳn</h3>
+<div class="out">5 request toi cung mot tep nho:
+
+                        openat   fstat   sendfile   close
+  open_file_cache BAT      0       0        5         5
+  open_file_cache TAT     10       5        5        10
+                          ^^      ^^
+                   2 lan mo + 1 lan stat MOI REQUEST, bien mat sach</div>
+<div class="callout warn">
+<p><strong>Và một phép đo KHÔNG tìm thấy gì, mà điều đó cũng là thông tin.</strong> Bấm giờ 500 lượt <code>curl</code> tuần tự tới cùng một tệp nhỏ cho ra 7,16ms khi bật cache và 7,10ms khi tắt — không khác gì cả. Đó KHÔNG phải bằng chứng rằng chỉ thị này vô dụng; đó là bằng chứng rằng PHÉP ĐO đã sai. Mỗi lượt <code>curl</code> tốn chừng 7ms chỉ để khởi động một tiến trình, nên vài micro giây tiết kiệm được từ một lời gọi <code>openat</code> chìm nghỉm dưới đó. Đếm syscall mới là phép đo thật thà ở đây, còn con số đồng hồ mới là thứ mà đem đăng lên thì gây hiểu lầm.</p>
+</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Nó cache MÔ TẢ TỆP và siêu dữ liệu, KHÔNG cache nội dung</span><span class="v">Dữ liệu của tệp vẫn tới từ bộ đệm trang của nhân, thứ vốn đã lo việc đó rồi. Cái được cache là mô tả tệp đang mở, kết quả <code>stat</code>, và cái sự thật rằng một đường dẫn có hay không tồn tại — tức là phần sổ sách theo từng request, không phải đám byte.</span></div>
+  <div class="kv"><span class="k">Chỗ nó sinh lời: NHIỀU request, NHIỀU tệp nhỏ</span><span class="v">Một trang kéo về bốn mươi tài nguyên nhỏ thì tốn bốn mươi lần mở và bốn mươi lần stat cho MỖI khách nếu không có nó. Trên một site tĩnh đông khách thì đó là một phần lớn trong toàn bộ số syscall mà tiến trình thực hiện, mà syscall mới là chỗ thời gian của một máy chủ tĩnh thật sự đi vào.</span></div>
+  <div class="kv"><span class="k">open_file_cache_errors cache cả những lần TRƯỢT</span><span class="v">Bật nó lên thì một request lặp đi lặp lại tới một tệp không tồn tại sẽ không phải stat lại hệ tệp mỗi lần. Điều đó có nghĩa lý khi có một con quét dạo nện liên tục vào những đường dẫn không có, mà đó là kiểu tải bạn nhận được dù có muốn hay không.</span></div>
+  <div class="kv"><span class="k">Cái giá là dữ liệu CŨ trong tối đa open_file_cache_valid</span><span class="v">Một tệp vừa bị thay trên đĩa vẫn có thể được phục vụ từ mô tả tệp cũ cho tới khi mục đó được xác thực lại. Với <code>30s</code> thì đó là một cửa sổ nửa phút sau khi deploy — thường thì không sao, và đáng biết TRƯỚC khi bạn tốn một tiếng tự hỏi vì sao tệp mới chưa hiện ra.</span></div>
+</div>
+<pre><code>http {
+  sendfile        on;
+  tcp_nopush      on;          <span class="tok-comment"># chỉ có tác dụng khi sendfile on</span>
+  tcp_nodelay     on;          <span class="tok-comment"># cho kết nối giữ-sống, gửi ngay gói cuối</span>
+
+  open_file_cache          max=10000 inactive=60s;
+  open_file_cache_valid    30s;      <span class="tok-comment"># cửa sổ cũ tối đa sau khi deploy</span>
+  open_file_cache_min_uses 2;        <span class="tok-comment"># chỉ cache thứ được hỏi tới ít nhất 2 lần</span>
+  open_file_cache_errors   on;       <span class="tok-comment"># cache cả 404 — chống đám quét dạo</span>
+}</code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — <code>open_file_cache</code> GIỮ mô tả tệp, nên một lần deploy thay tệp có thể phục vụ tệp cũ trong chốc lát, còn một lần deploy XOÁ tệp có thể phục vụ tệp ĐÃ XOÁ suốt cả cửa sổ hiệu lực.</strong> Trên Unix, mô tả tệp vẫn hợp lệ sau khi unlink — dữ liệu còn nguyên đó cho tới khi người giữ cuối cùng đóng nó lại. Nên một tệp bạn gỡ đi vì một lý do chính đáng vẫn có thể tiếp tục được phục vụ trong tối đa <code>open_file_cache_valid</code>. Nếu việc gỡ là KHẨN — một tài liệu bị lộ, một bản dựng hỏng — thì hãy NẠP LẠI Nginx sau khi xoá chứ đừng cho rằng cái tệp đã biến mất. Một lần nạp lại thay luôn đám worker cùng với bộ đệm của chúng, và đó là lý do các script deploy tiêu chuẩn đều làm một lần.</p>
+</div>
+
+<h3>Phần chỉnh tinh còn lại, xếp theo mức độ có nghĩa lý</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">1. Nén cho tốt và cache cho đúng (4.2, 4.3)</span><span class="lz-lnote">Byte KHÔNG gửi thắng byte gửi một cách hiệu quả, thắng rất xa. Một năm cache trên tài nguyên có băm xoá luôn cái request; điều đó đáng giá hơn TẤT CẢ phần tối ưu syscall trong bài này cộng lại.</span></div>
+  <div class="lz-layer"><span class="lz-lname">2. sendfile và open_file_cache</span><span class="lz-lnote">Thật và miễn phí, nhưng chúng đổi cái CÁCH máy làm công việc mà nó vốn đã làm. Hãy bật lên rồi thôi nghĩ về chúng.</span></div>
+  <div class="lz-layer"><span class="lz-lname">3. worker_processes và worker_connections</span><span class="lz-lnote"><code>auto</code> cho cái đầu là đúng trên gần như mọi máy. Cái thứ hai chỉ có nghĩa lý khi bạn THẬT SỰ cạn — và error log nói thẳng bằng chữ <code>worker_connections are not enough</code> khi điều đó xảy ra.</span></div>
+  <div class="lz-layer"><span class="lz-lname">4. Mọi thứ khác mà bạn đọc được</span><span class="lz-lnote"><code>aio</code>, <code>directio</code>, <code>thread_pool</code> — chúng giải những bài toán CÓ THẬT cho máy chủ media lớn nơi tệp vượt quá RAM, và chúng có thể làm một site bình thường CHẬM ĐI. Đừng chép chúng từ một bài viết chỉnh tinh mà không có cái tải đã sinh ra bài viết đó.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Thói quen mà bài này thật sự nói về nó.</strong> Khi một chỉ thị tuyên bố làm cái gì đó nhanh hơn, hãy hỏi nó ĐỔI cái gì thay vì hỏi nó có giúp không — <code>strace</code> trên worker trả lời trong ba mươi giây và câu trả lời là một CON SỐ ĐẾM, không phải một ý kiến. Nó cũng bảo vệ bạn khỏi cái lỗi ngược lại: cái phép bấm giờ 500 request ở trên lẽ ra đã cho tôi kết luận "không khác gì, khỏi bận tâm", và kết luận đó SAI.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">nginx — sendfile, tcp_nopush, tcp_nodelay</span><span class="lc-sub">nginx.org · Bộ ba đi liền nhau, kèm cách chúng tương tác</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#open_file_cache" target="_blank" rel="noopener"><span class="lc-ico">🗄️</span><span class="lc-body"><span class="lc-title">nginx — open_file_cache</span><span class="lc-sub">nginx.org · Chính xác cái gì được cache, và ngữ nghĩa của hiệu lực</span></span></a>
+<a class="link-card" href="https://man7.org/linux/man-pages/man2/sendfile.2.html" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">man 2 sendfile</span><span class="lc-sub">man7.org · Chính cái lời gọi hệ thống, và vì sao nó tránh được phép chép qua không gian người dùng</span></span></a>
+<a class="link-card" href="/courses/linux-bash/learn${REF}"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Linux &amp; Bash</span><span class="lc-sub">strace, mô tả tệp, và vì sao một tệp đã unlink vẫn đọc được</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Tự tay đếm syscall của worker, với mỗi chỉ thị bật rồi tắt</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 4.5 ─────────────────────────── */
+    {
+      title: '4.5 — A production static block, assembled and measured|||4.5 — Một khối tĩnh cho production, ráp lại và đem đo',
+      slug: 'nginx-4-5-khoi-tinh-production',
+      type: 'LESSON',
+      description: 'Ghép mọi thứ trong chương thành một cấu hình chạy được cho một SPA có tài nguyên băm và một thư mục tệp người dùng tải lên, rồi đo TỪNG tuyến. Sáu dòng đo, và dòng cuối phơi ra một con lỗi thật trong cấu hình do chính bài này viết: một cú 404 bị cache MỘT NĂM.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.5</span>
+<h2>A production static block, assembled and measured</h2>
+<p class="lead">Four lessons of pieces. Here they are as one config for a realistic site — a single-page app with content-hashed assets, an HTML entry point, and a directory of user uploads — with every route measured afterwards. The last measurement found a bug in the config written above it, which is left in because it is the most useful thing in the lesson.</p>
+
+<h3>The config</h3>
+<pre><code>http {
+  include       /etc/nginx/mime.types;
+  default_type  application/octet-stream;   <span class="tok-comment"># KHÔNG phải text/plain (4.1)</span>
+
+  sendfile on; tcp_nopush on; tcp_nodelay on;          <span class="tok-comment"># 4.4</span>
+  open_file_cache max=10000 inactive=60s;
+  open_file_cache_valid 30s;
+  open_file_cache_min_uses 2;
+  open_file_cache_errors on;
+
+  gzip on; gzip_vary on; gzip_comp_level 5;            <span class="tok-comment"># 4.3</span>
+  gzip_min_length 256;
+  gzip_types text/css application/javascript application/json image/svg+xml;
+  gzip_static on;
+
+  server {
+    listen 443 ssl default_server;
+    server_name vidu.com;
+    root /srv/site;
+
+    <span class="tok-comment"># Tài nguyên CÓ BĂM: một năm, immutable (4.2)</span>
+    location /tinh/ {
+      add_header Cache-Control "public, max-age=31536000, immutable";
+      add_header X-Content-Type-Options "nosniff" always;
+      try_files \$uri =404;
+    }
+
+    <span class="tok-comment"># Tệp NGƯỜI DÙNG tải lên: không bao giờ được dựng ra trong trình duyệt</span>
+    location /tai-len/ {
+      types { }                             <span class="tok-comment"># bỏ hẳn bảng mime</span>
+      default_type application/octet-stream;
+      add_header Content-Disposition "attachment" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header Cache-Control "public, max-age=604800";
+      try_files \$uri =404;
+    }
+
+    <span class="tok-comment"># HTML: luôn hỏi lại</span>
+    location = /index.html {
+      add_header Cache-Control "no-cache";
+      add_header X-Content-Type-Options "nosniff" always;
+    }
+
+    <span class="tok-comment"># SPA: mọi đường dẫn khác về index.html (2.5)</span>
+    location / { try_files \$uri \$uri/ /index.html; }
+  }
+}</code></pre>
+
+<h3>Every route, measured</h3>
+<div class="out">tai nguyen co bam   200  application/javascript  Content-Encoding: gzip
+                         Cache-Control: public, max-age=31536000, immutable
+                         X-Content-Type-Options: nosniff
+
+index.html          200  text/html    Cache-Control: no-cache
+
+duong dan SPA       200  text/html    Cache-Control: no-cache
+                         ETag y HET index.html  &lt;- try_files DA chuyen huong noi bo
+                         va khop LAI vao khoi = /index.html
+
+anh tai len         200  application/octet-stream
+                         Content-Disposition: attachment
+                         X-Content-Type-Options: nosniff
+
+tep tai len "la"    200  application/octet-stream   &lt;- noi dung la &lt;script&gt;
+                         Content-Disposition: attachment
+                         (trinh duyet TAI VE, khong dung ra)
+
+tep khong ton tai   404  Cache-Control: public, max-age=31536000, immutable
+                              ^^^^^^^^ DAY LA MOT CON LOI</div>
+<div class="callout ok">
+<p><strong>The SPA row is Lesson 2.5 paying off in a way worth pointing at.</strong> A request for <code>/bat-ky/duong-dan</code> matched <code>location /</code>, found no file, and fell through to <code>/index.html</code>. That fallback is an internal redirect, so location matching ran again and the request landed in <code>location = /index.html</code> — which is why it came back with <code>no-cache</code> rather than whatever <code>location /</code> would have given it. The <code>ETag</code> is identical to the real <code>/index.html</code>, confirming it is the same file through the same block. Structuring it this way means the caching rule for your HTML is written once and applies to every SPA route automatically.</p>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — the 404 came back with a one-year immutable cache, and the cause was the word <code>always</code>.</strong> The first version of the block above wrote <code>add_header Cache-Control "..." always;</code>, and <code>always</code> means "on every response including errors". So a browser that requested a hashed asset during a partial deploy — the HTML already updated, the asset not yet uploaded — cached the <code>404</code> for a year. That user's site is broken until they clear their cache, and no deploy can fix it because the browser will not ask again. Measured after removing <code>always</code> from that one line: the <code>404</code> carries no <code>Cache-Control</code> at all, and the <code>200</code> still carries the full year. <strong>The rule: <code>always</code> belongs on security headers, which must apply to error pages too, and must not be on <code>Cache-Control</code>, where it caches your failures.</strong></p>
+</div>
+<div class="out">SAU KHI bo chu "always" khoi dong Cache-Control:
+
+  404: HTTP/1.1 404 Not Found        (khong con Cache-Control)
+  200: HTTP/1.1 200 OK               Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options tren 404: VAN CO (vi no van giu "always")</div>
+
+<h3>Why the uploads block looks like that</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">types { } empties the MIME table for that location</span><span class="lz-lnote">Combined with <code>default_type application/octet-stream</code>, every uploaded file is announced as binary regardless of its extension. An uploaded <code>.html</code> or <code>.svg</code> then cannot be rendered as a document on your origin, which is what turns an upload feature into stored XSS.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Content-Disposition: attachment is the second lock</span><span class="lz-lnote">It tells the browser to download rather than display, even for types it would normally render. Belt and braces, because the two mechanisms fail differently and uploads are the one place you want both.</span></div>
+  <div class="lz-layer"><span class="lz-lname">A separate origin is the real fix</span><span class="lz-lnote">Serving uploads from <code>files.vidu.com</code> rather than <code>vidu.com/tai-len/</code> means even a rendered document cannot touch your cookies or your DOM. The two headers above are what you do while that is not possible.</span></div>
+  <div class="lz-layer"><span class="lz-lname">try_files $uri =404 rather than a fallback</span><span class="lz-lnote">A missing upload should be a <code>404</code>, not your SPA shell. Without the explicit <code>=404</code> the request would fall to <code>location /</code> and return <code>index.html</code> with status <code>200</code> — an HTML page where an image was expected.</span></div>
+</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Check the error responses, not just the successes</span><span class="v">This is the general form of the bug above. When you review a static config, request one path that does not exist in each location and read the headers. Anything cached, anything leaking, anything with the wrong status is easier to see there than on the happy path.</span></div>
+  <div class="kv"><span class="k">Each location repeats the headers it needs</span><span class="v">Because of the array-replacement rule from Lesson 2.3. In a real config the shared set goes in a snippet and every block includes it — written out longhand here so you can see exactly what each block sends.</span></div>
+  <div class="kv"><span class="k">The order of the location blocks does not matter</span><span class="v">Three prefixes and one exact match. By Lesson 2.1, prefixes compete on length and <code>=</code> short-circuits, so this config behaves identically however you sort it. That is a property worth having in a file other people will edit.</span></div>
+  <div class="kv"><span class="k">One measurement per route is the whole review</span><span class="v">Six <code>curl -I</code> calls covered every path through this config, including the failure. It is faster than reading the file and it is the only way to catch a header that comes from a module rather than from a line you wrote.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Why the bug stays in the lesson.</strong> It was not planted. The config was written from the four preceding lessons, it looked right, it passed <code>nginx -t</code>, and five of six routes were perfect. It took one request to a path that does not exist to find a failure that would have been invisible in production until a user complained about a permanently broken page. That is the argument for measuring error paths, made better by an example than by an assertion.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_headers_module.html#add_header" target="_blank" rel="noopener"><span class="lc-ico">📤</span><span class="lc-body"><span class="lc-title">nginx — add_header and the always flag</span><span class="lc-sub">nginx.org · Exactly which status codes each form applies to</span></span></a>
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition" target="_blank" rel="noopener"><span class="lc-ico">📎</span><span class="lc-body"><span class="lc-title">MDN — Content-Disposition</span><span class="lc-sub">developer.mozilla.org · attachment versus inline, and filename handling</span></span></a>
+<a class="link-card" href="https://owasp.org/www-community/attacks/xss/" target="_blank" rel="noopener"><span class="lc-ico">💉</span><span class="lc-body"><span class="lc-title">OWASP — Cross-site scripting</span><span class="lc-sub">owasp.org · Why an uploaded file rendered on your origin is the same bug</span></span></a>
+<a class="link-card" href="/courses/nextjs/learn${REF}"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">CuongThai course — Next.js</span><span class="lc-sub">Content-hashed filenames, and what the framework emits for you</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Run the six probes, find the cached 404 yourself, then fix it with one word</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.5</span>
+<h2>Một khối tĩnh cho production, ráp lại và đem đo</h2>
+<p class="lead">Bốn bài toàn là các mảnh rời. Đây là chúng gộp thành MỘT cấu hình cho một site thực tế — một ứng dụng một-trang có tài nguyên băm nội dung, một điểm vào HTML, và một thư mục tệp người dùng tải lên — kèm phép đo TỪNG tuyến sau đó. Phép đo cuối cùng đã tìm ra một con lỗi trong chính cái cấu hình viết ngay phía trên nó, và nó được GIỮ NGUYÊN vì đó là thứ hữu ích nhất trong cả bài.</p>
+
+<h3>Cấu hình</h3>
+<pre><code>http {
+  include       /etc/nginx/mime.types;
+  default_type  application/octet-stream;   <span class="tok-comment"># KHÔNG phải text/plain (4.1)</span>
+
+  sendfile on; tcp_nopush on; tcp_nodelay on;          <span class="tok-comment"># 4.4</span>
+  open_file_cache max=10000 inactive=60s;
+  open_file_cache_valid 30s;
+  open_file_cache_min_uses 2;
+  open_file_cache_errors on;
+
+  gzip on; gzip_vary on; gzip_comp_level 5;            <span class="tok-comment"># 4.3</span>
+  gzip_min_length 256;
+  gzip_types text/css application/javascript application/json image/svg+xml;
+  gzip_static on;
+
+  server {
+    listen 443 ssl default_server;
+    server_name vidu.com;
+    root /srv/site;
+
+    <span class="tok-comment"># Tài nguyên CÓ BĂM: một năm, immutable (4.2)</span>
+    location /tinh/ {
+      add_header Cache-Control "public, max-age=31536000, immutable";
+      add_header X-Content-Type-Options "nosniff" always;
+      try_files \$uri =404;
+    }
+
+    <span class="tok-comment"># Tệp NGƯỜI DÙNG tải lên: không bao giờ được dựng ra trong trình duyệt</span>
+    location /tai-len/ {
+      types { }                             <span class="tok-comment"># bỏ hẳn bảng mime</span>
+      default_type application/octet-stream;
+      add_header Content-Disposition "attachment" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header Cache-Control "public, max-age=604800";
+      try_files \$uri =404;
+    }
+
+    <span class="tok-comment"># HTML: luôn hỏi lại</span>
+    location = /index.html {
+      add_header Cache-Control "no-cache";
+      add_header X-Content-Type-Options "nosniff" always;
+    }
+
+    <span class="tok-comment"># SPA: mọi đường dẫn khác về index.html (2.5)</span>
+    location / { try_files \$uri \$uri/ /index.html; }
+  }
+}</code></pre>
+
+<h3>Từng tuyến, đo thật</h3>
+<div class="out">tai nguyen co bam   200  application/javascript  Content-Encoding: gzip
+                         Cache-Control: public, max-age=31536000, immutable
+                         X-Content-Type-Options: nosniff
+
+index.html          200  text/html    Cache-Control: no-cache
+
+duong dan SPA       200  text/html    Cache-Control: no-cache
+                         ETag y HET index.html  &lt;- try_files DA chuyen huong noi bo
+                         va khop LAI vao khoi = /index.html
+
+anh tai len         200  application/octet-stream
+                         Content-Disposition: attachment
+                         X-Content-Type-Options: nosniff
+
+tep tai len "la"    200  application/octet-stream   &lt;- noi dung la &lt;script&gt;
+                         Content-Disposition: attachment
+                         (trinh duyet TAI VE, khong dung ra)
+
+tep khong ton tai   404  Cache-Control: public, max-age=31536000, immutable
+                              ^^^^^^^^ DAY LA MOT CON LOI</div>
+<div class="callout ok">
+<p><strong>Dòng SPA chính là Bài 2.5 đang sinh lời, và nó đáng được chỉ tận tay.</strong> Một request tới <code>/bat-ky/duong-dan</code> khớp <code>location /</code>, không tìm thấy tệp nào, rồi rơi xuống <code>/index.html</code>. Cái dự phòng đó là một cú chuyển hướng NỘI BỘ, nên phép khớp location chạy LẠI và request rơi vào <code>location = /index.html</code> — và đó là lý do nó quay ra với <code>no-cache</code> chứ không phải với thứ mà <code>location /</code> sẽ cho nó. Cái <code>ETag</code> giống HỆT <code>/index.html</code> thật, xác nhận đó đúng là cùng một tệp đi qua cùng một khối. Sắp xếp theo kiểu này nghĩa là cái luật cache cho HTML của bạn chỉ viết MỘT lần và tự động áp cho MỌI tuyến của SPA.</p>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — cú 404 quay ra kèm một cái cache MỘT NĂM immutable, và thủ phạm là chữ <code>always</code>.</strong> Bản đầu của cái khối ở trên viết <code>add_header Cache-Control "..." always;</code>, mà <code>always</code> nghĩa là "trên MỌI phản hồi, kể cả lỗi". Nên một trình duyệt xin một tài nguyên có băm trong lúc deploy đang dở dang — HTML đã cập nhật, tài nguyên chưa kịp lên — sẽ CACHE cái <code>404</code> đó suốt một năm. Site của người dùng ấy hỏng cho tới khi họ tự xoá bộ đệm, và KHÔNG lần deploy nào chữa được, vì trình duyệt sẽ không hỏi lại nữa. Đo lại sau khi bỏ chữ <code>always</code> khỏi đúng một dòng đó: cú <code>404</code> không mang <code>Cache-Control</code> nào cả, còn cú <code>200</code> vẫn mang trọn một năm. <strong>Luật: <code>always</code> thuộc về header BẢO MẬT, thứ bắt buộc phải áp cả cho trang lỗi, và KHÔNG được nằm trên <code>Cache-Control</code>, nơi nó đem cache luôn những lần bạn thất bại.</strong></p>
+</div>
+<div class="out">SAU KHI bo chu "always" khoi dong Cache-Control:
+
+  404: HTTP/1.1 404 Not Found        (khong con Cache-Control)
+  200: HTTP/1.1 200 OK               Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options tren 404: VAN CO (vi no van giu "always")</div>
+
+<h3>Vì sao khối tệp tải lên trông như thế</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">types { } làm RỖNG bảng MIME cho riêng location đó</span><span class="lz-lnote">Đi cùng <code>default_type application/octet-stream</code> thì MỌI tệp tải lên đều được công bố là nhị phân, bất kể phần đuôi của nó là gì. Một tệp <code>.html</code> hay <code>.svg</code> tải lên khi ấy KHÔNG dựng được thành tài liệu trên gốc của bạn, mà đó chính là thứ biến một tính năng tải lên thành XSS lưu trữ.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Content-Disposition: attachment là cái khoá thứ hai</span><span class="lz-lnote">Nó bảo trình duyệt TẢI VỀ chứ đừng hiển thị, kể cả với những kiểu mà bình thường nó sẽ dựng ra. Thắt lưng kèm dây đeo quần, vì hai cơ chế này hỏng theo hai kiểu khác nhau và tệp tải lên là chỗ DUY NHẤT bạn muốn có cả hai.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Một GỐC riêng mới là cách chữa thật</span><span class="lz-lnote">Phục vụ tệp tải lên từ <code>files.vidu.com</code> thay vì <code>vidu.com/tai-len/</code> nghĩa là kể cả một tài liệu có được dựng ra thì nó cũng không chạm nổi vào cookie hay DOM của bạn. Hai cái header ở trên là thứ bạn làm TRONG LÚC chưa làm được điều đó.</span></div>
+  <div class="lz-layer"><span class="lz-lname">try_files $uri =404 chứ không phải một cái dự phòng</span><span class="lz-lnote">Một tệp tải lên bị thiếu thì phải là <code>404</code>, không phải cái vỏ SPA của bạn. Thiếu dòng <code>=404</code> tường minh thì request sẽ rơi xuống <code>location /</code> và trả về <code>index.html</code> với mã <code>200</code> — một trang HTML ở chỗ lẽ ra phải là một tấm ảnh.</span></div>
+</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hãy kiểm phản hồi LỖI, đừng chỉ kiểm phản hồi thành công</span><span class="v">Đây là dạng tổng quát của con lỗi ở trên. Khi rà một cấu hình tĩnh, hãy gọi MỘT đường dẫn không tồn tại trong TỪNG location rồi đọc header. Thứ gì bị cache, thứ gì rò rỉ, thứ gì sai mã trạng thái đều dễ thấy ở đó hơn là trên con đường êm đẹp.</span></div>
+  <div class="kv"><span class="k">Mỗi location CHÉP LẠI những header nó cần</span><span class="v">Vì cái luật thay-thế-mảng ở Bài 2.3. Trong một cấu hình thật thì bộ dùng chung nằm trong một file snippet và mọi khối đều include nó — ở đây viết dài ra để bạn nhìn thấy CHÍNH XÁC mỗi khối gửi cái gì.</span></div>
+  <div class="kv"><span class="k">Thứ tự các khối location KHÔNG có nghĩa lý</span><span class="v">Ba tiền tố và một khớp chính xác. Theo Bài 2.1, tiền tố đua nhau bằng độ dài còn <code>=</code> thì đoản mạch, nên cấu hình này cư xử y hệt dù bạn sắp xếp thế nào. Đó là một tính chất đáng có với một file mà người khác sẽ vào sửa.</span></div>
+  <div class="kv"><span class="k">Mỗi tuyến một phép đo là XONG cả buổi rà soát</span><span class="v">Sáu lệnh <code>curl -I</code> phủ hết mọi đường đi qua cấu hình này, kể cả đường hỏng. Nó nhanh hơn ngồi đọc file, và nó là cách DUY NHẤT bắt được một cái header tới từ một module chứ không tới từ một dòng bạn viết.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Vì sao con lỗi được giữ nguyên trong bài.</strong> Nó KHÔNG phải cài cắm. Cấu hình được viết ra từ bốn bài trước, nó trông đúng, nó qua được <code>nginx -t</code>, và năm trên sáu tuyến hoàn hảo. Chỉ cần MỘT request tới một đường dẫn không tồn tại là lòi ra một kiểu hỏng mà ngoài production sẽ vô hình cho tới khi có người dùng kêu rằng trang của họ hỏng vĩnh viễn. Đó là lý lẽ cho việc đo cả đường LỖI, và một ví dụ nói điều đó hay hơn một lời khẳng định.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_headers_module.html#add_header" target="_blank" rel="noopener"><span class="lc-ico">📤</span><span class="lc-body"><span class="lc-title">nginx — add_header và cờ always</span><span class="lc-sub">nginx.org · Chính xác mỗi dạng áp cho những mã trạng thái nào</span></span></a>
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition" target="_blank" rel="noopener"><span class="lc-ico">📎</span><span class="lc-body"><span class="lc-title">MDN — Content-Disposition</span><span class="lc-sub">developer.mozilla.org · attachment và inline, và chuyện xử lý filename</span></span></a>
+<a class="link-card" href="https://owasp.org/www-community/attacks/xss/" target="_blank" rel="noopener"><span class="lc-ico">💉</span><span class="lc-body"><span class="lc-title">OWASP — Cross-site scripting</span><span class="lc-sub">owasp.org · Vì sao một tệp tải lên được dựng ra trên gốc của bạn cũng là con lỗi ấy</span></span></a>
+<a class="link-card" href="/courses/nextjs/learn${REF}"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Next.js</span><span class="lc-sub">Tên tệp băm theo nội dung, và framework tự sinh ra gì cho bạn</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Chạy sáu phép dò, tự tìm ra cú 404 bị cache, rồi vá nó bằng một chữ</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 4.6 ─────────────────────────── */
+    {
+      title: '4.6 — Quiz: static files|||4.6 — Quiz: tệp tĩnh',
+      slug: 'nginx-4-6-quiz',
+      type: 'QUIZ',
+      description: 'Tám câu về kiểu nội dung, ETag dựng từ mtime, nén trả trước, syscall của sendfile và open_file_cache, và cái chữ always làm cache luôn một cú 404.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.6</span>
+<h2>Quiz: static files</h2>
+<p class="lead">Eight questions, all from measurements. Two of them describe bugs that produce a correct-looking site and a broken experience for some users only, which is the kind worth being able to recognise.</p>
+<div class="callout">
+<p><strong>What this chapter established.</strong> <code>Content-Type</code> comes from an extension lookup and nothing else, so an unknown extension falls to <code>default_type</code> — which defaults to <code>text/plain</code> and is the wrong default anywhere users can upload; and a directory with no index and no <code>autoindex</code> answers <code>403</code>, not <code>404</code> (4.1). The <code>ETag</code> is exactly <code>hex(mtime)-hex(size)</code>, proven character by character, so <code>touch</code> alone changes it and a client holding the old one re-downloads the whole file — which is what every deploy that re-creates files does to every cached asset (4.2). On-the-fly gzip cost about 3.9ms per request on a 125KB file at level 5 and produced a <em>larger</em> result than a pre-built <code>gzip -9</code> file that <code>gzip_static</code> serves for about 0.2ms, and it also weakens the ETag and removes <code>Content-Length</code> (4.3). <code>sendfile</code> turned 186 syscalls into 3 for three 2MB requests, and <code>open_file_cache</code> removed every <code>openat</code> and <code>fstat</code> — while a wall-clock benchmark of the same thing showed nothing, because process startup dominated it (4.4). And assembling all of it produced one real bug: <code>always</code> on <code>Cache-Control</code> cached a <code>404</code> for a year (4.5).</p>
+</div>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.6</span>
+<h2>Quiz: tệp tĩnh</h2>
+<p class="lead">Tám câu, tất cả đều ra từ phép đo. Hai câu mô tả những con lỗi tạo ra một site TRÔNG có vẻ đúng nhưng hỏng với MỘT SỐ người dùng thôi, và đó là loại đáng học để nhận ra được.</p>
+<div class="callout">
+<p><strong>Chương này đã xác lập điều gì.</strong> <code>Content-Type</code> tới từ việc tra PHẦN ĐUÔI và không tới từ gì khác, nên một đuôi lạ rơi về <code>default_type</code> — thứ mặc định là <code>text/plain</code> và là mặc định SAI ở bất cứ đâu người dùng tải tệp lên được; và một thư mục không có index lẫn <code>autoindex</code> trả lời <code>403</code> chứ không phải <code>404</code> (4.1). <code>ETag</code> đúng bằng <code>hex(mtime)-hex(size)</code>, chứng minh khớp từng ký tự, nên chỉ một lệnh <code>touch</code> cũng làm nó đổi và client cầm cái cũ phải tải lại NGUYÊN tệp — mà đó chính là điều mọi lần deploy tạo lại tệp làm với mọi tài nguyên đang nằm trong bộ đệm (4.2). Nén tại chỗ tốn chừng 3,9ms mỗi request trên một tệp 125KB ở mức 5 và cho ra kết quả TO HƠN một tệp <code>gzip -9</code> dựng sẵn mà <code>gzip_static</code> phục vụ chỉ tốn chừng 0,2ms, đồng thời nó còn làm YẾU ETag và làm mất <code>Content-Length</code> (4.3). <code>sendfile</code> biến 186 syscall thành 3 cho ba request tệp 2MB, còn <code>open_file_cache</code> xoá sạch mọi <code>openat</code> và <code>fstat</code> — trong khi một phép bấm giờ cho đúng chuyện đó thì KHÔNG thấy gì, vì chi phí khởi động tiến trình đè lên tất cả (4.4). Và ráp tất cả lại thì lòi ra một con lỗi thật: chữ <code>always</code> trên <code>Cache-Control</code> đã cache một cú <code>404</code> suốt một năm (4.5).</p>
+</div>
+</div>
+`,
+      quiz: {
+        timeLimitSeconds: 720,
+        questions: [
+          {
+            question: 'You serve user uploads and http { } does not set default_type. A user uploads a file with no extension containing HTML. What happens?|||Bạn phục vụ tệp người dùng tải lên và khối http { } không đặt default_type. Một người dùng tải lên một tệp KHÔNG có phần đuôi, bên trong là HTML. Chuyện gì xảy ra?',
+            options: [
+              'Nginx sniffs the content and serves it as text/html|||Nginx đánh hơi nội dung và phục vụ nó dạng text/html',
+              'It is served as text/plain — the built-in default — and a browser may render the markup on your origin, which is stored XSS|||Nó được phục vụ dạng text/plain — mặc định có sẵn — và trình duyệt có thể dựng cái đánh dấu đó ngay trên gốc của bạn, tức là XSS lưu trữ',
+              'Nginx returns 415 Unsupported Media Type|||Nginx trả về 415 Unsupported Media Type',
+              'It is refused because the extension is missing|||Nó bị từ chối vì thiếu phần đuôi',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'A request hits a directory that exists, has no index file, and autoindex is off. What status comes back?|||Một request tới một thư mục CÓ THẬT, không có tệp index, và autoindex đang tắt. Mã trạng thái nào quay ra?',
+            options: [
+              '404 Not Found|||404 Not Found',
+              '403 Forbidden — the path exists and Nginx refuses to describe it, which also reveals that the directory is there|||403 Forbidden — đường dẫn có thật và Nginx từ chối mô tả nó, và điều đó cũng để lộ rằng thư mục đó tồn tại',
+              '200 with an empty body|||200 với thân rỗng',
+              '301 to the parent directory|||301 về thư mục cha',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Your deploy runs git clone into a fresh directory. File contents are byte-identical to last week. What do returning visitors experience?|||Lần deploy của bạn chạy git clone vào một thư mục mới. Nội dung tệp giống hệt tuần trước từng byte. Khách quay lại trải nghiệm điều gì?',
+            options: [
+              '304 responses; nothing is re-downloaded|||Toàn 304; không có gì phải tải lại',
+              'Full re-downloads — mtime changed, so the ETag changed, and the ETag is hex(mtime)-hex(size) rather than a content hash|||Tải lại TOÀN BỘ — mtime đã đổi nên ETag đổi, mà ETag là hex(mtime)-hex(size) chứ không phải một băm nội dung',
+              'Nothing changes because Last-Modified is unchanged|||Không có gì đổi vì Last-Modified không đổi',
+              'Only HTML is re-fetched|||Chỉ HTML là được lấy lại',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'You write expires 1y; and add_header Cache-Control "public, max-age=31536000, immutable"; in the same block. What does the client receive?|||Bạn viết expires 1y; và add_header Cache-Control "public, max-age=31536000, immutable"; trong CÙNG một khối. Client nhận được gì?',
+            options: [
+              'One merged Cache-Control header|||Một dòng Cache-Control đã hợp nhất',
+              'Two separate Cache-Control headers — they come from different modules and do not merge; the client picks one|||HAI dòng Cache-Control riêng biệt — chúng tới từ hai module khác nhau và KHÔNG hợp nhất; client tự chọn một',
+              'Only the add_header one; expires is overridden|||Chỉ cái của add_header; expires bị ghi đè',
+              'Nginx refuses to start|||Nginx từ chối khởi động',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Compared with compressing on the fly, what does gzip_static give you?|||So với nén tại chỗ, gzip_static cho bạn cái gì?',
+            options: [
+              'The same file, slightly faster|||Cùng cái tệp đó, nhanh hơn một chút',
+              'A smaller file (built at level 9) for near-zero per-request cost, plus a strong ETag and a real Content-Length|||Một tệp NHỎ HƠN (dựng ở mức 9) với chi phí mỗi request gần bằng không, kèm một ETag MẠNH và một Content-Length thật',
+              'Better compression but higher CPU cost|||Nén tốt hơn nhưng tốn CPU hơn',
+              'Nothing measurable|||Không có gì đo được',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Three requests for a 2MB file produced 3 sendfile() calls with sendfile on and 186 writev() calls with it off. Why?|||Ba request tới một tệp 2MB sinh ra 3 lời gọi sendfile() khi sendfile bật và 186 lời gọi writev() khi tắt. Vì sao?',
+            options: [
+              'sendfile compresses the file first|||sendfile nén tệp lại trước',
+              'Without it the worker reads the file into user space in ~32KB buffers and writes each one out; with it the kernel moves data straight from the page cache to the socket|||Không có nó thì worker ĐỌC tệp vào không gian người dùng theo từng đệm ~32KB rồi GHI từng cái ra; có nó thì nhân chuyển dữ liệu thẳng từ bộ đệm trang ra socket',
+              'writev is a slower version of the same call|||writev là phiên bản chậm hơn của cùng lời gọi ấy',
+              'The file was cached differently|||Cái tệp được cache theo cách khác',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'You delete a leaked file from disk. open_file_cache_valid is 30s. Is it gone from the site immediately?|||Bạn xoá một tệp bị lộ khỏi đĩa. open_file_cache_valid là 30s. Nó biến khỏi site ngay lập tức chứ?',
+            options: [
+              'Yes; deleting the file is enough|||Có; xoá tệp là đủ',
+              'No — the cached descriptor stays valid after an unlink on Unix, so it can keep being served for up to the validity window; reload Nginx to be sure|||Không — trên Unix, mô tả tệp đã cache vẫn hợp lệ sau khi unlink, nên nó có thể tiếp tục được phục vụ tới hết cửa sổ hiệu lực; hãy nạp lại Nginx cho chắc',
+              'Only if open_file_cache_errors is on|||Chỉ khi open_file_cache_errors đang bật',
+              'It returns 500 until the cache expires|||Nó trả 500 cho tới khi cache hết hạn',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'add_header Cache-Control "public, max-age=31536000, immutable" always; on a hashed-asset location. What did the measurement reveal?|||add_header Cache-Control "public, max-age=31536000, immutable" always; trên một location tài nguyên có băm. Phép đo phơi ra điều gì?',
+            options: [
+              'Nothing; always is required for the header to appear|||Không gì cả; always là bắt buộc để header hiện ra',
+              'The 404 for a missing asset also got the one-year immutable cache, so a browser that asked during a partial deploy caches the failure for a year|||Cú 404 của một tài nguyên bị thiếu CŨNG nhận cái cache một năm immutable, nên một trình duyệt hỏi trúng lúc deploy dở dang sẽ cache luôn cái thất bại đó suốt một năm',
+              'The header was dropped on 200 responses|||Header bị bỏ trên các phản hồi 200',
+              'always only affects redirects|||always chỉ ảnh hưởng tới các cú chuyển hướng',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+        ],
+      },
+    },
   ],
 };

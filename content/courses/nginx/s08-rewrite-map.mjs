@@ -535,5 +535,511 @@ limit_req_zone \$khoa_gioi_han zone=chung:10m rate=20r/s;</code></pre>
 </div>
 `,
     },
+
+    /* ─────────────────────────── 8.4 ─────────────────────────── */
+    {
+      title: '8.4 — return, error_page, and the blocks nobody can reach|||8.4 — return, error_page, và những khối không ai gọi tới được',
+      slug: 'nginx-8-4-return-error-page',
+      type: 'LESSON',
+      description: 'Ba dạng của error_page cho ra ba mã trạng thái khác nhau từ cùng một trang lỗi — 404, 200 và 200 — và khác biệt là một dấu bằng. Kèm hai loại khối chỉ chạm tới được từ BÊN TRONG, và cái chỉ thị một chữ bịt lối vào từ ngoài.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 8 · Lesson 8.4</span>
+<h2>return, error_page, and the blocks nobody can reach</h2>
+<p class="lead">Not every response comes from a file or an upstream. Some are produced by the config itself, and the directives that do it have exact behaviours that a quick reading gets wrong — starting with a status code that depends on an equals sign.</p>
+
+<h3>error_page, three spellings</h3>
+<div class="out">location /loi-giu/ { error_page 404      /trang-loi; return 404; }
+location /loi-doi/ { error_page 404 =    /trang-loi; return 404; }
+location /loi-200/ { error_page 404 =200 /trang-loi; return 404; }
+
+  /loi-giu/  -> ma=404   TRANG LOI: uri=[/trang-loi]
+  /loi-doi/  -> ma=200   TRANG LOI: uri=[/trang-loi]
+  /loi-200/  -> ma=200   TRANG LOI: uri=[/trang-loi]
+               ^^^^^^ CUNG mot trang, BA mac dinh, hai ma khac nhau</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">No equals sign keeps the original status</span><span class="lz-d">The client gets <code>404</code> with your page as the body. This is what you want for a real error page: the status is honest, and search engines and clients treat it as a genuine miss.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">A bare equals takes the status from the handler</span><span class="lz-d">The handling location returned <code>200</code>, so the client got <code>200</code> — a soft 404. Occasionally correct, when a "not found" is really a valid empty result. Usually a mistake that gets missing pages indexed.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">=NNN sets the status explicitly</span><span class="lz-d"><code>=200</code>, <code>=301</code>, whatever you name. This is the form to reach for when you deliberately want the status to differ from what triggered the page — <code>error_page 403 =404 /404.html;</code> hides the existence of something.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The error page goes through location matching</span><span class="lz-d">It is an internal redirect (Lesson 2.5), so <code>\$uri</code> becomes the error page's path and a different block handles it — which is why <code>/trang-loi</code> printed its own <code>\$uri</code> rather than the original one.</span></div>
+</div>
+
+<h3>Blocks reachable only from inside</h3>
+<div class="out">location /noi-bo { internal; return 200 "noi bo"; }
+
+  goi THANG /noi-bo                -> 404
+  qua error_page tu /thu-noi-bo/   -> 200  "noi bo"
+
+location /goi-ten/ { try_files /khong-co-dau @du-phong; }
+location @du-phong { return 200 "DA VAO @du-phong: uri=[$uri]"; }
+
+  /goi-ten/x -> 200  DA VAO @du-phong: uri=[/goi-ten/x]
+                                             ^^^^^^^^^ $uri KHONG doi</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">internal turns a direct request into 404</span><span class="v">Measured. The block still answers internal redirects — <code>error_page</code>, <code>try_files</code>, <code>X-Accel-Redirect</code>, a <code>rewrite ... last</code>. It is the right guard on anything that should only be reachable from your own config, and it costs one word.</span></div>
+  <div class="kv"><span class="k">A named location does not change $uri</span><span class="v">Falling into <code>@du-phong</code> left <code>\$uri</code> as <code>/goi-ten/x</code>. That is the point: the fallback can still see what was originally asked for, which a path-based fallback would have overwritten.</span></div>
+  <div class="kv"><span class="k">Named locations have no URL at all</span><span class="v">There is no path that maps to <code>@du-phong</code> — the <code>@</code> is not a URL character in this sense, so a request for <code>/@du-phong</code> is just an ordinary path that lands wherever ordinary matching sends it. They exist purely as targets for <code>try_files</code>, <code>error_page</code> and <code>proxy_next_upstream</code>.</span></div>
+  <div class="kv"><span class="k">X-Accel-Redirect is the pattern these enable</span><span class="v">Your application checks permission, then returns an empty response with <code>X-Accel-Redirect: /tep-rieng/abc.pdf</code>. Nginx serves the file from an <code>internal</code> location — the application never streams bytes, and the file has no public URL. This is the correct way to serve authorised downloads.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Tệp riêng tư: ứng dụng kiểm quyền, Nginx gửi byte</span>
+location /tep-rieng/ {
+  internal;                       <span class="tok-comment"># gọi thẳng -> 404</span>
+  alias /srv/rieng-tu/;
+}
+<span class="tok-comment"># Ứng dụng trả: X-Accel-Redirect: /tep-rieng/hop-dong.pdf</span>
+
+<span class="tok-comment"># Trang lỗi: giữ đúng mã, và đừng để lộ trang lỗi ra ngoài</span>
+error_page 404 /404.html;
+error_page 500 502 503 504 /50x.html;
+location = /404.html { internal; root /srv/loi; }
+location = /50x.html { internal; root /srv/loi; }
+
+<span class="tok-comment"># API thì trang lỗi phải là JSON, không phải HTML (Bài 7.4)</span>
+error_page 404 = @json_404;
+location @json_404 {
+  default_type application/json;
+  return 404 '{"loi":"khong tim thay"}';
+}</code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — <code>error_page 404 = @xu-ly;</code> with a bare equals takes the status from the handler, so a JSON error handler that ends in <code>return 404</code> is fine but one that ends in <code>return 200</code> silently turns every miss into a success.</strong> The block above works because the named location itself returns <code>404</code>. Write the same thing with <code>return 200 '{"loi":"..."}'</code> and every 404 on your API becomes a <code>200</code> with an error body — which client libraries will not treat as an error, so failures become silent empty results. If you want the handler's status, say so with the bare <code>=</code> deliberately; if you want the original, leave the <code>=</code> out entirely. Half the confusion around <code>error_page</code> is that both forms look like a typo for the other.</p>
+</div>
+
+<h3>return, and when it is enough</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">return CODE — the cheapest possible response</span><span class="lz-lnote"><code>return 204;</code> for a beacon endpoint, <code>return 444;</code> to close without answering (Lesson 1.3), <code>return 403;</code> for a blocked path. No file, no upstream, no work.</span></div>
+  <div class="lz-layer"><span class="lz-lname">return CODE "text" — an inline body</span><span class="lz-lnote">Variables are interpolated, so <code>return 200 "\$remote_addr\\n";</code> is a working echo endpoint in one line. Set <code>default_type</code> alongside it or the body is announced as <code>text/plain</code>.</span></div>
+  <div class="lz-layer"><span class="lz-lname">return CODE URL — a redirect</span><span class="lz-lnote">With a <code>3xx</code> code and a URL, this is the redirect form. Prefer it over <code>rewrite ... permanent</code> for fixed destinations: it is clearer, cheaper, and cannot be misread as an internal rewrite.</span></div>
+  <div class="lz-layer"><span class="lz-lname">A health endpoint should be a return</span><span class="lz-lnote"><code>location = /health { access_log off; return 200 "ok\\n"; }</code>. It never touches your application, so it stays up while the application is restarting — which is either exactly what you want from a liveness probe or exactly what you do not, so decide which one this endpoint is.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>The pattern these four directives share.</strong> <code>return</code>, <code>error_page</code>, <code>internal</code> and named locations are all ways to answer a request without leaving Nginx, and every one of them interacts with the internal-redirect machinery from Lesson 2.5. When one of them behaves oddly, the first question is which block ended up handling the request and what <code>\$uri</code> was by then — and a temporary <code>return 200 "\$uri"</code> in each candidate block answers it faster than reading the chain.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#error_page" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">nginx — error_page and internal</span><span class="lc-sub">nginx.org · The three forms and exactly what each does to the status</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return" target="_blank" rel="noopener"><span class="lc-ico">↩️</span><span class="lc-body"><span class="lc-title">nginx — return</span><span class="lc-sub">nginx.org · Code, code with text, and code with URL</span></span></a>
+<a class="link-card" href="https://www.nginx.com/resources/wiki/start/topics/examples/xsendfile/" target="_blank" rel="noopener"><span class="lc-ico">📤</span><span class="lc-body"><span class="lc-title">nginx — X-Accel-Redirect</span><span class="lc-sub">nginx.com · Serving authorised files without streaming them through your app</span></span></a>
+<a class="link-card" href="/courses/authentication/learn${REF}"><span class="lc-ico">🔑</span><span class="lc-body"><span class="lc-title">CuongThai course — Authentication</span><span class="lc-sub">Authorising a download, and why the file must not have a public URL</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Serve the same error page three ways and watch the status code change</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 8 · Bài 8.4</span>
+<h2>return, error_page, và những khối không ai gọi tới được</h2>
+<p class="lead">Không phải phản hồi nào cũng tới từ một tệp hay một upstream. Có những cái do CHÍNH cấu hình sinh ra, và những chỉ thị làm việc đó có hành vi chính xác mà đọc lướt thì hiểu sai — bắt đầu bằng một mã trạng thái phụ thuộc vào MỘT dấu bằng.</p>
+
+<h3>error_page, ba cách viết</h3>
+<div class="out">location /loi-giu/ { error_page 404      /trang-loi; return 404; }
+location /loi-doi/ { error_page 404 =    /trang-loi; return 404; }
+location /loi-200/ { error_page 404 =200 /trang-loi; return 404; }
+
+  /loi-giu/  -> ma=404   TRANG LOI: uri=[/trang-loi]
+  /loi-doi/  -> ma=200   TRANG LOI: uri=[/trang-loi]
+  /loi-200/  -> ma=200   TRANG LOI: uri=[/trang-loi]
+               ^^^^^^ CUNG mot trang, BA cach viet, hai ma khac nhau</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">KHÔNG có dấu bằng thì GIỮ nguyên mã gốc</span><span class="lz-d">Client nhận <code>404</code> với trang của bạn làm thân. Đó là thứ bạn muốn cho một trang lỗi THẬT: mã trạng thái thật thà, và máy tìm kiếm lẫn client đều coi đó là một cú trượt đúng nghĩa.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Một dấu bằng TRẦN thì lấy mã của BỘ XỬ LÝ</span><span class="lz-d">Cái location xử lý trả về <code>200</code>, nên client nhận <code>200</code> — một cú 404-mềm. Thỉnh thoảng thì đúng, khi "không tìm thấy" thật sự là một kết quả rỗng hợp lệ. Thường thì đó là một lỗi khiến những trang không tồn tại bị đem đi lập chỉ mục.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">=NNN đặt mã một cách TƯỜNG MINH</span><span class="lz-d"><code>=200</code>, <code>=301</code>, bạn gọi tên cái nào cũng được. Đây là dạng nên với tới khi bạn CHỦ ĐỘNG muốn mã khác với thứ đã kích hoạt trang lỗi — <code>error_page 403 =404 /404.html;</code> giấu đi sự tồn tại của một thứ gì đó.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Trang lỗi ĐI QUA phép khớp location</span><span class="lz-d">Nó là một cú chuyển hướng nội bộ (Bài 2.5), nên <code>\$uri</code> thành đường dẫn của trang lỗi và một khối KHÁC xử lý nó — đó là lý do <code>/trang-loi</code> in ra <code>\$uri</code> của chính nó chứ không phải cái ban đầu.</span></div>
+</div>
+
+<h3>Những khối chỉ chạm tới được từ BÊN TRONG</h3>
+<div class="out">location /noi-bo { internal; return 200 "noi bo"; }
+
+  goi THANG /noi-bo                -> 404
+  qua error_page tu /thu-noi-bo/   -> 200  "noi bo"
+
+location /goi-ten/ { try_files /khong-co-dau @du-phong; }
+location @du-phong { return 200 "DA VAO @du-phong: uri=[$uri]"; }
+
+  /goi-ten/x -> 200  DA VAO @du-phong: uri=[/goi-ten/x]
+                                             ^^^^^^^^^ $uri KHONG doi</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">internal biến một request gọi thẳng thành 404</span><span class="v">Đo được. Cái khối vẫn trả lời các cú chuyển hướng NỘI BỘ — <code>error_page</code>, <code>try_files</code>, <code>X-Accel-Redirect</code>, một lệnh <code>rewrite ... last</code>. Nó là cái chốt ĐÚNG cho mọi thứ chỉ nên chạm tới được từ cấu hình của chính bạn, và nó tốn một chữ.</span></div>
+  <div class="kv"><span class="k">Một named location KHÔNG làm đổi $uri</span><span class="v">Rơi vào <code>@du-phong</code> mà <code>\$uri</code> vẫn là <code>/goi-ten/x</code>. Đó chính là ĐIỂM: cái dự phòng vẫn nhìn thấy được thứ ban đầu được hỏi, trong khi một dự phòng theo đường dẫn thì đã ghi đè mất.</span></div>
+  <div class="kv"><span class="k">Named location KHÔNG có URL nào cả</span><span class="v">Không có đường dẫn nào ánh xạ tới <code>@du-phong</code> — dấu <code>@</code> ở đây không phải một ký tự URL theo nghĩa đó, nên một request tới <code>/@du-phong</code> chỉ là một đường dẫn bình thường và rơi vào bất cứ đâu mà phép khớp bình thường đưa nó tới. Chúng tồn tại thuần tuý làm ĐÍCH cho <code>try_files</code>, <code>error_page</code> và <code>proxy_next_upstream</code>.</span></div>
+  <div class="kv"><span class="k">X-Accel-Redirect là khuôn mẫu mà chúng mở đường cho</span><span class="v">Ứng dụng của bạn kiểm quyền, rồi trả về một phản hồi RỖNG kèm <code>X-Accel-Redirect: /tep-rieng/abc.pdf</code>. Nginx phục vụ tệp từ một location <code>internal</code> — ứng dụng KHÔNG BAO GIỜ phải chảy byte, và cái tệp không có URL công khai nào. Đây là cách ĐÚNG để phục vụ tệp tải xuống có phân quyền.</span></div>
+</div>
+<pre><code><span class="tok-comment"># Tệp riêng tư: ứng dụng kiểm quyền, Nginx gửi byte</span>
+location /tep-rieng/ {
+  internal;                       <span class="tok-comment"># gọi thẳng -> 404</span>
+  alias /srv/rieng-tu/;
+}
+<span class="tok-comment"># Ứng dụng trả: X-Accel-Redirect: /tep-rieng/hop-dong.pdf</span>
+
+<span class="tok-comment"># Trang lỗi: giữ đúng mã, và đừng để lộ trang lỗi ra ngoài</span>
+error_page 404 /404.html;
+error_page 500 502 503 504 /50x.html;
+location = /404.html { internal; root /srv/loi; }
+location = /50x.html { internal; root /srv/loi; }
+
+<span class="tok-comment"># API thì trang lỗi phải là JSON, không phải HTML (Bài 7.4)</span>
+error_page 404 = @json_404;
+location @json_404 {
+  default_type application/json;
+  return 404 '{"loi":"khong tim thay"}';
+}</code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — <code>error_page 404 = @xu-ly;</code> với dấu bằng TRẦN thì lấy mã của BỘ XỬ LÝ, nên một handler JSON kết thúc bằng <code>return 404</code> thì ổn còn một cái kết thúc bằng <code>return 200</code> sẽ ÂM THẦM biến mọi cú trượt thành một cú thành công.</strong> Cái khối ở trên chạy đúng vì chính cái named location trả về <code>404</code>. Viết y hệt thế nhưng với <code>return 200 '{"loi":"..."}'</code> thì MỌI cú 404 trên API của bạn thành <code>200</code> kèm một cái thân báo lỗi — thứ mà thư viện client sẽ KHÔNG coi là lỗi, nên các thất bại trở thành những kết quả rỗng câm lặng. Nếu bạn MUỐN lấy mã của handler thì hãy nói ra bằng dấu <code>=</code> trần một cách có chủ ý; còn nếu muốn giữ mã gốc thì bỏ hẳn dấu <code>=</code> đi. Một nửa sự rối rắm quanh <code>error_page</code> là vì cả hai dạng đều trông như một lỗi gõ nhầm của dạng kia.</p>
+</div>
+
+<h3>return, và khi nào nó là đủ</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">return MÃ — phản hồi rẻ nhất có thể</span><span class="lz-lnote"><code>return 204;</code> cho một điểm cuối ghi nhận, <code>return 444;</code> để đóng mà không trả lời (Bài 1.3), <code>return 403;</code> cho một đường dẫn bị chặn. Không tệp, không upstream, không việc gì.</span></div>
+  <div class="lz-layer"><span class="lz-lname">return MÃ "chữ" — một cái thân viết thẳng</span><span class="lz-lnote">Biến được nội suy, nên <code>return 200 "\$remote_addr\\n";</code> là một điểm cuối vọng lại chạy được, viết trong một dòng. Hãy đặt <code>default_type</code> đi kèm, không thì cái thân bị công bố là <code>text/plain</code>.</span></div>
+  <div class="lz-layer"><span class="lz-lname">return MÃ URL — một cú chuyển hướng</span><span class="lz-lnote">Với một mã <code>3xx</code> và một URL thì đây là dạng chuyển hướng. Hãy ưu tiên nó hơn <code>rewrite ... permanent</code> với những đích CỐ ĐỊNH: nó rõ hơn, rẻ hơn, và không thể bị đọc nhầm thành một phép viết lại nội bộ.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Điểm cuối health nên là một cái return</span><span class="lz-lnote"><code>location = /health { access_log off; return 200 "ok\\n"; }</code>. Nó KHÔNG hề chạm tới ứng dụng của bạn, nên nó vẫn sống trong lúc ứng dụng đang khởi động lại — mà đó hoặc là ĐÚNG cái bạn muốn từ một phép dò sống-chết, hoặc là ĐÚNG cái bạn không muốn, nên hãy quyết xem cái điểm cuối này là loại nào.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Khuôn mẫu chung của bốn chỉ thị này.</strong> <code>return</code>, <code>error_page</code>, <code>internal</code> và named location đều là những cách trả lời một request mà KHÔNG rời khỏi Nginx, và cái nào cũng tương tác với bộ máy chuyển-hướng-nội-bộ ở Bài 2.5. Khi một cái trong số đó cư xử lạ thì câu hỏi ĐẦU TIÊN là rốt cuộc KHỐI NÀO đã xử lý request và lúc đó <code>\$uri</code> là gì — và một dòng <code>return 200 "\$uri"</code> tạm thời đặt vào từng khối ứng viên trả lời nhanh hơn là ngồi đọc cả cái chuỗi.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#error_page" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">nginx — error_page và internal</span><span class="lc-sub">nginx.org · Ba dạng và chính xác mỗi dạng làm gì với mã trạng thái</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return" target="_blank" rel="noopener"><span class="lc-ico">↩️</span><span class="lc-body"><span class="lc-title">nginx — return</span><span class="lc-sub">nginx.org · Mã, mã kèm chữ, và mã kèm URL</span></span></a>
+<a class="link-card" href="https://www.nginx.com/resources/wiki/start/topics/examples/xsendfile/" target="_blank" rel="noopener"><span class="lc-ico">📤</span><span class="lc-body"><span class="lc-title">nginx — X-Accel-Redirect</span><span class="lc-sub">nginx.com · Phục vụ tệp có phân quyền mà không phải chảy chúng qua ứng dụng</span></span></a>
+<a class="link-card" href="/courses/authentication/learn${REF}"><span class="lc-ico">🔑</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Authentication</span><span class="lc-sub">Phân quyền một lượt tải xuống, và vì sao cái tệp KHÔNG được có URL công khai</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Phục vụ cùng một trang lỗi theo ba cách và xem mã trạng thái đổi</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 8.5 ─────────────────────────── */
+    {
+      title: '8.5 — A real URL migration, assembled and measured|||8.5 — Một cuộc chuyển đổi URL thật, ráp lại và đem đo',
+      slug: 'nginx-8-5-chuyen-doi-url',
+      type: 'LESSON',
+      description: 'Đổi cấu trúc URL của cả một site mà không mất thứ hạng tìm kiếm và không mất người dùng cầm đường dẫn cũ. Bài này dựng cấu hình đó — ba cái map nối nhau và ĐÚNG MỘT chỗ thi hành — rồi bắn tám phép dò, và tìm ra một vòng lặp chuyển hướng mà Nginx KHÔNG chặn.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 8 · Lesson 8.5</span>
+<h2>A real URL migration, assembled and measured</h2>
+<p class="lead">Changing a site's URL structure means every old link in the world now points at nothing. The config that fixes that is the whole of this chapter working together, and it fits in about twenty lines.</p>
+
+<h3>Three maps and one enforcement point</h3>
+<pre><code><span class="tok-comment"># 1) Bảng 1-1, để trong file riêng (người không rành Nginx sửa được)</span>
+map \$uri \$dich_bang {
+  default "";
+  include /etc/nginx/chuyen-huong.map;    <span class="tok-comment"># "/gioi-thieu  /ve-chung-toi;"</span>
+}
+
+<span class="tok-comment"># 2) Quy tắc theo MẪU — nhiều URL cùng một hình dạng</span>
+map \$uri \$dich_mau {
+  default "";
+  "~^/bai-viet/(\\\\d+)\$"               "/tin/\$1";
+  "~^/danh-muc/(.+)/trang/(\\\\d+)\$"    "/c/\$1?trang=\$2";
+}
+
+<span class="tok-comment"># 3) Gộp: bảng thắng, rồi mới tới mẫu</span>
+map "\$dich_bang:\$dich_mau" \$dich {
+  default      "";
+  "~^([^:]+):" "\$1";        <span class="tok-comment"># có trong bảng -> lấy bảng</span>
+  "~^:(.+)\$"   "\$1";        <span class="tok-comment"># không có -> lấy mẫu</span>
+}
+
+server {
+  <span class="tok-comment"># 4) MỘT chỗ duy nhất thi hành. if + return: hợp lệ (Bài 8.2)</span>
+  if (\$dich) { return 301 \$dich; }
+  ...
+}</code></pre>
+<div class="out">=== Bang 1-1 ===
+/gioi-thieu             -> 301  Location: .../ve-chung-toi
+/lien-he.html           -> 301  Location: .../lien-he
+/san-pham/cu-1          -> 301  Location: .../san-pham/moi-1
+
+=== Quy tac theo mau ===
+/bai-viet/123           -> 301  Location: .../tin/123
+/danh-muc/sach/trang/4  -> 301  Location: .../c/sach?trang=4
+
+=== KHONG khop gi — di qua NGUYEN VEN ===
+/moi                    -> 200  TRANG MOI
+/tin/999                -> 200  TIN: uri=[/tin/999]
+/khong-co-gi            -> 404  khong tim thay</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The table handles the one-offs</span><span class="lz-d">Pages that moved for reasons nothing else shares. Keeping it in an included file means it can grow to thousands of rows without touching the config, and the lookup stays a single hash operation (Lesson 8.3).</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Patterns handle the structural change</span><span class="lz-d">Every article, every paginated category. One regex covers a million URLs, and the captures rebuild the new shape — including moving a path segment into a query parameter, measured in the last row.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">A third map merges them with a defined precedence</span><span class="lz-d">The composite-key idiom from Lesson 8.3. The table wins when both match, which is what you want: a specific exception should override a general rule.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">One place enforces it, at server level</span><span class="lz-d">Not scattered through the locations. Every URL is checked once, and a URL that matches nothing has an empty <code>\$dich</code> and passes through untouched — measured in the last three rows.</span></div>
+</div>
+
+<h3>The probe that found a problem</h3>
+<div class="out">Them vao bang: /rat-cu -> /gioi-thieu   (ma /gioi-thieu ĐÃ tro toi /ve-chung-toi)
+                /vong-a -> /vong-b
+                /vong-b -> /vong-a
+
+  /rat-cu   khong theo: 301 -> /gioi-thieu
+            CO theo -L : 200, so chang=2, cuoi=/ve-chung-toi     &lt;- CHUOI
+
+  /vong-a   CO theo -L : 301, so chang=5, roi curl BO CUOC
+            "qua nhieu chuyen huong"                             &lt;- VONG LAP</div>
+<div class="pitfall">
+<p><strong>Bẫy — the internal-redirect cycle limit from Lesson 2.5 does not protect you here, because these are <em>external</em> redirects.</strong> Each <code>301</code> ends the request; the loop only exists across separate requests from the client. Nginx sees two perfectly normal responses and has no way to know they form a cycle — no <code>500</code>, no error log line, nothing. The browser eventually gives up with "too many redirects" and the user sees a broken page. Chains are the milder version of the same thing: <code>/rat-cu</code> reached its destination in two hops, which works but costs an extra round trip and dilutes the search-engine signal that <code>301</code> is supposed to pass. Both are properties of the <em>table</em>, not the config, so the check belongs wherever the table is edited.</p>
+</div>
+<pre><code><span class="tok-comment"># Bộ kiểm bảng — chạy trong CI, mười hai dòng</span>
+cap = {}
+for line in open('chuyen-huong.map'):
+    p = line.strip().rstrip(';').split()
+    if len(p) == 2: cap[p[0]] = p[1]
+
+<span class="tok-comment"># Bất kỳ ĐÍCH nào cũng xuất hiện làm KHOÁ = một chuỗi hoặc một vòng</span>
+for k, v in cap.items():
+    if v in cap:
+        print(f'CHUOI: {k} -> {v} -> {cap[v]}')</code></pre>
+<div class="out">so cap: 6
+CHUOI: /rat-cu -> /gioi-thieu -> /ve-chung-toi
+CHUOI: /vong-a -> /vong-b -> /vong-a
+CHUOI: /vong-b -> /vong-a -> /vong-b</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Flatten chains at the source, do not chain redirects</span><span class="v"><code>/rat-cu</code> should point straight at <code>/ve-chung-toi</code>. The checker finds every case in one pass, and rewriting the table is mechanical — take the final destination of each chain and use it directly.</span></div>
+  <div class="kv"><span class="k">301 is cached by browsers, sometimes forever</span><span class="v">A wrong <code>301</code> is very hard to take back: browsers remember it and will not re-ask. Deploy a migration with <code>302</code> for the first day, confirm the destinations from real traffic, then switch to <code>301</code>. That one precaution costs nothing and is the only protection against a typo in a table of a thousand rows.</span></div>
+  <div class="kv"><span class="k">Keep the old URLs working, do not just delete them</span><span class="v">A <code>404</code> loses the link and the ranking; a <code>301</code> passes both to the new URL. The table is the cheapest way to keep every inbound link in the world working, and it costs one hash lookup per request.</span></div>
+  <div class="kv"><span class="k">Log the redirect so you can retire the table</span><span class="v">With <code>\$dich</code> in the access log, you can see which old URLs are still being requested a year later. The ones with no traffic can be removed; the ones with traffic tell you which external site still links to you.</span></div>
+</div>
+
+<h3>The order to run a migration in</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">1. Export the old URL list before you change anything</span><span class="lz-lnote">From the access log, the sitemap, or the database. You cannot build the table from URLs you no longer know about, and the log is the only record of what people actually request.</span></div>
+  <div class="lz-layer"><span class="lz-lname">2. Write patterns first, table second</span><span class="lz-lnote">Most of a migration is structural. Cover the shapes with two or three regexes, then put only the genuine exceptions in the table — a table with a thousand mechanical rows is a pattern nobody spotted.</span></div>
+  <div class="lz-layer"><span class="lz-lname">3. Run the chain checker, then probe every pattern</span><span class="lz-lnote">One <code>curl</code> per rule, checking the <code>Location</code> is what you meant. Eight probes covered the config above; a real migration wants one per pattern plus a sample of the table.</span></div>
+  <div class="lz-layer"><span class="lz-lname">4. Ship with 302, watch, then switch to 301</span><span class="lz-lnote">A day or a week of real traffic finds the cases you did not think of, and <code>302</code> means you can still change your mind. Switching the number afterwards is a one-character diff.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>What made this config easy to verify.</strong> Every decision is a table, and there is exactly one place that acts on the result. That means the entire migration can be checked by reading two data files and probing one directive — as opposed to a chain of <code>rewrite</code> rules spread across locations, where the answer to "what happens to this URL" requires simulating the whole file in your head. The declarative shape from Lesson 8.3 is what makes the difference, and it is most valuable exactly here, on the change that must not go wrong.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://developers.google.com/search/docs/crawling-indexing/301-redirects" target="_blank" rel="noopener"><span class="lc-ico">🔍</span><span class="lc-body"><span class="lc-title">Google Search — site moves with URL changes</span><span class="lc-sub">developers.google.com · What a 301 passes on and how long to keep them</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_map_module.html" target="_blank" rel="noopener"><span class="lc-ico">🗺️</span><span class="lc-body"><span class="lc-title">nginx — map with include</span><span class="lc-sub">nginx.org · Keeping a large table outside the config file</span></span></a>
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections" target="_blank" rel="noopener"><span class="lc-ico">↩️</span><span class="lc-body"><span class="lc-title">MDN — HTTP redirects</span><span class="lc-sub">developer.mozilla.org · Chains, loops, and what each status means to a client</span></span></a>
+<a class="link-card" href="/courses/git/learn${REF}"><span class="lc-ico">🌿</span><span class="lc-body"><span class="lc-title">CuongThai course — Git &amp; GitHub</span><span class="lc-sub">Reviewing a generated table in a pull request, and keeping the checker in CI</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Build the three-map migration, then plant a redirect loop and watch nothing catch it</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 8 · Bài 8.5</span>
+<h2>Một cuộc chuyển đổi URL thật, ráp lại và đem đo</h2>
+<p class="lead">Đổi cấu trúc URL của một site nghĩa là MỌI đường dẫn cũ trên thế giới giờ trỏ vào hư không. Cấu hình sửa chuyện đó chính là cả chương này hợp tác với nhau, và nó gọn trong chừng hai mươi dòng.</p>
+
+<h3>Ba cái map và MỘT chỗ thi hành</h3>
+<pre><code><span class="tok-comment"># 1) Bảng 1-1, để trong file riêng (người không rành Nginx sửa được)</span>
+map \$uri \$dich_bang {
+  default "";
+  include /etc/nginx/chuyen-huong.map;    <span class="tok-comment"># "/gioi-thieu  /ve-chung-toi;"</span>
+}
+
+<span class="tok-comment"># 2) Quy tắc theo MẪU — nhiều URL cùng một hình dạng</span>
+map \$uri \$dich_mau {
+  default "";
+  "~^/bai-viet/(\\\\d+)\$"               "/tin/\$1";
+  "~^/danh-muc/(.+)/trang/(\\\\d+)\$"    "/c/\$1?trang=\$2";
+}
+
+<span class="tok-comment"># 3) Gộp: bảng thắng, rồi mới tới mẫu</span>
+map "\$dich_bang:\$dich_mau" \$dich {
+  default      "";
+  "~^([^:]+):" "\$1";        <span class="tok-comment"># có trong bảng -> lấy bảng</span>
+  "~^:(.+)\$"   "\$1";        <span class="tok-comment"># không có -> lấy mẫu</span>
+}
+
+server {
+  <span class="tok-comment"># 4) MỘT chỗ duy nhất thi hành. if + return: hợp lệ (Bài 8.2)</span>
+  if (\$dich) { return 301 \$dich; }
+  ...
+}</code></pre>
+<div class="out">=== Bang 1-1 ===
+/gioi-thieu             -> 301  Location: .../ve-chung-toi
+/lien-he.html           -> 301  Location: .../lien-he
+/san-pham/cu-1          -> 301  Location: .../san-pham/moi-1
+
+=== Quy tac theo mau ===
+/bai-viet/123           -> 301  Location: .../tin/123
+/danh-muc/sach/trang/4  -> 301  Location: .../c/sach?trang=4
+
+=== KHONG khop gi — di qua NGUYEN VEN ===
+/moi                    -> 200  TRANG MOI
+/tin/999                -> 200  TIN: uri=[/tin/999]
+/khong-co-gi            -> 404  khong tim thay</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Cái bảng lo những ca LẺ</span><span class="lz-d">Những trang dời đi vì những lý do không chia sẻ với ai khác. Giữ nó trong một file include nghĩa là nó phình lên hàng nghìn dòng cũng không phải động vào cấu hình, và phép tra vẫn là MỘT thao tác băm (Bài 8.3).</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Các MẪU lo phần thay đổi CẤU TRÚC</span><span class="lz-d">Mọi bài viết, mọi trang danh mục có phân trang. MỘT biểu thức chính quy phủ cả triệu URL, và các nhóm bắt dựng lại hình dạng mới — kể cả việc chuyển một đoạn đường dẫn thành một tham số query, đo được ở dòng cuối.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Cái map thứ ba GỘP chúng lại với thứ tự ưu tiên rõ ràng</span><span class="lz-d">Chính là cách viết khoá ghép ở Bài 8.3. Cái BẢNG thắng khi cả hai cùng khớp, và đó là thứ bạn muốn: một ngoại lệ cụ thể phải đè lên một quy tắc chung.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">MỘT chỗ thi hành nó, ở tầng server</span><span class="lz-d">Không rải rác qua các location. Mọi URL được kiểm MỘT lần, và một URL không khớp gì thì có <code>\$dich</code> rỗng và đi qua NGUYÊN VẸN — đo được ở ba dòng cuối.</span></div>
+</div>
+
+<h3>Phép dò tìm ra một vấn đề</h3>
+<div class="out">Them vao bang: /rat-cu -> /gioi-thieu   (ma /gioi-thieu DA tro toi /ve-chung-toi)
+                /vong-a -> /vong-b
+                /vong-b -> /vong-a
+
+  /rat-cu   khong theo: 301 -> /gioi-thieu
+            CO theo -L : 200, so chang=2, cuoi=/ve-chung-toi     &lt;- CHUOI
+
+  /vong-a   CO theo -L : 301, so chang=5, roi curl BO CUOC
+            "qua nhieu chuyen huong"                             &lt;- VONG LAP</div>
+<div class="pitfall">
+<p><strong>Bẫy — cái giới hạn vòng chuyển-hướng-nội-bộ ở Bài 2.5 KHÔNG che chở bạn ở đây, vì đây là những cú chuyển hướng NGOÀI.</strong> Mỗi cú <code>301</code> KẾT THÚC một request; cái vòng lặp chỉ tồn tại XUYÊN QUA nhiều request riêng biệt từ phía client. Nginx nhìn thấy hai phản hồi hoàn toàn bình thường và chẳng có cách nào biết chúng tạo thành một vòng — không <code>500</code>, không dòng error log, không gì cả. Trình duyệt cuối cùng bỏ cuộc với câu "quá nhiều chuyển hướng" và người dùng thấy một trang hỏng. CHUỖI là phiên bản nhẹ hơn của cùng chuyện đó: <code>/rat-cu</code> tới được đích sau HAI chặng, nó chạy nhưng tốn thêm một vòng đi về và làm loãng cái tín hiệu mà <code>301</code> lẽ ra phải truyền cho máy tìm kiếm. Cả hai đều là tính chất của cái BẢNG chứ không phải của cấu hình, nên phép kiểm thuộc về đúng chỗ cái bảng được sửa.</p>
+</div>
+<pre><code><span class="tok-comment"># Bộ kiểm bảng — chạy trong CI, mười hai dòng</span>
+cap = {}
+for line in open('chuyen-huong.map'):
+    p = line.strip().rstrip(';').split()
+    if len(p) == 2: cap[p[0]] = p[1]
+
+<span class="tok-comment"># Bất kỳ ĐÍCH nào cũng xuất hiện làm KHOÁ = một chuỗi hoặc một vòng</span>
+for k, v in cap.items():
+    if v in cap:
+        print(f'CHUOI: {k} -> {v} -> {cap[v]}')</code></pre>
+<div class="out">so cap: 6
+CHUOI: /rat-cu -> /gioi-thieu -> /ve-chung-toi
+CHUOI: /vong-a -> /vong-b -> /vong-a
+CHUOI: /vong-b -> /vong-a -> /vong-b</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hãy LÀM PHẲNG chuỗi ngay tại nguồn, đừng nối chuyển hướng</span><span class="v"><code>/rat-cu</code> phải trỏ THẲNG tới <code>/ve-chung-toi</code>. Bộ kiểm tìm ra mọi ca trong một lượt, và việc viết lại cái bảng là máy móc — lấy đích CUỐI của mỗi chuỗi rồi dùng thẳng nó.</span></div>
+  <div class="kv"><span class="k">301 bị trình duyệt CACHE, đôi khi là mãi mãi</span><span class="v">Một cú <code>301</code> SAI thì rất khó rút lại: trình duyệt nhớ nó và sẽ KHÔNG hỏi lại. Hãy triển khai một cuộc chuyển đổi bằng <code>302</code> trong ngày đầu, xác nhận các đích từ lưu lượng thật, rồi mới đổi sang <code>301</code>. Một phòng bị ấy chẳng tốn gì và nó là tuyến bảo vệ DUY NHẤT trước một lỗi gõ nhầm trong một cái bảng nghìn dòng.</span></div>
+  <div class="kv"><span class="k">Hãy GIỮ cho URL cũ chạy được, đừng chỉ xoá chúng đi</span><span class="v">Một cú <code>404</code> làm mất cả đường dẫn lẫn thứ hạng; một cú <code>301</code> chuyển CẢ HAI sang URL mới. Cái bảng là cách rẻ nhất để giữ cho MỌI đường dẫn từ ngoài vào còn chạy được, và nó tốn một phép tra băm cho mỗi request.</span></div>
+  <div class="kv"><span class="k">Hãy ghi log cú chuyển hướng để còn RÚT cái bảng về sau</span><span class="v">Có <code>\$dich</code> trong access log thì một năm sau bạn nhìn ra được URL cũ nào vẫn còn bị gọi. Những cái không có lưu lượng thì gỡ đi được; những cái CÓ thì nói cho bạn biết site bên ngoài nào vẫn đang trỏ tới bạn.</span></div>
+</div>
+
+<h3>Thứ tự để chạy một cuộc chuyển đổi</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">1. XUẤT danh sách URL cũ TRƯỚC khi đổi bất cứ thứ gì</span><span class="lz-lnote">Từ access log, từ sitemap, hay từ cơ sở dữ liệu. Bạn không dựng nổi cái bảng từ những URL mà mình không còn biết tới, và cái log là bản ghi DUY NHẤT về những thứ người ta THẬT SỰ gọi.</span></div>
+  <div class="lz-layer"><span class="lz-lname">2. Viết MẪU trước, bảng sau</span><span class="lz-lnote">Phần lớn một cuộc chuyển đổi là CẤU TRÚC. Hãy phủ các hình dạng bằng hai ba biểu thức chính quy, rồi chỉ bỏ những NGOẠI LỆ thật sự vào bảng — một cái bảng có nghìn dòng máy móc chính là một cái mẫu mà chẳng ai nhận ra.</span></div>
+  <div class="lz-layer"><span class="lz-lname">3. Chạy bộ kiểm chuỗi, rồi DÒ từng mẫu</span><span class="lz-lnote">Mỗi quy tắc một lệnh <code>curl</code>, kiểm xem cái <code>Location</code> có đúng ý không. Tám phép dò phủ hết cấu hình ở trên; một cuộc chuyển đổi thật thì muốn mỗi mẫu một phép dò cộng một mẫu ngẫu nhiên từ cái bảng.</span></div>
+  <div class="lz-layer"><span class="lz-lname">4. Ship bằng 302, theo dõi, rồi mới đổi sang 301</span><span class="lz-lnote">Một ngày hay một tuần lưu lượng thật sẽ tìm ra những ca bạn không nghĩ tới, và <code>302</code> nghĩa là bạn vẫn đổi ý được. Đổi cái số ấy sau đó là một diff MỘT ký tự.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Cái gì làm cho cấu hình này DỄ kiểm.</strong> Mọi quyết định đều là một cái BẢNG, và có ĐÚNG MỘT chỗ hành động theo kết quả. Nghĩa là cả cuộc chuyển đổi kiểm được bằng cách đọc hai file dữ liệu và dò một chỉ thị — trái ngược với một chuỗi luật <code>rewrite</code> rải khắp các location, nơi câu trả lời cho "cái URL này sẽ ra sao" đòi bạn phải mô phỏng cả cái file trong đầu. Hình dạng KHAI BÁO ở Bài 8.3 mới là thứ tạo ra khác biệt, và nó có giá trị nhất đúng ở đây, trên cái thay đổi KHÔNG ĐƯỢC PHÉP sai.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://developers.google.com/search/docs/crawling-indexing/301-redirects" target="_blank" rel="noopener"><span class="lc-ico">🔍</span><span class="lc-body"><span class="lc-title">Google Search — dời site kèm đổi URL</span><span class="lc-sub">developers.google.com · Một cú 301 truyền được cái gì và nên giữ chúng bao lâu</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_map_module.html" target="_blank" rel="noopener"><span class="lc-ico">🗺️</span><span class="lc-body"><span class="lc-title">nginx — map với include</span><span class="lc-sub">nginx.org · Giữ một cái bảng lớn nằm ngoài file cấu hình</span></span></a>
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections" target="_blank" rel="noopener"><span class="lc-ico">↩️</span><span class="lc-body"><span class="lc-title">MDN — Chuyển hướng HTTP</span><span class="lc-sub">developer.mozilla.org · Chuỗi, vòng lặp, và mỗi mã trạng thái nói gì với client</span></span></a>
+<a class="link-card" href="/courses/git/learn${REF}"><span class="lc-ico">🌿</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Git &amp; GitHub</span><span class="lc-sub">Rà soát một cái bảng sinh ra trong pull request, và giữ bộ kiểm trong CI</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Dựng cuộc chuyển đổi ba-map, rồi cài một vòng lặp chuyển hướng và xem chẳng gì bắt được nó</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 8.6 ─────────────────────────── */
+    {
+      title: '8.6 — Quiz: rewriting and mapping|||8.6 — Quiz: viết lại và ánh xạ',
+      slug: 'nginx-8-6-quiz',
+      type: 'QUIZ',
+      description: 'Tám câu về bốn cái cờ của rewrite, ba kiểu hỏng của if, bốn kiểu khoá của map, ba dạng error_page, và cái vòng lặp chuyển hướng mà không gì chặn được.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 8 · Lesson 8.6</span>
+<h2>Quiz: rewriting and mapping</h2>
+<p class="lead">Eight questions. Two of them are about a config line that does nothing and a config line that breaks a file server, both of which look completely reasonable.</p>
+<div class="callout">
+<p><strong>What this chapter established.</strong> <code>rewrite</code>'s four flags do four different things: <code>last</code> restarts location matching (<code>$uri</code> changes, <code>$request_uri</code> does not), <code>redirect</code> and <code>permanent</code> send <code>302</code> and <code>301</code> to the client, and no flag lets subsequent rewrites keep running — while <code>break</code> stops the entire rewrite module, so a <code>return</code> written after it never executes, proven by two blocks producing identical output (8.1). <code>if</code> creates a nested location, which is why <code>add_header</code> inside one discards the outer list and why <code>try_files</code> plus an <code>if</code> turned a working <code>200</code> into a <code>404</code> on the addition of <code>?x=1</code> (8.2). <code>map</code> does all of it safely: exact keys in a hash, regex keys with captures, hostname wildcards, chaining, and a composite key standing in for the <code>&amp;&amp;</code> that does not exist (8.3). <code>error_page</code> has three forms giving <code>404</code>, <code>200</code> and <code>200</code> from the same page, and <code>internal</code> plus named locations make blocks that only internal redirects can reach (8.4). And a redirect table with a cycle in it produces a loop that Nginx cannot detect, because external redirects end the request (8.5).</p>
+</div>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 8 · Bài 8.6</span>
+<h2>Quiz: viết lại và ánh xạ</h2>
+<p class="lead">Tám câu. Hai câu nói về một dòng cấu hình CHẲNG LÀM GÌ và một dòng cấu hình PHÁ một máy chủ tệp, mà cả hai đều trông hoàn toàn hợp lý.</p>
+<div class="callout">
+<p><strong>Chương này đã xác lập điều gì.</strong> Bốn cái cờ của <code>rewrite</code> làm bốn việc khác nhau: <code>last</code> chạy lại phép khớp location (<code>$uri</code> đổi, <code>$request_uri</code> không), <code>redirect</code> và <code>permanent</code> gửi <code>302</code> và <code>301</code> ra client, còn không cờ thì các rewrite đứng sau vẫn chạy tiếp — trong khi <code>break</code> DỪNG cả module rewrite, nên một <code>return</code> viết sau nó KHÔNG BAO GIỜ chạy, chứng minh bằng hai khối cho ra kết quả y hệt (8.1). <code>if</code> tạo ra một location LỒNG, và đó là lý do <code>add_header</code> nằm trong nó vứt bỏ danh sách bên ngoài, và là lý do <code>try_files</code> đi cùng một cái <code>if</code> đã biến một cú <code>200</code> đang chạy tốt thành <code>404</code> chỉ vì thêm <code>?x=1</code> (8.2). <code>map</code> làm được tất cả một cách an toàn: khoá chính xác nằm trong bảng băm, khoá regex có nhóm bắt, ký tự đại diện cho tên miền, nối map, và một khoá GHÉP đứng thay cho phép <code>&amp;&amp;</code> vốn không tồn tại (8.3). <code>error_page</code> có ba dạng cho ra <code>404</code>, <code>200</code> và <code>200</code> từ cùng một trang, còn <code>internal</code> cộng named location tạo ra những khối mà chỉ chuyển hướng nội bộ mới chạm tới được (8.4). Và một bảng chuyển hướng có vòng lặp bên trong sinh ra một cái vòng mà Nginx KHÔNG phát hiện nổi, vì chuyển hướng ngoài thì KẾT THÚC request (8.5).</p>
+</div>
+</div>
+`,
+      quiz: {
+        timeLimitSeconds: 720,
+        questions: [
+          {
+            question: 'location /x/ { rewrite ^ /y break; return 200 "xin chao"; } — what does a request for /x/abc return?|||location /x/ { rewrite ^ /y break; return 200 "xin chao"; } — một request tới /x/abc trả về gì?',
+            options: [
+              '200 with "xin chao"|||200 kèm "xin chao"',
+              'Whatever /y resolves to in this block — break stops the rewrite module, and return is a rewrite-module directive, so it never runs|||Bất cứ thứ gì /y giải ra được TRONG khối này — break dừng module rewrite, mà return là một chỉ thị của module rewrite, nên nó không bao giờ chạy',
+              '301 to /y|||301 tới /y',
+              'A configuration error at startup|||Một lỗi cấu hình lúc khởi động',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'After rewrite ^/cu/(.*)$ /moi/$1 last;, what are $uri and $request_uri?|||Sau lệnh rewrite ^/cu/(.*)$ /moi/$1 last;, $uri và $request_uri là gì?',
+            options: [
+              'Both become /moi/...|||Cả hai đều thành /moi/...',
+              '$uri becomes /moi/... and $request_uri keeps what the client sent — which is why access logs stay honest|||$uri thành /moi/... còn $request_uri GIỮ thứ client đã gửi — và đó là lý do access log vẫn thật thà',
+              'Both keep /cu/...|||Cả hai đều giữ /cu/...',
+              '$request_uri becomes /moi/... and $uri keeps /cu/...|||$request_uri thành /moi/... còn $uri giữ /cu/...',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'A location has add_header X-A. You add if ($arg_x = 1) { add_header X-B; }. What does a request with ?x=1 receive?|||Một location có add_header X-A. Bạn thêm if ($arg_x = 1) { add_header X-B; }. Một request kèm ?x=1 nhận được gì?',
+            options: [
+              'Both X-A and X-B|||Cả X-A lẫn X-B',
+              'Only X-B — the if is a nested location, so its add_header list replaces the outer one entirely|||CHỈ X-B — cái if là một location LỒNG, nên danh sách add_header của nó THAY THẾ hoàn toàn cái bên ngoài',
+              'Only X-A|||Chỉ X-A',
+              'Neither|||Không cái nào',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'A location serves a file with try_files and also has an if block adding a header. What did adding ?x=1 to the URL do?|||Một location phục vụ một tệp bằng try_files và có thêm một khối if để thêm header. Việc thêm ?x=1 vào URL đã làm gì?',
+            options: [
+              'Nothing; the file is still served|||Không gì cả; tệp vẫn được phục vụ',
+              'It returned 404 — the request was handled by the nested if location, which has no try_files and therefore no content handler|||Nó trả về 404 — request được xử lý bởi cái location LỒNG của if, thứ không có try_files nên không có bộ xử lý nội dung nào',
+              'It returned 500|||Nó trả về 500',
+              'The header was ignored|||Cái header bị bỏ qua',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Which if bodies are safe inside a location?|||Thân if nào thì AN TOÀN khi nằm trong một location?',
+            options: [
+              'Any directive that is valid in a location|||Bất kỳ chỉ thị nào hợp lệ trong một location',
+              'Only return and rewrite — everything else is a bug waiting for the right request to match|||Chỉ return và rewrite — mọi thứ khác đều là một con lỗi đang chờ đúng cái request khớp nó',
+              'Only add_header|||Chỉ add_header',
+              'if is never safe anywhere|||if không bao giờ an toàn ở đâu cả',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Nginx has no &&. How do you express "both A and B are true" with map?|||Nginx không có &&. Diễn đạt "cả A lẫn B đều đúng" bằng map thế nào?',
+            options: [
+              'Nest two map blocks|||Lồng hai khối map vào nhau',
+              'Build a composite key: map "$a:$b" $ket_qua { "~^co:co$" 1; } — with a separator that cannot appear in either value|||Dựng một khoá GHÉP: map "$a:$b" $ket_qua { "~^co:co$" 1; } — với một dấu ngăn KHÔNG THỂ xuất hiện trong hai giá trị kia',
+              'Use two if blocks|||Dùng hai khối if',
+              'It is not possible|||Không làm được',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'error_page 404 /trang-loi; versus error_page 404 = /trang-loi; — what differs?|||error_page 404 /trang-loi; và error_page 404 = /trang-loi; — khác nhau chỗ nào?',
+            options: [
+              'Nothing; the equals sign is decorative|||Không gì cả; dấu bằng chỉ để trang trí',
+              'Without = the client still gets 404; with a bare = the status comes from the handling location, which returned 200|||Không có = thì client vẫn nhận 404; có dấu = TRẦN thì mã lấy từ location xử lý, mà nó trả về 200',
+              'The equals sign makes it a redirect|||Dấu bằng biến nó thành một cú chuyển hướng',
+              'Without = the error page is not shown|||Không có = thì trang lỗi không hiện ra',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Your redirect table contains /a → /b and /b → /a. What does Nginx do?|||Bảng chuyển hướng của bạn có /a → /b và /b → /a. Nginx làm gì?',
+            options: [
+              'Returns 500 with "rewrite or internal redirection cycle"|||Trả 500 kèm "rewrite or internal redirection cycle"',
+              'Nothing — these are external 301s, each ending its own request, so Nginx sees two normal responses and the browser is what gives up|||Không gì cả — đây là các cú 301 NGOÀI, mỗi cái kết thúc request của nó, nên Nginx thấy hai phản hồi bình thường và trình duyệt mới là bên bỏ cuộc',
+              'Refuses to load the config|||Từ chối nạp cấu hình',
+              'Serves /a directly|||Phục vụ thẳng /a',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+        ],
+      },
+    },
   ],
 };

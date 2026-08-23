@@ -33,7 +33,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 6 | `git` | `git` — Git & GitHub | ✅ **XONG** (14 mục · 63 bài · 889k · TB 14.109) |
 | 7 | `linux-bash` | `linux-bash` — Linux & Bash | ✅ **XONG** (13 mục · 69 bài · 1.660k · TB 24.064) |
 | 8 | `docker` | `docker` — Docker | ✅ **XONG** (13 mục · 76 bài · 1.584k · TB 20.842) |
-| 9 | `redis` | — | ❌ **THIẾU** |
+| 9 | `redis` | `redis` — Redis | ✅ **XONG** (13 mục · 76 bài · 1.582k · TB 20.819) |
 | 10 | `prisma-orm` | — | ❌ **THIẾU** |
 | 11 | `authentication` | — | ❌ **THIẾU** |
 | 12 | `nginx` | — | ❌ **THIẾU** |
@@ -50,7 +50,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 23 | `domains-dns-tls` | — | ❌ **THIẾU** |
 | 24 | `cuongthai-roadmap` | *(lộ trình, không phải khoá)* | — bỏ qua |
 
-**Tổng: 8 khoá đã có · 15 khoá còn thiếu.**
+**Tổng: 9 khoá đã có · 14 khoá còn thiếu.**
 
 ### Thứ tự ưu tiên (đã chốt)
 
@@ -162,6 +162,11 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 | 22/08/2026 | Khoá Docker — Chương 7 (dữ liệu), 8 (mạng), 9 (Compose) | 58 bài · 1.227k ký tự · 124 sơ đồ |
 | 22/08/2026 | Khoá Docker — Chương 10 (stack thật), 11 (production) | 70 bài · 1.467k ký tự · 148 sơ đồ |
 | 22/08/2026 | **Khoá Docker — HOÀN THÀNH** (Chương 12, chẩn đoán + kết khoá) | **76 bài · 1.584k ký tự · TB 20.842 · 162 sơ đồ · 454 nguồn · 130 bẫy · 13 quiz · đạt mọi sàn** |
+| 22/08/2026 | Khoá Redis — Mục 0 → Chương 3 | 28 bài · 563k ký tự · 68 sơ đồ |
+| 23/08/2026 | Khoá Redis — Chương 4 (list/set/zset), 5 (hash + HEXPIRE) | 40 bài · 818k ký tự · 100 sơ đồ |
+| 23/08/2026 | Khoá Redis — Chương 6 (bộ đệm), 7 (nguyên tử), 8 (Pub/Sub & Stream) | 52 bài · 1.077k ký tự · 132 sơ đồ |
+| 23/08/2026 | Khoá Redis — Chương 9 (bộ nhớ/lưu trữ), 10 (vận hành/ACL), 11 (mở rộng) | 70 bài · 1.457k ký tự · 182 sơ đồ |
+| 23/08/2026 | **Khoá Redis — HOÀN THÀNH** (Chương 12, chẩn đoán + kết khoá) | **76 bài · 1.582k ký tự · TB 20.819 · 196 sơ đồ · 386 nguồn · 124 bẫy · 13 quiz · đạt mọi sàn** |
 
 
 ### Khoá Linux & Bash — XONG (22/08/2026)
@@ -189,6 +194,26 @@ production** — đó là luận điểm xuyên suốt khoá.
 
 Còn hai bước phải chạy ở máy nhà — xem §6.
 
+### Khoá Redis — XONG (23/08/2026)
+
+13 mục (Mục 0 + Chương 1–12), **76 bài · 1.582k ký tự · TB 20.819 ký tự/bài ·
+196 sơ đồ `lz-*` · 386 thẻ nguồn học · 124 bẫy · 574 khối code ·
+460 khối output · 13 quiz · 126 liên kết thực hành Code Lab**.
+
+Đường đi: mô hình thực thi (một luồng, RESP, pipeline) → khoá & TTL → chuỗi,
+bitmap, HyperLogLog → list/set/sorted set → hash & mô hình hoá đối tượng →
+làm bộ đệm cho đúng → tính nguyên tử (MULTI/WATCH/Lua/Function) → Pub/Sub &
+Stream → bộ nhớ, đẩy khoá, lưu lâu dài → vận hành & ACL → nhân bản, Sentinel,
+Cluster → chẩn đoán.
+
+**KHÔNG trùng Node.js Chương 12** (Redis, 125k ký tự): khoá đó dạy DÙNG Redis
+từ phía ứng dụng Node; khoá này dạy CHÍNH Redis. Luận điểm xuyên suốt: gần
+như mọi sự cố Redis đều suy ra từ đúng một sự thật — *một luồng, mỗi lúc một
+lệnh* — và Redis sẽ làm chính xác điều bạn bảo, kể cả những điều có sức phá
+huỷ, vì nó không có ràng buộc, không có quay lui và không có lược đồ.
+
+Còn hai bước phải chạy ở máy nhà — xem §6.
+
 ---
 
 ## 6. Việc chưa chạy được từ sandbox (áp cho MỌI khoá mới)
@@ -207,7 +232,7 @@ node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
 node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ```
 
-**Đang chờ chạy — ba khoá:**
+**Đang chờ chạy — bốn khoá:**
 
 ```bash
 # Git & GitHub
@@ -224,10 +249,16 @@ node scripts/course-seed.mjs --file ./content/courses/linux-bash.mjs --apply
 docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
   --slug docker --icon docker --color 2496ED --title "Docker" --subtitle "Container → Production"
 node scripts/course-seed.mjs --file ./content/courses/docker.mjs --apply
+
+# Redis
+docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+  --slug redis --icon redis --color DC382D --title "Redis" --subtitle "Cache → Production"
+node scripts/course-seed.mjs --file ./content/courses/redis.mjs --apply
 ```
 
-⚠️ Cả hai khoá dùng **category mới `devops`** (`DevOps & Vận hành`), chưa từng có trong
-DB — lần seed đầu sẽ thêm một mục lọc mới trên trang `/courses`.
+⚠️ **Linux & Bash** với **Docker** dùng **category mới `devops`** (`DevOps & Vận hành`),
+chưa từng có trong DB — lần seed đầu sẽ thêm một mục lọc mới trên trang `/courses`.
+**Redis** dùng category `databases` đã có sẵn (chung với PostgreSQL).
 
 ---
 

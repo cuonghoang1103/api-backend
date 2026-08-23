@@ -97,6 +97,108 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/cv/target', nap: () => import('@/app/cv/target/page') },
   { mau: '/cv/xem', nap: () => import('@/app/cv/xem/page') },
   { mau: '/cv/builder/:id', nap: () => import('@/app/cv/builder/[id]/page') },
+
+  /* ═══ MƯỜI CÂY CÒN LẠI — 22/08/2026 ═══════════════════════════
+     Đo trước khi làm: 60 tệp · 13.928 dòng · 39 chỗ dính Next.js, TOÀN BỘ là
+     `next/link` và `next/navigation`. KHÔNG có `next/image`, KHÔNG có
+     `next/dynamic` — nên không phải viết shim nào mới.
+
+     ⚠️ BỐN chỗ TĨNH ĐỤNG ĐỘNG ở đây, nhiều hơn mọi cây trước cộng lại. Đánh
+     dấu từng chỗ bên dưới; đảo thứ tự là trang tĩnh bị đọc thành tham số động
+     và hỏng CÂM — đúng như `/language/notebook` đã dạy. */
+
+  /* ── Maker Lab ── */
+  { mau: '/maker-lab', nap: () => import('@/app/maker-lab/page') },
+  { mau: '/maker-lab/:slug', nap: () => import('@/app/maker-lab/[slug]/page') },
+
+  /* ── Xưởng nội dung ── */
+  { mau: '/creator', nap: () => import('@/app/creator/page') },
+  { mau: '/creator/calendar', nap: () => import('@/app/creator/calendar/page') },
+  { mau: '/creator/ideas', nap: () => import('@/app/creator/ideas/page') },
+  { mau: '/creator/list', nap: () => import('@/app/creator/list/page') },
+  { mau: '/creator/pipeline', nap: () => import('@/app/creator/pipeline/page') },
+  { mau: '/creator/projects/:id', nap: () => import('@/app/creator/projects/[id]/page') },
+
+  /* ── Dự án ── */
+  { mau: '/projects', nap: () => import('@/app/projects/page') },
+  // ⚠️ TĨNH TRƯỚC ĐỘNG: `/projects/search` cùng hình dạng với `/projects/:slug`.
+  { mau: '/projects/search', nap: () => import('@/app/projects/search/page') },
+
+  /* ── Kho mã ── */
+
+  /* ── Exp Hub ── */
+  { mau: '/exp-hub', nap: () => import('@/app/exp-hub/page') },
+
+  /* ── Trò chơi ── */
+  // ⚠️ TĨNH TRƯỚC ĐỘNG: đường dưới cùng hình dạng với `/games/:slug`.
+  /*
+   * ⛔ `/games/love-me` CỐ Ý KHÔNG có ở đây (24/08/2026, người dùng quyết).
+   *
+   * Trang đó chỉ `redirect` sang một FILE HTML TĨNH
+   * (`frontend/public/games/love-me-game/love-me.html`, 1,9MB, 5 tệp). Trong
+   * app nó không có chỗ chứa hợp lệ: desktop không gói `frontend/public`, CSP
+   * đặt `frame-src 'none'`, trình duyệt trong app chỉ nhận http/https, còn
+   * `window.location` thì điều hướng CẢ renderer ra khỏi app.
+   *
+   * Đường duy nhất làm nó chạy trong app là nới `frame-src` — mở đúng lớp đang
+   * giữ mọi thứ khác, cho một game nhỏ. Không đáng.
+   *
+   * Bấm vào nó vẫn ÊM: `/games` thuộc cây web nên chủ cây được dựng, rồi
+   * `TrangWebTheoTuyen` hiện "Không tìm thấy" KÈM NÚT QUAY VỀ.
+   */
+
+  /* ── Tài chính (13 màn, nhiều nhất) ── */
+  { mau: '/finance', nap: () => import('@/app/finance/page') },
+  { mau: '/finance/currency', nap: () => import('@/app/finance/currency/page') },
+  { mau: '/finance/debts', nap: () => import('@/app/finance/debts/page') },
+  { mau: '/finance/expenses', nap: () => import('@/app/finance/expenses/page') },
+  { mau: '/finance/income', nap: () => import('@/app/finance/income/page') },
+  { mau: '/finance/investments', nap: () => import('@/app/finance/investments/page') },
+  { mau: '/finance/reports', nap: () => import('@/app/finance/reports/page') },
+  { mau: '/finance/savings', nap: () => import('@/app/finance/savings/page') },
+  { mau: '/finance/wallets', nap: () => import('@/app/finance/wallets/page') },
+  // ⚠️ TĨNH TRƯỚC ĐỘNG: `/finance/debts/calendar` cùng hình dạng với
+  //    `/finance/debts/:id` — cả hai đều ba đoạn.
+  { mau: '/finance/debts/calendar', nap: () => import('@/app/finance/debts/calendar/page') },
+  { mau: '/finance/expenses/recurring', nap: () => import('@/app/finance/expenses/recurring/page') },
+  { mau: '/finance/debts/:id', nap: () => import('@/app/finance/debts/[id]/page') },
+  { mau: '/finance/wallets/:id', nap: () => import('@/app/finance/wallets/[id]/page') },
+
+
+  /* ⛔⛔ TÁM TRANG BỊ GỠ — chúng là SERVER COMPONENT (24/08/2026) ────────────
+   *
+   *   /repos · /repos/:id · /repos/tag/:slug          (CẢ cây)
+   *   /games · /games/leaderboard · /games/:slug      (CẢ cây)
+   *   /projects/:slug · /exp-hub/:slug                (trang chi tiết)
+   *
+   * Chúng khai `export default async function` — component BẤT ĐỒNG BỘ, thứ
+   * chỉ Next chạy được ở phía MÁY CHỦ. Dựng chúng trong cây React phía client
+   * cho ra `Minified React error #31 … [object Promise]`: React nhận một lời
+   * hứa ở chỗ đáng lẽ là phần tử.
+   *
+   * Đây KHÔNG phải lỗ hổng shim — không shim nào vá được. Muốn đưa vào app thì
+   * phải VIẾT LẠI chúng thành client component, và việc đó đổi cả hành vi trên
+   * web (mất kết xuất phía máy chủ ⇒ ảnh hưởng SEO), nên là quyết định riêng.
+   *
+   * ⚠️ Cách đo của tôi đã bỏ sót chuyện này: tôi đếm import từ `next/*` mà
+   * KHÔNG hỏi "trang này là server hay client component" — câu hỏi cơ bản hơn.
+   * Đếm bằng: grep -L "use client" rồi grep "export default async".
+   *
+   * `/projects` và `/exp-hub` GIỮ trang danh sách (chúng là client component
+   * và chạy tốt); bấm vào một mục thì rơi vào "Không tìm thấy" kèm nút quay về.
+   */
+
+  /* ── Diễn đàn ── */
+  { mau: '/forum', nap: () => import('@/app/forum/page') },
+  { mau: '/forum/:id', nap: () => import('@/app/forum/[id]/page') },
+
+  /* ── Đã lưu ── */
+  { mau: '/saved', nap: () => import('@/app/saved/page') },
+
+  /* ── Trang cá nhân ── */
+  { mau: '/profile', nap: () => import('@/app/profile/page') },
+  { mau: '/profile/:id', nap: () => import('@/app/profile/[id]/page') },
+  { mau: '/profile/:id/v2', nap: () => import('@/app/profile/[id]/v2/page') },
 ];
 
 export interface KhopTuyen {
@@ -129,7 +231,11 @@ export function khopTuyenWeb(duong: string): KhopTuyen | null {
 }
 
 /** Gốc của những cây route mà trang web sở hữu — dùng cho router của app. */
-export const GOC_WEB: readonly string[] = ['/language', '/roadmap', '/interview', '/cv'];
+export const GOC_WEB: readonly string[] = [
+  '/language', '/roadmap', '/interview', '/cv',
+  '/maker-lab', '/creator', '/projects', '/exp-hub',
+  '/finance', '/forum', '/saved', '/profile',
+];
 
 /** Đường dẫn này có thuộc một cây web không (kể cả các trang con động). */
 export function thuocCayWeb(duong: string): boolean {

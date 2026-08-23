@@ -382,6 +382,67 @@ ok "Đã tráo sang ảnh ${SHA}"
 info "Chạy migration..."
 sshvps "docker exec ${COMPOSE_PROJECT}_backend npx prisma migrate deploy 2>&1 | tail -5" || warn "migrate có lỗi — kiểm tay"
 
+# ─── 6b. Seed nội dung (Step 3.5→3.17 của deploy.sh) ───────────────────
+#
+# THIẾU HẲN cho tới 24/08/2026: file này chỉ build+tráo+migrate, chưa từng
+# seed nội dung. Hậu quả: content/exams/*.mjs (và ~17 loại khác — academy,
+# courses, deepdives, exphub, interview, feed-series, repos, Chinese/Japanese/
+# English...) nằm im trong ảnh Docker suốt từ 18/08 (lúc file này thành đường
+# deploy chuẩn) tới nay dù code vẫn "deploy xong" đều đặn — log seed cũ nhất
+# trên VPS (.deploy-logs/*.log) đứng yên đúng mốc 18/08 00:47-00:51. Phát
+# hiện khi `/exam` thiếu cả SWR302 lẫn FER202/ITE302c dù đã seed+deploy nhiều
+# đợt trước đó.
+#
+# Lấy khối Step 3.5→3.17 THẲNG từ deploy.sh của chính commit đang deploy —
+# KHÔNG chép tay (chép tay là đúng kiểu lệch bản mà danh sách route smoke-test
+# ở dưới đã né bằng cách trích động; áp dụng lại nguyên tắc đó ở đây, nên
+# Step 3.18 sau này thêm vào deploy.sh sẽ TỰ ĐỘNG được deploy-nha.sh chạy
+# theo, không cần sửa file này). `$DC exec -T backend sh -c "..."` cần cwd có
+# docker-compose.yml nên phải cd vào REPO_DIR trên VPS trước — file đó hiếm
+# khi đổi cấu trúc dù cây REPO_DIR có thể cũ hơn commit đang deploy (không
+# sao: mọi lệnh seed chạy TRONG container, dùng content/scripts ảnh mới vừa
+# tráo, không đụng gì tới cây REPO_DIR).
+info "Chạy seed nội dung (Step 3.5→3.17 từ deploy.sh)..."
+KHOI_SEED_FILE=$(mktemp)
+sed -n '/^SEED_ERR_RE=/,/^report_seed "Repo Hub seed"/p' deploy.sh > "$KHOI_SEED_FILE"
+if [ ! -s "$KHOI_SEED_FILE" ]; then
+    warn "Không trích được khối seed từ deploy.sh — BỎ QUA (kiểm tay: ssh VPS rồi docker exec ${COMPOSE_PROJECT}_backend node scripts/academy-seed-exam.mjs --file content/exams/<file>.mjs --apply)"
+else
+    # ⚠️ KHÔNG `sshvps "bash -s" < file` hay `<<EOF`: một dòng bên trong gọi
+    # `docker compose exec -T backend sh -c "..."` — tiến trình con đó THỪA
+    # HƯỞNG cùng stdin đang là luồng script chưa đọc hết, nên nó có thể tranh
+    # đọc byte với chính bash đang phân tích script, khiến bash gặp EOF sớm và
+    # thoát mã 0 giữa chừng KHÔNG BÁO LỖI (đúng lỗi bắt được khi thử thật lần
+    # đầu 24/08: chỉ in đúng 1 dòng info rồi dừng câm). Ghi ra FILE trên VPS
+    # rồi chạy bằng đường dẫn — bash đọc script từ file, không tranh stdin với
+    # tiến trình con nào cả.
+    {
+        cat <<'HEADER'
+set -u
+info() { echo "[$(date '+%H:%M:%S')] [INFO]  $*"; }
+ok()   { echo "[$(date '+%H:%M:%S')] [✅ OK]  $*"; }
+warn() { echo "[$(date '+%H:%M:%S')] [WARN]  $*"; }
+HEADER
+        echo "DC=\"docker compose -p ${COMPOSE_PROJECT}\""
+        echo 'REPO_DIR="/home/deployer/repo"'
+        echo 'cd "$REPO_DIR" || exit 1'
+        cat "$KHOI_SEED_FILE"
+    } | sshvps "cat > /tmp/deploy-nha-seed.sh"
+    rm -f "$KHOI_SEED_FILE"
+    sshvps "bash /tmp/deploy-nha-seed.sh; rm -f /tmp/deploy-nha-seed.sh" 2>&1 | tee /tmp/seed-nha.log
+    # ⚠️ KHÔNG `|| echo 0`: `grep -c` LUÔN in ra một dòng đếm (kể cả "0") dù
+    # thoát mã 1 khi không khớp dòng nào — thêm `|| echo 0` in ĐÈ THÊM một
+    # dòng "0" nữa, biến kết quả thành "0\n0" và làm `[ -gt 0 ]` bên dưới lỗi
+    # "integer expression expected" (vô hại nhưng lộ trong log, bắt được ở
+    # lần deploy thật đầu tiên 24/08/2026).
+    SO_LOI_SEED=$(grep -c '\[WARN\]' /tmp/seed-nha.log 2>/dev/null)
+    if [ "${SO_LOI_SEED:-0}" -gt 0 ]; then
+        warn "Seed nội dung có ${SO_LOI_SEED} bước báo lỗi — không chặn deploy, xem chi tiết ở trên hoặc /tmp/seed-nha.log trên máy chạy script này"
+    else
+        ok "Seed nội dung xong (không bước nào báo lỗi)"
+    fi
+fi
+
 info "Chờ backend khoẻ..."
 KHOE=false
 for i in $(seq 1 18); do

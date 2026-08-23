@@ -71,6 +71,51 @@ const nguoi = (i) => ({ id: i, username: `nguoi${i}`, displayName: `Người dù
 const mang = (n, f) => Array.from({ length: n }, (_, i) => f(i + 1));
 
 const BANG = [
+    /* ── Bốn cây port 24/08/2026 ──
+       Endpoint đo bằng cách BẮT LỜI GỌI THẬT (`page.on('request')`) chứ không
+       đọc mã đoán. Xếp mẫu CỤ THỂ trước: `/admin/content/projects` cũng khớp
+       mẫu `/projects` phía dưới. */
+    [/\/maker-lab\/projects/, () => mang(6, (i) => ({ id: i, slug: `du-an-${i}`,
+        name: `Dự án phần cứng số ${i}`, title: `Dự án phần cứng số ${i}`,
+        summary: 'Mô tả ngắn đủ dài để tràn sang dòng thứ hai như thật.',
+        description: 'Mô tả ngắn.',
+        /* ⚠️ Khớp `STATUS_META` + `BOARD_LABEL` trong `app/maker-lab/page.tsx`. */
+        status: ['PLANNING', 'SOURCING', 'BUILDING', 'TESTING', 'LIVE', 'ARCHIVED'][i - 1],
+        board: ['ESP32_S3', 'ESP8266', 'RP2040', 'STM32', 'ARDUINO', 'OTHER'][i - 1], coverUrl: null, thumbnailUrl: null,
+        technologies: ['ESP32', 'PlatformIO'], tags: ['ESP32'], updatedAt: '2026-08-20T00:00:00Z' }))],
+    [/\/admin\/content\/projects/, () => mang(5, (i) => ({ id: i, slug: `bai-${i}`,
+        title: `Dự án nội dung số ${i}`, /* ⚠️ Giá trị PHẢI khớp `CONTENT_STATUS_META` trong `lib/studio-meta.ts` —
+           trang tra `META[p.status].emoji`, sai khoá là `undefined.emoji`. */
+        status: ['IDEA', 'SCRIPTING', 'FILMING', 'EDITING', 'PUBLISHED'][i - 1],
+        /* ⚠️ `TypePill` tra `CONTENT_TYPE_META[type].emoji` — THIẾU HẲN trường
+           này thì `undefined.emoji`. Giá trị lấy từ `lib/studio-meta.ts`. */
+        type: ['LECTURE', 'TUTORIAL', 'VLOG', 'SHORTS', 'REVIEW'][i - 1],
+        platform: 'YOUTUBE', publishAt: '2026-09-01T00:00:00Z', thumbnailUrl: null,
+        tags: ['ai'], updatedAt: '2026-08-20T00:00:00Z', notes: null }))],
+    [/\/finance\/dashboard/, () => ({ month: '2026-08',
+        totalBalance: '125000000', netWorth: '180000000', totalRemainingDebt: '20000000',
+        incomeThisMonth: '30000000', expenseThisMonth: '18500000', savingsThisMonth: '11500000',
+        spendingVsIncomePct: 62, hasUnconvertedUsd: false,
+        fx: { rate: '25400', updatedAt: '2026-08-22T00:00:00Z' },
+        wallets: mang(4, (i) => ({ id: i, name: `Ví số ${i}`, type: 'BANK', currency: 'VND',
+          balance: `${i * 10000000}`, icon: null, color: '#22c55e', isDefault: i === 1 })),
+        budgets: mang(5, (i) => ({ category: { id: i, name: `Nhóm chi ${i}`, icon: null, color: '#f59e0b' },
+          budget: '5000000', used: `${i * 800000}`, ratio: i * 0.18, status: 'OK' })),
+        cashflow: mang(12, (i) => ({ date: `2026-08-${String(i).padStart(2, '0')}`,
+          income: `${i * 200000}`, expense: `${i * 150000}` })),
+        expenseByCategory: mang(6, (i) => ({
+          category: { id: i, name: `Nhóm chi tiêu số ${i}`, icon: null, color: '#ef4444' },
+          total: `${i * 900000}` })),
+        upcomingPayments: mang(3, (i) => ({ id: i, debtId: i, lenderName: `Bên cho vay ${i}`,
+          lenderType: 'BANK', currency: 'VND', dueDate: '2026-09-05', amountDue: '2000000',
+          isOverdue: i === 1 })) })],
+    [/\/projects/, () => mang(6, (i) => ({ id: i, slug: `du-an-${i}`,
+        title: `Dự án số ${i} với tiêu đề khá dài để thử tràn`,
+        name: `Dự án số ${i}`, summary: 'Tóm tắt dự án, dài vừa đủ để tràn dòng.',
+        description: 'Tóm tắt dự án.', year: 2024 + (i % 2), role: 'Full-stack',
+        status: 'DONE', coverUrl: null, thumbnailUrl: null, url: null,
+        technologies: ['TypeScript', 'Node.js'], techStack: ['TypeScript', 'Node.js'],
+        tags: ['web'], updatedAt: '2026-08-20T00:00:00Z' }))],
     /* ── Phỏng vấn (22/08/2026) ──
        Đặt TRƯỚC mọi mẫu khác: `/interview/history` cũng khớp được những mẫu
        rộng phía dưới, và cái khớp đầu tiên thắng. Dữ liệu phải ĐỦ ĐÔNG —
@@ -364,6 +409,13 @@ const CHUAN_BI = {
     '/interview/session/1', '/interview/report/1',
     '/cv', '/cv/profile', '/cv/import', '/cv/intake', '/cv/target', '/cv/xem',
     '/language', '/language/ja', '/roadmap',
+    /* Gói của Xưởng mô phỏng hơn 1MB — mốc chờ CỨNG 1200ms bắt trúng chữ
+       "Đang mở…" khi máy bận hoặc khi gói lớn thêm. Nó vốn xanh và đỏ lên
+       vì lý do chẳng liên quan gì tới bố cục. */
+    '/simulation', '/algorithms', '/notes',
+    '/maker-lab', '/creator', '/projects', '/exp-hub',
+    '/finance', '/forum', '/saved', '/profile',
+    '/projects/search', '/finance/debts/calendar',
   ].map((d) => [d, choNoiDung])),
   '/chat': async (p) => {
     // Bật chế độ Lập trình rồi mở thêm tab: đây đúng là thao tác người dùng
@@ -437,7 +489,13 @@ const DUONG = JSON.parse(process.env.CT_TRANG ?? 'null')
          là chỗ người dùng ngồi lâu nhất, nên bỏ qua vì "cần phiên thật" là bỏ
          đúng phần đáng đo. Máy chủ giả ở trên trả phiên 6 câu + báo cáo đầy đủ,
          nên chúng vẽ ra trạng thái ĐÔNG chứ không phải màn rỗng. */
-      '/interview/session/1', '/interview/report/1'];
+      '/interview/session/1', '/interview/report/1',
+      /* Mười cây cuối (22/08/2026). Đo GỐC của từng cây, cộng bốn đường TĨNH
+         từng đụng ĐỘNG — nếu bảng tra xếp sai thứ tự thì chúng mở ra trang
+         chi tiết rỗng chứ không phải trang danh sách, và chỉ nhìn mới biết. */
+      '/maker-lab', '/creator', '/projects', '/exp-hub',
+      '/finance', '/forum', '/saved', '/profile',
+      '/projects/search', '/finance/debts/calendar'];
 
 let hong = 0;
 const bang = [];
@@ -490,6 +548,7 @@ for (const duong of DUONG) {
            đúng cái bẫy [[feedback_phep_kiem_dat_vi_ly_do_sai]]. */
         soDieuKhien: noi.querySelectorAll('button, a, input, select, textarea, [role="tab"]').length,
         soChu: (noi.textContent ?? '').trim().length,
+        chuDau: (noi.textContent ?? '').trim().slice(0, 120),
       };
     });
 
@@ -497,6 +556,22 @@ for (const duong of DUONG) {
 
     if (kq.loi) {
       loi.push(`${rong}px: ${kq.loi}${loiTrang.length ? ` — lỗi: ${loiTrang[0]}` : ''}`);
+      continue;
+    }
+    /* ⚠️⚠️ CHỐT CHỐNG XANH-GIẢ, LỚP HAI — thêm 24/08/2026.
+     *
+     * `TrangWeb.tsx` nay có RANH GIỚI LỖI: trang nổ thì nó vẽ ra khối "Trang
+     * gặp lỗi" kèm thông điệp. Đó là cải thiện cho NGƯỜI DÙNG (trước là màn
+     * hình trắng câm) nhưng nó LÀM MÙ BỘ ĐO NÀY: khối đó có đủ chữ để qua chốt
+     * "gần như TRỐNG" bên dưới.
+     *
+     * Đo thật: bộ đo báo 45/45 XANH trong khi `/repos`, `/games`, `/creator`,
+     * `/saved` đều đang hiện "Trang gặp lỗi". Suýt phát hành như thế.
+     *
+     * Bài học: thêm một ranh giới lỗi là thêm một cách để bộ kiểm nói dối.
+     * Chốt này phải đi CÙNG ranh giới đó, không phải sau. */
+    if (/^Trang gặp lỗi|^Không tìm thấy/.test(kq.chuDau)) {
+      loi.push(`${rong}px: RANH GIỚI LỖI bắt được — trang không dựng nổi: ${kq.chuDau.slice(0, 90)}`);
       continue;
     }
     /* CHỐT CHỐNG XANH-GIẢ. Trang không vẽ ra gì thì mọi phép đo bên dưới đều

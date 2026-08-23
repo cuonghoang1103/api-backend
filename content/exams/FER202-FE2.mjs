@@ -22,7 +22,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a common use case for using Redux in a React application?</p></div><div class=\"ml-vi\"><p>Đâu là một trường hợp sử dụng phổ biến của Redux trong ứng dụng React?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q1.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q1.png",
           "options": [
             {
               "text": "Managing authentication and user sessions|||Quản lý xác thực và phiên đăng nhập người dùng"
@@ -46,7 +46,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which hook is typically used alongside useSelector to modify the Redux state?</p></div><div class=\"ml-vi\"><p>Hook nào thường dùng cùng useSelector để thay đổi Redux state?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q2.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q2.png",
           "options": [
             {
               "text": "useState|||useState"
@@ -70,7 +70,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of the Redux middleware in React applications?</p></div><div class=\"ml-vi\"><p>Middleware của Redux trong ứng dụng React dùng để làm gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q3.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q3.png",
           "options": [
             {
               "text": "To handle asynchronous actions and side effects|||Xử lý action bất đồng bộ và side effect"
@@ -94,7 +94,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the core principle of Redux?</p></div><div class=\"ml-vi\"><p>Nguyên tắc cốt lõi của Redux là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q4.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q4.png",
           "options": [
             {
               "text": "Single source of truth and unidirectional data flow.|||Một nguồn sự thật duy nhất và luồng dữ liệu một chiều."
@@ -118,7 +118,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the advantage of using Axios over fetch?</p></div><div class=\"ml-vi\"><p>Lợi thế của việc dùng Axios so với fetch là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q5.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q5.png",
           "options": [
             {
               "text": "Axios has better support for handling requests and responses.|||Axios hỗ trợ tốt hơn cho việc xử lý request và response."
@@ -142,7 +142,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the main purpose of the await keyword within an async function?</p></div><div class=\"ml-vi\"><p>Mục đích chính của từ khoá await trong một hàm async là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q6.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q6.png",
           "options": [
             {
               "text": "To return a new Promise object.|||Trả về một Promise object mới."
@@ -166,7 +166,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Why would a React developer choose to use &quot;Axios&quot;?</p></div><div class=\"ml-vi\"><p>Vì sao một React developer chọn dùng &quot;Axios&quot;?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q7.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q7.png",
           "options": [
             {
               "text": "To render React components faster|||Để render component React nhanh hơn"
@@ -190,7 +190,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which method is most commonly used in a React app to fetch data from a server?</p></div><div class=\"ml-vi\"><p>Phương thức nào thường dùng nhất trong app React để lấy dữ liệu từ server?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q8.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q8.png",
           "options": [
             {
               "text": "WebSockets|||WebSockets"
@@ -214,7 +214,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is used to pass a function from a parent component to a child component?</p></div><div class=\"ml-vi\"><p>Cái nào dùng để truyền một hàm từ component cha xuống component con?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q9.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q9.png",
           "options": [
             {
               "text": "Passing a function as a prop to the child component.|||Truyền hàm dưới dạng prop cho component con."
@@ -238,7 +238,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What happens when you use the xs prop on a Col component in React-Bootstrap?</p></div><div class=\"ml-vi\"><p>Điều gì xảy ra khi dùng prop xs trên component Col trong React-Bootstrap?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q10.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q10.png",
           "options": [
             {
               "text": "The column will only have its width defined on extra-large screens.|||Cột chỉ có chiều rộng được định nghĩa trên màn hình cực lớn (extra-large)."
@@ -262,7 +262,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How can you ensure that a prop is passed as an array with at least one element?</p></div><div class=\"ml-vi\"><p>Làm sao đảm bảo một prop được truyền là một mảng có ít nhất một phần tử?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q11.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q11.png",
           "options": [
             {
               "text": "By using PropTypes.array.isRequired|||Dùng PropTypes.array.isRequired"
@@ -286,7 +286,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the primary purpose of a router in a web application?</p></div><div class=\"ml-vi\"><p>Mục đích chính của một router trong ứng dụng web là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q12.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q12.png",
           "options": [
             {
               "text": "To manage state within a component|||Quản lý state bên trong một component"
@@ -310,7 +310,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How do you declare a route in React Router?</p><pre><code class=\"language-jsx\"><span class=\"hljs-comment\">// A. Using &lt;Link path=&quot;/&quot; element={&lt;Home /&gt;} /&gt;</span>\n<span class=\"hljs-comment\">// B. Using &lt;Route path=&quot;/&quot; element={&lt;Home /&gt;} /&gt;</span>\n<span class=\"hljs-comment\">// C. Using &lt;Routes path=&quot;/&quot; element={&lt;Home /&gt;} /&gt;</span>\n<span class=\"hljs-comment\">// D. Using &lt;context path=&quot;/&quot;&gt;&lt;/context&gt;&lt;/suspense&gt;&lt;/home&gt;</span></code></pre></div><div class=\"ml-vi\"><p>Làm sao khai báo một route trong React Router?</p><pre><code class=\"language-jsx\"><span class=\"hljs-comment\">// A. Using &lt;Link path=&quot;/&quot; element={&lt;Home /&gt;} /&gt;</span>\n<span class=\"hljs-comment\">// B. Using &lt;Route path=&quot;/&quot; element={&lt;Home /&gt;} /&gt;</span>\n<span class=\"hljs-comment\">// C. Using &lt;Routes path=&quot;/&quot; element={&lt;Home /&gt;} /&gt;</span>\n<span class=\"hljs-comment\">// D. Using &lt;context path=&quot;/&quot;&gt;&lt;/context&gt;&lt;/suspense&gt;&lt;/home&gt;</span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q13.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q13.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -334,7 +334,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the difference between the HTTP response codes 401 and 403?</p></div><div class=\"ml-vi\"><p>Khác biệt giữa mã phản hồi HTTP 401 và 403 là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q14.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q14.png",
           "options": [
             {
               "text": "401 the request is missing valid authentication credentials, while 403 the server refuses to authorize.|||401 nghĩa là request thiếu thông tin xác thực hợp lệ, còn 403 nghĩa là server từ chối uỷ quyền."
@@ -358,7 +358,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the above json-server code used for?</p><pre><code class=\"language-javascript\"><span class=\"hljs-keyword\">const</span> jsonServer = <span class=\"hljs-built_in\">require</span>(<span class=\"hljs-string\">&#x27;json-server&#x27;</span>);\n<span class=\"hljs-keyword\">const</span> server = jsonServer.<span class=\"hljs-title function_\">create</span>();\n<span class=\"hljs-keyword\">const</span> router = jsonServer.<span class=\"hljs-title function_\">router</span>(<span class=\"hljs-string\">&#x27;data.json&#x27;</span>);\n<span class=\"hljs-keyword\">const</span> port = <span class=\"hljs-number\">3000</span>;\n\nserver.<span class=\"hljs-title function_\">use</span>(router);\n\nserver.<span class=\"hljs-title function_\">listen</span>(port, <span class=\"hljs-function\">() =&gt;</span> {\n  <span class=\"hljs-variable language_\">console</span>.<span class=\"hljs-title function_\">log</span>(<span class=\"hljs-string\">`JSON server is running on port <span class=\"hljs-subst\">${port}</span>`</span>);\n});</code></pre></div><div class=\"ml-vi\"><p>Đoạn code json-server ở trên dùng để làm gì?</p><pre><code class=\"language-javascript\"><span class=\"hljs-keyword\">const</span> jsonServer = <span class=\"hljs-built_in\">require</span>(<span class=\"hljs-string\">&#x27;json-server&#x27;</span>);\n<span class=\"hljs-keyword\">const</span> server = jsonServer.<span class=\"hljs-title function_\">create</span>();\n<span class=\"hljs-keyword\">const</span> router = jsonServer.<span class=\"hljs-title function_\">router</span>(<span class=\"hljs-string\">&#x27;data.json&#x27;</span>);\n<span class=\"hljs-keyword\">const</span> port = <span class=\"hljs-number\">3000</span>;\n\nserver.<span class=\"hljs-title function_\">use</span>(router);\n\nserver.<span class=\"hljs-title function_\">listen</span>(port, <span class=\"hljs-function\">() =&gt;</span> {\n  <span class=\"hljs-variable language_\">console</span>.<span class=\"hljs-title function_\">log</span>(<span class=\"hljs-string\">`JSON server is running on port <span class=\"hljs-subst\">${port}</span>`</span>);\n});</code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q15.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q15.png",
           "options": [
             {
               "text": "Create a dynamic server to serve JSON data.|||Tạo một server động để phục vụ dữ liệu JSON."
@@ -382,7 +382,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How do you dispatch an action when a button is clicked?</p></div><div class=\"ml-vi\"><p>Làm sao để dispatch một action khi nút được click?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q16.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q16.png",
           "options": [
             {
               "text": "<pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">handleClick</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n  <span class=\"hljs-title function_\">dispatch</span>({ <span class=\"hljs-attr\">type</span>: <span class=\"hljs-string\">&#x27;BUTTON_CLICKED&#x27;</span> });\n};\n<span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">button</span> <span class=\"hljs-attr\">onClick</span>=<span class=\"hljs-string\">{handleClick}</span>&gt;</span>Click me<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">button</span>&gt;</span></span>;</code></pre>|||<pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">handleClick</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n  <span class=\"hljs-title function_\">dispatch</span>({ <span class=\"hljs-attr\">type</span>: <span class=\"hljs-string\">&#x27;BUTTON_CLICKED&#x27;</span> });\n};\n<span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">button</span> <span class=\"hljs-attr\">onClick</span>=<span class=\"hljs-string\">{handleClick}</span>&gt;</span>Click me<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">button</span>&gt;</span></span>;</code></pre>"
@@ -406,7 +406,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is the correct way to use useSelector to access a value from the Redux store?</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. const value = useSelector((store) =&gt; store.value);</span>\n<span class=\"hljs-comment\">// B. const value = useSelector((state) =&gt; state.value);</span>\n<span class=\"hljs-comment\">// C. const value = useSelector((context) =&gt; context.value);</span>\n<span class=\"hljs-comment\">// D. const value = useSelector((redux) =&gt; redux.value);</span></code></pre></div><div class=\"ml-vi\"><p>Cách nào dùng useSelector đúng để lấy một giá trị từ Redux store?</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. const value = useSelector((store) =&gt; store.value);</span>\n<span class=\"hljs-comment\">// B. const value = useSelector((state) =&gt; state.value);</span>\n<span class=\"hljs-comment\">// C. const value = useSelector((context) =&gt; context.value);</span>\n<span class=\"hljs-comment\">// D. const value = useSelector((redux) =&gt; redux.value);</span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q17.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q17.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -430,7 +430,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the typical file extension for a React component?</p></div><div class=\"ml-vi\"><p>Đuôi file thường dùng cho một component React là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q18.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q18.png",
           "options": [
             {
               "text": ".html|||.html"
@@ -454,7 +454,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of React.Fragment or shorthand &lt;&gt; &lt;/&gt; in React?(Select all that apply)</p></div><div class=\"ml-vi\"><p>React.Fragment hoặc dạng rút gọn &lt;&gt; &lt;/&gt; trong React dùng để làm gì? (Chọn tất cả đáp án đúng)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q19.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q19.png",
           "options": [
             {
               "text": "Fragments allow you to group multiple elements without adding an extra node to the DOM.|||Fragment cho phép gộp nhiều phần tử mà không thêm node thừa vào DOM."
@@ -479,7 +479,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How can the useEffect hook be optimized for cleanup actions?</p></div><div class=\"ml-vi\"><p>Làm sao tối ưu hook useEffect cho hành động dọn dẹp (cleanup)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q20.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q20.png",
           "options": [
             {
               "text": "By passing an empty array as the second argument|||Truyền một mảng rỗng làm tham số thứ hai"
@@ -503,7 +503,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How would you use the useContext Hook to access a shared theme in a React component?</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. const theme = useContext(ThemeContext);</span>\n<span class=\"hljs-comment\">// B. const { theme } = useContext(ThemeContext);</span>\n<span class=\"hljs-comment\">// C. const { theme } = useContext(ThemeContext.Provider);</span>\n<span class=\"hljs-comment\">// D. const theme = useContext(ThemeContext.Provider);</span></code></pre></div><div class=\"ml-vi\"><p>Làm sao dùng hook useContext để lấy theme dùng chung trong một component React?</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. const theme = useContext(ThemeContext);</span>\n<span class=\"hljs-comment\">// B. const { theme } = useContext(ThemeContext);</span>\n<span class=\"hljs-comment\">// C. const { theme } = useContext(ThemeContext.Provider);</span>\n<span class=\"hljs-comment\">// D. const theme = useContext(ThemeContext.Provider);</span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q21.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q21.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -527,7 +527,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which of the following could cause an Effect to run too frequently?</p></div><div class=\"ml-vi\"><p>Điều gì có thể khiến một Effect chạy quá thường xuyên?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q22.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q22.png",
           "options": [
             {
               "text": "Including all state variables in the dependency array.|||Đưa mọi biến state vào mảng dependency."
@@ -551,7 +551,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is NOT considered a popular front-end framework?</p></div><div class=\"ml-vi\"><p>Đâu KHÔNG được xem là một framework front-end phổ biến?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q23.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q23.png",
           "options": [
             {
               "text": "React|||React"
@@ -575,7 +575,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is one major benefit of using front-end frameworks like React or Vue.js?</p></div><div class=\"ml-vi\"><p>Một lợi ích lớn của việc dùng framework front-end như React hay Vue.js là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q24.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q24.png",
           "options": [
             {
               "text": "They eliminate the need for HTML|||Loại bỏ hoàn toàn nhu cầu dùng HTML"
@@ -599,7 +599,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How can you access Chrome DevTools?</p></div><div class=\"ml-vi\"><p>Làm sao để mở Chrome DevTools?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q25.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q25.png",
           "options": [
             {
               "text": "By pressing F12 or right-clicking and selecting &quot;Inspect&quot;|||Nhấn F12 hoặc chuột phải rồi chọn &quot;Inspect&quot;"
@@ -623,7 +623,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How would you render a user&#39;s name dynamically inside an &lt;h2&gt; tag in JSX?</p><pre><code class=\"language-jsx\"><span class=\"hljs-comment\">// A. &lt;h2&gt; &lt;p&gt;{userName}&lt;/p&gt; &lt;/h2&gt;</span>\n<span class=\"hljs-comment\">// B. &lt;h2&gt; {userName} &lt;/h2&gt;</span>\n<span class=\"hljs-comment\">// C. &lt;h2&gt; &quot;userName&quot; &lt;/h2&gt;</span>\n<span class=\"hljs-comment\">// D. &lt;h2&gt;{userName: &quot;John&quot;}&lt;/h2&gt;</span></code></pre></div><div class=\"ml-vi\"><p>Làm sao render tên người dùng động bên trong thẻ &lt;h2&gt; trong JSX?</p><pre><code class=\"language-jsx\"><span class=\"hljs-comment\">// A. &lt;h2&gt; &lt;p&gt;{userName}&lt;/p&gt; &lt;/h2&gt;</span>\n<span class=\"hljs-comment\">// B. &lt;h2&gt; {userName} &lt;/h2&gt;</span>\n<span class=\"hljs-comment\">// C. &lt;h2&gt; &quot;userName&quot; &lt;/h2&gt;</span>\n<span class=\"hljs-comment\">// D. &lt;h2&gt;{userName: &quot;John&quot;}&lt;/h2&gt;</span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q26.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q26.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -647,7 +647,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>The purpose of JSX is to:</p></div><div class=\"ml-vi\"><p>Mục đích của JSX là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q27.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q27.png",
           "options": [
             {
               "text": "Make JavaScript code more readable by embedding HTML in JavaScript|||Làm code JavaScript dễ đọc hơn bằng cách nhúng HTML vào trong JavaScript"
@@ -671,7 +671,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What does ES6 introduce that is essential for React applications? (Select all that apply)</p></div><div class=\"ml-vi\"><p>ES6 giới thiệu những gì thiết yếu cho ứng dụng React? (Chọn tất cả đáp án đúng)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q28.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q28.png",
           "options": [
             {
               "text": "Arrow functions|||Arrow function"
@@ -697,7 +697,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How do you import and use a Button component from React-Bootstrap 5?(Select all that apply)</p></div><div class=\"ml-vi\"><p>Làm sao import và dùng component Button từ React-Bootstrap 5? (Chọn tất cả đáp án đúng)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q29.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q29.png",
           "options": [
             {
               "text": "<pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span> <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n<span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">Button</span> <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap/Button&#x27;</span>;\n\n<span class=\"hljs-keyword\">function</span> <span class=\"hljs-title function_\">Demo</span>(<span class=\"hljs-params\"></span>) {\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span>&gt;</span>\n  );\n}\n\nexport default Demo;</span></code></pre>|||<pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span> <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n<span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">Button</span> <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap/Button&#x27;</span>;\n\n<span class=\"hljs-keyword\">function</span> <span class=\"hljs-title function_\">Demo</span>(<span class=\"hljs-params\"></span>) {\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span>&gt;</span>\n  );\n}\n\nexport default Demo;</span></code></pre>"
@@ -721,7 +721,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the main purpose of React-Bootstrap?</p></div><div class=\"ml-vi\"><p>Mục đích chính của React-Bootstrap là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q30.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q30.png",
           "options": [
             {
               "text": "To build React components using jQuery|||Xây dựng component React bằng jQuery"
@@ -745,7 +745,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Create a responsive grid layout using React-Bootstrap with three columns that stack vertically on small screens. Which classes would you apply?</p></div><div class=\"ml-vi\"><p>Tạo bố cục grid responsive bằng React-Bootstrap với ba cột, xếp chồng dọc trên màn hình nhỏ. Nên dùng prop nào?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q31.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q31.png",
           "options": [
             {
               "text": "<pre><code class=\"language-jsx\">&lt;<span class=\"hljs-title class_\">Container</span>&gt;\n  <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Row</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Col</span>&gt;</span>1 of 3<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Col</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Col</span>&gt;</span>2 of 3<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Col</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Col</span>&gt;</span>3 of 3<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Col</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Row</span>&gt;</span></span>\n&lt;/<span class=\"hljs-title class_\">Container</span>&gt;</code></pre>|||<pre><code class=\"language-jsx\">&lt;<span class=\"hljs-title class_\">Container</span>&gt;\n  <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Row</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Col</span>&gt;</span>1 of 3<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Col</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Col</span>&gt;</span>2 of 3<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Col</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Col</span>&gt;</span>3 of 3<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Col</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Row</span>&gt;</span></span>\n&lt;/<span class=\"hljs-title class_\">Container</span>&gt;</code></pre>"
@@ -769,7 +769,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is the first step in React&#39;s render cycle?</p></div><div class=\"ml-vi\"><p>Bước đầu tiên trong chu trình render của React là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q32.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q32.png",
           "options": [
             {
               "text": "Triggering a render when state or props change.|||Kích hoạt (trigger) render khi state hoặc props thay đổi."
@@ -793,7 +793,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How can you pass parameters to an event handler in React? (Select all that apply)</p></div><div class=\"ml-vi\"><p>Làm sao để truyền tham số cho một event handler trong React? (Chọn tất cả đáp án đúng)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q33.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q33.png",
           "options": [
             {
               "text": "Using the bind() method.|||Dùng phương thức bind()."
@@ -818,7 +818,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the primary purpose of Next.js?</p></div><div class=\"ml-vi\"><p>Mục đích chính của Next.js là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q34.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q34.png",
           "options": [
             {
               "text": "To enable server-side rendering and generate static websites.|||Cho phép server-side rendering và sinh website tĩnh."
@@ -842,7 +842,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the main advantage of Tailwind CSS compared to Bootstrap?</p></div><div class=\"ml-vi\"><p>Lợi thế chính của Tailwind CSS so với Bootstrap là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q35.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q35.png",
           "options": [
             {
               "text": "It provides more flexibility to create custom designs and components.|||Cho nhiều tự do hơn để tạo thiết kế và component tuỳ chỉnh."
@@ -866,7 +866,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What command is used to create a new Next.js project?</p></div><div class=\"ml-vi\"><p>Lệnh nào dùng để tạo một dự án Next.js mới?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q36.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q36.png",
           "options": [
             {
               "text": "npx create-react-app|||npx create-react-app"
@@ -890,7 +890,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is a core feature of Next.js that enhances SEO?</p></div><div class=\"ml-vi\"><p>Tính năng cốt lõi nào của Next.js giúp cải thiện SEO?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q37.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q37.png",
           "options": [
             {
               "text": "Real-time data fetching.|||Lấy dữ liệu theo thời gian thực."
@@ -914,7 +914,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which Bootstrap class is commonly used to create a responsive navigation bar?</p></div><div class=\"ml-vi\"><p>Class Bootstrap nào thường dùng để tạo thanh điều hướng (navbar) responsive?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q38.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q38.png",
           "options": [
             {
               "text": ".navbar-static|||.navbar-static"
@@ -938,7 +938,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which class is used to create a form input with a validation state in Bootstrap 5?</p></div><div class=\"ml-vi\"><p>Class nào dùng để tạo một ô nhập form có trạng thái validate trong Bootstrap 5?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q39.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q39.png",
           "options": [
             {
               "text": ".form-control|||.form-control"
@@ -962,7 +962,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which Bootstrap class provides a fluid container that adapts to all breakpoints?</p></div><div class=\"ml-vi\"><p>Class Bootstrap nào cho một container fluid, thích ứng với mọi breakpoint?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q40.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q40.png",
           "options": [
             {
               "text": ".container-fluid|||.container-fluid"
@@ -986,7 +986,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Why should you avoid using too many lazy components in your application?</p></div><div class=\"ml-vi\"><p>Vì sao nên tránh dùng quá nhiều lazy component trong ứng dụng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q41.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q41.png",
           "options": [
             {
               "text": "Because it results in multiple HTTP requests, slowing down the application.|||Vì nó dẫn tới nhiều HTTP request, làm chậm ứng dụng."
@@ -1010,7 +1010,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Analyze the differences between Flux and MVC architectures. Which statement is true?</p></div><div class=\"ml-vi\"><p>Phân tích khác biệt giữa kiến trúc Flux và MVC. Phát biểu nào đúng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q42.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q42.png",
           "options": [
             {
               "text": "Flux enforces unidirectional data flow, while MVC allows bidirectional data flow.|||Flux ép luồng dữ liệu một chiều, còn MVC cho phép luồng dữ liệu hai chiều."
@@ -1034,7 +1034,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How would you extract and display multiple parameters, userId and postId, in a component?</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. const { userId, postId } = useParams();</span>\n<span class=\"hljs-comment\">// B. const userId = useParams(&#x27;userId&#x27;); const postId = useParams(&#x27;postId&#x27;);</span>\n<span class=\"hljs-comment\">// C. const userId = route.params.userId; const postId = route.params.postId;</span>\n<span class=\"hljs-comment\">// D. const { userId } = useParams(); const { postId } = useParams();</span></code></pre></div><div class=\"ml-vi\"><p>Làm sao trích xuất và hiển thị nhiều tham số, userId và postId, trong một component?</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. const { userId, postId } = useParams();</span>\n<span class=\"hljs-comment\">// B. const userId = useParams(&#x27;userId&#x27;); const postId = useParams(&#x27;postId&#x27;);</span>\n<span class=\"hljs-comment\">// C. const userId = route.params.userId; const postId = route.params.postId;</span>\n<span class=\"hljs-comment\">// D. const { userId } = useParams(); const { postId } = useParams();</span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q43.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q43.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -1058,7 +1058,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How would you navigate programmatically to a route with a parameter using useNavigate in React Router?</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. navigate(&quot;/user:id&quot;);</span>\n<span class=\"hljs-comment\">// B. navigate(&quot;/user?id=123&quot;);</span>\n<span class=\"hljs-comment\">// C. navigate(&quot;/user/123&quot;);</span>\n<span class=\"hljs-comment\">// D. navigate({ path: &quot;/user/123&quot; });</span></code></pre></div><div class=\"ml-vi\"><p>Làm sao điều hướng bằng code tới một route có tham số dùng useNavigate trong React Router?</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. navigate(&quot;/user:id&quot;);</span>\n<span class=\"hljs-comment\">// B. navigate(&quot;/user?id=123&quot;);</span>\n<span class=\"hljs-comment\">// C. navigate(&quot;/user/123&quot;);</span>\n<span class=\"hljs-comment\">// D. navigate({ path: &quot;/user/123&quot; });</span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q44.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q44.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -1082,7 +1082,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Why might this code produce unexpected results?</p><pre><code class=\"language-javascript\"><span class=\"hljs-keyword\">function</span> <span class=\"hljs-title function_\">Counter</span>(<span class=\"hljs-params\"></span>) {\n  <span class=\"hljs-keyword\">const</span> [count, setCount] = <span class=\"hljs-title function_\">useState</span>(<span class=\"hljs-number\">0</span>);\n  <span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">handleClick</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n    <span class=\"hljs-title function_\">setCount</span>(count + <span class=\"hljs-number\">1</span>);\n    <span class=\"hljs-title function_\">setCount</span>(count + <span class=\"hljs-number\">1</span>);\n  };\n  <span class=\"hljs-keyword\">return</span> <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">button</span> <span class=\"hljs-attr\">onClick</span>=<span class=\"hljs-string\">{handleClick}</span>&gt;</span>{count}<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">button</span>&gt;</span></span>;\n}</code></pre></div><div class=\"ml-vi\"><p>Vì sao đoạn code này có thể cho kết quả không như mong đợi?</p><pre><code class=\"language-javascript\"><span class=\"hljs-keyword\">function</span> <span class=\"hljs-title function_\">Counter</span>(<span class=\"hljs-params\"></span>) {\n  <span class=\"hljs-keyword\">const</span> [count, setCount] = <span class=\"hljs-title function_\">useState</span>(<span class=\"hljs-number\">0</span>);\n  <span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">handleClick</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n    <span class=\"hljs-title function_\">setCount</span>(count + <span class=\"hljs-number\">1</span>);\n    <span class=\"hljs-title function_\">setCount</span>(count + <span class=\"hljs-number\">1</span>);\n  };\n  <span class=\"hljs-keyword\">return</span> <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">button</span> <span class=\"hljs-attr\">onClick</span>=<span class=\"hljs-string\">{handleClick}</span>&gt;</span>{count}<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">button</span>&gt;</span></span>;\n}</code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q45.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q45.png",
           "options": [
             {
               "text": "Because setCount is called twice, it resets state|||Vì setCount được gọi hai lần nên nó reset state"
@@ -1106,7 +1106,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Find the bug in the following React code:</p><pre><code class=\"language-javascript\"><span class=\"hljs-keyword\">const</span> [items, setItems] = <span class=\"hljs-title function_\">useState</span>([]);\n<span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">addItem</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n  items.<span class=\"hljs-title function_\">push</span>(<span class=\"hljs-string\">&#x27;new&#x27;</span>);\n  <span class=\"hljs-title function_\">setItems</span>(items);\n};</code></pre></div><div class=\"ml-vi\"><p>Tìm lỗi trong đoạn code React sau:</p><pre><code class=\"language-javascript\"><span class=\"hljs-keyword\">const</span> [items, setItems] = <span class=\"hljs-title function_\">useState</span>([]);\n<span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">addItem</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n  items.<span class=\"hljs-title function_\">push</span>(<span class=\"hljs-string\">&#x27;new&#x27;</span>);\n  <span class=\"hljs-title function_\">setItems</span>(items);\n};</code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q46.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q46.png",
           "options": [
             {
               "text": "useState should be useReducer|||useState phải đổi thành useReducer"
@@ -1130,7 +1130,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In the useEffect hook, how many milliseconds would you wait using setTimeout to perform a side effect after 2 seconds?</p></div><div class=\"ml-vi\"><p>Trong hook useEffect, dùng setTimeout để thực hiện side effect sau 2 giây thì cần chờ bao nhiêu mili giây?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q47.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q47.png",
           "options": [
             {
               "text": "2|||2"
@@ -1154,7 +1154,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which is the correct way to consume context in a functional component using the &quot;useContext&quot; hook?</p></div><div class=\"ml-vi\"><p>Cách nào đúng để lấy giá trị context trong một functional component bằng hook &quot;useContext&quot;?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q48.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q48.png",
           "options": [
             {
               "text": "const value = MyContext();|||const value = MyContext();"
@@ -1178,7 +1178,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In React Router, how do you define a nested route structure within a parent component?</p></div><div class=\"ml-vi\"><p>Trong React Router, làm sao định nghĩa cấu trúc route lồng nhau bên trong một component cha?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q49.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q49.png",
           "options": [
             {
               "text": "Utilize the &lt;Switch&gt; component to handle nested routes|||Dùng component &lt;Switch&gt; để xử lý route lồng nhau"
@@ -1202,7 +1202,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Fill in the blank in this Bootstrap CSS code to apply a primary button style using React-Bootstrap:</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">______</span>=<span class=\"hljs-string\">&quot;primary&quot;</span>&gt;</span>Click me<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span></span></code></pre></div><div class=\"ml-vi\"><p>Điền vào chỗ trống trong đoạn code Bootstrap CSS sau để áp style nút primary bằng React-Bootstrap:</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">______</span>=<span class=\"hljs-string\">&quot;primary&quot;</span>&gt;</span>Click me<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span></span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2/q50.jpg",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE2-v2/q50.png",
           "options": [
             {
               "text": "color|||color"

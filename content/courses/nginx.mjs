@@ -23,6 +23,7 @@ import s05 from './nginx/s05-bo-dem-proxy.mjs';
 import s06 from './nginx/s06-tls-http2.mjs';
 import s07 from './nginx/s07-gioi-han.mjs';
 import s08 from './nginx/s08-rewrite-map.mjs';
+import s09 from './nginx/s09-can-bang-tai.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -54,5 +55,6 @@ export default {
     s06,
     s07,
     s08,
+    s09,
   ],
 };

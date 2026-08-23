@@ -839,6 +839,13 @@ export const INVOKE_CHANNELS = {
   'notes:deleteFile': noteFileSchema,
   'notes:revealFolder': null,
 
+  /* Sân chơi 3D. `tai` là lời gọi CHẠY LÂU (78 MB): nó trả về ngay, tiến độ đi
+     qua sự kiện `sanChoi:tienDo`. Renderer phải gắn listener TRƯỚC khi gọi. */
+  'sanChoi:trangThai': null,
+  'sanChoi:tai': null,
+  'sanChoi:mo': z.object({ cheDo: z.enum(['sinh-ton', 'tu-do']) }),
+  'sanChoi:xoa': null,
+
   'music:listDownloaded': null,
   'music:saveAudio': saveAudioSchema,
   'music:deleteAudio': z.object({ trackId: trackIdSchema }),
@@ -977,6 +984,8 @@ export const EVENT_CHANNELS = [
   'agent:moWeb',
   /** Thông báo đẩy tới CỬA SỔ ROBOT nổi (tin nhắn, nhạc, agent xong việc). */
   'robot:tin',
+  /** Tiến độ tải thế giới sân chơi. Bị bóp còn ~10 lần/giây ở main. */
+  'sanChoi:tienDo',
 ] as const;
 
 export type EventChannel = (typeof EVENT_CHANNELS)[number];
@@ -984,6 +993,31 @@ export type EventChannel = (typeof EVENT_CHANNELS)[number];
 // ─────────────────────────────────────────────────────────────
 // Kiểu trả về
 // ─────────────────────────────────────────────────────────────
+
+/** Trạng thái sân chơi 3D trong app. Xem `main/sanChoi.ts`. */
+export interface TrangThaiSanChoi {
+  /** Bản cài có kèm phần mã sân chơi không. `false` = chưa chạy `dong-goi:san-choi`. */
+  coPhanMa: boolean;
+  /** Đã tải đủ phần thế giới chưa. Chỉ khi `true` mới nên mở cửa sổ chơi. */
+  sanSang: boolean;
+  /** Vân tay của bộ tài nguyên trong bản cài. Lệch với bản đã tải ⇒ phải tải bù. */
+  version: string | null;
+  tongByte: number;
+  /** Byte đã nằm trên đĩa. Dùng để vẽ thanh tiến độ trước cả khi bắt đầu tải. */
+  daCoByte: number;
+  soFileThieu: number;
+}
+
+/** Một nhịp tiến độ tải, đẩy qua sự kiện `sanChoi:tienDo`. */
+export interface TienDoTai {
+  daTaiByte: number;
+  tongByte: number;
+  soFileXong: number;
+  soFileTong: number;
+  xong: boolean;
+  /** Có mặt nghĩa là lượt tải DỪNG giữa chừng. Chạy lại sẽ tiếp tục chỗ dở. */
+  loi?: string;
+}
 
 export interface AppInfo {
   version: string;
@@ -1154,6 +1188,18 @@ export interface DesktopBridge {
    * đĩa — ví dụ ảnh kéo từ một trang web.
    */
   duongCuaFile(f: File): string | null;
+  /**
+   * Sân chơi 3D — xem `main/sanChoi.ts`.
+   *
+   * `tai()` trả về NGAY; theo dõi bằng sự kiện `sanChoi:tienDo`. Gọi `mo()`
+   * khi `trangThai().sanSang` là true, không thì game kẹt ở màn hình tải.
+   */
+  sanChoi: {
+    trangThai(): Promise<TrangThaiSanChoi>;
+    tai(): Promise<void>;
+    mo(cheDo: 'sinh-ton' | 'tu-do'): Promise<void>;
+    xoa(): Promise<void>;
+  };
   music: {
     listDownloaded(): Promise<DownloadedTrack[]>;
     saveAudio(trackId: number, bytes: Uint8Array, ext: string): Promise<void>;

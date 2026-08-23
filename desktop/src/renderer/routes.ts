@@ -28,6 +28,7 @@ import {
   Bot,
   Braces,
   Briefcase,
+  Car,
   ClipboardList,
   Cpu,
   FileText,
@@ -143,6 +144,10 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['music', 'nghe nhạc', 'remix', 'nhac'] },
   { path: '/games', label: 'Trò chơi', icon: Gamepad2, group: 'khac',
     keywords: ['games', 'tro choi'] },
+  /* Sân chơi 3D. Trên web đây là một ứng dụng Vite tĩnh trong `public/`; trong
+     app nó là màn hình native mở ra CỬA SỔ RIÊNG — xem features/sanchoi. */
+  { path: '/playground', label: 'Sân chơi 3D', icon: Car, group: 'khac',
+    keywords: ['playground', 'san choi', '3d', 'game', 'lai xe', 'sinh ton'] },
   { path: '/finance', label: 'Tài chính', icon: Wallet, group: 'khac',
     keywords: ['finance', 'tai chinh', 'moneyflow', 'chi tieu'] },
   { path: '/forum', label: 'Diễn đàn', icon: Users, group: 'khac',

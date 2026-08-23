@@ -22,6 +22,26 @@ import { createMainWindow } from './window';
 
 registerSchemesAsPrivileged();
 
+/**
+ * Cờ GPU cho sân chơi 3D — PHẢI đặt trước `app.whenReady()`.
+ *
+ * Sân chơi vẽ bằng `three/webgpu`. Đặt muộn hơn thì Chromium đã chốt cấu hình
+ * GPU rồi và cờ im lặng không có tác dụng nào — không lỗi, chỉ là game rơi về
+ * WebGL2 và chạy chậm hơn mà không ai biết vì sao.
+ *
+ * `enable-unsafe-webgpu` chỉ PHƠI RA `navigator.gpu`; nó không tắt sandbox và
+ * không đụng tới renderer chính. Trên Linux cần thêm `Vulkan` vì đó là backend
+ * duy nhất Dawn dùng được ở đó.
+ *
+ * ⚠️ Thiếu WebGPU KHÔNG làm game chết: `Rendering.js` đặt `forceWebGL: false`
+ * nên three tự lùi về WebGL2, và bảng Cài đặt của game hiện sẵn cảnh báo
+ * "performance loss". Đo thật xem máy có ăn cờ này không: `npm run do:webgpu`.
+ */
+app.commandLine.appendSwitch('enable-unsafe-webgpu');
+if (process.platform === 'linux') {
+  app.commandLine.appendSwitch('enable-features', 'Vulkan');
+}
+
 let mainWindow: BrowserWindow | null = null;
 
 /**

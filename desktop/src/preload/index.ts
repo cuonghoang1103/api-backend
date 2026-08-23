@@ -37,6 +37,7 @@ import type {
   NotesFolder,
   StorageUsage,
   StoredSession,
+  TrangThaiSanChoi,
   UpdateStatus,
 } from '../shared/ipc';
 
@@ -53,6 +54,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'browser:trangThai',
   'agent:moWeb',
   'robot:tin',
+  'sanChoi:tienDo',
 ];
 
 const bridge: DesktopBridge = {
@@ -138,6 +140,15 @@ const bridge: DesktopBridge = {
     } catch {
       return null;
     }
+  },
+
+  sanChoi: {
+    trangThai: () =>
+      ipcRenderer.invoke('sanChoi:trangThai') as Promise<TrangThaiSanChoi>,
+    tai: () => ipcRenderer.invoke('sanChoi:tai') as Promise<void>,
+    mo: (cheDo: 'sinh-ton' | 'tu-do') =>
+      ipcRenderer.invoke('sanChoi:mo', { cheDo }) as Promise<void>,
+    xoa: () => ipcRenderer.invoke('sanChoi:xoa') as Promise<void>,
   },
 
   music: {

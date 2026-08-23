@@ -21,6 +21,8 @@ import {
   DEV_SERVER_URL,
   IS_DEV,
   MEDIA_ORIGIN,
+  PLAYGROUND_HOST,
+  PLAYGROUND_ORIGIN,
 } from './config';
 
 /**
@@ -55,6 +57,18 @@ export function registerSchemesAsPrivileged(): void {
 export function registerAppProtocol(rendererRoot: string): void {
   protocol.handle(APP_SCHEME, async (request) => {
     const url = new URL(request.url);
+
+    /**
+     * `app://playground/…` — sân chơi 3D, phục vụ từ hai thư mục khác hẳn
+     * renderer (phần mã trong bản cài + phần thế giới trong `userData`).
+     *
+     * Nạp động để tránh vòng import: `sanChoi.ts` cần `hardenWebContents` của
+     * chính file này. Cùng lối với `./ipc/music` ngay bên dưới.
+     */
+    if (url.host === PLAYGROUND_HOST) {
+      const { phucVu } = await import('./sanChoi');
+      return phucVu(decodeURIComponent(url.pathname));
+    }
 
     if (url.host !== APP_HOST) {
       return new Response('Not found', { status: 404 });
@@ -120,6 +134,44 @@ function originOf(rawUrl: string): string | null {
  * nó — script nằm trước thẻ đó vẫn chạy. Header thì áp dụng cho toàn bộ tài
  * liệu ngay từ byte đầu tiên.
  */
+/**
+ * CSP RIÊNG cho sân chơi 3D (`app://playground`).
+ *
+ * Sân chơi cần đúng hai thứ mà renderer chính KHÔNG được có, và đây là lý do
+ * nó phải sống ở một origin khác thay vì nới luật chung:
+ *
+ *  · `'unsafe-eval'` — Rapier là WebAssembly, biên dịch wasm cần nó.
+ *  · `blob:` — các file `.glb` nhúng texture bên trong; three bóc ra thành
+ *    blob URL rồi mới nạp. Thiếu nó thì thế giới hiện ra KHÔNG có vật liệu.
+ *
+ * Bản web đã trả giá đúng hai điều này, xem `frontend/next.config.js`.
+ *
+ * Ngược lại, nó KHÔNG cần gì từ mạng: `connect-src` chỉ có chính nó — mọi tài
+ * nguyên đều nằm trên đĩa và đi qua `app://playground`. Bộ tải 78 MB chạy ở
+ * MAIN nên không đụng tới luật này. Nghĩa là kể cả khi 50k dòng mã bên thứ ba
+ * này bị chèn, nó cũng không gửi được gì ra ngoài.
+ *
+ * ⚠️ `base-uri 'self'` chứ không phải `'none'` như app: `index.html` của sân
+ * chơi dựa vào thẻ `<base href="./">` để giải mọi đường dẫn tương đối.
+ */
+function cspSanChoi(): string {
+  return [
+    `default-src 'self' ${PLAYGROUND_ORIGIN} blob: data:`,
+    `script-src 'self' ${PLAYGROUND_ORIGIN} 'unsafe-inline' 'unsafe-eval' blob:`,
+    `style-src 'self' ${PLAYGROUND_ORIGIN} 'unsafe-inline'`,
+    `img-src 'self' ${PLAYGROUND_ORIGIN} blob: data:`,
+    `font-src 'self' ${PLAYGROUND_ORIGIN} data:`,
+    `media-src 'self' ${PLAYGROUND_ORIGIN} blob: data:`,
+    `worker-src 'self' ${PLAYGROUND_ORIGIN} blob:`,
+    `connect-src 'self' ${PLAYGROUND_ORIGIN} blob: data:`,
+    `object-src 'none'`,
+    `base-uri 'self'`,
+    `form-action 'none'`,
+    `frame-src 'none'`,
+    `frame-ancestors 'none'`,
+  ].join('; ');
+}
+
 function contentSecurityPolicy(): string {
   const connect = [APP_ORIGIN, ...ALLOWED_CONNECT_ORIGINS].join(' ');
 
@@ -178,10 +230,19 @@ export function applySessionPolicies(): void {
   const ses = session.defaultSession;
 
   ses.webRequest.onHeadersReceived((details, callback) => {
+    /**
+     * CSP theo ORIGIN của phản hồi, không phải một luật chung cho cả session.
+     *
+     * Sân chơi phải có `'unsafe-eval'`; renderer chính TUYỆT ĐỐI không được có.
+     * Gắn một luật chung cho cả hai nghĩa là mở `eval` ngay trong trang đang
+     * giữ phiên đăng nhập — đúng thứ CSP sinh ra để chặn.
+     */
+    const laSanChoi = details.url.startsWith(`${PLAYGROUND_ORIGIN}/`);
+
     callback({
       responseHeaders: {
         ...details.responseHeaders,
-        'Content-Security-Policy': [contentSecurityPolicy()],
+        'Content-Security-Policy': [laSanChoi ? cspSanChoi() : contentSecurityPolicy()],
         'X-Content-Type-Options': ['nosniff'],
       },
     });

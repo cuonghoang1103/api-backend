@@ -36,6 +36,7 @@ import { MoPhongPage } from './features/simulation/MoPhongPage';
 import { LoTrinhPage } from './features/roadmap/LoTrinhPage';
 import { NgoaiNguPage } from './features/language/NgoaiNguPage';
 import { PhongVanPage } from './features/interview/PhongVanPage';
+import { SanChoiPage } from './features/sanchoi/SanChoiPage';
 import { thuocCayWeb } from './features/web/dinhTuyenWeb';
 
 export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
@@ -60,6 +61,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/roadmap': LoTrinhPage,
   '/language': NgoaiNguPage,
   '/interview': PhongVanPage,
+  '/playground': SanChoiPage,
 };
 
 /**

@@ -268,6 +268,54 @@ export class Game
         {
             this.achievements.setProgress('debug', 1)
         }
+
+        this.applyUrlFlags()
+    }
+
+    /**
+     * Cờ mở thẳng một chế độ, đọc từ `location.hash`.
+     *
+     * `#sinh-ton` (hoặc `#survival`) bật luôn chế độ Sinh tồn thay vì bắt người
+     * chơi vào Cài đặt bấm tay. Bản đóng gói trong app desktop mở đúng địa chỉ
+     * này — app là để CHƠI, không phải để đi xem hồ sơ, nên nó không có lý do
+     * gì bắt đi qua ba lần bấm mỗi lần mở.
+     *
+     * Cùng lối với `#debug`, `#skip`, `#stats`, `#inspector` đã có sẵn.
+     *
+     * ⚠️ Gọi qua `preference.set()`, KHÔNG gọi thẳng `survival.enable()`: chỉ
+     * `set()` mới bắn `preferenceChange`, và đó là thứ làm nút On/Off trong
+     * Cài đặt sáng đúng. Gọi tắt thì game vào chế độ Sinh tồn thật nhưng bảng
+     * Cài đặt vẫn hiển thị "Off" — người chơi bấm Off để thoát thì không có gì
+     * xảy ra, vì với nó trạng thái vốn đã là Off.
+     */
+    applyUrlFlags()
+    {
+        if(!location.hash.match(/sinh-?ton|survival/i))
+            return
+
+        /**
+         * Đợi màn mở đầu chạy XONG (`reveal.step === 2`) rồi mới bật.
+         *
+         * ⚠️ Đừng thay bằng `ticker.wait(n)`: tham số của nó là SỐ KHUNG HÌNH,
+         * không phải giây (`Ticker.wait(frames, callback)`). Một con số đủ lớn
+         * để qua được màn mở đầu trên máy yếu thì trên máy khoẻ lại là chờ vô
+         * cớ, và ngược lại — bật giữa chừng thì trời sập tối ngay trong đoạn
+         * máy quay giới thiệu còn thông báo hướng dẫn phím thì trôi qua lúc
+         * người chơi chưa cầm được xe.
+         *
+         * `reveal.step` là mốc THẬT: bước 2 cũng chính là lúc `world.step(2)`
+         * chạy, tức thế giới đã dựng đủ.
+         */
+        const cho = () =>
+        {
+            if(this.reveal.step < 2)
+                return
+
+            this.ticker.events.off('tick', cho)
+            this.world?.survival?.preference.set('on')
+        }
+
+        this.ticker.events.on('tick', cho, 999)
     }
 
     reset()

@@ -37,6 +37,22 @@ directories:
 # dựng chưa ký không đụng tới nó.
 afterSign: scripts/notarize-hook.cjs
 
+# ── Sân chơi 3D ────────────────────────────────────────────
+# Phần MÃ của sân chơi (~12 MB) đi kèm bản cài; phần thế giới (~78 MB) app tải
+# về `userData` lần đầu người dùng bấm chơi. Xem `docs/playground-dong-goi-app.md`.
+#
+# ⚠️ `extraResources` chứ KHÔNG phải `files`: `files` đi vào `app.asar`, mà asar
+#   KHÔNG nén — nhét 12 MB tài nguyên nhị phân vào đó chẳng lợi byte nào, lại
+#   thêm một lớp đọc cho mọi lần nạp texture. Ở `extraResources` chúng nằm thẳng
+#   trong `Resources/playground/`, đúng chỗ `thuMucMa()` đi tìm.
+#
+# ⚠️ Thư mục này do `npm run dong-goi:san-choi` SINH RA (đã nối vào `npm run
+#   build`, nên mọi đường dựng đều chạy nó). Nó không nằm trong git — kho không
+#   phải mang thêm một bản sao 12 MB của thứ đã có trong `frontend/public/`.
+extraResources:
+  - from: resources/playground
+    to: playground
+
 files:
   - dist/**/*
   - package.json

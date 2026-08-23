@@ -45,12 +45,38 @@ export const APP_SCHEME = 'app';
 export const APP_HOST = 'cuongthai';
 export const APP_ORIGIN = `${APP_SCHEME}://${APP_HOST}`;
 
+/**
+ * Sân chơi 3D chạy trên MỘT HOST RIÊNG của cùng scheme: `app://playground`.
+ *
+ * Vì sao không nhét vào `app://cuongthai/playground/`: origin quyết định phạm
+ * vi của CSP, localStorage và mọi thứ khác. Sân chơi cần một CSP nới hơn hẳn
+ * renderer chính — `'unsafe-eval'` để Rapier biên dịch WebAssembly, `blob:` vì
+ * three bóc texture nhúng trong `.glb` ra thành blob URL. Chung origin nghĩa là
+ * nới CSP cho CẢ app, tức là mở `eval` ngay trong trang đang giữ phiên đăng
+ * nhập của người dùng. Tách host thì hai bộ luật sống cạnh nhau mà không đụng
+ * nhau, và `localStorage` của game (điểm cao, tuỳ chọn) cũng không lẫn vào app.
+ */
+export const PLAYGROUND_HOST = 'playground';
+export const PLAYGROUND_ORIGIN = `${APP_SCHEME}://${PLAYGROUND_HOST}`;
+
 /** Scheme deep-link, dùng cho vòng OAuth quay lại app. */
 export const DEEP_LINK_SCHEME = 'cuongthai';
 
 export const WEB_ORIGIN = 'https://cuongthai.com';
 export const API_ORIGIN = process.env.CUONGTHAI_API_ORIGIN ?? 'https://api.cuongthai.com';
 export const MEDIA_ORIGIN = 'https://media.cuongthai.com';
+
+/**
+ * Nơi tải ~78 MB tài nguyên thế giới của sân chơi về lần đầu.
+ *
+ * Chính là thư mục web đang phục vụ — không dựng thêm chỗ chứa nào, không tốn
+ * thêm đĩa VPS (kho này đã một lần chết vì hết đĩa), và bản cài luôn tải đúng
+ * bộ tài nguyên khớp với bản dựng mà `dong-goi-san-choi.mjs` đã lập manifest.
+ *
+ * Đổi được bằng `CT_PLAYGROUND_ASSETS` để thử với máy chủ cục bộ.
+ */
+export const PLAYGROUND_ASSET_BASE =
+  process.env.CT_PLAYGROUND_ASSETS ?? `${WEB_ORIGIN}/playground`;
 
 /** Vite dev server — chỉ dùng khi chạy `npm run dev`. */
 export const DEV_SERVER_URL = 'http://localhost:5273';
@@ -60,8 +86,8 @@ export const DEV_SERVER_URL = 'http://localhost:5273';
  * bị chặn ở `will-navigate` và đẩy ra trình duyệt hệ thống.
  */
 export const ALLOWED_NAVIGATION_ORIGINS: readonly string[] = IS_DEV
-  ? [APP_ORIGIN, DEV_SERVER_URL, WEB_ORIGIN, 'https://www.cuongthai.com']
-  : [APP_ORIGIN, WEB_ORIGIN, 'https://www.cuongthai.com'];
+  ? [APP_ORIGIN, PLAYGROUND_ORIGIN, DEV_SERVER_URL, WEB_ORIGIN, 'https://www.cuongthai.com']
+  : [APP_ORIGIN, PLAYGROUND_ORIGIN, WEB_ORIGIN, 'https://www.cuongthai.com'];
 
 /**
  * Những gốc mà renderer được phép GỌI (connect-src trong CSP). Hẹp hơn nhiều

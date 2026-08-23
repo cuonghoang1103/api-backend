@@ -1,7 +1,12 @@
 # Sân chơi 3D: đóng gói thành app, hay ở lại trình duyệt?
 
 Viết 23/08/2026, sau khi user hỏi *"đóng gói để nâng cấp và làm thêm ở app chứ
-không phải ở trình duyệt được không, và nên đi đường nào"*.
+không phải ở trình duyệt được không, và nên đi đường nào"*, rồi chốt *"làm bản
+app đi, đóng gói phần Sinh tồn vào app"*.
+
+**Mục 1–6 là phần quyết định. Mục 7 là thứ đã dựng xong và đã chạy thật. Mục 8
+trả lời câu "sau này làm server online, đánh nhau trong thế giới của nhau được
+không".**
 
 ---
 
@@ -185,17 +190,146 @@ Cách chia việc rõ ràng:
 
 ---
 
-## 7. Việc phải làm, theo thứ tự
+## 7. ĐÃ DỰNG XONG (23/08/2026), và đã chạy thật
 
-| # | Việc | Ghi chú |
+Đường 2 ở mục 4 nay là mã thật, không còn là đề xuất.
+
+| Tệp | Việc |
+|---|---|
+| `desktop/scripts/dong-goi-san-choi.mjs` | Chia bản dựng: **11,9 MB / 44 tệp** đi kèm bản cài · **78,0 MB / 891 tệp** tải rời. Đổi `<base href>` sang `./`, sinh manifest có sha256 từng tệp + `version` của cả bộ. `npm run dong-goi:san-choi` |
+| `desktop/src/main/sanChoi.ts` | Hai thư mục, bộ tải 6 luồng (bỏ qua tệp đã có ⇒ đứt mạng chạy lại là tiếp tục; ghi `.part` rồi đổi tên; đối chiếu sha256), phục vụ `app://playground`, cửa sổ chơi riêng |
+| `desktop/src/main/security.ts` | **CSP tách theo origin** — sân chơi có `'unsafe-eval'` + `blob:`, renderer chính giữ nguyên luật chặt |
+| `desktop/src/main/index.ts` | Cờ WebGPU đặt **trước** `app.whenReady()` (+ Vulkan trên Linux) |
+| `desktop/src/main/ipc/sanChoi.ts`, `shared/ipc.ts`, `preload/index.ts` | 4 kênh + 1 sự kiện tiến độ. `tai()` trả về NGAY, tiến độ đi bằng sự kiện |
+| `desktop/src/renderer/features/sanchoi/SanChoiPage.tsx` | Màn hình `/playground`: trạng thái · nút tải có thanh tiến độ · **Chơi Sinh tồn** · Đi dạo tự do · Xoá tài nguyên |
+| `desktop/electron-builder.yml` | `extraResources` (KHÔNG phải `files`: asar không nén) |
+| `desktop/scripts/smoke-san-choi.mjs` | 17 phép kiểm, `npm run smoke:san-choi` |
+| `playground-3d/sources/Game/Game.js` | `#sinh-ton` vào thẳng chế độ Sinh tồn — app mở đúng địa chỉ này |
+| `playground-3d/vite.config.js` | **Vá lỗi `envDir`** — xem dưới |
+
+### Lỗi vá kèm: `npm run build` của sân chơi ra bản HỎNG trên máy sạch
+
+`envDir: '../'` trỏ ra **gốc repo**, không phải `playground-3d/` (Vite giải nó
+theo thư mục chạy, không theo `root`). Đo bằng `loadEnv('production', <dir>)`:
+chỉ `playground-3d/` có `.env.production`.
+
+Hậu quả im lặng: `%VITE_BASE_HREF%` không được thay ⇒ `<base>` **rỗng** ⇒ mọi
+tài nguyên tìm ở gốc site và 404 sạch ⇒ đúng cái "kẹt mãi ở màn hình tải, không
+lỗi nào" trong CLAUDE.md. Không ai thấy vì `import 'dotenv/config'` nạp
+`playground-3d/.env` (bị .gitignore) vào `process.env`, mà `process.env` thắng
+mọi `.env.<mode>`. Máy có `.env` thì dựng đúng; **máy sạch — máy CI, máy mới
+clone — dựng ra bản hỏng mà build vẫn XANH.**
+
+Nay `envDir` là đường dẫn tuyệt đối suy từ vị trí file cấu hình.
+
+### Bằng chứng chạy thật
+
+`npm run smoke:san-choi` — **17/17 đạt**, gồm:
+
+- `app://playground/index.html` trả 200, `<base href="./">` đúng
+- manifest 891 tệp / 78,0 MB
+- `..%2f` ra ngoài gốc bị chặn **403** (dạng mã hoá, vì `..` trần bị chuẩn hoá
+  trước khi tới handler — bộ kiểm phải thử đúng cái chốt)
+- CSP: sân chơi chạy được `eval`, renderer chính **chặn** script từ `blob:`
+- **Tải thật 891/891 tệp** qua đúng đường `renderer → IPC → net.fetch → đĩa →
+  sha256`, rồi tệp thế giới phục vụ được qua `app://playground`
+
+Bộ kiểm này đã **tự bắt được chính nó hai lần** trước khi tin được — đúng bài
+[[feedback_verify_the_checker_before_the_content]]:
+
+1. Đọc CSP bằng `net.fetch` ở main → rỗng, 4 phép kiểm đỏ oan. `net.fetch` ở
+   main KHÔNG đi qua `session.webRequest` nên không bao giờ thấy header. Đổi
+   sang đo **hiệu lực** (`eval`, script từ `blob:`).
+2. Đo "app không có `'unsafe-eval'`" bằng `eval` → đỏ oan tiếp: chạy
+   `dist/main/index.cjs` từ `node_modules` thì `isPackaged` luôn **false** ⇒ app
+   dùng nhánh CSP **dev**, mà nhánh đó CÓ `'unsafe-eval'`. `CT_RENDERER=bundle`
+   chỉ đổi nguồn renderer, không đổi `isPackaged`.
+
+### Ba điều bộ kiểm KHÔNG chứng minh được
+
+| Điều | Đo bằng gì |
+|---|---|
+| Game có **vẽ ra** không | Máy có GPU. Container này không có |
+| Bản đóng gói thật bỏ `'unsafe-eval'` | Cài bản `.dmg`/`.exe` rồi đo |
+| WebGPU hay lùi về WebGL2 | `cd desktop && npm run do:webgpu` trên máy nhà |
+
+---
+
+## 8. Làm tiếp tới đâu: server online, đánh nhau trong thế giới của nhau
+
+**Làm được**, và ống dẫn đã có sẵn một nửa — nhưng nửa còn lại mới là phần khó,
+nên đừng đọc "có sẵn WebSocket" thành "gần xong".
+
+### Đã có
+
+`sources/Game/Server.js` (132 dòng, đi theo bản gốc folio-2025):
+
+- WebSocket + **msgpack** (nhị phân, gọn hơn JSON nhiều — đúng thứ cần cho
+  đồng bộ 15–20 gói/giây)
+- `uuid` mỗi máy, giữ trong `localStorage`
+- Tự nối lại mỗi 2 giây, có sẵn lớp CSS `is-server-online/offline` và thông báo
+- Bật/tắt bằng **đúng một biến**: `VITE_SERVER_URL`. Production đang để trống
+  nên toàn bộ phần mạng đang tắt.
+
+Đang dùng cho hai thứ, và cả hai đều **không phải thời gian thực**:
+`Whispers` (lời nhắn người chơi để lại trong thế giới) và bảng giờ đường đua.
+
+### Chưa có
+
+**Đồng bộ vị trí người chơi.** Không một dòng nào vẽ xe của người khác. Đây là
+phần phải viết mới.
+
+### Ba bước, theo thứ tự
+
+1. **Máy chủ WS** (Node) giữ phòng + phát lại trạng thái. Không cần vật lý.
+2. **Client gửi–nhận trạng thái xe**: gửi `{pos, quat, vel}` của mình ~15–20
+   lần/giây; nhận của người khác rồi dựng một `VisualVehicle` cho mỗi người và
+   **nội suy** giữa hai gói (thiếu nội suy thì xe người khác giật từng nấc —
+   đây là lỗi ai cũng mắc lần đầu).
+3. **Bắn nhau** — và đây mới là quyết định thật:
+
+| Mô hình | Cái giá | Hợp khi |
 |---|---|---|
-| 1 | `cd desktop && npm run do:webgpu` trên máy nhà | 5 phút, quyết định phần còn lại |
-| 2 | Điền credit hoặc thay `boss.glb` | **chặn phát hành**, xem 6.6 |
-| 3 | Dựng thử `VITE_BASE_HREF=./`, mở bằng Electron ở máy | chứng minh nó chạy ngoài Next |
-| 4 | Protocol `app://playground/` + tải rời vào `userData` | phần việc chính |
-| 5 | Khai `extraResources`, dựng thử ba nền tảng | `electron-builder.yml` |
-| 6 | Thêm mục "Sân chơi" vào app + nút tải lần đầu | giao diện |
-| 7 | Smoke test: chạy bản ĐÃ ĐÓNG GÓI, không phải bản dev | `CT_RENDERER=bundle`, như `smoke.mjs` |
+| **Client tự quyết** (mình tự tính bắn trúng ai rồi báo lên) | Gian lận được | Chơi với bạn bè ⇒ **chọn cái này** |
+| **Máy chủ quyết** | Phải chạy Rapier trên Node và viết lại vật lý xe cho chạy được hai nơi | Có tiền thưởng / bảng xếp hạng công khai |
 
-Bước 7 không bỏ được. Bài học đắt nhất của repo này viết ở CLAUDE.md:
-***build xanh không có nghĩa là ảnh chạy được.***
+`@dimforge/rapier3d` chạy được ở Node nên đường thứ hai KHÔNG bị chặn về kỹ
+thuật — nó chỉ đắt gấp nhiều lần. Đường giữa: client tự quyết + máy chủ kiểm
+vài điều rẻ tiền (tốc độ tối đa, tầm bắn, nhịp bắn).
+
+### Ba điều biết trước kẻo trả giá
+
+1. ⚠️ **Giao thức mạng phải có SỐ PHIÊN BẢN ngay từ gói đầu tiên.** Client cũ
+   nối vào máy chủ mới là nguồn lỗi câm kinh điển: không ai báo lỗi, chỉ là xe
+   người khác đứng im hoặc bay lên trời. Máy chủ phải từ chối thẳng phiên bản
+   nó không hiểu, kèm câu nói rõ "cập nhật app đi".
+2. ⚠️ **Đừng nhét máy chủ game chung chỗ với Postgres.** VPS 6 GB đã chật, và
+   kho này đã một lần chết vì hết đĩa (18/08). Máy chủ game là tiến trình sống
+   lâu, ăn CPU **đều đặn** chứ không theo đợt như API. Đo trước khi ghép.
+3. ⚠️ **`coturn/` đã có sẵn nhưng KHÔNG dùng lại được ở đây.** Nó phục vụ
+   WebRTC cho gọi thoại. Đồng bộ trạng thái game qua WebSocket đơn giản hơn
+   nhiều và đủ dùng; WebRTC data channel chỉ đáng cân nhắc nếu sau này cần
+   nối thẳng máy-tới-máy.
+
+### App giúp được gì cho phần online
+
+| | |
+|---|---|
+| Phiên bản client **cố định** | Máy chủ biết chắc mình đang nói chuyện với ai |
+| `electron-updater` đẩy bản mới **đồng loạt** | Đúng lúc giao thức đổi — thứ quyết định ở điểm 1 trên |
+| Không tải lại 78 MB | Người chơi vào lại phòng trong vài giây |
+
+Nói cách khác: phần online là lý do **mạnh nhất** để có bản app, mạnh hơn cả
+chuyện hiệu năng.
+
+---
+
+## 9. ⛔ Trước khi phát hành bản cài ĐẦU TIÊN
+
+Nhắc lại mục 6.6 vì nó là thứ duy nhất **chặn**: `static/monsters/boss.glb`
+không có tác giả, nguồn hay giấy phép nào được ghi lại, mà nó đang dùng cho cả
+ba loại quái Sinh tồn — tức là chính phần đang đóng gói vào app.
+
+Phục vụ trên web đã là rủi ro. **Phát hành thành file cài đặt thì không rút lại
+được**, vì bản cài nằm trên máy người dùng. Điền credit hoặc thay model trước
+khi bấm `npm run phat-hanh`.

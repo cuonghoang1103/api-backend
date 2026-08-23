@@ -84,7 +84,7 @@ check('Buffer không lộ ra renderer', !isolation.hasBuffer);
    thì thêm cả vào đây, đó chính là điều phép kiểm này muốn ép. */
 const expected = [
   'agent', 'app', 'auth', 'browser', 'duongCuaFile', 'mau', 'music', 'notes',
-  'on', 'robot', 'settings', 'storage', 'update',
+  'on', 'robot', 'sanChoi', 'settings', 'storage', 'update',
 ];
 console.log('\nCầu nối preload:');
 check('window.cuongthai tồn tại', isolation.bridgeKeys !== null);

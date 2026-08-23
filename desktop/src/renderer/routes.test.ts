@@ -20,6 +20,7 @@ import { GROUP_LABELS, GROUP_ORDER, ROUTES } from './routes';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const APP_DIR = path.resolve(here, '../../../frontend/src/app');
+const PUBLIC_DIR = path.resolve(here, '../../../frontend/public');
 
 /**
  * Trang Next tồn tại nếu có `<route>/page.tsx`.
@@ -33,6 +34,17 @@ function pageExists(routePath: string): boolean {
 
   const direct = path.join(APP_DIR, ...segments, 'page.tsx');
   if (fs.existsSync(direct)) return true;
+
+  /**
+   * Ứng dụng TĨNH trong `public/` cũng là một trang thật trên web.
+   *
+   * `/playground` là sân chơi 3D — một bản dựng Vite nằm ở
+   * `frontend/public/playground/index.html`, không phải trang Next. Nó có URL
+   * thật, mở được, và đúng là thứ khẳng định trong `routes.ts` nói tới; chỉ có
+   * điều nó không bao giờ có `page.tsx`. Thiếu nhánh này thì phép kiểm đỏ trong
+   * khi cả bảng điều hướng lẫn website đều đúng.
+   */
+  if (fs.existsSync(path.join(PUBLIC_DIR, ...segments, 'index.html'))) return true;
 
   // Thử với một lớp route group bọc ngoài: (nhom)/<đường dẫn>/page.tsx
   const groups = fs

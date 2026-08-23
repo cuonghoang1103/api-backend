@@ -14,3 +14,6 @@ out/
 
 # Ảnh chụp của phép kiểm robot — sinh ra mỗi lần chạy, không phải nguồn.
 robot-thu.png
+
+# Sinh ra bởi `npm run dong-goi:san-choi` — bản sao phần mã sân chơi.
+resources/

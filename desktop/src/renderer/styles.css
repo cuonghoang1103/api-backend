@@ -710,6 +710,33 @@ code {
   color: var(--ct-err);
 }
 
+/* ── Sân chơi 3D ───────────────────────────────────────── */
+
+.ct-sc-tiendo {
+  margin-top: 16px;
+}
+
+.ct-sc-thanh {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--ct-hover);
+  overflow: hidden;
+}
+
+.ct-sc-day {
+  height: 100%;
+  background: var(--ct-accent);
+  /* Chỉ chạy hoạt hình CHIỀU RỘNG. Thanh này cập nhật ~10 lần/giây suốt vài
+     phút; hoạt hình màu hay bóng ở nhịp đó là việc vô ích cho GPU đúng lúc
+     người dùng đang chờ. */
+  transition: width 160ms linear;
+}
+
+.ct-sc-tiendo p {
+  margin: 10px 0 0;
+  font-size: 13px;
+}
+
 /* ── Bảng lệnh ─────────────────────────────────────────── */
 
 .ct-palette-backdrop {

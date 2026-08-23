@@ -34,7 +34,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 7 | `linux-bash` | `linux-bash` — Linux & Bash | ✅ **XONG** (13 mục · 69 bài · 1.660k · TB 24.064) |
 | 8 | `docker` | `docker` — Docker | ✅ **XONG** (13 mục · 76 bài · 1.584k · TB 20.842) |
 | 9 | `redis` | `redis` — Redis | ✅ **XONG** (13 mục · 76 bài · 1.582k · TB 20.819) |
-| 10 | `prisma-orm` | — | ❌ **THIẾU** |
+| 10 | `prisma-orm` | `prisma-orm` — Prisma ORM | ✅ **XONG** (13 mục · 76 bài · 1.744k · TB 22.943) |
 | 11 | `authentication` | — | ❌ **THIẾU** |
 | 12 | `nginx` | — | ❌ **THIẾU** |
 | 13 | `deploy-vps` | — | ❌ **THIẾU** |
@@ -50,16 +50,16 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 23 | `domains-dns-tls` | — | ❌ **THIẾU** |
 | 24 | `cuongthai-roadmap` | *(lộ trình, không phải khoá)* | — bỏ qua |
 
-**Tổng: 9 khoá đã có · 14 khoá còn thiếu.**
+**Tổng: 10 khoá đã có · 13 khoá còn thiếu.**
 
 ### Thứ tự ưu tiên (đã chốt)
 
 Theo thứ tự một người học thật sự cần, và theo mức độ khoá đó được các khoá khác dẫn tới:
 
-1. **Git & GitHub** — nền tảng, mọi khoá khác giả định đã biết; roadmap trỏ tới 8 lần
-2. **Linux & Bash** — điều kiện cần của deploy, Docker, Nginx
-3. **Docker** — Node.js Ch17 chỉ chạm bề mặt; xứng đáng khoá riêng
-4. **Redis** · 5. **Prisma ORM** · 6. **Authentication** — đào sâu ba chương của Node.js
+1. ✅ **Git & GitHub** — nền tảng, mọi khoá khác giả định đã biết; roadmap trỏ tới 8 lần
+2. ✅ **Linux & Bash** — điều kiện cần của deploy, Docker, Nginx
+3. ✅ **Docker** — Node.js Ch17 chỉ chạm bề mặt; xứng đáng khoá riêng
+4. ✅ **Redis** · 5. ✅ **Prisma ORM** · 6. **Authentication ← TIẾP THEO** — đào sâu ba chương của Node.js
 7. **Nginx** · 8. **Deploy VPS** · 9. **GitHub Actions (CI/CD)** — mảng vận hành
 10. **Tailwind CSS** · 11. **Socket.IO** — mảng sản phẩm
 12. **Object Storage (S3/R2)** · 13. **Media Processing** · 14. **Observability**
@@ -167,6 +167,10 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 | 23/08/2026 | Khoá Redis — Chương 6 (bộ đệm), 7 (nguyên tử), 8 (Pub/Sub & Stream) | 52 bài · 1.077k ký tự · 132 sơ đồ |
 | 23/08/2026 | Khoá Redis — Chương 9 (bộ nhớ/lưu trữ), 10 (vận hành/ACL), 11 (mở rộng) | 70 bài · 1.457k ký tự · 182 sơ đồ |
 | 23/08/2026 | **Khoá Redis — HOÀN THÀNH** (Chương 12, chẩn đoán + kết khoá) | **76 bài · 1.582k ký tự · TB 20.819 · 196 sơ đồ · 386 nguồn · 124 bẫy · 13 quiz · đạt mọi sàn** |
+| 23/08/2026 | Khoá Prisma ORM — Mục 0 → Chương 8 | 58 bài · 1.196k ký tự · 138 sơ đồ |
+| 23/08/2026 | Khoá Prisma ORM — Chương 9 (hiệu năng), 10 (cửa thoát hiểm) | 70 bài · 1.483k ký tự · 186 sơ đồ |
+| 23/08/2026 | Khoá Prisma ORM — Chương 11 (production) | 76 bài · 1.621k ký tự · 212 sơ đồ |
+| 23/08/2026 | **Khoá Prisma ORM — HOÀN THÀNH** (Chương 12, chẩn đoán + thi cuối) | **76 bài · 1.744k ký tự · TB 22.943 · 234 sơ đồ · 650 nguồn · 114 bẫy · 13 quiz · đạt mọi sàn** |
 
 
 ### Khoá Linux & Bash — XONG (22/08/2026)
@@ -212,6 +216,29 @@ như mọi sự cố Redis đều suy ra từ đúng một sự thật — *mộ
 lệnh* — và Redis sẽ làm chính xác điều bạn bảo, kể cả những điều có sức phá
 huỷ, vì nó không có ràng buộc, không có quay lui và không có lược đồ.
 
+### Khoá Prisma ORM — XONG (23/08/2026)
+
+13 mục (Mục 0 + Chương 1–12), **76 bài · 1.744k ký tự · TB 22.943 ký tự/bài ·
+234 sơ đồ `lz-*` · 650 thẻ nguồn học · 114 bẫy · 992 khối code ·
+566 khối output · 13 quiz · 126 liên kết thực hành Code Lab**.
+
+Đường đi: ORM giải bài toán gì → ngôn ngữ lược đồ → quan hệ (hai phía) →
+đọc/ghi và ghi lồng nhau → truy vấn sâu → migration → giao dịch & tương tranh
+→ hệ kiểu được sinh ra → hiệu năng (đo trước, N+1, chỉ mục, pool, cache) →
+cửa thoát hiểm (SQL thô, TypedSQL, `$extends`) → đưa lên production (engine
+trong ảnh, Dockerfile, cửa sổ deploy, seed/nạp bù, SIGTERM) → chẩn đoán.
+
+**KHÔNG trùng Node.js Chương 7** (dùng Prisma như phương tiện đưa Notes API
+sang PostgreSQL) và **KHÔNG trùng khoá PostgreSQL** (dạy SQL và chính cơ sở
+dữ liệu). Luận điểm xuyên suốt: phần lớn "lỗi Prisma" thật ra là lỗi cơ sở
+dữ liệu đang mặc bộ đồ TypeScript — và cái tín hiệu **xanh lúc dựng, xanh lúc
+đẩy, hỏng trên production** lặp lại ở đủ năm sự cố có thật của kho này được
+dệt vào bài học: engine musl/glibc (7 phút 502), migration `add_music_and_profile`
+trùng tên ràng buộc làm `migrate dev` hỏng vĩnh viễn (P3006), enum
+`CODE` → `CODE_REVIEW` qua sạch checklist rồi vỡ seed trên production, hai
+đường ống deploy đua nhau tới lỗi 500 feed 03/07, và cache dựng làm đầy đĩa
+chứa Postgres.
+
 Còn hai bước phải chạy ở máy nhà — xem §6.
 
 ---
@@ -232,7 +259,7 @@ node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
 node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ```
 
-**Đang chờ chạy — bốn khoá:**
+**Đang chờ chạy — năm khoá:**
 
 ```bash
 # Git & GitHub
@@ -254,11 +281,16 @@ node scripts/course-seed.mjs --file ./content/courses/docker.mjs --apply
 docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
   --slug redis --icon redis --color DC382D --title "Redis" --subtitle "Cache → Production"
 node scripts/course-seed.mjs --file ./content/courses/redis.mjs --apply
+
+# Prisma ORM
+docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+  --slug prisma-orm --icon prisma --color 2D3748 --title "Prisma ORM" --subtitle "Schema → Production"
+node scripts/course-seed.mjs --file ./content/courses/prisma-orm.mjs --apply
 ```
 
 ⚠️ **Linux & Bash** với **Docker** dùng **category mới `devops`** (`DevOps & Vận hành`),
 chưa từng có trong DB — lần seed đầu sẽ thêm một mục lọc mới trên trang `/courses`.
-**Redis** dùng category `databases` đã có sẵn (chung với PostgreSQL).
+**Redis** và **Prisma ORM** dùng category `databases` đã có sẵn (chung với PostgreSQL).
 
 ---
 

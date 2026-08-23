@@ -17,6 +17,7 @@
 import s00 from './nginx/s00-intro.mjs';
 import s01 from './nginx/s01-chon-server.mjs';
 import s02 from './nginx/s02-location.mjs';
+import s03 from './nginx/s03-reverse-proxy.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -42,5 +43,6 @@ export default {
     s00,
     s01,
     s02,
+    s03,
   ],
 };

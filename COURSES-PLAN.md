@@ -36,7 +36,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 9 | `redis` | `redis` — Redis | ✅ **XONG** (13 mục · 76 bài · 1.582k · TB 20.819) |
 | 10 | `prisma-orm` | `prisma-orm` — Prisma ORM | ✅ **XONG** (13 mục · 76 bài · 1.744k · TB 22.943) |
 | 11 | `authentication` | `authentication` — Authentication | ✅ **XONG** (13 mục · 76 bài · 1.538k · TB 20.236) |
-| 12 | `nginx` | — | ❌ **THIẾU** |
+| 12 | `nginx` | `nginx` — Nginx | ✅ **XONG** (12 mục · 70 bài · 1.206k · TB 17.224) |
 | 13 | `deploy-vps` | — | ❌ **THIẾU** |
 | 14 | `github-actions` | — | ❌ **THIẾU** |
 | 15 | `tailwind-css` | — | ❌ **THIẾU** |
@@ -50,7 +50,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 23 | `domains-dns-tls` | — | ❌ **THIẾU** |
 | 24 | `cuongthai-roadmap` | *(lộ trình, không phải khoá)* | — bỏ qua |
 
-**Tổng: 11 khoá đã có · 12 khoá còn thiếu.**
+**Tổng: 12 khoá đã có · 11 khoá còn thiếu.**
 
 ### Thứ tự ưu tiên (đã chốt)
 
@@ -60,7 +60,7 @@ Theo thứ tự một người học thật sự cần, và theo mức độ kho
 2. ✅ **Linux & Bash** — điều kiện cần của deploy, Docker, Nginx
 3. ✅ **Docker** — Node.js Ch17 chỉ chạm bề mặt; xứng đáng khoá riêng
 4. ✅ **Redis** · 5. ✅ **Prisma ORM** · 6. ✅ **Authentication** — đào sâu ba chương của Node.js
-7. **Nginx ← TIẾP THEO** · 8. **Deploy VPS** · 9. **GitHub Actions (CI/CD)** — mảng vận hành
+7. ✅ **Nginx** · 8. **Deploy VPS ← TIẾP THEO** · 9. **GitHub Actions (CI/CD)** — mảng vận hành
 10. **Tailwind CSS** · 11. **Socket.IO** — mảng sản phẩm
 12. **Object Storage (S3/R2)** · 13. **Media Processing** · 14. **Observability**
 15. **Payment Integration** (+ **VNPay**, **PayOS**) · 18. **Domains, DNS & TLS**
@@ -176,6 +176,9 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 | 23/08/2026 | Khoá Authentication — Chương 8 (OAuth/OIDC), 9 (phân quyền) | 58 bài · 1.210k ký tự · 230 sơ đồ |
 | 23/08/2026 | Khoá Authentication — Chương 10 (tấn công), 11 (vận hành) | 70 bài · 1.434k ký tự · 278 sơ đồ |
 | 23/08/2026 | **Khoá Authentication — HOÀN THÀNH** (Chương 12, chẩn đoán + thi cuối) | **76 bài · 1.538k ký tự · TB 20.236 · 302 sơ đồ · 644 nguồn · 122 bẫy · 13 quiz · đạt mọi sàn** |
+| 23/08/2026 | Khoá Nginx — Mục 0 → Chương 9 | 58 bài · 966k ký tự · 184 sơ đồ |
+| 23/08/2026 | Khoá Nginx — Chương 10 (log & quan sát) | 64 bài · 1.090k ký tự · 200 sơ đồ |
+| 23/08/2026 | **Khoá Nginx — HOÀN THÀNH** (Chương 11, chẩn đoán + thi cuối) | **70 bài · 1.206k ký tự · TB 17.224 · 216 sơ đồ · 562 nguồn · 118 bẫy · 12 quiz · đạt mọi sàn** |
 
 
 ### Khoá Linux & Bash — XONG (22/08/2026)
@@ -276,6 +279,41 @@ Còn hai bước phải chạy ở máy nhà — xem §6.
 
 ---
 
+### Khoá Nginx — XONG (23/08/2026)
+
+12 mục (Mục 0 + Chương 1–11), **70 bài · 1.206k ký tự** · TB 17.224 ·
+216 sơ đồ `lz-*` · 562 thẻ nguồn học · 118 bẫy · 158 khối code ·
+268 khối output · 12 quiz · 0 lỗi · đạt mọi sàn §3.
+
+Đường đi: một bản dựng chạy được → request tìm ra khối `server` thế nào →
+`location` nào thắng → reverse proxy → tệp tĩnh → bộ đệm → TLS và HTTP/2 →
+giới hạn (tốc độ, kết nối, kích thước) → viết lại và ánh xạ → cân bằng tải →
+log và quan sát → chẩn đoán.
+
+**Toàn bộ khối output là ĐO THẬT** trên nginx 1.24.0 (`--with-debug`),
+OpenSSL 3.0.13 và các upstream Node dựng trong sandbox — không có khối nào
+chép từ tài liệu. Vài phép đo đáng nhớ: thử **cả 158 bộ mã hoá** từng cái một
+(khối mặc định nhận 21, trong đó 12 cái KHÔNG có forward secrecy) · hồ sơ
+riêng tư của một người dùng bị bộ đệm phục vụ cho khách vãng lai · `strace`
+đếm 900 syscall `write()` gom lại còn **1** nhờ `buffer=64k`, trong khi đồng
+hồ bấm giờ **không thấy khác biệt nào** giữa bật và tắt log · một request tầm
+thường ở mức `debug` tốn 5.913 byte (gấp 52 lần một dòng access log) ·
+`accepts 42 / handled 3` cho thấy 39 kết nối bị vứt mà access log **không hề
+có dấu vết**.
+
+**Ba lỗi của chính tôi được giữ lại trong bài** thay vì lặng lẽ sửa, vì chúng
+là lý lẽ tốt hơn mọi lời khẳng định: một phép đo gzip bắn cùng một request 200
+lần nên chỉ đo bộ nén (đo lại bằng lưu lượng đa dạng) · một phép thử trả về
+hai tệp log rỗng trông như kết quả sạch, thật ra nginx chưa từng khởi động vì
+trùng cổng · và **cấu hình production ở Bài 11.5 dính đúng cái bẫy mà Bài 11.3
+vừa cảnh báo** — `location /tinh/` khai `add_header` riêng nên mất HSTS và
+X-Frame-Options, chỉ còn 1/3 header bảo mật, và thứ bắt được nó không phải
+kiến thức mà là một vòng lặp đi đếm header trên từng tuyến.
+
+Còn hai bước phải chạy ở máy nhà — xem §6.
+
+---
+
 ## 6. Việc chưa chạy được từ sandbox (áp cho MỌI khoá mới)
 
 Hai bước cuối của mỗi khoá cần môi trường mà sandbox không có — hãy chạy khi ở máy nhà:
@@ -292,7 +330,7 @@ node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
 node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ```
 
-**Đang chờ chạy — sáu khoá:**
+**Đang chờ chạy — bảy khoá:**
 
 ```bash
 # Git & GitHub
@@ -325,9 +363,14 @@ docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
   --slug authentication --icon openid --color F78C40 --title "Authentication" --subtitle "Login → Production"
 # (Nếu slug "openid" trả 404 ở Simple Icons thì lùi về --icon auth0 --color EB5424.)
 node scripts/course-seed.mjs --file ./content/courses/authentication.mjs --apply
+
+# Nginx
+docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+  --slug nginx --icon nginx --color 009639 --title "Nginx" --subtitle "Request → Production"
+node scripts/course-seed.mjs --file ./content/courses/nginx.mjs --apply
 ```
 
-⚠️ **Linux & Bash** với **Docker** dùng **category mới `devops`** (`DevOps & Vận hành`),
+⚠️ **Linux & Bash**, **Docker** và **Nginx** dùng **category mới `devops`** (`DevOps & Vận hành`),
 chưa từng có trong DB — lần seed đầu sẽ thêm một mục lọc mới trên trang `/courses`.
 **Redis** và **Prisma ORM** dùng category `databases` đã có sẵn (chung với PostgreSQL).
 **Authentication** dùng category `backend` đã có sẵn (chung với Node.js).

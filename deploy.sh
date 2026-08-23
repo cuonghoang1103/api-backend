@@ -997,7 +997,24 @@ fi
 
 # ── Step 5: Reload nginx ───────────────────────────────────────────
 info "Reloading nginx config..."
-$DC exec -T nginx nginx -s reload 2>/dev/null && ok "Nginx reloaded" || true
+# `nginx -t` TRƯỚC, và bắt lỗi thật.
+#
+# Dòng cũ là `nginx -s reload 2>/dev/null && ok || true`: config sai thì reload
+# hỏng, `|| true` nuốt mất, deploy vẫn báo xanh — còn nginx im lặng chạy tiếp
+# CONFIG CŨ. Nghĩa là mọi thay đổi nginx đều có thể "deploy thành công" mà
+# không hề được áp dụng, và không ai biết cho tới khi đi tìm một triệu chứng
+# hoàn toàn khác.
+#
+# `nginx -t` không đụng vào tiến trình đang chạy, nên phép kiểm này an toàn.
+if $DC exec -T nginx nginx -t >/dev/null 2>&1; then
+    $DC exec -T nginx nginx -s reload 2>/dev/null && ok "Nginx reloaded" || \
+        warn "nginx -t xanh nhưng reload hỏng — kiểm 'docker logs cuonghoangdev_nginx'"
+else
+    fail "nginx.conf SAI cú pháp — KHÔNG reload. nginx vẫn chạy config cũ:"
+    $DC exec -T nginx nginx -t 2>&1 | sed 's/^/      /'
+    fail "Sửa nginx/nginx.conf rồi chạy lại deploy."
+    exit 1
+fi
 
 # ── Step 6: Docker cleanup (free SSD space) ───────────────────────
 # Every deploy builds a fresh repo-backend/repo-frontend image; the

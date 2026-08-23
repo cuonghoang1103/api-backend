@@ -78,6 +78,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/projects`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${SITE_URL}/games`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${SITE_URL}/language`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+
+    // ── Các trang công khai trước đây KHÔNG có trong sitemap ───────────────
+    // Không trang nào ở đây đòi đăng nhập (đã đối chiếu từng cái với
+    // middleware.ts và với chính page.tsx của nó — những trang có
+    // `redirect('/login')` như /exam/[examId] cố ý KHÔNG nằm đây).
+    //
+    // `/code-lab` là cửa vào của phần nội dung lớn nhất web: nó liên kết
+    // xuống toàn bộ track và bài tập được liệt kê ở cuối hàm này.
+    { url: `${SITE_URL}/code-lab`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${SITE_URL}/algorithms`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${SITE_URL}/interview`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${SITE_URL}/cv`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${SITE_URL}/hub`, lastModified: now, changeFrequency: 'weekly', priority: 0.5 },
+    { url: `${SITE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${SITE_URL}/download`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${SITE_URL}/tools/image-to-doc`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+
+    // Sân chơi 3D. Trước đây KHÔNG có ở đây, và trên trang chủ nó lại nấp sau
+    // một <button> không href (đã sửa trong PlaygroundGate.tsx) — nên thực tế
+    // Googlebot không có lối nào bò tới, dù đây là thứ khác biệt nhất của web.
+    // Không có dấu gạch chéo cuối: `/playground` được rewrite sang
+    // /playground/index.html trong next.config.js, còn `/playground/` thì Next
+    // bỏ dấu gạch chéo và 308 ngược lại — URL chuyển hướng trong sitemap là
+    // một lỗi mềm của Search Console.
+    { url: `${SITE_URL}/playground`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${SITE_URL}/tech-trends`, lastModified: now, changeFrequency: 'daily', priority: 0.6 },
     { url: `${SITE_URL}/voice`, lastModified: now, changeFrequency: 'daily', priority: 0.6 },
     { url: `${SITE_URL}/forum`, lastModified: now, changeFrequency: 'daily', priority: 0.5 },
@@ -109,16 +134,57 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   type TechTrendItem = { id: number | string; slug?: string; updatedAt?: string; publishedAt?: string; createdAt?: string; coverImageUrl?: string }
   type GameItem = { id: number | string; slug?: string; status?: string; updatedAt?: string; createdAt?: string; coverImage?: string }
 
-  const [courses, posts, products, projects, techTrends, games] = await Promise.all([
-    safeFetch<CourseItem>('/courses?limit=100'),
-    // `size`, not `limit` — the blog list endpoint ignores `limit` and falls
-    // back to its default of 10, which would silently truncate the sitemap
-    // once there are more than ten resource posts.
-    safeFetch<BlogItem>('/blog/posts?size=100'),
-    safeFetch<ShopItem>('/shop/products?limit=100'),
-    safeFetch<ProjectItem>('/projects?limit=100'),
-    safeFetch<TechTrendItem>('/tech-trends/articles?size=100'),
-    safeFetch<GameItem>('/games'),
+  // Code Lab: một lời gọi cho TOÀN BỘ track + bài tập, ở dạng nhẹ nhất
+  // (slug + updatedAt). Endpoint `/code-lab/sitemap` sinh ra riêng cho việc
+  // này — xem `listSitemapEntries` ở backend để biết vì sao KHÔNG dùng
+  // `/code-lab/exercises` (nó trả nguyên đề bài + lời giải, và chặn limit ở
+  // 100 ⇒ 126 lượt gọi).
+  type CodeLabSitemap = {
+    tracks: { slug: string; updatedAt?: string }[]
+    exercises: { slug: string; trackSlug: string; updatedAt?: string }[]
+  }
+  // Fail-open giống `safeFetch`, chỉ khác ở SHAPE trả về (một object hai mảng,
+  // không phải `{ data: [...] }`) nên không dùng chung được. Thời hạn 8s thay
+  // vì 3s: đây là truy vấn nặng nhất — nhưng backend đã nhớ tạm 1 giờ trong
+  // tiến trình (`listSitemapEntries`), nên hầu hết lượt gọi về trong vài ms và
+  // 8s chỉ là trần cho lần đầu sau khi khởi động lại.
+  async function fetchCodeLab(): Promise<CodeLabSitemap> {
+    const empty: CodeLabSitemap = { tracks: [], exercises: [] }
+    try {
+      const res = await fetch(`${getServerApiBaseUrl()}/api/v1/code-lab/sitemap`, {
+        headers: { 'User-Agent': 'cuongthai-sitemap/1.0' },
+        next: { revalidate: 3600 },
+        signal: AbortSignal.timeout(8000),
+      })
+      if (!res.ok) return empty
+      const d = (await res.json())?.data
+      return {
+        tracks: Array.isArray(d?.tracks) ? d.tracks : [],
+        exercises: Array.isArray(d?.exercises) ? d.exercises : [],
+      }
+    } catch (err) {
+      console.warn('[sitemap] code-lab fetch failed:', (err as Error).message)
+      return empty
+    }
+  }
+
+  // Code Lab đi CÙNG Promise.all, không xếp sau nó. Gọi tuần tự thì tổng thời
+  // gian là 3s + 8s = 11s, và Search Console bỏ cuộc trước khi sitemap kịp trả
+  // — đúng thứ mà chú thích `dynamic = 'force-dynamic'` ở đầu file dặn tránh.
+  // Chạy song song thì tổng chỉ bằng lời gọi chậm nhất.
+  const [[courses, posts, products, projects, techTrends, games], codeLab] = await Promise.all([
+    Promise.all([
+      safeFetch<CourseItem>('/courses?limit=100'),
+      // `size`, not `limit` — the blog list endpoint ignores `limit` and falls
+      // back to its default of 10, which would silently truncate the sitemap
+      // once there are more than ten resource posts.
+      safeFetch<BlogItem>('/blog/posts?size=100'),
+      safeFetch<ShopItem>('/shop/products?limit=100'),
+      safeFetch<ProjectItem>('/projects?limit=100'),
+      safeFetch<TechTrendItem>('/tech-trends/articles?size=100'),
+      safeFetch<GameItem>('/games'),
+    ]),
+    fetchCodeLab(),
   ])
 
   const courseUrls: MetadataRoute.Sitemap = courses
@@ -227,5 +293,61 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Music tracks intentionally omitted — no per-track page (played in-place
   // on /music), so linking /music/:id would 404.
 
-  return [...staticPages, ...courseUrls, ...blogUrls, ...shopUrls, ...projectUrls, ...techTrendUrls, ...gameUrls, ...voiceUrls]
+  // ── Code Lab ────────────────────────────────────────────────────────────
+  // Đây là phần nội dung LỚN NHẤT của web (~12.500 bài tập) và trước
+  // 23/08/2026 không có URL nào của nó trong sitemap — sitemap chỉ có 76 dòng
+  // trong khi trang chủ khoe hàng nghìn bài.
+  //
+  // Điều kiện tiên quyết ĐÃ xong trước khi thêm vào đây: mỗi trang bài tập nay
+  // có tiêu đề + mô tả + canonical riêng, nhờ
+  // `code-lab/[trackSlug]/[exerciseSlug]/layout.tsx`. Nộp 12.500 URL trùng
+  // tiêu đề thì Google gộp hoặc bỏ, nên thứ tự hai việc này không đảo được.
+  const codeTrackUrls: MetadataRoute.Sitemap = codeLab.tracks
+    .filter((t) => t.slug)
+    .map((t) => ({
+      url: `${SITE_URL}/code-lab/${t.slug}`,
+      lastModified: t.updatedAt ? new Date(t.updatedAt) : now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }))
+
+  const codeExerciseUrls: MetadataRoute.Sitemap = codeLab.exercises
+    .filter((e) => e.slug && e.trackSlug)
+    .map((e) => ({
+      url: `${SITE_URL}/code-lab/${e.trackSlug}/${e.slug}`,
+      lastModified: e.updatedAt ? new Date(e.updatedAt) : now,
+      // Nội dung bài tập gần như không đổi sau khi xuất bản; nói 'monthly' để
+      // Googlebot không quay lại nện 12.500 URL mỗi ngày trên con VPS 6GB.
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    }))
+
+  const all = [
+    ...staticPages,
+    ...courseUrls,
+    ...blogUrls,
+    ...shopUrls,
+    ...projectUrls,
+    ...techTrendUrls,
+    ...gameUrls,
+    ...voiceUrls,
+    ...codeTrackUrls,
+    ...codeExerciseUrls,
+  ]
+
+  // Trần cứng của giao thức sitemap: 50.000 URL cho MỘT file. Hiện ~12.700 nên
+  // còn rất rộng, nhưng Code Lab là phần tăng nhanh nhất và ngày chạm trần thì
+  // Google lặng lẽ bỏ phần thừa, không báo gì. Cắt có kiểm soát + một dòng log
+  // để lần đó ta biết mà tách file (`generateSitemaps`) thay vì phát hiện qua
+  // việc mất index.
+  const MAX_URLS = 50_000
+  if (all.length > MAX_URLS) {
+    console.warn(
+      `[sitemap] ${all.length} URL vượt trần ${MAX_URLS} — đã cắt bớt. ` +
+        'Đã đến lúc tách sitemap bằng generateSitemaps().',
+    )
+    return all.slice(0, MAX_URLS)
+  }
+
+  return all
 }

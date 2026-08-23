@@ -16,6 +16,23 @@
  *
  * Dùng lại được ở bất cứ đâu cần dẫn sang sân chơi — truyền `children` là phần
  * hiện ra, phần cảnh báo giữ nguyên.
+ *
+ * ─── VÌ SAO CÁI BẤM LÀ <a> CHỨ KHÔNG PHẢI <button> (23/08/2026) ──────────────
+ * Nó từng là `<button onClick={() => setOpen(true)}>`. Hộp thoại chạy đúng,
+ * nhưng cái nút KHÔNG CÓ `href` — và ba thứ mất theo:
+ *
+ *   · Googlebot không bò sang được. Nó đi theo `href`, không bấm nút. Sân chơi
+ *     3D là thứ khác biệt nhất của cả web mà lại gần như vô hình với tìm kiếm.
+ *   · Bấm giữa / Ctrl+bấm / Cmd+bấm không mở tab mới. Chuột phải không có
+ *     "Mở trong tab mới", cũng không copy được địa chỉ.
+ *   · Trình đọc màn hình đọc ra "nút" thay vì "liên kết", nên người dùng không
+ *     biết là sắp rời trang.
+ *
+ * Nay là `<a href="/playground">` thật. Hộp thoại cảnh báo vẫn nguyên: bấm
+ * trái bình thường thì `preventDefault()` rồi mở hộp thoại. Nhưng bấm-có-phím-
+ * bổ-trợ (Ctrl/Cmd/Shift/Alt) và bấm chuột giữa thì KHÔNG chặn — để trình
+ * duyệt làm đúng việc của nó. Người cố tình mở tab mới là người đã biết mình
+ * muốn gì; chặn họ lại để cảnh báo là phiền chứ không phải giúp.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -32,7 +49,7 @@ export default function PlaygroundGate({
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const enterRef = useRef<HTMLAnchorElement | null>(null);
-  const openerRef = useRef<HTMLButtonElement | null>(null);
+  const openerRef = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => setMounted(true), []);
 
@@ -147,9 +164,25 @@ export default function PlaygroundGate({
 
   return (
     <>
-      <button ref={openerRef} type="button" onClick={() => setOpen(true)} className={className}>
+      <a
+        ref={openerRef}
+        href={PLAYGROUND_URL}
+        className={className}
+        onClick={(e) => {
+          // Để nguyên những lối đi mà người dùng CỐ Ý chọn:
+          //   · e.metaKey/ctrlKey → mở tab mới
+          //   · e.shiftKey        → mở cửa sổ mới
+          //   · e.altKey          → tải về
+          //   · e.button !== 0    → bấm giữa (React chỉ bắn onClick cho nút
+          //                         chính, nhưng kiểm cho chắc)
+          // Mọi trường hợp đó đi thẳng sang /playground, không qua hộp thoại.
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+          e.preventDefault();
+          setOpen(true);
+        }}
+      >
         {children}
-      </button>
+      </a>
       {mounted && open && createPortal(dialog, document.body)}
     </>
   );

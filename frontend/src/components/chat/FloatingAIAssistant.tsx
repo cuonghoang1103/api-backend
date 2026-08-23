@@ -71,13 +71,69 @@ export default function FloatingAIAssistant() {
     ? 'typing'
     : 'idle';
 
-  // Load Lottie animation data from public folder
+  // ─── Nạp hoạt hình robot: MUỘN, và chỉ khi thật sự cần ────────────────────
+  //
+  // Con robot này là TRANG TRÍ. Nhưng nó được gắn trong layout gốc, nên trước
+  // 23/08/2026 nó kéo theo chuỗi sau ngay khi component mount, trên MỌI trang:
+  //
+  //   fetch('/animations/robot.json')  → 60KB
+  //   → setRobotData → LottieClient render → import('lottie-react')
+  //   → chunk lottie-web              → 300KB   (đo thật: dc112a36….js)
+  //
+  //  360KB tranh băng thông với chính nội dung trang, ngay lúc trang đang cố
+  //  vẽ màn hình đầu tiên.
+  //
+  // Ba lớp hoãn, theo thứ tự đắt dần:
+  //
+  // 1. `hidden` → KHÔNG tải gì cả. Trên /admin, /creator, và trên điện thoại ở
+  //    mọi trang không phải '/', con robot còn không được vẽ ra. Tải hoạt hình
+  //    cho một thứ `return null` là lãng phí thuần tuý.
+  //
+  // 2. `reduceAnim` → KHÔNG tải gì cả. Máy cảm ứng và người bật
+  //    prefers-reduced-motion vốn đã không được xem hoạt hình lặp (xem các
+  //    `animate={reduceAnim ? undefined : …}` ở dưới). Với họ Lottie chỉ vẽ ra
+  //    một khung hình đứng yên — đúng bằng thứ mà `/robot-avatar.png` (16KB)
+  //    làm được. Đây là nhóm hưởng lợi nhiều nhất: máy yếu, mạng chậm.
+  //
+  // 3. Còn lại → tải khi trình duyệt RẢNH (`requestIdleCallback`). Vẫn là con
+  //    robot động y như cũ, chỉ khác là nó xếp hàng SAU nội dung trang chứ
+  //    không giành chỗ. `timeout: 4000` là chốt chặn: trang bận liên tục thì
+  //    sau 4 giây cứ nạp, đừng để robot không bao giờ động.
+  //
+  // ⚠️ ĐỪNG gỡ điều kiện `hidden`/`reduceAnim` rồi để lại mỗi fetch. Chuỗi
+  // `robotData → LottieClient → import()` mới là chỗ tốn 300KB; cái fetch 60KB
+  // chỉ là ngòi nổ.
   useEffect(() => {
-    fetch('/animations/robot.json')
-      .then((res) => res.json())
-      .then((data) => setRobotData(data))
-      .catch(console.error);
-  }, []);
+    if (hidden || reduceAnim || robotData) return;
+
+    let alive = true;
+    const load = () => {
+      fetch('/animations/robot.json')
+        .then((res) => res.json())
+        .then((data) => {
+          if (alive) setRobotData(data);
+        })
+        // Im lặng: robot là trang trí, hỏng nó không đáng bẩn console của
+        // người dùng. Không có robotData thì LottieClient vẽ ô trong suốt và
+        // nút vẫn bấm được — xem lớp dự phòng <img> ở dưới.
+        .catch(() => {});
+    };
+
+    // `typeof … === 'function'` chứ không phải `if (window.requestIdleCallback)`:
+    // lib.dom khai nó là LUÔN có, nên dạng kiểm tra tính đúng-sai bị tsc chặn
+    // bằng TS2774. Guard vẫn cần thật — Safari mới hỗ trợ requestIdleCallback
+    // từ 16.4, và ở đó nhánh setTimeout là thứ giữ cho robot vẫn động.
+    const supportsIdle = typeof window.requestIdleCallback === 'function';
+    const handle: number = supportsIdle
+      ? window.requestIdleCallback(load, { timeout: 4000 })
+      : window.setTimeout(load, 1500);
+
+    return () => {
+      alive = false;
+      if (supportsIdle) window.cancelIdleCallback(handle);
+      else window.clearTimeout(handle);
+    };
+  }, [hidden, reduceAnim, robotData]);
 
   // Control Lottie playback based on state
   useEffect(() => {
@@ -238,15 +294,33 @@ export default function FloatingAIAssistant() {
               className="absolute inset-0 rounded-3xl bg-gradient-to-br from-neon-indigo via-neon-violet to-neon-fuchsia"
             />
 
-            {/* Lottie Animation */}
+            {/* Robot: ảnh tĩnh trước, hoạt hình sau (hoặc không bao giờ).
+                `robot-avatar.png` nặng 16KB và nằm sẵn trong `public/`, nên
+                nút có mặt mũi NGAY khung hình đầu — không còn khoảng trống
+                trong suốt trong lúc chờ 360KB Lottie như trước.
+                Với `reduceAnim` thì ảnh này là bản cuối cùng, đúng chủ ý:
+                người đã xin bớt chuyển động thì không nhận hoạt hình lặp vô
+                hạn, và cũng không phải tải nó về. */}
             <div className="relative w-full h-full rounded-3xl overflow-hidden">
-              <LottieClient
-                lottieRef={lottieRef}
-                animationData={robotData ?? undefined}
-                loop
-                autoplay
-                style={{ width: '100%', height: '100%' }}
-              />
+              {robotData ? (
+                <LottieClient
+                  lottieRef={lottieRef}
+                  animationData={robotData}
+                  loop
+                  autoplay
+                  style={{ width: '100%', height: '100%' }}
+                />
+              ) : (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src="/robot-avatar.png"
+                  alt=""
+                  aria-hidden
+                  width={80}
+                  height={80}
+                  className="h-full w-full object-contain"
+                />
+              )}
             </div>
           </motion.button>
 

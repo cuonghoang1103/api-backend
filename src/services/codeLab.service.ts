@@ -566,6 +566,68 @@ const EXERCISE_DETAIL_INCLUDE = {
   author: { select: { id: true, username: true, fullName: true, avatarUrl: true } },
 } satisfies Prisma.CodeExerciseInclude;
 
+// ─── Sitemap feed ───────────────────────────────────────────────
+
+/**
+ * Mọi URL Code Lab công khai, ở dạng NHẸ NHẤT có thể — chỉ cho sitemap.xml.
+ *
+ * ⚠️ ĐỪNG thay bằng `listExercises`. Nó `include` cả module/track/author và
+ * trả về NGUYÊN bản ghi bài tập: problemHtml + bản dịch tiếng Việt +
+ * solutionCodeJson + solutionExplanationHtml + hintsJson… Với ~12,5k bài thì
+ * đó là hàng trăm MB kéo qua chỉ để lấy mỗi cái slug. Nó còn chặn `limit` ở
+ * 100, nên sitemap sẽ phải gọi 126 lượt.
+ *
+ * Ở đây `select` đúng 4 cột, tất cả đều nằm sẵn trong bảng, và lọc theo
+ * `status` đã có chỉ mục. Một truy vấn, một lượt quét.
+ *
+ * Chỉ trả PUBLISHED: bài DRAFT trả 404 cho khách, đưa vào sitemap là tự nộp
+ * lỗi cho Search Console.
+ */
+type SitemapEntries = {
+  tracks: { slug: string; updatedAt: Date }[]
+  exercises: { slug: string; trackSlug: string; updatedAt: Date }[]
+}
+
+// Nhớ tạm trong tiến trình, 1 giờ. Cùng khuôn với `landingStats.service.ts`.
+//
+// KHÔNG dựa vào cache của Next: `sitemap.ts` khai `export const dynamic =
+// 'force-dynamic'`, và cờ đó đổi mặc định fetchCache sang no-store — nghĩa là
+// `next: { revalidate: 3600 }` ở phía frontend có thể bị bỏ qua. Chốt chặn
+// phải nằm ở ĐÂY, chỗ duy nhất không phụ thuộc vào ngữ nghĩa cache của
+// framework. Không có nó, mỗi lượt Googlebot lấy sitemap.xml là một lần quét
+// ~12,5k hàng trên con VPS 6GB.
+const SITEMAP_TTL_MS = 60 * 60 * 1000;
+let sitemapCache: { at: number; data: SitemapEntries } | null = null;
+
+export async function listSitemapEntries(): Promise<SitemapEntries> {
+  if (sitemapCache && Date.now() - sitemapCache.at < SITEMAP_TTL_MS) return sitemapCache.data;
+
+  const [tracks, exercises] = await Promise.all([
+    prisma.codeTrack.findMany({
+      where: { status: 'PUBLISHED' },
+      select: { slug: true, updatedAt: true },
+      orderBy: { id: 'asc' },
+    }),
+    prisma.codeExercise.findMany({
+      where: { status: 'PUBLISHED', track: { status: 'PUBLISHED' } },
+      select: { slug: true, updatedAt: true, track: { select: { slug: true } } },
+      orderBy: { id: 'asc' },
+    }),
+  ]);
+
+  const data: SitemapEntries = {
+    tracks: tracks.map((t) => ({ slug: t.slug, updatedAt: t.updatedAt })),
+    exercises: exercises
+      // Về lý thuyết `trackId` là NOT NULL nên track luôn có; lọc cho chắc để
+      // một hàng lệch dữ liệu không sinh ra URL `/code-lab/undefined/...`.
+      .filter((e) => e.track?.slug)
+      .map((e) => ({ slug: e.slug, trackSlug: e.track.slug, updatedAt: e.updatedAt })),
+  };
+
+  sitemapCache = { at: Date.now(), data };
+  return data;
+}
+
 export async function getExerciseBySlug(slug: string, opts: { admin?: boolean } = {}) {
   const exercise = await prisma.codeExercise.findUnique({
     where: { slug },
@@ -575,6 +637,44 @@ export async function getExerciseBySlug(slug: string, opts: { admin?: boolean } 
   if (!opts.admin && exercise.status !== 'PUBLISHED') throw new NotFoundError('Exercise not found.');
   // Best-effort view counter (don't block on it).
   prisma.codeExercise.update({ where: { id: exercise.id }, data: { viewCount: { increment: 1 } } }).catch(() => {});
+  return exercise;
+}
+
+/**
+ * Chỉ những trường cần cho thẻ <title>/<meta> của MỘT bài tập.
+ *
+ * ⚠️ CỐ Ý KHÔNG dùng `getExerciseBySlug` cho việc này, vì hai lý do:
+ *
+ * 1. Nó TĂNG viewCount. `generateMetadata` chạy ở server cho mỗi lượt tải
+ *    trang, còn bản thân trang lại tự gọi by-slug lần nữa ở client — dùng
+ *    chung một hàm là mỗi lượt xem đếm thành hai. Và khi Googlebot bò hết
+ *    ~12,5k bài thì cột "Views" của admin thành số rác.
+ * 2. Nó trả về nguyên bản ghi: lời giải, gợi ý, bản dịch, giải thích của AI…
+ *    Thẻ meta cần đúng cái tiêu đề và một câu mô tả.
+ *
+ * `problemHtml` vẫn phải lấy vì mô tả rút ra từ đó, nhưng chỉ MỘT bài chứ
+ * không phải cả danh sách.
+ */
+export async function getExerciseMeta(slug: string) {
+  const exercise = await prisma.codeExercise.findUnique({
+    where: { slug },
+    select: {
+      title: true,
+      slug: true,
+      difficulty: true,
+      language: true,
+      status: true,
+      updatedAt: true,
+      problemHtml: true,
+      track: { select: { name: true, slug: true, status: true } },
+      module: { select: { name: true } },
+    },
+  });
+  // Bài DRAFT: coi như không có. Trang cũng 404 cho khách, nên thẻ meta phải
+  // nói cùng một điều — không rò tiêu đề bài chưa xuất bản ra kết quả tìm kiếm.
+  if (!exercise || exercise.status !== 'PUBLISHED' || exercise.track?.status !== 'PUBLISHED') {
+    throw new NotFoundError('Exercise not found.');
+  }
   return exercise;
 }
 

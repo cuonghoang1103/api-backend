@@ -455,5 +455,431 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
 </div>
 `,
     },
+
+    /* ─────────────────────────── 5.4 ─────────────────────────── */
+    {
+      title: '5.4 — The stampede: 20 requests, 20 upstream calls or 1|||5.4 — Cơn giẫm đạp: 20 request, gọi upstream 20 lần hay 1 lần',
+      slug: 'nginx-5-4-con-giam-dap',
+      type: 'LESSON',
+      description: 'Một mục cache hết hạn đúng lúc đông khách và mọi request cùng lao lên upstream một lượt. Bài này đo đúng chuyện đó — 20 request đồng thời, đếm số lần upstream bị gọi — rồi bật một chỉ thị và đếm lại. Kèm cái GIÁ của nó, cũng đo, vì nó có giá thật.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Lesson 5.4</span>
+<h2>The stampede: 20 requests, 20 upstream calls or 1</h2>
+<p class="lead">Caching removes load right up to the moment an entry expires. At that instant every request in flight finds nothing in the cache and goes to the backend at once — and the busier you are, the worse it is, which is the wrong way round for a protection mechanism.</p>
+
+<h3>Twenty simultaneous requests, an uncached slow path</h3>
+<div class="out">Duong dan mat 1 giay o upstream, chua co trong cache.
+20 request DONG THOI. Dem so lan upstream THAT SU bi goi:
+
+  KHONG co proxy_cache_lock     -> upstream bi goi 20 lan
+  CO proxy_cache_lock           -> upstream bi goi  1 lan</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Without the lock, every miss is independent</span><span class="lz-d">Nginx has no notion that twenty requests want the same thing. Each one misses, each one opens an upstream connection, and your backend receives twenty copies of a query it only needed to run once.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">With it, one request is elected and the rest wait</span><span class="lz-d"><code>proxy_cache_lock on;</code> lets the first miss proceed and holds the others. When the entry lands, they are served from it. One upstream call, measured, for twenty clients.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">It matters most on exactly your worst endpoint</span><span class="lz-d">The stampede scales with traffic and with how slow the endpoint is — the longer the backend takes, the more requests pile up behind it. So the endpoint you most wanted to cache is the one that suffers most without this.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">proxy_cache_lock_timeout bounds the wait</span><span class="lz-d">If the elected request takes longer than this, the waiting ones give up and go upstream themselves. It is the escape hatch that stops a hung backend turning into a queue of blocked clients — default 5 seconds.</span></div>
+</div>
+
+<h3>What it costs, also measured</h3>
+<div class="out">Cung 20 request do, lan nay do THOI GIAN tung request:
+
+  KHONG lock   tong=1,04s   nhanh nhat=1,00s   cham nhat=1,01s   trung vi=1,00s
+  CO lock      tong=1,53s   nhanh nhat=1,00s   cham nhat=1,51s   trung vi=1,00s
+                                                ^^^^^^^^^^^^^^^
+                     nguoi cho lau nhat mat them nua giay</div>
+<div class="callout warn">
+<p><strong>The lock is not free, and the trade is worth stating plainly.</strong> The waiting requests poll for the entry rather than being woken the instant it arrives, so a follower can sit for up to half a second after the leader has already finished. Measured: the slowest of the twenty went from 1.01s to 1.51s. What you bought is your backend receiving one query instead of twenty. On an endpoint that is expensive for the backend, that is an obviously good trade. On a cheap endpoint with a large fan-out of waiters, it may not be — and now you can decide with numbers instead of by reputation.</p>
+</div>
+<pre><code>location /api/danh-sach {
+  proxy_cache kho;
+  proxy_cache_valid 200 60s;
+
+  proxy_cache_lock          on;
+  proxy_cache_lock_timeout  5s;    <span class="tok-comment"># chờ tối đa, rồi tự đi hỏi upstream</span>
+  proxy_cache_lock_age      5s;    <span class="tok-comment"># kẻ dẫn đầu chậm quá thì bầu người khác</span>
+
+  <span class="tok-comment"># Và cách chữa TỐT HƠN cho cùng bài toán — xem Bài 5.5:</span>
+  proxy_cache_use_stale         updating;
+  proxy_cache_background_update on;
+
+  proxy_pass http://api;
+}</code></pre>
+
+<h3>Three ways to blunt a stampede, in order of preference</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">1. Serve stale while one request refreshes</span><span class="v"><code>proxy_cache_use_stale updating</code> with <code>proxy_cache_background_update on</code>. Nobody waits at all: the expired copy goes out instantly while one request refreshes in the background. This is better than the lock for anything where slightly-old data is acceptable, which is most things. Lesson 5.5 measures it.</span></div>
+  <div class="kv"><span class="k">2. proxy_cache_lock for data that must be current</span><span class="v">When serving stale is genuinely wrong — a price, a stock level, a balance — the lock is the right answer. Everyone gets fresh data; one of them waits a little longer than they would have.</span></div>
+  <div class="kv"><span class="k">3. Longer TTLs, fewer expiries</span><span class="v">A stampede happens once per expiry. Going from 10s to 60s cuts the number of stampedes by six with no other change. Reach for this first when the data allows it, because it is the only option with no downside at all.</span></div>
+  <div class="kv"><span class="k">Do not stagger TTLs by hand</span><span class="v">A common suggestion is to randomise expiry times so entries do not expire together. Different URLs already expire at different times because they were first cached at different times; the case where this helps — thousands of entries populated in one burst — is rare enough that the added complexity usually is not worth it.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — the stampede is not the only reason a cache makes an outage worse.</strong> When the backend is already struggling, every expiry adds requests to a system that cannot serve them, so responses get slower, so more requests pile up behind each expiry. The lock helps, and <code>proxy_cache_use_stale error timeout http_500 http_502 http_503 http_504</code> helps far more — it says "if the upstream is failing, keep serving what we have". Without it, the moment your backend goes down your cache stops shielding it and starts amplifying the outage, because every expired entry becomes a new failed request. A cache configured only for the happy path makes the unhappy path worse.</p>
+</div>
+
+<h3>Watching for it in production</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Look for correlated MISS bursts in the log</span><span class="lz-lnote">With <code>\$upstream_cache_status</code> logged, a stampede is several <code>MISS</code> lines for the same URI within milliseconds. One <code>awk</code> counting misses per URI per second finds them, and they cluster exactly one TTL apart.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Backend latency graphs show it as regular spikes</span><span class="lz-lnote">Evenly spaced spikes at your TTL interval, with the height proportional to traffic. If the spacing matches a number in your Nginx config, you have found the cause without looking at anything else.</span></div>
+  <div class="lz-layer"><span class="lz-lname">$upstream_response_time separates cache from backend</span><span class="lz-lnote">Log it alongside <code>\$request_time</code>. On a <code>HIT</code> the upstream time is empty; on a <code>MISS</code> it is the real backend latency. The two together tell you what your users experience and what your backend is actually being asked to do.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Test it before you need it</span><span class="lz-lnote">Twenty concurrent requests to an uncached URL, and a counter in the upstream. That is the whole experiment in this lesson, it takes a minute, and it tells you which of the two rows above your config is on.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>The framing that makes this easy to remember.</strong> A cache turns many requests into one. A stampede is the moment it briefly stops doing that, and the mechanisms in this lesson are about narrowing that moment: the lock makes the followers wait for the one call, serving stale removes the wait entirely, and a longer TTL makes the moment happen less often. Pick by asking how bad slightly-old data is for that endpoint, because that single question chooses the mechanism.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_lock" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_lock</span><span class="lc-sub">nginx.org · With lock_timeout and lock_age, and how the waiters poll</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_use_stale" target="_blank" rel="noopener"><span class="lc-ico">🕰️</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_use_stale</span><span class="lc-sub">nginx.org · The updating keyword, which is the better answer to this problem</span></span></a>
+<a class="link-card" href="https://en.wikipedia.org/wiki/Cache_stampede" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">Cache stampede</span><span class="lc-sub">wikipedia.org · The general problem and the standard mitigations</span></span></a>
+<a class="link-card" href="/courses/redis/learn${REF}"><span class="lc-ico">🧱</span><span class="lc-body"><span class="lc-title">CuongThai course — Redis</span><span class="lc-sub">The same stampede one layer in, and the lock pattern for solving it there</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Fire 20 concurrent requests at a counting upstream, then turn the lock on and count again</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Bài 5.4</span>
+<h2>Cơn giẫm đạp: 20 request, gọi upstream 20 lần hay 1 lần</h2>
+<p class="lead">Bộ đệm gỡ tải cho bạn cho tới ĐÚNG cái khoảnh khắc một mục hết hạn. Ngay giây đó, mọi request đang bay đều không tìm thấy gì trong cache và cùng lao lên backend một lượt — và càng đông khách thì càng tệ, tức là ngược đời với một cơ chế bảo vệ.</p>
+
+<h3>Hai mươi request đồng thời, một đường dẫn chậm chưa có trong cache</h3>
+<div class="out">Duong dan mat 1 giay o upstream, chua co trong cache.
+20 request DONG THOI. Dem so lan upstream THAT SU bi goi:
+
+  KHONG co proxy_cache_lock     -> upstream bi goi 20 lan
+  CO proxy_cache_lock           -> upstream bi goi  1 lan</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Không có khoá thì mỗi cú trượt là ĐỘC LẬP</span><span class="lz-d">Nginx không có khái niệm gì về chuyện hai mươi request cùng muốn một thứ. Cái nào cũng trượt, cái nào cũng mở một kết nối lên upstream, và backend của bạn nhận về HAI MƯƠI bản của một truy vấn mà nó chỉ cần chạy một lần.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Có nó thì MỘT request được bầu ra, số còn lại CHỜ</span><span class="lz-d"><code>proxy_cache_lock on;</code> cho cú trượt đầu tiên đi tiếp và giữ những cái khác lại. Khi cái mục ấy về tới nơi, chúng được phục vụ từ nó. Một lời gọi upstream, đo thật, cho hai mươi khách.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nó có nghĩa lý nhất đúng ở điểm cuối TỆ NHẤT của bạn</span><span class="lz-d">Cơn giẫm đạp lớn lên theo lưu lượng VÀ theo độ chậm của điểm cuối — backend càng lâu thì càng nhiều request dồn đống phía sau. Nên cái điểm cuối bạn muốn cache nhất chính là cái chịu thiệt nhất khi thiếu chỉ thị này.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">proxy_cache_lock_timeout CHẶN cái chờ lại</span><span class="lz-d">Nếu cái request được bầu lâu hơn ngần ấy thì đám đang chờ bỏ cuộc và tự đi lên upstream. Đó là lối thoát hiểm ngăn một backend bị treo biến thành một hàng dài client bị chẹn — mặc định 5 giây.</span></div>
+</div>
+
+<h3>Nó tốn cái gì, cũng đo</h3>
+<div class="out">Cung 20 request do, lan nay do THOI GIAN tung request:
+
+  KHONG lock   tong=1,04s   nhanh nhat=1,00s   cham nhat=1,01s   trung vi=1,00s
+  CO lock      tong=1,53s   nhanh nhat=1,00s   cham nhat=1,51s   trung vi=1,00s
+                                                ^^^^^^^^^^^^^^^
+                     nguoi cho lau nhat mat them nua giay</div>
+<div class="callout warn">
+<p><strong>Cái khoá KHÔNG miễn phí, và cuộc đổi chác này đáng được nói thẳng.</strong> Đám request đang chờ đi HỎI THĂM cái mục theo chu kỳ chứ không được đánh thức ngay lúc nó về, nên một kẻ đi theo có thể ngồi thêm tới nửa giây SAU KHI kẻ dẫn đầu đã xong. Đo được: kẻ chậm nhất trong hai mươi đi từ 1,01s lên 1,51s. Cái bạn MUA được là backend nhận một truy vấn thay vì hai mươi. Với một điểm cuối đắt đỏ cho backend thì đó rõ ràng là cuộc đổi chác tốt. Với một điểm cuối rẻ mà có đông kẻ chờ thì có thể không — và giờ bạn quyết định bằng CON SỐ chứ không bằng tiếng đồn.</p>
+</div>
+<pre><code>location /api/danh-sach {
+  proxy_cache kho;
+  proxy_cache_valid 200 60s;
+
+  proxy_cache_lock          on;
+  proxy_cache_lock_timeout  5s;    <span class="tok-comment"># chờ tối đa, rồi tự đi hỏi upstream</span>
+  proxy_cache_lock_age      5s;    <span class="tok-comment"># kẻ dẫn đầu chậm quá thì bầu người khác</span>
+
+  <span class="tok-comment"># Và cách chữa TỐT HƠN cho cùng bài toán — xem Bài 5.5:</span>
+  proxy_cache_use_stale         updating;
+  proxy_cache_background_update on;
+
+  proxy_pass http://api;
+}</code></pre>
+
+<h3>Ba cách làm cùn một cơn giẫm đạp, xếp theo mức ưu tiên</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">1. Phục vụ bản CŨ trong khi MỘT request đi làm mới</span><span class="v"><code>proxy_cache_use_stale updating</code> cùng <code>proxy_cache_background_update on</code>. KHÔNG ai phải chờ cả: bản đã hết hạn đi ra ngay lập tức trong khi một request làm mới ở nền. Cái này hơn cái khoá với mọi thứ mà dữ liệu hơi cũ một chút vẫn chấp nhận được, tức là hầu hết mọi thứ. Bài 5.5 đem nó ra đo.</span></div>
+  <div class="kv"><span class="k">2. proxy_cache_lock cho dữ liệu BẮT BUỘC phải mới</span><span class="v">Khi phục vụ bản cũ là THẬT SỰ sai — một cái giá, một mức tồn kho, một số dư — thì cái khoá là câu trả lời đúng. Mọi người đều nhận dữ liệu tươi; một trong số họ chờ lâu hơn một chút so với lẽ ra.</span></div>
+  <div class="kv"><span class="k">3. TTL dài hơn, ít lần hết hạn hơn</span><span class="v">Một cơn giẫm đạp xảy ra MỖI lần hết hạn. Đi từ 10s lên 60s là cắt số cơn giẫm đạp đi sáu lần mà không đổi gì khác. Hãy với tới cái này TRƯỚC khi dữ liệu cho phép, vì nó là lựa chọn duy nhất chẳng có mặt trái nào cả.</span></div>
+  <div class="kv"><span class="k">Đừng tự tay rải lệch TTL</span><span class="v">Một gợi ý hay gặp là ngẫu nhiên hoá thời điểm hết hạn để các mục đừng hết hạn cùng lúc. Các URL khác nhau vốn đã hết hạn vào những lúc khác nhau vì chúng được cache lần đầu vào những lúc khác nhau; cái ca mà mẹo này giúp ích — hàng nghìn mục được nạp vào trong một đợt — hiếm tới mức phần phức tạp thêm vào thường không bõ.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — giẫm đạp KHÔNG phải lý do duy nhất khiến một bộ đệm làm cho sự cố tệ hơn.</strong> Khi backend đã đang vật lộn thì mỗi lần hết hạn lại NÉM thêm request vào một hệ thống không phục vụ nổi, nên phản hồi chậm hơn, nên càng nhiều request dồn đống sau mỗi lần hết hạn. Cái khoá giúp được, còn <code>proxy_cache_use_stale error timeout http_500 http_502 http_503 http_504</code> giúp được nhiều hơn HẲN — nó nói "nếu upstream đang hỏng thì cứ tiếp tục phát cái ta đang có". Thiếu nó thì đúng cái lúc backend của bạn ngã xuống, bộ đệm thôi che chắn và bắt đầu KHUẾCH ĐẠI sự cố, vì mỗi mục hết hạn thành một request thất bại mới. Một bộ đệm chỉ được cấu hình cho con đường êm đẹp sẽ làm con đường gập ghềnh tệ hơn.</p>
+</div>
+
+<h3>Rình nó ngoài production</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Tìm những chùm MISS đi cùng nhau trong log</span><span class="lz-lnote">Có <code>\$upstream_cache_status</code> trong log thì một cơn giẫm đạp là vài dòng <code>MISS</code> cho CÙNG một URI trong vòng vài mili giây. Một lệnh <code>awk</code> đếm số lần trượt theo từng URI từng giây là tìm ra, và chúng tụ lại cách nhau đúng một TTL.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Đồ thị độ trễ backend cho thấy nó thành những cái gai ĐỀU ĐẶN</span><span class="lz-lnote">Gai cách nhau đều đúng bằng khoảng TTL của bạn, cao thấp tỉ lệ với lưu lượng. Nếu cái khoảng cách đó khớp với một con số trong cấu hình Nginx thì bạn đã tìm ra nguyên nhân mà chẳng cần nhìn thứ gì khác.</span></div>
+  <div class="lz-layer"><span class="lz-lname">$upstream_response_time tách bạch cache với backend</span><span class="lz-lnote">Ghi nó cạnh <code>\$request_time</code>. Ở một cú <code>HIT</code> thì thời gian upstream RỖNG; ở một cú <code>MISS</code> thì đó là độ trễ backend thật. Hai cái đi cùng nhau nói cho bạn biết người dùng trải nghiệm gì VÀ backend thật sự đang bị bắt làm gì.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Hãy thử nó TRƯỚC khi cần tới nó</span><span class="lz-lnote">Hai mươi request đồng thời tới một URL chưa cache, cộng một cái biến đếm trong upstream. Đó là toàn bộ thí nghiệm của bài này, nó tốn một phút, và nó nói cho bạn biết cấu hình của bạn đang nằm ở dòng nào trong hai dòng ở trên.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Cách đóng khung để dễ nhớ.</strong> Một bộ đệm biến NHIỀU request thành MỘT. Cơn giẫm đạp là khoảnh khắc nó tạm thời thôi làm điều đó, và mọi cơ chế trong bài này đều nhằm THU HẸP cái khoảnh khắc ấy: cái khoá bắt đám đi theo chờ đúng một lời gọi, phục vụ bản cũ thì xoá luôn cái chờ, còn TTL dài hơn thì làm cái khoảnh khắc ấy xảy ra ít lần hơn. Hãy chọn bằng cách hỏi dữ liệu hơi cũ thì TỆ tới đâu với điểm cuối đó, vì đúng một câu hỏi ấy chọn hộ bạn cái cơ chế.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_lock" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_lock</span><span class="lc-sub">nginx.org · Kèm lock_timeout, lock_age, và cách đám chờ đi hỏi thăm</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_use_stale" target="_blank" rel="noopener"><span class="lc-ico">🕰️</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_use_stale</span><span class="lc-sub">nginx.org · Từ khoá updating, câu trả lời TỐT HƠN cho bài toán này</span></span></a>
+<a class="link-card" href="https://en.wikipedia.org/wiki/Cache_stampede" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">Cache stampede</span><span class="lc-sub">wikipedia.org · Bài toán tổng quát và các cách giảm thiểu tiêu chuẩn</span></span></a>
+<a class="link-card" href="/courses/redis/learn${REF}"><span class="lc-ico">🧱</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Redis</span><span class="lc-sub">Cùng cơn giẫm đạp ấy sâu hơn một tầng, và khuôn mẫu khoá để giải nó ở đó</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Bắn 20 request đồng thời vào một upstream biết đếm, rồi bật khoá lên và đếm lại</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 5.5 ─────────────────────────── */
+    {
+      title: '5.5 — Serving stale: staying up while the backend is down|||5.5 — Phục vụ bản cũ: đứng vững trong khi backend đã ngã',
+      slug: 'nginx-5-5-phuc-vu-ban-cu',
+      type: 'LESSON',
+      description: 'Một chỉ thị biến bộ đệm từ chỗ tiết kiệm tải thành một lớp giữ cho site sống. Bài này GIẾT hẳn upstream rồi đo bốn tuyến khác nhau: hai tuyến vẫn trả 200 với nội dung cũ, hai tuyến trả 502 — và khác biệt là đúng một dòng cấu hình.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Lesson 5.5</span>
+<h2>Serving stale: staying up while the backend is down</h2>
+<p class="lead">Everything so far treated the cache as a way to reduce load. It is also the only component that still has your content after the thing that produced it has stopped answering. Turning that into a feature takes one directive, and this lesson measures it with the upstream genuinely killed.</p>
+
+<h3>The upstream is dead. Four routes, four outcomes</h3>
+<div class="out">1. Nap cache truoc                     MISS   "binh thuong, lan goi upstream thu 41"
+2. Ngay sau do                         HIT    "binh thuong, lan goi upstream thu 41"
+
+   ... GIET tien trinh upstream ...
+
+3. Muc con TUOI, use_stale bat         HIT    "binh thuong, ... thu 41"   200
+4. Muc DA HET HAN, use_stale bat       STALE  "binh thuong, ... thu 41"   200
+5. Muc DA HET HAN, use_stale TAT       EXPIRED  &lt;html&gt;502 Bad Gateway
+6. Duong dan CHUA TUNG cache           MISS     &lt;html&gt;502 Bad Gateway
+
+   ... upstream song lai ...
+
+7. Request dau tien sau khi song lai   STALE  (van ban cu, tra NGAY)
+                                              va mot request nen di lam moi</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A fresh entry does not care that the backend is gone</span><span class="lz-d">Row 3: still a plain <code>HIT</code>. Within the TTL, Nginx never asks the upstream anything, so an outage shorter than your TTL is invisible to anyone who requests a cached URL.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">An expired entry is where the directive earns its place</span><span class="lz-d">Rows 4 and 5 are the same URL at the same moment with the same dead backend. With <code>proxy_cache_use_stale</code> the user gets the old content and a <code>200</code>; without it they get <code>502</code>. That is the whole feature.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">It cannot invent what was never cached</span><span class="lz-d">Row 6: a URL nobody had requested before is a <code>502</code> regardless. Stale-serving covers your popular paths, which is usually most of your traffic — but it is not a substitute for the backend being up.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">background_update means nobody waits for the recovery either</span><span class="lz-d">Row 7: the first request after the backend returned still got the stale copy instantly, while a separate request refreshed the entry. Without it, that one unlucky user pays the full backend latency.</span></div>
+</div>
+<pre><code>location /api/ {
+  proxy_cache kho;
+  proxy_cache_valid 200 60s;
+
+  <span class="tok-comment"># Dùng bản cũ khi upstream lỗi, hết giờ, hoặc đang được làm mới</span>
+  proxy_cache_use_stale error timeout updating
+                        http_500 http_502 http_503 http_504;
+
+  <span class="tok-comment"># Làm mới ở NỀN — người dùng nhận bản cũ NGAY, không chờ</span>
+  proxy_cache_background_update on;
+
+  <span class="tok-comment"># Và cho phép Nginx tự chuyển sang máy khác khi một máy hỏng</span>
+  proxy_next_upstream error timeout http_502 http_503 http_504;
+
+  proxy_pass http://api;
+}</code></pre>
+<div class="kv-grid">
+  <div class="kv"><span class="k">updating is the everyday one; the rest are for outages</span><span class="v"><code>updating</code> fires on every normal expiry and is what removes the stampede from Lesson 5.4 without making anyone wait. The <code>error timeout http_5xx</code> keywords only matter when something is actually broken — which is exactly when you want them already configured.</span></div>
+  <div class="kv"><span class="k">Stale has no time limit unless you set one</span><span class="v">An entry stays servable until <code>inactive</code> removes it or the disk limit evicts it. A backend down for a day can be serving day-old content, which for a status page is wrong and for a product catalogue may be fine. <code>proxy_cache_valid</code> does not bound it; the <code>inactive</code> parameter of <code>proxy_cache_path</code> does.</span></div>
+  <div class="kv"><span class="k">Tell the user when it is stale, if it matters</span><span class="v"><code>add_header X-Cache-Status \$upstream_cache_status always;</code> at minimum, and for a page where freshness matters, have the frontend read it and show a quiet "last updated" note. Silently serving old data is right for a catalogue and wrong for a dashboard.</span></div>
+  <div class="kv"><span class="k">It changes what your monitoring sees</span><span class="v">With stale-serving on, a total backend outage can show as <code>200</code>s at the edge. That is the point — and it means edge status codes are no longer a health check. Monitor the upstream directly, or alert on the rate of <code>STALE</code>, which goes from near zero to everything the instant the backend dies.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — stale-serving turns a loud failure into a silent one, and that is only good if somebody is still watching.</strong> Before: the backend dies, users see <code>502</code>, someone is paged within a minute. After: the backend dies, users see slightly old pages, nothing alerts, and you find out hours later when the data is visibly wrong. The feature is right — a degraded site beats a broken one — but it must be paired with an alert that does not depend on user-visible errors. Alert on the <code>STALE</code> rate in your access log, or on the upstream's own health endpoint, and make sure that alert exists <em>before</em> you turn this on rather than after the first incident you did not notice.</p>
+</div>
+
+<h3>What a resilient cache config looks like end to end</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">A TTL long enough to cover a short outage</span><span class="lz-lnote">If your deploys take two minutes and occasionally restart the backend, a 60-second TTL means a fresh <code>HIT</code> covers most of it without stale-serving being involved at all. The cheapest resilience is the TTL you already have.</span></div>
+  <div class="lz-layer"><span class="lz-lname">use_stale for the failure modes you actually see</span><span class="lz-lnote"><code>error timeout http_502 http_503 http_504</code> covers a dead process, a hung one and a deploy in progress. Adding <code>http_403</code> or <code>http_404</code> is almost always wrong — those are answers, not failures.</span></div>
+  <div class="lz-layer"><span class="lz-lname">background_update so the first user after recovery is not punished</span><span class="lz-lnote">Without it, every expiry has exactly one victim who waits for the backend. With it there are none, and the refresh happens on a request nobody is waiting on.</span></div>
+  <div class="lz-layer"><span class="lz-lname">An alert on STALE, not on 5xx</span><span class="lz-lnote">Because the 5xx is what you just removed. One line counting <code>STALE</code> per minute in the access log, alerting above a small threshold, restores the signal you traded away.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Why this is the most valuable directive in the chapter.</strong> Everything else here makes a working site faster. This one keeps a site answering when the thing behind it has stopped — measured above as the difference between a <code>200</code> with real content and a <code>502</code>, for the same URL at the same instant. Sites go down; a cache that keeps serving during the ten minutes it takes you to notice and fix it is worth more than any hit-rate improvement.</p>
+</div>
+
+<h3>Learning sources for this lesson</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_use_stale" target="_blank" rel="noopener"><span class="lc-ico">🕰️</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_use_stale</span><span class="lc-sub">nginx.org · Every keyword, and how it interacts with background_update</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream" target="_blank" rel="noopener"><span class="lc-ico">➡️</span><span class="lc-body"><span class="lc-title">nginx — proxy_next_upstream</span><span class="lc-sub">nginx.org · Failing over to another backend, which pairs with this</span></span></a>
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#stale-while-revalidate" target="_blank" rel="noopener"><span class="lc-ico">🔄</span><span class="lc-body"><span class="lc-title">MDN — stale-while-revalidate</span><span class="lc-sub">developer.mozilla.org · The standard header expressing the same idea to browsers and CDNs</span></span></a>
+<a class="link-card" href="/courses/docker/learn${REF}"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">CuongThai course — Docker</span><span class="lc-sub">The restart window during a deploy, which is exactly what stale-serving covers</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Kill the upstream and watch two routes answer 200 while two answer 502</span></span></a>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Bài 5.5</span>
+<h2>Phục vụ bản cũ: đứng vững trong khi backend đã ngã</h2>
+<p class="lead">Từ đầu tới giờ ta coi bộ đệm là một cách GIẢM TẢI. Nó còn là thành phần DUY NHẤT vẫn còn giữ nội dung của bạn sau khi cái thứ sản xuất ra nội dung ấy đã thôi trả lời. Biến điều đó thành một tính năng tốn đúng một chỉ thị, và bài này đem nó ra đo với upstream bị GIẾT thật.</p>
+
+<h3>Upstream đã chết. Bốn tuyến, bốn kết cục</h3>
+<div class="out">1. Nap cache truoc                     MISS   "binh thuong, lan goi upstream thu 41"
+2. Ngay sau do                         HIT    "binh thuong, lan goi upstream thu 41"
+
+   ... GIET tien trinh upstream ...
+
+3. Muc con TUOI, use_stale bat         HIT    "binh thuong, ... thu 41"   200
+4. Muc DA HET HAN, use_stale bat       STALE  "binh thuong, ... thu 41"   200
+5. Muc DA HET HAN, use_stale TAT       EXPIRED  &lt;html&gt;502 Bad Gateway
+6. Duong dan CHUA TUNG cache           MISS     &lt;html&gt;502 Bad Gateway
+
+   ... upstream song lai ...
+
+7. Request dau tien sau khi song lai   STALE  (van ban cu, tra NGAY)
+                                              va mot request nen di lam moi</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Một mục còn TƯƠI thì chẳng quan tâm backend đã biến mất</span><span class="lz-d">Dòng 3: vẫn là một cú <code>HIT</code> bình thường. Trong khoảng TTL, Nginx KHÔNG hỏi upstream cái gì cả, nên một sự cố ngắn hơn TTL của bạn là VÔ HÌNH với bất cứ ai gọi một URL đã có trong cache.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Mục ĐÃ HẾT HẠN mới là chỗ chỉ thị này xứng đáng có mặt</span><span class="lz-d">Dòng 4 và 5 là CÙNG một URL, CÙNG một thời điểm, CÙNG một backend đã chết. Có <code>proxy_cache_use_stale</code> thì người dùng nhận nội dung cũ kèm mã <code>200</code>; không có thì họ nhận <code>502</code>. Đó là toàn bộ tính năng.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nó không BỊA ra được thứ chưa từng được cache</span><span class="lz-d">Dòng 6: một URL chưa ai từng gọi thì vẫn là <code>502</code>. Phục vụ bản cũ che chở những đường dẫn ĐÔNG KHÁCH của bạn, mà đó thường là phần lớn lưu lượng — nhưng nó KHÔNG thay thế được việc backend phải sống.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">background_update nghĩa là cả lúc HỒI PHỤC cũng không ai phải chờ</span><span class="lz-d">Dòng 7: request đầu tiên sau khi backend quay lại VẪN nhận bản cũ ngay lập tức, trong khi một request riêng đi làm mới cái mục. Thiếu nó thì đúng một người xui xẻo ấy trả trọn cái độ trễ của backend.</span></div>
+</div>
+<pre><code>location /api/ {
+  proxy_cache kho;
+  proxy_cache_valid 200 60s;
+
+  <span class="tok-comment"># Dùng bản cũ khi upstream lỗi, hết giờ, hoặc đang được làm mới</span>
+  proxy_cache_use_stale error timeout updating
+                        http_500 http_502 http_503 http_504;
+
+  <span class="tok-comment"># Làm mới ở NỀN — người dùng nhận bản cũ NGAY, không chờ</span>
+  proxy_cache_background_update on;
+
+  <span class="tok-comment"># Và cho phép Nginx tự chuyển sang máy khác khi một máy hỏng</span>
+  proxy_next_upstream error timeout http_502 http_503 http_504;
+
+  proxy_pass http://api;
+}</code></pre>
+<div class="kv-grid">
+  <div class="kv"><span class="k">updating là cái dùng HÀNG NGÀY; số còn lại dành cho sự cố</span><span class="v"><code>updating</code> nổ ở MỌI lần hết hạn bình thường và nó chính là thứ gỡ bỏ cơn giẫm đạp ở Bài 5.4 mà không bắt ai phải chờ. Mấy từ khoá <code>error timeout http_5xx</code> chỉ có nghĩa lý khi thật sự có thứ gì đó hỏng — mà đó đúng là lúc bạn muốn chúng ĐÃ được cấu hình sẵn.</span></div>
+  <div class="kv"><span class="k">Bản cũ KHÔNG có giới hạn thời gian trừ khi bạn đặt một cái</span><span class="v">Một mục còn phục vụ được cho tới khi <code>inactive</code> gỡ nó đi hoặc trần đĩa đuổi nó ra. Một backend chết cả ngày có thể đang phục vụ nội dung một ngày tuổi, mà với một trang trạng thái thì đó là SAI còn với một danh mục sản phẩm thì có thể chấp nhận. <code>proxy_cache_valid</code> KHÔNG chặn được nó; tham số <code>inactive</code> của <code>proxy_cache_path</code> mới chặn.</span></div>
+  <div class="kv"><span class="k">Hãy NÓI cho người dùng biết đó là bản cũ, nếu điều đó có nghĩa lý</span><span class="v">Tối thiểu là <code>add_header X-Cache-Status \$upstream_cache_status always;</code>, và với một trang mà độ tươi quan trọng thì cho frontend đọc nó rồi hiện một dòng "cập nhật lần cuối" nhỏ nhẹ. Âm thầm phát dữ liệu cũ là ĐÚNG với một danh mục và SAI với một bảng điều khiển.</span></div>
+  <div class="kv"><span class="k">Nó làm ĐỔI thứ mà hệ giám sát của bạn nhìn thấy</span><span class="v">Bật phục vụ bản cũ lên thì một sự cố chết hẳn backend có thể hiện ra thành toàn <code>200</code> ở rìa mạng. Đó chính là MỤC ĐÍCH — và nó nghĩa là mã trạng thái ở rìa thôi còn là một phép kiểm sức khoẻ. Hãy giám sát upstream TRỰC TIẾP, hoặc cảnh báo theo tỷ lệ <code>STALE</code>, thứ nhảy từ gần bằng không lên thành tất cả ngay giây backend chết.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — phục vụ bản cũ biến một kiểu hỏng ỒN ÀO thành một kiểu hỏng CÂM LẶNG, và điều đó chỉ tốt nếu vẫn còn ai đó đang canh.</strong> Trước: backend chết, người dùng thấy <code>502</code>, có người bị gọi dậy trong vòng một phút. Sau: backend chết, người dùng thấy những trang hơi cũ, chẳng cảnh báo nào kêu, và bạn phát hiện ra sau mấy tiếng khi dữ liệu đã sai một cách nhìn thấy được. Tính năng này ĐÚNG — một site suy giảm vẫn hơn một site hỏng — nhưng nó BẮT BUỘC phải đi kèm một cảnh báo không dựa vào lỗi mà người dùng nhìn thấy. Hãy cảnh báo theo tỷ lệ <code>STALE</code> trong access log, hoặc theo điểm cuối sức khoẻ của chính upstream, và hãy chắc rằng cảnh báo đó TỒN TẠI <em>trước khi</em> bạn bật cái này chứ đừng sau sự cố đầu tiên mà bạn không nhận ra.</p>
+</div>
+
+<h3>Một cấu hình cache có sức chịu đựng trông thế nào</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Một TTL đủ dài để phủ một sự cố ngắn</span><span class="lz-lnote">Nếu mỗi lần deploy của bạn mất hai phút và thỉnh thoảng khởi động lại backend thì một TTL 60 giây nghĩa là một cú <code>HIT</code> còn tươi đã che phần lớn khoảng đó mà chẳng cần tới chuyện phục vụ bản cũ. Sức chịu đựng RẺ NHẤT là cái TTL bạn vốn đã có.</span></div>
+  <div class="lz-layer"><span class="lz-lname">use_stale cho đúng những kiểu hỏng bạn THẬT SỰ gặp</span><span class="lz-lnote"><code>error timeout http_502 http_503 http_504</code> phủ một tiến trình đã chết, một tiến trình bị treo, và một lần deploy đang chạy. Thêm <code>http_403</code> hay <code>http_404</code> vào thì gần như luôn SAI — đó là những CÂU TRẢ LỜI, không phải kiểu hỏng.</span></div>
+  <div class="lz-layer"><span class="lz-lname">background_update để người dùng đầu tiên sau khi hồi phục không bị phạt</span><span class="lz-lnote">Thiếu nó thì mỗi lần hết hạn có đúng MỘT nạn nhân ngồi chờ backend. Có nó thì không có ai, và việc làm mới diễn ra trên một request mà chẳng ai đang chờ.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Một cảnh báo theo STALE, không theo 5xx</span><span class="lz-lnote">Vì cái 5xx chính là thứ bạn vừa gỡ bỏ. Một dòng đếm số <code>STALE</code> mỗi phút trong access log, cảnh báo khi vượt một ngưỡng nhỏ, là khôi phục lại đúng cái tín hiệu bạn vừa đánh đổi đi.</span></div>
+</div>
+<div class="note-ct">
+<p><strong>Vì sao đây là chỉ thị giá trị nhất cả chương.</strong> Mọi thứ khác ở đây làm cho một site ĐANG CHẠY nhanh hơn. Cái này giữ cho một site còn TRẢ LỜI khi thứ đứng sau nó đã ngừng — đo được ở trên bằng khác biệt giữa một cú <code>200</code> có nội dung thật và một cú <code>502</code>, cho cùng một URL vào cùng một khoảnh khắc. Site nào rồi cũng có lúc ngã; một bộ đệm vẫn phục vụ suốt mười phút bạn cần để phát hiện và sửa thì đáng giá hơn mọi cải thiện tỷ lệ trúng.</p>
+</div>
+
+<h3>Nguồn học cho bài này</h3>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_use_stale" target="_blank" rel="noopener"><span class="lc-ico">🕰️</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_use_stale</span><span class="lc-sub">nginx.org · Mọi từ khoá, và nó tương tác với background_update thế nào</span></span></a>
+<a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream" target="_blank" rel="noopener"><span class="lc-ico">➡️</span><span class="lc-body"><span class="lc-title">nginx — proxy_next_upstream</span><span class="lc-sub">nginx.org · Chuyển sang một backend khác khi hỏng, thứ đi cặp với cái này</span></span></a>
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#stale-while-revalidate" target="_blank" rel="noopener"><span class="lc-ico">🔄</span><span class="lc-body"><span class="lc-title">MDN — stale-while-revalidate</span><span class="lc-sub">developer.mozilla.org · Cái header chuẩn diễn đạt cùng ý tưởng với trình duyệt và CDN</span></span></a>
+<a class="link-card" href="/courses/docker/learn${REF}"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Docker</span><span class="lc-sub">Cái cửa sổ khởi động lại trong một lần deploy, đúng thứ mà phục vụ bản cũ che cho</span></span></a>
+<a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Giết upstream rồi xem hai tuyến trả 200 trong khi hai tuyến trả 502</span></span></a>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 5.6 ─────────────────────────── */
+    {
+      title: '5.6 — Quiz: caching in front of your application|||5.6 — Quiz: bộ đệm đặt trước ứng dụng của bạn',
+      slug: 'nginx-5-6-quiz',
+      type: 'QUIZ',
+      description: 'Tám câu về khoá cache, cái gì âm thầm không được cache, vụ rò rỉ giữa hai người dùng, chuỗi ưu tiên thời hạn, cơn giẫm đạp và chuyện phục vụ bản cũ.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Lesson 5.6</span>
+<h2>Quiz: caching in front of your application</h2>
+<p class="lead">Eight questions from an upstream that counted its own calls, so every answer is about what actually reached the application rather than what should have.</p>
+<div class="callout">
+<p><strong>What this chapter established.</strong> Three directives turn a proxy into a cache, and the default key is <code>$scheme$proxy_host$request_uri</code> — which includes the query string and does <em>not</em> include the client's <code>Host</code> (5.1). <code>Set-Cookie</code>, <code>Cache-Control: private</code>, undeclared status codes and non-GET methods are all refused automatically, but <code>Authorization</code> is not — measured as user A's private profile being served to an anonymous visitor and to a different logged-in user (5.2). Lifetimes are decided by <code>X-Accel-Expires</code>, then the upstream's <code>Cache-Control</code>, then <code>proxy_cache_valid</code>, and <code>proxy_ignore_headers</code> deletes whichever you name — including the <code>private</code> that was protecting you (5.3). Twenty concurrent requests to an uncached slow path hit the upstream twenty times, or once with <code>proxy_cache_lock</code>, at a cost of half a second on the slowest waiter (5.4). And with the upstream killed outright, <code>proxy_cache_use_stale</code> was the difference between a <code>200</code> carrying real content and a <code>502</code>, for the same URL at the same moment (5.5).</p>
+</div>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Bài 5.6</span>
+<h2>Quiz: bộ đệm đặt trước ứng dụng của bạn</h2>
+<p class="lead">Tám câu ra từ một upstream biết tự đếm số lần nó bị gọi, nên mọi đáp án đều nói về cái THỰC SỰ tới được ứng dụng chứ không nói về cái lẽ ra.</p>
+<div class="callout">
+<p><strong>Chương này đã xác lập điều gì.</strong> Ba chỉ thị biến một con proxy thành một bộ đệm, và khoá mặc định là <code>$scheme$proxy_host$request_uri</code> — thứ CÓ query string bên trong và KHÔNG có <code>Host</code> của client (5.1). <code>Set-Cookie</code>, <code>Cache-Control: private</code>, những mã trạng thái không được khai và các phương thức khác GET đều bị từ chối tự động, nhưng <code>Authorization</code> thì KHÔNG — đo được bằng việc hồ sơ riêng của người dùng A bị đem phát cho một khách vãng lai và cho một người dùng đã đăng nhập khác (5.2). Thời hạn do <code>X-Accel-Expires</code> quyết trước, rồi tới <code>Cache-Control</code> của upstream, rồi mới tới <code>proxy_cache_valid</code>, còn <code>proxy_ignore_headers</code> thì XOÁ bất cứ cái nào bạn gọi tên — kể cả cái <code>private</code> đang che chở bạn (5.3). Hai mươi request đồng thời tới một đường dẫn chậm chưa cache thì gọi upstream hai mươi lần, hoặc MỘT lần với <code>proxy_cache_lock</code>, đổi lại nửa giây trên kẻ chờ lâu nhất (5.4). Và với upstream bị giết hẳn, <code>proxy_cache_use_stale</code> là khác biệt giữa một cú <code>200</code> mang nội dung thật và một cú <code>502</code>, cho cùng một URL vào cùng một khoảnh khắc (5.5).</p>
+</div>
+</div>
+`,
+      quiz: {
+        timeLimitSeconds: 720,
+        questions: [
+          {
+            question: 'One server block serves vidu.com and blog.vidu.com from the same proxy_cache. What goes wrong with the default cache key?|||Một khối server phục vụ cả vidu.com lẫn blog.vidu.com từ cùng một proxy_cache. Khoá cache mặc định gây ra chuyện gì?',
+            options: [
+              'Nothing; the Host is always part of the key|||Không gì cả; Host luôn nằm trong khoá',
+              'The default key uses $proxy_host (the upstream address), not the client Host, so both sites share entries for the same path|||Khoá mặc định dùng $proxy_host (địa chỉ upstream) chứ không dùng Host của client, nên hai site DÙNG CHUNG mục cho cùng một đường dẫn',
+              'Nginx refuses to start with two hostnames and one cache|||Nginx từ chối khởi động khi có hai tên miền và một cache',
+              'Only the first hostname is ever cached|||Chỉ tên miền đầu tiên được cache',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Your API returns a personalised response with no Cache-Control header, and proxy_cache is on with proxy_cache_valid 200 10s. What did the measurement show?|||API của bạn trả về một phản hồi cá nhân hoá mà KHÔNG có header Cache-Control, còn proxy_cache đang bật với proxy_cache_valid 200 10s. Phép đo cho thấy gì?',
+            options: [
+              'Nginx skips caching because the request had an Authorization header|||Nginx bỏ qua việc cache vì request có header Authorization',
+              'It is cached and then served to an anonymous visitor and to a different logged-in user — Authorization is neither in the key nor a reason to skip|||Nó bị cache rồi đem phát cho một khách vãng lai và cho một người dùng đã đăng nhập KHÁC — Authorization vừa không nằm trong khoá vừa không phải lý do để bỏ qua',
+              'Nginx returns 403 for the second request|||Nginx trả 403 cho request thứ hai',
+              'Only the first user ever gets a response|||Chỉ người dùng đầu tiên nhận được phản hồi',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Which pair of directives is needed to keep credentialed requests out of a shared cache?|||Cặp chỉ thị nào cần có để giữ các request có mang thông tin đăng nhập ra khỏi bộ đệm dùng chung?',
+            options: [
+              'proxy_no_cache alone is enough|||Chỉ mỗi proxy_no_cache là đủ',
+              'proxy_no_cache stops storing and proxy_cache_bypass stops serving — you need both, because each covers a different half|||proxy_no_cache chặn việc CẤT còn proxy_cache_bypass chặn việc PHÁT — cần CẢ HAI, vì mỗi cái lo một nửa khác nhau',
+              'proxy_cache_bypass alone is enough|||Chỉ mỗi proxy_cache_bypass là đủ',
+              'proxy_ignore_headers Authorization|||proxy_ignore_headers Authorization',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'The upstream sends Cache-Control: max-age=2 and the config says proxy_cache_valid 200 10s. When does the entry expire?|||Upstream gửi Cache-Control: max-age=2 còn cấu hình nói proxy_cache_valid 200 10s. Mục cache hết hạn khi nào?',
+            options: [
+              'After 10 seconds; the config always wins|||Sau 10 giây; cấu hình luôn thắng',
+              'After 2 seconds — the upstream header takes precedence over proxy_cache_valid, measured as EXPIRED at t=3s|||Sau 2 giây — header của upstream ĐƯỢC ƯU TIÊN hơn proxy_cache_valid, đo được là EXPIRED ở t=3s',
+              'After 12 seconds; the two are added|||Sau 12 giây; hai cái được cộng lại',
+              'Never; conflicting values disable caching|||Không bao giờ; giá trị mâu thuẫn thì tắt cache',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'What is the hidden cost of proxy_ignore_headers Cache-Control?|||Cái giá ẩn của proxy_ignore_headers Cache-Control là gì?',
+            options: [
+              'It only affects max-age|||Nó chỉ ảnh hưởng tới max-age',
+              'It also ignores private, no-store and no-cache — removing the protection that stops personalised responses being cached|||Nó bỏ qua LUÔN private, no-store và no-cache — gỡ bỏ đúng tuyến phòng thủ ngăn phản hồi cá nhân hoá bị cache',
+              'It doubles memory usage|||Nó làm tốn gấp đôi bộ nhớ',
+              'It disables ETags|||Nó tắt ETag',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'Twenty simultaneous requests arrive for an uncached path that takes 1s upstream. Without proxy_cache_lock, how many upstream calls?|||Hai mươi request đồng thời tới một đường dẫn chưa cache mà upstream mất 1 giây. KHÔNG có proxy_cache_lock thì upstream bị gọi mấy lần?',
+            options: [
+              'One; Nginx coalesces identical requests by default|||Một; Nginx mặc định gộp các request giống nhau lại',
+              'Twenty — each miss is independent, and the lock is what reduces it to one|||Hai mươi — mỗi cú trượt là độc lập, và cái khoá mới là thứ giảm nó xuống còn một',
+              'Two: one for the body and one for the headers|||Hai: một cho thân và một cho header',
+              'It depends on worker_processes|||Tuỳ vào worker_processes',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'What does proxy_cache_lock cost, measured?|||proxy_cache_lock tốn cái gì, theo phép đo?',
+            options: [
+              'Nothing; it is free|||Không gì cả; nó miễn phí',
+              'Latency on the waiters — they poll for the entry, so the slowest of twenty went from 1.01s to 1.51s|||Độ trễ ở đám đang chờ — chúng đi hỏi thăm cái mục theo chu kỳ, nên kẻ chậm nhất trong hai mươi đi từ 1,01s lên 1,51s',
+              'Memory proportional to the number of waiters|||Bộ nhớ tỉ lệ với số kẻ đang chờ',
+              'It disables background updates|||Nó tắt việc làm mới ở nền',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+          {
+            question: 'The backend is dead. A cached entry has expired. What separates a 200 from a 502?|||Backend đã chết. Một mục cache đã hết hạn. Cái gì phân tách một cú 200 với một cú 502?',
+            options: [
+              'The TTL length|||Độ dài của TTL',
+              'proxy_cache_use_stale — with it the stale copy is served with status 200; without it the same URL at the same moment returns 502|||proxy_cache_use_stale — có nó thì bản cũ được phát ra kèm mã 200; không có nó thì CÙNG URL ấy vào CÙNG khoảnh khắc ấy trả về 502',
+              'proxy_cache_lock|||proxy_cache_lock',
+              'Whether the entry was a HIT before|||Việc mục đó trước đây có từng là HIT hay không',
+            ],
+            correctIndex: 1,
+            points: 1,
+          },
+        ],
+      },
+    },
   ],
 };

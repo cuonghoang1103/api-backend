@@ -26,6 +26,7 @@ import s07 from './authentication/s07-mfa-passkey.mjs';
 import s08 from './authentication/s08-oauth-oidc.mjs';
 import s09 from './authentication/s09-phan-quyen.mjs';
 import s10 from './authentication/s10-tan-cong.mjs';
+import s11 from './authentication/s11-van-hanh.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -61,5 +62,6 @@ export default {
     s08,
     s09,
     s10,
+    s11,
   ],
 };

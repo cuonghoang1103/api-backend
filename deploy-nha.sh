@@ -489,7 +489,7 @@ else
     exit 1
 fi
 
-# ─── 6b. nginx: đồng bộ config rồi nạp lại ─────────────────────────────
+# ─── 6c. nginx: đồng bộ config rồi nạp lại ─────────────────────────────
 #
 # VÌ SAO CÓ BƯỚC NÀY (23/08/2026): trước đó file này KHÔNG hề đụng tới nginx.
 # Cả script nhắc chữ "nginx" đúng MỘT lần, trong một dòng chú thích, còn bước

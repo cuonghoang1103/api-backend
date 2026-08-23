@@ -15,6 +15,7 @@
  */
 
 import s00 from './nginx/s00-intro.mjs';
+import s01 from './nginx/s01-chon-server.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -38,5 +39,6 @@ export default {
   },
   sections: [
     s00,
+    s01,
   ],
 };

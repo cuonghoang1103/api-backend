@@ -22,7 +22,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is one of the recommendations for governments?</p></div><div class=\"ml-vi\"><p>Một trong những khuyến nghị dành cho các chính phủ là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q1.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q1.png",
           "options": [
             {
               "text": "Promote human values.|||Thúc đẩy các giá trị con người."
@@ -46,7 +46,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a reason to engage external stakeholders during the development of internal and external ethics policies?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là lý do để thu hút các bên liên quan bên ngoài trong quá trình xây dựng các chính sách đạo đức nội bộ và bên ngoài?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q2.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q2.png",
           "options": [
             {
               "text": "It can be used as an opportunity to demonstrate your ethical standpoints with both internal and external stakeholders.|||Có thể dùng như cơ hội để thể hiện lập trường đạo đức của bạn với cả các bên liên quan nội bộ và bên ngoài."
@@ -70,7 +70,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which type of entity are the OECD Principles on Artificial Intelligence mostly geared towards?</p></div><div class=\"ml-vi\"><p>Các Nguyên tắc AI của OECD (OECD Principles on Artificial Intelligence) chủ yếu hướng đến loại thực thể nào?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q3.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q3.png",
           "options": [
             {
               "text": "Individuals|||Cá nhân"
@@ -94,7 +94,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>When your collected data doesn&#39;t accurately reflect the full environment, you&#39;re experiencing</p></div><div class=\"ml-vi\"><p>Khi dữ liệu bạn thu thập không phản ánh chính xác toàn bộ môi trường, bạn đang gặp phải</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q4.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q4.png",
           "options": [
             {
               "text": "prejudice bias|||thiên kiến định kiến"
@@ -118,7 +118,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following metrics is used to evaluate a linear regression machine learning model?</p></div><div class=\"ml-vi\"><p>Chỉ số nào sau đây được dùng để đánh giá một mô hình học máy hồi quy tuyến tính?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q5.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q5.png",
           "options": [
             {
               "text": "Goodhart&#39;s Law|||Định luật Goodhart"
@@ -142,7 +142,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Why are environmental concerns important to consider in the ethical development of data-driven technologies?</p></div><div class=\"ml-vi\"><p>Tại sao các mối lo ngại về môi trường lại quan trọng cần cân nhắc trong việc phát triển có đạo đức công nghệ dựa trên dữ liệu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q6.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q6.png",
           "options": [
             {
               "text": "Data-driven technologies can cause secondary, indirect, or cumulative effects on the environment that might impact people in the long term.|||Công nghệ dựa trên dữ liệu có thể gây ra tác động thứ cấp, gián tiếp, hoặc tích luỹ lên môi trường, có thể ảnh hưởng đến con người về lâu dài."
@@ -166,7 +166,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Why is it important to maintain public trust?</p></div><div class=\"ml-vi\"><p>Tại sao việc duy trì niềm tin công chúng lại quan trọng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q7.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q7.png",
           "options": [
             {
               "text": "Trust, once lost, is difficult to regain.|||Niềm tin, một khi đã mất, rất khó để lấy lại."
@@ -190,7 +190,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is the difference between beneficence and non-maleficence?</p></div><div class=\"ml-vi\"><p>Sự khác biệt giữa beneficence (thiện ý) và non-maleficence (không gây hại) là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q8.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q8.png",
           "options": [
             {
               "text": "Beneficence refers to &quot;do only good&quot; and non-maleficence refers to &quot;do no harm.&quot;|||Beneficence nghĩa là &quot;chỉ làm điều tốt&quot; và non-maleficence nghĩa là &quot;không gây hại.&quot;"
@@ -214,7 +214,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Why is deciding how to act using moral reasoning not always a feasible goal for human beings?</p></div><div class=\"ml-vi\"><p>Tại sao việc quyết định cách hành động dựa trên lý luận đạo đức không phải lúc nào cũng là mục tiêu khả thi đối với con người?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q9.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q9.png",
           "options": [
             {
               "text": "Most people are not educated on normative ethical theories and therefore cannot perform true moral reasoning.|||Hầu hết mọi người không được giáo dục về các lý thuyết đạo đức quy chuẩn nên không thể thực hiện lý luận đạo đức thực sự."
@@ -238,7 +238,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>An attacker fools an AI-based anti-spam system into thinking the attacker&#39;s email messages are benign. This enables the attacker&#39;s emails to reach their destination(s) without being blocked. What type of adversarial machine learning is this?</p></div><div class=\"ml-vi\"><p>Một kẻ tấn công đánh lừa hệ thống chống thư rác dựa trên AI khiến nó nghĩ rằng email của kẻ tấn công là vô hại. Điều này giúp email của kẻ tấn công đến được đích mà không bị chặn. Đây là loại học máy đối kháng nào?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q10.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q10.png",
           "options": [
             {
               "text": "Spoofing|||Giả mạo (Spoofing)"
@@ -262,7 +262,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following principle sets are important for the creation of open data that is widely utilized?</p></div><div class=\"ml-vi\"><p>Bộ nguyên tắc nào sau đây quan trọng cho việc tạo ra dữ liệu mở được sử dụng rộng rãi?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q11.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q11.png",
           "options": [
             {
               "text": "ISO 27017|||ISO 27017"
@@ -286,7 +286,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following are logical arguments in favor of an organization maintaining compliance? (Select two.)</p></div><div class=\"ml-vi\"><p>Lập luận logic nào sau đây ủng hộ việc tổ chức duy trì tuân thủ? (Chọn hai.)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q12.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q12.png",
           "options": [
             {
               "text": "Reduced time to deployment|||Giảm thời gian triển khai"
@@ -311,7 +311,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a good example of a feedback loop in machine learning?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là ví dụ tốt về vòng lặp phản hồi (feedback loop) trong học máy?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q13.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q13.png",
           "options": [
             {
               "text": "A shopping app surfaces new items to buy, which is based on dataset from customers fitting a similar profile. When you buy, you go into that dataset.|||Một ứng dụng mua sắm hiển thị sản phẩm mới dựa trên tập dữ liệu từ khách hàng có hồ sơ tương tự. Khi bạn mua, bạn đi vào tập dữ liệu đó."
@@ -335,7 +335,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Why are groups like race and religion considered protected classes?</p></div><div class=\"ml-vi\"><p>Tại sao các nhóm như chủng tộc và tôn giáo được coi là nhóm được bảo vệ (protected classes)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q14.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q14.png",
           "options": [
             {
               "text": "People use these groups as the basis for their identities.|||Con người dùng các nhóm này làm nền tảng cho danh tính của họ."
@@ -359,7 +359,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>At what point should ethical consideration ideally be applied to emerging technologies?</p></div><div class=\"ml-vi\"><p>Về mặt lý tưởng, sự cân nhắc đạo đức nên được áp dụng vào công nghệ mới nổi ở thời điểm nào?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q15.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q15.png",
           "options": [
             {
               "text": "Once an ethical issue has received negative feedback in public media.|||Chỉ khi một vấn đề đạo đức nhận được phản hồi tiêu cực trên truyền thông đại chúng."
@@ -383,7 +383,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>K-anonymity in a dataset is achieved when each individual cannot be</p></div><div class=\"ml-vi\"><p>K-ẩn danh (K-anonymity) trong một tập dữ liệu đạt được khi mỗi cá nhân không thể bị</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q16.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q16.png",
           "options": [
             {
               "text": "distinguished from at least K individuals who are also in the dataset|||phân biệt với ít nhất K cá nhân khác cũng có trong tập dữ liệu"
@@ -407,7 +407,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is an ethical benefit of incorporating fair competition considerations in a data-driven technology ecosystem?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là lợi ích đạo đức của việc đưa các cân nhắc về cạnh tranh công bằng vào hệ sinh thái công nghệ dựa trên dữ liệu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q17.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q17.png",
           "options": [
             {
               "text": "Consolidating products and services under a single organization|||Hợp nhất sản phẩm và dịch vụ dưới một tổ chức duy nhất"
@@ -431,7 +431,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following are likely to be found within a penetration test rules of engagement (ROE)? (Select two.)</p></div><div class=\"ml-vi\"><p>Điều nào sau đây có khả năng được tìm thấy trong bộ quy tắc giao ước (RoE) của một bài kiểm tra xâm nhập? (Chọn hai.)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q18.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q18.png",
           "options": [
             {
               "text": "What systems may be targeted|||Những hệ thống nào có thể là mục tiêu"
@@ -456,7 +456,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What shared principle from ethical frameworks is intellectual property often at odds with?</p></div><div class=\"ml-vi\"><p>Sở hữu trí tuệ thường xung đột với nguyên tắc chung nào từ các khung đạo đức?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q19.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q19.png",
           "options": [
             {
               "text": "Privacy|||Quyền riêng tư"
@@ -480,7 +480,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>How can confirmation bias impact us socially? (Select two.)</p></div><div class=\"ml-vi\"><p>Thiên kiến xác nhận (confirmation bias) có thể tác động đến chúng ta về mặt xã hội như thế nào? (Chọn hai.)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q20.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q20.png",
           "options": [
             {
               "text": "It can lead to a diverse set of friends.|||Nó có thể dẫn đến một nhóm bạn đa dạng."
@@ -505,7 +505,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a case study that best represents the principle of professional responsibility?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là một tình huống nghiên cứu thể hiện tốt nhất nguyên tắc trách nhiệm nghề nghiệp?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q21.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q21.png",
           "options": [
             {
               "text": "The American Medical Association&#39;s definition of AI as augmented intelligence|||Định nghĩa của Hiệp hội Y khoa Hoa Kỳ (AMA) về AI như &quot;trí tuệ tăng cường&quot; (augmented intelligence)"
@@ -529,7 +529,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is the function of a red team in a penetration testing exercise?</p></div><div class=\"ml-vi\"><p>Chức năng của đội đỏ (red team) trong một bài tập kiểm tra xâm nhập là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q22.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q22.png",
           "options": [
             {
               "text": "To conduct the simulated attacks.|||Để thực hiện các cuộc tấn công mô phỏng."
@@ -553,7 +553,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is an adequate definition of a stakeholder?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là định nghĩa đầy đủ về bên liên quan (stakeholder)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q23.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q23.png",
           "options": [
             {
               "text": "All internal employees.|||Tất cả nhân viên nội bộ."
@@ -577,7 +577,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>A hospital dataset protects whether an individual has had either a stroke, heart attack, or staph infection. The individual may still be harmed via dataset</p></div><div class=\"ml-vi\"><p>Một tập dữ liệu bệnh viện bảo vệ thông tin liệu một cá nhân có bị đột quỵ, nhồi máu cơ tim, hay nhiễm khuẩn tụ cầu hay không. Cá nhân đó vẫn có thể bị tổn hại thông qua</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q24.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q24.png",
           "options": [
             {
               "text": "group inclusion|||việc thuộc vào nhóm (group inclusion)"
@@ -601,7 +601,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>In presenting an audit report, a researcher would</p></div><div class=\"ml-vi\"><p>Khi trình bày một báo cáo kiểm toán, nhà nghiên cứu sẽ</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q25.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q25.png",
           "options": [
             {
               "text": "prevent the model from launching|||ngăn mô hình được ra mắt"
@@ -625,7 +625,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Why are anonymization and pseudonymization insufficient protection measures against breaches of data privacy and security?</p></div><div class=\"ml-vi\"><p>Tại sao ẩn danh hoá và giả danh hoá là các biện pháp bảo vệ không đủ chống lại vi phạm quyền riêng tư và bảo mật dữ liệu?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q26.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q26.png",
           "options": [
             {
               "text": "They only work in scenarios with particular kinds of personal information.|||Chúng chỉ hoạt động trong các tình huống có loại thông tin cá nhân cụ thể."
@@ -649,7 +649,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>How can a visual contract be easier to understand than a written contract?</p></div><div class=\"ml-vi\"><p>Hợp đồng dạng hình ảnh có thể dễ hiểu hơn hợp đồng bằng văn bản như thế nào?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q27.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q27.png",
           "options": [
             {
               "text": "The use of pictures is more accessible to all people, whereas a written contract may be difficult for someone with a reading disability to understand.|||Việc dùng hình ảnh dễ tiếp cận hơn với mọi người, trong khi hợp đồng văn bản có thể khó hiểu với người gặp khó khăn về đọc."
@@ -673,7 +673,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following are effective strategies when making statements on social media? (Select two.)</p></div><div class=\"ml-vi\"><p>Chiến lược nào sau đây hiệu quả khi đưa ra tuyên bố trên mạng xã hội? (Chọn hai.)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q28.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q28.png",
           "options": [
             {
               "text": "Being honest and up front|||Trung thực và thẳng thắn"
@@ -698,7 +698,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following are important to provide to a crisis communication team? (Select two.)</p></div><div class=\"ml-vi\"><p>Điều nào sau đây quan trọng cần cung cấp cho đội truyền thông khủng hoảng? (Chọn hai.)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q29.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q29.png",
           "options": [
             {
               "text": "Clear direction on the roles and responsibilities of team members|||Định hướng rõ ràng về vai trò và trách nhiệm của các thành viên trong đội"
@@ -723,7 +723,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following best describes what an algorithm is?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây mô tả tốt nhất một thuật toán là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q30.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q30.png",
           "options": [
             {
               "text": "a recipe that a computer uses to solve problems|||một công thức mà máy tính dùng để giải quyết vấn đề"
@@ -747,7 +747,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following elements might be considered moderately affected in an Impact Level 2 Algorithmic Impact Assessment? (Select two.)</p></div><div class=\"ml-vi\"><p>Yếu tố nào sau đây có thể được coi là bị ảnh hưởng vừa phải trong một Đánh giá Tác động Thuật toán ở Mức độ Tác động 2? (Chọn hai.)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q31.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q31.png",
           "options": [
             {
               "text": "A loss of life resulting from specific circumstances.|||Mất mạng sống do các tình huống cụ thể."
@@ -772,7 +772,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What make ethics training effective? (Select all that apply.)</p></div><div class=\"ml-vi\"><p>Điều gì làm cho đào tạo đạo đức hiệu quả? (Chọn tất cả các đáp án đúng.)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q32.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q32.png",
           "options": [
             {
               "text": "Keep sessions short and focused.|||Giữ các buổi đào tạo ngắn gọn và tập trung."
@@ -795,7 +795,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>The Data minimization principle requires that you limit data collection to only what is ____</p></div><div class=\"ml-vi\"><p>Nguyên tắc Tối thiểu hoá dữ liệu yêu cầu chỉ thu thập dữ liệu ____</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q33.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q33.png",
           "options": [
             {
               "text": "necessary for differential privacy|||cần thiết cho quyền riêng tư khác biệt"
@@ -819,7 +819,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>How do anonymized datasets fall short of their goal of being anonymous?</p></div><div class=\"ml-vi\"><p>Các tập dữ liệu đã ẩn danh không đạt được mục tiêu ẩn danh của chúng như thế nào?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q34.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q34.png",
           "options": [
             {
               "text": "Anonymized datasets can be re-identified by anyone holding the hash key.|||Tập dữ liệu ẩn danh có thể bị tái định danh bởi bất kỳ ai nắm giữ khoá băm."
@@ -843,7 +843,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What does it mean to say that human rights are inalienable? (Select two.)</p></div><div class=\"ml-vi\"><p>Nói rằng quyền con người là bất khả xâm phạm nghĩa là gì? (Chọn hai.)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q35.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q35.png",
           "options": [
             {
               "text": "Inalienable rights are conditional.|||Quyền bất khả xâm phạm là có điều kiện."
@@ -868,7 +868,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a reason to engage in a comprehensive information gathering phase before drafting your internal and external ethics policies?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là lý do để thực hiện giai đoạn thu thập thông tin toàn diện trước khi soạn thảo các chính sách đạo đức nội bộ và bên ngoài?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q36.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q36.png",
           "options": [
             {
               "text": "It helps to unearth best practices from peers in the industry.|||Nó giúp khám phá các thực hành tốt nhất từ đồng nghiệp trong ngành."
@@ -892,7 +892,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>In the context of open data, what is FAIR?</p></div><div class=\"ml-vi\"><p>Trong bối cảnh dữ liệu mở, FAIR là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q37.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q37.png",
           "options": [
             {
               "text": "An acronym for findable, accessible, interoperable, and reusable.|||Từ viết tắt của findable, accessible, interoperable, và reusable (có thể tìm thấy, có thể truy cập, có thể tương tác, có thể tái sử dụng)."
@@ -916,7 +916,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following constitute internal stakeholders in the context of a code of ethics?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây cấu thành các bên liên quan nội bộ trong bối cảnh của một bộ quy tắc đạo đức?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q38.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q38.png",
           "options": [
             {
               "text": "Regulators|||Cơ quan quản lý"
@@ -940,7 +940,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following are useful strategies for communicating ethical risks to the organization? (Select two.)</p></div><div class=\"ml-vi\"><p>Chiến lược nào sau đây hữu ích để truyền đạt rủi ro đạo đức tới tổ chức? (Chọn hai.)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q39.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q39.png",
           "options": [
             {
               "text": "Communicate information through a single voice|||Truyền đạt thông tin qua một tiếng nói duy nhất"
@@ -965,7 +965,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is the most important ethical consideration regarding technical developments like deepfakes?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây là cân nhắc đạo đức quan trọng nhất liên quan đến các phát triển kỹ thuật như deepfake?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q40.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q40.png",
           "options": [
             {
               "text": "They take away monetization opportunities, leaving individuals unfairly compensated for their data.|||Chúng lấy đi cơ hội kiếm tiền, khiến cá nhân không được đền bù công bằng cho dữ liệu của mình."
@@ -989,7 +989,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>The Strava dataset example illustrates that while differential privacy can protect individuals, it can still harm ________</p></div><div class=\"ml-vi\"><p>Ví dụ về tập dữ liệu Strava minh hoạ rằng dù quyền riêng tư khác biệt có thể bảo vệ cá nhân, nó vẫn có thể gây hại cho ________</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q41.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q41.png",
           "options": [
             {
               "text": "Researchers|||Nhà nghiên cứu"
@@ -1013,7 +1013,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Why is it important to consider Goodhart&#39;s law?</p></div><div class=\"ml-vi\"><p>Tại sao việc cân nhắc định luật Goodhart lại quan trọng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q42.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q42.png",
           "options": [
             {
               "text": "A model might optimize one metric at the expense of others.|||Một mô hình có thể tối ưu một chỉ số với cái giá phải trả là các chỉ số khác."
@@ -1037,7 +1037,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>The organization needs to ask itself about any quality control issues it may be having. Which of the following processes is most suitable for asking and answering that question?</p></div><div class=\"ml-vi\"><p>Tổ chức cần tự hỏi về bất kỳ vấn đề kiểm soát chất lượng nào có thể đang gặp phải. Quy trình nào sau đây phù hợp nhất để đặt ra và trả lời câu hỏi đó?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q43.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q43.png",
           "options": [
             {
               "text": "Business impact assessment|||Đánh giá tác động kinh doanh"
@@ -1061,7 +1061,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Why is it important to categorize ethical risks into different types? (Select two.)</p></div><div class=\"ml-vi\"><p>Tại sao việc phân loại rủi ro đạo đức thành các loại khác nhau lại quan trọng? (Chọn hai.)</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q44.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q44.png",
           "options": [
             {
               "text": "It makes it easier for us to identify and manage different types of risks.|||Nó giúp chúng ta dễ dàng xác định và quản lý các loại rủi ro khác nhau."
@@ -1086,7 +1086,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>An ethical impact assessment is ________</p></div><div class=\"ml-vi\"><p>Đánh giá tác động đạo đức là ________</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q45.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q45.png",
           "options": [
             {
               "text": "Focused on the impact of past ethical risks.|||Tập trung vào tác động của các rủi ro đạo đức trong quá khứ."
@@ -1110,7 +1110,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following statements accurately describes the philosophical concept of predeterminism?</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây mô tả chính xác khái niệm triết học về thuyết tiền định (predeterminism)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q46.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q46.png",
           "options": [
             {
               "text": "All future events are determined by preceding events, as in a chain, but human beings may still be able to interfere with this chain of events.|||Mọi sự kiện tương lai đều được quyết định bởi các sự kiện trước đó, như một chuỗi, nhưng con người vẫn có thể can thiệp vào chuỗi sự kiện này."
@@ -1134,7 +1134,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following describes the purpose of a STEEPV analysis?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây mô tả mục đích của một phân tích STEEPV?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q47.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q47.png",
           "options": [
             {
               "text": "To perform a strategic analysis of user needs and behaviors.|||Để thực hiện phân tích chiến lược về nhu cầu và hành vi người dùng."
@@ -1158,7 +1158,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Is an open door policy equivalent to ensuring employee voice?</p></div><div class=\"ml-vi\"><p>Chính sách mở cửa (open door policy) có tương đương với việc đảm bảo tiếng nói của nhân viên không?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q48.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q48.png",
           "options": [
             {
               "text": "No, because an open door policy is the opposite of employee voice.|||Không, vì chính sách mở cửa là điều ngược lại với tiếng nói của nhân viên."
@@ -1182,7 +1182,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>In 2019, ____% of equity-futures and cash-equity trades were executed by algorithms</p></div><div class=\"ml-vi\"><p>Vào năm 2019, ____% các giao dịch hợp đồng tương lai cổ phiếu và cổ phiếu tiền mặt được thực hiện bởi thuật toán</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q49.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q49.png",
           "options": [
             {
               "text": "1-5%|||1-5%"
@@ -1206,7 +1206,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following measures is best suited for reporting results to an audience?</p></div><div class=\"ml-vi\"><p>Chỉ số nào sau đây phù hợp nhất để báo cáo kết quả cho một đối tượng khán giả?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q50.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q50.png",
           "options": [
             {
               "text": "Standard deviation|||Độ lệch chuẩn"
@@ -1230,7 +1230,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Once a dataset has been cleaned, which accuracy guideline ensures your model is looking at the problem correctly?</p></div><div class=\"ml-vi\"><p>Sau khi tập dữ liệu đã được làm sạch, nguyên tắc chính xác nào đảm bảo mô hình của bạn đang xem xét đúng vấn đề?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q51.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q51.png",
           "options": [
             {
               "text": "Objective summarization|||Tóm tắt khách quan"
@@ -1254,7 +1254,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following, by itself, qualifies as personally identifiable information (PII)?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây, tự bản thân nó, đủ điều kiện là thông tin định danh cá nhân (PII)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q52.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q52.png",
           "options": [
             {
               "text": "System events added to a log|||Các sự kiện hệ thống được thêm vào nhật ký"
@@ -1278,7 +1278,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What&#39;s the difference between a basic and learning algorithm?</p></div><div class=\"ml-vi\"><p>Sự khác biệt giữa thuật toán cơ bản và thuật toán học máy là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q53.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q53.png",
           "options": [
             {
               "text": "A basic algorithm takes an input, while a learning algorithm takes an input and gets an output|||Thuật toán cơ bản nhận một đầu vào, còn thuật toán học máy nhận một đầu vào và cho ra một đầu ra"
@@ -1302,7 +1302,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>What is the primary advantage of radioactive data tracing over past techniques that modify input in order to determine whether or not that input was used in training?</p></div><div class=\"ml-vi\"><p>Ưu điểm chính của kỹ thuật đánh dấu dữ liệu phóng xạ so với các kỹ thuật trước đây sửa đổi dữ liệu đầu vào để xác định liệu dữ liệu đó có được dùng để huấn luyện hay không là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q54.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q54.png",
           "options": [
             {
               "text": "Radioactive data tracing can be used to modify the label.|||Đánh dấu dữ liệu phóng xạ có thể dùng để sửa đổi nhãn."
@@ -1326,7 +1326,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>How is a culture-building workshop different from ethics training?</p></div><div class=\"ml-vi\"><p>Hội thảo xây dựng văn hoá khác với đào tạo đạo đức như thế nào?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q55.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q55.png",
           "options": [
             {
               "text": "Culture-building workshops teaches people how to integrate company values into daily practice, while ethics training teaches the company values.|||Hội thảo xây dựng văn hoá dạy cách đưa các giá trị công ty vào thực hành hàng ngày, còn đào tạo đạo đức dạy các giá trị công ty."
@@ -1344,7 +1344,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>If we know one group&#39;s worthiness score has been artificially inflated, one solution for fairness is to</p></div><div class=\"ml-vi\"><p>Nếu chúng ta biết điểm số &quot;đáng tin cậy&quot; của một nhóm đã bị thổi phồng một cách giả tạo, một giải pháp cho sự công bằng là</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q56.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q56.png",
           "options": [
             {
               "text": "creating separate decision thresholds for each group|||tạo ra các ngưỡng quyết định riêng biệt cho mỗi nhóm"
@@ -1368,7 +1368,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following Python tools is designed to integrate with Google&#39;s Cloud AI platform?</p></div><div class=\"ml-vi\"><p>Công cụ Python nào sau đây được thiết kế để tích hợp với nền tảng Google Cloud AI?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q57.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q57.png",
           "options": [
             {
               "text": "What-If|||What-If"
@@ -1392,7 +1392,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following resources does the National Institute of Standards and Technology (NIST) provide to organizations?</p></div><div class=\"ml-vi\"><p>Viện Tiêu chuẩn và Công nghệ Quốc gia Hoa Kỳ (NIST) cung cấp nguồn lực nào sau đây cho các tổ chức?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q58.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q58.png",
           "options": [
             {
               "text": "Measurement technologies|||Công nghệ đo lường"
@@ -1416,7 +1416,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Why is it important to engage stakeholders at the beginning of the ethical risk management process?</p></div><div class=\"ml-vi\"><p>Tại sao việc thu hút các bên liên quan ngay từ đầu quy trình quản lý rủi ro đạo đức lại quan trọng?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q59.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q59.png",
           "options": [
             {
               "text": "It proves that you are completely equipped to address any ethical risks in your data-driven systems.|||Nó chứng minh rằng bạn hoàn toàn có đủ khả năng giải quyết mọi rủi ro đạo đức trong hệ thống dựa trên dữ liệu của mình."
@@ -1440,7 +1440,7 @@ export default {
           "kind": "MCQ",
           "points": 0.1667,
           "prompt": "<div class=\"ml-en\"><p>Which of the following best describes a marketing persona?</p></div><div class=\"ml-vi\"><p>Điều nào sau đây mô tả tốt nhất một chân dung khách hàng tiếp thị (marketing persona)?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10/q60.webp",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/ITE302c/FE10-v2/q60.png",
           "options": [
             {
               "text": "A character that encapsulates a brand&#39;s personality|||Một nhân vật thể hiện tính cách của thương hiệu"

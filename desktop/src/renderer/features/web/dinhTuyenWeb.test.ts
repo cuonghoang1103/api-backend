@@ -74,7 +74,6 @@ describe('khopTuyenWeb', () => {
   it('TĨNH thắng ĐỘNG ở cả bốn chỗ mới', () => {
     const cap: [string, string, string][] = [
       ['/projects/search', '/projects/search', '/projects/:slug'],
-      ['/games/leaderboard', '/games/leaderboard', '/games/:slug'],
       ['/finance/debts/calendar', '/finance/debts/calendar', '/finance/debts/:id'],
     ];
     for (const [duong, mauDung, mauSai] of cap) {
@@ -88,22 +87,24 @@ describe('khopTuyenWeb', () => {
      * mở ra với `slug="love-me"`, gọi API, rồi báo "không có game này". Chốt
      * lại ở đây để ai đó thêm lại thì phải thêm CÓ Ý THỨC.
      */
-    expect(khopTuyenWeb('/games/love-me')?.tuyen.mau,
-      '`/games/love-me` đã bị bỏ — không được rơi vào trang chi tiết')
-      .not.toBe('/games/love-me');
+    /* Cả cây `/games` và `/repos` đã bị gỡ vì là SERVER COMPONENT — xem chú
+       thích trong `dinhTuyenWeb.ts`. Chốt lại để ai đó thêm lại thì phải thêm
+       CÓ Ý THỨC, sau khi đã viết lại chúng thành client component. */
+    for (const d of ['/games', '/games/leaderboard', '/games/love-me', '/games/co-vua',
+                     '/repos', '/repos/12', '/repos/tag/react',
+                     '/projects/mot-du-an', '/exp-hub/abc']) {
+      expect(khopTuyenWeb(d), `${d} là server component, phải KHÔNG có tuyến`).toBeNull();
+    }
 
     // Và bản ĐỘNG vẫn phải khớp bình thường với giá trị thật.
-    expect(khopTuyenWeb('/projects/mot-du-an')?.thamSo).toEqual({ slug: 'mot-du-an' });
-    expect(khopTuyenWeb('/games/co-vua')?.thamSo).toEqual({ slug: 'co-vua' });
     expect(khopTuyenWeb('/finance/debts/12')?.thamSo).toEqual({ id: '12' });
   });
 
   it('mười cây mới: gốc và một đường con tiêu biểu đều khớp', () => {
-    const goc = ['/maker-lab', '/creator', '/projects', '/repos', '/exp-hub',
-                 '/games', '/finance', '/forum', '/saved', '/profile'];
+    const goc = ['/maker-lab', '/creator', '/projects', '/exp-hub',
+                 '/finance', '/forum', '/saved', '/profile'];
     for (const g of goc) expect(khopTuyenWeb(g)?.tuyen.mau, g).toBe(g);
     expect(khopTuyenWeb('/creator/projects/7')?.thamSo).toEqual({ id: '7' });
-    expect(khopTuyenWeb('/repos/tag/react')?.thamSo).toEqual({ slug: 'react' });
     expect(khopTuyenWeb('/profile/9/v2')?.thamSo).toEqual({ id: '9' });
     expect(khopTuyenWeb('/finance/wallets/3')?.thamSo).toEqual({ id: '3' });
   });
@@ -132,7 +133,7 @@ describe('khopTuyenWeb', () => {
       expect(thay.has(t.mau), `mẫu trùng: ${t.mau}`).toBe(false);
       thay.add(t.mau);
     }
-    expect(thay.size).toBe(73);
+    expect(thay.size).toBe(65);
   });
 });
 
@@ -156,7 +157,7 @@ describe('thuocCayWeb', () => {
   });
 
   it('nhận cả mười cây mới', () => {
-    for (const d of ['/finance/debts/12', '/games/leaderboard', '/profile/9/v2',
+    for (const d of ['/finance/debts/12', '/profile/9/v2',
                      '/saved', '/forum/3', '/exp-hub/abc']) {
       expect(thuocCayWeb(d), d).toBe(true);
     }
@@ -169,7 +170,6 @@ describe('thuocCayWeb', () => {
     expect(thuocCayWeb('/roadmapper')).toBe(false);
     expect(thuocCayWeb('/interviews')).toBe(false);
     expect(thuocCayWeb('/cvs')).toBe(false);
-    expect(thuocCayWeb('/games-x')).toBe(false);
     expect(thuocCayWeb('/financeer')).toBe(false);
     expect(thuocCayWeb('/chat')).toBe(false);
   });

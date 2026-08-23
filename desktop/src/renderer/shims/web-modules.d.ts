@@ -193,3 +193,12 @@ declare module '@/app/*/page' {
   const Trang: ComponentType;
   export default Trang;
 }
+
+/* Provider react-query của web. `VoWeb` dựng nó cho MỌI cây web dùng lại —
+   `/creator` và `/saved` gọi `useQuery`, và thiếu nó thì chúng nổ ngay lúc vẽ
+   với "No QueryClient set". Khai riêng vì wildcard trên chỉ phủ module TRANG. */
+declare module '@/components/providers/TanStackQueryProvider' {
+  import type { ComponentType, ReactNode } from 'react';
+  const P: ComponentType<{ children: ReactNode }>;
+  export default P;
+}

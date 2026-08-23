@@ -123,21 +123,14 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/projects', nap: () => import('@/app/projects/page') },
   // ⚠️ TĨNH TRƯỚC ĐỘNG: `/projects/search` cùng hình dạng với `/projects/:slug`.
   { mau: '/projects/search', nap: () => import('@/app/projects/search/page') },
-  { mau: '/projects/:slug', nap: () => import('@/app/projects/[slug]/page') },
 
   /* ── Kho mã ── */
-  { mau: '/repos', nap: () => import('@/app/repos/page') },
-  { mau: '/repos/:id', nap: () => import('@/app/repos/[id]/page') },
-  { mau: '/repos/tag/:slug', nap: () => import('@/app/repos/tag/[slug]/page') },
 
   /* ── Exp Hub ── */
   { mau: '/exp-hub', nap: () => import('@/app/exp-hub/page') },
-  { mau: '/exp-hub/:slug', nap: () => import('@/app/exp-hub/[slug]/page') },
 
   /* ── Trò chơi ── */
-  { mau: '/games', nap: () => import('@/app/games/page') },
   // ⚠️ TĨNH TRƯỚC ĐỘNG: đường dưới cùng hình dạng với `/games/:slug`.
-  { mau: '/games/leaderboard', nap: () => import('@/app/games/leaderboard/page') },
   /*
    * ⛔ `/games/love-me` CỐ Ý KHÔNG có ở đây (24/08/2026, người dùng quyết).
    *
@@ -153,7 +146,6 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
    * Bấm vào nó vẫn ÊM: `/games` thuộc cây web nên chủ cây được dựng, rồi
    * `TrangWebTheoTuyen` hiện "Không tìm thấy" KÈM NÚT QUAY VỀ.
    */
-  { mau: '/games/:slug', nap: () => import('@/app/games/[slug]/page') },
 
   /* ── Tài chính (13 màn, nhiều nhất) ── */
   { mau: '/finance', nap: () => import('@/app/finance/page') },
@@ -171,6 +163,30 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/finance/expenses/recurring', nap: () => import('@/app/finance/expenses/recurring/page') },
   { mau: '/finance/debts/:id', nap: () => import('@/app/finance/debts/[id]/page') },
   { mau: '/finance/wallets/:id', nap: () => import('@/app/finance/wallets/[id]/page') },
+
+
+  /* ⛔⛔ TÁM TRANG BỊ GỠ — chúng là SERVER COMPONENT (24/08/2026) ────────────
+   *
+   *   /repos · /repos/:id · /repos/tag/:slug          (CẢ cây)
+   *   /games · /games/leaderboard · /games/:slug      (CẢ cây)
+   *   /projects/:slug · /exp-hub/:slug                (trang chi tiết)
+   *
+   * Chúng khai `export default async function` — component BẤT ĐỒNG BỘ, thứ
+   * chỉ Next chạy được ở phía MÁY CHỦ. Dựng chúng trong cây React phía client
+   * cho ra `Minified React error #31 … [object Promise]`: React nhận một lời
+   * hứa ở chỗ đáng lẽ là phần tử.
+   *
+   * Đây KHÔNG phải lỗ hổng shim — không shim nào vá được. Muốn đưa vào app thì
+   * phải VIẾT LẠI chúng thành client component, và việc đó đổi cả hành vi trên
+   * web (mất kết xuất phía máy chủ ⇒ ảnh hưởng SEO), nên là quyết định riêng.
+   *
+   * ⚠️ Cách đo của tôi đã bỏ sót chuyện này: tôi đếm import từ `next/*` mà
+   * KHÔNG hỏi "trang này là server hay client component" — câu hỏi cơ bản hơn.
+   * Đếm bằng: grep -L "use client" rồi grep "export default async".
+   *
+   * `/projects` và `/exp-hub` GIỮ trang danh sách (chúng là client component
+   * và chạy tốt); bấm vào một mục thì rơi vào "Không tìm thấy" kèm nút quay về.
+   */
 
   /* ── Diễn đàn ── */
   { mau: '/forum', nap: () => import('@/app/forum/page') },
@@ -217,8 +233,8 @@ export function khopTuyenWeb(duong: string): KhopTuyen | null {
 /** Gốc của những cây route mà trang web sở hữu — dùng cho router của app. */
 export const GOC_WEB: readonly string[] = [
   '/language', '/roadmap', '/interview', '/cv',
-  '/maker-lab', '/creator', '/projects', '/repos', '/exp-hub',
-  '/games', '/finance', '/forum', '/saved', '/profile',
+  '/maker-lab', '/creator', '/projects', '/exp-hub',
+  '/finance', '/forum', '/saved', '/profile',
 ];
 
 /** Đường dẫn này có thuộc một cây web không (kể cả các trang con động). */

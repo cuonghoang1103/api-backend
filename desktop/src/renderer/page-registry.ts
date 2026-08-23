@@ -25,9 +25,7 @@ import { CvWebPage } from './features/cv/CvWebPage';
 import { MakerLabPage } from './features/maker-lab/MakerLabPage';
 import { XuongNoiDungPage } from './features/creator/XuongNoiDungPage';
 import { DuAnPage } from './features/projects/DuAnPage';
-import { KhoMaPage } from './features/repos/KhoMaPage';
 import { ExpHubPage } from './features/exp-hub/ExpHubPage';
-import { TroChoiPage } from './features/games/TroChoiPage';
 import { TaiChinhPage } from './features/finance/TaiChinhPage';
 import { DienDanPage } from './features/forum/DienDanPage';
 import { DaLuuPage } from './features/saved/DaLuuPage';
@@ -70,6 +68,14 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/roadmap': LoTrinhPage,
   '/language': NgoaiNguPage,
   '/interview': PhongVanPage,
+  '/maker-lab': MakerLabPage,
+  '/creator': XuongNoiDungPage,
+  '/projects': DuAnPage,
+  '/exp-hub': ExpHubPage,
+  '/finance': TaiChinhPage,
+  '/forum': DienDanPage,
+  '/saved': DaLuuPage,
+  '/profile': TrangCaNhanPage,
 };
 
 /**
@@ -93,9 +99,7 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/maker-lab', MakerLabPage],
   ['/creator', XuongNoiDungPage],
   ['/projects', DuAnPage],
-  ['/repos', KhoMaPage],
   ['/exp-hub', ExpHubPage],
-  ['/games', TroChoiPage],
   ['/finance', TaiChinhPage],
   ['/forum', DienDanPage],
   ['/saved', DaLuuPage],

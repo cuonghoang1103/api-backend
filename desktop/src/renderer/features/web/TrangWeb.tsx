@@ -30,6 +30,7 @@ import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { configureWebApi } from '../../shims/web-api-adapter';
 import { LoiChuyenHuong, LoiKhongTimThay, ThamSoTuyen } from '../../shims/next-navigation';
+import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider';
 import { khopTuyenWeb } from './dinhTuyenWeb';
 
 function DangMo({ ten }: { ten: string }) {
@@ -76,12 +77,34 @@ export function useCauNoiWeb(): boolean {
   return xong;
 }
 
-/** Bọc chung: đặt `.dark` cho biến thể Tailwind của cây web. */
+/**
+ * Bọc chung: đặt `.dark` cho biến thể Tailwind của cây web, và dựng những
+ * PROVIDER mà mã web trông đợi có sẵn.
+ *
+ * ─── Vì sao cần provider (24/08/2026) ───
+ * Trên web, `app/layout.tsx` bọc mọi trang trong bốn provider:
+ * `AuthProvider` → `ToasterProvider` → `TanStackQueryProvider` → `ThemeProvider`.
+ * App desktop định tuyến THẲNG vào module trang nên không có cái nào.
+ *
+ * Sáu cây port trước không dùng react-query nên không lộ. `/creator` và
+ * `/saved` thì dùng, và chúng nổ ngay lúc vẽ: "No QueryClient set, use
+ * QueryClientProvider to set one".
+ *
+ * ⚠️ CHỈ thêm `TanStackQueryProvider`, KHÔNG thêm ba cái kia — mỗi cái là một
+ * quyết định riêng, không phải một gói:
+ *  • `ThemeProvider` của web đặt lớp lên `<html>`, mà app đã có hệ chủ đề
+ *    riêng. Trộn vào là đúng lỗi 02/07/2026 (lớp `dark` toàn cục phá Notes).
+ *  • `AuthProvider` sẽ đi nạp phiên lần nữa, trong khi `useCauNoiWeb` đã nạp
+ *    phiên của app vào `authStore` rồi.
+ *  • `ToasterProvider` là chuyện có thật cần xử lý (không có nó thì mọi lời
+ *    gọi `toast.*` trong cây web im lặng không hiện gì) — nhưng nó ảnh hưởng
+ *    CẢ SÁU cây đã chạy tốt, nên tách ra làm riêng, có đo.
+ */
 export function VoWeb({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useAppState();
   return (
     <div className={`ct-web-host${resolvedTheme === 'dark' ? ' dark' : ''}`}>
-      {children}
+      <TanStackQueryProvider>{children}</TanStackQueryProvider>
     </div>
   );
 }

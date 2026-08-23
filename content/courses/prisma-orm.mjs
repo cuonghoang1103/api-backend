@@ -20,6 +20,7 @@
 import s00 from './prisma-orm/s00-intro.mjs';
 import s01 from './prisma-orm/s01-orm.mjs';
 import s02 from './prisma-orm/s02-luoc-do.mjs';
+import s03 from './prisma-orm/s03-quan-he.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -45,5 +46,6 @@ export default {
     s00,
     s01,
     s02,
+    s03,
   ],
 };

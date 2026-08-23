@@ -28,6 +28,7 @@ import s07 from './prisma-orm/s07-giao-dich.mjs';
 import s08 from './prisma-orm/s08-he-kieu.mjs';
 import s09 from './prisma-orm/s09-hieu-nang.mjs';
 import s10 from './prisma-orm/s10-thoat-hiem.mjs';
+import s11 from './prisma-orm/s11-len-production.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -61,5 +62,6 @@ export default {
     s08,
     s09,
     s10,
+    s11,
   ],
 };

@@ -93,7 +93,7 @@ const bridge: DesktopBridge = {
     moThuMuc: () => ipcRenderer.invoke('update:moThuMuc') as Promise<void>,
     tuCapNhat: () => ipcRenderer.invoke('update:tuCapNhat') as Promise<void>,
     noiDangChay: () => ipcRenderer.invoke('update:noiDangChay') as Promise<{
-      duong: string; trongApplications: boolean; ghiDuoc: boolean;
+      duong: string; daCaiDung: boolean; ghiDuoc: boolean;
     }>,
   },
 

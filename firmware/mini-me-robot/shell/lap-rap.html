@@ -585,7 +585,7 @@ details[open] summary{border-bottom:1px solid var(--line)}
       <tr><td class="mono">DC · RS · A0</td><td>lệnh hay dữ liệu</td><td class="num">GPIO 13</td></tr>
       <tr><td class="mono">CS · SS</td><td>chọn chip</td><td class="num">9 / 10 / 14 — <b>mỗi màn một chân</b></td></tr>
       <tr><td class="mono">RES · RST · RESET</td><td>khởi động lại</td><td class="num">3V3 (cả ba)</td></tr>
-      <tr><td class="mono">BLK · LED · BL</td><td>đèn nền</td><td class="num">để hở</td></tr>
+      <tr><td class="mono">BLK · LED · BL</td><td>đèn nền</td><td class="num"><b>khác nhau hai màn</b></td></tr>
       <tr><td class="mono">SDO · MISO</td><td>dữ liệu ra khỏi màn</td><td class="num"><b>KHÔNG nối</b></td></tr>
       <tr><td class="mono">VCC · VDD</td><td>nguồn</td><td class="num">3V3</td></tr>
     </tbody>
@@ -603,7 +603,7 @@ details[open] summary{border-bottom:1px solid var(--line)}
       <tr><td class="mono">DC</td><td class="num">GPIO 13</td><td class="num">GPIO 13</td></tr>
       <tr><td class="mono">CS</td><td class="num"><b>GPIO 9</b></td><td class="num"><b>GPIO 14</b></td><td>← <b>chỗ duy nhất hai mắt khác nhau</b></td></tr>
       <tr><td class="mono">RES</td><td class="num">3V3</td><td class="num">3V3</td><td>nối cứng, firmware reset bằng lệnh <code>0x01</code></td></tr>
-      <tr><td class="mono">BLK</td><td class="num">để hở</td><td class="num">để hở</td><td>hở = đèn nền sáng luôn</td></tr>
+      <tr><td class="mono">BLK</td><td class="num">để hở</td><td class="num">để hở</td><td>hở = sáng luôn, vì bo tròn có transistor <code>Q1 (S8050)</code> lái đèn nền. <b>Đừng đem quy tắc này sang màn bụng</b></td></tr>
     </tbody>
   </table></div>
 
@@ -619,7 +619,7 @@ details[open] summary{border-bottom:1px solid var(--line)}
       <tr><td class="mono">DC · RS</td><td class="num">GPIO 13</td><td>dùng chung</td></tr>
       <tr><td class="mono">SDI · MOSI</td><td class="num">GPIO 11</td><td>dùng chung</td></tr>
       <tr><td class="mono">SCK</td><td class="num">GPIO 12</td><td>dùng chung</td></tr>
-      <tr><td class="mono">LED · BL</td><td class="num">3V3 hoặc để hở</td><td>tuỳ lô: có bo cần cấp nguồn cho đèn nền, có bo tự nối sẵn</td></tr>
+      <tr><td class="mono">LED · BL</td><td class="num"><b>3V3</b></td><td><b>PHẢI cấp điện.</b> Khác hẳn màn tròn: bo 3.5" phần lớn nối chân này thẳng vào dãy LED qua trở hạn dòng, không có transistor lái. Bỏ hở là màn <b>tối đen hoàn toàn</b> trong khi chip vẫn chạy — xem ô dưới</td></tr>
       <tr><td class="mono">SDO · MISO</td><td class="num"><b>không nối</b></td><td>firmware khai <code>GFX_NOT_DEFINED</code> cho MISO — nó không bao giờ đọc ngược từ màn</td></tr>
       <tr><td class="mono">T_CLK T_CS T_DIN T_DO T_IRQ</td><td class="num"><b>không nối</b></td><td>cả nhóm cảm ứng. Firmware không có mã đọc touch</td></tr>
     </tbody>
@@ -647,6 +647,13 @@ details[open] summary{border-bottom:1px solid var(--line)}
   <div class="note">
     <span class="warn-h">Cấp 3,3 V cho bo có ổn áp thì mất gì</span>
     <p><code>AMS1117</code> bị dropout, ra khoảng <b>3,0–3,2 V</b> thay vì 3,3 V. Chip ILI9488 chạy được từ 2,5 V nên vẫn đủ — chỉ <b>đèn nền hơi mờ</b>. Đúng tình huống của màn tròn GC9A01, và ở đó cách chữa sạch là cấp <b>3,8–4,2 V</b>: đủ chênh áp cho ổn áp mà vẫn dưới ngưỡng nguy hiểm. Với màn bụng cũng dùng được mẹo ấy nếu thấy tối quá.</p>
+  </div>
+
+
+  <div class="warn">
+    <span class="warn-h">"Tối đen" và "trắng xoá" là hai lỗi khác hẳn nhau</span>
+    <p><b>Trắng xoá</b> = đèn nền sáng, chip không nhận lệnh ⇒ lỗi driver hoặc dây tín hiệu. <b>Tối đen hoàn toàn</b> = đèn nền không có điện ⇒ lỗi nguồn hoặc chân <code>LED</code> chưa nối. Phân biệt được thì khỏi đi sai đường: chip có thể đang chạy đúng suốt mà bạn không thấy gì.</p>
+    <p>23/08/2026 sổ này từng ghi <code>LED</code> "3V3 hoặc để hở, tuỳ lô" — lấy nhầm quy tắc của màn tròn. Bo tròn GC9A01 có transistor <code>Q1 = J3Y (S8050)</code> cùng <code>R2</code>/<code>R3</code> lái đèn nền nên để hở là sáng; bo 3.5" không có mạch ấy. Repo có pinout GC9A01 nhưng <b>không có pinout nào cho ILI9488</b>, và chỗ hở đó là nơi lời khuyên sai chui vào.</p>
   </div>
 
   <div class="warn">
@@ -710,6 +717,33 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <p>Bản thiết kế tính cho đế 2 viên <b>92 × 43 × 22</b> chiếm dải sâu 32–75 mm. Đế 3 viên khoảng <b>78 × 60 × 22</b>, đặt cạnh dài theo chiều ngang thân thì chiếm tới <b>92 mm</b> — dải cho mạch tụt từ 42,6 xuống <b>25,6 mm</b>.</p>
     <p>Vẫn đủ nếu đặt ESP32 <b>nằm áp thành sau</b> (mặt bo song song với nắp), nhưng <b>không đủ để dựng đứng</b>. Đo đế thật rồi hãy chốt chỗ.</p>
     <p><b>Và đừng dựng pack đứng lên cho gọn.</b> Robot cao 248 mm trên khung xích; dồn 150 g pin lên cao là mua thêm nguy cơ lật khi phanh gấp. Pin là vật nặng nhất trong thân, chỗ của nó là sát đáy.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Ngân sách dòng — đo thật 23/08/2026</h2>
+  <p>Câu hỏi thực tế là "nguồn này gánh nổi bao nhiêu thứ cùng lúc". Trả lời: <b>cả ba màn, mic và loa cùng chạy thì vẫn đủ</b> — nhưng nút thắt không nằm ở chỗ dễ đoán.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Tầng</th><th class="num">Tải</th><th class="num">Trần</th><th></th></tr></thead>
+    <tbody>
+      <tr><td><b>AMS1117</b> của shield<br><span style="opacity:.7;font-size:13px">5V → 3V3</span></td><td class="num">270 mA</td><td class="num">~300–400 mA</td><td>⚠️ <b>đây mới là nút thắt.</b> Nó ĐỐT phần chênh 1,7 V nên toả 0,46 W — chịu được nhưng ấm, và không còn chỗ cho thứ 3V3 nào thêm</td></tr>
+      <tr><td><b>XL1509</b> của shield<br><span style="opacity:.7;font-size:13px">12V → 5V</span></td><td class="num">450–870 mA</td><td class="num">2000 mA</td><td>✅ dư thoải mái, kể cả lúc loa kêu to hết cỡ</td></tr>
+      <tr><td>Servo · động cơ</td><td class="num">—</td><td class="num">—</td><td>không đụng shield: servo lấy <code>V+</code> từ LM2596 riêng, động cơ lấy 12 V thẳng vào <code>B+/B−</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="warn">
+    <span class="warn-h">USB một mình KHÔNG gánh nổi ba màn — đo được, không phải suy đoán</span>
+    <p>23/08 chạy ba màn chỉ bằng USB-C: một màn <b>mờ hẳn và tự tắt mỗi giây rồi sáng lại</b>, hai màn kia bình thường. Nạp bàn kiểm chỉ lái MỘT màn thì hết ngay. Cắm 12 V vào jack rồi chạy lại cả ba — sạch hoàn toàn.</p>
+    <p>Nguyên nhân: ba màn cùng bú vào <b>ổn áp bé trên DevKit</b> (~500 mA), vốn còn phải nuôi chính con ESP32. Riêng đèn nền màn bụng đã ăn 100–150 mA.</p>
+    <p>⛔ <b>Lấy 3V3 cho các module từ khối <code>3V3</code> của MKE-B01, KHÔNG lấy từ chân <code>3V3</code> của ESP32.</b> Cắm nhầm chỗ này là dựng lại đúng cái lỗi trên, mà triệu chứng của nó — một màn mờ, chập chờn — trông y như màn kém chất lượng hoặc dây tiếp xúc tồi.</p>
+  </div>
+
+  <div class="note">
+    <span class="warn-h">Phân biệt hai triệu chứng, vì chúng dẫn đi hai hướng</span>
+    <p><b>Một màn mờ / chập chờn, hai màn kia ổn</b> ⇒ nguồn. Nếu ESP32 reset thì <b>cả ba</b> cùng tắt, nên chỉ một màn tắt là loại được giả thuyết reset.</p>
+    <p><b>Sọc ngang, nhiễu hạt, màu lem</b> ⇒ đường truyền, hạ tốc độ SPI. Hai lỗi này không liên quan gì đến nhau — chữa nhầm cái nọ bằng cách của cái kia thì mất cả buổi.</p>
   </div>
 </section>
 
@@ -791,7 +825,7 @@ details[open] summary{border-bottom:1px solid var(--line)}
   <h2>Ba phép thử cuối</h2>
   <ol class="steps">
     <li><b>Cấp 12 V, chưa nạp firmware chạy.</b> Nhìn xem có bánh nào tự quay không. Bốn con trở 10k kéo <code>RPWM</code>/<code>LPWM</code> xuống GND là thứ chặn chuyện đó — đo <b>trong mạch</b> ra ~7,8k là bình thường, chỉ <code>OL</code> hoặc <code>0</code> mới là hỏng.</li>
-    <li><b>Nạp <code>mini-me</code>, xem hai mắt vẽ xong không.</b> Cả ba màn chạy ở 4 MHz.</li>
+    <li><b>Nạp <code>mini-me</code>, xem hai mắt vẽ xong không.</b> Cả ba màn chạy ở <b>40 MHz</b> (đo 23/08: 271 vòng/giây, đỉnh 4,2 ms).</li>
     <li><b>Cho chạy tiến 1 giây trên sàn.</b> PWM 100 là ngưỡng bứt được từ đứng yên, 115 là số đang dùng, 255 là hết ga và xe đi thẳng.</li>
   </ol>
 </section>

@@ -82,7 +82,33 @@ namespace man_hinh {
 //
 // Muốn nâng tốc độ thì phải kiểm bằng HÌNH THẬT (con mắt), không bao
 // giờ bằng ô màu đặc.
-static constexpr int32_t TOC_DO = 4000000;
+//
+// ── 40 MHz, ĐO THẬT 23/08/2026 trên bo hshop + vỏ đã lắp ──
+//
+// Con số cũ là 4 MHz, hạ xuống 15/08 để né bo GC9A01 CŨ — con bo
+// `XY1.28YYFT-S7P` có R1–R5 đều 1kΩ mắc NỐI TIẾP năm đường tín hiệu,
+// cộng điện dung dây dupont thành bộ lọc thông thấp làm nhoè sườn xung.
+// Bo hshop `1.28"TFT V1.0` KHÔNG có mấy con trở đó (ba con trở của nó
+// nằm ở đường nguồn và mạch lái đèn nền), nên nó gánh được cao hơn hẳn.
+//
+// Đo bằng `-e mat-demo`, lệnh `f`, nhìn HÌNH MẮT THẬT chứ không ô đặc:
+//
+//      4 MHz →  41 vòng/giây · đỉnh 25,1 ms   ✗ vượt ngưỡng gấp 3
+//     10 MHz →  94 vòng/giây · đỉnh 11,2 ms   ✗
+//     20 MHz → 167 vòng/giây · đỉnh  6,5 ms   ✓ sạch, biên 1,5 ms
+//     40 MHz → 271 vòng/giây · đỉnh  4,2 ms   ✓ sạch, biên 3,8 ms
+//
+// Ngưỡng là 8 ms: quá đó thì CPU không bơm kịp I2S và TIẾNG BẮT ĐẦU
+// VẤP — xem `demo_mat.cpp`. Nên 4 MHz không chỉ chậm, nó vốn đã nằm
+// ngoài mức chạy được cho robot vừa vẽ mắt vừa nói.
+//
+// Chọn 40 thay vì 20 vì biên rộng gấp đôi: lúc chạy `mini-me`, hai mắt
+// còn chia bus với màn ngực, vẽ xong sớm bao nhiêu thì tiếng có thêm
+// chừng ấy thời gian không bị vấp.
+//
+// ⚠️ Quay lại bo màn CŨ thì phải hạ về 4 MHz. Con số này gắn với BO,
+// không phải với chip GC9A01.
+static constexpr int32_t TOC_DO = 40000000;
 
 // ⚠️ HSPI (SPI3), KHÔNG phải bus mặc định. Bus mặc định của ESP32-S3
 // dùng chân trùng GPIO 33–37 — vốn đã bị PSRAM octal của bản N16R8

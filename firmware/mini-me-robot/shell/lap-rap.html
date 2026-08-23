@@ -748,6 +748,82 @@ details[open] summary{border-bottom:1px solid var(--line)}
 </section>
 
 <section>
+  <h2>Đi dây nguồn cố định — làm một lần, pin về là cắm</h2>
+  <p>Mục này để làm <b>trước khi pin về</b>: cố định khay, dựng đường phân nguồn, chừa sẵn chỗ cho BMS. Khi ba viên Samsung tới thì chỉ việc đặt vào và cắm hai đầu dây.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 420 268" role="img" aria-label="Sơ đồ phân nguồn: pack 3S qua BMS ra jack DC đực, adapter cũng ra jack DC đực, cả hai cắm vào một jack cái duy nhất trên thân, qua công tắc 10A tới điểm phân nhánh 12V chia cho MKE-B01, hai bo IBT-2 và LM2596">
+      <defs><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+      <g stroke="currentColor" fill="none" stroke-width="1.3">
+        <rect x="12" y="18" width="76" height="34"/>
+        <rect x="110" y="18" width="66" height="34"/>
+        <rect x="12" y="82" width="76" height="30" stroke-dasharray="4 3"/>
+        <rect x="196" y="34" width="58" height="52" stroke="#B8860B" stroke-width="1.8"/>
+        <rect x="276" y="46" width="60" height="28"/>
+        <rect x="276" y="122" width="130" height="34"/>
+        <rect x="276" y="170" width="130" height="34"/>
+        <rect x="276" y="218" width="130" height="34"/>
+      </g>
+      <g stroke="currentColor" fill="none" stroke-width="1.3">
+        <line x1="88" y1="35" x2="108" y2="35" marker-end="url(#arp)"/>
+        <path d="M176,35 L186,35 L186,52 L194,52" marker-end="url(#arp)"/>
+        <path d="M88,97 L150,97 L150,68 L194,68" marker-end="url(#arp)" stroke-dasharray="4 3"/>
+        <line x1="254" y1="60" x2="274" y2="60" marker-end="url(#arp)"/>
+        <path d="M336,60 L356,60 L356,100 L60,100" stroke="none"/>
+      </g>
+      <g stroke="#B8860B" fill="none" stroke-width="1.5">
+        <path d="M306,74 L306,104 L240,104 L240,139 L274,139" marker-end="url(#arp)"/>
+        <path d="M306,104 L306,187 L274,187" marker-end="url(#arp)"/>
+        <path d="M306,104 L306,235 L274,235" marker-end="url(#arp)"/>
+      </g>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" text-anchor="middle">
+        <text x="50" y="32">khay 3 viên</text><text x="50" y="45" font-size="9" opacity=".75">nối tiếp 12,6 V</text>
+        <text x="143" y="32">BMS 3S</text><text x="143" y="45" font-size="9" opacity=".75">≥ 20 A, ra P+/P−</text>
+        <text x="50" y="96">adapter 12 V</text><text x="50" y="107" font-size="9" opacity=".75">(đường thay thế)</text>
+        <text x="225" y="54" font-weight="600" font-size="11">JACK DC</text>
+        <text x="225" y="67" font-size="9">một cửa</text><text x="225" y="78" font-size="9">DUY NHẤT</text>
+        <text x="306" y="58" font-size="10">công tắc</text><text x="306" y="69" font-size="9" opacity=".75">≥ 10 A</text>
+        <text x="341" y="136" font-size="10">MKE-B01</text><text x="341" y="149" font-size="9" opacity=".75">→ 5 V và 3V3</text>
+        <text x="341" y="184" font-size="10">2× IBT-2</text><text x="341" y="197" font-size="9" opacity=".75">12 V thẳng vào B+/B−</text>
+        <text x="341" y="232" font-size="10">LM2596</text><text x="341" y="245" font-size="9" opacity=".75">→ 5 V cho servo</text>
+      </g>
+      <text x="150" y="128" font-family="IBM Plex Mono, monospace" font-size="9" fill="#B8860B" font-weight="600">tụ 2200µF + 104</text>
+      <text x="150" y="140" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="currentColor" opacity=".75">ngay tại điểm phân nhánh</text>
+    </svg>
+    <figcaption>Pack và adapter <b>cùng ra jack DC đực</b>, thân robot có đúng <b>một jack cái</b>. Muốn đổi nguồn thì rút cái này cắm cái kia — không thể cắm nhầm cả hai. Đường nét đứt là adapter, dùng trong lúc chờ pin.</figcaption>
+  </figure>
+
+  <div class="warn">
+    <span class="warn-h">Vì sao phải một cửa vào, không phải hai</span>
+    <p>Pack 3S sạc đầy là <b>12,6 V</b>, adapter là <b>12,0 V</b>. Cắm cả hai cùng lúc thì chênh 0,6 V đẩy dòng từ pack sang adapter, hoặc adapter nạp ngược vào pack theo kiểu không kiểm soát — không qua mạch sạc, không cân bằng cell, không giới hạn dòng.</p>
+    <p>Một jack cái duy nhất khiến lỗi đó <b>không thể xảy ra bằng thao tác</b>, thay vì trông vào việc nhớ. Rẻ hơn mọi mạch chuyển nguồn tự động, và không có gì để hỏng.</p>
+  </div>
+
+  <div class="warn">
+    <span class="warn-h">Công tắc phải chịu ≥ 10 A — không dùng loại bán kèm hộp pin</span>
+    <p>Cộng đỉnh: MKE-B01 450 mA + loa 600 mA + sáu servo 4,2 A + hai động cơ bứt 6 A ≈ <b>11,2 A</b>. Công tắc 3 A sẽ nóng chảy đúng lúc robot bứt tốc, và hỏng kiểu ấy thì tiếp điểm dính lại chứ không ngắt.</p>
+    <p>Đặt công tắc ở <b>đường dương, sau jack</b>, để rút jack ra là cắt hẳn mọi thứ kể cả khi công tắc đang bật.</p>
+  </div>
+
+  <h3>Thứ tự làm</h3>
+  <ol class="steps">
+    <li><b>Cố định khay pin xuống đáy thân</b>, dải sâu 32–92 mm. Bắt vít hoặc dán hai mặt — nó là vật nặng nhất trong thân nên đừng chỉ nhét vào.</li>
+    <li><b>Chừa chỗ cho BMS ngay cạnh khay.</b> Bo BMS 3S 20 A cỡ 50 × 25 mm; để nó ở chỗ với tay được qua cửa bảo trì, vì đó là thứ bạn sẽ phải kiểm khi pin có vấn đề.</li>
+    <li><b>Hàn dây từ khay ra trước, chừa đầu cho BMS.</b> Dây <b>silicone 22AWG</b> cho đường 12 V — dupont không gánh nổi 11 A. Đánh dấu rõ dương/âm bằng màu hoặc ống co.</li>
+    <li><b>Lắp jack DC cái</b> lên nắp sau hoặc thành bên, chỗ cắm vào được mà không phải mở vỏ.</li>
+    <li><b>Công tắc ≥10 A</b> trên đường dương, sau jack.</li>
+    <li><b>Tụ 2200 µF + 104 ngay tại điểm phân nhánh 12 V</b>, trước khi chia đi ba nhánh. Đúng cực — dải màu trên thân tụ là cực âm.</li>
+    <li><b>Ba nhánh 12 V:</b> MKE-B01 · hai IBT-2 · LM2596. Mỗi nhánh một cặp dây riêng từ điểm phân nhánh, đừng nối nối tiếp chuyền tay nhau.</li>
+    <li><b>GND chập chung một điểm</b> — đây là chỗ dễ làm ẩu nhất và hậu quả là nhiễu I2S/SPI không lần ra được.</li>
+  </ol>
+
+  <div class="note">
+    <span class="warn-h">Chưa hàn cứng phần tín hiệu</span>
+    <p>Cố định <b>vị trí module</b> và <b>đường nguồn</b> thì được — chúng đã kiểm xong. Nhưng giữ nguyên đầu dupont cho <b>dây tín hiệu</b> tới servo và động cơ, vì hai thứ đó chưa test. Bó gọn bằng dây rút và dán nhãn là đủ gọn để làm việc tiếp.</p>
+  </div>
+</section>
+
+<section>
   <h2>Tụ — gắn ở đâu và vì sao</h2>
   <p>Không mảnh nào của bộ vỏ giữ tụ, và bảng nối dây ở trên cũng không kể chúng: tụ không nối vào chân GPIO nào cả, chúng <b>bắc ngang giữa một rail nguồn và đất</b>. Nhưng thiếu chúng thì robot reset giữa câu đang nói, và triệu chứng trông y như lỗi phần mềm.</p>
 

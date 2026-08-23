@@ -752,45 +752,70 @@ details[open] summary{border-bottom:1px solid var(--line)}
   <p>Mục này để làm <b>trước khi pin về</b>: cố định khay, dựng đường phân nguồn, chừa sẵn chỗ cho BMS. Khi ba viên Samsung tới thì chỉ việc đặt vào và cắm hai đầu dây.</p>
 
   <figure class="fig">
-    <svg viewBox="0 0 420 268" role="img" aria-label="Sơ đồ phân nguồn: pack 3S qua BMS ra jack DC đực, adapter cũng ra jack DC đực, cả hai cắm vào một jack cái duy nhất trên thân, qua công tắc 10A tới điểm phân nhánh 12V chia cho MKE-B01, hai bo IBT-2 và LM2596">
-      <defs><marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+    <svg viewBox="0 0 420 540" role="img" aria-label="Sơ đồ nguồn hoàn chỉnh: ba viên 18650 nối tiếp vào BMS 3S, jack sạc riêng nối B+ B−, công tắc ba vị trí chọn giữa adapter và pin, qua điểm phân nhánh 12V có tụ, chia ba nhánh cho MKE-B01, hai bo IBT-2 và LM2596">
+      <defs><marker id="arn2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+
       <g stroke="currentColor" fill="none" stroke-width="1.3">
-        <rect x="12" y="18" width="76" height="34"/>
-        <rect x="110" y="18" width="66" height="34"/>
-        <rect x="12" y="82" width="76" height="30" stroke-dasharray="4 3"/>
-        <rect x="196" y="34" width="58" height="52" stroke="#B8860B" stroke-width="1.8"/>
-        <rect x="276" y="46" width="60" height="28"/>
-        <rect x="276" y="122" width="130" height="34"/>
-        <rect x="276" y="170" width="130" height="34"/>
-        <rect x="276" y="218" width="130" height="34"/>
+        <rect x="34" y="18" width="172" height="46"/>
+        <rect x="44" y="27" width="48" height="28"/><rect x="96" y="27" width="48" height="28"/><rect x="148" y="27" width="48" height="28"/>
+        <rect x="34" y="108" width="172" height="52" stroke-width="1.7"/>
+        <rect x="258" y="108" width="128" height="40" stroke-dasharray="4 3"/>
+        <rect x="34" y="212" width="172" height="58" stroke="#B8860B" stroke-width="1.9"/>
+        <rect x="258" y="222" width="128" height="40" stroke-dasharray="4 3"/>
+        <rect x="26" y="330" width="368" height="18" fill="currentColor" fill-opacity=".1" stroke-width="1.6"/>
+        <rect x="26" y="404" width="112" height="60"/>
+        <rect x="154" y="404" width="112" height="60"/>
+        <rect x="282" y="404" width="112" height="60"/>
+        <rect x="282" y="486" width="112" height="38" stroke-dasharray="3 3"/>
       </g>
-      <g stroke="currentColor" fill="none" stroke-width="1.3">
-        <line x1="88" y1="35" x2="108" y2="35" marker-end="url(#arp)"/>
-        <path d="M176,35 L186,35 L186,52 L194,52" marker-end="url(#arp)"/>
-        <path d="M88,97 L150,97 L150,68 L194,68" marker-end="url(#arp)" stroke-dasharray="4 3"/>
-        <line x1="254" y1="60" x2="274" y2="60" marker-end="url(#arp)"/>
-        <path d="M336,60 L356,60 L356,100 L60,100" stroke="none"/>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.4">
+        <line x1="68" y1="64" x2="68" y2="106" marker-end="url(#arn2)"/>
+        <line x1="120" y1="64" x2="120" y2="106" marker-end="url(#arn2)" stroke-dasharray="2 2"/>
+        <line x1="172" y1="64" x2="172" y2="106" marker-end="url(#arn2)"/>
+        <path d="M258,128 L228,128 L228,134 L208,134" marker-end="url(#arn2)" stroke-dasharray="4 3"/>
+        <line x1="120" y1="160" x2="120" y2="210" marker-end="url(#arn2)"/>
+        <path d="M258,242 L232,242 L232,252 L208,252" marker-end="url(#arn2)" stroke-dasharray="4 3"/>
       </g>
-      <g stroke="#B8860B" fill="none" stroke-width="1.5">
-        <path d="M306,74 L306,104 L240,104 L240,139 L274,139" marker-end="url(#arp)"/>
-        <path d="M306,104 L306,187 L274,187" marker-end="url(#arp)"/>
-        <path d="M306,104 L306,235 L274,235" marker-end="url(#arp)"/>
+      <g stroke="#B8860B" fill="none" stroke-width="1.7">
+        <line x1="120" y1="270" x2="120" y2="328" marker-end="url(#arn2)"/>
+        <line x1="82" y1="348" x2="82" y2="402" marker-end="url(#arn2)"/>
+        <line x1="210" y1="348" x2="210" y2="402" marker-end="url(#arn2)"/>
+        <line x1="338" y1="348" x2="338" y2="402" marker-end="url(#arn2)"/>
+        <line x1="338" y1="464" x2="338" y2="484" marker-end="url(#arn2)"/>
       </g>
+
       <g font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" text-anchor="middle">
-        <text x="50" y="32">khay 3 viên</text><text x="50" y="45" font-size="9" opacity=".75">nối tiếp 12,6 V</text>
-        <text x="143" y="32">BMS 3S</text><text x="143" y="45" font-size="9" opacity=".75">≥ 20 A, ra P+/P−</text>
-        <text x="50" y="96">adapter 12 V</text><text x="50" y="107" font-size="9" opacity=".75">(đường thay thế)</text>
-        <text x="225" y="54" font-weight="600" font-size="11">JACK DC</text>
-        <text x="225" y="67" font-size="9">một cửa</text><text x="225" y="78" font-size="9">DUY NHẤT</text>
-        <text x="306" y="58" font-size="10">công tắc</text><text x="306" y="69" font-size="9" opacity=".75">≥ 10 A</text>
-        <text x="341" y="136" font-size="10">MKE-B01</text><text x="341" y="149" font-size="9" opacity=".75">→ 5 V và 3V3</text>
-        <text x="341" y="184" font-size="10">2× IBT-2</text><text x="341" y="197" font-size="9" opacity=".75">12 V thẳng vào B+/B−</text>
-        <text x="341" y="232" font-size="10">LM2596</text><text x="341" y="245" font-size="9" opacity=".75">→ 5 V cho servo</text>
+        <text x="120" y="14" font-weight="600">KHAY 3 VIÊN 18650 nối tiếp — 12,6 V khi đầy</text>
+        <text x="68" y="45">18650</text><text x="120" y="45">18650</text><text x="172" y="45">18650</text>
+        <text x="120" y="128" font-weight="600">BMS 3S ≥ 20 A có cân bằng</text>
+        <text x="120" y="146" font-size="9.5" opacity=".8">vào: B− B1 B2 B+ · ra: P+ P−</text>
+        <text x="322" y="126" font-size="10">jack SẠC riêng</text><text x="322" y="139" font-size="9" opacity=".75">12,6 V CC/CV → B+/B−</text>
+        <text x="120" y="234" font-weight="600" font-size="11">CÔNG TẮC ON–OFF–ON</text>
+        <text x="120" y="249" font-size="9.5">≥ 10 A · 3 vị trí</text>
+        <text x="120" y="262" font-size="9" opacity=".8">adapter │ TẮT │ pin</text>
+        <text x="322" y="240" font-size="10">jack ADAPTER 12 V</text><text x="322" y="253" font-size="9" opacity=".75">đường dùng khi để bàn</text>
+        <text x="210" y="343" font-size="10" font-weight="600">ĐIỂM PHÂN NHÁNH 12 V — tụ 2200 µF + 104 tại đây</text>
+        <text x="82" y="424" font-size="10" font-weight="600">MKE-B01</text>
+        <text x="82" y="439" font-size="9" opacity=".8">XL1509 → 5 V: loa</text>
+        <text x="82" y="452" font-size="9" opacity=".8">AMS1117 → 3V3: 3 màn, mic, I2C</text>
+        <text x="210" y="424" font-size="10" font-weight="600">2× IBT-2</text>
+        <text x="210" y="439" font-size="9" opacity=".8">12 V thẳng vào B+/B−</text>
+        <text x="210" y="452" font-size="9" opacity=".8">→ hai động cơ 33GB-520</text>
+        <text x="338" y="424" font-size="10" font-weight="600">LM2596</text>
+        <text x="338" y="439" font-size="9" opacity=".8">vặn ra ĐÚNG 5,0 V</text>
+        <text x="338" y="452" font-size="9" opacity=".8">trước khi cắm tải</text>
+        <text x="338" y="504" font-size="10">V+ của PCA9685</text><text x="338" y="517" font-size="9" opacity=".75">6 servo · vòng LED</text>
       </g>
-      <text x="150" y="128" font-family="IBM Plex Mono, monospace" font-size="9" fill="#B8860B" font-weight="600">tụ 2200µF + 104</text>
-      <text x="150" y="140" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="currentColor" opacity=".75">ngay tại điểm phân nhánh</text>
+      <g font-family="IBM Plex Mono, monospace" font-size="8.5" fill="currentColor" opacity=".8">
+        <text x="46" y="80">B−</text><text x="99" y="80">B1·B2</text><text x="163" y="80">B+</text>
+        <text x="126" y="188">P+ / P−</text>
+        <text x="126" y="300">18 AWG</text>
+        <text x="88" y="372">24 AWG</text><text x="216" y="372">20 AWG</text><text x="344" y="372">22 AWG</text>
+      </g>
+      <text x="120" y="95" font-family="IBM Plex Sans, sans-serif" font-size="8.5" fill="currentColor" opacity=".7" text-anchor="middle">nét đứt = dây cân bằng, chỉ ~100 mA</text>
     </svg>
-    <figcaption>Pack và adapter <b>cùng ra jack DC đực</b>, thân robot có đúng <b>một jack cái</b>. Muốn đổi nguồn thì rút cái này cắm cái kia — không thể cắm nhầm cả hai. Đường nét đứt là adapter, dùng trong lúc chờ pin.</figcaption>
+    <figcaption>Đường vàng là đường mang dòng tải. <b>Chỉ <code>B−</code> và <code>B+</code> gánh cả 11 A</b> — hai dây cân bằng <code>B1</code>/<code>B2</code> chỉ đo áp từng cell nên 24 AWG là thừa đủ. Công tắc ba vị trí khiến adapter và pin <b>không thể cùng nối</b>, và vị trí giữa là tắt hẳn.</figcaption>
   </figure>
 
   <div class="warn">
@@ -805,21 +830,46 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <p>Đặt công tắc ở <b>đường dương, sau jack</b>, để rút jack ra là cắt hẳn mọi thứ kể cả khi công tắc đang bật.</p>
   </div>
 
-  <h3>Thứ tự làm</h3>
-  <ol class="steps">
-    <li><b>Cố định khay pin xuống đáy thân</b>, dải sâu 32–92 mm. Bắt vít hoặc dán hai mặt — nó là vật nặng nhất trong thân nên đừng chỉ nhét vào.</li>
-    <li><b>Chừa chỗ cho BMS ngay cạnh khay.</b> Bo BMS 3S 20 A cỡ 50 × 25 mm; để nó ở chỗ với tay được qua cửa bảo trì, vì đó là thứ bạn sẽ phải kiểm khi pin có vấn đề.</li>
-    <li><b>Hàn dây từ khay ra trước, chừa đầu cho BMS.</b> Dây <b>silicone 22AWG</b> cho đường 12 V — dupont không gánh nổi 11 A. Đánh dấu rõ dương/âm bằng màu hoặc ống co.</li>
-    <li><b>Lắp jack DC cái</b> lên nắp sau hoặc thành bên, chỗ cắm vào được mà không phải mở vỏ.</li>
-    <li><b>Công tắc ≥10 A</b> trên đường dương, sau jack.</li>
-    <li><b>Tụ 2200 µF + 104 ngay tại điểm phân nhánh 12 V</b>, trước khi chia đi ba nhánh. Đúng cực — dải màu trên thân tụ là cực âm.</li>
-    <li><b>Ba nhánh 12 V:</b> MKE-B01 · hai IBT-2 · LM2596. Mỗi nhánh một cặp dây riêng từ điểm phân nhánh, đừng nối nối tiếp chuyền tay nhau.</li>
-    <li><b>GND chập chung một điểm</b> — đây là chỗ dễ làm ẩu nhất và hậu quả là nhiễu I2S/SPI không lần ra được.</li>
-  </ol>
+  <h3>Bảy chặng — đo xong chặng này mới sang chặng sau</h3>
+  <p>Đây là chỗ dễ mất linh kiện nhất của cả robot: một lần đấu ngược là mất pack, mất BMS, hoặc mất ESP32. Nên <b>mỗi chặng kết thúc bằng một phép đo</b>, và không nối tải nào cho tới chặng cuối.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th class="num">Chặng</th><th>Làm</th><th>Đo xong mới đi tiếp</th></tr></thead>
+    <tbody>
+      <tr><td class="num"><b>1</b></td><td><b>Khay 3 viên, chưa lắp pin.</b> Cố định khay xuống đáy thân ở dải sâu 32–92 mm bằng vít hoặc dán hai mặt.</td><td>Nhìn: cực + và − của từng ngăn đúng chiều lò xo</td></tr>
+      <tr><td class="num"><b>2</b></td><td><b>Hàn dây ra khay.</b> <code>B−</code> ở cực âm ngăn 1, <code>B+</code> ở cực dương ngăn 3 — cả hai <b>18 AWG</b>. Hai dây cân bằng <code>B1</code> (mối ngăn 1–2) và <code>B2</code> (mối 2–3) chỉ cần <b>24 AWG</b>.</td><td><b>Chưa lắp pin.</b> Đo thông mạch từng dây tới đúng điểm của nó</td></tr>
+      <tr><td class="num"><b>3</b></td><td><b>Lắp pin, đấu BMS theo thứ tự <code>B−</code> → <code>B1</code> → <code>B2</code> → <code>B+</code>.</b> Nhảy cóc có thể hỏng BMS ngay lúc chạm dây.</td><td><b>Đo <code>P+</code>/<code>P−</code> phải ra đúng điện áp pack.</b> Ra 0 V là BMS đang cắt — thường do một cell dưới ngưỡng</td></tr>
+      <tr><td class="num"><b>4</b></td><td><b>Jack sạc riêng → <code>B+</code>/<code>B−</code> của BMS.</b> Đây là cửa duy nhất cho sạc 12,6 V CC/CV.</td><td>Đo cực jack: giữa ruột và vỏ phải ra đúng điện áp pack, đúng cực</td></tr>
+      <tr><td class="num"><b>5</b></td><td><b>Công tắc ON–OFF–ON.</b> Chân giữa → đi tiếp. Một chân bên → <code>P+</code> của BMS. Chân bên kia → ruột jack adapter. <b>GND của adapter chập chung với <code>P−</code>.</b></td><td>Gạt ba vị trí, đo chân giữa: <b>pin → 12,6 V · giữa → 0 V · adapter → 12 V</b></td></tr>
+      <tr><td class="num"><b>6</b></td><td><b>Điểm phân nhánh.</b> Một cầu đấu hoặc mẩu đồng, <b>không</b> chuyền dây tay nọ sang tay kia. Hàn <b>tụ 2200 µF + 104</b> ngay tại đây, dải màu trên tụ là cực âm.</td><td>Đo lại 12 V ở điểm phân nhánh. Cắm điện lần đầu sẽ thấy <b>tia lửa nhỏ</b> — đó là dòng nạp tụ, bình thường</td></tr>
+      <tr><td class="num"><b>7</b></td><td><b>Ba nhánh, mỗi nhánh một cặp dây riêng từ điểm phân nhánh.</b></td><td>Nối từng nhánh một, đo trước khi nối nhánh sau</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Ba nhánh — cái nào đi đâu</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Nhánh</th><th class="num">Dây</th><th class="num">Dòng</th><th>Nuôi những gì</th></tr></thead>
+    <tbody>
+      <tr><td><b>MKE-B01</b><br><span style="opacity:.7;font-size:13px">12 V vào jack của shield</span></td><td class="num">24 AWG</td><td class="num">1,1 A</td><td><code>XL1509</code> → 5 V cho <b>loa MAX98357A</b><br><code>AMS1117</code> → 3V3 cho <b>ba màn, mic, I2C</b></td></tr>
+      <tr><td><b>2× IBT-2</b><br><span style="opacity:.7;font-size:13px">12 V thẳng vào <code>B+</code>/<code>B−</code></span></td><td class="num">20 AWG</td><td class="num">6,0 A</td><td>hai động cơ 33GB-520. <b>Không</b> qua mạch hạ áp nào — động cơ ăn thẳng 12 V</td></tr>
+      <tr><td><b>LM2596</b><br><span style="opacity:.7;font-size:13px">vặn ra đúng 5,0 V</span></td><td class="num">22 AWG</td><td class="num">4,5 A</td><td><b><code>V+</code> của PCA9685</b> cho sáu servo, và <b>vòng LED</b></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="warn">
+    <span class="warn-h">Bốn chỗ sai là mất đồ, không phải mất công</span>
+    <p><b>Vặn LM2596 ra 5,0 V TRƯỚC KHI cắm tải.</b> Nó xuất xưởng ở mức bất kỳ — có con ra 12 V nguyên. Cắm servo vào rồi mới vặn là servo ăn nguyên mức đang để.</p>
+    <p><b><code>VCC</code> của IBT-2 cắm 3V3, không phải 12 V.</b> Chỉ <code>B+</code>/<code>B−</code> mới nhận 12 V; <code>VCC</code> là chân nuôi phần logic, cấp 12 V vào đó là chết bo.</p>
+    <p><b>Đừng lấy 3V3 từ chân ESP32.</b> Ba màn phải lấy ở khối <code>3V3</code> của MKE-B01 — đo thật 23/08: lấy từ ESP32 thì một màn mờ và tự tắt mỗi giây.</p>
+    <p><b>Tụ hoá đúng cực.</b> Dải màu nhạt dọc thân là cực <b>âm</b>, chân âm cũng ngắn hơn. Cắm ngược vào 12 V thì nổ trong vài giây. Tụ ở rail 12 V lấy loại <b>≥ 25 V</b>.</p>
+  </div>
 
   <div class="note">
-    <span class="warn-h">Chưa hàn cứng phần tín hiệu</span>
-    <p>Cố định <b>vị trí module</b> và <b>đường nguồn</b> thì được — chúng đã kiểm xong. Nhưng giữ nguyên đầu dupont cho <b>dây tín hiệu</b> tới servo và động cơ, vì hai thứ đó chưa test. Bó gọn bằng dây rút và dán nhãn là đủ gọn để làm việc tiếp.</p>
+    <span class="warn-h">Dùng hằng ngày sau khi xong</span>
+    <p><b>Để bàn:</b> gạt công tắc sang <b>adapter</b>, cắm jack 12 V. Muốn nạp pack thì cắm thêm sạc 12,6 V vào jack sạc — pack được nạp và cân bằng trong khi tải chạy hoàn toàn bằng adapter.</p>
+    <p><b>Mang đi:</b> rút cả hai jack, gạt sang <b>pin</b>.</p>
+    <p><b>Cất lâu:</b> gạt về <b>giữa</b>. BMS vẫn rút một dòng rất nhỏ, nên vị trí tắt là thứ giữ pack không tự cạn sau vài tuần không dùng.</p>
+    <p>Gạt công tắc lúc robot đang chạy thì nó mất điện chừng một giây rồi khởi động lại — không sao, firmware tự nối lại WiFi.</p>
   </div>
 </section>
 

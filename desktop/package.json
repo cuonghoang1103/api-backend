@@ -33,7 +33,8 @@
     "thu:python": "npm run build && node scripts/thu-python.mjs",
     "phat-hanh": "node scripts/phat-hanh.mjs",
     "do:bo-cuc": "rm -rf node_modules/.vite && vite build --config vite.bo-cuc.config.ts && node scripts/do-bo-cuc.mjs",
-    "do:bong": "node scripts/do-bong-robot.mjs"
+    "do:bong": "node scripts/do-bong-robot.mjs",
+    "do:webgpu": "node scripts/do-webgpu.mjs"
   },
   "dependencies": {
     "@hocuspocus/provider": "^2.15.3",

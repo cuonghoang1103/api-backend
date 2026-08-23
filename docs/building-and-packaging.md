@@ -2,6 +2,10 @@
 
 > Cập nhật 16/08/2026. Mọi con số dưới đây là **đo thật**, không ước lượng.
 
+> Đóng gói **sân chơi 3D `/playground`** vào app là một bài riêng — số đo, ba
+> đường đi và bẫy giấy phép nằm ở
+> [`playground-dong-goi-app.md`](./playground-dong-goi-app.md).
+
 ---
 
 ## Lệnh

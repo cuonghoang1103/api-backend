@@ -19,6 +19,7 @@
 
 import s00 from './deploy-vps/s00-intro.mjs';
 import s01 from './deploy-vps/s01-tao-tac.mjs';
+import s02 from './deploy-vps/s02-van-chuyen.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -43,5 +44,6 @@ export default {
   sections: [
     s00,
     s01,
+    s02,
   ],
 };

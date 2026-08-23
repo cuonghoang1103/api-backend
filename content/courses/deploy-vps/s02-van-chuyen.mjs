@@ -518,5 +518,397 @@ docker compose up -d --no-build app</code></pre>
 </div>
 `,
     },
+
+    /* ─────────────────────────── 2.4 ─────────────────────────── */
+    {
+      title: '2.4 — Choosing a transport, and where to build|||2.4 — Chọn đường vận chuyển, và dựng ở đâu',
+      slug: 'deploy-2-4-chon-duong-va-dung-o-dau',
+      type: 'LESSON',
+      description: 'Ba đường đặt cạnh nhau trên cùng một thay đổi một dòng — và phép so sánh đầu tiên của tôi SAI, vì hai bên không hề gửi đi cùng một thứ. Bài này sửa lại phép đo rồi rút ra luật chọn.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 2 · Lesson 2.4</span>
+<h2>Choosing a transport, and where to build</h2>
+<p class="lead">Three transports, measured in the previous three lessons. Putting them side by side is harder than it looks, because the obvious comparison is not a comparison at all — and getting that wrong is how people end up with strong opinions built on a bad benchmark.</p>
+
+<h3>The comparison, done wrong first</h3>
+<div class="out">  rsync        310 ms    1.497.754 byte
+  git push     293 ms          586 bytes</div>
+<p>rsync looked 2,500 times worse. It was not: the rsync destination directory was empty, so it did a <em>first</em> sync, while git pushed a delta against a repository that already had the history. Two different operations, one table.</p>
+<div class="out">════ CONG BANG: ca hai deu la lan thu HAI, chi doi mot dong ════
+  rsync (dich DA co)   295 ms       15.499 byte
+  git push             305 ms          565 bytes</div>
+<div class="callout warn"><strong>Even the corrected table is not apples to apples, and it is worth saying why.</strong> The working tree here is 3.8 MB, of which 3.1 MB is <code>node_modules</code>. rsync is syncing that; git is not, because it is gitignored. So the two are shipping <em>different artifacts</em> — 27× more bytes for rsync partly reflects that it has 800 more files to account for. Any benchmark of these two transports has this problem baked in, and a number that ignores it is measuring the exclude list, not the transport.</div>
+<p>What the corrected table does establish is the thing worth taking away: <strong>both took about 300 milliseconds</strong>. Lesson 0.1 measured why — the SSH handshake dominates at this scale, and the payload is free. For a project of this size, transport speed is not a reason to choose anything.</p>
+
+<h3>So choose on the properties that differ</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">What can reach production</span><span class="v">rsync: whatever is in the directory, including a file you are mid-edit (Lesson 0.1). git: committed work only. Registry: whatever was built, which is committed work if the build is honest.</span></div>
+  <div class="kv"><span class="k">What the server needs installed</span><span class="v">rsync: rsync. git: git, plus a build toolchain if the artifact is source. Registry: a container runtime, and nothing else — no compiler, no npm, no source.</span></div>
+  <div class="kv"><span class="k">What the server accumulates</span><span class="v">rsync: only the tree. git: the full history, growing forever (556 KB against 176 KB in Lesson 0.1). Registry: image layers, which need their own pruning.</span></div>
+  <div class="kv"><span class="k">What a rollback needs</span><span class="v">All three are the same if you use the releases layout: a directory or an image that is already on disk. Without it, all three need the network.</span></div>
+</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">rsync</span><span class="lz-t">When you are shipping something already built</span><span class="lz-d">A compiled binary, a bundled front end, a tree assembled by CI. Also the pragmatic choice for an existing setup — it works with anything and needs nothing on the far side. Pair it with <code>--link-dest</code> and a releases directory, and honour the two dangers from Lesson 2.1.</span></div>
+  <div class="lz-step"><span class="lz-k">git push</span><span class="lz-t">When the artifact is source and the repository is modest</span><span class="lz-d">Interpreted languages, one or two servers. The committed-only guarantee is the real value, and the whole deploy fits in a hook you can read in one screen. Cost: the history lives on the server, and the build has to happen there.</span></div>
+  <div class="lz-step"><span class="lz-k">registry</span><span class="lz-t">When the runtime is part of what you ship, or there are several servers</span><span class="lz-d">The strongest reproducibility of the three, and the only one where the server needs no build tools at all. Cost: a registry and a build machine, both of which can be down when you need to deploy urgently.</span></div>
+  <div class="lz-step"><span class="lz-k">✗</span><span class="lz-t">Not: scp, FTP, or editing files over SSH</span><span class="lz-d"><code>scp</code> re-sends everything and has no delta and no delete. Editing in place is the failure mode where the server's code exists nowhere else, and the next deploy silently reverts the fix nobody wrote down.</span></div>
+</div>
+
+<h3>Where the build happens is a separate question</h3>
+<p>Transport and build location are often conflated, and they are independent. You can build anywhere and ship by any transport — the constraint is only that the build must produce something that runs on the target.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Build on the server</span><span class="lz-lnote">Simplest, and the platform matches by definition. Costs CPU, memory and disk on the machine that is also serving traffic — and Chapter 8 measures a build being killed by the OOM killer and a deploy dying with <em>no space left on device</em> on the disk holding the database.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Build in CI, ship the result</span><span class="lz-lnote">The server stays a server. Requires the CI environment to match the target — same OS, same architecture, same libc, same runtime — and that match is a thing that drifts silently.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Build on your own machine, ship the result</span><span class="lz-lnote">Fast and free, and it is the path this repository uses: <code>deploy-nha.sh</code> builds at home, pushes to a registry, and the VPS only swaps. Roughly three times faster than building on the VPS, and it keeps a build cache off the server's disk entirely.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Build inside an image built for the target</span><span class="lz-lnote">The version that makes "build anywhere" actually safe, because the build environment <em>is</em> the runtime environment. It is the only one of these four where a platform mismatch is structurally impossible rather than merely unlikely.</span></div>
+</div>
+<div class="pitfall"><strong>Bẫy — building somewhere else means the build must be the target, not merely resemble it.</strong> The failure in this repository was exactly this: the build ran against the wrong Dockerfile, producing a musl base carrying a glibc engine. Everything matched except the one thing that mattered, and nothing checked. If you build off the server, add one assertion that compares the built artifact against the runtime it is going to — a libc check, a Node version check, an architecture check. One line, run before the push, is what turns "it should match" into "it does".</div>
+
+<h3>A rule that survives contact with reality</h3>
+<div class="callout ok"><strong>Ship what you tested, not instructions for producing it.</strong> Every transport is fine when the thing crossing the wire is the same thing that was verified. The failures in this chapter are all cases where it was not: an uncommitted file added at the last moment, a dependency resolved differently on the far side, a base image that moved. Choose the transport that makes the artifact hardest to change between test and production, and the rest of the differences stop mattering.</div>
+<pre><code><span class="tok-comment"># cau hoi quyet dinh, theo thu tu</span>
+1. Tao tac cua toi la NGUON hay la thu DA DUNG?          → nguon: git · da dung: rsync/registry
+2. May chu co nen co bo cong cu dung khong?              → khong: registry hoac dung o CI
+3. Co bao nhieu may chu?                                  → nhieu hon mot: registry
+4. Kho ma co lon khong (tai nguyen nhi phan, lich su dai)? → co: tranh git push
+5. Runtime co phai thu toi can ghim khong?                → co: registry</code></pre>
+<div class="note-ct">One more thing all three share: none of them is the swap. Every measurement in this chapter stops the moment the bytes are on the server, and at that point nothing has changed for a single user — the old version is still running. Getting the new one to serve traffic without dropping a request is Chapter 3, and it is where the 3,070 ms outage from Lesson 0.1 finally goes away.</div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">The Twelve-Factor App — V. Build, release, run</span><span class="lc-sub">12factor.net/build-release-run — the separation this whole chapter rests on: build produces the artifact, release combines it with config, run executes it.</span></span></div>
+<div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">rsync(1), git-push(1), docker-push(1)</span><span class="lc-sub">The three manual pages behind the three transports. Reading the FILTER RULES section of the first is the highest-value hour of the three.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — where to build, and multi-stage builds</span><span class="lc-sub">/courses/docker/learn${REF} — the build-inside-the-target-image pattern, and how to keep build tools out of what you ship.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Git &amp; GitHub — what a push actually transfers</span><span class="lc-sub">/courses/git/learn${REF} — packfiles and deltas, which is why the git column of the table above is so small.</span></span></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 2 · Bài 2.4</span>
+<h2>Chọn đường vận chuyển, và dựng ở đâu</h2>
+<p class="lead">Ba đường vận chuyển, đã đo ở ba bài trước. Đặt chúng cạnh nhau khó hơn vẻ ngoài của nó, vì phép so sánh hiển nhiên thật ra KHÔNG phải một phép so sánh — và làm sai chuyện đó chính là cách người ta có những ý kiến rất chắc chắn dựng trên một phép đo hỏng.</p>
+
+<h3>Phép so sánh, làm SAI trước đã</h3>
+<div class="out">  rsync        310 ms    1.497.754 byte
+  git push     293 ms          586 bytes</div>
+<p>rsync trông tệ hơn 2.500 lần. Không phải vậy: thư mục đích của rsync lúc đó RỖNG, nên nó làm một lần đồng bộ ĐẦU TIÊN, còn git thì đẩy một phần chênh lệch vào một kho vốn đã có lịch sử. Hai thao tác khác nhau, nhét chung một bảng.</p>
+<div class="out">════ CONG BANG: ca hai deu la lan thu HAI, chi doi mot dong ════
+  rsync (dich DA co)   295 ms       15.499 byte
+  git push             305 ms          565 bytes</div>
+<div class="callout warn"><strong>Ngay cả cái bảng đã sửa cũng KHÔNG phải so táo với táo, và điều đó đáng nói rõ.</strong> Cây làm việc ở đây nặng 3,8 MB, trong đó 3,1 MB là <code>node_modules</code>. rsync đang đồng bộ cả đống đó; git thì không, vì nó nằm trong gitignore. Nên hai bên đang gửi đi <em>HAI TẠO TÁC KHÁC NHAU</em> — con số nhiều byte hơn 27 lần của rsync một phần phản ánh việc nó có thêm 800 tệp phải tính tới. Mọi phép đo hai đường này đều mang sẵn vấn đề đó bên trong, và một con số bỏ qua nó là đang đo CÁI DANH SÁCH LOẠI TRỪ chứ không đo đường vận chuyển.</div>
+<p>Thứ mà cái bảng đã sửa THẬT SỰ xác lập lại là điều đáng mang đi: <strong>cả hai đều mất khoảng 300 mili giây</strong>. Bài 0.1 đã đo lý do — cái bắt tay SSH chiếm phần lớn ở quy mô này, còn phần tải thì miễn phí. Với một dự án cỡ này, TỐC ĐỘ vận chuyển không phải lý do để chọn bất cứ thứ gì.</p>
+
+<h3>Vậy hãy chọn theo những tính chất thật sự KHÁC nhau</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cái gì CÓ THỂ lên tới production</span><span class="v">rsync: bất cứ thứ gì trong thư mục, kể cả tệp bạn đang sửa dở (Bài 0.1). git: chỉ phần đã commit. Registry: bất cứ thứ gì đã được dựng, mà đó là phần đã commit nếu bước dựng trung thực.</span></div>
+  <div class="kv"><span class="k">Máy chủ cần cài sẵn gì</span><span class="v">rsync: rsync. git: git, cộng bộ công cụ dựng nếu tạo tác là mã nguồn. Registry: một runtime container, và không gì khác — không trình biên dịch, không npm, không mã nguồn.</span></div>
+  <div class="kv"><span class="k">Máy chủ TÍCH TỤ cái gì</span><span class="v">rsync: chỉ cái cây. git: toàn bộ lịch sử, tăng mãi mãi (556 KB so với 176 KB ở Bài 0.1). Registry: các lớp ảnh, và chúng cần bộ dọn dẹp riêng.</span></div>
+  <div class="kv"><span class="k">Một cú lùi bản cần gì</span><span class="v">Cả ba như nhau NẾU bạn dùng bố cục releases: một thư mục hoặc một cái ảnh đã nằm sẵn trên đĩa. Không có nó thì cả ba đều cần MẠNG.</span></div>
+</div>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">rsync</span><span class="lz-t">Khi bạn gửi đi thứ ĐÃ DỰNG XONG</span><span class="lz-d">Một tệp nhị phân đã biên dịch, một front end đã đóng gói, một cây do CI lắp ráp. Cũng là lựa chọn thực dụng cho một hệ thống đang chạy sẵn — nó làm việc với mọi thứ và không đòi gì ở phía bên kia. Hãy ghép nó với <code>--link-dest</code> và một thư mục releases, và tôn trọng hai mối nguy ở Bài 2.1.</span></div>
+  <div class="lz-step"><span class="lz-k">git push</span><span class="lz-t">Khi tạo tác là MÃ NGUỒN và kho mã cỡ vừa</span><span class="lz-d">Ngôn ngữ thông dịch, một hai máy chủ. Cái bảo đảm chỉ-lấy-thứ-đã-commit mới là giá trị thật, và cả quy trình deploy gói trong một cái hook đọc hết trong một màn hình. Cái giá: lịch sử sống trên máy chủ, và bước dựng phải xảy ra ở đó.</span></div>
+  <div class="lz-step"><span class="lz-k">registry</span><span class="lz-t">Khi runtime cũng là thứ bạn gửi đi, hoặc khi có nhiều máy chủ</span><span class="lz-d">Tính tái lập mạnh nhất trong ba đường, và là đường duy nhất mà máy chủ hoàn toàn không cần công cụ dựng. Cái giá: một registry và một máy dựng, mà cả hai đều có thể đang chết đúng lúc bạn cần deploy gấp.</span></div>
+  <div class="lz-step"><span class="lz-k">✗</span><span class="lz-t">KHÔNG phải: scp, FTP, hay sửa tệp thẳng qua SSH</span><span class="lz-d"><code>scp</code> gửi lại toàn bộ, không có chênh lệch và không có xoá. Sửa tại chỗ là kiểu hỏng mà mã trên máy chủ KHÔNG tồn tại ở đâu khác, và lần deploy kế tiếp lặng lẽ xoá mất cái sửa mà chẳng ai ghi lại.</span></div>
+</div>
+
+<h3>Dựng ở đâu là một câu hỏi RIÊNG</h3>
+<p>Đường vận chuyển và nơi dựng hay bị gộp làm một, và chúng độc lập với nhau. Bạn dựng ở đâu cũng được rồi gửi bằng đường nào cũng được — ràng buộc duy nhất là bước dựng phải cho ra thứ CHẠY ĐƯỢC trên máy đích.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Dựng trên máy chủ</span><span class="lz-lnote">Đơn giản nhất, và nền tảng khớp theo định nghĩa. Tốn CPU, bộ nhớ và đĩa trên chính cái máy đang phục vụ lưu lượng — và Chương 8 đo một lần dựng bị kẻ giết OOM giết chết cùng một lần deploy chết với <em>no space left on device</em> trên đúng cái đĩa chứa cơ sở dữ liệu.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Dựng trong CI, gửi kết quả đi</span><span class="lz-lnote">Máy chủ vẫn chỉ là máy chủ. Đòi môi trường CI phải KHỚP máy đích — cùng hệ điều hành, cùng kiến trúc, cùng libc, cùng runtime — và cái sự khớp đó là thứ trôi lệch một cách lặng lẽ.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Dựng trên máy của chính bạn, gửi kết quả đi</span><span class="lz-lnote">Nhanh và miễn phí, và đó là đường mà kho mã này đang dùng: <code>deploy-nha.sh</code> dựng ở nhà, đẩy lên registry, còn VPS chỉ tráo. Nhanh hơn dựng trên VPS khoảng ba lần, và nó giữ cho cache dựng nằm hẳn ngoài đĩa của máy chủ.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Dựng BÊN TRONG một cái ảnh dựng cho máy đích</span><span class="lz-lnote">Phiên bản làm cho "dựng ở đâu cũng được" thật sự an toàn, vì môi trường dựng CHÍNH LÀ môi trường chạy. Nó là cái duy nhất trong bốn cái mà lệch nền tảng là chuyện KHÔNG THỂ về mặt cấu trúc, chứ không phải chỉ là khó xảy ra.</span></div>
+</div>
+<div class="pitfall"><strong>Bẫy — dựng ở chỗ khác nghĩa là chỗ dựng phải LÀ máy đích, chứ không phải chỉ GIỐNG nó.</strong> Sự cố của kho mã này đúng là chuyện đó: bước dựng chạy với nhầm Dockerfile, cho ra một nền musl mang theo một engine glibc. Mọi thứ đều khớp trừ đúng cái thứ quan trọng, và chẳng có gì kiểm. Nếu bạn dựng ngoài máy chủ, hãy thêm MỘT phép khẳng định so tạo tác vừa dựng với cái runtime nó sắp chạy vào — kiểm libc, kiểm phiên bản Node, kiểm kiến trúc. Một dòng, chạy trước khi đẩy, là thứ biến "chắc là nó khớp" thành "nó khớp".</div>
+
+<h3>Một cái luật sống sót được khi va vào thực tế</h3>
+<div class="callout ok"><strong>Hãy gửi đi THỨ BẠN ĐÃ KIỂM THỬ, đừng gửi đi CÔNG THỨC để tạo ra nó.</strong> Mọi đường vận chuyển đều ổn khi thứ băng qua đường truyền chính là thứ đã được kiểm chứng. Mọi kiểu hỏng trong chương này đều là những ca mà điều đó KHÔNG đúng: một tệp chưa commit lọt vào phút chót, một phụ thuộc được giải khác đi ở phía bên kia, một cái ảnh nền đã bị di chuyển. Hãy chọn đường vận chuyển làm cho tạo tác KHÓ THAY ĐỔI NHẤT giữa lúc kiểm thử và lúc lên production, rồi mọi khác biệt còn lại sẽ thôi quan trọng.</div>
+<pre><code><span class="tok-comment"># cau hoi quyet dinh, theo thu tu</span>
+1. Tao tac cua toi la NGUON hay la thu DA DUNG?          → nguon: git · da dung: rsync/registry
+2. May chu co nen co bo cong cu dung khong?              → khong: registry hoac dung o CI
+3. Co bao nhieu may chu?                                  → nhieu hon mot: registry
+4. Kho ma co lon khong (tai nguyen nhi phan, lich su dai)? → co: tranh git push
+5. Runtime co phai thu toi can ghim khong?                → co: registry</code></pre>
+<div class="note-ct">Còn một điều nữa mà cả ba đường đều giống nhau: KHÔNG cái nào là bước TRÁO. Mọi phép đo trong chương này dừng lại đúng khoảnh khắc các byte đã nằm trên máy chủ, và ở thời điểm đó chưa có gì thay đổi với một người dùng nào cả — bản cũ vẫn đang chạy. Đưa bản mới vào phục vụ lưu lượng mà không rơi một request nào là Chương 3, và đó là chỗ cái gián đoạn 3.070 ms ở Bài 0.1 rốt cuộc biến mất.</div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">The Twelve-Factor App — V. Build, release, run</span><span class="lc-sub">12factor.net/build-release-run — sự tách bạch mà cả chương này dựa lên: dựng sinh ra tạo tác, phát hành ghép nó với cấu hình, chạy thì thực thi nó.</span></span></div>
+<div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">rsync(1), git-push(1), docker-push(1)</span><span class="lc-sub">Ba trang man đứng sau ba đường vận chuyển. Đọc mục FILTER RULES của cái đầu tiên là một giờ đáng giá nhất trong ba cái.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — dựng ở đâu, và bản dựng nhiều tầng</span><span class="lc-sub">/courses/docker/learn${REF} — khuôn dựng-bên-trong-ảnh-đích, và cách giữ cho công cụ dựng không lọt vào thứ bạn gửi đi.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Git &amp; GitHub — một lần push thật ra chuyển đi cái gì</span><span class="lc-sub">/courses/git/learn${REF} — packfile và delta, và đó là lý do cột git trong bảng ở trên nhỏ tới vậy.</span></span></div>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 2.5 ─────────────────────────── */
+    {
+      title: '2.5 — When the transport fails halfway|||2.5 — Khi đường vận chuyển hỏng nửa chừng',
+      slug: 'deploy-2-5-hong-nua-chung',
+      type: 'LESSON',
+      description: 'Hai lần deploy chạy chồng nhau: cái bắt đầu SAU lại xong TRƯỚC, rồi cái cũ ghi đè lên nó — production chạy bản cũ hơn. Đo cả sự cố lẫn hai kiểu khoá sửa được nó.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 2 · Lesson 2.5</span>
+<h2>When the transport fails halfway</h2>
+<p class="lead">Lesson 2.1 measured what an interrupted rsync leaves behind: 310 files from one release and 90 from another. This lesson covers the rest of the ways a transport goes wrong — and the one that produces the strangest outcome, where the deploy you started second is not the one that ends up running.</p>
+
+<h3>Two deploys at once</h3>
+<p>Two deploys of different versions, started 150 ms apart. The first is slower; the second finishes first:</p>
+<div class="out">════ HAI lan deploy chay chong nhau, KHONG co khoa ════
+  [B] xong, hien-tai → B
+  [A] xong, hien-tai → A
+  KET QUA: hien-tai → A
+  noi dung dang duoc phuc vu: A</div>
+<div class="callout warn"><strong>B was pushed second, completed first, and then A overwrote it.</strong> Production is running A — the <em>older</em> deploy — and the person who deployed B watched their deploy succeed. Nothing failed. Both scripts exited 0, both printed a success line, and the result is that the most recent change is not live. It will stay that way until someone deploys again, which is usually the next morning when someone notices the fix is missing.</div>
+<p>This is not a rare shape. It happens when two people deploy at once, when a CI job overlaps a manual deploy, or when someone re-runs a deploy they thought had failed. This repository has a measured instance: eleven version bumps in four and a half hours from several sessions, of which <em>one was never released at all</em> — the version number moved, everyone believed it had shipped, and users stayed on the previous build with nothing anywhere comparing the two.</p>
+
+<h3>One lock fixes it, and the flag decides the semantics</h3>
+<pre><code><span class="tok-comment"># mo mot mo ta tep tren tep khoa, roi giu khoa suot ca lan deploy</span>
+exec 9&gt;/var/lock/deploy.lock
+if ! flock -n 9; then
+  echo "co lan deploy khac dang chay — DUNG" &gt;&amp;2
+  exit 1
+fi</code></pre>
+<div class="out">════ cung tinh huong, nhung CO flock ════
+  [B] co lan deploy khac dang chay — DUNG
+  [A] xong, hien-tai → A
+  KET QUA: hien-tai → A
+
+════ va neu B CHO thay vi bo cuoc (flock -w 10) ════
+  [A] xong, hien-tai → A
+  [B] xong, hien-tai → B
+  KET QUA: hien-tai → B</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>flock -n</code> — fail immediately</span><span class="v">B refuses to start and says why. Only one deploy ever runs, and the rejected one exits non-zero so CI marks it failed rather than silently doing nothing.</span></div>
+  <div class="kv"><span class="k"><code>flock -w 10</code> — wait, then give up</span><span class="v">B waits for A to finish, then deploys. The result is B — the newest change wins, which is almost always what you actually want.</span></div>
+  <div class="kv"><span class="k">The lock releases itself</span><span class="v">It is held on a file descriptor, so the kernel drops it when the process exits — including a crash, a kill, or a dropped SSH session. A lock file you create and delete by hand does not have that property, and a stale one blocks deploys until someone removes it.</span></div>
+  <div class="kv"><span class="k">Lock on the server, not the client</span><span class="v">A lock on your laptop does not know about the deploy running from CI. The file must live on the machine being deployed to.</span></div>
+</div>
+<div class="pitfall"><strong>Bẫy — <code>flock file cmd</code> and <code>exec 9&gt;file; flock 9</code> are not the same.</strong> The first holds the lock only for the duration of <code>cmd</code>; if your deploy is several commands, each one locks and unlocks and the gaps between them are unprotected. The file-descriptor form holds it for the life of the shell, which is what a multi-step deploy needs. And put the lock file somewhere that survives — <code>/var/lock</code> or <code>/run</code> — not inside the release directory you are about to replace.</div>
+
+<h3>Which failures are safe to retry</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">✓</span><span class="lz-t">Transport into a new release directory</span><span class="lz-d">Fully safe. The target is a fresh directory nothing is serving, and re-running overwrites a partial copy with a complete one. Run it as many times as you like. This is the single largest benefit of the releases layout, beyond rollback.</span></div>
+  <div class="lz-step"><span class="lz-k">✓</span><span class="lz-t">The symlink swap</span><span class="lz-d">Idempotent by nature — pointing a symlink at the directory it already points at changes nothing, and <code>rename(2)</code> cannot half-happen.</span></div>
+  <div class="lz-step"><span class="lz-k">⚠</span><span class="lz-t">Transport directly over a live directory</span><span class="lz-d">Retrying makes the mixed state from Lesson 2.1 <em>more</em> mixed while it runs. It converges if it completes; it is dangerous every second it does not. Another reason not to deploy this way.</span></div>
+  <div class="lz-step"><span class="lz-k">✗</span><span class="lz-t">Database migrations</span><span class="lz-d">Not generally safe to retry, and the failure mode is worse than anything in this chapter. Chapter 5 is about exactly this — including the state where a migration is recorded as neither applied nor rolled back, and every subsequent deploy refuses to run.</span></div>
+</div>
+<div class="callout ok"><strong>Design the transport step so retrying is always correct.</strong> Then a network blip, a timeout, or a laptop lid becomes an inconvenience instead of an incident: run it again. The property you want is that the operation can be repeated any number of times with the same end state, and the releases layout gives it to you almost for free — every deploy writes to a name nothing else uses.</div>
+
+<h3>Resuming rather than restarting</h3>
+<pre><code><span class="tok-comment"># giu phan da chuyen duoc, lan sau di tiep tu do</span>
+rsync -a --partial --partial-dir=.rsync-tam ./ vps:/srv/app/phat-hanh/&lt;ban&gt;/
+
+<span class="tok-comment"># tu thu lai khi mang chap chon — 3 lan, cach nhau vai giay</span>
+for i in 1 2 3; do
+  rsync -a --partial ./ vps:"\$BAN/" &amp;&amp; break
+  echo "lan \$i hong, cho \$((i * 5))s roi thu lai" &gt;&amp;2
+  sleep \$((i * 5))
+done</code></pre>
+<div class="note-ct"><code>--partial</code> keeps a partially transferred file instead of deleting it, and <code>--partial-dir</code> keeps it somewhere that is not the destination path — so a resumed transfer picks up where it stopped without ever exposing a half-written file at the real name. Worth having on a slow or unreliable link, and unnecessary on a fast one where restarting costs a second.</div>
+<div class="pitfall"><strong>Bẫy — a retry loop with no limit is worse than no retry loop.</strong> A deploy that retries forever against a server that is genuinely down does not fail; it hangs, holding the lock from earlier in this lesson, until someone notices. Bound the attempts, bound the total time, and make sure the final failure is loud. A deploy that fails clearly after thirty seconds is a better outcome than one that is still trying an hour later.</div>
+
+<h3>What a transport can and cannot promise</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">It can promise per-file atomicity</span><span class="lz-lnote">rsync and git both write-then-rename, so no file is ever half-old and half-new. Measured in Lesson 2.1: zero partial files after a kill.</span></div>
+  <div class="lz-layer"><span class="lz-lname">It cannot promise per-deploy atomicity</span><span class="lz-lnote">That has to come from the structure around it — a new directory plus a symlink swap. No transport flag gives it to you.</span></div>
+  <div class="lz-layer"><span class="lz-lname">It cannot promise ordering</span><span class="lz-lnote">Measured above: the second deploy finished first. Ordering comes from a lock, not from the transport.</span></div>
+  <div class="lz-layer"><span class="lz-lname">It cannot tell you whether the result works</span><span class="lz-lnote">A completed transfer means the bytes arrived. Lesson 0.3 measured three deploys where the bytes arrived perfectly and the site was broken.</span></div>
+</div>
+<div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">flock(1) and flock(2)</span><span class="lc-sub">man7.org/linux/man-pages/man1/flock.1.html — both forms, and the sentence explaining that the lock is released when the file descriptor closes.</span></span></div>
+<div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">rsync(1) — --partial, --partial-dir, --timeout</span><span class="lc-sub">man7.org/linux/man-pages/man1/rsync.1.html — resumption, and the timeout that turns a hung transfer into a failed one.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Idempotence in operations</span><span class="lc-sub">en.wikipedia.org/wiki/Idempotence — the property that makes "just run it again" a safe instruction, and the reason it is worth designing for deliberately.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — file locks, traps and cleaning up on exit</span><span class="lc-sub">/courses/linux-bash/learn${REF} — how a shell script holds a resource safely and gives it back even when it is killed.</span></span></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 2 · Bài 2.5</span>
+<h2>Khi đường vận chuyển hỏng nửa chừng</h2>
+<p class="lead">Bài 2.1 đã đo thứ mà một lệnh rsync bị cắt ngang để lại: 310 tệp từ bản này và 90 tệp từ bản kia. Bài này nói nốt những cách khác mà một đường vận chuyển đi sai — và cái cách sinh ra kết cục kỳ lạ nhất, khi lần deploy bạn khởi động SAU lại không phải cái rốt cuộc đang chạy.</p>
+
+<h3>Hai lần deploy cùng lúc</h3>
+<p>Hai lần deploy hai phiên bản khác nhau, khởi động cách nhau 150 ms. Cái thứ nhất chậm hơn; cái thứ hai xong trước:</p>
+<div class="out">════ HAI lan deploy chay chong nhau, KHONG co khoa ════
+  [B] xong, hien-tai → B
+  [A] xong, hien-tai → A
+  KET QUA: hien-tai → A
+  noi dung dang duoc phuc vu: A</div>
+<div class="callout warn"><strong>B được đẩy sau, xong trước, rồi A ghi đè lên nó.</strong> Production đang chạy A — lần deploy CŨ HƠN — và cái người đã deploy B thì đã nhìn thấy lần deploy của mình thành công. Không có gì hỏng cả. Cả hai script đều thoát ra 0, cả hai đều in một dòng thành công, và kết quả là thay đổi MỚI NHẤT không hề lên sóng. Nó sẽ ở nguyên như vậy cho tới khi có người deploy lại, mà thường là sáng hôm sau khi có ai đó phát hiện cái sửa lỗi bị thiếu.</div>
+<p>Đây không phải một hình dạng hiếm. Nó xảy ra khi hai người cùng deploy, khi một job CI chồng lên một lần deploy tay, hoặc khi ai đó chạy lại một lần deploy mà họ tưởng đã hỏng. Kho mã này có một ca đo được: mười một lần bump phiên bản trong bốn tiếng rưỡi từ nhiều phiên làm việc, trong đó <em>MỘT bản chưa từng được phát hành</em> — con số phiên bản đã nhích lên, mọi người đều tin là đã ship, và người dùng nằm lại ở bản trước mà chẳng có chỗ nào đối chiếu hai thứ đó.</p>
+
+<h3>Một cái khoá sửa được nó, và cái cờ quyết định ngữ nghĩa</h3>
+<pre><code><span class="tok-comment"># mo mot mo ta tep tren tep khoa, roi giu khoa suot ca lan deploy</span>
+exec 9&gt;/var/lock/deploy.lock
+if ! flock -n 9; then
+  echo "co lan deploy khac dang chay — DUNG" &gt;&amp;2
+  exit 1
+fi</code></pre>
+<div class="out">════ cung tinh huong, nhung CO flock ════
+  [B] co lan deploy khac dang chay — DUNG
+  [A] xong, hien-tai → A
+  KET QUA: hien-tai → A
+
+════ va neu B CHO thay vi bo cuoc (flock -w 10) ════
+  [A] xong, hien-tai → A
+  [B] xong, hien-tai → B
+  KET QUA: hien-tai → B</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>flock -n</code> — hỏng ngay lập tức</span><span class="v">B từ chối khởi động và nói rõ vì sao. Chỉ đúng MỘT lần deploy từng chạy, và cái bị từ chối thoát ra khác 0 nên CI đánh dấu nó là THẤT BẠI thay vì lặng lẽ chẳng làm gì.</span></div>
+  <div class="kv"><span class="k"><code>flock -w 10</code> — chờ, rồi mới bỏ cuộc</span><span class="v">B chờ A xong rồi mới deploy. Kết quả là B — thay đổi mới nhất thắng, và đó gần như luôn là thứ bạn THẬT SỰ muốn.</span></div>
+  <div class="kv"><span class="k">Cái khoá tự nhả</span><span class="v">Nó được giữ trên một mô tả tệp, nên nhân hệ điều hành nhả nó khi tiến trình thoát — kể cả khi sập, bị giết, hay rớt phiên SSH. Một tệp khoá bạn tự tạo và tự xoá thì KHÔNG có tính chất đó, và một cái còn sót lại sẽ chặn mọi lần deploy cho tới khi có người gỡ nó.</span></div>
+  <div class="kv"><span class="k">Khoá trên MÁY CHỦ, không phải trên máy client</span><span class="v">Một cái khoá trên laptop của bạn không biết gì về lần deploy đang chạy từ CI. Tệp khoá phải sống trên chính cái máy đang được deploy vào.</span></div>
+</div>
+<div class="pitfall"><strong>Bẫy — <code>flock file cmd</code> và <code>exec 9&gt;file; flock 9</code> KHÔNG giống nhau.</strong> Cái đầu chỉ giữ khoá trong đúng thời gian <code>cmd</code> chạy; nếu lần deploy của bạn gồm nhiều lệnh thì mỗi lệnh khoá rồi mở khoá, và những khoảng trống giữa chúng KHÔNG được bảo vệ. Dạng dùng mô tả tệp giữ khoá suốt vòng đời của shell, và đó mới là thứ một lần deploy nhiều bước cần. Và hãy đặt tệp khoá ở chỗ SỐNG SÓT được — <code>/var/lock</code> hoặc <code>/run</code> — chứ đừng đặt trong chính thư mục bản phát hành mà bạn sắp thay.</div>
+
+<h3>Kiểu hỏng nào THỬ LẠI được an toàn</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">✓</span><span class="lz-t">Vận chuyển vào một thư mục bản phát hành MỚI</span><span class="lz-d">Hoàn toàn an toàn. Đích là một thư mục mới tinh chẳng ai đang phục vụ từ đó, và chạy lại sẽ ghi đè một bản chép dở bằng một bản đầy đủ. Chạy bao nhiêu lần tuỳ thích. Đây là ích lợi LỚN NHẤT của bố cục releases, ngoài chuyện lùi bản.</span></div>
+  <div class="lz-step"><span class="lz-k">✓</span><span class="lz-t">Cú tráo symlink</span><span class="lz-d">Tự nó đã bất biến khi lặp lại — trỏ một symlink vào đúng thư mục nó đang trỏ thì chẳng đổi gì, và <code>rename(2)</code> không thể xảy ra một nửa.</span></div>
+  <div class="lz-step"><span class="lz-k">⚠</span><span class="lz-t">Vận chuyển thẳng đè lên thư mục ĐANG SỐNG</span><span class="lz-d">Thử lại làm cái trạng thái trộn lẫn ở Bài 2.1 <em>TRỘN THÊM</em> trong lúc nó chạy. Nó hội tụ NẾU chạy xong; nó nguy hiểm mỗi giây nó chưa xong. Thêm một lý do nữa để không deploy theo kiểu này.</span></div>
+  <div class="lz-step"><span class="lz-k">✗</span><span class="lz-t">Migration cơ sở dữ liệu</span><span class="lz-d">Nói chung KHÔNG an toàn để thử lại, và kiểu hỏng của nó tệ hơn mọi thứ trong chương này. Chương 5 nói đúng về chuyện đó — kể cả cái trạng thái mà một migration được ghi nhận là KHÔNG áp dụng cũng KHÔNG lùi lại, và mọi lần deploy sau đó đều từ chối chạy.</span></div>
+</div>
+<div class="callout ok"><strong>Hãy thiết kế bước vận chuyển sao cho THỬ LẠI luôn đúng.</strong> Khi đó một cú nghẽn mạng, một lần hết giờ, hay một cái nắp laptop trở thành phiền toái chứ không phải sự cố: chạy lại thôi. Tính chất bạn muốn là thao tác đó lặp lại bao nhiêu lần cũng cho ra cùng một trạng thái cuối, và bố cục releases đem lại điều đó gần như miễn phí — mọi lần deploy đều ghi vào một cái tên mà không ai khác dùng.</div>
+
+<h3>Đi tiếp thay vì làm lại từ đầu</h3>
+<pre><code><span class="tok-comment"># giu phan da chuyen duoc, lan sau di tiep tu do</span>
+rsync -a --partial --partial-dir=.rsync-tam ./ vps:/srv/app/phat-hanh/&lt;ban&gt;/
+
+<span class="tok-comment"># tu thu lai khi mang chap chon — 3 lan, cach nhau vai giay</span>
+for i in 1 2 3; do
+  rsync -a --partial ./ vps:"\$BAN/" &amp;&amp; break
+  echo "lan \$i hong, cho \$((i * 5))s roi thu lai" &gt;&amp;2
+  sleep \$((i * 5))
+done</code></pre>
+<div class="note-ct"><code>--partial</code> giữ lại một tệp chuyển dở thay vì xoá nó đi, còn <code>--partial-dir</code> giữ nó ở một chỗ KHÔNG phải đường dẫn đích — nên một lần chuyển tiếp tục sẽ nối vào chỗ nó dừng mà không bao giờ phơi ra một tệp viết dở mang đúng cái tên thật. Đáng có trên một đường truyền chậm hoặc chập chờn, và không cần thiết trên một đường nhanh mà làm lại từ đầu chỉ tốn một giây.</div>
+<div class="pitfall"><strong>Bẫy — một vòng thử lại KHÔNG có giới hạn còn tệ hơn không có vòng thử lại nào.</strong> Một lần deploy cứ thử lại mãi mãi vào một máy chủ đang chết thật thì KHÔNG hỏng; nó TREO, giữ nguyên cái khoá ở phần trên bài này, cho tới khi có người phát hiện. Hãy chặn số lần, chặn tổng thời gian, và bảo đảm cú hỏng cuối cùng phải ỒN ÀO. Một lần deploy hỏng rõ ràng sau ba mươi giây là kết cục TỐT HƠN một lần vẫn còn đang thử sau một tiếng.</div>
+
+<h3>Một đường vận chuyển hứa được gì và KHÔNG hứa được gì</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Nó hứa được tính nguyên tử theo TỪNG TỆP</span><span class="lz-lnote">rsync và git đều ghi-rồi-đổi-tên, nên không tệp nào từng ở trạng thái nửa cũ nửa mới. Đo ở Bài 2.1: không sót tệp dở dang nào sau khi bị giết.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Nó KHÔNG hứa được tính nguyên tử theo LẦN DEPLOY</span><span class="lz-lnote">Cái đó phải tới từ CẤU TRÚC bao quanh nó — một thư mục mới cộng một cú tráo symlink. Không cờ vận chuyển nào đem lại cho bạn.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Nó KHÔNG hứa được THỨ TỰ</span><span class="lz-lnote">Đo ở trên: lần deploy thứ hai xong trước. Thứ tự tới từ một cái KHOÁ, không tới từ đường vận chuyển.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Nó KHÔNG cho bạn biết kết quả có CHẠY không</span><span class="lz-lnote">Một lần chuyển hoàn tất nghĩa là các byte đã tới nơi. Bài 0.3 đã đo ba lần deploy mà các byte tới nơi hoàn hảo còn website thì hỏng.</span></div>
+</div>
+<div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">flock(1) và flock(2)</span><span class="lc-sub">man7.org/linux/man-pages/man1/flock.1.html — cả hai dạng, và cái câu giải thích rằng khoá được nhả khi mô tả tệp đóng lại.</span></span></div>
+<div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">rsync(1) — --partial, --partial-dir, --timeout</span><span class="lc-sub">man7.org/linux/man-pages/man1/rsync.1.html — chuyện đi tiếp, và cái timeout biến một lần chuyển bị treo thành một lần chuyển hỏng.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tính bất biến khi lặp lại trong vận hành</span><span class="lc-sub">en.wikipedia.org/wiki/Idempotence — cái tính chất làm cho câu "cứ chạy lại đi" thành một chỉ dẫn an toàn, và lý do nó đáng được thiết kế một cách có chủ ý.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — khoá tệp, trap và dọn dẹp lúc thoát</span><span class="lc-sub">/courses/linux-bash/learn${REF} — một script shell giữ một tài nguyên an toàn thế nào và trả lại nó ra sao ngay cả khi bị giết.</span></span></div>
+</div>
+`,
+    },
+
+    /* ─────────────────────────── 2.6 ─────────────────────────── */
+    {
+      title: '2.6 — Quiz: transport|||2.6 — Quiz: vận chuyển',
+      slug: 'deploy-2-6-quiz',
+      type: 'QUIZ',
+      description: 'Tám câu về một thuật toán gửi 100 byte cho một tệp đã dịch chuyển toàn bộ, một lệnh xoá ảnh người dùng không hỏi han, hai cái ảnh 29 MB gộp lại vẫn 29 MB, và một lần deploy cũ hơn thắng lần mới hơn.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 2 · Lesson 2.6</span>
+<h2>Quiz: transport</h2>
+<p class="lead">Eight questions from a chapter where one benchmark had to be thrown away and rebuilt, because the first version compared two operations that were not the same operation.</p>
+<div class="callout">
+<p><strong>What this chapter established.</strong> rsync's rolling checksum sent 22 KB to sync a 20 MB file after a 100-byte change in the middle, and only <strong>18 KB with 100 literal bytes</strong> after inserting 100 bytes at the front — which shifts every byte and defeats a naive block comparison (2.1). Its two dangers are silent: <code>--delete</code> removed a user's uploaded image without asking, and a killed transfer left 310 files on one release and 90 on another — atomic per file, never per deploy (2.1). A bare repository plus a fifteen-line <code>post-receive</code> hook is a complete deploy, but the hook runs <em>after</em> the objects are accepted, so a failing hook does not fail the push (2.2). Container layers are content-addressed: two 29 MB images packaged together are 29 MB, because only the 857-byte source layer differed — and one <code>COPY . .</code> before <code>npm ci</code> destroys that entirely (2.3). Both transports took about 300 ms because the SSH handshake dominates, and the first attempt at comparing them was wrong: it timed a first sync against a delta (2.4). And two overlapping deploys produced the worst outcome of the chapter — the one started second finished first, the older one overwrote it, and production ran the older code while both deploys reported success (2.5).</p>
+</div>
+</div>
+
+<div class="ml-vi">
+<span class="eyebrow">Chương 2 · Bài 2.6</span>
+<h2>Quiz: vận chuyển</h2>
+<p class="lead">Tám câu ra từ một chương mà một phép đo phải vứt đi dựng lại, vì bản đầu tiên đem so hai thao tác vốn không phải cùng một thao tác.</p>
+<div class="callout">
+<p><strong>Chương này đã xác lập điều gì.</strong> Mã kiểm tra kiểu cuộn của rsync gửi 22 KB để đồng bộ một tệp 20 MB sau khi đổi 100 byte ở giữa, và chỉ <strong>18 KB với đúng 100 byte nguyên bản</strong> sau khi CHÈN 100 byte vào đầu — việc làm dịch chuyển mọi byte và đánh bại một phép so khối ngây thơ (2.1). Hai mối nguy của nó đều CÂM: <code>--delete</code> gỡ mất một tấm ảnh người dùng đã tải lên mà không hỏi han, và một lần chuyển bị giết để lại 310 tệp của bản này và 90 tệp của bản kia — nguyên tử theo TỪNG TỆP, không bao giờ theo lần deploy (2.1). Một kho trần cộng một hook <code>post-receive</code> mười lăm dòng là một quy trình deploy hoàn chỉnh, nhưng hook chạy <em>SAU KHI</em> các đối tượng đã được nhận, nên một hook hỏng KHÔNG làm lần push hỏng theo (2.2). Các lớp container được định địa chỉ theo nội dung: hai cái ảnh 29 MB đóng gói chung vẫn là 29 MB, vì chỉ lớp mã nguồn 857 byte là khác — và một dòng <code>COPY . .</code> đặt trước <code>npm ci</code> phá sạch chuyện đó (2.3). Cả hai đường vận chuyển đều mất khoảng 300 ms vì cái bắt tay SSH chiếm phần lớn, và lần đầu đem chúng ra so là SAI: nó bấm giờ một lần đồng bộ ĐẦU TIÊN đấu với một phần CHÊNH LỆCH (2.4). Và hai lần deploy chồng nhau sinh ra kết cục tệ nhất chương — cái khởi động sau lại xong trước, cái cũ hơn ghi đè lên nó, và production chạy mã cũ trong khi CẢ HAI lần deploy đều báo thành công (2.5).</p>
+</div>
+</div>
+`,
+      quiz: {
+        timeLimitSeconds: 720,
+        questions: [
+          {
+            question: 'You insert 100 bytes at the start of a 20 MB file, shifting every byte, then rsync it. How much travels?|||Bạn chèn 100 byte vào ĐẦU một tệp 20 MB, làm dịch chuyển mọi byte, rồi rsync nó. Bao nhiêu byte đi qua đường truyền?',
+            options: [
+              'The whole 20 MB, because every block moved|||Cả 20 MB, vì mọi khối đều dịch chuyển',
+              'About 18 KB, of which only 100 bytes are literal — the rolling checksum advances one byte at a time, so it finds the original blocks at their new offsets|||Khoảng 18 KB, trong đó chỉ 100 byte là nguyên bản — mã kiểm tra kiểu cuộn tiến từng byte một, nên nó tìm ra các khối gốc ở vị trí mới của chúng',
+              'Half the file|||Nửa cái tệp',
+              'Nothing, because the checksum still matches|||Không gì cả, vì mã kiểm tra vẫn khớp',
+            ],
+            correctIndex: 1,
+            points: 15,
+          },
+          {
+            question: 'Your deploy runs rsync --delete against /srv/app, which also contains the directory users upload files into. What happens to the uploads?|||Quy trình deploy chạy rsync --delete vào /srv/app, mà thư mục đó cũng chứa nơi người dùng tải tệp lên. Chuyện gì xảy ra với đám tệp tải lên?',
+            options: [
+              'They are preserved, since they are not in the source|||Chúng được giữ lại, vì chúng không có ở nguồn',
+              'They are deleted — --delete removes anything on the server that is absent from the source, with no confirmation and no error|||Chúng bị XOÁ — --delete gỡ bỏ mọi thứ trên máy chủ mà vắng mặt ở nguồn, không xác nhận và không lỗi',
+              'rsync refuses to run|||rsync từ chối chạy',
+              'They are moved to a backup directory|||Chúng được chuyển vào một thư mục sao lưu',
+            ],
+            correctIndex: 1,
+            points: 10,
+          },
+          {
+            question: 'An rsync deploy straight into the live directory is killed halfway. What state is the application in?|||Một lần deploy rsync thẳng vào thư mục đang sống bị giết giữa chừng. Ứng dụng đang ở trạng thái nào?',
+            options: [
+              'Some files are half-written and will fail to parse|||Một số tệp bị viết dở và sẽ lỗi cú pháp',
+              'Every file is intact, but the directory holds a mixture of two releases — a version that never existed in any commit|||Mọi tệp đều nguyên vẹn, nhưng thư mục đang giữ một MỚ TRỘN của hai bản phát hành — một phiên bản chưa từng tồn tại trong bất kỳ commit nào',
+              'The deploy rolls itself back|||Lần deploy tự lùi lại',
+              'Nothing changed, because rsync is transactional|||Không gì đổi cả, vì rsync có tính giao dịch',
+            ],
+            correctIndex: 1,
+            points: 15,
+          },
+          {
+            question: 'Your post-receive hook exits 1 because the build failed. What does the person who pushed see?|||Hook post-receive của bạn thoát ra 1 vì bước dựng hỏng. Người vừa push thấy gì?',
+            options: [
+              'The push is rejected and the commit is not stored|||Lần push bị từ chối và commit không được lưu',
+              'The push succeeds — post-receive runs after the objects are accepted, so a non-zero exit is only a warning; rejecting a push needs pre-receive|||Lần push THÀNH CÔNG — post-receive chạy sau khi các đối tượng đã được nhận, nên mã thoát khác 0 chỉ là một cảnh báo; muốn từ chối push thì phải dùng pre-receive',
+              'Git retries the hook|||Git thử lại cái hook',
+              'The repository is left corrupted|||Kho mã bị để lại ở trạng thái hỏng',
+            ],
+            correctIndex: 1,
+            points: 15,
+          },
+          {
+            question: 'A Dockerfile has COPY . . on the line before RUN npm ci. What does that cost per deploy?|||Một Dockerfile có dòng COPY . . đặt ngay trước RUN npm ci. Nó tốn thêm gì cho mỗi lần deploy?',
+            options: [
+              'Nothing — the layers are the same either way|||Không gì cả — các lớp vẫn thế dù xếp cách nào',
+              'The dependency layer is invalidated on every commit, so npm ci re-runs and the 30 MB layer gets a new digest — the registry transfers 30 MB instead of about 857 bytes|||Lớp phụ thuộc bị vô hiệu ở MỌI commit, nên npm ci chạy lại và cái lớp 30 MB nhận một digest mới — registry chuyển 30 MB thay vì khoảng 857 byte',
+              'The image will not build|||Cái ảnh sẽ không dựng được',
+              'Only the build is slower; the transfer is unchanged|||Chỉ bước dựng chậm hơn; phần chuyển thì không đổi',
+            ],
+            correctIndex: 1,
+            points: 15,
+          },
+          {
+            question: 'Why is deploying by image tag rather than digest a problem?|||Vì sao deploy theo TAG ảnh thay vì theo DIGEST lại là một vấn đề?',
+            options: [
+              'Tags are slower to pull|||Tag kéo về chậm hơn',
+              'A tag is a mutable pointer — it can be moved to different content, so two servers pulling the same tag a week apart can legitimately be running different code|||Một cái tag là con trỏ CÓ THỂ ĐỔI — nó có thể bị chuyển sang nội dung khác, nên hai máy chủ kéo cùng một tag cách nhau một tuần có thể đang chạy hai đoạn mã khác nhau một cách hợp lệ',
+              'Tags cannot be used with compose|||Tag không dùng được với compose',
+              'Digests are required by the registry|||Registry bắt buộc phải dùng digest',
+            ],
+            correctIndex: 1,
+            points: 10,
+          },
+          {
+            question: 'The first attempt to compare rsync and git push showed rsync sending 1.5 MB against git sending 586 bytes. Why was that comparison invalid?|||Lần đầu đem so rsync với git push cho thấy rsync gửi 1,5 MB còn git gửi 586 byte. Vì sao phép so đó KHÔNG hợp lệ?',
+            options: [
+              'git compresses better|||git nén tốt hơn',
+              'The rsync destination was empty, so it did a first sync while git pushed a delta — two different operations; and the two also ship different artifacts, since node_modules is gitignored|||Thư mục đích của rsync đang RỖNG nên nó làm một lần đồng bộ đầu tiên, còn git thì đẩy phần chênh lệch — hai thao tác khác nhau; và hai bên còn gửi đi hai tạo tác khác nhau, vì node_modules nằm trong gitignore',
+              'The measurements were taken on different machines|||Hai phép đo lấy trên hai máy khác nhau',
+              'rsync was not given -z|||rsync không được truyền cờ -z',
+            ],
+            correctIndex: 1,
+            points: 15,
+          },
+          {
+            question: 'Deploy A starts, then deploy B starts 150 ms later and finishes first. Neither uses a lock. What is running afterwards?|||Deploy A khởi động, rồi deploy B khởi động sau 150 ms và xong trước. Không cái nào dùng khoá. Sau đó cái gì đang chạy?',
+            options: [
+              'B, the most recent one|||B, cái mới nhất',
+              'A — it finished last and overwrote the symlink, so production runs the older code while both deploys reported success|||A — nó xong SAU CÙNG và ghi đè lên symlink, nên production chạy mã CŨ HƠN trong khi cả hai lần deploy đều báo thành công',
+              'Neither; the deploy fails|||Không cái nào; lần deploy hỏng',
+              'A mixture of both|||Một mớ trộn của cả hai',
+            ],
+            correctIndex: 1,
+            points: 15,
+          },
+        ],
+      },
+    },
   ],
 };

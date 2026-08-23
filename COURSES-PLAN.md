@@ -35,7 +35,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 8 | `docker` | `docker` — Docker | ✅ **XONG** (13 mục · 76 bài · 1.584k · TB 20.842) |
 | 9 | `redis` | `redis` — Redis | ✅ **XONG** (13 mục · 76 bài · 1.582k · TB 20.819) |
 | 10 | `prisma-orm` | `prisma-orm` — Prisma ORM | ✅ **XONG** (13 mục · 76 bài · 1.744k · TB 22.943) |
-| 11 | `authentication` | — | ❌ **THIẾU** |
+| 11 | `authentication` | `authentication` — Authentication | ✅ **XONG** (13 mục · 76 bài · 1.538k · TB 20.236) |
 | 12 | `nginx` | — | ❌ **THIẾU** |
 | 13 | `deploy-vps` | — | ❌ **THIẾU** |
 | 14 | `github-actions` | — | ❌ **THIẾU** |
@@ -50,7 +50,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 23 | `domains-dns-tls` | — | ❌ **THIẾU** |
 | 24 | `cuongthai-roadmap` | *(lộ trình, không phải khoá)* | — bỏ qua |
 
-**Tổng: 10 khoá đã có · 13 khoá còn thiếu.**
+**Tổng: 11 khoá đã có · 12 khoá còn thiếu.**
 
 ### Thứ tự ưu tiên (đã chốt)
 
@@ -59,8 +59,8 @@ Theo thứ tự một người học thật sự cần, và theo mức độ kho
 1. ✅ **Git & GitHub** — nền tảng, mọi khoá khác giả định đã biết; roadmap trỏ tới 8 lần
 2. ✅ **Linux & Bash** — điều kiện cần của deploy, Docker, Nginx
 3. ✅ **Docker** — Node.js Ch17 chỉ chạm bề mặt; xứng đáng khoá riêng
-4. ✅ **Redis** · 5. ✅ **Prisma ORM** · 6. **Authentication ← TIẾP THEO** — đào sâu ba chương của Node.js
-7. **Nginx** · 8. **Deploy VPS** · 9. **GitHub Actions (CI/CD)** — mảng vận hành
+4. ✅ **Redis** · 5. ✅ **Prisma ORM** · 6. ✅ **Authentication** — đào sâu ba chương của Node.js
+7. **Nginx ← TIẾP THEO** · 8. **Deploy VPS** · 9. **GitHub Actions (CI/CD)** — mảng vận hành
 10. **Tailwind CSS** · 11. **Socket.IO** — mảng sản phẩm
 12. **Object Storage (S3/R2)** · 13. **Media Processing** · 14. **Observability**
 15. **Payment Integration** (+ **VNPay**, **PayOS**) · 18. **Domains, DNS & TLS**
@@ -171,6 +171,11 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 | 23/08/2026 | Khoá Prisma ORM — Chương 9 (hiệu năng), 10 (cửa thoát hiểm) | 70 bài · 1.483k ký tự · 186 sơ đồ |
 | 23/08/2026 | Khoá Prisma ORM — Chương 11 (production) | 76 bài · 1.621k ký tự · 212 sơ đồ |
 | 23/08/2026 | **Khoá Prisma ORM — HOÀN THÀNH** (Chương 12, chẩn đoán + thi cuối) | **76 bài · 1.744k ký tự · TB 22.943 · 234 sơ đồ · 650 nguồn · 114 bẫy · 13 quiz · đạt mọi sàn** |
+| 23/08/2026 | Khoá Authentication — Mục 0 → Chương 5 | 34 bài · 696k ký tự · 138 sơ đồ |
+| 23/08/2026 | Khoá Authentication — Chương 6 (vòng đời tài khoản), 7 (MFA & passkey) | 46 bài · 966k ký tự · 184 sơ đồ |
+| 23/08/2026 | Khoá Authentication — Chương 8 (OAuth/OIDC), 9 (phân quyền) | 58 bài · 1.210k ký tự · 230 sơ đồ |
+| 23/08/2026 | Khoá Authentication — Chương 10 (tấn công), 11 (vận hành) | 70 bài · 1.434k ký tự · 278 sơ đồ |
+| 23/08/2026 | **Khoá Authentication — HOÀN THÀNH** (Chương 12, chẩn đoán + thi cuối) | **76 bài · 1.538k ký tự · TB 20.236 · 302 sơ đồ · 644 nguồn · 122 bẫy · 13 quiz · đạt mọi sàn** |
 
 
 ### Khoá Linux & Bash — XONG (22/08/2026)
@@ -241,6 +246,34 @@ chứa Postgres.
 
 Còn hai bước phải chạy ở máy nhà — xem §6.
 
+### Khoá Authentication — XONG (23/08/2026)
+
+13 mục · 76 bài · **1.538k ký tự** · TB 20.236 · 302 sơ đồ · 644 nguồn học ·
+122 bẫy · 442 khối code · 220 khối output · 13 quiz · 0 lỗi · đạt mọi sàn §3.
+
+Đường đi: giao thức quen thuộc và ba bài toán → tín vật cùng các nguyên thuỷ
+(ngẫu nhiên, so sánh hằng thời gian, băm với chữ ký) → mật khẩu (Argon2id,
+danh sách rò rỉ, nâng tham số) → phiên và cookie → JWT nhìn từ bên trong →
+refresh, xoay vòng, thu hồi → vòng đời tài khoản (đăng ký, xác minh, đặt lại,
+dò tài khoản, đổi email, xoá) → yếu tố thứ hai và passkey → OAuth 2.1 và OIDC
+→ mô hình phân quyền (RBAC, ABAC/ReBAC, nhiều tenant) → các cú tấn công xếp
+theo tần suất thật → vận hành (bí mật, xoay khoá, trần tần suất, kiểm toán,
+giám sát) → chẩn đoán.
+
+**KHÔNG trùng Node.js Chương 8 và 9** (dùng JWT như phương tiện để dựng API
+Notes). Toàn bộ output là ĐO THẬT trong sandbox, không bịa: sáu vector kiểm
+thử chính thức của RFC 6238 khớp bằng ba mươi dòng TOTP viết tay · ràng buộc
+origin của WebAuthn chạy trên ba tình huống (chấp nhận, chuyển tiếp, trang
+giả) · rò rỉ thời gian khi dò tài khoản 0,001 ms so với 106 ms · PostgreSQL
+16.13 dựng tại chỗ để chứng minh Row-Level Security cùng CẢ HAI đường nó âm
+thầm bị bỏ qua · cú đầu độc header Host gửi bằng socket thô · một cuộc đua
+TOCTOU đổi được một mã dùng-một-lần tới năm lần · xoay khoá bốn giai đoạn kèm
+cả hai kiểu hỏng · và bốn phép đo trên chính kho mã này (939 endpoint và độ
+phủ middleware, 273/43/6 hành vi tham chiếu, 2.056 gói phụ thuộc, 155 biến
+môi trường trong đó 84 cái không có tài liệu).
+
+Còn hai bước phải chạy ở máy nhà — xem §6.
+
 ---
 
 ## 6. Việc chưa chạy được từ sandbox (áp cho MỌI khoá mới)
@@ -259,7 +292,7 @@ node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
 node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ```
 
-**Đang chờ chạy — năm khoá:**
+**Đang chờ chạy — sáu khoá:**
 
 ```bash
 # Git & GitHub
@@ -286,11 +319,18 @@ node scripts/course-seed.mjs --file ./content/courses/redis.mjs --apply
 docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
   --slug prisma-orm --icon prisma --color 2D3748 --title "Prisma ORM" --subtitle "Schema → Production"
 node scripts/course-seed.mjs --file ./content/courses/prisma-orm.mjs --apply
+
+# Authentication
+docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+  --slug authentication --icon openid --color F78C40 --title "Authentication" --subtitle "Login → Production"
+# (Nếu slug "openid" trả 404 ở Simple Icons thì lùi về --icon auth0 --color EB5424.)
+node scripts/course-seed.mjs --file ./content/courses/authentication.mjs --apply
 ```
 
 ⚠️ **Linux & Bash** với **Docker** dùng **category mới `devops`** (`DevOps & Vận hành`),
 chưa từng có trong DB — lần seed đầu sẽ thêm một mục lọc mới trên trang `/courses`.
 **Redis** và **Prisma ORM** dùng category `databases` đã có sẵn (chung với PostgreSQL).
+**Authentication** dùng category `backend` đã có sẵn (chung với Node.js).
 
 ---
 

@@ -22,6 +22,7 @@ import s03 from './authentication/s03-phien-cookie.mjs';
 import s04 from './authentication/s04-jwt.mjs';
 import s05 from './authentication/s05-refresh.mjs';
 import s06 from './authentication/s06-vong-doi-tai-khoan.mjs';
+import s07 from './authentication/s07-mfa-passkey.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -53,5 +54,6 @@ export default {
     s04,
     s05,
     s06,
+    s07,
   ],
 };

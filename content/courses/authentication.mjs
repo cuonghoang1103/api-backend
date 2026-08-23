@@ -17,6 +17,7 @@
 
 import s00 from './authentication/s00-intro.mjs';
 import s01 from './authentication/s01-tin-vat.mjs';
+import s02 from './authentication/s02-mat-khau.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -43,5 +44,6 @@ export default {
   sections: [
     s00,
     s01,
+    s02,
   ],
 };

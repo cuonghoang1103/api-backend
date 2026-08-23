@@ -37,7 +37,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 10 | `prisma-orm` | `prisma-orm` — Prisma ORM | ✅ **XONG** (13 mục · 76 bài · 1.744k · TB 22.943) |
 | 11 | `authentication` | `authentication` — Authentication | ✅ **XONG** (13 mục · 76 bài · 1.538k · TB 20.236) |
 | 12 | `nginx` | `nginx` — Nginx | ✅ **XONG** (12 mục · 70 bài · 1.206k · TB 17.224) |
-| 13 | `deploy-vps` | — | ❌ **THIẾU** |
+| 13 | `deploy-vps` | `deploy-vps` — Deploy lên VPS | ✅ **XONG** (12 mục · 70 bài · 1.133k · TB 16.190) |
 | 14 | `github-actions` | — | ❌ **THIẾU** |
 | 15 | `tailwind-css` | — | ❌ **THIẾU** |
 | 16 | `socket-io` | — | ❌ **THIẾU** |
@@ -60,7 +60,7 @@ Theo thứ tự một người học thật sự cần, và theo mức độ kho
 2. ✅ **Linux & Bash** — điều kiện cần của deploy, Docker, Nginx
 3. ✅ **Docker** — Node.js Ch17 chỉ chạm bề mặt; xứng đáng khoá riêng
 4. ✅ **Redis** · 5. ✅ **Prisma ORM** · 6. ✅ **Authentication** — đào sâu ba chương của Node.js
-7. ✅ **Nginx** · 8. **Deploy VPS ← TIẾP THEO** · 9. **GitHub Actions (CI/CD)** — mảng vận hành
+7. ✅ **Nginx** · 8. ✅ **Deploy VPS** · 9. **GitHub Actions (CI/CD) ← TIẾP THEO** — mảng vận hành
 10. **Tailwind CSS** · 11. **Socket.IO** — mảng sản phẩm
 12. **Object Storage (S3/R2)** · 13. **Media Processing** · 14. **Observability**
 15. **Payment Integration** (+ **VNPay**, **PayOS**) · 18. **Domains, DNS & TLS**
@@ -312,6 +312,47 @@ kiến thức mà là một vòng lặp đi đếm header trên từng tuyến.
 
 Còn hai bước phải chạy ở máy nhà — xem §6.
 
+### 24/08/2026 — Deploy VPS (12 mục · 70 bài · 1.133k · TB 16.190)
+
+Khoá thứ tám, và là khoá mà mọi số đo đến từ **hạ tầng thật dựng trong hộp
+cát**, không phải từ tài liệu: hai con sshd (2222 mặc định, 2223 đã siết),
+PostgreSQL 16.13 ở cổng 5433 với bảng 400.170 dòng, dockerd, ba con nginx
+1.24.0 cho ba bộ đo khác nhau, một cgroup v1 memory có giới hạn thật, một
+tệp swap 512 MB bật thật, và bốn hệ tệp ext4 loopback cố tình làm nhỏ.
+
+186 sơ đồ · 510 nguồn · 130 bẫy · 254 khối code · **344 khối output đo thật**
+· 11 quiz.
+
+Cái sợi chỉ chạy suốt 12 mục là **phép kiểm nói CÓ trong khi hệ thống SAI**,
+và mỗi lần nó xuất hiện đều kèm một phép đo:
+
+- chốt kiểm sức khoẻ trả 200 trong khi MỌI endpoint trả 500, vì mã đã lùi lên
+  một lược đồ đã đi tiếp (6.2)
+- cú lùi 140 ms chạy hoàn hảo trong khi người dùng nhận bản cũ suốt **5 phút**
+  vì một bộ đệm proxy (6.5)
+- lời hỏi xác nhận **thoát 0 mà không deploy** khi không có terminal — đúng
+  hành vi CLAUDE.md của kho này ghi lại (7.3)
+- phép kiểm sẵn sàng đốt **3.022 ms** để báo sai là app chết, trong khi app
+  chạy tốt, rồi thoát 0 (7.4)
+- bản dựng **thoát 0** trong khi cơ sở dữ liệu bị OOM giết (8.2)
+- load average **0,10** trên một cái máy bão hoà 100% từ giây số 0 (9.1)
+- `psql` phục hồi một bản dump cắt cụt với **mã thoát 0** và để lại một bảng
+  400.170 dòng **RỖNG**; `pg_restore --list` cũng thoát 0 (10.3)
+- và một phép kiểm nghiệm thu **ĐẠT vì nó bị chĩa vào một cái 404** (11.5)
+
+Ba con bọ tìm được trong chính công trình của tôi, và cả ba đều được GIỮ LẠI
+trong bài vì chúng dạy tốt hơn một lời khẳng định: cái trap dọn dẹp khôi phục
+symlink mà **không khởi động lại tiến trình**, để website nằm ở bản HỎNG
+(7.5) · nginx lộ `Server: nginx/1.24.0 (Ubuntu)` · và handler lỗi trả
+`x-ban: v1` cho bất cứ ai kích được một cú 500 (11.5).
+
+Hai phép đo THẤT BẠI cũng được giữ nguyên kèm lý do phép đo không nhìn thấy:
+định đo cạn inode nhưng đo trúng cạn KHỐI (32.394 tệp 1 byte = 127 MB, khuếch
+đại ~4.000 lần — 8.4), và đọc `memory.stat` SAU khi tiến trình thoát nên thấy
+`swap 0` rồi suýt kết luận swap không được dùng (8.3).
+
+Còn hai bước phải chạy ở máy nhà — xem §6.
+
 ---
 
 ## 6. Việc chưa chạy được từ sandbox (áp cho MỌI khoá mới)
@@ -368,9 +409,14 @@ node scripts/course-seed.mjs --file ./content/courses/authentication.mjs --apply
 docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
   --slug nginx --icon nginx --color 009639 --title "Nginx" --subtitle "Request → Production"
 node scripts/course-seed.mjs --file ./content/courses/nginx.mjs --apply
+
+# Deploy VPS
+docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+  --slug deploy-vps --icon ubuntu --color E95420 --title "Deploy lên VPS" --subtitle "Máy bạn → Production"
+node scripts/course-seed.mjs --file ./content/courses/deploy-vps.mjs --apply
 ```
 
-⚠️ **Linux & Bash**, **Docker** và **Nginx** dùng **category mới `devops`** (`DevOps & Vận hành`),
+⚠️ **Linux & Bash**, **Docker**, **Nginx** và **Deploy VPS** dùng **category mới `devops`** (`DevOps & Vận hành`),
 chưa từng có trong DB — lần seed đầu sẽ thêm một mục lọc mới trên trang `/courses`.
 **Redis** và **Prisma ORM** dùng category `databases` đã có sẵn (chung với PostgreSQL).
 **Authentication** dùng category `backend` đã có sẵn (chung với Node.js).

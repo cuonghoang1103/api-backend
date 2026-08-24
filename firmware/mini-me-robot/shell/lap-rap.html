@@ -187,7 +187,7 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <span><b>Vỏ</b> 14 mảnh PETG</span>
     <span><b>Vít</b> M3 tự ren</span>
     <span><b>Khung</b> TP101 · 155 mm</span>
-    <span><b>Nguồn thử</b> adapter 12 V / 3 A</span>
+    <span><b>Nguồn</b> 12 V/3 A để bàn · 12,6 V/2 A để sạc</span>
   </div>
 </header>
 
@@ -901,6 +901,21 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <figcaption>Ba nét vàng là <b>ba mối nối tắt</b> biến hai mạch của DPDT thành một mạch gánh gấp đôi dòng: <code>1↔4</code>, <code>2↔5</code>, <code>3↔6</code>. Dùng dây 18 AWG hoặc mẩu đồng. Đường âm đi thẳng, không dính gì tới công tắc.</figcaption>
   </figure>
 
+
+  <div class="warn">
+    <span class="warn-h">HAI adapter, HAI jack — dán nhãn ngay lúc lắp</span>
+    <div class="tw"><table>
+      <thead><tr><th>Adapter</th><th class="num">Cắm vào</th><th>Việc của nó</th></tr></thead>
+      <tbody>
+        <tr><td><b>12 V / 3 A</b><br><span style="opacity:.75;font-size:13px">JH-1230, đã có sẵn</span></td><td class="num">jack <b>NGUỒN</b></td><td>qua công tắc tới tải. Đủ cho robot đứng bàn nói chuyện và cử động tay (1,1–1,7 A); lúc bứt tốc vượt 3 A nên hơi yếu, tụ 2200 µF đỡ phần xung</td></tr>
+        <tr><td><b>12,6 V / 2 A</b><br><span style="opacity:.75;font-size:13px">đặt kèm BMS</span></td><td class="num">jack <b>SẠC</b></td><td>thẳng vào <code>B+</code>/<code>B−</code> của BMS. Sạc pack 2500 mAh trong ~1,25 giờ</td></tr>
+      </tbody>
+    </table></div>
+    <p><b>Cắm nhầm thì sao:</b> 12 V vào jack sạc ⇒ pack không bao giờ đầy, chỉ lên 4,00 V/cell (80 %) rồi dừng. 12,6 V vào jack nguồn ⇒ vô hại nhưng chỉ có 2 A, thiếu cho động cơ.</p>
+    <p><b>Và đừng dùng adapter 12 V để sạc</b> dù nó cắm vừa. Nó là nguồn áp thuần, không có mạch CC/CV: cắm vào pack 10,35 V thì chênh 1,65 V trên nội trở 90 mΩ đòi 18 A lý thuyết — adapter tự sụt áp rồi chạy hết công suất liên tục, nóng, và không có giai đoạn CV để kết thúc đúng cách.</p>
+    <p>Cả hai đều là <b>jack DC 5.5×2.1, tâm dương</b> — cắm lọt lẫn nhau, nên nhãn dán là thứ duy nhất ngăn nhầm.</p>
+  </div>
+
   <h3>Bảy chặng — đo xong chặng này mới sang chặng sau</h3>
   <p>Đây là chỗ dễ mất linh kiện nhất của cả robot: một lần đấu ngược là mất pack, mất BMS, hoặc mất ESP32. Nên <b>mỗi chặng kết thúc bằng một phép đo</b>, và không nối tải nào cho tới chặng cuối.</p>
 
@@ -1218,7 +1233,7 @@ details[open] summary{border-bottom:1px solid var(--line)}
       <tr><td class="mono">PCF8575</td><td>mở rộng thêm 16 chân I/O</td><td>sau khi dời sáu servo sang PCA9685 thì ESP32 còn dư chân — <code>config.h</code> ghi rõ GPIO 38 và 45 vẫn trống</td></tr>
       <tr><td class="mono">XL6009</td><td>tăng áp</td><td>không có rail nào cần điện áp cao hơn nguồn vào; cả ba mức 12 / 5 / 3V3 đều là hạ áp</td></tr>
       <tr><td class="mono">ESP32-CAM</td><td>mắt nhìn</td><td>chưa có trong thiết kế hiện tại. Đầu đã kín chỗ vì hai màn tròn</td></tr>
-      <tr><td class="mono">TP5100 · BMS 2S</td><td>sạc và bảo vệ pin</td><td>chỉ cần khi chạy pin thật. Lắp thử và mọi phép đo trên bàn đều dùng adapter 12 V</td></tr>
+      <tr><td class="mono">TP5100 · BMS 2S</td><td>sạc và bảo vệ pin</td><td>chỉ cần khi chạy pin thật, và đều là loại 2S nên KHÔNG dùng được với pack 3S</td></tr>
     </tbody>
   </table></div>
   <div class="note">

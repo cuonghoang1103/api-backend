@@ -39,7 +39,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 12 | `nginx` | `nginx` — Nginx | ✅ **XONG** (12 mục · 70 bài · 1.206k · TB 17.224) |
 | 13 | `deploy-vps` | `deploy-vps` — Deploy lên VPS | ✅ **XONG** (12 mục · 70 bài · 1.133k · TB 16.190) |
 | 14 | `github-actions` | `github-actions` — GitHub Actions | ✅ **XONG** (11 mục · 66 bài · 1.103k · TB 16.720) |
-| 15 | `tailwind-css` | `tailwind-css` — Tailwind CSS | 🚧 **ĐANG LÀM** (8/11 mục · 46 bài · 688k) |
+| 15 | `tailwind-css` | `tailwind-css` — Tailwind CSS | ✅ **XONG** (12/12 mục · 66 bài · 962k) |
 | 16 | `socket-io` | — | ❌ **THIẾU** |
 | 17 | `object-storage-s3` | — | ❌ **THIẾU** |
 | 18 | `media-processing` | — | ❌ **THIẾU** |
@@ -61,7 +61,7 @@ Theo thứ tự một người học thật sự cần, và theo mức độ kho
 3. ✅ **Docker** — Node.js Ch17 chỉ chạm bề mặt; xứng đáng khoá riêng
 4. ✅ **Redis** · 5. ✅ **Prisma ORM** · 6. ✅ **Authentication** — đào sâu ba chương của Node.js
 7. ✅ **Nginx** · 8. ✅ **Deploy VPS** · 9. ✅ **GitHub Actions (CI/CD)** — mảng vận hành
-10. **Tailwind CSS ← TIẾP THEO** · 11. **Socket.IO** — mảng sản phẩm
+10. ~~**Tailwind CSS**~~ ✅ · 11. **Socket.IO ← TIẾP THEO** — mảng sản phẩm
 12. **Object Storage (S3/R2)** · 13. **Media Processing** · 14. **Observability**
 15. **Payment Integration** (+ **VNPay**, **PayOS**) · 18. **Domains, DNS & TLS**
 

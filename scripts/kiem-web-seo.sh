@@ -16,6 +16,7 @@ set -uo pipefail
 
 BASE="${1:-https://cuongthai.com}"
 PASS=0; FAIL=0; WARN=0
+ANH_FE_CU=0   # =1 khi phát hiện ảnh frontend đang chạy là bản trước bản vá canonical
 
 c_ok()   { printf '  \033[32m✓\033[0m %s\n' "$1"; PASS=$((PASS+1)); }
 c_bad()  { printf '  \033[31m✗\033[0m %s\n' "$1"; FAIL=$((FAIL+1)); }
@@ -39,8 +40,10 @@ else
   ver=$(curl -sS -o /dev/null --max-time 15 -w '%{http_version}' "$BASE/" 2>/dev/null)
   case "$ver" in
     2|3)  c_ok  "thương lượng được HTTP/$ver" ;;
+    # MỘT c_bad thôi. Trước đây gọi hai lần cho cùng một lỗi, làm dòng tổng
+    # kết đếm 8 hỏng trong khi chỉ có 7 — bộ đếm nói dối về mức nghiêm trọng.
     1.1)  c_bad "vẫn HTTP/1.1 — thiếu 'http2 on;' trong nginx.conf, HOẶC config chưa tới được container"
-          c_bad "  (bind-mount file đơn gắn theo INODE: thay file bằng mv/rsync thì container vẫn đọc bản cũ)" ;;
+          echo "       (bind-mount file đơn gắn theo INODE: thay file bằng mv/rsync thì container vẫn đọc bản cũ)" ;;
     *)    c_bad "không gọi được (http_version='$ver')" ;;
   esac
 fi
@@ -77,7 +80,8 @@ kiem_trung() { # $1=slug  $2=nhãn
   echo "       canonical của /blog/$slug: ${cb:-(KHÔNG có)}"
   case "$cb" in
     */tech-trends/"$slug") c_ok "trùng nội dung NHƯNG canonical đã gộp về /tech-trends/ — đúng" ;;
-    */blog/"$slug")        c_bad "cả hai cùng 200 và /blog/ tự canonical về chính nó — ĐANG chia đôi tín hiệu" ;;
+    */blog/"$slug")        c_bad "cả hai cùng 200 và /blog/ tự canonical về chính nó — ĐANG chia đôi tín hiệu"
+                           ANH_FE_CU=1 ;;
     "")                    c_bad "/blog/$slug không có thẻ canonical nào" ;;
     *)                     c_bad "canonical trỏ đi đâu đó lạ: $cb" ;;
   esac
@@ -162,4 +166,19 @@ fi
 
 echo
 echo "═══ $PASS đạt · $FAIL hỏng · $WARN cảnh báo ═══"
+
+# Phân biệt hai thứ trông giống hệt nhau trong bảng trên: "bản vá chưa lên
+# production" và "bản vá đã lên mà vẫn hỏng". Nhầm hai cái này là đi sửa nhầm
+# chỗ — đã dẫm 25/08/2026, mất một vòng chẩn đoán.
+#
+# Canonical chéo ở /blog/<slug> là phép thử tốt vì nó THUẦN FRONTEND: không
+# phụ thuộc nginx, không phụ thuộc DB, không phụ thuộc thứ tự bước deploy. Nó
+# còn tự trỏ về chính nó nghĩa là ảnh frontend đang chạy KHÔNG chứa bản vá.
+if [ "$ANH_FE_CU" = 1 ]; then
+    echo
+    echo "⚠️  Ảnh frontend đang chạy là bản CŨ (canonical chéo chưa có hiệu lực)."
+    echo "    Nhiều mục hỏng ở trên có thể chỉ là 'chưa deploy', không phải 'vá không ăn'."
+    echo "    Chạy 'bash deploy-nha.sh' rồi đo lại trước khi đi tìm lỗi khác."
+fi
+
 [ "$FAIL" -eq 0 ]

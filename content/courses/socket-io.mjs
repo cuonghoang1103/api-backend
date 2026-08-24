@@ -21,6 +21,7 @@ import s01 from './socket-io/s01-vong-doi.mjs';
 import s02 from './socket-io/s02-transport.mjs';
 import s03 from './socket-io/s03-room.mjs';
 import s04 from './socket-io/s04-presence.mjs';
+import s05 from './socket-io/s05-cluster.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 3 },
@@ -44,5 +45,6 @@ export default {
     s02,
     s03,
     s04,
+    s05,
   ],
 };

@@ -476,12 +476,12 @@ for preset in ultrafast veryfast fast medium slow; do
   for crf in 20 23 26; do
     out="/tmp/bench-\${preset}-\${crf}.mp4"
     start=$(date +%s%N)
-    ffmpeg -y -hide_banner -loglevel error -i "$IN" \
-      -c:v libx264 -crf "$crf" -preset "$preset" -pix_fmt yuv420p \
+    ffmpeg -y -hide_banner -loglevel error -i "$IN" \\
+      -c:v libx264 -crf "$crf" -preset "$preset" -pix_fmt yuv420p \\
       -c:a aac -b:a 128k -movflags +faststart "$out"
     ms=$(( ($(date +%s%N) - start) / 1000000 ))
     bytes=$(stat -c%s "$out" 2>/dev/null || stat -f%z "$out")
-    printf '%-10s crf=%-3s %7d ms %9d bytes\n' "$preset" "$crf" "$ms" "$bytes"
+    printf '%-10s crf=%-3s %7d ms %9d bytes\\n' "$preset" "$crf" "$ms" "$bytes"
     rm -f "$out"
   done
 done
@@ -671,12 +671,12 @@ for preset in ultrafast veryfast fast medium slow; do
   for crf in 20 23 26; do
     out="/tmp/bench-\${preset}-\${crf}.mp4"
     start=$(date +%s%N)
-    ffmpeg -y -hide_banner -loglevel error -i "$IN" \
-      -c:v libx264 -crf "$crf" -preset "$preset" -pix_fmt yuv420p \
+    ffmpeg -y -hide_banner -loglevel error -i "$IN" \\
+      -c:v libx264 -crf "$crf" -preset "$preset" -pix_fmt yuv420p \\
       -c:a aac -b:a 128k -movflags +faststart "$out"
     ms=$(( ($(date +%s%N) - start) / 1000000 ))
     bytes=$(stat -c%s "$out" 2>/dev/null || stat -f%z "$out")
-    printf '%-10s crf=%-3s %7d ms %9d bytes\n' "$preset" "$crf" "$ms" "$bytes"
+    printf '%-10s crf=%-3s %7d ms %9d bytes\\n' "$preset" "$crf" "$ms" "$bytes"
     rm -f "$out"
   done
 done

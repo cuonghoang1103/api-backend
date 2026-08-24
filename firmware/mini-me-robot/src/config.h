@@ -247,7 +247,11 @@
 #define BATTERY_CELLS     3      // số viên nối tiếp
 #define BATTERY_DIVIDER  4.33f   // (100k + 30k) / 30k
 #define BATTERY_FULL_MV  12600   // 3 × 4,20V
-#define BATTERY_EMPTY_MV  9000   // 3 × 3,00V — ngưỡng BMS cắt
+#define BATTERY_EMPTY_MV  9600   /* 3 × 3,20V — ĐÚNG ngưỡng cắt của BMS đã mua.
+                                  * Không phải 9000: bo BMS 3S 20A ghi "điện thế
+                                  * xả cạn 9,6V". Để 9000 thì firmware tưởng còn
+                                  * dùng được tới 9V và báo ~3% đúng lúc BMS cắt
+                                  * nguồn — người dùng thấy "còn pin" mà robot tắt. */
 
 // ─── An toàn ──────────────────────────────────────────────
 // Nằm trong FIRMWARE, không phải trên server: mất mạng thì robot

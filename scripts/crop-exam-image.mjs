@@ -143,6 +143,70 @@ async function detectBannerHeight(buf, width) {
   return 34; // fallback to the known constant if detection is inconclusive
 }
 
+// Third known source layout ("red-divider"): a fixed left sidebar (site
+// wordmark + progress bar + an "Answer" checkbox panel + Back/Next buttons)
+// separated from the real question+options panel by a solid RED vertical
+// rule, plus a yellow circular page-number badge fixed in the bottom-right
+// corner. None of trim()'s existing branches handle this — the checkbox
+// panel and badge sit far from the real content, so a plain bounding-box
+// trim() stays close to full-canvas size (caught 24/08/2026 on SWR302
+// Đề 7-26: ~12/20 decks used this layout and shipped essentially uncropped).
+//
+// Fix: detect the red rule (a column that's >40% strongly-red down its
+// height — distinct enough that no other known layout's black/gray accent
+// bars false-positive), slice everything to its right, white out the
+// badge's fixed corner rectangle, then trim with a LOOSENED threshold (30,
+// not the usual 10) because this template's empty panel area is filled
+// light gray (~240,240,240) rather than pure white — default threshold
+// treats that as real content. Finally cap the height: a stray horizontal
+// footer rule sits ~500px below the real content and pins trim()'s box to
+// it even at high threshold (the rule itself is dark enough to stay
+// "non-white" at any reasonable threshold), so anything past a generous
+// MAX_CONTENT_H is guaranteed template chrome, not text.
+async function findRedDividerX(buf, width, height) {
+  const { data, info } = await sharp(buf).raw().toBuffer({ resolveWithObject: true });
+  const channels = info.channels;
+  let best = { x: -1, count: 0 };
+  for (let x = 0; x < width; x++) {
+    let redCount = 0;
+    for (let y = 0; y < height; y += 2) {
+      const i = (y * width + x) * channels;
+      const r = data[i], g = data[i + 1], b = data[i + 2];
+      if (r > 180 && g < 90 && b < 90) redCount++;
+    }
+    if (redCount > best.count) best = { x, count: redCount };
+  }
+  return best.count / (height / 2) > 0.4 ? best.x : -1;
+}
+
+const RED_DIVIDER_MAX_CONTENT_H = 460;
+
+async function cropRedDividerLayout(whited, meta) {
+  const redX = await findRedDividerX(whited, meta.width, meta.height);
+  if (redX < 0) return null;
+
+  const badgeRect = await sharp({ create: { width: 220, height: 130, channels: 4, background: WHITE } }).png().toBuffer();
+  const badgeWhited = await sharp(whited).composite([{ input: badgeRect, left: meta.width - 220, top: meta.height - 130 }]).png().toBuffer();
+
+  const rightLeft = redX + 8;
+  const rightW = meta.width - rightLeft;
+  const rightBuf = await sharp(badgeWhited).extract({ left: rightLeft, top: 0, width: rightW, height: meta.height }).png().toBuffer();
+
+  const { info: tinfo } = await sharp(rightBuf).trim({ background: '#ffffff', threshold: 30 }).toBuffer({ resolveWithObject: true });
+  const left = Math.abs(tinfo.trimOffsetLeft);
+  const top = Math.abs(tinfo.trimOffsetTop);
+  const cappedHeight = Math.min(tinfo.height, RED_DIVIDER_MAX_CONTENT_H, meta.height - top);
+  const capped = await sharp(rightBuf)
+    .extract({ left, top, width: Math.min(tinfo.width, rightW - left), height: cappedHeight })
+    .png()
+    .toBuffer();
+
+  // re-trim the capped slice tightly — most questions are far shorter than
+  // the cap, so this drops the trailing gray filler down to just the text.
+  const { info: tinfo2 } = await sharp(capped).trim({ background: '#ffffff', threshold: 30 }).toBuffer({ resolveWithObject: true });
+  return sharp(capped).extract({ left: 0, top: 0, width: tinfo2.width, height: tinfo2.height }).png().toBuffer();
+}
+
 const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.png'));
 let done = 0;
 for (const f of files) {
@@ -152,10 +216,14 @@ for (const f of files) {
 
   const whitedRect = await whiteOutWatermark(sharp(src), meta.height);
   const whited = await whiteOutGhostWatermark(whitedRect, meta.width, meta.height);
-  const bannerHeight = await detectBannerHeight(whited, meta.width);
+
+  const redDividerBuf = await cropRedDividerLayout(whited, meta);
+  const bannerHeight = redDividerBuf ? 0 : await detectBannerHeight(whited, meta.width);
 
   let finalBuf;
-  if (bannerHeight > 0) {
+  if (redDividerBuf) {
+    finalBuf = redDividerBuf;
+  } else if (bannerHeight > 0) {
     // banner layout: trim banner strip and body separately, re-stack at
     // the body's trimmed width so the banner doesn't force full width.
     const bannerBuf = await sharp(whited).extract({ left: 0, top: 0, width: meta.width, height: bannerHeight }).png().toBuffer();

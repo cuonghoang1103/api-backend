@@ -187,7 +187,7 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <span><b>Vỏ</b> 14 mảnh PETG</span>
     <span><b>Vít</b> M3 tự ren</span>
     <span><b>Khung</b> TP101 · 155 mm</span>
-    <span><b>Nguồn thử</b> adapter 12 V / 3 A</span>
+    <span><b>Nguồn</b> 12 V/3 A để bàn · 12,6 V/2 A để sạc</span>
   </div>
 </header>
 
@@ -677,11 +677,11 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <thead><tr><th></th><th class="num">2S (bản cũ)</th><th class="num">3S (nay)</th></tr></thead>
     <tbody>
       <tr><td>Sạc đầy</td><td class="num">8,4 V</td><td class="num">12,6 V</td></tr>
-      <tr><td>Cạn — BMS cắt</td><td class="num">6,0 V</td><td class="num">9,0 V</td></tr>
+      <tr><td>Cạn — BMS cắt</td><td class="num">6,0 V</td><td class="num"><b>9,6 V</b></td></tr>
       <tr><td>Bộ chia áp đo pin</td><td class="num">100k / 47k</td><td class="num"><b>100k / 30k</b></td></tr>
       <tr><td>Hệ số chia</td><td class="num">3,128</td><td class="num"><b>4,33</b></td></tr>
-      <tr><td>BMS</td><td class="num">2S</td><td class="num"><b>3S có cân bằng, ≥ 20 A</b></td></tr>
-      <tr><td>Sạc</td><td class="num">TP5100</td><td class="num"><b>12,6 V CC/CV</b></td></tr>
+      <tr><td>BMS</td><td class="num">2S <span style="opacity:.7">(có sẵn, KHÔNG dùng được)</span></td><td class="num"><b>3S 20A có cân bằng</b></td></tr>
+      <tr><td>Nguồn sạc</td><td class="num">TP5100</td><td class="num"><b>adapter 12,6 V 2A</b><br><span style="font-size:12px;opacity:.75">jack DC 5.5×2.1</span></td></tr>
     </tbody>
   </table></div>
 
@@ -689,6 +689,39 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <span class="warn-h">Giữ bộ trở cũ là cháy chân GPIO 1</span>
     <p>Hệ số 3,128 tính cho 2S. Với 3S: <b>10,6 V → 3,39 V</b> (đã vượt trần 3,3 V của ADC) và <b>12,6 V → 4,03 V</b>. Bộ đúng là <b>100k / 30k</b> → 12,6 V ra 2,91 V, còn dư biên an toàn. <code>220k / 68k</code> cũng được và rò ít hơn.</p>
     <p><b>Đừng dùng 150k/47k</b> — nó ra 3,01 V, sát trần quá; chỉ cần một viên sạc hơi quá là chạm 3,3 V.</p>
+  </div>
+
+
+  <div class="note">
+    <span class="warn-h">Bộ đã chốt mua — 23/08/2026</span>
+    <p><b>Bo "Mạch sạc Pin 3S 12V-20A, sạc cân bằng và bảo vệ"</b> — trên bo in <code>0V</code> · <code>4.2V</code> · <code>8.4V</code> · <code>12.6V</code>, đó chính là bốn mối <code>B−</code> <code>B1</code> <code>B2</code> <code>B+</code>. Xả liên tục 20 A, tức thời 40 A, size 58 × 20 × 3,6 mm.</p>
+    <p><b>Nó KHÔNG tự tạo ra 12,6 V</b> — mô tả ghi "sử dụng sạc 12,6 V – 13 V, đề xuất nguồn có hạn dòng". Nên mua kèm <b>adapter 12,6 V 2A</b> (cùng shop có phân loại đó, jack DC 5.5×2.1 — đúng cỡ jack sạc bạn sắp lắp).</p>
+    <p>Bộ này thay hẳn module sạc Type-C: module ấy chỉ sạc chứ <b>không cân bằng cell</b>, dùng nó thì vẫn phải mua thêm BMS. Bo trên gộp cả hai việc.</p>
+    <p>⚠️ Bo ghi <b>xả cạn 9,6 V</b> (3,20 V/cell) chứ không phải 9,0 V. <code>BATTERY_EMPTY_MV</code> đã sửa theo — để 9000 thì firmware báo ~3% đúng lúc BMS cắt nguồn, tức người dùng thấy "còn pin" mà robot tắt ngóm.</p>
+  </div>
+
+
+  <div class="note">
+    <span class="warn-h">Khay thật của robot này — đo và hàn xong 23/08/2026</span>
+    <p>Khay 3 ngăn chỉ ra <b>2 dây</b>, phải hàn thêm hai dây cân bằng. Trong khay pin, <b>nốt đồng vàng phẳng là cực DƯƠNG</b>, <b>lò xo là cực ÂM</b>, và ba viên xếp <b>xen kẽ chiều</b>. Hai mối nối tiếp lộ ngay <b>mặt trước</b>, không cần lật mặt sau.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Dây</th><th>Hàn vào</th><th class="num">Đo được</th><th class="num">Cắm chân BMS</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">B−</td><td>dây <b>đen</b> có sẵn</td><td class="num">0 V</td><td class="num"><code>0V</code></td></tr>
+        <tr><td class="mono">B1</td><td>nốt đồng <b>ngăn 3, đầu DƯỚI</b></td><td class="num">3,52 V</td><td class="num"><code>4.2V</code></td></tr>
+        <tr><td class="mono">B2</td><td>nốt đồng <b>ngăn 2, đầu TRÊN</b></td><td class="num">7,04 V</td><td class="num"><code>8.4V</code></td></tr>
+        <tr><td class="mono">B+</td><td>dây <b>đỏ</b> có sẵn</td><td class="num">10,56 V</td><td class="num"><code>12.6V</code></td></tr>
+      </tbody>
+    </table></div>
+    <p>Ba viên đều <b>3,52 V</b> — 7,04 ÷ 3,52 = đúng 2,00 và 10,56 = đúng 3 lần. Pack cân bằng hoàn hảo.</p>
+    <p><b>Hàn vào nốt đồng, đừng hàn vào lò xo:</b> nốt đồng phẳng nên thiếc bám trong hai giây, còn lò xo tản nhiệt nhanh, khó ăn thiếc, và hàn lâu làm mất tính đàn hồi khiến viên pin tiếp xúc kém về sau.</p>
+  </div>
+
+  <div class="warn">
+    <span class="warn-h"><code>B1</code> và <code>B2</code> KHÔNG phải cực dương hay âm</span>
+    <p>Chúng là <b>nấc thang điện áp</b>, không phải cực. Điện áp luôn là hiệu số giữa hai điểm, nên "3,52 V" có nghĩa là "cao hơn dây đen 3,52 V". BMS lấy hiệu số từng bậc để biết từng viên: viên 1 = <code>B1−B−</code>, viên 2 = <code>B2−B1</code>, viên 3 = <code>B+−B2</code>. Bốn điểm mới cho ra ba hiệu số — đó là lý do cần bốn dây.</p>
+    <p><b>Nhưng thứ tự thì sống còn.</b> Đấu ngược <code>B1</code> với <code>B2</code> thì BMS tính ra viên 1 = 7,04 V (tưởng quá áp nghiêm trọng) và viên 2 = <b>−3,52 V</b>, một điện áp âm không tồn tại. Gặp số đó BMS có thể hỏng ngay hoặc cắt vĩnh viễn. Dùng hai màu dây khác nhau và dán nhãn lúc hàn.</p>
+    <p>Cách ghép khỏi nhầm: bo BMS in sẵn <code>0V</code> · <code>4.2V</code> · <code>8.4V</code> · <code>12.6V</code> — <b>số nhỏ vào chỗ số nhỏ</b>. Số trên bo là điện áp lúc đầy, pack đang 3,52 V/viên nên đo thấp hơn, thứ tự vẫn khớp.</p>
   </div>
 
   <h3>Làm pack — thứ tự này quan trọng</h3>
@@ -830,6 +863,83 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <p>Đặt công tắc ở <b>đường dương, sau jack</b>, để rút jack ra là cắt hẳn mọi thứ kể cả khi công tắc đang bật.</p>
   </div>
 
+
+  <figure class="fig">
+    <svg viewBox="0 0 420 350" role="img" aria-label="Sơ đồ đấu công tắc DPDT sáu chân: hai chân trên nối tắt nhận cực dương từ pin, hai chân dưới nối tắt nhận cực dương adapter, hai chân giữa nối tắt đi ra tải, còn hai cực âm nối chung không qua công tắc">
+      <defs><marker id="arc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+
+      <rect x="150" y="60" width="120" height="170" rx="4" fill="currentColor" fill-opacity=".07" stroke="currentColor" stroke-width="1.6"/>
+      <text x="210" y="50" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" text-anchor="middle" font-weight="600">CÔNG TẮC DPDT — nhìn từ MẶT DƯỚI</text>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.4">
+        <rect x="168" y="76" width="26" height="14"/><rect x="226" y="76" width="26" height="14"/>
+        <rect x="168" y="138" width="26" height="14"/><rect x="226" y="138" width="26" height="14"/>
+        <rect x="168" y="200" width="26" height="14"/><rect x="226" y="200" width="26" height="14"/>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" text-anchor="middle">
+        <text x="181" y="87">1</text><text x="239" y="87">4</text>
+        <text x="181" y="149">2</text><text x="239" y="149">5</text>
+        <text x="181" y="211">3</text><text x="239" y="211">6</text>
+      </g>
+
+      <g stroke="#B8860B" stroke-width="2.6" fill="none">
+        <line x1="194" y1="83" x2="226" y2="83"/>
+        <line x1="194" y1="145" x2="226" y2="145"/>
+        <line x1="194" y1="207" x2="226" y2="207"/>
+      </g>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="8.5" fill="#B8860B" text-anchor="middle" font-weight="600">
+        <text x="210" y="78">nối tắt</text><text x="210" y="140">nối tắt</text><text x="210" y="202">nối tắt</text>
+      </g>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.5">
+        <line x1="100" y1="83" x2="166" y2="83" marker-end="url(#arc)"/>
+        <line x1="100" y1="207" x2="166" y2="207" marker-end="url(#arc)"/>
+        <line x1="254" y1="145" x2="330" y2="145" marker-end="url(#arc)"/>
+      </g>
+
+      <g font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor">
+        <text x="96" y="80" text-anchor="end" font-weight="600">BMS P+</text>
+        <text x="96" y="93" text-anchor="end" font-size="9" opacity=".75">cực dương pin</text>
+        <text x="96" y="204" text-anchor="end" font-weight="600">adapter +</text>
+        <text x="96" y="217" text-anchor="end" font-size="9" opacity=".75">ruột jack DC</text>
+        <text x="334" y="142" font-weight="600">ra tải</text>
+        <text x="334" y="155" font-size="9" opacity=".75">→ tụ 2200µF → phân nhánh</text>
+      </g>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.5" stroke-dasharray="5 3">
+        <path d="M100,278 L210,278"/>
+        <path d="M100,300 L210,300"/>
+        <path d="M210,278 L210,300"/>
+        <line x1="210" y1="289" x2="330" y2="289" marker-end="url(#arc)"/>
+      </g>
+      <circle cx="210" cy="289" r="3.5" fill="currentColor"/>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor">
+        <text x="96" y="282" text-anchor="end" font-weight="600">BMS P−</text>
+        <text x="96" y="304" text-anchor="end" font-weight="600">adapter −</text>
+        <text x="334" y="286" font-weight="600">đất chung</text>
+        <text x="334" y="299" font-size="9" opacity=".75">GND toàn robot</text>
+      </g>
+      <text x="210" y="326" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity=".8" text-anchor="middle">hai cực ÂM chập thẳng vào nhau — KHÔNG qua công tắc</text>
+      <text x="210" y="245" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="currentColor" opacity=".7" text-anchor="middle">nấc giữa = cả 1·4 lẫn 3·6 đều hở ⇒ TẮT</text>
+    </svg>
+    <figcaption>Ba nét vàng là <b>ba mối nối tắt</b> biến hai mạch của DPDT thành một mạch gánh gấp đôi dòng: <code>1↔4</code>, <code>2↔5</code>, <code>3↔6</code>. Dùng dây 18 AWG hoặc mẩu đồng. Đường âm đi thẳng, không dính gì tới công tắc.</figcaption>
+  </figure>
+
+
+  <div class="warn">
+    <span class="warn-h">HAI adapter, HAI jack — dán nhãn ngay lúc lắp</span>
+    <div class="tw"><table>
+      <thead><tr><th>Adapter</th><th class="num">Cắm vào</th><th>Việc của nó</th></tr></thead>
+      <tbody>
+        <tr><td><b>12 V / 3 A</b><br><span style="opacity:.75;font-size:13px">JH-1230, đã có sẵn</span></td><td class="num">jack <b>NGUỒN</b></td><td>qua công tắc tới tải. Đủ cho robot đứng bàn nói chuyện và cử động tay (1,1–1,7 A); lúc bứt tốc vượt 3 A nên hơi yếu, tụ 2200 µF đỡ phần xung</td></tr>
+        <tr><td><b>12,6 V / 2 A</b><br><span style="opacity:.75;font-size:13px">đặt kèm BMS</span></td><td class="num">jack <b>SẠC</b></td><td>thẳng vào <code>B+</code>/<code>B−</code> của BMS. Sạc pack 2500 mAh trong ~1,25 giờ</td></tr>
+      </tbody>
+    </table></div>
+    <p><b>Cắm nhầm thì sao:</b> 12 V vào jack sạc ⇒ pack không bao giờ đầy, chỉ lên 4,00 V/cell (80 %) rồi dừng. 12,6 V vào jack nguồn ⇒ vô hại nhưng chỉ có 2 A, thiếu cho động cơ.</p>
+    <p><b>Và đừng dùng adapter 12 V để sạc</b> dù nó cắm vừa. Nó là nguồn áp thuần, không có mạch CC/CV: cắm vào pack 10,35 V thì chênh 1,65 V trên nội trở 90 mΩ đòi 18 A lý thuyết — adapter tự sụt áp rồi chạy hết công suất liên tục, nóng, và không có giai đoạn CV để kết thúc đúng cách.</p>
+    <p>Cả hai đều là <b>jack DC 5.5×2.1, tâm dương</b> — cắm lọt lẫn nhau, nên nhãn dán là thứ duy nhất ngăn nhầm.</p>
+  </div>
+
   <h3>Bảy chặng — đo xong chặng này mới sang chặng sau</h3>
   <p>Đây là chỗ dễ mất linh kiện nhất của cả robot: một lần đấu ngược là mất pack, mất BMS, hoặc mất ESP32. Nên <b>mỗi chặng kết thúc bằng một phép đo</b>, và không nối tải nào cho tới chặng cuối.</p>
 
@@ -846,6 +956,30 @@ details[open] summary{border-bottom:1px solid var(--line)}
     </tbody>
   </table></div>
 
+
+  <div class="warn">
+    <span class="warn-h">Đo chiều gạt TRƯỚC KHI hàn — đừng đoán</span>
+    <p>Ở phần lớn công tắc gạt, <b>gạt cần LÊN thì chân giữa nối xuống chân DƯỚI</b> chứ không phải chân trên — cơ cấu đòn bẩy lật ngược. Nhưng không phải lô nào cũng vậy, và hàn xong mới phát hiện thì phải tháo cả sáu mối.</p>
+    <p><b>Cách đo, 30 giây:</b> để đồng hồ ở thang thông mạch (có tiếng bíp). Que một cắm chân <b>2</b> (giữa cột trái). Que kia chạm chân <b>1</b>, rồi chân <b>3</b>. Gạt cần lên, xuống, giữa và ghi lại nấc nào thông với chân nào.</p>
+    <p>Rồi mới quyết định gán: bạn muốn <b>gạt lên = pin</b> thì nối <code>BMS P+</code> vào cặp chân mà nấc trên thông tới. Ba nấc phải cho ra: một nấc thông pin, nấc giữa <b>không thông gì cả</b>, nấc kia thông adapter.</p>
+  </div>
+
+  <div class="tw"><table>
+    <thead><tr><th class="num">Chân</th><th>Nối vào</th><th>Dây</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td class="num"><b>1 + 4</b></td><td><code>P+</code> của BMS</td><td class="num">18 AWG</td><td>cực dương pin. Hai chân này <b>nối tắt với nhau</b> rồi mới nhận một sợi dây vào</td></tr>
+      <tr><td class="num"><b>3 + 6</b></td><td>ruột jack adapter</td><td class="num">18 AWG</td><td>cực dương adapter, cũng nối tắt hai chân</td></tr>
+      <tr><td class="num"><b>2 + 5</b></td><td>ra tải</td><td class="num">18 AWG</td><td>nối tắt, rồi một sợi đi tới tụ 2200 µF và điểm phân nhánh</td></tr>
+      <tr><td class="num">—</td><td><code>P−</code> của BMS <b>+</b> vỏ jack adapter</td><td class="num">18 AWG</td><td><b>chập thẳng vào nhau, không qua công tắc.</b> Đây là đất chung của toàn robot</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note">
+    <span class="warn-h">Vì sao cắm cả hai nguồn cùng lúc vẫn an toàn</span>
+    <p>Giả sử adapter đang cắm mà bạn gạt sang <b>pin</b>: cực âm adapter vẫn nối đất chung, nhưng cực dương của nó bị công tắc bỏ hở ⇒ <b>mạch không khép kín, không có dòng nào chạy</b>. Ngược lại cũng thế.</p>
+    <p>Nghĩa là bạn không cần nhớ rút jack trước khi gạt. Chỉ cần đừng bao giờ nối hai cực dương lại với nhau ở đâu đó ngoài công tắc.</p>
+  </div>
+
   <h3>Ba nhánh — cái nào đi đâu</h3>
   <div class="tw"><table>
     <thead><tr><th>Nhánh</th><th class="num">Dây</th><th class="num">Dòng</th><th>Nuôi những gì</th></tr></thead>
@@ -861,7 +995,9 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <p><b>Vặn LM2596 ra 5,0 V TRƯỚC KHI cắm tải.</b> Nó xuất xưởng ở mức bất kỳ — có con ra 12 V nguyên. Cắm servo vào rồi mới vặn là servo ăn nguyên mức đang để.</p>
     <p><b><code>VCC</code> của IBT-2 cắm 3V3, không phải 12 V.</b> Chỉ <code>B+</code>/<code>B−</code> mới nhận 12 V; <code>VCC</code> là chân nuôi phần logic, cấp 12 V vào đó là chết bo.</p>
     <p><b>Đừng lấy 3V3 từ chân ESP32.</b> Ba màn phải lấy ở khối <code>3V3</code> của MKE-B01 — đo thật 23/08: lấy từ ESP32 thì một màn mờ và tự tắt mỗi giây.</p>
-    <p><b>Tụ hoá đúng cực.</b> Dải màu nhạt dọc thân là cực <b>âm</b>, chân âm cũng ngắn hơn. Cắm ngược vào 12 V thì nổ trong vài giây. Tụ ở rail 12 V lấy loại <b>≥ 25 V</b>.</p>
+    <p><b>Tụ hoá đúng cực — hai dấu hiệu phải khớp nhau.</b> <b>Chân DÀI là cực dương</b>, chân ngắn là cực âm; và trên thân có <b>dải màu nhạt in dấu <code>−</code></b> chỉ về phía chân ngắn. Nếu chân đã bị cắt bằng nhau thì tin vào dải trên thân, đừng đoán theo chân.</p>
+    <p>Tụ mắc <b>SONG SONG</b> với nguồn — bắc ngang giữa đường dương và đường âm ngay tại điểm phân nhánh, <b>không nối tiếp</b> vào đường dây. Dòng vẫn đi thẳng từ công tắc ra ba nhánh; tụ chỉ ngồi cạnh làm kho điện. Con <code>104</code> đi kèm thì không phân cực, cắm chiều nào cũng được.</p>
+    <p>Cắm ngược vào 12 V thì nổ trong vài giây, kêu to và bắn giấy bạc. Tụ ở rail 12 V lấy loại <b>≥ 25 V</b> — con số in ngay trên thân cạnh dung lượng.</p>
   </div>
 
   <div class="note">
@@ -1121,7 +1257,7 @@ details[open] summary{border-bottom:1px solid var(--line)}
       <tr><td class="mono">PCF8575</td><td>mở rộng thêm 16 chân I/O</td><td>sau khi dời sáu servo sang PCA9685 thì ESP32 còn dư chân — <code>config.h</code> ghi rõ GPIO 38 và 45 vẫn trống</td></tr>
       <tr><td class="mono">XL6009</td><td>tăng áp</td><td>không có rail nào cần điện áp cao hơn nguồn vào; cả ba mức 12 / 5 / 3V3 đều là hạ áp</td></tr>
       <tr><td class="mono">ESP32-CAM</td><td>mắt nhìn</td><td>chưa có trong thiết kế hiện tại. Đầu đã kín chỗ vì hai màn tròn</td></tr>
-      <tr><td class="mono">TP5100 · BMS 2S</td><td>sạc và bảo vệ pin</td><td>chỉ cần khi chạy pin thật. Lắp thử và mọi phép đo trên bàn đều dùng adapter 12 V</td></tr>
+      <tr><td class="mono">TP5100 · BMS 2S</td><td>sạc và bảo vệ pin</td><td>chỉ cần khi chạy pin thật, và đều là loại 2S nên KHÔNG dùng được với pack 3S</td></tr>
     </tbody>
   </table></div>
   <div class="note">

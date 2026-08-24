@@ -875,7 +875,7 @@ export function Button({ className, variant = 'primary', ...props }) {
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">remove the conflict</span><span class="lz-d">Two utilities for the same property at the same scope is a bug (lesson 3.2). Delete the one you did not mean. This resolves the majority of cases and is the only fix that leaves the code simpler than it found it.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">merge instead of concatenate</span><span class="lz-d">If the classes are composed at runtime, route them through <code>cn()</code> (lesson 3.4). Last-written wins, which is what the code already looked like it did.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">check the layer</span><span class="lz-d">If a hand-written CSS rule is winning, it may be sitting outside any <code>@layer</code> — in which case it beats utilities structurally, and moving it into <code>@layer components</code> fixes it properly. Chapter 7 measures this repo and finds 88% of its CSS in exactly that position.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">check the layer</span><span class="lz-d">If a hand-written CSS rule is winning, check two things: its specificity, and whether it sits outside any <code>@layer</code>. Chapter 7 measures this repo — 88% of its CSS is unlayered — and works out which of those two is actually deciding, because the fix differs.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">then, and only then, <code>!</code></span><span class="lz-d">When you genuinely cannot change the losing side — third-party CSS you do not control, a widget that injects inline styles — <code>!p-8</code> is the correct tool. Leave a comment saying which rule you are overriding, because the next reader cannot see it from here.</span></div>
 </div>
 
@@ -932,7 +932,7 @@ $ grep -c '!important' src/app/globals.css
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — !important and cascade origins</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/important — the precise statement that <code>!important</code> changes cascade origin rather than specificity, which is why it is unconditional.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — the important modifier</span><span class="lc-sub">tailwindcss.com/docs/configuration#important — the <code>!</code> prefix, the config-level <code>important: true</code>, and the explicit note that the latter is for legacy-migration scenarios.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Cascade layers</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/@layer — including the counter-intuitive rule that <code>!important</code> REVERSES layer priority, which is worth knowing before combining the two.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 7 — layers, and the 88% measurement</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — why most of this repository's CSS beats utilities structurally, and what moving it into a layer would change.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 7 — layers, and the 88% measurement</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — how much of this repository's CSS beats utilities, and whether the cause is specificity or source order. The answer changes what the fix is.</span></span></div>
 </div>
 
 <div class="ml-vi">
@@ -964,7 +964,7 @@ $ grep -c '!important' src/app/globals.css
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">GỠ cái xung đột</span><span class="lz-d">Hai tiện ích cùng thuộc tính ở cùng phạm vi là một CON BỌ (bài 3.2). Xoá cái bạn không định viết. Cách này giải quyết PHẦN LỚN các ca và là cú vá DUY NHẤT để lại mã đơn giản hơn lúc nó tới.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">HỢP NHẤT thay vì NỐI chuỗi</span><span class="lz-d">Nếu các lớp được soạn lúc chạy, hãy cho chúng đi qua <code>cn()</code> (bài 3.4). Viết-cuối-thắng, đúng cái mà mã VỐN TRÔNG như đang làm.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">kiểm cái LAYER</span><span class="lz-d">Nếu một quy tắc CSS viết tay đang thắng, có thể nó nằm NGOÀI mọi <code>@layer</code> — trường hợp ấy nó thắng tiện ích về mặt CẤU TRÚC, và dời nó vào <code>@layer components</code> mới vá đúng. Chương 7 đo kho này và tìm ra 88% CSS của nó ở đúng vị thế đó.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">kiểm cái LAYER</span><span class="lz-d">Nếu một quy tắc CSS viết tay đang thắng, hãy kiểm HAI thứ: ĐỘ ĐẶC HIỆU của nó, và nó có nằm NGOÀI mọi <code>@layer</code> không. Chương 7 đo kho này — 88% CSS của nó không-layer — và tìm ra cái nào trong hai thứ ấy THẬT SỰ quyết định, vì cú vá KHÁC nhau.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">rồi, và CHỈ khi đó, dùng <code>!</code></span><span class="lz-d">Khi bạn THẬT SỰ không đổi được phía đang thua — CSS bên thứ ba bạn không kiểm soát, một widget bơm inline style — thì <code>!p-8</code> là công cụ ĐÚNG. Hãy để lại một comment nói bạn đang đè quy tắc NÀO, vì người đọc sau không thấy được từ đây.</span></div>
 </div>
 
@@ -1141,7 +1141,7 @@ $ grep -c '!important' src/app/globals.css
           {
             question: 'A hand-written rule beats your utility. Before reaching for <code>!</code>, what should you check?|||Một quy tắc viết tay thắng tiện ích của bạn. TRƯỚC khi với tay tới <code>!</code>, bạn nên kiểm gì?',
             options: [
-              'Whether that rule sits OUTSIDE any <code>@layer</code> — if so it beats utilities structurally, and moving it into <code>@layer components</code> fixes every utility at once instead of one element|||Xem quy tắc ấy có nằm NGOÀI mọi <code>@layer</code> không — nếu có thì nó thắng tiện ích về mặt CẤU TRÚC, và dời nó vào <code>@layer components</code> vá MỌI tiện ích cùng lúc thay vì một thẻ',
+              'Its SPECIFICITY first, then whether it sits outside any <code>@layer</code> — a more specific rule wins from anywhere, so only a tie is fixed by layering|||ĐỘ ĐẶC HIỆU của nó TRƯỚC, rồi mới xem nó có nằm NGOÀI mọi <code>@layer</code> không — một quy tắc đặc hiệu hơn thắng từ bất cứ đâu, nên chỉ một cú HOÀ mới vá được bằng layer',
               'Whether the utility is spelled correctly|||Xem tiện ích có gõ đúng chính tả không',
               'Whether the browser supports the property|||Xem trình duyệt có hỗ trợ thuộc tính đó không',
               'Nothing — <code>!</code> is the standard fix for cascade conflicts|||Không gì cả — <code>!</code> là cú vá tiêu chuẩn cho xung đột cascade',

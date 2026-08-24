@@ -25,6 +25,7 @@ import s05 from './socket-io/s05-cluster.mjs';
 import s06 from './socket-io/s06-ack.mjs';
 import s07 from './socket-io/s07-webrtc.mjs';
 import s08 from './socket-io/s08-crdt.mjs';
+import s09 from './socket-io/s09-raw-ws.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 3 },
@@ -52,5 +53,6 @@ export default {
     s06,
     s07,
     s08,
+    s09,
   ],
 };

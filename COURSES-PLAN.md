@@ -40,7 +40,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 13 | `deploy-vps` | `deploy-vps` — Deploy lên VPS | ✅ **XONG** (12 mục · 70 bài · 1.133k · TB 16.190) |
 | 14 | `github-actions` | `github-actions` — GitHub Actions | ✅ **XONG** (11 mục · 66 bài · 1.103k · TB 16.720) |
 | 15 | `tailwind-css` | `tailwind-css` — Tailwind CSS | ✅ **XONG** (12/12 mục · 66 bài · 962k) |
-| 16 | `socket-io` | `socket-io` — Socket.IO | ✅ **XONG** (12/12 mục · 66 bài · 554k) |
+| 16 | `socket-io` | `socket-io` — Socket.IO | ⚠️ **XONG nhưng DƯỚI SÀN** (12/12 mục · 66 bài · 554k · TB **8.394** < sàn 9.000) — cần thêm ~40k, xem §4 |
 | 17 | `object-storage-s3` | `object-storage` — Object Storage (Cloudflare R2) | ✅ **XONG** (11 mục · 39 bài · 353k · TB 9.053) |
 | 18 | `media-processing` | `media-processing` — Media Processing (Sharp + FFmpeg) | ✅ **XONG** (11 mục · 37 bài · 576k · TB 15.554) |
 | 19 | `observability-monitoring` | — | ❌ **THIẾU** |
@@ -135,6 +135,16 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 | `typescript` | 7.720 | **8** | 20 | **thiếu sơ đồ trầm trọng** — 8 sơ đồ cho 84 bài |
 | `nextjs` | 5.672 | 56 | 46 | mỏng: 59 bài < 6k ký tự |
 | `web-foundations` | 5.201 | **0** | 56 | **không có sơ đồ nào**; 40 bài < 6k ký tự |
+
+### Khoá MỚI chưa đạt sàn (phát hiện 24/08/2026)
+
+| Khoá | ký tự/bài | Thiếu gì |
+|---|---|---|
+| `socket-io` | **8.394** | Dưới sàn 9.000. Cần thêm ~40k ký tự (66 bài × 9.000 = 594k, hiện 554k). Một bài mỏng: `io-5-2-adapter-api` (5.637). Sơ đồ/nguồn/bẫy đều dư chuẩn (156/210/102) — chỉ thiếu độ dài. |
+
+Khoá này đã bị đánh dấu ✅ XONG ở phiên trước mà không chạy `course-depth-audit.mjs`
+lần cuối. Bài học: **chạy CẢ HAI bộ kiểm trước khi đánh dấu xong**, không chỉ
+`course-content-check.mjs` — cái đầu kiểm cấu trúc, cái sau mới kiểm độ sâu.
 
 **Đã sửa:** `nodejs-1-6-quiz` phương án `user.name = "Bình"` bị bộ kiểm bắt là thiếu `|||`
 (dấu tiếng Việt trong một phương án thuần code). Đổi thành `"Binh"` — cả 5 khoá nay

@@ -39,7 +39,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 12 | `nginx` | `nginx` — Nginx | ✅ **XONG** (12 mục · 70 bài · 1.206k · TB 17.224) |
 | 13 | `deploy-vps` | `deploy-vps` — Deploy lên VPS | ✅ **XONG** (12 mục · 70 bài · 1.133k · TB 16.190) |
 | 14 | `github-actions` | `github-actions` — GitHub Actions | ✅ **XONG** (11 mục · 66 bài · 1.103k · TB 16.720) |
-| 15 | `tailwind-css` | `tailwind-css` — Tailwind CSS | 🚧 **ĐANG LÀM** (6/11 mục · 34 bài · 517k) |
+| 15 | `tailwind-css` | `tailwind-css` — Tailwind CSS | 🚧 **ĐANG LÀM** (7/11 mục · 40 bài · 604k) |
 | 16 | `socket-io` | — | ❌ **THIẾU** |
 | 17 | `object-storage-s3` | — | ❌ **THIẾU** |
 | 18 | `media-processing` | — | ❌ **THIẾU** |

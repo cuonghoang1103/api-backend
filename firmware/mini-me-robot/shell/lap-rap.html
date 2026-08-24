@@ -830,6 +830,68 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <p>Đặt công tắc ở <b>đường dương, sau jack</b>, để rút jack ra là cắt hẳn mọi thứ kể cả khi công tắc đang bật.</p>
   </div>
 
+
+  <figure class="fig">
+    <svg viewBox="0 0 420 350" role="img" aria-label="Sơ đồ đấu công tắc DPDT sáu chân: hai chân trên nối tắt nhận cực dương từ pin, hai chân dưới nối tắt nhận cực dương adapter, hai chân giữa nối tắt đi ra tải, còn hai cực âm nối chung không qua công tắc">
+      <defs><marker id="arc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+
+      <rect x="150" y="60" width="120" height="170" rx="4" fill="currentColor" fill-opacity=".07" stroke="currentColor" stroke-width="1.6"/>
+      <text x="210" y="50" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" text-anchor="middle" font-weight="600">CÔNG TẮC DPDT — nhìn từ MẶT DƯỚI</text>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.4">
+        <rect x="168" y="76" width="26" height="14"/><rect x="226" y="76" width="26" height="14"/>
+        <rect x="168" y="138" width="26" height="14"/><rect x="226" y="138" width="26" height="14"/>
+        <rect x="168" y="200" width="26" height="14"/><rect x="226" y="200" width="26" height="14"/>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" text-anchor="middle">
+        <text x="181" y="87">1</text><text x="239" y="87">4</text>
+        <text x="181" y="149">2</text><text x="239" y="149">5</text>
+        <text x="181" y="211">3</text><text x="239" y="211">6</text>
+      </g>
+
+      <g stroke="#B8860B" stroke-width="2.6" fill="none">
+        <line x1="194" y1="83" x2="226" y2="83"/>
+        <line x1="194" y1="145" x2="226" y2="145"/>
+        <line x1="194" y1="207" x2="226" y2="207"/>
+      </g>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="8.5" fill="#B8860B" text-anchor="middle" font-weight="600">
+        <text x="210" y="78">nối tắt</text><text x="210" y="140">nối tắt</text><text x="210" y="202">nối tắt</text>
+      </g>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.5">
+        <line x1="100" y1="83" x2="166" y2="83" marker-end="url(#arc)"/>
+        <line x1="100" y1="207" x2="166" y2="207" marker-end="url(#arc)"/>
+        <line x1="254" y1="145" x2="330" y2="145" marker-end="url(#arc)"/>
+      </g>
+
+      <g font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor">
+        <text x="96" y="80" text-anchor="end" font-weight="600">BMS P+</text>
+        <text x="96" y="93" text-anchor="end" font-size="9" opacity=".75">cực dương pin</text>
+        <text x="96" y="204" text-anchor="end" font-weight="600">adapter +</text>
+        <text x="96" y="217" text-anchor="end" font-size="9" opacity=".75">ruột jack DC</text>
+        <text x="334" y="142" font-weight="600">ra tải</text>
+        <text x="334" y="155" font-size="9" opacity=".75">→ tụ 2200µF → phân nhánh</text>
+      </g>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.5" stroke-dasharray="5 3">
+        <path d="M100,278 L210,278"/>
+        <path d="M100,300 L210,300"/>
+        <path d="M210,278 L210,300"/>
+        <line x1="210" y1="289" x2="330" y2="289" marker-end="url(#arc)"/>
+      </g>
+      <circle cx="210" cy="289" r="3.5" fill="currentColor"/>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor">
+        <text x="96" y="282" text-anchor="end" font-weight="600">BMS P−</text>
+        <text x="96" y="304" text-anchor="end" font-weight="600">adapter −</text>
+        <text x="334" y="286" font-weight="600">đất chung</text>
+        <text x="334" y="299" font-size="9" opacity=".75">GND toàn robot</text>
+      </g>
+      <text x="210" y="326" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity=".8" text-anchor="middle">hai cực ÂM chập thẳng vào nhau — KHÔNG qua công tắc</text>
+      <text x="210" y="245" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="currentColor" opacity=".7" text-anchor="middle">nấc giữa = cả 1·4 lẫn 3·6 đều hở ⇒ TẮT</text>
+    </svg>
+    <figcaption>Ba nét vàng là <b>ba mối nối tắt</b> biến hai mạch của DPDT thành một mạch gánh gấp đôi dòng: <code>1↔4</code>, <code>2↔5</code>, <code>3↔6</code>. Dùng dây 18 AWG hoặc mẩu đồng. Đường âm đi thẳng, không dính gì tới công tắc.</figcaption>
+  </figure>
+
   <h3>Bảy chặng — đo xong chặng này mới sang chặng sau</h3>
   <p>Đây là chỗ dễ mất linh kiện nhất của cả robot: một lần đấu ngược là mất pack, mất BMS, hoặc mất ESP32. Nên <b>mỗi chặng kết thúc bằng một phép đo</b>, và không nối tải nào cho tới chặng cuối.</p>
 
@@ -846,6 +908,30 @@ details[open] summary{border-bottom:1px solid var(--line)}
     </tbody>
   </table></div>
 
+
+  <div class="warn">
+    <span class="warn-h">Đo chiều gạt TRƯỚC KHI hàn — đừng đoán</span>
+    <p>Ở phần lớn công tắc gạt, <b>gạt cần LÊN thì chân giữa nối xuống chân DƯỚI</b> chứ không phải chân trên — cơ cấu đòn bẩy lật ngược. Nhưng không phải lô nào cũng vậy, và hàn xong mới phát hiện thì phải tháo cả sáu mối.</p>
+    <p><b>Cách đo, 30 giây:</b> để đồng hồ ở thang thông mạch (có tiếng bíp). Que một cắm chân <b>2</b> (giữa cột trái). Que kia chạm chân <b>1</b>, rồi chân <b>3</b>. Gạt cần lên, xuống, giữa và ghi lại nấc nào thông với chân nào.</p>
+    <p>Rồi mới quyết định gán: bạn muốn <b>gạt lên = pin</b> thì nối <code>BMS P+</code> vào cặp chân mà nấc trên thông tới. Ba nấc phải cho ra: một nấc thông pin, nấc giữa <b>không thông gì cả</b>, nấc kia thông adapter.</p>
+  </div>
+
+  <div class="tw"><table>
+    <thead><tr><th class="num">Chân</th><th>Nối vào</th><th>Dây</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td class="num"><b>1 + 4</b></td><td><code>P+</code> của BMS</td><td class="num">18 AWG</td><td>cực dương pin. Hai chân này <b>nối tắt với nhau</b> rồi mới nhận một sợi dây vào</td></tr>
+      <tr><td class="num"><b>3 + 6</b></td><td>ruột jack adapter</td><td class="num">18 AWG</td><td>cực dương adapter, cũng nối tắt hai chân</td></tr>
+      <tr><td class="num"><b>2 + 5</b></td><td>ra tải</td><td class="num">18 AWG</td><td>nối tắt, rồi một sợi đi tới tụ 2200 µF và điểm phân nhánh</td></tr>
+      <tr><td class="num">—</td><td><code>P−</code> của BMS <b>+</b> vỏ jack adapter</td><td class="num">18 AWG</td><td><b>chập thẳng vào nhau, không qua công tắc.</b> Đây là đất chung của toàn robot</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note">
+    <span class="warn-h">Vì sao cắm cả hai nguồn cùng lúc vẫn an toàn</span>
+    <p>Giả sử adapter đang cắm mà bạn gạt sang <b>pin</b>: cực âm adapter vẫn nối đất chung, nhưng cực dương của nó bị công tắc bỏ hở ⇒ <b>mạch không khép kín, không có dòng nào chạy</b>. Ngược lại cũng thế.</p>
+    <p>Nghĩa là bạn không cần nhớ rút jack trước khi gạt. Chỉ cần đừng bao giờ nối hai cực dương lại với nhau ở đâu đó ngoài công tắc.</p>
+  </div>
+
   <h3>Ba nhánh — cái nào đi đâu</h3>
   <div class="tw"><table>
     <thead><tr><th>Nhánh</th><th class="num">Dây</th><th class="num">Dòng</th><th>Nuôi những gì</th></tr></thead>
@@ -861,7 +947,9 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <p><b>Vặn LM2596 ra 5,0 V TRƯỚC KHI cắm tải.</b> Nó xuất xưởng ở mức bất kỳ — có con ra 12 V nguyên. Cắm servo vào rồi mới vặn là servo ăn nguyên mức đang để.</p>
     <p><b><code>VCC</code> của IBT-2 cắm 3V3, không phải 12 V.</b> Chỉ <code>B+</code>/<code>B−</code> mới nhận 12 V; <code>VCC</code> là chân nuôi phần logic, cấp 12 V vào đó là chết bo.</p>
     <p><b>Đừng lấy 3V3 từ chân ESP32.</b> Ba màn phải lấy ở khối <code>3V3</code> của MKE-B01 — đo thật 23/08: lấy từ ESP32 thì một màn mờ và tự tắt mỗi giây.</p>
-    <p><b>Tụ hoá đúng cực.</b> Dải màu nhạt dọc thân là cực <b>âm</b>, chân âm cũng ngắn hơn. Cắm ngược vào 12 V thì nổ trong vài giây. Tụ ở rail 12 V lấy loại <b>≥ 25 V</b>.</p>
+    <p><b>Tụ hoá đúng cực — hai dấu hiệu phải khớp nhau.</b> <b>Chân DÀI là cực dương</b>, chân ngắn là cực âm; và trên thân có <b>dải màu nhạt in dấu <code>−</code></b> chỉ về phía chân ngắn. Nếu chân đã bị cắt bằng nhau thì tin vào dải trên thân, đừng đoán theo chân.</p>
+    <p>Tụ mắc <b>SONG SONG</b> với nguồn — bắc ngang giữa đường dương và đường âm ngay tại điểm phân nhánh, <b>không nối tiếp</b> vào đường dây. Dòng vẫn đi thẳng từ công tắc ra ba nhánh; tụ chỉ ngồi cạnh làm kho điện. Con <code>104</code> đi kèm thì không phân cực, cắm chiều nào cũng được.</p>
+    <p>Cắm ngược vào 12 V thì nổ trong vài giây, kêu to và bắn giấy bạc. Tụ ở rail 12 V lấy loại <b>≥ 25 V</b> — con số in ngay trên thân cạnh dung lượng.</p>
   </div>
 
   <div class="note">

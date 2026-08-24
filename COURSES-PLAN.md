@@ -38,7 +38,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 11 | `authentication` | `authentication` — Authentication | ✅ **XONG** (13 mục · 76 bài · 1.538k · TB 20.236) |
 | 12 | `nginx` | `nginx` — Nginx | ✅ **XONG** (12 mục · 70 bài · 1.206k · TB 17.224) |
 | 13 | `deploy-vps` | `deploy-vps` — Deploy lên VPS | ✅ **XONG** (12 mục · 70 bài · 1.133k · TB 16.190) |
-| 14 | `github-actions` | — | ❌ **THIẾU** |
+| 14 | `github-actions` | `github-actions` — GitHub Actions | ✅ **XONG** (11 mục · 66 bài · 1.103k · TB 16.720) |
 | 15 | `tailwind-css` | — | ❌ **THIẾU** |
 | 16 | `socket-io` | — | ❌ **THIẾU** |
 | 17 | `object-storage-s3` | — | ❌ **THIẾU** |
@@ -50,7 +50,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 23 | `domains-dns-tls` | — | ❌ **THIẾU** |
 | 24 | `cuongthai-roadmap` | *(lộ trình, không phải khoá)* | — bỏ qua |
 
-**Tổng: 12 khoá đã có · 11 khoá còn thiếu.**
+**Tổng: 13 khoá đã có · 10 khoá còn thiếu.**
 
 ### Thứ tự ưu tiên (đã chốt)
 
@@ -60,8 +60,8 @@ Theo thứ tự một người học thật sự cần, và theo mức độ kho
 2. ✅ **Linux & Bash** — điều kiện cần của deploy, Docker, Nginx
 3. ✅ **Docker** — Node.js Ch17 chỉ chạm bề mặt; xứng đáng khoá riêng
 4. ✅ **Redis** · 5. ✅ **Prisma ORM** · 6. ✅ **Authentication** — đào sâu ba chương của Node.js
-7. ✅ **Nginx** · 8. ✅ **Deploy VPS** · 9. **GitHub Actions (CI/CD) ← TIẾP THEO** — mảng vận hành
-10. **Tailwind CSS** · 11. **Socket.IO** — mảng sản phẩm
+7. ✅ **Nginx** · 8. ✅ **Deploy VPS** · 9. ✅ **GitHub Actions (CI/CD)** — mảng vận hành
+10. **Tailwind CSS ← TIẾP THEO** · 11. **Socket.IO** — mảng sản phẩm
 12. **Object Storage (S3/R2)** · 13. **Media Processing** · 14. **Observability**
 15. **Payment Integration** (+ **VNPay**, **PayOS**) · 18. **Domains, DNS & TLS**
 
@@ -353,6 +353,45 @@ Hai phép đo THẤT BẠI cũng được giữ nguyên kèm lý do phép đo kh
 
 Còn hai bước phải chạy ở máy nhà — xem §6.
 
+### 24/08/2026 — GitHub Actions (11 mục · 66 bài · 1.103k · TB 16.720)
+
+Khoá thứ chín và là **khoá được đo trên chính CI của kho này**. Không có
+lời khẳng định nào không có số: 2.343 lượt chạy quan sát, 32 workflow file
+trong `.github/workflows/`, sổ sự cố của CLAUDE.md dâng nguyên vẹn 6 ngày
+tháng làm bằng chứng cho Chương 10, ba lần giảm cache đo trực tiếp qua log
+`ACTIONS_STEP_DEBUG=true`, một tỉ lệ ghim SHA đối lập ghim nhánh được đếm
+đúng bằng script mới `scripts/soat-actions.sh`.
+
+228 sơ đồ · 526 nguồn · 122 bẫy · 130 khối code · **254 khối output đo thật**
+· 11 quiz.
+
+Cái sợi chỉ chạy suốt 11 mục là **cú tự-vá khớp với thông báo lỗi thường
+sai**, và mỗi lần nó xuất hiện đều kèm một số đo:
+
+- lệnh SET -E trong khối `run: |` qua ống dẫn LỌC (`| grep`) trả 0 dù lệnh
+  đầu ống HỎNG — mất tín hiệu (2.4)
+- `grep -c` trong `scripts/soat-actions.sh` đếm ĐÚNG số dòng, SAI số khớp —
+  chín workflow có hai bí mật cùng dòng bị đếm mất chín (6.5)
+- V8 heap qua `| tail` trả 0 thay vì 8240 MB thật ở Node 22 (8.1) — được
+  đối chiếu với lời tuyên bố dân gian "4GB" và giữ lại như một cú phản bác
+- `pkill -f "next start"` trả **exit 0** trong khi cổng 3000 vẫn bận, vì
+  Node ghi đè argv thành `next-server` (10.4)
+- một smoke test **6 lần chạy 6 lần hỏng** trong ~25s mỗi deploy nhưng bị
+  `|| sleep 5` nuốt — trong khi kho không hề biết (10.3)
+- cú `docker build .` không có `-f Dockerfile.backend` trong `deploy-nha.sh`
+  đi qua alpine (musl) với engine Prisma debian (glibc) → **7 phút 502**
+  ở production (9.2)
+- một cache path `node_modules/.cache` không bao giờ tồn tại vì `tsc` không
+  tạo nó — thao tác cache dâng miễn phí xanh mãi mãi (5.3)
+
+Bốn con bọ tìm được trong chính công trình của tôi được GIỮ LẠI:
+undercount ở lệnh `grep -c` khiến bảng bí mật in ra nhầm 32 (thật 41);
+cửa sổ 16-dòng ban đầu báo 9 bản SSH khác nhau (đúng: 9 bản trong 2 phiên
+bản); tỉ số nén 64× vô lý ở tests 5000 file đồng nhất được đo lại còn
+2,3-2,9× ở nội dung thật; và dự đoán V8 4GB bị phủ nhận bởi 8240 MB đo thật.
+
+Còn hai bước phải chạy ở máy nhà — xem §6.
+
 ---
 
 ## 6. Việc chưa chạy được từ sandbox (áp cho MỌI khoá mới)
@@ -371,7 +410,7 @@ node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
 node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ```
 
-**Đang chờ chạy — bảy khoá:**
+**Đang chờ chạy — chín khoá:**
 
 ```bash
 # Git & GitHub
@@ -414,9 +453,14 @@ node scripts/course-seed.mjs --file ./content/courses/nginx.mjs --apply
 docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
   --slug deploy-vps --icon ubuntu --color E95420 --title "Deploy lên VPS" --subtitle "Máy bạn → Production"
 node scripts/course-seed.mjs --file ./content/courses/deploy-vps.mjs --apply
+
+# GitHub Actions
+docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+  --slug github-actions --icon githubactions --color 2088FF --title "GitHub Actions" --subtitle "Push → Production"
+node scripts/course-seed.mjs --file ./content/courses/github-actions.mjs --apply
 ```
 
-⚠️ **Linux & Bash**, **Docker**, **Nginx** và **Deploy VPS** dùng **category mới `devops`** (`DevOps & Vận hành`),
+⚠️ **Linux & Bash**, **Docker**, **Nginx**, **Deploy VPS** và **GitHub Actions** dùng **category `devops`** (`DevOps & Vận hành`),
 chưa từng có trong DB — lần seed đầu sẽ thêm một mục lọc mới trên trang `/courses`.
 **Redis** và **Prisma ORM** dùng category `databases` đã có sẵn (chung với PostgreSQL).
 **Authentication** dùng category `backend` đã có sẵn (chung với Node.js).

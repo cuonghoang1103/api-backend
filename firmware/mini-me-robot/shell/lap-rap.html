@@ -700,6 +700,30 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <p>⚠️ Bo ghi <b>xả cạn 9,6 V</b> (3,20 V/cell) chứ không phải 9,0 V. <code>BATTERY_EMPTY_MV</code> đã sửa theo — để 9000 thì firmware báo ~3% đúng lúc BMS cắt nguồn, tức người dùng thấy "còn pin" mà robot tắt ngóm.</p>
   </div>
 
+
+  <div class="note">
+    <span class="warn-h">Khay thật của robot này — đo và hàn xong 23/08/2026</span>
+    <p>Khay 3 ngăn chỉ ra <b>2 dây</b>, phải hàn thêm hai dây cân bằng. Trong khay pin, <b>nốt đồng vàng phẳng là cực DƯƠNG</b>, <b>lò xo là cực ÂM</b>, và ba viên xếp <b>xen kẽ chiều</b>. Hai mối nối tiếp lộ ngay <b>mặt trước</b>, không cần lật mặt sau.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Dây</th><th>Hàn vào</th><th class="num">Đo được</th><th class="num">Cắm chân BMS</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">B−</td><td>dây <b>đen</b> có sẵn</td><td class="num">0 V</td><td class="num"><code>0V</code></td></tr>
+        <tr><td class="mono">B1</td><td>nốt đồng <b>ngăn 3, đầu DƯỚI</b></td><td class="num">3,52 V</td><td class="num"><code>4.2V</code></td></tr>
+        <tr><td class="mono">B2</td><td>nốt đồng <b>ngăn 2, đầu TRÊN</b></td><td class="num">7,04 V</td><td class="num"><code>8.4V</code></td></tr>
+        <tr><td class="mono">B+</td><td>dây <b>đỏ</b> có sẵn</td><td class="num">10,56 V</td><td class="num"><code>12.6V</code></td></tr>
+      </tbody>
+    </table></div>
+    <p>Ba viên đều <b>3,52 V</b> — 7,04 ÷ 3,52 = đúng 2,00 và 10,56 = đúng 3 lần. Pack cân bằng hoàn hảo.</p>
+    <p><b>Hàn vào nốt đồng, đừng hàn vào lò xo:</b> nốt đồng phẳng nên thiếc bám trong hai giây, còn lò xo tản nhiệt nhanh, khó ăn thiếc, và hàn lâu làm mất tính đàn hồi khiến viên pin tiếp xúc kém về sau.</p>
+  </div>
+
+  <div class="warn">
+    <span class="warn-h"><code>B1</code> và <code>B2</code> KHÔNG phải cực dương hay âm</span>
+    <p>Chúng là <b>nấc thang điện áp</b>, không phải cực. Điện áp luôn là hiệu số giữa hai điểm, nên "3,52 V" có nghĩa là "cao hơn dây đen 3,52 V". BMS lấy hiệu số từng bậc để biết từng viên: viên 1 = <code>B1−B−</code>, viên 2 = <code>B2−B1</code>, viên 3 = <code>B+−B2</code>. Bốn điểm mới cho ra ba hiệu số — đó là lý do cần bốn dây.</p>
+    <p><b>Nhưng thứ tự thì sống còn.</b> Đấu ngược <code>B1</code> với <code>B2</code> thì BMS tính ra viên 1 = 7,04 V (tưởng quá áp nghiêm trọng) và viên 2 = <b>−3,52 V</b>, một điện áp âm không tồn tại. Gặp số đó BMS có thể hỏng ngay hoặc cắt vĩnh viễn. Dùng hai màu dây khác nhau và dán nhãn lúc hàn.</p>
+    <p>Cách ghép khỏi nhầm: bo BMS in sẵn <code>0V</code> · <code>4.2V</code> · <code>8.4V</code> · <code>12.6V</code> — <b>số nhỏ vào chỗ số nhỏ</b>. Số trên bo là điện áp lúc đầy, pack đang 3,52 V/viên nên đo thấp hơn, thứ tự vẫn khớp.</p>
+  </div>
+
   <h3>Làm pack — thứ tự này quan trọng</h3>
   <ol class="steps">
     <li><b>Đo từng viên riêng trước khi nối.</b> Ba viên phải cùng loại, cùng dung lượng, cùng tuổi, và chênh nhau <b>không quá 0,05 V</b>. Lệch hơn thì sạc riêng cho đều rồi mới ghép — pack lệch cell thì viên yếu bị đẩy quá sâu mỗi lần xả, hỏng nhanh và phồng.</li>

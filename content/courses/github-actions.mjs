@@ -27,6 +27,7 @@ import s05 from './github-actions/s05-cache.mjs';
 import s06 from './github-actions/s06-bi-mat.mjs';
 import s07 from './github-actions/s07-toc-do.mjs';
 import s08 from './github-actions/s08-do.mjs';
+import s09 from './github-actions/s09-deploy.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -59,5 +60,6 @@ export default {
     s06,
     s07,
     s08,
+    s09,
   ],
 };

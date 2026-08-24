@@ -18,6 +18,7 @@
 
 import s00 from './socket-io/s00-intro.mjs';
 import s01 from './socket-io/s01-vong-doi.mjs';
+import s02 from './socket-io/s02-transport.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 3 },
@@ -38,5 +39,6 @@ export default {
   sections: [
     s00,
     s01,
+    s02,
   ],
 };

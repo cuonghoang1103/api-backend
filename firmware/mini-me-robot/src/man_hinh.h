@@ -108,7 +108,23 @@ namespace man_hinh {
 //
 // ⚠️ Quay lại bo màn CŨ thì phải hạ về 4 MHz. Con số này gắn với BO,
 // không phải với chip GC9A01.
-static constexpr int32_t TOC_DO = 40000000;
+// ⛔⛔ 24/08/2026 — HẠ VỀ 20 MHz. 40 MHz LÀM MÀN BỤNG RA SỌC.
+//
+// Phép đo 23/08 chạy bằng `-e mat-demo`, mà bàn thử đó CHỈ VẼ HAI MẮT
+// GC9A01 — nó không đụng tới màn ngực. Tôi lấy kết quả "40 MHz sạch"
+// rồi áp cho CẢ BA màn, trong khi màn ngực là ILI9488, chip khác hẳn,
+// và bàn kiểm riêng của nó (`test/` env `test-ili9488`) vốn chạy 20 MHz.
+//
+// Kết quả: hai mắt vẽ đẹp ở 40 MHz, còn màn ngực đầy sọc dọc.
+//
+// Bài học: đo trên MỘT loại màn không kết luận được cho loại kia, dù
+// chúng dùng chung một bus SPI. Muốn nâng riêng cho mắt thì phải tách
+// `TOC_DO` thành hai hằng số — nhưng cả ba đang chia chung một bus nên
+// tốc độ phải lấy theo con CHẬM NHẤT.
+//
+// 20 MHz vẫn dư: đo được 167 vòng/giây, đỉnh 6,5 ms, dưới ngưỡng 8 ms
+// mà CPU cần để bơm kịp I2S.
+static constexpr int32_t TOC_DO = 20000000;
 
 // ⚠️ HSPI (SPI3), KHÔNG phải bus mặc định. Bus mặc định của ESP32-S3
 // dùng chân trùng GPIO 33–37 — vốn đã bị PSRAM octal của bản N16R8
@@ -166,7 +182,11 @@ inline Arduino_GFX* nguc() {
   Arduino_DataBus* b = busNguc();
   // RST = GFX_NOT_DEFINED → reset bằng lệnh phần mềm (dây RST nối 3V3).
   // Xoay 1 = ngang 480×320, giữ đúng bố cục mà `face.cpp` đang vẽ.
-  static Arduino_GFX* g = new Arduino_ILI9488(b, GFX_NOT_DEFINED, 1, false);
+  // Hướng 3, KHÔNG phải 1. Cả hai đều nằm ngang nhưng lệch nhau 180°.
+  // Đo thật 25/08/2026 trên vỏ đã lắp: hướng 1 cho hình NGƯỢC LÊN TRÊN.
+  // Con số này gắn với cách bo màn được bắt vào tấm ngực, không phải
+  // với chip — lắp lại màn theo chiều khác thì phải đổi lại.
+  static Arduino_GFX* g = new Arduino_ILI9488(b, GFX_NOT_DEFINED, 3, false);
   return g;
 }
 

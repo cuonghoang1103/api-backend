@@ -42,7 +42,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 15 | `tailwind-css` | `tailwind-css` — Tailwind CSS | ✅ **XONG** (12/12 mục · 66 bài · 962k) |
 | 16 | `socket-io` | `socket-io` — Socket.IO | ✅ **XONG** (12/12 mục · 66 bài · 554k) |
 | 17 | `object-storage-s3` | `object-storage` — Object Storage (Cloudflare R2) | ✅ **XONG** (11 mục · 39 bài · 353k · TB 9.053) |
-| 18 | `media-processing` | — | ❌ **THIẾU** |
+| 18 | `media-processing` | `media-processing` — Media Processing (Sharp + FFmpeg) | ✅ **XONG** (11 mục · 37 bài · 576k · TB 15.554) |
 | 19 | `observability-monitoring` | — | ❌ **THIẾU** |
 | 20 | `payment-integration` | — | ❌ **THIẾU** |
 | 21 | `vnpay` | — | ❌ **THIẾU** |
@@ -50,7 +50,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 23 | `domains-dns-tls` | — | ❌ **THIẾU** |
 | 24 | `cuongthai-roadmap` | *(lộ trình, không phải khoá)* | — bỏ qua |
 
-**Tổng: 14 khoá đã có · 9 khoá còn thiếu.**
+**Tổng: 15 khoá đã có · 8 khoá còn thiếu.**
 
 ### Thứ tự ưu tiên (đã chốt)
 
@@ -62,7 +62,7 @@ Theo thứ tự một người học thật sự cần, và theo mức độ kho
 4. ✅ **Redis** · 5. ✅ **Prisma ORM** · 6. ✅ **Authentication** — đào sâu ba chương của Node.js
 7. ✅ **Nginx** · 8. ✅ **Deploy VPS** · 9. ✅ **GitHub Actions (CI/CD)** — mảng vận hành
 10. ~~**Tailwind CSS**~~ ✅ · 11. ~~**Socket.IO**~~ ✅ · ~~**Object Storage**~~ ✅ — mảng sản phẩm
-12. ~~**Object Storage (S3/R2)**~~ ✅ · **Media Processing ← TIẾP THEO** · 14. **Observability**
+12. ~~**Object Storage (S3/R2)**~~ ✅ · ~~**Media Processing**~~ ✅ · **Observability ← TIẾP THEO**
 15. **Payment Integration** (+ **VNPay**, **PayOS**) · 18. **Domains, DNS & TLS**
 
 ---

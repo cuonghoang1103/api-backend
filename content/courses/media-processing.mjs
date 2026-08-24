@@ -14,10 +14,10 @@ import s03 from './media-processing/s03-ffmpeg.mjs';
 import s04 from './media-processing/s04-audio.mjs';
 import s05 from './media-processing/s05-pipeline.mjs';
 import s06 from './media-processing/s06-cost.mjs';
-// import s07 from './media-processing/s07-streaming.mjs';
-// import s08 from './media-processing/s08-live.mjs';
-// import s09 from './media-processing/s09-chan-doan.mjs';
-// import s10 from './media-processing/s10-on-thi.mjs';
+import s07 from './media-processing/s07-streaming.mjs';
+import s08 from './media-processing/s08-live.mjs';
+import s09 from './media-processing/s09-chan-doan.mjs';
+import s10 from './media-processing/s10-on-thi.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -33,5 +33,5 @@ export default {
     description: 'Khoá Media Processing cho backend Node.js. 11 mục về Sharp (metadata, resize, WebP re-encoding, animated GIF), FFmpeg (video thumbnails, transcoding, audio decode), pipeline pattern (upload → optimize → variants → CDN), cost management, streaming (HLS/DASH), và diagnosis. Vá decompression bomb thật (100MP guard) và mpg123 vs ffmpeg tradeoff (1.5MB vs 80MB image) từ imageOptimizer.ts + audio.ts.',
     tags: 'media,image,video,audio,sharp,ffmpeg,webp,transcoding,streaming,cdn',
   },
-  sections: [s00, s01, s02, s03, s04, s05, s06],
+  sections: [s00, s01, s02, s03, s04, s05, s06, s07, s08, s09, s10],
 };

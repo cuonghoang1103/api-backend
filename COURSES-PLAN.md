@@ -82,12 +82,22 @@ Khoá **Node.js** là chuẩn vàng. Số đo thật của nó:
 | Khối code (`<pre>`) | 690 | ≥ 4 mỗi bài |
 | Quiz cuối chương | 18 | 1 mỗi chương, 8 câu |
 
-Kiểm bằng hai lệnh (đều chạy được ở local, không cần DB):
+Kiểm bằng **ba** lệnh (đều chạy được ở local, không cần DB) — phải chạy CẢ BA
+trước khi đánh dấu một khoá là xong:
 
 ```bash
 node scripts/course-content-check.mjs ./content/courses/<khoá>.mjs   # cấu trúc: song ngữ, cân thẻ, quiz
 node scripts/course-depth-audit.mjs   ./content/courses/<khoá>.mjs   # độ sâu: ký tự/bài, sơ đồ, nguồn
+node scripts/course-lang-check.mjs    ./content/courses/<khoá>.mjs   # NGÔN NGỮ: ml-en có thật sự là tiếng Anh không
 ```
+
+⚠️ **Vì sao có lệnh thứ ba (thêm 24/08/2026).** `course-content-check.mjs` chỉ
+**đếm** số khối `ml-en`/`ml-vi` cho khớp — nó không nhìn vào bên trong. Một bài
+có khối `ml-en` viết toàn tiếng Việt vẫn qua sạch, và người học chọn tiếng Anh
+nhận về tiếng Việt. Rà toàn bộ ngày 24/08 tìm ra **90 bài** như vậy. Bộ dò mới
+đo *tỷ lệ đoạn text có dấu tiếng Việt* trong khối `ml-en`, và cố ý bỏ qua ba
+vùng mà tiếng Việt là hợp lệ: khối `<pre>` (trích nguyên văn mã/comment của kho),
+khối `.out` (kết quả chạy thật), và `lc-sub` (phụ đề thẻ nguồn).
 
 ### Luật soạn nội dung (đã trả giá để biết)
 

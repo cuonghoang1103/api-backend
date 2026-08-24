@@ -677,11 +677,11 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <thead><tr><th></th><th class="num">2S (bản cũ)</th><th class="num">3S (nay)</th></tr></thead>
     <tbody>
       <tr><td>Sạc đầy</td><td class="num">8,4 V</td><td class="num">12,6 V</td></tr>
-      <tr><td>Cạn — BMS cắt</td><td class="num">6,0 V</td><td class="num">9,0 V</td></tr>
+      <tr><td>Cạn — BMS cắt</td><td class="num">6,0 V</td><td class="num"><b>9,6 V</b></td></tr>
       <tr><td>Bộ chia áp đo pin</td><td class="num">100k / 47k</td><td class="num"><b>100k / 30k</b></td></tr>
       <tr><td>Hệ số chia</td><td class="num">3,128</td><td class="num"><b>4,33</b></td></tr>
-      <tr><td>BMS</td><td class="num">2S</td><td class="num"><b>3S có cân bằng, ≥ 20 A</b></td></tr>
-      <tr><td>Sạc</td><td class="num">TP5100</td><td class="num"><b>12,6 V CC/CV</b></td></tr>
+      <tr><td>BMS</td><td class="num">2S <span style="opacity:.7">(có sẵn, KHÔNG dùng được)</span></td><td class="num"><b>3S 20A có cân bằng</b></td></tr>
+      <tr><td>Nguồn sạc</td><td class="num">TP5100</td><td class="num"><b>adapter 12,6 V 2A</b><br><span style="font-size:12px;opacity:.75">jack DC 5.5×2.1</span></td></tr>
     </tbody>
   </table></div>
 
@@ -689,6 +689,15 @@ details[open] summary{border-bottom:1px solid var(--line)}
     <span class="warn-h">Giữ bộ trở cũ là cháy chân GPIO 1</span>
     <p>Hệ số 3,128 tính cho 2S. Với 3S: <b>10,6 V → 3,39 V</b> (đã vượt trần 3,3 V của ADC) và <b>12,6 V → 4,03 V</b>. Bộ đúng là <b>100k / 30k</b> → 12,6 V ra 2,91 V, còn dư biên an toàn. <code>220k / 68k</code> cũng được và rò ít hơn.</p>
     <p><b>Đừng dùng 150k/47k</b> — nó ra 3,01 V, sát trần quá; chỉ cần một viên sạc hơi quá là chạm 3,3 V.</p>
+  </div>
+
+
+  <div class="note">
+    <span class="warn-h">Bộ đã chốt mua — 23/08/2026</span>
+    <p><b>Bo "Mạch sạc Pin 3S 12V-20A, sạc cân bằng và bảo vệ"</b> — trên bo in <code>0V</code> · <code>4.2V</code> · <code>8.4V</code> · <code>12.6V</code>, đó chính là bốn mối <code>B−</code> <code>B1</code> <code>B2</code> <code>B+</code>. Xả liên tục 20 A, tức thời 40 A, size 58 × 20 × 3,6 mm.</p>
+    <p><b>Nó KHÔNG tự tạo ra 12,6 V</b> — mô tả ghi "sử dụng sạc 12,6 V – 13 V, đề xuất nguồn có hạn dòng". Nên mua kèm <b>adapter 12,6 V 2A</b> (cùng shop có phân loại đó, jack DC 5.5×2.1 — đúng cỡ jack sạc bạn sắp lắp).</p>
+    <p>Bộ này thay hẳn module sạc Type-C: module ấy chỉ sạc chứ <b>không cân bằng cell</b>, dùng nó thì vẫn phải mua thêm BMS. Bo trên gộp cả hai việc.</p>
+    <p>⚠️ Bo ghi <b>xả cạn 9,6 V</b> (3,20 V/cell) chứ không phải 9,0 V. <code>BATTERY_EMPTY_MV</code> đã sửa theo — để 9000 thì firmware báo ~3% đúng lúc BMS cắt nguồn, tức người dùng thấy "còn pin" mà robot tắt ngóm.</p>
   </div>
 
   <h3>Làm pack — thứ tự này quan trọng</h3>

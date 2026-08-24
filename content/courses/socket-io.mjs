@@ -23,6 +23,7 @@ import s03 from './socket-io/s03-room.mjs';
 import s04 from './socket-io/s04-presence.mjs';
 import s05 from './socket-io/s05-cluster.mjs';
 import s06 from './socket-io/s06-ack.mjs';
+import s07 from './socket-io/s07-webrtc.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 3 },
@@ -48,5 +49,6 @@ export default {
     s04,
     s05,
     s06,
+    s07,
   ],
 };

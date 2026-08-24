@@ -21,6 +21,7 @@
 import s00 from './github-actions/s00-intro.mjs';
 import s01 from './github-actions/s01-tep-workflow.mjs';
 import s02 from './github-actions/s02-job-runner.mjs';
+import s03 from './github-actions/s03-bieu-thuc.mjs';
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -47,5 +48,6 @@ export default {
     s00,
     s01,
     s02,
+    s03,
   ],
 };

@@ -553,21 +553,55 @@ if ! docker ps --format '{{.Names}}' | grep -qx "${PROJ}_nginx"; then
 fi
 
 cp -p "$CONF" "$SAO" 2>/dev/null || touch "$SAO"
-mv "$MOI" "$CONF"
 
-# `nginx -t` đọc file qua bind-mount nên nó kiểm ĐÚNG bản vừa đặt vào.
+# ⚠️⚠️ GHI ĐÈ TẠI CHỖ, TUYỆT ĐỐI KHÔNG `mv`.
+#
+# `nginx.conf` là bind-mount một FILE ĐƠN. Docker gắn nó theo INODE lúc
+# container khởi động, không theo đường dẫn. `mv` là đổi tên: nó trỏ đường dẫn
+# trên host sang một inode MỚI, còn container thì vẫn dính vào inode CŨ.
+#
+# Hậu quả đo thật 25/08/2026, và nó câm hoàn toàn:
+#     file trên host đổi          ✓
+#     container vẫn thấy bản cũ   ✗
+#     `nginx -t` xanh   — vì đang kiểm CONFIG CŨ, vốn hợp lệ
+#     `reload` thành công — nạp lại CONFIG CŨ
+#     script báo KQ=OK  — trong khi không có gì thay đổi
+# Deploy báo xanh hai lần liền mà HTTP/2 vẫn tắt và header cache vẫn no-store.
+#
+# `cat > "$CONF"` thì cắt cụt rồi ghi lại ĐÚNG inode đó, nên container thấy
+# ngay. Cùng lý do khiến `sed -i` và `:w` của vim (mặc định ghi file tạm rồi
+# đổi tên) cũng KHÔNG dùng được ở đây.
+cat "$MOI" > "$CONF" || { rm -f "$MOI"; echo "KQ=GHI_HONG"; exit 1; }
+rm -f "$MOI"
+
+# Chốt kiểm inode: container có THẬT SỰ thấy bản mới không?
+#
+# Đây là phép kiểm mà nếu có từ đầu thì đã bắt được lỗi `mv` ngay lần chạy đầu,
+# thay vì để nó báo OK hai lần. Đừng bỏ: nó rẻ, và nó canh đúng cái khoảng cách
+# giữa "file trên host" và "file container đang đọc" — chỗ duy nhất mà mọi thứ
+# khác trong khối này đều mặc định là bằng nhau.
+BAM_NGOAI=$(sha256sum "$CONF" | cut -d' ' -f1)
+BAM_TRONG=$(docker exec "${PROJ}_nginx" sha256sum /etc/nginx/nginx.conf 2>/dev/null | cut -d' ' -f1)
+if [ -z "$BAM_TRONG" ] || [ "$BAM_NGOAI" != "$BAM_TRONG" ]; then
+  cat "$SAO" > "$CONF"; rm -f "$SAO"
+  echo "KQ=MOUNT_LECH"; exit 1
+fi
+
+# `nginx -t` đọc /etc/nginx/nginx.conf trong container — và chốt kiểm ngay trên
+# vừa chứng minh đó đúng là bản mới.
 if docker exec "${PROJ}_nginx" nginx -t 2>&1; then
   if docker exec "${PROJ}_nginx" nginx -s reload 2>&1; then
     # Giữ 3 bản sao gần nhất, dọn phần còn lại (cùng lối với bước 7).
     ls -1t "$CONF".sao.* 2>/dev/null | tail -n +4 | xargs -r rm -f
     echo "KQ=OK"
   else
-    mv "$SAO" "$CONF"
+    cat "$SAO" > "$CONF"; rm -f "$SAO"
+    docker exec "${PROJ}_nginx" nginx -s reload >/dev/null 2>&1 || true
     echo "KQ=NAP_HONG"; exit 1
   fi
 else
   # ⚠️ Trả bản cũ về TRƯỚC khi thoát. Xem chú thích bom hẹn giờ ở phía Mac.
-  mv "$SAO" "$CONF"
+  cat "$SAO" > "$CONF"; rm -f "$SAO"
   echo "KQ=TEST_HONG"; exit 1
 fi
 EOF
@@ -584,6 +618,15 @@ EOF
             KQ=NAP_HONG)
                 fail "nginx -t xanh nhưng reload hỏng — ĐÃ TRẢ LẠI bản cũ."
                 fail "Kiểm: docker logs ${COMPOSE_PROJECT}_nginx"
+                exit 1 ;;
+            KQ=MOUNT_LECH)
+                fail "Container nginx KHÔNG thấy file vừa ghi — bind-mount đã lệch inode."
+                fail "ĐÃ TRẢ LẠI bản cũ; web không gián đoạn."
+                fail "Thường là do container được tạo trước khi file bị thay bằng mv/rsync."
+                fail "Sửa: ssh VPS rồi 'docker compose -p ${COMPOSE_PROJECT} up -d --force-recreate nginx'"
+                exit 1 ;;
+            KQ=GHI_HONG)
+                fail "Không ghi được nginx.conf trên VPS (đĩa đầy? quyền?) — chưa đổi gì cả."
                 exit 1 ;;
             KQ=NGINX_KHONG_CHAY)
                 fail "Container ${COMPOSE_PROJECT}_nginx không chạy — chưa đổi gì cả."

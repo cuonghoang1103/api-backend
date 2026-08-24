@@ -318,9 +318,18 @@ publicRouter.get('/articles/by-slug/:slug', async (req, res: Response<ApiRespons
       throw new AppError('Article not found', 404, 'ARTICLE_NOT_FOUND');
     }
 
-    prisma.techTrendArticle
-      .update({ where: { id: article.id }, data: { viewCount: { increment: 1 } } })
-      .catch(() => {});
+    // `?dem=0` — đọc mà KHÔNG đếm lượt xem.
+    //
+    // Sinh ra cho `/blog/[slug]` (25/08/2026): trang đó phải hỏi "slug này có
+    // tồn tại bên tech-trends không?" để quyết định canonical. Hỏi bằng đường
+    // thường thì MỖI lượt tải một bài blog lại +1 view cho bài tech-trends
+    // trùng tên — người dùng không hề mở nó. Cùng lý do đã tách
+    // `/code-lab/exercises/:slug/meta`.
+    if (req.query.dem !== '0') {
+      prisma.techTrendArticle
+        .update({ where: { id: article.id }, data: { viewCount: { increment: 1 } } })
+        .catch(() => {});
+    }
 
     res.json({ success: true, data: serializeForPublic(article as unknown as Record<string, unknown>) });
   } catch (error) {

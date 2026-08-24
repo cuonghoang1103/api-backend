@@ -27,12 +27,23 @@ echo "═══ Kiểm $BASE ═══"
 # ── 1. HTTP/2 ────────────────────────────────────────────────
 echo
 echo "1) HTTP/2"
-ver=$(curl -sS -o /dev/null --max-time 15 -w '%{http_version}' "$BASE/" 2>/dev/null)
-case "$ver" in
-  2|3)  c_ok  "thương lượng được HTTP/$ver" ;;
-  1.1)  c_bad "vẫn HTTP/1.1 — thiếu 'http2 on;' trong nginx.conf, HOẶC đã sửa mà chưa 'nginx -s reload'" ;;
-  *)    c_bad "không gọi được (http_version='$ver')" ;;
-esac
+# ⚠️ KIỂM BỘ KIỂM TRƯỚC. `curl` của macOS nhiều bản KHÔNG biên dịch kèm
+# nghttp2 — nó sẽ không chào h2 trong ALPN, và server dù bật HTTP/2 vẫn trả
+# 1.1. Không kiểm chỗ này thì một cái curl thiếu tính năng sẽ báo oan cho
+# server, và ta đi sửa nhầm chỗ.
+if ! curl -V | grep -qi 'HTTP2'; then
+  c_warn "curl này KHÔNG hỗ trợ HTTP/2 (curl -V không có 'HTTP2') — phép đo dưới đây VÔ NGHĨA."
+  c_warn "  Kiểm bằng cách khác: mở DevTools → Network → cột Protocol, hoặc"
+  c_warn "  brew install curl && \$(brew --prefix curl)/bin/curl -sI --http2 $BASE/"
+else
+  ver=$(curl -sS -o /dev/null --max-time 15 -w '%{http_version}' "$BASE/" 2>/dev/null)
+  case "$ver" in
+    2|3)  c_ok  "thương lượng được HTTP/$ver" ;;
+    1.1)  c_bad "vẫn HTTP/1.1 — thiếu 'http2 on;' trong nginx.conf, HOẶC config chưa tới được container"
+          c_bad "  (bind-mount file đơn gắn theo INODE: thay file bằng mv/rsync thì container vẫn đọc bản cũ)" ;;
+    *)    c_bad "không gọi được (http_version='$ver')" ;;
+  esac
+fi
 
 # ── 2. Bài viết ở hai URL? ───────────────────────────────────
 # Lấy slug THẬT từ chính API, rồi thử slug đó ở CẢ HAI đường. Đây là phép
@@ -46,25 +57,34 @@ bl_slug=$(curl -sS --max-time 15 "$BASE/api/v1/blog/posts?size=1" 2>/dev/null \
           | grep -o '"slug":"[^"]*"' | head -1 | cut -d'"' -f4)
 code_of() { curl -sS -o /dev/null --max-time 15 -w '%{http_code}' "$1" 2>/dev/null; }
 
-if [ -n "$tt_slug" ]; then
-  a=$(code_of "$BASE/tech-trends/$tt_slug"); b=$(code_of "$BASE/blog/$tt_slug")
-  echo "     slug tech-trends '$tt_slug' → /tech-trends/=$a  /blog/=$b"
-  [ "$b" = "404" ] && c_ok "/blog/<slug tech-trends> trả 404 (không trùng)" \
-                   || c_bad "/blog/<slug tech-trends> trả $b — ĐANG trùng URL"
-else
-  c_warn "không lấy được slug tech-trends nào để thử"
-fi
-if [ -n "$bl_slug" ]; then
-  a=$(code_of "$BASE/blog/$bl_slug"); b=$(code_of "$BASE/tech-trends/$bl_slug")
-  echo "     slug blog '$bl_slug' → /blog/=$a  /tech-trends/=$b"
-  [ "$b" = "404" ] && c_ok "/tech-trends/<slug blog> trả 404 (không trùng)" \
-                   || c_bad "/tech-trends/<slug blog> trả $b — ĐANG trùng URL"
-  canon=$(curl -sS --max-time 15 "$BASE/blog/$bl_slug" 2>/dev/null \
-          | grep -o '<link rel="canonical"[^>]*>' | head -1)
-  echo "     canonical của /blog/$bl_slug: ${canon:-(không có)}"
-else
-  c_warn "không lấy được slug blog nào để thử"
-fi
+canon_of() { curl -sS --max-time 20 "$1" 2>/dev/null | grep -o '<link rel="canonical"[^>]*>' | grep -o 'href="[^"]*"' | cut -d'"' -f2 | head -1; }
+
+# ⚠️ Phép kiểm ĐÚNG ở đây KHÔNG phải "URL kia có 404 không".
+# `/blog/<slug>` được giữ sống CÓ CHỦ Ý: luồng bình luận của nó gắn với
+# `Comment.postId` (bảng `posts`), 301 sang tech-trends là bỏ rơi hết bình
+# luận cũ. Nên hai URL cùng trả 200 là chấp nhận được — thứ KHÔNG chấp nhận
+# được là cả hai cùng tự canonical về chính mình, vì đó mới là cái chia đôi
+# tín hiệu xếp hạng. Đo canonical, đừng đo mã trạng thái.
+kiem_trung() { # $1=slug  $2=nhãn
+  local slug="$1" nhan="$2" mb mt cb
+  mb=$(code_of "$BASE/blog/$slug"); mt=$(code_of "$BASE/tech-trends/$slug")
+  echo "     $nhan '$slug' → /blog/=$mb  /tech-trends/=$mt"
+  if [ "$mb" != "200" ] || [ "$mt" != "200" ]; then
+    c_ok "chỉ sống ở một nơi — không có gì để gộp"
+    return
+  fi
+  cb=$(canon_of "$BASE/blog/$slug")
+  echo "       canonical của /blog/$slug: ${cb:-(KHÔNG có)}"
+  case "$cb" in
+    */tech-trends/"$slug") c_ok "trùng nội dung NHƯNG canonical đã gộp về /tech-trends/ — đúng" ;;
+    */blog/"$slug")        c_bad "cả hai cùng 200 và /blog/ tự canonical về chính nó — ĐANG chia đôi tín hiệu" ;;
+    "")                    c_bad "/blog/$slug không có thẻ canonical nào" ;;
+    *)                     c_bad "canonical trỏ đi đâu đó lạ: $cb" ;;
+  esac
+}
+
+[ -n "$tt_slug" ] && kiem_trung "$tt_slug" "slug tech-trends" || c_warn "không lấy được slug tech-trends nào để thử"
+[ -n "$bl_slug" ] && kiem_trung "$bl_slug" "slug blog"        || c_warn "không lấy được slug blog nào để thử"
 
 # ── 3. Trang chủ có tải emoji-mart / lottie không? ────────────
 echo
@@ -118,14 +138,27 @@ done
 # ── 6. Sitemap ───────────────────────────────────────────────
 echo
 echo "6) Sitemap"
-sm=$(curl -sS --max-time 60 "$BASE/sitemap.xml" 2>/dev/null)
+# 7.6k URL ~ vài MB và route là force-dynamic, 60s từng là quá chật.
+sm=$(curl -sS --max-time 180 "$BASE/sitemap.xml" 2>/dev/null)
 tot=$(printf '%s' "$sm" | grep -c '<loc>')
 cl=$(printf '%s' "$sm" | grep -c '<loc>[^<]*/code-lab/')
 echo "     tổng URL: $tot   (trong đó /code-lab/: $cl)"
 [ "$tot" -gt 1000 ] && c_ok "sitemap đã mang nội dung Code Lab" \
                     || c_bad "chỉ $tot URL — phần nội dung lớn nhất vẫn chưa được nộp"
-printf '%s' "$sm" | grep -q '<loc>[^<]*/playground</loc>' \
-  && c_ok "/playground có trong sitemap" || c_bad "/playground vắng mặt trong sitemap"
+# Bắt rộng tay (chỉ cần thấy chữ "playground" ở bất kỳ đâu) rồi IN RA thứ tìm
+# được. Lần chạy 25/08 báo "vắng mặt" trong khi `sitemap.ts` rõ ràng có dòng đó
+# — nên nghi ngờ chính phép so khớp trước, và cách duy nhất để biết là nhìn
+# xem sitemap thật sự chứa gì.
+pg=$(printf '%s' "$sm" | grep -i 'playground' | head -3)
+if [ -n "$pg" ]; then
+  c_ok "/playground có trong sitemap"
+  printf '%s\n' "$pg" | sed 's/^/         /'
+else
+  c_bad "không thấy chữ 'playground' nào trong sitemap"
+  echo "     5 URL không-code-lab đầu tiên (để đối chiếu dạng thẻ):"
+  printf '%s' "$sm" | grep '<loc>' | grep -v '/code-lab/' | head -5 | sed 's/^/         /'
+  echo "     dung lượng tải về: $(printf '%s' "$sm" | wc -c | tr -d ' ') byte"
+fi
 
 echo
 echo "═══ $PASS đạt · $FAIL hỏng · $WARN cảnh báo ═══"

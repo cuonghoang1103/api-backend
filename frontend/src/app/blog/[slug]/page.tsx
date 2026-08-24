@@ -52,6 +52,45 @@ const getPost = cache(async (slug: string): Promise<Post | null> => {
   }
 });
 
+/**
+ * Slug này có tồn tại bên /tech-trends không?
+ *
+ * ─── VÌ SAO CẦN (25/08/2026) ─────────────────────────────────────────────
+ * Hai bảng `posts` và `tech_trend_articles` CÓ SLUG TRÙNG NHAU trong dữ liệu
+ * thật. Mã thì không hề có đường rẽ chéo — đọc mã sẽ kết luận là không thể
+ * trùng, và tôi đã kết luận đúng như vậy, SAI. Đo trên production:
+ *
+ *   /tech-trends/ma-hoa-aes-rsa-chu-ky-so        → 200
+ *   /blog/ma-hoa-aes-rsa-chu-ky-so               → 200   ← cùng một bài
+ *   /blog/thong-bao-ve-thay-oi-source-swp301     → 200
+ *   /tech-trends/thong-bao-ve-thay-oi-source-swp301 → 200
+ *
+ * Cả hai chiều. Nghĩa là cuộc gộp blog 05/08/2026 đã CHÉP nội dung sang bảng
+ * mới mà không xoá bảng cũ. Google thấy hai URL cùng nội dung, mỗi URL tự
+ * canonical về chính nó ⇒ tín hiệu xếp hạng bị chia đôi trên toàn bộ blog.
+ *
+ * Sửa bằng canonical CHÉO chứ không phải 301: `/blog/<slug>` phải sống tiếp vì
+ * luồng bình luận của nó gắn với `Comment.postId` (bảng `posts`) — 301 sang
+ * tech-trends là bỏ rơi toàn bộ bình luận cũ. Canonical giữ trang sống, giữ
+ * bình luận, mà vẫn gộp tín hiệu về một URL.
+ *
+ * `?dem=0` để phép hỏi này KHÔNG cộng lượt xem cho bài tech-trends — xem chú
+ * thích trong `techTrends.routes.ts`.
+ */
+const coBenTechTrends = cache(async (slug: string): Promise<boolean> => {
+  try {
+    const res = await fetch(
+      `${getServerApiBaseUrl()}/api/v1/tech-trends/articles/by-slug/${encodeURIComponent(slug)}?dem=0`,
+      { headers: { accept: 'application/json' }, next: { revalidate: 300 } },
+    );
+    return res.ok;
+  } catch {
+    // Hỏi không được thì coi như KHÔNG trùng — giữ canonical về chính nó.
+    // Trỏ canonical sang một URL có thể không tồn tại còn tệ hơn là để nguyên.
+    return false;
+  }
+});
+
 // Strip markdown/html to a plain-text meta description.
 const toText = (s?: string, n = 200) =>
   (s ?? '')
@@ -83,16 +122,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = toText(post.excerpt || post.content) || 'Bài viết trên CuongThai.';
   const image = post.thumbnailUrl || undefined;
   const url = `${SITE_URL}/blog/${params.slug}`;
+  // Trùng bên tech-trends ⇒ canonical trỏ SANG ĐÓ. Xem `coBenTechTrends`.
+  const canonical = (await coBenTechTrends(params.slug))
+    ? `${SITE_URL}/tech-trends/${params.slug}`
+    : url;
 
   return {
     title: `${post.title} | Blog | CuongThai`,
     description,
     keywords: post.tagNames?.length ? post.tagNames : undefined,
-    alternates: { canonical: url },
+    alternates: { canonical },
     openGraph: {
       title: post.title,
       description,
-      url,
+      // og:url đi cùng canonical: Messenger dùng og:url làm đích khi bấm vào
+      // link chia sẻ, nên để nó lệch canonical là hai nơi nói hai điều khác nhau.
+      url: canonical,
       type: 'article',
       publishedTime: post.publishedAt || undefined,
       modifiedTime: post.updatedAt || undefined,
@@ -113,6 +158,11 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!post) notFound();
 
   const url = `${SITE_URL}/blog/${params.slug}`;
+  // `cache()` nên lời gọi này dùng chung kết quả với generateMetadata — một
+  // request tới backend cho cả hai, không phải hai.
+  const canonical = (await coBenTechTrends(params.slug))
+    ? `${SITE_URL}/tech-trends/${params.slug}`
+    : url;
   const publishedAt = post.publishedAt || post.createdAt;
 
   const jsonLd = {
@@ -125,7 +175,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     dateModified: post.updatedAt || undefined,
     author: { '@type': 'Person', name: post.authorName || 'CuongThai' },
     keywords: post.tagNames?.join(', ') || undefined,
-    mainEntityOfPage: url,
+    mainEntityOfPage: canonical,
   };
 
   return (

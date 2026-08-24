@@ -197,8 +197,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       images: c.thumbnailUrl ? [c.thumbnailUrl] : undefined,
     }))
 
+  // Slug NÀO cũng có ở tech-trends thì bỏ khỏi phần /blog/ — hai bảng `posts`
+  // và `tech_trend_articles` có slug trùng nhau trong dữ liệu thật (xem
+  // `coBenTechTrends` trong blog/[slug]/page.tsx), và những trang đó nay
+  // canonical sang /tech-trends/. Nộp cả hai URL cho Google là tự khai báo
+  // trùng lặp: bản không-canonical chỉ tổ làm loãng.
+  //
+  // Best-effort: `techTrends` lấy `size=100`, nên nếu có hơn 100 bài thì vài
+  // slug trùng vẫn lọt. Canonical ở trang mới là hàng rào chính; đây chỉ là
+  // dọn cho sạch đầu vào.
+  const slugTechTrends = new Set(techTrends.map((a) => a.slug).filter(Boolean))
+
   const blogUrls: MetadataRoute.Sitemap = posts
-    .filter((p) => p.slug && p.slug.length > 0)
+    .filter((p) => p.slug && p.slug.length > 0 && !slugTechTrends.has(p.slug))
     .map((p) => ({
       url: `${SITE_URL}/blog/${p.slug}`,
       lastModified: p.publishedAt

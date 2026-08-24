@@ -26,6 +26,7 @@ import s01 from './tailwind-css/s01-thang.mjs';
 import s02 from './tailwind-css/s02-bien-the.mjs';
 import s03 from './tailwind-css/s03-xung-dot.mjs';
 import s04 from './tailwind-css/s04-component.mjs';
+import s05 from './tailwind-css/s05-cau-hinh.mjs';
 
 export default {
   // Category ĐÃ CÓ (dùng chung với Next.js và Web Foundations) — giữ NGUYÊN
@@ -56,5 +57,6 @@ export default {
     s02,
     s03,
     s04,
+    s05,
   ],
 };

@@ -868,12 +868,24 @@ await collaborationServer.closeConnections({ documentName: &#96;note-\${noteId}&
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Quiz</span>
 <h2>What Chapter 8 established</h2>
-<p class="lead">Sáu câu về collaborative editing — vì sao KHÔNG dùng socket.io, và cái gì thay thế cho use case này.</p>
+<p class="lead">Six questions on collaborative editing — and on recognising a problem Socket.IO is the wrong tool for.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Two WebSocket servers in one repo is correct</span><span class="lz-d">Socket.IO for chat and presence, Hocuspocus for documents. They solve different problems, and forcing document sync through an event bus means reimplementing conflict resolution badly.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">CRDTs merge without a server referee</span><span class="lz-d">Events need a total order, which needs a coordinator. A CRDT converges from any order of arrival, which is why offline edits merge cleanly instead of needing an operational-transform server.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Yjs speaks a binary sync protocol</span><span class="lz-d">It is not JSON events. Persistence is a separate decision — when to snapshot the Y.Doc — and per-document authorization has to happen at the connection, not per message.</span></div>
+</div>
+<p>6 questions, 10 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Kiểm tra</span>
 <h2>Chương 8 đã dựng được gì</h2>
-<p class="lead">Sáu câu về collaborative editing — vì sao KHÔNG dùng socket.io, và cái gì thay thế cho use case này.</p>
+<p class="lead">Sáu câu về soạn thảo cộng tác — và về việc nhận ra một bài toán mà Socket.IO là công cụ sai.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Hai server WebSocket trong một kho là đúng</span><span class="lz-d">Socket.IO cho chat và presence, Hocuspocus cho tài liệu. Chúng giải quyết hai bài toán khác nhau, và ép việc đồng bộ tài liệu đi qua một event bus nghĩa là cài lại phần giải quyết xung đột một cách tệ hại.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">CRDT hợp nhất mà không cần trọng tài phía server</span><span class="lz-d">Sự kiện cần một thứ tự toàn phần, thứ đòi phải có một bộ điều phối. Một CRDT hội tụ từ bất kỳ thứ tự tới nào, đó là lý do các sửa đổi ngoại tuyến hợp nhất sạch sẽ thay vì cần một server operational-transform.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Yjs nói một giao thức đồng bộ nhị phân</span><span class="lz-d">Nó không phải sự kiện JSON. Việc lưu trữ là một quyết định riêng — khi nào chụp ảnh Y.Doc — và việc phân quyền theo từng tài liệu phải xảy ra ở lúc kết nối, không phải theo từng thông điệp.</span></div>
+</div>
+<p>6 câu, 10 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

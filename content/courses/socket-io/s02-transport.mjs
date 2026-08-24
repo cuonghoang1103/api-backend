@@ -842,13 +842,25 @@ Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Quiz</span>
-<h2>What Chapter 2 measured</h2>
-<p class="lead">Sáu câu, mười phút. Về transport thực sự — overhead ở đâu, ping timing chuẩn, sticky sessions cho cluster, curl để chẩn đoán, và binary payload.</p>
+<h2>What Chapter 2 established</h2>
+<p class="lead">Six questions on transports, heartbeats and the upgrade — where most production Socket.IO problems actually live.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">The overhead is the handshake, not the frames</span><span class="lz-d">A WebSocket frame costs 2-14 bytes. The connection setup costs a full HTTP round-trip plus an upgrade. That is why connection churn hurts far more than message volume.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">pingInterval and pingTimeout are four modes</span><span class="lz-d">The two numbers combine into distinct behaviours: healthy, slow-network-but-alive, dead-but-not-yet-noticed, and falsely-declared-dead. Tune them against your worst real network, not your laptop.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Sticky sessions are not optional on polling</span><span class="lz-d">A polling client makes many HTTP requests that must all reach the same worker, because the session lives in that worker's memory. Without stickiness the handshake succeeds and then the connection fails in a way that looks random.</span></div>
+</div>
+<p>6 questions, 10 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Kiểm tra</span>
-<h2>Chương 2 đã đo được gì</h2>
-<p class="lead">Sáu câu, mười phút. Về transport thực sự — overhead ở đâu, ping timing chuẩn, sticky sessions cho cluster, curl để chẩn đoán, và binary payload.</p>
+<h2>Chương 2 đã dựng được gì</h2>
+<p class="lead">Sáu câu về transport, nhịp tim và việc nâng cấp — nơi phần lớn sự cố Socket.IO trên production thực sự nằm.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Chi phí nằm ở cú bắt tay, không phải ở khung tin</span><span class="lz-d">Một khung WebSocket tốn 2-14 byte. Việc thiết lập kết nối tốn trọn một vòng HTTP cộng một lần nâng cấp. Đó là lý do việc kết nối đứt-nối liên tục gây hại hơn nhiều so với lượng thông điệp.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">pingInterval và pingTimeout là bốn chế độ</span><span class="lz-d">Hai con số kết hợp thành những hành vi riêng biệt: khoẻ, mạng chậm nhưng còn sống, đã chết mà chưa bị phát hiện, và bị tuyên chết oan. Hãy tinh chỉnh chúng theo mạng thật tệ nhất của bạn, không phải theo cái laptop.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Sticky session không phải tuỳ chọn với polling</span><span class="lz-d">Một client polling tạo nhiều request HTTP mà tất cả đều phải tới đúng một worker, vì phiên sống trong bộ nhớ của worker đó. Không có sticky thì cú bắt tay thành công rồi kết nối hỏng theo kiểu trông như ngẫu nhiên.</span></div>
+</div>
+<p>6 câu, 10 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

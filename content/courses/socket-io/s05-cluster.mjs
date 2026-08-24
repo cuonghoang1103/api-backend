@@ -195,129 +195,419 @@ Pattern la: socket.io#&lt;namespace&gt;#&lt;room-name&gt;
 `,
     },
 
+
     /* ─────────────────────────── 5.2 ─────────────────────────── */
     {
-      title: '5.2 — Adapter API: fetchSockets, serverSideEmit, socketsJoin|||5.2 — Adapter API: fetchSockets, serverSideEmit, socketsJoin',
+      title: '5.2 — Adapter API: the four methods that cross workers|||5.2 — Adapter API: bốn method đi xuyên worker',
       slug: 'io-5-2-adapter-api',
       type: 'VIDEO',
-      description: 'Bốn method của adapter chạy được qua cluster. `fetchSockets()` lấy socket từ mọi worker. `serverSideEmit` là RPC giữa worker.',
+      description: 'fetchSockets, socketsJoin/Leave, serverSideEmit và disconnectSockets — bốn method chỉ đúng khi có adapter, và bốn method tương ứng của socket.io thuần sẽ nói dối trong cluster.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.2</span>
-<h2>Adapter API: methods that scale across workers</h2>
-<p class="lead">Adapter đem đến bốn method mà emit thường không có. Mỗi cái giải quyết vấn đề khác nhau trong cluster.</p>
+<h2>Adapter API: the four methods that cross workers</h2>
+<p class="lead">Lesson 5.1 established that the adapter carries <code>emit</code> across workers. It also adds four methods that have no single-process equivalent — and, more importantly, it changes the meaning of four methods you were already using. The local versions do not throw in a cluster; they quietly answer for one worker out of N.</p>
 
-<h3>fetchSockets — cluster-aware</h3>
-<pre><code class="language-ts">// LOCAL only — chi thay socket cua worker hien tai
-const localSockets = [...io.of('/').sockets.values()];
+<h3>The pairs: what lies, and what tells the truth</h3>
+<pre><code class="language-text">LOCAL (one worker only)              CLUSTER-WIDE (via adapter)
+──────────────────────────────────  ────────────────────────────────────
+io.of('/').sockets                   await io.fetchSockets()
+  a Map of THIS worker's sockets       RemoteSocket[] from every worker
 
-// CLUSTER-WIDE — Redis adapter aggregate tu moi worker
-const allSockets = await io.fetchSockets();
-// tra ve RemoteSocket[] — subset cua Socket API
-allSockets[0].data.userId;     // data van co
-allSockets[0].emit('foo');     // hoat dong
-allSockets[0].on(...);         // KHONG — RemoteSocket khong subscribe
+socket.join(room)                    await io.in(sel).socketsJoin(room)
+  joins one socket you hold            joins every matching socket anywhere
+
+socket.disconnect()                  await io.in(sel).disconnectSockets()
+  disconnects one socket you hold      disconnects every match anywhere
+
+(no equivalent)                      io.serverSideEmit(ev, cb)
+                                       RPC to the other worker processes
+
+The left column does not error in a cluster. With 4 workers it answers
+for ~25% of your users, which is exactly the kind of bug that passes
+every local test and every staging test with one instance.
 </code></pre>
 
-<h3>socketsJoin / socketsLeave — cluster-wide room management</h3>
-<pre><code class="language-ts">// Ep MOI socket cua user 42 (moi worker) join room "vip"
-await io.in('user:42').socketsJoin('vip');
+<h3>fetchSockets — the one you will reach for most</h3>
+<pre><code class="language-ts">// LOCAL — only this worker's sockets
+const local = [...io.of('/').sockets.values()];
+local.length;                    // 312 on a 4-worker box holding ~1,250
 
-// Ep moi socket trong "old-room" roi ra
-await io.in('old-room').socketsLeave('old-room');
+// CLUSTER-WIDE — the adapter asks every worker and aggregates
+const all = await io.fetchSockets();
+all.length;                      // 1,250
+
+// What you get back is a RemoteSocket, not a Socket:
+all[0].id;                       // ✅ present
+all[0].data.userId;              // ✅ data is replicated with the socket
+all[0].rooms;                    // ✅ Set of room names
+all[0].handshake;                // ✅ headers, address, auth, query
+all[0].emit('foo', payload);     // ✅ routed to the owning worker
+all[0].join('vip');              // ✅ routed
+all[0].leave('vip');             // ✅ routed
+all[0].disconnect();             // ✅ routed
+all[0].on('bar', handler);       // ❌ NOT available — see below
 </code></pre>
 
-<h3>serverSideEmit — RPC giữa workers</h3>
-<pre><code class="language-ts">// Worker A: emit request den moi worker khac + tra ket qua
-io.serverSideEmit('get-stats', (err, responses) =&gt; {
-  // responses la array tu moi worker khac
-});
+<pre><code class="language-text">Why .on() is missing, and why that is not an oversight:
 
-// Worker B, C, D: handler
-io.on('get-stats', (cb) =&gt; {
-  cb({ workerId: process.pid, count: io.sockets.sockets.size });
-});
+  A listener is a function. Functions cannot be serialized and shipped
+  to another Node process. The socket lives on worker B; your handler
+  closure lives on worker A. There is no mechanism that could make
+  all[0].on('bar', fn) work.
+
+  Everything that DOES work — emit, join, leave, disconnect — is a
+  COMMAND: a message the adapter can serialize, publish to Redis, and
+  have the owning worker execute. Everything that does not work is a
+  SUBSCRIPTION, which would require moving code.
+
+  That distinction is the whole mental model for the adapter API:
+  you can tell a remote socket to do something; you cannot ask it to
+  call you back.
 </code></pre>
 
-<div class="callout ok">
-<p><strong>Dùng cho monitoring hoặc admin command.</strong> Đếm tổng số socket qua cluster, kick user khỏi mọi worker, force reload config — đều dễ với <code>serverSideEmit</code>. KHÔNG dùng cho realtime message (overhead lớn hơn thẳng emit).</p>
+<h3>Filtering with fetchSockets</h3>
+<pre><code class="language-ts">// Every socket in a room, across the cluster
+const inRoom = await io.in('room:42').fetchSockets();
+
+// Combine selectors — same chaining as emit
+const vipsExceptOne = await io.in('vip').except('room:muted').fetchSockets();
+
+// A namespace other than '/'
+const admins = await io.of('/admin').fetchSockets();
+
+// A common real query: is this user online anywhere?
+async function isOnline(userId: number) {
+  const sockets = await io.in(\`user:\${userId}\`).fetchSockets();
+  return sockets.length &gt; 0;
+}
+</code></pre>
+
+<div class="callout warn">
+<p><strong>Cost note.</strong> <code>fetchSockets()</code> is a round-trip to every worker, gated by a timeout. It is fine on an admin endpoint or a once-per-minute metric. It is <em>not</em> fine inside a message handler that fires thousands of times a second — that turns one user action into N Redis round-trips. If you need &quot;is this user online&quot; on a hot path, keep a presence set in Redis instead (Chapter 4).</p>
 </div>
 
-<h3>disconnectSockets — kick user khỏi cluster</h3>
-<pre><code class="language-ts">// Da doi mat khau — kick moi socket cua user 42
-await io.in('user:42').disconnectSockets(true);
+<h3>socketsJoin / socketsLeave — moving rooms you do not hold</h3>
+<pre><code class="language-ts">// The problem: user 42 has 3 tabs open, spread across 3 different
+// workers. You want all of them in the "vip" room. You hold none
+// of those socket objects.
+
+await io.in('user:42').socketsJoin('vip');     // all three, anywhere
+await io.in('old-room').socketsLeave('old-room');
+
+// Also accepts an array
+await io.in('user:42').socketsJoin(['vip', 'announcements']);
+</code></pre>
+
+<pre><code class="language-text">The pattern this exists for:
+
+  1. A user upgrades to a paid plan mid-session
+  2. Their entitlement changes, so their room membership must change
+  3. But their sockets are on workers you are not currently executing on
+
+  Without socketsJoin: you would emit a "re-subscribe" message to the
+  user, and their client would have to ask to join — a round-trip to
+  the browser and back, which fails if the tab is backgrounded.
+
+  With socketsJoin: the server changes membership directly. The client
+  does not participate and cannot get it wrong.
+</code></pre>
+
+<h3>serverSideEmit — RPC between worker processes</h3>
+<pre><code class="language-ts">// Worker A asks every OTHER worker a question
+io.serverSideEmit('get-stats', (err, responses) =&gt; {
+  if (err) {
+    // At least one worker did not answer before the timeout.
+    // responses is NOT populated — you get the error instead.
+    logger.warn('serverSideEmit timed out', { err: err.message });
+    return;
+  }
+  // responses: one entry per other worker, in arbitrary order
+  const total = responses.reduce((n, r) =&gt; n + r.count, 0);
+});
+
+// Every other worker answers
+io.on('get-stats', (cb) =&gt; {
+  cb({ pid: process.pid, count: io.of('/').sockets.size });
+});
+</code></pre>
+
+<pre><code class="language-text">Four properties that decide whether you should use it:
+
+  1. It reaches every OTHER worker, never the sender.
+     A 4-worker cluster gives you 3 responses, not 4. If you want a
+     cluster total, add the local value yourself.
+
+  2. The callback is all-or-nothing.
+     One slow worker means an error and NO partial results. There is
+     no "here are the 2 that answered". Design for the error path.
+
+  3. Arguments must be serializable.
+     Same constraint as .on() above: no functions, no class instances
+     with methods, no circular references.
+
+  4. It is slow relative to emit.
+     A publish, N subscribes, N handler runs, N publishes back, and a
+     collect. Use it for admin and monitoring, never for user messages.
+</code></pre>
+
+<h3>disconnectSockets — the security-relevant one</h3>
+<pre><code class="language-ts">// Password changed, or the account was banned. Every session of this
+// user must end, on every worker, immediately.
+await io.in(\`user:\${userId}\`).disconnectSockets(true);
+//                                              ^^^^
+// true  = close the underlying transport too (the client sees a real
+//         disconnect and its reconnect logic runs)
+// false = leave the low-level connection open (rarely what you want)
+</code></pre>
+
+<pre><code class="language-text">Why this matters more than it looks:
+
+  Revoking a token in your database stops the NEXT request from
+  authenticating. It does nothing to a WebSocket that authenticated
+  ten minutes ago and is still open — that connection keeps receiving
+  events for as long as it stays connected, which can be hours.
+
+  So "log out everywhere" has two halves:
+    1. invalidate the token / session record   (your auth layer)
+    2. disconnectSockets across the cluster    (this method)
+
+  Skipping the second half is a real vulnerability with a long tail:
+  a banned user keeps seeing live messages until their network blips.
+</code></pre>
+
+<h3>Reading the source of truth</h3>
+<pre><code class="language-ts">// Which adapter is actually installed? Worth logging at boot —
+// a misconfigured deploy that silently ran the in-memory adapter is
+// Chapter 5.3's failure mode, and this line catches it.
+logger.info('[socket] adapter', {
+  name: io.of('/').adapter.constructor.name,
+  // 'Adapter'      → in-memory, single process only
+  // 'RedisAdapter' → cluster-aware
+});
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng LOCAL <code>io.sockets.sockets</code> trong cluster.</strong> Trả về Map chỉ chứa sockets của WORKER hiện tại. Với 4 worker, bạn thấy 1/4 users. Luôn dùng <code>await io.fetchSockets()</code> cho public API.</p>
+<p><strong>Bẫy — using <code>io.sockets.sockets</code> for a user-facing count.</strong> It is a <code>Map</code> of the current worker's sockets only. On 4 workers your &quot;online users&quot; number is roughly a quarter of the truth, and it is <em>different on every request</em> depending on which worker answered. It never throws, so nothing points at it. Use <code>await io.fetchSockets()</code>, or better, a Redis presence set.</p>
+</div>
+
+<div class="pitfall">
+<p><strong>Bẫy — treating <code>serverSideEmit</code>'s callback as partial-results.</strong> If any worker misses the timeout you get an error and no responses at all, not the subset that answered. A monitoring endpoint written assuming partial results will show &quot;0 users online&quot; during a slow moment rather than a slightly stale number.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Adapter cung cấp <code>fetchSockets</code>, <code>socketsJoin/Leave</code>, <code>serverSideEmit</code>, <code>disconnectSockets</code> — tất cả cluster-aware qua Redis, mỗi cái giải quyết một vấn đề (query membership, force room membership, RPC, kick) mà LOCAL socket.io API không giải quyết được.</p>
+<p><strong>One sentence.</strong> The adapter adds four cluster-wide methods — <code>fetchSockets</code> (aggregate, returns command-only <code>RemoteSocket</code>s because listeners cannot be serialized across processes), <code>socketsJoin</code>/<code>socketsLeave</code> (change room membership for sockets you do not hold), <code>serverSideEmit</code> (all-or-nothing RPC to the <em>other</em> workers), and <code>disconnectSockets</code> (the half of &quot;log out everywhere&quot; that token revocation cannot do) — and the danger is not these methods but their local counterparts, which in a cluster answer for one worker out of N without ever raising an error.</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server API (adapter)</span><span class="lc-sub">socket.io/docs/v4/server-api#serverfetchsockets — bảng đầy đủ các method.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server API</span><span class="lc-sub">socket.io/docs/v4/server-api#serverfetchsockets — bảng đầy đủ, kèm phần RemoteSocket.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapter</span><span class="lc-sub">socket.io/docs/v4/adapter — method nào đi qua adapter và method nào không.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server-side emit</span><span class="lc-sub">socket.io/docs/v4/server-api#serverserversideemiteventname-args — ngữ nghĩa timeout và callback.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
-<h2>Adapter API: các method chạy được qua cluster</h2>
-<p class="lead">Adapter đem đến bốn method mà emit thường không có. Mỗi cái giải quyết vấn đề khác nhau trong cluster.</p>
+<h2>Adapter API: bốn method đi xuyên worker</h2>
+<p class="lead">Bài 5.1 đã xác lập rằng adapter mang <code>emit</code> đi qua các worker. Nó còn thêm bốn method không có bản tương đương trong tiến trình đơn — và, quan trọng hơn, nó thay đổi ý nghĩa của bốn method bạn vốn đã dùng. Các phiên bản local không ném lỗi trong cluster; chúng lặng lẽ trả lời thay cho một worker trên N.</p>
 
-<h3>fetchSockets — cluster-aware</h3>
-<pre><code class="language-ts">// LOCAL only — chi thay socket cua worker hien tai
-const localSockets = [...io.of('/').sockets.values()];
+<h3>Các cặp: cái nào nói dối, cái nào nói thật</h3>
+<pre><code class="language-text">LOCAL (chỉ một worker)               TOÀN CLUSTER (qua adapter)
+──────────────────────────────────  ────────────────────────────────────
+io.of('/').sockets                   await io.fetchSockets()
+  Map socket của CHÍNH worker này      RemoteSocket[] từ mọi worker
 
-// CLUSTER-WIDE — Redis adapter aggregate tu moi worker
-const allSockets = await io.fetchSockets();
-// tra ve RemoteSocket[] — subset cua Socket API
-allSockets[0].data.userId;     // data van co
-allSockets[0].emit('foo');     // hoat dong
-allSockets[0].on(...);         // KHONG — RemoteSocket khong subscribe
+socket.join(room)                    await io.in(sel).socketsJoin(room)
+  join một socket bạn đang cầm         join mọi socket khớp, ở bất kỳ đâu
+
+socket.disconnect()                  await io.in(sel).disconnectSockets()
+  ngắt một socket bạn đang cầm         ngắt mọi socket khớp, ở bất kỳ đâu
+
+(không có tương đương)               io.serverSideEmit(ev, cb)
+                                       RPC tới các tiến trình worker khác
+
+Cột trái không báo lỗi trong cluster. Với 4 worker nó trả lời thay cho
+~25% người dùng của bạn, đúng loại bug lọt qua mọi test local và mọi
+test staging chạy một instance.
 </code></pre>
 
-<h3>socketsJoin / socketsLeave — cluster-wide room management</h3>
-<pre><code class="language-ts">// Ep MOI socket cua user 42 (moi worker) join room "vip"
-await io.in('user:42').socketsJoin('vip');
+<h3>fetchSockets — cái bạn sẽ dùng nhiều nhất</h3>
+<pre><code class="language-ts">// LOCAL — chỉ socket của worker này
+const local = [...io.of('/').sockets.values()];
+local.length;                    // 312 trên máy 4 worker đang giữ ~1.250
 
-// Ep moi socket trong "old-room" roi ra
-await io.in('old-room').socketsLeave('old-room');
+// TOÀN CLUSTER — adapter hỏi mọi worker rồi gộp lại
+const all = await io.fetchSockets();
+all.length;                      // 1.250
+
+// Thứ bạn nhận về là RemoteSocket, không phải Socket:
+all[0].id;                       // ✅ có
+all[0].data.userId;              // ✅ data được nhân bản cùng socket
+all[0].rooms;                    // ✅ Set tên room
+all[0].handshake;                // ✅ header, address, auth, query
+all[0].emit('foo', payload);     // ✅ định tuyến tới worker sở hữu
+all[0].join('vip');              // ✅ định tuyến
+all[0].leave('vip');             // ✅ định tuyến
+all[0].disconnect();             // ✅ định tuyến
+all[0].on('bar', handler);       // ❌ KHÔNG có — xem dưới
 </code></pre>
 
-<h3>serverSideEmit — RPC giữa workers</h3>
-<pre><code class="language-ts">// Worker A: emit request den moi worker khac + tra ket qua
-io.serverSideEmit('get-stats', (err, responses) =&gt; {
-  // responses la array tu moi worker khac
-});
+<pre><code class="language-text">Vì sao thiếu .on(), và vì sao đó không phải một thiếu sót:
 
-// Worker B, C, D: handler
-io.on('get-stats', (cb) =&gt; {
-  cb({ workerId: process.pid, count: io.sockets.sockets.size });
-});
+  Một listener là một hàm. Hàm không serialize được để gửi sang một
+  tiến trình Node khác. Socket sống ở worker B; closure handler của
+  bạn sống ở worker A. Không có cơ chế nào làm cho
+  all[0].on('bar', fn) chạy được.
+
+  Mọi thứ CHẠY ĐƯỢC — emit, join, leave, disconnect — đều là một
+  MỆNH LỆNH: một thông điệp mà adapter serialize được, publish lên
+  Redis, và để worker sở hữu thực thi. Mọi thứ không chạy được đều là
+  một ĐĂNG KÝ LẮNG NGHE, thứ đòi phải di chuyển mã.
+
+  Sự phân biệt đó chính là toàn bộ mô hình tư duy cho adapter API:
+  bạn ra lệnh được cho một socket ở xa; bạn không nhờ nó gọi lại
+  cho bạn được.
 </code></pre>
 
-<div class="callout ok">
-<p><strong>Dùng cho monitoring hoặc admin command.</strong> Đếm tổng số socket qua cluster, kick user khỏi mọi worker, force reload config — đều dễ với <code>serverSideEmit</code>. KHÔNG dùng cho realtime message (overhead lớn hơn thẳng emit).</p>
+<h3>Lọc bằng fetchSockets</h3>
+<pre><code class="language-ts">// Mọi socket trong một room, xuyên cluster
+const inRoom = await io.in('room:42').fetchSockets();
+
+// Kết hợp selector — cùng cách nối chuỗi như emit
+const vipsExceptOne = await io.in('vip').except('room:muted').fetchSockets();
+
+// Một namespace khác '/'
+const admins = await io.of('/admin').fetchSockets();
+
+// Một truy vấn thật rất hay gặp: user này có online ở đâu không?
+async function isOnline(userId: number) {
+  const sockets = await io.in(\`user:\${userId}\`).fetchSockets();
+  return sockets.length &gt; 0;
+}
+</code></pre>
+
+<div class="callout warn">
+<p><strong>Ghi chú chi phí.</strong> <code>fetchSockets()</code> là một vòng gọi tới mọi worker, có timeout canh. Nó ổn trên một endpoint admin hoặc một chỉ số mỗi phút một lần. Nó <em>không</em> ổn bên trong một handler thông điệp chạy hàng nghìn lần mỗi giây — cái đó biến một thao tác của người dùng thành N vòng gọi Redis. Nếu cần &quot;user này có online không&quot; trên đường nóng, hãy giữ một tập presence trong Redis (Chương 4).</p>
 </div>
 
-<h3>disconnectSockets — kick user khỏi cluster</h3>
-<pre><code class="language-ts">// Da doi mat khau — kick moi socket cua user 42
-await io.in('user:42').disconnectSockets(true);
+<h3>socketsJoin / socketsLeave — đổi room của socket bạn không cầm</h3>
+<pre><code class="language-ts">// Vấn đề: user 42 mở 3 tab, nằm rải trên 3 worker khác nhau. Bạn
+// muốn cả ba vào room "vip". Bạn không cầm object socket nào trong số đó.
+
+await io.in('user:42').socketsJoin('vip');     // cả ba, ở bất kỳ đâu
+await io.in('old-room').socketsLeave('old-room');
+
+// Cũng nhận một mảng
+await io.in('user:42').socketsJoin(['vip', 'announcements']);
+</code></pre>
+
+<pre><code class="language-text">Cái pattern mà nó sinh ra để phục vụ:
+
+  1. Một user nâng cấp lên gói trả phí giữa phiên
+  2. Quyền lợi của họ đổi, nên room họ thuộc về phải đổi theo
+  3. Nhưng socket của họ nằm trên những worker mà bạn không đang chạy trên đó
+
+  Không có socketsJoin: bạn sẽ phải emit một thông điệp "đăng ký lại"
+  xuống cho user, và client của họ phải xin join — một vòng đi xuống
+  trình duyệt rồi quay lại, thứ sẽ hỏng nếu tab đang chạy nền.
+
+  Có socketsJoin: server đổi thành viên trực tiếp. Client không tham
+  gia vào và không thể làm sai được.
+</code></pre>
+
+<h3>serverSideEmit — RPC giữa các tiến trình worker</h3>
+<pre><code class="language-ts">// Worker A hỏi mọi worker KHÁC một câu
+io.serverSideEmit('get-stats', (err, responses) =&gt; {
+  if (err) {
+    // Ít nhất một worker không trả lời kịp timeout.
+    // responses KHÔNG được điền — bạn nhận lỗi thay vào đó.
+    logger.warn('serverSideEmit timed out', { err: err.message });
+    return;
+  }
+  // responses: một mục cho mỗi worker khác, thứ tự tuỳ ý
+  const total = responses.reduce((n, r) =&gt; n + r.count, 0);
+});
+
+// Mọi worker khác trả lời
+io.on('get-stats', (cb) =&gt; {
+  cb({ pid: process.pid, count: io.of('/').sockets.size });
+});
+</code></pre>
+
+<pre><code class="language-text">Bốn tính chất quyết định bạn có nên dùng nó không:
+
+  1. Nó tới mọi worker KHÁC, không bao giờ tới chính người gửi.
+     Một cluster 4 worker cho bạn 3 response, không phải 4. Muốn tổng
+     toàn cluster thì tự cộng giá trị local vào.
+
+  2. Callback là được-tất-cả-hoặc-không-gì.
+     Một worker chậm nghĩa là một lỗi và KHÔNG có kết quả từng phần.
+     Không có chuyện "đây là 2 cái đã trả lời". Hãy thiết kế cho nhánh lỗi.
+
+  3. Tham số phải serialize được.
+     Cùng ràng buộc với .on() ở trên: không hàm, không instance class
+     có method, không tham chiếu vòng.
+
+  4. Nó chậm so với emit.
+     Một lần publish, N lần subscribe, N lần chạy handler, N lần publish
+     ngược, rồi một lần gom. Dùng cho admin và giám sát, không bao giờ
+     cho thông điệp của người dùng.
+</code></pre>
+
+<h3>disconnectSockets — cái liên quan tới bảo mật</h3>
+<pre><code class="language-ts">// Đã đổi mật khẩu, hoặc tài khoản bị cấm. Mọi phiên của user này
+// phải chấm dứt, trên mọi worker, ngay lập tức.
+await io.in(\`user:\${userId}\`).disconnectSockets(true);
+//                                              ^^^^
+// true  = đóng luôn transport bên dưới (client thấy một lần ngắt thật
+//         và logic reconnect của nó chạy)
+// false = để kết nối tầng thấp mở (hiếm khi là thứ bạn muốn)
+</code></pre>
+
+<pre><code class="language-text">Vì sao điều này quan trọng hơn vẻ ngoài của nó:
+
+  Thu hồi một token trong database chặn được request TIẾP THEO xác thực.
+  Nó không làm gì được với một WebSocket đã xác thực từ mười phút trước
+  và vẫn đang mở — kết nối đó tiếp tục nhận sự kiện chừng nào nó còn
+  kết nối, và chừng đó có thể là hàng giờ.
+
+  Nên "đăng xuất mọi nơi" có hai nửa:
+    1. vô hiệu hoá token / bản ghi phiên     (lớp auth của bạn)
+    2. disconnectSockets xuyên cluster       (method này)
+
+  Bỏ qua nửa thứ hai là một lỗ hổng thật với cái đuôi dài: một user
+  bị cấm vẫn thấy thông điệp trực tiếp cho tới khi mạng của họ chớp.
+</code></pre>
+
+<h3>Đọc nguồn sự thật</h3>
+<pre><code class="language-ts">// Adapter nào thực sự được cài? Đáng ghi log lúc khởi động —
+// một lần deploy sai cấu hình mà âm thầm chạy adapter in-memory chính
+// là failure mode ở Bài 5.3, và dòng này bắt được nó.
+logger.info('[socket] adapter', {
+  name: io.of('/').adapter.constructor.name,
+  // 'Adapter'      → in-memory, chỉ một tiến trình
+  // 'RedisAdapter' → nhận biết cluster
+});
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng LOCAL <code>io.sockets.sockets</code> trong cluster.</strong> Trả về Map chỉ chứa sockets của WORKER hiện tại. Với 4 worker, bạn thấy 1/4 users. Luôn dùng <code>await io.fetchSockets()</code> cho public API.</p>
+<p><strong>Bẫy — dùng <code>io.sockets.sockets</code> cho một con số hiển thị cho người dùng.</strong> Nó là một <code>Map</code> chỉ chứa socket của worker hiện tại. Trên 4 worker, con số &quot;người dùng đang online&quot; của bạn xấp xỉ một phần tư sự thật, và nó <em>khác nhau ở mỗi request</em> tuỳ worker nào trả lời. Nó không bao giờ ném lỗi, nên chẳng có gì chỉ vào nó. Hãy dùng <code>await io.fetchSockets()</code>, hoặc tốt hơn là một tập presence trong Redis.</p>
+</div>
+
+<div class="pitfall">
+<p><strong>Bẫy — coi callback của <code>serverSideEmit</code> là kết quả từng phần.</strong> Nếu bất kỳ worker nào lỡ timeout, bạn nhận một lỗi và hoàn toàn không có response nào, chứ không phải cái tập con đã trả lời. Một endpoint giám sát viết theo giả định có kết quả từng phần sẽ hiện &quot;0 người online&quot; trong một khoảnh khắc chậm thay vì một con số hơi cũ.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Adapter cung cấp <code>fetchSockets</code>, <code>socketsJoin/Leave</code>, <code>serverSideEmit</code>, <code>disconnectSockets</code> — tất cả cluster-aware qua Redis, mỗi cái giải quyết một vấn đề (query membership, force room membership, RPC, kick) mà LOCAL socket.io API không giải quyết được.</p>
+<p><strong>Một câu.</strong> Adapter thêm bốn method toàn-cluster — <code>fetchSockets</code> (gộp lại, trả về <code>RemoteSocket</code> chỉ-nhận-lệnh vì listener không serialize được qua tiến trình), <code>socketsJoin</code>/<code>socketsLeave</code> (đổi thành viên room cho những socket bạn không cầm), <code>serverSideEmit</code> (RPC được-tất-cả-hoặc-không-gì tới các worker <em>khác</em>), và <code>disconnectSockets</code> (nửa của &quot;đăng xuất mọi nơi&quot; mà việc thu hồi token không làm được) — và mối nguy không nằm ở những method này mà ở những bản local tương ứng, vốn trong cluster trả lời thay cho một worker trên N mà không bao giờ nêu lên một lỗi nào.</p>
 </div>
 
 <h3>Nguồn</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server API (adapter)</span><span class="lc-sub">socket.io/docs/v4/server-api#serverfetchsockets — bảng đầy đủ các method.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server API</span><span class="lc-sub">socket.io/docs/v4/server-api#serverfetchsockets — bảng đầy đủ, kèm phần RemoteSocket.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapter</span><span class="lc-sub">socket.io/docs/v4/adapter — method nào đi qua adapter và method nào không.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server-side emit</span><span class="lc-sub">socket.io/docs/v4/server-api#serverserversideemiteventname-args — ngữ nghĩa timeout và callback.</span></span></div>
 </div>
 `,
     },
+
 
     /* ─────────────────────────── 5.3 ─────────────────────────── */
     {
@@ -577,115 +867,341 @@ Cluster-level:
 
     /* ─────────────────────────── 5.5 ─────────────────────────── */
     {
-      title: '5.5 — Alternatives to Redis adapter|||5.5 — Alternatives cho Redis adapter',
+      title: '5.5 — Alternatives to the Redis adapter|||5.5 — Những lựa chọn thay cho Redis adapter',
       slug: 'io-5-5-alt',
       type: 'VIDEO',
-      description: 'MongoDB adapter, Postgres adapter, Kafka adapter, và AMQP adapter. Trade off nào cho mỗi cái, và khi nào không dùng adapter (single instance forever).',
+      description: 'Bốn cách khác để broadcast xuyên worker — cluster adapter, Postgres, MongoDB, và không cluster gì cả — kèm điều kiện khiến mỗi cái là lựa chọn đúng.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.5</span>
-<h2>Alternatives to Redis adapter</h2>
-<p class="lead">Redis is the default recommendation but not the only choice. This lesson catalogs official alternatives and when each fits.</p>
+<h2>Alternatives to the Redis adapter</h2>
+<p class="lead">Redis is the default answer and usually the right one, but it is not the only one — and reaching for it reflexively means adding a service you now have to run, monitor and pay for. Four alternatives exist, and each is correct under a condition you can state precisely.</p>
 
-<h3>Bảng so sánh</h3>
-<div class="out">Adapter               Backend           Latency  Payload   Persist?  Ideal
---------------------  ----------------  -------  --------  --------  -----
-default (memory)      -                 &lt;1ms     unlimited no        single
-@s.i/redis-adapter    Redis pub/sub     ~1ms     unlimited no        cluster N&lt;100
-@s.i/redis-streams    Redis Streams     ~2ms     unlimited YES       replay needed
-@s.i/postgres         Postgres LN       ~10ms    8KB       no        already have PG
-@s.i/mongo            MongoDB tail      ~30ms    16MB      YES       already have Mongo
-@s.i/cluster          Node cluster IPC  &lt;1ms     unlimited no        single VM only
-@s.i/amqp             RabbitMQ          ~5ms     unlimited configurable  enterprise MQ
-</div>
+<h3>The options, and the condition that selects each</h3>
+<pre><code class="language-text">Option                    Correct when…                    Cost
+───────────────────────  ──────────────────────────────  ──────────────────
+No adapter at all         You genuinely run ONE process   Zero. Also the
+(in-memory, the default)  and will keep doing so           default, which is
+                                                           why it is dangerous
 
-<h3>Khi nào NOT dùng adapter</h3>
+@socket.io/cluster-       All workers are on ONE machine  Zero extra infra
+adapter                   via node:cluster                 Does NOT cross
+                                                           machines
+
+@socket.io/redis-adapter  Multiple machines, and you      A Redis you run
+                          already run Redis                and monitor
+
+@socket.io/postgres-      Multiple machines, and you      No new service if
+adapter                   already run Postgres but NOT     Postgres is there
+                          Redis                            Higher latency
+
+@socket.io/mongo-adapter  Same, but MongoDB               Same trade
+</code></pre>
+
+<h3>Option 1 — no adapter, deliberately</h3>
+<pre><code class="language-ts">// This is what you get if you configure nothing:
+const io = new Server(httpServer);
+io.of('/').adapter.constructor.name;   // 'Adapter' — in-memory
+</code></pre>
+
+<pre><code class="language-text">The in-memory adapter is correct when there is exactly one process,
+and that is a real configuration:
+
+  - A small app on a single VPS with one Node process
+  - An internal tool with dozens, not thousands, of users
+  - Any deployment where you have consciously decided that vertical
+    scaling is enough for the next year
+
+The danger is not that it is slow. It is that it is the DEFAULT, so
+"we never chose an adapter" and "we chose the in-memory adapter"
+produce identical code. The moment someone adds a second worker —
+a pm2 instance count, a Docker replica, a Kubernetes scale-up — the
+app keeps starting, keeps serving, and silently delivers messages to
+roughly 1/N of the intended recipients.
+
+That is why Lesson 5.2 ends with a boot-time log line. It costs one
+line and turns an invisible misconfiguration into a visible one.
+</code></pre>
+
+<h3>Option 2 — the cluster adapter, for one machine</h3>
+<pre><code class="language-ts">import cluster from 'node:cluster';
+import { createAdapter, setupPrimary } from '@socket.io/cluster-adapter';
+import { setupMaster } from '@socket.io/sticky';
+
+if (cluster.isPrimary) {
+  const httpServer = http.createServer();
+  setupMaster(httpServer, { loadBalancingMethod: 'least-connection' });
+  setupPrimary();                       // routes adapter messages between workers
+  httpServer.listen(3000);
+  for (let i = 0; i &lt; os.cpus().length; i++) cluster.fork();
+} else {
+  const io = new Server(httpServer);
+  io.adapter(createAdapter());          // IPC between workers, no Redis
+}
+</code></pre>
+
+<pre><code class="language-text">What it does: routes adapter traffic over Node's built-in IPC channel
+between the primary process and its workers.
+
+  ✅ No external service. Nothing to install, monitor, or pay for.
+  ✅ Lower latency than Redis — no network hop, no serialization to
+     a separate process over TCP.
+  ✅ Pairs with @socket.io/sticky, which solves the polling stickiness
+     problem from Chapter 2 in the same setup.
+
+  ❌ ONE machine only. The primary process is the router, so a second
+     server has no way to participate.
+  ❌ The primary becomes a bottleneck and a single point of failure
+     for cross-worker delivery.
+
+This is the option most small deployments should take and most skip.
+If you run four workers on one VPS — which describes an enormous
+number of Node apps — this gives you correct cross-worker broadcast
+with no Redis at all.
+</code></pre>
+
+<h3>Option 3 — Postgres, when you already have it</h3>
+<pre><code class="language-ts">import { createAdapter } from '@socket.io/postgres-adapter';
+import pg from 'pg';
+
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+io.adapter(createAdapter(pool));
+</code></pre>
+
+<pre><code class="language-text">It uses LISTEN/NOTIFY — Postgres's own pub/sub — plus a table for
+payloads too large for a NOTIFY message (the limit is 8000 bytes).
+
+  ✅ No new service if Postgres is already in your stack, which for
+     this repo it is.
+  ✅ One less thing to back up, secure, and upgrade.
+
+  ❌ Higher latency than Redis. LISTEN/NOTIFY is not what Postgres is
+     optimized for, and every broadcast now competes with your query
+     workload for the same connections.
+  ❌ Large payloads round-trip through a table, which turns a
+     broadcast into a write.
+  ❌ Connection pool pressure: the adapter holds a dedicated
+     connection for LISTEN, and under load that matters.
+
+The honest framing: this is a good choice when your realtime traffic
+is modest and you value operational simplicity over milliseconds.
+It is a poor choice for a chat-heavy app, because you have put your
+message bus on the same box as your durable data.
+</code></pre>
+
+<h3>Deciding, in three questions</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">single VM luôn</span><span class="lz-d">Kho này hôm nay. Single Docker container. Memory adapter đủ. Đừng thêm dependency chỉ để phòng xa.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">test / dev</span><span class="lz-d">Không cần thiết. Memory adapter chạy tự.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Realtime KHÔNG mission-critical</span><span class="lz-d">Nếu broadcast rơi thỉnh thoảng OK (game state, chart update), thì memory + retry ở client đủ.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Will you ever run more than one machine?</span><span class="lz-d">If genuinely no — and be honest, because &quot;we might scale later&quot; is not the same as a plan — the cluster adapter is strictly better than Redis: less to run, lower latency, and it solves stickiness in the same configuration.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Do you already run Redis?</span><span class="lz-d">If yes, use it. The Redis adapter is the best-tested, best-documented option, and adding one more use to a service you already operate costs nearly nothing. This repo already runs Redis for caching and queues, so the answer here is yes.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Is realtime traffic modest and Postgres already present?</span><span class="lz-d">Then the Postgres adapter is defensible, and it is the right call for an internal tool where adding a Redis is more operational burden than the latency is worth. Measure the p99 before committing — LISTEN/NOTIFY under a busy query load is not what the benchmarks show.</span></div>
 </div>
 
-<h3>Khi nào chọn adapter khác Redis</h3>
-<div class="lz-map">
-<div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">postgres-adapter</span><span class="lz-nsub">đã có Postgres, không muốn Redis</span></span>
-<span class="lz-nbody">Dùng LISTEN/NOTIFY. Latency cao hơn ~10× nhưng nếu bạn broadcast không cực nhiều (chat, không phải game), OK. Không cần deploy Redis + monitoring Redis.</span>
-</div>
-<div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">redis-streams-adapter</span><span class="lz-nsub">cần replay khi worker join</span></span>
-<span class="lz-nbody">Redis Streams persist messages. Worker mới join có thể replay last N messages — cho use case &quot;client offline 5 phút rồi reconnect, cần catch up&quot;.</span>
-</div>
-<div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">cluster-adapter</span><span class="lz-nsub">Node cluster mode</span></span>
-<span class="lz-nbody">Nếu bạn dùng <code>cluster.fork()</code> có &lt;8 worker cùng VM, IPC nhanh hơn Redis network hop. Nhưng không scale qua VM — bạn khoá mình trong 1 máy.</span>
-</div>
+<h3>The migration path between them</h3>
+<pre><code class="language-ts">// Adapters are swappable at one line, which is the point of the
+// abstraction. Moving from cluster-adapter to redis-adapter when a
+// second machine appears is a config change, not a rewrite:
+
+const adapter = process.env.SOCKET_ADAPTER ?? 'memory';
+
+if (adapter === 'redis') {
+  const pub = createClient({ url: process.env.REDIS_URL });
+  const sub = pub.duplicate();
+  await Promise.all([pub.connect(), sub.connect()]);
+  io.adapter(createRedisAdapter(pub, sub));
+} else if (adapter === 'cluster') {
+  io.adapter(createClusterAdapter());
+}
+// else: in-memory, and the boot log will say so
+
+logger.info('[socket] adapter', { configured: adapter, actual: io.of('/').adapter.constructor.name });
+</code></pre>
+
+<p>Note the log prints both the <em>intended</em> and the <em>actual</em> adapter. Those disagreeing — because an env var was missing, or a Redis connection failed and something swallowed the error — is precisely the silent misconfiguration this chapter keeps returning to.</p>
+
+<div class="pitfall">
+<p><strong>Bẫy — choosing Redis reflexively for a single-machine deployment.</strong> If all your workers are on one box under <code>node:cluster</code>, the cluster adapter is lower latency and adds no service to operate. Redis becomes correct the moment there is a second machine — not before.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — chọn Kafka adapter cho scale cao.</strong> Kafka tuyệt vời cho event streaming, nhưng cho pub/sub realtime của socket.io, nó overkill. Latency 5-20ms + operational complexity. Chỉ dùng nếu bạn đã có Kafka cluster với ops team lo.</p>
+<p><strong>Bẫy — treating the Postgres adapter as a drop-in for Redis at any scale.</strong> LISTEN/NOTIFY caps payloads at 8000 bytes and spills larger ones to a table, and the adapter holds a dedicated connection. On a chat-heavy workload you have quietly put your message bus in contention with your durable data. Measure p99 broadcast latency under your real query load before committing.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Bảng adapter so sánh 7 lựa chọn với trade off khác nhau — Redis default cho cluster cỡ trung, Postgres nếu đã có sẵn, Redis Streams nếu cần replay, Kafka nếu enterprise-scale — và luôn nhớ &quot;không adapter&quot; là lựa chọn có nếu bạn thực sự single-instance.</p>
+<p><strong>One sentence.</strong> Four adapters exist and each is selected by one condition — in-memory when you genuinely run one process (dangerous only because it is the silent default), <code>cluster-adapter</code> when every worker is on one machine under <code>node:cluster</code> (lower latency than Redis, no service to operate, and it pairs with <code>@socket.io/sticky</code>), <code>redis-adapter</code> once there is a second machine or you already run Redis, and <code>postgres-adapter</code> when realtime traffic is modest and operational simplicity beats milliseconds — and because swapping them is a one-line change, the real decision is only ever &quot;what is true today&quot;.</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapters</span><span class="lc-sub">socket.io/docs/v4/adapter — danh sách adapter chính thức + guide chọn.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapter</span><span class="lc-sub">socket.io/docs/v4/adapter — danh sách adapter chính thức và giao diện chung.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/cluster-adapter</span><span class="lc-sub">github.com/socketio/socket.io-cluster-adapter — IPC giữa worker, dùng với setupPrimary.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/postgres-adapter</span><span class="lc-sub">github.com/socketio/socket.io-postgres-adapter — LISTEN/NOTIFY và giới hạn 8000 byte.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — NOTIFY</span><span class="lc-sub">postgresql.org/docs/current/sql-notify.html — trần payload và ngữ nghĩa hàng đợi.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.5</span>
-<h2>Alternatives cho Redis adapter</h2>
-<p class="lead">Redis là recommendation mặc định nhưng không phải duy nhất. Bài này liệt kê alternatives chính thức và mỗi cái hợp khi nào.</p>
+<h2>Những lựa chọn thay cho Redis adapter</h2>
+<p class="lead">Redis là câu trả lời mặc định và thường là câu trả lời đúng, nhưng nó không phải cái duy nhất — và với tới nó theo phản xạ nghĩa là thêm một dịch vụ mà từ giờ bạn phải chạy, giám sát và trả tiền. Có bốn lựa chọn thay thế, và mỗi cái đúng dưới một điều kiện bạn phát biểu được chính xác.</p>
 
-<h3>Bảng so sánh</h3>
-<div class="out">Adapter               Backend           Latency  Payload   Persist?  Ideal
---------------------  ----------------  -------  --------  --------  -----
-default (memory)      -                 &lt;1ms     unlimited no        single
-@s.i/redis-adapter    Redis pub/sub     ~1ms     unlimited no        cluster N&lt;100
-@s.i/redis-streams    Redis Streams     ~2ms     unlimited YES       replay needed
-@s.i/postgres         Postgres LN       ~10ms    8KB       no        already have PG
-@s.i/mongo            MongoDB tail      ~30ms    16MB      YES       already have Mongo
-@s.i/cluster          Node cluster IPC  &lt;1ms     unlimited no        single VM only
-@s.i/amqp             RabbitMQ          ~5ms     unlimited configurable  enterprise MQ
-</div>
+<h3>Các lựa chọn, và điều kiện chọn ra từng cái</h3>
+<pre><code class="language-text">Lựa chọn                  Đúng khi…                        Chi phí
+───────────────────────  ──────────────────────────────  ──────────────────
+Không adapter nào cả      Bạn thật sự chạy MỘT tiến      Bằng không. Cũng là
+(in-memory, mặc định)     trình và sẽ giữ như vậy         mặc định, đó là lý
+                                                          do nó nguy hiểm
 
-<h3>Khi nào KHÔNG dùng adapter</h3>
+@socket.io/cluster-       Mọi worker trên MỘT máy qua    Không thêm hạ tầng
+adapter                   node:cluster                    KHÔNG đi xuyên máy
+
+@socket.io/redis-adapter  Nhiều máy, và bạn vốn đã       Một Redis bạn chạy
+                          chạy Redis                      và giám sát
+
+@socket.io/postgres-      Nhiều máy, và bạn vốn đã có    Không dịch vụ mới
+adapter                   Postgres nhưng KHÔNG có Redis   nếu Postgres đã có
+                                                          Độ trễ cao hơn
+
+@socket.io/mongo-adapter  Tương tự, nhưng MongoDB        Cùng đánh đổi
+</code></pre>
+
+<h3>Lựa chọn 1 — không adapter, một cách có chủ đích</h3>
+<pre><code class="language-ts">// Đây là thứ bạn nhận được nếu không cấu hình gì:
+const io = new Server(httpServer);
+io.of('/').adapter.constructor.name;   // 'Adapter' — in-memory
+</code></pre>
+
+<pre><code class="language-text">Adapter in-memory là đúng khi có đúng một tiến trình, và đó là một
+cấu hình có thật:
+
+  - Một app nhỏ trên một VPS đơn với một tiến trình Node
+  - Một công cụ nội bộ với vài chục, không phải vài nghìn, người dùng
+  - Bất kỳ triển khai nào mà bạn đã quyết định một cách có ý thức rằng
+    scale theo chiều dọc là đủ cho năm tới
+
+Mối nguy không phải là nó chậm. Mà là nó là MẶC ĐỊNH, nên "chúng ta
+chưa bao giờ chọn adapter" và "chúng ta đã chọn adapter in-memory"
+sinh ra mã giống hệt nhau. Khoảnh khắc ai đó thêm một worker thứ hai —
+một chỉ số instance của pm2, một replica Docker, một lần scale-up
+Kubernetes — app vẫn khởi động, vẫn phục vụ, và âm thầm giao thông
+điệp tới khoảng 1/N số người nhận đáng lẽ phải nhận.
+
+Đó là lý do Bài 5.2 kết bằng một dòng log lúc khởi động. Nó tốn một
+dòng và biến một cấu hình sai vô hình thành một cái nhìn thấy được.
+</code></pre>
+
+<h3>Lựa chọn 2 — cluster adapter, cho một máy</h3>
+<pre><code class="language-ts">import cluster from 'node:cluster';
+import { createAdapter, setupPrimary } from '@socket.io/cluster-adapter';
+import { setupMaster } from '@socket.io/sticky';
+
+if (cluster.isPrimary) {
+  const httpServer = http.createServer();
+  setupMaster(httpServer, { loadBalancingMethod: 'least-connection' });
+  setupPrimary();                       // định tuyến thông điệp adapter giữa worker
+  httpServer.listen(3000);
+  for (let i = 0; i &lt; os.cpus().length; i++) cluster.fork();
+} else {
+  const io = new Server(httpServer);
+  io.adapter(createAdapter());          // IPC giữa worker, không Redis
+}
+</code></pre>
+
+<pre><code class="language-text">Nó làm gì: định tuyến traffic adapter qua kênh IPC có sẵn của Node
+giữa tiến trình chính và các worker của nó.
+
+  ✅ Không dịch vụ ngoài. Không có gì để cài, giám sát, hay trả tiền.
+  ✅ Độ trễ thấp hơn Redis — không nhảy qua mạng, không serialize sang
+     một tiến trình riêng qua TCP.
+  ✅ Đi cặp với @socket.io/sticky, thứ giải quyết vấn đề sticky của
+     polling ở Chương 2 trong cùng một lần cấu hình.
+
+  ❌ Chỉ MỘT máy. Tiến trình chính là bộ định tuyến, nên một server
+     thứ hai không có cách nào tham gia.
+  ❌ Tiến trình chính trở thành nút thắt cổ chai và một điểm hỏng đơn
+     cho việc giao xuyên worker.
+
+Đây là lựa chọn mà hầu hết triển khai nhỏ nên chọn và hầu hết đều bỏ
+qua. Nếu bạn chạy bốn worker trên một VPS — thứ mô tả một số lượng
+khổng lồ app Node — cái này cho bạn broadcast xuyên worker đúng đắn
+mà không cần Redis nào cả.
+</code></pre>
+
+<h3>Lựa chọn 3 — Postgres, khi bạn vốn đã có nó</h3>
+<pre><code class="language-ts">import { createAdapter } from '@socket.io/postgres-adapter';
+import pg from 'pg';
+
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+io.adapter(createAdapter(pool));
+</code></pre>
+
+<pre><code class="language-text">Nó dùng LISTEN/NOTIFY — pub/sub của chính Postgres — cộng một bảng cho
+những tải trọng quá lớn với một thông điệp NOTIFY (giới hạn là 8000 byte).
+
+  ✅ Không dịch vụ mới nếu Postgres vốn đã trong stack của bạn, mà với
+     kho này thì đúng là vậy.
+  ✅ Bớt một thứ phải sao lưu, bảo mật, và nâng cấp.
+
+  ❌ Độ trễ cao hơn Redis. LISTEN/NOTIFY không phải thứ Postgres được
+     tối ưu cho, và giờ mỗi lần broadcast đều tranh cùng những kết nối
+     với tải truy vấn của bạn.
+  ❌ Tải trọng lớn phải đi vòng qua một bảng, biến một lần broadcast
+     thành một lần ghi.
+  ❌ Áp lực lên connection pool: adapter giữ một kết nối riêng cho
+     LISTEN, và dưới tải thì điều đó quan trọng.
+
+Cách nói trung thực: đây là lựa chọn tốt khi traffic realtime của bạn
+khiêm tốn và bạn coi trọng sự đơn giản vận hành hơn vài mili giây. Nó
+là lựa chọn tệ cho một app nặng chat, vì bạn vừa đặt bus thông điệp
+lên cùng cái máy với dữ liệu bền của mình.
+</code></pre>
+
+<h3>Quyết định, bằng ba câu hỏi</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">single VM luôn</span><span class="lz-d">Kho này hôm nay. Single Docker container. Memory adapter đủ. Đừng thêm dependency chỉ để phòng xa.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">test / dev</span><span class="lz-d">Không cần thiết. Memory adapter chạy tự.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Realtime KHÔNG mission-critical</span><span class="lz-d">Nếu broadcast rơi thỉnh thoảng OK (game state, chart update), thì memory + retry ở client đủ.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Bạn có bao giờ chạy nhiều hơn một máy không?</span><span class="lz-d">Nếu thật sự không — và hãy trung thực, vì &quot;có thể sau này chúng ta sẽ scale&quot; không giống một kế hoạch — thì cluster adapter tốt hơn Redis một cách dứt khoát: ít thứ phải chạy hơn, độ trễ thấp hơn, và nó giải quyết luôn chuyện sticky trong cùng một lần cấu hình.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Bạn vốn đã chạy Redis chưa?</span><span class="lz-d">Nếu rồi, hãy dùng nó. Redis adapter là lựa chọn được kiểm thử kỹ nhất, tài liệu tốt nhất, và thêm một mục đích dùng nữa cho một dịch vụ bạn vốn đã vận hành thì gần như không tốn gì. Kho này vốn đã chạy Redis cho cache và hàng đợi, nên câu trả lời ở đây là rồi.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Traffic realtime có khiêm tốn và Postgres đã có sẵn không?</span><span class="lz-d">Vậy thì Postgres adapter là bảo vệ được, và nó là nước đi đúng cho một công cụ nội bộ nơi thêm một Redis là gánh nặng vận hành lớn hơn giá trị của vài mili giây. Hãy đo p99 trước khi cam kết — LISTEN/NOTIFY dưới một tải truy vấn bận không giống thứ các benchmark cho thấy.</span></div>
 </div>
 
-<h3>Khi nào chọn adapter khác Redis</h3>
-<div class="lz-map">
-<div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">postgres-adapter</span><span class="lz-nsub">đã có Postgres, không muốn Redis</span></span>
-<span class="lz-nbody">Dùng LISTEN/NOTIFY. Latency cao hơn ~10× nhưng nếu bạn broadcast không cực nhiều (chat, không phải game), OK. Không cần deploy Redis + monitoring Redis.</span>
-</div>
-<div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">redis-streams-adapter</span><span class="lz-nsub">cần replay khi worker join</span></span>
-<span class="lz-nbody">Redis Streams persist messages. Worker mới join có thể replay last N messages — cho use case &quot;client offline 5 phút rồi reconnect, cần catch up&quot;.</span>
-</div>
-<div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">cluster-adapter</span><span class="lz-nsub">Node cluster mode</span></span>
-<span class="lz-nbody">Nếu bạn dùng <code>cluster.fork()</code> có &lt;8 worker cùng VM, IPC nhanh hơn Redis network hop. Nhưng không scale qua VM — bạn khoá mình trong 1 máy.</span>
-</div>
+<h3>Đường chuyển đổi giữa chúng</h3>
+<pre><code class="language-ts">// Adapter tráo được bằng một dòng, đó chính là điểm của lớp trừu tượng.
+// Chuyển từ cluster-adapter sang redis-adapter khi máy thứ hai xuất hiện
+// là một thay đổi cấu hình, không phải một lần viết lại:
+
+const adapter = process.env.SOCKET_ADAPTER ?? 'memory';
+
+if (adapter === 'redis') {
+  const pub = createClient({ url: process.env.REDIS_URL });
+  const sub = pub.duplicate();
+  await Promise.all([pub.connect(), sub.connect()]);
+  io.adapter(createRedisAdapter(pub, sub));
+} else if (adapter === 'cluster') {
+  io.adapter(createClusterAdapter());
+}
+// còn lại: in-memory, và log lúc khởi động sẽ nói ra điều đó
+
+logger.info('[socket] adapter', { configured: adapter, actual: io.of('/').adapter.constructor.name });
+</code></pre>
+
+<p>Chú ý dòng log in ra cả adapter <em>định dùng</em> lẫn adapter <em>thực tế</em>. Hai cái đó bất đồng — vì một biến môi trường bị thiếu, hoặc một kết nối Redis hỏng mà có thứ gì đó nuốt mất lỗi — chính là cái cấu hình sai im lặng mà chương này cứ quay lại mãi.</p>
+
+<div class="pitfall">
+<p><strong>Bẫy — chọn Redis theo phản xạ cho một triển khai một máy.</strong> Nếu mọi worker của bạn nằm trên một máy dưới <code>node:cluster</code>, cluster adapter có độ trễ thấp hơn và không thêm dịch vụ nào phải vận hành. Redis trở nên đúng vào khoảnh khắc có máy thứ hai — không sớm hơn.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — chọn Kafka adapter cho scale cao.</strong> Kafka tuyệt vời cho event streaming, nhưng cho pub/sub realtime của socket.io, nó overkill. Latency 5-20ms + operational complexity. Chỉ dùng nếu bạn đã có Kafka cluster với ops team lo.</p>
+<p><strong>Bẫy — coi Postgres adapter là bản thay thế thả-vào cho Redis ở mọi quy mô.</strong> LISTEN/NOTIFY chặn tải trọng ở 8000 byte và đổ những cái lớn hơn sang một bảng, còn adapter thì giữ một kết nối riêng. Trên một workload nặng chat, bạn vừa lặng lẽ đặt bus thông điệp vào thế tranh chấp với dữ liệu bền của mình. Hãy đo độ trễ broadcast p99 dưới tải truy vấn thật trước khi cam kết.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Bảng adapter so sánh 7 lựa chọn với trade off khác nhau — Redis default cho cluster cỡ trung, Postgres nếu đã có sẵn, Redis Streams nếu cần replay, Kafka nếu enterprise-scale — và luôn nhớ &quot;không adapter&quot; là lựa chọn có nếu bạn thực sự single-instance.</p>
+<p><strong>Một câu.</strong> Có bốn adapter và mỗi cái được chọn bởi một điều kiện — in-memory khi bạn thật sự chạy một tiến trình (nguy hiểm chỉ vì nó là mặc định im lặng), <code>cluster-adapter</code> khi mọi worker nằm trên một máy dưới <code>node:cluster</code> (độ trễ thấp hơn Redis, không dịch vụ nào phải vận hành, và nó đi cặp với <code>@socket.io/sticky</code>), <code>redis-adapter</code> một khi có máy thứ hai hoặc bạn vốn đã chạy Redis, và <code>postgres-adapter</code> khi traffic realtime khiêm tốn và sự đơn giản vận hành thắng vài mili giây — và vì việc tráo chúng chỉ là một dòng, quyết định thật sự luôn chỉ là &quot;hôm nay điều gì đang đúng&quot;.</p>
 </div>
 
 <h3>Nguồn</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapters</span><span class="lc-sub">socket.io/docs/v4/adapter — danh sách adapter chính thức + guide chọn.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapter</span><span class="lc-sub">socket.io/docs/v4/adapter — danh sách adapter chính thức và giao diện chung.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/cluster-adapter</span><span class="lc-sub">github.com/socketio/socket.io-cluster-adapter — IPC giữa worker, dùng với setupPrimary.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/postgres-adapter</span><span class="lc-sub">github.com/socketio/socket.io-postgres-adapter — LISTEN/NOTIFY và giới hạn 8000 byte.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — NOTIFY</span><span class="lc-sub">postgresql.org/docs/current/sql-notify.html — trần payload và ngữ nghĩa hàng đợi.</span></span></div>
 </div>
 `,
     },
+
 
     /* ─────────────────────────── 5.6 ─────────────────────────── */
     {
@@ -697,12 +1213,24 @@ default (memory)      -                 &lt;1ms     unlimited no        single
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Quiz</span>
 <h2>What Chapter 5 established</h2>
-<p class="lead">Sáu câu về cluster mode socket.io — vì sao cần Redis, khi nào không, và checklist trước khi scale.</p>
+<p class="lead">Six questions on clustering — the point at which every local assumption about "the sockets" stops being true.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">One worker only knows its own sockets</span><span class="lz-d">Without an adapter, io.emit reaches the fraction of users connected to the worker that happens to be executing. Nothing errors. The Redis adapter publishes broadcasts so every worker delivers to its own share.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">The adapter adds four methods and changes four</span><span class="lz-d">fetchSockets, socketsJoin/Leave, serverSideEmit and disconnectSockets are cluster-wide. Their local counterparts — io.of("/").sockets above all — silently answer for one worker out of N.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Redis down is a partition, not an outage</span><span class="lz-d">Each worker keeps serving its own connected clients; only cross-worker delivery stops. That failure mode is quiet, which is why logging the adapter class name at boot is worth the one line.</span></div>
+</div>
+<p>6 questions, 10 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Kiểm tra</span>
 <h2>Chương 5 đã dựng được gì</h2>
-<p class="lead">Sáu câu về cluster mode socket.io — vì sao cần Redis, khi nào không, và checklist trước khi scale.</p>
+<p class="lead">Sáu câu về clustering — thời điểm mà mọi giả định local về "các socket" thôi còn đúng.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Một worker chỉ biết socket của chính nó</span><span class="lz-d">Không có adapter, io.emit chỉ tới được phần user đang kết nối vào đúng worker tình cờ đang chạy. Không có lỗi nào. Redis adapter publish các lần broadcast để mọi worker giao cho phần của mình.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Adapter thêm bốn method và thay đổi bốn method</span><span class="lz-d">fetchSockets, socketsJoin/Leave, serverSideEmit và disconnectSockets là toàn cluster. Những bản local tương ứng — nhất là io.of("/").sockets — âm thầm trả lời thay cho một worker trên N.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Redis chết là một phân mảnh, không phải một cú sập</span><span class="lz-d">Mỗi worker vẫn phục vụ những client đang nối vào nó; chỉ việc giao xuyên worker là dừng. Kiểu hỏng đó rất im lặng, đó là lý do ghi log tên class adapter lúc khởi động đáng giá một dòng.</span></div>
+</div>
+<p>6 câu, 10 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

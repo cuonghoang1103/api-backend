@@ -148,13 +148,25 @@ export default {
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Final exam</span>
-<h2>Mười hai câu, mười tám phút</h2>
-<p class="lead">Đề thi cuối rút từ mười chương đầu theo tỉ lệ cột A / B / C. Không câu nào lặp; mọi câu đều xoay quanh một quyết định thật.</p>
+<h2>Final exam</h2>
+<p class="lead">Twelve questions across eleven chapters. Everything here was measured against the repo's own socket layer or read off a real wire capture.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">The threads that run through the whole course</span><span class="lz-d">Socket.IO is engine.io plus a protocol; one worker only knows its own sockets; the default delivery guarantee is at-most-once; and presence is where an O(N²) fan-out hides.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">The failures that are silent</span><span class="lz-d">A missing adapter, a dropped message with no ack, a namespace where a room belonged, a local socket count in a cluster — none of these raise an error. They give a wrong answer confidently, which is the shape of nearly every hard bug in this course.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Where Socket.IO is the wrong tool</span><span class="lz-d">Documents want a CRDT. Microcontrollers want raw WebSocket. Media wants WebRTC and, for groups, an SFU. Knowing the boundary is as useful as knowing the API.</span></div>
+</div>
+<p>12 questions, 25 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Chương 11 · Đề thi cuối</span>
-<h2>Mười hai câu, mười tám phút</h2>
-<p class="lead">Đề thi cuối rút từ mười chương đầu theo tỉ lệ cột A / B / C. Không câu nào lặp; mọi câu đều xoay quanh một quyết định thật.</p>
+<span class="eyebrow">Chương 11 · Bài thi cuối</span>
+<h2>Bài thi cuối</h2>
+<p class="lead">Mười hai câu trải mười một chương. Mọi thứ ở đây đều được đo trên chính lớp socket của kho hoặc đọc ra từ một bản bắt gói thật.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Những sợi chỉ xuyên suốt cả khoá</span><span class="lz-d">Socket.IO là engine.io cộng một giao thức; một worker chỉ biết socket của chính nó; bảo đảm giao nhận mặc định là at-most-once; và presence là nơi một cú toả O(N²) ẩn mình.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Những thất bại im lặng</span><span class="lz-d">Một adapter bị thiếu, một thông điệp rơi mà không có ack, một namespace ở chỗ lẽ ra là room, một phép đếm socket local trong cluster — không cái nào nêu lên lỗi. Chúng đưa ra một câu trả lời sai một cách tự tin, và đó là hình dạng của gần như mọi bug khó trong khoá này.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Chỗ Socket.IO là công cụ sai</span><span class="lz-d">Tài liệu cần một CRDT. Vi điều khiển cần WebSocket thuần. Media cần WebRTC và, với nhóm, một SFU. Biết ranh giới cũng hữu ích ngang biết API.</span></div>
+</div>
+<p>12 câu, 25 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

@@ -1015,12 +1015,24 @@ Voi 1.000 thread dong thoi: 1.000.000 update/gio
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Quiz</span>
 <h2>What Chapter 4 established</h2>
-<p class="lead">Sáu câu, mười phút. Presence là feature dễ làm sai kinh khủng nếu naive — kho này comment thật chỉ ra vì sao.</p>
+<p class="lead">Six questions on presence — the feature that looks trivial and is the most common way a Socket.IO app falls over.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">io.emit for presence is O(N²)</span><span class="lz-d">Every user's status change sent to every user means N status changes each fanned out to N recipients. At 1,000 users a single reconnect storm is a million messages. The fix is computing an audience, not broadcasting to everyone.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">One user is many sockets</span><span class="lz-d">Multiple tabs, phone and laptop, a reconnect in flight. Presence must be reference-counted per user, or closing one tab marks a user offline while they are still connected elsewhere.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Typing indicators cost per keystroke</span><span class="lz-d">Naively they are one message per character per recipient. Throttle at the client, and send "started"/"stopped" rather than a stream, or a single conversation can outweigh all your other traffic.</span></div>
+</div>
+<p>6 questions, 10 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Kiểm tra</span>
 <h2>Chương 4 đã dựng được gì</h2>
-<p class="lead">Sáu câu, mười phút. Presence là feature dễ làm sai kinh khủng nếu naive — kho này comment thật chỉ ra vì sao.</p>
+<p class="lead">Sáu câu về presence — tính năng trông có vẻ tầm thường và là cách phổ biến nhất khiến một app Socket.IO sụp.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">io.emit cho presence là O(N²)</span><span class="lz-d">Mỗi lần đổi trạng thái của một user gửi tới mọi user nghĩa là N lần đổi trạng thái, mỗi lần toả ra N người nhận. Ở 1.000 user, một cơn bão kết nối lại là một triệu thông điệp. Cách vá là tính ra tập khán giả, không phải broadcast cho tất cả.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Một user là nhiều socket</span><span class="lz-d">Nhiều tab, điện thoại và laptop, một lần kết nối lại đang bay. Presence phải đếm tham chiếu theo từng user, nếu không đóng một tab sẽ đánh dấu user offline trong khi họ vẫn còn kết nối ở nơi khác.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Chỉ báo đang gõ tốn tiền theo từng phím</span><span class="lz-d">Làm ngây thơ thì đó là một thông điệp cho mỗi ký tự cho mỗi người nhận. Hãy tiết chế ở phía client, và gửi "bắt đầu"/"dừng" thay vì một dòng liên tục, nếu không một cuộc hội thoại có thể nặng hơn toàn bộ traffic còn lại.</span></div>
+</div>
+<p>6 câu, 10 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

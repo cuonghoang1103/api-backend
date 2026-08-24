@@ -831,12 +831,24 @@ socket.on('room:join', async ({ roomId }) =&gt; {
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Quiz</span>
 <h2>What Chapter 7 established</h2>
-<p class="lead">Sáu câu về WebRTC signalling. Điểm quan trọng nhất: socket.io signalling ~2 KB, WebRTC media 1-2 Mbps P2P — nếu bạn gộp hai cái, kiến trúc sai.</p>
+<p class="lead">Six questions on WebRTC signalling — the part Socket.IO does, and the much larger part it does not.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Socket.IO relays, it does not carry media</span><span class="lz-d">Signalling exchanges SDP offers and ICE candidates so two peers can find each other. Once they connect, audio and video flow directly between them and never touch your server.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">SDP and ICE are just payloads to you</span><span class="lz-d">You forward opaque blobs. Understanding roughly what is inside them — codecs and network candidates — is what lets you debug "the call connects but there is no video".</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Peer-to-peer fails often enough to need TURN</span><span class="lz-d">Symmetric NAT and restrictive firewalls block direct connections for a meaningful share of users, and a TURN relay is the fallback you pay bandwidth for. Group calls are a different architecture again: an SFU, which is a real media server.</span></div>
+</div>
+<p>6 questions, 10 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Kiểm tra</span>
 <h2>Chương 7 đã dựng được gì</h2>
-<p class="lead">Sáu câu về WebRTC signalling. Điểm quan trọng nhất: socket.io signalling ~2 KB, WebRTC media 1-2 Mbps P2P — nếu bạn gộp hai cái, kiến trúc sai.</p>
+<p class="lead">Sáu câu về signalling WebRTC — phần Socket.IO làm, và phần lớn hơn nhiều mà nó không làm.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Socket.IO chuyển tiếp, nó không mang media</span><span class="lz-d">Signalling trao đổi SDP offer và ICE candidate để hai peer tìm được nhau. Khi chúng đã kết nối, âm thanh và hình ảnh chảy thẳng giữa hai bên và không bao giờ chạm tới server của bạn.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">SDP và ICE với bạn chỉ là tải trọng</span><span class="lz-d">Bạn chuyển tiếp những khối dữ liệu mờ. Hiểu đại khái bên trong chúng có gì — codec và các ứng viên mạng — mới là thứ giúp bạn gỡ lỗi "cuộc gọi kết nối được nhưng không có hình".</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Ngang hàng thất bại đủ thường xuyên để cần TURN</span><span class="lz-d">NAT đối xứng và tường lửa ngặt chặn kết nối trực tiếp với một tỷ lệ người dùng đáng kể, và một TURN relay là đường lùi mà bạn trả tiền băng thông cho nó. Gọi nhóm lại là một kiến trúc khác nữa: một SFU, tức là một media server thật.</span></div>
+</div>
+<p>6 câu, 10 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

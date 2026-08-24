@@ -804,12 +804,24 @@ Socket.io debugging:
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Quiz</span>
 <h2>What Chapter 6 established</h2>
-<p class="lead">Sáu câu về delivery guarantees. Socket.io default là at-most-once — biết cái đó, biết cách nâng lên, và biết khi nào KHÔNG dùng socket.io là ba việc phân biệt engineer socket.io khỏi tutorial-copier.</p>
+<p class="lead">Six questions on delivery guarantees — what Socket.IO promises, what it does not, and what you have to build.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">The default is at-most-once</span><span class="lz-d">A message emitted while a client is disconnected is gone. Socket.IO does not queue, does not retry, and does not tell you it was dropped. Anything stronger is your code, not the library.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">At-least-once needs ack plus retry</span><span class="lz-d">The ack callback tells you the client received it. Retrying until an ack arrives gives at-least-once — and therefore duplicates, which the receiver must tolerate.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Exactly-once needs a dedupe layer</span><span class="lz-d">There is no transport that gives it for free. A message id plus a seen-set on the receiver turns at-least-once into effectively-once; without that set, "exactly once" is a claim nobody has verified.</span></div>
+</div>
+<p>6 questions, 10 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Kiểm tra</span>
 <h2>Chương 6 đã dựng được gì</h2>
-<p class="lead">Sáu câu về delivery guarantees. Socket.io default là at-most-once — biết cái đó, biết cách nâng lên, và biết khi nào KHÔNG dùng socket.io là ba việc phân biệt engineer socket.io khỏi tutorial-copier.</p>
+<p class="lead">Sáu câu về bảo đảm giao nhận — Socket.IO hứa gì, không hứa gì, và bạn phải tự dựng gì.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Mặc định là at-most-once</span><span class="lz-d">Một thông điệp emit khi client đang mất kết nối thì mất luôn. Socket.IO không xếp hàng, không thử lại, và không báo cho bạn biết là nó đã rơi. Bất cứ thứ gì mạnh hơn đều là mã của bạn, không phải của thư viện.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">At-least-once cần ack cộng retry</span><span class="lz-d">Callback ack cho bạn biết client đã nhận. Thử lại tới khi có ack cho bạn at-least-once — và do đó có bản trùng, thứ mà bên nhận phải chịu được.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Exactly-once cần một lớp khử trùng</span><span class="lz-d">Không transport nào cho không thứ đó. Một id thông điệp cộng một tập đã-thấy ở bên nhận biến at-least-once thành gần-như-đúng-một-lần; không có tập đó thì "đúng một lần" chỉ là một lời khẳng định chưa ai kiểm chứng.</span></div>
+</div>
+<p>6 câu, 10 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

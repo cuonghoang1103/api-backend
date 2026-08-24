@@ -883,12 +883,24 @@ $ for i in 1 2 3 4; do curl -s http://backend-$i/health/socket; done
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Quiz</span>
 <h2>What Chapter 10 established</h2>
-<p class="lead">Sáu câu về diagnosis — thay reflex console.log bằng decision tree.</p>
+<p class="lead">Six questions on diagnosis — the decision tree that turns "realtime is broken" into a specific failing step.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Four questions, in order</span><span class="lz-d">Is the client connected? Is the event on the wire? Did the handler run? Did the side effect happen? Each one is answerable with a single check, and answering them in order eliminates most of the search space immediately.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">The wire is readable</span><span class="lz-d">DevTools shows engine.io frames directly. "The event never arrived" and "the event arrived and the handler threw" look identical from the UI and completely different on the wire.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Cluster bugs have their own signature</span><span class="lz-d">Works for some users and not others, works on refresh, or the count is roughly 1/N of expected — those all point at a missing or misconfigured adapter rather than at your event code.</span></div>
+</div>
+<p>6 questions, 10 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Kiểm tra</span>
 <h2>Chương 10 đã dựng được gì</h2>
-<p class="lead">Sáu câu về diagnosis — thay reflex console.log bằng decision tree.</p>
+<p class="lead">Sáu câu về chẩn đoán — cây quyết định biến "realtime hỏng" thành một bước hỏng cụ thể.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Bốn câu hỏi, theo thứ tự</span><span class="lz-d">Client có kết nối không? Sự kiện có trên đường truyền không? Handler có chạy không? Tác dụng phụ có xảy ra không? Mỗi câu trả lời được bằng một phép kiểm duy nhất, và trả lời theo thứ tự sẽ loại bỏ ngay phần lớn không gian tìm kiếm.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Đường truyền đọc được</span><span class="lz-d">DevTools hiện thẳng các khung engine.io. "Sự kiện không bao giờ tới" và "sự kiện đã tới và handler ném lỗi" trông giống hệt nhau từ giao diện và khác hoàn toàn trên đường truyền.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Bug cluster có chữ ký riêng</span><span class="lz-d">Chạy được với một số user và không với số khác, chạy được khi tải lại trang, hoặc con số xấp xỉ 1/N so với kỳ vọng — tất cả đều chỉ vào một adapter thiếu hoặc sai cấu hình chứ không phải vào mã sự kiện của bạn.</span></div>
+</div>
+<p>6 câu, 10 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

@@ -831,12 +831,24 @@ socket.on(EVT.THREAD_JOIN, handleThreadJoin);
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Quiz</span>
 <h2>What Chapter 3 established</h2>
-<p class="lead">Sáu câu, mười phút. Về routing ở tầng 3 — room là abstraction bạn cần, namespace là abstraction bạn hầu như không cần.</p>
+<p class="lead">Six questions on routing at layer 3 — rooms are the abstraction you want, namespaces are the one you probably do not.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">A room is just a string in a Set</span><span class="lz-d">There is no room object to create or destroy. Joining adds a string; leaving removes it; a room with no members simply stops existing. That is why room "cleanup" is usually a non-problem.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Namespaces are a separate connection, rooms are not</span><span class="lz-d">A namespace multiplexes a distinct Socket.IO connection with its own middleware and handlers. Most designs that reach for namespaces actually want rooms plus an event-name prefix, at a fraction of the complexity.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Broadcast selectors compose</span><span class="lz-d">to, in, except and volatile chain together, and the same chaining works for the adapter methods in Chapter 5. Knowing the selector grammar once pays off everywhere.</span></div>
+</div>
+<p>6 questions, 10 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Kiểm tra</span>
 <h2>Chương 3 đã dựng được gì</h2>
-<p class="lead">Sáu câu, mười phút. Về routing ở tầng 3 — room là abstraction bạn cần, namespace là abstraction bạn hầu như không cần.</p>
+<p class="lead">Sáu câu về định tuyến ở tầng 3 — room là abstraction bạn cần, namespace là cái bạn hầu như không cần.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Một room chỉ là một chuỗi trong một Set</span><span class="lz-d">Không có object room nào để tạo hay huỷ. Join là thêm một chuỗi; leave là bỏ nó đi; một room không còn thành viên thì đơn giản là thôi tồn tại. Đó là lý do việc "dọn dẹp" room thường không phải vấn đề.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Namespace là một kết nối riêng, room thì không</span><span class="lz-d">Một namespace ghép kênh thành một kết nối Socket.IO riêng biệt với middleware và handler của riêng nó. Hầu hết thiết kế với tới namespace thực ra chỉ cần room cộng một tiền tố tên sự kiện, với một phần nhỏ độ phức tạp.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Các selector broadcast ghép được với nhau</span><span class="lz-d">to, in, except và volatile nối chuỗi được, và cùng cách nối đó dùng được cho các method adapter ở Chương 5. Học ngữ pháp selector một lần là có lợi ở mọi nơi.</span></div>
+</div>
+<p>6 câu, 10 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

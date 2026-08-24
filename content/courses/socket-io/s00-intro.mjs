@@ -723,22 +723,24 @@ Client:  431[{"ok":true}]
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Quiz</span>
 <h2>What Section 0 established</h2>
-<p class="lead">Sáu câu, chín phút. Mọi câu đều xoay quanh mô hình bốn tầng và cái gì nằm trên dây thật.</p>
-<div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">0.1 — bốn tầng</span><span class="lz-lnote">wire, engine.io, socket.io, code — mỗi hành vi lạ ứng với một tầng cụ thể</span></div>
-<div class="lz-layer"><span class="lz-lname">0.2 — long-polling KHÔNG chết</span><span class="lz-lnote">client luôn bắt đầu polling rồi upgrade; polling giữ 3-5% users qua proxy strip upgrade</span></div>
-<div class="lz-layer"><span class="lz-lname">0.3 — ba packet đầu</span><span class="lz-lnote">OPEN (engine.io 0), CONNECT (socket.io 0), EVENT (socket.io 2). Hai sid khác nhau (engine.io ≠ socket.io)</span></div>
+<p class="lead">Four questions on what Socket.IO actually is, before any code.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Socket.IO is not WebSocket</span><span class="lz-d">It is engine.io (transport + reconnect + heartbeat) wrapped in a protocol that adds namespaces, rooms, acks and automatic reconnection. A raw WebSocket client cannot talk to a Socket.IO server — the handshake and framing differ.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Long-polling still matters in 2026</span><span class="lz-d">It is the fallback that makes the first connection succeed behind proxies and corporate middleboxes that break WebSocket upgrades. The client starts on polling and upgrades once it knows the upgrade works.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">You can read the wire</span><span class="lz-d">Engine.io packets are prefixed with a single digit (0 open, 2 ping, 3 pong, 4 message), and Socket.IO packets add a second digit (0 connect, 2 event, 3 ack). Three real packets read end to end remove most of the mystery.</span></div>
 </div>
+<p>4 questions, 8 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Mục 0 · Kiểm tra</span>
-<h2>Mục 0 đã dựng được gì</h2>
-<p class="lead">Sáu câu, chín phút. Mọi câu đều xoay quanh mô hình bốn tầng và cái gì nằm trên dây thật.</p>
-<div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">0.1 — bốn tầng</span><span class="lz-lnote">wire, engine.io, socket.io, code — mỗi hành vi lạ ứng với một tầng cụ thể</span></div>
-<div class="lz-layer"><span class="lz-lname">0.2 — long-polling KHÔNG chết</span><span class="lz-lnote">client luôn bắt đầu polling rồi upgrade; polling giữ 3-5% users qua proxy strip upgrade</span></div>
-<div class="lz-layer"><span class="lz-lname">0.3 — ba packet đầu</span><span class="lz-lnote">OPEN (engine.io 0), CONNECT (socket.io 0), EVENT (socket.io 2). Hai sid khác nhau (engine.io ≠ socket.io)</span></div>
+<span class="eyebrow">Section 0 · Kiểm tra</span>
+<h2>Section 0 đã dựng được gì</h2>
+<p class="lead">Bốn câu về Socket.IO thực sự là gì, trước khi viết dòng mã nào.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Socket.IO không phải WebSocket</span><span class="lz-d">Nó là engine.io (transport + reconnect + nhịp tim) bọc trong một giao thức thêm namespace, room, ack và tự động kết nối lại. Một client WebSocket thuần không nói chuyện được với server Socket.IO — bắt tay và cách đóng khung đều khác.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Long-polling vẫn còn quan trọng năm 2026</span><span class="lz-d">Nó là đường lùi giúp kết nối đầu tiên thành công sau những proxy và thiết bị trung gian doanh nghiệp vốn phá vỡ việc nâng cấp WebSocket. Client khởi đầu bằng polling rồi nâng cấp khi biết chắc việc nâng cấp chạy được.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Bạn đọc được đường truyền</span><span class="lz-d">Gói engine.io có một chữ số đứng đầu (0 open, 2 ping, 3 pong, 4 message), và gói Socket.IO thêm một chữ số thứ hai (0 connect, 2 event, 3 ack). Đọc trọn ba gói thật là gỡ bỏ gần hết vẻ bí ẩn.</span></div>
 </div>
+<p>4 câu, 8 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

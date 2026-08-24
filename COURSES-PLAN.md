@@ -40,7 +40,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 13 | `deploy-vps` | `deploy-vps` — Deploy lên VPS | ✅ **XONG** (12 mục · 70 bài · 1.133k · TB 16.190) |
 | 14 | `github-actions` | `github-actions` — GitHub Actions | ✅ **XONG** (11 mục · 66 bài · 1.103k · TB 16.720) |
 | 15 | `tailwind-css` | `tailwind-css` — Tailwind CSS | ✅ **XONG** (12/12 mục · 66 bài · 962k) |
-| 16 | `socket-io` | `socket-io` — Socket.IO | ⚠️ **XONG nhưng DƯỚI SÀN** (12/12 mục · 66 bài · 554k · TB **8.394** < sàn 9.000) — cần thêm ~40k, xem §4 |
+| 16 | `socket-io` | `socket-io` — Socket.IO | ✅ **XONG** (12/12 mục · 66 bài · 622k · TB 9.419) — *đã vá 24/08, xem §4* |
 | 17 | `object-storage-s3` | `object-storage` — Object Storage (Cloudflare R2) | ✅ **XONG** (11 mục · 39 bài · 353k · TB 9.053) |
 | 18 | `media-processing` | `media-processing` — Media Processing (Sharp + FFmpeg) | ✅ **XONG** (11 mục · 37 bài · 576k · TB 15.554) |
 | 19 | `observability-monitoring` | — | ❌ **THIẾU** |
@@ -136,15 +136,34 @@ Kết quả `course-depth-audit.mjs` ngày 22/08/2026:
 | `nextjs` | 5.672 | 56 | 46 | mỏng: 59 bài < 6k ký tự |
 | `web-foundations` | 5.201 | **0** | 56 | **không có sơ đồ nào**; 40 bài < 6k ký tự |
 
-### Khoá MỚI chưa đạt sàn (phát hiện 24/08/2026)
+### Socket.IO — đã phát hiện dưới sàn và đã vá (24/08/2026)
 
-| Khoá | ký tự/bài | Thiếu gì |
-|---|---|---|
-| `socket-io` | **8.394** | Dưới sàn 9.000. Cần thêm ~40k ký tự (66 bài × 9.000 = 594k, hiện 554k). Một bài mỏng: `io-5-2-adapter-api` (5.637). Sơ đồ/nguồn/bẫy đều dư chuẩn (156/210/102) — chỉ thiếu độ dài. |
+| Mốc | Bài | Ký tự | TB/bài | Trạng thái |
+|---|---|---|---|---|
+| Trước khi vá | 66 | 554k | **8.394** | ❌ dưới sàn 9.000 |
+| Sau khi vá | 66 | **622k** | **9.419** | ✅ đạt |
 
 Khoá này đã bị đánh dấu ✅ XONG ở phiên trước mà không chạy `course-depth-audit.mjs`
 lần cuối. Bài học: **chạy CẢ HAI bộ kiểm trước khi đánh dấu xong**, không chỉ
 `course-content-check.mjs` — cái đầu kiểm cấu trúc, cái sau mới kiểm độ sâu.
+
+**Đã làm gì để vá** (+68k, không thêm bài nào — thêm bài làm mẫu số tăng theo nên
+*hạ* trung bình; phải mở rộng bài sẵn có):
+
+1. Viết lại `io-5-2-adapter-api` 5.637 → 21.457. Bài mỏng nhất khoá, và nội dung cũ
+   trộn tiếng Việt trong khối `ml-en`. Bản mới: bảng bốn cặp method local-vs-cluster,
+   vì sao `RemoteSocket` không có `.on()` (listener không serialize được qua tiến
+   trình), ngữ nghĩa all-or-nothing của `serverSideEmit`, và `disconnectSockets` như
+   nửa thứ hai của "đăng xuất mọi nơi" mà thu hồi token không làm được.
+2. Viết lại `io-5-5-alt` 7.449 → 20.700. Bốn adapter kèm điều kiện chọn từng cái —
+   nổi bật là `cluster-adapter` cho triển khai một máy, thứ hầu hết app nhỏ nên dùng
+   và hầu hết bỏ qua để với tới Redis theo phản xạ.
+3. Viết lại `io-1-5-state` 7.551 → 19.550. Ba pattern khôi phục trạng thái sau
+   reconnect, và pattern nào lấp được *khoảng trống thông điệp* chứ không chỉ trạng thái.
+4. Viết lại `content` của **cả 12 bài quiz** (~500 → ~2.800 mỗi bài). Chúng vốn chỉ có
+   một dòng tiêu đề, **và khối `ml-en` chứa văn xuôi tiếng Việt** — bộ kiểm cấu trúc
+   không bắt được vì nó chỉ đếm số khối. Bản mới là tóm tắt song ngữ thật "chương này
+   đã dựng được gì" trước khi vào câu hỏi.
 
 **Đã sửa:** `nodejs-1-6-quiz` phương án `user.name = "Bình"` bị bộ kiểm bắt là thiếu `|||`
 (dấu tiếng Việt trong một phương án thuần code). Đổi thành `"Binh"` — cả 5 khoá nay

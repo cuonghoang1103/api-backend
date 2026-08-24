@@ -1000,12 +1000,24 @@ void loop() {
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Quiz</span>
 <h2>What Chapter 9 established</h2>
-<p class="lead">Sáu câu về khi socket.io KHÔNG dùng được và fallback pattern.</p>
+<p class="lead">Six questions on raw WebSocket — when the library is not available, and what you have to write yourself.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">A microcontroller cannot run the Socket.IO client</span><span class="lz-d">That is why the device tier speaks raw WebSocket. Everything the library gave you — reconnect with backoff, heartbeats, framing, acks — becomes code you own, which is why that gateway file is over a thousand lines.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Reconnect logic is the hard part</span><span class="lz-d">Exponential backoff with jitter, a cap, and a distinction between "the network blipped" and "the server rejected us". Getting this wrong produces either a thundering herd or a device that never comes back.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">JSON framing is not free</span><span class="lz-d">On a constrained device, parsing and allocating for every message is a real cost. A compact binary framing or a fixed schema is often the difference between comfortable and out of memory.</span></div>
+</div>
+<p>6 questions, 10 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Kiểm tra</span>
 <h2>Chương 9 đã dựng được gì</h2>
-<p class="lead">Sáu câu về khi socket.io KHÔNG dùng được và fallback pattern.</p>
+<p class="lead">Sáu câu về WebSocket thuần — khi thư viện không dùng được, và bạn phải tự viết những gì.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Một vi điều khiển không chạy được client Socket.IO</span><span class="lz-d">Đó là lý do tầng thiết bị nói WebSocket thuần. Mọi thứ thư viện từng cho bạn — kết nối lại có backoff, nhịp tim, đóng khung, ack — trở thành mã bạn sở hữu, và đó là lý do file gateway đó dài hơn một nghìn dòng.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Logic kết nối lại mới là phần khó</span><span class="lz-d">Backoff luỹ thừa có nhiễu ngẫu nhiên, một trần, và một sự phân biệt giữa "mạng chớp" với "server từ chối chúng ta". Làm sai chỗ này sinh ra hoặc một bầy đàn ập tới, hoặc một thiết bị không bao giờ quay lại.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Đóng khung JSON không miễn phí</span><span class="lz-d">Trên một thiết bị eo hẹp, việc phân tích và cấp phát cho mỗi thông điệp là một chi phí thật. Một cách đóng khung nhị phân gọn hoặc một schema cố định thường là khác biệt giữa thoải mái và hết bộ nhớ.</span></div>
+</div>
+<p>6 câu, 10 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

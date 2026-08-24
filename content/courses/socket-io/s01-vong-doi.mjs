@@ -863,139 +863,350 @@ c.on('connect_error', (err) =&gt; {
 
     /* ─────────────────────────── 1.5 ─────────────────────────── */
     {
-      title: '1.5 — State that survives reconnect: three patterns|||1.5 — State sống sót reconnect: ba pattern',
+      title: '1.5 — State that survives reconnect: three patterns|||1.5 — Trạng thái sống sót qua reconnect: ba pattern',
       slug: 'io-1-5-state',
       type: 'VIDEO',
-      description: 'Ephemeral (không giữ), server-remembered (Map theo userId), client-refetched (sync-since-last-seen). Chọn cái nào phụ thuộc data cost + staleness tolerance.',
+      description: 'Một kết nối mới là một socket mới với room rỗng và data rỗng. Ba pattern lấp khoảng trống đó, mỗi cái đúng cho một loại trạng thái khác nhau.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.5</span>
 <h2>State that survives reconnect: three patterns</h2>
-<p class="lead">Lesson 1.3 showed that reconnect wipes rooms, sid, and pending events. This lesson gives the three patterns for what to do about it, and when each fits.</p>
+<p class="lead">Lesson 1.3 established that a reconnect is a brand-new connection: new socket id, empty rooms, empty <code>socket.data</code>. Nothing carries over automatically. Every realtime app therefore needs a deliberate answer to &quot;what happens to the session&quot;, and there are exactly three shapes that answer takes.</p>
 
-<h3>Pattern 1 — Ephemeral (don&#39;t save)</h3>
-<pre><code class="language-ts">// Presence, typing indicators, cursor positions
-socket.on('typing:start', () =&gt; io.to(&#96;thread:\${threadId}&#96;).emit('user:typing', userId));
-// KHONG luu vao DB, KHONG luu vao Map — ephemeral hoan toan
+<h3>What is actually lost</h3>
+<pre><code class="language-text">Before disconnect                    After reconnect
+──────────────────────────────────  ──────────────────────────────────
+socket.id = 'AbC123'                 socket.id = 'XyZ789'   ← different
+socket.rooms = {'AbC123',            socket.rooms = {'XyZ789'}
+                'room:42', 'vip'}                     ← only its own id
+socket.data = { userId: 42,          socket.data = {}
+                role: 'admin' }                       ← empty
+
+Server-side references to the old id are now dangling. Anything you
+stored keyed by socket.id points at a socket that no longer exists.
+
+What DOES survive: the HTTP-layer facts. Cookies are re-sent, and
+&#96;socket.handshake.auth&#96; is re-supplied by the client, so middleware
+can authenticate the new connection exactly as it did the first one.
+That is the foundation all three patterns build on.
 </code></pre>
 
-<p>Nếu client reconnect và typing indicator mất — không sao, họ sẽ gõ tiếp và trigger event mới. Data này KHÔNG đáng cost để giữ. Kho này dùng cho: <code>thread:typing</code>, <code>presence:update</code> (thời điểm mới nhất), <code>listen:sync-request</code>.</p>
-
-<h3>Pattern 2 — Server-remembered (Map keyed by userId)</h3>
-<pre><code class="language-ts">// Rooms user da join
-const userRooms = new Map&lt;number, Set&lt;string&gt;&gt;();
-
-socket.on('thread:join', (threadId) =&gt; {
-  socket.join(&#96;thread:\${threadId}&#96;);
-  const rooms = userRooms.get(userId) ?? new Set();
-  rooms.add(&#96;thread:\${threadId}&#96;);
-  userRooms.set(userId, rooms);
+<h3>Pattern 1 — re-derive on connect (the default, and usually right)</h3>
+<pre><code class="language-ts">// Middleware authenticates every connection, old or new, identically.
+io.use(async (socket, next) =&gt; {
+  const token = socket.handshake.auth?.token;
+  const user = await verify(token);
+  if (!user) return next(new Error('unauthorized'));
+  socket.data.userId = user.id;
+  socket.data.role = user.role;
+  next();
 });
 
-// Khi reconnect
+io.on('connection', async (socket) =&gt; {
+  // Rebuild room membership from durable data, not from memory.
+  const rooms = await db.roomsForUser(socket.data.userId);
+  await socket.join([\`user:\${socket.data.userId}\`, ...rooms]);
+});
+</code></pre>
+
+<pre><code class="language-text">Why this is the default:
+
+  It has no state to go stale. The server asks the database what the
+  truth is, every time, and a reconnect is indistinguishable from a
+  first connection. There is no expiry to tune, no cleanup job, and
+  no window during which two representations disagree.
+
+  Cost: one query per connection. On a reconnect storm — a deploy, a
+  mobile network blip across thousands of clients — that is thousands
+  of queries in a few seconds. Chapter 5's checklist covers this;
+  the mitigation is caching roomsForUser, not abandoning the pattern.
+</code></pre>
+
+<h3>Pattern 2 — a server-side session keyed by something stable</h3>
+<pre><code class="language-ts">// The socket id changes; the USER id does not. Key everything by the
+// thing that survives.
+
+// ❌ Dangling after any reconnect
+const draftsBySocket = new Map&lt;string, Draft&gt;();
+
+// ✅ Survives, because userId is stable
+const draftsByUser = new Map&lt;number, Draft&gt;();
+
 io.on('connection', (socket) =&gt; {
-  for (const r of userRooms.get(userId) ?? []) socket.join(r);
+  const uid = socket.data.userId;
+  const draft = draftsByUser.get(uid);
+  if (draft) socket.emit('draft:restore', draft);
+
+  socket.on('draft:update', (d) =&gt; draftsByUser.set(uid, d));
 });
 </code></pre>
 
-<p>Server nhớ thay client. Data ở RAM (fast) hoặc Redis (persist qua restart). Kho này dùng cho: <code>userRooms</code> (implicit), <code>listen:room</code> host status.</p>
+<pre><code class="language-text">Two constraints that decide whether this works:
 
-<h3>Pattern 3 — Client-refetched (sync-since-last-seen)</h3>
-<pre><code class="language-ts">// Client gui timestamp cua tin cuoi da nhan, server tra danh sach tin sau do
-c.on('connect', async () =&gt; {
-  const lastSeen = localStorage.getItem('lastMessageAt');
-  const missed = await api.get(&#96;/threads/messages?since=\${lastSeen}&#96;);
-  for (const m of missed) addMessage(m);
+  1. In a cluster, a Map is per-worker.
+     The reconnect may land on a different worker (Chapter 2's
+     stickiness only pins a SESSION, not a future reconnect), so an
+     in-process Map is a cache with a random miss rate. Put it in
+     Redis with a TTL if the state matters.
+
+  2. It needs an eviction story.
+     A user who never comes back leaves their entry forever. A TTL
+     slightly longer than your reconnect window — a few minutes, not
+     hours — bounds it without discarding legitimate reconnects.
+</code></pre>
+
+<h3>Pattern 3 — the client holds it and replays</h3>
+<pre><code class="language-ts">// The client already knows what it was doing. Let it say so.
+socket.on('connect', () =&gt; {
+  socket.emit('resume', {
+    conversationId: currentConversationId,
+    lastEventId: lastSeenEventId,     // ← the important half
+  });
+});
+
+// Server answers with only what was missed
+socket.on('resume', async ({ conversationId, lastEventId }, ack) =&gt; {
+  if (!(await canAccess(socket.data.userId, conversationId))) {
+    return ack({ error: 'forbidden' });
+  }
+  await socket.join(\`conv:\${conversationId}\`);
+  const missed = await db.eventsSince(conversationId, lastEventId);
+  ack({ missed });
 });
 </code></pre>
 
-<p>Data ở DB đã có, chỉ cần fetch. Đây là pattern chuẩn cho tin nhắn quan trọng — KHÔNG dựa vào emit reach client. Kho này dùng cho: chat messages, notifications, feed posts.</p>
+<pre><code class="language-text">This is the only pattern that closes the GAP, not just the state.
 
-<h3>So sánh</h3>
-<div class="out">Pattern      Data cost  Staleness   Complexity  Use for
-1 Ephemeral  0          irrelevant  0            presence, typing
-2 Server RAM small      seconds     medium       user rooms, active session
-2 Server DB  small      minutes     high         cluster-safe rooms (Redis)
-3 Client     large      up to hours medium       messages, notifications
+  Patterns 1 and 2 restore where the user was. Neither delivers the
+  messages that arrived while they were disconnected — Chapter 6
+  establishes that socket.io's default is at-most-once, so those
+  messages are simply gone.
+
+  A &#96;lastEventId&#96; turns the reconnect into a query: "everything after
+  this point". That is the mechanism behind every chat app that shows
+  you what you missed while the train was in a tunnel.
+
+⚠️ Everything the client sends is untrusted. The &#96;resume&#96; handler
+   above re-checks authorization before joining, because a client can
+   claim any conversationId it likes. Pattern 3 moves state to the
+   client; it must not move TRUST there.
+</code></pre>
+
+<h3>Choosing</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Is it derivable from durable data? → Pattern 1</span><span class="lz-d">Room membership, permissions, subscriptions. Re-deriving costs a query and can never go stale, which is worth more than the query costs. Cache it if reconnect storms show up in your database metrics.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Is it ephemeral but server-owned? → Pattern 2</span><span class="lz-d">An unsent draft, a wizard step, a rate-limit counter. Key it by user id rather than socket id, put it in Redis if you run more than one worker, and give it a TTL a little longer than your reconnect window.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Does the client need what it MISSED? → Pattern 3</span><span class="lz-d">Chat, notifications, live feeds. Only a client-supplied cursor lets the server answer &quot;what happened since&quot;. Re-authorize everything the client claims, and pair it with Chapter 6 if delivery must be guaranteed rather than best-effort.</span></div>
 </div>
 
-<div class="callout warn">
-<p><strong>Sai cost pattern tệ hơn không có pattern.</strong> Server-remember cho tin nhắn quan trọng (nếu server restart, mất) — bug lớn. Ephemeral cho user rooms (nếu reconnect, không nhận msg cho thread họ đang xem) — bug thầm. Xác định staleness tolerance trước khi chọn.</p>
+<h3>Most real apps use all three at once</h3>
+<pre><code class="language-ts">io.on('connection', async (socket) =&gt; {
+  const uid = socket.data.userId;                       // set by middleware
+
+  // 1 — re-derive durable membership
+  await socket.join([\`user:\${uid}\`, ...(await db.roomsForUser(uid))]);
+
+  // 2 — restore ephemeral server-side state
+  const draft = await redis.get(\`draft:\${uid}\`);
+  if (draft) socket.emit('draft:restore', JSON.parse(draft));
+
+  // 3 — let the client ask for the gap
+  socket.on('resume', handleResume);
+
+  socket.emit('ready');                                 // now it is safe to send
+});
+</code></pre>
+
+<p>The <code>ready</code> event at the end matters more than it looks. Without it the client cannot tell &quot;connected&quot; from &quot;connected and restored&quot;, so it may emit into a socket that has not joined its rooms yet — and those emits go nowhere, silently.</p>
+
+<div class="pitfall">
+<p><strong>Bẫy — keying anything by <code>socket.id</code> across a reconnect.</strong> The id is regenerated, so every <code>Map&lt;socketId, …&gt;</code> entry becomes garbage the moment the network blips. It leaks memory and the lookup silently misses. Key by user id, which is stable.</p>
+</div>
+
+<div class="pitfall">
+<p><strong>Bẫy — trusting what the client replays.</strong> Pattern 3 has the client send a conversation id and a cursor. Both are attacker-controlled. Re-run your authorization check inside the <code>resume</code> handler; a client that asks to resume a conversation it was never in must be refused, not joined.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Ephemeral (không cost, không staleness care), server-remembered (RAM/Redis + <code>Map&lt;userId, ...&gt;</code>), client-refetched (DB có sẵn + sync-since-last-seen) — ba pattern cho ba loại data khác nhau, và sai pattern là bug lớn hơn không có pattern.</p>
+<p><strong>One sentence.</strong> A reconnect is a new socket with a new id, empty rooms and empty <code>data</code>, and only the HTTP-layer facts (cookies, <code>handshake.auth</code>) survive — so restore with one of three patterns chosen by what the state <em>is</em>: re-derive it from durable data (default, never stale, costs a query), keep it server-side keyed by user id rather than socket id (in Redis once you have more than one worker, with a TTL), or have the client replay a <code>lastEventId</code> cursor so the server can answer with what was missed — and only the third closes the message gap, because socket.io's default delivery guarantee drops anything sent while the client was away.</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Connection state recovery</span><span class="lc-sub">socket.io/docs/v4/connection-state-recovery — feature 4.6+ tự động giữ state trong RAM một khoảng. Trade off: memory.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 6 — acks and delivery guarantees</span><span class="lc-sub">/courses/socket-io/learn${REF} — pattern 3 sâu hơn ở Chương 6.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Connection state recovery</span><span class="lc-sub">socket.io/docs/v4/connection-state-recovery — bản dựng sẵn của Pattern 3, và giới hạn của nó.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Middlewares</span><span class="lc-sub">socket.io/docs/v4/middlewares — vì sao xác thực chạy trước sự kiện connection.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — The Socket instance</span><span class="lc-sub">socket.io/docs/v4/server-socket-instance — socket.data, socket.rooms, và vòng đời của chúng.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.5</span>
-<h2>State sống sót reconnect: ba pattern</h2>
-<p class="lead">Bài 1.3 chỉ ra reconnect xoá rooms, sid, và pending events. Bài này đưa ba pattern cho việc gì nên làm với chuyện đó, và mỗi cái hợp khi nào.</p>
+<h2>Trạng thái sống sót qua reconnect: ba pattern</h2>
+<p class="lead">Bài 1.3 đã xác lập rằng một lần kết nối lại là một kết nối hoàn toàn mới: socket id mới, room rỗng, <code>socket.data</code> rỗng. Không gì tự động mang sang. Vì thế mọi app realtime đều cần một câu trả lời có chủ đích cho câu hỏi &quot;phiên làm việc thì sao&quot;, và câu trả lời đó có đúng ba hình dạng.</p>
 
-<h3>Pattern 1 — Ephemeral (không giữ)</h3>
-<pre><code class="language-ts">// Presence, typing indicator, con tro
-socket.on('typing:start', () =&gt; io.to(&#96;thread:\${threadId}&#96;).emit('user:typing', userId));
-// KHONG luu DB, KHONG luu Map — ephemeral hoan toan
+<h3>Cái gì thực sự mất</h3>
+<pre><code class="language-text">Trước khi ngắt                       Sau khi nối lại
+──────────────────────────────────  ──────────────────────────────────
+socket.id = 'AbC123'                 socket.id = 'XyZ789'   ← khác
+socket.rooms = {'AbC123',            socket.rooms = {'XyZ789'}
+                'room:42', 'vip'}                     ← chỉ có id của nó
+socket.data = { userId: 42,          socket.data = {}
+                role: 'admin' }                       ← rỗng
+
+Mọi tham chiếu phía server tới id cũ giờ đều lơ lửng. Bất cứ thứ gì
+bạn lưu theo khoá socket.id đều trỏ vào một socket không còn tồn tại.
+
+Thứ CÓ sống sót: những dữ kiện ở tầng HTTP. Cookie được gửi lại, và
+&#96;socket.handshake.auth&#96; được client cung cấp lại, nên middleware xác
+thực được kết nối mới y hệt như nó đã làm với kết nối đầu tiên.
+Đó là nền móng mà cả ba pattern dựng lên trên.
 </code></pre>
 
-<p>Nếu client reconnect và typing indicator mất — không sao, họ gõ tiếp và trigger event mới. Data này KHÔNG đáng cost để giữ. Kho này dùng cho: <code>thread:typing</code>, <code>presence:update</code> (thời điểm mới nhất), <code>listen:sync-request</code>.</p>
-
-<h3>Pattern 2 — Server nhớ (Map theo userId)</h3>
-<pre><code class="language-ts">// Rooms user da join
-const userRooms = new Map&lt;number, Set&lt;string&gt;&gt;();
-
-socket.on('thread:join', (threadId) =&gt; {
-  socket.join(&#96;thread:\${threadId}&#96;);
-  const rooms = userRooms.get(userId) ?? new Set();
-  rooms.add(&#96;thread:\${threadId}&#96;);
-  userRooms.set(userId, rooms);
+<h3>Pattern 1 — suy lại lúc connect (mặc định, và thường là đúng)</h3>
+<pre><code class="language-ts">// Middleware xác thực mọi kết nối, cũ hay mới, y như nhau.
+io.use(async (socket, next) =&gt; {
+  const token = socket.handshake.auth?.token;
+  const user = await verify(token);
+  if (!user) return next(new Error('unauthorized'));
+  socket.data.userId = user.id;
+  socket.data.role = user.role;
+  next();
 });
 
-// Khi reconnect
+io.on('connection', async (socket) =&gt; {
+  // Dựng lại thành viên room từ dữ liệu bền, không phải từ bộ nhớ.
+  const rooms = await db.roomsForUser(socket.data.userId);
+  await socket.join([\`user:\${socket.data.userId}\`, ...rooms]);
+});
+</code></pre>
+
+<pre><code class="language-text">Vì sao đây là mặc định:
+
+  Nó không có trạng thái nào để cũ đi. Server hỏi database sự thật là
+  gì, mỗi lần, và một lần kết nối lại không phân biệt được với một
+  kết nối đầu tiên. Không có hạn nào phải tinh chỉnh, không job dọn
+  dẹp nào, và không có cửa sổ thời gian nào mà hai biểu diễn bất đồng.
+
+  Cái giá: một truy vấn cho mỗi kết nối. Trong một cơn bão kết nối
+  lại — một lần deploy, một cú chớp mạng di động trên hàng nghìn
+  client — đó là hàng nghìn truy vấn trong vài giây. Checklist ở
+  Chương 5 nói về chuyện này; cách giảm nhẹ là cache roomsForUser,
+  không phải bỏ pattern.
+</code></pre>
+
+<h3>Pattern 2 — một phiên phía server, khoá bằng thứ ổn định</h3>
+<pre><code class="language-ts">// socket id đổi; USER id thì không. Hãy khoá mọi thứ theo thứ sống sót.
+
+// ❌ Lơ lửng sau bất kỳ lần kết nối lại nào
+const draftsBySocket = new Map&lt;string, Draft&gt;();
+
+// ✅ Sống sót, vì userId ổn định
+const draftsByUser = new Map&lt;number, Draft&gt;();
+
 io.on('connection', (socket) =&gt; {
-  for (const r of userRooms.get(userId) ?? []) socket.join(r);
+  const uid = socket.data.userId;
+  const draft = draftsByUser.get(uid);
+  if (draft) socket.emit('draft:restore', draft);
+
+  socket.on('draft:update', (d) =&gt; draftsByUser.set(uid, d));
 });
 </code></pre>
 
-<p>Server nhớ thay client. Data ở RAM (nhanh) hoặc Redis (persist qua restart). Kho này dùng cho: <code>userRooms</code> (implicit), <code>listen:room</code> host status.</p>
+<pre><code class="language-text">Hai ràng buộc quyết định cái này có chạy được không:
 
-<h3>Pattern 3 — Client refetch (sync-since-last-seen)</h3>
-<pre><code class="language-ts">// Client gui timestamp tin cuoi da nhan, server tra danh sach tin sau do
-c.on('connect', async () =&gt; {
-  const lastSeen = localStorage.getItem('lastMessageAt');
-  const missed = await api.get(&#96;/threads/messages?since=\${lastSeen}&#96;);
-  for (const m of missed) addMessage(m);
+  1. Trong cluster, một Map là của riêng từng worker.
+     Lần kết nối lại có thể rơi vào một worker khác (sticky ở Chương 2
+     chỉ ghim một PHIÊN, không ghim một lần kết nối lại trong tương
+     lai), nên một Map trong tiến trình là một cache với tỷ lệ trượt
+     ngẫu nhiên. Hãy đặt nó vào Redis kèm TTL nếu trạng thái đó quan trọng.
+
+  2. Nó cần một câu chuyện dọn dẹp.
+     Một user không bao giờ quay lại để lại mục của họ mãi mãi. Một
+     TTL dài hơn cửa sổ kết nối lại của bạn một chút — vài phút, không
+     phải vài giờ — chặn được nó mà không vứt đi những lần nối lại hợp lệ.
+</code></pre>
+
+<h3>Pattern 3 — client giữ và phát lại</h3>
+<pre><code class="language-ts">// Client vốn đã biết nó đang làm gì. Hãy để nó nói ra.
+socket.on('connect', () =&gt; {
+  socket.emit('resume', {
+    conversationId: currentConversationId,
+    lastEventId: lastSeenEventId,     // ← nửa quan trọng
+  });
+});
+
+// Server trả lời chỉ bằng phần đã bỏ lỡ
+socket.on('resume', async ({ conversationId, lastEventId }, ack) =&gt; {
+  if (!(await canAccess(socket.data.userId, conversationId))) {
+    return ack({ error: 'forbidden' });
+  }
+  await socket.join(\`conv:\${conversationId}\`);
+  const missed = await db.eventsSince(conversationId, lastEventId);
+  ack({ missed });
 });
 </code></pre>
 
-<p>Data ở DB có sẵn, chỉ cần fetch. Đây là pattern chuẩn cho tin nhắn quan trọng — KHÔNG dựa vào emit tới client. Kho này dùng cho: chat messages, notifications, feed posts.</p>
+<pre><code class="language-text">Đây là pattern duy nhất lấp được KHOẢNG TRỐNG, không chỉ trạng thái.
 
-<h3>So sánh</h3>
-<div class="out">Pattern      Data cost  Staleness   Complexity  Dung cho
-1 Ephemeral  0          khong quan  0            presence, typing
-2 Server RAM nho        vai giay    trung binh   user rooms, active session
-2 Server DB  nho        vai phut    cao          cluster-safe rooms (Redis)
-3 Client     lon        toi vai gio trung binh   tin nhan, thong bao
+  Pattern 1 và 2 khôi phục chỗ người dùng đang ở. Không cái nào giao
+  những thông điệp đã tới trong lúc họ mất kết nối — Chương 6 xác lập
+  rằng mặc định của socket.io là at-most-once, nên những thông điệp
+  đó đơn giản là mất.
+
+  Một &#96;lastEventId&#96; biến lần kết nối lại thành một truy vấn: "mọi thứ
+  sau điểm này". Đó là cơ chế đằng sau mọi app chat cho bạn xem thứ
+  bạn đã bỏ lỡ trong lúc tàu chui qua hầm.
+
+⚠️ Mọi thứ client gửi đều không đáng tin. Handler &#96;resume&#96; ở trên kiểm
+   lại quyền trước khi join, vì một client khai được bất kỳ
+   conversationId nào nó thích. Pattern 3 đẩy trạng thái sang client;
+   nó không được đẩy NIỀM TIN sang đó.
+</code></pre>
+
+<h3>Chọn thế nào</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Nó suy ra được từ dữ liệu bền không? → Pattern 1</span><span class="lz-d">Thành viên room, quyền, đăng ký theo dõi. Suy lại tốn một truy vấn và không bao giờ cũ đi được, và điều đó đáng giá hơn cái giá của truy vấn. Hãy cache nó nếu bão kết nối lại xuất hiện trong số liệu database của bạn.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Nó phù du nhưng do server sở hữu? → Pattern 2</span><span class="lz-d">Một bản nháp chưa gửi, một bước trong wizard, một bộ đếm giới hạn tốc độ. Hãy khoá theo user id thay vì socket id, đặt vào Redis nếu bạn chạy nhiều hơn một worker, và cho nó một TTL dài hơn cửa sổ kết nối lại một chút.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Client có cần thứ nó ĐÃ BỎ LỠ không? → Pattern 3</span><span class="lz-d">Chat, thông báo, feed trực tiếp. Chỉ một con trỏ do client cung cấp mới cho phép server trả lời &quot;chuyện gì đã xảy ra từ lúc đó&quot;. Hãy kiểm lại quyền cho mọi thứ client khai, và ghép nó với Chương 6 nếu việc giao nhận phải được bảo đảm chứ không phải nỗ-lực-tốt-nhất.</span></div>
 </div>
 
-<div class="callout warn">
-<p><strong>Sai cost pattern tệ hơn không có pattern.</strong> Server-remember cho tin nhắn quan trọng (nếu server restart, mất) — bug lớn. Ephemeral cho user rooms (nếu reconnect, không nhận msg cho thread họ đang xem) — bug thầm. Xác định staleness tolerance trước khi chọn.</p>
+<h3>Hầu hết app thật dùng cả ba cùng lúc</h3>
+<pre><code class="language-ts">io.on('connection', async (socket) =&gt; {
+  const uid = socket.data.userId;                       // do middleware đặt
+
+  // 1 — suy lại thành viên bền
+  await socket.join([\`user:\${uid}\`, ...(await db.roomsForUser(uid))]);
+
+  // 2 — khôi phục trạng thái phù du phía server
+  const draft = await redis.get(\`draft:\${uid}\`);
+  if (draft) socket.emit('draft:restore', JSON.parse(draft));
+
+  // 3 — để client hỏi phần bị bỏ lỡ
+  socket.on('resume', handleResume);
+
+  socket.emit('ready');                                 // giờ mới an toàn để gửi
+});
+</code></pre>
+
+<p>Sự kiện <code>ready</code> ở cuối quan trọng hơn vẻ ngoài của nó. Không có nó, client không phân biệt được &quot;đã kết nối&quot; với &quot;đã kết nối và đã khôi phục&quot;, nên nó có thể emit vào một socket còn chưa join room của mình — và những lần emit đó đi vào hư không, một cách im lặng.</p>
+
+<div class="pitfall">
+<p><strong>Bẫy — khoá bất cứ thứ gì theo <code>socket.id</code> qua một lần kết nối lại.</strong> Id được sinh lại, nên mọi mục <code>Map&lt;socketId, …&gt;</code> trở thành rác vào khoảnh khắc mạng chớp. Nó rò bộ nhớ và phép tra cứu trượt trong im lặng. Hãy khoá theo user id, thứ ổn định.</p>
+</div>
+
+<div class="pitfall">
+<p><strong>Bẫy — tin thứ client phát lại.</strong> Pattern 3 để client gửi một conversation id và một con trỏ. Cả hai đều do kẻ tấn công điều khiển được. Hãy chạy lại phép kiểm quyền bên trong handler <code>resume</code>; một client xin resume một cuộc hội thoại nó chưa bao giờ ở trong đó phải bị từ chối, không phải được cho join.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Ephemeral (không cost, không staleness care), server nhớ (RAM/Redis + <code>Map&lt;userId, ...&gt;</code>), client refetch (DB có sẵn + sync-since-last-seen) — ba pattern cho ba loại data khác nhau, và sai pattern là bug lớn hơn không có pattern.</p>
+<p><strong>Một câu.</strong> Một lần kết nối lại là một socket mới với id mới, room rỗng và <code>data</code> rỗng, và chỉ những dữ kiện ở tầng HTTP (cookie, <code>handshake.auth</code>) sống sót — nên hãy khôi phục bằng một trong ba pattern, chọn theo bản chất của trạng thái: suy lại từ dữ liệu bền (mặc định, không bao giờ cũ, tốn một truy vấn), giữ phía server khoá theo user id thay vì socket id (trong Redis một khi bạn có hơn một worker, kèm TTL), hoặc để client phát lại một con trỏ <code>lastEventId</code> để server trả lời bằng phần đã bỏ lỡ — và chỉ cái thứ ba lấp được khoảng trống thông điệp, vì bảo đảm giao nhận mặc định của socket.io vứt bỏ bất cứ thứ gì gửi trong lúc client vắng mặt.</p>
 </div>
 
 <h3>Nguồn</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Connection state recovery</span><span class="lc-sub">socket.io/docs/v4/connection-state-recovery — feature 4.6+ tự động giữ state trong RAM một khoảng. Trade off: memory.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 6 — acks và delivery guarantees</span><span class="lc-sub">/courses/socket-io/learn${REF} — pattern 3 sâu hơn ở Chương 6.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Connection state recovery</span><span class="lc-sub">socket.io/docs/v4/connection-state-recovery — bản dựng sẵn của Pattern 3, và giới hạn của nó.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Middlewares</span><span class="lc-sub">socket.io/docs/v4/middlewares — vì sao xác thực chạy trước sự kiện connection.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — The Socket instance</span><span class="lc-sub">socket.io/docs/v4/server-socket-instance — socket.data, socket.rooms, và vòng đời của chúng.</span></span></div>
 </div>
 `,
     },
+
 
     /* ─────────────────────────── 1.6 ─────────────────────────── */
     {
@@ -1007,12 +1218,24 @@ c.on('connect', async () =&gt; {
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Quiz</span>
 <h2>What Chapter 1 established</h2>
-<p class="lead">Sáu câu, mười phút. Về vòng đời một connection từ birth (~9ms setup) đến death (một trong sáu reason) đến rebirth (auto backoff, sid mới, rooms trống).</p>
+<p class="lead">Six questions on the lifecycle of a single connection — the part every later chapter assumes you know.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Connect is five events, not one</span><span class="lz-d">The handshake fires a sequence, and middleware runs BEFORE the connection event. That ordering is what makes authentication possible at all: reject in middleware and the socket never reaches your handlers.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Four disconnect reasons, four responses</span><span class="lz-d">A client-initiated close, a server-initiated close, a transport error and a ping timeout mean different things. Treating them identically is how you end up reconnecting when you should not, or not reconnecting when you should.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Reconnect does not restore state</span><span class="lz-d">A new connection gets a new socket id and empty rooms. Nothing about the previous session survives automatically. Three patterns close that gap: re-join on connect, server-side session lookup, and client-held state replayed after connect.</span></div>
+</div>
+<p>6 questions, 10 minutes. Answer from the mechanism, not from memory — every option is plausible if you are guessing.</p>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Kiểm tra</span>
 <h2>Chương 1 đã dựng được gì</h2>
-<p class="lead">Sáu câu, mười phút. Về vòng đời một connection từ sinh (~9ms setup) đến chết (một trong sáu reason) đến sinh lại (auto backoff, sid mới, rooms trống).</p>
+<p class="lead">Sáu câu về vòng đời của một kết nối đơn lẻ — phần mà mọi chương sau đều giả định bạn đã nắm.</p>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Connect là năm sự kiện, không phải một</span><span class="lz-d">Cú bắt tay phát ra một chuỗi, và middleware chạy TRƯỚC sự kiện connection. Chính thứ tự đó là thứ làm cho việc xác thực khả thi: từ chối trong middleware thì socket không bao giờ tới được handler của bạn.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Bốn lý do ngắt, bốn cách phản ứng</span><span class="lz-d">Client chủ động đóng, server chủ động đóng, lỗi transport, và ping timeout mang ý nghĩa khác nhau. Xử chúng như nhau là cách bạn kết nối lại khi lẽ ra không nên, hoặc không kết nối lại khi lẽ ra phải.</span></div>
+<div class="lz-step"><span class="lz-k">•</span><span class="lz-t">Kết nối lại không khôi phục trạng thái</span><span class="lz-d">Một kết nối mới nhận một socket id mới và room rỗng. Không gì của phiên trước tự động sống sót. Ba pattern lấp khoảng trống đó: join lại lúc connect, tra cứu phiên phía server, và trạng thái do client giữ rồi phát lại sau khi connect.</span></div>
+</div>
+<p>6 câu, 10 phút. Hãy trả lời từ cơ chế, đừng trả lời từ trí nhớ — mọi phương án đều hợp lý nếu bạn đang đoán.</p>
 </div>
 `,
       quiz: {

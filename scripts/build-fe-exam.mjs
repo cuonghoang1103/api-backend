@@ -61,6 +61,9 @@ const POINTS = parseFloat(val('--points', '10'));
 const PASS = parseFloat(val('--pass', '4'));
 const SOURCE = val('--source', 'REAL');
 const SUBJECT = val('--instructions-subject', 'this subject');
+const KIND = val('--kind', 'FE'); // FE | PT | ME — nhãn loại đề
+const EXAM_LABEL_EN = KIND === 'PT' ? 'Progress Test' : KIND === 'ME' ? 'Mid-term Exam' : 'Final Exam';
+const EXAM_LABEL_VI = KIND === 'PT' ? 'bài kiểm tra tiến độ (Progress Test)' : KIND === 'ME' ? 'thi giữa kỳ (Mid-term Exam)' : 'thi cuối kỳ (Final Exam)';
 
 if (!BANK || !COURSE || !CODE || !TITLE || !OUT) {
   console.error('cần --bank --course --code --title --out (tuỳ chọn --images --desc --duration --points --pass --source --instructions-subject)');
@@ -134,7 +137,7 @@ function explHtml(q) {
 function instructions() {
   return (
     '<div class="ml-en">' +
-    `<p>This is a real FPTU <b>Final Exam</b> paper for <b>${esc(SUBJECT)}</b>. Every question is <b>multiple choice</b> and auto-graded.</p>` +
+    `<p>This is a real FPTU <b>${EXAM_LABEL_EN}</b> paper for <b>${esc(SUBJECT)}</b>. Every question is <b>multiple choice</b> and auto-graded.</p>` +
     '<ul>' +
     '<li>Some questions say "choose TWO" — they are only correct when both right answers are selected.</li>' +
     '<li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li>' +
@@ -143,7 +146,7 @@ function instructions() {
     '<p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p>' +
     '</div>' +
     '<div class="ml-vi">' +
-    `<p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>${esc(SUBJECT)}</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p>` +
+    `<p>Đây là đề <b>${EXAM_LABEL_VI}</b> thật của FPTU môn <b>${esc(SUBJECT)}</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p>` +
     '<ul>' +
     '<li>Một số câu ghi "chọn HAI" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li>' +
     '<li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li>' +
@@ -182,6 +185,11 @@ const questions = bank.map((q) => {
 const spec = {
   course: { courseCode: COURSE },
   exams: [{
+    // Frontend chỉ render kind 'FE' (MCQ tự chấm) và 'PE' (thực hành). PT/ME
+    // vẫn là đề trắc nghiệm nên LƯU kind='FE' và phân biệt bằng code/title —
+    // đúng quy ước WF-PT1 (kind='FE', code='PT1') và Reading (code='READ-').
+    // --kind chỉ đổi CHỮ trong hướng dẫn (Final Exam / Progress Test), không
+    // đổi kind lưu xuống.
     kind: 'FE',
     code: CODE,
     title: TITLE,

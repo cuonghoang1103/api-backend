@@ -166,7 +166,13 @@ async function detectBannerHeight(buf, width) {
 async function findRedDivider(buf, width, height) {
   const { data, info } = await sharp(buf).raw().toBuffer({ resolveWithObject: true });
   const channels = info.channels;
-  const isRed = (i) => data[i] > 180 && data[i + 1] < 90 && data[i + 2] < 90;
+  // Loosened from (r>180,g<90,b<90): some decks (SWT301 PT3 SPRING23, a
+  // green-themed variant) draw a LIGHTER/pinker divider ~ (160,110,110) that the
+  // strict red missed, leaving the page essentially uncropped (logo + checkbox
+  // panel kept — caught 25/08/2026 on PT3-1 q16). The >40% full-height coverage
+  // requirement below still rejects stray reddish text/glyphs, so this only adds
+  // genuine full-height rules.
+  const isRed = (i) => data[i] > 150 && data[i + 1] < 120 && data[i + 2] < 120;
   let best = { x: -1, count: 0 };
   for (let x = 0; x < width; x++) {
     let redCount = 0;

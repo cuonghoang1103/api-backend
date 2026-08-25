@@ -570,10 +570,26 @@ found 0 vulnerabilities</div>
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 1: terminal navigation, absolute vs relative paths, VS Code, the Git snapshot model, GitHub remotes, and npm/package.json.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> These tools stick only through repetition. Drill real terminal and Git commands on Code Lab until they are muscle memory.</p>
+<h3>The chapter in four points</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Paths</span><span class="lz-t">Absolute vs relative</span><span class="lz-d">A relative path is meaningless without <code>pwd</code>. The same idea returns in <code>import './x.js'</code> and in every <code>src=""</code>.</span></div>
+<div class="lz-node"><span class="lz-k">The editor</span><span class="lz-t">Search and rename, not scrolling</span><span class="lz-d">Ctrl/Cmd+P to reach a file, Shift+F to search the project, F2 to rename a symbol everywhere at once.</span></div>
+<div class="lz-node"><span class="lz-k">Git</span><span class="lz-t">Three places, one command to see them</span><span class="lz-d">Working directory → staging → repository. <code>git status</code> tells you where everything is; run it constantly.</span></div>
+<div class="lz-node"><span class="lz-k">npm</span><span class="lz-t">Two files, one folder</span><span class="lz-d"><code>package.json</code> declares, <code>package-lock.json</code> pins, <code>node_modules</code> is disposable. Commit the first two, never the third.</span></div>
+</div>
+<p class="note-ct"><strong>If a question stumps you</strong>, do not guess — open a terminal and run the command. Every answer in this quiz can be checked in under a minute on your own machine, and checking it is worth more than the point.</p>
 <div class="link-card"><a href="/code-lab/git">Practice on Code Lab → Git track</a></div>
 <div class="link-card"><a href="/code-lab/linux-bash">Practice on Code Lab → Linux &amp; Bash (terminal) track</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 1: di chuyển terminal, đường dẫn tuyệt đối vs tương đối, VS Code, mô hình ảnh chụp của Git, remote GitHub, và npm/package.json.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Mấy công cụ này chỉ thấm qua lặp lại. Hãy luyện lệnh terminal và Git thật ở Code Lab tới khi thành phản xạ.</p>
+<h3>Cả chương trong bốn ý</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Đường dẫn</span><span class="lz-t">Tuyệt đối với tương đối</span><span class="lz-d">Một đường dẫn tương đối là vô nghĩa nếu không có <code>pwd</code>. Cùng ý đó quay lại trong <code>import './x.js'</code> và trong mọi <code>src=""</code>.</span></div>
+<div class="lz-node"><span class="lz-k">Trình soạn thảo</span><span class="lz-t">Tìm và đổi tên, đừng cuộn</span><span class="lz-d">Ctrl/Cmd+P để tới một file, Shift+F để tìm khắp dự án, F2 để đổi tên một ký hiệu ở mọi nơi một lượt.</span></div>
+<div class="lz-node"><span class="lz-k">Git</span><span class="lz-t">Ba chỗ, một lệnh để nhìn cả ba</span><span class="lz-d">Thư mục làm việc → vùng chờ → kho. <code>git status</code> cho biết mọi thứ đang ở đâu; hãy chạy nó liên tục.</span></div>
+<div class="lz-node"><span class="lz-k">npm</span><span class="lz-t">Hai file, một thư mục</span><span class="lz-d"><code>package.json</code> khai báo, <code>package-lock.json</code> ghim, <code>node_modules</code> vứt đi được. Commit hai cái đầu, đừng bao giờ commit cái thứ ba.</span></div>
+</div>
+<p class="note-ct"><strong>Nếu một câu làm bạn bí</strong>, đừng đoán — hãy mở terminal và chạy thử cái lệnh đó. Mọi đáp án trong bài kiểm tra này đều kiểm được dưới một phút trên chính máy bạn, và việc kiểm ấy đáng giá hơn cái điểm.</p>
 <div class="link-card"><a href="/code-lab/git">Luyện tập ở Code Lab → track Git</a></div>
 <div class="link-card"><a href="/code-lab/linux-bash">Luyện tập ở Code Lab → track Linux &amp; Bash (terminal)</a></div></div>
 `,

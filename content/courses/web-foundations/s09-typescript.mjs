@@ -53,6 +53,16 @@ add("2", 3);    // ❌ compiler error, BEFORE the code ever runs:
 <p>Keep one mental model in mind for this whole chapter: types exist only while you write and compile code. Once compiled, every annotation is erased — the program that actually runs is plain JavaScript, identical to what you would type by hand.</p>
 <p class="pitfall"><strong>TypeScript does not make your code faster, and it adds no runtime checks.</strong> It is a tool that runs before your code, not while it runs. If bad data sneaks in from outside your program (a malformed API response, for instance), TypeScript's compile-time promise does not protect you at runtime — you still validate untrusted data the same way you always would.</p>
 <p class="note-ct"><strong>Nothing here is new syntax to fear.</strong> Every concept from Chapters 4-5 — variables, functions, arrays, objects, <code>fetch</code> — works completely unchanged in TypeScript. This chapter only adds a thin layer of annotations on top of what you already know.</p>
+<h3>Where TypeScript sits in your workflow</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">You write .ts</span><span class="lz-d">Every valid JavaScript file is already valid TypeScript. Renaming <code>.js</code> to <code>.ts</code> is a legitimate first step.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The compiler checks it</span><span class="lz-d">This is the entire value: mistakes are reported before the program runs, in the editor, as you type them.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The types are erased</span><span class="lz-d">The emitted JavaScript has no annotations, no interfaces, nothing. There is no runtime cost and no runtime protection.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Node or the browser runs the JavaScript</span><span class="lz-d">Which is why a wrong type at the boundary — JSON from an API, a form field — is still a runtime bug. The compiler never saw that data.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — believing a type annotation checks data that came from outside.</strong> <code>const user = await res.json() as User</code> compiles perfectly and checks nothing: <code>res.json()</code> returns whatever the server sent, and <code>as</code> simply tells the compiler to stop asking. The server renames a field, the type still says <code>User</code>, and you get <code>undefined</code> at a property TypeScript swore was there. Types describe what your code <em>expects</em>; only a runtime check can confirm what actually arrived. Validate at the boundary — a few <code>if</code>s at first, a schema library when the app grows — and let everything inside be typed because something verified it.</p></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html" target="_blank" rel="noopener">TypeScript in 5 minutes — the official starting point</a></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/play" target="_blank" rel="noopener">TypeScript Playground — see the JavaScript your types compile to</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.1</span>
@@ -89,6 +99,16 @@ add("2", 3);    // ❌ lỗi biên dịch, TRƯỚC KHI code chạy:
 <p>Giữ một mô hình tư duy cho cả chương này: type chỉ tồn tại khi bạn viết và biên dịch code. Sau khi biên dịch, mọi annotation bị xoá — chương trình thật sự chạy là JavaScript thuần, giống hệt bạn tự gõ tay.</p>
 <p class="pitfall"><strong>TypeScript không làm code chạy nhanh hơn, và không thêm kiểm tra lúc chạy.</strong> Nó là công cụ chạy TRƯỚC code của bạn, không phải trong lúc code chạy. Nếu dữ liệu xấu lẻn vào từ bên ngoài chương trình (vd một phản hồi API sai định dạng), lời hứa lúc-biên-dịch của TypeScript không bảo vệ bạn lúc chạy — bạn vẫn phải validate dữ liệu không tin cậy như mọi khi.</p>
 <p class="note-ct"><strong>Không có cú pháp mới nào đáng sợ ở đây.</strong> Mọi khái niệm từ Chương 4-5 — biến, hàm, mảng, đối tượng, <code>fetch</code> — hoạt động y hệt trong TypeScript. Chương này chỉ thêm một lớp annotation mỏng lên trên những gì bạn đã biết.</p>
+<h3>TypeScript nằm ở đâu trong quy trình của bạn</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Bạn viết file .ts</span><span class="lz-d">Mọi file JavaScript hợp lệ đều đã là TypeScript hợp lệ. Đổi tên <code>.js</code> thành <code>.ts</code> là một bước đầu chính đáng.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Trình biên dịch kiểm nó</span><span class="lz-d">Đây là toàn bộ giá trị: sai sót được báo trước khi chương trình chạy, ngay trong trình soạn thảo, ngay lúc bạn gõ ra chúng.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Kiểu bị xoá đi</span><span class="lz-d">JavaScript sinh ra không còn chú thích, không interface, không gì cả. Không tốn gì lúc chạy và cũng không bảo vệ gì lúc chạy.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Node hoặc trình duyệt chạy JavaScript đó</span><span class="lz-d">Đó là lý do một kiểu sai ở biên — JSON từ một API, một ô nhập của form — vẫn là lỗi lúc chạy. Trình biên dịch chưa hề nhìn thấy dữ liệu ấy.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tin rằng một dòng chú thích kiểu có kiểm dữ liệu đến từ bên ngoài.</strong> <code>const user = await res.json() as User</code> biên dịch hoàn hảo và chẳng kiểm gì: <code>res.json()</code> trả về đúng thứ máy chủ gửi, còn <code>as</code> chỉ đơn giản bảo trình biên dịch thôi hỏi. Máy chủ đổi tên một field, kiểu vẫn nói <code>User</code>, và bạn nhận <code>undefined</code> ở một thuộc tính mà TypeScript đã thề là có. Kiểu mô tả thứ mã của bạn <em>mong đợi</em>; chỉ một phép kiểm lúc chạy mới xác nhận được thứ thật sự đã tới. Hãy kiểm ở biên — vài câu <code>if</code> lúc đầu, một thư viện schema khi ứng dụng lớn lên — rồi để mọi thứ bên trong được gán kiểu VÌ đã có thứ xác minh nó.</p></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html" target="_blank" rel="noopener">TypeScript trong 5 phút — điểm khởi đầu chính thức</a></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/play" target="_blank" rel="noopener">TypeScript Playground — xem đoạn JavaScript mà kiểu của bạn biên dịch ra</a></div>
 </div>
 `,
     },
@@ -132,6 +152,16 @@ id = true;          // ❌ error: Type 'boolean' is not assignable to type 'stri
 <pre><code>let data: any = fetchSomething();
 data.whatever.you.want();  // no error, ever — TypeScript stops checking this value entirely</code></pre>
 <p class="pitfall"><strong>Avoid <code>any</code>.</strong> It is an escape hatch that disables type checking for that value and everything derived from it — you lose autocomplete, you lose the "catch bugs early" benefit from Lesson 9.1, and the compiler will not warn you about anything involving it. It exists for genuinely untyped edge cases (rare), not as a shortcut to silence an error you do not understand yet.</p>
+<h3>Let inference do the work</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">const n = 3</span><span class="lz-t">Already typed</span><span class="lz-d">TypeScript infers <code>3</code>. Writing <code>const n: number = 3</code> adds nothing and makes the code noisier.</span></div>
+<div class="lz-node"><span class="lz-k">Function parameters</span><span class="lz-t">Always annotate</span><span class="lz-d">There is nothing to infer from — a parameter's type is a decision only you can make. This is where annotations earn their keep.</span></div>
+<div class="lz-node"><span class="lz-k">Return types</span><span class="lz-t">Usually inferred</span><span class="lz-d">Annotate them on exported functions, where an accidental change to the return shape should be an error at the function, not at its callers.</span></div>
+<div class="lz-node"><span class="lz-k">any</span><span class="lz-t">Turns checking off</span><span class="lz-d">And it spreads: everything derived from an <code>any</code> is unchecked too. Use <code>unknown</code> when you genuinely do not know — it forces a check instead of removing one.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>strictNullChecks</code> turned off, so the compiler cannot see a single null.</strong> Without it, <code>null</code> and <code>undefined</code> are assignable to every type, which means <code>user.name.trim()</code> type-checks even when <code>user</code> is <code>null</code> — and the entire class of "cannot read properties of undefined" crashes, the most common runtime error in JavaScript, stays invisible. It is off in old <code>tsconfig.json</code> files and in a lot of tutorials. Turn on <code>"strict": true</code> on day one of a new project: you get a lot of errors, and every one of them is a crash the compiler just found for you.</p></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html" target="_blank" rel="noopener">Handbook — everyday types, and where inference is enough</a></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/tsconfig#strict" target="_blank" rel="noopener">tsconfig reference — what strict actually turns on</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.2</span>
@@ -164,6 +194,16 @@ id = true;          // ❌ lỗi: Type 'boolean' is not assignable to type 'stri
 <pre><code>let data: any = fetchSomething();
 data.whatever.you.want();  // không bao giờ lỗi — TypeScript ngừng kiểm giá trị này hoàn toàn</code></pre>
 <p class="pitfall"><strong>Tránh <code>any</code>.</strong> Nó là lối thoát tắt hết kiểm kiểu cho giá trị đó và mọi thứ suy ra từ nó — bạn mất autocomplete, mất lợi ích "bắt lỗi sớm" ở Bài 9.1, và trình biên dịch sẽ không cảnh báo gì liên quan tới nó nữa. Nó tồn tại cho những ca thật sự không có kiểu (hiếm), không phải để tắt tiếng một lỗi bạn chưa hiểu.</p>
+<h3>Hãy để phép suy kiểu làm việc</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">const n = 3</span><span class="lz-t">Đã có kiểu rồi</span><span class="lz-d">TypeScript suy ra <code>3</code>. Viết <code>const n: number = 3</code> chẳng thêm được gì mà chỉ làm mã ồn hơn.</span></div>
+<div class="lz-node"><span class="lz-k">Tham số hàm</span><span class="lz-t">Luôn luôn chú thích</span><span class="lz-d">Chẳng có gì để suy ra cả — kiểu của một tham số là quyết định chỉ bạn mới đưa ra được. Đây là chỗ chú thích kiểu xứng đáng với công sức.</span></div>
+<div class="lz-node"><span class="lz-k">Kiểu trả về</span><span class="lz-t">Thường được suy ra</span><span class="lz-d">Hãy chú thích cho các hàm xuất ra ngoài, nơi một thay đổi vô ý ở dáng trả về nên là lỗi tại chính hàm đó, chứ không phải tại các chỗ gọi nó.</span></div>
+<div class="lz-node"><span class="lz-k">any</span><span class="lz-t">Tắt việc kiểm</span><span class="lz-d">Và nó lan: mọi thứ dẫn xuất từ một <code>any</code> cũng không được kiểm. Hãy dùng <code>unknown</code> khi bạn thật sự không biết — nó ép phải kiểm thay vì gỡ bỏ phép kiểm.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — <code>strictNullChecks</code> bị tắt, nên trình biên dịch chẳng thấy nổi một cái null nào.</strong> Không có nó, <code>null</code> và <code>undefined</code> gán được vào mọi kiểu, tức là <code>user.name.trim()</code> qua kiểm kiểu ngay cả khi <code>user</code> là <code>null</code> — và cả một họ lỗi "cannot read properties of undefined", lỗi lúc chạy phổ biến nhất trong JavaScript, ở lại vô hình. Nó bị tắt trong các file <code>tsconfig.json</code> cũ và trong khối bài hướng dẫn. Hãy bật <code>"strict": true</code> ngay ngày đầu của một dự án mới: bạn nhận về cả đống lỗi, và mỗi cái trong số đó là một cú sập mà trình biên dịch vừa tìm giùm bạn.</p></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html" target="_blank" rel="noopener">Handbook — các kiểu hằng ngày, và chỗ nào suy kiểu là đủ</a></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/tsconfig#strict" target="_blank" rel="noopener">Tra cứu tsconfig — strict thật ra bật những gì</a></div>
 </div>
 `,
     },
@@ -222,6 +262,16 @@ async function getUser(id: number): Promise&lt;User&gt; {
   return response.json();
 }</code></pre>
 <p class="note-ct"><strong>An interface is a promise about JSON shape, written once and checked everywhere.</strong> Instead of hoping every place that reads <code>user.name</code> spelled it correctly, the interface catches a typo the moment you type it — exactly the discipline your future Express routes and React components will lean on for every request and response body.</p>
+<h3>Describing the shape of your data</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">interface User { … }</span><span class="lz-t">A named shape</span><span class="lz-d">Lists the properties and their types. Any object with at least those properties fits — TypeScript matches on structure, not on names.</span></div>
+<div class="lz-layer"><span class="lz-k">bio?: string</span><span class="lz-t">Optional</span><span class="lz-d">May be absent. Inside your code it is <code>string | undefined</code>, so the compiler makes you check before using it.</span></div>
+<div class="lz-layer"><span class="lz-k">readonly id: string</span><span class="lz-t">Set once</span><span class="lz-d">Assignable at creation, never again. Perfect for identifiers — the compiler catches the accidental reassignment.</span></div>
+<div class="lz-layer"><span class="lz-k">Reuse it everywhere</span><span class="lz-t">One definition, many functions</span><span class="lz-d">The point of naming a shape is that adding a field updates every function that handles it — and breaks the ones that need updating.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an optional property silenced with <code>!</code> instead of a check.</strong> When <code>user.bio</code> is <code>string | undefined</code>, the compiler refuses <code>user.bio.length</code> — and <code>user.bio!.length</code> makes the error disappear without changing anything about the data. The non-null assertion is a promise to the compiler that you cannot back up; on the first user who never filled in a bio, it throws. It is one keystroke and it undoes the whole reason you added the type. Write the check (<code>if (user.bio)</code>) or use optional chaining with a fallback (<code>user.bio?.length ?? 0</code>) — both take a second and both are still true next month.</p></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/2/objects.html" target="_blank" rel="noopener">Handbook — object types, optional and readonly properties</a></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html" target="_blank" rel="noopener">Handbook — narrowing: checking instead of asserting</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.3</span>
@@ -269,6 +319,16 @@ async function getUser(id: number): Promise&lt;User&gt; {
   return response.json();
 }</code></pre>
 <p class="note-ct"><strong>Một interface là một lời hứa về hình dạng JSON, viết một lần và kiểm ở khắp nơi.</strong> Thay vì hy vọng mọi chỗ đọc <code>user.name</code> đều gõ đúng, interface bắt một lỗi gõ ngay lúc bạn gõ nó — đúng kỷ luật mà các route Express và component React tương lai của bạn sẽ dựa vào cho mọi body yêu cầu và phản hồi.</p>
+<h3>Mô tả dáng của dữ liệu</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">interface User { … }</span><span class="lz-t">Một cái dáng có tên</span><span class="lz-d">Liệt kê các thuộc tính và kiểu của chúng. Mọi object có ít nhất chừng ấy thuộc tính đều vừa — TypeScript khớp theo cấu trúc, không theo tên.</span></div>
+<div class="lz-layer"><span class="lz-k">bio?: string</span><span class="lz-t">Tuỳ chọn</span><span class="lz-d">Có thể vắng mặt. Bên trong mã của bạn nó là <code>string | undefined</code>, nên trình biên dịch bắt bạn kiểm trước khi dùng.</span></div>
+<div class="lz-layer"><span class="lz-k">readonly id: string</span><span class="lz-t">Đặt một lần</span><span class="lz-d">Gán được lúc tạo, không bao giờ nữa. Hoàn hảo cho các định danh — trình biên dịch bắt được phép gán lại vô ý.</span></div>
+<div class="lz-layer"><span class="lz-k">Dùng lại nó ở mọi nơi</span><span class="lz-t">Một định nghĩa, nhiều hàm</span><span class="lz-d">Mục đích của việc đặt tên cho một cái dáng là: thêm một field sẽ cập nhật mọi hàm xử lý nó — và làm hỏng đúng những hàm cần được sửa.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một thuộc tính tuỳ chọn bị dập bằng dấu <code>!</code> thay vì bằng một phép kiểm.</strong> Khi <code>user.bio</code> là <code>string | undefined</code>, trình biên dịch từ chối <code>user.bio.length</code> — và <code>user.bio!.length</code> làm cái lỗi biến mất mà chẳng đổi gì về dữ liệu cả. Phép khẳng định không-null là một lời hứa với trình biên dịch mà bạn không chống lưng nổi; tới người dùng đầu tiên chưa từng điền tiểu sử, nó ném lỗi. Nó chỉ là một cú gõ phím và nó xoá sạch lý do bạn thêm cái kiểu vào. Hãy viết phép kiểm (<code>if (user.bio)</code>) hoặc dùng optional chaining kèm giá trị dự phòng (<code>user.bio?.length ?? 0</code>) — cả hai tốn một giây và cả hai tháng sau vẫn đúng.</p></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/2/objects.html" target="_blank" rel="noopener">Handbook — kiểu object, thuộc tính optional và readonly</a></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html" target="_blank" rel="noopener">Handbook — thu hẹp kiểu: kiểm thay vì khẳng định</a></div>
 </div>
 `,
     },
@@ -318,6 +378,16 @@ first([1, 2, 3]);           // T = number, returns a number
 first(["a", "b", "c"]);     // T = string, returns a string</code></pre>
 <p><code>identity</code> and <code>first</code> work for any type, yet TypeScript still checks the result precisely — call <code>first</code> on <code>number[]</code> and you get a <code>number</code> back, not <code>any</code>. That is the whole point of generics: reusable code that does not give up type safety.</p>
 <p class="note-ct"><strong><code>T</code> is just a name.</strong> It could be called anything — it is convention, the same way loop counters are often called <code>i</code>. What matters is that the same letter appears in the parameter and the return type, linking them together.</p>
+<h3>Typing a function, from the outside in</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Annotate every parameter</span><span class="lz-d">This is the contract. Callers are checked against it, and the body gets real types to work with instead of <code>any</code>.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Give optional parameters a default</span><span class="lz-d"><code>function page(n = 1)</code> types <code>n</code> as <code>number</code> and removes the <code>undefined</code> case from the body entirely.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Let the return type be inferred</span><span class="lz-d">Except on exported functions, where writing it makes an accidental change fail at the function rather than at its callers.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Reach for &lt;T&gt; only to relate two things</span><span class="lz-d"><code>first&lt;T&gt;(a: T[]): T</code> ties the output to the input. If the parameter appears only once, a plain type would have done the same job.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a generic that is really a cast in disguise.</strong> <code>async function getJson&lt;T&gt;(url: string): Promise&lt;T&gt;</code> is a pattern you will see in every tutorial, and <code>T</code> appears only in the return type — so there is nothing to infer it from, and the caller simply declares the answer. <code>getJson&lt;User&gt;('/api/notes')</code> compiles happily and hands you a note typed as a user. The type parameter did no work; it just moved an unchecked assumption into a nicer syntax. If a type parameter does not appear in a parameter, it is not checking anything — return <code>unknown</code> and make the caller prove what came back.</p></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/2/functions.html" target="_blank" rel="noopener">Handbook — functions, including when a generic is worth it</a></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/2/generics.html" target="_blank" rel="noopener">Handbook — generics from the beginning</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.4</span>
@@ -356,6 +426,16 @@ first([1, 2, 3]);           // T = number, trả về number
 first(["a", "b", "c"]);     // T = string, trả về string</code></pre>
 <p><code>identity</code> và <code>first</code> hoạt động cho mọi kiểu, nhưng TypeScript vẫn kiểm kết quả chính xác — gọi <code>first</code> trên <code>number[]</code> và bạn nhận lại một <code>number</code>, không phải <code>any</code>. Đó chính là mục đích của generic: code tái dùng được mà không đánh mất an toàn kiểu.</p>
 <p class="note-ct"><strong><code>T</code> chỉ là một cái tên.</strong> Nó có thể gọi bất cứ gì — đó là quy ước, giống cách bộ đếm vòng lặp thường gọi là <code>i</code>. Điều quan trọng là cùng một chữ cái xuất hiện ở tham số và kiểu trả về, liên kết chúng lại.</p>
+<h3>Gán kiểu cho một hàm, từ ngoài vào trong</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Chú thích cho mọi tham số</span><span class="lz-d">Đây là bản hợp đồng. Các chỗ gọi được kiểm với nó, và phần thân có kiểu thật để làm việc thay vì <code>any</code>.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Cho tham số tuỳ chọn một giá trị mặc định</span><span class="lz-d"><code>function page(n = 1)</code> gán <code>n</code> kiểu <code>number</code> và xoá sạch trường hợp <code>undefined</code> khỏi phần thân.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Hãy để kiểu trả về được suy ra</span><span class="lz-d">Trừ với các hàm xuất ra ngoài, nơi viết ra nó làm một thay đổi vô ý hỏng ngay tại hàm chứ không phải tại các chỗ gọi.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Chỉ với tay tới &lt;T&gt; để nối hai thứ lại</span><span class="lz-d"><code>first&lt;T&gt;(a: T[]): T</code> buộc đầu ra vào đầu vào. Nếu tham số kiểu chỉ xuất hiện một lần thì một kiểu thường đã làm đúng việc đó.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một generic thật ra là một phép ép kiểu trá hình.</strong> <code>async function getJson&lt;T&gt;(url: string): Promise&lt;T&gt;</code> là mẫu bạn sẽ gặp trong mọi bài hướng dẫn, và <code>T</code> chỉ xuất hiện ở kiểu trả về — nên chẳng có gì để suy ra nó, và chỗ gọi đơn giản là tự khai đáp án. <code>getJson&lt;User&gt;('/api/notes')</code> biên dịch vui vẻ rồi đưa cho bạn một ghi chú mang kiểu người dùng. Tham số kiểu ấy chẳng làm việc gì; nó chỉ dời một giả định không kiểm vào một cú pháp đẹp hơn. Nếu một tham số kiểu không xuất hiện ở tham số hàm thì nó chẳng kiểm gì cả — hãy trả về <code>unknown</code> và bắt chỗ gọi chứng minh thứ vừa nhận về.</p></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/2/functions.html" target="_blank" rel="noopener">Handbook — hàm, gồm cả khi nào một generic là đáng dùng</a></div>
+<div class="link-card"><a href="https://www.typescriptlang.org/docs/handbook/2/generics.html" target="_blank" rel="noopener">Handbook — generic từ đầu</a></div>
 </div>
 `,
     },
@@ -388,6 +468,14 @@ npx tsc              // compile every .ts file to .js, following tsconfig.json</
 </div>
 <p class="note-ct"><strong>This very project is TypeScript.</strong> The <code>api-backend</code> repository these lessons live in is a Node.js + Express + TypeScript backend, with a Next.js + TypeScript frontend — every route, every React component you would open in it is typed exactly the way this chapter described. Running <code>npx tsc --noEmit</code> before shipping a change is a real, everyday habit here, not a classroom exercise.</p>
 
+<h3>Adding TypeScript to a project that exists</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">tsc --init, then turn on strict</span><span class="lz-d">Start strict from the beginning even if you convert slowly. Loosening later is easy; tightening a large codebase is not.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Convert leaf files first</span><span class="lz-d">Utilities that import nothing. Their types then flow outward into everything that uses them, doing half the next file's work for you.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Install @types for your libraries</span><span class="lz-d"><code>@types/node</code>, <code>@types/express</code> if the package does not ship its own. Without them every import is silently <code>any</code>.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Put tsc --noEmit in CI</span><span class="lz-d">A check that only runs in your editor is a check that stops running the day someone is in a hurry.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — assuming a green build means the types were checked.</strong> Modern bundlers (esbuild, swc, Vite) strip types without checking a single one — that is precisely why they are fast. So the dev server keeps serving a build with type errors in it, and a deploy pipeline that only runs the bundler ships them to production, with nothing in the output to say so. The checking is a separate command: <code>tsc --noEmit</code>. Put it in the same npm script as the build (<code>tsc --noEmit &amp;&amp; vite build</code>) so it cannot be skipped by accident, and run it in CI on every push — this repo's own rules require exactly that before a push.</p></div>
 <div class="link-card"><a href="https://www.typescriptlang.org/docs/" target="_blank" rel="noopener">TypeScript — official docs</a></div>
 
 <p>Next up is the final chapter: how to think like a developer — reading errors, debugging systematically, and using Git like a pro instead of just typing commands you memorised.</p>
@@ -412,6 +500,14 @@ npx tsc              // biên dịch mọi file .ts sang .js, theo tsconfig.json
 </div>
 <p class="note-ct"><strong>Chính dự án này là TypeScript.</strong> Kho mã <code>api-backend</code> mà các bài học này nằm trong đó là một backend Node.js + Express + TypeScript, cùng một frontend Next.js + TypeScript — mọi route, mọi component React bạn mở trong đó đều có kiểu đúng như chương này mô tả. Chạy <code>npx tsc --noEmit</code> trước khi đẩy một thay đổi là thói quen hằng ngày thật sự ở đây, không phải bài tập trên lớp.</p>
 
+<h3>Thêm TypeScript vào một dự án đã có sẵn</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">tsc --init, rồi bật strict</span><span class="lz-d">Hãy strict ngay từ đầu kể cả khi bạn chuyển đổi chậm. Nới lỏng về sau thì dễ; siết chặt một kho mã lớn thì không.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Chuyển các file lá trước</span><span class="lz-d">Những hàm tiện ích chẳng import gì. Kiểu của chúng khi đó chảy ra ngoài tới mọi thứ dùng chúng, làm sẵn giùm bạn nửa phần việc của file kế tiếp.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Cài @types cho các thư viện</span><span class="lz-d"><code>@types/node</code>, <code>@types/express</code> nếu package không tự ship kiểu. Thiếu chúng thì mọi import âm thầm thành <code>any</code>.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Đặt tsc --noEmit vào CI</span><span class="lz-d">Một phép kiểm chỉ chạy trong trình soạn thảo của bạn là một phép kiểm sẽ ngừng chạy vào cái ngày có người đang vội.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tưởng một bản build xanh nghĩa là kiểu đã được kiểm.</strong> Các bundler hiện đại (esbuild, swc, Vite) tước kiểu đi mà không kiểm lấy một cái — đó chính xác là lý do chúng nhanh. Nên dev server cứ phục vụ một bản dựng có lỗi kiểu bên trong, và một đường ống deploy chỉ chạy bundler sẽ ship chúng lên production, mà đầu ra chẳng có gì nói cho bạn biết. Việc kiểm là một lệnh riêng: <code>tsc --noEmit</code>. Hãy đặt nó cùng một npm script với lệnh build (<code>tsc --noEmit &amp;&amp; vite build</code>) để không thể lỡ tay bỏ qua, và chạy nó trong CI ở mọi lần push — luật của chính kho này đòi đúng điều đó trước khi push.</p></div>
 <div class="link-card"><a href="https://www.typescriptlang.org/docs/" target="_blank" rel="noopener">TypeScript — tài liệu chính thức</a></div>
 
 <p>Tiếp theo là chương cuối cùng: cách tư duy như một lập trình viên — đọc lỗi, gỡ lỗi có hệ thống, và dùng Git như dân chuyên nghiệp thay vì chỉ gõ những lệnh học thuộc lòng.</p>
@@ -429,9 +525,25 @@ npx tsc              // biên dịch mọi file .ts sang .js, theo tsconfig.json
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 9: why TypeScript, basic types and annotations, union types and any, interfaces, typing functions, a gentle intro to generics, and how tsc/tsconfig fit into a real project.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> Reading about types only gets you so far. On Code Lab, annotate real variables and functions, define interfaces, and watch the compiler catch mistakes on the TypeScript track.</p>
+<h3>The chapter in four points</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Checked, then erased</span><span class="lz-t">No runtime protection</span><span class="lz-d">The compiler checks your code against itself. Data from an API or a form was never seen by it — validate at the boundary.</span></div>
+<div class="lz-node"><span class="lz-k">Annotate parameters</span><span class="lz-t">Let the rest infer</span><span class="lz-d">A parameter's type is a decision only you can make. <code>const n = 3</code> is already typed; writing <code>: number</code> adds nothing.</span></div>
+<div class="lz-node"><span class="lz-k">strict on, day one</span><span class="lz-t">Especially strictNullChecks</span><span class="lz-d">Without it the compiler cannot see a single null dereference — the most common runtime error in JavaScript stays invisible.</span></div>
+<div class="lz-node"><span class="lz-k">! and as are promises</span><span class="lz-t">Not checks</span><span class="lz-d">Both silence the compiler without changing the data. If you cannot back the promise up, write the check instead.</span></div>
+</div>
+<p class="note-ct"><strong>The errors are the product.</strong> When TypeScript refuses something, the useful reflex is "what does it know that I do not?" — not "how do I make this message go away". Nearly every red squiggle you silence with <code>!</code> or <code>any</code> is a crash you have agreed to meet later.</p>
 <div class="link-card"><a href="/code-lab/typescript">Practice on Code Lab → TypeScript track</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 9: vì sao dùng TypeScript, kiểu cơ bản và annotation, union type và any, interface, gắn kiểu cho hàm, làm quen nhẹ với generic, và tsc/tsconfig vận hành trong một dự án thật thế nào.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Chỉ đọc về type thì không đủ. Trên Code Lab, hãy gắn annotation cho biến và hàm thật, định nghĩa interface, và xem trình biên dịch bắt lỗi ở track TypeScript.</p>
+<h3>Cả chương trong bốn ý</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Kiểm rồi xoá</span><span class="lz-t">Không bảo vệ gì lúc chạy</span><span class="lz-d">Trình biên dịch kiểm mã của bạn với chính nó. Dữ liệu từ một API hay một form thì nó chưa từng thấy — hãy kiểm ở biên.</span></div>
+<div class="lz-node"><span class="lz-k">Chú thích cho tham số</span><span class="lz-t">Còn lại để nó tự suy</span><span class="lz-d">Kiểu của một tham số là quyết định chỉ bạn mới đưa ra được. <code>const n = 3</code> đã có kiểu rồi; viết thêm <code>: number</code> chẳng thêm được gì.</span></div>
+<div class="lz-node"><span class="lz-k">Bật strict ngay ngày đầu</span><span class="lz-t">Nhất là strictNullChecks</span><span class="lz-d">Không có nó, trình biên dịch chẳng thấy nổi một phép tham chiếu null nào — lỗi lúc chạy phổ biến nhất của JavaScript ở lại vô hình.</span></div>
+<div class="lz-node"><span class="lz-k">! và as là lời hứa</span><span class="lz-t">Không phải phép kiểm</span><span class="lz-d">Cả hai đều dập trình biên dịch mà chẳng đổi gì về dữ liệu. Nếu bạn không chống lưng nổi lời hứa đó thì hãy viết phép kiểm.</span></div>
+</div>
+<p class="note-ct"><strong>Chính những cái lỗi mới là sản phẩm.</strong> Khi TypeScript từ chối một thứ, phản xạ hữu ích là "nó biết gì mà mình không biết?" — chứ không phải "làm sao cho cái thông báo này biến mất". Gần như mọi vệt gạch đỏ bạn dập bằng <code>!</code> hay <code>any</code> đều là một cú sập bạn đã đồng ý gặp lại sau này.</p>
 <div class="link-card"><a href="/code-lab/typescript">Luyện tập ở Code Lab → track TypeScript</a></div></div>
 `,
       quiz: {

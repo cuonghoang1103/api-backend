@@ -635,9 +635,25 @@ btn.addEventListener("click", () =&gt; {
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 4: variables and types, strict equality, loops, functions, array methods, objects, and the DOM. Several ask what a snippet prints — the answers were verified by running the code.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> JavaScript only sticks when you write it. Head to Code Lab and solve real problems — variables, loops, functions and array methods — with instant checks.</p>
+<h3>The chapter in four points</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">const, then let</span><span class="lz-t">And === always</span><span class="lz-d"><code>const</code> locks the name, not the value. <code>==</code> converts before comparing, and the rules are not worth memorising.</span></div>
+<div class="lz-node"><span class="lz-k">Six falsy values</span><span class="lz-t">false, 0, '', null, undefined, NaN</span><span class="lz-d">Everything else is truthy, including <code>[]</code>. Use <code>??</code> for defaults so a legitimate <code>0</code> survives.</span></div>
+<div class="lz-node"><span class="lz-k">Arrow bodies</span><span class="lz-t">Braces mean you must return</span><span class="lz-d"><code>n =&gt; n * 2</code> returns; <code>n =&gt; { n * 2 }</code> returns <code>undefined</code>, silently, and it becomes <code>NaN</code> further down.</span></div>
+<div class="lz-node"><span class="lz-k">Copies are shallow</span><span class="lz-t">{...obj} shares nested data</span><span class="lz-d">Mutating <code>copy.tags</code> also mutates <code>original.tags</code>. This is the source of "editing one changed all of them".</span></div>
+</div>
+<p class="note-ct"><strong>The questions that ask what a snippet prints are the important ones.</strong> If your prediction is wrong, do not just read the answer — paste the snippet into a Node REPL or the browser console and change one thing at a time until the behaviour makes sense.</p>
 <div class="link-card"><a href="/code-lab/javascript">Practice on Code Lab → JavaScript track</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 4: biến và kiểu, bằng nghiêm ngặt, vòng lặp, hàm, phương thức mảng, đối tượng, và DOM. Vài câu hỏi một đoạn code in ra gì — đáp án đã được xác minh bằng cách chạy code.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> JavaScript chỉ thấm khi bạn tự viết. Hãy sang Code Lab giải bài thật — biến, vòng lặp, hàm và phương thức mảng — với chấm điểm tức thì.</p>
+<h3>Cả chương trong bốn ý</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">const, rồi mới let</span><span class="lz-t">Và luôn dùng ===</span><span class="lz-d"><code>const</code> khoá cái tên, không khoá giá trị. <code>==</code> chuyển đổi trước khi so, và luật của nó không đáng để học thuộc.</span></div>
+<div class="lz-node"><span class="lz-k">Sáu giá trị falsy</span><span class="lz-t">false, 0, '', null, undefined, NaN</span><span class="lz-d">Còn lại đều truthy, kể cả <code>[]</code>. Hãy dùng <code>??</code> cho giá trị mặc định để một số <code>0</code> hợp lệ sống sót.</span></div>
+<div class="lz-node"><span class="lz-k">Thân arrow function</span><span class="lz-t">Có ngoặc nhọn là phải return</span><span class="lz-d"><code>n =&gt; n * 2</code> có trả về; <code>n =&gt; { n * 2 }</code> trả về <code>undefined</code>, lặng lẽ, rồi thành <code>NaN</code> ở phía dưới.</span></div>
+<div class="lz-node"><span class="lz-k">Bản chép là chép nông</span><span class="lz-t">{...obj} dùng chung dữ liệu lồng</span><span class="lz-d">Sửa <code>copy.tags</code> là sửa luôn <code>original.tags</code>. Đây là nguồn gốc của cảnh "sửa một cái thì cả đám cùng đổi".</span></div>
+</div>
+<p class="note-ct"><strong>Những câu hỏi "đoạn này in ra gì" mới là câu quan trọng.</strong> Nếu bạn đoán sai, đừng chỉ đọc đáp án — hãy dán đoạn đó vào Node REPL hoặc console của trình duyệt rồi đổi từng thứ một cho tới khi hành vi của nó trở nên có lý.</p>
 <div class="link-card"><a href="/code-lab/javascript">Luyện tập ở Code Lab → track JavaScript</a></div></div>
 `,
       quiz: {

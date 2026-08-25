@@ -479,6 +479,8 @@ Content-Type: application/json
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Both are attacker-controlled</span><span class="lz-d">Anyone can type any id. "Is this the caller's note?" is a separate question from "does this note exist?" — and the one people forget.</span></div>
 </div>
 <div class="pitfall"><p><strong>Trap — trusting an id from the URL to also mean permission.</strong> <code>GET /api/v1/notes/12</code> with a valid login returns note 12; change the number to 13 and, unless the query filters by owner, it returns someone else's note just as happily. This is the most common serious vulnerability in a first API, and it never shows up in testing because you only ever open your own ids. The fix is one clause, applied everywhere: look the resource up <em>scoped to the caller</em> (<code>where: { id, userId: req.user.id }</code>) rather than looking it up and then checking. Same for update and delete.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/API/URL/searchParams" target="_blank" rel="noopener">MDN — URLSearchParams: parsing a query string properly</a></div>
+<div class="link-card"><a href="https://restfulapi.net/resource-naming/" target="_blank" rel="noopener">REST resource naming — path vs query, with examples</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.5</span>
@@ -531,6 +533,8 @@ Content-Type: application/json
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Cả hai đều do kẻ tấn công điều khiển</span><span class="lz-d">Ai cũng gõ được id bất kỳ. "Đây có phải ghi chú của người gọi không?" là câu hỏi tách biệt với "ghi chú này có tồn tại không?" — và là câu người ta hay quên.</span></div>
 </div>
 <div class="pitfall"><p><strong>Bẫy — tin rằng một id lấy từ URL cũng đồng nghĩa với quyền truy cập.</strong> <code>GET /api/v1/notes/12</code> với một phiên đăng nhập hợp lệ trả về ghi chú 12; đổi con số thành 13, và trừ khi truy vấn có lọc theo chủ sở hữu, nó vui vẻ trả về ghi chú của người khác. Đây là lỗ hổng nghiêm trọng phổ biến nhất trong một API đầu tay, và nó chẳng bao giờ lộ ra lúc thử vì bạn chỉ mở id của chính mình. Cách chữa là một mệnh đề, áp ở mọi nơi: hãy tra tài nguyên <em>trong phạm vi người gọi</em> (<code>where: { id, userId: req.user.id }</code>) chứ đừng tra ra rồi mới đi kiểm. Sửa và xoá cũng vậy.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/API/URL/searchParams" target="_blank" rel="noopener">MDN — URLSearchParams: phân tích chuỗi truy vấn cho đúng</a></div>
+<div class="link-card"><a href="https://restfulapi.net/resource-naming/" target="_blank" rel="noopener">Đặt tên tài nguyên REST — đường dẫn với truy vấn, kèm ví dụ</a></div>
 </div>
 `,
     },
@@ -545,9 +549,25 @@ Content-Type: application/json
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 6: the request/response cycle, HTTP methods, status codes, headers and JSON, and REST with route params vs query strings.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> The best way to internalise HTTP is to build a real API. On Code Lab, implement routes, methods, status codes and JSON responses on the Node.js (Express) track.</p>
+<h3>The chapter in four points</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">A request is text</span><span class="lz-t">Method, path, headers, body</span><span class="lz-d">Debug it with <code>curl -i</code> or the Network tab, not the address bar — which sends its own headers and caches the result.</span></div>
+<div class="lz-node"><span class="lz-k">The method is a promise</span><span class="lz-t">GET must not change anything</span><span class="lz-d">Crawlers, prefetchers and link previews all act on it. A <code>GET /delete</code> endpoint will fire itself.</span></div>
+<div class="lz-node"><span class="lz-k">The status is the outcome</span><span class="lz-t">Not the body</span><span class="lz-d">200 with an error inside disables monitoring, caching and retries. 4xx is the caller's fault, 5xx is yours.</span></div>
+<div class="lz-node"><span class="lz-k">Path vs query</span><span class="lz-t">Identity vs view</span><span class="lz-d">Both arrive as strings and both are attacker-controlled. An id in the URL never implies permission — scope the query to the caller.</span></div>
+</div>
+<p class="note-ct"><strong>Practise on a real endpoint.</strong> Point <code>curl -i</code> at any public API and read the whole response: the status line, every header, then the body. Ten minutes of this makes the rest of the course easier to debug.</p>
 <div class="link-card"><a href="/code-lab/nodejs-express">Practice on Code Lab → Node.js (Express) track</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 6: chu trình request/response, method HTTP, mã trạng thái, headers và JSON, và REST với tham số route vs query string.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Cách tốt nhất để thấm HTTP là tự dựng một API thật. Trên Code Lab, hãy hiện thực các route, method, mã trạng thái và phản hồi JSON ở track Node.js (Express).</p>
+<h3>Cả chương trong bốn ý</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Một request là chữ</span><span class="lz-t">Phương thức, đường dẫn, header, thân</span><span class="lz-d">Hãy gỡ lỗi bằng <code>curl -i</code> hoặc tab Network, đừng dùng thanh địa chỉ — nó gửi header của riêng nó và nhớ đệm kết quả.</span></div>
+<div class="lz-node"><span class="lz-k">Phương thức là một lời hứa</span><span class="lz-t">GET không được đổi gì</span><span class="lz-d">Bot thu thập, bộ nạp trước và phần xem trước liên kết đều hành động dựa trên đó. Một endpoint <code>GET /delete</code> sẽ tự nổ.</span></div>
+<div class="lz-node"><span class="lz-k">Mã trạng thái là kết cục</span><span class="lz-t">Không phải phần thân</span><span class="lz-d">200 kèm lỗi bên trong sẽ vô hiệu hoá giám sát, nhớ đệm và thử lại. 4xx là lỗi của người gọi, 5xx là lỗi của bạn.</span></div>
+<div class="lz-node"><span class="lz-k">Đường dẫn với truy vấn</span><span class="lz-t">Danh tính với cách nhìn</span><span class="lz-d">Cả hai đều tới dạng chuỗi và đều do kẻ tấn công điều khiển. Một id trong URL không bao giờ hàm ý quyền — hãy giới hạn truy vấn theo người gọi.</span></div>
+</div>
+<p class="note-ct"><strong>Hãy luyện trên một endpoint thật.</strong> Chĩa <code>curl -i</code> vào một API công khai bất kỳ rồi đọc cả phản hồi: dòng trạng thái, từng header, rồi mới tới thân. Mười phút như thế làm phần còn lại của khoá học dễ gỡ lỗi hơn hẳn.</p>
 <div class="link-card"><a href="/code-lab/nodejs-express">Luyện tập ở Code Lab → track Node.js (Express)</a></div></div>
 `,
       quiz: {

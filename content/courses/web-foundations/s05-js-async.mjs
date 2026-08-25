@@ -295,6 +295,8 @@ const b = await slow();   // 1s
 // Parallel: 1 second total
 const [a, b] = await Promise.all([slow(), slow()]);</code></pre>
 <div class="pitfall"><p><strong>Trap — <code>await</code> inside <code>forEach</code> does nothing at all.</strong> <code>items.forEach(async item =&gt; { await save(item) })</code> looks like it saves each item in turn; in fact <code>forEach</code> ignores the promise each callback returns, so it fires all of them at once and moves on immediately. The line after the loop runs before a single save has finished, and any error inside becomes an unhandled rejection. Use <code>for (const item of items) { await save(item) }</code> when order matters, or <code>await Promise.all(items.map(save))</code> when it does not. The <code>for…of</code> is the one that respects <code>await</code>.</p></div>
+<div class="link-card"><a href="https://javascript.info/async-await" target="_blank" rel="noopener">JavaScript.info — async/await, with the sequential-vs-parallel section</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all" target="_blank" rel="noopener">MDN — Promise.all, and what happens when one rejects</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.3</span>
@@ -353,6 +355,8 @@ const b = await slow();   // 1s
 // Song song: tổng 1 giây
 const [a, b] = await Promise.all([slow(), slow()]);</code></pre>
 <div class="pitfall"><p><strong>Bẫy — <code>await</code> bên trong <code>forEach</code> chẳng làm gì cả.</strong> <code>items.forEach(async item =&gt; { await save(item) })</code> nhìn như đang lưu từng mục lần lượt; thật ra <code>forEach</code> lờ đi cái promise mà mỗi callback trả về, nên nó bắn hết cùng một lúc rồi đi tiếp ngay. Dòng sau vòng lặp chạy trước khi có lấy một lần lưu nào xong, và mọi lỗi bên trong đều thành unhandled rejection. Hãy dùng <code>for (const item of items) { await save(item) }</code> khi thứ tự có ý nghĩa, hoặc <code>await Promise.all(items.map(save))</code> khi không. Chính <code>for…of</code> mới là thứ tôn trọng <code>await</code>.</p></div>
+<div class="link-card"><a href="https://javascript.info/async-await" target="_blank" rel="noopener">JavaScript.info — async/await, có mục tuần tự với song song</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all" target="_blank" rel="noopener">MDN — Promise.all, và chuyện gì xảy ra khi một cái hỏng</a></div>
 </div>
 `,
     },
@@ -587,9 +591,25 @@ import { useState } from "react";  // một named export từ React</code></pre>
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 5: synchronous vs asynchronous, the event loop and print order, Promise states, async/await and try/catch, fetch and response.ok, and ES module import/export. The ordering answers were verified by running the code.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> Async is best learned hands-on. On Code Lab, write Promises, async/await and fetch-style tasks with instant checks.</p>
+<h3>The chapter in four points</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">One thread</span><span class="lz-t">Slow work is handed off</span><span class="lz-d">A long synchronous loop blocks clicks, timers and repaints. If a page freezes, look for a loop, not a network call.</span></div>
+<div class="lz-node"><span class="lz-k">Promises settle once</span><span class="lz-t">And you must return them</span><span class="lz-d">A <code>.then</code> that forgets to return the inner promise breaks the chain silently and swallows its errors.</span></div>
+<div class="lz-node"><span class="lz-k">await is sequential</span><span class="lz-t">Promise.all is not</span><span class="lz-d">Two <code>await</code>s in a row wait twice. And <code>await</code> inside <code>forEach</code> does nothing at all — use <code>for…of</code>.</span></div>
+<div class="lz-node"><span class="lz-k">fetch and modules</span><span class="lz-t">Two silent traps</span><span class="lz-d"><code>fetch</code> does not reject on 404 or 500 — check <code>res.ok</code>. And modules need a real server, not <code>file://</code>.</span></div>
+</div>
+<p class="note-ct"><strong>Async bugs are ordering bugs.</strong> When something is <code>undefined</code> that should have a value, add a <code>console.log</code> with a label at each step and read the order they print in — it is almost never the order you assumed.</p>
 <div class="link-card"><a href="/code-lab/javascript">Practice on Code Lab → JavaScript track</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 5: đồng bộ vs bất đồng bộ, event loop và thứ tự in ra, các trạng thái Promise, async/await và try/catch, fetch và response.ok, và import/export ES module. Đáp án thứ tự đã được xác minh bằng cách chạy code.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Bất đồng bộ học tốt nhất qua thực hành. Trên Code Lab, hãy viết Promise, async/await và bài kiểu fetch với chấm điểm tức thì.</p>
+<h3>Cả chương trong bốn ý</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Một luồng duy nhất</span><span class="lz-t">Việc chậm được giao đi nơi khác</span><span class="lz-d">Một vòng lặp đồng bộ dài chặn cả cú bấm, bộ đếm giờ và việc vẽ lại. Trang đơ thì hãy tìm một vòng lặp, đừng tìm một lời gọi mạng.</span></div>
+<div class="lz-node"><span class="lz-k">Promise chốt một lần</span><span class="lz-t">Và bạn phải return chúng</span><span class="lz-d">Một <code>.then</code> quên return cái promise bên trong sẽ làm đứt chuỗi một cách lặng lẽ và nuốt luôn lỗi của nó.</span></div>
+<div class="lz-node"><span class="lz-k">await là tuần tự</span><span class="lz-t">Promise.all thì không</span><span class="lz-d">Hai <code>await</code> liền nhau là chờ hai lần. Và <code>await</code> trong <code>forEach</code> thì chẳng làm gì cả — hãy dùng <code>for…of</code>.</span></div>
+<div class="lz-node"><span class="lz-k">fetch và module</span><span class="lz-t">Hai cái bẫy lặng lẽ</span><span class="lz-d"><code>fetch</code> không từ chối khi gặp 404 hay 500 — hãy kiểm <code>res.ok</code>. Và module cần một máy chủ thật, không phải <code>file://</code>.</span></div>
+</div>
+<p class="note-ct"><strong>Lỗi bất đồng bộ là lỗi thứ tự.</strong> Khi một thứ đang là <code>undefined</code> mà lẽ ra phải có giá trị, hãy thêm một <code>console.log</code> có nhãn ở từng bước rồi đọc thứ tự chúng in ra — nó gần như chẳng bao giờ là thứ tự bạn đã giả định.</p>
 <div class="link-card"><a href="/code-lab/javascript">Luyện tập ở Code Lab → track JavaScript</a></div></div>
 `,
       quiz: {

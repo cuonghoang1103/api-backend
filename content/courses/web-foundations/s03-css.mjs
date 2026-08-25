@@ -600,9 +600,25 @@ grid-template-columns: 240px 1fr;             /* thanh bên cố định + nội
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 3: selectors and the cascade, the box model and box-sizing, Flexbox axes, CSS Grid, relative units and media queries.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> CSS layout only clicks once you push pixels yourself. On Code Lab, style and lay out real elements — box model, Flexbox, Grid and responsive — with instant feedback.</p>
+<h3>The chapter in four points</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Cascade</span><span class="lz-t">Specificity, then source order</span><span class="lz-d">DevTools strikes through the rules that lost. Read it before reaching for <code>!important</code>, which hides the cause rather than fixing it.</span></div>
+<div class="lz-node"><span class="lz-k">Box model</span><span class="lz-t">border-box, once, at the top</span><span class="lz-d"><code>* { box-sizing: border-box }</code> makes <code>width</code> mean the visible box. Without it, padding pushes columns past 100%.</span></div>
+<div class="lz-node"><span class="lz-k">Flexbox</span><span class="lz-t">One direction, and the axis matters</span><span class="lz-d">Set <code>flex-direction</code> first: <code>justify-content</code> and <code>align-items</code> swap meaning between row and column.</span></div>
+<div class="lz-node"><span class="lz-k">Grid &amp; responsive</span><span class="lz-t">Two directions; mobile as the default</span><span class="lz-d">Grid for the page skeleton, flexbox inside it. Write the one-column layout first, then add <code>min-width</code> queries where the design breaks.</span></div>
+</div>
+<p class="note-ct"><strong>Do not memorise CSS properties.</strong> Nobody does. Learn the four models above — cascade, box, flex axis, grid tracks — and look the properties up. The models are what let you read someone else's stylesheet.</p>
 <div class="link-card"><a href="/code-lab/html-css">Practice on Code Lab → HTML &amp; CSS track</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 3: bộ chọn và cascade, box model và box-sizing, các trục Flexbox, CSS Grid, đơn vị tương đối và media query.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Bố cục CSS chỉ thật sự thông khi bạn tự tay đẩy từng pixel. Trên Code Lab, hãy tạo kiểu và dàn các phần tử thật — box model, Flexbox, Grid và responsive — với phản hồi tức thì.</p>
+<h3>Cả chương trong bốn ý</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Đổ tầng (cascade)</span><span class="lz-t">Độ đặc hiệu, rồi tới thứ tự trong mã</span><span class="lz-d">DevTools gạch ngang những luật đã thua. Hãy đọc nó trước khi với tay lấy <code>!important</code>, thứ giấu nguyên nhân đi chứ không sửa nó.</span></div>
+<div class="lz-node"><span class="lz-k">Mô hình hộp</span><span class="lz-t">border-box, một lần, ở trên cùng</span><span class="lz-d"><code>* { box-sizing: border-box }</code> làm <code>width</code> nghĩa là cái hộp nhìn thấy được. Thiếu nó, padding đẩy các cột vượt quá 100%.</span></div>
+<div class="lz-node"><span class="lz-k">Flexbox</span><span class="lz-t">Một chiều, và cái trục có ý nghĩa</span><span class="lz-d">Hãy đặt <code>flex-direction</code> trước: <code>justify-content</code> và <code>align-items</code> đổi nghĩa cho nhau giữa row và column.</span></div>
+<div class="lz-node"><span class="lz-k">Grid &amp; responsive</span><span class="lz-t">Hai chiều; điện thoại làm mặc định</span><span class="lz-d">Grid cho bộ khung trang, flexbox bên trong nó. Hãy viết bố cục một cột trước, rồi thêm query <code>min-width</code> ở chỗ thiết kế vỡ.</span></div>
+</div>
+<p class="note-ct"><strong>Đừng học thuộc các thuộc tính CSS.</strong> Chẳng ai làm thế. Hãy học bốn mô hình ở trên — cascade, hộp, trục flex, rãnh grid — rồi tra thuộc tính khi cần. Chính các mô hình mới là thứ giúp bạn đọc được bảng kiểu của người khác.</p>
 <div class="link-card"><a href="/code-lab/html-css">Luyện tập ở Code Lab → track HTML &amp; CSS</a></div></div>
 `,
       quiz: {

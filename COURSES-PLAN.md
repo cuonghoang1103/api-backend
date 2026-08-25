@@ -50,7 +50,20 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 23 | `domains-dns-tls` | — | ❌ **THIẾU** |
 | 24 | `cuongthai-roadmap` | *(lộ trình, không phải khoá)* | — bỏ qua |
 
-**Tổng: 15 khoá đã có · 8 khoá còn thiếu.**
+**Tổng (cập nhật 25/08/2026): 18 khoá đã có · 5 khoá còn thiếu.**
+Còn lại: `observability-monitoring` · `payment-integration` · `vnpay` · `payos` ·
+`domains-dns-tls`. (`cuongthai-roadmap` là lộ trình, không phải khoá.)
+
+⚠️ **18 "đã có" KHÔNG có nghĩa 18 đạt chuẩn.** Chạy `course-depth-audit.mjs`
+trên cả 18 ngày 25/08: **14 đạt mọi sàn §3, 4 KHÔNG** — và cả 4 đều nằm trong
+nhóm 5 khoá CŨ ở §4 (chỉ `nodejs` đã được nâng lên chuẩn):
+
+| Khoá | TB ký tự/bài | Thiếu gì |
+|---|---|---|
+| `nextjs` | 5.672 | dưới sàn 9.000 · sơ đồ 56/101 · bẫy 46/101 · nguồn 184/202 · 39 bài mỏng |
+| `web-foundations` | 5.201 | dưới sàn 9.000 · **sơ đồ 0**/54 · nguồn 74/108 · 30 bài mỏng |
+| `typescript` | 7.720 | dưới sàn 9.000 · sơ đồ 8/68 · bẫy 20/68 · nguồn 122/136 |
+| `postgresql` | 9.039 | TB đạt, nhưng sơ đồ 20/44 · bẫy 10/44 |
 
 ### Thứ tự ưu tiên (đã chốt)
 

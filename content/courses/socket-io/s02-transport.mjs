@@ -47,10 +47,10 @@ export default {
 </div>
 
 <div class="callout warn">
-<p><strong>Ở tầng socket.io, hai transport tốn CHÍNH XÁC BẰNG NHAU.</strong> Payload là một chuỗi text; socket.io không biết nó sẽ đi qua HTTP hay WebSocket. Overhead thật nằm ở TẦNG DƯỚI, và cần đo ở đó.</p>
+<p><strong>At the socket.io layer, the two transports cost EXACTLY THE SAME.</strong> The payload is a text string; socket.io has no idea whether it will travel over HTTP or WebSocket. The real overhead lives in the LAYER BELOW, and that is where it has to be measured.</p>
 </div>
 
-<h3>Overhead thật của polling — HTTP header</h3>
+<h3>Polling's real overhead — the HTTP headers</h3>
 <pre><code class="language-text">Moi POLL cycle cua polling:
   GET /socket.io/?EIO=4&transport=polling&sid=...&t=abc
   Host: example.com
@@ -67,9 +67,9 @@ Response:
   &lt;- ~200-300 byte response header
 </code></pre>
 
-<p>Ở polling, mỗi POLL cycle (GET → wait for msg → POST reply → GET again) tốn <strong>~800-1300 byte header</strong>. Ở WebSocket, sau handshake ban đầu, mỗi frame là <strong>2-14 byte overhead</strong>.</p>
+<p>With polling, each POLL cycle (GET → wait for msg → POST reply → GET again) costs <strong>~800-1300 byte header</strong>. With WebSocket, after the initial handshake, each frame is <strong>2-14 byte overhead</strong>.</p>
 
-<h3>Sửa lại số của 0.2</h3>
+<h3>Correcting the number from 0.2</h3>
 <div class="out">Overhead per MESSAGE:
   polling:   ~800 byte header / poll cycle
              Neu POLL batch nhieu msg trong mot response → chi 1 header cho batch
@@ -85,20 +85,20 @@ polling nang gap 2,7x - 133x tuy do burstiness. Con so 133x DUNG cho chat cham,
 sai cho chat busty. Bai 0.2 gia dinh "1 msg per poll" quá đơn giản.
 </div>
 
-<h3>Chỗ overhead khác — CPU khi mã hoá</h3>
+<h3>The other overhead — CPU during encoding</h3>
 <pre><code class="language-text">websocket frame:  [len:1-9][mask:0-4][payload]     — ~stateless
 polling body:     0{"sid":"...",...}\\x1e\\x1e4["msg",...]\\x1e...
                   &lt;- boc trong text/plain, dung \\x1e la delimiter
                   &lt;- parse boi 2 lop: HTTP body reader + engine.io splitter
 </code></pre>
 
-<p>CPU cost per message ở polling cao hơn ~1.3×. Trong throughput cao (10.000 msg/s), điều này đáng kể. Trong throughput thấp (chat của kho này, ~1.000 msg/s), không đáng.</p>
+<p>The per-message CPU cost is ~1.3× higher on polling. At high throughput (10,000 msg/s) that matters. At low throughput (this repo's chat, ~1,000 msg/s) it does not.</p>
 
 <div class="callout ok">
-<p><strong>Kết luận đo được.</strong> Con số &quot;133×&quot; ở bài 0.2 đúng CHIỀU (polling nặng hơn) nhưng dựa vào ước lượng đơn giản. Con số thật là 2,7-133× tuỳ burstiness. Ba giá trị đáng nhớ: WebSocket ~6 byte/msg overhead, polling batch tốt ~16 byte/msg, polling worst-case ~800 byte/msg. Cả ba đều nhỏ so với payload thật của chat (~50-200 byte). Overhead KHÔNG phải lý do quan trọng nhất để chọn WebSocket — latency mới.</p>
+<p><strong>What the measurement concludes.</strong> The &quot;133×&quot; figure in lesson 0.2 has the right DIRECTION (polling is heavier) but rests on a naive estimate. The real number is 2.7-133× depending on burstiness. Three values worth remembering: WebSocket ~6 bytes/msg of overhead, well-batched polling ~16 bytes/msg, worst-case polling ~800 bytes/msg. All three are small next to a real chat payload (~50-200 bytes). Overhead is NOT the most important reason to pick WebSocket — latency is.</p>
 </div>
 
-<h3>Latency là lý do THẬT — đo được</h3>
+<h3>Latency is the REAL reason — and it is measurable</h3>
 <pre><code class="language-text">websocket: client send → server receive: ~1 RTT (~20-100ms local, ~200ms trans-Pacific)
 polling:   client → GET arrive → server hold → server response ← client
            +1 RTT tối thiểu, +N ms hold time (server phải wait for msg to send)
@@ -111,17 +111,17 @@ Cho video call signalling (Chuong 7): 200ms trans-Pacific WebSocket
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — đọc số &quot;133×&quot; của tôi ở 0.2 mà không kiểm.</strong> Chính tôi đã tạo ra con số ấy bằng phép nhân đơn giản, không phải bằng đo. Đây là dạng lỗi &quot;số nghe hợp lý&quot; — vào text được vì không mâu thuẫn với gì bạn biết. Cách vá: chạy probe. Cách phòng: mọi số phải có PHÉP ĐO ĐI KÈM, không phải ĐO NGHỈ.</p>
+<p><strong>Bẫy — đọc số &quot;133×&quot; của tôi ở 0.2 mà không kiểm.</strong> I produced that figure myself with a simple multiplication, not with a measurement. This is the &quot;plausible-sounding number&quot; class of error — it gets into the text because it contradicts nothing you already know. The fix: run a probe. The prevention: every number must ship WITH ITS MEASUREMENT, not with an estimate standing in for one.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Ở tầng socket.io, polling và WebSocket tốn CHÍNH XÁC BẰNG NHAU (đo được 681 byte cho 20 msg cả hai) — overhead thật ở tầng HTTP header (2,7×-133× tuỳ burstiness) và latency (thêm 1-2 RTT per interaction), latency mới là lý do quan trọng nhất để upgrade lên WebSocket, không phải bytes.</p>
+<p><strong>One sentence.</strong> At the socket.io layer, polling and WebSocket cost EXACTLY THE SAME (a measured 681 bytes for 20 messages on both) — the real overhead sits in the HTTP headers (2.7×-133× depending on burstiness) and in latency (an extra 1-2 RTT per interaction), and latency, not bytes, is the most important reason to upgrade to WebSocket.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO — Transports</span><span class="lc-sub">socket.io/docs/v4/how-it-works/#transports — chi tiết định dạng packet cả hai transport.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 6455 — WebSocket frame format</span><span class="lc-sub">tools.ietf.org/html/rfc6455#section-5.2 — 2-14 byte overhead per frame là con số chính xác này.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 7 — WebRTC signalling</span><span class="lc-sub">/courses/socket-io/learn${REF} — nơi latency &lt;100ms là bắt buộc, không chỉ nice-to-have.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 7 — WebRTC signalling</span><span class="lc-sub">/courses/socket-io/learn${REF} — nơi latency &lt;100ms là bắt buộc, không chỉ nice-to-have.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -283,7 +283,7 @@ Fix: pingInterval &lt; proxy_read_timeout
 </div>
 
 <div class="callout warn">
-<p><strong>Đo <code>proxy_read_timeout</code> của bạn trước khi đặt <code>pingInterval</code>.</strong> Default nginx là 60s. Cloudflare Free là 100s. AWS ELB là 60s. Nếu bạn đặt <code>pingInterval: 90000</code> sau nginx 60s, kết nối bị kill trước khi ping.</p>
+<p><strong>Đo <code>proxy_read_timeout</code> before you set <code>pingInterval</code>.</strong> The nginx default is 60s. Cloudflare Free is 100s. AWS ELB is 60s. If you set <code>pingInterval: 90000</code> behind a 60s nginx, the connection is killed before the ping ever fires.</p>
 </div>
 
 <h3>Server-side detection cost</h3>
@@ -297,13 +297,13 @@ Ke ca 100.000 socket, tong ping traffic la 170 KB/s — khong dang ke
 </code></pre>
 
 <div class="callout">
-<p><strong>One sentence.</strong> <code>pingInterval</code> (mặc định 25s, kho này giữ 25s) phải < proxy read timeout để giữ kết nối; <code>pingTimeout</code> (mặc định 20s, kho này đặt 60s) là độ trễ tối đa server nhận biết client dead — kho này chọn 25s/60s vì user mobile VN cần tolerance với 3G/4G hiccup, đổi 85s max disconnect detection lấy tránh false-disconnect.</p>
+<p><strong>One sentence.</strong> <code>pingInterval</code> (25s by default, and this repo keeps 25s) must be < proxy read timeout để giữ kết nối; <code>pingTimeout</code> (20s by default, set to 60s here) is the longest the server can take to notice a dead client — this repo picks 25s/60s because Vietnamese mobile users need tolerance for 3G/4G hiccups, trading 85s of worst-case disconnect detection for the absence of false disconnects.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server options</span><span class="lc-sub">socket.io/docs/v4/server-options/#pinginterval — chi tiết cả hai option, default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nginx — proxy_read_timeout</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout — mặc định 60s, đè lên WebSocket idle.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 3 — nginx làm proxy</span><span class="lc-sub">/courses/nginx/learn${REF} — <code>proxy_read_timeout 3600s;</code> cho WebSocket route là đủ.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 3 — nginx as the proxy</span><span class="lc-sub">/courses/nginx/learn${REF} — <code>proxy_read_timeout 3600s;</code> cho WebSocket route là đủ.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -395,7 +395,7 @@ Ke ca 100.000 socket, tong ping traffic la 170 KB/s — khong dang ke
 </div>
 
 <div class="callout warn">
-<p><strong>WebSocket-only KHÔNG tự sửa.</strong> Bạn có thể nghĩ &quot;chỉ cần tắt polling&quot; — nhưng handshake ban đầu VẪN qua polling ở mặc định. Kể cả bắt buộc WebSocket, một số client dùng library cũ mặc định polling.</p>
+<p><strong>WebSocket-only does NOT fix this by itself.</strong> You might think &quot;just turn polling off&quot; — but the initial handshake STILL goes over polling by default. Even if you force WebSocket, some clients run older libraries that default to polling.</p>
 </div>
 
 <h3>Fix: sticky sessions</h3>
@@ -415,9 +415,9 @@ upstream backend {
 }
 </code></pre>
 
-<p><code>ip_hash</code> đơn giản nhưng hai user cùng NAT (văn phòng) dồn vào cùng worker. <code>hash $cookie_io</code> tốt hơn — socket.io-client set cookie <code>io</code> tự động, nó phân phối cân đối.</p>
+<p><code>ip_hash</code> is simple, but two users behind the same NAT (an office) pile onto the same worker. <code>hash $cookie_io</code> is better — socket.io-client sets the <code>io</code> cookie automatically, so the distribution stays even.</p>
 
-<h3>Verify sticky đang hoạt động</h3>
+<h3>Verifying that stickiness actually works</h3>
 <pre><code class="language-bash">for i in 1 2 3 4 5 6 7 8 9 10; do
   curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling' \\
     -H 'Cookie: io=abcdefgh' \\
@@ -427,21 +427,21 @@ done
 # 200 400 200 400 200 400 200 400 200 400    &lt;- KHONG sticky, luan phien
 </code></pre>
 
-<h3>Cluster mode ở kho này</h3>
-<p>Kho này chạy backend ở MỘT container Docker, không multi-worker (chưa). Nhưng cấu hình Redis adapter (<code>attachRedisAdapter</code> trong <code>messaging.socket.ts:200</code>) đã sẵn sàng — chỉ cần bật cluster ở PM2 hay Kubernetes replicas là nó hoạt động. Sticky nginx VẪN cần vì polling handshake — Redis adapter cross-worker broadcast, KHÔNG cross-worker session.</p>
+<h3>Cluster mode in this repo</h3>
+<p>This repo runs the backend in ONE Docker container, not multi-worker (not yet). But the Redis adapter config (<code>attachRedisAdapter</code> trong <code>messaging.socket.ts:200</code>) is already in place — turn on clustering in PM2 or add Kubernetes replicas and it works. Sticky nginx is STILL required because of the polling handshake — the Redis adapter gives you cross-worker broadcast, NOT cross-worker sessions.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ Redis adapter thay thế sticky.</strong> KHÔNG. Redis adapter phát broadcast messages qua workers; nó KHÔNG chia sẻ engine.io session state. Polling vẫn cần một client về cùng worker. Đây là hai vấn đề khác nhau, cần hai giải pháp khác nhau.</p>
+<p><strong>Bẫy — nghĩ Redis adapter thay thế sticky.</strong> NO. The Redis adapter fans broadcast messages out across workers; it does NOT share engine.io session state. Polling still needs one client to land back on the same worker. These are two different problems requiring two different solutions.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Polling handshake là nhiều HTTP request phải đến cùng worker để chia sẻ session — không sticky = 50-75% requests fail trong cluster — fix là <code>ip_hash</code> hoặc <code>hash $cookie_io</code> ở nginx (không phải cấu hình socket.io); và Redis adapter (bài 5.1) KHÔNG thay thế sticky vì nó chia sẻ broadcast, không chia sẻ session.</p>
+<p><strong>One sentence.</strong> A polling handshake is several HTTP requests that must reach the same worker to share a session — without stickiness, 50-75% of requests fail in a cluster — and the fix is <code>ip_hash</code> or <code>hash $cookie_io</code> in nginx (not a socket.io setting); the Redis adapter (lesson 5.1) does NOT replace stickiness, because it shares broadcasts, not sessions.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Using multiple nodes</span><span class="lc-sub">socket.io/docs/v4/using-multiple-nodes/#sticky-sessions — giải thích chính thức tại sao cần và các option cấu hình cho từng proxy.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nginx — hash directive</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_upstream_module.html#hash — <code>hash</code> hoạt động tốt hơn <code>ip_hash</code> khi client sau NAT.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 5 — Redis adapter và cluster</span><span class="lc-sub">/courses/socket-io/learn${REF} — cách Redis adapter làm broadcast cross-worker, và vì sao vẫn không thay thế sticky.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 5 — the Redis adapter and clustering</span><span class="lc-sub">/courses/socket-io/learn${REF} — cách Redis adapter làm broadcast cross-worker, và vì sao vẫn không thay thế sticky.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.3</span>
@@ -525,13 +525,13 @@ done
 </code></pre>
 
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">200 OK, body starts with <code>0{...}</code></span><span class="lz-d">Socket.IO đang chạy, sid được cấp. Cấu hình chuẩn đọc được thẳng — bạn thấy <code>pingTimeout: 60000</code> vs default 20000 giúp verify config đã lên production.</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">404</span><span class="lz-d">Nginx không route <code>/socket.io/</code> vào backend. Kiểm cấu hình <code>location /socket.io/</code>.</span></div>
-<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">timeout</span><span class="lz-d">Backend down hoặc firewall chặn. Kiểm <code>curl https://api.example.com/health</code> có ok không.</span></div>
-<div class="lz-step"><span class="lz-k">d</span><span class="lz-t"><code>upgrades:[]</code> trống</span><span class="lz-d">Server không tell client được về WebSocket. Có thể nginx <code>proxy_set_header Upgrade</code> chưa đúng.</span></div>
+<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">200 OK, body starts with <code>0{...}</code></span><span class="lz-d">Socket.IO is up and a sid has been issued. The live configuration is readable right here — you can see <code>pingTimeout: 60000</code> against the default 20000, which confirms your config actually reached production.</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">404</span><span class="lz-d">Nginx is not routing <code>/socket.io/</code> to the backend. Check the <code>location /socket.io/</code>.</span></div>
+<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">timeout</span><span class="lz-d">The backend is down or a firewall is blocking. Check whether <code>curl https://api.example.com/health</code> is healthy.</span></div>
+<div class="lz-step"><span class="lz-k">d</span><span class="lz-t"><code>upgrades:[]</code> is empty</span><span class="lz-d">The server cannot tell the client about WebSocket. Most likely nginx's <code>proxy_set_header Upgrade</code> is not right yet.</span></div>
 </div>
 
-<h3>Command 2 — kiểm sticky sessions</h3>
+<h3>Command 2 — checking sticky sessions</h3>
 <pre><code class="language-bash">$ for i in 1 2 3 4 5 6 7 8 9 10; do
     curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling' \\
       -H 'Cookie: io=stickytest' \\
@@ -540,9 +540,9 @@ done
 200 200 200 200 200 200 200 200 200 200
 </code></pre>
 
-<p>Mọi request 200 = sticky đang OK (hoặc single worker). Xen kẽ 200/400 = round-robin đang lộn xộn — thấy 2.3.</p>
+<p>Every request returning 200 means stickiness is fine (or there is a single worker). Alternating 200/400 means round-robin is shuffling you around — see 2.3.</p>
 
-<h3>Command 3 — kiểm auth</h3>
+<h3>Command 3 — checking auth</h3>
 <pre><code class="language-bash"># khong cookie auth
 $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling'
 0{"sid":"XYZ",...}    &lt;- van 200: middleware CHUA reject o day (chua co CONNECT packet)
@@ -557,37 +557,37 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Hai ưu điểm của curl.</strong> (1) Chạy được ở container backend hoặc VPS — không cần trình duyệt. (2) Log ĐẦY ĐỦ HTTP header + response, thấy được cả stuff mà DevTools ẩn (X-Powered-By, Server, các custom header).</p>
+<p><strong>Two advantages of curl.</strong> (1) It runs inside the backend container or on the VPS — no browser needed. (2) It logs the COMPLETE HTTP headers plus the response, including things DevTools hides (X-Powered-By, Server, custom headers).</p>
 </div>
 
-<h3>Kịch bản debug thật</h3>
+<h3>Real debugging scenarios</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">&quot;Chat không hoạt động sau deploy&quot;</span><span class="lz-nsub">bắt đầu ở đâu?</span></span>
-<span class="lz-nbody">Bước 1: curl endpoint handshake. 200 với sid = socket.io sống. 404/timeout = trở về nginx config.</span>
+<span class="lz-node"><span class="lz-ntitle">&quot;Chat stopped working after the deploy&quot;</span><span class="lz-nsub">where do you start?</span></span>
+<span class="lz-nbody">Step 1: curl the handshake endpoint. A 200 with a sid means socket.io is alive. A 404 or a timeout sends you back to the nginx config.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">&quot;Random 50% users bị lỗi&quot;</span><span class="lz-nsub">chấp nhận sticky hoặc broadcast</span></span>
-<span class="lz-nbody">Chạy loop sticky check ở command 2. Xen kẽ 200/400 → sticky chưa cấu hình. Toàn 200 nhưng vẫn lỗi → broadcast cross-worker, cần Redis adapter (Ch5).</span>
+<span class="lz-node"><span class="lz-ntitle">&quot;A random 50% of users are broken&quot;</span><span class="lz-nsub">stickiness or broadcast</span></span>
+<span class="lz-nbody">Run the sticky-check loop from command 2. Alternating 200/400 → stickiness is not configured. All 200s but still broken → cross-worker broadcast, so you need the Redis adapter (Ch. 5).</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">&quot;Ping timeout mãi&quot;</span><span class="lz-nsub">giá trị nào đang chạy?</span></span>
-<span class="lz-nbody">Command 1 output cho <code>pingInterval</code> + <code>pingTimeout</code>. Nếu chúng khác cái bạn set trong code = deploy chưa lên. Xem <code>docker ps</code>, image tag.</span>
+<span class="lz-node"><span class="lz-ntitle">&quot;Endless ping timeouts&quot;</span><span class="lz-nsub">which values are actually running?</span></span>
+<span class="lz-nbody">Command 1 output cho <code>pingInterval</code> + <code>pingTimeout</code>. If they differ from what you set in code, the deploy never landed. See <code>docker ps</code>, image tag.</span>
 </div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng <code>curl -v</code> mà không hiểu output.</strong> <code>-v</code> dumps 50+ dòng header. Dễ bị bối rối. Bắt đầu bằng <code>-s -o /dev/null -w &#39;%{http_code}&#39;</code> — chỉ status code. Rồi <code>-s</code> để xem body. Chỉ dùng <code>-v</code> khi biết mình đang tìm gì.</p>
+<p><strong>Bẫy — dùng <code>curl -v</code> without understanding the output.</strong> <code>-v</code> dumps 50+ lines of headers. It is easy to get lost. Start with <code>-s -o /dev/null -w &#39;%{http_code}&#39;</code> — status code only. Then <code>-s</code> to see the body. Only reach for <code>-v</code> once you know what you are looking for.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Ba curl command reproduce handshake của socket.io mà không cần trình duyệt — kiểm cấu hình đã lên (pingTimeout hiện ra trong body OPEN), kiểm sticky (loop trả toàn 200 hay xen kẽ 400), và kiểm auth (CONNECT_ERROR packet <code>44</code>) — đủ để debug 80% các bug production socket.io.</p>
+<p><strong>One sentence.</strong> Three curl commands reproduce socket.io's handshake without a browser — verifying that the config shipped (pingTimeout appears in the OPEN body), verifying stickiness (the loop returns all 200s or alternates with 400s), and verifying auth (a CONNECT_ERROR packet <code>44</code>) — enough to debug 80% of production socket.io bugs.</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO protocol packet types</span><span class="lc-sub">github.com/socketio/engine.io-protocol#packet — bảng số ứng với chuỗi để giải mã output curl.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO protocol packet types</span><span class="lc-sub">github.com/socketio/engine.io-protocol#packet — bảng số ứng with chuỗi để giải mã output curl.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">curl manual — output formatting</span><span class="lc-sub">everything.curl.dev/usingcurl/verbose — cách kiểm soát output, đặc biệt <code>-w</code> format string.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 11 — chẩn đoán realtime bug</span><span class="lc-sub">/courses/socket-io/learn${REF} — cây quyết định dùng ba lệnh này ở các nhánh khác nhau.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 11 — diagnosing realtime bugs</span><span class="lc-sub">/courses/socket-io/learn${REF} — cây quyết định dùng ba lệnh này ở các nhánh khác nhau.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.4</span>
@@ -692,16 +692,16 @@ c.on('binary', (data) =&gt; {
 <div class="out">received Buffer of size: 1024 first byte: 42
 </div>
 
-<h3>Trên dây</h3>
+<h3>On the wire</h3>
 <pre><code class="language-text">websocket frame:
   [opcode=0x02 (binary), len=1024, payload=&lt;1024 byte thuc te&gt;]
   
 Total bytes: 1024 payload + 2-14 byte overhead = 1026-1038 byte
 </code></pre>
 
-<p>Nếu socket.io encode qua base64, kích thước sẽ là 1024 × 4/3 ≈ 1365 byte + JSON braces = ~1400 byte. Kết quả đo được 1026 byte → khẳng định binary frame native.</p>
+<p>If socket.io encoded via base64, the size would be 1024 × 4/3 ≈ 1365 bytes plus JSON braces = ~1400 bytes. The measured result of 1026 bytes confirms a native binary frame.</p>
 
-<h3>Polling khác — base64 bắt buộc</h3>
+<h3>Polling is different — base64 is mandatory</h3>
 <pre><code class="language-text">polling body la text/plain:
   4b1{"_placeholder":true,"num":0}
   &lt;- + attachment binary trong request tiep theo o base64
@@ -710,26 +710,26 @@ Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Polling KHÔNG hỗ trợ binary native.</strong> Nếu client kết nối bằng polling và bạn <code>emit()</code> một Buffer, socket.io encode nó thành base64 và tách vào request thứ hai. Kích thước tăng 33%, latency 2× (2 HTTP round trip). Đây là lý do KHÁC để upgrade sang WebSocket cho binary use case.</p>
+<p><strong>Polling does NOT support native binary.</strong> If a client is connected over polling and you <code>emit()</code> a Buffer, socket.io base64-encodes it and splits it into a second request. The size grows 33% and latency doubles (2 HTTP round trips). This is ANOTHER reason to upgrade to WebSocket for binary use cases.</p>
 </div>
 
-<h3>Khi nào KHÔNG dùng socket.io cho binary</h3>
+<h3>When NOT to use socket.io for binary</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">upload file lớn (&gt;1MB)</span><span class="lz-nsub">HTTP POST + progress</span></span>
-<span class="lz-nbody">Dùng HTTP <code>fetch</code> với <code>upload progress</code>. Không cần realtime — file lớn phải chunk và resume, việc socket.io không làm sẵn.</span>
+<span class="lz-node"><span class="lz-ntitle">large file uploads (&gt;1MB)</span><span class="lz-nsub">HTTP POST + progress</span></span>
+<span class="lz-nbody">Use an HTTP <code>fetch</code> with <code>upload progress</code>. Realtime is not required — large files need chunking and resumption, neither of which socket.io does for you.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">video call</span><span class="lz-nsub">WebRTC</span></span>
-<span class="lz-nbody">Media stream đi qua WebRTC peer-to-peer. Socket.io CHỈ dùng cho signalling (offer/answer/ICE) — payload &lt; 10 KB. Chương 7 đo cái này.</span>
+<span class="lz-nbody">Media streams go peer-to-peer over WebRTC. Socket.io is used ONLY for signalling (offer/answer/ICE) — payloads under 10 KB. Chapter 7 measures this.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">image thumbnail (2-100 KB)</span><span class="lz-nsub">OK dùng socket.io</span></span>
-<span class="lz-nbody">Kích thước OK, latency quan trọng, không cần progress. Socket.io binary frame chạy tốt. Kho này emit avatar update như vậy.</span>
+<span class="lz-node"><span class="lz-ntitle">image thumbnail (2-100 KB)</span><span class="lz-nsub">socket.io is fine here</span></span>
+<span class="lz-nbody">The size is fine, latency matters, no progress bar needed. Socket.io's binary frames work well. This repo emits avatar updates exactly this way.</span>
 </div>
 </div>
 
-<h3>maxHttpBufferSize — chống DDoS bằng payload lớn</h3>
+<h3>maxHttpBufferSize — defending against oversized-payload DDoS</h3>
 <pre><code class="language-ts">io = new IOServer(server, {
   maxHttpBufferSize: 1e6,   // 1 MB (default)
   // giam xuong 100_000 (100 KB) neu app cua ban khong nen nhan
@@ -737,20 +737,20 @@ Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
 });
 </code></pre>
 
-<p>Kho này giữ default 1 MB. Nếu bạn nhận payload &gt; 1 MB, engine.io đóng connection với <code>disconnect(&quot;forced close&quot;)</code>.</p>
+<p>This repo keeps the 1 MB default. If a payload larger than 1 MB arrives, engine.io closes the connection with <code>disconnect(&quot;forced close&quot;)</code>.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng socket.io emit cho upload file 10 MB.</strong> Bạn nhận <code>disconnect(forced close)</code> vì vượt <code>maxHttpBufferSize</code>. Hoặc bạn tăng lên 100 MB — thì một request emit chiếm 100 MB RAM của server. Vá: chunk file, dùng HTTP upload endpoint riêng, socket.io CHỈ báo &quot;upload xong&quot; realtime.</p>
+<p><strong>Bẫy — dùng socket.io emit cho upload file 10 MB.</strong> You get <code>disconnect(forced close)</code> because you exceeded <code>maxHttpBufferSize</code>. Or you raise it to 100 MB — and then a single emit request holds 100 MB of server RAM. The fix: chunk the file, use a dedicated HTTP upload endpoint, and let socket.io ONLY announce &quot;upload finished&quot; in realtime.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Buffer/ArrayBuffer qua WebSocket socket.io là native binary frame (KHÔNG base64, không ~33% overhead), nhưng qua polling phải base64 và chia hai HTTP request — nên với binary use case cần WebSocket; upload file lớn (&gt;1 MB) đi HTTP endpoint riêng vì <code>maxHttpBufferSize</code> mặc định là 1 MB và tăng nó là mở DDoS surface.</p>
+<p><strong>One sentence.</strong> A Buffer/ArrayBuffer over a socket.io WebSocket is a native binary frame (NO base64, no ~33% overhead), but over polling it must be base64-encoded and split across two HTTP requests — so binary use cases need WebSocket; large file uploads (&gt;1 MB) belong on a dedicated HTTP endpoint, because <code>maxHttpBufferSize</code> defaults to 1 MB and raising it opens a DDoS surface.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Binary support</span><span class="lc-sub">socket.io/docs/v4/emitting-events/#binary — chi tiết Buffer, ArrayBuffer, Blob types và cách chúng được encode.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — maxHttpBufferSize</span><span class="lc-sub">socket.io/docs/v4/server-options/#maxhttpbuffersize — trade off giữa payload lớn hỗ trợ vs DDoS resistance.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 7 — WebRTC signalling</span><span class="lc-sub">/courses/socket-io/learn${REF} — ví dụ chuẩn: socket.io signalling payload &lt; 10 KB, media stream qua WebRTC.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 7 — WebRTC signalling</span><span class="lc-sub">/courses/socket-io/learn${REF} — ví dụ chuẩn: socket.io signalling payload &lt; 10 KB, media stream qua WebRTC.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.5</span>

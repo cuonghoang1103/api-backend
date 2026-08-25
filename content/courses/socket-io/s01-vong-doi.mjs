@@ -44,26 +44,26 @@ c.on('connect', () =&gt; events.push([T(), 'client: connect', c.id]));
 </div>
 
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">t=26ms</span><span class="lz-t">server: <code>connection</code></span><span class="lz-d">Handshake xong. Client đã gửi POST HTTP đầu tiên, server đã cấp sid, JWT (nếu có) đã kiểm. <code>s.conn.transport.name</code> vẫn là <code>polling</code> tại đây — <em>upgrade chưa xảy ra</em>.</span></div>
-<div class="lz-step"><span class="lz-k">t=35ms</span><span class="lz-t">client: <code>connect</code></span><span class="lz-d">Client thấy CONNECT packet của socket.io (frame 2 ở bài 0.3). Nhận sid từ server. Lúc này <code>c.id</code> có giá trị — trước đó là <code>undefined</code>.</span></div>
-<div class="lz-step"><span class="lz-k">t=35ms</span><span class="lz-t">server: <code>upgrade</code> → websocket</span><span class="lz-d">Client mở WebSocket connection, engine.io hoán transport. Từ giờ tất cả frame đi qua WS thay vì HTTP polling. Đây là event chỉ ở tầng 2 — code tầng 4 KHÔNG cần biết.</span></div>
+<div class="lz-step"><span class="lz-k">t=26ms</span><span class="lz-t">server: <code>connection</code></span><span class="lz-d">The handshake is done. The client has sent its first HTTP POST, the server has issued a sid, and the JWT (if any) has been checked. <code>s.conn.transport.name</code> is still <code>polling</code> at this point — <em>the upgrade has not happened yet</em>.</span></div>
+<div class="lz-step"><span class="lz-k">t=35ms</span><span class="lz-t">client: <code>connect</code></span><span class="lz-d">The client sees socket.io's CONNECT packet (frame 2 in lesson 0.3) and receives its sid from the server. Only now does <code>c.id</code> hold a value — before this it was <code>undefined</code>.</span></div>
+<div class="lz-step"><span class="lz-k">t=35ms</span><span class="lz-t">server: <code>upgrade</code> → websocket</span><span class="lz-d">The client opens a WebSocket connection and engine.io swaps transports. From here on every frame travels over WS instead of HTTP polling. This is a layer-2-only event — layer-4 code does NOT need to know about it.</span></div>
 </div>
 
-<h3>Cái bạn ĐƯỢC PHÉP giả định trong handler <code>connection</code></h3>
+<h3>What you ARE allowed to assume inside the handler <code>connection</code></h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">socket có sid</span><span class="lz-lnote"><code>s.id</code> có giá trị — bạn có thể log, gán vào bảng, dùng làm key. Nó KHÔNG đổi trong đời connection này (nhưng SẼ đổi nếu reconnect — xem bài 1.5)</span></div>
-<div class="lz-layer"><span class="lz-lname">middleware auth đã chạy</span><span class="lz-lnote">Nếu bạn khai <code>io.use(...)</code>, nó đã pass. <code>socket.data.user</code> (kho này set từ JWT) đã có mặt. Không cần kiểm null</span></div>
-<div class="lz-layer"><span class="lz-lname">chưa join room nào</span><span class="lz-lnote">Socket mặc định chỉ join room mang chính sid của nó (thứ cho phép <code>io.to(sid).emit(...)</code>). Muốn join room khác thì phải gọi <code>socket.join(&#39;user:42&#39;)</code> ở handler này</span></div>
+<div class="lz-layer"><span class="lz-lname">the socket has a sid</span><span class="lz-lnote"><code>s.id</code> holds a value — you can log it, put it in a map, use it as a key. It does NOT change for the life of this connection (but it WILL change on a reconnect — see lesson 1.5)</span></div>
+<div class="lz-layer"><span class="lz-lname">the auth middleware has already run</span><span class="lz-lnote">If you declared <code>io.use(...)</code>, it has already passed. <code>socket.data.user</code> (which this repo sets from the JWT) is already present. No null check needed</span></div>
+<div class="lz-layer"><span class="lz-lname">no rooms joined yet</span><span class="lz-lnote">By default a socket joins only the room named after its own sid (the thing that makes <code>io.to(sid).emit(...)</code>work). To join any other room you must call <code>socket.join(&#39;user:42&#39;)</code> in this handler</span></div>
 </div>
 
-<h3>Cái bạn KHÔNG được giả định</h3>
+<h3>What you may NOT assume</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">transport không đảm bảo là WebSocket</span><span class="lz-lnote"><code>s.conn.transport.name</code> là <code>&#39;polling&#39;</code> tại thời điểm <code>connection</code> fire. Upgrade chưa xảy ra. Chưa gì phụ thuộc điều này, nhưng đừng log &quot;WebSocket client connected&quot; ở đây — sẽ nói dối 3-5% trường hợp (nhóm không upgrade được)</span></div>
-<div class="lz-layer"><span class="lz-lname">client chưa thấy <code>connect</code></span><span class="lz-lnote">Có 9ms giữa <code>connection</code> ở server và <code>connect</code> ở client. Nếu bạn <code>socket.emit(&#39;init:data&#39;, ...)</code> trong handler <code>connection</code>, event ấy xếp hàng và gửi ngay sau. Client sẽ nhận nó — nhưng trong khoảng đó, client chưa gắn được handler nào</span></div>
-<div class="lz-layer"><span class="lz-lname">client sẽ ở lại</span><span class="lz-lnote">Client có thể mất kết nối 100ms sau (chớp mạng, đóng tab). <code>connection</code> handler chạy trên MỘT khoảnh khắc, không phải trên MỘT phiên</span></div>
+<div class="lz-layer"><span class="lz-lname">the transport is not guaranteed to be WebSocket</span><span class="lz-lnote"><code>s.conn.transport.name</code> là <code>&#39;polling&#39;</code> at the moment <code>connection</code> fires. The upgrade has not happened yet. Nothing depends on it so far, but do not log &quot;WebSocket client connected&quot; here — it will be lying 3-5% of the time (the group that never upgrades)</span></div>
+<div class="lz-layer"><span class="lz-lname">the client has not seen it yet <code>connect</code></span><span class="lz-lnote">There are 9ms between <code>connection</code> on the server and <code>connect</code> on the client. If you <code>socket.emit(&#39;init:data&#39;, ...)</code> trong handler <code>connection</code>, that event queues up and is sent right after. The client will receive it — but during that window the client has not attached any handler yet</span></div>
+<div class="lz-layer"><span class="lz-lname">the client is here to stay</span><span class="lz-lnote">The client may drop 100ms later (a network blink, a closed tab). <code>connection</code> the handler runs for ONE instant, not for ONE session</span></div>
 </div>
 
-<h3>Mã pattern chuẩn của kho này</h3>
+<h3>The standard pattern this repo uses</h3>
 <pre><code class="language-ts">// messaging.socket.ts
 io.on('connection', async (socket) =&gt; {
   const userId = socket.data.userId as number;
@@ -92,10 +92,10 @@ io.on('connection', async (socket) =&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Bốn bước — theo thứ tự này.</strong> (1) Join room trước, để <em>các event khác</em> emit tới room đúng chỗ. (2) Cập nhật presence. (3) Đăng ký handler cho các message client sẽ gửi. (4) Handler <code>disconnect</code> để dọn dẹp. Kho này làm đủ bốn — bỏ bước nào cũng có bug hoặc leak.</p>
+<p><strong>Four steps — in this order.</strong> (1) Join the rooms first, so that <em>other events</em> emitting to that room land in the right place. (2) Update presence. (3) Register handlers for the messages the client will send. (4) A <code>disconnect</code> handler to clean up. This repo does all four — drop any one of them and you get a bug or a leak.</p>
 </div>
 
-<h3>Chỗ có race conditions</h3>
+<h3>Where the race conditions live</h3>
 <pre><code class="language-ts">// BUG: client emit 'thread:join' TRUOC khi server dang ky handler
 io.on('connection', async (socket) =&gt; {
   await fetchUser(socket.data.userId);           // ~50ms — client CO the emit trong khoang nay
@@ -111,21 +111,21 @@ io.on('connection', async (socket) =&gt; {
 });
 </code></pre>
 
-<p>Socket.IO buffers packet ở tầng 2 khi handler chưa đăng ký? <strong>KHÔNG</strong>. Event tới trước khi handler đăng ký sẽ bị bỏ qua âm thầm. Điều này khác Node.js EventEmitter (cũng vậy) nhưng khác cách client mong đợi (họ nghĩ emit là send).</p>
+<p>Does Socket.IO buffer packets at layer 2 while the handler is not registered yet? <strong>NO</strong>. An event that arrives before its handler is registered is dropped silently. This matches Node.js EventEmitter (same behaviour) but not what the client expects (they think emit means send).</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng <code>connection</code> handler như một &quot;init user session&quot; async khối lớn.</strong> Handler chạy đồng bộ, và một <code>await fetch()</code> ở đây tạo cửa sổ ~50-200ms mà event client gửi vào ĐÃ bị mất. Đăng ký handler NGAY, defer async logic vào INSIDE handler.</p>
+<p><strong>Bẫy — dùng <code>connection</code> handler as one big async &quot;init user session&quot; block.</strong> The handler runs synchronously, and a single <code>await fetch()</code> here opens a ~50-200ms window in which events the client sends are ALREADY lost. Register the handlers IMMEDIATELY and defer the async work to INSIDE those handlers.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Vòng đời &quot;connect&quot; là ba event trong ~9ms — server <code>connection</code> (transport là polling, middleware đã pass, chưa join room), client <code>connect</code> (nhận sid), server <code>upgrade</code> (chuyển sang WebSocket) — và pattern chuẩn của handler <code>connection</code> là join room → cập nhật presence → đăng ký handler → gắn disconnect, theo đúng thứ tự đó, không có <code>await</code> giữa các bước đăng ký.</p>
+<p><strong>One sentence.</strong> The &quot;connect&quot; lifecycle is three events inside ~9ms — server <code>connection</code> (transport is polling, middleware has passed, no rooms joined), client <code>connect</code> (sid received), server <code>upgrade</code> (switched to WebSocket) — and the standard shape of the <code>connection</code> handler is join rooms → update presence → register handlers → attach disconnect, in exactly that order, with no <code>await</code> between the registration steps.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server API</span><span class="lc-sub">socket.io/docs/v4/server-api — <code>io.on(&#39;connection&#39;)</code>, <code>socket.data</code>, <code>socket.join</code>. Tra khi cần.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Middleware</span><span class="lc-sub">socket.io/docs/v4/middlewares — cách <code>io.use()</code> chạy TRƯỚC <code>connection</code>, và làm gì khi middleware fail (client thấy <code>connect_error</code>).</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Node.js — EventEmitter</span><span class="lc-sub">nodejs.org/api/events.html — cơ chế underlying của <code>socket.on(...)</code> và tại sao event trước handler đăng ký bị bỏ qua.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 4 — presence và bẫy O(N²)</span><span class="lc-sub">/courses/socket-io/learn${REF} — kho này chọn cấu trúc bốn bước ở trên vì lý do đo được trong Chương 4.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 4 — presence and the O(N²) trap</span><span class="lc-sub">/courses/socket-io/learn${REF} — kho này chọn cấu trúc bốn bước ở trên vì lý do đo được trong Chương 4.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -270,27 +270,27 @@ srv.closeAllConnections();
 // -&gt; server and client both see: 'ping timeout'  (after 60s)
 </code></pre>
 
-<h3>Bốn reason và ý nghĩa</h3>
+<h3>Four reasons and what each means</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">io server disconnect</span><span class="lz-nsub">bạn gọi <code>socket.disconnect(true)</code></span></span>
-<span class="lz-nbody"><strong>Chủ động — không tự reconnect.</strong> Client sẽ KHÔNG cố kết nối lại. Dùng khi user đăng xuất, hoặc kick khỏi một feature. Nếu muốn reconnect thì client phải gọi <code>c.connect()</code> tay.</span>
+<span class="lz-node"><span class="lz-ntitle">io server disconnect</span><span class="lz-nsub">you called <code>socket.disconnect(true)</code></span></span>
+<span class="lz-nbody"><strong>Deliberate — no automatic reconnect.</strong> The client will NOT try to reconnect. Use this when a user logs out, or is kicked out of a feature. To reconnect, the client must call <code>c.connect()</code> tay.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">io client disconnect</span><span class="lz-nsub">client gọi <code>c.close()</code></span></span>
-<span class="lz-nbody"><strong>Chủ động — không tự reconnect.</strong> User tự đóng — có thể do đóng tab, chuyển route logout, hay <code>useEffect</code> cleanup. Server nên dọn presence NGAY.</span>
+<span class="lz-node"><span class="lz-ntitle">io client disconnect</span><span class="lz-nsub">the client called <code>c.close()</code></span></span>
+<span class="lz-nbody"><strong>Deliberate — no automatic reconnect.</strong> The user closed it themselves — a closed tab, a logout route change, or a <code>useEffect</code> cleanup. The server should clear presence IMMEDIATELY.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">transport close</span><span class="lz-nsub">TCP close bất thường</span></span>
-<span class="lz-nbody"><strong>Bất ngờ — SẼ tự reconnect.</strong> Kill server, mất Wi-Fi, deploy mới. Client tự backoff và thử lại. Server nên đợi một ngắn trước khi dọn hết state — có thể client quay lại trong 2 giây.</span>
+<span class="lz-node"><span class="lz-ntitle">transport close</span><span class="lz-nsub">an abnormal TCP close</span></span>
+<span class="lz-nbody"><strong>Unexpected — it WILL reconnect on its own.</strong> A killed server, lost Wi-Fi, a fresh deploy. The client backs off and retries by itself. The server should wait a moment before wiping all state — the client may well be back within 2 seconds.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">ping timeout</span><span class="lz-nsub">network chết âm thầm</span></span>
-<span class="lz-nbody"><strong>Bất ngờ — SẼ tự reconnect.</strong> Không có FIN packet nào — chỉ ping/pong hết hạn sau <code>pingTimeout</code>. Đây là kiểu chậm chạp: đợi 60s ở kho này. UI phải chọn: hoặc chờ 60s để hiện &quot;offline&quot;, hoặc dùng timeout ngắn hơn cho UX.</span>
+<span class="lz-node"><span class="lz-ntitle">ping timeout</span><span class="lz-nsub">the network died quietly</span></span>
+<span class="lz-nbody"><strong>Unexpected — it WILL reconnect on its own.</strong> There is no FIN packet at all — just ping/pong expiring after <code>pingTimeout</code>. This is the slow kind: a 60s wait in this repo. The UI has to choose: wait the full 60s before showing &quot;offline&quot;, or use a shorter timeout for UX purposes.</span>
 </div>
 </div>
 
-<h3>Bảng phản ứng của bạn cho mỗi reason</h3>
+<h3>Your response table, reason by reason</h3>
 <div class="out">reason                          reconnect?  presence update?  clean up state?
 io server disconnect            KHONG       NGAY              NGAY
 io client disconnect            KHONG       NGAY              NGAY
@@ -301,7 +301,7 @@ parse error                     KHONG       NGAY              NGAY (voi log SEV)
 </div>
 
 <div class="callout warn">
-<p><strong>Không debounce presence &quot;offline&quot; là bug UX chính.</strong> Người dùng chuyển từ Wi-Fi sang 4G — bạn thấy <code>disconnect(transport close)</code>, cập nhật presence xuống offline NGAY, phát <code>presence:update</code> cho 20 bạn. 800ms sau socket reconnect, presence lại lên online. Kết quả: bạn bè của họ thấy avatar nhấp nháy xám-xanh — báo động sai. Debounce 2 giây trước khi phát &quot;offline&quot; giải quyết.</p>
+<p><strong>Not debouncing the &quot;offline&quot; presence is the main UX bug here.</strong> A user moves from Wi-Fi to 4G — you see <code>disconnect(transport close)</code>, drop their presence to offline IMMEDIATELY and broadcast <code>presence:update</code> to 20 friends. 800ms later the socket reconnects and presence goes back to online. The result: their friends watch the avatar flicker grey-green — a false alarm. Debouncing 2 seconds before broadcasting &quot;offline&quot; fixes it.</p>
 </div>
 
 <h3>Ba pattern debounce presence</h3>
@@ -334,25 +334,25 @@ io.on('connection', (socket) =&gt; {
 });
 </code></pre>
 
-<h3>Vì sao <code>disconnect</code> handler nhận <code>reason</code>, không <code>error</code></h3>
+<h3>Why the <code>disconnect</code> handler receives a <code>reason</code>, not an <code>error</code></h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname"><code>reason</code> là chuỗi mô tả</span><span class="lz-lnote">Sáu giá trị chuỗi. Bạn <code>switch (reason)</code> trong code — không phải <code>catch (err)</code>. Đây là quyết định API cố ý: mọi disconnect là &quot;bình thường&quot;, không phải exception</span></div>
-<div class="lz-layer"><span class="lz-lname">disconnect vì auth fail</span><span class="lz-lnote">KHÔNG đến <code>disconnect</code> handler. Nếu middleware <code>io.use()</code> reject, client thấy <code>connect_error</code>. Đó là event RIÊNG — <code>disconnect</code> chỉ fire cho socket đã connect thành công</span></div>
-<div class="lz-layer"><span class="lz-lname">side effect trong <code>disconnect</code></span><span class="lz-lnote">Chạy đồng bộ, không phải async safe. Nếu <code>await</code> query Prisma, event sau (như trong lúc reconnect) có thể diễn ra trước khi cleanup xong. Dùng lock hoặc queue trong trường hợp đó</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>reason</code> is a descriptive string</span><span class="lz-lnote">Six string values. You <code>switch (reason)</code> on them in code — you do not <code>catch (err)</code>. This is a deliberate API decision: every disconnect is &quot;normal&quot;, not an exception</span></div>
+<div class="lz-layer"><span class="lz-lname">a disconnect caused by an auth failure</span><span class="lz-lnote">never reaches the <code>disconnect</code> handler. If the <code>io.use()</code> middleware rejects, the client sees <code>connect_error</code>. That is a SEPARATE event — <code>disconnect</code> only fires for sockets that connected successfully</span></div>
+<div class="lz-layer"><span class="lz-lname">side effect trong <code>disconnect</code></span><span class="lz-lnote">It runs synchronously and is not async-safe. If you <code>await</code> a Prisma query, a later event (during a reconnect, say) can happen before the cleanup finishes. Use a lock or a queue in that case</span></div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dọn dẹp state NGAY khi thấy <code>disconnect</code>.</strong> Chuyển Wi-Fi → 4G tạo <code>transport close</code>, và 800ms sau client quay lại. Nếu bạn xoá <code>onlineUserIds</code> ngay, presence UI flap. Nếu bạn xoá <code>currentThread</code> ngay, client phải re-join khi reconnect và thấy tin nhắn cũ. Debounce, không xoá ngay.</p>
+<p><strong>Bẫy — dọn dẹp state NGAY khi thấy <code>disconnect</code>.</strong> Switching Wi-Fi → 4G produces <code>transport close</code>, and 800ms later the client is back. If you delete <code>onlineUserIds</code> immediately, the presence UI flaps. If you delete <code>currentThread</code> immediately, the client must re-join on reconnect and sees stale messages. Debounce; do not delete on the spot.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Sáu reason của <code>disconnect</code> chia hai nhóm — chủ động (io server/client disconnect, parse error) không tự reconnect và cần dọn NGAY, còn bất ngờ (transport close, ping timeout, transport error) TỰ ĐỘNG reconnect và cần debounce presence 2s + state cleanup 60s để tránh UI flap khi user chuyển mạng.</p>
+<p><strong>One sentence.</strong> The six reasons of <code>disconnect</code> split into two groups — the deliberate ones (io server/client disconnect, parse error) do not reconnect and need cleanup IMMEDIATELY, while the unexpected ones (transport close, ping timeout, transport error) reconnect AUTOMATICALLY and need a 2s presence debounce plus 60s state cleanup so the UI does not flap when a user changes networks.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — disconnect reasons</span><span class="lc-sub">socket.io/docs/v4/client-socket-instance/#disconnect — sáu chuỗi reason, mỗi cái có định nghĩa chính xác về khi nào fire và có reconnect không.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Page Visibility API</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API — <code>visibilitychange</code> event, cho bạn biết tab đang khuất — hữu ích cho debounce chuyển tab thay vì network</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 4 — presence và bẫy O(N²)</span><span class="lc-sub">/courses/socket-io/learn${REF} — sau khi bạn xử lý reason đúng, presence vẫn còn bẫy N²</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 4 — presence and the O(N²) trap</span><span class="lc-sub">/courses/socket-io/learn${REF} — sau khi bạn xử lý reason đúng, presence vẫn còn bẫy N²</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -501,23 +501,23 @@ t=1553 client: reconnect         3
 t=1553 client: connect           JAlAcN05WmD    &lt;- SID MOI
 </div>
 
-<h3>Ba điều thay đổi khi reconnect</h3>
+<h3>Three things change on a reconnect</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">1 · sid mới</span><span class="lz-nsub">wk01tA... → JAlAcN...</span></span>
-<span class="lz-nbody">Server thấy đây là connection HOÀN TOÀN MỚI. <code>io.on(&#39;connection&#39;)</code> fire lại. Nếu bạn có bảng <code>Map&lt;sid, userId&gt;</code>, entry cũ vẫn nằm đó cho tới khi disconnect fire — mà disconnect có thể fire SAU khi connect mới, do timing.</span>
+<span class="lz-node"><span class="lz-ntitle">1 · a new sid</span><span class="lz-nsub">wk01tA... → JAlAcN...</span></span>
+<span class="lz-nbody">The server sees this as an ENTIRELY NEW connection. <code>io.on(&#39;connection&#39;)</code> fires again. If you keep a <code>Map&lt;sid, userId&gt;</code>map, the old entry stays there until disconnect fires — and disconnect can fire AFTER the new connect, purely as a matter of timing.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">2 · rooms trống</span><span class="lz-nsub">phải re-join tất</span></span>
-<span class="lz-nbody">Socket mới không thuộc room nào ngoài room mang sid của nó. Nếu client trước đó join <code>thread:42</code>, họ KHÔNG còn ở đó nữa. Server phải tự động re-join dựa trên <code>userId</code>, hoặc client phải phát lại <code>thread:join</code> — quyết định của bạn.</span>
+<span class="lz-node"><span class="lz-ntitle">2 · empty rooms</span><span class="lz-nsub">everything must be re-joined</span></span>
+<span class="lz-nbody">The new socket belongs to no room except the one named after its sid. If the client had previously joined <code>thread:42</code>, they are NOT there any more. The server has to re-join automatically based on <code>userId</code>, or the client has to re-send <code>thread:join</code> — your call.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">3 · pending events MẤT</span><span class="lz-nsub">emit trong khoảng disconnect</span></span>
-<span class="lz-nbody">Nếu server <code>io.to(&#39;thread:42&#39;).emit(&#39;msg&#39;, ...)</code> trong lúc client đang disconnect (400ms → 1553ms trên probe), event ấy đi tới CÁC socket còn ở room lúc đó — không có client này. Reconnect KHÔNG có replay. Chương 6 dạy pattern &quot;fetch-since-last-seen&quot;.</span>
+<span class="lz-node"><span class="lz-ntitle">3 · pending events are LOST</span><span class="lz-nsub">emits during the disconnect window</span></span>
+<span class="lz-nbody">If the server <code>io.to(&#39;thread:42&#39;).emit(&#39;msg&#39;, ...)</code> while the client is disconnected (400ms → 1553ms on my probe), that event goes to WHICHEVER sockets are in the room at that moment — and this client is not one of them. A reconnect does NOT replay anything. Chapter 6 teaches the &quot;fetch-since-last-seen&quot; pattern.</span>
 </div>
 </div>
 
-<h3>Server-side pattern để re-join room tự động</h3>
+<h3>The server-side pattern for re-joining rooms automatically</h3>
 <pre><code class="language-ts">// Track cac room USER da join, khong phai SOCKET
 const userRooms = new Map&lt;number, Set&lt;string&gt;&gt;();
 
@@ -540,10 +540,10 @@ io.on('connection', (socket) =&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Track theo USER, không theo SOCKET.</strong> Vì sid đổi mỗi reconnect, một bảng khoá theo sid sẽ leak (không xoá được entry cũ vì bạn không có event chắc chắn). Bảng khoá theo <code>userId</code> tồn tại xuyên reconnect và bạn dọn khi tất cả socket của user ấy disconnect.</p>
+<p><strong>Track by USER, not by SOCKET.</strong> Because the sid changes on every reconnect, a map keyed by sid leaks (you cannot delete the old entry, because no event reliably tells you to). A map keyed by <code>userId</code> survives reconnects, and you clear it once every socket belonging to that user has disconnected.</p>
 </div>
 
-<h3>Client-side: c.id là <code>undefined</code> ở event <code>reconnect</code></h3>
+<h3>Client-side: c.id is <code>undefined</code> in the <code>reconnect</code></h3>
 <pre><code class="language-ts">c.io.on('reconnect', (n) =&gt; {
   console.log(c.id);  // undefined — reconnect fire TRUOC khi 'connect' fire
 });
@@ -554,9 +554,9 @@ c.on('connect', () =&gt; {
 });
 </code></pre>
 
-<p>Đây là timing subtle: <code>reconnect</code> ở manager fire ở tầng 2 (engine.io reconnect), <code>connect</code> ở socket fire ở tầng 3 (socket.io CONNECT packet đã nhận). Manager biết trước. Đo được vì probe của tôi crash lần đầu.</p>
+<p>This is a subtle piece of timing: <code>reconnect</code> on the manager fires at layer 2 (the engine.io reconnect), while <code>connect</code> on the socket fires at layer 3 (the socket.io CONNECT packet has arrived). The manager knows first. I only measured this because my probe crashed the first time.</p>
 
-<h3>Backoff mặc định vs cấu hình</h3>
+<h3>Default backoff vs a configured one</h3>
 <pre><code class="language-ts">// default
 const c = io(url, {
   reconnection: true,           // ON, khong tat neu khong biet minh dang lam gi
@@ -578,17 +578,17 @@ Jitter la CO Y — 1000 client cung reconnect KHONG lam DDoS server luc cap dien
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — tắt reconnection.</strong> Ai đó viết <code>{ reconnection: false }</code> để &quot;dễ debug&quot; ở dev, rồi quên. Prod: mất Wi-Fi 5s = user phải reload trang. Chỉ tắt trong test hoặc khi tự viết reconnect logic (rất hiếm).</p>
+<p><strong>Bẫy — tắt reconnection.</strong> Someone writes <code>{ reconnection: false }</code> to make debugging easier in dev, then forgets. In prod: 5s of lost Wi-Fi means the user has to reload the page. Only disable it in tests, or when you are writing your own reconnect logic (very rare).</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Reconnect tự động ở TẦNG 2 (backoff exponential 1-5s, jitter ±50%, vô hạn attempts), nhưng ở TẦNG 3 &amp; 4 sid đổi + rooms trống + pending events mất — nên state của app phải track theo <code>userId</code> chứ không theo <code>socket.id</code>, và data quan trọng phải có pattern &quot;fetch-since-last-seen&quot; hơn là dựa vào emit đến đúng.</p>
+<p><strong>One sentence.</strong> Reconnection is automatic at LAYER 2 (exponential backoff 1-5s, ±50% jitter, unlimited attempts), but at LAYERS 3 &amp; 4 the sid changes, the rooms are empty and pending events are lost — so application state must be tracked by <code>userId</code> and never by <code>socket.id</code>, and anything that matters needs a &quot;fetch-since-last-seen&quot; pattern rather than faith that the emit arrived.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Manager options</span><span class="lc-sub">socket.io/docs/v4/client-options/#manager-options — mọi option reconnect, cùng default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Connection state recovery</span><span class="lc-sub">socket.io/docs/v4/connection-state-recovery — feature 4.6+ để server GIỮ state (rooms + missed events) trong RAM một khoảng — trade off: memory. Không dùng ở kho này</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 6 — acks và delivery guarantees</span><span class="lc-sub">/courses/socket-io/learn${REF} — pattern &quot;fetch-since-last-seen&quot; đối lập với &quot;emit and hope&quot;.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 6 — acks and delivery guarantees</span><span class="lc-sub">/courses/socket-io/learn${REF} — pattern &quot;fetch-since-last-seen&quot; đối lập với &quot;emit and hope&quot;.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.3</span>

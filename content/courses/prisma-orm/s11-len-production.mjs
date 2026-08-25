@@ -94,7 +94,7 @@ set -euo pipefail
 ANH="\$1"
 
 <span class="tok-comment"># 1. Which libc is inside the image?</span>
-if docker run --rm --entrypoint sh "\$ANH" -c 'ls /lib/ld-musl-*.so.1' &gt;/dev/null 2&gt;&amp;1; then
+if docker run --rm --entrypoint sh "\$ANH" -c 'ls /lib/ld-musl-*.count.1' &gt;/dev/null 2&gt;&amp;1; then
   LIBC=musl
 else
   LIBC=glibc
@@ -102,7 +102,7 @@ fi
 
 <span class="tok-comment"># 2. Which engine did generate put there?</span>
 ENGINE=\$(docker run --rm --entrypoint sh "\$ANH" -c \\
-  'ls /app/node_modules/.prisma/client/libquery_engine-*.so.node' | head -1)
+  'ls /app/node_modules/.prisma/client/libquery_engine-*.count.node' | head -1)
 
 <span class="tok-comment"># 3. Do they agree?</span>
 case "\$LIBC:\$ENGINE" in
@@ -220,7 +220,7 @@ set -euo pipefail
 ANH="\$1"
 
 <span class="tok-comment"># 1. Bên trong ảnh là libc nào?</span>
-if docker run --rm --entrypoint sh "\$ANH" -c 'ls /lib/ld-musl-*.so.1' &gt;/dev/null 2&gt;&amp;1; then
+if docker run --rm --entrypoint sh "\$ANH" -c 'ls /lib/ld-musl-*.count.1' &gt;/dev/null 2&gt;&amp;1; then
   LIBC=musl
 else
   LIBC=glibc
@@ -228,7 +228,7 @@ fi
 
 <span class="tok-comment"># 2. generate đã đặt engine nào vào đó?</span>
 ENGINE=\$(docker run --rm --entrypoint sh "\$ANH" -c \\
-  'ls /app/node_modules/.prisma/client/libquery_engine-*.so.node' | head -1)
+  'ls /app/node_modules/.prisma/client/libquery_engine-*.count.node' | head -1)
 
 <span class="tok-comment"># 3. Hai cái có khớp nhau không?</span>
 case "\$LIBC:\$ENGINE" in
@@ -622,7 +622,7 @@ Database schema is up to date!</div>
 <h3>Expand and contract — renaming a column across three deploys</h3>
 <pre><code><span class="tok-comment">// ❌ The one-step rename. Compiles, migrates, breaks the window.</span>
 model User {
-  hoTen String   <span class="tok-comment">// was: fullName</span>
+  fullName String <span class="tok-comment">// was: fullName</span>
 }</code></pre>
 <div class="out">-- Prisma sinh ra:
 ALTER TABLE "User" DROP COLUMN "fullName";
@@ -631,18 +631,18 @@ ALTER TABLE "User" ADD COLUMN "hoTen" TEXT NOT NULL;
 -- Ma CU van dang SELECT "fullName" → 42703 column does not exist
 -- Va toan bo du lieu ho ten vua bi xoa.</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Deploy 1</span><span class="lz-t">Expand</span><span class="lz-d">Add <code>hoTen String?</code> — nullable, no default needed. Migration adds the column; old code ignores it. New code <strong>writes both</strong> columns and <strong>reads <code>fullName</code></strong>. Safe in both directions.</span></div>
-  <div class="lz-step"><span class="lz-k">Between</span><span class="lz-t">Backfill</span><span class="lz-d"><code>UPDATE "User" SET "hoTen" = "fullName" WHERE "hoTen" IS NULL</code> — in chunks, as Lesson 11.4 shows. Nothing depends on it finishing, so it can take an hour.</span></div>
-  <div class="lz-step"><span class="lz-k">Deploy 2</span><span class="lz-t">Switch the read</span><span class="lz-d">New code <strong>reads <code>hoTen</code></strong>, still writes both. If you roll back to deploy 1's image, it still works — <code>fullName</code> is current because deploy 2 kept writing it.</span></div>
-  <div class="lz-step"><span class="lz-k">Deploy 3</span><span class="lz-t">Contract</span><span class="lz-d">Stop writing <code>fullName</code>. One deploy later, when you are sure no rollback target still reads it, a migration drops the column and <code>hoTen</code> becomes <code>NOT NULL</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 1</span><span class="lz-t">Expand</span><span class="lz-d">Add <code>fullName String?</code> — nullable, no default needed. Migration adds the column; old code ignores it. New code <strong>writes both</strong> columns and <strong>reads <code>fullName</code></strong>. Safe in both directions.</span></div>
+  <div class="lz-step"><span class="lz-k">Between</span><span class="lz-t">Backfill</span><span class="lz-d"><code>UPDATE "User" SET "fullName" = "fullName" WHERE "fullName" IS NULL</code> — in chunks, as Lesson 11.4 shows. Nothing depends on it finishing, so it can take an hour.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 2</span><span class="lz-t">Switch the read</span><span class="lz-d">New code <strong>reads <code>fullName</code></strong>, still writes both. If you roll back to deploy 1's image, it still works — <code>fullName</code> is current because deploy 2 kept writing it.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 3</span><span class="lz-t">Contract</span><span class="lz-d">Stop writing <code>fullName</code>. One deploy later, when you are sure no rollback target still reads it, a migration drops the column and <code>fullName</code> becomes <code>NOT NULL</code>.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Trap — <code>@map</code> makes this free, and people forget it exists.</strong> If the change is only what the <em>Prisma field</em> is called, <code>hoTen String @map("fullName")</code> renames it in your code with an empty migration — no column moves, no window, no backfill. Three deploys are for changing the actual column. Check which one you are doing before writing any of this.</p>
+<p><strong>Trap — <code>@map</code> makes this free, and people forget it exists.</strong> If the change is only what the <em>Prisma field</em> is called, <code>fullName String @map("fullName")</code> renames it in your code with an empty migration — no column moves, no window, no backfill. Three deploys are for changing the actual column. Check which one you are doing before writing any of this.</p>
 </div>
 
 <h3>The migrations that lock the table</h3>
 <pre><code><span class="tok-comment">-- Looks instant. Is not.</span>
-ALTER TABLE "SocialPost" ADD COLUMN "diem" INTEGER NOT NULL DEFAULT 0;</code></pre>
+ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Adding a column with a constant default</span><span class="v">Instant since PostgreSQL 11 — the default is stored in the catalogue, no table rewrite. Safe on any size.</span></div>
   <div class="kv"><span class="k">Adding <code>NOT NULL</code> without a default</span><span class="v">Fails immediately if any row exists. Add it nullable, backfill, then <code>SET NOT NULL</code> — and that last step still scans the whole table under an <code>ACCESS EXCLUSIVE</code> lock.</span></div>
@@ -653,7 +653,7 @@ ALTER TABLE "SocialPost" ADD COLUMN "diem" INTEGER NOT NULL DEFAULT 0;</code></p
 SET lock_timeout = '3s';
 SET statement_timeout = '30s';
 
-ALTER TABLE "SocialPost" ADD COLUMN "diem" INTEGER NOT NULL DEFAULT 0;</code></pre>
+ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></pre>
 <div class="out">-- KHONG co lock_timeout:
 --   ALTER TABLE cho lay ACCESS EXCLUSIVE
 --   → mot truy van dang chay giu lock 40 giay
@@ -742,7 +742,7 @@ Database schema is up to date!</div>
 <h3>Mở rộng rồi thu hẹp — đổi tên một cột qua BA lần deploy</h3>
 <pre><code><span class="tok-comment">// ❌ Đổi tên một phát. Biên dịch được, migrate được, vỡ ngay trong cửa sổ.</span>
 model User {
-  hoTen String   <span class="tok-comment">// trước là: fullName</span>
+  fullName String <span class="tok-comment">// trước là: fullName</span>
 }</code></pre>
 <div class="out">-- Prisma sinh ra:
 ALTER TABLE "User" DROP COLUMN "fullName";
@@ -751,18 +751,18 @@ ALTER TABLE "User" ADD COLUMN "hoTen" TEXT NOT NULL;
 -- Ma CU van dang SELECT "fullName" → 42703 column does not exist
 -- Va toan bo du lieu ho ten vua bi xoa.</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Deploy 1</span><span class="lz-t">Mở rộng</span><span class="lz-d">Thêm <code>hoTen String?</code> — cho phép null, không cần default. Migration thêm cột; mã cũ lờ nó đi. Mã mới <strong>GHI cả hai</strong> cột và <strong>ĐỌC <code>fullName</code></strong>. An toàn cả hai chiều.</span></div>
-  <div class="lz-step"><span class="lz-k">Ở giữa</span><span class="lz-t">Nạp bù</span><span class="lz-d"><code>UPDATE "User" SET "hoTen" = "fullName" WHERE "hoTen" IS NULL</code> — chia lô, như Bài 11.4 chỉ. Không có gì phụ thuộc vào việc nó xong lúc nào, nên nó chạy cả tiếng cũng được.</span></div>
-  <div class="lz-step"><span class="lz-k">Deploy 2</span><span class="lz-t">Chuyển đường ĐỌC</span><span class="lz-d">Mã mới <strong>ĐỌC <code>hoTen</code></strong>, vẫn ghi cả hai. Nếu bạn lùi về ảnh của deploy 1, nó vẫn chạy — <code>fullName</code> vẫn đúng vì deploy 2 vẫn ghi vào đó.</span></div>
-  <div class="lz-step"><span class="lz-k">Deploy 3</span><span class="lz-t">Thu hẹp</span><span class="lz-d">Ngừng ghi <code>fullName</code>. Một lần deploy sau nữa, khi bạn chắc chắn không còn đích lùi bản nào còn đọc nó, một migration xoá cột đi và <code>hoTen</code> thành <code>NOT NULL</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 1</span><span class="lz-t">Mở rộng</span><span class="lz-d">Thêm <code>fullName String?</code> — cho phép null, không cần default. Migration thêm cột; mã cũ lờ nó đi. Mã mới <strong>GHI cả hai</strong> cột và <strong>ĐỌC <code>fullName</code></strong>. An toàn cả hai chiều.</span></div>
+  <div class="lz-step"><span class="lz-k">Ở giữa</span><span class="lz-t">Nạp bù</span><span class="lz-d"><code>UPDATE "User" SET "fullName" = "fullName" WHERE "fullName" IS NULL</code> — chia lô, như Bài 11.4 chỉ. Không có gì phụ thuộc vào việc nó xong lúc nào, nên nó chạy cả tiếng cũng được.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 2</span><span class="lz-t">Chuyển đường ĐỌC</span><span class="lz-d">Mã mới <strong>ĐỌC <code>fullName</code></strong>, vẫn ghi cả hai. Nếu bạn lùi về ảnh của deploy 1, nó vẫn chạy — <code>fullName</code> vẫn đúng vì deploy 2 vẫn ghi vào đó.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 3</span><span class="lz-t">Thu hẹp</span><span class="lz-d">Ngừng ghi <code>fullName</code>. Một lần deploy sau nữa, khi bạn chắc chắn không còn đích lùi bản nào còn đọc nó, một migration xoá cột đi và <code>fullName</code> thành <code>NOT NULL</code>.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>@map</code> làm việc này MIỄN PHÍ, mà người ta quên là nó tồn tại.</strong> Nếu thay đổi chỉ là cái <em>trường Prisma</em> tên là gì, thì <code>hoTen String @map("fullName")</code> đổi tên nó trong mã của bạn với một migration RỖNG — không cột nào dịch chuyển, không cửa sổ, không nạp bù. Ba lần deploy là dành cho việc đổi CỘT THẬT. Hãy xem mình đang làm cái nào trước khi viết bất cứ thứ gì ở trên.</p>
+<p><strong>Bẫy — <code>@map</code> làm việc này MIỄN PHÍ, mà người ta quên là nó tồn tại.</strong> Nếu thay đổi chỉ là cái <em>trường Prisma</em> tên là gì, thì <code>fullName String @map("fullName")</code> đổi tên nó trong mã của bạn với một migration RỖNG — không cột nào dịch chuyển, không cửa sổ, không nạp bù. Ba lần deploy là dành cho việc đổi CỘT THẬT. Hãy xem mình đang làm cái nào trước khi viết bất cứ thứ gì ở trên.</p>
 </div>
 
 <h3>Những migration KHOÁ cả bảng</h3>
 <pre><code><span class="tok-comment">-- Trông có vẻ tức thì. Không phải.</span>
-ALTER TABLE "SocialPost" ADD COLUMN "diem" INTEGER NOT NULL DEFAULT 0;</code></pre>
+ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Thêm cột kèm default là HẰNG</span><span class="v">Tức thì từ PostgreSQL 11 — default nằm trong catalogue, không viết lại bảng. An toàn ở mọi kích cỡ.</span></div>
   <div class="kv"><span class="k">Thêm <code>NOT NULL</code> mà KHÔNG có default</span><span class="v">Hỏng ngay nếu bảng có hàng nào. Hãy thêm cho phép null, nạp bù, rồi <code>SET NOT NULL</code> — và ngay cả bước cuối đó vẫn quét cả bảng dưới khoá <code>ACCESS EXCLUSIVE</code>.</span></div>
@@ -773,7 +773,7 @@ ALTER TABLE "SocialPost" ADD COLUMN "diem" INTEGER NOT NULL DEFAULT 0;</code></p
 SET lock_timeout = '3s';
 SET statement_timeout = '30s';
 
-ALTER TABLE "SocialPost" ADD COLUMN "diem" INTEGER NOT NULL DEFAULT 0;</code></pre>
+ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></pre>
 <div class="out">-- KHONG co lock_timeout:
 --   ALTER TABLE cho lay ACCESS EXCLUSIVE
 --   → mot truy van dang chay giu lock 40 giay
@@ -888,7 +888,7 @@ Invalid value for argument &#96;type&#96;. Expected ContentType.
 <pre><code><span class="tok-comment">// ✅ Import the type. Then a schema rename is a compile error.</span>
 import { ContentType } from '@prisma/client';
 
-const loai: ContentType = ContentType.CODE_REVIEW;</code></pre>
+const kind: ContentType = ContentType.CODE_REVIEW;</code></pre>
 <pre><code><span class="tok-comment">// tsconfig.seed.json — a second config for the excluded directory</span>
 {
   "extends": "./tsconfig.json",
@@ -925,28 +925,28 @@ CREATE UNIQUE INDEX "user_email_chuan_hoa_key" ON "User" ("emailChuanHoa");</cod
 const LO = 1000;
 const KHO = process.argv.includes('--that');   <span class="tok-comment">// default is a dry run</span>
 
-let tong = 0;
+let total = 0;
 for (;;) {
   <span class="tok-comment">// The un-backfilled rows ARE the queue. No cursor to store.</span>
-  const canLam = await prisma.user.findMany({
-    where:  { hoTen: null, fullName: { not: null } },
+  const todo = await prisma.user.findMany({
+    where:  { fullName: null, fullName: { not: null } },
     select: { id: true, fullName: true },
     take:   LO,
   });
-  if (canLam.length === 0) break;
+  if (todo.length === 0) break;
 
   if (!KHO) {
-    console.log(&#96;[thu] se cap nhat \${canLam.length} hang, vi du:&#96;, canLam[0]);
+    console.log(&#96;[thu] se cap nhat \${todo.length} hang, vi du:&#96;, todo[0]);
   } else {
     await prisma.$transaction(
-      canLam.map((u) =&gt; prisma.user.update({
-        where: { id: u.id }, data: { hoTen: u.fullName },
+      todo.map((u) =&gt; prisma.user.update({
+        where: { id: u.id }, data: { fullName: u.fullName },
       })),
     );
   }
 
-  tong += canLam.length;
-  console.log(&#96;\${tong} hang · \${new Date().toISOString()}&#96;);
+  total += todo.length;
+  console.log(&#96;\${total} hang · \${new Date().toISOString()}&#96;);
   if (!KHO) break;
   await new Promise((r) =&gt; setTimeout(r, 200));   <span class="tok-comment">// let the database breathe</span>
 }</code></pre>
@@ -960,7 +960,7 @@ $ npx tsx scripts/nap-bu-ho-ten.ts --that
 …
 1247104 hang · 2026-08-23T13:41:55.907Z</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">The filter is the cursor</span><span class="lz-t">Resumable for free</span><span class="lz-d"><code>where: { hoTen: null }</code> means completed rows leave the queue by definition. Kill the script at any point, run it again, and it continues — no checkpoint file, no offset to store, no double-processing.</span></div>
+  <div class="lz-step"><span class="lz-k">The filter is the cursor</span><span class="lz-t">Resumable for free</span><span class="lz-d"><code>where: { fullName: null }</code> means completed rows leave the queue by definition. Kill the script at any point, run it again, and it continues — no checkpoint file, no offset to store, no double-processing.</span></div>
   <div class="lz-step"><span class="lz-k">Dry run by default</span><span class="lz-t">The flag is <code>--that</code>, not <code>--dry-run</code></span><span class="lz-d">Requiring a flag to write means a mistyped command does nothing. Requiring a flag to <em>not</em> write means a forgotten flag rewrites production. Default to safe.</span></div>
   <div class="lz-step"><span class="lz-k">Sleep between chunks</span><span class="lz-t">Leave headroom</span><span class="lz-d">200 ms per thousand rows keeps the backfill well under the connection budget from Lesson 9.4 and gives autovacuum room to keep up with the dead tuples the updates create.</span></div>
   <div class="lz-step"><span class="lz-k">Log a timestamp per chunk</span><span class="lz-t">So you can predict the end</span><span class="lz-d">Two lines of output give you a rate; a rate gives you an ETA. A backfill with no progress output is indistinguishable from a hung one, and someone will kill it at minute forty.</span></div>
@@ -1044,7 +1044,7 @@ Invalid value for argument &#96;type&#96;. Expected ContentType.
 <pre><code><span class="tok-comment">// ✅ Import cái kiểu vào. Khi đó đổi tên trong lược đồ là LỖI BIÊN DỊCH.</span>
 import { ContentType } from '@prisma/client';
 
-const loai: ContentType = ContentType.CODE_REVIEW;</code></pre>
+const kind: ContentType = ContentType.CODE_REVIEW;</code></pre>
 <pre><code><span class="tok-comment">// tsconfig.seed.json — một cấu hình thứ hai cho thư mục bị loại trừ</span>
 {
   "extends": "./tsconfig.json",
@@ -1081,28 +1081,28 @@ CREATE UNIQUE INDEX "user_email_chuan_hoa_key" ON "User" ("emailChuanHoa");</cod
 const LO = 1000;
 const KHO = process.argv.includes('--that');   <span class="tok-comment">// mặc định là chạy THỬ</span>
 
-let tong = 0;
+let total = 0;
 for (;;) {
   <span class="tok-comment">// Những hàng CHƯA nạp bù CHÍNH LÀ hàng đợi. Không cần lưu con trỏ.</span>
-  const canLam = await prisma.user.findMany({
-    where:  { hoTen: null, fullName: { not: null } },
+  const todo = await prisma.user.findMany({
+    where:  { fullName: null, fullName: { not: null } },
     select: { id: true, fullName: true },
     take:   LO,
   });
-  if (canLam.length === 0) break;
+  if (todo.length === 0) break;
 
   if (!KHO) {
-    console.log(&#96;[thu] se cap nhat \${canLam.length} hang, vi du:&#96;, canLam[0]);
+    console.log(&#96;[thu] se cap nhat \${todo.length} hang, vi du:&#96;, todo[0]);
   } else {
     await prisma.$transaction(
-      canLam.map((u) =&gt; prisma.user.update({
-        where: { id: u.id }, data: { hoTen: u.fullName },
+      todo.map((u) =&gt; prisma.user.update({
+        where: { id: u.id }, data: { fullName: u.fullName },
       })),
     );
   }
 
-  tong += canLam.length;
-  console.log(&#96;\${tong} hang · \${new Date().toISOString()}&#96;);
+  total += todo.length;
+  console.log(&#96;\${total} hang · \${new Date().toISOString()}&#96;);
   if (!KHO) break;
   await new Promise((r) =&gt; setTimeout(r, 200));   <span class="tok-comment">// để cơ sở dữ liệu thở</span>
 }</code></pre>
@@ -1116,7 +1116,7 @@ $ npx tsx scripts/nap-bu-ho-ten.ts --that
 …
 1247104 hang · 2026-08-23T13:41:55.907Z</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Bộ lọc CHÍNH LÀ con trỏ</span><span class="lz-t">Nối lại được, miễn phí</span><span class="lz-d"><code>where: { hoTen: null }</code> nghĩa là hàng đã xong thì tự rời khỏi hàng đợi theo định nghĩa. Giết script ở bất cứ đâu, chạy lại, và nó đi tiếp — không file điểm dừng, không offset phải lưu, không xử lý trùng.</span></div>
+  <div class="lz-step"><span class="lz-k">Bộ lọc CHÍNH LÀ con trỏ</span><span class="lz-t">Nối lại được, miễn phí</span><span class="lz-d"><code>where: { fullName: null }</code> nghĩa là hàng đã xong thì tự rời khỏi hàng đợi theo định nghĩa. Giết script ở bất cứ đâu, chạy lại, và nó đi tiếp — không file điểm dừng, không offset phải lưu, không xử lý trùng.</span></div>
   <div class="lz-step"><span class="lz-k">Mặc định là chạy THỬ</span><span class="lz-t">Cờ là <code>--that</code>, không phải <code>--dry-run</code></span><span class="lz-d">Bắt phải có cờ mới GHI nghĩa là một câu lệnh gõ nhầm chẳng làm gì. Bắt phải có cờ mới KHÔNG ghi nghĩa là một cái cờ quên mất sẽ ghi đè production. Hãy mặc định về phía an toàn.</span></div>
   <div class="lz-step"><span class="lz-k">Ngủ giữa các lô</span><span class="lz-t">Chừa khoảng thở</span><span class="lz-d">200 ms cho mỗi nghìn hàng giữ cho việc nạp bù nằm sâu dưới ngân sách kết nối của Bài 9.4 và cho autovacuum chỗ để theo kịp đám tuple chết mà các lệnh update sinh ra.</span></div>
   <div class="lz-step"><span class="lz-k">In dấu thời gian ở mỗi lô</span><span class="lz-t">Để đoán được lúc xong</span><span class="lz-d">Hai dòng đầu ra cho bạn một TỐC ĐỘ; tốc độ cho bạn một giờ dự kiến xong. Một script nạp bù không in tiến độ thì không phân biệt được với một script đã treo, và tới phút thứ bốn mươi sẽ có người giết nó.</span></div>
@@ -1149,7 +1149,7 @@ $ npx tsx scripts/nap-bu-ho-ten.ts --that
 
 <h3>One client per process</h3>
 <pre><code><span class="tok-comment">// ❌ A client per request. Each one opens its own pool.</span>
-app.get('/bai-viet', async (req, res) =&gt; {
+app.get('/post-viet', async (req, res) =&gt; {
   const prisma = new PrismaClient();
   res.json(await prisma.socialPost.findMany({ take: 20 }));
 });</code></pre>
@@ -1187,11 +1187,11 @@ docker compose up -d --no-build backend</code></pre>
 <pre><code><span class="tok-comment">// src/index.ts — use all ten seconds, then stop</span>
 const server = app.listen(3000);
 
-let dangTat = false;
-async function tatDan(tin: string) {
-  if (dangTat) return;              <span class="tok-comment">// SIGTERM can arrive twice</span>
-  dangTat = true;
-  console.log(&#96;[\${tin}] bat dau tat dan&#96;);
+let disabled = false;
+async function backoff(msg: string) {
+  if (disabled) return;              <span class="tok-comment">// SIGTERM can arrive twice</span>
+  disabled = true;
+  console.log(&#96;[\${msg}] bat dau tat dan&#96;);
 
   <span class="tok-comment">// 1. Stop accepting new connections; existing requests finish.</span>
   await new Promise&lt;void&gt;((ok) =&gt; server.close(() =&gt; ok()));
@@ -1204,8 +1204,8 @@ async function tatDan(tin: string) {
   process.exit(0);
 }
 
-process.on('SIGTERM', () =&gt; tatDan('SIGTERM'));
-process.on('SIGINT',  () =&gt; tatDan('SIGINT'));
+process.on('SIGTERM', () =&gt; backoff('SIGTERM'));
+process.on('SIGINT',  () =&gt; backoff('SIGINT'));
 
 <span class="tok-comment">// A hard deadline, in case a request never finishes</span>
 process.on('SIGTERM', () =&gt; setTimeout(() =&gt; process.exit(1), 9000).unref());</code></pre>
@@ -1229,7 +1229,7 @@ app.get('/health', (_req, res) =&gt; res.json({ ok: true }));
 
 <span class="tok-comment">// Readiness — should this instance receive traffic?</span>
 app.get('/ready', async (_req, res) =&gt; {
-  if (dangTat) return res.status(503).json({ ok: false, ly_do: 'dang tat' });
+  if (disabled) return res.status(503).json({ ok: false, ly_do: 'dang tat' });
   try {
     await prisma.$queryRaw&#96;SELECT 1&#96;;
     res.json({ ok: true });
@@ -1289,7 +1289,7 @@ prisma.$on('error', (e) =&gt; logger.error({ msg: e.message }, 'prisma error'));
 
 <h3>Mỗi tiến trình MỘT client</h3>
 <pre><code><span class="tok-comment">// ❌ Mỗi request một client. Mỗi cái mở một pool riêng.</span>
-app.get('/bai-viet', async (req, res) =&gt; {
+app.get('/post-viet', async (req, res) =&gt; {
   const prisma = new PrismaClient();
   res.json(await prisma.socialPost.findMany({ take: 20 }));
 });</code></pre>
@@ -1327,11 +1327,11 @@ docker compose up -d --no-build backend</code></pre>
 <pre><code><span class="tok-comment">// src/index.ts — dùng hết mười giây đó, rồi hãy dừng</span>
 const server = app.listen(3000);
 
-let dangTat = false;
-async function tatDan(tin: string) {
-  if (dangTat) return;              <span class="tok-comment">// SIGTERM có thể tới hai lần</span>
-  dangTat = true;
-  console.log(&#96;[\${tin}] bat dau tat dan&#96;);
+let disabled = false;
+async function backoff(msg: string) {
+  if (disabled) return;              <span class="tok-comment">// SIGTERM có thể tới hai lần</span>
+  disabled = true;
+  console.log(&#96;[\${msg}] bat dau tat dan&#96;);
 
   <span class="tok-comment">// 1. Ngừng nhận kết nối mới; request đang chạy thì chạy nốt.</span>
   await new Promise&lt;void&gt;((ok) =&gt; server.close(() =&gt; ok()));
@@ -1344,8 +1344,8 @@ async function tatDan(tin: string) {
   process.exit(0);
 }
 
-process.on('SIGTERM', () =&gt; tatDan('SIGTERM'));
-process.on('SIGINT',  () =&gt; tatDan('SIGINT'));
+process.on('SIGTERM', () =&gt; backoff('SIGTERM'));
+process.on('SIGINT',  () =&gt; backoff('SIGINT'));
 
 <span class="tok-comment">// Một hạn chót cứng, phòng khi có request không bao giờ xong</span>
 process.on('SIGTERM', () =&gt; setTimeout(() =&gt; process.exit(1), 9000).unref());</code></pre>
@@ -1369,7 +1369,7 @@ app.get('/health', (_req, res) =&gt; res.json({ ok: true }));
 
 <span class="tok-comment">// Sẵn sàng — instance này có nên nhận lưu lượng không?</span>
 app.get('/ready', async (_req, res) =&gt; {
-  if (dangTat) return res.status(503).json({ ok: false, ly_do: 'dang tat' });
+  if (disabled) return res.status(503).json({ ok: false, ly_do: 'dang tat' });
   try {
     await prisma.$queryRaw&#96;SELECT 1&#96;;
     res.json({ ok: true });

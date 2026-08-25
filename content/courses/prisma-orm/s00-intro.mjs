@@ -300,14 +300,14 @@ console.log(user?.fullName);</code></pre>
 <pre><code><span class="tok-comment"># One throwaway PostgreSQL 16, port 5432, data in a named volume</span>
 docker run -d --name pg-hoc \\
   -e POSTGRES_PASSWORD=matkhau \\
-  -e POSTGRES_USER=hocvien \\
+  -e POSTGRES_USER=student \\
   -e POSTGRES_DB=hocprisma \\
   -p 5432:5432 \\
   -v pg-hoc-data:/var/lib/postgresql/data \\
   postgres:16-alpine
 
 <span class="tok-comment"># Confirm it is actually accepting connections, not merely "running"</span>
-docker exec pg-hoc pg_isready -U hocvien -d hocprisma</code></pre>
+docker exec pg-hoc pg_isready -U student -d hocprisma</code></pre>
 <div class="out">4a9b2f1c8d3e7061b5a4c9e2f8d13a7be0c5419d6f2a8b3c7e1d0946af58b2c3
 /var/run/postgresql:5432 - accepting connections</div>
 <div class="callout">
@@ -362,10 +362,10 @@ Next steps:
 <h3>The connection string, read carefully</h3>
 <p>Open <code>.env</code> and replace the placeholder. Every part of this URL does something:</p>
 <pre><code><span class="tok-comment"># .env</span>
-DATABASE_URL="postgresql://hocvien:matkhau@localhost:5432/hocprisma?schema=public&amp;connection_limit=10&amp;pool_timeout=20"</code></pre>
+DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma?schema=public&amp;connection_limit=10&amp;pool_timeout=20"</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>postgresql://</code></span><span class="v">The protocol, which must match the <code>provider</code> in <code>schema.prisma</code>. <code>postgres://</code> is accepted as an alias. A mismatch here produces <code>P1012</code> at validation time, not at connect time.</span></div>
-  <div class="kv"><span class="k"><code>hocvien:matkhau</code></span><span class="v">User and password. If your password contains <code>@</code>, <code>:</code>, <code>/</code> or <code>?</code> it <strong>must be percent-encoded</strong> — <code>p@ss</code> becomes <code>p%40ss</code>. This is the single most common "why can't it connect" of all, because the failure looks like a wrong password rather than a malformed URL.</span></div>
+  <div class="kv"><span class="k"><code>student:matkhau</code></span><span class="v">User and password. If your password contains <code>@</code>, <code>:</code>, <code>/</code> or <code>?</code> it <strong>must be percent-encoded</strong> — <code>p@ss</code> becomes <code>p%40ss</code>. This is the single most common "why can't it connect" of all, because the failure looks like a wrong password rather than a malformed URL.</span></div>
   <div class="kv"><span class="k"><code>localhost:5432</code></span><span class="v">Host and port. Inside Docker Compose this becomes the service name, not <code>localhost</code> — a container's <code>localhost</code> is itself. Chapter 11 covers this properly; it is the second most common connection failure.</span></div>
   <div class="kv"><span class="k"><code>/hocprisma</code></span><span class="v">The database name. Not the schema — the database. Getting these two confused is why people end up with tables in a database they did not mean to touch.</span></div>
   <div class="kv"><span class="k"><code>?schema=public</code></span><span class="v">The PostgreSQL schema (namespace) Prisma writes into. Defaults to <code>public</code>. Set it to something else and you can host several environments in one database — a genuinely useful trick for a cheap VPS.</span></div>
@@ -480,7 +480,7 @@ prisma:query COMMIT</div>
 
 <h3>Verify the whole chain works</h3>
 <pre><code><span class="tok-comment"># A table exists, in the right database, with the right columns</span>
-docker exec -it pg-hoc psql -U hocvien -d hocprisma -c "\\d users"</code></pre>
+docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d users"</code></pre>
 <div class="out">                                     Table "public.users"
    Column   |              Type              | Nullable |              Default
 ------------+--------------------------------+----------+-----------------------------------
@@ -510,14 +510,14 @@ Indexes:
 <pre><code><span class="tok-comment"># Một PostgreSQL 16 dùng tạm, cổng 5432, dữ liệu để trong volume có tên</span>
 docker run -d --name pg-hoc \\
   -e POSTGRES_PASSWORD=matkhau \\
-  -e POSTGRES_USER=hocvien \\
+  -e POSTGRES_USER=student \\
   -e POSTGRES_DB=hocprisma \\
   -p 5432:5432 \\
   -v pg-hoc-data:/var/lib/postgresql/data \\
   postgres:16-alpine
 
 <span class="tok-comment"># Xác nhận nó thật sự nhận kết nối, chứ không chỉ "đang chạy"</span>
-docker exec pg-hoc pg_isready -U hocvien -d hocprisma</code></pre>
+docker exec pg-hoc pg_isready -U student -d hocprisma</code></pre>
 <div class="out">4a9b2f1c8d3e7061b5a4c9e2f8d13a7be0c5419d6f2a8b3c7e1d0946af58b2c3
 /var/run/postgresql:5432 - accepting connections</div>
 <div class="callout">
@@ -572,10 +572,10 @@ Next steps:
 <h3>Chuỗi kết nối, đọc cho kỹ</h3>
 <p>Mở <code>.env</code> và thay chỗ giữ chỗ. Mọi phần của URL này đều có việc:</p>
 <pre><code><span class="tok-comment"># .env</span>
-DATABASE_URL="postgresql://hocvien:matkhau@localhost:5432/hocprisma?schema=public&amp;connection_limit=10&amp;pool_timeout=20"</code></pre>
+DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma?schema=public&amp;connection_limit=10&amp;pool_timeout=20"</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>postgresql://</code></span><span class="v">Giao thức, phải khớp <code>provider</code> trong <code>schema.prisma</code>. <code>postgres://</code> được chấp nhận như tên gọi khác. Lệch ở đây sinh ra <code>P1012</code> lúc kiểm lược đồ, không phải lúc kết nối.</span></div>
-  <div class="kv"><span class="k"><code>hocvien:matkhau</code></span><span class="v">Người dùng và mật khẩu. Nếu mật khẩu chứa <code>@</code>, <code>:</code>, <code>/</code> hay <code>?</code> thì <strong>bắt buộc phải mã hoá phần trăm</strong> — <code>p@ss</code> thành <code>p%40ss</code>. Đây là nguyên nhân "sao không kết nối được" phổ biến nhất, vì nó trông y hệt sai mật khẩu chứ không giống một URL viết hỏng.</span></div>
+  <div class="kv"><span class="k"><code>student:matkhau</code></span><span class="v">Người dùng và mật khẩu. Nếu mật khẩu chứa <code>@</code>, <code>:</code>, <code>/</code> hay <code>?</code> thì <strong>bắt buộc phải mã hoá phần trăm</strong> — <code>p@ss</code> thành <code>p%40ss</code>. Đây là nguyên nhân "sao không kết nối được" phổ biến nhất, vì nó trông y hệt sai mật khẩu chứ không giống một URL viết hỏng.</span></div>
   <div class="kv"><span class="k"><code>localhost:5432</code></span><span class="v">Máy chủ và cổng. Bên trong Docker Compose thì đây là tên service, không phải <code>localhost</code> — <code>localhost</code> của một container là chính nó. Chương 11 nói kỹ; đây là nguyên nhân hỏng kết nối phổ biến thứ hai.</span></div>
   <div class="kv"><span class="k"><code>/hocprisma</code></span><span class="v">Tên cơ sở dữ liệu. Không phải schema — mà là database. Lẫn hai thứ này là lý do người ta tạo bảng nhầm vào một cơ sở dữ liệu họ không định đụng tới.</span></div>
   <div class="kv"><span class="k"><code>?schema=public</code></span><span class="v">Schema (không gian tên) của PostgreSQL mà Prisma ghi vào. Mặc định <code>public</code>. Đặt khác đi thì bạn nhét được nhiều môi trường vào chung một cơ sở dữ liệu — một mẹo thật sự có ích với VPS giá rẻ.</span></div>
@@ -690,7 +690,7 @@ prisma:query COMMIT</div>
 
 <h3>Kiểm lại cả chuỗi có chạy không</h3>
 <pre><code><span class="tok-comment"># Có một bảng, đúng cơ sở dữ liệu, đúng các cột</span>
-docker exec -it pg-hoc psql -U hocvien -d hocprisma -c "\\d users"</code></pre>
+docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d users"</code></pre>
 <div class="out">                                     Table "public.users"
    Column   |              Type              | Nullable |              Default
 ------------+--------------------------------+----------+-----------------------------------
@@ -792,7 +792,7 @@ const an = await prisma.user.create({
     fullName: 'Nguyen Van An',
     posts: {
       create: [
-        { title: 'Bai dau tien', body: 'Xin chao', published: true, views: 120 },
+        { title: 'Bai dau money', body: 'Xin chao', published: true, views: 120 },
         { title: 'Bai nhap', body: null },
       ],
     },
@@ -1014,7 +1014,7 @@ const an = await prisma.user.create({
     fullName: 'Nguyen Van An',
     posts: {
       create: [
-        { title: 'Bai dau tien', body: 'Xin chao', published: true, views: 120 },
+        { title: 'Bai dau money', body: 'Xin chao', published: true, views: 120 },
         { title: 'Bai nhap', body: null },
       ],
     },

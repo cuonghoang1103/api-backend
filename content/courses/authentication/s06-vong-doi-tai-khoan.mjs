@@ -310,14 +310,14 @@ do dai URL: 76 ky tu</div>
 <p><strong>Trap — a GET that consumes the token will be consumed by a machine.</strong> Outlook Safe Links, Proofpoint, Mimecast, Slack unfurling, Skype previews and half a dozen antivirus suites fetch every URL in an incoming mail to check it. They arrive seconds after delivery, they follow redirects, and they do not run your JavaScript. Any side effect you attach to that <code>GET</code> has already happened by the time the human opens the message.</p>
 </div>
 <pre><code><span class="tok-comment">// Vá: GET chỉ HIỂN THỊ. Việc xác minh nằm sau một cú POST.</span>
-app.get('/xac-minh', async (req, res) =&gt; {
+app.get('/verify', async (req, res) =&gt; {
   const t = String(req.query.t ?? '');
   const r = await timTokenConHan(t);                     <span class="tok-comment">// chỉ ĐỌC, không đổi gì</span>
   if (!r) return res.render('xac-minh-hong');
   res.render('xac-minh', { t });                          <span class="tok-comment">// một cái nút, form POST</span>
 });
 
-app.post('/xac-minh', dinhDanhCsrf, async (req, res) =&gt; { <span class="tok-comment">// ← Bài 3.5</span>
+app.post('/verify', dinhDanhCsrf, async (req, res) =&gt; { <span class="tok-comment">// ← Bài 3.5</span>
   const r = await timTokenConHan(String(req.body.t ?? ''));
   if (!r) return res.status(410).render('xac-minh-hong');
 
@@ -344,7 +344,7 @@ app.post('/xac-minh', dinhDanhCsrf, async (req, res) =&gt; { <span class="tok-co
 
 <h3>Resending, expiry, and the address stuck on an orphan</h3>
 <pre><code><span class="tok-comment">// Gửi lại: giới hạn theo NGƯỜI DÙNG, và trả lời y hệt nhau dù có hay không.</span>
-app.post('/xac-minh/gui-lai', gioiHan({ moiPhut: 1, moiGio: 5 }), async (req, res) =&gt; {
+app.post('/verify/resend', gioiHan({ moiPhut: 1, moiGio: 5 }), async (req, res) =&gt; {
   const ch = chuanHoaEmail(String(req.body.email ?? ''));
   const nd = await prisma.nguoiDung.findUnique({ where: { emailChuanHoa: ch } });
 
@@ -414,14 +414,14 @@ do dai URL: 76 ky tu</div>
 <p><strong>Bẫy — một cái GET có tiêu thụ token thì sẽ bị MÁY tiêu thụ.</strong> Outlook Safe Links, Proofpoint, Mimecast, phần xem trước của Slack, xem trước của Skype và cả tá bộ diệt virus đều tải MỌI URL trong thư đến để kiểm tra nó. Chúng tới sau vài giây kể từ lúc thư về, chúng đi theo cả chuyển hướng, và chúng KHÔNG chạy JavaScript của bạn. Mọi tác dụng phụ bạn gắn vào cái <code>GET</code> đó đều đã xảy ra xong trước khi con người mở thư ra.</p>
 </div>
 <pre><code><span class="tok-comment">// Vá: GET chỉ HIỂN THỊ. Việc xác minh nằm sau một cú POST.</span>
-app.get('/xac-minh', async (req, res) =&gt; {
+app.get('/verify', async (req, res) =&gt; {
   const t = String(req.query.t ?? '');
   const r = await timTokenConHan(t);                     <span class="tok-comment">// chỉ ĐỌC, không đổi gì</span>
   if (!r) return res.render('xac-minh-hong');
   res.render('xac-minh', { t });                          <span class="tok-comment">// một cái nút, form POST</span>
 });
 
-app.post('/xac-minh', dinhDanhCsrf, async (req, res) =&gt; { <span class="tok-comment">// ← Bài 3.5</span>
+app.post('/verify', dinhDanhCsrf, async (req, res) =&gt; { <span class="tok-comment">// ← Bài 3.5</span>
   const r = await timTokenConHan(String(req.body.t ?? ''));
   if (!r) return res.status(410).render('xac-minh-hong');
 
@@ -448,7 +448,7 @@ app.post('/xac-minh', dinhDanhCsrf, async (req, res) =&gt; { <span class="tok-co
 
 <h3>Gửi lại, hết hạn, và cái địa chỉ kẹt trên một tài khoản mồ côi</h3>
 <pre><code><span class="tok-comment">// Gửi lại: giới hạn theo NGƯỜI DÙNG, và trả lời y hệt nhau dù có hay không.</span>
-app.post('/xac-minh/gui-lai', gioiHan({ moiPhut: 1, moiGio: 5 }), async (req, res) =&gt; {
+app.post('/verify/resend', gioiHan({ moiPhut: 1, moiGio: 5 }), async (req, res) =&gt; {
   const ch = chuanHoaEmail(String(req.body.email ?? ''));
   const nd = await prisma.nguoiDung.findUnique({ where: { emailChuanHoa: ch } });
 
@@ -560,7 +560,7 @@ const url = &#96;\${URL_CONG_KHAI}/dat-lai?t=\${token}&#96;;
   </div>
 </div>
 <h3>The two endpoints, in full</h3>
-<pre><code>app.post('/quen-mat-khau', gioiHan({ ip: '5/gio', email: '3/gio' }), async (req, res) =&gt; {
+<pre><code>app.post('/forgot-password', gioiHan({ ip: '5/gio', email: '3/gio' }), async (req, res) =&gt; {
   const ch = chuanHoaEmail(String(req.body.email ?? ''));
   const nd = await prisma.nguoiDung.findUnique({ where: { emailChuanHoa: ch } });
 
@@ -578,7 +578,7 @@ const url = &#96;\${URL_CONG_KHAI}/dat-lai?t=\${token}&#96;;
   <span class="tok-comment">// MỘT câu trả lời duy nhất, cho mọi trường hợp. Bài 6.4.</span>
   res.status(202).json({ thongBao: 'Nếu địa chỉ đó có tài khoản, chúng tôi đã gửi thư.' });
 });</code></pre>
-<pre><code>app.post('/dat-lai', dinhDanhCsrf, async (req, res) =&gt; {
+<pre><code>app.post('/reset', dinhDanhCsrf, async (req, res) =&gt; {
   const { t, matKhauMoi } = req.body;
   await kiemDoManh(matKhauMoi);                              <span class="tok-comment">// ← Chương 2, y hệt lúc đăng ký</span>
 
@@ -708,7 +708,7 @@ const url = &#96;\${URL_CONG_KHAI}/dat-lai?t=\${token}&#96;;
   </div>
 </div>
 <h3>Hai endpoint, đầy đủ</h3>
-<pre><code>app.post('/quen-mat-khau', gioiHan({ ip: '5/gio', email: '3/gio' }), async (req, res) =&gt; {
+<pre><code>app.post('/forgot-password', gioiHan({ ip: '5/gio', email: '3/gio' }), async (req, res) =&gt; {
   const ch = chuanHoaEmail(String(req.body.email ?? ''));
   const nd = await prisma.nguoiDung.findUnique({ where: { emailChuanHoa: ch } });
 
@@ -726,7 +726,7 @@ const url = &#96;\${URL_CONG_KHAI}/dat-lai?t=\${token}&#96;;
   <span class="tok-comment">// MỘT câu trả lời duy nhất, cho mọi trường hợp. Bài 6.4.</span>
   res.status(202).json({ thongBao: 'Nếu địa chỉ đó có tài khoản, chúng tôi đã gửi thư.' });
 });</code></pre>
-<pre><code>app.post('/dat-lai', dinhDanhCsrf, async (req, res) =&gt; {
+<pre><code>app.post('/reset', dinhDanhCsrf, async (req, res) =&gt; {
   const { t, matKhauMoi } = req.body;
   await kiemDoManh(matKhauMoi);                              <span class="tok-comment">// ← Chương 2, y hệt lúc đăng ký</span>
 
@@ -856,10 +856,10 @@ if (!nd || !khop || nd.khoaLuc) {
 
 <h3>The fourth leak: every other flow</h3>
 <pre><code><span class="tok-comment">// Bốn cái cửa CÙNG phải trả lời như nhau, không thì ba cái kia vô nghĩa.</span>
-POST /dang-ky           → 202 'Kiểm tra hộp thư của bạn.'        <span class="tok-comment">// dù trùng hay không (6.1)</span>
-POST /quen-mat-khau     → 202 'Nếu địa chỉ đó có tài khoản, …'   <span class="tok-comment">// dù có hay không (6.3)</span>
-POST /xac-minh/gui-lai  → 202 'Nếu địa chỉ đó cần xác minh, …'   <span class="tok-comment">// (6.2)</span>
-POST /dang-nhap         → 401 'Email hoặc mật khẩu không đúng'   <span class="tok-comment">// + băm giả (ở trên)</span></code></pre>
+POST /sign-up           → 202 'Kiểm tra hộp thư của bạn.'        <span class="tok-comment">// dù trùng hay không (6.1)</span>
+POST /forgot-password     → 202 'Nếu địa chỉ đó có tài khoản, …'   <span class="tok-comment">// dù có hay không (6.3)</span>
+POST /verify/resend  → 202 'Nếu địa chỉ đó cần xác minh, …'   <span class="tok-comment">// (6.2)</span>
+POST /sign-in         → 401 'Email hoặc mật khẩu không đúng'   <span class="tok-comment">// + băm giả (ở trên)</span></code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Registration is the loudest door</span><span class="lz-lnote">"That email is already registered" is a perfect oracle, and it is the message almost every signup form shows. Hiding it means answering <code>202</code> either way and letting the mailbox carry the difference: a welcome mail, or a "someone tried to register with your address — here is a reset link" mail.</span></div>
   <div class="lz-layer"><span class="lz-lname">The mailbox is the only safe channel</span><span class="lz-lnote">This is the general shape of the whole lesson. Anything you must tell the account holder and must not tell a stranger goes by mail, because the mailbox is the one place only the real owner reads.</span></div>
@@ -958,10 +958,10 @@ if (!nd || !khop || nd.khoaLuc) {
 
 <h3>Cái rò rỉ thứ tư: mọi luồng CÒN LẠI</h3>
 <pre><code><span class="tok-comment">// Bốn cái cửa CÙNG phải trả lời như nhau, không thì ba cái kia vô nghĩa.</span>
-POST /dang-ky           → 202 'Kiểm tra hộp thư của bạn.'        <span class="tok-comment">// dù trùng hay không (6.1)</span>
-POST /quen-mat-khau     → 202 'Nếu địa chỉ đó có tài khoản, …'   <span class="tok-comment">// dù có hay không (6.3)</span>
-POST /xac-minh/gui-lai  → 202 'Nếu địa chỉ đó cần xác minh, …'   <span class="tok-comment">// (6.2)</span>
-POST /dang-nhap         → 401 'Email hoặc mật khẩu không đúng'   <span class="tok-comment">// + băm giả (ở trên)</span></code></pre>
+POST /sign-up           → 202 'Kiểm tra hộp thư của bạn.'        <span class="tok-comment">// dù trùng hay không (6.1)</span>
+POST /forgot-password     → 202 'Nếu địa chỉ đó có tài khoản, …'   <span class="tok-comment">// dù có hay không (6.3)</span>
+POST /verify/resend  → 202 'Nếu địa chỉ đó cần xác minh, …'   <span class="tok-comment">// (6.2)</span>
+POST /sign-in         → 401 'Email hoặc mật khẩu không đúng'   <span class="tok-comment">// + băm giả (ở trên)</span></code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Đăng ký là cánh cửa ồn ào nhất</span><span class="lz-lnote">"Email này đã được đăng ký" là một cái máy trả lời hoàn hảo, và đó lại là câu mà gần như mọi biểu mẫu đăng ký đều hiển thị. Giấu nó nghĩa là đáp <code>202</code> trong cả hai trường hợp và để HỘP THƯ mang phần khác biệt: một lá thư chào mừng, hoặc một lá thư "có người vừa thử đăng ký bằng địa chỉ của bạn — đây là đường dẫn đặt lại mật khẩu".</span></div>
   <div class="lz-layer"><span class="lz-lname">Hộp thư là kênh AN TOÀN duy nhất</span><span class="lz-lnote">Đây là hình dạng chung của cả bài này. Bất cứ điều gì bạn BUỘC phải nói với chủ tài khoản mà KHÔNG được nói với người lạ thì đều đi bằng thư, vì hộp thư là nơi duy nhất chỉ chủ nhân thật đọc được.</span></div>
@@ -1007,9 +1007,9 @@ POST /dang-nhap         → 401 'Email hoặc mật khẩu không đúng'   <spa
 
 <h3>Why changing an address is a takeover primitive</h3>
 <pre><code><span class="tok-comment">// Kẻ tấn công có một phiên sống (laptop mượn, XSS, cookie bị cắp).</span>
-PATCH /toi/email  { email: 'ke-tan-cong@vidu.com' }   → 200 OK
-POST  /quen-mat-khau { email: 'ke-tan-cong@vidu.com' } → thư về hộp thư CỦA HẮN
-POST  /dat-lai    { t: '…', matKhauMoi: '…' }          → mọi phiên bị thu hồi
+PATCH /me/email  { email: 'ke-tan-cong@vidu.com' }   → 200 OK
+POST  /forgot-password { email: 'ke-tan-cong@vidu.com' } → thư về hộp thư CỦA HẮN
+POST  /reset    { t: '…', matKhauMoi: '…' }          → mọi phiên bị thu hồi
 
 <span class="tok-comment">// Chủ nhân thật giờ: không đăng nhập được, không đặt lại được (địa chỉ đã đổi),</span>
 <span class="tok-comment">// và không có lá thư nào báo cho họ biết. Ba request. Không cần biết mật khẩu.</span></code></pre>
@@ -1099,9 +1099,9 @@ const cua = await prisma.donHang.findMany({ where: { nguoiDungId: nd.id } });</c
 
 <h3>Vì sao đổi địa chỉ là một nguyên thuỷ chiếm tài khoản</h3>
 <pre><code><span class="tok-comment">// Kẻ tấn công có một phiên sống (laptop mượn, XSS, cookie bị cắp).</span>
-PATCH /toi/email  { email: 'ke-tan-cong@vidu.com' }   → 200 OK
-POST  /quen-mat-khau { email: 'ke-tan-cong@vidu.com' } → thư về hộp thư CỦA HẮN
-POST  /dat-lai    { t: '…', matKhauMoi: '…' }          → mọi phiên bị thu hồi
+PATCH /me/email  { email: 'ke-tan-cong@vidu.com' }   → 200 OK
+POST  /forgot-password { email: 'ke-tan-cong@vidu.com' } → thư về hộp thư CỦA HẮN
+POST  /reset    { t: '…', matKhauMoi: '…' }          → mọi phiên bị thu hồi
 
 <span class="tok-comment">// Chủ nhân thật giờ: không đăng nhập được, không đặt lại được (địa chỉ đã đổi),</span>
 <span class="tok-comment">// và không có lá thư nào báo cho họ biết. Ba request. Không cần biết mật khẩu.</span></code></pre>

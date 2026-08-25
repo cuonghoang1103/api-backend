@@ -676,7 +676,7 @@ if (++trangThai.sai &gt;= 3) { await huy(phienId); await canhBao(nd, 'push.sai_s
 
 <h3>The shape: act first, wait, come back</h3>
 <pre><code><span class="tok-comment">// Bước 1 — kẻ tấn công đăng ký bằng email của NẠN NHÂN, hôm nay.</span>
-POST /dang-ky { email: 'nan-nhan@congty.com', matKhau: '<span class="tok-comment">…của hắn…</span>' }
+POST /sign-up { email: 'nan-nhan@congty.com', matKhau: '<span class="tok-comment">…của hắn…</span>' }
 
 <span class="tok-comment">// Bước 2 — chờ. Vài tuần, vài tháng. Không làm gì cả.</span>
 
@@ -758,7 +758,7 @@ if (kq.count === 0) throw new Error('khong hop le');   <span class="tok-comment"
 
 <h3>Hình dạng chung: ra tay trước, chờ, rồi quay lại</h3>
 <pre><code><span class="tok-comment">// Bước 1 — kẻ tấn công đăng ký bằng email của NẠN NHÂN, hôm nay.</span>
-POST /dang-ky { email: 'nan-nhan@congty.com', matKhau: '<span class="tok-comment">…của hắn…</span>' }
+POST /sign-up { email: 'nan-nhan@congty.com', matKhau: '<span class="tok-comment">…của hắn…</span>' }
 
 <span class="tok-comment">// Bước 2 — chờ. Vài tuần, vài tháng. Không làm gì cả.</span>
 

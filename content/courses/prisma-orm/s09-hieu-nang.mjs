@@ -29,24 +29,24 @@ export default {
   log: [{ emit: 'event', level: 'query' }],
 });
 
-const nhatKy: { sql: string; params: string; ms: number }[] = [];
+const log: { sql: string; params: string; ms: number }[] = [];
 
 prisma.$on('query', (e) =&gt; {
-  nhatKy.push({ sql: e.query, params: e.params, ms: e.duration });
+  log.push({ sql: e.query, params: e.params, ms: e.duration });
 });
 
 <span class="tok-comment">// Wrap a single request and report what it cost</span>
-export function batDau() {
-  const tu = nhatKy.length;
+export function start() {
+  const from = log.length;
   return () =&gt; {
-    const cua = nhatKy.slice(tu);
-    const tong = cua.reduce((s, q) =&gt; s + q.ms, 0);
-    return { so: cua.length, tongMs: tong, cauTruyVan: cua };
+    const cua = log.slice(from);
+    const total = cua.reduce((s, q) =&gt; s + q.ms, 0);
+    return { count: cua.length, totalMs: total, queryText: cua };
   };
 }</code></pre>
-<pre><code>const xong = batDau();
-await layTrangChu(userId);
-console.log(xong());</code></pre>
+<pre><code>const done = start();
+await getHomePage(userId);
+console.log(done());</code></pre>
 <div class="out">{
   so: 47,
   tongMs: 812,
@@ -57,23 +57,23 @@ console.log(xong());</code></pre>
 </div>
 
 <h3>Step 2 — rank by total time, not by slowest</h3>
-<pre><code>function xepHang(cua: { sql: string; ms: number }[]) {
-  const nhom = new Map&lt;string, { so: number; tong: number; max: number }&gt;();
+<pre><code>function rank(cua: { sql: string; ms: number }[]) {
+  const groups = new Map&lt;string, { count: number; total: number; max: number }&gt;();
 
   for (const q of cua) {
     <span class="tok-comment">// normalise: collapse the parameter placeholders so repeats group together</span>
     const khuon = q.sql.replace(/\\$\\d+/g, '?').replace(/\\s+/g, ' ');
-    const n = nhom.get(khuon) ?? { so: 0, tong: 0, max: 0 };
-    n.so++; n.tong += q.ms; n.max = Math.max(n.max, q.ms);
-    nhom.set(khuon, n);
+    const n = groups.get(khuon) ?? { count: 0, total: 0, max: 0 };
+    n.count++; n.total += q.ms; n.max = Math.max(n.max, q.ms);
+    groups.set(khuon, n);
   }
 
-  return [...nhom.entries()]
+  return [...groups.entries()]
     .map(([sql, n]) =&gt; ({ sql: sql.slice(0, 90), ...n }))
-    .sort((a, b) =&gt; b.tong - a.tong);
+    .sort((a, b) =&gt; b.total - a.total);
 }
 
-console.table(xepHang(xong().cauTruyVan));</code></pre>
+console.table(rank(done().queryText));</code></pre>
 <div class="out">┌─────────┬────────────────────────────────────────────────────┬─────┬───────┬──────┐
 │ (index) │ sql                                                │ so  │ tong  │ max  │
 ├─────────┼────────────────────────────────────────────────────┼─────┼───────┼──────┤
@@ -91,7 +91,7 @@ console.table(xepHang(xong().cauTruyVan));</code></pre>
 
 <h3>Step 3 — reconstruct the real SQL</h3>
 <pre><code><span class="tok-comment">// Prisma logs the SQL and the params separately. Put them back together.</span>
-function dungLai(sql: string, params: string): string {
+function stop(sql: string, params: string): string {
   const p: unknown[] = JSON.parse(params);
   return sql.replace(/\\$(\\d+)/g, (_, i) =&gt; {
     const v = p[Number(i) - 1];
@@ -101,8 +101,8 @@ function dungLai(sql: string, params: string): string {
   });
 }
 
-const chamNhat = xong().cauTruyVan.sort((a, b) =&gt; b.ms - a.ms)[0];
-console.log('EXPLAIN ANALYZE ' + dungLai(chamNhat.sql, chamNhat.params) + ';');</code></pre>
+const chamNhat = done().queryText.sort((a, b) =&gt; b.ms - a.ms)[0];
+console.log('EXPLAIN ANALYZE ' + stop(chamNhat.sql, chamNhat.params) + ';');</code></pre>
 <div class="out">EXPLAIN ANALYZE SELECT "public"."posts"."id", "public"."posts"."title", ...
 FROM "public"."posts"
 WHERE ("public"."posts"."published" = true AND "public"."posts"."title"::text ILIKE '%prisma%')
@@ -153,16 +153,16 @@ Execution Time: 4.281 ms
 
 <h3>The three numbers to watch</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Queries per request</span><span class="lz-lnote">Should be a small constant — under ten for most pages. If it grows with the number of items on the page, that is an N+1 and it is the highest-value thing to fix. Assert on it in tests: <code>expect(so).toBeLessThan(10)</code>.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Queries per request</span><span class="lz-lnote">Should be a small constant — under ten for most pages. If it grows with the number of items on the page, that is an N+1 and it is the highest-value thing to fix. Assert on it in tests: <code>expect(count).toBeLessThan(10)</code>.</span></div>
   <div class="lz-layer"><span class="lz-lname">Total query time per request</span><span class="lz-lnote">The database's share of your latency. If it is 40 ms of a 900 ms request, the database is not your problem and further optimisation there is wasted effort.</span></div>
   <div class="lz-layer"><span class="lz-lname">Rows read versus rows returned</span><span class="lz-lnote">From <code>EXPLAIN</code>. Four hundred thousand read to return twenty is the signature of a missing index. Twenty read to return twenty is optimal and there is nothing left to do.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Make it a test, so a regression is caught before review</span>
-test('trang chu khong bi N+1', async () =&gt; {
-  const xong = batDau();
-  await layTrangChu(1);
-  const { so } = xong();
-  expect(so).toBeLessThanOrEqual(6);
+test('page chu khong bi N+1', async () =&gt; {
+  const done = start();
+  await getHomePage(1);
+  const { count } = done();
+  expect(count).toBeLessThanOrEqual(6);
 });</code></pre>
 <div class="callout">
 <p><strong>A query-count assertion is the cheapest performance test there is.</strong> It runs in milliseconds, needs no load generator, and catches the exact regression that matters: someone adds an <code>include</code> inside a loop, or removes one from a query, and the count jumps from six to sixty. Latency tests are noisy and slow; a count is deterministic. Put one on every page that renders a list.</p>
@@ -203,24 +203,24 @@ LIMIT 10;</code></pre>
   log: [{ emit: 'event', level: 'query' }],
 });
 
-const nhatKy: { sql: string; params: string; ms: number }[] = [];
+const log: { sql: string; params: string; ms: number }[] = [];
 
 prisma.$on('query', (e) =&gt; {
-  nhatKy.push({ sql: e.query, params: e.params, ms: e.duration });
+  log.push({ sql: e.query, params: e.params, ms: e.duration });
 });
 
 <span class="tok-comment">// Bọc một yêu cầu và báo lại nó tốn bao nhiêu</span>
-export function batDau() {
-  const tu = nhatKy.length;
+export function start() {
+  const from = log.length;
   return () =&gt; {
-    const cua = nhatKy.slice(tu);
-    const tong = cua.reduce((s, q) =&gt; s + q.ms, 0);
-    return { so: cua.length, tongMs: tong, cauTruyVan: cua };
+    const cua = log.slice(from);
+    const total = cua.reduce((s, q) =&gt; s + q.ms, 0);
+    return { count: cua.length, totalMs: total, queryText: cua };
   };
 }</code></pre>
-<pre><code>const xong = batDau();
-await layTrangChu(userId);
-console.log(xong());</code></pre>
+<pre><code>const done = start();
+await getHomePage(userId);
+console.log(done());</code></pre>
 <div class="out">{
   so: 47,
   tongMs: 812,
@@ -231,23 +231,23 @@ console.log(xong());</code></pre>
 </div>
 
 <h3>Bước 2 — xếp hạng theo tổng thời gian, không theo cái chậm nhất</h3>
-<pre><code>function xepHang(cua: { sql: string; ms: number }[]) {
-  const nhom = new Map&lt;string, { so: number; tong: number; max: number }&gt;();
+<pre><code>function rank(cua: { sql: string; ms: number }[]) {
+  const groups = new Map&lt;string, { count: number; total: number; max: number }&gt;();
 
   for (const q of cua) {
     <span class="tok-comment">// chuẩn hoá: gộp các chỗ giữ tham số lại để các lần lặp gom về một nhóm</span>
     const khuon = q.sql.replace(/\\$\\d+/g, '?').replace(/\\s+/g, ' ');
-    const n = nhom.get(khuon) ?? { so: 0, tong: 0, max: 0 };
-    n.so++; n.tong += q.ms; n.max = Math.max(n.max, q.ms);
-    nhom.set(khuon, n);
+    const n = groups.get(khuon) ?? { count: 0, total: 0, max: 0 };
+    n.count++; n.total += q.ms; n.max = Math.max(n.max, q.ms);
+    groups.set(khuon, n);
   }
 
-  return [...nhom.entries()]
+  return [...groups.entries()]
     .map(([sql, n]) =&gt; ({ sql: sql.slice(0, 90), ...n }))
-    .sort((a, b) =&gt; b.tong - a.tong);
+    .sort((a, b) =&gt; b.total - a.total);
 }
 
-console.table(xepHang(xong().cauTruyVan));</code></pre>
+console.table(rank(done().queryText));</code></pre>
 <div class="out">┌─────────┬────────────────────────────────────────────────────┬─────┬───────┬──────┐
 │ (index) │ sql                                                │ so  │ tong  │ max  │
 ├─────────┼────────────────────────────────────────────────────┼─────┼───────┼──────┤
@@ -265,7 +265,7 @@ console.table(xepHang(xong().cauTruyVan));</code></pre>
 
 <h3>Bước 3 — dựng lại đúng câu SQL thật</h3>
 <pre><code><span class="tok-comment">// Prisma ghi log SQL và tham số riêng ra. Hãy ghép chúng lại.</span>
-function dungLai(sql: string, params: string): string {
+function stop(sql: string, params: string): string {
   const p: unknown[] = JSON.parse(params);
   return sql.replace(/\\$(\\d+)/g, (_, i) =&gt; {
     const v = p[Number(i) - 1];
@@ -275,8 +275,8 @@ function dungLai(sql: string, params: string): string {
   });
 }
 
-const chamNhat = xong().cauTruyVan.sort((a, b) =&gt; b.ms - a.ms)[0];
-console.log('EXPLAIN ANALYZE ' + dungLai(chamNhat.sql, chamNhat.params) + ';');</code></pre>
+const chamNhat = done().queryText.sort((a, b) =&gt; b.ms - a.ms)[0];
+console.log('EXPLAIN ANALYZE ' + stop(chamNhat.sql, chamNhat.params) + ';');</code></pre>
 <div class="out">EXPLAIN ANALYZE SELECT "public"."posts"."id", "public"."posts"."title", ...
 FROM "public"."posts"
 WHERE ("public"."posts"."published" = true AND "public"."posts"."title"::text ILIKE '%prisma%')
@@ -327,16 +327,16 @@ Execution Time: 4.281 ms
 
 <h3>Ba con số cần canh</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Số truy vấn trên mỗi yêu cầu</span><span class="lz-lnote">Phải là một hằng số nhỏ — dưới mười với phần lớn trang. Nếu nó tăng theo số phần tử trên trang thì đó là một N+1 và là thứ đáng vá nhất. Hãy khẳng định nó trong bài kiểm: <code>expect(so).toBeLessThan(10)</code>.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Số truy vấn trên mỗi yêu cầu</span><span class="lz-lnote">Phải là một hằng số nhỏ — dưới mười với phần lớn trang. Nếu nó tăng theo số phần tử trên trang thì đó là một N+1 và là thứ đáng vá nhất. Hãy khẳng định nó trong bài kiểm: <code>expect(count).toBeLessThan(10)</code>.</span></div>
   <div class="lz-layer"><span class="lz-lname">Tổng thời gian truy vấn trên mỗi yêu cầu</span><span class="lz-lnote">Phần cơ sở dữ liệu chiếm trong độ trễ của bạn. Nếu nó là 40 ms trong một yêu cầu 900 ms thì cơ sở dữ liệu không phải vấn đề của bạn, và tối ưu thêm ở đó là công sức phí phạm.</span></div>
   <div class="lz-layer"><span class="lz-lname">Số hàng đọc so với số hàng trả về</span><span class="lz-lnote">Lấy từ <code>EXPLAIN</code>. Đọc bốn trăm nghìn để trả hai mươi là chữ ký của một chỉ mục còn thiếu. Đọc hai mươi để trả hai mươi là tối ưu và không còn gì để làm.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Biến nó thành một bài kiểm, để một lần thụt lùi bị bắt trước khi review</span>
-test('trang chu khong bi N+1', async () =&gt; {
-  const xong = batDau();
-  await layTrangChu(1);
-  const { so } = xong();
-  expect(so).toBeLessThanOrEqual(6);
+test('page chu khong bi N+1', async () =&gt; {
+  const done = start();
+  await getHomePage(1);
+  const { count } = done();
+  expect(count).toBeLessThanOrEqual(6);
 });</code></pre>
 <div class="callout">
 <p><strong>Một phép khẳng định về số truy vấn là bài kiểm hiệu năng rẻ nhất từng có.</strong> Nó chạy trong vài mili giây, không cần bộ tạo tải, và bắt đúng cái thụt lùi quan trọng: có người thêm một <code>include</code> vào trong một vòng lặp, hoặc bỏ một cái ra khỏi truy vấn, và con số nhảy từ sáu lên sáu mươi. Bài kiểm độ trễ thì nhiễu và chậm; một con số đếm thì tất định. Hãy đặt một cái lên mọi trang có vẽ danh sách.</p>
@@ -383,31 +383,31 @@ LIMIT 10;</code></pre>
 
 <h3>Form 1 — the explicit loop</h3>
 <pre><code><span class="tok-comment">// The obvious one. Everybody writes it once.</span>
-const bai = await prisma.post.findMany({ take: 40 });
-for (const b of bai) {
-  const tacGia = await prisma.user.findUnique({ where: { id: b.authorId } });
-  render(b, tacGia);
+const post = await prisma.post.findMany({ take: 40 });
+for (const b of post) {
+  const author = await prisma.user.findUnique({ where: { id: b.authorId } });
+  render(b, author);
 }</code></pre>
 <div class="out">41 queries · 402 ms total · 14 ms each</div>
 <pre><code><span class="tok-comment">// Fix: ask for the relation with the parent</span>
-const bai = await prisma.post.findMany({ take: 40, include: { author: true } });</code></pre>
+const post = await prisma.post.findMany({ take: 40, include: { author: true } });</code></pre>
 <div class="out">2 queries · 18 ms total</div>
 
 <h3>Form 2 — the loop hidden in a helper</h3>
 <pre><code><span class="tok-comment">// The helper is fine. Calling it in a map is not.</span>
-async function demBinhLuan(postId: number) {
+async function countComments(postId: number) {
   return prisma.comment.count({ where: { postId } });
 }
 
-const bai = await prisma.post.findMany({ take: 40 });
-const kq = await Promise.all(
-  bai.map(async (b) =&gt; ({ ...b, so: await demBinhLuan(b.id) })),
+const post = await prisma.post.findMany({ take: 40 });
+const result = await Promise.all(
+  post.map(async (b) =&gt; ({ ...b, count: await countComments(b.id) })),
 );</code></pre>
 <div class="out">41 queries · 128 ms total
 -- Promise.all makes them concurrent, which hides it: the wall clock looks acceptable
 -- while the database does forty-one times the work and holds forty-one connections</div>
 <pre><code><span class="tok-comment">// Fix: _count, which is one correlated subquery (Lesson 4.2)</span>
-const bai = await prisma.post.findMany({
+const post = await prisma.post.findMany({
   take: 40,
   include: { _count: { select: { comments: true } } },
 });</code></pre>
@@ -417,7 +417,7 @@ const bai = await prisma.post.findMany({
 </div>
 
 <h3>Form 3 — the nested <code>include</code> that fans out</h3>
-<pre><code>const nguoiDung = await prisma.user.findMany({
+<pre><code>const user = await prisma.user.findMany({
   take: 20,
   include: {
     posts: {
@@ -436,7 +436,7 @@ prisma:query SELECT ... FROM "users" WHERE "id" IN ($1…$1204)                 
 <p><strong>This is not N+1 — it is four queries — and it is still the problem.</strong> Prisma batched perfectly; the cost is that each level multiplies the row count, and the fourth query alone returns 1,204 full user rows. The ranking table from Lesson 9.1 shows this as one slow query rather than many fast ones, which is why <em>rows transferred</em> is the third number to watch. The fix is not batching; it is asking for less.</p>
 </div>
 <pre><code><span class="tok-comment">// Fix: the page renders 20 cards, so fetch what 20 cards need</span>
-const nguoiDung = await prisma.user.findMany({
+const user = await prisma.user.findMany({
   take: 20,
   select: {
     id: true,
@@ -454,23 +454,23 @@ const nguoiDung = await prisma.user.findMany({
 
 <h3>Form 4 — the loop in the caller</h3>
 <pre><code><span class="tok-comment">// The service is correct in isolation. The route is what creates the N+1.</span>
-class BaiVietService {
-  async layTheoId(id: number) {
+class PostService {
+  async getById(id: number) {
     return prisma.post.findUniqueOrThrow({ where: { id }, include: { author: true } });
   }
 }
 
 <span class="tok-comment">// somewhere else, months later</span>
-const kq = await Promise.all(ids.map((id) =&gt; svc.layTheoId(id)));</code></pre>
+const result = await Promise.all(ids.map((id) =&gt; svc.getById(id)));</code></pre>
 <pre><code><span class="tok-comment">// Fix: give the service a batch method, and use it</span>
-class BaiVietService {
-  async layTheoIds(ids: number[]) {
+class PostService {
+  async getByIds(ids: number[]) {
     return prisma.post.findMany({ where: { id: { in: ids } }, include: { author: true } });
   }
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">This is the one that survives review</span><span class="v">Both files look reasonable. The N+1 exists only in the combination, so it is invisible in a diff and only shows up in the query log — which is the argument for the query-count test from Lesson 9.1.</span></div>
-  <div class="kv"><span class="k">Every single-id method wants a plural sibling</span><span class="v">If <code>layTheoId</code> exists, someone will eventually map over it. Providing <code>layTheoIds</code> means the correct thing is also the convenient thing.</span></div>
+  <div class="kv"><span class="k">Every single-id method wants a plural sibling</span><span class="v">If <code>getById</code> exists, someone will eventually map over it. Providing <code>getByIds</code> means the correct thing is also the convenient thing.</span></div>
   <div class="kv"><span class="k">Or a DataLoader</span><span class="v">In GraphQL this is what <code>dataloader</code> exists for: it collects the individual calls within a tick and issues one <code>IN</code> query. Worth it when the call sites genuinely cannot be batched by hand.</span></div>
 </div>
 
@@ -579,31 +579,31 @@ await prisma.$transaction([
 
 <h3>Dạng 1 — vòng lặp tường minh</h3>
 <pre><code><span class="tok-comment">// Dạng hiển nhiên. Ai cũng viết nó một lần trong đời.</span>
-const bai = await prisma.post.findMany({ take: 40 });
-for (const b of bai) {
-  const tacGia = await prisma.user.findUnique({ where: { id: b.authorId } });
-  render(b, tacGia);
+const post = await prisma.post.findMany({ take: 40 });
+for (const b of post) {
+  const author = await prisma.user.findUnique({ where: { id: b.authorId } });
+  render(b, author);
 }</code></pre>
 <div class="out">41 truy vấn · tổng 402 ms · mỗi lần 14 ms</div>
 <pre><code><span class="tok-comment">// Vá: xin luôn quan hệ cùng với cha</span>
-const bai = await prisma.post.findMany({ take: 40, include: { author: true } });</code></pre>
+const post = await prisma.post.findMany({ take: 40, include: { author: true } });</code></pre>
 <div class="out">2 truy vấn · tổng 18 ms</div>
 
 <h3>Dạng 2 — vòng lặp giấu trong một hàm phụ</h3>
 <pre><code><span class="tok-comment">// Cái hàm phụ thì ổn. Gọi nó trong một map thì không.</span>
-async function demBinhLuan(postId: number) {
+async function countComments(postId: number) {
   return prisma.comment.count({ where: { postId } });
 }
 
-const bai = await prisma.post.findMany({ take: 40 });
-const kq = await Promise.all(
-  bai.map(async (b) =&gt; ({ ...b, so: await demBinhLuan(b.id) })),
+const post = await prisma.post.findMany({ take: 40 });
+const result = await Promise.all(
+  post.map(async (b) =&gt; ({ ...b, count: await countComments(b.id) })),
 );</code></pre>
 <div class="out">41 truy vấn · tổng 128 ms
 -- Promise.all làm chúng chạy song song, và điều đó giấu vấn đề đi: đồng hồ trông chấp nhận được
 -- trong khi cơ sở dữ liệu làm gấp bốn mươi mốt lần công việc và giữ bốn mươi mốt kết nối</div>
 <pre><code><span class="tok-comment">// Vá: _count, tức một truy vấn con tương quan (Bài 4.2)</span>
-const bai = await prisma.post.findMany({
+const post = await prisma.post.findMany({
   take: 40,
   include: { _count: { select: { comments: true } } },
 });</code></pre>
@@ -613,7 +613,7 @@ const bai = await prisma.post.findMany({
 </div>
 
 <h3>Dạng 3 — <code>include</code> lồng nhau nở bung ra</h3>
-<pre><code>const nguoiDung = await prisma.user.findMany({
+<pre><code>const user = await prisma.user.findMany({
   take: 20,
   include: {
     posts: {
@@ -632,7 +632,7 @@ prisma:query SELECT ... FROM "users" WHERE "id" IN ($1…$1204)                 
 <p><strong>Đây không phải N+1 — nó là bốn câu truy vấn — và nó vẫn là vấn đề.</strong> Prisma đã gom lô hoàn hảo; cái giá là mỗi tầng nhân số hàng lên, và riêng câu thứ tư trả về 1.204 hàng người dùng đầy đủ. Bảng xếp hạng ở Bài 9.1 hiện chuyện này thành một câu truy vấn chậm chứ không phải nhiều câu nhanh, và vì thế <em>số hàng truyền đi</em> mới là con số thứ ba cần canh. Cách vá không phải gom lô; mà là xin ít lại.</p>
 </div>
 <pre><code><span class="tok-comment">// Vá: trang vẽ 20 cái thẻ, vậy hãy lấy đúng thứ 20 cái thẻ cần</span>
-const nguoiDung = await prisma.user.findMany({
+const user = await prisma.user.findMany({
   take: 20,
   select: {
     id: true,
@@ -650,23 +650,23 @@ const nguoiDung = await prisma.user.findMany({
 
 <h3>Dạng 4 — vòng lặp nằm ở bên gọi</h3>
 <pre><code><span class="tok-comment">// Cái service tự nó đúng. Chính cái route mới tạo ra N+1.</span>
-class BaiVietService {
-  async layTheoId(id: number) {
+class PostService {
+  async getById(id: number) {
     return prisma.post.findUniqueOrThrow({ where: { id }, include: { author: true } });
   }
 }
 
 <span class="tok-comment">// ở một chỗ khác, vài tháng sau</span>
-const kq = await Promise.all(ids.map((id) =&gt; svc.layTheoId(id)));</code></pre>
+const result = await Promise.all(ids.map((id) =&gt; svc.getById(id)));</code></pre>
 <pre><code><span class="tok-comment">// Vá: cho service một phương thức nhận lô, và dùng nó</span>
-class BaiVietService {
-  async layTheoIds(ids: number[]) {
+class PostService {
+  async getByIds(ids: number[]) {
     return prisma.post.findMany({ where: { id: { in: ids } }, include: { author: true } });
   }
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Đây là dạng sống sót qua review</span><span class="v">Cả hai tệp đều trông hợp lý. N+1 chỉ tồn tại trong sự kết hợp, nên nó vô hình trong một bản diff và chỉ lộ ra trong log truy vấn — và đó là lý lẽ cho bài kiểm đếm truy vấn ở Bài 9.1.</span></div>
-  <div class="kv"><span class="k">Mọi phương thức nhận một id đều muốn có một người anh em số nhiều</span><span class="v">Nếu <code>layTheoId</code> tồn tại thì rốt cuộc sẽ có người map lên nó. Cung cấp sẵn <code>layTheoIds</code> nghĩa là thứ đúng đắn cũng là thứ tiện tay.</span></div>
+  <div class="kv"><span class="k">Mọi phương thức nhận một id đều muốn có một người anh em số nhiều</span><span class="v">Nếu <code>getById</code> tồn tại thì rốt cuộc sẽ có người map lên nó. Cung cấp sẵn <code>getByIds</code> nghĩa là thứ đúng đắn cũng là thứ tiện tay.</span></div>
   <div class="kv"><span class="k">Hoặc một DataLoader</span><span class="v">Trong GraphQL thì <code>dataloader</code> tồn tại đúng vì chuyện này: nó gom các lời gọi lẻ trong cùng một tick rồi bắn một câu <code>IN</code>. Đáng dùng khi các chỗ gọi thật sự không gom lô bằng tay được.</span></div>
 </div>
 
@@ -818,7 +818,7 @@ Execution Time: 0.118 ms</div>
 <h3>The foreign key nobody indexed</h3>
 <pre><code><span class="tok-comment">-- Find every foreign key with no index on the referencing column</span>
 SELECT c.conrelid::regclass AS bang,
-       a.attname            AS cot,
+       a.attname            AS column,
        c.conname            AS rang_buoc
 FROM pg_constraint c
 JOIN pg_attribute  a ON a.attrelid = c.conrelid AND a.attnum = ANY(c.conkey)
@@ -989,7 +989,7 @@ Execution Time: 0.118 ms</div>
 <h3>Cái khoá ngoại không ai đánh chỉ mục</h3>
 <pre><code><span class="tok-comment">-- Tìm mọi khoá ngoại không có chỉ mục trên cột tham chiếu</span>
 SELECT c.conrelid::regclass AS bang,
-       a.attname            AS cot,
+       a.attname            AS column,
        c.conname            AS rang_buoc
 FROM pg_constraint c
 JOIN pg_attribute  a ON a.attrelid = c.conrelid AND a.attnum = ANY(c.conkey)
@@ -1179,12 +1179,12 @@ DATABASE_URL="postgresql://u:p@host:5432/db?connection_limit=12&amp;pool_timeout
 <h3>Measure it</h3>
 <pre><code><span class="tok-comment">-- Who is connected, and what are they doing?</span>
 SELECT state,
-       count(*) AS so,
+       count(*) AS count,
        max(now() - state_change)::interval(0) AS lau_nhat
 FROM pg_stat_activity
 WHERE datname = current_database()
 GROUP BY state
-ORDER BY so DESC;</code></pre>
+ORDER BY count DESC;</code></pre>
 <div class="out">        state        | so |  lau_nhat
 ---------------------+----+-----------
  idle                | 61 | 00:14:22
@@ -1307,12 +1307,12 @@ DATABASE_URL="postgresql://u:p@host:5432/db?connection_limit=12&amp;pool_timeout
 <h3>Đo nó</h3>
 <pre><code><span class="tok-comment">-- Ai đang nối, và họ đang làm gì?</span>
 SELECT state,
-       count(*) AS so,
+       count(*) AS count,
        max(now() - state_change)::interval(0) AS lau_nhat
 FROM pg_stat_activity
 WHERE datname = current_database()
 GROUP BY state
-ORDER BY so DESC;</code></pre>
+ORDER BY count DESC;</code></pre>
 <div class="out">        state        | so |  lau_nhat
 ---------------------+----+-----------
  idle                | 61 | 00:14:22
@@ -1437,7 +1437,7 @@ select: {...}   → 20 rows,   47 KB transferred,   6.9 ms
 
 <h3>2. Offset pagination dies at page 500</h3>
 <pre><code><span class="tok-comment">// The obvious pagination</span>
-const trang = await prisma.socialPost.findMany({
+const page = await prisma.socialPost.findMany({
   orderBy: { createdAt: 'desc' },
   skip: (page - 1) * 20,
   take: 20,
@@ -1452,13 +1452,13 @@ OFFSET 200000 → Limit … actual time=0.031..1873. rows=20  loops=1  1874.2 ms
 <p><strong>Trap — <code>OFFSET n</code> reads and throws away <code>n</code> rows.</strong> The database has no way to jump to row 200,000 of an ordered result; it produces them in order and discards the first 200,000. The cost is linear in the page number, so the page nobody visits is the one that ties up a connection for two seconds. Worse, it is <em>unstable</em>: a row inserted while a user pages through shifts everything down, so they see one row twice and never see another.</p>
 </div>
 <pre><code><span class="tok-comment">// Cursor pagination — constant cost, and stable</span>
-const trang = await prisma.socialPost.findMany({
+const page = await prisma.socialPost.findMany({
   orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],   <span class="tok-comment">// tie-break: createdAt is not unique</span>
   cursor: cursorId ? { id: cursorId } : undefined,
   skip: cursorId ? 1 : 0,                             <span class="tok-comment">// skip the cursor row itself</span>
   take: 20,
 });
-const tiepTheo = trang.length === 20 ? trang[19].id : null;</code></pre>
+const tiepTheo = page.length === 20 ? page[19].id : null;</code></pre>
 <div class="out">cursor at row      0  →  0.5 ms
 cursor at row  10000  →  0.6 ms
 cursor at row 200000  →  0.5 ms
@@ -1473,7 +1473,7 @@ cursor at row 200000  →  0.5 ms
 
 <h3>3. <code>count()</code> is a sequential scan</h3>
 <pre><code><span class="tok-comment">// "1,247,891 posts" in the header</span>
-const tong = await prisma.socialPost.count();</code></pre>
+const total = await prisma.socialPost.count();</code></pre>
 <div class="out">EXPLAIN ANALYZE SELECT count(*) FROM "SocialPost";
 
  Finalize Aggregate  (cost=…) (actual time=1204.8..1204.8 rows=1)
@@ -1503,16 +1503,16 @@ const [{ uoc_luong }] = await prisma.$queryRaw&lt;{ uoc_luong: bigint }[]&gt;&#9
 
 <h3>4. Batch the writes</h3>
 <pre><code><span class="tok-comment">// A loop of awaits: 500 round trips</span>
-for (const d of duLieu) {
+for (const d of payload) {
   await prisma.notification.create({ data: d });
 }</code></pre>
 <pre><code><span class="tok-comment">// createMany: one statement</span>
-await prisma.notification.createMany({ data: duLieu, skipDuplicates: true });
+await prisma.notification.createMany({ data: payload, skipDuplicates: true });
 
 <span class="tok-comment">// $transaction with an array: one round trip, one transaction,</span>
 <span class="tok-comment">// for operations that createMany cannot express</span>
 await prisma.$transaction(
-  duLieu.map((d) =&gt; prisma.notification.upsert({
+  payload.map((d) =&gt; prisma.notification.upsert({
     where: { uk_thong_bao: { userId: d.userId, key: d.key } },
     create: d,
     update: { seenAt: null },
@@ -1532,22 +1532,22 @@ Same 500 rows. 127x between the ends.</div>
 
 <h3>5. The cache, and the only honest invalidation rule</h3>
 <pre><code><span class="tok-comment">// Read-through: ask the cache, fall back to Prisma, store the answer</span>
-async function layHoSo(userId: string) {
-  const khoa = &#96;ho-so:\${userId}&#96;;
-  const daCo = await redis.get(khoa);
+async function getProfile(userId: string) {
+  const key = &#96;ho-count:\${userId}&#96;;
+  const daCo = await redis.get(key);
   if (daCo) return JSON.parse(daCo);
 
   const hoSo = await prisma.user.findUnique({
     where: { id: userId },
     select: { id: true, username: true, avatarUrl: true, bio: true },
   });
-  if (hoSo) await redis.set(khoa, JSON.stringify(hoSo), 'EX', 300);
+  if (hoSo) await redis.set(key, JSON.stringify(hoSo), 'EX', 300);
   return hoSo;
 }</code></pre>
 <pre><code><span class="tok-comment">// Every write path must delete the key. Every one.</span>
-async function capNhatHoSo(userId: string, data: CapNhatHoSo) {
+async function updateProfile(userId: string, data: CapNhatHoSo) {
   const hoSo = await prisma.user.update({ where: { id: userId }, data });
-  await redis.del(&#96;ho-so:\${userId}&#96;);      <span class="tok-comment">// delete, do not overwrite</span>
+  await redis.del(&#96;ho-count:\${userId}&#96;);      <span class="tok-comment">// delete, do not overwrite</span>
   return hoSo;
 }</code></pre>
 <div class="lz-map">
@@ -1639,7 +1639,7 @@ select: {...}   → 20 hang,   47 KB truyen,   6.9 ms
 
 <h3>2. Phân trang bằng offset chết ở trang 500</h3>
 <pre><code><span class="tok-comment">// Cách phân trang ai cũng nghĩ ra đầu tiên</span>
-const trang = await prisma.socialPost.findMany({
+const page = await prisma.socialPost.findMany({
   orderBy: { createdAt: 'desc' },
   skip: (page - 1) * 20,
   take: 20,
@@ -1654,13 +1654,13 @@ OFFSET 200000 → Limit … actual time=0.031..1873. rows=20  loops=1  1874.2 ms
 <p><strong>Bẫy — <code>OFFSET n</code> ĐỌC rồi VỨT ĐI <code>n</code> hàng.</strong> Cơ sở dữ liệu không có cách nào nhảy thẳng tới hàng thứ 200.000 của một kết quả đã sắp xếp; nó sinh ra chúng theo thứ tự rồi bỏ 200.000 cái đầu. Chi phí tuyến tính theo số trang, nên cái trang không ai vào lại chính là cái giữ một kết nối suốt hai giây. Tệ hơn, nó KHÔNG ỔN ĐỊNH: một hàng chèn vào trong lúc người dùng đang lật trang sẽ đẩy mọi thứ xuống, nên họ thấy một hàng hai lần và không bao giờ thấy một hàng khác.</p>
 </div>
 <pre><code><span class="tok-comment">// Phân trang bằng con trỏ — chi phí hằng số, và ổn định</span>
-const trang = await prisma.socialPost.findMany({
+const page = await prisma.socialPost.findMany({
   orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],   <span class="tok-comment">// phá hoà: createdAt không duy nhất</span>
   cursor: cursorId ? { id: cursorId } : undefined,
   skip: cursorId ? 1 : 0,                             <span class="tok-comment">// bỏ chính hàng con trỏ</span>
   take: 20,
 });
-const tiepTheo = trang.length === 20 ? trang[19].id : null;</code></pre>
+const tiepTheo = page.length === 20 ? page[19].id : null;</code></pre>
 <div class="out">con tro o hang      0  →  0.5 ms
 con tro o hang  10000  →  0.6 ms
 con tro o hang 200000  →  0.5 ms
@@ -1675,7 +1675,7 @@ con tro o hang 200000  →  0.5 ms
 
 <h3>3. <code>count()</code> là một cú quét tuần tự</h3>
 <pre><code><span class="tok-comment">// "1.247.891 bài viết" trên đầu trang</span>
-const tong = await prisma.socialPost.count();</code></pre>
+const total = await prisma.socialPost.count();</code></pre>
 <div class="out">EXPLAIN ANALYZE SELECT count(*) FROM "SocialPost";
 
  Finalize Aggregate  (cost=…) (actual time=1204.8..1204.8 rows=1)
@@ -1705,16 +1705,16 @@ const [{ uoc_luong }] = await prisma.$queryRaw&lt;{ uoc_luong: bigint }[]&gt;&#9
 
 <h3>4. Gộp các lệnh ghi</h3>
 <pre><code><span class="tok-comment">// Vòng lặp await: 500 lượt đi về</span>
-for (const d of duLieu) {
+for (const d of payload) {
   await prisma.notification.create({ data: d });
 }</code></pre>
 <pre><code><span class="tok-comment">// createMany: một câu lệnh</span>
-await prisma.notification.createMany({ data: duLieu, skipDuplicates: true });
+await prisma.notification.createMany({ data: payload, skipDuplicates: true });
 
 <span class="tok-comment">// $transaction dạng mảng: một lượt đi về, một giao dịch,</span>
 <span class="tok-comment">// cho những thao tác mà createMany không diễn đạt nổi</span>
 await prisma.$transaction(
-  duLieu.map((d) =&gt; prisma.notification.upsert({
+  payload.map((d) =&gt; prisma.notification.upsert({
     where: { uk_thong_bao: { userId: d.userId, key: d.key } },
     create: d,
     update: { seenAt: null },
@@ -1734,22 +1734,22 @@ Cung 500 hang. Chenh 127 lan giua hai dau.</div>
 
 <h3>5. Cache, và luật vô hiệu hoá trung thực DUY NHẤT</h3>
 <pre><code><span class="tok-comment">// Đọc xuyên qua: hỏi cache, hụt thì hỏi Prisma, rồi cất câu trả lời</span>
-async function layHoSo(userId: string) {
-  const khoa = &#96;ho-so:\${userId}&#96;;
-  const daCo = await redis.get(khoa);
+async function getProfile(userId: string) {
+  const key = &#96;ho-count:\${userId}&#96;;
+  const daCo = await redis.get(key);
   if (daCo) return JSON.parse(daCo);
 
   const hoSo = await prisma.user.findUnique({
     where: { id: userId },
     select: { id: true, username: true, avatarUrl: true, bio: true },
   });
-  if (hoSo) await redis.set(khoa, JSON.stringify(hoSo), 'EX', 300);
+  if (hoSo) await redis.set(key, JSON.stringify(hoSo), 'EX', 300);
   return hoSo;
 }</code></pre>
 <pre><code><span class="tok-comment">// MỌI đường ghi phải XOÁ khoá. Mọi đường.</span>
-async function capNhatHoSo(userId: string, data: CapNhatHoSo) {
+async function updateProfile(userId: string, data: CapNhatHoSo) {
   const hoSo = await prisma.user.update({ where: { id: userId }, data });
-  await redis.del(&#96;ho-so:\${userId}&#96;);      <span class="tok-comment">// XOÁ, đừng ghi đè</span>
+  await redis.del(&#96;ho-count:\${userId}&#96;);      <span class="tok-comment">// XOÁ, đừng ghi đè</span>
   return hoSo;
 }</code></pre>
 <div class="lz-map">

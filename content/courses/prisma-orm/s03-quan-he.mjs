@@ -29,7 +29,7 @@ export default {
   id    Int    @id @default(autoincrement())
   email String @unique
 
-  posts Post[]                      <span class="tok-comment">// ③ back-relation — NO column exists for this</span>
+  posts Post[] <span class="tok-comment">// ③ back-relation — NO column exists for this</span>
 
   @@map("users")
 }
@@ -52,8 +52,8 @@ model Post {
 
 <h3>The error you will meet on your first relation</h3>
 <pre><code><span class="tok-comment">// Post declares the relation; User says nothing back</span>
-model User { id Int @id @default(autoincrement()) }
-model Post {
+model User { id       Int  @id @default(autoincrement()) }
+model    Post {
   id       Int  @id @default(autoincrement())
   authorId Int
   author   User @relation(fields: [authorId], references: [id])
@@ -139,7 +139,7 @@ COMMIT</div>
 
 <h3>The one thing the database does not know</h3>
 <pre><code><span class="tok-comment">// Prisma sees a relation. PostgreSQL sees a constraint.</span>
-docker exec -it pg-hoc psql -U hocvien -d hocprisma -c "\\d posts"</code></pre>
+docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d posts"</code></pre>
 <div class="out">Indexes:
     "posts_pkey" PRIMARY KEY, btree (id)
     "posts_author_id_idx" btree (author_id)
@@ -164,7 +164,7 @@ Foreign-key constraints:
   id    Int    @id @default(autoincrement())
   email String @unique
 
-  posts Post[]                      <span class="tok-comment">// ③ quan hệ ngược — KHÔNG có cột nào cho nó cả</span>
+  posts Post[] <span class="tok-comment">// ③ quan hệ ngược — KHÔNG có cột nào cho nó cả</span>
 
   @@map("users")
 }
@@ -187,8 +187,8 @@ model Post {
 
 <h3>Lỗi bạn sẽ gặp ở quan hệ đầu tiên của mình</h3>
 <pre><code><span class="tok-comment">// Post khai quan hệ; User không nói lại gì</span>
-model User { id Int @id @default(autoincrement()) }
-model Post {
+model User { id       Int  @id @default(autoincrement()) }
+model    Post {
   id       Int  @id @default(autoincrement())
   authorId Int
   author   User @relation(fields: [authorId], references: [id])
@@ -274,7 +274,7 @@ COMMIT</div>
 
 <h3>Điều duy nhất cơ sở dữ liệu không biết</h3>
 <pre><code><span class="tok-comment">// Prisma nhìn thấy một quan hệ. PostgreSQL nhìn thấy một ràng buộc.</span>
-docker exec -it pg-hoc psql -U hocvien -d hocprisma -c "\\d posts"</code></pre>
+docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d posts"</code></pre>
 <div class="out">Indexes:
     "posts_pkey" PRIMARY KEY, btree (id)
     "posts_author_id_idx" btree (author_id)
@@ -305,12 +305,12 @@ Foreign-key constraints:
 
 <h3>Required or optional — the choice that shapes your code</h3>
 <pre><code>model Post {
-  id       Int   @id @default(autoincrement())
-  title    String
+  id         Int       @id @default(autoincrement())
+  title      String
 
   <span class="tok-comment">// REQUIRED: every post must have an author</span>
-  authorId Int   @map("author_id")
-  author   User  @relation(fields: [authorId], references: [id])
+  authorId   Int       @map("author_id")
+  author     User      @relation(fields: [authorId], references: [id])
 
   <span class="tok-comment">// OPTIONAL: a post may or may not be in a category</span>
   categoryId Int?      @map("category_id")
@@ -444,12 +444,12 @@ prisma:query COMMIT</div>
 
 <h3>Bắt buộc hay tuỳ chọn — lựa chọn định hình mã của bạn</h3>
 <pre><code>model Post {
-  id       Int   @id @default(autoincrement())
-  title    String
+  id         Int       @id @default(autoincrement())
+  title      String
 
   <span class="tok-comment">// BẮT BUỘC: mọi bài viết đều phải có tác giả</span>
-  authorId Int   @map("author_id")
-  author   User  @relation(fields: [authorId], references: [id])
+  authorId   Int       @map("author_id")
+  author     User      @relation(fields: [authorId], references: [id])
 
   <span class="tok-comment">// TUỲ CHỌN: một bài viết có thể thuộc hoặc không thuộc chuyên mục nào</span>
   categoryId Int?      @map("category_id")
@@ -595,7 +595,7 @@ prisma:query COMMIT</div>
   id      Int      @id @default(autoincrement())
   email   String   @unique
 
-  profile Profile?                       <span class="tok-comment">// back-relation, always optional</span>
+  profile Profile? <span class="tok-comment">// back-relation, always optional</span>
 
   @@map("users")
 }
@@ -605,8 +605,8 @@ model Profile {
   bio    String?
   avatar String? @db.VarChar(500)
 
-  userId Int  @unique @map("user_id")     <span class="tok-comment">// @unique is what makes it one-to-one</span>
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int     @unique @map("user_id")     <span class="tok-comment">// @unique is what makes it one-to-one</span>
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("profiles")
 }</code></pre>
@@ -633,7 +633,7 @@ model User {
   profile   Profile @relation(fields: [profileId], references: [id])
 }
 model Profile {
-  id   Int   @id @default(autoincrement())
+  id   Int     @id @default(autoincrement())
   bio  String?
   user User?
 }</code></pre>
@@ -716,9 +716,9 @@ const p = await prisma.user.findUnique({ where: { id: 1 } }).profile();</code></
 <h3>The other one-to-one: sharing a primary key</h3>
 <pre><code><span class="tok-comment">// The Profile's id IS the User's id — no separate key, no separate sequence</span>
 model Profile {
-  id   Int    @id                         <span class="tok-comment">// no @default — it comes from User</span>
+  id   Int     @id                         <span class="tok-comment">// no @default — it comes from User</span>
   bio  String?
-  user User   @relation(fields: [id], references: [id], onDelete: Cascade)
+  user User    @relation(fields: [id], references: [id], onDelete: Cascade)
 
   @@map("profiles")
 }</code></pre>
@@ -745,7 +745,7 @@ model Profile {
   id      Int      @id @default(autoincrement())
   email   String   @unique
 
-  profile Profile?                       <span class="tok-comment">// quan hệ ngược, luôn tuỳ chọn</span>
+  profile Profile? <span class="tok-comment">// quan hệ ngược, luôn tuỳ chọn</span>
 
   @@map("users")
 }
@@ -755,8 +755,8 @@ model Profile {
   bio    String?
   avatar String? @db.VarChar(500)
 
-  userId Int  @unique @map("user_id")     <span class="tok-comment">// @unique là thứ biến nó thành một–một</span>
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int     @unique @map("user_id")     <span class="tok-comment">// @unique là thứ biến nó thành một–một</span>
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("profiles")
 }</code></pre>
@@ -783,7 +783,7 @@ model User {
   profile   Profile @relation(fields: [profileId], references: [id])
 }
 model Profile {
-  id   Int   @id @default(autoincrement())
+  id   Int     @id @default(autoincrement())
   bio  String?
   user User?
 }</code></pre>
@@ -866,9 +866,9 @@ const p = await prisma.user.findUnique({ where: { id: 1 } }).profile();</code></
 <h3>Dạng một–một còn lại: dùng chung khoá chính</h3>
 <pre><code><span class="tok-comment">// id của Profile CHÍNH LÀ id của User — không khoá riêng, không sequence riêng</span>
 model Profile {
-  id   Int    @id                         <span class="tok-comment">// không @default — nó đến từ User</span>
+  id   Int     @id                         <span class="tok-comment">// không @default — nó đến từ User</span>
   bio  String?
-  user User   @relation(fields: [id], references: [id], onDelete: Cascade)
+  user User    @relation(fields: [id], references: [id], onDelete: Cascade)
 
   @@map("profiles")
 }</code></pre>
@@ -903,16 +903,16 @@ model Profile {
 <pre><code>model Post {
   id         Int        @id @default(autoincrement())
   title      String
-  categories Category[]              <span class="tok-comment">// that is all</span>
+  categories Category[] <span class="tok-comment">// that is all</span>
 }
 
 model Category {
   id    Int    @id @default(autoincrement())
   name  String @unique
-  posts Post[]                       <span class="tok-comment">// and that</span>
+  posts Post[] <span class="tok-comment">// and that</span>
 }</code></pre>
 <pre><code>npx prisma migrate dev --name nhieu_nhieu_an
-docker exec -it pg-hoc psql -U hocvien -d hocprisma -c "\\d \\"_CategoryToPost\\""</code></pre>
+docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"_CategoryToPost\\""</code></pre>
 <div class="out">           Table "public._CategoryToPost"
  Column |  Type   | Nullable | Default
 --------+---------+----------+---------
@@ -978,12 +978,12 @@ model PostCategory {
   categoryId Int      @map("category_id")
 
   <span class="tok-comment">// The reason to do this at all: the join carries data</span>
-  ganLuc     DateTime @default(now()) @map("gan_luc")
-  nguoiGanId Int?     @map("nguoi_gan_id")
-  laChinh    Boolean  @default(false) @map("la_chinh")
+  attachedAt DateTime @default(now()) @map("gan_luc")
+  assignerId Int?     @map("nguoi_gan_id")
+  isPrimary  Boolean  @default(false) @map("la_chinh")
 
-  post     Post     @relation(fields: [postId],     references: [id], onDelete: Cascade)
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  post       Post     @relation(fields: [postId],     references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
 
   @@id([postId, categoryId])
   @@index([categoryId])
@@ -1001,7 +1001,7 @@ await prisma.post.create({
     title: 'Bai moi',
     categories: {
       create: [
-        { category: { connect: { id: 1 } }, laChinh: true },
+        { category: { connect: { id: 1 } }, isPrimary: true },
         { category: { connect: { id: 2 } } },
       ],
     },
@@ -1011,12 +1011,12 @@ await prisma.post.create({
 <span class="tok-comment">// Reading: two levels of nesting instead of one</span>
 const p = await prisma.post.findUniqueOrThrow({
   where: { id: 1 },
-  include: { categories: { include: { category: true }, orderBy: { ganLuc: 'asc' } } },
+  include: { categories: { include: { category: true }, orderBy: { attachedAt: 'asc' } } },
 });
 console.log(p.categories.map((c) =&gt; c.category.name));
 
 <span class="tok-comment">// And the thing implicit cannot do at all: query the link itself</span>
-const thongKe = await prisma.postCategory.groupBy({
+const stats = await prisma.postCategory.groupBy({
   by: ['categoryId'],
   _count: { _all: true },
   orderBy: { _count: { categoryId: 'desc' } },
@@ -1096,16 +1096,16 @@ SELECT (SELECT count(*) FROM "_CategoryToPost") AS cu,
 <pre><code>model Post {
   id         Int        @id @default(autoincrement())
   title      String
-  categories Category[]              <span class="tok-comment">// chỉ vậy thôi</span>
+  categories Category[] <span class="tok-comment">// chỉ vậy thôi</span>
 }
 
 model Category {
   id    Int    @id @default(autoincrement())
   name  String @unique
-  posts Post[]                       <span class="tok-comment">// và vậy</span>
+  posts Post[] <span class="tok-comment">// và vậy</span>
 }</code></pre>
 <pre><code>npx prisma migrate dev --name nhieu_nhieu_an
-docker exec -it pg-hoc psql -U hocvien -d hocprisma -c "\\d \\"_CategoryToPost\\""</code></pre>
+docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"_CategoryToPost\\""</code></pre>
 <div class="out">           Table "public._CategoryToPost"
  Column |  Type   | Nullable | Default
 --------+---------+----------+---------
@@ -1171,12 +1171,12 @@ model PostCategory {
   categoryId Int      @map("category_id")
 
   <span class="tok-comment">// Lý do làm chuyện này ngay từ đầu: mối nối mang theo dữ liệu</span>
-  ganLuc     DateTime @default(now()) @map("gan_luc")
-  nguoiGanId Int?     @map("nguoi_gan_id")
-  laChinh    Boolean  @default(false) @map("la_chinh")
+  attachedAt DateTime @default(now()) @map("gan_luc")
+  assignerId Int?     @map("nguoi_gan_id")
+  isPrimary  Boolean  @default(false) @map("la_chinh")
 
-  post     Post     @relation(fields: [postId],     references: [id], onDelete: Cascade)
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  post       Post     @relation(fields: [postId],     references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
 
   @@id([postId, categoryId])
   @@index([categoryId])
@@ -1194,7 +1194,7 @@ await prisma.post.create({
     title: 'Bai moi',
     categories: {
       create: [
-        { category: { connect: { id: 1 } }, laChinh: true },
+        { category: { connect: { id: 1 } }, isPrimary: true },
         { category: { connect: { id: 2 } } },
       ],
     },
@@ -1204,12 +1204,12 @@ await prisma.post.create({
 <span class="tok-comment">// Đọc: hai tầng lồng thay vì một</span>
 const p = await prisma.post.findUniqueOrThrow({
   where: { id: 1 },
-  include: { categories: { include: { category: true }, orderBy: { ganLuc: 'asc' } } },
+  include: { categories: { include: { category: true }, orderBy: { attachedAt: 'asc' } } },
 });
 console.log(p.categories.map((c) =&gt; c.category.name));
 
 <span class="tok-comment">// Và điều dạng ẩn hoàn toàn không làm được: truy vấn chính mối nối</span>
-const thongKe = await prisma.postCategory.groupBy({
+const stats = await prisma.postCategory.groupBy({
   by: ['categoryId'],
   _count: { _all: true },
   orderBy: { _count: { categoryId: 'desc' } },
@@ -1296,9 +1296,9 @@ SELECT (SELECT count(*) FROM "_CategoryToPost") AS cu,
 
 <h3>Self-relation, one-to-many: a comment tree</h3>
 <pre><code>model Comment {
-  id      Int     @id @default(autoincrement())
-  body    String
-  postId  Int     @map("post_id")
+  id       Int       @id @default(autoincrement())
+  body     String
+  postId   Int       @map("post_id")
 
   parentId Int?      @map("parent_id")
   parent   Comment?  @relation("TraLoi", fields: [parentId], references: [id], onDelete: Cascade)
@@ -1331,20 +1331,20 @@ prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2,$3,$4,$5,$6,
 <pre><code><span class="tok-comment">// A recursive CTE: the whole subtree, any depth, in ONE query</span>
 type Node = { id: number; body: string; parentId: number | null; depth: number; path: number[] };
 
-const cay = await prisma.$queryRaw&lt;Node[]&gt;&#96;
-  WITH RECURSIVE cay AS (
+const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
+  WITH RECURSIVE tree AS (
     SELECT id, body, parent_id AS "parentId", 0 AS depth, ARRAY[id] AS path
     FROM comments
     WHERE post_id = \${postId} AND parent_id IS NULL
 
     UNION ALL
 
-    SELECT c.id, c.body, c.parent_id, cay.depth + 1, cay.path || c.id
+    SELECT c.id, c.body, c.parent_id, tree.depth + 1, tree.path || c.id
     FROM comments c
-    JOIN cay ON c.parent_id = cay.id
-    WHERE cay.depth &lt; 10
+    JOIN tree ON c.parent_id = tree.id
+    WHERE tree.depth &lt; 10
   )
-  SELECT * FROM cay ORDER BY path&#96;;</code></pre>
+  SELECT * FROM tree ORDER BY path&#96;;</code></pre>
 <div class="out">[
   { id: 1,  body: 'Bai hay',        parentId: null, depth: 0, path: [1] },
   { id: 4,  body: 'Dong y',         parentId: 1,    depth: 1, path: [1, 4] },
@@ -1353,18 +1353,18 @@ const cay = await prisma.$queryRaw&lt;Node[]&gt;&#96;
   { id: 2,  body: 'Chua thuyet phuc', parentId: null, depth: 0, path: [2] }
 ]</div>
 <div class="callout ok">
-<p><strong>Three details make that query production-ready.</strong> <code>ORDER BY path</code> returns the rows already in display order, so the client renders them without sorting. <code>depth</code> gives you the indentation for free. And <code>WHERE cay.depth &lt; 10</code> is a hard stop: a cycle in the data — which a bug or a bad import can create — would otherwise loop forever and take the connection with it. Always bound a recursive CTE.</p>
+<p><strong>Three details make that query production-ready.</strong> <code>ORDER BY path</code> returns the rows already in display order, so the client renders them without sorting. <code>depth</code> gives you the indentation for free. And <code>WHERE tree.depth &lt; 10</code> is a hard stop: a cycle in the data — which a bug or a bad import can create — would otherwise loop forever and take the connection with it. Always bound a recursive CTE.</p>
 </div>
 
 <h3>Self-relation, one-to-one: the manager chain</h3>
-<pre><code>model NhanVien {
-  id       Int    @id @default(autoincrement())
-  ten      String
+<pre><code>model Employee {
+  id       Int       @id @default(autoincrement())
+  name     String
 
   <span class="tok-comment">// Each employee has at most one direct report — a strict chain</span>
-  capTrenId Int?      @unique @map("cap_tren_id")
-  capTren   NhanVien? @relation("ChuoiQuanLy", fields: [capTrenId], references: [id])
-  capDuoi   NhanVien? @relation("ChuoiQuanLy")
+  parentId Int?      @unique @map("cap_tren_id")
+  capTren  Employee? @relation("ChuoiQuanLy", fields: [parentId], references: [id])
+  capDuoi  Employee? @relation("ChuoiQuanLy")
 
   @@map("nhan_vien")
 }</code></pre>
@@ -1372,11 +1372,11 @@ const cay = await prisma.$queryRaw&lt;Node[]&gt;&#96;
 
 <h3>Self-relation, many-to-many: following</h3>
 <pre><code>model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
+  id           Int    @id @default(autoincrement())
+  username     String @unique
 
   <span class="tok-comment">// Implicit, if the follow carries no data</span>
-  dangTheoDoi User[] @relation("TheoDoi")
+  dangTheoDoi  User[] @relation("TheoDoi")
   nguoiTheoDoi User[] @relation("TheoDoi")
 }</code></pre>
 <pre><code><span class="tok-comment">// Explicit, once you want to know WHEN — which you always eventually do</span>
@@ -1388,21 +1388,21 @@ model User {
 }
 
 model Follow {
-  nguoiTheoDoiId    Int      @map("nguoi_theo_doi_id")
-  nguoiDuocTheoDoiId Int     @map("nguoi_duoc_theo_doi_id")
-  taoLuc            DateTime @default(now()) @map("tao_luc") @db.Timestamptz(3)
+  followerId       Int      @map("nguoi_theo_doi_id")
+  followingId      Int      @map("nguoi_duoc_theo_doi_id")
+  createdAt        DateTime @default(now()) @map("tao_luc") @db.Timestamptz(3)
 
-  nguoiTheoDoi     User @relation("NguoiTheoDoi",     fields: [nguoiTheoDoiId],     references: [id], onDelete: Cascade)
-  nguoiDuocTheoDoi User @relation("NguoiDuocTheoDoi", fields: [nguoiDuocTheoDoiId], references: [id], onDelete: Cascade)
+  nguoiTheoDoi     User     @relation("NguoiTheoDoi",     fields: [followerId],     references: [id], onDelete: Cascade)
+  nguoiDuocTheoDoi User     @relation("NguoiDuocTheoDoi", fields: [followingId], references: [id], onDelete: Cascade)
 
-  @@id([nguoiTheoDoiId, nguoiDuocTheoDoiId])
-  @@index([nguoiDuocTheoDoiId])
+  @@id([followerId, followingId])
+  @@index([followingId])
   @@map("follow")
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Two relation names, not one</span><span class="v">The explicit form has <em>two</em> separate relations from <code>Follow</code> to <code>User</code>, so each needs its own name. Reusing one name here is the most common error in this shape.</span></div>
-  <div class="kv"><span class="k">The composite id prevents duplicates</span><span class="v"><code>@@id([nguoiTheoDoiId, nguoiDuocTheoDoiId])</code> makes following someone twice structurally impossible — better than checking in application code, which races.</span></div>
-  <div class="kv"><span class="k">Index the reverse direction</span><span class="v">The primary key indexes <code>(follower, followee)</code>, which serves "who do I follow". "Who follows me" needs <code>@@index([nguoiDuocTheoDoiId])</code> or it scans.</span></div>
+  <div class="kv"><span class="k">The composite id prevents duplicates</span><span class="v"><code>@@id([followerId, followingId])</code> makes following someone twice structurally impossible — better than checking in application code, which races.</span></div>
+  <div class="kv"><span class="k">Index the reverse direction</span><span class="v">The primary key indexes <code>(follower, followee)</code>, which serves "who do I follow". "Who follows me" needs <code>@@index([followingId])</code> or it scans.</span></div>
   <div class="kv"><span class="k">What it still cannot stop</span><span class="v">Following yourself. No schema constraint expresses that in Prisma — it needs a database <code>CHECK</code> constraint added by hand, or a check in your service layer.</span></div>
 </div>
 <pre><code><span class="tok-comment">-- The CHECK Prisma cannot declare, added in a hand-written migration</span>
@@ -1414,22 +1414,22 @@ ALTER TABLE "follow" ADD CONSTRAINT "follow_khong_tu_theo_doi"
   id       Int    @id @default(autoincrement())
   username String @unique
 
-  daViet    Post[] @relation("TacGia")
-  daDuyet   Post[] @relation("NguoiDuyet")
+  daViet   Post[] @relation("TacGia")
+  daDuyet  Post[] @relation("NguoiDuyet")
 }
 
 model Post {
-  id     Int    @id @default(autoincrement())
-  title  String
+  id         Int    @id @default(autoincrement())
+  title      String
 
-  tacGiaId     Int   @map("tac_gia_id")
-  tacGia       User  @relation("TacGia", fields: [tacGiaId], references: [id])
+  authorId   Int    @map("tac_gia_id")
+  author     User   @relation("TacGia", fields: [authorId], references: [id])
 
-  nguoiDuyetId Int?  @map("nguoi_duyet_id")
-  nguoiDuyet   User? @relation("NguoiDuyet", fields: [nguoiDuyetId], references: [id], onDelete: SetNull)
+  approverId Int?   @map("nguoi_duyet_id")
+  nguoiDuyet User?  @relation("NguoiDuyet", fields: [approverId], references: [id], onDelete: SetNull)
 
-  @@index([tacGiaId])
-  @@index([nguoiDuyetId])
+  @@index([authorId])
+  @@index([approverId])
 }</code></pre>
 <pre><code><span class="tok-comment">// Remove the names and see what Prisma says</span>
 npx prisma validate</code></pre>
@@ -1466,9 +1466,9 @@ categories Category[] @relation("PhanLoai")</code></pre>
 
 <h3>Tự quan hệ, một–nhiều: cây bình luận</h3>
 <pre><code>model Comment {
-  id      Int     @id @default(autoincrement())
-  body    String
-  postId  Int     @map("post_id")
+  id       Int       @id @default(autoincrement())
+  body     String
+  postId   Int       @map("post_id")
 
   parentId Int?      @map("parent_id")
   parent   Comment?  @relation("TraLoi", fields: [parentId], references: [id], onDelete: Cascade)
@@ -1501,20 +1501,20 @@ prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2,$3,$4,$5,$6,
 <pre><code><span class="tok-comment">// Một CTE đệ quy: cả cây con, sâu bao nhiêu cũng được, trong MỘT câu truy vấn</span>
 type Node = { id: number; body: string; parentId: number | null; depth: number; path: number[] };
 
-const cay = await prisma.$queryRaw&lt;Node[]&gt;&#96;
-  WITH RECURSIVE cay AS (
+const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
+  WITH RECURSIVE tree AS (
     SELECT id, body, parent_id AS "parentId", 0 AS depth, ARRAY[id] AS path
     FROM comments
     WHERE post_id = \${postId} AND parent_id IS NULL
 
     UNION ALL
 
-    SELECT c.id, c.body, c.parent_id, cay.depth + 1, cay.path || c.id
+    SELECT c.id, c.body, c.parent_id, tree.depth + 1, tree.path || c.id
     FROM comments c
-    JOIN cay ON c.parent_id = cay.id
-    WHERE cay.depth &lt; 10
+    JOIN tree ON c.parent_id = tree.id
+    WHERE tree.depth &lt; 10
   )
-  SELECT * FROM cay ORDER BY path&#96;;</code></pre>
+  SELECT * FROM tree ORDER BY path&#96;;</code></pre>
 <div class="out">[
   { id: 1,  body: 'Bai hay',        parentId: null, depth: 0, path: [1] },
   { id: 4,  body: 'Dong y',         parentId: 1,    depth: 1, path: [1, 4] },
@@ -1523,18 +1523,18 @@ const cay = await prisma.$queryRaw&lt;Node[]&gt;&#96;
   { id: 2,  body: 'Chua thuyet phuc', parentId: null, depth: 0, path: [2] }
 ]</div>
 <div class="callout ok">
-<p><strong>Ba chi tiết khiến câu truy vấn ấy dùng được trên production.</strong> <code>ORDER BY path</code> trả về các hàng đã đúng thứ tự hiển thị, nên phía client vẽ ra mà không cần sắp lại. <code>depth</code> cho bạn mức thụt lề miễn phí. Còn <code>WHERE cay.depth &lt; 10</code> là một cái phanh cứng: một chu trình trong dữ liệu — thứ mà một con bọ hay một lần nhập dữ liệu hỏng có thể tạo ra — nếu không sẽ lặp vô tận và kéo theo cả cái kết nối. Luôn chặn biên cho một CTE đệ quy.</p>
+<p><strong>Ba chi tiết khiến câu truy vấn ấy dùng được trên production.</strong> <code>ORDER BY path</code> trả về các hàng đã đúng thứ tự hiển thị, nên phía client vẽ ra mà không cần sắp lại. <code>depth</code> cho bạn mức thụt lề miễn phí. Còn <code>WHERE tree.depth &lt; 10</code> là một cái phanh cứng: một chu trình trong dữ liệu — thứ mà một con bọ hay một lần nhập dữ liệu hỏng có thể tạo ra — nếu không sẽ lặp vô tận và kéo theo cả cái kết nối. Luôn chặn biên cho một CTE đệ quy.</p>
 </div>
 
 <h3>Tự quan hệ, một–một: chuỗi quản lý</h3>
-<pre><code>model NhanVien {
-  id       Int    @id @default(autoincrement())
-  ten      String
+<pre><code>model Employee {
+  id       Int       @id @default(autoincrement())
+  name     String
 
   <span class="tok-comment">// Mỗi người có nhiều nhất một cấp dưới trực tiếp — một chuỗi thẳng</span>
-  capTrenId Int?      @unique @map("cap_tren_id")
-  capTren   NhanVien? @relation("ChuoiQuanLy", fields: [capTrenId], references: [id])
-  capDuoi   NhanVien? @relation("ChuoiQuanLy")
+  parentId Int?      @unique @map("cap_tren_id")
+  capTren  Employee? @relation("ChuoiQuanLy", fields: [parentId], references: [id])
+  capDuoi  Employee? @relation("ChuoiQuanLy")
 
   @@map("nhan_vien")
 }</code></pre>
@@ -1542,11 +1542,11 @@ const cay = await prisma.$queryRaw&lt;Node[]&gt;&#96;
 
 <h3>Tự quan hệ, nhiều–nhiều: theo dõi</h3>
 <pre><code>model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
+  id           Int    @id @default(autoincrement())
+  username     String @unique
 
   <span class="tok-comment">// Dạng ẩn, nếu mối theo dõi không mang dữ liệu gì</span>
-  dangTheoDoi User[] @relation("TheoDoi")
+  dangTheoDoi  User[] @relation("TheoDoi")
   nguoiTheoDoi User[] @relation("TheoDoi")
 }</code></pre>
 <pre><code><span class="tok-comment">// Dạng tường minh, khi bạn muốn biết LÚC NÀO — và bao giờ bạn cũng sẽ muốn</span>
@@ -1558,21 +1558,21 @@ model User {
 }
 
 model Follow {
-  nguoiTheoDoiId    Int      @map("nguoi_theo_doi_id")
-  nguoiDuocTheoDoiId Int     @map("nguoi_duoc_theo_doi_id")
-  taoLuc            DateTime @default(now()) @map("tao_luc") @db.Timestamptz(3)
+  followerId       Int      @map("nguoi_theo_doi_id")
+  followingId      Int      @map("nguoi_duoc_theo_doi_id")
+  createdAt        DateTime @default(now()) @map("tao_luc") @db.Timestamptz(3)
 
-  nguoiTheoDoi     User @relation("NguoiTheoDoi",     fields: [nguoiTheoDoiId],     references: [id], onDelete: Cascade)
-  nguoiDuocTheoDoi User @relation("NguoiDuocTheoDoi", fields: [nguoiDuocTheoDoiId], references: [id], onDelete: Cascade)
+  nguoiTheoDoi     User     @relation("NguoiTheoDoi",     fields: [followerId],     references: [id], onDelete: Cascade)
+  nguoiDuocTheoDoi User     @relation("NguoiDuocTheoDoi", fields: [followingId], references: [id], onDelete: Cascade)
 
-  @@id([nguoiTheoDoiId, nguoiDuocTheoDoiId])
-  @@index([nguoiDuocTheoDoiId])
+  @@id([followerId, followingId])
+  @@index([followingId])
   @@map("follow")
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Hai tên quan hệ, không phải một</span><span class="v">Dạng tường minh có <em>hai</em> quan hệ riêng biệt từ <code>Follow</code> tới <code>User</code>, nên mỗi cái cần một tên riêng. Dùng lại một tên ở đây là lỗi phổ biến nhất của hình dạng này.</span></div>
-  <div class="kv"><span class="k">Khoá phức hợp chặn bản trùng</span><span class="v"><code>@@id([nguoiTheoDoiId, nguoiDuocTheoDoiId])</code> khiến việc theo dõi ai đó hai lần là bất khả về cấu trúc — tốt hơn hẳn việc kiểm trong mã ứng dụng, vốn có tranh chấp.</span></div>
-  <div class="kv"><span class="k">Đánh chỉ mục cho chiều ngược</span><span class="v">Khoá chính đánh chỉ mục <code>(người theo dõi, người được theo dõi)</code>, phục vụ câu "tôi đang theo dõi ai". Câu "ai đang theo dõi tôi" cần <code>@@index([nguoiDuocTheoDoiId])</code> nếu không nó quét.</span></div>
+  <div class="kv"><span class="k">Khoá phức hợp chặn bản trùng</span><span class="v"><code>@@id([followerId, followingId])</code> khiến việc theo dõi ai đó hai lần là bất khả về cấu trúc — tốt hơn hẳn việc kiểm trong mã ứng dụng, vốn có tranh chấp.</span></div>
+  <div class="kv"><span class="k">Đánh chỉ mục cho chiều ngược</span><span class="v">Khoá chính đánh chỉ mục <code>(người theo dõi, người được theo dõi)</code>, phục vụ câu "tôi đang theo dõi ai". Câu "ai đang theo dõi tôi" cần <code>@@index([followingId])</code> nếu không nó quét.</span></div>
   <div class="kv"><span class="k">Thứ nó vẫn không chặn được</span><span class="v">Tự theo dõi chính mình. Không ràng buộc nào trong lược đồ Prisma diễn đạt được điều đó — nó cần một ràng buộc <code>CHECK</code> của cơ sở dữ liệu thêm bằng tay, hoặc một phép kiểm trong tầng dịch vụ của bạn.</span></div>
 </div>
 <pre><code><span class="tok-comment">-- Cái CHECK mà Prisma không khai được, thêm trong một migration viết tay</span>
@@ -1584,22 +1584,22 @@ ALTER TABLE "follow" ADD CONSTRAINT "follow_khong_tu_theo_doi"
   id       Int    @id @default(autoincrement())
   username String @unique
 
-  daViet    Post[] @relation("TacGia")
-  daDuyet   Post[] @relation("NguoiDuyet")
+  daViet   Post[] @relation("TacGia")
+  daDuyet  Post[] @relation("NguoiDuyet")
 }
 
 model Post {
-  id     Int    @id @default(autoincrement())
-  title  String
+  id         Int    @id @default(autoincrement())
+  title      String
 
-  tacGiaId     Int   @map("tac_gia_id")
-  tacGia       User  @relation("TacGia", fields: [tacGiaId], references: [id])
+  authorId   Int    @map("tac_gia_id")
+  author     User   @relation("TacGia", fields: [authorId], references: [id])
 
-  nguoiDuyetId Int?  @map("nguoi_duyet_id")
-  nguoiDuyet   User? @relation("NguoiDuyet", fields: [nguoiDuyetId], references: [id], onDelete: SetNull)
+  approverId Int?   @map("nguoi_duyet_id")
+  nguoiDuyet User?  @relation("NguoiDuyet", fields: [approverId], references: [id], onDelete: SetNull)
 
-  @@index([tacGiaId])
-  @@index([nguoiDuyetId])
+  @@index([authorId])
+  @@index([approverId])
 }</code></pre>
 <pre><code><span class="tok-comment">// Bỏ hai cái tên đi rồi xem Prisma nói gì</span>
 npx prisma validate</code></pre>

@@ -53,7 +53,7 @@ export default {
 </div>
 
 <h3>Why <code>findUnique</code> refuses your filter</h3>
-<pre><code>await prisma.post.findUnique({ where: { title: 'Bai dau tien' } });</code></pre>
+<pre><code>await prisma.post.findUnique({ where: { title: 'Bai dau money' } });</code></pre>
 <div class="out">TypeScript error:
 Object literal may only specify known properties, and 'title' does not exist in type 'PostWhereUniqueInput'.</div>
 <pre><code><span class="tok-comment">// The where type is generated from the model's unique constraints only:</span>
@@ -66,7 +66,7 @@ export type PostWhereUniqueInput =
 </div>
 <pre><code><span class="tok-comment">// Since Prisma 5, findUnique also accepts extra non-unique filters</span>
 <span class="tok-comment">// alongside the unique one — useful for authorisation checks</span>
-const bai = await prisma.post.findUnique({
+const post = await prisma.post.findUnique({
   where: { id: 42, authorId: currentUserId },   <span class="tok-comment">// id is unique; authorId narrows it</span>
 });</code></pre>
 <div class="out">prisma:query SELECT ... FROM "public"."posts" WHERE ("public"."posts"."id" = $1 AND "public"."posts"."author_id" = $2) LIMIT $3 OFFSET $4</div>
@@ -78,7 +78,7 @@ const u = await prisma.user.findUnique({ where: { email } });
 if (!u) return res.status(404).json({ error: 'Khong tim thay nguoi dung' });
 
 <span class="tok-comment">// Absence is a bug → throw, and let the error handler produce the 500</span>
-const cauHinh = await prisma.setting.findUniqueOrThrow({ where: { key: 'site_name' } });
+const config = await prisma.setting.findUniqueOrThrow({ where: { key: 'site_name' } });
 
 <span class="tok-comment">// The anti-pattern: pretending null cannot happen</span>
 const u2 = (await prisma.user.findUnique({ where: { email } }))!;
@@ -215,7 +215,7 @@ SELECT "public"."users"."id" FROM "public"."users" WHERE "public"."users"."email
 </div>
 
 <h3>Vì sao <code>findUnique</code> từ chối bộ lọc của bạn</h3>
-<pre><code>await prisma.post.findUnique({ where: { title: 'Bai dau tien' } });</code></pre>
+<pre><code>await prisma.post.findUnique({ where: { title: 'Bai dau money' } });</code></pre>
 <div class="out">TypeScript error:
 Object literal may only specify known properties, and 'title' does not exist in type 'PostWhereUniqueInput'.</div>
 <pre><code><span class="tok-comment">// Kiểu của where được sinh CHỈ từ các ràng buộc unique của model:</span>
@@ -228,7 +228,7 @@ export type PostWhereUniqueInput =
 </div>
 <pre><code><span class="tok-comment">// Từ Prisma 5, findUnique cũng nhận thêm các bộ lọc không-unique</span>
 <span class="tok-comment">// đi kèm cái unique — rất tiện cho phép kiểm quyền</span>
-const bai = await prisma.post.findUnique({
+const post = await prisma.post.findUnique({
   where: { id: 42, authorId: currentUserId },   <span class="tok-comment">// id là unique; authorId thu hẹp thêm</span>
 });</code></pre>
 <div class="out">prisma:query SELECT ... FROM "public"."posts" WHERE ("public"."posts"."id" = $1 AND "public"."posts"."author_id" = $2) LIMIT $3 OFFSET $4</div>
@@ -240,7 +240,7 @@ const u = await prisma.user.findUnique({ where: { email } });
 if (!u) return res.status(404).json({ error: 'Khong tim thay nguoi dung' });
 
 <span class="tok-comment">// Vắng mặt là một con bọ → ném lỗi, để bộ xử lý lỗi sinh ra mã 500</span>
-const cauHinh = await prisma.setting.findUniqueOrThrow({ where: { key: 'site_name' } });
+const config = await prisma.setting.findUniqueOrThrow({ where: { key: 'site_name' } });
 
 <span class="tok-comment">// Kiểu làm sai: giả vờ null không thể xảy ra</span>
 const u2 = (await prisma.user.findUnique({ where: { email } }))!;
@@ -417,7 +417,7 @@ const forLogin = await prisma.user.findUnique({
 </div>
 
 <h3>Nesting, as deep as you like</h3>
-<pre><code>const bai = await prisma.post.findUniqueOrThrow({
+<pre><code>const post = await prisma.post.findUniqueOrThrow({
   where: { id: 1 },
   select: {
     id: true,
@@ -505,21 +505,21 @@ const author = await prisma.comment.findUnique({ where: { id: 5 } }).post().auth
 <pre><code>import { Prisma } from '@prisma/client';
 
 <span class="tok-comment">// Define the selection once, as a value</span>
-const baiTomTat = {
+const postSummary = {
   id: true,
   title: true,
   author: { select: { username: true } },
 } satisfies Prisma.PostSelect;
 
 <span class="tok-comment">// Derive the type from it — never written by hand, never drifts</span>
-type BaiTomTat = Prisma.PostGetPayload&lt;{ select: typeof baiTomTat }&gt;;
+type PostSummary = Prisma.PostGetPayload&lt;{ select: typeof postSummary }&gt;;
 
 <span class="tok-comment">// Now the selection and its type travel together</span>
-async function layDanhSach(): Promise&lt;BaiTomTat[]&gt; {
-  return prisma.post.findMany({ select: baiTomTat, take: 20 });
+async function getList(): Promise&lt;PostSummary[]&gt; {
+  return prisma.post.findMany({ select: postSummary, take: 20 });
 }
 
-function render(b: BaiTomTat) {
+function render(b: PostSummary) {
   return &#96;\${b.title} — \${b.author.username}&#96;;
 }</code></pre>
 <div class="callout ok">
@@ -598,7 +598,7 @@ const forLogin = await prisma.user.findUnique({
 </div>
 
 <h3>Lồng nhau, sâu bao nhiêu tuỳ bạn</h3>
-<pre><code>const bai = await prisma.post.findUniqueOrThrow({
+<pre><code>const post = await prisma.post.findUniqueOrThrow({
   where: { id: 1 },
   select: {
     id: true,
@@ -686,21 +686,21 @@ const author = await prisma.comment.findUnique({ where: { id: 5 } }).post().auth
 <pre><code>import { Prisma } from '@prisma/client';
 
 <span class="tok-comment">// Định nghĩa phép chọn một lần, dưới dạng một giá trị</span>
-const baiTomTat = {
+const postSummary = {
   id: true,
   title: true,
   author: { select: { username: true } },
 } satisfies Prisma.PostSelect;
 
 <span class="tok-comment">// Suy ra kiểu từ nó — không bao giờ viết tay, không bao giờ trôi dạt</span>
-type BaiTomTat = Prisma.PostGetPayload&lt;{ select: typeof baiTomTat }&gt;;
+type PostSummary = Prisma.PostGetPayload&lt;{ select: typeof postSummary }&gt;;
 
 <span class="tok-comment">// Giờ phép chọn và kiểu của nó đi cùng nhau</span>
-async function layDanhSach(): Promise&lt;BaiTomTat[]&gt; {
-  return prisma.post.findMany({ select: baiTomTat, take: 20 });
+async function getList(): Promise&lt;PostSummary[]&gt; {
+  return prisma.post.findMany({ select: postSummary, take: 20 });
 }
 
-function render(b: BaiTomTat) {
+function render(b: PostSummary) {
   return &#96;\${b.title} — \${b.author.username}&#96;;
 }</code></pre>
 <div class="callout ok">
@@ -772,9 +772,9 @@ await prisma.post.create({
   data: {
     title: 'Bai moi',
     tags: {
-      connectOrCreate: ['nodejs', 'prisma', 'postgres'].map((ten) =&gt; ({
-        where:  { name: ten },
-        create: { name: ten },
+      connectOrCreate: ['nodejs', 'prisma', 'postgres'].map((name) =&gt; ({
+        where:  { name: name },
+        create: { name: name },
       })),
     },
   },
@@ -814,11 +814,11 @@ createMany: 486.331ms</div>
   <div class="kv"><span class="k">It is one statement, so it is atomic</span><span class="v">Without <code>skipDuplicates</code>, one bad row rolls back all ten thousand. That is usually correct for an import, and occasionally the thing that makes you validate before writing.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Prisma 5.14+: the rows come back, so you can use their ids</span>
-const bai = await prisma.post.createManyAndReturn({
+const post = await prisma.post.createManyAndReturn({
   data: [{ title: 'A', authorId: 1 }, { title: 'B', authorId: 1 }],
   select: { id: true, title: true },
 });
-console.log(bai);</code></pre>
+console.log(post);</code></pre>
 <div class="out">prisma:query INSERT INTO "posts" ("title","author_id") VALUES ($1,$2),($3,$4) RETURNING "id","title"
 
 [ { id: 101, title: 'A' }, { id: 102, title: 'B' } ]</div>
@@ -829,12 +829,12 @@ console.log(bai);</code></pre>
 <span class="tok-comment">// = 5,000 transactions, 15,000 inserts, about 40 seconds.</span>
 
 <span class="tok-comment">// Two statements instead:</span>
-const nguoiDung = await prisma.user.createManyAndReturn({
+const user = await prisma.user.createManyAndReturn({
   data: users.map((u) =&gt; ({ email: u.email, fullName: u.fullName })),
   select: { id: true, email: true },
 });
 
-const byEmail = new Map(nguoiDung.map((u) =&gt; [u.email, u.id]));
+const byEmail = new Map(user.map((u) =&gt; [u.email, u.id]));
 
 await prisma.post.createMany({
   data: users.flatMap((u) =&gt;
@@ -853,7 +853,7 @@ real    0m1.207s</div>
   await prisma.user.create({ data: { email: 'an@example.com' } });
 } catch (e) {
   if (e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp; e.code === 'P2002') {
-    console.log('Trung o cot:', e.meta?.target);
+    console.log('Trung o column:', e.meta?.target);
     return res.status(409).json({ error: 'Email da duoc dung' });
   }
   throw e;
@@ -877,7 +877,7 @@ model Post {
   createdAt DateTime @default(now())          <span class="tok-comment">// never passed by hand</span>
   updatedAt DateTime @updatedAt
 }</code></pre>
-<pre><code>await prisma.post.create({ data: { title: 'Bai', slug: 'bai', authorId: 1 } });</code></pre>
+<pre><code>await prisma.post.create({ data: { title: 'Bai', slug: 'post', authorId: 1 } });</code></pre>
 <div class="out">INSERT INTO "posts" ("title","slug","author_id","updated_at") VALUES ($1,$2,$3,$4) RETURNING ...
 -- published, views and created_at came from the database defaults</div>
 <div class="callout">
@@ -940,9 +940,9 @@ await prisma.post.create({
   data: {
     title: 'Bai moi',
     tags: {
-      connectOrCreate: ['nodejs', 'prisma', 'postgres'].map((ten) =&gt; ({
-        where:  { name: ten },
-        create: { name: ten },
+      connectOrCreate: ['nodejs', 'prisma', 'postgres'].map((name) =&gt; ({
+        where:  { name: name },
+        create: { name: name },
       })),
     },
   },
@@ -982,11 +982,11 @@ createMany: 486.331ms</div>
   <div class="kv"><span class="k">Nó là một câu lệnh, nên nó nguyên tử</span><span class="v">Không có <code>skipDuplicates</code> thì một hàng hỏng làm quay lui cả mười nghìn hàng. Thường thì đúng ý cho một lần nhập, và thỉnh thoảng là thứ khiến bạn phải kiểm dữ liệu trước khi ghi.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Prisma 5.14+: các hàng quay về, nên bạn dùng được id của chúng</span>
-const bai = await prisma.post.createManyAndReturn({
+const post = await prisma.post.createManyAndReturn({
   data: [{ title: 'A', authorId: 1 }, { title: 'B', authorId: 1 }],
   select: { id: true, title: true },
 });
-console.log(bai);</code></pre>
+console.log(post);</code></pre>
 <div class="out">prisma:query INSERT INTO "posts" ("title","author_id") VALUES ($1,$2),($3,$4) RETURNING "id","title"
 
 [ { id: 101, title: 'A' }, { id: 102, title: 'B' } ]</div>
@@ -997,12 +997,12 @@ console.log(bai);</code></pre>
 <span class="tok-comment">// = 5.000 giao dịch, 15.000 lần chèn, khoảng 40 giây.</span>
 
 <span class="tok-comment">// Hai câu lệnh thay vào đó:</span>
-const nguoiDung = await prisma.user.createManyAndReturn({
+const user = await prisma.user.createManyAndReturn({
   data: users.map((u) =&gt; ({ email: u.email, fullName: u.fullName })),
   select: { id: true, email: true },
 });
 
-const byEmail = new Map(nguoiDung.map((u) =&gt; [u.email, u.id]));
+const byEmail = new Map(user.map((u) =&gt; [u.email, u.id]));
 
 await prisma.post.createMany({
   data: users.flatMap((u) =&gt;
@@ -1021,7 +1021,7 @@ real    0m1.207s</div>
   await prisma.user.create({ data: { email: 'an@example.com' } });
 } catch (e) {
   if (e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp; e.code === 'P2002') {
-    console.log('Trung o cot:', e.meta?.target);
+    console.log('Trung o column:', e.meta?.target);
     return res.status(409).json({ error: 'Email da duoc dung' });
   }
   throw e;
@@ -1045,7 +1045,7 @@ model Post {
   createdAt DateTime @default(now())          <span class="tok-comment">// không bao giờ truyền bằng tay</span>
   updatedAt DateTime @updatedAt
 }</code></pre>
-<pre><code>await prisma.post.create({ data: { title: 'Bai', slug: 'bai', authorId: 1 } });</code></pre>
+<pre><code>await prisma.post.create({ data: { title: 'Bai', slug: 'post', authorId: 1 } });</code></pre>
 <div class="out">INSERT INTO "posts" ("title","slug","author_id","updated_at") VALUES ($1,$2,$3,$4) RETURNING ...
 -- published, views và created_at đến từ giá trị mặc định của cơ sở dữ liệu</div>
 <div class="callout">
@@ -1081,9 +1081,9 @@ model Post {
   <div class="kv"><span class="k"><code>updateManyAndReturn</code></span><span class="v">Prisma 6: <code>updateMany</code> that returns the rows via <code>RETURNING</code>. Fills the gap that used to force a follow-up <code>findMany</code>.</span></div>
 </div>
 <pre><code><span class="tok-comment">// update — one row, and it must exist</span>
-const bai = await prisma.post.update({
+const post = await prisma.post.update({
   where: { id: 1 },
-  data: { title: 'Doi ten', published: true },
+  data: { title: 'Doi name', published: true },
 });
 
 <span class="tok-comment">// updateMany — a count, no rows, no throw</span>
@@ -1147,14 +1147,14 @@ await Promise.all(Array.from({ length: 100 }, async () =&gt; {
   const p = await prisma.post.findUniqueOrThrow({ where: { id: 1 } });
   await prisma.post.update({ where: { id: 1 }, data: { views: p.views + 1 } });
 }));
-console.log('doc-roi-ghi:', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);
+console.log('doc-roi-write:', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);
 
 await prisma.post.update({ where: { id: 1 }, data: { views: 0 } });
 
 await Promise.all(Array.from({ length: 100 }, () =&gt;
   prisma.post.update({ where: { id: 1 }, data: { views: { increment: 1 } } }),
 ));
-console.log('nguyen tu  :', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);</code></pre>
+console.log('nguyen from  :', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);</code></pre>
 <div class="out">doc-roi-ghi: 23
 nguyen tu  : 100</div>
 <p>Seventy-seven of a hundred writes silently lost. On a development machine with one user this code appears to work perfectly, which is exactly why the bug reaches production. Any field that is <em>derived from its own previous value</em> — a counter, a balance, a stock level, a retry count — must use an atomic operator or an explicit transaction. Chapter 7 covers the cases atomic operators cannot express.</p>
@@ -1197,7 +1197,7 @@ RETURNING ...</div>
     <span class="tok-comment">// one-to-many: any combination, all in the same transaction</span>
     posts: {
       updateMany: { where: { published: false }, data: { published: true } },
-      update:     { where: { id: 3 }, data: { title: 'Sua rieng bai nay' } },
+      update:     { where: { id: 3 }, data: { title: 'Sua rieng post nay' } },
       create:     [{ title: 'Bai moi' }],
       deleteMany: { views: 0 },
     },
@@ -1261,9 +1261,9 @@ UPDATE "products" SET "stock" = "products"."stock" - $1 WHERE ("id"=$2 AND "prod
   <div class="kv"><span class="k"><code>updateManyAndReturn</code></span><span class="v">Prisma 6: <code>updateMany</code> có trả về các hàng thông qua <code>RETURNING</code>. Lấp đúng cái lỗ vốn buộc bạn phải <code>findMany</code> thêm một lần.</span></div>
 </div>
 <pre><code><span class="tok-comment">// update — một hàng, và nó buộc phải tồn tại</span>
-const bai = await prisma.post.update({
+const post = await prisma.post.update({
   where: { id: 1 },
-  data: { title: 'Doi ten', published: true },
+  data: { title: 'Doi name', published: true },
 });
 
 <span class="tok-comment">// updateMany — một số đếm, không có hàng, không ném lỗi</span>
@@ -1327,14 +1327,14 @@ await Promise.all(Array.from({ length: 100 }, async () =&gt; {
   const p = await prisma.post.findUniqueOrThrow({ where: { id: 1 } });
   await prisma.post.update({ where: { id: 1 }, data: { views: p.views + 1 } });
 }));
-console.log('doc-roi-ghi:', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);
+console.log('doc-roi-write:', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);
 
 await prisma.post.update({ where: { id: 1 }, data: { views: 0 } });
 
 await Promise.all(Array.from({ length: 100 }, () =&gt;
   prisma.post.update({ where: { id: 1 }, data: { views: { increment: 1 } } }),
 ));
-console.log('nguyen tu  :', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);</code></pre>
+console.log('nguyen from  :', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);</code></pre>
 <div class="out">doc-roi-ghi: 23
 nguyen tu  : 100</div>
 <p>Bảy mươi bảy trên một trăm lần ghi mất trong im lặng. Trên máy phát triển với một người dùng thì đoạn mã ấy trông chạy hoàn hảo, và chính vì thế con bọ đi thẳng lên production. Bất kỳ trường nào <em>được suy ra từ chính giá trị trước đó của nó</em> — một bộ đếm, một số dư, một mức tồn kho, một số lần thử lại — đều phải dùng toán tử nguyên tử hoặc một giao dịch tường minh. Chương 7 nói về những trường hợp mà toán tử nguyên tử diễn đạt không nổi.</p>
@@ -1377,7 +1377,7 @@ RETURNING ...</div>
     <span class="tok-comment">// một–nhiều: kết hợp kiểu nào cũng được, tất cả trong cùng một giao dịch</span>
     posts: {
       updateMany: { where: { published: false }, data: { published: true } },
-      update:     { where: { id: 3 }, data: { title: 'Sua rieng bai nay' } },
+      update:     { where: { id: 3 }, data: { title: 'Sua rieng post nay' } },
       create:     [{ title: 'Bai moi' }],
       deleteMany: { views: 0 },
     },
@@ -1444,7 +1444,7 @@ UPDATE "products" SET "stock" = "products"."stock" - $1 WHERE ("id"=$2 AND "prod
 
 <h3>The two methods</h3>
 <pre><code><span class="tok-comment">// delete — one row, by unique field. Returns it. Throws P2025 if absent.</span>
-const bai = await prisma.post.delete({ where: { id: 1 } });
+const post = await prisma.post.delete({ where: { id: 1 } });
 
 <span class="tok-comment">// deleteMany — any filter. Returns { count }. Never throws for zero matches.</span>
 const r = await prisma.post.deleteMany({ where: { authorId: 3, published: false } });
@@ -1602,7 +1602,7 @@ da xoa that: 412</div>
 
 <h3>Hai phương thức</h3>
 <pre><code><span class="tok-comment">// delete — một hàng, theo trường unique. Trả về nó. Ném P2025 nếu không có.</span>
-const bai = await prisma.post.delete({ where: { id: 1 } });
+const post = await prisma.post.delete({ where: { id: 1 } });
 
 <span class="tok-comment">// deleteMany — bộ lọc bất kỳ. Trả về { count }. Không bao giờ ném lỗi khi khớp 0 hàng.</span>
 const r = await prisma.post.deleteMany({ where: { authorId: 3, published: false } });

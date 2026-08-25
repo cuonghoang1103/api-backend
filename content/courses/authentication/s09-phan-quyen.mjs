@@ -43,7 +43,7 @@ export default {
 
 <h3>IDOR, in four lines</h3>
 <pre><code><span class="tok-comment">// Endpoint này CÓ xác thực. Nó vẫn là một lỗ hổng.</span>
-app.get('/api/hoa-don/:id', xacThuc, async (req, res) =&gt; {
+app.get('/api/invoices/:id', xacThuc, async (req, res) =&gt; {
   const hd = await prisma.hoaDon.findUnique({ where: { id: req.params.id } });
   res.json(hd);            <span class="tok-comment">// ← hoá đơn CỦA AI cũng được</span>
 });
@@ -123,7 +123,7 @@ KHONG co lop nao trong hai lop tren   : 114
 
 <h3>IDOR, trong bốn dòng</h3>
 <pre><code><span class="tok-comment">// Endpoint này CÓ xác thực. Nó vẫn là một lỗ hổng.</span>
-app.get('/api/hoa-don/:id', xacThuc, async (req, res) =&gt; {
+app.get('/api/invoices/:id', xacThuc, async (req, res) =&gt; {
   const hd = await prisma.hoaDon.findUnique({ where: { id: req.params.id } });
   res.json(hd);            <span class="tok-comment">// ← hoá đơn CỦA AI cũng được</span>
 });
@@ -255,7 +255,7 @@ model Quyen     { id Int @id  ma String @unique  roles RoleQuyen[] }  <span clas
 model RoleQuyen { roleId Int  quyenId Int   @@id([roleId, quyenId]) }
 
 <span class="tok-comment">// Mã KHÔNG BAO GIỜ nhắc tên vai trò. Nó hỏi về QUYỀN.</span>
-app.delete('/bai-viet/:id', xacThuc, doiQuyen('bai_viet:xoa'), xoaBaiViet);
+app.delete('/posts/:id', xacThuc, doiQuyen('bai_viet:xoa'), xoaBaiViet);
 
 <span class="tok-comment">// SAI — đây là chặng hai đội lốt chặng ba:</span>
 if (nd.vaiTro === 'admin' || nd.vaiTro === 'kiem_duyet') { <span class="tok-comment">/* … */</span> }</code></pre>
@@ -358,7 +358,7 @@ model Quyen     { id Int @id  ma String @unique  roles RoleQuyen[] }  <span clas
 model RoleQuyen { roleId Int  quyenId Int   @@id([roleId, quyenId]) }
 
 <span class="tok-comment">// Mã KHÔNG BAO GIỜ nhắc tên vai trò. Nó hỏi về QUYỀN.</span>
-app.delete('/bai-viet/:id', xacThuc, doiQuyen('bai_viet:xoa'), xoaBaiViet);
+app.delete('/posts/:id', xacThuc, doiQuyen('bai_viet:xoa'), xoaBaiViet);
 
 <span class="tok-comment">// SAI — đây là chặng hai đội lốt chặng ba:</span>
 if (nd.vaiTro === 'admin' || nd.vaiTro === 'kiem_duyet') { <span class="tok-comment">/* … */</span> }</code></pre>
@@ -856,7 +856,7 @@ export async function xoaBaiViet(nd: NguoiDung, id: string) {
 # Neu luat song trong tang dich vu thi ba duong dau co no, con hai duong
 # cuoi — script chay tay va seed — van khong. Do la ly do can Lop 3 o Bai 9.4.</div>
 <div class="pitfall">
-<p><strong>Trap — mass assignment turns an ordinary update endpoint into privilege escalation.</strong> A handler that spreads the request body into an update lets the client write any column the model has: <code>PATCH /toi { "ten": "Cường", "vaiTro": "admin" }</code> succeeds, and every authorization rule in this chapter was enforced correctly on an operation the user was genuinely allowed to perform. The fix is to allow-list fields explicitly — never <code>data: req.body</code>, always <code>data: { ten, anhDaiDien }</code> — and to validate with a schema that <em>strips</em> unknown keys rather than one that ignores them. Grep for <code>...req.body</code> across the codebase; it finds this class in one pass.</p>
+<p><strong>Trap — mass assignment turns an ordinary update endpoint into privilege escalation.</strong> A handler that spreads the request body into an update lets the client write any column the model has: <code>PATCH /me { "ten": "Cường", "vaiTro": "admin" }</code> succeeds, and every authorization rule in this chapter was enforced correctly on an operation the user was genuinely allowed to perform. The fix is to allow-list fields explicitly — never <code>data: req.body</code>, always <code>data: { ten, anhDaiDien }</code> — and to validate with a schema that <em>strips</em> unknown keys rather than one that ignores them. Grep for <code>...req.body</code> across the codebase; it finds this class in one pass.</p>
 </div>
 <pre><code><span class="tok-comment">// SAI — client viết được MỌI cột mà model có:</span>
 await prisma.nguoiDung.update({ where: { id: nd.id }, data: req.body });
@@ -953,7 +953,7 @@ export async function xoaBaiViet(nd: NguoiDung, id: string) {
 # Neu luat song trong tang dich vu thi ba duong dau co no, con hai duong
 # cuoi — script chay tay va seed — van khong. Do la ly do can Lop 3 o Bai 9.4.</div>
 <div class="pitfall">
-<p><strong>Bẫy — gán hàng loạt biến một endpoint cập nhật bình thường thành một cú LEO THANG ĐẶC QUYỀN.</strong> Một bộ xử lý trải thẳng thân request vào lệnh cập nhật sẽ cho client ghi vào BẤT KỲ cột nào mà model có: <code>PATCH /toi { "ten": "Cường", "vaiTro": "admin" }</code> thành công, và mọi luật phân quyền trong chương này đều đã được thi hành ĐÚNG trên một thao tác mà người dùng THẬT SỰ được phép làm. Cách vá là liệt kê trắng các trường một cách tường minh — đừng bao giờ <code>data: req.body</code>, luôn luôn <code>data: { ten, anhDaiDien }</code> — và kiểm bằng một schema <em>CẮT BỎ</em> khoá lạ chứ không phải lờ chúng đi. Hãy grep <code>...req.body</code> trên toàn kho mã; nó tìm ra cả họ lỗi này trong một lượt.</p>
+<p><strong>Bẫy — gán hàng loạt biến một endpoint cập nhật bình thường thành một cú LEO THANG ĐẶC QUYỀN.</strong> Một bộ xử lý trải thẳng thân request vào lệnh cập nhật sẽ cho client ghi vào BẤT KỲ cột nào mà model có: <code>PATCH /me { "ten": "Cường", "vaiTro": "admin" }</code> thành công, và mọi luật phân quyền trong chương này đều đã được thi hành ĐÚNG trên một thao tác mà người dùng THẬT SỰ được phép làm. Cách vá là liệt kê trắng các trường một cách tường minh — đừng bao giờ <code>data: req.body</code>, luôn luôn <code>data: { ten, anhDaiDien }</code> — và kiểm bằng một schema <em>CẮT BỎ</em> khoá lạ chứ không phải lờ chúng đi. Hãy grep <code>...req.body</code> trên toàn kho mã; nó tìm ra cả họ lỗi này trong một lượt.</p>
 </div>
 <pre><code><span class="tok-comment">// SAI — client viết được MỌI cột mà model có:</span>
 await prisma.nguoiDung.update({ where: { id: nd.id }, data: req.body });

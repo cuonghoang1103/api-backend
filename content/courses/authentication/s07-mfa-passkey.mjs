@@ -62,8 +62,8 @@ export default {
 if (!thietBiDaNho(req)) await doiYeuToThuHai(nd);
 
 <span class="tok-comment">// 2. Xác thực lại trước việc nhạy cảm — Bài 6.5, và đây là chỗ quan trọng NHẤT</span>
-app.patch('/toi/email', doiXacThucLai({ trongVong: 300 }), doiEmail);
-app.post('/toi/xoa',     doiXacThucLai({ trongVong: 300 }), xoaTaiKhoan);
+app.patch('/me/email', doiXacThucLai({ trongVong: 300 }), doiEmail);
+app.post('/me/delete',     doiXacThucLai({ trongVong: 300 }), xoaTaiKhoan);
 app.post('/thanh-toan',  doiXacThucLai({ trongVong: 300 }), chuyenTien);
 
 <span class="tok-comment">// 3. Khi có gì đó BẤT THƯỜNG — quốc gia mới, thiết bị mới, sau một lần đặt lại</span>
@@ -136,8 +136,8 @@ if (diemRuiRo(req, nd) &gt; NGUONG) await doiYeuToThuHai(nd);</code></pre>
 if (!thietBiDaNho(req)) await doiYeuToThuHai(nd);
 
 <span class="tok-comment">// 2. Xác thực lại trước việc nhạy cảm — Bài 6.5, và đây là chỗ quan trọng NHẤT</span>
-app.patch('/toi/email', doiXacThucLai({ trongVong: 300 }), doiEmail);
-app.post('/toi/xoa',     doiXacThucLai({ trongVong: 300 }), xoaTaiKhoan);
+app.patch('/me/email', doiXacThucLai({ trongVong: 300 }), doiEmail);
+app.post('/me/delete',     doiXacThucLai({ trongVong: 300 }), xoaTaiKhoan);
 app.post('/thanh-toan',  doiXacThucLai({ trongVong: 300 }), chuyenTien);
 
 <span class="tok-comment">// 3. Khi có gì đó BẤT THƯỜNG — quốc gia mới, thiết bị mới, sau một lần đặt lại</span>
@@ -405,7 +405,7 @@ await prisma.yeuTo.update({ where: { id: yeuTo.id }, data: { buocCuoi: buoc } })
 
 <h3>Enrolment, in the only safe order</h3>
 <pre><code><span class="tok-comment">// 1. Xác thực lại TRƯỚC (Bài 7.1) — kẻ có phiên không được tự cắm yếu tố của hắn.</span>
-app.post('/toi/totp/bat-dau', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
+app.post('/me/totp/begin', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
   const biMat = randomBytes(20);
 
   <span class="tok-comment">// 2. Lưu ở trạng thái CHƯA BẬT, có hạn. Tài khoản chưa đổi gì cả.</span>
@@ -421,7 +421,7 @@ app.post('/toi/totp/bat-dau', doiXacThucLai({ trongVong: 300 }), async (req, res
   res.json({ uri: otpauthUri(nd, biMat), biMat: base32(biMat) });
 });</code></pre>
 <pre><code><span class="tok-comment">// 4. Chỉ BẬT sau khi người dùng chứng minh họ đọc được một mã.</span>
-app.post('/toi/totp/xac-nhan', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
+app.post('/me/totp/confirm', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
   const yt = await layYeuToChuaBat(nd.id, 'TOTP');
   if (!yt || yt.hetHanDangKy &lt; new Date()) return res.status(410).json({ loi: 'Hết hạn.' });
 
@@ -517,7 +517,7 @@ if (buoc !== null &amp;&amp; buoc &gt; yt.buocCuoi) await redis.del(KEY);</code>
 
 <h3>Đăng ký, theo thứ tự an toàn DUY NHẤT</h3>
 <pre><code><span class="tok-comment">// 1. Xác thực lại TRƯỚC (Bài 7.1) — kẻ có phiên không được tự cắm yếu tố của hắn.</span>
-app.post('/toi/totp/bat-dau', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
+app.post('/me/totp/begin', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
   const biMat = randomBytes(20);
 
   <span class="tok-comment">// 2. Lưu ở trạng thái CHƯA BẬT, có hạn. Tài khoản chưa đổi gì cả.</span>
@@ -533,7 +533,7 @@ app.post('/toi/totp/bat-dau', doiXacThucLai({ trongVong: 300 }), async (req, res
   res.json({ uri: otpauthUri(nd, biMat), biMat: base32(biMat) });
 });</code></pre>
 <pre><code><span class="tok-comment">// 4. Chỉ BẬT sau khi người dùng chứng minh họ đọc được một mã.</span>
-app.post('/toi/totp/xac-nhan', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
+app.post('/me/totp/confirm', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
   const yt = await layYeuToChuaBat(nd.id, 'TOTP');
   if (!yt || yt.hetHanDangKy &lt; new Date()) return res.status(410).json({ loi: 'Hết hạn.' });
 
@@ -865,7 +865,7 @@ const cred = await navigator.credentials.get({
 </div>
 
 <h3>Registration: the challenge belongs on the server</h3>
-<pre><code>app.post('/passkey/dang-ky/bat-dau', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
+<pre><code>app.post('/passkey/register/begin', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
   const tuyChon = await generateRegistrationOptions({
     rpName: 'CuongThai', rpID: RP_ID,
     userID: nd.userHandle,               <span class="tok-comment">// ngẫu nhiên mỗi người, KHÔNG phải email</span>
@@ -879,7 +879,7 @@ const cred = await navigator.credentials.get({
   await redis.set(&#96;thu-thach:\${req.phienId}&#96;, tuyChon.challenge, { EX: 300 });
   res.json(tuyChon);
 });</code></pre>
-<pre><code>app.post('/passkey/dang-ky/xong', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
+<pre><code>app.post('/passkey/register/finish', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
   const mong = await redis.getDel(&#96;thu-thach:\${req.phienId}&#96;);   <span class="tok-comment">// đọc và XOÁ: dùng một lần</span>
   if (!mong) return res.status(410).json({ loi: 'Thử thách hết hạn.' });
 
@@ -1011,7 +1011,7 @@ if (await PublicKeyCredential.isConditionalMediationAvailable?.()) {
 </div>
 
 <h3>Đăng ký: thử thách thuộc về MÁY CHỦ</h3>
-<pre><code>app.post('/passkey/dang-ky/bat-dau', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
+<pre><code>app.post('/passkey/register/begin', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
   const tuyChon = await generateRegistrationOptions({
     rpName: 'CuongThai', rpID: RP_ID,
     userID: nd.userHandle,               <span class="tok-comment">// ngẫu nhiên mỗi người, KHÔNG phải email</span>
@@ -1025,7 +1025,7 @@ if (await PublicKeyCredential.isConditionalMediationAvailable?.()) {
   await redis.set(&#96;thu-thach:\${req.phienId}&#96;, tuyChon.challenge, { EX: 300 });
   res.json(tuyChon);
 });</code></pre>
-<pre><code>app.post('/passkey/dang-ky/xong', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
+<pre><code>app.post('/passkey/register/finish', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
   const mong = await redis.getDel(&#96;thu-thach:\${req.phienId}&#96;);   <span class="tok-comment">// đọc và XOÁ: dùng một lần</span>
   if (!mong) return res.status(410).json({ loi: 'Thử thách hết hạn.' });
 

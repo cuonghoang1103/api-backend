@@ -53,11 +53,11 @@ export default {
 
 <h3>Question 2: which step?</h3>
 <pre><code><span class="tok-comment">// Ba bước, ba mã trạng thái khác nhau. Hỏi CÁI NÀO trước khi đoán vì sao.</span>
-POST /dang-nhap   → 401  <span class="tok-comment">// tín vật sai, HOẶC tài khoản bị khoá, HOẶC băm không khớp</span>
-POST /dang-nhap   → 429  <span class="tok-comment">// bộ giới hạn — Bài 11.3, và hãy hỏi nó đếm theo TRỤC nào</span>
+POST /sign-in   → 401  <span class="tok-comment">// tín vật sai, HOẶC tài khoản bị khoá, HOẶC băm không khớp</span>
+POST /sign-in   → 429  <span class="tok-comment">// bộ giới hạn — Bài 11.3, và hãy hỏi nó đếm theo TRỤC nào</span>
 POST /mfa/kiem    → 401  <span class="tok-comment">// mã đúng nhưng đồng hồ lệch, hoặc buocCuoi chặn tái dùng — 7.2</span>
-GET  /api/toi     → 401  <span class="tok-comment">// đăng nhập ĐƯỢC, phiên KHÔNG dùng được ⇒ cookie hoặc token</span>
-GET  /api/toi     → 403  <span class="tok-comment">// phiên tốt, PHÂN QUYỀN từ chối ⇒ Chương 9, không phải xác thực</span></code></pre>
+GET  /api/me     → 401  <span class="tok-comment">// đăng nhập ĐƯỢC, phiên KHÔNG dùng được ⇒ cookie hoặc token</span>
+GET  /api/me     → 403  <span class="tok-comment">// phiên tốt, PHÂN QUYỀN từ chối ⇒ Chương 9, không phải xác thực</span></code></pre>
 <div class="pitfall">
 <p><strong>Trap — "cannot log in" and "gets logged out immediately" are different bugs with the same sentence.</strong> If <code>/dang-nhap</code> returns 200 and the very next request returns 401, authentication succeeded and the <em>session</em> failed — which moves you from Chapter 2 to Chapter 3 or 4, an entirely different subsystem. Ask for the network tab, or reproduce with two <code>curl</code> calls: one to log in, one to use what it returned. Two commands separate the two halves of the course, and people routinely spend an afternoon in the wrong one.</p>
 </div>
@@ -134,11 +134,11 @@ content-type: application/json
 
 <h3>Câu hỏi 2: hỏng ở BƯỚC NÀO?</h3>
 <pre><code><span class="tok-comment">// Ba bước, ba mã trạng thái khác nhau. Hỏi CÁI NÀO trước khi đoán vì sao.</span>
-POST /dang-nhap   → 401  <span class="tok-comment">// tín vật sai, HOẶC tài khoản bị khoá, HOẶC băm không khớp</span>
-POST /dang-nhap   → 429  <span class="tok-comment">// bộ giới hạn — Bài 11.3, và hãy hỏi nó đếm theo TRỤC nào</span>
+POST /sign-in   → 401  <span class="tok-comment">// tín vật sai, HOẶC tài khoản bị khoá, HOẶC băm không khớp</span>
+POST /sign-in   → 429  <span class="tok-comment">// bộ giới hạn — Bài 11.3, và hãy hỏi nó đếm theo TRỤC nào</span>
 POST /mfa/kiem    → 401  <span class="tok-comment">// mã đúng nhưng đồng hồ lệch, hoặc buocCuoi chặn tái dùng — 7.2</span>
-GET  /api/toi     → 401  <span class="tok-comment">// đăng nhập ĐƯỢC, phiên KHÔNG dùng được ⇒ cookie hoặc token</span>
-GET  /api/toi     → 403  <span class="tok-comment">// phiên tốt, PHÂN QUYỀN từ chối ⇒ Chương 9, không phải xác thực</span></code></pre>
+GET  /api/me     → 401  <span class="tok-comment">// đăng nhập ĐƯỢC, phiên KHÔNG dùng được ⇒ cookie hoặc token</span>
+GET  /api/me     → 403  <span class="tok-comment">// phiên tốt, PHÂN QUYỀN từ chối ⇒ Chương 9, không phải xác thực</span></code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — "không đăng nhập được" và "vừa đăng nhập xong đã bị đá ra" là HAI con lỗi khác nhau mang cùng một câu nói.</strong> Nếu <code>/dang-nhap</code> trả 200 mà request NGAY SAU đó trả 401 thì việc xác thực đã THÀNH CÔNG và cái <em>PHIÊN</em> mới hỏng — điều đó chuyển bạn từ Chương 2 sang Chương 3 hoặc 4, một phân hệ hoàn toàn khác. Hãy xin cái tab Network, hoặc tự tái hiện bằng hai lời gọi <code>curl</code>: một để đăng nhập, một để dùng thứ nó trả về. Hai câu lệnh tách được hai nửa của cả khoá học này, mà người ta vẫn đều đặn ngồi cả buổi chiều ở nửa SAI.</p>
 </div>

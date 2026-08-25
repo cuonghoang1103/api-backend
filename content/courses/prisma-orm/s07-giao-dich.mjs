@@ -25,7 +25,7 @@ export default {
 <p class="lead">Prisma has two transaction APIs that look similar and behave very differently. One takes an array and is essentially free; the other takes a callback, holds a connection open for as long as your code runs inside it, and is the fastest way to exhaust a connection pool. Choosing between them is the whole of this lesson.</p>
 
 <h3>The array form — sequential operations</h3>
-<pre><code>const [nguoiDung, baiViet, donHang] = await prisma.$transaction([
+<pre><code>const [user, baiViet, order] = await prisma.$transaction([
   prisma.user.count(),
   prisma.post.count({ where: { published: true } }),
   prisma.order.groupBy({ by: ['status'], _count: { _all: true } }),
@@ -43,19 +43,19 @@ prisma:query COMMIT</div>
 </div>
 
 <h3>The interactive form — a callback</h3>
-<pre><code>const kq = await prisma.$transaction(async (tx) =&gt; {
+<pre><code>const result = await prisma.$transaction(async (tx) =&gt; {
   <span class="tok-comment">// 1 — read</span>
-  const tk = await tx.taiKhoan.findUniqueOrThrow({ where: { id: tuId } });
+  const tk = await tx.account.findUniqueOrThrow({ where: { id: fromId } });
 
   <span class="tok-comment">// 2 — decide, in JavaScript, with the value we just read</span>
-  if (tk.soDu.lessThan(soTien)) throw new Error('So du khong du');
+  if (tk.balance.lessThan(amount)) throw new Error('So du khong du');
 
   <span class="tok-comment">// 3 — write, twice</span>
-  await tx.taiKhoan.update({ where: { id: tuId },  data: { soDu: { decrement: soTien } } });
-  await tx.taiKhoan.update({ where: { id: denId }, data: { soDu: { increment: soTien } } });
+  await tx.account.update({ where: { id: fromId },  data: { balance: { decrement: amount } } });
+  await tx.account.update({ where: { id: toId }, data: { balance: { increment: amount } } });
 
   <span class="tok-comment">// 4 — and record it</span>
-  return tx.giaoDich.create({ data: { tuId, denId, soTien } });
+  return tx.transaction.create({ data: { fromId, toId, amount } });
 });</code></pre>
 <div class="out">prisma:query BEGIN
 prisma:query SELECT ... FROM "tai_khoan" WHERE "id" = $1 LIMIT $2
@@ -89,13 +89,13 @@ prisma:query COMMIT</div>
 <pre><code><span class="tok-comment">// Type a helper so it accepts either client and cannot be called wrongly</span>
 type TxClient = Omit&lt;PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'&gt;;
 
-async function ghiNhatKy(db: TxClient, hanhDong: string, nguoiDungId: number) {
-  return db.auditLog.create({ data: { hanhDong, nguoiDungId } });
+async function writeAuditLog(db: TxClient, action: string, userId: number) {
+  return db.auditLog.create({ data: { action, userId } });
 }
 
 await prisma.$transaction(async (tx) =&gt; {
   await tx.post.delete({ where: { id: 42 } });
-  await ghiNhatKy(tx, 'XOA_BAI', currentUserId);    <span class="tok-comment">// same transaction</span>
+  await writeAuditLog(tx, 'XOA_BAI', currentUserId);    <span class="tok-comment">// same transaction</span>
 });</code></pre>
 
 <h3>Nested writes are already a transaction</h3>
@@ -127,20 +127,20 @@ COMMIT</div>
 <h3>The three ways to exhaust the pool</h3>
 <pre><code><span class="tok-comment">// 1 — an HTTP call inside the transaction</span>
 await prisma.$transaction(async (tx) =&gt; {
-  const don = await tx.donHang.create({ data: { … } });
-  const kq  = await fetch('https://cong-thanh-toan/charge', { … });   <span class="tok-comment">// 2 seconds!</span>
-  await tx.donHang.update({ where: { id: don.id }, data: { maGiaoDich: kq.id } });
+  const order = await tx.order.create({ data: { … } });
+  const result  = await fetch('https://cong-thanh-toan/charge', { … });   <span class="tok-comment">// 2 seconds!</span>
+  await tx.order.update({ where: { id: order.id }, data: { txCode: result.id } });
 });</code></pre>
 <div class="out">-- 10 concurrent orders, pool of 10, payment gateway at 2s each
 PrismaClientKnownRequestError: Timed out fetching a new connection from the connection pool.
 (Current connection pool timeout: 10, connection limit: 10)
   code: 'P2024'</div>
 <pre><code><span class="tok-comment">// The fix: the external call happens OUTSIDE, between two short transactions</span>
-const don = await prisma.donHang.create({ data: { …, trangThai: 'CHO_THANH_TOAN' } });
-const kq  = await fetch('https://cong-thanh-toan/charge', { … });     <span class="tok-comment">// no connection held</span>
-await prisma.donHang.update({
-  where: { id: don.id },
-  data:  { maGiaoDich: kq.id, trangThai: 'DA_THANH_TOAN' },
+const order = await prisma.order.create({ data: { …, status: 'CHO_THANH_TOAN' } });
+const result  = await fetch('https://cong-thanh-toan/charge', { … });     <span class="tok-comment">// no connection held</span>
+await prisma.order.update({
+  where: { id: order.id },
+  data:  { txCode: result.id, status: 'DA_THANH_TOAN' },
 });</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">2 — a loop inside the transaction</span><span class="v">A thousand <code>tx.post.update</code> calls is a thousand round trips holding one connection. Batch them: build the array and pass it to the array form, or use <code>updateMany</code>.</span></div>
@@ -164,7 +164,7 @@ await prisma.donHang.update({
 <p class="lead">Prisma có hai API giao dịch trông giống nhau và cư xử rất khác nhau. Một cái nhận một mảng và gần như miễn phí; cái kia nhận một callback, giữ một kết nối mở suốt thời gian mã của bạn chạy bên trong, và là cách nhanh nhất để vét cạn connection pool. Chọn giữa hai cái đó là toàn bộ bài này.</p>
 
 <h3>Dạng mảng — các thao tác tuần tự</h3>
-<pre><code>const [nguoiDung, baiViet, donHang] = await prisma.$transaction([
+<pre><code>const [user, baiViet, order] = await prisma.$transaction([
   prisma.user.count(),
   prisma.post.count({ where: { published: true } }),
   prisma.order.groupBy({ by: ['status'], _count: { _all: true } }),
@@ -182,19 +182,19 @@ prisma:query COMMIT</div>
 </div>
 
 <h3>Dạng tương tác — một callback</h3>
-<pre><code>const kq = await prisma.$transaction(async (tx) =&gt; {
+<pre><code>const result = await prisma.$transaction(async (tx) =&gt; {
   <span class="tok-comment">// 1 — đọc</span>
-  const tk = await tx.taiKhoan.findUniqueOrThrow({ where: { id: tuId } });
+  const tk = await tx.account.findUniqueOrThrow({ where: { id: fromId } });
 
   <span class="tok-comment">// 2 — quyết, bằng JavaScript, với giá trị vừa đọc được</span>
-  if (tk.soDu.lessThan(soTien)) throw new Error('So du khong du');
+  if (tk.balance.lessThan(amount)) throw new Error('So du khong du');
 
   <span class="tok-comment">// 3 — ghi, hai lần</span>
-  await tx.taiKhoan.update({ where: { id: tuId },  data: { soDu: { decrement: soTien } } });
-  await tx.taiKhoan.update({ where: { id: denId }, data: { soDu: { increment: soTien } } });
+  await tx.account.update({ where: { id: fromId },  data: { balance: { decrement: amount } } });
+  await tx.account.update({ where: { id: toId }, data: { balance: { increment: amount } } });
 
   <span class="tok-comment">// 4 — và ghi nhận lại</span>
-  return tx.giaoDich.create({ data: { tuId, denId, soTien } });
+  return tx.transaction.create({ data: { fromId, toId, amount } });
 });</code></pre>
 <div class="out">prisma:query BEGIN
 prisma:query SELECT ... FROM "tai_khoan" WHERE "id" = $1 LIMIT $2
@@ -228,13 +228,13 @@ prisma:query COMMIT</div>
 <pre><code><span class="tok-comment">// Gán kiểu cho hàm phụ để nó nhận được cả hai client và không thể gọi sai</span>
 type TxClient = Omit&lt;PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'&gt;;
 
-async function ghiNhatKy(db: TxClient, hanhDong: string, nguoiDungId: number) {
-  return db.auditLog.create({ data: { hanhDong, nguoiDungId } });
+async function writeAuditLog(db: TxClient, action: string, userId: number) {
+  return db.auditLog.create({ data: { action, userId } });
 }
 
 await prisma.$transaction(async (tx) =&gt; {
   await tx.post.delete({ where: { id: 42 } });
-  await ghiNhatKy(tx, 'XOA_BAI', currentUserId);    <span class="tok-comment">// cùng một giao dịch</span>
+  await writeAuditLog(tx, 'XOA_BAI', currentUserId);    <span class="tok-comment">// cùng một giao dịch</span>
 });</code></pre>
 
 <h3>Ghi lồng nhau vốn đã là một giao dịch</h3>
@@ -266,20 +266,20 @@ COMMIT</div>
 <h3>Ba cách vét cạn pool</h3>
 <pre><code><span class="tok-comment">// 1 — một lời gọi HTTP nằm bên trong giao dịch</span>
 await prisma.$transaction(async (tx) =&gt; {
-  const don = await tx.donHang.create({ data: { … } });
-  const kq  = await fetch('https://cong-thanh-toan/charge', { … });   <span class="tok-comment">// 2 giây!</span>
-  await tx.donHang.update({ where: { id: don.id }, data: { maGiaoDich: kq.id } });
+  const order = await tx.order.create({ data: { … } });
+  const result  = await fetch('https://cong-thanh-toan/charge', { … });   <span class="tok-comment">// 2 giây!</span>
+  await tx.order.update({ where: { id: order.id }, data: { txCode: result.id } });
 });</code></pre>
 <div class="out">-- 10 đơn hàng song song, pool 10 kết nối, cổng thanh toán 2 giây mỗi lượt
 PrismaClientKnownRequestError: Timed out fetching a new connection from the connection pool.
 (Current connection pool timeout: 10, connection limit: 10)
   code: 'P2024'</div>
 <pre><code><span class="tok-comment">// Cách vá: lời gọi ra ngoài xảy ra BÊN NGOÀI, giữa hai giao dịch ngắn</span>
-const don = await prisma.donHang.create({ data: { …, trangThai: 'CHO_THANH_TOAN' } });
-const kq  = await fetch('https://cong-thanh-toan/charge', { … });     <span class="tok-comment">// không giữ kết nối nào</span>
-await prisma.donHang.update({
-  where: { id: don.id },
-  data:  { maGiaoDich: kq.id, trangThai: 'DA_THANH_TOAN' },
+const order = await prisma.order.create({ data: { …, status: 'CHO_THANH_TOAN' } });
+const result  = await fetch('https://cong-thanh-toan/charge', { … });     <span class="tok-comment">// không giữ kết nối nào</span>
+await prisma.order.update({
+  where: { id: order.id },
+  data:  { txCode: result.id, status: 'DA_THANH_TOAN' },
 });</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">2 — một vòng lặp nằm bên trong giao dịch</span><span class="v">Một nghìn lời gọi <code>tx.post.update</code> là một nghìn lượt đi về trong khi giữ một kết nối. Hãy gom lô: dựng cái mảng rồi truyền vào dạng mảng, hoặc dùng <code>updateMany</code>.</span></div>
@@ -350,15 +350,15 @@ COMMIT;</code></pre>
 
 <h3><code>READ COMMITTED</code>: what the default lets through</h3>
 <pre><code><span class="tok-comment">// Rule: at most 2 admins. Two requests promote two different users at once.</span>
-async function thangCap(userId: number) {
+async function levelUp(userId: number) {
   return prisma.$transaction(async (tx) =&gt; {
-    const soAdmin = await tx.user.count({ where: { role: 'ADMIN' } });
-    if (soAdmin &gt;= 2) throw new Error('Da du 2 admin');
+    const adminCount = await tx.user.count({ where: { role: 'ADMIN' } });
+    if (adminCount &gt;= 2) throw new Error('Da du 2 admin');
     return tx.user.update({ where: { id: userId }, data: { role: 'ADMIN' } });
   });
 }
 
-await Promise.all([thangCap(10), thangCap(11)]);
+await Promise.all([levelUp(10), levelUp(11)]);
 console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</code></pre>
 <div class="out">admin: 3</div>
 <div class="pitfall">
@@ -366,19 +366,19 @@ console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</c
 </div>
 
 <h3><code>SERIALIZABLE</code>: the guarantee, and its price</h3>
-<pre><code>async function thangCap(userId: number) {
+<pre><code>async function levelUp(userId: number) {
   return prisma.$transaction(
     async (tx) =&gt; {
-      const soAdmin = await tx.user.count({ where: { role: 'ADMIN' } });
-      if (soAdmin &gt;= 2) throw new Error('Da du 2 admin');
+      const adminCount = await tx.user.count({ where: { role: 'ADMIN' } });
+      if (adminCount &gt;= 2) throw new Error('Da du 2 admin');
       return tx.user.update({ where: { id: userId }, data: { role: 'ADMIN' } });
     },
     { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
   );
 }
 
-const kq = await Promise.allSettled([thangCap(10), thangCap(11)]);
-console.log(kq.map((r) =&gt; r.status));
+const result = await Promise.allSettled([levelUp(10), levelUp(11)]);
+console.log(result.map((r) =&gt; r.status));
 console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</code></pre>
 <div class="out">[ 'fulfilled', 'rejected' ]
 admin: 2
@@ -392,24 +392,24 @@ Transaction failed due to a write conflict or a deadlock. Please retry your tran
 <p><strong>Serializable does not make both succeed — it makes one fail loudly.</strong> PostgreSQL tracks the read/write dependencies between concurrent transactions and aborts one when the pair could not have been produced by running them one after the other. The rule is preserved; the cost is a <code>40001</code> error, and the contract is that <strong>you must retry it</strong>. A serializable transaction without a retry wrapper is not safer than <code>READ COMMITTED</code> — it just fails differently.</p>
 </div>
 <pre><code><span class="tok-comment">// The retry wrapper that makes Serializable usable</span>
-async function chayLai&lt;T&gt;(fn: () =&gt; Promise&lt;T&gt;, lanToiDa = 5): Promise&lt;T&gt; {
-  for (let lan = 1; ; lan++) {
+async function retry&lt;T&gt;(fn: () =&gt; Promise&lt;T&gt;, maxAttempts = 5): Promise&lt;T&gt; {
+  for (let attempt = 1; ; attempt++) {
     try {
       return await fn();
     } catch (e) {
-      const laXungDot =
+      const isConflict =
         e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp;
         (e.code === 'P2034' || e.code === 'P2002');
-      if (!laXungDot || lan &gt;= lanToiDa) throw e;
+      if (!isConflict || attempt &gt;= maxAttempts) throw e;
 
       <span class="tok-comment">// exponential backoff with jitter, so retries do not collide again</span>
-      const cho = Math.min(50 * 2 ** lan, 1000) * (0.5 + Math.random());
-      await new Promise((r) =&gt; setTimeout(r, cho));
+      const waitMs = Math.min(50 * 2 ** attempt, 1000) * (0.5 + Math.random());
+      await new Promise((r) =&gt; setTimeout(r, waitMs));
     }
   }
 }
 
-await chayLai(() =&gt; thangCap(11));</code></pre>
+await retry(() =&gt; levelUp(11));</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Jitter is not optional</span><span class="v">Without randomness, two transactions that conflicted will retry at the same instant and conflict again. The jitter is what breaks the cycle.</span></div>
   <div class="kv"><span class="k">Bound the attempts</span><span class="v">Five is plenty. If a transaction fails five times, the contention is structural — the design needs changing, not more retries.</span></div>
@@ -438,9 +438,9 @@ CREATE UNIQUE INDEX "chi_hai_admin" ON "users"("role", "admin_slot")
 <pre><code><span class="tok-comment">// A report that must be internally consistent: every query sees one snapshot</span>
 const bc = await prisma.$transaction(
   async (tx) =&gt; ({
-    tong:     await tx.donHang.aggregate({ _sum: { total: true } }),
-    theoNgay: await tx.donHang.groupBy({ by: ['ngay'], _sum: { total: true } }),
-    chiTiet:  await tx.donHang.findMany({ take: 1000, orderBy: { ngay: 'desc' } }),
+    total:     await tx.order.aggregate({ _sum: { total: true } }),
+    byDay: await tx.order.groupBy({ by: ['day'], _sum: { total: true } }),
+    detail:  await tx.order.findMany({ take: 1000, orderBy: { day: 'desc' } }),
   }),
   { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead },
 );</code></pre>
@@ -507,15 +507,15 @@ COMMIT;</code></pre>
 
 <h3><code>READ COMMITTED</code>: mức mặc định để lọt cái gì</h3>
 <pre><code><span class="tok-comment">// Luật: nhiều nhất 2 admin. Hai yêu cầu cùng lúc thăng cấp hai người khác nhau.</span>
-async function thangCap(userId: number) {
+async function levelUp(userId: number) {
   return prisma.$transaction(async (tx) =&gt; {
-    const soAdmin = await tx.user.count({ where: { role: 'ADMIN' } });
-    if (soAdmin &gt;= 2) throw new Error('Da du 2 admin');
+    const adminCount = await tx.user.count({ where: { role: 'ADMIN' } });
+    if (adminCount &gt;= 2) throw new Error('Da du 2 admin');
     return tx.user.update({ where: { id: userId }, data: { role: 'ADMIN' } });
   });
 }
 
-await Promise.all([thangCap(10), thangCap(11)]);
+await Promise.all([levelUp(10), levelUp(11)]);
 console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</code></pre>
 <div class="out">admin: 3</div>
 <div class="pitfall">
@@ -523,19 +523,19 @@ console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</c
 </div>
 
 <h3><code>SERIALIZABLE</code>: bảo đảm, và cái giá của nó</h3>
-<pre><code>async function thangCap(userId: number) {
+<pre><code>async function levelUp(userId: number) {
   return prisma.$transaction(
     async (tx) =&gt; {
-      const soAdmin = await tx.user.count({ where: { role: 'ADMIN' } });
-      if (soAdmin &gt;= 2) throw new Error('Da du 2 admin');
+      const adminCount = await tx.user.count({ where: { role: 'ADMIN' } });
+      if (adminCount &gt;= 2) throw new Error('Da du 2 admin');
       return tx.user.update({ where: { id: userId }, data: { role: 'ADMIN' } });
     },
     { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
   );
 }
 
-const kq = await Promise.allSettled([thangCap(10), thangCap(11)]);
-console.log(kq.map((r) =&gt; r.status));
+const result = await Promise.allSettled([levelUp(10), levelUp(11)]);
+console.log(result.map((r) =&gt; r.status));
 console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</code></pre>
 <div class="out">[ 'fulfilled', 'rejected' ]
 admin: 2
@@ -549,24 +549,24 @@ Transaction failed due to a write conflict or a deadlock. Please retry your tran
 <p><strong>Serializable không làm cả hai thành công — nó làm một cái hỏng một cách ồn ào.</strong> PostgreSQL theo dõi các phụ thuộc đọc/ghi giữa các giao dịch song song và huỷ một cái khi cặp đó không thể được tạo ra bởi việc chạy chúng lần lượt. Cái luật được giữ; cái giá là một lỗi <code>40001</code>, và giao kèo là <strong>bạn phải thử lại nó</strong>. Một giao dịch serializable không có lớp bọc thử lại thì không an toàn hơn <code>READ COMMITTED</code> — nó chỉ hỏng theo kiểu khác.</p>
 </div>
 <pre><code><span class="tok-comment">// Lớp bọc thử lại khiến Serializable dùng được</span>
-async function chayLai&lt;T&gt;(fn: () =&gt; Promise&lt;T&gt;, lanToiDa = 5): Promise&lt;T&gt; {
-  for (let lan = 1; ; lan++) {
+async function retry&lt;T&gt;(fn: () =&gt; Promise&lt;T&gt;, maxAttempts = 5): Promise&lt;T&gt; {
+  for (let attempt = 1; ; attempt++) {
     try {
       return await fn();
     } catch (e) {
-      const laXungDot =
+      const isConflict =
         e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp;
         (e.code === 'P2034' || e.code === 'P2002');
-      if (!laXungDot || lan &gt;= lanToiDa) throw e;
+      if (!isConflict || attempt &gt;= maxAttempts) throw e;
 
       <span class="tok-comment">// lùi theo cấp số nhân kèm nhiễu, để các lần thử lại không lại đụng nhau</span>
-      const cho = Math.min(50 * 2 ** lan, 1000) * (0.5 + Math.random());
-      await new Promise((r) =&gt; setTimeout(r, cho));
+      const waitMs = Math.min(50 * 2 ** attempt, 1000) * (0.5 + Math.random());
+      await new Promise((r) =&gt; setTimeout(r, waitMs));
     }
   }
 }
 
-await chayLai(() =&gt; thangCap(11));</code></pre>
+await retry(() =&gt; levelUp(11));</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nhiễu không phải tuỳ chọn</span><span class="v">Không có yếu tố ngẫu nhiên thì hai giao dịch vừa xung đột sẽ thử lại đúng cùng một khoảnh khắc và lại xung đột. Chính cái nhiễu ấy phá vỡ vòng lặp.</span></div>
   <div class="kv"><span class="k">Chặn số lần thử</span><span class="v">Năm là quá đủ. Nếu một giao dịch hỏng năm lần thì tranh chấp là chuyện cấu trúc — thiết kế cần đổi, chứ không cần thêm lần thử.</span></div>
@@ -595,9 +595,9 @@ CREATE UNIQUE INDEX "chi_hai_admin" ON "users"("role", "admin_slot")
 <pre><code><span class="tok-comment">// Một báo cáo buộc phải nhất quán bên trong: mọi truy vấn nhìn cùng một bản chụp</span>
 const bc = await prisma.$transaction(
   async (tx) =&gt; ({
-    tong:     await tx.donHang.aggregate({ _sum: { total: true } }),
-    theoNgay: await tx.donHang.groupBy({ by: ['ngay'], _sum: { total: true } }),
-    chiTiet:  await tx.donHang.findMany({ take: 1000, orderBy: { ngay: 'desc' } }),
+    total:     await tx.order.aggregate({ _sum: { total: true } }),
+    byDay: await tx.order.groupBy({ by: ['day'], _sum: { total: true } }),
+    detail:  await tx.order.findMany({ take: 1000, orderBy: { day: 'desc' } }),
   }),
   { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead },
 );</code></pre>
@@ -640,14 +640,14 @@ const bc = await prisma.$transaction(
   const [sp] = await tx.$queryRaw&lt;{ id: number; stock: number }[]&gt;&#96;
     SELECT id, stock FROM products WHERE id = \${spId} FOR UPDATE&#96;;
 
-  if (sp.stock &lt; soLuong) throw new Error('Khong du hang');
+  if (sp.stock &lt; quantity) throw new Error('Khong du hang');
 
   await tx.product.update({
     where: { id: spId },
-    data:  { stock: { decrement: soLuong } },
+    data:  { stock: { decrement: quantity } },
   });
 
-  return tx.orderItem.create({ data: { orderId, productId: spId, soLuong } });
+  return tx.orderItem.create({ data: { orderId, productId: spId, quantity } });
 });</code></pre>
 <div class="out">prisma:query BEGIN
 prisma:query SELECT id, stock FROM products WHERE id = $1 FOR UPDATE
@@ -686,13 +686,13 @@ const cong = await prisma.$transaction(async (tx) =&gt; {
 <h3>Optimistic: a version column</h3>
 <pre><code>model Document {
   id      Int    @id @default(autoincrement())
-  noiDung String
+  body    String
   version Int    @default(0)
 }</code></pre>
-<pre><code>async function luu(id: number, noiDung: string, versionDaBiet: number) {
+<pre><code>async function save(id: number, body: string, knownVersion: number) {
   const r = await prisma.document.updateMany({
-    where: { id, version: versionDaBiet },              <span class="tok-comment">// only if nobody else wrote</span>
-    data:  { noiDung, version: { increment: 1 } },
+    where: { id, version: knownVersion },              <span class="tok-comment">// only if nobody else wrote</span>
+    data:  { body, version: { increment: 1 } },
   });
 
   if (r.count === 0) {
@@ -713,7 +713,7 @@ WHERE ("id" = $3 AND "version" = $4)
 <pre><code><span class="tok-comment">// The same idea without an extra column, using updatedAt</span>
 const r = await prisma.document.updateMany({
   where: { id, updatedAt: daBiet },      <span class="tok-comment">// the timestamp the client last saw</span>
-  data:  { noiDung },                     <span class="tok-comment">// @updatedAt bumps it automatically</span>
+  data:  { body },                     <span class="tok-comment">// @updatedAt bumps it automatically</span>
 });</code></pre>
 
 <h3>Advisory locks: for things that are not rows</h3>
@@ -729,7 +729,7 @@ if (!ok[0].pg_try_advisory_lock) {
 }
 
 try {
-  await chayNhapDuLieu();          <span class="tok-comment">// minutes of work, safely exclusive</span>
+  await runImport();          <span class="tok-comment">// minutes of work, safely exclusive</span>
 } finally {
   await prisma.$executeRaw&#96;SELECT pg_advisory_unlock(\${KHOA_NHAP})&#96;;
 }</code></pre>
@@ -748,16 +748,16 @@ Mot ban khac dang chay. Bo qua.     ← instance 2, immediately
 
 <h3>Deadlocks, and the fix</h3>
 <pre><code><span class="tok-comment">// Two transfers in opposite directions, at the same moment</span>
-async function chuyen(tu: number, den: number, tien: number) {
+async function transfer(from: number, to: number, money: number) {
   return prisma.$transaction(async (tx) =&gt; {
-    await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id = \${tu}  FOR UPDATE&#96;;
-    await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id = \${den} FOR UPDATE&#96;;
-    await tx.taiKhoan.update({ where: { id: tu },  data: { soDu: { decrement: tien } } });
-    await tx.taiKhoan.update({ where: { id: den }, data: { soDu: { increment: tien } } });
+    await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id = \${from}  FOR UPDATE&#96;;
+    await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id = \${to} FOR UPDATE&#96;;
+    await tx.account.update({ where: { id: from },  data: { balance: { decrement: money } } });
+    await tx.account.update({ where: { id: to }, data: { balance: { increment: money } } });
   });
 }
 
-await Promise.all([chuyen(1, 2, 100), chuyen(2, 1, 50)]);</code></pre>
+await Promise.all([transfer(1, 2, 100), transfer(2, 1, 50)]);</code></pre>
 <div class="out">PrismaClientKnownRequestError:
 Transaction failed due to a write conflict or a deadlock. Please retry your transaction
   code: 'P2034'
@@ -767,13 +767,13 @@ Transaction failed due to a write conflict or a deadlock. Please retry your tran
 DETAIL: Process 4182 waits for ShareLock on transaction 9014; blocked by process 4190.
         Process 4190 waits for ShareLock on transaction 9013; blocked by process 4182.</div>
 <pre><code><span class="tok-comment">// The fix: always lock in the same order, regardless of direction</span>
-async function chuyen(tu: number, den: number, tien: number) {
-  const [dau, sau] = [tu, den].sort((a, b) =&gt; a - b);   <span class="tok-comment">// ascending id, always</span>
+async function transfer(from: number, to: number, money: number) {
+  const [dau, sau] = [from, to].sort((a, b) =&gt; a - b);   <span class="tok-comment">// ascending id, always</span>
 
   return prisma.$transaction(async (tx) =&gt; {
     await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id IN (\${dau}, \${sau}) ORDER BY id FOR UPDATE&#96;;
-    await tx.taiKhoan.update({ where: { id: tu },  data: { soDu: { decrement: tien } } });
-    await tx.taiKhoan.update({ where: { id: den }, data: { soDu: { increment: tien } } });
+    await tx.account.update({ where: { id: from },  data: { balance: { decrement: money } } });
+    await tx.account.update({ where: { id: to }, data: { balance: { increment: money } } });
   });
 }</code></pre>
 <div class="pitfall">
@@ -806,14 +806,14 @@ async function chuyen(tu: number, den: number, tien: number) {
   const [sp] = await tx.$queryRaw&lt;{ id: number; stock: number }[]&gt;&#96;
     SELECT id, stock FROM products WHERE id = \${spId} FOR UPDATE&#96;;
 
-  if (sp.stock &lt; soLuong) throw new Error('Khong du hang');
+  if (sp.stock &lt; quantity) throw new Error('Khong du hang');
 
   await tx.product.update({
     where: { id: spId },
-    data:  { stock: { decrement: soLuong } },
+    data:  { stock: { decrement: quantity } },
   });
 
-  return tx.orderItem.create({ data: { orderId, productId: spId, soLuong } });
+  return tx.orderItem.create({ data: { orderId, productId: spId, quantity } });
 });</code></pre>
 <div class="out">prisma:query BEGIN
 prisma:query SELECT id, stock FROM products WHERE id = $1 FOR UPDATE
@@ -852,13 +852,13 @@ const cong = await prisma.$transaction(async (tx) =&gt; {
 <h3>Lạc quan: một cột phiên bản</h3>
 <pre><code>model Document {
   id      Int    @id @default(autoincrement())
-  noiDung String
+  body    String
   version Int    @default(0)
 }</code></pre>
-<pre><code>async function luu(id: number, noiDung: string, versionDaBiet: number) {
+<pre><code>async function save(id: number, body: string, knownVersion: number) {
   const r = await prisma.document.updateMany({
-    where: { id, version: versionDaBiet },              <span class="tok-comment">// chỉ khi chưa ai ghi</span>
-    data:  { noiDung, version: { increment: 1 } },
+    where: { id, version: knownVersion },              <span class="tok-comment">// chỉ khi chưa ai ghi</span>
+    data:  { body, version: { increment: 1 } },
   });
 
   if (r.count === 0) {
@@ -879,7 +879,7 @@ WHERE ("id" = $3 AND "version" = $4)
 <pre><code><span class="tok-comment">// Cùng ý tưởng mà không cần cột thêm, dùng luôn updatedAt</span>
 const r = await prisma.document.updateMany({
   where: { id, updatedAt: daBiet },      <span class="tok-comment">// mốc thời gian client nhìn thấy lần cuối</span>
-  data:  { noiDung },                     <span class="tok-comment">// @updatedAt tự nâng nó lên</span>
+  data:  { body },                     <span class="tok-comment">// @updatedAt tự nâng nó lên</span>
 });</code></pre>
 
 <h3>Advisory lock: cho những thứ không phải hàng dữ liệu</h3>
@@ -895,7 +895,7 @@ if (!ok[0].pg_try_advisory_lock) {
 }
 
 try {
-  await chayNhapDuLieu();          <span class="tok-comment">// hàng phút công việc, độc quyền an toàn</span>
+  await runImport();          <span class="tok-comment">// hàng phút công việc, độc quyền an toàn</span>
 } finally {
   await prisma.$executeRaw&#96;SELECT pg_advisory_unlock(\${KHOA_NHAP})&#96;;
 }</code></pre>
@@ -914,16 +914,16 @@ Mot ban khac dang chay. Bo qua.     ← bản chạy 2, ngay lập tức
 
 <h3>Khoá chết, và cách vá</h3>
 <pre><code><span class="tok-comment">// Hai lần chuyển khoản ngược chiều nhau, cùng một khoảnh khắc</span>
-async function chuyen(tu: number, den: number, tien: number) {
+async function transfer(from: number, to: number, money: number) {
   return prisma.$transaction(async (tx) =&gt; {
-    await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id = \${tu}  FOR UPDATE&#96;;
-    await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id = \${den} FOR UPDATE&#96;;
-    await tx.taiKhoan.update({ where: { id: tu },  data: { soDu: { decrement: tien } } });
-    await tx.taiKhoan.update({ where: { id: den }, data: { soDu: { increment: tien } } });
+    await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id = \${from}  FOR UPDATE&#96;;
+    await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id = \${to} FOR UPDATE&#96;;
+    await tx.account.update({ where: { id: from },  data: { balance: { decrement: money } } });
+    await tx.account.update({ where: { id: to }, data: { balance: { increment: money } } });
   });
 }
 
-await Promise.all([chuyen(1, 2, 100), chuyen(2, 1, 50)]);</code></pre>
+await Promise.all([transfer(1, 2, 100), transfer(2, 1, 50)]);</code></pre>
 <div class="out">PrismaClientKnownRequestError:
 Transaction failed due to a write conflict or a deadlock. Please retry your transaction
   code: 'P2034'
@@ -933,13 +933,13 @@ Transaction failed due to a write conflict or a deadlock. Please retry your tran
 DETAIL: Process 4182 waits for ShareLock on transaction 9014; blocked by process 4190.
         Process 4190 waits for ShareLock on transaction 9013; blocked by process 4182.</div>
 <pre><code><span class="tok-comment">// Cách vá: luôn khoá theo cùng một thứ tự, bất kể chiều nào</span>
-async function chuyen(tu: number, den: number, tien: number) {
-  const [dau, sau] = [tu, den].sort((a, b) =&gt; a - b);   <span class="tok-comment">// id tăng dần, luôn luôn</span>
+async function transfer(from: number, to: number, money: number) {
+  const [dau, sau] = [from, to].sort((a, b) =&gt; a - b);   <span class="tok-comment">// id tăng dần, luôn luôn</span>
 
   return prisma.$transaction(async (tx) =&gt; {
     await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id IN (\${dau}, \${sau}) ORDER BY id FOR UPDATE&#96;;
-    await tx.taiKhoan.update({ where: { id: tu },  data: { soDu: { decrement: tien } } });
-    await tx.taiKhoan.update({ where: { id: den }, data: { soDu: { increment: tien } } });
+    await tx.account.update({ where: { id: from },  data: { balance: { decrement: money } } });
+    await tx.account.update({ where: { id: to }, data: { balance: { increment: money } } });
   });
 }</code></pre>
 <div class="pitfall">
@@ -992,7 +992,7 @@ async function chuyen(tu: number, den: number, tien: number) {
 <pre><code><span class="tok-comment">// The classic: an import inside a transaction</span>
 await prisma.$transaction(async (tx) =&gt; {
   for (const dong of tenNghinDong) {
-    await tx.sanPham.create({ data: dong });
+    await tx.product.create({ data: dong });
   }
 });</code></pre>
 <div class="out">PrismaClientKnownRequestError:
@@ -1008,7 +1008,7 @@ const KICH_THUOC = 500;
 
 for (let i = 0; i &lt; tenNghinDong.length; i += KICH_THUOC) {
   const lo = tenNghinDong.slice(i, i + KICH_THUOC);
-  await prisma.sanPham.createMany({ data: lo, skipDuplicates: true });
+  await prisma.product.createMany({ data: lo, skipDuplicates: true });
   console.log('da nhap', Math.min(i + KICH_THUOC, tenNghinDong.length));
 }</code></pre>
 <div class="out">da nhap 500
@@ -1024,9 +1024,9 @@ real    0m2.184s</div>
 await prisma.$transaction(
   async (tx) =&gt; {
     await tx.$executeRaw&#96;SET LOCAL statement_timeout = '25s'&#96;;
-    await tx.soKeToan.createMany({ data: butToan });
-    await tx.taiKhoan.updateMany({ where: { … }, data: { … } });
-    await tx.kyKeToan.update({ where: { id: kyId }, data: { daChot: true } });
+    await tx.ledger.createMany({ data: butToan });
+    await tx.account.updateMany({ where: { … }, data: { … } });
+    await tx.accountingPeriod.update({ where: { id: kyId }, data: { daChot: true } });
   },
   { maxWait: 5000, timeout: 30000 },
 );</code></pre>
@@ -1039,47 +1039,47 @@ await prisma.$transaction(
 
 <h3>The retry problem: doing it once, exactly</h3>
 <pre><code><span class="tok-comment">// A retry wrapper is not safe on its own. Consider what this retries:</span>
-await chayLai(async () =&gt; {
+await retry(async () =&gt; {
   await prisma.$transaction(async (tx) =&gt; {
-    await tx.taiKhoan.update({ where: { id: 1 }, data: { soDu: { decrement: 100 } } });
-    await tx.giaoDich.create({ data: { taiKhoanId: 1, soTien: 100 } });
+    await tx.account.update({ where: { id: 1 }, data: { balance: { decrement: 100 } } });
+    await tx.transaction.create({ data: { accountId: 1, amount: 100 } });
   });
 });</code></pre>
 <div class="callout warn">
 <p><strong>If the transaction commits and then the connection drops before the acknowledgement arrives, the client sees a failure and retries — and the balance is debited twice.</strong> This is not hypothetical; it is the ordinary behaviour of a network. A transaction guarantees atomicity <em>at the database</em>, and says nothing about whether the caller found out. Any operation that a retry might re-run needs a way to recognise that it already happened.</p>
 </div>
 <pre><code><span class="tok-comment">// An idempotency key: the caller names the operation, the database enforces once</span>
-model GiaoDich {
-  id       Int      @id @default(autoincrement())
-  khoa     String   @unique @map("khoa_idempotent")
-  soTien   Decimal  @db.Decimal(14, 2)
-  taoLuc   DateTime @default(now())
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique @map("khoa_idempotent")
+  amount    Decimal  @db.Decimal(14, 2)
+  createdAt DateTime @default(now())
 
   @@map("giao_dich")
 }</code></pre>
-<pre><code>async function rutTien(taiKhoanId: number, soTien: number, khoa: string) {
+<pre><code>async function withdraw(accountId: number, amount: number, key: string) {
   try {
     return await prisma.$transaction(async (tx) =&gt; {
       <span class="tok-comment">// The unique constraint is the guard. A duplicate key throws P2002.</span>
-      const gd = await tx.giaoDich.create({ data: { khoa, taiKhoanId, soTien } });
-      await tx.taiKhoan.update({
-        where: { id: taiKhoanId },
-        data:  { soDu: { decrement: soTien } },
+      const gd = await tx.transaction.create({ data: { key, accountId, amount } });
+      await tx.account.update({
+        where: { id: accountId },
+        data:  { balance: { decrement: amount } },
       });
       return gd;
     });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp; e.code === 'P2002') {
       <span class="tok-comment">// Already done. Return the original result — do not repeat the work.</span>
-      return prisma.giaoDich.findUniqueOrThrow({ where: { khoa } });
+      return prisma.transaction.findUniqueOrThrow({ where: { key } });
     }
     throw e;
   }
 }
 
 <span class="tok-comment">// The caller generates the key once and reuses it across every retry</span>
-const khoa = crypto.randomUUID();
-await chayLai(() =&gt; rutTien(1, 100, khoa));</code></pre>
+const key = crypto.randomUUID();
+await retry(() =&gt; withdraw(1, 100, key));</code></pre>
 <div class="out">-- first attempt:  INSERT … RETURNING  → { id: 41, khoa: 'a1b2…', soTien: 100 }
 -- retried:        INSERT → P2002 → SELECT → { id: 41, khoa: 'a1b2…', soTien: 100 }
 -- balance debited exactly once</div>
@@ -1093,42 +1093,42 @@ await chayLai(() =&gt; rutTien(1, 100, khoa));</code></pre>
 <h3>The other half: things that must happen after the commit</h3>
 <pre><code><span class="tok-comment">// The problem: this email is sent even if the transaction rolls back</span>
 await prisma.$transaction(async (tx) =&gt; {
-  const don = await tx.donHang.create({ data: { … } });
-  await guiEmail(don);          <span class="tok-comment">// ← outside the database, cannot be rolled back</span>
-  await tx.tonKho.update({ … }); <span class="tok-comment">// ← if THIS throws, the email was already sent</span>
+  const order = await tx.order.create({ data: { … } });
+  await sendEmail(order);          <span class="tok-comment">// ← outside the database, cannot be rolled back</span>
+  await tx.stock.update({ … }); <span class="tok-comment">// ← if THIS throws, the email was already sent</span>
 });</code></pre>
 <pre><code><span class="tok-comment">// The outbox pattern: record the intent inside the transaction,</span>
 <span class="tok-comment">// act on it outside. Now the record and the intent commit together.</span>
 model Outbox {
-  id       Int       @id @default(autoincrement())
-  loai     String
-  duLieu   Json
-  daXuLy   DateTime? @map("da_xu_ly")
-  taoLuc   DateTime  @default(now())
+  id        Int       @id @default(autoincrement())
+  kind      String
+  payload   Json
+  daXuLy    DateTime? @map("da_xu_ly")
+  createdAt DateTime  @default(now())
 
-  @@index([daXuLy, taoLuc])
+  @@index([daXuLy, createdAt])
   @@map("outbox")
 }</code></pre>
 <pre><code>await prisma.$transaction(async (tx) =&gt; {
-  const don = await tx.donHang.create({ data: { … } });
-  await tx.tonKho.update({ … });
-  await tx.outbox.create({ data: { loai: 'DON_HANG_MOI', duLieu: { donId: don.id } } });
+  const order = await tx.order.create({ data: { … } });
+  await tx.stock.update({ … });
+  await tx.outbox.create({ data: { kind: 'DON_HANG_MOI', payload: { orderId: order.id } } });
 });
 
 <span class="tok-comment">// A separate worker, using SKIP LOCKED from Lesson 7.3</span>
 for (;;) {
-  const viec = await prisma.$transaction(async (tx) =&gt; {
-    const [v] = await tx.$queryRaw&lt;{ id: number; loai: string; duLieu: any }[]&gt;&#96;
-      SELECT id, loai, "duLieu" FROM outbox
-      WHERE "da_xu_ly" IS NULL ORDER BY "taoLuc"
+  const job = await prisma.$transaction(async (tx) =&gt; {
+    const [v] = await tx.$queryRaw&lt;{ id: number; kind: string; payload: any }[]&gt;&#96;
+      SELECT id, kind, "payload" FROM outbox
+      WHERE "da_xu_ly" IS NULL ORDER BY "createdAt"
       FOR UPDATE SKIP LOCKED LIMIT 1&#96;;
     if (!v) return null;
     await tx.outbox.update({ where: { id: v.id }, data: { daXuLy: new Date() } });
     return v;
   });
 
-  if (!viec) { await nghi(1000); continue; }
-  await xuLy(viec);      <span class="tok-comment">// send the email, call the webhook, publish the event</span>
+  if (!job) { await nghi(1000); continue; }
+  await xuLy(job);      <span class="tok-comment">// send the email, call the webhook, publish the event</span>
 }</code></pre>
 <div class="callout ok">
 <p><strong>The outbox trades "exactly once" for "at least once", and that is the honest trade.</strong> If the worker crashes after acting but before marking the row processed, the action repeats — so the action itself must be idempotent, which is the same discipline as the previous section. What you gain is that the intent can never be lost: if the order exists, the outbox row exists, because they committed together. No distributed transaction, no message broker, one table.</p>
@@ -1163,7 +1163,7 @@ for (;;) {
 <pre><code><span class="tok-comment">// Kinh điển: một lần nhập dữ liệu nằm bên trong giao dịch</span>
 await prisma.$transaction(async (tx) =&gt; {
   for (const dong of tenNghinDong) {
-    await tx.sanPham.create({ data: dong });
+    await tx.product.create({ data: dong });
   }
 });</code></pre>
 <div class="out">PrismaClientKnownRequestError:
@@ -1179,7 +1179,7 @@ const KICH_THUOC = 500;
 
 for (let i = 0; i &lt; tenNghinDong.length; i += KICH_THUOC) {
   const lo = tenNghinDong.slice(i, i + KICH_THUOC);
-  await prisma.sanPham.createMany({ data: lo, skipDuplicates: true });
+  await prisma.product.createMany({ data: lo, skipDuplicates: true });
   console.log('da nhap', Math.min(i + KICH_THUOC, tenNghinDong.length));
 }</code></pre>
 <div class="out">da nhap 500
@@ -1195,9 +1195,9 @@ real    0m2.184s</div>
 await prisma.$transaction(
   async (tx) =&gt; {
     await tx.$executeRaw&#96;SET LOCAL statement_timeout = '25s'&#96;;
-    await tx.soKeToan.createMany({ data: butToan });
-    await tx.taiKhoan.updateMany({ where: { … }, data: { … } });
-    await tx.kyKeToan.update({ where: { id: kyId }, data: { daChot: true } });
+    await tx.ledger.createMany({ data: butToan });
+    await tx.account.updateMany({ where: { … }, data: { … } });
+    await tx.accountingPeriod.update({ where: { id: kyId }, data: { daChot: true } });
   },
   { maxWait: 5000, timeout: 30000 },
 );</code></pre>
@@ -1210,47 +1210,47 @@ await prisma.$transaction(
 
 <h3>Bài toán thử lại: làm đúng một lần, chính xác một lần</h3>
 <pre><code><span class="tok-comment">// Một lớp bọc thử lại tự nó chưa an toàn. Hãy nghĩ xem nó thử lại cái gì:</span>
-await chayLai(async () =&gt; {
+await retry(async () =&gt; {
   await prisma.$transaction(async (tx) =&gt; {
-    await tx.taiKhoan.update({ where: { id: 1 }, data: { soDu: { decrement: 100 } } });
-    await tx.giaoDich.create({ data: { taiKhoanId: 1, soTien: 100 } });
+    await tx.account.update({ where: { id: 1 }, data: { balance: { decrement: 100 } } });
+    await tx.transaction.create({ data: { accountId: 1, amount: 100 } });
   });
 });</code></pre>
 <div class="callout warn">
 <p><strong>Nếu giao dịch commit xong rồi kết nối rớt trước khi lời xác nhận về tới nơi, client thấy một thất bại và thử lại — và số dư bị trừ hai lần.</strong> Đây không phải giả thuyết; đó là hành vi bình thường của một mạng máy tính. Một giao dịch bảo đảm tính nguyên tử <em>tại cơ sở dữ liệu</em>, và không nói gì về việc bên gọi có biết được hay không. Bất kỳ thao tác nào mà một lần thử lại có thể chạy lại đều cần một cách để nhận ra rằng nó đã xảy ra rồi.</p>
 </div>
 <pre><code><span class="tok-comment">// Khoá idempotent: bên gọi đặt tên cho thao tác, cơ sở dữ liệu thi hành "một lần"</span>
-model GiaoDich {
-  id       Int      @id @default(autoincrement())
-  khoa     String   @unique @map("khoa_idempotent")
-  soTien   Decimal  @db.Decimal(14, 2)
-  taoLuc   DateTime @default(now())
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique @map("khoa_idempotent")
+  amount    Decimal  @db.Decimal(14, 2)
+  createdAt DateTime @default(now())
 
   @@map("giao_dich")
 }</code></pre>
-<pre><code>async function rutTien(taiKhoanId: number, soTien: number, khoa: string) {
+<pre><code>async function withdraw(accountId: number, amount: number, key: string) {
   try {
     return await prisma.$transaction(async (tx) =&gt; {
       <span class="tok-comment">// Ràng buộc unique chính là hàng rào. Khoá trùng thì ném P2002.</span>
-      const gd = await tx.giaoDich.create({ data: { khoa, taiKhoanId, soTien } });
-      await tx.taiKhoan.update({
-        where: { id: taiKhoanId },
-        data:  { soDu: { decrement: soTien } },
+      const gd = await tx.transaction.create({ data: { key, accountId, amount } });
+      await tx.account.update({
+        where: { id: accountId },
+        data:  { balance: { decrement: amount } },
       });
       return gd;
     });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp; e.code === 'P2002') {
       <span class="tok-comment">// Đã làm rồi. Trả về kết quả gốc — đừng lặp lại công việc.</span>
-      return prisma.giaoDich.findUniqueOrThrow({ where: { khoa } });
+      return prisma.transaction.findUniqueOrThrow({ where: { key } });
     }
     throw e;
   }
 }
 
 <span class="tok-comment">// Bên gọi sinh khoá một lần và dùng lại nó qua mọi lần thử lại</span>
-const khoa = crypto.randomUUID();
-await chayLai(() =&gt; rutTien(1, 100, khoa));</code></pre>
+const key = crypto.randomUUID();
+await retry(() =&gt; withdraw(1, 100, key));</code></pre>
 <div class="out">-- lần đầu:     INSERT … RETURNING  → { id: 41, khoa: 'a1b2…', soTien: 100 }
 -- thử lại:     INSERT → P2002 → SELECT → { id: 41, khoa: 'a1b2…', soTien: 100 }
 -- số dư bị trừ đúng một lần</div>
@@ -1264,42 +1264,42 @@ await chayLai(() =&gt; rutTien(1, 100, khoa));</code></pre>
 <h3>Nửa còn lại: những việc phải xảy ra sau khi commit</h3>
 <pre><code><span class="tok-comment">// Vấn đề: cái email này vẫn được gửi ngay cả khi giao dịch quay lui</span>
 await prisma.$transaction(async (tx) =&gt; {
-  const don = await tx.donHang.create({ data: { … } });
-  await guiEmail(don);          <span class="tok-comment">// ← ngoài cơ sở dữ liệu, không quay lui được</span>
-  await tx.tonKho.update({ … }); <span class="tok-comment">// ← nếu CÁI NÀY ném lỗi thì email đã gửi mất rồi</span>
+  const order = await tx.order.create({ data: { … } });
+  await sendEmail(order);          <span class="tok-comment">// ← ngoài cơ sở dữ liệu, không quay lui được</span>
+  await tx.stock.update({ … }); <span class="tok-comment">// ← nếu CÁI NÀY ném lỗi thì email đã gửi mất rồi</span>
 });</code></pre>
 <pre><code><span class="tok-comment">// Mẫu outbox: ghi lại ý định bên trong giao dịch,</span>
 <span class="tok-comment">// rồi hành động bên ngoài. Giờ bản ghi và ý định commit cùng nhau.</span>
 model Outbox {
-  id       Int       @id @default(autoincrement())
-  loai     String
-  duLieu   Json
-  daXuLy   DateTime? @map("da_xu_ly")
-  taoLuc   DateTime  @default(now())
+  id        Int       @id @default(autoincrement())
+  kind      String
+  payload   Json
+  daXuLy    DateTime? @map("da_xu_ly")
+  createdAt DateTime  @default(now())
 
-  @@index([daXuLy, taoLuc])
+  @@index([daXuLy, createdAt])
   @@map("outbox")
 }</code></pre>
 <pre><code>await prisma.$transaction(async (tx) =&gt; {
-  const don = await tx.donHang.create({ data: { … } });
-  await tx.tonKho.update({ … });
-  await tx.outbox.create({ data: { loai: 'DON_HANG_MOI', duLieu: { donId: don.id } } });
+  const order = await tx.order.create({ data: { … } });
+  await tx.stock.update({ … });
+  await tx.outbox.create({ data: { kind: 'DON_HANG_MOI', payload: { orderId: order.id } } });
 });
 
 <span class="tok-comment">// Một thợ chạy riêng, dùng SKIP LOCKED từ Bài 7.3</span>
 for (;;) {
-  const viec = await prisma.$transaction(async (tx) =&gt; {
-    const [v] = await tx.$queryRaw&lt;{ id: number; loai: string; duLieu: any }[]&gt;&#96;
-      SELECT id, loai, "duLieu" FROM outbox
-      WHERE "da_xu_ly" IS NULL ORDER BY "taoLuc"
+  const job = await prisma.$transaction(async (tx) =&gt; {
+    const [v] = await tx.$queryRaw&lt;{ id: number; kind: string; payload: any }[]&gt;&#96;
+      SELECT id, kind, "payload" FROM outbox
+      WHERE "da_xu_ly" IS NULL ORDER BY "createdAt"
       FOR UPDATE SKIP LOCKED LIMIT 1&#96;;
     if (!v) return null;
     await tx.outbox.update({ where: { id: v.id }, data: { daXuLy: new Date() } });
     return v;
   });
 
-  if (!viec) { await nghi(1000); continue; }
-  await xuLy(viec);      <span class="tok-comment">// gửi email, gọi webhook, phát sự kiện</span>
+  if (!job) { await nghi(1000); continue; }
+  await xuLy(job);      <span class="tok-comment">// gửi email, gọi webhook, phát sự kiện</span>
 }</code></pre>
 <div class="callout ok">
 <p><strong>Outbox đánh đổi "đúng một lần" lấy "ít nhất một lần", và đó là đánh đổi trung thực.</strong> Nếu thợ chết sau khi đã hành động nhưng trước khi đánh dấu hàng là đã xử lý thì hành động ấy lặp lại — nên bản thân hành động phải idempotent, tức đúng cái kỷ luật ở phần trước. Thứ bạn được là ý định không bao giờ mất được: nếu đơn hàng tồn tại thì hàng outbox tồn tại, vì chúng commit cùng nhau. Không giao dịch phân tán, không message broker, chỉ một cái bảng.</p>
@@ -1345,10 +1345,10 @@ if (daCo) throw new Error('Trung slug');
 await prisma.post.create({ data: { slug, title } });
 
 <span class="tok-comment">// Correct — let the constraint decide, and handle the collision</span>
-async function taoBai(title: string) {
-  const goc = taoSlug(title);
+async function createPost(title: string) {
+  const base = makeSlug(title);
   for (let i = 0; i &lt; 5; i++) {
-    const slug = i === 0 ? goc : &#96;\${goc}-\${i}&#96;;
+    const slug = i === 0 ? base : &#96;\${base}-\${i}&#96;;
     try {
       return await prisma.post.create({ data: { slug, title } });
     } catch (e) {
@@ -1356,7 +1356,7 @@ async function taoBai(title: string) {
       throw e;
     }
   }
-  return prisma.post.create({ data: { slug: &#96;\${goc}-\${crypto.randomUUID().slice(0, 8)}&#96;, title } });
+  return prisma.post.create({ data: { slug: &#96;\${base}-\${crypto.randomUUID().slice(0, 8)}&#96;, title } });
 }</code></pre>
 <div class="callout ok">
 <p><strong>Insert and catch beats check and insert, every time.</strong> The check-then-insert version is two round trips and still races; the insert-and-catch version is one round trip and is correct by construction, because the unique index is enforced atomically. The loop handles the ordinary case of a genuinely duplicate title, and the final fallback guarantees termination.</p>
@@ -1364,18 +1364,18 @@ async function taoBai(title: string) {
 
 <h3>3 · The last seat</h3>
 <pre><code><span class="tok-comment">// Naive — both buyers read stock: 1, both decrement, stock: -1</span>
-const g = await prisma.ghe.findUniqueOrThrow({ where: { id } });
-if (g.conLai &lt; 1) throw new Error('Het ghe');
-await prisma.ghe.update({ where: { id }, data: { conLai: { decrement: 1 } } });
+const g = await prisma.seat.findUniqueOrThrow({ where: { id } });
+if (g.remaining &lt; 1) throw new Error('Het seat');
+await prisma.seat.update({ where: { id }, data: { remaining: { decrement: 1 } } });
 
 <span class="tok-comment">// Correct — the precondition IS the where clause</span>
-const r = await prisma.ghe.updateMany({
-  where: { id, conLai: { gt: 0 } },
-  data:  { conLai: { decrement: 1 } },
+const r = await prisma.seat.updateMany({
+  where: { id, remaining: { gt: 0 } },
+  data:  { remaining: { decrement: 1 } },
 });
-if (r.count === 0) throw new Error('Het ghe');</code></pre>
+if (r.count === 0) throw new Error('Het seat');</code></pre>
 <pre><code><span class="tok-comment">-- And the constraint that makes the bug impossible even from psql</span>
-ALTER TABLE "ghe" ADD CONSTRAINT "ghe_con_lai_khong_am" CHECK ("con_lai" &gt;= 0);</code></pre>
+ALTER TABLE "seat" ADD CONSTRAINT "ghe_con_lai_khong_am" CHECK ("con_lai" &gt;= 0);</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Tool: precondition + constraint</span><span class="lz-t">No lock needed</span><span class="lz-d">The <code>where</code> makes check and write one statement. The <code>CHECK</code> is the second line of defence, and it protects against every writer including ones that are not your application.</span></div>
   <div class="lz-step"><span class="lz-k">When the booking spans two tables</span><span class="lz-t">Then you lock</span><span class="lz-d">"Decrement the seat count AND insert a ticket AND charge" is a transaction with a <code>FOR UPDATE</code> on the seat row. The precondition trick only covers a single-table guard.</span></div>
@@ -1384,46 +1384,46 @@ ALTER TABLE "ghe" ADD CONSTRAINT "ghe_con_lai_khong_am" CHECK ("con_lai" &gt;= 0
 <h3>4 · A rate limit</h3>
 <pre><code><span class="tok-comment">// Naive — count, then decide. Two requests both count 9 of 10.</span>
 const n = await prisma.apiCall.count({
-  where: { userId, taoLuc: { gte: motPhutTruoc } },
+  where: { userId, createdAt: { gte: motPhutTruoc } },
 });
 if (n &gt;= 10) throw new Error('Qua nhieu yeu cau');
 await prisma.apiCall.create({ data: { userId } });
 
 <span class="tok-comment">// Better in PostgreSQL — insert and count in ONE statement</span>
-const [kq] = await prisma.$queryRaw&lt;{ dem: number }[]&gt;&#96;
+const [result] = await prisma.$queryRaw&lt;{ cnt: number }[]&gt;&#96;
   WITH them AS (
     INSERT INTO api_calls (user_id, tao_luc) VALUES (\${userId}, now()) RETURNING id
   )
-  SELECT count(*)::int AS dem FROM api_calls
+  SELECT count(*)::int AS cnt FROM api_calls
   WHERE user_id = \${userId} AND tao_luc &gt;= now() - interval '1 minute'&#96;;
 
-if (kq.dem &gt; 10) throw new Error('Qua nhieu yeu cau');</code></pre>
+if (result.cnt &gt; 10) throw new Error('Qua nhieu yeu cau');</code></pre>
 <div class="callout warn">
 <p><strong>Rate limiting in PostgreSQL is possible and usually the wrong place for it.</strong> Every request becomes a write, which means WAL, replication traffic, and a table that needs constant cleanup. Redis exists for exactly this: a sliding-window counter with an expiry is one command and no persistence cost, and the CuongThai Redis course covers the pattern. Use the database only when the limit must survive a Redis restart — a monthly quota, a billing cap.</p>
 </div>
 
 <h3>5 · A balance transfer</h3>
 <pre><code><span class="tok-comment">// Naive — everything wrong at once: read-then-write, no ordering, no idempotency</span>
-const tu = await prisma.taiKhoan.findUniqueOrThrow({ where: { id: tuId } });
-if (tu.soDu &lt; tien) throw new Error('Khong du');
-await prisma.taiKhoan.update({ where: { id: tuId },  data: { soDu: tu.soDu - tien } });
-await prisma.taiKhoan.update({ where: { id: denId }, data: { soDu: { increment: tien } } });</code></pre>
+const from = await prisma.account.findUniqueOrThrow({ where: { id: fromId } });
+if (from.balance &lt; money) throw new Error('Khong du');
+await prisma.account.update({ where: { id: fromId },  data: { balance: from.balance - money } });
+await prisma.account.update({ where: { id: toId }, data: { balance: { increment: money } } });</code></pre>
 <pre><code><span class="tok-comment">// Correct — ordered locks, atomic operators, an idempotency key, a retry</span>
-async function chuyen(tuId: number, denId: number, tien: number, khoa: string) {
-  const [a, b] = [tuId, denId].sort((x, y) =&gt; x - y);
+async function transfer(fromId: number, toId: number, money: number, key: string) {
+  const [a, b] = [fromId, toId].sort((x, y) =&gt; x - y);
 
-  return chayLai(() =&gt;
+  return retry(() =&gt;
     prisma.$transaction(async (tx) =&gt; {
       await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id IN (\${a}, \${b}) ORDER BY id FOR UPDATE&#96;;
 
-      const r = await tx.taiKhoan.updateMany({
-        where: { id: tuId, soDu: { gte: tien } },
-        data:  { soDu: { decrement: tien } },
+      const r = await tx.account.updateMany({
+        where: { id: fromId, balance: { gte: money } },
+        data:  { balance: { decrement: money } },
       });
       if (r.count === 0) throw new Error('So du khong du');
 
-      await tx.taiKhoan.update({ where: { id: denId }, data: { soDu: { increment: tien } } });
-      return tx.giaoDich.create({ data: { khoa, tuId, denId, tien } });
+      await tx.account.update({ where: { id: toId }, data: { balance: { increment: money } } });
+      return tx.transaction.create({ data: { key, fromId, toId, money } });
     }),
   );
 }</code></pre>
@@ -1440,11 +1440,11 @@ so lan thu lai  : 3</div>
 
 <h3>6 · A job queue</h3>
 <pre><code><span class="tok-comment">// Naive — every worker picks the same job</span>
-const job = await prisma.job.findFirst({ where: { status: 'CHO' }, orderBy: { taoLuc: 'asc' } });
+const job = await prisma.job.findFirst({ where: { status: 'CHO' }, orderBy: { createdAt: 'asc' } });
 await prisma.job.update({ where: { id: job.id }, data: { status: 'DANG_CHAY' } });
 
 <span class="tok-comment">// Correct — SKIP LOCKED hands each worker a different row</span>
-async function nhanViec() {
+async function takeJob() {
   return prisma.$transaction(async (tx) =&gt; {
     const [v] = await tx.$queryRaw&lt;{ id: number }[]&gt;&#96;
       SELECT id FROM jobs WHERE status = 'CHO'
@@ -1452,7 +1452,7 @@ async function nhanViec() {
     if (!v) return null;
     return tx.job.update({
       where: { id: v.id },
-      data:  { status: 'DANG_CHAY', nhanLuc: new Date(), soLan: { increment: 1 } },
+      data:  { status: 'DANG_CHAY', receivedAt: new Date(), attempts: { increment: 1 } },
     });
   });
 }</code></pre>
@@ -1460,13 +1460,13 @@ async function nhanViec() {
 await prisma.job.updateMany({
   where: {
     status:  'DANG_CHAY',
-    nhanLuc: { lt: new Date(Date.now() - 5 * 60_000) },   <span class="tok-comment">// stuck for 5 minutes</span>
-    soLan:   { lt: 3 },
+    receivedAt: { lt: new Date(Date.now() - 5 * 60_000) },   <span class="tok-comment">// stuck for 5 minutes</span>
+    attempts:   { lt: 3 },
   },
   data: { status: 'CHO' },
 });</code></pre>
 <div class="callout ok">
-<p><strong>A queue is not finished until it recovers from a dead worker.</strong> <code>SKIP LOCKED</code> hands out jobs correctly; nothing hands them back when the process holding one is killed. The reclaim query above — run on a timer — is what turns a working queue into a reliable one, and the <code>soLan</code> bound is what stops a poisoned job from being retried forever.</p>
+<p><strong>A queue is not finished until it recovers from a dead worker.</strong> <code>SKIP LOCKED</code> hands out jobs correctly; nothing hands them back when the process holding one is killed. The reclaim query above — run on a timer — is what turns a working queue into a reliable one, and the <code>attempts</code> bound is what stops a poisoned job from being retried forever.</p>
 </div>
 
 <h3>The pattern across all six</h3>
@@ -1522,10 +1522,10 @@ if (daCo) throw new Error('Trung slug');
 await prisma.post.create({ data: { slug, title } });
 
 <span class="tok-comment">// Đúng — để ràng buộc quyết, và xử lý va chạm</span>
-async function taoBai(title: string) {
-  const goc = taoSlug(title);
+async function createPost(title: string) {
+  const base = makeSlug(title);
   for (let i = 0; i &lt; 5; i++) {
-    const slug = i === 0 ? goc : &#96;\${goc}-\${i}&#96;;
+    const slug = i === 0 ? base : &#96;\${base}-\${i}&#96;;
     try {
       return await prisma.post.create({ data: { slug, title } });
     } catch (e) {
@@ -1533,7 +1533,7 @@ async function taoBai(title: string) {
       throw e;
     }
   }
-  return prisma.post.create({ data: { slug: &#96;\${goc}-\${crypto.randomUUID().slice(0, 8)}&#96;, title } });
+  return prisma.post.create({ data: { slug: &#96;\${base}-\${crypto.randomUUID().slice(0, 8)}&#96;, title } });
 }</code></pre>
 <div class="callout ok">
 <p><strong>Chèn rồi bắt lỗi thắng kiểm rồi chèn, lần nào cũng vậy.</strong> Bản kiểm-rồi-chèn là hai lượt đi về mà vẫn có tranh chấp; bản chèn-rồi-bắt là một lượt đi về và đúng ngay từ cấu trúc, vì chỉ mục unique được thi hành một cách nguyên tử. Vòng lặp xử lý trường hợp bình thường là tiêu đề trùng thật, còn nhánh dự phòng cuối cùng bảo đảm nó luôn kết thúc.</p>
@@ -1541,18 +1541,18 @@ async function taoBai(title: string) {
 
 <h3>3 · Cái ghế cuối cùng</h3>
 <pre><code><span class="tok-comment">// Ngây thơ — hai người mua đều đọc conLai: 1, đều trừ, thành conLai: -1</span>
-const g = await prisma.ghe.findUniqueOrThrow({ where: { id } });
-if (g.conLai &lt; 1) throw new Error('Het ghe');
-await prisma.ghe.update({ where: { id }, data: { conLai: { decrement: 1 } } });
+const g = await prisma.seat.findUniqueOrThrow({ where: { id } });
+if (g.remaining &lt; 1) throw new Error('Het seat');
+await prisma.seat.update({ where: { id }, data: { remaining: { decrement: 1 } } });
 
 <span class="tok-comment">// Đúng — tiền điều kiện CHÍNH LÀ mệnh đề where</span>
-const r = await prisma.ghe.updateMany({
-  where: { id, conLai: { gt: 0 } },
-  data:  { conLai: { decrement: 1 } },
+const r = await prisma.seat.updateMany({
+  where: { id, remaining: { gt: 0 } },
+  data:  { remaining: { decrement: 1 } },
 });
-if (r.count === 0) throw new Error('Het ghe');</code></pre>
+if (r.count === 0) throw new Error('Het seat');</code></pre>
 <pre><code><span class="tok-comment">-- Và cái ràng buộc khiến con bọ thành bất khả ngay cả khi gõ từ psql</span>
-ALTER TABLE "ghe" ADD CONSTRAINT "ghe_con_lai_khong_am" CHECK ("con_lai" &gt;= 0);</code></pre>
+ALTER TABLE "seat" ADD CONSTRAINT "ghe_con_lai_khong_am" CHECK ("con_lai" &gt;= 0);</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Công cụ: tiền điều kiện cộng ràng buộc</span><span class="lz-t">Không cần khoá</span><span class="lz-d">Mệnh đề <code>where</code> làm phép kiểm và phép ghi thành một câu lệnh. Cái <code>CHECK</code> là tuyến phòng thủ thứ hai, và nó bảo vệ trước mọi bên ghi kể cả những bên không phải ứng dụng của bạn.</span></div>
   <div class="lz-step"><span class="lz-k">Khi việc đặt chỗ trải qua hai bảng</span><span class="lz-t">Thì bạn khoá</span><span class="lz-d">"Trừ số ghe VÀ chèn một vé VÀ thu tiền" là một giao dịch có <code>FOR UPDATE</code> lên hàng ghế. Mẹo tiền điều kiện chỉ bao được một hàng rào trong cùng một bảng.</span></div>
@@ -1561,46 +1561,46 @@ ALTER TABLE "ghe" ADD CONSTRAINT "ghe_con_lai_khong_am" CHECK ("con_lai" &gt;= 0
 <h3>4 · Giới hạn tần suất</h3>
 <pre><code><span class="tok-comment">// Ngây thơ — đếm, rồi quyết. Hai yêu cầu đều đếm ra 9 trên 10.</span>
 const n = await prisma.apiCall.count({
-  where: { userId, taoLuc: { gte: motPhutTruoc } },
+  where: { userId, createdAt: { gte: motPhutTruoc } },
 });
 if (n &gt;= 10) throw new Error('Qua nhieu yeu cau');
 await prisma.apiCall.create({ data: { userId } });
 
 <span class="tok-comment">// Tốt hơn trong PostgreSQL — chèn và đếm trong MỘT câu lệnh</span>
-const [kq] = await prisma.$queryRaw&lt;{ dem: number }[]&gt;&#96;
+const [result] = await prisma.$queryRaw&lt;{ cnt: number }[]&gt;&#96;
   WITH them AS (
     INSERT INTO api_calls (user_id, tao_luc) VALUES (\${userId}, now()) RETURNING id
   )
-  SELECT count(*)::int AS dem FROM api_calls
+  SELECT count(*)::int AS cnt FROM api_calls
   WHERE user_id = \${userId} AND tao_luc &gt;= now() - interval '1 minute'&#96;;
 
-if (kq.dem &gt; 10) throw new Error('Qua nhieu yeu cau');</code></pre>
+if (result.cnt &gt; 10) throw new Error('Qua nhieu yeu cau');</code></pre>
 <div class="callout warn">
 <p><strong>Giới hạn tần suất trong PostgreSQL là khả thi và thường là chỗ sai để làm việc đó.</strong> Mọi yêu cầu đều thành một lần ghi, nghĩa là WAL, lưu lượng nhân bản, và một cái bảng cần dọn dẹp liên tục. Redis tồn tại đúng cho việc này: một bộ đếm cửa sổ trượt kèm hạn dùng chỉ là một câu lệnh và không tốn chi phí lưu lâu dài, và khoá Redis của CuongThai nói về mẫu đó. Chỉ dùng cơ sở dữ liệu khi cái giới hạn ấy buộc phải sống sót qua một lần Redis khởi động lại — một hạn mức theo tháng, một trần tính tiền.</p>
 </div>
 
 <h3>5 · Chuyển số dư</h3>
 <pre><code><span class="tok-comment">// Ngây thơ — sai tất cả cùng lúc: đọc-rồi-ghi, không thứ tự khoá, không idempotent</span>
-const tu = await prisma.taiKhoan.findUniqueOrThrow({ where: { id: tuId } });
-if (tu.soDu &lt; tien) throw new Error('Khong du');
-await prisma.taiKhoan.update({ where: { id: tuId },  data: { soDu: tu.soDu - tien } });
-await prisma.taiKhoan.update({ where: { id: denId }, data: { soDu: { increment: tien } } });</code></pre>
+const from = await prisma.account.findUniqueOrThrow({ where: { id: fromId } });
+if (from.balance &lt; money) throw new Error('Khong du');
+await prisma.account.update({ where: { id: fromId },  data: { balance: from.balance - money } });
+await prisma.account.update({ where: { id: toId }, data: { balance: { increment: money } } });</code></pre>
 <pre><code><span class="tok-comment">// Đúng — khoá theo thứ tự, toán tử nguyên tử, một khoá idempotent, một lớp thử lại</span>
-async function chuyen(tuId: number, denId: number, tien: number, khoa: string) {
-  const [a, b] = [tuId, denId].sort((x, y) =&gt; x - y);
+async function transfer(fromId: number, toId: number, money: number, key: string) {
+  const [a, b] = [fromId, toId].sort((x, y) =&gt; x - y);
 
-  return chayLai(() =&gt;
+  return retry(() =&gt;
     prisma.$transaction(async (tx) =&gt; {
       await tx.$queryRaw&#96;SELECT id FROM tai_khoan WHERE id IN (\${a}, \${b}) ORDER BY id FOR UPDATE&#96;;
 
-      const r = await tx.taiKhoan.updateMany({
-        where: { id: tuId, soDu: { gte: tien } },
-        data:  { soDu: { decrement: tien } },
+      const r = await tx.account.updateMany({
+        where: { id: fromId, balance: { gte: money } },
+        data:  { balance: { decrement: money } },
       });
       if (r.count === 0) throw new Error('So du khong du');
 
-      await tx.taiKhoan.update({ where: { id: denId }, data: { soDu: { increment: tien } } });
-      return tx.giaoDich.create({ data: { khoa, tuId, denId, tien } });
+      await tx.account.update({ where: { id: toId }, data: { balance: { increment: money } } });
+      return tx.transaction.create({ data: { key, fromId, toId, money } });
     }),
   );
 }</code></pre>
@@ -1617,11 +1617,11 @@ so lan thu lai  : 3</div>
 
 <h3>6 · Hàng đợi việc</h3>
 <pre><code><span class="tok-comment">// Ngây thơ — mọi thợ đều nhặt trúng cùng một việc</span>
-const job = await prisma.job.findFirst({ where: { status: 'CHO' }, orderBy: { taoLuc: 'asc' } });
+const job = await prisma.job.findFirst({ where: { status: 'CHO' }, orderBy: { createdAt: 'asc' } });
 await prisma.job.update({ where: { id: job.id }, data: { status: 'DANG_CHAY' } });
 
 <span class="tok-comment">// Đúng — SKIP LOCKED đưa cho mỗi thợ một hàng khác nhau</span>
-async function nhanViec() {
+async function takeJob() {
   return prisma.$transaction(async (tx) =&gt; {
     const [v] = await tx.$queryRaw&lt;{ id: number }[]&gt;&#96;
       SELECT id FROM jobs WHERE status = 'CHO'
@@ -1629,7 +1629,7 @@ async function nhanViec() {
     if (!v) return null;
     return tx.job.update({
       where: { id: v.id },
-      data:  { status: 'DANG_CHAY', nhanLuc: new Date(), soLan: { increment: 1 } },
+      data:  { status: 'DANG_CHAY', receivedAt: new Date(), attempts: { increment: 1 } },
     });
   });
 }</code></pre>
@@ -1637,13 +1637,13 @@ async function nhanViec() {
 await prisma.job.updateMany({
   where: {
     status:  'DANG_CHAY',
-    nhanLuc: { lt: new Date(Date.now() - 5 * 60_000) },   <span class="tok-comment">// kẹt 5 phút</span>
-    soLan:   { lt: 3 },
+    receivedAt: { lt: new Date(Date.now() - 5 * 60_000) },   <span class="tok-comment">// kẹt 5 phút</span>
+    attempts:   { lt: 3 },
   },
   data: { status: 'CHO' },
 });</code></pre>
 <div class="callout ok">
-<p><strong>Một hàng đợi chưa hoàn thành cho tới khi nó phục hồi được sau khi một thợ chết.</strong> <code>SKIP LOCKED</code> phát việc ra đúng cách; không có gì thu việc về khi tiến trình đang giữ nó bị giết. Câu truy vấn đòi lại ở trên — chạy theo một bộ định thời — là thứ biến một hàng đợi chạy được thành một hàng đợi đáng tin, và cái chặn <code>soLan</code> là thứ ngăn một việc độc bị thử lại vô tận.</p>
+<p><strong>Một hàng đợi chưa hoàn thành cho tới khi nó phục hồi được sau khi một thợ chết.</strong> <code>SKIP LOCKED</code> phát việc ra đúng cách; không có gì thu việc về khi tiến trình đang giữ nó bị giết. Câu truy vấn đòi lại ở trên — chạy theo một bộ định thời — là thứ biến một hàng đợi chạy được thành một hàng đợi đáng tin, và cái chặn <code>attempts</code> là thứ ngăn một việc độc bị thử lại vô tận.</p>
 </div>
 
 <h3>Cái mẫu chung của cả sáu</h3>

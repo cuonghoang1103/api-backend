@@ -52,7 +52,7 @@ const b = await prisma.user.findUnique({ where: { id: 1 } });
 console.log(a === b);
 console.log(a.email === b.email);
 
-b.fullName = 'Doi ten';
+b.fullName = 'Doi name';
 console.log(a.fullName);</code></pre>
 <div class="out">false
 true
@@ -100,8 +100,8 @@ real    0m0.061s</div>
 <h3>Granularity: where do you put the address?</h3>
 <pre><code><span class="tok-comment">// Option A — flatten it. Simple, queryable, and the fields multiply.</span>
 model User {
-  id            Int    @id @default(autoincrement())
-  email         String @unique
+  id            Int     @id @default(autoincrement())
+  email         String  @unique
   addressStreet String? @map("address_street")
   addressCity   String? @map("address_city")
   addressZip    String? @map("address_zip")
@@ -143,14 +143,14 @@ enum ContentType {
 }
 
 model Content {
-  id        Int         @id @default(autoincrement())
-  type      ContentType
-  title     String
+  id       Int         @id @default(autoincrement())
+  type     ContentType
+  title    String
   <span class="tok-comment">// only meaningful when type = VLOG</span>
-  videoUrl  String?     @map("video_url")
-  duration  Int?
+  videoUrl String?     @map("video_url")
+  duration Int?
   <span class="tok-comment">// only meaningful when type = ARTICLE</span>
-  body      String?
+  body     String?
 
   @@map("contents")
 }</code></pre>
@@ -211,7 +211,7 @@ const b = await prisma.user.findUnique({ where: { id: 1 } });
 console.log(a === b);
 console.log(a.email === b.email);
 
-b.fullName = 'Doi ten';
+b.fullName = 'Doi name';
 console.log(a.fullName);</code></pre>
 <div class="out">false
 true
@@ -259,8 +259,8 @@ real    0m0.061s</div>
 <h3>Độ hạt: nhét cái địa chỉ vào đâu?</h3>
 <pre><code><span class="tok-comment">// Cách A — trải phẳng. Đơn giản, truy vấn được, và số trường thì nở ra.</span>
 model User {
-  id            Int    @id @default(autoincrement())
-  email         String @unique
+  id            Int     @id @default(autoincrement())
+  email         String  @unique
   addressStreet String? @map("address_street")
   addressCity   String? @map("address_city")
   addressZip    String? @map("address_zip")
@@ -302,14 +302,14 @@ enum ContentType {
 }
 
 model Content {
-  id        Int         @id @default(autoincrement())
-  type      ContentType
-  title     String
+  id       Int         @id @default(autoincrement())
+  type     ContentType
+  title    String
   <span class="tok-comment">// chỉ có nghĩa khi type = VLOG</span>
-  videoUrl  String?     @map("video_url")
-  duration  Int?
+  videoUrl String?     @map("video_url")
+  duration Int?
   <span class="tok-comment">// chỉ có nghĩa khi type = ARTICLE</span>
-  body      String?
+  body     String?
 
   @@map("contents")
 }</code></pre>
@@ -369,7 +369,7 @@ du -sh node_modules/.prisma/client/</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>index.d.ts</code> — 242 KB of types</span><span class="v">The part that matters. Model interfaces, one delegate per model, and the argument types for every method. Nothing here runs; it exists entirely for the compiler and your editor.</span></div>
   <div class="kv"><span class="k"><code>index.js</code> — 38 KB of runtime</span><span class="v">Surprisingly small, because it does almost nothing: it reads the embedded schema, builds the delegate objects with a <code>Proxy</code>, and forwards every call to the engine. The query building happens in the engine, not here.</span></div>
-  <div class="kv"><span class="k"><code>libquery_engine-*.so.node</code> — 18 MB</span><span class="v">The Rust query engine, compiled for <strong>your platform</strong>. That platform suffix is the most operationally dangerous string in the whole toolchain, and Chapter 11 is largely about it.</span></div>
+  <div class="kv"><span class="k"><code>libquery_engine-*.count.node</code> — 18 MB</span><span class="v">The Rust query engine, compiled for <strong>your platform</strong>. That platform suffix is the most operationally dangerous string in the whole toolchain, and Chapter 11 is largely about it.</span></div>
   <div class="kv"><span class="k"><code>schema.prisma</code> — a copy</span><span class="v">Your schema, embedded. The runtime reads it to know your models. This is why the generated client is genuinely self-describing, and why <code>prisma generate</code> must be re-run whenever the schema changes.</span></div>
   <div class="kv"><span class="k"><code>edge.js</code> / <code>edge.d.ts</code></span><span class="v">The variant for environments with no filesystem and no native modules — Cloudflare Workers, Vercel Edge. Same API, different transport. Chapter 11 covers when you need it.</span></div>
 </div>
@@ -515,7 +515,7 @@ du -sh node_modules/.prisma/client/</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>index.d.ts</code> — 242 KB toàn kiểu</span><span class="v">Phần quan trọng. Interface của model, mỗi model một delegate, và kiểu tham số cho mọi phương thức. Ở đây không có gì chạy cả; nó tồn tại hoàn toàn cho trình biên dịch và trình soạn thảo của bạn.</span></div>
   <div class="kv"><span class="k"><code>index.js</code> — 38 KB phần chạy</span><span class="v">Nhỏ đến bất ngờ, vì nó gần như không làm gì: đọc lược đồ nhúng bên trong, dựng các đối tượng delegate bằng một <code>Proxy</code>, rồi chuyển tiếp mọi lời gọi xuống engine. Phần dựng truy vấn xảy ra trong engine, không phải ở đây.</span></div>
-  <div class="kv"><span class="k"><code>libquery_engine-*.so.node</code> — 18 MB</span><span class="v">Query engine viết bằng Rust, biên dịch cho <strong>nền tảng của bạn</strong>. Cái hậu tố nền tảng ấy là chuỗi ký tự nguy hiểm nhất về mặt vận hành trong cả bộ công cụ, và Chương 11 phần lớn nói về nó.</span></div>
+  <div class="kv"><span class="k"><code>libquery_engine-*.count.node</code> — 18 MB</span><span class="v">Query engine viết bằng Rust, biên dịch cho <strong>nền tảng của bạn</strong>. Cái hậu tố nền tảng ấy là chuỗi ký tự nguy hiểm nhất về mặt vận hành trong cả bộ công cụ, và Chương 11 phần lớn nói về nó.</span></div>
   <div class="kv"><span class="k"><code>schema.prisma</code> — một bản sao</span><span class="v">Lược đồ của bạn, nhúng vào. Phần chạy đọc nó để biết các model của bạn. Nhờ vậy client sinh ra thật sự tự mô tả được chính nó, và cũng vì vậy <code>prisma generate</code> phải chạy lại mỗi khi lược đồ đổi.</span></div>
   <div class="kv"><span class="k"><code>edge.js</code> / <code>edge.d.ts</code></span><span class="v">Biến thể cho môi trường không có hệ tệp và không có module native — Cloudflare Workers, Vercel Edge. Cùng API, khác đường truyền. Chương 11 nói khi nào bạn cần nó.</span></div>
 </div>
@@ -693,7 +693,7 @@ DURATION: 1 ms</div>
 <h3>Three engine architectures, three sets of problems</h3>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Binary engine (Prisma 2, and still available)</span><span class="lz-lnote">A separate <code>query-engine</code> process, spoken to over HTTP on localhost. Robust and easy to reason about; costs a process, a port and ~50 ms of start-up. Enable with <code>engineType = "binary"</code>. Rarely the right choice today.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Node-API library (the default in Prisma 3–5)</span><span class="lz-lnote"><code>libquery_engine-&lt;platform&gt;.so.node</code>, loaded into your Node process. No extra process, faster calls — and a hard dependency on the exact platform and libc it was built for. <strong>This is the layer behind the outage in the note below.</strong></span></div>
+  <div class="lz-layer"><span class="lz-lname">Node-API library (the default in Prisma 3–5)</span><span class="lz-lnote"><code>libquery_engine-&lt;platform&gt;.count.node</code>, loaded into your Node process. No extra process, faster calls — and a hard dependency on the exact platform and libc it was built for. <strong>This is the layer behind the outage in the note below.</strong></span></div>
   <div class="lz-layer"><span class="lz-lname">Query compiler in WebAssembly (Prisma 6+)</span><span class="lz-lnote">No native binary at all: SQL is compiled in WASM and executed by an ordinary JavaScript driver via a <em>driver adapter</em>. Removes ~18 MB from the image and the whole class of platform-mismatch failures. Requires the adapter packages and, in 6.x, a preview flag.</span></div>
 </div>
 <pre><code><span class="tok-comment">// The WASM / driver-adapter shape — no engine binary anywhere</span>
@@ -805,7 +805,7 @@ DURATION: 1 ms</div>
 <h3>Ba kiến trúc engine, ba nhóm vấn đề</h3>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Engine dạng nhị phân (Prisma 2, và vẫn còn dùng được)</span><span class="lz-lnote">Một tiến trình <code>query-engine</code> riêng, nói chuyện qua HTTP trên localhost. Bền và dễ suy luận; trả giá bằng một tiến trình, một cổng và khoảng 50 ms khởi động. Bật bằng <code>engineType = "binary"</code>. Ngày nay hiếm khi là lựa chọn đúng.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Thư viện Node-API (mặc định ở Prisma 3–5)</span><span class="lz-lnote"><code>libquery_engine-&lt;nền tảng&gt;.so.node</code>, nạp thẳng vào tiến trình Node của bạn. Không thêm tiến trình, gọi nhanh hơn — và phụ thuộc cứng vào đúng nền tảng cùng libc mà nó được dựng cho. <strong>Đây chính là tầng đứng sau sự cố ở khối ghi chú bên dưới.</strong></span></div>
+  <div class="lz-layer"><span class="lz-lname">Thư viện Node-API (mặc định ở Prisma 3–5)</span><span class="lz-lnote"><code>libquery_engine-&lt;nền tảng&gt;.count.node</code>, nạp thẳng vào tiến trình Node của bạn. Không thêm tiến trình, gọi nhanh hơn — và phụ thuộc cứng vào đúng nền tảng cùng libc mà nó được dựng cho. <strong>Đây chính là tầng đứng sau sự cố ở khối ghi chú bên dưới.</strong></span></div>
   <div class="lz-layer"><span class="lz-lname">Trình biên dịch truy vấn bằng WebAssembly (Prisma 6+)</span><span class="lz-lnote">Không còn nhị phân native nào: SQL được biên dịch trong WASM và thực thi bởi một trình điều khiển JavaScript bình thường qua một <em>driver adapter</em>. Bỏ đi ~18 MB khỏi ảnh và bỏ luôn cả lớp lỗi lệch nền tảng. Cần các gói adapter, và ở 6.x cần một cờ preview.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Dáng của WASM / driver adapter — không có nhị phân engine ở đâu cả</span>
@@ -942,7 +942,7 @@ ls node_modules/.prisma/client/*.node</code></pre>
 <div class="out">node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node
 node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node</div>
 <div class="pitfall">
-<p><strong>Trap — <code>"native"</code> alone in a multi-stage Dockerfile.</strong> You generate on a Debian builder, copy <code>node_modules</code> into an Alpine runtime, and the engine you shipped is glibc while the image is musl. The container starts, the first query throws <code>Unable to require(...libquery_engine-debian-openssl-3.0.x.so.node)</code>, and the process restarts forever. This is exactly the CuongThai 502 from Lesson 1.3. The fix is one line — list both targets — and Chapter 11 shows the pre-push check that makes forgetting it impossible.</p>
+<p><strong>Trap — <code>"native"</code> alone in a multi-stage Dockerfile.</strong> You generate on a Debian builder, copy <code>node_modules</code> into an Alpine runtime, and the engine you shipped is glibc while the image is musl. The container starts, the first query throws <code>Unable to require(...libquery_engine-debian-openssl-3.0.x.count.node)</code>, and the process restarts forever. This is exactly the CuongThai 502 from Lesson 1.3. The fix is one line — list both targets — and Chapter 11 shows the pre-push check that makes forgetting it impossible.</p>
 </div>
 
 <h3>Preview features worth knowing about</h3>
@@ -1049,7 +1049,7 @@ ls node_modules/.prisma/client/*.node</code></pre>
 <div class="out">node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node
 node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node</div>
 <div class="pitfall">
-<p><strong>Bẫy — chỉ để mỗi <code>"native"</code> trong một Dockerfile nhiều tầng.</strong> Bạn generate trên tầng builder Debian, chép <code>node_modules</code> sang runtime Alpine, và engine bạn vừa đóng gói là glibc trong khi ảnh là musl. Container khởi động, câu truy vấn đầu tiên ném <code>Unable to require(...libquery_engine-debian-openssl-3.0.x.so.node)</code>, và tiến trình restart mãi mãi. Đây đúng là cú 502 của CuongThai ở Bài 1.3. Cách vá là một dòng — liệt kê cả hai target — và Chương 11 chỉ chốt kiểm trước khi đẩy khiến việc quên nó thành bất khả.</p>
+<p><strong>Bẫy — chỉ để mỗi <code>"native"</code> trong một Dockerfile nhiều tầng.</strong> Bạn generate trên tầng builder Debian, chép <code>node_modules</code> sang runtime Alpine, và engine bạn vừa đóng gói là glibc trong khi ảnh là musl. Container khởi động, câu truy vấn đầu tiên ném <code>Unable to require(...libquery_engine-debian-openssl-3.0.x.count.node)</code>, và tiến trình restart mãi mãi. Đây đúng là cú 502 của CuongThai ở Bài 1.3. Cách vá là một dòng — liệt kê cả hai target — và Chương 11 chỉ chốt kiểm trước khi đẩy khiến việc quên nó thành bất khả.</p>
 </div>
 
 <h3>Những tính năng preview đáng biết</h3>
@@ -1159,7 +1159,7 @@ Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:
 ALTER TABLE "posts" ADD COLUMN "slug" TEXT;
 
 <span class="tok-comment">-- 2. Backfill from data that already exists</span>
-UPDATE "posts" SET "slug" = 'bai-' || "id" WHERE "slug" IS NULL;
+UPDATE "posts" SET "slug" = 'post-' || "id" WHERE "slug" IS NULL;
 
 <span class="tok-comment">-- 3. Now the constraint can be satisfied</span>
 ALTER TABLE "posts" ALTER COLUMN "slug" SET NOT NULL;
@@ -1296,7 +1296,7 @@ Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:
 ALTER TABLE "posts" ADD COLUMN "slug" TEXT;
 
 <span class="tok-comment">-- 2. Đổ dữ liệu vào từ thứ vốn đã có</span>
-UPDATE "posts" SET "slug" = 'bai-' || "id" WHERE "slug" IS NULL;
+UPDATE "posts" SET "slug" = 'post-' || "id" WHERE "slug" IS NULL;
 
 <span class="tok-comment">-- 3. Giờ mới thoả được ràng buộc</span>
 ALTER TABLE "posts" ALTER COLUMN "slug" SET NOT NULL;

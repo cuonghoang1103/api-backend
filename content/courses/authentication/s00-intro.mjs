@@ -208,7 +208,7 @@ curl -s https://cuongthai.com/api/v1/auth/me \\
   </div>
 </div>
 <pre><code><span class="tok-comment">// The mistake, in four lines. It authenticates. It does not authorize.</span>
-app.get('/api/don-hang/:id', requireAuth, async (req, res) =&gt; {
+app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
   const don = await prisma.donHang.findUnique({ where: { id: req.params.id } });
   res.json(don);                       <span class="tok-comment">// ← whose order is this?</span>
 });</code></pre>
@@ -218,7 +218,7 @@ app.get('/api/don-hang/:id', requireAuth, async (req, res) =&gt; {
 # Cai don nay thuoc ve clx9 — KHONG phai An. An van doc duoc.
 # Doi id trong URL la doc duoc don cua bat ky ai. Day la IDOR.</div>
 <pre><code><span class="tok-comment">// The fix is one clause, and it belongs in the query, not after it</span>
-app.get('/api/don-hang/:id', requireAuth, async (req, res) =&gt; {
+app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
   const don = await prisma.donHang.findFirst({
     where: { id: req.params.id, userId: req.user.id },   <span class="tok-comment">// ← gate 3</span>
   });
@@ -303,7 +303,7 @@ function requireAuth(req, res, next) {
   </div>
 </div>
 <pre><code><span class="tok-comment">// Cái sai, gói trong bốn dòng. Nó XÁC THỰC. Nó KHÔNG phân quyền.</span>
-app.get('/api/don-hang/:id', requireAuth, async (req, res) =&gt; {
+app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
   const don = await prisma.donHang.findUnique({ where: { id: req.params.id } });
   res.json(don);                       <span class="tok-comment">// ← đơn này của AI?</span>
 });</code></pre>
@@ -313,7 +313,7 @@ app.get('/api/don-hang/:id', requireAuth, async (req, res) =&gt; {
 # Cai don nay thuoc ve clx9 — KHONG phai An. An van doc duoc.
 # Doi id trong URL la doc duoc don cua bat ky ai. Day la IDOR.</div>
 <pre><code><span class="tok-comment">// Cách vá là MỘT mệnh đề, và nó thuộc về câu truy vấn, không phải sau nó</span>
-app.get('/api/don-hang/:id', requireAuth, async (req, res) =&gt; {
+app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
   const don = await prisma.donHang.findFirst({
     where: { id: req.params.id, userId: req.user.id },   <span class="tok-comment">// ← cổng 3</span>
   });
@@ -443,13 +443,13 @@ const prisma = new PrismaClient();
 const app = express();
 app.use(express.json());
 
-app.post('/dang-ky', async (req, res) =&gt; {
+app.post('/sign-up', async (req, res) =&gt; {
   const { email, matKhau } = req.body;
   const nd = await prisma.nguoiDung.create({ data: { email, matKhau } });
   res.json({ id: nd.id });
 });
 
-app.post('/dang-nhap', async (req, res) =&gt; {
+app.post('/sign-in', async (req, res) =&gt; {
   const { email, matKhau } = req.body;
   const nd = await prisma.nguoiDung.findUnique({ where: { email } });
   if (!nd) return res.status(401).json({ loi: 'Email khong ton tai' });
@@ -461,7 +461,7 @@ app.post('/dang-nhap', async (req, res) =&gt; {
   res.json({ phien: phien.id });
 });
 
-app.get('/toi', async (req, res) =&gt; {
+app.get('/me', async (req, res) =&gt; {
   const phien = await prisma.phien.findUnique({
     where: { id: String(req.headers['x-phien']) },
     include: { nguoiDung: true },
@@ -582,13 +582,13 @@ const prisma = new PrismaClient();
 const app = express();
 app.use(express.json());
 
-app.post('/dang-ky', async (req, res) =&gt; {
+app.post('/sign-up', async (req, res) =&gt; {
   const { email, matKhau } = req.body;
   const nd = await prisma.nguoiDung.create({ data: { email, matKhau } });
   res.json({ id: nd.id });
 });
 
-app.post('/dang-nhap', async (req, res) =&gt; {
+app.post('/sign-in', async (req, res) =&gt; {
   const { email, matKhau } = req.body;
   const nd = await prisma.nguoiDung.findUnique({ where: { email } });
   if (!nd) return res.status(401).json({ loi: 'Email khong ton tai' });
@@ -600,7 +600,7 @@ app.post('/dang-nhap', async (req, res) =&gt; {
   res.json({ phien: phien.id });
 });
 
-app.get('/toi', async (req, res) =&gt; {
+app.get('/me', async (req, res) =&gt; {
   const phien = await prisma.phien.findUnique({
     where: { id: String(req.headers['x-phien']) },
     include: { nguoiDung: true },

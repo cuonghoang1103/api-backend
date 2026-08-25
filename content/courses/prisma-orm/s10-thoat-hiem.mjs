@@ -33,11 +33,11 @@ export default {
   <div class="kv"><span class="k"><code>$executeRawUnsafe</code></span><span class="v">Same, for statements. The one place it is genuinely needed: DDL where the table name is a variable — and that is exactly the case you must whitelist by hand.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Tagged template — note: NO parentheses after the function name</span>
-const nguoiDung = await prisma.$queryRaw&#96;
+const user = await prisma.$queryRaw&#96;
   SELECT id, username FROM "User" WHERE email = \${email}&#96;;
 
 <span class="tok-comment">// String argument — note: parentheses. A completely different function.</span>
-const nguoiDung = await prisma.$queryRawUnsafe(
+const user = await prisma.$queryRawUnsafe(
   &#96;SELECT id, username FROM "User" WHERE email = '\${email}'&#96;   <span class="tok-comment">// ← danger</span>
 );</code></pre>
 <div class="callout warn">
@@ -60,7 +60,7 @@ console.log(n);</code></pre>
 
 <h3>The attack, run for real</h3>
 <pre><code><span class="tok-comment">// A "search by email" endpoint, written the unsafe way</span>
-app.get('/tim', async (req, res) =&gt; {
+app.get('/search', async (req, res) =&gt; {
   const rows = await prisma.$queryRawUnsafe(
     &#96;SELECT id, username FROM "User" WHERE email = '\${req.query.email}'&#96;
   );
@@ -93,7 +93,7 @@ import { Prisma } from '@prisma/client';
 
 const dieuKien: Prisma.Sql[] = [Prisma.sql&#96;"deletedAt" IS NULL&#96;];
 if (tuKhoa)  dieuKien.push(Prisma.sql&#96;content ILIKE \${'%' + tuKhoa + '%'}&#96;);
-if (tacGia)  dieuKien.push(Prisma.sql&#96;"authorId" = \${tacGia}&#96;);
+if (author)  dieuKien.push(Prisma.sql&#96;"authorId" = \${author}&#96;);
 if (tuNgay)  dieuKien.push(Prisma.sql&#96;"createdAt" &gt;= \${tuNgay}&#96;);
 
 const rows = await prisma.$queryRaw&#96;
@@ -110,10 +110,10 @@ prisma:query params: ["%prisma%", "clx7…", 20]</div>
   <div class="lz-layer"><span class="lz-lname"><code>Prisma.sql&#96;…&#96;</code></span><span class="lz-lnote">A fragment that carries its own bind parameters. Composing two fragments composes their parameters correctly — you never renumber <code>$1</code>, <code>$2</code> by hand.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>Prisma.join(list, ' AND ')</code></span><span class="lz-lnote">Glues fragments with a separator. The separator is a plain string and must be a constant you wrote — it is SQL text, not data.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>Prisma.empty</code></span><span class="lz-lnote">The zero-length fragment, for the branch where a clause is absent. <code>WHERE \${dieuKien ?? Prisma.empty}</code> avoids building two versions of the query.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>Prisma.raw('…')</code></span><span class="lz-lnote"><strong>Injects text verbatim.</strong> It exists for identifiers — a column name to sort by — and it is the one place inside the safe API where user input must never reach. Whitelist, always: <code>const cot = ({ moi: 'createdAt', ten: 'title' })[req.query.sort] ?? 'createdAt';</code></span></div>
+  <div class="lz-layer"><span class="lz-lname"><code>Prisma.raw('…')</code></span><span class="lz-lnote"><strong>Injects text verbatim.</strong> It exists for identifiers — a column name to sort by — and it is the one place inside the safe API where user input must never reach. Whitelist, always: <code>const column = ({ moi: 'createdAt', name: 'title' })[req.query.sort] ?? 'createdAt';</code></span></div>
 </div>
 <div class="pitfall">
-<p><strong>Trap — you cannot parameterise an identifier.</strong> <code>ORDER BY \${cot}</code> inside <code>$queryRaw</code> sends <code>ORDER BY $1</code>, and PostgreSQL sorts every row by the constant string — no error, wrong results, and it looks like the sort is "just not working". Table names, column names, <code>ASC</code>/<code>DESC</code> and <code>LIMIT</code> keywords are SQL <em>text</em>. They go through <code>Prisma.raw</code>, from a whitelist, or they do not go at all.</p>
+<p><strong>Trap — you cannot parameterise an identifier.</strong> <code>ORDER BY \${column}</code> inside <code>$queryRaw</code> sends <code>ORDER BY $1</code>, and PostgreSQL sorts every row by the constant string — no error, wrong results, and it looks like the sort is "just not working". Table names, column names, <code>ASC</code>/<code>DESC</code> and <code>LIMIT</code> keywords are SQL <em>text</em>. They go through <code>Prisma.raw</code>, from a whitelist, or they do not go at all.</p>
 </div>
 <div class="note-ct">
 <p><strong>The habit that removes the whole class of bug.</strong> Grep the repository for <code>RawUnsafe</code> in CI and fail the build on any new occurrence outside an allow-listed file. On CuongThai there are two legitimate uses — a maintenance script that vacuums a table chosen from a fixed list, and a migration helper — and both are in files the check names explicitly. Everything else uses the tagged template. A rule a machine enforces is worth more than a rule in a document nobody re-reads.</p>
@@ -140,11 +140,11 @@ prisma:query params: ["%prisma%", "clx7…", 20]</div>
   <div class="kv"><span class="k"><code>$executeRawUnsafe</code></span><span class="v">Tương tự, cho câu lệnh. Chỗ nó thật sự cần thiết: DDL với tên bảng là biến — và đó đúng là trường hợp bạn PHẢI tự lập danh sách trắng.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Thẻ mẫu — chú ý: KHÔNG có dấu ngoặc sau tên hàm</span>
-const nguoiDung = await prisma.$queryRaw&#96;
+const user = await prisma.$queryRaw&#96;
   SELECT id, username FROM "User" WHERE email = \${email}&#96;;
 
 <span class="tok-comment">// Đối số là chuỗi — chú ý: CÓ dấu ngoặc. Một hàm hoàn toàn khác.</span>
-const nguoiDung = await prisma.$queryRawUnsafe(
+const user = await prisma.$queryRawUnsafe(
   &#96;SELECT id, username FROM "User" WHERE email = '\${email}'&#96;   <span class="tok-comment">// ← nguy hiểm</span>
 );</code></pre>
 <div class="callout warn">
@@ -167,7 +167,7 @@ console.log(n);</code></pre>
 
 <h3>Cú tấn công, chạy thật</h3>
 <pre><code><span class="tok-comment">// Một endpoint "tìm theo email", viết theo kiểu không an toàn</span>
-app.get('/tim', async (req, res) =&gt; {
+app.get('/search', async (req, res) =&gt; {
   const rows = await prisma.$queryRawUnsafe(
     &#96;SELECT id, username FROM "User" WHERE email = '\${req.query.email}'&#96;
   );
@@ -200,7 +200,7 @@ import { Prisma } from '@prisma/client';
 
 const dieuKien: Prisma.Sql[] = [Prisma.sql&#96;"deletedAt" IS NULL&#96;];
 if (tuKhoa)  dieuKien.push(Prisma.sql&#96;content ILIKE \${'%' + tuKhoa + '%'}&#96;);
-if (tacGia)  dieuKien.push(Prisma.sql&#96;"authorId" = \${tacGia}&#96;);
+if (author)  dieuKien.push(Prisma.sql&#96;"authorId" = \${author}&#96;);
 if (tuNgay)  dieuKien.push(Prisma.sql&#96;"createdAt" &gt;= \${tuNgay}&#96;);
 
 const rows = await prisma.$queryRaw&#96;
@@ -215,12 +215,12 @@ const rows = await prisma.$queryRaw&#96;
 prisma:query params: ["%prisma%", "clx7…", 20]</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname"><code>Prisma.sql&#96;…&#96;</code></span><span class="lz-lnote">Một mẩu câu MANG THEO tham số ràng buộc của chính nó. Ghép hai mẩu thì ghép luôn tham số cho đúng — bạn không bao giờ phải tự đánh lại số <code>$1</code>, <code>$2</code>.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>Prisma.join(danhSach, ' AND ')</code></span><span class="lz-lnote">Dán các mẩu bằng một dấu phân cách. Dấu phân cách là chuỗi thường và PHẢI là hằng do chính bạn viết — nó là chữ SQL, không phải dữ liệu.</span></div>
+  <div class="lz-layer"><span class="lz-lname"><code>Prisma.join(list, ' AND ')</code></span><span class="lz-lnote">Dán các mẩu bằng một dấu phân cách. Dấu phân cách là chuỗi thường và PHẢI là hằng do chính bạn viết — nó là chữ SQL, không phải dữ liệu.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>Prisma.empty</code></span><span class="lz-lnote">Mẩu rỗng, cho nhánh mà một mệnh đề vắng mặt. <code>WHERE \${dieuKien ?? Prisma.empty}</code> giúp khỏi phải dựng hai phiên bản của câu truy vấn.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>Prisma.raw('…')</code></span><span class="lz-lnote"><strong>Chèn chữ NGUYÊN XI.</strong> Nó tồn tại cho định danh — một tên cột để sắp xếp — và là chỗ DUY NHẤT bên trong API an toàn mà đầu vào người dùng KHÔNG BAO GIỜ được chạm tới. Danh sách trắng, luôn luôn: <code>const cot = ({ moi: 'createdAt', ten: 'title' })[req.query.sort] ?? 'createdAt';</code></span></div>
+  <div class="lz-layer"><span class="lz-lname"><code>Prisma.raw('…')</code></span><span class="lz-lnote"><strong>Chèn chữ NGUYÊN XI.</strong> Nó tồn tại cho định danh — một tên cột để sắp xếp — và là chỗ DUY NHẤT bên trong API an toàn mà đầu vào người dùng KHÔNG BAO GIỜ được chạm tới. Danh sách trắng, luôn luôn: <code>const column = ({ moi: 'createdAt', name: 'title' })[req.query.sort] ?? 'createdAt';</code></span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — KHÔNG tham số hoá được một định danh.</strong> <code>ORDER BY \${cot}</code> bên trong <code>$queryRaw</code> gửi đi <code>ORDER BY $1</code>, và PostgreSQL sắp mọi hàng theo một chuỗi hằng — không lỗi, kết quả sai, và nhìn cứ như "sắp xếp tự nhiên không chạy". Tên bảng, tên cột, từ khoá <code>ASC</code>/<code>DESC</code> và <code>LIMIT</code> đều là CHỮ SQL. Chúng đi qua <code>Prisma.raw</code>, lấy từ một danh sách trắng, hoặc không đi đâu cả.</p>
+<p><strong>Bẫy — KHÔNG tham số hoá được một định danh.</strong> <code>ORDER BY \${column}</code> bên trong <code>$queryRaw</code> gửi đi <code>ORDER BY $1</code>, và PostgreSQL sắp mọi hàng theo một chuỗi hằng — không lỗi, kết quả sai, và nhìn cứ như "sắp xếp tự nhiên không chạy". Tên bảng, tên cột, từ khoá <code>ASC</code>/<code>DESC</code> và <code>LIMIT</code> đều là CHỮ SQL. Chúng đi qua <code>Prisma.raw</code>, lấy từ một danh sách trắng, hoặc không đi đâu cả.</p>
 </div>
 <div class="note-ct">
 <p><strong>Thói quen xoá sạch cả một LỚP bug.</strong> Cho CI grep kho mã tìm <code>RawUnsafe</code> và làm hỏng bản dựng khi có chỗ mới nào nằm ngoài danh sách file được phép. Trên CuongThai có hai chỗ dùng chính đáng — một script bảo trì chạy vacuum trên bảng chọn từ danh sách cố định, và một hàm phụ cho migration — cả hai đều nằm trong những file mà phép kiểm gọi tên tường minh. Còn lại dùng thẻ mẫu hết. Một luật do MÁY cưỡng chế đáng giá hơn một luật nằm trong tài liệu không ai đọc lại.</p>
@@ -267,7 +267,7 @@ $queryRaw&lt;T = unknown&gt;(query: TemplateStringsArray, ...values: any[]): Pri
 
 <h3>Conversion 1 — <code>count(*)</code> is a BigInt, and it breaks <code>res.json</code></h3>
 <pre><code>const rows = await prisma.$queryRaw&#96;
-  SELECT "authorId", count(*) AS so_bai
+  SELECT "authorId", count(*) AS post_count
   FROM "SocialPost" GROUP BY "authorId"&#96;;
 console.log(rows[0]);
 res.json(rows);</code></pre>
@@ -277,21 +277,21 @@ TypeError: Do not know how to serialize a BigInt
     at JSON.stringify (&lt;anonymous&gt;)
     at ServerResponse.json (express/lib/response.js:1150:14)</div>
 <pre><code><span class="tok-comment">-- Fix at the source: cast in the SQL</span>
-SELECT "authorId", count(*)::int AS so_bai FROM "SocialPost" GROUP BY "authorId";</code></pre>
+SELECT "authorId", count(*)::int AS post_count FROM "SocialPost" GROUP BY "authorId";</code></pre>
 <div class="out">{ authorId: 'clx7…', so_bai: 14 }         ← a plain number</div>
 <div class="callout ok">
-<p><strong>Cast in SQL, do not convert in JavaScript.</strong> <code>Number(row.so_bai)</code> works but must be repeated at every call site and forgotten at exactly one of them. <code>::int</code> fixes it once, at the place the value is produced, for every caller — and it documents the intent to the next reader of the query. Use <code>::bigint</code> deliberately when a count really can exceed 2<sup>31</sup>, and then handle the BigInt on purpose.</p>
+<p><strong>Cast in SQL, do not convert in JavaScript.</strong> <code>Number(row.post_count)</code> works but must be repeated at every call site and forgotten at exactly one of them. <code>::int</code> fixes it once, at the place the value is produced, for every caller — and it documents the intent to the next reader of the query. Use <code>::bigint</code> deliberately when a count really can exceed 2<sup>31</sup>, and then handle the BigInt on purpose.</p>
 </div>
 
 <h3>Conversion 2 — <code>Decimal</code> stays a Decimal object</h3>
-<pre><code>const rows = await prisma.$queryRaw&#96;SELECT id, gia FROM "Order" LIMIT 1&#96;;
-console.log(rows[0].gia, typeof rows[0].gia);
-console.log(rows[0].gia + 100);</code></pre>
+<pre><code>const rows = await prisma.$queryRaw&#96;SELECT id, price FROM "Order" LIMIT 1&#96;;
+console.log(rows[0].price, typeof rows[0].price);
+console.log(rows[0].price + 100);</code></pre>
 <div class="out">Decimal { s: 1, e: 5, d: [ 249000 ] } object
 249000100        ← string concatenation, not addition</div>
 <pre><code><span class="tok-comment">// Decimal has its own arithmetic. Use it, or convert explicitly.</span>
-rows[0].gia.plus(100).toString();     <span class="tok-comment">// '249100'  — exact</span>
-rows[0].gia.toNumber() + 100;         <span class="tok-comment">// 249100    — float, loses precision above 2^53</span></code></pre>
+rows[0].price.plus(100).toString();     <span class="tok-comment">// '249100'  — exact</span>
+rows[0].price.toNumber() + 100;         <span class="tok-comment">// 249100    — float, loses precision above 2^53</span></code></pre>
 <div class="pitfall">
 <p><strong>Trap — <code>Decimal + number</code> is a silent string concatenation.</strong> JavaScript's <code>+</code> falls back to string when either side is an object, and <code>Decimal.toString()</code> gives digits, so <code>249000 + 100</code> becomes <code>'249000100'</code> — a plausible-looking number that is wrong by a factor of a thousand. It reaches an invoice before anyone notices. Money is <code>Decimal</code>, and <code>Decimal</code> arithmetic uses methods: <code>.plus()</code>, <code>.minus()</code>, <code>.times()</code>, <code>.dividedBy()</code>.</p>
 </div>
@@ -332,22 +332,22 @@ await prisma.$queryRaw&#96;SELECT id, avatar_url FROM users&#96;;
 <pre><code><span class="tok-comment">// Raw and builder in one transaction — this works</span>
 await prisma.$transaction(async (tx) =&gt; {
   await tx.$executeRaw&#96;LOCK TABLE "Counter" IN SHARE ROW EXCLUSIVE MODE&#96;;
-  const c = await tx.counter.findUnique({ where: { key: 'don-hang' } });
-  await tx.counter.update({ where: { key: 'don-hang' }, data: { value: c.value + 1 } });
+  const c = await tx.counter.findUnique({ where: { key: 'order-hang' } });
+  await tx.counter.update({ where: { key: 'order-hang' }, data: { value: c.value + 1 } });
 });</code></pre>
 
 <h3>Putting a real check back</h3>
 <pre><code>import { z } from 'zod';
 
-const HangThongKe = z.object({
+const StatsRow = z.object({
   authorId: z.string(),
-  so_bai:   z.number().int(),
+  post_count:   z.number().int(),
   gan_nhat: z.date(),
 });
 
-const rows = HangThongKe.array().parse(
+const rows = StatsRow.array().parse(
   await prisma.$queryRaw&#96;
-    SELECT "authorId", count(*)::int AS so_bai, max("createdAt") AS gan_nhat
+    SELECT "authorId", count(*)::int AS post_count, max("createdAt") AS gan_nhat
     FROM "SocialPost" WHERE "deletedAt" IS NULL GROUP BY "authorId"&#96;
 );
 <span class="tok-comment">// rows is now { authorId: string; so_bai: number; gan_nhat: Date }[]</span>
@@ -398,7 +398,7 @@ $queryRaw&lt;T = unknown&gt;(query: TemplateStringsArray, ...values: any[]): Pri
 
 <h3>Chuyển đổi 1 — <code>count(*)</code> là BigInt, và nó làm vỡ <code>res.json</code></h3>
 <pre><code>const rows = await prisma.$queryRaw&#96;
-  SELECT "authorId", count(*) AS so_bai
+  SELECT "authorId", count(*) AS post_count
   FROM "SocialPost" GROUP BY "authorId"&#96;;
 console.log(rows[0]);
 res.json(rows);</code></pre>
@@ -408,21 +408,21 @@ TypeError: Do not know how to serialize a BigInt
     at JSON.stringify (&lt;anonymous&gt;)
     at ServerResponse.json (express/lib/response.js:1150:14)</div>
 <pre><code><span class="tok-comment">-- Vá tại nguồn: ép kiểu ngay trong SQL</span>
-SELECT "authorId", count(*)::int AS so_bai FROM "SocialPost" GROUP BY "authorId";</code></pre>
+SELECT "authorId", count(*)::int AS post_count FROM "SocialPost" GROUP BY "authorId";</code></pre>
 <div class="out">{ authorId: 'clx7…', so_bai: 14 }         ← mot so thuong</div>
 <div class="callout ok">
-<p><strong>Ép kiểu trong SQL, đừng chuyển đổi trong JavaScript.</strong> <code>Number(row.so_bai)</code> chạy được nhưng phải lặp lại ở mọi chỗ gọi và sẽ bị quên ở đúng một chỗ. <code>::int</code> vá một lần, ngay nơi giá trị được sinh ra, cho MỌI người gọi — và nó nói rõ ý định cho người đọc câu truy vấn sau này. Chỉ dùng <code>::bigint</code> một cách CÓ CHỦ Ý khi phép đếm thật sự có thể vượt 2<sup>31</sup>, rồi xử lý BigInt một cách có chủ ý luôn.</p>
+<p><strong>Ép kiểu trong SQL, đừng chuyển đổi trong JavaScript.</strong> <code>Number(row.post_count)</code> chạy được nhưng phải lặp lại ở mọi chỗ gọi và sẽ bị quên ở đúng một chỗ. <code>::int</code> vá một lần, ngay nơi giá trị được sinh ra, cho MỌI người gọi — và nó nói rõ ý định cho người đọc câu truy vấn sau này. Chỉ dùng <code>::bigint</code> một cách CÓ CHỦ Ý khi phép đếm thật sự có thể vượt 2<sup>31</sup>, rồi xử lý BigInt một cách có chủ ý luôn.</p>
 </div>
 
 <h3>Chuyển đổi 2 — <code>Decimal</code> vẫn là một object Decimal</h3>
-<pre><code>const rows = await prisma.$queryRaw&#96;SELECT id, gia FROM "Order" LIMIT 1&#96;;
-console.log(rows[0].gia, typeof rows[0].gia);
-console.log(rows[0].gia + 100);</code></pre>
+<pre><code>const rows = await prisma.$queryRaw&#96;SELECT id, price FROM "Order" LIMIT 1&#96;;
+console.log(rows[0].price, typeof rows[0].price);
+console.log(rows[0].price + 100);</code></pre>
 <div class="out">Decimal { s: 1, e: 5, d: [ 249000 ] } object
 249000100        ← noi chuoi, khong phai phep cong</div>
 <pre><code><span class="tok-comment">// Decimal có số học riêng. Dùng nó, hoặc chuyển đổi tường minh.</span>
-rows[0].gia.plus(100).toString();     <span class="tok-comment">// '249100'  — chính xác</span>
-rows[0].gia.toNumber() + 100;         <span class="tok-comment">// 249100    — số thực, mất chính xác trên 2^53</span></code></pre>
+rows[0].price.plus(100).toString();     <span class="tok-comment">// '249100'  — chính xác</span>
+rows[0].price.toNumber() + 100;         <span class="tok-comment">// 249100    — số thực, mất chính xác trên 2^53</span></code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — <code>Decimal + number</code> là một phép nối chuỗi LẶNG LẼ.</strong> Toán tử <code>+</code> của JavaScript rơi về chuỗi khi một vế là object, và <code>Decimal.toString()</code> cho ra chữ số, nên <code>249000 + 100</code> thành <code>'249000100'</code> — một con số nhìn RẤT HỢP LÝ mà sai gấp một nghìn lần. Nó đi tới tận hoá đơn trước khi có ai nhận ra. Tiền là <code>Decimal</code>, và số học của <code>Decimal</code> dùng phương thức: <code>.plus()</code>, <code>.minus()</code>, <code>.times()</code>, <code>.dividedBy()</code>.</p>
 </div>
@@ -463,22 +463,22 @@ await prisma.$queryRaw&#96;SELECT id, avatar_url FROM users&#96;;
 <pre><code><span class="tok-comment">// Thô và trình dựng trong một giao dịch — cái này chạy được</span>
 await prisma.$transaction(async (tx) =&gt; {
   await tx.$executeRaw&#96;LOCK TABLE "Counter" IN SHARE ROW EXCLUSIVE MODE&#96;;
-  const c = await tx.counter.findUnique({ where: { key: 'don-hang' } });
-  await tx.counter.update({ where: { key: 'don-hang' }, data: { value: c.value + 1 } });
+  const c = await tx.counter.findUnique({ where: { key: 'order-hang' } });
+  await tx.counter.update({ where: { key: 'order-hang' }, data: { value: c.value + 1 } });
 });</code></pre>
 
 <h3>Đặt một phép kiểm THẬT trở lại</h3>
 <pre><code>import { z } from 'zod';
 
-const HangThongKe = z.object({
+const StatsRow = z.object({
   authorId: z.string(),
-  so_bai:   z.number().int(),
+  post_count:   z.number().int(),
   gan_nhat: z.date(),
 });
 
-const rows = HangThongKe.array().parse(
+const rows = StatsRow.array().parse(
   await prisma.$queryRaw&#96;
-    SELECT "authorId", count(*)::int AS so_bai, max("createdAt") AS gan_nhat
+    SELECT "authorId", count(*)::int AS post_count, max("createdAt") AS gan_nhat
     FROM "SocialPost" WHERE "deletedAt" IS NULL GROUP BY "authorId"&#96;
 );
 <span class="tok-comment">// rows giờ là { authorId: string; so_bai: number; gan_nhat: Date }[]</span>
@@ -545,14 +545,14 @@ WHERE u.id = ANY($1);</code></pre>
 <h3>2. Window functions — rank, running total, and the previous row</h3>
 <pre><code>SELECT
   u.username,
-  count(p.id)::int                                      AS so_bai,
+  count(p.id)::int                                      AS post_count,
   rank()       OVER (ORDER BY count(p.id) DESC)         AS hang,
   sum(count(p.id)) OVER (ORDER BY count(p.id) DESC)     AS luy_tien,
   lag(u.username) OVER (ORDER BY count(p.id) DESC)      AS nguoi_tren
 FROM "User" u
 LEFT JOIN "SocialPost" p ON p."authorId" = u.id AND p."deletedAt" IS NULL
 GROUP BY u.id, u.username
-ORDER BY so_bai DESC
+ORDER BY post_count DESC
 LIMIT 5;</code></pre>
 <div class="out">  username  | so_bai | hang | luy_tien | nguoi_tren
 ------------+--------+------+----------+------------
@@ -581,23 +581,23 @@ model Comment {
 <span class="tok-comment">// Through the builder, depth is fixed at write time:</span>
 include: { replies: { include: { replies: { include: { replies: true } } } } }
 <span class="tok-comment">// Three levels. The fourth is silently missing.</span></code></pre>
-<pre><code>WITH RECURSIVE cay AS (
+<pre><code>WITH RECURSIVE tree AS (
   <span class="tok-comment">-- anchor: the top-level comments of this post</span>
   SELECT id, content, "parentId", 0 AS do_sau,
-         ARRAY["createdAt"] AS duong_dan
+         ARRAY["createdAt"] AS path
   FROM "Comment"
   WHERE "postId" = $1 AND "parentId" IS NULL
 
   UNION ALL
 
   <span class="tok-comment">-- recursive step: children of everything already in cay</span>
-  SELECT c.id, c.content, c."parentId", cay.do_sau + 1,
-         cay.duong_dan || c."createdAt"
+  SELECT c.id, c.content, c."parentId", tree.do_sau + 1,
+         tree.path || c."createdAt"
   FROM "Comment" c
-  JOIN cay ON c."parentId" = cay.id
-  WHERE cay.do_sau &lt; 10          <span class="tok-comment">-- depth guard, always</span>
+  JOIN tree ON c."parentId" = tree.id
+  WHERE tree.do_sau &lt; 10          <span class="tok-comment">-- depth guard, always</span>
 )
-SELECT * FROM cay ORDER BY duong_dan;</code></pre>
+SELECT * FROM tree ORDER BY path;</code></pre>
 <div class="out">              id | do_sau |            content
 -----------------+--------+---------------------------------
  cm_a            |      0 | Bai viet hay
@@ -608,24 +608,24 @@ SELECT * FROM cay ORDER BY duong_dan;</code></pre>
 
 Execution Time: 3.208 ms   (any depth, one query)</div>
 <div class="pitfall">
-<p><strong>Trap — a recursive CTE without a depth guard runs forever on a cycle.</strong> One row whose <code>parentId</code> points at its own descendant — a bug, a bad import, a merge — and the query generates rows until the connection dies or the disk fills with temp files. <code>WHERE do_sau &lt; 10</code> costs nothing and bounds the damage. The <code>duong_dan</code> array is the second half of the defence: <code>WHERE NOT c.id = ANY(duong_dan)</code> makes a cycle terminate rather than merely time out, and it gives you the ordering for free.</p>
+<p><strong>Trap — a recursive CTE without a depth guard runs forever on a cycle.</strong> One row whose <code>parentId</code> points at its own descendant — a bug, a bad import, a merge — and the query generates rows until the connection dies or the disk fills with temp files. <code>WHERE do_sau &lt; 10</code> costs nothing and bounds the damage. The <code>path</code> array is the second half of the defence: <code>WHERE NOT c.id = ANY(path)</code> makes a cycle terminate rather than merely time out, and it gives you the ordering for free.</p>
 </div>
 
 <h3>4. <code>ON CONFLICT DO UPDATE</code> with an expression</h3>
 <pre><code><span class="tok-comment">// What upsert can say: "if it exists, set it to this value"</span>
 await prisma.dailyStat.upsert({
-  where:  { uk_ngay: { key: 'luot-xem', ngay } },
-  create: { key: 'luot-xem', ngay, so: 1 },
-  update: { so: { increment: 1 } },        <span class="tok-comment">// ok — increment is supported</span>
+  where:  { uk_ngay: { key: 'luot-xem', day } },
+  create: { key: 'luot-xem', day, count: 1 },
+  update: { count: { increment: 1 } },        <span class="tok-comment">// ok — increment is supported</span>
 });</code></pre>
 <pre><code><span class="tok-comment">-- What upsert cannot say: a value computed from BOTH sides,</span>
 <span class="tok-comment">-- for many rows at once, in one statement.</span>
-INSERT INTO "DailyStat" (key, ngay, so, cap_nhat)
+INSERT INTO "DailyStat" (key, day, count, updated_at)
 SELECT * FROM unnest($1::text[], $2::date[], $3::int[], $4::timestamptz[])
-ON CONFLICT (key, ngay) DO UPDATE
-SET so       = "DailyStat".so + EXCLUDED.so,
-    cap_nhat = GREATEST("DailyStat".cap_nhat, EXCLUDED.cap_nhat)
-WHERE EXCLUDED.cap_nhat &gt; "DailyStat".cap_nhat;   <span class="tok-comment">-- conditional update</span></code></pre>
+ON CONFLICT (key, day) DO UPDATE
+SET count       = "DailyStat".count + EXCLUDED.count,
+    updated_at = GREATEST("DailyStat".updated_at, EXCLUDED.updated_at)
+WHERE EXCLUDED.updated_at &gt; "DailyStat".updated_at;   <span class="tok-comment">-- conditional update</span></code></pre>
 <div class="out">INSERT 0 4096
 
 4.096 hang gop trong 1 cau lenh, 1 giao dich, 34 ms.
@@ -634,7 +634,7 @@ Qua upsert: 4.096 luot di ve, 4.096 giao dich, ~39 giay.</div>
   <div class="lz-layer"><span class="lz-lname"><code>EXCLUDED</code></span><span class="lz-lnote">The pseudo-table holding the row that <em>would have been</em> inserted. It lets the update read both the existing value and the incoming one — which is what "merge" means and what <code>upsert</code>'s <code>update</code> block cannot see.</span></div>
   <div class="lz-layer"><span class="lz-lname">A <code>WHERE</code> on the conflict action</span><span class="lz-lnote">Skip the update when the incoming row is older. Last-write-wins is a choice, not a law, and this is where you override it.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>unnest</code> of arrays</span><span class="lz-lnote">Four parameters carry four thousand rows. It stays inside the 65,535 bind-parameter cap that would stop a <code>VALUES</code> list of the same size (Lesson 9.5).</span></div>
-  <div class="lz-layer"><span class="lz-lname">The unique constraint is required</span><span class="lz-lnote"><code>ON CONFLICT (key, ngay)</code> needs a unique index on exactly those columns. Without it PostgreSQL raises <code>there is no unique or exclusion constraint matching the ON CONFLICT specification</code> — which at least fails loudly.</span></div>
+  <div class="lz-layer"><span class="lz-lname">The unique constraint is required</span><span class="lz-lnote"><code>ON CONFLICT (key, day)</code> needs a unique index on exactly those columns. Without it PostgreSQL raises <code>there is no unique or exclusion constraint matching the ON CONFLICT specification</code> — which at least fails loudly.</span></div>
 </div>
 
 <h3>5. Full-text search that ranks</h3>
@@ -644,14 +644,14 @@ ALTER TABLE "SocialPost"
   GENERATED ALWAYS AS (to_tsvector('simple', coalesce(content, ''))) STORED;
 
 CREATE INDEX socialpost_tim_kiem_idx ON "SocialPost" USING GIN (tim_kiem);</code></pre>
-<pre><code>const ketQua = await prisma.$queryRaw&#96;
+<pre><code>const result = await prisma.$queryRaw&#96;
   SELECT id, content,
-         ts_rank(tim_kiem, truy_van) AS diem,
+         ts_rank(tim_kiem, truy_van) AS score,
          ts_headline('simple', content, truy_van,
                      'StartSel=&lt;mark&gt;, StopSel=&lt;/mark&gt;') AS trich
   FROM "SocialPost", websearch_to_tsquery('simple', \${tuKhoa}) AS truy_van
   WHERE tim_kiem @@ truy_van AND "deletedAt" IS NULL
-  ORDER BY diem DESC, "createdAt" DESC
+  ORDER BY score DESC, "createdAt" DESC
   LIMIT 20&#96;;</code></pre>
 <div class="out">tu khoa: prisma migration
 
@@ -720,14 +720,14 @@ WHERE u.id = ANY($1);</code></pre>
 <h3>2. Window function — xếp hạng, tổng luỹ tiến, và hàng liền trước</h3>
 <pre><code>SELECT
   u.username,
-  count(p.id)::int                                      AS so_bai,
+  count(p.id)::int                                      AS post_count,
   rank()       OVER (ORDER BY count(p.id) DESC)         AS hang,
   sum(count(p.id)) OVER (ORDER BY count(p.id) DESC)     AS luy_tien,
   lag(u.username) OVER (ORDER BY count(p.id) DESC)      AS nguoi_tren
 FROM "User" u
 LEFT JOIN "SocialPost" p ON p."authorId" = u.id AND p."deletedAt" IS NULL
 GROUP BY u.id, u.username
-ORDER BY so_bai DESC
+ORDER BY post_count DESC
 LIMIT 5;</code></pre>
 <div class="out">  username  | so_bai | hang | luy_tien | nguoi_tren
 ------------+--------+------+----------+------------
@@ -756,23 +756,23 @@ model Comment {
 <span class="tok-comment">// Qua trình dựng, độ sâu bị CHỐT CỨNG lúc viết mã:</span>
 include: { replies: { include: { replies: { include: { replies: true } } } } }
 <span class="tok-comment">// Ba tầng. Tầng thứ tư biến mất trong im lặng.</span></code></pre>
-<pre><code>WITH RECURSIVE cay AS (
+<pre><code>WITH RECURSIVE tree AS (
   <span class="tok-comment">-- mỏ neo: các bình luận gốc của bài này</span>
   SELECT id, content, "parentId", 0 AS do_sau,
-         ARRAY["createdAt"] AS duong_dan
+         ARRAY["createdAt"] AS path
   FROM "Comment"
   WHERE "postId" = $1 AND "parentId" IS NULL
 
   UNION ALL
 
   <span class="tok-comment">-- bước đệ quy: con của mọi thứ đã có trong cay</span>
-  SELECT c.id, c.content, c."parentId", cay.do_sau + 1,
-         cay.duong_dan || c."createdAt"
+  SELECT c.id, c.content, c."parentId", tree.do_sau + 1,
+         tree.path || c."createdAt"
   FROM "Comment" c
-  JOIN cay ON c."parentId" = cay.id
-  WHERE cay.do_sau &lt; 10          <span class="tok-comment">-- chốt chặn độ sâu, LUÔN LUÔN</span>
+  JOIN tree ON c."parentId" = tree.id
+  WHERE tree.do_sau &lt; 10          <span class="tok-comment">-- chốt chặn độ sâu, LUÔN LUÔN</span>
 )
-SELECT * FROM cay ORDER BY duong_dan;</code></pre>
+SELECT * FROM tree ORDER BY path;</code></pre>
 <div class="out">              id | do_sau |            content
 -----------------+--------+---------------------------------
  cm_a            |      0 | Bai viet hay
@@ -783,24 +783,24 @@ SELECT * FROM cay ORDER BY duong_dan;</code></pre>
 
 Execution Time: 3,208 ms   (do sau bao nhieu cung 1 truy van)</div>
 <div class="pitfall">
-<p><strong>Bẫy — một CTE đệ quy KHÔNG có chốt chặn độ sâu sẽ chạy MÃI MÃI khi gặp chu trình.</strong> Chỉ một hàng có <code>parentId</code> trỏ vào chính hậu duệ của nó — do bug, do nhập dữ liệu sai, do một lần gộp nhánh — là câu truy vấn sinh hàng cho tới khi kết nối chết hoặc đĩa đầy file tạm. <code>WHERE do_sau &lt; 10</code> không tốn gì và chặn được thiệt hại. Cái mảng <code>duong_dan</code> là nửa còn lại của hàng phòng thủ: <code>WHERE NOT c.id = ANY(duong_dan)</code> làm chu trình DỪNG hẳn chứ không chỉ hết giờ, và tặng luôn thứ tự sắp xếp cho bạn.</p>
+<p><strong>Bẫy — một CTE đệ quy KHÔNG có chốt chặn độ sâu sẽ chạy MÃI MÃI khi gặp chu trình.</strong> Chỉ một hàng có <code>parentId</code> trỏ vào chính hậu duệ của nó — do bug, do nhập dữ liệu sai, do một lần gộp nhánh — là câu truy vấn sinh hàng cho tới khi kết nối chết hoặc đĩa đầy file tạm. <code>WHERE do_sau &lt; 10</code> không tốn gì và chặn được thiệt hại. Cái mảng <code>path</code> là nửa còn lại của hàng phòng thủ: <code>WHERE NOT c.id = ANY(path)</code> làm chu trình DỪNG hẳn chứ không chỉ hết giờ, và tặng luôn thứ tự sắp xếp cho bạn.</p>
 </div>
 
 <h3>4. <code>ON CONFLICT DO UPDATE</code> kèm BIỂU THỨC</h3>
 <pre><code><span class="tok-comment">// Thứ upsert nói được: "nếu đã có thì đặt thành giá trị này"</span>
 await prisma.dailyStat.upsert({
-  where:  { uk_ngay: { key: 'luot-xem', ngay } },
-  create: { key: 'luot-xem', ngay, so: 1 },
-  update: { so: { increment: 1 } },        <span class="tok-comment">// ổn — increment có hỗ trợ</span>
+  where:  { uk_ngay: { key: 'luot-xem', day } },
+  create: { key: 'luot-xem', day, count: 1 },
+  update: { count: { increment: 1 } },        <span class="tok-comment">// ổn — increment có hỗ trợ</span>
 });</code></pre>
 <pre><code><span class="tok-comment">-- Thứ upsert KHÔNG nói được: một giá trị tính từ CẢ HAI phía,</span>
 <span class="tok-comment">-- cho nhiều hàng cùng lúc, trong MỘT câu lệnh.</span>
-INSERT INTO "DailyStat" (key, ngay, so, cap_nhat)
+INSERT INTO "DailyStat" (key, day, count, updated_at)
 SELECT * FROM unnest($1::text[], $2::date[], $3::int[], $4::timestamptz[])
-ON CONFLICT (key, ngay) DO UPDATE
-SET so       = "DailyStat".so + EXCLUDED.so,
-    cap_nhat = GREATEST("DailyStat".cap_nhat, EXCLUDED.cap_nhat)
-WHERE EXCLUDED.cap_nhat &gt; "DailyStat".cap_nhat;   <span class="tok-comment">-- cập nhật có điều kiện</span></code></pre>
+ON CONFLICT (key, day) DO UPDATE
+SET count       = "DailyStat".count + EXCLUDED.count,
+    updated_at = GREATEST("DailyStat".updated_at, EXCLUDED.updated_at)
+WHERE EXCLUDED.updated_at &gt; "DailyStat".updated_at;   <span class="tok-comment">-- cập nhật có điều kiện</span></code></pre>
 <div class="out">INSERT 0 4096
 
 4.096 hang gop trong 1 cau lenh, 1 giao dich, 34 ms.
@@ -809,7 +809,7 @@ Qua upsert: 4.096 luot di ve, 4.096 giao dich, ~39 giay.</div>
   <div class="lz-layer"><span class="lz-lname"><code>EXCLUDED</code></span><span class="lz-lnote">Bảng giả chứa cái hàng LẼ RA đã được chèn. Nó cho phép phần update đọc CẢ giá trị đang có LẪN giá trị đang tới — đó chính là nghĩa của "gộp", và là thứ khối <code>update</code> của <code>upsert</code> không nhìn thấy.</span></div>
   <div class="lz-layer"><span class="lz-lname">Một <code>WHERE</code> gắn vào hành động khi xung đột</span><span class="lz-lnote">Bỏ qua việc cập nhật khi hàng đang tới CŨ hơn. "Ai ghi sau thắng" là một LỰA CHỌN, không phải định luật, và đây là chỗ bạn lật ngược nó.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>unnest</code> các mảng</span><span class="lz-lnote">Bốn tham số cõng bốn nghìn hàng. Nó nằm gọn trong trần 65.535 tham số ràng buộc, cái trần sẽ chặn một danh sách <code>VALUES</code> cùng cỡ (Bài 9.5).</span></div>
-  <div class="lz-layer"><span class="lz-lname">BẮT BUỘC phải có ràng buộc duy nhất</span><span class="lz-lnote"><code>ON CONFLICT (key, ngay)</code> cần một chỉ mục duy nhất trên ĐÚNG những cột đó. Thiếu nó, PostgreSQL ném <code>there is no unique or exclusion constraint matching the ON CONFLICT specification</code> — ít ra thì nó hỏng một cách ồn ào.</span></div>
+  <div class="lz-layer"><span class="lz-lname">BẮT BUỘC phải có ràng buộc duy nhất</span><span class="lz-lnote"><code>ON CONFLICT (key, day)</code> cần một chỉ mục duy nhất trên ĐÚNG những cột đó. Thiếu nó, PostgreSQL ném <code>there is no unique or exclusion constraint matching the ON CONFLICT specification</code> — ít ra thì nó hỏng một cách ồn ào.</span></div>
 </div>
 
 <h3>5. Tìm kiếm toàn văn CÓ XẾP HẠNG</h3>
@@ -819,14 +819,14 @@ ALTER TABLE "SocialPost"
   GENERATED ALWAYS AS (to_tsvector('simple', coalesce(content, ''))) STORED;
 
 CREATE INDEX socialpost_tim_kiem_idx ON "SocialPost" USING GIN (tim_kiem);</code></pre>
-<pre><code>const ketQua = await prisma.$queryRaw&#96;
+<pre><code>const result = await prisma.$queryRaw&#96;
   SELECT id, content,
-         ts_rank(tim_kiem, truy_van) AS diem,
+         ts_rank(tim_kiem, truy_van) AS score,
          ts_headline('simple', content, truy_van,
                      'StartSel=&lt;mark&gt;, StopSel=&lt;/mark&gt;') AS trich
   FROM "SocialPost", websearch_to_tsquery('simple', \${tuKhoa}) AS truy_van
   WHERE tim_kiem @@ truy_van AND "deletedAt" IS NULL
-  ORDER BY diem DESC, "createdAt" DESC
+  ORDER BY score DESC, "createdAt" DESC
   LIMIT 20&#96;;</code></pre>
 <div class="out">tu khoa: prisma migration
 
@@ -888,7 +888,7 @@ SELECT
   p.id,
   p.content,
   p."createdAt",
-  count(c.id)::int AS so_binh_luan
+  count(c.id)::int AS comment_count
 FROM "SocialPost" p
 LEFT JOIN "Comment" c ON c."postId" = p.id
 WHERE p."authorId" = $1 AND p."deletedAt" IS NULL
@@ -903,13 +903,13 @@ Datasource "db": PostgreSQL database "cuongthai" at "localhost:5432"
 ✔ Generated Prisma Client (v6.4.1) to ./node_modules/@prisma/client in 284ms
 ✔ Generated 1 SQL query to ./node_modules/@prisma/client/sql in 41ms</div>
 <pre><code><span class="tok-comment">// Use it. The import path is @prisma/client/sql, not @prisma/client.</span>
-import { thongKeTacGia } from '@prisma/client/sql';
+import { authorStats } from '@prisma/client/sql';
 
-const rows = await prisma.$queryRawTyped(thongKeTacGia(tacGiaId, 20));
+const rows = await prisma.$queryRawTyped(authorStats(authorId, 20));
 
-rows[0].so_binh_luan;   <span class="tok-comment">// number</span>
+rows[0].comment_count;   <span class="tok-comment">// number</span>
 rows[0].createdAt;      <span class="tok-comment">// Date</span>
-rows[0].khong_co_that;  <span class="tok-comment">// ❌ Property 'khong_co_that' does not exist</span></code></pre>
+rows[0].not_real;  <span class="tok-comment">// ❌ Property 'khong_co_that' does not exist</span></code></pre>
 <div class="lz-map">
   <div class="lz-stage">
     <span class="lz-badge">Build</span>
@@ -945,7 +945,7 @@ npx prisma generate --sql</code></pre>
 
 <h3>The <code>@param</code> comment, in full</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k"><code>-- @param {String} $1:ten</code></span><span class="v">Position, type, and the name the generated function's argument will have. The name is what appears in your editor's autocomplete, so make it readable.</span></div>
+  <div class="kv"><span class="k"><code>-- @param {String} $1:name</code></span><span class="v">Position, type, and the name the generated function's argument will have. The name is what appears in your editor's autocomplete, so make it readable.</span></div>
   <div class="kv"><span class="k">The type names</span><span class="v"><code>String</code>, <code>Int</code>, <code>BigInt</code>, <code>Float</code>, <code>Boolean</code>, <code>DateTime</code>, <code>Decimal</code>, <code>Json</code>, <code>Bytes</code> — the Prisma scalar names, not the PostgreSQL ones.</span></div>
   <div class="kv"><span class="k">Optional parameters</span><span class="v"><code>-- @param {String} $1:tuKhoa?</code> — the trailing <code>?</code> makes the argument <code>string | null</code>. Use it with <code>WHERE (\$1 IS NULL OR content ILIKE \$1)</code> for a filter that may be absent.</span></div>
   <div class="kv"><span class="k">A description after the name</span><span class="v">Everything after the name becomes the JSDoc comment on the generated argument. It costs one line and shows up on hover months later.</span></div>
@@ -1021,7 +1021,7 @@ SELECT
   p.id,
   p.content,
   p."createdAt",
-  count(c.id)::int AS so_binh_luan
+  count(c.id)::int AS comment_count
 FROM "SocialPost" p
 LEFT JOIN "Comment" c ON c."postId" = p.id
 WHERE p."authorId" = $1 AND p."deletedAt" IS NULL
@@ -1036,13 +1036,13 @@ Datasource "db": PostgreSQL database "cuongthai" at "localhost:5432"
 ✔ Generated Prisma Client (v6.4.1) to ./node_modules/@prisma/client in 284ms
 ✔ Generated 1 SQL query to ./node_modules/@prisma/client/sql in 41ms</div>
 <pre><code><span class="tok-comment">// Dùng nó. Đường import là @prisma/client/sql, KHÔNG phải @prisma/client.</span>
-import { thongKeTacGia } from '@prisma/client/sql';
+import { authorStats } from '@prisma/client/sql';
 
-const rows = await prisma.$queryRawTyped(thongKeTacGia(tacGiaId, 20));
+const rows = await prisma.$queryRawTyped(authorStats(authorId, 20));
 
-rows[0].so_binh_luan;   <span class="tok-comment">// number</span>
+rows[0].comment_count;   <span class="tok-comment">// number</span>
 rows[0].createdAt;      <span class="tok-comment">// Date</span>
-rows[0].khong_co_that;  <span class="tok-comment">// ❌ Property 'khong_co_that' does not exist</span></code></pre>
+rows[0].not_real;  <span class="tok-comment">// ❌ Property 'khong_co_that' does not exist</span></code></pre>
 <div class="lz-map">
   <div class="lz-stage">
     <span class="lz-badge">Build</span>
@@ -1078,7 +1078,7 @@ npx prisma generate --sql</code></pre>
 
 <h3>Chú thích <code>@param</code>, đầy đủ</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k"><code>-- @param {String} $1:ten</code></span><span class="v">Vị trí, kiểu, và cái TÊN mà đối số của hàm sinh ra sẽ mang. Cái tên đó là thứ hiện lên trong gợi ý của trình soạn thảo, nên hãy đặt cho dễ đọc.</span></div>
+  <div class="kv"><span class="k"><code>-- @param {String} $1:name</code></span><span class="v">Vị trí, kiểu, và cái TÊN mà đối số của hàm sinh ra sẽ mang. Cái tên đó là thứ hiện lên trong gợi ý của trình soạn thảo, nên hãy đặt cho dễ đọc.</span></div>
   <div class="kv"><span class="k">Các tên kiểu</span><span class="v"><code>String</code>, <code>Int</code>, <code>BigInt</code>, <code>Float</code>, <code>Boolean</code>, <code>DateTime</code>, <code>Decimal</code>, <code>Json</code>, <code>Bytes</code> — tên kiểu vô hướng của PRISMA, không phải của PostgreSQL.</span></div>
   <div class="kv"><span class="k">Tham số tuỳ chọn</span><span class="v"><code>-- @param {String} $1:tuKhoa?</code> — dấu <code>?</code> ở cuối làm đối số thành <code>string | null</code>. Dùng nó cùng <code>WHERE (\$1 IS NULL OR content ILIKE \$1)</code> cho một bộ lọc có thể vắng mặt.</span></div>
   <div class="kv"><span class="k">Phần mô tả sau cái tên</span><span class="v">Mọi thứ viết sau tên sẽ thành chú thích JSDoc trên đối số được sinh ra. Tốn một dòng, và hiện lên khi bạn rê chuột vào nó mấy tháng sau.</span></div>
@@ -1170,7 +1170,7 @@ prismaGoc.$extends(mở_rộng);                      <span class="tok-comment">
   name: 'media-url',
   result: {
     user: {
-      anhDaiDien: {
+      avatarUrl: {
         needs: { avatarUrl: true },              <span class="tok-comment">// ← the fields it depends on</span>
         compute(u) {
           if (!u.avatarUrl) return '/images/mac-dinh.png';
@@ -1187,8 +1187,8 @@ prismaGoc.$extends(mở_rộng);                      <span class="tok-comment">
     },
   },
 });</code></pre>
-<pre><code>const u = await prisma.user.findUniqueOrThrow({ where: { id }, select: { anhDaiDien: true } });
-console.log(u.anhDaiDien);   <span class="tok-comment">// string — and avatarUrl was fetched automatically</span></code></pre>
+<pre><code>const u = await prisma.user.findUniqueOrThrow({ where: { id }, select: { avatarUrl: true } });
+console.log(u.avatarUrl);   <span class="tok-comment">// string — and avatarUrl was fetched automatically</span></code></pre>
 <div class="out">prisma:query SELECT "public"."User"."avatar_url" FROM "public"."User" WHERE …
 https://media.cuongthai.com/avatars/clx7….webp</div>
 <div class="lz-flow">
@@ -1203,7 +1203,7 @@ https://media.cuongthai.com/avatars/clx7….webp</div>
   name: 'truy-van-thuong-dung',
   model: {
     user: {
-      async timTheoEmailHoacTen(q: string) {
+      async findByEmailOrName(q: string) {
         return prisma.user.findFirst({
           where: { OR: [{ email: q }, { username: q }] },
           select: { id: true, username: true, email: true },
@@ -1211,7 +1211,7 @@ https://media.cuongthai.com/avatars/clx7….webp</div>
       },
     },
     $allModels: {
-      async tonTai&lt;T&gt;(this: T, where: Prisma.Args&lt;T, 'findFirst'&gt;['where']): Promise&lt;boolean&gt; {
+      async exists&lt;T&gt;(this: T, where: Prisma.Args&lt;T, 'findFirst'&gt;['where']): Promise&lt;boolean&gt; {
         const ctx = Prisma.getExtensionContext(this);
         const n = await (ctx as any).count({ where, take: 1 });
         return n &gt; 0;
@@ -1226,8 +1226,8 @@ https://media.cuongthai.com/avatars/clx7….webp</div>
     },
   },
 });</code></pre>
-<pre><code>await prisma.user.timTheoEmailHoacTen('an@vidu.com');
-await prisma.socialPost.tonTai({ id: postId });   <span class="tok-comment">// on every model</span>
+<pre><code>await prisma.user.findByEmailOrName('an@vidu.com');
+await prisma.socialPost.exists({ id: postId });   <span class="tok-comment">// on every model</span>
 await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// → 1.84 (ms)</span></code></pre>
 <div class="callout ok">
 <p><strong><code>$allModels</code> plus <code>Prisma.getExtensionContext(this)</code> is how you write a method once for every model.</strong> <code>this</code> inside the method is the model delegate it was called on, and <code>getExtensionContext</code> gives you a properly-typed handle to it. It is the closest Prisma gets to a base repository class, without any of the inheritance.</p>
@@ -1322,7 +1322,7 @@ prismaGoc.$extends(moRong);                      <span class="tok-comment">// �
   name: 'media-url',
   result: {
     user: {
-      anhDaiDien: {
+      avatarUrl: {
         needs: { avatarUrl: true },              <span class="tok-comment">// ← những trường nó phụ thuộc vào</span>
         compute(u) {
           if (!u.avatarUrl) return '/images/mac-dinh.png';
@@ -1339,8 +1339,8 @@ prismaGoc.$extends(moRong);                      <span class="tok-comment">// �
     },
   },
 });</code></pre>
-<pre><code>const u = await prisma.user.findUniqueOrThrow({ where: { id }, select: { anhDaiDien: true } });
-console.log(u.anhDaiDien);   <span class="tok-comment">// string — và avatarUrl được lấy về TỰ ĐỘNG</span></code></pre>
+<pre><code>const u = await prisma.user.findUniqueOrThrow({ where: { id }, select: { avatarUrl: true } });
+console.log(u.avatarUrl);   <span class="tok-comment">// string — và avatarUrl được lấy về TỰ ĐỘNG</span></code></pre>
 <div class="out">prisma:query SELECT "public"."User"."avatar_url" FROM "public"."User" WHERE …
 https://media.cuongthai.com/avatars/clx7….webp</div>
 <div class="lz-flow">
@@ -1355,7 +1355,7 @@ https://media.cuongthai.com/avatars/clx7….webp</div>
   name: 'truy-van-thuong-dung',
   model: {
     user: {
-      async timTheoEmailHoacTen(q: string) {
+      async findByEmailOrName(q: string) {
         return prisma.user.findFirst({
           where: { OR: [{ email: q }, { username: q }] },
           select: { id: true, username: true, email: true },
@@ -1363,7 +1363,7 @@ https://media.cuongthai.com/avatars/clx7….webp</div>
       },
     },
     $allModels: {
-      async tonTai&lt;T&gt;(this: T, where: Prisma.Args&lt;T, 'findFirst'&gt;['where']): Promise&lt;boolean&gt; {
+      async exists&lt;T&gt;(this: T, where: Prisma.Args&lt;T, 'findFirst'&gt;['where']): Promise&lt;boolean&gt; {
         const ctx = Prisma.getExtensionContext(this);
         const n = await (ctx as any).count({ where, take: 1 });
         return n &gt; 0;
@@ -1378,8 +1378,8 @@ https://media.cuongthai.com/avatars/clx7….webp</div>
     },
   },
 });</code></pre>
-<pre><code>await prisma.user.timTheoEmailHoacTen('an@vidu.com');
-await prisma.socialPost.tonTai({ id: postId });   <span class="tok-comment">// có trên MỌI model</span>
+<pre><code>await prisma.user.findByEmailOrName('an@vidu.com');
+await prisma.socialPost.exists({ id: postId });   <span class="tok-comment">// có trên MỌI model</span>
 await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// → 1,84 (ms)</span></code></pre>
 <div class="callout ok">
 <p><strong><code>$allModels</code> cộng <code>Prisma.getExtensionContext(this)</code> là cách viết MỘT phương thức dùng cho MỌI model.</strong> <code>this</code> bên trong phương thức chính là cái delegate model mà nó được gọi lên, và <code>getExtensionContext</code> trao cho bạn một tay cầm có kiểu đàng hoàng vào đó. Đây là thứ gần nhất với một lớp repository cơ sở mà Prisma có, mà không mang theo tí kế thừa nào.</p>

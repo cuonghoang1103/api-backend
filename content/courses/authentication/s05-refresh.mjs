@@ -1138,8 +1138,8 @@ if (!daTungThay) {
 <h3>The race</h3>
 <pre><code><span class="tok-comment">// Một trang tải xong, gửi mười request. Access token vừa hết hạn.</span>
 Promise.all([
-  goi('/api/toi'), goi('/api/thong-bao'), goi('/api/feed'),
-  goi('/api/gio-hang'), goi('/api/tin-nhan'), <span class="tok-comment">/* … */</span>
+  goi('/api/me'), goi('/api/thong-bao'), goi('/api/feed'),
+  goi('/api/cart'), goi('/api/messages'), <span class="tok-comment">/* … */</span>
 ]);</code></pre>
 <div class="out">09:44:20.104  GET /api/toi         → 401
 09:44:20.106  GET /api/thong-bao   → 401
@@ -1279,8 +1279,8 @@ if (cu.dungLuc) {
 <h3>Cuộc đua</h3>
 <pre><code><span class="tok-comment">// Một trang tải xong, gửi mười request. Access token vừa hết hạn.</span>
 Promise.all([
-  goi('/api/toi'), goi('/api/thong-bao'), goi('/api/feed'),
-  goi('/api/gio-hang'), goi('/api/tin-nhan'), <span class="tok-comment">/* … */</span>
+  goi('/api/me'), goi('/api/thong-bao'), goi('/api/feed'),
+  goi('/api/cart'), goi('/api/messages'), <span class="tok-comment">/* … */</span>
 ]);</code></pre>
 <div class="out">09:44:20.104  GET /api/toi         → 401
 09:44:20.106  GET /api/thong-bao   → 401

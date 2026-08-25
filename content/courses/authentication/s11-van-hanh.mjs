@@ -404,9 +404,9 @@ rai deu 20 req / 120s
 
 <h3>The axis matters more than the algorithm</h3>
 <pre><code><span class="tok-comment">// Mỗi luồng đếm theo một TRỤC khác nhau. Chọn sai trục là bộ giới hạn vô dụng.</span>
-'/dang-nhap'        → theo TÀI KHOẢN  (kẻ tấn công xoay IP, không xoay được đích) <span class="tok-comment">// 10.1</span>
-'/dang-ky'          → theo IP + ASN   (chưa có tài khoản nào để mà đếm)
-'/quen-mat-khau'    → CẢ HAI          (theo IP chặn quét, theo email chặn bom thư) <span class="tok-comment">// 6.3</span>
+'/sign-in'        → theo TÀI KHOẢN  (kẻ tấn công xoay IP, không xoay được đích) <span class="tok-comment">// 10.1</span>
+'/sign-up'          → theo IP + ASN   (chưa có tài khoản nào để mà đếm)
+'/forgot-password'    → CẢ HAI          (theo IP chặn quét, theo email chặn bom thư) <span class="tok-comment">// 6.3</span>
 '/mfa/kiem'         → theo TÀI KHOẢN  (sáu chữ số chỉ là một triệu)               <span class="tok-comment">// 7.3</span>
 '/auth/refresh'     → theo PHIÊN      (một phiên chính đáng làm mới có nhịp)      <span class="tok-comment">// 5.5</span></code></pre>
 <div class="pitfall">
@@ -477,9 +477,9 @@ rai deu 20 req / 120s
 
 <h3>Cái TRỤC còn quan trọng hơn cả thuật toán</h3>
 <pre><code><span class="tok-comment">// Mỗi luồng đếm theo một TRỤC khác nhau. Chọn sai trục là bộ giới hạn vô dụng.</span>
-'/dang-nhap'        → theo TÀI KHOẢN  (kẻ tấn công xoay IP, không xoay được đích) <span class="tok-comment">// 10.1</span>
-'/dang-ky'          → theo IP + ASN   (chưa có tài khoản nào để mà đếm)
-'/quen-mat-khau'    → CẢ HAI          (theo IP chặn quét, theo email chặn bom thư) <span class="tok-comment">// 6.3</span>
+'/sign-in'        → theo TÀI KHOẢN  (kẻ tấn công xoay IP, không xoay được đích) <span class="tok-comment">// 10.1</span>
+'/sign-up'          → theo IP + ASN   (chưa có tài khoản nào để mà đếm)
+'/forgot-password'    → CẢ HAI          (theo IP chặn quét, theo email chặn bom thư) <span class="tok-comment">// 6.3</span>
 '/mfa/kiem'         → theo TÀI KHOẢN  (sáu chữ số chỉ là một triệu)               <span class="tok-comment">// 7.3</span>
 '/auth/refresh'     → theo PHIÊN      (một phiên chính đáng làm mới có nhịp)      <span class="tok-comment">// 5.5</span></code></pre>
 <div class="pitfall">

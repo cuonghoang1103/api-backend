@@ -208,8 +208,8 @@ try {
   return await prisma.user.create({ data });
 } catch (e) {
   if (e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp; e.code === 'P2002') {
-    const cot = (e.meta?.target as string[])?.join(', ') ?? 'khong ro';
-    throw new HttpError(409, &#96;\${cot} da ton tai&#96;);
+    const column = (e.meta?.target as string[])?.join(', ') ?? 'khong ro';
+    throw new HttpError(409, &#96;\${column} da ton tai&#96;);
   }
   throw e;
 }</code></pre>
@@ -270,7 +270,7 @@ Prisma Migrate will not apply any further migrations until this is resolved.</di
 
 <h3>Shape 7 — nothing is failing</h3>
 <pre><code><span class="tok-comment">// No error. The wrong answer.</span>
-const bai = await prisma.socialPost.findMany({ where: { authorId } });
+const post = await prisma.socialPost.findMany({ where: { authorId } });
 <span class="tok-comment">// → includes soft-deleted rows, because this is a raw-ish path</span>
 <span class="tok-comment">//   the extension does not cover, or an include that bypasses it</span></code></pre>
 <div class="lz-flow">
@@ -315,8 +315,8 @@ try {
   return await prisma.user.create({ data });
 } catch (e) {
   if (e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp; e.code === 'P2002') {
-    const cot = (e.meta?.target as string[])?.join(', ') ?? 'khong ro';
-    throw new HttpError(409, &#96;\${cot} da ton tai&#96;);
+    const column = (e.meta?.target as string[])?.join(', ') ?? 'khong ro';
+    throw new HttpError(409, &#96;\${column} da ton tai&#96;);
   }
   throw e;
 }</code></pre>
@@ -377,7 +377,7 @@ Prisma Migrate will not apply any further migrations until this is resolved.</di
 
 <h3>Hình dáng 7 — chẳng có gì hỏng cả</h3>
 <pre><code><span class="tok-comment">// Không lỗi. Câu trả lời SAI.</span>
-const bai = await prisma.socialPost.findMany({ where: { authorId } });
+const post = await prisma.socialPost.findMany({ where: { authorId } });
 <span class="tok-comment">// → kèm cả những hàng đã xoá mềm, vì đây là một đường mà</span>
 <span class="tok-comment">//   phần mở rộng không phủ tới, hoặc một include đi vòng qua nó</span></code></pre>
 <div class="lz-flow">
@@ -462,12 +462,12 @@ npx prisma db pull</code></pre>
 <div class="out">Introspecting based on datasource defined in prisma/schema.prisma …
 ✔ Introspected 34 models and wrote them into prisma/schema.prisma in 1.2s</div>
 <pre><code><span class="tok-comment"># The safe way: introspect into a scratch file and diff it</span>
-cp prisma/schema.prisma /tmp/schema.goc.prisma
+cp prisma/schema.prisma /tmp/schema.base.prisma
 npx prisma db pull --schema /tmp/soi.prisma 2&gt;/dev/null || {
   cp prisma/schema.prisma /tmp/soi.prisma
   npx prisma db pull --schema /tmp/soi.prisma
 }
-diff /tmp/schema.goc.prisma /tmp/soi.prisma</code></pre>
+diff /tmp/schema.base.prisma /tmp/soi.prisma</code></pre>
 <div class="pitfall">
 <p><strong>Trap — <code>db pull</code> destroys everything the database cannot express.</strong> It rewrites your schema file from introspection, so <code>@map</code> names it cannot infer, <code>@relation</code> labels, comments, ordering and generator blocks are rewritten or lost. It is a legitimate tool for adopting an existing database, and a terrible one for "let me just check". Copy the schema to <code>/tmp</code> and pull into that.</p>
 </div>
@@ -599,12 +599,12 @@ npx prisma db pull</code></pre>
 <div class="out">Introspecting based on datasource defined in prisma/schema.prisma …
 ✔ Introspected 34 models and wrote them into prisma/schema.prisma in 1.2s</div>
 <pre><code><span class="tok-comment"># Cách an toàn: nội soi vào một file nháp rồi diff</span>
-cp prisma/schema.prisma /tmp/schema.goc.prisma
+cp prisma/schema.prisma /tmp/schema.base.prisma
 npx prisma db pull --schema /tmp/soi.prisma 2&gt;/dev/null || {
   cp prisma/schema.prisma /tmp/soi.prisma
   npx prisma db pull --schema /tmp/soi.prisma
 }
-diff /tmp/schema.goc.prisma /tmp/soi.prisma</code></pre>
+diff /tmp/schema.base.prisma /tmp/soi.prisma</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — <code>db pull</code> PHÁ HUỶ mọi thứ mà cơ sở dữ liệu không diễn đạt được.</strong> Nó viết lại file lược đồ của bạn từ kết quả nội soi, nên những cái tên <code>@map</code> nó không suy ra được, nhãn <code>@relation</code>, chú thích, thứ tự và các khối generator đều bị viết lại hoặc mất. Nó là công cụ CHÍNH ĐÁNG để tiếp quản một cơ sở dữ liệu có sẵn, và là công cụ TỆ HẠI cho việc "để tôi xem thử cái". Hãy copy lược đồ ra <code>/tmp</code> rồi pull vào đó.</p>
 </div>
@@ -739,7 +739,7 @@ groups:
     expr: prisma_client_queries_wait &gt; 0
     for: 5m
     annotations:
-      summary: "Truy van dang xep hang cho ket noi ({{ \\$value }} dang doi)"
+      summary: "Truy van dang xep hang waitMs ket noi ({{ \\$value }} dang doi)"
       runbook: "Bai 9.4 · kiem idle in transaction truoc khi nang connection_limit"
 
   - alert: KetNoiGanTran
@@ -840,7 +840,7 @@ groups:
     expr: prisma_client_queries_wait &gt; 0
     for: 5m
     annotations:
-      summary: "Truy van dang xep hang cho ket noi ({{ \\$value }} dang doi)"
+      summary: "Truy van dang xep hang waitMs ket noi ({{ \\$value }} dang doi)"
       runbook: "Bai 9.4 · kiem idle in transaction truoc khi nang connection_limit"
 
   - alert: KetNoiGanTran

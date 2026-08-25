@@ -29,7 +29,7 @@ export default {
 
 <span class="tok-comment">// Exactly the scalar columns. No relations, because a bare findMany</span>
 <span class="tok-comment">// returns no relations.</span>
-function hienThi(u: User) {
+function visible(u: User) {
   return &#96;\${u.fullName ?? u.email} (\${u.id})&#96;;
 }</code></pre>
 <div class="kv-grid">
@@ -39,12 +39,12 @@ function hienThi(u: User) {
 </div>
 
 <h3>2 · Enums</h3>
-<pre><code>import { ContentType, TrangThaiDon } from '@prisma/client';
+<pre><code>import { ContentType, OrderStatus } from '@prisma/client';
 
 <span class="tok-comment">// A value at runtime AND a type — both come from the schema</span>
-const macDinh: ContentType = ContentType.ARTICLE;
+const defaultValue: ContentType = ContentType.ARTICLE;
 
-function nhan(t: TrangThaiDon): string {
+function nhan(t: OrderStatus): string {
   switch (t) {
     case 'MOI':        return 'Moi tao';
     case 'DANG_XU_LY': return 'Dang xu ly';
@@ -60,7 +60,7 @@ function nhan(t: TrangThaiDon): string {
 <pre><code>import { Prisma } from '@prisma/client';
 
 <span class="tok-comment">// A repository function that accepts a caller-supplied filter, safely</span>
-async function timBaiViet(
+async function findPost(
   where: Prisma.PostWhereInput,
   orderBy: Prisma.PostOrderByWithRelationInput = { createdAt: 'desc' },
   take = 20,
@@ -69,8 +69,8 @@ async function timBaiViet(
 }
 
 <span class="tok-comment">// The caller gets full autocomplete and full checking</span>
-await timBaiViet({ published: true, author: { role: 'ADMIN' } });
-await timBaiViet({ publisshed: true });   <span class="tok-comment">// ✗ compile error, typo caught</span></code></pre>
+await findPost({ published: true, author: { role: 'ADMIN' } });
+await findPost({ publisshed: true });   <span class="tok-comment">// ✗ compile error, typo caught</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Roughly twenty per model</span><span class="v"><code>WhereInput</code>, <code>WhereUniqueInput</code>, <code>CreateInput</code>, <code>UpdateInput</code>, <code>OrderByWithRelationInput</code>, <code>Select</code>, <code>Include</code>, <code>FindManyArgs</code> and more. Lesson 1.2 counted thirty-one for a four-field model.</span></div>
   <div class="kv"><span class="k">The alternative is <code>any</code></span><span class="v">A repository taking <code>filter: any</code> throws away every guarantee the schema gave you, at exactly the boundary where callers are most likely to make a mistake.</span></div>
@@ -82,8 +82,8 @@ await timBaiViet({ publisshed: true });   <span class="tok-comment">// ✗ compi
 <pre><code>import { Prisma } from '@prisma/client';
 
 <span class="tok-comment">// Decimal: an object with methods, not a number (Lesson 2.1)</span>
-function dinhDang(gia: Prisma.Decimal): string {
-  return gia.toFixed(2);
+function dinhDang(price: Prisma.Decimal): string {
+  return price.toFixed(2);
 }
 
 <span class="tok-comment">// The Json family — four distinct types for four distinct situations</span>
@@ -93,8 +93,8 @@ let c: Prisma.JsonObject;       <span class="tok-comment">// specifically an obj
 const d = Prisma.DbNull;        <span class="tok-comment">// SQL NULL, not the JSON value null</span>
 const e = Prisma.JsonNull;      <span class="tok-comment">// the JSON value null, not SQL NULL</span></code></pre>
 <pre><code><span class="tok-comment">// The distinction, made visible</span>
-await prisma.user.update({ where: { id: 1 }, data: { caiDat: Prisma.DbNull } });
-await prisma.user.update({ where: { id: 2 }, data: { caiDat: Prisma.JsonNull } });
+await prisma.user.update({ where: { id: 1 }, data: { settings: Prisma.DbNull } });
+await prisma.user.update({ where: { id: 2 }, data: { settings: Prisma.JsonNull } });
 
 const r = await prisma.$queryRaw&#96;SELECT id, cai_dat, cai_dat IS NULL AS la_sql_null FROM users WHERE id IN (1,2)&#96;;
 console.log(r);</code></pre>
@@ -112,12 +112,12 @@ try {
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
     <span class="tok-comment">// e.code and e.meta are typed and populated</span>
     if (e.code === 'P2002') return res.status(409).json({ truong: e.meta?.target });
-    if (e.code === 'P2003') return res.status(400).json({ loi: 'Tham chieu khong ton tai' });
+    if (e.code === 'P2003') return res.status(400).json({ error: 'Tham chieu khong ton tai' });
     if (e.code === 'P2025') return res.status(404).end();
   }
   if (e instanceof Prisma.PrismaClientValidationError) {
     <span class="tok-comment">// bad arguments — this is a bug in your code, not the user's input</span>
-    return res.status(500).json({ loi: 'Truy van sai cau truc' });
+    return res.status(500).json({ error: 'Truy van sai cau truc' });
   }
   throw e;
 }</code></pre>
@@ -135,19 +135,19 @@ try {
 <pre><code>import type { PrismaClient } from '@prisma/client';
 
 <span class="tok-comment">// Dependency injection, and testability, for free</span>
-export class BaiVietService {
+export class PostService {
   constructor(private db: PrismaClient) {}
 
-  async layTheoTacGia(tacGiaId: number) {
-    return this.db.post.findMany({ where: { authorId: tacGiaId }, take: 20 });
+  async getByAuthor(authorId: number) {
+    return this.db.post.findMany({ where: { authorId: authorId }, take: 20 });
   }
 }
 
 <span class="tok-comment">// The type that accepts either the client or a transaction client</span>
 export type DbClient = Omit&lt;PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'&gt;;
 
-async function ghiNhatKy(db: DbClient, hanhDong: string) {
-  return db.auditLog.create({ data: { hanhDong } });
+async function writeAuditLog(db: DbClient, action: string) {
+  return db.auditLog.create({ data: { action } });
 }</code></pre>
 <div class="callout">
 <p><strong>That <code>DbClient</code> alias is worth putting in a shared file on day one.</strong> Every helper that might be called inside a transaction needs it, and writing the <code>Omit</code> at each call site is how people end up typing the parameter as <code>any</code> instead — which reintroduces exactly the bug from Lesson 7.1, where a helper silently used the outer client and escaped the transaction.</p>
@@ -178,7 +178,7 @@ async function ghiNhatKy(db: DbClient, hanhDong: string) {
 
 <span class="tok-comment">// Đúng bằng các cột vô hướng. Không có quan hệ, vì một findMany trần</span>
 <span class="tok-comment">// không trả về quan hệ nào.</span>
-function hienThi(u: User) {
+function visible(u: User) {
   return &#96;\${u.fullName ?? u.email} (\${u.id})&#96;;
 }</code></pre>
 <div class="kv-grid">
@@ -188,12 +188,12 @@ function hienThi(u: User) {
 </div>
 
 <h3>2 · Enum</h3>
-<pre><code>import { ContentType, TrangThaiDon } from '@prisma/client';
+<pre><code>import { ContentType, OrderStatus } from '@prisma/client';
 
 <span class="tok-comment">// Vừa là một giá trị lúc chạy VỪA là một kiểu — cả hai đến từ lược đồ</span>
-const macDinh: ContentType = ContentType.ARTICLE;
+const defaultValue: ContentType = ContentType.ARTICLE;
 
-function nhan(t: TrangThaiDon): string {
+function nhan(t: OrderStatus): string {
   switch (t) {
     case 'MOI':        return 'Moi tao';
     case 'DANG_XU_LY': return 'Dang xu ly';
@@ -209,7 +209,7 @@ function nhan(t: TrangThaiDon): string {
 <pre><code>import { Prisma } from '@prisma/client';
 
 <span class="tok-comment">// Một hàm kho dữ liệu nhận bộ lọc do bên gọi đưa vào, một cách an toàn</span>
-async function timBaiViet(
+async function findPost(
   where: Prisma.PostWhereInput,
   orderBy: Prisma.PostOrderByWithRelationInput = { createdAt: 'desc' },
   take = 20,
@@ -218,8 +218,8 @@ async function timBaiViet(
 }
 
 <span class="tok-comment">// Bên gọi có đầy đủ gợi ý gõ và đầy đủ kiểm tra</span>
-await timBaiViet({ published: true, author: { role: 'ADMIN' } });
-await timBaiViet({ publisshed: true });   <span class="tok-comment">// ✗ lỗi biên dịch, bắt được lỗi gõ</span></code></pre>
+await findPost({ published: true, author: { role: 'ADMIN' } });
+await findPost({ publisshed: true });   <span class="tok-comment">// ✗ lỗi biên dịch, bắt được lỗi gõ</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Khoảng hai mươi kiểu cho mỗi model</span><span class="v"><code>WhereInput</code>, <code>WhereUniqueInput</code>, <code>CreateInput</code>, <code>UpdateInput</code>, <code>OrderByWithRelationInput</code>, <code>Select</code>, <code>Include</code>, <code>FindManyArgs</code> và nhiều nữa. Bài 1.2 đếm được ba mươi mốt cái cho một model bốn trường.</span></div>
   <div class="kv"><span class="k">Lựa chọn thay thế là <code>any</code></span><span class="v">Một hàm kho dữ liệu nhận <code>filter: any</code> vứt bỏ mọi bảo đảm mà lược đồ vừa cho bạn, đúng ngay tại cái ranh giới mà bên gọi dễ làm sai nhất.</span></div>
@@ -231,8 +231,8 @@ await timBaiViet({ publisshed: true });   <span class="tok-comment">// ✗ lỗi
 <pre><code>import { Prisma } from '@prisma/client';
 
 <span class="tok-comment">// Decimal: một đối tượng có phương thức, không phải một số (Bài 2.1)</span>
-function dinhDang(gia: Prisma.Decimal): string {
-  return gia.toFixed(2);
+function dinhDang(price: Prisma.Decimal): string {
+  return price.toFixed(2);
 }
 
 <span class="tok-comment">// Họ Json — bốn kiểu riêng cho bốn tình huống riêng</span>
@@ -242,8 +242,8 @@ let c: Prisma.JsonObject;       <span class="tok-comment">// cụ thể là mộ
 const d = Prisma.DbNull;        <span class="tok-comment">// NULL của SQL, không phải giá trị JSON null</span>
 const e = Prisma.JsonNull;      <span class="tok-comment">// giá trị JSON null, không phải NULL của SQL</span></code></pre>
 <pre><code><span class="tok-comment">// Phân biệt ấy, nhìn tận mắt</span>
-await prisma.user.update({ where: { id: 1 }, data: { caiDat: Prisma.DbNull } });
-await prisma.user.update({ where: { id: 2 }, data: { caiDat: Prisma.JsonNull } });
+await prisma.user.update({ where: { id: 1 }, data: { settings: Prisma.DbNull } });
+await prisma.user.update({ where: { id: 2 }, data: { settings: Prisma.JsonNull } });
 
 const r = await prisma.$queryRaw&#96;SELECT id, cai_dat, cai_dat IS NULL AS la_sql_null FROM users WHERE id IN (1,2)&#96;;
 console.log(r);</code></pre>
@@ -261,12 +261,12 @@ try {
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
     <span class="tok-comment">// e.code và e.meta đều có kiểu và có dữ liệu</span>
     if (e.code === 'P2002') return res.status(409).json({ truong: e.meta?.target });
-    if (e.code === 'P2003') return res.status(400).json({ loi: 'Tham chieu khong ton tai' });
+    if (e.code === 'P2003') return res.status(400).json({ error: 'Tham chieu khong ton tai' });
     if (e.code === 'P2025') return res.status(404).end();
   }
   if (e instanceof Prisma.PrismaClientValidationError) {
     <span class="tok-comment">// tham số sai — đây là con bọ trong mã của bạn, không phải dữ liệu người dùng</span>
-    return res.status(500).json({ loi: 'Truy van sai cau truc' });
+    return res.status(500).json({ error: 'Truy van sai cau truc' });
   }
   throw e;
 }</code></pre>
@@ -284,19 +284,19 @@ try {
 <pre><code>import type { PrismaClient } from '@prisma/client';
 
 <span class="tok-comment">// Tiêm phụ thuộc, và khả năng kiểm thử, miễn phí</span>
-export class BaiVietService {
+export class PostService {
   constructor(private db: PrismaClient) {}
 
-  async layTheoTacGia(tacGiaId: number) {
-    return this.db.post.findMany({ where: { authorId: tacGiaId }, take: 20 });
+  async getByAuthor(authorId: number) {
+    return this.db.post.findMany({ where: { authorId: authorId }, take: 20 });
   }
 }
 
 <span class="tok-comment">// Kiểu nhận được cả client thường lẫn client của giao dịch</span>
 export type DbClient = Omit&lt;PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'&gt;;
 
-async function ghiNhatKy(db: DbClient, hanhDong: string) {
-  return db.auditLog.create({ data: { hanhDong } });
+async function writeAuditLog(db: DbClient, action: string) {
+  return db.auditLog.create({ data: { action } });
 }</code></pre>
 <div class="callout">
 <p><strong>Cái bí danh <code>DbClient</code> đó đáng đặt vào một tệp dùng chung ngay ngày đầu.</strong> Mọi hàm phụ có khả năng được gọi bên trong một giao dịch đều cần nó, và viết cái <code>Omit</code> ở từng chỗ gọi là cách người ta rốt cuộc gán kiểu tham số thành <code>any</code> — và như thế là đưa trở lại đúng con bọ ở Bài 7.1, nơi một hàm phụ âm thầm dùng client bên ngoài và thoát khỏi giao dịch.</p>
@@ -332,7 +332,7 @@ async function ghiNhatKy(db: DbClient, hanhDong: string) {
 <p class="lead">The moment a query has an <code>include</code> or a <code>select</code>, its result is no longer a <code>User</code> — it is something narrower or wider, and there is no generated name for it. Every codebase hits this in week two, and most solve it by hand-writing an interface that immediately starts drifting. There is a correct answer, it is two lines, and it is the most useful thing in this chapter.</p>
 
 <h3>The problem</h3>
-<pre><code>const bai = await prisma.post.findMany({
+<pre><code>const post = await prisma.post.findMany({
   select: {
     id: true,
     title: true,
@@ -344,7 +344,7 @@ async function ghiNhatKy(db: DbClient, hanhDong: string) {
 <span class="tok-comment">// Now try to pass one of those to a render function.</span>
 function the(b: Post) { … }        <span class="tok-comment">// ✗ Post has body, views, authorId… none of which we selected</span>
 function the(b: any) { … }         <span class="tok-comment">// ✗ works, and throws away everything</span>
-interface TheBai { … }             <span class="tok-comment">// ✗ works, and drifts the moment the select changes</span></code></pre>
+interface Card { … }             <span class="tok-comment">// ✗ works, and drifts the moment the select changes</span></code></pre>
 <div class="out">Argument of type '{ id: number; title: string; author: {...}; _count: {...} }'
 is not assignable to parameter of type 'Post'.
   Type is missing the following properties from type 'Post': body, published, views, createdAt, authorId</div>
@@ -353,7 +353,7 @@ is not assignable to parameter of type 'Post'.
 <pre><code>import { Prisma } from '@prisma/client';
 
 <span class="tok-comment">// 1. The selection, as a value, checked against the model</span>
-const chonTheBai = {
+const pickCard = {
   id: true,
   title: true,
   author: { select: { username: true, avatarUrl: true } },
@@ -361,28 +361,28 @@ const chonTheBai = {
 } satisfies Prisma.PostSelect;
 
 <span class="tok-comment">// 2. The type, derived from that value</span>
-type TheBai = Prisma.PostGetPayload&lt;{ select: typeof chonTheBai }&gt;;
+type Card = Prisma.PostGetPayload&lt;{ select: typeof pickCard }&gt;;
 
 <span class="tok-comment">// 3. Both used together — the query and the type cannot disagree</span>
-async function layThe(): Promise&lt;TheBai[]&gt; {
-  return prisma.post.findMany({ select: chonTheBai, take: 20 });
+async function getCard(): Promise&lt;Card[]&gt; {
+  return prisma.post.findMany({ select: pickCard, take: 20 });
 }
 
-function the(b: TheBai) {
+function the(b: Card) {
   return &#96;\${b.title} — \${b.author.username} (\${b._count.comments})&#96;;
 }</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k"><code>satisfies</code>, not <code>:</code></span><span class="lz-t">This matters</span><span class="lz-d"><code>const x: Prisma.PostSelect = {…}</code> widens the value to the whole <code>PostSelect</code> type, so <code>typeof x</code> is useless. <code>satisfies</code> checks it against <code>PostSelect</code> while keeping the literal shape — which is exactly what <code>GetPayload</code> needs to compute the result.</span></div>
   <div class="lz-step"><span class="lz-k"><code>GetPayload</code> does the work</span><span class="lz-t">One generic per model</span><span class="lz-d"><code>PostGetPayload</code>, <code>UserGetPayload</code>, one for each. It takes the same argument object the query takes and computes the exact return type — the same machinery Prisma uses internally, exposed for you.</span></div>
-  <div class="lz-step"><span class="lz-k">The selection is now shared</span><span class="lz-t">Import it anywhere</span><span class="lz-d">Three endpoints returning the same card shape use one <code>chonTheBai</code>, so they cannot diverge. Change it once and all three change.</span></div>
+  <div class="lz-step"><span class="lz-k">The selection is now shared</span><span class="lz-t">Import it anywhere</span><span class="lz-d">Three endpoints returning the same card shape use one <code>pickCard</code>, so they cannot diverge. Change it once and all three change.</span></div>
   <div class="lz-step"><span class="lz-k">Removing a field breaks the users</span><span class="lz-t">Which is the point</span><span class="lz-d">Delete <code>title</code> from the selection and <code>the()</code> turns red immediately, naming the exact line. A hand-written interface would have compiled and returned <code>undefined</code> at runtime.</span></div>
 </div>
 <pre><code><span class="tok-comment">// It works for include too</span>
-type BaiCoTacGia = Prisma.PostGetPayload&lt;{ include: { author: true } }&gt;;
+type PostWithAuthor = Prisma.PostGetPayload&lt;{ include: { author: true } }&gt;;
 <span class="tok-comment">// = Post &amp; { author: User }</span>
 
 <span class="tok-comment">// And for nested everything</span>
-type BaiDayDu = Prisma.PostGetPayload&lt;{
+type FullPost = Prisma.PostGetPayload&lt;{
   include: {
     author: { select: { username: true } };
     comments: { include: { author: true } };
@@ -391,7 +391,7 @@ type BaiDayDu = Prisma.PostGetPayload&lt;{
 
 <h3>Answer 2 — <code>Prisma.validator</code></h3>
 <pre><code><span class="tok-comment">// The older API, still supported, and clearer in some codebases</span>
-const chonTheBai = Prisma.validator&lt;Prisma.PostDefaultArgs&gt;()({
+const pickCard = Prisma.validator&lt;Prisma.PostDefaultArgs&gt;()({
   select: {
     id: true,
     title: true,
@@ -399,9 +399,9 @@ const chonTheBai = Prisma.validator&lt;Prisma.PostDefaultArgs&gt;()({
   },
 });
 
-type TheBai = Prisma.PostGetPayload&lt;typeof chonTheBai&gt;;
+type Card = Prisma.PostGetPayload&lt;typeof pickCard&gt;;
 
-await prisma.post.findMany({ ...chonTheBai, take: 20 });</code></pre>
+await prisma.post.findMany({ ...pickCard, take: 20 });</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">It validates at definition time</span><span class="v">A typo in a field name is an error where the selection is written, not where it is used. With <code>satisfies</code> you get the same thing, so this is mostly a style choice now.</span></div>
   <div class="kv"><span class="k">It wraps the whole args object</span><span class="v">Not just the <code>select</code> — you can include <code>where</code>, <code>orderBy</code> and <code>take</code> in the same reusable constant, then spread it into the query.</span></div>
@@ -411,16 +411,16 @@ await prisma.post.findMany({ ...chonTheBai, take: 20 });</code></pre>
 
 <h3>Answer 3 — derive from the function</h3>
 <pre><code><span class="tok-comment">// No named selection at all — take the type from the function's own return</span>
-async function layThe() {
+async function getCard() {
   return prisma.post.findMany({
     select: { id: true, title: true, author: { select: { username: true } } },
     take: 20,
   });
 }
 
-type TheBai = Awaited&lt;ReturnType&lt;typeof layThe&gt;&gt;[number];
+type Card = Awaited&lt;ReturnType&lt;typeof getCard&gt;&gt;[number];
 
-function the(b: TheBai) {
+function the(b: Card) {
   return &#96;\${b.title} — \${b.author.username}&#96;;
 }</code></pre>
 <div class="callout ok">
@@ -429,7 +429,7 @@ function the(b: TheBai) {
 
 <h3>Applying it: an API response type</h3>
 <pre><code><span class="tok-comment">// The selection lives with the route that uses it</span>
-export const chonHoSoCongKhai = {
+export const selectPublicProfile = {
   id: true,
   username: true,
   fullName: true,
@@ -438,13 +438,13 @@ export const chonHoSoCongKhai = {
   _count: { select: { posts: true, followers: true } },
 } satisfies Prisma.UserSelect;
 
-export type HoSoCongKhai = Prisma.UserGetPayload&lt;{ select: typeof chonHoSoCongKhai }&gt;;
+export type HoSoCongKhai = Prisma.UserGetPayload&lt;{ select: typeof selectPublicProfile }&gt;;
 
 <span class="tok-comment">// The route</span>
 app.get('/api/v1/users/:username', async (req, res) =&gt; {
   const u = await prisma.user.findUnique({
     where:  { username: req.params.username },
-    select: chonHoSoCongKhai,
+    select: selectPublicProfile,
   });
   if (!u) return res.status(404).end();
   res.json(u satisfies HoSoCongKhai);
@@ -480,7 +480,7 @@ app.get('/api/v1/users/:username', async (req, res) =&gt; {
 <p class="lead">Ngay khi một câu truy vấn có <code>include</code> hay <code>select</code>, kết quả của nó không còn là một <code>User</code> nữa — nó là một thứ hẹp hơn hoặc rộng hơn, và không có cái tên nào được sinh sẵn cho nó. Mọi kho mã đều đụng chuyện này vào tuần thứ hai, và phần lớn giải bằng cách viết tay một interface rồi interface ấy bắt đầu trôi dạt ngay lập tức. Có một câu trả lời đúng, nó dài hai dòng, và nó là thứ hữu ích nhất trong cả chương này.</p>
 
 <h3>Vấn đề</h3>
-<pre><code>const bai = await prisma.post.findMany({
+<pre><code>const post = await prisma.post.findMany({
   select: {
     id: true,
     title: true,
@@ -492,7 +492,7 @@ app.get('/api/v1/users/:username', async (req, res) =&gt; {
 <span class="tok-comment">// Giờ thử truyền một trong số đó vào một hàm vẽ giao diện.</span>
 function the(b: Post) { … }        <span class="tok-comment">// ✗ Post có body, views, authorId… mà ta không chọn cái nào</span>
 function the(b: any) { … }         <span class="tok-comment">// ✗ chạy được, và vứt bỏ mọi thứ</span>
-interface TheBai { … }             <span class="tok-comment">// ✗ chạy được, và trôi dạt ngay khi select đổi</span></code></pre>
+interface Card { … }             <span class="tok-comment">// ✗ chạy được, và trôi dạt ngay khi select đổi</span></code></pre>
 <div class="out">Argument of type '{ id: number; title: string; author: {...}; _count: {...} }'
 is not assignable to parameter of type 'Post'.
   Type is missing the following properties from type 'Post': body, published, views, createdAt, authorId</div>
@@ -501,7 +501,7 @@ is not assignable to parameter of type 'Post'.
 <pre><code>import { Prisma } from '@prisma/client';
 
 <span class="tok-comment">// 1. Phép chọn, dưới dạng một giá trị, được kiểm với model</span>
-const chonTheBai = {
+const pickCard = {
   id: true,
   title: true,
   author: { select: { username: true, avatarUrl: true } },
@@ -509,28 +509,28 @@ const chonTheBai = {
 } satisfies Prisma.PostSelect;
 
 <span class="tok-comment">// 2. Cái kiểu, suy ra từ giá trị đó</span>
-type TheBai = Prisma.PostGetPayload&lt;{ select: typeof chonTheBai }&gt;;
+type Card = Prisma.PostGetPayload&lt;{ select: typeof pickCard }&gt;;
 
 <span class="tok-comment">// 3. Dùng cả hai cùng nhau — truy vấn và kiểu không thể bất đồng</span>
-async function layThe(): Promise&lt;TheBai[]&gt; {
-  return prisma.post.findMany({ select: chonTheBai, take: 20 });
+async function getCard(): Promise&lt;Card[]&gt; {
+  return prisma.post.findMany({ select: pickCard, take: 20 });
 }
 
-function the(b: TheBai) {
+function the(b: Card) {
   return &#96;\${b.title} — \${b.author.username} (\${b._count.comments})&#96;;
 }</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k"><code>satisfies</code>, không phải <code>:</code></span><span class="lz-t">Chỗ này quan trọng</span><span class="lz-d"><code>const x: Prisma.PostSelect = {…}</code> nới rộng giá trị thành cả kiểu <code>PostSelect</code>, nên <code>typeof x</code> thành vô dụng. <code>satisfies</code> kiểm nó với <code>PostSelect</code> mà vẫn giữ nguyên hình dạng chữ — đúng thứ <code>GetPayload</code> cần để tính ra kết quả.</span></div>
   <div class="lz-step"><span class="lz-k"><code>GetPayload</code> làm phần việc</span><span class="lz-t">Mỗi model một generic</span><span class="lz-d"><code>PostGetPayload</code>, <code>UserGetPayload</code>, mỗi model một cái. Nó nhận đúng cái đối tượng tham số mà câu truy vấn nhận rồi tính ra kiểu trả về chính xác — đúng bộ máy Prisma dùng bên trong, phơi ra cho bạn.</span></div>
-  <div class="lz-step"><span class="lz-k">Phép chọn giờ dùng chung được</span><span class="lz-t">Import ở đâu cũng được</span><span class="lz-d">Ba endpoint cùng trả về một hình thẻ thì dùng chung một <code>chonTheBai</code>, nên chúng không thể tách nhau ra. Đổi một lần là cả ba đổi.</span></div>
+  <div class="lz-step"><span class="lz-k">Phép chọn giờ dùng chung được</span><span class="lz-t">Import ở đâu cũng được</span><span class="lz-d">Ba endpoint cùng trả về một hình thẻ thì dùng chung một <code>pickCard</code>, nên chúng không thể tách nhau ra. Đổi một lần là cả ba đổi.</span></div>
   <div class="lz-step"><span class="lz-k">Bỏ một trường thì làm vỡ chỗ dùng</span><span class="lz-t">Và đó chính là điểm mấu chốt</span><span class="lz-d">Xoá <code>title</code> khỏi phép chọn thì <code>the()</code> đỏ lên ngay lập tức, nêu đúng dòng. Một interface viết tay thì đã biên dịch trót lọt và trả về <code>undefined</code> lúc chạy.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Nó cũng chạy với include</span>
-type BaiCoTacGia = Prisma.PostGetPayload&lt;{ include: { author: true } }&gt;;
+type PostWithAuthor = Prisma.PostGetPayload&lt;{ include: { author: true } }&gt;;
 <span class="tok-comment">// = Post &amp; { author: User }</span>
 
 <span class="tok-comment">// Và với mọi thứ lồng nhau</span>
-type BaiDayDu = Prisma.PostGetPayload&lt;{
+type FullPost = Prisma.PostGetPayload&lt;{
   include: {
     author: { select: { username: true } };
     comments: { include: { author: true } };
@@ -539,7 +539,7 @@ type BaiDayDu = Prisma.PostGetPayload&lt;{
 
 <h3>Cách 2 — <code>Prisma.validator</code></h3>
 <pre><code><span class="tok-comment">// API cũ hơn, vẫn được hỗ trợ, và rõ ràng hơn trong một số kho mã</span>
-const chonTheBai = Prisma.validator&lt;Prisma.PostDefaultArgs&gt;()({
+const pickCard = Prisma.validator&lt;Prisma.PostDefaultArgs&gt;()({
   select: {
     id: true,
     title: true,
@@ -547,9 +547,9 @@ const chonTheBai = Prisma.validator&lt;Prisma.PostDefaultArgs&gt;()({
   },
 });
 
-type TheBai = Prisma.PostGetPayload&lt;typeof chonTheBai&gt;;
+type Card = Prisma.PostGetPayload&lt;typeof pickCard&gt;;
 
-await prisma.post.findMany({ ...chonTheBai, take: 20 });</code></pre>
+await prisma.post.findMany({ ...pickCard, take: 20 });</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nó kiểm ngay lúc định nghĩa</span><span class="v">Một lỗi gõ trong tên trường là một lỗi ngay chỗ phép chọn được viết, không phải chỗ nó được dùng. Với <code>satisfies</code> bạn cũng có điều đó, nên giờ đây phần lớn là chuyện phong cách.</span></div>
   <div class="kv"><span class="k">Nó bọc cả đối tượng tham số</span><span class="v">Không chỉ phần <code>select</code> — bạn nhét được cả <code>where</code>, <code>orderBy</code> và <code>take</code> vào cùng một hằng số dùng lại được, rồi trải nó vào câu truy vấn.</span></div>
@@ -559,16 +559,16 @@ await prisma.post.findMany({ ...chonTheBai, take: 20 });</code></pre>
 
 <h3>Cách 3 — suy ra từ chính cái hàm</h3>
 <pre><code><span class="tok-comment">// Không cần phép chọn có tên nào cả — lấy kiểu từ chính giá trị hàm trả về</span>
-async function layThe() {
+async function getCard() {
   return prisma.post.findMany({
     select: { id: true, title: true, author: { select: { username: true } } },
     take: 20,
   });
 }
 
-type TheBai = Awaited&lt;ReturnType&lt;typeof layThe&gt;&gt;[number];
+type Card = Awaited&lt;ReturnType&lt;typeof getCard&gt;&gt;[number];
 
-function the(b: TheBai) {
+function the(b: Card) {
   return &#96;\${b.title} — \${b.author.username}&#96;;
 }</code></pre>
 <div class="callout ok">
@@ -577,7 +577,7 @@ function the(b: TheBai) {
 
 <h3>Áp dụng: một kiểu phản hồi API</h3>
 <pre><code><span class="tok-comment">// Phép chọn sống cùng cái route dùng nó</span>
-export const chonHoSoCongKhai = {
+export const selectPublicProfile = {
   id: true,
   username: true,
   fullName: true,
@@ -586,13 +586,13 @@ export const chonHoSoCongKhai = {
   _count: { select: { posts: true, followers: true } },
 } satisfies Prisma.UserSelect;
 
-export type HoSoCongKhai = Prisma.UserGetPayload&lt;{ select: typeof chonHoSoCongKhai }&gt;;
+export type HoSoCongKhai = Prisma.UserGetPayload&lt;{ select: typeof selectPublicProfile }&gt;;
 
 <span class="tok-comment">// Cái route</span>
 app.get('/api/v1/users/:username', async (req, res) =&gt; {
   const u = await prisma.user.findUnique({
     where:  { username: req.params.username },
-    select: chonHoSoCongKhai,
+    select: selectPublicProfile,
   });
   if (!u) return res.status(404).end();
   res.json(u satisfies HoSoCongKhai);
@@ -674,12 +674,12 @@ An error occurred while running the seed command.</div>
 type ContentType = 'VLOG' | 'ARTICLE' | 'CODE' | 'TUTORIAL';
 <span class="tok-comment">//                                       ^^^^^^ still the old name</span>
 
-const duLieu: { title: string; type: ContentType }[] = [
-  { title: 'Review ma nguon Prisma', type: 'CODE' },
+const payload: { title: string; type: ContentType }[] = [
+  { title: 'Review code nguon Prisma', type: 'CODE' },
   …
 ];
 
-for (const d of duLieu) {
+for (const d of payload) {
   await prisma.content.create({ data: d });    <span class="tok-comment">// sends 'CODE' to a database that no longer has it</span>
 }</code></pre>
 
@@ -805,12 +805,12 @@ An error occurred while running the seed command.</div>
 type ContentType = 'VLOG' | 'ARTICLE' | 'CODE' | 'TUTORIAL';
 <span class="tok-comment">//                                       ^^^^^^ vẫn là tên cũ</span>
 
-const duLieu: { title: string; type: ContentType }[] = [
-  { title: 'Review ma nguon Prisma', type: 'CODE' },
+const payload: { title: string; type: ContentType }[] = [
+  { title: 'Review code nguon Prisma', type: 'CODE' },
   …
 ];
 
-for (const d of duLieu) {
+for (const d of payload) {
   await prisma.content.create({ data: d });    <span class="tok-comment">// gửi 'CODE' tới một cơ sở dữ liệu không còn nó</span>
 }</code></pre>
 
@@ -909,7 +909,7 @@ ALTER TYPE "ContentType" ADD VALUE 'CODE_REVIEW';
 
 <h3>The shape</h3>
 <pre><code>const prisma = new PrismaClient().$extends({
-  name: 'ten-cua-ban',
+  name: 'name-cua-ban',
   result: { /* computed fields */ },
   model:  { /* methods on prisma.user, prisma.post, … */ },
   query:  { /* intercept queries */ },
@@ -963,17 +963,17 @@ Nguyen Van An https://cuongthai.com/u/an</div>
 <pre><code>const prisma = new PrismaClient().$extends({
   model: {
     user: {
-      async timTheoEmail(email: string) {
+      async findByEmail(email: string) {
         return prisma.user.findUnique({ where: { email } });
       },
-      async dangKy(email: string, matKhau: string) {
+      async register(email: string, password: string) {
         return prisma.user.create({
-          data: { email, password: await bam(matKhau) },
+          data: { email, password: await hash(password) },
         });
       },
     },
     post: {
-      async dangBai(id: number) {
+      async publishPost(id: number) {
         return prisma.post.updateMany({
           where: { id, published: false },
           data:  { published: true, publishedAt: new Date() },
@@ -982,7 +982,7 @@ Nguyen Van An https://cuongthai.com/u/an</div>
     },
     $allModels: {
       <span class="tok-comment">// available on EVERY model</span>
-      async tonTai&lt;T&gt;(this: T, where: Prisma.Args&lt;T, 'findFirst'&gt;['where']): Promise&lt;boolean&gt; {
+      async exists&lt;T&gt;(this: T, where: Prisma.Args&lt;T, 'findFirst'&gt;['where']): Promise&lt;boolean&gt; {
         const ctx = Prisma.getExtensionContext(this);
         const r = await (ctx as any).findFirst({ where, select: { id: true } });
         return r !== null;
@@ -991,12 +991,12 @@ Nguyen Van An https://cuongthai.com/u/an</div>
   },
 });
 
-await prisma.user.timTheoEmail('an@example.com');
-await prisma.post.dangBai(42);
-await prisma.comment.tonTai({ postId: 1 });      <span class="tok-comment">// from $allModels</span></code></pre>
+await prisma.user.findByEmail('an@example.com');
+await prisma.post.publishPost(42);
+await prisma.comment.exists({ postId: 1 });      <span class="tok-comment">// from $allModels</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">It is a repository layer without the layer</span><span class="v">The methods live next to the model they belong to, discoverable by autocomplete on <code>prisma.user.</code>, and typed. Compare with a <code>UserRepository</code> class that has to be imported and wired up separately.</span></div>
-  <div class="kv"><span class="k"><code>$allModels</code> for genuinely generic helpers</span><span class="v"><code>tonTai</code>, <code>demTheo</code>, <code>xoaMem</code> — anything that works the same way on every model. <code>Prisma.getExtensionContext(this)</code> is how the method finds out which model it was called on.</span></div>
+  <div class="kv"><span class="k"><code>$allModels</code> for genuinely generic helpers</span><span class="v"><code>exists</code>, <code>demTheo</code>, <code>xoaMem</code> — anything that works the same way on every model. <code>Prisma.getExtensionContext(this)</code> is how the method finds out which model it was called on.</span></div>
   <div class="kv"><span class="k">The self-reference caveat</span><span class="v">Inside the method, <code>prisma</code> refers to the client being defined. Some codebases prefer <code>Prisma.getExtensionContext(this)</code> throughout to avoid the circularity, especially when extensions are stacked.</span></div>
   <div class="kv"><span class="k">Do not put business logic here</span><span class="v">"Publish a post" is a data operation and fits. "Publish a post, notify subscribers, invalidate the cache" is application logic and belongs in a service — the extension is a data layer, not a place for everything.</span></div>
 </div>
@@ -1007,10 +1007,10 @@ await prisma.comment.tonTai({ postId: 1 });      <span class="tok-comment">// fr
     <span class="tok-comment">// every operation on every model: log the slow ones</span>
     async $allOperations({ model, operation, args, query }) {
       const t0 = performance.now();
-      const kq = await query(args);
+      const result = await query(args);
       const ms = performance.now() - t0;
       if (ms &gt; 200) console.warn(&#96;CHAM \${ms.toFixed(0)}ms \${model}.\${operation}&#96;);
-      return kq;
+      return result;
     },
 
     <span class="tok-comment">// one model, one operation: normalise before writing</span>
@@ -1037,17 +1037,17 @@ CHAM 233ms user.aggregate</div>
   <div class="lz-layer"><span class="lz-lname">Raw queries are not intercepted</span><span class="lz-lnote"><code>$queryRaw</code> and <code>$executeRaw</code> bypass the query component entirely. Any invariant enforced here — soft-delete filtering, tenant scoping — must be repeated in every raw query by hand.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Multi-tenant scoping: the highest-value use of the query component</span>
-function clientChoThue(tenantId: number) {
+function tenantClient(tenantId: number) {
   return base.$extends({
     query: {
       $allModels: {
         async $allOperations({ operation, args, query }) {
           const doc = ['findFirst', 'findMany', 'findUnique', 'count', 'aggregate'];
-          const ghi = ['create', 'createMany'];
+          const write = ['create', 'createMany'];
 
           if (doc.includes(operation)) {
             args.where = { ...(args as any).where, tenantId };
-          } else if (ghi.includes(operation)) {
+          } else if (write.includes(operation)) {
             (args as any).data = { ...(args as any).data, tenantId };
           }
           return query(args);
@@ -1057,7 +1057,7 @@ function clientChoThue(tenantId: number) {
   });
 }
 
-const db = clientChoThue(req.user.tenantId);
+const db = tenantClient(req.user.tenantId);
 await db.post.findMany();       <span class="tok-comment">// automatically scoped, impossible to forget</span></code></pre>
 <div class="pitfall">
 <p><strong>Trap — a tenant filter in an extension is a safety net, not a security boundary.</strong> It covers the queries that go through the extended client and nothing else: not <code>$queryRaw</code>, not nested reads inside an <code>include</code> on a different model, not a helper that captured the base client. For real isolation, use PostgreSQL row-level security, or a schema per tenant, or a database per tenant — and keep the extension as the layer that catches the ordinary mistakes.</p>
@@ -1066,7 +1066,7 @@ await db.post.findMany();       <span class="tok-comment">// automatically scope
 <h3>4 · <code>client</code> — top-level methods</h3>
 <pre><code>const prisma = new PrismaClient().$extends({
   client: {
-    async khoeManh(): Promise&lt;boolean&gt; {
+    async healthy(): Promise&lt;boolean&gt; {
       try {
         await (Prisma.getExtensionContext(this) as any).$queryRaw&#96;SELECT 1&#96;;
         return true;
@@ -1074,9 +1074,9 @@ await db.post.findMany();       <span class="tok-comment">// automatically scope
         return false;
       }
     },
-    async thongKeKetNoi() {
+    async connectionStats() {
       return (Prisma.getExtensionContext(this) as any).$queryRaw&#96;
-        SELECT count(*)::int AS tong,
+        SELECT count(*)::int AS total,
                count(*) FILTER (WHERE state = 'active')::int AS dang_chay
         FROM pg_stat_activity WHERE datname = current_database()&#96;;
     },
@@ -1084,13 +1084,13 @@ await db.post.findMany();       <span class="tok-comment">// automatically scope
 });
 
 app.get('/health', async (_, res) =&gt; {
-  res.status(await prisma.khoeManh() ? 200 : 503).end();
+  res.status(await prisma.healthy() ? 200 : 503).end();
 });</code></pre>
 
 <h3>Stacking, and the order that matters</h3>
 <pre><code>export const prisma = new PrismaClient()
   .$extends(xoaMem)        <span class="tok-comment">// 1 — filters deleted rows</span>
-  .$extends(ghiNhatKy)     <span class="tok-comment">// 2 — logs writes</span>
+  .$extends(writeAuditLog)     <span class="tok-comment">// 2 — logs writes</span>
   .$extends(truongTinh)    <span class="tok-comment">// 3 — computed fields</span>
   .$extends(phuongThuc);   <span class="tok-comment">// 4 — model methods</span></code></pre>
 <div class="kv-grid">
@@ -1114,7 +1114,7 @@ app.get('/health', async (_, res) =&gt; {
 
 <h3>Hình dạng</h3>
 <pre><code>const prisma = new PrismaClient().$extends({
-  name: 'ten-cua-ban',
+  name: 'name-cua-ban',
   result: { /* trường tính toán */ },
   model:  { /* phương thức trên prisma.user, prisma.post, … */ },
   query:  { /* chặn truy vấn */ },
@@ -1168,17 +1168,17 @@ Nguyen Van An https://cuongthai.com/u/an</div>
 <pre><code>const prisma = new PrismaClient().$extends({
   model: {
     user: {
-      async timTheoEmail(email: string) {
+      async findByEmail(email: string) {
         return prisma.user.findUnique({ where: { email } });
       },
-      async dangKy(email: string, matKhau: string) {
+      async register(email: string, password: string) {
         return prisma.user.create({
-          data: { email, password: await bam(matKhau) },
+          data: { email, password: await hash(password) },
         });
       },
     },
     post: {
-      async dangBai(id: number) {
+      async publishPost(id: number) {
         return prisma.post.updateMany({
           where: { id, published: false },
           data:  { published: true, publishedAt: new Date() },
@@ -1187,7 +1187,7 @@ Nguyen Van An https://cuongthai.com/u/an</div>
     },
     $allModels: {
       <span class="tok-comment">// có mặt trên MỌI model</span>
-      async tonTai&lt;T&gt;(this: T, where: Prisma.Args&lt;T, 'findFirst'&gt;['where']): Promise&lt;boolean&gt; {
+      async exists&lt;T&gt;(this: T, where: Prisma.Args&lt;T, 'findFirst'&gt;['where']): Promise&lt;boolean&gt; {
         const ctx = Prisma.getExtensionContext(this);
         const r = await (ctx as any).findFirst({ where, select: { id: true } });
         return r !== null;
@@ -1196,12 +1196,12 @@ Nguyen Van An https://cuongthai.com/u/an</div>
   },
 });
 
-await prisma.user.timTheoEmail('an@example.com');
-await prisma.post.dangBai(42);
-await prisma.comment.tonTai({ postId: 1 });      <span class="tok-comment">// đến từ $allModels</span></code></pre>
+await prisma.user.findByEmail('an@example.com');
+await prisma.post.publishPost(42);
+await prisma.comment.exists({ postId: 1 });      <span class="tok-comment">// đến từ $allModels</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nó là một tầng kho dữ liệu mà không cần cả cái tầng</span><span class="v">Các phương thức sống ngay cạnh model mà chúng thuộc về, gợi ý gõ tìm ra được khi gõ <code>prisma.user.</code>, và có kiểu. So với một lớp <code>UserRepository</code> phải import và nối dây riêng.</span></div>
-  <div class="kv"><span class="k"><code>$allModels</code> cho những hàm phụ thật sự tổng quát</span><span class="v"><code>tonTai</code>, <code>demTheo</code>, <code>xoaMem</code> — bất cứ thứ gì chạy y hệt nhau trên mọi model. <code>Prisma.getExtensionContext(this)</code> là cách phương thức biết nó được gọi trên model nào.</span></div>
+  <div class="kv"><span class="k"><code>$allModels</code> cho những hàm phụ thật sự tổng quát</span><span class="v"><code>exists</code>, <code>demTheo</code>, <code>xoaMem</code> — bất cứ thứ gì chạy y hệt nhau trên mọi model. <code>Prisma.getExtensionContext(this)</code> là cách phương thức biết nó được gọi trên model nào.</span></div>
   <div class="kv"><span class="k">Lưu ý về tự tham chiếu</span><span class="v">Bên trong phương thức, <code>prisma</code> trỏ tới chính client đang được định nghĩa. Một số kho mã thích dùng <code>Prisma.getExtensionContext(this)</code> xuyên suốt để tránh vòng lặp ấy, nhất là khi các extension chồng lên nhau.</span></div>
   <div class="kv"><span class="k">Đừng nhét logic nghiệp vụ vào đây</span><span class="v">"Đăng một bài viết" là một thao tác dữ liệu và hợp. "Đăng một bài viết, báo cho người theo dõi, xoá cache" là logic ứng dụng và thuộc về một service — extension là tầng dữ liệu, không phải chỗ để mọi thứ.</span></div>
 </div>
@@ -1212,10 +1212,10 @@ await prisma.comment.tonTai({ postId: 1 });      <span class="tok-comment">// đ
     <span class="tok-comment">// mọi thao tác trên mọi model: ghi log những cái chậm</span>
     async $allOperations({ model, operation, args, query }) {
       const t0 = performance.now();
-      const kq = await query(args);
+      const result = await query(args);
       const ms = performance.now() - t0;
       if (ms &gt; 200) console.warn(&#96;CHAM \${ms.toFixed(0)}ms \${model}.\${operation}&#96;);
-      return kq;
+      return result;
     },
 
     <span class="tok-comment">// một model, một thao tác: chuẩn hoá trước khi ghi</span>
@@ -1242,17 +1242,17 @@ CHAM 233ms user.aggregate</div>
   <div class="lz-layer"><span class="lz-lname">Truy vấn thô không bị chặn</span><span class="lz-lnote"><code>$queryRaw</code> và <code>$executeRaw</code> đi vòng hoàn toàn qua thành phần query. Mọi bất biến được thi hành ở đây — lọc xoá mềm, phạm vi theo khách thuê — đều phải lặp lại bằng tay trong từng câu truy vấn thô.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Phạm vi theo khách thuê: cách dùng giá trị nhất của thành phần query</span>
-function clientChoThue(tenantId: number) {
+function tenantClient(tenantId: number) {
   return base.$extends({
     query: {
       $allModels: {
         async $allOperations({ operation, args, query }) {
           const doc = ['findFirst', 'findMany', 'findUnique', 'count', 'aggregate'];
-          const ghi = ['create', 'createMany'];
+          const write = ['create', 'createMany'];
 
           if (doc.includes(operation)) {
             args.where = { ...(args as any).where, tenantId };
-          } else if (ghi.includes(operation)) {
+          } else if (write.includes(operation)) {
             (args as any).data = { ...(args as any).data, tenantId };
           }
           return query(args);
@@ -1262,7 +1262,7 @@ function clientChoThue(tenantId: number) {
   });
 }
 
-const db = clientChoThue(req.user.tenantId);
+const db = tenantClient(req.user.tenantId);
 await db.post.findMany();       <span class="tok-comment">// tự động giới hạn phạm vi, không thể quên</span></code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — một bộ lọc theo khách thuê đặt trong extension là một lưới an toàn, không phải một ranh giới bảo mật.</strong> Nó bao những truy vấn đi qua client đã mở rộng và không bao gì khác: không bao <code>$queryRaw</code>, không bao các lần đọc lồng bên trong một <code>include</code> trên model khác, không bao một hàm phụ đã cầm sẵn client gốc. Muốn cô lập thật thì hãy dùng row-level security của PostgreSQL, hoặc mỗi khách một schema, hoặc mỗi khách một cơ sở dữ liệu — và giữ extension làm tầng bắt những sai sót thông thường.</p>
@@ -1271,7 +1271,7 @@ await db.post.findMany();       <span class="tok-comment">// tự động giới
 <h3>4 · <code>client</code> — phương thức mức trên</h3>
 <pre><code>const prisma = new PrismaClient().$extends({
   client: {
-    async khoeManh(): Promise&lt;boolean&gt; {
+    async healthy(): Promise&lt;boolean&gt; {
       try {
         await (Prisma.getExtensionContext(this) as any).$queryRaw&#96;SELECT 1&#96;;
         return true;
@@ -1279,9 +1279,9 @@ await db.post.findMany();       <span class="tok-comment">// tự động giới
         return false;
       }
     },
-    async thongKeKetNoi() {
+    async connectionStats() {
       return (Prisma.getExtensionContext(this) as any).$queryRaw&#96;
-        SELECT count(*)::int AS tong,
+        SELECT count(*)::int AS total,
                count(*) FILTER (WHERE state = 'active')::int AS dang_chay
         FROM pg_stat_activity WHERE datname = current_database()&#96;;
     },
@@ -1289,13 +1289,13 @@ await db.post.findMany();       <span class="tok-comment">// tự động giới
 });
 
 app.get('/health', async (_, res) =&gt; {
-  res.status(await prisma.khoeManh() ? 200 : 503).end();
+  res.status(await prisma.healthy() ? 200 : 503).end();
 });</code></pre>
 
 <h3>Ghép chồng, và cái thứ tự có ý nghĩa</h3>
 <pre><code>export const prisma = new PrismaClient()
   .$extends(xoaMem)        <span class="tok-comment">// 1 — lọc bỏ hàng đã xoá</span>
-  .$extends(ghiNhatKy)     <span class="tok-comment">// 2 — ghi log các lần ghi</span>
+  .$extends(writeAuditLog)     <span class="tok-comment">// 2 — ghi log các lần ghi</span>
   .$extends(truongTinh)    <span class="tok-comment">// 3 — trường tính toán</span>
   .$extends(phuongThuc);   <span class="tok-comment">// 4 — phương thức của model</span></code></pre>
 <div class="kv-grid">
@@ -1370,7 +1370,7 @@ ls trace/</code></pre>
 <h3>The five mitigations, ranked by measured effect</h3>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1 · Name deep query types</span><span class="lz-t">Biggest effect, least effort</span><span class="lz-d">A four-level <code>include</code> written inline is re-evaluated at every use. Extract it with <code>satisfies</code> + <code>GetPayload</code> (Lesson 8.2) and the type is computed once. On the CuongThai schema this was the single largest win.</span></div>
-  <div class="lz-step"><span class="lz-k">2 · Annotate exported function returns</span><span class="lz-t">Large effect on incremental checks</span><span class="lz-d">An exported <code>async function</code> with an inferred return type forces every consumer to re-infer it. Writing <code>: Promise&lt;TheBai[]&gt;</code> gives the checker a stopping point.</span></div>
+  <div class="lz-step"><span class="lz-k">2 · Annotate exported function returns</span><span class="lz-t">Large effect on incremental checks</span><span class="lz-d">An exported <code>async function</code> with an inferred return type forces every consumer to re-infer it. Writing <code>: Promise&lt;Card[]&gt;</code> gives the checker a stopping point.</span></div>
   <div class="lz-step"><span class="lz-k">3 · Turn on <code>incremental</code></span><span class="lz-t">Large effect on repeat runs</span><span class="lz-d"><code>"incremental": true</code> plus a <code>.tsbuildinfo</code> makes the second and later checks a fraction of the first. Does nothing for a cold run or for the editor's first load, but transforms the edit-check loop.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Split the schema by domain</span><span class="lz-t">Moderate effect, real cost</span><span class="lz-d">Two Prisma clients over two schemas halves each client's type surface. Genuinely helps, and it is an architectural change — separate migration histories, no cross-client relations. Only for a schema that is genuinely two systems.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Fewer stacked extensions</span><span class="lz-t">Small effect</span><span class="lz-d">Merging four extensions into one reduces the inference layers. Measurable, and rarely worth the loss in organisation unless the trace names it.</span></div>
@@ -1378,7 +1378,7 @@ ls trace/</code></pre>
 <pre><code><span class="tok-comment">// Mitigation 1, applied — this is the change to make first</span>
 
 <span class="tok-comment">// Before: the type is re-computed at every call site</span>
-async function layBai(id: number) {
+async function getPost(id: number) {
   return prisma.post.findUnique({
     where: { id },
     include: {
@@ -1396,9 +1396,9 @@ const kemDayDu = {
   tags:     { include: { tag: true } },
 } satisfies Prisma.PostInclude;
 
-export type BaiDayDu = Prisma.PostGetPayload&lt;{ include: typeof kemDayDu }&gt;;
+export type FullPost = Prisma.PostGetPayload&lt;{ include: typeof kemDayDu }&gt;;
 
-export async function layBai(id: number): Promise&lt;BaiDayDu | null&gt; {
+export async function getPost(id: number): Promise&lt;FullPost | null&gt; {
   return prisma.post.findUnique({ where: { id }, include: kemDayDu });
 }</code></pre>
 <div class="out">-- before
@@ -1495,7 +1495,7 @@ ls trace/</code></pre>
 <h3>Năm cách giảm nhẹ, xếp theo hiệu quả đo được</h3>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1 · Đặt tên cho các kiểu truy vấn sâu</span><span class="lz-t">Hiệu quả lớn nhất, công sức ít nhất</span><span class="lz-d">Một <code>include</code> bốn tầng viết thẳng trong dòng sẽ được tính lại ở mọi chỗ dùng. Hãy tách nó ra bằng <code>satisfies</code> + <code>GetPayload</code> (Bài 8.2) và cái kiểu chỉ được tính một lần. Trên lược đồ CuongThai thì đây là phần cải thiện lớn nhất.</span></div>
-  <div class="lz-step"><span class="lz-k">2 · Ghi rõ kiểu trả về cho các hàm xuất ra</span><span class="lz-t">Hiệu quả lớn với các lần kiểm tăng dần</span><span class="lz-d">Một <code>async function</code> được xuất ra mà để kiểu trả về tự suy sẽ buộc mọi bên tiêu thụ phải suy lại nó. Viết <code>: Promise&lt;TheBai[]&gt;</code> cho bộ kiểm một điểm dừng.</span></div>
+  <div class="lz-step"><span class="lz-k">2 · Ghi rõ kiểu trả về cho các hàm xuất ra</span><span class="lz-t">Hiệu quả lớn với các lần kiểm tăng dần</span><span class="lz-d">Một <code>async function</code> được xuất ra mà để kiểu trả về tự suy sẽ buộc mọi bên tiêu thụ phải suy lại nó. Viết <code>: Promise&lt;Card[]&gt;</code> cho bộ kiểm một điểm dừng.</span></div>
   <div class="lz-step"><span class="lz-k">3 · Bật <code>incremental</code></span><span class="lz-t">Hiệu quả lớn với các lần chạy lặp lại</span><span class="lz-d"><code>"incremental": true</code> cộng một tệp <code>.tsbuildinfo</code> làm lần kiểm thứ hai trở đi chỉ còn một phần nhỏ lần đầu. Không giúp gì cho lần chạy nguội hay lần nạp đầu tiên của trình soạn thảo, nhưng biến đổi hẳn vòng lặp sửa-kiểm.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Chẻ lược đồ theo miền</span><span class="lz-t">Hiệu quả vừa, giá thật</span><span class="lz-d">Hai Prisma client trên hai lược đồ giảm một nửa bề mặt kiểu của mỗi client. Thật sự có tác dụng, và nó là một thay đổi kiến trúc — lịch sử migration riêng, không có quan hệ xuyên client. Chỉ dành cho lược đồ thật sự là hai hệ thống.</span></div>
   <div class="lz-step"><span class="lz-k">5 · Bớt extension chồng lên nhau</span><span class="lz-t">Hiệu quả nhỏ</span><span class="lz-d">Gộp bốn extension thành một làm giảm số tầng suy diễn. Đo được, và hiếm khi đáng đánh đổi bằng sự lộn xộn về tổ chức trừ khi bản trace gọi tên nó.</span></div>
@@ -1503,7 +1503,7 @@ ls trace/</code></pre>
 <pre><code><span class="tok-comment">// Cách 1, áp dụng — đây là thay đổi nên làm trước tiên</span>
 
 <span class="tok-comment">// Trước: cái kiểu được tính lại ở mọi chỗ gọi</span>
-async function layBai(id: number) {
+async function getPost(id: number) {
   return prisma.post.findUnique({
     where: { id },
     include: {
@@ -1521,9 +1521,9 @@ const kemDayDu = {
   tags:     { include: { tag: true } },
 } satisfies Prisma.PostInclude;
 
-export type BaiDayDu = Prisma.PostGetPayload&lt;{ include: typeof kemDayDu }&gt;;
+export type FullPost = Prisma.PostGetPayload&lt;{ include: typeof kemDayDu }&gt;;
 
-export async function layBai(id: number): Promise&lt;BaiDayDu | null&gt; {
+export async function getPost(id: number): Promise&lt;FullPost | null&gt; {
   return prisma.post.findUnique({ where: { id }, include: kemDayDu });
 }</code></pre>
 <div class="out">-- trước

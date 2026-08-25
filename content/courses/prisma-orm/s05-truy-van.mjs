@@ -418,7 +418,7 @@ where: { tags: { some: { name: { in: ['nodejs', 'prisma'] } } } }   <span class=
 
 <span class="tok-comment">// RIGHT — one &#96;some&#96; per required tag, ANDed</span>
 where: {
-  AND: ['nodejs', 'prisma'].map((ten) =&gt; ({ tags: { some: { name: ten } } })),
+  AND: ['nodejs', 'prisma'].map((name) =&gt; ({ tags: { some: { name: name } } })),
 }</code></pre>
 <div class="out">SELECT ... FROM "posts"
 WHERE EXISTS (SELECT 1 FROM "_PostToTag" pt JOIN "tags" t ON t.id = pt."A"
@@ -589,7 +589,7 @@ where: { tags: { some: { name: { in: ['nodejs', 'prisma'] } } } }   <span class=
 
 <span class="tok-comment">// ĐÚNG — mỗi thẻ bắt buộc một &#96;some&#96;, AND lại với nhau</span>
 where: {
-  AND: ['nodejs', 'prisma'].map((ten) =&gt; ({ tags: { some: { name: ten } } })),
+  AND: ['nodejs', 'prisma'].map((name) =&gt; ({ tags: { some: { name: name } } })),
 }</code></pre>
 <div class="out">SELECT ... FROM "posts"
 WHERE EXISTS (SELECT 1 FROM "_PostToTag" pt JOIN "tags" t ON t.id = pt."A"
@@ -720,15 +720,15 @@ OFFSET 1000000 → Execution Time:  982.115 ms</div>
 </div>
 
 <h3>Cursor pagination</h3>
-<pre><code>const trang = await prisma.post.findMany({
+<pre><code>const page = await prisma.post.findMany({
   where:   { published: true },
   orderBy: { id: 'desc' },
   take:    20,
   ...(cursor &amp;&amp; { cursor: { id: Number(cursor) }, skip: 1 }),   <span class="tok-comment">// skip the cursor row itself</span>
 });
 
-const next = trang.length === 20 ? trang[trang.length - 1].id : null;
-res.json({ rows: trang, nextCursor: next });</code></pre>
+const next = page.length === 20 ? page[page.length - 1].id : null;
+res.json({ rows: page, nextCursor: next });</code></pre>
 <div class="out">SELECT ... FROM "posts" WHERE "published" = $1 AND "id" &lt;= $2
 ORDER BY "id" DESC LIMIT $3 OFFSET $4
 
@@ -871,15 +871,15 @@ OFFSET 1000000 → Execution Time:  982.115 ms</div>
 </div>
 
 <h3>Phân trang bằng con trỏ</h3>
-<pre><code>const trang = await prisma.post.findMany({
+<pre><code>const page = await prisma.post.findMany({
   where:   { published: true },
   orderBy: { id: 'desc' },
   take:    20,
   ...(cursor &amp;&amp; { cursor: { id: Number(cursor) }, skip: 1 }),   <span class="tok-comment">// bỏ qua chính hàng con trỏ</span>
 });
 
-const next = trang.length === 20 ? trang[trang.length - 1].id : null;
-res.json({ rows: trang, nextCursor: next });</code></pre>
+const next = page.length === 20 ? page[page.length - 1].id : null;
+res.json({ rows: page, nextCursor: next });</code></pre>
 <div class="out">SELECT ... FROM "posts" WHERE "published" = $1 AND "id" &lt;= $2
 ORDER BY "id" DESC LIMIT $3 OFFSET $4
 
@@ -999,7 +999,7 @@ console.log(k);</code></pre>
 </div>
 
 <h3><code>groupBy</code> — the dashboard query</h3>
-<pre><code>const theoThang = await prisma.order.groupBy({
+<pre><code>const byMonth = await prisma.order.groupBy({
   by:      ['status'],
   where:   { createdAt: { gte: dauThang } },
   _count:  { _all: true },
@@ -1007,7 +1007,7 @@ console.log(k);</code></pre>
   _avg:    { total: true },
   orderBy: { _sum: { total: 'desc' } },
 });
-console.log(theoThang);</code></pre>
+console.log(byMonth);</code></pre>
 <div class="out">prisma:query SELECT "orders"."status", COUNT(*), SUM("orders"."total"), AVG("orders"."total")
   FROM "orders" WHERE "orders"."created_at" &gt;= $1
   GROUP BY "orders"."status"
@@ -1019,7 +1019,7 @@ console.log(theoThang);</code></pre>
   { status: 'DA_HUY',     _count: { _all:  204 }, _sum: { total:  31900000 }, _avg: { total: 156372.5 } }
 ]</div>
 <pre><code><span class="tok-comment">// Group by several fields, and filter the GROUPS with &#96;having&#96;</span>
-const theoTacGia = await prisma.post.groupBy({
+const byAuthor = await prisma.post.groupBy({
   by:     ['authorId', 'published'],
   _count: { _all: true },
   _avg:   { views: true },
@@ -1042,31 +1042,31 @@ ORDER BY "author_id" ASC</div>
   <div class="lz-layer"><span class="lz-lname">4 · Fill gaps in a series</span><span class="lz-lnote">A day with no orders produces no row, so a 30-day chart silently has 26 bars. The fix is <code>generate_series</code> and a <code>LEFT JOIN</code> — raw SQL, and the single most common reason a dashboard query leaves Prisma.</span></div>
 </div>
 <pre><code><span class="tok-comment">// All four, in one raw query — this is the shape of most real dashboard SQL</span>
-type Ngay = { ngay: Date; soDon: bigint; doanhThu: bigint };
+type Day = { day: Date; orderCount: bigint; revenue: bigint };
 
-const bieuDo = await prisma.$queryRaw&lt;Ngay[]&gt;&#96;
-  SELECT d.ngay,
-         COUNT(o.id)               AS "soDon",
-         COALESCE(SUM(o.total), 0) AS "doanhThu"
-  FROM generate_series(\${tu}::date, \${den}::date, '1 day') AS d(ngay)
+const bieuDo = await prisma.$queryRaw&lt;Day[]&gt;&#96;
+  SELECT d.day,
+         COUNT(o.id)               AS "orderCount",
+         COALESCE(SUM(o.total), 0) AS "revenue"
+  FROM generate_series(\${from}::date, \${to}::date, '1 day') AS d(day)
   LEFT JOIN orders o
-    ON o.created_at &gt;= d.ngay
-   AND o.created_at &lt;  d.ngay + INTERVAL '1 day'
+    ON o.created_at &gt;= d.day
+   AND o.created_at &lt;  d.day + INTERVAL '1 day'
    AND o.status = 'DA_GIAO'
-  GROUP BY d.ngay
-  ORDER BY d.ngay&#96;;</code></pre>
+  GROUP BY d.day
+  ORDER BY d.day&#96;;</code></pre>
 <div class="out">[
   { ngay: 2026-08-01, soDon: 128n, doanhThu: 24180000n },
   { ngay: 2026-08-02, soDon:   0n, doanhThu:        0n },   ← the gap, filled
   { ngay: 2026-08-03, soDon:  94n, doanhThu: 18402000n }
 ]</div>
 <div class="pitfall">
-<p><strong>Trap — <code>COUNT</code> and <code>SUM</code> come back as <code>BigInt</code> from a raw query.</strong> PostgreSQL returns <code>bigint</code> for both, and the driver maps it to the JavaScript <code>bigint</code> primitive. <code>JSON.stringify</code> then throws <code>TypeError: Do not know how to serialize a BigInt</code>. Cast in SQL (<code>COUNT(*)::int</code>) or convert in JavaScript (<code>Number(row.soDon)</code>) before the response — and note that Prisma's own <code>_count</code> does this for you, which is why the problem only appears once you drop to raw.</p>
+<p><strong>Trap — <code>COUNT</code> and <code>SUM</code> come back as <code>BigInt</code> from a raw query.</strong> PostgreSQL returns <code>bigint</code> for both, and the driver maps it to the JavaScript <code>bigint</code> primitive. <code>JSON.stringify</code> then throws <code>TypeError: Do not know how to serialize a BigInt</code>. Cast in SQL (<code>COUNT(*)::int</code>) or convert in JavaScript (<code>Number(row.orderCount)</code>) before the response — and note that Prisma's own <code>_count</code> does this for you, which is why the problem only appears once you drop to raw.</p>
 </div>
 
 <h3><code>distinct</code>, and where it actually runs</h3>
 <pre><code><span class="tok-comment">// One post per author — the newest, because of the ordering</span>
-const moiNguoiMotBai = await prisma.post.findMany({
+const onePostPerPerson = await prisma.post.findMany({
   distinct: ['authorId'],
   orderBy:  [{ authorId: 'asc' }, { publishedAt: 'desc' }],
   take:     50,
@@ -1145,7 +1145,7 @@ console.log(k);</code></pre>
 </div>
 
 <h3><code>groupBy</code> — câu truy vấn của bảng điều khiển</h3>
-<pre><code>const theoThang = await prisma.order.groupBy({
+<pre><code>const byMonth = await prisma.order.groupBy({
   by:      ['status'],
   where:   { createdAt: { gte: dauThang } },
   _count:  { _all: true },
@@ -1153,7 +1153,7 @@ console.log(k);</code></pre>
   _avg:    { total: true },
   orderBy: { _sum: { total: 'desc' } },
 });
-console.log(theoThang);</code></pre>
+console.log(byMonth);</code></pre>
 <div class="out">prisma:query SELECT "orders"."status", COUNT(*), SUM("orders"."total"), AVG("orders"."total")
   FROM "orders" WHERE "orders"."created_at" &gt;= $1
   GROUP BY "orders"."status"
@@ -1165,7 +1165,7 @@ console.log(theoThang);</code></pre>
   { status: 'DA_HUY',     _count: { _all:  204 }, _sum: { total:  31900000 }, _avg: { total: 156372.5 } }
 ]</div>
 <pre><code><span class="tok-comment">// Gộp theo nhiều trường, và lọc chính các NHÓM bằng &#96;having&#96;</span>
-const theoTacGia = await prisma.post.groupBy({
+const byAuthor = await prisma.post.groupBy({
   by:     ['authorId', 'published'],
   _count: { _all: true },
   _avg:   { views: true },
@@ -1188,31 +1188,31 @@ ORDER BY "author_id" ASC</div>
   <div class="lz-layer"><span class="lz-lname">4 · Lấp chỗ trống trong một chuỗi</span><span class="lz-lnote">Một ngày không có đơn nào thì không sinh ra hàng nào, nên một biểu đồ 30 ngày âm thầm chỉ có 26 cột. Cách vá là <code>generate_series</code> cộng một <code>LEFT JOIN</code> — SQL thô, và là lý do phổ biến nhất khiến một truy vấn bảng điều khiển rời khỏi Prisma.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Cả bốn, trong một truy vấn thô — đây là hình dạng của phần lớn SQL bảng điều khiển thật</span>
-type Ngay = { ngay: Date; soDon: bigint; doanhThu: bigint };
+type Day = { day: Date; orderCount: bigint; revenue: bigint };
 
-const bieuDo = await prisma.$queryRaw&lt;Ngay[]&gt;&#96;
-  SELECT d.ngay,
-         COUNT(o.id)               AS "soDon",
-         COALESCE(SUM(o.total), 0) AS "doanhThu"
-  FROM generate_series(\${tu}::date, \${den}::date, '1 day') AS d(ngay)
+const bieuDo = await prisma.$queryRaw&lt;Day[]&gt;&#96;
+  SELECT d.day,
+         COUNT(o.id)               AS "orderCount",
+         COALESCE(SUM(o.total), 0) AS "revenue"
+  FROM generate_series(\${from}::date, \${to}::date, '1 day') AS d(day)
   LEFT JOIN orders o
-    ON o.created_at &gt;= d.ngay
-   AND o.created_at &lt;  d.ngay + INTERVAL '1 day'
+    ON o.created_at &gt;= d.day
+   AND o.created_at &lt;  d.day + INTERVAL '1 day'
    AND o.status = 'DA_GIAO'
-  GROUP BY d.ngay
-  ORDER BY d.ngay&#96;;</code></pre>
+  GROUP BY d.day
+  ORDER BY d.day&#96;;</code></pre>
 <div class="out">[
   { ngay: 2026-08-01, soDon: 128n, doanhThu: 24180000n },
   { ngay: 2026-08-02, soDon:   0n, doanhThu:        0n },   ← chỗ trống, đã lấp
   { ngay: 2026-08-03, soDon:  94n, doanhThu: 18402000n }
 ]</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>COUNT</code> và <code>SUM</code> quay về dưới dạng <code>BigInt</code> từ một truy vấn thô.</strong> PostgreSQL trả về <code>bigint</code> cho cả hai, và trình điều khiển ánh xạ nó sang kiểu nguyên thuỷ <code>bigint</code> của JavaScript. <code>JSON.stringify</code> khi ấy ném <code>TypeError: Do not know how to serialize a BigInt</code>. Hãy ép kiểu trong SQL (<code>COUNT(*)::int</code>) hoặc đổi trong JavaScript (<code>Number(row.soDon)</code>) trước khi trả về — và lưu ý <code>_count</code> của chính Prisma làm hộ bạn việc đó, nên vấn đề chỉ xuất hiện khi bạn rơi xuống SQL thô.</p>
+<p><strong>Bẫy — <code>COUNT</code> và <code>SUM</code> quay về dưới dạng <code>BigInt</code> từ một truy vấn thô.</strong> PostgreSQL trả về <code>bigint</code> cho cả hai, và trình điều khiển ánh xạ nó sang kiểu nguyên thuỷ <code>bigint</code> của JavaScript. <code>JSON.stringify</code> khi ấy ném <code>TypeError: Do not know how to serialize a BigInt</code>. Hãy ép kiểu trong SQL (<code>COUNT(*)::int</code>) hoặc đổi trong JavaScript (<code>Number(row.orderCount)</code>) trước khi trả về — và lưu ý <code>_count</code> của chính Prisma làm hộ bạn việc đó, nên vấn đề chỉ xuất hiện khi bạn rơi xuống SQL thô.</p>
 </div>
 
 <h3><code>distinct</code>, và nó thật sự chạy ở đâu</h3>
 <pre><code><span class="tok-comment">// Mỗi tác giả một bài — bài mới nhất, nhờ thứ tự sắp xếp</span>
-const moiNguoiMotBai = await prisma.post.findMany({
+const onePostPerPerson = await prisma.post.findMany({
   distinct: ['authorId'],
   orderBy:  [{ authorId: 'asc' }, { publishedAt: 'desc' }],
   take:     50,
@@ -1271,7 +1271,7 @@ real    0m0.087s</div>
 <p class="lead">Every application grows a search box, and there are exactly four answers in increasing order of effort. Most teams start at level one and stay there past the point where it hurts, because the failure is gradual — the box gets slower month by month rather than breaking. Here are all four, measured on the same 400,000 rows.</p>
 
 <h3>Level 1 — <code>contains</code></h3>
-<pre><code>const kq = await prisma.post.findMany({
+<pre><code>const result = await prisma.post.findMany({
   where: {
     OR: [
       { title: { contains: q, mode: 'insensitive' } },
@@ -1305,7 +1305,7 @@ Execution Time: 5.104 ms</div>
 <p><strong>Eighty times faster, and the application code did not change.</strong> This is the highest-value two lines in the chapter. A GIN trigram index makes <code>ILIKE '%…%'</code> index-backed, which is normally impossible. It also brings fuzzy matching for free — <code>similarity()</code> and the <code>%</code> operator let you handle typos, which no amount of <code>contains</code> ever will. The costs are real but modest: the index is larger than a B-tree and writes are slower, so measure both if the table is write-heavy.</p>
 </div>
 <pre><code><span class="tok-comment">// Fuzzy matching, once the trigram index exists</span>
-const gan = await prisma.$queryRaw&lt;{ id: number; title: string; sim: number }[]&gt;&#96;
+const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: number }[]&gt;&#96;
   SELECT id, title, similarity(title, \${q}) AS sim
   FROM posts
   WHERE title % \${q}
@@ -1327,15 +1327,15 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
 CREATE INDEX "posts_search_idx" ON "posts" USING gin ("search");</code></pre>
 <pre><code><span class="tok-comment">// Prisma cannot model tsvector, so mark it Unsupported and query it raw</span>
 model Post {
-  id     Int    @id @default(autoincrement())
+  id     Int         @id @default(autoincrement())
   title  String
   body   String?
-  search Unsupported("tsvector")?      <span class="tok-comment">// generated; never written by the client</span>
+  search Unsupported ("tsvector")?      <span class="tok-comment">// generated; never written by the client</span>
 
   @@index([search], map: "posts_search_idx")
   @@map("posts")
 }</code></pre>
-<pre><code>const kq = await prisma.$queryRaw&lt;{ id: number; title: string; rank: number }[]&gt;&#96;
+<pre><code>const result = await prisma.$queryRaw&lt;{ id: number; title: string; rank: number }[]&gt;&#96;
   SELECT id, title, ts_rank("search", websearch_to_tsquery('simple', \${q})) AS rank
   FROM posts
   WHERE "search" @@ websearch_to_tsquery('simple', \${q})
@@ -1362,16 +1362,16 @@ Execution Time: 2.011 ms
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
 <span class="tok-comment">-- unaccent() is not IMMUTABLE by default, so wrap it for a generated column</span>
-CREATE FUNCTION khong_dau(text) RETURNS text
+CREATE FUNCTION unaccented(text) RETURNS text
   LANGUAGE sql IMMUTABLE PARALLEL SAFE STRICT
   AS $$ SELECT unaccent('unaccent', $1) $$;
 
 ALTER TABLE "posts" ADD COLUMN "search" tsvector
   GENERATED ALWAYS AS (
-    setweight(to_tsvector('simple', khong_dau(coalesce("title", ''))), 'A') ||
-    setweight(to_tsvector('simple', khong_dau(coalesce("body",  ''))), 'B')
+    setweight(to_tsvector('simple', unaccented(coalesce("title", ''))), 'A') ||
+    setweight(to_tsvector('simple', unaccented(coalesce("body",  ''))), 'B')
   ) STORED;</code></pre>
-<pre><code>WHERE "search" @@ websearch_to_tsquery('simple', khong_dau(\${q}))</code></pre>
+<pre><code>WHERE "search" @@ websearch_to_tsquery('simple', unaccented(\${q}))</code></pre>
 
 <h3>Level 4 — a dedicated search engine</h3>
 <div class="kv-grid">
@@ -1406,7 +1406,7 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
 <p class="lead">Ứng dụng nào rồi cũng mọc ra một ô tìm kiếm, và có đúng bốn câu trả lời xếp theo mức công sức tăng dần. Phần lớn đội bắt đầu ở cấp một rồi ở lại đó quá lâu sau khi nó bắt đầu đau, vì thất bại diễn ra từ từ — ô tìm kiếm chậm dần theo từng tháng chứ không hỏng hẳn. Đây là cả bốn cấp, đo trên cùng 400.000 hàng.</p>
 
 <h3>Cấp 1 — <code>contains</code></h3>
-<pre><code>const kq = await prisma.post.findMany({
+<pre><code>const result = await prisma.post.findMany({
   where: {
     OR: [
       { title: { contains: q, mode: 'insensitive' } },
@@ -1440,7 +1440,7 @@ Execution Time: 5.104 ms</div>
 <p><strong>Nhanh gấp tám mươi lần, và mã ứng dụng không đổi một chữ.</strong> Đây là hai dòng đáng giá nhất trong cả chương. Một chỉ mục trigram GIN khiến <code>ILIKE '%…%'</code> được chỉ mục đỡ, điều vốn dĩ là bất khả. Nó còn cho thêm phép khớp mờ miễn phí — <code>similarity()</code> và toán tử <code>%</code> cho phép bạn xử lý lỗi gõ, thứ mà <code>contains</code> không bao giờ làm được. Cái giá là có thật nhưng vừa phải: chỉ mục to hơn B-tree và ghi chậm hơn, nên hãy đo cả hai nếu bảng nặng ghi.</p>
 </div>
 <pre><code><span class="tok-comment">// Khớp mờ, một khi đã có chỉ mục trigram</span>
-const gan = await prisma.$queryRaw&lt;{ id: number; title: string; sim: number }[]&gt;&#96;
+const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: number }[]&gt;&#96;
   SELECT id, title, similarity(title, \${q}) AS sim
   FROM posts
   WHERE title % \${q}
@@ -1462,15 +1462,15 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
 CREATE INDEX "posts_search_idx" ON "posts" USING gin ("search");</code></pre>
 <pre><code><span class="tok-comment">// Prisma không mô hình hoá được tsvector, nên đánh dấu Unsupported và truy vấn thô</span>
 model Post {
-  id     Int    @id @default(autoincrement())
+  id     Int         @id @default(autoincrement())
   title  String
   body   String?
-  search Unsupported("tsvector")?      <span class="tok-comment">// sinh ra; client không bao giờ ghi</span>
+  search Unsupported ("tsvector")?      <span class="tok-comment">// sinh ra; client không bao giờ ghi</span>
 
   @@index([search], map: "posts_search_idx")
   @@map("posts")
 }</code></pre>
-<pre><code>const kq = await prisma.$queryRaw&lt;{ id: number; title: string; rank: number }[]&gt;&#96;
+<pre><code>const result = await prisma.$queryRaw&lt;{ id: number; title: string; rank: number }[]&gt;&#96;
   SELECT id, title, ts_rank("search", websearch_to_tsquery('simple', \${q})) AS rank
   FROM posts
   WHERE "search" @@ websearch_to_tsquery('simple', \${q})
@@ -1497,16 +1497,16 @@ Execution Time: 2.011 ms
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
 <span class="tok-comment">-- unaccent() mặc định không IMMUTABLE, nên phải bọc lại mới dùng cho cột sinh ra</span>
-CREATE FUNCTION khong_dau(text) RETURNS text
+CREATE FUNCTION unaccented(text) RETURNS text
   LANGUAGE sql IMMUTABLE PARALLEL SAFE STRICT
   AS $$ SELECT unaccent('unaccent', $1) $$;
 
 ALTER TABLE "posts" ADD COLUMN "search" tsvector
   GENERATED ALWAYS AS (
-    setweight(to_tsvector('simple', khong_dau(coalesce("title", ''))), 'A') ||
-    setweight(to_tsvector('simple', khong_dau(coalesce("body",  ''))), 'B')
+    setweight(to_tsvector('simple', unaccented(coalesce("title", ''))), 'A') ||
+    setweight(to_tsvector('simple', unaccented(coalesce("body",  ''))), 'B')
   ) STORED;</code></pre>
-<pre><code>WHERE "search" @@ websearch_to_tsquery('simple', khong_dau(\${q}))</code></pre>
+<pre><code>WHERE "search" @@ websearch_to_tsquery('simple', unaccented(\${q}))</code></pre>
 
 <h3>Cấp 4 — một máy tìm kiếm riêng</h3>
 <div class="kv-grid">

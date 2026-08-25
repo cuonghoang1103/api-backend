@@ -46,7 +46,7 @@ migration.sql</div>
 ALTER TABLE "dev_posts" ADD COLUMN     "video_url" VARCHAR(500);</div>
 
 <h3>Half two: the table</h3>
-<pre><code>docker exec -it pg-hoc psql -U hocvien -d hocprisma -c "\\d _prisma_migrations"</code></pre>
+<pre><code>docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d _prisma_migrations"</code></pre>
 <div class="out">                       Table "public._prisma_migrations"
        Column        |           Type           | Nullable |    Default
 ---------------------+--------------------------+----------+---------------
@@ -165,7 +165,7 @@ migration.sql</div>
 ALTER TABLE "dev_posts" ADD COLUMN     "video_url" VARCHAR(500);</div>
 
 <h3>Nửa thứ hai: cái bảng</h3>
-<pre><code>docker exec -it pg-hoc psql -U hocvien -d hocprisma -c "\\d _prisma_migrations"</code></pre>
+<pre><code>docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d _prisma_migrations"</code></pre>
 <div class="out">                       Table "public._prisma_migrations"
        Column        |           Type           | Nullable |    Default
 ---------------------+--------------------------+----------+---------------
@@ -282,7 +282,7 @@ wc -l prisma/migrations/*/migration.sql | tail -1</code></pre>
 <pre><code><span class="tok-comment"># Watch it happen: list databases while migrate dev runs</span>
 npx prisma migrate dev --name them_cot &amp;
 sleep 0.4
-docker exec pg-hoc psql -U hocvien -d postgres -c "\\l" | grep shadow</code></pre>
+docker exec pg-hoc psql -U student -d postgres -c "\\l" | grep shadow</code></pre>
 <div class="out"> prisma_migrate_shadow_db_9f2c48e1a7b3 | hocvien | UTF8 | ...</div>
 <div class="callout">
 <p><strong>Steps 2 and 4 are the whole point.</strong> Step 2 verifies that your migration history is <em>replayable</em> — that a new developer, or a fresh CI database, can build the schema from scratch. Step 4 verifies that your real database still matches what the history describes. Without a shadow database Prisma could still generate a migration, but it could not tell you either of those things, and both are how migration bugs get caught before production.</p>
@@ -310,9 +310,9 @@ ERROR: permission denied to create database</div>
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }</code></pre>
 <pre><code><span class="tok-comment"># .env — a second database on the same server, created once by hand</span>
-DATABASE_URL="postgresql://hocvien:matkhau@localhost:5432/hocprisma"
-SHADOW_DATABASE_URL="postgresql://hocvien:matkhau@localhost:5432/hocprisma_shadow"</code></pre>
-<pre><code>docker exec pg-hoc psql -U hocvien -d postgres -c "CREATE DATABASE hocprisma_shadow;"
+DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma"
+SHADOW_DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma_shadow"</code></pre>
+<pre><code>docker exec pg-hoc psql -U student -d postgres -c "CREATE DATABASE hocprisma_shadow;"
 npx prisma migrate dev --name them_cot</code></pre>
 <div class="out">CREATE DATABASE
 Environment variables loaded from .env
@@ -400,7 +400,7 @@ npx prisma migrate diff \\
 <pre><code><span class="tok-comment"># Xem nó xảy ra: liệt kê các cơ sở dữ liệu trong lúc migrate dev đang chạy</span>
 npx prisma migrate dev --name them_cot &amp;
 sleep 0.4
-docker exec pg-hoc psql -U hocvien -d postgres -c "\\l" | grep shadow</code></pre>
+docker exec pg-hoc psql -U student -d postgres -c "\\l" | grep shadow</code></pre>
 <div class="out"> prisma_migrate_shadow_db_9f2c48e1a7b3 | hocvien | UTF8 | ...</div>
 <div class="callout">
 <p><strong>Bước 2 và 4 mới là trọng tâm.</strong> Bước 2 kiểm rằng lịch sử migration của bạn <em>phát lại được</em> — rằng một lập trình viên mới, hay một cơ sở dữ liệu CI sạch, dựng lại được lược đồ từ đầu. Bước 4 kiểm rằng cơ sở dữ liệu thật của bạn vẫn còn khớp với thứ lịch sử mô tả. Không có shadow database thì Prisma vẫn sinh ra được migration, nhưng nó không nói được cho bạn cả hai điều đó, mà cả hai đều là cách những con bọ migration bị bắt trước khi lên production.</p>
@@ -428,9 +428,9 @@ ERROR: permission denied to create database</div>
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }</code></pre>
 <pre><code><span class="tok-comment"># .env — một cơ sở dữ liệu thứ hai trên cùng máy chủ, tạo tay một lần</span>
-DATABASE_URL="postgresql://hocvien:matkhau@localhost:5432/hocprisma"
-SHADOW_DATABASE_URL="postgresql://hocvien:matkhau@localhost:5432/hocprisma_shadow"</code></pre>
-<pre><code>docker exec pg-hoc psql -U hocvien -d postgres -c "CREATE DATABASE hocprisma_shadow;"
+DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma"
+SHADOW_DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma_shadow"</code></pre>
+<pre><code>docker exec pg-hoc psql -U student -d postgres -c "CREATE DATABASE hocprisma_shadow;"
 npx prisma migrate dev --name them_cot</code></pre>
 <div class="out">CREATE DATABASE
 Environment variables loaded from .env
@@ -566,7 +566,7 @@ The following migration(s) have been applied:
 <h3>Renaming a column without losing data</h3>
 <pre><code><span class="tok-comment">// You rename a field in the schema</span>
 model User {
-  hoTen String? @map("ho_ten")     <span class="tok-comment">// was: fullName String? @map("full_name")</span>
+  fullName String? @map("ho_ten")     <span class="tok-comment">// was: fullName String? @map("full_name")</span>
 }</code></pre>
 <div class="out">-- What Prisma generates. Read it twice.
 ALTER TABLE "users" DROP COLUMN "full_name";
@@ -715,7 +715,7 @@ The following migration(s) have been applied:
 <h3>Đổi tên một cột mà không mất dữ liệu</h3>
 <pre><code><span class="tok-comment">// Bạn đổi tên một trường trong lược đồ</span>
 model User {
-  hoTen String? @map("ho_ten")     <span class="tok-comment">// trước là: fullName String? @map("full_name")</span>
+  fullName String? @map("ho_ten")     <span class="tok-comment">// trước là: fullName String? @map("full_name")</span>
 }</code></pre>
 <div class="out">-- Thứ Prisma sinh ra. Đọc hai lần.
 ALTER TABLE "users" DROP COLUMN "full_name";
@@ -876,7 +876,7 @@ The following is a summary of the differences:
 mkdir -p prisma/migrations/20260823070000_ghi_nhan_trgm
 cat &gt; prisma/migrations/20260823070000_ghi_nhan_trgm/migration.sql &lt;&lt;'SQL'
 -- Records an index created by hand on 2026-08-14. Already present in
--- every environment, so this migration is intentionally a no-op there.
+-- every environment, count this migration is intentionally a no-op there.
 CREATE INDEX IF NOT EXISTS "posts_title_trgm" ON "posts" USING gin ("title" gin_trgm_ops);
 SQL
 
@@ -1027,7 +1027,7 @@ The following is a summary of the differences:
 <span class="tok-comment"># Bước B: tạo một thư mục migration ghi nhận nó</span>
 mkdir -p prisma/migrations/20260823070000_ghi_nhan_trgm
 cat &gt; prisma/migrations/20260823070000_ghi_nhan_trgm/migration.sql &lt;&lt;'SQL'
--- Ghi nhan mot chi muc tao tay ngay 14/08/2026. Da co san o moi moi truong,
+-- Ghi nhan mot chi muc tao tay day 14/08/2026. Da co san o moi moi truong,
 -- nen o do migration nay co y la mot thao tac rong.
 CREATE INDEX IF NOT EXISTS "posts_title_trgm" ON "posts" USING gin ("title" gin_trgm_ops);
 SQL
@@ -1231,7 +1231,7 @@ for (;;) {
 
   await prisma.$transaction(
     batch.map((p) =&gt;
-      prisma.post.update({ where: { id: p.id }, data: { slug: taoSlug(p.title, p.id) } }),
+      prisma.post.update({ where: { id: p.id }, data: { slug: makeSlug(p.title, p.id) } }),
     ),
   );
   console.log('da xu ly', batch.length);
@@ -1260,7 +1260,7 @@ ERROR: check constraint "orders_total_khong_am" is violated by some row</div>
   <div class="lz-layer"><span class="lz-lname">4 · Fix the cause in a new migration</span><span class="lz-lnote">Here: the constraint failed because real rows violate it. The fix is a migration that repairs those rows first, then adds the constraint — not an edit to the failed file, which is now recorded with a checksum.</span></div>
 </div>
 <pre><code><span class="tok-comment">-- Step 2: what actually ran</span>
-SELECT migration_name, started_at, applied_steps_count, left(logs, 200) AS loi
+SELECT migration_name, started_at, applied_steps_count, left(logs, 200) AS error
 FROM _prisma_migrations
 WHERE finished_at IS NULL AND rolled_back_at IS NULL;</code></pre>
 <div class="out">      migration_name         |         started_at         | applied_steps_count |                loi
@@ -1389,7 +1389,7 @@ for (;;) {
 
   await prisma.$transaction(
     batch.map((p) =&gt;
-      prisma.post.update({ where: { id: p.id }, data: { slug: taoSlug(p.title, p.id) } }),
+      prisma.post.update({ where: { id: p.id }, data: { slug: makeSlug(p.title, p.id) } }),
     ),
   );
   console.log('da xu ly', batch.length);
@@ -1418,7 +1418,7 @@ ERROR: check constraint "orders_total_khong_am" is violated by some row</div>
   <div class="lz-layer"><span class="lz-lname">4 · Vá nguyên nhân trong một migration MỚI</span><span class="lz-lnote">Ở đây: ràng buộc hỏng vì có những hàng thật vi phạm nó. Cách vá là một migration sửa những hàng ấy trước rồi mới thêm ràng buộc — không phải sửa cái tệp đã hỏng, vốn giờ đã được ghi lại kèm một checksum.</span></div>
 </div>
 <pre><code><span class="tok-comment">-- Bước 2: thật ra cái gì đã chạy</span>
-SELECT migration_name, started_at, applied_steps_count, left(logs, 200) AS loi
+SELECT migration_name, started_at, applied_steps_count, left(logs, 200) AS error
 FROM _prisma_migrations
 WHERE finished_at IS NULL AND rolled_back_at IS NULL;</code></pre>
 <div class="out">      migration_name         |         started_at         | applied_steps_count |                loi

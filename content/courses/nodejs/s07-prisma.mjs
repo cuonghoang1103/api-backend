@@ -978,7 +978,7 @@ timeout or doing less work in the transaction.</div>
 +  const note = await service.get(Number(req.params.id));</code></pre>
 <div class="out">11 dòng thay đổi trên tổng 39 dòng của router:
   1  dòng import
-  5  handler được thêm từ storeá \`async\`
+  5  handler được thêm từ khoá \`async\`
   5  lời gọi service được thêm \`await\`
   0  mã trạng thái, đường dẫn, luật kiểm tra dữ liệu hay nhánh lỗi bị đụng tới</div>
 <div class="callout ok"><strong>Lời hứa, nói lại cho đúng.</strong> Bài 5.5 bảo "đổi một file". Sự thật là một file bị <em>viết lại</em> (service) và router được thêm hai từ khoá cho mỗi handler — vì một lời gọi cơ sở dữ liệu là bất đồng bộ, còn <code>Map</code> trong RAM thì không. Thứ KHÔNG đổi là tất cả những gì làm nên một API: đường dẫn, mã trạng thái, header <code>Location</code>, kiểm tra dữ liệu, nhánh 404, bộ xử lý lỗi. Nếu handler của chương 5 đã được viết <code>async</code> ngay từ đầu, router sẽ giống hệt nhau tới từng byte.</div>

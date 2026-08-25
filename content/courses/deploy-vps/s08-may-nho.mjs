@@ -315,7 +315,7 @@ exec node dung.mjs</code></pre>
 <p>If the machine has systemd, the setting belongs in the unit rather than in a script:</p>
 
 <pre><code>[Service]
-OOMScoreAdjust=-500        <span class="tok-comment"># cho dich vu bạn KHONG muon mat</span>
+OOMScoreAdjust=-500        <span class="tok-comment"># for the service you do NOT want to lose</span>
 MemoryMax=512M             <span class="tok-comment"># tran cung: vuot la bi giet</span>
 MemoryHigh=400M            <span class="tok-comment"># tran mem: vuot thi bi bop cho cham lai truoc</span></code></pre>
 

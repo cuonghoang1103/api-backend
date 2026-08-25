@@ -532,7 +532,7 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
 <h3>1. ReDoS — 31 characters that freeze the whole server</h3>
 <p>A regular expression with a nested quantifier. It is not exotic; variants of it appear in validation code everywhere:</p>
 <pre><code><span class="tok-kw">const</span> RE = /^(a+)+$/;
-RE.test(<span class="tok-str">'a'</span>.repeat(n) + <span class="tok-str">'!'</span>);   <span class="tok-cmt">// input không khớp</span></code></pre>
+RE.test(<span class="tok-str">'a'</span>.repeat(n) + <span class="tok-str">'!'</span>);   <span class="tok-cmt">// the inputs do not match</span></code></pre>
 <div class="out">20 ký tự →       8.0ms
 22 ký tự →      32.4ms
 24 ký tự →     135.7ms
@@ -569,7 +569,7 @@ RE.test(<span class="tok-str">'a'</span>.repeat(n) + <span class="tok-str">'!'</
   <span class="tok-kw">return</span> target;
 }
 merge({ name: <span class="tok-str">'An'</span> }, JSON.parse(<span class="tok-str">'{"__proto__":{"isAdmin":true}}'</span>));</code></pre>
-<div class="out">Object.keys(req.body) = ["__proto__"] ← "__proto__" là storeá THẬT sau JSON.parse
+<div class="out">Object.keys(req.body) = ["__proto__"] ← "__proto__" là khoá THẬT sau JSON.parse
 trước khi trộn: ({}).isAdmin = undefined
 sau khi trộn  : ({}).isAdmin = true
 kiểm tra quyền: user.isAdmin → CHO QUA (!!)   — user chưa từng được gán isAdmin
@@ -582,7 +582,7 @@ new Map().get("isAdmin")    = undefined</div>
   <div class="lz-layer"><span class="lz-lname">Reject dangerous keys explicitly</span><span class="lz-lnote">skip <code>__proto__</code>, <code>constructor</code>, <code>prototype</code> in any recursive copy — measured below, it works</span></div>
   <div class="lz-layer"><span class="lz-lname">Use structures without a prototype</span><span class="lz-lnote"><code>Object.create(null)</code> and <code>Map</code> are immune; a <code>Map</code> for user-controlled key/value data is the structurally correct choice anyway</span></div>
 </div>
-<div class="out">Bản vá 1 — bỏ qua storeá nguy hiểm:
+<div class="out">Bản vá 1 — bỏ qua khoá nguy hiểm:
   sau safeMerge : ({}).isAdmin = undefined</div>
 <p>And a piece of good news you should verify rather than assume — how Express parses the query string:</p>
 <div class="out">=== req.query: "simple" (mặc định Express 5) vs "extended" (qs) ===
@@ -609,7 +609,7 @@ RSS sau 1.5 giây      : 213 MB</div>
 <h3>4. SSRF — making your server read its own secrets</h3>
 <p>The feature is completely ordinary: a link preview, an avatar import, a webhook test button. The user supplies a URL and the server fetches it.</p>
 <pre><code>app.get(<span class="tok-str">'/preview'</span>, <span class="tok-kw">async</span> (req, res) =&gt; {
-  <span class="tok-kw">const</span> r = <span class="tok-kw">await</span> fetch(req.query.url);      <span class="tok-cmt">// ← toàn bộ lỗ hổng nằm ở đây</span>
+  <span class="tok-kw">const</span> r = <span class="tok-kw">await</span> fetch(req.query.url);      <span class="tok-cmt">// ← the entire vulnerability is right here</span>
   res.type(<span class="tok-str">'text'</span>).send(<span class="tok-kw">await</span> r.text());
 });</code></pre>
 <p>An internal service that is not exposed to the internet at all is listening on 4404. The attacker never needs to reach it — your server can, and your server is the one making the request:</p>
@@ -697,7 +697,7 @@ RE.test(<span class="tok-str">'a'</span>.repeat(n) + <span class="tok-str">'!'</
   <span class="tok-kw">return</span> target;
 }
 merge({ name: <span class="tok-str">'An'</span> }, JSON.parse(<span class="tok-str">'{"__proto__":{"isAdmin":true}}'</span>));</code></pre>
-<div class="out">Object.keys(req.body) = ["__proto__"] ← "__proto__" là storeá THẬT sau JSON.parse
+<div class="out">Object.keys(req.body) = ["__proto__"] ← "__proto__" là khoá THẬT sau JSON.parse
 trước khi trộn: ({}).isAdmin = undefined
 sau khi trộn  : ({}).isAdmin = true
 kiểm tra quyền: user.isAdmin → CHO QUA (!!)   — user chưa từng được gán isAdmin
@@ -710,7 +710,7 @@ new Map().get("isAdmin")    = undefined</div>
   <div class="lz-layer"><span class="lz-lname">Chặn tường minh các khoá nguy hiểm</span><span class="lz-lnote">bỏ qua <code>__proto__</code>, <code>constructor</code>, <code>prototype</code> trong mọi phép sao chép đệ quy — đo bên dưới, nó có tác dụng</span></div>
   <div class="lz-layer"><span class="lz-lname">Dùng cấu trúc không có nguyên mẫu</span><span class="lz-lnote"><code>Object.create(null)</code> và <code>Map</code> miễn nhiễm; dùng <code>Map</code> cho dữ liệu khoá/giá trị do người dùng kiểm soát vốn dĩ cũng là lựa chọn đúng về mặt cấu trúc</span></div>
 </div>
-<div class="out">Bản vá 1 — bỏ qua storeá nguy hiểm:
+<div class="out">Bản vá 1 — bỏ qua khoá nguy hiểm:
   sau safeMerge : ({}).isAdmin = undefined</div>
 <p>Và một tin tốt mà bạn nên tự kiểm chứng thay vì tin sẵn — cách Express phân tích query string:</p>
 <div class="out">=== req.query: "simple" (mặc định Express 5) vs "extended" (qs) ===

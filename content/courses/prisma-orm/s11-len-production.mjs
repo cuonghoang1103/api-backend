@@ -89,7 +89,7 @@ OpenSSL 3.0.16 11 Feb 2025</div>
 
 <h3>The check that would have caught it</h3>
 <pre><code><span class="tok-comment">#!/usr/bin/env bash</span>
-<span class="tok-comment"># scripts/kiem-engine.sh — chạy TRƯỚC khi đẩy ảnh lên registry</span>
+<span class="tok-comment"># scripts/check-engine.sh — run BEFORE pushing the image to the registry</span>
 set -euo pipefail
 ANH="\$1"
 
@@ -376,7 +376,7 @@ COPY package*.json ./
 
 USER node                                     <span class="tok-comment"># do not run as root</span>
 EXPOSE 3000
-ENTRYPOINT ["dumb-init", "--"]                <span class="tok-comment"># PID 1 that forwards SIGTERM — Bài 11.5</span>
+ENTRYPOINT ["dumb-init", "--"]                <span class="tok-comment"># PID 1 that forwards SIGTERM — Lesson 11.5</span>
 CMD ["node", "dist/index.js"]</code></pre>
 <div class="out">docker build -f Dockerfile.backend -t backend:test .
 

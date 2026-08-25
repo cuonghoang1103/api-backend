@@ -273,11 +273,11 @@ List prefix "images/post/u7/"  → 1 object</div>
 <h3>Key layout is a design decision, not a filename</h3>
 <p>The key is the only index this system gives you. This project's rule, from <code>src/storage/keys.ts</code>:</p>
 <pre><code><span class="tok-cmt">// images/post/u7/1753660000000-a1b2c3d4e5f6.jpg</span>
-<span class="tok-cmt">//   │      │    │        │             └── 6 byte ngẫu nhiên (crypto)</span>
+<span class="tok-cmt">//   │      │    │        │             └── 6 random bytes (crypto)</span>
 <span class="tok-cmt">//   │      │    │        └── Date.now()</span>
-<span class="tok-cmt">//   │      │    └── u&lt;userId&gt; — chủ sở hữu, kiểm được sau này</span>
-<span class="tok-cmt">//   │      └── loại nội dung</span>
-<span class="tok-cmt">//   └── họ (images | audio | video | documents)</span>
+<span class="tok-cmt">//   │      │    └── u&lt;userId&gt; — the owner, checkable later</span>
+<span class="tok-cmt">//   │      └── the content type</span>
+<span class="tok-cmt">//   └── the family (images | audio | video | documents)</span>
 <span class="tok-kw">const</span> filename = <span class="tok-str">&#96;\${Date.now()}-\${randomBytes(6).toString('hex')}\${ext}&#96;</span>;</code></pre>
 <p>Every element earns its place. The family prefix makes lifecycle rules and cost reports possible. The <code>u&lt;id&gt;</code> segment turns ownership into something you can check without a database round trip — <code>keyBelongsToUser()</code> is a regex on the key. The timestamp makes keys sort chronologically. And the random suffix does two jobs: it prevents collisions when two users upload <code>IMG_0001.jpg</code> in the same millisecond, and it makes the key <strong>unguessable</strong>, which is the entire security model of a public bucket. Notice what is <em>not</em> in there: the original filename. That is deliberate — user filenames carry <code>../</code>, emoji, 300-character names, and occasionally the name of the person who sent it.</p>
 
@@ -309,9 +309,9 @@ URL đó dùng ở máy khác, không có credential nào → HTTP 206 (vẫn t�
 
 <h3>Measurement 4 — Content-Type is NOT bound by default</h3>
 <p>The server signs a PUT for a video, specifying <code>ContentType: 'video/mp4'</code>. The client then uses that URL but sends a different header:</p>
-<pre><code><span class="tok-cmt">// máy chủ ký:</span>
+<pre><code><span class="tok-cmt">// the server signs:</span>
 getSignedUrl(s3, <span class="tok-kw">new</span> PutObjectCommand({ Bucket, Key, ContentType: <span class="tok-str">'video/mp4'</span> }), { expiresIn: <span class="tok-num">600</span> });
-<span class="tok-cmt">// client dùng đúng URL đó nhưng gửi header khác:</span>
+<span class="tok-cmt">// the client uses that exact URL but sends different headers:</span>
 <span class="tok-cmt">// curl -X PUT -H 'Content-Type: text/html' --data-binary '&lt;script&gt;alert(document.cookie)&lt;/script&gt;'</span></code></pre>
 <div class="out">SignedHeaders = host
   → client PUT text/html THÀNH CÔNG. Object lưu: {"type":"text/html","size":39}</div>
@@ -319,7 +319,7 @@ getSignedUrl(s3, <span class="tok-kw">new</span> PutObjectCommand({ Bucket, Key,
 <p>The fix is one option:</p>
 <pre><code>getSignedUrl(s3, <span class="tok-kw">new</span> PutObjectCommand({ Bucket, Key, ContentType: <span class="tok-str">'video/mp4'</span> }), {
   expiresIn: <span class="tok-num">600</span>,
-  signableHeaders: <span class="tok-kw">new</span> Set([<span class="tok-str">'content-type'</span>]),   <span class="tok-cmt">// ← đưa header vào chữ ký</span>
+  signableHeaders: <span class="tok-kw">new</span> Set([<span class="tok-str">'content-type'</span>]),   <span class="tok-cmt">// ← puts the headers into the signature</span>
 });</code></pre>
 <div class="out">SignedHeaders = content-type;host
   PUT text/html → 403 | PUT video/mp4 → 200
@@ -565,8 +565,8 @@ SVG có onload            PASS   PASS             KHÔNG NHẬN RA  CHẶN (magi
 <h3>Measurement 2 — the polyglot, and why sniffing is not enough</h3>
 <p>A file that starts with the six bytes <code>GIF89a</code> and continues with HTML is, as far as any sniffer is concerned, a GIF:</p>
 <pre><code><span class="tok-kw">const</span> polyglot = Buffer.concat([
-  Buffer.from(<span class="tok-str">'GIF89a'</span>),                              <span class="tok-cmt">// magic bytes thật của GIF</span>
-  Buffer.from(<span class="tok-str">'/**/=1;&lt;script&gt;alert(1)&lt;/script&gt;'</span>),  <span class="tok-cmt">// và cũng là JS/HTML hợp lệ</span>
+  Buffer.from(<span class="tok-str">'GIF89a'</span>),                              <span class="tok-cmt">// a real GIF's magic bytes</span>
+  Buffer.from(<span class="tok-str">'/**/=1;&lt;script&gt;alert(1)&lt;/script&gt;'</span>),  <span class="tok-cmt">// and also valid JS/HTML</span>
 ]);
 <span class="tok-kw">await</span> fileTypeFromBuffer(polyglot);  <span class="tok-cmt">// → { mime: 'image/gif' }</span></code></pre>
 <p>If your allow-list contains <code>image/gif</code>, this passes. Now try to actually decode it as an image:</p>
@@ -581,11 +581,11 @@ sharp NÉM     : Input buffer has corrupt header: gifload_buffer: Invalid frame 
   chuỗi &lt;script&gt; còn trong file? true
   sau khi sharp re-encode: 570,4KB trong 218,4ms; còn chuỗi &lt;script&gt;? false</div>
 <p>Storing that file unchanged puts an attacker-controlled HTML string on your media domain. Whether it ever executes depends on how it is served (<code>Content-Type</code>, <code>nosniff</code>, which domain) — but the whole point of defence in depth is not to depend on that. Re-encoding removes the question: sharp decodes the pixels and writes a new file, and nothing that was not a pixel survives the trip.</p>
-<pre><code><span class="tok-cmt">// Đây là toàn bộ phép kiểm ảnh cần thiết — và nó cũng là bước tối ưu:</span>
+<pre><code><span class="tok-cmt">// This is the entire image check you need — and it doubles as the optimisation step:</span>
 <span class="tok-kw">const</span> out = <span class="tok-kw">await</span> sharp(buffer)
   .resize({ width: <span class="tok-num">1200</span>, withoutEnlargement: <span class="tok-kw">true</span> })
   .webp({ quality: <span class="tok-num">80</span> })
-  .toBuffer();   <span class="tok-cmt">// ném nếu không giải mã được → 400, không phải 500</span></code></pre>
+  .toBuffer();   <span class="tok-cmt">// throws if it cannot decode → 400, not 500</span></code></pre>
 
 <h3>Measurement 4 — the decompression bomb</h3>
 <p>Re-encoding solves the content problem and opens a resource problem. A PNG storing one flat colour compresses absurdly well, so a tiny file can describe an enormous image:</p>
@@ -599,7 +599,7 @@ Bom 2: PNG 1183,1KB = 20000×20000 = 400 triệu điểm ảnh
   → 8 × 758KB = 5,9MB trên đường truyền, nhưng 445MB RAM + CPU trên máy chủ
 so sánh: 8 ảnh THẬT 6,85MB cùng lúc: 452,5ms | RSS +17MB</div>
 <p>Read those two lines together. Eight real photos — 54,8MB of upload — cost 17MB of memory, because sharp streams and downscales them. Eight bombs — 5,9MB of upload, one tenth the bandwidth — cost <strong>445MB, twenty-six times more</strong>. Nothing in your size limit, your MIME check or your magic-byte sniffing sees this coming. The defence is a pixel budget, chosen for your product rather than for the format:</p>
-<pre><code>sharp(buffer, { limitInputPixels: <span class="tok-num">50e6</span> })   <span class="tok-cmt">// 50 triệu điểm ảnh ≈ 8000×6000, rộng hơn mọi máy ảnh phổ thông</span>
+<pre><code>sharp(buffer, { limitInputPixels: <span class="tok-num">50e6</span> })   <span class="tok-cmt">// 50 million pixels ≈ 8000×6000, wider than any consumer camera</span>
   .resize({ width: <span class="tok-num">1200</span> }).webp().toBuffer();</code></pre>
 <div class="out">Bom 1 (256MP) với limitInputPixels: 50e6 → Input image exceeds pixel limit</div>
 <p>And because sharp's work happens in libvips' own threads rather than on the event loop, a queue is the other half of the answer: bound how many images you process concurrently instead of letting request volume decide.</p>

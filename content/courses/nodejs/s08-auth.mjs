@@ -65,7 +65,7 @@ argon2id (OWASP 19MiB,t=2) 33.0ms/lần  →        30.3 lần/giây</div>
   <span class="tok-kw">const</span> guess = String(i).padStart(<span class="tok-num">6</span>, <span class="tok-str">'0'</span>);
   table.set(crypto.createHash(<span class="tok-str">'sha256'</span>).update(guess).digest(<span class="tok-str">'hex'</span>), guess);
 }
-<span class="tok-comment">// "hash bị rò từ CSDL"</span>
+<span class="tok-comment">// "a hash leaked from the DB"</span>
 table.get(crypto.createHash(<span class="tok-str">'sha256'</span>).update(<span class="tok-str">'123456'</span>).digest(<span class="tok-str">'hex'</span>));</code></pre>
 <div class="out">dựng bảng 1.000.000 mục : 1774ms   (0.56 triệu băm/giây)
 tra ngược hash bị rò    : "123456"  trong 0.0023ms
@@ -119,9 +119,9 @@ băm  (31 ký tự): x4Y05t1q0YIRcs.YQcb4WEtp1sivisK</div>
 
 <h3>Measurement 4 — the sync variant freezes the entire server</h3>
 <p>Both APIs exist and the names differ by four characters. The difference is not stylistic:</p>
-<pre><code><span class="tok-comment">// nhịp tim: một setInterval 50ms chạy song song, đo độ trễ</span>
-<span class="tok-kw">for</span> (<span class="tok-kw">let</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">10</span>; i++) bcrypt.hashSync(<span class="tok-str">'pw'</span>, <span class="tok-num">12</span>);        <span class="tok-comment">// đồng bộ</span>
-<span class="tok-kw">await</span> Promise.all(Array.from({ length: <span class="tok-num">10</span> }, () =&gt; bcrypt.hash(<span class="tok-str">'pw'</span>, <span class="tok-num">12</span>)));  <span class="tok-comment">// bất đồng bộ</span></code></pre>
+<pre><code><span class="tok-comment">// heartbeat: a 50ms setInterval running alongside, measuring the lag</span>
+<span class="tok-kw">for</span> (<span class="tok-kw">let</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">10</span>; i++) bcrypt.hashSync(<span class="tok-str">'pw'</span>, <span class="tok-num">12</span>);        <span class="tok-comment">// synchronous</span>
+<span class="tok-kw">await</span> Promise.all(Array.from({ length: <span class="tok-num">10</span> }, () =&gt; bcrypt.hash(<span class="tok-str">'pw'</span>, <span class="tok-num">12</span>)));  <span class="tok-comment">// asynchronous</span></code></pre>
 <div class="out">bcrypt.hashSync ×10 (đồng bộ)      xong sau  3009ms | nhịp tim 50ms trễ tối đa 2959ms
 bcrypt.hash ×10 (bất đồng bộ)      xong sau   978ms | nhịp tim 50ms trễ tối đa 1ms
 argon2.hash ×10 (bất đồng bộ)      xong sau    94ms | nhịp tim 50ms trễ tối đa 1ms</div>
@@ -144,7 +144,7 @@ argon2.verify (không giới hạn 72 byte) = false</div>
 <pre><code><span class="tok-comment">// src/auth/password.mjs</span>
 <span class="tok-kw">import</span> argon2 <span class="tok-kw">from</span> <span class="tok-str">'argon2'</span>;
 
-<span class="tok-comment">// Tham số OWASP 2024 cho argon2id: 19 MiB bộ nhớ, 2 vòng, 1 luồng.</span>
+<span class="tok-comment">// OWASP 2024 parameters for argon2id: 19 MiB of memory, 2 passes, 1 lane.</span>
 <span class="tok-kw">const</span> OPTS = { type: argon2.argon2id, memoryCost: <span class="tok-num">19456</span>, timeCost: <span class="tok-num">2</span>, parallelism: <span class="tok-num">1</span> };
 
 <span class="tok-kw">export const</span> hashPassword = (plain) =&gt; argon2.hash(plain, OPTS);
@@ -152,10 +152,10 @@ argon2.verify (không giới hạn 72 byte) = false</div>
 <span class="tok-kw">export async function</span> verifyPassword(hash, plain) {
   <span class="tok-kw">if</span> (!hash) <span class="tok-kw">return false</span>;
   <span class="tok-kw">try</span> { <span class="tok-kw">return await</span> argon2.verify(hash, plain); }
-  <span class="tok-kw">catch</span> { <span class="tok-kw">return false</span>; }              <span class="tok-comment">// chuỗi băm hỏng ≠ crash 500</span>
+  <span class="tok-kw">catch</span> { <span class="tok-kw">return false</span>; }              <span class="tok-comment">// a corrupt hash string ≠ a 500 crash</span>
 }
 
-<span class="tok-comment">// Một chuỗi băm "giả" để so ngay cả khi email không tồn tại</span>
+<span class="tok-comment">// A "fake" hash string to compare against even when the email does not exist</span>
 <span class="tok-kw">export const</span> DUMMY_HASH = <span class="tok-kw">await</span> hashPassword(<span class="tok-str">'mat-khau-khong-bao-gio-dung-den'</span>);
 
 <span class="tok-kw">export const</span> needsRehash = (hash) =&gt; argon2.needsRehash(hash, OPTS);</code></pre>
@@ -165,10 +165,10 @@ argon2.verify (không giới hạn 72 byte) = false</div>
 <p>The obvious implementation returns early when the email is unknown. That early return is a side channel: it skips the expensive hash, so it answers faster. Thirty logins each way, median:</p>
 <pre><code><span class="tok-comment">// BẢN LỖI</span>
 <span class="tok-kw">const</span> user = <span class="tok-kw">await</span> prisma.user.findUnique({ where: { email } });
-<span class="tok-kw">if</span> (!user) <span class="tok-kw">return</span> { ok: <span class="tok-kw">false</span> };            <span class="tok-comment">// ← không băm gì cả</span>
+<span class="tok-kw">if</span> (!user) <span class="tok-kw">return</span> { ok: <span class="tok-kw">false</span> };            <span class="tok-comment">// ← hashes nothing at all</span>
 <span class="tok-kw">return</span> { ok: <span class="tok-kw">await</span> verifyPassword(user.passwordHash, password) };
 
-<span class="tok-comment">// BẢN ĐÚNG</span>
+<span class="tok-comment">// THE CORRECT VERSION</span>
 <span class="tok-kw">const</span> user = <span class="tok-kw">await</span> prisma.user.findUnique({ where: { email } });
 <span class="tok-kw">const</span> ok = <span class="tok-kw">await</span> verifyPassword(user?.passwordHash ?? DUMMY_HASH, password);
 <span class="tok-kw">return</span> { ok: Boolean(user) &amp;&amp; ok };</code></pre>
@@ -475,7 +475,7 @@ jwt.verify → JsonWebTokenError: invalid signature</div>
 
 <h3>Attack 3 — lie about the algorithm</h3>
 <p>Two classic variants. <code>alg: "none"</code> claims the token needs no signature. Algorithm confusion is nastier: a server that verifies RS256 with a <em>public</em> key can be handed an HS256 token signed <em>with that same public key</em> — which the attacker has, because it is public.</p>
-<pre><code><span class="tok-comment">// kẻ tấn công CHỈ có khoá công khai</span>
+<pre><code><span class="tok-comment">// the attacker has ONLY the public key</span>
 <span class="tok-kw">const</span> forged = jwt.sign({ sub: <span class="tok-str">'1'</span>, role: <span class="tok-str">'ADMIN'</span> }, publicKey, { algorithm: <span class="tok-str">'HS256'</span> });</code></pre>
 <div class="out">--- Server KHÔNG chốt algorithms ---
 jwt.verify → JsonWebTokenError: invalid algorithm
@@ -486,16 +486,16 @@ jwt.verify → JsonWebTokenError: invalid algorithm</div>
 <pre><code><span class="tok-kw">function</span> verifyNgayTho(token, key) {
   <span class="tok-kw">const</span> [h, p, s] = token.split(<span class="tok-str">'.'</span>);
   <span class="tok-kw">const</span> { alg } = JSON.parse(Buffer.from(h, <span class="tok-str">'base64url'</span>));
-  <span class="tok-kw">if</span> (alg === <span class="tok-str">'none'</span>) <span class="tok-kw">return</span> JSON.parse(Buffer.from(p, <span class="tok-str">'base64url'</span>));    <span class="tok-comment">// lỗ 1</span>
-  <span class="tok-kw">if</span> (alg === <span class="tok-str">'HS256'</span>) { <span class="tok-comment">/* HMAC bằng key … */</span> }                        <span class="tok-comment">// lỗ 2</span>
-  <span class="tok-comment">/* … ngược lại: kiểm chữ ký RSA … */</span>
+  <span class="tok-kw">if</span> (alg === <span class="tok-str">'none'</span>) <span class="tok-kw">return</span> JSON.parse(Buffer.from(p, <span class="tok-str">'base64url'</span>));    <span class="tok-comment">// hole 1</span>
+  <span class="tok-kw">if</span> (alg === <span class="tok-str">'HS256'</span>) { <span class="tok-comment">/* HMAC with key … */</span> }                        <span class="tok-comment">// hole 2</span>
+  <span class="tok-comment">/* … conversely: verify the RSA signature … */</span>
 }</code></pre>
 <div class="out">=== Bộ kiểm TỰ VIẾT (tin header.alg) — đây mới là nạn nhân thật ===
 token giả HS256 → { sub: '1', role: 'ADMIN', iat: 1785172455, exp: 1785173355 }
 token alg=none  → { sub: '1', role: 'ADMIN' }</div>
 <p>Full admin, twice, in eleven lines of "obvious" code. The lesson is not "jsonwebtoken is safe" — it is that <strong>the algorithm must be decided by the server, never read from the token</strong>. Pin it and the class of bug disappears regardless of library version:</p>
 <pre><code>jwt.verify(token, SECRET, {
-  algorithms: [<span class="tok-str">'HS256'</span>],             <span class="tok-comment">// máy chủ quyết định, không đọc từ token</span>
+  algorithms: [<span class="tok-str">'HS256'</span>],             <span class="tok-comment">// the server decides; it does not read this from the token</span>
   issuer: <span class="tok-str">'cuongthai-api'</span>,
   audience: <span class="tok-str">'cuongthai-web'</span>,
 });</code></pre>
@@ -540,10 +540,10 @@ lưu vào CSDL  : 826e2f5a6db95a52a065561fec18ada271cf62cda2ca6070509f6a7e19c41b
 <pre><code><span class="tok-kw">model</span> RefreshSession {
   id        String    @id @default(uuid())
   userId    Int
-  familyId  String                                <span class="tok-comment">// cả chuỗi xoay vòng của MỘT lần đăng nhập</span>
-  tokenHash String    @unique                     <span class="tok-comment">// sha256, KHÔNG phải token</span>
+  familyId  String                                <span class="tok-comment">// the whole rotation chain of ONE sign-in</span>
+  tokenHash String    @unique                     <span class="tok-comment">// sha256, NOT the token</span>
   expiresAt DateTime
-  usedAt    DateTime?                             <span class="tok-comment">// đã đổi lấy cặp mới chưa</span>
+  usedAt    DateTime?                             <span class="tok-comment">// has it been exchanged for a new pair yet</span>
   revokedAt DateTime?
   userAgent String?   @db.VarChar(200)
   createdAt DateTime  @default(now())
@@ -955,14 +955,14 @@ verify + findUnique(User) — bản đang dùng      trung vị 1.010ms  (n=2000
 <div class="out">── 3. Gọi /notes KHÔNG token
 HTTP 401  {"error":{"code":"NO_TOKEN","message":"Thiếu access token"}}
 
-── 4. Token rác / token ký bằng storeá khác
+── 4. Token rác / token ký bằng khoá khác
 HTTP 401  {"error":{"code":"TOKEN_INVALID","message":"jwt malformed"}}
 HTTP 401  {"error":{"code":"TOKEN_INVALID","message":"invalid signature"}}</div>
 <p>The second one is the important test, and it is worth being explicit about what it proves. That token was minted with the correct payload — <code>sub: '1'</code>, <code>role: 'ADMIN'</code>, correct issuer and audience, not expired. Everything about it is right except that it was signed with a different secret. That is the whole security boundary, and it holds.</p>
 
 <h3>Mounting order decides whether any of this runs</h3>
 <pre><code><span class="tok-kw">const</span> router = Router();
-router.use(requireAuth);        <span class="tok-comment">// MỌI route ghi chú đều cần đăng nhập</span>
+router.use(requireAuth);        <span class="tok-comment">// EVERY notes route requires a signed-in user</span>
 
 router.get(<span class="tok-str">'/'</span>, …);
 router.post(<span class="tok-str">'/'</span>, …);</code></pre>
@@ -974,36 +974,36 @@ router.post(<span class="tok-str">'/'</span>, …);</code></pre>
     ? next()
     : next(<span class="tok-kw">new</span> AppError(<span class="tok-num">403</span>, <span class="tok-str">'FORBIDDEN'</span>, <span class="tok-str">'Cần quyền '</span> + roles.join(<span class="tok-str">' hoặc '</span>)));
 
-<span class="tok-comment">// dùng: xác thực trước, phân quyền sau — đúng thứ tự đó</span>
+<span class="tok-comment">// use: authenticate first, authorise second — in exactly that order</span>
 router.delete(<span class="tok-str">'/users/:id'</span>, requireAuth, requireRole(<span class="tok-str">'ADMIN'</span>), handler);</code></pre>
 <p>A factory returning a middleware, so the role list is written where the route is. Note the order: <code>requireAuth</code> must run first, because <code>requireRole</code> reads <code>req.user</code> — reversed, every request is 403 including the admin's, and the message sends you hunting in the wrong place.</p>
 <p>Two roles is enough for most applications and this course stays there. When it stops being enough, the next step is permissions rather than more roles: <code>requirePermission('note:delete:any')</code>, with roles mapping to permission sets. Adding a role to a system built on role checks means editing every route; adding one to a system built on permissions means editing one table.</p>
 
 <h3>Now delete the lie</h3>
-<pre><code><span class="tok-comment">// TRƯỚC — chương 7</span>
+<pre><code><span class="tok-comment">// BEFORE — chapter 7</span>
 <span class="tok-kw">const</span> AUTHOR_ID = <span class="tok-num">1</span>;
 <span class="tok-kw">export async function</span> list({ page, limit, q }) {
   <span class="tok-kw">const</span> where = { authorId: AUTHOR_ID, … };
 }
 
-<span class="tok-comment">// SAU — chương 8: actor là tham số ĐẦU TIÊN của mọi hàm</span>
+<span class="tok-comment">// AFTER — chapter 8: the actor is the FIRST parameter of every function</span>
 <span class="tok-kw">export async function</span> list(actor, { page, limit, q }) {
   <span class="tok-kw">const</span> where = { authorId: actor.id, … };
 }</code></pre>
 <p>Making <code>actor</code> the first parameter of every service function is a deliberate irritation. You cannot call the function without answering "on whose behalf?", so forgetting the ownership check becomes a syntax-level mistake instead of a silent security hole. The alternative — reading a global "current user" from somewhere — is exactly how those holes appear.</p>
 
 <h3>One rule, one place</h3>
-<pre><code><span class="tok-comment">// Quy tắc quyền nằm ĐÚNG MỘT CHỖ: chủ sở hữu, hoặc ADMIN</span>
+<pre><code><span class="tok-comment">// The permission rule lives in EXACTLY ONE PLACE: the owner, or an ADMIN</span>
 <span class="tok-kw">const</span> canTouch = (note, actor) =&gt; note.authorId === actor.id || actor.role === <span class="tok-str">'ADMIN'</span>;
 
 <span class="tok-kw">export async function</span> get(actor, id) {
   <span class="tok-kw">const</span> note = <span class="tok-kw">await</span> prisma.note.findUnique({ where: { id } });
-  <span class="tok-kw">if</span> (!note || !canTouch(note, actor)) <span class="tok-kw">return null</span>;   <span class="tok-comment">// 404, KHÔNG 403</span>
+  <span class="tok-kw">if</span> (!note || !canTouch(note, actor)) <span class="tok-kw">return null</span>;   <span class="tok-comment">// 404, NOT 403</span>
   <span class="tok-kw">return</span> note;
 }
 <span class="tok-kw">export async function</span> update(actor, id, patch) {
   <span class="tok-kw">if</span> (!<span class="tok-kw">await</span> get(actor, id)) <span class="tok-kw">return null</span>;
-  <span class="tok-kw">const</span> { id: _i, authorId: _a, ...safe } = patch;      <span class="tok-comment">// chặn đổi chủ sở hữu qua body</span>
+  <span class="tok-kw">const</span> { id: _i, authorId: _a, ...safe } = patch;      <span class="tok-comment">// blocks changing the owner through the body</span>
   <span class="tok-kw">return</span> prisma.note.update({ where: { id }, data: safe });
 }
 <span class="tok-kw">export async function</span> remove(actor, id) {
@@ -1135,7 +1135,7 @@ verify + findUnique(User) — bản đang dùng      trung vị 1.010ms  (n=2000
 <div class="out">── 3. Gọi /notes KHÔNG token
 HTTP 401  {"error":{"code":"NO_TOKEN","message":"Thiếu access token"}}
 
-── 4. Token rác / token ký bằng storeá khác
+── 4. Token rác / token ký bằng khoá khác
 HTTP 401  {"error":{"code":"TOKEN_INVALID","message":"jwt malformed"}}
 HTTP 401  {"error":{"code":"TOKEN_INVALID","message":"invalid signature"}}</div>
 <p>Cái thứ hai mới là phép thử quan trọng, và cần nói rõ nó chứng minh điều gì. Token đó được nặn ra với payload hoàn toàn đúng — <code>sub: '1'</code>, <code>role: 'ADMIN'</code>, đúng issuer và audience, chưa hết hạn. Mọi thứ ở nó đều đúng, trừ việc nó được ký bằng một khoá bí mật khác. Đó chính là toàn bộ ranh giới an toàn, và nó đứng vững.</p>
@@ -1305,11 +1305,11 @@ Set-Cookie: csrf_token=5866ee2352054a7d4323e097c541f0bb; Path=/; SameSite=Lax</d
    bank    → /chuyen-tien-csrf       HTTP 200  {"ok":true,"soTien":"50000"}
    bank    → /chuyen-tien-bearer     HTTP 200  {"ok":true,"soTien":"50000"}</div>
 <p>Three defences, in the order you should adopt them:</p>
-<pre><code><span class="tok-comment">// 1) Kiểm Origin/Referer — hai dòng, chặn được đa số</span>
+<pre><code><span class="tok-comment">// 1) Check Origin/Referer — two lines, stops the majority</span>
 <span class="tok-kw">const</span> o = req.get(<span class="tok-str">'origin'</span>) ?? (req.get(<span class="tok-str">'referer'</span>) ? <span class="tok-kw">new</span> URL(req.get(<span class="tok-str">'referer'</span>)).origin : <span class="tok-kw">null</span>);
 <span class="tok-kw">if</span> (o &amp;&amp; !ORIGINS.includes(o)) <span class="tok-kw">return</span> res.status(<span class="tok-num">403</span>).json({ error: <span class="tok-str">'CROSS_SITE'</span> });
 
-<span class="tok-comment">// 2) Double-submit: header phải khớp cookie đọc-được</span>
+<span class="tok-comment">// 2) Double-submit: the header must match the readable cookie</span>
 <span class="tok-kw">const</span> c = req.cookies.csrf_token, h = req.get(<span class="tok-str">'x-csrf-token'</span>);
 <span class="tok-kw">if</span> (!c || !h || c.length !== h.length ||
     !crypto.timingSafeEqual(Buffer.from(c), Buffer.from(h)))
@@ -1351,8 +1351,8 @@ máy 2 (kẻ gọi) SAU đó : HTTP 401  {"error":{"code":"TOKEN_REVOKED","messa
 <span class="tok-kw">const</span> WINDOW_MS = <span class="tok-num">60_000</span>, MAX = <span class="tok-num">5</span>;
 
 <span class="tok-kw">export function</span> loginLimit(req, res, next) {
-  <span class="tok-kw">const</span> key = req.ip + <span class="tok-str">'|'</span> + (req.body?.email ?? <span class="tok-str">''</span>).toLowerCase();   <span class="tok-comment">// khoá theo IP + email</span>
-  <span class="tok-comment">// … đếm trong cửa sổ, đặt header RateLimit-*, 429 khi vượt …</span>
+  <span class="tok-kw">const</span> key = req.ip + <span class="tok-str">'|'</span> + (req.body?.email ?? <span class="tok-str">''</span>).toLowerCase();   <span class="tok-comment">// keyed by IP + email</span>
+  <span class="tok-comment">// … count within the window, set the RateLimit-* headers, 429 on overflow …</span>
 }</code></pre>
 <div class="out">lần 1: HTTP 401  RateLimit-Remaining: 4
 lần 2: HTTP 401  RateLimit-Remaining: 3
@@ -1361,7 +1361,7 @@ lần 4: HTTP 401  RateLimit-Remaining: 1
 lần 5: HTTP 401  RateLimit-Remaining: 0
 lần 6: HTTP 429  RateLimit-Remaining: 0 Retry-After: 60
 lần 7: HTTP 429  RateLimit-Remaining: 0 Retry-After: 60
-mật khẩu ĐÚNG khi đang bị storeá: HTTP 429
+mật khẩu ĐÚNG khi đang bị khoá: HTTP 429
 email KHÁC từ cùng IP        : HTTP 200</div>
 <p>Four decisions are visible in that output, and each of them is a trade-off someone gets wrong:</p>
 <div class="kv-grid">
@@ -1496,7 +1496,7 @@ lần 4: HTTP 401  RateLimit-Remaining: 1
 lần 5: HTTP 401  RateLimit-Remaining: 0
 lần 6: HTTP 429  RateLimit-Remaining: 0 Retry-After: 60
 lần 7: HTTP 429  RateLimit-Remaining: 0 Retry-After: 60
-mật khẩu ĐÚNG khi đang bị storeá: HTTP 429
+mật khẩu ĐÚNG khi đang bị khoá: HTTP 429
 email KHÁC từ cùng IP        : HTTP 200</div>
 <p>Trong đoạn kết quả đó có bốn quyết định, và cái nào cũng là một đánh đổi mà người ta hay làm sai:</p>
 <div class="kv-grid">

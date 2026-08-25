@@ -242,7 +242,7 @@ describe('slugify', () =&gt; {
 
 <h3>Why the service could not be tested — and what changed</h3>
 <p>The original Notes service imported its database module directly:</p>
-<pre><code>import { db } from './db.mjs';                 // ← storeá chặt vào PostgreSQL
+<pre><code>import { db } from './db.mjs';                 // ← khoá chặt vào PostgreSQL
 export async function create(actor, input) {
   const existing = await db.query('SELECT …');
   …
@@ -406,7 +406,7 @@ describe('slugify', () =&gt; {
 
 <h3>Vì sao service không test được — và đã sửa gì</h3>
 <p>Bản Notes service ban đầu import thẳng module cơ sở dữ liệu:</p>
-<pre><code>import { db } from './db.mjs';                 // ← storeá chặt vào PostgreSQL
+<pre><code>import { db } from './db.mjs';                 // ← khoá chặt vào PostgreSQL
 export async function create(actor, input) {
   const existing = await db.query('SELECT …');
   …
@@ -847,7 +847,7 @@ song song, mỗi file một schema     10/10       0,89s            258ms</div>
 <div class="out">docker run trả về sau        202 ms
 pg_isready báo OK lần đầu    954 ms
 psql kết nối THẬT được      1149 ms
-lỗi trong storeảng giữa: psql: error: connection to server on socket
+lỗi trong khoảng giữa: psql: error: connection to server on socket
   "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory</div>
 <p><strong>1149ms</strong> is the honest price of a guaranteed-clean database per run — cheap against a five-minute CI job, expensive against the 0,10s inner loop you run while typing.</p>
 <div class="pitfall">
@@ -959,7 +959,7 @@ song song, mỗi file một schema     10/10       0,89s            258ms</div>
 <div class="out">docker run trả về sau        202 ms
 pg_isready báo OK lần đầu    954 ms
 psql kết nối THẬT được      1149 ms
-lỗi trong storeảng giữa: psql: error: connection to server on socket
+lỗi trong khoảng giữa: psql: error: connection to server on socket
   "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory</div>
 <p><strong>1149ms</strong> là cái giá trung thực cho một cơ sở dữ liệu bảo đảm sạch ở mỗi lượt chạy — rẻ khi so với một job CI năm phút, đắt khi so với vòng lặp 0,10s bạn chạy trong lúc đang gõ code.</p>
 <div class="pitfall">
@@ -1086,9 +1086,9 @@ jobs:
         with: { node-version: '22', cache: 'npm' }   # 22 khớp runtime production (node:22-alpine)
       - run: npm ci --no-audit --no-fund       # ci, KHÔNG install: dựng lại đúng lockfile
       - run: npx tsc --noEmit                  # bắt buộc
-      - run: npm run eval:grader               # bắt buộc — bộ vàng, không DB, không storeá LLM
+      - run: npm run eval:grader               # bắt buộc — bộ vàng, không DB, không khoá LLM
       - run: npm run eval:cv-linter            # bắt buộc
-      - run: npm run eval:cv-fabrication       # tự BỎ QUA nếu thiếu storeá AI
+      - run: npm run eval:cv-fabrication       # tự BỎ QUA nếu thiếu khoá AI
       - run: npm test                          # bắt buộc — 20 test, 1297ms
       - run: npm run lint
         continue-on-error: true                # ← chỉ để tham khảo, không chặn merge</code></pre>
@@ -1214,9 +1214,9 @@ jobs:
         with: { node-version: '22', cache: 'npm' }   # 22 khớp runtime production (node:22-alpine)
       - run: npm ci --no-audit --no-fund       # ci, KHÔNG phải install: dựng lại đúng theo lockfile
       - run: npx tsc --noEmit                  # bắt buộc
-      - run: npm run eval:grader               # bắt buộc — bộ vàng, không DB, không storeá LLM
+      - run: npm run eval:grader               # bắt buộc — bộ vàng, không DB, không khoá LLM
       - run: npm run eval:cv-linter            # bắt buộc
-      - run: npm run eval:cv-fabrication       # tự BỎ QUA nếu thiếu storeá AI
+      - run: npm run eval:cv-fabrication       # tự BỎ QUA nếu thiếu khoá AI
       - run: npm test                          # bắt buộc — 20 test, 1297ms
       - run: npm run lint
         continue-on-error: true                # ← chỉ để tham khảo, không chặn merge</code></pre>

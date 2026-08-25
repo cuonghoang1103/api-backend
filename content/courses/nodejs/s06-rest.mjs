@@ -1008,7 +1008,7 @@ trạng thái cuối: {"id":1,"title":"A sửa","version":2}   ← sửa đổi 
 lần 2  Idempotency-Key: 7f3a…  → 201  {"id":"27d79403","amount":250000,"charged":true}
                                   Idempotent-Replay: true    ← cùng id, chỉ trừ tiền MỘT lần
 lần 3  Idempotency-Key: 91b2…  → 201  {"id":"4e7e8308","amount":250000,"charged":true}
-                                                             ← storeá mới = giao dịch mới</div>
+                                                             ← khoá mới = giao dịch mới</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Client sinh ra khoá</span><span class="v">Một UUID cho mỗi ý định của người dùng — tạo ra lúc bấm nút, và mọi lần thử lại của chính cú bấm đó đều dùng lại nó.</span></div>
   <div class="kv"><span class="k">Lưu ở nơi sống sót được</span><span class="v">Một <code>Map</code> thì đủ cho bản demo; còn trên production đó là một bảng hoặc một khoá Redis có TTL (24 giờ là thường thấy). Map trong bộ nhớ là của riêng từng tiến trình, nên với hai container thì cú thử lại có thể rơi vào con chưa từng thấy khoá đó.</span></div>

@@ -66,7 +66,7 @@ export default {
 <p>The curve flattens hard after ~100. Going from 1 to 100 buys 49×; going from 1.000 to 10.000 buys 8%. Since Redis is single-threaded, a giant pipeline is one long command batch that <em>blocks every other client</em> while it runs. <strong>Batch in chunks of 100–1.000, not "all of it".</strong></p>
 
 <h3>MGET: pipelining that is built into the command</h3>
-<div class="out">[4] 1000 GET tuần tự 200,2ms  vs  1 MGET 1000 storeá 1,6ms → nhanh hơn 127,3×</div>
+<div class="out">[4] 1000 GET tuần tự 200,2ms  vs  1 MGET 1000 khoá 1,6ms → nhanh hơn 127,3×</div>
 <p>Whenever you are about to loop over ids and GET each one, look for the plural version first: <code>MGET</code>, <code>HMGET</code>, <code>SMEMBERS</code>, <code>ZRANGE</code>. One command, one round trip.</p>
 
 <h3>How much does the payload size matter?</h3>
@@ -162,7 +162,7 @@ export function getRedis() {
 <p>Đường cong phẳng ra rất nhanh sau mốc ~100. Đi từ 1 lên 100 mua được 49 lần; đi từ 1.000 lên 10.000 chỉ mua thêm 8%. Mà vì Redis chạy một luồng, một pipeline khổng lồ là một lô lệnh dài <em>chặn mọi client khác</em> trong lúc nó chạy. <strong>Hãy chia lô 100–1.000 lệnh, đừng "gửi tất".</strong></p>
 
 <h3>MGET: pipeline được đóng sẵn vào trong lệnh</h3>
-<div class="out">[4] 1000 GET tuần tự 200,2ms  vs  1 MGET 1000 storeá 1,6ms → nhanh hơn 127,3×</div>
+<div class="out">[4] 1000 GET tuần tự 200,2ms  vs  1 MGET 1000 khoá 1,6ms → nhanh hơn 127,3×</div>
 <p>Bất cứ khi nào bạn sắp lặp qua một danh sách id rồi GET từng cái, hãy tìm phiên bản số nhiều trước: <code>MGET</code>, <code>HMGET</code>, <code>SMEMBERS</code>, <code>ZRANGE</code>. Một lệnh, một vòng đi-về.</p>
 
 <h3>Kích thước dữ liệu ảnh hưởng bao nhiêu?</h3>
@@ -277,10 +277,10 @@ export function getRedis() {
 <div class="out">[5] sau    0ms: GET="xin chào" TTL=3
 [5] sau 1000ms: GET="xin chào" TTL=2
 [5] sau 2000ms: GET=null TTL=-2
-    TTL -2 = storeá không tồn tại, -1 = tồn tại nhưng KHÔNG có hạn
-[5b] storeá không đặt hạn → TTL=-1</div>
+    TTL -2 = khoá không tồn tại, -1 = tồn tại nhưng KHÔNG có hạn
+[5b] khoá không đặt hạn → TTL=-1</div>
 <p>Those two negative numbers are worth memorising: <strong>-2 means gone, -1 means immortal</strong>. And -1 is how a cache turns into a leak:</p>
-<div class="out">[6] SET lại KHÔNG kèm EX: TTL 100 → -1 (mất hạn, storeá sống mãi) | dùng KEEPTTL → TTL 100</div>
+<div class="out">[6] SET lại KHÔNG kèm EX: TTL 100 → -1 (mất hạn, khoá sống mãi) | dùng KEEPTTL → TTL 100</div>
 <p>Writing a key that already had an expiry, without repeating <code>EX</code>, <strong>removes the expiry</strong>. The key now lives until Redis restarts or evicts it. One refresh path in your codebase that forgets <code>EX</code> is enough to slowly fill Redis with immortal stale entries. Use <code>KEEPTTL</code> when you mean "update the value, keep the deadline".</p>
 
 <h3>Betrayal 4 — the stampede</h3>
@@ -288,7 +288,7 @@ export function getRedis() {
 <div class="out">--- 200 request đồng thời, cache RỖNG (mô phỏng đúng lúc TTL vừa hết) ---
 [1] cache-aside ngây thơ           200 lần hỏi Postgres |  6064,6ms cho 200 request | dữ liệu OK
 [2] single-flight trong tiến trình   1 lần hỏi Postgres |    65,3ms cho 200 request | dữ liệu OK
-[3] storeá phân tán SET NX             1 lần hỏi Postgres |    99,1ms cho 200 request | dữ liệu OK
+[3] khoá phân tán SET NX             1 lần hỏi Postgres |    99,1ms cho 200 request | dữ liệu OK
 [4] cache-aside ngây thơ, cache ẤM   0 lần hỏi Postgres |    14,9ms cho 200 request</div>
 <p>The naive version fired <strong>200 identical expensive queries</strong> and took 6 seconds. Note that the code is <em>correct</em> — everyone got the right answer. It is correct and it is a denial-of-service attack you wrote yourself. Compare line [4]: the same code, when the cache happens to be warm, is 400× faster. Your endpoint's latency now depends on a coin flip.</p>
 
@@ -323,8 +323,8 @@ if (got) {
 <p>It costs more (99,1ms vs 65,3ms) because the losers poll for the winner to finish. Lesson 12.4 shows why the naive <code>del</code> above is <em>wrong</em> and what to write instead.</p>
 
 <h4>Fix C — jitter, so keys do not die together</h4>
-<div class="out">[5] 50 storeá TTL cố định 60s → tất cả hết hạn trong storeảng 60–60s (cùng một giây)
-    50 storeá TTL 60s + jitter 0–30s → hết hạn rải ra 60–89s</div>
+<div class="out">[5] 50 khoá TTL cố định 60s → tất cả hết hạn trong khoảng 60–60s (cùng một giây)
+    50 khoá TTL 60s + jitter 0–30s → hết hạn rải ra 60–89s</div>
 <p>If a deploy warms 50 caches in the same second with the same TTL, all 50 expire in the same second sixty seconds later — a synchronised stampede across <em>different</em> keys, which no per-key lock can help with. <code>EX: 60 + Math.floor(Math.random() * 30)</code> costs nothing and removes the whole failure class.</p>
 
 <h3>Invalidation: the part nobody enjoys</h3>
@@ -396,10 +396,10 @@ if (got) {
 <div class="out">[5] sau    0ms: GET="xin chào" TTL=3
 [5] sau 1000ms: GET="xin chào" TTL=2
 [5] sau 2000ms: GET=null TTL=-2
-    TTL -2 = storeá không tồn tại, -1 = tồn tại nhưng KHÔNG có hạn
-[5b] storeá không đặt hạn → TTL=-1</div>
+    TTL -2 = khoá không tồn tại, -1 = tồn tại nhưng KHÔNG có hạn
+[5b] khoá không đặt hạn → TTL=-1</div>
 <p>Hai số âm đó đáng để thuộc lòng: <strong>-2 là đã biến mất, -1 là bất tử</strong>. Và -1 chính là cách một cache biến thành chỗ rò rỉ:</p>
-<div class="out">[6] SET lại KHÔNG kèm EX: TTL 100 → -1 (mất hạn, storeá sống mãi) | dùng KEEPTTL → TTL 100</div>
+<div class="out">[6] SET lại KHÔNG kèm EX: TTL 100 → -1 (mất hạn, khoá sống mãi) | dùng KEEPTTL → TTL 100</div>
 <p>Ghi đè lên một khoá vốn đã có hạn, mà không lặp lại <code>EX</code>, sẽ <strong>xoá luôn cái hạn đó</strong>. Khoá bây giờ sống tới khi Redis khởi động lại hoặc trục xuất nó. Chỉ cần MỘT nhánh code làm mới cache trong dự án quên <code>EX</code> là đủ để Redis từ từ đầy ứ những mục cũ bất tử. Hãy dùng <code>KEEPTTL</code> khi ý bạn là "cập nhật giá trị, giữ nguyên hạn".</p>
 
 <h3>Lần phản chủ 4 — cơn giẫm đạp (stampede)</h3>
@@ -407,7 +407,7 @@ if (got) {
 <div class="out">--- 200 request đồng thời, cache RỖNG (mô phỏng đúng lúc TTL vừa hết) ---
 [1] cache-aside ngây thơ           200 lần hỏi Postgres |  6064,6ms cho 200 request | dữ liệu OK
 [2] single-flight trong tiến trình   1 lần hỏi Postgres |    65,3ms cho 200 request | dữ liệu OK
-[3] storeá phân tán SET NX             1 lần hỏi Postgres |    99,1ms cho 200 request | dữ liệu OK
+[3] khoá phân tán SET NX             1 lần hỏi Postgres |    99,1ms cho 200 request | dữ liệu OK
 [4] cache-aside ngây thơ, cache ẤM   0 lần hỏi Postgres |    14,9ms cho 200 request</div>
 <p>Bản ngây thơ bắn ra <strong>200 truy vấn đắt tiền giống hệt nhau</strong> và mất 6 giây. Để ý là code đó <em>đúng</em> — ai cũng nhận được câu trả lời chính xác. Nó vừa đúng vừa là một đòn từ chối dịch vụ do chính bạn viết ra. So với dòng [4]: cùng đoạn code ấy, khi cache tình cờ đang ấm, nhanh hơn 400 lần. Độ trễ của endpoint giờ phụ thuộc vào một cú tung đồng xu.</p>
 
@@ -442,25 +442,25 @@ if (got) {
 <p>Nó đắt hơn (99,1ms so với 65,3ms) vì những kẻ thua cuộc phải hỏi đi hỏi lại chờ người thắng làm xong. Bài 12.4 sẽ chỉ ra vì sao lệnh <code>del</code> ngây thơ ở trên là <em>SAI</em> và phải viết gì thay vào đó.</p>
 
 <h4>Cách sửa C — jitter, để các khoá đừng chết chùm</h4>
-<div class="out">[5] 50 storeá TTL cố định 60s → tất cả hết hạn trong storeảng 60–60s (cùng một giây)
-    50 storeá TTL 60s + jitter 0–30s → hết hạn rải ra 60–89s</div>
-<p>Nếu một lần deploy làm ấm 50 cache trong cùng một giây với cùng một TTL thì sáu mươi giây sau cả 50 cùng hết hạn trong cùng một giây — một cơn giẫm đạp đồng bộ trên <em>nhiều khoá khác nhau</em>, thứ mà khoá theo từng khoá không cứu được. <code>EX: 60 + Math.floor(Math.random() * 30)</code> không tốn gì cả và xoá sổ nguyên một họ lỗi.</p>
+<div class="out">[5] 50 khoá TTL cố định 60s → tất cả hết hạn trong khoảng 60–60s (cùng một giây)
+    50 khoá TTL 60s + jitter 0–30s → hết hạn rải ra 60–89s</div>
+<p>Nếu một lần deploy làm ấm 50 cache trong cùng một giây với cùng một TTL thì sáu mươi giây sau cả 50 cùng hết hạn trong cùng một giây — một cơn giẫm đạp đồng counterBộ trên <em>nhiều khoá khác nhau</em>, thứ mà khoá theo từng khoá không cứu được. <code>EX: 60 + Math.floor(Math.random() * 30)</code> không tốn gì cả và xoá sổ nguyên một họ lỗi.</p>
 
 <h3>Làm mới cache: phần chẳng ai thích</h3>
 <p>Chỉ có đúng ba chiến lược trung thực, và chọn cái nào là quyết định về sản phẩm chứ không phải về kỹ thuật:</p>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Chỉ dùng TTL</span><span class="v">"cũ tối đa 60 giây thì chấp nhận được". Đơn giản nhất, không có code làm mới, không có bug. Đúng cho bảng xếp hạng, danh sách xu hướng, các con số đếm</span></div>
-  <div class="kv"><span class="k">Xoá khi ghi</span><span class="v"><code>DEL</code> khoá ngay trong chính nhánh code làm thay đổi dữ liệu. Đúng cho hồ sơ người dùng. Con bug luôn luôn nằm ở nhánh ghi mà bạn quên mất</span></div>
-  <div class="kv"><span class="k">Gắn phiên bản vào tên khoá</span><span class="v"><code>note:42:v7</code> — tăng số phiên bản là mọi khoá cũ trở nên không ai với tới được và tự hết hạn. Không cần xoá, không có đua. Đổi lại tốn RAM cho tới khi các mục cũ hết hạn</span></div>
+  <div class="kv"><span class="k">Chỉ dùng TTL</span><span class="v">"cũ tối đa 60 giây thì chấp nhận được". Đơn giản nhất, không có code làm mới, không có bug. Đúng cho counterBảng xếp hạng, danh sách xu hướng, các con số đếm</span></div>
+  <div class="kv"><span class="k">Xoá khi ghi</span><span class="v"><code>DEL</code> khoá ngay trong chính nhánh code làm thay đổi dữ liệu. Đúng cho hồ sơ người dùng. Con bug luôn luôn nằm ở nhánh ghi mà counterBạn quên mất</span></div>
+  <div class="kv"><span class="k">Gắn phiên counterBản vào tên khoá</span><span class="v"><code>note:42:v7</code> — tăng số phiên counterBản là mọi khoá cũ trở nên không ai với tới được và tự hết hạn. Không cần xoá, không có đua. Đổi lại tốn RAM cho tới khi các mục cũ hết hạn</span></div>
 </div>
 <p>Hãy ưu tiên TTL. Chỉ với tới xoá-khi-ghi khi một lần đọc dữ liệu cũ hiện ra trước mắt người dùng và gây xấu hổ. <strong>Tuyệt đối đừng</strong> viết logic sửa-tại-chỗ giá trị trong cache: hai người ghi đồng thời sẽ đan xen vào nhau và để lại trong cache một giá trị chưa từng tồn tại trong cơ sở dữ liệu.</p>
 
 <div class="pitfall">
-<p><strong>Quên cache cả lần trượt.</strong> Nếu <code>GET user:99999</code> trượt và cơ sở dữ liệu cũng chẳng trả về gì, code ngây thơ sẽ không cache gì cả — thế là mọi request hỏi một id không tồn tại đều đâm thẳng vào cơ sở dữ liệu mãi mãi. Kẻ tấn công chỉ cần hỏi các id ngẫu nhiên là biến cache của bạn thành một cái ống thông. Hãy cache cả kết quả rỗng, với TTL ngắn: <code>SET user:99999 "null" EX 30</code>. Và nhớ rằng phép kiểm lần trượt phải là <code>hit !== null</code>, KHÔNG BAO GIỜ dùng <code>if (!hit)</code> — vì một mục cache là chuỗi rỗng sẽ bị coi là trượt trong mọi request.</p>
+<p><strong>Quên cache cả lần trượt.</strong> Nếu <code>GET user:99999</code> trượt và cơ sở dữ liệu cũng chẳng trả về gì, code ngây thơ sẽ không cache gì cả — thế là mọi request hỏi một id không tồn tại đều đâm thẳng vào cơ sở dữ liệu mãi mãi. Kẻ tấn công chỉ cần hỏi các id ngẫu nhiên là biến cache của counterBạn thành một cái ống thông. Hãy cache cả kết quả rỗng, với TTL ngắn: <code>SET user:99999 "null" EX 30</code>. Và nhớ rằng phép kiểm lần trượt phải là <code>hit !== null</code>, KHÔNG BAO GIỜ dùng <code>if (!hit)</code> — vì một mục cache là chuỗi rỗng sẽ counterBị coi là trượt trong mọi request.</p>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Redis production ngay lúc này giữ <strong>26 khoá trong 1,23 MB</strong> với <code>maxmemory 256M</code> và <code>keyspace_hits:165 / keyspace_misses:20</code> — tỉ lệ trúng 89,2%. Gần như không có gì trên trang này là một truy vấn được cache; toàn bộ số khoá đó là bộ đếm giới hạn tần suất và hạn mức (<code>rl:general:&lt;ip&gt;</code>, <code>quota:&lt;userId&gt;:month:2026-07</code>). Đó là một thừa nhận có chủ ý và hơi khó chịu: những lần đọc đắt tiền của trang này được làm nhanh bằng <em>chỉ mục</em> ở chương 7, và một chỉ mục biến 28ms thành 0,129ms là cách sửa tốt hơn một cache, bởi vì nó không kèm theo bất kỳ câu chuyện làm-mới nào cả. Redis kiếm được chỗ đứng ở đây nhờ những việc mà cơ sở dữ liệu thật sự không làm được — các bộ đếm dùng chung giữa nhiều tiến trình, chính là bài 12.4.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Redis production ngay lúc này giữ <strong>26 khoá trong 1,23 MB</strong> với <code>maxmemory 256M</code> và <code>keyspace_hits:165 / keyspace_misses:20</code> — tỉ lệ trúng 89,2%. Gần như không có gì trên trang này là một truy vấn được cache; toàn counterBộ số khoá đó là bộ đếm giới hạn tần suất và hạn mức (<code>rl:general:&lt;ip&gt;</code>, <code>quota:&lt;userId&gt;:month:2026-07</code>). Đó là một thừa nhận có chủ ý và hơi khó chịu: những lần đọc đắt tiền của trang này được làm nhanh counterBằng <em>chỉ mục</em> ở chương 7, và một chỉ mục biến 28ms thành 0,129ms là cách sửa tốt hơn một cache, counterBởi vì nó không kèm theo bất kỳ câu chuyện làm-mới nào cả. Redis kiếm được chỗ đứng ở đây nhờ những việc mà cơ sở dữ liệu thật sự không làm được — các counterBộ đếm dùng chung giữa nhiều tiến trình, chính là bài 12.4.</p>
 </div>
 
 <div class="link-card codelab">
@@ -477,7 +477,7 @@ if (got) {
       title: '12.3 — Picking the right structure is worth 95× the RAM|||12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM',
       slug: 'nodejs-12-3-cau-truc-du-lieu',
       type: 'VIDEO',
-      description: 'Cùng một bài toán, ba cách lưu, RAM chênh nhau 2 lần. Đếm 100.000 người dùng duy nhất: Set 3,53MB, HyperLogLog 0,04MB. Và cú nhảy đáng sợ: thêm ĐÚNG MỘT trường thứ 513 làm RAM tăng 3,6 lần.',
+      description: 'Cùng một counterBài toán, ba cách lưu, RAM chênh nhau 2 lần. Đếm 100.000 người dùng duy nhất: Set 3,53MB, HyperLogLog 0,04MB. Và cú nhảy đáng sợ: thêm ĐÚNG MỘT trường thứ 513 làm RAM tăng 3,6 lần.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.3</span>
@@ -485,10 +485,10 @@ if (got) {
 <p class="lead">Redis is not a key-value store with strings in it. It is a small library of data structures that happen to live on a server, and the difference between knowing three of them and knowing eight is measured in gigabytes of RAM you did not have to buy. Every number below is <code>used_memory</code> read from <code>INFO</code> before and after loading exactly the same information.</p>
 
 <h3>The same 100.000 sessions, three ways</h3>
-<div class="out">--- Lưu 100000 phiên đăng nhập {userId, role, ip} bằng 3 kiểu khác nhau ---
-[1] String: 100k storeá, giá trị là JSON           11,66MB  (100000 storeá, 283,41ms)
-[2] Hash: 100k storeá, mỗi storeá 3 trường           10,94MB  (100000 storeá, 436,71ms)
-[3] Hash gom lô: 1000 storeá × 100 trường JSON      5,93MB  (  1000 storeá, 320,26ms)
+<div class="out">--- Lưu 100000 phiên đăng nhập {userId, role, ip} counterBằng 3 kiểu khác nhau ---
+[1] String: 100k khoá, giá trị là JSON           11,66MB  (100000 khoá, 283,41ms)
+[2] Hash: 100k storeá, mỗi storeá 3 trường           10,94MB  (100000 khoá, 436,71ms)
+[3] Hash gom lô: 1000 khoá × 100 trường JSON      5,93MB  (  1000 khoá, 320,26ms)
     → gom lô tiết kiệm 49% so với String, NHƯNG mất khả năng đặt TTL cho từng phiên</div>
 <p>Two lessons hide in there. First, a hash with three fields is <em>not</em> meaningfully cheaper than a JSON string — the win people expect from "use hashes" is not where they think it is. Second, the real saving comes from having <strong>fewer keys</strong>: 100.000 top-level keys cost roughly 5,7 MB in key overhead alone, before any of your data. Every Redis key carries a dictionary entry, an expiry slot and an object header.</p>
 <p>And the warning in that last line is the whole trade. Bucketing gives you half the RAM back and takes away <code>EXPIRE</code>, because TTL lives on keys, never on hash fields. A session store needs per-session expiry, so for sessions you pay the 11,66 MB. For something like "the last 100 events per user", bucketing is free money.</p>
@@ -510,14 +510,14 @@ hash-max-listpack-entries = 512</div>
 
 <h3>Counting unique things: Set vs HyperLogLog</h3>
 <div class="out">--- Đếm 100000 người dùng duy nhất trong ngày ---
-[4] Set: lưu đủ 100k id                           3,53MB  (     1 storeá, 44,18ms)
-[5] HyperLogLog: PFADD 100k id                    0,04MB  (     1 storeá, 30,65ms)
+[4] Set: lưu đủ 100k id                           3,53MB  (     1 khoá, 44,18ms)
+[5] HyperLogLog: PFADD 100k id                    0,04MB  (     1 khoá, 30,65ms)
     Set đếm CHÍNH XÁC 100000 | HLL ước lượng 100165 (lệch 0,17%)
     HLL nhỏ hơn Set 95× — đổi độ chính xác lấy RAM</div>
 <p><strong>95× smaller, 0,17% wrong.</strong> A HyperLogLog is a fixed 12 KB no matter how many items you add — one million or one billion, still 12 KB. The trade is absolute: you can ask <em>how many</em> (<code>PFCOUNT</code>) and you can merge two of them (<code>PFMERGE</code>, which is how "unique visitors this week" works), but you can <strong>never</strong> ask whether a specific user is in it. If you need <code>SISMEMBER</code>, you need a Set.</p>
 
 <h3>Membership over a dense id space: bitmaps</h3>
-<div class="out">[6] Bitmap: SETBIT cho 1.000.000 user             0,15MB  (     1 storeá, 800,00ms)
+<div class="out">[6] Bitmap: SETBIT cho 1.000.000 user             0,15MB  (     1 khoá, 800,00ms)
     BITCOUNT = 333334 user hoạt động, tốn đúng 152,3KB</div>
 <p>"Which of our million users were active today?" — <strong>152 KB</strong>, exact, with membership testable via <code>GETBIT</code>. One bit per user, indexed by numeric id. This is the structure behind every retention chart: one bitmap per day, then <code>BITOP AND</code> across seven of them gives weekly retention with no query at all. It only works when ids are dense integers — a bitmap for user id 8.000.000 allocates a megabyte even if that is your only user.</p>
 
@@ -542,9 +542,9 @@ hash-max-listpack-entries = 512</div>
 <pre><code class="language-javascript">// Khuôn: &lt;miền&gt;:&lt;thực thể&gt;:&lt;id&gt;:&lt;thuộc tính&gt;
 'sess:a3f9c1'                  // phiên đăng nhập
 'user:42:profile'              // hồ sơ đã cache
-'lb:notes:views:2026-07'       // bảng xếp hạng theo tháng
+'lb:notes:views:2026-07'       // counterBảng xếp hạng theo tháng
 'rl:general:14.191.170.161'    // bộ đếm giới hạn tần suất theo IP
-'quota:42:month:2026-07'       // hạn mức theo tháng — hết tháng là storeá tự chết</code></pre>
+'quota:42:month:2026-07'       // hạn mức theo tháng — hết tháng là khoá tự chết</code></pre>
 <p>Two rules make this pay off. Put the <strong>time bucket inside the key</strong> when the data is periodic — <code>quota:42:month:2026-07</code> needs no reset job, because next month is simply a different key. And keep prefixes short but never cryptic: with 100.000 keys, the prefix is stored 100.000 times, but a key nobody can decode during an incident costs far more than the bytes.</p>
 
 <div class="pitfall">
@@ -566,81 +566,81 @@ hash-max-listpack-entries = 512</div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.3</span>
 <h2>Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</h2>
-<p class="lead">Redis không phải một kho khoá-giá trị chứa toàn chuỗi. Nó là một thư viện nhỏ các cấu trúc dữ liệu tình cờ sống trên máy chủ, và khoảng cách giữa việc biết ba cái với việc biết tám cái được đo bằng số gigabyte RAM bạn không phải bỏ tiền mua. Mọi con số dưới đây là <code>used_memory</code> đọc từ <code>INFO</code> trước và sau khi nạp đúng cùng một lượng thông tin.</p>
+<p class="lead">Redis không phải một kho khoá-giá trị chứa toàn chuỗi. Nó là một thư viện nhỏ các cấu trúc dữ liệu tình cờ sống trên máy chủ, và khoảng cách giữa việc biết ba cái với việc biết tám cái được đo counterBằng số gigabyte RAM counterBạn không phải bỏ tiền mua. Mọi con số dưới đây là <code>used_memory</code> đọc từ <code>INFO</code> trước và sau khi nạp đúng cùng một lượng thông tin.</p>
 
 <h3>Cùng 100.000 phiên đăng nhập, ba cách lưu</h3>
-<div class="out">--- Lưu 100000 phiên đăng nhập {userId, role, ip} bằng 3 kiểu khác nhau ---
-[1] String: 100k storeá, giá trị là JSON           11,66MB  (100000 storeá, 283,41ms)
-[2] Hash: 100k storeá, mỗi storeá 3 trường           10,94MB  (100000 storeá, 436,71ms)
-[3] Hash gom lô: 1000 storeá × 100 trường JSON      5,93MB  (  1000 storeá, 320,26ms)
+<div class="out">--- Lưu 100000 phiên đăng nhập {userId, role, ip} counterBằng 3 kiểu khác nhau ---
+[1] String: 100k khoá, giá trị là JSON           11,66MB  (100000 khoá, 283,41ms)
+[2] Hash: 100k storeá, mỗi storeá 3 trường           10,94MB  (100000 khoá, 436,71ms)
+[3] Hash gom lô: 1000 khoá × 100 trường JSON      5,93MB  (  1000 khoá, 320,26ms)
     → gom lô tiết kiệm 49% so với String, NHƯNG mất khả năng đặt TTL cho từng phiên</div>
-<p>Có hai bài học nấp trong đó. Thứ nhất, một hash ba trường <em>không</em> rẻ hơn một chuỗi JSON bao nhiêu — cái lợi mà người ta trông đợi từ lời khuyên "dùng hash đi" không nằm ở chỗ họ tưởng. Thứ hai, khoản tiết kiệm thật đến từ việc có <strong>ÍT KHOÁ hơn</strong>: 100.000 khoá cấp cao nhất tốn xấp xỉ 5,7 MB chỉ riêng cho phần phụ trội của khoá, chưa tính một byte dữ liệu nào của bạn. Mỗi khoá Redis đều mang theo một ô trong từ điển, một chỗ cho hạn dùng và một phần đầu đối tượng.</p>
-<p>Và lời cảnh báo ở dòng cuối chính là toàn bộ cuộc đánh đổi. Gom lô trả lại cho bạn một nửa RAM và lấy đi <code>EXPIRE</code>, vì TTL sống trên KHOÁ chứ không bao giờ sống trên trường của hash. Kho phiên đăng nhập cần hạn riêng cho từng phiên, nên với phiên thì bạn cứ trả 11,66 MB. Còn với thứ kiểu "100 sự kiện gần nhất của mỗi người dùng" thì gom lô là tiền cho không.</p>
+<p>Có hai counterBài học nấp trong đó. Thứ nhất, một hash ba trường <em>không</em> rẻ hơn một chuỗi JSON bao nhiêu — cái lợi mà người ta trông đợi từ lời khuyên "dùng hash đi" không nằm ở chỗ họ tưởng. Thứ hai, khoản tiết kiệm thật đến từ việc có <strong>ÍT KHOÁ hơn</strong>: 100.000 khoá cấp cao nhất tốn xấp xỉ 5,7 MB chỉ riêng cho phần phụ trội của khoá, chưa tính một byte dữ liệu nào của counterBạn. Mỗi khoá Redis đều mang theo một ô trong từ điển, một chỗ cho hạn dùng và một phần đầu đối tượng.</p>
+<p>Và lời cảnh counterBáo ở dòng cuối chính là toàn counterBộ cuộc đánh đổi. Gom lô trả lại cho bạn một nửa RAM và lấy đi <code>EXPIRE</code>, vì TTL sống trên KHOÁ chứ không bao giờ sống trên trường của hash. Kho phiên đăng nhập cần hạn riêng cho từng phiên, nên với phiên thì counterBạn cứ trả 11,66 MB. Còn với thứ kiểu "100 sự kiện gần nhất của mỗi người dùng" thì gom lô là tiền cho không.</p>
 
 <h3>Vách đá mã hoá: thêm một trường, RAM gấp 3,6 lần</h3>
-<p>Redis lưu các tập hợp nhỏ trong một bố cục phẳng gọn gàng tên là <em>listpack</em>, và chuyển sang bảng băm thật khi vượt một ngưỡng cấu hình. Cú chuyển đó không hề từ từ:</p>
+<p>Redis lưu các tập hợp nhỏ trong một counterBố cục phẳng gọn gàng tên là <em>listpack</em>, và chuyển sang bảng băm thật khi vượt một ngưỡng cấu hình. Cú chuyển đó không hề từ từ:</p>
 <div class="out">hash  128 trường: mã hoá=listpack  RAM=  2608 byte → 20,4 byte/trường
 hash  512 trường: mã hoá=listpack  RAM= 10288 byte → 20,1 byte/trường
 hash  513 trường: mã hoá=hashtable RAM= 37024 byte → 72,2 byte/trường
 hash 1000 trường: mã hoá=hashtable RAM= 64296 byte → 64,3 byte/trường
 1000 trường chẻ thành 8 hash × 125 trường: RAM=20864 byte
 hash-max-listpack-entries = 512</div>
-<p>Thêm <strong>trường thứ 513 làm bộ nhớ nhân lên 3,6 lần</strong>. Dữ liệu của bạn chẳng thay đổi gì; bạn chỉ vừa bước qua ngưỡng <code>hash-max-listpack-entries</code>. Và hãy nhìn dòng cuối: đúng 1.000 trường ấy chẻ thành tám hash mỗi cái 125 trường chỉ tốn 20.864 byte thay vì 64.296 — <strong>ít hơn 3,1 lần</strong>, thuần tuý nhờ nằm dưới ngưỡng.</p>
+<p>Thêm <strong>trường thứ 513 làm counterBộ nhớ nhân lên 3,6 lần</strong>. Dữ liệu của bạn chẳng thay đổi gì; bạn chỉ vừa bước qua ngưỡng <code>hash-max-listpack-entries</code>. Và hãy nhìn dòng cuối: đúng 1.000 trường ấy chẻ thành tám hash mỗi cái 125 trường chỉ tốn 20.864 byte thay vì 64.296 — <strong>ít hơn 3,1 lần</strong>, thuần tuý nhờ nằm dưới ngưỡng.</p>
 <p>Set cũng hành xử y hệt, với một kiểu mã hoá thứ ba:</p>
 <div class="out">20 số nguyên : intset   96 byte
 + 1 chuỗi    : listpack 104 byte</div>
-<p>Một set toàn số nguyên dùng <code>intset</code>, bố cục dày đặc nhất Redis có. Thêm đúng một phần tử không phải số là nó chuyển đổi vĩnh viễn — không bao giờ quay lại. Lưu id dưới dạng <code>"user-42"</code> thay vì <code>42</code> là âm thầm vứt bỏ kiểu mã hoá đó trên toàn bộ dữ liệu của bạn.</p>
-<p>Bạn tự kiểm bất kỳ khoá nào bằng <code>OBJECT ENCODING storeá</code> và <code>MEMORY USAGE storeá</code>. Hai lệnh này trả lời câu "sao Redis phình to thế" nhanh hơn mọi bảng điều khiển.</p>
+<p>Một set toàn số nguyên dùng <code>intset</code>, counterBố cục dày đặc nhất Redis có. Thêm đúng một phần tử không phải số là nó chuyển đổi vĩnh viễn — không bao giờ quay lại. Lưu id dưới dạng <code>"user-42"</code> thay vì <code>42</code> là âm thầm vứt counterBỏ kiểu mã hoá đó trên toàn counterBộ dữ liệu của bạn.</p>
+<p>Bạn tự kiểm bất kỳ khoá nào bằng <code>OBJECT ENCODING khoá</code> và <code>MEMORY USAGE khoá</code>. Hai lệnh này trả lời câu "sao Redis phình to thế" nhanh hơn mọi bảng điều khiển.</p>
 
 <h3>Đếm số lượng duy nhất: Set hay HyperLogLog</h3>
 <div class="out">--- Đếm 100000 người dùng duy nhất trong ngày ---
-[4] Set: lưu đủ 100k id                           3,53MB  (     1 storeá, 44,18ms)
-[5] HyperLogLog: PFADD 100k id                    0,04MB  (     1 storeá, 30,65ms)
+[4] Set: lưu đủ 100k id                           3,53MB  (     1 khoá, 44,18ms)
+[5] HyperLogLog: PFADD 100k id                    0,04MB  (     1 khoá, 30,65ms)
     Set đếm CHÍNH XÁC 100000 | HLL ước lượng 100165 (lệch 0,17%)
     HLL nhỏ hơn Set 95× — đổi độ chính xác lấy RAM</div>
-<p><strong>Nhỏ hơn 95 lần, sai 0,17%.</strong> Một HyperLogLog luôn là 12 KB cố định bất kể bạn nhét vào bao nhiêu — một triệu hay một tỉ, vẫn 12 KB. Cuộc đánh đổi thì tuyệt đối: bạn hỏi được <em>có bao nhiêu</em> (<code>PFCOUNT</code>) và trộn được hai cái lại (<code>PFMERGE</code>, đó chính là cách tính "số người duy nhất trong tuần"), nhưng bạn <strong>không bao giờ</strong> hỏi được một người cụ thể có nằm trong đó hay không. Nếu bạn cần <code>SISMEMBER</code> thì bạn cần Set.</p>
+<p><strong>Nhỏ hơn 95 lần, sai 0,17%.</strong> Một HyperLogLog luôn là 12 KB cố định counterBất kể counterBạn nhét vào bao nhiêu — một triệu hay một tỉ, vẫn 12 KB. Cuộc đánh đổi thì tuyệt đối: bạn hỏi được <em>có bao nhiêu</em> (<code>PFCOUNT</code>) và trộn được hai cái lại (<code>PFMERGE</code>, đó chính là cách tính "số người duy nhất trong tuần"), nhưng counterBạn <strong>không bao giờ</strong> hỏi được một người cụ thể có nằm trong đó hay không. Nếu bạn cần <code>SISMEMBER</code> thì counterBạn cần Set.</p>
 
 <h3>Kiểm tra thành viên trên dải id dày đặc: bitmap</h3>
-<div class="out">[6] Bitmap: SETBIT cho 1.000.000 user             0,15MB  (     1 storeá, 800,00ms)
+<div class="out">[6] Bitmap: SETBIT cho 1.000.000 user             0,15MB  (     1 khoá, 800,00ms)
     BITCOUNT = 333334 user hoạt động, tốn đúng 152,3KB</div>
-<p>"Trong một triệu người dùng, hôm nay ai có hoạt động?" — <strong>152 KB</strong>, chính xác tuyệt đối, và kiểm tra từng người được bằng <code>GETBIT</code>. Một bit cho một người, đánh chỉ số bằng id dạng số. Đây là cấu trúc nằm sau mọi biểu đồ giữ chân người dùng: mỗi ngày một bitmap, rồi <code>BITOP AND</code> bảy cái là ra tỉ lệ giữ chân theo tuần mà không cần một truy vấn nào. Nó chỉ đúng khi id là số nguyên dày đặc — một bitmap cho user id 8.000.000 sẽ cấp phát cả megabyte dù đó là người dùng duy nhất của bạn.</p>
+<p>"Trong một triệu người dùng, hôm nay ai có hoạt động?" — <strong>152 KB</strong>, chính xác tuyệt đối, và kiểm tra từng người được counterBằng <code>GETBIT</code>. Một bit cho một người, đánh chỉ số bằng id dạng số. Đây là cấu trúc nằm sau mọi biểu đồ giữ chân người dùng: mỗi ngày một bitmap, rồi <code>BITOP AND</code> counterBảy cái là ra tỉ lệ giữ chân theo tuần mà không cần một truy vấn nào. Nó chỉ đúng khi id là số nguyên dày đặc — một bitmap cho user id 8.000.000 sẽ cấp phát cả megabyte dù đó là người dùng duy nhất của counterBạn.</p>
 
 <h3>Bảng xếp hạng: sorted set</h3>
 <div class="out">[7] ZSet 100000 người: lấy TOP 10 0,77ms | hỏi thứ hạng 1 người 0,32ms (hạng 94725)
     top1 = user-99729 (9972 điểm) — Redis giữ sẵn thứ tự, không cần ORDER BY</div>
-<p>Hãy so với bài 12.2, nơi cũng bảng xếp hạng ấy lấy từ PostgreSQL tốn <strong>48,04ms</strong> và chỉ dựng được nguyên cả bảng. Một sorted set trả lời câu <em>"tôi đang hạng mấy?"</em> trong 0,32ms — câu hỏi mà SQL phải giải bằng hàm cửa sổ chạy qua mọi dòng. Khi xếp hạng là một tính năng của sản phẩm chứ không phải một bản báo cáo, hãy giữ sorted set làm nguồn sự thật và để Postgres giữ phần lịch sử.</p>
+<p>Hãy so với counterBài 12.2, nơi cũng counterBảng xếp hạng ấy lấy từ PostgreSQL tốn <strong>48,04ms</strong> và chỉ dựng được nguyên cả bảng. Một sorted set trả lời câu <em>"tôi đang hạng mấy?"</em> trong 0,32ms — câu hỏi mà SQL phải giải counterBằng hàm cửa sổ chạy qua mọi dòng. Khi xếp hạng là một tính năng của sản phẩm chứ không phải một bản counterBáo cáo, hãy giữ sorted set làm nguồn sự thật và để Postgres giữ phần lịch sử.</p>
 
 <h3>Thực đơn đầy đủ, và khi nào mỗi món là câu trả lời</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">String</span><span class="v">cache JSON, cờ bật/tắt, bộ đếm (<code>INCR</code> chạy trên String). Mặc định, và dùng nó chẳng có gì sai</span></div>
+  <div class="kv"><span class="k">String</span><span class="v">cache JSON, cờ counterBật/tắt, counterBộ đếm (<code>INCR</code> chạy trên String). Mặc định, và dùng nó chẳng có gì sai</span></div>
   <div class="kv"><span class="k">Hash</span><span class="v">đối tượng cần sửa TỪNG trường: <code>HINCRBY user:42 views 1</code> chứ không phải đọc-sửa-ghi cả đối tượng</span></div>
   <div class="kv"><span class="k">List</span><span class="v">hàng đợi đơn giản (<code>LPUSH</code>/<code>BRPOP</code>), nhật ký N mục gần nhất (<code>LPUSH</code> + <code>LTRIM</code>)</span></div>
-  <div class="kv"><span class="k">Set</span><span class="v">quan hệ và phép toán tập hợp: bạn chung (<code>SINTER</code>), thẻ, "đã xem chưa"</span></div>
-  <div class="kv"><span class="k">Sorted Set</span><span class="v">bất cứ thứ gì có THỨ TỰ: bảng xếp hạng, hàng đợi ưu tiên, cửa sổ trượt theo thời gian (bài 12.4)</span></div>
+  <div class="kv"><span class="k">Set</span><span class="v">quan hệ và phép toán tập hợp: counterBạn chung (<code>SINTER</code>), thẻ, "đã xem chưa"</span></div>
+  <div class="kv"><span class="k">Sorted Set</span><span class="v">counterBất cứ thứ gì có THỨ TỰ: counterBảng xếp hạng, hàng đợi ưu tiên, cửa sổ trượt theo thời gian (bài 12.4)</span></div>
   <div class="kv"><span class="k">Bitmap</span><span class="v">1 bit cho 1 id trên dải id dày đặc: hoạt động theo ngày, cờ tính năng theo người dùng</span></div>
   <div class="kv"><span class="k">HyperLogLog</span><span class="v">đếm số lượng duy nhất khi con số gần đúng là đủ. 12 KB cố định, mãi mãi</span></div>
-  <div class="kv"><span class="k">Stream</span><span class="v">nhật ký sự kiện chỉ ghi thêm, có consumer group và xác nhận — bài 12.5</span></div>
+  <div class="kv"><span class="k">Stream</span><span class="v">nhật ký sự kiện chỉ ghi thêm, có consumer group và xác nhận — counterBài 12.5</span></div>
 </div>
 
 <h3>Đặt tên khoá cho tử tế</h3>
 <pre><code class="language-javascript">// Khuôn: &lt;miền&gt;:&lt;thực thể&gt;:&lt;id&gt;:&lt;thuộc tính&gt;
 'sess:a3f9c1'                  // phiên đăng nhập
 'user:42:profile'              // hồ sơ đã cache
-'lb:notes:views:2026-07'       // bảng xếp hạng theo tháng
+'lb:notes:views:2026-07'       // counterBảng xếp hạng theo tháng
 'rl:general:14.191.170.161'    // bộ đếm giới hạn tần suất theo IP
-'quota:42:month:2026-07'       // hạn mức theo tháng — hết tháng là storeá tự chết</code></pre>
-<p>Hai quy tắc khiến cách này sinh lời. Hãy nhét <strong>mốc thời gian vào trong tên khoá</strong> khi dữ liệu có tính chu kỳ — <code>quota:42:month:2026-07</code> chẳng cần công việc reset nào cả, vì tháng sau đơn giản là một khoá khác. Và giữ tiền tố ngắn nhưng đừng bao giờ khó hiểu: với 100.000 khoá thì tiền tố bị lưu 100.000 lần, nhưng một cái khoá không ai giải mã nổi giữa lúc sự cố còn đắt hơn nhiều so với mấy byte ấy.</p>
+'quota:42:month:2026-07'       // hạn mức theo tháng — hết tháng là khoá tự chết</code></pre>
+<p>Hai quy tắc khiến cách này sinh lời. Hãy nhét <strong>mốc thời gian vào trong tên khoá</strong> khi dữ liệu có tính chu kỳ — <code>quota:42:month:2026-07</code> chẳng cần công việc reset nào cả, vì tháng sau đơn giản là một khoá khác. Và giữ tiền tố ngắn nhưng đừng bao giờ khó hiểu: với 100.000 khoá thì tiền tố counterBị lưu 100.000 lần, nhưng một cái khoá không ai giải mã nổi giữa lúc sự cố còn đắt hơn nhiều so với mấy byte ấy.</p>
 
 <div class="pitfall">
-<p><strong>Con số sẽ làm bạn ngạc nhiên lúc 3 giờ sáng.</strong> Một Redis rỗng chứa 1.000.000 khoá tí hon dùng hết <strong>93,4 MB</strong> (đo ở bài 12.5). Tức là xấp xỉ 93 byte phụ trội cho mỗi khoá, trước khi tính giá trị của bạn. Các đội thường ước lượng dung lượng Redis bằng cách cộng kích thước các giá trị lại, deploy, rồi đụng trần <code>maxmemory</code> khi mới đạt một phần ba số khoá dự kiến. Hãy ước lượng theo <em>số lượng khoá</em> trước, kích thước giá trị sau.</p>
+<p><strong>Con số sẽ làm counterBạn ngạc nhiên lúc 3 giờ sáng.</strong> Một Redis rỗng chứa 1.000.000 khoá tí hon dùng hết <strong>93,4 MB</strong> (đo ở counterBài 12.5). Tức là xấp xỉ 93 byte phụ trội cho mỗi khoá, trước khi tính giá trị của bạn. Các đội thường ước lượng dung lượng Redis bằng cách cộng kích thước các giá trị lại, deploy, rồi đụng trần <code>maxmemory</code> khi mới đạt một phần ba số khoá dự kiến. Hãy ước lượng theo <em>số lượng khoá</em> trước, kích thước giá trị sau.</p>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Khoá của dịch vụ hạn mức là <code>quota:&lt;userId&gt;:minute:&lt;YYYY-MM-DD-HH-mm&gt;</code>, <code>…:day:&lt;YYYY-MM-DD&gt;</code> và <code>…:month:&lt;YYYY-MM&gt;</code> — chuỗi thuần điều khiển bằng <code>INCR</code>, với chu kỳ nướng thẳng vào tên. Không có gì reset bộ đếm cả; khoá theo phút đơn giản là hết được ai nhắc tới khi phút đó trôi qua rồi tự hết hạn sau 65 giây. Production hiện báo <code>expired_keys:21</code> và <code>evicted_keys:0</code>: mọi thứ rời đi đều vì tự hết hạn, và đó đúng là dáng vẻ của một vùng khoá khoẻ mạnh.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Khoá của dịch vụ hạn mức là <code>quota:&lt;userId&gt;:minute:&lt;YYYY-MM-DD-HH-mm&gt;</code>, <code>…:day:&lt;YYYY-MM-DD&gt;</code> và <code>…:month:&lt;YYYY-MM&gt;</code> — chuỗi thuần điều khiển counterBằng <code>INCR</code>, với chu kỳ nướng thẳng vào tên. Không có gì reset bộ đếm cả; khoá theo phút đơn giản là hết được ai nhắc tới khi phút đó trôi qua rồi tự hết hạn sau 65 giây. Production hiện counterBáo <code>expired_keys:21</code> và <code>evicted_keys:0</code>: mọi thứ rời đi đều vì tự hết hạn, và đó đúng là dáng vẻ của một vùng khoá khoẻ mạnh.</p>
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-423"><span class="lc-t">Code Lab · Core Data Structures</span><span class="lc-d">String, Hash, List, Set, Sorted Set — bài tập từng lệnh</span></a>
+  <a href="/code-lab/redis${REF}#module-423"><span class="lc-t">Code Lab · Core Data Structures</span><span class="lc-d">String, Hash, List, Set, Sorted Set — counterBài tập từng lệnh</span></a>
 </div>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-425"><span class="lc-t">Code Lab · Advanced Data Types and Commands</span><span class="lc-d">Bitmap, HyperLogLog, GEO và các lệnh ít gặp</span></a>
@@ -661,7 +661,7 @@ hash-max-listpack-entries = 512</div>
         caption: { en: "Atomicity: rate limits and locks", vi: "Nguyên tử: giới hạn tần suất và khoá" },
       },
       type: 'VIDEO',
-      description: 'GET → kiểm tra → SET cho lọt cả 500 request qua một giới hạn 100. Cửa sổ cố định cho lọt gấp đôi ở ranh giới. Và một khoá phân tán viết sai xoá nhầm khoá của người khác — có bằng chứng chạy thật.',
+      description: 'GET → kiểm tra → SET cho lọt cả 500 request qua một giới hạn 100. Cửa sổ cố định cho lọt gấp đôi ở ranh giới. Và một khoá phân tán viết sai xoá nhầm khoá của người khác — có counterBằng chứng chạy thật.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.4</span>
@@ -671,13 +671,13 @@ hash-max-listpack-entries = 512</div>
 <h3>The bug that starts everything</h3>
 <p>Redis runs one command at a time. That makes each individual command atomic. It does <strong>not</strong> make your sequence of commands atomic, because other clients run between them. Here is the difference, measured with 500 concurrent requests against a limit of 100:</p>
 <div class="out">--- 500 request SONG SONG, giới hạn 100 ---
-   cho qua 100 / chặn 400 → bộ đếm cuối = 500
-   cùng việc đó bằng GET → kiểm → SET (không nguyên tử): cho qua 500, bộ đếm cuối = 1 ← SAI</div>
+   cho qua 100 / chặn 400 → counterBộ đếm cuối = 500
+   cùng việc đó counterBằng GET → kiểm → SET (không nguyên tử): cho qua 500, bộ đếm cuối = 1 ← SAI</div>
 <p><strong>Every single request passed a limit of 100</strong>, and the counter ended at 1. All 500 read the counter (0), all 500 decided they were under the limit, all 500 wrote 1. The limiter did nothing at all — and it would have looked perfectly correct in any test with one request at a time.</p>
 
 <h3>The second bug: INCR then EXPIRE</h3>
 <p>The obvious fix is <code>INCR</code>, which is atomic. But a counter needs a deadline, and that is a second command:</p>
-<div class="out">   INCR xong, chưa kịp EXPIRE → TTL = -1 (storeá sống MÃI MÃI, user bị storeá vĩnh viễn)
+<div class="out">   INCR xong, chưa kịp EXPIRE → TTL = -1 (storeá sống MÃI MÃI, user counterBị storeá vĩnh viễn)
    Lua (INCR + PEXPIRE nguyên tử) → TTL = 60s ✓</div>
 <p>If the process dies, the connection drops or the request is cancelled between <code>INCR</code> and <code>EXPIRE</code>, the key exists with no expiry. It never resets. That user is rate-limited <strong>forever</strong>, and no amount of waiting fixes it. This is a real, common, extremely confusing production bug: one user, permanently 429, and nothing in the logs.</p>
 <p>Two correct fixes. <code>MULTI</code>/<code>EXEC</code> queues both commands and runs them as one unit, or a Lua script does the same with the ability to branch:</p>
@@ -691,7 +691,7 @@ return c</code></pre>
 <p>Bucket by time: <code>rl:bob:1785182120</code>. Simple, one key, 56 bytes. And measurably wrong:</p>
 <div class="out">--- Cửa sổ cố định 5 request / 1 giây: đo lỗ hổng ranh giới ---
    cửa sổ #1785182120: cho qua 5 | cửa sổ #1785182121: cho qua 5
-   ⇒ 10 request lọt trong storeảng ~300ms, dù giới hạn ghi là 5/giây → thực tế chịu 10/giây ở ranh giới</div>
+   ⇒ 10 request lọt trong khoảng ~300ms, dù giới hạn ghi là 5/giây → thực tế chịu 10/giây ở ranh giới</div>
 <p>Five at the end of one window, five at the start of the next: <strong>double the configured limit inside 300 milliseconds</strong>. For a login endpoint that is the difference between 5 password guesses per second and 10. Whether that matters is a judgement call — for API throttling it usually does not; for anything security-sensitive it does.</p>
 
 <h3>Algorithm 2 — sliding window with a sorted set</h3>
@@ -710,12 +710,12 @@ return {0, n}</code></pre>
    chờ đủ 1s cho cửa sổ trôi qua → request mới: CHO QUA (đang có 1 trong cửa sổ)</div>
 <p>Exactly right at the boundary. The price is RAM, and it is not small:</p>
 <div class="out">   RAM: cửa sổ trượt giữ 1001 phần tử = 89072 byte cho MỘT người dùng
-        cửa sổ cố định 1 storeá = 56 byte | token bucket 1 hash = 96 byte</div>
+        cửa sổ cố định 1 khoá = 56 byte | token bucket 1 hash = 96 byte</div>
 <p><strong>89 KB per user versus 56 bytes.</strong> A sliding window stores one entry per request in the window, so a limit of 1.000 means 1.000 entries. With 10.000 active users that is 890 MB — more than most Redis instances have. Sliding windows are correct and they do not scale to large limits. Use them where the limit is small and correctness matters (login: 5 per 15 minutes), not for general API throttling.</p>
 
 <h3>Algorithm 3 — token bucket, when you want to allow bursts</h3>
 <div class="out">--- Token bucket 5 token, nạp 5 token/giây ---
-   10 request tức thì → cho qua 5 (bùng hết bình), token còn 0.03
+   10 request tức thì → cho qua 5 (counterBùng hết counterBình), token còn 0.03
    chờ 600ms (nạp ~3 token) → request: CHO QUA, còn 2.04 token</div>
 <p>A bucket holds N tokens and refills at a steady rate. A client that has been quiet can spend its whole bucket at once, then is throttled to the refill rate. This is what you actually want for a public API: a page that fires eight requests on load should succeed, while a script hammering you steadily should not. Two fields in a hash, 96 bytes, and it never stores per-request state.</p>
 <div class="out">--- Giá mỗi lần kiểm (1000 lần, ms/lần) ---
@@ -728,12 +728,12 @@ return {0, n}</code></pre>
 <h4>Wrong 1 — a lock with no expiry</h4>
 <div class="out">   worker-1 SETNX → 1 (giành được), TTL = -1
    worker-1 CRASH trước khi DEL...
-   worker-2 SETNX → 0 (0 = thất bại), TTL vẫn -1 → KẸT MÃI MÃI</div>
+   worker-2 SETNX → 0 (0 = thất counterBại), TTL vẫn -1 → KẸT MÃI MÃI</div>
 <p>One crashed process and the lock is held forever. Always <code>SET key val PX ttl NX</code>, never <code>SETNX</code> alone.</p>
 
 <h4>Wrong 2 — unlocking with plain DEL</h4>
-<div class="out">   worker-1 giữ storeá (hạn 300ms), làm việc CHẬM mất 400ms...
-   storeá tự hết hạn → worker-2 giành được: OK — GIỜ CÓ HAI worker trong vùng tới hạn
+<div class="out">   worker-1 giữ khoá (hạn 300ms), làm việc CHẬM mất 400ms...
+   khoá tự hết hạn → worker-2 giành được: OK — GIỜ CÓ HAI worker trong vùng tới hạn
    worker-1 làm xong, gọi DEL → xoá 1 storeá — nhưng đó là storeá của WORKER-2!
    storeá còn lại: null → worker-3 bất kỳ giành được ngay</div>
 <p>This is the subtle one and it is worth reading twice. Worker-1's job outran its lock TTL. The lock expired, worker-2 legitimately took it — and then worker-1 finished and deleted <em>worker-2's</em> lock. Now the critical section is wide open. One slow job cascades into unbounded concurrency.</p>
@@ -752,19 +752,19 @@ async function acquire(key, ttlMs) {
 
 const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code></pre>
 <div class="out">   worker-1 giành được, token = bd76d443…
-   storeá hết hạn, worker-2 giành được, token = d6afad4b…
-   worker-1 mở storeá bằng token của mình → xoá 0 storeá (0 = KHÔNG xoá nhầm ✓)
-   storeá vẫn thuộc về worker-2: d6afad4b…
+   khoá hết hạn, worker-2 giành được, token = d6afad4b…
+   worker-1 mở khoá bằng token của mình → xoá 0 khoá (0 = KHÔNG xoá nhầm ✓)
+   khoá vẫn thuộc về worker-2: d6afad4b…
    worker-2 mở storeá → xoá 1 storeá ✓</div>
 <p>The check and the delete must happen in the same atomic step — doing <code>GET</code>, comparing in JavaScript, then <code>DEL</code> reintroduces exactly the race we just fixed, because the lock can expire between the two commands.</p>
 
 <h3>Does the lock actually do anything? Measure it.</h3>
-<div class="out">--- 50 worker song song, mỗi worker cộng 1 vào bộ đếm (đọc-sửa-ghi, 5ms) ---
-   KHÔNG storeá     → bộ đếm = 1 (đúng phải là 50)
-   CÓ storeá        → bộ đếm = 50 ✓
-   INCR nguyên tử → bộ đếm = 50 ✓ (không cần storeá — hãy ưu tiên cách này)</div>
+<div class="out">--- 50 worker song song, mỗi worker cộng 1 vào counterBộ đếm (đọc-sửa-ghi, 5ms) ---
+   KHÔNG khoá     → counterBộ đếm = 1 (đúng phải là 50)
+   CÓ khoá        → bộ đếm = 50 ✓
+   INCR nguyên tử → bộ đếm = 50 ✓ (không cần khoá — hãy ưu tiên cách này)</div>
 <p>Fifty increments, forty-nine of them lost. And then the third line, which is the point of this whole section: <strong>the lock was never necessary.</strong> <code>INCR</code> gives the same correct answer with no lock, no token, no TTL tuning and no failure mode. A distributed lock is the answer when the critical section touches something <em>outside</em> Redis — a third-party API that must be called once, a file, a report that takes ten seconds. Inside Redis, reach for the atomic command or a Lua script first.</p>
-<div class="out">   500 lần storeá + mở (không tranh chấp): 0,657ms/lần (2 vòng đi-về)</div>
+<div class="out">   500 lần khoá + mở (không tranh chấp): 0,657ms/lần (2 vòng đi-về)</div>
 
 <div class="pitfall">
 <p><strong>A Redis lock is not a safety guarantee.</strong> If your job can exceed the lock TTL, two workers <em>will</em> eventually run at the same time — measurement 2 above is that happening. No amount of Lua fixes it, because the lock has already expired. Either make the work idempotent (so running it twice is harmless), or have the worker renew the lock while it runs and abort if the renewal fails. Redlock across multiple independent Redis nodes exists for this, and it is still debated; if correctness genuinely depends on mutual exclusion, use a database transaction with a unique constraint, which chapter 7.3 measured giving you P2002 at exactly the right moment.</p>
@@ -785,33 +785,33 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.4</span>
 <h2>Tính nguyên tử: giới hạn tần suất và khoá phân tán làm cho đúng</h2>
-<p class="lead">Đây là bài mà Redis thôi làm một thứ tối ưu và trở thành công cụ đảm bảo <em>tính đúng đắn</em>. Bài 8.4 đã dựng một bộ giới hạn tần suất chạy được — miễn là chỉ có đúng một tiến trình Node. Ngay khi bạn chạy hai, một bộ đếm trong bộ nhớ trở thành hai bộ đếm, và giới hạn 5 lần một phút của bạn thành 10 lần một phút. Redis sửa được chuyện đó, nhưng chỉ khi bạn hiểu thao tác nào là nguyên tử và thao tác nào chỉ trông giống thế.</p>
+<p class="lead">Đây là counterBài mà Redis thôi làm một thứ tối ưu và trở thành công cụ đảm counterBảo <em>tính đúng đắn</em>. Bài 8.4 đã dựng một bộ giới hạn tần suất chạy được — miễn là chỉ có đúng một tiến trình Node. Ngay khi bạn chạy hai, một bộ đếm trong bộ nhớ trở thành hai counterBộ đếm, và giới hạn 5 lần một phút của bạn thành 10 lần một phút. Redis sửa được chuyện đó, nhưng chỉ khi bạn hiểu thao tác nào là nguyên tử và thao tác nào chỉ trông giống thế.</p>
 
 <h3>Con bug khởi đầu mọi chuyện</h3>
-<p>Redis chạy mỗi lúc một lệnh. Điều đó khiến TỪNG lệnh riêng lẻ là nguyên tử. Nó <strong>không</strong> khiến CHUỖI lệnh của bạn nguyên tử, bởi vì các client khác chen vào giữa chúng. Đây là sự khác biệt, đo bằng 500 request đồng thời trên một giới hạn 100:</p>
+<p>Redis chạy mỗi lúc một lệnh. Điều đó khiến TỪNG lệnh riêng lẻ là nguyên tử. Nó <strong>không</strong> khiến CHUỖI lệnh của counterBạn nguyên tử, counterBởi vì các client khác chen vào giữa chúng. Đây là sự khác biệt, đo bằng 500 request đồng thời trên một giới hạn 100:</p>
 <div class="out">--- 500 request SONG SONG, giới hạn 100 ---
-   cho qua 100 / chặn 400 → bộ đếm cuối = 500
-   cùng việc đó bằng GET → kiểm → SET (không nguyên tử): cho qua 500, bộ đếm cuối = 1 ← SAI</div>
-<p><strong>Toàn bộ 500 request đều lọt qua một giới hạn 100</strong>, và bộ đếm dừng lại ở 1. Cả 500 cùng đọc bộ đếm (0), cả 500 cùng kết luận mình đang dưới hạn, cả 500 cùng ghi 1. Bộ giới hạn không làm gì hết — và nó sẽ trông hoàn toàn đúng đắn trong mọi bài test chạy từng request một.</p>
+   cho qua 100 / chặn 400 → counterBộ đếm cuối = 500
+   cùng việc đó counterBằng GET → kiểm → SET (không nguyên tử): cho qua 500, bộ đếm cuối = 1 ← SAI</div>
+<p><strong>Toàn bộ 500 request đều lọt qua một giới hạn 100</strong>, và bộ đếm dừng lại ở 1. Cả 500 cùng đọc bộ đếm (0), cả 500 cùng kết luận mình đang dưới hạn, cả 500 cùng ghi 1. Bộ giới hạn không làm gì hết — và nó sẽ trông hoàn toàn đúng đắn trong mọi counterBài test chạy từng request một.</p>
 
 <h3>Con bug thứ hai: INCR rồi EXPIRE</h3>
-<p>Cách sửa hiển nhiên là <code>INCR</code>, vốn nguyên tử. Nhưng bộ đếm cần một hạn chót, và đó là lệnh thứ hai:</p>
-<div class="out">   INCR xong, chưa kịp EXPIRE → TTL = -1 (storeá sống MÃI MÃI, user bị storeá vĩnh viễn)
+<p>Cách sửa hiển nhiên là <code>INCR</code>, vốn nguyên tử. Nhưng counterBộ đếm cần một hạn chót, và đó là lệnh thứ hai:</p>
+<div class="out">   INCR xong, chưa kịp EXPIRE → TTL = -1 (storeá sống MÃI MÃI, user counterBị storeá vĩnh viễn)
    Lua (INCR + PEXPIRE nguyên tử) → TTL = 60s ✓</div>
-<p>Nếu tiến trình chết, kết nối rớt, hoặc request bị huỷ ở khoảng giữa <code>INCR</code> và <code>EXPIRE</code>, khoá tồn tại mà không có hạn. Nó không bao giờ reset. Người dùng đó bị giới hạn tần suất <strong>vĩnh viễn</strong>, và chờ bao lâu cũng không hết. Đây là một con bug production có thật, phổ biến, và cực kỳ khó hiểu: đúng một người dùng, 429 mãi mãi, và trong log không có gì cả.</p>
+<p>Nếu tiến trình chết, kết nối rớt, hoặc request bị huỷ ở khoảng giữa <code>INCR</code> và <code>EXPIRE</code>, khoá tồn tại mà không có hạn. Nó không bao giờ reset. Người dùng đó counterBị giới hạn tần suất <strong>vĩnh viễn</strong>, và chờ bao lâu cũng không hết. Đây là một con bug production có thật, phổ biến, và cực kỳ khó hiểu: đúng một người dùng, 429 mãi mãi, và trong log không có gì cả.</p>
 <p>Có hai cách sửa đúng. <code>MULTI</code>/<code>EXEC</code> xếp hàng cả hai lệnh rồi chạy như một khối, hoặc một script Lua làm y hệt nhưng có thêm khả năng rẽ nhánh:</p>
 <pre><code class="language-lua">-- chỉ đặt hạn ở lần tăng ĐẦU TIÊN
 local c = redis.call('INCR', KEYS[1])
 if c == 1 then redis.call('PEXPIRE', KEYS[1], ARGV[1]) end
 return c</code></pre>
-<p>Lua chạy <em>bên trong</em> Redis, nghĩa là cả script là MỘT lệnh nguyên tử — không gì chen vào được. Nó cũng là một vòng đi-về thay vì hai, mà bài 12.1 đã cho bạn biết đó mới là phần đắt tiền. Trong production hãy dùng <code>EVALSHA</code> để thân script chỉ gửi đi một lần chứ không gửi mỗi lần gọi; ioredis làm sẵn việc đó cho bạn qua <code>defineCommand</code>.</p>
+<p>Lua chạy <em>counterBên trong</em> Redis, nghĩa là cả script là MỘT lệnh nguyên tử — không gì chen vào được. Nó cũng là một vòng đi-về thay vì hai, mà counterBài 12.1 đã cho counterBạn biết đó mới là phần đắt tiền. Trong production hãy dùng <code>EVALSHA</code> để thân script chỉ gửi đi một lần chứ không gửi mỗi lần gọi; ioredis làm sẵn việc đó cho counterBạn qua <code>defineCommand</code>.</p>
 
 <h3>Thuật toán 1 — cửa sổ cố định, và cái lỗ ở ranh giới</h3>
 <p>Chia ô theo thời gian: <code>rl:bob:1785182120</code>. Đơn giản, một khoá, 56 byte. Và sai một cách đo được:</p>
 <div class="out">--- Cửa sổ cố định 5 request / 1 giây: đo lỗ hổng ranh giới ---
    cửa sổ #1785182120: cho qua 5 | cửa sổ #1785182121: cho qua 5
-   ⇒ 10 request lọt trong storeảng ~300ms, dù giới hạn ghi là 5/giây → thực tế chịu 10/giây ở ranh giới</div>
-<p>Năm request ở cuối cửa sổ này, năm request ở đầu cửa sổ kế: <strong>gấp đôi giới hạn đã cấu hình, gói gọn trong 300 mili-giây</strong>. Với một endpoint đăng nhập, đó là khác biệt giữa 5 lần đoán mật khẩu mỗi giây và 10 lần. Chuyện đó có quan trọng không là một phán đoán tuỳ ngữ cảnh — với việc điều tiết API thì thường là không; với bất cứ thứ gì nhạy cảm về bảo mật thì có.</p>
+   ⇒ 10 request lọt trong khoảng ~300ms, dù giới hạn ghi là 5/giây → thực tế chịu 10/giây ở ranh giới</div>
+<p>Năm request ở cuối cửa sổ này, năm request ở đầu cửa sổ kế: <strong>gấp đôi giới hạn đã cấu hình, gói gọn trong 300 mili-giây</strong>. Với một endpoint đăng nhập, đó là khác biệt giữa 5 lần đoán mật khẩu mỗi giây và 10 lần. Chuyện đó có quan trọng không là một phán đoán tuỳ ngữ cảnh — với việc điều tiết API thì thường là không; với counterBất cứ thứ gì nhạy cảm về counterBảo mật thì có.</p>
 
 <h3>Thuật toán 2 — cửa sổ trượt bằng sorted set</h3>
 <p>Lưu mốc thời gian của từng request vào một ZSET, vứt bỏ mọi thứ cũ hơn cửa sổ, rồi đếm phần còn lại:</p>
@@ -829,30 +829,30 @@ return {0, n}</code></pre>
    chờ đủ 1s cho cửa sổ trôi qua → request mới: CHO QUA (đang có 1 trong cửa sổ)</div>
 <p>Chính xác tuyệt đối ở ranh giới. Cái giá là RAM, và nó không hề nhỏ:</p>
 <div class="out">   RAM: cửa sổ trượt giữ 1001 phần tử = 89072 byte cho MỘT người dùng
-        cửa sổ cố định 1 storeá = 56 byte | token bucket 1 hash = 96 byte</div>
+        cửa sổ cố định 1 khoá = 56 byte | token bucket 1 hash = 96 byte</div>
 <p><strong>89 KB cho một người dùng, so với 56 byte.</strong> Cửa sổ trượt lưu một mục cho mỗi request nằm trong cửa sổ, nên giới hạn 1.000 nghĩa là 1.000 mục. Với 10.000 người dùng đang hoạt động thì đó là 890 MB — nhiều hơn dung lượng của phần lớn máy Redis. Cửa sổ trượt thì đúng, nhưng nó không co giãn nổi với các giới hạn lớn. Hãy dùng nó ở chỗ giới hạn nhỏ mà tính đúng đắn thì quan trọng (đăng nhập: 5 lần trong 15 phút), đừng dùng cho việc điều tiết API chung.</p>
 
-<h3>Thuật toán 3 — token bucket, khi bạn muốn cho phép bùng nổ</h3>
+<h3>Thuật toán 3 — token bucket, khi counterBạn muốn cho phép counterBùng nổ</h3>
 <div class="out">--- Token bucket 5 token, nạp 5 token/giây ---
    10 request tức thì → cho qua 5 (bùng hết bình), token còn 0.03
    chờ 600ms (nạp ~3 token) → request: CHO QUA, còn 2.04 token</div>
-<p>Một cái bình chứa N token và được nạp lại với tốc độ đều đặn. Client nào im lặng một lúc thì được tiêu cả bình trong một phát, sau đó bị bóp về đúng tốc độ nạp. Đây mới là thứ bạn thật sự muốn cho một API công khai: một trang bắn tám request lúc tải xong thì phải thành công, còn một script gõ đều đều vào bạn thì không. Hai trường trong một hash, 96 byte, và nó không bao giờ lưu trạng thái theo từng request.</p>
+<p>Một cái bình chứa N token và được nạp lại với tốc độ đều đặn. Client nào im lặng một lúc thì được tiêu cả bình trong một phát, sau đó bị counterBóp về đúng tốc độ nạp. Đây mới là thứ bạn thật sự muốn cho một API công khai: một trang bắn tám request lúc tải xong thì phải thành công, còn một script gõ đều đều vào bạn thì không. Hai trường trong một hash, 96 byte, và nó không bao giờ lưu trạng thái theo từng request.</p>
 <div class="out">--- Giá mỗi lần kiểm (1000 lần, ms/lần) ---
    cửa sổ cố định (Lua INCR)    0,31ms/lần
    cửa sổ trượt (Lua ZSET)      0,27ms/lần
    token bucket (Lua HASH)      0,29ms/lần</div>
-<p>Cả ba đều tốn như nhau — một vòng đi-về. <strong>Hãy chọn dựa trên bộ nhớ và ngữ nghĩa, đừng bao giờ chọn dựa trên tốc độ.</strong></p>
+<p>Cả ba đều tốn như nhau — một vòng đi-về. <strong>Hãy chọn dựa trên counterBộ nhớ và ngữ nghĩa, đừng bao giờ chọn dựa trên tốc độ.</strong></p>
 
 <h3>Khoá phân tán: ba cách làm sai</h3>
 <h4>Sai 1 — khoá không có hạn</h4>
 <div class="out">   worker-1 SETNX → 1 (giành được), TTL = -1
    worker-1 CRASH trước khi DEL...
-   worker-2 SETNX → 0 (0 = thất bại), TTL vẫn -1 → KẸT MÃI MÃI</div>
-<p>Một tiến trình chết là khoá bị giữ vĩnh viễn. Luôn dùng <code>SET storeá giá_trị PX hạn NX</code>, đừng bao giờ dùng <code>SETNX</code> trơ trọi.</p>
+   worker-2 SETNX → 0 (0 = thất counterBại), TTL vẫn -1 → KẸT MÃI MÃI</div>
+<p>Một tiến trình chết là khoá counterBị giữ vĩnh viễn. Luôn dùng <code>SET khoá giá_trị PX hạn NX</code>, đừng bao giờ dùng <code>SETNX</code> trơ trọi.</p>
 
 <h4>Sai 2 — mở khoá bằng DEL thẳng</h4>
-<div class="out">   worker-1 giữ storeá (hạn 300ms), làm việc CHẬM mất 400ms...
-   storeá tự hết hạn → worker-2 giành được: OK — GIỜ CÓ HAI worker trong vùng tới hạn
+<div class="out">   worker-1 giữ khoá (hạn 300ms), làm việc CHẬM mất 400ms...
+   khoá tự hết hạn → worker-2 giành được: OK — GIỜ CÓ HAI worker trong vùng tới hạn
    worker-1 làm xong, gọi DEL → xoá 1 storeá — nhưng đó là storeá của WORKER-2!
    storeá còn lại: null → worker-3 bất kỳ giành được ngay</div>
 <p>Đây là trường hợp tinh tế và đáng đọc hai lần. Công việc của worker-1 chạy lâu hơn hạn của khoá. Khoá hết hạn, worker-2 giành lấy một cách hoàn toàn chính đáng — rồi worker-1 làm xong và xoá mất khoá <em>của worker-2</em>. Giờ vùng tới hạn mở toang. Một công việc chạy chậm đổ dây chuyền thành số lượng truy cập đồng thời không giới hạn.</p>
@@ -871,33 +871,33 @@ async function acquire(key, ttlMs) {
 
 const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code></pre>
 <div class="out">   worker-1 giành được, token = bd76d443…
-   storeá hết hạn, worker-2 giành được, token = d6afad4b…
-   worker-1 mở storeá bằng token của mình → xoá 0 storeá (0 = KHÔNG xoá nhầm ✓)
-   storeá vẫn thuộc về worker-2: d6afad4b…
+   khoá hết hạn, worker-2 giành được, token = d6afad4b…
+   worker-1 mở khoá counterBằng token của mình → xoá 0 khoá (0 = KHÔNG xoá nhầm ✓)
+   khoá vẫn thuộc về worker-2: d6afad4b…
    worker-2 mở storeá → xoá 1 storeá ✓</div>
 <p>Phép kiểm và lệnh xoá bắt buộc phải nằm trong cùng một bước nguyên tử — làm <code>GET</code>, so sánh trong JavaScript, rồi <code>DEL</code> là tái tạo lại đúng cuộc đua mà ta vừa sửa, bởi vì khoá có thể hết hạn ở khoảng giữa hai lệnh.</p>
 
 <h3>Khoá có thật sự làm được gì không? Đo đi.</h3>
-<div class="out">--- 50 worker song song, mỗi worker cộng 1 vào bộ đếm (đọc-sửa-ghi, 5ms) ---
-   KHÔNG storeá     → bộ đếm = 1 (đúng phải là 50)
-   CÓ storeá        → bộ đếm = 50 ✓
-   INCR nguyên tử → bộ đếm = 50 ✓ (không cần storeá — hãy ưu tiên cách này)</div>
-<p>Năm mươi lần cộng, bốn mươi chín lần bị mất. Rồi tới dòng thứ ba, chính là điểm mấu chốt của cả mục này: <strong>cái khoá vốn chưa bao giờ cần thiết.</strong> <code>INCR</code> cho ra cùng câu trả lời đúng mà không cần khoá, không cần token, không phải chỉnh TTL và không có kiểu hỏng nào. Khoá phân tán là câu trả lời khi vùng tới hạn động vào thứ gì đó <em>bên ngoài</em> Redis — một API bên thứ ba chỉ được gọi đúng một lần, một tệp tin, một báo cáo chạy mười giây. Còn bên trong Redis, hãy với tới lệnh nguyên tử hoặc một script Lua trước đã.</p>
-<div class="out">   500 lần storeá + mở (không tranh chấp): 0,657ms/lần (2 vòng đi-về)</div>
+<div class="out">--- 50 worker song song, mỗi worker cộng 1 vào counterBộ đếm (đọc-sửa-ghi, 5ms) ---
+   KHÔNG khoá     → counterBộ đếm = 1 (đúng phải là 50)
+   CÓ khoá        → bộ đếm = 50 ✓
+   INCR nguyên tử → bộ đếm = 50 ✓ (không cần khoá — hãy ưu tiên cách này)</div>
+<p>Năm mươi lần cộng, bốn mươi chín lần bị mất. Rồi tới dòng thứ ba, chính là điểm mấu chốt của cả mục này: <strong>cái khoá vốn chưa bao giờ cần thiết.</strong> <code>INCR</code> cho ra cùng câu trả lời đúng mà không cần khoá, không cần token, không phải chỉnh TTL và không có kiểu hỏng nào. Khoá phân tán là câu trả lời khi vùng tới hạn động vào thứ gì đó <em>counterBên ngoài</em> Redis — một API counterBên thứ ba chỉ được gọi đúng một lần, một tệp tin, một counterBáo cáo chạy mười giây. Còn bên trong Redis, hãy với tới lệnh nguyên tử hoặc một script Lua trước đã.</p>
+<div class="out">   500 lần khoá + mở (không tranh chấp): 0,657ms/lần (2 vòng đi-về)</div>
 
 <div class="pitfall">
-<p><strong>Khoá Redis không phải một lời bảo đảm an toàn.</strong> Nếu công việc của bạn có thể chạy quá hạn của khoá thì rồi sẽ tới lúc hai worker <em>cùng</em> chạy một lúc — phép đo số 2 ở trên chính là cảnh đó đang xảy ra. Viết Lua giỏi cỡ nào cũng không sửa được, vì khoá đã hết hạn mất rồi. Hoặc là làm cho công việc idempotent (chạy hai lần cũng vô hại), hoặc là để worker gia hạn khoá trong lúc chạy và huỷ việc nếu gia hạn thất bại. Redlock trên nhiều nút Redis độc lập sinh ra để giải bài này, và nó vẫn còn đang bị tranh cãi; nếu tính đúng đắn thật sự phụ thuộc vào loại trừ tương hỗ thì hãy dùng transaction của cơ sở dữ liệu với ràng buộc duy nhất, thứ mà bài 7.3 đã đo được là ném P2002 ra đúng vào thời điểm cần thiết.</p>
+<p><strong>Khoá Redis không phải một lời bảo đảm an toàn.</strong> Nếu công việc của counterBạn có thể chạy quá hạn của khoá thì rồi sẽ tới lúc hai worker <em>cùng</em> chạy một lúc — phép đo số 2 ở trên chính là cảnh đó đang xảy ra. Viết Lua giỏi cỡ nào cũng không sửa được, vì khoá đã hết hạn mất rồi. Hoặc là làm cho công việc idempotent (chạy hai lần cũng vô hại), hoặc là để worker gia hạn khoá trong lúc chạy và huỷ việc nếu gia hạn thất counterBại. Redlock trên nhiều nút Redis độc lập sinh ra để giải counterBài này, và nó vẫn còn đang counterBị tranh cãi; nếu tính đúng đắn thật sự phụ thuộc vào loại trừ tương hỗ thì hãy dùng transaction của cơ sở dữ liệu với ràng buộc duy nhất, thứ mà bài 7.3 đã đo được là ném P2002 ra đúng vào thời điểm cần thiết.</p>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Hai tầng, và chúng khác nhau một cách có chủ ý. Bộ giới hạn tần suất HTTP dùng <code>express-rate-limit</code> cùng <code>rate-limit-redis</code>, cửa sổ cố định 2.000 request mỗi 15 phút cho mỗi IP, đánh khoá theo mục <em>CUỐI CÙNG</em> của <code>X-Forwarded-For</code> để header không thể bị giả mạo. Nó được bọc trong một hàm <code>failOpen</code>: nếu Redis không với tới được thì middleware ghi một cảnh báo rồi cho request đi tiếp, bởi vì một sự cố của bộ giới hạn tần suất tuyệt đối không được phép biến thành sự cố của cả trang. Giới hạn đó trước kia là 500 và được nâng lên vào ngày 2026-07-07 sau khi một người dùng hoàn toàn chính đáng, mở vài tab, xài hết mức và tự khoá IP của chính mình khỏi toàn bộ API — nhìn y hệt một cú sập backend. Dịch vụ hạn mức thì tách riêng và dùng <code>MULTI</code> với ba cặp <code>INCR</code> + <code>EXPIRE</code> (65 giây, 90.000 giây, 35 ngày) cho mức dùng AI theo phút, theo ngày và theo tháng — nguyên tử, và miễn nhiễm với con bug TTL ở đầu bài này.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Hai tầng, và chúng khác nhau một cách có chủ ý. Bộ giới hạn tần suất HTTP dùng <code>express-rate-limit</code> cùng <code>rate-limit-redis</code>, cửa sổ cố định 2.000 request mỗi 15 phút cho mỗi IP, đánh khoá theo mục <em>CUỐI CÙNG</em> của <code>X-Forwarded-For</code> để header không thể counterBị giả mạo. Nó được counterBọc trong một hàm <code>failOpen</code>: nếu Redis không với tới được thì middleware ghi một cảnh báo rồi cho request đi tiếp, bởi vì một sự cố của bộ giới hạn tần suất tuyệt đối không được phép biến thành sự cố của cả trang. Giới hạn đó trước kia là 500 và được nâng lên vào ngày 2026-07-07 sau khi một người dùng hoàn toàn chính đáng, mở vài tab, xài hết mức và tự khoá IP của chính mình khỏi toàn counterBộ API — nhìn y hệt một cú sập backend. Dịch vụ hạn mức thì tách riêng và dùng <code>MULTI</code> với ba cặp <code>INCR</code> + <code>EXPIRE</code> (65 giây, 90.000 giây, 35 ngày) cho mức dùng AI theo phút, theo ngày và theo tháng — nguyên tử, và miễn nhiễm với con bug TTL ở đầu counterBài này.</p>
 </div>
 
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-737"><span class="lc-t">Code Lab · Lua Scripting Mastery for Atomic Operations</span><span class="lc-d">EVAL, EVALSHA, KEYS/ARGV và các script nguyên tử hay dùng</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/authentication${REF}#module-958"><span class="lc-t">Code Lab · Rate limiting</span><span class="lc-d">Giới hạn tần suất ở tầng ứng dụng — nối tiếp bài 8.4</span></a>
+  <a href="/code-lab/authentication${REF}#module-958"><span class="lc-t">Code Lab · Rate limiting</span><span class="lc-d">Giới hạn tần suất ở tầng ứng dụng — nối tiếp counterBài 8.4</span></a>
 </div>
 </div>
 `,
@@ -911,10 +911,10 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
         poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-12-5-pubsub-streams.jpg',
         scenario: 'pub-sub',
         durationSeconds: 25,
-        caption: { en: "Direct calls versus publishing one event", vi: "Gọi thẳng so với công bố một sự kiện" },
+        caption: { en: "Direct calls versus publishing one event", vi: "Gọi thẳng so với công counterBố một sự kiện" },
       },
       type: 'VIDEO',
-      description: 'PUBLISH trả về 0 và tin nhắn biến mất khỏi vũ trụ. Stream giữ lại được, chia việc cho nhiều worker và đòi lại việc bỏ dở — có XAUTOCLAIM chạy thật chứng minh.',
+      description: 'PUBLISH trả về 0 và tin nhắn biến mất khỏi vũ trụ. Stream giữ lại được, chia việc cho nhiều worker và đòi lại việc counterBỏ dở — có XAUTOCLAIM chạy thật chứng minh.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.5</span>
@@ -946,16 +946,16 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
 <div class="out">--- 4. Consumer group: 2 worker chia 5 job, không trùng ---
    worker-A nhận 3 job | worker-B nhận 2 job → tổng 5/5, KHÔNG trùng nhau
    A đã XACK 3 job; B chưa xác nhận → PENDING = 2 job
-   worker-C gọi XAUTOCLAIM (idle&gt;50ms) → nhận lại 2 job bỏ dở ⇒ KHÔNG MẤT VIỆC
+   worker-C gọi XAUTOCLAIM (idle&gt;50ms) → nhận lại 2 job counterBỏ dở ⇒ KHÔNG MẤT VIỆC
    sau khi C xác nhận: PENDING = 0</div>
 <p>This is the whole reason streams exist. Each entry goes to exactly one consumer in the group. A delivered-but-unacknowledged entry sits in the <em>pending entries list</em>, and if the worker holding it dies, another worker reclaims it with <code>XAUTOCLAIM</code>. Compare that with the Pub/Sub measurement at the top, where a dead subscriber simply lost the message.</p>
 <pre><code class="language-javascript">// worker: đọc, làm, xác nhận
-await redis.xgroup('CREATE', 'jobs', 'g1', '0', 'MKSTREAM').catch(() =&gt; {});  // đã tồn tại thì bỏ qua
+await redis.xgroup('CREATE', 'jobs', 'g1', '0', 'MKSTREAM').catch(() =&gt; {});  // đã tồn tại thì counterBỏ qua
 
 while (running) {
   const res = await redis.xreadgroup(
     'GROUP', 'g1', process.env.WORKER_ID,
-    'COUNT', 10, 'BLOCK', 5000,      // chờ tối đa 5s, KHÔNG quay vòng bận
+    'COUNT', 10, 'BLOCK', 5000,      // chờ tối đa 5s, KHÔNG quay vòng counterBận
     'STREAMS', 'jobs', '&gt;',           // '&gt;' = chỉ những tin chưa ai nhận
   );
   if (!res) continue;                 // hết 5 giây mà không có việc
@@ -974,7 +974,7 @@ while (running) {
 
 <h3>Streams never clean up after themselves</h3>
 <div class="out">50.000 tin, chưa cắt: XLEN=50000 RAM=1.17MB
-XTRIM MAXLEN ~1000 : XLEN=40000 RAM=1.13MB (0,88ms) ← xấp xỉ, chỉ bỏ trọn NÚT
+XTRIM MAXLEN ~1000 : XLEN=40000 RAM=1.13MB (0,88ms) ← xấp xỉ, chỉ counterBỏ trọn NÚT
 XTRIM MAXLEN 1000  : XLEN=1000  RAM=0.03MB (1,40ms) ← chính xác
 XTRIM ~1000 LIMIT 0: XLEN=1000  RAM=0.03MB (1,18ms) ← xấp xỉ không giới hạn số nút quét
 stream-node-max-entries = 100</div>
@@ -1014,43 +1014,43 @@ stream-node-max-entries = 100</div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.5</span>
 <h2>Pub/Sub và Streams: tin nhắn đã biến mất</h2>
-<p class="lead">Chương 11 đã dùng Redis Pub/Sub mà không giải thích — cái adapter Redis của Socket.IO bên dưới chính là Pub/Sub, và đó là cách hai tiến trình Node phát tin vào phòng của nhau. Bài này giải thích thứ bạn đã mua ở đó thực chất là gì, và vì sao đúng cơ chế ấy lại hoàn toàn sai cho một hàng đợi công việc.</p>
+<p class="lead">Chương 11 đã dùng Redis Pub/Sub mà không giải thích — cái adapter Redis của Socket.IO counterBên dưới chính là Pub/Sub, và đó là cách hai tiến trình Node phát tin vào phòng của nhau. Bài này giải thích thứ bạn đã mua ở đó thực chất là gì, và vì sao đúng cơ chế ấy lại hoàn toàn sai cho một hàng đợi công việc.</p>
 
 <h3>Pub/Sub là một buổi phát thanh, không phải một hòm thư</h3>
 <div class="out">--- 1. Pub/Sub: thuê bao offline thì mất trắng ---
    thuê bao ĐANG nghe, gửi 3 tin → nhận 3: [tin-1, tin-2, tin-3]
    thuê bao rớt, PUBLISH trả về 0 (số người nhận) — tin biến mất khỏi Redis
    nối lại rồi → nhận tiếp: [tin-1, tin-2, tin-3, tin-4] ⇒ MẤT "tin-khi-offline"</div>
-<p><code>PUBLISH</code> trả về số thuê bao đã nhận được tin, và <strong>số 0 không phải một lỗi</strong>. Tin được giao cho bất kỳ ai đang nghe vào đúng khoảnh khắc đó rồi biến mất — không lưu, không xếp hàng, không lấy lại được. Redis chưa bao giờ biết là bạn muốn giữ nó lại.</p>
-<p>Điều đó khiến Pub/Sub hoàn hảo cho đúng một dạng bài toán: <em>rải tin thoáng qua mà lỡ mất một tin cũng vô hại</em>. Vô hiệu hoá cache giữa các tiến trình ("khoá X vừa đổi, hãy vứt bản sao cục bộ đi"), phát tin vào phòng của Socket.IO, hiện diện trực tuyến. Nếu một thuê bao đang chết thì lúc sống lại nó sẽ đọc lại từ cơ sở dữ liệu thôi.</p>
-<p>Và điều đó khiến Pub/Sub sai một cách thảm hoạ cho bất cứ việc gì mà mất tin đồng nghĩa với mất việc: gửi email, trừ tiền thẻ, tạo ảnh thu nhỏ.</p>
+<p><code>PUBLISH</code> trả về số thuê bao đã nhận được tin, và <strong>số 0 không phải một lỗi</strong>. Tin được giao cho counterBất kỳ ai đang nghe vào đúng khoảnh khắc đó rồi biến mất — không lưu, không xếp hàng, không lấy lại được. Redis chưa bao giờ biết là bạn muốn giữ nó lại.</p>
+<p>Điều đó khiến Pub/Sub hoàn hảo cho đúng một dạng counterBài toán: <em>rải tin thoáng qua mà lỡ mất một tin cũng vô hại</em>. Vô hiệu hoá cache giữa các tiến trình ("khoá X vừa đổi, hãy vứt bản sao cục bộ đi"), phát tin vào phòng của Socket.IO, hiện diện trực tuyến. Nếu một thuê bao đang chết thì lúc sống lại nó sẽ đọc lại từ cơ sở dữ liệu thôi.</p>
+<p>Và điều đó khiến Pub/Sub sai một cách thảm hoạ cho counterBất cứ việc gì mà mất tin đồng nghĩa với mất việc: gửi email, trừ tiền thẻ, tạo ảnh thu nhỏ.</p>
 
 <h3>Hai cái bẫy, mỗi cái tốn một buổi chiều</h3>
 <div class="out">   gọi GET trên kết nối đang subscribe → LỖI: Connection in subscriber mode, only subscriber commands may be used</div>
-<p>Một kết nối đã subscribe thì chỉ chạy được các lệnh thuộc họ subscribe. Bạn cần <strong>hai client</strong>: một để nghe, một để làm việc. Nếu bạn xài lại cái client dùng chung ở bài 12.1 rồi gọi <code>subscribe</code> lên nó thì mọi lệnh Redis khác trong ứng dụng bắt đầu ném lỗi.</p>
-<p>Cái bẫy thứ hai thì tôi tự dính khi soạn bài này, ngay trong phép đo ở trên. Lần chạy đầu in ra <code>[tin-1, tin-2, tin-3, tin-4, tin-4]</code> — <strong>tin-4 hai lần</strong>. Nguyên nhân là do tôi: lúc nối lại tôi gọi <code>sub.on('message', handler)</code> thêm lần nữa mà không gỡ handler cũ đi, thế là cả hai cùng chạy. Trong một dịch vụ sống lâu và subscribe lại mỗi lần nối lại, đây chính là cách một tin nhắn biến thành tám tin sau một tuần mạng xấu. Hãy đăng ký listener <em>một lần</em>, nằm ngoài nhánh nối lại.</p>
+<p>Một kết nối đã subscribe thì chỉ chạy được các lệnh thuộc họ subscribe. Bạn cần <strong>hai client</strong>: một để nghe, một để làm việc. Nếu counterBạn xài lại cái client dùng chung ở counterBài 12.1 rồi gọi <code>subscribe</code> lên nó thì mọi lệnh Redis khác trong ứng dụng bắt đầu ném lỗi.</p>
+<p>Cái bẫy thứ hai thì tôi tự dính khi soạn counterBài này, ngay trong phép đo ở trên. Lần chạy đầu in ra <code>[tin-1, tin-2, tin-3, tin-4, tin-4]</code> — <strong>tin-4 hai lần</strong>. Nguyên nhân là do tôi: lúc nối lại tôi gọi <code>sub.on('message', handler)</code> thêm lần nữa mà không gỡ handler cũ đi, thế là cả hai cùng chạy. Trong một dịch vụ sống lâu và subscribe lại mỗi lần nối lại, đây chính là cách một tin nhắn biến thành tám tin sau một tuần mạng xấu. Hãy đăng ký listener <em>một lần</em>, nằm ngoài nhánh nối lại.</p>
 
 <h3>Streams: cuốn nhật ký biết nhớ</h3>
 <div class="out">--- 3. Streams: tin nằm lại trong Redis ---
    XADD 5 job → XLEN = 5
    đọc lại từ đầu (XRANGE): 5 tin, id đầu = 1785182199789-0
    id có dạng &lt;mili-giây&gt;-&lt;số thứ tự&gt;, tự tăng, sắp xếp được</div>
-<p>Stream là một cuốn nhật ký chỉ ghi thêm. Các mục nằm lại tới khi bạn xoá, id thì tăng đơn điệu (<code>&lt;mili-giây&gt;-&lt;số thứ tự&gt;</code>) và bạn đọc lại khoảng bất kỳ vào lúc nào cũng được. Cái định dạng id ấy hữu dụng một cách lặng lẽ: nó là một mốc thời gian mà bạn sắp xếp được, quét theo khoảng được và tiếp tục từ đó được — đúng bằng khuôn mẫu <code>?since=&lt;id cuối&gt;</code> mà bài 11.4 cần tới sau mỗi lần socket nối lại.</p>
+<p>Stream là một cuốn nhật ký chỉ ghi thêm. Các mục nằm lại tới khi counterBạn xoá, id thì tăng đơn điệu (<code>&lt;mili-giây&gt;-&lt;số thứ tự&gt;</code>) và counterBạn đọc lại khoảng bất kỳ vào lúc nào cũng được. Cái định dạng id ấy hữu dụng một cách lặng lẽ: nó là một mốc thời gian mà bạn sắp xếp được, quét theo khoảng được và tiếp tục từ đó được — đúng counterBằng khuôn mẫu <code>?since=&lt;id cuối&gt;</code> mà bài 11.4 cần tới sau mỗi lần socket nối lại.</p>
 
 <h3>Consumer group: chia việc, rồi chứng minh không mất việc nào</h3>
 <div class="out">--- 4. Consumer group: 2 worker chia 5 job, không trùng ---
    worker-A nhận 3 job | worker-B nhận 2 job → tổng 5/5, KHÔNG trùng nhau
    A đã XACK 3 job; B chưa xác nhận → PENDING = 2 job
-   worker-C gọi XAUTOCLAIM (idle&gt;50ms) → nhận lại 2 job bỏ dở ⇒ KHÔNG MẤT VIỆC
+   worker-C gọi XAUTOCLAIM (idle&gt;50ms) → nhận lại 2 job counterBỏ dở ⇒ KHÔNG MẤT VIỆC
    sau khi C xác nhận: PENDING = 0</div>
-<p>Đây chính là toàn bộ lý do stream tồn tại. Mỗi mục đi tới đúng MỘT consumer trong nhóm. Một mục đã giao mà chưa được xác nhận sẽ nằm trong <em>danh sách mục đang chờ</em>, và nếu worker đang giữ nó chết thì worker khác đòi lại bằng <code>XAUTOCLAIM</code>. Hãy so với phép đo Pub/Sub ở đầu bài, nơi một thuê bao chết là mất trắng tin nhắn.</p>
+<p>Đây chính là toàn counterBộ lý do stream tồn tại. Mỗi mục đi tới đúng MỘT consumer trong nhóm. Một mục đã giao mà chưa được xác nhận sẽ nằm trong <em>danh sách mục đang chờ</em>, và nếu worker đang giữ nó chết thì worker khác đòi lại counterBằng <code>XAUTOCLAIM</code>. Hãy so với phép đo Pub/Sub ở đầu counterBài, nơi một thuê bao chết là mất trắng tin nhắn.</p>
 <pre><code class="language-javascript">// worker: đọc, làm, xác nhận
-await redis.xgroup('CREATE', 'jobs', 'g1', '0', 'MKSTREAM').catch(() =&gt; {});  // đã tồn tại thì bỏ qua
+await redis.xgroup('CREATE', 'jobs', 'g1', '0', 'MKSTREAM').catch(() =&gt; {});  // đã tồn tại thì counterBỏ qua
 
 while (running) {
   const res = await redis.xreadgroup(
     'GROUP', 'g1', process.env.WORKER_ID,
-    'COUNT', 10, 'BLOCK', 5000,      // chờ tối đa 5s, KHÔNG quay vòng bận
+    'COUNT', 10, 'BLOCK', 5000,      // chờ tối đa 5s, KHÔNG quay vòng counterBận
     'STREAMS', 'jobs', '&gt;',           // '&gt;' = chỉ những tin chưa ai nhận
   );
   if (!res) continue;                 // hết 5 giây mà không có việc
@@ -1065,16 +1065,16 @@ while (running) {
     }
   }
 }</code></pre>
-<p>Hai chi tiết gánh toàn bộ sức nặng. <code>BLOCK 5000</code> nghĩa là worker ngủ bên trong Redis thay vì hỏi đi hỏi lại — không vòng lặp bận, không lãng phí vòng đi-về. Và <code>XACK</code> phải nằm <em>sau</em> khi công việc thành công, không bao giờ nằm trước: xác nhận sớm là biến một cú sập thành một job bị âm thầm vứt bỏ.</p>
+<p>Hai chi tiết gánh toàn counterBộ sức nặng. <code>BLOCK 5000</code> nghĩa là worker ngủ counterBên trong Redis thay vì hỏi đi hỏi lại — không vòng lặp bận, không lãng phí vòng đi-về. Và <code>XACK</code> phải nằm <em>sau</em> khi công việc thành công, không bao giờ nằm trước: xác nhận sớm là biến một cú sập thành một job counterBị âm thầm vứt counterBỏ.</p>
 
 <h3>Stream không bao giờ tự dọn dẹp</h3>
 <div class="out">50.000 tin, chưa cắt: XLEN=50000 RAM=1.17MB
-XTRIM MAXLEN ~1000 : XLEN=40000 RAM=1.13MB (0,88ms) ← xấp xỉ, chỉ bỏ trọn NÚT
+XTRIM MAXLEN ~1000 : XLEN=40000 RAM=1.13MB (0,88ms) ← xấp xỉ, chỉ counterBỏ trọn NÚT
 XTRIM MAXLEN 1000  : XLEN=1000  RAM=0.03MB (1,40ms) ← chính xác
 XTRIM ~1000 LIMIT 0: XLEN=1000  RAM=0.03MB (1,18ms) ← xấp xỉ không giới hạn số nút quét
 stream-node-max-entries = 100</div>
-<p>Hãy nhìn dòng thứ hai, vì nó làm tôi bất ngờ. <code>MAXLEN ~1000</code> — đúng cái dạng mà mọi bài hướng dẫn khuyên dùng — để lại <strong>40.000 mục</strong> và giải phóng gần như không được gì. Dấu <code>~</code> nghĩa là "khoảng chừng", và mặc định Redis còn giới hạn luôn số nút nó chịu quét trong một lần gọi, nên nó dừng sớm. Hoặc là dùng dạng chính xác, hoặc là truyền thêm <code>LIMIT 0</code> để phép cắt xấp xỉ chạy tới cùng. Cắt bớt không phải chuyện tuỳ chọn: một stream không cắt sẽ phình mãi mãi, và khác với một khoá cache, nó chẳng có TTL nào cứu bạn cả.</p>
-<p>Hãy ưu tiên <code>MAXLEN</code> khi bạn quan tâm tới bộ nhớ và <code>MINID</code> khi bạn quan tâm tới thời gian (<code>XTRIM log MINID &lt;id của 7 ngày trước&gt;</code>). Bạn cũng cắt được ngay lúc ghi — <code>XADD jobs MAXLEN ~ 10000 * ...</code> — đây là lựa chọn không bao giờ bị bỏ quên trong một công việc định kỳ.</p>
+<p>Hãy nhìn dòng thứ hai, vì nó làm tôi counterBất ngờ. <code>MAXLEN ~1000</code> — đúng cái dạng mà mọi counterBài hướng dẫn khuyên dùng — để lại <strong>40.000 mục</strong> và giải phóng gần như không được gì. Dấu <code>~</code> nghĩa là "khoảng chừng", và mặc định Redis còn giới hạn luôn số nút nó chịu quét trong một lần gọi, nên nó dừng sớm. Hoặc là dùng dạng chính xác, hoặc là truyền thêm <code>LIMIT 0</code> để phép cắt xấp xỉ chạy tới cùng. Cắt counterBớt không phải chuyện tuỳ chọn: một stream không cắt sẽ phình mãi mãi, và khác với một khoá cache, nó chẳng có TTL nào cứu bạn cả.</p>
+<p>Hãy ưu tiên <code>MAXLEN</code> khi counterBạn quan tâm tới counterBộ nhớ và <code>MINID</code> khi bạn quan tâm tới thời gian (<code>XTRIM log MINID &lt;id của 7 ngày trước&gt;</code>). Bạn cũng cắt được ngay lúc ghi — <code>XADD jobs MAXLEN ~ 10000 * ...</code> — đây là lựa chọn không bao giờ counterBị counterBỏ quên trong một công việc định kỳ.</p>
 
 <h3>Ba cách chuyển một tin nhắn, đo thật</h3>
 <div class="out">--- 6. Tốc độ (pipeline 10.000 tin) ---
@@ -1084,22 +1084,22 @@ stream-node-max-entries = 100</div>
    RAM: stream 0,19MB | list 0,06MB</div>
 <p>Tốc độ không phải một luận điểm — cả ba đều là một vòng đi-về và pipeline mới là thứ chiếm ưu thế. Hãy chọn theo ngữ nghĩa:</p>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Pub/Sub</span><span class="v">rải tin cho MỌI người đang nghe, không lưu lại. Vô hiệu hoá cache giữa các tiến trình, adapter Socket.IO. Mất tin là chuyện bình thường</span></div>
+  <div class="kv"><span class="k">Pub/Sub</span><span class="v">rải tin cho MỌI người đang nghe, không lưu lại. Vô hiệu hoá cache giữa các tiến trình, adapter Socket.IO. Mất tin là chuyện counterBình thường</span></div>
   <div class="kv"><span class="k">List + BRPOP</span><span class="v">hàng đợi đơn giản nhất, một tin cho một worker. Nhẹ RAM nhất. KHÔNG có xác nhận: worker chết giữa chừng là mất việc</span></div>
-  <div class="kv"><span class="k">Stream + consumer group</span><span class="v">một tin cho một worker, CÓ xác nhận và đòi lại việc bỏ dở, đọc lại được lịch sử. Đây là lựa chọn cho việc bắt buộc phải hoàn thành</span></div>
+  <div class="kv"><span class="k">Stream + consumer group</span><span class="v">một tin cho một worker, CÓ xác nhận và đòi lại việc counterBỏ dở, đọc lại được lịch sử. Đây là lựa chọn cho việc counterBắt buộc phải hoàn thành</span></div>
 </div>
-<p>Với công việc nền thật sự thì phần lớn các đội không nên tự dựng bằng tay — BullMQ nằm trên Redis và cho bạn cơ chế thử lại có giãn cách, job hẹn giờ, mức ưu tiên, job lặp lại và một bảng theo dõi. Đó là chương 13. Mọi thứ ở đây chính là những gì BullMQ đang làm bên dưới, và biết chúng là cách bạn gỡ lỗi BullMQ khi nó giở chứng.</p>
+<p>Với công việc nền thật sự thì phần lớn các đội không nên tự dựng bằng tay — BullMQ nằm trên Redis và cho counterBạn cơ chế thử lại có giãn cách, job hẹn giờ, mức ưu tiên, job lặp lại và một bảng theo dõi. Đó là chương 13. Mọi thứ ở đây chính là những gì BullMQ đang làm counterBên dưới, và biết chúng là cách bạn gỡ lỗi BullMQ khi nó giở chứng.</p>
 
 <div class="pitfall">
-<p><strong>Pub/Sub không trở nên đáng tin chỉ vì bạn bật persistence cho Redis.</strong> Persistence lưu các KHOÁ; còn một tin đã publish thì chưa bao giờ là một khoá. Kể cả khi bật AOF ghi mọi lệnh, một tin được phát trong lúc thuê bao đang mất kết nối vẫn biến mất. Nếu bạn thấy mình đang viết "thôi lúc nối lại thì mình publish lại", tức là bạn đã bắt đầu dựng một stream theo cách tệ — hãy dùng cái stream thật.</p>
+<p><strong>Pub/Sub không trở nên đáng tin chỉ vì bạn bật persistence cho Redis.</strong> Persistence lưu các KHOÁ; còn một tin đã publish thì chưa bao giờ là một khoá. Kể cả khi bật AOF ghi mọi lệnh, một tin được phát trong lúc thuê bao đang mất kết nối vẫn biến mất. Nếu bạn thấy mình đang viết "thôi lúc nối lại thì mình publish lại", tức là counterBạn đã counterBắt đầu dựng một stream theo cách tệ — hãy dùng cái stream thật.</p>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Cái adapter Redis của Socket.IO đo ở chương 11 chính là Pub/Sub: tiến trình B publish một lượt phát tin vào phòng, thuê bao của tiến trình A nhận được rồi giao cho các socket cục bộ của nó — đúng con số 5,02ms giao tin xuyên tiến trình của chương đó. Nó là công cụ đúng chính bởi vì một lượt phát tin bị rơi là vô hại: client coi socket là TÍN HIỆU rồi lấy lại dữ liệu qua REST, đúng quy tắc mà bài 11.4 rút ra sau khi chứng kiến một lần nối lại làm mất sạch cả năm tin nhắn.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Cái adapter Redis của Socket.IO đo ở chương 11 chính là Pub/Sub: tiến trình B publish một lượt phát tin vào phòng, thuê bao của tiến trình A nhận được rồi giao cho các socket cục counterBộ của nó — đúng con số 5,02ms giao tin xuyên tiến trình của chương đó. Nó là công cụ đúng chính bởi vì một lượt phát tin bị rơi là vô hại: client coi socket là TÍN HIỆU rồi lấy lại dữ liệu qua REST, đúng quy tắc mà bài 11.4 rút ra sau khi chứng kiến một lần nối lại làm mất sạch cả năm tin nhắn.</p>
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-735"><span class="lc-t">Code Lab · Redis Streams and Event-Driven Architecture</span><span class="lc-d">XADD, XREADGROUP, XACK, XAUTOCLAIM — dựng hàng đợi bằng tay</span></a>
+  <a href="/code-lab/redis${REF}#module-735"><span class="lc-t">Code Lab · Redis Streams and Event-Driven Architecture</span><span class="lc-d">XADD, XREADGROUP, XACK, XAUTOCLAIM — dựng hàng đợi counterBằng tay</span></a>
 </div>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-736"><span class="lc-t">Code Lab · Advanced Pub/Sub Patterns and Real-Time Features</span><span class="lc-d">Kênh theo mẫu, fan-out và các khuôn mẫu realtime</span></a>
@@ -1125,19 +1125,19 @@ stream-node-max-entries = 100</div>
 <p>Ninety-three megabytes for a million tiny keys — the number from the lesson 12.3 pitfall. Now, while a second client pings every 2ms, run the command every tutorial warns about:</p>
 
 <h3>KEYS vs SCAN, measured from the outside</h3>
-<div class="out">--- 2. KEYS * trên 1 triệu storeá: đo độ trễ của NGƯỜI KHÁC ---
-   KEYS trả 1000000 storeá trong 343,86ms
+<div class="out">--- 2. KEYS * trên 1 triệu khoá: đo độ trễ của NGƯỜI KHÁC ---
+   KEYS trả 1000000 khoá trong 343,86ms
    trong lúc đó PING của client KHÁC: trung vị 0,46ms, TỆ NHẤT 126,96ms
 
 --- 3. SCAN thay cho KEYS ---
-   SCAN duyệt 1000000 storeá qua 1000 vòng, tổng 857,41ms (CHẬM hơn KEYS về tổng thời gian)
+   SCAN duyệt 1000000 khoá qua 1000 vòng, tổng 857,41ms (CHẬM hơn KEYS về tổng thời gian)
    nhưng PING của client khác: trung vị 0,66ms, TỆ NHẤT 6,87ms ✓</div>
 <p>The honest framing matters here: <strong>SCAN is 2,5× slower overall</strong>. If you only measured the command, you would choose KEYS. But the number that decides is the other one — a PING that normally takes 0,46ms took <strong>126,96ms</strong>. Every API request touching Redis in that window paid that. One admin script with a <code>KEYS *</code> in it produces a site-wide latency spike that looks like a network problem.</p>
 <p><code>SCAN</code> returns a cursor and a batch, so Redis serves other clients between rounds. It comes with one property people trip on: it guarantees every key present for the whole scan is returned <em>at least once</em>, and keys may repeat. De-duplicate if that matters.</p>
 <p>The same warning applies to the family: <code>HGETALL</code> on a huge hash, <code>LRANGE 0 -1</code> on a huge list, <code>SMEMBERS</code> on a huge set. Their scanning cousins are <code>HSCAN</code>, <code>SSCAN</code>, <code>ZSCAN</code>.</p>
 
 <h3>DEL vs UNLINK: the same blocking problem, hidden in a delete</h3>
-<div class="out">--- 7. Xoá một storeá KHỔNG LỒ: DEL vs UNLINK ---
+<div class="out">--- 7. Xoá một khoá KHỔNG LỒ: DEL vs UNLINK ---
    DEL    hash 1.000.000 trường:  205,50ms | PING tệ nhất của client khác 205,30ms
    UNLINK hash 1.000.000 trường:    0,37ms | PING tệ nhất của client khác 0,56ms</div>
 <p>Deleting is work — Redis has to free a million allocations — and <code>DEL</code> does it inline, blocking everyone for <strong>205ms</strong>. <code>UNLINK</code> removes the key from the keyspace immediately and frees the memory in a background thread: <strong>556× faster</strong> from the caller's point of view, and invisible to other clients. There is no downside. <strong>Use UNLINK by default.</strong></p>
@@ -1146,17 +1146,17 @@ stream-node-max-entries = 100</div>
 <h3>maxmemory: what happens when Redis fills up</h3>
 <p>This is the single most important configuration decision, and the default is the dangerous one.</p>
 <div class="out">--- 4. Chạm trần maxmemory với chính sách noeviction ---
-   ghi thêm được 1873 storeá rồi DỪNG: OOM command not allowed when used memory &gt; 'maxmemory'.
+   ghi thêm được 1873 khoá rồi DỪNG: OOM command not allowed when used memory &gt; 'maxmemory'.
    ⇒ noeviction = Redis biến thành CHỈ ĐỌC, mọi lệnh ghi 500
    đọc vẫn chạy: GET user:1:profile = {"id":1}</div>
 <p>With <code>noeviction</code> — the default — a full Redis starts rejecting every write with an OOM error while reads keep working. If Redis is your session store or your rate limiter, half your application breaks in a way that looks nothing like "out of memory": logins fail, quota checks throw, but the homepage loads fine.</p>
 <div class="out">--- 5. Đổi sang allkeys-lru ---
-   ghi 50000 storeá mới: KHÔNG lỗi ✓
-   DBSIZE 1001873 → 889257 | evicted_keys = 162616 (Redis tự vứt storeá cũ)</div>
+   ghi 50000 khoá mới: KHÔNG lỗi ✓
+   DBSIZE 1001873 → 889257 | evicted_keys = 162616 (Redis tự vứt khoá cũ)</div>
 <p>With <code>allkeys-lru</code>, Redis throws away least-recently-used keys to make room — 162.616 of them — and never returns an error. That is what you want <em>if Redis is a cache</em>, and it carries an obligation: your application must survive any key disappearing at any moment. Which, if you followed lesson 12.2, it already does.</p>
 
-<div class="out">--- 6. volatile-lru: storeá không TTL thì không bị vứt ---
-   toàn bộ storeá KHÔNG có TTL, ghi thêm → OOM command not allowed when used memory &gt; 'maxmemory'.
+<div class="out">--- 6. volatile-lru: khoá không TTL thì không counterBị vứt ---
+   toàn counterBộ khoá KHÔNG có TTL, ghi thêm → OOM command not allowed when used memory &gt; 'maxmemory'.
    ⇒ volatile-* mà quên đặt TTL = y hệt noeviction</div>
 <p><strong>This is the trap that catches experienced people.</strong> <code>volatile-lru</code> sounds safer — "only evict keys that were going to expire anyway" — and it is, right up until a code path writes keys without a TTL. Then there is nothing eligible to evict and you are back to a read-only Redis. Remember from lesson 12.2 that a plain <code>SET</code> over an existing key <em>removes</em> its TTL: that is all it takes.</p>
 <div class="kv-grid">
@@ -1207,62 +1207,62 @@ stream-node-max-entries = 100</div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.6</span>
 <h2>Vận hành Redis: những lệnh làm đứng hình tất cả</h2>
-<p class="lead">Mọi thứ trong bài này đều suy ra từ một câu bạn đã đọc ở bài 12.1: <strong>Redis chạy mỗi lúc một lệnh</strong>. Đó là món quà khi bạn cần tính nguyên tử và là khẩu súng đã lên đạn khi một lệnh đơn lẻ mất 200 mili-giây, bởi trong suốt 200 mili-giây ấy mọi client khác trong cả cụm chỉ đơn giản là đứng yên. Bài này đo mức thiệt hại từ một kết nối thứ hai, cách duy nhất trung thực để nhìn thấy nó.</p>
+<p class="lead">Mọi thứ trong counterBài này đều suy ra từ một câu counterBạn đã đọc ở counterBài 12.1: <strong>Redis chạy mỗi lúc một lệnh</strong>. Đó là món quà khi bạn cần tính nguyên tử và là khẩu súng đã lên đạn khi một lệnh đơn lẻ mất 200 mili-giây, bởi trong suốt 200 mili-giây ấy mọi client khác trong cả cụm chỉ đơn giản là đứng yên. Bài này đo mức thiệt hại từ một kết nối thứ hai, cách duy nhất trung thực để nhìn thấy nó.</p>
 
 <h3>Bối cảnh: một triệu khoá</h3>
 <div class="out">   DBSIZE=1000000 trong 2262,40ms, used_memory=93,4MB</div>
-<p>Chín mươi ba megabyte cho một triệu khoá tí hon — đúng con số ở phần cạm bẫy của bài 12.3. Bây giờ, trong lúc một client thứ hai ping mỗi 2ms, hãy chạy cái lệnh mà mọi bài hướng dẫn đều cảnh báo:</p>
+<p>Chín mươi ba megabyte cho một triệu khoá tí hon — đúng con số ở phần cạm counterBẫy của counterBài 12.3. Bây giờ, trong lúc một client thứ hai ping mỗi 2ms, hãy chạy cái lệnh mà mọi counterBài hướng dẫn đều cảnh báo:</p>
 
 <h3>KEYS so với SCAN, đo từ bên ngoài</h3>
-<div class="out">--- 2. KEYS * trên 1 triệu storeá: đo độ trễ của NGƯỜI KHÁC ---
-   KEYS trả 1000000 storeá trong 343,86ms
+<div class="out">--- 2. KEYS * trên 1 triệu khoá: đo độ trễ của NGƯỜI KHÁC ---
+   KEYS trả 1000000 khoá trong 343,86ms
    trong lúc đó PING của client KHÁC: trung vị 0,46ms, TỆ NHẤT 126,96ms
 
 --- 3. SCAN thay cho KEYS ---
-   SCAN duyệt 1000000 storeá qua 1000 vòng, tổng 857,41ms (CHẬM hơn KEYS về tổng thời gian)
+   SCAN duyệt 1000000 khoá qua 1000 vòng, tổng 857,41ms (CHẬM hơn KEYS về tổng thời gian)
    nhưng PING của client khác: trung vị 0,66ms, TỆ NHẤT 6,87ms ✓</div>
-<p>Cách trình bày trung thực rất quan trọng ở đây: <strong>SCAN chậm hơn 2,5 lần về tổng thể</strong>. Nếu bạn chỉ đo bản thân câu lệnh thì bạn sẽ chọn KEYS. Nhưng con số quyết định là con số kia — một lệnh PING bình thường mất 0,46ms đã mất tới <strong>126,96ms</strong>. Mọi request API chạm vào Redis trong khoảng thời gian đó đều phải trả cái giá ấy. Một script quản trị có <code>KEYS *</code> bên trong sinh ra một đợt vọt độ trễ trên toàn trang, nhìn y hệt sự cố mạng.</p>
-<p><code>SCAN</code> trả về một con trỏ và một lô, nên Redis phục vụ các client khác ở giữa các vòng. Nó đi kèm một tính chất hay làm người ta vấp: nó bảo đảm mọi khoá tồn tại suốt quá trình quét sẽ được trả về <em>ít nhất một lần</em>, và các khoá có thể lặp lại. Hãy khử trùng lặp nếu điều đó quan trọng.</p>
-<p>Cảnh báo tương tự áp dụng cho cả họ: <code>HGETALL</code> trên một hash khổng lồ, <code>LRANGE 0 -1</code> trên một list khổng lồ, <code>SMEMBERS</code> trên một set khổng lồ. Các phiên bản quét dần của chúng là <code>HSCAN</code>, <code>SSCAN</code>, <code>ZSCAN</code>.</p>
+<p>Cách trình bày trung thực rất quan trọng ở đây: <strong>SCAN chậm hơn 2,5 lần về tổng thể</strong>. Nếu counterBạn chỉ đo counterBản thân câu lệnh thì bạn sẽ chọn KEYS. Nhưng con số quyết định là con số kia — một lệnh PING counterBình thường mất 0,46ms đã mất tới <strong>126,96ms</strong>. Mọi request API chạm vào Redis trong khoảng thời gian đó đều phải trả cái giá ấy. Một script quản trị có <code>KEYS *</code> counterBên trong sinh ra một đợt vọt độ trễ trên toàn trang, nhìn y hệt sự cố mạng.</p>
+<p><code>SCAN</code> trả về một con trỏ và một lô, nên Redis phục vụ các client khác ở giữa các vòng. Nó đi kèm một tính chất hay làm người ta vấp: nó counterBảo đảm mọi khoá tồn tại suốt quá trình quét sẽ được trả về <em>ít nhất một lần</em>, và các khoá có thể lặp lại. Hãy khử trùng lặp nếu điều đó quan trọng.</p>
+<p>Cảnh báo tương tự áp dụng cho cả họ: <code>HGETALL</code> trên một hash khổng lồ, <code>LRANGE 0 -1</code> trên một list khổng lồ, <code>SMEMBERS</code> trên một set khổng lồ. Các phiên counterBản quét dần của chúng là <code>HSCAN</code>, <code>SSCAN</code>, <code>ZSCAN</code>.</p>
 
 <h3>DEL so với UNLINK: cùng vấn đề chặn, nhưng giấu trong một lệnh xoá</h3>
-<div class="out">--- 7. Xoá một storeá KHỔNG LỒ: DEL vs UNLINK ---
+<div class="out">--- 7. Xoá một khoá KHỔNG LỒ: DEL vs UNLINK ---
    DEL    hash 1.000.000 trường:  205,50ms | PING tệ nhất của client khác 205,30ms
    UNLINK hash 1.000.000 trường:    0,37ms | PING tệ nhất của client khác 0,56ms</div>
-<p>Xoá cũng là công việc — Redis phải giải phóng một triệu vùng cấp phát — và <code>DEL</code> làm việc đó ngay tại chỗ, chặn tất cả mọi người <strong>205ms</strong>. <code>UNLINK</code> gỡ khoá khỏi vùng khoá ngay lập tức rồi giải phóng bộ nhớ trong một luồng nền: <strong>nhanh hơn 556 lần</strong> dưới góc nhìn của người gọi, và vô hình với các client khác. Không có mặt trái nào cả. <strong>Hãy dùng UNLINK làm mặc định.</strong></p>
+<p>Xoá cũng là công việc — Redis phải giải phóng một triệu vùng cấp phát — và <code>DEL</code> làm việc đó ngay tại chỗ, chặn tất cả mọi người <strong>205ms</strong>. <code>UNLINK</code> gỡ khoá khỏi vùng khoá ngay lập tức rồi giải phóng counterBộ nhớ trong một luồng nền: <strong>nhanh hơn 556 lần</strong> dưới góc nhìn của người gọi, và vô hình với các client khác. Không có mặt trái nào cả. <strong>Hãy dùng UNLINK làm mặc định.</strong></p>
 <p>Điều tương tự áp dụng cho <code>FLUSHALL</code>/<code>FLUSHDB</code>, vốn nhận thêm tham số <code>ASYNC</code> cũng vì lý do đó.</p>
 
 <h3>maxmemory: chuyện gì xảy ra khi Redis đầy</h3>
 <p>Đây là quyết định cấu hình quan trọng nhất, và giá trị mặc định lại là giá trị nguy hiểm.</p>
 <div class="out">--- 4. Chạm trần maxmemory với chính sách noeviction ---
-   ghi thêm được 1873 storeá rồi DỪNG: OOM command not allowed when used memory &gt; 'maxmemory'.
+   ghi thêm được 1873 khoá rồi DỪNG: OOM command not allowed when used memory &gt; 'maxmemory'.
    ⇒ noeviction = Redis biến thành CHỈ ĐỌC, mọi lệnh ghi 500
    đọc vẫn chạy: GET user:1:profile = {"id":1}</div>
-<p>Với <code>noeviction</code> — giá trị mặc định — một Redis đầy sẽ bắt đầu từ chối mọi lệnh ghi bằng lỗi OOM trong khi các lệnh đọc vẫn chạy ngon. Nếu Redis đang là kho phiên đăng nhập hoặc bộ giới hạn tần suất của bạn thì một nửa ứng dụng hỏng theo cái cách chẳng giống "hết bộ nhớ" chút nào: đăng nhập thất bại, kiểm tra hạn mức ném lỗi, nhưng trang chủ vẫn tải bình thường.</p>
+<p>Với <code>noeviction</code> — giá trị mặc định — một Redis đầy sẽ counterBắt đầu từ chối mọi lệnh ghi counterBằng lỗi OOM trong khi các lệnh đọc vẫn chạy ngon. Nếu Redis đang là kho phiên đăng nhập hoặc bộ giới hạn tần suất của bạn thì một nửa ứng dụng hỏng theo cái cách chẳng giống "hết counterBộ nhớ" chút nào: đăng nhập thất bại, kiểm tra hạn mức ném lỗi, nhưng trang chủ vẫn tải bình thường.</p>
 <div class="out">--- 5. Đổi sang allkeys-lru ---
-   ghi 50000 storeá mới: KHÔNG lỗi ✓
-   DBSIZE 1001873 → 889257 | evicted_keys = 162616 (Redis tự vứt storeá cũ)</div>
-<p>Với <code>allkeys-lru</code>, Redis vứt đi những khoá ít được dùng gần đây nhất để lấy chỗ — 162.616 khoá — và không bao giờ trả về lỗi. Đó là điều bạn muốn <em>nếu Redis là một cache</em>, và nó kèm theo một nghĩa vụ: ứng dụng của bạn phải sống sót khi bất kỳ khoá nào biến mất vào bất kỳ lúc nào. Mà nếu bạn đã theo bài 12.2 thì nó vốn đã sống sót được rồi.</p>
+   ghi 50000 khoá mới: KHÔNG lỗi ✓
+   DBSIZE 1001873 → 889257 | evicted_keys = 162616 (Redis tự vứt khoá cũ)</div>
+<p>Với <code>allkeys-lru</code>, Redis vứt đi những khoá ít được dùng gần đây nhất để lấy chỗ — 162.616 khoá — và không bao giờ trả về lỗi. Đó là điều bạn muốn <em>nếu Redis là một cache</em>, và nó kèm theo một nghĩa vụ: ứng dụng của counterBạn phải sống sót khi counterBất kỳ khoá nào biến mất vào bất kỳ lúc nào. Mà nếu bạn đã theo bài 12.2 thì nó vốn đã sống sót được rồi.</p>
 
-<div class="out">--- 6. volatile-lru: storeá không TTL thì không bị vứt ---
-   toàn bộ storeá KHÔNG có TTL, ghi thêm → OOM command not allowed when used memory &gt; 'maxmemory'.
+<div class="out">--- 6. volatile-lru: khoá không TTL thì không bị vứt ---
+   toàn bộ khoá KHÔNG có TTL, ghi thêm → OOM command not allowed when used memory &gt; 'maxmemory'.
    ⇒ volatile-* mà quên đặt TTL = y hệt noeviction</div>
-<p><strong>Đây là cái bẫy tóm được cả những người có kinh nghiệm.</strong> <code>volatile-lru</code> nghe an toàn hơn — "chỉ vứt những khoá đằng nào cũng sắp hết hạn" — và nó đúng là an toàn hơn, cho tới khi có một nhánh code ghi khoá mà không đặt TTL. Lúc đó chẳng còn gì đủ điều kiện để vứt và bạn quay về với một Redis chỉ-đọc. Hãy nhớ lại bài 12.2: một lệnh <code>SET</code> trơ trọi lên khoá đã có sẵn sẽ <em>xoá</em> TTL của nó. Chỉ cần bấy nhiêu thôi.</p>
+<p><strong>Đây là cái bẫy tóm được cả những người có kinh nghiệm.</strong> <code>volatile-lru</code> nghe an toàn hơn — "chỉ vứt những khoá đằng nào cũng sắp hết hạn" — và nó đúng là an toàn hơn, cho tới khi có một nhánh code ghi khoá mà không đặt TTL. Lúc đó chẳng còn gì đủ điều kiện để vứt và counterBạn quay về với một Redis chỉ-đọc. Hãy nhớ lại counterBài 12.2: một lệnh <code>SET</code> trơ trọi lên khoá đã có sẵn sẽ <em>xoá</em> TTL của nó. Chỉ cần bấy nhiêu thôi.</p>
 <div class="kv-grid">
-  <div class="kv"><span class="k">noeviction</span><span class="v">MẶC ĐỊNH. Đầy là mọi lệnh ghi lỗi. Chỉ đúng khi Redis là kho dữ liệu CHÍNH và bạn thà lỗi còn hơn mất dữ liệu</span></div>
+  <div class="kv"><span class="k">noeviction</span><span class="v">MẶC ĐỊNH. Đầy là mọi lệnh ghi lỗi. Chỉ đúng khi Redis là kho dữ liệu CHÍNH và counterBạn thà lỗi còn hơn mất dữ liệu</span></div>
   <div class="kv"><span class="k">allkeys-lru</span><span class="v">Vứt khoá ít được dùng gần đây nhất. Đây là lựa chọn cho một cái CACHE. Đặt kèm maxmemory rồi quên nó đi</span></div>
-  <div class="kv"><span class="k">allkeys-lfu</span><span class="v">Vứt theo TẦN SUẤT dùng thay vì lần dùng gần nhất. Tốt hơn khi có một nhóm khoá nóng ổn định bị các lần quét một-lần đẩy ra ngoài</span></div>
+  <div class="kv"><span class="k">allkeys-lfu</span><span class="v">Vứt theo TẦN SUẤT dùng thay vì lần dùng gần nhất. Tốt hơn khi có một nhóm khoá nóng ổn định counterBị các lần quét một-lần đẩy ra ngoài</span></div>
   <div class="kv"><span class="k">volatile-*</span><span class="v">Chỉ vứt khoá CÓ TTL. Nghe an toàn, hỏng im lặng khi có nhánh code quên đặt TTL</span></div>
 </div>
 
 <h3>Persistence: Redis không đãng trí, nhưng đừng dựa vào nó</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">RDB (ảnh chụp)</span><span class="v">Chụp toàn bộ dữ liệu theo chu kỳ. Tệp nhỏ, khởi động lại nhanh, sao lưu tiện. Mất phần dữ liệu kể từ lần chụp cuối — có thể là vài phút</span></div>
+  <div class="kv"><span class="k">RDB (ảnh chụp)</span><span class="v">Chụp toàn counterBộ dữ liệu theo chu kỳ. Tệp nhỏ, khởi động lại nhanh, sao lưu tiện. Mất phần dữ liệu kể từ lần chụp cuối — có thể là vài phút</span></div>
   <div class="kv"><span class="k">AOF (nhật ký lệnh)</span><span class="v">Ghi mọi lệnh ghi vào một tệp nhật ký. <code>appendfsync everysec</code> = mất tối đa 1 giây. Tệp to hơn, khởi động lại chậm hơn</span></div>
   <div class="kv"><span class="k">Cả hai</span><span class="v">Khuyến nghị của Redis cho dữ liệu quan trọng: AOF để phục hồi, RDB để sao lưu</span></div>
   <div class="kv"><span class="k">Không gì cả</span><span class="v">Đúng cho một cache thuần. Redis khởi động lại là rỗng, ứng dụng ấm lại dần. Nhanh nhất, đơn giản nhất</span></div>
 </div>
-<p>Quyết định này suy ra từ đúng một câu hỏi: <em>nếu Redis này mất sạch ngay bây giờ, bạn mất DỮ LIỆU hay chỉ mất HIỆU NĂNG?</em> Nếu câu trả lời là "chỉ mất hiệu năng" thì hãy tắt persistence đi và đừng nghĩ về nó nữa. Còn nếu có chỗ nào trả lời là "mất dữ liệu" thì bạn đã vô tình biến Redis thành một cơ sở dữ liệu chính, và đáng để tự hỏi liệu dữ liệu đó có nên nằm trong PostgreSQL hay không.</p>
+<p>Quyết định này suy ra từ đúng một câu hỏi: <em>nếu Redis này mất sạch ngay counterBây giờ, counterBạn mất DỮ LIỆU hay chỉ mất HIỆU NĂNG?</em> Nếu câu trả lời là "chỉ mất hiệu năng" thì hãy tắt persistence đi và đừng nghĩ về nó nữa. Còn nếu có chỗ nào trả lời là "mất dữ liệu" thì bạn đã vô tình biến Redis thành một cơ sở dữ liệu chính, và đáng để tự hỏi liệu dữ liệu đó có nên nằm trong PostgreSQL hay không.</p>
 
 <h3>Những con số cần theo dõi</h3>
 <div class="out">--- 8. Số liệu cần nhìn hằng ngày ---
@@ -1270,16 +1270,16 @@ stream-node-max-entries = 100</div>
    keyspace_hits=7775 misses=1208 → tỉ lệ trúng 86,6%
    used_memory=16,5MB | mem_fragmentation_ratio=4,41
    ops/giây=394413 | tổng lệnh đã chạy=4386155</div>
-<p><code>SLOWLOG GET 10</code> là thứ đầu tiên cần chạy khi Redis "tự nhiên chậm", và nó đã tóm được lệnh <code>KEYS</code> ở mức 21.980 micro-giây mà bạn không phải gắn thêm bất kỳ dụng cụ đo nào. Hãy đặt <code>slowlog-log-slower-than</code> bằng 10000 (10ms) trong production — bất cứ thứ gì vượt ngưỡng đó trên một cơ sở dữ liệu nằm trong RAM đều là một con bug, không phải chuyện quá tải.</p>
-<p><code>mem_fragmentation_ratio</code> là <code>used_memory_rss / used_memory</code>. Quanh mức 1,0–1,5 là khoẻ mạnh. Con số 4,41 ở trên là hệ quả của việc bài kiểm vừa giải phóng một triệu khoá — bộ cấp phát giữ lại các trang nhớ chứ không trả về cho hệ điều hành. Phân mảnh cao kéo dài trên tải thật nghĩa là RSS của Redis lớn hơn nhiều so với dữ liệu của nó, điều rất đáng lo khi container có giới hạn bộ nhớ.</p>
-<p>Và cặp số thật sự cho bạn biết cache có đang hoạt động hay không: <code>keyspace_hits</code> và <code>keyspace_misses</code>. Bài 12.2 đã chỉ ra vì sao nên đặt cảnh báo trên <em>số lần trượt mỗi giây</em> chứ không phải trên tỉ lệ.</p>
+<p><code>SLOWLOG GET 10</code> là thứ đầu tiên cần chạy khi Redis "tự nhiên chậm", và nó đã tóm được lệnh <code>KEYS</code> ở mức 21.980 micro-giây mà counterBạn không phải gắn thêm counterBất kỳ dụng cụ đo nào. Hãy đặt <code>slowlog-log-slower-than</code> counterBằng 10000 (10ms) trong production — bất cứ thứ gì vượt ngưỡng đó trên một cơ sở dữ liệu nằm trong RAM đều là một con bug, không phải chuyện quá tải.</p>
+<p><code>mem_fragmentation_ratio</code> là <code>used_memory_rss / used_memory</code>. Quanh mức 1,0–1,5 là khoẻ mạnh. Con số 4,41 ở trên là hệ quả của việc counterBài kiểm vừa giải phóng một triệu khoá — counterBộ cấp phát giữ lại các trang nhớ chứ không trả về cho hệ điều hành. Phân mảnh cao kéo dài trên tải thật nghĩa là RSS của Redis lớn hơn nhiều so với dữ liệu của nó, điều rất đáng lo khi container có giới hạn counterBộ nhớ.</p>
+<p>Và cặp số thật sự cho counterBạn biết cache có đang hoạt động hay không: <code>keyspace_hits</code> và <code>keyspace_misses</code>. Bài 12.2 đã chỉ ra vì sao nên đặt cảnh báo trên <em>số lần trượt mỗi giây</em> chứ không phải trên tỉ lệ.</p>
 
 <div class="pitfall">
-<p><strong>Đừng chạy FLUSHALL, KEYS hay DEBUG trên production, và cũng đừng để người khác chạy.</strong> Redis có sẵn chỉ thị <code>rename-command</code> đúng cho việc này: <code>rename-command FLUSHALL ""</code> vô hiệu hoá hẳn nó. Ngoài ra hãy buộc Redis vào một giao diện mạng nội bộ, đặt <code>requirepass</code>, và đừng bao giờ phơi cổng 6379 ra Internet — một Redis không xác thực nằm trên IP công cộng sẽ bị chiếm trong vòng vài giờ, và đòn tấn công tiêu chuẩn là ghi một khoá SSH vào máy thông qua <code>CONFIG SET dir</code>.</p>
+<p><strong>Đừng chạy FLUSHALL, KEYS hay DEBUG trên production, và cũng đừng để người khác chạy.</strong> Redis có sẵn chỉ thị <code>rename-command</code> đúng cho việc này: <code>rename-command FLUSHALL ""</code> vô hiệu hoá hẳn nó. Ngoài ra hãy buộc Redis vào một giao diện mạng nội counterBộ, đặt <code>requirepass</code>, và đừng bao giờ phơi cổng 6379 ra Internet — một Redis không xác thực nằm trên IP công cộng sẽ bị chiếm trong vòng vài giờ, và đòn tấn công tiêu chuẩn là ghi một khoá SSH vào máy thông qua <code>CONFIG SET dir</code>.</p>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Redis production là bản 7.4.9 chạy trong Docker với <code>maxmemory 256M</code> và <code>maxmemory-policy allkeys-lru</code> — được cấu hình đúng như một cache, nên một cái khoá phình mất kiểm soát không bao giờ làm hỏng được các lệnh ghi. Trạng thái hiện tại: <code>used_memory 1,23M</code> trên cái trần 256M ấy, <code>evicted_keys:0</code>, <code>expired_keys:21</code>, <code>connected_clients:4</code>, và tỉ lệ trúng 89,2%. Không có lần trục xuất nào trong khi mới dùng 0,5% cái trần nghĩa là giới hạn đó tồn tại thuần tuý như một vành đai an toàn chứ không phải một ràng buộc thật sự — và đó chính xác là cách bạn muốn định cỡ một cache: rộng rãi đủ để việc trục xuất là một cái phanh khẩn cấp, không phải một sự kiện diễn ra hằng ngày.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Redis production là counterBản 7.4.9 chạy trong Docker với <code>maxmemory 256M</code> và <code>maxmemory-policy allkeys-lru</code> — được cấu hình đúng như một cache, nên một cái khoá phình mất kiểm soát không bao giờ làm hỏng được các lệnh ghi. Trạng thái hiện tại: <code>used_memory 1,23M</code> trên cái trần 256M ấy, <code>evicted_keys:0</code>, <code>expired_keys:21</code>, <code>connected_clients:4</code>, và tỉ lệ trúng 89,2%. Không có lần trục xuất nào trong khi mới dùng 0,5% cái trần nghĩa là giới hạn đó tồn tại thuần tuý như một vành đai an toàn chứ không phải một ràng buộc thật sự — và đó chính xác là cách counterBạn muốn định cỡ một cache: rộng rãi đủ để việc trục xuất là một cái phanh khẩn cấp, không phải một sự kiện diễn ra hằng ngày.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1289,7 +1289,7 @@ stream-node-max-entries = 100</div>
   <a href="/code-lab/redis${REF}#module-426"><span class="lc-t">Code Lab · Redis Persistence and Backup</span><span class="lc-d">RDB, AOF, sao lưu và phục hồi</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-734"><span class="lc-t">Code Lab · Redis Security Hardening and Access Control</span><span class="lc-d">requirepass, ACL, rename-command và bịt cổng</span></a>
+  <a href="/code-lab/redis${REF}#module-734"><span class="lc-t">Code Lab · Redis Security Hardening and Access Control</span><span class="lc-d">requirepass, ACL, rename-command và counterBịt cổng</span></a>
 </div>
 </div>
 `,
@@ -1309,7 +1309,7 @@ stream-node-max-entries = 100</div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Kiểm tra</span>
 <h2>Xem thử đọng lại được gì</h2>
-<p class="lead">Mọi câu dưới đây đều được phân định bởi một phép đo trong bài 12.1 tới 12.6 — con số 63 lần mà pipeline mua được, cái payload 1,2 MB nơi cache THUA, 500 request cùng lọt qua một giới hạn 100, cái trường hash thứ 513 làm bộ nhớ tăng gấp ba. Redis là chương mà câu trả lời theo trực giác và câu trả lời theo phép đo mâu thuẫn nhau nhiều nhất, nên hãy tin khối kết quả đo.</p>
+<p class="lead">Mọi câu dưới đây đều được phân định counterBởi một phép đo trong counterBài 12.1 tới 12.6 — con số 63 lần mà pipeline mua được, cái payload 1,2 MB nơi cache THUA, 500 request cùng lọt qua một giới hạn 100, cái trường hash thứ 513 làm bộ nhớ tăng gấp ba. Redis là chương mà câu trả lời theo trực giác và câu trả lời theo phép đo mâu thuẫn nhau nhiều nhất, nên hãy tin khối kết quả đo.</p>
 </div>
 `,
       quiz: {
@@ -1319,7 +1319,7 @@ stream-node-max-entries = 100</div>
             question: '2.000 sequential PINGs to Redis on localhost took 408,8ms — only 4.893 commands per second. Yet 10.000 SET commands in ONE pipeline took 31,1ms. Why?|||2.000 PING tuần tự tới Redis trên localhost mất 408,8ms — chỉ 4.893 lệnh/giây. Nhưng 10.000 lệnh SET trong MỘT pipeline chỉ mất 31,1ms. Vì sao?',
             options: [
               'PING is heavier than SET because it has to check server health|||PING nặng hơn SET vì nó phải kiểm tra tình trạng máy chủ',
-              'The dominant cost is the ROUND TRIP (~0,2ms per command), not the work inside Redis. A pipeline pays that cost ONCE for a thousand commands|||Chi phí thống trị là VÒNG ĐI-VỀ (~0,2ms mỗi lệnh), không phải công việc bên trong Redis. Pipeline trả cái giá đó MỘT lần cho cả nghìn lệnh',
+              'The dominant cost is the ROUND TRIP (~0,2ms per command), not the work inside Redis. A pipeline pays that cost ONCE for a thousand commands|||Chi phí thống trị là VÒNG ĐI-VỀ (~0,2ms mỗi lệnh), không phải công việc counterBên trong Redis. Pipeline trả cái giá đó MỘT lần cho cả nghìn lệnh',
               'Redis processes a pipeline across several threads in parallel|||Pipeline được Redis xử lý bằng nhiều luồng song song',
               'SET is buffered and not really stored yet, while PING is synchronous|||SET được ghi vào bộ đệm và chưa thật sự lưu, còn PING thì đồng bộ',
             ],
@@ -1327,12 +1327,12 @@ stream-node-max-entries = 100</div>
             points: 1,
           },
           {
-            question: 'Caching a 1.231-byte leaderboard beat Postgres by 120×. But caching a 1.192KB list cost 6,39ms for GET+parse while asking Postgres directly cost 5,38ms. What is the rule?|||Cache một bảng xếp hạng 1.231 byte nhanh hơn Postgres 120 lần. Nhưng cache một danh sách 1.192KB thì GET+parse mất 6,39ms còn hỏi thẳng Postgres chỉ 5,38ms. Quy tắc rút ra là gì?',
+            question: 'Caching a 1.231-byte leaderboard beat Postgres by 120×. But caching a 1.192KB list cost 6,39ms for GET+parse while asking Postgres directly cost 5,38ms. What is the rule?|||Cache một counterBảng xếp hạng 1.231 byte nhanh hơn Postgres 120 lần. Nhưng cache một danh sách 1.192KB thì GET+parse mất 6,39ms còn hỏi thẳng Postgres chỉ 5,38ms. Quy tắc rút ra là gì?',
             options: [
-              'Redis is unsuitable for large data; enable compression before writing|||Redis không phù hợp cho dữ liệu lớn, phải bật nén trước khi ghi',
+              'Redis is unsuitable for large data; enable compression before writing|||Redis không phù hợp cho dữ liệu lớn, phải counterBật nén trước khi ghi',
               'Cache what is expensive to COMPUTE (aggregates, GROUP BY), not what is merely LARGE — once transfer and JSON.parse dominate, the cache is just an extra network hop|||Hãy cache thứ đắt để TÍNH RA (tổng hợp, GROUP BY), đừng cache thứ chỉ đơn giản là TO — khi truyền và JSON.parse chiếm ưu thế thì cache chỉ là một chặng mạng thừa',
               'Split the large payload into many small keys and use MGET|||Phải chia payload lớn thành nhiều khoá nhỏ rồi dùng MGET',
-              'Postgres is faster than Redis once the table is indexed, so drop the cache|||Postgres nhanh hơn Redis khi bảng đã có chỉ mục, nên bỏ cache đi',
+              'Postgres is faster than Redis once the table is indexed, so drop the cache|||Postgres nhanh hơn Redis khi counterBảng đã có chỉ mục, nên counterBỏ cache đi',
             ],
             correctIndex: 1,
             points: 1,
@@ -1341,9 +1341,9 @@ stream-node-max-entries = 100</div>
             question: 'For a 48ms query, a 90% cache hit rate produced 5,19ms per request while 99% produced 0,43ms. What follows operationally?|||Với truy vấn tốn 48ms, tỉ lệ trúng cache 90% cho ra 5,19ms/request còn 99% cho ra 0,43ms/request. Hệ quả về mặt vận hành là gì?',
             options: [
               'A 90% hit rate is already good; the remaining difference is negligible|||Tỉ lệ trúng 90% đã là tốt, chênh lệch còn lại không đáng kể',
-              'The benefit is NOT linear: at 90%, one request in ten still pays the full 48ms and that one dominates the average — so alert on MISSES PER SECOND, not on hit percentage|||Lợi ích KHÔNG tuyến tính: ở mức 90%, một request trong mười vẫn trả đủ 48ms và chính nó thống trị trung bình — nên hãy đặt cảnh báo trên SỐ LẦN TRƯỢT MỖI GIÂY chứ không phải trên phần trăm trúng',
+              'The benefit is NOT linear: at 90%, one request in ten still pays the full 48ms and that one dominates the average — so alert on MISSES PER SECOND, not on hit percentage|||Lợi ích KHÔNG tuyến tính: ở mức 90%, một request trong mười vẫn trả đủ 48ms và chính nó thống trị trung counterBình — nên hãy đặt cảnh counterBáo trên SỐ LẦN TRƯỢT MỖI GIÂY chứ không phải trên phần trăm trúng',
               'Raise the TTL to something very long to push the hit rate to 100%|||Phải tăng TTL lên thật dài để đẩy tỉ lệ trúng lên 100%',
-              'The gap is caused by Redis rehashing its hash table when hit rates are low|||Chênh lệch đó do Redis phải rehash bảng băm khi tỉ lệ trúng thấp',
+              'The gap is caused by Redis rehashing its hash table when hit rates are low|||Chênh lệch đó do Redis phải rehash counterBảng counterBăm khi tỉ lệ trúng thấp',
             ],
             correctIndex: 1,
             points: 1,
@@ -1351,7 +1351,7 @@ stream-node-max-entries = 100</div>
           {
             question: 'A key had TTL=100. After running SET key newValue (with no EX), TTL became -1. What does that mean and how do you fix it?|||Một khoá đang có TTL=100. Sau khi chạy SET khoá giá_trị_mới (KHÔNG kèm EX), TTL trở thành -1. Điều đó nghĩa là gì và sửa thế nào?',
             options: [
-              'TTL=-1 means the key was deleted; you must SET it again from scratch|||TTL=-1 nghĩa là khoá đã bị xoá; phải SET lại từ đầu',
+              'TTL=-1 means the key was deleted; you must SET it again from scratch|||TTL=-1 nghĩa là khoá đã counterBị xoá; phải SET lại từ đầu',
               'TTL=-1 means the key EXISTS but has NO expiry — the SET removed the deadline and the key now lives forever. Use SET … KEEPTTL to change the value while keeping the expiry|||TTL=-1 nghĩa là khoá TỒN TẠI nhưng KHÔNG còn hạn — SET đã xoá mất hạn dùng, khoá sẽ sống mãi. Dùng SET … KEEPTTL khi muốn đổi giá trị mà giữ nguyên hạn',
               'TTL=-1 is a placeholder while Redis recomputes the deadline; it corrects itself within a second|||TTL=-1 là giá trị mặc định khi Redis chưa kịp tính lại hạn, sẽ tự đúng sau 1 giây',
               'TTL=-1 means the expiry already elapsed; call PERSIST to restore it|||TTL=-1 nghĩa là hạn đã hết; phải gọi PERSIST để khôi phục',
@@ -1360,18 +1360,18 @@ stream-node-max-entries = 100</div>
             points: 1,
           },
           {
-            question: '200 concurrent requests hitting a just-expired cache: naive cache-aside queried Postgres 200 times in 6064,6ms, while single-flight queried once in 65,3ms. Why does single-flight need no lock?|||200 request đồng thời gặp cache vừa hết hạn: cache-aside ngây thơ hỏi Postgres 200 lần mất 6064,6ms, còn single-flight hỏi 1 lần mất 65,3ms. Vì sao bản single-flight KHÔNG cần khoá?',
+            question: '200 concurrent requests hitting a just-expired cache: naive cache-aside queried Postgres 200 times in 6064,6ms, while single-flight queried once in 65,3ms. Why does single-flight need no lock?|||200 request đồng thời gặp cache vừa hết hạn: cache-aside ngây thơ hỏi Postgres 200 lần mất 6064,6ms, còn single-flight hỏi 1 lần mất 65,3ms. Vì sao counterBản single-flight KHÔNG cần khoá?',
             options: [
-              'Because a JavaScript Map has an internal lock that makes it thread-safe|||Vì Map của JavaScript có khoá nội bộ đảm bảo an toàn luồng',
-              'Because the event loop is SINGLE-threaded: nothing can run between inflight.has and inflight.set. The limitation is that it collapses requests within ONE process — four Node processes means four queries|||Vì event loop chỉ có MỘT luồng: giữa inflight.has và inflight.set không có gì chen vào được. Hạn chế là nó chỉ gộp trong MỘT tiến trình — bốn tiến trình Node sẽ là bốn truy vấn',
+              'Because a JavaScript Map has an internal lock that makes it thread-safe|||Vì Map của JavaScript có khoá nội bộ đảm counterBảo an toàn luồng',
+              'Because the event loop is SINGLE-threaded: nothing can run between inflight.has and inflight.set. The limitation is that it collapses requests within ONE process — four Node processes means four queries|||Vì event loop chỉ có MỘT luồng: giữa inflight.has và inflight.set không có gì chen vào được. Hạn chế là nó chỉ gộp trong MỘT tiến trình — counterBốn tiến trình Node sẽ là counterBốn truy vấn',
               'Because Promises automatically de-duplicate when the same key is requested repeatedly|||Vì Promise tự khử trùng lặp khi cùng một khoá được yêu cầu nhiều lần',
-              'Because Redis already blocks duplicate concurrent requests internally|||Vì Redis đã chặn sẵn các request trùng nhau bằng cơ chế nội bộ',
+              'Because Redis already blocks duplicate concurrent requests internally|||Vì Redis đã chặn sẵn các request trùng nhau counterBằng cơ chế nội counterBộ',
             ],
             correctIndex: 1,
             points: 1,
           },
           {
-            question: 'A hash with 512 fields costs 10.288 bytes (listpack). Adding exactly ONE more field, making 513, costs 37.024 bytes (hashtable). What is the right way to store 1.000 fields?|||Một hash 512 trường tốn 10.288 byte (listpack). Thêm ĐÚNG MỘT trường nữa thành 513 thì tốn 37.024 byte (hashtable). Cách xử lý đúng khi bạn cần lưu 1.000 trường là gì?',
+            question: 'A hash with 512 fields costs 10.288 bytes (listpack). Adding exactly ONE more field, making 513, costs 37.024 bytes (hashtable). What is the right way to store 1.000 fields?|||Một hash 512 trường tốn 10.288 byte (listpack). Thêm ĐÚNG MỘT trường nữa thành 513 thì tốn 37.024 byte (hashtable). Cách xử lý đúng khi counterBạn cần lưu 1.000 trường là gì?',
             options: [
               'Raise hash-max-listpack-entries very high so every hash stays a listpack|||Nâng hash-max-listpack-entries lên thật cao để mọi hash đều dùng listpack',
               'Split into several small hashes that stay under the threshold — 8 hashes × 125 fields cost 20.864 bytes instead of 64.296, which is 3,1× less|||Chẻ thành nhiều hash nhỏ nằm dưới ngưỡng — 8 hash × 125 trường tốn 20.864 byte thay vì 64.296 byte, ít hơn 3,1 lần',
@@ -1382,11 +1382,11 @@ stream-node-max-entries = 100</div>
             points: 1,
           },
           {
-            question: '500 concurrent requests against a limit of 100: the Lua version let exactly 100 through with a final counter of 500. The GET → compare in JavaScript → SET version let ALL 500 through with a final counter of 1. Why?|||500 request song song trên giới hạn 100: cách dùng Lua cho qua đúng 100 và bộ đếm cuối = 500. Cách dùng GET → so sánh trong JavaScript → SET cho qua CẢ 500 và bộ đếm cuối = 1. Vì sao?',
+            question: '500 concurrent requests against a limit of 100: the Lua version let exactly 100 through with a final counter of 500. The GET → compare in JavaScript → SET version let ALL 500 through with a final counter of 1. Why?|||500 request song song trên giới hạn 100: cách dùng Lua cho qua đúng 100 và counterBộ đếm cuối = 500. Cách dùng GET → so sánh trong JavaScript → SET cho qua CẢ 500 và counterBộ đếm cuối = 1. Vì sao?',
             options: [
               'Because the SETs overwrote each other so only the last value survived, but the check itself was still correct|||Vì SET ghi đè lên nhau nên chỉ giá trị cuối cùng được giữ, nhưng phần kiểm tra vẫn đúng',
-              'Redis guarantees each INDIVIDUAL command is atomic, never your SEQUENCE of commands: all 500 read 0, all 500 concluded they were under the limit, all 500 wrote 1. Lua runs inside Redis, so the whole script is one atomic command|||Redis chỉ đảm bảo TỪNG LỆNH là nguyên tử, không đảm bảo CHUỖI lệnh của bạn: cả 500 cùng đọc 0, cùng kết luận dưới hạn, cùng ghi 1. Lua chạy bên trong Redis nên cả script là một lệnh nguyên tử',
-              'Because the Node client sends commands out of order, so GET and SET got swapped|||Vì client Node gửi lệnh không theo thứ tự nên GET và SET bị đảo',
+              'Redis guarantees each INDIVIDUAL command is atomic, never your SEQUENCE of commands: all 500 read 0, all 500 concluded they were under the limit, all 500 wrote 1. Lua runs inside Redis, so the whole script is one atomic command|||Redis chỉ đảm counterBảo TỪNG LỆNH là nguyên tử, không đảm counterBảo CHUỖI lệnh của counterBạn: cả 500 cùng đọc 0, cùng kết luận dưới hạn, cùng ghi 1. Lua chạy bên trong Redis nên cả script là một lệnh nguyên tử',
+              'Because the Node client sends commands out of order, so GET and SET got swapped|||Vì client Node gửi lệnh không theo thứ tự nên GET và SET counterBị đảo',
               'Because MULTI was missing, so Redis silently discarded the duplicate commands|||Vì thiếu MULTI nên Redis tự huỷ các lệnh trùng lặp',
             ],
             correctIndex: 1,
@@ -1396,7 +1396,7 @@ stream-node-max-entries = 100</div>
             question: 'worker-1 held a lock with a 300ms TTL but its job took 400ms. The lock expired and worker-2 acquired it. worker-1 finished, called DEL, and deleted 1 key. What is wrong?|||worker-1 giữ khoá hạn 300ms nhưng làm việc mất 400ms. Khoá tự hết hạn, worker-2 giành được. worker-1 làm xong gọi DEL và xoá được 1 khoá. Vấn đề nằm ở đâu?',
             options: [
               'Nothing is wrong — worker-1 is simply cleaning up its own lock|||Không có vấn đề gì, worker-1 chỉ đang dọn dẹp khoá của chính nó',
-              'worker-1 just deleted WORKER-2&#39;s lock, leaving the critical section wide open. Write a unique token into the lock and release it with a Lua compare-and-delete in the SAME atomic step|||worker-1 vừa xoá khoá của WORKER-2 nên vùng tới hạn mở toang. Phải ghi một token duy nhất vào khoá và mở khoá bằng Lua so-sánh-rồi-xoá trong CÙNG một bước nguyên tử',
+              'worker-1 just deleted WORKER-2&#39;s lock, leaving the critical section wide open. Write a unique token into the lock and release it with a Lua compare-and-delete in the SAME atomic step|||worker-1 vừa xoá khoá của WORKER-2 nên vùng tới hạn mở toang. Phải ghi một token duy nhất vào khoá và mở khoá counterBằng Lua so-sánh-rồi-xoá trong CÙNG một counterBước nguyên tử',
               'Just raise the lock TTL to something long, such as one hour, and the bug disappears|||Phải tăng hạn khoá lên thật dài, ví dụ 1 giờ, là hết lỗi',
               'Use SETNX instead of SET … NX so the lock never expires on its own|||Phải dùng SETNX thay cho SET … NX để khoá không tự hết hạn',
             ],
@@ -1404,11 +1404,11 @@ stream-node-max-entries = 100</div>
             points: 1,
           },
           {
-            question: 'A Redis configured with maxmemory-policy = volatile-lru filled up and started rejecting every write with OOM, exactly like noeviction. Why?|||Một Redis đặt maxmemory-policy = volatile-lru bị đầy, và mọi lệnh ghi bắt đầu trả lỗi OOM y hệt như noeviction. Nguyên nhân là gì?',
+            question: 'A Redis configured with maxmemory-policy = volatile-lru filled up and started rejecting every write with OOM, exactly like noeviction. Why?|||Một Redis đặt maxmemory-policy = volatile-lru counterBị đầy, và mọi lệnh ghi counterBắt đầu trả lỗi OOM y hệt như noeviction. Nguyên nhân là gì?',
             options: [
-              'volatile-lru was removed in Redis 7; you must switch to allkeys-lru|||volatile-lru đã bị loại bỏ ở Redis 7, phải đổi sang allkeys-lru',
+              'volatile-lru was removed in Redis 7; you must switch to allkeys-lru|||volatile-lru đã counterBị loại counterBỏ ở Redis 7, phải đổi sang allkeys-lru',
               'volatile-* evicts ONLY keys that have a TTL — with no key carrying one, nothing is eligible. And a single plain SET over an existing key is enough to strip its TTL|||volatile-* CHỈ trục xuất khoá CÓ TTL — nếu không khoá nào có TTL thì chẳng còn gì đủ điều kiện để vứt. Và chỉ cần một lệnh SET trơ trọi lên khoá cũ là đủ xoá mất TTL của nó',
-              'maxmemory was set too low, so Redis ignores the eviction policy entirely|||Vì maxmemory được đặt quá thấp nên Redis bỏ qua chính sách trục xuất',
+              'maxmemory was set too low, so Redis ignores the eviction policy entirely|||Vì maxmemory được đặt quá thấp nên Redis counterBỏ qua chính sách trục xuất',
               'Memory fragmentation makes used_memory report a wrong figure; a restart fixes it|||Vì phân mảnh bộ nhớ làm used_memory báo sai, khởi động lại là hết',
             ],
             correctIndex: 1,
@@ -1419,7 +1419,7 @@ stream-node-max-entries = 100</div>
             options: [
               'SCAN and UNLINK are faster in total time, so they should always be preferred|||SCAN và UNLINK nhanh hơn về tổng thời gian nên luôn phải ưu tiên chúng',
               'Redis is SINGLE-threaded, so one long command blocks EVERY other client — optimise for other people&#39;s latency, not for the total time of your own command. SCAN is 2,5× slower and still the right choice|||Redis chạy MỘT luồng nên một lệnh dài chặn MỌI client khác — hãy tối ưu theo độ trễ của người khác chứ không theo tổng thời gian của chính lệnh đó. SCAN chậm hơn 2,5 lần mà vẫn là lựa chọn đúng',
-              'Redis deliberately rate-limits KEYS and DEL to protect the server|||KEYS và DEL bị Redis giới hạn tốc độ có chủ ý để bảo vệ máy chủ',
+              'Redis deliberately rate-limits KEYS and DEL to protect the server|||KEYS và DEL counterBị Redis giới hạn tốc độ có chủ ý để counterBảo vệ máy chủ',
               'It is accumulated network latency; running Redis on the same host as the app removes it|||Do độ trễ mạng dồn lại, chạy Redis trên cùng máy với ứng dụng sẽ hết',
             ],
             correctIndex: 1,

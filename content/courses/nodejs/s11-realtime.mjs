@@ -84,16 +84,16 @@ sec-websocket-accept: Upm+pYUvMCSMenoyLWVjZht5jas=</div>
 
 <h3>The smallest useful server</h3>
 <pre><code><span class="tok-kw">import</span> { WebSocketServer } <span class="tok-kw">from</span> <span class="tok-str">'ws'</span>;
-<span class="tok-kw">const</span> server = http.createServer(app);        <span class="tok-cmt">// CÙNG server HTTP với Express</span>
+<span class="tok-kw">const</span> server = http.createServer(app);        <span class="tok-cmt">// the SAME HTTP server as Express</span>
 <span class="tok-kw">const</span> wss = <span class="tok-kw">new</span> WebSocketServer({ server });
 
 wss.on(<span class="tok-str">'connection'</span>, (ws, req) =&gt; {
   ws.on(<span class="tok-str">'message'</span>, (data) =&gt; {
-    <span class="tok-cmt">// data là Buffer — KHÔNG phải object. Bạn tự chọn định dạng.</span>
+    <span class="tok-cmt">// data is a Buffer — NOT an object. You choose the format yourself.</span>
     <span class="tok-kw">const</span> msg = JSON.parse(data.toString());
     ws.send(JSON.stringify({ echo: msg }));
   });
-  ws.on(<span class="tok-str">'close'</span>, () =&gt; { <span class="tok-cmt">/* dọn dẹp */</span> });
+  ws.on(<span class="tok-str">'close'</span>, () =&gt; { <span class="tok-cmt">/* cleanup */</span> });
 });
 server.listen(<span class="tok-num">3001</span>);</code></pre>
 <p>Note it shares the HTTP server. One port, one TLS certificate, one reverse-proxy rule. The upgrade only happens for requests carrying the <code>Upgrade</code> header; everything else is still Express.</p>
@@ -261,13 +261,13 @@ thời gian mở 5.000 kết nối:  ws 1.107ms  |  socket.io 1.769ms</div>
   <div class="lz-node"><span class="lz-t">socket.id</span><span class="lz-d">every socket is automatically in a room named after itself — that is how a direct reply to one tab works</span></div>
 </div>
 <pre><code>io.on(<span class="tok-str">'connection'</span>, (socket) =&gt; {
-  socket.join(<span class="tok-str">&#96;user:\${userId}&#96;</span>);                 <span class="tok-cmt">// mọi thiết bị của người này</span>
+  socket.join(<span class="tok-str">&#96;user:\${userId}&#96;</span>);                 <span class="tok-cmt">// every device belonging to this person</span>
   socket.on(<span class="tok-str">'thread:join'</span>, (id) =&gt; socket.join(<span class="tok-str">&#96;thread:\${id}&#96;</span>));
 });
 
-io.to(<span class="tok-str">&#96;thread:\${threadId}&#96;</span>).emit(<span class="tok-str">'thread:new-message'</span>, msg);   <span class="tok-cmt">// cả phòng</span>
-socket.to(<span class="tok-str">&#96;thread:\${threadId}&#96;</span>).emit(<span class="tok-str">'thread:typing'</span>, t);      <span class="tok-cmt">// cả phòng TRỪ mình</span>
-io.to(<span class="tok-str">&#96;user:\${receiverId}&#96;</span>).emit(<span class="tok-str">'social:notification'</span>, n);   <span class="tok-cmt">// một người</span></code></pre>
+io.to(<span class="tok-str">&#96;thread:\${threadId}&#96;</span>).emit(<span class="tok-str">'thread:new-message'</span>, msg);   <span class="tok-cmt">// the whole room</span>
+socket.to(<span class="tok-str">&#96;thread:\${threadId}&#96;</span>).emit(<span class="tok-str">'thread:typing'</span>, t);      <span class="tok-cmt">// the whole room EXCEPT me</span>
+io.to(<span class="tok-str">&#96;user:\${receiverId}&#96;</span>).emit(<span class="tok-str">'social:notification'</span>, n);   <span class="tok-cmt">// one person</span></code></pre>
 <p>The difference between <code>io.to(room)</code> and <code>socket.to(room)</code> is one character and it is the bug behind "why do I see my own typing indicator": <code>io.to</code> includes the sender, <code>socket.to</code> excludes them.</p>
 
 <h3>Acknowledgements: when you need to know it arrived</h3>
@@ -423,14 +423,14 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
 <h3>Where the credential comes from</h3>
 <p>The handshake is HTTP, so all three of the usual places work — and the third is the one you want in a browser:</p>
 <pre><code>io.use(<span class="tok-kw">async</span> (socket, next) =&gt; {
-  <span class="tok-cmt">// 1. socket.handshake.auth.token  — client tự truyền (phải lấy từ JS ⇒ không httpOnly được)</span>
-  <span class="tok-cmt">// 2. header Authorization         — dùng được cho client không phải trình duyệt</span>
-  <span class="tok-cmt">// 3. cookie httpOnly              — trình duyệt tự gửi khi bắt tay ⇒ AN TOÀN NHẤT</span>
+  <span class="tok-cmt">// 1. socket.handshake.auth.token  — passed by the client (JS must read it ⇒ cannot be httpOnly)</span>
+  <span class="tok-cmt">// 2. the Authorization header     — usable by non-browser clients</span>
+  <span class="tok-cmt">// 3. an httpOnly cookie           — the browser sends it on the handshake ⇒ SAFEST</span>
   <span class="tok-kw">const</span> token = extractToken(socket.request);
   <span class="tok-kw">if</span> (!token) <span class="tok-kw">return</span> next(<span class="tok-kw">new</span> Error(<span class="tok-str">'NO_TOKEN'</span>));
   <span class="tok-kw">try</span> {
     <span class="tok-kw">const</span> payload = jwt.verify(token, SECRET);
-    socket.data.userId = payload.userId;      <span class="tok-cmt">// bám vào socket, KHÔNG tin client nữa</span>
+    socket.data.userId = payload.userId;      <span class="tok-cmt">// attached to the socket; the client is no longer trusted</span>
     next();
   } <span class="tok-kw">catch</span> (e) { next(e); }
 });</code></pre>
@@ -440,15 +440,15 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
 <div class="out">token hợp lệ             → KẾT NỐI ĐƯỢC
 không token              → BỊ TỪ CHỐI: NO_TOKEN
 token hết hạn            → BỊ TỪ CHỐI: jwt expired
-token tự ký storeá sai     → BỊ TỪ CHỐI: invalid signature</div>
+token tự ký khoá sai     → BỊ TỪ CHỐI: invalid signature</div>
 <p>Rejection surfaces on the client as a <code>connect_error</code> event, not as a thrown exception — a client that only listens for <code>connect</code> will sit there silently forever, which is why an unauthenticated socket usually presents as "realtime just doesn't work" rather than as an error.</p>
 
 <h3>Measurement 2 — the hole: authenticated is not authorized</h3>
 <p>User 7 is a participant in thread 42 and nothing else. They connect with a perfectly valid token — every check above passes — and then emit one event. Two server implementations, side by side:</p>
-<pre><code><span class="tok-cmt">// ❌ CÁCH SAI — chính xác là dòng từng nằm trong production của site này</span>
+<pre><code><span class="tok-cmt">// ❌ THE WRONG WAY — precisely the line that once ran in this site's production</span>
 socket.on(<span class="tok-str">'join:unsafe'</span>, (room) =&gt; { socket.join(room); });
 
-<span class="tok-cmt">// ✅ CÁCH ĐÚNG — kiểm quyền cho TỪNG sự kiện</span>
+<span class="tok-cmt">// ✅ THE RIGHT WAY — authorise EVERY event</span>
 socket.on(<span class="tok-str">'join:safe'</span>, (threadId) =&gt; {
   <span class="tok-kw">if</span> (!socket.data.threads.includes(threadId)) <span class="tok-kw">return</span> socket.emit(<span class="tok-str">'error:forbidden'</span>, { threadId });
   socket.join(<span class="tok-str">&#96;thread:\${threadId}&#96;</span>);
@@ -456,7 +456,7 @@ socket.on(<span class="tok-str">'join:safe'</span>, (threadId) =&gt; {
 <p>User 7 asks for thread 99, which belongs to two other people:</p>
 <div class="out">   join:unsafe → ĐÃ VÀO thread:99 (không ai kiểm!)
    join:safe   → TỪ CHỐI thread 99 (không phải người trong cuộc)
-   ⚠️  socket lậu NHẬN ĐƯỢC tin riêng tư: {"threadId":99,"body":"Chuyển storeản 50 triệu nhé"}</div>
+   ⚠️  socket lậu NHẬN ĐƯỢC tin riêng tư: {"threadId":99,"body":"Chuyển khoản 50 triệu nhé"}</div>
 <p>That is the whole attack. No stolen token, no XSS, no privilege escalation — a legitimately logged-in user emitted one event with a number they do not own. Thread ids are sequential integers, so "guessing" is a <code>for</code> loop. And because it happens over a socket, <strong>nothing appears in your REST access logs</strong>: no <code>GET /threads/99</code>, no 403, nothing to alert on.</p>
 
 <div class="note-ct">
@@ -525,7 +525,7 @@ tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
 <div class="out">token hợp lệ             → KẾT NỐI ĐƯỢC
 không token              → BỊ TỪ CHỐI: NO_TOKEN
 token hết hạn            → BỊ TỪ CHỐI: jwt expired
-token tự ký storeá sai     → BỊ TỪ CHỐI: invalid signature</div>
+token tự ký khoá sai     → BỊ TỪ CHỐI: invalid signature</div>
 <p>Việc bị từ chối hiện ra ở client dưới dạng sự kiện <code>connect_error</code>, không phải một ngoại lệ được ném ra — một client chỉ lắng nghe <code>connect</code> sẽ ngồi im lặng mãi mãi, và đó là lý do một socket chưa xác thực thường biểu hiện thành câu "realtime tự nhiên không chạy" chứ không thành một thông báo lỗi.</p>
 
 <h3>Phép đo 2 — cái lỗ: đã xác thực KHÔNG có nghĩa là có quyền</h3>
@@ -541,7 +541,7 @@ socket.on(<span class="tok-str">'join:safe'</span>, (threadId) =&gt; {
 <p>Người dùng 7 xin vào thread 99, vốn là của hai người khác:</p>
 <div class="out">   join:unsafe → ĐÃ VÀO thread:99 (không ai kiểm!)
    join:safe   → TỪ CHỐI thread 99 (không phải người trong cuộc)
-   ⚠️  socket lậu NHẬN ĐƯỢC tin riêng tư: {"threadId":99,"body":"Chuyển storeản 50 triệu nhé"}</div>
+   ⚠️  socket lậu NHẬN ĐƯỢC tin riêng tư: {"threadId":99,"body":"Chuyển khoản 50 triệu nhé"}</div>
 <p>Toàn bộ đòn tấn công chỉ có thế. Không trộm token, không XSS, không leo thang đặc quyền — một người dùng đăng nhập hợp pháp emit một sự kiện kèm một con số không thuộc về mình. Id của thread là số nguyên tuần tự, nên "đoán" ở đây là một vòng <code>for</code>. Và vì chuyện xảy ra qua socket nên <strong>không có gì hiện lên trong log truy cập REST</strong>: không <code>GET /threads/99</code>, không lỗi 403, không có gì để mà cảnh báo.</p>
 
 <div class="note-ct">
@@ -620,7 +620,7 @@ tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
 <p>Same test, with <code>@socket.io/redis-adapter</code> attached on both processes. The adapter publishes every broadcast to a Redis channel and each process replays it to its own local sockets:</p>
 <pre><code><span class="tok-kw">import</span> { createAdapter } <span class="tok-kw">from</span> <span class="tok-str">'@socket.io/redis-adapter'</span>;
 <span class="tok-kw">const</span> pub = <span class="tok-kw">new</span> Redis(REDIS_URL);
-<span class="tok-kw">const</span> sub = pub.duplicate();          <span class="tok-cmt">// PHẢI là kết nối riêng: một client đang SUBSCRIBE không chạy lệnh khác được</span>
+<span class="tok-kw">const</span> sub = pub.duplicate();          <span class="tok-cmt">// MUST be its own connection: a client in SUBSCRIBE mode cannot run other commands</span>
 io.adapter(createAdapter(pub, sub));</code></pre>
 <div class="out">########## CÓ adapter Redis ##########
   A /count: {"localConns":1,"socketsInRoomClusterWide":1}
@@ -647,9 +647,9 @@ transport=websocket  qua LB luân phiên → OK</div>
   RSS 65,1MB → 257,5MB (+192,4MB)
   readyState = 1 (1 = OPEN) → send() KHÔNG hề báo lỗi</div>
 <p>The socket still reports <code>OPEN</code>. <code>send()</code> returns normally. One client cost 192MB and there is no error anywhere. The guard is to look before you write:</p>
-<pre><code><span class="tok-kw">const</span> LIMIT = <span class="tok-num">1</span> * <span class="tok-num">1024</span> * <span class="tok-num">1024</span>;               <span class="tok-cmt">// 1MB hàng đợi cho mỗi socket</span>
+<pre><code><span class="tok-kw">const</span> LIMIT = <span class="tok-num">1</span> * <span class="tok-num">1024</span> * <span class="tok-num">1024</span>;               <span class="tok-cmt">// a 1MB queue per socket</span>
 <span class="tok-kw">if</span> (ws.bufferedAmount &gt; LIMIT) {
-  <span class="tok-cmt">// khách này không theo kịp: bỏ tin, hoặc đóng và bắt họ tải lại từ REST</span>
+  <span class="tok-cmt">// this client cannot keep up: drop the message, or close and make them refetch over REST</span>
   <span class="tok-kw">return</span>;
 }
 ws.send(payload);</code></pre>

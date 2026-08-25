@@ -530,7 +530,7 @@ services:
 <pre><code># cách 1: exec — thay thế shell bằng node, giữ nguyên PID 1
 #!/bin/sh
 npx prisma migrate deploy
-exec node dist/index.js        # ← 'exec' là từ storeá quan trọng nhất ở đây
+exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất ở đây
 
 # cách 2: dùng init để nhận và chuyển tiếp tín hiệu
 # docker run --init ...        (Docker nhét sẵn tini vào PID 1)</code></pre>
@@ -628,7 +628,7 @@ services:
 <pre><code># cách 1: exec — thay thế shell bằng node, giữ nguyên PID 1
 #!/bin/sh
 npx prisma migrate deploy
-exec node dist/index.js        # ← 'exec' là từ storeá quan trọng nhất ở đây
+exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất ở đây
 
 # cách 2: dùng init để nhận và chuyển tiếp tín hiệu
 # docker run --init ...        (Docker nhét sẵn tini vào PID 1)</code></pre>

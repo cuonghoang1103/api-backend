@@ -481,7 +481,7 @@ npx prisma studio</code></pre>
 </div>
 
 <h3>The four PostgreSQL views worth memorising</h3>
-<pre><code><span class="tok-comment">-- 1. Who is connected and what are they doing? (Bài 9.4, 12.2)</span>
+<pre><code><span class="tok-comment">-- 1. Who is connected and what are they doing? (Lessons 9.4, 12.2)</span>
 SELECT pid, state, now() - state_change AS lau, left(query, 60)
 FROM pg_stat_activity
 WHERE datname = current_database() AND state != 'idle'
@@ -503,7 +503,7 @@ WHERE cardinality(pg_blocking_pids(bi.pid)) &gt; 0;</code></pre>
    41302 | ALTER TABLE "SocialPost"… |   41287 | SELECT … FROM "User"  | 00:00:31
 
 -- Bai 11.3: mot ALTER dang waitMs, va MOI truy van moi xep hang sau no.</div>
-<pre><code><span class="tok-comment">-- 3. Which tables are being scanned instead of indexed? (Bài 9.3)</span>
+<pre><code><span class="tok-comment">-- 3. Which tables are being scanned instead of indexed? (Lesson 9.3)</span>
 SELECT relname, seq_scan, seq_tup_read, idx_scan, n_live_tup, n_dead_tup
 FROM pg_stat_user_tables
 WHERE seq_scan &gt; 0
@@ -515,7 +515,7 @@ ORDER BY seq_tup_read DESC LIMIT 5;</code></pre>
 
 -- 22 ty hang doc tuan from = mot chi muc bi thieu.
 -- 418k dead tuple = autovacuum khong theo kip (Bai 11.4).</div>
-<pre><code><span class="tok-comment">-- 4. What is actually slow, cumulatively? (Bài 9.1)</span>
+<pre><code><span class="tok-comment">-- 4. What is actually slow, cumulatively? (Lesson 9.1)</span>
 SELECT calls, round(total_exec_time)::int AS tong_ms,
        round(mean_exec_time::numeric, 2) AS tb_ms, left(query, 70)
 FROM pg_stat_statements

@@ -20,9 +20,9 @@ export default {
 <h3>Same rate, three spellings, ten rapid requests</h3>
 <pre><code>limit_req_zone \$binary_remote_addr zone=cham:10m rate=2r/s;
 
-location /a/ { limit_req zone=cham; }                    <span class="tok-comment"># không burst</span>
-location /b/ { limit_req zone=cham burst=5; }            <span class="tok-comment"># burst, có xếp hàng</span>
-location /c/ { limit_req zone=cham burst=5 nodelay; }    <span class="tok-comment"># burst, không chờ</span></code></pre>
+location /a/ { limit_req zone=cham; }                    <span class="tok-comment"># no burst</span>
+location /b/ { limit_req zone=cham burst=5; }            <span class="tok-comment"># burst, with queueing</span>
+location /c/ { limit_req zone=cham burst=5 nodelay; }    <span class="tok-comment"># burst, no waiting</span></code></pre>
 <div class="out">Ban 10 request lien tiep that nhanh:
 
 A) khong burst    200 503 503 503 503 503 503 503 503 503
@@ -51,20 +51,20 @@ error.log: limiting requests, excess: 0.660 by zone "cham", client: 127.0.0.1</d
 </div>
 <pre><code>http {
   limit_req_zone \$binary_remote_addr zone=chung:10m rate=10r/s;
-  limit_req_status  429;          <span class="tok-comment"># KHÔNG phải 503</span>
+  limit_req_status  429;          <span class="tok-comment"># NOT 503</span>
   limit_conn_status 429;
 
   server {
-    <span class="tok-comment"># Tuyến người dùng bấm: cho cả trang nạp qua, chặn script</span>
+    <span class="tok-comment"># Routes a human clicks: let a full page load through, block scripts</span>
     location /api/ {
       limit_req zone=chung burst=20 nodelay;
       add_header Retry-After 1 always;
       proxy_pass http://api;
     }
 
-    <span class="tok-comment"># Tuyến ĐẮT: xếp hàng chứ đừng từ chối</span>
+    <span class="tok-comment"># EXPENSIVE routes: queue rather than refuse</span>
     location /api/bao-cao {
-      limit_req zone=chung burst=5;      <span class="tok-comment"># có chờ</span>
+      limit_req zone=chung burst=5;      <span class="tok-comment"># with waiting</span>
       proxy_pass http://api;
     }
   }
@@ -200,15 +200,15 @@ C) Cung cau hinh B, nhung mot ke tan cong TU DOI X-Forwarded-For:
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Reading X-Forwarded-For directly is worse</span><span class="lz-d">Row C. The header is client input (Lesson 3.2), so an attacker changes it per request and every request gets a fresh bucket. The limit is not weakened — it is gone, and the config still looks like it has one.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The answer is to fix $remote_addr itself</span><span class="lz-d"><code>set_real_ip_from</code> with the addresses of proxies you actually operate, plus <code>real_ip_header X-Forwarded-For</code>. Nginx then rewrites <code>\$remote_addr</code> to the real client, so <code>\$binary_remote_addr</code> is both correct and unforgeable — and every limit keyed on it is too.</span></div>
 </div>
-<pre><code><span class="tok-comment"># ĐÚNG: sửa chính $remote_addr, rồi khoá theo nó</span>
-set_real_ip_from 10.0.0.0/8;          <span class="tok-comment"># CHỈ các proxy do BẠN vận hành</span>
+<pre><code><span class="tok-comment"># RIGHT: fix $remote_addr itself, then key on it</span>
+set_real_ip_from 10.0.0.0/8;          <span class="tok-comment"># ONLY the proxies YOU operate</span>
 set_real_ip_from 172.16.0.0/12;
 real_ip_header   X-Forwarded-For;
 real_ip_recursive on;
 
 limit_req_zone \$binary_remote_addr zone=theo-ip:10m rate=10r/s;
 
-<span class="tok-comment"># SAI: đọc thẳng header (dòng C ở trên — giả mạo được)</span>
+<span class="tok-comment"># WRONG: reading the header directly (line C above — forgeable)</span>
 <span class="tok-comment"># map $http_x_forwarded_for $ip_that { ... }</span>
 <span class="tok-comment"># limit_req_zone $ip_that zone=... </span></code></pre>
 <div class="callout warn">
@@ -370,20 +370,20 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <p><strong>Trap — <code>limit_conn</code> counts connections that have finished reading their request headers, and a slowloris connection never finishes.</strong> The middle row is the measurement: twenty dribbling connections, a limit of two per IP, and all twenty survived. They are not counted because from Nginx's point of view no request has started yet — they are still in the header-reading phase. So the directive people reach for to stop connection exhaustion is precisely the wrong one for the best-known connection-exhaustion attack. What stops it is <code>client_header_timeout</code>: with it at 2 seconds all twenty were closed. The two directives protect against different things and neither substitutes for the other.</p>
 </div>
 <pre><code>http {
-  <span class="tok-comment"># Chống nhỏ giọt: cắt kết nối chưa gửi xong header/thân</span>
-  client_header_timeout 10s;      <span class="tok-comment"># mặc định 60s — quá rộng rãi</span>
+  <span class="tok-comment"># Against slowloris: cut connections that never finish their headers or body</span>
+  client_header_timeout 10s;      <span class="tok-comment"># default 60s — far too generous</span>
   client_body_timeout   10s;
-  send_timeout          10s;      <span class="tok-comment"># client đọc phản hồi quá chậm</span>
+  send_timeout          10s;      <span class="tok-comment"># the client reads the response too slowly</span>
   keepalive_timeout     30s;
 
-  <span class="tok-comment"># Chống chiếm slot: giới hạn số kết nối ĐANG XỬ LÝ mỗi IP</span>
+  <span class="tok-comment"># Against slot exhaustion: cap the IN-FLIGHT connections per IP</span>
   limit_conn_zone \$binary_remote_addr zone=conn:10m;
   limit_conn_status 429;
 
   server {
-    limit_conn conn 20;                <span class="tok-comment"># trang thường: rộng rãi</span>
+    limit_conn conn 20;                <span class="tok-comment"># ordinary pages: generous</span>
     location /tai-xuong/ {
-      limit_conn conn 2;               <span class="tok-comment"># tải file: chặt</span>
+      limit_conn conn 2;               <span class="tok-comment"># file downloads: tight</span>
       limit_rate_after 5m;
       limit_rate 1m;
     }
@@ -527,15 +527,15 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The default is 1MB, and it is the wrong default for uploads</span><span class="lz-d"><code>client_max_body_size 1m;</code> is what you get if you say nothing, and it produces a <code>413</code> on the first photo somebody uploads. It is also the right default for an API that only receives JSON, so this is a per-location decision rather than a global one.</span></div>
 </div>
 <pre><code>http {
-  client_max_body_size 1m;              <span class="tok-comment"># mặc định chặt cho toàn site</span>
+  client_max_body_size 1m;              <span class="tok-comment"># a tight default for the whole site</span>
 
   server {
-    location /api/ { }                  <span class="tok-comment"># JSON: 1MB là quá đủ</span>
+    location /api/ { }                  <span class="tok-comment"># JSON: 1MB is more than enough</span>
 
     location /tai-len/ {
-      client_max_body_size 50m;         <span class="tok-comment"># CHỈ ở đây mới nới</span>
-      client_body_buffer_size 128k;     <span class="tok-comment"># lớn hơn thì tràn ra đĩa</span>
-      proxy_request_buffering on;       <span class="tok-comment"># đọc XONG rồi mới gọi backend</span>
+      client_max_body_size 50m;         <span class="tok-comment"># loosened ONLY here</span>
+      client_body_buffer_size 128k;     <span class="tok-comment"># anything larger spills to disk</span>
+      proxy_request_buffering on;       <span class="tok-comment"># read it FULLY before calling the backend</span>
       proxy_pass http://api;
     }
   }
@@ -651,32 +651,32 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 
 <h3>The config</h3>
 <pre><code>http {
-  <span class="tok-comment"># 1) DANH TÍNH — sửa $remote_addr TRƯỚC, rồi mọi giới hạn mới đúng (7.2)</span>
-  set_real_ip_from 10.0.0.0/8;      <span class="tok-comment"># CHỈ proxy của bạn</span>
+  <span class="tok-comment"># 1) IDENTITY — fix $remote_addr FIRST, and only then is every limit correct (7.2)</span>
+  set_real_ip_from 10.0.0.0/8;      <span class="tok-comment"># YOUR proxies only</span>
   real_ip_header    X-Forwarded-For;
   real_ip_recursive on;
 
-  <span class="tok-comment"># 2) VÙNG — mỗi mục đích một vùng riêng</span>
+  <span class="tok-comment"># 2) ZONES — one zone per purpose</span>
   limit_req_zone  \$binary_remote_addr zone=chung:10m     rate=20r/s;
   limit_req_zone  \$binary_remote_addr zone=login:10m  rate=10r/m;
   limit_req_zone  \$binary_remote_addr zone=upload:10m    rate=2r/s;
   limit_conn_zone \$binary_remote_addr zone=ket:10m;
 
-  <span class="tok-comment"># 3) MÃ TRẢ VỀ đúng nghĩa (7.1)</span>
+  <span class="tok-comment"># 3) The RIGHT STATUS CODE (7.1)</span>
   limit_req_status  429;
   limit_conn_status 429;
 
-  <span class="tok-comment"># 4) THỜI GIAN — chống nhỏ giọt (7.3)</span>
+  <span class="tok-comment"># 4) TIME — against slowloris (7.3)</span>
   client_header_timeout 10s;
   client_body_timeout   10s;
   send_timeout          10s;
   keepalive_timeout     30s;
 
-  <span class="tok-comment"># 5) KÍCH THƯỚC — chặt ở mặc định, nới đúng chỗ cần (7.4)</span>
+  <span class="tok-comment"># 5) SIZE — tight by default, loosened exactly where needed (7.4)</span>
   client_max_body_size 1m;
 
   server {
-    limit_conn ket 20;                        <span class="tok-comment"># trần chung cho mỗi IP</span>
+    limit_conn ket 20;                        <span class="tok-comment"># the shared cap per IP</span>
 
     location /api/dang-nhap {
       limit_req zone=login burst=3 nodelay;
@@ -684,11 +684,11 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
       proxy_pass http://api;
     }
     location /api/ {
-      limit_req zone=chung burst=40 nodelay;  <span class="tok-comment"># cho cả trang nạp qua</span>
+      limit_req zone=chung burst=40 nodelay;  <span class="tok-comment"># lets a full page load through</span>
       proxy_pass http://api;
     }
     location /tai-len/ {
-      limit_req zone=upload burst=5;          <span class="tok-comment"># VÙNG RIÊNG — xem bên dưới</span>
+      limit_req zone=upload burst=5;          <span class="tok-comment"># ITS OWN ZONE — see below</span>
       limit_conn ket 2;
       client_max_body_size 50m;
       proxy_pass http://api;

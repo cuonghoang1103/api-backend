@@ -19,19 +19,19 @@ export default {
 
 <h3>The three directives</h3>
 <pre><code>http {
-  <span class="tok-comment"># Kho chứa: nằm ở tầng http, KHÔNG đặt trong server được</span>
+  <span class="tok-comment"># The store: lives at the http level, CANNOT go inside a server block</span>
   proxy_cache_path /var/cache/nginx
-                   levels=1:2            <span class="tok-comment"># cây thư mục 2 tầng, tránh 1 thư mục triệu tệp</span>
-                   keys_zone=kho:10m     <span class="tok-comment"># 10MB bộ nhớ chung ~ 80.000 khoá</span>
-                   max_size=10g          <span class="tok-comment"># trần ĐĨA; vượt thì đuổi bản cũ nhất</span>
-                   inactive=60m;         <span class="tok-comment"># không ai hỏi trong 60 phút thì xoá</span>
+                   levels=1:2            <span class="tok-comment"># a 2-level directory tree, to avoid one folder with a million files</span>
+                   keys_zone=kho:10m     <span class="tok-comment"># 10MB of shared memory ~ 80,000 keys</span>
+                   max_size=10g          <span class="tok-comment"># the DISK cap; past it the oldest entries are evicted</span>
+                   inactive=60m;         <span class="tok-comment"># deleted if nobody asks for it within 60 minutes</span>
 
   server {
-    add_header X-Cache-Status \$upstream_cache_status always;   <span class="tok-comment"># để NHÌN THẤY nó</span>
+    add_header X-Cache-Status \$upstream_cache_status always;   <span class="tok-comment"># so you can SEE it</span>
 
     location / {
-      proxy_cache       kho;             <span class="tok-comment"># dùng kho nào</span>
-      proxy_cache_valid 200 10s;         <span class="tok-comment"># giữ 200 trong 10 giây</span>
+      proxy_cache       kho;             <span class="tok-comment"># which store to use</span>
+      proxy_cache_valid 200 10s;         <span class="tok-comment"># hold a 200 for 10 seconds</span>
       proxy_pass http://127.0.0.1:9201;
     }
   }
@@ -204,9 +204,9 @@ Phuong thuc:
   proxy_cache kho;
   proxy_cache_valid 200 10s;
 
-  <span class="tok-comment"># KHÔNG cất phản hồi của một request có mang thông tin đăng nhập</span>
+  <span class="tok-comment"># do NOT store the response to a request carrying credentials</span>
   proxy_no_cache      \$http_authorization \$cookie_phien;
-  <span class="tok-comment"># và KHÔNG lấy từ cache ra cho một request như thế</span>
+  <span class="tok-comment"># and do NOT serve one from cache for such a request</span>
   proxy_cache_bypass  \$http_authorization \$cookie_phien;
 
   proxy_pass http://api;
@@ -357,15 +357,15 @@ D) Upstream khai X-Accel-Expires: 2 VA Cache-Control: max-age=600
   <div class="kv"><span class="k">The backend is not yours → proxy_cache_valid, plus ignore if needed</span><span class="v">A third-party API or a legacy service that sends nothing useful. Set the lifetime in the config, scoped to that one location, and accept that you are now the one asserting how fresh the data is.</span></div>
   <div class="kv"><span class="k">Different statuses want different lifetimes</span><span class="v"><code>proxy_cache_valid 200 10m;</code> <code>proxy_cache_valid 404 1m;</code> <code>proxy_cache_valid 500 502 503 504 1s;</code> — caching a <code>404</code> briefly stops a scanner from reaching your application at all, and one second on <code>5xx</code> collapses a thundering retry storm into a trickle without hiding a real outage.</span></div>
 </div>
-<pre><code><span class="tok-comment"># "Nginx giữ 10 phút, trình duyệt hỏi lại mỗi lần"</span>
-<span class="tok-comment"># — viết ở phía ỨNG DỤNG, không phải ở cấu hình:</span>
-res.setHeader('X-Accel-Expires', '600');        <span class="tok-comment"># chỉ Nginx đọc, rồi bị lột đi</span>
-res.setHeader('Cache-Control', 'no-cache');     <span class="tok-comment"># trình duyệt thấy cái này</span>
+<pre><code><span class="tok-comment"># "Nginx holds it 10 minutes, the browser revalidates every time"</span>
+<span class="tok-comment"># — written on the APPLICATION side, not in the config:</span>
+res.setHeader('X-Accel-Expires', '600');        <span class="tok-comment"># read by Nginx only, then stripped</span>
+res.setHeader('Cache-Control', 'no-cache');     <span class="tok-comment"># the browser sees this one</span>
 
-<span class="tok-comment"># Và ở Nginx, thời hạn theo TỪNG mã trạng thái:</span>
+<span class="tok-comment"># And in Nginx, a lifetime PER status code:</span>
 proxy_cache_valid 200      10m;
-proxy_cache_valid 404      1m;    <span class="tok-comment"># chan quét dạo khỏi ứng dụng</span>
-proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão thử lại</span></code></pre>
+proxy_cache_valid 404      1m;    <span class="tok-comment"># keeps wandering scanners off the application</span>
+proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># damps the retry storm</span></code></pre>
 
 <h3>Reading a cache entry's remaining life</h3>
 <div class="lz-stack">
@@ -496,10 +496,10 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
   proxy_cache_valid 200 60s;
 
   proxy_cache_lock          on;
-  proxy_cache_lock_timeout  5s;    <span class="tok-comment"># chờ tối đa, rồi tự đi hỏi upstream</span>
-  proxy_cache_lock_age      5s;    <span class="tok-comment"># kẻ dẫn đầu chậm quá thì bầu người khác</span>
+  proxy_cache_lock_timeout  5s;    <span class="tok-comment"># waits at most this long, then asks upstream itself</span>
+  proxy_cache_lock_age      5s;    <span class="tok-comment"># if the leader is too slow, elect another</span>
 
-  <span class="tok-comment"># Và cách chữa TỐT HƠN cho cùng bài toán — xem Bài 5.5:</span>
+  <span class="tok-comment"># And the BETTER cure for the same problem — see Lesson 5.5:</span>
   proxy_cache_use_stale         updating;
   proxy_cache_background_update on;
 
@@ -648,14 +648,14 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
   proxy_cache kho;
   proxy_cache_valid 200 60s;
 
-  <span class="tok-comment"># Dùng bản cũ khi upstream lỗi, hết giờ, hoặc đang được làm mới</span>
+  <span class="tok-comment"># Serve the stale copy when upstream errors, times out, or is being refreshed</span>
   proxy_cache_use_stale error timeout updating
                         http_500 http_502 http_503 http_504;
 
-  <span class="tok-comment"># Làm mới ở NỀN — người dùng nhận bản cũ NGAY, không chờ</span>
+  <span class="tok-comment"># Refresh in the BACKGROUND — the user gets the stale copy AT ONCE, no waiting</span>
   proxy_cache_background_update on;
 
-  <span class="tok-comment"># Và cho phép Nginx tự chuyển sang máy khác khi một máy hỏng</span>
+  <span class="tok-comment"># And let Nginx move to another server by itself when one fails</span>
   proxy_next_upstream error timeout http_502 http_503 http_504;
 
   proxy_pass http://api;

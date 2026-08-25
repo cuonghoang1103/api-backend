@@ -233,12 +233,12 @@ expires 1y + add_header Cache-Control "public, max-age=31536000, immutable"
   <div class="kv"><span class="k">immutable is what makes a year-long cache safe</span><span class="v">With a content-hashed filename, the content behind a URL can never change, so <code>immutable</code> tells the browser not to revalidate even on a reload. That turns a <code>304</code> round trip into no request at all, which on a page with forty assets is the difference you can feel.</span></div>
   <div class="kv"><span class="k">HTML gets the opposite treatment</span><span class="v">The document that references the hashed assets must never be cached long, or visitors keep loading the old page pointing at old assets. <code>no-cache</code> on HTML plus a year on hashed assets is the standard pairing, and it is why <code>expires</code> belongs per-location rather than at the top of the file.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cặp chuẩn: HTML luôn hỏi lại, tài nguyên có băm thì cache một năm</span>
+<pre><code><span class="tok-comment"># The standard pair: HTML always revalidates, hashed assets cache for a year</span>
 location = /index.html {
-  add_header Cache-Control "no-cache" always;   <span class="tok-comment"># hỏi lại MỖI lần, nhưng vẫn dùng 304</span>
+  add_header Cache-Control "no-cache" always;   <span class="tok-comment"># revalidate EVERY time, but still use 304</span>
 }
 location /tinh/ {
-  expires 1y;                                   <span class="tok-comment"># CHỈ dùng expires, không thêm add_header</span>
+  expires 1y;                                   <span class="tok-comment"># use expires ONLY, do not add an add_header</span>
   add_header Cache-Control "public, max-age=31536000, immutable" always;
 }</code></pre>
 <div class="callout warn">
@@ -400,15 +400,15 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 </div>
 <pre><code>http {
   gzip              on;
-  gzip_vary         on;          <span class="tok-comment"># BẮT BUỘC khi có bất cứ bộ đệm nào ở giữa</span>
-  gzip_comp_level   5;           <span class="tok-comment"># 4–6; cao hơn là trả CPU thật cho vài phần trăm</span>
-  gzip_min_length   256;         <span class="tok-comment"># dưới ngưỡng này nén xong còn to hơn</span>
-  gzip_proxied      any;         <span class="tok-comment"># nén cả phản hồi đến từ upstream</span>
+  gzip_vary         on;          <span class="tok-comment"># MANDATORY whenever any cache sits in between</span>
+  gzip_comp_level   5;           <span class="tok-comment"># 4–6; higher means paying real CPU for a few percent</span>
+  gzip_min_length   256;         <span class="tok-comment"># below this threshold, compressing makes it larger</span>
+  gzip_proxied      any;         <span class="tok-comment"># compress upstream responses too</span>
   gzip_types        text/css application/javascript application/json
                     image/svg+xml application/xml;
-  <span class="tok-comment"># text/html LUÔN được nén, không cần khai — khai lại là một dòng WARN</span>
+  <span class="tok-comment"># text/html is ALWAYS compressed, no need to declare it — declaring it logs a WARN</span>
 
-  gzip_static       on;          <span class="tok-comment"># có tệp .gz kề bên thì dùng nó</span>
+  gzip_static       on;          <span class="tok-comment"># if a .gz file sits alongside, use it</span>
 }</code></pre>
 <div class="pitfall">
 <p><strong>Trap — do not compress what is already compressed, and be careful what you compress at all.</strong> JPEG, PNG, MP4, WebP, WOFF2 and every archive format are already compressed; running gzip over them burns CPU to make the file very slightly larger. They are absent from the default <code>gzip_types</code> for that reason, and adding them "for completeness" is a pure loss. Separately, compressing a response that mixes a secret with attacker-influenced content is what BREACH exploits — the compressed length leaks whether a guess appeared in the body. That is a real concern for HTML pages containing CSRF tokens, and the practical mitigations are per-request token randomisation rather than turning compression off site-wide.</p>
@@ -551,13 +551,13 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 </div>
 <pre><code>http {
   sendfile        on;
-  tcp_nopush      on;          <span class="tok-comment"># chỉ có tác dụng khi sendfile on</span>
-  tcp_nodelay     on;          <span class="tok-comment"># cho kết nối giữ-sống, gửi ngay gói cuối</span>
+  tcp_nopush      on;          <span class="tok-comment"># only has an effect when sendfile is on</span>
+  tcp_nodelay     on;          <span class="tok-comment"># for keep-alive connections, send the final packet at once</span>
 
   open_file_cache          max=10000 inactive=60s;
-  open_file_cache_valid    30s;      <span class="tok-comment"># cửa sổ cũ tối đa sau khi deploy</span>
-  open_file_cache_min_uses 2;        <span class="tok-comment"># chỉ cache thứ được hỏi tới ít nhất 2 lần</span>
-  open_file_cache_errors   on;       <span class="tok-comment"># cache cả 404 — chống đám quét dạo</span>
+  open_file_cache_valid    30s;      <span class="tok-comment"># the maximum staleness window after a deploy</span>
+  open_file_cache_min_uses 2;        <span class="tok-comment"># only cache what is asked for at least twice</span>
+  open_file_cache_errors   on;       <span class="tok-comment"># cache 404s too — against wandering scanners</span>
 }</code></pre>
 <div class="pitfall">
 <p><strong>Trap — <code>open_file_cache</code> holds descriptors, so a deploy that replaces files can serve the old ones briefly, and a deploy that <em>deletes</em> them can serve deleted files for the whole validity window.</strong> The descriptor stays valid after an unlink on Unix — the data is still there until the last holder closes it. So a file you removed for a good reason can keep being served for up to <code>open_file_cache_valid</code>. If a removal is urgent — a leaked document, a bad build — reload Nginx after the deletion rather than assuming the file is gone. A reload replaces the workers and their caches with it, which is why the standard deploy script does one.</p>
@@ -666,7 +666,7 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 <h3>The config</h3>
 <pre><code>http {
   include       /etc/nginx/mime.types;
-  default_type  application/octet-stream;   <span class="tok-comment"># KHÔNG phải text/plain (4.1)</span>
+  default_type  application/octet-stream;   <span class="tok-comment"># NOT text/plain (4.1)</span>
 
   sendfile on; tcp_nopush on; tcp_nodelay on;          <span class="tok-comment"># 4.4</span>
   open_file_cache max=10000 inactive=60s;
@@ -684,16 +684,16 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
     server_name vidu.com;
     root /srv/site;
 
-    <span class="tok-comment"># Tài nguyên CÓ BĂM: một năm, immutable (4.2)</span>
+    <span class="tok-comment"># HASHED assets: one year, immutable (4.2)</span>
     location /tinh/ {
       add_header Cache-Control "public, max-age=31536000, immutable";
       add_header X-Content-Type-Options "nosniff" always;
       try_files \$uri =404;
     }
 
-    <span class="tok-comment"># Tệp NGƯỜI DÙNG tải lên: không bao giờ được dựng ra trong trình duyệt</span>
+    <span class="tok-comment"># USER-uploaded files: must never be rendered in the browser</span>
     location /tai-len/ {
-      types { }                             <span class="tok-comment"># bỏ hẳn bảng mime</span>
+      types { }                             <span class="tok-comment"># drop the mime table entirely</span>
       default_type application/octet-stream;
       add_header Content-Disposition "attachment" always;
       add_header X-Content-Type-Options "nosniff" always;
@@ -701,13 +701,13 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
       try_files \$uri =404;
     }
 
-    <span class="tok-comment"># HTML: luôn hỏi lại</span>
+    <span class="tok-comment"># HTML: always revalidate</span>
     location = /index.html {
       add_header Cache-Control "no-cache";
       add_header X-Content-Type-Options "nosniff" always;
     }
 
-    <span class="tok-comment"># SPA: mọi đường dẫn khác về index.html (2.5)</span>
+    <span class="tok-comment"># SPA: every other path falls back to index.html (2.5)</span>
     location / { try_files \$uri \$uri/ /index.html; }
   }
 }</code></pre>

@@ -19,13 +19,13 @@ export default {
 
 <h3>Seven blocks, deliberately overlapping</h3>
 <pre><code>server {
-  location = /a            { ... }   <span class="tok-comment"># 1 — khớp CHÍNH XÁC</span>
-  location ^~ /a/tinh      { ... }   <span class="tok-comment"># 2 — tiền tố ƯU TIÊN</span>
-  location ~ \\.php         { ... }   <span class="tok-comment"># 3 — regex, phân biệt hoa thường</span>
-  location ~* \\.(jpg|gif)  { ... }   <span class="tok-comment"># 4 — regex, KHÔNG phân biệt hoa thường</span>
-  location /a/tinh/sau     { ... }   <span class="tok-comment"># 5 — tiền tố thường, DÀI hơn #2</span>
-  location /a              { ... }   <span class="tok-comment"># 6 — tiền tố thường</span>
-  location /               { ... }   <span class="tok-comment"># 7 — tiền tố bắt-tất</span>
+  location = /a            { ... }   <span class="tok-comment"># 1 — EXACT match</span>
+  location ^~ /a/tinh      { ... }   <span class="tok-comment"># 2 — PRIORITY prefix</span>
+  location ~ \\.php         { ... }   <span class="tok-comment"># 3 — regex, case-sensitive</span>
+  location ~* \\.(jpg|gif)  { ... }   <span class="tok-comment"># 4 — regex, case-INSENSITIVE</span>
+  location /a/tinh/sau     { ... }   <span class="tok-comment"># 5 — plain prefix, LONGER than #2</span>
+  location /a              { ... }   <span class="tok-comment"># 6 — plain prefix</span>
+  location /               { ... }   <span class="tok-comment"># 7 — the catch-all prefix</span>
 }</code></pre>
 <div class="out">=== BANG DO THAT — nginx 1.24.0 ===
 /a                   -> 1. = /a            (khop CHINH XAC)
@@ -329,7 +329,7 @@ location /         { return 200 "cong khai         uri=[\$uri]"; }</code></pre>
   location / {
     add_header X-Trong-Location "co-o-location" always;
   }
-  location ~* \\.(jpg|png)\$ {          <span class="tok-comment"># KHÔNG có add_header nào</span>
+  location ~* \\.(jpg|png)\$ {          <span class="tok-comment"># NO add_header at all</span>
     expires 7d;
   }
   location = /anh-2.jpg {
@@ -364,9 +364,9 @@ add_header Strict-Transport-Security "max-age=31536000" always;
 add_header X-Content-Type-Options    "nosniff" always;
 add_header X-Frame-Options           "SAMEORIGIN" always;
 
-<span class="tok-comment"># Rồi trong MỌI khối nào có add_header của riêng nó:</span>
+<span class="tok-comment"># Then in EVERY block that has an add_header of its own:</span>
 location /static/ {
-  include /etc/nginx/snippets/header-bao-mat.conf;   <span class="tok-comment"># một dòng, không trôi dạt</span>
+  include /etc/nginx/snippets/header-bao-mat.conf;   <span class="tok-comment"># one line, no drift</span>
   add_header Cache-Control "public, max-age=31536000, immutable" always;
 }</code></pre>
 
@@ -561,12 +561,12 @@ do that — duong dan Nginx dung len:
 </div>
 
 <h3>The missing slash, and what it leaks</h3>
-<pre><code><span class="tok-comment"># SAI — location thiếu dấu / ở cuối</span>
+<pre><code><span class="tok-comment"># WRONG — the location is missing its trailing /</span>
 location /tep { alias /tmp/nxloc/kho/cong-khai/; }
 
-<span class="tok-comment"># Cây thư mục:</span>
-<span class="tok-comment">#   /tmp/nxloc/kho/bi-mat.txt          &lt;- KHÔNG được phép công khai</span>
-<span class="tok-comment">#   /tmp/nxloc/kho/cong-khai/ok.txt    &lt;- thư mục định phục vụ</span></code></pre>
+<span class="tok-comment"># The directory tree:</span>
+<span class="tok-comment">#   /tmp/nxloc/store/secret.txt        &lt;- must NOT be public</span>
+<span class="tok-comment">#   /tmp/nxloc/store/public/ok.txt     &lt;- the directory you meant to serve</span></code></pre>
 <div class="out">=== location /tep  (THIEU dau / cuoi) ===
 /tep/ok.txt                -> 200  OK          (dung nhu y dinh)
 /tep../bi-mat.txt          -> 200  BI-MAT      &lt;- DOC DUOC TEP NGOAI THU MUC
@@ -578,12 +578,12 @@ location /tep { alias /tmp/nxloc/kho/cong-khai/; }
 <div class="pitfall">
 <p><strong>Trap — this is the best-known Nginx misconfiguration, and it is one character wide.</strong> <code>location /tep</code> is a prefix, and prefixes do not stop at a separator (Lesson 2.1), so it matches <code>/tep../bi-mat.txt</code>. <code>alias</code> then removes the matched <code>/tep</code> and prepends the alias, giving <code>/tmp/nxloc/kho/cong-khai/../bi-mat.txt</code> — which the filesystem resolves to the parent directory. The <code>..</code> survived normalisation because <code>tep..</code> is not a path segment, so Lesson 2.2's cleanup never applied to it. Writing <code>location /tep/</code> closes it, measured above: the crafted request no longer matches the block at all. <strong>The rule: when a location is paired with <code>alias</code>, both the location and the alias must end in <code>/</code>, or neither may.</strong> The mixed spelling is the vulnerable one.</p>
 </div>
-<pre><code><span class="tok-comment"># ĐÚNG — cả hai cùng có dấu / ở cuối</span>
+<pre><code><span class="tok-comment"># RIGHT — both carry the trailing /</span>
 location /tep/ { alias /tmp/nxloc/kho/cong-khai/; }
 
-<span class="tok-comment"># Cũng đúng, và thường tốt hơn: đổi tên thư mục cho khớp rồi dùng root</span>
+<span class="tok-comment"># Also correct, and usually better: rename the directory to match and use root</span>
 location /tep/ { root /tmp/nxloc/kho/cong-khai-goc; }
-<span class="tok-comment">#   -&gt; mở /tmp/nxloc/kho/cong-khai-goc/tep/... — không có phép thay thế nào</span></code></pre>
+<span class="tok-comment">#   -&gt; opens /tmp/nxloc/store/public-root/file/... — no substitution involved</span></code></pre>
 
 <h3>Checking your own config for this</h3>
 <div class="lz-stack">
@@ -708,8 +708,8 @@ location /tep/ { root /tmp/nxloc/kho/cong-khai-goc; }
 <p class="lead">Everything so far treated location selection as a single decision. It is not always: three ordinary directives can rewrite <code>$uri</code> mid-request and send the whole matching algorithm back to step one. Once you can see that happening, a large class of "impossible" Nginx behaviour becomes obvious.</p>
 
 <h3>try_files, in the order it tries</h3>
-<pre><code>location /spa/  { try_files \$uri \$uri/ /index.html; }   <span class="tok-comment"># dự phòng là một URI</span>
-location /chat/ { try_files \$uri =404; }                <span class="tok-comment"># dự phòng là một MÃ</span>
+<pre><code>location /spa/  { try_files \$uri \$uri/ /index.html; }   <span class="tok-comment"># the fallback is a URI</span>
+location /chat/ { try_files \$uri =404; }                <span class="tok-comment"># the fallback is a CODE</span>
 location /di-vong/ { try_files \$uri /dich-cuoi; }
 location /dich-cuoi { return 200 "DA CHAY LAI KHOP LOCATION: uri=[\$uri]"; }</code></pre>
 <div class="out">=== A: du phong la mot URI ===
@@ -745,8 +745,8 @@ location /dich-cuoi { return 200 "DA CHAY LAI KHOP LOCATION: uri=[\$uri]"; }</co
 </div>
 
 <h3>Building the loop on purpose</h3>
-<pre><code><span class="tok-comment"># Dự phòng trỏ tới một tệp KHÔNG tồn tại, mà đường dẫn đó lại rơi</span>
-<span class="tok-comment"># đúng vào CHÍNH khối này — nên nó thử lại, và lại, và lại</span>
+<pre><code><span class="tok-comment"># The fallback points at a file that does NOT exist, and that path lands</span>
+<span class="tok-comment"># back in THIS SAME block — so it retries, and retries, and retries</span>
 location /vong-lap/ { try_files \$uri /vong-lap/khong-bao-gio-co.html; }</code></pre>
 <div class="out">/vong-lap/x              -> 500
 
@@ -756,11 +756,11 @@ rewrite or internal redirection cycle while internally redirecting to
 <div class="pitfall">
 <p><strong>Trap — a <code>500</code> with no application involved, and the config that causes it looks completely reasonable.</strong> The fallback URI has to be servable by a block that does <em>not</em> send it back through the same <code>try_files</code>. Here <code>/vong-lap/khong-bao-gio-co.html</code> re-matched <code>location /vong-lap/</code>, the file still did not exist, and the fallback fired again — ten times, then <code>500</code>. The classic production version is an SPA config where <code>/index.html</code> is genuinely missing after a bad deploy: every URL on the site returns <code>500</code> instead of a <code>404</code>, and the error log line above is the only thing that says why. Two habits prevent it: make the fallback a path that a <code>location =</code> block handles directly, and make sure the file exists as part of the deploy check rather than assuming it.</p>
 </div>
-<pre><code><span class="tok-comment"># An toàn: dự phòng đi vào một khối KHÔNG thể quay lại try_files</span>
+<pre><code><span class="tok-comment"># Safe: the fallback goes into a block that CANNOT return to try_files</span>
 location /spa/ { try_files \$uri \$uri/ /spa-index; }
 location = /spa-index {
   root /srv/spa;
-  try_files /index.html =404;   <span class="tok-comment"># thiếu tệp thì 404 THẬT, không phải 500</span>
+  try_files /index.html =404;   <span class="tok-comment"># a missing file gives a REAL 404, not a 500</span>
 }</code></pre>
 
 <h3>Reading a request that redirected internally</h3>

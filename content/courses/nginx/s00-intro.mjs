@@ -68,11 +68,11 @@ export default {
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Limits, compression, cache, redirects</span><span class="lz-nsub">Chapters 5 and 7–9 · rules that belong in front of your code, not inside it</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment"># Không có Nginx: mỗi ứng dụng tự lo mọi thứ.</span>
+<pre><code><span class="tok-comment"># Without Nginx: every app looks after everything itself.</span>
 Internet → :3000 Node   (TLS? gzip? tệp tĩnh? trần tần suất? tất cả tự viết)
          → :4000 Python (…và viết lại lần nữa, bằng ngôn ngữ khác)
 
-<span class="tok-comment"># Có Nginx: một chỗ duy nhất, và ứng dụng chỉ còn lo phần việc của nó.</span>
+<span class="tok-comment"># With Nginx: one single place, and the app only handles its own job.</span>
 Internet → :443 nginx ─┬→ 127.0.0.1:3000  /api
                        ├→ 127.0.0.1:4000  /ai
                        └→ /var/www        /static  (nginx tự phục vụ)</code></pre>
@@ -197,15 +197,15 @@ Internet → :443 nginx ─┬→ 127.0.0.1:3000  /api
 <pre><code><span class="tok-comment"># Ubuntu / Debian</span>
 sudo apt-get update &amp;&amp; sudo apt-get install -y nginx
 nginx -v                       <span class="tok-comment"># nginx version: nginx/1.24.0 (Ubuntu)</span>
-nginx -V 2&gt;&amp;1 | tr ' ' '\\\\n' | grep '^--with'   <span class="tok-comment"># các module đã biên dịch vào</span>
+nginx -V 2&gt;&amp;1 | tr ' ' '\\\\n' | grep '^--with'   <span class="tok-comment"># the modules compiled in</span>
 
-<span class="tok-comment"># Docker — không đụng gì tới máy chủ</span>
+<span class="tok-comment"># Docker — touches nothing on the host</span>
 docker run --rm -p 8080:80 -v "$PWD/nginx.conf:/etc/nginx/nginx.conf:ro" nginx:1.27-alpine
 
-<span class="tok-comment"># Chạy với MỘT tệp cấu hình của riêng bạn, không cần quyền root, không cần systemd</span>
-nginx -c /tmp/ng/conf/nginx.conf         <span class="tok-comment"># khởi động</span>
-nginx -c /tmp/ng/conf/nginx.conf -t      <span class="tok-comment"># CHỈ kiểm cú pháp, không khởi động</span>
-nginx -c /tmp/ng/conf/nginx.conf -s stop <span class="tok-comment"># dừng</span></code></pre>
+<span class="tok-comment"># Run with ONE config file of your own — no root, no systemd</span>
+nginx -c /tmp/ng/conf/nginx.conf         <span class="tok-comment"># start</span>
+nginx -c /tmp/ng/conf/nginx.conf -t      <span class="tok-comment"># syntax check ONLY, does not start</span>
+nginx -c /tmp/ng/conf/nginx.conf -s stop <span class="tok-comment"># stop</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Always run -t before anything else</span><span class="v"><code>nginx -t</code> parses the whole configuration and reports the file and line of the first problem. It costs nothing, it runs without touching the running server, and it is the single habit that prevents most Nginx outages.</span></div>
   <div class="kv"><span class="k">-c lets you experiment without a server</span><span class="v">Point it at a file in <code>/tmp</code>, listen on port 8080, and you have a complete Nginx to learn on with no root, no systemd and nothing to break. Every measurement in this course was produced that way.</span></div>
@@ -393,22 +393,22 @@ worker moi: 32227 32228 32229 32230   &lt;- da thay HET
 <p class="lead">Nginx configuration is not a program — it is a tree of nested contexts with an inheritance rule, and once that rule is clear most of the language stops being surprising. This lesson is ten lines that run, then the one rule that explains why a setting you definitely wrote is definitely not applying.</p>
 
 <h3>Ten lines, each with a reason</h3>
-<pre><code>worker_processes  1;                       <span class="tok-comment"># bao nhiêu tiến trình thợ — Bài 0.2</span>
-error_log         /tmp/ng/logs/error.log warn;  <span class="tok-comment"># log LỖI: chỗ đầu tiên phải nhìn</span>
-pid               /tmp/ng/logs/nginx.pid;  <span class="tok-comment"># nơi tín hiệu tìm ra master</span>
+<pre><code>worker_processes  1;                       <span class="tok-comment"># how many worker processes — Lesson 0.2</span>
+error_log         /tmp/ng/logs/error.log warn;  <span class="tok-comment"># the ERROR log: the first place to look</span>
+pid               /tmp/ng/logs/nginx.pid;  <span class="tok-comment"># where signals find the master</span>
 
-events {                                   <span class="tok-comment"># ← ngữ cảnh events, bắt buộc phải có</span>
-  worker_connections 1024;                 <span class="tok-comment"># trần kết nối cho MỖI worker</span>
+events {                                   <span class="tok-comment"># ← the events context, mandatory</span>
+  worker_connections 1024;                 <span class="tok-comment"># connection cap PER worker</span>
 }
 
-http {                                     <span class="tok-comment"># ← mọi thứ về HTTP nằm trong đây</span>
-  access_log /tmp/ng/logs/access.log;      <span class="tok-comment"># log TRUY CẬP: khác hẳn error_log</span>
+http {                                     <span class="tok-comment"># ← everything HTTP lives in here</span>
+  access_log /tmp/ng/logs/access.log;      <span class="tok-comment"># the ACCESS log: an entirely different thing from error_log</span>
 
-  server {                                 <span class="tok-comment"># ← một "trang", một cổng, một tên miền</span>
+  server {                                 <span class="tok-comment"># ← one "site", one port, one domain</span>
     listen      8080;
-    server_name _;                         <span class="tok-comment"># "_" = khớp mọi Host — Chương 2</span>
+    server_name _;                         <span class="tok-comment"># "_" = matches any Host — Chapter 2</span>
 
-    location / {                           <span class="tok-comment"># ← một nhóm URL</span>
+    location / {                           <span class="tok-comment"># ← a group of URLs</span>
       return 200 "xin chao\\\\n";
     }
   }
@@ -440,19 +440,19 @@ http {                                     <span class="tok-comment"># ← mọi
 
 <h3>The inheritance rule, measured</h3>
 <pre><code>http {
-  add_header X-Tang "http" always;          <span class="tok-comment"># đặt ở TẦNG HTTP</span>
+  add_header X-Tang "http" always;          <span class="tok-comment"># set at the HTTP level</span>
 
   server {
     listen 8080;
-    location /thua-huong { return 200 "…"; }       <span class="tok-comment"># không đặt gì</span>
+    location /thua-huong { return 200 "…"; }       <span class="tok-comment"># sets nothing</span>
     location /ghi-de {
-      add_header X-Tang "location" always;         <span class="tok-comment"># đặt LẠI ở đây</span>
+      add_header X-Tang "location" always;         <span class="tok-comment"># set AGAIN here</span>
       return 200 "…";
     }
   }
   server {
     listen 8081;
-    add_header X-Tang "server" always;             <span class="tok-comment"># đặt lại ở tầng SERVER</span>
+    add_header X-Tang "server" always;             <span class="tok-comment"># reset at the SERVER level</span>
     location / { return 200 "…"; }
   }
 }</code></pre>

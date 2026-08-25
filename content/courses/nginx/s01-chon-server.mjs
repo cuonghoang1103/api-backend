@@ -26,14 +26,14 @@ export default {
 <p class="lead">Selecting a server block happens in two stages, and almost every explanation skips the first one. Before Nginx compares a single hostname it has already narrowed the candidates down to the blocks listening on the socket that received the connection — so if a request reaches the wrong site, the reason is often that it never reached the right <code>listen</code> at all.</p>
 
 <h3>What listen actually declares</h3>
-<pre><code>listen 80;                 <span class="tok-comment"># mọi địa chỉ IPv4, cổng 80  — bằng 0.0.0.0:80</span>
-listen 127.0.0.1:8080;     <span class="tok-comment"># CHỈ loopback — không ai ngoài máy tới được</span>
-listen 192.0.2.10:443 ssl; <span class="tok-comment"># một địa chỉ cụ thể, kèm TLS — Chương 6</span>
-listen [::]:80;            <span class="tok-comment"># IPv6; mặc định trên Linux là DÙNG CHUNG cả IPv4</span>
-listen [::]:80 ipv6only=on;<span class="tok-comment"># CHỈ IPv6 — nay là mặc định của nginx</span>
-listen 8080 default_server;<span class="tok-comment"># máy chủ mặc định CHO CỔNG NÀY — Bài 1.3</span>
+<pre><code>listen 80;                 <span class="tok-comment"># every IPv4 address, port 80 — same as 0.0.0.0:80</span>
+listen 127.0.0.1:8080;     <span class="tok-comment"># loopback ONLY — nothing off-box can reach it</span>
+listen 192.0.2.10:443 ssl; <span class="tok-comment"># one specific address, with TLS — Chapter 6</span>
+listen [::]:80;            <span class="tok-comment"># IPv6; on Linux the default SHARES IPv4 as well</span>
+listen [::]:80 ipv6only=on;<span class="tok-comment"># IPv6 ONLY — now nginx's default</span>
+listen 8080 default_server;<span class="tok-comment"># the default server FOR THIS PORT — Lesson 1.3</span>
 
-<span class="tok-comment"># Một khối server nghe được NHIỀU socket:</span>
+<span class="tok-comment"># One server block can listen on SEVERAL sockets:</span>
 server {
   listen 80;
   listen 443 ssl;
@@ -68,7 +68,7 @@ server {
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Choose a location</span><span class="lz-nsub">Only now does this begin, and only INSIDE the block already chosen · Chapter 2</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment"># Xem NGINX thật sự đang nghe ở đâu — đừng đọc cấu hình rồi đoán</span>
+<pre><code><span class="tok-comment"># See where NGINX is actually listening — do not read the config and guess</span>
 ss -tlnp | grep nginx
 <span class="tok-comment"># LISTEN 0 511  0.0.0.0:8080  0.0.0.0:*  users:(("nginx",pid=3218,fd=6))</span>
 
@@ -179,9 +179,9 @@ nginx -T | grep -nE '^\\\\s*(listen|server_name)'</code></pre>
 <p class="lead">Once Nginx has the candidate blocks for a socket, it compares the <code>Host</code> header against their names — and it does so in a fixed order that has nothing to do with the order the blocks appear in your file. Four levels, checked in sequence, first match wins.</p>
 
 <h3>Six hosts, six blocks, measured</h3>
-<pre><code>server { listen 8080; server_name mot.vidu.com;   … }  <span class="tok-comment"># 1 · khớp chính xác</span>
-server { listen 8080; server_name *.vidu.com;     … }  <span class="tok-comment"># 2 · đại diện ở ĐẦU</span>
-server { listen 8080; server_name www.vidu.*;     … }  <span class="tok-comment"># 3 · đại diện ở CUỐI</span>
+<pre><code>server { listen 8080; server_name mot.vidu.com;   … }  <span class="tok-comment"># 1 · exact match</span>
+server { listen 8080; server_name *.vidu.com;     … }  <span class="tok-comment"># 2 · leading wildcard</span>
+server { listen 8080; server_name www.vidu.*;     … }  <span class="tok-comment"># 3 · trailing wildcard</span>
 server { listen 8080; server_name ~^may(?&lt;so&gt;\\\\d+)\\\\.vidu\\\\.com$; … } <span class="tok-comment"># 4 · regex</span></code></pre>
 <div class="out">Host gui len             cong   khoi server nao tra loi
 ------------------------ -----  ------------------------------------
@@ -225,12 +225,12 @@ khong-khop.com           8080   1 · ten CHINH XAC: mot.vidu.com  &lt;- may chu 
   <div class="lz-layer"><span class="lz-lname">An empty server_name matches a missing Host</span><span class="lz-lnote"><code>server_name "";</code> catches requests that arrive with no <code>Host</code> header at all, which HTTP/1.0 clients and some scanners still do. Useful for returning 444 to junk traffic rather than letting it reach the default server.</span></div>
   <div class="lz-layer"><span class="lz-lname">Long names need a bigger bucket</span><span class="lz-lnote"><code>could not build server_names_hash, you should increase server_names_hash_bucket_size</code> is a startup error, not a warning, and it means exactly what it says. Raise it to the next power of two; it is not a sign that anything else is wrong.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Bắt được tên miền con và DÙNG nó — lý do thật để viết regex</span>
+<pre><code><span class="tok-comment"># Capture the subdomain and USE it — the real reason to write a regex</span>
 server {
   listen 8080;
   server_name ~^(?&lt;khach&gt;[a-z0-9-]+)\\\\.vidu\\\\.com$;
 
-  root /srv/khach/$khach;              <span class="tok-comment"># mỗi khách một thư mục</span>
+  root /srv/khach/$khach;              <span class="tok-comment"># one directory per customer</span>
   access_log /var/log/nginx/$khach.log;
 }</code></pre>
 <div class="note-ct">
@@ -366,23 +366,23 @@ server {
 </div>
 
 <h3>What a deliberate default should do</h3>
-<pre><code><span class="tok-comment"># Phương án A — TỪ CHỐI THẲNG. Chọn cái này khi mọi trang đều có tên miền.</span>
+<pre><code><span class="tok-comment"># Option A — REFUSE OUTRIGHT. Pick this when every site has its own domain.</span>
 server {
   listen 80  default_server;
   listen 443 ssl default_server;
-  server_name _;                       <span class="tok-comment"># "_" chỉ là một cái tên KHÔNG BAO GIỜ khớp</span>
+  server_name _;                       <span class="tok-comment"># "_" is just a name that NEVER matches</span>
 
-  ssl_certificate     /etc/nginx/tls/tam.crt;   <span class="tok-comment"># vẫn cần chứng chỉ — xem bên dưới</span>
+  ssl_certificate     /etc/nginx/tls/tam.crt;   <span class="tok-comment"># still needs a certificate — see below</span>
   ssl_certificate_key /etc/nginx/tls/tam.key;
 
-  return 444;                          <span class="tok-comment"># đóng kết nối, KHÔNG trả byte nào</span>
+  return 444;                          <span class="tok-comment"># closes the connection, returns NO bytes</span>
 }
 
-<span class="tok-comment"># Phương án B — trả lời tử tế. Chọn cái này khi có người dùng thật gõ nhầm.</span>
+<span class="tok-comment"># Option B — answer politely. Pick this when real users mistype.</span>
 server {
   listen 80 default_server;
   server_name _;
-  return 301 https://vidu.com$request_uri;   <span class="tok-comment"># đưa họ về trang chính</span>
+  return 301 https://vidu.com$request_uri;   <span class="tok-comment"># send them to the main site</span>
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">444 is an Nginx-only code, and it is the right one here</span><span class="v">It is not a real HTTP status — it tells Nginx to close the connection without sending anything. Scanners get nothing to fingerprint, no error page reveals your server version, and the request costs you one closed socket instead of a rendered response.</span></div>
@@ -563,16 +563,16 @@ Location: http://ke-tan-cong.com:8080/thu-muc/          &lt;- BAN khong viet don
 <div class="pitfall">
 <p><strong>Trap — the third case is the one that catches careful people, because you did not write it.</strong> When a request names a directory without a trailing slash, Nginx issues its own <code>301</code> to add one — and it builds that <code>Location</code> from <code>$host</code>. So a configuration containing not a single <code>$host</code> anywhere still emits an attacker-controlled absolute redirect, and a security review that greps for <code>$host</code> finds nothing. The same applies to the automatic redirect from <code>rewrite</code> and to <code>try_files</code> falling through to a directory. Two directives fix it at the source: <code>absolute_redirect off;</code> makes Nginx emit a relative <code>Location</code>, and <code>server_name_in_redirect on;</code> makes it use the configured name instead of the header.</p>
 </div>
-<pre><code><span class="tok-comment"># Vá tận gốc — đặt ở tầng http là mọi khối đều thừa hưởng</span>
+<pre><code><span class="tok-comment"># The root fix — set it at the http level and every block inherits it</span>
 http {
-  absolute_redirect     off;   <span class="tok-comment"># Location: /thu-muc/   (tương đối, không có host)</span>
-  server_name_in_redirect on;  <span class="tok-comment"># nếu vẫn cần tuyệt đối thì dùng TÊN TRONG CẤU HÌNH</span>
-  port_in_redirect      off;   <span class="tok-comment"># bỏ luôn cái ":8080" đứng sau proxy thì sai bét</span>
+  absolute_redirect     off;   <span class="tok-comment"># Location: /folder/   (relative, no host)</span>
+  server_name_in_redirect on;  <span class="tok-comment"># if you still need it absolute, use the NAME FROM THE CONFIG</span>
+  port_in_redirect      off;   <span class="tok-comment"># dropping the ":8080" behind the proxy is flatly wrong</span>
 }
 
-<span class="tok-comment"># Và trong mã của bạn: đích chuyển hướng là HẰNG SỐ, không phải biến</span>
-return 301 https://vidu.com$request_uri;    <span class="tok-comment"># ĐÚNG</span>
-<span class="tok-comment"># return 301 https://$host$request_uri;    // SAI — client chọn đích</span></code></pre>
+<span class="tok-comment"># And in your code: the redirect target is a CONSTANT, not a variable</span>
+return 301 https://vidu.com$request_uri;    <span class="tok-comment"># RIGHT</span>
+<span class="tok-comment"># return 301 https://$host$request_uri;    // WRONG — the client picks the target</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">$host is fine for reading, dangerous for building</span><span class="v">Logging it, routing on it, choosing a <code>root</code> from a captured subdomain — all reasonable, because a wrong value only affects that request. Putting it into a <code>Location</code>, an email link or a cache key is different: there it becomes something you hand back to a browser as if you had chosen it.</span></div>
   <div class="kv"><span class="k">A refusing default server closes most of this</span><span class="v">If an unmatched <code>Host</code> gets <code>444</code> (Lesson 1.3), an attacker cannot reach a block with a forged name in the first place. That is why the two lessons belong together — the default block is the enforcement point for everything here.</span></div>
@@ -701,17 +701,17 @@ return 301 https://vidu.com$request_uri;    <span class="tok-comment"># ĐÚNG</
 
 <h3>The layout on disk</h3>
 <pre><code>/etc/nginx/
-├── nginx.conf                    <span class="tok-comment"># chỉ chứa tầng http + một dòng include</span>
-├── sites-available/              <span class="tok-comment"># mọi site, kể cả site đang tắt</span>
-│   ├── 00-default.conf           <span class="tok-comment"># khối bắt-tất, KHÔNG server_name</span>
+├── nginx.conf                    <span class="tok-comment"># contains only the http level plus one include line</span>
+├── sites-available/              <span class="tok-comment"># every site, including the disabled ones</span>
+│   ├── 00-default.conf           <span class="tok-comment"># the catch-all block, NO server_name</span>
 │   ├── 10-vidu.conf              <span class="tok-comment"># apex + www</span>
 │   ├── 20-api.conf
 │   ├── 30-blog.conf
-│   └── 90-admin.conf             <span class="tok-comment"># cổng riêng</span>
-└── sites-enabled/                <span class="tok-comment"># toàn liên kết mềm — bật/tắt là ln -s và rm</span>
+│   └── 90-admin.conf             <span class="tok-comment"># its own port</span>
+└── sites-enabled/                <span class="tok-comment"># all symlinks — enabling and disabling is ln -s and rm</span>
     └── ...
 
-<span class="tok-comment"># Trong nginx.conf, đúng một dòng kéo tất cả vào:</span>
+<span class="tok-comment"># In nginx.conf, exactly one line pulls it all in:</span>
 include /etc/nginx/sites-enabled/*.conf;</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">One file per site</span><span class="lz-d">A site is a unit you turn on and off. Splitting by file means enabling one is a symlink and disabling one is <code>rm</code> — neither touches a line another site depends on.</span></div>

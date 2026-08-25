@@ -20,7 +20,7 @@ export default {
 <h3>The four lines</h3>
 <pre><code>server {
   listen 443 ssl;
-  http2 on;                                      <span class="tok-comment"># nginx ≥ 1.25.1; cũ hơn thì viết "listen 443 ssl http2;"</span>
+  http2 on;                                      <span class="tok-comment"># nginx ≥ 1.25.1; on older versions write "listen 443 ssl http2;"</span>
   server_name vidu.com;
 
   ssl_certificate     /etc/letsencrypt/live/vidu.com/fullchain.pem;
@@ -65,15 +65,15 @@ Client CHI tin ROOT (dung nhu mot trinh duyet)
 </div>
 
 <h3>Reading a chain from the outside</h3>
-<pre><code><span class="tok-comment"># Máy chủ gửi ra những chứng chỉ nào, và xác thực có qua không</span>
+<pre><code><span class="tok-comment"># Which certificates the server sends, and whether validation passes</span>
 openssl s_client -connect vidu.com:443 -servername vidu.com &lt;/dev/null 2&gt;&amp;1 \\
   | grep -E '^ [0-9] s:|Verify return code'
 
-<span class="tok-comment"># Chứng chỉ hết hạn khi nào — chạy cái này trong cron</span>
+<span class="tok-comment"># When the certificate expires — run this from cron</span>
 echo | openssl s_client -connect vidu.com:443 -servername vidu.com 2&gt;/dev/null \\
   | openssl x509 -noout -dates -subject
 
-<span class="tok-comment"># Chứng chỉ khai những tên nào (SAN), thứ QUYẾT ĐỊNH nó dùng được cho đâu</span>
+<span class="tok-comment"># Which names the certificate declares (SAN) — what DECIDES where it is usable</span>
 echo | openssl s_client -connect vidu.com:443 -servername vidu.com 2&gt;/dev/null \\
   | openssl x509 -noout -text | grep -A1 'Subject Alternative Name'</code></pre>
 <div class="kv-grid">
@@ -246,13 +246,13 @@ Trong 21 cai do, 12 cai KHONG co ECDHE:
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">A smaller list is a smaller attack surface</span><span class="lz-d">Three accepted instead of twenty-one. Every suite you keep is one more implementation that has to be correct, and the history of TLS is largely a history of suites that turned out not to be.</span></div>
 </div>
 <pre><code>ssl_protocols TLSv1.2 TLSv1.3;
-ssl_prefer_server_ciphers off;      <span class="tok-comment"># để CLIENT chọn — nó biết phần cứng của nó</span>
+ssl_prefer_server_ciphers off;      <span class="tok-comment"># let the CLIENT choose — it knows its own hardware</span>
 ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
             ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:
             ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305;
 
-<span class="tok-comment"># Sáu mục, mỗi thuật toán một cặp ECDSA/RSA. Chứng chỉ RSA thì ba mục</span>
-<span class="tok-comment"># ECDSA nằm im — đúng như phép đo: 3 được chấp nhận, không phải 6.</span></code></pre>
+<span class="tok-comment"># Six entries, an ECDSA/RSA pair per algorithm. An RSA-only certificate gives three</span>
+<span class="tok-comment"># ECDSA stays idle — exactly as measured: 3 accepted, not 6.</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">ssl_prefer_server_ciphers off is the modern advice</span><span class="v">It used to be <code>on</code>, to stop a client picking something weak. Once the server's list contains only strong suites there is nothing weak to pick, and letting the client choose lets a phone without AES hardware pick ChaCha20, which is several times faster for it. Turning it on now mainly forces slow choices onto mobile clients.</span></div>
   <div class="kv"><span class="k">ChaCha20 belongs in the list for exactly that reason</span><span class="v">Devices with AES-NI pick AES-GCM; devices without it pick ChaCha20 and get a large speedup. Both are in the measured list above, and which one a given client uses is its own decision.</span></div>
@@ -408,14 +408,14 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Session resumption covers returning visitors</span><span class="lz-d">When a client does have to reconnect — a new page load, a reopened laptop — a cached session lets it skip the expensive part. <code>ssl_session_cache shared:SSL:10m;</code> holds roughly 40,000 sessions and is one line.</span></div>
 </div>
 <pre><code>http {
-  <span class="tok-comment"># Vé phiên dùng chung giữa các worker — MỘT dòng, ~40.000 phiên</span>
+  <span class="tok-comment"># A session cache shared across workers — ONE line, ~40,000 sessions</span>
   ssl_session_cache   shared:SSL:10m;
   ssl_session_timeout 1d;
 
-  <span class="tok-comment"># Vé phiên KHÔNG trạng thái: tắt, trừ khi bạn tự xoay khoá</span>
+  <span class="tok-comment"># Stateless session tickets: off, unless you rotate the keys yourself</span>
   ssl_session_tickets off;
 
-  keepalive_timeout   75s;      <span class="tok-comment"># mặc định, và nó ĐANG làm việc nặng nhất</span>
+  keepalive_timeout   75s;      <span class="tok-comment"># the default, and it IS doing the heaviest work</span>
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">ssl_session_cache defaults to none, which is the wrong default</span><span class="v">Without it every reconnect is a full handshake. One line at <code>http</code> level covers every server block. The <code>shared:</code> form matters: a per-worker cache means a client resuming on a different worker misses.</span></div>
@@ -698,7 +698,7 @@ tren HTTP (cong 80)      : KHONG co — va dung ra la the</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Start with a short max-age</span><span class="lz-d"><code>max-age=300</code> for a week, then raise it. HSTS is not revocable: once a browser has stored two years, that browser will refuse plain HTTP for two years whatever you do to the server. Get it wrong at full length and the only fix is waiting.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">includeSubDomains and preload are one-way doors</span><span class="lz-d"><code>includeSubDomains</code> covers every subdomain including the internal one on plain HTTP that you forgot about. <code>preload</code> ships your domain inside browsers, and removal takes months. Both are correct for a mature site and dangerous as a first step.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Cổng 80 — thứ tự QUAN TRỌNG: ACME đứng TRÊN cú chuyển hướng</span>
+<pre><code><span class="tok-comment"># Port 80 — the ORDER MATTERS: ACME comes ABOVE the redirect</span>
 server {
   listen 80;
   listen [::]:80;
@@ -708,16 +708,16 @@ server {
   location / { return 301 https://vidu.com\$request_uri; }   <span class="tok-comment"># HẰNG SỐ</span>
 }
 
-<span class="tok-comment"># Cổng 443 — HSTS chỉ ở đây, và bắt đầu bằng số NHỎ</span>
+<span class="tok-comment"># Port 443 — HSTS only here, and start with a SMALL number</span>
 server {
   listen 443 ssl;
   http2 on;
   server_name vidu.com;
-  add_header Strict-Transport-Security "max-age=300" always;   <span class="tok-comment"># 5 phút, tuần đầu</span>
-  <span class="tok-comment"># sau một tuần yên ổn: "max-age=63072000; includeSubDomains"</span>
+  add_header Strict-Transport-Security "max-age=300" always;   <span class="tok-comment"># 5 minutes, for the first week</span>
+  <span class="tok-comment"># after a quiet week: "max-age=63072000; includeSubDomains"</span>
 }
 
-<span class="tok-comment"># www -> apex, khối riêng, đích vẫn là HẰNG SỐ (Bài 1.5)</span>
+<span class="tok-comment"># www -> apex, its own block, and the target is still a CONSTANT (Lesson 1.5)</span>
 server {
   listen 443 ssl;
   server_name www.vidu.com;

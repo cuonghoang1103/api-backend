@@ -38,19 +38,19 @@ upstream theoip   { ip_hash;     server ...9501; server ...9502; server ...9503;
 
 <h3>The upstream block itself</h3>
 <pre><code>upstream api {
-  server 10.0.1.11:3000  weight=2;          <span class="tok-comment"># máy khoẻ hơn, nhận nhiều hơn</span>
+  server 10.0.1.11:3000  weight=2;          <span class="tok-comment"># a stronger box takes more</span>
   server 10.0.1.12:3000;
-  server 10.0.1.13:3000  backup;            <span class="tok-comment"># CHỈ dùng khi máy chính chết hết</span>
-  server 10.0.1.14:3000  down;              <span class="tok-comment"># rút ra khỏi vòng, không xoá dòng</span>
+  server 10.0.1.13:3000  backup;            <span class="tok-comment"># used ONLY when every primary is dead</span>
+  server 10.0.1.14:3000  down;              <span class="tok-comment"># pulled out of rotation without deleting the line</span>
 
-  keepalive 32;                             <span class="tok-comment"># tái dùng kết nối — Bài 9.4</span>
+  keepalive 32;                             <span class="tok-comment"># connection reuse — Lesson 9.4</span>
 }
 
 server {
   location /api/ {
     proxy_http_version 1.1;
     proxy_set_header Connection "";
-    proxy_pass http://api/;                 <span class="tok-comment"># tên khối, không phải địa chỉ</span>
+    proxy_pass http://api/;                 <span class="tok-comment"># the block name, not an address</span>
   }
 }</code></pre>
 <div class="kv-grid">
@@ -204,7 +204,7 @@ Ca hai dang deu GHIM on dinh. Khac biet chi lo ra khi be MAY CHU doi.</div>
 <div class="pitfall">
 <p><strong>Trap — <code>ip_hash</code> keys on the client address, which is the wrong key more often than it looks.</strong> Everyone behind one corporate NAT or one mobile carrier gateway shares an address and therefore a backend, so a "balanced" pool can be badly skewed by a few large networks. Worse, a client whose address changes — moving from wifi to mobile data — is silently reassigned and loses its session mid-use. And behind a CDN or a load balancer, <code>\$remote_addr</code> is the proxy's address (Lesson 3.2), so <code>ip_hash</code> maps <em>everyone</em> to one backend unless <code>real_ip</code> is configured first. Prefer <code>hash \$cookie_phien consistent;</code> or <code>hash \$http_x_api_key consistent;</code> — key on something that identifies the client rather than its current network position.</p>
 </div>
-<pre><code><span class="tok-comment"># Ghim theo PHIÊN, không ghim theo địa chỉ mạng</span>
+<pre><code><span class="tok-comment"># Pin by SESSION, not by network address</span>
 upstream api {
   hash \$cookie_phien consistent;
   server 10.0.1.11:3000;
@@ -212,9 +212,9 @@ upstream api {
   server 10.0.1.13:3000;
 }
 
-<span class="tok-comment"># Và cách TỐT HƠN CẢ: đừng cần ghim gì cả</span>
-<span class="tok-comment">#   phiên nằm trong Redis hoặc trong một JWT đã ký</span>
-<span class="tok-comment">#   -> mọi máy phục vụ được mọi request -> round robin, không trạng thái</span></code></pre>
+<span class="tok-comment"># And the BEST way of all: do not need pinning at all</span>
+<span class="tok-comment">#   the session lives in Redis or inside a signed JWT</span>
+<span class="tok-comment">#   -> every box can serve every request -> round robin, stateless</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Sticky routing is a workaround, not an architecture</span><span class="v">Every one of its problems — uneven distribution, sessions lost on scale-out, a node that cannot be drained without logging people out — disappears if the state lives somewhere shared. Reach for it when you cannot change the application, and treat it as debt.</span></div>
   <div class="kv"><span class="k">An empty key sends the request to round robin</span><span class="v">A user with no session cookie yet has an empty <code>\$cookie_phien</code>, and Nginx falls back to normal balancing for them. That is the correct behaviour and it means the first request of a session is not pinned — which is fine, because the backend that handles it is the one that sets the cookie.</span></div>
@@ -355,16 +355,16 @@ error.log:  1 x connect() failed
 <pre><code>upstream api {
   server 10.0.1.11:3000  max_fails=2 fail_timeout=5s;
   server 10.0.1.12:3000  max_fails=2 fail_timeout=5s;
-  server 10.0.1.13:3000  backup;          <span class="tok-comment"># chỉ dùng khi hai máy trên chết hết</span>
+  server 10.0.1.13:3000  backup;          <span class="tok-comment"># used only when both boxes above are dead</span>
   keepalive 32;
 }
 
 location /api/ {
   proxy_next_upstream         error timeout http_502 http_503 http_504;
-  <span class="tok-comment"># KHÔNG có non_idempotent -> POST không bị gửi lại</span>
+  <span class="tok-comment"># NO non_idempotent -> a POST is never resent</span>
   proxy_next_upstream_tries   2;
   proxy_next_upstream_timeout 5s;
-  proxy_connect_timeout       2s;          <span class="tok-comment"># hỏng nhanh thì chuyển máy nhanh</span>
+  proxy_connect_timeout       2s;          <span class="tok-comment"># fail fast, move to another box fast</span>
   proxy_pass http://api/;
 }</code></pre>
 <div class="out">=== backup: do that ===
@@ -498,9 +498,9 @@ giet may-2 (chinh),   20 request : may-3=20        (backup vao cuoc)</div>
   server 10.0.1.11:3000;
   server 10.0.1.12:3000;
 
-  keepalive          32;      <span class="tok-comment"># số kết nối RẢNH giữ lại cho MỖI worker</span>
-  keepalive_requests 1000;    <span class="tok-comment"># đóng và mở lại sau ngần này request</span>
-  keepalive_timeout  60s;     <span class="tok-comment"># đóng kết nối rảnh quá lâu</span>
+  keepalive          32;      <span class="tok-comment"># how many IDLE connections each worker keeps</span>
+  keepalive_requests 1000;    <span class="tok-comment"># close and reopen after this many requests</span>
+  keepalive_timeout  60s;     <span class="tok-comment"># close connections idle for too long</span>
 }
 
 location /api/ {
@@ -644,11 +644,11 @@ location /api/ {
   <div class="lz-layer"><span class="lz-lname">Canary: weight the new version low</span><span class="lz-lnote"><code>server moi:3000 weight=1;</code> alongside <code>server cu:3000 weight=9;</code> sends a tenth of traffic to the new build. Watch the error rate, then shift the weights. It is crude compared with a real traffic-splitting system and it needs nothing you do not already have.</span></div>
   <div class="lz-layer"><span class="lz-lname">Draining: down plus a wait</span><span class="lz-lnote">Marking a server <code>down</code> stops new requests immediately, but requests already in flight continue. Wait for your longest expected request before shutting the process down, or you will cut off the exact users you were being careful about.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Blue-green trong một tệp include, đổi bằng một liên kết mềm</span>
-<span class="tok-comment"># /etc/nginx/be-hien-tai.conf  ->  be-xanh.conf hoặc be-luc.conf</span>
+<pre><code><span class="tok-comment"># Blue-green in one include file, switched with a symlink</span>
+<span class="tok-comment"># /etc/nginx/be-current.conf  ->  be-blue.conf or be-green.conf</span>
 upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
 
-<span class="tok-comment"># Đổi bể = đổi liên kết mềm rồi nạp lại. Lùi lại cũng y hệt thế.</span>
+<span class="tok-comment"># Switching pools = repoint the symlink and reload. Rolling back is exactly the same.</span>
 <span class="tok-comment">#   ln -sfn be-luc.conf /etc/nginx/be-hien-tai.conf</span>
 <span class="tok-comment">#   nginx -t &amp;&amp; nginx -s reload</span></code></pre>
 <div class="pitfall">

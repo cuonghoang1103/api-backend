@@ -55,20 +55,20 @@ location /f-break2/ { root ...; rewrite ^/f-break2/(.*)$ /dich break; }
   <div class="kv"><span class="k">The query string is appended unless you stop it</span><span class="v">A replacement with no <code>?</code> keeps the original arguments. A replacement ending in <code>?</code> discards them. <code>rewrite ^/cu$ /moi? permanent;</code> is how you drop a query string on purpose, and forgetting the <code>?</code> is how tracking parameters survive a migration.</span></div>
   <div class="kv"><span class="k">There is a cycle limit, same as Lesson 2.5</span><span class="v">Ten internal redirects and the request dies with <code>500</code> and <code>rewrite or internal redirection cycle</code> in the error log. A <code>last</code> that rewrites into a block that rewrites back is the usual way to produce it.</span></div>
 </div>
-<pre><code><span class="tok-comment"># ĐÚNG: sửa đường dẫn rồi chuyển tiếp, break đứng TRƯỚC proxy_pass</span>
+<pre><code><span class="tok-comment"># RIGHT: rewrite the path then forward — break comes BEFORE proxy_pass</span>
 location /cu/ {
   rewrite ^/cu/(.*)\$ /moi/\$1 break;
-  proxy_pass http://api;            <span class="tok-comment"># không phải chỉ thị rewrite -> vẫn chạy</span>
+  proxy_pass http://api;            <span class="tok-comment"># not a rewrite directive -> still runs</span>
 }
 
-<span class="tok-comment"># ĐÚNG: URL đã dời thật thì báo cho trình duyệt biết</span>
+<span class="tok-comment"># RIGHT: if the URL genuinely moved, tell the browser</span>
 rewrite ^/bai-viet/(\\d+)\$ /tin/\$1 permanent;
 
-<span class="tok-comment"># SAI: return đứng sau break — nó KHÔNG chạy</span>
+<span class="tok-comment"># WRONG: return sits after break — it does NOT run</span>
 <span class="tok-comment"># location /x/ { rewrite ^ /y break; return 200 "..."; }</span>
 
-<span class="tok-comment"># Và thường thì KHÔNG cần rewrite gì cả:</span>
-location = /cu-cu-cu { return 301 /moi; }   <span class="tok-comment"># rẻ hơn, rõ hơn</span></code></pre>
+<span class="tok-comment"># And usually NO rewrite is needed at all:</span>
+location = /cu-cu-cu { return 301 /moi; }   <span class="tok-comment"># cheaper, clearer</span></code></pre>
 
 <h3>When not to use rewrite at all</h3>
 <div class="lz-stack">
@@ -225,7 +225,7 @@ map \$http_user_agent \$la_bot {
   default  "";
   "~*bot"  "co";
 }
-add_header X-Bot \$la_bot always;        <span class="tok-comment"># header rỗng thì không được gửi</span>
+add_header X-Bot \$la_bot always;        <span class="tok-comment"># an empty header is not sent</span>
 
 <span class="tok-comment"># THAY VÌ: if ($request_method = POST) { proxy_pass http://ghi; }</span>
 map \$request_method \$dich_upstream {
@@ -235,7 +235,7 @@ map \$request_method \$dich_upstream {
 }
 location /api/ { proxy_pass \$dich_upstream; }
 
-<span class="tok-comment"># if VẪN ĐÚNG khi thân nó chỉ có return hoặc rewrite:</span>
+<span class="tok-comment"># if is STILL correct when its body contains only return or rewrite:</span>
 if (\$host != "vidu.com") { return 301 https://vidu.com\$request_uri; }
 if (\$request_uri ~ "^/cu/") { rewrite ^/cu/(.*)\$ /moi/\$1 permanent; }</code></pre>
 <div class="kv-grid">
@@ -355,8 +355,8 @@ if (\$request_uri ~ "^/cu/") { rewrite ^/cu/(.*)\$ /moi/\$1 permanent; }</code><
 <pre><code>map \$arg_v \$ket_qua {
   default          "MAC-DINH";
   "a"              "khop-chinh-xac-a";
-  "~^so-(\\\\d+)\$"   "regex-bat-duoc-\$1";      <span class="tok-comment"># ~ phân biệt hoa thường</span>
-  "~*^HOA"         "regex-khong-phan-biet";  <span class="tok-comment"># ~* thì không</span>
+  "~^so-(\\\\d+)\$"   "regex-bat-duoc-\$1";      <span class="tok-comment"># ~ is case-sensitive</span>
+  "~*^HOA"         "regex-khong-phan-biet";  <span class="tok-comment"># ~* is not</span>
 }</code></pre>
 <div class="out">?v=<rong>  -> MAC-DINH
 ?v=a       -> khop-chinh-xac-a
@@ -407,25 +407,25 @@ Va MOT map co the doc ket qua cua map KHAC:
 <div class="pitfall">
 <p><strong>Trap — there is no <code>&amp;&amp;</code>, and the workaround people reach for first is nested <code>if</code>, which is not even legal.</strong> The idiom is to build one string out of the variables you care about and match a pattern against it, as above. The separator matters: use a character that cannot appear in either value, or <code>a=</code>"<code>x:y</code>" and <code>b=</code>"<code>z</code>" collide with <code>a=</code>"<code>x</code>" and <code>b=</code>"<code>y:z</code>". A colon is fine for flags and wrong for user-supplied strings — for those, a character like <code>\\x1f</code> that cannot occur in a URL is the safe choice. This is the one place where the <code>map</code> approach is genuinely less readable than a conditional would be, and it is still better than the alternative.</p>
 </div>
-<pre><code><span class="tok-comment"># Ba khuôn mẫu map dùng được ngay</span>
+<pre><code><span class="tok-comment"># Three map patterns you can use straight away</span>
 
-<span class="tok-comment"># 1) Bật/tắt theo tên miền — không có if nào</span>
+<span class="tok-comment"># 1) On/off by domain — with no if at all</span>
 map \$http_host \$moi_truong {
   default        "san-xuat";
   "~^thu-nghiem" "thu-nghiem";
 }
 add_header X-Moi-Truong \$moi_truong always;
 
-<span class="tok-comment"># 2) Bảng chuyển hướng, để trong file riêng</span>
+<span class="tok-comment"># 2) A redirect table, kept in its own file</span>
 map \$request_uri \$dich_cu {
-  include /etc/nginx/chuyen-huong.map;   <span class="tok-comment"># "/cu/a  /moi/a;" mỗi dòng một cặp</span>
+  include /etc/nginx/chuyen-huong.map;   <span class="tok-comment"># "/old/a  /new/a;" one pair per line</span>
 }
-if (\$dich_cu) { return 301 \$dich_cu; }   <span class="tok-comment"># if + return: hợp lệ (8.2)</span>
+if (\$dich_cu) { return 301 \$dich_cu; }   <span class="tok-comment"># if + return: legitimate (8.2)</span>
 
-<span class="tok-comment"># 3) Miễn trừ giới hạn tần suất cho nội bộ</span>
+<span class="tok-comment"># 3) Exempting internal traffic from the rate limit</span>
 map \$binary_remote_addr \$khoa_gioi_han {
   default              \$binary_remote_addr;
-  "~^\\\\x7f"            "";                <span class="tok-comment"># rỗng = KHÔNG áp giới hạn</span>
+  "~^\\\\x7f"            "";                <span class="tok-comment"># empty = the limit does NOT apply</span>
 }
 limit_req_zone \$khoa_gioi_han zone=chung:10m rate=20r/s;</code></pre>
 <div class="note-ct">
@@ -581,20 +581,20 @@ location @du-phong { return 200 "DA VAO @du-phong: uri=[$uri]"; }
   <div class="kv"><span class="k">Named locations have no URL at all</span><span class="v">There is no path that maps to <code>@du-phong</code> — the <code>@</code> is not a URL character in this sense, so a request for <code>/@du-phong</code> is just an ordinary path that lands wherever ordinary matching sends it. They exist purely as targets for <code>try_files</code>, <code>error_page</code> and <code>proxy_next_upstream</code>.</span></div>
   <div class="kv"><span class="k">X-Accel-Redirect is the pattern these enable</span><span class="v">Your application checks permission, then returns an empty response with <code>X-Accel-Redirect: /tep-rieng/abc.pdf</code>. Nginx serves the file from an <code>internal</code> location — the application never streams bytes, and the file has no public URL. This is the correct way to serve authorised downloads.</span></div>
 </div>
-<pre><code><span class="tok-comment"># Tệp riêng tư: ứng dụng kiểm quyền, Nginx gửi byte</span>
+<pre><code><span class="tok-comment"># Private files: the app checks permission, Nginx ships the bytes</span>
 location /tep-rieng/ {
-  internal;                       <span class="tok-comment"># gọi thẳng -> 404</span>
+  internal;                       <span class="tok-comment"># called directly -> 404</span>
   alias /srv/rieng-tu/;
 }
-<span class="tok-comment"># Ứng dụng trả: X-Accel-Redirect: /tep-rieng/hop-dong.pdf</span>
+<span class="tok-comment"># The app returns: X-Accel-Redirect: /private-files/contract.pdf</span>
 
-<span class="tok-comment"># Trang lỗi: giữ đúng mã, và đừng để lộ trang lỗi ra ngoài</span>
+<span class="tok-comment"># Error pages: keep the right status, and do not expose the page itself</span>
 error_page 404 /404.html;
 error_page 500 502 503 504 /50x.html;
 location = /404.html { internal; root /srv/loi; }
 location = /50x.html { internal; root /srv/loi; }
 
-<span class="tok-comment"># API thì trang lỗi phải là JSON, không phải HTML (Bài 7.4)</span>
+<span class="tok-comment"># For an API the error page must be JSON, not HTML (Lesson 7.4)</span>
 error_page 404 = @json_404;
 location @json_404 {
   default_type application/json;
@@ -718,28 +718,28 @@ location @json_404 {
 <p class="lead">Changing a site's URL structure means every old link in the world now points at nothing. The config that fixes that is the whole of this chapter working together, and it fits in about twenty lines.</p>
 
 <h3>Three maps and one enforcement point</h3>
-<pre><code><span class="tok-comment"># 1) Bảng 1-1, để trong file riêng (người không rành Nginx sửa được)</span>
+<pre><code><span class="tok-comment"># 1) A 1-to-1 table in its own file (editable by someone who does not know Nginx)</span>
 map \$uri \$dich_bang {
   default "";
   include /etc/nginx/chuyen-huong.map;    <span class="tok-comment"># "/gioi-thieu  /ve-chung-toi;"</span>
 }
 
-<span class="tok-comment"># 2) Quy tắc theo MẪU — nhiều URL cùng một hình dạng</span>
+<span class="tok-comment"># 2) PATTERN rules — many URLs sharing one shape</span>
 map \$uri \$dich_mau {
   default "";
   "~^/bai-viet/(\\\\d+)\$"               "/tin/\$1";
   "~^/danh-muc/(.+)/trang/(\\\\d+)\$"    "/c/\$1?trang=\$2";
 }
 
-<span class="tok-comment"># 3) Gộp: bảng thắng, rồi mới tới mẫu</span>
+<span class="tok-comment"># 3) Combined: the table wins, then the pattern</span>
 map "\$dich_bang:\$dich_mau" \$dich {
   default      "";
-  "~^([^:]+):" "\$1";        <span class="tok-comment"># có trong bảng -> lấy bảng</span>
-  "~^:(.+)\$"   "\$1";        <span class="tok-comment"># không có -> lấy mẫu</span>
+  "~^([^:]+):" "\$1";        <span class="tok-comment"># in the table -> take the table</span>
+  "~^:(.+)\$"   "\$1";        <span class="tok-comment"># not there -> take the pattern</span>
 }
 
 server {
-  <span class="tok-comment"># 4) MỘT chỗ duy nhất thi hành. if + return: hợp lệ (Bài 8.2)</span>
+  <span class="tok-comment"># 4) ONE single place enforces it. if + return: legitimate (Lesson 8.2)</span>
   if (\$dich) { return 301 \$dich; }
   ...
 }</code></pre>
@@ -776,13 +776,13 @@ server {
 <div class="pitfall">
 <p><strong>Trap — the internal-redirect cycle limit from Lesson 2.5 does not protect you here, because these are <em>external</em> redirects.</strong> Each <code>301</code> ends the request; the loop only exists across separate requests from the client. Nginx sees two perfectly normal responses and has no way to know they form a cycle — no <code>500</code>, no error log line, nothing. The browser eventually gives up with "too many redirects" and the user sees a broken page. Chains are the milder version of the same thing: <code>/rat-cu</code> reached its destination in two hops, which works but costs an extra round trip and dilutes the search-engine signal that <code>301</code> is supposed to pass. Both are properties of the <em>table</em>, not the config, so the check belongs wherever the table is edited.</p>
 </div>
-<pre><code><span class="tok-comment"># Bộ kiểm bảng — chạy trong CI, mười hai dòng</span>
+<pre><code><span class="tok-comment"># The table checker — runs in CI, twelve lines</span>
 cap = {}
 for line in open('chuyen-huong.map'):
     p = line.strip().rstrip(';').split()
     if len(p) == 2: cap[p[0]] = p[1]
 
-<span class="tok-comment"># Bất kỳ ĐÍCH nào cũng xuất hiện làm KHOÁ = một chuỗi hoặc một vòng</span>
+<span class="tok-comment"># Any TARGET that also appears as a KEY = a chain or a loop</span>
 for k, v in cap.items():
     if v in cap:
         print(f'CHUOI: {k} -> {v} -> {cap[v]}')</code></pre>

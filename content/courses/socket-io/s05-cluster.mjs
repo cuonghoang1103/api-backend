@@ -25,12 +25,12 @@ export default {
 
 <h3>The problem — single worker vs cluster</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1 worker</span><span class="lz-t"><code>io.to(&quot;thread:42&quot;).emit(...)</code></span><span class="lz-d">Adapter kiểm memory-local rooms Map, tìm mọi socket trong <code>thread:42</code>, gửi packet. Đơn giản, đầy đủ.</span></div>
-<div class="lz-step"><span class="lz-k">4 worker</span><span class="lz-t"><code>io.to(&quot;thread:42&quot;).emit(...)</code></span><span class="lz-d">Mỗi worker chỉ biết CÁC SOCKET CỦA MÌNH — 1/4 tổng. Broadcast đến 1/4 người trong room. 3/4 im lặng không nhận.</span></div>
-<div class="lz-step"><span class="lz-k">4 worker + Redis</span><span class="lz-t"><code>io.to(&quot;thread:42&quot;).emit(...)</code></span><span class="lz-d">Worker A publish message vào Redis channel <code>socket.io#thread:42</code>. Worker B, C, D subscribe. Mỗi worker nhận, broadcast local đến CÁC SOCKET CỦA MÌNH. Đầy đủ.</span></div>
+<div class="lz-step"><span class="lz-k">1 worker</span><span class="lz-t"><code>io.to(&quot;thread:42&quot;).emit(...)</code></span><span class="lz-d">The adapter checks its memory-local rooms Map, finds every socket in <code>thread:42</code>and sends the packet. Simple and complete.</span></div>
+<div class="lz-step"><span class="lz-k">4 worker</span><span class="lz-t"><code>io.to(&quot;thread:42&quot;).emit(...)</code></span><span class="lz-d">Each worker knows only ITS OWN SOCKETS — a quarter of the total. The broadcast reaches a quarter of the room. The other three quarters get nothing, silently.</span></div>
+<div class="lz-step"><span class="lz-k">4 worker + Redis</span><span class="lz-t"><code>io.to(&quot;thread:42&quot;).emit(...)</code></span><span class="lz-d">Worker A publishes the message to the Redis channel <code>socket.io#thread:42</code>. Workers B, C and D are subscribed. Each one receives it and broadcasts locally to ITS OWN SOCKETS. Complete coverage.</span></div>
 </div>
 
-<h3>Kho này — code attach adapter</h3>
+<h3>This repo — the code that attaches the adapter</h3>
 <pre><code class="language-ts">// messaging.socket.ts:182-215
 async function attachRedisAdapter(server: IOServer): Promise&lt;void&gt; {
   try {
@@ -49,10 +49,10 @@ async function attachRedisAdapter(server: IOServer): Promise&lt;void&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>BEST-EFFORT — nếu Redis chết, socket.io VẪN chạy đơn máy.</strong> Fallback không throw. Chỉ log warning. Lý do: kho này hiện single instance, adapter là chuẩn bị cho future cluster. Nếu Redis pause trong DB restart, socket không phải cùng chết.</p>
+<p><strong>BEST-EFFORT — if Redis dies, socket.io STILL runs as a single instance.</strong> The fallback does not throw. It only logs a warning. The reason: this repo is single-instance today and the adapter is preparation for a future cluster. If Redis pauses during a DB restart, the sockets should not have to die with it.</p>
 </div>
 
-<h3>Overhead của pub/sub</h3>
+<h3>The overhead of pub/sub</h3>
 <pre><code class="language-text">Cost cho MOI broadcast:
   1. Serialize packet: ~1μs
   2. Redis PUBLISH: ~50-200μs (RTT den Redis)
@@ -89,21 +89,21 @@ Pattern la: socket.io#&lt;namespace&gt;#&lt;room-name&gt;
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Redis adapter dùng msgpack, không JSON.</strong> Nên xem qua <code>redis-cli</code> thấy binary — không đọc trực tiếp. Dùng adapter&#39;s debug tools hoặc parse msgpack.</p>
+<p><strong>The Redis adapter uses msgpack, not JSON.</strong> So looking at it through <code>redis-cli</code> shows binary — not directly readable. Use the adapter&#39;s debug tools, or parse the msgpack yourself.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ adapter tự share tất cả state qua Redis.</strong> KHÔNG. Adapter chỉ share BROADCASTS (packet đi ra). Rooms membership vẫn LOCAL trong mỗi worker. <code>io.sockets.adapter.rooms.get(&#39;X&#39;)</code> ở worker A chỉ có sockets của A. Cho công việc &quot;ai đang ở room X&quot; toàn cluster, phải dùng <code>await io.in(&#39;X&#39;).fetchSockets()</code> — nó dùng Redis để aggregate.</p>
+<p><strong>Bẫy — nghĩ adapter tự share tất cả state qua Redis.</strong> NO. The adapter shares only BROADCASTS (outgoing packets). Room membership stays LOCAL to each worker. <code>io.sockets.adapter.rooms.get(&#39;X&#39;)</code> on worker A holds only A's sockets. To answer &quot;who is in room X&quot; across the whole cluster you must use <code>await io.in(&#39;X&#39;).fetchSockets()</code> — it uses Redis to aggregate.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Không có Redis adapter, cluster mode broadcast chỉ đến 1/N users (worker-local); với adapter, mỗi <code>io.to(room).emit</code> qua Redis pub/sub thêm ~100-400μs latency nhưng đến đầy đủ; kho này attach best-effort — Redis down thì fallback in-memory single-instance.</p>
+<p><strong>One sentence.</strong> Without the Redis adapter, a cluster-mode broadcast reaches only 1/N of your users (worker-local); with it, every <code>io.to(room).emit</code> goes through Redis pub/sub, adding ~100-400μs of latency but reaching everyone; this repo attaches it best-effort — if Redis is down it falls back to the in-memory single-instance adapter.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/redis-adapter</span><span class="lc-sub">github.com/socketio/socket.io-redis-adapter — API, protocol, và caveats.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Redis — PUBSUB</span><span class="lc-sub">redis.io/docs/manual/pubsub — fire-and-forget, không persist — nếu subscriber down, message MẤT.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Bài 2.3 — sticky sessions</span><span class="lc-sub">/courses/socket-io/learn${REF} — cả hai đều cần cho cluster.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Lesson 2.3 — sticky sessions</span><span class="lc-sub">/courses/socket-io/learn${REF} — cả hai đều cần cho cluster.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -623,12 +623,12 @@ logger.info('[socket] adapter', {
 
 <h3>Three failure modes</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">Redis restart nhanh (&lt;5s)</span><span class="lz-d">Pub/sub subscriptions bị mất trong lúc restart. Sau restart, adapter tự re-subscribe (ioredis auto-reconnect). Trong lúc down, cross-worker broadcasts BỊ RỚT — message đến worker A, không đến B/C/D. Sau reconnect, không replay.</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">Redis chậm/latency spike</span><span class="lz-d">PUBLISH latency tăng từ 1ms lên 500ms. Socket.io emit vẫn không throw — nó fire-and-forget vào Redis client&#39;s TCP send buffer. Nếu buffer đầy, PUBLISH bị queue trong RAM Node — mất tin nhắn không đến.</span></div>
-<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">Redis hoàn toàn không reachable</span><span class="lz-d">Connection error. ioredis retry background. Adapter emit warning; broadcast được TRY nhưng đến nowhere. Cluster fanout hoàn toàn mất. Trong-worker vẫn OK.</span></div>
+<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">Redis restart nhanh (&lt;5s)</span><span class="lz-d">Pub/sub subscriptions are lost during the restart. Afterwards the adapter re-subscribes on its own (ioredis auto-reconnect). While it is down, cross-worker broadcasts are DROPPED — the message reaches worker A but not B/C/D. After the reconnect, nothing is replayed.</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">Redis slow / a latency spike</span><span class="lz-d">PUBLISH latency climbs from 1ms to 500ms. The socket.io emit still does not throw — it fires and forgets into the Redis client&#39;s TCP send buffer. If that buffer fills, the PUBLISH queues in Node's memory — and the message quietly never arrives.</span></div>
+<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">Redis completely unreachable</span><span class="lz-d">A connection error. ioredis retries in the background. The adapter emits a warning; the broadcast is ATTEMPTED but goes nowhere. Cluster fanout is entirely lost. Within a single worker things still work.</span></div>
 </div>
 
-<h3>Kho này — code fallback</h3>
+<h3>This repo — the fallback code</h3>
 <pre><code class="language-ts">// attachRedisAdapter (5.1) log warning, KHONG throw
 // -&gt; io van khoi dong, in-memory adapter mac dinh chay
 // -&gt; single-worker: OK
@@ -636,17 +636,17 @@ logger.info('[socket] adapter', {
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Đây là intentional trade-off.</strong> Kho này hôm nay single-instance nên fallback in-memory là OK. Ngày mai khi bật cluster mà không sửa fallback, bạn có bug âm thầm khi Redis blip. Fix: monitoring alarm on adapter warning, hoặc healthcheck kiểm adapter still connected.</p>
+<p><strong>This is a deliberate trade-off.</strong> This repo is single-instance today, so an in-memory fallback is fine. The day you enable clustering without revisiting that fallback, you get a silent bug on every Redis blip. The fix: alarm on the adapter warning, or a healthcheck that verifies the adapter is still connected.</p>
 </div>
 
 <h3>Redis failover — Redis Sentinel / Redis Cluster</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">Sentinel</span><span class="lz-lnote">Failover 5-10s. Pub/sub subscriptions phải re-establish. Trong khoảng đó, broadcast mất</span></div>
-<div class="lz-layer"><span class="lz-lname">Redis Cluster (sharded)</span><span class="lz-lnote">Pub/sub trên Redis Cluster có limitation — bạn phải setup mode &quot;sharded pub/sub&quot; Redis 7+. socket.io adapter hỗ trợ nhưng cần cấu hình riêng</span></div>
-<div class="lz-layer"><span class="lz-lname">Redis Serverless (Upstash, ElastiCache)</span><span class="lz-lnote">Pub/sub thường KHÔNG hỗ trợ (khác từ Redis-compatible). Đọc doc trước khi chọn service</span></div>
+<div class="lz-layer"><span class="lz-lname">Sentinel</span><span class="lz-lnote">A 5-10s failover. Pub/sub subscriptions have to be re-established. During that window, broadcasts are lost</span></div>
+<div class="lz-layer"><span class="lz-lname">Redis Cluster (sharded)</span><span class="lz-lnote">Pub/sub on Redis Cluster has limitations — you have to set up &quot;sharded pub/sub&quot; mode on Redis 7+. The socket.io adapter supports it, but it needs its own configuration</span></div>
+<div class="lz-layer"><span class="lz-lname">Redis Serverless (Upstash, ElastiCache)</span><span class="lz-lnote">Pub/sub is often NOT supported (Redis-compatible is not the same as Redis). Read the docs before choosing a service</span></div>
 </div>
 
-<h3>Alternatives khi Redis không phù hợp</h3>
+<h3>Alternatives when Redis is not a good fit</h3>
 <pre><code class="language-text">Postgres adapter (@socket.io/postgres-adapter):
   Dung Postgres LISTEN/NOTIFY. Cost cao hon (~5-10ms), gioi han payload 8KB.
   Uu diem: neu ban da co Postgres, khong them dependency
@@ -657,11 +657,11 @@ Cluster adapter (khong dung Redis):
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ &quot;Redis rất reliable, không cần lo failure&quot;.</strong> Redis restart cho maintenance (~2 giờ/tháng). Trong 30s đó, cluster socket.io mất fanout. Không phải Redis hỏng — là planned maintenance. Design phải chịu được, không chỉ dựa vào Redis luôn up.</p>
+<p><strong>Bẫy — nghĩ &quot;Redis rất reliable, không cần lo failure&quot;.</strong> Redis restarts for maintenance (~2 hours a month). For those 30 seconds, the socket.io cluster loses fanout. Redis is not broken — this is planned maintenance. The design has to survive it rather than assume Redis is always up.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Ba failure modes của Redis (restart nhanh, chậm, chết hoàn toàn) đều làm cluster broadcast mất tạm thời — kho này chọn best-effort fallback (in-memory adapter mà single-instance OK), cluster mode cần monitoring adapter status; alternatives Postgres adapter (chậm hơn 5-10ms, 8KB payload) hoặc Node cluster adapter (không scale qua VM).</p>
+<p><strong>One sentence.</strong> All three Redis failure modes (a quick restart, slowness, total death) cost you cluster broadcast for a while — this repo chooses a best-effort fallback (the in-memory adapter, fine while single-instance), while cluster mode needs monitoring of the adapter's status; the alternatives are the Postgres adapter (5-10ms slower, 8KB payloads) or the Node cluster adapter (which does not scale across VMs).</p>
 </div>
 
 <h3>Sources</h3>
@@ -737,11 +737,11 @@ Cluster adapter (khong dung Redis):
 
 <h3>Checklist</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Sticky sessions ở proxy</span><span class="lz-d">Nginx <code>hash $cookie_io</code>. Không sticky = polling break 50-75% requests. Bài 2.3.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Redis adapter attached</span><span class="lz-d">Kiểm log &quot;Redis adapter attached&quot;. Nếu &quot;NOT attached&quot;, cluster fanout mất. Bài 5.1.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">State theo userId, không sid</span><span class="lz-d">Với reconnect + cluster, sid đổi và socket có thể ở worker khác. State cache theo userId (Redis-backed). Bài 1.5 + 4.3.</span></div>
-<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Monitoring per-worker</span><span class="lz-d">Metrics <code>socket.io.connected_count</code> per worker. Không cân bằng = sticky đang chôn ai đó. Grafana dashboard track.</span></div>
-<div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Graceful shutdown</span><span class="lz-d">Worker sắp restart: <code>io.close()</code> trước exit, cho socket disconnect sạch (client thấy <code>&quot;io server disconnect&quot;</code> vs <code>&quot;transport close&quot;</code>). Bài 1.2.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Sticky sessions at the proxy</span><span class="lz-d">Nginx <code>hash $cookie_io</code>. Without stickiness, polling breaks 50-75% of requests. Lesson 2.3.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Redis adapter attached</span><span class="lz-d">Check for the &quot;Redis adapter attached&quot; log line. If it says &quot;NOT attached&quot;, cluster fanout is gone. Lesson 5.1.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">State keyed by userId, not sid</span><span class="lz-d">With reconnects and a cluster, the sid changes and the socket may land on a different worker. Cache state by userId (Redis-backed). Lessons 1.5 and 4.3.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Monitoring per-worker</span><span class="lz-d">Metrics <code>socket.io.connected_count</code> per worker. An imbalance means stickiness is burying someone. Track it on a Grafana dashboard.</span></div>
+<div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Graceful shutdown</span><span class="lz-d">A worker about to restart: <code>io.close()</code> before exiting, so sockets disconnect cleanly (the client sees <code>&quot;io server disconnect&quot;</code> vs <code>&quot;transport close&quot;</code>). Lesson 1.2.</span></div>
 </div>
 
 <h3>Graceful shutdown code</h3>
@@ -769,7 +769,7 @@ Cluster adapter (khong dung Redis):
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Rolling restart pattern.</strong> Kubernetes/PM2 send SIGTERM, wait <code>terminationGracePeriodSeconds</code> (default 30s), then SIGKILL. Trong 30s đó, worker phải drain — không thì socket bị force-close ngoài ý muốn.</p>
+<p><strong>Rolling restart pattern.</strong> Kubernetes/PM2 send SIGTERM, wait <code>terminationGracePeriodSeconds</code> (30s by default), then SIGKILL. In those 30 seconds the worker has to drain — otherwise sockets are force-closed against your intent.</p>
 </div>
 
 <h3>Monitoring KPIs</h3>
@@ -785,16 +785,16 @@ Cluster-level:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — bật cluster trước khi làm 5 việc trên.</strong> Với 100 user, bạn KHÔNG thấy vấn đề. Với 1.000 user, bug âm thầm và unpredictable. Với 10.000 user, deploy hằng ngày là crisis. Làm checklist TRƯỚC, không SAU.</p>
+<p><strong>Bẫy — bật cluster trước khi làm 5 việc trên.</strong> At 100 users you see NO problem. At 1,000 the bugs are silent and unpredictable. At 10,000 every daily deploy is a crisis. Work the checklist BEFORE, not after.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Trước khi từ 1 worker lên N, năm việc phải xong theo thứ tự: sticky sessions, Redis adapter attached, state theo userId, per-worker metrics, graceful shutdown — thiếu bất cứ cái nào cũng tạo bug âm thầm ở scale trung bình và crisis ở scale lớn.</p>
+<p><strong>One sentence.</strong> Before going from 1 worker to N, five things must be done in order: sticky sessions, the Redis adapter attached, state keyed by userId, per-worker metrics, and graceful shutdown — miss any one of them and you get silent bugs at medium scale and a crisis at large scale.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Using multiple nodes</span><span class="lc-sub">socket.io/docs/v4/using-multiple-nodes — checklist chính thức, phần này diễn giải cho use case kho này.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 10 — Observability</span><span class="lc-sub">/courses/observability/learn${REF} — cách monitor metrics ở trên.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 10 — Observability</span><span class="lc-sub">/courses/observability/learn${REF} — cách monitor metrics ở trên.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.4</span>

@@ -32,24 +32,24 @@ socket.emit('important', { id: 1 });
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Đây là at-most-once — không phải reliability.</strong> Packet đến client hoặc mất. Không có bảo đảm nào. Không có exception. Client offline vài giây? Message bay vào không gian.</p>
+<p><strong>This is at-most-once — not reliability.</strong> The packet either reaches the client or it does not. No guarantee. No exception. The client was offline for a few seconds? The message flew off into space.</p>
 </div>
 
-<h3>Ba cách client &quot;mất&quot; message</h3>
+<h3>Three ways a client &quot;loses&quot; a message</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">disconnect trong lúc emit</span><span class="lz-d">Server enqueue packet vào TCP send buffer, disconnect happens 100ms sau. Packet trong buffer NHƯNG socket đã đóng — packet dropped ở kernel.</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">client đang polling, đang giữa POST cycle</span><span class="lz-d">Server hold packet cho poll response tiếp theo. Client crash trước khi GET poll — packet mất trong RAM server, không persist.</span></div>
-<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">Redis adapter blip</span><span class="lz-d">Broadcast từ worker A, Redis pub/sub blip 1ms, worker B miss. Sockets ở worker B không nhận. Không có replay.</span></div>
+<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">a disconnect mid-emit</span><span class="lz-d">The server queues the packet into the TCP send buffer and the disconnect happens 100ms later. The packet is in the buffer BUT the socket is closed — the kernel drops it.</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">the client is polling, mid-POST-cycle</span><span class="lz-d">The server holds the packet for the next poll response. The client crashes before the GET poll — the packet dies in server memory, never persisted.</span></div>
+<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">Redis adapter blip</span><span class="lz-d">A broadcast from worker A, a 1ms Redis pub/sub blip, and worker B misses it. Sockets on worker B receive nothing. No replay.</span></div>
 </div>
 
-<h3>Vì sao default là at-most-once</h3>
+<h3>Why the default is at-most-once</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">Chi phí</span><span class="lz-lnote">At-least-once cần ack + retry + dedupe key. Multiplication cost: ~2× traffic, ~10× code complexity. Cho use cases realtime UI (presence, typing), overkill</span></div>
-<div class="lz-layer"><span class="lz-lname">Latency</span><span class="lz-lnote">Ack means round trip. Realtime UI (cursor, animation) không chấp nhận thêm 100ms per interaction</span></div>
-<div class="lz-layer"><span class="lz-lname">Delivery không PHẢI concern chính của socket.io</span><span class="lz-lnote">Socket.io là realtime transport. Nếu bạn cần &quot;100% delivered&quot;, dùng HTTP POST + DB persist thay vì socket.io emit</span></div>
+<div class="lz-layer"><span class="lz-lname">Cost</span><span class="lz-lnote">At-least-once needs an ack, a retry and a dedupe key. The multiplier: ~2× the traffic, ~10× the code complexity. For realtime UI use cases (presence, typing) that is overkill</span></div>
+<div class="lz-layer"><span class="lz-lname">Latency</span><span class="lz-lnote">An ack means a round trip. Realtime UI (cursors, animation) cannot absorb another 100ms per interaction</span></div>
+<div class="lz-layer"><span class="lz-lname">Delivery is NOT socket.io's main concern</span><span class="lz-lnote">Socket.io is a realtime transport. If you need &quot;100% delivered&quot;, use an HTTP POST plus a DB write instead of a socket.io emit</span></div>
 </div>
 
-<h3>Ba loại data đúng cho at-most-once</h3>
+<h3>Three kinds of data that suit at-most-once</h3>
 <pre><code class="language-text">✓ presence, typing indicators, cursor positions
 ✓ live scoreboard updates (tin nhat quan trong)
 ✓ chart tick updates
@@ -58,7 +58,7 @@ socket.emit('important', { id: 1 });
 Data mat rai rac cong voi cach tra ra khi user tuong tac -> UX OK
 </code></pre>
 
-<h3>Ba loại KHÔNG đúng cho at-most-once</h3>
+<h3>Three kinds that do NOT suit at-most-once</h3>
 <pre><code class="language-text">✗ chat messages (mat = user complain)
 ✗ payment confirmation (mat = ke toan sai)
 ✗ order status update (mat = customer service call)
@@ -67,16 +67,16 @@ Data quan trong -> luu DB, dung Bai 6.2 pattern
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ socket.io cho reliable delivery vì &quot;WebSocket bên dưới có delivery guarantee&quot;.</strong> WebSocket TCP bảo đảm packet đến TRONG connection. Nếu connection break, packet trong-flight MẤT. WebSocket + reconnect KHÔNG replay. Đây là điểm không hiểu số 1 khi dev mới.</p>
+<p><strong>Bẫy — nghĩ socket.io cho reliable delivery vì &quot;WebSocket bên dưới có delivery guarantee&quot;.</strong> WebSocket's TCP guarantees delivery WITHIN a connection. If the connection breaks, in-flight packets are LOST. WebSocket plus reconnect does NOT replay. This is the number-one misunderstanding among newer developers.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Socket.io default là at-most-once fire-and-forget — packet trong send buffer khi disconnect thì mất, không có exception, không có replay — đúng cho presence/typing/UI update nhưng SAI cho chat/payment/order status, phải chủ động thêm ack + retry (bài 6.2) hoặc dùng HTTP POST + DB.</p>
+<p><strong>One sentence.</strong> Socket.io defaults to at-most-once fire-and-forget — a packet sitting in the send buffer at disconnect time is lost, with no exception and no replay — which is right for presence, typing and UI updates but WRONG for chat, payments and order status, where you must deliberately add ack plus retry (lesson 6.2) or use an HTTP POST plus a DB write.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Delivery guarantees</span><span class="lc-sub">socket.io/docs/v4/delivery-guarantees — tài liệu chính thức nói thẳng &quot;at-most-once by default&quot;.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Bài 6.2 — ack + retry</span><span class="lc-sub">/courses/socket-io/learn${REF} — cách nâng lên at-least-once.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Lesson 6.2 — ack + retry</span><span class="lc-sub">/courses/socket-io/learn${REF} — cách nâng lên at-least-once.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
@@ -172,7 +172,7 @@ socket.on('chat:send', async (data, ack) =&gt; {
 });
 </code></pre>
 
-<h3>Retry loop với dedup key</h3>
+<h3>A retry loop with a dedup key</h3>
 <pre><code class="language-ts">async function sendWithRetry(msg: { messageId: string; text: string }) {
   const maxAttempts = 3;
   for (let attempt = 1; attempt &lt;= maxAttempts; attempt++) {
@@ -187,7 +187,7 @@ socket.on('chat:send', async (data, ack) =&gt; {
 }
 </code></pre>
 
-<h3>Vì sao <code>messageId</code> critical</h3>
+<h3>Why the <code>messageId</code> critical</h3>
 <pre><code class="language-ts">// Kich ban: client emit -&gt; server persist -&gt; ack timeout tren network path
 // Client retry -&gt; server persist LAI -&gt; message trung
 // Dedup: server check messageId truoc khi persist
@@ -204,7 +204,7 @@ socket.on('chat:send', async (data, ack) =&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Client generate <code>messageId</code> (UUID) ở gửi.</strong> Server không tự tạo — nếu tạo, retry là message mới (không dedup được). Client tạo ID lần đầu và giữ nó qua mọi retry.</p>
+<p><strong>Client generate <code>messageId</code> (a UUID) is created by the sender.</strong> The server does not generate it — if it did, every retry would be a new message and dedup would be impossible. The client generates the ID once and keeps it across every retry.</p>
 </div>
 
 <h3>Server-to-client ack — reverse direction</h3>
@@ -232,11 +232,11 @@ Kho nay: chi dung ack cho chat:send. Presence, typing khong.
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — quên gọi <code>ack</code> ở server handler.</strong> Client wait timeout (3s default), retry. Bạn tưởng client bug, thật ra server không ack. Rule: mọi <code>emitWithAck</code> phía client PHẢI có <code>ack(...)</code> phía server, ngay cả khi payload trống. Missing ack là bug số 1 với ack pattern.</p>
+<p><strong>Bẫy — quên gọi <code>ack</code> in the server handler.</strong> The client waits out the timeout (3s by default) and retries. You assume the client is buggy; in fact the server never acked. The rule: every <code>emitWithAck</code> on the client MUST have a matching <code>ack(...)</code> on the server, even when the payload is empty. A missing ack is the number-one bug with this pattern.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> At-least-once trong socket.io = <code>emitWithAck</code> + timeout + retry loop với backoff + client-generated <code>messageId</code> để dedup ở server — cost là +50-200ms latency + memory tracking pending acks, chỉ dùng cho data quan trọng (chat/payment/order), KHÔNG cho realtime UI updates.</p>
+<p><strong>One sentence.</strong> At-least-once trong socket.io = <code>emitWithAck</code> plus a timeout plus a backoff retry loop plus a client-generated <code>messageId</code> for server-side dedup — the cost is +50-200ms of latency plus the memory to track pending acks, so use it only for data that matters (chat, payments, orders), NOT for realtime UI updates.</p>
 </div>
 
 <h3>Sources</h3>
@@ -354,20 +354,20 @@ Kho nay: chi dung ack cho chat:send. Presence, typing khong.
 <h3>Dedupe key patterns</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">unique constraint DB</span><span class="lz-nsub">chuẩn nhất</span></span>
-<span class="lz-nbody">Column <code>message_id</code> UNIQUE trong Postgres. Duplicate insert throw exception → catch và trả ID cũ. Atomic, no race.</span>
+<span class="lz-node"><span class="lz-ntitle">unique constraint DB</span><span class="lz-nsub">the most correct</span></span>
+<span class="lz-nbody">Column <code>message_id</code> A UNIQUE constraint in Postgres. A duplicate insert throws → catch it and return the existing ID. Atomic, no race.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">Redis SETNX với TTL</span><span class="lz-nsub">nhanh, distributed</span></span>
-<span class="lz-nbody"><code>SET dedupe:&lt;messageId&gt; 1 NX EX 3600</code>. Trả OK = lần đầu process. Trả nil = duplicate. TTL 1 giờ đủ vì retry loop giới hạn.</span>
+<span class="lz-node"><span class="lz-ntitle">Redis SETNX with a TTL</span><span class="lz-nsub">nhanh, distributed</span></span>
+<span class="lz-nbody"><code>SET dedupe:&lt;messageId&gt; 1 NX EX 3600</code>. OK means this is the first time you are processing it. nil means it is a duplicate. A one-hour TTL is enough because the retry loop is bounded.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">memory Map + LRU</span><span class="lz-nsub">single-instance</span></span>
-<span class="lz-nbody">Map&lt;messageId, timestamp&gt; với LRU eviction. Nhanh nhất nhưng KHÔNG share qua worker — chỉ cho single-instance.</span>
+<span class="lz-nbody">A Map&lt;messageId, timestamp&gt; with LRU eviction. Fastest, but NOT shared across workers — single-instance only.</span>
 </div>
 </div>
 
-<h3>Pattern chuẩn với Postgres</h3>
+<h3>The standard pattern with Postgres</h3>
 <pre><code class="language-ts">socket.on('order:create', async (data, ack) =&gt; {
   try {
     const order = await prisma.order.create({
@@ -386,7 +386,7 @@ Kho nay: chi dung ack cho chat:send. Presence, typing khong.
 });
 </code></pre>
 
-<h3>Vì sao SETNX không đủ cho payment</h3>
+<h3>Why SETNX is not enough for payments</h3>
 <pre><code class="language-ts">// KEM: check dedupe roi mo process
 const isNew = await redis.set(&#96;dedupe:\${id}&#96;, '1', 'NX', 'EX', 3600);
 if (!isNew) return { duplicate: true };
@@ -404,10 +404,10 @@ await prisma.$transaction(async (tx) =&gt; {
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Đây KHÔNG phải chuyện socket.io.</strong> Exactly-once là property của toàn hệ thống, không riêng của layer transport. Socket.io + ack cho at-least-once. Muốn exactly-once, layer application phải có dedupe + atomic operation.</p>
+<p><strong>This is NOT a socket.io matter.</strong> Exactly-once is a property of the whole system, not of the transport layer. Socket.io plus acks gives you at-least-once. For exactly-once, the application layer has to provide dedup plus an atomic operation.</p>
 </div>
 
-<h3>Idempotency-key HTTP tiêu chuẩn</h3>
+<h3>The standard HTTP idempotency key</h3>
 <pre><code class="language-text">HTTP:  POST /payments
        Idempotency-Key: 550e8400-e29b-...
        {amount: 100, ...}
@@ -417,11 +417,11 @@ Socket.io:  socket.emit('payment:create', { messageId: uuid(), amount: 100 })
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng messageId ngắn hoặc predictable.</strong> Timestamp hoặc counter sequential dễ collision khi client chạy song song. UUID v4 (random) là chuẩn — 2^122 khả năng, thực tế zero collision.</p>
+<p><strong>Bẫy — dùng messageId ngắn hoặc predictable.</strong> A timestamp or a sequential counter collides easily when clients run in parallel. UUID v4 (random) is the standard — 2^122 possibilities, effectively zero collisions.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Exactly-once cần dedupe layer bên trên at-least-once — unique constraint DB (chuẩn nhất, atomic), Redis SETNX (nhanh, cross-worker), hoặc memory Map (single-instance) — kết hợp với client-generated UUID messageId là chuẩn Idempotency-Key pattern.</p>
+<p><strong>One sentence.</strong> Exactly-once needs a dedupe layer on top of at-least-once — a DB unique constraint (the most correct, and atomic), Redis SETNX (fast, cross-worker), or an in-memory Map (single-instance) — combined with a client-generated UUID messageId, which is the standard Idempotency-Key pattern.</p>
 </div>
 
 <h3>Sources</h3>
@@ -524,10 +524,10 @@ Socket.io:  socket.emit('payment:create', { messageId: uuid(), amount: 100 })
 
 <h3>Ordering guarantees</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">CO</span><span class="lz-t">Trong một socket</span><span class="lz-d">Server emit event A rồi event B → client nhận A rồi B (TCP order). Đây là TRUE cho cả polling và WebSocket.</span></div>
-<div class="lz-step"><span class="lz-k">KHONG</span><span class="lz-t">Giữa hai socket</span><span class="lz-d">User có tab 1 và tab 2, server broadcast: <code>io.to(&quot;user:42&quot;).emit(&#39;X&#39;)</code>. Tab 1 có thể nhận X trước tab 2 hoặc sau — không guarantee.</span></div>
-<div class="lz-step"><span class="lz-k">KHONG</span><span class="lz-t">Giữa hai worker (cluster)</span><span class="lz-d">Worker A và B đều emit đến room. Redis pub/sub không guarantee thứ tự cross-worker delivery.</span></div>
-<div class="lz-step"><span class="lz-k">KHONG</span><span class="lz-t">Sau disconnect + reconnect</span><span class="lz-d">Events phát trong khoảng disconnect mất. Sau reconnect, events mới đến — nhưng không phải các cái miss. Không có &quot;catch up in order&quot;.</span></div>
+<div class="lz-step"><span class="lz-k">CO</span><span class="lz-t">Within one socket</span><span class="lz-d">The server emits event A then event B → the client receives A then B (TCP ordering). This holds for both polling and WebSocket.</span></div>
+<div class="lz-step"><span class="lz-k">KHONG</span><span class="lz-t">Between two sockets</span><span class="lz-d">A user has tab 1 and tab 2 and the server broadcasts: <code>io.to(&quot;user:42&quot;).emit(&#39;X&#39;)</code>. Tab 1 may receive X before tab 2 or after — no guarantee either way.</span></div>
+<div class="lz-step"><span class="lz-k">KHONG</span><span class="lz-t">Between two workers (a cluster)</span><span class="lz-d">Workers A and B both emit into the room. Redis pub/sub guarantees no cross-worker delivery order.</span></div>
+<div class="lz-step"><span class="lz-k">KHONG</span><span class="lz-t">Sau disconnect + reconnect</span><span class="lz-d">Events emitted during the disconnect window are lost. After the reconnect, new events arrive — but not the missed ones. There is no &quot;catch up in order&quot;.</span></div>
 </div>
 
 <h3>Fix reordering: sequence number</h3>
@@ -560,9 +560,9 @@ socket.on('chat:message', (msg) =&gt; {
 
 <h3>Sequence number vs timestamp</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">timestamp</span><span class="lz-lnote">Clock skew server vs client. Multi-worker clock skew giữa các worker. Không dependable cho ordering</span></div>
-<div class="lz-layer"><span class="lz-lname">database ID (auto-increment)</span><span class="lz-lnote">Chuẩn — DB monotonic. Nhưng cần persist trước khi emit (round trip DB). Kho này dùng cái này cho <code>chat:new-message</code></span></div>
-<div class="lz-layer"><span class="lz-lname">sequence counter server-side</span><span class="lz-lnote">Reset khi restart. Cần Redis atomic INCR cho cluster</span></div>
+<div class="lz-layer"><span class="lz-lname">timestamp</span><span class="lz-lnote">Clock skew between server and client. Clock skew between workers in a cluster. Not dependable for ordering</span></div>
+<div class="lz-layer"><span class="lz-lname">database ID (auto-increment)</span><span class="lz-lnote">The proper answer — the DB is monotonic. But it requires persisting before emitting (a DB round trip). This repo uses it for <code>chat:new-message</code></span></div>
+<div class="lz-layer"><span class="lz-lname">sequence counter server-side</span><span class="lz-lnote">Resets on restart. Needs an atomic Redis INCR in a cluster</span></div>
 </div>
 
 <h3>Trong practice</h3>
@@ -573,11 +573,11 @@ Live scores: overwrite theo lastest by timestamp, don gian.
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ &quot;WebSocket TCP nên order đúng&quot;.</strong> TCP order chỉ TRUE giữa 2 endpoint có 1 connection. Nếu server có 4 worker phát tin (Redis pub/sub), hoặc client có 3 tab (3 socket), TCP order không apply. Cần sequence layer trên.</p>
+<p><strong>Bẫy — nghĩ &quot;WebSocket TCP nên order đúng&quot;.</strong> TCP ordering holds only between 2 endpoints sharing 1 connection. If the server has 4 workers emitting (via Redis pub/sub), or the client has 3 tabs (3 sockets), TCP ordering does not apply. You need a sequencing layer above it.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Socket.io preserves order WITHIN a socket (TCP), nhưng NOT across multiple sockets (multi-tab, cluster, reconnect gaps) — fix bằng sequence number ở payload (tốt nhất là DB auto-increment ID) + reorder logic ở client, với gap detection để trigger refetch nếu gap quá lớn.</p>
+<p><strong>One sentence.</strong> Socket.io preserves order WITHIN a socket (TCP), but NOT across multiple sockets (multi-tab, cluster, reconnect gaps) — fix it with a sequence number in the payload (a DB auto-increment ID is best) plus reorder logic on the client, with gap detection to trigger a refetch when the gap grows too large.</p>
 </div>
 
 <h3>Sources</h3>
@@ -666,12 +666,12 @@ Live scores: overwrite theo lastest by timestamp, don gian.
 
 <h3>Three criteria</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">Q1</span><span class="lz-t">Cần server-push (chủ động bắn ra)?</span><span class="lz-d">Chat message đến — user không request, server push. Order status change — user không query, server push. Nếu server phải push, cần socket.io.</span></div>
-<div class="lz-step"><span class="lz-k">Q2</span><span class="lz-t">Cần response ngay?</span><span class="lz-d">User click &quot;Send&quot; và mong thấy tin nhắn hiện ngay. HTTP round trip 100-500ms. Socket.io emit + ack: ~50-100ms. Nếu lag &gt;200ms không chấp nhận được, socket.io.</span></div>
-<div class="lz-step"><span class="lz-k">Q3</span><span class="lz-t">Cần strong delivery + idempotency?</span><span class="lz-d">Payment, order — mất là bug lớn. HTTP có Idempotency-Key + retry chuẩn. Socket.io cần build ack layer từ đầu. Nếu YES cho delivery, HTTP thắng.</span></div>
+<div class="lz-step"><span class="lz-k">Q1</span><span class="lz-t">Do you need server push (the server speaking first)?</span><span class="lz-d">A chat message arrives — the user did not request it, the server pushed. An order status changes — the user did not query, the server pushed. If the server has to push, you need socket.io.</span></div>
+<div class="lz-step"><span class="lz-k">Q2</span><span class="lz-t">Do you need the response immediately?</span><span class="lz-d">A user clicks &quot;Send&quot; and expects the message to appear at once. An HTTP round trip is 100-500ms. A socket.io emit plus ack is ~50-100ms. If &gt;200ms of lag is unacceptable, use socket.io.</span></div>
+<div class="lz-step"><span class="lz-k">Q3</span><span class="lz-t">Do you need strong delivery plus idempotency?</span><span class="lz-d">Payments, orders — losing one is a serious bug. HTTP has a standard Idempotency-Key plus retry. Socket.io makes you build the ack layer from scratch. If delivery is the priority, HTTP wins.</span></div>
 </div>
 
-<h3>Bảng quyết định</h3>
+<h3>The decision table</h3>
 <div class="out">Feature              Q1 push?  Q2 fast?  Q3 reliable?  Choice
 Chat message         YES       YES       YES           socket + ack + DB
 Typing indicator     YES       YES       NO            socket, no ack
@@ -683,7 +683,7 @@ Push notification    YES       NO        YES           HTTP + FCM/APNS
 Video signalling     YES       YES       YES           socket (Chuong 7)
 </div>
 
-<h3>Hybrid pattern — cả hai</h3>
+<h3>The hybrid pattern — both</h3>
 <pre><code class="language-ts">// Chat send: HTTP POST for persist + reliability, socket for realtime broadcast
 async function sendMessage(threadId, text) {
   // 1. HTTP POST persist (co Idempotency-Key)
@@ -697,10 +697,10 @@ async function sendMessage(threadId, text) {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Hybrid rất phổ biến.</strong> HTTP cho action + reliability. Socket.io cho realtime notification &quot;có action mới&quot;. Khoá này dạy socket.io — nhưng biết dùng HTTP đúng chỗ quan trọng bằng biết dùng socket.io.</p>
+<p><strong>The hybrid is very common.</strong> HTTP for the action and its reliability. Socket.io for the realtime notification that &quot;something new happened&quot;. This course teaches socket.io — but knowing where HTTP belongs matters just as much as knowing socket.io.</p>
 </div>
 
-<h3>Debug — HTTP dễ hơn nhiều</h3>
+<h3>Debugging — HTTP is far easier</h3>
 <pre><code class="language-text">HTTP debugging:
   - Curl request tren terminal, xem response
   - Chrome Network tab, click, xem headers + payload
@@ -715,11 +715,11 @@ Socket.io debugging:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng socket.io cho MỌI action vì &quot;realtime hơn&quot;.</strong> User bấm &quot;Update profile&quot; — dùng socket.io emit? Vô nghĩa. HTTP PUT là chuẩn 20 năm, tools support đầy đủ, error handling built-in. Chỉ dùng socket.io khi cần push từ server hoặc latency &lt;100ms là critical.</p>
+<p><strong>Bẫy — dùng socket.io cho MỌI action vì &quot;realtime hơn&quot;.</strong> A user clicks &quot;Update profile&quot; — over a socket.io emit? Pointless. HTTP PUT has been the standard for 20 years, the tooling is complete and error handling is built in. Reach for socket.io only when you need a server push or when sub-100ms latency is critical.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Ba criteria (server-push, sub-200ms latency, strong delivery) — nếu cả 3 = socket.io + ack, chỉ 1-2 = HTTP thường hoặc hybrid (HTTP cho action + socket.io cho realtime notification); không dùng socket.io cho update profile hay CRUD thường vì HTTP có tools chín và debug dễ hơn nhiều.</p>
+<p><strong>One sentence.</strong> Three criteria (server push, sub-200ms latency, strong delivery) — all three point to socket.io plus acks; only one or two means plain HTTP or a hybrid (HTTP for the action, socket.io for the realtime notification); do not use socket.io for a profile update or ordinary CRUD, because HTTP has mature tooling and is far easier to debug.</p>
 </div>
 
 <h3>Sources</h3>

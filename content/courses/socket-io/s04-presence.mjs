@@ -40,9 +40,9 @@ export default {
 
 <h3>Cost analysis</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1 user connect</span><span class="lz-t">1 event × N receivers</span><span class="lz-d">Với N=10.000 sockets connected, mỗi connect là 10.000 packets to send. OK, 100 KB tổng.</span></div>
-<div class="lz-step"><span class="lz-k">N users connect</span><span class="lz-t">N × N = N² packets</span><span class="lz-d">Với N=10.000 và tất cả reconnect cùng lúc (deploy): 100.000.000 packets. Ở 60 byte/packet là 6 GB traffic — trong một vài giây.</span></div>
-<div class="lz-step"><span class="lz-k">CPU cost</span><span class="lz-t">JSON.stringify × N²</span><span class="lz-d">Node encode payload N² lần. Với ~2μs/serialize, 100M × 2μs = 200 giây CPU. Trên 8 core: 25 giây latency.</span></div>
+<div class="lz-step"><span class="lz-k">1 user connect</span><span class="lz-t">1 event × N receivers</span><span class="lz-d">With N=10,000 sockets connected, each connect means 10,000 packets to send. Fine — 100 KB in total.</span></div>
+<div class="lz-step"><span class="lz-k">N users connect</span><span class="lz-t">N × N = N² packets</span><span class="lz-d">With N=10,000 and all of them reconnecting at once (a deploy): 100,000,000 packets. At 60 bytes each that is 6 GB of traffic — in a handful of seconds.</span></div>
+<div class="lz-step"><span class="lz-k">CPU cost</span><span class="lz-t">JSON.stringify × N²</span><span class="lz-d">Node serialises the payload N² times. At ~2μs per serialisation, 100M × 2μs = 200 seconds of CPU. Across 8 cores: 25 seconds of latency.</span></div>
 </div>
 
 <div class="out">Deploy scenario:
@@ -54,7 +54,7 @@ export default {
   = server dead
 </div>
 
-<h3>Comment thật của kho này</h3>
+<h3>The actual comment in this repo</h3>
 <pre><code class="language-ts">// messaging.socket.ts:180-198
 /**
  * Emit a presence update ONLY to the given audience (their per-user
@@ -75,10 +75,10 @@ function emitPresenceTo(
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Đây là comment ĐÃ ĐO — không phải lý thuyết.</strong> &quot;O(N²) storm during deploy reconnects&quot; là câu tường thuật một sự cố thật xảy ra rồi được ghi lại. Cost giảm từ N² xuống N × |audience| — với audience trung bình 30 người, thì factor giảm ~333× ở N=10.000.</p>
+<p><strong>This comment records a MEASUREMENT — not a theory.</strong> &quot;O(N²) storm during deploy reconnects&quot; narrates a real incident that happened and was then written down. The cost drops from N² to N × |audience| — with an average audience of 30 people, that is a ~333× reduction at N=10,000.</p>
 </div>
 
-<h3>Ước lượng ở kho này</h3>
+<h3>The estimate for this repo</h3>
 <div class="out">N = 10.000 online users (uoc luong tuong lai)
 audience (friends + thread peers) trung binh: 30 nguoi
 
@@ -89,7 +89,7 @@ Tiet kiem: 333x tren luot event
 Deploy storm giam tu ~5 phut server dead xuong ~1 giay lag nho
 </div>
 
-<h3>Vì sao "just don't emit disconnect" không đủ</h3>
+<h3>Why "just don't emit disconnect" is not enough</h3>
 <pre><code class="language-ts">// Y tuong kem: chi emit connect, khong disconnect (presence tu decay)
 io.on('connection', (socket) =&gt; {
   io.emit('presence:update', { userId, online: true });
@@ -99,19 +99,19 @@ io.on('connection', (socket) =&gt; {
 // Cost: 50% van la N x N = N^2. Van kem.
 </code></pre>
 
-<p>Giảm 2× không giải quyết vấn đề O — vẫn O(N²). Cần thay THUẬT toán, không chỉ trim constant.</p>
+<p>A 2× reduction does not solve a complexity problem — it is still O(N²). You have to change the ALGORITHM, not trim a constant.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ 10.000 users là &quot;quá scale&quot; không quan tâm hôm nay.</strong> Kho này ĐANG ~200 online users. Nhưng deploy storm scale hàm N² của <em>current N</em>, không target N. 200 × 200 = 40.000 packets. Vẫn dễ handle. 2.000 × 2.000 = 4 triệu packets — cũng handle được nhưng lag 1 giây. Vấn đề bung khi bạn ít khi để ý, không phải khi bạn đợi.</p>
+<p><strong>Bẫy — nghĩ 10.000 users là &quot;quá scale&quot; không quan tâm hôm nay.</strong> This repo currently has ~200 online users. But a deploy storm scales as N² in <em>current N</em>, not in the target N. 200 × 200 = 40,000 packets. Still easy. 2,000 × 2,000 = 4 million packets — still survivable, but with a full second of lag. The problem detonates when you are not watching, not when you are waiting for it.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Naive presence <code>io.emit</code> là O(N²) — với N=10.000 và deploy reconnect storm là 100 triệu packet trong vài giây (server dead), và fix của kho này (<code>emitPresenceTo(audience)</code>, audience ≈ 30) giảm 333× xuống ~300k packet — trong đó comment kho là bằng chứng có đo thật.</p>
+<p><strong>One sentence.</strong> Naive presence <code>io.emit</code> is O(N²) — at N=10,000 a deploy reconnect storm is 100 million packets in a few seconds (a dead server), and this repo's fix (<code>emitPresenceTo(audience)</code>, audience ≈ 30) cuts that 333× down to ~300k packets — and the repo's own comment is the evidence that it was actually measured.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Broadcasting messages</span><span class="lc-sub">socket.io/docs/v4/broadcasting-events — chi tiết cost của io.emit vs io.to.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Bài 4.2 — bảng friends</span><span class="lc-sub">/courses/socket-io/learn${REF} — cách lấy audience nhanh (query cache).</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Lesson 4.2 — the friends table</span><span class="lc-sub">/courses/socket-io/learn${REF} — cách lấy audience nhanh (query cache).</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -231,9 +231,9 @@ audience(X) = friends(X) &cup; threadPeers(X)
 // threadPeers(X) = user chung mot cuoc chat DM
 </code></pre>
 
-<p>UI của kho render presence chỉ ở 4 chỗ (comment nêu ở 4.1): <code>ActiveNowRow</code> (bạn), <code>ThreadList</code>/<code>MiniChatDock</code>/<code>ChatInfoPanel</code>/<code>/messages</code> (chat peers). Không ai khác cần biết. Đó là audience.</p>
+<p>This repo's UI renders presence in only 4 places (the comment quoted in 4.1): <code>ActiveNowRow</code> (friends), <code>ThreadList</code>/<code>MiniChatDock</code>/<code>ChatInfoPanel</code>/<code>/messages</code> (chat peers). Nobody else needs to know. That is the audience.</p>
 
-<h3>Naive compute — chậm nếu chạy mỗi connect</h3>
+<h3>The naive computation — slow if it runs on every connect</h3>
 <pre><code class="language-ts">async function getAudience(userId: number): Promise&lt;number[]&gt; {
   const friends = await prisma.friendship.findMany({
     where: { OR: [{ userAId: userId }, { userBId: userId }], status: 'ACCEPTED' },
@@ -253,7 +253,7 @@ audience(X) = friends(X) &cup; threadPeers(X)
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Compute audience mỗi connect là O(N) query DB.</strong> Trong deploy storm, đó là 10.000 query trong vài giây — Prisma pool cạn, DB CPU 100%. Cần CACHE.</p>
+<p><strong>Computing the audience on every connect is an O(N) DB query.</strong> In a deploy storm that is 10,000 queries in a few seconds — the Prisma pool drains and DB CPU hits 100%. You need a CACHE.</p>
 </div>
 
 <h3>Cache trong Redis</h3>
@@ -273,11 +273,11 @@ async function getAudienceCached(userId: number): Promise&lt;number[]&gt; {
 // Deploy storm: 10.000 * 1ms = 10 giay chi phi audience compute
 </code></pre>
 
-<h3>Invalidate khi nào</h3>
+<h3>When to invalidate</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">friend added/removed</span><span class="lz-d">Invalidate cả hai user: <code>redis.del(&#96;presence:audience:\${a}&#96;, &#96;presence:audience:\${b}&#96;)</code>.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">thread created / participant added</span><span class="lz-d">Invalidate tất cả participants của thread đó.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">TTL 5 phút</span><span class="lz-d">Backstop nếu invalidate miss (bug, race). Trade off: staleness tối đa 5 phút, chấp nhận được cho presence.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">friend added/removed</span><span class="lz-d">Invalidate both users: <code>redis.del(&#96;presence:audience:\${a}&#96;, &#96;presence:audience:\${b}&#96;)</code>.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">thread created / participant added</span><span class="lz-d">Invalidate every participant of that thread.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">a 5-minute TTL</span><span class="lz-d">A backstop for when invalidation is missed (a bug, a race). The trade: at most 5 minutes of staleness, which is acceptable for presence.</span></div>
 </div>
 
 <h3>Alternative: precomputed table</h3>
@@ -290,19 +290,19 @@ CREATE TABLE presence_audience (
 -- Populated on friend/thread changes; queried at connect
 </code></pre>
 
-<p>Đây là tradeoff khác: write-heavy (mỗi friend/thread change là N write), read-fast (một query index-based). Kho này chọn Redis cache vì read/write ratio là ~100:1 — cache lành hơn.</p>
+<p>That is a different trade: write-heavy (every friend/thread change is N writes), read-fast (one index-backed query). This repo picks the Redis cache because the read/write ratio is ~100:1 — the cache is the healthier option.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — quên invalidate cache khi user block user khác.</strong> Block = remove friend + rời tất thread chung. Nếu invalidate không đầy đủ, ex-friend vẫn nhận presence updates ~5 phút. Bug rất tinh vi vì hiếm khi user block; test thường không bắt.</p>
+<p><strong>Bẫy — quên invalidate cache khi user block user khác.</strong> A block means removing the friend and leaving every shared thread. If invalidation is incomplete, the ex-friend keeps receiving presence updates for ~5 minutes. A very subtle bug, because users block rarely and tests usually miss it.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Audience = friends ∪ thread peers, cache 5 phút trong Redis (1ms per read sau warm-up), invalidate khi friend/thread change + TTL backstop — giảm cost compute audience từ 200s cho deploy storm 10k users xuống 10s, và trade off staleness ≤5 phút chấp nhận được cho presence.</p>
+<p><strong>One sentence.</strong> The audience is friends ∪ thread peers, cached for 5 minutes in Redis (1ms per read once warm), invalidated on friend/thread changes with a TTL backstop — cutting the audience-computation cost for a 10k-user deploy storm from 200s to 10s, at the acceptable price of ≤5 minutes of presence staleness.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Redis — Caching patterns</span><span class="lc-sub">redis.io/docs/manual/patterns/twemproxy — cache-aside, đủ cho use case này.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Khoá Redis của CuongThai</span><span class="lc-sub">/courses/redis/learn${REF} — pattern cache-aside chi tiết, kèm invalidation strategies.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">CuongThai's Redis keys</span><span class="lc-sub">/courses/redis/learn${REF} — pattern cache-aside chi tiết, kèm invalidation strategies.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -419,7 +419,7 @@ CREATE TABLE presence_audience (
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Kết quả bug:</strong> User có 2 tab, đóng 1 → presence gợn (online → offline → online 200ms sau khi tab kia gửi tín hiệu). Bạn bè của họ thấy avatar nhấp nháy khi họ chỉ đóng inbox.</p>
+<p><strong>The resulting bug:</strong> A user with 2 tabs closes one → presence ripples (online → offline → online 200ms later, once the other tab reports in). Their friends watch the avatar flicker because they merely closed their inbox.</p>
 </div>
 
 <h3>Fix: reference counting</h3>
@@ -451,7 +451,7 @@ io.on('connection', (socket) =&gt; {
 });
 </code></pre>
 
-<h3>Kết hợp với debounce từ 1.2</h3>
+<h3>Combined with the debounce from 1.2</h3>
 <pre><code class="language-ts">socket.on('disconnect', (reason) =&gt; {
   const sockets = socketsByUser.get(userId);
   if (!sockets) return;
@@ -471,11 +471,11 @@ io.on('connection', (socket) =&gt; {
 // scheduleOfflineDebounce cancel offline neu socket khac vao trong 2s
 </code></pre>
 
-<h3>&quot;lastSeen&quot; — quan trọng hơn &quot;online&quot;</h3>
+<h3>&quot;lastSeen&quot; — more important than &quot;online&quot;</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">&quot;Active now&quot; strict</span><span class="lz-lnote">Chỉ hiện khi có socket connected. Không giữ &quot;online 2 phút trước&quot;. Rõ ràng nhưng UI dễ nhấp nháy</span></div>
-<div class="lz-layer"><span class="lz-lname">&quot;Active recently&quot; broad</span><span class="lz-lnote">Hiện &quot;Active&quot; cho tới 5-10 phút sau lastSeen. UI mềm hơn nhưng có thể mislead — user đã đi ngủ vẫn hiện online</span></div>
-<div class="lz-layer"><span class="lz-lname">this repo</span><span class="lz-lnote">Emit cả <code>online</code> (boolean) và <code>lastSeen</code> (Date.now()). Client tự chọn render — <code>ActiveNowRow</code> dùng strict, <code>ThreadList</code> dùng broad</span></div>
+<div class="lz-layer"><span class="lz-lname">&quot;Active now&quot; strict</span><span class="lz-lnote">Shown only while a socket is connected. No &quot;online 2 minutes ago&quot;. Unambiguous, but the UI flickers easily</span></div>
+<div class="lz-layer"><span class="lz-lname">&quot;Active recently&quot; broad</span><span class="lz-lnote">Shows &quot;Active&quot; for 5-10 minutes past lastSeen. A softer UI, but it can mislead — a user who has gone to bed still reads as online</span></div>
+<div class="lz-layer"><span class="lz-lname">this repo</span><span class="lz-lnote">Emit both <code>online</code> (a boolean) and <code>lastSeen</code> (Date.now()). The client picks how to render it — <code>ActiveNowRow</code> uses the strict reading, <code>ThreadList</code> uses the broad one</span></div>
 </div>
 
 <h3>Redis-backed multi-instance</h3>
@@ -495,16 +495,16 @@ async function markOnline(userId: number, socketId: string) {
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — quên cleanup <code>socketsByUser</code> khi cluster restart.</strong> Nếu worker crash, Set trong-process biến mất. Redis-backed thì entry vẫn còn — với TTL 1h backup, tự dọn. Nếu KHÔNG có TTL, orphan mãi.</p>
+<p><strong>Bẫy — quên cleanup <code>socketsByUser</code> khi cluster restart.</strong> If a worker crashes, an in-process Set vanishes with it. Redis-backed, the entry survives — and a 1h backup TTL clears it eventually. WITHOUT that TTL it is orphaned forever.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Multi-tab presence cần reference counting (Set&lt;socketId&gt; per userId), chỉ emit offline khi Set về 0 và không có debounce cancel — kết hợp với <code>lastSeen</code> timestamp cho FE chọn strict vs broad hiển thị, và trong cluster phải dùng Redis <code>SADD</code>/<code>SCARD</code> vì Set trong-process không share qua worker.</p>
+<p><strong>One sentence.</strong> Multi-tab presence needs reference counting (a Set&lt;socketId&gt; per userId), emitting offline only when the Set reaches 0 and no debounce has cancelled it — combined with a <code>lastSeen</code> timestamp so the frontend can choose a strict or broad display, and in a cluster it has to live in a Redis <code>SADD</code>/<code>SCARD</code> because an in-process Set is not shared across workers.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Redis — SADD, SCARD, SREM</span><span class="lc-sub">redis.io/commands/sadd — atomic set operations, đủ cho multi-instance socket counting.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Bài 1.2 — disconnect reasons</span><span class="lc-sub">/courses/socket-io/learn${REF} — debounce cho &quot;transport close&quot; là chỗ multi-tab bug hay giấu.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Lesson 1.2 — disconnect reasons</span><span class="lc-sub">/courses/socket-io/learn${REF} — debounce cho &quot;transport close&quot; là chỗ multi-tab bug hay giấu.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.3</span>
@@ -638,10 +638,10 @@ socket.on('thread:typing', ({ threadId, userId }) =&gt; {
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Cost với chat busy:</strong> 10 người trong thread, mỗi người gõ 5 phím/giây trung bình. Server nhận 50 events/second, phát mỗi cái đến 9 người = 450 packets/second. Cho MỘT thread. 100 thread = 45.000 packets/second cho typing indicator.</p>
+<p><strong>The cost in a busy chat:</strong> 10 people in a thread, each averaging 5 keystrokes a second. The server receives 50 events/second and fans each out to 9 people = 450 packets/second. For ONE thread. 100 threads = 45,000 packets/second just for typing indicators.</p>
 </div>
 
-<h3>Fix 1: debounce phía client</h3>
+<h3>Fix 1: debounce on the client</h3>
 <pre><code class="language-tsx">// FE — chi emit khi bat dau go, khong emit lai neu dang go
 let lastEmit = 0;
 &lt;input onKeyDown={() =&gt; {
@@ -653,7 +653,7 @@ let lastEmit = 0;
 }} /&gt;
 </code></pre>
 
-<h3>Fix 2: timeout auto-clear phía CLIENT nhận</h3>
+<h3>Fix 2: an auto-clear timeout on the RECEIVING client</h3>
 <pre><code class="language-tsx">// FE nhan — clear tu dong sau 3s neu khong nhan typing them
 const typingTimers = new Map&lt;number, NodeJS.Timeout&gt;();
 
@@ -672,23 +672,23 @@ socket.on('thread:typing', (userId) =&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Server KHÔNG cần lưu typing state.</strong> Ephemeral hoàn toàn — nếu user disconnect, client-side timeout tự dọn. Không cần <code>disconnect</code> handler đặc biệt. Đây là ephemeral pattern (bài 1.5) đúng ứng dụng.</p>
+<p><strong>The server does NOT need to store typing state.</strong> Entirely ephemeral — if the user disconnects, the client-side timeout clears it. No special <code>disconnect</code> handler required. This is the ephemeral pattern (lesson 1.5) applied correctly.</p>
 </div>
 
-<h3>Cost sau khi vá</h3>
+<h3>The cost after the fix</h3>
 <div class="out">Truoc: 10 user * 5 keystroke/s * 9 receiver = 450 packet/s (1 thread)
 Sau debounce 3s: 10 user * 0.33 emit/s * 9 receiver = ~30 packet/s (1 thread)
 Tiet kiem: 15x
 </div>
 
-<h3>&quot;Stop typing&quot; explicit event — cần không?</h3>
+<h3>An explicit &quot;stop typing&quot; event — do you need one?</h3>
 <pre><code class="language-tsx">// TUY CHON — emit khi user xoa het chu hoac blur input
 &lt;input onBlur={() =&gt; socket.emit('thread:typing:stop', { threadId })} /&gt;
 </code></pre>
 
-<p>Có thể. Nhưng client-side timeout đã lo. &quot;Stop&quot; explicit giúp UI clear sớm hơn 3s, nhưng cost là DOUBLE event traffic (mỗi typing session cần 2 event). Kho này KHÔNG dùng — timeout đã đủ mượt.</p>
+<p>You could. But the client-side timeout already handles it. An explicit &quot;stop&quot; clears the UI up to 3s sooner, at the cost of DOUBLING event traffic (every typing session needs 2 events). This repo does NOT use one — the timeout is smooth enough.</p>
 
-<h3>Rate limit chống DDoS</h3>
+<h3>A rate limit against DDoS</h3>
 <pre><code class="language-ts">// Neu client bug hoac malicious, gioi han 5 emit/s
 const rateLimiters = new Map&lt;string, { count: number; reset: number }&gt;();
 
@@ -706,16 +706,16 @@ socket.on('thread:typing', (data) =&gt; {
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — debounce phía server thay vì phía client.</strong> Nếu server debounce, mỗi socket vẫn spam server bằng events. Server chỉ tiết kiệm BROADCAST, không tiết kiệm RECEIVE. Debounce phía CLIENT giảm cả hai. Đặt cả hai (client debounce + server rate limit) là chuẩn.</p>
+<p><strong>Bẫy — debounce phía server thay vì phía client.</strong> If the server does the debouncing, every socket still spams the server with events. The server saves only on BROADCAST, not on RECEIVE. Debouncing on the CLIENT saves both. Doing both (client debounce + server rate limit) is the standard.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Typing indicators cần debounce phía CLIENT (chỉ emit mỗi 3s tối đa) + auto-clear phía CLIENT nhận (timeout 3s sau event cuối) + server rate limit backstop — server không cần lưu state, đây là ephemeral pattern (1.5) đúng use case và giảm cost 15× so với emit-per-keystroke.</p>
+<p><strong>One sentence.</strong> Typing indicators need a CLIENT-side debounce (at most one emit every 3s) plus an auto-clear on the RECEIVING client (a 3s timeout after the last event) plus a server rate limit as backstop — the server stores no state, this is the ephemeral pattern (1.5) in its proper use case, and it cuts the cost 15× against emit-per-keystroke.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">socket.io — Rate limiting</span><span class="lc-sub">socket.io/get-started/basic-crud-application/#rate-limiting — pattern chuẩn cho server-side.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Bài 1.5 — state patterns</span><span class="lc-sub">/courses/socket-io/learn${REF} — typing là ví dụ tuyệt vời cho ephemeral pattern.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Lesson 1.5 — state patterns</span><span class="lc-sub">/courses/socket-io/learn${REF} — typing là ví dụ tuyệt vời cho ephemeral pattern.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.4</span>
@@ -825,16 +825,16 @@ socket.on('thread:typing', (data) =&gt; {
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.5</span>
 <h2>Read receipts: three visibility levels</h2>
-<p class="lead">&quot;Đã xem&quot; ở Messenger là feature quen thuộc. Nó ẩn chứa ba mức tách biệt — và cả ba đều cần khác nhau về technical implementation và UX signalling.</p>
+<p class="lead">Messenger's &quot;Seen&quot; is a familiar feature. It hides three distinct levels — and all three differ in both technical implementation and UX signalling.</p>
 
-<h3>Ba mức</h3>
+<h3>The three levels</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">SENT — server đã lưu</span><span class="lz-d">Client emit <code>chat:send</code>, server persist DB, ack thành công. UI hiện icon &quot;đã gửi&quot; (một dấu tick). Không cần realtime — HTTP POST cũng làm được.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">DELIVERED — client đã nhận</span><span class="lz-d">Server broadcast <code>chat:new-message</code> đến room, mỗi socket recipient ack lại &quot;got it&quot;. Server cập nhật <code>deliveredAt</code>. UI hiện tick đôi. Cần socket + ack (bài 6.x).</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">READ — user thao tác thấy</span><span class="lz-d">User scroll đến message HOẶC mở thread. Client emit <code>chat:mark-read</code>. Server update <code>readAt</code>, broadcast lại cho sender. UI tick xanh. Cần detection user thấy.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">SENT — the server has stored it</span><span class="lz-d">Client emit <code>chat:send</code>, the server persists to the DB and the ack succeeds. The UI shows a &quot;sent&quot; icon (one tick). No realtime needed — an HTTP POST would do.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">DELIVERED — the client has received it</span><span class="lz-d">Server broadcast <code>chat:new-message</code> to the room, and each recipient socket acks back &quot;got it&quot;. The server updates <code>deliveredAt</code>. The UI shows a double tick. Requires sockets plus acks (lesson 6.x).</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">READ — the user actually looked at it</span><span class="lz-d">The user scrolls to the message OR opens the thread. The client emits <code>chat:mark-read</code>. Server update <code>readAt</code>, which is broadcast back to the sender. The UI turns the tick blue. Requires detecting that the user saw it.</span></div>
 </div>
 
-<h3>SENT — dễ nhất</h3>
+<h3>SENT — the easiest</h3>
 <pre><code class="language-ts">socket.emit('chat:send', { threadId, text }, (ack) =&gt; {
   if (ack.ok) markSent(ack.messageId);
 });
@@ -847,7 +847,7 @@ socket.on('chat:send', async ({ threadId, text }, ack) =&gt; {
 });
 </code></pre>
 
-<h3>DELIVERED — cần ack từ recipient</h3>
+<h3>DELIVERED — needs an ack from the recipient</h3>
 <pre><code class="language-ts">// Server: nhan chat:new-message
 socket.on('chat:new-message-ack', async ({ messageId }) =&gt; {
   await prisma.messageDelivery.upsert({
@@ -861,10 +861,10 @@ socket.on('chat:new-message-ack', async ({ messageId }) =&gt; {
 </code></pre>
 
 <div class="callout warn">
-<p><strong>DELIVERED khác READ.</strong> Delivered = &quot;client đã nhận packet&quot;. User có thể đóng tab, chưa scroll đến, chưa nhìn — nhưng packet đã đến. Đừng gộp hai concept này.</p>
+<p><strong>DELIVERED is not READ.</strong> Delivered means &quot;the client received the packet&quot;. The user may have closed the tab, never scrolled to it, never looked — but the packet arrived. Do not collapse these two concepts.</p>
 </div>
 
-<h3>READ — cần detection user actual xem</h3>
+<h3>READ — needs detection that the user genuinely saw it</h3>
 <pre><code class="language-tsx">// FE — IntersectionObserver detect message vao view
 const observer = new IntersectionObserver((entries) =&gt; {
   entries.forEach(entry =&gt; {
@@ -890,7 +890,7 @@ setInterval(() =&gt; {
 }, 500);
 </code></pre>
 
-<h3>Cost — vì sao read receipts hay tắt được</h3>
+<h3>Cost — why read receipts so often come with an off switch</h3>
 <div class="out">Chat 10 nguoi rat busy, moi nguoi doc 100 tin/gio
 Read receipt: 10 * 100 = 1.000 mark-read events/gio/thread
 Broadcast toi sender: 1.000 update UI events
@@ -898,19 +898,19 @@ Broadcast toi sender: 1.000 update UI events
 Voi 1.000 thread dong thoi: 1.000.000 update/gio
 </div>
 
-<p>Đó là cost thật. Nhiều app cho user tắt (Messenger có setting &quot;turn off read receipts&quot;) không phải cho privacy — mà để giảm cost server.</p>
+<p>That cost is real. Many apps let users turn it off (Messenger has a &quot;turn off read receipts&quot; setting) not for privacy — but to cut server cost.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng DELIVERED làm READ.</strong> Tick đôi (delivered) và tick xanh (read) là hai mức khác nhau. Nếu bạn dùng delivered = read, user thấy &quot;đã xem&quot; ngay cả khi họ chưa mở tab. Bug UX nghiêm trọng vì user tin điều đó.</p>
+<p><strong>Bẫy — dùng DELIVERED làm READ.</strong> The double tick (delivered) and the blue tick (read) are two different levels. If you treat delivered as read, users see &quot;seen&quot; even when the recipient never opened the tab. A serious UX bug, because people believe what that tick says.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Read receipts có ba mức tách biệt (SENT server-ack, DELIVERED client-ack, READ user-visibility) — mỗi cái cần technical implementation khác (DB ack, socket ack + prisma upsert, IntersectionObserver + batch) và UX signal khác (một tick, hai tick, tick xanh) — cost cao khiến nhiều app cho user tắt được.</p>
+<p><strong>One sentence.</strong> Read receipts have three distinct levels (SENT is a server ack, DELIVERED a client ack, READ a visibility signal) — each needs a different implementation (a DB ack, a socket ack plus a Prisma upsert, an IntersectionObserver plus batching) and a different UX signal (one tick, two ticks, a blue tick) — and the cost is high enough that many apps let users switch it off.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — IntersectionObserver</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API — API chuẩn để detect element vào viewport.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 6 — acks</span><span class="lc-sub">/courses/socket-io/learn${REF} — DELIVERED cần ack đúng cách để không mất khi client offline lúc receive.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 6 — acks</span><span class="lc-sub">/courses/socket-io/learn${REF} — DELIVERED cần ack đúng cách để không mất khi client offline lúc receive.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.5</span>

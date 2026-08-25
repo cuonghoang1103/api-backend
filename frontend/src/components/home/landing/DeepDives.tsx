@@ -22,8 +22,9 @@
  */
 import Link from 'next/link';
 import { DEEP_DIVES } from './deepDivesData';
+export { default } from './DeepDivesEditorial';
 
-export default function DeepDives() {
+export function LegacyDeepDives() {
   return (
     <section className="border-b border-[var(--border-color)]">
       <div className="mx-auto max-w-5xl px-5 py-16 sm:px-8">

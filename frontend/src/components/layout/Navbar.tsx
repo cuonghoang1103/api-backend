@@ -253,7 +253,7 @@ export default function Navbar() {
  // there so it doesn't sit on top of the studio topbar
  // (z-40 > z-20) and clip the first row of editor controls.
  const isStudioPage = pathname?.startsWith('/creator') ?? false;
- if (isAuthPage || isStudioPage) return null;
+  if (isAuthPage || isStudioPage || pathname === '/') return null;
 
   const contactItems = [
     { href: 'tel:+84399360938', icon: 'phone' },

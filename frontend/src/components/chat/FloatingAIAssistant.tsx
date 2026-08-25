@@ -3,11 +3,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MessageCircle } from 'lucide-react';
 import LottieClient from '@/components/ui/LottieClient';
 import type { LottieRefCurrentProps } from 'lottie-react';
 import { useChatStore } from '@/store/chatStore';
 import { useMusicStore } from '@/store/musicStore';
 import { useReduceAnimations } from '@/hooks/useIsTouch';
+import { useTranslation } from '@/hooks/useTranslation';
+import { getLandingCopy } from '@/components/home/landing/landingCopy';
 import ChatModal from './ChatModal';
 
 type RobotState = 'idle' | 'thinking' | 'typing';
@@ -29,6 +32,9 @@ export default function FloatingAIAssistant() {
  // action buttons (blocked snippet creation in /admin/exp-hub,
  // 2026-07-06) — hide it there too.
  const pathname = usePathname();
+ const isLanding = pathname === '/';
+ const { locale } = useTranslation();
+ const landingCopy = getLandingCopy(locale);
  // On MOBILE, show the AI bubble only on the home feed ('/') — on every other
  // page it covered content/action buttons (user request 2026-07-09). Desktop
  // is unaffected. Uses matchMedia (a plain call, not a hook) so the value is
@@ -119,7 +125,7 @@ export default function FloatingAIAssistant() {
   // `robotData → LottieClient → import()` mới là chỗ tốn 300KB; fetch 60KB
   // chỉ là ngòi nổ.
   useEffect(() => {
-    if (hidden || reduceAnim || robotData || !wantsAnim) return;
+    if (hidden || isLanding || reduceAnim || robotData || !wantsAnim) return;
 
     let alive = true;
     fetch('/animations/robot.json')
@@ -135,7 +141,7 @@ export default function FloatingAIAssistant() {
     return () => {
       alive = false;
     };
-  }, [hidden, reduceAnim, robotData, wantsAnim]);
+  }, [hidden, isLanding, reduceAnim, robotData, wantsAnim]);
 
   // AI đang nghĩ / đang gõ ⇒ mở cửa cho hoạt hình dù người dùng chưa rê chuột.
   // Đây là lúc DUY NHẤT con robot mang thông tin chứ không chỉ trang trí:
@@ -178,7 +184,7 @@ export default function FloatingAIAssistant() {
     // On routes where the bubble is hidden, don't schedule idle tooltips —
     // otherwise a pending tooltip could flash the instant we navigate back to
     // a visible route. (The hook itself still runs; only its body is gated.)
-    if (hidden || isOpen) {
+    if (hidden || isLanding || isOpen) {
       setShowTooltip(false);
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
@@ -189,7 +195,7 @@ export default function FloatingAIAssistant() {
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
     };
-  }, [hidden, isOpen, scheduleTooltip]);
+  }, [hidden, isLanding, isOpen, scheduleTooltip]);
 
   const handleMouseEnter = () => {
     // Tín hiệu quan tâm đầu tiên và phổ biến nhất — bắt đầu kéo Lottie về.
@@ -218,12 +224,39 @@ export default function FloatingAIAssistant() {
 
   const handleClose = () => {
     setIsOpen(false);
-    scheduleTooltip();
+    if (!isLanding) scheduleTooltip();
   };
 
   // Route-based hide happens HERE — after every hook has run — so the hook
   // order stays identical whether or not the bubble is shown (see `hidden`).
   if (hidden) return null;
+
+  if (isLanding) {
+    return (
+      <>
+        <div
+          className="ai-robot-fab landing-ai-fab fixed bottom-6 right-6 z-[100]"
+          style={{ ['--music-offset' as string]: musicActive ? '84px' : '0px' } as React.CSSProperties}
+        >
+          <button
+            type="button"
+            className="landing-ai-fab-button"
+            onClick={() => {
+              setIsOpen(true);
+              setShowTooltip(false);
+            }}
+            aria-label={landingCopy.assistant.label}
+          >
+            <MessageCircle aria-hidden size={18} />
+            <span>{landingCopy.assistant.label}</span>
+          </button>
+        </div>
+        <AnimatePresence>
+          {isOpen && <ChatModal onClose={handleClose} />}
+        </AnimatePresence>
+      </>
+    );
+  }
 
   return (
     <>

@@ -78,13 +78,13 @@ RUN npm ci                       # ĐẦY ĐỦ, gồm cả devDependencies
 COPY . .
 RUN npm run build                # tsc, bundler, gì cũng được
 
-# ── giai đoạn 2: just phụ thuộc production ──
+# ── stage 2: production dependencies only ──
 FROM node:22-slim AS deps
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev            # KHÔNG có devDependencies
 
-# ── giai đoạn 3: ảnh chạy thật ──
+# ── stage 3: the actual runtime image ──
 FROM node:22-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
@@ -264,7 +264,7 @@ CMD ["node", "dist/index.js"]</code></pre>
 COPY . .
 RUN npm ci --omit=dev
 
-# ✓ ĐÚNG — npm ci just chạy lại khi package.json/package-lock.json đổi
+# ✓ RIGHT — npm ci only re-runs when package.json/package-lock.json changes
 COPY package*.json ./
 RUN npm ci --omit=dev
 COPY src ./src</code></pre>
@@ -329,7 +329,7 @@ dist</code></pre>
 <pre><code># build đúng kiến trúc của máy đích
 docker build --platform linux/amd64 -t app:1.4.2 .
 
-# hoặc build cho cả hai, đẩy thẳng lên registry
+# or build for both and push straight to the registry
 docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/me/app:1.4.2 --push .</code></pre>
 
 <div class="callout warn">
@@ -532,8 +532,8 @@ services:
 npx prisma migrate deploy
 exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất ở đây
 
-# cách 2: dùng init để nhận và chuyển tiếp tín hiệu
-# docker run --init ...        (Docker nhét sẵn tini vào PID 1)</code></pre>
+# option 2: use an init to receive and forward signals
+# docker run --init ...        (Docker puts tini in as PID 1 for you)</code></pre>
 
 <p><code>exec</code> replaces the shell process with node instead of forking a child, so node <em>becomes</em> PID 1 and receives signals directly. Without it, the shell stays at PID 1 and you are back to the middle row of the table.</p>
 
@@ -929,7 +929,7 @@ request: 327 tổng, 327 thành công, 0 HỎNG   (0% mất)</div>
 <pre><code># ĐÚNG: chờ đúng cái mà người dùng sẽ gọi
 until curl -sf http://127.0.0.1:3741/health/live &gt;/dev/null; do sleep 0.05; done
 
-# SAI: 'docker ps' nói nó chạy rồi ≠ nó nhận việc được rồi
+# WRONG: 'docker ps' saying it is running ≠ it is ready to take work
 docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
 
 <h3>Rolling versus blue-green</h3>
@@ -1137,9 +1137,9 @@ done</code></pre>
 <pre><code># quay lui bằng ẢNH — nhanh nhất, vài giây
 docker compose up -d --no-build backend    # với ảnh đã ghim ở tag trước
 
-# quay lui bằng CODE — chậm hơn, nhưng lịch sử git thẳng thớm
+# roll back through CODE — slower, but the git history stays straight
 git revert &lt;sha_xau&gt;
-# chạy checklist trước push, rồi deploy như bình thường</code></pre>
+# run the pre-push checklist, then deploy as usual</code></pre>
 
 <div class="danger">
 <p><strong>The rule that keeps rollback from making things worse: reverting code does not revert the database.</strong> If the bad deploy included a migration, the schema is already changed, and starting the old image gives you old code against a new schema — which can be worse than the bug you are rolling back from. Any migration that drops a column or changes a type makes the rollback path unsafe. This is why the additive pattern from chapter 7 matters: add nullable, backfill, switch reads, only then remove — because every step of that sequence is individually reversible.</p>

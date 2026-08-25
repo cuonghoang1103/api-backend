@@ -50,7 +50,7 @@ app.get('/notes', (req, res) =&gt; {
 <p>Node has a built-in profiler. One flag, and on clean exit it writes a <code>.cpuprofile</code> file you can open in Chrome DevTools — or parse yourself, which is what the table below does:</p>
 
 <pre><code>node --cpu-prof --cpu-prof-dir=./prof server.mjs
-# chạy tải vào nó, rồi cho tiến trình thoát BÌNH THƯỜNG (SIGKILL thì không có file)</code></pre>
+# drive load through it, then let the process exit NORMALLY (SIGKILL leaves no file)</code></pre>
 
 <div class="out">tổng thời gian lấy mẫu: 6636ms, 4257 mẫu, 862 node
 
@@ -959,8 +959,8 @@ app.get('/__heap', (req, res) =&gt; {
   const f = v8.writeHeapSnapshot();             // ⚠ CHẶN, và file to bằng cả heap
   res.json({ file: f });
 });
-// hoặc từ bên ngoài, không cần sửa code:
-//   kill -USR2 &lt;pid&gt;    (bật debugger)  → Chrome DevTools → Memory → Take snapshot</code></pre>
+// or from outside, with no code change:
+//   kill -USR2 &lt;pid&gt;    (enables the debugger)  → Chrome DevTools → Memory → Take snapshot</code></pre>
 
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Take a heap snapshot right after startup</span><span class="lz-d">this is your baseline</span></div>

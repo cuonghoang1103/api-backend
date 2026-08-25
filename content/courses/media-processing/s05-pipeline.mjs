@@ -461,7 +461,7 @@ not in a path.
 <h3>Serving the original name back without putting it in the key</h3>
 <pre><code class="language-javascript">// Database row:
 //   { id, r2Key: 'documents/u42/1735...-a3f9.pdf',
-//     originalName: 'Hợp đồng 2026.pdf', mimeType: 'application/pdf' }
+//     originalName: 'Contract 2026.pdf', mimeType: 'application/pdf' }
 
 // On download, sign a URL that tells the browser the friendly name:
 const url = await getSignedUrl(s3, new GetObjectCommand({

@@ -41,7 +41,7 @@ router.post('/notes', requireAuth, async (req, res, next) =&gt; {
   } catch (e) { next(e); }                                            // lỗi đi ra chỗ khác (chương 5)
 });
 
-// service — chỉ nói chuyện nghiệp vụ
+// service — speaks business logic only
 async function create(actor, data) {
   if (!actor) throw new AppError('UNAUTHENTICATED', 401);
   if (await repo.slugExists(data.slug)) throw new AppError('SLUG_TAKEN', 409);
@@ -194,7 +194,7 @@ src/routes/notes.routes.ts       src/services/notes.service.ts
 src/routes/messages.routes.ts    src/services/messages.service.ts
 src/routes/courses.routes.ts     src/services/courses.service.ts
 
-// theo TÍNH NĂNG — mọi thứ của một tính năng ở cùng một chỗ
+// by FEATURE — everything belonging to one feature in one place
 src/features/notes/    { routes.ts, service.ts, repo.ts, schema.ts, notes.test.ts }
 src/features/messages/ { routes.ts, service.ts, repo.ts, schema.ts, messages.test.ts }</code></pre>
 
@@ -414,7 +414,7 @@ service gọi service khác:
 import { sendEmail } from './email.service.js';
 async function share(note, to) { await sendEmail(to, 'Ghi chú mới', note.title); }
 
-// ghép lỏng: notes chỉ biết "có một hàm nhận (to, subject, body)"
+// loose coupling: notes only knows "there is a function taking (to, subject, body)"
 async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note.title); }</code></pre>
 
 <p><strong>Communicate by event where the caller does not need an answer.</strong> "A note was shared" is a fact; who cares about it — email, notifications, analytics — is not the note module's business. Chapter 13's queue is exactly this boundary made durable: the publisher does not know the subscribers, and a subscriber failing does not fail the request.</p>
@@ -715,11 +715,11 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <p>The code already says what. Six months later the question is always <em>why</em>, and the answer is usually gone. The cheapest possible fix is a comment that records the alternative you rejected and the reason:</p>
 
 <pre><code>// Vì sao KHÔNG dùng BullMQ ở đây?
-// Hàng đợi này chỉ chạy 1 tiến trình và mỗi lần chỉ 1 job. BullMQ thêm
-// 22 gói + 13MB và một phụ thuộc Redis nữa cho một thứ mà một cái mảng
-// đã làm được. Đánh đổi: nếu tiến trình sập giữa job thì job đang chạy MẤT.
-// Giảm nhẹ bằng embeddingStatus + recoverPendingJobs() lúc khởi động.
-// Đổi ý khi: có tiến trình thứ hai, hoặc khi mất job trở nên không chấp nhận được.</code></pre>
+// This queue runs 1 process and 1 job at a time. BullMQ would add
+// 22 packages + 13MB and another Redis dependency for something an array
+// already handles. The trade: if the process dies mid-job, that job is LOST.
+// Mitigated by embeddingStatus + recoverPendingJobs() at startup.
+// Change your mind when: a second process appears, or losing a job stops being acceptable.</code></pre>
 
 <p>That comment is worth more than a diagram. It states the decision, the cost that was accepted, the mitigation, and — crucially — <strong>the condition under which the decision should be revisited</strong>. Without that last line, a deliberate trade-off is indistinguishable from an oversight, and the next person either preserves it out of superstition or removes it without knowing what it was protecting.</p>
 

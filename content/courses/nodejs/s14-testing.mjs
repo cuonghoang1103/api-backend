@@ -572,7 +572,7 @@ export function createApp({ service, auth }) {
   return app;
 }
 
-// src/server.mjs — chỉ file NÀY được gọi listen
+// src/server.mjs — only THIS file may call listen
 import { createApp } from './app.mjs';
 createApp({ service: realService, auth: jwtAuth }).listen(3000);</code></pre>
 <p>The factory also takes its dependencies as arguments, which is what lets one test file run the whole app against a fake service and another run it against a real database — without a single environment variable.</p>
@@ -1049,10 +1049,10 @@ All files          |   83.33 |    70.83 |   79.16 |   84.61 |
 <p>A flaky test is worse than no test. It trains the team to re-run CI instead of reading it, and once that habit exists a <em>real</em> failure gets re-run too. Two tools for hunting one down:</p>
 <pre><code># 1. Chạy lặp — chập chờn theo xác suất thì lộ ra ở tần suất
 for i in $(seq 1 10); do npx vitest run --config vitest.flaky.mjs; done
-# → PASS=0 FAIL=10 : không phải chập chờn, mà là hỏng chắc chắn
-# → PASS=7 FAIL=3  : mới đúng là chập chờn, đi tìm trạng thái dùng chung
+# → PASS=0 FAIL=10 : not flaky, reliably broken
+# → PASS=7 FAIL=3  : that is genuinely flaky — go looking for shared state
 
-# 2. Xáo thứ tự — lộ ra sự phụ thuộc vào trình tự
+# 2. Shuffle the order — exposes order dependence
 npx vitest run --sequence.shuffle</code></pre>
 <div class="out">$ npx vitest run tests/slug.test.mjs --sequence.shuffle --reporter=verbose
  ✓ canEdit &gt; allows the author

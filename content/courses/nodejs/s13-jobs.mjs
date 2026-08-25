@@ -81,7 +81,7 @@ app.post('/register', async (req, res) =&gt; {
   res.status(201).json(user);
 });
 
-// SAU — route chỉ ghi nhận việc cần làm
+// AFTER — the route only records the work to be done
 app.post('/register', async (req, res) =&gt; {
   const user = await createUser(req.body);
   await emailQueue.add('welcome', { userId: user.id }, {
@@ -230,7 +230,7 @@ import { Queue } from 'bullmq';
 const emailQueue = new Queue('email', { connection: { host: '127.0.0.1', port: 6379 } });
 await emailQueue.add('welcome', { userId: 42 });
 
-// worker.js — TIẾN TRÌNH RIÊNG, chạy bằng &#96;node worker.js&#96;
+// worker.js — A SEPARATE PROCESS, run with &#96;node worker.js&#96;
 import { Worker } from 'bullmq';
 new Worker('email', async (job) =&gt; {
   const user = await db.user.findUnique({ where: { id: job.data.userId } });
@@ -286,7 +286,7 @@ new Queue('email');       // gửi thư
 new Queue('media');       // tạo ảnh thu nhỏ, nén video
 new Queue('search');      // dựng lại chỉ mục
 
-// TRONG một hàng đợi, dùng job name để phân nhánh
+// WITHIN one queue, branch on the job name
 await emailQueue.add('welcome', { userId: 42 });
 await emailQueue.add('password-reset', { userId: 42, token });</code></pre>
 <p>Separate queues so a 30-second video job cannot starve a password-reset email — they have different concurrency, different limiters and different urgency. Within a queue, the job <em>name</em> is the discriminator your handler switches on.</p>
@@ -467,14 +467,14 @@ async function handleCharge(job) {
   await db.payment.update({ where: { orderId }, data: { status: 'DONE', ref: result.id } });
 }
 
-// 2) Kiểm trạng thái trước khi làm — rẻ, nhưng vẫn có khe hở đua
+// 2) Check the state before acting — cheap, but still leaves a race window
 async function handleThumbnail(job) {
   const doc = await db.doc.findUnique({ where: { id: job.data.id } });
   if (doc.thumbnailKey) return { skipped: true };
   // …
 }
 
-// 3) Khoá idempotency đưa cho bên thứ ba — cách tốt nhất khi họ hỗ trợ
+// 3) An idempotency key handed to the third party — the best option when they support it
 await psp.charge({ orderId, amount }, { idempotencyKey: &#96;charge-\${orderId}&#96; });</code></pre>
 <p>Option 2 looks fine and has a real race: two workers can both read "no thumbnail yet" before either writes. It is acceptable when running twice is merely wasteful, never when it costs money. Option 1 is the one to reach for when correctness matters, and it reuses exactly the <code>P2002</code> unique-constraint behaviour chapter 7.3 measured.</p>
 
@@ -720,7 +720,7 @@ new Worker('cron', async () =&gt; {
   for (const u of users) await sendDigest(u);        // một job khổng lồ, hỏng giữa chừng là mất sạch
 });
 
-// ĐÚNG: job định kỳ chỉ RẢI việc ra
+// RIGHT: the periodic job only FANS THE WORK OUT
 new Worker('cron', async () =&gt; {
   const users = await db.user.findMany({ where: { needsDigest: true }, select: { id: true } });
   await digestQueue.addBulk(users.map((u) =&gt; ({

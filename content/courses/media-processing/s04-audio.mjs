@@ -122,10 +122,10 @@ function decodeWith(dec, mp3, sampleRate) {
 <h3>The fallback chain, and why mpg123 comes first</h3>
 <pre><code class="language-javascript">// src/services/makerlab/audio.ts — the ordering comment, verbatim:
 //
-// mpg123 đứng trước vì image production chỉ cài nó (xem Dockerfile):
-// ~1,5 MB cho đúng một việc, thay vì ~80 MB của ffmpeg. ffmpeg đứng
-// sau để máy lập trình — vốn gần như luôn có sẵn ffmpeg mà hiếm khi
-// có mpg123 — vẫn chạy thử được ở local mà không phải cài thêm gì.
+// mpg123 comes first because the production image installs only it (see the Dockerfile):
+// ~1.5 MB for exactly one job, against ffmpeg's ~80 MB. ffmpeg comes
+// second so a developer machine — which almost always has ffmpeg and rarely
+// has mpg123 — can still run this locally without installing anything.
 </code></pre>
 
 <pre><code class="language-text">Translated: mpg123 is first because the production image installs only it —
@@ -1014,15 +1014,15 @@ closely, the other is a sentence a device speaks once.
 <h3>Why the robot path chose raw PCM over MP3</h3>
 <pre><code class="language-javascript">// src/services/makerlab/audio.ts — the header comment, verbatim:
 //
-// TTS trả về MP3. Vi điều khiển thì thích PCM thô hơn nhiều:
+// TTS returns MP3. A microcontroller much prefers raw PCM:
 //
-//   MP3  — 6 KB một câu, nhưng ESP32 phải giải mã. Thêm một thư viện,
-//          thêm một bộ đệm vòng trong PSRAM, thêm một chỗ để sai.
-//   PCM  — 120 KB một câu, nhưng firmware chỉ việc đẩy thẳng byte vào
-//          I2S. Không giải mã, không thư viện, không có gì để hỏng.
+//   MP3  — 6 KB a sentence, but the ESP32 has to decode it. One more library,
+//          one more ring buffer in PSRAM, one more place to get it wrong.
+//   PCM  — 120 KB a sentence, but the firmware just pushes the bytes straight into
+//          I2S. No decoding, no library, nothing to break.
 //
-// Bản đầu tiên chọn PCM: 120 KB qua WiFi mất khoảng 0,1 giây, trong
-// khi một lỗi giải mã MP3 có thể mất cả buổi tối.
+// The first version chose PCM: 120 KB over WiFi takes about 0.1 seconds, while
+// one MP3 decoding bug can cost you an entire evening.
 </code></pre>
 
 <pre><code class="language-text">The trade, stated as numbers:

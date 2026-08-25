@@ -376,7 +376,7 @@ Kho nay: chi dung ack cho chat:send. Presence, typing khong.
     ack({ ok: true, orderId: order.id });
   } catch (err) {
     if (err.code === 'P2002' && err.meta?.target?.includes('messageId')) {
-      // Duplicate — trả order cũ
+      // Duplicate — return the existing order
       const existing = await prisma.order.findUnique({ where: { messageId: data.messageId } });
       ack({ ok: true, orderId: existing.id, duplicate: true });
     } else {

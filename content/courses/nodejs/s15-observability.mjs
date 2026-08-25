@@ -431,14 +431,14 @@ import { randomUUID } from 'node:crypto';
 
 const als = new AsyncLocalStorage();
 
-// một middleware duy nhất, đặt trước mọi route
+// a single middleware, placed before every route
 app.use((req, res, next) =&gt; {
   const reqId = req.headers['x-request-id'] || randomUUID().slice(0, 8);
   res.setHeader('X-Request-ID', reqId);
   als.run({ log: logger.child({ reqId }) }, next);
 });
 
-// mọi nơi khác trong ứng dụng
+// everywhere else in the application
 function log() { return als.getStore()?.log ?? logger; }</code></pre>
 
 <p>Now the service and repository log through <code>log()</code> and get the right child logger automatically. <strong>Neither function takes <code>reqId</code> as a parameter.</strong> That is the output shown above — the three-layer app that produced those clean lines has no correlation parameter anywhere in it.</p>
@@ -1320,7 +1320,7 @@ const sdk = new NodeSDK({
 });
 sdk.start();
 
-// chỉ SAU dòng này mới được import app
+// app may only be imported AFTER this line
 const { default: express } = await import('express');</code></pre>
 
 <div class="pitfall">
@@ -1646,7 +1646,7 @@ span.end();</code></pre>
 <pre><code>// liveness — không chạm vào bất cứ thứ gì bên ngoài
 app.get('/health/live', (req, res) =&gt; res.json({ status: 'ok' }));
 
-// readiness — được phép kiểm phụ thuộc, và PHẢI có timeout
+// readiness — allowed to check dependencies, and MUST have a timeout
 app.get('/health/ready', async (req, res) =&gt; {
   try {
     await prisma.$queryRaw\`SELECT 1\`;

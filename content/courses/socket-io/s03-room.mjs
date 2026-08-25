@@ -514,10 +514,10 @@ io.to('thread:42').to('user:7').emit('personal', d);   // trong CA A VA B
 // 4. socket.emit — chi client dang giu socket nay
 socket.emit('reply', data);                            // dua nay, con moi tab khac cua cung user KHONG
 
-// 5. socket.to(room).emit — room trừ chính socket này
+// 5. socket.to(room).emit — the room except this socket
 socket.to('thread:42').emit('typing', ...);            // MOI TRONG thread:42 TRU chinh socket
 
-// 6. socket.broadcast.emit — mọi socket KHÁC (equivalent to socket.to(chatnamespace))
+// 6. socket.broadcast.emit — every OTHER socket (equivalent to socket.to(chatnamespace))
 socket.broadcast.emit('user-joined', ...);             // moi ai khac ngoai chinh minh
 </code></pre>
 

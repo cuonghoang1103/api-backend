@@ -318,7 +318,7 @@ async function getLeaderboard() {
 if (got) {
   try { /* nạp lại và ghi vào cache */ } finally { await redis.del(&#96;\${KEY}:lock&#96;); }
 } else {
-  // không giành được: chờ ngắn rồi đọc lại cache
+  // lost the race: wait briefly, then re-read the cache
 }</code></pre>
 <p>It costs more (99,1ms vs 65,3ms) because the losers poll for the winner to finish. Lesson 12.4 shows why the naive <code>del</code> above is <em>wrong</em> and what to write instead.</p>
 
@@ -965,7 +965,7 @@ while (running) {
       await handle(fields);
       await redis.xack('jobs', 'g1', id);   // CHỈ xác nhận khi đã làm XONG
     } catch (err) {
-      // đừng XACK: để nó nằm trong pending cho worker khác đòi lại
+      // do not XACK: leave it pending so another worker can reclaim it
       logger.error('job failed', { id, err });
     }
   }

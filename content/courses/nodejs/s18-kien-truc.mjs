@@ -24,9 +24,9 @@ export default {
 
 <h3>The three layers, and what each is allowed to know</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-t">Route (HTTP)</span><span class="lz-d">Biết về HTTP: đường dẫn, mã trạng thái, header, validate đầu vào. KHÔNG biết SQL, KHÔNG biết quy tắc nghiệp vụ</span></div>
-  <div class="lz-layer"><span class="lz-t">Service (nghiệp vụ)</span><span class="lz-d">Biết quy tắc: ai được sửa cái gì, giá tính thế nào, thứ tự các bước. KHÔNG biết mình đang được gọi từ HTTP hay từ một job nền</span></div>
-  <div class="lz-layer"><span class="lz-t">Data (lưu trữ)</span><span class="lz-d">Biết cách đọc và ghi. KHÔNG biết vì sao. Prisma, SQL thô, Redis, R2</span></div>
+  <div class="lz-layer"><span class="lz-t">Route (HTTP)</span><span class="lz-d">Knows HTTP: paths, status codes, headers, input validation. Knows NO SQL and NO business rules</span></div>
+  <div class="lz-layer"><span class="lz-t">Service (business)</span><span class="lz-d">Knows the rules: who may edit what, how the price is calculated, the order of the steps. Does NOT know whether it was called from HTTP or from a background job</span></div>
+  <div class="lz-layer"><span class="lz-t">Data (storage)</span><span class="lz-d">Knows how to read and write. Does NOT know why. Prisma, raw SQL, Redis, R2</span></div>
 </div>
 
 <p>The value is in the negatives. A service that does not know it was called over HTTP can be reused by a queue worker (chapter 13), a cron job, a CLI script and a test (chapter 14) without changing a line. A route that does not know SQL cannot accidentally ship a query that scans a million rows. Each "does not know" is a class of bug that becomes impossible rather than merely unlikely.</p>
@@ -60,7 +60,7 @@ file service có import trực tiếp prisma:   61 / 77   (79%)</div>
 <p><strong>Nearly half the route files talk to the database directly.</strong> The architecture on the whiteboard says route → service → data. The architecture in the repository says that 45% of the time it is route → data, with the middle layer skipped entirely. Nobody decided this. It happened one endpoint at a time, each time for a good local reason — "it is just one query", "there is no business logic here yet" — and each of those judgements was individually defensible.</p>
 </div>
 
-<p>The cost arrives later, and it arrives in a specific shape: <strong>the day a rule has to apply everywhere.</strong> Soft-delete, an audit log, a tenant filter, a permission check, a cache. Each of those is one change in a service layer and twenty-eight changes scattered through route files — twenty-eight chances to miss one. Chapter 8 measured what missing one looks like: an IDOR where Bình could read An's note, found because someone went looking, not because anything failed.</p>
+<p>The cost arrives later, and it arrives in a specific shape: <strong>the day a rule has to apply everywhere.</strong> Soft-delete, an audit log, a tenant filter, a permission check, a cache. Each of those is one change in a service layer and twenty-eight changes scattered through route files — twenty-eight chances to miss one. Chapter 8 measured what missing one looks like: an IDOR where Binh could read An's note, found because someone went looking, not because anything failed.</p>
 
 <div class="callout">
 <p><strong>When skipping the layer is genuinely fine.</strong> A read-only endpoint with no authorisation beyond "logged in", no business rule and no reuse — a dropdown's list of categories, say — gains nothing from a service that only forwards a call. The honest test is not "is there logic today" but <strong>"if a rule had to apply to every note, would this endpoint get it automatically?"</strong> If the answer is no, the layer is load-bearing even when it looks empty.</p>
@@ -88,7 +88,7 @@ src/utils         5 file      336 dòng
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> The layering is real but not enforced, and the 28-of-62 count is the honest measure of that. What holds the system together despite the leak is that the <em>cross-cutting</em> layer is not leaked at all: authentication, the request id, rate limiting and error handling all live in middleware mounted once in <code>src/index.ts</code>, so no route can accidentally opt out of them. That is the right thing to have been strict about — a route that skips the service layer writes a slightly awkward query, while a route that skips <code>requireAuth</code> is an incident. Being deliberate about <em>which</em> boundary is load-bearing is more valuable than being uniformly strict about all of them.</p>
+<p><strong>How cuongthai.com does it.</strong> The layering is real but not enforced, and the 28-of-62 count is the honest measure of that. What holds the system together despite the leak is that the <em>cross-cutting</em> layer is not leaked at all: authentication, the request id, rate limiting and error handling all live in middleware mounted once in <code>src/index.ts</code>, so no route can accidentally opt out of them. That is the right thing to have been strict about — a route that skips the service layer writes a slightly awkward query, while a route that skips <code>requireAuth</code> is an incident. Being deliberate about <em>which</em> boundary is load-bearing is more valuable than being uniformly strict about all of them.</p>
 </div>
 
 <div class="link-card codelab">
@@ -199,10 +199,10 @@ src/features/notes/    { routes.ts, service.ts, repo.ts, schema.ts, notes.test.t
 src/features/messages/ { routes.ts, service.ts, repo.ts, schema.ts, messages.test.ts }</code></pre>
 
 <div class="kv-grid">
-  <div class="kv"><span>Theo LOẠI — được gì</span><b>Dễ trả lời "route trông thế nào ở dự án này". Khớp với hầu hết bài hướng dẫn. Khởi đầu nhanh</b></div>
-  <div class="kv"><span>Theo LOẠI — mất gì</span><b>Sửa MỘT tính năng phải mở 4-5 thư mục. Xoá một tính năng thì phải đi săn khắp nơi</b></div>
-  <div class="kv"><span>Theo TÍNH NĂNG — được gì</span><b>Một thư mục = một thứ. Xoá thư mục là xoá xong tính năng. Ranh giới nhìn thấy được bằng mắt</b></div>
-  <div class="kv"><span>Theo TÍNH NĂNG — mất gì</span><b>Dễ lặp lại code giữa các tính năng. Cần kỷ luật về chỗ để mã DÙNG CHUNG</b></div>
+  <div class="kv"><span>By TYPE — what you gain</span><b>Easy to answer "what does a route look like in this project". Matches most tutorials. A fast start</b></div>
+  <div class="kv"><span>By TYPE — what you lose</span><b>Editing ONE feature means opening 4-5 directories. Deleting a feature means hunting it down everywhere</b></div>
+  <div class="kv"><span>By FEATURE — what you gain</span><b>One directory = one thing. Deleting the directory deletes the feature. The boundary is visible to the eye</b></div>
+  <div class="kv"><span>By FEATURE — what you lose</span><b>Easy to duplicate code between features. It demands discipline about where SHARED code lives</b></div>
 </div>
 
 <p>The rule that decides it: <strong>optimise for the change you actually make.</strong> Almost nobody edits "all the routes" — they edit "the notes feature". Organising by type optimises for a navigation pattern that does not match how work arrives. Below roughly ten features the difference is noise; above it, by-feature wins clearly and the migration cost has grown to the point where it will not happen.</p>
@@ -234,18 +234,18 @@ file to nhất:
 <p><strong>Data files and logic files have different rules.</strong> Splitting 3.607 lines of seed data across twelve files makes it harder to read, not easier: nobody navigates it, they search it, and the search works the same either way. Its complexity is <em>flat</em> — 1.286 similar entries, no branching, no interaction between them. Compare with a 2.262-line service file, where complexity is <em>tangled</em>: every function can call every other, and understanding one may require understanding six.</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>Dữ liệu phẳng (seed, hằng số, bản dịch)</span><b>To bao nhiêu cũng được. Không nhánh rẽ, không tương tác. Đọc bằng cách TÌM KIẾM</b></div>
-  <div class="kv"><span>Logic (service, route)</span><b>Bắt đầu thấy đau quanh 500 dòng. Mỗi hàm gọi được mọi hàm khác</b></div>
-  <div class="kv"><span>Cấu hình (index.ts)</span><b>Được phép dài nếu nó THẲNG TUỘT. 808 dòng gắn 76 route thì đọc được; 808 dòng logic thì không</b></div>
+  <div class="kv"><span>Flat data (seeds, constants, translations)</span><b>As large as you like. No branching, no interaction. You read it by SEARCHING</b></div>
+  <div class="kv"><span>Logic (service, route)</span><b>Starts to hurt around 500 lines. Every function can call every other one</b></div>
+  <div class="kv"><span>Configuration (index.ts)</span><b>Allowed to be long if it is STRAIGHT-LINE. 808 lines mounting 76 routes is readable; 808 lines of logic is not</b></div>
 </div>
 
 <h3>What actually makes a file hard</h3>
 <p>Three signals that matter more than length:</p>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Số LÝ DO để thay đổi</span><span class="lz-d">Một file phải sửa khi giá đổi, khi email đổi, và khi lược đồ đổi = ba tính năng đang trọ chung nhà</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Chiều sâu import</span><span class="lz-d">Phải mở bao nhiêu file khác mới hiểu được file này? Ba là ổn, mười thì không</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Số người sửa nó cùng lúc</span><span class="lz-d">File nào cũng gây xung đột merge thì đó là một điểm nghẽn, bất kể dài bao nhiêu</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">The number of REASONS to change</span><span class="lz-d">A file that must change when pricing changes, when email changes, and when the schema changes is three features sharing one house</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Import depth</span><span class="lz-d">How many other files must you open to understand this one? Three is fine, ten is not</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">How many people edit it at once</span><span class="lz-d">A file that causes merge conflicts every time is a bottleneck, however long it is</span></div>
 </div>
 
 <p>Signal 1 is the useful one and it is old advice with a bad name — "single responsibility" sounds like a rule about size and is actually a rule about <em>reasons to change</em>. A 900-line file that only ever changes when the payment provider changes its API is a good file. A 200-line file that gets touched by three unrelated tickets a week is not.</p>
@@ -255,7 +255,7 @@ file to nhất:
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Organised by type at the top level, but with a partial migration toward by-feature visible inside <code>src/services</code>: eight subdirectories — <code>cv/</code>, <code>finance/</code>, <code>games/</code>, <code>interview/</code>, <code>payment/</code>, <code>srs/</code>, <code>techTrends/</code>, <code>voiceHub/</code> — hold 82 of the 159 service files. Those are exactly the features that grew large enough to make the flat directory painful. Nobody planned a migration; the structure bent where the pressure was. That is how organisation usually evolves in a codebase that is being used, and it is a healthier signal than a scheme imposed on day one that nothing has tested.</p>
+<p><strong>How cuongthai.com does it.</strong> Organised by type at the top level, but with a partial migration toward by-feature visible inside <code>src/services</code>: eight subdirectories — <code>cv/</code>, <code>finance/</code>, <code>games/</code>, <code>interview/</code>, <code>payment/</code>, <code>srs/</code>, <code>techTrends/</code>, <code>voiceHub/</code> — hold 82 of the 159 service files. Those are exactly the features that grew large enough to make the flat directory painful. Nobody planned a migration; the structure bent where the pressure was. That is how organisation usually evolves in a codebase that is being used, and it is a healthier signal than a scheme imposed on day one that nothing has tested.</p>
 </div>
 
 <div class="link-card codelab">
@@ -376,10 +376,10 @@ service gọi service khác:
 <p><code>pro.service</code> appearing at the top of both lists is the interesting result. Seven modules depend on it, and it depends on five others. That makes it a <strong>hub</strong>: a change to how "is this user Pro" is answered ripples into seven features, and a change in any of its five dependencies ripples back into it. Hubs are not automatically bad — a shared authorisation concept <em>should</em> be shared — but they are where a codebase becomes hard to change without anyone deciding it should.</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>Ghép nối LÀNH</span><b>Nhiều nơi phụ thuộc vào một khái niệm ỔN ĐỊNH: xác thực, log, cấu hình. Chúng hiếm khi đổi</b></div>
-  <div class="kv"><span>Ghép nối ĐAU</span><b>Nhiều nơi phụ thuộc vào một thứ THAY ĐỔI LIÊN TỤC: một service tính năng còn đang tiến hoá</b></div>
-  <div class="kv"><span>Ghép nối VÒNG TRÒN</span><b>A gọi B, B gọi A. Không test riêng được cái nào, không hiểu riêng được cái nào. Luôn phải sửa</b></div>
-  <div class="kv"><span>Ghép nối ẨN</span><b>Hai mô-đun chia nhau một bảng mà không import nhau. Đồ thị import KHÔNG thấy được nó</b></div>
+  <div class="kv"><span>HEALTHY coupling</span><b>Many places depending on a STABLE concept: authentication, logging, configuration. They rarely change</b></div>
+  <div class="kv"><span>PAINFUL coupling</span><b>Many places depending on something CONSTANTLY CHANGING: a feature service still evolving</b></div>
+  <div class="kv"><span>CIRCULAR coupling</span><b>A calls B, B calls A. Neither can be tested alone, neither can be understood alone. Always worth fixing</b></div>
+  <div class="kv"><span>HIDDEN coupling</span><b>Two modules sharing a table without importing each other. The import graph CANNOT see it</b></div>
 </div>
 
 <h3>The coupling the import graph cannot see</h3>
@@ -396,11 +396,11 @@ service gọi service khác:
 
 <h3>Which boundaries are real</h3>
 <div class="lz-map">
-  <div class="lz-node"><span class="lz-t">Thư mục</span><span class="lz-d">KHÔNG phải ranh giới. Không có gì ngăn bạn import xuyên qua. Chỉ là cách sắp xếp cho mắt người</span></div>
-  <div class="lz-node"><span class="lz-t">Mô-đun có export tường minh</span><span class="lz-d">Ranh giới YẾU. Có một mặt tiền công khai, nhưng người ta vẫn import thẳng vào trong được</span></div>
-  <div class="lz-node"><span class="lz-t">Gói riêng / workspace</span><span class="lz-d">Ranh giới THẬT. Import xuyên qua là lỗi biên dịch. Cái giá: phải quản lý phiên bản</span></div>
-  <div class="lz-node"><span class="lz-t">Tiến trình riêng (dịch vụ)</span><span class="lz-d">Ranh giới CỨNG NHẤT. Chỉ nói chuyện qua mạng. Và giờ mọi lời gọi đều hỏng được (chương 16)</span></div>
-  <div class="lz-node"><span class="lz-t">Cơ sở dữ liệu riêng</span><span class="lz-d">Ranh giới thật sự cuối cùng. Không JOIN được nữa. Đây là chỗ đau thật sự bắt đầu</span></div>
+  <div class="lz-node"><span class="lz-t">A directory</span><span class="lz-d">is NOT a boundary. Nothing stops you importing straight through it. It is an arrangement for human eyes</span></div>
+  <div class="lz-node"><span class="lz-t">A module with explicit exports</span><span class="lz-d">A WEAK boundary. There is a public facade, but people can still import directly into its interior</span></div>
+  <div class="lz-node"><span class="lz-t">A separate package / workspace</span><span class="lz-d">A REAL boundary. Importing through it is a compile error. The price: you now manage versions</span></div>
+  <div class="lz-node"><span class="lz-t">A separate process (a service)</span><span class="lz-d">The HARDEST boundary. They speak only over the network. And now every call can fail (chapter 16)</span></div>
+  <div class="lz-node"><span class="lz-t">A separate database</span><span class="lz-d">The final real boundary. No more JOINs. This is where the pain genuinely begins</span></div>
 </div>
 
 <p>Each step down that list makes the boundary harder to violate and makes ordinary work more expensive. The mistake is picking a level for how it sounds rather than for what you need enforced. <strong>A folder called <code>domain/</code> that anything can import from is not a boundary; it is a wish.</strong></p>
@@ -426,7 +426,7 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> One schema, 248 models, 95 migrations, 76 route groups — a monolith by any measure, and coherent because the coupling is mostly one-directional: features depend on shared concepts (<code>pro</code>, <code>notification</code>, <code>quota</code>) and shared concepts do not depend on features. The place this shows strain is exactly where you would predict: <code>social.service.ts</code> at 2.262 lines is imported by five other modules, so it is both a hub and a large file, which is the combination that makes changes slow. Nothing is broken — but that pairing is the single most useful thing an import-graph count tells you about where to look first.</p>
+<p><strong>How cuongthai.com does it.</strong> One schema, 248 models, 95 migrations, 76 route groups — a monolith by any measure, and coherent because the coupling is mostly one-directional: features depend on shared concepts (<code>pro</code>, <code>notification</code>, <code>quota</code>) and shared concepts do not depend on features. The place this shows strain is exactly where you would predict: <code>social.service.ts</code> at 2.262 lines is imported by five other modules, so it is both a hub and a large file, which is the combination that makes changes slow. Nothing is broken — but that pairing is the single most useful thing an import-graph count tells you about where to look first.</p>
 </div>
 
 <div class="link-card codelab">
@@ -545,27 +545,27 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 
 <h3>What splitting actually buys and costs</h3>
 <div class="kv-grid">
-  <div class="kv"><span>Được: mở rộng độc lập</span><b>Mở rộng riêng phần nặng CPU. Nhưng chương 16 đo được: app nghẽn I/O thì thêm tiến trình chỉ được +5,7%</b></div>
-  <div class="kv"><span>Được: cô lập lỗi</span><b>Một dịch vụ chết không kéo cả hệ thống. THẬT — và cần bộ ngắt mạch, thử lại, phương án dự phòng ở mọi lời gọi</b></div>
-  <div class="kv"><span>Được: đội độc lập</span><b>Lý do THẬT SỰ tốt duy nhất. Ranh giới dịch vụ khớp với ranh giới giao tiếp giữa người với người</b></div>
-  <div class="kv"><span>Mất: mọi lời gọi hàm giờ HỎNG ĐƯỢC</span><b>Timeout, thử lại, một phần thành công. Mỗi lời gọi mạng là một chế độ hỏng mới</b></div>
-  <div class="kv"><span>Mất: không JOIN được nữa</span><b>Một truy vấn duy nhất thành ba lời gọi mạng cộng phép gộp trong bộ nhớ ở tầng ứng dụng</b></div>
-  <div class="kv"><span>Mất: transaction biến mất</span><b>Chương 7 chứng minh rollback bằng thực nghiệm. Xuyên hai dịch vụ thì không có rollback</b></div>
+  <div class="kv"><span>You gain: independent scaling</span><b>Scale the CPU-heavy part on its own. But chapter 16 measured it: for an I/O-bound app, extra processes buy you +5.7%</b></div>
+  <div class="kv"><span>You gain: fault isolation</span><b>One service dying does not take the system with it. TRUE — and it needs circuit breakers, retries and fallbacks at every call</b></div>
+  <div class="kv"><span>You gain: independent teams</span><b>The only GENUINELY good reason. Service boundaries matching the boundaries of human communication</b></div>
+  <div class="kv"><span>You lose: every function call can now FAIL</span><b>Timeouts, retries, partial success. Every network call is a new failure mode</b></div>
+  <div class="kv"><span>You lose: no more JOINs</span><b>One query becomes three network calls plus an in-memory join at the application layer</b></div>
+  <div class="kv"><span>You lose: transactions disappear</span><b>Chapter 7 proved rollback experimentally. Across two services there is no rollback</b></div>
 </div>
 
 <p>The measured numbers from earlier chapters settle several of these without argument. Tracing across service boundaries costs <strong>39,6% of throughput</strong> (chapter 16) and is not optional once a request spans processes — without it, "where did the time go" has no answer at all. A local function call is nanoseconds; the same call over HTTP was measured at <strong>0,14ms with keep-alive and 1,29ms without</strong> (chapter 16), and that is on loopback, not across a network.</p>
 
 <div class="danger">
-<p><strong>The cost that is never in the diagram: partial failure.</strong> In a monolith, <code>createOrder()</code> either happens or does not — chapter 7 demonstrated a real transaction rolling back cleanly. Split payment and inventory into two services and there is a state where payment succeeded and inventory failed. That state has to be designed for: idempotency keys, compensating actions, reconciliation jobs, and an operations process for the cases automation misses. Chapter 13 measured a single instance of this class of bug — a non-idempotent job with <code>attempts: 3</code> charged a customer <strong>300.000đ instead of 100.000đ</strong>. Distributed systems make that shape of bug the normal case rather than the exception.</p>
+<p><strong>The cost that is never in the diagram: partial failure.</strong> In a monolith, <code>createOrder()</code> either happens or does not — chapter 7 demonstrated a real transaction rolling back cleanly. Split payment and inventory into two services and there is a state where payment succeeded and inventory failed. That state has to be designed for: idempotency keys, compensating actions, reconciliation jobs, and an operations process for the cases automation misses. Chapter 13 measured a single instance of this class of bug — a non-idempotent job with <code>attempts: 3</code> charged a customer <strong>300,000 dong instead of 100,000</strong>. Distributed systems make that shape of bug the normal case rather than the exception.</p>
 </div>
 
 <h3>The three real signals</h3>
 <p>None of them is "the codebase is big".</p>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Hồ sơ mở rộng KHÁC HẲN nhau</span><span class="lz-d">Một phần cần 16 nhân cho việc nặng CPU, phần còn lại cần 2. Chương 16: cluster ăn 3,4× ở route CPU và 1,06× ở route I/O</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Nhịp phát hành khác nhau</span><span class="lz-d">Một phần đổi mỗi ngày, phần kia mỗi quý và bị kiểm toán. Deploy chung buộc phần chậm phải chịu rủi ro của phần nhanh</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Đội đang giẫm chân nhau</span><span class="lz-d">Xung đột merge, chờ nhau để deploy, không ai dám sửa file kia. Đây là lý do TỐT NHẤT và là lý do ít được nói tới nhất</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Wildly DIFFERENT scaling profiles</span><span class="lz-d">One part needs 16 cores for CPU-heavy work and the rest needs 2. Chapter 16: clustering wins 3.4× on a CPU route and 1.06× on an I/O one</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Different release cadences</span><span class="lz-d">One part changes daily, the other quarterly and under audit. A shared deploy forces the slow part to bear the fast part's risk</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Teams treading on each other</span><span class="lz-d">Merge conflicts, waiting on each other to deploy, nobody daring to touch the other's file. This is the BEST reason and the least discussed one</span></div>
 </div>
 
 <p>Signal 3 is decisive and the other two are usually solvable without splitting. Conway's observation — that systems end up shaped like the organisation that builds them — is the practical core of this decision: <strong>a service boundary that does not match a team boundary is pure cost.</strong> One person maintaining six services has all the failure modes and none of the benefit.</p>
@@ -574,10 +574,10 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <p>Between "one file" and "twelve services" there is a modular monolith: one deployable unit, hard internal boundaries. It gets most of the organisational benefit at none of the network cost:</p>
 
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-t">Một tiến trình, một lần deploy</span><span class="lz-d">Vẫn transaction được, vẫn JOIN được, vẫn gọi hàm là nano-giây</span></div>
-  <div class="lz-layer"><span class="lz-t">Mô-đun có mặt tiền TƯỜNG MINH</span><span class="lz-d">Mỗi tính năng export một API hẹp. Cấm import chéo vào ruột nhau, cưỡng chế bằng lint</span></div>
-  <div class="lz-layer"><span class="lz-t">Bảng thuộc quyền sở hữu</span><span class="lz-d">Mỗi mô-đun SỞ HỮU bảng của mình; mô-đun khác đọc qua mặt tiền chứ không truy vấn thẳng</span></div>
-  <div class="lz-layer"><span class="lz-t">Tách được sau này nếu cần</span><span class="lz-d">Ranh giới đã ở đúng chỗ. Tách chỉ còn là đổi lời gọi hàm thành lời gọi mạng</span></div>
+  <div class="lz-layer"><span class="lz-t">One process, one deploy</span><span class="lz-d">You keep transactions, you keep JOINs, and a function call is still nanoseconds</span></div>
+  <div class="lz-layer"><span class="lz-t">Modules with EXPLICIT facades</span><span class="lz-d">Each feature exports a narrow API. Cross-importing into each other's internals is forbidden and enforced by lint</span></div>
+  <div class="lz-layer"><span class="lz-t">Tables have owners</span><span class="lz-d">Each module OWNS its tables; other modules read through the facade rather than querying directly</span></div>
+  <div class="lz-layer"><span class="lz-t">Splittable later if needed</span><span class="lz-d">The boundaries are already in the right places. Splitting is then just turning function calls into network calls</span></div>
 </div>
 
 <p>The third layer is the one that makes the difference and the one that gets skipped. Enforcing "only the courses module queries course tables" is what makes a future split possible; without it, the boundaries exist in the folder tree and not in the data, and the split will be rewritten from scratch.</p>
@@ -590,16 +590,16 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <p>Worth noticing: several things in this course are already boundaries without being separate services.</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>Hàng đợi job (chương 13)</span><b>Bên phát và bên xử lý ghép lỏng qua Redis. Worker tách ra thành tiến trình riêng lúc nào cũng được</b></div>
-  <div class="kv"><span>R2 / object storage (chương 10)</span><b>File đã nằm ở một dịch vụ khác rồi. Bạn đã đang gọi mạng và đã đang xử lý lỗi của nó</b></div>
-  <div class="kv"><span>Redis (chương 12)</span><b>Trạng thái dùng chung nằm ngoài tiến trình. Đây là thứ khiến việc chạy nhiều bản sao trở nên khả thi</b></div>
-  <div class="kv"><span>Cổng thanh toán, API AI</span><b>Đã là dịch vụ bên ngoài. Timeout, thử lại, khoá idempotency — bạn đã viết cả rồi</b></div>
+  <div class="kv"><span>The job queue (chapter 13)</span><b>Producer and consumer are loosely coupled through Redis. The worker can become its own process at any time</b></div>
+  <div class="kv"><span>R2 / object storage (chapter 10)</span><b>Your files already live in another service. You are already making network calls and already handling their failures</b></div>
+  <div class="kv"><span>Redis (chapter 12)</span><b>Shared state living outside the process. This is what makes running multiple replicas possible at all</b></div>
+  <div class="kv"><span>Payment gateways, AI APIs</span><b>Already external services. Timeouts, retries, idempotency keys — you have written all of it already</b></div>
 </div>
 
 <p>That is the honest framing: <strong>you are already running a distributed system.</strong> The question is not whether to have network boundaries but whether to add more of them <em>inside</em> code you control, where they buy the least and cost the most.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> One backend process, one frontend process, one database, one Redis, on one VPS. By the signals above that is correct on all three counts: the workload is I/O-bound (chapter 16 measured 97,8% of request time inside a database call, and forking gains 5,7% on that shape), everything ships on the same cadence, and there is one person. What the system does have is the <em>useful</em> boundaries — R2 for files, Redis for shared state, external APIs for payments and AI — each of which was adopted because something specific required it. The two places that would split first if the constraints changed are already visible: <code>embedQueue.service.ts</code> (an in-process array queue that its own comments admit loses in-flight jobs on crash) and <code>cron.service.ts</code> (eleven schedules guarded by a single-process flag). Both are correct today and both are the exact pieces a second process would break — which is a much more useful thing to know than an opinion about microservices.</p>
+<p><strong>How cuongthai.com does it.</strong> One backend process, one frontend process, one database, one Redis, on one VPS. By the signals above that is correct on all three counts: the workload is I/O-bound (chapter 16 measured 97,8% of request time inside a database call, and forking gains 5,7% on that shape), everything ships on the same cadence, and there is one person. What the system does have is the <em>useful</em> boundaries — R2 for files, Redis for shared state, external APIs for payments and AI — each of which was adopted because something specific required it. The two places that would split first if the constraints changed are already visible: <code>embedQueue.service.ts</code> (an in-process array queue that its own comments admit loses in-flight jobs on crash) and <code>cron.service.ts</code> (eleven schedules guarded by a single-process flag). Both are correct today and both are the exact pieces a second process would break — which is a much more useful thing to know than an opinion about microservices.</p>
 </div>
 
 <div class="link-card codelab">
@@ -697,18 +697,18 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 
 <h3>Two kinds of door</h3>
 <div class="kv-grid">
-  <div class="kv"><span>Cửa hai chiều</span><b>Đổi lại được trong một buổi chiều: thư viện log, cách đặt tên thư mục, mức nén, cỡ pool. QUYẾT NHANH, sai thì sửa</b></div>
-  <div class="kv"><span>Cửa một chiều</span><b>Chi phí đổi lại là nhiều tháng: lược đồ CSDL, hợp đồng API công khai, ngôn ngữ, mô hình xác thực. QUYẾT CHẬM, viết lại lý do</b></div>
+  <div class="kv"><span>A two-way door</span><b>Reversible in an afternoon: the logging library, directory naming, compression level, pool size. DECIDE FAST and fix it if wrong</b></div>
+  <div class="kv"><span>A one-way door</span><b>Reversing it costs months: the DB schema, a public API contract, the language, the auth model. DECIDE SLOWLY and write down why</b></div>
 </div>
 
 <p>The failure mode is treating them the same. Weeks spent on a two-way door — the eternal ORM debate — while a one-way door is walked through casually: an id exposed in a public URL, an auth model that assumes one user has one role, a table designed for the shape of today's screen.</p>
 
 <div class="lz-map">
-  <div class="lz-node"><span class="lz-t">Lược đồ CSDL</span><span class="lz-d">Dữ liệu SỐNG LÂU HƠN code. Chương 7 đã đo: một migration hỏng cho ra P3018 lần đầu rồi P3009 CHẶN mọi lần deploy sau</span></div>
-  <div class="lz-node"><span class="lz-t">API công khai</span><span class="lz-d">Một khi có client bên ngoài dùng, bạn không đổi được nữa — chỉ thêm phiên bản. Chương 6 nói về hợp đồng vì lý do này</span></div>
-  <div class="lz-node"><span class="lz-t">Mô hình xác thực</span><span class="lz-d">Đổi cách sinh token nghĩa là đăng xuất toàn bộ người dùng. Chương 8 đo được: logout-all làm chính người gọi cũng 401</span></div>
-  <div class="lz-node"><span class="lz-t">Định danh trong URL</span><span class="lz-d">Id tuần tự lộ số lượng và mời gọi IDOR (chương 8). Đổi sang UUID sau này = mọi link cũ chết</span></div>
-  <div class="lz-node"><span class="lz-t">Múi giờ &amp; kiểu thời gian</span><span class="lz-d">Lưu <code>timestamp</code> thay vì <code>timestamptz</code> làm hỏng dữ liệu theo cách không sửa ngược được. Dự án này đã dính</span></div>
+  <div class="lz-node"><span class="lz-t">The DB schema</span><span class="lz-d">Data OUTLIVES code. Chapter 7 measured it: one failed migration gives you P3018 the first time and then P3009 BLOCKING every deploy after</span></div>
+  <div class="lz-node"><span class="lz-t">A public API</span><span class="lz-d">Once external clients use it you cannot change it — you can only add a version. Chapter 6 talks about contracts for exactly this reason</span></div>
+  <div class="lz-node"><span class="lz-t">The auth model</span><span class="lz-d">Changing how tokens are generated logs out every user. Chapter 8 measured it: logout-all 401s the very caller who requested it</span></div>
+  <div class="lz-node"><span class="lz-t">Identifiers in URLs</span><span class="lz-d">Sequential ids leak your volumes and invite IDOR (chapter 8). Switching to UUIDs later kills every old link</span></div>
+  <div class="lz-node"><span class="lz-t">Timezones &amp; time types</span><span class="lz-d">Storing <code>timestamp</code> instead of <code>timestamptz</code> corrupts data in a way you cannot undo. This project has been bitten by it</span></div>
 </div>
 
 <h3>Write down why, not what</h3>
@@ -731,19 +731,19 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <p>The metaphor is good and usually applied to the wrong things. Debt is <strong>a decision that makes future changes more expensive</strong> — not "code I do not like". Ugly code that never changes costs nothing. Clean code with the wrong boundary costs every week.</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>Nợ CÓ CHỦ ĐÍCH</span><b>"Ship trước cho kịp, biết là phải sửa." Ổn — nếu có ghi lại và có ai đó nhớ</b></div>
-  <div class="kv"><span>Nợ VÔ TÌNH</span><b>"Giờ mới biết lẽ ra nên làm thế kia." Không tránh được. Đây là cách bạn học</b></div>
-  <div class="kv"><span>Nợ do THỐI RỮA</span><b>Quyết định vốn đúng, nhưng hoàn cảnh đã đổi. Cờ tính năng, code tương thích ngược, giải pháp tạm cho một bug đã được sửa</b></div>
-  <div class="kv"><span>KHÔNG phải nợ</span><b>Code xấu mà không ai đụng tới, và không chặn thứ gì. Bỏ qua đi</b></div>
+  <div class="kv"><span>DELIBERATE debt</span><b>"Ship it to make the date, knowing it has to be fixed." Fine — if it is written down and somebody remembers</b></div>
+  <div class="kv"><span>ACCIDENTAL debt</span><b>"Only now do I see how it should have been done." Unavoidable. This is how you learn</b></div>
+  <div class="kv"><span>debt from ROT</span><b>A decision that was right, in circumstances that have changed. Feature flags, backward-compatibility code, a workaround for a bug that has since been fixed</b></div>
+  <div class="kv"><span>NOT debt</span><b>Ugly code nobody touches that blocks nothing. Leave it alone</b></div>
 </div>
 
 <p>The useful question is never "is this good code" but <strong>"what does this make expensive?"</strong>. The 28 route files bypassing the service layer (lesson 18.1) are debt precisely because they make one specific future change — applying a rule everywhere — cost twenty-eight edits instead of one. A 3.607-line seed file is not debt, because it makes nothing expensive.</p>
 
 <h3>Three that were paid in this project, with receipts</h3>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Khoá GIPHY trong bundle client</span><span class="lz-d">Nhanh và tiện lúc đầu. Trả giá: khoá bị thu hồi, 403 ở production, phải viết proxy backend. Giờ là quy tắc vĩnh viễn: khoá bên thứ ba KHÔNG bao giờ là NEXT_PUBLIC_</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Class <code>dark</code> toàn cục cho theme</span><span class="lz-d">Đúng khi chỉ có một hệ theme. Trả giá: nó kích hoạt mọi utility <code>dark:</code> của Tailwind bên trong Notes, phá vỡ bộ chuyển 3 theme của chính module đó. Giờ theme toàn cục là <code>theme-dark</code></span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Lược đồ trôi khỏi lịch sử migration</span><span class="lz-d">Vá tay lên production một lần. Trả giá: P3009 CHẶN MỌI lần deploy về sau cho tới khi 6 migration được resolve thủ công</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">The GIPHY key in the client bundle</span><span class="lz-d">Fast and convenient at first. The price: a revoked key, 403s in production, and a backend proxy to write. It is now a permanent rule: a third-party key is NEVER NEXT_PUBLIC_</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Class <code>dark</code> globally for theming</span><span class="lz-d">Right when there is only one theming system. The price: it activated every Tailwind <code>dark:</code> utility inside Notes, breaking that module's own 3-theme switcher. The global theme class is now <code>theme-dark</code></span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Schema drifting away from the migration history</span><span class="lz-d">One manual patch on production. The price: P3009 BLOCKING EVERY subsequent deploy until 6 migrations were resolved by hand</span></div>
 </div>
 
 <p>Every one of those was a reasonable local decision that became expensive at a distance. That is what debt is — not carelessness, but a cost deferred to a moment when it will be someone else's problem, frequently your own.</p>
@@ -753,7 +753,7 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> This project keeps its decisions in an unusual place: a <code>CLAUDE.md</code> at the repo root with a "Known Error Patterns" table — date, what broke, lesson learned — plus <em>forbidden actions</em> written as absolutes ("never run <code>migrate reset</code>", "never <code>db push</code> against production", "never auto-resolve a failed migration"). Each of those rules is a scar. It works because the rules live next to the code and are read before every change, rather than in a wiki that is written once and never opened. The habit generalises: <strong>a decision record is only useful where the decision is being made.</strong></p>
+<p><strong>How cuongthai.com does it.</strong> This project keeps its decisions in an unusual place: a <code>CLAUDE.md</code> at the repo root with a "Known Error Patterns" table — date, what broke, lesson learned — plus <em>forbidden actions</em> written as absolutes ("never run <code>migrate reset</code>", "never <code>db push</code> against production", "never auto-resolve a failed migration"). Each of those rules is a scar. It works because the rules live next to the code and are read before every change, rather than in a wiki that is written once and never opened. The habit generalises: <strong>a decision record is only useful where the decision is being made.</strong></p>
 </div>
 
 <div class="link-card codelab">
@@ -847,25 +847,25 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 
 <h3>The system, chapter by chapter</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-t">1-4 · Nền tảng</span><span class="lz-d">JavaScript cho backend · V8 + libuv + event loop · module lõi · npm và lockfile. <strong>Đo:</strong> chặn loop 3e9 vòng = trễ 2.873ms; stream 348MB dùng 120MB RAM so với readFileSync 395MB</span></div>
-  <div class="lz-layer"><span class="lz-t">5-6 · HTTP</span><span class="lz-d">Express, middleware, xử lý lỗi · thiết kế REST, validate, phân trang. <strong>Đo:</strong> Express 4 treo request khi async throw, Express 5 trả 500; OFFSET 999980 quét đủ 1 triệu dòng còn cursor mất 0,015ms</span></div>
-  <div class="lz-layer"><span class="lz-t">7 · Dữ liệu</span><span class="lz-d">PostgreSQL + Prisma, quan hệ, transaction, chỉ mục. <strong>Đo:</strong> chỉ mục biến 28,6ms thành 0,129ms (222×); N+1 51 truy vấn thành 2</span></div>
-  <div class="lz-layer"><span class="lz-t">8-9 · Bảo mật</span><span class="lz-d">Băm mật khẩu, JWT, phân quyền · header, XSS, ReDoS, SSRF, bí mật. <strong>Đo:</strong> bcrypt cost 12 chậm hơn sha256 328.000 lần — đó là mục đích; XSS lấy được cookie phiên end-to-end</span></div>
-  <div class="lz-layer"><span class="lz-t">10-11 · Nội dung &amp; realtime</span><span class="lz-d">Upload, object storage, xử lý ảnh · WebSocket, Socket.IO, adapter. <strong>Đo:</strong> URL ký sẵn KHÔNG ràng buộc Content-Type; polling ngốn 8,93GB/giờ ở chỗ WebSocket dùng 68 byte/tin</span></div>
-  <div class="lz-layer"><span class="lz-t">12-13 · Quy mô</span><span class="lz-d">Redis: cache, TTL, nguyên tử · hàng đợi, thử lại, idempotent. <strong>Đo:</strong> pipeline nhanh hơn 63×; job không idempotent trừ tiền 3 lần</span></div>
-  <div class="lz-layer"><span class="lz-t">14-15 · Niềm tin</span><span class="lz-d">Kiểm thử · log, metric, trace, cảnh báo. <strong>Đo:</strong> độ phủ 100% cả bốn cột vẫn để lọt lỗ leo thang quyền; một nhãn metric sai chỗ ngốn 939MB</span></div>
-  <div class="lz-layer"><span class="lz-t">16-18 · Vận hành</span><span class="lz-d">Hiệu năng · Docker và deploy · kiến trúc. <strong>Đo:</strong> 285 → 3.550 req/giây không đổi thư viện nào; deploy mất 1,5% request cho tới khi có proxy đứng trước</span></div>
+  <div class="lz-layer"><span class="lz-t">1-4 · Foundations</span><span class="lz-d">JavaScript for the backend · V8 + libuv + the event loop · core modules · npm and the lockfile. <strong>Đo:</strong> a blocking 3e9-iteration loop costs 2,873ms of lag; streaming 348MB uses 120MB of RAM against readFileSync's 395MB</span></div>
+  <div class="lz-layer"><span class="lz-t">5-6 · HTTP</span><span class="lz-d">Express, middleware, error handling · REST design, validation, pagination. <strong>Đo:</strong> Express 4 hangs the request on an async throw while Express 5 returns 500; OFFSET 999980 scans all 1 million rows where a cursor takes 0.015ms</span></div>
+  <div class="lz-layer"><span class="lz-t">7 · Data</span><span class="lz-d">PostgreSQL + Prisma, relations, transactions, indexes. <strong>Đo:</strong> an index turns 28.6ms into 0.129ms (222×); N+1 goes from 51 queries to 2</span></div>
+  <div class="lz-layer"><span class="lz-t">8-9 · Security</span><span class="lz-d">Password hashing, JWTs, authorisation · headers, XSS, ReDoS, SSRF, secrets. <strong>Đo:</strong> bcrypt at cost 12 is 328,000× slower than sha256 — that is the point; XSS steals a session cookie end to end</span></div>
+  <div class="lz-layer"><span class="lz-t">10-11 · Content &amp; realtime</span><span class="lz-d">Uploads, object storage, image processing · WebSocket, Socket.IO, adapters. <strong>Đo:</strong> a pre-signed URL does NOT constrain Content-Type; polling burns 8.93GB an hour where WebSocket uses 68 bytes a message</span></div>
+  <div class="lz-layer"><span class="lz-t">12-13 · Scale</span><span class="lz-d">Redis: caching, TTLs, atomicity · queues, retries, idempotency. <strong>Đo:</strong> a pipeline is 63× faster; a non-idempotent job charges the customer 3 times</span></div>
+  <div class="lz-layer"><span class="lz-t">14-15 · Confidence</span><span class="lz-d">Testing · logs, metrics, traces, alerts. <strong>Đo:</strong> 100% coverage in all four columns still lets a privilege-escalation hole through; one misplaced metric label eats 939MB</span></div>
+  <div class="lz-layer"><span class="lz-t">16-18 · Operations</span><span class="lz-d">Performance · Docker and deployment · architecture. <strong>Đo:</strong> 285 → 3,550 req/s without changing a single library; a deploy loses 1.5% of requests until a proxy stands in front</span></div>
 </div>
 
 <h3>The five ideas that keep recurring</h3>
 <p>Different chapters, same lesson, arrived at from different directions:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>1. Đo, đừng đoán</span><b>Cái regex ai cũng nghi = 0,5% CPU. p95 khoẻ mạnh giấu một request 8.241ms. Trực giác sai một cách có hệ thống</b></div>
-  <div class="kv"><span>2. Bỏ bớt việc thắng làm nhanh hơn</span><b>Cache 120×, chỉ mục 222×, gửi ít trường 2,8× — so với thư viện nhanh hơn 1,39×</b></div>
-  <div class="kv"><span>3. Mặc định là quyết định</span><b>pino-http ghi token vào log. Pool <code>connectionTimeoutMillis: 0</code> treo vô hạn. <code>docker stop</code> giết sau 1,26s</b></div>
-  <div class="kv"><span>4. Kiểu dữ liệu không thay được phân quyền</span><b><code>typeof threadId === 'number'</code> là kiểm KIỂU chứ không kiểm QUYỀN — đó là lỗ IDOR socket thật đã tìm ra khi soạn chương 11</b></div>
-  <div class="kv"><span>5. Hỏng trong im lặng đắt hơn hỏng ầm ĩ</span><b>Build cũ trả 404 trong khi health check báo xanh. Thiếu biến môi trường thì nên GIẾT tiến trình lúc khởi động</b></div>
+  <div class="kv"><span>1. Measure, do not guess</span><b>The regex everyone suspected is 0.5% of CPU. A healthy p95 hides an 8,241ms request. Intuition is wrong systematically</b></div>
+  <div class="kv"><span>2. Doing less beats going faster</span><b>A cache is 120×, an index 222×, sending fewer fields 2.8× — against a faster library's 1.39×</b></div>
+  <div class="kv"><span>3. Defaults are decisions</span><b>pino-http logs your tokens. A <code>connectionTimeoutMillis: 0</code> pool hangs forever. <code>docker stop</code> kills after 1.26s</b></div>
+  <div class="kv"><span>4. Types do not substitute for authorisation</span><b><code>typeof threadId === 'number'</code> checks the TYPE, not the PERMISSION — that is the real socket IDOR found while writing chapter 11</b></div>
+  <div class="kv"><span>5. Failing quietly costs more than failing loudly</span><b>A stale build returns 404 while the health check reports green. A missing environment variable should KILL the process at startup</b></div>
 </div>
 
 <h3>What a real Node backend looks like when it boots</h3>
@@ -887,13 +887,13 @@ khởi động toàn bộ: 3,63 giây</div>
 
 <h3>Before your first production deploy</h3>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Bí mật</span><span class="lz-d">Không có gì trong git, không có gì trong ảnh Docker, kiểm biến bắt buộc lúc khởi động và CHẾT nếu thiếu (17.4)</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Xác thực &amp; phân quyền</span><span class="lz-d">Băm mật khẩu bằng argon2/bcrypt, JWT có hạn, phân quyền ở TỪNG handler kể cả socket (8, 9, 11)</span></div>
-  <div class="lz-layer lz-step"><span class="lz-n">3</span><span class="lz-t">Đầu vào</span><span class="lz-d">Validate mọi thân request bằng zod, giới hạn cỡ body, che bí mật trong log, kiểm magic byte của file (6, 9, 10, 15)</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Cơ sở dữ liệu</span><span class="lz-d">Migration cộng thêm và đảo ngược được, chỉ mục cho cột đang lọc, pool đã đo, KHÔNG nối chuỗi SQL (7, 16)</span></div>
-  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Quan sát</span><span class="lz-d">Log JSON + mã request, theo dõi lỗi, uptime check từ BÊN NGOÀI, cảnh báo đĩa (15)</span></div>
-  <div class="lz-step"><span class="lz-n">6</span><span class="lz-t">Vòng đời</span><span class="lz-d">CMD dạng exec, tắt êm khi SIGTERM, stop_grace_period đặt rõ, liveness KHÔNG chạm DB (15, 17)</span></div>
-  <div class="lz-step"><span class="lz-n">7</span><span class="lz-t">Deploy</span><span class="lz-d">Proxy giữ cổng, kiểm khoẻ TRƯỚC khi đổi, smoke-test route đã gắn, biết đường quay lui (17)</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Secrets</span><span class="lz-d">Nothing in git, nothing in the Docker image, required variables checked at startup and the process DIES if any is missing (17.4)</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Authentication &amp; authorisation</span><span class="lz-d">Hash passwords with argon2/bcrypt, expire your JWTs, authorise in EVERY handler including sockets (8, 9, 11)</span></div>
+  <div class="lz-layer lz-step"><span class="lz-n">3</span><span class="lz-t">Input</span><span class="lz-d">Validate every request body with zod, cap the body size, redact secrets in logs, check files' magic bytes (6, 9, 10, 15)</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">The database</span><span class="lz-d">Additive, reversible migrations, indexes on the columns you filter by, a measured pool, and NO string-concatenated SQL (7, 16)</span></div>
+  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Observability</span><span class="lz-d">JSON logs plus a request id, error tracking, an EXTERNAL uptime check, disk alerts (15)</span></div>
+  <div class="lz-step"><span class="lz-n">6</span><span class="lz-t">Lifecycle</span><span class="lz-d">The exec form of CMD, a graceful SIGTERM shutdown, an explicit stop_grace_period, and a liveness probe that does NOT touch the DB (15, 17)</span></div>
+  <div class="lz-step"><span class="lz-n">7</span><span class="lz-t">Deploy</span><span class="lz-d">The proxy holds the port, health-check BEFORE switching, smoke-test that routes are mounted, and know the way back (17)</span></div>
 </div>
 
 <div class="callout">
@@ -906,7 +906,7 @@ khởi động toàn bộ: 3,63 giây</div>
 <p>Build something and put it in front of people. Every measurement here exists because a real system was serving real users and something needed explaining. That is the only reliable source of the questions worth answering.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> This course is not written about a demo. It is written about the system serving the page you are reading — 244 TypeScript files, 80.454 lines, 248 database models, 95 migrations, 76 route groups, one VPS. Every "how this site does it" box in eighteen chapters was checked against the running code, including the parts where the honest answer was "it does not do this yet": no <code>/metrics</code>, no OpenTelemetry, no <code>AsyncLocalStorage</code>, 28 of 62 route files skipping the service layer, no <code>stop_grace_period</code>. A system you can describe accurately, including its gaps, is one you can improve. That is the last idea in the course, and the one the other seventeen chapters were quietly building toward.</p>
+<p><strong>How cuongthai.com does it.</strong> This course is not written about a demo. It is written about the system serving the page you are reading — 244 TypeScript files, 80.454 lines, 248 database models, 95 migrations, 76 route groups, one VPS. Every "how this site does it" box in eighteen chapters was checked against the running code, including the parts where the honest answer was "it does not do this yet": no <code>/metrics</code>, no OpenTelemetry, no <code>AsyncLocalStorage</code>, 28 of 62 route files skipping the service layer, no <code>stop_grace_period</code>. A system you can describe accurately, including its gaps, is one you can improve. That is the last idea in the course, and the one the other seventeen chapters were quietly building toward.</p>
 </div>
 
 <div class="link-card codelab">

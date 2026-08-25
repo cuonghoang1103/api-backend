@@ -71,10 +71,10 @@ app.get('/notes', (req, res) =&gt; {
 <p>Read the bottom line first: <strong>the regex everyone suspects is 0,5% of the CPU.</strong> Rewriting it perfectly would have bought half a percent. The real costs are elsewhere:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>stringify — 16,9%</span><b>Express tuần tự hoá phản hồi 365KB. Chi phí này tỉ lệ THẲNG với cỡ payload</b></div>
-  <div class="kv"><span>renderNote — 15,9%</span><b>Dựng 500 object mới ở MỖI request cho dữ liệu không hề đổi</b></div>
-  <div class="kv"><span>crypto hash — 14,5%</span><b>Cộng 4 dòng: update 7,4 + 3,7, Hash 2,8, digest 2,8. Một dòng code "để chống cache"</b></div>
-  <div class="kv"><span>garbage collector — 3,7%</span><b>Hệ quả, không phải nguyên nhân: 500 object rác mỗi request thì phải có ai đó dọn</b></div>
+  <div class="kv"><span>stringify — 16,9%</span><b>Express serialising a 365KB response. This cost scales DIRECTLY with payload size</b></div>
+  <div class="kv"><span>renderNote — 15,9%</span><b>Building 500 fresh objects on EVERY request for data that never changes</b></div>
+  <div class="kv"><span>crypto hash — 14,5%</span><b>Four lines summed: update 7.4 + 3.7, Hash 2.8, digest 2.8. One line of code written "to defeat caching"</b></div>
+  <div class="kv"><span>garbage collector — 3,7%</span><b>A consequence, not a cause: 500 objects of garbage per request means somebody has to collect them</b></div>
 </div>
 
 <div class="callout">
@@ -87,7 +87,7 @@ app.get('/notes', (req, res) =&gt; {
 <div class="out">bước tối ưu                                req/giây   p50    p97.5   cỡ phản hồi
 1. nguyên bản                                  305   60ms   120ms   365.593 B
 2. tính SẴN renderNote một lần                 662   28ms    56ms   365.593 B
-3. tuần tự hoá SẴN thành chuỗi                1.270   14ms    29ms   365.593 B
+3. tuần tự hoá SẴN for chuỗi                1.270   14ms    29ms   365.593 B
 4. chỉ trả các trường client thật sự cần      3.550    5ms    10ms    86.683 B</div>
 
 <p><strong>11,6× faster. Zero libraries changed, zero infrastructure added.</strong> Each step is worth understanding separately, because each represents a different general principle.</p>
@@ -109,21 +109,21 @@ app.get('/notes', (req, res) =&gt; { res.type('json'); res.send(BODY); });</code
 <p>This is the single most reliable optimisation in web development and it is almost never listed as one: <strong>the cheapest byte is the one you do not send.</strong> It helps the server (less serialisation, less writev), the network (less bandwidth), and the client (less parsing) at the same time.</p>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Đo mốc</span><span class="lz-d">autocannon, ghi lại req/giây và p97.5. Không có mốc thì không chứng minh được gì</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Lấy profile</span><span class="lz-d"><code>--cpu-prof</code> DƯỚI TẢI, không phải lúc rảnh. Profile lúc rảnh chỉ toàn (idle)</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Sửa ĐÚNG MỘT thứ</span><span class="lz-d">thứ đứng đầu bảng. Sửa hai thứ cùng lúc thì không biết cái nào ăn</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Đo lại</span><span class="lz-d">nếu không nhúc nhích thì HOÀN TÁC. Code phức tạp hơn mà không nhanh hơn là lỗ ròng</span></div>
-  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Lặp lại</span><span class="lz-d">profile lại — nút thắt đã DI CHUYỂN. Bảng cũ không còn đúng nữa</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Đo mốc</span><span class="lz-d">autocannon, recording req/s and p97.5. Without a baseline you can prove nothing</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Take a profile</span><span class="lz-d"><code>--cpu-prof</code> UNDER LOAD, not at rest. An idle profile is nothing but (idle)</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Fix EXACTLY ONE thing</span><span class="lz-d">whatever sits at the top of the table. Fix two at once and you cannot tell which one worked</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Đo lại</span><span class="lz-d">if nothing moves, REVERT. More complex code that is no faster is a net loss</span></div>
+  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Repeat</span><span class="lz-d">profile again — the bottleneck has MOVED. The old table no longer holds</span></div>
 </div>
 
 <h3>Benchmarking without fooling yourself</h3>
 <p>The numbers above are only worth anything if the measurement is honest. Four rules that produce comparable results:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>Làm nóng trước</span><b>V8 thông dịch trước rồi mới biên dịch JIT. Vài trăm request đầu chậm hơn 5-10 lần — bỏ chúng đi</b></div>
-  <div class="kv"><span>Đo p97.5, đừng đo trung bình</span><b>Trung bình bị một request 8 giây kéo lệch mà không ai thấy; phân vị thì không</b></div>
-  <div class="kv"><span>Client và server KHÁC máy</span><b>autocannon ăn CPU thật. Chạy chung máy = hai bên tranh nhau nhân CPU, số nào cũng thấp</b></div>
-  <div class="kv"><span>Đổi ĐÚNG MỘT biến</span><b>Cùng dữ liệu, cùng số kết nối, cùng thời lượng. Đổi hai thứ thì kết quả vô nghĩa</b></div>
+  <div class="kv"><span>Warm it up first</span><b>V8 interprets before it JIT-compiles. The first few hundred requests are 5-10× slower — discard them</b></div>
+  <div class="kv"><span>Đo p97.5, đừng đo trung bình</span><b>An average is skewed by one 8-second request without anyone noticing; a percentile is not</b></div>
+  <div class="kv"><span>Client and server on DIFFERENT machines</span><b>autocannon consumes real CPU. On the same box the two fight over cores and every number comes out low</b></div>
+  <div class="kv"><span>Change EXACTLY ONE variable</span><b>Same data, same connection count, same duration. Change two and the result means nothing</b></div>
 </div>
 
 <div class="pitfall">
@@ -131,7 +131,7 @@ app.get('/notes', (req, res) =&gt; { res.type('json'); res.send(BODY); });</code
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> The pattern in step 2 is already in production here, under a different name: chapter 12's Redis cache is precomputation with a TTL instead of a startup constant. The measured 120× gap between a <code>GROUP BY</code> over 500.000 rows (48,04ms) and a Redis <code>GET</code> (0,40ms) is the same trade this lesson makes — do the work once, serve the result many times. Step 4 is the one this codebase has <em>not</em> systematically applied: several list endpoints still return full row objects where the front end renders four fields, which is where an easy 3× is sitting unclaimed.</p>
+<p><strong>How cuongthai.com does it.</strong> The pattern in step 2 is already in production here, under a different name: chapter 12's Redis cache is precomputation with a TTL instead of a startup constant. The measured 120× gap between a <code>GROUP BY</code> over 500.000 rows (48,04ms) and a Redis <code>GET</code> (0,40ms) is the same trade this lesson makes — do the work once, serve the result many times. Step 4 is the one this codebase has <em>not</em> systematically applied: several list endpoints still return full row objects where the front end renders four fields, which is where an easy 3× is sitting unclaimed.</p>
 </div>
 
 <div class="link-card codelab">
@@ -345,21 +345,21 @@ SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 
 
 <h3>The corrected mental model</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-t">Hàng đợi của bạn (pool)</span><span class="lz-d">request chờ tới lượt có kết nối. Đo bằng <code>pool.waitingCount</code>. Đây là nơi thời gian nằm khi pool quá NHỎ</span></div>
-  <div class="lz-layer"><span class="lz-t">Vòng đi-về mạng + giao thức</span><span class="lz-d">tuần tự hoá truy vấn, gửi, nhận, phân tích kết quả. Đây là phần <code>pg</code> làm và <code>EXPLAIN</code> KHÔNG thấy</span></div>
-  <div class="lz-layer"><span class="lz-t">Hàng đợi của PostgreSQL</span><span class="lz-d">các session tranh nhau CPU, buffer, khoá. Đây là nơi thời gian chuyển tới khi pool quá TO</span></div>
-  <div class="lz-layer"><span class="lz-t">Công việc thật</span><span class="lz-d">0,030ms. Cái duy nhất <code>EXPLAIN ANALYZE</code> đo, và là phần nhỏ nhất</span></div>
+  <div class="lz-layer"><span class="lz-t">Your queue (the pool)</span><span class="lz-d">requests waiting their turn for a connection. Measured by <code>pool.waitingCount</code>. This is where the time sits when the pool is too SMALL</span></div>
+  <div class="lz-layer"><span class="lz-t">Network round trip plus protocol</span><span class="lz-d">serialising the query, sending, receiving, parsing the result. This is the part <code>pg</code> does and that <code>EXPLAIN</code> does NOT see</span></div>
+  <div class="lz-layer"><span class="lz-t">PostgreSQL's queue</span><span class="lz-d">sessions fighting over CPU, buffers and locks. This is where the time moves to when the pool is too LARGE</span></div>
+  <div class="lz-layer"><span class="lz-t">The actual work</span><span class="lz-d">0.030ms. The only thing <code>EXPLAIN ANALYZE</code> measures, and the smallest part of all</span></div>
 </div>
 
 <p>The practical consequence: <strong><code>EXPLAIN ANALYZE</code> being fast does not mean your query is fast.</strong> It means the plan is good. A perfectly planned query can still cost 5ms in production because of everything wrapped around it, and no amount of index tuning will touch that.</p>
 
 <h3>What to do about it, in order</h3>
 <div class="kv-grid">
-  <div class="kv"><span>Bớt số truy vấn</span><b>N+1 (chương 7): 51 truy vấn → 2 là 5,6×. Không phép chỉnh pool nào bù nổi</b></div>
-  <div class="kv"><span>Chỉnh pool cho ĐÚNG</span><b>Quá nhỏ = xếp hàng ở bạn, quá to = xếp hàng ở DB. Đo cả hai vế rồi mới chọn</b></div>
-  <div class="kv"><span>Không truy vấn nữa</span><b>Cache (chương 12). Truy vấn nhanh nhất là truy vấn không xảy ra</b></div>
-  <div class="kv"><span>Đẩy việc ra khỏi request</span><b>Hàng đợi (chương 13). Người dùng không cần chờ email được gửi xong</b></div>
-  <div class="kv"><span>Rồi mới tối ưu JavaScript</span><b>2% ở ví dụ này. Có ích, nhưng LÀM SAU CÙNG</b></div>
+  <div class="kv"><span>Reduce the number of queries</span><b>N+1 (chapter 7): 51 queries → 2 is 5.6×. No amount of pool tuning makes that up</b></div>
+  <div class="kv"><span>Size the pool CORRECTLY</span><b>Too small means queueing at your end, too large means queueing at the DB. Measure both sides before choosing</b></div>
+  <div class="kv"><span>Stop querying altogether</span><b>Cache (chapter 12). The fastest query is the one that never happens</b></div>
+  <div class="kv"><span>Push work out of the request</span><b>Queues (chapter 13). The user does not need to wait for the email to be sent</b></div>
+  <div class="kv"><span>Only then optimise the JavaScript</span><b>2% in this example. Useful, but do it LAST</b></div>
 </div>
 
 <div class="pitfall">
@@ -367,7 +367,7 @@ SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> The production numbers from chapter 7 are the same shape: a fresh connection per query cost 8,03ms against 0,38ms for a reused one — <strong>21×</strong> — and twenty queries of 100ms each took 2160ms with a pool of 1 versus 132ms with a pool of 20. That project also hit the other end of the curve: twelve Prisma clients × pool 10 = 120 connections against a <code>max_connections</code> of 100, producing <code>53300 sorry, too many clients already</code>. Both failure modes, on the same system, six months apart. The lesson from this chapter is that they are the <em>same</em> failure — a queue in the wrong place — and only measuring both halves tells you which one you have.</p>
+<p><strong>How cuongthai.com does it.</strong> The production numbers from chapter 7 are the same shape: a fresh connection per query cost 8,03ms against 0,38ms for a reused one — <strong>21×</strong> — and twenty queries of 100ms each took 2160ms with a pool of 1 versus 132ms with a pool of 20. That project also hit the other end of the curve: twelve Prisma clients × pool 10 = 120 connections against a <code>max_connections</code> of 100, producing <code>53300 sorry, too many clients already</code>. Both failure modes, on the same system, six months apart. The lesson from this chapter is that they are the <em>same</em> failure — a queue in the wrong place — and only measuring both halves tells you which one you have.</p>
 </div>
 
 <div class="link-card codelab">
@@ -533,11 +533,11 @@ brotli q11      br                   22  873ms   943ms       1.918 B     br</div
 <p><strong>Brotli at maximum destroys the server: 22 requests per second, p50 of 873ms.</strong> The compression is now the entire application. This is not a hypothetical mistake; <code>BROTLI_PARAM_QUALITY: 11</code> is what you get by copying a static-asset build config into a dynamic API.</p>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Phản hồi &lt; 1KB</span><span class="lz-d">ĐỪNG nén. Phần đầu gzip đã ~20 byte, và nén xong có khi còn to hơn</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">JSON/HTML/CSS/JS động</span><span class="lz-d">gzip level 1 hoặc brotli quality 4. Chốt lại ở đây, đừng vặn cao hơn</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Tệp tĩnh (bundle, ảnh SVG)</span><span class="lz-d">nén SẴN lúc build ở mức cao nhất, phục vụ file .br/.gz có sẵn. Trả giá MỘT lần</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Đã nén rồi (jpg, png, mp4, zip)</span><span class="lz-d">ĐỪNG nén lại. Tốn CPU, được ~0%, đôi khi còn to ra</span></div>
-  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Có nginx/Cloudflare ở trước?</span><span class="lz-d">Để chúng nén. Node được giải phóng, chúng làm bằng C và có cache</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Responses under 1KB</span><span class="lz-d">Do NOT compress. The gzip header alone is ~20 bytes, and the compressed result can end up larger</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Dynamic JSON/HTML/CSS/JS</span><span class="lz-d">gzip level 1 or brotli quality 4. Settle here and do not turn the dial higher</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Static files (bundles, SVG images)</span><span class="lz-d">PRE-compress at build time at the highest setting and serve the ready-made .br/.gz files. You pay ONCE</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Already compressed (jpg, png, mp4, zip)</span><span class="lz-d">Do NOT recompress. It burns CPU, gains ~0%, and sometimes grows the file</span></div>
+  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Is nginx or Cloudflare in front?</span><span class="lz-d">Let them compress. Node is freed up, and they do it in C with a cache</span></div>
 </div>
 
 <h3>Where compression should actually happen</h3>
@@ -580,7 +580,7 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Compression happens at nginx, not in Node — the right layer, as argued above. The media subdomain adds the other half of this lesson: R2 objects are served with <code>cache-control: public, max-age=31536000, immutable</code> behind a Cloudflare cache rule, verified by GET as <code>cf-cache-status: HIT</code> with an <code>age</code> of several hours. A cached response is compression taken to its limit — zero bytes from origin, zero CPU, zero database. The general rule this chapter keeps arriving at from different directions: <strong>the fastest work is the work that does not happen.</strong></p>
+<p><strong>How cuongthai.com does it.</strong> Compression happens at nginx, not in Node — the right layer, as argued above. The media subdomain adds the other half of this lesson: R2 objects are served with <code>cache-control: public, max-age=31536000, immutable</code> behind a Cloudflare cache rule, verified by GET as <code>cf-cache-status: HIT</code> with an <code>age</code> of several hours. A cached response is compression taken to its limit — zero bytes from origin, zero CPU, zero database. The general rule this chapter keeps arriving at from different directions: <strong>the fastest work is the work that does not happen.</strong></p>
 </div>
 
 <div class="link-card codelab">
@@ -715,7 +715,7 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 <h3>Two routes, five configurations</h3>
 <p>The same application, forked into 1, 2, 4, 8 and 10 workers, serving two endpoints. <code>/cpu</code> hashes a string twenty times — real computation, like password verification or image processing. <code>/io</code> awaits 30ms — like a database query. Both hit with 50 concurrent connections:</p>
 
-<div class="out">route  worker   req/giây   p50    p97.5   số pid khác nhau
+<div class="out">route  worker   req/giây   p50    p97.5   different pid numbers
 /cpu     1        8.708    5ms    10ms        1
 /cpu     2       18.303    2ms     5ms        2
 /cpu     4       29.542    1ms     5ms        4
@@ -732,37 +732,37 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 <p><strong>Two completely different stories from the same change.</strong> The CPU route goes 8.708 → 29.542, a <strong>3,4× gain</strong>. The I/O route goes 1.253 → 1.325, a <strong>5,7% gain</strong> — indistinguishable from noise. Forking ten processes did nothing at all for the route that spends its time waiting, because <em>waiting was never the thing competing for a core.</em> One event loop can hold thousands of pending awaits; it does not need help doing nothing.</p>
 </div>
 
-<p>The <code>số pid khác nhau</code> column is there to prove the workers really are being used — 40 sample requests hit 10 distinct processes. The load was distributed correctly. It just did not matter.</p>
+<p>The <code>different pid numbers</code> column is there to prove the workers really are being used — 40 sample requests hit 10 distinct processes. The load was distributed correctly. It just did not matter.</p>
 
 <h3>The second surprise: more workers made it worse</h3>
 <p>On a ten-core machine, CPU throughput peaks at <strong>four</strong> workers and then declines: 29.542 → 27.189 → 25.112. Three reasons, all of which apply to your production machine too:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>Client cũng ăn CPU</span><b>autocannon chạy CÙNG máy và cần vài nhân. Ở production đó là nginx, hệ gom log, agent giám sát</b></div>
-  <div class="kv"><span>Chuyển ngữ cảnh</span><b>Nhiều tiến trình hơn số nhân = hệ điều hành phải luân phiên chúng, và mỗi lần đổi đều tốn</b></div>
-  <div class="kv"><span>Mỗi worker là một V8 riêng</span><b>Heap riêng, JIT riêng, GC riêng. 10 worker = 10 lần bộ nhớ nền</b></div>
+  <div class="kv"><span>The client burns CPU too</span><b>autocannon runs on the SAME box and needs several cores. In production that role is played by nginx, the log collector, the monitoring agent</b></div>
+  <div class="kv"><span>Context switching</span><b>More processes than cores means the OS has to rotate between them, and every switch costs</b></div>
+  <div class="kv"><span>Each worker is its own V8</span><b>Its own heap, its own JIT, its own GC. 10 workers means 10× the baseline memory</b></div>
 </div>
 
 <p>The practical rule: <strong>start at <code>cores - 1</code>, then measure down as well as up.</strong> The optimum is usually lower than the core count, and the only way to find it is to try. Copying <code>os.cpus().length</code> from a tutorial is how you end up on the falling side of that curve.</p>
 
 <h3>Deciding whether cluster is your answer</h3>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Lấy CPU profile dưới tải (bài 16.1)</span><span class="lz-d">Bao nhiêu phần trăm là (idle)?</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">idle CAO (&gt;60%)</span><span class="lz-d">Bạn nghẽn ở I/O. Cluster KHÔNG giúp gì. Hãy đi sửa cơ sở dữ liệu hoặc API bên ngoài</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">idle THẤP (&lt;30%)</span><span class="lz-d">Bạn nghẽn ở CPU. Cluster giúp gần tuyến tính tới khoảng số nhân</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Một hàm duy nhất chiếm hết CPU</span><span class="lz-d">Dùng <code>worker_threads</code> cho riêng nó (chương 2) — rẻ hơn nhân cả tiến trình lên</span></div>
-  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Đo lại ở 2, 4, 6, 8 worker</span><span class="lz-d">Chọn đỉnh THẬT, không chọn số nhân</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Take a CPU profile under load (lesson 16.1)</span><span class="lz-d">What percentage is (idle)?</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">idle CAO (&gt;60%)</span><span class="lz-d">You are I/O-bound. Clustering does NOTHING. Go fix the database or the external API</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">LOW idle (&lt;30%)</span><span class="lz-d">You are CPU-bound. Clustering helps almost linearly up to roughly the core count</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">A single function eating all the CPU</span><span class="lz-d">Use a <code>worker_threads</code> for just that (chapter 2) — cheaper than multiplying the whole process</span></div>
+  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Đo lại ở 2, 4, 6, 8 worker</span><span class="lz-d">Pick the REAL peak, not the core count</span></div>
 </div>
 
 <h3>What breaks when you fork</h3>
 <p>Every worker is a separate process with separate memory. Anything your single-process code kept in a variable now exists N times, independently, and the copies do not agree:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>Cache trong bộ nhớ</span><b>N bản sao khác nhau. Người dùng thấy dữ liệu cũ tuỳ vào việc trúng worker nào</b></div>
-  <div class="kv"><span>Rate limit đếm trong RAM</span><b>Giới hạn 100/phút thành 100×N. Phải đếm trong Redis (chương 12)</b></div>
-  <div class="kv"><span>Socket.IO</span><b>Emit ở worker 1 không tới được client nối vào worker 2 — phải có Redis adapter (chương 11, đã đo)</b></div>
-  <div class="kv"><span>Cron / job định kỳ</span><b>Chạy N lần thay vì 1. Phải khoá bằng Redis hoặc tách hẳn ra tiến trình riêng</b></div>
-  <div class="kv"><span>Bộ đếm, biến toàn cục</span><b>Mỗi worker một giá trị. Metric của chương 15 cũng vậy — mỗi tiến trình một /metrics</b></div>
+  <div class="kv"><span>In-memory caches</span><b>N different copies. Users see stale data depending on which worker they land on</b></div>
+  <div class="kv"><span>Rate limits counted in RAM</span><b>A 100-per-minute limit becomes 100×N. It has to be counted in Redis (chapter 12)</b></div>
+  <div class="kv"><span>Socket.IO</span><b>An emit on worker 1 never reaches a client attached to worker 2 — you need the Redis adapter (chapter 11, measured)</b></div>
+  <div class="kv"><span>Cron and periodic jobs</span><b>They run N times instead of once. Lock with Redis, or split them into their own process entirely</b></div>
+  <div class="kv"><span>Counters and global variables</span><b>One value per worker. Chapter 15's metrics too — one /metrics per process</b></div>
 </div>
 
 <div class="pitfall">
@@ -773,15 +773,15 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 <p>All three do the same thing — run N processes behind one port — and differ in who supervises them:</p>
 
 <div class="lz-map">
-  <div class="lz-node"><span class="lz-t">cluster (trong code)</span><span class="lz-d">Không cần cài gì, nhưng tiến trình cha là ĐIỂM CHẾT DUY NHẤT và bạn phải tự viết phần khởi động lại worker</span></div>
-  <div class="lz-node"><span class="lz-t">PM2</span><span class="lz-d">Tự khởi động lại, reload không gián đoạn, có log. Thêm một thứ phải vận hành, và trùng việc với Docker</span></div>
-  <div class="lz-node"><span class="lz-t">N container</span><span class="lz-d">1 tiến trình mỗi container, nhân bản bằng Docker/Kubernetes. Cách lành mạnh nhất — bộ điều phối lo việc khởi động lại, health check, triển khai dần</span></div>
+  <div class="lz-node"><span class="lz-t">cluster (trong code)</span><span class="lz-d">Nothing to install, but the parent process is a SINGLE POINT OF FAILURE and you have to write the worker-restart logic yourself</span></div>
+  <div class="lz-node"><span class="lz-t">PM2</span><span class="lz-d">Automatic restarts, zero-downtime reloads, logging. One more thing to operate, and it duplicates what Docker does</span></div>
+  <div class="lz-node"><span class="lz-t">N container</span><span class="lz-d">1 process per container, replicated with Docker/Kubernetes. The healthiest option — the orchestrator handles restarts, health checks and rolling deploys</span></div>
 </div>
 
 <p>For a containerised deployment the third option is almost always right: <strong>one process per container, scale by running more containers.</strong> It keeps the container as the unit of everything — restart, health check, rollout, resource limit — instead of hiding a process manager inside one.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Production runs a <strong>single</strong> backend process in a single container. Given the measurements above that is the correct choice, and the reason is visible in this course's own numbers: this is an I/O-bound application. Chapter 16.2 measured 97,8% of request time inside a database call, and the <code>/io</code> row above says forking gains 5,7% on exactly that shape of work. What forking <em>would</em> break is already documented here — <code>cron.service.ts</code> holds eleven <code>cron.schedule()</code> calls guarded only by an in-process flag, and <code>embedQueue.service.ts</code> is an in-memory array queue with a <code>_processing</code> flag. Both are correct today and both break the day a second process appears. That is the real cost of clustering this app, and it is why the honest scaling path here is chapter 12's cache and chapter 13's queue, not more workers.</p>
+<p><strong>How cuongthai.com does it.</strong> Production runs a <strong>single</strong> backend process in a single container. Given the measurements above that is the correct choice, and the reason is visible in this course's own numbers: this is an I/O-bound application. Chapter 16.2 measured 97,8% of request time inside a database call, and the <code>/io</code> row above says forking gains 5,7% on exactly that shape of work. What forking <em>would</em> break is already documented here — <code>cron.service.ts</code> holds eleven <code>cron.schedule()</code> calls guarded only by an in-process flag, and <code>embedQueue.service.ts</code> is an in-memory array queue with a <code>_processing</code> flag. Both are correct today and both break the day a second process appears. That is the real cost of clustering this app, and it is why the honest scaling path here is chapter 12's cache and chapter 13's queue, not more workers.</p>
 </div>
 
 <div class="link-card codelab">
@@ -963,21 +963,21 @@ app.get('/__heap', (req, res) =&gt; {
 //   kill -USR2 &lt;pid&gt;    (bật debugger)  → Chrome DevTools → Memory → Take snapshot</code></pre>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Chụp ảnh heap khi vừa khởi động xong</span><span class="lz-d">đây là mốc so sánh</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Chạy tải vài chục nghìn request</span><span class="lz-d">đúng cái đường mà bạn nghi ngờ</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Chụp ảnh thứ hai, so bằng "Comparison"</span><span class="lz-d">DevTools chỉ ra loại object nào TĂNG THÊM và tăng bao nhiêu</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Đọc cột Retainers</span><span class="lz-d">"cái gì đang giữ object này lại" — đó chính là thủ phạm, không phải object</span></div>
-  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Sửa, rồi lặp lại bước 1-3</span><span class="lz-d">đường RSS phải đi ngang mới coi là xong</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Take a heap snapshot right after startup</span><span class="lz-d">this is your baseline</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Drive a few tens of thousands of requests</span><span class="lz-d">down exactly the path you suspect</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Take a second snapshot and compare with "Comparison"</span><span class="lz-d">DevTools shows you which object types GREW and by how much</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Read the Retainers column</span><span class="lz-d">"what is holding this object" — that is the culprit, not the object itself</span></div>
+  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Fix it, then repeat steps 1-3</span><span class="lz-d">the RSS line has to go flat before you call it done</span></div>
 </div>
 
 <p>Two warnings about snapshots in production. They <strong>block the event loop</strong> for as long as it takes to walk the heap — seconds on a large one — and the file is roughly the size of the heap, so a 2GB process writes a 2GB file onto a disk that may not have room (chapter 15's disk-full incident). Take them on a canary instance or during a maintenance window, never casually on a live node.</p>
 
 <h3>Heap limits and the OOM kill</h3>
 <div class="kv-grid">
-  <div class="kv"><span>Trần heap mặc định</span><b>4.144MB trên máy này; Node tự chọn theo RAM tổng. Trong container phải khai TAY</b></div>
-  <div class="kv"><span>--max-old-space-size=512</span><b>Chạm trần → Node ném lỗi và in stack trace. BẠN BIẾT vì sao</b></div>
-  <div class="kv"><span>Không đặt, container limit 512MB</span><b>Node tưởng mình có nhiều RAM hơn thực tế → kernel giết bằng SIGKILL, exit 137, KHÔNG có log gì</b></div>
-  <div class="kv"><span>Quy tắc</span><b>Đặt heap ≈ 75% giới hạn container. Chừa chỗ cho Buffer, socket, stack — chúng nằm NGOÀI heap</b></div>
+  <div class="kv"><span>The default heap ceiling</span><b>4,144MB on this machine; Node picks it from total RAM. Inside a container you must declare it BY HAND</b></div>
+  <div class="kv"><span>--max-old-space-size=512</span><b>Hitting the ceiling → Node throws and prints a stack trace. YOU KNOW why</b></div>
+  <div class="kv"><span>Unset, with a 512MB container limit</span><b>Node believes it has more RAM than it does → the kernel kills it with SIGKILL, exit 137, and NO log at all</b></div>
+  <div class="kv"><span>The rule</span><b>Set the heap to ≈75% of the container limit. Leave room for Buffers, sockets and stacks — they live OUTSIDE the heap</b></div>
 </div>
 
 <div class="pitfall">
@@ -985,7 +985,7 @@ app.get('/__heap', (req, res) =&gt; {
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Chapter 10 measured the buffer version of this exact problem on this codebase: four concurrent 120MB uploads took RSS from 56,7MB to <strong>786,1MB</strong>, and a 758KB PNG containing a 16000×16000 image cost 99MB of RSS to decode — eight of them, 445MB, from 5,9MB of network traffic. Neither would have shown up in a heap snapshot. Both were fixed the way this lesson prescribes: a bound (<code>MAX_INPUT_PIXELS</code>, a queue of at most four concurrent decodes) decided in advance rather than discovered during an outage. The unbounded-cache pattern is the same failure with a friendlier face.</p>
+<p><strong>How cuongthai.com does it.</strong> Chapter 10 measured the buffer version of this exact problem on this codebase: four concurrent 120MB uploads took RSS from 56,7MB to <strong>786,1MB</strong>, and a 758KB PNG containing a 16000×16000 image cost 99MB of RSS to decode — eight of them, 445MB, from 5,9MB of network traffic. Neither would have shown up in a heap snapshot. Both were fixed the way this lesson prescribes: a bound (<code>MAX_INPUT_PIXELS</code>, a queue of at most four concurrent decodes) decided in advance rather than discovered during an outage. The unbounded-cache pattern is the same failure with a friendlier face.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1138,12 +1138,12 @@ tổng mỗi request:         5,288ms  → cải thiện 0,23%</div>
 <h3>The rest of the list, each with its number</h3>
 
 <div class="kv-grid">
-  <div class="kv"><span>Viết lại regex</span><b>0,5% CPU trong profile ở bài 16.1. Sửa hoàn hảo cũng chỉ được nửa phần trăm</b></div>
-  <div class="kv"><span>Nâng gzip lên level 9</span><b>Chậm hơn 3,2 lần, file TO HƠN level 1 (4.310 vs 4.298 B)</b></div>
-  <div class="kv"><span>Bật brotli mức 11</span><b>Chậm hơn 490 lần, file to hơn 13%, máy chủ tụt còn 22 req/giây</b></div>
-  <div class="kv"><span>cluster cho app nghẽn I/O</span><b>+5,7% với 10 lần số tiến trình — và phá vỡ cron, cache, rate limit</b></div>
-  <div class="kv"><span>Nâng pool DB lên 50</span><b>Throughput GIẢM 2.935 → 2.747. Hàng đợi chỉ dời chỗ chứ không biến mất</b></div>
-  <div class="kv"><span>Đổi <code>let</code> thành <code>const</code>, tránh <code>forEach</code></span><b>Không xuất hiện trong bất kỳ profile nào ở chương này. V8 đã lo phần đó</b></div>
+  <div class="kv"><span>Rewriting the regex</span><b>0.5% of CPU in lesson 16.1's profile. A perfect fix wins you half a percent</b></div>
+  <div class="kv"><span>Raising gzip to level 9</span><b>3.2× slower, with a file LARGER than level 1 (4,310 vs 4,298 B)</b></div>
+  <div class="kv"><span>Turning brotli up to 11</span><b>490× slower, a file 13% larger, and the server drops to 22 req/s</b></div>
+  <div class="kv"><span>clustering an I/O-bound app</span><b>+5.7% for 10× the processes — and it breaks cron, caches and rate limits</b></div>
+  <div class="kv"><span>Raising the DB pool to 50</span><b>Throughput FELL from 2,935 to 2,747. The queue only moved; it did not disappear</b></div>
+  <div class="kv"><span>Swapping <code>let</code> for <code>const</code>, avoiding <code>forEach</code></span><b>Appears in no profile anywhere in this chapter. V8 already handles that</b></div>
 </div>
 
 <p>Two of those deserve a second look because they are worse than neutral. Raising gzip and brotli quality <em>costs</em> throughput and <em>produces larger files</em> — a change that is negative in both dimensions while feeling like tuning. And clustering an I/O-bound app buys 5,7% while introducing four separate classes of correctness bug. <strong>An optimisation that adds a bug is not a slow win; it is a loss.</strong></p>
@@ -1157,7 +1157,7 @@ tuần tự hoá sẵn thay vì mỗi request              1,9×   LÀM MỘT L�
 tính sẵn thay vì tính lại                        2,2×   LÀM MỘT LẦN
 dùng lại kết nối (keep-alive)                    9,4×   BỎ BỚT VIỆC
 cache Redis thay cho GROUP BY (chương 12)      120,0×   BỎ BỚT VIỆC
-gộp N+1 thành 1 truy vấn (chương 7)              5,6×   BỎ BỚT VIỆC
+gộp N+1 for 1 truy vấn (chương 7)              5,6×   BỎ BỚT VIỆC
 thêm chỉ mục cho cột đang lọc (chương 7)       222,0×   BỎ BỚT VIỆC
 cluster cho việc NẶNG CPU                        3,4×   THÊM PHẦN CỨNG
 fast-json-stringify                              1,39×  LÀM NHANH HƠN
@@ -1166,18 +1166,18 @@ viết lại regex                                   1,005× LÀM NHANH HƠN</di
 <p>The pattern is not subtle. <strong>Every large win removes work or does it once. Every small win makes the same work faster.</strong> "Make it faster" is the category people reach for first because it is the one that feels like engineering, and it is the category with the worst returns.</p>
 
 <div class="lz-map">
-  <div class="lz-node"><span class="lz-t">1. BỎ BỚT VIỆC</span><span class="lz-d">Cache, chỉ mục, bớt trường, bớt truy vấn, dùng lại kết nối. Hệ số 5× tới 200×. LUÔN thử trước</span></div>
-  <div class="lz-node"><span class="lz-t">2. LÀM MỘT LẦN</span><span class="lz-d">Tính sẵn, tuần tự hoá sẵn, gom lô, ghi đệm. Hệ số 2× tới 20×</span></div>
-  <div class="lz-node"><span class="lz-t">3. LÀM CHỖ KHÁC</span><span class="lz-d">Hàng đợi nền, CDN, nginx nén thay Node. Không nhanh hơn, nhưng dời khỏi đường găng của người dùng</span></div>
-  <div class="lz-node"><span class="lz-t">4. THÊM PHẦN CỨNG</span><span class="lz-d">cluster, thêm container. Tuyến tính, tốn tiền thật, chỉ ăn khi nghẽn CPU</span></div>
-  <div class="lz-node"><span class="lz-t">5. LÀM NHANH HƠN</span><span class="lz-d">Thư viện nhanh hơn, thuật toán khéo hơn, vi tối ưu. Hệ số 1,0× tới 1,4×. LÀM SAU CÙNG</span></div>
+  <div class="lz-node"><span class="lz-t">1. DO LESS WORK</span><span class="lz-d">Caching, indexes, fewer fields, fewer queries, reused connections. A factor of 5× to 200×. ALWAYS try this first</span></div>
+  <div class="lz-node"><span class="lz-t">2. DO IT ONCE</span><span class="lz-d">Precompute, pre-serialise, batch, buffer writes. A factor of 2× to 20×</span></div>
+  <div class="lz-node"><span class="lz-t">3. DO IT SOMEWHERE ELSE</span><span class="lz-d">Background queues, a CDN, nginx compressing instead of Node. Not faster, but off the user's critical path</span></div>
+  <div class="lz-node"><span class="lz-t">4. ADD HARDWARE</span><span class="lz-d">clustering, more containers. Linear, costs real money, and only works when you are CPU-bound</span></div>
+  <div class="lz-node"><span class="lz-t">5. MAKE IT FASTER</span><span class="lz-d">A faster library, a cleverer algorithm, micro-optimisation. A factor of 1.0× to 1.4×. DO THIS LAST</span></div>
 </div>
 
 <h3>The three questions before any optimisation</h3>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Nó chiếm bao nhiêu phần trăm TỔNG?</span><span class="lz-d">Không biết thì đi đo (16.1, 16.2). Nếu dưới 5% thì dừng lại ngay tại đây</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Có thể BỎ HẲN thay vì làm nhanh hơn không?</span><span class="lz-d">Cache, tính sẵn, gửi ít đi. Gần như luôn thắng đậm hơn</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Nó làm code khó hiểu thêm bao nhiêu?</span><span class="lz-d">Nhanh 5% mà bug nhiều gấp đôi là một phép đánh đổi tồi. Ghi lại LÝ DO cạnh mọi chỗ tối ưu</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">What percentage of the TOTAL is it?</span><span class="lz-d">If you do not know, go and measure (16.1, 16.2). If it is under 5%, stop right here</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Can it be REMOVED ENTIRELY rather than made faster?</span><span class="lz-d">Cache it, precompute it, send less. Almost always the bigger win</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">How much harder does it make the code to understand?</span><span class="lz-d">5% faster with twice the bugs is a bad trade. Write the REASON next to every optimisation</span></div>
 </div>
 
 <div class="callout">
@@ -1189,7 +1189,7 @@ viết lại regex                                   1,005× LÀM NHANH HƠN</di
 <p>The other stopping rule is economic. A day of engineering time costs more than a month of the extra VPS that would have absorbed the same load — unless the optimisation removes a scaling <em>limit</em> rather than a scaling cost. Chapter 12's 120× cache and chapter 7's 222× index changed what the system is capable of. A 1,39× serialiser changes an invoice.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Every performance change in this project's history falls in the top two categories, and none in the last. Redis caching (120×), indexes on filtered columns (222×), cursor pagination instead of <code>OFFSET</code> (181×), collapsing N+1 into <code>include</code> (5,6×), streaming uploads instead of buffering (6× less RAM), Cloudflare caching the media domain (origin bytes → zero). Not one of them was a faster library or a cleverer loop. The site is written in ordinary, readable JavaScript and is fast because of what it <em>does not do</em> — which is the conclusion this whole chapter has been walking toward from six different directions.</p>
+<p><strong>How cuongthai.com does it.</strong> Every performance change in this project's history falls in the top two categories, and none in the last. Redis caching (120×), indexes on filtered columns (222×), cursor pagination instead of <code>OFFSET</code> (181×), collapsing N+1 into <code>include</code> (5,6×), streaming uploads instead of buffering (6× less RAM), Cloudflare caching the media domain (origin bytes → zero). Not one of them was a faster library or a cleverer loop. The site is written in ordinary, readable JavaScript and is fast because of what it <em>does not do</em> — which is the conclusion this whole chapter has been walking toward from six different directions.</p>
 </div>
 
 <div class="link-card codelab">

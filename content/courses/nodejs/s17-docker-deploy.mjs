@@ -46,10 +46,10 @@ export default {
 <p><strong>440MB against 58,8MB — 7,5×</strong> for an application whose own code is four kilobytes. Almost the entire difference is the base image and what you chose to leave inside it.</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>node:22</span><b>Debian đầy đủ + toolchain build + git + curl. 381MB trước khi bạn viết dòng nào</b></div>
-  <div class="kv"><span>node:22-slim</span><b>Debian tối giản, KHÔNG toolchain. 76,2MB. Mặc định đúng cho phần lớn trường hợp</b></div>
-  <div class="kv"><span>node:22-alpine</span><b>55,4MB. Nhỏ nhất, nhưng dùng musl libc chứ không phải glibc — module native có thể vỡ</b></div>
-  <div class="kv"><span>distroless</span><b>Chỉ Node + app, KHÔNG shell. An toàn nhất, và <code>docker exec ... sh</code> không dùng được nữa</b></div>
+  <div class="kv"><span>node:22</span><b>A full Debian plus a build toolchain plus git plus curl. 381MB before you write a single line</b></div>
+  <div class="kv"><span>node:22-slim</span><b>A minimal Debian with NO toolchain. 76.2MB. The right default for most cases</b></div>
+  <div class="kv"><span>node:22-alpine</span><b>55.4MB. The smallest, but it uses musl libc rather than glibc — native modules can break</b></div>
+  <div class="kv"><span>distroless</span><b>Node plus your app only, with NO shell. The safest, and <code>docker exec ... sh</code> no longer works</b></div>
 </div>
 
 <div class="callout warn">
@@ -78,7 +78,7 @@ RUN npm ci                       # ĐẦY ĐỦ, gồm cả devDependencies
 COPY . .
 RUN npm run build                # tsc, bundler, gì cũng được
 
-# ── giai đoạn 2: chỉ phụ thuộc production ──
+# ── giai đoạn 2: just phụ thuộc production ──
 FROM node:22-slim AS deps
 WORKDIR /app
 COPY package*.json ./
@@ -98,18 +98,18 @@ CMD ["node", "dist/index.js"]</code></pre>
 <p>Only the final stage becomes the image. Stages 1 and 2 exist during the build and are discarded — <strong>the compiler never ships</strong>. The measured result, 77,5MB, is smaller than the single-stage slim build (79,6MB) because it copies <code>dist/</code> instead of <code>src/</code>.</p>
 
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-t">builder</span><span class="lz-d">toolchain, devDependencies, mã nguồn. Có thể nặng 500MB — KHÔNG SAO, nó bị vứt</span></div>
-  <div class="lz-layer"><span class="lz-t">deps</span><span class="lz-d">chỉ <code>npm ci --omit=dev</code>. Tách riêng để tầng này được cache độc lập với việc build</span></div>
-  <div class="lz-layer"><span class="lz-t">runner</span><span class="lz-d">ảnh nền + node_modules production + dist. Đây là thứ DUY NHẤT lên tới máy chủ</span></div>
+  <div class="lz-layer"><span class="lz-t">builder</span><span class="lz-d">the toolchain, devDependencies, the source. It can weigh 500MB — that is FINE, it gets thrown away</span></div>
+  <div class="lz-layer"><span class="lz-t">deps</span><span class="lz-d">just <code>npm ci --omit=dev</code>. Kept separate so this layer caches independently of the build</span></div>
+  <div class="lz-layer"><span class="lz-t">runner</span><span class="lz-d">the base image plus production node_modules plus dist. This is the ONLY thing that reaches the server</span></div>
 </div>
 
 <h3>Three lines that are not about size</h3>
 <p>The runner stage has three lines whose value is not measured in megabytes:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>ENV NODE_ENV=production</span><b>Express bật cache view + tắt stack trace; nhiều thư viện đổi hành vi theo biến này. Quên nó là chạy chế độ dev ở production</b></div>
-  <div class="kv"><span>USER node</span><b>Mặc định container chạy bằng ROOT. Ảnh node có sẵn user <code>node</code> — dùng nó. Một lỗ RCE khi đang là root là root TRÊN CẢ HOST nếu thoát được container</b></div>
-  <div class="kv"><span>npm ci, KHÔNG npm install</span><b><code>ci</code> tôn trọng lockfile tuyệt đối và fail nếu lệch; <code>install</code> có thể ÂM THẦM nâng phiên bản (chương 4 đã đo: 4.18.0 → 4.22.2)</b></div>
+  <div class="kv"><span>ENV NODE_ENV=production</span><b>Express enables view caching and disables stack traces; many libraries change behaviour on this variable. Forget it and you run dev mode in production</b></div>
+  <div class="kv"><span>USER node</span><b>Containers run as ROOT by default. The node image already ships a <code>node</code> user — use it. An RCE while running as root is root ON THE HOST if the container can be escaped</b></div>
+  <div class="kv"><span>npm ci, NOT npm install</span><b><code>ci</code> honours the lockfile absolutely and fails on any divergence; <code>install</code> can SILENTLY bump a version (chapter 4 measured it: 4.18.0 → 4.22.2)</b></div>
 </div>
 
 <div class="pitfall">
@@ -117,7 +117,7 @@ CMD ["node", "dist/index.js"]</code></pre>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> The backend Dockerfile is multi-stage on <code>node:22-slim</code>, and its comments record why. It installs <code>python3 make g++ pkg-config libvips-dev</code> in the builder stage only — because <code>sharp</code> downloads prebuilt binaries from GitHub at install time and that download timed out from this VPS four deploys in a row on 2026-07-06. Two fixes were applied together: the system libvips so sharp's compile-from-source fallback actually works, and <code>npm_config_sharp_binary_host</code> pointed at the npmmirror CDN so the install never touches GitHub. None of that toolchain reaches the runner stage. This is exactly the case where alpine would have been the wrong choice.</p>
+<p><strong>How cuongthai.com does it.</strong> The backend Dockerfile is multi-stage on <code>node:22-slim</code>, and its comments record why. It installs <code>python3 make g++ pkg-config libvips-dev</code> in the builder stage only — because <code>sharp</code> downloads prebuilt binaries from GitHub at install time and that download timed out from this VPS four deploys in a row on 2026-07-06. Two fixes were applied together: the system libvips so sharp's compile-from-source fallback actually works, and <code>npm_config_sharp_binary_host</code> pointed at the npmmirror CDN so the install never touches GitHub. None of that toolchain reaches the runner stage. This is exactly the case where alpine would have been the wrong choice.</p>
 </div>
 
 <div class="link-card codelab">
@@ -264,7 +264,7 @@ CMD ["node", "dist/index.js"]</code></pre>
 COPY . .
 RUN npm ci --omit=dev
 
-# ✓ ĐÚNG — npm ci chỉ chạy lại khi package.json/package-lock.json đổi
+# ✓ ĐÚNG — npm ci just chạy lại khi package.json/package-lock.json đổi
 COPY package*.json ./
 RUN npm ci --omit=dev
 COPY src ./src</code></pre>
@@ -278,11 +278,11 @@ multi-stage                rebuild  1,13s      (3 giai đoạn, vẫn bỏ qua n
 <p>The 5,6× here is on a three-package project where <code>npm ci</code> takes about two seconds. On the real backend behind this course — with native modules, a libvips compile fallback and a sharp binary download — that same reinstall is minutes, on every deploy, forever, purely because of line order.</p>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">FROM + cài gói hệ thống</span><span class="lz-d">apt-get. Đổi vài tháng một lần</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">COPY package*.json</span><span class="lz-d">CHỈ hai file này, chưa copy gì khác</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">RUN npm ci</span><span class="lz-d">Tầng đắt nhất. Được cache cho tới khi lockfile đổi</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">COPY mã nguồn</span><span class="lz-d">Đổi ở mọi commit — nên phải nằm SAU tầng đắt</span></div>
-  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">RUN build</span><span class="lz-d">Chạy lại mỗi lần sửa code, nhưng đó là việc bắt buộc phải làm</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">FROM plus system packages</span><span class="lz-d">apt-get. Changes every few months</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">COPY package*.json</span><span class="lz-d">ONLY these two files; nothing else copied yet</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">RUN npm ci</span><span class="lz-d">The most expensive layer. Cached until the lockfile changes</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">COPY the source</span><span class="lz-d">Changes on every commit — so it must come AFTER the expensive layer</span></div>
+  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">RUN build</span><span class="lz-d">Re-runs on every code change, but that is work you genuinely have to do</span></div>
 </div>
 
 <div class="pitfall">
@@ -304,10 +304,10 @@ node_modules
 dist</code></pre>
 
 <div class="kv-grid">
-  <div class="kv"><span>node_modules</span><b>Sai kiến trúc, to, và <code>npm ci</code> đằng nào cũng cài lại. Dòng quan trọng nhất</b></div>
-  <div class="kv"><span>.git</span><b>Toàn bộ lịch sử repo, gồm cả những bí mật bạn đã xoá ở commit sau</b></div>
-  <div class="kv"><span>.env</span><b>Chép bí mật vào ảnh là cách chắc chắn nhất để chúng bị phát tán</b></div>
-  <div class="kv"><span>dist</span><b>Sẽ được build lại trong ảnh. Bản của máy bạn chỉ gây nhầm lẫn</b></div>
+  <div class="kv"><span>node_modules</span><b>Wrong architecture, large, and <code>npm ci</code> reinstalls it all anyway. The most important line</b></div>
+  <div class="kv"><span>.git</span><b>The entire repo history, including the secrets you deleted in a later commit</b></div>
+  <div class="kv"><span>.env</span><b>Copying secrets into the image is the surest way to distribute them</b></div>
+  <div class="kv"><span>dist</span><b>It gets rebuilt inside the image. Your machine's copy only causes confusion</b></div>
 </div>
 
 <div class="callout">
@@ -318,9 +318,9 @@ dist</code></pre>
 <p>Three common ways a build that should be cached is not:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>Cache CI trống rỗng</span><b>Runner mới mỗi lần chạy = cache nguội mỗi lần. Cần <code>--cache-from</code> trỏ vào registry, nếu không "tối ưu thứ tự tầng" chẳng có tác dụng gì trên CI</b></div>
-  <div class="kv"><span>ARG đặt trên cao</span><b>Một <code>ARG BUILD_TIME</code> đổi ở mọi build sẽ vô hiệu hoá MỌI tầng bên dưới nó. Đặt ARG càng sát chỗ dùng càng tốt</b></div>
-  <div class="kv"><span>COPY . . trước khi cài</span><b>Chính là lỗi ở đầu bài. Mọi thay đổi ở bất kỳ file nào cũng làm chạy lại phần cài đặt</b></div>
+  <div class="kv"><span>An empty CI cache</span><b>A fresh runner every run means a cold cache every run. You need <code>--cache-from</code> pointed at a registry, otherwise "optimising layer order" does nothing whatsoever in CI</b></div>
+  <div class="kv"><span>An ARG placed too high</span><b>One <code>ARG BUILD_TIME</code> that changes on every build invalidates EVERY layer beneath it. Put an ARG as close to its use as you can</b></div>
+  <div class="kv"><span>COPY . . before installing</span><b>Exactly the mistake at the top of this lesson. Any change to any file re-runs the install</b></div>
 </div>
 
 <h3>Building for a machine that is not yours</h3>
@@ -337,7 +337,7 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/me/app:1.4.2 -
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Images are built <em>on the VPS</em>, one at a time. The comment in <code>deploy.sh</code> explains why: parallel cold builds of the backend and frontend once had the kernel OOM-kill <code>next build</code> with exit 137 on the 6GB box (2026-07-06). The build cache is pruned after every deploy to keep the disk from filling — the incident from chapter 15 — which means every deploy is a cold build, which in turn is exactly why the layer ordering in this lesson matters here more than it would with a warm cache. The two constraints interact: prune the cache to save disk, and layer order becomes the only thing keeping deploys short.</p>
+<p><strong>How cuongthai.com does it.</strong> Images are built <em>on the VPS</em>, one at a time. The comment in <code>deploy.sh</code> explains why: parallel cold builds of the backend and frontend once had the kernel OOM-kill <code>next build</code> with exit 137 on the 6GB box (2026-07-06). The build cache is pruned after every deploy to keep the disk from filling — the incident from chapter 15 — which means every deploy is a cold build, which in turn is exactly why the layer ordering in this lesson matters here more than it would with a warm cache. The two constraints interact: prune the cache to save disk, and layer order becomes the only thing keeping deploys short.</p>
 </div>
 
 <div class="link-card codelab">
@@ -517,11 +517,11 @@ services:
     stop_grace_period: 30s        # ĐẶT RÕ. Đừng thừa kế một mặc định bạn chưa đo</code></pre>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Docker gửi SIGTERM tới PID 1</span><span class="lz-d">Phải là tiến trình Node của bạn — dùng CMD dạng exec</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">App ngừng nhận kết nối MỚI</span><span class="lz-d"><code>server.close()</code>. Load balancer nên đã rút nó ra từ trước rồi</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Request ĐANG chạy được hoàn thành</span><span class="lz-d">Đây là toàn bộ lý do tồn tại của cơ chế này</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Đóng pool DB, đóng worker hàng đợi</span><span class="lz-d">Job đang chạy dở phải được trả về hàng đợi (chương 13)</span></div>
-  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">process.exit(0)</span><span class="lz-d">Trước khi hết grace period, nếu không thì SIGKILL và exit 137</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Docker sends SIGTERM to PID 1</span><span class="lz-d">That must be your Node process — use the exec form of CMD</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">The app stops accepting NEW connections</span><span class="lz-d"><code>server.close()</code>. The load balancer should already have pulled it out beforehand</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">IN-FLIGHT requests are allowed to finish</span><span class="lz-d">This is the entire reason the mechanism exists</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Close the DB pool, close the queue workers</span><span class="lz-d">A half-finished job must be returned to the queue (chapter 13)</span></div>
+  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">process.exit(0)</span><span class="lz-d">Before the grace period expires, otherwise it is SIGKILL and exit 137</span></div>
 </div>
 
 <h3>When you genuinely need <code>npm start</code></h3>
@@ -548,7 +548,7 @@ exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất �
 <p><code>--start-period</code> is the parameter people omit and then get paged about: during it, failures do not count towards <code>--retries</code>. Without it, a service that takes 15 seconds to boot is marked unhealthy and restarted, and restarts forever. And per chapter 15: the health check URL must be the <em>liveness</em> probe, not one that touches the database — otherwise a database blip restarts every container at once.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> The graceful shutdown here is real and measured: chapter 13 recorded the log sequence <code>SAN-SANG | BATDAU 1 | NHAN-SIGTERM | XONG 1 | DA-DONG</code> with the process exiting after 1296ms, against 5ms and one stuck active job when SIGTERM was not handled. The deploy path uses <code>docker compose up -d --force-recreate</code>, whose comment in <code>deploy.sh</code> notes it swaps containers atomically rather than <code>down &amp;&amp; up</code> — the right instinct. The gap this lesson identifies is that no <code>stop_grace_period</code> is set anywhere, so the swap inherits whatever default the installed Docker has, which the table above shows can be about one second. For an API where the slowest routes are AI calls measured in <em>hundreds</em> of seconds, that is worth pinning down explicitly.</p>
+<p><strong>How cuongthai.com does it.</strong> The graceful shutdown here is real and measured: chapter 13 recorded the log sequence <code>SAN-SANG | BATDAU 1 | NHAN-SIGTERM | XONG 1 | DA-DONG</code> with the process exiting after 1296ms, against 5ms and one stuck active job when SIGTERM was not handled. The deploy path uses <code>docker compose up -d --force-recreate</code>, whose comment in <code>deploy.sh</code> notes it swaps containers atomically rather than <code>down &amp;&amp; up</code> — the right instinct. The gap this lesson identifies is that no <code>stop_grace_period</code> is set anywhere, so the swap inherits whatever default the installed Docker has, which the table above shows can be about one second. For an API where the slowest routes are AI calls measured in <em>hundreds</em> of seconds, that is worth pinning down explicitly.</p>
 </div>
 
 <div class="link-card codelab">
@@ -714,9 +714,9 @@ CMD ["node", "src/index.js"]</code></pre>
 
 <h3>Build-time versus runtime: the line that decides everything</h3>
 <div class="lz-map">
-  <div class="lz-node"><span class="lz-t">Build-time (ARG)</span><span class="lz-d">Chỉ tồn tại trong lúc build. Nằm trong <code>docker history</code>. Dùng cho: phiên bản, cờ tính năng. TUYỆT ĐỐI KHÔNG cho bí mật</span></div>
-  <div class="lz-node"><span class="lz-t">Secret mount</span><span class="lz-d">Tồn tại trong đúng một RUN, không vào tầng nào, không vào history. Dùng cho: token registry riêng, khoá SSH lúc build</span></div>
-  <div class="lz-node"><span class="lz-t">Runtime (env container)</span><span class="lz-d">Cấp lúc <code>docker run</code>/compose. KHÔNG nằm trong ảnh. Đây là chỗ đúng cho MỌI bí mật production</span></div>
+  <div class="lz-node"><span class="lz-t">Build-time (ARG)</span><span class="lz-d">Exists only during the build. Visible in <code>docker history</code>. Use for: versions, feature flags. ABSOLUTELY NOT for secrets</span></div>
+  <div class="lz-node"><span class="lz-t">Secret mount</span><span class="lz-d">Exists for exactly one RUN, enters no layer and no history. Use for: private registry tokens, build-time SSH keys</span></div>
+  <div class="lz-node"><span class="lz-t">Runtime (env container)</span><span class="lz-d">Supplied at <code>docker run</code>/compose time. NOT in the image. This is the right place for EVERY production secret</span></div>
 </div>
 
 <p>The rule that follows: <strong>one image, many environments.</strong> The same image tag runs in staging and production, and the only difference is the environment handed to it at start. An image that contains a database URL is an image that can only ever run in one place — and that has already leaked it.</p>
@@ -727,10 +727,10 @@ CMD ["node", "src/index.js"]</code></pre>
 
 <h3>Where runtime secrets should live</h3>
 <div class="kv-grid">
-  <div class="kv"><span>File .env trên máy chủ</span><b>Đủ dùng cho một VPS. Phải <code>chmod 600</code>, phải nằm NGOÀI thư mục rsync, phải nằm trong .gitignore VÀ .dockerignore</b></div>
-  <div class="kv"><span>Docker secrets / swarm</span><b>Gắn vào <code>/run/secrets/*</code>, không nằm trong biến môi trường nên không lộ qua <code>docker inspect</code></b></div>
-  <div class="kv"><span>Vault / SSM / Secret Manager</span><b>Có xoay khoá, có nhật ký truy cập, có phân quyền. Đúng cho nhiều máy chủ, thừa cho một cái</b></div>
-  <div class="kv"><span>Secret của CI</span><b>GitHub Actions secrets. Nhớ rằng chúng KHÔNG tự tới được VPS — phải cấu hình riêng ở đó</b></div>
+  <div class="kv"><span>A .env file on the server</span><b>Good enough for one VPS. It must be <code>chmod 600</code>, must live OUTSIDE the rsync directory, and must be in both .gitignore AND .dockerignore</b></div>
+  <div class="kv"><span>Docker secrets / swarm</span><b>Mounted into <code>/run/secrets/*</code>, not in an environment variable, so it does not leak through <code>docker inspect</code></b></div>
+  <div class="kv"><span>Vault / SSM / Secret Manager</span><b>Key rotation, access logs, permissions. Right for many servers, overkill for one</b></div>
+  <div class="kv"><span>CI secrets</span><b>GitHub Actions secrets. Remember they do NOT reach the VPS on their own — they must be configured there separately</b></div>
 </div>
 
 <div class="pitfall">
@@ -749,7 +749,7 @@ if (missing.length) {
 <p>Rotate it. Not "remove it from the image and rebuild" — <strong>rotate the credential itself</strong>. Deleting the layer does not un-pull the image from anyone who has it, and old tags may still exist in the registry, in a CI cache, on a developer's laptop. The only action that actually helps is making the leaked value worthless.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Runtime configuration lives in <code>/opt/cuonghoangdev/.env</code> on the VPS, outside the deployed tree, and the deploy script's rsync explicitly excludes <code>.env*</code> so values there survive every deploy. That arrangement is right and it has one documented sharp edge: appending a variable <em>while a deploy is running</em> does nothing, because that deploy already loaded the environment — the container has to be recreated afterwards. The project also carries the <code>NEXT_PUBLIC_</code> lesson as a permanent rule in its own instructions: third-party API keys never get that prefix; they go through an authenticated backend proxy so the key stays server-side and rotating it is a container restart rather than a rebuild.</p>
+<p><strong>How cuongthai.com does it.</strong> Runtime configuration lives in <code>/opt/cuonghoangdev/.env</code> on the VPS, outside the deployed tree, and the deploy script's rsync explicitly excludes <code>.env*</code> so values there survive every deploy. That arrangement is right and it has one documented sharp edge: appending a variable <em>while a deploy is running</em> does nothing, because that deploy already loaded the environment — the container has to be recreated afterwards. The project also carries the <code>NEXT_PUBLIC_</code> lesson as a permanent rule in its own instructions: third-party API keys never get that prefix; they go through an authenticated backend proxy so the key stays server-side and rotating it is a container restart rather than a rebuild.</p>
 </div>
 
 <div class="link-card codelab">
@@ -916,11 +916,11 @@ request: 327 tổng, 327 thành công, 0 HỎNG   (0% mất)</div>
 <p><strong>327 out of 327.</strong> The public port never closed, because the proxy never restarted. That single structural difference — something long-lived owning the address — is the whole of zero-downtime deployment. Everything else is detail.</p>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Proxy giữ cổng công khai VĨNH VIỄN</span><span class="lz-d">nginx, Traefik, hay cân bằng tải của nhà cung cấp. Nó KHÔNG khởi động lại khi bạn deploy</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Dựng phiên bản mới BÊN CẠNH cái cũ</span><span class="lz-d">Cổng khác hoặc tên container khác. Cái cũ vẫn đang phục vụ</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Kiểm khoẻ cái MỚI cho tới khi nó thật sự sẵn sàng</span><span class="lz-d">Không phải "container đã chạy" mà là "route đã trả lời". Đây là chốt chặn</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Đổi đích của proxy</span><span class="lz-d">Reload cấu hình. Kết nối đang mở tự chảy hết ở cái cũ</span></div>
-  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Chờ hết grace period rồi mới bỏ cái cũ</span><span class="lz-d">Bài 17.3: SIGTERM + đủ thời gian để request đang chạy hoàn thành</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">The proxy holds the public port PERMANENTLY</span><span class="lz-d">nginx, Traefik, or your provider's load balancer. It does NOT restart when you deploy</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Bring the new version up ALONGSIDE the old one</span><span class="lz-d">A different port or a different container name. The old one is still serving</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Health-check the NEW one until it is genuinely ready</span><span class="lz-d">Not "the container started" but "the route answered". This is the gate</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Switch the proxy's target</span><span class="lz-d">Reload the config. Open connections drain out of the old one by themselves</span></div>
+  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Wait out the grace period before dropping the old one</span><span class="lz-d">Lesson 17.3: SIGTERM plus enough time for in-flight requests to finish</span></div>
 </div>
 
 <h3>Why the health check must be the gate</h3>
@@ -934,10 +934,10 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
 
 <h3>Rolling versus blue-green</h3>
 <div class="kv-grid">
-  <div class="kv"><span>Blue-green</span><b>Chạy song song 2 phiên bản đầy đủ, đổi hết một lúc. Quay lui tức thì (đổi ngược). Cần gấp đôi tài nguyên trong lúc đổi</b></div>
-  <div class="kv"><span>Rolling</span><b>Thay từng bản sao một. Chỉ cần thêm ít tài nguyên. Có lúc CẢ HAI phiên bản cùng phục vụ — API phải tương thích ngược</b></div>
-  <div class="kv"><span>Canary</span><b>Đẩy 5% lưu lượng sang bản mới, xem metric (chương 15), rồi mới đẩy nốt. An toàn nhất, hạ tầng phức tạp nhất</b></div>
-  <div class="kv"><span>Recreate</span><b>Dừng hết rồi chạy lại. Đúng 1,5% ở trên. Chấp nhận được cho công cụ nội bộ, không cho sản phẩm</b></div>
+  <div class="kv"><span>Blue-green</span><b>Run 2 complete versions side by side and switch all at once. Instant rollback (switch back). Needs double the resources during the switch</b></div>
+  <div class="kv"><span>Rolling</span><b>Replace one replica at a time. Needs only a little extra resource. For a while BOTH versions serve — so the API must be backward-compatible</b></div>
+  <div class="kv"><span>Canary</span><b>Push 5% of traffic to the new version, watch the metrics (chapter 15), then push the rest. The safest, and the most complex infrastructure</b></div>
+  <div class="kv"><span>Recreate</span><b>Stop everything, then start again. Exactly the 1.5% above. Acceptable for internal tools, not for a product</b></div>
 </div>
 
 <div class="callout warn">
@@ -949,7 +949,7 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> The deploy has the right pieces and one honest gap. nginx owns ports 80 and 443 permanently and is not restarted during a deploy — that is the structural property this lesson says matters most. <code>deploy.sh</code> uses <code>docker compose up -d --force-recreate</code>, whose comment explains it swaps atomically rather than <code>down &amp;&amp; up</code>, and afterwards waits for the backend's health endpoint before continuing. The gap is that the health check runs <em>after</em> the swap rather than gating it: the new container takes the name and the network alias, and nginx points at the new one from that moment, so there is a real window between "container recreated" and "application answering". That is the measured 1,5%, and closing it is what method 3 above describes.</p>
+<p><strong>How cuongthai.com does it.</strong> The deploy has the right pieces and one honest gap. nginx owns ports 80 and 443 permanently and is not restarted during a deploy — that is the structural property this lesson says matters most. <code>deploy.sh</code> uses <code>docker compose up -d --force-recreate</code>, whose comment explains it swaps atomically rather than <code>down &amp;&amp; up</code>, and afterwards waits for the backend's health endpoint before continuing. The gap is that the health check runs <em>after</em> the swap rather than gating it: the new container takes the name and the network alias, and nginx points at the new one from that moment, so there is a real window between "container recreated" and "application answering". That is the measured 1,5%, and closing it is what method 3 above describes.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1097,10 +1097,10 @@ $ curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/api/v1/messages/t
 <p>The rule worth memorising, because it costs five seconds and answers the question people spend hours on:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>200</span><b>Route đã gắn, công khai. Sống</b></div>
-  <div class="kv"><span>401 / 403</span><b>Route ĐÃ GẮN, chỉ là cần xác thực. SỐNG — vấn đề của bạn nằm chỗ khác</b></div>
-  <div class="kv"><span>404</span><b>Route KHÔNG tồn tại trong tiến trình đang chạy. Build cũ hoặc deploy dở dang</b></div>
-  <div class="kv"><span>502 / 503</span><b>Proxy sống, ứng dụng thì không. Xem log container, không phải log route</b></div>
+  <div class="kv"><span>200</span><b>The route is mounted and public. Alive</b></div>
+  <div class="kv"><span>401 / 403</span><b>The route IS MOUNTED, it simply needs authentication. ALIVE — your problem is elsewhere</b></div>
+  <div class="kv"><span>404</span><b>The route does NOT exist in the running process. A stale build or a half-finished deploy</b></div>
+  <div class="kv"><span>502 / 503</span><b>The proxy is alive, the application is not. Read the container logs, not the route logs</b></div>
 </div>
 
 <p>Diagnose with <code>curl</code>, not with the browser. A browser sends cookies, follows redirects, caches aggressively and renders a generic error page for all four cases — it hides exactly the distinction you need.</p>
@@ -1123,10 +1123,10 @@ done</code></pre>
 
 <h3>How a build goes stale in the first place</h3>
 <div class="kv-grid">
-  <div class="kv"><span>Deploy chỉ rsync, không build lại</span><b>Chính là nguyên nhân sự cố trên. Mã nguồn mới trên đĩa, ảnh cũ trong container</b></div>
-  <div class="kv"><span>Cache tầng bị trúng nhầm</span><b>Một <code>COPY</code> khai quá hẹp làm Docker tưởng không có gì đổi</b></div>
-  <div class="kv"><span>Build đậu nhưng đẩy hỏng</span><b>Registry giữ tag cũ. <code>docker pull</code> im lặng lấy lại đúng cái ảnh cũ</b></div>
-  <div class="kv"><span>Tag <code>:latest</code></span><b>Không nói được ảnh nào đang chạy, và không quay lui về "cái trước" được vì không có tên</b></div>
+  <div class="kv"><span>The deploy only rsynced and never rebuilt</span><b>Precisely the cause of the incident above. New source on disk, old image in the container</b></div>
+  <div class="kv"><span>A layer cache hit it should not have</span><b>One <code>COPY</code> declared too narrowly makes Docker believe nothing changed</b></div>
+  <div class="kv"><span>The build passed but the push failed</span><b>The registry keeps the old tag. <code>docker pull</code> silently pulls that same old image back</b></div>
+  <div class="kv"><span>Tag <code>:latest</code></span><b>You cannot say which image is running, and you cannot roll back to "the previous one" because it has no name</b></div>
 </div>
 
 <p>The last one is worth stating as a rule: <strong>tag images with something immutable</strong> — the git SHA, or a version. <code>app:latest</code> cannot be rolled back to, cannot be audited, and cannot answer "which commit is production running". <code>app:2871889</code> answers all three.</p>
@@ -1147,11 +1147,11 @@ git revert &lt;sha_xau&gt;
 
 <h3>The order to check things when a deploy fails</h3>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Container có chạy không?</span><span class="lz-d"><code>docker ps</code>. Exit 137 = bị giết (hết RAM hoặc hết grace period, bài 17.3)</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Nó có nói gì lúc chết không?</span><span class="lz-d"><code>docker logs --tail=50</code>. Biến môi trường thiếu thường lộ ra ngay đây</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Route có được gắn không?</span><span class="lz-d">curl 401/404. Đây là phép kiểm phân biệt build cũ với mọi thứ khác</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Migration có áp được không?</span><span class="lz-d"><code>prisma migrate status</code>. P3009 = một migration hỏng đang CHẶN mọi lần deploy sau</span></div>
-  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Vẫn chưa ra?</span><span class="lz-d">QUAY LUI TRƯỚC, điều tra sau. Production không phải chỗ để gỡ lỗi</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Is the container running?</span><span class="lz-d"><code>docker ps</code>. Exit 137 means it was killed (out of memory, or the grace period expired — lesson 17.3)</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Did it say anything as it died?</span><span class="lz-d"><code>docker logs --tail=50</code>. A missing environment variable usually surfaces right here</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Is the route mounted?</span><span class="lz-d">curl for 401/404. This is the check that separates a stale build from everything else</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Did the migrations apply?</span><span class="lz-d"><code>prisma migrate status</code>. P3009 means a failed migration is BLOCKING every subsequent deploy</span></div>
+  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Still nothing?</span><span class="lz-d">ROLL BACK FIRST, investigate afterwards. Production is not the place to debug</span></div>
 </div>
 
 <p>Step 5 is the one experienced people follow and everyone else learns the hard way. The instinct under pressure is to find the cause first — and every minute spent on that is a minute of outage. Roll back, confirm the site is healthy, <em>then</em> reproduce it somewhere that is not production.</p>
@@ -1161,7 +1161,7 @@ git revert &lt;sha_xau&gt;
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> The smoke test in this lesson is not an example — it is in <code>deploy.sh</code>, added after the 2026-07-02 incident, and it lists twenty-odd routes across every feature module. The deploy also fails on it. Two other rules came out of the same week and are now written into the project's own instructions: <strong>always run a full <code>bash deploy.sh</code> after a code change, never <code>--no-build</code></strong> (which only rsyncs, leaves the old image running, and skips the smoke test — exactly how the stale build shipped), and diagnose route health with unauthenticated <code>curl</code> rather than the browser. The chat history was a separate bug entirely, found the same day: nothing was lost, a per-viewer <code>deletedAt</code> filter was hiding it. Two unrelated causes presenting as one symptom is normal during an incident, and it is the reason step 3 above is a <em>measurement</em> rather than a guess.</p>
+<p><strong>How cuongthai.com does it.</strong> The smoke test in this lesson is not an example — it is in <code>deploy.sh</code>, added after the 2026-07-02 incident, and it lists twenty-odd routes across every feature module. The deploy also fails on it. Two other rules came out of the same week and are now written into the project's own instructions: <strong>always run a full <code>bash deploy.sh</code> after a code change, never <code>--no-build</code></strong> (which only rsyncs, leaves the old image running, and skips the smoke test — exactly how the stale build shipped), and diagnose route health with unauthenticated <code>curl</code> rather than the browser. The chat history was a separate bug entirely, found the same day: nothing was lost, a per-viewer <code>deletedAt</code> filter was hiding it. Two unrelated causes presenting as one symptom is normal during an incident, and it is the reason step 3 above is a <em>measurement</em> rather than a guess.</p>
 </div>
 
 <div class="link-card codelab">

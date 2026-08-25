@@ -17,6 +17,12 @@
  *   node scripts/course-video-seed.mjs --file ./content/course-videos/nextjs.mjs --apply
  *   node scripts/course-video-seed.mjs --all --apply     # every map file
  *
+ * CHỐT CREDIT: --apply bị TỪ CHỐI khi còn entry `yt` mà `credit` rỗng. Credit
+ * rỗng nghĩa là bản đồ chưa qua `verify-youtube-videos.mjs --fix-credits`, tức
+ * chưa ai chứng minh link còn sống VÀ chưa đọc được tên kênh — seed lúc đó là
+ * đưa lên trang học một video không rõ còn chạy không và không ghi công tác
+ * giả. Chạy verify trước. Cần seed nháp thì thêm --cho-phep-thieu-credit.
+ *
  * MAP SHAPE (default export):
  *   {
  *     courseSlug: 'nextjs',
@@ -43,6 +49,7 @@ const args = process.argv.slice(2);
 const has = (f) => args.includes(f);
 const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : d; };
 const APPLY = has('--apply');
+const ALLOW_NO_CREDIT = has('--cho-phep-thieu-credit');
 const MAP_DIR = './content/course-videos';
 
 const files = has('--all')
@@ -63,6 +70,30 @@ function ytUrl(raw) {
     s.match(/\/embed\/([A-Za-z0-9_-]{11})/) ||
     s.match(/\/shorts\/([A-Za-z0-9_-]{11})/);
   return m?.[1] ? `https://youtu.be/${m[1]}` : null;
+}
+
+// ── Chốt credit ───────────────────────────────────────────────────────────────
+// Quét trước toàn bộ bản đồ: một credit rỗng là dấu hiệu bản đồ chưa qua
+// verify-youtube-videos.mjs --fix-credits. Chặn ở đây, trước khi mở kết nối
+// Prisma, để lần chạy sai không để lại nửa vời trong DB.
+if (APPLY && !ALLOW_NO_CREDIT) {
+  const thieu = [];
+  for (const file of files) {
+    const m = (await import(pathToFileURL(path.resolve(file)).href)).default;
+    for (const [slug, e] of Object.entries(m.lessons || {})) {
+      if (e.yt && !String(e.credit || '').trim()) thieu.push(`${path.basename(file)} · ${slug}`);
+    }
+  }
+  if (thieu.length) {
+    console.error(`\n✗ ${thieu.length} entry còn credit rỗng — chưa xác minh. Ví dụ:`);
+    thieu.slice(0, 5).forEach((t) => console.error(`    ${t}`));
+    if (thieu.length > 5) console.error(`    … và ${thieu.length - 5} entry nữa`);
+    console.error('\nChạy trước:');
+    for (const file of files) console.error(`  node scripts/verify-youtube-videos.mjs --file ${file} --fix-credits`);
+    console.error('\n(Cố tình seed nháp: thêm --cho-phep-thieu-credit)');
+    await prisma.$disconnect();
+    process.exit(1);
+  }
 }
 
 let totalPatched = 0, totalMissing = 0, totalBad = 0;

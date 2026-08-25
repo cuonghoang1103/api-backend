@@ -43,16 +43,16 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 16 | `socket-io` | `socket-io` — Socket.IO | ✅ **XONG** (12/12 mục · 66 bài · 622k · TB 9.419) — *đã vá 24/08, xem §4* |
 | 17 | `object-storage-s3` | `object-storage` — Object Storage (Cloudflare R2) | ✅ **XONG** (11 mục · 39 bài · 353k · TB 9.053) |
 | 18 | `media-processing` | `media-processing` — Media Processing (Sharp + FFmpeg) | ✅ **XONG** (11 mục · 37 bài · 576k · TB 15.554) |
-| 19 | `observability-monitoring` | — | ❌ **THIẾU** |
+| 19 | `observability-monitoring` | `observability-monitoring` — Observability & Monitoring (Node.js trên VPS) | ✅ **XONG** (13 mục · 70 bài · 921k · TB 13.152) |
 | 20 | `payment-integration` | — | ❌ **THIẾU** |
 | 21 | `vnpay` | — | ❌ **THIẾU** |
 | 22 | `payos` | — | ❌ **THIẾU** |
 | 23 | `domains-dns-tls` | — | ❌ **THIẾU** |
 | 24 | `cuongthai-roadmap` | *(lộ trình, không phải khoá)* | — bỏ qua |
 
-**Tổng (cập nhật 25/08/2026): 18 khoá đã có · 5 khoá còn thiếu.**
-Còn lại: `observability-monitoring` · `payment-integration` · `vnpay` · `payos` ·
-`domains-dns-tls`. (`cuongthai-roadmap` là lộ trình, không phải khoá.)
+**Tổng (cập nhật 25/08/2026): 19 khoá đã có · 4 khoá còn thiếu.**
+Còn lại: `payment-integration` · `vnpay` · `payos` · `domains-dns-tls`.
+(`cuongthai-roadmap` là lộ trình, không phải khoá.)
 
 ⚠️ **18 "đã có" KHÔNG có nghĩa 18 đạt chuẩn.** Chạy `course-depth-audit.mjs`
 trên cả 18 ngày 25/08: **14 đạt mọi sàn §3, 4 KHÔNG** — và cả 4 đều nằm trong
@@ -599,6 +599,73 @@ Còn hai bước phải chạy ở máy nhà — xem §6.
 
 ---
 
+### 25/08/2026 — Observability & Monitoring (13 mục · 70 bài · 921k · TB 13.152)
+
+Khoá thứ 19. Luật tự đặt cho khoá này: **không khẳng định gì về chi phí hay
+hành vi mà không có một phép đo**. Mười tám phép đo chạy thật trong sandbox
+(Node 22.22.2), mọi script đều nằm trong chính bài dùng nó — xem bài 12.1 cho
+bảng đầy đủ. Tám kết quả lật ngược một niềm tin phổ biến:
+
+| Đo | Kết quả | Niềm tin bị lật |
+|---|---|---|
+| dựng một dòng log | 15 / 19 / 571 / **1310** ns | phần đắt nhất là `new Date().toISOString()` (~740 ns), KHÔNG phải JSON |
+| ghi một dòng log | file 2866 · **ống 4985** · /dev/null 2303 ns | tổng thật ~6.300 ns/dòng, không phải 1.310 |
+| bên đọc ống chậm | RSS 43 → **122 MB**, 47.874.720 byte kẹt trong đệm | trình thu log chậm là RÒ RỈ BỘ NHỚ TRONG APP |
+| AsyncLocalStorage | run() **677 ns**/request · getStore() không đo được | "ALS chậm" là lịch sử trước Node 16 |
+| ô histogram mặc định | p95 thật 27,6ms → báo **46,6ms (sai 69%)** | mặc định của prom-client sai NGHIÊM TRỌNG và im lặng |
+| CPU% với Node bị chặn | chặn 200ms/vòng → **CPU toàn máy 23,8%** | CPU% không phân biệt nổi 50ms với 200ms; p50 độ trễ giữ nguyên 1,1ms |
+| heap so với RSS | heapUsed 4→75→**4** MB · rss 43→150→**140** MB | đồ thị RSS chỉ-lên là BÌNH THƯỜNG; chữ ký rò rỉ là ĐÁY răng cưa |
+| lấy mẫu đầu 1% | cần **299 lần** xảy ra để có 95% cơ hội bắt được một cái | lấy mẫu đầu vứt đi đúng những cú hỏng hiếm đáng tìm |
+
+**Sáu khiếm khuyết CÓ THẬT tìm được trong kho, bằng cách đọc mã** (mỗi cái
+kèm file và số dòng trong bài tương ứng — bài 12.2 xếp chúng thành kế hoạch
+sửa "giờ 1–2"):
+
+1. `req.id` ghi một lần ở `src/index.ts:225`, **đọc không lần nào** — không
+   lời gọi logger nào kèm nó, kể cả `errorHandler.ts`. Người dùng gửi ảnh
+   chụp header `X-Request-ID` và không truy vấn nào tìm ra (bài 3.1)
+2. `nginx.conf` chuyển tiếp 4 header nhưng `grep -c X-Request-ID` = **0**, nên
+   nhánh "tôn trọng id đến từ ngoài" của middleware là **mã chết** trên
+   production. Mà nginx vốn đã có sẵn `$request_id` và `log_format` cũng
+   không dùng (bài 3.3)
+3. `healthcheck` trong `docker-compose.yml` gọi **`/health`** (có kiểm cơ sở
+   dữ liệu) chứ không gọi `/health/live` (tồn tại, không ai dùng) ⇒ một cú
+   nấc 20 giây của Postgres khiến Docker giết một tiến trình Node hoàn toàn
+   khoẻ mạnh ở giây thứ 30 (bài 8.2)
+4. **Không một khối `logging:` nào** trong cả hai file compose (7 dịch vụ,
+   0 giới hạn), bù lại bằng một cron hằng tuần `truncate` log quá 200 MB —
+   trên đúng cái đĩa chứa Postgres (bài 2.2)
+5. `LOG_PIPELINE.md` nâng `msg` lên làm **nhãn Loki**, mà `src/` phát ra
+   **325** giá trị msg khác nhau ⇒ 28 luồng thành **9.100** (bài 2.4).
+   Cũng lộ ra: danh mục sự kiện trong tài liệu ghi 124 trên tổng 325
+6. `connection_limit` **chưa từng được đặt** (Prisma mặc định 9 trên VPS
+   4 nhân) còn `max_connections` chỉ xuất hiện trong `docker-compose.yml`
+   bên trong một dòng **CHÚ THÍCH** (Postgres mặc định 100). Chín trên một
+   trăm (bài 5.4)
+
+**Bài học về bộ kiểm, lần thứ năm.** Hai lớp lỗi tái diễn suốt khoá này mà
+`course-content-check` KHÔNG bắt được vì file không import nổi trước khi tới
+được bộ kiểm: **backtick trần** bọc định danh trong văn xuôi (`` `waiting` ``,
+`` `version` ``, `` `time() - ...` ``) và **`${...}` chưa escape** trong ví dụ
+YAML/Grafana (`${GLITCHTIP_SECRET}`, `${__value.raw}`). Đã gia cố script chèn
+bài để tự thoát cả hai trước khi ghi. Cùng với `</code></pre>` đóng nhầm khối
+`<div class="out">` (2 lần) và `|||` gõ thành `|///` (3 lần), đây là bốn lớp
+lỗi mà một khoá 70 bài sinh ra đủ nhiều để đáng tự động hoá.
+
+**Cũng sửa một sai của chính bộ kiểm từng-bài của tôi:** `perlesson.mjs` đòi
+**≥2 thẻ nguồn MỖI KHỐI** trong khi §3 chỉ đòi **≥2 mỗi BÀI** (tức ≥1 mỗi
+khối). Với cái bar sai đó nó báo 6 khoá "dưới chuẩn" (185 bài) — tất cả đều
+đạt chuẩn thật. Đã sửa; chạy lại: **1.111 bài lý thuyết, 19/19 khoá đạt.**
+
+Ba bộ kiểm, cả 19 khoá: content-check ✅ 0 lỗi · depth-audit ✅ đạt mọi sàn ·
+lang-check 0 "nặng" trên 1.355 bài. Khoá này góp 1 hit "nhẹ": bài 1.1 trích
+cố ý một tên file tiếng Việt (`báo-cáo.pdf`) trong ví dụ về việc KHÔNG được
+nội suy dữ liệu vào `msg` — dương tính giả, giữ nguyên.
+
+Còn hai bước phải chạy ở máy nhà — xem §6.
+
+---
+
 ## 6. Việc chưa chạy được từ sandbox (áp cho MỌI khoá mới)
 
 Hai bước cuối của mỗi khoá cần môi trường mà sandbox không có — hãy chạy khi ở máy nhà:
@@ -615,7 +682,7 @@ node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
 node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ```
 
-**Đang chờ chạy — chín khoá:**
+**Đang chờ chạy — mười khoá:**
 
 ```bash
 # Git & GitHub
@@ -663,9 +730,15 @@ node scripts/course-seed.mjs --file ./content/courses/deploy-vps.mjs --apply
 docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
   --slug github-actions --icon githubactions --color 2088FF --title "GitHub Actions" --subtitle "Push → Production"
 node scripts/course-seed.mjs --file ./content/courses/github-actions.mjs --apply
+
+# Observability & Monitoring
+docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+  --slug observability-monitoring --icon grafana --color F46800 \
+  --title "Observability & Monitoring" --subtitle "Log → Metric → Trace"
+node scripts/course-seed.mjs --file ./content/courses/observability-monitoring.mjs --apply
 ```
 
-⚠️ **Linux & Bash**, **Docker**, **Nginx**, **Deploy VPS** và **GitHub Actions** dùng **category `devops`** (`DevOps & Vận hành`),
+⚠️ **Linux & Bash**, **Docker**, **Nginx**, **Deploy VPS**, **GitHub Actions** và **Observability & Monitoring** dùng **category `devops`** (`DevOps & Vận hành`),
 chưa từng có trong DB — lần seed đầu sẽ thêm một mục lọc mới trên trang `/courses`.
 **Redis** và **Prisma ORM** dùng category `databases` đã có sẵn (chung với PostgreSQL).
 **Authentication** dùng category `backend` đã có sẵn (chung với Node.js).

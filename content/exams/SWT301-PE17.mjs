@@ -40,7 +40,8 @@ export default {
               "weight": 1,
               "maxScore": 0.5
             }
-          ]
+          ],
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWT301/PE17.png"
         },
         {
           "kind": "WRITE",
@@ -66,7 +67,8 @@ export default {
               "weight": 1,
               "maxScore": 1
             }
-          ]
+          ],
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWT301/PE17.png"
         },
         {
           "kind": "WRITE",
@@ -92,7 +94,8 @@ export default {
               "weight": 1,
               "maxScore": 1
             }
-          ]
+          ],
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWT301/PE17.png"
         }
       ]
     }

@@ -55,7 +55,7 @@ thoi gian de thu het 1 trieu cap:
   <div class="lz-step"><span class="lz-k">4 · Risk signals</span><span class="lz-t">Cheap, and surprisingly effective</span><span class="lz-d">A first-ever login from a new country, a datacentre ASN, a missing or absurd user agent, a session with no prior device cookie. None is proof; together they justify demanding a second factor for that attempt.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Trần theo TÀI KHOẢN, lùi theo cấp số nhân, tự hồi phục.</span>
-const KEY = &#96;dn-hong:\${emailChuanHoa}&#96;;
+const KEY = &#96;dn-hong:\${normalizedEmail}&#96;;
 const n = await redis.incr(KEY);
 if (n === 1) await redis.expire(KEY, 900);
 
@@ -65,7 +65,7 @@ if (n &gt; 5) {
 }
 
 <span class="tok-comment">// Đăng nhập ĐÚNG → xoá bộ đếm. Người dùng thật không bao giờ chạm tới trần.</span>
-if (khop) await redis.del(KEY);</code></pre>
+if (match) await redis.del(KEY);</code></pre>
 <div class="pitfall">
 <p><strong>Trap — a permanent lockout after N failures is a denial-of-service tool handed to the attacker.</strong> If five wrong passwords lock an account until support unlocks it, anybody who knows an email address can lock that account, and a stuffing run locks out fifteen percent of your users in an afternoon. That is a worse outcome than the attack it prevents. Use a rolling window that expires on its own, back off exponentially rather than blocking outright, and reserve a real lock for accounts where you have positive evidence of compromise — where the correct response is a forced reset, not a wall.</p>
 </div>
@@ -128,7 +128,7 @@ thoi gian de thu het 1 trieu cap:
   <div class="lz-step"><span class="lz-k">4 · Các tín hiệu rủi ro</span><span class="lz-t">Rẻ, và hiệu quả đến bất ngờ</span><span class="lz-d">Lần đầu tiên đăng nhập từ một quốc gia mới, một ASN của trung tâm dữ liệu, một user agent thiếu hoặc vô lý, một phiên không có cookie thiết bị nào từ trước. Không cái nào là bằng chứng; nhưng gộp lại thì đủ để đòi một yếu tố thứ hai cho riêng lần thử đó.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Trần theo TÀI KHOẢN, lùi theo cấp số nhân, tự hồi phục.</span>
-const KEY = &#96;dn-hong:\${emailChuanHoa}&#96;;
+const KEY = &#96;dn-hong:\${normalizedEmail}&#96;;
 const n = await redis.incr(KEY);
 if (n === 1) await redis.expire(KEY, 900);
 
@@ -138,7 +138,7 @@ if (n &gt; 5) {
 }
 
 <span class="tok-comment">// Đăng nhập ĐÚNG → xoá bộ đếm. Người dùng thật không bao giờ chạm tới trần.</span>
-if (khop) await redis.del(KEY);</code></pre>
+if (match) await redis.del(KEY);</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — khoá vĩnh viễn sau N lần hỏng là một công cụ TỪ CHỐI DỊCH VỤ trao tận tay kẻ tấn công.</strong> Nếu năm lần sai mật khẩu khoá một tài khoản cho tới khi bộ phận hỗ trợ mở, thì bất kỳ ai biết một địa chỉ email đều khoá được tài khoản đó, và một đợt nhồi sẽ khoá mất mười lăm phần trăm người dùng của bạn trong một buổi chiều. Đó là kết cục TỆ HƠN chính cú tấn công mà nó ngăn. Hãy dùng một cửa sổ trượt tự hết hạn, lùi theo cấp số nhân thay vì chặn thẳng, và chỉ dành một cú khoá thật cho những tài khoản mà bạn CÓ bằng chứng dương tính rằng đã bị xâm nhập — mà ở đó phản ứng đúng là ÉP ĐẶT LẠI MẬT KHẨU, không phải dựng một bức tường.</p>
 </div>
@@ -232,9 +232,9 @@ ma diem cua "cuοngthai.com": cuU+3BFngthai.com
   <div class="lz-step"><span class="lz-k">Watch for the lookalike domains</span><span class="lz-t">Detection, not prevention</span><span class="lz-d">Certificate transparency logs publish every certificate issued, so a feed filtered for names resembling yours finds the phishing site the day it is set up — often before the campaign starts.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Cảnh báo khi một PHIÊN đột ngột đổi chỗ — không chặn, nhưng phát hiện.</span>
-if (phien.ipCuoi &amp;&amp; asn(req.ip) !== asn(phien.ipCuoi)) {
-  await ghiSuKien('phien.doi_mang', { phienId: phien.id, cu: phien.ipCuoi, moi: req.ip });
-  if (laHanhDongNhayCam(req)) return doiXacThucLai(req, res);   <span class="tok-comment">// ← Bài 7.1</span>
+if (session.lastIp &amp;&amp; asn(req.ip) !== asn(session.lastIp)) {
+  await recordEvent('session.network_change', { sessionId: session.id, cu: session.lastIp, moi: req.ip });
+  if (isSensitiveAction(req)) return requireReauth(req, res);   <span class="tok-comment">// ← Bài 7.1</span>
 }</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Do not fight it with fingerprinting alone</span><span class="lz-lnote">A proxy forwards the victim's own user agent and can forward much of the rest. Fingerprint mismatches catch the lazy kits and miss the current ones, so treat a match as no evidence and a mismatch as a signal worth an alert.</span></div>
@@ -315,9 +315,9 @@ ma diem cua "cuοngthai.com": cuU+3BFngthai.com
   <div class="lz-step"><span class="lz-k">Canh chừng những tên miền nhìn giống</span><span class="lz-t">Phát hiện, không phải phòng ngừa</span><span class="lz-d">Nhật ký minh bạch chứng chỉ công bố MỌI chứng chỉ được cấp, nên một luồng dữ liệu lọc theo những cái tên na ná tên bạn sẽ tìm ra trang lừa đảo ngay trong ngày nó được dựng — thường là trước khi chiến dịch bắt đầu.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Cảnh báo khi một PHIÊN đột ngột đổi chỗ — không chặn, nhưng phát hiện.</span>
-if (phien.ipCuoi &amp;&amp; asn(req.ip) !== asn(phien.ipCuoi)) {
-  await ghiSuKien('phien.doi_mang', { phienId: phien.id, cu: phien.ipCuoi, moi: req.ip });
-  if (laHanhDongNhayCam(req)) return doiXacThucLai(req, res);   <span class="tok-comment">// ← Bài 7.1</span>
+if (session.lastIp &amp;&amp; asn(req.ip) !== asn(session.lastIp)) {
+  await recordEvent('session.network_change', { sessionId: session.id, cu: session.lastIp, moi: req.ip });
+  if (isSensitiveAction(req)) return requireReauth(req, res);   <span class="tok-comment">// ← Bài 7.1</span>
 }</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Đừng chống nó bằng mỗi dấu vân tay thiết bị</span><span class="lz-lnote">Một cái proxy chuyển tiếp chính user agent của nạn nhân và chuyển tiếp được phần lớn những thứ còn lại. Lệch dấu vân tay bắt được những bộ công cụ lười và bỏ sót những bộ hiện hành, nên hãy coi việc KHỚP là không có bằng chứng gì, còn việc LỆCH là một tín hiệu đáng báo động.</span></div>
@@ -397,17 +397,17 @@ if (phien.ipCuoi &amp;&amp; asn(req.ip) !== asn(phien.ipCuoi)) {
 
 <h3>Subdomains, and the cookie scope that invites them</h3>
 <pre><code><span class="tok-comment">// Cookie này đi tới MỌI tên miền con, kể cả cái bạn đã quên:</span>
-Set-Cookie: phien=…; Domain=.cuongthai.com; Secure; HttpOnly
+Set-Cookie: session=…; Domain=.cuongthai.com; Secure; HttpOnly
 
 <span class="tok-comment">// Cookie này KHÔNG:</span>
-Set-Cookie: phien=…; Secure; HttpOnly            <span class="tok-comment">// ← không có Domain = chỉ host này</span>
+Set-Cookie: session=…; Secure; HttpOnly            <span class="tok-comment">// ← không có Domain = chỉ host này</span>
 
 <span class="tok-comment">// blog cu.cuongthai.com tro CNAME toi mot bucket da xoa ⇒ ai dang ky lai</span>
 <span class="tok-comment">// cai bucket do se nhan duoc cookie phien cua moi nguoi dung ghe qua.</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Omit Domain unless you need it</span><span class="lz-t">A one-word change</span><span class="lz-d">Without <code>Domain</code>, the cookie is scoped to the exact host that set it. With it, every current and future subdomain receives it — including one somebody sets up next year on a platform you do not control.</span></div>
   <div class="lz-step"><span class="lz-k">Subdomain takeover is common and cheap</span><span class="lz-t">A dangling DNS record</span><span class="lz-d">A CNAME pointing at a cloud resource that was deleted can be claimed by whoever registers that resource name next. Audit your DNS for records pointing at services you no longer use — it is a one-off script and it finds things.</span></div>
-  <div class="lz-step"><span class="lz-k">__Host- makes the rule enforceable</span><span class="lz-t">The browser checks it</span><span class="lz-d">A cookie named <code>__Host-phien</code> is rejected by the browser unless it is <code>Secure</code>, has <code>Path=/</code> and has <em>no</em> <code>Domain</code> attribute. It turns your intention into something a misconfiguration cannot quietly undo.</span></div>
+  <div class="lz-step"><span class="lz-k">__Host- makes the rule enforceable</span><span class="lz-t">The browser checks it</span><span class="lz-d">A cookie named <code>__Host-session</code> is rejected by the browser unless it is <code>Secure</code>, has <code>Path=/</code> and has <em>no</em> <code>Domain</code> attribute. It turns your intention into something a misconfiguration cannot quietly undo.</span></div>
   <div class="lz-step"><span class="lz-k">User content belongs on another registrable domain</span><span class="lz-t">Not a subdomain</span><span class="lz-d">If you host uploads, previews or customer pages, serve them from a separate domain entirely. On a subdomain they share your cookie scope and much of your origin's trust; on another domain they share nothing.</span></div>
 </div>
 
@@ -478,17 +478,17 @@ Set-Cookie: phien=…; Secure; HttpOnly            <span class="tok-comment">// 
 
 <h3>Tên miền con, và cái phạm vi cookie mời gọi chúng</h3>
 <pre><code><span class="tok-comment">// Cookie này đi tới MỌI tên miền con, kể cả cái bạn đã quên:</span>
-Set-Cookie: phien=…; Domain=.cuongthai.com; Secure; HttpOnly
+Set-Cookie: session=…; Domain=.cuongthai.com; Secure; HttpOnly
 
 <span class="tok-comment">// Cookie này KHÔNG:</span>
-Set-Cookie: phien=…; Secure; HttpOnly            <span class="tok-comment">// ← không có Domain = chỉ host này</span>
+Set-Cookie: session=…; Secure; HttpOnly            <span class="tok-comment">// ← không có Domain = chỉ host này</span>
 
 <span class="tok-comment">// blog cu.cuongthai.com tro CNAME toi mot bucket da xoa ⇒ ai dang ky lai</span>
 <span class="tok-comment">// cai bucket do se nhan duoc cookie phien cua moi nguoi dung ghe qua.</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Bỏ Domain đi trừ khi bạn CẦN nó</span><span class="lz-t">Một thay đổi đúng một từ</span><span class="lz-d">Không có <code>Domain</code> thì cookie chỉ thuộc phạm vi đúng cái host đã đặt nó. Có nó thì MỌI tên miền con hiện tại và TƯƠNG LAI đều nhận được — kể cả cái mà sang năm ai đó dựng lên trên một nền tảng bạn không kiểm soát.</span></div>
   <div class="lz-step"><span class="lz-k">Chiếm tên miền con là chuyện phổ biến và rẻ</span><span class="lz-t">Một bản ghi DNS bỏ lửng</span><span class="lz-d">Một bản ghi CNAME trỏ tới một tài nguyên đám mây đã bị xoá thì ai đăng ký lại đúng cái tên tài nguyên ấy sẽ nhận được nó. Hãy soát DNS tìm những bản ghi trỏ tới các dịch vụ bạn không còn dùng — đó là một cái script chạy một lần, và nó thường tìm ra thứ gì đó.</span></div>
-  <div class="lz-step"><span class="lz-k">__Host- biến cái luật đó thành thứ THI HÀNH được</span><span class="lz-t">Trình duyệt tự kiểm</span><span class="lz-d">Một cookie tên <code>__Host-phien</code> sẽ bị trình duyệt TỪ CHỐI trừ khi nó có <code>Secure</code>, có <code>Path=/</code> và KHÔNG có thuộc tính <code>Domain</code>. Nó biến ý định của bạn thành thứ mà một lần cấu hình sai không lặng lẽ tháo bỏ được.</span></div>
+  <div class="lz-step"><span class="lz-k">__Host- biến cái luật đó thành thứ THI HÀNH được</span><span class="lz-t">Trình duyệt tự kiểm</span><span class="lz-d">Một cookie tên <code>__Host-session</code> sẽ bị trình duyệt TỪ CHỐI trừ khi nó có <code>Secure</code>, có <code>Path=/</code> và KHÔNG có thuộc tính <code>Domain</code>. Nó biến ý định của bạn thành thứ mà một lần cấu hình sai không lặng lẽ tháo bỏ được.</span></div>
   <div class="lz-step"><span class="lz-k">Nội dung người dùng thuộc về một TÊN MIỀN KHÁC</span><span class="lz-t">Không phải một tên miền con</span><span class="lz-d">Nếu bạn phục vụ tệp tải lên, bản xem trước hay trang của khách hàng thì hãy đưa chúng sang một tên miền hoàn toàn riêng. Nằm trên tên miền con thì chúng dùng chung phạm vi cookie của bạn và phần lớn sự tin cậy của origin; nằm trên tên miền khác thì chúng chẳng chung gì cả.</span></div>
 </div>
 
@@ -548,12 +548,12 @@ nem 100 lan cung chi con toi da 3 lan doan.</div>
 </div>
 <pre><code><span class="tok-comment">// Khớp số: con số hiện trên MÀN HÌNH ĐĂNG NHẬP, người dùng GÕ nó vào app.</span>
 const so = String(randomInt(10, 100));                <span class="tok-comment">// hai chữ số</span>
-await redis.set(&#96;push:\${phienId}&#96;, JSON.stringify({ so, sai: 0 }), { EX: 120 });
-hienTrenManHinhDangNhap(so);                          <span class="tok-comment">// ← kẻ tấn công thấy cái này</span>
-guiThongBaoDay(nd, 'Nhập số hiện trên màn hình đăng nhập');  <span class="tok-comment">// ← nạn nhân KHÔNG thấy</span>
+await redis.set(&#96;push:\${sessionId}&#96;, JSON.stringify({ count, wrong: 0 }), { EX: 120 });
+showOnSignInScreen(count);                          <span class="tok-comment">// ← kẻ tấn công thấy cái này</span>
+sendPush(u, 'Nhập số hiện trên màn hình đăng nhập');  <span class="tok-comment">// ← nạn nhân KHÔNG thấy</span>
 
 <span class="tok-comment">// Sai 3 lần là huỷ, và đó là một sự kiện bảo mật.</span>
-if (++trangThai.sai &gt;= 3) { await huy(phienId); await canhBao(nd, 'push.sai_so'); }</code></pre>
+if (++state.sai &gt;= 3) { await revoke(sessionId); await warn(u, 'push.error_margin'); }</code></pre>
 
 <h3>The help desk, which is the real back door</h3>
 <div class="lz-flow">
@@ -618,12 +618,12 @@ nem 100 lan cung chi con toi da 3 lan doan.</div>
 </div>
 <pre><code><span class="tok-comment">// Khớp số: con số hiện trên MÀN HÌNH ĐĂNG NHẬP, người dùng GÕ nó vào app.</span>
 const so = String(randomInt(10, 100));                <span class="tok-comment">// hai chữ số</span>
-await redis.set(&#96;push:\${phienId}&#96;, JSON.stringify({ so, sai: 0 }), { EX: 120 });
-hienTrenManHinhDangNhap(so);                          <span class="tok-comment">// ← kẻ tấn công thấy cái này</span>
-guiThongBaoDay(nd, 'Nhập số hiện trên màn hình đăng nhập');  <span class="tok-comment">// ← nạn nhân KHÔNG thấy</span>
+await redis.set(&#96;push:\${sessionId}&#96;, JSON.stringify({ count, wrong: 0 }), { EX: 120 });
+showOnSignInScreen(count);                          <span class="tok-comment">// ← kẻ tấn công thấy cái này</span>
+sendPush(u, 'Nhập số hiện trên màn hình đăng nhập');  <span class="tok-comment">// ← nạn nhân KHÔNG thấy</span>
 
 <span class="tok-comment">// Sai 3 lần là huỷ, và đó là một sự kiện bảo mật.</span>
-if (++trangThai.sai &gt;= 3) { await huy(phienId); await canhBao(nd, 'push.sai_so'); }</code></pre>
+if (++state.sai &gt;= 3) { await revoke(sessionId); await warn(u, 'push.error_margin'); }</code></pre>
 
 <h3>Bàn hỗ trợ, cánh cửa sau THẬT SỰ</h3>
 <div class="lz-flow">
@@ -676,7 +676,7 @@ if (++trangThai.sai &gt;= 3) { await huy(phienId); await canhBao(nd, 'push.sai_s
 
 <h3>The shape: act first, wait, come back</h3>
 <pre><code><span class="tok-comment">// Bước 1 — kẻ tấn công đăng ký bằng email của NẠN NHÂN, hôm nay.</span>
-POST /sign-up { email: 'nan-nhan@congty.com', matKhau: '<span class="tok-comment">…của hắn…</span>' }
+POST /sign-up { email: 'nan-nhan@congty.com', password: '<span class="tok-comment">…của hắn…</span>' }
 
 <span class="tok-comment">// Bước 2 — chờ. Vài tuần, vài tháng. Không làm gì cả.</span>
 
@@ -720,16 +720,16 @@ POST /sign-up { email: 'nan-nhan@congty.com', matKhau: '<span class="tok-comment
 Ma dung MOT lan ma doi duoc nam lan. Cung hinh dang nay ap cho:
   token dat lai mat khau · loi moi · phieu giam gia · lenh rut tien.</div>
 <pre><code><span class="tok-comment">// SAI — có một cái await giữa lúc ĐỌC trạng thái và lúc HÀNH ĐỘNG theo nó.</span>
-const ma = await prisma.maKhoiPhuc.findFirst({ where: { maBam, daDung: false } });
-if (!ma) throw new Error('khong hop le');
-await argon2.hash(matKhauMoi);                 <span class="tok-comment">// ← 100ms. Năm request cùng qua được đây.</span>
-await prisma.maKhoiPhuc.update({ where: { id: ma.id }, data: { daDung: true } });</code></pre>
+const code = await prisma.recoveryCode.findFirst({ where: { hashCode, used: false } });
+if (!code) throw new Error('khong hop le');
+await argon2.hash(newPassword);                 <span class="tok-comment">// ← 100ms. Năm request cùng qua được đây.</span>
+await prisma.recoveryCode.update({ where: { id: ma.id }, data: { used: true } });</code></pre>
 <pre><code><span class="tok-comment">// ĐÚNG — để CƠ SỞ DỮ LIỆU quyết định ai thắng, bằng một lệnh ghi có điều kiện.</span>
-const kq = await prisma.maKhoiPhuc.updateMany({
-  where: { maBam, daDung: false },             <span class="tok-comment">// điều kiện nằm TRONG lệnh ghi</span>
-  data:  { daDung: true, dungLuc: new Date() },
+const result = await prisma.recoveryCode.updateMany({
+  where: { hashCode, used: false },             <span class="tok-comment">// điều kiện nằm TRONG lệnh ghi</span>
+  data:  { used: true, usedAt: new Date() },
 });
-if (kq.count === 0) throw new Error('khong hop le');   <span class="tok-comment">// đúng MỘT request nhận count=1</span></code></pre>
+if (result.count === 0) throw new Error('khong hop le');   <span class="tok-comment">// đúng MỘT request nhận count=1</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">The pattern to look for</span><span class="lz-t">Read, await, decide</span><span class="lz-d">Any handler that loads a row, awaits something slow, and then acts on what it read has this bug. Hashing a password, sending a mail and calling an API are all slow enough to lose the race — and authentication flows do all three.</span></div>
   <div class="lz-step"><span class="lz-k">The fix is a conditional write</span><span class="lz-t">Not a lock</span><span class="lz-d">Put the condition in the <code>WHERE</code> of the update and check the affected-row count. The database serialises it for you, it works across processes, and it needs no coordination service.</span></div>
@@ -758,7 +758,7 @@ if (kq.count === 0) throw new Error('khong hop le');   <span class="tok-comment"
 
 <h3>Hình dạng chung: ra tay trước, chờ, rồi quay lại</h3>
 <pre><code><span class="tok-comment">// Bước 1 — kẻ tấn công đăng ký bằng email của NẠN NHÂN, hôm nay.</span>
-POST /sign-up { email: 'nan-nhan@congty.com', matKhau: '<span class="tok-comment">…của hắn…</span>' }
+POST /sign-up { email: 'nan-nhan@congty.com', password: '<span class="tok-comment">…của hắn…</span>' }
 
 <span class="tok-comment">// Bước 2 — chờ. Vài tuần, vài tháng. Không làm gì cả.</span>
 
@@ -802,16 +802,16 @@ POST /sign-up { email: 'nan-nhan@congty.com', matKhau: '<span class="tok-comment
 Ma dung MOT lan ma doi duoc nam lan. Cung hinh dang nay ap cho:
   token dat lai mat khau · loi moi · phieu giam gia · lenh rut tien.</div>
 <pre><code><span class="tok-comment">// SAI — có một cái await giữa lúc ĐỌC trạng thái và lúc HÀNH ĐỘNG theo nó.</span>
-const ma = await prisma.maKhoiPhuc.findFirst({ where: { maBam, daDung: false } });
-if (!ma) throw new Error('khong hop le');
-await argon2.hash(matKhauMoi);                 <span class="tok-comment">// ← 100ms. Năm request cùng qua được đây.</span>
-await prisma.maKhoiPhuc.update({ where: { id: ma.id }, data: { daDung: true } });</code></pre>
+const code = await prisma.recoveryCode.findFirst({ where: { hashCode, used: false } });
+if (!code) throw new Error('khong hop le');
+await argon2.hash(newPassword);                 <span class="tok-comment">// ← 100ms. Năm request cùng qua được đây.</span>
+await prisma.recoveryCode.update({ where: { id: ma.id }, data: { used: true } });</code></pre>
 <pre><code><span class="tok-comment">// ĐÚNG — để CƠ SỞ DỮ LIỆU quyết định ai thắng, bằng một lệnh ghi có điều kiện.</span>
-const kq = await prisma.maKhoiPhuc.updateMany({
-  where: { maBam, daDung: false },             <span class="tok-comment">// điều kiện nằm TRONG lệnh ghi</span>
-  data:  { daDung: true, dungLuc: new Date() },
+const result = await prisma.recoveryCode.updateMany({
+  where: { hashCode, used: false },             <span class="tok-comment">// điều kiện nằm TRONG lệnh ghi</span>
+  data:  { used: true, usedAt: new Date() },
 });
-if (kq.count === 0) throw new Error('khong hop le');   <span class="tok-comment">// đúng MỘT request nhận count=1</span></code></pre>
+if (result.count === 0) throw new Error('khong hop le');   <span class="tok-comment">// đúng MỘT request nhận count=1</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Cái hình mẫu cần đi tìm</span><span class="lz-t">Đọc, await, rồi quyết định</span><span class="lz-d">Bất kỳ bộ xử lý nào nạp một bản ghi lên, chờ một việc chậm, rồi hành động theo thứ nó vừa đọc đều mang con lỗi này. Băm một mật khẩu, gửi một lá thư và gọi một API đều đủ chậm để THUA cuộc đua — mà các luồng xác thực thì làm cả ba.</span></div>
   <div class="lz-step"><span class="lz-k">Cách vá là một lệnh GHI CÓ ĐIỀU KIỆN</span><span class="lz-t">Không phải một cái khoá</span><span class="lz-d">Hãy đặt điều kiện vào mệnh đề <code>WHERE</code> của lệnh cập nhật rồi kiểm số dòng bị ảnh hưởng. Cơ sở dữ liệu tuần tự hoá giùm bạn, nó chạy xuyên qua nhiều tiến trình, và nó chẳng cần một dịch vụ điều phối nào.</span></div>

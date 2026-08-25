@@ -26,45 +26,45 @@ export default {
 <p class="lead">A server-side session is the oldest answer to Lesson 0.1's problem and still the right one for most products: put a row in a database, give the browser a pointer to it, look it up on every request. It is unfashionable next to JWTs and it has the one property JWTs cannot easily have — you can end it instantly.</p>
 
 <h3>The schema</h3>
-<pre><code>model Phien {
-  id          String    @id @default(cuid())
-  tokenBam    String    @unique                  <span class="tok-comment">// sha256 của token — Bài 1.3</span>
-  nguoiDungId String
-  nguoiDung   NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
+<pre><code>model Session {
+  id                String    @id @default(cuid())
+  tokenHash         String    @unique                  <span class="tok-comment">// sha256 của token — Bài 1.3</span>
+  userId            String
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  taoLuc      DateTime  @default(now())
-  hetHanTuyetDoi DateTime                        <span class="tok-comment">// trần cứng, không gia hạn</span>
-  hoatDongLuc DateTime  @default(now())          <span class="tok-comment">// cho hết hạn theo nhàn rỗi</span>
-  thuHoiLuc   DateTime?                          <span class="tok-comment">// null = còn sống</span>
+  createdAt         DateTime  @default(now())
+  absoluteExpiresAt DateTime  <span class="tok-comment">// trần cứng, không gia hạn</span>
+  activeAt          DateTime  @default(now())          <span class="tok-comment">// cho hết hạn theo nhàn rỗi</span>
+  revokedAt         DateTime? <span class="tok-comment">// null = còn sống</span>
 
-  trinhDuyet  String?                            <span class="tok-comment">// cho DANH SÁCH THIẾT BỊ, không phải để bảo mật</span>
-  ipTao       String?
+  browser           String?   <span class="tok-comment">// cho DANH SÁCH THIẾT BỊ, không phải để bảo mật</span>
+  createdIp         String?
 
-  @@index([nguoiDungId])                         <span class="tok-comment">// "thoát khỏi mọi thiết bị"</span>
-  @@index([hetHanTuyetDoi])                      <span class="tok-comment">// job dọn dẹp</span>
+  @@index([userId])                         <span class="tok-comment">// "thoát khỏi mọi thiết bị"</span>
+  @@index([absoluteExpiresAt])                      <span class="tok-comment">// job dọn dẹp</span>
 }</code></pre>
 <div class="kv-grid">
-  <div class="kv"><span class="k"><code>tokenBam</code>, not <code>token</code></span><span class="v">Lesson 1.3: store <code>sha256(token)</code> and look up by it. A database dump then contains no usable credentials, and there is no comparison in your code to get wrong. A fast hash is correct here because the token is 256 random bits.</span></div>
-  <div class="kv"><span class="k">Two expiry columns, not one</span><span class="v"><code>hetHanTuyetDoi</code> is a ceiling that never moves — thirty days from creation, and then you log in again no matter how active you were. <code>hoatDongLuc</code> drives idle expiry: inactive for two hours, session over. They answer different questions and you want both.</span></div>
-  <div class="kv"><span class="k"><code>thuHoiLuc</code> instead of deleting</span><span class="v">A revoked row you keep for a while is an audit trail: you can answer "was this session used after the user said they logged out?". Delete it in the cleanup job a week later. Chapter 11 uses this column.</span></div>
-  <div class="kv"><span class="k"><code>trinhDuyet</code> and <code>ipTao</code> are for the human</span><span class="v">They power a "Chrome on Windows · Hà Nội · 2 hours ago" list so a user can spot a session they do not recognise. Do <em>not</em> reject a request because the user agent changed — that breaks legitimate updates and mobile switching, and an attacker copies the header anyway.</span></div>
+  <div class="kv"><span class="k"><code>tokenHash</code>, not <code>token</code></span><span class="v">Lesson 1.3: store <code>sha256(token)</code> and look up by it. A database dump then contains no usable credentials, and there is no comparison in your code to get wrong. A fast hash is correct here because the token is 256 random bits.</span></div>
+  <div class="kv"><span class="k">Two expiry columns, not one</span><span class="v"><code>absoluteExpiresAt</code> is a ceiling that never moves — thirty days from creation, and then you log in again no matter how active you were. <code>activeAt</code> drives idle expiry: inactive for two hours, session over. They answer different questions and you want both.</span></div>
+  <div class="kv"><span class="k"><code>revokedAt</code> instead of deleting</span><span class="v">A revoked row you keep for a while is an audit trail: you can answer "was this session used after the user said they logged out?". Delete it in the cleanup job a week later. Chapter 11 uses this column.</span></div>
+  <div class="kv"><span class="k"><code>browser</code> and <code>createdIp</code> are for the human</span><span class="v">They power a "Chrome on Windows · Hà Nội · 2 hours ago" list so a user can spot a session they do not recognise. Do <em>not</em> reject a request because the user agent changed — that breaks legitimate updates and mobile switching, and an attacker copies the header anyway.</span></div>
 </div>
 
 <h3>Issuing a session</h3>
 <pre><code>import { randomBytes, createHash } from 'node:crypto';
 
-const NHAN_ROI_MS  = 2 * 60 * 60 * 1000;         <span class="tok-comment">// 2 giờ nhàn rỗi</span>
-const TUYET_DOI_MS = 30 * 24 * 60 * 60 * 1000;   <span class="tok-comment">// 30 ngày trần cứng</span>
+const IDLE_MS  = 2 * 60 * 60 * 1000;         <span class="tok-comment">// 2 giờ nhàn rỗi</span>
+const ABSOLUTE_MS = 30 * 24 * 60 * 60 * 1000;   <span class="tok-comment">// 30 ngày trần cứng</span>
 
-export async function taoPhien(nguoiDungId: string, req: Request) {
+export async function createSession(userId: string, req: Request) {
   const token = randomBytes(32).toString('base64url');       <span class="tok-comment">// 256 bit</span>
-  await prisma.phien.create({
+  await prisma.session.create({
     data: {
-      tokenBam: createHash('sha256').update(token).digest('hex'),
-      nguoiDungId,
-      hetHanTuyetDoi: new Date(Date.now() + TUYET_DOI_MS),
-      trinhDuyet: req.get('user-agent')?.slice(0, 200),
-      ipTao: req.ip,
+      tokenHash: createHash('sha256').update(token).digest('hex'),
+      userId,
+      absoluteExpiresAt: new Date(Date.now() + ABSOLUTE_MS),
+      browser: req.get('user-agent')?.slice(0, 200),
+      createdIp: req.ip,
     },
   });
   return token;                                   <span class="tok-comment">// chỉ trả về ĐÚNG MỘT LẦN</span>
@@ -77,33 +77,33 @@ Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max
 # va bo nho cua tien trinh nay trong vai mili giay. Khong o dau khac.</div>
 
 <h3>Verifying one, on every request</h3>
-<pre><code>export async function layPhien(token: string | undefined) {
+<pre><code>export async function getSession(token: string | undefined) {
   if (!token) return null;
-  const bam = createHash('sha256').update(token).digest('hex');
+  const hash = createHash('sha256').update(token).digest('hex');
   const bayGio = new Date();
 
-  const phien = await prisma.phien.findFirst({
+  const session = await prisma.session.findFirst({
     where: {
-      tokenBam: bam,
-      thuHoiLuc: null,
-      hetHanTuyetDoi: { gt: bayGio },
-      hoatDongLuc:    { gt: new Date(bayGio.getTime() - NHAN_ROI_MS) },
+      tokenHash: bam,
+      revokedAt: null,
+      absoluteExpiresAt: { gt: bayGio },
+      activeAt:    { gt: new Date(bayGio.getTime() - IDLE_MS) },
     },
-    include: { nguoiDung: { select: { id: true, email: true, vaiTro: true } } },
+    include: { user: { select: { id: true, email: true, role: true } } },
   });
-  if (!phien) return null;
+  if (!session) return null;
 
   <span class="tok-comment">// Chỉ ghi khi đã cũ hơn 5 phút — xem bên dưới</span>
-  if (bayGio.getTime() - phien.hoatDongLuc.getTime() &gt; 5 * 60 * 1000) {
-    await prisma.phien.update({
-      where: { id: phien.id }, data: { hoatDongLuc: bayGio },
+  if (bayGio.getTime() - session.activeAt.getTime() &gt; 5 * 60 * 1000) {
+    await prisma.session.update({
+      where: { id: session.id }, data: { activeAt: bayGio },
     });
   }
-  return phien;
+  return session;
 }</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Every condition in the <code>where</code></span><span class="lz-t">Not in an <code>if</code> after</span><span class="lz-d">Revoked, absolutely expired and idle-expired are all filters, exactly as in Lesson 0.2. One query returns a session or nothing, and a later refactor cannot drop a check by accident.</span></div>
-  <div class="lz-step"><span class="lz-k">The five-minute write threshold</span><span class="lz-t">The performance fix</span><span class="lz-d">Updating <code>hoatDongLuc</code> on every request means a database write per page view — including every image, API call and poll. Writing only when the value is more than five minutes stale keeps idle expiry accurate to five minutes and removes 99% of the writes.</span></div>
+  <div class="lz-step"><span class="lz-k">The five-minute write threshold</span><span class="lz-t">The performance fix</span><span class="lz-d">Updating <code>activeAt</code> on every request means a database write per page view — including every image, API call and poll. Writing only when the value is more than five minutes stale keeps idle expiry accurate to five minutes and removes 99% of the writes.</span></div>
   <div class="lz-step"><span class="lz-k">One query, one join</span><span class="lz-t">The cost per request</span><span class="lz-d">A unique-index lookup plus a join on the primary key is roughly 0.3 ms on a warm database. That is the real price of server-side sessions, and it is far less than most people assume when they reach for JWTs to avoid it.</span></div>
   <div class="lz-step"><span class="lz-k">Cache it if you must</span><span class="lz-t">And know what you traded</span><span class="lz-d">Putting sessions in Redis makes the lookup 0.05 ms — Lesson 3.5. But a cached session is a session you can no longer revoke instantly unless you also delete the cache entry, which is exactly the JWT problem in a smaller form.</span></div>
 </div>
@@ -124,7 +124,7 @@ Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max
   </div>
 </div>
 <div class="pitfall">
-<p><strong>Trap — sliding expiry alone means a stolen session never expires.</strong> If every request pushes the deadline forward, an attacker who polls a harmless endpoint once an hour keeps the session alive indefinitely, and the legitimate user has no idea. That is exactly what the absolute ceiling is for: no amount of activity extends <code>hetHanTuyetDoi</code>, so the session ends on schedule regardless of who was using it.</p>
+<p><strong>Trap — sliding expiry alone means a stolen session never expires.</strong> If every request pushes the deadline forward, an attacker who polls a harmless endpoint once an hour keeps the session alive indefinitely, and the legitimate user has no idea. That is exactly what the absolute ceiling is for: no amount of activity extends <code>absoluteExpiresAt</code>, so the session ends on schedule regardless of who was using it.</p>
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Banking: 15 minutes idle, 12 hours absolute</span><span class="v">High-value actions, users who expect to be logged out. The friction is understood and accepted in that context.</span></div>
@@ -135,9 +135,9 @@ Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max
 
 <h3>Cleaning up</h3>
 <pre><code><span class="tok-comment">-- Chạy hằng ngày. Không có nó thì bảng chỉ có LỚN LÊN.</span>
-DELETE FROM "Phien"
-WHERE "hetHanTuyetDoi" &lt; now() - interval '7 days'
-   OR ("thuHoiLuc" IS NOT NULL AND "thuHoiLuc" &lt; now() - interval '7 days');</code></pre>
+DELETE FROM "Session"
+WHERE "absoluteExpiresAt" &lt; now() - interval '7 days'
+   OR ("revokedAt" IS NOT NULL AND "revokedAt" &lt; now() - interval '7 days');</code></pre>
 <div class="out">DELETE 184203
 Time: 892.104 ms
 
@@ -161,45 +161,45 @@ Time: 892.104 ms
 <p class="lead">Một phiên phía máy chủ là câu trả lời CỔ NHẤT cho bài toán của Bài 0.1 và vẫn là câu trả lời ĐÚNG cho phần lớn sản phẩm: đặt một hàng vào cơ sở dữ liệu, đưa cho trình duyệt một con trỏ tới nó, tra cứu nó ở mọi request. Nó không hợp mốt bên cạnh JWT và nó có ĐÚNG MỘT tính chất mà JWT khó có được — bạn KẾT THÚC nó được, ngay lập tức.</p>
 
 <h3>Lược đồ</h3>
-<pre><code>model Phien {
-  id          String    @id @default(cuid())
-  tokenBam    String    @unique                  <span class="tok-comment">// sha256 của token — Bài 1.3</span>
-  nguoiDungId String
-  nguoiDung   NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
+<pre><code>model Session {
+  id                String    @id @default(cuid())
+  tokenHash         String    @unique                  <span class="tok-comment">// sha256 của token — Bài 1.3</span>
+  userId            String
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  taoLuc      DateTime  @default(now())
-  hetHanTuyetDoi DateTime                        <span class="tok-comment">// trần cứng, không gia hạn</span>
-  hoatDongLuc DateTime  @default(now())          <span class="tok-comment">// cho hết hạn theo nhàn rỗi</span>
-  thuHoiLuc   DateTime?                          <span class="tok-comment">// null = còn sống</span>
+  createdAt         DateTime  @default(now())
+  absoluteExpiresAt DateTime  <span class="tok-comment">// trần cứng, không gia hạn</span>
+  activeAt          DateTime  @default(now())          <span class="tok-comment">// cho hết hạn theo nhàn rỗi</span>
+  revokedAt         DateTime? <span class="tok-comment">// null = còn sống</span>
 
-  trinhDuyet  String?                            <span class="tok-comment">// cho DANH SÁCH THIẾT BỊ, không phải để bảo mật</span>
-  ipTao       String?
+  browser           String?   <span class="tok-comment">// cho DANH SÁCH THIẾT BỊ, không phải để bảo mật</span>
+  createdIp         String?
 
-  @@index([nguoiDungId])                         <span class="tok-comment">// "thoát khỏi mọi thiết bị"</span>
-  @@index([hetHanTuyetDoi])                      <span class="tok-comment">// job dọn dẹp</span>
+  @@index([userId])                         <span class="tok-comment">// "thoát khỏi mọi thiết bị"</span>
+  @@index([absoluteExpiresAt])                      <span class="tok-comment">// job dọn dẹp</span>
 }</code></pre>
 <div class="kv-grid">
-  <div class="kv"><span class="k"><code>tokenBam</code>, KHÔNG phải <code>token</code></span><span class="v">Bài 1.3: cất <code>sha256(token)</code> và tra cứu THEO nó. Khi đó một bản dump cơ sở dữ liệu không chứa tín vật nào dùng được, và trong mã bạn không còn phép so sánh nào để làm sai. Hàm băm NHANH là đúng ở đây, vì cái token là 256 bit ngẫu nhiên.</span></div>
-  <div class="kv"><span class="k">HAI cột hết hạn, không phải một</span><span class="v"><code>hetHanTuyetDoi</code> là một cái TRẦN không bao giờ dịch chuyển — ba mươi ngày kể từ lúc tạo, rồi bạn đăng nhập lại bất kể đã hoạt động nhiều tới đâu. <code>hoatDongLuc</code> lo phần hết hạn theo NHÀN RỖI: không hoạt động hai giờ là phiên kết thúc. Chúng trả lời hai câu hỏi khác nhau và bạn muốn có CẢ HAI.</span></div>
-  <div class="kv"><span class="k"><code>thuHoiLuc</code> thay vì xoá hàng</span><span class="v">Một hàng đã thu hồi mà bạn giữ lại một thời gian chính là một vết kiểm toán: bạn trả lời được câu "cái phiên này có bị dùng SAU khi người dùng nói họ đã đăng xuất không?". Hãy xoá nó trong job dọn dẹp một tuần sau. Chương 11 dùng cột này.</span></div>
-  <div class="kv"><span class="k"><code>trinhDuyet</code> và <code>ipTao</code> là dành cho CON NGƯỜI</span><span class="v">Chúng nuôi một danh sách kiểu "Chrome trên Windows · Hà Nội · 2 giờ trước" để người dùng phát hiện một phiên họ không nhận ra. ĐỪNG từ chối một request vì user agent đã đổi — cái đó phá vỡ những lần cập nhật chính đáng và việc chuyển thiết bị di động, mà kẻ tấn công thì copy cái header đó dễ như không.</span></div>
+  <div class="kv"><span class="k"><code>tokenHash</code>, KHÔNG phải <code>token</code></span><span class="v">Bài 1.3: cất <code>sha256(token)</code> và tra cứu THEO nó. Khi đó một bản dump cơ sở dữ liệu không chứa tín vật nào dùng được, và trong mã bạn không còn phép so sánh nào để làm sai. Hàm băm NHANH là đúng ở đây, vì cái token là 256 bit ngẫu nhiên.</span></div>
+  <div class="kv"><span class="k">HAI cột hết hạn, không phải một</span><span class="v"><code>absoluteExpiresAt</code> là một cái TRẦN không bao giờ dịch chuyển — ba mươi ngày kể từ lúc tạo, rồi bạn đăng nhập lại bất kể đã hoạt động nhiều tới đâu. <code>activeAt</code> lo phần hết hạn theo NHÀN RỖI: không hoạt động hai giờ là phiên kết thúc. Chúng trả lời hai câu hỏi khác nhau và bạn muốn có CẢ HAI.</span></div>
+  <div class="kv"><span class="k"><code>revokedAt</code> thay vì xoá hàng</span><span class="v">Một hàng đã thu hồi mà bạn giữ lại một thời gian chính là một vết kiểm toán: bạn trả lời được câu "cái phiên này có bị dùng SAU khi người dùng nói họ đã đăng xuất không?". Hãy xoá nó trong job dọn dẹp một tuần sau. Chương 11 dùng cột này.</span></div>
+  <div class="kv"><span class="k"><code>browser</code> và <code>createdIp</code> là dành cho CON NGƯỜI</span><span class="v">Chúng nuôi một danh sách kiểu "Chrome trên Windows · Hà Nội · 2 giờ trước" để người dùng phát hiện một phiên họ không nhận ra. ĐỪNG từ chối một request vì user agent đã đổi — cái đó phá vỡ những lần cập nhật chính đáng và việc chuyển thiết bị di động, mà kẻ tấn công thì copy cái header đó dễ như không.</span></div>
 </div>
 
 <h3>Cấp một phiên</h3>
 <pre><code>import { randomBytes, createHash } from 'node:crypto';
 
-const NHAN_ROI_MS  = 2 * 60 * 60 * 1000;         <span class="tok-comment">// 2 giờ nhàn rỗi</span>
-const TUYET_DOI_MS = 30 * 24 * 60 * 60 * 1000;   <span class="tok-comment">// 30 ngày trần cứng</span>
+const IDLE_MS  = 2 * 60 * 60 * 1000;         <span class="tok-comment">// 2 giờ nhàn rỗi</span>
+const ABSOLUTE_MS = 30 * 24 * 60 * 60 * 1000;   <span class="tok-comment">// 30 ngày trần cứng</span>
 
-export async function taoPhien(nguoiDungId: string, req: Request) {
+export async function createSession(userId: string, req: Request) {
   const token = randomBytes(32).toString('base64url');       <span class="tok-comment">// 256 bit</span>
-  await prisma.phien.create({
+  await prisma.session.create({
     data: {
-      tokenBam: createHash('sha256').update(token).digest('hex'),
-      nguoiDungId,
-      hetHanTuyetDoi: new Date(Date.now() + TUYET_DOI_MS),
-      trinhDuyet: req.get('user-agent')?.slice(0, 200),
-      ipTao: req.ip,
+      tokenHash: createHash('sha256').update(token).digest('hex'),
+      userId,
+      absoluteExpiresAt: new Date(Date.now() + ABSOLUTE_MS),
+      browser: req.get('user-agent')?.slice(0, 200),
+      createdIp: req.ip,
     },
   });
   return token;                                   <span class="tok-comment">// chỉ trả về ĐÚNG MỘT LẦN</span>
@@ -212,33 +212,33 @@ Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max
 # va bo nho cua tien trinh nay trong vai mili giay. Khong o dau khac.</div>
 
 <h3>Xác minh một phiên, ở MỌI request</h3>
-<pre><code>export async function layPhien(token: string | undefined) {
+<pre><code>export async function getSession(token: string | undefined) {
   if (!token) return null;
-  const bam = createHash('sha256').update(token).digest('hex');
+  const hash = createHash('sha256').update(token).digest('hex');
   const bayGio = new Date();
 
-  const phien = await prisma.phien.findFirst({
+  const session = await prisma.session.findFirst({
     where: {
-      tokenBam: bam,
-      thuHoiLuc: null,
-      hetHanTuyetDoi: { gt: bayGio },
-      hoatDongLuc:    { gt: new Date(bayGio.getTime() - NHAN_ROI_MS) },
+      tokenHash: bam,
+      revokedAt: null,
+      absoluteExpiresAt: { gt: bayGio },
+      activeAt:    { gt: new Date(bayGio.getTime() - IDLE_MS) },
     },
-    include: { nguoiDung: { select: { id: true, email: true, vaiTro: true } } },
+    include: { user: { select: { id: true, email: true, role: true } } },
   });
-  if (!phien) return null;
+  if (!session) return null;
 
   <span class="tok-comment">// Chỉ ghi khi đã cũ hơn 5 phút — xem bên dưới</span>
-  if (bayGio.getTime() - phien.hoatDongLuc.getTime() &gt; 5 * 60 * 1000) {
-    await prisma.phien.update({
-      where: { id: phien.id }, data: { hoatDongLuc: bayGio },
+  if (bayGio.getTime() - session.activeAt.getTime() &gt; 5 * 60 * 1000) {
+    await prisma.session.update({
+      where: { id: session.id }, data: { activeAt: bayGio },
     });
   }
-  return phien;
+  return session;
 }</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Mọi điều kiện nằm trong <code>where</code></span><span class="lz-t">Không nằm ở một <code>if</code> phía sau</span><span class="lz-d">Đã thu hồi, hết hạn tuyệt đối và hết hạn do nhàn rỗi đều là BỘ LỌC, đúng như ở Bài 0.2. Một câu truy vấn trả về một phiên hoặc không gì cả, và một lần refactor sau này không thể vô tình đánh rơi một phép kiểm.</span></div>
-  <div class="lz-step"><span class="lz-k">Ngưỡng ghi năm phút</span><span class="lz-t">Cách vá hiệu năng</span><span class="lz-d">Cập nhật <code>hoatDongLuc</code> ở mọi request nghĩa là một lệnh GHI cơ sở dữ liệu cho mỗi lượt xem trang — kể cả mọi ảnh, mọi lời gọi API và mọi lần hỏi thăm. Chỉ ghi khi giá trị đã cũ hơn năm phút thì giữ độ chính xác của hết-hạn-nhàn-rỗi trong khoảng năm phút và xoá đi 99% số lệnh ghi.</span></div>
+  <div class="lz-step"><span class="lz-k">Ngưỡng ghi năm phút</span><span class="lz-t">Cách vá hiệu năng</span><span class="lz-d">Cập nhật <code>activeAt</code> ở mọi request nghĩa là một lệnh GHI cơ sở dữ liệu cho mỗi lượt xem trang — kể cả mọi ảnh, mọi lời gọi API và mọi lần hỏi thăm. Chỉ ghi khi giá trị đã cũ hơn năm phút thì giữ độ chính xác của hết-hạn-nhàn-rỗi trong khoảng năm phút và xoá đi 99% số lệnh ghi.</span></div>
   <div class="lz-step"><span class="lz-k">Một truy vấn, một phép nối</span><span class="lz-t">Chi phí cho mỗi request</span><span class="lz-d">Một lần tra chỉ mục duy nhất cộng một phép nối theo khoá chính tốn khoảng 0,3 ms trên một cơ sở dữ liệu đã ấm. Đó là cái GIÁ THẬT của phiên phía máy chủ, và nó thấp hơn nhiều so với mức phần lớn người ta tưởng khi họ với tay sang JWT để né nó.</span></div>
   <div class="lz-step"><span class="lz-k">Cache nó nếu buộc phải</span><span class="lz-t">Và biết mình vừa đánh đổi gì</span><span class="lz-d">Đặt phiên vào Redis làm lần tra còn 0,05 ms — Bài 3.5. Nhưng một phiên đã cache là một phiên bạn KHÔNG còn thu hồi tức thì được nữa, trừ khi bạn cũng xoá luôn mục cache — và đó chính là bài toán của JWT, ở dạng nhỏ hơn.</span></div>
 </div>
@@ -259,7 +259,7 @@ Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max
   </div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — chỉ có hết hạn TRƯỢT thôi thì một phiên bị cắp KHÔNG BAO GIỜ hết hạn.</strong> Nếu mọi request đều đẩy hạn chót lùi ra, thì một kẻ tấn công cứ mỗi giờ hỏi thăm một endpoint vô hại là giữ được cái phiên sống VÔ THỜI HẠN, còn người dùng thật thì không hay biết gì. Đó chính xác là công dụng của cái trần TUYỆT ĐỐI: không có mức hoạt động nào kéo dài được <code>hetHanTuyetDoi</code>, nên phiên kết thúc đúng lịch bất kể ai đang dùng nó.</p>
+<p><strong>Bẫy — chỉ có hết hạn TRƯỢT thôi thì một phiên bị cắp KHÔNG BAO GIỜ hết hạn.</strong> Nếu mọi request đều đẩy hạn chót lùi ra, thì một kẻ tấn công cứ mỗi giờ hỏi thăm một endpoint vô hại là giữ được cái phiên sống VÔ THỜI HẠN, còn người dùng thật thì không hay biết gì. Đó chính xác là công dụng của cái trần TUYỆT ĐỐI: không có mức hoạt động nào kéo dài được <code>absoluteExpiresAt</code>, nên phiên kết thúc đúng lịch bất kể ai đang dùng nó.</p>
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Ngân hàng: 15 phút nhàn rỗi, 12 giờ tuyệt đối</span><span class="v">Hành động giá trị cao, người dùng MONG ĐỢI bị đăng xuất. Sự phiền phức đó được hiểu và được chấp nhận trong bối cảnh ấy.</span></div>
@@ -270,9 +270,9 @@ Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max
 
 <h3>Dọn dẹp</h3>
 <pre><code><span class="tok-comment">-- Chạy hằng ngày. Không có nó thì bảng chỉ có LỚN LÊN.</span>
-DELETE FROM "Phien"
-WHERE "hetHanTuyetDoi" &lt; now() - interval '7 days'
-   OR ("thuHoiLuc" IS NOT NULL AND "thuHoiLuc" &lt; now() - interval '7 days');</code></pre>
+DELETE FROM "Session"
+WHERE "absoluteExpiresAt" &lt; now() - interval '7 days'
+   OR ("revokedAt" IS NOT NULL AND "revokedAt" &lt; now() - interval '7 days');</code></pre>
 <div class="out">DELETE 184203
 Time: 892.104 ms
 
@@ -304,13 +304,13 @@ Time: 892.104 ms
 <p class="lead">A session cookie's security is entirely in its attributes, and each one blocks a specific attack while leaving the others untouched. This lesson goes through them one at a time with the threat each addresses, and ends with the single prefix that enforces three of them at once.</p>
 
 <h3>The header, annotated</h3>
-<pre><code>Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
+<pre><code>Set-Cookie: __Host-session=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
             └───┬───┘ └──┬──┘      └─┬──┘ └───┬──┘  └─┬──┘ └──────┬─────┘  └──────┬──────┘
           tiền tố  giá trị       phạm vi   script  chỉ    ngữ cảnh chéo    tuổi thọ
           bắt buộc               đường dẫn không   HTTPS   trang
           3 luật                          đọc được</code></pre>
 <pre><code><span class="tok-comment">// Express: đặt tất cả trong một chỗ, không rải rác</span>
-res.cookie('__Host-phien', token, {
+res.cookie('__Host-session', token, {
   httpOnly: true,
   secure:   true,
   sameSite: 'lax',
@@ -371,8 +371,8 @@ Khong dat     → Chrome mac dinh Lax; Safari va cac trinh duyet khac
 </div>
 
 <h3><code>Domain</code> — the attribute to leave out</h3>
-<pre><code>Set-Cookie: phien=…;                      <span class="tok-comment">// host-only: CHỈ vidu.com</span>
-Set-Cookie: phien=…; Domain=vidu.com      <span class="tok-comment">// vidu.com VÀ mọi tên miền con</span></code></pre>
+<pre><code>Set-Cookie: session=…;                      <span class="tok-comment">// host-only: CHỈ vidu.com</span>
+Set-Cookie: session=…; Domain=vidu.com      <span class="tok-comment">// vidu.com VÀ mọi tên miền con</span></code></pre>
 <div class="out">Voi Domain=vidu.com, cookie phien duoc gui toi:
   vidu.com            ✅ y dinh
   app.vidu.com        ✅ y dinh
@@ -390,20 +390,20 @@ Set-Cookie: phien=…; Domain=vidu.com      <span class="tok-comment">// vidu.co
 </div>
 
 <h3><code>__Host-</code> — three rules the browser enforces for you</h3>
-<pre><code>Set-Cookie: __Host-phien=…; Path=/; Secure; HttpOnly; SameSite=Lax   <span class="tok-comment">// ✅ nhận</span>
-Set-Cookie: __Host-phien=…; Path=/; HttpOnly                          <span class="tok-comment">// ❌ bỏ: thiếu Secure</span>
-Set-Cookie: __Host-phien=…; Path=/admin; Secure                       <span class="tok-comment">// ❌ bỏ: Path phải là /</span>
-Set-Cookie: __Host-phien=…; Path=/; Secure; Domain=vidu.com           <span class="tok-comment">// ❌ bỏ: có Domain</span></code></pre>
+<pre><code>Set-Cookie: __Host-session=…; Path=/; Secure; HttpOnly; SameSite=Lax   <span class="tok-comment">// ✅ nhận</span>
+Set-Cookie: __Host-session=…; Path=/; HttpOnly                          <span class="tok-comment">// ❌ bỏ: thiếu Secure</span>
+Set-Cookie: __Host-session=…; Path=/admin; Secure                       <span class="tok-comment">// ❌ bỏ: Path phải là /</span>
+Set-Cookie: __Host-session=…; Path=/; Secure; Domain=vidu.com           <span class="tok-comment">// ❌ bỏ: có Domain</span></code></pre>
 <div class="callout ok">
 <p><strong>The <code>__Host-</code> prefix is the highest-value single change in this lesson.</strong> A cookie whose name starts with it is rejected by the browser unless it has <code>Secure</code>, has <code>Path=/</code>, and has no <code>Domain</code>. That means a misconfiguration cannot silently ship — it fails loudly in development instead. It also blocks <em>cookie tossing</em>, where a compromised subdomain sets a cookie of the same name to overwrite yours, because a subdomain cannot write a <code>__Host-</code> cookie at all.</p>
 </div>
 
 <h3>Clearing a cookie, and the trap</h3>
 <pre><code><span class="tok-comment">// ❌ Không xoá được gì cả</span>
-res.clearCookie('__Host-phien');
+res.clearCookie('__Host-session');
 
 <span class="tok-comment">// ✅ Phải khớp CHÍNH XÁC path, domain, secure và sameSite lúc đặt</span>
-res.clearCookie('__Host-phien', {
+res.clearCookie('__Host-session', {
   path: '/', secure: true, httpOnly: true, sameSite: 'lax',
 });</code></pre>
 <div class="out"># Trinh duyet dinh danh mot cookie bang (ten, domain, path).
@@ -413,7 +413,7 @@ res.clearCookie('__Host-phien', {
 # Va du sao: xoa cookie KHONG phai dang xuat. Phai THU HOI hang phien
 # trong co so du lieu, neu khong thi ke cap van dung tiep binh thuong.</div>
 <div class="note-ct">
-<p><strong>The complete set, for a normal application.</strong> Name it <code>__Host-phien</code> · <code>HttpOnly</code> · <code>Secure</code> · <code>SameSite=Lax</code> · <code>Path=/</code> · no <code>Domain</code> · <code>Max-Age</code> matching the session's absolute expiry · and <code>app.set('trust proxy', 1)</code> so <code>Secure</code> works behind Nginx. Six attributes, one line of Express configuration, and every one of them has a specific attack behind it. Write it once in a helper and never set a session cookie by hand again.</p>
+<p><strong>The complete set, for a normal application.</strong> Name it <code>__Host-session</code> · <code>HttpOnly</code> · <code>Secure</code> · <code>SameSite=Lax</code> · <code>Path=/</code> · no <code>Domain</code> · <code>Max-Age</code> matching the session's absolute expiry · and <code>app.set('trust proxy', 1)</code> so <code>Secure</code> works behind Nginx. Six attributes, one line of Express configuration, and every one of them has a specific attack behind it. Write it once in a helper and never set a session cookie by hand again.</p>
 </div>
 
 <h3>Learning sources for this lesson</h3>
@@ -431,13 +431,13 @@ res.clearCookie('__Host-phien', {
 <p class="lead">Độ an toàn của một cookie phiên nằm TRỌN trong các thuộc tính của nó, và mỗi thuộc tính chặn một cú tấn công CỤ THỂ trong khi để yên những cú khác. Bài này đi qua từng cái một, kèm mối đe doạ mà nó nhắm tới, rồi kết bằng một cái TIỀN TỐ duy nhất cưỡng chế ba thuộc tính cùng lúc.</p>
 
 <h3>Cái header, có chú giải</h3>
-<pre><code>Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
+<pre><code>Set-Cookie: __Host-session=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
             └───┬───┘ └──┬──┘      └─┬──┘ └───┬──┘  └─┬──┘ └──────┬─────┘  └──────┬──────┘
           tiền tố  giá trị       phạm vi   script  chỉ    ngữ cảnh chéo    tuổi thọ
           bắt buộc               đường dẫn không   HTTPS   trang
           3 luật                          đọc được</code></pre>
 <pre><code><span class="tok-comment">// Express: đặt tất cả trong MỘT chỗ, đừng rải rác</span>
-res.cookie('__Host-phien', token, {
+res.cookie('__Host-session', token, {
   httpOnly: true,
   secure:   true,
   sameSite: 'lax',
@@ -498,8 +498,8 @@ Khong dat     → Chrome mac dinh Lax; Safari va cac trinh duyet khac
 </div>
 
 <h3><code>Domain</code> — cái thuộc tính nên BỎ TRỐNG</h3>
-<pre><code>Set-Cookie: phien=…;                      <span class="tok-comment">// chỉ-host: CHỈ vidu.com</span>
-Set-Cookie: phien=…; Domain=vidu.com      <span class="tok-comment">// vidu.com VÀ mọi tên miền con</span></code></pre>
+<pre><code>Set-Cookie: session=…;                      <span class="tok-comment">// chỉ-host: CHỈ vidu.com</span>
+Set-Cookie: session=…; Domain=vidu.com      <span class="tok-comment">// vidu.com VÀ mọi tên miền con</span></code></pre>
 <div class="out">Voi Domain=vidu.com, cookie phien duoc gui toi:
   vidu.com            ✅ y dinh
   app.vidu.com        ✅ y dinh
@@ -517,20 +517,20 @@ Set-Cookie: phien=…; Domain=vidu.com      <span class="tok-comment">// vidu.co
 </div>
 
 <h3><code>__Host-</code> — ba luật do TRÌNH DUYỆT cưỡng chế giùm bạn</h3>
-<pre><code>Set-Cookie: __Host-phien=…; Path=/; Secure; HttpOnly; SameSite=Lax   <span class="tok-comment">// ✅ nhận</span>
-Set-Cookie: __Host-phien=…; Path=/; HttpOnly                          <span class="tok-comment">// ❌ bỏ: thiếu Secure</span>
-Set-Cookie: __Host-phien=…; Path=/admin; Secure                       <span class="tok-comment">// ❌ bỏ: Path phải là /</span>
-Set-Cookie: __Host-phien=…; Path=/; Secure; Domain=vidu.com           <span class="tok-comment">// ❌ bỏ: có Domain</span></code></pre>
+<pre><code>Set-Cookie: __Host-session=…; Path=/; Secure; HttpOnly; SameSite=Lax   <span class="tok-comment">// ✅ nhận</span>
+Set-Cookie: __Host-session=…; Path=/; HttpOnly                          <span class="tok-comment">// ❌ bỏ: thiếu Secure</span>
+Set-Cookie: __Host-session=…; Path=/admin; Secure                       <span class="tok-comment">// ❌ bỏ: Path phải là /</span>
+Set-Cookie: __Host-session=…; Path=/; Secure; Domain=vidu.com           <span class="tok-comment">// ❌ bỏ: có Domain</span></code></pre>
 <div class="callout ok">
 <p><strong>Tiền tố <code>__Host-</code> là thay đổi ĐƠN LẺ có giá trị cao nhất trong bài này.</strong> Một cookie có tên bắt đầu bằng nó sẽ bị TRÌNH DUYỆT từ chối trừ khi nó có <code>Secure</code>, có <code>Path=/</code>, và KHÔNG có <code>Domain</code>. Nghĩa là một cấu hình sai KHÔNG thể lặng lẽ lên production — nó hỏng ỒN ÀO ngay lúc phát triển. Nó cũng chặn được <em>cookie tossing</em>, khi một tên miền con bị chiếm đặt một cookie CÙNG TÊN để đè lên cookie của bạn, bởi vì một tên miền con hoàn toàn KHÔNG ghi được một cookie <code>__Host-</code>.</p>
 </div>
 
 <h3>Xoá một cookie, và cái bẫy</h3>
 <pre><code><span class="tok-comment">// ❌ Không xoá được gì cả</span>
-res.clearCookie('__Host-phien');
+res.clearCookie('__Host-session');
 
 <span class="tok-comment">// ✅ Phải khớp CHÍNH XÁC path, domain, secure và sameSite lúc đặt</span>
-res.clearCookie('__Host-phien', {
+res.clearCookie('__Host-session', {
   path: '/', secure: true, httpOnly: true, sameSite: 'lax',
 });</code></pre>
 <div class="out"># Trinh duyet dinh danh mot cookie bang (ten, domain, path).
@@ -540,7 +540,7 @@ res.clearCookie('__Host-phien', {
 # Va du sao: xoa cookie KHONG phai dang xuat. Phai THU HOI hang phien
 # trong co so du lieu, neu khong thi ke cap van dung tiep binh thuong.</div>
 <div class="note-ct">
-<p><strong>Bộ đầy đủ, cho một ứng dụng bình thường.</strong> Đặt tên là <code>__Host-phien</code> · <code>HttpOnly</code> · <code>Secure</code> · <code>SameSite=Lax</code> · <code>Path=/</code> · KHÔNG có <code>Domain</code> · <code>Max-Age</code> khớp với hết-hạn-tuyệt-đối của phiên · và <code>app.set('trust proxy', 1)</code> để <code>Secure</code> chạy đúng sau Nginx. Sáu thuộc tính, một dòng cấu hình Express, và MỖI cái đều có một cú tấn công cụ thể đứng sau. Hãy viết nó MỘT lần trong một hàm phụ rồi đừng bao giờ đặt cookie phiên bằng tay nữa.</p>
+<p><strong>Bộ đầy đủ, cho một ứng dụng bình thường.</strong> Đặt tên là <code>__Host-session</code> · <code>HttpOnly</code> · <code>Secure</code> · <code>SameSite=Lax</code> · <code>Path=/</code> · KHÔNG có <code>Domain</code> · <code>Max-Age</code> khớp với hết-hạn-tuyệt-đối của phiên · và <code>app.set('trust proxy', 1)</code> để <code>Secure</code> chạy đúng sau Nginx. Sáu thuộc tính, một dòng cấu hình Express, và MỖI cái đều có một cú tấn công cụ thể đứng sau. Hãy viết nó MỘT lần trong một hàm phụ rồi đừng bao giờ đặt cookie phiên bằng tay nữa.</p>
 </div>
 
 <h3>Nguồn học cho bài này</h3>
@@ -582,10 +582,10 @@ res.clearCookie('__Host-phien', {
 </div>
 <pre><code><span class="tok-comment">// ❌ The vulnerable pattern: reuse the id, just attach a user to it</span>
 app.post('/sign-in', async (req, res) =&gt; {
-  const nd = await kiemTraMatKhau(req.body);
-  await prisma.phien.update({
-    where: { id: req.phien.id },              <span class="tok-comment">// ← CÙNG mã phiên</span>
-    data:  { nguoiDungId: nd.id },            <span class="tok-comment">// ← chỉ gắn thêm người dùng</span>
+  const u = await verifyPassword(req.body);
+  await prisma.session.update({
+    where: { id: req.session.id },              <span class="tok-comment">// ← CÙNG mã phiên</span>
+    data:  { userId: u.id },            <span class="tok-comment">// ← chỉ gắn thêm người dùng</span>
   });
   res.json({ ok: true });
 });</code></pre>
@@ -595,7 +595,7 @@ app.post('/sign-in', async (req, res) =&gt; {
 
 <h3>How the id gets planted</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Cookie tossing from a subdomain</span><span class="v">A compromised or unclaimed <code>cu.vidu.com</code> can set a cookie named <code>phien</code> for the parent domain. Lesson 3.2's <code>__Host-</code> prefix blocks this specifically, because a subdomain cannot write a <code>__Host-</code> cookie.</span></div>
+  <div class="kv"><span class="k">Cookie tossing from a subdomain</span><span class="v">A compromised or unclaimed <code>cu.vidu.com</code> can set a cookie named <code>session</code> for the parent domain. Lesson 3.2's <code>__Host-</code> prefix blocks this specifically, because a subdomain cannot write a <code>__Host-</code> cookie.</span></div>
   <div class="kv"><span class="k">A session id in the URL</span><span class="v">Old frameworks accepted <code>?PHPSESSID=…</code> or <code>;jsessionid=…</code> so that cookieless browsers worked. A link is then all it takes. Never read a session token from a query parameter — cookies or the <code>Authorization</code> header, nothing else.</span></div>
   <div class="kv"><span class="k">XSS anywhere on the origin</span><span class="v">If a script can run, it can set <code>document.cookie</code>. <code>HttpOnly</code> prevents reading but not writing a <em>different</em> cookie name — and a same-name write is what the <code>__Host-</code> prefix stops.</span></div>
   <div class="kv"><span class="k">A shared or public machine</span><span class="v">The lowest-tech version: log in on a library computer, do not log out, and the next person has your session. Idle expiry from Lesson 3.1 bounds it; regeneration does not help here, but revocation does.</span></div>
@@ -604,15 +604,15 @@ app.post('/sign-in', async (req, res) =&gt; {
 <h3>The fix</h3>
 <pre><code><span class="tok-comment">// ✅ Thu hồi cái cũ, cấp cái MỚI. Bốn dòng.</span>
 app.post('/sign-in', async (req, res) =&gt; {
-  const nd = await kiemTraMatKhau(req.body);
+  const u = await verifyPassword(req.body);
 
-  if (req.phien) {
-    await prisma.phien.update({
-      where: { id: req.phien.id }, data: { thuHoiLuc: new Date() },
+  if (req.session) {
+    await prisma.session.update({
+      where: { id: req.session.id }, data: { revokedAt: new Date() },
     });
   }
-  const token = await taoPhien(nd.id, req);      <span class="tok-comment">// mã HOÀN TOÀN mới</span>
-  datCookiePhien(res, token);
+  const token = await createSession(u.id, req);      <span class="tok-comment">// mã HOÀN TOÀN mới</span>
+  setSessionCookie(res, token);
 
   res.json({ ok: true });
 });</code></pre>
@@ -635,19 +635,19 @@ app.post('/sign-in', async (req, res) =&gt; {
 <h3>Carrying anonymous state across</h3>
 <pre><code><span class="tok-comment">// Người dùng có giỏ hàng TRƯỚC khi đăng nhập. Chuyển DỮ LIỆU, không chuyển MÃ.</span>
 app.post('/sign-in', async (req, res) =&gt; {
-  const gioCu = req.phien?.id;                    <span class="tok-comment">// giữ lại id CŨ để đọc dữ liệu</span>
-  const nd = await kiemTraMatKhau(req.body);
+  const oldCart = req.session?.id;                    <span class="tok-comment">// giữ lại id CŨ để đọc dữ liệu</span>
+  const u = await verifyPassword(req.body);
 
   await prisma.$transaction(async (tx) =&gt; {
-    if (gioCu) {
-      await tx.gioHang.updateMany({
-        where: { phienId: gioCu }, data: { nguoiDungId: nd.id, phienId: null },
+    if (oldCart) {
+      await tx.cart.updateMany({
+        where: { sessionId: oldCart }, data: { userId: u.id, sessionId: null },
       });
-      await tx.phien.update({ where: { id: gioCu }, data: { thuHoiLuc: new Date() } });
+      await tx.session.update({ where: { id: oldCart }, data: { revokedAt: new Date() } });
     }
   });
 
-  datCookiePhien(res, await taoPhien(nd.id, req));
+  setSessionCookie(res, await createSession(u.id, req));
 });</code></pre>
 <div class="pitfall">
 <p><strong>Trap — an anonymous session that survives login is the vulnerability wearing a feature's clothes.</strong> "Keep the cart" is a real requirement, and the wrong implementation of it — keeping the session id so the cart stays attached — is exactly the fixation bug. Move the <em>rows</em> to the user, revoke the old session, issue a new one. The user sees their cart; the attacker's planted id is dead.</p>
@@ -655,28 +655,28 @@ app.post('/sign-in', async (req, res) =&gt; {
 
 <h3>Step-up: proving it is still you</h3>
 <pre><code><span class="tok-comment">// Một cột nữa trên Phien, và một middleware</span>
-model Phien {
+model Session {
   <span class="tok-comment">// …</span>
-  xacThucLuc DateTime   <span class="tok-comment">// lần cuối người dùng CHỨNG MINH danh tính</span>
+  authenticatedAt DateTime <span class="tok-comment">// lần cuối người dùng CHỨNG MINH danh tính</span>
 }
 
-export function canXacThucLai(phutToiDa: number) {
+export function needsReauth(maxMinutes: number) {
   return (req, res, next) =&gt; {
-    const tuoi = Date.now() - req.phien.xacThucLuc.getTime();
-    if (tuoi &gt; phutToiDa * 60_000) {
-      return res.status(403).json({ ma: 'CAN_XAC_THUC_LAI', phutToiDa });
+    const age = Date.now() - req.session.authenticatedAt.getTime();
+    if (age &gt; maxMinutes * 60_000) {
+      return res.status(403).json({ ma: 'CAN_XAC_THUC_LAI', maxMinutes });
     }
     next();
   };
 }
 
-app.post('/account/change-email',  requireAuth, canXacThucLai(5), doiEmail);
-app.post('/account/delete',        requireAuth, canXacThucLai(5), xoaTaiKhoan);
-app.post('/thanh-toan/rut-tien',  requireAuth, canXacThucLai(2), rutTien);</code></pre>
+app.post('/account/change-email',  requireAuth, needsReauth(5), doiEmail);
+app.post('/account/delete',        requireAuth, needsReauth(5), xoaTaiKhoan);
+app.post('/thanh-toan/rut-tien',  requireAuth, needsReauth(2), rutTien);</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">It defends against the stolen session, not the stolen password</span><span class="lz-lnote">An attacker with a hijacked cookie can read everything, but cannot change the email or delete the account without producing the password. That is the gap between "session compromised" and "account lost", and it is worth building.</span></div>
   <div class="lz-layer"><span class="lz-lname">Which actions need it</span><span class="lz-lnote">Anything that changes how the account is recovered — email, phone, password, MFA devices, recovery codes — plus anything irreversible or financial. Not "everything sensitive": too many prompts and users stop reading them.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Update <code>xacThucLuc</code>, do not rotate</span><span class="lz-lnote">Re-authentication confirms the existing session rather than raising its privilege, so the id stays. Set <code>xacThucLuc = now()</code> on success. Rotation is for privilege <em>increase</em>; this is privilege <em>confirmation</em>.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Update <code>authenticatedAt</code>, do not rotate</span><span class="lz-lnote">Re-authentication confirms the existing session rather than raising its privilege, so the id stays. Set <code>authenticatedAt = now()</code> on success. Rotation is for privilege <em>increase</em>; this is privilege <em>confirmation</em>.</span></div>
   <div class="lz-layer"><span class="lz-lname">This is OIDC's <code>auth_time</code> and <code>max_age</code></span><span class="lz-lnote">The same idea is standardised: an identity provider reports when the user actually authenticated, and a relying party can demand a fresh one. Chapter 8 uses it; the mechanism here is the local version of the same requirement.</span></div>
 </div>
 <div class="note-ct">
@@ -713,10 +713,10 @@ app.post('/thanh-toan/rut-tien',  requireAuth, canXacThucLai(2), rutTien);</code
 </div>
 <pre><code><span class="tok-comment">// ❌ Mẫu có lỗ hổng: dùng lại mã, chỉ gắn thêm người dùng vào</span>
 app.post('/sign-in', async (req, res) =&gt; {
-  const nd = await kiemTraMatKhau(req.body);
-  await prisma.phien.update({
-    where: { id: req.phien.id },              <span class="tok-comment">// ← CÙNG mã phiên</span>
-    data:  { nguoiDungId: nd.id },            <span class="tok-comment">// ← chỉ gắn thêm người dùng</span>
+  const u = await verifyPassword(req.body);
+  await prisma.session.update({
+    where: { id: req.session.id },              <span class="tok-comment">// ← CÙNG mã phiên</span>
+    data:  { userId: u.id },            <span class="tok-comment">// ← chỉ gắn thêm người dùng</span>
   });
   res.json({ ok: true });
 });</code></pre>
@@ -726,7 +726,7 @@ app.post('/sign-in', async (req, res) =&gt; {
 
 <h3>Cái mã đó được CẮM vào bằng cách nào</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Ném cookie từ một tên miền con</span><span class="v">Một <code>cu.vidu.com</code> bị chiếm hoặc chưa ai nhận có thể đặt một cookie tên <code>phien</code> cho tên miền cha. Tiền tố <code>__Host-</code> của Bài 3.2 chặn ĐÚNG chuyện này, vì một tên miền con không ghi được cookie <code>__Host-</code>.</span></div>
+  <div class="kv"><span class="k">Ném cookie từ một tên miền con</span><span class="v">Một <code>cu.vidu.com</code> bị chiếm hoặc chưa ai nhận có thể đặt một cookie tên <code>session</code> cho tên miền cha. Tiền tố <code>__Host-</code> của Bài 3.2 chặn ĐÚNG chuyện này, vì một tên miền con không ghi được cookie <code>__Host-</code>.</span></div>
   <div class="kv"><span class="k">Mã phiên nằm trong URL</span><span class="v">Các framework cũ chấp nhận <code>?PHPSESSID=…</code> hay <code>;jsessionid=…</code> để trình duyệt không có cookie vẫn chạy được. Khi đó chỉ cần một cái LIÊN KẾT là đủ. ĐỪNG BAO GIỜ đọc token phiên từ một tham số truy vấn — cookie hoặc header <code>Authorization</code>, không gì khác.</span></div>
   <div class="kv"><span class="k">XSS ở BẤT KỲ đâu trên origin</span><span class="v">Nếu một script chạy được thì nó ghi được <code>document.cookie</code>. <code>HttpOnly</code> ngăn việc ĐỌC chứ không ngăn việc GHI một cookie tên KHÁC — và việc ghi đè cùng tên mới là thứ tiền tố <code>__Host-</code> chặn.</span></div>
   <div class="kv"><span class="k">Một máy dùng chung hoặc máy công cộng</span><span class="v">Phiên bản ít công nghệ nhất: đăng nhập trên máy ở thư viện, không đăng xuất, và người kế tiếp có phiên của bạn. Hết hạn nhàn rỗi của Bài 3.1 chặn trần được nó; tái sinh mã thì không giúp ở đây, nhưng THU HỒI thì có.</span></div>
@@ -735,15 +735,15 @@ app.post('/sign-in', async (req, res) =&gt; {
 <h3>Cách vá</h3>
 <pre><code><span class="tok-comment">// ✅ Thu hồi cái cũ, cấp cái MỚI. Bốn dòng.</span>
 app.post('/sign-in', async (req, res) =&gt; {
-  const nd = await kiemTraMatKhau(req.body);
+  const u = await verifyPassword(req.body);
 
-  if (req.phien) {
-    await prisma.phien.update({
-      where: { id: req.phien.id }, data: { thuHoiLuc: new Date() },
+  if (req.session) {
+    await prisma.session.update({
+      where: { id: req.session.id }, data: { revokedAt: new Date() },
     });
   }
-  const token = await taoPhien(nd.id, req);      <span class="tok-comment">// mã HOÀN TOÀN mới</span>
-  datCookiePhien(res, token);
+  const token = await createSession(u.id, req);      <span class="tok-comment">// mã HOÀN TOÀN mới</span>
+  setSessionCookie(res, token);
 
   res.json({ ok: true });
 });</code></pre>
@@ -766,19 +766,19 @@ app.post('/sign-in', async (req, res) =&gt; {
 <h3>Mang trạng thái ẩn danh đi theo</h3>
 <pre><code><span class="tok-comment">// Người dùng có giỏ hàng TRƯỚC khi đăng nhập. Chuyển DỮ LIỆU, không chuyển MÃ.</span>
 app.post('/sign-in', async (req, res) =&gt; {
-  const gioCu = req.phien?.id;                    <span class="tok-comment">// giữ lại id CŨ để đọc dữ liệu</span>
-  const nd = await kiemTraMatKhau(req.body);
+  const oldCart = req.session?.id;                    <span class="tok-comment">// giữ lại id CŨ để đọc dữ liệu</span>
+  const u = await verifyPassword(req.body);
 
   await prisma.$transaction(async (tx) =&gt; {
-    if (gioCu) {
-      await tx.gioHang.updateMany({
-        where: { phienId: gioCu }, data: { nguoiDungId: nd.id, phienId: null },
+    if (oldCart) {
+      await tx.cart.updateMany({
+        where: { sessionId: oldCart }, data: { userId: u.id, sessionId: null },
       });
-      await tx.phien.update({ where: { id: gioCu }, data: { thuHoiLuc: new Date() } });
+      await tx.session.update({ where: { id: oldCart }, data: { revokedAt: new Date() } });
     }
   });
 
-  datCookiePhien(res, await taoPhien(nd.id, req));
+  setSessionCookie(res, await createSession(u.id, req));
 });</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — một phiên ẩn danh SỐNG SÓT qua lần đăng nhập chính là lỗ hổng đang khoác áo tính năng.</strong> "Giữ lại giỏ hàng" là một yêu cầu THẬT, và bản cài đặt SAI của nó — giữ nguyên mã phiên để cái giỏ vẫn dính vào — chính xác là con bug fixation. Hãy chuyển những HÀNG dữ liệu sang cho người dùng, thu hồi phiên cũ, cấp phiên mới. Người dùng thấy giỏ hàng của họ; còn cái mã kẻ tấn công cắm vào thì đã chết.</p>
@@ -786,28 +786,28 @@ app.post('/sign-in', async (req, res) =&gt; {
 
 <h3>Xác thực theo bậc: chứng minh vẫn là bạn</h3>
 <pre><code><span class="tok-comment">// Thêm một cột trên Phien, và một middleware</span>
-model Phien {
+model Session {
   <span class="tok-comment">// …</span>
-  xacThucLuc DateTime   <span class="tok-comment">// lần cuối người dùng CHỨNG MINH danh tính</span>
+  authenticatedAt DateTime <span class="tok-comment">// lần cuối người dùng CHỨNG MINH danh tính</span>
 }
 
-export function canXacThucLai(phutToiDa: number) {
+export function needsReauth(maxMinutes: number) {
   return (req, res, next) =&gt; {
-    const tuoi = Date.now() - req.phien.xacThucLuc.getTime();
-    if (tuoi &gt; phutToiDa * 60_000) {
-      return res.status(403).json({ ma: 'CAN_XAC_THUC_LAI', phutToiDa });
+    const age = Date.now() - req.session.authenticatedAt.getTime();
+    if (age &gt; maxMinutes * 60_000) {
+      return res.status(403).json({ ma: 'CAN_XAC_THUC_LAI', maxMinutes });
     }
     next();
   };
 }
 
-app.post('/account/change-email',  requireAuth, canXacThucLai(5), doiEmail);
-app.post('/account/delete',        requireAuth, canXacThucLai(5), xoaTaiKhoan);
-app.post('/thanh-toan/rut-tien',  requireAuth, canXacThucLai(2), rutTien);</code></pre>
+app.post('/account/change-email',  requireAuth, needsReauth(5), doiEmail);
+app.post('/account/delete',        requireAuth, needsReauth(5), xoaTaiKhoan);
+app.post('/thanh-toan/rut-tien',  requireAuth, needsReauth(2), rutTien);</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Nó phòng cú CẮP PHIÊN, không phòng cú cắp mật khẩu</span><span class="lz-lnote">Kẻ tấn công cầm một cookie bị chiếm thì ĐỌC được mọi thứ, nhưng KHÔNG đổi được email hay xoá được tài khoản nếu không trình ra mật khẩu. Đó chính là khoảng cách giữa "phiên bị chiếm" và "mất tài khoản", và nó đáng để dựng.</span></div>
   <div class="lz-layer"><span class="lz-lname">Hành động nào cần tới nó</span><span class="lz-lnote">Bất cứ thứ gì làm thay đổi CÁCH KHÔI PHỤC tài khoản — email, số điện thoại, mật khẩu, thiết bị MFA, mã khôi phục — cộng bất cứ thứ gì không hoàn tác được hoặc dính tiền. KHÔNG phải "mọi thứ nhạy cảm": hỏi quá nhiều thì người dùng ngừng đọc.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Hãy CẬP NHẬT <code>xacThucLuc</code>, đừng xoay mã</span><span class="lz-lnote">Xác thực lại là XÁC NHẬN phiên đang có chứ không nâng đặc quyền của nó, nên cái mã giữ nguyên. Hãy đặt <code>xacThucLuc = now()</code> khi thành công. Xoay mã là cho việc <em>TĂNG</em> đặc quyền; cái này là <em>XÁC NHẬN</em> đặc quyền.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Hãy CẬP NHẬT <code>authenticatedAt</code>, đừng xoay mã</span><span class="lz-lnote">Xác thực lại là XÁC NHẬN phiên đang có chứ không nâng đặc quyền của nó, nên cái mã giữ nguyên. Hãy đặt <code>authenticatedAt = now()</code> khi thành công. Xoay mã là cho việc <em>TĂNG</em> đặc quyền; cái này là <em>XÁC NHẬN</em> đặc quyền.</span></div>
   <div class="lz-layer"><span class="lz-lname">Đây chính là <code>auth_time</code> và <code>max_age</code> của OIDC</span><span class="lz-lnote">Cùng một ý tưởng đã được chuẩn hoá: một nhà cung cấp danh tính báo lại thời điểm người dùng THẬT SỰ xác thực, và bên tin cậy có thể đòi một lần xác thực mới. Chương 8 dùng nó; cơ chế ở đây là bản CỤC BỘ của cùng một yêu cầu.</span></div>
 </div>
 <div class="note-ct">
@@ -893,20 +893,20 @@ Access-Control-Allow-Origin: https://vidu.com     ← trinh duyet SE chan viec d
 
 <h3>Defence 2 — check where the request came from</h3>
 <pre><code><span class="tok-comment">// Sec-Fetch-Site: trình duyệt TỰ nói ra ngữ cảnh, không giả được từ JS</span>
-export function chanXuyenTrang(req, res, next) {
+export function blockCrossSite(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
 
-  const nguon = req.get('sec-fetch-site');
-  if (nguon) {
+  const source = req.get('sec-fetch-site');
+  if (source) {
     <span class="tok-comment">// same-origin | same-site | cross-site | none (gõ URL, bookmark)</span>
-    if (nguon === 'same-origin' || nguon === 'none') return next();
-    return res.status(403).json({ loi: 'Nguon xuyen trang' });
+    if (source === 'same-origin' || source === 'none') return next();
+    return res.status(403).json({ error: 'Nguon xuyen trang' });
   }
 
   <span class="tok-comment">// Trình duyệt cũ: lùi về Origin</span>
   const origin = req.get('origin');
-  if (!origin) return res.status(403).json({ loi: 'Thieu Origin' });
-  if (!DUOC_PHEP.has(origin)) return res.status(403).json({ loi: 'Origin la' });
+  if (!origin) return res.status(403).json({ error: 'Thieu Origin' });
+  if (!DUOC_PHEP.has(origin)) return res.status(403).json({ error: 'Origin la' });
   next();
 }</code></pre>
 <div class="out">Truy cap binh thuong  → Sec-Fetch-Site: same-origin  → cho qua ✅
@@ -925,10 +925,10 @@ Postman, curl         → khong co header nao           → xu ly rieng</div>
 <pre><code><span class="tok-comment">// Double-submit CÓ KÝ: ràng token vào phiên, nên tên miền con không giả được</span>
 import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
 
-export function phatTokenCsrf(res, phienId: string) {
-  const ma = randomBytes(16).toString('base64url');
-  const chuKy = createHmac('sha256', KHOA_CSRF).update(&#96;\${phienId}.\${ma}&#96;).digest('base64url');
-  const token = &#96;\${ma}.\${chuKy}&#96;;
+export function issueCsrfToken(res, sessionId: string) {
+  const code = randomBytes(16).toString('base64url');
+  const signature = createHmac('sha256', KHOA_CSRF).update(&#96;\${sessionId}.\${ma}&#96;).digest('base64url');
+  const token = &#96;\${ma}.\${signature}&#96;;
 
   res.cookie('__Host-csrf', token, {
     secure: true, sameSite: 'lax', path: '/',
@@ -937,18 +937,18 @@ export function phatTokenCsrf(res, phienId: string) {
   return token;
 }
 
-export function kiemTokenCsrf(req, res, next) {
+export function checkCsrfToken(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
 
-  const tuHeader = String(req.get('x-csrf-token') ?? '');
-  const tuCookie = String(req.cookies['__Host-csrf'] ?? '');
-  if (!tuHeader || tuHeader !== tuCookie) return res.status(403).end();
+  const fromHeader = String(req.get('x-csrf-token') ?? '');
+  const fromCookie = String(req.cookies['__Host-csrf'] ?? '');
+  if (!fromHeader || fromHeader !== fromCookie) return res.status(403).end();
 
-  const [ma, chuKy] = tuHeader.split('.');
-  const mong = createHmac('sha256', KHOA_CSRF)
-    .update(&#96;\${req.phien.id}.\${ma}&#96;).digest('base64url');
+  const [code, signature] = fromHeader.split('.');
+  const expected = createHmac('sha256', KHOA_CSRF)
+    .update(&#96;\${req.session.id}.\${ma}&#96;).digest('base64url');
 
-  const a = Buffer.from(chuKy ?? ''), b = Buffer.from(mong);
+  const a = Buffer.from(signature ?? ''), b = Buffer.from(expected);
   if (a.length !== b.length || !timingSafeEqual(a, b)) return res.status(403).end();
   next();
 }</code></pre>
@@ -1037,20 +1037,20 @@ Access-Control-Allow-Origin: https://vidu.com     ← trinh duyet SE chan viec d
 
 <h3>Lớp phòng 2 — kiểm xem request tới TỪ ĐÂU</h3>
 <pre><code><span class="tok-comment">// Sec-Fetch-Site: trình duyệt TỰ nói ra ngữ cảnh, không giả được từ JS</span>
-export function chanXuyenTrang(req, res, next) {
+export function blockCrossSite(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
 
-  const nguon = req.get('sec-fetch-site');
-  if (nguon) {
+  const source = req.get('sec-fetch-site');
+  if (source) {
     <span class="tok-comment">// same-origin | same-site | cross-site | none (gõ URL, bookmark)</span>
-    if (nguon === 'same-origin' || nguon === 'none') return next();
-    return res.status(403).json({ loi: 'Nguon xuyen trang' });
+    if (source === 'same-origin' || source === 'none') return next();
+    return res.status(403).json({ error: 'Nguon xuyen trang' });
   }
 
   <span class="tok-comment">// Trình duyệt cũ: lùi về Origin</span>
   const origin = req.get('origin');
-  if (!origin) return res.status(403).json({ loi: 'Thieu Origin' });
-  if (!DUOC_PHEP.has(origin)) return res.status(403).json({ loi: 'Origin la' });
+  if (!origin) return res.status(403).json({ error: 'Thieu Origin' });
+  if (!DUOC_PHEP.has(origin)) return res.status(403).json({ error: 'Origin la' });
   next();
 }</code></pre>
 <div class="out">Truy cap binh thuong  → Sec-Fetch-Site: same-origin  → cho qua ✅
@@ -1069,10 +1069,10 @@ Postman, curl         → khong co header nao           → xu ly rieng</div>
 <pre><code><span class="tok-comment">// Double-submit CÓ KÝ: ràng token vào phiên, nên tên miền con không giả được</span>
 import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
 
-export function phatTokenCsrf(res, phienId: string) {
-  const ma = randomBytes(16).toString('base64url');
-  const chuKy = createHmac('sha256', KHOA_CSRF).update(&#96;\${phienId}.\${ma}&#96;).digest('base64url');
-  const token = &#96;\${ma}.\${chuKy}&#96;;
+export function issueCsrfToken(res, sessionId: string) {
+  const code = randomBytes(16).toString('base64url');
+  const signature = createHmac('sha256', KHOA_CSRF).update(&#96;\${sessionId}.\${ma}&#96;).digest('base64url');
+  const token = &#96;\${ma}.\${signature}&#96;;
 
   res.cookie('__Host-csrf', token, {
     secure: true, sameSite: 'lax', path: '/',
@@ -1081,18 +1081,18 @@ export function phatTokenCsrf(res, phienId: string) {
   return token;
 }
 
-export function kiemTokenCsrf(req, res, next) {
+export function checkCsrfToken(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
 
-  const tuHeader = String(req.get('x-csrf-token') ?? '');
-  const tuCookie = String(req.cookies['__Host-csrf'] ?? '');
-  if (!tuHeader || tuHeader !== tuCookie) return res.status(403).end();
+  const fromHeader = String(req.get('x-csrf-token') ?? '');
+  const fromCookie = String(req.cookies['__Host-csrf'] ?? '');
+  if (!fromHeader || fromHeader !== fromCookie) return res.status(403).end();
 
-  const [ma, chuKy] = tuHeader.split('.');
-  const mong = createHmac('sha256', KHOA_CSRF)
-    .update(&#96;\${req.phien.id}.\${ma}&#96;).digest('base64url');
+  const [code, signature] = fromHeader.split('.');
+  const expected = createHmac('sha256', KHOA_CSRF)
+    .update(&#96;\${req.session.id}.\${ma}&#96;).digest('base64url');
 
-  const a = Buffer.from(chuKy ?? ''), b = Buffer.from(mong);
+  const a = Buffer.from(signature ?? ''), b = Buffer.from(expected);
   if (a.length !== b.length || !timingSafeEqual(a, b)) return res.status(403).end();
   next();
 }</code></pre>
@@ -1158,36 +1158,36 @@ Truy vấn được         ✅        ⚠️        ❌</code></pre>
 <pre><code>import { createClient } from 'redis';
 const redis = createClient({ url: process.env.REDIS_URL });
 
-const NHAN_ROI_S = 2 * 60 * 60;                   <span class="tok-comment">// 2 giờ</span>
+const IDLE_S = 2 * 60 * 60;                   <span class="tok-comment">// 2 giờ</span>
 
-export async function taoPhien(nguoiDungId: string) {
+export async function createSession(userId: string) {
   const token = randomBytes(32).toString('base64url');
-  const khoa  = 'phien:' + createHash('sha256').update(token).digest('hex');
+  const khoa  = 'session:' + createHash('sha256').update(token).digest('hex');
 
   await redis.multi()
-    .set(khoa, JSON.stringify({
-      nguoiDungId,
-      hetHanTuyetDoi: Date.now() + 30 * 24 * 3600 * 1000,
-    }), { EX: NHAN_ROI_S })                        <span class="tok-comment">// ← hết hạn nhàn rỗi, miễn phí</span>
-    .sAdd(&#96;nguoi:\${nguoiDungId}:phien&#96;, khoa)      <span class="tok-comment">// ← chỉ mục phụ</span>
-    .expire(&#96;nguoi:\${nguoiDungId}:phien&#96;, 30 * 24 * 3600)
+    .set(key, JSON.stringify({
+      userId,
+      absoluteExpiresAt: Date.now() + 30 * 24 * 3600 * 1000,
+    }), { EX: IDLE_S })                        <span class="tok-comment">// ← hết hạn nhàn rỗi, miễn phí</span>
+    .sAdd(&#96;nguoi:\${userId}:session&#96;, key)      <span class="tok-comment">// ← chỉ mục phụ</span>
+    .expire(&#96;nguoi:\${userId}:session&#96;, 30 * 24 * 3600)
     .exec();
 
   return token;
 }
 
-export async function layPhien(token: string) {
-  const khoa = 'phien:' + createHash('sha256').update(token).digest('hex');
-  const s = await redis.get(khoa);
+export async function getSession(token: string) {
+  const key = 'session:' + createHash('sha256').update(token).digest('hex');
+  const s = await redis.get(key);
   if (!s) return null;                             <span class="tok-comment">// hết hạn hoặc chưa từng có</span>
 
-  const phien = JSON.parse(s);
-  if (Date.now() &gt; phien.hetHanTuyetDoi) {          <span class="tok-comment">// trần cứng: kiểm tay</span>
-    await redis.del(khoa);
+  const session = JSON.parse(s);
+  if (Date.now() &gt; session.absoluteExpiresAt) {          <span class="tok-comment">// trần cứng: kiểm tay</span>
+    await redis.del(key);
     return null;
   }
-  await redis.expire(khoa, NHAN_ROI_S);            <span class="tok-comment">// trượt cửa sổ nhàn rỗi</span>
-  return phien;
+  await redis.expire(key, IDLE_S);            <span class="tok-comment">// trượt cửa sổ nhàn rỗi</span>
+  return session;
 }</code></pre>
 <div class="out">$ redis-cli TTL phien:8f2a91c4…
 (integer) 7194
@@ -1199,7 +1199,7 @@ $ redis-cli SMEMBERS nguoi:clx7…:phien
 
 # "Thoat khoi moi thiet bi" = DEL tat ca thanh vien cua set do.</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">TTL replaces idle expiry</span><span class="lz-t">The main win</span><span class="lz-d">Redis deletes the key itself. No cleanup job, no <code>hoatDongLuc</code> column, no "only write if five minutes stale" optimisation — <code>EXPIRE</code> on read is one command and it is the whole mechanism.</span></div>
+  <div class="lz-step"><span class="lz-k">TTL replaces idle expiry</span><span class="lz-t">The main win</span><span class="lz-d">Redis deletes the key itself. No cleanup job, no <code>activeAt</code> column, no "only write if five minutes stale" optimisation — <code>EXPIRE</code> on read is one command and it is the whole mechanism.</span></div>
   <div class="lz-step"><span class="lz-k">Absolute expiry is still yours</span><span class="lz-t">TTL only slides</span><span class="lz-d">A sliding TTL alone has exactly the problem from Lesson 3.1: a stolen session kept warm never expires. Keep the ceiling inside the value and check it on read.</span></div>
   <div class="lz-step"><span class="lz-k">"Log out everywhere" needs a second index</span><span class="lz-t">The cost of a key-value store</span><span class="lz-d">Redis cannot answer "all sessions for user X" without you maintaining the set. Remember to remove members when a session ends, or the set grows forever — give it its own TTL as a backstop.</span></div>
   <div class="lz-step"><span class="lz-k">Durability is a choice you must make</span><span class="lz-t">And usually an easy one</span><span class="lz-d">With no persistence configured, a Redis restart logs everyone out. That is a mild annoyance for a social product and unacceptable for a banking one. AOF with <code>everysec</code> is the usual middle ground.</span></div>
@@ -1207,15 +1207,15 @@ $ redis-cli SMEMBERS nguoi:clx7…:phien
 
 <h3>The cookie itself: no storage, no revocation</h3>
 <pre><code><span class="tok-comment">// iron-session và tương tự: mã hoá cả trạng thái rồi nhét vào cookie</span>
-Set-Cookie: __Host-phien=Fe26.2**a1b2c3…**d4e5f6…**7a8b9c…; …
+Set-Cookie: __Host-session=Fe26.2**a1b2c3…**d4e5f6…**7a8b9c…; …
 
 <span class="tok-comment">// Bên trong, sau khi giải mã:</span>
-{ "nguoiDungId": "clx7…", "vaiTro": "USER", "hetHan": 1758592000 }</code></pre>
+{ "userId": "clx7…", "role": "USER", "expiresAt": 1758592000 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">✅ Nothing to store, nothing to look up</span><span class="v">No database row, no Redis key, no cleanup job. It scales horizontally with no shared state, which is the entire appeal and is genuinely valuable for a stateless fleet.</span></div>
-  <div class="kv"><span class="k">❌ You cannot revoke it</span><span class="v">A logged-out user's cookie still decrypts and still says who they are until <code>hetHan</code> passes. Every workaround — a denylist, a version counter, a "sessions changed at" timestamp — reintroduces exactly the storage you removed.</span></div>
+  <div class="kv"><span class="k">❌ You cannot revoke it</span><span class="v">A logged-out user's cookie still decrypts and still says who they are until <code>expiresAt</code> passes. Every workaround — a denylist, a version counter, a "sessions changed at" timestamp — reintroduces exactly the storage you removed.</span></div>
   <div class="kv"><span class="k">❌ 4096 bytes, shared with every other cookie</span><span class="v">And the cookie is sent on <em>every single request</em>, including static assets unless you scope them elsewhere. A 3 KB session cookie on a page with forty requests is 120 KB of upload per page view.</span></div>
-  <div class="kv"><span class="k">❌ Stale data, structurally</span><span class="v">If <code>vaiTro</code> lives in the cookie, a role change does not take effect until the cookie is reissued. Either you re-set it on every response — which is a write of a different kind — or you accept that authorisation reads stale data.</span></div>
+  <div class="kv"><span class="k">❌ Stale data, structurally</span><span class="v">If <code>role</code> lives in the cookie, a role change does not take effect until the cookie is reissued. Either you re-set it on every response — which is a write of a different kind — or you accept that authorisation reads stale data.</span></div>
 </div>
 <div class="pitfall">
 <p><strong>Trap — "stateless" usually becomes "stateful, badly" within a year.</strong> The first requirement that breaks it is always the same: someone asks for a logout button that actually works, or for "sign out of all devices", or for an admin to be able to disable an account immediately. The answer is a denylist, which is a database — but now it is a database you consult <em>in addition to</em> the cookie, with none of the benefits of having used one from the start. Decide up front whether instant revocation is a requirement; if it is, this option is already excluded.</p>
@@ -1273,36 +1273,36 @@ Truy vấn được         ✅        ⚠️        ❌</code></pre>
 <pre><code>import { createClient } from 'redis';
 const redis = createClient({ url: process.env.REDIS_URL });
 
-const NHAN_ROI_S = 2 * 60 * 60;                   <span class="tok-comment">// 2 giờ</span>
+const IDLE_S = 2 * 60 * 60;                   <span class="tok-comment">// 2 giờ</span>
 
-export async function taoPhien(nguoiDungId: string) {
+export async function createSession(userId: string) {
   const token = randomBytes(32).toString('base64url');
-  const khoa  = 'phien:' + createHash('sha256').update(token).digest('hex');
+  const khoa  = 'session:' + createHash('sha256').update(token).digest('hex');
 
   await redis.multi()
-    .set(khoa, JSON.stringify({
-      nguoiDungId,
-      hetHanTuyetDoi: Date.now() + 30 * 24 * 3600 * 1000,
-    }), { EX: NHAN_ROI_S })                        <span class="tok-comment">// ← hết hạn nhàn rỗi, miễn phí</span>
-    .sAdd(&#96;nguoi:\${nguoiDungId}:phien&#96;, khoa)      <span class="tok-comment">// ← chỉ mục phụ</span>
-    .expire(&#96;nguoi:\${nguoiDungId}:phien&#96;, 30 * 24 * 3600)
+    .set(key, JSON.stringify({
+      userId,
+      absoluteExpiresAt: Date.now() + 30 * 24 * 3600 * 1000,
+    }), { EX: IDLE_S })                        <span class="tok-comment">// ← hết hạn nhàn rỗi, miễn phí</span>
+    .sAdd(&#96;nguoi:\${userId}:session&#96;, key)      <span class="tok-comment">// ← chỉ mục phụ</span>
+    .expire(&#96;nguoi:\${userId}:session&#96;, 30 * 24 * 3600)
     .exec();
 
   return token;
 }
 
-export async function layPhien(token: string) {
-  const khoa = 'phien:' + createHash('sha256').update(token).digest('hex');
-  const s = await redis.get(khoa);
+export async function getSession(token: string) {
+  const key = 'session:' + createHash('sha256').update(token).digest('hex');
+  const s = await redis.get(key);
   if (!s) return null;                             <span class="tok-comment">// hết hạn hoặc chưa từng có</span>
 
-  const phien = JSON.parse(s);
-  if (Date.now() &gt; phien.hetHanTuyetDoi) {          <span class="tok-comment">// trần cứng: kiểm tay</span>
-    await redis.del(khoa);
+  const session = JSON.parse(s);
+  if (Date.now() &gt; session.absoluteExpiresAt) {          <span class="tok-comment">// trần cứng: kiểm tay</span>
+    await redis.del(key);
     return null;
   }
-  await redis.expire(khoa, NHAN_ROI_S);            <span class="tok-comment">// trượt cửa sổ nhàn rỗi</span>
-  return phien;
+  await redis.expire(key, IDLE_S);            <span class="tok-comment">// trượt cửa sổ nhàn rỗi</span>
+  return session;
 }</code></pre>
 <div class="out">$ redis-cli TTL phien:8f2a91c4…
 (integer) 7194
@@ -1314,7 +1314,7 @@ $ redis-cli SMEMBERS nguoi:clx7…:phien
 
 # "Thoat khoi moi thiet bi" = DEL tat ca thanh vien cua set do.</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">TTL THAY THẾ hết hạn nhàn rỗi</span><span class="lz-t">Cái được chính</span><span class="lz-d">Redis tự xoá cái khoá. Không job dọn dẹp, không cột <code>hoatDongLuc</code>, không cái tối ưu "chỉ ghi khi đã cũ năm phút" — <code>EXPIRE</code> lúc đọc là MỘT câu lệnh và đó là toàn bộ cơ chế.</span></div>
+  <div class="lz-step"><span class="lz-k">TTL THAY THẾ hết hạn nhàn rỗi</span><span class="lz-t">Cái được chính</span><span class="lz-d">Redis tự xoá cái khoá. Không job dọn dẹp, không cột <code>activeAt</code>, không cái tối ưu "chỉ ghi khi đã cũ năm phút" — <code>EXPIRE</code> lúc đọc là MỘT câu lệnh và đó là toàn bộ cơ chế.</span></div>
   <div class="lz-step"><span class="lz-k">Hết hạn TUYỆT ĐỐI vẫn là việc của bạn</span><span class="lz-t">TTL chỉ biết TRƯỢT</span><span class="lz-d">Chỉ có TTL trượt thôi thì gặp đúng vấn đề của Bài 3.1: một phiên bị cắp mà giữ cho ấm sẽ không bao giờ hết hạn. Hãy giữ cái trần bên trong giá trị và kiểm nó lúc đọc.</span></div>
   <div class="lz-step"><span class="lz-k">"Thoát mọi thiết bị" cần một chỉ mục THỨ HAI</span><span class="lz-t">Cái giá của một kho khoá-giá-trị</span><span class="lz-d">Redis không trả lời được "mọi phiên của người dùng X" nếu bạn không tự duy trì cái set. Nhớ gỡ thành viên ra khi một phiên kết thúc, không thì cái set lớn lên mãi — hãy cho nó một TTL riêng làm lưới đỡ.</span></div>
   <div class="lz-step"><span class="lz-k">Độ bền là một LỰA CHỌN bạn phải ra</span><span class="lz-t">Và thường là một lựa chọn dễ</span><span class="lz-d">Không cấu hình lưu lâu dài thì một lần restart Redis là đăng xuất tất cả mọi người. Đó là một phiền toái nhẹ với một sản phẩm mạng xã hội và là không chấp nhận được với một sản phẩm ngân hàng. AOF với <code>everysec</code> là điểm giữa thường dùng.</span></div>
@@ -1322,15 +1322,15 @@ $ redis-cli SMEMBERS nguoi:clx7…:phien
 
 <h3>Chính cái cookie: không lưu gì, và không thu hồi được</h3>
 <pre><code><span class="tok-comment">// iron-session và tương tự: mã hoá cả trạng thái rồi nhét vào cookie</span>
-Set-Cookie: __Host-phien=Fe26.2**a1b2c3…**d4e5f6…**7a8b9c…; …
+Set-Cookie: __Host-session=Fe26.2**a1b2c3…**d4e5f6…**7a8b9c…; …
 
 <span class="tok-comment">// Bên trong, sau khi giải mã:</span>
-{ "nguoiDungId": "clx7…", "vaiTro": "USER", "hetHan": 1758592000 }</code></pre>
+{ "userId": "clx7…", "role": "USER", "expiresAt": 1758592000 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">✅ Không có gì để lưu, không có gì để tra</span><span class="v">Không hàng cơ sở dữ liệu, không khoá Redis, không job dọn dẹp. Nó mở rộng ngang mà không cần trạng thái dùng chung nào, và đó là toàn bộ sức hấp dẫn của nó — thật sự có giá trị với một đội máy chủ phi trạng thái.</span></div>
-  <div class="kv"><span class="k">❌ Bạn KHÔNG thu hồi được nó</span><span class="v">Cookie của một người đã đăng xuất vẫn giải mã được và vẫn nói họ là ai, cho tới khi <code>hetHan</code> trôi qua. Mọi cách chữa cháy — một danh sách chặn, một bộ đếm phiên bản, một dấu thời gian "phiên đã đổi lúc" — đều LÔI LẠI đúng cái kho lưu trữ mà bạn vừa bỏ đi.</span></div>
+  <div class="kv"><span class="k">❌ Bạn KHÔNG thu hồi được nó</span><span class="v">Cookie của một người đã đăng xuất vẫn giải mã được và vẫn nói họ là ai, cho tới khi <code>expiresAt</code> trôi qua. Mọi cách chữa cháy — một danh sách chặn, một bộ đếm phiên bản, một dấu thời gian "phiên đã đổi lúc" — đều LÔI LẠI đúng cái kho lưu trữ mà bạn vừa bỏ đi.</span></div>
   <div class="kv"><span class="k">❌ 4096 byte, chia chung với mọi cookie khác</span><span class="v">Và cookie được gửi ở <em>MỌI request</em>, kể cả tài nguyên tĩnh trừ khi bạn tách chúng sang chỗ khác. Một cookie phiên 3 KB trên một trang có bốn mươi request là 120 KB tải lên cho MỖI lượt xem trang.</span></div>
-  <div class="kv"><span class="k">❌ Dữ liệu CŨ, về mặt cấu trúc</span><span class="v">Nếu <code>vaiTro</code> nằm trong cookie thì một lần đổi vai trò KHÔNG có hiệu lực cho tới khi cookie được phát lại. Hoặc bạn đặt lại nó ở mọi phản hồi — vốn cũng là một kiểu GHI — hoặc bạn chấp nhận rằng phân quyền đang đọc dữ liệu CŨ.</span></div>
+  <div class="kv"><span class="k">❌ Dữ liệu CŨ, về mặt cấu trúc</span><span class="v">Nếu <code>role</code> nằm trong cookie thì một lần đổi vai trò KHÔNG có hiệu lực cho tới khi cookie được phát lại. Hoặc bạn đặt lại nó ở mọi phản hồi — vốn cũng là một kiểu GHI — hoặc bạn chấp nhận rằng phân quyền đang đọc dữ liệu CŨ.</span></div>
 </div>
 <div class="pitfall">
 <p><strong>Bẫy — "phi trạng thái" thường trở thành "có trạng thái, mà làm dở" trong vòng một năm.</strong> Yêu cầu đầu tiên phá vỡ nó luôn luôn giống nhau: có người đòi một nút đăng xuất THẬT SỰ hoạt động, hoặc đòi "thoát khỏi mọi thiết bị", hoặc đòi một quản trị viên vô hiệu hoá được một tài khoản NGAY LẬP TỨC. Câu trả lời là một danh sách chặn, tức là một cơ sở dữ liệu — nhưng giờ nó là một cơ sở dữ liệu bạn phải hỏi THÊM VÀO cái cookie, mà không có lợi ích nào của việc đã dùng nó ngay từ đầu. Hãy quyết TRƯỚC xem thu hồi tức thì có phải một yêu cầu không; nếu có thì lựa chọn này đã bị loại rồi.</p>

@@ -43,19 +43,19 @@ export default {
 
 <h3>IDOR, in four lines</h3>
 <pre><code><span class="tok-comment">// Endpoint này CÓ xác thực. Nó vẫn là một lỗ hổng.</span>
-app.get('/api/invoices/:id', xacThuc, async (req, res) =&gt; {
-  const hd = await prisma.hoaDon.findUnique({ where: { id: req.params.id } });
-  res.json(hd);            <span class="tok-comment">// ← hoá đơn CỦA AI cũng được</span>
+app.get('/api/invoices/:id', requireAuth, async (req, res) =&gt; {
+  const invoice = await prisma.invoice.findUnique({ where: { id: req.params.id } });
+  res.json(invoice);            <span class="tok-comment">// ← hoá đơn CỦA AI cũng được</span>
 });
 
 <span class="tok-comment">// Vá: chủ sở hữu là một phần của CÂU TRUY VẤN, không phải một phép kiểm sau đó.</span>
-const hd = await prisma.hoaDon.findFirst({
-  where: { id: req.params.id, nguoiDungId: req.nd.id },   <span class="tok-comment">// ← ở ĐÂY</span>
+const invoice = await prisma.invoice.findFirst({
+  where: { id: req.params.id, userId: req.u.id },   <span class="tok-comment">// ← ở ĐÂY</span>
 });
-if (!hd) return res.status(404).end();                    <span class="tok-comment">// 404, không phải 403</span></code></pre>
+if (!invoice) return res.status(404).end();                    <span class="tok-comment">// 404, không phải 403</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Insecure direct object reference</span><span class="v">The client supplies an identifier and the server fetches it without asking whether this user may have it. It is the most common access-control bug by a wide margin, and it needs no tooling to find: change a number in a URL.</span></div>
-  <div class="kv"><span class="k">Put ownership in the WHERE clause</span><span class="v">A separate <code>if (hd.nguoiDungId !== req.nd.id)</code> works and is one refactor away from being deleted. A query that cannot return another user's row is correct by construction, and it stays correct when somebody adds a second code path.</span></div>
+  <div class="kv"><span class="k">Put ownership in the WHERE clause</span><span class="v">A separate <code>if (invoice.userId !== req.u.id)</code> works and is one refactor away from being deleted. A query that cannot return another user's row is correct by construction, and it stays correct when somebody adds a second code path.</span></div>
   <div class="kv"><span class="k">Answer 404, not 403</span><span class="v"><code>403</code> confirms the record exists, which turns the endpoint into an enumeration oracle (Lesson 6.4) — an attacker can map your invoice ids without reading a single one. Say "not found", because to this user it genuinely is not.</span></div>
   <div class="kv"><span class="k">Sequential ids make it trivial, and random ids do not fix it</span><span class="v">A UUID makes guessing impractical, which raises the cost but does not remove the flaw: ids leak through shared links, exports, referrers and support tickets. Unguessable identifiers are a mitigation, never the control.</span></div>
 </div>
@@ -123,19 +123,19 @@ KHONG co lop nao trong hai lop tren   : 114
 
 <h3>IDOR, trong bốn dòng</h3>
 <pre><code><span class="tok-comment">// Endpoint này CÓ xác thực. Nó vẫn là một lỗ hổng.</span>
-app.get('/api/invoices/:id', xacThuc, async (req, res) =&gt; {
-  const hd = await prisma.hoaDon.findUnique({ where: { id: req.params.id } });
-  res.json(hd);            <span class="tok-comment">// ← hoá đơn CỦA AI cũng được</span>
+app.get('/api/invoices/:id', requireAuth, async (req, res) =&gt; {
+  const invoice = await prisma.invoice.findUnique({ where: { id: req.params.id } });
+  res.json(invoice);            <span class="tok-comment">// ← hoá đơn CỦA AI cũng được</span>
 });
 
 <span class="tok-comment">// Vá: chủ sở hữu là một phần của CÂU TRUY VẤN, không phải một phép kiểm sau đó.</span>
-const hd = await prisma.hoaDon.findFirst({
-  where: { id: req.params.id, nguoiDungId: req.nd.id },   <span class="tok-comment">// ← ở ĐÂY</span>
+const invoice = await prisma.invoice.findFirst({
+  where: { id: req.params.id, userId: req.u.id },   <span class="tok-comment">// ← ở ĐÂY</span>
 });
-if (!hd) return res.status(404).end();                    <span class="tok-comment">// 404, không phải 403</span></code></pre>
+if (!invoice) return res.status(404).end();                    <span class="tok-comment">// 404, không phải 403</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Tham chiếu đối tượng trực tiếp không an toàn</span><span class="v">Client đưa lên một định danh và máy chủ đi lấy nó về mà không hỏi xem người dùng này có được phép có nó không. Đây là con lỗi kiểm soát truy cập phổ biến nhất, bỏ xa các loại khác, và tìm ra nó chẳng cần công cụ gì: đổi một con số trên URL.</span></div>
-  <div class="kv"><span class="k">Đặt quyền sở hữu vào mệnh đề WHERE</span><span class="v">Một câu <code>if (hd.nguoiDungId !== req.nd.id)</code> riêng thì chạy được, và chỉ cách một lần tái cấu trúc là bị xoá mất. Còn một câu truy vấn KHÔNG THỂ trả về bản ghi của người khác thì đúng theo cấu trúc, và nó vẫn đúng khi có người thêm một đường mã thứ hai.</span></div>
+  <div class="kv"><span class="k">Đặt quyền sở hữu vào mệnh đề WHERE</span><span class="v">Một câu <code>if (invoice.userId !== req.u.id)</code> riêng thì chạy được, và chỉ cách một lần tái cấu trúc là bị xoá mất. Còn một câu truy vấn KHÔNG THỂ trả về bản ghi của người khác thì đúng theo cấu trúc, và nó vẫn đúng khi có người thêm một đường mã thứ hai.</span></div>
   <div class="kv"><span class="k">Trả 404, không trả 403</span><span class="v"><code>403</code> xác nhận rằng bản ghi có tồn tại, tức là biến endpoint thành một cái máy trả lời cho việc dò (Bài 6.4) — kẻ tấn công lập được bản đồ id hoá đơn của bạn mà không cần đọc lấy một cái. Hãy nói "không tìm thấy", vì với người dùng này thì đúng là không có thật.</span></div>
   <div class="kv"><span class="k">Id tuần tự làm việc đó thành dễ, và id ngẫu nhiên KHÔNG vá được nó</span><span class="v">Một cái UUID làm việc đoán mò thành bất khả thi, tức là nâng chi phí lên chứ không gỡ được chỗ hỏng: id vẫn rò ra qua đường dẫn chia sẻ, qua bản xuất dữ liệu, qua Referer và qua ticket hỗ trợ. Định danh không đoán được là một lớp giảm nhẹ, không bao giờ là biện pháp kiểm soát.</span></div>
 </div>
@@ -195,23 +195,23 @@ KHONG co lop nao trong hai lop tren   : 114
 <p class="lead">Role-based access control is the model almost everybody reaches for, and it deserves its popularity: it is easy to explain, easy to query and easy to show in an interface. It also has a precise breaking point, and knowing where that is saves you from either over-engineering on day one or rebuilding under pressure in year two.</p>
 
 <h3>Stage one: the boolean, and why it always spreads</h3>
-<pre><code>model NguoiDung {
-  laAdmin Boolean @default(false)      <span class="tok-comment">// tuần 1: hoàn toàn hợp lý</span>
+<pre><code>model User {
+  isAdmin Boolean @default(false)      <span class="tok-comment">// tuần 1: hoàn toàn hợp lý</span>
 }
 
 <span class="tok-comment">// Tháng 6, sau khi có đội hỗ trợ, đội kiểm duyệt và đội tài chính:</span>
-model NguoiDung {
-  laAdmin       Boolean @default(false)
-  laKiemDuyet   Boolean @default(false)
-  laHoTro       Boolean @default(false)
-  laKeToan      Boolean @default(false)
-  xemDuocDoanhThu Boolean @default(false)
-  xoaDuocBaiViet  Boolean @default(false)
+model User {
+  isAdmin        Boolean @default(false)
+  isModerator    Boolean @default(false)
+  isSupport      Boolean @default(false)
+  isAccountant   Boolean @default(false)
+  canViewRevenue Boolean @default(false)
+  canDeletePost  Boolean @default(false)
   <span class="tok-comment">// …và không ai còn trả lời được: một "kiểm duyệt viên" thì làm được gì?</span>
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Booleans do not compose</span><span class="v">Six flags are sixty-four possible combinations, and your product intends to support four of them. The other sixty exist, are reachable through the admin interface, and have never been tested.</span></div>
-  <div class="kv"><span class="k">There is nowhere to write the answer</span><span class="v">"What can a moderator do?" has no location in the schema — it lives in whichever <code>if</code> statements happen to mention <code>laKiemDuyet</code>. Answering the question means grepping, and the answer changes every sprint.</span></div>
+  <div class="kv"><span class="k">There is nowhere to write the answer</span><span class="v">"What can a moderator do?" has no location in the schema — it lives in whichever <code>if</code> statements happen to mention <code>isModerator</code>. Answering the question means grepping, and the answer changes every sprint.</span></div>
   <div class="kv"><span class="k">Every new capability is a migration</span><span class="v">Adding a permission means a schema change, a deploy, and a backfill deciding who gets it. With roles, granting a new capability to twelve people is one row.</span></div>
   <div class="kv"><span class="k">It is still right for a small product</span><span class="v">If there are two kinds of user and there will be two kinds next year, a boolean is honest and cheap. The mistake is not starting there — it is staying there past the third flag.</span></div>
 </div>
@@ -251,19 +251,19 @@ ADD CONSTRAINT "user_roles_roleId_fkey" FOREIGN KEY ("roleId")
 
 <h3>Stage three: roles grant permissions</h3>
 <pre><code><span class="tok-comment">// Vai trò là cái CON NGƯỜI hiểu. Quyền là cái MÃ kiểm.</span>
-model Quyen     { id Int @id  ma String @unique  roles RoleQuyen[] }  <span class="tok-comment">// 'bai_viet:xoa'</span>
-model RoleQuyen { roleId Int  quyenId Int   @@id([roleId, quyenId]) }
+model Permission     { id Int @id  ma String @unique  roles RolePermission[] }  <span class="tok-comment">// 'bai_viet:xoa'</span>
+model RolePermission { roleId Int  quyenId Int   @@id([roleId, quyenId]) }
 
 <span class="tok-comment">// Mã KHÔNG BAO GIỜ nhắc tên vai trò. Nó hỏi về QUYỀN.</span>
-app.delete('/posts/:id', xacThuc, doiQuyen('bai_viet:xoa'), xoaBaiViet);
+app.delete('/posts/:id', requireAuth, changeRole('post:xoa'), deletePost);
 
 <span class="tok-comment">// SAI — đây là chặng hai đội lốt chặng ba:</span>
-if (nd.vaiTro === 'admin' || nd.vaiTro === 'kiem_duyet') { <span class="tok-comment">/* … */</span> }</code></pre>
+if (u.role === 'admin' || u.role === 'kiem_duyet') { <span class="tok-comment">/* … */</span> }</code></pre>
 <div class="pitfall">
-<p><strong>Trap — checking role names in application code recreates every problem the roles were meant to solve.</strong> The moment a handler says <code>if (role === 'admin' || role === 'moderator')</code>, adding a fourth role means finding and editing every such condition, and nobody can list what a role does without reading the whole codebase. Check <em>permissions</em>, always: <code>doiQuyen('bai_viet:xoa')</code>. Then creating a role is inserting rows, changing what a role can do is an admin screen, and the code never changes. The one legitimate exception is a hard-coded superuser check used to protect the permission system itself from locking everyone out.</p>
+<p><strong>Trap — checking role names in application code recreates every problem the roles were meant to solve.</strong> The moment a handler says <code>if (role === 'admin' || role === 'moderator')</code>, adding a fourth role means finding and editing every such condition, and nobody can list what a role does without reading the whole codebase. Check <em>permissions</em>, always: <code>changeRole('post:xoa')</code>. Then creating a role is inserting rows, changing what a role can do is an admin screen, and the code never changes. The one legitimate exception is a hard-coded superuser check used to protect the permission system itself from locking everyone out.</p>
 </div>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Name permissions resource:action</span><span class="lz-lnote"><code>bai_viet:xoa</code>, <code>hoa_don:xem</code>, <code>nguoi_dung:khoa</code>. It sorts usefully, it groups in an interface, and a wildcard like <code>hoa_don:*</code> becomes meaningful later if you need it.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Name permissions resource:action</span><span class="lz-lnote"><code>post:xoa</code>, <code>hoa_don:xem</code>, <code>nguoi_dung:khoa</code>. It sorts usefully, it groups in an interface, and a wildcard like <code>hoa_don:*</code> becomes meaningful later if you need it.</span></div>
   <div class="lz-layer"><span class="lz-lname">Generate the permission list from code, not by hand</span><span class="lz-lnote">Define the permissions as a TypeScript union and seed the table from it. Then a permission referenced in a handler but missing from the database is a type error, rather than a check that silently denies everything in production.</span></div>
   <div class="lz-layer"><span class="lz-lname">Role hierarchies are optional and usually not worth it</span><span class="lz-lnote">"Admin inherits everything an editor has" is expressible with a parent link, and it turns a flat lookup into a recursive one that is harder to reason about and to display. Duplicating a few rows per role is cheaper than explaining an inheritance graph to a support agent.</span></div>
   <div class="lz-layer"><span class="lz-lname">Audit every grant and revoke</span><span class="lz-lnote">Who gave whom which role, and when. Privilege escalation is the goal of most internal attacks, and this table is the first thing an incident asks for — Chapter 11 builds the log it belongs in.</span></div>
@@ -298,23 +298,23 @@ if (nd.vaiTro === 'admin' || nd.vaiTro === 'kiem_duyet') { <span class="tok-comm
 <p class="lead">Kiểm soát truy cập theo vai trò là mô hình mà gần như ai cũng với tay lấy, và nó xứng đáng nổi tiếng: dễ giải thích, dễ truy vấn và dễ bày ra trên giao diện. Nó cũng có một ĐIỂM VỠ rất rõ, và biết điểm đó nằm ở đâu sẽ cứu bạn khỏi hoặc là làm quá phức tạp ngay ngày đầu, hoặc là phải xây lại dưới áp lực vào năm thứ hai.</p>
 
 <h3>Chặng một: cái boolean, và vì sao nó luôn lan ra</h3>
-<pre><code>model NguoiDung {
-  laAdmin Boolean @default(false)      <span class="tok-comment">// tuần 1: hoàn toàn hợp lý</span>
+<pre><code>model User {
+  isAdmin Boolean @default(false)      <span class="tok-comment">// tuần 1: hoàn toàn hợp lý</span>
 }
 
 <span class="tok-comment">// Tháng 6, sau khi có đội hỗ trợ, đội kiểm duyệt và đội tài chính:</span>
-model NguoiDung {
-  laAdmin       Boolean @default(false)
-  laKiemDuyet   Boolean @default(false)
-  laHoTro       Boolean @default(false)
-  laKeToan      Boolean @default(false)
-  xemDuocDoanhThu Boolean @default(false)
-  xoaDuocBaiViet  Boolean @default(false)
+model User {
+  isAdmin        Boolean @default(false)
+  isModerator    Boolean @default(false)
+  isSupport      Boolean @default(false)
+  isAccountant   Boolean @default(false)
+  canViewRevenue Boolean @default(false)
+  canDeletePost  Boolean @default(false)
   <span class="tok-comment">// …và không ai còn trả lời được: một "kiểm duyệt viên" thì làm được gì?</span>
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Boolean thì KHÔNG ghép lại được</span><span class="v">Sáu cái cờ là sáu mươi tư tổ hợp có thể xảy ra, và sản phẩm của bạn định hỗ trợ bốn trong số đó. Sáu mươi cái còn lại VẪN tồn tại, VẪN với tới được qua giao diện quản trị, và chưa bao giờ được kiểm thử.</span></div>
-  <div class="kv"><span class="k">Không có CHỖ nào để viết câu trả lời</span><span class="v">Câu "kiểm duyệt viên làm được gì?" không có một vị trí nào trong lược đồ cả — nó sống trong những câu <code>if</code> nào tình cờ có nhắc tới <code>laKiemDuyet</code>. Trả lời câu hỏi đó nghĩa là đi grep, và câu trả lời đổi sau mỗi sprint.</span></div>
+  <div class="kv"><span class="k">Không có CHỖ nào để viết câu trả lời</span><span class="v">Câu "kiểm duyệt viên làm được gì?" không có một vị trí nào trong lược đồ cả — nó sống trong những câu <code>if</code> nào tình cờ có nhắc tới <code>isModerator</code>. Trả lời câu hỏi đó nghĩa là đi grep, và câu trả lời đổi sau mỗi sprint.</span></div>
   <div class="kv"><span class="k">Mỗi khả năng mới là một cuộc migration</span><span class="v">Thêm một quyền nghĩa là đổi lược đồ, deploy, và một lần điền dữ liệu ngược để quyết ai được nhận. Với vai trò thì cấp một khả năng mới cho mười hai người chỉ là MỘT bản ghi.</span></div>
   <div class="kv"><span class="k">Với sản phẩm nhỏ thì nó vẫn ĐÚNG</span><span class="v">Nếu chỉ có hai loại người dùng và sang năm vẫn hai loại thì một cái boolean là trung thực và rẻ. Cái sai không phải là bắt đầu từ đó — mà là ở lại đó sau cái cờ thứ ba.</span></div>
 </div>
@@ -354,19 +354,19 @@ ADD CONSTRAINT "user_roles_roleId_fkey" FOREIGN KEY ("roleId")
 
 <h3>Chặng ba: vai trò CẤP quyền</h3>
 <pre><code><span class="tok-comment">// Vai trò là cái CON NGƯỜI hiểu. Quyền là cái MÃ kiểm.</span>
-model Quyen     { id Int @id  ma String @unique  roles RoleQuyen[] }  <span class="tok-comment">// 'bai_viet:xoa'</span>
-model RoleQuyen { roleId Int  quyenId Int   @@id([roleId, quyenId]) }
+model Permission     { id Int @id  ma String @unique  roles RolePermission[] }  <span class="tok-comment">// 'bai_viet:xoa'</span>
+model RolePermission { roleId Int  quyenId Int   @@id([roleId, quyenId]) }
 
 <span class="tok-comment">// Mã KHÔNG BAO GIỜ nhắc tên vai trò. Nó hỏi về QUYỀN.</span>
-app.delete('/posts/:id', xacThuc, doiQuyen('bai_viet:xoa'), xoaBaiViet);
+app.delete('/posts/:id', requireAuth, changeRole('post:xoa'), deletePost);
 
 <span class="tok-comment">// SAI — đây là chặng hai đội lốt chặng ba:</span>
-if (nd.vaiTro === 'admin' || nd.vaiTro === 'kiem_duyet') { <span class="tok-comment">/* … */</span> }</code></pre>
+if (u.role === 'admin' || u.role === 'kiem_duyet') { <span class="tok-comment">/* … */</span> }</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — kiểm TÊN VAI TRÒ trong mã ứng dụng là dựng lại đúng mọi vấn đề mà vai trò sinh ra để giải.</strong> Ngay khoảnh khắc một bộ xử lý viết <code>if (role === 'admin' || role === 'kiem_duyet')</code> thì việc thêm một vai thứ tư nghĩa là phải đi tìm và sửa MỌI điều kiện kiểu ấy, và không ai liệt kê nổi một vai trò làm được gì nếu không đọc hết kho mã. Hãy kiểm <em>QUYỀN</em>, luôn luôn: <code>doiQuyen('bai_viet:xoa')</code>. Khi đó tạo một vai trò là chèn vài bản ghi, đổi việc một vai trò làm được gì là một màn hình quản trị, còn mã thì chẳng đổi. Ngoại lệ chính đáng duy nhất là một phép kiểm siêu người dùng viết cứng, dùng để bảo vệ chính hệ thống phân quyền khỏi việc khoá tất cả mọi người ở ngoài.</p>
+<p><strong>Bẫy — kiểm TÊN VAI TRÒ trong mã ứng dụng là dựng lại đúng mọi vấn đề mà vai trò sinh ra để giải.</strong> Ngay khoảnh khắc một bộ xử lý viết <code>if (role === 'admin' || role === 'kiem_duyet')</code> thì việc thêm một vai thứ tư nghĩa là phải đi tìm và sửa MỌI điều kiện kiểu ấy, và không ai liệt kê nổi một vai trò làm được gì nếu không đọc hết kho mã. Hãy kiểm <em>QUYỀN</em>, luôn luôn: <code>changeRole('post:xoa')</code>. Khi đó tạo một vai trò là chèn vài bản ghi, đổi việc một vai trò làm được gì là một màn hình quản trị, còn mã thì chẳng đổi. Ngoại lệ chính đáng duy nhất là một phép kiểm siêu người dùng viết cứng, dùng để bảo vệ chính hệ thống phân quyền khỏi việc khoá tất cả mọi người ở ngoài.</p>
 </div>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Đặt tên quyền theo dạng tài_nguyên:hành_động</span><span class="lz-lnote"><code>bai_viet:xoa</code>, <code>hoa_don:xem</code>, <code>nguoi_dung:khoa</code>. Nó sắp xếp ra thứ có ích, nó gom nhóm gọn trên giao diện, và một ký tự đại diện kiểu <code>hoa_don:*</code> về sau trở nên có nghĩa nếu bạn cần tới.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Đặt tên quyền theo dạng tài_nguyên:hành_động</span><span class="lz-lnote"><code>post:xoa</code>, <code>hoa_don:xem</code>, <code>nguoi_dung:khoa</code>. Nó sắp xếp ra thứ có ích, nó gom nhóm gọn trên giao diện, và một ký tự đại diện kiểu <code>hoa_don:*</code> về sau trở nên có nghĩa nếu bạn cần tới.</span></div>
   <div class="lz-layer"><span class="lz-lname">SINH danh sách quyền từ MÃ, đừng gõ tay</span><span class="lz-lnote">Hãy định nghĩa các quyền thành một union của TypeScript rồi seed bảng từ đó. Khi ấy một quyền được nhắc trong bộ xử lý mà thiếu trong cơ sở dữ liệu sẽ là một LỖI KIỂU, thay vì một phép kiểm âm thầm từ chối tất cả trên production.</span></div>
   <div class="lz-layer"><span class="lz-lname">Cây phân cấp vai trò là tuỳ chọn, và thường không đáng</span><span class="lz-lnote">"Admin thừa hưởng mọi thứ của biên tập viên" thì diễn đạt được bằng một liên kết cha, và nó biến một phép tra phẳng thành một phép tra đệ quy khó suy luận và khó hiển thị hơn. Nhân đôi vài bản ghi cho mỗi vai rẻ hơn việc đi giải thích một đồ thị thừa kế cho một bạn hỗ trợ.</span></div>
   <div class="lz-layer"><span class="lz-lname">GHI KIỂM TOÁN mọi lần cấp và thu hồi</span><span class="lz-lnote">Ai cấp vai gì cho ai, và lúc nào. Leo thang đặc quyền là mục tiêu của phần lớn các cú tấn công từ bên trong, và cái bảng này là thứ đầu tiên một cuộc điều tra sự cố hỏi tới — Chương 11 dựng cái nhật ký mà nó thuộc về.</span></div>
@@ -411,11 +411,11 @@ if (nd.vaiTro === 'admin' || nd.vaiTro === 'kiem_duyet') { <span class="tok-comm
 
 <h3>ABAC: the rule reads the attributes</h3>
 <pre><code><span class="tok-comment">// Quyết định là một HÀM của (chủ thể, hành động, đối tượng, bối cảnh).</span>
-function duocPhep(nd, hanhDong, dt, boiCanh) {
-  if (hanhDong === 'sua' &amp;&amp; dt.loai === 'taiLieu') {
-    if (dt.chuSoHuuId === nd.id) return true;                    <span class="tok-comment">// sở hữu</span>
-    if (dt.trangThai === 'DA_KHOA') return false;                 <span class="tok-comment">// trạng thái ĐỐI TƯỢNG</span>
-    if (nd.phongBan === dt.phongBan &amp;&amp; nd.capBac &gt;= 3) return true; <span class="tok-comment">// thuộc tính CHỦ THỂ</span>
+function allowed(u, hanhDong, dt, boiCanh) {
+  if (hanhDong === 'sua' &amp;&amp; dt.loai === 'document') {
+    if (dt.ownerId === u.id) return true;                    <span class="tok-comment">// sở hữu</span>
+    if (dt.state === 'DA_KHOA') return false;                 <span class="tok-comment">// trạng thái ĐỐI TƯỢNG</span>
+    if (u.department === dt.department &amp;&amp; u.tier &gt;= 3) return true; <span class="tok-comment">// thuộc tính CHỦ THỂ</span>
     if (boiCanh.gio &lt; 6 || boiCanh.gio &gt; 22) return false;        <span class="tok-comment">// BỐI CẢNH</span>
   }
   return false;                                                   <span class="tok-comment">// mặc định TỪ CHỐI</span>
@@ -429,12 +429,12 @@ function duocPhep(nd, hanhDong, dt, boiCanh) {
 
 <h3>ReBAC: store the relationships, walk the graph</h3>
 <pre><code><span class="tok-comment">// Một bộ ba: (đối tượng, quan hệ, chủ thể). Chỉ thế thôi.</span>
-['taiLieu:42',         'chuSoHuu',  'nd:cuong'],
-['taiLieu:42',         'nam_trong', 'thuMuc:ke-hoach'],
-['thuMuc:ke-hoach',    'nam_trong', 'khongGian:cuongthai'],
-['khongGian:cuongthai','quanTri',   'nd:mai'],
-['khongGian:cuongthai','thanhVien', 'nd:nam'],
-['taiLieu:42',         'nguoiXem',  'lienKetChiaSe:abc'],
+['document:42',         'chuSoHuu',  'u:cuong'],
+['document:42',         'nam_trong', 'folder:ke-hoach'],
+['folder:ke-hoach',    'nam_trong', 'namespace:cuongthai'],
+['namespace:cuongthai','quanTri',   'u:mai'],
+['namespace:cuongthai','thanhVien', 'u:nam'],
+['document:42',         'nguoiXem',  'shareLink:abc'],
 
 <span class="tok-comment">// Luật: sửa = chuSoHuu HOẶC quanTri của vật chứa nó (đệ quy).</span>
 <span class="tok-comment">//       đọc = sửa HOẶC thanhVien của vật chứa nó HOẶC nguoiXem.</span></code></pre>
@@ -451,7 +451,7 @@ DOC  taiLieu:42   <- nd:lan               CHAN  khong tim thay duong nao
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Both directions work</span><span class="lz-t">The property ABAC lacks</span><span class="lz-d">"May Cường edit this?" walks up from the object. "Who can edit this?" walks down from it. The same tuples answer both, which is what makes a real sharing dialog possible.</span></div>
   <div class="lz-step"><span class="lz-k">Inheritance falls out of the graph</span><span class="lz-t">No special cases</span><span class="lz-d">A workspace admin gets access to every document inside it because the containment edges exist, not because anyone wrote a rule about workspaces and documents. Adding a folder level changes no code.</span></div>
-  <div class="lz-step"><span class="lz-k">Subjects need not be users</span><span class="lz-t">Groups, links, services</span><span class="lz-d"><code>lienKetChiaSe:abc</code> is a subject with a viewer relation. So is a team, an API key or another document. That generality is why the model covers "anyone with the link".</span></div>
+  <div class="lz-step"><span class="lz-k">Subjects need not be users</span><span class="lz-t">Groups, links, services</span><span class="lz-d"><code>shareLink:abc</code> is a subject with a viewer relation. So is a team, an API key or another document. That generality is why the model covers "anyone with the link".</span></div>
   <div class="lz-step"><span class="lz-k">The decision carries its reason</span><span class="lz-t">Auditing for free</span><span class="lz-d">Every allow comes with the path that produced it. "Mai can edit because she administers the workspace two levels up" is a sentence you can show a user, log in an incident, and test against.</span></div>
 </div>
 <div class="pitfall">
@@ -490,11 +490,11 @@ DOC  taiLieu:42   <- nd:lan               CHAN  khong tim thay duong nao
 
 <h3>ABAC: luật ĐỌC các thuộc tính</h3>
 <pre><code><span class="tok-comment">// Quyết định là một HÀM của (chủ thể, hành động, đối tượng, bối cảnh).</span>
-function duocPhep(nd, hanhDong, dt, boiCanh) {
-  if (hanhDong === 'sua' &amp;&amp; dt.loai === 'taiLieu') {
-    if (dt.chuSoHuuId === nd.id) return true;                    <span class="tok-comment">// sở hữu</span>
-    if (dt.trangThai === 'DA_KHOA') return false;                 <span class="tok-comment">// trạng thái ĐỐI TƯỢNG</span>
-    if (nd.phongBan === dt.phongBan &amp;&amp; nd.capBac &gt;= 3) return true; <span class="tok-comment">// thuộc tính CHỦ THỂ</span>
+function allowed(u, hanhDong, dt, boiCanh) {
+  if (hanhDong === 'sua' &amp;&amp; dt.loai === 'document') {
+    if (dt.ownerId === u.id) return true;                    <span class="tok-comment">// sở hữu</span>
+    if (dt.state === 'DA_KHOA') return false;                 <span class="tok-comment">// trạng thái ĐỐI TƯỢNG</span>
+    if (u.department === dt.department &amp;&amp; u.tier &gt;= 3) return true; <span class="tok-comment">// thuộc tính CHỦ THỂ</span>
     if (boiCanh.gio &lt; 6 || boiCanh.gio &gt; 22) return false;        <span class="tok-comment">// BỐI CẢNH</span>
   }
   return false;                                                   <span class="tok-comment">// mặc định TỪ CHỐI</span>
@@ -508,12 +508,12 @@ function duocPhep(nd, hanhDong, dt, boiCanh) {
 
 <h3>ReBAC: lưu QUAN HỆ, rồi đi trên đồ thị</h3>
 <pre><code><span class="tok-comment">// Một bộ ba: (đối tượng, quan hệ, chủ thể). Chỉ thế thôi.</span>
-['taiLieu:42',         'chuSoHuu',  'nd:cuong'],
-['taiLieu:42',         'nam_trong', 'thuMuc:ke-hoach'],
-['thuMuc:ke-hoach',    'nam_trong', 'khongGian:cuongthai'],
-['khongGian:cuongthai','quanTri',   'nd:mai'],
-['khongGian:cuongthai','thanhVien', 'nd:nam'],
-['taiLieu:42',         'nguoiXem',  'lienKetChiaSe:abc'],
+['document:42',         'chuSoHuu',  'u:cuong'],
+['document:42',         'nam_trong', 'folder:ke-hoach'],
+['folder:ke-hoach',    'nam_trong', 'namespace:cuongthai'],
+['namespace:cuongthai','quanTri',   'u:mai'],
+['namespace:cuongthai','thanhVien', 'u:nam'],
+['document:42',         'nguoiXem',  'shareLink:abc'],
 
 <span class="tok-comment">// Luật: sửa = chuSoHuu HOẶC quanTri của vật chứa nó (đệ quy).</span>
 <span class="tok-comment">//       đọc = sửa HOẶC thanhVien của vật chứa nó HOẶC nguoiXem.</span></code></pre>
@@ -530,7 +530,7 @@ DOC  taiLieu:42   <- nd:lan               CHAN  khong tim thay duong nao
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Chạy được CẢ HAI CHIỀU</span><span class="lz-t">Tính chất mà ABAC thiếu</span><span class="lz-d">"Cường sửa được cái này không?" thì đi NGƯỢC LÊN từ đối tượng. "Ai sửa được cái này?" thì đi XUỐNG từ nó. Cùng một bộ ba trả lời được cả hai, và đó là thứ làm cho một hộp thoại chia sẻ thật sự trở nên khả thi.</span></div>
   <div class="lz-step"><span class="lz-k">Thừa kế RƠI RA từ đồ thị</span><span class="lz-t">Không có trường hợp đặc biệt nào</span><span class="lz-d">Một quản trị viên không gian làm việc có quyền trên mọi tài liệu bên trong vì các cạnh CHỨA tồn tại, chứ không phải vì có ai đó viết một cái luật về không gian với tài liệu. Thêm một tầng thư mục thì chẳng đổi dòng mã nào.</span></div>
-  <div class="lz-step"><span class="lz-k">Chủ thể KHÔNG nhất thiết là người dùng</span><span class="lz-t">Nhóm, đường dẫn, dịch vụ</span><span class="lz-d"><code>lienKetChiaSe:abc</code> là một chủ thể mang quan hệ nguoiXem. Một cái đội, một khoá API hay một tài liệu khác cũng vậy. Chính tính tổng quát ấy làm mô hình này phủ được ca "ai có đường dẫn thì vào được".</span></div>
+  <div class="lz-step"><span class="lz-k">Chủ thể KHÔNG nhất thiết là người dùng</span><span class="lz-t">Nhóm, đường dẫn, dịch vụ</span><span class="lz-d"><code>shareLink:abc</code> là một chủ thể mang quan hệ nguoiXem. Một cái đội, một khoá API hay một tài liệu khác cũng vậy. Chính tính tổng quát ấy làm mô hình này phủ được ca "ai có đường dẫn thì vào được".</span></div>
   <div class="lz-step"><span class="lz-k">Quyết định mang theo LÝ DO của nó</span><span class="lz-t">Kiểm toán miễn phí</span><span class="lz-d">Mỗi lần cho phép đều kèm cái ĐƯỜNG ĐI sinh ra nó. "Mai sửa được vì cô ấy quản trị cái không gian làm việc cách đó hai tầng" là một câu văn bạn đưa cho người dùng đọc được, ghi vào một cuộc điều tra sự cố được, và viết test cho nó được.</span></div>
 </div>
 <div class="pitfall">
@@ -578,9 +578,9 @@ DOC  taiLieu:42   <- nd:lan               CHAN  khong tim thay duong nao
 
 <h3>The bug, and why it is invisible in review</h3>
 <pre><code><span class="tok-comment">// Ba truy vấn. Hai cái đúng, một cái không. Cái nào?</span>
-const a = await prisma.hoaDon.findMany({ where: { tenantId, trangThai: 'CHUA_TRA' } });
-const b = await prisma.hoaDon.findMany({ where: { tenantId, khachHangId } });
-const c = await prisma.hoaDon.findMany({ where: { trangThai: 'QUA_HAN' } });
+const a = await prisma.invoice.findMany({ where: { tenantId, state: 'CHUA_TRA' } });
+const b = await prisma.invoice.findMany({ where: { tenantId, khachHangId } });
+const c = await prisma.invoice.findMany({ where: { state: 'QUA_HAN' } });
 
 <span class="tok-comment">// Cái thứ ba trả về hoá đơn quá hạn của MỌI công ty. Nó biên dịch được,</span>
 <span class="tok-comment">// nó chạy được, test cũng xanh — vì môi trường test chỉ có MỘT tenant.</span></code></pre>
@@ -612,7 +612,7 @@ const c = await prisma.hoaDon.findMany({ where: { trangThai: 'QUA_HAN' } });
 </div>
 <pre><code><span class="tok-comment">// Lớp 1 — tenant lấy TỪ PHIÊN. Không bao giờ từ tham số của request.</span>
 app.use((req, res, next) =&gt; {
-  req.tenantId = req.nd.tenantId;              <span class="tok-comment">// ĐÚNG: máy chủ tự biết</span>
+  req.tenantId = req.u.tenantId;              <span class="tok-comment">// ĐÚNG: máy chủ tự biết</span>
   <span class="tok-comment">// req.tenantId = req.query.tenant;          // SAI: khách hàng tự khai</span>
   next();
 });
@@ -621,7 +621,7 @@ app.use((req, res, next) =&gt; {
 const db = prisma.$extends({
   query: { $allModels: { async $allOperations({ args, query, model }) {
     if (BANG_CO_TENANT.has(model!) &amp;&amp; args.where) {
-      args.where = { AND: [args.where, { tenantId: layTenantHienTai() }] };
+      args.where = { AND: [args.where, { tenantId: getCurrentTenant() }] };
     }
     return query(args);
   }}},
@@ -696,9 +696,9 @@ SET LOCAL app.tenant = 'cuongthai';</code></pre>
 
 <h3>Con lỗi, và vì sao nó vô hình lúc review</h3>
 <pre><code><span class="tok-comment">// Ba truy vấn. Hai cái đúng, một cái không. Cái nào?</span>
-const a = await prisma.hoaDon.findMany({ where: { tenantId, trangThai: 'CHUA_TRA' } });
-const b = await prisma.hoaDon.findMany({ where: { tenantId, khachHangId } });
-const c = await prisma.hoaDon.findMany({ where: { trangThai: 'QUA_HAN' } });
+const a = await prisma.invoice.findMany({ where: { tenantId, state: 'CHUA_TRA' } });
+const b = await prisma.invoice.findMany({ where: { tenantId, khachHangId } });
+const c = await prisma.invoice.findMany({ where: { state: 'QUA_HAN' } });
 
 <span class="tok-comment">// Cái thứ ba trả về hoá đơn quá hạn của MỌI công ty. Nó biên dịch được,</span>
 <span class="tok-comment">// nó chạy được, test cũng xanh — vì môi trường test chỉ có MỘT tenant.</span></code></pre>
@@ -730,7 +730,7 @@ const c = await prisma.hoaDon.findMany({ where: { trangThai: 'QUA_HAN' } });
 </div>
 <pre><code><span class="tok-comment">// Lớp 1 — tenant lấy TỪ PHIÊN. Không bao giờ từ tham số của request.</span>
 app.use((req, res, next) =&gt; {
-  req.tenantId = req.nd.tenantId;              <span class="tok-comment">// ĐÚNG: máy chủ tự biết</span>
+  req.tenantId = req.u.tenantId;              <span class="tok-comment">// ĐÚNG: máy chủ tự biết</span>
   <span class="tok-comment">// req.tenantId = req.query.tenant;          // SAI: khách hàng tự khai</span>
   next();
 });
@@ -739,7 +739,7 @@ app.use((req, res, next) =&gt; {
 const db = prisma.$extends({
   query: { $allModels: { async $allOperations({ args, query, model }) {
     if (BANG_CO_TENANT.has(model!) &amp;&amp; args.where) {
-      args.where = { AND: [args.where, { tenantId: layTenantHienTai() }] };
+      args.where = { AND: [args.where, { tenantId: getCurrentTenant() }] };
     }
     return query(args);
   }}},
@@ -824,23 +824,23 @@ SET LOCAL app.tenant = 'cuongthai';</code></pre>
 <h3>Four layers, four blind spots</h3>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">The interface — zero security, real value</span><span class="lz-lnote">Hiding a button users may not press is good design and stops nothing: the request is one <code>curl</code> away. Build it, and never count it. Every rule the interface expresses must exist on the server independently.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Route middleware — catches capability, misses the object</span><span class="lz-lnote"><code>doiQuyen('bai_viet:xoa')</code> runs before the handler and answers "may this person delete posts in general". It cannot answer "may they delete <em>this</em> post", because it has not loaded it yet. Necessary, never sufficient.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Route middleware — catches capability, misses the object</span><span class="lz-lnote"><code>changeRole('post:xoa')</code> runs before the handler and answers "may this person delete posts in general". It cannot answer "may they delete <em>this</em> post", because it has not loaded it yet. Necessary, never sufficient.</span></div>
   <div class="lz-layer"><span class="lz-lname">The service layer — the right place for object rules</span><span class="lz-lnote">Load the object, call one decision function, act. Every caller — HTTP handler, background job, GraphQL resolver, CLI script — goes through the same function, which is the property route middleware lacks.</span></div>
   <div class="lz-layer"><span class="lz-lname">The data layer — the only one that cannot be bypassed</span><span class="lz-lnote">Ownership in the <code>WHERE</code> clause and RLS in the database (Lessons 9.1 and 9.4). It cannot express "may Mai publish this", but what it does express, it enforces against every connection that ever opens.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Một hàm quyết định. Mọi đường gọi đều đi qua đúng nó.</span>
-export function coTheXoaBaiViet(nd: NguoiDung | null, bv: BaiViet): boolean {
-  if (!nd) return false;
-  if (bv.tacGiaId === nd.id) return true;
-  return nd.quyen.has('bai_viet:xoa');
+export function canDeletePost(u: User | null, post: Post): boolean {
+  if (!u) return false;
+  if (post.authorId === u.id) return true;
+  return u.permission.has('post:xoa');
 }
 
 <span class="tok-comment">// Tầng dịch vụ — KHÔNG phải bộ xử lý HTTP.</span>
-export async function xoaBaiViet(nd: NguoiDung, id: string) {
-  const bv = await prisma.baiViet.findUnique({ where: { id } });
-  if (!bv) throw new KhongTimThay();
-  if (!coTheXoaBaiViet(nd, bv)) throw new KhongTimThay();   <span class="tok-comment">// 404, không phải 403</span>
-  await prisma.baiViet.delete({ where: { id } });
+export async function deletePost(u: User, id: string) {
+  const bv = await prisma.post.findUnique({ where: { id } });
+  if (!bv) throw new NotFound();
+  if (!canDeletePost(u, bv)) throw new NotFound();   <span class="tok-comment">// 404, không phải 403</span>
+  await prisma.post.delete({ where: { id } });
 }</code></pre>
 
 <h3>The route is not the only door</h3>
@@ -856,31 +856,31 @@ export async function xoaBaiViet(nd: NguoiDung, id: string) {
 # Neu luat song trong tang dich vu thi ba duong dau co no, con hai duong
 # cuoi — script chay tay va seed — van khong. Do la ly do can Lop 3 o Bai 9.4.</div>
 <div class="pitfall">
-<p><strong>Trap — mass assignment turns an ordinary update endpoint into privilege escalation.</strong> A handler that spreads the request body into an update lets the client write any column the model has: <code>PATCH /me { "ten": "Cường", "vaiTro": "admin" }</code> succeeds, and every authorization rule in this chapter was enforced correctly on an operation the user was genuinely allowed to perform. The fix is to allow-list fields explicitly — never <code>data: req.body</code>, always <code>data: { ten, anhDaiDien }</code> — and to validate with a schema that <em>strips</em> unknown keys rather than one that ignores them. Grep for <code>...req.body</code> across the codebase; it finds this class in one pass.</p>
+<p><strong>Trap — mass assignment turns an ordinary update endpoint into privilege escalation.</strong> A handler that spreads the request body into an update lets the client write any column the model has: <code>PATCH /me { "ten": "Cường", "role": "admin" }</code> succeeds, and every authorization rule in this chapter was enforced correctly on an operation the user was genuinely allowed to perform. The fix is to allow-list fields explicitly — never <code>data: req.body</code>, always <code>data: { ten, anhDaiDien }</code> — and to validate with a schema that <em>strips</em> unknown keys rather than one that ignores them. Grep for <code>...req.body</code> across the codebase; it finds this class in one pass.</p>
 </div>
 <pre><code><span class="tok-comment">// SAI — client viết được MỌI cột mà model có:</span>
-await prisma.nguoiDung.update({ where: { id: nd.id }, data: req.body });
+await prisma.user.update({ where: { id: u.id }, data: req.body });
 
 <span class="tok-comment">// ĐÚNG — danh sách trắng tường minh, và schema CẮT BỎ khoá lạ:</span>
 const { ten, anhDaiDien } = ZodHoSo.parse(req.body);   <span class="tok-comment">// .strict() để lỗi thay vì lờ đi</span>
-await prisma.nguoiDung.update({ where: { id: nd.id }, data: { ten, anhDaiDien } });</code></pre>
+await prisma.user.update({ where: { id: u.id }, data: { ten, anhDaiDien } });</code></pre>
 
 <h3>Making forgetting a build error</h3>
 <pre><code><span class="tok-comment">// Mỗi tuyến PHẢI khai một chính sách. Kiểu dữ liệu ép điều đó.</span>
-type ChinhSach =
-  | { loai: 'congKhai'; lyDo: string }        <span class="tok-comment">// công khai thì phải NÓI VÌ SAO</span>
-  | { loai: 'daDangNhap' }
-  | { loai: 'quyen'; ma: MaQuyen };
+type Policy =
+  | { kiu: 'congKhai'; reason: string }        <span class="tok-comment">// công khai thì phải NÓI VÌ SAO</span>
+  | { kiu: 'daDangNhap' }
+  | { kiu: 'permission'; ma: MaQuyen };
 
-function tuyen(cs: ChinhSach, ...xuLy: RequestHandler[]) { <span class="tok-comment">/* … */</span> }
+function route(cs: Policy, ...handlers: RequestHandler[]) { <span class="tok-comment">/* … */</span> }
 
-tuyen({ loai: 'congKhai', lyDo: 'danh sách khoá học hiển thị cho khách' },
-      layDanhSachKhoaHoc);
-tuyen({ loai: 'quyen', ma: 'bai_viet:xoa' }, xoaBaiViet);
+route({ kiu: 'congKhai', reason: 'danh sách khoá học hiển thị cho khách' },
+      listCourses);
+route({ kiu: 'permission', ma: 'post:xoa' }, deletePost);
 <span class="tok-comment">// tuyen(layDanhSachKhoaHoc);   ← KHÔNG biên dịch được. Đó là toàn bộ ý tưởng.</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Deny by default, in the type system</span><span class="lz-t">Not in a code review</span><span class="lz-d">A route with no declared policy fails to compile. Lesson 9.1 measured 114 endpoints in this repository with no visible guard; with this shape, every one of them would carry a written reason instead of an unanswered question.</span></div>
-  <div class="lz-step"><span class="lz-k">Public routes state their reason</span><span class="lz-t">The reason is the review</span><span class="lz-d">Forcing a <code>lyDo</code> string turns "no marking" into "somebody wrote a sentence a reviewer can disagree with". It costs nothing and converts an omission into a claim.</span></div>
+  <div class="lz-step"><span class="lz-k">Public routes state their reason</span><span class="lz-t">The reason is the review</span><span class="lz-d">Forcing a <code>reason</code> string turns "no marking" into "somebody wrote a sentence a reviewer can disagree with". It costs nothing and converts an omission into a claim.</span></div>
   <div class="lz-step"><span class="lz-k">Enumerate the routes in a test</span><span class="lz-t">Catch what the types cannot</span><span class="lz-d">Walk the registered route table at startup and assert every entry has a policy. It also gives you a generated document of who can reach what — the page Lesson 9.1 asked you to write, kept current automatically.</span></div>
   <div class="lz-step"><span class="lz-k">One error shape for everything</span><span class="lz-t">404, uniformly</span><span class="lz-d">Whether the object does not exist, or exists and is forbidden, answer the same way. Anything else is the enumeration oracle from Lesson 6.4, rebuilt inside your authorization layer.</span></div>
 </div>
@@ -921,23 +921,23 @@ TAT CA KHOP.</div>
 <h3>Bốn tầng, bốn điểm mù</h3>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Giao diện — con số không về bảo mật, giá trị thì thật</span><span class="lz-lnote">Ẩn một cái nút mà người dùng không được bấm là thiết kế tốt và chặn được con số không: request đó chỉ cách một câu <code>curl</code>. Cứ làm đi, nhưng đừng bao giờ TÍNH nó vào. Mọi luật mà giao diện thể hiện đều phải tồn tại độc lập ở máy chủ.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Middleware trên tuyến — bắt được KHẢ NĂNG, bỏ sót ĐỐI TƯỢNG</span><span class="lz-lnote"><code>doiQuyen('bai_viet:xoa')</code> chạy trước bộ xử lý và trả lời câu "người này có được xoá bài viết nói chung không". Nó KHÔNG trả lời được câu "họ có được xoá <em>bài này</em> không", vì nó còn chưa nạp bài đó lên. Cần thiết, nhưng không bao giờ đủ.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Middleware trên tuyến — bắt được KHẢ NĂNG, bỏ sót ĐỐI TƯỢNG</span><span class="lz-lnote"><code>changeRole('post:xoa')</code> chạy trước bộ xử lý và trả lời câu "người này có được xoá bài viết nói chung không". Nó KHÔNG trả lời được câu "họ có được xoá <em>bài này</em> không", vì nó còn chưa nạp bài đó lên. Cần thiết, nhưng không bao giờ đủ.</span></div>
   <div class="lz-layer"><span class="lz-lname">Tầng dịch vụ — chỗ ĐÚNG cho luật theo đối tượng</span><span class="lz-lnote">Nạp đối tượng, gọi MỘT hàm quyết định, rồi hành động. Mọi bên gọi — bộ xử lý HTTP, công việc chạy nền, resolver GraphQL, script dòng lệnh — đều đi qua đúng cái hàm ấy, và đó là tính chất mà middleware trên tuyến không có.</span></div>
   <div class="lz-layer"><span class="lz-lname">Tầng dữ liệu — tầng DUY NHẤT không đi vòng qua được</span><span class="lz-lnote">Quyền sở hữu nằm trong mệnh đề <code>WHERE</code> và RLS nằm trong cơ sở dữ liệu (Bài 9.1 và 9.4). Nó không diễn đạt được câu "Mai có được xuất bản cái này không", nhưng cái gì nó diễn đạt được thì nó THI HÀNH với mọi kết nối từng mở ra.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Một hàm quyết định. Mọi đường gọi đều đi qua đúng nó.</span>
-export function coTheXoaBaiViet(nd: NguoiDung | null, bv: BaiViet): boolean {
-  if (!nd) return false;
-  if (bv.tacGiaId === nd.id) return true;
-  return nd.quyen.has('bai_viet:xoa');
+export function canDeletePost(u: User | null, post: Post): boolean {
+  if (!u) return false;
+  if (post.authorId === u.id) return true;
+  return u.permission.has('post:xoa');
 }
 
 <span class="tok-comment">// Tầng dịch vụ — KHÔNG phải bộ xử lý HTTP.</span>
-export async function xoaBaiViet(nd: NguoiDung, id: string) {
-  const bv = await prisma.baiViet.findUnique({ where: { id } });
-  if (!bv) throw new KhongTimThay();
-  if (!coTheXoaBaiViet(nd, bv)) throw new KhongTimThay();   <span class="tok-comment">// 404, không phải 403</span>
-  await prisma.baiViet.delete({ where: { id } });
+export async function deletePost(u: User, id: string) {
+  const bv = await prisma.post.findUnique({ where: { id } });
+  if (!bv) throw new NotFound();
+  if (!canDeletePost(u, bv)) throw new NotFound();   <span class="tok-comment">// 404, không phải 403</span>
+  await prisma.post.delete({ where: { id } });
 }</code></pre>
 
 <h3>Tuyến API KHÔNG phải cánh cửa duy nhất</h3>
@@ -953,31 +953,31 @@ export async function xoaBaiViet(nd: NguoiDung, id: string) {
 # Neu luat song trong tang dich vu thi ba duong dau co no, con hai duong
 # cuoi — script chay tay va seed — van khong. Do la ly do can Lop 3 o Bai 9.4.</div>
 <div class="pitfall">
-<p><strong>Bẫy — gán hàng loạt biến một endpoint cập nhật bình thường thành một cú LEO THANG ĐẶC QUYỀN.</strong> Một bộ xử lý trải thẳng thân request vào lệnh cập nhật sẽ cho client ghi vào BẤT KỲ cột nào mà model có: <code>PATCH /me { "ten": "Cường", "vaiTro": "admin" }</code> thành công, và mọi luật phân quyền trong chương này đều đã được thi hành ĐÚNG trên một thao tác mà người dùng THẬT SỰ được phép làm. Cách vá là liệt kê trắng các trường một cách tường minh — đừng bao giờ <code>data: req.body</code>, luôn luôn <code>data: { ten, anhDaiDien }</code> — và kiểm bằng một schema <em>CẮT BỎ</em> khoá lạ chứ không phải lờ chúng đi. Hãy grep <code>...req.body</code> trên toàn kho mã; nó tìm ra cả họ lỗi này trong một lượt.</p>
+<p><strong>Bẫy — gán hàng loạt biến một endpoint cập nhật bình thường thành một cú LEO THANG ĐẶC QUYỀN.</strong> Một bộ xử lý trải thẳng thân request vào lệnh cập nhật sẽ cho client ghi vào BẤT KỲ cột nào mà model có: <code>PATCH /me { "ten": "Cường", "role": "admin" }</code> thành công, và mọi luật phân quyền trong chương này đều đã được thi hành ĐÚNG trên một thao tác mà người dùng THẬT SỰ được phép làm. Cách vá là liệt kê trắng các trường một cách tường minh — đừng bao giờ <code>data: req.body</code>, luôn luôn <code>data: { ten, anhDaiDien }</code> — và kiểm bằng một schema <em>CẮT BỎ</em> khoá lạ chứ không phải lờ chúng đi. Hãy grep <code>...req.body</code> trên toàn kho mã; nó tìm ra cả họ lỗi này trong một lượt.</p>
 </div>
 <pre><code><span class="tok-comment">// SAI — client viết được MỌI cột mà model có:</span>
-await prisma.nguoiDung.update({ where: { id: nd.id }, data: req.body });
+await prisma.user.update({ where: { id: u.id }, data: req.body });
 
 <span class="tok-comment">// ĐÚNG — danh sách trắng tường minh, và schema CẮT BỎ khoá lạ:</span>
 const { ten, anhDaiDien } = ZodHoSo.parse(req.body);   <span class="tok-comment">// .strict() để lỗi thay vì lờ đi</span>
-await prisma.nguoiDung.update({ where: { id: nd.id }, data: { ten, anhDaiDien } });</code></pre>
+await prisma.user.update({ where: { id: u.id }, data: { ten, anhDaiDien } });</code></pre>
 
 <h3>Biến việc QUÊN thành một lỗi lúc dựng</h3>
 <pre><code><span class="tok-comment">// Mỗi tuyến PHẢI khai một chính sách. Kiểu dữ liệu ép điều đó.</span>
-type ChinhSach =
-  | { loai: 'congKhai'; lyDo: string }        <span class="tok-comment">// công khai thì phải NÓI VÌ SAO</span>
-  | { loai: 'daDangNhap' }
-  | { loai: 'quyen'; ma: MaQuyen };
+type Policy =
+  | { kiu: 'congKhai'; reason: string }        <span class="tok-comment">// công khai thì phải NÓI VÌ SAO</span>
+  | { kiu: 'daDangNhap' }
+  | { kiu: 'permission'; ma: MaQuyen };
 
-function tuyen(cs: ChinhSach, ...xuLy: RequestHandler[]) { <span class="tok-comment">/* … */</span> }
+function route(cs: Policy, ...handlers: RequestHandler[]) { <span class="tok-comment">/* … */</span> }
 
-tuyen({ loai: 'congKhai', lyDo: 'danh sách khoá học hiển thị cho khách' },
-      layDanhSachKhoaHoc);
-tuyen({ loai: 'quyen', ma: 'bai_viet:xoa' }, xoaBaiViet);
+route({ kiu: 'congKhai', reason: 'danh sách khoá học hiển thị cho khách' },
+      listCourses);
+route({ kiu: 'permission', ma: 'post:xoa' }, deletePost);
 <span class="tok-comment">// tuyen(layDanhSachKhoaHoc);   ← KHÔNG biên dịch được. Đó là toàn bộ ý tưởng.</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Mặc định TỪ CHỐI, ngay trong hệ kiểu</span><span class="lz-t">Không phải trong một buổi review</span><span class="lz-d">Một tuyến không khai chính sách thì không biên dịch được. Bài 9.1 đã đo được 114 endpoint trong kho mã này không có lớp chắn nào nhìn thấy được; với hình dạng này thì mỗi cái trong số đó sẽ mang theo một LÝ DO viết thành chữ thay vì một câu hỏi không lời đáp.</span></div>
-  <div class="lz-step"><span class="lz-k">Tuyến công khai phải NÊU lý do</span><span class="lz-t">Cái lý do CHÍNH LÀ phần review</span><span class="lz-d">Bắt buộc phải có một chuỗi <code>lyDo</code> biến "không đánh dấu gì" thành "có người đã viết một câu mà người review có thể phản đối". Nó chẳng tốn gì và biến một sự thiếu sót thành một lời khẳng định.</span></div>
+  <div class="lz-step"><span class="lz-k">Tuyến công khai phải NÊU lý do</span><span class="lz-t">Cái lý do CHÍNH LÀ phần review</span><span class="lz-d">Bắt buộc phải có một chuỗi <code>reason</code> biến "không đánh dấu gì" thành "có người đã viết một câu mà người review có thể phản đối". Nó chẳng tốn gì và biến một sự thiếu sót thành một lời khẳng định.</span></div>
   <div class="lz-step"><span class="lz-k">Duyệt hết các tuyến trong một bài kiểm thử</span><span class="lz-t">Bắt cái mà hệ kiểu không bắt nổi</span><span class="lz-d">Hãy đi qua bảng tuyến đã đăng ký lúc khởi động và khẳng định mọi mục đều có chính sách. Nó còn cho bạn một tài liệu SINH RA TỰ ĐỘNG về việc ai với tới được cái gì — đúng cái trang mà Bài 9.1 bảo bạn viết, và luôn được cập nhật.</span></div>
   <div class="lz-step"><span class="lz-k">MỘT hình dạng lỗi cho tất cả</span><span class="lz-t">404, đồng nhất</span><span class="lz-d">Dù đối tượng không tồn tại, hay tồn tại mà bị cấm, hãy trả lời y hệt nhau. Bất cứ thứ gì khác đều là cái máy trả lời cho việc dò ở Bài 6.4, được dựng lại ngay bên trong tầng phân quyền của bạn.</span></div>
 </div>

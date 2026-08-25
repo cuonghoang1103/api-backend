@@ -233,8 +233,8 @@ DPoP: eyJ0eXAiOiJkcG9wK2p3dCIsImFsZyI6…    <span class="tok-comment">// một 
 
 <h3><code>Math.random()</code> is not a coin flip</h3>
 <pre><code><span class="tok-comment">// Looks random. Is not.</span>
-const ma = Math.random().toString(36).slice(2);
-console.log(ma);</code></pre>
+const code = Math.random().toString(36).slice(2);
+console.log(code);</code></pre>
 <div class="out">k3f9a1x7bqz2
 
 # Trong nhu ngau nhien. Van de: no la mot day SO GIA-NGAU-NHIEN
@@ -298,11 +298,11 @@ $ node -e "console.log(require('crypto').randomUUID())"
 <pre><code><span class="tok-comment">// src/lib/ngau-nhien.ts — one file, used everywhere</span>
 import { randomBytes } from 'node:crypto';
 
-export const maPhien   = () =&gt; randomBytes(32).toString('base64url'); <span class="tok-comment">// 256 bit</span>
-export const maCsrf    = () =&gt; randomBytes(16).toString('base64url'); <span class="tok-comment">// 128 bit</span>
-export const maDatLai  = () =&gt; randomBytes(32).toString('base64url'); <span class="tok-comment">// 256 bit</span>
-export const khoaApi   = () =&gt; 'ct_' + randomBytes(32).toString('base64url');
-export const maKhoiPhuc = () =&gt;                                        <span class="tok-comment">// 10 mã, mỗi mã 40 bit</span>
+export const sessionCode   = () =&gt; randomBytes(32).toString('base64url'); <span class="tok-comment">// 256 bit</span>
+export const csrfToken    = () =&gt; randomBytes(16).toString('base64url'); <span class="tok-comment">// 128 bit</span>
+export const resetCode  = () =&gt; randomBytes(32).toString('base64url'); <span class="tok-comment">// 256 bit</span>
+export const apiKey   = () =&gt; 'ct_' + randomBytes(32).toString('base64url');
+export const recoveryCode = () =&gt;                                        <span class="tok-comment">// 10 mã, mỗi mã 40 bit</span>
   Array.from({ length: 10 }, () =&gt; randomBytes(5).toString('hex'));</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Session id — 128 bits minimum, 256 is free</span><span class="lz-lnote">Lives as long as the session, and guessing one is instant account access. There is no reason to economise here.</span></div>
@@ -334,8 +334,8 @@ export const maKhoiPhuc = () =&gt;                                        <span 
 
 <h3><code>Math.random()</code> không phải một cú tung đồng xu</h3>
 <pre><code><span class="tok-comment">// Trông ngẫu nhiên. Không phải.</span>
-const ma = Math.random().toString(36).slice(2);
-console.log(ma);</code></pre>
+const code = Math.random().toString(36).slice(2);
+console.log(code);</code></pre>
 <div class="out">k3f9a1x7bqz2
 
 # Trong nhu ngau nhien. Van de: no la mot day SO GIA-NGAU-NHIEN
@@ -399,11 +399,11 @@ $ node -e "console.log(require('crypto').randomUUID())"
 <pre><code><span class="tok-comment">// src/lib/ngau-nhien.ts — một file, dùng ở mọi nơi</span>
 import { randomBytes } from 'node:crypto';
 
-export const maPhien   = () =&gt; randomBytes(32).toString('base64url'); <span class="tok-comment">// 256 bit</span>
-export const maCsrf    = () =&gt; randomBytes(16).toString('base64url'); <span class="tok-comment">// 128 bit</span>
-export const maDatLai  = () =&gt; randomBytes(32).toString('base64url'); <span class="tok-comment">// 256 bit</span>
-export const khoaApi   = () =&gt; 'ct_' + randomBytes(32).toString('base64url');
-export const maKhoiPhuc = () =&gt;                                        <span class="tok-comment">// 10 mã, mỗi mã 40 bit</span>
+export const sessionCode   = () =&gt; randomBytes(32).toString('base64url'); <span class="tok-comment">// 256 bit</span>
+export const csrfToken    = () =&gt; randomBytes(16).toString('base64url'); <span class="tok-comment">// 128 bit</span>
+export const resetCode  = () =&gt; randomBytes(32).toString('base64url'); <span class="tok-comment">// 256 bit</span>
+export const apiKey   = () =&gt; 'ct_' + randomBytes(32).toString('base64url');
+export const recoveryCode = () =&gt;                                        <span class="tok-comment">// 10 mã, mỗi mã 40 bit</span>
   Array.from({ length: 10 }, () =&gt; randomBytes(5).toString('hex'));</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Mã phiên — tối thiểu 128 bit, mà 256 thì miễn phí</span><span class="lz-lnote">Nó sống đúng bằng tuổi cái phiên, và đoán trúng một cái là vào thẳng tài khoản. Không có lý do gì để tiết kiệm ở đây.</span></div>
@@ -448,11 +448,11 @@ if (tokenGuiLen === tokenThat) { … }
 <span class="tok-comment">// What the CPU does: compare byte 0. Differ? Return false, now.</span>
 <span class="tok-comment">//                    Same? Compare byte 1. And so on.</span></code></pre>
 <pre><code><span class="tok-comment">// Measure it: 2 million comparisons per bucket, 64-char token</span>
-const that = 'a'.repeat(64);
+const real = 'a'.repeat(64);
 for (const trung of [0, 1, 8, 32, 63, 64]) {
-  const doan = 'a'.repeat(trung) + 'b'.repeat(64 - trung);
+  const segment = 'a'.repeat(trung) + 'b'.repeat(64 - trung);
   const t = process.hrtime.bigint();
-  for (let i = 0; i &lt; 2_000_000; i++) { that === doan; }
+  for (let i = 0; i &lt; 2_000_000; i++) { real === segment; }
   const ns = Number(process.hrtime.bigint() - t) / 2_000_000;
   console.log(&#96;trung \${String(trung).padStart(2)} ky tu → \${ns.toFixed(2)} ns&#96;);
 }</code></pre>
@@ -491,12 +491,12 @@ RangeError [ERR_CRYPTO_TIMING_SAFE_EQUAL_LENGTH]:
 <pre><code><span class="tok-comment">// The double-HMAC pattern: safe for any lengths, no branch on length</span>
 import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
 
-const khoaPhien = randomBytes(32);        <span class="tok-comment">// per-process, not persisted</span>
+const sessionKey = randomBytes(32);        <span class="tok-comment">// per-process, not persisted</span>
 
-export function bangNhau(a: string, b: string) {
-  const ha = createHmac('sha256', khoaPhien).update(a).digest();
-  const hb = createHmac('sha256', khoaPhien).update(b).digest();
-  return timingSafeEqual(ha, hb);          <span class="tok-comment">// always 32 bytes</span>
+export function equalsCT(a: string, b: string) {
+  const hmacA = createHmac('sha256', sessionKey).update(a).digest();
+  const hmacB = createHmac('sha256', sessionKey).update(b).digest();
+  return timingSafeEqual(hmacA, hmacB);          <span class="tok-comment">// always 32 bytes</span>
 }</code></pre>
 <div class="callout ok">
 <p><strong>Why an HMAC and not a plain hash.</strong> With a plain <code>sha256</code>, an attacker who knows the algorithm can compute the digest of any candidate offline and mount the same attack against the digest. Keying it with a random per-process value they do not know removes that: they cannot predict what either side hashes to, so the comparison reveals nothing about the input beyond equality.</p>
@@ -504,19 +504,19 @@ export function bangNhau(a: string, b: string) {
 
 <h3>The better answer: do not compare, look up</h3>
 <pre><code><span class="tok-comment">// ❌ Fetch every session, compare in application code</span>
-const phien = await prisma.phien.findFirst({ where: { id: maGuiLen } });
+const session = await prisma.session.findFirst({ where: { id: submittedCode } });
 
 <span class="tok-comment">// ✅ Store a hash of the token; look up BY the hash.</span>
 <span class="tok-comment">//    The database index does the matching, and the row does not</span>
 <span class="tok-comment">//    contain the token at all.</span>
-const bam = createHash('sha256').update(maGuiLen).digest('hex');
-const phien = await prisma.phien.findUnique({ where: { tokenBam: bam } });</code></pre>
+const hash = createHash('sha256').update(submittedCode).digest('hex');
+const session = await prisma.session.findUnique({ where: { tokenHash: bam } });</code></pre>
 <pre><code><span class="tok-comment">// prisma/schema.prisma</span>
-model Phien {
-  id       String   @id @default(cuid())
-  tokenBam String   @unique          <span class="tok-comment">// sha256 của token, KHÔNG phải token</span>
-  hetHan   DateTime
-  nguoiDungId String
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique          <span class="tok-comment">// sha256 của token, KHÔNG phải token</span>
+  expiresAt DateTime
+  userId    String
 }</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">The database dump stops being a session list</span><span class="lz-lnote">A leaked backup contains hashes, and a hash cannot be presented as a credential. This alone is worth the two lines: it converts "every active session is compromised" into "no session is compromised".</span></div>
@@ -527,13 +527,13 @@ model Phien {
 
 <h3>The place this bug actually appears: webhook signatures</h3>
 <pre><code><span class="tok-comment">// ❌ Real code, from more than one production codebase</span>
-const chuKy = createHmac('sha256', SECRET).update(req.rawBody).digest('hex');
-if (chuKy !== req.headers['x-signature']) return res.status(401).end();
+const signature = createHmac('sha256', SECRET).update(req.rawBody).digest('hex');
+if (signature !== req.headers['x-signature']) return res.status(401).end();
 
 <span class="tok-comment">// ✅ The same thing, without the side channel</span>
-const chuKy = createHmac('sha256', SECRET).update(req.rawBody).digest();
-const guiLen = Buffer.from(String(req.headers['x-signature']), 'hex');
-if (guiLen.length !== chuKy.length || !timingSafeEqual(chuKy, guiLen)) {
+const signature = createHmac('sha256', SECRET).update(req.rawBody).digest();
+const upload = Buffer.from(String(req.headers['x-signature']), 'hex');
+if (upload.length !== signature.length || !timingSafeEqual(signature, upload)) {
   return res.status(401).end();
 }</code></pre>
 <div class="kv-grid">
@@ -566,11 +566,11 @@ if (tokenGuiLen === tokenThat) { … }
 <span class="tok-comment">// Cái CPU làm: so byte 0. Khác? Trả về false, NGAY.</span>
 <span class="tok-comment">//              Giống? So byte 1. Và cứ thế.</span></code></pre>
 <pre><code><span class="tok-comment">// Đo nó: 2 triệu phép so mỗi ô, token 64 ký tự</span>
-const that = 'a'.repeat(64);
+const real = 'a'.repeat(64);
 for (const trung of [0, 1, 8, 32, 63, 64]) {
-  const doan = 'a'.repeat(trung) + 'b'.repeat(64 - trung);
+  const segment = 'a'.repeat(trung) + 'b'.repeat(64 - trung);
   const t = process.hrtime.bigint();
-  for (let i = 0; i &lt; 2_000_000; i++) { that === doan; }
+  for (let i = 0; i &lt; 2_000_000; i++) { real === segment; }
   const ns = Number(process.hrtime.bigint() - t) / 2_000_000;
   console.log(&#96;trung \${String(trung).padStart(2)} ky tu → \${ns.toFixed(2)} ns&#96;);
 }</code></pre>
@@ -609,12 +609,12 @@ RangeError [ERR_CRYPTO_TIMING_SAFE_EQUAL_LENGTH]:
 <pre><code><span class="tok-comment">// Mẫu HMAC kép: an toàn với mọi độ dài, không rẽ nhánh theo độ dài</span>
 import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
 
-const khoaPhien = randomBytes(32);        <span class="tok-comment">// theo tiến trình, không lưu lại</span>
+const sessionKey = randomBytes(32);        <span class="tok-comment">// theo tiến trình, không lưu lại</span>
 
-export function bangNhau(a: string, b: string) {
-  const ha = createHmac('sha256', khoaPhien).update(a).digest();
-  const hb = createHmac('sha256', khoaPhien).update(b).digest();
-  return timingSafeEqual(ha, hb);          <span class="tok-comment">// luôn 32 byte</span>
+export function equalsCT(a: string, b: string) {
+  const hmacA = createHmac('sha256', sessionKey).update(a).digest();
+  const hmacB = createHmac('sha256', sessionKey).update(b).digest();
+  return timingSafeEqual(hmacA, hmacB);          <span class="tok-comment">// luôn 32 byte</span>
 }</code></pre>
 <div class="callout ok">
 <p><strong>Vì sao dùng HMAC chứ không phải một hàm băm trần.</strong> Với <code>sha256</code> trần, một kẻ tấn công biết thuật toán có thể TỰ TÍNH chuỗi băm của mọi ứng viên ở ngoại tuyến rồi mở đúng cuộc tấn công đó lên chuỗi băm. Gắn khoá bằng một giá trị ngẫu nhiên theo tiến trình mà họ không biết sẽ xoá bỏ điều đó: họ không đoán nổi mỗi vế băm ra cái gì, nên phép so sánh không tiết lộ gì về đầu vào ngoài chuyện chúng có bằng nhau hay không.</p>
@@ -622,19 +622,19 @@ export function bangNhau(a: string, b: string) {
 
 <h3>Câu trả lời TỐT HƠN: đừng so sánh, hãy TRA CỨU</h3>
 <pre><code><span class="tok-comment">// ❌ Lấy phiên về rồi so sánh trong mã ứng dụng</span>
-const phien = await prisma.phien.findFirst({ where: { id: maGuiLen } });
+const session = await prisma.session.findFirst({ where: { id: submittedCode } });
 
 <span class="tok-comment">// ✅ Cất một chuỗi BĂM của token; tra cứu THEO chuỗi băm đó.</span>
 <span class="tok-comment">//    Chỉ mục cơ sở dữ liệu lo việc khớp, và cái hàng đó KHÔNG</span>
 <span class="tok-comment">//    chứa token chút nào.</span>
-const bam = createHash('sha256').update(maGuiLen).digest('hex');
-const phien = await prisma.phien.findUnique({ where: { tokenBam: bam } });</code></pre>
+const hash = createHash('sha256').update(submittedCode).digest('hex');
+const session = await prisma.session.findUnique({ where: { tokenHash: bam } });</code></pre>
 <pre><code><span class="tok-comment">// prisma/schema.prisma</span>
-model Phien {
-  id       String   @id @default(cuid())
-  tokenBam String   @unique          <span class="tok-comment">// sha256 của token, KHÔNG phải token</span>
-  hetHan   DateTime
-  nguoiDungId String
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique          <span class="tok-comment">// sha256 của token, KHÔNG phải token</span>
+  expiresAt DateTime
+  userId    String
 }</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Bản dump cơ sở dữ liệu thôi là một danh sách phiên</span><span class="lz-lnote">Một bản sao lưu rò ra chỉ chứa chuỗi băm, và một chuỗi băm thì không TRÌNH RA làm tín vật được. Chỉ riêng điều này đã đáng hai dòng mã: nó biến "mọi phiên đang hoạt động đều bị chiếm" thành "không phiên nào bị chiếm".</span></div>
@@ -645,13 +645,13 @@ model Phien {
 
 <h3>Chỗ con bug này THẬT SỰ xuất hiện: chữ ký webhook</h3>
 <pre><code><span class="tok-comment">// ❌ Mã thật, lấy từ hơn một kho mã production</span>
-const chuKy = createHmac('sha256', SECRET).update(req.rawBody).digest('hex');
-if (chuKy !== req.headers['x-signature']) return res.status(401).end();
+const signature = createHmac('sha256', SECRET).update(req.rawBody).digest('hex');
+if (signature !== req.headers['x-signature']) return res.status(401).end();
 
 <span class="tok-comment">// ✅ Cũng chuyện đó, không kèm kênh phụ</span>
-const chuKy = createHmac('sha256', SECRET).update(req.rawBody).digest();
-const guiLen = Buffer.from(String(req.headers['x-signature']), 'hex');
-if (guiLen.length !== chuKy.length || !timingSafeEqual(chuKy, guiLen)) {
+const signature = createHmac('sha256', SECRET).update(req.rawBody).digest();
+const upload = Buffer.from(String(req.headers['x-signature']), 'hex');
+if (upload.length !== signature.length || !timingSafeEqual(signature, upload)) {
   return res.status(401).end();
 }</code></pre>
 <div class="kv-grid">
@@ -710,8 +710,8 @@ createHmac('sha256', KHOA_CHUNG).update('xin chao').digest('hex');
 
 <span class="tok-comment">// 3. Signature — private key signs, public key verifies</span>
 const { privateKey, publicKey } = generateKeyPairSync('ed25519');
-const chuKy = sign(null, Buffer.from('xin chao'), privateKey);
-verify(null, Buffer.from('xin chao'), publicKey, chuKy);</code></pre>
+const signature = sign(null, Buffer.from('xin chao'), privateKey);
+verify(null, Buffer.from('xin chao'), publicKey, signature);</code></pre>
 <div class="out">1. 1b4f0e9851971998e732078544c96b36c3d01cedf7caa332359d6f1d83567014
 2. 8f1a2c05e9c7b3d4a6e8f0219d3b5c7e4a1f8d2b6c9e0a3f5d7b1c4e6a8f0d29
 3. &lt;Buffer 3d 9c 41 f7 … 64 byte&gt;   → verify: true</div>
@@ -760,10 +760,10 @@ const tag = createHmac('sha256', BIMAT).update(duLieu).digest('hex');
 
 <h3>Encryption is a fourth thing, and not a substitute</h3>
 <pre><code><span class="tok-comment">// ❌ Encrypting without authenticating: the ciphertext can be tampered with</span>
-const cipher = createCipheriv('aes-256-ctr', khoa, iv);   <span class="tok-comment">// no tag</span>
+const cipher = createCipheriv('aes-256-ctr', key, iv);   <span class="tok-comment">// no tag</span>
 
 <span class="tok-comment">// ✅ AEAD: encrypt AND authenticate in one construction</span>
-const cipher = createCipheriv('aes-256-gcm', khoa, iv);
+const cipher = createCipheriv('aes-256-gcm', key, iv);
 const ct = Buffer.concat([cipher.update(duLieu), cipher.final()]);
 const tag = cipher.getAuthTag();       <span class="tok-comment">// ← decryption FAILS without this</span></code></pre>
 <div class="lz-stack">
@@ -817,8 +817,8 @@ createHmac('sha256', KHOA_CHUNG).update('xin chao').digest('hex');
 
 <span class="tok-comment">// 3. Chữ ký — khoá riêng ký, khoá công xác minh</span>
 const { privateKey, publicKey } = generateKeyPairSync('ed25519');
-const chuKy = sign(null, Buffer.from('xin chao'), privateKey);
-verify(null, Buffer.from('xin chao'), publicKey, chuKy);</code></pre>
+const signature = sign(null, Buffer.from('xin chao'), privateKey);
+verify(null, Buffer.from('xin chao'), publicKey, signature);</code></pre>
 <div class="out">1. 1b4f0e9851971998e732078544c96b36c3d01cedf7caa332359d6f1d83567014
 2. 8f1a2c05e9c7b3d4a6e8f0219d3b5c7e4a1f8d2b6c9e0a3f5d7b1c4e6a8f0d29
 3. &lt;Buffer 3d 9c 41 f7 … 64 byte&gt;   → verify: true</div>
@@ -867,10 +867,10 @@ const tag = createHmac('sha256', BIMAT).update(duLieu).digest('hex');
 
 <h3>Mã hoá là thứ THỨ TƯ, và không thay thế được ba cái kia</h3>
 <pre><code><span class="tok-comment">// ❌ Mã hoá mà không xác thực: bản mã bị can thiệp được</span>
-const cipher = createCipheriv('aes-256-ctr', khoa, iv);   <span class="tok-comment">// không có tag</span>
+const cipher = createCipheriv('aes-256-ctr', key, iv);   <span class="tok-comment">// không có tag</span>
 
 <span class="tok-comment">// ✅ AEAD: mã hoá VÀ xác thực trong cùng một cấu trúc</span>
-const cipher = createCipheriv('aes-256-gcm', khoa, iv);
+const cipher = createCipheriv('aes-256-gcm', key, iv);
 const ct = Buffer.concat([cipher.update(duLieu), cipher.final()]);
 const tag = cipher.getAuthTag();       <span class="tok-comment">// ← thiếu cái này là giải mã THẤT BẠI</span></code></pre>
 <div class="lz-stack">
@@ -949,8 +949,8 @@ export const logger = pino({
     paths: [
       'req.headers.cookie',
       'req.headers.authorization',
-      'req.body.matKhau',
-      'req.body.matKhauMoi',
+      'req.body.password',
+      'req.body.newPassword',
       'res.headers["set-cookie"]',
       '*.token', '*.accessToken', '*.refreshToken', '*.apiKey',
     ],
@@ -961,7 +961,7 @@ export const logger = pino({
   "cookie":"[DA_CHE]","authorization":"[DA_CHE]"},
   "body":{"email":"an@vidu.com","matKhau":"[DA_CHE]"}}}</div>
 <div class="pitfall">
-<p><strong>Trap — a deny-list of field names will miss one, and you will not know which.</strong> <code>matKhau</code> is redacted; <code>mat_khau</code>, <code>password</code>, <code>pwd</code> and <code>newPassword</code> are not. The robust version is the other direction: log an explicit allow-list of fields you have decided are safe, and never pass whole request, response or error objects to the logger. It is more typing and it fails closed instead of open.</p>
+<p><strong>Trap — a deny-list of field names will miss one, and you will not know which.</strong> <code>password</code> is redacted; <code>mat_khau</code>, <code>password</code>, <code>pwd</code> and <code>newPassword</code> are not. The robust version is the other direction: log an explicit allow-list of fields you have decided are safe, and never pass whole request, response or error objects to the logger. It is more typing and it fails closed instead of open.</p>
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Error objects are the sneakiest</span><span class="v">An axios error carries <code>err.config.headers</code> — including the <code>Authorization</code> header of the failed request. A Prisma error carries the query parameters (Lesson 11.5 of the Prisma course). Serialising an error is serialising everything it captured.</span></div>
@@ -1071,8 +1071,8 @@ export const logger = pino({
     paths: [
       'req.headers.cookie',
       'req.headers.authorization',
-      'req.body.matKhau',
-      'req.body.matKhauMoi',
+      'req.body.password',
+      'req.body.newPassword',
       'res.headers["set-cookie"]',
       '*.token', '*.accessToken', '*.refreshToken', '*.apiKey',
     ],
@@ -1083,7 +1083,7 @@ export const logger = pino({
   "cookie":"[DA_CHE]","authorization":"[DA_CHE]"},
   "body":{"email":"an@vidu.com","matKhau":"[DA_CHE]"}}}</div>
 <div class="pitfall">
-<p><strong>Bẫy — một danh sách CẤM theo tên trường sẽ sót một cái, và bạn sẽ không biết là cái nào.</strong> <code>matKhau</code> thì bị che; <code>mat_khau</code>, <code>password</code>, <code>pwd</code> và <code>newPassword</code> thì không. Bản vững chắc đi theo chiều NGƯỢC LẠI: ghi ra một danh sách CHO PHÉP tường minh gồm những trường bạn đã QUYẾT ĐỊNH là an toàn, và đừng bao giờ ném cả đối tượng request, response hay error vào logger. Gõ nhiều hơn thật, nhưng nó hỏng theo hướng ĐÓNG chứ không phải hướng MỞ.</p>
+<p><strong>Bẫy — một danh sách CẤM theo tên trường sẽ sót một cái, và bạn sẽ không biết là cái nào.</strong> <code>password</code> thì bị che; <code>mat_khau</code>, <code>password</code>, <code>pwd</code> và <code>newPassword</code> thì không. Bản vững chắc đi theo chiều NGƯỢC LẠI: ghi ra một danh sách CHO PHÉP tường minh gồm những trường bạn đã QUYẾT ĐỊNH là an toàn, và đừng bao giờ ném cả đối tượng request, response hay error vào logger. Gõ nhiều hơn thật, nhưng nó hỏng theo hướng ĐÓNG chứ không phải hướng MỞ.</p>
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Đối tượng lỗi là thứ ranh ma nhất</span><span class="v">Một lỗi của axios cõng theo <code>err.config.headers</code> — kèm cả header <code>Authorization</code> của request vừa trượt. Một lỗi của Prisma cõng theo tham số truy vấn (Bài 11.5 của khoá Prisma). Tuần tự hoá một lỗi là tuần tự hoá MỌI thứ nó đã bắt được.</span></div>

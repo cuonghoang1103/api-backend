@@ -53,19 +53,19 @@ export default {
 
 <h3>Fail at boot, not at 3am</h3>
 <pre><code><span class="tok-comment">// Kiểm MỘT lần lúc khởi động. Thiếu bí mật ⇒ tiến trình KHÔNG chạy.</span>
-const CanCo = z.object({
+const Required = z.object({
   DATABASE_URL:   z.string().url(),
   JWT_SECRET:     z.string().min(32),        <span class="tok-comment">// KHÔNG có giá trị mặc định</span>
   REDIS_URL:      z.string().url(),
-  URL_CONG_KHAI:  z.string().url(),          <span class="tok-comment">// ← Bài 6.3, chặn đầu độc Host</span>
+  PUBLIC_URL:  z.string().url(),          <span class="tok-comment">// ← Bài 6.3, chặn đầu độc Host</span>
 });
 
-export const env = CanCo.parse(process.env);  <span class="tok-comment">// ném lỗi ngay lúc nạp module</span>
+export const env = Required.parse(process.env);  <span class="tok-comment">// ném lỗi ngay lúc nạp module</span>
 
 <span class="tok-comment">// SAI, và đây là cách một bí mật dev đi tới production:</span>
 <span class="tok-comment">// const secret = process.env.JWT_SECRET ?? 'dev-secret';</span></code></pre>
 <div class="pitfall">
-<p><strong>Trap — a missing variable that defaults silently is worse than a crash, because it is invisible.</strong> With a fallback, the app starts, tokens are signed with a value an attacker can read in your repository, and everything looks healthy. With a validated schema the process refuses to start, the deploy fails, and someone fixes it in two minutes. Validate at module load so the failure happens during the deploy rather than on the first request that happens to need it — and put <code>URL_CONG_KHAI</code> in the required set, because a missing public URL is how Lesson 6.3's reset link falls back to the <code>Host</code> header.</p>
+<p><strong>Trap — a missing variable that defaults silently is worse than a crash, because it is invisible.</strong> With a fallback, the app starts, tokens are signed with a value an attacker can read in your repository, and everything looks healthy. With a validated schema the process refuses to start, the deploy fails, and someone fixes it in two minutes. Validate at module load so the failure happens during the deploy rather than on the first request that happens to need it — and put <code>PUBLIC_URL</code> in the required set, because a missing public URL is how Lesson 6.3's reset link falls back to the <code>Host</code> header.</p>
 </div>
 
 <h3>Documentation drifts. Measured, in this repository</h3>
@@ -147,19 +147,19 @@ diff /tmp/dang-doc /tmp/dang-khai || exit 1        <span class="tok-comment">// 
 
 <h3>Hỏng ngay lúc khởi động, đừng hỏng lúc ba giờ sáng</h3>
 <pre><code><span class="tok-comment">// Kiểm MỘT lần lúc khởi động. Thiếu bí mật ⇒ tiến trình KHÔNG chạy.</span>
-const CanCo = z.object({
+const Required = z.object({
   DATABASE_URL:   z.string().url(),
   JWT_SECRET:     z.string().min(32),        <span class="tok-comment">// KHÔNG có giá trị mặc định</span>
   REDIS_URL:      z.string().url(),
-  URL_CONG_KHAI:  z.string().url(),          <span class="tok-comment">// ← Bài 6.3, chặn đầu độc Host</span>
+  PUBLIC_URL:  z.string().url(),          <span class="tok-comment">// ← Bài 6.3, chặn đầu độc Host</span>
 });
 
-export const env = CanCo.parse(process.env);  <span class="tok-comment">// ném lỗi ngay lúc nạp module</span>
+export const env = Required.parse(process.env);  <span class="tok-comment">// ném lỗi ngay lúc nạp module</span>
 
 <span class="tok-comment">// SAI, và đây là cách một bí mật dev đi tới production:</span>
 <span class="tok-comment">// const secret = process.env.JWT_SECRET ?? 'dev-secret';</span></code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — một biến bị thiếu mà LẶNG LẼ rơi về giá trị mặc định thì tệ hơn một cú sập, vì nó VÔ HÌNH.</strong> Có đường lùi thì ứng dụng khởi động, token được ký bằng một giá trị mà kẻ tấn công đọc được ngay trong kho mã của bạn, và mọi thứ trông khoẻ mạnh. Có một schema kiểm chứng thì tiến trình từ chối khởi động, lần deploy thất bại, và có người sửa nó trong hai phút. Hãy kiểm ngay lúc NẠP MODULE để sự cố xảy ra trong lúc deploy chứ không phải ở cái request đầu tiên tình cờ cần tới nó — và hãy đặt <code>URL_CONG_KHAI</code> vào nhóm bắt buộc, vì thiếu một URL công khai chính là cách mà đường dẫn đặt lại ở Bài 6.3 rơi về header <code>Host</code>.</p>
+<p><strong>Bẫy — một biến bị thiếu mà LẶNG LẼ rơi về giá trị mặc định thì tệ hơn một cú sập, vì nó VÔ HÌNH.</strong> Có đường lùi thì ứng dụng khởi động, token được ký bằng một giá trị mà kẻ tấn công đọc được ngay trong kho mã của bạn, và mọi thứ trông khoẻ mạnh. Có một schema kiểm chứng thì tiến trình từ chối khởi động, lần deploy thất bại, và có người sửa nó trong hai phút. Hãy kiểm ngay lúc NẠP MODULE để sự cố xảy ra trong lúc deploy chứ không phải ở cái request đầu tiên tình cờ cần tới nó — và hãy đặt <code>PUBLIC_URL</code> vào nhóm bắt buộc, vì thiếu một URL công khai chính là cách mà đường dẫn đặt lại ở Bài 6.3 rơi về header <code>Host</code>.</p>
 </div>
 
 <h3>Tài liệu thì TRÔI DẠT. Đo thật, trên chính kho mã này</h3>
@@ -253,14 +253,14 @@ diff /tmp/dang-doc /tmp/dang-khai || exit 1        <span class="tok-comment">// 
 KHOA_KY_HIEN_TAI = 'k2'                    <span class="tok-comment">// đúng MỘT khoá ký</span>
 CHUM_KHOA = { k1: '…', k2: '…' }           <span class="tok-comment">// NHIỀU khoá xác minh</span>
 
-const token = jwt.sign(payload, CHUM_KHOA[KHOA_KY_HIEN_TAI],
+const token = jwt.sign(payload, CHUM_KEYS[KHOA_KY_HIEN_TAI],
                        { algorithm: 'HS256', keyid: KHOA_KY_HIEN_TAI });
 
 <span class="tok-comment">// Xác minh: đọc kid, tra trong chùm, GHIM thuật toán (Bài 4.2).</span>
 const kid = jwt.decode(token, { complete: true })?.header.kid;
-const khoa = CHUM_KHOA[kid];
-if (!khoa) throw new Error('kid khong biet');
-jwt.verify(token, khoa, { algorithms: ['HS256'] });</code></pre>
+const key = CHUM_KEYS[kid];
+if (!key) throw new Error('kid khong biet');
+jwt.verify(token, key, { algorithms: ['HS256'] });</code></pre>
 
 <h3>The same four phases, for everything else</h3>
 <div class="lz-stack">
@@ -328,14 +328,14 @@ jwt.verify(token, khoa, { algorithms: ['HS256'] });</code></pre>
 KHOA_KY_HIEN_TAI = 'k2'                    <span class="tok-comment">// đúng MỘT khoá ký</span>
 CHUM_KHOA = { k1: '…', k2: '…' }           <span class="tok-comment">// NHIỀU khoá xác minh</span>
 
-const token = jwt.sign(payload, CHUM_KHOA[KHOA_KY_HIEN_TAI],
+const token = jwt.sign(payload, CHUM_KEYS[KHOA_KY_HIEN_TAI],
                        { algorithm: 'HS256', keyid: KHOA_KY_HIEN_TAI });
 
 <span class="tok-comment">// Xác minh: đọc kid, tra trong chùm, GHIM thuật toán (Bài 4.2).</span>
 const kid = jwt.decode(token, { complete: true })?.header.kid;
-const khoa = CHUM_KHOA[kid];
-if (!khoa) throw new Error('kid khong biet');
-jwt.verify(token, khoa, { algorithms: ['HS256'] });</code></pre>
+const key = CHUM_KEYS[kid];
+if (!key) throw new Error('kid khong biet');
+jwt.verify(token, key, { algorithms: ['HS256'] });</code></pre>
 
 <h3>Cũng bốn giai đoạn ấy, cho mọi thứ CÒN LẠI</h3>
 <div class="lz-stack">
@@ -423,7 +423,7 @@ rai deu 20 req / 120s
 <pre><code><span class="tok-comment">// Trả lời đủ để client cư xử đúng, không đủ để kẻ tấn công dò ra trần.</span>
 res.status(429)
    .set('Retry-After', String(cho))        <span class="tok-comment">// giây — client tử tế sẽ chờ</span>
-   .json({ loi: 'Quá nhiều yêu cầu. Hãy thử lại sau.' });
+   .json({ error: 'Quá nhiều yêu cầu. Hãy thử lại sau.' });
 
 <span class="tok-comment">// KHÔNG gửi kèm: trần là bao nhiêu, còn lại mấy lượt, đang đếm theo trục nào.</span>
 <span class="tok-comment">// Với API công khai có tài liệu thì các header X-RateLimit-* là ĐÚNG;</span>
@@ -496,7 +496,7 @@ rai deu 20 req / 120s
 <pre><code><span class="tok-comment">// Trả lời đủ để client cư xử đúng, không đủ để kẻ tấn công dò ra trần.</span>
 res.status(429)
    .set('Retry-After', String(cho))        <span class="tok-comment">// giây — client tử tế sẽ chờ</span>
-   .json({ loi: 'Quá nhiều yêu cầu. Hãy thử lại sau.' });
+   .json({ error: 'Quá nhiều yêu cầu. Hãy thử lại sau.' });
 
 <span class="tok-comment">// KHÔNG gửi kèm: trần là bao nhiêu, còn lại mấy lượt, đang đếm theo trục nào.</span>
 <span class="tok-comment">// Với API công khai có tài liệu thì các header X-RateLimit-* là ĐÚNG;</span>
@@ -555,22 +555,22 @@ res.status(429)
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">And who really did them</span><span class="lz-nsub">Admin impersonation, bulk export, account deletion, MFA reset by support · record the operator, not the victim</span></div></div>
   </div>
 </div>
-<pre><code>model SuKienKiemToan {
-  id          BigInt   @id @default(autoincrement())
-  luc         DateTime @default(now())
-  loai        String                       <span class="tok-comment">// 'vai_tro.cap', 'mat_khau.dat_lai'</span>
-  chuTheId    String?                      <span class="tok-comment">// AI làm — người vận hành, không phải nạn nhân</span>
-  doiTuongId  String?                      <span class="tok-comment">// làm LÊN AI/CÁI GÌ</span>
-  ip          String?
-  userAgent   String?
-  ketQua      String                       <span class="tok-comment">// 'thanh_cong' | 'that_bai' | 'tu_choi'</span>
-  chiTiet     Json?                        <span class="tok-comment">// bối cảnh — xem danh sách CẤM bên dưới</span>
-  bamTruoc    String                       <span class="tok-comment">// ← chuỗi băm, phần dưới bài</span>
-  bam         String
+<pre><code>model AuditEvent {
+  id        BigInt   @id @default(autoincrement())
+  luc       DateTime @default(now())
+  loai      String   <span class="tok-comment">// 'vai_tro.cap', 'mat_khau.dat_lai'</span>
+  subjectId String?  <span class="tok-comment">// AI làm — người vận hành, không phải nạn nhân</span>
+  objectId  String?  <span class="tok-comment">// làm LÊN AI/CÁI GÌ</span>
+  ip        String?
+  userAgent String?
+  result    String   <span class="tok-comment">// 'thanh_cong' | 'that_bai' | 'tu_choi'</span>
+  detail    Json?    <span class="tok-comment">// bối cảnh — xem danh sách CẤM bên dưới</span>
+  prevHash  String   <span class="tok-comment">// ← chuỗi băm, phần dưới bài</span>
+  bam       String
 
-  @@index([chuTheId, luc])
-  @@index([doiTuongId, luc])
-  @@index([loai, luc])
+  @@index([subjectId, luc])
+  @@index([objectId, luc])
+  @@index([kind, luc])
   @@map("su_kien_kiem_toan")
 }</code></pre>
 <div class="kv-grid">
@@ -585,13 +585,13 @@ res.status(429)
 <p><strong>Trap — an audit log that captures credentials is a credential file with better indexing.</strong> Never write: passwords, even wrong ones, even hashed; tokens, session ids, refresh tokens, reset tokens or authorization codes; TOTP secrets or codes; full card numbers; API keys. And never log a whole request or response body on an authentication route — that is how all of the above end up there without anyone deciding to put them there. Store identifiers and hashes: the last four characters of a token, or its SHA-256, is enough to correlate two log lines without the log becoming the thing an attacker wants. The same rule covers your error reporter and your APM tracer, which capture request bodies by default and are usually the ones that actually leak.</p>
 </div>
 <pre><code><span class="tok-comment">// SAI — và đây là cách một nhật ký trở thành thứ ĐÁNG CẮP NHẤT bạn có:</span>
-log.info('dang nhap that bai', { email, matKhau, body: req.body });
+log.info('dang nhap that bai', { email, password, body: req.body });
 
 <span class="tok-comment">// ĐÚNG — đủ để đối chiếu, không đủ để dùng lại:</span>
 log.info('dang nhap that bai', {
-  emailChuanHoa,                      <span class="tok-comment">// định danh, không phải tín vật</span>
+  normalizedEmail,                      <span class="tok-comment">// định danh, không phải tín vật</span>
   ip: req.ip, asn: asn(req.ip),
-  tokenDauCuoi: token?.slice(-4),     <span class="tok-comment">// đối chiếu được, không phát lại được</span>
+  tokenTail: token?.slice(-4),     <span class="tok-comment">// đối chiếu được, không phát lại được</span>
 });</code></pre>
 
 <h3>Tamper evidence, run for real</h3>
@@ -605,9 +605,9 @@ Kiem lai: chuoi NGUYEN VEN
 Sau khi SUA ban ghi #2 (giau viec tu cap admin): HONG o ban ghi #1
 Sau khi XOA HAN ban ghi #2: HONG o ban ghi #1</div>
 <pre><code><span class="tok-comment">// Mỗi bản ghi băm CẢ nội dung của nó LẪN băm của bản ghi trước.</span>
-const bamTruoc = (await banGhiCuoi())?.bam ?? '0'.repeat(64);
-const bam = sha256(JSON.stringify(suKien) + bamTruoc);
-await prisma.suKienKiemToan.create({ data: { ...suKien, bamTruoc, bam } });</code></pre>
+const prevHash = (await lastRecord())?.bam ?? '0'.repeat(64);
+const bam = sha256(JSON.stringify(event) + prevHash);
+await prisma.auditEvent.create({ data: { ...event, prevHash, bam } });</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Editing breaks the chain</span><span class="lz-t">And so does deleting</span><span class="lz-d">Change one field or remove one row and every hash after it stops matching. An attacker who reaches your database can still destroy the log — but they cannot quietly <em>edit</em> it, and the difference between "the log is gone" and "the log says nothing happened" is enormous during an investigation.</span></div>
   <div class="lz-step"><span class="lz-k">Verify on a schedule</span><span class="lz-t">A nightly job</span><span class="lz-d">Walk the chain and alert on the first mismatch. A tamper-evident log nobody verifies proves nothing, because the evidence is only produced by the checking.</span></div>
@@ -658,22 +658,22 @@ await prisma.suKienKiemToan.create({ data: { ...suKien, bamTruoc, bam } });</cod
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Và AI THẬT SỰ đã làm chúng</span><span class="lz-nsub">Quản trị viên đóng vai người dùng, xuất dữ liệu hàng loạt, xoá tài khoản, hỗ trợ đặt lại MFA · hãy ghi NGƯỜI VẬN HÀNH, không ghi nạn nhân</span></div></div>
   </div>
 </div>
-<pre><code>model SuKienKiemToan {
-  id          BigInt   @id @default(autoincrement())
-  luc         DateTime @default(now())
-  loai        String                       <span class="tok-comment">// 'vai_tro.cap', 'mat_khau.dat_lai'</span>
-  chuTheId    String?                      <span class="tok-comment">// AI làm — người vận hành, không phải nạn nhân</span>
-  doiTuongId  String?                      <span class="tok-comment">// làm LÊN AI/CÁI GÌ</span>
-  ip          String?
-  userAgent   String?
-  ketQua      String                       <span class="tok-comment">// 'thanh_cong' | 'that_bai' | 'tu_choi'</span>
-  chiTiet     Json?                        <span class="tok-comment">// bối cảnh — xem danh sách CẤM bên dưới</span>
-  bamTruoc    String                       <span class="tok-comment">// ← chuỗi băm, phần dưới bài</span>
-  bam         String
+<pre><code>model AuditEvent {
+  id        BigInt   @id @default(autoincrement())
+  luc       DateTime @default(now())
+  loai      String   <span class="tok-comment">// 'vai_tro.cap', 'mat_khau.dat_lai'</span>
+  subjectId String?  <span class="tok-comment">// AI làm — người vận hành, không phải nạn nhân</span>
+  objectId  String?  <span class="tok-comment">// làm LÊN AI/CÁI GÌ</span>
+  ip        String?
+  userAgent String?
+  result    String   <span class="tok-comment">// 'thanh_cong' | 'that_bai' | 'tu_choi'</span>
+  detail    Json?    <span class="tok-comment">// bối cảnh — xem danh sách CẤM bên dưới</span>
+  prevHash  String   <span class="tok-comment">// ← chuỗi băm, phần dưới bài</span>
+  bam       String
 
-  @@index([chuTheId, luc])
-  @@index([doiTuongId, luc])
-  @@index([loai, luc])
+  @@index([subjectId, luc])
+  @@index([objectId, luc])
+  @@index([kind, luc])
   @@map("su_kien_kiem_toan")
 }</code></pre>
 <div class="kv-grid">
@@ -688,13 +688,13 @@ await prisma.suKienKiemToan.create({ data: { ...suKien, bamTruoc, bam } });</cod
 <p><strong>Bẫy — một nhật ký kiểm toán có chứa tín vật là một tệp tín vật được đánh chỉ mục ĐẸP HƠN.</strong> Đừng bao giờ ghi: mật khẩu, kể cả mật khẩu SAI, kể cả dạng băm; token, id phiên, refresh token, token đặt lại hay mã uỷ quyền; bí mật hay mã TOTP; số thẻ đầy đủ; khoá API. Và đừng bao giờ ghi cả một thân request hay response trên một tuyến xác thực — đó chính là cách tất cả những thứ trên rơi vào đó mà chẳng ai từng quyết định đặt chúng vào. Hãy lưu ĐỊNH DANH và BĂM: bốn ký tự cuối của một token, hoặc SHA-256 của nó, là đủ để đối chiếu hai dòng log mà không biến nhật ký thành thứ kẻ tấn công thèm muốn. Cùng luật đó áp cho bộ báo lỗi và bộ theo dấu APM của bạn, vốn thu thân request theo MẶC ĐỊNH và thường mới là những thứ thật sự làm rò rỉ.</p>
 </div>
 <pre><code><span class="tok-comment">// SAI — và đây là cách một nhật ký trở thành thứ ĐÁNG CẮP NHẤT bạn có:</span>
-log.info('dang nhap that bai', { email, matKhau, body: req.body });
+log.info('dang nhap that bai', { email, password, body: req.body });
 
 <span class="tok-comment">// ĐÚNG — đủ để đối chiếu, không đủ để dùng lại:</span>
 log.info('dang nhap that bai', {
-  emailChuanHoa,                      <span class="tok-comment">// định danh, không phải tín vật</span>
+  normalizedEmail,                      <span class="tok-comment">// định danh, không phải tín vật</span>
   ip: req.ip, asn: asn(req.ip),
-  tokenDauCuoi: token?.slice(-4),     <span class="tok-comment">// đối chiếu được, không phát lại được</span>
+  tokenTail: token?.slice(-4),     <span class="tok-comment">// đối chiếu được, không phát lại được</span>
 });</code></pre>
 
 <h3>Bằng chứng chống sửa đổi, chạy thật</h3>
@@ -708,9 +708,9 @@ Kiem lai: chuoi NGUYEN VEN
 Sau khi SUA ban ghi #2 (giau viec tu cap admin): HONG o ban ghi #1
 Sau khi XOA HAN ban ghi #2: HONG o ban ghi #1</div>
 <pre><code><span class="tok-comment">// Mỗi bản ghi băm CẢ nội dung của nó LẪN băm của bản ghi trước.</span>
-const bamTruoc = (await banGhiCuoi())?.bam ?? '0'.repeat(64);
-const bam = sha256(JSON.stringify(suKien) + bamTruoc);
-await prisma.suKienKiemToan.create({ data: { ...suKien, bamTruoc, bam } });</code></pre>
+const prevHash = (await lastRecord())?.bam ?? '0'.repeat(64);
+const bam = sha256(JSON.stringify(event) + prevHash);
+await prisma.auditEvent.create({ data: { ...event, prevHash, bam } });</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">SỬA thì gãy chuỗi</span><span class="lz-t">Và XOÁ cũng vậy</span><span class="lz-d">Đổi một trường hoặc gỡ một dòng là mọi băm phía sau nó thôi không khớp. Một kẻ tấn công tới được cơ sở dữ liệu của bạn thì vẫn PHÁ được nhật ký — nhưng hắn không thể lặng lẽ <em>SỬA</em> nó, và khác biệt giữa "nhật ký đã biến mất" với "nhật ký nói chẳng có gì xảy ra" là khổng lồ trong một cuộc điều tra.</span></div>
   <div class="lz-step"><span class="lz-k">Kiểm lại THEO LỊCH</span><span class="lz-t">Một công việc chạy đêm</span><span class="lz-d">Đi hết chuỗi và báo động ở chỗ lệch đầu tiên. Một nhật ký chống-sửa-đổi mà chẳng ai kiểm lại thì không chứng minh được gì cả, vì bằng chứng chỉ được SINH RA bởi chính việc kiểm.</span></div>
@@ -785,7 +785,7 @@ await prisma.suKienKiemToan.create({ data: { ...suKien, bamTruoc, bam } });</cod
   <div class="lz-step"><span class="lz-k">Never alert on a single user's behaviour</span><span class="lz-t">Except reuse detection</span><span class="lz-d">One person failing five logins is a typo. Alerting per user produces thousands of pages and finds nothing — aggregate first, and let the per-user events live in the audit log where an investigation can find them.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Ghi mọi sự kiện xác thực thành MỘT chỉ số có nhãn. Cảnh báo dựng trên nó.</span>
-xacThucTong.inc({ loai: 'dang_nhap', ketQua: khop ? 'thanh_cong' : 'that_bai' });
+requireAuthTong.inc({ kiu: 'dang_nhap', result: khop ? 'thanh_cong' : 'that_bai' });
 
 <span class="tok-comment">// PromQL: tỉ lệ hỏng trong 15 phút, KHÔNG phải số đếm.</span>
 <span class="tok-comment">//   sum(rate(xac_thuc_tong{loai="dang_nhap",ketQua="that_bai"}[15m]))</span>
@@ -852,7 +852,7 @@ xacThucTong.inc({ loai: 'dang_nhap', ketQua: khop ? 'thanh_cong' : 'that_bai' })
   <div class="lz-step"><span class="lz-k">Đừng bao giờ cảnh báo theo hành vi của MỘT người dùng</span><span class="lz-t">Trừ phát hiện tái dùng</span><span class="lz-d">Một người đăng nhập hỏng năm lần là một cú gõ nhầm. Cảnh báo theo từng người dùng sẽ sinh ra hàng nghìn cuộc gọi và chẳng tìm ra gì — hãy TỔNG HỢP trước đã, và để các sự kiện theo từng người sống trong nhật ký kiểm toán, nơi một cuộc điều tra tìm ra được chúng.</span></div>
 </div>
 <pre><code><span class="tok-comment">// Ghi mọi sự kiện xác thực thành MỘT chỉ số có nhãn. Cảnh báo dựng trên nó.</span>
-xacThucTong.inc({ loai: 'dang_nhap', ketQua: khop ? 'thanh_cong' : 'that_bai' });
+requireAuthTong.inc({ kiu: 'dang_nhap', result: khop ? 'thanh_cong' : 'that_bai' });
 
 <span class="tok-comment">// PromQL: tỉ lệ hỏng trong 15 phút, KHÔNG phải số đếm.</span>
 <span class="tok-comment">//   sum(rate(xac_thuc_tong{loai="dang_nhap",ketQua="that_bai"}[15m]))</span>

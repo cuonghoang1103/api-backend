@@ -59,15 +59,15 @@ export default {
 <pre><code><span class="tok-comment">// Yếu tố thứ hai ở BA thời điểm khác nhau, và chúng khác nhau thật.</span>
 
 <span class="tok-comment">// 1. Lúc đăng nhập — nhưng nhớ thiết bị, không thì người dùng sẽ tắt MFA đi</span>
-if (!thietBiDaNho(req)) await doiYeuToThuHai(nd);
+if (!rememberedDevice(req)) await changeSecondFactor(u);
 
 <span class="tok-comment">// 2. Xác thực lại trước việc nhạy cảm — Bài 6.5, và đây là chỗ quan trọng NHẤT</span>
-app.patch('/me/email', doiXacThucLai({ trongVong: 300 }), doiEmail);
-app.post('/me/delete',     doiXacThucLai({ trongVong: 300 }), xoaTaiKhoan);
-app.post('/thanh-toan',  doiXacThucLai({ trongVong: 300 }), chuyenTien);
+app.patch('/me/email', requireReauth({ within: 300 }), doiEmail);
+app.post('/me/delete',     requireReauth({ within: 300 }), xoaTaiKhoan);
+app.post('/thanh-toan',  requireReauth({ within: 300 }), chuyenTien);
 
 <span class="tok-comment">// 3. Khi có gì đó BẤT THƯỜNG — quốc gia mới, thiết bị mới, sau một lần đặt lại</span>
-if (diemRuiRo(req, nd) &gt; NGUONG) await doiYeuToThuHai(nd);</code></pre>
+if (riskScore(req, u) &gt; NGUONG) await changeSecondFactor(u);</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Remembering the device is not a weakness, it is what makes MFA survive</span><span class="lz-lnote">A factor demanded on every login gets switched off, or the user picks the weakest option available. Remember the browser for thirty days with a separate signed cookie, and re-ask when it expires, when the device is new, or when the risk score rises.</span></div>
   <div class="lz-layer"><span class="lz-lname">Step-up is where the value actually is</span><span class="lz-lnote">Login MFA protects against someone who has the password. Step-up protects against someone who already has a live session — a stolen cookie, an unlocked laptop, an XSS. Chapters 3 through 6 all end at the same place: the attacker is inside. Step-up is the only control that still bites there.</span></div>
@@ -133,15 +133,15 @@ if (diemRuiRo(req, nd) &gt; NGUONG) await doiYeuToThuHai(nd);</code></pre>
 <pre><code><span class="tok-comment">// Yếu tố thứ hai ở BA thời điểm khác nhau, và chúng khác nhau thật.</span>
 
 <span class="tok-comment">// 1. Lúc đăng nhập — nhưng nhớ thiết bị, không thì người dùng sẽ tắt MFA đi</span>
-if (!thietBiDaNho(req)) await doiYeuToThuHai(nd);
+if (!rememberedDevice(req)) await changeSecondFactor(u);
 
 <span class="tok-comment">// 2. Xác thực lại trước việc nhạy cảm — Bài 6.5, và đây là chỗ quan trọng NHẤT</span>
-app.patch('/me/email', doiXacThucLai({ trongVong: 300 }), doiEmail);
-app.post('/me/delete',     doiXacThucLai({ trongVong: 300 }), xoaTaiKhoan);
-app.post('/thanh-toan',  doiXacThucLai({ trongVong: 300 }), chuyenTien);
+app.patch('/me/email', requireReauth({ within: 300 }), doiEmail);
+app.post('/me/delete',     requireReauth({ within: 300 }), xoaTaiKhoan);
+app.post('/thanh-toan',  requireReauth({ within: 300 }), chuyenTien);
 
 <span class="tok-comment">// 3. Khi có gì đó BẤT THƯỜNG — quốc gia mới, thiết bị mới, sau một lần đặt lại</span>
-if (diemRuiRo(req, nd) &gt; NGUONG) await doiYeuToThuHai(nd);</code></pre>
+if (riskScore(req, u) &gt; NGUONG) await changeSecondFactor(u);</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Nhớ thiết bị không phải điểm yếu, đó là thứ giúp MFA sống sót</span><span class="lz-lnote">Một yếu tố bị đòi ở mọi lần đăng nhập sẽ bị TẮT đi, hoặc người dùng sẽ chọn phương án yếu nhất hiện có. Hãy nhớ trình duyệt trong ba mươi ngày bằng một cookie đã ký riêng, rồi hỏi lại khi nó hết hạn, khi thiết bị là mới, hoặc khi điểm rủi ro tăng lên.</span></div>
   <div class="lz-layer"><span class="lz-lname">Giá trị thật sự nằm ở chỗ nâng cấp xác thực</span><span class="lz-lnote">MFA lúc đăng nhập bảo vệ trước kẻ CÓ mật khẩu. Nâng cấp xác thực bảo vệ trước kẻ ĐÃ CÓ một phiên sống — một cookie bị cắp, một cái laptop chưa khoá, một lỗ XSS. Chương 3 tới Chương 6 đều kết thúc ở cùng một chỗ: kẻ tấn công đã ở BÊN TRONG. Nâng cấp xác thực là biện pháp duy nhất còn cắn được ở đó.</span></div>
@@ -185,11 +185,11 @@ if (diemRuiRo(req, nd) &gt; NGUONG) await doiYeuToThuHai(nd);</code></pre>
 <h3>The whole algorithm</h3>
 <pre><code>import { createHmac } from 'node:crypto';
 
-function hotp(khoa: Buffer, boDem: number, soChuSo = 6): string {
+function hotp(khoa: Buffer, counter: number, soChuSo = 6): string {
   const buf = Buffer.alloc(8);
-  buf.writeBigUInt64BE(BigInt(boDem));                    <span class="tok-comment">// 1. bộ đếm, 8 byte, big-endian</span>
+  buf.writeBigUInt64BE(BigInt(counter));                    <span class="tok-comment">// 1. bộ đếm, 8 byte, big-endian</span>
 
-  const h = createHmac('sha1', khoa).update(buf).digest(); <span class="tok-comment">// 2. HMAC-SHA1 → 20 byte</span>
+  const h = createHmac('sha1', key).update(buf).digest(); <span class="tok-comment">// 2. HMAC-SHA1 → 20 byte</span>
 
   const off = h[h.length - 1] &amp; 0x0f;                      <span class="tok-comment">// 3. cắt động: 4 bit cuối = vị trí</span>
   const bin = ((h[off] &amp; 0x7f) &lt;&lt; 24) | (h[off + 1] &lt;&lt; 16)
@@ -200,7 +200,7 @@ function hotp(khoa: Buffer, boDem: number, soChuSo = 6): string {
 
 <span class="tok-comment">// TOTP chỉ là HOTP với bộ đếm = thời gian chia cho 30.</span>
 const totp = (khoa: Buffer, giay = Date.now() / 1000, buoc = 30) =&gt;
-  hotp(khoa, Math.floor(giay / buoc));</code></pre>
+  hotp(key, Math.floor(giay / buoc));</code></pre>
 <div class="out">RFC 6238 test vectors (SHA-1):
   T=         59  ->  94287082
   T= 1111111109  ->  07081804
@@ -221,9 +221,9 @@ const totp = (khoa: Buffer, giay = Date.now() / 1000, buoc = 30) =&gt;
 
 <h3>Base32, the QR code, and the shape of an enrolment</h3>
 <pre><code><span class="tok-comment">// Bí mật là 20 byte ngẫu nhiên. Ứng dụng sinh mã đọc base32, KHÔNG đọc hex.</span>
-const biMat = randomBytes(20);
-const uri = 'otpauth://totp/CuongThai:' + encodeURIComponent(nd.email)
-          + '?secret=' + base32(biMat)
+const secret = randomBytes(20);
+const uri = 'otpauth://totp/CuongThai:' + encodeURIComponent(u.email)
+          + '?secret=' + base32(secret)
           + '&amp;issuer=CuongThai&amp;algorithm=SHA1&amp;digits=6&amp;period=30';</code></pre>
 <div class="out">bi mat moi   : IIO6GHS2LR6L2HAJ3BBEARUMFK3CX5LK
 otpauth URI  : otpauth://totp/CuongThai:cuong%40cuongthai.com?secret=IIO6GHS2LR6L2HAJ3BBEARUMFK3CX5LK&amp;issuer=CuongThai&amp;algorithm=SHA1&amp;digits=6&amp;period=30</div>
@@ -244,14 +244,14 @@ otpauth URI  : otpauth://totp/CuongThai:cuong%40cuongthai.com?secret=IIO6GHS2LR6
 
 # Ba ma cung hop le tai moi thoi diem. Do la CO Y: dong ho dien thoai lech,
 # nguoi dung go cham, va mot ma sinh ra o giay thu 29 thi toi noi o buoc sau.</div>
-<pre><code>function kiemTotp(biMat: Buffer, maNhap: string, cuaSo = 1): number | null {
-  const buocHienTai = Math.floor(Date.now() / 1000 / 30);
+<pre><code>function checkTotp(secret: Buffer, inputCode: string, cuaSo = 1): number | null {
+  const currentStep = Math.floor(Date.now() / 1000 / 30);
 
   for (let d = -cuaSo; d &lt;= cuaSo; d++) {
-    const mong = hotp(biMat, buocHienTai + d);
+    const expected = hotp(secret, currentStep + d);
     <span class="tok-comment">// So sánh hằng thời gian — Bài 1.3, và ở đây nó thật sự cần thiết.</span>
-    if (timingSafeEqual(Buffer.from(mong), Buffer.from(maNhap.padEnd(6)))) {
-      return buocHienTai + d;                <span class="tok-comment">// ← TRẢ VỀ BƯỚC, không trả về true</span>
+    if (timingSafeEqual(Buffer.from(expected), Buffer.from(inputCode.padEnd(6)))) {
+      return currentStep + d;                <span class="tok-comment">// ← TRẢ VỀ BƯỚC, không trả về true</span>
     }
   }
   return null;
@@ -259,12 +259,12 @@ otpauth URI  : otpauth://totp/CuongThai:cuong%40cuongthai.com?secret=IIO6GHS2LR6
 <div class="pitfall">
 <p><strong>Trap — returning a boolean makes replay impossible to prevent, and replay is the attack that actually happens.</strong> A TOTP code stays valid for up to ninety seconds. Anyone who sees it once — over the shoulder, in a phishing proxy, in a screenshot pasted into a support chat — can use it again inside that window. The fix is to return the step number that matched and store it: <code>lastStep</code> on the factor row, with the rule that the new step must be strictly greater. A code that already succeeded can never succeed twice, and the change is two lines.</p>
 </div>
-<pre><code>const buoc = kiemTotp(biMat, ma);
-if (buoc === null || buoc &lt;= yeuTo.buocCuoi) {         <span class="tok-comment">// ← chặn TÁI DÙNG</span>
-  await ghiNhanThatBai(nd.id);
-  return res.status(401).json({ loi: 'Mã không đúng.' });
+<pre><code>const buoc = checkTotp(secret, code);
+if (buoc === null || buoc &lt;= factor.lastStep) {         <span class="tok-comment">// ← chặn TÁI DÙNG</span>
+  await recordFailure(u.id);
+  return res.status(401).json({ error: 'Mã không đúng.' });
 }
-await prisma.yeuTo.update({ where: { id: yeuTo.id }, data: { buocCuoi: buoc } });</code></pre>
+await prisma.factor.update({ where: { id: factor.id }, data: { lastStep: buoc } });</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">One step either way, and no more</span><span class="lz-lnote">A window of ±1 accepts ninety seconds of skew, which covers every phone with automatic time and every user typing slowly. Widening it to ±5 to "help" users with wrong clocks accepts five and a half minutes and multiplies the guessing surface; fix their clock instead, or tell them to.</span></div>
   <div class="lz-layer"><span class="lz-lname">Record the drift, do not silently absorb it</span><span class="lz-lnote">If a user's codes consistently match at step −1, their phone clock is slow. Storing the observed offset lets you keep the window narrow and still accept them, and it turns a mysterious "sometimes it does not work" ticket into a one-line answer.</span></div>
@@ -291,11 +291,11 @@ await prisma.yeuTo.update({ where: { id: yeuTo.id }, data: { buocCuoi: buoc } })
 <h3>Toàn bộ thuật toán</h3>
 <pre><code>import { createHmac } from 'node:crypto';
 
-function hotp(khoa: Buffer, boDem: number, soChuSo = 6): string {
+function hotp(khoa: Buffer, counter: number, soChuSo = 6): string {
   const buf = Buffer.alloc(8);
-  buf.writeBigUInt64BE(BigInt(boDem));                    <span class="tok-comment">// 1. bộ đếm, 8 byte, big-endian</span>
+  buf.writeBigUInt64BE(BigInt(counter));                    <span class="tok-comment">// 1. bộ đếm, 8 byte, big-endian</span>
 
-  const h = createHmac('sha1', khoa).update(buf).digest(); <span class="tok-comment">// 2. HMAC-SHA1 → 20 byte</span>
+  const h = createHmac('sha1', key).update(buf).digest(); <span class="tok-comment">// 2. HMAC-SHA1 → 20 byte</span>
 
   const off = h[h.length - 1] &amp; 0x0f;                      <span class="tok-comment">// 3. cắt động: 4 bit cuối = vị trí</span>
   const bin = ((h[off] &amp; 0x7f) &lt;&lt; 24) | (h[off + 1] &lt;&lt; 16)
@@ -306,7 +306,7 @@ function hotp(khoa: Buffer, boDem: number, soChuSo = 6): string {
 
 <span class="tok-comment">// TOTP chỉ là HOTP với bộ đếm = thời gian chia cho 30.</span>
 const totp = (khoa: Buffer, giay = Date.now() / 1000, buoc = 30) =&gt;
-  hotp(khoa, Math.floor(giay / buoc));</code></pre>
+  hotp(key, Math.floor(giay / buoc));</code></pre>
 <div class="out">RFC 6238 test vectors (SHA-1):
   T=         59  ->  94287082
   T= 1111111109  ->  07081804
@@ -327,9 +327,9 @@ const totp = (khoa: Buffer, giay = Date.now() / 1000, buoc = 30) =&gt;
 
 <h3>Base32, mã QR, và hình dạng của một lần đăng ký</h3>
 <pre><code><span class="tok-comment">// Bí mật là 20 byte ngẫu nhiên. Ứng dụng sinh mã đọc base32, KHÔNG đọc hex.</span>
-const biMat = randomBytes(20);
-const uri = 'otpauth://totp/CuongThai:' + encodeURIComponent(nd.email)
-          + '?secret=' + base32(biMat)
+const secret = randomBytes(20);
+const uri = 'otpauth://totp/CuongThai:' + encodeURIComponent(u.email)
+          + '?secret=' + base32(secret)
           + '&amp;issuer=CuongThai&amp;algorithm=SHA1&amp;digits=6&amp;period=30';</code></pre>
 <div class="out">bi mat moi   : IIO6GHS2LR6L2HAJ3BBEARUMFK3CX5LK
 otpauth URI  : otpauth://totp/CuongThai:cuong%40cuongthai.com?secret=IIO6GHS2LR6L2HAJ3BBEARUMFK3CX5LK&amp;issuer=CuongThai&amp;algorithm=SHA1&amp;digits=6&amp;period=30</div>
@@ -350,27 +350,27 @@ otpauth URI  : otpauth://totp/CuongThai:cuong%40cuongthai.com?secret=IIO6GHS2LR6
 
 # Ba ma cung hop le tai moi thoi diem. Do la CO Y: dong ho dien thoai lech,
 # nguoi dung go cham, va mot ma sinh ra o giay thu 29 thi toi noi o buoc sau.</div>
-<pre><code>function kiemTotp(biMat: Buffer, maNhap: string, cuaSo = 1): number | null {
-  const buocHienTai = Math.floor(Date.now() / 1000 / 30);
+<pre><code>function checkTotp(secret: Buffer, inputCode: string, cuaSo = 1): number | null {
+  const currentStep = Math.floor(Date.now() / 1000 / 30);
 
   for (let d = -cuaSo; d &lt;= cuaSo; d++) {
-    const mong = hotp(biMat, buocHienTai + d);
+    const expected = hotp(secret, currentStep + d);
     <span class="tok-comment">// So sánh hằng thời gian — Bài 1.3, và ở đây nó thật sự cần thiết.</span>
-    if (timingSafeEqual(Buffer.from(mong), Buffer.from(maNhap.padEnd(6)))) {
-      return buocHienTai + d;                <span class="tok-comment">// ← TRẢ VỀ BƯỚC, không trả về true</span>
+    if (timingSafeEqual(Buffer.from(expected), Buffer.from(inputCode.padEnd(6)))) {
+      return currentStep + d;                <span class="tok-comment">// ← TRẢ VỀ BƯỚC, không trả về true</span>
     }
   }
   return null;
 }</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — trả về một giá trị đúng/sai khiến việc chặn TÁI DÙNG thành bất khả, mà tái dùng mới là cú tấn công thật sự xảy ra.</strong> Một mã TOTP còn hiệu lực tới chín mươi giây. Bất kỳ ai nhìn thấy nó MỘT lần — liếc qua vai, trong một trang lừa đảo trung gian, trong một ảnh chụp màn hình dán vào cuộc trò chuyện hỗ trợ — đều dùng lại được trong cửa sổ ấy. Cách vá là trả về SỐ BƯỚC đã khớp rồi lưu lại: một cột <code>buocCuoi</code> trên bản ghi yếu tố, kèm luật rằng bước mới phải LỚN HƠN HẲN. Một cái mã đã thành công thì không bao giờ thành công lần thứ hai, và thay đổi này chỉ tốn hai dòng.</p>
+<p><strong>Bẫy — trả về một giá trị đúng/sai khiến việc chặn TÁI DÙNG thành bất khả, mà tái dùng mới là cú tấn công thật sự xảy ra.</strong> Một mã TOTP còn hiệu lực tới chín mươi giây. Bất kỳ ai nhìn thấy nó MỘT lần — liếc qua vai, trong một trang lừa đảo trung gian, trong một ảnh chụp màn hình dán vào cuộc trò chuyện hỗ trợ — đều dùng lại được trong cửa sổ ấy. Cách vá là trả về SỐ BƯỚC đã khớp rồi lưu lại: một cột <code>lastStep</code> trên bản ghi yếu tố, kèm luật rằng bước mới phải LỚN HƠN HẲN. Một cái mã đã thành công thì không bao giờ thành công lần thứ hai, và thay đổi này chỉ tốn hai dòng.</p>
 </div>
-<pre><code>const buoc = kiemTotp(biMat, ma);
-if (buoc === null || buoc &lt;= yeuTo.buocCuoi) {         <span class="tok-comment">// ← chặn TÁI DÙNG</span>
-  await ghiNhanThatBai(nd.id);
-  return res.status(401).json({ loi: 'Mã không đúng.' });
+<pre><code>const buoc = checkTotp(secret, code);
+if (buoc === null || buoc &lt;= factor.lastStep) {         <span class="tok-comment">// ← chặn TÁI DÙNG</span>
+  await recordFailure(u.id);
+  return res.status(401).json({ error: 'Mã không đúng.' });
 }
-await prisma.yeuTo.update({ where: { id: yeuTo.id }, data: { buocCuoi: buoc } });</code></pre>
+await prisma.factor.update({ where: { id: factor.id }, data: { lastStep: buoc } });</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Một bước mỗi bên, không hơn</span><span class="lz-lnote">Cửa sổ ±1 chấp nhận chín mươi giây lệch, đủ phủ mọi cái điện thoại đặt giờ tự động và mọi người dùng gõ chậm. Nới lên ±5 để "giúp" người có đồng hồ sai là chấp nhận năm phút rưỡi và nhân bề mặt đoán mò lên; hãy sửa đồng hồ của họ, hoặc bảo họ đi sửa.</span></div>
   <div class="lz-layer"><span class="lz-lname">GHI LẠI độ trôi, đừng lặng lẽ hấp thụ nó</span><span class="lz-lnote">Nếu mã của một người dùng cứ khớp đều ở bước −1 thì đồng hồ điện thoại của họ chạy chậm. Lưu lại độ lệch quan sát được cho phép bạn giữ cửa sổ hẹp mà vẫn chấp nhận họ, và nó biến một cái ticket bí ẩn kiểu "thỉnh thoảng nó không chạy" thành một câu trả lời một dòng.</span></div>
@@ -378,7 +378,7 @@ await prisma.yeuTo.update({ where: { id: yeuTo.id }, data: { buocCuoi: buoc } })
   <div class="lz-layer"><span class="lz-lname">Một triệu mã KHÔNG phải nhiều</span><span class="lz-lnote">Với ba bước hợp lệ ở mọi thời điểm, một cú đoán mù thành công khoảng ba lần trên một triệu. Mười lượt thử mỗi tài khoản mỗi giờ làm con số đó thành vô nghĩa; hoàn toàn không giới hạn thì nó thành một buổi chiều gửi request bằng script. Bài 7.3 đấu bộ giới hạn vào.</span></div>
 </div>
 <div class="note-ct">
-<p><strong>Hãy dùng thư viện trên production, nhưng viết cái này MỘT lần trước đã.</strong> Một bản cài đặt có người bảo trì sẽ lo giùm bạn các ca biên của base32, việc chuẩn hoá đầu vào và phép so sánh hằng thời gian mà bạn không phải tự nghĩ lại, và đó là lựa chọn đúng cho mã chạy thật. Cái nó KHÔNG làm được là nói cho bạn biết vì sao cái cửa sổ tồn tại, vì sao <code>buocCuoi</code> lại quan trọng, hay vì sao cấu hình SHA-256 "an toàn hơn" của bạn lại sinh ra những mã mà không ứng dụng sinh mã nào tạo được. Ba mươi dòng cộng với chính bộ vector kiểm thử của RFC mua cho bạn tất cả những thứ đó VĨNH VIỄN — và chúng tốn khoảng hai mươi phút.</p>
+<p><strong>Hãy dùng thư viện trên production, nhưng viết cái này MỘT lần trước đã.</strong> Một bản cài đặt có người bảo trì sẽ lo giùm bạn các ca biên của base32, việc chuẩn hoá đầu vào và phép so sánh hằng thời gian mà bạn không phải tự nghĩ lại, và đó là lựa chọn đúng cho mã chạy thật. Cái nó KHÔNG làm được là nói cho bạn biết vì sao cái cửa sổ tồn tại, vì sao <code>lastStep</code> lại quan trọng, hay vì sao cấu hình SHA-256 "an toàn hơn" của bạn lại sinh ra những mã mà không ứng dụng sinh mã nào tạo được. Ba mươi dòng cộng với chính bộ vector kiểm thử của RFC mua cho bạn tất cả những thứ đó VĨNH VIỄN — và chúng tốn khoảng hai mươi phút.</p>
 </div>
 
 <h3>Nguồn học cho bài này</h3>
@@ -405,39 +405,39 @@ await prisma.yeuTo.update({ where: { id: yeuTo.id }, data: { buocCuoi: buoc } })
 
 <h3>Enrolment, in the only safe order</h3>
 <pre><code><span class="tok-comment">// 1. Xác thực lại TRƯỚC (Bài 7.1) — kẻ có phiên không được tự cắm yếu tố của hắn.</span>
-app.post('/me/totp/begin', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
-  const biMat = randomBytes(20);
+app.post('/me/totp/begin', requireReauth({ within: 300 }), async (req, res) =&gt; {
+  const secret = randomBytes(20);
 
   <span class="tok-comment">// 2. Lưu ở trạng thái CHƯA BẬT, có hạn. Tài khoản chưa đổi gì cả.</span>
-  await prisma.yeuTo.upsert({
-    where:  { nguoiDungId_loai: { nguoiDungId: nd.id, loai: 'TOTP' } },
-    create: { nguoiDungId: nd.id, loai: 'TOTP', biMatMaHoa: maHoa(biMat),
-              batLuc: null, hetHanDangKy: new Date(Date.now() + 10 * 60_000) },
-    update: { biMatMaHoa: maHoa(biMat), batLuc: null,
-              hetHanDangKy: new Date(Date.now() + 10 * 60_000) },
+  await prisma.factor.upsert({
+    where:  { userId_kiu: { userId: u.id, kiu: 'TOTP' } },
+    create: { userId: u.id, kiu: 'TOTP', encryptedSecret: encrypt(secret),
+              enabledAt: null, registrationExpiresAt: new Date(Date.now() + 10 * 60_000) },
+    update: { encryptedSecret: encrypt(secret), enabledAt: null,
+              registrationExpiresAt: new Date(Date.now() + 10 * 60_000) },
   });
 
   <span class="tok-comment">// 3. Trả về QR + bí mật dạng chữ. Vẫn CHƯA bật.</span>
-  res.json({ uri: otpauthUri(nd, biMat), biMat: base32(biMat) });
+  res.json({ uri: otpauthUri(u, secret), secret: base32(secret) });
 });</code></pre>
 <pre><code><span class="tok-comment">// 4. Chỉ BẬT sau khi người dùng chứng minh họ đọc được một mã.</span>
-app.post('/me/totp/confirm', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
-  const yt = await layYeuToChuaBat(nd.id, 'TOTP');
-  if (!yt || yt.hetHanDangKy &lt; new Date()) return res.status(410).json({ loi: 'Hết hạn.' });
+app.post('/me/totp/confirm', requireReauth({ within: 300 }), async (req, res) =&gt; {
+  const factor = await getUnenabledFactors(u.id, 'TOTP');
+  if (!yt || factor.registrationExpiresAt &lt; new Date()) return res.status(410).json({ error: 'Hết hạn.' });
 
-  const buoc = kiemTotp(giaiMa(yt.biMatMaHoa), String(req.body.ma ?? ''));
-  if (buoc === null) return res.status(401).json({ loi: 'Mã không đúng.' });
+  const buoc = checkTotp(decrypt(factor.encryptedSecret), String(req.body.ma ?? ''));
+  if (buoc === null) return res.status(401).json({ error: 'Mã không đúng.' });
 
-  const maKhoiPhuc = sinhMaKhoiPhuc(10);              <span class="tok-comment">// ← sinh CÙNG LÚC, không để sau</span>
+  const recoveryCode = generateRecoveryCodes(10);              <span class="tok-comment">// ← sinh CÙNG LÚC, không để sau</span>
   await prisma.$transaction([
-    prisma.yeuTo.update({ where: { id: yt.id },
-      data: { batLuc: new Date(), buocCuoi: buoc, hetHanDangKy: null } }),
-    prisma.maKhoiPhuc.deleteMany({ where: { nguoiDungId: nd.id } }),
-    prisma.maKhoiPhuc.createMany({ data: maKhoiPhuc.map((m) =&gt; ({
-      nguoiDungId: nd.id, maBam: sha256(m) })) }),
+    prisma.factor.update({ where: { id: factor.id },
+      data: { enabledAt: new Date(), lastStep: buoc, registrationExpiresAt: null } }),
+    prisma.recoveryCode.deleteMany({ where: { userId: u.id } }),
+    prisma.recoveryCode.createMany({ data: recoveryCode.map((m) =&gt; ({
+      userId: u.id, hashCode: sha256(m) })) }),
   ]);
-  await guiThuDaBatMfa(nd.email);                      <span class="tok-comment">// ← Bài 6.5, lá thư thứ tư</span>
-  res.json({ maKhoiPhuc });                            <span class="tok-comment">// ← lần DUY NHẤT chúng xuất hiện</span>
+  await sendMailMfaEnabled(u.email);                      <span class="tok-comment">// ← Bài 6.5, lá thư thứ tư</span>
+  res.json({ recoveryCode });                            <span class="tok-comment">// ← lần DUY NHẤT chúng xuất hiện</span>
 });</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Never enable on step 3</span><span class="lz-t">The classic lockout</span><span class="lz-d">If showing the QR code turns MFA on, a user whose camera failed, whose app crashed, or who simply closed the tab is now locked out of an account they were trying to protect. Proving one code works is the whole point of the confirm step.</span></div>
@@ -473,17 +473,17 @@ Doan mu 10 ma  : 10 / 1.126e+15 = 1 tren 1.126e+14</div>
 
 <h3>Rate limiting, which is what makes six digits enough</h3>
 <pre><code><span class="tok-comment">// Trần theo TÀI KHOẢN, không theo IP — kẻ tấn công đổi IP dễ hơn đổi tài khoản.</span>
-const KEY = &#96;mfa-that-bai:\${nd.id}&#96;;
-const soLan = await redis.incr(KEY);
-if (soLan === 1) await redis.expire(KEY, 3600);
+const KEY = &#96;mfa-that-bai:\${u.id}&#96;;
+const attempts = await redis.incr(KEY);
+if (attempts === 1) await redis.expire(KEY, 3600);
 
-if (soLan &gt; 10) {                                  <span class="tok-comment">// 10 lần/giờ</span>
-  await guiThuNghiNgo(nd.email);                    <span class="tok-comment">// ← ai đó đang đoán mã của bạn</span>
-  return res.status(429).json({ loi: 'Quá nhiều lần thử. Hãy đợi.' });
+if (attempts &gt; 10) {                                  <span class="tok-comment">// 10 lần/giờ</span>
+  await sendMailSuspicious(u.email);                    <span class="tok-comment">// ← ai đó đang đoán mã của bạn</span>
+  return res.status(429).json({ error: 'Quá nhiều lần thử. Hãy đợi.' });
 }
 
 <span class="tok-comment">// Đúng mã → xoá bộ đếm. Sai → để nguyên, nó tự hết hạn sau một giờ.</span>
-if (buoc !== null &amp;&amp; buoc &gt; yt.buocCuoi) await redis.del(KEY);</code></pre>
+if (buoc !== null &amp;&amp; buoc &gt; factor.lastStep) await redis.del(KEY);</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Ten per hour turns a million into nothing</span><span class="lz-lnote">Three valid codes out of a million, ten guesses an hour: about one chance in thirty-eight thousand per hour of trying, and a very loud trail. Without the limiter, a script reaches even odds in under two days of quiet requests.</span></div>
   <div class="lz-layer"><span class="lz-lname">Count against the account, not the address</span><span class="lz-lnote">The attacker already has the password, so they know exactly which account they are attacking and they can rotate IP addresses for pennies. An IP-based limiter measures the wrong thing here.</span></div>
@@ -517,39 +517,39 @@ if (buoc !== null &amp;&amp; buoc &gt; yt.buocCuoi) await redis.del(KEY);</code>
 
 <h3>Đăng ký, theo thứ tự an toàn DUY NHẤT</h3>
 <pre><code><span class="tok-comment">// 1. Xác thực lại TRƯỚC (Bài 7.1) — kẻ có phiên không được tự cắm yếu tố của hắn.</span>
-app.post('/me/totp/begin', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
-  const biMat = randomBytes(20);
+app.post('/me/totp/begin', requireReauth({ within: 300 }), async (req, res) =&gt; {
+  const secret = randomBytes(20);
 
   <span class="tok-comment">// 2. Lưu ở trạng thái CHƯA BẬT, có hạn. Tài khoản chưa đổi gì cả.</span>
-  await prisma.yeuTo.upsert({
-    where:  { nguoiDungId_loai: { nguoiDungId: nd.id, loai: 'TOTP' } },
-    create: { nguoiDungId: nd.id, loai: 'TOTP', biMatMaHoa: maHoa(biMat),
-              batLuc: null, hetHanDangKy: new Date(Date.now() + 10 * 60_000) },
-    update: { biMatMaHoa: maHoa(biMat), batLuc: null,
-              hetHanDangKy: new Date(Date.now() + 10 * 60_000) },
+  await prisma.factor.upsert({
+    where:  { userId_kiu: { userId: u.id, kiu: 'TOTP' } },
+    create: { userId: u.id, kiu: 'TOTP', encryptedSecret: encrypt(secret),
+              enabledAt: null, registrationExpiresAt: new Date(Date.now() + 10 * 60_000) },
+    update: { encryptedSecret: encrypt(secret), enabledAt: null,
+              registrationExpiresAt: new Date(Date.now() + 10 * 60_000) },
   });
 
   <span class="tok-comment">// 3. Trả về QR + bí mật dạng chữ. Vẫn CHƯA bật.</span>
-  res.json({ uri: otpauthUri(nd, biMat), biMat: base32(biMat) });
+  res.json({ uri: otpauthUri(u, secret), secret: base32(secret) });
 });</code></pre>
 <pre><code><span class="tok-comment">// 4. Chỉ BẬT sau khi người dùng chứng minh họ đọc được một mã.</span>
-app.post('/me/totp/confirm', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
-  const yt = await layYeuToChuaBat(nd.id, 'TOTP');
-  if (!yt || yt.hetHanDangKy &lt; new Date()) return res.status(410).json({ loi: 'Hết hạn.' });
+app.post('/me/totp/confirm', requireReauth({ within: 300 }), async (req, res) =&gt; {
+  const factor = await getUnenabledFactors(u.id, 'TOTP');
+  if (!yt || factor.registrationExpiresAt &lt; new Date()) return res.status(410).json({ error: 'Hết hạn.' });
 
-  const buoc = kiemTotp(giaiMa(yt.biMatMaHoa), String(req.body.ma ?? ''));
-  if (buoc === null) return res.status(401).json({ loi: 'Mã không đúng.' });
+  const buoc = checkTotp(decrypt(factor.encryptedSecret), String(req.body.ma ?? ''));
+  if (buoc === null) return res.status(401).json({ error: 'Mã không đúng.' });
 
-  const maKhoiPhuc = sinhMaKhoiPhuc(10);              <span class="tok-comment">// ← sinh CÙNG LÚC, không để sau</span>
+  const recoveryCode = generateRecoveryCodes(10);              <span class="tok-comment">// ← sinh CÙNG LÚC, không để sau</span>
   await prisma.$transaction([
-    prisma.yeuTo.update({ where: { id: yt.id },
-      data: { batLuc: new Date(), buocCuoi: buoc, hetHanDangKy: null } }),
-    prisma.maKhoiPhuc.deleteMany({ where: { nguoiDungId: nd.id } }),
-    prisma.maKhoiPhuc.createMany({ data: maKhoiPhuc.map((m) =&gt; ({
-      nguoiDungId: nd.id, maBam: sha256(m) })) }),
+    prisma.factor.update({ where: { id: factor.id },
+      data: { enabledAt: new Date(), lastStep: buoc, registrationExpiresAt: null } }),
+    prisma.recoveryCode.deleteMany({ where: { userId: u.id } }),
+    prisma.recoveryCode.createMany({ data: recoveryCode.map((m) =&gt; ({
+      userId: u.id, hashCode: sha256(m) })) }),
   ]);
-  await guiThuDaBatMfa(nd.email);                      <span class="tok-comment">// ← Bài 6.5, lá thư thứ tư</span>
-  res.json({ maKhoiPhuc });                            <span class="tok-comment">// ← lần DUY NHẤT chúng xuất hiện</span>
+  await sendMailMfaEnabled(u.email);                      <span class="tok-comment">// ← Bài 6.5, lá thư thứ tư</span>
+  res.json({ recoveryCode });                            <span class="tok-comment">// ← lần DUY NHẤT chúng xuất hiện</span>
 });</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Đừng BAO GIỜ bật ở bước 3</span><span class="lz-t">Cú khoá cửa kinh điển</span><span class="lz-d">Nếu việc hiển thị mã QR đã bật MFA lên thì một người dùng có camera hỏng, có ứng dụng bị sập, hoặc đơn giản là lỡ đóng tab, giờ bị khoá ra ngoài chính cái tài khoản họ đang cố bảo vệ. Chứng minh được MỘT mã chạy được chính là toàn bộ ý nghĩa của bước xác nhận.</span></div>
@@ -585,17 +585,17 @@ Doan mu 10 ma  : 10 / 1.126e+15 = 1 tren 1.126e+14</div>
 
 <h3>Giới hạn tần suất, thứ làm cho sáu chữ số trở nên ĐỦ</h3>
 <pre><code><span class="tok-comment">// Trần theo TÀI KHOẢN, không theo IP — kẻ tấn công đổi IP dễ hơn đổi tài khoản.</span>
-const KEY = &#96;mfa-that-bai:\${nd.id}&#96;;
-const soLan = await redis.incr(KEY);
-if (soLan === 1) await redis.expire(KEY, 3600);
+const KEY = &#96;mfa-that-bai:\${u.id}&#96;;
+const attempts = await redis.incr(KEY);
+if (attempts === 1) await redis.expire(KEY, 3600);
 
-if (soLan &gt; 10) {                                  <span class="tok-comment">// 10 lần/giờ</span>
-  await guiThuNghiNgo(nd.email);                    <span class="tok-comment">// ← ai đó đang đoán mã của bạn</span>
-  return res.status(429).json({ loi: 'Quá nhiều lần thử. Hãy đợi.' });
+if (attempts &gt; 10) {                                  <span class="tok-comment">// 10 lần/giờ</span>
+  await sendMailSuspicious(u.email);                    <span class="tok-comment">// ← ai đó đang đoán mã của bạn</span>
+  return res.status(429).json({ error: 'Quá nhiều lần thử. Hãy đợi.' });
 }
 
 <span class="tok-comment">// Đúng mã → xoá bộ đếm. Sai → để nguyên, nó tự hết hạn sau một giờ.</span>
-if (buoc !== null &amp;&amp; buoc &gt; yt.buocCuoi) await redis.del(KEY);</code></pre>
+if (buoc !== null &amp;&amp; buoc &gt; factor.lastStep) await redis.del(KEY);</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Mười lần một giờ biến một triệu thành con số không</span><span class="lz-lnote">Ba mã hợp lệ trên một triệu, mười lượt đoán mỗi giờ: khoảng một phần ba mươi tám nghìn cơ hội cho mỗi giờ thử, kèm một vệt dấu vết rất ồn. Không có bộ giới hạn thì một cái script đạt tỉ lệ ăn thua ngang ngửa chỉ sau chưa tới hai ngày gửi request lặng lẽ.</span></div>
   <div class="lz-layer"><span class="lz-lname">Đếm theo TÀI KHOẢN, không theo địa chỉ mạng</span><span class="lz-lnote">Kẻ tấn công vốn đã có mật khẩu, nên hắn biết chính xác mình đang đánh tài khoản nào và hắn xoay IP với giá vài xu. Một bộ giới hạn theo IP đo nhầm thứ ở đây.</span></div>
@@ -674,7 +674,7 @@ if (cd.origin !== ORIGIN_MONG_DOI) throw new Error('sai origin');
 if (!authData.subarray(0, 32).equals(sha256(RP_ID))) throw new Error('sai rpIdHash');
 
 <span class="tok-comment">// Chữ ký phủ lên: authenticatorData ‖ sha256(clientDataJSON)</span>
-const ok = verify(khoaCong, Buffer.concat([authData, sha256(clientDataJSON)]), chuKy);</code></pre>
+const ok = verify(publicKey, Buffer.concat([authData, sha256(clientDataJSON)]), signature);</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Case 1</span><span class="lz-t">The real user</span><span class="lz-d">Origin matches, RP ID hash matches, signature verifies. Nothing was typed and nothing was transcribed — the user tapped a fingerprint sensor.</span></div>
   <div class="lz-step"><span class="lz-k">Case 2</span><span class="lz-t">A relay attack, which defeats TOTP</span><span class="lz-d">The phishing site proxies your real login page and forwards the signature verbatim. It fails, because the browser wrote its own origin into the signed data and the attacker cannot alter it without breaking the signature.</span></div>
@@ -771,7 +771,7 @@ if (cd.origin !== ORIGIN_MONG_DOI) throw new Error('sai origin');
 if (!authData.subarray(0, 32).equals(sha256(RP_ID))) throw new Error('sai rpIdHash');
 
 <span class="tok-comment">// Chữ ký phủ lên: authenticatorData ‖ sha256(clientDataJSON)</span>
-const ok = verify(khoaCong, Buffer.concat([authData, sha256(clientDataJSON)]), chuKy);</code></pre>
+const ok = verify(publicKey, Buffer.concat([authData, sha256(clientDataJSON)]), signature);</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Trường hợp 1</span><span class="lz-t">Người dùng thật</span><span class="lz-d">Origin khớp, rpIdHash khớp, chữ ký hợp lệ. Không có gì được gõ và không có gì được chép tay — người dùng chỉ chạm một cái vào cảm biến vân tay.</span></div>
   <div class="lz-step"><span class="lz-k">Trường hợp 2</span><span class="lz-t">Tấn công chuyển tiếp, thứ hạ gục TOTP</span><span class="lz-d">Trang lừa đảo dựng proxy tới đúng trang đăng nhập thật của bạn rồi chuyển tiếp nguyên văn cái chữ ký. Nó THẤT BẠI, vì trình duyệt đã tự ghi origin của chính nó vào phần dữ liệu được ký, và kẻ tấn công không sửa được cái đó mà không làm hỏng chữ ký.</span></div>
@@ -840,21 +840,21 @@ const cred = await navigator.credentials.get({
 <p class="lead">Lesson 7.4 explained why passkeys work. This one is the part you actually write — and almost all of the difficulty is in three places that the specification mentions briefly and that break in production loudly: where the challenge lives, what the signature counter means today, and how you move an existing product across without stranding anybody.</p>
 
 <h3>The schema</h3>
-<pre><code>model ThongTinXacThuc {
-  id            String   @id @default(cuid())
-  nguoiDungId   String
-  credentialId  Bytes    @unique          <span class="tok-comment">// id do bộ xác thực cấp — DUY NHẤT toàn hệ thống</span>
-  khoaCong      Bytes                     <span class="tok-comment">// khoá công dạng COSE, lưu nguyên xi</span>
-  boDem         Int      @default(0)      <span class="tok-comment">// bộ đếm chữ ký — đọc Bài này trước khi kiểm</span>
-  aaguid        Bytes?                    <span class="tok-comment">// loại bộ xác thực → "Passkey trên iPhone"</span>
-  duocSaoLuu    Boolean  @default(false)  <span class="tok-comment">// cờ BS: nó có đồng bộ không</span>
-  duongTruyen   String[]                  <span class="tok-comment">// internal / hybrid / usb / nfc / ble</span>
-  ten           String?                   <span class="tok-comment">// người dùng đặt: "MacBook cơ quan"</span>
-  dungCuoiLuc   DateTime?
-  taoLuc        DateTime @default(now())
+<pre><code>model Credential {
+  id           String    @id @default(cuid())
+  userId       String
+  credentialId Bytes     @unique          <span class="tok-comment">// id do bộ xác thực cấp — DUY NHẤT toàn hệ thống</span>
+  publicKey    Bytes     <span class="tok-comment">// khoá công dạng COSE, lưu nguyên xi</span>
+  counter      Int       @default(0)      <span class="tok-comment">// bộ đếm chữ ký — đọc Bài này trước khi kiểm</span>
+  aaguid       Bytes?    <span class="tok-comment">// loại bộ xác thực → "Passkey trên iPhone"</span>
+  backedUp     Boolean   @default(false)  <span class="tok-comment">// cờ BS: nó có đồng bộ không</span>
+  channel      String[]  <span class="tok-comment">// internal / hybrid / usb / nfc / ble</span>
+  ten          String?   <span class="tok-comment">// người dùng đặt: "MacBook cơ quan"</span>
+  lastUsedAt   DateTime?
+  createdAt    DateTime  @default(now())
 
-  nguoiDung     NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
-  @@index([nguoiDungId])
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
   @@map("thong_tin_xac_thuc")
 }</code></pre>
 <div class="kv-grid">
@@ -865,37 +865,37 @@ const cred = await navigator.credentials.get({
 </div>
 
 <h3>Registration: the challenge belongs on the server</h3>
-<pre><code>app.post('/passkey/register/begin', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
-  const tuyChon = await generateRegistrationOptions({
+<pre><code>app.post('/passkey/register/begin', requireReauth({ within: 300 }), async (req, res) =&gt; {
+  const optional = await generateRegistrationOptions({
     rpName: 'CuongThai', rpID: RP_ID,
-    userID: nd.userHandle,               <span class="tok-comment">// ngẫu nhiên mỗi người, KHÔNG phải email</span>
-    userName: nd.email, userDisplayName: nd.ten,
+    userID: u.userHandle,               <span class="tok-comment">// ngẫu nhiên mỗi người, KHÔNG phải email</span>
+    userName: u.email, userDisplayName: u.ten,
     attestationType: 'none',             <span class="tok-comment">// ← Bài 7.4</span>
-    excludeCredentials: (await layCredential(nd.id)).map((c) =&gt; ({ id: c.credentialId })),
+    excludeCredentials: (await getCredentials(u.id)).map((c) =&gt; ({ id: c.credentialId })),
     authenticatorSelection: { residentKey: 'preferred', userVerification: 'preferred' },
   });
 
   <span class="tok-comment">// Thử thách nằm ở MÁY CHỦ, gắn với phiên, có hạn. KHÔNG gửi kèm về rồi nhận lại.</span>
-  await redis.set(&#96;thu-thach:\${req.phienId}&#96;, tuyChon.challenge, { EX: 300 });
-  res.json(tuyChon);
+  await redis.set(&#96;thu-challenge:\${req.sessionId}&#96;, optional.challenge, { EX: 300 });
+  res.json(optional);
 });</code></pre>
-<pre><code>app.post('/passkey/register/finish', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
-  const mong = await redis.getDel(&#96;thu-thach:\${req.phienId}&#96;);   <span class="tok-comment">// đọc và XOÁ: dùng một lần</span>
-  if (!mong) return res.status(410).json({ loi: 'Thử thách hết hạn.' });
+<pre><code>app.post('/passkey/register/finish', requireReauth({ within: 300 }), async (req, res) =&gt; {
+  const expected = await redis.getDel(&#96;thu-challenge:\${req.sessionId}&#96;);   <span class="tok-comment">// đọc và XOÁ: dùng một lần</span>
+  if (!mong) return res.status(410).json({ error: 'Thử thách hết hạn.' });
 
-  const kq = await verifyRegistrationResponse({
+  const result = await verifyRegistrationResponse({
     response: req.body, expectedChallenge: mong,
     expectedOrigin: ORIGIN, expectedRPID: RP_ID,
   });
-  if (!kq.verified) return res.status(400).json({ loi: 'Không kiểm chứng được.' });
+  if (!result.verified) return res.status(400).json({ error: 'Không kiểm chứng được.' });
 
-  const { credential, aaguid, credentialBackedUp } = kq.registrationInfo!;
-  await prisma.thongTinXacThuc.create({ data: {
-    nguoiDungId: nd.id, credentialId: credential.id, khoaCong: credential.publicKey,
-    boDem: credential.counter, aaguid, duocSaoLuu: credentialBackedUp,
-    duongTruyen: req.body.response.transports ?? [], ten: doanTenThietBi(aaguid),
+  const { credential, aaguid, credentialBackedUp } = result.registrationInfo!;
+  await prisma.credential.create({ data: {
+    userId: u.id, credentialId: credential.id, publicKey: credential.publicKey,
+    counter: credential.counter, aaguid, backedUp: credentialBackedUp,
+    channel: req.body.response.transports ?? [], ten: guessDeviceName(aaguid),
   }});
-  await guiThuDaThemPasskey(nd.email);         <span class="tok-comment">// ← lá thư thứ năm của Bài 6.5</span>
+  await sendMailPasskeyAdded(u.email);         <span class="tok-comment">// ← lá thư thứ năm của Bài 6.5</span>
   res.status(201).end();
 });</code></pre>
 <div class="pitfall">
@@ -920,23 +920,23 @@ Passkey moi dang ky  ->  0x5d  (01011101)
 # Mot byte co the duy nhat trong authenticatorData. BE=0 nghia la khoa
 # gan cung thiet bi; BE=1 va BS=1 nghia la passkey dang duoc dong bo.
 </div>
-<pre><code>const kq = await verifyAuthenticationResponse({
+<pre><code>const result = await verifyAuthenticationResponse({
   response: req.body, expectedChallenge: mong,
   expectedOrigin: ORIGIN, expectedRPID: RP_ID,
-  credential: { id: c.credentialId, publicKey: c.khoaCong, counter: c.boDem },
+  credential: { id: c.credentialId, publicKey: c.publicKey, counter: c.counter },
 });
 
 <span class="tok-comment">// SAI — dòng này giết sạch mọi passkey đồng bộ trên đời:</span>
-if (kq.authenticationInfo.newCounter &lt;= c.boDem) throw new Error('nhan ban!');
+if (result.authenticationInfo.newCounter &lt;= c.counter) throw new Error('nhan ban!');
 
 <span class="tok-comment">// ĐÚNG — chỉ kiểm khi bộ xác thực THẬT SỰ có dùng bộ đếm:</span>
-const bd = kq.authenticationInfo.newCounter;
-if (c.boDem &gt; 0 &amp;&amp; bd &gt; 0 &amp;&amp; bd &lt;= c.boDem) {
-  await canhBaoNhanBan(nd, c);                <span class="tok-comment">// tín hiệu THẬT: có bản sao khoá</span>
-  return res.status(401).json({ loi: 'Không xác thực được.' });
+const bd = result.authenticationInfo.newCounter;
+if (c.counter &gt; 0 &amp;&amp; bd &gt; 0 &amp;&amp; bd &lt;= c.counter) {
+  await warnDuplicate(u, c);                <span class="tok-comment">// tín hiệu THẬT: có bản sao khoá</span>
+  return res.status(401).json({ error: 'Không xác thực được.' });
 }
-await prisma.thongTinXacThuc.update({ where: { id: c.id },
-  data: { boDem: bd, dungCuoiLuc: new Date() } });</code></pre>
+await prisma.credential.update({ where: { id: c.id },
+  data: { counter: bd, lastUsedAt: new Date() } });</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">What it was for</span><span class="lz-t">Clone detection</span><span class="lz-d">A hardware key increments a counter on every signature. If a value arrives that is not greater than the last one you saw, two copies of the key exist — which for a device whose private key cannot be extracted means something is very wrong.</span></div>
   <div class="lz-step"><span class="lz-k">Why it is mostly zero now</span><span class="lz-t">Synced passkeys cannot count</span><span class="lz-d">A credential living on four devices has no single counter to increment, so platform authenticators report <code>0</code> permanently. The specification allows this explicitly.</span></div>
@@ -950,7 +950,7 @@ await prisma.thongTinXacThuc.update({ where: { id: c.id },
 
 if (await PublicKeyCredential.isConditionalMediationAvailable?.()) {
   navigator.credentials.get({
-    publicKey: { challenge: await layThuThach(), rpId: RP_ID },
+    publicKey: { challenge: await getChallenge(), rpId: RP_ID },
     mediation: 'conditional',            <span class="tok-comment">// ← không mở hộp thoại nếu không có passkey</span>
   }).then(dangNhapBangPasskey).catch(() =&gt; {});   <span class="tok-comment">// im lặng khi người dùng lờ đi</span>
 }</code></pre>
@@ -986,21 +986,21 @@ if (await PublicKeyCredential.isConditionalMediationAvailable?.()) {
 <p class="lead">Bài 7.4 giải thích vì sao passkey hoạt động. Bài này là phần bạn THẬT SỰ phải viết — và gần như toàn bộ chỗ khó nằm ở ba điểm mà đặc tả chỉ nhắc thoáng qua còn production thì hỏng rất to tiếng: thử thách nằm ở đâu, bộ đếm chữ ký ngày nay nghĩa là gì, và làm sao dời một sản phẩm đang chạy sang passkey mà không bỏ rơi ai.</p>
 
 <h3>Lược đồ</h3>
-<pre><code>model ThongTinXacThuc {
-  id            String   @id @default(cuid())
-  nguoiDungId   String
-  credentialId  Bytes    @unique          <span class="tok-comment">// id do bộ xác thực cấp — DUY NHẤT toàn hệ thống</span>
-  khoaCong      Bytes                     <span class="tok-comment">// khoá công dạng COSE, lưu nguyên xi</span>
-  boDem         Int      @default(0)      <span class="tok-comment">// bộ đếm chữ ký — đọc Bài này trước khi kiểm</span>
-  aaguid        Bytes?                    <span class="tok-comment">// loại bộ xác thực → "Passkey trên iPhone"</span>
-  duocSaoLuu    Boolean  @default(false)  <span class="tok-comment">// cờ BS: nó có đồng bộ không</span>
-  duongTruyen   String[]                  <span class="tok-comment">// internal / hybrid / usb / nfc / ble</span>
-  ten           String?                   <span class="tok-comment">// người dùng đặt: "MacBook cơ quan"</span>
-  dungCuoiLuc   DateTime?
-  taoLuc        DateTime @default(now())
+<pre><code>model Credential {
+  id           String    @id @default(cuid())
+  userId       String
+  credentialId Bytes     @unique          <span class="tok-comment">// id do bộ xác thực cấp — DUY NHẤT toàn hệ thống</span>
+  publicKey    Bytes     <span class="tok-comment">// khoá công dạng COSE, lưu nguyên xi</span>
+  counter      Int       @default(0)      <span class="tok-comment">// bộ đếm chữ ký — đọc Bài này trước khi kiểm</span>
+  aaguid       Bytes?    <span class="tok-comment">// loại bộ xác thực → "Passkey trên iPhone"</span>
+  backedUp     Boolean   @default(false)  <span class="tok-comment">// cờ BS: nó có đồng bộ không</span>
+  channel      String[]  <span class="tok-comment">// internal / hybrid / usb / nfc / ble</span>
+  ten          String?   <span class="tok-comment">// người dùng đặt: "MacBook cơ quan"</span>
+  lastUsedAt   DateTime?
+  createdAt    DateTime  @default(now())
 
-  nguoiDung     NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
-  @@index([nguoiDungId])
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
   @@map("thong_tin_xac_thuc")
 }</code></pre>
 <div class="kv-grid">
@@ -1011,37 +1011,37 @@ if (await PublicKeyCredential.isConditionalMediationAvailable?.()) {
 </div>
 
 <h3>Đăng ký: thử thách thuộc về MÁY CHỦ</h3>
-<pre><code>app.post('/passkey/register/begin', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
-  const tuyChon = await generateRegistrationOptions({
+<pre><code>app.post('/passkey/register/begin', requireReauth({ within: 300 }), async (req, res) =&gt; {
+  const optional = await generateRegistrationOptions({
     rpName: 'CuongThai', rpID: RP_ID,
-    userID: nd.userHandle,               <span class="tok-comment">// ngẫu nhiên mỗi người, KHÔNG phải email</span>
-    userName: nd.email, userDisplayName: nd.ten,
+    userID: u.userHandle,               <span class="tok-comment">// ngẫu nhiên mỗi người, KHÔNG phải email</span>
+    userName: u.email, userDisplayName: u.ten,
     attestationType: 'none',             <span class="tok-comment">// ← Bài 7.4</span>
-    excludeCredentials: (await layCredential(nd.id)).map((c) =&gt; ({ id: c.credentialId })),
+    excludeCredentials: (await getCredentials(u.id)).map((c) =&gt; ({ id: c.credentialId })),
     authenticatorSelection: { residentKey: 'preferred', userVerification: 'preferred' },
   });
 
   <span class="tok-comment">// Thử thách nằm ở MÁY CHỦ, gắn với phiên, có hạn. KHÔNG gửi kèm về rồi nhận lại.</span>
-  await redis.set(&#96;thu-thach:\${req.phienId}&#96;, tuyChon.challenge, { EX: 300 });
-  res.json(tuyChon);
+  await redis.set(&#96;thu-challenge:\${req.sessionId}&#96;, optional.challenge, { EX: 300 });
+  res.json(optional);
 });</code></pre>
-<pre><code>app.post('/passkey/register/finish', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
-  const mong = await redis.getDel(&#96;thu-thach:\${req.phienId}&#96;);   <span class="tok-comment">// đọc và XOÁ: dùng một lần</span>
-  if (!mong) return res.status(410).json({ loi: 'Thử thách hết hạn.' });
+<pre><code>app.post('/passkey/register/finish', requireReauth({ within: 300 }), async (req, res) =&gt; {
+  const expected = await redis.getDel(&#96;thu-challenge:\${req.sessionId}&#96;);   <span class="tok-comment">// đọc và XOÁ: dùng một lần</span>
+  if (!mong) return res.status(410).json({ error: 'Thử thách hết hạn.' });
 
-  const kq = await verifyRegistrationResponse({
+  const result = await verifyRegistrationResponse({
     response: req.body, expectedChallenge: mong,
     expectedOrigin: ORIGIN, expectedRPID: RP_ID,
   });
-  if (!kq.verified) return res.status(400).json({ loi: 'Không kiểm chứng được.' });
+  if (!result.verified) return res.status(400).json({ error: 'Không kiểm chứng được.' });
 
-  const { credential, aaguid, credentialBackedUp } = kq.registrationInfo!;
-  await prisma.thongTinXacThuc.create({ data: {
-    nguoiDungId: nd.id, credentialId: credential.id, khoaCong: credential.publicKey,
-    boDem: credential.counter, aaguid, duocSaoLuu: credentialBackedUp,
-    duongTruyen: req.body.response.transports ?? [], ten: doanTenThietBi(aaguid),
+  const { credential, aaguid, credentialBackedUp } = result.registrationInfo!;
+  await prisma.credential.create({ data: {
+    userId: u.id, credentialId: credential.id, publicKey: credential.publicKey,
+    counter: credential.counter, aaguid, backedUp: credentialBackedUp,
+    channel: req.body.response.transports ?? [], ten: guessDeviceName(aaguid),
   }});
-  await guiThuDaThemPasskey(nd.email);         <span class="tok-comment">// ← lá thư thứ năm của Bài 6.5</span>
+  await sendMailPasskeyAdded(u.email);         <span class="tok-comment">// ← lá thư thứ năm của Bài 6.5</span>
   res.status(201).end();
 });</code></pre>
 <div class="pitfall">
@@ -1066,23 +1066,23 @@ Passkey moi dang ky  ->  0x5d  (01011101)
 # Mot byte co the duy nhat trong authenticatorData. BE=0 nghia la khoa
 # gan cung thiet bi; BE=1 va BS=1 nghia la passkey dang duoc dong bo.
 </div>
-<pre><code>const kq = await verifyAuthenticationResponse({
+<pre><code>const result = await verifyAuthenticationResponse({
   response: req.body, expectedChallenge: mong,
   expectedOrigin: ORIGIN, expectedRPID: RP_ID,
-  credential: { id: c.credentialId, publicKey: c.khoaCong, counter: c.boDem },
+  credential: { id: c.credentialId, publicKey: c.publicKey, counter: c.counter },
 });
 
 <span class="tok-comment">// SAI — dòng này giết sạch mọi passkey đồng bộ trên đời:</span>
-if (kq.authenticationInfo.newCounter &lt;= c.boDem) throw new Error('nhan ban!');
+if (result.authenticationInfo.newCounter &lt;= c.counter) throw new Error('nhan ban!');
 
 <span class="tok-comment">// ĐÚNG — chỉ kiểm khi bộ xác thực THẬT SỰ có dùng bộ đếm:</span>
-const bd = kq.authenticationInfo.newCounter;
-if (c.boDem &gt; 0 &amp;&amp; bd &gt; 0 &amp;&amp; bd &lt;= c.boDem) {
-  await canhBaoNhanBan(nd, c);                <span class="tok-comment">// tín hiệu THẬT: có bản sao khoá</span>
-  return res.status(401).json({ loi: 'Không xác thực được.' });
+const bd = result.authenticationInfo.newCounter;
+if (c.counter &gt; 0 &amp;&amp; bd &gt; 0 &amp;&amp; bd &lt;= c.counter) {
+  await warnDuplicate(u, c);                <span class="tok-comment">// tín hiệu THẬT: có bản sao khoá</span>
+  return res.status(401).json({ error: 'Không xác thực được.' });
 }
-await prisma.thongTinXacThuc.update({ where: { id: c.id },
-  data: { boDem: bd, dungCuoiLuc: new Date() } });</code></pre>
+await prisma.credential.update({ where: { id: c.id },
+  data: { counter: bd, lastUsedAt: new Date() } });</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Nó sinh ra để làm gì</span><span class="lz-t">Phát hiện nhân bản</span><span class="lz-d">Một khoá phần cứng tăng một bộ đếm ở mỗi lần ký. Nếu về tới một giá trị KHÔNG lớn hơn cái bạn thấy lần trước thì có hai bản sao của cái khoá đang tồn tại — mà với một thiết bị có khoá riêng không rút ra được thì điều đó nghĩa là có chuyện rất không ổn.</span></div>
   <div class="lz-step"><span class="lz-k">Vì sao ngày nay nó phần lớn bằng không</span><span class="lz-t">Passkey đồng bộ không đếm được</span><span class="lz-d">Một credential sống trên bốn thiết bị thì chẳng có một bộ đếm DUY NHẤT nào để tăng, nên bộ xác thực nền tảng báo <code>0</code> vĩnh viễn. Đặc tả cho phép điều này một cách tường minh.</span></div>
@@ -1096,7 +1096,7 @@ await prisma.thongTinXacThuc.update({ where: { id: c.id },
 
 if (await PublicKeyCredential.isConditionalMediationAvailable?.()) {
   navigator.credentials.get({
-    publicKey: { challenge: await layThuThach(), rpId: RP_ID },
+    publicKey: { challenge: await getChallenge(), rpId: RP_ID },
     mediation: 'conditional',            <span class="tok-comment">// ← không mở hộp thoại nếu không có passkey</span>
   }).then(dangNhapBangPasskey).catch(() =&gt; {});   <span class="tok-comment">// im lặng khi người dùng lờ đi</span>
 }</code></pre>

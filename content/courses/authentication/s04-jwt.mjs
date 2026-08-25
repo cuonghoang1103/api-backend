@@ -45,7 +45,7 @@ echo "$TOKEN" | cut -d. -f2 | base64 -d 2&gt;/dev/null</code></pre>
 import { createHmac } from 'node:crypto';
 
 const [h, p, chuKyGuiLen] = token.split('.');
-const mong = createHmac('sha256', BI_MAT).update(&#96;\${h}.\${p}&#96;).digest('base64url');
+const expected = createHmac('sha256', SECRET).update(&#96;\${h}.\${p}&#96;).digest('base64url');
 
 console.log(mong === chuKyGuiLen);</code></pre>
 <div class="out">true
@@ -69,7 +69,7 @@ console.log(mong === chuKyGuiLen);</code></pre>
 
 <h3>Size, and where it is paid</h3>
 <pre><code><span class="tok-comment"># Cùng một mục đích, hai kích thước</span>
-Ma phien (Bai 3.1)  Kc9x2LmQ7vR3nT8wY…             43 ky tu
+Ma session (Bai 3.1)  Kc9x2LmQ7vR3nT8wY…             43 ky tu
 JWT o tren                                          268 ky tu
 JWT that, co role va permission                ~ 600–900 ky tu</code></pre>
 <div class="out"># Trong mot cookie, gui o MOI request:
@@ -125,7 +125,7 @@ echo "$TOKEN" | cut -d. -f2 | base64 -d 2&gt;/dev/null</code></pre>
 import { createHmac } from 'node:crypto';
 
 const [h, p, chuKyGuiLen] = token.split('.');
-const mong = createHmac('sha256', BI_MAT).update(&#96;\${h}.\${p}&#96;).digest('base64url');
+const expected = createHmac('sha256', SECRET).update(&#96;\${h}.\${p}&#96;).digest('base64url');
 
 console.log(mong === chuKyGuiLen);</code></pre>
 <div class="out">true
@@ -149,7 +149,7 @@ console.log(mong === chuKyGuiLen);</code></pre>
 
 <h3>Kích thước, và cái giá trả ở đâu</h3>
 <pre><code><span class="tok-comment"># Cùng một mục đích, hai kích thước</span>
-Ma phien (Bai 3.1)  Kc9x2LmQ7vR3nT8wY…             43 ky tu
+Ma session (Bai 3.1)  Kc9x2LmQ7vR3nT8wY…             43 ky tu
 JWT o tren                                          268 ky tu
 JWT that, co role va permission                ~ 600–900 ky tu</code></pre>
 <div class="out"># Trong mot cookie, gui o MOI request:
@@ -198,7 +198,7 @@ JWT that, co role va permission                ~ 600–900 ky tu</code></pre>
 node -e '
 const b = (o) =&gt; Buffer.from(JSON.stringify(o)).toString("base64url");
 const h = b({ alg: "none", typ: "JWT" });
-const p = b({ sub: "clx7", vaiTro: "ADMIN", exp: 9999999999 });
+const p = b({ sub: "clx7", role: "ADMIN", exp: 9999999999 });
 console.log(h + "." + p + ".");            <span class="tok-comment">// ← chữ ký RỖNG</span>
 '</code></pre>
 <div class="out">eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJjbHg3IiwidmFpVHJvIjoiQURNSU4iLCJleHAiOjk5OTk5OTk5OTl9.
@@ -228,15 +228,15 @@ $ curl -s localhost:3000/toi -H "Authorization: Bearer &lt;token tren&gt;"
   </div>
 </div>
 <pre><code><span class="tok-comment">// ❌ Mã có lỗ hổng — trông hoàn toàn hợp lý</span>
-const khoaCong = fs.readFileSync('public.pem', 'utf8');
-const claims = jwt.verify(token, khoaCong);        <span class="tok-comment">// alg lấy từ TOKEN</span></code></pre>
+const publicKey = fs.readFileSync('public.pem', 'utf8');
+const claims = jwt.verify(token, publicKey);        <span class="tok-comment">// alg lấy từ TOKEN</span></code></pre>
 <pre><code><span class="tok-comment"># Kẻ tấn công tự đúc một cái, dùng đúng file PEM CÔNG KHAI làm bí mật HMAC</span>
 node -e '
 const c = require("crypto"), fs = require("fs");
 const pem = fs.readFileSync("public.pem", "utf8");   <span class="tok-comment">// ai cũng tải được</span>
 const b = (o) =&gt; Buffer.from(JSON.stringify(o)).toString("base64url");
 const h = b({ alg: "HS256", typ: "JWT" });
-const p = b({ sub: "clx7", vaiTro: "ADMIN", exp: 9999999999 });
+const p = b({ sub: "clx7", role: "ADMIN", exp: 9999999999 });
 const s = c.createHmac("sha256", pem).update(h + "." + p).digest("base64url");
 console.log(h + "." + p + "." + s);
 '</code></pre>
@@ -271,7 +271,7 @@ console.log(h + "." + p + "." + s);
 
 <h3>The fix, in one line</h3>
 <pre><code><span class="tok-comment">// ✅ Nói TRƯỚC cái gì được chấp nhận. Token không được chọn.</span>
-const claims = jwt.verify(token, khoaCong, {
+const claims = jwt.verify(token, publicKey, {
   algorithms: ['RS256'],                     <span class="tok-comment">// ← danh sách trắng, cố định</span>
   issuer:   'https://vidu.com',
   audience: 'vidu-api',
@@ -279,9 +279,9 @@ const claims = jwt.verify(token, khoaCong, {
 <pre><code><span class="tok-comment">// ✅ Tốt hơn nữa: jose, nơi KHOÁ tự mang theo thuật toán của nó</span>
 import { jwtVerify, importSPKI } from 'jose';
 
-const khoa = await importSPKI(PEM_CONG, 'RS256');      <span class="tok-comment">// khoá BIẾT nó là RS256</span>
+const key = await importSPKI(PEM_CONG, 'RS256');      <span class="tok-comment">// khoá BIẾT nó là RS256</span>
 
-const { payload } = await jwtVerify(token, khoa, {
+const { payload } = await jwtVerify(token, key, {
   algorithms: ['RS256'],
   issuer:   'https://vidu.com',
   audience: 'vidu-api',
@@ -319,7 +319,7 @@ JWSInvalid: "alg" (Algorithm) Header Parameter value not allowed
 node -e '
 const b = (o) =&gt; Buffer.from(JSON.stringify(o)).toString("base64url");
 const h = b({ alg: "none", typ: "JWT" });
-const p = b({ sub: "clx7", vaiTro: "ADMIN", exp: 9999999999 });
+const p = b({ sub: "clx7", role: "ADMIN", exp: 9999999999 });
 console.log(h + "." + p + ".");            <span class="tok-comment">// ← chữ ký RỖNG</span>
 '</code></pre>
 <div class="out">eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJjbHg3IiwidmFpVHJvIjoiQURNSU4iLCJleHAiOjk5OTk5OTk5OTl9.
@@ -349,15 +349,15 @@ $ curl -s localhost:3000/toi -H "Authorization: Bearer &lt;token tren&gt;"
   </div>
 </div>
 <pre><code><span class="tok-comment">// ❌ Mã có lỗ hổng — trông hoàn toàn hợp lý</span>
-const khoaCong = fs.readFileSync('public.pem', 'utf8');
-const claims = jwt.verify(token, khoaCong);        <span class="tok-comment">// alg lấy từ TOKEN</span></code></pre>
+const publicKey = fs.readFileSync('public.pem', 'utf8');
+const claims = jwt.verify(token, publicKey);        <span class="tok-comment">// alg lấy từ TOKEN</span></code></pre>
 <pre><code><span class="tok-comment"># Kẻ tấn công tự đúc một cái, dùng đúng file PEM CÔNG KHAI làm bí mật HMAC</span>
 node -e '
 const c = require("crypto"), fs = require("fs");
 const pem = fs.readFileSync("public.pem", "utf8");   <span class="tok-comment">// ai cũng tải được</span>
 const b = (o) =&gt; Buffer.from(JSON.stringify(o)).toString("base64url");
 const h = b({ alg: "HS256", typ: "JWT" });
-const p = b({ sub: "clx7", vaiTro: "ADMIN", exp: 9999999999 });
+const p = b({ sub: "clx7", role: "ADMIN", exp: 9999999999 });
 const s = c.createHmac("sha256", pem).update(h + "." + p).digest("base64url");
 console.log(h + "." + p + "." + s);
 '</code></pre>
@@ -392,7 +392,7 @@ console.log(h + "." + p + "." + s);
 
 <h3>Cách vá, gói trong một dòng</h3>
 <pre><code><span class="tok-comment">// ✅ Nói TRƯỚC cái gì được chấp nhận. Token không được chọn.</span>
-const claims = jwt.verify(token, khoaCong, {
+const claims = jwt.verify(token, publicKey, {
   algorithms: ['RS256'],                     <span class="tok-comment">// ← danh sách trắng, cố định</span>
   issuer:   'https://vidu.com',
   audience: 'vidu-api',
@@ -400,9 +400,9 @@ const claims = jwt.verify(token, khoaCong, {
 <pre><code><span class="tok-comment">// ✅ Tốt hơn nữa: jose, nơi KHOÁ tự mang theo thuật toán của nó</span>
 import { jwtVerify, importSPKI } from 'jose';
 
-const khoa = await importSPKI(PEM_CONG, 'RS256');      <span class="tok-comment">// khoá BIẾT nó là RS256</span>
+const key = await importSPKI(PEM_CONG, 'RS256');      <span class="tok-comment">// khoá BIẾT nó là RS256</span>
 
-const { payload } = await jwtVerify(token, khoa, {
+const { payload } = await jwtVerify(token, key, {
   algorithms: ['RS256'],
   issuer:   'https://vidu.com',
   audience: 'vidu-api',
@@ -452,12 +452,12 @@ JWSInvalid: "alg" (Algorithm) Header Parameter value not allowed
   <div class="kv"><span class="k"><code>iat</code> — issued at</span><span class="v">When it was minted. Drives step-up authentication (Lesson 3.3's <code>max_age</code>) and lets you reject every token issued before a password change — the poor man's revocation.</span></div>
   <div class="kv"><span class="k"><code>nbf</code> — not before</span><span class="v">Rarely needed: a token that becomes valid later. Worth checking anyway, because a library that ignores it will happily accept a token forward-dated by an issuer you do not fully trust.</span></div>
   <div class="kv"><span class="k"><code>jti</code> — token id</span><span class="v">A unique id per token. Required if you ever need to deny one specific token, and required for one-time-use tokens — a password reset link that must not work twice (Chapter 6).</span></div>
-  <div class="kv"><span class="k">Custom claims — namespace them</span><span class="v">Use <code>https://vidu.com/vaiTro</code> rather than <code>vaiTro</code>. Unnamespaced names can collide with a future registered claim or with another issuer's meaning, and OIDC providers require the URI form for anything they pass through.</span></div>
+  <div class="kv"><span class="k">Custom claims — namespace them</span><span class="v">Use <code>https://vidu.com/role</code> rather than <code>role</code>. Unnamespaced names can collide with a future registered claim or with another issuer's meaning, and OIDC providers require the URI form for anything they pass through.</span></div>
 </div>
 
 <h3>The seconds trap</h3>
 <pre><code><span class="tok-comment">// ❌ Một dòng, và cái token sống tới năm 57000</span>
-const claims = { sub: nd.id, exp: Date.now() + 15 * 60 * 1000 };</code></pre>
+const claims = { sub: u.id, exp: Date.now() + 15 * 60 * 1000 };</code></pre>
 <div class="out">$ node -e "console.log(new Date((Date.now() + 900000)     * 1000))"
 +057219-11-08T13:20:00.000Z          ← exp doc theo GIAY
 
@@ -469,15 +469,15 @@ $ node -e "console.log(new Date( Math.floor(Date.now()/1000) + 900 ))"
 <pre><code><span class="tok-comment">// ✅ Để thư viện tính giùm, và đừng bao giờ tự viết số học thời gian</span>
 import { SignJWT } from 'jose';
 
-const token = await new SignJWT({ 'https://vidu.com/vaiTro': nd.vaiTro })
+const token = await new SignJWT({ 'https://vidu.com/role': u.role })
   .setProtectedHeader({ alg: 'RS256', kid: KID_HIEN_TAI })
   .setIssuer('https://vidu.com')
   .setAudience('vidu-api')
-  .setSubject(nd.id)
+  .setSubject(u.id)
   .setIssuedAt()
   .setExpirationTime('15m')             <span class="tok-comment">// ← chuỗi, không phải số học</span>
   .setJti(randomUUID())
-  .sign(khoaRieng);</code></pre>
+  .sign(privateKey);</code></pre>
 <div class="callout warn">
 <p><strong>This is the most common JWT bug in JavaScript codebases, and it is silent.</strong> Nothing throws, nothing warns, and every test passes — because a token that never expires works perfectly in every test you would think to write. It surfaces only when someone finds a year-old token still working, which is usually during an incident. Never compute <code>exp</code> by hand; let the library take a duration string.</p>
 </div>
@@ -485,8 +485,8 @@ const token = await new SignJWT({ 'https://vidu.com/vaiTro': nd.vaiTro })
 <h3>Validating all of them</h3>
 <pre><code>import { jwtVerify } from 'jose';
 
-export async function kiemToken(token: string) {
-  const { payload } = await jwtVerify(token, khoaCong, {
+export async function checkToken(token: string) {
+  const { payload } = await jwtVerify(token, publicKey, {
     algorithms: ['RS256'],            <span class="tok-comment">// Bài 4.2 — bắt buộc</span>
     issuer:     'https://vidu.com',   <span class="tok-comment">// iss</span>
     audience:   'vidu-api',           <span class="tok-comment">// aud</span>
@@ -515,12 +515,12 @@ JWTClaimValidationFailed: unexpected "iss" claim value</div>
 
 <h3><code>jti</code>, and revocation you can actually afford</h3>
 <pre><code><span class="tok-comment">// Một danh sách CHẶN nhỏ, chỉ giữ trong đúng tuổi thọ của token</span>
-export async function chanToken(jti: string, expSeconds: number) {
-  const conLai = expSeconds - Math.floor(Date.now() / 1000);
-  if (conLai &gt; 0) await redis.set(&#96;chan:\${jti}&#96;, '1', { EX: conLai });
+export async function blockToken(jti: string, expSeconds: number) {
+  const remaining = expSeconds - Math.floor(Date.now() / 1000);
+  if (remaining &gt; 0) await redis.set(&#96;chan:\${jti}&#96;, '1', { EX: remaining });
 }
 
-export async function biChan(jti: string) {
+export async function blocked(jti: string) {
   return (await redis.exists(&#96;chan:\${jti}&#96;)) === 1;
 }</code></pre>
 <div class="lz-stack">
@@ -558,12 +558,12 @@ export async function biChan(jti: string) {
   <div class="kv"><span class="k"><code>iat</code> — phát lúc</span><span class="v">Lúc nó được đúc. Nó nuôi việc xác thực theo bậc (cái <code>max_age</code> của Bài 3.3) và cho phép bạn từ chối MỌI token phát trước một lần đổi mật khẩu — cơ chế thu hồi của nhà nghèo.</span></div>
   <div class="kv"><span class="k"><code>nbf</code> — chưa hiệu lực trước</span><span class="v">Ít khi cần: một token chỉ có hiệu lực từ sau này. Vẫn đáng kiểm, vì một thư viện lờ nó đi sẽ vui vẻ nhận một token được đề ngày TƯƠNG LAI bởi một bên phát hành mà bạn không hoàn toàn tin.</span></div>
   <div class="kv"><span class="k"><code>jti</code> — mã token</span><span class="v">Một mã duy nhất cho mỗi token. Bắt buộc phải có nếu bạn từng cần CHẶN đúng một token cụ thể, và bắt buộc với token dùng-một-lần — một liên kết đặt lại mật khẩu KHÔNG được chạy hai lần (Chương 6).</span></div>
-  <div class="kv"><span class="k">Claim riêng — hãy đặt trong không gian tên</span><span class="v">Dùng <code>https://vidu.com/vaiTro</code> thay vì <code>vaiTro</code>. Những cái tên trần có thể đụng với một claim được đăng ký trong tương lai hoặc với ý nghĩa của một bên phát hành khác, và các nhà cung cấp OIDC ĐÒI dạng URI với bất cứ thứ gì họ truyền qua.</span></div>
+  <div class="kv"><span class="k">Claim riêng — hãy đặt trong không gian tên</span><span class="v">Dùng <code>https://vidu.com/role</code> thay vì <code>role</code>. Những cái tên trần có thể đụng với một claim được đăng ký trong tương lai hoặc với ý nghĩa của một bên phát hành khác, và các nhà cung cấp OIDC ĐÒI dạng URI với bất cứ thứ gì họ truyền qua.</span></div>
 </div>
 
 <h3>Cái bẫy GIÂY</h3>
 <pre><code><span class="tok-comment">// ❌ Một dòng, và cái token sống tới năm 57000</span>
-const claims = { sub: nd.id, exp: Date.now() + 15 * 60 * 1000 };</code></pre>
+const claims = { sub: u.id, exp: Date.now() + 15 * 60 * 1000 };</code></pre>
 <div class="out">$ node -e "console.log(new Date((Date.now() + 900000)     * 1000))"
 +057219-11-08T13:20:00.000Z          ← exp doc theo GIAY
 
@@ -575,15 +575,15 @@ $ node -e "console.log(new Date( Math.floor(Date.now()/1000) + 900 ))"
 <pre><code><span class="tok-comment">// ✅ Để thư viện tính giùm, và đừng bao giờ tự viết số học thời gian</span>
 import { SignJWT } from 'jose';
 
-const token = await new SignJWT({ 'https://vidu.com/vaiTro': nd.vaiTro })
+const token = await new SignJWT({ 'https://vidu.com/role': u.role })
   .setProtectedHeader({ alg: 'RS256', kid: KID_HIEN_TAI })
   .setIssuer('https://vidu.com')
   .setAudience('vidu-api')
-  .setSubject(nd.id)
+  .setSubject(u.id)
   .setIssuedAt()
   .setExpirationTime('15m')             <span class="tok-comment">// ← chuỗi, không phải số học</span>
   .setJti(randomUUID())
-  .sign(khoaRieng);</code></pre>
+  .sign(privateKey);</code></pre>
 <div class="callout warn">
 <p><strong>Đây là con bug JWT PHỔ BIẾN NHẤT trong các kho mã JavaScript, và nó LẶNG LẼ.</strong> Không có gì ném lỗi, không có gì cảnh báo, và mọi bài test đều xanh — bởi vì một token KHÔNG BAO GIỜ hết hạn thì chạy hoàn hảo trong mọi bài test mà bạn nghĩ ra để viết. Nó chỉ lộ ra khi có người phát hiện một token một-năm-tuổi vẫn còn dùng được, và thường là giữa lúc đang có sự cố. ĐỪNG BAO GIỜ tự tính <code>exp</code>; hãy để thư viện nhận một chuỗi thời lượng.</p>
 </div>
@@ -591,8 +591,8 @@ const token = await new SignJWT({ 'https://vidu.com/vaiTro': nd.vaiTro })
 <h3>Kiểm HẾT chúng</h3>
 <pre><code>import { jwtVerify } from 'jose';
 
-export async function kiemToken(token: string) {
-  const { payload } = await jwtVerify(token, khoaCong, {
+export async function checkToken(token: string) {
+  const { payload } = await jwtVerify(token, publicKey, {
     algorithms: ['RS256'],            <span class="tok-comment">// Bài 4.2 — bắt buộc</span>
     issuer:     'https://vidu.com',   <span class="tok-comment">// iss</span>
     audience:   'vidu-api',           <span class="tok-comment">// aud</span>
@@ -621,12 +621,12 @@ JWTClaimValidationFailed: unexpected "iss" claim value</div>
 
 <h3><code>jti</code>, và cơ chế thu hồi mà bạn kham nổi</h3>
 <pre><code><span class="tok-comment">// Một danh sách CHẶN nhỏ, chỉ giữ trong đúng tuổi thọ của token</span>
-export async function chanToken(jti: string, expSeconds: number) {
-  const conLai = expSeconds - Math.floor(Date.now() / 1000);
-  if (conLai &gt; 0) await redis.set(&#96;chan:\${jti}&#96;, '1', { EX: conLai });
+export async function blockToken(jti: string, expSeconds: number) {
+  const remaining = expSeconds - Math.floor(Date.now() / 1000);
+  if (remaining &gt; 0) await redis.set(&#96;chan:\${jti}&#96;, '1', { EX: remaining });
 }
 
-export async function biChan(jti: string) {
+export async function blocked(jti: string) {
   return (await redis.exists(&#96;chan:\${jti}&#96;)) === 1;
 }</code></pre>
 <div class="lz-stack">
@@ -684,16 +684,16 @@ wc -c khoa-rieng.pem khoa-cong.pem</code></pre>
 <pre><code><span class="tok-comment">// Header của token nói dùng khoá NÀO — nhưng không nói khoá đó Ở ĐÂU</span>
 { "alg": "EdDSA", "typ": "JWT", "kid": "2026-08" }</code></pre>
 <pre><code><span class="tok-comment">// Bên xác minh tra kid trong một BẢN ĐỒ CỐ ĐỊNH. Không nối chuỗi, không SQL.</span>
-const KHOA: Record&lt;string, KeyLike&gt; = {
+const KEYS: Record&lt;string, KeyLike&gt; = {
   '2026-08': await importSPKI(PEM_THANG_8, 'EdDSA'),
   '2026-05': await importSPKI(PEM_THANG_5, 'EdDSA'),      <span class="tok-comment">// còn nhận, không còn ký</span>
 };
 
 const kid = decodeProtectedHeader(token).kid;
-const khoa = KHOA[kid ?? ''];
-if (!khoa) throw new Error('kid khong biet');              <span class="tok-comment">// KHÔNG lùi về khoá mặc định</span>
+const key = KEYS[kid ?? ''];
+if (!key) throw new Error('kid khong biet');              <span class="tok-comment">// KHÔNG lùi về khoá mặc định</span>
 
-const { payload } = await jwtVerify(token, khoa, { algorithms: ['EdDSA'], … });</code></pre>
+const { payload } = await jwtVerify(token, key, { algorithms: ['EdDSA'], … });</code></pre>
 <div class="pitfall">
 <p><strong>Trap — falling back to a default key when the <code>kid</code> is unknown undoes the whole point.</strong> It turns "which key signed this" into "any key I have will do", which is a smaller version of the algorithm confusion in Lesson 4.2. An unknown <code>kid</code> is a rejected token. And keep the map a map: <code>kid</code> is attacker-controlled input, so it must never reach a filesystem path, a SQL query or a template string.</p>
 </div>
@@ -757,11 +757,11 @@ T+24h   Go 2026-08 khoi JWKS. Xoa khoa rieng cu.</code></pre>
 <p><strong>The order is what makes it zero-downtime, and it is publish-before-sign.</strong> Doing it the other way — switch the signing key, then publish — creates a window in which live tokens reference a <code>kid</code> no verifier knows, and every request fails until caches catch up. Publish first, wait one cache TTL, then switch. The whole rotation is two config changes separated by an hour.</p>
 </div>
 <pre><code><span class="tok-comment">// HS256: cùng ý tưởng, hai bí mật thay vì hai khoá</span>
-const BI_MAT: Record&lt;string, Uint8Array&gt; = {
+const SECRET: Record&lt;string, Uint8Array&gt; = {
   'v2': Buffer.from(process.env.JWT_SECRET_V2!, 'base64'),
   'v1': Buffer.from(process.env.JWT_SECRET_V1!, 'base64'),
 };
-const KY_BANG = 'v2';
+const SIGNED_WITH = 'v2';
 
 <span class="tok-comment">// Ký bằng KY_BANG; xác minh bằng đúng cái BI_MAT[kid]. Sau 24 giờ, xoá v1.</span></code></pre>
 
@@ -810,16 +810,16 @@ wc -c khoa-rieng.pem khoa-cong.pem</code></pre>
 <pre><code><span class="tok-comment">// Header của token nói dùng khoá NÀO — nhưng không nói khoá đó Ở ĐÂU</span>
 { "alg": "EdDSA", "typ": "JWT", "kid": "2026-08" }</code></pre>
 <pre><code><span class="tok-comment">// Bên xác minh tra kid trong một BẢN ĐỒ CỐ ĐỊNH. Không nối chuỗi, không SQL.</span>
-const KHOA: Record&lt;string, KeyLike&gt; = {
+const KEYS: Record&lt;string, KeyLike&gt; = {
   '2026-08': await importSPKI(PEM_THANG_8, 'EdDSA'),
   '2026-05': await importSPKI(PEM_THANG_5, 'EdDSA'),      <span class="tok-comment">// còn nhận, không còn ký</span>
 };
 
 const kid = decodeProtectedHeader(token).kid;
-const khoa = KHOA[kid ?? ''];
-if (!khoa) throw new Error('kid khong biet');              <span class="tok-comment">// KHÔNG lùi về khoá mặc định</span>
+const key = KEYS[kid ?? ''];
+if (!key) throw new Error('kid khong biet');              <span class="tok-comment">// KHÔNG lùi về khoá mặc định</span>
 
-const { payload } = await jwtVerify(token, khoa, { algorithms: ['EdDSA'], … });</code></pre>
+const { payload } = await jwtVerify(token, key, { algorithms: ['EdDSA'], … });</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — lùi về một khoá MẶC ĐỊNH khi <code>kid</code> lạ là xoá bỏ toàn bộ ý nghĩa của việc này.</strong> Nó biến "khoá nào đã ký cái này" thành "khoá nào tôi có cũng được", và đó là một phiên bản thu nhỏ của cú nhầm lẫn thuật toán ở Bài 4.2. Một <code>kid</code> lạ là một token BỊ TỪ CHỐI. Và hãy giữ cái bản đồ đúng là một bản đồ: <code>kid</code> là đầu vào do kẻ tấn công kiểm soát, nên nó KHÔNG BAO GIỜ được chạm tới một đường dẫn file, một câu SQL hay một chuỗi mẫu.</p>
 </div>
@@ -883,11 +883,11 @@ T+24h   Go 2026-08 khoi JWKS. Xoa khoa rieng cu.</code></pre>
 <p><strong>Cái làm cho nó KHÔNG ngừng dịch vụ chính là THỨ TỰ, và thứ tự đó là CÔNG BỐ TRƯỚC KHI KÝ.</strong> Làm ngược lại — chuyển khoá ký rồi mới công bố — tạo ra một cửa sổ trong đó token đang sống trỏ tới một <code>kid</code> mà không bên xác minh nào biết, và MỌI request hỏng cho tới khi cache bắt kịp. Công bố trước, chờ hết một chu kỳ cache, rồi mới chuyển. Cả cuộc xoay vòng là HAI thay đổi cấu hình cách nhau một tiếng.</p>
 </div>
 <pre><code><span class="tok-comment">// HS256: cùng ý tưởng, hai bí mật thay vì hai khoá</span>
-const BI_MAT: Record&lt;string, Uint8Array&gt; = {
+const SECRET: Record&lt;string, Uint8Array&gt; = {
   'v2': Buffer.from(process.env.JWT_SECRET_V2!, 'base64'),
   'v1': Buffer.from(process.env.JWT_SECRET_V1!, 'base64'),
 };
-const KY_BANG = 'v2';
+const SIGNED_WITH = 'v2';
 
 <span class="tok-comment">// Ký bằng KY_BANG; xác minh bằng đúng cái BI_MAT[kid]. Sau 24 giờ, xoá v1.</span></code></pre>
 
@@ -966,7 +966,7 @@ fetch('/api/change-email', {
 <pre><code><span class="tok-comment">// Access token: chỉ trong bộ nhớ. Không localStorage, không cookie.</span>
 let accessToken: string | null = null;
 
-async function goi(url: string, opt: RequestInit = {}) {
+async function call(url: string, opt: RequestInit = {}) {
   const r = await fetch(url, {
     ...opt,
     headers: { ...opt.headers, Authorization: &#96;Bearer \${accessToken}&#96; },
@@ -977,7 +977,7 @@ async function goi(url: string, opt: RequestInit = {}) {
   const moi = await fetch('https://api.vidu.com/auth/refresh', {
     method: 'POST', credentials: 'include',        <span class="tok-comment">// cookie đi kèm</span>
   });
-  if (!moi.ok) { chuyenToiDangNhap(); return r; }
+  if (!moi.ok) { redirectToSignIn(); return r; }
 
   accessToken = (await moi.json()).accessToken;    <span class="tok-comment">// chỉ nằm trong biến</span>
   return goi(url, opt);                            <span class="tok-comment">// thử lại ĐÚNG MỘT lần</span>
@@ -1072,7 +1072,7 @@ fetch('/api/change-email', {
 <pre><code><span class="tok-comment">// Access token: chỉ trong bộ nhớ. Không localStorage, không cookie.</span>
 let accessToken: string | null = null;
 
-async function goi(url: string, opt: RequestInit = {}) {
+async function call(url: string, opt: RequestInit = {}) {
   const r = await fetch(url, {
     ...opt,
     headers: { ...opt.headers, Authorization: &#96;Bearer \${accessToken}&#96; },
@@ -1083,7 +1083,7 @@ async function goi(url: string, opt: RequestInit = {}) {
   const moi = await fetch('https://api.vidu.com/auth/refresh', {
     method: 'POST', credentials: 'include',        <span class="tok-comment">// cookie đi kèm</span>
   });
-  if (!moi.ok) { chuyenToiDangNhap(); return r; }
+  if (!moi.ok) { redirectToSignIn(); return r; }
 
   accessToken = (await moi.json()).accessToken;    <span class="tok-comment">// chỉ nằm trong biến</span>
   return goi(url, opt);                            <span class="tok-comment">// thử lại ĐÚNG MỘT lần</span>

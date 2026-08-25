@@ -67,30 +67,30 @@ POST /auth/refresh         Cookie: __Host-refresh=&lt;refresh, 30 ngày&gt;
 
 <h3>The schema, which is Chapter 3's table with one column added</h3>
 <pre><code>model RefreshToken {
-  id          String    @id @default(cuid())
-  tokenBam    String    @unique               <span class="tok-comment">// sha256 — Bài 1.3</span>
-  nguoiDungId String
-  nguoiDung   NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
+  id        String    @id @default(cuid())
+  tokenHash String    @unique               <span class="tok-comment">// sha256 — Bài 1.3</span>
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  hoId        String                          <span class="tok-comment">// ← HỌ token: Bài 5.2</span>
-  taoLuc      DateTime  @default(now())
-  hetHan      DateTime
-  dungLuc     DateTime?                       <span class="tok-comment">// ← đã đổi lấy access token chưa</span>
-  thuHoiLuc   DateTime?
+  hoId      String    <span class="tok-comment">// ← HỌ token: Bài 5.2</span>
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  usedAt    DateTime? <span class="tok-comment">// ← đã đổi lấy access token chưa</span>
+  revokedAt DateTime?
 
-  trinhDuyet  String?
-  ipTao       String?
+  browser   String?
+  createdIp String?
 
-  @@index([nguoiDungId])
+  @@index([userId])
   @@index([hoId])
 }</code></pre>
 <pre><code><span class="tok-comment">// Đăng nhập: cấp CẢ HAI</span>
-export async function dangNhap(nd: NguoiDung, req: Request, res: Response) {
-  const access = await kyAccessToken(nd);                   <span class="tok-comment">// JWT, 15 phút</span>
-  const refresh = await taoRefreshToken(nd.id, randomUUID(), req);  <span class="tok-comment">// họ mới</span>
+export async function signIn(u: User, req: Request, res: Response) {
+  const access = await signAccessToken(u);                   <span class="tok-comment">// JWT, 15 phút</span>
+  const refresh = await createRefreshToken(u.id, randomUUID(), req);  <span class="tok-comment">// họ mới</span>
 
-  datCookieRefresh(res, refresh);
-  return { accessToken: access, hetHanSau: 900 };           <span class="tok-comment">// giây</span>
+  setRefreshCookie(res, refresh);
+  return { accessToken: access, expiresIn: 900 };           <span class="tok-comment">// giây</span>
 }</code></pre>
 <div class="out">HTTP/1.1 200 OK
 Set-Cookie: __Host-refresh=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000
@@ -103,23 +103,23 @@ Content-Type: application/json
 
 <h3>The exchange</h3>
 <pre><code>app.post('/auth/refresh', async (req, res) =&gt; {
-  const guiLen = req.cookies['__Host-refresh'];
-  if (!guiLen) return res.status(401).json({ loi: 'Chua dang nhap' });
+  const upload = req.cookies['__Host-refresh'];
+  if (!upload) return res.status(401).json({ error: 'Chua dang nhap' });
 
-  const bam = createHash('sha256').update(guiLen).digest('hex');
-  const cu = await prisma.refreshToken.findUnique({ where: { tokenBam: bam } });
+  const hash = createHash('sha256').update(upload).digest('hex');
+  const cu = await prisma.refreshToken.findUnique({ where: { tokenHash: bam } });
 
-  if (!cu || cu.thuHoiLuc || cu.hetHan &lt; new Date()) {
-    xoaCookieRefresh(res);
-    return res.status(401).json({ loi: 'Phien khong hop le' });
+  if (!cu || cu.revokedAt || cu.expiresAt &lt; new Date()) {
+    clearRefreshCookie(res);
+    return res.status(401).json({ error: 'Session khong hop le' });
   }
   <span class="tok-comment">// Bài 5.2 chèn phần phát hiện TÁI DÙNG vào ngay đây.</span>
 
-  const nd = await prisma.nguoiDung.findUniqueOrThrow({ where: { id: cu.nguoiDungId } });
-  const moi = await xoayRefreshToken(cu, req);              <span class="tok-comment">// dùng một lần</span>
-  datCookieRefresh(res, moi);
+  const u = await prisma.user.findUniqueOrThrow({ where: { id: cu.userId } });
+  const moi = await rotateRefreshToken(cu, req);              <span class="tok-comment">// dùng một lần</span>
+  setRefreshCookie(res, moi);
 
-  res.json({ accessToken: await kyAccessToken(nd), hetHanSau: 900 });
+  res.json({ accessToken: await signAccessToken(u), expiresIn: 900 });
 });</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Re-read the user, every time</span><span class="lz-t">This is where freshness comes from</span><span class="lz-d">The new access token is built from the current row: current role, current disabled flag, current permissions. That is what makes a fifteen-minute window meaningful — a demotion takes effect at the next refresh, not at the next login.</span></div>
@@ -203,30 +203,30 @@ POST /auth/refresh         Cookie: __Host-refresh=&lt;refresh, 30 ngày&gt;
 
 <h3>Lược đồ, chính là bảng của Chương 3 cộng một cột</h3>
 <pre><code>model RefreshToken {
-  id          String    @id @default(cuid())
-  tokenBam    String    @unique               <span class="tok-comment">// sha256 — Bài 1.3</span>
-  nguoiDungId String
-  nguoiDung   NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
+  id        String    @id @default(cuid())
+  tokenHash String    @unique               <span class="tok-comment">// sha256 — Bài 1.3</span>
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  hoId        String                          <span class="tok-comment">// ← HỌ token: Bài 5.2</span>
-  taoLuc      DateTime  @default(now())
-  hetHan      DateTime
-  dungLuc     DateTime?                       <span class="tok-comment">// ← đã đổi lấy access token chưa</span>
-  thuHoiLuc   DateTime?
+  hoId      String    <span class="tok-comment">// ← HỌ token: Bài 5.2</span>
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  usedAt    DateTime? <span class="tok-comment">// ← đã đổi lấy access token chưa</span>
+  revokedAt DateTime?
 
-  trinhDuyet  String?
-  ipTao       String?
+  browser   String?
+  createdIp String?
 
-  @@index([nguoiDungId])
+  @@index([userId])
   @@index([hoId])
 }</code></pre>
 <pre><code><span class="tok-comment">// Đăng nhập: cấp CẢ HAI</span>
-export async function dangNhap(nd: NguoiDung, req: Request, res: Response) {
-  const access = await kyAccessToken(nd);                   <span class="tok-comment">// JWT, 15 phút</span>
-  const refresh = await taoRefreshToken(nd.id, randomUUID(), req);  <span class="tok-comment">// họ mới</span>
+export async function signIn(u: User, req: Request, res: Response) {
+  const access = await signAccessToken(u);                   <span class="tok-comment">// JWT, 15 phút</span>
+  const refresh = await createRefreshToken(u.id, randomUUID(), req);  <span class="tok-comment">// họ mới</span>
 
-  datCookieRefresh(res, refresh);
-  return { accessToken: access, hetHanSau: 900 };           <span class="tok-comment">// giây</span>
+  setRefreshCookie(res, refresh);
+  return { accessToken: access, expiresIn: 900 };           <span class="tok-comment">// giây</span>
 }</code></pre>
 <div class="out">HTTP/1.1 200 OK
 Set-Cookie: __Host-refresh=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000
@@ -239,23 +239,23 @@ Content-Type: application/json
 
 <h3>Cú đổi</h3>
 <pre><code>app.post('/auth/refresh', async (req, res) =&gt; {
-  const guiLen = req.cookies['__Host-refresh'];
-  if (!guiLen) return res.status(401).json({ loi: 'Chua dang nhap' });
+  const upload = req.cookies['__Host-refresh'];
+  if (!upload) return res.status(401).json({ error: 'Chua dang nhap' });
 
-  const bam = createHash('sha256').update(guiLen).digest('hex');
-  const cu = await prisma.refreshToken.findUnique({ where: { tokenBam: bam } });
+  const hash = createHash('sha256').update(upload).digest('hex');
+  const cu = await prisma.refreshToken.findUnique({ where: { tokenHash: bam } });
 
-  if (!cu || cu.thuHoiLuc || cu.hetHan &lt; new Date()) {
-    xoaCookieRefresh(res);
-    return res.status(401).json({ loi: 'Phien khong hop le' });
+  if (!cu || cu.revokedAt || cu.expiresAt &lt; new Date()) {
+    clearRefreshCookie(res);
+    return res.status(401).json({ error: 'Session khong hop le' });
   }
   <span class="tok-comment">// Bài 5.2 chèn phần phát hiện TÁI DÙNG vào ngay đây.</span>
 
-  const nd = await prisma.nguoiDung.findUniqueOrThrow({ where: { id: cu.nguoiDungId } });
-  const moi = await xoayRefreshToken(cu, req);              <span class="tok-comment">// dùng một lần</span>
-  datCookieRefresh(res, moi);
+  const u = await prisma.user.findUniqueOrThrow({ where: { id: cu.userId } });
+  const moi = await rotateRefreshToken(cu, req);              <span class="tok-comment">// dùng một lần</span>
+  setRefreshCookie(res, moi);
 
-  res.json({ accessToken: await kyAccessToken(nd), hetHanSau: 900 });
+  res.json({ accessToken: await signAccessToken(u), expiresIn: 900 });
 });</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">ĐỌC LẠI người dùng, MỖI lần</span><span class="lz-t">Đây là chỗ sinh ra tính "mới"</span><span class="lz-d">Access token mới được dựng từ HÀNG HIỆN TẠI: vai trò hiện tại, cờ vô hiệu hoá hiện tại, quyền hạn hiện tại. Chính điều đó làm cho cửa sổ mười lăm phút CÓ NGHĨA — một cú hạ quyền có hiệu lực ở lần refresh kế tiếp, không phải ở lần đăng nhập kế tiếp.</span></div>
@@ -306,26 +306,26 @@ Dich vu noi bo, may-toi-may  1 gio    khong co    1 gio</code></pre>
 <p class="lead">Rotation on its own limits how long a stolen refresh token is useful. Reuse detection does something better: it turns the theft into an <em>observable event</em>. A token that has already been exchanged, presented a second time, means a copy exists — and since you cannot tell whether you are talking to the victim or the thief, you end the whole lineage and make both start again.</p>
 
 <h3>Rotation: single use, always</h3>
-<pre><code>export async function xoayRefreshToken(cu: RefreshToken, req: Request) {
-  const tokenMoi = randomBytes(32).toString('base64url');
+<pre><code>export async function rotateRefreshToken(cu: RefreshToken, req: Request) {
+  const newToken = randomBytes(32).toString('base64url');
 
   await prisma.$transaction([
     prisma.refreshToken.update({
       where: { id: cu.id },
-      data:  { dungLuc: new Date() },              <span class="tok-comment">// đánh dấu ĐÃ DÙNG</span>
+      data:  { usedAt: new Date() },              <span class="tok-comment">// đánh dấu ĐÃ DÙNG</span>
     }),
     prisma.refreshToken.create({
       data: {
-        tokenBam: createHash('sha256').update(tokenMoi).digest('hex'),
-        nguoiDungId: cu.nguoiDungId,
+        tokenHash: createHash('sha256').update(newToken).digest('hex'),
+        userId: cu.userId,
         hoId: cu.hoId,                             <span class="tok-comment">// ← CÙNG một họ</span>
-        hetHan: cu.hetHan,                         <span class="tok-comment">// trần TUYỆT ĐỐI không dời</span>
-        trinhDuyet: req.get('user-agent')?.slice(0, 200),
-        ipTao: req.ip,
+        expiresAt: cu.expiresAt,                         <span class="tok-comment">// trần TUYỆT ĐỐI không dời</span>
+        browser: req.get('user-agent')?.slice(0, 200),
+        createdIp: req.ip,
       },
     }),
   ]);
-  return tokenMoi;
+  return newToken;
 }</code></pre>
 <div class="out">SELECT "hoId", left("tokenBam",8) AS bam, "taoLuc"::time, "dungLuc"::time
 FROM "RefreshToken" WHERE "hoId" = 'f47ac10b…' ORDER BY "taoLuc";
@@ -339,7 +339,7 @@ FROM "RefreshToken" WHERE "hoId" = 'f47ac10b…' ORDER BY "taoLuc";
 # Mot lan dang nhap = mot HO. Moi lan refresh them mot mat xich.
 # Cai het han TUYET DOI thua ke tu mat xich dau — xoay vong khong keo dai phien.</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Do not extend the absolute expiry</span><span class="v">Each new token inherits <code>hetHan</code> from the one it replaced. Otherwise rotation becomes sliding expiry, and Lesson 3.1's problem returns: a stolen family kept warm never ends.</span></div>
+  <div class="kv"><span class="k">Do not extend the absolute expiry</span><span class="v">Each new token inherits <code>expiresAt</code> from the one it replaced. Otherwise rotation becomes sliding expiry, and Lesson 3.1's problem returns: a stolen family kept warm never ends.</span></div>
   <div class="kv"><span class="k">One transaction, or the race wins</span><span class="v">Marking used and creating the successor must be atomic. Split them and two concurrent refreshes can both see an unused token and both mint successors — two live branches of one family, which is the state reuse detection is supposed to make impossible.</span></div>
   <div class="kv"><span class="k">Mark used, do not delete</span><span class="v">The used row <em>is</em> the detector. Deleting it turns a reuse into "token not found", which is indistinguishable from an expired session and triggers no alarm.</span></div>
   <div class="kv"><span class="k">The family id is a plain UUID</span><span class="v">Generated once at login and copied to every descendant. It carries no meaning and needs none — its only job is to let one <code>updateMany</code> end the whole lineage.</span></div>
@@ -359,24 +359,24 @@ FROM "RefreshToken" WHERE "hoId" = 'f47ac10b…' ORDER BY "taoLuc";
   </div>
 </div>
 <pre><code><span class="tok-comment">// Chèn vào /auth/refresh, ngay sau khi tìm thấy hàng</span>
-if (cu.dungLuc) {
+if (cu.usedAt) {
   <span class="tok-comment">// Token này ĐÃ được đổi rồi. Có một bản sao đang tồn tại.</span>
   await prisma.refreshToken.updateMany({
-    where: { hoId: cu.hoId, thuHoiLuc: null },
-    data:  { thuHoiLuc: new Date() },              <span class="tok-comment">// giết CẢ HỌ</span>
+    where: { hoId: cu.hoId, revokedAt: null },
+    data:  { revokedAt: new Date() },              <span class="tok-comment">// giết CẢ HỌ</span>
   });
 
   logger.warn({
-    su_kien: 'refresh_token_tai_dung',
-    nguoiDungId: cu.nguoiDungId,
+    event: 'refresh_token_tai_dung',
+    userId: cu.userId,
     hoId: cu.hoId,
-    daDungLuc: cu.dungLuc,
+    usedAt: cu.usedAt,
     ip: req.ip,
-    trinhDuyet: req.get('user-agent'),
+    browser: req.get('user-agent'),
   }, 'phat hien tai dung refresh token');
 
-  xoaCookieRefresh(res);
-  return res.status(401).json({ loi: 'Phien khong hop le, vui long dang nhap lai' });
+  clearRefreshCookie(res);
+  return res.status(401).json({ error: 'Session khong hop le, vui long dang nhap lai' });
 }</code></pre>
 <div class="out">{"level":40,"su_kien":"refresh_token_tai_dung","nguoiDungId":"clx7a2b1c",
  "hoId":"f47ac10b…","daDungLuc":"2026-08-23T09:29:11.284Z",
@@ -399,12 +399,12 @@ if (cu.dungLuc) {
 
 <h3>What the user sees, and what to tell them</h3>
 <pre><code><span class="tok-comment">// ❌ Câu mặc định của phần lớn hệ thống</span>
-{ "loi": "Phien khong hop le" }
+{ "loi": "Session khong hop le" }
 
 <span class="tok-comment">// ✅ Nói ra chuyện gì đã xảy ra và họ nên làm gì</span>
 {
-  "loi": "Phien cua ban da ket thuc vi ly do bao mat",
-  "chiTiet": "Chung toi phat hien tai khoan nay duoc truy cap tu hai noi cung luc. "
+  "loi": "Session cua ban da ket thuc vi ly do bao mat",
+  "detail": "Chung toi phat hien tai khoan nay duoc truy cap tu hai noi cung luc. "
            + "Vui long dang nhap lai. Neu khong phai ban, hay doi mat khau.",
   "ma": "REFRESH_TAI_DUNG"
 }</code></pre>
@@ -435,26 +435,26 @@ if (cu.dungLuc) {
 <p class="lead">Riêng việc xoay vòng thì giới hạn được một refresh token bị cắp còn hữu dụng bao lâu. Phát hiện tái dùng làm một điều TỐT HƠN: nó biến cú trộm thành một <em>SỰ KIỆN QUAN SÁT ĐƯỢC</em>. Một token đã được đổi rồi mà bị trình ra lần thứ hai nghĩa là CÓ một bản sao đang tồn tại — và vì bạn không phân biệt nổi mình đang nói chuyện với nạn nhân hay với kẻ cắp, bạn kết thúc cả DÒNG HỌ và bắt cả hai bắt đầu lại.</p>
 
 <h3>Xoay vòng: dùng MỘT lần, luôn luôn</h3>
-<pre><code>export async function xoayRefreshToken(cu: RefreshToken, req: Request) {
-  const tokenMoi = randomBytes(32).toString('base64url');
+<pre><code>export async function rotateRefreshToken(cu: RefreshToken, req: Request) {
+  const newToken = randomBytes(32).toString('base64url');
 
   await prisma.$transaction([
     prisma.refreshToken.update({
       where: { id: cu.id },
-      data:  { dungLuc: new Date() },              <span class="tok-comment">// đánh dấu ĐÃ DÙNG</span>
+      data:  { usedAt: new Date() },              <span class="tok-comment">// đánh dấu ĐÃ DÙNG</span>
     }),
     prisma.refreshToken.create({
       data: {
-        tokenBam: createHash('sha256').update(tokenMoi).digest('hex'),
-        nguoiDungId: cu.nguoiDungId,
+        tokenHash: createHash('sha256').update(newToken).digest('hex'),
+        userId: cu.userId,
         hoId: cu.hoId,                             <span class="tok-comment">// ← CÙNG một họ</span>
-        hetHan: cu.hetHan,                         <span class="tok-comment">// trần TUYỆT ĐỐI không dời</span>
-        trinhDuyet: req.get('user-agent')?.slice(0, 200),
-        ipTao: req.ip,
+        expiresAt: cu.expiresAt,                         <span class="tok-comment">// trần TUYỆT ĐỐI không dời</span>
+        browser: req.get('user-agent')?.slice(0, 200),
+        createdIp: req.ip,
       },
     }),
   ]);
-  return tokenMoi;
+  return newToken;
 }</code></pre>
 <div class="out">SELECT "hoId", left("tokenBam",8) AS bam, "taoLuc"::time, "dungLuc"::time
 FROM "RefreshToken" WHERE "hoId" = 'f47ac10b…' ORDER BY "taoLuc";
@@ -468,7 +468,7 @@ FROM "RefreshToken" WHERE "hoId" = 'f47ac10b…' ORDER BY "taoLuc";
 # Mot lan dang nhap = mot HO. Moi lan refresh them mot mat xich.
 # Cai het han TUYET DOI thua ke tu mat xich dau — xoay vong khong keo dai phien.</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">ĐỪNG kéo dài hết hạn tuyệt đối</span><span class="v">Mỗi token mới THỪA KẾ <code>hetHan</code> từ cái nó thay thế. Không thì việc xoay vòng biến thành hết-hạn-trượt, và vấn đề của Bài 3.1 quay lại: một dòng họ bị cắp mà giữ cho ấm thì không bao giờ kết thúc.</span></div>
+  <div class="kv"><span class="k">ĐỪNG kéo dài hết hạn tuyệt đối</span><span class="v">Mỗi token mới THỪA KẾ <code>expiresAt</code> từ cái nó thay thế. Không thì việc xoay vòng biến thành hết-hạn-trượt, và vấn đề của Bài 3.1 quay lại: một dòng họ bị cắp mà giữ cho ấm thì không bao giờ kết thúc.</span></div>
   <div class="kv"><span class="k">MỘT giao dịch, không thì cuộc đua thắng</span><span class="v">Đánh dấu đã dùng và tạo cái kế nhiệm phải NGUYÊN TỬ. Tách chúng ra thì hai lần refresh song song đều thấy một token chưa dùng và đều đúc kế nhiệm — thành hai NHÁNH sống của một họ, đúng cái trạng thái mà phát hiện tái dùng lẽ ra phải làm cho bất khả.</span></div>
   <div class="kv"><span class="k">ĐÁNH DẤU đã dùng, đừng XOÁ</span><span class="v">Cái hàng đã dùng CHÍNH LÀ bộ phát hiện. Xoá nó đi là biến một cú tái dùng thành "không tìm thấy token", thứ không phân biệt nổi với một phiên hết hạn và không kích hoạt báo động nào.</span></div>
   <div class="kv"><span class="k">Mã họ chỉ là một UUID trần</span><span class="v">Sinh MỘT lần lúc đăng nhập rồi copy sang mọi hậu duệ. Nó không mang ý nghĩa nào và cũng không cần — việc duy nhất của nó là cho phép MỘT câu <code>updateMany</code> kết thúc cả dòng họ.</span></div>
@@ -488,24 +488,24 @@ FROM "RefreshToken" WHERE "hoId" = 'f47ac10b…' ORDER BY "taoLuc";
   </div>
 </div>
 <pre><code><span class="tok-comment">// Chèn vào /auth/refresh, ngay sau khi tìm thấy hàng</span>
-if (cu.dungLuc) {
+if (cu.usedAt) {
   <span class="tok-comment">// Token này ĐÃ được đổi rồi. Có một bản sao đang tồn tại.</span>
   await prisma.refreshToken.updateMany({
-    where: { hoId: cu.hoId, thuHoiLuc: null },
-    data:  { thuHoiLuc: new Date() },              <span class="tok-comment">// giết CẢ HỌ</span>
+    where: { hoId: cu.hoId, revokedAt: null },
+    data:  { revokedAt: new Date() },              <span class="tok-comment">// giết CẢ HỌ</span>
   });
 
   logger.warn({
-    su_kien: 'refresh_token_tai_dung',
-    nguoiDungId: cu.nguoiDungId,
+    event: 'refresh_token_tai_dung',
+    userId: cu.userId,
     hoId: cu.hoId,
-    daDungLuc: cu.dungLuc,
+    usedAt: cu.usedAt,
     ip: req.ip,
-    trinhDuyet: req.get('user-agent'),
+    browser: req.get('user-agent'),
   }, 'phat hien tai dung refresh token');
 
-  xoaCookieRefresh(res);
-  return res.status(401).json({ loi: 'Phien khong hop le, vui long dang nhap lai' });
+  clearRefreshCookie(res);
+  return res.status(401).json({ error: 'Session khong hop le, vui long dang nhap lai' });
 }</code></pre>
 <div class="out">{"level":40,"su_kien":"refresh_token_tai_dung","nguoiDungId":"clx7a2b1c",
  "hoId":"f47ac10b…","daDungLuc":"2026-08-23T09:29:11.284Z",
@@ -528,12 +528,12 @@ if (cu.dungLuc) {
 
 <h3>Người dùng nhìn thấy gì, và nên nói gì với họ</h3>
 <pre><code><span class="tok-comment">// ❌ Câu mặc định của phần lớn hệ thống</span>
-{ "loi": "Phien khong hop le" }
+{ "loi": "Session khong hop le" }
 
 <span class="tok-comment">// ✅ Nói ra chuyện gì đã xảy ra và họ nên làm gì</span>
 {
-  "loi": "Phien cua ban da ket thuc vi ly do bao mat",
-  "chiTiet": "Chung toi phat hien tai khoan nay duoc truy cap tu hai noi cung luc. "
+  "loi": "Session cua ban da ket thuc vi ly do bao mat",
+  "detail": "Chung toi phat hien tai khoan nay duoc truy cap tu hai noi cung luc. "
            + "Vui long dang nhap lai. Neu khong phai ban, hay doi mat khau.",
   "ma": "REFRESH_TAI_DUNG"
 }</code></pre>
@@ -596,19 +596,19 @@ if (cu.dungLuc) {
   </div>
 </div>
 <pre><code><span class="tok-comment">// Sự kiện 1 và 2 — chỉ là những câu UPDATE</span>
-export async function dangXuat(refreshToken: string, res: Response) {
-  const bam = createHash('sha256').update(refreshToken).digest('hex');
+export async function signOut(refreshToken: string, res: Response) {
+  const hash = createHash('sha256').update(refreshToken).digest('hex');
   await prisma.refreshToken.updateMany({
-    where: { tokenBam: bam, thuHoiLuc: null },
-    data:  { thuHoiLuc: new Date() },
+    where: { tokenHash: bam, revokedAt: null },
+    data:  { revokedAt: new Date() },
   });
-  xoaCookieRefresh(res);
+  clearRefreshCookie(res);
 }
 
-export async function dangXuatMoiNoi(nguoiDungId: string, giuLaiHoId?: string) {
+export async function signOutEverywhere(userId: string, giuLaiHoId?: string) {
   await prisma.refreshToken.updateMany({
-    where: { nguoiDungId, thuHoiLuc: null, ...(giuLaiHoId &amp;&amp; { hoId: { not: giuLaiHoId } }) },
-    data:  { thuHoiLuc: new Date() },
+    where: { userId, revokedAt: null, ...(giuLaiHoId &amp;&amp; { hoId: { not: giuLaiHoId } }) },
+    data:  { revokedAt: new Date() },
   });
 }</code></pre>
 <div class="out">$ curl -X POST localhost:3000/auth/dang-xuat -b "__Host-refresh=Kc9x2Lm…"
@@ -626,23 +626,23 @@ HTTP/1.1 401 {"loi":"Phien khong hop le"}     ← ngay lap tuc
 
 <h3>The fast path, for events 4 and 5</h3>
 <pre><code><span class="tok-comment">// Khi khoá một tài khoản hoặc hạ quyền — có hiệu lực NGAY</span>
-export async function khoaTaiKhoan(nguoiDungId: string) {
+export async function lockAccount(userId: string) {
   await prisma.$transaction([
-    prisma.nguoiDung.update({ where: { id: nguoiDungId }, data: { biKhoa: true } }),
+    prisma.user.update({ where: { id: userId }, data: { locked: true } }),
     prisma.refreshToken.updateMany({
-      where: { nguoiDungId, thuHoiLuc: null }, data: { thuHoiLuc: new Date() },
+      where: { userId, revokedAt: null }, data: { revokedAt: new Date() },
     }),
   ]);
 
   <span class="tok-comment">// Chặn cả những access token ĐANG BAY, trong đúng tuổi thọ còn lại</span>
-  await redis.set(&#96;chan-nguoi:\${nguoiDungId}&#96;, '1', { EX: 900 });
+  await redis.set(&#96;chan-nguoi:\${userId}&#96;, '1', { EX: 900 });
 }</code></pre>
 <pre><code><span class="tok-comment">// Middleware: một lần EXISTS, chỉ cho những token đã qua chữ ký</span>
 export async function requireAuth(req, res, next) {
-  const claims = await kiemToken(layToken(req));          <span class="tok-comment">// chữ ký + claim</span>
+  const claims = await checkToken(getToken(req));          <span class="tok-comment">// chữ ký + claim</span>
 
   if (await redis.exists(&#96;chan-nguoi:\${claims.sub}&#96;)) {   <span class="tok-comment">// ~0,05 ms</span>
-    return res.status(401).json({ loi: 'Tai khoan da bi khoa' });
+    return res.status(401).json({ error: 'Tai khoan da bi khoa' });
   }
   req.user = claims;
   next();
@@ -655,21 +655,21 @@ export async function requireAuth(req, res, next) {
 </div>
 
 <h3>Password change: revoke, but keep this device</h3>
-<pre><code>export async function doiMatKhau(nd: NguoiDung, cu: string, moi: string, hoIdHienTai: string) {
-  if (!(await kiemMatKhau(nd.bam, cu))) throw new HttpError(400, 'Mat khau hien tai khong dung');
+<pre><code>export async function changePassword(u: User, cu: string, moi: string, currentFamilyId: string) {
+  if (!(await checkPassword(u.bam, cu))) throw new HttpError(400, 'Mat ksuffix hien tai khong dung');
 
   await prisma.$transaction([
-    prisma.nguoiDung.update({
-      where: { id: nd.id },
-      data:  { bam: await hash(chuanBi(moi), THAM_SO) },
+    prisma.user.update({
+      where: { id: u.id },
+      data:  { bam: await hash(prepare(moi), PARAMS) },
     }),
     prisma.refreshToken.updateMany({
-      where: { nguoiDungId: nd.id, hoId: { not: hoIdHienTai }, thuHoiLuc: null },
-      data:  { thuHoiLuc: new Date() },
+      where: { userId: u.id, hoId: { not: currentFamilyId }, revokedAt: null },
+      data:  { revokedAt: new Date() },
     }),
   ]);
 
-  await guiEmail(nd.email, 'mat-khau-da-doi', { luc: new Date(), ip: req.ip });
+  await sendEmail(u.email, 'mat-khau-da-doi', { luc: new Date(), ip: req.ip });
 }</code></pre>
 <div class="out">SELECT "hoId", "thuHoiLuc" IS NOT NULL AS da_thu_hoi
 FROM "RefreshToken" WHERE "nguoiDungId" = 'clx7a2b1c' AND "thuHoiLuc" IS NULL OR true;
@@ -685,7 +685,7 @@ FROM "RefreshToken" WHERE "nguoiDungId" = 'clx7a2b1c' AND "thuHoiLuc" IS NULL OR
 
 <h3>Deletion, and what the database does for you</h3>
 <pre><code>model RefreshToken {
-  nguoiDung NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Cascade handles hard deletion</span><span class="lz-lnote">Deleting the user row removes every refresh token in the same statement, at the database level, with no application code involved. That is one fewer thing to forget in the delete-account flow.</span></div>
@@ -735,19 +735,19 @@ FROM "RefreshToken" WHERE "nguoiDungId" = 'clx7a2b1c' AND "thuHoiLuc" IS NULL OR
   </div>
 </div>
 <pre><code><span class="tok-comment">// Sự kiện 1 và 2 — chỉ là những câu UPDATE</span>
-export async function dangXuat(refreshToken: string, res: Response) {
-  const bam = createHash('sha256').update(refreshToken).digest('hex');
+export async function signOut(refreshToken: string, res: Response) {
+  const hash = createHash('sha256').update(refreshToken).digest('hex');
   await prisma.refreshToken.updateMany({
-    where: { tokenBam: bam, thuHoiLuc: null },
-    data:  { thuHoiLuc: new Date() },
+    where: { tokenHash: bam, revokedAt: null },
+    data:  { revokedAt: new Date() },
   });
-  xoaCookieRefresh(res);
+  clearRefreshCookie(res);
 }
 
-export async function dangXuatMoiNoi(nguoiDungId: string, giuLaiHoId?: string) {
+export async function signOutEverywhere(userId: string, giuLaiHoId?: string) {
   await prisma.refreshToken.updateMany({
-    where: { nguoiDungId, thuHoiLuc: null, ...(giuLaiHoId &amp;&amp; { hoId: { not: giuLaiHoId } }) },
-    data:  { thuHoiLuc: new Date() },
+    where: { userId, revokedAt: null, ...(giuLaiHoId &amp;&amp; { hoId: { not: giuLaiHoId } }) },
+    data:  { revokedAt: new Date() },
   });
 }</code></pre>
 <div class="out">$ curl -X POST localhost:3000/auth/dang-xuat -b "__Host-refresh=Kc9x2Lm…"
@@ -765,23 +765,23 @@ HTTP/1.1 401 {"loi":"Phien khong hop le"}     ← ngay lap tuc
 
 <h3>Đường nhanh, cho sự kiện 4 và 5</h3>
 <pre><code><span class="tok-comment">// Khi khoá một tài khoản hoặc hạ quyền — có hiệu lực NGAY</span>
-export async function khoaTaiKhoan(nguoiDungId: string) {
+export async function lockAccount(userId: string) {
   await prisma.$transaction([
-    prisma.nguoiDung.update({ where: { id: nguoiDungId }, data: { biKhoa: true } }),
+    prisma.user.update({ where: { id: userId }, data: { locked: true } }),
     prisma.refreshToken.updateMany({
-      where: { nguoiDungId, thuHoiLuc: null }, data: { thuHoiLuc: new Date() },
+      where: { userId, revokedAt: null }, data: { revokedAt: new Date() },
     }),
   ]);
 
   <span class="tok-comment">// Chặn cả những access token ĐANG BAY, trong đúng tuổi thọ còn lại</span>
-  await redis.set(&#96;chan-nguoi:\${nguoiDungId}&#96;, '1', { EX: 900 });
+  await redis.set(&#96;chan-nguoi:\${userId}&#96;, '1', { EX: 900 });
 }</code></pre>
 <pre><code><span class="tok-comment">// Middleware: một lần EXISTS, chỉ cho những token đã qua chữ ký</span>
 export async function requireAuth(req, res, next) {
-  const claims = await kiemToken(layToken(req));          <span class="tok-comment">// chữ ký + claim</span>
+  const claims = await checkToken(getToken(req));          <span class="tok-comment">// chữ ký + claim</span>
 
   if (await redis.exists(&#96;chan-nguoi:\${claims.sub}&#96;)) {   <span class="tok-comment">// ~0,05 ms</span>
-    return res.status(401).json({ loi: 'Tai khoan da bi khoa' });
+    return res.status(401).json({ error: 'Tai khoan da bi khoa' });
   }
   req.user = claims;
   next();
@@ -794,21 +794,21 @@ export async function requireAuth(req, res, next) {
 </div>
 
 <h3>Đổi mật khẩu: thu hồi, nhưng GIỮ thiết bị này</h3>
-<pre><code>export async function doiMatKhau(nd: NguoiDung, cu: string, moi: string, hoIdHienTai: string) {
-  if (!(await kiemMatKhau(nd.bam, cu))) throw new HttpError(400, 'Mat khau hien tai khong dung');
+<pre><code>export async function changePassword(u: User, cu: string, moi: string, currentFamilyId: string) {
+  if (!(await checkPassword(u.bam, cu))) throw new HttpError(400, 'Mat ksuffix hien tai khong dung');
 
   await prisma.$transaction([
-    prisma.nguoiDung.update({
-      where: { id: nd.id },
-      data:  { bam: await hash(chuanBi(moi), THAM_SO) },
+    prisma.user.update({
+      where: { id: u.id },
+      data:  { bam: await hash(prepare(moi), PARAMS) },
     }),
     prisma.refreshToken.updateMany({
-      where: { nguoiDungId: nd.id, hoId: { not: hoIdHienTai }, thuHoiLuc: null },
-      data:  { thuHoiLuc: new Date() },
+      where: { userId: u.id, hoId: { not: currentFamilyId }, revokedAt: null },
+      data:  { revokedAt: new Date() },
     }),
   ]);
 
-  await guiEmail(nd.email, 'mat-khau-da-doi', { luc: new Date(), ip: req.ip });
+  await sendEmail(u.email, 'mat-khau-da-doi', { luc: new Date(), ip: req.ip });
 }</code></pre>
 <div class="out">SELECT "hoId", "thuHoiLuc" IS NOT NULL AS da_thu_hoi
 FROM "RefreshToken" WHERE "nguoiDungId" = 'clx7a2b1c' AND "thuHoiLuc" IS NULL OR true;
@@ -824,7 +824,7 @@ FROM "RefreshToken" WHERE "nguoiDungId" = 'clx7a2b1c' AND "thuHoiLuc" IS NULL OR
 
 <h3>Xoá tài khoản, và cơ sở dữ liệu làm giùm bạn cái gì</h3>
 <pre><code>model RefreshToken {
-  nguoiDung NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Cascade lo phần xoá CỨNG</span><span class="lz-lnote">Xoá hàng người dùng là gỡ MỌI refresh token trong CÙNG câu lệnh, ở mức cơ sở dữ liệu, không cần dòng mã ứng dụng nào. Đó là bớt được một thứ để quên trong luồng xoá tài khoản.</span></div>
@@ -858,24 +858,24 @@ FROM "RefreshToken" WHERE "nguoiDungId" = 'clx7a2b1c' AND "thuHoiLuc" IS NULL OR
 <p class="lead">The refresh token table already stores a user agent, an IP and timestamps. Rendering that as a screen turns an internal mechanism into a security feature — and one with a property none of your monitoring has: the user knows which of those sessions is theirs, and you do not.</p>
 
 <h3>The query, and the shape it returns</h3>
-<pre><code>export async function danhSachPhien(nguoiDungId: string, hoIdHienTai: string) {
+<pre><code>export async function sessionList(userId: string, currentFamilyId: string) {
   const rows = await prisma.refreshToken.findMany({
     where: {
-      nguoiDungId,
-      thuHoiLuc: null,
-      hetHan: { gt: new Date() },
-      dungLuc: null,                       <span class="tok-comment">// chỉ mắt xích ĐANG SỐNG của mỗi họ</span>
+      userId,
+      revokedAt: null,
+      expiresAt: { gt: new Date() },
+      usedAt: null,                       <span class="tok-comment">// chỉ mắt xích ĐANG SỐNG của mỗi họ</span>
     },
-    select: { hoId: true, taoLuc: true, trinhDuyet: true, ipTao: true },
-    orderBy: { taoLuc: 'desc' },
+    select: { hoId: true, createdAt: true, browser: true, createdIp: true },
+    orderBy: { createdAt: 'desc' },
   });
 
   return rows.map((r) =&gt; ({
     hoId: r.hoId,
-    laHienTai: r.hoId === hoIdHienTai,
-    thietBi: docThietBi(r.trinhDuyet),      <span class="tok-comment">// "Chrome trên Windows"</span>
-    viTri:   viTriGanDung(r.ipTao),         <span class="tok-comment">// "Hà Nội, Việt Nam"</span>
-    hoatDong: r.taoLuc,                     <span class="tok-comment">// lần refresh gần nhất</span>
+    isCurrent: r.hoId === currentFamilyId,
+    device: readDevice(r.browser),      <span class="tok-comment">// "Chrome trên Windows"</span>
+    position:   approxLocation(r.createdIp),         <span class="tok-comment">// "Hà Nội, Việt Nam"</span>
+    active: r.createdAt,                     <span class="tok-comment">// lần refresh gần nhất</span>
   }));
 }</code></pre>
 <div class="out">[
@@ -890,14 +890,14 @@ FROM "RefreshToken" WHERE "nguoiDungId" = 'clx7a2b1c' AND "thuHoiLuc" IS NULL OR
 # Dong thu ba la thu ma nguoi dung nhan ra ngay va giam sat cua ban thi khong:
 # ho chua bao gio dung Linux, va chua bao gio o Duc.</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">One row per family</span><span class="lz-t">Not per token</span><span class="lz-d">Rotation creates a new row every fifteen minutes. Filtering on <code>dungLuc: null</code> gives exactly the live link of each family — one row per logged-in device, which is what the user expects to see.</span></div>
-  <div class="lz-step"><span class="lz-k">"Last active" is the newest link's creation time</span><span class="lz-t">Free from rotation</span><span class="lz-d">Because the live token was created at the last refresh, its <code>taoLuc</code> <em>is</em> the last-seen time, accurate to the access-token lifetime. No extra column, no per-request write.</span></div>
+  <div class="lz-step"><span class="lz-k">One row per family</span><span class="lz-t">Not per token</span><span class="lz-d">Rotation creates a new row every fifteen minutes. Filtering on <code>usedAt: null</code> gives exactly the live link of each family — one row per logged-in device, which is what the user expects to see.</span></div>
+  <div class="lz-step"><span class="lz-k">"Last active" is the newest link's creation time</span><span class="lz-t">Free from rotation</span><span class="lz-d">Because the live token was created at the last refresh, its <code>createdAt</code> <em>is</em> the last-seen time, accurate to the access-token lifetime. No extra column, no per-request write.</span></div>
   <div class="lz-step"><span class="lz-k">Mark the current one</span><span class="lz-t">And do not let them revoke it by accident</span><span class="lz-d">"This device" next to the current family, with revocation for it labelled as logging out rather than as terminating a suspicious session. Without the marker, users revoke the session they are sitting in and file a bug.</span></div>
   <div class="lz-step"><span class="lz-k">Show the family id, never the token</span><span class="lz-t">Obvious, and worth stating</span><span class="lz-d">The revoke button posts a <code>hoId</code>. The token hash never leaves the server and the token itself exists only in the browser that holds it.</span></div>
 </div>
 
 <h3>Turning a user agent into something readable</h3>
-<pre><code>const MAU: [RegExp, string][] = [
+<pre><code>const PATTERNS: [RegExp, string][] = [
   [/Edg\\//,                     'Edge'],
   [/OPR\\//,                     'Opera'],
   [/Chrome\\//,                  'Chrome'],
@@ -912,10 +912,10 @@ const HE: [RegExp, string][] = [
   [/Linux/,                     'Linux'],
 ];
 
-export function docThietBi(ua?: string | null) {
+export function readDevice(ua?: string | null) {
   if (!ua) return 'Thiet bi khong ro';
-  const tr = MAU.find(([r]) =&gt; r.test(ua))?.[1] ?? 'Trinh duyet khac';
-  const he = HE.find(([r]) =&gt; r.test(ua))?.[1] ?? 'he dieu hanh khac';
+  const tr = PATTERNS.find(([r]) =&gt; r.test(ua))?.[1] ?? 'Trinh duyet khac';
+  const os = OS.find(([r]) =&gt; r.test(ua))?.[1] ?? 'he dieu hanh khac';
   return &#96;\${tr} tren \${he}&#96;;
 }</code></pre>
 <div class="pitfall">
@@ -931,16 +931,16 @@ export function docThietBi(ua?: string | null) {
 </div>
 
 <h3>The revoke button</h3>
-<pre><code>app.post('/tai-khoan/phien/:hoId/thu-hoi', requireAuth, canXacThucLai(30), async (req, res) =&gt; {
+<pre><code>app.post('/tai-khoan/session/:hoId/thu-hoi', requireAuth, needsReauth(30), async (req, res) =&gt; {
   const { count } = await prisma.refreshToken.updateMany({
     where: {
       hoId: req.params.hoId,
-      nguoiDungId: req.user.sub,          <span class="tok-comment">// ← cổng 3, Bài 0.2</span>
-      thuHoiLuc: null,
+      userId: req.user.sub,          <span class="tok-comment">// ← cổng 3, Bài 0.2</span>
+      revokedAt: null,
     },
-    data: { thuHoiLuc: new Date() },
+    data: { revokedAt: new Date() },
   });
-  if (count === 0) return res.status(404).json({ loi: 'Khong tim thay phien' });
+  if (count === 0) return res.status(404).json({ error: 'Khong tim thay session' });
 
   await redis.set(&#96;chan-ho:\${req.params.hoId}&#96;, '1', { EX: 900 });   <span class="tok-comment">// Bài 5.3</span>
   res.status(204).end();
@@ -952,7 +952,7 @@ HTTP/1.1 204 No Content
 # Access token cua no chet trong &lt;= 15 phut, hoac ngay lap tuc neu
 # ban them khoa chan-ho vao middleware.</div>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">The ownership check is in the <code>where</code></span><span class="lz-lnote">Lesson 0.2, again: <code>nguoiDungId: req.user.sub</code> inside the filter means one user cannot revoke another's session by posting a guessed <code>hoId</code>. A count of zero becomes a 404, which does not confirm whether the id exists.</span></div>
+  <div class="lz-layer"><span class="lz-lname">The ownership check is in the <code>where</code></span><span class="lz-lnote">Lesson 0.2, again: <code>userId: req.user.sub</code> inside the filter means one user cannot revoke another's session by posting a guessed <code>hoId</code>. A count of zero becomes a 404, which does not confirm whether the id exists.</span></div>
   <div class="lz-layer"><span class="lz-lname">Require recent authentication</span><span class="lz-lnote">Revoking sessions is a security action, so Lesson 3.3's step-up applies. An attacker who has a session should not be able to lock the real user out of their other devices without proving the password.</span></div>
   <div class="lz-layer"><span class="lz-lname">Offer "revoke all others" prominently</span><span class="lz-lnote">A user who sees something wrong wants one button, not five. Combine it with a forced password change in the same flow — that is the response you actually want them to take.</span></div>
   <div class="lz-layer"><span class="lz-lname">Log every revocation</span><span class="lz-lnote">Who revoked what, when, from where. When a user later asks "why was I logged out on my phone", the answer is in the log rather than in a guess, and Chapter 11's audit trail wants this event anyway.</span></div>
@@ -960,16 +960,16 @@ HTTP/1.1 204 No Content
 
 <h3>The email that does the most work</h3>
 <pre><code><span class="tok-comment">// Đăng nhập từ một thiết bị chưa từng thấy → gửi thư</span>
-const daTungThay = await prisma.refreshToken.findFirst({
-  where: { nguoiDungId: nd.id, trinhDuyet: dauVetThietBi(req) },
+const seenBefore = await prisma.refreshToken.findFirst({
+  where: { userId: u.id, browser: deviceFingerprint(req) },
 });
 
-if (!daTungThay) {
-  await guiEmail(nd.email, 'dang-nhap-thiet-bi-moi', {
-    thietBi: docThietBi(req.get('user-agent')),
-    viTri:   viTriGanDung(req.ip),
+if (!seenBefore) {
+  await sendEmail(u.email, 'dang-nhap-thiet-bi-moi', {
+    device: readDevice(req.get('user-agent')),
+    position:   approxLocation(req.ip),
     luc:     new Date(),
-    lienKet: 'https://vidu.com/tai-khoan/phien',
+    link: 'https://vidu.com/tai-khoan/session',
   });
 }</code></pre>
 <div class="callout ok">
@@ -993,24 +993,24 @@ if (!daTungThay) {
 <p class="lead">Bảng refresh token vốn đã lưu user agent, một địa chỉ IP và các dấu thời gian. Vẽ chúng ra thành một màn hình là biến một cơ chế nội bộ thành một TÍNH NĂNG bảo mật — và là tính năng có một tính chất mà không hệ giám sát nào của bạn có: NGƯỜI DÙNG biết phiên nào là của họ, còn bạn thì không.</p>
 
 <h3>Câu truy vấn, và hình dạng nó trả về</h3>
-<pre><code>export async function danhSachPhien(nguoiDungId: string, hoIdHienTai: string) {
+<pre><code>export async function sessionList(userId: string, currentFamilyId: string) {
   const rows = await prisma.refreshToken.findMany({
     where: {
-      nguoiDungId,
-      thuHoiLuc: null,
-      hetHan: { gt: new Date() },
-      dungLuc: null,                       <span class="tok-comment">// chỉ mắt xích ĐANG SỐNG của mỗi họ</span>
+      userId,
+      revokedAt: null,
+      expiresAt: { gt: new Date() },
+      usedAt: null,                       <span class="tok-comment">// chỉ mắt xích ĐANG SỐNG của mỗi họ</span>
     },
-    select: { hoId: true, taoLuc: true, trinhDuyet: true, ipTao: true },
-    orderBy: { taoLuc: 'desc' },
+    select: { hoId: true, createdAt: true, browser: true, createdIp: true },
+    orderBy: { createdAt: 'desc' },
   });
 
   return rows.map((r) =&gt; ({
     hoId: r.hoId,
-    laHienTai: r.hoId === hoIdHienTai,
-    thietBi: docThietBi(r.trinhDuyet),      <span class="tok-comment">// "Chrome trên Windows"</span>
-    viTri:   viTriGanDung(r.ipTao),         <span class="tok-comment">// "Hà Nội, Việt Nam"</span>
-    hoatDong: r.taoLuc,                     <span class="tok-comment">// lần refresh gần nhất</span>
+    isCurrent: r.hoId === currentFamilyId,
+    device: readDevice(r.browser),      <span class="tok-comment">// "Chrome trên Windows"</span>
+    position:   approxLocation(r.createdIp),         <span class="tok-comment">// "Hà Nội, Việt Nam"</span>
+    active: r.createdAt,                     <span class="tok-comment">// lần refresh gần nhất</span>
   }));
 }</code></pre>
 <div class="out">[
@@ -1025,14 +1025,14 @@ if (!daTungThay) {
 # Dong thu ba la thu ma nguoi dung nhan ra ngay va giam sat cua ban thi khong:
 # ho chua bao gio dung Linux, va chua bao gio o Duc.</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">MỘT hàng cho mỗi HỌ</span><span class="lz-t">Không phải cho mỗi token</span><span class="lz-d">Việc xoay vòng tạo ra một hàng mới mỗi mười lăm phút. Lọc theo <code>dungLuc: null</code> cho ra đúng mắt xích ĐANG SỐNG của từng họ — một hàng cho mỗi thiết bị đang đăng nhập, đúng thứ người dùng mong nhìn thấy.</span></div>
-  <div class="lz-step"><span class="lz-k">"Hoạt động lần cuối" là thời điểm TẠO của mắt xích mới nhất</span><span class="lz-t">Có sẵn nhờ xoay vòng</span><span class="lz-d">Vì token đang sống được tạo ra ở lần refresh gần nhất, nên <code>taoLuc</code> của nó CHÍNH LÀ thời điểm nhìn thấy lần cuối, chính xác tới mức tuổi thọ access token. Không thêm cột, không ghi cho mỗi request.</span></div>
+  <div class="lz-step"><span class="lz-k">MỘT hàng cho mỗi HỌ</span><span class="lz-t">Không phải cho mỗi token</span><span class="lz-d">Việc xoay vòng tạo ra một hàng mới mỗi mười lăm phút. Lọc theo <code>usedAt: null</code> cho ra đúng mắt xích ĐANG SỐNG của từng họ — một hàng cho mỗi thiết bị đang đăng nhập, đúng thứ người dùng mong nhìn thấy.</span></div>
+  <div class="lz-step"><span class="lz-k">"Hoạt động lần cuối" là thời điểm TẠO của mắt xích mới nhất</span><span class="lz-t">Có sẵn nhờ xoay vòng</span><span class="lz-d">Vì token đang sống được tạo ra ở lần refresh gần nhất, nên <code>createdAt</code> của nó CHÍNH LÀ thời điểm nhìn thấy lần cuối, chính xác tới mức tuổi thọ access token. Không thêm cột, không ghi cho mỗi request.</span></div>
   <div class="lz-step"><span class="lz-k">Đánh dấu cái HIỆN TẠI</span><span class="lz-t">Và đừng để họ lỡ tay thu hồi nó</span><span class="lz-d">Ghi "Thiết bị này" cạnh dòng của họ hiện tại, và nút thu hồi cho nó thì gọi là ĐĂNG XUẤT chứ không phải kết thúc một phiên khả nghi. Không có cái dấu đó, người dùng sẽ thu hồi chính cái phiên họ đang ngồi rồi báo lỗi.</span></div>
   <div class="lz-step"><span class="lz-k">Hiện mã HỌ, ĐỪNG BAO GIỜ hiện token</span><span class="lz-t">Hiển nhiên, và vẫn đáng nói ra</span><span class="lz-d">Nút thu hồi gửi lên một <code>hoId</code>. Chuỗi băm của token không bao giờ rời khỏi máy chủ, còn chính cái token thì chỉ tồn tại trong cái trình duyệt đang giữ nó.</span></div>
 </div>
 
 <h3>Biến một user agent thành thứ đọc được</h3>
-<pre><code>const MAU: [RegExp, string][] = [
+<pre><code>const PATTERNS: [RegExp, string][] = [
   [/Edg\\//,                     'Edge'],
   [/OPR\\//,                     'Opera'],
   [/Chrome\\//,                  'Chrome'],
@@ -1047,10 +1047,10 @@ const HE: [RegExp, string][] = [
   [/Linux/,                     'Linux'],
 ];
 
-export function docThietBi(ua?: string | null) {
+export function readDevice(ua?: string | null) {
   if (!ua) return 'Thiet bi khong ro';
-  const tr = MAU.find(([r]) =&gt; r.test(ua))?.[1] ?? 'Trinh duyet khac';
-  const he = HE.find(([r]) =&gt; r.test(ua))?.[1] ?? 'he dieu hanh khac';
+  const tr = PATTERNS.find(([r]) =&gt; r.test(ua))?.[1] ?? 'Trinh duyet khac';
+  const os = OS.find(([r]) =&gt; r.test(ua))?.[1] ?? 'he dieu hanh khac';
   return &#96;\${tr} tren \${he}&#96;;
 }</code></pre>
 <div class="pitfall">
@@ -1066,16 +1066,16 @@ export function docThietBi(ua?: string | null) {
 </div>
 
 <h3>Cái nút thu hồi</h3>
-<pre><code>app.post('/tai-khoan/phien/:hoId/thu-hoi', requireAuth, canXacThucLai(30), async (req, res) =&gt; {
+<pre><code>app.post('/tai-khoan/session/:hoId/thu-hoi', requireAuth, needsReauth(30), async (req, res) =&gt; {
   const { count } = await prisma.refreshToken.updateMany({
     where: {
       hoId: req.params.hoId,
-      nguoiDungId: req.user.sub,          <span class="tok-comment">// ← cổng 3, Bài 0.2</span>
-      thuHoiLuc: null,
+      userId: req.user.sub,          <span class="tok-comment">// ← cổng 3, Bài 0.2</span>
+      revokedAt: null,
     },
-    data: { thuHoiLuc: new Date() },
+    data: { revokedAt: new Date() },
   });
-  if (count === 0) return res.status(404).json({ loi: 'Khong tim thay phien' });
+  if (count === 0) return res.status(404).json({ error: 'Khong tim thay session' });
 
   await redis.set(&#96;chan-ho:\${req.params.hoId}&#96;, '1', { EX: 900 });   <span class="tok-comment">// Bài 5.3</span>
   res.status(204).end();
@@ -1087,7 +1087,7 @@ HTTP/1.1 204 No Content
 # Access token cua no chet trong &lt;= 15 phut, hoac ngay lap tuc neu
 # ban them khoa chan-ho vao middleware.</div>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Phép kiểm quyền sở hữu nằm TRONG <code>where</code></span><span class="lz-lnote">Lại là Bài 0.2: <code>nguoiDungId: req.user.sub</code> nằm trong bộ lọc nghĩa là một người dùng KHÔNG thu hồi được phiên của người khác bằng cách gửi lên một <code>hoId</code> đoán bừa. Số đếm bằng không thành 404, thứ không xác nhận cái id đó có tồn tại hay không.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Phép kiểm quyền sở hữu nằm TRONG <code>where</code></span><span class="lz-lnote">Lại là Bài 0.2: <code>userId: req.user.sub</code> nằm trong bộ lọc nghĩa là một người dùng KHÔNG thu hồi được phiên của người khác bằng cách gửi lên một <code>hoId</code> đoán bừa. Số đếm bằng không thành 404, thứ không xác nhận cái id đó có tồn tại hay không.</span></div>
   <div class="lz-layer"><span class="lz-lname">Hãy ĐÒI xác thực gần đây</span><span class="lz-lnote">Thu hồi phiên là một hành động bảo mật, nên việc xác thực theo bậc của Bài 3.3 áp dụng. Một kẻ tấn công đang cầm một phiên KHÔNG được phép khoá người dùng thật ra khỏi các thiết bị khác mà không chứng minh mật khẩu.</span></div>
   <div class="lz-layer"><span class="lz-lname">Hãy để "thu hồi mọi cái khác" thật NỔI BẬT</span><span class="lz-lnote">Một người dùng thấy có gì sai thì muốn MỘT cái nút, không phải năm cái. Hãy gộp nó với một lần bắt buộc đổi mật khẩu trong cùng luồng — đó mới là phản ứng bạn THẬT SỰ muốn họ thực hiện.</span></div>
   <div class="lz-layer"><span class="lz-lname">Ghi log MỌI lần thu hồi</span><span class="lz-lnote">Ai thu hồi cái gì, lúc nào, từ đâu. Khi một người dùng sau này hỏi "vì sao điện thoại tôi bị đăng xuất", câu trả lời nằm trong nhật ký chứ không nằm trong phỏng đoán, và dù sao vết kiểm toán của Chương 11 cũng cần sự kiện này.</span></div>
@@ -1095,16 +1095,16 @@ HTTP/1.1 204 No Content
 
 <h3>Cái email làm được nhiều việc nhất</h3>
 <pre><code><span class="tok-comment">// Đăng nhập từ một thiết bị chưa từng thấy → gửi thư</span>
-const daTungThay = await prisma.refreshToken.findFirst({
-  where: { nguoiDungId: nd.id, trinhDuyet: dauVetThietBi(req) },
+const seenBefore = await prisma.refreshToken.findFirst({
+  where: { userId: u.id, browser: deviceFingerprint(req) },
 });
 
-if (!daTungThay) {
-  await guiEmail(nd.email, 'dang-nhap-thiet-bi-moi', {
-    thietBi: docThietBi(req.get('user-agent')),
-    viTri:   viTriGanDung(req.ip),
+if (!seenBefore) {
+  await sendEmail(u.email, 'dang-nhap-thiet-bi-moi', {
+    device: readDevice(req.get('user-agent')),
+    position:   approxLocation(req.ip),
     luc:     new Date(),
-    lienKet: 'https://vidu.com/tai-khoan/phien',
+    link: 'https://vidu.com/tai-khoan/session',
   });
 }</code></pre>
 <div class="callout ok">
@@ -1160,18 +1160,18 @@ Promise.all([
 </div>
 
 <h3>Fix 1 — one in-flight refresh per tab</h3>
-<pre><code>let dangRefresh: Promise&lt;string&gt; | null = null;
+<pre><code>let refreshing: Promise&lt;string&gt; | null = null;
 
-async function layAccessTokenMoi(): Promise&lt;string&gt; {
-  if (dangRefresh) return dangRefresh;              <span class="tok-comment">// ← mọi người cùng chờ MỘT cái</span>
+async function getNewAccessToken(): Promise&lt;string&gt; {
+  if (refreshing) return refreshing;              <span class="tok-comment">// ← mọi người cùng chờ MỘT cái</span>
 
-  dangRefresh = (async () =&gt; {
+  refreshing = (async () =&gt; {
     const r = await fetch('/auth/refresh', { method: 'POST', credentials: 'include' });
-    if (!r.ok) { chuyenToiDangNhap(); throw new Error('refresh that bai'); }
+    if (!r.ok) { redirectToSignIn(); throw new Error('refresh that bai'); }
     return (await r.json()).accessToken;
-  })().finally(() =&gt; { dangRefresh = null; });
+  })().finally(() =&gt; { refreshing = null; });
 
-  return dangRefresh;
+  return refreshing;
 }</code></pre>
 <div class="out">09:44:20.130  POST /auth/refresh   RT1 → RT2      ✅  (mot lan duy nhat)
 09:44:20.152  Ca muoi request thu lai voi access token moi. Xong.</div>
@@ -1181,13 +1181,13 @@ async function layAccessTokenMoi(): Promise&lt;string&gt; {
 
 <h3>Fix 2 — coordinate across tabs</h3>
 <pre><code><span class="tok-comment">// Web Locks: một cái khoá dùng chung cho mọi tab CÙNG origin</span>
-async function layAccessTokenMoi(): Promise&lt;string&gt; {
+async function getNewAccessToken(): Promise&lt;string&gt; {
   return navigator.locks.request('lam-moi-token', async () =&gt; {
     <span class="tok-comment">// Tab khác có thể vừa làm mới xong trong lúc ta đợi khoá.</span>
-    if (conHan(accessToken)) return accessToken!;
+    if (stillValid(accessToken)) return accessToken!;
 
     const r = await fetch('/auth/refresh', { method: 'POST', credentials: 'include' });
-    if (!r.ok) { chuyenToiDangNhap(); throw new Error('refresh that bai'); }
+    if (!r.ok) { redirectToSignIn(); throw new Error('refresh that bai'); }
 
     accessToken = (await r.json()).accessToken;
     return accessToken;
@@ -1202,15 +1202,15 @@ async function layAccessTokenMoi(): Promise&lt;string&gt; {
 
 <h3>Fix 3 — refresh before the 401, not after</h3>
 <pre><code><span class="tok-comment">// Access token 15 phút → làm mới ở phút thứ 12. Không bao giờ thấy 401.</span>
-let hetHanLuc = 0;
+let expiresAt = 0;
 
-function datLich(hetHanSau: number) {
-  hetHanLuc = Date.now() + hetHanSau * 1000;
-  setTimeout(() =&gt; { layAccessTokenMoi().catch(() =&gt; {}); }, hetHanSau * 0.8 * 1000);
+function schedule(expiresIn: number) {
+  expiresAt = Date.now() + expiresIn * 1000;
+  setTimeout(() =&gt; { getNewAccessToken().catch(() =&gt; {}); }, expiresIn * 0.8 * 1000);
 }
 
-async function goi(url: string, opt: RequestInit = {}) {
-  if (Date.now() &gt; hetHanLuc - 30_000) await layAccessTokenMoi();   <span class="tok-comment">// hàng rào 30 giây</span>
+async function call(url: string, opt: RequestInit = {}) {
+  if (Date.now() &gt; expiresAt - 30_000) await getNewAccessToken();   <span class="tok-comment">// hàng rào 30 giây</span>
   <span class="tok-comment">// …gửi request; 401 giờ là ngoại lệ, không phải chuyện thường ngày</span>
 }</code></pre>
 <div class="lz-stack">
@@ -1222,26 +1222,26 @@ async function goi(url: string, opt: RequestInit = {}) {
 
 <h3>Fix 4 — the server's grace window</h3>
 <pre><code><span class="tok-comment">// Sau khi xoay vòng, nhớ lại "token này đã đổi ra cái gì" trong 30 giây</span>
-export async function xoayRefreshToken(cu: RefreshToken, req: Request) {
-  const tokenMoi = randomBytes(32).toString('base64url');
+export async function rotateRefreshToken(cu: RefreshToken, req: Request) {
+  const newToken = randomBytes(32).toString('base64url');
   await prisma.$transaction([ <span class="tok-comment">/* …như Bài 5.2… */</span> ]);
 
-  await redis.set(&#96;ke-nhiem:\${cu.tokenBam}&#96;, tokenMoi, { EX: 30 });
-  return tokenMoi;
+  await redis.set(&#96;ke-nhiem:\${cu.tokenHash}&#96;, newToken, { EX: 30 });
+  return newToken;
 }</code></pre>
 <pre><code><span class="tok-comment">// Trong /auth/refresh, TRƯỚC khi kết luận là tái dùng</span>
-if (cu.dungLuc) {
-  const keNhiem = await redis.get(&#96;ke-nhiem:\${bam}&#96;);
+if (cu.usedAt) {
+  const successor = await redis.get(&#96;ke-nhiem:\${bam}&#96;);
 
-  if (keNhiem) {
+  if (successor) {
     <span class="tok-comment">// Đây là một cuộc ĐUA, không phải một cú trộm: trả về ĐÚNG cái đã cấp.</span>
-    datCookieRefresh(res, keNhiem);
-    const nd = await prisma.nguoiDung.findUniqueOrThrow({ where: { id: cu.nguoiDungId } });
-    return res.json({ accessToken: await kyAccessToken(nd), hetHanSau: 900 });
+    setRefreshCookie(res, successor);
+    const u = await prisma.user.findUniqueOrThrow({ where: { id: cu.userId } });
+    return res.json({ accessToken: await signAccessToken(u), expiresIn: 900 });
   }
 
   <span class="tok-comment">// Quá 30 giây → đây là tái dùng THẬT. Bài 5.2 xử lý tiếp.</span>
-  await thuHoiCaHo(cu.hoId);
+  await revokeFamily(cu.hoId);
   <span class="tok-comment">// …</span>
 }</code></pre>
 <div class="out">09:44:20.130  RT1 → RT2, nho lai ke-nhiem:RT1 = RT2 (TTL 30s)
@@ -1301,18 +1301,18 @@ Promise.all([
 </div>
 
 <h3>Vá 1 — mỗi tab chỉ một lời gọi refresh đang bay</h3>
-<pre><code>let dangRefresh: Promise&lt;string&gt; | null = null;
+<pre><code>let refreshing: Promise&lt;string&gt; | null = null;
 
-async function layAccessTokenMoi(): Promise&lt;string&gt; {
-  if (dangRefresh) return dangRefresh;              <span class="tok-comment">// ← mọi người cùng chờ MỘT cái</span>
+async function getNewAccessToken(): Promise&lt;string&gt; {
+  if (refreshing) return refreshing;              <span class="tok-comment">// ← mọi người cùng chờ MỘT cái</span>
 
-  dangRefresh = (async () =&gt; {
+  refreshing = (async () =&gt; {
     const r = await fetch('/auth/refresh', { method: 'POST', credentials: 'include' });
-    if (!r.ok) { chuyenToiDangNhap(); throw new Error('refresh that bai'); }
+    if (!r.ok) { redirectToSignIn(); throw new Error('refresh that bai'); }
     return (await r.json()).accessToken;
-  })().finally(() =&gt; { dangRefresh = null; });
+  })().finally(() =&gt; { refreshing = null; });
 
-  return dangRefresh;
+  return refreshing;
 }</code></pre>
 <div class="out">09:44:20.130  POST /auth/refresh   RT1 → RT2      ✅  (mot lan duy nhat)
 09:44:20.152  Ca muoi request thu lai voi access token moi. Xong.</div>
@@ -1322,13 +1322,13 @@ async function layAccessTokenMoi(): Promise&lt;string&gt; {
 
 <h3>Vá 2 — bắt các tab nói chuyện với nhau</h3>
 <pre><code><span class="tok-comment">// Web Locks: một cái khoá dùng chung cho mọi tab CÙNG origin</span>
-async function layAccessTokenMoi(): Promise&lt;string&gt; {
+async function getNewAccessToken(): Promise&lt;string&gt; {
   return navigator.locks.request('lam-moi-token', async () =&gt; {
     <span class="tok-comment">// Tab khác có thể vừa làm mới xong trong lúc ta đợi khoá.</span>
-    if (conHan(accessToken)) return accessToken!;
+    if (stillValid(accessToken)) return accessToken!;
 
     const r = await fetch('/auth/refresh', { method: 'POST', credentials: 'include' });
-    if (!r.ok) { chuyenToiDangNhap(); throw new Error('refresh that bai'); }
+    if (!r.ok) { redirectToSignIn(); throw new Error('refresh that bai'); }
 
     accessToken = (await r.json()).accessToken;
     return accessToken;
@@ -1343,15 +1343,15 @@ async function layAccessTokenMoi(): Promise&lt;string&gt; {
 
 <h3>Vá 3 — làm mới TRƯỚC cái 401, không phải sau</h3>
 <pre><code><span class="tok-comment">// Access token 15 phút → làm mới ở phút thứ 12. Không bao giờ thấy 401.</span>
-let hetHanLuc = 0;
+let expiresAt = 0;
 
-function datLich(hetHanSau: number) {
-  hetHanLuc = Date.now() + hetHanSau * 1000;
-  setTimeout(() =&gt; { layAccessTokenMoi().catch(() =&gt; {}); }, hetHanSau * 0.8 * 1000);
+function schedule(expiresIn: number) {
+  expiresAt = Date.now() + expiresIn * 1000;
+  setTimeout(() =&gt; { getNewAccessToken().catch(() =&gt; {}); }, expiresIn * 0.8 * 1000);
 }
 
-async function goi(url: string, opt: RequestInit = {}) {
-  if (Date.now() &gt; hetHanLuc - 30_000) await layAccessTokenMoi();   <span class="tok-comment">// hàng rào 30 giây</span>
+async function call(url: string, opt: RequestInit = {}) {
+  if (Date.now() &gt; expiresAt - 30_000) await getNewAccessToken();   <span class="tok-comment">// hàng rào 30 giây</span>
   <span class="tok-comment">// …gửi request; 401 giờ là ngoại lệ, không phải chuyện thường ngày</span>
 }</code></pre>
 <div class="lz-stack">
@@ -1363,26 +1363,26 @@ async function goi(url: string, opt: RequestInit = {}) {
 
 <h3>Vá 4 — cửa sổ ân hạn phía máy chủ</h3>
 <pre><code><span class="tok-comment">// Sau khi xoay vòng, nhớ lại "token này đã đổi ra cái gì" trong 30 giây</span>
-export async function xoayRefreshToken(cu: RefreshToken, req: Request) {
-  const tokenMoi = randomBytes(32).toString('base64url');
+export async function rotateRefreshToken(cu: RefreshToken, req: Request) {
+  const newToken = randomBytes(32).toString('base64url');
   await prisma.$transaction([ <span class="tok-comment">/* …như Bài 5.2… */</span> ]);
 
-  await redis.set(&#96;ke-nhiem:\${cu.tokenBam}&#96;, tokenMoi, { EX: 30 });
-  return tokenMoi;
+  await redis.set(&#96;ke-nhiem:\${cu.tokenHash}&#96;, newToken, { EX: 30 });
+  return newToken;
 }</code></pre>
 <pre><code><span class="tok-comment">// Trong /auth/refresh, TRƯỚC khi kết luận là tái dùng</span>
-if (cu.dungLuc) {
-  const keNhiem = await redis.get(&#96;ke-nhiem:\${bam}&#96;);
+if (cu.usedAt) {
+  const successor = await redis.get(&#96;ke-nhiem:\${bam}&#96;);
 
-  if (keNhiem) {
+  if (successor) {
     <span class="tok-comment">// Đây là một cuộc ĐUA, không phải một cú trộm: trả về ĐÚNG cái đã cấp.</span>
-    datCookieRefresh(res, keNhiem);
-    const nd = await prisma.nguoiDung.findUniqueOrThrow({ where: { id: cu.nguoiDungId } });
-    return res.json({ accessToken: await kyAccessToken(nd), hetHanSau: 900 });
+    setRefreshCookie(res, successor);
+    const u = await prisma.user.findUniqueOrThrow({ where: { id: cu.userId } });
+    return res.json({ accessToken: await signAccessToken(u), expiresIn: 900 });
   }
 
   <span class="tok-comment">// Quá 30 giây → đây là tái dùng THẬT. Bài 5.2 xử lý tiếp.</span>
-  await thuHoiCaHo(cu.hoId);
+  await revokeFamily(cu.hoId);
   <span class="tok-comment">// …</span>
 }</code></pre>
 <div class="out">09:44:20.130  RT1 → RT2, nho lai ke-nhiem:RT1 = RT2 (TTL 30s)

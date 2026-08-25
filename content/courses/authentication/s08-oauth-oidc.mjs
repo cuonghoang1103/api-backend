@@ -59,7 +59,7 @@ export default {
 <h3>What OAuth actually replaced</h3>
 <pre><code><span class="tok-comment">// Trước OAuth, việc "cho ứng dụng này đọc danh bạ của tôi" trông như thế này:</span>
 POST /nhap-danh-ba
-{ "email": "cuong@gmail.com", "matKhau": "mat-khau-gmail-that" }
+{ "email": "cuong@gmail.com", "password": "mat-khau-gmail-that" }
 
 <span class="tok-comment">// Bên thứ ba giữ mật khẩu Gmail của bạn. Toàn quyền. Vĩnh viễn.</span>
 <span class="tok-comment">// Muốn thu hồi ⇒ đổi mật khẩu ⇒ mọi ứng dụng khác cũng chết theo.</span></code></pre>
@@ -145,7 +145,7 @@ id_token_signing_alg_values       ["RS256"]
 <h3>OAuth thật ra đã THAY THẾ cái gì</h3>
 <pre><code><span class="tok-comment">// Trước OAuth, việc "cho ứng dụng này đọc danh bạ của tôi" trông như thế này:</span>
 POST /nhap-danh-ba
-{ "email": "cuong@gmail.com", "matKhau": "mat-khau-gmail-that" }
+{ "email": "cuong@gmail.com", "password": "mat-khau-gmail-that" }
 
 <span class="tok-comment">// Bên thứ ba giữ mật khẩu Gmail của bạn. Toàn quyền. Vĩnh viễn.</span>
 <span class="tok-comment">// Muốn thu hồi ⇒ đổi mật khẩu ⇒ mọi ứng dụng khác cũng chết theo.</span></code></pre>
@@ -223,7 +223,7 @@ id_token_signing_alg_values       ["RS256"]
 <pre><code>const verifier  = randomBytes(32).toString('base64url');                    <span class="tok-comment">// bí mật, GIỮ LẠI</span>
 const challenge = createHash('sha256').update(verifier).digest('base64url'); <span class="tok-comment">// công khai, GỬI ĐI</span>
 
-await redis.set(&#96;oauth:\${req.phienId}&#96;, JSON.stringify({ verifier, state, nonce }), { EX: 600 });</code></pre>
+await redis.set(&#96;oauth:\${req.sessionId}&#96;, JSON.stringify({ verifier, state, nonce }), { EX: 600 });</code></pre>
 <div class="out">code_verifier         : Vc0FZ5zeusRqMY_oUBI1_SoYEk5k5vbJ7bQRzfCnp50
   do dai              : 43 ky tu (chuan doi 43-128)
 code_challenge        : coi0bg884uyP36FyBO_ZqDG1bbN8aqWYsYPsv0T-2jQ
@@ -273,7 +273,7 @@ nonce : ijJ9VAWAMw37WJxPeMV4Fw  (chong phat lai ID token)</div>
     redirect_uri: REDIRECT_URI,          <span class="tok-comment">// PHẢI giống hệt bước 2</span>
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,        <span class="tok-comment">// backend mới có; SPA thuần thì không</span>
-    code_verifier: luu.verifier,         <span class="tok-comment">// ← bản gốc, chưa băm</span>
+    code_verifier: saved.verifier,         <span class="tok-comment">// ← bản gốc, chưa băm</span>
   }),
 });
 const { access_token, id_token, refresh_token, expires_in } = await r.json();</code></pre>
@@ -333,7 +333,7 @@ const { access_token, id_token, refresh_token, expires_in } = await r.json();</c
 <pre><code>const verifier  = randomBytes(32).toString('base64url');                    <span class="tok-comment">// bí mật, GIỮ LẠI</span>
 const challenge = createHash('sha256').update(verifier).digest('base64url'); <span class="tok-comment">// công khai, GỬI ĐI</span>
 
-await redis.set(&#96;oauth:\${req.phienId}&#96;, JSON.stringify({ verifier, state, nonce }), { EX: 600 });</code></pre>
+await redis.set(&#96;oauth:\${req.sessionId}&#96;, JSON.stringify({ verifier, state, nonce }), { EX: 600 });</code></pre>
 <div class="out">code_verifier         : Vc0FZ5zeusRqMY_oUBI1_SoYEk5k5vbJ7bQRzfCnp50
   do dai              : 43 ky tu (chuan doi 43-128)
 code_challenge        : coi0bg884uyP36FyBO_ZqDG1bbN8aqWYsYPsv0T-2jQ
@@ -383,7 +383,7 @@ nonce : ijJ9VAWAMw37WJxPeMV4Fw  (chong phat lai ID token)</div>
     redirect_uri: REDIRECT_URI,          <span class="tok-comment">// PHẢI giống hệt bước 2</span>
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,        <span class="tok-comment">// backend mới có; SPA thuần thì không</span>
-    code_verifier: luu.verifier,         <span class="tok-comment">// ← bản gốc, chưa băm</span>
+    code_verifier: saved.verifier,         <span class="tok-comment">// ← bản gốc, chưa băm</span>
   }),
 });
 const { access_token, id_token, refresh_token, expires_in } = await r.json();</code></pre>
@@ -494,8 +494,8 @@ GET /oauth/quay-ve?code=…&amp;state=…
 → 302 https://ke-tan-cong.com                          <span class="tok-comment">// mã đi theo trong Referer</span>
 
 <span class="tok-comment">// Vá: mọi đích chuyển hướng phải nằm trong DANH SÁCH TRẮNG đường dẫn nội bộ.</span>
-const DICH_HOP_LE = new Set(['/bang-dieu-khien', '/ho-so', '/']);
-const dich = DICH_HOP_LE.has(luu.dich) ? luu.dich : '/';</code></pre>
+const VALID_SERVICES = new Set(['/bang-dieu-khien', '/ho-so', '/']);
+const service = VALID_SERVICES.has(saved.service) ? saved.service : '/';</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">An open redirect anywhere on your domain is an OAuth vulnerability</span><span class="lz-lnote">The registered URI is honoured, your own server then forwards the browser outward, and the code travels in the <code>Referer</code>. Audit every <code>next</code>, <code>return_to</code> and <code>continue</code> parameter in the product, not only the ones near the login code.</span></div>
   <div class="lz-layer"><span class="lz-lname">Register a separate client per environment</span><span class="lz-lnote">Development, staging and production each get their own client id and their own single redirect URI. Adding <code>http://localhost:3000/cb</code> to the production client means anybody running a local server on that port can complete a production flow.</span></div>
@@ -577,8 +577,8 @@ GET /oauth/quay-ve?code=…&amp;state=…
 → 302 https://ke-tan-cong.com                          <span class="tok-comment">// mã đi theo trong Referer</span>
 
 <span class="tok-comment">// Vá: mọi đích chuyển hướng phải nằm trong DANH SÁCH TRẮNG đường dẫn nội bộ.</span>
-const DICH_HOP_LE = new Set(['/bang-dieu-khien', '/ho-so', '/']);
-const dich = DICH_HOP_LE.has(luu.dich) ? luu.dich : '/';</code></pre>
+const VALID_SERVICES = new Set(['/bang-dieu-khien', '/ho-so', '/']);
+const service = VALID_SERVICES.has(saved.service) ? saved.service : '/';</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Một chuyển hướng mở BẤT KỲ ĐÂU trên tên miền của bạn là một lỗ hổng OAuth</span><span class="lz-lnote">Cái URI đã đăng ký được tôn trọng, rồi chính máy chủ của bạn đẩy trình duyệt ra ngoài, và cái mã đi theo trong <code>Referer</code>. Hãy soát MỌI tham số <code>next</code>, <code>return_to</code> và <code>continue</code> trong cả sản phẩm, không chỉ những cái nằm gần đoạn mã đăng nhập.</span></div>
   <div class="lz-layer"><span class="lz-lname">Đăng ký một client RIÊNG cho mỗi môi trường</span><span class="lz-lnote">Phát triển, thử nghiệm và production, mỗi cái một client id riêng và một redirect URI duy nhất riêng. Thêm <code>http://localhost:3000/cb</code> vào client production nghĩa là bất kỳ ai chạy một máy chủ cục bộ trên cổng đó đều hoàn tất được một luồng production.</span></div>
@@ -644,15 +644,15 @@ chu ky bi doi mot byte  TU CHOI  &lt;- chu ky SAI
 # Bay token RS256 THAT, ky bang mot khoa sinh tai cho, kiem bang bay phep
 # kiem duoi day. Moi dong bi tu choi vi mot ly do KHAC nhau — bo bat mot
 # phep kiem la mot dong trong so do im lang chuyen thanh CHAP NHAN.</div>
-<pre><code>const kq = await jwtVerify(idToken, JWKS, {                <span class="tok-comment">// jose, JWKS lấy từ discovery</span>
+<pre><code>const result = await jwtVerify(idToken, JWKS, {                <span class="tok-comment">// jose, JWKS lấy từ discovery</span>
   issuer:   'https://accounts.google.com',                 <span class="tok-comment">// 2. iss — KHỚP CHÍNH XÁC</span>
   audience: CLIENT_ID,                                     <span class="tok-comment">// 3. aud — client id CỦA BẠN</span>
   algorithms: ['RS256'],                                   <span class="tok-comment">// 1. thuật toán GHIM — Bài 4.2</span>
   clockTolerance: 60,                                      <span class="tok-comment">// 4. exp/iat, cho lệch 60 giây</span>
 });
-const p = kq.payload;
+const p = result.payload;
 
-if (p.nonce !== luu.nonce)          throw new Error('nonce lech');       <span class="tok-comment">// 5</span>
+if (p.nonce !== saved.nonce)          throw new Error('nonce lech');       <span class="tok-comment">// 5</span>
 if (p.azp &amp;&amp; p.azp !== CLIENT_ID)   throw new Error('azp lech');         <span class="tok-comment">// 6</span>
 if (p.email &amp;&amp; p.email_verified !== true) throw new Error('email chua xac minh'); <span class="tok-comment">// 7</span></code></pre>
 <div class="kv-grid">
@@ -664,8 +664,8 @@ if (p.email &amp;&amp; p.email_verified !== true) throw new Error('email chua xa
 
 <h3>The one boolean, and the takeover behind it</h3>
 <pre><code><span class="tok-comment">// SAI — và đây là con lỗi đã hạ được nhiều sản phẩm lớn:</span>
-const nd = await prisma.nguoiDung.findUnique({ where: { emailChuanHoa: chuanHoa(p.email) } });
-if (nd) return dangNhap(nd);          <span class="tok-comment">// ← nối tài khoản CHỈ bằng email</span>
+const u = await prisma.user.findUnique({ where: { normalizedEmail: normalize(p.email) } });
+if (u) return signIn(u);          <span class="tok-comment">// ← nối tài khoản CHỈ bằng email</span>
 
 <span class="tok-comment">// Kẻ tấn công: mở tài khoản ở một nhà cung cấp OIDC dễ dãi,</span>
 <span class="tok-comment">// đặt email hồ sơ thành victim@congty.com (không ai xác minh),</span>
@@ -675,15 +675,15 @@ if (nd) return dangNhap(nd);          <span class="tok-comment">// ← nối tà
 <p><strong>Trap — an email address inside an ID token is a claim, not a fact, until <code>email_verified</code> says otherwise.</strong> Providers differ enormously: Google verifies, GitHub distinguishes verified from unverified addresses, and a long tail of smaller providers let a user type anything into a profile field and hand it to you unchallenged. If your login matches accounts on the email alone, anyone who can register at the sloppiest provider you accept can sign in as any of your users. Two rules close it: refuse any token whose <code>email_verified</code> is not exactly <code>true</code>, and treat "which providers do we accept" as a security decision made deliberately rather than a list that grows whenever someone asks.</p>
 </div>
 <pre><code><span class="tok-comment">// ĐÚNG — khoá là (nhà cung cấp, sub), còn email chỉ để hiển thị.</span>
-model LienKetNhaCungCap {
-  id            String @id @default(cuid())
-  nhaCungCap    String                         <span class="tok-comment">// 'google' | 'github' | …</span>
-  subNhaCungCap String                         <span class="tok-comment">// claim 'sub' — ỔN ĐỊNH, KHÔNG ĐỔI</span>
-  nguoiDungId   String
-  emailLucNoi   String?                        <span class="tok-comment">// ảnh chụp, chỉ để tra cứu về sau</span>
+model ProviderLink {
+  id          String  @id @default(cuid())
+  provider    String  <span class="tok-comment">// 'google' | 'github' | …</span>
+  providerSub String  <span class="tok-comment">// claim 'sub' — ỔN ĐỊNH, KHÔNG ĐỔI</span>
+  userId      String
+  emailAtTime String? <span class="tok-comment">// ảnh chụp, chỉ để tra cứu về sau</span>
 
-  nguoiDung     NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
-  @@unique([nhaCungCap, subNhaCungCap])        <span class="tok-comment">// ← danh tính THẬT sự nằm ở đây</span>
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerSub])        <span class="tok-comment">// ← danh tính THẬT sự nằm ở đây</span>
   @@map("lien_ket_nha_cung_cap")
 }</code></pre>
 <div class="lz-stack">
@@ -750,15 +750,15 @@ chu ky bi doi mot byte  TU CHOI  &lt;- chu ky SAI
 # Bay token RS256 THAT, ky bang mot khoa sinh tai cho, kiem bang bay phep
 # kiem duoi day. Moi dong bi tu choi vi mot ly do KHAC nhau — bo bat mot
 # phep kiem la mot dong trong so do im lang chuyen thanh CHAP NHAN.</div>
-<pre><code>const kq = await jwtVerify(idToken, JWKS, {                <span class="tok-comment">// jose, JWKS lấy từ discovery</span>
+<pre><code>const result = await jwtVerify(idToken, JWKS, {                <span class="tok-comment">// jose, JWKS lấy từ discovery</span>
   issuer:   'https://accounts.google.com',                 <span class="tok-comment">// 2. iss — KHỚP CHÍNH XÁC</span>
   audience: CLIENT_ID,                                     <span class="tok-comment">// 3. aud — client id CỦA BẠN</span>
   algorithms: ['RS256'],                                   <span class="tok-comment">// 1. thuật toán GHIM — Bài 4.2</span>
   clockTolerance: 60,                                      <span class="tok-comment">// 4. exp/iat, cho lệch 60 giây</span>
 });
-const p = kq.payload;
+const p = result.payload;
 
-if (p.nonce !== luu.nonce)          throw new Error('nonce lech');       <span class="tok-comment">// 5</span>
+if (p.nonce !== saved.nonce)          throw new Error('nonce lech');       <span class="tok-comment">// 5</span>
 if (p.azp &amp;&amp; p.azp !== CLIENT_ID)   throw new Error('azp lech');         <span class="tok-comment">// 6</span>
 if (p.email &amp;&amp; p.email_verified !== true) throw new Error('email chua xac minh'); <span class="tok-comment">// 7</span></code></pre>
 <div class="kv-grid">
@@ -770,8 +770,8 @@ if (p.email &amp;&amp; p.email_verified !== true) throw new Error('email chua xa
 
 <h3>Một giá trị boolean, và cú chiếm tài khoản đứng sau nó</h3>
 <pre><code><span class="tok-comment">// SAI — và đây là con lỗi đã hạ được nhiều sản phẩm lớn:</span>
-const nd = await prisma.nguoiDung.findUnique({ where: { emailChuanHoa: chuanHoa(p.email) } });
-if (nd) return dangNhap(nd);          <span class="tok-comment">// ← nối tài khoản CHỈ bằng email</span>
+const u = await prisma.user.findUnique({ where: { normalizedEmail: normalize(p.email) } });
+if (u) return signIn(u);          <span class="tok-comment">// ← nối tài khoản CHỈ bằng email</span>
 
 <span class="tok-comment">// Kẻ tấn công: mở tài khoản ở một nhà cung cấp OIDC dễ dãi,</span>
 <span class="tok-comment">// đặt email hồ sơ thành victim@congty.com (không ai xác minh),</span>
@@ -781,15 +781,15 @@ if (nd) return dangNhap(nd);          <span class="tok-comment">// ← nối tà
 <p><strong>Bẫy — một địa chỉ email nằm trong ID token là một LỜI KHAI, không phải một sự thật, cho tới khi <code>email_verified</code> nói khác đi.</strong> Các nhà cung cấp khác nhau một trời một vực: Google có xác minh, GitHub phân biệt địa chỉ đã xác minh với chưa xác minh, còn một cái đuôi dài các nhà cung cấp nhỏ thì cho người dùng gõ bất cứ thứ gì vào một ô hồ sơ rồi giao thẳng cho bạn mà chẳng hỏi han gì. Nếu trang đăng nhập của bạn nối tài khoản CHỈ bằng email thì bất kỳ ai đăng ký được ở cái nhà cung cấp cẩu thả nhất mà bạn chấp nhận đều đăng nhập được với tư cách BẤT KỲ người dùng nào của bạn. Hai luật bịt nó lại: từ chối mọi token có <code>email_verified</code> không đúng bằng <code>true</code>, và coi câu "chúng ta chấp nhận những nhà cung cấp nào" là một QUYẾT ĐỊNH BẢO MẬT đưa ra có chủ ý chứ không phải một danh sách cứ dài ra mỗi lần có người xin thêm.</p>
 </div>
 <pre><code><span class="tok-comment">// ĐÚNG — khoá là (nhà cung cấp, sub), còn email chỉ để hiển thị.</span>
-model LienKetNhaCungCap {
-  id            String @id @default(cuid())
-  nhaCungCap    String                         <span class="tok-comment">// 'google' | 'github' | …</span>
-  subNhaCungCap String                         <span class="tok-comment">// claim 'sub' — ỔN ĐỊNH, KHÔNG ĐỔI</span>
-  nguoiDungId   String
-  emailLucNoi   String?                        <span class="tok-comment">// ảnh chụp, chỉ để tra cứu về sau</span>
+model ProviderLink {
+  id          String  @id @default(cuid())
+  provider    String  <span class="tok-comment">// 'google' | 'github' | …</span>
+  providerSub String  <span class="tok-comment">// claim 'sub' — ỔN ĐỊNH, KHÔNG ĐỔI</span>
+  userId      String
+  emailAtTime String? <span class="tok-comment">// ảnh chụp, chỉ để tra cứu về sau</span>
 
-  nguoiDung     NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
-  @@unique([nhaCungCap, subNhaCungCap])        <span class="tok-comment">// ← danh tính THẬT sự nằm ở đây</span>
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerSub])        <span class="tok-comment">// ← danh tính THẬT sự nằm ở đây</span>
   @@map("lien_ket_nha_cung_cap")
 }</code></pre>
 <div class="lz-stack">
@@ -860,16 +860,16 @@ model LienKetNhaCungCap {
 </div>
 <h3>Case 3, decided properly</h3>
 <pre><code><span class="tok-comment">// Địa chỉ ĐÃ xác minh, trùng một tài khoản đang có, chưa có liên kết nào.</span>
-const nd = await prisma.nguoiDung.findUnique({ where: { emailChuanHoa: ch } });
+const u = await prisma.user.findUnique({ where: { normalizedEmail: ch } });
 
-if (!nd.matKhauBam &amp;&amp; !(await coYeuToKhac(nd.id))) {
+if (!u.passwordHash &amp;&amp; !(await hasOtherFactor(u.id))) {
   <span class="tok-comment">// Tài khoản này KHÔNG có cách đăng nhập nào khác — không ai "sở hữu" nó</span>
   <span class="tok-comment">// theo nghĩa có thể chứng minh. Nối luôn là an toàn.</span>
-  await noiVaDangNhap(nd, nhaCungCap, sub);
+  await linkAndSignIn(u, provider, sub);
 } else {
   <span class="tok-comment">// CÓ mật khẩu hoặc CÓ passkey ⇒ bắt bên đang sở hữu chứng minh trước.</span>
   <span class="tok-comment">// KHÔNG đăng nhập. Lưu một yêu cầu nối đang chờ, rồi hỏi.</span>
-  await luuYeuCauNoiChoDuyet(nd.id, nhaCungCap, sub, p.email);
+  await savePendingLinkRequest(u.id, provider, sub, p.email);
   return res.render('xac-nhan-noi-tai-khoan');   <span class="tok-comment">// "Nhập mật khẩu để nối"</span>
 }</code></pre>
 <div class="pitfall">
@@ -883,16 +883,16 @@ if (!nd.matKhauBam &amp;&amp; !(await coYeuToKhac(nd.id))) {
 </div>
 
 <h3>Unlinking, and the lockout it causes</h3>
-<pre><code>app.delete('/toi/lien-ket/:nhaCungCap', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
-  const soCach = await demCachDangNhap(nd.id);   <span class="tok-comment">// mật khẩu + passkey + số liên kết</span>
+<pre><code>app.delete('/toi/lien-ket/:provider', requireReauth({ within: 300 }), async (req, res) =&gt; {
+  const distance = await countRecentSignIns(u.id);   <span class="tok-comment">// mật khẩu + passkey + số liên kết</span>
 
-  if (soCach &lt;= 1) {
+  if (distance &lt;= 1) {
     return res.status(409).json({
-      loi: 'Đây là cách đăng nhập duy nhất của bạn. Hãy đặt mật khẩu trước.',
+      error: 'Đây là cách đăng nhập duy nhất của bạn. Hãy đặt mật khẩu trước.',
     });
   }
-  await prisma.lienKetNhaCungCap.delete({ where: { id: lienKet.id } });
-  await guiThuDaGoLienKet(nd.email);
+  await prisma.providerLink.delete({ where: { id: link.id } });
+  await sendMailLinkRemoved(u.email);
   res.status(204).end();
 });</code></pre>
 <div class="lz-stack">
@@ -970,16 +970,16 @@ GitHub       403    (khong co truong issuer)
 </div>
 <h3>Trường hợp 3, quyết cho đúng</h3>
 <pre><code><span class="tok-comment">// Địa chỉ ĐÃ xác minh, trùng một tài khoản đang có, chưa có liên kết nào.</span>
-const nd = await prisma.nguoiDung.findUnique({ where: { emailChuanHoa: ch } });
+const u = await prisma.user.findUnique({ where: { normalizedEmail: ch } });
 
-if (!nd.matKhauBam &amp;&amp; !(await coYeuToKhac(nd.id))) {
+if (!u.passwordHash &amp;&amp; !(await hasOtherFactor(u.id))) {
   <span class="tok-comment">// Tài khoản này KHÔNG có cách đăng nhập nào khác — không ai "sở hữu" nó</span>
   <span class="tok-comment">// theo nghĩa có thể chứng minh. Nối luôn là an toàn.</span>
-  await noiVaDangNhap(nd, nhaCungCap, sub);
+  await linkAndSignIn(u, provider, sub);
 } else {
   <span class="tok-comment">// CÓ mật khẩu hoặc CÓ passkey ⇒ bắt bên đang sở hữu chứng minh trước.</span>
   <span class="tok-comment">// KHÔNG đăng nhập. Lưu một yêu cầu nối đang chờ, rồi hỏi.</span>
-  await luuYeuCauNoiChoDuyet(nd.id, nhaCungCap, sub, p.email);
+  await savePendingLinkRequest(u.id, provider, sub, p.email);
   return res.render('xac-nhan-noi-tai-khoan');   <span class="tok-comment">// "Nhập mật khẩu để nối"</span>
 }</code></pre>
 <div class="pitfall">
@@ -993,16 +993,16 @@ if (!nd.matKhauBam &amp;&amp; !(await coYeuToKhac(nd.id))) {
 </div>
 
 <h3>Gỡ nối, và cú khoá cửa mà nó gây ra</h3>
-<pre><code>app.delete('/toi/lien-ket/:nhaCungCap', doiXacThucLai({ trongVong: 300 }), async (req, res) =&gt; {
-  const soCach = await demCachDangNhap(nd.id);   <span class="tok-comment">// mật khẩu + passkey + số liên kết</span>
+<pre><code>app.delete('/toi/lien-ket/:provider', requireReauth({ within: 300 }), async (req, res) =&gt; {
+  const distance = await countRecentSignIns(u.id);   <span class="tok-comment">// mật khẩu + passkey + số liên kết</span>
 
-  if (soCach &lt;= 1) {
+  if (distance &lt;= 1) {
     return res.status(409).json({
-      loi: 'Đây là cách đăng nhập duy nhất của bạn. Hãy đặt mật khẩu trước.',
+      error: 'Đây là cách đăng nhập duy nhất của bạn. Hãy đặt mật khẩu trước.',
     });
   }
-  await prisma.lienKetNhaCungCap.delete({ where: { id: lienKet.id } });
-  await guiThuDaGoLienKet(nd.email);
+  await prisma.providerLink.delete({ where: { id: link.id } });
+  await sendMailLinkRemoved(u.email);
   res.status(204).end();
 });</code></pre>
 <div class="lz-stack">

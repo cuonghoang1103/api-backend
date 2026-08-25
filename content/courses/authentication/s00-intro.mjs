@@ -209,8 +209,8 @@ curl -s https://cuongthai.com/api/v1/auth/me \\
 </div>
 <pre><code><span class="tok-comment">// The mistake, in four lines. It authenticates. It does not authorize.</span>
 app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
-  const don = await prisma.donHang.findUnique({ where: { id: req.params.id } });
-  res.json(don);                       <span class="tok-comment">// ← whose order is this?</span>
+  const order = await prisma.order.findUnique({ where: { id: req.params.id } });
+  res.json(order);                       <span class="tok-comment">// ← whose order is this?</span>
 });</code></pre>
 <div class="out">$ curl -s /api/don-hang/clx7… -H "Authorization: Bearer &lt;token cua AN&gt;"
 {"id":"clx7…","userId":"clx9…","tong":2490000,"diaChi":"…","dienThoai":"09…"}
@@ -219,11 +219,11 @@ app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
 # Doi id trong URL la doc duoc don cua bat ky ai. Day la IDOR.</div>
 <pre><code><span class="tok-comment">// The fix is one clause, and it belongs in the query, not after it</span>
 app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
-  const don = await prisma.donHang.findFirst({
+  const order = await prisma.order.findFirst({
     where: { id: req.params.id, userId: req.user.id },   <span class="tok-comment">// ← gate 3</span>
   });
-  if (!don) return res.status(404).json({ error: 'Khong tim thay' });
-  res.json(don);
+  if (!order) return res.status(404).json({ error: 'Khong tim thay' });
+  res.json(order);
 });</code></pre>
 <div class="callout ok">
 <p><strong>Put the ownership check inside the <code>where</code>, not in an <code>if</code> after the fetch.</strong> A filter cannot be forgotten by a later refactor the way a separate <code>if</code> can, it cannot be bypassed by an early return someone adds above it, and it returns 404 rather than 403 — which does not confirm to an attacker that the id exists. One clause, three benefits.</p>
@@ -255,10 +255,10 @@ app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
 <h3>Why the separation matters in code</h3>
 <pre><code><span class="tok-comment">// Middleware answers gate 2 — and only gate 2.</span>
 function requireAuth(req, res, next) {
-  const token = layToken(req);
+  const token = getToken(req);
   if (!token) return res.status(401).json({ error: 'Chua dang nhap' });
   try {
-    req.user = xacMinh(token);         <span class="tok-comment">// authenticated: we know WHO</span>
+    req.user = verify(token);         <span class="tok-comment">// authenticated: we know WHO</span>
     next();
   } catch {
     return res.status(401).json({ error: 'Token khong hop le' });
@@ -304,8 +304,8 @@ function requireAuth(req, res, next) {
 </div>
 <pre><code><span class="tok-comment">// Cái sai, gói trong bốn dòng. Nó XÁC THỰC. Nó KHÔNG phân quyền.</span>
 app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
-  const don = await prisma.donHang.findUnique({ where: { id: req.params.id } });
-  res.json(don);                       <span class="tok-comment">// ← đơn này của AI?</span>
+  const order = await prisma.order.findUnique({ where: { id: req.params.id } });
+  res.json(order);                       <span class="tok-comment">// ← đơn này của AI?</span>
 });</code></pre>
 <div class="out">$ curl -s /api/don-hang/clx7… -H "Authorization: Bearer &lt;token cua AN&gt;"
 {"id":"clx7…","userId":"clx9…","tong":2490000,"diaChi":"…","dienThoai":"09…"}
@@ -314,11 +314,11 @@ app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
 # Doi id trong URL la doc duoc don cua bat ky ai. Day la IDOR.</div>
 <pre><code><span class="tok-comment">// Cách vá là MỘT mệnh đề, và nó thuộc về câu truy vấn, không phải sau nó</span>
 app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
-  const don = await prisma.donHang.findFirst({
+  const order = await prisma.order.findFirst({
     where: { id: req.params.id, userId: req.user.id },   <span class="tok-comment">// ← cổng 3</span>
   });
-  if (!don) return res.status(404).json({ error: 'Khong tim thay' });
-  res.json(don);
+  if (!order) return res.status(404).json({ error: 'Khong tim thay' });
+  res.json(order);
 });</code></pre>
 <div class="callout ok">
 <p><strong>Hãy đặt phép kiểm quyền sở hữu BÊN TRONG <code>where</code>, đừng đặt vào một <code>if</code> sau khi đã lấy dữ liệu.</strong> Một bộ lọc thì không thể bị một lần refactor sau này QUÊN mất như một cái <code>if</code> rời, nó không bị vượt qua bởi một lệnh return sớm mà ai đó thêm vào phía trên, và nó trả 404 chứ không phải 403 — tức là không XÁC NHẬN với kẻ tấn công rằng cái id đó có thật. Một mệnh đề, ba cái lợi.</p>
@@ -350,10 +350,10 @@ app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
 <h3>Vì sao việc tách bạch lại quan trọng trong mã</h3>
 <pre><code><span class="tok-comment">// Middleware trả lời cổng 2 — và CHỈ cổng 2.</span>
 function requireAuth(req, res, next) {
-  const token = layToken(req);
+  const token = getToken(req);
   if (!token) return res.status(401).json({ error: 'Chua dang nhap' });
   try {
-    req.user = xacMinh(token);         <span class="tok-comment">// đã xác thực: ta biết AI</span>
+    req.user = verify(token);         <span class="tok-comment">// đã xác thực: ta biết AI</span>
     next();
   } catch {
     return res.status(401).json({ error: 'Token khong hop le' });
@@ -407,19 +407,19 @@ services:
 <pre><code>docker compose up -d
 echo 'DATABASE_URL="postgresql://postgres:matkhau@localhost:5432/hocauth"' &gt; .env</code></pre>
 <pre><code><span class="tok-comment">// prisma/schema.prisma</span>
-model NguoiDung {
-  id       String   @id @default(cuid())
-  email    String   @unique
-  matKhau  String
-  taoLuc   DateTime @default(now())
-  phien    Phien[]
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  session   Session[]
 }
 
-model Phien {
-  id         String    @id
-  nguoiDungId String
-  nguoiDung  NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
-  taoLuc     DateTime  @default(now())
+model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }</code></pre>
 <pre><code>npx prisma migrate dev --name khoi_tao</code></pre>
 <div class="out">Applying migration &#96;20260823150000_khoi_tao&#96;
@@ -444,40 +444,40 @@ const app = express();
 app.use(express.json());
 
 app.post('/sign-up', async (req, res) =&gt; {
-  const { email, matKhau } = req.body;
-  const nd = await prisma.nguoiDung.create({ data: { email, matKhau } });
-  res.json({ id: nd.id });
+  const { email, password } = req.body;
+  const u = await prisma.user.create({ data: { email, password } });
+  res.json({ id: u.id });
 });
 
 app.post('/sign-in', async (req, res) =&gt; {
-  const { email, matKhau } = req.body;
-  const nd = await prisma.nguoiDung.findUnique({ where: { email } });
-  if (!nd) return res.status(401).json({ loi: 'Email khong ton tai' });
-  if (nd.matKhau !== matKhau) return res.status(401).json({ loi: 'Sai mat khau' });
+  const { email, password } = req.body;
+  const u = await prisma.user.findUnique({ where: { email } });
+  if (!u) return res.status(401).json({ error: 'Email khong ton tai' });
+  if (u.password !== password) return res.status(401).json({ error: 'Sai mat khau' });
 
-  const phien = await prisma.phien.create({
-    data: { id: String(Date.now()), nguoiDungId: nd.id },
+  const session = await prisma.session.create({
+    data: { id: String(Date.now()), userId: u.id },
   });
-  res.json({ phien: phien.id });
+  res.json({ session: session.id });
 });
 
 app.get('/me', async (req, res) =&gt; {
-  const phien = await prisma.phien.findUnique({
-    where: { id: String(req.headers['x-phien']) },
-    include: { nguoiDung: true },
+  const session = await prisma.session.findUnique({
+    where: { id: String(req.headers['x-session']) },
+    include: { user: true },
   });
-  if (!phien) return res.status(401).json({ loi: 'Chua dang nhap' });
-  res.json({ email: phien.nguoiDung.email });
+  if (!session) return res.status(401).json({ error: 'Chua dang nhap' });
+  res.json({ email: session.user.email });
 });
 
 app.listen(3000, () =&gt; console.log('http://localhost:3000'));</code></pre>
 <pre><code>npx tsx watch src/index.ts
 
 curl -s localhost:3000/dang-ky -H 'content-type: application/json' \\
-  -d '{"email":"an@vidu.com","matKhau":"khongaidoanduoc"}'
+  -d '{"email":"an@vidu.com","password":"khongaidoanduoc"}'
 curl -s localhost:3000/dang-nhap -H 'content-type: application/json' \\
-  -d '{"email":"an@vidu.com","matKhau":"khongaidoanduoc"}'
-curl -s localhost:3000/toi -H 'x-phien: 1756000123456'</code></pre>
+  -d '{"email":"an@vidu.com","password":"khongaidoanduoc"}'
+curl -s localhost:3000/toi -H 'x-session: 1756000123456'</code></pre>
 <div class="out">{"id":"clx7a2b1c0000abcdefghijkl"}
 {"phien":"1756000123456"}
 {"email":"an@vidu.com"}</div>
@@ -487,23 +487,23 @@ curl -s localhost:3000/toi -H 'x-phien: 1756000123456'</code></pre>
 
 <h3>Six problems, six chapters</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">1 · The password is stored as typed → Chapter 2</span><span class="lz-lnote"><code>SELECT email, "matKhau" FROM "NguoiDung"</code> prints everyone's password. One leaked backup, one SQL injection, one curious employee, and every account is gone — plus every other site where that person reused the password.</span></div>
+  <div class="lz-layer"><span class="lz-lname">1 · The password is stored as typed → Chapter 2</span><span class="lz-lnote"><code>SELECT email, "password" FROM "User"</code> prints everyone's password. One leaked backup, one SQL injection, one curious employee, and every account is gone — plus every other site where that person reused the password.</span></div>
   <div class="lz-layer"><span class="lz-lname">2 · The error says which half was wrong → Chapter 6</span><span class="lz-lnote">"Email khong ton tai" versus "Sai mat khau" turns the login form into a membership oracle: an attacker learns which of a million leaked emails have accounts here, before trying a single password. Both branches must return the same message, in the same time.</span></div>
   <div class="lz-layer"><span class="lz-lname">3 · The session id is <code>Date.now()</code> → Chapter 3</span><span class="lz-lnote">Guessable to the millisecond. An attacker who knows roughly when you logged in can brute-force a few thousand candidates. A session id must come from a cryptographic random source, with enough bits that guessing is hopeless.</span></div>
   <div class="lz-layer"><span class="lz-lname">4 · The session never expires and cannot be revoked → Chapter 5</span><span class="lz-lnote">No <code>expiresAt</code>, no logout, no "sign out everywhere". A session created today is still valid next year, and a stolen one is valid forever. Expiry and revocation are features, and this code has neither.</span></div>
-  <div class="lz-layer"><span class="lz-lname">5 · The credential travels in a custom header → Chapter 4</span><span class="lz-lnote"><code>x-phien</code> means the browser will not send it automatically, so a real front end must store it in JavaScript — which means one XSS reads it. A cookie with <code>HttpOnly</code>, <code>Secure</code> and <code>SameSite</code> is a different trade, and Chapter 4 is where you choose.</span></div>
+  <div class="lz-layer"><span class="lz-lname">5 · The credential travels in a custom header → Chapter 4</span><span class="lz-lnote"><code>x-session</code> means the browser will not send it automatically, so a real front end must store it in JavaScript — which means one XSS reads it. A cookie with <code>HttpOnly</code>, <code>Secure</code> and <code>SameSite</code> is a different trade, and Chapter 4 is where you choose.</span></div>
   <div class="lz-layer"><span class="lz-lname">6 · Nothing limits attempts → Chapter 10 and 11</span><span class="lz-lnote">A script can try ten thousand passwords a second against this endpoint. Rate limiting per account and per IP, lockout with backoff, and a check against known-breached passwords are what make an online guessing attack pointless.</span></div>
 </div>
 <pre><code><span class="tok-comment">-- Problem 1, demonstrated in one query</span>
-psql "$DATABASE_URL" -c 'SELECT email, "matKhau" FROM "NguoiDung";'</code></pre>
+psql "$DATABASE_URL" -c 'SELECT email, "password" FROM "User";'</code></pre>
 <div class="out">     email     |     matKhau
 ---------------+------------------
  an@vidu.com   | khongaidoanduoc
  binh@vidu.com | 123456
  chi@vidu.com  | Matkhau@2026</div>
 <pre><code><span class="tok-comment"># Problem 2, demonstrated in two requests</span>
-curl -s localhost:3000/dang-nhap -d '{"email":"co-that@vidu.com","matKhau":"x"}' -H 'content-type: application/json'
-curl -s localhost:3000/dang-nhap -d '{"email":"khong-co@vidu.com","matKhau":"x"}' -H 'content-type: application/json'</code></pre>
+curl -s localhost:3000/dang-nhap -d '{"email":"co-that@vidu.com","password":"x"}' -H 'content-type: application/json'
+curl -s localhost:3000/dang-nhap -d '{"email":"khong-co@vidu.com","password":"x"}' -H 'content-type: application/json'</code></pre>
 <div class="out">{"loi":"Sai mat khau"}          ← tai khoan NAY co ton tai
 {"loi":"Email khong ton tai"}   ← tai khoan nay khong
 
@@ -546,19 +546,19 @@ services:
 <pre><code>docker compose up -d
 echo 'DATABASE_URL="postgresql://postgres:matkhau@localhost:5432/hocauth"' &gt; .env</code></pre>
 <pre><code><span class="tok-comment">// prisma/schema.prisma</span>
-model NguoiDung {
-  id       String   @id @default(cuid())
-  email    String   @unique
-  matKhau  String
-  taoLuc   DateTime @default(now())
-  phien    Phien[]
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  session   Session[]
 }
 
-model Phien {
-  id         String    @id
-  nguoiDungId String
-  nguoiDung  NguoiDung @relation(fields: [nguoiDungId], references: [id], onDelete: Cascade)
-  taoLuc     DateTime  @default(now())
+model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }</code></pre>
 <pre><code>npx prisma migrate dev --name khoi_tao</code></pre>
 <div class="out">Applying migration &#96;20260823150000_khoi_tao&#96;
@@ -583,40 +583,40 @@ const app = express();
 app.use(express.json());
 
 app.post('/sign-up', async (req, res) =&gt; {
-  const { email, matKhau } = req.body;
-  const nd = await prisma.nguoiDung.create({ data: { email, matKhau } });
-  res.json({ id: nd.id });
+  const { email, password } = req.body;
+  const u = await prisma.user.create({ data: { email, password } });
+  res.json({ id: u.id });
 });
 
 app.post('/sign-in', async (req, res) =&gt; {
-  const { email, matKhau } = req.body;
-  const nd = await prisma.nguoiDung.findUnique({ where: { email } });
-  if (!nd) return res.status(401).json({ loi: 'Email khong ton tai' });
-  if (nd.matKhau !== matKhau) return res.status(401).json({ loi: 'Sai mat khau' });
+  const { email, password } = req.body;
+  const u = await prisma.user.findUnique({ where: { email } });
+  if (!u) return res.status(401).json({ error: 'Email khong ton tai' });
+  if (u.password !== password) return res.status(401).json({ error: 'Sai mat khau' });
 
-  const phien = await prisma.phien.create({
-    data: { id: String(Date.now()), nguoiDungId: nd.id },
+  const session = await prisma.session.create({
+    data: { id: String(Date.now()), userId: u.id },
   });
-  res.json({ phien: phien.id });
+  res.json({ session: session.id });
 });
 
 app.get('/me', async (req, res) =&gt; {
-  const phien = await prisma.phien.findUnique({
-    where: { id: String(req.headers['x-phien']) },
-    include: { nguoiDung: true },
+  const session = await prisma.session.findUnique({
+    where: { id: String(req.headers['x-session']) },
+    include: { user: true },
   });
-  if (!phien) return res.status(401).json({ loi: 'Chua dang nhap' });
-  res.json({ email: phien.nguoiDung.email });
+  if (!session) return res.status(401).json({ error: 'Chua dang nhap' });
+  res.json({ email: session.user.email });
 });
 
 app.listen(3000, () =&gt; console.log('http://localhost:3000'));</code></pre>
 <pre><code>npx tsx watch src/index.ts
 
 curl -s localhost:3000/dang-ky -H 'content-type: application/json' \\
-  -d '{"email":"an@vidu.com","matKhau":"khongaidoanduoc"}'
+  -d '{"email":"an@vidu.com","password":"khongaidoanduoc"}'
 curl -s localhost:3000/dang-nhap -H 'content-type: application/json' \\
-  -d '{"email":"an@vidu.com","matKhau":"khongaidoanduoc"}'
-curl -s localhost:3000/toi -H 'x-phien: 1756000123456'</code></pre>
+  -d '{"email":"an@vidu.com","password":"khongaidoanduoc"}'
+curl -s localhost:3000/toi -H 'x-session: 1756000123456'</code></pre>
 <div class="out">{"id":"clx7a2b1c0000abcdefghijkl"}
 {"phien":"1756000123456"}
 {"email":"an@vidu.com"}</div>
@@ -626,23 +626,23 @@ curl -s localhost:3000/toi -H 'x-phien: 1756000123456'</code></pre>
 
 <h3>Sáu vấn đề, sáu chương</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">1 · Mật khẩu cất y như lúc gõ vào → Chương 2</span><span class="lz-lnote"><code>SELECT email, "matKhau" FROM "NguoiDung"</code> in ra mật khẩu của TẤT CẢ mọi người. Một bản sao lưu rò ra, một lỗ SQL injection, một nhân viên tò mò — là mất sạch mọi tài khoản, cộng thêm mọi trang khác nơi người ta dùng lại mật khẩu đó.</span></div>
+  <div class="lz-layer"><span class="lz-lname">1 · Mật khẩu cất y như lúc gõ vào → Chương 2</span><span class="lz-lnote"><code>SELECT email, "password" FROM "User"</code> in ra mật khẩu của TẤT CẢ mọi người. Một bản sao lưu rò ra, một lỗ SQL injection, một nhân viên tò mò — là mất sạch mọi tài khoản, cộng thêm mọi trang khác nơi người ta dùng lại mật khẩu đó.</span></div>
   <div class="lz-layer"><span class="lz-lname">2 · Thông báo lỗi NÓI RA nửa nào sai → Chương 6</span><span class="lz-lnote">"Email khong ton tai" đối lại "Sai mat khau" biến cái form đăng nhập thành một cỗ máy tra cứu thành viên: kẻ tấn công biết được trong một triệu email rò rỉ thì email nào có tài khoản ở đây, TRƯỚC KHI thử một mật khẩu nào. Cả hai nhánh phải trả về CÙNG một thông báo, trong CÙNG một khoảng thời gian.</span></div>
   <div class="lz-layer"><span class="lz-lname">3 · Mã phiên là <code>Date.now()</code> → Chương 3</span><span class="lz-lnote">Đoán được tới từng mili giây. Kẻ tấn công biết đại khái lúc bạn đăng nhập là dò được vài nghìn ứng viên. Một mã phiên phải tới từ nguồn ngẫu nhiên mật mã, với đủ số bit để việc đoán là vô vọng.</span></div>
   <div class="lz-layer"><span class="lz-lname">4 · Phiên không bao giờ hết hạn và không thu hồi được → Chương 5</span><span class="lz-lnote">Không có <code>expiresAt</code>, không có đăng xuất, không có "thoát khỏi mọi thiết bị". Một phiên tạo hôm nay vẫn còn hiệu lực sang năm sau, và một phiên bị cắp thì hiệu lực MÃI MÃI. Hết hạn và thu hồi là TÍNH NĂNG, và đoạn mã này không có cái nào.</span></div>
-  <div class="lz-layer"><span class="lz-lname">5 · Tín vật đi trong một header tự chế → Chương 4</span><span class="lz-lnote"><code>x-phien</code> nghĩa là trình duyệt sẽ KHÔNG tự gửi nó, nên một front end thật buộc phải cất nó trong JavaScript — tức là một lỗ XSS là đọc được. Một cookie có <code>HttpOnly</code>, <code>Secure</code> và <code>SameSite</code> là một đánh đổi KHÁC, và Chương 4 là chỗ bạn chọn.</span></div>
+  <div class="lz-layer"><span class="lz-lname">5 · Tín vật đi trong một header tự chế → Chương 4</span><span class="lz-lnote"><code>x-session</code> nghĩa là trình duyệt sẽ KHÔNG tự gửi nó, nên một front end thật buộc phải cất nó trong JavaScript — tức là một lỗ XSS là đọc được. Một cookie có <code>HttpOnly</code>, <code>Secure</code> và <code>SameSite</code> là một đánh đổi KHÁC, và Chương 4 là chỗ bạn chọn.</span></div>
   <div class="lz-layer"><span class="lz-lname">6 · Không có gì giới hạn số lần thử → Chương 10 và 11</span><span class="lz-lnote">Một script thử được mười nghìn mật khẩu mỗi giây lên cái endpoint này. Giới hạn tốc độ theo tài khoản và theo IP, khoá tạm có lùi dần, và một phép đối chiếu với danh sách mật khẩu đã lộ — đó là những thứ làm cho một cú dò trực tuyến trở nên vô nghĩa.</span></div>
 </div>
 <pre><code><span class="tok-comment">-- Vấn đề 1, chứng minh bằng một câu truy vấn</span>
-psql "$DATABASE_URL" -c 'SELECT email, "matKhau" FROM "NguoiDung";'</code></pre>
+psql "$DATABASE_URL" -c 'SELECT email, "password" FROM "User";'</code></pre>
 <div class="out">     email     |     matKhau
 ---------------+------------------
  an@vidu.com   | khongaidoanduoc
  binh@vidu.com | 123456
  chi@vidu.com  | Matkhau@2026</div>
 <pre><code><span class="tok-comment"># Vấn đề 2, chứng minh bằng hai request</span>
-curl -s localhost:3000/dang-nhap -d '{"email":"co-that@vidu.com","matKhau":"x"}' -H 'content-type: application/json'
-curl -s localhost:3000/dang-nhap -d '{"email":"khong-co@vidu.com","matKhau":"x"}' -H 'content-type: application/json'</code></pre>
+curl -s localhost:3000/dang-nhap -d '{"email":"co-that@vidu.com","password":"x"}' -H 'content-type: application/json'
+curl -s localhost:3000/dang-nhap -d '{"email":"khong-co@vidu.com","password":"x"}' -H 'content-type: application/json'</code></pre>
 <div class="out">{"loi":"Sai mat khau"}          ← tai khoan NAY co ton tai
 {"loi":"Email khong ton tai"}   ← tai khoan nay khong
 

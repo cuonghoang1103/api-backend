@@ -27,7 +27,7 @@ export default {
 
 <h3>Why a fast hash is the wrong tool</h3>
 <pre><code><span class="tok-comment">// The instinct: "hash it, hashes are one-way"</span>
-const bam = createHash('sha256').update(matKhau).digest('hex');</code></pre>
+const hash = createHash('sha256').update(password).digest('hex');</code></pre>
 <div class="out"># Toc do do tren MOT GPU pho thong (bench kieu hashcat, xap xi):
 
 MD5        ~ 160 GH/s     (160.000.000.000 lan bam moi giay)
@@ -63,8 +63,8 @@ sha256('123456') = 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6
 # Ke tan cong be MOT lan, lay duoc 8.544 tai khoan.
 # Va mot bang cau vong tinh san tra ra ca ba trong vai mili giay.</div>
 <pre><code><span class="tok-comment">// With a per-user salt: the same password, two different hashes</span>
-const muoi = randomBytes(16);                    <span class="tok-comment">// 128 bit, một người một cái</span>
-const bam = createHash('sha256').update(Buffer.concat([muoi, Buffer.from(matKhau)])).digest();
+const salt = randomBytes(16);                    <span class="tok-comment">// 128 bit, một người một cái</span>
+const hash = createHash('sha256').update(Buffer.concat([salt, Buffer.from(password)])).digest();
 <span class="tok-comment">// Lưu CẢ HAI: muối không phải bí mật, nó chỉ cần DUY NHẤT.</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">✅ Salt kills precomputation</span><span class="v">A rainbow table is built once and reused against every unsalted hash on earth. With a unique salt per user, a precomputed table is useless — the attacker must start from scratch for each row.</span></div>
@@ -129,7 +129,7 @@ Cung mot the may. Chi khac tham so.</div>
 
 <h3>Vì sao hàm băm nhanh là công cụ SAI</h3>
 <pre><code><span class="tok-comment">// Phản xạ đầu tiên: "băm nó đi, băm là một chiều mà"</span>
-const bam = createHash('sha256').update(matKhau).digest('hex');</code></pre>
+const hash = createHash('sha256').update(password).digest('hex');</code></pre>
 <div class="out"># Toc do do tren MOT GPU pho thong (bench kieu hashcat, xap xi):
 
 MD5        ~ 160 GH/s     (160.000.000.000 lan bam moi giay)
@@ -165,8 +165,8 @@ sha256('123456') = 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6
 # Ke tan cong be MOT lan, lay duoc 8.544 tai khoan.
 # Va mot bang cau vong tinh san tra ra ca ba trong vai mili giay.</div>
 <pre><code><span class="tok-comment">// Có muối riêng từng người: cùng một mật khẩu, hai chuỗi băm khác nhau</span>
-const muoi = randomBytes(16);                    <span class="tok-comment">// 128 bit, một người một cái</span>
-const bam = createHash('sha256').update(Buffer.concat([muoi, Buffer.from(matKhau)])).digest();
+const salt = randomBytes(16);                    <span class="tok-comment">// 128 bit, một người một cái</span>
+const hash = createHash('sha256').update(Buffer.concat([salt, Buffer.from(password)])).digest();
 <span class="tok-comment">// Lưu CẢ HAI: muối không phải bí mật, nó chỉ cần DUY NHẤT.</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">✅ Muối giết chết việc TÍNH TRƯỚC</span><span class="v">Một bảng cầu vồng được dựng MỘT lần rồi dùng lại với mọi chuỗi băm không muối trên đời. Với một muối riêng cho từng người, bảng tính sẵn thành vô dụng — kẻ tấn công phải bắt đầu lại từ đầu cho TỪNG hàng.</span></div>
@@ -258,15 +258,15 @@ $2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewKyPjHiw3sTJoiu
 <pre><code><span class="tok-comment">// scripts/do-bam.ts — chạy trên MÁY SẼ CHẠY PRODUCTION</span>
 import { hash } from '@node-rs/argon2';
 
-const NGAN_SACH_MS = 250;
+const BUDGET_MS = 250;
 
 for (const m of [19456, 32768, 65536, 131072]) {       <span class="tok-comment">// KiB</span>
   for (const t of [1, 2, 3]) {
-    const bd = process.hrtime.bigint();
+    const t0 = process.hrtime.bigint();
     await hash('matkhauthu', { memoryCost: m, timeCost: t, parallelism: 1 });
-    const ms = Number(process.hrtime.bigint() - bd) / 1e6;
-    const dat = ms &lt;= NGAN_SACH_MS ? '✅' : '❌';
-    console.log(&#96;m=\${String(m).padStart(6)}KiB t=\${t} → \${ms.toFixed(0).padStart(4)} ms \${dat}&#96;);
+    const ms = Number(process.hrtime.bigint() - t0) / 1e6;
+    const dat = ms &lt;= BUDGET_MS ? '✅' : '❌';
+    console.log(&#96;m=\${String(m).padStart(6)}KiB t=\${t} → \${ms.toFixed(0).padStart(4)} ms \${verdict}&#96;);
   }
 }</code></pre>
 <div class="out">m= 19456KiB t=1 →   28 ms ✅
@@ -302,16 +302,16 @@ backend     6.71GiB / 2GiB     ← OOM. Container bi giet.
 <p><strong>Trap — a slow password hash on an unauthenticated endpoint is a denial-of-service amplifier.</strong> Each failed login costs the attacker one HTTP request and costs you 64 MiB and 187 ms of CPU. That is an enormous asymmetry in <em>their</em> favour, and it is the reverse of what you wanted. Three defences, all required: rate-limit login attempts per IP and per account (Chapter 11), cap concurrent hashing with a small queue, and size <code>memoryCost × maxConcurrent</code> to fit the container's memory limit with room to spare.</p>
 </div>
 <pre><code><span class="tok-comment">// Cap the concurrency explicitly rather than discovering the limit at 3am</span>
-import { Sema } from 'async-sema';
+import { Secode } from 'async-sema';
 
-const cong = new Sema(8);                     <span class="tok-comment">// 8 × 64 MiB = 512 MiB tối đa</span>
+const gate = new Sema(8);                     <span class="tok-comment">// 8 × 64 MiB = 512 MiB tối đa</span>
 
-export async function bamMatKhau(mk: string) {
-  await cong.acquire();
+export async function hashPassword(pw: string) {
+  await gate.acquire();
   try {
     return await hash(mk, { memoryCost: 65536, timeCost: 2, parallelism: 1 });
   } finally {
-    cong.release();
+    gate.release();
   }
 }</code></pre>
 
@@ -337,22 +337,22 @@ true
 <pre><code><span class="tok-comment">// Argon2id — dùng @node-rs/argon2 (Rust, prebuilt cho cả musl lẫn glibc)</span>
 import { hash, verify } from '@node-rs/argon2';
 
-const THAM_SO = { memoryCost: 65536, timeCost: 2, parallelism: 1 };
+const PARAMS = { memoryCost: 65536, timeCost: 2, parallelism: 1 };
 <span class="tok-comment">// đo 08/2026 trên VPS 4 vCPU: 187 ms</span>
 
-await hash(matKhau, THAM_SO);                  <span class="tok-comment">// muối tự sinh, tự nhúng</span>
-await verify(bamDaLuu, matKhau);               <span class="tok-comment">// tham số đọc từ chính chuỗi</span></code></pre>
+await hash(password, PARAMS);                  <span class="tok-comment">// muối tự sinh, tự nhúng</span>
+await verify(bamDaLuu, password);               <span class="tok-comment">// tham số đọc từ chính chuỗi</span></code></pre>
 <pre><code><span class="tok-comment">// bcrypt — một núm duy nhất, khó chỉnh sai</span>
 import bcrypt from 'bcrypt';
-await bcrypt.hash(matKhau, 12);                <span class="tok-comment">// đo trước; 12 là mức sàn ngày nay</span>
-await bcrypt.compare(matKhau, bamDaLuu);</code></pre>
+await bcrypt.hash(password, 12);                <span class="tok-comment">// đo trước; 12 là mức sàn ngày nay</span>
+await bcrypt.compare(password, bamDaLuu);</code></pre>
 <pre><code><span class="tok-comment">// scrypt — có sẵn trong Node, không cần module native</span>
 import { scrypt, randomBytes, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
 const scryptAsync = promisify(scrypt);
 
-const muoi = randomBytes(16);
-const bam = await scryptAsync(matKhau, muoi, 64, { N: 2 ** 15, r: 8, p: 1 });
+const salt = randomBytes(16);
+const bam = await scryptAsync(password, salt, 64, { N: 2 ** 15, r: 8, p: 1 });
 <span class="tok-comment">// N=32768, r=8 → khoảng 32 MiB. Lưu 'scrypt$32768$8$1$muối$băm' để tự mô tả.</span></code></pre>
 <div class="note-ct">
 <p><strong>Do not hash the password in the browser.</strong> It sounds protective and it is not: whatever the client sends becomes the credential, so a client-side hash is just a password with extra steps — and an attacker with the database can replay the stored value directly. Send the password over TLS and hash it on the server. The one legitimate variant is a zero-knowledge protocol such as OPAQUE, where the server never sees the password at all; that is a real design with real trade-offs, and it is not "call sha256 in the front end".</p>
@@ -393,15 +393,15 @@ $2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewKyPjHiw3sTJoiu
 <pre><code><span class="tok-comment">// scripts/do-bam.ts — chạy trên MÁY SẼ CHẠY PRODUCTION</span>
 import { hash } from '@node-rs/argon2';
 
-const NGAN_SACH_MS = 250;
+const BUDGET_MS = 250;
 
 for (const m of [19456, 32768, 65536, 131072]) {       <span class="tok-comment">// KiB</span>
   for (const t of [1, 2, 3]) {
-    const bd = process.hrtime.bigint();
+    const t0 = process.hrtime.bigint();
     await hash('matkhauthu', { memoryCost: m, timeCost: t, parallelism: 1 });
-    const ms = Number(process.hrtime.bigint() - bd) / 1e6;
-    const dat = ms &lt;= NGAN_SACH_MS ? '✅' : '❌';
-    console.log(&#96;m=\${String(m).padStart(6)}KiB t=\${t} → \${ms.toFixed(0).padStart(4)} ms \${dat}&#96;);
+    const ms = Number(process.hrtime.bigint() - t0) / 1e6;
+    const dat = ms &lt;= BUDGET_MS ? '✅' : '❌';
+    console.log(&#96;m=\${String(m).padStart(6)}KiB t=\${t} → \${ms.toFixed(0).padStart(4)} ms \${verdict}&#96;);
   }
 }</code></pre>
 <div class="out">m= 19456KiB t=1 →   28 ms ✅
@@ -437,16 +437,16 @@ backend     6.71GiB / 2GiB     ← OOM. Container bi giet.
 <p><strong>Bẫy — một hàm băm mật khẩu chậm đặt trên một endpoint KHÔNG cần xác thực là một bộ KHUẾCH ĐẠI tấn công từ chối dịch vụ.</strong> Mỗi lần đăng nhập trượt tốn của kẻ tấn công MỘT request HTTP và tốn của bạn 64 MiB cộng 187 ms CPU. Đó là một cú bất đối xứng khổng lồ nghiêng về <em>PHÍA HỌ</em>, tức là ngược hẳn thứ bạn muốn. Ba lớp phòng, cần cả ba: giới hạn tốc độ đăng nhập theo IP và theo tài khoản (Chương 11), CHẶN số lần băm song song bằng một hàng đợi nhỏ, và tính <code>memoryCost × số_song_song_tối_đa</code> sao cho vừa trong giới hạn bộ nhớ của container còn dư chỗ thở.</p>
 </div>
 <pre><code><span class="tok-comment">// Chặn số song song TƯỜNG MINH, thay vì phát hiện ra giới hạn lúc 3 giờ sáng</span>
-import { Sema } from 'async-sema';
+import { Secode } from 'async-sema';
 
-const cong = new Sema(8);                     <span class="tok-comment">// 8 × 64 MiB = 512 MiB tối đa</span>
+const gate = new Sema(8);                     <span class="tok-comment">// 8 × 64 MiB = 512 MiB tối đa</span>
 
-export async function bamMatKhau(mk: string) {
-  await cong.acquire();
+export async function hashPassword(pw: string) {
+  await gate.acquire();
   try {
     return await hash(mk, { memoryCost: 65536, timeCost: 2, parallelism: 1 });
   } finally {
-    cong.release();
+    gate.release();
   }
 }</code></pre>
 
@@ -472,22 +472,22 @@ true
 <pre><code><span class="tok-comment">// Argon2id — dùng @node-rs/argon2 (Rust, prebuilt cho cả musl lẫn glibc)</span>
 import { hash, verify } from '@node-rs/argon2';
 
-const THAM_SO = { memoryCost: 65536, timeCost: 2, parallelism: 1 };
+const PARAMS = { memoryCost: 65536, timeCost: 2, parallelism: 1 };
 <span class="tok-comment">// đo 08/2026 trên VPS 4 vCPU: 187 ms</span>
 
-await hash(matKhau, THAM_SO);                  <span class="tok-comment">// muối tự sinh, tự nhúng</span>
-await verify(bamDaLuu, matKhau);               <span class="tok-comment">// tham số đọc từ chính chuỗi</span></code></pre>
+await hash(password, PARAMS);                  <span class="tok-comment">// muối tự sinh, tự nhúng</span>
+await verify(bamDaLuu, password);               <span class="tok-comment">// tham số đọc từ chính chuỗi</span></code></pre>
 <pre><code><span class="tok-comment">// bcrypt — một núm duy nhất, khó chỉnh sai</span>
 import bcrypt from 'bcrypt';
-await bcrypt.hash(matKhau, 12);                <span class="tok-comment">// đo trước; 12 là mức sàn ngày nay</span>
-await bcrypt.compare(matKhau, bamDaLuu);</code></pre>
+await bcrypt.hash(password, 12);                <span class="tok-comment">// đo trước; 12 là mức sàn ngày nay</span>
+await bcrypt.compare(password, bamDaLuu);</code></pre>
 <pre><code><span class="tok-comment">// scrypt — có sẵn trong Node, không cần module native</span>
 import { scrypt, randomBytes, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
 const scryptAsync = promisify(scrypt);
 
-const muoi = randomBytes(16);
-const bam = await scryptAsync(matKhau, muoi, 64, { N: 2 ** 15, r: 8, p: 1 });
+const salt = randomBytes(16);
+const bam = await scryptAsync(password, salt, 64, { N: 2 ** 15, r: 8, p: 1 });
 <span class="tok-comment">// N=32768, r=8 → khoảng 32 MiB. Lưu 'scrypt$32768$8$1$muối$băm' để tự mô tả.</span></code></pre>
 <div class="note-ct">
 <p><strong>ĐỪNG băm mật khẩu ở trình duyệt.</strong> Nghe có vẻ bảo vệ nhưng không: bất cứ thứ gì client GỬI LÊN đều trở thành TÍN VẬT, nên một chuỗi băm phía client chỉ là một cái mật khẩu với vài bước thừa — và kẻ tấn công có cơ sở dữ liệu thì phát lại thẳng giá trị đã lưu. Hãy gửi mật khẩu qua TLS rồi băm ở MÁY CHỦ. Biến thể chính đáng duy nhất là một giao thức không-tiết-lộ như OPAQUE, nơi máy chủ không bao giờ nhìn thấy mật khẩu; đó là một thiết kế THẬT với những đánh đổi THẬT, và nó không phải chuyện "gọi sha256 ở front end".</p>
@@ -517,9 +517,9 @@ const bam = await scryptAsync(matKhau, muoi, 64, { N: 2 ** 15, r: 8, p: 1 });
 
 <h3>Both branches must cost the same</h3>
 <pre><code><span class="tok-comment">// ❌ Lesson 0.3's version, measured</span>
-const nd = await prisma.nguoiDung.findUnique({ where: { email } });
-if (!nd) return res.status(401).json({ loi: 'Email khong ton tai' });
-if (!(await verify(nd.bam, matKhau))) return res.status(401).json({ loi: 'Sai mat khau' });</code></pre>
+const u = await prisma.user.findUnique({ where: { email } });
+if (!u) return res.status(401).json({ error: 'Email khong ton tai' });
+if (!(await verify(u.bam, password))) return res.status(401).json({ error: 'Sai mat khau' });</code></pre>
 <div class="out">$ for i in $(seq 200); do curl -s -o /dev/null -w "%{time_total}\\n" \\
     localhost:3000/dang-nhap -d '{"email":"co-that@vidu.com","matKhau":"x"}' \\
     -H 'content-type: application/json'; done | sort -n | awk 'NR==100'
@@ -532,21 +532,21 @@ $ … -d '{"email":"khong-co@vidu.com","matKhau":"x"}' …
 # chi rieng thoi gian da noi ro tai khoan do co ton tai hay khong.</div>
 <pre><code><span class="tok-comment">// ✅ Hash something even when the user does not exist</span>
 import { hash, verify } from '@node-rs/argon2';
-import { THAM_SO } from './cau-hinh.js';
+import { PARAMS } from './cau-hinh.js';
 
 <span class="tok-comment">// Sinh một lần lúc khởi động, từ một mật khẩu không ai có.</span>
-const BAM_GIA = await hash(randomBytes(32).toString('base64url'), THAM_SO);
+const FAKE_HASH = await hash(randomBytes(32).toString('base64url'), PARAMS);
 
-export async function dangNhap(email: string, matKhau: string) {
-  const nd = await prisma.nguoiDung.findUnique({ where: { email } });
+export async function signIn(email: string, password: string) {
+  const u = await prisma.user.findUnique({ where: { email } });
 
   <span class="tok-comment">// Cùng một phép băm ở CẢ HAI nhánh — chỉ khác cái nó so với.</span>
-  const dung = await verify(nd?.bam ?? BAM_GIA, matKhau).catch(() =&gt; false);
+  const dung = await verify(u?.bam ?? FAKE_HASH, password).catch(() =&gt; false);
 
-  if (!nd || !dung) {
-    throw new HttpError(401, 'Email hoac mat khau khong dung');
+  if (!u || !dung) {
+    throw new HttpError(401, 'Email hoac mat ksuffix khong dung');
   }
-  return nd;
+  return u;
 }</code></pre>
 <div class="out">$ … co-that@vidu.com  → 0.191
 $ … khong-co@vidu.com → 0.189
@@ -563,20 +563,20 @@ $ … khong-co@vidu.com → 0.189
 <pre><code><span class="tok-comment">// Parameters were raised in June. Old rows still carry June's cost.</span>
 <span class="tok-comment">// The only moment you hold the plaintext is a successful login.</span>
 
-const nd = await dangNhap(email, matKhau);
+const u = await signIn(email, password);
 
-if (canBamLai(nd.bam)) {
-  const bamMoi = await hash(matKhau, THAM_SO);
-  await prisma.nguoiDung.update({ where: { id: nd.id }, data: { bam: bamMoi } });
+if (needsRehash(u.bam)) {
+  const newHash = await hash(password, PARAMS);
+  await prisma.user.update({ where: { id: u.id }, data: { bam: newHash } });
 }</code></pre>
 <pre><code><span class="tok-comment">// The check reads the parameters out of the stored string itself</span>
-export function canBamLai(bamCu: string): boolean {
-  const m = /^\\$argon2id\\$v=(\\d+)\\$m=(\\d+),t=(\\d+),p=(\\d+)/.exec(bamCu);
+export function needsRehash(oldHash: string): boolean {
+  const m = /^\\$argon2id\\$v=(\\d+)\\$m=(\\d+),t=(\\d+),p=(\\d+)/.exec(oldHash);
   if (!m) return true;                                   <span class="tok-comment">// bcrypt cũ, hoặc lạ → nâng</span>
   const [, , mem, t, p] = m.map(Number);
-  return mem &lt; THAM_SO.memoryCost
-      || t   &lt; THAM_SO.timeCost
-      || p   !== THAM_SO.parallelism;
+  return mem &lt; PARAMS.memoryCost
+      || t   &lt; PARAMS.timeCost
+      || p   !== PARAMS.parallelism;
 }</code></pre>
 <div class="out">$ node -e "console.log(canBamLai('\$argon2id\$v=19\$m=19456,t=2,p=1\$…'))"
 true      ← m=19456 < 65536, nang len
@@ -584,7 +584,7 @@ true      ← m=19456 < 65536, nang len
 $ node -e "console.log(canBamLai('\$argon2id\$v=19\$m=65536,t=2,p=1\$…'))"
 false     ← da dung tham so hien tai</div>
 <div class="callout ok">
-<p><strong>This is the whole upgrade mechanism, and it costs four lines.</strong> Raise the parameters in one config object; every user is silently migrated the next time they log in. No mass reset, no downtime, no migration script. Lesson 2.5 uses exactly the same hook to move an entire table off bcrypt or off unsalted MD5 — the only difference is what <code>canBamLai</code> returns true for.</p>
+<p><strong>This is the whole upgrade mechanism, and it costs four lines.</strong> Raise the parameters in one config object; every user is silently migrated the next time they log in. No mass reset, no downtime, no migration script. Lesson 2.5 uses exactly the same hook to move an entire table off bcrypt or off unsalted MD5 — the only difference is what <code>needsRehash</code> returns true for.</p>
 </div>
 
 <h3>Normalise, but do not mangle</h3>
@@ -598,7 +598,7 @@ Buffer.from('mật'.normalize('NFD'), 'utf8').length   <span class="tok-comment"
 # Cung mot nguoi, cung mot mat khau, hai thiet bi → hai chuoi byte.
 # Khong chuan hoa: dang nhap duoc tren may nay, truot tren may kia.</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Normalise with NFKC, on both paths</span><span class="v"><code>matKhau.normalize('NFKC')</code> before hashing and before verifying. NIST SP 800-63B recommends it explicitly. Apply it in one helper so the two call sites cannot drift apart.</span></div>
+  <div class="kv"><span class="k">Normalise with NFKC, on both paths</span><span class="v"><code>password.normalize('NFKC')</code> before hashing and before verifying. NIST SP 800-63B recommends it explicitly. Apply it in one helper so the two call sites cannot drift apart.</span></div>
   <div class="kv"><span class="k">Do not trim</span><span class="v">A space is a legal password character, and trimming silently changes what the user chose. The exception worth knowing: mobile keyboards sometimes append a space after autocomplete — handle that in the client, not by mutating the password server-side.</span></div>
   <div class="kv"><span class="k">Do not truncate, and do not filter characters</span><span class="v">Accept everything printable including emoji. A maximum length is fine for denial-of-service reasons — 128 or 256 characters — but rejecting <code>;</code> or <code>'</code> "for security" is a sign the password is being concatenated into SQL somewhere, which is the actual bug.</span></div>
   <div class="kv"><span class="k">Do not lowercase</span><span class="v">It sounds like a usability improvement and it removes about a third of the entropy of a typical password. Emails are case-insensitive; passwords are not.</span></div>
@@ -606,18 +606,18 @@ Buffer.from('mật'.normalize('NFD'), 'utf8').length   <span class="tok-comment"
 
 <h3>The pepper: one secret outside the database</h3>
 <pre><code><span class="tok-comment">// HMAC the password with an application secret BEFORE hashing it</span>
-const TIEU = Buffer.from(process.env.PASSWORD_PEPPER!, 'base64');  <span class="tok-comment">// 32 byte</span>
+const PEPPER = Buffer.from(process.env.PASSWORD_PEPPER!, 'base64');  <span class="tok-comment">// 32 byte</span>
 
-const chuanBi = (mk: string) =&gt;
-  createHmac('sha256', TIEU).update(mk.normalize('NFKC')).digest('base64');
+const prepare = (pw: string) =&gt;
+  createHmac('sha256', PEPPER).update(mk.normalize('NFKC')).digest('base64');
 
-await hash(chuanBi(matKhau), THAM_SO);       <span class="tok-comment">// lưu như bình thường</span>
-await verify(nd.bam, chuanBi(matKhau));</code></pre>
+await hash(prepare(password), PARAMS);       <span class="tok-comment">// lưu như bình thường</span>
+await verify(u.bam, prepare(password));</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">What it buys: a database-only leak becomes useless</span><span class="lz-lnote">The attacker who dumps the user table cannot start cracking at all without the pepper, because every candidate must be HMAC'd with a 256-bit key they do not have. Given how many breaches are backup-shaped rather than server-shaped, this is a meaningful boundary.</span></div>
   <div class="lz-layer"><span class="lz-lname">What it does not buy: protection from a full compromise</span><span class="lz-lnote">If the attacker has code execution on the application server, they have the environment variable too. The pepper separates "database leaked" from "server compromised" — which are genuinely different events, but do not mistake it for a second password hash.</span></div>
-  <div class="lz-layer"><span class="lz-lname">The cost: rotation is genuinely hard</span><span class="lz-lnote">Changing the pepper invalidates every stored hash, because you cannot re-derive them without the plaintexts. The workable pattern is versioning — store <code>v2$…</code>, keep the old pepper for verification, and re-pepper on successful login exactly as <code>canBamLai</code> does. Design that in from the start or accept that the pepper is permanent.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Use HMAC, not concatenation</span><span class="lz-lnote"><code>sha256(TIEU + matKhau)</code> is Lesson 1.4's length-extension mistake again. And HMAC before the slow hash, not after: the slow hash must be the last step so its cost still applies to every guess.</span></div>
+  <div class="lz-layer"><span class="lz-lname">The cost: rotation is genuinely hard</span><span class="lz-lnote">Changing the pepper invalidates every stored hash, because you cannot re-derive them without the plaintexts. The workable pattern is versioning — store <code>v2$…</code>, keep the old pepper for verification, and re-pepper on successful login exactly as <code>needsRehash</code> does. Design that in from the start or accept that the pepper is permanent.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Use HMAC, not concatenation</span><span class="lz-lnote"><code>sha256(TIEU + password)</code> is Lesson 1.4's length-extension mistake again. And HMAC before the slow hash, not after: the slow hash must be the last step so its cost still applies to every guess.</span></div>
   <div class="lz-layer"><span class="lz-lname">Is it worth it?</span><span class="lz-lnote">If you have a secret manager and a rotation story, yes — it is cheap. If the pepper would live in the same <code>.env</code> that also holds <code>DATABASE_URL</code>, on the same box, then any leak of one leaks the other and you have added complexity for very little. Be honest about which situation you are in.</span></div>
 </div>
 <div class="pitfall">
@@ -642,9 +642,9 @@ await verify(nd.bam, chuanBi(matKhau));</code></pre>
 
 <h3>Cả hai nhánh phải tốn NHƯ NHAU</h3>
 <pre><code><span class="tok-comment">// ❌ Bản của Bài 0.3, đem đo</span>
-const nd = await prisma.nguoiDung.findUnique({ where: { email } });
-if (!nd) return res.status(401).json({ loi: 'Email khong ton tai' });
-if (!(await verify(nd.bam, matKhau))) return res.status(401).json({ loi: 'Sai mat khau' });</code></pre>
+const u = await prisma.user.findUnique({ where: { email } });
+if (!u) return res.status(401).json({ error: 'Email khong ton tai' });
+if (!(await verify(u.bam, password))) return res.status(401).json({ error: 'Sai mat khau' });</code></pre>
 <div class="out">$ for i in $(seq 200); do curl -s -o /dev/null -w "%{time_total}\\n" \\
     localhost:3000/dang-nhap -d '{"email":"co-that@vidu.com","matKhau":"x"}' \\
     -H 'content-type: application/json'; done | sort -n | awk 'NR==100'
@@ -657,21 +657,21 @@ $ … -d '{"email":"khong-co@vidu.com","matKhau":"x"}' …
 # chi rieng thoi gian da noi ro tai khoan do co ton tai hay khong.</div>
 <pre><code><span class="tok-comment">// ✅ Băm một cái gì đó NGAY CẢ khi người dùng không tồn tại</span>
 import { hash, verify } from '@node-rs/argon2';
-import { THAM_SO } from './cau-hinh.js';
+import { PARAMS } from './cau-hinh.js';
 
 <span class="tok-comment">// Sinh một lần lúc khởi động, từ một mật khẩu không ai có.</span>
-const BAM_GIA = await hash(randomBytes(32).toString('base64url'), THAM_SO);
+const FAKE_HASH = await hash(randomBytes(32).toString('base64url'), PARAMS);
 
-export async function dangNhap(email: string, matKhau: string) {
-  const nd = await prisma.nguoiDung.findUnique({ where: { email } });
+export async function signIn(email: string, password: string) {
+  const u = await prisma.user.findUnique({ where: { email } });
 
   <span class="tok-comment">// Cùng một phép băm ở CẢ HAI nhánh — chỉ khác cái nó so với.</span>
-  const dung = await verify(nd?.bam ?? BAM_GIA, matKhau).catch(() =&gt; false);
+  const dung = await verify(u?.bam ?? FAKE_HASH, password).catch(() =&gt; false);
 
-  if (!nd || !dung) {
-    throw new HttpError(401, 'Email hoac mat khau khong dung');
+  if (!u || !dung) {
+    throw new HttpError(401, 'Email hoac mat ksuffix khong dung');
   }
-  return nd;
+  return u;
 }</code></pre>
 <div class="out">$ … co-that@vidu.com  → 0.191
 $ … khong-co@vidu.com → 0.189
@@ -688,20 +688,20 @@ $ … khong-co@vidu.com → 0.189
 <pre><code><span class="tok-comment">// Tham số đã nâng hồi tháng Sáu. Những hàng cũ vẫn mang chi phí tháng Sáu.</span>
 <span class="tok-comment">// Khoảnh khắc DUY NHẤT bạn cầm được bản rõ là một lần đăng nhập THÀNH CÔNG.</span>
 
-const nd = await dangNhap(email, matKhau);
+const u = await signIn(email, password);
 
-if (canBamLai(nd.bam)) {
-  const bamMoi = await hash(matKhau, THAM_SO);
-  await prisma.nguoiDung.update({ where: { id: nd.id }, data: { bam: bamMoi } });
+if (needsRehash(u.bam)) {
+  const newHash = await hash(password, PARAMS);
+  await prisma.user.update({ where: { id: u.id }, data: { bam: newHash } });
 }</code></pre>
 <pre><code><span class="tok-comment">// Phép kiểm đọc tham số ra TỪ CHÍNH chuỗi đã lưu</span>
-export function canBamLai(bamCu: string): boolean {
-  const m = /^\\$argon2id\\$v=(\\d+)\\$m=(\\d+),t=(\\d+),p=(\\d+)/.exec(bamCu);
+export function needsRehash(oldHash: string): boolean {
+  const m = /^\\$argon2id\\$v=(\\d+)\\$m=(\\d+),t=(\\d+),p=(\\d+)/.exec(oldHash);
   if (!m) return true;                                   <span class="tok-comment">// bcrypt cũ, hoặc lạ → nâng</span>
   const [, , mem, t, p] = m.map(Number);
-  return mem &lt; THAM_SO.memoryCost
-      || t   &lt; THAM_SO.timeCost
-      || p   !== THAM_SO.parallelism;
+  return mem &lt; PARAMS.memoryCost
+      || t   &lt; PARAMS.timeCost
+      || p   !== PARAMS.parallelism;
 }</code></pre>
 <div class="out">$ node -e "console.log(canBamLai('\$argon2id\$v=19\$m=19456,t=2,p=1\$…'))"
 true      ← m=19456 < 65536, nang len
@@ -709,7 +709,7 @@ true      ← m=19456 < 65536, nang len
 $ node -e "console.log(canBamLai('\$argon2id\$v=19\$m=65536,t=2,p=1\$…'))"
 false     ← da dung tham so hien tai</div>
 <div class="callout ok">
-<p><strong>Đây là TOÀN BỘ cơ chế nâng cấp, và nó tốn bốn dòng.</strong> Nâng tham số trong MỘT đối tượng cấu hình; mọi người dùng được chuyển đổi lặng lẽ ở lần đăng nhập kế tiếp. Không đặt lại hàng loạt, không ngừng dịch vụ, không script chuyển đổi. Bài 2.5 dùng ĐÚNG cái móc này để đưa cả một bảng rời khỏi bcrypt hoặc rời khỏi MD5 không muối — khác biệt duy nhất là <code>canBamLai</code> trả true cho những gì.</p>
+<p><strong>Đây là TOÀN BỘ cơ chế nâng cấp, và nó tốn bốn dòng.</strong> Nâng tham số trong MỘT đối tượng cấu hình; mọi người dùng được chuyển đổi lặng lẽ ở lần đăng nhập kế tiếp. Không đặt lại hàng loạt, không ngừng dịch vụ, không script chuyển đổi. Bài 2.5 dùng ĐÚNG cái móc này để đưa cả một bảng rời khỏi bcrypt hoặc rời khỏi MD5 không muối — khác biệt duy nhất là <code>needsRehash</code> trả true cho những gì.</p>
 </div>
 
 <h3>Chuẩn hoá, nhưng đừng cắt xén</h3>
@@ -723,7 +723,7 @@ Buffer.from('mật'.normalize('NFD'), 'utf8').length   <span class="tok-comment"
 # Cung mot nguoi, cung mot mat khau, hai thiet bi → hai chuoi byte.
 # Khong chuan hoa: dang nhap duoc tren may nay, truot tren may kia.</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Chuẩn hoá bằng NFKC, ở CẢ HAI đường</span><span class="v"><code>matKhau.normalize('NFKC')</code> trước khi băm và trước khi xác minh. NIST SP 800-63B khuyến nghị điều này một cách tường minh. Hãy áp nó trong MỘT hàm phụ để hai chỗ gọi không thể trôi dạt khỏi nhau.</span></div>
+  <div class="kv"><span class="k">Chuẩn hoá bằng NFKC, ở CẢ HAI đường</span><span class="v"><code>password.normalize('NFKC')</code> trước khi băm và trước khi xác minh. NIST SP 800-63B khuyến nghị điều này một cách tường minh. Hãy áp nó trong MỘT hàm phụ để hai chỗ gọi không thể trôi dạt khỏi nhau.</span></div>
   <div class="kv"><span class="k">ĐỪNG cắt khoảng trắng hai đầu</span><span class="v">Dấu cách là một ký tự mật khẩu HỢP LỆ, và cắt nó đi là lặng lẽ đổi thứ người dùng đã chọn. Ngoại lệ đáng biết: bàn phím di động đôi khi tự thêm một dấu cách sau khi tự hoàn thành — hãy xử lý chuyện đó ở phía client, đừng biến đổi mật khẩu ở máy chủ.</span></div>
   <div class="kv"><span class="k">ĐỪNG cắt cụt, và đừng lọc ký tự</span><span class="v">Hãy nhận mọi ký tự in được, kể cả emoji. Một giới hạn độ dài tối đa thì ổn vì lý do chống từ chối dịch vụ — 128 hoặc 256 ký tự — nhưng từ chối dấu <code>;</code> hay <code>'</code> "vì lý do bảo mật" là dấu hiệu mật khẩu đang bị nối vào SQL ở đâu đó, và ĐÓ mới là con bug thật.</span></div>
   <div class="kv"><span class="k">ĐỪNG hạ về chữ thường</span><span class="v">Nghe như một cải thiện trải nghiệm và nó xoá đi chừng một phần ba entropy của một mật khẩu điển hình. Email thì không phân biệt hoa thường; mật khẩu thì CÓ.</span></div>
@@ -731,18 +731,18 @@ Buffer.from('mật'.normalize('NFD'), 'utf8').length   <span class="tok-comment"
 
 <h3>TIÊU: một bí mật nằm NGOÀI cơ sở dữ liệu</h3>
 <pre><code><span class="tok-comment">// HMAC mật khẩu với một bí mật cấp ứng dụng TRƯỚC khi băm nó</span>
-const TIEU = Buffer.from(process.env.PASSWORD_PEPPER!, 'base64');  <span class="tok-comment">// 32 byte</span>
+const PEPPER = Buffer.from(process.env.PASSWORD_PEPPER!, 'base64');  <span class="tok-comment">// 32 byte</span>
 
-const chuanBi = (mk: string) =&gt;
-  createHmac('sha256', TIEU).update(mk.normalize('NFKC')).digest('base64');
+const prepare = (pw: string) =&gt;
+  createHmac('sha256', PEPPER).update(mk.normalize('NFKC')).digest('base64');
 
-await hash(chuanBi(matKhau), THAM_SO);       <span class="tok-comment">// lưu như bình thường</span>
-await verify(nd.bam, chuanBi(matKhau));</code></pre>
+await hash(prepare(password), PARAMS);       <span class="tok-comment">// lưu như bình thường</span>
+await verify(u.bam, prepare(password));</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Nó mua được gì: một cú rò CHỈ cơ sở dữ liệu trở nên vô dụng</span><span class="lz-lnote">Kẻ tấn công dump được bảng người dùng KHÔNG bắt đầu bẻ được chút nào nếu không có tiêu, vì mọi ứng viên đều phải đi qua HMAC với một khoá 256 bit mà họ không có. Xét việc bao nhiêu vụ rò có hình dạng "bản sao lưu" thay vì "máy chủ bị chiếm", đây là một ranh giới có ý nghĩa.</span></div>
   <div class="lz-layer"><span class="lz-lname">Nó KHÔNG mua được gì: bảo vệ trước một cú chiếm toàn phần</span><span class="lz-lnote">Nếu kẻ tấn công chạy được mã trên máy chủ ứng dụng thì họ có luôn cái biến môi trường. Tiêu tách "cơ sở dữ liệu rò" ra khỏi "máy chủ bị chiếm" — hai sự kiện thật sự KHÁC nhau, nhưng đừng nhầm nó với một lớp băm mật khẩu thứ hai.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Cái giá: xoay vòng thật sự KHÓ</span><span class="lz-lnote">Đổi tiêu là vô hiệu hoá MỌI chuỗi băm đã lưu, vì bạn không suy lại được chúng nếu không có bản rõ. Mẫu làm được là ĐÁNH PHIÊN BẢN — lưu <code>v2$…</code>, giữ tiêu cũ để xác minh, và nêm lại tiêu khi đăng nhập thành công y hệt cách <code>canBamLai</code> làm. Hãy thiết kế điều đó ngay từ đầu, hoặc chấp nhận rằng cái tiêu là VĨNH VIỄN.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Dùng HMAC, đừng nối chuỗi</span><span class="lz-lnote"><code>sha256(TIEU + matKhau)</code> là lại đúng cái sai lầm nối dài của Bài 1.4. Và HMAC đặt TRƯỚC hàm băm chậm, không phải sau: hàm băm chậm phải là bước CUỐI để chi phí của nó vẫn áp lên mọi lần đoán.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Cái giá: xoay vòng thật sự KHÓ</span><span class="lz-lnote">Đổi tiêu là vô hiệu hoá MỌI chuỗi băm đã lưu, vì bạn không suy lại được chúng nếu không có bản rõ. Mẫu làm được là ĐÁNH PHIÊN BẢN — lưu <code>v2$…</code>, giữ tiêu cũ để xác minh, và nêm lại tiêu khi đăng nhập thành công y hệt cách <code>needsRehash</code> làm. Hãy thiết kế điều đó ngay từ đầu, hoặc chấp nhận rằng cái tiêu là VĨNH VIỄN.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Dùng HMAC, đừng nối chuỗi</span><span class="lz-lnote"><code>sha256(TIEU + password)</code> là lại đúng cái sai lầm nối dài của Bài 1.4. Và HMAC đặt TRƯỚC hàm băm chậm, không phải sau: hàm băm chậm phải là bước CUỐI để chi phí của nó vẫn áp lên mọi lần đoán.</span></div>
   <div class="lz-layer"><span class="lz-lname">Có đáng không?</span><span class="lz-lnote">Nếu bạn có một trình quản bí mật và một câu chuyện xoay vòng thì CÓ — nó rẻ. Nếu cái tiêu sẽ nằm trong đúng cái <code>.env</code> vốn cũng chứa <code>DATABASE_URL</code>, trên cùng một máy, thì rò cái này là rò cái kia và bạn vừa thêm phức tạp để đổi lấy rất ít. Hãy trung thực xem mình đang ở tình huống nào.</span></div>
 </div>
 <div class="pitfall">
@@ -798,9 +798,9 @@ await verify(nd.bam, chuanBi(matKhau));</code></pre>
 <pre><code><span class="tok-comment">// k-anonymity: send the first 5 hex characters of the SHA-1, nothing more</span>
 import { createHash } from 'node:crypto';
 
-export async function daLoRoi(matKhau: string): Promise&lt;number&gt; {
-  const sha1 = createHash('sha1').update(matKhau).digest('hex').toUpperCase();
-  const dau = sha1.slice(0, 5);        <span class="tok-comment">// gửi đi</span>
+export async function leaked(password: string): Promise&lt;number&gt; {
+  const sha1 = createHash('sha1').update(password).digest('hex').toUpperCase();
+  const prefix = sha1.slice(0, 5);        <span class="tok-comment">// gửi đi</span>
   const duoi = sha1.slice(5);          <span class="tok-comment">// KHÔNG gửi</span>
 
   const r = await fetch(&#96;https://api.pwnedpasswords.com/range/\${dau}&#96;, {
@@ -808,9 +808,9 @@ export async function daLoRoi(matKhau: string): Promise&lt;number&gt; {
   });
   const text = await r.text();
 
-  for (const dong of text.split('\\n')) {
-    const [hau, so] = dong.trim().split(':');
-    if (hau === duoi) return Number(so);
+  for (const line of text.split('\\n')) {
+    const [suffix, count] = line.trim().split(':');
+    if (suffix === duoi) return Number(count);
   }
   return 0;
 }</code></pre>
@@ -835,8 +835,8 @@ curl -s https://api.pwnedpasswords.com/range/5BAA6 | grep '^1E4C9B93F3F0682250B6
 <pre><code>import zxcvbn from 'zxcvbn';
 
 for (const mk of ['Password1!', 'conmeomuncuatoi', 'Tr0ub4dor&amp;3', 'con meo mun cua toi ten la Bo']) {
-  const kq = zxcvbn(mk);
-  console.log(mk.padEnd(32), 'diem', kq.score, '·', kq.crack_times_display.offline_slow_hashing_1e4_per_second);
+  const result = zxcvbn(pw);
+  console.log(pw.padEnd(32), 'diem', result.score, '·', result.crack_times_display.offline_slow_hashing_1e4_per_secou);
 }</code></pre>
 <div class="out">Password1!                       diem 1 · 3 hours
 conmeomuncuatoi                  diem 3 · 3 months
@@ -895,9 +895,9 @@ con meo mun cua toi ten la Bo    diem 4 · centuries
 <pre><code><span class="tok-comment">// k-ẩn danh: gửi 5 ký tự hex ĐẦU của SHA-1, không hơn</span>
 import { createHash } from 'node:crypto';
 
-export async function daLoRoi(matKhau: string): Promise&lt;number&gt; {
-  const sha1 = createHash('sha1').update(matKhau).digest('hex').toUpperCase();
-  const dau = sha1.slice(0, 5);        <span class="tok-comment">// gửi đi</span>
+export async function leaked(password: string): Promise&lt;number&gt; {
+  const sha1 = createHash('sha1').update(password).digest('hex').toUpperCase();
+  const prefix = sha1.slice(0, 5);        <span class="tok-comment">// gửi đi</span>
   const duoi = sha1.slice(5);          <span class="tok-comment">// KHÔNG gửi</span>
 
   const r = await fetch(&#96;https://api.pwnedpasswords.com/range/\${dau}&#96;, {
@@ -905,9 +905,9 @@ export async function daLoRoi(matKhau: string): Promise&lt;number&gt; {
   });
   const text = await r.text();
 
-  for (const dong of text.split('\\n')) {
-    const [hau, so] = dong.trim().split(':');
-    if (hau === duoi) return Number(so);
+  for (const line of text.split('\\n')) {
+    const [suffix, count] = line.trim().split(':');
+    if (suffix === duoi) return Number(count);
   }
   return 0;
 }</code></pre>
@@ -932,8 +932,8 @@ curl -s https://api.pwnedpasswords.com/range/5BAA6 | grep '^1E4C9B93F3F0682250B6
 <pre><code>import zxcvbn from 'zxcvbn';
 
 for (const mk of ['Password1!', 'conmeomuncuatoi', 'Tr0ub4dor&amp;3', 'con meo mun cua toi ten la Bo']) {
-  const kq = zxcvbn(mk);
-  console.log(mk.padEnd(32), 'diem', kq.score, '·', kq.crack_times_display.offline_slow_hashing_1e4_per_second);
+  const result = zxcvbn(pw);
+  console.log(pw.padEnd(32), 'diem', result.score, '·', result.crack_times_display.offline_slow_hashing_1e4_per_secou);
 }</code></pre>
 <div class="out">Password1!                       diem 1 · 3 hours
 conmeomuncuatoi                  diem 3 · 3 months
@@ -977,8 +977,8 @@ con meo mun cua toi ten la Bo    diem 4 · centuries
 
 <h3>Three situations, three answers</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">A · Same algorithm, lower parameters</span><span class="v"><code>$argon2id$…m=19456…</code> when you now use <code>m=65536</code>. Lesson 2.3's <code>canBamLai</code> already handles it: rehash on the next successful login, and nothing else is needed.</span></div>
-  <div class="kv"><span class="k">B · A different modern algorithm</span><span class="v">bcrypt to Argon2id, or scrypt to Argon2id. The old hashes are not dangerous, so lazy migration on login is fine. The only change is that <code>canBamLai</code> must recognise the old prefix and the verify path must dispatch on it.</span></div>
+  <div class="kv"><span class="k">A · Same algorithm, lower parameters</span><span class="v"><code>$argon2id$…m=19456…</code> when you now use <code>m=65536</code>. Lesson 2.3's <code>needsRehash</code> already handles it: rehash on the next successful login, and nothing else is needed.</span></div>
+  <div class="kv"><span class="k">B · A different modern algorithm</span><span class="v">bcrypt to Argon2id, or scrypt to Argon2id. The old hashes are not dangerous, so lazy migration on login is fine. The only change is that <code>needsRehash</code> must recognise the old prefix and the verify path must dispatch on it.</span></div>
   <div class="kv"><span class="k">C · A broken scheme</span><span class="v">Unsalted MD5, SHA-1, or a plaintext column. Lazy migration is <em>not</em> enough here, because the existing rows are a liability right now — a leak today exposes every password today, including the ones belonging to people who have not logged in for a year.</span></div>
   <div class="kv"><span class="k">The distinction that matters</span><span class="v">In A and B you are improving something adequate. In C you are containing a live problem. Only C needs the wrapping technique below, and only C has a deadline.</span></div>
 </div>
@@ -988,14 +988,14 @@ con meo mun cua toi ten la Bo    diem 4 · centuries
 import { hash, verify as argonVerify } from '@node-rs/argon2';
 import bcrypt from 'bcrypt';
 
-export async function kiemMatKhau(bamCu: string, matKhau: string): Promise&lt;boolean&gt; {
-  if (bamCu.startsWith('$argon2')) return argonVerify(bamCu, matKhau).catch(() =&gt; false);
-  if (/^\\$2[aby]\\$/.test(bamCu))   return bcrypt.compare(matKhau, bamCu);
+export async function checkPassword(oldHash: string, password: string): Promise&lt;boolean&gt; {
+  if (oldHash.startsWith('$argon2')) return argonVerify(oldHash, password).catch(() =&gt; false);
+  if (/^\\$2[aby]\\$/.test(oldHash))   return bcrypt.compare(password, oldHash);
   return false;                                   <span class="tok-comment">// định dạng lạ → trượt</span>
 }
 
-export function canBamLai(bamCu: string): boolean {
-  return !bamCu.startsWith('$argon2id$') || thamSoThapHon(bamCu);
+export function needsRehash(oldHash: string): boolean {
+  return !oldHash.startsWith('$argon2id$') || weakerParams(oldHash);
 }</code></pre>
 <div class="out">$ SELECT left(bam, 10) AS dinh_dang, count(*) FROM "NguoiDung" GROUP BY 1;
 
@@ -1034,18 +1034,18 @@ bam_moi = argon2id( md5_hex_da_co )        <span class="tok-comment">// lưu kè
 <pre><code><span class="tok-comment">// scripts/boc-md5.ts — chạy một lần, chia lô, nối lại được (Prisma 11.4)</span>
 const LO = 500;
 for (;;) {
-  const canBoc = await prisma.nguoiDung.findMany({
+  const needsWrap = await prisma.user.findMany({
     where: { bam: { not: { startsWith: '$' } } },   <span class="tok-comment">// còn là md5 hex trần</span>
     select: { id: true, bam: true },
     take: LO,
   });
-  if (canBoc.length === 0) break;
+  if (needsWrap.length === 0) break;
 
-  for (const nd of canBoc) {
-    const boc = 'boc1$' + await hash(nd.bam.toLowerCase(), THAM_SO);
-    await prisma.nguoiDung.update({ where: { id: nd.id }, data: { bam: boc } });
+  for (const nd of needsWrap) {
+    const wrapped = 'boc1$' + await hash(u.bam.toLowerCase(), PARAMS);
+    await prisma.user.update({ where: { id: u.id }, data: { bam: boc } });
   }
-  console.log(&#96;\${canBoc.length} hang · \${new Date().toISOString()}&#96;);
+  console.log(&#96;\${needsWrap.length} hang · \${new Date().toISOString()}&#96;);
   await new Promise((r) =&gt; setTimeout(r, 200));
 }</code></pre>
 <div class="out">500 hang · 2026-08-23T16:04:11.284Z
@@ -1056,12 +1056,12 @@ for (;;) {
 # Sau 2 gio 43 phut: KHONG con mot chuoi md5 tran nao trong CSDL.
 # Khong ai phai dat lai mat khau. Khong ai nhan mot email nao.</div>
 <pre><code><span class="tok-comment">// The verify path handles both, and unwraps on success</span>
-export async function kiemMatKhau(bamCu: string, matKhau: string) {
-  if (bamCu.startsWith('boc1$')) {
-    const trong = createHash('md5').update(matKhau).digest('hex');
-    return argonVerify(bamCu.slice(5), trong).catch(() =&gt; false);
+export async function checkPassword(oldHash: string, password: string) {
+  if (oldHash.startsWith('boc1$')) {
+    const trong = createHash('md5').update(password).digest('hex');
+    return argonVerify(oldHash.slice(5), trong).catch(() =&gt; false);
   }
-  if (bamCu.startsWith('$argon2')) return argonVerify(bamCu, matKhau).catch(() =&gt; false);
+  if (oldHash.startsWith('$argon2')) return argonVerify(oldHash, password).catch(() =&gt; false);
   return false;
 }
 
@@ -1100,8 +1100,8 @@ export async function kiemMatKhau(bamCu: string, matKhau: string) {
 
 <h3>Ba tình huống, ba câu trả lời</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">A · Cùng thuật toán, tham số thấp hơn</span><span class="v"><code>$argon2id$…m=19456…</code> trong khi bây giờ bạn dùng <code>m=65536</code>. Hàm <code>canBamLai</code> của Bài 2.3 đã lo rồi: băm lại ở lần đăng nhập thành công kế tiếp, và không cần gì thêm.</span></div>
-  <div class="kv"><span class="k">B · Một thuật toán hiện đại KHÁC</span><span class="v">bcrypt sang Argon2id, hoặc scrypt sang Argon2id. Chuỗi băm cũ KHÔNG nguy hiểm, nên chuyển đổi LƯỜI theo lần đăng nhập là ổn. Thay đổi duy nhất là <code>canBamLai</code> phải nhận ra tiền tố cũ và đường xác minh phải rẽ nhánh theo nó.</span></div>
+  <div class="kv"><span class="k">A · Cùng thuật toán, tham số thấp hơn</span><span class="v"><code>$argon2id$…m=19456…</code> trong khi bây giờ bạn dùng <code>m=65536</code>. Hàm <code>needsRehash</code> của Bài 2.3 đã lo rồi: băm lại ở lần đăng nhập thành công kế tiếp, và không cần gì thêm.</span></div>
+  <div class="kv"><span class="k">B · Một thuật toán hiện đại KHÁC</span><span class="v">bcrypt sang Argon2id, hoặc scrypt sang Argon2id. Chuỗi băm cũ KHÔNG nguy hiểm, nên chuyển đổi LƯỜI theo lần đăng nhập là ổn. Thay đổi duy nhất là <code>needsRehash</code> phải nhận ra tiền tố cũ và đường xác minh phải rẽ nhánh theo nó.</span></div>
   <div class="kv"><span class="k">C · Một sơ đồ ĐÃ HỎNG</span><span class="v">MD5 không muối, SHA-1, hoặc một cột lưu dạng rõ. Chuyển đổi lười <em>KHÔNG</em> đủ ở đây, vì những hàng đang có là một mối nguy NGAY LÚC NÀY — một cú rò hôm nay là lộ mọi mật khẩu hôm nay, kể cả của những người cả năm chưa đăng nhập.</span></div>
   <div class="kv"><span class="k">Khác biệt QUAN TRỌNG</span><span class="v">Ở A và B bạn đang CẢI THIỆN một thứ vốn đã tạm ổn. Ở C bạn đang KHOANH VÙNG một vấn đề đang sống. Chỉ C mới cần kỹ thuật bọc bên dưới, và chỉ C mới có một hạn chót.</span></div>
 </div>
@@ -1111,14 +1111,14 @@ export async function kiemMatKhau(bamCu: string, matKhau: string) {
 import { hash, verify as argonVerify } from '@node-rs/argon2';
 import bcrypt from 'bcrypt';
 
-export async function kiemMatKhau(bamCu: string, matKhau: string): Promise&lt;boolean&gt; {
-  if (bamCu.startsWith('$argon2')) return argonVerify(bamCu, matKhau).catch(() =&gt; false);
-  if (/^\\$2[aby]\\$/.test(bamCu))   return bcrypt.compare(matKhau, bamCu);
+export async function checkPassword(oldHash: string, password: string): Promise&lt;boolean&gt; {
+  if (oldHash.startsWith('$argon2')) return argonVerify(oldHash, password).catch(() =&gt; false);
+  if (/^\\$2[aby]\\$/.test(oldHash))   return bcrypt.compare(password, oldHash);
   return false;                                   <span class="tok-comment">// định dạng lạ → trượt</span>
 }
 
-export function canBamLai(bamCu: string): boolean {
-  return !bamCu.startsWith('$argon2id$') || thamSoThapHon(bamCu);
+export function needsRehash(oldHash: string): boolean {
+  return !oldHash.startsWith('$argon2id$') || weakerParams(oldHash);
 }</code></pre>
 <div class="out">$ SELECT left(bam, 10) AS dinh_dang, count(*) FROM "NguoiDung" GROUP BY 1;
 
@@ -1157,18 +1157,18 @@ bam_moi = argon2id( md5_hex_da_co )        <span class="tok-comment">// lưu kè
 <pre><code><span class="tok-comment">// scripts/boc-md5.ts — chạy một lần, chia lô, nối lại được (Prisma 11.4)</span>
 const LO = 500;
 for (;;) {
-  const canBoc = await prisma.nguoiDung.findMany({
+  const needsWrap = await prisma.user.findMany({
     where: { bam: { not: { startsWith: '$' } } },   <span class="tok-comment">// còn là md5 hex trần</span>
     select: { id: true, bam: true },
     take: LO,
   });
-  if (canBoc.length === 0) break;
+  if (needsWrap.length === 0) break;
 
-  for (const nd of canBoc) {
-    const boc = 'boc1$' + await hash(nd.bam.toLowerCase(), THAM_SO);
-    await prisma.nguoiDung.update({ where: { id: nd.id }, data: { bam: boc } });
+  for (const nd of needsWrap) {
+    const wrapped = 'boc1$' + await hash(u.bam.toLowerCase(), PARAMS);
+    await prisma.user.update({ where: { id: u.id }, data: { bam: boc } });
   }
-  console.log(&#96;\${canBoc.length} hang · \${new Date().toISOString()}&#96;);
+  console.log(&#96;\${needsWrap.length} hang · \${new Date().toISOString()}&#96;);
   await new Promise((r) =&gt; setTimeout(r, 200));
 }</code></pre>
 <div class="out">500 hang · 2026-08-23T16:04:11.284Z
@@ -1179,12 +1179,12 @@ for (;;) {
 # Sau 2 gio 43 phut: KHONG con mot chuoi md5 tran nao trong CSDL.
 # Khong ai phai dat lai mat khau. Khong ai nhan mot email nao.</div>
 <pre><code><span class="tok-comment">// Đường xác minh lo được cả hai, và GỠ BỌC khi thành công</span>
-export async function kiemMatKhau(bamCu: string, matKhau: string) {
-  if (bamCu.startsWith('boc1$')) {
-    const trong = createHash('md5').update(matKhau).digest('hex');
-    return argonVerify(bamCu.slice(5), trong).catch(() =&gt; false);
+export async function checkPassword(oldHash: string, password: string) {
+  if (oldHash.startsWith('boc1$')) {
+    const trong = createHash('md5').update(password).digest('hex');
+    return argonVerify(oldHash.slice(5), trong).catch(() =&gt; false);
   }
-  if (bamCu.startsWith('$argon2')) return argonVerify(bamCu, matKhau).catch(() =&gt; false);
+  if (oldHash.startsWith('$argon2')) return argonVerify(oldHash, password).catch(() =&gt; false);
   return false;
 }
 

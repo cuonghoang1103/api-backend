@@ -232,7 +232,7 @@ content-type: application/json
   <div class="lz-layer"><span class="lz-lname">Clock drift fails for one user, forever</span><span class="lz-lnote">Their phone is ninety seconds out, so every code they will ever generate is rejected, and nothing else about their account is wrong. Ask them to enable automatic time — and log the observed step offset (7.2) so support can see the drift instead of guessing at it.</span></div>
   <div class="lz-layer"><span class="lz-lname">An encoding or algorithm mismatch fails for everyone, from enrolment</span><span class="lz-lnote">If <em>no</em> user has ever completed MFA enrolment, it is not drift. It is the secret encoding or the hash algorithm, and the fastest check is the RFC 6238 test vectors from Lesson 7.2 — if your implementation does not reproduce them, the bug is yours and not theirs.</span></div>
   <div class="lz-layer"><span class="lz-lname">Server drift fails for everyone, suddenly</span><span class="lz-lnote">A container with no NTP drifts over weeks, and then one day every code from every user is rejected at once. That is shape 2 wearing shape 6's clothes — check the server clock before touching the code.</span></div>
-  <div class="lz-layer"><span class="lz-lname">A code that works once and then never again is not drift</span><span class="lz-lnote">That is the <code>buocCuoi</code> replay guard from Lesson 7.2 doing its job — usually because the client submitted the form twice. The fix is on the client, and the guard is correct.</span></div>
+  <div class="lz-layer"><span class="lz-lname">A code that works once and then never again is not drift</span><span class="lz-lnote">That is the <code>lastStep</code> replay guard from Lesson 7.2 doing its job — usually because the client submitted the form twice. The fix is on the client, and the guard is correct.</span></div>
 </div>
 
 <h3>The lookup table</h3>
@@ -298,7 +298,7 @@ content-type: application/json
   <div class="lz-layer"><span class="lz-lname">Lệch đồng hồ thì hỏng với MỘT người, VĨNH VIỄN</span><span class="lz-lnote">Điện thoại của họ lệch chín mươi giây, nên MỌI mã họ sẽ sinh ra từ nay về sau đều bị từ chối, mà chẳng có gì khác về tài khoản của họ là sai cả. Hãy bảo họ bật đồng hồ tự động — và hãy GHI LẠI độ lệch bước quan sát được (7.2) để bộ phận hỗ trợ NHÌN THẤY độ trôi thay vì phải đoán.</span></div>
   <div class="lz-layer"><span class="lz-lname">Lệch mã hoá hay lệch thuật toán thì hỏng với TẤT CẢ, ngay từ lúc đăng ký</span><span class="lz-lnote">Nếu CHƯA có người dùng nào từng hoàn tất được việc đăng ký MFA thì đó không phải lệch đồng hồ. Đó là phần mã hoá bí mật hoặc thuật toán băm, và phép kiểm nhanh nhất là bộ vector kiểm thử của RFC 6238 ở Bài 7.2 — nếu bản cài của bạn không tái tạo được chúng thì con lỗi là của BẠN chứ không phải của họ.</span></div>
   <div class="lz-layer"><span class="lz-lname">Đồng hồ MÁY CHỦ lệch thì hỏng với tất cả, ĐỘT NGỘT</span><span class="lz-lnote">Một container không có NTP sẽ trôi dần qua nhiều tuần, rồi một ngày mọi mã của mọi người dùng cùng bị từ chối một lúc. Đó là hình dạng 2 khoác bộ đồ của hình dạng 6 — hãy kiểm đồng hồ máy chủ TRƯỚC khi đụng vào mã.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Một mã chạy được MỘT lần rồi thôi thì KHÔNG phải lệch đồng hồ</span><span class="lz-lnote">Đó là cái chốt chặn phát lại <code>buocCuoi</code> ở Bài 7.2 đang làm đúng việc của nó — thường vì client gửi biểu mẫu hai lần. Cách vá nằm ở phía CLIENT, còn cái chốt thì ĐÚNG.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Một mã chạy được MỘT lần rồi thôi thì KHÔNG phải lệch đồng hồ</span><span class="lz-lnote">Đó là cái chốt chặn phát lại <code>lastStep</code> ở Bài 7.2 đang làm đúng việc của nó — thường vì client gửi biểu mẫu hai lần. Cách vá nằm ở phía CLIENT, còn cái chốt thì ĐÚNG.</span></div>
 </div>
 
 <h3>Bảng tra</h3>
@@ -381,7 +381,7 @@ $argon2id$v=19$m=65536,t=3,p=4$c29tZXNhbHQ$…
 <span class="tok-comment">// Bản ghi CŨ mang tham số CŨ. Đó là hình dạng 4 ở Bài 12.2.</span>
 
 <span class="tok-comment">// 4. Tuyến có được gắn không? 404 = build cũ, 401 = có gắn và đòi xác thực.</span>
-curl -s -o /dev/null -w "%{http_code}\\\\n" https://vidu.com/api/v1/&lt;tuyen&gt;
+curl -s -o /dev/null -w "%{http_code}\\\\n" https://vidu.com/api/v1/&lt;route&gt;
 
 <span class="tok-comment">// 5. Đồng hồ máy chủ — cái hay bị bỏ qua nhất ở hình dạng 6.</span>
 date -u; timedatectl status | grep -i 'synchronized\\\\|NTP'
@@ -389,11 +389,11 @@ date -u; timedatectl status | grep -i 'synchronized\\\\|NTP'
 <span class="tok-comment">// 6. Cơ sở dữ liệu nói gì về tài khoản này (đọc, đừng đoán):</span>
 SELECT email_xac_minh, khoa_luc, phien_ban_tin_vat,
        (SELECT count(*) FROM refresh_token r
-         WHERE r.nguoi_dung_id = u.id AND r.thu_hoi_luc IS NULL) AS phien_song
+         WHERE r.user_id = u.id AND r.revoked_at IS NULL) AS phien_song
 FROM nguoi_dung u WHERE email_chuan_hoa = 'nan-nhan@vidu.com';
 
 <span class="tok-comment">// 7. Nhật ký kiểm toán — Bài 11.4 dựng ra chính là để trả lời câu này.</span>
-SELECT luc, loai, chu_the_id, ip, ket_qua FROM su_kien_kiem_toan
+SELECT luc, kind, chu_the_id, ip, ket_qua FROM su_kien_kiem_toan
 WHERE doi_tuong_id = 'u_812' ORDER BY luc DESC LIMIT 50;</code></pre>
 <div class="pitfall">
 <p><strong>Trap — the database is the only thing that is not telling you a story.</strong> The user's description is filtered through what they noticed, the logs are filtered through what somebody decided to record, and your mental model is filtered through what you built six months ago. The row is the state. Before forming any hypothesis about why an account cannot log in, run query 6: is the email verified, is the account locked, what is the credential version, and how many live sessions are there? Four columns, one query, and it eliminates most hypotheses before you spend an hour on them.</p>
@@ -465,7 +465,7 @@ $argon2id$v=19$m=65536,t=3,p=4$c29tZXNhbHQ$…
 <span class="tok-comment">// Bản ghi CŨ mang tham số CŨ. Đó là hình dạng 4 ở Bài 12.2.</span>
 
 <span class="tok-comment">// 4. Tuyến có được gắn không? 404 = build cũ, 401 = có gắn và đòi xác thực.</span>
-curl -s -o /dev/null -w "%{http_code}\\\\n" https://vidu.com/api/v1/&lt;tuyen&gt;
+curl -s -o /dev/null -w "%{http_code}\\\\n" https://vidu.com/api/v1/&lt;route&gt;
 
 <span class="tok-comment">// 5. Đồng hồ máy chủ — cái hay bị bỏ qua nhất ở hình dạng 6.</span>
 date -u; timedatectl status | grep -i 'synchronized\\\\|NTP'
@@ -473,11 +473,11 @@ date -u; timedatectl status | grep -i 'synchronized\\\\|NTP'
 <span class="tok-comment">// 6. Cơ sở dữ liệu nói gì về tài khoản này (đọc, đừng đoán):</span>
 SELECT email_xac_minh, khoa_luc, phien_ban_tin_vat,
        (SELECT count(*) FROM refresh_token r
-         WHERE r.nguoi_dung_id = u.id AND r.thu_hoi_luc IS NULL) AS phien_song
+         WHERE r.user_id = u.id AND r.revoked_at IS NULL) AS phien_song
 FROM nguoi_dung u WHERE email_chuan_hoa = 'nan-nhan@vidu.com';
 
 <span class="tok-comment">// 7. Nhật ký kiểm toán — Bài 11.4 dựng ra chính là để trả lời câu này.</span>
-SELECT luc, loai, chu_the_id, ip, ket_qua FROM su_kien_kiem_toan
+SELECT luc, kind, chu_the_id, ip, ket_qua FROM su_kien_kiem_toan
 WHERE doi_tuong_id = 'u_812' ORDER BY luc DESC LIMIT 50;</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — CƠ SỞ DỮ LIỆU là thứ DUY NHẤT không kể chuyện cho bạn nghe.</strong> Lời mô tả của người dùng đã bị lọc qua những gì họ ĐỂ Ý thấy, log đã bị lọc qua những gì ai đó QUYẾT ĐỊNH ghi lại, còn mô hình trong đầu bạn thì bị lọc qua thứ bạn đã dựng sáu tháng trước. Cái BẢN GHI mới là trạng thái. Trước khi hình thành bất kỳ giả thuyết nào về việc vì sao một tài khoản không đăng nhập được, hãy chạy câu truy vấn số 6: email đã xác minh chưa, tài khoản có bị khoá không, phiên bản tín vật là bao nhiêu, và có bao nhiêu phiên đang sống? Bốn cột, một câu truy vấn, và nó loại bỏ phần lớn giả thuyết trước khi bạn tốn một tiếng cho chúng.</p>
@@ -611,7 +611,7 @@ grep -rE "env\\\\.[A-Z_]*(SECRET|KEY)[A-Z_]*\\\\s*(\\\\|\\\\||\\\\?\\\\?)" src/ 
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Tín vật và phiên (1–7)</span><span class="lz-lnote">Argon2id hay bcrypt với tham số hiện hành, và bản ghi cũ có được băm lại lúc đăng nhập không (2.3, 2.5)? Mật khẩu mới có được đối chiếu danh sách rò rỉ không (2.2)? Cookie phiên có <code>HttpOnly</code>, <code>Secure</code>, <code>SameSite</code> và KHÔNG có <code>Domain</code> không (3.4, 10.3)? Kho phiên có dùng chung giữa các bản chạy không (3.3)? Thuật toán có được ghim ở MỌI lời gọi <code>verify</code> không (4.2)? <code>iss</code>, <code>aud</code> và <code>exp</code> có được kiểm đủ cả ba không (4.3)? Token có mang <code>kid</code> không (4.4)?</span></div>
   <div class="lz-layer"><span class="lz-lname">Thu hồi và vòng đời (8–13)</span><span class="lz-lnote">Refresh token có xoay vòng, có phát hiện tái dùng và có cửa sổ ân hạn không (5.2, 5.5)? Một lần đặt lại mật khẩu có thu hồi MỌI phiên không (6.3)? URL đặt lại có dựng từ CẤU HÌNH thay vì từ một header không (6.3)? Phản hồi đăng nhập có ĐỒNG NHẤT không, và nó có LUÔN băm không (6.4)? Đổi email có đòi xác thực lại và có xác minh địa chỉ mới TRƯỚC khi chuyển không (6.5)? Có một danh sách thiết bị mà người dùng thao tác được không (5.4)?</span></div>
-  <div class="lz-layer"><span class="lz-lname">Yếu tố và liên kết định danh (14–17)</span><span class="lz-lnote">Việc đăng ký MFA có xác nhận một mã CHẠY ĐƯỢC trước khi bật, và có phát mã khôi phục dạng băm ngay tại khoảnh khắc đó không (7.3)? <code>buocCuoi</code> có được lưu để một mã không thể phát lại không (7.2)? Với đăng nhập mạng xã hội, tài khoản có lấy khoá là <code>(nhà cung cấp, sub)</code> thay vì email không, và <code>email_verified</code> có bắt buộc không (8.4, 8.5)? <code>state</code>, <code>nonce</code> và verifier PKCE có nằm ở phía máy chủ và dùng một lần không (8.2, 8.3)?</span></div>
+  <div class="lz-layer"><span class="lz-lname">Yếu tố và liên kết định danh (14–17)</span><span class="lz-lnote">Việc đăng ký MFA có xác nhận một mã CHẠY ĐƯỢC trước khi bật, và có phát mã khôi phục dạng băm ngay tại khoảnh khắc đó không (7.3)? <code>lastStep</code> có được lưu để một mã không thể phát lại không (7.2)? Với đăng nhập mạng xã hội, tài khoản có lấy khoá là <code>(nhà cung cấp, sub)</code> thay vì email không, và <code>email_verified</code> có bắt buộc không (8.4, 8.5)? <code>state</code>, <code>nonce</code> và verifier PKCE có nằm ở phía máy chủ và dùng một lần không (8.2, 8.3)?</span></div>
   <div class="lz-layer"><span class="lz-lname">Phân quyền và vận hành (18–20)</span><span class="lz-lnote">Quyền sở hữu có nằm TRONG câu truy vấn thay vì trong một câu <code>if</code> đứng sau nó không, và một endpoint không khai chính sách có hỏng theo hướng ĐÓNG không (9.1, 9.5)? Trong hệ nhiều tenant, tenant có tới từ PHIÊN không và có một lớp THỨ HAI nằm dưới tầng ứng dụng không (9.4)? Có nhật ký kiểm toán ghi NGƯỜI THỰC HIỆN không, và có thứ gì cảnh báo khi tái dùng refresh token không (11.4, 11.5)?</span></div>
 </div>
 <div class="pitfall">

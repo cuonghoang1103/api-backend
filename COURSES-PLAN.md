@@ -805,6 +805,38 @@ node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
 node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ```
 
+### ⚡ MỘT LỆNH LÀM NỐT TẤT CẢ (26/08/2026)
+
+`scripts/hoan-tat-khoa-hoc.sh` gộp cả năm bước còn lại. **Chạy trên máy Mac** —
+nó cần ba thứ sandbox không có: ra được `youtube.com`, khoá ssh vào VPS, khoá
+ssh vào máy nhà.
+
+```bash
+cd <repo trên Mac> && git fetch origin \
+  && git checkout origin/claude/intelligent-cori-pt8zxp -- scripts/hoan-tat-khoa-hoc.sh \
+  && bash scripts/hoan-tat-khoa-hoc.sh
+```
+
+Nó KHÔNG tự push — chỉ commit tại chỗ, rồi `deploy-nha.sh` ở bước 5 vẫn hỏi
+duyệt qua Telegram như cũ.
+
+⛔ **Chốt ngưỡng 20% ở bước 2 là thứ đắt nhất trong file đó.** Bước 2 gỡ mọi
+entry còn `credit: ''` sau khi `--fix-credits` chạy (rỗng == link chết). Thử
+thật trên bản sao lúc credit còn rỗng toàn bộ — đúng trạng thái `main` ngày
+25/08 — nó gỡ **sạch 804/804 entry**, tức là bước 1 hỏng vì bất cứ lý do gì
+(mất mạng, sai thư mục, oEmbed đổi) là cả tính năng video biến mất mà không ai
+kịp thấy. Thực tế chỉ ~24/804 chết (3%), nên >20% ⇒ dừng hẳn, **không ghi file
+nào**. Đã kiểm cả hai chiều: ca xấu dừng đúng và không đụng file; ca thật gỡ
+đúng 2/57 và file vẫn parse được.
+
+### Vì sao đợt deploy 25/08 chưa hiện khoá/ảnh/video — ba nguyên nhân khác nhau
+
+| Thiếu gì | Nguyên nhân |
+|---|---|
+| **Video** | `--fix-credits` chạy ở `~/cuongthai-build/api-backend-deploy` nhưng **không commit**. `deploy-nha.sh` chỉ đẩy thứ ĐÃ COMMIT, nên production nhận bản credit rỗng ⇒ chốt của `course-video-seed` từ chối `--apply` (rc=1, `✗ 63 entry còn credit rỗng`). Chốt làm đúng việc; cái sai là kết quả nằm ngoài git. |
+| **Ảnh bìa** | `deploy.sh` chạy `course-seed.mjs` và `course-video-seed.mjs` nhưng **không** có `course-cover.mjs` — ảnh bìa bắt buộc chạy tay trong container backend (cần `sharp` + `R2_*`). |
+| **Khoá học** | `deploy.sh:571-574` CÓ lặp qua mọi `content/courses/*.mjs` và `course-seed.mjs --apply`. Grep log không thấy lỗi nào ở khối này ⇒ khoá nhiều khả năng đã seed; thẻ vỡ ảnh làm tưởng là thiếu khoá. Còn nghi thì xem `grep -iE "course\|khoá" /tmp/seed-nha.log`. |
+
 ### Video YouTube — CHẠY `--fix-credits` TRƯỚC KHI SEED
 
 ```bash

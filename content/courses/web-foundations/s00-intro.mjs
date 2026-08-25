@@ -52,6 +52,14 @@ export default {
 </div>
 <p>Chapters 0–5 are the foundation for <strong>both</strong> Node.js and Next.js. Chapters 6–8 lean toward the <strong>backend</strong> (Node.js). All of it, plus JavaScript/TypeScript, is what makes <strong>Next.js/React</strong> readable.</p>
 
+<h3>The four layers you are about to learn</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Browser</span><span class="lz-t">HTML, CSS, JavaScript</span><span class="lz-d">What the user sees and clicks. Runs on their machine, in their browser, which you do not control — so it can never be trusted with secrets.</span></div>
+<div class="lz-layer"><span class="lz-k">Network</span><span class="lz-t">HTTP requests &amp; responses</span><span class="lz-d">Every interaction is a request going out and a response coming back. Chapter 6 makes this visible; almost every bug you will chase lives here.</span></div>
+<div class="lz-layer"><span class="lz-k">Server</span><span class="lz-t">Node.js, your own code</span><span class="lz-d">Runs on a machine you control. This is where authentication decisions are made and where secrets are allowed to live.</span></div>
+<div class="lz-layer"><span class="lz-k">Database</span><span class="lz-t">SQL, tables, rows</span><span class="lz-d">The only layer that remembers anything after the request ends. Chapter 8.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — learning by watching instead of by typing.</strong> A tutorial video is comfortable precisely because it removes the part that teaches: getting stuck. You watch someone build a to-do app in forty minutes, feel that you understood it, and cannot write a single line the next day — because you practised <em>recognising</em> code, not producing it. The fix is uncomfortable and cheap: after every lesson here, close the page and rebuild the example from memory. You will fail, look something up, and that lookup is what actually sticks. Ten minutes of typing beats an hour of watching, every time.</p></div>
 <div class="link-card"><a href="https://roadmap.sh/frontend" target="_blank" rel="noopener">roadmap.sh — the visual web developer roadmap</a></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Learn" target="_blank" rel="noopener">MDN — Learn web development (the reference we lean on)</a></div>
 
@@ -90,6 +98,14 @@ export default {
 </div>
 <p>Chương 0–5 là nền tảng cho <strong>cả</strong> Node.js lẫn Next.js. Chương 6–8 nghiêng về <strong>backend</strong> (Node.js). Toàn bộ, cộng JavaScript/TypeScript, là thứ làm cho <strong>Next.js/React</strong> đọc được.</p>
 
+<h3>Bốn tầng bạn sắp học</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Trình duyệt</span><span class="lz-t">HTML, CSS, JavaScript</span><span class="lz-d">Thứ người dùng nhìn thấy và bấm vào. Chạy trên máy của họ, trong trình duyệt của họ, thứ bạn không kiểm soát — nên nó không bao giờ được giữ bí mật.</span></div>
+<div class="lz-layer"><span class="lz-k">Mạng</span><span class="lz-t">Request &amp; response HTTP</span><span class="lz-d">Mọi tương tác đều là một request đi ra và một response đi về. Chương 6 làm nó hiện hình; gần như mọi lỗi bạn sẽ truy đuổi đều sống ở đây.</span></div>
+<div class="lz-layer"><span class="lz-k">Máy chủ</span><span class="lz-t">Node.js, mã của chính bạn</span><span class="lz-d">Chạy trên một máy bạn kiểm soát. Đây là nơi các quyết định xác thực được đưa ra và là nơi bí mật được phép sống.</span></div>
+<div class="lz-layer"><span class="lz-k">Cơ sở dữ liệu</span><span class="lz-t">SQL, bảng, dòng</span><span class="lz-d">Tầng duy nhất còn nhớ được gì đó sau khi request kết thúc. Chương 8.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — học bằng cách xem thay vì bằng cách gõ.</strong> Một video hướng dẫn dễ chịu chính vì nó gỡ đi cái phần dạy được: lúc bị kẹt. Bạn xem người ta dựng một app to-do trong bốn mươi phút, thấy mình đã hiểu, rồi hôm sau không viết nổi một dòng — vì bạn đã luyện <em>nhận ra</em> mã, chứ không phải tạo ra mã. Cách chữa thì khó chịu mà rẻ: sau mỗi bài ở đây, đóng trang lại và dựng lại ví dụ từ trí nhớ. Bạn sẽ hỏng, sẽ phải tra, và chính lần tra đó mới là thứ ở lại. Mười phút gõ hơn một tiếng xem, lần nào cũng vậy.</p></div>
 <div class="link-card"><a href="https://roadmap.sh/frontend" target="_blank" rel="noopener">roadmap.sh — lộ trình lập trình web trực quan</a></div>
 <div class="link-card"><a href="https://developer.mozilla.org/vi/docs/Learn" target="_blank" rel="noopener">MDN — Học phát triển web (tài liệu tham chiếu chính)</a></div>
 
@@ -145,6 +161,14 @@ Content-Type: text/html
 
 <p class="note-ct"><strong>Why this matters for later:</strong> the whole "Server Component vs Client Component" idea in Next.js is just this line drawn inside your app — some code runs on the server, some in the browser. Once this picture is solid, that lesson is easy.</p>
 
+<h3>What happens between typing a URL and seeing the page</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">DNS turns the name into a number</span><span class="lz-d"><code>cuongthai.com</code> means nothing to the network. A DNS lookup returns an IP address like <code>203.0.113.10</code> — the actual machine to talk to.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The browser opens a connection</span><span class="lz-d">TCP, then TLS for <code>https://</code>. TLS is what makes the traffic unreadable to anyone in between — a café's WiFi, an ISP.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">It sends one HTTP request</span><span class="lz-d">A few lines of text: a method (<code>GET</code>), a path (<code>/</code>), and headers. That is genuinely all a request is.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The server replies, the browser renders</span><span class="lz-d">HTML comes back first; the browser then requests every CSS, JS and image it references — dozens more round trips for one page.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — thinking a page is one request.</strong> Open any site's DevTools Network tab and you will see forty, eighty, sometimes three hundred requests for a single page. This matters immediately: when "the site is slow", the question is not "is my server slow?" but "which of these requests is slow, and how many are there?" It also explains a bug you will hit within a week — you change a CSS file, reload, and nothing happens, because the browser reused its cached copy rather than asking again. Hard-reload (Ctrl/Cmd+Shift+R) before you go looking for a bug in code that is already correct.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/How_the_Web_works" target="_blank" rel="noopener">MDN — How the Web works</a></div>
 </div>
 <div class="ml-vi">
@@ -185,6 +209,14 @@ Content-Type: text/html
 
 <p class="note-ct"><strong>Vì sao điều này quan trọng về sau:</strong> toàn bộ ý tưởng "Server Component vs Client Component" trong Next.js chỉ là ranh giới này vẽ vào trong ứng dụng của bạn — một phần mã chạy trên server, một phần chạy trong trình duyệt. Khi bức tranh này vững, bài đó trở nên dễ.</p>
 
+<h3>Chuyện gì xảy ra giữa lúc gõ URL và lúc thấy trang</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">DNS biến cái tên thành một con số</span><span class="lz-d"><code>cuongthai.com</code> chẳng có nghĩa gì với mạng. Một lần tra DNS trả về một địa chỉ IP như <code>203.0.113.10</code> — cái máy thật để nói chuyện.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Trình duyệt mở một kết nối</span><span class="lz-d">TCP, rồi TLS cho <code>https://</code>. TLS là thứ làm lưu lượng không đọc được với bất kỳ ai đứng giữa — WiFi quán cà phê, nhà mạng.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nó gửi MỘT request HTTP</span><span class="lz-d">Vài dòng chữ: một phương thức (<code>GET</code>), một đường dẫn (<code>/</code>), và các header. Một request thật sự chỉ có thế.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Máy chủ trả lời, trình duyệt vẽ ra</span><span class="lz-d">HTML về trước; rồi trình duyệt xin từng file CSS, JS và ảnh mà nó tham chiếu — thêm hàng chục lượt đi về nữa cho một trang.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tưởng một trang là một request.</strong> Mở tab Network trong DevTools của bất kỳ trang nào là bạn thấy bốn mươi, tám mươi, có khi ba trăm request cho đúng một trang. Điều này có ý nghĩa ngay lập tức: khi "trang chậm", câu hỏi không phải "máy chủ của tôi chậm à?" mà là "request nào trong đống này chậm, và có bao nhiêu cái?". Nó cũng giải thích một lỗi bạn sẽ gặp trong vòng một tuần — bạn sửa một file CSS, tải lại, chẳng có gì đổi, vì trình duyệt dùng lại bản trong bộ nhớ đệm thay vì hỏi lại. Hãy tải lại cứng (Ctrl/Cmd+Shift+R) trước khi đi tìm lỗi trong đoạn mã vốn đã đúng.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/vi/docs/Learn/Getting_started_with_the_web/How_the_Web_works" target="_blank" rel="noopener">MDN — Web hoạt động thế nào</a></div>
 </div>
 `,
@@ -238,6 +270,22 @@ git config --global user.email "you@example.com"</code></pre>
 
 <p class="pitfall"><strong>Common first stumble:</strong> "command not found" after installing Node/Git usually means you must <strong>close and reopen the terminal</strong> (or restart) so it picks up the new program. Try that before assuming the install failed.</p>
 
+<h3>Check every install before you trust it</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Install, then ask the tool itself</span><span class="lz-d">Every one of these answers <code>--version</code>. If it prints a number, it is installed and on your PATH. If it says "command not found", it is one or the other — not both.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Open a NEW terminal first</span><span class="lz-d">An installer edits your PATH, and an already-open terminal read its PATH when it started. Half of all "it did not install" reports are a stale window.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Write the versions down</span><span class="lz-d">When something breaks in three weeks, "which Node was I on?" is the first question. A note costs ten seconds now.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Only then start the tutorial</span><span class="lz-d">Debugging a half-installed toolchain while also learning the language is two problems at once, and you cannot tell which one you are looking at.</span></div>
+</div>
+<pre><code>node --version
+npm --version
+git --version
+code --version</code></pre>
+<div class="out">v22.14.0
+10.9.2
+git version 2.47.1
+1.96.2</div>
+<div class="pitfall"><p><strong>Trap — following a tutorial written for a different major version.</strong> A blog post from 2019 that says <code>npm install -g create-react-app</code>, or a video using Node 14 syntax, will fail in ways that look like your mistake. The error rarely says "wrong version" — it says something about a missing module or an unexpected token, and you spend an hour on it. Before trusting any tutorial, check two things: its date, and whether the version it assumes matches what <code>--version</code> just printed. When they differ, prefer the official documentation, which is versioned.</p></div>
 <div class="link-card"><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code — download</a></div>
 <div class="link-card"><a href="https://nodejs.org/en/download" target="_blank" rel="noopener">Node.js — download the LTS version</a></div>
 <div class="link-card"><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git — download</a></div>
@@ -281,6 +329,22 @@ git config --global user.email "ban@example.com"</code></pre>
 
 <p class="pitfall"><strong>Vấp phổ biến đầu tiên:</strong> báo "command not found" sau khi cài Node/Git thường nghĩa là bạn phải <strong>đóng và mở lại terminal</strong> (hoặc khởi động lại máy) để nó nhận chương trình mới. Hãy thử điều đó trước khi kết luận là cài hỏng.</p>
 
+<h3>Kiểm mọi thứ vừa cài trước khi tin nó</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Cài xong thì hỏi chính công cụ đó</span><span class="lz-d">Cái nào cũng trả lời <code>--version</code>. Nó in ra một con số là cài rồi và đã nằm trong PATH. Nó nói "command not found" thì hoặc chưa cài, hoặc chưa vào PATH — chứ không phải cả hai.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Mở một terminal MỚI trước đã</span><span class="lz-d">Trình cài đặt sửa PATH, còn một terminal đang mở thì đã đọc PATH từ lúc nó khởi động. Một nửa số báo cáo "cài không được" là do cái cửa sổ cũ.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Ghi lại các số phiên bản</span><span class="lz-d">Ba tuần nữa khi có thứ gì hỏng, "lúc đó mình dùng Node mấy nhỉ?" là câu hỏi đầu tiên. Ghi một dòng bây giờ tốn mười giây.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Rồi mới bắt đầu bài hướng dẫn</span><span class="lz-d">Gỡ lỗi một bộ công cụ cài dở trong lúc đang học ngôn ngữ là hai bài toán cùng lúc, và bạn không phân biệt nổi mình đang nhìn cái nào.</span></div>
+</div>
+<pre><code>node --version
+npm --version
+git --version
+code --version</code></pre>
+<div class="out">v22.14.0
+10.9.2
+git version 2.47.1
+1.96.2</div>
+<div class="pitfall"><p><strong>Bẫy — làm theo một bài hướng dẫn viết cho phiên bản lớn khác.</strong> Một bài blog năm 2019 bảo <code>npm install -g create-react-app</code>, hay một video dùng cú pháp Node 14, sẽ hỏng theo kiểu trông y như bạn làm sai. Lỗi hiếm khi nói "sai phiên bản" — nó nói gì đó về một module bị thiếu hoặc một token bất ngờ, và bạn mất một tiếng cho nó. Trước khi tin bất kỳ bài hướng dẫn nào, hãy kiểm hai thứ: ngày đăng, và phiên bản nó giả định có khớp với thứ <code>--version</code> vừa in ra không. Khi chúng lệch nhau, hãy chọn tài liệu chính thức, vì tài liệu có đánh số phiên bản.</p></div>
 <div class="link-card"><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code — tải về</a></div>
 <div class="link-card"><a href="https://nodejs.org/en/download" target="_blank" rel="noopener">Node.js — tải bản LTS</a></div>
 <div class="link-card"><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git — tải về</a></div>
@@ -328,6 +392,14 @@ ReferenceError: total is not defined
 
 <p class="note-ct"><strong>Where this leads:</strong> finish these 11 chapters and you will open the CuongThai <strong>Node.js</strong> and <strong>Next.js &amp; React</strong> courses and actually understand them — that is the whole point of building this foundation first.</p>
 
+<h3>How to get unstuck — in this order</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Read the actual error</span><span class="lz-d">All of it, including the file name and line number. Beginners skip this because errors look scary; the error is usually the answer, written down.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Check your assumption with one print</span><span class="lz-d">You believe a variable holds something. Print it. Half of all bugs die right here, because it held <code>undefined</code> all along.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Shrink it until it is tiny</span><span class="lz-d">Delete everything unrelated until the bug either disappears (the last thing you deleted was involved) or stays in ten lines you can read in one go.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Then search, with the error text</span><span class="lz-d">Paste the message, minus your own file paths and names. Searching "my code does not work" finds nothing; searching the exact message finds the person who hit it in 2021.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — asking an AI for the answer before you have a question.</strong> Pasting a whole file with "fix this" usually gets working code back, and that is the problem: you now have a solution you cannot maintain, sitting in a program you understand slightly less than before. It also fails silently when the model guesses — beginners cannot yet tell a correct answer from a confident wrong one. Use it the way you would use a patient senior: describe what you expected, what happened, and what you already tried. Ask it to explain the cause before it writes the fix, then type the fix yourself.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/" target="_blank" rel="noopener">MDN Web Docs — the reference to bookmark</a></div>
 <div class="link-card"><a href="https://javascript.info/" target="_blank" rel="noopener">javascript.info — JavaScript from basics to deep</a></div>
 </div>
@@ -362,6 +434,14 @@ ReferenceError: total is not defined
 
 <p class="note-ct"><strong>Điều này dẫn tới đâu:</strong> học xong 11 chương, bạn sẽ mở khoá <strong>Node.js</strong> và <strong>Next.js &amp; React</strong> của CuongThai và thật sự hiểu chúng — đó chính là lý do ta xây nền tảng này trước.</p>
 
+<h3>Cách gỡ kẹt — theo đúng thứ tự này</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đọc cái lỗi thật sự</span><span class="lz-d">Đọc hết, kể cả tên file và số dòng. Người mới hay bỏ qua vì lỗi trông đáng sợ; nhưng lỗi thường chính là đáp án, đã viết sẵn ra đó.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Kiểm giả định của bạn bằng một lệnh in</span><span class="lz-d">Bạn tin một biến đang chứa cái gì đó. Hãy in nó ra. Một nửa số lỗi chết ngay tại đây, vì hoá ra nó là <code>undefined</code> từ đầu.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Thu nhỏ nó lại cho tí xíu</span><span class="lz-d">Xoá hết những gì không liên quan cho tới khi lỗi hoặc biến mất (thứ vừa xoá có dính líu) hoặc còn nguyên trong mười dòng bạn đọc một hơi là hết.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Rồi hãy tìm kiếm, bằng chính chữ trong lỗi</span><span class="lz-d">Dán nguyên thông điệp, bỏ đi tên file và tên riêng của bạn. Tìm "mã của tôi không chạy" thì chẳng ra gì; tìm đúng thông điệp thì ra người đã gặp nó năm 2021.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — hỏi AI lấy đáp án trước khi bạn có một câu hỏi.</strong> Dán cả file kèm "sửa giúp" thì thường nhận về mã chạy được, và đó mới là vấn đề: giờ bạn có một lời giải bạn không bảo trì nổi, nằm trong một chương trình bạn hiểu ít hơn lúc trước một chút. Nó cũng hỏng lặng lẽ khi mô hình đoán — người mới chưa phân biệt nổi một câu trả lời đúng với một câu trả lời sai mà tự tin. Hãy dùng nó như dùng một đàn anh kiên nhẫn: kể ra bạn mong gì, xảy ra chuyện gì, và đã thử những gì. Bảo nó giải thích nguyên nhân trước khi viết bản sửa, rồi tự tay gõ bản sửa đó.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/vi/" target="_blank" rel="noopener">MDN Web Docs — tài liệu nên đánh dấu</a></div>
 <div class="link-card"><a href="https://javascript.info/" target="_blank" rel="noopener">javascript.info — JavaScript từ cơ bản tới sâu</a></div>
 </div>

@@ -59,6 +59,16 @@ p {
 <h3>What "Cascading" means</h3>
 <p>When several rules touch the same element, CSS decides the winner by <strong>specificity</strong> (an id beats a class beats a tag) and, on a tie, by <strong>order</strong> (the later rule wins). This is why your styles sometimes "do not apply" — a more specific rule elsewhere is overriding them.</p>
 <p class="note-ct"><strong>Prefer classes.</strong> Style almost everything with classes, keep specificity low and even, and let source order settle ties. Fighting the cascade with <code>!important</code> and stacked ids is a mess you can avoid by leaning on classes from the start.</p>
+<h3>How the browser picks which rule wins</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Collect every matching rule</span><span class="lz-d">From your stylesheets, from inline styles, and from the browser's own defaults. Several rules setting the same property is normal, not a mistake.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Compare specificity</span><span class="lz-d">An id beats any number of classes; a class beats any number of tag names. <code>#nav a</code> beats <code>.menu .link.active</code>, however unfair that feels.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Tie? The later rule wins</span><span class="lz-d">Same specificity means source order decides — which is why the order of your <code>&lt;link&gt;</code> tags matters and why appending a rule often "fixes" it.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">DevTools shows you the answer</span><span class="lz-d">The Styles panel lists every rule that matched and strikes through the ones that lost. Read it instead of guessing — the reason is always right there.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — reaching for <code>!important</code> to win a fight you have not diagnosed.</strong> It works instantly, which is the problem: the real cause was a more specific selector somewhere, and you have now added a rule that only a second <code>!important</code> can override. Two months later a stylesheet has fifteen of them, and changing any colour requires adding a sixteenth. When a style does not apply, open DevTools, find the rule that beat yours, and either match its specificity or lower it. Keep <code>!important</code> for overriding third-party CSS you cannot edit — that is the one case where it is the right tool.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity" target="_blank" rel="noopener">MDN — Specificity, with the exact scoring rules</a></div>
+<div class="link-card"><a href="https://specificity.keegan.st/" target="_blank" rel="noopener">Specificity calculator — paste a selector, see its score</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
@@ -102,6 +112,16 @@ p {
 <h3>"Cascading" (xếp tầng) nghĩa là gì</h3>
 <p>Khi nhiều quy tắc cùng chạm một phần tử, CSS quyết định người thắng theo <strong>độ đặc hiệu (specificity)</strong> (id thắng class, class thắng thẻ) và, khi hoà, theo <strong>thứ tự</strong> (quy tắc viết sau thắng). Đây là lý do đôi khi kiểu của bạn "không ăn" — một quy tắc đặc hiệu hơn ở chỗ khác đang đè lên.</p>
 <p class="note-ct"><strong>Ưu tiên class.</strong> Hãy tạo kiểu gần như mọi thứ bằng class, giữ độ đặc hiệu thấp và đồng đều, và để thứ tự nguồn phân định khi hoà. Đấu với cascade bằng <code>!important</code> và chồng id là một mớ hỗn độn bạn tránh được nếu tựa vào class ngay từ đầu.</p>
+<h3>Trình duyệt chọn luật nào thắng như thế nào</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Gom mọi luật khớp</span><span class="lz-d">Từ bảng kiểu của bạn, từ style viết thẳng trong thẻ, và từ mặc định của chính trình duyệt. Nhiều luật cùng đặt một thuộc tính là chuyện bình thường, không phải sai.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">So độ đặc hiệu</span><span class="lz-d">Một id thắng bao nhiêu class cũng thắng; một class thắng bao nhiêu tên thẻ cũng thắng. <code>#nav a</code> thắng <code>.menu .link.active</code>, dù nghe có bất công đến đâu.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Hoà? Luật đứng sau thắng</span><span class="lz-d">Cùng độ đặc hiệu thì thứ tự trong mã quyết định — đó là lý do thứ tự các thẻ <code>&lt;link&gt;</code> có ý nghĩa và là lý do thêm một luật vào cuối thường "chữa" được.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">DevTools bày sẵn đáp án</span><span class="lz-d">Bảng Styles liệt kê mọi luật đã khớp và gạch ngang những cái thua. Hãy đọc nó thay vì đoán — lý do luôn nằm ngay đó.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — với tay lấy <code>!important</code> để thắng một trận bạn chưa chẩn đoán.</strong> Nó hiệu nghiệm tức thì, và đó mới là vấn đề: nguyên nhân thật là một bộ chọn đặc hiệu hơn ở đâu đó, còn bạn thì vừa thêm một luật mà chỉ một <code>!important</code> thứ hai mới đè nổi. Hai tháng sau, một bảng kiểu có mười lăm cái như thế, và đổi một màu bất kỳ đòi phải thêm cái thứ mười sáu. Khi một style không ăn, hãy mở DevTools, tìm cái luật đã thắng luật của bạn, rồi hoặc cân bằng độ đặc hiệu hoặc hạ nó xuống. Hãy để dành <code>!important</code> cho việc đè CSS của bên thứ ba mà bạn không sửa được — đó là trường hợp duy nhất nó là công cụ đúng.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity" target="_blank" rel="noopener">MDN — Độ đặc hiệu, kèm luật tính điểm chính xác</a></div>
+<div class="link-card"><a href="https://specificity.keegan.st/" target="_blank" rel="noopener">Máy tính độ đặc hiệu — dán một bộ chọn, xem điểm của nó</a></div>
 </div>
 `,
     },
@@ -150,6 +170,20 @@ padding-left: 8px;            /* just one side */</code></pre>
 
 <h3>Inspect it live</h3>
 <p class="note-ct"><strong>Open DevTools</strong> (F12) → Elements → pick an element, and you will see this exact box diagram with the four layers coloured. Learning to read that panel is one of the fastest ways to understand any layout — yours or someone else's.</p>
+<h3>The box model, from the inside out</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Content</span><span class="lz-t">The text or image itself</span><span class="lz-d">What <code>width</code> and <code>height</code> refer to by default — and only this part, which is where the confusion starts.</span></div>
+<div class="lz-layer"><span class="lz-k">Padding</span><span class="lz-t">Space inside the border</span><span class="lz-d">Takes the element's background colour. Use it to push content away from the edge of a card or button.</span></div>
+<div class="lz-layer"><span class="lz-k">Border</span><span class="lz-t">The line around it</span><span class="lz-d">Adds to the element's rendered size unless <code>box-sizing</code> says otherwise. A 1px border on both sides is 2px wider than you asked for.</span></div>
+<div class="lz-layer"><span class="lz-k">Margin</span><span class="lz-t">Space outside, between elements</span><span class="lz-d">Always transparent, and never part of the element's size. Vertical margins between siblings collapse into one — the larger of the two.</span></div>
+</div>
+<pre><code>* { box-sizing: border-box; }   /* put this at the top of every stylesheet */
+
+.card { width: 300px; padding: 20px; border: 1px solid #ddd; }
+/* with border-box:  the card is exactly 300px wide  */
+/* without it:       300 + 40 + 2 = 342px            */</code></pre>
+<div class="pitfall"><p><strong>Trap — two columns at <code>width: 50%</code> that do not fit side by side.</strong> Give each of them <code>padding: 20px</code> and, under the default <code>content-box</code> sizing, each is really 50% + 40px wide — so together they exceed 100% and the second wraps onto its own line. Nothing errors; the layout just breaks, usually only at certain screen widths, which makes it look like a responsive bug. The one-line fix at the top of the stylesheet, <code>* { box-sizing: border-box; }</code>, makes <code>width</code> mean the whole visible box including padding and border. Every CSS framework does this on your behalf; do it yourself when you are not using one.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model" target="_blank" rel="noopener">MDN — The box model, with interactive examples</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.2</span>
@@ -187,6 +221,20 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 
 <h3>Soi trực tiếp</h3>
 <p class="note-ct"><strong>Mở DevTools</strong> (F12) → Elements → chọn một phần tử, bạn sẽ thấy đúng sơ đồ hộp này với bốn lớp được tô màu. Học đọc bảng đó là một trong những cách nhanh nhất để hiểu bất kỳ bố cục nào — của bạn hay của người khác.</p>
+<h3>Mô hình hộp, từ trong ra ngoài</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Nội dung</span><span class="lz-t">Chính đoạn chữ hay tấm ảnh</span><span class="lz-d">Thứ mà <code>width</code> và <code>height</code> mặc định trỏ tới — và chỉ phần này thôi, đó là chỗ bắt đầu mọi nhầm lẫn.</span></div>
+<div class="lz-layer"><span class="lz-k">Padding</span><span class="lz-t">Khoảng trống bên trong viền</span><span class="lz-d">Mang màu nền của phần tử. Dùng nó để đẩy nội dung ra khỏi mép một cái thẻ hay cái nút.</span></div>
+<div class="lz-layer"><span class="lz-k">Border</span><span class="lz-t">Đường viền quanh nó</span><span class="lz-d">Cộng thêm vào kích thước hiển thị trừ khi <code>box-sizing</code> nói khác. Viền 1px hai bên là rộng hơn 2px so với con số bạn đặt.</span></div>
+<div class="lz-layer"><span class="lz-k">Margin</span><span class="lz-t">Khoảng trống bên ngoài, giữa các phần tử</span><span class="lz-d">Luôn trong suốt, và không bao giờ tính vào kích thước phần tử. Margin dọc giữa hai anh em sẽ gộp làm một — lấy cái lớn hơn.</span></div>
+</div>
+<pre><code>* { box-sizing: border-box; }   /* đặt dòng này ở đầu mọi bảng kiểu */
+
+.card { width: 300px; padding: 20px; border: 1px solid #ddd; }
+/* với border-box:  cái thẻ rộng đúng 300px       */
+/* không có nó:     300 + 40 + 2 = 342px          */</code></pre>
+<div class="pitfall"><p><strong>Bẫy — hai cột <code>width: 50%</code> mà không nằm cạnh nhau nổi.</strong> Cho mỗi cái <code>padding: 20px</code>, thì dưới kiểu tính mặc định <code>content-box</code>, mỗi cái thật ra rộng 50% + 40px — nên cộng lại vượt quá 100% và cái thứ hai rớt xuống hàng riêng. Chẳng lỗi nào cả; bố cục chỉ đơn giản là vỡ, thường chỉ ở vài độ rộng màn hình nhất định, làm nó trông như một lỗi responsive. Cách chữa một dòng ở đầu bảng kiểu, <code>* { box-sizing: border-box; }</code>, làm <code>width</code> nghĩa là cả cái hộp nhìn thấy được, kể cả padding và viền. Framework CSS nào cũng làm việc này giùm bạn; hãy tự làm khi bạn không dùng cái nào.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model" target="_blank" rel="noopener">MDN — Mô hình hộp, kèm ví dụ tương tác</a></div>
 </div>
 `,
     },
@@ -243,6 +291,16 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 <pre><code>.sidebar { width: 240px; }   /* fixed */
 .content { flex: 1; }        /* takes all remaining space */</code></pre>
 <p class="note-ct"><strong>Reach for Flexbox for one-dimensional layout:</strong> a navbar, a row of buttons, a card's inner alignment, a media object (avatar beside text). When you need a real two-dimensional grid of rows AND columns, that is the next lesson.</p>
+<h3>Flexbox in four decisions</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Which element is the container?</span><span class="lz-d"><code>display: flex</code> goes on the <em>parent</em>. It changes how its direct children are laid out and does nothing to grandchildren.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Which way is the main axis?</span><span class="lz-d"><code>flex-direction: row</code> (default) or <code>column</code>. This single property decides what "justify" and "align" mean for everything below.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">justify-content — along the main axis</span><span class="lz-d">Left-to-right in a row, top-to-bottom in a column. <code>space-between</code> is the classic navbar: logo left, links right.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">align-items — across it</span><span class="lz-d">The perpendicular direction. <code>center</code> here is what vertically centres a row of items, the thing CSS was mocked for being unable to do.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>justify-content: center</code> that centres nothing, because the axis is not the one you pictured.</strong> The two alignment properties swap meaning the moment you set <code>flex-direction: column</code>: <code>justify-content</code> now works vertically and <code>align-items</code> horizontally. So a sidebar you switched to a column suddenly ignores the centring you wrote, and adding more <code>center</code> values makes it worse. Before touching either property, say the direction out loud — "this is a column, so justify is vertical" — or use DevTools' flexbox overlay, which draws the main axis on the page so there is nothing left to guess.</p></div>
+<div class="link-card"><a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/" target="_blank" rel="noopener">CSS-Tricks — A Complete Guide to Flexbox (the one everyone keeps open)</a></div>
+<div class="link-card"><a href="https://flexboxfroggy.com/" target="_blank" rel="noopener">Flexbox Froggy — 24 levels, learn it by playing</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.3</span>
@@ -288,6 +346,16 @@ padding-left: 8px;            /* chỉ một cạnh */</code></pre>
 <pre><code>.sidebar { width: 240px; }   /* cố định */
 .content { flex: 1; }        /* lấy hết không gian còn lại */</code></pre>
 <p class="note-ct"><strong>Dùng Flexbox cho bố cục một chiều:</strong> một thanh điều hướng, một hàng nút, căn chỉnh bên trong một thẻ, một khối media (ảnh đại diện cạnh chữ). Khi bạn cần một lưới hai chiều thật sự gồm CẢ hàng VÀ cột, đó là bài kế tiếp.</p>
+<h3>Flexbox trong bốn quyết định</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Phần tử nào là vật chứa?</span><span class="lz-d"><code>display: flex</code> đặt lên <em>phần tử cha</em>. Nó đổi cách các con TRỰC TIẾP được bố trí và chẳng làm gì với các cháu.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Trục chính đi hướng nào?</span><span class="lz-d"><code>flex-direction: row</code> (mặc định) hoặc <code>column</code>. Đúng một thuộc tính này quyết định "justify" và "align" nghĩa là gì cho mọi thứ phía dưới.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">justify-content — dọc theo trục chính</span><span class="lz-d">Trái sang phải với row, trên xuống dưới với column. <code>space-between</code> là thanh điều hướng kinh điển: logo bên trái, các liên kết bên phải.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">align-items — cắt ngang nó</span><span class="lz-d">Hướng vuông góc. <code>center</code> ở đây là thứ căn giữa theo chiều dọc một hàng phần tử, đúng cái mà CSS từng bị chê là không làm nổi.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — <code>justify-content: center</code> chẳng căn giữa được gì, vì cái trục không phải cái bạn hình dung.</strong> Hai thuộc tính căn chỉnh đổi nghĩa cho nhau ngay khi bạn đặt <code>flex-direction: column</code>: <code>justify-content</code> giờ làm việc theo chiều dọc còn <code>align-items</code> theo chiều ngang. Nên một thanh bên bạn vừa đổi sang column bỗng lờ đi phép căn giữa bạn viết, và thêm nữa giá trị <code>center</code> chỉ làm tệ hơn. Trước khi động vào hai thuộc tính đó, hãy nói hướng ra thành lời — "đây là column, nên justify là chiều dọc" — hoặc dùng lớp phủ flexbox của DevTools, nó vẽ luôn trục chính lên trang để không còn gì phải đoán.</p></div>
+<div class="link-card"><a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/" target="_blank" rel="noopener">CSS-Tricks — Hướng dẫn Flexbox đầy đủ (ai cũng mở sẵn tab này)</a></div>
+<div class="link-card"><a href="https://flexboxfroggy.com/" target="_blank" rel="noopener">Flexbox Froggy — 24 màn, học bằng cách chơi</a></div>
 </div>
 `,
     },
@@ -337,6 +405,21 @@ grid-template-columns: 240px 1fr;             /* fixed sidebar + flexible conten
 </div>
 <p class="note-ct"><strong>You do not choose one forever.</strong> Real pages use both together — Grid for the overall page skeleton, Flexbox inside individual cards and bars. Learn both; reach for whichever matches the shape of the problem in front of you.</p>
 
+<h3>Grid or flexbox — the question that decides</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">One direction?</span><span class="lz-t">Flexbox</span><span class="lz-d">A row of buttons, a navbar, a list of tags that wraps. You care about how items flow along a line.</span></div>
+<div class="lz-node"><span class="lz-k">Two directions at once?</span><span class="lz-t">Grid</span><span class="lz-d">A page layout with header, sidebar and content; a photo gallery where rows must line up with each other. You care about the whole plane.</span></div>
+<div class="lz-node"><span class="lz-k">Content decides the size?</span><span class="lz-t">Flexbox leans that way</span><span class="lz-d">Items size themselves and the container reacts. Good when you do not know how many items there will be.</span></div>
+<div class="lz-node"><span class="lz-k">Layout decides the size?</span><span class="lz-t">Grid leans that way</span><span class="lz-d">You declare the tracks up front and items go into them. Good when the design has a fixed skeleton.</span></div>
+</div>
+<pre><code>.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+/* No media query needed: columns are added and removed automatically
+   as the container gets wider or narrower. */</code></pre>
+<div class="pitfall"><p><strong>Trap — treating grid and flexbox as rivals and picking one for the whole project.</strong> They are not alternatives; they solve different problems and are designed to nest. The natural answer for most pages is grid for the page skeleton — header, sidebar, main, footer — and flexbox inside each region for the row of buttons or the list of cards. Forcing everything into one produces the tell-tale symptoms: a flexbox layout full of fixed widths trying to make rows line up, or a grid with one column and a lot of <code>grid-row</code> arithmetic doing what <code>flex-direction: column</code> does in one line. Ask the direction question per container, not per project.</p></div>
 <div class="link-card"><a href="https://cssgridgarden.com/" target="_blank" rel="noopener">Grid Garden — learn CSS Grid by playing a game</a></div>
 </div>
 <div class="ml-vi">
@@ -376,6 +459,21 @@ grid-template-columns: 240px 1fr;             /* thanh bên cố định + nội
 </div>
 <p class="note-ct"><strong>Bạn không chọn một cái mãi mãi.</strong> Trang thật dùng cả hai cùng nhau — Grid cho bộ khung tổng thể của trang, Flexbox bên trong từng thẻ và thanh. Học cả hai; dùng cái nào khớp với hình dạng bài toán trước mặt.</p>
 
+<h3>Grid hay flexbox — câu hỏi quyết định</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Một chiều thôi?</span><span class="lz-t">Flexbox</span><span class="lz-d">Một hàng nút, một thanh điều hướng, một danh sách thẻ có xuống dòng. Bạn quan tâm các phần tử chảy dọc theo một đường thế nào.</span></div>
+<div class="lz-node"><span class="lz-k">Hai chiều cùng lúc?</span><span class="lz-t">Grid</span><span class="lz-d">Một bố cục trang có đầu trang, thanh bên và nội dung; một thư viện ảnh mà các hàng phải thẳng hàng với nhau. Bạn quan tâm cả mặt phẳng.</span></div>
+<div class="lz-node"><span class="lz-k">Nội dung quyết định kích thước?</span><span class="lz-t">Flexbox nghiêng về phía đó</span><span class="lz-d">Phần tử tự định cỡ và vật chứa phản ứng theo. Tốt khi bạn không biết sẽ có bao nhiêu phần tử.</span></div>
+<div class="lz-node"><span class="lz-k">Bố cục quyết định kích thước?</span><span class="lz-t">Grid nghiêng về phía đó</span><span class="lz-d">Bạn khai các rãnh từ trước rồi phần tử rơi vào đó. Tốt khi thiết kế có một bộ khung cố định.</span></div>
+</div>
+<pre><code>.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+/* Không cần media query: số cột tự thêm vào và bớt đi
+   khi vật chứa rộng ra hay hẹp lại. */</code></pre>
+<div class="pitfall"><p><strong>Bẫy — coi grid và flexbox là đối thủ rồi chọn một cái cho cả dự án.</strong> Chúng không phải hai lựa chọn thay nhau; chúng giải hai bài toán khác nhau và được thiết kế để lồng vào nhau. Đáp án tự nhiên cho phần lớn trang là grid cho bộ khung trang — đầu trang, thanh bên, nội dung chính, chân trang — và flexbox bên trong từng vùng cho hàng nút hay danh sách thẻ. Ép mọi thứ vào một cái sẽ sinh ra những triệu chứng dễ nhận: một bố cục flexbox đầy chiều rộng cố định cố làm các hàng thẳng nhau, hoặc một grid một cột với cả đống phép tính <code>grid-row</code> làm đúng việc mà <code>flex-direction: column</code> làm trong một dòng. Hãy hỏi câu hỏi về chiều cho từng vật chứa, đừng hỏi cho cả dự án.</p></div>
 <div class="link-card"><a href="https://cssgridgarden.com/" target="_blank" rel="noopener">Grid Garden — học CSS Grid bằng cách chơi game</a></div>
 </div>
 `,
@@ -429,6 +527,14 @@ grid-template-columns: 240px 1fr;             /* thanh bên cố định + nội
 <h3>Where this leads</h3>
 <p class="note-ct"><strong>Every framework builds on this.</strong> Tailwind CSS (used in the Next.js course) is just these ideas with short class names — <code>md:grid-cols-3</code> is a <code>min-width: 768px</code> media query. Understand raw CSS responsiveness here and every UI framework afterwards is a shortcut, not a mystery.</p>
 
+<h3>Responsive, in the order that matters</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The viewport meta tag, first</span><span class="lz-d">Without <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code> a phone pretends to be 980px wide and zooms out. Every media query below it is then measuring the wrong thing.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Write the mobile layout as the default</span><span class="lz-d">One column, full-width, no media query. This is the hardest constraint, so solving it first means everything after is an enhancement.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Add min-width queries as it gets roomier</span><span class="lz-d"><code>@media (min-width: 768px)</code> and up. Each query only adds; nothing has to be undone, which keeps the stylesheet readable.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Break where the design breaks</span><span class="lz-d">Not at device names. Drag the browser window until the layout looks wrong, and put the breakpoint there — the device list changes every year, your content does not.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — testing responsiveness only by resizing the desktop browser.</strong> The narrow window tells you about width and nothing else, so three real differences slip through: a phone's on-screen keyboard covers half the viewport and can hide the very button the form needs; there is no hover, so a menu that opens on hover is unreachable; and a fingertip is about 44px wide, so links spaced 8px apart are a lottery. Desktop DevTools' device mode fixes the first two-thirds of this. Actually opening the page on a phone — on your local network, at least once before shipping — is what catches the rest.</p></div>
 <div class="link-card"><a href="https://web.dev/learn/design" target="_blank" rel="noopener">web.dev — Learn Responsive Design</a></div>
 </div>
 <div class="ml-vi">
@@ -471,6 +577,14 @@ grid-template-columns: 240px 1fr;             /* thanh bên cố định + nội
 <h3>Điều này dẫn tới đâu</h3>
 <p class="note-ct"><strong>Mọi framework đều đứng trên nền này.</strong> Tailwind CSS (dùng trong khoá Next.js) chỉ là những ý tưởng này với tên class ngắn — <code>md:grid-cols-3</code> chính là một media query <code>min-width: 768px</code>. Hiểu responsive bằng CSS thuần ở đây thì mọi framework UI về sau là một lối tắt, không phải một điều bí ẩn.</p>
 
+<h3>Responsive, theo đúng thứ tự quan trọng</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Thẻ meta viewport, trước đã</span><span class="lz-d">Không có <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code> thì điện thoại giả vờ rộng 980px rồi thu nhỏ lại. Mọi media query phía dưới khi đó đang đo nhầm thứ.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Viết bố cục điện thoại làm mặc định</span><span class="lz-d">Một cột, tràn hết chiều rộng, không media query nào. Đây là ràng buộc khó nhất, nên giải nó trước nghĩa là mọi thứ sau đó chỉ là thêm thắt.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Thêm query min-width khi màn rộng ra</span><span class="lz-d"><code>@media (min-width: 768px)</code> trở lên. Mỗi query chỉ thêm vào; chẳng phải gỡ bỏ gì, và điều đó giữ cho bảng kiểu đọc được.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Ngắt ở chỗ thiết kế vỡ</span><span class="lz-d">Chứ không phải ở tên thiết bị. Hãy kéo cửa sổ trình duyệt cho tới khi bố cục trông sai, rồi đặt điểm ngắt ở đó — danh sách thiết bị mỗi năm mỗi khác, nội dung của bạn thì không.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — chỉ kiểm responsive bằng cách kéo hẹp cửa sổ trình duyệt trên máy tính.</strong> Cửa sổ hẹp chỉ nói cho bạn về chiều rộng chứ không nói gì khác, nên có ba khác biệt thật lọt qua: bàn phím ảo của điện thoại che mất nửa khung nhìn và có thể giấu đúng cái nút mà form cần; không có trạng thái rê chuột, nên một menu mở khi rê chuột là không với tới được; và một đầu ngón tay rộng chừng 44px, nên các liên kết cách nhau 8px là một trò may rủi. Chế độ thiết bị trong DevTools trên máy tính giải quyết được hai phần ba đầu. Còn thật sự mở trang trên một cái điện thoại — trong mạng nội bộ, ít nhất một lần trước khi ship — mới là thứ bắt được phần còn lại.</p></div>
 <div class="link-card"><a href="https://web.dev/learn/design" target="_blank" rel="noopener">web.dev — Học Thiết kế Responsive</a></div>
 </div>
 `,

@@ -57,6 +57,23 @@ function handleKeyDown(e) {
 <div class="pitfall">
 <p><strong>The IME trap — real, and this site hit it.</strong> When typing Vietnamese, Japanese or Chinese, an input method (IME) composes characters before committing them, and pressing <em>Enter</em> during composition means "confirm this character", not "submit". A naive <code>onKeyDown</code> that submits on Enter fires mid-composition and eats the user's word. Guard it: <code>if (e.nativeEvent.isComposing) return;</code> before acting on Enter/Space/Escape. cuongthai.com learned this in the messenger and feed composer — the guard is now standard for any keyboard handler that must coexist with CJK input.</p>
 </div>
+<h3>How a React event handler differs from an HTML one</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>It is a function, not a string</b> — &#96;onClick={handleClick}&#96; passes the function. &#96;onClick={handleClick()}&#96; calls it during render and passes the result — usually &#96;undefined&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>React attaches one listener at the root</b> — Your handlers are dispatched from there. This is why adding a thousand rows does not add a thousand listeners.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>The event object is React&#39;s own</b> — A SyntheticEvent with the same API as the DOM one, normalised across browsers. &#96;e.nativeEvent&#96; gets you the original.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>preventDefault still works</b> — And it is still how you stop a form submitting or a link navigating. &#96;return false&#96; does nothing in React.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — &#96;onClick={handleDelete(id)}&#96; fires during render, not on click.</strong> The parentheses call the function immediately, so the row deletes itself as soon as the list renders — and if the handler sets state, that render triggers another render and you get an infinite loop with a stack trace that points at React internals. The compiler cannot help: passing a function&#39;s return value is perfectly valid JavaScript. When a handler needs an argument, wrap it: &#96;onClick={() =&gt; handleDelete(id)}&#96;. The arrow is created on each render, which is fine — that cost is invisible next to the bug it prevents.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/responding-to-events" target="_blank" rel="noopener">
+  <span class="lc-ico">🖱️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Responding to events</span><span class="lc-sub">Handlers, arguments, propagation, and preventDefault.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/common#react-event-object" target="_blank" rel="noopener">
+  <span class="lc-ico">🧷</span>
+  <span class="lc-body"><span class="lc-title">react.dev — The React event object</span><span class="lc-sub">What a SyntheticEvent carries, and how it differs from the DOM event.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -98,6 +115,23 @@ function handleKeyDown(e) {
 <div class="pitfall">
 <p><strong>Bẫy IME — có thật, và site này từng dính.</strong> Khi gõ tiếng Việt, Nhật hay Trung, một bộ gõ (IME) ghép ký tự trước khi chốt, và nhấn <em>Enter</em> giữa lúc đang ghép nghĩa là "xác nhận ký tự này", không phải "gửi". Một <code>onKeyDown</code> ngây thơ submit khi Enter sẽ nổ giữa lúc đang ghép và ăn mất chữ của người dùng. Hãy chặn: <code>if (e.nativeEvent.isComposing) return;</code> trước khi xử Enter/Space/Escape. cuongthai.com học được điều này ở khung soạn tin nhắn và feed — cái chặn này giờ là chuẩn cho mọi handler bàn phím phải sống chung với bộ gõ CJK.</p>
 </div>
+<h3>Handler sự kiện của React khác handler HTML thế nào</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Nó là một hàm, không phải một chuỗi</b> — &#96;onClick={handleClick}&#96; truyền cái hàm. &#96;onClick={handleClick()}&#96; GỌI nó ngay lúc render rồi truyền kết quả — thường là &#96;undefined&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>React gắn một listener duy nhất ở gốc</b> — Handler của bạn được điều phối từ đó. Đó là lý do thêm một nghìn dòng không hề thêm một nghìn listener.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Object sự kiện là của chính React</b> — Một SyntheticEvent có cùng API với object DOM, đã chuẩn hoá giữa các trình duyệt. &#96;e.nativeEvent&#96; cho bạn cái gốc.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>preventDefault vẫn chạy</b> — Và vẫn là cách bạn chặn một form gửi đi hay một liên kết chuyển trang. &#96;return false&#96; chẳng làm gì trong React cả.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — &#96;onClick={handleDelete(id)}&#96; nổ ngay lúc render, không phải lúc bấm.</strong> Cặp ngoặc tròn gọi hàm ngay lập tức, nên cái dòng đó tự xoá mình ngay khi danh sách vừa vẽ ra — và nếu handler có đặt state thì lần render đó lại kích hoạt một lần render nữa, và bạn có một vòng lặp vô tận với vệt stack chỉ vào ruột của React. Trình biên dịch không cứu được: truyền giá trị trả về của một hàm là JavaScript hoàn toàn hợp lệ. Khi một handler cần đối số, hãy bọc nó lại: &#96;onClick={() =&gt; handleDelete(id)}&#96;. Cái arrow được tạo lại ở mỗi lần render, và điều đó không sao — chi phí ấy vô hình bên cạnh cái lỗi mà nó ngăn được.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/responding-to-events" target="_blank" rel="noopener">
+  <span class="lc-ico">🖱️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Phản hồi sự kiện</span><span class="lc-sub">Handler, đối số, lan truyền, và preventDefault.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/common#react-event-object" target="_blank" rel="noopener">
+  <span class="lc-ico">🧷</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Object sự kiện của React</span><span class="lc-sub">Một SyntheticEvent mang những gì, và nó khác object sự kiện DOM ra sao.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -142,6 +176,24 @@ function handleKeyDown(e) {
 <div class="pitfall">
 <p><strong>The <code>value</code>-without-<code>onChange</code> warning.</strong> If you set <code>value={name}</code> but forget <code>onChange</code>, React makes the field read-only and warns: <em>"You provided a &#96;value&#96; prop to a form field without an &#96;onChange&#96; handler."</em> You told React "the value is always <code>name</code>", so it refuses to let the DOM diverge — with no <code>onChange</code>, typing can never update <code>name</code>, so the field is frozen. Either add <code>onChange</code> (controlled) or use <code>defaultValue</code> instead of <code>value</code> (uncontrolled — Lesson 4.4). A related trap: never initialise state to <code>null</code>/<code>undefined</code> for an input, or it flips between uncontrolled and controlled and warns; start with an empty string.</p>
 </div>
+<h3>A controlled input, in one loop</h3>
+<div class="lz-map">
+  <div class="lz-stage">State is the truth; the input just displays it</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">value comes from state</div><div class="lz-nsub">&#96;value={text}&#96;. The input shows what state says, always — there is no second copy of the truth living in the DOM.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">onChange writes back</div><div class="lz-nsub">&#96;onChange={e =&gt; setText(e.target.value)}&#96;. Every keystroke updates state, which re-renders, which sets the value.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">So you can transform on the way</div><div class="lz-nsub">Uppercase it, strip spaces, cap the length, reject non-digits — because every character passes through your code.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">And read it anywhere</div><div class="lz-nsub">Validation, a live preview, a disabled submit button. They all read the same variable, so nothing can disagree.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — &#96;value={user.name}&#96; with no &#96;onChange&#96;, giving a field nobody can type in.</strong> React ties the input to state, state never changes, so every keypress is immediately overwritten by the old value — the field looks enabled and simply refuses input. The console says so (&quot;You provided a &#96;value&#96; prop to a form field without an &#96;onChange&#96; handler&quot;), but it is one warning among many and easy to miss. Three fixes depending on intent: add the handler, add &#96;readOnly&#96; if it is meant to be read-only, or use &#96;defaultValue&#96; if you wanted an uncontrolled field with an initial value.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/input" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — The input component</span><span class="lc-sub">Controlled vs uncontrolled, with every prop and the warnings each triggers.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/reacting-to-input-with-state" target="_blank" rel="noopener">
+  <span class="lc-ico">🔁</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Reacting to input with state</span><span class="lc-sub">How to model a form as states rather than as a pile of booleans.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -176,6 +228,24 @@ function handleKeyDown(e) {
 <div class="pitfall">
 <p><strong>Cảnh báo <code>value</code> mà thiếu <code>onChange</code>.</strong> Nếu bạn đặt <code>value={name}</code> mà quên <code>onChange</code>, React biến ô thành chỉ đọc và cảnh báo: <em>"You provided a &#96;value&#96; prop to a form field without an &#96;onChange&#96; handler."</em> Bạn đã bảo React "giá trị luôn là <code>name</code>", nên nó từ chối để DOM lệch đi — không có <code>onChange</code>, gõ không bao giờ cập nhật được <code>name</code>, nên ô bị đóng băng. Hoặc thêm <code>onChange</code> (có kiểm soát) hoặc dùng <code>defaultValue</code> thay cho <code>value</code> (không kiểm soát — Bài 4.4). Một bẫy liên quan: đừng bao giờ khởi tạo state cho một input bằng <code>null</code>/<code>undefined</code>, kẻo nó lật qua lại giữa không-kiểm-soát và có-kiểm-soát rồi cảnh báo; hãy bắt đầu bằng một chuỗi rỗng.</p>
 </div>
+<h3>Một ô nhập có kiểm soát, trong một vòng</h3>
+<div class="lz-map">
+  <div class="lz-stage">State là sự thật; ô nhập chỉ hiển thị nó</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">value đến từ state</div><div class="lz-nsub">&#96;value={text}&#96;. Ô nhập hiện đúng thứ state nói, luôn luôn — không có bản sao thứ hai của sự thật nằm trong DOM.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">onChange ghi ngược lại</div><div class="lz-nsub">&#96;onChange={e =&gt; setText(e.target.value)}&#96;. Mỗi lần gõ phím là một lần cập nhật state, kéo theo render lại, kéo theo đặt lại value.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Nên bạn biến đổi được trên đường đi</div><div class="lz-nsub">Viết hoa, bỏ dấu cách, chặn độ dài, từ chối ký tự không phải số — vì mọi ký tự đều đi qua mã của bạn.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Và đọc nó ở bất cứ đâu</div><div class="lz-nsub">Kiểm dữ liệu, một khung xem trước trực tiếp, một nút gửi bị khoá. Tất cả đều đọc cùng một biến, nên không gì có thể bất đồng.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — &#96;value={user.name}&#96; mà không có &#96;onChange&#96;, cho ra một ô chẳng ai gõ vào được.</strong> React buộc ô nhập vào state, state chẳng bao giờ đổi, nên mọi lần gõ phím đều bị ghi đè ngay bằng giá trị cũ — cái ô trông vẫn dùng được mà đơn giản là từ chối nhận chữ. Console có nói (&quot;You provided a &#96;value&#96; prop to a form field without an &#96;onChange&#96; handler&quot;), nhưng đó là một cảnh báo giữa cả đống và rất dễ bỏ sót. Ba cách chữa tuỳ ý định: thêm handler vào, thêm &#96;readOnly&#96; nếu nó vốn để chỉ-đọc, hoặc dùng &#96;defaultValue&#96; nếu bạn muốn một ô không kiểm soát có giá trị ban đầu.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/input" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Component input</span><span class="lc-sub">Có kiểm soát với không kiểm soát, kèm mọi prop và cảnh báo mà mỗi cái sinh ra.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/reacting-to-input-with-state" target="_blank" rel="noopener">
+  <span class="lc-ico">🔁</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Phản ứng với đầu vào bằng state</span><span class="lc-sub">Cách mô hình hoá một form thành các trạng thái thay vì một đống boolean.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -232,6 +302,23 @@ function handleKeyDown(e) {
 <div class="note-ct">
 <p><strong>How cuongthai.com does it</strong> — small forms (a search box, a rename dialog) use one or two <code>useState</code> values inline like Lesson 4.2. Bigger forms (signup, profile, the CV builder) use <code>react-hook-form</code> so the fields are registered rather than each wired by hand, with <code>zod</code> schemas validating on submit. The mental model is identical; the library just removes the repetition once a form has more than a couple of fields.</p>
 </div>
+<h3>Submitting a form without reloading the page</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Handle onSubmit on the form</b> — Not onClick on the button. The form fires on Enter too, and screen readers announce it as a form — the button alone gives you neither.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Call e.preventDefault() first</b> — Otherwise the browser does a full page navigation and your handler&#39;s work is thrown away mid-flight.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Disable the button while it is in flight</b> — A second submit creates a second order. This is the cheapest fix for the most expensive bug in this lesson.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Then show the outcome</b> — Success, or the server&#39;s error message. A form that appears to do nothing is indistinguishable from a broken one.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a submit handler that is &#96;async&#96; and calls &#96;preventDefault&#96; after an &#96;await&#96;.</strong> &#96;async function onSubmit(e) { await check(); e.preventDefault(); }&#96; is too late: React&#39;s event object is dispatched synchronously, and by the time the promise resolves the browser has already decided to navigate. The page reloads mid-request, the network tab shows a cancelled call, and the bug only appears when &#96;check()&#96; actually takes time — so it passes locally and fails on a slow connection. Call &#96;preventDefault()&#96; on the first line of the handler, before any &#96;await&#96;, every time.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/form" target="_blank" rel="noopener">
+  <span class="lc-ico">📮</span>
+  <span class="lc-body"><span class="lc-title">react.dev — The form component</span><span class="lc-sub">onSubmit, the action prop, and how forms work in modern React.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault" target="_blank" rel="noopener">
+  <span class="lc-ico">🛑</span>
+  <span class="lc-body"><span class="lc-title">MDN — Event.preventDefault</span><span class="lc-sub">Why it must run synchronously, and what happens when it does not.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -278,6 +365,23 @@ function handleKeyDown(e) {
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào</strong> — form nhỏ (một ô tìm kiếm, một hộp đổi tên) dùng một hai giá trị <code>useState</code> ngay tại chỗ như Bài 4.2. Form lớn hơn (đăng ký, hồ sơ, trình dựng CV) dùng <code>react-hook-form</code> để các trường được đăng ký thay vì nối tay từng cái, với schema <code>zod</code> kiểm lúc submit. Mô hình tư duy y hệt; thư viện chỉ bỏ đi phần lặp lại khi một form có hơn vài trường.</p>
 </div>
+<h3>Gửi một form mà không tải lại trang</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Xử onSubmit trên thẻ form</b> — Đừng xử onClick trên cái nút. Form còn nổ khi bấm Enter, và trình đọc màn hình xướng nó lên là một form — riêng cái nút thì không cho bạn thứ nào trong hai.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Gọi e.preventDefault() trước đã</b> — Không thì trình duyệt chuyển trang toàn phần và phần việc của handler bị vứt bỏ giữa chừng.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Khoá cái nút trong lúc đang gửi</b> — Một lần gửi thứ hai tạo ra một đơn hàng thứ hai. Đây là cách chữa rẻ nhất cho cái lỗi đắt nhất trong bài này.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Rồi hiện kết cục ra</b> — Thành công, hoặc thông điệp lỗi của máy chủ. Một form có vẻ chẳng làm gì thì không phân biệt được với một form hỏng.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một handler submit là &#96;async&#96; và gọi &#96;preventDefault&#96; SAU một &#96;await&#96;.</strong> &#96;async function onSubmit(e) { await check(); e.preventDefault(); }&#96; là quá muộn: object sự kiện của React được điều phối đồng bộ, và tới lúc promise xong thì trình duyệt đã quyết định chuyển trang rồi. Trang tải lại giữa chừng request, tab Network hiện một lời gọi bị huỷ, và cái lỗi chỉ lộ ra khi &#96;check()&#96; thật sự tốn thời gian — nên nó qua được ở máy bạn và hỏng trên đường truyền chậm. Hãy gọi &#96;preventDefault()&#96; ở dòng đầu tiên của handler, trước mọi &#96;await&#96;, lần nào cũng vậy.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/form" target="_blank" rel="noopener">
+  <span class="lc-ico">📮</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Component form</span><span class="lc-sub">onSubmit, prop action, và form hoạt động ra sao trong React hiện đại.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault" target="_blank" rel="noopener">
+  <span class="lc-ico">🛑</span>
+  <span class="lc-body"><span class="lc-title">MDN — Event.preventDefault</span><span class="lc-sub">Vì sao nó phải chạy đồng bộ, và chuyện gì xảy ra khi không.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -332,6 +436,24 @@ function handleKeyDown(e) {
 <div class="callout ok">
 <p><strong>Stage 1 complete.</strong> You now have the whole foundation of React: JSX describes the UI, components compose via props and children, state gives them memory, and events drive state through controlled forms. <strong>Progress Test 1</strong> in the Exam Room covers Chapters 1–4. Stage 2 goes deeper into hooks — starting with the one that trips up everyone, <code>useEffect</code>.</p>
 </div>
+<h3>Controlled or uncontrolled — pick by what you need during typing</h3>
+<div class="lz-map">
+  <div class="lz-stage">Both are valid; the question is who holds the value</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Controlled</div><div class="lz-nsub">React state holds the value. Choose it when you need live validation, a character counter, a dependent field, or a preview that updates as you type.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Uncontrolled</div><div class="lz-nsub">The DOM holds the value; you read it on submit with a ref or from FormData. Choose it for a plain form where nothing reacts until submit.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Uncontrolled is fewer renders</div><div class="lz-nsub">No re-render per keystroke. On a long form with many fields, that difference is measurable — but measure before assuming it matters.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Do not switch mid-life</div><div class="lz-nsub">Going from &#96;undefined&#96; to a value flips an input from uncontrolled to controlled and React warns loudly. Initialise with &#96;&#39;&#39;&#96;, never &#96;undefined&#96;.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — initialising a controlled input from data that has not loaded yet.</strong> &#96;value={user?.name}&#96; is &#96;undefined&#96; on the first render, so React treats the input as uncontrolled; when the fetch resolves, the value becomes a string and React switches it to controlled — logging &quot;A component is changing an uncontrolled input to be controlled&quot; and, more practically, discarding anything the user typed in the meantime. Default the value instead (&#96;value={user?.name ?? &#39;&#39;}&#96;), or do not render the form until the data is there. The warning is precise; it is worth reading rather than filtering out.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable" target="_blank" rel="noopener">
+  <span class="lc-ico">🎚️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Controlling an input with state</span><span class="lc-sub">The controlled pattern, and the exact conditions that trigger the switch warning.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/FormData" target="_blank" rel="noopener">
+  <span class="lc-ico">🧾</span>
+  <span class="lc-body"><span class="lc-title">MDN — FormData</span><span class="lc-sub">Reading an uncontrolled form in one line on submit, without refs.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -376,6 +498,24 @@ function handleKeyDown(e) {
 <div class="callout ok">
 <p><strong>Hoàn thành Giai đoạn 1.</strong> Giờ bạn có toàn bộ nền tảng React: JSX mô tả giao diện, component ghép qua props và children, state cho chúng trí nhớ, và sự kiện điều khiển state qua form có kiểm soát. <strong>Bài kiểm tra tiến độ 1</strong> trong Phòng thi phủ Chương 1–4. Giai đoạn 2 đào sâu hooks — bắt đầu với cái làm ai cũng vấp, <code>useEffect</code>.</p>
 </div>
+<h3>Có kiểm soát hay không kiểm soát — chọn theo thứ bạn cần TRONG LÚC gõ</h3>
+<div class="lz-map">
+  <div class="lz-stage">Cả hai đều hợp lệ; câu hỏi là ai giữ giá trị</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Có kiểm soát</div><div class="lz-nsub">State của React giữ giá trị. Hãy chọn nó khi bạn cần kiểm dữ liệu trực tiếp, một bộ đếm ký tự, một trường phụ thuộc, hay một khung xem trước cập nhật khi gõ.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Không kiểm soát</div><div class="lz-nsub">DOM giữ giá trị; bạn đọc nó lúc submit bằng một ref hoặc từ FormData. Hãy chọn nó cho một form đơn giản chẳng có gì phản ứng cho tới lúc gửi.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Không kiểm soát thì ít render hơn</div><div class="lz-nsub">Không render lại ở mỗi lần gõ phím. Trên một form dài nhiều trường, chênh lệch đó đo được — nhưng hãy đo trước khi cho rằng nó quan trọng.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Đừng đổi giữa chừng</div><div class="lz-nsub">Đi từ &#96;undefined&#96; sang một giá trị là lật một ô nhập từ không-kiểm-soát sang có-kiểm-soát và React cảnh báo to tiếng. Hãy khởi tạo bằng &#96;&#39;&#39;&#96;, đừng bao giờ bằng &#96;undefined&#96;.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — khởi tạo một ô nhập có kiểm soát từ dữ liệu chưa tải xong.</strong> &#96;value={user?.name}&#96; là &#96;undefined&#96; ở lần render đầu, nên React coi ô nhập là không-kiểm-soát; tới khi phép fetch xong, giá trị thành một chuỗi và React chuyển nó sang có-kiểm-soát — ghi ra &quot;A component is changing an uncontrolled input to be controlled&quot; và, thực tế hơn, vứt bỏ mọi thứ người dùng đã gõ trong khoảng đó. Hãy đặt giá trị dự phòng (&#96;value={user?.name ?? &#39;&#39;}&#96;), hoặc đừng vẽ form ra cho tới khi có dữ liệu. Cảnh báo ấy nói rất chính xác; nó đáng đọc chứ không đáng lọc bỏ.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable" target="_blank" rel="noopener">
+  <span class="lc-ico">🎚️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Kiểm soát một ô nhập bằng state</span><span class="lc-sub">Mẫu có-kiểm-soát, và đúng những điều kiện làm nổ cảnh báo chuyển đổi.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/FormData" target="_blank" rel="noopener">
+  <span class="lc-ico">🧾</span>
+  <span class="lc-body"><span class="lc-title">MDN — FormData</span><span class="lc-sub">Đọc một form không kiểm soát trong một dòng lúc submit, không cần ref.</span></span>
+</a>
+
 </div>
 `,
     },

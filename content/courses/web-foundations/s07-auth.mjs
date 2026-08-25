@@ -50,6 +50,16 @@ Response 2: 401 Unauthorized — "...who?"</code></pre>
 <p class="pitfall"><strong>"I logged in, so I'm logged in" is not how HTTP works.</strong> A beginner mistake is assuming the server keeps a memory of you by default. It does not — every request must re-prove identity, one way or another. If you ever see a 401 right after a successful login, this is almost always why: the follow-up request forgot to attach the cookie/token.</p>
 
 <p class="note-ct"><strong>You already met the header that will carry this.</strong> Chapter 6 showed <code>Authorization: Bearer &lt;token&gt;</code> as one of the common headers, and Chapter 6 also covered <code>401 Unauthorized</code> vs <code>403 Forbidden</code> — that pair maps exactly onto authentication vs authorization. In your future Node.js/Express backend, this whole chapter becomes one thing: <strong>auth middleware</strong> that runs before your routes and checks "who is this?" (401 if unknown) then "are they allowed here?" (403 if not).</p>
+<h3>Authentication and authorisation are two questions</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Authentication</span><span class="lz-t">Who are you?</span><span class="lz-d">Answered once, at login, by checking something only that person has: a password, a code from their phone, a passkey on their device.</span></div>
+<div class="lz-layer"><span class="lz-k">Session or token</span><span class="lz-t">Proof, carried forward</span><span class="lz-d">HTTP forgets everything between requests, so the answer has to travel with each one — as a cookie or an <code>Authorization</code> header.</span></div>
+<div class="lz-layer"><span class="lz-k">Authorisation</span><span class="lz-t">May you do this?</span><span class="lz-d">Answered on <em>every</em> request, for <em>every</em> resource. Being logged in says nothing about whether note 13 is yours.</span></div>
+<div class="lz-layer"><span class="lz-k">401 vs 403</span><span class="lz-t">The two failures</span><span class="lz-d">401 means "I do not know who you are" — log in. 403 means "I know exactly who you are, and no". Mixing them up confuses the client.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — checking permission in the user interface instead of on the server.</strong> Hiding the Delete button from non-admins feels like access control, and it is not: the endpoint is still there, and anyone can call it with <code>curl</code>, from DevTools, or by replaying a request they saw once. The UI check is a courtesy — it stops honest users from doing something they will be told off for. The real check lives in the handler, before anything is written. A useful test while building: for every button you hide, ask "what happens if someone calls this endpoint anyway?" If you do not know, that is the next thing to fix.</p></div>
+<div class="link-card"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" target="_blank" rel="noopener">OWASP Authentication Cheat Sheet — the practical checklist</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication" target="_blank" rel="noopener">MDN — HTTP authentication, 401 vs 403</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
@@ -82,6 +92,16 @@ Phản hồi 2: 401 Unauthorized — "...ai cơ?"</code></pre>
 <p class="pitfall"><strong>"Tôi đã đăng nhập rồi, nên tôi đang đăng nhập" không phải cách HTTP hoạt động.</strong> Một sai lầm của người mới là nghĩ server mặc định giữ ký ức về bạn. Không hề — mọi yêu cầu đều phải chứng minh lại danh tính, bằng cách này hay cách khác. Nếu bạn từng thấy 401 ngay sau khi đăng nhập thành công, gần như luôn là vì lý do này: yêu cầu tiếp theo quên đính kèm cookie/token.</p>
 
 <p class="note-ct"><strong>Bạn đã gặp header sẽ mang thứ này rồi.</strong> Chương 6 cho thấy <code>Authorization: Bearer &lt;token&gt;</code> là một trong các header thường gặp, và Chương 6 cũng nói về <code>401 Unauthorized</code> vs <code>403 Forbidden</code> — cặp đó ánh xạ đúng vào xác thực vs phân quyền. Trong backend Node.js/Express tương lai của bạn, cả chương này trở thành một thứ: <strong>auth middleware</strong> chạy trước route của bạn, kiểm "đây là ai?" (401 nếu không rõ) rồi "họ có được phép ở đây không?" (403 nếu không).</p>
+<h3>Xác thực và phân quyền là hai câu hỏi khác nhau</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Xác thực</span><span class="lz-t">Bạn là ai?</span><span class="lz-d">Trả lời một lần, lúc đăng nhập, bằng cách kiểm một thứ chỉ người đó có: mật khẩu, một mã từ điện thoại, một passkey trên thiết bị.</span></div>
+<div class="lz-layer"><span class="lz-k">Phiên hoặc token</span><span class="lz-t">Bằng chứng, mang theo về sau</span><span class="lz-d">HTTP quên sạch giữa các request, nên câu trả lời phải đi kèm từng cái — dưới dạng cookie hoặc header <code>Authorization</code>.</span></div>
+<div class="lz-layer"><span class="lz-k">Phân quyền</span><span class="lz-t">Bạn có được làm việc này không?</span><span class="lz-d">Trả lời ở <em>mọi</em> request, cho <em>mọi</em> tài nguyên. Đăng nhập rồi chẳng nói gì về việc ghi chú 13 có phải của bạn không.</span></div>
+<div class="lz-layer"><span class="lz-k">401 với 403</span><span class="lz-t">Hai kiểu thất bại</span><span class="lz-d">401 nghĩa là "tôi không biết bạn là ai" — hãy đăng nhập. 403 nghĩa là "tôi biết chính xác bạn là ai, và không". Lẫn lộn hai cái làm client bối rối.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — kiểm quyền ở giao diện thay vì ở máy chủ.</strong> Giấu cái nút Xoá khỏi người không phải quản trị viên thì nghe như kiểm soát truy cập, mà không phải: cái endpoint vẫn nằm đó, và ai cũng gọi được bằng <code>curl</code>, từ DevTools, hoặc bằng cách phát lại một request họ từng thấy. Phép kiểm ở giao diện là một cử chỉ lịch sự — nó ngăn người dùng ngay thẳng khỏi làm điều sẽ bị mắng. Phép kiểm thật sống trong handler, trước khi có gì được ghi. Một phép thử hữu ích lúc đang dựng: với mỗi cái nút bạn giấu đi, hãy hỏi "nếu có người cứ gọi endpoint này thì sao?". Nếu bạn không biết, đó là thứ tiếp theo cần sửa.</p></div>
+<div class="link-card"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" target="_blank" rel="noopener">OWASP Authentication Cheat Sheet — bản kiểm thực dụng</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication" target="_blank" rel="noopener">MDN — Xác thực HTTP, 401 với 403</a></div>
 </div>
 `,
     },
@@ -131,6 +151,22 @@ Phản hồi 2: 401 Unauthorized — "...ai cơ?"</code></pre>
 <p class="pitfall"><strong>Storing a login token in localStorage feels convenient — and is a real security weakness.</strong> Any JavaScript that runs on your page (including a malicious script sneaked in through a dependency or an XSS bug) can read localStorage and steal it. A <code>HttpOnly</code> cookie is invisible to JavaScript entirely, so it survives that exact attack. This is why session cookies are still the default choice for traditional logged-in websites.</p>
 
 <p class="note-ct"><strong>Forward reference:</strong> sessions are not the only fix. Lesson 7.3 covers <strong>tokens (JWT)</strong> — a fix where the server does not need to remember anything at all. In Node.js/Express, the session approach is exactly what libraries like <code>express-session</code> implement: they set the cookie for you and store the session server-side (in memory for dev, in Redis/a database for production).</p>
+<h3>The four cookie flags that matter</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">HttpOnly</span><span class="lz-t">JavaScript cannot read it</span><span class="lz-d">The single most valuable flag for a session cookie: it means an XSS bug cannot simply steal the session and post it elsewhere.</span></div>
+<div class="lz-node"><span class="lz-k">Secure</span><span class="lz-t">HTTPS only</span><span class="lz-d">Without it, one plain-HTTP request on a café network hands the cookie to whoever is listening. Set it everywhere except localhost.</span></div>
+<div class="lz-node"><span class="lz-k">SameSite</span><span class="lz-t">Not sent from other sites</span><span class="lz-d"><code>Lax</code> is a sensible default and blocks most CSRF; <code>Strict</code> is safer and logs users out when they arrive from a link.</span></div>
+<div class="lz-node"><span class="lz-k">Max-Age / Expires</span><span class="lz-t">How long it survives</span><span class="lz-d">No value means the cookie dies with the browser tab. A long value is convenience bought with risk on shared machines.</span></div>
+</div>
+<pre><code>res.cookie('sid', id, {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000,   // 7 days
+});</code></pre>
+<div class="pitfall"><p><strong>Trap — a cookie lifetime that outlives the session it points at.</strong> Set the cookie to seven days and the server-side session (or the token inside it) to twenty-four hours, and on day two every request arrives <em>with</em> a cookie that is no longer valid. The user is not logged out — the browser still sends it, so the app looks logged in — but every API call returns 401, and the symptom is "the site is broken", not "please log in". This exact mismatch is recorded in this repo's own history: a 24-hour JWT under a 7-day cookie, with no working refresh endpoint, so sessions died silently after a day. Keep the two numbers in one place, and implement refresh before you extend either.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies" target="_blank" rel="noopener">MDN — Using HTTP cookies, every flag explained</a></div>
+<div class="link-card"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html" target="_blank" rel="noopener">OWASP Session Management Cheat Sheet</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.2</span>
@@ -169,6 +205,22 @@ Phản hồi 2: 401 Unauthorized — "...ai cơ?"</code></pre>
 <p class="pitfall"><strong>Lưu token đăng nhập trong localStorage nghe tiện — và là một điểm yếu bảo mật thật.</strong> Bất kỳ JavaScript nào chạy trên trang bạn (kể cả một script độc hại lẻn vào qua một dependency hay lỗi XSS) đều đọc được localStorage và đánh cắp nó. Một cookie <code>HttpOnly</code> hoàn toàn vô hình với JavaScript, nên nó sống sót đúng kiểu tấn công đó. Đây là lý do session cookie vẫn là lựa chọn mặc định cho các website đăng nhập truyền thống.</p>
 
 <p class="note-ct"><strong>Tham chiếu tới:</strong> session không phải cách khắc phục duy nhất. Bài 7.3 nói về <strong>token (JWT)</strong> — một cách khắc phục mà server không cần nhớ gì cả. Trong Node.js/Express, cách tiếp cận session chính là những gì thư viện như <code>express-session</code> hiện thực: chúng đặt cookie giúp bạn và lưu session phía server (trong bộ nhớ khi phát triển, trong Redis/cơ sở dữ liệu khi production).</p>
+<h3>Bốn cờ cookie có ý nghĩa</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">HttpOnly</span><span class="lz-t">JavaScript không đọc được</span><span class="lz-d">Cờ giá trị nhất cho một cookie phiên: nó nghĩa là một lỗ hổng XSS không thể chỉ việc lấy cắp phiên rồi gửi đi nơi khác.</span></div>
+<div class="lz-node"><span class="lz-k">Secure</span><span class="lz-t">Chỉ đi qua HTTPS</span><span class="lz-d">Không có nó, một request HTTP trần trong mạng quán cà phê là trao cookie cho bất kỳ ai đang nghe. Hãy bật ở mọi nơi trừ localhost.</span></div>
+<div class="lz-node"><span class="lz-k">SameSite</span><span class="lz-t">Không gửi từ trang khác</span><span class="lz-d"><code>Lax</code> là mặc định hợp lý và chặn được phần lớn CSRF; <code>Strict</code> an toàn hơn nhưng làm người dùng bị đăng xuất khi họ tới từ một liên kết.</span></div>
+<div class="lz-node"><span class="lz-k">Max-Age / Expires</span><span class="lz-t">Nó sống bao lâu</span><span class="lz-d">Không đặt giá trị thì cookie chết theo tab trình duyệt. Đặt dài là mua sự tiện lợi bằng rủi ro trên máy dùng chung.</span></div>
+</div>
+<pre><code>res.cookie('sid', id, {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000,   // 7 ngày
+});</code></pre>
+<div class="pitfall"><p><strong>Bẫy — tuổi thọ cookie dài hơn cái phiên mà nó trỏ tới.</strong> Đặt cookie bảy ngày còn phiên phía máy chủ (hoặc token bên trong nó) hai mươi tư giờ, thì sang ngày thứ hai mọi request đều tới <em>kèm</em> một cookie không còn hợp lệ. Người dùng không hề bị đăng xuất — trình duyệt vẫn gửi nó, nên ứng dụng trông như đã đăng nhập — nhưng mọi lời gọi API đều trả 401, và triệu chứng là "trang hỏng rồi", chứ không phải "mời đăng nhập". Đúng cái lệch này có trong lịch sử của chính kho này: một JWT 24 giờ dưới một cookie 7 ngày, mà không có endpoint làm mới nào chạy được, nên phiên chết lặng lẽ sau một ngày. Hãy giữ hai con số đó ở một chỗ, và làm phần làm-mới trước khi kéo dài bất kỳ cái nào.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies" target="_blank" rel="noopener">MDN — Dùng cookie HTTP, giải thích từng cờ</a></div>
+<div class="link-card"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html" target="_blank" rel="noopener">OWASP Session Management Cheat Sheet</a></div>
 </div>
 `,
     },
@@ -209,6 +261,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjQyfQ.4f8a91c2...</code>
 <p class="pitfall"><strong>A JWT's payload is base64-encoded, NOT encrypted — never put secrets in it.</strong> Anyone can copy the middle part of a JWT and decode it in two seconds with zero tools; it is not scrambled, just re-formatted. A password, a credit card number, or anything sensitive in the payload is effectively public. Only put non-secret identity data there (user id, role, expiry) and let the signature guarantee it was not forged.</p>
 
 <p class="note-ct"><strong>Node.js preview:</strong> your Express backend will use a library like <code>jsonwebtoken</code> to sign a token at login (&#96;jwt.sign(payload, secret)&#96;) and an auth middleware that runs <code>jwt.verify(token, secret)</code> on every protected route — throwing a <strong>401</strong> (Chapter 6) if the token is missing or the signature does not check out, before your route handler ever runs.</p>
+<h3>What is actually inside a JWT</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Header — the algorithm</span><span class="lz-d">Base64url text, not encryption. Says how the signature was made, e.g. <code>HS256</code>.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Payload — the claims</span><span class="lz-d">Also base64url. <code>sub</code> (who), <code>exp</code> (until when), plus whatever you add. Anyone holding the token can read all of it.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Signature — the only secret part</span><span class="lz-d">A hash of the first two pieces plus your server's key. It proves the payload was not edited; it does not hide anything.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Verification is the whole point</span><span class="lz-d">Decoding a token is trivial and proves nothing. Only <em>verifying</em> the signature — with your key, on the server — makes the claims trustworthy.</span></div>
+</div>
+<div class="out">$ echo 'eyJzdWIiOiIxMiIsInJvbGUiOiJhZG1pbiJ9' | base64 -d
+{"sub":"12","role":"admin"}</div>
+<div class="pitfall"><p><strong>Trap — putting anything private in a JWT payload, or believing a token can be cancelled.</strong> Base64 is not encryption; as the command above shows, anyone with the token reads every claim in it — so an email address, a phone number or an internal user note is effectively published to whoever holds it, including any script that can reach browser storage. The second half is worse: a signed token stays valid until <code>exp</code>, so "log out everywhere" and "ban this account" do not work by themselves. Keep access tokens short-lived (minutes), pair them with a refresh token you can revoke server-side, and keep a deny-list for the cases that cannot wait.</p></div>
+<div class="link-card"><a href="https://jwt.io/" target="_blank" rel="noopener">jwt.io — paste a token, see exactly what is inside it</a></div>
+<div class="link-card"><a href="https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html" target="_blank" rel="noopener">OWASP — JWT pitfalls and how to avoid them</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.3</span>
@@ -238,6 +302,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjQyfQ.4f8a91c2...</code>
 <p class="pitfall"><strong>Payload của JWT chỉ mã hoá base64, KHÔNG mã hoá thật — đừng bao giờ để bí mật trong đó.</strong> Bất kỳ ai cũng có thể copy phần giữa của một JWT và giải mã trong hai giây mà không cần công cụ nào; nó không bị xáo trộn, chỉ đổi định dạng. Một mật khẩu, số thẻ tín dụng, hay bất cứ gì nhạy cảm trong payload coi như công khai. Chỉ đặt dữ liệu danh tính không bí mật ở đó (user id, role, thời hạn) và để chữ ký đảm bảo nó không bị giả mạo.</p>
 
 <p class="note-ct"><strong>Xem trước Node.js:</strong> backend Express của bạn sẽ dùng một thư viện như <code>jsonwebtoken</code> để ký một token lúc đăng nhập (&#96;jwt.sign(payload, secret)&#96;) và một auth middleware chạy <code>jwt.verify(token, secret)</code> ở mỗi route được bảo vệ — ném ra <strong>401</strong> (Chương 6) nếu token thiếu hoặc chữ ký không khớp, trước khi route handler của bạn từng chạy.</p>
+<h3>Bên trong một JWT thật ra có gì</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Header — thuật toán</span><span class="lz-d">Chữ base64url, không phải mã hoá. Nói chữ ký được tạo thế nào, ví dụ <code>HS256</code>.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Payload — các tuyên bố</span><span class="lz-d">Cũng base64url. <code>sub</code> (là ai), <code>exp</code> (tới khi nào), cộng bất cứ thứ gì bạn thêm. Ai cầm token cũng đọc được toàn bộ.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Chữ ký — phần bí mật duy nhất</span><span class="lz-d">Một hàm băm của hai mẩu đầu cộng khoá của máy chủ bạn. Nó chứng minh payload chưa bị sửa; nó KHÔNG giấu bất cứ thứ gì.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Xác minh mới là toàn bộ vấn đề</span><span class="lz-d">Giải mã một token thì dễ như bỡn và chẳng chứng minh gì. Chỉ có <em>xác minh</em> chữ ký — bằng khoá của bạn, trên máy chủ — mới làm các tuyên bố đáng tin.</span></div>
+</div>
+<div class="out">$ echo 'eyJzdWIiOiIxMiIsInJvbGUiOiJhZG1pbiJ9' | base64 -d
+{"sub":"12","role":"admin"}</div>
+<div class="pitfall"><p><strong>Bẫy — đặt thứ riêng tư vào payload của JWT, hoặc tin rằng huỷ được một token.</strong> Base64 không phải mã hoá; như lệnh ở trên cho thấy, ai có token là đọc được mọi tuyên bố trong đó — nên một địa chỉ email, một số điện thoại hay một ghi chú nội bộ về người dùng thực chất đã công bố cho bất kỳ ai cầm nó, kể cả một script với tới được bộ nhớ trình duyệt. Nửa sau còn tệ hơn: một token đã ký vẫn hợp lệ cho tới <code>exp</code>, nên "đăng xuất mọi nơi" và "khoá tài khoản này" tự thân chúng không chạy. Hãy giữ token truy cập sống ngắn (vài phút), ghép nó với một token làm mới mà bạn thu hồi được ở máy chủ, và giữ một danh sách chặn cho những ca không chờ được.</p></div>
+<div class="link-card"><a href="https://jwt.io/" target="_blank" rel="noopener">jwt.io — dán một token vào, xem chính xác bên trong có gì</a></div>
+<div class="link-card"><a href="https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html" target="_blank" rel="noopener">OWASP — các bẫy của JWT và cách tránh</a></div>
 </div>
 `,
     },
@@ -294,6 +370,20 @@ const isMatch = await bcrypt.compare(typedPassword, hash);
 <p class="note-ct"><strong>Why slow hashing is good:</strong> checking one login attempt taking an extra ~100ms is invisible to a real user, but it makes an attacker's brute-force script — which needs to try millions of guesses — impractically slow. The "cost factor" can be raised over time as computers get faster, which is exactly why bcrypt has stayed relevant for decades.</p>
 
 <p class="pitfall"><strong>Do not roll your own crypto.</strong> Writing your own hashing scheme, using a fast general-purpose hash (MD5, plain SHA-256) for passwords, or reusing the same salt for everyone are all real, documented ways real companies got breached. Use a vetted library (bcrypt, argon2) — this is one corner of programming where "boring and standard" beats "clever."</p>
+<h3>Storing a password, correctly</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Never store the password</span><span class="lz-d">Not encrypted either — encryption is reversible, and whoever gets the database usually gets the key with it.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Hash it with bcrypt or argon2</span><span class="lz-d">Deliberately slow, so an attacker with the hashes can only try a few thousand guesses a second instead of billions. Slowness is the feature.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The salt is automatic</span><span class="lz-d">bcrypt generates a random salt per password and stores it inside the hash string, so two users with the same password get different hashes.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Compare with the library</span><span class="lz-d"><code>bcrypt.compare(plain, hash)</code>. Never hash the input and compare with <code>===</code> — the salt is in the stored hash, so that always fails.</span></div>
+</div>
+<pre><code>const hash = await bcrypt.hash(password, 12);
+// $2b$12$Xy8kQ2r...   ← algorithm, cost, salt and hash, all in one string
+
+const ok = await bcrypt.compare(input, hash);</code></pre>
+<div class="pitfall"><p><strong>Trap — a login that tells an attacker which half was wrong.</strong> Returning "no account with that email" for an unknown address and "wrong password" for a known one turns your login form into a membership checker: an attacker can test a list of ten thousand emails and learn exactly which ones have accounts here, which is valuable on its own and doubly so when the site is sensitive. A timing difference does the same thing — if a missing user returns instantly while a real one waits for bcrypt, the clock leaks the answer. Return one message for both cases, and run the hash comparison even when the user was not found.</p></div>
+<div class="link-card"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" target="_blank" rel="noopener">OWASP Password Storage Cheat Sheet — which algorithm, which cost</a></div>
+<div class="link-card"><a href="https://github.com/kelektiv/node.bcrypt.js" target="_blank" rel="noopener">node.bcrypt.js — the library, and its README on cost factors</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.4</span>
@@ -339,6 +429,20 @@ const isMatch = await bcrypt.compare(mậtKhẩuVừaGõ, hash);
 <p class="note-ct"><strong>Vì sao hash chậm lại là điều tốt:</strong> kiểm một lần đăng nhập tốn thêm ~100ms là vô hình với người dùng thật, nhưng khiến script brute-force của kẻ tấn công — cần thử hàng triệu lần đoán — chậm đến mức bất khả thi. "Cost factor" có thể tăng dần theo thời gian khi máy tính mạnh lên, đó chính là lý do bcrypt vẫn còn phù hợp suốt hàng thập kỷ.</p>
 
 <p class="pitfall"><strong>Đừng tự chế mật mã của riêng bạn.</strong> Tự viết một sơ đồ hash riêng, dùng một hash tổng quát nhanh (MD5, SHA-256 thuần) cho mật khẩu, hay dùng chung một salt cho tất cả mọi người đều là những cách thật, đã được ghi nhận khiến các công ty thật bị xâm nhập. Hãy dùng một thư viện đã được kiểm chứng (bcrypt, argon2) — đây là một góc của lập trình mà "nhàm chán và chuẩn mực" thắng "khôn khéo."</p>
+<h3>Lưu một mật khẩu, cho đúng</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đừng bao giờ lưu mật khẩu</span><span class="lz-d">Mã hoá cũng không — mã hoá là đảo ngược được, và kẻ lấy được cơ sở dữ liệu thường lấy được luôn cái khoá kèm theo.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Băm nó bằng bcrypt hoặc argon2</span><span class="lz-d">Chậm một cách có chủ đích, để kẻ tấn công cầm đống hash chỉ thử được vài nghìn lần đoán mỗi giây thay vì hàng tỷ. Cái chậm ấy chính là tính năng.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Muối là tự động</span><span class="lz-d">bcrypt sinh một chuỗi muối ngẫu nhiên cho mỗi mật khẩu và cất luôn trong chuỗi hash, nên hai người dùng cùng mật khẩu vẫn có hash khác nhau.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So sánh bằng chính thư viện đó</span><span class="lz-d"><code>bcrypt.compare(plain, hash)</code>. Đừng bao giờ tự băm đầu vào rồi so bằng <code>===</code> — muối nằm trong hash đã lưu, nên cách đó luôn luôn sai.</span></div>
+</div>
+<pre><code>const hash = await bcrypt.hash(password, 12);
+// $2b$12$Xy8kQ2r...   ← thuật toán, chi phí, muối và hash, tất cả trong một chuỗi
+
+const ok = await bcrypt.compare(input, hash);</code></pre>
+<div class="pitfall"><p><strong>Bẫy — một trang đăng nhập nói cho kẻ tấn công biết nửa nào sai.</strong> Trả về "không có tài khoản với email đó" cho một địa chỉ lạ và "sai mật khẩu" cho một địa chỉ có thật là biến form đăng nhập của bạn thành một máy dò thành viên: kẻ tấn công thử một danh sách mười nghìn email và biết chính xác cái nào có tài khoản ở đây, thứ tự nó đã có giá trị và càng có giá khi trang web nhạy cảm. Chênh lệch thời gian cũng làm y hệt — nếu một người dùng không tồn tại trả về tức thì trong khi người có thật phải chờ bcrypt, thì cái đồng hồ đã tiết lộ đáp án. Hãy trả về MỘT thông điệp cho cả hai ca, và vẫn chạy phép so hash kể cả khi không tìm thấy người dùng.</p></div>
+<div class="link-card"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" target="_blank" rel="noopener">OWASP Password Storage Cheat Sheet — thuật toán nào, chi phí bao nhiêu</a></div>
+<div class="link-card"><a href="https://github.com/kelektiv/node.bcrypt.js" target="_blank" rel="noopener">node.bcrypt.js — thư viện, và README về hệ số chi phí</a></div>
 </div>
 `,
     },
@@ -374,6 +478,14 @@ Missing that header → browser blocks the JS from reading the response
 
 <p class="pitfall"><strong>A "CORS error" means the browser blocked YOUR OWN script — it is not the server being down, and not an attack on you.</strong> The request often still reaches the server and even runs there; the browser just refuses to hand the response back to your JavaScript. That is also why CORS never appears in curl, Postman, or server-to-server calls — CORS is enforced only inside browsers, as a protection for the person visiting the page. Fix it by having the server opt in (add the right <code>Access-Control-Allow-Origin</code> header, e.g. via the &#96;cors&#96; npm package in Express) — never by trying to bypass it from the client.</p>
 
+<h3>CORS, in the order the browser applies it</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The browser compares origins</span><span class="lz-d">Scheme, host and port must all match. <code>http://x.com</code> and <code>https://x.com</code> are different origins, and so are ports 3000 and 5173.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Simple requests go straight out</span><span class="lz-d">A plain <code>GET</code>. The request reaches your server either way — CORS decides whether the <em>response</em> may be read, not whether it is sent.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Others get a preflight first</span><span class="lz-d">An <code>OPTIONS</code> request asking permission, triggered by a custom header or a JSON <code>Content-Type</code>. Your server must answer it.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The server's headers decide</span><span class="lz-d"><code>Access-Control-Allow-Origin</code> and friends. CORS is enforced by the browser, on the server's instructions — <code>curl</code> ignores it entirely.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — fixing a CORS error with <code>Allow-Origin: *</code>.</strong> It makes the message go away, and it turns off the protection: any website your users visit can now call your API from their browsers. That is harmless for genuinely public data and serious for anything else — although with cookies there is a second safeguard, because <code>*</code> is incompatible with <code>Allow-Credentials: true</code>, and the browser will refuse the combination. That refusal is what usually sends people looking for a workaround, at exactly the moment the rule is protecting them. List the origins you actually serve, and remember the browser is enforcing this on your behalf: CORS is not a firewall, and it never stops <code>curl</code>.</p></div>
 <div class="link-card"><a href="https://youtu.be/hExRDVZHhig" target="_blank" rel="noopener">SSL, TLS, HTTP, HTTPS Explained</a></div>
 
 <p class="note-ct"><strong>Chapter wrap-up.</strong> You now have the full authentication picture: the problem (Lesson 7.1, HTTP forgets you), two fixes (7.2 cookies/sessions, 7.3 JWT), how passwords must be stored (7.4), and the two extra layers that make all of it safe to use in the real world (7.5, HTTPS + CORS). This is precisely what your Express auth middleware, login routes and CORS config will implement. <strong>Next chapter: data & SQL</strong> — how the server actually stores and queries the data sitting behind all of these authenticated requests.</p>
@@ -401,6 +513,14 @@ Thiếu header đó → trình duyệt chặn JS đọc phản hồi
 
 <p class="pitfall"><strong>Một "lỗi CORS" nghĩa là trình duyệt chặn CHÍNH script của bạn — không phải server sập, và không phải một cuộc tấn công vào bạn.</strong> Yêu cầu thường vẫn tới được server và thậm chí chạy ở đó; trình duyệt chỉ từ chối trao phản hồi lại cho JavaScript của bạn. Đó cũng là lý do CORS không bao giờ xuất hiện trong curl, Postman, hay các lời gọi server-to-server — CORS chỉ được thực thi bên trong trình duyệt, như một bảo vệ cho người đang xem trang. Sửa nó bằng cách để server chủ động cho phép (thêm đúng header <code>Access-Control-Allow-Origin</code>, vd qua gói npm &#96;cors&#96; trong Express) — không bao giờ bằng cách tìm cách lách nó từ phía client.</p>
 
+<h3>CORS, theo đúng thứ tự trình duyệt áp dụng</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Trình duyệt so các origin</span><span class="lz-d">Giao thức, tên máy và cổng đều phải khớp. <code>http://x.com</code> và <code>https://x.com</code> là hai origin khác nhau, cổng 3000 với 5173 cũng vậy.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Request đơn giản thì đi thẳng</span><span class="lz-d">Một <code>GET</code> trơn. Request tới máy chủ bạn dù thế nào — CORS quyết định phần <em>phản hồi</em> có được đọc hay không, chứ không quyết định nó có được gửi hay không.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Các loại khác bị hỏi trước (preflight)</span><span class="lz-d">Một request <code>OPTIONS</code> xin phép, kích hoạt bởi một header tự đặt hoặc một <code>Content-Type</code> kiểu JSON. Máy chủ của bạn phải trả lời nó.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Header của máy chủ quyết định</span><span class="lz-d"><code>Access-Control-Allow-Origin</code> và bạn bè. CORS do trình duyệt cưỡng chế, theo chỉ dẫn của máy chủ — <code>curl</code> thì lờ tịt nó.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — chữa một lỗi CORS bằng <code>Allow-Origin: *</code>.</strong> Nó làm thông báo biến mất, và nó tắt luôn lớp bảo vệ: bất kỳ trang web nào người dùng của bạn ghé qua giờ đều gọi được API của bạn từ trình duyệt của họ. Điều đó vô hại với dữ liệu thật sự công khai và nghiêm trọng với mọi thứ khác — dù với cookie thì còn một lớp chốt thứ hai, vì <code>*</code> không tương thích với <code>Allow-Credentials: true</code>, và trình duyệt sẽ từ chối tổ hợp đó. Chính cú từ chối ấy thường đẩy người ta đi tìm cách lách, đúng vào lúc cái luật đang bảo vệ họ. Hãy liệt kê những origin bạn thật sự phục vụ, và nhớ rằng trình duyệt đang cưỡng chế điều này thay bạn: CORS không phải tường lửa, và nó chẳng bao giờ chặn được <code>curl</code>.</p></div>
 <div class="link-card"><a href="https://youtu.be/hExRDVZHhig" target="_blank" rel="noopener">SSL, TLS, HTTP, HTTPS Explained</a></div>
 
 <p class="note-ct"><strong>Tổng kết chương.</strong> Giờ bạn đã có bức tranh xác thực đầy đủ: bài toán (Bài 7.1, HTTP quên bạn), hai cách khắc phục (7.2 cookie/session, 7.3 JWT), cách mật khẩu phải được lưu (7.4), và hai lớp thêm khiến tất cả an toàn để dùng ngoài đời thật (7.5, HTTPS + CORS). Đây đúng là thứ auth middleware, route đăng nhập và cấu hình CORS trong Express của bạn sẽ hiện thực. <strong>Chương kế tiếp: dữ liệu & SQL</strong> — server thật sự lưu và truy vấn dữ liệu đứng sau mọi yêu cầu đã xác thực này như thế nào.</p>
@@ -418,9 +538,25 @@ Thiếu header đó → trình duyệt chặn JS đọc phản hồi
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 7: authentication vs authorization, cookies and sessions, JWT, password security, and HTTPS/CORS.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> The best way to internalise auth is to build real login and protected routes. On Code Lab, implement sessions or JWT, hash passwords with bcrypt, and wire up middleware on the Node.js (Express) track.</p>
+<h3>The chapter in four points</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Two questions</span><span class="lz-t">Who are you, and may you</span><span class="lz-d">Authentication happens once; authorisation happens on every request, for every resource. A hidden button is not access control.</span></div>
+<div class="lz-node"><span class="lz-k">Cookie flags</span><span class="lz-t">HttpOnly, Secure, SameSite</span><span class="lz-d">And keep the cookie's lifetime in step with the session's — a mismatch logs users out invisibly, with 401s instead of a login prompt.</span></div>
+<div class="lz-node"><span class="lz-k">A JWT is readable</span><span class="lz-t">Signed, not encrypted</span><span class="lz-d">Anyone holding it reads every claim, and it stays valid until it expires. Keep them short-lived and pair them with something revocable.</span></div>
+<div class="lz-node"><span class="lz-k">Passwords</span><span class="lz-t">bcrypt, and one error message</span><span class="lz-d">Never store or encrypt them — hash them slowly. And do not tell an attacker which half of the login was wrong.</span></div>
+</div>
+<p class="note-ct"><strong>Security is the one area where "it works" proves nothing.</strong> A broken auth check works perfectly for the honest user testing it. For each endpoint you write, ask what happens when someone calls it with a different id, no token, or an expired one — then try it.</p>
 <div class="link-card"><a href="/code-lab/nodejs-express">Practice on Code Lab → Node.js (Express) track</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 7: xác thực vs phân quyền, cookie và session, JWT, bảo mật mật khẩu, và HTTPS/CORS.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Cách tốt nhất để thấm auth là tự dựng đăng nhập thật và các route được bảo vệ. Trên Code Lab, hãy hiện thực session hoặc JWT, hash mật khẩu bằng bcrypt, và nối middleware ở track Node.js (Express).</p>
+<h3>Cả chương trong bốn ý</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Hai câu hỏi</span><span class="lz-t">Bạn là ai, và bạn có được phép</span><span class="lz-d">Xác thực xảy ra một lần; phân quyền xảy ra ở mọi request, cho mọi tài nguyên. Một cái nút bị giấu không phải là kiểm soát truy cập.</span></div>
+<div class="lz-node"><span class="lz-k">Các cờ cookie</span><span class="lz-t">HttpOnly, Secure, SameSite</span><span class="lz-d">Và giữ tuổi thọ cookie khớp nhịp với phiên — lệch nhau là người dùng bị đăng xuất một cách vô hình, nhận 401 thay vì lời mời đăng nhập.</span></div>
+<div class="lz-node"><span class="lz-k">Một JWT là đọc được</span><span class="lz-t">Đã ký, không phải mã hoá</span><span class="lz-d">Ai cầm nó cũng đọc được mọi tuyên bố, và nó hợp lệ cho tới khi hết hạn. Hãy giữ chúng sống ngắn và ghép với một thứ thu hồi được.</span></div>
+<div class="lz-node"><span class="lz-k">Mật khẩu</span><span class="lz-t">bcrypt, và một thông điệp lỗi duy nhất</span><span class="lz-d">Đừng bao giờ lưu hay mã hoá chúng — hãy băm chậm. Và đừng nói cho kẻ tấn công biết nửa nào của lần đăng nhập là sai.</span></div>
+</div>
+<p class="note-ct"><strong>An toàn là lĩnh vực duy nhất mà "nó chạy được" chẳng chứng minh gì.</strong> Một phép kiểm quyền bị hỏng vẫn chạy hoàn hảo với người dùng ngay thẳng đang thử nó. Với mỗi endpoint bạn viết, hãy hỏi chuyện gì xảy ra khi có người gọi nó bằng một id khác, không có token, hoặc một token hết hạn — rồi thử thật.</p>
 <div class="link-card"><a href="/code-lab/nodejs-express">Luyện tập ở Code Lab → track Node.js (Express)</a></div></div>
 `,
       quiz: {

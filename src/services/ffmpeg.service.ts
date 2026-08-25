@@ -19,7 +19,7 @@
  * ============================================================
  */
 
-import { exec } from 'child_process';
+import { exec, execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs/promises';
@@ -27,6 +27,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
 
 const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 const FFMPEG_PATH = process.env.FFMPEG_PATH || 'ffmpeg';
 const FFPROBE_PATH = process.env.FFPROBE_PATH || 'ffprobe';
@@ -81,9 +82,13 @@ export interface AudioMetadata {
 export async function getAudioMetadata(filePath: string): Promise<AudioMetadata> {
   const absPath = path.resolve(filePath);
   try {
-    const { stdout } = await execAsync(
-      `${FFPROBE_PATH} -v quiet -print_format json -show_format -show_streams "${absPath}"`,
-    );
+    const { stdout } = await execFileAsync(FFPROBE_PATH, [
+      '-v', 'quiet',
+      '-print_format', 'json',
+      '-show_format',
+      '-show_streams',
+      absPath,
+    ]);
     const data = JSON.parse(stdout);
     const audioStream = data.streams?.find((s: any) => s.codec_type === 'audio');
     const format = data.format;
@@ -137,18 +142,24 @@ export async function normalizeAudio(
   const targetLRA = LOUDNESS_TARGET.loudnessRange;
   const targetThresh = String(targetI - targetLRA);
 
-  // Build the first-pass command:
-  // -af loudnorm with print_format=json outputs measurement data as JSON
-  const measureCmd = [
-    `${FFMPEG_PATH} -y -i "${absInput}"`,
-    `-af loudnorm=I=${targetI}:TP=${targetTP}:LRA=${targetLRA}:threshold=${targetThresh}:print_format=summary`,
-    '-f null -',
-  ].join(' ');
+  // Build the first-pass argv. The whole -af value must be ONE argument —
+  // see the comment on the second pass below for what happens when it is not.
+  const measureArgs = [
+    '-y',
+    '-i', absInput,
+    '-af',
+    `loudnorm=I=${targetI}:TP=${targetTP}:LRA=${targetLRA}:threshold=${targetThresh}:print_format=summary`,
+    '-f', 'null',
+    '-',
+  ];
 
   let measurement: LoudnormResult['measurement'] = {};
 
   try {
-    const { stdout, stderr } = await execAsync(measureCmd, { timeout: 300000 });
+    const { stdout, stderr } = await execFileAsync(FFMPEG_PATH, measureArgs, {
+      timeout: 300000,
+      maxBuffer: 10 * 1024 * 1024, // loudnorm prints its summary to stderr
+    });
 
     // Parse the summary output from loudnorm
     // Format: "n:I=-14.0LUFS ..." etc.
@@ -191,33 +202,52 @@ export async function normalizeAudio(
   const measuredLRA = measurement.inputLRA || String(targetLRA);
   const measuredThresh = measurement.inputThresh || targetThresh;
 
-  // Build the second-pass command with measured values
-  // This gives us accurate normalization instead of guesswork
-  const normalizeCmd = [
-    `${FFMPEG_PATH} -y -i "${absInput}"`,
-    `-af loudnorm=I=${targetI}:TP=${targetTP}:LRA=${targetLRA}:threshold=${targetThresh}`,
-    // Use measured values for better accuracy
-    `:measured_I=${measuredI}:measured_TP=${measuredTP}:measured_LRA=${measuredLRA}:measured_thresh=${measuredThresh}`,
-    // Copy non-audio streams (metadata, cover art) if possible
-    '-c:a libmp3lame -b:a 192k', // re-encode to MP3 for consistent quality
-    '-id3v2_version 3',
-    `"${absOutput}"`,
-  ].join(' ');
+  // Build the second-pass argv with the measured values.
+  //
+  // The filter string is built as ONE value. It used to be assembled by
+  // .join(' ')-ing two array entries, which put a SPACE between
+  // `threshold=...` and `:measured_I=...`. ffmpeg then saw the measured
+  // values as a separate positional argument (an output URL it could not
+  // find a muxer for), pass 2 failed, and every track silently took the
+  // fallback path below — a plain re-encode with no normalization at all.
+  const loudnormFilter =
+    `loudnorm=I=${targetI}:TP=${targetTP}:LRA=${targetLRA}:threshold=${targetThresh}` +
+    `:measured_I=${measuredI}:measured_TP=${measuredTP}` +
+    `:measured_LRA=${measuredLRA}:measured_thresh=${measuredThresh}`;
+
+  const normalizeArgs = [
+    '-y',
+    '-i', absInput,
+    '-af', loudnormFilter,
+    // re-encode to MP3 for consistent quality
+    '-c:a', 'libmp3lame',
+    '-b:a', '192k',
+    '-id3v2_version', '3',
+    absOutput,
+  ];
 
   try {
-    await execAsync(normalizeCmd, { timeout: 300000 });
+    await execFileAsync(FFMPEG_PATH, normalizeArgs, {
+      timeout: 300000,
+      maxBuffer: 10 * 1024 * 1024,
+    });
     // (debug log removed 2026-06-17)
   } catch (err) {
     // If FFmpeg fails, try a simpler approach — just re-encode without loudnorm
     logger.warn('Loudnorm normalization failed, falling back to re-encode', { error: err instanceof Error ? err.message : String(err) });
-    const fallbackCmd = [
-      `${FFMPEG_PATH} -y -i "${absInput}"`,
-      '-c:a libmp3lame -b:a 192k',
-      '-id3v2_version 3',
-      `"${absOutput}"`,
-    ].join(' ');
+    const fallbackArgs = [
+      '-y',
+      '-i', absInput,
+      '-c:a', 'libmp3lame',
+      '-b:a', '192k',
+      '-id3v2_version', '3',
+      absOutput,
+    ];
     try {
-      await execAsync(fallbackCmd, { timeout: 300000 });
+      await execFileAsync(FFMPEG_PATH, fallbackArgs, {
+        timeout: 300000,
+        maxBuffer: 10 * 1024 * 1024,
+      });
       // (debug log removed 2026-06-17)
     } catch (fallbackErr) {
       throw new AppError(

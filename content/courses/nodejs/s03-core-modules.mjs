@@ -85,6 +85,22 @@ join    : /var/www/uploads</div>
   <div class="kv"><span class="k">EMFILE</span><span class="v">Too many open files — you are leaking file handles somewhere.</span></div>
 </div>
 <div class="note-ct">On this site the disk is used far less than you might expect: uploads go straight to Cloudflare R2, not to local storage. That is deliberate — containers are replaceable, so anything written inside one disappears on the next deploy. Treat the container filesystem as scratch space only.</div>
+<h3>Building a path that survives every platform</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Never concatenate strings</span><span class="lz-d"><code>dir + '/' + name</code> breaks on Windows, doubles a slash when <code>dir</code> already ends in one, and cannot normalise <code>..</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">path.join for pieces</span><span class="lz-d">It uses the platform separator and collapses redundant slashes. This is the everyday one.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">path.resolve for an absolute path</span><span class="lz-d">It walks right to left until it has an absolute path, filling in from <code>process.cwd()</code> if needed. Use it when the result must not depend on where the process was started.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And check the result before using it</span><span class="lz-d">A path built from user input can escape its directory. <code>path.resolve</code> then <code>startsWith</code> the intended root is the check that stops traversal.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/path.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🗂️</span>
+  <span class="lc-body"><span class="lc-title">Node.js — path</span><span class="lc-sub">Every function, with the platform differences called out for each.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/fs.html#promises-api" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Node.js — fs/promises</span><span class="lc-sub">The API this course uses: promise-based, awaitable, and no callback nesting.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -115,7 +131,7 @@ join    : /var/www/uploads</div>
   <div class="kv"><span class="k">path.extname / basename / parse</span><span class="v">Tháo rời một đường dẫn. Dùng mấy cái này thay cho <code>split('.')</code>.</span></div>
 </div>
 <div class="pitfall"><strong>Cái bẫy bảo mật.</strong> Đừng bao giờ viết <code>path.join(thuMucUpload, req.params.filename)</code> với tên file do người dùng gửi lên. Một cái tên kiểu <code>../../etc/passwd</code> sẽ thoát khỏi thư mục của bạn — đây là lỗ hổng path traversal. Luôn kiểm tra kết quả có còn nằm bên trong hay không:
-<br><br><code>const full = path.resolve(thuMucUpload, ten);<br>if (!full.startsWith(path.resolve(thuMucUpload) + path.sep)) throw new Error('đường dẫn không hợp lệ');</code></div>
+<br><br><code>const full = path.resolve(thuMucUpload, name);<br>if (!full.startsWith(path.resolve(thuMucUpload) + path.sep)) throw new Error('đường dẫn không hợp lệ');</code></div>
 
 <h3>fs có ba phong cách</h3>
 <pre><code><span class="tok-comment">// 1. API Promise — cái bạn nên dùng</span>
@@ -156,6 +172,22 @@ join    : /var/www/uploads</div>
   <div class="kv"><span class="k">EMFILE</span><span class="v">Mở quá nhiều file — bạn đang rò rỉ file handle ở đâu đó.</span></div>
 </div>
 <div class="note-ct">Ở website này ổ đĩa được dùng ít hơn bạn tưởng nhiều: file upload đi thẳng lên Cloudflare R2 chứ không lưu tại máy. Đó là chủ ý — container là thứ thay thế được, nên mọi thứ ghi bên trong nó sẽ biến mất ở lần deploy kế tiếp. Hãy coi hệ thống file của container chỉ là chỗ nháp.</div>
+<h3>Dựng một đường dẫn sống được trên mọi nền tảng</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đừng bao giờ nối chuỗi</span><span class="lz-d"><code>dir + '/' + name</code> vỡ trên Windows, nhân đôi dấu gạch chéo khi <code>dir</code> vốn đã kết thúc bằng một cái, và không chuẩn hoá nổi <code>..</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">path.join cho các mảnh ghép</span><span class="lz-d">Nó dùng dấu phân cách của nền tảng và gộp các dấu gạch chéo thừa. Đây là cái dùng hằng ngày.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">path.resolve cho một đường dẫn tuyệt đối</span><span class="lz-d">Nó đi từ phải sang trái cho tới khi có một đường dẫn tuyệt đối, điền thêm từ <code>process.cwd()</code> nếu cần. Hãy dùng nó khi kết quả KHÔNG được phụ thuộc vào chỗ tiến trình được khởi động.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và hãy kiểm kết quả trước khi dùng</span><span class="lz-d">Một đường dẫn dựng từ đầu vào của người dùng có thể thoát khỏi thư mục của nó. <code>path.resolve</code> rồi <code>startsWith</code> cái gốc dự định chính là phép kiểm chặn được việc đi ngược thư mục.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/path.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🗂️</span>
+  <span class="lc-body"><span class="lc-title">Node.js — path</span><span class="lc-sub">Mọi hàm, có nêu rõ khác biệt giữa các nền tảng cho từng cái.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/fs.html#promises-api" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Node.js — fs/promises</span><span class="lc-sub">API mà khoá này dùng: dựa trên promise, await được, và không lồng callback.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -217,6 +249,22 @@ Buffer.<span class="tok-function">alloc</span>(<span class="tok-number">1024</sp
 Buffer.<span class="tok-function">concat</span>([a, b]);                <span class="tok-comment">// join several chunks</span></code></pre>
 <div class="callout warn">Never use <code>Buffer.allocUnsafe(n)</code> unless you immediately overwrite every byte. It hands you memory that was not cleared — meaning it may still contain fragments of other data that passed through your process. Use <code>Buffer.alloc</code>.</div>
 <div class="note-ct">The payment integration on this site verifies webhook signatures against the raw request body for exactly the reason above: Express would otherwise parse the JSON and re-serialise it, changing whitespace and key order, and the HMAC would never match. Chapter 6 shows how to keep the raw body available for just that one route.</div>
+<h3>Why a character is not a byte</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A Buffer is a fixed array of bytes</span><span class="lz-d">Not text. It has no encoding until you decide one, and the same bytes read as UTF-8 and as latin1 give different strings.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">UTF-8 uses one to four bytes per character</span><span class="lz-d">ASCII is one, Vietnamese with diacritics is two or three, an emoji is four. So <code>str.length</code> and <code>Buffer.byteLength(str)</code> are different numbers.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Slicing at a byte offset can split a character</span><span class="lz-d">Cutting a UTF-8 sequence in half produces the replacement character. This is the bug behind &quot;the last letter turned into a question mark&quot;.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Use StringDecoder across chunks</span><span class="lz-d">It holds an incomplete sequence until the next chunk completes it — which is exactly what a stream needs.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/buffer.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">Node.js — Buffer</span><span class="lc-sub">Allocation, encodings, and the byteLength/length distinction this lesson turns on.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/string_decoder.html" target="_blank" rel="noopener">
+  <span class="lc-ico">✂️</span>
+  <span class="lc-body"><span class="lc-title">Node.js — StringDecoder</span><span class="lc-sub">The one-class answer to splitting multi-byte characters across chunk boundaries.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -262,6 +310,22 @@ Buffer.<span class="tok-function">alloc</span>(<span class="tok-number">1024</sp
 Buffer.<span class="tok-function">concat</span>([a, b]);                <span class="tok-comment">// nối nhiều khúc lại</span></code></pre>
 <div class="callout warn">Đừng bao giờ dùng <code>Buffer.allocUnsafe(n)</code> trừ khi bạn ghi đè ngay lập tức lên từng byte. Nó đưa cho bạn vùng nhớ chưa được xoá — nghĩa là có thể còn sót mảnh dữ liệu khác từng đi qua tiến trình của bạn. Hãy dùng <code>Buffer.alloc</code>.</div>
 <div class="note-ct">Phần tích hợp thanh toán của website này xác minh chữ ký webhook trên body thô đúng vì lý do vừa nói: nếu không, Express sẽ phân tích JSON rồi tạo lại chuỗi, làm đổi khoảng trắng và thứ tự khoá, khiến HMAC không bao giờ khớp. Chương 6 sẽ chỉ cách giữ lại body thô cho riêng một route đó.</div>
+<h3>Vì sao một ký tự không phải một byte</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Một Buffer là một mảng byte cố định</span><span class="lz-d">Không phải chữ. Nó chẳng có bảng mã nào cho tới khi bạn quyết định một cái, và cùng những byte đó đọc theo UTF-8 với đọc theo latin1 cho ra hai chuỗi khác nhau.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">UTF-8 dùng một tới bốn byte cho mỗi ký tự</span><span class="lz-d">ASCII là một, tiếng Việt có dấu là hai hoặc ba, một emoji là bốn. Nên <code>str.length</code> và <code>Buffer.byteLength(str)</code> là hai con số khác nhau.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Cắt theo vị trí byte có thể xé đôi một ký tự</span><span class="lz-d">Cắt một chuỗi UTF-8 làm đôi sẽ cho ra ký tự thay thế. Đây là cái lỗi đứng sau câu &quot;chữ cuối cùng biến thành dấu hỏi&quot;.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Hãy dùng StringDecoder khi đi qua các mẩu</span><span class="lz-d">Nó giữ lại một chuỗi byte chưa hoàn chỉnh cho tới khi mẩu kế tiếp hoàn tất nó — và đó đúng là thứ một luồng dữ liệu cần.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/buffer.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">Node.js — Buffer</span><span class="lc-sub">Cấp phát, bảng mã, và sự phân biệt byteLength/length mà bài này xoay quanh.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/string_decoder.html" target="_blank" rel="noopener">
+  <span class="lc-ico">✂️</span>
+  <span class="lc-body"><span class="lc-title">Node.js — StringDecoder</span><span class="lc-sub">Câu trả lời gọn trong một lớp cho việc ký tự nhiều byte bị xé qua ranh giới các mẩu.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -373,15 +437,15 @@ compressed:  15.0 MB</div>
 <span class="tok-function">console.log</span>(<span class="tok-string">'RAM trước :'</span>, <span class="tok-function">mb</span>(), <span class="tok-string">'MB'</span>);
 
 <span class="tok-keyword">const</span> data = fs.<span class="tok-function">readFileSync</span>(file);        <span class="tok-comment">// nạp TOÀN BỘ file vào RAM</span>
-<span class="tok-keyword">let</span> dong = <span class="tok-number">0</span>;
-<span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> ch <span class="tok-keyword">of</span> data) <span class="tok-keyword">if</span> (ch === <span class="tok-number">10</span>) dong++;
+<span class="tok-keyword">let</span> lines = <span class="tok-number">0</span>;
+<span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> ch <span class="tok-keyword">of</span> data) <span class="tok-keyword">if</span> (ch === <span class="tok-number">10</span>) lines++;
 <span class="tok-function">console.log</span>(<span class="tok-string">'RAM sau   :'</span>, <span class="tok-function">mb</span>(), <span class="tok-string">'MB'</span>);</code></pre>
 <div class="out">RAM trước : 37 MB
 RAM sau   : 395 MB
 số dòng: 6000000 | thời gian: 3662 ms</div>
 <p>Giờ vẫn phép đếm đó nhưng bằng stream, đọc theo từng khúc:</p>
 <pre><code>fs.<span class="tok-function">createReadStream</span>(file)
-  .<span class="tok-function">on</span>(<span class="tok-string">'data'</span>, (chunk) =&gt; { <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> ch <span class="tok-keyword">of</span> chunk) <span class="tok-keyword">if</span> (ch === <span class="tok-number">10</span>) dong++; })
+  .<span class="tok-function">on</span>(<span class="tok-string">'data'</span>, (chunk) =&gt; { <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> ch <span class="tok-keyword">of</span> chunk) <span class="tok-keyword">if</span> (ch === <span class="tok-number">10</span>) lines++; })
   .<span class="tok-function">on</span>(<span class="tok-string">'end'</span>, () =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'RAM đỉnh:'</span>, dinh, <span class="tok-string">'MB'</span>));</code></pre>
 <div class="out">RAM trước   : 37 MB
 RAM đỉnh    : 120 MB
@@ -507,6 +571,22 @@ store.<span class="tok-function">off</span>(<span class="tok-string">'saved'</sp
   <div class="kv"><span class="k">emit</span><span class="v">Synchronous. Returns true if at least one listener was called.</span></div>
 </div>
 <div class="note-ct">The realtime layer of this site is built on emitters end to end: a Socket.IO connection is an emitter, and the chat service emits domain events like "message created" that both the socket layer and the notification layer subscribe to. That is the payoff of this pattern — the code that saves a message does not need to know who cares.</div>
+<h3>The four things to know about an emitter</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">emit is synchronous</span><span class="lz-d">Listeners run in order, in the same tick, before <code>emit</code> returns. A slow listener blocks the emitter — this is not a queue.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The error event is special</span><span class="lz-d">With no listener for <code>'error'</code>, Node throws and the process exits. Every emitter you keep around needs one.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Listeners are not removed for you</span><span class="lz-d"><code>on</code> adds, and only <code>off</code> or <code>once</code> removes. An emitter that outlives its listeners is the classic leak.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Eleven is a warning, not a limit</span><span class="lz-d"><code>MaxListenersExceededWarning</code> at eleven listeners on one event is Node guessing you forgot an <code>off</code>. Usually it is right.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/events.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📡</span>
+  <span class="lc-body"><span class="lc-title">Node.js — Events</span><span class="lc-sub">The full API, including once, off, and the error-event rule.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/events.html#emittersetmaxlistenersn" target="_blank" rel="noopener">
+  <span class="lc-ico">⚠️</span>
+  <span class="lc-body"><span class="lc-title">Node.js — setMaxListeners</span><span class="lc-sub">What the warning means, and when raising the limit is legitimate rather than a cover-up.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -517,18 +597,18 @@ store.<span class="tok-function">off</span>(<span class="tok-string">'saved'</sp
 <h3>Phát và nghe</h3>
 <pre><code><span class="tok-keyword">const</span> { EventEmitter } = <span class="tok-function">require</span>(<span class="tok-string">'node:events'</span>);
 
-<span class="tok-keyword">class</span> <span class="tok-type">KhoLuu</span> <span class="tok-keyword">extends</span> <span class="tok-type">EventEmitter</span> {
-  <span class="tok-function">luu</span>(ten) { <span class="tok-keyword">this</span>.<span class="tok-function">emit</span>(<span class="tok-string">'daLuu'</span>, { ten }); }
+<span class="tok-keyword">class</span> <span class="tok-type">NoteStore</span> <span class="tok-keyword">extends</span> <span class="tok-type">EventEmitter</span> {
+  <span class="tok-function">save</span>(name) { <span class="tok-keyword">this</span>.<span class="tok-function">emit</span>(<span class="tok-string">'daLuu'</span>, { name }); }
 }
 
-<span class="tok-keyword">const</span> kho = <span class="tok-keyword">new</span> <span class="tok-function">KhoLuu</span>();
-kho.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, (n) =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [log]    đã lưu:'</span>, n.ten));
-kho.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, (n) =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [email]  gửi thông báo về:'</span>, n.ten));
-kho.<span class="tok-function">once</span>(<span class="tok-string">'daLuu'</span>, () =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [once]   chỉ chạy lần đầu'</span>));
+<span class="tok-keyword">const</span> store = <span class="tok-keyword">new</span> <span class="tok-function">NoteStore</span>();
+store.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, (n) =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [log]    đã lưu:'</span>, n.name));
+store.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, (n) =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [email]  gửi thông báo về:'</span>, n.name));
+store.<span class="tok-function">once</span>(<span class="tok-string">'daLuu'</span>, () =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [once]   chỉ chạy lần đầu'</span>));
 
-kho.<span class="tok-function">luu</span>(<span class="tok-string">'ghi-chu-1'</span>);
-kho.<span class="tok-function">luu</span>(<span class="tok-string">'ghi-chu-2'</span>);
-<span class="tok-function">console.log</span>(<span class="tok-string">'số listener của daLuu:'</span>, kho.<span class="tok-function">listenerCount</span>(<span class="tok-string">'daLuu'</span>));</code></pre>
+store.<span class="tok-function">save</span>(<span class="tok-string">'ghi-chu-1'</span>);
+store.<span class="tok-function">save</span>(<span class="tok-string">'ghi-chu-2'</span>);
+<span class="tok-function">console.log</span>(<span class="tok-string">'số listener của daLuu:'</span>, store.<span class="tok-function">listenerCount</span>(<span class="tok-string">'daLuu'</span>));</code></pre>
 <div class="out">  [log]    đã lưu: ghi-chu-1
   [email]  gửi thông báo về: ghi-chu-1
   [once]   chỉ chạy lần đầu
@@ -549,20 +629,36 @@ e.<span class="tok-function">on</span>(<span class="tok-string">'error'</span>, 
 
 <h3>Cảnh báo rò rỉ bộ nhớ mà bạn sẽ gặp</h3>
 <pre><code>(node:1234) MaxListenersExceededWarning: Possible EventEmitter memory leak
-detected. 11 daLuu listeners added to [KhoLuu]. Use emitter.setMaxListeners()
+detected. 11 daLuu listeners added to [NoteStore]. Use emitter.setMaxListeners()
 to increase limit</code></pre>
 <div class="callout warn">Node cảnh báo khi một sự kiện có 11 listener. Chuyện này gần như không bao giờ được giải quyết bằng cách nâng giới hạn lên — nó có nghĩa bạn đang <strong>thêm listener mà không gỡ ra</strong>, thường là bên trong một request handler. Mỗi request lại thêm một cái, bộ nhớ phình dần, và cuối cùng tiến trình chết. Cách sửa là <code>off()</code> / <code>once()</code>, chứ không phải <code>setMaxListeners(100)</code>.</div>
 <pre><code><span class="tok-comment">// đăng ký rồi dọn dẹp</span>
-<span class="tok-keyword">const</span> khiLuu = (n) =&gt; <span class="tok-function">xuLy</span>(n);
-kho.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, khiLuu);
+<span class="tok-keyword">const</span> onSaved = (n) =&gt; <span class="tok-function">xuLy</span>(n);
+store.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, onSaved);
 <span class="tok-comment">// về sau, khi bên tiêu thụ không cần nữa:</span>
-kho.<span class="tok-function">off</span>(<span class="tok-string">'daLuu'</span>, khiLuu);</code></pre>
+store.<span class="tok-function">off</span>(<span class="tok-string">'daLuu'</span>, onSaved);</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">on / off</span><span class="v">Thêm và gỡ listener. Muốn gỡ phải có ĐÚNG tham chiếu hàm đó — một arrow viết thẳng tại chỗ thì không gỡ được.</span></div>
   <div class="kv"><span class="k">once</span><span class="v">Tự gỡ sau lần phát đầu tiên. Dùng cho những việc một-lần như 'ready' hay 'close'.</span></div>
   <div class="kv"><span class="k">emit</span><span class="v">Chạy đồng bộ. Trả về true nếu có ít nhất một listener được gọi.</span></div>
 </div>
 <div class="note-ct">Tầng realtime của website này được dựng trên emitter từ đầu tới cuối: một kết nối Socket.IO chính là emitter, và dịch vụ chat phát ra các sự kiện nghiệp vụ kiểu "vừa tạo tin nhắn" để cả tầng socket lẫn tầng thông báo cùng đăng ký nghe. Đó chính là phần thưởng của mẫu này — đoạn code lưu tin nhắn không cần biết ai đang quan tâm tới nó.</div>
+<h3>Bốn điều cần biết về một emitter</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">emit là ĐỒNG BỘ</span><span class="lz-d">Các listener chạy theo thứ tự, trong cùng một tick, trước khi <code>emit</code> trả về. Một listener chậm sẽ chặn cả emitter — đây không phải một hàng đợi.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Sự kiện error là đặc biệt</span><span class="lz-d">Không có listener nào cho <code>'error'</code> thì Node ném lỗi và tiến trình thoát. Mọi emitter bạn giữ lại lâu dài đều cần một cái.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Listener không tự được gỡ giùm bạn</span><span class="lz-d"><code>on</code> thêm vào, và chỉ <code>off</code> hoặc <code>once</code> mới gỡ ra. Một emitter sống lâu hơn các listener của nó chính là cái rò rỉ kinh điển.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Mười một là một cảnh báo, không phải một giới hạn</span><span class="lz-d"><code>MaxListenersExceededWarning</code> khi có mười một listener trên một sự kiện là Node đoán rằng bạn quên một lệnh <code>off</code>. Thường thì nó đoán đúng.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/events.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📡</span>
+  <span class="lc-body"><span class="lc-title">Node.js — Events</span><span class="lc-sub">Toàn bộ API, gồm once, off, và luật về sự kiện error.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/events.html#emittersetmaxlistenersn" target="_blank" rel="noopener">
+  <span class="lc-ico">⚠️</span>
+  <span class="lc-body"><span class="lc-title">Node.js — setMaxListeners</span><span class="lc-sub">Cảnh báo đó nghĩa là gì, và khi nào nâng giới hạn là chính đáng chứ không phải che đậy.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -643,6 +739,13 @@ Content-Type: application/json; charset=utf-8
 <p><code>res</code> is a writable stream and <code>req</code> is a readable one. Once that clicks, uploads, downloads and proxies all become the same idea.</p>
 <div class="pitfall">Every response must end <strong>exactly once</strong>. Forget <code>res.end()</code> and the client hangs until it times out; call it twice and you get <code>ERR_STREAM_WRITE_AFTER_END</code>. The classic cause is forgetting <code>return</code> after sending a response — execution continues and sends a second one.</div>
 <div class="note-ct">Express is a thin layer over exactly this API. That is why you can always drop down to <code>req</code>/<code>res</code> inside an Express handler when you need something the framework does not wrap — as this site does for streaming media with HTTP Range support.</div>
+<h3>What the raw http module makes you do by hand</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Parse the URL yourself</span><span class="lz-d"><code>req.url</code> is a string. Routing, path parameters and the query string are all yours to split.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Collect the body from a stream</span><span class="lz-d"><code>req</code> is a readable stream, so a JSON body arrives in chunks you concatenate and parse — including the error case when it is not JSON.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Set every header and status</span><span class="lz-d">Nothing is defaulted for you. Forget <code>Content-Type</code> and the browser guesses, usually wrong.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And handle errors on every path</span><span class="lz-d">An uncaught throw in a handler takes the process down, because there is no framework layer to catch it.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-320" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Express.js Core Concepts</span><span class="lc-sub">Ready for chapter 5 — 10 exercises on routing and middleware.</span></span>
@@ -718,6 +821,13 @@ Content-Type: application/json; charset=utf-8
 <p><code>res</code> là một stream ghi còn <code>req</code> là một stream đọc. Khi điều đó vỡ ra trong đầu, thì upload, download và proxy đều trở thành cùng một ý tưởng.</p>
 <div class="pitfall">Mỗi phản hồi phải kết thúc <strong>đúng một lần</strong>. Quên <code>res.end()</code> thì client treo cho tới lúc hết giờ chờ; gọi hai lần thì nhận <code>ERR_STREAM_WRITE_AFTER_END</code>. Nguyên nhân kinh điển là quên <code>return</code> sau khi đã gửi phản hồi — code chạy tiếp và gửi thêm cái thứ hai.</div>
 <div class="note-ct">Express là một lớp mỏng phủ lên đúng cái API này. Đó là lý do bạn luôn có thể tụt xuống dùng thẳng <code>req</code>/<code>res</code> bên trong một handler Express khi cần thứ mà framework không bọc sẵn — như website này vẫn làm khi truyền media có hỗ trợ HTTP Range.</div>
+<h3>Module http trần bắt bạn tự làm những gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Tự phân tích URL</span><span class="lz-d"><code>req.url</code> là một chuỗi. Định tuyến, tham số đường dẫn và chuỗi truy vấn đều là việc bạn phải tự cắt ra.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Tự gom phần thân từ một luồng</span><span class="lz-d"><code>req</code> là một luồng đọc được, nên một thân JSON tới theo từng mẩu mà bạn phải nối lại rồi phân tích — kể cả xử lý trường hợp lỗi khi nó không phải JSON.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Tự đặt mọi header và mã trạng thái</span><span class="lz-d">Chẳng có gì được đặt mặc định giùm bạn. Quên <code>Content-Type</code> là trình duyệt đoán, và thường đoán sai.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và tự xử lỗi trên mọi nhánh</span><span class="lz-d">Một lệnh ném lỗi không bắt trong handler sẽ hạ luôn tiến trình, vì chẳng có tầng framework nào ở đó để hứng nó.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-320" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Các khái niệm lõi của Express</span><span class="lc-sub">Chuẩn bị cho chương 5 — 10 bài tập về định tuyến và middleware.</span></span>

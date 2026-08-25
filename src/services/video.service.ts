@@ -58,16 +58,18 @@ export async function extractVideoThumbnail(
     // -i: input file
     // -vframes 1: extract only one frame
     // -q:v 2: quality (2 = high quality JPEG)
-    const cmd = [
-      `${FFMPEG_PATH} -y`,
-      '-ss 00:00:01',
-      `-i "${inputPath}"`,
-      '-vframes 1',
-      '-q:v 2',
-      `"${outputPath}"`,
-    ].join(' ');
-
-    await execAsync(cmd, { timeout: 60000 }); // 60s timeout for thumbnail extraction
+    //
+    // SECURITY: execFile (no shell), like extractVideoThumbnailFromUrl below.
+    // `inputPath` ends in `path.extname(originalName)`, and originalName is the
+    // client-supplied multer filename — a slash-free name such as
+    // `clip.mp4";id;#` survives extname intact, so building a shell string here
+    // let an uploader run arbitrary commands. Passing argv avoids the shell
+    // entirely; no quoting or escaping is involved.
+    await execFileAsync(
+      FFMPEG_PATH,
+      ['-y', '-ss', '00:00:01', '-i', inputPath, '-vframes', '1', '-q:v', '2', outputPath],
+      { timeout: 60000 }, // 60s timeout for thumbnail extraction
+    );
     outputExists = true;
 
     // Read the extracted thumbnail

@@ -47,6 +47,24 @@ useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); 
 </div>
 <p>The skill is matching the kind of state to the right tool. Get that right and most "state management is hard" pain disappears.</p>
 
+<h3>Two kinds of state, two kinds of tool</h3>
+<div class="lz-map">
+  <div class="lz-stage">Ask where the truth lives</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Client state</div><div class="lz-nsub">A modal being open, a selected tab, a draft in an input. You own it, nobody else can change it, and losing it costs nothing.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Server state</div><div class="lz-nsub">Rows in a database. You hold a <em>copy</em>, it can change without you, and it can be stale the moment you read it.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Server state is a cache problem</div><div class="lz-nsub">Fetching, deduplication, revalidation, retries, staleness. None of those are what &#96;useState&#96; is for.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">So do not mix them</div><div class="lz-nsub">Copying a fetched list into &#96;useState&#96; makes a second copy nobody invalidates. It is the root of most &quot;my data is stale&quot; bugs.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — reaching for a global store because prop drilling got annoying.</strong> Zustand or Redux will hold the fetched user list happily, and now you own a cache: nothing revalidates it, nothing deduplicates two components asking at once, nothing retries a failed request, and it is stale after any write from another tab. The annoyance was three levels of props; the cost is a cache you maintain by hand. Server data belongs in a cache library or, in the App Router, in a Server Component that refetches on revalidation. Keep the store for genuinely client-side state, where the app is the source of truth.</p></div>
+<a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/overview" target="_blank" rel="noopener">
+  <span class="lc-ico">🗃️</span>
+  <span class="lc-body"><span class="lc-title">TanStack Query — Overview</span><span class="lc-sub">The clearest statement of the server-state-is-different argument.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/fetching" target="_blank" rel="noopener">
+  <span class="lc-ico">📥</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Data fetching</span><span class="lc-sub">The framework&#39;s own answer, which removes most of the need for a client cache.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/does-this-replace-client-state" target="_blank" rel="noopener">
   <span class="lc-ico">🔀</span>
@@ -78,6 +96,24 @@ useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); 
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Context</b> — giá trị client toàn app, đổi chậm (auth, theme). <b>URL</b> — state chia sẻ được (bộ lọc, trang).</div></div>
 </div>
 <p>Kỹ năng là khớp loại state với đúng công cụ. Làm đúng điều đó thì phần lớn nỗi đau "quản lý state khó" biến mất.</p>
+
+<h3>Hai loại state, hai loại công cụ</h3>
+<div class="lz-map">
+  <div class="lz-stage">Hãy hỏi sự thật nằm ở đâu</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">State phía client</div><div class="lz-nsub">Một modal đang mở, một tab đang chọn, một bản nháp trong ô nhập. Bạn sở hữu nó, chẳng ai khác đổi được, và mất nó cũng chẳng tốn gì.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">State phía máy chủ</div><div class="lz-nsub">Các dòng trong cơ sở dữ liệu. Bạn chỉ giữ một <em>bản sao</em>, nó đổi được mà không cần bạn, và nó có thể đã cũ ngay lúc bạn đọc.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">State máy chủ là bài toán nhớ đệm</div><div class="lz-nsub">Lấy dữ liệu, khử trùng lặp, làm mới, thử lại, độ cũ. Chẳng cái nào trong số đó là việc của &#96;useState&#96;.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Nên đừng trộn chúng vào nhau</div><div class="lz-nsub">Chép một danh sách vừa lấy về vào &#96;useState&#96; là tạo ra một bản sao thứ hai chẳng ai vô hiệu hoá. Đó là gốc rễ của phần lớn lỗi &quot;dữ liệu của tôi bị cũ&quot;.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — với tay tới một store toàn cục vì việc luồn props đã trở nên phiền phức.</strong> Zustand hay Redux sẽ vui vẻ giữ cái danh sách người dùng vừa lấy về, và thế là bạn sở hữu một bộ nhớ đệm: chẳng gì làm mới nó, chẳng gì khử trùng lặp khi hai component cùng hỏi một lúc, chẳng gì thử lại một request hỏng, và nó cũ ngay sau bất kỳ lần ghi nào từ một tab khác. Cái phiền phức ban đầu là ba tầng props; cái giá phải trả là một bộ nhớ đệm bạn tự tay bảo trì. Dữ liệu máy chủ thuộc về một thư viện nhớ đệm, hoặc trong App Router thì thuộc về một Server Component tự lấy lại khi được làm mới. Hãy để dành cái store cho state thật sự thuộc phía client, nơi ứng dụng mới là nguồn sự thật.</p></div>
+<a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/overview" target="_blank" rel="noopener">
+  <span class="lc-ico">🗃️</span>
+  <span class="lc-body"><span class="lc-title">TanStack Query — Tổng quan</span><span class="lc-sub">Lời phát biểu rõ nhất về luận điểm state-máy-chủ-là-thứ-khác.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/fetching" target="_blank" rel="noopener">
+  <span class="lc-ico">📥</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Lấy dữ liệu</span><span class="lc-sub">Câu trả lời của chính framework, thứ gỡ đi phần lớn nhu cầu về một bộ đệm phía client.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/does-this-replace-client-state" target="_blank" rel="noopener">
@@ -129,6 +165,23 @@ const add   = useCart((s) =&gt; s.add);</code></pre>
 <p><strong>Persisted stores hydrate asynchronously — do not gate your whole UI on a single "hydrated" flag.</strong> A persisted Zustand store loads from <code>localStorage</code> after mount, and its hydration flag can, in some conditions, never flip true — a real cuongthai.com bug where a page sat forever on "Đang tải…". If you must know whether persisted state is ready, track a local <code>mounted</code> state and read the stored value directly as a fallback, rather than trusting one boolean to reveal the app. (Same lesson as the hydration boundary in Chapter 9.)</p>
 </div>
 
+<h3>A store, and what it is good for</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Create it once, outside React</b> — &#96;const useCart = create((set) =&gt; ({ items: [], add: (i) =&gt; set(…) }))&#96;. It is a module-level object, not a hook factory.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Subscribe with a selector</b> — &#96;useCart(s =&gt; s.items.length)&#96;. The component re-renders only when that slice changes, not when anything in the store does.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>It works outside components too</b> — An event handler, a utility, a socket callback can call &#96;useCart.getState().add(x)&#96;. Handy, and easy to abuse.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Client only</b> — A store is browser state. Mark the file &#96;&#39;use client&#39;&#96; and keep server data out of it.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — selecting the whole store, so every component re-renders on every change.</strong> &#96;const { items, total } = useCart()&#96; subscribes to the entire store object, which is a new reference after any &#96;set&#96; — so a component reading only &#96;total&#96; re-renders when an unrelated field changes, and on a large store that is the whole tree. It works, it is just quietly expensive, and the profiler shows renders with no visible cause. Select the narrowest slice you need (&#96;useCart(s =&gt; s.total)&#96;), and when you genuinely need several fields, select them individually or pass a shallow-equality comparator.</p></div>
+<a class="link-card dl" href="https://zustand.docs.pmnd.rs/getting-started/introduction" target="_blank" rel="noopener">
+  <span class="lc-ico">🐻</span>
+  <span class="lc-body"><span class="lc-title">Zustand — Introduction</span><span class="lc-sub">The API in full, including selectors and the shallow comparator.</span></span>
+</a>
+<a class="link-card dl" href="https://zustand.docs.pmnd.rs/guides/nextjs" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">Zustand with Next.js</span><span class="lc-sub">The App Router guide: per-request stores, and why a module-level store leaks on the server.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://zustand.docs.pmnd.rs/getting-started/introduction" target="_blank" rel="noopener">
   <span class="lc-ico">🐻</span>
@@ -168,6 +221,23 @@ const add   = useCart((s) =&gt; s.add);</code></pre>
 <div class="pitfall">
 <p><strong>Store persist hydrate bất đồng bộ — đừng chặn cả UI sau một cờ "hydrated" duy nhất.</strong> Một store Zustand persist tải từ <code>localStorage</code> sau khi mount, và cờ hydration của nó, trong vài điều kiện, có thể không bao giờ lật true — một bug thật của cuongthai.com khiến một trang ngồi mãi ở "Đang tải…". Nếu bạn phải biết state persist đã sẵn sàng chưa, hãy theo dõi một state <code>mounted</code> cục bộ và đọc thẳng giá trị đã lưu làm dự phòng, thay vì tin một boolean để hiện app. (Cùng bài học với ranh giới hydration ở Chương 9.)</p>
 </div>
+
+<h3>Một store, và nó tốt cho việc gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Tạo nó một lần, bên ngoài React</b> — &#96;const useCart = create((set) =&gt; ({ items: [], add: (i) =&gt; set(…) }))&#96;. Nó là một object ở cấp module, không phải một xưởng sinh hook.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Đăng ký bằng một bộ chọn</b> — &#96;useCart(s =&gt; s.items.length)&#96;. Component chỉ render lại khi đúng lát cắt đó đổi, không phải khi bất cứ thứ gì trong store đổi.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nó chạy được cả ngoài component</b> — Một handler sự kiện, một hàm tiện ích, một callback socket đều gọi được &#96;useCart.getState().add(x)&#96;. Tiện, và dễ bị lạm dụng.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Chỉ dành cho client</b> — Một store là state của trình duyệt. Hãy đánh dấu file &#96;&#39;use client&#39;&#96; và giữ dữ liệu máy chủ ra ngoài nó.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — chọn cả cái store, khiến mọi component render lại ở mọi thay đổi.</strong> &#96;const { items, total } = useCart()&#96; là đăng ký toàn bộ object store, thứ trở thành một tham chiếu mới sau mỗi lần &#96;set&#96; — nên một component chỉ đọc &#96;total&#96; vẫn render lại khi một field chẳng liên quan đổi, và với một store lớn thì đó là cả cái cây. Nó chạy được, chỉ là đắt một cách lặng lẽ, và profiler hiện ra những lần render chẳng có nguyên nhân nhìn thấy được. Hãy chọn lát cắt hẹp nhất bạn cần (&#96;useCart(s =&gt; s.total)&#96;), và khi thật sự cần nhiều field thì hãy chọn từng cái một hoặc truyền vào một bộ so sánh nông.</p></div>
+<a class="link-card dl" href="https://zustand.docs.pmnd.rs/getting-started/introduction" target="_blank" rel="noopener">
+  <span class="lc-ico">🐻</span>
+  <span class="lc-body"><span class="lc-title">Zustand — Giới thiệu</span><span class="lc-sub">Toàn bộ API, gồm cả bộ chọn và bộ so sánh nông.</span></span>
+</a>
+<a class="link-card dl" href="https://zustand.docs.pmnd.rs/guides/nextjs" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">Zustand với Next.js</span><span class="lc-sub">Hướng dẫn cho App Router: store theo từng request, và vì sao store ở cấp module rò rỉ trên máy chủ.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://zustand.docs.pmnd.rs/getting-started/introduction" target="_blank" rel="noopener">
@@ -217,6 +287,23 @@ function Posts() {
 <p><strong>The race you fought by hand in Chapter 5 is gone.</strong> The out-of-order fetch bug, the manual cleanup, the "is this still the current request" flag — TanStack Query handles all of it through the query key and its internal cache. That is the payoff of using a tool built for server state.</p>
 </div>
 
+<h3>What a query library does for you</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Caches by key</b> — &#96;useQuery({ queryKey: [&#39;notes&#39;, id] })&#96;. Two components asking for the same key share one request and one cache entry.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Serves stale data instantly, then refetches</b> — The screen never goes blank on a revisit — the cached value renders while the fresh one loads.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Retries, dedupes, and refetches on focus</b> — All the behaviour you would otherwise write by hand in an effect, wrong, three times.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Not needed for server-rendered data</b> — In the App Router, a Server Component already does the fetch. Use a query library for data that changes while the user watches.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an unstable query key, so nothing is ever cached.</strong> &#96;queryKey: [&#39;notes&#39;, { filters }]&#96; where &#96;filters&#96; is an object built during render creates a new key on every render — the library hashes the key, and a structurally identical object hashes the same, so this one is usually fine. The real breakage is a key containing something genuinely new each time: &#96;Date.now()&#96;, a random id, or an inline function. Then every render is a cache miss, every render fires a request, and the network tab fills up while the UI flickers. Keys must be serialisable and derived only from values that identify the data.</p></div>
+<a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/query-keys" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">TanStack Query — Query keys</span><span class="lc-sub">How keys are hashed and compared, with the rules for building them.</span></span>
+</a>
+<a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/ssr" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">TanStack Query — SSR and Next.js</span><span class="lc-sub">Hydrating server-fetched data into the client cache, instead of fetching twice.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/quick-start" target="_blank" rel="noopener">
   <span class="lc-ico">📡</span>
@@ -254,6 +341,23 @@ function Posts() {
 <div class="callout ok">
 <p><strong>Cuộc đua bạn từng đánh bằng tay ở Chương 5 biến mất.</strong> Bug fetch sai thứ tự, cleanup thủ công, cờ "đây có còn là request hiện tại không" — TanStack Query lo hết qua query key và cache nội bộ. Đó là phần thưởng của việc dùng một công cụ dựng cho state server.</p>
 </div>
+
+<h3>Một thư viện truy vấn làm gì giùm bạn</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Nhớ đệm theo khoá</b> — &#96;useQuery({ queryKey: [&#39;notes&#39;, id] })&#96;. Hai component cùng hỏi một khoá thì dùng chung một request và một mục trong đệm.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Phục vụ dữ liệu cũ tức thì, rồi lấy lại</b> — Màn hình chẳng bao giờ trắng xoá khi ghé lại — giá trị trong đệm được vẽ ra trong lúc giá trị tươi đang tải.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Thử lại, khử trùng lặp, và lấy lại khi cửa sổ được chú ý</b> — Toàn bộ hành vi mà nếu không có nó bạn sẽ tự viết tay trong một effect, viết sai, ba lần.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Không cần cho dữ liệu đã render ở máy chủ</b> — Trong App Router, một Server Component đã lấy dữ liệu rồi. Hãy dùng thư viện truy vấn cho dữ liệu thay đổi trong lúc người dùng đang nhìn.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một khoá truy vấn không ổn định, khiến chẳng gì được nhớ đệm.</strong> &#96;queryKey: [&#39;notes&#39;, { filters }]&#96; với &#96;filters&#96; là một object dựng trong lúc render sẽ tạo ra một khoá mới ở mỗi lần render — nhưng thư viện băm cái khoá đó, và một object giống hệt về cấu trúc sẽ băm ra cùng kết quả, nên ca này thường không sao. Chỗ vỡ thật là một khoá chứa thứ thật sự mới mỗi lần: &#96;Date.now()&#96;, một id ngẫu nhiên, hay một hàm viết thẳng. Khi đó mọi lần render đều trượt đệm, mọi lần render đều bắn một request, và tab Network đầy ắp trong khi giao diện nhấp nháy. Khoá phải tuần tự hoá được và chỉ được dẫn xuất từ những giá trị định danh dữ liệu.</p></div>
+<a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/query-keys" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">TanStack Query — Khoá truy vấn</span><span class="lc-sub">Khoá được băm và so sánh ra sao, kèm luật để dựng chúng.</span></span>
+</a>
+<a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/ssr" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">TanStack Query — SSR và Next.js</span><span class="lc-sub">Hydrate dữ liệu lấy ở máy chủ vào bộ đệm phía client, thay vì lấy hai lần.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/quick-start" target="_blank" rel="noopener">
@@ -302,6 +406,23 @@ function useAddPost() {
 <p><strong>Two write paths, one rule.</strong> Whether you mutate via a Server Action (Chapter 12) or <code>useMutation</code>, the write is only finished when the relevant cache is refreshed. Forgetting the invalidation is the number-one reason a UI shows stale data right after a successful write.</p>
 </div>
 
+<h3>Writing, then making the screen agree</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Send the write</b> — A Server Action, or a mutation function in a query library. Either way, one place that owns the request.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Invalidate what displays it</b> — &#96;revalidatePath&#96; on the server, &#96;queryClient.invalidateQueries&#96; on the client. A write with no invalidation is a stale screen.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Or update optimistically</b> — Show the result before the server confirms. The interface feels instant, and you now owe a rollback path.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Handle the failure</b> — Roll back the optimistic value, show what went wrong, and leave the user&#39;s input intact so they can retry.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an optimistic update with no rollback, leaving the screen showing something that never happened.</strong> Adding the row locally before the request returns makes the app feel fast, and when the server rejects it — a validation error, a lost connection, a permission failure — the row simply stays there. The user believes it saved, closes the tab, and the item is gone next time. Every optimistic update needs the failure path written at the same time as the happy one: capture the previous value, restore it on error, and surface the message. &#96;useOptimistic&#96; in React and &#96;onError&#96; in a query library both exist to make that pairing explicit.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/useOptimistic" target="_blank" rel="noopener">
+  <span class="lc-ico">✨</span>
+  <span class="lc-body"><span class="lc-title">react.dev — useOptimistic</span><span class="lc-sub">Optimistic UI with Server Actions, including the automatic revert on failure.</span></span>
+</a>
+<a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">TanStack Query — Optimistic updates</span><span class="lc-sub">The snapshot-and-rollback pattern, with the code for both paths.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/mutations" target="_blank" rel="noopener">
   <span class="lc-ico">✍️</span>
@@ -338,6 +459,23 @@ function useAddPost() {
 <div class="callout warn">
 <p><strong>Hai đường ghi, một quy tắc.</strong> Dù bạn mutate qua Server Action (Chương 12) hay <code>useMutation</code>, cú ghi chỉ xong khi cache liên quan được làm mới. Quên vô hiệu hoá là lý do số một khiến UI hiện dữ liệu cũ ngay sau một cú ghi thành công.</p>
 </div>
+
+<h3>Ghi, rồi làm cho màn hình đồng ý</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Gửi phép ghi đi</b> — Một Server Action, hoặc một hàm mutation trong thư viện truy vấn. Kiểu nào cũng vậy, một chỗ duy nhất sở hữu cái request.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Vô hiệu hoá thứ hiển thị nó</b> — &#96;revalidatePath&#96; ở máy chủ, &#96;queryClient.invalidateQueries&#96; ở client. Một phép ghi không kèm vô hiệu hoá là một màn hình cũ.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Hoặc cập nhật lạc quan</b> — Hiện kết quả ra trước khi máy chủ xác nhận. Giao diện có cảm giác tức thì, và giờ bạn nợ một đường quay lui.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Xử lý cả trường hợp hỏng</b> — Quay lui giá trị lạc quan, hiện ra chuyện gì đã sai, và giữ nguyên phần người dùng đã nhập để họ thử lại.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một cập nhật lạc quan không có đường quay lui, để lại màn hình hiện một thứ chưa từng xảy ra.</strong> Thêm cái dòng đó vào cục bộ trước khi request về làm ứng dụng có cảm giác nhanh, và khi máy chủ từ chối nó — một lỗi kiểm dữ liệu, một cú mất kết nối, một lần thiếu quyền — thì cái dòng ấy đơn giản là nằm lại đó. Người dùng tin là đã lưu, đóng tab, và lần sau món đó biến mất. Mọi cập nhật lạc quan đều cần viết đường-hỏng cùng lúc với đường-thuận: giữ lại giá trị trước đó, khôi phục nó khi lỗi, và hiện thông điệp ra. &#96;useOptimistic&#96; của React và &#96;onError&#96; của thư viện truy vấn đều tồn tại để làm cặp đôi ấy trở nên tường minh.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/useOptimistic" target="_blank" rel="noopener">
+  <span class="lc-ico">✨</span>
+  <span class="lc-body"><span class="lc-title">react.dev — useOptimistic</span><span class="lc-sub">Giao diện lạc quan với Server Action, gồm cả phép tự quay lui khi hỏng.</span></span>
+</a>
+<a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">TanStack Query — Cập nhật lạc quan</span><span class="lc-sub">Mẫu chụp-ảnh-rồi-quay-lui, kèm mã cho cả hai đường.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/mutations" target="_blank" rel="noopener">
@@ -380,6 +518,24 @@ function useAddPost() {
 <p><strong>cuongthai.com in these terms:</strong> initial page content renders from Server Components; auth and theme are Context (app-wide, slow); fast-changing feature UI lives in Zustand stores (some persisted to survive reload); and shareable view state — which feed tab, which filter — belongs in the URL so a link reproduces the exact view. The same app uses four different tools, each matched to the kind of state it holds. That matching, not the choice of any one library, is the actual skill.</p>
 </div>
 
+<h3>Choosing the smallest tool that fits</h3>
+<div class="lz-map">
+  <div class="lz-stage">Start at the top and stop as soon as it works</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">A local useState</div><div class="lz-nsub">One component needs it. Ninety per cent of state stops here, and moving on from here is a cost, not a promotion.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Lift it to a parent</div><div class="lz-nsub">Two siblings need it. Still no library, still nothing to learn for the next reader.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">The URL</div><div class="lz-nsub">A filter, a tab, a page number. Putting it in the query string makes it shareable, bookmarkable and survivable across a refresh — for free.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">A store or a query library</div><div class="lz-nsub">Genuinely global client state, or genuinely cached server state. Two different problems; do not use one tool for both.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — filter and pagination state kept in React, so no URL can be shared.</strong> &#96;useState&#96; for the current filter works perfectly until a user wants to send a colleague the filtered view, presses back expecting the previous filter, or refreshes and loses their place. All three are the same missing feature, and none of them look like a state-management problem when reported. The URL is a state store the browser maintains for you: &#96;useSearchParams&#96; to read, &#96;router.replace&#96; to write. It also means a Server Component can read the filter and query with it, which removes a round trip entirely.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/use-search-params" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — useSearchParams</span><span class="lc-sub">Reading query state in a Client Component, with the Suspense caveat.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating" target="_blank" rel="noopener">
+  <span class="lc-ico">🧭</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Linking and navigating</span><span class="lc-sub">Updating the URL without a full navigation, which is what makes this practical.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://react.dev/learn/managing-state" target="_blank" rel="noopener">
   <span class="lc-ico">🧠</span>
@@ -410,6 +566,24 @@ function useAddPost() {
 <div class="note-ct">
 <p><strong>cuongthai.com theo các thuật ngữ này:</strong> nội dung trang ban đầu render từ Server Component; auth và theme là Context (toàn app, chậm); UI tính năng đổi nhanh nằm trong các store Zustand (vài cái persist để sống qua reload); và state hiển thị chia sẻ được — tab feed nào, bộ lọc nào — thuộc về URL để một link tái hiện đúng góc nhìn. Cùng một app dùng bốn công cụ khác nhau, mỗi cái khớp với loại state nó giữ. Chính sự khớp đó, không phải việc chọn một thư viện, mới là kỹ năng thật.</p>
 </div>
+
+<h3>Chọn công cụ nhỏ nhất vừa vặn</h3>
+<div class="lz-map">
+  <div class="lz-stage">Bắt đầu từ trên xuống và dừng ngay khi nó chạy được</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Một useState cục bộ</div><div class="lz-nsub">Chỉ một component cần nó. Chín mươi phần trăm state dừng ở đây, và đi tiếp khỏi đây là một cái giá, không phải một sự thăng cấp.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Nâng nó lên phần tử cha</div><div class="lz-nsub">Hai anh em cùng cần. Vẫn chưa cần thư viện, vẫn chưa có gì để người đọc sau phải học.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">URL</div><div class="lz-nsub">Một bộ lọc, một tab, một số trang. Đặt nó vào chuỗi truy vấn là làm nó chia sẻ được, đánh dấu được và sống sót qua một lần tải lại — miễn phí.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Một store hoặc một thư viện truy vấn</div><div class="lz-nsub">State client thật sự toàn cục, hoặc state máy chủ thật sự cần nhớ đệm. Hai bài toán khác nhau; đừng dùng một công cụ cho cả hai.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — giữ state lọc và phân trang trong React, nên chẳng URL nào chia sẻ được.</strong> &#96;useState&#96; cho bộ lọc hiện tại chạy hoàn hảo cho tới khi một người dùng muốn gửi cho đồng nghiệp cái khung nhìn đã lọc, bấm quay lại và mong thấy bộ lọc trước đó, hoặc tải lại và mất chỗ đang xem. Cả ba đều là cùng một tính năng bị thiếu, và chẳng cái nào trông giống một vấn đề quản lý state khi được báo cáo. URL là một kho state mà trình duyệt duy trì giùm bạn: &#96;useSearchParams&#96; để đọc, &#96;router.replace&#96; để ghi. Nó còn có nghĩa là một Server Component đọc được bộ lọc và truy vấn luôn với nó, thứ gỡ hẳn đi một lượt đi về.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/use-search-params" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — useSearchParams</span><span class="lc-sub">Đọc state từ query trong một Client Component, kèm lưu ý về Suspense.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating" target="_blank" rel="noopener">
+  <span class="lc-ico">🧭</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Liên kết và điều hướng</span><span class="lc-sub">Cập nhật URL mà không chuyển trang toàn phần, thứ làm cách này khả thi.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://react.dev/learn/managing-state" target="_blank" rel="noopener">

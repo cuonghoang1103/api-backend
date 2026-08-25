@@ -47,6 +47,23 @@ export default {
 <p><strong>Beginner reassurance:</strong> you do not need to test everything, and you do not start with 100% coverage. Start by unit-testing the tricky logic and writing one e2e test for your most important flow. Even a little testing turns "I hope I didn't break anything" into "the tests are green, ship it."</p>
 </div>
 
+<h3>What a test actually buys you</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>It documents the intended behaviour</b> — A test name is a sentence about what the code should do, checked by a machine. Comments go stale; tests fail.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>It makes refactoring safe</b> — You can restructure freely when something proves the behaviour did not change. Without that, every refactor is a gamble.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>It catches the regression you cannot foresee</b> — The bug is rarely in the code you just wrote — it is in the thing three modules away that depended on it.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>It only helps if it runs</b> — A test suite that is red on main teaches everyone to ignore red. Keep it green or delete the failing test.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — testing the implementation instead of the behaviour.</strong> A test that asserts &#96;setState&#96; was called with a particular object, or that a component rendered a specific internal class name, breaks the moment you refactor — even though the app still works exactly as before. Now the suite is a cost with no benefit: every change requires updating tests that were never checking anything a user cares about. Assert what someone using the app would notice: the text on screen, the request that was sent, the value returned. A good test survives a rewrite of the code it tests.</p></div>
+<a class="link-card dl" href="https://testing-library.com/docs/guiding-principles" target="_blank" rel="noopener">
+  <span class="lc-ico">🎯</span>
+  <span class="lc-body"><span class="lc-title">Testing Library — Guiding principles</span><span class="lc-sub">&quot;The more your tests resemble the way your software is used…&quot; — the sentence this lesson rests on.</span></span>
+</a>
+<a class="link-card dl" href="https://kentcdodds.com/blog/write-tests" target="_blank" rel="noopener">
+  <span class="lc-ico">🏆</span>
+  <span class="lc-body"><span class="lc-title">Write tests. Not too many. Mostly integration.</span><span class="lc-sub">The trade-off argument for where to spend testing effort.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/testing" target="_blank" rel="noopener">
   <span class="lc-ico">✅</span>
@@ -78,6 +95,23 @@ export default {
 <div class="callout ok">
 <p><strong>Trấn an người mới:</strong> bạn không cần test mọi thứ, và không bắt đầu với 100% coverage. Hãy bắt đầu bằng unit-test cho logic hóc búa và viết một e2e test cho luồng quan trọng nhất. Chỉ một chút test cũng biến "mong là mình không làm hỏng gì" thành "test xanh rồi, ship thôi".</p>
 </div>
+
+<h3>Một bài kiểm thử thật sự mua cho bạn cái gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Nó ghi lại hành vi dự định</b> — Tên một bài kiểm thử là một câu nói về việc mã nên làm gì, và được máy kiểm chứng. Comment thì cũ đi; bài kiểm thử thì hỏng.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Nó làm việc tái cấu trúc trở nên an toàn</b> — Bạn sắp xếp lại thoải mái khi có thứ chứng minh hành vi không đổi. Không có nó thì mỗi lần tái cấu trúc là một canh bạc.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nó bắt được cái lỗi hồi quy bạn không lường trước</b> — Lỗi hiếm khi nằm trong đoạn mã bạn vừa viết — nó nằm ở cái thứ cách đó ba module vốn phụ thuộc vào nó.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nó chỉ có ích nếu nó được chạy</b> — Một bộ kiểm thử đỏ trên nhánh chính dạy tất cả mọi người phớt lờ màu đỏ. Hãy giữ nó xanh hoặc xoá bài kiểm thử đang hỏng đi.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — kiểm thử phần hiện thực thay vì kiểm thử hành vi.</strong> Một bài kiểm thử khẳng định rằng &#96;setState&#96; đã được gọi với một object cụ thể, hay rằng một component đã vẽ ra một tên class nội bộ nào đó, sẽ vỡ ngay khi bạn tái cấu trúc — dù ứng dụng vẫn chạy y hệt như trước. Giờ bộ kiểm thử là một chi phí không đem lại lợi ích gì: mọi thay đổi đều đòi cập nhật những bài kiểm thử vốn chưa từng kiểm thứ gì người dùng quan tâm. Hãy khẳng định thứ mà một người dùng ứng dụng sẽ nhận ra: đoạn chữ trên màn hình, cái request đã gửi đi, giá trị đã trả về. Một bài kiểm thử tốt sống sót qua một lần viết lại đoạn mã mà nó kiểm.</p></div>
+<a class="link-card dl" href="https://testing-library.com/docs/guiding-principles" target="_blank" rel="noopener">
+  <span class="lc-ico">🎯</span>
+  <span class="lc-body"><span class="lc-title">Testing Library — Nguyên tắc dẫn đường</span><span class="lc-sub">&quot;Bài kiểm thử của bạn càng giống cách phần mềm được dùng…&quot; — câu nói mà bài này dựa vào.</span></span>
+</a>
+<a class="link-card dl" href="https://kentcdodds.com/blog/write-tests" target="_blank" rel="noopener">
+  <span class="lc-ico">🏆</span>
+  <span class="lc-body"><span class="lc-title">Viết kiểm thử. Đừng quá nhiều. Chủ yếu là tích hợp.</span><span class="lc-sub">Luận điểm đánh đổi về việc nên dồn công sức kiểm thử vào đâu.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/testing" target="_blank" rel="noopener">
@@ -130,6 +164,23 @@ describe('formatVND', () =&gt; {
 <p><strong>A good first habit:</strong> when you write a function with any real logic, write two or three tests for it — the normal case, an edge case (zero, empty, negative), and anything that once broke. It takes a minute and pays back every time you touch that function later.</p>
 </div>
 
+<h3>A unit test, and what belongs in one</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Pure functions first</b> — A formatter, a validator, a price calculation. No React, no network, no database — fast and deterministic.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>One behaviour per test</b> — The name says what, the body shows how. A test asserting five things tells you nothing when it fails.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Arrange, act, assert</b> — Set up the input, call the thing, check the output. Any test that does not fit this shape is usually doing too much.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Run them on every commit</b> — Fast unit tests are worth having only if nobody has to remember to run them.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a test that passes because the assertion never ran.</strong> &#96;test(&#39;saves&#39;, async () =&gt; { save().then(r =&gt; expect(r.ok).toBe(true)) })&#96; passes instantly and checks nothing: the test function returned before the promise resolved, so the assertion executed after the test was already recorded as green. The same shape appears with a missing &#96;await&#96;, or an assertion inside a callback that never fires. It is worse than no test, because it reports confidence you do not have. Two habits: always &#96;await&#96; or return the promise, and make a new test fail once on purpose before you trust it.</p></div>
+<a class="link-card dl" href="https://vitest.dev/guide/" target="_blank" rel="noopener">
+  <span class="lc-ico">⚡</span>
+  <span class="lc-body"><span class="lc-title">Vitest — Guide</span><span class="lc-sub">Setup, the API, and the Next.js configuration notes.</span></span>
+</a>
+<a class="link-card dl" href="https://vitest.dev/api/expect.html" target="_blank" rel="noopener">
+  <span class="lc-ico">✅</span>
+  <span class="lc-body"><span class="lc-title">Vitest — expect</span><span class="lc-sub">Every matcher, including the async ones this trap is about.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://vitest.dev/guide/" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
@@ -170,6 +221,23 @@ describe('formatVND', () =&gt; {
 <div class="callout ok">
 <p><strong>Một thói quen đầu tiên tốt:</strong> khi bạn viết một hàm có logic thật, hãy viết hai ba test cho nó — ca thường, một ca biên (số 0, rỗng, âm), và bất cứ gì từng hỏng. Tốn một phút và trả lại mỗi lần bạn động vào hàm đó sau này.</p>
 </div>
+
+<h3>Một bài kiểm thử đơn vị, và cái gì thuộc về nó</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Các hàm thuần trước</b> — Một bộ định dạng, một bộ kiểm dữ liệu, một phép tính giá. Không React, không mạng, không cơ sở dữ liệu — nhanh và tất định.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Một hành vi mỗi bài kiểm thử</b> — Cái tên nói CÁI GÌ, phần thân cho thấy NHƯ THẾ NÀO. Một bài kiểm thử khẳng định năm thứ chẳng nói gì với bạn khi nó hỏng.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Sắp xếp, hành động, khẳng định</b> — Dựng đầu vào, gọi cái thứ đó, kiểm đầu ra. Bài kiểm thử nào không vừa hình dạng này thì thường là đang làm quá nhiều việc.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Chạy chúng ở mọi commit</b> — Kiểm thử đơn vị nhanh chỉ đáng có nếu chẳng ai phải nhớ chạy chúng.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một bài kiểm thử qua được vì phép khẳng định chưa hề chạy.</strong> &#96;test(&#39;saves&#39;, async () =&gt; { save().then(r =&gt; expect(r.ok).toBe(true)) })&#96; qua ngay tức thì và chẳng kiểm gì cả: hàm kiểm thử đã trả về trước khi promise xong, nên phép khẳng định chạy sau khi bài kiểm thử đã được ghi nhận là xanh. Cùng hình dạng ấy hiện ra khi thiếu một &#96;await&#96;, hoặc khi phép khẳng định nằm trong một callback chẳng bao giờ nổ. Nó tệ hơn cả không có bài kiểm thử nào, vì nó báo cáo một sự tự tin mà bạn không có. Hai thói quen: luôn &#96;await&#96; hoặc return cái promise, và hãy cố tình làm cho một bài kiểm thử mới hỏng một lần trước khi tin nó.</p></div>
+<a class="link-card dl" href="https://vitest.dev/guide/" target="_blank" rel="noopener">
+  <span class="lc-ico">⚡</span>
+  <span class="lc-body"><span class="lc-title">Vitest — Hướng dẫn</span><span class="lc-sub">Cài đặt, API, và các ghi chú cấu hình cho Next.js.</span></span>
+</a>
+<a class="link-card dl" href="https://vitest.dev/api/expect.html" target="_blank" rel="noopener">
+  <span class="lc-ico">✅</span>
+  <span class="lc-body"><span class="lc-title">Vitest — expect</span><span class="lc-sub">Mọi matcher, gồm cả những cái bất đồng bộ mà bẫy này nói tới.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://vitest.dev/guide/" target="_blank" rel="noopener">
@@ -222,6 +290,23 @@ it('increments when the button is clicked', async () =&gt; {
 <p><strong>A bonus: querying by role makes you check accessibility.</strong> If <code>getByRole('button', { name: ... })</code> cannot find your button, often it is because the markup is not accessible (a clickable <code>div</code> instead of a real <code>&lt;button&gt;</code>). Writing tests this way nudges you toward markup that screen readers can use too.</p>
 </div>
 
+<h3>Testing a component the way a user meets it</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Render it, then query like a person</b> — &#96;getByRole(&#39;button&#39;, { name: &#39;Save&#39; })&#96; — by what it is and what it says, not by a class name or a test id.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Interact with userEvent</b> — It fires the full sequence a real interaction produces: focus, keydown, input, change. &#96;fireEvent&#96; skips most of it.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Assert what changed on screen</b> — The new text, the disabled button, the error message. Not internal state, which the user never sees.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Await what is asynchronous</b> — &#96;findBy&#96; queries and &#96;waitFor&#96; retry until the DOM settles, instead of guessing with a timeout.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — reaching for &#96;getByTestId&#96; when a query by role fails.</strong> It makes the test pass and quietly removes the thing the test was proving. &#96;getByRole(&#39;button&#39;)&#96; failing usually means the element is not a button — a clickable &#96;div&#96;, or a button with no accessible name — which is a real accessibility bug the query just found for you. Swapping in a test id hides it, and the component ships unreachable by keyboard and unreadable by a screen reader. Fix the markup instead; the test then passes for the right reason. Keep test ids for the rare element that genuinely has no accessible identity.</p></div>
+<a class="link-card dl" href="https://testing-library.com/docs/queries/about#priority" target="_blank" rel="noopener">
+  <span class="lc-ico">🔎</span>
+  <span class="lc-body"><span class="lc-title">Testing Library — Query priority</span><span class="lc-sub">The recommended order, with the reasoning for why role comes first.</span></span>
+</a>
+<a class="link-card dl" href="https://testing-library.com/docs/user-event/intro" target="_blank" rel="noopener">
+  <span class="lc-ico">🖱️</span>
+  <span class="lc-body"><span class="lc-title">user-event</span><span class="lc-sub">Why it is preferred over fireEvent, with the event sequences it produces.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://testing-library.com/docs/react-testing-library/intro/" target="_blank" rel="noopener">
   <span class="lc-ico">🧩</span>
@@ -262,6 +347,23 @@ it('tăng khi nút được bấm', async () =&gt; {
 <div class="callout warn">
 <p><strong>Một điểm cộng: truy theo vai trò buộc bạn kiểm trợ năng.</strong> Nếu <code>getByRole('button', { name: ... })</code> không tìm thấy nút của bạn, thường là vì markup không có trợ năng (một <code>div</code> bấm được thay vì một <code>&lt;button&gt;</code> thật). Viết test kiểu này đẩy bạn tới markup mà trình đọc màn hình cũng dùng được.</p>
 </div>
+
+<h3>Kiểm thử một component theo cách người dùng gặp nó</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Vẽ nó ra, rồi truy vấn như một con người</b> — &#96;getByRole(&#39;button&#39;, { name: &#39;Lưu&#39; })&#96; — theo cái nó LÀ và cái nó NÓI, không theo tên class hay một test id.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Tương tác bằng userEvent</b> — Nó bắn ra đầy đủ chuỗi sự kiện mà một tương tác thật sinh ra: focus, keydown, input, change. &#96;fireEvent&#96; bỏ qua phần lớn trong số đó.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Khẳng định thứ đã đổi TRÊN MÀN HÌNH</b> — Đoạn chữ mới, cái nút bị khoá, thông điệp lỗi. Đừng khẳng định state nội bộ, thứ người dùng chẳng bao giờ thấy.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Hãy await những thứ bất đồng bộ</b> — Các truy vấn &#96;findBy&#96; và &#96;waitFor&#96; sẽ thử lại cho tới khi DOM ổn định, thay vì đoán mò bằng một khoảng chờ.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — với tay lấy &#96;getByTestId&#96; khi một truy vấn theo vai trò bị hỏng.</strong> Nó làm bài kiểm thử qua được và lặng lẽ gỡ đi đúng cái thứ mà bài kiểm thử đang chứng minh. &#96;getByRole(&#39;button&#39;)&#96; hỏng thường có nghĩa là phần tử đó KHÔNG phải một cái nút — một &#96;div&#96; bấm được, hoặc một nút không có tên tiếp cận được — và đó là một lỗi khả năng tiếp cận thật mà truy vấn vừa tìm ra giùm bạn. Thay bằng một test id là giấu nó đi, và component lên production ở dạng không với tới được bằng bàn phím và không đọc được bằng trình đọc màn hình. Hãy sửa cái markup; khi đó bài kiểm thử qua vì đúng lý do. Hãy để dành test id cho những phần tử hiếm hoi thật sự không có danh tính tiếp cận được.</p></div>
+<a class="link-card dl" href="https://testing-library.com/docs/queries/about#priority" target="_blank" rel="noopener">
+  <span class="lc-ico">🔎</span>
+  <span class="lc-body"><span class="lc-title">Testing Library — Thứ tự ưu tiên truy vấn</span><span class="lc-sub">Thứ tự được khuyến nghị, kèm lý do vì sao vai trò đứng đầu.</span></span>
+</a>
+<a class="link-card dl" href="https://testing-library.com/docs/user-event/intro" target="_blank" rel="noopener">
+  <span class="lc-ico">🖱️</span>
+  <span class="lc-body"><span class="lc-title">user-event</span><span class="lc-sub">Vì sao nó được ưa hơn fireEvent, kèm các chuỗi sự kiện nó sinh ra.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://testing-library.com/docs/react-testing-library/intro/" target="_blank" rel="noopener">
@@ -309,6 +411,23 @@ test('a user can log in', async ({ page }) =&gt; {
 <p><strong>How the pyramid pays off:</strong> unit tests tell you <em>which</em> function broke; e2e tests tell you <em>the login flow is broken</em> without saying where. You want both — many precise unit tests to localise bugs, plus a few e2e tests that guarantee the journeys users actually pay you for still work end to end.</p>
 </div>
 
+<h3>An end-to-end test, and what it is for</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>It drives a real browser</b> — Real rendering, real navigation, real network. It is the only kind of test that proves the pieces fit together.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Cover the paths that must not break</b> — Sign up, log in, checkout, publish. Five of these are worth more than five hundred component tests.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>It is slow and it is honest</b> — A minute per run instead of a millisecond. Budget for that: E2E on pull requests, unit tests on every save.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Run it against a build</b> — &#96;next build &amp;&amp; next start&#96;. The dev server behaves differently enough that a dev-only pass proves less than it seems.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a flaky test that everyone learns to re-run.</strong> A test that passes four times out of five teaches the team that red means &quot;try again&quot;, and from then on a real failure gets re-run too. The usual cause is a fixed wait — &#96;waitForTimeout(1000)&#96; — which is a bet on how fast the machine is, and CI machines are slower and more variable than yours. Playwright&#39;s assertions auto-wait for a condition, so &#96;expect(locator).toBeVisible()&#96; retries until it is true or the timeout expires. Replace every fixed sleep with a condition, and treat a flake as a bug to fix rather than a nuisance to tolerate.</p></div>
+<a class="link-card dl" href="https://playwright.dev/docs/intro" target="_blank" rel="noopener">
+  <span class="lc-ico">🎭</span>
+  <span class="lc-body"><span class="lc-title">Playwright — Getting started</span><span class="lc-sub">Setup, the test runner, and the trace viewer that shows why a run failed.</span></span>
+</a>
+<a class="link-card dl" href="https://playwright.dev/docs/best-practices" target="_blank" rel="noopener">
+  <span class="lc-ico">📋</span>
+  <span class="lc-body"><span class="lc-title">Playwright — Best practices</span><span class="lc-sub">Locators, auto-waiting, and the specific anti-patterns that cause flakes.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://playwright.dev/docs/intro" target="_blank" rel="noopener">
   <span class="lc-ico">🎬</span>
@@ -344,6 +463,23 @@ test('người dùng đăng nhập được', async ({ page }) =&gt; {
 <div class="callout ok">
 <p><strong>Kim tự tháp trả công thế nào:</strong> unit test cho bạn biết <em>hàm nào</em> hỏng; e2e test cho biết <em>luồng đăng nhập hỏng</em> mà không nói ở đâu. Bạn muốn cả hai — nhiều unit test chính xác để khoanh vùng bug, cộng vài e2e test bảo đảm các hành trình người dùng thật sự trả tiền cho bạn vẫn chạy từ đầu tới cuối.</p>
 </div>
+
+<h3>Một bài kiểm thử đầu-cuối, và nó dùng để làm gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Nó điều khiển một trình duyệt thật</b> — Vẽ thật, điều hướng thật, mạng thật. Đây là loại kiểm thử duy nhất chứng minh được các mảnh ghép khớp với nhau.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Hãy phủ những đường KHÔNG ĐƯỢC PHÉP vỡ</b> — Đăng ký, đăng nhập, thanh toán, xuất bản. Năm cái này đáng giá hơn năm trăm bài kiểm thử component.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nó chậm và nó thành thật</b> — Một phút mỗi lần chạy thay vì một mili giây. Hãy dự trù cho điều đó: E2E chạy ở pull request, kiểm thử đơn vị chạy ở mỗi lần lưu.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Chạy nó với một bản đã build</b> — &#96;next build &amp;&amp; next start&#96;. Dev server cư xử khác đủ nhiều để một lượt chạy chỉ-ở-dev chứng minh được ít hơn vẻ ngoài của nó.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một bài kiểm thử chập chờn mà cả đội học được cách chạy lại.</strong> Một bài kiểm thử qua bốn trên năm lần sẽ dạy cả đội rằng màu đỏ nghĩa là &quot;thử lại đi&quot;, và từ đó một cú hỏng thật cũng bị chạy lại. Nguyên nhân thường gặp là một khoảng chờ cố định — &#96;waitForTimeout(1000)&#96; — vốn là một canh bạc về tốc độ của máy, mà máy CI thì chậm hơn và thất thường hơn máy bạn. Các phép khẳng định của Playwright tự chờ một điều kiện, nên &#96;expect(locator).toBeVisible()&#96; sẽ thử lại cho tới khi đúng hoặc hết giờ. Hãy thay mọi lệnh ngủ cố định bằng một điều kiện, và coi một lần chập chờn là một lỗi cần sửa chứ không phải một phiền toái phải chịu.</p></div>
+<a class="link-card dl" href="https://playwright.dev/docs/intro" target="_blank" rel="noopener">
+  <span class="lc-ico">🎭</span>
+  <span class="lc-body"><span class="lc-title">Playwright — Bắt đầu</span><span class="lc-sub">Cài đặt, bộ chạy kiểm thử, và trình xem vết cho thấy vì sao một lượt chạy hỏng.</span></span>
+</a>
+<a class="link-card dl" href="https://playwright.dev/docs/best-practices" target="_blank" rel="noopener">
+  <span class="lc-ico">📋</span>
+  <span class="lc-body"><span class="lc-title">Playwright — Thực hành tốt</span><span class="lc-sub">Locator, tự chờ, và những mẫu-phản-diện cụ thể gây ra chập chờn.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://playwright.dev/docs/intro" target="_blank" rel="noopener">
@@ -385,6 +521,24 @@ test('người dùng đăng nhập được', async ({ page }) =&gt; {
 <p><strong>Practical starting point:</strong> add unit tests for your trickiest functions, one e2e test for your most important flow, and a regression test each time you fix a bug. That modest set catches most of what hurts, and it grows naturally with the app instead of as a giant upfront chore.</p>
 </div>
 
+<h3>Where to spend the testing budget</h3>
+<div class="lz-map">
+  <div class="lz-stage">Cost rises down the list; so does confidence</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Pure logic — many tests</div><div class="lz-nsub">Validators, formatters, reducers, price calculations. Milliseconds each, and they catch the errors that are easiest to make.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Components — a moderate number</div><div class="lz-nsub">The ones with branching behaviour: an empty state, an error state, a disabled submit. Not every presentational card.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Critical journeys — a few</div><div class="lz-nsub">Sign up, log in, pay. End-to-end, against a build, on every pull request.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Everything else — none, deliberately</div><div class="lz-nsub">A test that never fails and never documents anything is a maintenance cost. Deleting one is a legitimate improvement.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — chasing a coverage percentage instead of covering risk.</strong> A 90% target is met most cheaply by testing the easy 90% — getters, prop pass-through, components with one branch — while the error handling, the race condition and the permission check stay untested because they are hard to set up. The number goes up, the risk does not move, and now every refactor drags a hundred low-value tests behind it. Ask instead which failures would be worst: money, data loss, a security check. Test those first, and let coverage be a symptom rather than a target.</p></div>
+<a class="link-card dl" href="https://martinfowler.com/bliki/TestPyramid.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔺</span>
+  <span class="lc-body"><span class="lc-title">Martin Fowler — Test pyramid</span><span class="lc-sub">The shape this lesson describes, and the argument for it.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/testing" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Testing</span><span class="lc-sub">Setting up Vitest, Jest, Playwright and Cypress with the App Router.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://kentcdodds.com/blog/write-tests" target="_blank" rel="noopener">
   <span class="lc-ico">🎯</span>
@@ -414,6 +568,24 @@ test('người dùng đăng nhập được', async ({ page }) =&gt; {
 <div class="callout ok">
 <p><strong>Điểm khởi đầu thực dụng:</strong> thêm unit test cho các hàm hóc búa nhất, một e2e test cho luồng quan trọng nhất, và một regression test mỗi lần bạn sửa một bug. Bộ khiêm tốn đó bắt phần lớn cái gây đau, và nó lớn tự nhiên theo app thay vì như một việc vặt khổng lồ làm trước.</p>
 </div>
+
+<h3>Nên dồn ngân sách kiểm thử vào đâu</h3>
+<div class="lz-map">
+  <div class="lz-stage">Chi phí tăng dần khi đi xuống; niềm tin cũng vậy</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Logic thuần — nhiều bài kiểm thử</div><div class="lz-nsub">Bộ kiểm dữ liệu, bộ định dạng, reducer, phép tính giá. Mỗi cái vài mili giây, và chúng bắt được những lỗi dễ phạm nhất.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Component — số lượng vừa phải</div><div class="lz-nsub">Những cái có hành vi rẽ nhánh: một trạng thái rỗng, một trạng thái lỗi, một nút gửi bị khoá. Không phải mọi cái thẻ thuần trang trí.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Hành trình tới hạn — vài cái</div><div class="lz-nsub">Đăng ký, đăng nhập, thanh toán. Đầu-cuối, chạy với một bản đã build, ở mọi pull request.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Mọi thứ khác — không, một cách có chủ đích</div><div class="lz-nsub">Một bài kiểm thử chẳng bao giờ hỏng và chẳng ghi lại điều gì là một chi phí bảo trì. Xoá một cái đi là một cải thiện chính đáng.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — đuổi theo một tỷ lệ phủ thay vì phủ lấy rủi ro.</strong> Mục tiêu 90% được đạt rẻ nhất bằng cách kiểm thử đúng 90% dễ nhất — các getter, các phép truyền prop, những component chỉ có một nhánh — trong khi phần xử lý lỗi, cái điều kiện tranh chấp và phép kiểm quyền vẫn không được kiểm vì chúng khó dựng. Con số đi lên, rủi ro đứng yên, và giờ mỗi lần tái cấu trúc lại kéo theo một trăm bài kiểm thử ít giá trị. Thay vào đó hãy hỏi cú hỏng nào là tệ nhất: tiền bạc, mất dữ liệu, một phép kiểm an toàn. Hãy kiểm thử những cái đó trước, và để tỷ lệ phủ là một triệu chứng chứ không phải một mục tiêu.</p></div>
+<a class="link-card dl" href="https://martinfowler.com/bliki/TestPyramid.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔺</span>
+  <span class="lc-body"><span class="lc-title">Martin Fowler — Kim tự tháp kiểm thử</span><span class="lc-sub">Hình dạng mà bài này mô tả, và lập luận cho nó.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/testing" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Kiểm thử</span><span class="lc-sub">Cài Vitest, Jest, Playwright và Cypress với App Router.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://kentcdodds.com/blog/write-tests" target="_blank" rel="noopener">

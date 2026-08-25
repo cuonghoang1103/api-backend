@@ -63,6 +63,16 @@ export default {
   <div class="kv"><span class="k">charset / viewport</span><span class="v">UTF-8 lets you write Tiếng Việt correctly; the viewport tag makes the page fit phones.</span></div>
 </div>
 <p class="note-ct"><strong>Try it now:</strong> save the block above as <code>index.html</code>, then in VS Code right-click → "Open with Live Server" (from Lesson 1.2). You just built a web page. Change the text, save, and watch it reload.</p>
+<h3>How the browser turns your file into a page</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">It reads the text top to bottom</span><span class="lz-d">Your <code>.html</code> file is plain text. Nothing is compiled; the browser parses it character by character as it arrives over the network.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">It builds a tree — the DOM</span><span class="lz-d">Each tag becomes a node, nested exactly as your tags nest. This tree, not your file, is what CSS styles and JavaScript manipulates.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">It repairs your mistakes silently</span><span class="lz-d">A missing <code>&lt;/p&gt;</code> is guessed at; a <code>&lt;div&gt;</code> inside a <code>&lt;p&gt;</code> is moved. You get a page, just not the tree you wrote.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So inspect the tree, not the file</span><span class="lz-d">DevTools' Elements tab shows the DOM the browser actually built. When CSS "does not apply", this is where the reason usually is.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — HTML never throws an error, so a broken page looks like a CSS or JavaScript problem.</strong> Forget a closing <code>&lt;/div&gt;</code> and the browser closes it for you — somewhere. Your footer ends up nested inside your sidebar, your CSS selector no longer matches, and you spend an hour on a stylesheet that was correct all along. Nothing in the console mentions it, because unclosed tags are not an error in HTML; they are a documented recovery behaviour. Two habits fix this permanently: let the editor auto-close tags, and when layout goes strange, open Elements and read the nesting before you touch anything else.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML" target="_blank" rel="noopener">MDN — Introduction to HTML (the reference worth bookmarking)</a></div>
+<div class="link-card"><a href="https://validator.w3.org/nu/" target="_blank" rel="noopener">W3C validator — paste your HTML, see what is actually malformed</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -110,6 +120,16 @@ export default {
   <div class="kv"><span class="k">charset / viewport</span><span class="v">UTF-8 cho bạn gõ Tiếng Việt đúng; thẻ viewport giúp trang vừa với điện thoại.</span></div>
 </div>
 <p class="note-ct"><strong>Thử ngay:</strong> lưu khối trên thành <code>index.html</code>, rồi trong VS Code chuột phải → "Open with Live Server" (từ Bài 1.2). Bạn vừa dựng một trang web. Đổi chữ, lưu, và xem nó tự tải lại.</p>
+<h3>Trình duyệt biến file của bạn thành trang thế nào</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Nó đọc chữ từ trên xuống</span><span class="lz-d">File <code>.html</code> của bạn là chữ thuần. Chẳng có gì được biên dịch; trình duyệt phân tích từng ký tự ngay khi chúng về qua mạng.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Nó dựng một cái cây — DOM</span><span class="lz-d">Mỗi thẻ thành một nút, lồng nhau đúng như thẻ của bạn lồng nhau. Chính cái cây này, chứ không phải file của bạn, mới là thứ CSS tô và JavaScript thao tác.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nó âm thầm vá lỗi của bạn</span><span class="lz-d">Một <code>&lt;/p&gt;</code> bị thiếu sẽ được đoán; một <code>&lt;div&gt;</code> nằm trong <code>&lt;p&gt;</code> sẽ bị dời đi. Bạn vẫn có một trang, chỉ là không phải cái cây bạn đã viết.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nên hãy soi cái cây, đừng soi cái file</span><span class="lz-d">Tab Elements của DevTools hiện đúng DOM mà trình duyệt đã dựng. Khi CSS "không ăn", lý do thường nằm ở đây.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — HTML không bao giờ ném lỗi, nên một trang hỏng trông như lỗi CSS hay JavaScript.</strong> Quên một <code>&lt;/div&gt;</code> là trình duyệt tự đóng giùm — ở đâu đó. Cái footer của bạn kết thúc bên trong thanh bên, bộ chọn CSS thôi khớp, và bạn mất một tiếng với một bảng kiểu vốn đã đúng từ đầu. Chẳng gì trong console nhắc tới nó, vì thẻ chưa đóng không phải lỗi trong HTML; nó là một hành vi khôi phục có ghi trong đặc tả. Hai thói quen chữa dứt điểm: để trình soạn thảo tự đóng thẻ, và khi bố cục trở nên kỳ quặc thì mở Elements đọc cấu trúc lồng nhau trước khi động vào bất cứ thứ gì.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML" target="_blank" rel="noopener">MDN — Nhập môn HTML (tài liệu tra cứu đáng đánh dấu)</a></div>
+<div class="link-card"><a href="https://validator.w3.org/nu/" target="_blank" rel="noopener">Bộ kiểm W3C — dán HTML vào, xem chỗ nào thật sự sai cấu trúc</a></div>
 </div>
 `,
     },
@@ -162,6 +182,16 @@ export default {
   <div class="kv"><span class="k">width / height</span><span class="v">Reserve space so the page does not jump while the image loads.</span></div>
 </div>
 <p class="note-ct"><strong>alt text is an accessibility duty, not a nicety.</strong> A blind visitor "sees" your image only through its alt. Describe what matters; if the image is purely decorative, use an empty <code>alt=""</code> so it is skipped.</p>
+<h3>Three attributes that carry most of the weight</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">href</span><span class="lz-t">Where a link goes</span><span class="lz-d">Absolute (<code>https://…</code>), root-relative (<code>/about</code>) or file-relative (<code>about.html</code>). The same absolute-vs-relative idea as terminal paths, applied to URLs.</span></div>
+<div class="lz-node"><span class="lz-k">src</span><span class="lz-t">What an image loads</span><span class="lz-d">Triggers a second network request. A page with thirty images makes thirty requests, which is why image size dominates load time.</span></div>
+<div class="lz-node"><span class="lz-k">alt</span><span class="lz-t">What the image says</span><span class="lz-d">Read aloud by screen readers, shown when the image fails, and indexed by search engines. Not optional, and not a caption.</span></div>
+<div class="lz-node"><span class="lz-k">width &amp; height</span><span class="lz-t">Reserve the space</span><span class="lz-d">Setting both lets the browser lay out the page before the image arrives, so text stops jumping around as things load.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>alt=""</code> and a missing <code>alt</code> mean opposite things.</strong> An empty <code>alt</code> is a deliberate statement: "this image is decorative, skip it", and a screen reader stays silent. A <em>missing</em> <code>alt</code> leaves the reader with nothing to announce, so many read the file name instead — a blind user hears "i-m-g underscore 2 0 2 4 underscore final v3 dot p-n-g". The two look equally blank in a code review, which is why this is worth learning once: write real text for images that carry meaning, write <code>alt=""</code> for spacers and background flourishes, and never leave the attribute off.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img" target="_blank" rel="noopener">MDN — the img element and every attribute it takes</a></div>
+<div class="link-card"><a href="https://www.w3.org/WAI/tutorials/images/decision-tree/" target="_blank" rel="noopener">W3C alt decision tree — what to write, case by case</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -203,6 +233,16 @@ export default {
   <div class="kv"><span class="k">width / height</span><span class="v">Giữ chỗ trước để trang không bị nhảy khi ảnh đang tải.</span></div>
 </div>
 <p class="note-ct"><strong>alt là một trách nhiệm về khả năng tiếp cận, không phải điểm cộng.</strong> Một khách khiếm thị "thấy" ảnh của bạn chỉ qua alt. Hãy mô tả điều quan trọng; nếu ảnh chỉ để trang trí, dùng <code>alt=""</code> rỗng để nó được bỏ qua.</p>
+<h3>Ba thuộc tính gánh phần lớn công việc</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">href</span><span class="lz-t">Liên kết đi đâu</span><span class="lz-d">Tuyệt đối (<code>https://…</code>), tương đối theo gốc (<code>/about</code>) hoặc tương đối theo file (<code>about.html</code>). Đúng cái ý tuyệt-đối-với-tương-đối của đường dẫn terminal, áp lên URL.</span></div>
+<div class="lz-node"><span class="lz-k">src</span><span class="lz-t">Ảnh nạp cái gì</span><span class="lz-d">Kích hoạt một request mạng thứ hai. Một trang ba mươi ảnh tạo ba mươi request, và đó là lý do kích thước ảnh chi phối thời gian tải.</span></div>
+<div class="lz-node"><span class="lz-k">alt</span><span class="lz-t">Ảnh nói gì</span><span class="lz-d">Được trình đọc màn hình đọc lên, hiện ra khi ảnh hỏng, và được máy tìm kiếm lập chỉ mục. Không phải tuỳ chọn, cũng không phải chú thích ảnh.</span></div>
+<div class="lz-node"><span class="lz-k">width &amp; height</span><span class="lz-t">Giữ sẵn chỗ</span><span class="lz-d">Đặt cả hai là trình duyệt bố trí được trang trước khi ảnh về, nên chữ thôi nhảy lung tung trong lúc mọi thứ đang tải.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — <code>alt=""</code> và thiếu hẳn <code>alt</code> mang ý nghĩa trái ngược nhau.</strong> Một <code>alt</code> rỗng là một tuyên bố có chủ đích: "ảnh này chỉ để trang trí, bỏ qua đi", và trình đọc màn hình sẽ im lặng. Còn <em>thiếu</em> <code>alt</code> thì trình đọc chẳng có gì để đọc, nên nhiều cái đọc luôn tên file — một người khiếm thị nghe thấy "i-m-g gạch dưới 2 0 2 4 gạch dưới final v3 chấm p-n-g". Hai thứ nhìn trong review mã đều trống như nhau, và đó là lý do đáng học một lần cho xong: viết chữ thật cho ảnh mang ý nghĩa, viết <code>alt=""</code> cho ảnh đệm và hoạ tiết nền, và đừng bao giờ bỏ hẳn thuộc tính đó.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img" target="_blank" rel="noopener">MDN — thẻ img và mọi thuộc tính của nó</a></div>
+<div class="link-card"><a href="https://www.w3.org/WAI/tutorials/images/decision-tree/" target="_blank" rel="noopener">Cây quyết định alt của W3C — viết gì, theo từng trường hợp</a></div>
 </div>
 `,
     },
@@ -261,6 +301,14 @@ export default {
 <p>When you need a box <em>only</em> for styling/layout and there is no semantic element that fits — a wrapper you will position with CSS. <code>&lt;div&gt;</code> and its inline cousin <code>&lt;span&gt;</code> are the meaningless boxes you reach for last, not first.</p>
 <p class="note-ct"><strong>Rule of thumb:</strong> reach for a semantic element first; drop to <code>&lt;div&gt;</code>/<code>&lt;span&gt;</code> only when nothing else describes the content. This one habit measurably improves accessibility and SEO for free.</p>
 
+<h3>What a semantic tag buys that a div does not</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Screen readers</span><span class="lz-t">Navigation by landmark</span><span class="lz-d">A blind user can jump straight to <code>&lt;nav&gt;</code> or <code>&lt;main&gt;</code>. With <code>&lt;div class="nav"&gt;</code> there is nothing to jump to — the class name means nothing to the browser.</span></div>
+<div class="lz-layer"><span class="lz-k">Keyboard behaviour</span><span class="lz-t">Free, and hard to replicate</span><span class="lz-d">A <code>&lt;button&gt;</code> is focusable, fires on Enter and Space, and announces itself as a button. A clickable <code>&lt;div&gt;</code> does none of that until you add four attributes and two handlers.</span></div>
+<div class="lz-layer"><span class="lz-k">Search engines</span><span class="lz-t">Structure they can read</span><span class="lz-d">Headings in order (<code>h1</code> then <code>h2</code>) describe the document's outline. This is also how "jump to section" features in readers work.</span></div>
+<div class="lz-layer"><span class="lz-k">Your future self</span><span class="lz-t">The underrated one</span><span class="lz-d">Six months later, <code>&lt;article&gt;</code> tells you what a block is. <code>&lt;div class="wrapper-2"&gt;</code> does not.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a clickable <code>&lt;div&gt;</code> works for you and fails for everyone else.</strong> <code>&lt;div onclick="submit()"&gt;Send&lt;/div&gt;</code> looks and behaves correctly with a mouse, which is why it ships. It cannot be reached with Tab, does not respond to Enter or Space, is announced as plain text by a screen reader, and shows no focus ring — so it is invisible to keyboard users, invisible to assistive technology, and unusable for anyone who cannot use a mouse. The fix costs nothing: use <code>&lt;button type="button"&gt;</code> and style it. If you genuinely cannot, you owe it <code>role="button"</code>, <code>tabindex="0"</code>, and keyboard handlers for both keys — which is the browser telling you to use the button.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element" target="_blank" rel="noopener">MDN — the full HTML element reference</a></div>
 </div>
 <div class="ml-vi">
@@ -309,6 +357,14 @@ export default {
 <p>Khi bạn cần một cái hộp <em>chỉ</em> để tạo kiểu/bố cục và không có phần tử ngữ nghĩa nào hợp — một lớp bọc bạn sẽ định vị bằng CSS. <code>&lt;div&gt;</code> và người anh em cùng dòng <code>&lt;span&gt;</code> là những cái hộp vô nghĩa bạn dùng sau cùng, không phải đầu tiên.</p>
 <p class="note-ct"><strong>Quy tắc bỏ túi:</strong> tìm một phần tử ngữ nghĩa trước; chỉ hạ xuống <code>&lt;div&gt;</code>/<code>&lt;span&gt;</code> khi không gì khác mô tả được nội dung. Chỉ một thói quen này đã cải thiện đo được về khả năng tiếp cận và SEO — miễn phí.</p>
 
+<h3>Một thẻ ngữ nghĩa mua được gì mà div không có</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Trình đọc màn hình</span><span class="lz-t">Điều hướng theo mốc</span><span class="lz-d">Người khiếm thị nhảy thẳng tới <code>&lt;nav&gt;</code> hay <code>&lt;main&gt;</code> được. Với <code>&lt;div class="nav"&gt;</code> thì chẳng có gì để nhảy tới — tên class chẳng có nghĩa gì với trình duyệt.</span></div>
+<div class="lz-layer"><span class="lz-k">Hành vi bàn phím</span><span class="lz-t">Miễn phí, và khó dựng lại</span><span class="lz-d">Một <code>&lt;button&gt;</code> nhận được tiêu điểm, kích hoạt bằng Enter và Space, và tự xưng là một cái nút. Một <code>&lt;div&gt;</code> bấm được thì chẳng có gì trong số đó cho tới khi bạn thêm bốn thuộc tính và hai handler.</span></div>
+<div class="lz-layer"><span class="lz-k">Máy tìm kiếm</span><span class="lz-t">Cấu trúc mà chúng đọc được</span><span class="lz-d">Tiêu đề theo thứ tự (<code>h1</code> rồi <code>h2</code>) mô tả dàn ý của tài liệu. Đây cũng là cách tính năng "nhảy tới mục" trong các trình đọc hoạt động.</span></div>
+<div class="lz-layer"><span class="lz-k">Chính bạn trong tương lai</span><span class="lz-t">Thứ hay bị coi nhẹ</span><span class="lz-d">Sáu tháng sau, <code>&lt;article&gt;</code> nói cho bạn biết khối đó là gì. <code>&lt;div class="wrapper-2"&gt;</code> thì không.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một <code>&lt;div&gt;</code> bấm được thì chạy với bạn và hỏng với mọi người khác.</strong> <code>&lt;div onclick="submit()"&gt;Gửi&lt;/div&gt;</code> nhìn và chạy đúng với con chuột, và đó là lý do nó lên production. Nó không tới được bằng phím Tab, không phản hồi Enter hay Space, bị trình đọc màn hình xướng lên như chữ thường, và không có vòng tiêu điểm — nên nó vô hình với người dùng bàn phím, vô hình với công nghệ trợ giúp, và không dùng được với bất kỳ ai không dùng chuột được. Cách chữa chẳng tốn gì: dùng <code>&lt;button type="button"&gt;</code> rồi tô lại. Nếu thật sự không thể, bạn nợ nó <code>role="button"</code>, <code>tabindex="0"</code>, và handler bàn phím cho cả hai phím — mà đó chính là trình duyệt đang bảo bạn hãy dùng cái button.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element" target="_blank" rel="noopener">MDN — tra cứu đầy đủ các phần tử HTML</a></div>
 </div>
 `,
@@ -368,6 +424,14 @@ export default {
 <p>Attributes like <code>required</code>, <code>minlength</code>, <code>maxlength</code>, <code>min</code>, <code>max</code>, <code>pattern</code>, and <code>type="email"</code> make the browser check input <em>before</em> it submits — no JavaScript needed.</p>
 <p class="pitfall"><strong>Browser validation is convenience, not security.</strong> A determined user can bypass it entirely. The Node.js backend must <em>always</em> re-validate every value it receives. Client checks are for a smooth experience; server checks are for safety.</p>
 
+<h3>What happens when a form is submitted</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The browser collects named inputs</span><span class="lz-d">Only fields with a <code>name</code> attribute are included. A field without one is invisible to the submission — a silent, very common bug.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">It runs built-in validation</span><span class="lz-d"><code>required</code>, <code>type="email"</code>, <code>min</code>, <code>pattern</code>. Free, localised, and it blocks submission before any request leaves.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">It sends a request</span><span class="lz-d"><code>method="get"</code> puts the values in the URL; <code>method="post"</code> puts them in the body. Passwords must never travel in a URL — they end up in browser history and server logs.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The server validates again</span><span class="lz-d">Everything in step 2 runs on the user's machine and can be turned off with two clicks in DevTools. Browser validation is for helpfulness; server validation is for correctness.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — trusting the browser's validation as a security check.</strong> <code>required</code> and <code>type="email"</code> stop honest users from making mistakes, and stop nobody else: anyone can delete the attribute in DevTools, or skip the page entirely and post to your endpoint with <code>curl</code>. Every field arriving at your server is attacker-controlled text, including a <code>&lt;select&gt;</code> where you only offered three options and a hidden input carrying a price. Validate everything again on the server, and treat the client-side rules as what they are: a better user experience, not a boundary.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Learn/Forms" target="_blank" rel="noopener">MDN — Web forms, from first steps to advanced</a></div>
 </div>
 <div class="ml-vi">
@@ -416,6 +480,14 @@ export default {
 <p>Các thuộc tính như <code>required</code>, <code>minlength</code>, <code>maxlength</code>, <code>min</code>, <code>max</code>, <code>pattern</code>, và <code>type="email"</code> khiến trình duyệt kiểm tra dữ liệu <em>trước khi</em> gửi đi — không cần JavaScript.</p>
 <p class="pitfall"><strong>Kiểm tra ở trình duyệt là tiện lợi, không phải bảo mật.</strong> Một người dùng cố tình có thể bỏ qua nó hoàn toàn. Backend Node.js <em>luôn luôn</em> phải kiểm tra lại mọi giá trị nó nhận. Kiểm phía client để trải nghiệm mượt; kiểm phía server để an toàn.</p>
 
+<h3>Chuyện gì xảy ra khi một form được gửi đi</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Trình duyệt gom các ô có name</span><span class="lz-d">Chỉ những trường có thuộc tính <code>name</code> mới được đưa vào. Một trường thiếu nó là vô hình với phép gửi — một lỗi lặng lẽ và rất phổ biến.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Nó chạy phần kiểm dựng sẵn</span><span class="lz-d"><code>required</code>, <code>type="email"</code>, <code>min</code>, <code>pattern</code>. Miễn phí, có bản dịch sẵn, và nó chặn việc gửi trước khi có request nào rời đi.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nó gửi một request</span><span class="lz-d"><code>method="get"</code> đặt giá trị vào URL; <code>method="post"</code> đặt vào thân. Mật khẩu KHÔNG BAO GIỜ được đi trong URL — nó sẽ nằm lại trong lịch sử trình duyệt và log máy chủ.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Máy chủ kiểm lại lần nữa</span><span class="lz-d">Mọi thứ ở bước 2 chạy trên máy người dùng và tắt được bằng hai cú bấm trong DevTools. Kiểm ở trình duyệt là để tử tế; kiểm ở máy chủ là để đúng.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — coi phần kiểm của trình duyệt là một phép kiểm an toàn.</strong> <code>required</code> và <code>type="email"</code> ngăn người dùng ngay thẳng khỏi gõ nhầm, và chẳng ngăn được ai khác: bất kỳ ai cũng xoá được thuộc tính đó trong DevTools, hoặc bỏ qua hẳn trang web mà gửi thẳng tới endpoint của bạn bằng <code>curl</code>. Mọi trường tới máy chủ của bạn đều là chữ do kẻ tấn công điều khiển, kể cả một <code>&lt;select&gt;</code> mà bạn chỉ đưa ra ba lựa chọn và một input ẩn mang theo giá tiền. Hãy kiểm lại tất cả ở máy chủ, và coi luật phía client đúng như bản chất của nó: một trải nghiệm tốt hơn, không phải một biên giới.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Learn/Forms" target="_blank" rel="noopener">MDN — Biểu mẫu web, từ bước đầu tới nâng cao</a></div>
 </div>
 `,
@@ -475,6 +547,14 @@ export default {
 </div>
 <p class="note-ct"><strong>The payoff of semantic, accessible HTML compounds.</strong> The same choices that help a screen-reader user also help Google index your page and help your CSS and JavaScript target elements cleanly. Good structure is the gift that keeps giving — and it is the whole reason this chapter comes before CSS and JS.</p>
 
+<h3>Accessibility checks you can do in five minutes</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Unplug the mouse</span><span class="lz-t">Tab through the page</span><span class="lz-d">Can you reach every control, and can you see where you are? If the focus ring is invisible or the order jumps around, keyboard users are stuck.</span></div>
+<div class="lz-node"><span class="lz-k">Zoom to 200%</span><span class="lz-t">Ctrl/Cmd + several times</span><span class="lz-d">Text should reflow, not get clipped or overlap. This catches fixed pixel heights faster than any tool.</span></div>
+<div class="lz-node"><span class="lz-k">Check colour contrast</span><span class="lz-t">DevTools shows a ratio</span><span class="lz-d">Aim for 4.5:1 on body text. Light grey on white is the single most common failure, and it is invisible to people with good eyesight and a good monitor.</span></div>
+<div class="lz-node"><span class="lz-k">Run Lighthouse</span><span class="lz-t">Built into Chrome DevTools</span><span class="lz-d">It catches missing labels, missing alt, bad heading order. It is a floor, not a ceiling — a perfect score still needs the three checks above.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a placeholder is not a label.</strong> <code>&lt;input placeholder="Email"&gt;</code> looks tidy and disappears the instant someone types, so a user who is interrupted mid-form comes back to a row of boxes with no idea what any of them wanted. Screen readers treat placeholders inconsistently — some announce nothing at all — and the grey-on-white text usually fails contrast. Use a real <code>&lt;label for="email"&gt;</code>: it stays visible, it is announced reliably, and it makes the label clickable, which enlarges the tap target on a phone. Keep the placeholder for an example of the format (<code>you@example.com</code>), not for the field's name.</p></div>
 <div class="link-card"><a href="https://www.w3.org/WAI/tutorials/" target="_blank" rel="noopener">W3C — Web Accessibility Tutorials</a></div>
 </div>
 <div class="ml-vi">
@@ -523,6 +603,14 @@ export default {
 </div>
 <p class="note-ct"><strong>Lợi ích của HTML ngữ nghĩa, tiếp cận được cộng dồn lại.</strong> Chính những lựa chọn giúp người dùng trình đọc màn hình cũng giúp Google lập chỉ mục trang bạn và giúp CSS cùng JavaScript nhắm tới phần tử gọn gàng. Cấu trúc tốt là món quà cho mãi — và đó chính là lý do chương này đứng trước CSS và JS.</p>
 
+<h3>Những phép kiểm khả năng tiếp cận làm được trong năm phút</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Rút chuột ra</span><span class="lz-t">Đi khắp trang bằng Tab</span><span class="lz-d">Bạn có tới được mọi điều khiển không, và có thấy mình đang ở đâu không? Nếu vòng tiêu điểm vô hình hoặc thứ tự nhảy lung tung thì người dùng bàn phím bị kẹt.</span></div>
+<div class="lz-node"><span class="lz-k">Phóng to 200%</span><span class="lz-t">Ctrl/Cmd + vài lần</span><span class="lz-d">Chữ phải chảy lại chứ không bị cắt cụt hay chồng lên nhau. Cái này bắt các chiều cao pixel cố định nhanh hơn mọi công cụ.</span></div>
+<div class="lz-node"><span class="lz-k">Kiểm tương phản màu</span><span class="lz-t">DevTools hiện ra tỷ lệ</span><span class="lz-d">Nhắm 4,5:1 cho chữ thân bài. Xám nhạt trên nền trắng là lỗi phổ biến nhất, và nó vô hình với người mắt tốt ngồi trước màn hình tốt.</span></div>
+<div class="lz-node"><span class="lz-k">Chạy Lighthouse</span><span class="lz-t">Có sẵn trong Chrome DevTools</span><span class="lz-d">Nó bắt nhãn thiếu, alt thiếu, thứ tự tiêu đề sai. Nó là cái sàn, không phải cái trần — điểm tuyệt đối vẫn cần ba phép kiểm ở trên.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — placeholder không phải là nhãn.</strong> <code>&lt;input placeholder="Email"&gt;</code> trông gọn gàng và biến mất ngay khi có người gõ, nên một người bị ngắt quãng giữa chừng quay lại thấy một dãy ô trống mà chẳng biết ô nào đòi gì. Trình đọc màn hình xử lý placeholder không nhất quán — có cái chẳng đọc gì cả — và chữ xám trên nền trắng thường trượt tương phản. Hãy dùng một <code>&lt;label for="email"&gt;</code> thật: nó ở lại, nó được xướng lên đáng tin, và nó làm cái nhãn bấm được, tức là mở rộng vùng chạm trên điện thoại. Hãy để dành placeholder cho một ví dụ về định dạng (<code>ban@vidu.com</code>), đừng dùng nó làm tên trường.</p></div>
 <div class="link-card"><a href="https://www.w3.org/WAI/tutorials/" target="_blank" rel="noopener">W3C — Hướng dẫn về khả năng tiếp cận web</a></div>
 </div>
 `,
@@ -538,9 +626,25 @@ export default {
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 2: element anatomy and attributes, headings and links, semantic structure, forms and inputs, tables, and accessibility.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> Reading HTML is not the same as writing it. Head to Code Lab and build real markup — the exercises check your solution automatically.</p>
+<h3>The chapter in four points</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">The DOM, not the file</span><span class="lz-t">The browser repairs and moves things</span><span class="lz-d">HTML never errors. When something looks wrong, read the Elements panel — that is the tree CSS and JavaScript actually see.</span></div>
+<div class="lz-node"><span class="lz-k">Semantics</span><span class="lz-t">Tags carry meaning, classes do not</span><span class="lz-d"><code>&lt;button&gt;</code> is focusable and keyboard-operable for free; <code>&lt;div class="button"&gt;</code> is none of those things.</span></div>
+<div class="lz-node"><span class="lz-k">alt</span><span class="lz-t">Empty and missing are opposites</span><span class="lz-d"><code>alt=""</code> says "decorative, skip it". No <code>alt</code> at all leaves a screen reader announcing the file name.</span></div>
+<div class="lz-node"><span class="lz-k">Forms</span><span class="lz-t">name to submit, label to be usable</span><span class="lz-d">A field without <code>name</code> is not sent. A placeholder is not a label, and browser validation is not a security check.</span></div>
+</div>
+<p class="note-ct"><strong>A five-minute check that beats any quiz:</strong> open a page you wrote, put the mouse away, and Tab through it. If you cannot reach every control and see where you are, the HTML has something to fix.</p>
 <div class="link-card"><a href="/code-lab/html-css">Practice on Code Lab → HTML &amp; CSS track</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 2: giải phẫu phần tử và thuộc tính, tiêu đề và liên kết, cấu trúc ngữ nghĩa, biểu mẫu và input, bảng, và khả năng tiếp cận.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Đọc HTML không giống viết HTML. Hãy sang Code Lab để tự tay dựng mã thật — các bài tập tự động chấm lời giải của bạn.</p>
+<h3>Cả chương trong bốn ý</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">DOM, không phải cái file</span><span class="lz-t">Trình duyệt tự vá và tự dời</span><span class="lz-d">HTML không bao giờ báo lỗi. Khi thấy có gì sai, hãy đọc bảng Elements — đó mới là cái cây mà CSS và JavaScript thật sự nhìn thấy.</span></div>
+<div class="lz-node"><span class="lz-k">Ngữ nghĩa</span><span class="lz-t">Thẻ mang ý nghĩa, class thì không</span><span class="lz-d"><code>&lt;button&gt;</code> nhận tiêu điểm và dùng được bằng bàn phím, miễn phí; <code>&lt;div class="button"&gt;</code> chẳng có thứ nào trong đó.</span></div>
+<div class="lz-node"><span class="lz-k">alt</span><span class="lz-t">Rỗng và thiếu là hai thứ trái ngược</span><span class="lz-d"><code>alt=""</code> nói "trang trí thôi, bỏ qua". Không có <code>alt</code> nào thì trình đọc màn hình đọc lên tên file.</span></div>
+<div class="lz-node"><span class="lz-k">Form</span><span class="lz-t">name để gửi được, label để dùng được</span><span class="lz-d">Một trường thiếu <code>name</code> thì không được gửi. Placeholder không phải nhãn, và phần kiểm của trình duyệt không phải phép kiểm an toàn.</span></div>
+</div>
+<p class="note-ct"><strong>Một phép kiểm năm phút hơn mọi bài kiểm tra:</strong> mở một trang bạn tự viết, cất con chuột đi, rồi đi khắp trang bằng phím Tab. Nếu bạn không tới được mọi điều khiển và không thấy mình đang ở đâu thì HTML còn thứ cần sửa.</p>
 <div class="link-card"><a href="/code-lab/html-css">Luyện tập ở Code Lab → track HTML &amp; CSS</a></div></div>
 `,
       quiz: {

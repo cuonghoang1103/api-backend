@@ -68,6 +68,24 @@ document.body.append(p, button);</code></pre>
 <div class="callout ok">
 <p><strong>Hold onto this:</strong> a component is a function of state. Same state in → same UI description out. Every confusing thing later — why it re-rendered, why the value was stale, why the effect ran twice — dissolves once you truly believe that a component is just a function that describes the screen.</p>
 </div>
+<h3>Where React sits between your data and the screen</h3>
+<div class="lz-map">
+  <div class="lz-stage">One render, four steps</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">You describe, you do not command</div><div class="lz-nsub">A component returns what the UI <em>should</em> look like for the current data. You never write &#96;element.appendChild&#96; — that is React&#39;s job, not yours.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">React builds a tree of elements</div><div class="lz-nsub">The returned JSX becomes plain objects: type, props, children. Cheap to create, cheap to throw away — nothing has touched the DOM yet.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">It diffs against the previous tree</div><div class="lz-nsub">Same position, same type → keep the DOM node and update what changed. Different type → tear it down and build a new one.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">It applies the smallest set of DOM edits</div><div class="lz-nsub">One text node updated instead of a whole list rebuilt. This is why you can re-render on every keystroke without the page feeling slow.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — reaching for the DOM directly inside a component.</strong> &#96;document.getElementById(&#39;total&#39;).textContent = sum&#96; works the first time and then fights React forever: on the next render React restores what its own tree says should be there, and your change silently disappears. Worse, the two can disagree for a while, so the screen shows one number and the state holds another. If a value is on screen, it must come from state or props. Reach for the DOM only through a ref, and only for things React does not model — focus, scroll position, measuring a node.</p></div>
+<a class="link-card dl" href="https://react.dev/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">⚛️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Learn React</span><span class="lc-sub">The official tutorial, rewritten for hooks and modern React. Start here, not with an old blog post.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/render-and-commit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔄</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Render and commit</span><span class="lc-sub">The two phases in detail: what React computes, and when it touches the DOM.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -117,6 +135,24 @@ document.body.append(p, button);</code></pre>
 <div class="callout ok">
 <p><strong>Giữ chặt điều này:</strong> một component là một hàm của state. Cùng state vào → cùng mô tả giao diện ra. Mọi thứ khó hiểu sau này — vì sao nó render lại, vì sao giá trị bị cũ, vì sao effect chạy hai lần — đều tan biến khi bạn thật sự tin rằng component chỉ là một hàm mô tả màn hình.</p>
 </div>
+<h3>React đứng ở đâu giữa dữ liệu của bạn và màn hình</h3>
+<div class="lz-map">
+  <div class="lz-stage">Một lần render, bốn bước</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Bạn mô tả, bạn không ra lệnh</div><div class="lz-nsub">Một component trả về giao diện <em>nên</em> trông thế nào với dữ liệu hiện tại. Bạn chẳng bao giờ viết &#96;element.appendChild&#96; — đó là việc của React, không phải của bạn.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">React dựng một cây các element</div><div class="lz-nsub">Đoạn JSX trả về thành những object thuần: kiểu, props, con. Tạo rẻ, vứt đi cũng rẻ — chưa gì chạm vào DOM cả.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Nó so cây mới với cây cũ</div><div class="lz-nsub">Cùng vị trí, cùng kiểu → giữ nút DOM và chỉ cập nhật phần đã đổi. Khác kiểu → phá đi dựng lại.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Nó áp tập chỉnh sửa DOM nhỏ nhất</div><div class="lz-nsub">Một nút văn bản được cập nhật thay vì dựng lại cả danh sách. Đó là lý do bạn render lại mỗi lần gõ phím mà trang vẫn không ì.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — với tay vào DOM trực tiếp bên trong một component.</strong> &#96;document.getElementById(&#39;total&#39;).textContent = sum&#96; chạy được lần đầu rồi đánh nhau với React mãi mãi: ở lần render sau React khôi phục lại đúng thứ cây của nó nói là phải có ở đó, và thay đổi của bạn biến mất lặng lẽ. Tệ hơn, hai bên có thể bất đồng một lúc, nên màn hình hiện một con số còn state giữ một con số khác. Nếu một giá trị có trên màn hình thì nó phải đến từ state hoặc props. Chỉ với tay vào DOM qua một ref, và chỉ cho những thứ React không mô hình hoá — tiêu điểm, vị trí cuộn, đo kích thước một nút.</p></div>
+<a class="link-card dl" href="https://react.dev/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">⚛️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Học React</span><span class="lc-sub">Hướng dẫn chính thức, viết lại cho hook và React hiện đại. Hãy bắt đầu ở đây, đừng bắt đầu bằng một bài blog cũ.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/render-and-commit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔄</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Render và commit</span><span class="lc-sub">Hai giai đoạn, chi tiết: React tính gì, và khi nào nó chạm vào DOM.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -161,6 +197,23 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 <div class="pitfall">
 <p><strong>Why you sometimes still see <code>import React from 'react'</code> and sometimes not.</strong> Old JSX compiled to <code>React.createElement(...)</code>, so <code>React</code> had to be in scope — every file imported it. Since React 17 the "automatic runtime" imports the helper for you behind the scenes, so modern Next.js files use JSX without importing <code>React</code> at all. Both are the same mechanism; only the import changed. If a tutorial's first line is <code>import React from 'react'</code> and yours isn't, nothing is wrong.</p>
 </div>
+<h3>What the compiler does to your JSX</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>It is not HTML</b> — &#96;&lt;Card title="Hi" /&gt;&#96; compiles to a function call that returns an object. That is why JSX obeys JavaScript&#39;s rules, not HTML&#39;s.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Attributes become props</b> — And they use JavaScript names: &#96;className&#96;, &#96;htmlFor&#96;, &#96;onClick&#96; — because &#96;class&#96; and &#96;for&#96; are reserved words in the language.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Children become an argument</b> — Whatever sits between the tags is passed along as &#96;props.children&#96;, which is what makes wrapper components possible.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>So a component is just a function</b> — It takes props and returns elements. Everything you know about functions — defaults, destructuring, early returns — applies unchanged.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — writing &#96;class&#96; instead of &#96;className&#96;, and getting no error.</strong> React silently ignores an unknown DOM attribute in most cases, so &#96;&lt;div class="card"&gt;&#96; renders a div with no class and no styling — and the console warning is easy to scroll past. The same applies to &#96;for&#96; on a label, which quietly breaks the click-to-focus behaviour that made you write the label in the first place. Both are a consequence of JSX being JavaScript: &#96;class&#96; and &#96;for&#96; are keywords. Turn on the React ESLint plugin and it flags these as you type.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/writing-markup-with-jsx" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Writing markup with JSX</span><span class="lc-sub">The rules, and the three that catch everyone.</span></span>
+</a>
+<a class="link-card dl" href="https://babeljs.io/repl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔧</span>
+  <span class="lc-body"><span class="lc-title">Babel REPL — see what JSX compiles to</span><span class="lc-sub">Paste a component, watch it become plain function calls. Ten minutes here removes most JSX confusion.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -195,6 +248,23 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 <div class="pitfall">
 <p><strong>Vì sao có lúc bạn vẫn thấy <code>import React from 'react'</code> và có lúc không.</strong> JSX cũ biên dịch thành <code>React.createElement(...)</code>, nên <code>React</code> phải nằm trong phạm vi — mọi file đều import nó. Từ React 17 "automatic runtime" tự import hàm phụ trợ hộ bạn ở hậu trường, nên file Next.js hiện đại dùng JSX mà chẳng import <code>React</code> gì cả. Cả hai là cùng một cơ chế; chỉ dòng import đổi. Nếu dòng đầu của một tutorial là <code>import React from 'react'</code> còn của bạn thì không, chẳng có gì sai.</p>
 </div>
+<h3>Trình biên dịch làm gì với JSX của bạn</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Nó không phải HTML</b> — &#96;&lt;Card title="Hi" /&gt;&#96; biên dịch thành một lời gọi hàm trả về một object. Đó là lý do JSX tuân luật của JavaScript, không phải luật của HTML.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Thuộc tính thành props</b> — Và chúng dùng tên kiểu JavaScript: &#96;className&#96;, &#96;htmlFor&#96;, &#96;onClick&#96; — vì &#96;class&#96; và &#96;for&#96; là từ khoá của ngôn ngữ.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Phần con thành một đối số</b> — Bất cứ thứ gì nằm giữa hai thẻ đều được truyền tiếp dưới dạng &#96;props.children&#96;, và chính điều đó cho phép có component bọc.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nên một component chỉ là một hàm</b> — Nó nhận props và trả về element. Mọi thứ bạn biết về hàm — giá trị mặc định, phép rã, trả về sớm — đều áp dụng nguyên vẹn.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — viết &#96;class&#96; thay vì &#96;className&#96;, và chẳng nhận được lỗi nào.</strong> React lặng lẽ bỏ qua một thuộc tính DOM lạ trong phần lớn trường hợp, nên &#96;&lt;div class="card"&gt;&#96; vẽ ra một div không có class và không được tô — còn cảnh báo trong console thì rất dễ lướt qua. Chuyện tương tự với &#96;for&#96; trên một label, nó âm thầm làm hỏng hành vi bấm-để-focus, đúng cái lý do bạn viết label ra. Cả hai đều là hệ quả của việc JSX là JavaScript: &#96;class&#96; và &#96;for&#96; là từ khoá. Hãy bật plugin ESLint của React và nó báo ngay lúc bạn gõ.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/writing-markup-with-jsx" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Viết markup bằng JSX</span><span class="lc-sub">Các luật, và ba luật bắt hụt chân tất cả mọi người.</span></span>
+</a>
+<a class="link-card dl" href="https://babeljs.io/repl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔧</span>
+  <span class="lc-body"><span class="lc-title">Babel REPL — xem JSX biên dịch ra gì</span><span class="lc-sub">Dán một component vào, xem nó thành các lời gọi hàm thuần. Mười phút ở đây gỡ được phần lớn nhầm lẫn về JSX.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -244,6 +314,24 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 <div class="note-ct">
 <p><strong>How cuongthai.com does it</strong> — this site styles almost everything with Tailwind utility classes in <code>className</code> (<code>className="flex items-center gap-2"</code>), and reserves the <code>style</code> object for the few truly dynamic values that can't be a class — a computed width, an aspect-ratio measured from a video, a CSS variable set at runtime. Chapter 13 is entirely about this choice.</p>
 </div>
+<h3>What braces mean in each position</h3>
+<div class="lz-map">
+  <div class="lz-stage">Four places, one rule: a JavaScript expression</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">In text: {value}</div><div class="lz-nsub">Renders the value. Strings and numbers print; &#96;null&#96;, &#96;undefined&#96;, &#96;false&#96; and &#96;true&#96; render nothing at all — which is what makes conditional rendering work.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">In an attribute: prop={expr}</div><div class="lz-nsub">No quotes around the braces. &#96;title={&#39;Hi&#39;}&#96; and &#96;title="Hi"&#96; are the same; &#96;title="{x}"&#96; passes the literal five characters.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Double braces: style={{…}}</div><div class="lz-nsub">Not special syntax — the outer pair is the expression slot, the inner pair is an object literal. Same for &#96;data={{ id: 1 }}&#96;.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Expressions only, never statements</div><div class="lz-nsub">&#96;{if (x) …}&#96; is a syntax error. Use a ternary, &#96;&amp;&amp;&#96;, or compute the value in a variable above the &#96;return&#96;.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — &#96;{count &amp;&amp; &lt;Badge /&gt;}&#96; renders a literal 0 when the count is zero.</strong> &#96;&amp;&amp;&#96; returns its left operand when that operand is falsy, and React renders the number &#96;0&#96; because zero is a perfectly good thing to display. So an empty cart shows a bare &quot;0&quot; floating in the layout, and it only happens at exactly one value — which is why it survives testing. The same bug hits &#96;items.length &amp;&amp; …&#96;. Force a boolean (&#96;count &gt; 0 &amp;&amp; …&#96;) or use a ternary with &#96;null&#96;. Empty string does the same thing in some positions, so &#96;name &amp;&amp; …&#96; is worth the same care.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/javascript-in-jsx-with-curly-braces" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">react.dev — JavaScript in JSX with curly braces</span><span class="lc-sub">Every position braces are allowed, and what each one accepts.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/conditional-rendering" target="_blank" rel="noopener">
+  <span class="lc-ico">🔀</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Conditional rendering</span><span class="lc-sub">Ternary, &amp;&amp;, and early return — with the falsy-value trap called out.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -283,6 +371,24 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào</strong> — site này style gần như mọi thứ bằng class tiện ích Tailwind trong <code>className</code> (<code>className="flex items-center gap-2"</code>), và để dành object <code>style</code> cho vài giá trị thật sự động không thể thành class — một chiều rộng tính toán, một tỉ lệ khung hình đo từ video, một biến CSS đặt lúc chạy. Chương 13 dành trọn để bàn lựa chọn này.</p>
 </div>
+<h3>Dấu ngoặc nhọn nghĩa là gì ở từng vị trí</h3>
+<div class="lz-map">
+  <div class="lz-stage">Bốn chỗ, một luật: một biểu thức JavaScript</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Trong chữ: {value}</div><div class="lz-nsub">Vẽ ra giá trị. Chuỗi và số thì in ra; &#96;null&#96;, &#96;undefined&#96;, &#96;false&#96; và &#96;true&#96; chẳng vẽ ra gì cả — và chính điều đó làm phép vẽ có điều kiện chạy được.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Trong thuộc tính: prop={expr}</div><div class="lz-nsub">Không có dấu nháy bọc quanh ngoặc. &#96;title={&#39;Hi&#39;}&#96; và &#96;title="Hi"&#96; là một; còn &#96;title="{x}"&#96; truyền đúng năm ký tự đó.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Hai lớp ngoặc: style={{…}}</div><div class="lz-nsub">Không phải cú pháp đặc biệt — lớp ngoài là ô biểu thức, lớp trong là một object literal. Với &#96;data={{ id: 1 }}&#96; cũng vậy.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Chỉ biểu thức, không bao giờ là câu lệnh</div><div class="lz-nsub">&#96;{if (x) …}&#96; là lỗi cú pháp. Hãy dùng toán tử ba ngôi, &#96;&amp;&amp;&#96;, hoặc tính giá trị ra một biến ở trên &#96;return&#96;.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — &#96;{count &amp;&amp; &lt;Badge /&gt;}&#96; vẽ ra một số 0 chình ình khi count bằng không.</strong> &#96;&amp;&amp;&#96; trả về vế trái khi vế đó là falsy, và React vẽ số &#96;0&#96; ra vì số không là một thứ hoàn toàn hiển thị được. Thế là một giỏ hàng rỗng hiện một chữ &quot;0&quot; trơ trọi giữa bố cục, và nó chỉ xảy ra ở đúng một giá trị — đó là lý do nó sống sót qua khâu thử. Cùng lỗi ấy đánh vào &#96;items.length &amp;&amp; …&#96;. Hãy ép thành boolean (&#96;count &gt; 0 &amp;&amp; …&#96;) hoặc dùng ba ngôi với &#96;null&#96;. Chuỗi rỗng cũng gây chuyện tương tự ở vài vị trí, nên &#96;name &amp;&amp; …&#96; cũng đáng cẩn thận như thế.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/javascript-in-jsx-with-curly-braces" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">react.dev — JavaScript trong JSX bằng ngoặc nhọn</span><span class="lc-sub">Mọi vị trí được phép đặt ngoặc, và mỗi chỗ nhận cái gì.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/conditional-rendering" target="_blank" rel="noopener">
+  <span class="lc-ico">🔀</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Vẽ có điều kiện</span><span class="lc-sub">Ba ngôi, &amp;&amp;, và trả về sớm — có nêu rõ cái bẫy giá trị falsy.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -340,6 +446,23 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   return &lt;section&gt;{body}&lt;/section&gt;;
 }</code></pre>
 <p>This reads far better than three nested ternaries, and it uses real <code>if</code> statements — legal here because we are above the <code>return</code>, in ordinary JavaScript, not inside the JSX.</p>
+<h3>Rendering a list, correctly</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>map, not forEach</b> — &#96;map&#96; returns an array of elements; &#96;forEach&#96; returns &#96;undefined&#96; and renders nothing. This is the commonest &quot;my list is blank&quot; cause.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Return the element</b> — Inside &#96;map(item =&gt; { … })&#96; you need an explicit &#96;return&#96;. With &#96;map(item =&gt; (…))&#96; the parentheses return it for you.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Give each item a stable key</b> — From the data — an id — not from the index. The key is how React matches items between renders.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Handle the empty case</b> — An empty array renders nothing at all, which looks like a bug to a user. Show a message instead of a blank space.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — using the array index as a key in a list that can change.</strong> &#96;items.map((item, i) =&gt; &lt;Row key={i} /&gt;)&#96; is what the warning message makes people write, and it is correct only for a list that never reorders, never has items inserted, and never has items removed. Delete the first row and every remaining item&#39;s index shifts by one, so React thinks item 2 <em>became</em> item 1 rather than that item 1 was removed: it keeps the old DOM node and just updates the text. Any state living in those rows — a checked box, a half-typed input, an open menu — stays behind on the wrong row. Use an id from your data.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/rendering-lists" target="_blank" rel="noopener">
+  <span class="lc-ico">📋</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Rendering lists</span><span class="lc-sub">map, keys, and why the index is usually wrong.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/preserving-and-resetting-state" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Preserving and resetting state</span><span class="lc-sub">What a key actually controls: whether React keeps a component's state or throws it away.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -387,6 +510,23 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   return &lt;section&gt;{body}&lt;/section&gt;;
 }</code></pre>
 <p>Đoạn này dễ đọc hơn hẳn ba ternary lồng nhau, và nó dùng câu <code>if</code> thật — hợp lệ ở đây vì ta đang ở phía trên <code>return</code>, trong JavaScript bình thường, không phải bên trong JSX.</p>
+<h3>Vẽ một danh sách, cho đúng</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>map, đừng forEach</b> — &#96;map&#96; trả về một mảng element; &#96;forEach&#96; trả về &#96;undefined&#96; và chẳng vẽ ra gì. Đây là nguyên nhân phổ biến nhất của &quot;danh sách của tôi trống trơn&quot;.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Nhớ return cái element</b> — Trong &#96;map(item =&gt; { … })&#96; bạn cần một &#96;return&#96; tường minh. Với &#96;map(item =&gt; (…))&#96; thì cặp ngoặc tròn trả về giùm bạn.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Cho mỗi phần tử một key ổn định</b> — Lấy từ dữ liệu — một id — chứ đừng lấy từ chỉ số. Key là cách React ghép các phần tử giữa hai lần render.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Xử lý trường hợp rỗng</b> — Một mảng rỗng chẳng vẽ ra gì cả, và với người dùng thì nó trông như một lỗi. Hãy hiện một thông điệp thay vì một khoảng trắng.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — dùng chỉ số mảng làm key trong một danh sách có thể thay đổi.</strong> &#96;items.map((item, i) =&gt; &lt;Row key={i} /&gt;)&#96; là thứ mà cái cảnh báo khiến người ta viết ra, và nó chỉ đúng với một danh sách không bao giờ đổi thứ tự, không bao giờ chèn thêm, và không bao giờ bị xoá bớt. Xoá dòng đầu tiên là chỉ số của mọi phần tử còn lại dịch đi một, nên React tưởng phần tử 2 đã <em>trở thành</em> phần tử 1 chứ không phải phần tử 1 bị xoá: nó giữ nguyên nút DOM cũ và chỉ cập nhật chữ. Mọi state sống trong những dòng đó — một ô đã tích, một ô nhập đang gõ dở, một menu đang mở — đều ở lại nhầm dòng. Hãy dùng một id lấy từ dữ liệu.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/rendering-lists" target="_blank" rel="noopener">
+  <span class="lc-ico">📋</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Vẽ danh sách</span><span class="lc-sub">map, key, và vì sao chỉ số thường là sai.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/preserving-and-resetting-state" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Giữ và đặt lại state</span><span class="lc-sub">Key thật ra điều khiển cái gì: React giữ state của một component hay vứt nó đi.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -443,6 +583,23 @@ return &lt;Header title="Feed" action={badge} /&gt;;</code></pre>
 <div class="callout ok">
 <p>Next: where the "data that changes" comes from. Chapter 2 introduces <strong>props</strong> — how a parent hands data down to a child — and composition, the art of building big UIs out of small components. Then Chapter 3 gives components a memory with <strong>state</strong>, and the whole loop comes alive.</p>
 </div>
+<h3>The JSX rules the compiler enforces</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>One root element per return</b> — Because a function returns one value. Wrap siblings in a &#96;&lt;&gt;…&lt;/&gt;&#96; fragment when you do not want an extra div in the DOM.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Every tag closes</b> — Including &#96;&lt;img /&gt;&#96;, &#96;&lt;br /&gt;&#96; and &#96;&lt;input /&gt;&#96;, which HTML lets you leave open. JSX is XML-strict here.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Component names start uppercase</b> — &#96;&lt;card /&gt;&#96; compiles to the string &quot;card&quot; — an unknown DOM tag that renders empty. &#96;&lt;Card /&gt;&#96; compiles to the variable.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Whitespace between tags is dropped</b> — Newlines and indentation vanish. If you need a space between two elements, write &#96;{&#39; &#39;}&#96; explicitly.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a lowercase component name renders nothing, with no error.</strong> &#96;&lt;userCard name={n} /&gt;&#96; does not call your function. JSX treats a lowercase tag as a DOM element name, so this compiles to &#96;createElement(&#39;userCard&#39;, …)&#96; — a custom element the browser knows nothing about, which renders as an empty node. No error, no warning, just a gap in the page where your component should be. It usually appears after a rename or a copy-paste, and people go hunting in the component&#39;s own code. Check the capital letter first: it is the difference between a variable reference and a string.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/writing-markup-with-jsx#the-rules-of-jsx" target="_blank" rel="noopener">
+  <span class="lc-ico">📏</span>
+  <span class="lc-body"><span class="lc-title">react.dev — The rules of JSX</span><span class="lc-sub">The three hard rules, with the error each one produces.</span></span>
+</a>
+<a class="link-card dl" href="https://transform.tools/html-to-jsx" target="_blank" rel="noopener">
+  <span class="lc-ico">🔄</span>
+  <span class="lc-body"><span class="lc-title">transform.tools — HTML to JSX</span><span class="lc-sub">Paste HTML from anywhere and get valid JSX back, with the attribute renames applied.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -489,6 +646,23 @@ return &lt;Header title="Feed" action={badge} /&gt;;</code></pre>
 <div class="callout ok">
 <p>Tiếp theo: "dữ liệu có thể đổi" đến từ đâu. Chương 2 giới thiệu <strong>props</strong> — cách cha trao dữ liệu xuống con — và cách ghép, nghệ thuật dựng UI to từ những component nhỏ. Rồi Chương 3 cho component một trí nhớ bằng <strong>state</strong>, và cả vòng lặp sống dậy.</p>
 </div>
+<h3>Những luật JSX mà trình biên dịch cưỡng chế</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Mỗi lần return một phần tử gốc</b> — Vì một hàm trả về một giá trị. Hãy bọc các phần tử anh em trong một fragment &#96;&lt;&gt;…&lt;/&gt;&#96; khi bạn không muốn thêm một div thừa vào DOM.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Thẻ nào cũng phải đóng</b> — Kể cả &#96;&lt;img /&gt;&#96;, &#96;&lt;br /&gt;&#96; và &#96;&lt;input /&gt;&#96;, những thẻ mà HTML cho phép bỏ ngỏ. JSX ở đây nghiêm ngặt kiểu XML.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Tên component viết hoa chữ đầu</b> — &#96;&lt;card /&gt;&#96; biên dịch thành chuỗi &quot;card&quot; — một thẻ DOM lạ, vẽ ra rỗng. &#96;&lt;Card /&gt;&#96; mới biên dịch thành cái biến.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Khoảng trắng giữa các thẻ bị bỏ</b> — Xuống dòng và thụt lề biến mất. Nếu bạn cần một dấu cách giữa hai phần tử, hãy viết &#96;{&#39; &#39;}&#96; tường minh.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tên component viết thường thì chẳng vẽ ra gì, mà cũng chẳng báo lỗi.</strong> &#96;&lt;userCard name={n} /&gt;&#96; không hề gọi hàm của bạn. JSX coi một thẻ viết thường là tên một phần tử DOM, nên nó biên dịch thành &#96;createElement(&#39;userCard&#39;, …)&#96; — một thẻ tuỳ chỉnh mà trình duyệt chẳng biết là gì, và nó vẽ ra một nút rỗng. Không lỗi, không cảnh báo, chỉ có một khoảng trống trên trang ở đúng chỗ component của bạn lẽ ra phải nằm. Nó thường xuất hiện sau một lần đổi tên hay chép-dán, và người ta lao đi lùng trong chính mã của component. Hãy kiểm chữ hoa đầu tiên trước: đó là khác biệt giữa một tham chiếu biến và một chuỗi.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/writing-markup-with-jsx#the-rules-of-jsx" target="_blank" rel="noopener">
+  <span class="lc-ico">📏</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Các luật của JSX</span><span class="lc-sub">Ba luật cứng, kèm lỗi mà mỗi cái sinh ra.</span></span>
+</a>
+<a class="link-card dl" href="https://transform.tools/html-to-jsx" target="_blank" rel="noopener">
+  <span class="lc-ico">🔄</span>
+  <span class="lc-body"><span class="lc-title">transform.tools — HTML sang JSX</span><span class="lc-sub">Dán HTML từ bất cứ đâu và nhận lại JSX hợp lệ, đã đổi sẵn tên thuộc tính.</span></span>
+</a>
+
 </div>
 `,
     },

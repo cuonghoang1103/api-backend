@@ -69,6 +69,13 @@ after freeze: { name: 'An' }</div>
   <div class="kv"><span class="k">var never</span><span class="v">There is no case in new code where var is the right answer.</span></div>
 </div>
 <div class="note-ct">Every service file on this site declares with <code>const</code> first; ESLint is configured to flag a <code>let</code> that is never reassigned. It sounds pedantic until you are reading an unfamiliar 300-line file and can tell at a glance which values move and which don't.</div>
+<h3>Which declaration to reach for, in order</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">const by default</span><span class="lz-d">It says the name will not be repointed. Most variables never are, and the reader gets that guarantee for free.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">let only when you reassign</span><span class="lz-d">A loop counter, an accumulator. The editor tells you — assigning to a <code>const</code> is an immediate error.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Never var in new code</span><span class="lz-d">It ignores block scope, so a <code>var</code> inside an <code>if</code> leaks to the whole function. It is also the mechanism behind the classic loop trap above.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">const does not freeze the value</span><span class="lz-d"><code>const a = []</code> then <code>a.push(1)</code> is legal. The name is locked; the object it points at is not.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-318" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 318 — JavaScript Foundations for Node.js</span><span class="lc-sub">Practise scope, closures and async on 10 graded exercises.</span></span>
@@ -128,6 +135,13 @@ sau freeze: { name: 'An' }</div>
   <div class="kv"><span class="k">var thì không bao giờ</span><span class="v">Trong code mới, không có tình huống nào var là câu trả lời đúng.</span></div>
 </div>
 <div class="note-ct">Mọi file service của website này đều khai báo <code>const</code> trước; ESLint được cấu hình để cảnh báo khi một <code>let</code> chẳng bao giờ bị gán lại. Nghe có vẻ khó tính, cho tới lúc bạn phải đọc một file 300 dòng chưa từng thấy và muốn liếc một cái là biết giá trị nào thay đổi, giá trị nào không.</div>
+<h3>Nên với tay tới khai báo nào, theo thứ tự</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">const theo mặc định</span><span class="lz-d">Nó nói rằng cái tên này sẽ không bị trỏ lại. Phần lớn biến chẳng bao giờ bị trỏ lại, và người đọc nhận được bảo đảm đó miễn phí.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">let chỉ khi bạn gán lại</span><span class="lz-d">Một biến đếm vòng lặp, một biến cộng dồn. Trình soạn thảo sẽ nhắc bạn — gán vào một <code>const</code> là lỗi ngay lập tức.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Đừng bao giờ dùng var trong mã mới</span><span class="lz-d">Nó bỏ qua phạm vi khối, nên một <code>var</code> trong một <code>if</code> rò ra cả hàm. Nó cũng là cơ chế đứng sau cái bẫy vòng lặp kinh điển ở trên.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">const KHÔNG đóng băng giá trị</span><span class="lz-d"><code>const a = []</code> rồi <code>a.push(1)</code> là hợp lệ. Cái tên bị khoá; còn object nó trỏ tới thì không.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-318" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 318 — Nền tảng JavaScript cho Node.js</span><span class="lc-sub">Luyện phạm vi biến, closure và bất đồng bộ qua 10 bài tập có chấm.</span></span>
@@ -195,6 +209,22 @@ rebound with bind: Hello from NotesAPI</div>
   <div class="kv"><span class="k">Honest advice</span><span class="v">Most modern Node code avoids <code>this</code> almost entirely — plain exported functions plus closures are simpler to test and impossible to unbind.</span></div>
 </div>
 <div class="note-ct">The service layer of this site is written as plain exported async functions, deliberately: <code>export async function shareNote(noteId, userId)</code>. No <code>this</code>, so it can be called from an Express route, a Socket.IO handler or a background job with no binding ceremony.</div>
+<h3>What decides the value of this</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">An arrow function has no this of its own</span><span class="lz-d">It takes the one from where it was <em>written</em>. That is why an arrow passed to <code>setTimeout</code> still sees the surrounding object.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">A function expression takes it from the call</span><span class="lz-d"><code>obj.method()</code> gives <code>this = obj</code>; <code>const f = obj.method; f()</code> gives <code>undefined</code> in strict mode. Same function, different receiver.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">call, apply and bind set it explicitly</span><span class="lz-d"><code>bind</code> returns a new function with <code>this</code> fixed — useful, and it creates a new identity every call, which matters for listeners.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">A closure is the other half</span><span class="lz-d">A function keeps the variables it was created with, whatever <code>this</code> ends up being. The two mechanisms are independent and get confused constantly.</span></div>
+</div>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener">
+  <span class="lc-ico">🎯</span>
+  <span class="lc-body"><span class="lc-title">MDN — this</span><span class="lc-sub">Every binding rule, in the order the language applies them.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Closures" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">MDN — Closures</span><span class="lc-sub">The mechanism behind private state, and the loop trap from lesson 1.1.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -203,43 +233,43 @@ rebound with bind: Hello from NotesAPI</div>
 <p class="lead">Closure là một hàm nhớ được những biến quanh nó, kể cả khi đoạn code tạo ra chúng đã chạy xong từ lâu. Chỉ một câu đó thôi đã giải thích được connection pool, bộ giới hạn tần suất, cache và các nhà máy sinh middleware — tất cả đều là thứ bạn sẽ tự viết ở phần sau của khoá.</p>
 
 <h3>Closure: trạng thái riêng tư mà không cần class</h3>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">taoBoDem</span>() {
-  <span class="tok-keyword">let</span> soLan = <span class="tok-number">0</span>;            <span class="tok-comment">// riêng tư — bên ngoài không chạm được</span>
-  <span class="tok-keyword">return</span> <span class="tok-keyword">function</span> () { soLan++; <span class="tok-keyword">return</span> soLan; };
+<pre><code><span class="tok-keyword">function</span> <span class="tok-function">createCounter</span>() {
+  <span class="tok-keyword">let</span> count = <span class="tok-number">0</span>;            <span class="tok-comment">// riêng tư — bên ngoài không chạm được</span>
+  <span class="tok-keyword">return</span> <span class="tok-keyword">function</span> () { count++; <span class="tok-keyword">return</span> count; };
 }
-<span class="tok-keyword">const</span> demA = <span class="tok-function">taoBoDem</span>();
-<span class="tok-keyword">const</span> demB = <span class="tok-function">taoBoDem</span>();
-<span class="tok-function">console.log</span>(<span class="tok-function">demA</span>(), <span class="tok-function">demA</span>(), <span class="tok-function">demA</span>());
-<span class="tok-function">console.log</span>(<span class="tok-function">demB</span>());
-<span class="tok-function">console.log</span>(<span class="tok-string">'soLan có lộ ra ngoài không?'</span>, <span class="tok-keyword">typeof</span> soLan);</code></pre>
+<span class="tok-keyword">const</span> a = <span class="tok-function">createCounter</span>();
+<span class="tok-keyword">const</span> b = <span class="tok-function">createCounter</span>();
+<span class="tok-function">console.log</span>(<span class="tok-function">a</span>(), <span class="tok-function">a</span>(), <span class="tok-function">a</span>());
+<span class="tok-function">console.log</span>(<span class="tok-function">b</span>());
+<span class="tok-function">console.log</span>(<span class="tok-string">'count có lộ ra ngoài không?'</span>, <span class="tok-keyword">typeof</span> count);</code></pre>
 <div class="out">1 2 3
 1
-soLan có lộ ra ngoài không? undefined</div>
-<p>Hai điều đáng chú ý. Thứ nhất, <code>demA</code> và <code>demB</code> có bộ đếm <strong>riêng biệt</strong> — mỗi lần gọi <code>taoBoDem</code> tạo ra một phạm vi mới toanh. Thứ hai, <code>soLan</code> thực sự không với tới được từ bên ngoài; đó là đóng gói thật sự, chẳng cần class nào cả.</p>
+count có lộ ra ngoài không? undefined</div>
+<p>Hai điều đáng chú ý. Thứ nhất, <code>a</code> và <code>b</code> có bộ đếm <strong>riêng biệt</strong> — mỗi lần gọi <code>createCounter</code> tạo ra một phạm vi mới toanh. Thứ hai, <code>count</code> thực sự không với tới được từ bên ngoài; đó là đóng gói thật sự, chẳng cần class nào cả.</p>
 <div class="callout ok">Hình dạng này — một hàm nhà máy trả về một hàm "ôm" lấy cấu hình — là mẫu phổ biến bậc nhất trong Express. Mọi middleware bạn viết rồi sẽ trông như <code>function requireRole(role) { return (req, res, next) =&gt; { … } }</code>. Cái arrow bên trong đang ôm lấy biến <code>role</code>.</div>
 
 <h3><code>this</code>: chỗ ai cũng hiểu sai</h3>
 <p>Trong hàm thường, <code>this</code> phụ thuộc vào <strong>cách hàm được gọi</strong>, không phải nơi hàm được viết. Trong arrow function, <code>this</code> được lấy từ phạm vi bao quanh ngay lúc định nghĩa và không bao giờ đổi được:</p>
-<pre><code><span class="tok-keyword">const</span> dichVu = {
-  ten: <span class="tok-string">'NotesAPI'</span>,
-  chaoThuong: <span class="tok-keyword">function</span> () { <span class="tok-keyword">return</span> <span class="tok-string">'Xin chào từ '</span> + <span class="tok-keyword">this</span>.ten; },
-  chaoArrow: () =&gt; <span class="tok-string">'Xin chào từ '</span> + <span class="tok-keyword">this</span>.ten,
+<pre><code><span class="tok-keyword">const</span> service = {
+  name: <span class="tok-string">'NotesAPI'</span>,
+  greetNormal: <span class="tok-keyword">function</span> () { <span class="tok-keyword">return</span> <span class="tok-string">'Xin chào từ '</span> + <span class="tok-keyword">this</span>.name; },
+  greetArrow: () =&gt; <span class="tok-string">'Xin chào từ '</span> + <span class="tok-keyword">this</span>.name,
 };
-<span class="tok-function">console.log</span>(dichVu.<span class="tok-function">chaoThuong</span>());
-<span class="tok-function">console.log</span>(dichVu.<span class="tok-function">chaoArrow</span>());
+<span class="tok-function">console.log</span>(service.<span class="tok-function">greetNormal</span>());
+<span class="tok-function">console.log</span>(service.<span class="tok-function">greetArrow</span>());
 
-<span class="tok-keyword">const</span> tachRa = dichVu.chaoThuong;   <span class="tok-comment">// tách hàm ra khỏi object</span>
-<span class="tok-function">console.log</span>(<span class="tok-function">tachRa</span>());
-<span class="tok-function">console.log</span>(<span class="tok-string">'buộc lại bằng bind:'</span>, tachRa.<span class="tok-function">bind</span>(dichVu)());</code></pre>
+<span class="tok-keyword">const</span> detached = service.greetNormal;   <span class="tok-comment">// tách hàm ra khỏi object</span>
+<span class="tok-function">console.log</span>(<span class="tok-function">detached</span>());
+<span class="tok-function">console.log</span>(<span class="tok-string">'buộc lại bằng bind:'</span>, detached.<span class="tok-function">bind</span>(service)());</code></pre>
 <div class="out">Xin chào từ NotesAPI
 Xin chào từ (undefined)
 Xin chào từ undefined
 buộc lại bằng bind: Xin chào từ NotesAPI</div>
 <p>Dòng thứ ba mới là dòng nguy hiểm: tách một method ra khỏi object sẽ <strong>âm thầm</strong> làm mất <code>this</code>. Trong file CommonJS (không strict), <code>this</code> rơi về đối tượng toàn cục nên bạn nhận <code>undefined</code> thay vì một tiếng nổ. Trong ES module — vốn luôn strict — cùng đoạn code đó ném lỗi:</p>
 <pre><code><span class="tok-comment">// vẫn code đó, nhưng đặt trong file .mjs (ES module = luôn strict)</span>
-<span class="tok-keyword">const</span> tachRa = dichVu.chao;
-<span class="tok-function">tachRa</span>();</code></pre>
-<div class="out">TypeError: Cannot read properties of undefined (reading 'ten')</div>
+<span class="tok-keyword">const</span> detached = service.chao;
+<span class="tok-function">detached</span>();</code></pre>
+<div class="out">TypeError: Cannot read properties of undefined (reading 'name')</div>
 <div class="pitfall">Lỗi này cắn bạn khi truyền một method làm callback: <code>app.get('/notes', controller.list)</code> sẽ làm mất <code>this</code> bên trong <code>list</code>. Cách sửa, xếp theo thứ tự nên dùng: (1) đừng dùng <code>this</code> — cứ export hàm thuần; (2) <code>controller.list.bind(controller)</code>; (3) bọc lại: <code>(req, res) =&gt; controller.list(req, res)</code>.</div>
 
 <h3>Khi nào dùng loại nào</h3>
@@ -249,6 +279,22 @@ buộc lại bằng bind: Xin chào từ NotesAPI</div>
   <div class="kv"><span class="k">Lời khuyên thật lòng</span><span class="v">Phần lớn code Node hiện đại gần như tránh hẳn <code>this</code> — hàm export thuần cộng closure thì dễ test hơn và không thể bị mất ràng buộc.</span></div>
 </div>
 <div class="note-ct">Tầng service của website này được viết dưới dạng các hàm async export thuần, một cách có chủ đích: <code>export async function shareNote(noteId, userId)</code>. Không có <code>this</code>, nên nó gọi được từ route Express, từ handler Socket.IO hay từ một job chạy nền mà chẳng cần nghi thức bind nào.</div>
+<h3>Cái gì quyết định giá trị của this</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Một arrow function không có this của riêng nó</span><span class="lz-d">Nó lấy cái this từ nơi nó được <em>viết ra</em>. Đó là lý do một arrow truyền vào <code>setTimeout</code> vẫn nhìn thấy object bao quanh.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Một function expression lấy this từ chỗ GỌI</span><span class="lz-d"><code>obj.method()</code> cho <code>this = obj</code>; còn <code>const f = obj.method; f()</code> cho <code>undefined</code> ở chế độ nghiêm ngặt. Cùng một hàm, khác bên nhận.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">call, apply và bind đặt nó tường minh</span><span class="lz-d"><code>bind</code> trả về một hàm MỚI với <code>this</code> đã cố định — tiện, và nó tạo một danh tính mới ở mỗi lần gọi, điều đó có ý nghĩa với các listener.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Closure là nửa còn lại</span><span class="lz-d">Một hàm giữ lại những biến mà nó được tạo ra cùng, bất kể <code>this</code> rốt cuộc là gì. Hai cơ chế này độc lập với nhau và bị nhầm lẫn liên tục.</span></div>
+</div>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener">
+  <span class="lc-ico">🎯</span>
+  <span class="lc-body"><span class="lc-title">MDN — this</span><span class="lc-sub">Mọi luật gán this, theo đúng thứ tự ngôn ngữ áp dụng chúng.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Closures" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">MDN — Closure</span><span class="lc-sub">Cơ chế đứng sau trạng thái riêng tư, và cái bẫy vòng lặp ở bài 1.1.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -304,6 +350,22 @@ the deep copy                      : {"name":"An","address":{"city":"Huế"},"ta
 <span class="tok-keyword">const</span> limitBad = req.query.limit || <span class="tok-number">20</span>;          <span class="tok-comment">// || also replaces 0 and '' — usually a bug</span></code></pre>
 <div class="pitfall">Use <code>??</code>, not <code>||</code>, for defaults on numbers. With <code>||</code>, a legitimate <code>limit=0</code> or <code>page=0</code> silently becomes 20 — because <code>0</code> is falsy. This is a real and very annoying pagination bug.</div>
 <div class="note-ct">On this site the "don't leak secrets" rule is enforced at the serialisation layer: a <code>serializeUser()</code> function builds the response object explicitly, field by field. Adding a column to the database therefore <em>cannot</em> accidentally expose it through the API — the opposite of returning the raw database row.</div>
+<h3>Value or reference, and where the line is</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Primitives are copied</span><span class="lz-d">A number, a string, a boolean. Assigning one gives the other variable its own copy, and changing one cannot affect the other.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Objects and arrays are shared</span><span class="lz-d">The variable holds a reference. Two names can point at the same object, and a change through either is visible through both.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Spread copies one level</span><span class="lz-d"><code>{...obj}</code> gives a new top-level object whose nested values are still the same references. This is where most surprises live.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">structuredClone copies all of them</span><span class="lz-d">Deep, built into Node, and it handles Dates and Maps. Slower — reach for it when you actually need depth, not by default.</span></div>
+</div>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" target="_blank" rel="noopener">
+  <span class="lc-ico">📤</span>
+  <span class="lc-body"><span class="lc-title">MDN — Spread syntax</span><span class="lc-sub">What it copies, what it shares, and where it does not apply.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone" target="_blank" rel="noopener">
+  <span class="lc-ico">🧬</span>
+  <span class="lc-body"><span class="lc-title">MDN — structuredClone()</span><span class="lc-sub">A real deep copy, with the list of types it supports and the ones it throws on.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -312,21 +374,21 @@ the deep copy                      : {"name":"An","address":{"city":"Huế"},"ta
 <p class="lead">Kiểu nguyên thuỷ được sao chép theo giá trị. Object và mảng thì sao chép <strong>theo tham chiếu</strong> — biến giữ một địa chỉ, không giữ dữ liệu. Gần như mọi con bug "sao bản gốc lại đổi?" trong backend đều sinh ra từ đúng sự thật này.</p>
 
 <h3>Sao chép nông chỉ đi được một tầng</h3>
-<pre><code><span class="tok-keyword">const</span> goc = { ten: <span class="tok-string">'An'</span>, diaChi: { thanhPho: <span class="tok-string">'Hà Nội'</span> }, tags: [<span class="tok-string">'a'</span>] };
+<pre><code><span class="tok-keyword">const</span> original = { name: <span class="tok-string">'An'</span>, address: { city: <span class="tok-string">'Hà Nội'</span> }, tags: [<span class="tok-string">'a'</span>] };
 
-<span class="tok-keyword">const</span> copyNong = { ...goc };          <span class="tok-comment">// spread = chỉ chép MỘT tầng</span>
-copyNong.ten = <span class="tok-string">'Bình'</span>;               <span class="tok-comment">// tầng ngoài → bản gốc an toàn</span>
-copyNong.diaChi.thanhPho = <span class="tok-string">'Đà Nẵng'</span>;  <span class="tok-comment">// tầng trong → DÙNG CHUNG với bản gốc!</span>
-<span class="tok-function">console.log</span>(<span class="tok-string">'gốc sau khi sửa bản sao nông:'</span>, JSON.<span class="tok-function">stringify</span>(goc));
+<span class="tok-keyword">const</span> shallow = { ...original };          <span class="tok-comment">// spread = chỉ chép MỘT tầng</span>
+shallow.name = <span class="tok-string">'Bình'</span>;               <span class="tok-comment">// tầng ngoài → bản gốc an toàn</span>
+shallow.address.city = <span class="tok-string">'Đà Nẵng'</span>;  <span class="tok-comment">// tầng trong → DÙNG CHUNG với bản gốc!</span>
+<span class="tok-function">console.log</span>(<span class="tok-string">'gốc sau khi sửa bản sao nông:'</span>, JSON.<span class="tok-function">stringify</span>(original));
 
-<span class="tok-keyword">const</span> copySau = <span class="tok-function">structuredClone</span>(goc);  <span class="tok-comment">// có sẵn từ Node 17</span>
-copySau.diaChi.thanhPho = <span class="tok-string">'Huế'</span>;
-<span class="tok-function">console.log</span>(<span class="tok-string">'gốc sau khi sửa bản sao sâu :'</span>, JSON.<span class="tok-function">stringify</span>(goc));
-<span class="tok-function">console.log</span>(<span class="tok-string">'bản sao sâu                 :'</span>, JSON.<span class="tok-function">stringify</span>(copySau));</code></pre>
-<div class="out">gốc sau khi sửa bản sao nông: {"ten":"An","diaChi":{"thanhPho":"Đà Nẵng"},"tags":["a"]}
-gốc sau khi sửa bản sao sâu : {"ten":"An","diaChi":{"thanhPho":"Đà Nẵng"},"tags":["a"]}
-bản sao sâu                 : {"ten":"An","diaChi":{"thanhPho":"Huế"},"tags":["a"]}</div>
-<p>Hãy đọc kỹ dòng kết quả đầu tiên: <code>ten</code> vẫn là <code>'An'</code> (được bảo vệ), nhưng <code>thanhPho</code> đã thành <code>'Đà Nẵng'</code> — object lồng bên trong chưa từng được sao chép, cả hai biến cùng trỏ vào một chỗ.</p>
+<span class="tok-keyword">const</span> deep = <span class="tok-function">structuredClone</span>(original);  <span class="tok-comment">// có sẵn từ Node 17</span>
+deep.address.city = <span class="tok-string">'Huế'</span>;
+<span class="tok-function">console.log</span>(<span class="tok-string">'gốc sau khi sửa bản sao sâu :'</span>, JSON.<span class="tok-function">stringify</span>(original));
+<span class="tok-function">console.log</span>(<span class="tok-string">'bản sao sâu                 :'</span>, JSON.<span class="tok-function">stringify</span>(deep));</code></pre>
+<div class="out">gốc sau khi sửa bản sao nông: {"name":"An","address":{"city":"Đà Nẵng"},"tags":["a"]}
+gốc sau khi sửa bản sao sâu : {"name":"An","address":{"city":"Đà Nẵng"},"tags":["a"]}
+bản sao sâu                 : {"name":"An","address":{"city":"Huế"},"tags":["a"]}</div>
+<p>Hãy đọc kỹ dòng kết quả đầu tiên: <code>name</code> vẫn là <code>'An'</code> (được bảo vệ), nhưng <code>city</code> đã thành <code>'Đà Nẵng'</code> — object lồng bên trong chưa từng được sao chép, cả hai biến cùng trỏ vào một chỗ.</p>
 <div class="callout warn">Tutorial cũ hay bảo dùng <code>JSON.parse(JSON.stringify(obj))</code> để chép sâu. Nó chạy được với dữ liệu thuần, nhưng <strong>phá hỏng</strong> <code>Date</code> (biến thành chuỗi), <code>undefined</code>, <code>Map</code>, <code>Set</code>, <code>BigInt</code> (ném lỗi) và hàm. Hãy dùng <code>structuredClone</code> — nó xử lý đúng cả Date, Map và Set.</div>
 
 <h3>Destructuring — cách bạn đọc dữ liệu từ request</h3>
@@ -338,18 +400,34 @@ bản sao sâu                 : {"ten":"An","diaChi":{"thanhPho":"Huế"},"tags
 
 <h3>Spread: cập nhật mà không sửa bản gốc</h3>
 <pre><code><span class="tok-comment">// ghép bản cập nhật lên bản ghi cũ — bản gốc không bị đụng</span>
-<span class="tok-keyword">const</span> banMoi = { ...note, title: <span class="tok-string">'Tiêu đề mới'</span>, updatedAt: <span class="tok-keyword">new</span> <span class="tok-function">Date</span>() };
+<span class="tok-keyword">const</span> updated = { ...note, title: <span class="tok-string">'Tiêu đề mới'</span>, updatedAt: <span class="tok-keyword">new</span> <span class="tok-function">Date</span>() };
 
 <span class="tok-comment">// loại bỏ một trường an toàn (đừng bao giờ gửi passwordHash cho client)</span>
 <span class="tok-keyword">const</span> { passwordHash, ...userAnToan } = user;</code></pre>
 <div class="callout ok">Dòng thứ hai là một thói quen bảo mật nên xây ngay từ bây giờ: bóc bí mật ra bằng destructuring, thay vì tin vào trí nhớ của mình về việc "được phép trả những trường nào".</div>
 
 <h3>Optional chaining và toán tử nullish</h3>
-<pre><code><span class="tok-keyword">const</span> thanhPho = user?.diaChi?.thanhPho ?? <span class="tok-string">'không rõ'</span>;  <span class="tok-comment">// không nổ nếu thiếu diaChi</span>
+<pre><code><span class="tok-keyword">const</span> city = user?.address?.city ?? <span class="tok-string">'không rõ'</span>;  <span class="tok-comment">// không nổ nếu thiếu diaChi</span>
 <span class="tok-keyword">const</span> limit = req.query.limit ?? <span class="tok-number">20</span>;              <span class="tok-comment">// ?? chỉ thay khi null/undefined</span>
 <span class="tok-keyword">const</span> limitSai = req.query.limit || <span class="tok-number">20</span>;           <span class="tok-comment">// || thay cả 0 và '' — thường là bug</span></code></pre>
 <div class="pitfall">Hãy dùng <code>??</code> chứ đừng dùng <code>||</code> để đặt giá trị mặc định cho số. Với <code>||</code>, một giá trị hợp lệ như <code>limit=0</code> hay <code>page=0</code> sẽ âm thầm biến thành 20 — vì <code>0</code> bị coi là "giá trị giả". Đây là một con bug phân trang có thật và rất khó chịu.</div>
 <div class="note-ct">Ở website này, quy tắc "không để rò rỉ bí mật" được thực thi ngay tại tầng chuyển đổi dữ liệu: hàm <code>serializeUser()</code> dựng object phản hồi một cách tường minh, từng trường một. Nhờ vậy, thêm một cột vào cơ sở dữ liệu <em>không thể</em> vô tình phơi nó ra API — ngược hẳn với kiểu trả thẳng bản ghi thô từ database.</div>
+<h3>Giá trị hay tham chiếu, và ranh giới nằm ở đâu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Giá trị nguyên thuỷ thì được CHÉP</span><span class="lz-d">Một con số, một chuỗi, một boolean. Gán một cái là biến kia có bản sao của riêng nó, và đổi cái này không đụng được cái kia.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Object và mảng thì được DÙNG CHUNG</span><span class="lz-d">Biến giữ một tham chiếu. Hai cái tên có thể trỏ vào cùng một object, và một thay đổi qua bên nào cũng nhìn thấy được từ cả hai.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Phép trải chép một tầng</span><span class="lz-d"><code>{...obj}</code> cho ra một object mới ở tầng trên cùng mà các giá trị lồng bên trong vẫn là đúng những tham chiếu cũ. Phần lớn bất ngờ sống ở đây.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">structuredClone chép hết mọi tầng</span><span class="lz-d">Sâu, có sẵn trong Node, và nó xử lý được cả Date lẫn Map. Chậm hơn — hãy với tay tới nó khi bạn THẬT SỰ cần độ sâu, đừng dùng theo mặc định.</span></div>
+</div>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" target="_blank" rel="noopener">
+  <span class="lc-ico">📤</span>
+  <span class="lc-body"><span class="lc-title">MDN — Cú pháp trải</span><span class="lc-sub">Nó chép cái gì, dùng chung cái gì, và chỗ nào nó không áp dụng.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone" target="_blank" rel="noopener">
+  <span class="lc-ico">🧬</span>
+  <span class="lc-body"><span class="lc-title">MDN — structuredClone()</span><span class="lc-sub">Một bản chép sâu thật sự, kèm danh sách kiểu nó hỗ trợ và kiểu nó ném lỗi.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -472,32 +550,32 @@ fs.<span class="tok-function">readFile</span>(<span class="tok-string">'note.txt
 <span class="tok-function">console.log</span>(data);</code></pre>
 
 <h3>Lỗi 1 — quên await</h3>
-<pre><code><span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">layTen</span>() { <span class="tok-keyword">await</span> <span class="tok-function">nghi</span>(<span class="tok-number">50</span>); <span class="tok-keyword">return</span> <span class="tok-string">'An'</span>; }
+<pre><code><span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">getName</span>() { <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">50</span>); <span class="tok-keyword">return</span> <span class="tok-string">'An'</span>; }
 
-<span class="tok-keyword">const</span> thieuAwait = <span class="tok-function">layTen</span>();        <span class="tok-comment">// không await</span>
-<span class="tok-function">console.log</span>(<span class="tok-string">'không await:'</span>, thieuAwait);
-<span class="tok-function">console.log</span>(<span class="tok-string">'có await   :'</span>, <span class="tok-keyword">await</span> <span class="tok-function">layTen</span>());</code></pre>
+<span class="tok-keyword">const</span> missing = <span class="tok-function">getName</span>();        <span class="tok-comment">// không await</span>
+<span class="tok-function">console.log</span>(<span class="tok-string">'không await:'</span>, missing);
+<span class="tok-function">console.log</span>(<span class="tok-string">'có await   :'</span>, <span class="tok-keyword">await</span> <span class="tok-function">getName</span>());</code></pre>
 <div class="out">không await: Promise { &lt;pending&gt; }
 có await   : An</div>
 <p>Hàm <code>async</code> <strong>luôn luôn</strong> trả về một Promise. Quên <code>await</code> là bạn gửi cho client một object Promise, và nó được chuyển thành <code>{}</code> — đúng con bug kinh điển "API của tôi trả về object rỗng".</p>
 
 <h3>Lỗi 2 — chờ tuần tự những việc chạy song song được</h3>
 <pre><code><span class="tok-comment">// tuần tự: mỗi await chặn cái kế tiếp</span>
-<span class="tok-keyword">await</span> <span class="tok-function">nghi</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">nghi</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">nghi</span>(<span class="tok-number">300</span>);
+<span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>);
 
 <span class="tok-comment">// song song: khởi động cả ba, rồi chờ cái chậm nhất</span>
-<span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">nghi</span>(<span class="tok-number">300</span>), <span class="tok-function">nghi</span>(<span class="tok-number">300</span>), <span class="tok-function">nghi</span>(<span class="tok-number">300</span>)]);</code></pre>
+<span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">sleep</span>(<span class="tok-number">300</span>), <span class="tok-function">sleep</span>(<span class="tok-number">300</span>), <span class="tok-function">sleep</span>(<span class="tok-number">300</span>)]);</code></pre>
 <div class="out">tuần tự  : 903 ms
 song song: 302 ms</div>
 <p>Nhanh gấp ba, cùng khối lượng công việc. Nguyên tắc: <strong>nếu B không cần kết quả của A thì đừng await A trước khi khởi động B.</strong> Một endpoint dashboard nạp user + ghi chú + thẻ theo kiểu tuần tự là đi ba vòng mạng chồng nhau một cách vô cớ.</p>
 <div class="callout warn">Có cả lỗi ngược lại: bắn 5.000 truy vấn trong một <code>Promise.all</code> sẽ vắt kiệt connection pool và làm sập cơ sở dữ liệu. Song song nghĩa là "vài cái một lúc", không phải "tất cả cùng lúc". Chương 16 sẽ nói về chia lô.</div>
 
 <h3>Lỗi 3 — tưởng cứ được ăn cả ngã về không</h3>
-<pre><code><span class="tok-keyword">try</span> { <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">nghi</span>(<span class="tok-number">10</span>), <span class="tok-function">hong</span>()]); }
+<pre><code><span class="tok-keyword">try</span> { <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">sleep</span>(<span class="tok-number">10</span>), <span class="tok-function">failing</span>()]); }
 <span class="tok-keyword">catch</span> (e) { <span class="tok-function">console.log</span>(<span class="tok-string">'Promise.all   → ném ngay:'</span>, e.message); }
 
-<span class="tok-keyword">const</span> ketQua = <span class="tok-keyword">await</span> Promise.<span class="tok-function">allSettled</span>([<span class="tok-function">nghi</span>(<span class="tok-number">10</span>), <span class="tok-function">hong</span>()]);
-<span class="tok-function">console.log</span>(<span class="tok-string">'allSettled    →'</span>, ketQua.<span class="tok-function">map</span>(r =&gt; r.status));</code></pre>
+<span class="tok-keyword">const</span> result = <span class="tok-keyword">await</span> Promise.<span class="tok-function">allSettled</span>([<span class="tok-function">sleep</span>(<span class="tok-number">10</span>), <span class="tok-function">failing</span>()]);
+<span class="tok-function">console.log</span>(<span class="tok-string">'allSettled    →'</span>, result.<span class="tok-function">map</span>(r =&gt; r.status));</code></pre>
 <div class="out">Promise.all   → ném ngay: DB mất kết nối
 allSettled    → [ 'fulfilled', 'rejected' ]</div>
 <div class="kv-grid">
@@ -599,6 +677,22 @@ ESM  : top-level await works</div>
   <div class="kv"><span class="k">You can import CJS from ESM</span><span class="v">Usually as a default import. The reverse (<code>require</code> an ESM package) is what breaks — that is why some packages say "ESM only".</span></div>
 </div>
 <div class="note-ct">This site's backend is <code>"type": "module"</code> — pure ESM, TypeScript compiled to ESM output. That is exactly why its maintenance scripts are written with <code>import</code> and can use top-level <code>await</code> without wrapping everything in an async main function.</div>
+<h3>How Node decides whether a file is CJS or ESM</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The extension wins first</span><span class="lz-d"><code>.mjs</code> is always ESM; <code>.cjs</code> is always CommonJS. Explicit, and it settles the question without reading anything else.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Then package.json type</span><span class="lz-d"><code>"type": "module"</code> makes every <code>.js</code> in that package ESM. Absent or <code>"commonjs"</code>, they are CJS.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The nearest package.json wins</span><span class="lz-d">Node walks up from the file. A subdirectory with its own <code>package.json</code> overrides the root, which is how one repo holds both.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And the two do not mix freely</span><span class="lz-d">ESM can <code>import</code> CJS; CJS cannot <code>require</code> ESM. That asymmetry is the source of most migration pain.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/packages.html#determining-module-system" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Node.js — Determining module system</span><span class="lc-sub">The exact resolution rules, including the dual-package cases.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/esm.html#interoperability-with-commonjs" target="_blank" rel="noopener">
+  <span class="lc-ico">🔀</span>
+  <span class="lc-body"><span class="lc-title">Node.js — ESM and CommonJS interop</span><span class="lc-sub">What can import what, and the named-export limitation that trips people up.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -608,19 +702,19 @@ ESM  : top-level await works</div>
 
 <h3>Đặt cạnh nhau</h3>
 <pre><code><span class="tok-comment">// ─── CommonJS ─── math.cjs</span>
-<span class="tok-keyword">function</span> <span class="tok-function">cong</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
-module.exports = { cong };
+<span class="tok-keyword">function</span> <span class="tok-function">add</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
+module.exports = { add };
 
 <span class="tok-comment">// dung.cjs</span>
-<span class="tok-keyword">const</span> { cong } = <span class="tok-function">require</span>(<span class="tok-string">'./math.cjs'</span>);
-<span class="tok-function">console.log</span>(<span class="tok-string">'CJS  :'</span>, <span class="tok-function">cong</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>), <span class="tok-string">'| __dirname có sẵn:'</span>, <span class="tok-keyword">typeof</span> __dirname);</code></pre>
+<span class="tok-keyword">const</span> { add } = <span class="tok-function">require</span>(<span class="tok-string">'./math.cjs'</span>);
+<span class="tok-function">console.log</span>(<span class="tok-string">'CJS  :'</span>, <span class="tok-function">add</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>), <span class="tok-string">'| __dirname có sẵn:'</span>, <span class="tok-keyword">typeof</span> __dirname);</code></pre>
 <div class="out">CJS  : 5 | __dirname có sẵn: string</div>
 <pre><code><span class="tok-comment">// ─── ES Modules ─── math.mjs</span>
-<span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">cong</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
+<span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">add</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
 
 <span class="tok-comment">// dung.mjs</span>
-<span class="tok-keyword">import</span> { cong } <span class="tok-keyword">from</span> <span class="tok-string">'./math.mjs'</span>;
-<span class="tok-function">console.log</span>(<span class="tok-string">'ESM  :'</span>, <span class="tok-function">cong</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>), <span class="tok-string">'| __dirname:'</span>, <span class="tok-keyword">typeof</span> __dirname);
+<span class="tok-keyword">import</span> { add } <span class="tok-keyword">from</span> <span class="tok-string">'./math.mjs'</span>;
+<span class="tok-function">console.log</span>(<span class="tok-string">'ESM  :'</span>, <span class="tok-function">add</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>), <span class="tok-string">'| __dirname:'</span>, <span class="tok-keyword">typeof</span> __dirname);
 <span class="tok-keyword">const</span> x = <span class="tok-keyword">await</span> Promise.<span class="tok-function">resolve</span>(<span class="tok-string">'top-level await chạy được'</span>);
 <span class="tok-function">console.log</span>(<span class="tok-string">'ESM  :'</span>, x);</code></pre>
 <div class="out">ESM  : 5 | __dirname: undefined
@@ -652,6 +746,22 @@ ESM  : top-level await chạy được</div>
   <div class="kv"><span class="k">Có thể import CJS từ ESM</span><span class="v">Thường dưới dạng default import. Chiều ngược lại (<code>require</code> một gói ESM) mới là chiều gãy — đó là lý do vài gói ghi "ESM only".</span></div>
 </div>
 <div class="note-ct">Backend của website này đặt <code>"type": "module"</code> — thuần ESM, TypeScript biên dịch ra ESM. Đó chính là lý do các script bảo trì của nó viết bằng <code>import</code> và dùng được <code>await</code> ở cấp cao nhất mà không phải bọc mọi thứ vào một hàm main async.</div>
+<h3>Node quyết định một file là CJS hay ESM thế nào</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Phần mở rộng thắng trước tiên</span><span class="lz-d"><code>.mjs</code> luôn là ESM; <code>.cjs</code> luôn là CommonJS. Tường minh, và nó dập tắt câu hỏi mà chẳng cần đọc gì thêm.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Rồi tới trường type trong package.json</span><span class="lz-d"><code>"type": "module"</code> làm mọi file <code>.js</code> trong package đó thành ESM. Không có nó hoặc để <code>"commonjs"</code> thì chúng là CJS.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">package.json GẦN NHẤT thắng</span><span class="lz-d">Node đi ngược lên từ file đó. Một thư mục con có <code>package.json</code> riêng sẽ đè lên cái ở gốc, và đó là cách một kho chứa được cả hai.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và hai bên không trộn tự do được</span><span class="lz-d">ESM <code>import</code> được CJS; CJS thì KHÔNG <code>require</code> được ESM. Sự bất đối xứng đó là nguồn gốc của phần lớn nỗi đau khi chuyển đổi.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/packages.html#determining-module-system" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Node.js — Xác định hệ module</span><span class="lc-sub">Các luật giải chính xác, gồm cả những ca gói kép.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/esm.html#interoperability-with-commonjs" target="_blank" rel="noopener">
+  <span class="lc-ico">🔀</span>
+  <span class="lc-body"><span class="lc-title">Node.js — ESM và CommonJS phối hợp</span><span class="lc-sub">Cái gì import được cái gì, và cái giới hạn về named export hay làm người ta vấp.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -699,7 +809,7 @@ ESM  : top-level await chạy được</div>
           {
             question: 'Given const user = { name: "An" }, which line throws?|||Cho const user = { name: "An" }, dòng nào ném lỗi?',
             options: [
-              'user.name = "Bình"',
+              'user.name = "Binh"',
               'user = {}',
               'Object.freeze(user)',
               'delete user.name',

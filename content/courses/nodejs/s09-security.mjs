@@ -373,8 +373,8 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
 
 <h3>Sanitize on write, or on read?</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Trên đường ghi (on write)</span><span class="lz-lnote">rẻ — làm một lần cho mỗi bài viết; nhưng dữ liệu gốc mất vĩnh viễn, và luật hôm nay là luật bạn phải sống cùng mãi mãi</span></div>
-  <div class="lz-layer"><span class="lz-lname">Trên đường đọc (on read)</span><span class="lz-lnote">đắt hơn — mỗi lần hiển thị; đổi lại luật sửa được, bản vá của thư viện tự áp dụng cho dữ liệu CŨ</span></div>
+  <div class="lz-layer"><span class="lz-lname">On the write path (on write)</span><span class="lz-lnote">cheap — done once per post; but the original data is gone forever, and today's rules are the rules you live with permanently</span></div>
+  <div class="lz-layer"><span class="lz-lname">On the read path (on read)</span><span class="lz-lnote">more expensive — once per render; in exchange the rules stay editable and a library patch applies itself to OLD data too</span></div>
 </div>
 <p>The trade-off is real, and the reason to prefer the render layer is that bypasses are discovered <em>after</em> your data is stored. A mutation-XSS bypass patched in DOMPurify next month protects you retroactively only if you sanitize when rendering. Sanitizing on write and trusting the column forever means the row that was "clean" under an old version stays in your database, trusted, forever.</p>
 
@@ -532,7 +532,7 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
 <h3>1. ReDoS — 31 characters that freeze the whole server</h3>
 <p>A regular expression with a nested quantifier. It is not exotic; variants of it appear in validation code everywhere:</p>
 <pre><code><span class="tok-kw">const</span> RE = /^(a+)+$/;
-RE.test(<span class="tok-str">'a'</span>.repeat(n) + <span class="tok-str">'!'</span>);   <span class="tok-cmt">// input không khớp</span></code></pre>
+RE.test(<span class="tok-str">'a'</span>.repeat(n) + <span class="tok-str">'!'</span>);   <span class="tok-cmt">// the inputs do not match</span></code></pre>
 <div class="out">20 ký tự →       8.0ms
 22 ký tự →      32.4ms
 24 ký tự →     135.7ms
@@ -609,7 +609,7 @@ RSS sau 1.5 giây      : 213 MB</div>
 <h3>4. SSRF — making your server read its own secrets</h3>
 <p>The feature is completely ordinary: a link preview, an avatar import, a webhook test button. The user supplies a URL and the server fetches it.</p>
 <pre><code>app.get(<span class="tok-str">'/preview'</span>, <span class="tok-kw">async</span> (req, res) =&gt; {
-  <span class="tok-kw">const</span> r = <span class="tok-kw">await</span> fetch(req.query.url);      <span class="tok-cmt">// ← toàn bộ lỗ hổng nằm ở đây</span>
+  <span class="tok-kw">const</span> r = <span class="tok-kw">await</span> fetch(req.query.url);      <span class="tok-cmt">// ← the entire vulnerability is right here</span>
   res.type(<span class="tok-str">'text'</span>).send(<span class="tok-kw">await</span> r.text());
 });</code></pre>
 <p>An internal service that is not exposed to the internet at all is listening on 4404. The attacker never needs to reach it — your server can, and your server is the one making the request:</p>
@@ -648,7 +648,7 @@ RSS sau 1.5 giây      : 213 MB</div>
 </a>
 <a class="link-card exphub" href="/exp-hub${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧰</span>
-  <span class="lc-body"><span class="lc-title">Exp Hub — mẹo và đoạn code hay dùng</span><span class="lc-sub">Tra nhanh cú pháp zod, helmet, cors khi đang code.</span></span>
+  <span class="lc-body"><span class="lc-title">Exp Hub — tips and frequently used snippets</span><span class="lc-sub">Tra nhanh cú pháp zod, helmet, cors khi đang code.</span></span>
 </a>
 </div>
 

@@ -45,6 +45,23 @@ export default {
 <p><strong>Rule:</strong> auth tokens belong in httpOnly, secure, sameSite cookies. Putting a JWT in <code>localStorage</code> "because it's easier to read" trades your users' sessions for convenience — the classic beginner security hole.</p>
 </div>
 
+<h3>The four steps of an authenticated request</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Identify once, at login</b> — Verify a password or an OAuth callback, then issue a session — a cookie holding an id, or a signed token.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Carry it on every request</b> — HTTP has no memory. The cookie travels automatically; a bearer token has to be attached by your code.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Verify on the server, every time</b> — Never trust a client-side check. The UI hiding a button is a courtesy; the handler refusing the call is the control.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Authorise per resource</b> — &quot;Logged in&quot; is not &quot;allowed to edit note 13&quot;. Scope every query to the caller rather than checking afterwards.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a route that is protected only by the component that renders its link.</strong> Hiding &#96;/admin&#96; from the navigation for non-admins hides nothing: the URL is guessable, the route still renders, and anyone can type it. In the App Router this is worse than in a classic SPA, because the page runs on the server and may query the database before anything checks who is asking — so an unauthorised visitor gets real data, rendered server-side, with no request the client could have blocked. Check the session inside the page or the layout that owns the segment, and treat middleware as a redirect convenience rather than the security boundary.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/authentication" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Authentication</span><span class="lc-sub">The framework&#39;s own guide: sessions, middleware, and where each check belongs.</span></span>
+</a>
+<a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🛡️</span>
+  <span class="lc-body"><span class="lc-title">OWASP — Authentication Cheat Sheet</span><span class="lc-sub">The practical checklist, independent of framework.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/authentication" target="_blank" rel="noopener">
   <span class="lc-ico">🔐</span>
@@ -74,6 +91,23 @@ export default {
 <div class="callout warn">
 <p><strong>Quy tắc:</strong> token auth thuộc về cookie httpOnly, secure, sameSite. Đặt một JWT trong <code>localStorage</code> "vì dễ đọc hơn" là đánh đổi phiên của người dùng lấy sự tiện — lỗ hổng bảo mật kinh điển của người mới.</p>
 </div>
+
+<h3>Bốn bước của một request đã xác thực</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Định danh một lần, lúc đăng nhập</b> — Kiểm một mật khẩu hoặc một callback OAuth, rồi cấp một phiên — một cookie giữ một id, hoặc một token đã ký.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Mang nó theo ở mọi request</b> — HTTP không có trí nhớ. Cookie đi theo tự động; một bearer token thì phải do mã của bạn đính kèm.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Xác minh ở máy chủ, mọi lần</b> — Đừng bao giờ tin một phép kiểm phía client. Giao diện giấu một cái nút là một cử chỉ lịch sự; handler từ chối lời gọi mới là phép kiểm soát.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Phân quyền theo từng tài nguyên</b> — &quot;Đã đăng nhập&quot; không phải là &quot;được phép sửa ghi chú 13&quot;. Hãy giới hạn mọi truy vấn theo người gọi thay vì kiểm sau.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một route chỉ được bảo vệ bởi cái component vẽ ra liên kết tới nó.</strong> Giấu &#96;/admin&#96; khỏi thanh điều hướng với người không phải quản trị viên thì chẳng giấu được gì: URL đoán được, route vẫn vẽ ra, và ai cũng gõ được. Trong App Router chuyện này còn tệ hơn một SPA cổ điển, vì trang chạy trên máy chủ và có thể đã truy vấn cơ sở dữ liệu trước khi có gì kiểm xem ai đang hỏi — nên một khách không có quyền nhận được dữ liệu thật, đã vẽ sẵn ở máy chủ, mà chẳng có request nào để phía client chặn lại. Hãy kiểm phiên đăng nhập ngay trong page hoặc layout sở hữu đoạn đó, và coi middleware là một tiện ích chuyển hướng chứ không phải cái biên an toàn.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/authentication" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Xác thực</span><span class="lc-sub">Hướng dẫn của chính framework: phiên, middleware, và mỗi phép kiểm thuộc về đâu.</span></span>
+</a>
+<a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🛡️</span>
+  <span class="lc-body"><span class="lc-title">OWASP — Authentication Cheat Sheet</span><span class="lc-sub">Bản kiểm thực dụng, độc lập với framework.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/authentication" target="_blank" rel="noopener">
@@ -122,6 +156,24 @@ const token = (await cookies()).get('token')?.value;
 <p><strong>Why you cannot set a cookie in a Server Component:</strong> a Server Component only renders output; it has no response to write a <code>Set-Cookie</code> header onto. Setting cookies happens during a mutation (Server Action) or in a Route Handler that returns a response. Trying to set one while rendering will error — do it in the action that logs the user in.</p>
 </div>
 
+<h3>Reading and writing cookies in the App Router</h3>
+<div class="lz-map">
+  <div class="lz-stage">Where each is allowed, and what it costs</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">cookies() reads them</div><div class="lz-nsub">In a Server Component, a Server Action or a route handler. Reading it opts the route into dynamic rendering — that is deliberate.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Only actions and handlers may write</div><div class="lz-nsub">A Server Component renders during a response that may already be cached, so setting a cookie there is not allowed.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">The flags are the security</div><div class="lz-nsub">&#96;httpOnly&#96;, &#96;secure&#96;, &#96;sameSite&#96;, and an explicit &#96;maxAge&#96;. Without &#96;httpOnly&#96;, an XSS bug is a session theft.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Keep them small</div><div class="lz-nsub">Cookies travel on every request, including images and API calls. A large one is a tax on the whole site.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a page that reads cookies and silently stops being static.</strong> Calling &#96;cookies()&#96; anywhere in a route — including in a shared helper three files deep — switches it to dynamic rendering for every visitor. It is the correct behaviour, because a cached page cannot vary per user, but nothing in the code says so: a marketing page that reads a theme cookie inside a layout quietly loses static generation and starts re-rendering on every request. The build output is where you find out — routes marked &#96;ƒ&#96; are dynamic. Check it after any change to a shared layout, and read the cookie in a small Client Component when only the browser needs it.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/cookies" target="_blank" rel="noopener">
+  <span class="lc-ico">🍪</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — cookies()</span><span class="lc-sub">Read, set and delete, with the exact rules about where each is allowed.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">MDN — HTTP cookies</span><span class="lc-sub">Every flag and what it defends against, in the general web case.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/cookies" target="_blank" rel="noopener">
   <span class="lc-ico">🍪</span>
@@ -158,6 +210,24 @@ const token = (await cookies()).get('token')?.value;
 <div class="callout warn">
 <p><strong>Vì sao không set cookie trong một Server Component:</strong> một Server Component chỉ render output; nó không có response để ghi header <code>Set-Cookie</code>. Việc set cookie xảy ra trong một mutation (Server Action) hoặc trong một Route Handler trả về response. Cố set trong lúc render sẽ lỗi — hãy làm trong action đăng nhập người dùng.</p>
 </div>
+
+<h3>Đọc và ghi cookie trong App Router</h3>
+<div class="lz-map">
+  <div class="lz-stage">Mỗi việc được phép ở đâu, và tốn gì</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">cookies() đọc chúng</div><div class="lz-nsub">Trong một Server Component, một Server Action hoặc một route handler. Đọc nó sẽ đưa route sang chế độ render động — đó là chủ đích.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Chỉ action và handler được GHI</div><div class="lz-nsub">Một Server Component vẽ ra trong một phản hồi có thể đã được nhớ đệm, nên đặt cookie ở đó là không được phép.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Các cờ mới là phần an toàn</div><div class="lz-nsub">&#96;httpOnly&#96;, &#96;secure&#96;, &#96;sameSite&#96;, và một &#96;maxAge&#96; tường minh. Thiếu &#96;httpOnly&#96; thì một lỗ hổng XSS là một vụ trộm phiên.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Giữ chúng nhỏ</div><div class="lz-nsub">Cookie đi theo MỌI request, kể cả ảnh và lời gọi API. Một cái cookie to là một khoản thuế đánh lên cả trang.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một trang đọc cookie rồi âm thầm thôi là trang tĩnh.</strong> Gọi &#96;cookies()&#96; ở bất cứ đâu trong một route — kể cả trong một hàm phụ dùng chung nằm sâu ba file — sẽ chuyển nó sang render động cho mọi khách. Đó là hành vi đúng, vì một trang đã nhớ đệm không thể khác nhau theo từng người, nhưng chẳng có gì trong mã nói ra điều đó: một trang giới thiệu đọc cookie chủ đề bên trong một layout sẽ lặng lẽ mất phần sinh tĩnh và bắt đầu vẽ lại ở mọi request. Đầu ra của build là chỗ bạn phát hiện ra — route đánh dấu &#96;ƒ&#96; là động. Hãy kiểm nó sau mỗi thay đổi ở một layout dùng chung, và đọc cookie trong một Client Component nhỏ khi chỉ trình duyệt cần nó.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/cookies" target="_blank" rel="noopener">
+  <span class="lc-ico">🍪</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — cookies()</span><span class="lc-sub">Đọc, đặt và xoá, kèm luật chính xác về chỗ nào được phép làm gì.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">MDN — Cookie HTTP</span><span class="lc-sub">Mọi cờ và nó phòng thủ điều gì, trong trường hợp web tổng quát.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/cookies" target="_blank" rel="noopener">
@@ -202,6 +272,23 @@ export const config = { matcher: ['/dashboard/:path*', '/settings/:path*'] };</c
 <p><strong>Middleware alone is not authentication.</strong> A common and dangerous mistake is to protect pages <em>only</em> in middleware. Middleware can check "is a token present," but the real check — is the token valid, is this user allowed to see this data — must happen where the data is accessed: the Server Component, the Server Action, the Route Handler. Next's own guidance is to use middleware for optimistic redirects and do the authoritative check close to the data. Never let a pretty redirect stand in for server-side authorisation (the Chapter 12 rule again).</p>
 </div>
 
+<h3>What middleware is for, and what it is not</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>It runs before the route, on every match</b> — Cheap redirects, locale detection, a rewrite. It sees the request and returns a response or lets it continue.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>It runs on the Edge runtime</b> — No Node APIs, no database driver, no bcrypt. Only what the Web platform provides.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>So it can check a token&#39;s shape, not a session</b> — Verifying a signature is fine; looking a session id up in Postgres is not. That check belongs in the page.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Scope it with a matcher</b> — &#96;export const config = { matcher: [&#39;/dashboard/:path*&#39;] }&#96;. Without one it runs on every asset request too.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — treating middleware as the authorisation layer.</strong> A middleware redirect keeps honest users out of &#96;/admin&#96; and is not a security boundary: it cannot query the database, so it can only inspect what the request carries, and any gap in the matcher is an unprotected route. The failure is quiet — add a new admin path, forget the matcher entry, and it is public with nothing to show for it. Use middleware for the redirect, and repeat the real check where the data is read: in the layout or page that owns the segment, and inside every Server Action. Duplication is the point; each check protects its own entry point.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🚦</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Middleware</span><span class="lc-sub">The matcher, the runtime limits, and the supported response types.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/authentication#protecting-routes-with-middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Protecting routes</span><span class="lc-sub">The official position: middleware for optimistic checks, real checks near the data.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/middleware" target="_blank" rel="noopener">
   <span class="lc-ico">🛡️</span>
@@ -234,6 +321,23 @@ export const config = { matcher: ['/dashboard/:path*', '/settings/:path*'] };</c
 <div class="pitfall">
 <p><strong>Chỉ middleware thì chưa phải xác thực.</strong> Một sai lầm phổ biến và nguy hiểm là bảo vệ trang <em>chỉ</em> trong middleware. Middleware kiểm được "có token hiện diện không", nhưng phép kiểm thật — token có hợp lệ không, người này có được phép xem dữ liệu này không — phải xảy ra nơi dữ liệu được truy cập: Server Component, Server Action, Route Handler. Chính hướng dẫn của Next là dùng middleware cho redirect lạc quan và làm phép kiểm có thẩm quyền gần dữ liệu. Đừng bao giờ để một redirect đẹp thay cho phân quyền phía server (lại là quy tắc Chương 12).</p>
 </div>
+
+<h3>Middleware dùng để làm gì, và không dùng để làm gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Nó chạy trước route, ở mọi lần khớp</b> — Chuyển hướng rẻ tiền, nhận diện ngôn ngữ, một phép viết lại đường dẫn. Nó thấy request rồi trả về một phản hồi hoặc cho đi tiếp.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Nó chạy trên runtime Edge</b> — Không API Node, không driver cơ sở dữ liệu, không bcrypt. Chỉ có những gì nền tảng Web cung cấp.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nên nó kiểm được HÌNH DẠNG một token, không kiểm được một phiên</b> — Xác minh một chữ ký thì được; tra một id phiên trong Postgres thì không. Phép kiểm đó thuộc về trang.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Hãy giới hạn nó bằng matcher</b> — &#96;export const config = { matcher: [&#39;/dashboard/:path*&#39;] }&#96;. Không có nó thì nó chạy cả với mọi request tài nguyên tĩnh.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — coi middleware là tầng phân quyền.</strong> Một phép chuyển hướng ở middleware giữ được người dùng ngay thẳng ở ngoài &#96;/admin&#96; và không phải một biên an toàn: nó không truy vấn cơ sở dữ liệu được, nên nó chỉ soi được thứ mà request mang theo, và mọi khe hở trong matcher đều là một route không được bảo vệ. Cú hỏng thì lặng lẽ — thêm một đường quản trị mới, quên mục trong matcher, thế là nó công khai mà chẳng có gì cho thấy. Hãy dùng middleware cho phép chuyển hướng, và lặp lại phép kiểm thật ở chỗ dữ liệu được đọc: trong layout hoặc page sở hữu đoạn đó, và bên trong mọi Server Action. Sự trùng lặp ấy chính là mục đích; mỗi phép kiểm bảo vệ đúng cửa vào của mình.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🚦</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Middleware</span><span class="lc-sub">Matcher, giới hạn của runtime, và các kiểu phản hồi được hỗ trợ.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/authentication#protecting-routes-with-middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Bảo vệ route</span><span class="lc-sub">Lập trường chính thức: middleware cho phép kiểm lạc quan, phép kiểm thật đặt sát dữ liệu.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/middleware" target="_blank" rel="noopener">
@@ -281,6 +385,23 @@ export async function getCurrentUser() {
 <p><strong>One source of truth for "who is the user."</strong> Centralising this in <code>getCurrentUser()</code> means every page and action checks identity the same way, and a change to how sessions work touches one function. Scatter the cookie-reading logic and you will eventually protect one route and forget another.</p>
 </div>
 
+<h3>Getting the current user where you need it</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Read the session on the server</b> — In a layout, a page, or a Server Action. One helper — &#96;getSession()&#96; — that reads the cookie and verifies it.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Do not pass the user id as a prop to actions</b> — The action reads it itself. A prop is caller-controlled; a session read is not.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Fetch once per request, not per component</b> — React&#39;s &#96;cache()&#96; deduplicates the call across a render pass, so calling &#96;getSession()&#96; in five components is one verification.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Send the client only what it displays</b> — A name and an avatar, not the whole record. Everything crossing the boundary is visible to the user.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a user object built once at module level, shared between every request.</strong> &#96;const currentUser = await getUser()&#96; at the top of a module runs once when the server starts and then serves that same user to everybody — every visitor sees the first person&#39;s name, and in the worst case their data. It looks like a caching bug and it is a lifetime bug: module scope on a server is process-wide, not per-request. The same shape appears with a module-level Zustand store, a shared Axios instance carrying an auth header, or a &#96;let&#96; used as a cache. Anything per-user must be read inside the request, every time.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🧠</span>
+  <span class="lc-body"><span class="lc-title">react.dev — cache()</span><span class="lc-sub">Deduplicating a server call within one render pass, without leaking across requests.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/authentication#stateless-sessions" target="_blank" rel="noopener">
+  <span class="lc-ico">🎫</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Sessions</span><span class="lc-sub">Reading and verifying a session on each request, with the helper pattern.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/authentication#authorization" target="_blank" rel="noopener">
   <span class="lc-ico">👤</span>
@@ -316,6 +437,23 @@ export async function getCurrentUser() {
 <div class="callout ok">
 <p><strong>Một nguồn sự thật cho "ai là người dùng".</strong> Gom việc này vào <code>getCurrentUser()</code> nghĩa là mọi page và action kiểm danh tính theo cùng một cách, và một thay đổi cách phiên hoạt động chỉ đụng một hàm. Rải logic đọc-cookie ra thì sớm muộn bạn sẽ bảo vệ một route và quên một route khác.</p>
 </div>
+
+<h3>Lấy người dùng hiện tại ở nơi bạn cần</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Đọc phiên đăng nhập ở máy chủ</b> — Trong một layout, một page, hoặc một Server Action. Một hàm phụ duy nhất — &#96;getSession()&#96; — đọc cookie rồi xác minh nó.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Đừng truyền id người dùng làm prop cho action</b> — Action tự đọc lấy. Một prop thì do người gọi điều khiển; một lần đọc phiên thì không.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Lấy một lần mỗi request, đừng lấy mỗi component</b> — &#96;cache()&#96; của React khử trùng lặp lời gọi trong một lượt render, nên gọi &#96;getSession()&#96; ở năm component chỉ là một lần xác minh.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Chỉ gửi cho client thứ nó hiển thị</b> — Một cái tên và một tấm ảnh đại diện, không phải cả bản ghi. Mọi thứ vượt qua ranh giới đều nhìn thấy được với người dùng.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một object người dùng dựng một lần ở cấp module, dùng chung giữa mọi request.</strong> &#96;const currentUser = await getUser()&#96; ở đầu một module sẽ chạy đúng một lần lúc máy chủ khởi động rồi phục vụ đúng người dùng đó cho tất cả — mọi khách đều thấy tên của người đầu tiên, và tệ nhất là thấy cả dữ liệu của họ. Nó trông như lỗi nhớ đệm mà thật ra là lỗi vòng đời: phạm vi module trên một máy chủ là phạm vi toàn tiến trình, không phải theo từng request. Cùng hình dạng ấy hiện ra với một store Zustand ở cấp module, một thực thể Axios dùng chung mang header xác thực, hay một &#96;let&#96; dùng làm bộ nhớ đệm. Mọi thứ riêng theo người dùng đều phải được đọc BÊN TRONG request, mọi lần.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🧠</span>
+  <span class="lc-body"><span class="lc-title">react.dev — cache()</span><span class="lc-sub">Khử trùng lặp một lời gọi máy chủ trong một lượt render, mà không rò rỉ qua các request.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/authentication#stateless-sessions" target="_blank" rel="noopener">
+  <span class="lc-ico">🎫</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Phiên đăng nhập</span><span class="lc-sub">Đọc và xác minh một phiên ở mỗi request, kèm mẫu hàm phụ.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/authentication#authorization" target="_blank" rel="noopener">
@@ -354,6 +492,23 @@ export async function getCurrentUser() {
 <p><strong>The tell of this bug class:</strong> "I am clearly logged in (the cookie is there, I did not log out), but everything 401s." Suspect a token that has expired while its cookie has not, plus a missing or broken refresh path. Cookie lifetime and token expiry are two different clocks — if they disagree and nothing refreshes, the session breaks exactly when the shorter one runs out.</p>
 </div>
 
+<h3>Keeping a session alive without keeping it forever</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Short access token, long refresh token</b> — Minutes and days. The short one limits the damage of a leak; the long one keeps the user logged in.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Refresh on 401, once</b> — An interceptor catches the expiry, refreshes, and retries the original request. Once — a loop here logs everyone out.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Rotate the refresh token</b> — Issue a new one each time and invalidate the old. A replayed old token then signals theft, and you can revoke the family.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Store both httpOnly</b> — Neither belongs in &#96;localStorage&#96;, where any script on the page can read it.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a token that expires long before the cookie carrying it.</strong> A 24-hour JWT inside a 7-day cookie means that from day two the browser keeps sending a cookie that is present and worthless: the app looks logged in, every API call returns 401, and the user reports &quot;the site is broken&quot; rather than &quot;log me in again&quot;. This is not hypothetical — it is recorded in this repo&#39;s own history, together with the second half of the failure: there was no working refresh endpoint, so nothing could recover. Keep the two lifetimes in one place, implement refresh before extending either, and test by moving the clock forward rather than by waiting a day.</p></div>
+<a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🎟️</span>
+  <span class="lc-body"><span class="lc-title">OWASP — JWT cheat sheet</span><span class="lc-sub">Expiry, revocation and rotation, with the attacks each one answers.</span></span>
+</a>
+<a class="link-card dl" href="https://auth0.com/docs/secure/tokens/refresh-tokens/refresh-token-rotation" target="_blank" rel="noopener">
+  <span class="lc-ico">🔄</span>
+  <span class="lc-body"><span class="lc-title">Auth0 — Refresh token rotation</span><span class="lc-sub">Why rotation plus reuse detection is the standard, explained end to end.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies" target="_blank" rel="noopener">
   <span class="lc-ico">⏰</span>
@@ -380,6 +535,23 @@ export async function getCurrentUser() {
 <div class="pitfall">
 <p><strong>Dấu hiệu của loại bug này:</strong> "Tôi rõ ràng đã đăng nhập (cookie còn đó, tôi không đăng xuất), nhưng mọi thứ 401." Hãy nghi một token đã hết hạn trong khi cookie thì chưa, cộng một đường refresh thiếu hoặc hỏng. Tuổi thọ cookie và hạn token là hai chiếc đồng hồ khác nhau — nếu chúng lệch nhau và không gì refresh, phiên vỡ đúng lúc cái ngắn hơn hết giờ.</p>
 </div>
+
+<h3>Giữ một phiên sống mà không giữ nó mãi mãi</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Token truy cập ngắn, token làm mới dài</b> — Vài phút và vài ngày. Cái ngắn giới hạn thiệt hại khi rò rỉ; cái dài giữ cho người dùng ở lại trạng thái đăng nhập.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Làm mới khi gặp 401, đúng một lần</b> — Một interceptor bắt lấy cú hết hạn, làm mới, rồi thử lại request gốc. Đúng một lần — một vòng lặp ở đây là đăng xuất tất cả mọi người.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Xoay vòng token làm mới</b> — Cấp một cái mới mỗi lần và vô hiệu hoá cái cũ. Một token cũ được phát lại khi đó là tín hiệu bị trộm, và bạn thu hồi được cả họ token đó.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Lưu cả hai dạng httpOnly</b> — Chẳng cái nào thuộc về &#96;localStorage&#96;, nơi mọi script trên trang đều đọc được.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một token hết hạn sớm hơn nhiều so với cái cookie mang nó.</strong> Một JWT 24 giờ nằm trong một cookie 7 ngày nghĩa là từ ngày thứ hai trình duyệt cứ gửi đi một cái cookie có mặt mà vô giá trị: ứng dụng trông như đã đăng nhập, mọi lời gọi API trả 401, và người dùng báo &quot;trang hỏng rồi&quot; chứ không phải &quot;cho tôi đăng nhập lại&quot;. Đây không phải chuyện giả định — nó có trong lịch sử của chính kho này, cùng với nửa sau của cú hỏng: chẳng có endpoint làm mới nào chạy được, nên không gì khôi phục nổi. Hãy giữ hai tuổi thọ đó ở một chỗ, làm phần làm-mới trước khi kéo dài bất kỳ cái nào, và hãy thử bằng cách dịch đồng hồ tới trước chứ đừng ngồi chờ một ngày.</p></div>
+<a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🎟️</span>
+  <span class="lc-body"><span class="lc-title">OWASP — Bản tra cứu JWT</span><span class="lc-sub">Hết hạn, thu hồi và xoay vòng, kèm những cuộc tấn công mà từng cái trả lời.</span></span>
+</a>
+<a class="link-card dl" href="https://auth0.com/docs/secure/tokens/refresh-tokens/refresh-token-rotation" target="_blank" rel="noopener">
+  <span class="lc-ico">🔄</span>
+  <span class="lc-body"><span class="lc-title">Auth0 — Xoay vòng token làm mới</span><span class="lc-sub">Vì sao xoay vòng cộng phát hiện tái sử dụng là chuẩn, giải thích từ đầu tới cuối.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies" target="_blank" rel="noopener">

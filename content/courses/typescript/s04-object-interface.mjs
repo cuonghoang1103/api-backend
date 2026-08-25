@@ -60,6 +60,14 @@ n.id = <span class="tok-string">'n2'</span>;</code></pre>
 <p>Perfect for identifiers and other values that must never change after creation. Like <code>readonly</code> arrays, it's a compile-time guarantee — erased at runtime, but enforced everywhere the type is used.</p>
 <div class="callout ok">These four rules — required, excess, optional, readonly — are the grammar of modelling data. Together they let a type say precisely "these fields must exist, these may, this one can't change, and nothing else belongs here".</div>
 <div class="note-ct">This site's core entities model <code>id</code> as <code>readonly</code> and truly-optional fields (a note's summary, a user's bio) with <code>?</code>. The result: the compiler forbids reassigning an id, and forces every place that reads an optional field to consider the "not set" case — before it becomes a runtime crash.</div>
+<h3>How the compiler reads an object literal</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Collect the required keys</span><span class="lz-d">Every property without <code>?</code> must be present. A missing one is TS2741 — the field you forgot, caught at build time instead of as an <code>undefined</code> in production.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Check each value against its type</span><span class="lz-d">Ordinary assignability. <code>title: 42</code> against <code>title: string</code> is TS2322, exactly as it would be for a standalone variable.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Excess property check — literals only</span><span class="lz-d">A <em>fresh</em> object literal may carry no unknown keys: TS2353. This is a typo-catcher, not a structural rule, and it is the one step that disappears the moment the literal passes through a variable.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Freeze what is readonly</span><span class="lz-d">Initialisation is allowed, reassignment is TS2540. Compile-time only — erased in the emitted JavaScript, so nothing at runtime enforces it.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — assigning the literal to a variable first switches the typo-catcher off.</strong> <code>const n: Note = { title: 'Hi', body: 'x', pinned: true }</code> is TS2353. But <code>const raw = { title: 'Hi', body: 'x', pinned: true }; const n: Note = raw;</code> compiles clean, because <code>raw</code> is no longer a fresh literal and structural typing only asks "does it have at least what Note needs?". The trap bites hardest with a typo: <code>{ tittle: 'Hi', body: 'x' }</code> assigned directly is an error, but routed through a variable it is a <em>missing required property</em> error instead — a different message pointing at a different line. Type the variable at its declaration (<code>const raw: Note = …</code>) so the check fires where the data is written.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: object types on Code Lab</span><span class="lc-sub">Drill shapes, optional &amp; readonly after this chapter.</span></span>
@@ -109,6 +117,14 @@ n.id = <span class="tok-string">'n2'</span>;</code></pre>
 <p>Hoàn hảo cho định danh và các giá trị khác không bao giờ được đổi sau khi tạo. Như mảng <code>readonly</code>, nó là bảo đảm lúc biên dịch — xoá lúc chạy, nhưng ép ở mọi nơi kiểu được dùng.</p>
 <div class="callout ok">Bốn quy tắc này — bắt buộc, thừa, optional, readonly — là ngữ pháp của việc mô hình hoá dữ liệu. Cùng nhau chúng cho một kiểu nói chính xác "những field này phải có, những field này có thể, cái này không đổi được, và không gì khác thuộc về đây".</div>
 <div class="note-ct">Các entity lõi của site này mô hình <code>id</code> là <code>readonly</code> và các field thật sự optional (summary của ghi chú, bio của người dùng) bằng <code>?</code>. Kết quả: trình biên dịch cấm gán lại id, và ép mọi chỗ đọc một field optional phải cân nhắc trường hợp "chưa đặt" — trước khi nó thành một cú sập lúc chạy.</div>
+<h3>Trình biên dịch đọc một object literal thế nào</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Gom các khoá bắt buộc</span><span class="lz-d">Mọi thuộc tính không có <code>?</code> đều phải có mặt. Thiếu một cái là TS2741 — đúng cái field bạn quên, bắt lúc build thay vì thành một <code>undefined</code> trên production.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Kiểm từng giá trị với kiểu của nó</span><span class="lz-d">Gán thông thường thôi. <code>title: 42</code> với <code>title: string</code> là TS2322, y hệt như với một biến đứng riêng.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Kiểm thuộc tính thừa — chỉ với literal</span><span class="lz-d">Một object literal <em>tươi</em> không được mang khoá lạ: TS2353. Đây là cái bẫy-bắt-gõ-nhầm, không phải luật cấu trúc, và nó là bước duy nhất biến mất ngay khi literal đi qua một biến.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Đóng băng cái nào readonly</span><span class="lz-d">Khởi tạo thì được, gán lại là TS2540. Chỉ ở thời điểm biên dịch — bị xoá trong JavaScript sinh ra, nên lúc chạy không có gì cưỡng chế.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — gán literal vào một biến trước là tắt luôn cái bẫy-bắt-gõ-nhầm.</strong> <code>const n: Note = { title: 'Hi', body: 'x', pinned: true }</code> là TS2353. Nhưng <code>const raw = { title: 'Hi', body: 'x', pinned: true }; const n: Note = raw;</code> lại biên dịch sạch, vì <code>raw</code> không còn là literal tươi nữa và kiểu cấu trúc chỉ hỏi "nó có đủ những gì Note cần không?". Bẫy này cắn đau nhất khi gõ nhầm: <code>{ tittle: 'Hi', body: 'x' }</code> gán thẳng thì báo lỗi, còn đi vòng qua một biến thì thành lỗi <em>thiếu thuộc tính bắt buộc</em> — một thông báo khác, chỉ vào một dòng khác. Hãy gán kiểu cho biến ngay lúc khai báo (<code>const raw: Note = …</code>) để phép kiểm nổ đúng chỗ dữ liệu được viết ra.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: kiểu object trên Code Lab</span><span class="lc-sub">Rèn dáng, optional &amp; readonly sau chương này.</span></span>
@@ -172,6 +188,22 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 </div>
 <div class="callout ok">A defensible one-liner: "interface for objects, type for everything else." You'll see codebases that use <code>type</code> for absolutely everything, and that's fine too — consistency matters more than the choice. What matters is knowing <em>why</em> the union case forces your hand.</div>
 <div class="note-ct">This site leans on <code>interface</code> for its entity shapes and <code>type</code> for the string-literal unions that model status, role and content type — exactly the split above. The union types are also where the famous enum-rename bug lived (chapter 9): a union is only as safe as its single source of truth.</div>
+<h3>interface vs type — what actually differs</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Describing an object</span><span class="lz-t">Both work, identically</span><span class="lz-d">Same assignability, same error messages, same performance in practice. This is the 90% case, and it is a coin flip.</span></div>
+<div class="lz-node"><span class="lz-k">Declaration merging</span><span class="lz-t">interface only</span><span class="lz-d">Two <code>interface Note</code> in one scope merge into one. Two <code>type Note</code> collide with TS2300. Merging is what makes augmenting <code>Express.Request</code> possible.</span></div>
+<div class="lz-node"><span class="lz-k">Unions, tuples, primitives</span><span class="lz-t">type only</span><span class="lz-d"><code>type Status = 'draft' | 'live'</code> has no interface spelling. Anything that is not an object shape needs <code>type</code>.</span></div>
+<div class="lz-node"><span class="lz-k">Mapped &amp; conditional types</span><span class="lz-t">type only</span><span class="lz-d"><code>Partial&lt;T&gt;</code>, <code>Omit&lt;T, K&gt;</code> and every utility in chapter 8 are type aliases. An interface cannot compute its own members.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — accidental declaration merging silently widens a type.</strong> Because interfaces merge, a second <code>interface User { role: string }</code> anywhere in the same scope does not error — it quietly adds <code>role</code> to the first one. Copy a file, forget to rename, and now every <code>User</code> in the project demands a field one of them never sets, with the error landing at the <em>call sites</em> rather than at the duplicate declaration. Type aliases fail loudly instead: TS2300 <em>Duplicate identifier</em>, pointing at both declarations. If you are not deliberately augmenting something, that loud failure is the better default.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: differences between type aliases and interfaces</span><span class="lc-sub">The official side-by-side table this lesson condenses.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice: interface &amp; type on Code Lab</span><span class="lc-sub">Drill merging, collisions and non-object types.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -221,6 +253,22 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 </div>
 <div class="callout ok">Một câu chốt bảo vệ được: "interface cho object, type cho mọi thứ khác." Bạn sẽ thấy những codebase dùng <code>type</code> cho tuyệt đối mọi thứ, và thế cũng ổn — nhất quán quan trọng hơn lựa chọn. Điều đáng nói là biết <em>vì sao</em> trường hợp union buộc tay bạn.</div>
 <div class="note-ct">Site này dựa vào <code>interface</code> cho các dáng entity và <code>type</code> cho các union literal-chuỗi mô hình hoá status, role và kiểu nội dung — đúng cách chia ở trên. Các kiểu union cũng là nơi con bug enum-rename nổi tiếng cư ngụ (chương 9): một union chỉ an toàn ngang với nguồn sự thật duy nhất của nó.</div>
+<h3>interface với type — thật ra khác nhau ở đâu</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Mô tả một object</span><span class="lz-t">Cả hai đều được, y hệt nhau</span><span class="lz-d">Cùng luật gán, cùng thông báo lỗi, trên thực tế cùng tốc độ. Đây là 90% trường hợp, và nó là chuyện tung đồng xu.</span></div>
+<div class="lz-node"><span class="lz-k">Hợp nhất khai báo</span><span class="lz-t">Chỉ interface</span><span class="lz-d">Hai <code>interface Note</code> trong cùng một phạm vi hợp lại làm một. Hai <code>type Note</code> va nhau với TS2300. Chính hợp nhất là thứ cho phép mở rộng <code>Express.Request</code>.</span></div>
+<div class="lz-node"><span class="lz-k">Union, tuple, primitive</span><span class="lz-t">Chỉ type</span><span class="lz-d"><code>type Status = 'draft' | 'live'</code> không có cách viết bằng interface. Bất cứ thứ gì không phải dáng object đều cần <code>type</code>.</span></div>
+<div class="lz-node"><span class="lz-k">Mapped &amp; conditional type</span><span class="lz-t">Chỉ type</span><span class="lz-d"><code>Partial&lt;T&gt;</code>, <code>Omit&lt;T, K&gt;</code> và mọi utility ở chương 8 đều là type alias. Interface không tự tính ra thành viên của chính nó được.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — hợp nhất khai báo ngoài ý muốn âm thầm nới rộng một kiểu.</strong> Vì interface hợp nhất, một <code>interface User { role: string }</code> thứ hai ở bất cứ đâu trong cùng phạm vi sẽ không báo lỗi — nó lặng lẽ thêm <code>role</code> vào cái thứ nhất. Chép một file, quên đổi tên, thế là mọi <code>User</code> trong dự án đòi một field mà một trong hai chỗ chẳng bao giờ đặt, còn lỗi thì rơi xuống <em>chỗ gọi</em> chứ không phải chỗ khai báo trùng. Type alias thì hỏng to tiếng: TS2300 <em>Duplicate identifier</em>, chỉ vào cả hai khai báo. Nếu bạn không cố tình mở rộng thứ gì, cái hỏng-to-tiếng ấy mới là mặc định tốt hơn.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: khác biệt giữa type alias và interface</span><span class="lc-sub">Bảng đối chiếu chính thức mà bài này cô lại.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện tập: interface &amp; type trên Code Lab</span><span class="lc-sub">Luyện hợp nhất, va chạm và kiểu không-phải-object.</span></span>
+</a>
 </div>
 `,
     },
@@ -270,6 +318,13 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 }</code></pre>
 <p>Usually you'd name the nested shape (<code>interface Author { ... }</code>) and reference it — smaller, reusable, and each piece gets its own name in error messages. Composition over one giant nested blob.</p>
 <div class="note-ct">This site's models are built exactly this way: a shared base carries <code>id</code> and timestamps, entities extend it, and relations reference other named types (a note references its author, not an inline blob). Prisma even generates these types for you (chapter 13) — composed, named, and kept in sync with the database schema.</div>
+<h3>extends and &amp; are not the same tool</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">interface B extends A</span><span class="lz-t">Checked at the declaration</span><span class="lz-d">If B redeclares a member of A with an incompatible type, you get TS2430 <em>right there</em>, on the interface. The conflict is reported where you wrote it.</span></div>
+<div class="lz-layer"><span class="lz-k">type B = A &amp; { … }</span><span class="lz-t">Computed lazily</span><span class="lz-d">The intersection is formed silently. A conflicting member becomes the intersection of both types — often <code>never</code> — and nothing complains until someone tries to assign a value.</span></div>
+<div class="lz-layer"><span class="lz-k">Same conflict, two experiences</span><span class="lz-t">One points at the cause</span><span class="lz-d"><code>extends</code> names the offending interface; <code>&amp;</code> names the innocent call site with "Type 'string' is not assignable to type 'never'".</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an intersection that quietly evaluates to <code>never</code>.</strong> <code>type A = { id: string }; type B = { id: number }; type C = A &amp; B;</code> compiles without a word. <code>C['id']</code> is <code>string &amp; number</code>, which is <code>never</code> — so <code>C</code> is a type no object can ever satisfy. You find out later at a construction site: <em>Type 'string' is not assignable to type 'never'</em>, pointing at perfectly correct code hundreds of lines from the mistake. When you are composing object shapes and want a conflict to be an error, use <code>interface … extends</code>: it reports TS2430 on the declaration itself.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: composing types on Code Lab</span><span class="lc-sub">Build types from reusable pieces after this chapter.</span></span>
@@ -313,6 +368,13 @@ dup.ts(2,6): error TS2300: Duplicate identifier 'Box'.</div>
 }</code></pre>
 <p>Thường bạn sẽ đặt tên cho dáng lồng (<code>interface Author { ... }</code>) rồi tham chiếu — nhỏ hơn, tái dùng được, và mỗi mảnh có tên riêng trong thông báo lỗi. Kết hợp hơn là một cục lồng khổng lồ.</p>
 <div class="note-ct">Các model của site này được dựng đúng kiểu này: một base chung mang <code>id</code> và mốc thời gian, các entity extends nó, và quan hệ tham chiếu tới các kiểu có tên khác (một ghi chú tham chiếu tác giả của nó, không phải một cục inline). Prisma thậm chí sinh các kiểu này hộ bạn (chương 13) — đã kết hợp, có tên, và giữ đồng bộ với schema cơ sở dữ liệu.</div>
+<h3>extends và &amp; không phải cùng một công cụ</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">interface B extends A</span><span class="lz-t">Kiểm ngay tại khai báo</span><span class="lz-d">Nếu B khai lại một thành viên của A với kiểu không tương thích, bạn nhận TS2430 <em>ngay tại đó</em>, trên chính interface. Xung đột được báo đúng chỗ bạn viết ra nó.</span></div>
+<div class="lz-layer"><span class="lz-k">type B = A &amp; { … }</span><span class="lz-t">Tính toán lười</span><span class="lz-d">Phép giao được tạo ra lặng lẽ. Một thành viên xung đột trở thành giao của cả hai kiểu — thường là <code>never</code> — và chẳng ai kêu ca cho tới khi có người thử gán một giá trị.</span></div>
+<div class="lz-layer"><span class="lz-k">Cùng một xung đột, hai trải nghiệm</span><span class="lz-t">Một cái chỉ vào nguyên nhân</span><span class="lz-d"><code>extends</code> gọi tên interface có lỗi; <code>&amp;</code> gọi tên chỗ gọi vô tội với "Type 'string' is not assignable to type 'never'".</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một phép giao âm thầm rút gọn thành <code>never</code>.</strong> <code>type A = { id: string }; type B = { id: number }; type C = A &amp; B;</code> biên dịch không một lời. <code>C['id']</code> là <code>string &amp; number</code>, tức là <code>never</code> — nên <code>C</code> là kiểu mà không object nào thoả nổi. Bạn phát hiện ra sau đó ở một chỗ dựng object: <em>Type 'string' is not assignable to type 'never'</em>, chỉ vào đoạn mã hoàn toàn đúng cách chỗ sai hàng trăm dòng. Khi đang ghép các dáng object và muốn xung đột thành lỗi, hãy dùng <code>interface … extends</code>: nó báo TS2430 ngay trên khai báo.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: kết hợp kiểu trên Code Lab</span><span class="lc-sub">Dựng kiểu từ những mảnh tái dùng sau chương này.</span></span>
@@ -360,6 +422,14 @@ s.chem = <span class="tok-string">'A'</span>;</code></pre>
   <div class="kv"><span class="k">A fixed named shape</span><span class="v">A plain <code>interface</code> — when you know the exact property names and they differ in type.</span></div>
 </div>
 <div class="note-ct">This site uses <code>Record&lt;string, ...&gt;</code> style maps for genuine lookups (caches, counts by key) and reserves fixed interfaces for entities. The <code>Record&lt;Status, number&gt;</code> pattern — a count per known status — is exactly how a dashboard tallies content, and the compiler guarantees no status is silently forgotten.</div>
+<h3>Index signature vs Record — same idea, different reach</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">[k: string]: T</span><span class="lz-t">Any key, unknown set</span><span class="lz-d">Reading <code>obj.anything</code> type-checks and returns <code>T</code>. Correct for genuinely open dictionaries — a header bag, a parsed query string.</span></div>
+<div class="lz-node"><span class="lz-k">Record&lt;string, T&gt;</span><span class="lz-t">The same thing, spelled shorter</span><span class="lz-d">Desugars to an index signature. Preferred because it composes: it is a type alias, so it can be mapped and intersected.</span></div>
+<div class="lz-node"><span class="lz-k">Record&lt;'a' | 'b', T&gt;</span><span class="lz-t">A closed set of keys</span><span class="lz-d">Now the compiler knows every key. Missing one is an error, and a typo'd key is an error — neither of which an open index signature can catch.</span></div>
+<div class="lz-node"><span class="lz-k">noUncheckedIndexedAccess</span><span class="lz-t">Makes lookups honest</span><span class="lz-d">Turns <code>T</code> into <code>T | undefined</code> for index reads, forcing the check that reflects what the dictionary actually promises.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an index signature promises every key exists.</strong> With <code>const counts: Record&lt;string, number&gt; = {}</code>, the expression <code>counts.missing</code> has type <code>number</code>, not <code>number | undefined</code>. So <code>counts.missing + 1</code> compiles clean and evaluates to <code>NaN</code> at runtime, and the <code>NaN</code> then propagates silently through every arithmetic step downstream. The type said "number" because an index signature describes what a key would hold <em>if</em> it were there, not whether it is. Two fixes: turn on <code>noUncheckedIndexedAccess</code> so the read is <code>number | undefined</code>, or close the key set with <code>Record&lt;'a' | 'b', number&gt;</code> so the compiler can prove every key is present.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: index signatures &amp; Record on Code Lab</span><span class="lc-sub">Cement chapter 4 with the matching exercises.</span></span>
@@ -397,6 +467,14 @@ s.chem = <span class="tok-string">'A'</span>;</code></pre>
   <div class="kv"><span class="k">Một dáng cố định có tên</span><span class="v">Một <code>interface</code> thuần — khi bạn biết chính xác các tên thuộc tính và chúng khác kiểu nhau.</span></div>
 </div>
 <div class="note-ct">Site này dùng các map kiểu <code>Record&lt;string, ...&gt;</code> cho các tra cứu thật (cache, đếm theo khoá) và dành interface cố định cho entity. Mẫu <code>Record&lt;Status, number&gt;</code> — một số đếm cho mỗi status đã biết — đúng là cách một dashboard cộng dồn nội dung, và trình biên dịch bảo đảm không status nào bị âm thầm quên.</div>
+<h3>Index signature với Record — cùng ý tưởng, tầm với khác nhau</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">[k: string]: T</span><span class="lz-t">Khoá nào cũng được, tập khoá không biết trước</span><span class="lz-d">Đọc <code>obj.batkycai</code> vẫn qua kiểm kiểu và trả về <code>T</code>. Đúng cho từ điển thật sự mở — một túi header, một query string đã phân tích.</span></div>
+<div class="lz-node"><span class="lz-k">Record&lt;string, T&gt;</span><span class="lz-t">Cùng một thứ, viết gọn hơn</span><span class="lz-d">Rút gọn thành index signature. Được ưa hơn vì nó ghép được: nó là type alias, nên map và giao được.</span></div>
+<div class="lz-node"><span class="lz-k">Record&lt;'a' | 'b', T&gt;</span><span class="lz-t">Một tập khoá đóng</span><span class="lz-d">Giờ trình biên dịch biết mọi khoá. Thiếu một cái là lỗi, gõ nhầm một khoá là lỗi — index signature mở không bắt được cái nào trong hai.</span></div>
+<div class="lz-node"><span class="lz-k">noUncheckedIndexedAccess</span><span class="lz-t">Bắt phép tra khoá nói thật</span><span class="lz-d">Biến <code>T</code> thành <code>T | undefined</code> khi đọc theo chỉ mục, ép bạn kiểm đúng thứ mà từ điển thật sự hứa hẹn.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — index signature hứa rằng khoá nào cũng tồn tại.</strong> Với <code>const counts: Record&lt;string, number&gt; = {}</code>, biểu thức <code>counts.missing</code> có kiểu <code>number</code>, không phải <code>number | undefined</code>. Nên <code>counts.missing + 1</code> biên dịch sạch và cho ra <code>NaN</code> lúc chạy, rồi cái <code>NaN</code> đó lan âm thầm qua mọi phép tính phía sau. Kiểu nói "number" vì index signature mô tả một khoá sẽ chứa gì <em>nếu</em> nó có ở đó, chứ không phải nó có hay không. Hai cách chữa: bật <code>noUncheckedIndexedAccess</code> để phép đọc thành <code>number | undefined</code>, hoặc đóng tập khoá bằng <code>Record&lt;'a' | 'b', number&gt;</code> để trình biên dịch chứng minh được mọi khoá đều có.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: index signature &amp; Record trên Code Lab</span><span class="lc-sub">Củng cố chương 4 bằng các bài tập tương ứng.</span></span>

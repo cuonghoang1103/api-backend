@@ -48,6 +48,24 @@ export default {
 <p><strong>You do not have to choose only one.</strong> A real app often uses Tailwind for components plus a small global stylesheet for CSS variables and base styles. That is exactly the mix the theming lessons below rely on.</p>
 </div>
 
+<h3>The styling options, and what each costs</h3>
+<div class="lz-map">
+  <div class="lz-stage">Pick by how the styles are scoped and when they load</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Tailwind utilities</div><div class="lz-nsub">Classes in the markup. No naming, no dead CSS, and the styles for a component travel with it. The cost is verbose class strings.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">CSS Modules</div><div class="lz-nsub">&#96;styles.card&#96; from a &#96;.module.css&#96; file. Real CSS with local scoping — good when you want the cascade back.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Global CSS</div><div class="lz-nsub">One file, imported in the root layout. For resets, fonts and CSS variables; not for component styling.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">CSS-in-JS</div><div class="lz-nsub">Runtime libraries need &#96;&#39;use client&#39;&#96;, which pulls the component into the bundle. Prefer a zero-runtime option in the App Router.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — building a class name from a variable, so Tailwind never generates it.</strong> &#96;className={&#96;text-\${color}-500&#96;}&#96; produces &#96;text-red-500&#96; at runtime and nothing at build time: Tailwind scans your source as plain text and only keeps classes it can literally see, so that class was never written into the CSS file. The element renders with no colour at all, and nothing errors — the class is in the DOM, it just does not exist in the stylesheet. Write the complete class names out (a lookup object mapping &#96;red&#96; to &#96;&#39;text-red-500&#39;&#96;), or add them to the safelist. This is the single most common Tailwind bug.</p></div>
+<a class="link-card dl" href="https://tailwindcss.com/docs/content-configuration#dynamic-class-names" target="_blank" rel="noopener">
+  <span class="lc-ico">🚨</span>
+  <span class="lc-body"><span class="lc-title">tailwindcss.com — Dynamic class names</span><span class="lc-sub">The official warning about this exact trap, with the recommended pattern.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/styling" target="_blank" rel="noopener">
+  <span class="lc-ico">🎨</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Styling</span><span class="lc-sub">Every supported approach, with the App Router caveats for each.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/styling" target="_blank" rel="noopener">
   <span class="lc-ico">🎨</span>
@@ -84,6 +102,24 @@ export default {
 <div class="callout ok">
 <p><strong>Bạn không buộc phải chọn chỉ một.</strong> App thật thường dùng Tailwind cho component cộng một stylesheet toàn cục nhỏ cho CSS variables và style nền. Đó chính là sự pha trộn mà các bài theme bên dưới dựa vào.</p>
 </div>
+
+<h3>Các lựa chọn tô kiểu, và mỗi cái tốn gì</h3>
+<div class="lz-map">
+  <div class="lz-stage">Chọn theo cách style được giới hạn phạm vi và thời điểm nó tải</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Utility của Tailwind</div><div class="lz-nsub">Class viết thẳng trong markup. Không phải đặt tên, không có CSS chết, và style của một component đi theo component đó. Cái giá là những chuỗi class dài dòng.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">CSS Modules</div><div class="lz-nsub">&#96;styles.card&#96; lấy từ một file &#96;.module.css&#96;. CSS thật với phạm vi cục bộ — tốt khi bạn muốn lấy lại phép đổ tầng.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">CSS toàn cục</div><div class="lz-nsub">Một file, import trong layout gốc. Dành cho reset, font và biến CSS; không dành để tô component.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">CSS-in-JS</div><div class="lz-nsub">Các thư viện chạy lúc runtime cần &#96;&#39;use client&#39;&#96;, thứ kéo component vào gói. Trong App Router hãy ưu tiên loại không có runtime.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — ghép tên class từ một biến, và Tailwind chẳng bao giờ sinh ra nó.</strong> &#96;className={&#96;text-\${color}-500&#96;}&#96; cho ra &#96;text-red-500&#96; lúc chạy và cho ra con số không lúc build: Tailwind quét mã nguồn của bạn như chữ thuần và chỉ giữ những class nó nhìn thấy nguyên văn, nên cái class đó chưa từng được viết vào file CSS. Phần tử vẽ ra chẳng có màu gì cả, mà chẳng lỗi nào — class có trong DOM, chỉ là nó không tồn tại trong bảng kiểu. Hãy viết trọn vẹn các tên class ra (một object tra cứu ánh xạ &#96;red&#96; sang &#96;&#39;text-red-500&#39;&#96;), hoặc thêm chúng vào safelist. Đây là lỗi Tailwind phổ biến nhất.</p></div>
+<a class="link-card dl" href="https://tailwindcss.com/docs/content-configuration#dynamic-class-names" target="_blank" rel="noopener">
+  <span class="lc-ico">🚨</span>
+  <span class="lc-body"><span class="lc-title">tailwindcss.com — Tên class động</span><span class="lc-sub">Cảnh báo chính thức về đúng cái bẫy này, kèm mẫu được khuyến nghị.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/styling" target="_blank" rel="noopener">
+  <span class="lc-ico">🎨</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Tô kiểu</span><span class="lc-sub">Mọi cách được hỗ trợ, kèm lưu ý riêng của App Router cho từng cách.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/styling" target="_blank" rel="noopener">
@@ -127,6 +163,23 @@ export default {
 <pre><code>&lt;button class={cn('rounded px-4 py-2', isActive &amp;&amp; 'bg-blue-600 text-white')}&gt;</code></pre>
 <p><code>tailwind-merge</code> also fixes the "last one wins" problem: <code>cn('p-2', 'p-4')</code> yields <code>p-4</code>, not both. You will use this <code>cn</code> pattern in almost every component.</p>
 
+<h3>Reading a Tailwind class string</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Utilities map one to one</b> — &#96;p-4&#96; is &#96;padding: 1rem&#96;. Once you know the scale, you read CSS directly out of the markup.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>The scale is the point</b> — &#96;p-2 p-4 p-6&#96; instead of &#96;12px 16px 18px&#96;. Constraints are what keep a design consistent across people.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Prefixes are conditions</b> — &#96;md:flex&#96;, &#96;hover:bg-blue-600&#96;, &#96;dark:text-white&#96;. Each is a media query or a selector, applied to that one utility.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Mobile first</b> — An unprefixed class applies everywhere; &#96;md:&#96; means &quot;from medium up&quot;. There is no &quot;below md&quot; prefix, by design.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — two conflicting utilities on one element, where the winner is decided by the stylesheet, not by your order.</strong> &#96;className="p-4 p-2"&#96; does not apply &#96;p-2&#96; because it is written last — CSS does not care about class attribute order. The winner is whichever rule appears later in the generated stylesheet, which is Tailwind&#39;s internal order and not something you control. It bites hardest when merging props: a base component with &#96;p-4&#96; and a caller passing &#96;p-2&#96; produce an unpredictable result that may differ between builds. Use &#96;tailwind-merge&#96; to resolve conflicts intentionally, and keep one source of truth for each property.</p></div>
+<a class="link-card dl" href="https://tailwindcss.com/docs/utility-first" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">tailwindcss.com — Utility-first fundamentals</span><span class="lc-sub">Why the approach works, and the objections it answers.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/dcastil/tailwind-merge" target="_blank" rel="noopener">
+  <span class="lc-ico">🔀</span>
+  <span class="lc-body"><span class="lc-title">tailwind-merge</span><span class="lc-sub">Resolving conflicting utilities predictably — the standard fix for component props.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://tailwindcss.com/docs/styling-with-utility-classes" target="_blank" rel="noopener">
   <span class="lc-ico">🧰</span>
@@ -154,6 +207,23 @@ export default {
 <p>Bạn thường bật/tắt class theo state. Ghép chuỗi bằng tay xấu đi rất nhanh; một hàm nhỏ (thường tên <code>cn</code>, bọc <code>clsx</code> + <code>tailwind-merge</code>) giữ gọn và xử lý xung đột:</p>
 <pre><code>&lt;button class={cn('rounded px-4 py-2', isActive &amp;&amp; 'bg-blue-600 text-white')}&gt;</code></pre>
 <p><code>tailwind-merge</code> còn sửa vấn đề "cái cuối thắng": <code>cn('p-2', 'p-4')</code> ra <code>p-4</code>, không phải cả hai. Bạn sẽ dùng mẫu <code>cn</code> này ở gần như mọi component.</p>
+
+<h3>Đọc một chuỗi class Tailwind</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Utility ánh xạ một-đối-một</b> — &#96;p-4&#96; là &#96;padding: 1rem&#96;. Nắm được cái thang rồi thì bạn đọc thẳng CSS ra từ markup.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Chính cái thang mới là mục đích</b> — &#96;p-2 p-4 p-6&#96; thay vì &#96;12px 16px 18px&#96;. Ràng buộc mới là thứ giữ cho một thiết kế nhất quán giữa nhiều người.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Tiền tố là các điều kiện</b> — &#96;md:flex&#96;, &#96;hover:bg-blue-600&#96;, &#96;dark:text-white&#96;. Mỗi cái là một media query hoặc một bộ chọn, áp cho đúng utility đó.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Ưu tiên điện thoại trước</b> — Một class không tiền tố áp ở mọi nơi; &#96;md:&#96; nghĩa là &quot;từ cỡ vừa trở lên&quot;. Không có tiền tố &quot;dưới md&quot;, và đó là chủ đích.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — hai utility xung đột trên cùng một phần tử, mà kẻ thắng do bảng kiểu quyết định chứ không do thứ tự bạn viết.</strong> &#96;className="p-4 p-2"&#96; KHÔNG áp &#96;p-2&#96; chỉ vì nó viết sau — CSS chẳng quan tâm thứ tự trong thuộc tính class. Kẻ thắng là luật nào xuất hiện sau hơn trong bảng kiểu được sinh ra, tức là thứ tự nội bộ của Tailwind chứ không phải thứ bạn điều khiển. Nó cắn đau nhất khi trộn props: một component nền có &#96;p-4&#96; và một chỗ gọi truyền &#96;p-2&#96; cho ra một kết quả không đoán được, thậm chí khác nhau giữa các lần build. Hãy dùng &#96;tailwind-merge&#96; để giải xung đột một cách có chủ đích, và giữ một nguồn sự thật duy nhất cho mỗi thuộc tính.</p></div>
+<a class="link-card dl" href="https://tailwindcss.com/docs/utility-first" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">tailwindcss.com — Nền tảng utility-first</span><span class="lc-sub">Vì sao cách tiếp cận này chạy được, và nó trả lời những phản đối nào.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/dcastil/tailwind-merge" target="_blank" rel="noopener">
+  <span class="lc-ico">🔀</span>
+  <span class="lc-body"><span class="lc-title">tailwind-merge</span><span class="lc-sub">Giải xung đột utility một cách đoán được — cách chữa tiêu chuẩn cho props của component.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://tailwindcss.com/docs/styling-with-utility-classes" target="_blank" rel="noopener">
@@ -195,6 +265,23 @@ export default {
 <p><strong>Because the class isn't on the server render, you will see a hydration warning</strong> on the element you mutate before hydration (usually <code>&lt;html&gt;</code>). That is expected here; the standard fix is <code>suppressHydrationWarning</code> on that element. It is one of the few legitimate uses of that escape hatch.</p>
 </div>
 
+<h3>Dark mode without a flash</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Put the class on html</b> — &#96;darkMode: &#39;class&#39;&#96; in the config, and &#96;&lt;html class="dark"&gt;&#96;. Every &#96;dark:&#96; utility keys off that one class.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Read the preference before paint</b> — A tiny inline script in the root layout sets the class from &#96;localStorage&#96; or &#96;prefers-color-scheme&#96; before the body renders.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Then hydrate the toggle</b> — A Client Component reads the current state and writes both the class and the stored preference.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Three states, not two</b> — Light, dark, and &quot;follow the system&quot;. The third is what most users actually want, and it needs storing as its own value.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a flash of the wrong theme on every page load.</strong> Setting the theme in a &#96;useEffect&#96; means the server rendered the light page, the browser painted it, and only then did your code add the &#96;dark&#96; class — so every navigation starts with a white flash on a dark-mode site. It is not a bug you can fix with a faster effect: effects run after paint, by definition. The answer is a blocking inline &#96;&lt;script&gt;&#96; in the root layout that sets the class before the body exists. It is one of the few legitimate uses of an inline script in a React app, and every theme library ships one.</p></div>
+<a class="link-card dl" href="https://tailwindcss.com/docs/dark-mode" target="_blank" rel="noopener">
+  <span class="lc-ico">🌗</span>
+  <span class="lc-body"><span class="lc-title">tailwindcss.com — Dark mode</span><span class="lc-sub">The class strategy, the media strategy, and the three-state toggle.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/pacocoursey/next-themes" target="_blank" rel="noopener">
+  <span class="lc-ico">🎚️</span>
+  <span class="lc-body"><span class="lc-title">next-themes</span><span class="lc-sub">The library that solves the flash and the three states, for the App Router.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://tailwindcss.com/docs/dark-mode" target="_blank" rel="noopener">
   <span class="lc-ico">🌓</span>
@@ -228,6 +315,23 @@ export default {
 <div class="callout warn">
 <p><strong>Vì class không có trên bản render của server, bạn sẽ thấy một cảnh báo hydration</strong> ở phần tử bạn sửa trước hydration (thường là <code>&lt;html&gt;</code>). Ở đây điều đó là bình thường; cách sửa chuẩn là <code>suppressHydrationWarning</code> trên phần tử đó. Đây là một trong số ít lần dùng cửa thoát đó là chính đáng.</p>
 </div>
+
+<h3>Chế độ tối mà không bị chớp sáng</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Đặt class lên thẻ html</b> — &#96;darkMode: &#39;class&#39;&#96; trong cấu hình, và &#96;&lt;html class="dark"&gt;&#96;. Mọi utility &#96;dark:&#96; đều bám vào đúng cái class đó.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Đọc lựa chọn TRƯỚC khi vẽ</b> — Một script nội tuyến bé xíu trong layout gốc đặt class từ &#96;localStorage&#96; hoặc &#96;prefers-color-scheme&#96; trước khi thẻ body được vẽ.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Rồi mới hydrate cái công tắc</b> — Một Client Component đọc trạng thái hiện tại rồi ghi cả cái class lẫn lựa chọn đã lưu.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Ba trạng thái, không phải hai</b> — Sáng, tối, và &quot;theo hệ thống&quot;. Cái thứ ba mới là thứ phần lớn người dùng thật sự muốn, và nó cần được lưu thành một giá trị riêng.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một cú chớp sai chủ đề ở mỗi lần tải trang.</strong> Đặt chủ đề trong một &#96;useEffect&#96; nghĩa là máy chủ đã vẽ trang sáng, trình duyệt đã vẽ nó ra, rồi mã của bạn mới thêm class &#96;dark&#96; vào — nên mọi lần chuyển trang đều bắt đầu bằng một cú chớp trắng trên một trang chế độ tối. Đây không phải lỗi chữa được bằng một effect nhanh hơn: effect chạy SAU khi vẽ, theo định nghĩa. Câu trả lời là một thẻ &#96;&lt;script&gt;&#96; nội tuyến chặn luồng trong layout gốc, đặt class trước khi thẻ body tồn tại. Đó là một trong số ít lần dùng script nội tuyến chính đáng trong một ứng dụng React, và thư viện chủ đề nào cũng ship một cái.</p></div>
+<a class="link-card dl" href="https://tailwindcss.com/docs/dark-mode" target="_blank" rel="noopener">
+  <span class="lc-ico">🌗</span>
+  <span class="lc-body"><span class="lc-title">tailwindcss.com — Chế độ tối</span><span class="lc-sub">Chiến lược dùng class, chiến lược dùng media, và công tắc ba trạng thái.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/pacocoursey/next-themes" target="_blank" rel="noopener">
+  <span class="lc-ico">🎚️</span>
+  <span class="lc-body"><span class="lc-title">next-themes</span><span class="lc-sub">Thư viện giải quyết cú chớp và ba trạng thái, cho App Router.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://tailwindcss.com/docs/dark-mode" target="_blank" rel="noopener">
@@ -271,6 +375,23 @@ html.theme-brown { --text-primary: #f3e9d8; --surface: #2b211a; }
 <h3>Semantic names beat literal ones</h3>
 <p>Name variables by <em>role</em> — <code>--text-primary</code>, <code>--surface</code>, <code>--border</code> — not by colour (<code>--gray-900</code>). A role survives a redesign; a literal colour name becomes a lie the moment the palette changes. This is the same tokens idea Tailwind ships, applied to your own multi-theme setup.</p>
 
+<h3>Theming with CSS variables</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Define tokens on :root</b> — &#96;--bg&#96;, &#96;--fg&#96;, &#96;--accent&#96;. Names describe the role, not the colour — &#96;--danger&#96;, never &#96;--red&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Redefine them per theme</b> — &#96;.dark { --bg: #0b0b0c }&#96;. One block per theme, and every component follows without knowing themes exist.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Wire them into Tailwind</b> — &#96;colors: { bg: &#39;var(--bg)&#39; }&#96; in the config, so &#96;bg-bg&#96; and &#96;text-fg&#96; resolve through the variables.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Then a third theme is one block</b> — Adding brown or high-contrast means adding variable values, not touching a single component.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a token named after its colour, which becomes a lie in the second theme.</strong> &#96;--gray-100&#96; used for card backgrounds reads fine in light mode and becomes nonsense in dark, where that background is nearly black; six months later there is a &#96;--gray-100: #1a1a1a&#96; line that every new reader has to decode. Worse, the name gives no clue about where it may be used, so it spreads into places a redesign then cannot change safely. Name by role — &#96;--surface&#96;, &#96;--surface-raised&#96;, &#96;--border-subtle&#96; — and the theme file stays readable and the components stay theme-agnostic.</p></div>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties" target="_blank" rel="noopener">
+  <span class="lc-ico">🎛️</span>
+  <span class="lc-body"><span class="lc-title">MDN — Using CSS custom properties</span><span class="lc-sub">Scope, inheritance and fallbacks — the mechanics behind the pattern.</span></span>
+</a>
+<a class="link-card dl" href="https://tailwindcss.com/docs/customizing-colors#using-css-variables" target="_blank" rel="noopener">
+  <span class="lc-ico">🎨</span>
+  <span class="lc-body"><span class="lc-title">tailwindcss.com — Colors from CSS variables</span><span class="lc-sub">Wiring variables into the Tailwind palette so utilities follow the theme.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties" target="_blank" rel="noopener">
   <span class="lc-ico">🎚️</span>
@@ -298,6 +419,23 @@ html.theme-brown { --text-primary: #f3e9d8; --surface: #2b211a; }
 
 <h3>Tên ngữ nghĩa hơn tên chữ đen</h3>
 <p>Đặt tên biến theo <em>vai trò</em> — <code>--text-primary</code>, <code>--surface</code>, <code>--border</code> — không theo màu (<code>--gray-900</code>). Một vai trò sống sót qua một lần thiết kế lại; một tên màu chữ đen thành lời nói dối ngay khi bảng màu đổi. Đây là cùng ý tưởng tokens Tailwind kèm sẵn, áp cho bộ nhiều theme của chính bạn.</p>
+
+<h3>Làm chủ đề bằng biến CSS</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Khai các token trên :root</b> — &#96;--bg&#96;, &#96;--fg&#96;, &#96;--accent&#96;. Tên mô tả VAI TRÒ, không mô tả màu — &#96;--danger&#96;, đừng bao giờ &#96;--red&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Khai lại chúng theo từng chủ đề</b> — &#96;.dark { --bg: #0b0b0c }&#96;. Mỗi chủ đề một khối, và mọi component đi theo mà chẳng cần biết là có chủ đề tồn tại.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Đấu chúng vào Tailwind</b> — &#96;colors: { bg: &#39;var(--bg)&#39; }&#96; trong cấu hình, để &#96;bg-bg&#96; và &#96;text-fg&#96; giải qua các biến.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Rồi chủ đề thứ ba chỉ là một khối</b> — Thêm màu nâu hay chế độ tương phản cao nghĩa là thêm giá trị biến, chứ không đụng vào một component nào.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một token đặt tên theo màu của nó, và cái tên đó thành lời nói dối ở chủ đề thứ hai.</strong> &#96;--gray-100&#96; dùng làm nền thẻ thì đọc lên rất ổn ở chế độ sáng và thành vô nghĩa ở chế độ tối, nơi cái nền ấy gần như đen; sáu tháng sau có một dòng &#96;--gray-100: #1a1a1a&#96; mà mọi người đọc mới đều phải giải mã. Tệ hơn, cái tên chẳng gợi ý gì về chỗ được phép dùng nó, nên nó lan vào những nơi mà một lần thiết kế lại sau này không đổi an toàn được. Hãy đặt tên theo vai trò — &#96;--surface&#96;, &#96;--surface-raised&#96;, &#96;--border-subtle&#96; — thế thì file chủ đề vẫn đọc được và các component vẫn không dính gì tới chủ đề.</p></div>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties" target="_blank" rel="noopener">
+  <span class="lc-ico">🎛️</span>
+  <span class="lc-body"><span class="lc-title">MDN — Dùng biến CSS tuỳ chỉnh</span><span class="lc-sub">Phạm vi, kế thừa và giá trị dự phòng — cơ chế đằng sau cái mẫu này.</span></span>
+</a>
+<a class="link-card dl" href="https://tailwindcss.com/docs/customizing-colors#using-css-variables" target="_blank" rel="noopener">
+  <span class="lc-ico">🎨</span>
+  <span class="lc-body"><span class="lc-title">tailwindcss.com — Màu lấy từ biến CSS</span><span class="lc-sub">Đấu biến vào bảng màu Tailwind để các utility đi theo chủ đề.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties" target="_blank" rel="noopener">
@@ -340,6 +478,24 @@ html.theme-brown { --text-primary: #f3e9d8; --surface: #2b211a; }
 <p><strong>How to catch it:</strong> test every screen in <em>both</em> themes, not just the one you built in. Most theme bugs are invisible in the theme you developed in and only appear when you flip. A quick light/dark toggle pass before shipping catches the whole class of "unreadable in the other theme" problems.</p>
 </div>
 
+<h3>Keeping a design consistent as the app grows</h3>
+<div class="lz-map">
+  <div class="lz-stage">Constraints beat discipline</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Use the scale, not arbitrary values</div><div class="lz-nsub">&#96;p-4&#96; rather than &#96;p-[17px]&#96;. Every escape hatch is a value nobody else will reuse.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Extract a component, not a class string</div><div class="lz-nsub">Copy-pasted class strings drift. A &#96;&lt;Button variant=&quot;danger&quot;&gt;&#96; changes in one place.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Check contrast when you pick colours</div><div class="lz-nsub">4.5:1 for body text. A palette that fails is invisible on your monitor and unreadable on a phone in sunlight.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Test both themes on every screen</div><div class="lz-nsub">A colour that reads well on white can vanish on near-black. This is a per-screen check, not a per-token one.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — hard-coded colours that ignore the theme entirely.</strong> &#96;className="bg-white text-gray-900"&#96; is invisible in light mode and unreadable in dark: the card stays white while everything around it turns near-black. It happens most often in a component copied from an example, and it survives review because the screenshot in the PR was taken in light mode. The mechanical fix is to ban raw colour utilities in components and use the role tokens instead (&#96;bg-surface text-fg&#96;), so a component cannot opt out of the theme by accident. Then switching themes on any screen is a real test rather than a spot check.</p></div>
+<a class="link-card dl" href="https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔍</span>
+  <span class="lc-body"><span class="lc-title">W3C — Contrast minimum</span><span class="lc-sub">What 4.5:1 means and which text sizes are exempt.</span></span>
+</a>
+<a class="link-card dl" href="https://tailwindcss.com/docs/theme" target="_blank" rel="noopener">
+  <span class="lc-ico">📐</span>
+  <span class="lc-body"><span class="lc-title">tailwindcss.com — Theme configuration</span><span class="lc-sub">Extending the scale properly, instead of reaching for arbitrary values.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://cva.style/docs" target="_blank" rel="noopener">
   <span class="lc-ico">🧬</span>
@@ -370,6 +526,24 @@ html.theme-brown { --text-primary: #f3e9d8; --surface: #2b211a; }
 <div class="callout ok">
 <p><strong>Cách bắt nó:</strong> test mọi màn ở <em>cả hai</em> theme, không chỉ cái bạn dựng bằng. Đa số bug theme vô hình ở theme bạn phát triển và chỉ hiện khi lật. Một lượt toggle sáng/tối nhanh trước khi ship bắt trọn loại lỗi "không đọc được ở theme kia".</p>
 </div>
+
+<h3>Giữ một thiết kế nhất quán khi ứng dụng lớn lên</h3>
+<div class="lz-map">
+  <div class="lz-stage">Ràng buộc thắng kỷ luật</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Dùng cái thang, đừng dùng giá trị tuỳ tiện</div><div class="lz-nsub">&#96;p-4&#96; chứ đừng &#96;p-[17px]&#96;. Mỗi cửa thoát là một giá trị chẳng ai khác dùng lại.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Hãy rút ra một component, đừng rút ra một chuỗi class</div><div class="lz-nsub">Chuỗi class chép-dán sẽ trôi dạt. Một &#96;&lt;Button variant=&quot;danger&quot;&gt;&#96; thì đổi ở một chỗ.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Kiểm tương phản ngay khi chọn màu</div><div class="lz-nsub">4,5:1 cho chữ thân bài. Một bảng màu trượt chuẩn thì vô hình trên màn hình của bạn và không đọc nổi trên điện thoại ngoài nắng.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Thử cả hai chủ đề trên MỌI màn hình</div><div class="lz-nsub">Một màu đọc tốt trên nền trắng có thể biến mất trên nền gần đen. Đây là phép kiểm theo từng màn hình, không phải theo từng token.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — màu viết cứng, lờ hẳn chủ đề đi.</strong> &#96;className="bg-white text-gray-900"&#96; thì vô hình ở chế độ sáng và không đọc nổi ở chế độ tối: cái thẻ vẫn trắng trong khi mọi thứ quanh nó chuyển sang gần đen. Nó hay xảy ra nhất ở một component chép từ một ví dụ, và nó sống sót qua review vì tấm ảnh chụp trong PR được chụp ở chế độ sáng. Cách chữa máy móc là cấm các utility màu thô trong component và dùng token vai trò thay thế (&#96;bg-surface text-fg&#96;), để một component không thể vô tình thoát khỏi chủ đề. Khi đó việc đổi chủ đề trên bất kỳ màn hình nào mới là một phép thử thật chứ không phải một cú kiểm ngẫu nhiên.</p></div>
+<a class="link-card dl" href="https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔍</span>
+  <span class="lc-body"><span class="lc-title">W3C — Tương phản tối thiểu</span><span class="lc-sub">4,5:1 nghĩa là gì và cỡ chữ nào được miễn.</span></span>
+</a>
+<a class="link-card dl" href="https://tailwindcss.com/docs/theme" target="_blank" rel="noopener">
+  <span class="lc-ico">📐</span>
+  <span class="lc-body"><span class="lc-title">tailwindcss.com — Cấu hình chủ đề</span><span class="lc-sub">Mở rộng cái thang cho đúng cách, thay vì với tay lấy giá trị tuỳ tiện.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://cva.style/docs" target="_blank" rel="noopener">

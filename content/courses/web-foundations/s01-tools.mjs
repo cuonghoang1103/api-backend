@@ -53,6 +53,26 @@ rm copy.html            # delete a file — no undo, be careful!</code></pre>
 <p><strong>Tab</strong> auto-completes a file or folder name — type <code>cd my-</code> then Tab. <strong>Up arrow</strong> recalls your previous commands so you do not retype them.</p>
 
 <p class="note-ct"><strong>Try it now:</strong> make a folder, cd into it, create a file, list it, then delete it. Muscle memory for this pays back every single day.</p>
+<h3>Reading a path the way the shell reads it</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Does it start with / ?</span><span class="lz-d">Then it is absolute — the shell starts at the root of the disk and ignores where you currently are. <code>/Users/binh/site</code> means the same thing typed from anywhere.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Does it start with ~ ?</span><span class="lz-d">The shell expands <code>~</code> to your home folder before doing anything else. <code>~/site</code> is really <code>/Users/binh/site</code> — absolute, just typed shorter.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Anything else is relative</span><span class="lz-d">It is glued onto your current folder. <code>src/app.js</code>, <code>./src/app.js</code> and <code>../other/app.js</code> all mean different files depending on where <code>pwd</code> says you are.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So pwd is the missing half of every relative path</span><span class="lz-d">When a command says "no such file" and you can see the file, run <code>pwd</code>. You are almost certainly in a different folder than you think.</span></div>
+</div>
+<pre><code>pwd
+ls
+cd src
+pwd
+cat app.js          # print a file's contents
+cd ..               # back up one level</code></pre>
+<div class="out">/Users/binh/site
+index.html  src  package.json
+/Users/binh/site/src
+console.log('hello');</div>
+<div class="pitfall"><p><strong>Trap — a space in a folder name breaks the command in a way the error does not explain.</strong> <code>cd My Project</code> does not try to enter "My Project"; the shell splits on spaces, so it sees two arguments and tries to enter a folder called <code>My</code>. The error is "no such file or directory: My" — a folder you never mentioned, which is exactly why beginners stare at it. Quote the path (<code>cd "My Project"</code>) or escape the space (<code>cd My\\ Project</code>). Better: avoid spaces in every folder that will hold code. This bites again later in npm scripts and in file paths inside your programs.</p></div>
+<div class="link-card"><a href="https://www.learnenough.com/command-line-tutorial" target="_blank" rel="noopener">Learn Enough Command Line to Be Dangerous — a gentle, complete walkthrough</a></div>
+<div class="link-card"><a href="https://explainshell.com/" target="_blank" rel="noopener">explainshell.com — paste any command, see what each flag does</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -90,6 +110,26 @@ rm copy.html            # xoá file — KHÔNG hoàn tác được, cẩn thận
 <p><strong>Tab</strong> tự hoàn thành tên file/thư mục — gõ <code>cd my-</code> rồi bấm Tab. <strong>Mũi tên lên</strong> gọi lại các lệnh trước để khỏi gõ lại.</p>
 
 <p class="note-ct"><strong>Thử ngay:</strong> tạo một thư mục, cd vào, tạo một file, liệt kê nó, rồi xoá đi. Cơ bắp ghi nhớ việc này sẽ trả lãi mỗi ngày.</p>
+<h3>Đọc một đường dẫn theo đúng cách shell đọc</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Nó có bắt đầu bằng / không?</span><span class="lz-d">Thì nó là tuyệt đối — shell bắt đầu từ gốc đĩa và mặc kệ bạn đang ở đâu. <code>/Users/binh/site</code> nghĩa y hệt nhau dù gõ từ đâu.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Nó có bắt đầu bằng ~ không?</span><span class="lz-d">Shell bung <code>~</code> thành thư mục nhà của bạn trước khi làm bất cứ gì khác. <code>~/site</code> thật ra là <code>/Users/binh/site</code> — vẫn tuyệt đối, chỉ gõ ngắn hơn.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Còn lại đều là tương đối</span><span class="lz-d">Nó bị dán vào thư mục hiện tại của bạn. <code>src/app.js</code>, <code>./src/app.js</code> và <code>../other/app.js</code> đều trỏ tới file khác nhau tuỳ theo <code>pwd</code> nói bạn đang ở đâu.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nên pwd là nửa còn thiếu của mọi đường dẫn tương đối</span><span class="lz-d">Khi một lệnh bảo "không có file đó" mà bạn nhìn thấy file rành rành, hãy chạy <code>pwd</code>. Gần như chắc chắn bạn đang ở một thư mục khác chỗ bạn tưởng.</span></div>
+</div>
+<pre><code>pwd
+ls
+cd src
+pwd
+cat app.js          # in nội dung một file
+cd ..               # lùi lên một cấp</code></pre>
+<div class="out">/Users/binh/site
+index.html  src  package.json
+/Users/binh/site/src
+console.log('hello');</div>
+<div class="pitfall"><p><strong>Bẫy — một dấu cách trong tên thư mục làm hỏng lệnh theo cách mà thông báo lỗi không hề giải thích.</strong> <code>cd My Project</code> không hề thử vào "My Project"; shell cắt theo dấu cách, nên nó thấy hai đối số và thử vào một thư mục tên <code>My</code>. Lỗi là "no such file or directory: My" — một thư mục bạn chưa từng nhắc tới, và đó đúng là lý do người mới ngồi nhìn nó trân trân. Hãy bọc đường dẫn trong nháy (<code>cd "My Project"</code>) hoặc thoát dấu cách (<code>cd My\\ Project</code>). Tốt hơn: đừng để dấu cách trong bất cứ thư mục nào sẽ chứa mã. Cái bẫy này còn cắn lại ở npm script và ở đường dẫn file bên trong chương trình của bạn.</p></div>
+<div class="link-card"><a href="https://www.learnenough.com/command-line-tutorial" target="_blank" rel="noopener">Learn Enough Command Line to Be Dangerous — đi từ đầu tới cuối, nhẹ nhàng</a></div>
+<div class="link-card"><a href="https://explainshell.com/" target="_blank" rel="noopener">explainshell.com — dán một lệnh vào, xem từng cờ làm gì</a></div>
 </div>
 `,
     },
@@ -131,6 +171,16 @@ rm copy.html            # xoá file — KHÔNG hoàn tác được, cẩn thận
 </div>
 
 <p class="note-ct"><strong>Do not memorize all of these.</strong> Pick two, use them until they are automatic, then add more. Fluency in your editor is a real productivity multiplier — but it grows slowly and that is fine.</p>
+<h3>The four editor features that actually save time</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Ctrl/Cmd + P</span><span class="lz-t">Jump to any file by name</span><span class="lz-d">Type three letters of the filename instead of clicking through folders. On a real project this replaces the file tree almost entirely.</span></div>
+<div class="lz-node"><span class="lz-k">Ctrl/Cmd + Shift + F</span><span class="lz-t">Search the whole project</span><span class="lz-d">Find every place a function is called before you rename it. This is how you answer "what breaks if I change this?" — the most common real question.</span></div>
+<div class="lz-node"><span class="lz-k">F2 — rename symbol</span><span class="lz-t">Rename everywhere at once</span><span class="lz-d">Unlike find-and-replace, it understands scope: it renames the variable, not every string that happens to match its letters.</span></div>
+<div class="lz-node"><span class="lz-k">Format on save</span><span class="lz-t">Stop arguing with whitespace</span><span class="lz-d">Turn it on once in Settings. Consistent formatting also makes Git diffs readable, because only real changes show up.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — installing twenty extensions in the first week.</strong> Each one adds behaviour you did not choose and cannot attribute: your code reformats itself in a way you did not ask for, an unexpected autocompletion inserts an import from the wrong package, the editor gets slow and you assume that is normal. When something odd happens, you have twenty suspects and no way to tell which. Start with the language extension for what you are writing and a formatter, and add anything else only when you have felt the specific pain it solves. If the editor starts behaving strangely, the first debugging step is to disable extensions and re-enable them one at a time.</p></div>
+<div class="link-card"><a href="https://code.visualstudio.com/docs/getstarted/tips-and-tricks" target="_blank" rel="noopener">VS Code — official tips &amp; tricks</a></div>
+<div class="link-card"><a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf" target="_blank" rel="noopener">Keyboard shortcut cheat sheet (PDF)</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -161,6 +211,16 @@ rm copy.html            # xoá file — KHÔNG hoàn tác được, cẩn thận
 </div>
 
 <p class="note-ct"><strong>Đừng học thuộc hết.</strong> Chọn hai cái, dùng tới khi thành phản xạ, rồi thêm. Thành thạo trình soạn thảo là một cấp số nhân năng suất thật — nhưng nó lớn chậm, và điều đó không sao.</p>
+<h3>Bốn tính năng của trình soạn thảo thật sự tiết kiệm thời gian</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Ctrl/Cmd + P</span><span class="lz-t">Nhảy tới file bất kỳ bằng tên</span><span class="lz-d">Gõ ba chữ cái của tên file thay vì bấm lần qua các thư mục. Trên một dự án thật, cái này gần như thay hẳn cây thư mục.</span></div>
+<div class="lz-node"><span class="lz-k">Ctrl/Cmd + Shift + F</span><span class="lz-t">Tìm khắp dự án</span><span class="lz-d">Tìm mọi chỗ gọi một hàm trước khi bạn đổi tên nó. Đây là cách trả lời "đổi cái này thì hỏng cái gì?" — câu hỏi thật hay gặp nhất.</span></div>
+<div class="lz-node"><span class="lz-k">F2 — đổi tên ký hiệu</span><span class="lz-t">Đổi tên khắp nơi một lượt</span><span class="lz-d">Khác tìm-và-thay, nó hiểu phạm vi: nó đổi tên cái biến, chứ không đổi mọi chuỗi tình cờ trùng chữ.</span></div>
+<div class="lz-node"><span class="lz-k">Format khi lưu</span><span class="lz-t">Thôi cãi nhau với khoảng trắng</span><span class="lz-d">Bật một lần trong Settings. Định dạng nhất quán còn làm các diff Git đọc được, vì chỉ thay đổi thật mới hiện ra.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — cài hai chục extension ngay tuần đầu.</strong> Mỗi cái thêm một hành vi bạn không chọn và không quy trách nhiệm được: mã tự định dạng lại theo kiểu bạn chẳng yêu cầu, một gợi ý tự động bất ngờ chèn import từ sai package, trình soạn thảo chậm đi và bạn tưởng thế là bình thường. Khi có chuyện lạ, bạn có hai chục kẻ tình nghi và không cách nào biết là ai. Hãy bắt đầu với extension của ngôn ngữ bạn đang viết cộng một bộ định dạng, và chỉ thêm thứ khác khi bạn đã thật sự thấy đau vì thiếu nó. Nếu trình soạn thảo bắt đầu cư xử lạ, bước gỡ lỗi đầu tiên là tắt hết extension rồi bật lại từng cái một.</p></div>
+<div class="link-card"><a href="https://code.visualstudio.com/docs/getstarted/tips-and-tricks" target="_blank" rel="noopener">VS Code — mẹo &amp; thủ thuật chính thức</a></div>
+<div class="link-card"><a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf" target="_blank" rel="noopener">Bảng tra phím tắt (PDF)</a></div>
 </div>
 `,
     },
@@ -210,6 +270,24 @@ dist/</code></pre>
 <h3>Branches, in one paragraph</h3>
 <p>A <strong>branch</strong> is a parallel line of commits — a safe place to try a feature without touching the main code. <code>git switch -c new-feature</code> creates and moves to one; when it works, you merge it back into <code>main</code>. For solo learning you can live on <code>main</code>; branches shine when working with others.</p>
 
+<h3>The three places your work can be</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Working directory</span><span class="lz-t">The files you are editing</span><span class="lz-d">What you see in the editor. Git knows they changed but has not recorded anything yet — <code>git status</code> lists them in red.</span></div>
+<div class="lz-layer"><span class="lz-k">Staging area</span><span class="lz-t">What the next commit will contain</span><span class="lz-d"><code>git add</code> puts a file here. This step exists so you can commit three of your five changed files, which is how commits stay small and readable.</span></div>
+<div class="lz-layer"><span class="lz-k">Repository</span><span class="lz-t">The permanent timeline</span><span class="lz-d"><code>git commit</code> writes a snapshot with a message and an author. Once here, the work is recoverable — this is the point of the whole exercise.</span></div>
+<div class="lz-layer"><span class="lz-k">git status answers all three</span><span class="lz-t">Run it constantly</span><span class="lz-d">It tells you what is changed, what is staged, and what branch you are on. There is no such thing as running it too often.</span></div>
+</div>
+<div class="out">$ git status
+On branch main
+Changes to be committed:
+  modified:   index.html
+
+Changes not staged for commit:
+  modified:   src/app.js
+
+Untracked files:
+  notes.txt</div>
+<div class="pitfall"><p><strong>Trap — <code>git add .</code> commits the files you never meant to share.</strong> The dot means "everything here", including a <code>.env</code> with your database password, a 400MB video you were testing with, and the <code>node_modules</code> folder. Two of those are merely annoying; the <code>.env</code> is a real incident, because Git keeps history — deleting the file in a later commit does not remove it from the repository, and if it was pushed, it is public. Write a <code>.gitignore</code> before your first commit (Node projects need at least <code>node_modules/</code> and <code>.env</code>), and read what <code>git status</code> lists before every <code>git add .</code>.</p></div>
 <div class="link-card"><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">Learn Git Branching — interactive visual practice</a></div>
 </div>
 <div class="ml-vi">
@@ -249,6 +327,24 @@ dist/</code></pre>
 <h3>Branch, trong một đoạn</h3>
 <p>Một <strong>branch</strong> là một nhánh commit song song — chỗ an toàn để thử một tính năng mà không đụng mã chính. <code>git switch -c new-feature</code> tạo và chuyển sang một nhánh; khi chạy được, bạn gộp (merge) nó về <code>main</code>. Khi tự học một mình, bạn có thể ở luôn trên <code>main</code>; branch toả sáng khi làm việc nhóm.</p>
 
+<h3>Ba chỗ mà công việc của bạn có thể đang nằm</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Thư mục làm việc</span><span class="lz-t">Những file bạn đang sửa</span><span class="lz-d">Thứ bạn thấy trong trình soạn thảo. Git biết chúng đã đổi nhưng chưa ghi lại gì cả — <code>git status</code> liệt kê chúng màu đỏ.</span></div>
+<div class="lz-layer"><span class="lz-k">Vùng chờ (staging)</span><span class="lz-t">Thứ mà commit kế tiếp sẽ chứa</span><span class="lz-d"><code>git add</code> đặt một file vào đây. Bước này tồn tại để bạn commit được ba trong năm file đã sửa, và đó là cách các commit giữ được nhỏ gọn, dễ đọc.</span></div>
+<div class="lz-layer"><span class="lz-k">Kho (repository)</span><span class="lz-t">Dòng thời gian vĩnh viễn</span><span class="lz-d"><code>git commit</code> ghi một ảnh chụp kèm thông điệp và tác giả. Vào tới đây rồi thì công việc lấy lại được — đó là toàn bộ mục đích của việc này.</span></div>
+<div class="lz-layer"><span class="lz-k">git status trả lời cả ba</span><span class="lz-t">Chạy nó liên tục</span><span class="lz-d">Nó cho biết gì đã đổi, gì đã vào vùng chờ, và bạn đang ở nhánh nào. Không có chuyện chạy nó quá nhiều.</span></div>
+</div>
+<div class="out">$ git status
+On branch main
+Changes to be committed:
+  modified:   index.html
+
+Changes not staged for commit:
+  modified:   src/app.js
+
+Untracked files:
+  notes.txt</div>
+<div class="pitfall"><p><strong>Bẫy — <code>git add .</code> commit luôn những file bạn chẳng bao giờ định chia sẻ.</strong> Dấu chấm nghĩa là "mọi thứ ở đây", gồm cả một file <code>.env</code> chứa mật khẩu cơ sở dữ liệu, một video 400MB bạn đang thử, và cả thư mục <code>node_modules</code>. Hai thứ đầu chỉ phiền; còn <code>.env</code> là một sự cố thật, vì Git giữ lịch sử — xoá file ở một commit sau KHÔNG gỡ nó khỏi kho, và nếu đã push thì nó công khai rồi. Hãy viết <code>.gitignore</code> trước commit đầu tiên (dự án Node cần ít nhất <code>node_modules/</code> và <code>.env</code>), và đọc kỹ những gì <code>git status</code> liệt kê trước mỗi lần <code>git add .</code>.</p></div>
 <div class="link-card"><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">Learn Git Branching — luyện trực quan, tương tác</a></div>
 </div>
 `,
@@ -290,6 +386,15 @@ git push                        # send today's commits to GitHub</code></pre>
 
 <p class="note-ct"><strong>Portfolio tip:</strong> push your practice projects to public GitHub repos with a short README explaining each. Six months from now that is real, browsable proof of what you can do — far more convincing than a line on a CV.</p>
 
+<h3>Local Git and GitHub are two different things</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">git commit is local and instant</span><span class="lz-d">It writes to a <code>.git</code> folder on your own disk. No network involved, and nobody else can see it — you can commit on a plane.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">git push sends commits to GitHub</span><span class="lz-d">Only now does anything leave your machine. "I committed it" and "it is on GitHub" are different claims, and confusing them loses work when a laptop dies.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">git pull brings others' commits down</span><span class="lz-d">Fetches what changed and merges it into your branch. Do it before you start work, not after you have written for three hours.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">GitHub adds the collaboration layer</span><span class="lz-d">Pull requests, issues, review, CI. None of that is Git — it is GitHub's product built on top of Git's timeline.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a repository that is public when you thought it was private.</strong> GitHub asks once, in a small radio button, and the default has changed over the years. A public repo is indexed by search engines within hours and scraped continuously by bots looking for exactly one thing: API keys committed by accident. People have woken up to thousands of dollars of cloud charges from a key pushed the night before. Check the badge next to the repository name — it says Public or Private — before your first push, and if a secret ever does get pushed, rotate the key immediately rather than deleting the commit; assume it was read within minutes.</p></div>
+<div class="link-card"><a href="https://docs.github.com/en/get-started/quickstart/hello-world" target="_blank" rel="noopener">GitHub Hello World — the official 10-minute first repository</a></div>
 <div class="link-card"><a href="https://docs.github.com/en/get-started/quickstart/hello-world" target="_blank" rel="noopener">GitHub — Hello World quickstart</a></div>
 </div>
 <div class="ml-vi">
@@ -320,6 +425,15 @@ git push                        # gửi commit hôm nay lên GitHub</code></pre>
 
 <p class="note-ct"><strong>Mẹo hồ sơ:</strong> hãy push các dự án luyện tập lên repo GitHub công khai kèm một README ngắn giải thích từng cái. Sáu tháng sau đó là bằng chứng thật, xem được về khả năng của bạn — thuyết phục hơn nhiều một dòng trong CV.</p>
 
+<h3>Git ở máy và GitHub là hai thứ khác nhau</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">git commit là cục bộ và tức thì</span><span class="lz-d">Nó ghi vào một thư mục <code>.git</code> trên đĩa của chính bạn. Không dính gì tới mạng, và không ai khác thấy được — bạn commit được cả khi đang trên máy bay.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">git push mới gửi commit lên GitHub</span><span class="lz-d">Chỉ tới lúc này mới có thứ gì rời khỏi máy bạn. "Tôi commit rồi" và "nó có trên GitHub rồi" là hai khẳng định khác nhau, và lẫn lộn chúng là mất việc khi cái laptop chết.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">git pull kéo commit của người khác về</span><span class="lz-d">Lấy phần đã đổi rồi trộn vào nhánh của bạn. Hãy làm trước khi bắt tay vào việc, đừng làm sau khi đã viết ba tiếng.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">GitHub thêm vào tầng cộng tác</span><span class="lz-d">Pull request, issue, review, CI. Không cái nào là Git cả — đó là sản phẩm của GitHub dựng trên dòng thời gian của Git.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một kho công khai trong khi bạn tưởng nó riêng tư.</strong> GitHub hỏi đúng một lần, ở một nút radio bé tí, và giá trị mặc định đã đổi qua nhiều năm. Một kho công khai bị công cụ tìm kiếm lập chỉ mục trong vài giờ và bị bot quét liên tục để tìm đúng một thứ: khoá API lỡ tay commit. Đã có người thức dậy với hàng nghìn đô tiền dịch vụ đám mây từ một cái khoá đẩy lên đêm hôm trước. Hãy kiểm cái nhãn cạnh tên kho — nó ghi Public hay Private — trước lần push đầu tiên, và nếu đã lỡ đẩy một bí mật lên thì hãy đổi khoá ngay lập tức thay vì đi xoá commit; cứ coi như nó đã bị đọc trong vòng vài phút.</p></div>
+<div class="link-card"><a href="https://docs.github.com/en/get-started/quickstart/hello-world" target="_blank" rel="noopener">GitHub Hello World — kho đầu tiên trong 10 phút, chính thức</a></div>
 <div class="link-card"><a href="https://docs.github.com/en/get-started/quickstart/hello-world" target="_blank" rel="noopener">GitHub — Hello World quickstart</a></div>
 </div>
 `,
@@ -373,6 +487,19 @@ npm install              # install everything listed in package.json</code></pre
 
 <p class="note-ct"><strong>Where this leads:</strong> the Node.js course is entirely built on this — Express, Prisma, everything is <code>npm install</code>-ed and launched via a script. And Next.js projects are created and run the exact same way.</p>
 
+<h3>What npm install actually does</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Reads package.json</span><span class="lz-d">The list of packages your project declares it needs, with version ranges like <code>^4.18.0</code> — "4.18.0 or any later 4.x".</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Downloads them, and their dependencies</span><span class="lz-d">Every package has its own dependencies. Four declared packages routinely become three hundred folders in <code>node_modules</code>.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Writes package-lock.json</span><span class="lz-d">The exact version of every single one. This file is what makes your machine and the server install identical code — commit it.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">node_modules is disposable</span><span class="lz-d">Never commit it, never edit inside it. Deleting it and re-running <code>npm install</code> is a legitimate first debugging step.</span></div>
+</div>
+<div class="out">$ npm install express
+
+added 69 packages, and audited 70 packages in 3s
+
+found 0 vulnerabilities</div>
+<div class="pitfall"><p><strong>Trap — <code>npm install</code> can quietly give the server different code than your laptop has.</strong> The <code>^</code> in <code>"express": "^4.18.0"</code> permits any 4.x release, so a deploy three weeks later installs 4.19.2 while you tested on 4.18.0. Usually nothing happens; occasionally a patch release changes behaviour and you get a bug that reproduces on the server and nowhere else — the worst kind to chase. <code>package-lock.json</code> exists exactly to prevent this, but only if you commit it <em>and</em> the deploy uses <code>npm ci</code> (which installs strictly from the lock file) rather than <code>npm install</code>. Check both; the two-word difference is the whole guarantee.</p></div>
 <div class="link-card"><a href="https://docs.npmjs.com/about-npm" target="_blank" rel="noopener">npm — official docs</a></div>
 </div>
 <div class="ml-vi">
@@ -415,6 +542,19 @@ npm install              # cài tất cả những gì liệt kê trong package.
 
 <p class="note-ct"><strong>Điều này dẫn tới đâu:</strong> khoá Node.js hoàn toàn đứng trên nền này — Express, Prisma, mọi thứ đều được <code>npm install</code> và khởi động qua một script. Và dự án Next.js cũng được tạo và chạy y hệt cách này.</p>
 
+<h3>npm install thật ra làm gì</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đọc package.json</span><span class="lz-d">Danh sách các package mà dự án khai là nó cần, kèm khoảng phiên bản kiểu <code>^4.18.0</code> — "4.18.0 hoặc bất kỳ bản 4.x nào mới hơn".</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Tải chúng về, cùng phụ thuộc của chúng</span><span class="lz-d">Mỗi package lại có phụ thuộc riêng. Bốn package khai ra thường thành ba trăm thư mục trong <code>node_modules</code>.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Ghi ra package-lock.json</span><span class="lz-d">Phiên bản chính xác của từng cái một. Chính file này làm máy bạn và máy chủ cài đúng cùng một mã — hãy commit nó.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">node_modules là thứ vứt đi được</span><span class="lz-d">Đừng bao giờ commit nó, đừng bao giờ sửa bên trong nó. Xoá nó rồi chạy lại <code>npm install</code> là một bước gỡ lỗi đầu tiên chính đáng.</span></div>
+</div>
+<div class="out">$ npm install express
+
+added 69 packages, and audited 70 packages in 3s
+
+found 0 vulnerabilities</div>
+<div class="pitfall"><p><strong>Bẫy — <code>npm install</code> có thể lặng lẽ cho máy chủ một mã khác với máy bạn.</strong> Dấu <code>^</code> trong <code>"express": "^4.18.0"</code> cho phép mọi bản 4.x, nên một lần deploy ba tuần sau sẽ cài 4.19.2 trong khi bạn thử trên 4.18.0. Thường thì chẳng sao; thỉnh thoảng một bản vá đổi hành vi và bạn có một lỗi chỉ tái hiện trên máy chủ chứ không ở đâu khác — loại khó đuổi nhất. <code>package-lock.json</code> sinh ra đúng để ngăn chuyện đó, nhưng chỉ khi bạn commit nó <em>và</em> khi deploy dùng <code>npm ci</code> (cài đúng theo file lock) chứ không phải <code>npm install</code>. Hãy kiểm cả hai; khác biệt hai chữ ấy chính là toàn bộ bảo đảm.</p></div>
 <div class="link-card"><a href="https://docs.npmjs.com/about-npm" target="_blank" rel="noopener">npm — tài liệu chính thức</a></div>
 </div>
 `,
@@ -430,10 +570,26 @@ npm install              # cài tất cả những gì liệt kê trong package.
       content: `
 <div class="ml-en"><p class="lead">Ten questions on Chapter 1: terminal navigation, absolute vs relative paths, VS Code, the Git snapshot model, GitHub remotes, and npm/package.json.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> These tools stick only through repetition. Drill real terminal and Git commands on Code Lab until they are muscle memory.</p>
+<h3>The chapter in four points</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Paths</span><span class="lz-t">Absolute vs relative</span><span class="lz-d">A relative path is meaningless without <code>pwd</code>. The same idea returns in <code>import './x.js'</code> and in every <code>src=""</code>.</span></div>
+<div class="lz-node"><span class="lz-k">The editor</span><span class="lz-t">Search and rename, not scrolling</span><span class="lz-d">Ctrl/Cmd+P to reach a file, Shift+F to search the project, F2 to rename a symbol everywhere at once.</span></div>
+<div class="lz-node"><span class="lz-k">Git</span><span class="lz-t">Three places, one command to see them</span><span class="lz-d">Working directory → staging → repository. <code>git status</code> tells you where everything is; run it constantly.</span></div>
+<div class="lz-node"><span class="lz-k">npm</span><span class="lz-t">Two files, one folder</span><span class="lz-d"><code>package.json</code> declares, <code>package-lock.json</code> pins, <code>node_modules</code> is disposable. Commit the first two, never the third.</span></div>
+</div>
+<p class="note-ct"><strong>If a question stumps you</strong>, do not guess — open a terminal and run the command. Every answer in this quiz can be checked in under a minute on your own machine, and checking it is worth more than the point.</p>
 <div class="link-card"><a href="/code-lab/git">Practice on Code Lab → Git track</a></div>
 <div class="link-card"><a href="/code-lab/linux-bash">Practice on Code Lab → Linux &amp; Bash (terminal) track</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 1: di chuyển terminal, đường dẫn tuyệt đối vs tương đối, VS Code, mô hình ảnh chụp của Git, remote GitHub, và npm/package.json.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Mấy công cụ này chỉ thấm qua lặp lại. Hãy luyện lệnh terminal và Git thật ở Code Lab tới khi thành phản xạ.</p>
+<h3>Cả chương trong bốn ý</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Đường dẫn</span><span class="lz-t">Tuyệt đối với tương đối</span><span class="lz-d">Một đường dẫn tương đối là vô nghĩa nếu không có <code>pwd</code>. Cùng ý đó quay lại trong <code>import './x.js'</code> và trong mọi <code>src=""</code>.</span></div>
+<div class="lz-node"><span class="lz-k">Trình soạn thảo</span><span class="lz-t">Tìm và đổi tên, đừng cuộn</span><span class="lz-d">Ctrl/Cmd+P để tới một file, Shift+F để tìm khắp dự án, F2 để đổi tên một ký hiệu ở mọi nơi một lượt.</span></div>
+<div class="lz-node"><span class="lz-k">Git</span><span class="lz-t">Ba chỗ, một lệnh để nhìn cả ba</span><span class="lz-d">Thư mục làm việc → vùng chờ → kho. <code>git status</code> cho biết mọi thứ đang ở đâu; hãy chạy nó liên tục.</span></div>
+<div class="lz-node"><span class="lz-k">npm</span><span class="lz-t">Hai file, một thư mục</span><span class="lz-d"><code>package.json</code> khai báo, <code>package-lock.json</code> ghim, <code>node_modules</code> vứt đi được. Commit hai cái đầu, đừng bao giờ commit cái thứ ba.</span></div>
+</div>
+<p class="note-ct"><strong>Nếu một câu làm bạn bí</strong>, đừng đoán — hãy mở terminal và chạy thử cái lệnh đó. Mọi đáp án trong bài kiểm tra này đều kiểm được dưới một phút trên chính máy bạn, và việc kiểm ấy đáng giá hơn cái điểm.</p>
 <div class="link-card"><a href="/code-lab/git">Luyện tập ở Code Lab → track Git</a></div>
 <div class="link-card"><a href="/code-lab/linux-bash">Luyện tập ở Code Lab → track Linux &amp; Bash (terminal)</a></div></div>
 `,

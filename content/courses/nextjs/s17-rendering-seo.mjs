@@ -47,6 +47,24 @@ export default {
 <p><strong>The good news for you:</strong> Next.js does all four, and you rarely pick one by name. In the App Router you write normal Server Components (Chapter 9) and control the behaviour with the caching choices you already learned in Chapter 10 — the framework then renders statically or dynamically for you. The next lesson shows exactly how it decides.</p>
 </div>
 
+<h3>Four ways a page can be produced</h3>
+<div class="lz-map">
+  <div class="lz-stage">The trade is always freshness against cost</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Static (SSG)</div><div class="lz-nsub">Rendered at build, served as a file. Fastest and cheapest; the content is only as fresh as your last deploy.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Incremental (ISR)</div><div class="lz-nsub">Static, plus a revalidation window. A visitor after the window still gets the cached page while it rebuilds behind them.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Server-rendered per request (SSR)</div><div class="lz-nsub">Fresh every time, and a database round trip on every visit. Right for personalised or fast-moving pages.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Client-rendered</div><div class="lz-nsub">An empty shell plus a fetch. Slowest first paint and no HTML for crawlers — reserve it for what genuinely cannot be server-rendered.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — assuming a route is static because nothing in it looks dynamic.</strong> One &#96;cookies()&#96; call, one &#96;searchParams&#96; read, one &#96;fetch&#96; with &#96;no-store&#96;, anywhere in the route or in a shared layout, moves the whole thing to per-request rendering. Nothing warns you, and the page still works — it is just now doing a database round trip for every visitor instead of being served as a file. The build output is the check: &#96;○&#96; is static, &#96;●&#96; is static with generated params, &#96;ƒ&#96; is dynamic. Read it after every change to a layout, because a layout&#39;s choice applies to every route beneath it.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies" target="_blank" rel="noopener">
+  <span class="lc-ico">🏗️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Server rendering strategies</span><span class="lc-sub">Static, dynamic and streaming, with what triggers each.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/next-cli#build" target="_blank" rel="noopener">
+  <span class="lc-ico">📊</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — next build output</span><span class="lc-sub">How to read the route table the build prints, symbol by symbol.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering" target="_blank" rel="noopener">
   <span class="lc-ico">🖼️</span>
@@ -78,6 +96,24 @@ export default {
 <div class="callout ok">
 <p><strong>Tin vui cho bạn:</strong> Next.js làm cả bốn, và bạn hiếm khi chọn bằng tên. Trong App Router bạn viết Server Component thường (Chương 9) và điều khiển hành vi bằng các lựa chọn cache bạn đã học ở Chương 10 — framework rồi sẽ render tĩnh hay động giúp bạn. Bài sau chỉ chính xác cách nó quyết định.</p>
 </div>
+
+<h3>Bốn cách một trang được tạo ra</h3>
+<div class="lz-map">
+  <div class="lz-stage">Cuộc đánh đổi luôn là độ tươi đổi lấy chi phí</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Tĩnh (SSG)</div><div class="lz-nsub">Vẽ lúc build, phục vụ như một file. Nhanh nhất và rẻ nhất; nội dung chỉ tươi bằng lần deploy gần nhất của bạn.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Tăng dần (ISR)</div><div class="lz-nsub">Tĩnh, cộng thêm một khoảng làm mới. Khách ghé sau khoảng đó vẫn nhận trang trong đệm trong lúc nó dựng lại ở phía sau.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Render ở máy chủ theo từng request (SSR)</div><div class="lz-nsub">Tươi mọi lần, và một lượt đi về cơ sở dữ liệu ở mỗi lượt ghé. Đúng cho trang cá nhân hoá hoặc trang thay đổi nhanh.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Render ở client</div><div class="lz-nsub">Một cái vỏ rỗng cộng một lượt fetch. Lần vẽ đầu chậm nhất và không có HTML cho bot — hãy để dành nó cho thứ thật sự không render ở máy chủ được.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — cho rằng một route là tĩnh vì chẳng có gì trong đó trông có vẻ động.</strong> Một lời gọi &#96;cookies()&#96;, một lần đọc &#96;searchParams&#96;, một &#96;fetch&#96; kèm &#96;no-store&#96;, ở bất cứ đâu trong route hay trong một layout dùng chung, đều dời cả thứ đó sang render theo từng request. Chẳng gì cảnh báo bạn, và trang vẫn chạy — chỉ là giờ nó đi về cơ sở dữ liệu một lượt cho mỗi khách thay vì được phục vụ như một file. Đầu ra của build là phép kiểm: &#96;○&#96; là tĩnh, &#96;●&#96; là tĩnh có sinh params, &#96;ƒ&#96; là động. Hãy đọc nó sau mỗi thay đổi ở một layout, vì lựa chọn của một layout áp cho mọi route bên dưới nó.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies" target="_blank" rel="noopener">
+  <span class="lc-ico">🏗️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Các chiến lược render ở máy chủ</span><span class="lc-sub">Tĩnh, động và streaming, kèm thứ kích hoạt từng cái.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/next-cli#build" target="_blank" rel="noopener">
+  <span class="lc-ico">📊</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Đầu ra của next build</span><span class="lc-sub">Cách đọc bảng route mà bản build in ra, từng ký hiệu một.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering" target="_blank" rel="noopener">
@@ -120,6 +156,23 @@ export default {
 <p><strong>Beginner gotcha:</strong> accidentally making a whole page dynamic. If you read a cookie or use <code>searchParams</code> high up in a page that could have been static, you opt the entire route out of static rendering. If only a small part needs request data, isolate it (a child component, or stream it with Suspense) so the rest can stay fast and static. "Why is my page suddenly slow / rebuilding every request?" usually traces to one request-specific call added near the top.</p>
 </div>
 
+<h3>Deciding per route, not per app</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Ask who the page is for</b> — The same for everyone → static. Different per user → dynamic. That single question decides most routes.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Then ask how fresh it must be</b> — Minutes are fine → revalidate on a timer. Instantly correct after a write → revalidate on demand from the action.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Mixed pages are normal</b> — A static shell with one dynamic widget inside a Suspense boundary. You do not have to pick one mode for a whole page.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Verify in the build output</b> — The route table is the only place the answer is authoritative. Assumptions here are usually wrong.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — making a whole page dynamic because one small part is personal.</strong> A product page that shows &quot;3 in your cart&quot; in the header does not need to be rendered per request: the product content is identical for everyone and the cart count is one number. Marking the route dynamic throws away static generation for the entire page — every visit re-renders the description, the images, the reviews. Keep the page static and let the personal fragment be a Client Component that fetches its own number, or a Suspense boundary streamed separately. The measurement is in the build output and in time-to-first-byte, both of which change immediately.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/partial-prerendering" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Partial prerendering</span><span class="lc-sub">Where this pattern is heading: one route, static shell, dynamic holes.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/caching#full-route-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Full Route Cache</span><span class="lc-sub">What static generation actually caches, and what invalidates it.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies" target="_blank" rel="noopener">
   <span class="lc-ico">⚙️</span>
@@ -150,6 +203,23 @@ export default {
 <div class="callout warn">
 <p><strong>Bẫy người mới:</strong> vô tình làm cả trang thành động. Nếu bạn đọc một cookie hoặc dùng <code>searchParams</code> ở trên cao trong một trang lẽ ra tĩnh được, bạn đưa cả route ra khỏi render tĩnh. Nếu chỉ một phần nhỏ cần dữ liệu request, hãy cô lập nó (một component con, hoặc stream bằng Suspense) để phần còn lại giữ nhanh và tĩnh. "Sao trang tôi bỗng chậm / dựng lại mỗi request?" thường truy về một lời gọi riêng-theo-request thêm gần đầu.</p>
 </div>
+
+<h3>Quyết định theo từng route, đừng quyết cho cả ứng dụng</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Hãy hỏi trang này dành cho ai</b> — Giống nhau với tất cả → tĩnh. Khác nhau theo từng người → động. Đúng một câu hỏi đó quyết định phần lớn các route.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Rồi hỏi nó phải tươi tới mức nào</b> — Vài phút cũng được → làm mới theo bộ đếm giờ. Phải đúng ngay sau khi ghi → làm mới theo yêu cầu từ chính action.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Trang pha trộn là chuyện bình thường</b> — Một cái vỏ tĩnh với một widget động bên trong một ranh giới Suspense. Bạn không buộc phải chọn một chế độ cho cả trang.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Xác nhận trong đầu ra của build</b> — Bảng route là nơi duy nhất câu trả lời có thẩm quyền. Phỏng đoán ở đây thường là sai.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — làm cả trang thành động chỉ vì một mẩu nhỏ mang tính cá nhân.</strong> Một trang sản phẩm hiện &quot;3 món trong giỏ&quot; ở đầu trang thì chẳng cần render theo từng request: nội dung sản phẩm y hệt nhau với tất cả mọi người còn số món trong giỏ chỉ là một con số. Đánh dấu route là động là vứt bỏ phần sinh tĩnh của cả trang — mỗi lượt ghé lại vẽ lại phần mô tả, các tấm ảnh, các đánh giá. Hãy giữ trang ở dạng tĩnh và để cái mẩu cá nhân đó là một Client Component tự lấy con số của nó, hoặc một ranh giới Suspense được truyền riêng. Phép đo nằm ở đầu ra của build và ở thời gian tới byte đầu tiên, cả hai đều đổi ngay lập tức.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/partial-prerendering" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Partial prerendering</span><span class="lc-sub">Hướng đi của mẫu này: một route, vỏ tĩnh, các lỗ động.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/caching#full-route-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Full Route Cache</span><span class="lc-sub">Phần sinh tĩnh thật sự nhớ đệm cái gì, và cái gì vô hiệu hoá nó.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/server-components#server-rendering-strategies" target="_blank" rel="noopener">
@@ -205,6 +275,23 @@ export async function generateMetadata({ params }) {
 <p><strong>Beginner takeaway:</strong> you get most SEO for free by rendering on the server (the default) and setting a good <code>title</code> + <code>description</code> per page. Add a sitemap and robots file, and content pages are discoverable. You do not need SEO tricks — you need real HTML and honest metadata.</p>
 </div>
 
+<h3>The SEO basics a framework cannot do for you</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>One h1 per page, describing the page</b> — Search engines and screen readers both use the heading outline. A styled div is not a heading.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>A unique title and description per route</b> — &#96;generateMetadata&#96; with the record&#39;s own data. Duplicate titles across a thousand product pages is a ranking problem.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Server-rendered content</b> — A crawler that has to execute JavaScript may index late or not at all. This is what the App Router gives you by default.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>A sitemap and robots file</b> — &#96;app/sitemap.ts&#96; and &#96;app/robots.ts&#96; generate them from your own data, so they cannot drift from the routes that exist.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a staging site indexed by Google, competing with production.</strong> A preview deployment with no &#96;robots&#96; rules gets crawled like any other site, and duplicate content on a &#96;*.vercel.app&#96; domain can outrank the real one — or simply leak an unreleased feature. It is invisible until someone searches for your product and finds the staging copy. Set &#96;noindex&#96; on every non-production environment from an environment variable, not by hand, so a new preview cannot be created without it. And check with &#96;curl -s &lt;url&gt; | grep robots&#96; rather than trusting the config.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/file-conventions/metadata" target="_blank" rel="noopener">
+  <span class="lc-ico">🏷️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Metadata files</span><span class="lc-sub">sitemap.ts, robots.ts and the generated metadata files, with the API for each.</span></span>
+</a>
+<a class="link-card dl" href="https://developers.google.com/search/docs/crawling-indexing/block-indexing" target="_blank" rel="noopener">
+  <span class="lc-ico">🚫</span>
+  <span class="lc-body"><span class="lc-title">Google — Block indexing</span><span class="lc-sub">The correct way to keep an environment out of the index, and how to verify it.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/metadata" target="_blank" rel="noopener">
   <span class="lc-ico">🔎</span>
@@ -248,6 +335,23 @@ export async function generateMetadata({ params }) {
 <div class="callout ok">
 <p><strong>Điều người mới cần nhớ:</strong> bạn có phần lớn SEO miễn phí nhờ render trên server (mặc định) và đặt một <code>title</code> + <code>description</code> tốt cho mỗi trang. Thêm một sitemap và file robots, và các trang nội dung sẽ được tìm thấy. Bạn không cần mẹo SEO — bạn cần HTML thật và metadata trung thực.</p>
 </div>
+
+<h3>Những điều cơ bản về SEO mà framework không làm giùm bạn</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Một h1 mỗi trang, mô tả đúng trang đó</b> — Máy tìm kiếm và trình đọc màn hình đều dùng dàn ý tiêu đề. Một cái div được tô đẹp không phải một tiêu đề.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Tiêu đề và mô tả riêng cho từng route</b> — &#96;generateMetadata&#96; với dữ liệu của chính bản ghi. Tiêu đề trùng nhau trên một nghìn trang sản phẩm là một vấn đề về thứ hạng.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nội dung render ở máy chủ</b> — Một con bot phải chạy JavaScript có thể lập chỉ mục muộn hoặc không lập luôn. Đây là thứ App Router cho bạn theo mặc định.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Một sitemap và một file robots</b> — &#96;app/sitemap.ts&#96; và &#96;app/robots.ts&#96; sinh chúng ra từ chính dữ liệu của bạn, nên chúng không thể trôi dạt khỏi những route thật sự tồn tại.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một trang thử nghiệm bị Google lập chỉ mục, cạnh tranh với bản production.</strong> Một bản triển khai xem trước không có luật &#96;robots&#96; sẽ bị quét như mọi trang khác, và nội dung trùng lặp trên một tên miền &#96;*.vercel.app&#96; có thể xếp hạng cao hơn bản thật — hoặc đơn giản là làm lộ một tính năng chưa phát hành. Nó vô hình cho tới khi có người tìm sản phẩm của bạn rồi thấy bản thử nghiệm. Hãy đặt &#96;noindex&#96; cho mọi môi trường không phải production bằng một biến môi trường, đừng đặt tay, để một bản xem trước mới không thể được tạo ra mà thiếu nó. Và hãy kiểm bằng &#96;curl -s &lt;url&gt; | grep robots&#96; chứ đừng tin vào cấu hình.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/file-conventions/metadata" target="_blank" rel="noopener">
+  <span class="lc-ico">🏷️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Các file metadata</span><span class="lc-sub">sitemap.ts, robots.ts và các file metadata sinh tự động, kèm API của từng cái.</span></span>
+</a>
+<a class="link-card dl" href="https://developers.google.com/search/docs/crawling-indexing/block-indexing" target="_blank" rel="noopener">
+  <span class="lc-ico">🚫</span>
+  <span class="lc-body"><span class="lc-title">Google — Chặn lập chỉ mục</span><span class="lc-sub">Cách đúng để giữ một môi trường ngoài chỉ mục, và cách xác minh nó.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/metadata" target="_blank" rel="noopener">
@@ -297,6 +401,23 @@ export async function generateMetadata({ params }) {
 <p><strong>Bonus:</strong> Next can generate the OG image dynamically per page (a file like <code>opengraph-image.tsx</code> that renders an image with the post's title on it). Great for blogs where every article deserves its own card — but a single static image is a perfectly good start.</p>
 </div>
 
+<h3>Making a shared link look right</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Four tags do most of the work</b> — &#96;og:title&#96;, &#96;og:description&#96;, &#96;og:image&#96;, &#96;og:url&#96;. Twitter reads its own &#96;twitter:card&#96; on top of them.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>The image needs absolute URLs</b> — A relative path resolves against the crawler&#39;s host, not yours. Always include the scheme and domain.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>1200×630 is the safe size</b> — Smaller images get cropped unpredictably or fall back to a small card.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Generate them per record</b> — &#96;opengraph-image.tsx&#96; renders an image from your data at request time, so every article gets its own.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a preview that never updates because the platform cached it.</strong> Facebook, Slack, LinkedIn and X all cache the metadata for a URL the first time anyone shares it, often for days. So the first share — usually while the page is still half-built — becomes the preview everyone sees, and fixing the tags changes nothing. There is no error to notice; the link simply keeps looking wrong. Each platform has a debugger that re-scrapes on demand (Facebook&#39;s Sharing Debugger, X&#39;s Card Validator), and the reliable habit is to check the tags before sharing a URL anywhere, not after.</p></div>
+<a class="link-card dl" href="https://ogp.me/" target="_blank" rel="noopener">
+  <span class="lc-ico">🖼️</span>
+  <span class="lc-body"><span class="lc-title">The Open Graph protocol</span><span class="lc-sub">The spec itself: every tag, with the required and optional ones marked.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image" target="_blank" rel="noopener">
+  <span class="lc-ico">🎨</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — opengraph-image</span><span class="lc-sub">Generating a per-record social image from JSX, with the size and caching rules.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/generate-metadata#opengraph" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
@@ -334,6 +455,23 @@ export async function generateMetadata({ params }) {
 <div class="callout ok">
 <p><strong>Điểm cộng:</strong> Next có thể sinh ảnh OG động theo từng trang (một file như <code>opengraph-image.tsx</code> render một ảnh có tiêu đề bài trên đó). Tuyệt cho blog nơi mỗi bài xứng đáng một thẻ riêng — nhưng một ảnh tĩnh duy nhất là một khởi đầu hoàn toàn tốt.</p>
 </div>
+
+<h3>Làm cho một liên kết được chia sẻ trông đúng</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Bốn thẻ lo phần lớn công việc</b> — &#96;og:title&#96;, &#96;og:description&#96;, &#96;og:image&#96;, &#96;og:url&#96;. Twitter đọc thêm &#96;twitter:card&#96; của riêng nó ở trên đó.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Ảnh cần URL tuyệt đối</b> — Một đường dẫn tương đối sẽ giải theo tên miền của con bot chứ không phải của bạn. Hãy luôn kèm giao thức và tên miền.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>1200×630 là kích thước an toàn</b> — Ảnh nhỏ hơn bị cắt xén khó lường hoặc rơi về một thẻ nhỏ.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Sinh chúng theo từng bản ghi</b> — &#96;opengraph-image.tsx&#96; vẽ một tấm ảnh từ dữ liệu của bạn lúc có request, nên mỗi bài viết có ảnh riêng.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một bản xem trước chẳng bao giờ cập nhật vì nền tảng đã nhớ đệm nó.</strong> Facebook, Slack, LinkedIn và X đều nhớ đệm metadata của một URL ngay lần đầu có người chia sẻ nó, thường là vài ngày. Nên lần chia sẻ đầu tiên — thường là lúc trang còn dựng dở — trở thành cái bản xem trước mà tất cả mọi người nhìn thấy, và sửa các thẻ đi chẳng thay đổi được gì. Không có lỗi nào để nhận ra; cái liên kết chỉ đơn giản là cứ trông sai. Mỗi nền tảng đều có một trình gỡ lỗi quét lại theo yêu cầu (Sharing Debugger của Facebook, Card Validator của X), và thói quen đáng tin là kiểm các thẻ TRƯỚC khi chia sẻ một URL đi đâu đó, chứ không phải sau.</p></div>
+<a class="link-card dl" href="https://ogp.me/" target="_blank" rel="noopener">
+  <span class="lc-ico">🖼️</span>
+  <span class="lc-body"><span class="lc-title">Giao thức Open Graph</span><span class="lc-sub">Bản đặc tả: mọi thẻ, có đánh dấu cái nào bắt buộc cái nào tuỳ chọn.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image" target="_blank" rel="noopener">
+  <span class="lc-ico">🎨</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — opengraph-image</span><span class="lc-sub">Sinh ảnh mạng xã hội theo từng bản ghi từ JSX, kèm luật kích thước và nhớ đệm.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/generate-metadata#opengraph" target="_blank" rel="noopener">
@@ -374,6 +512,24 @@ export async function generateMetadata({ params }) {
 <p><strong>Why start with the numbers:</strong> "make it faster" is vague; "get LCP under 2.5s and stop the layout from shifting" is a task you can act on and measure. You can see your own scores in Chrome DevTools (the Lighthouse tab) and in Google Search Console. Chapter 18 is the toolbox for actually moving them — this lesson gives you the scoreboard to aim at.</p>
 </div>
 
+<h3>The three metrics that are measured on real users</h3>
+<div class="lz-map">
+  <div class="lz-stage">Each one names a specific complaint</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">LCP — largest contentful paint</div><div class="lz-nsub">When the main content appeared. Target under 2.5s. Usually an image, a font, or a server response that took too long.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">INP — interaction to next paint</div><div class="lz-nsub">How long the page took to respond to a click. Target under 200ms. Long JavaScript tasks are the usual cause.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">CLS — cumulative layout shift</div><div class="lz-nsub">How much things jumped while loading. Target under 0.1. Images and ads without reserved space are the usual cause.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Field data, not lab data</div><div class="lz-nsub">These are collected from real Chrome users. A perfect Lighthouse score with bad field data means your users have slower devices than you.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an image with no width and height, shifting the whole page as it loads.</strong> The browser cannot reserve space for an image whose size it does not know, so the text below it is laid out, painted, and then pushed down when the image arrives — the reader loses their place, and someone tapping a link hits whatever moved into that spot. It is the single largest contributor to CLS on most sites, and it is invisible on a fast connection because the image arrives before the paint. &#96;next/image&#96; requires the dimensions for exactly this reason. Throttle to Slow 3G and reload: every jump you see is a shift your users are getting.</p></div>
+<a class="link-card dl" href="https://web.dev/articles/vitals" target="_blank" rel="noopener">
+  <span class="lc-ico">📈</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Core Web Vitals</span><span class="lc-sub">What each metric measures, the thresholds, and how they are collected.</span></span>
+</a>
+<a class="link-card dl" href="https://web.dev/articles/optimize-cls" target="_blank" rel="noopener">
+  <span class="lc-ico">📏</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Optimize CLS</span><span class="lc-sub">The specific causes of layout shift, each with the fix.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://web.dev/articles/vitals" target="_blank" rel="noopener">
   <span class="lc-ico">📈</span>
@@ -402,6 +558,24 @@ export async function generateMetadata({ params }) {
 <div class="callout ok">
 <p><strong>Vì sao bắt đầu bằng con số:</strong> "làm nhanh hơn" thì mơ hồ; "đưa LCP dưới 2,5s và ngăn bố cục nhảy" là một việc bạn hành động và đo được. Bạn xem điểm của mình trong Chrome DevTools (tab Lighthouse) và trong Google Search Console. Chương 18 là bộ đồ nghề để thật sự dịch chúng — bài này cho bạn bảng điểm để nhắm tới.</p>
 </div>
+
+<h3>Ba chỉ số được đo trên người dùng thật</h3>
+<div class="lz-map">
+  <div class="lz-stage">Mỗi cái gọi tên một lời phàn nàn cụ thể</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">LCP — lần vẽ nội dung lớn nhất</div><div class="lz-nsub">Khi nội dung chính hiện ra. Nhắm dưới 2,5 giây. Thường là một tấm ảnh, một font, hoặc một phản hồi máy chủ quá lâu.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">INP — từ tương tác tới lần vẽ kế tiếp</div><div class="lz-nsub">Trang mất bao lâu để đáp lại một cú bấm. Nhắm dưới 200ms. Nguyên nhân thường gặp là các tác vụ JavaScript dài.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">CLS — tổng độ xê dịch bố cục</div><div class="lz-nsub">Mọi thứ nhảy nhót bao nhiêu trong lúc tải. Nhắm dưới 0,1. Nguyên nhân thường gặp là ảnh và quảng cáo không được giữ chỗ sẵn.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Dữ liệu thực địa, không phải dữ liệu phòng thí nghiệm</div><div class="lz-nsub">Chúng được thu từ người dùng Chrome thật. Điểm Lighthouse hoàn hảo mà dữ liệu thực địa xấu nghĩa là người dùng của bạn có máy chậm hơn máy bạn.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một tấm ảnh không có width và height, đẩy cả trang xê dịch trong lúc tải.</strong> Trình duyệt không giữ chỗ được cho một tấm ảnh mà nó chưa biết kích thước, nên phần chữ bên dưới được bố trí, vẽ ra, rồi bị đẩy xuống khi ảnh về — người đọc mất chỗ đang đọc, và người đang chạm vào một liên kết lại bấm trúng thứ vừa nhảy vào chỗ đó. Đây là thứ đóng góp lớn nhất vào CLS ở phần lớn các trang, và nó vô hình trên đường truyền nhanh vì ảnh về trước cả lần vẽ. &#96;next/image&#96; đòi kích thước chính vì lẽ đó. Hãy bóp băng thông xuống Slow 3G rồi tải lại: mỗi cú nhảy bạn thấy là một cú xê dịch mà người dùng của bạn đang nhận.</p></div>
+<a class="link-card dl" href="https://web.dev/articles/vitals" target="_blank" rel="noopener">
+  <span class="lc-ico">📈</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Core Web Vitals</span><span class="lc-sub">Mỗi chỉ số đo cái gì, các ngưỡng, và chúng được thu thập ra sao.</span></span>
+</a>
+<a class="link-card dl" href="https://web.dev/articles/optimize-cls" target="_blank" rel="noopener">
+  <span class="lc-ico">📏</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Tối ưu CLS</span><span class="lc-sub">Những nguyên nhân cụ thể gây xê dịch bố cục, mỗi cái kèm cách chữa.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://web.dev/articles/vitals" target="_blank" rel="noopener">

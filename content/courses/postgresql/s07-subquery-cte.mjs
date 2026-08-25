@@ -65,6 +65,14 @@ ORDER BY id;</code></pre>
 (4 rows)</div>
 <p>You didn't have to know <em>which</em> users are in Hanoi — the subquery found them. This "filter by a set computed elsewhere" pattern is everywhere: items in active categories, orders from premium customers, posts by followed users. Many such queries can also be written as a JOIN (Chapter 5); a subquery is often the clearer way to express "keep rows whose key is in this set".</p>
 <div class="note-ct">The feed uses exactly this to show "posts from people you follow": <code>WHERE author_id IN (SELECT followee_id FROM follow WHERE follower_id = :me)</code>. The inner query is your follow list, computed fresh each time; the outer query filters the global post stream down to it. Change who you follow, and the set the feed filters against changes with no code edit.</div>
+<h3>Three places a subquery can stand</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">In WHERE — a value or a set</span><span class="lz-lnote"><code>WHERE user_id IN (SELECT id FROM app_user WHERE plan = 'pro')</code>. Runs once, produces a list, filters the outer rows against it. The most common shape by far.</span></div>
+<div class="lz-layer"><span class="lz-lname">In FROM — a derived table</span><span class="lz-lnote"><code>FROM (SELECT user_id, COUNT(*) c FROM note GROUP BY user_id) t</code>. Behaves exactly like a table, must have an alias, and is how you aggregate before joining (6.4).</span></div>
+<div class="lz-layer"><span class="lz-lname">In SELECT — a scalar</span><span class="lz-lnote"><code>SELECT u.name, (SELECT COUNT(*) FROM note n WHERE n.user_id = u.id)</code>. Must return exactly one row and one column, or the query errors at runtime rather than at parse time.</span></div>
+</div>
+<p>Only the third form runs per outer row; the first two run once. That single distinction predicts the performance of every subquery you will write, and it is what the next lesson is about.</p>
+<div class="pitfall"><p><strong>Trap — <code>NOT IN</code> against a column that can be NULL.</strong> <code>WHERE id NOT IN (SELECT user_id FROM note)</code> returns <em>zero rows</em> the moment one <code>user_id</code> is NULL, and it does so silently. The logic is airtight and deeply unhelpful: <code>id NOT IN (1, 2, NULL)</code> means "id ≠ 1 AND id ≠ 2 AND id ≠ NULL", and that last comparison is <code>UNKNOWN</code>, never true — so the whole condition can never be true. <code>NOT EXISTS</code> has no such flaw and is the safe default; if you must keep <code>NOT IN</code>, add <code>WHERE user_id IS NOT NULL</code> inside the subquery. This is one of the few SQL bugs that turns a working report into an empty one overnight, when the first NULL arrives.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: scalar and IN subqueries on the note table</span><span class="lc-sub">The Code Lab track sets up the data used across this chapter.</span></span>
@@ -116,6 +124,14 @@ ORDER BY id;</code></pre>
 (4 rows)</div>
 <p>Bạn không cần biết <em>những</em> user nào ở Hà Nội — subquery tìm ra chúng. Mẫu "lọc theo một tập tính ở nơi khác" này ở khắp nơi: món trong danh mục đang bật, đơn từ khách hàng cao cấp, bài đăng của user được theo dõi. Nhiều truy vấn kiểu này cũng viết được bằng JOIN (Chương 5); một subquery thường là cách rõ hơn để diễn đạt "giữ dòng có khoá nằm trong tập này".</p>
 <div class="note-ct">Bảng tin dùng đúng cái này để hiện "bài từ những người bạn theo dõi": <code>WHERE author_id IN (SELECT followee_id FROM follow WHERE follower_id = :me)</code>. Truy vấn trong là danh sách theo dõi của bạn, tính tươi mỗi lần; truy vấn ngoài lọc dòng chảy bài đăng toàn cục xuống còn nó. Đổi người bạn theo dõi, và tập mà bảng tin lọc theo đổi mà không cần sửa mã.</div>
+<h3>Ba chỗ một subquery được đứng</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">Trong WHERE — một giá trị hoặc một tập</span><span class="lz-lnote"><code>WHERE user_id IN (SELECT id FROM app_user WHERE plan = 'pro')</code>. Chạy MỘT lần, sinh ra một danh sách, lọc các dòng ngoài theo nó. Hình dạng phổ biến nhất, xa hơn mọi dạng khác.</span></div>
+<div class="lz-layer"><span class="lz-lname">Trong FROM — một bảng dẫn xuất</span><span class="lz-lnote"><code>FROM (SELECT user_id, COUNT(*) c FROM note GROUP BY user_id) t</code>. Hành xử y hệt một cái bảng, BẮT BUỘC có alias, và đây là cách bạn tổng hợp trước khi join (6.4).</span></div>
+<div class="lz-layer"><span class="lz-lname">Trong SELECT — một giá trị vô hướng</span><span class="lz-lnote"><code>SELECT u.name, (SELECT COUNT(*) FROM note n WHERE n.user_id = u.id)</code>. Phải trả về ĐÚNG một dòng một cột, không thì truy vấn lỗi lúc CHẠY chứ không phải lúc phân tích cú pháp.</span></div>
+</div>
+<p>Chỉ dạng thứ ba chạy theo TỪNG dòng ngoài; hai dạng đầu chạy một lần. Đúng một sự phân biệt ấy dự đoán được hiệu năng của mọi subquery bạn sẽ viết, và đó là nội dung của bài kế tiếp.</p>
+<div class="pitfall"><p><strong>Bẫy — <code>NOT IN</code> trên một cột có thể NULL.</strong> <code>WHERE id NOT IN (SELECT user_id FROM note)</code> trả về <em>KHÔNG DÒNG NÀO</em> ngay khoảnh khắc có một <code>user_id</code> là NULL, và nó làm thế trong im lặng. Lô-gíc thì kín kẽ mà vô cùng vô ích: <code>id NOT IN (1, 2, NULL)</code> nghĩa là "id ≠ 1 VÀ id ≠ 2 VÀ id ≠ NULL", mà phép so cuối là <code>UNKNOWN</code>, không bao giờ đúng — nên cả điều kiện không thể nào đúng. <code>NOT EXISTS</code> không có khuyết tật ấy và là mặc định an toàn; nếu buộc phải giữ <code>NOT IN</code>, thêm <code>WHERE user_id IS NOT NULL</code> vào TRONG subquery. Đây là một trong số ít bug SQL biến một báo cáo đang chạy thành báo cáo rỗng sau một đêm, đúng lúc cái NULL đầu tiên xuất hiện.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: subquery vô hướng và IN trên bảng note</span><span class="lc-sub">Track Code Lab dựng dữ liệu dùng xuyên suốt chương này.</span></span>
@@ -185,6 +201,14 @@ ORDER BY u.id;</code></pre>
 <p><strong>Zero rows</strong> — even though Ngoc clearly has no notes. Here's why: the subquery returns <code>{1, 2, 3, NULL}</code>. For Ngoc, <code>4 NOT IN (1,2,3,NULL)</code> asks "is 4 different from all of these?" — and <code>4 &lt;&gt; NULL</code> is <em>unknown</em> (the NULL trap from Chapter 4), so the whole condition is never true. One NULL in the list silently poisons the entire <code>NOT IN</code>.</p>
 <div class="callout danger">Prefer <strong><code>NOT EXISTS</code> over <code>NOT IN</code></strong> whenever the subquery column could be NULL. <code>NOT EXISTS</code> handles NULLs correctly and is usually as fast or faster. (<code>NOT IN</code> is fine only when you're certain the subquery never yields NULL.) This exact bug — a query that "returns nothing for no reason" — is one of the most time-wasting in SQL.</div>
 <div class="note-ct">This trap has burned real features here: a "users who haven't completed onboarding" query written with <code>NOT IN</code> silently returned an empty list the moment one row in the compared column was NULL, making it look like everyone had onboarded. Rewriting it as <code>NOT EXISTS</code> fixed it instantly. When a "find the missing" query mysteriously finds none, suspect a NULL in a <code>NOT IN</code>.</div>
+<h3>Correlated or not — the one question that matters</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">?</span><span class="lz-t">Does the inner query mention an outer column?</span><span class="lz-d">That is the entire test. <code>WHERE n.user_id = u.id</code> mentions <code>u</code>, which comes from outside — so it is correlated.</span></div>
+<div class="lz-step"><span class="lz-k">no</span><span class="lz-t">Uncorrelated → runs once</span><span class="lz-d">The server evaluates it a single time and reuses the result for every outer row. Cost is independent of how many rows the outer query has.</span></div>
+<div class="lz-step"><span class="lz-k">yes</span><span class="lz-t">Correlated → conceptually runs per row</span><span class="lz-d">Ten thousand outer rows means ten thousand evaluations, unless the planner rewrites it into a join — which PostgreSQL often does, and Chapter 10 shows you how to confirm.</span></div>
+<div class="lz-step"><span class="lz-k">→</span><span class="lz-t">EXISTS stops at the first hit</span><span class="lz-d">Unlike <code>COUNT(*) &gt; 0</code>, which must find every match before comparing, <code>EXISTS</code> returns as soon as one row qualifies. On a large child table that difference is the whole query.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — writing <code>(SELECT COUNT(*) …) &gt; 0</code> when you meant <code>EXISTS</code>.</strong> They return the same boolean and read almost the same, so the substitution feels free. It is not: the count must scan every matching child row to produce a number you then throw away, while <code>EXISTS</code> stops at the first one. On a user with 40,000 notes, the count reads 40,000 rows to answer a question that the first row already settled. The same trap has a mirror image — <code>COUNT(*) = 0</code> should be <code>NOT EXISTS</code>. Use a count when you want the number; use <code>EXISTS</code> when you want the answer yes or no.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: EXISTS vs the NOT IN NULL trap, side by side</span><span class="lc-sub">The Code Lab track reproduces the empty-result bug and its fix.</span></span>
@@ -244,6 +268,14 @@ ORDER BY u.id;</code></pre>
 <p><strong>Không dòng nào</strong> — dù Ngoc rõ ràng không có note. Lý do: subquery trả về <code>{1, 2, 3, NULL}</code>. Với Ngoc, <code>4 NOT IN (1,2,3,NULL)</code> hỏi "4 có khác tất cả những cái này không?" — và <code>4 &lt;&gt; NULL</code> là <em>không rõ</em> (bẫy NULL từ Chương 4), nên cả điều kiện không bao giờ đúng. Một NULL trong danh sách âm thầm đầu độc toàn bộ <code>NOT IN</code>.</p>
 <div class="callout danger">Hãy ưu tiên <strong><code>NOT EXISTS</code> hơn <code>NOT IN</code></strong> mỗi khi cột subquery có thể NULL. <code>NOT EXISTS</code> xử lý NULL đúng và thường nhanh bằng hoặc hơn. (<code>NOT IN</code> chỉ ổn khi bạn chắc chắn subquery không bao giờ ra NULL.) Đúng cái bug này — một truy vấn "trả về rỗng không vì lý do gì" — là một trong những thứ tốn thời gian nhất trong SQL.</div>
 <div class="note-ct">Bẫy này đã đốt tính năng thật ở đây: một truy vấn "user chưa hoàn tất onboarding" viết bằng <code>NOT IN</code> âm thầm trả về danh sách rỗng ngay khi một dòng trong cột so sánh là NULL, khiến trông như ai cũng đã onboard. Viết lại thành <code>NOT EXISTS</code> sửa ngay. Khi một truy vấn "tìm cái còn thiếu" bí ẩn không tìm thấy gì, hãy nghi một NULL trong một <code>NOT IN</code>.</div>
+<h3>Có tương quan hay không — câu hỏi duy nhất đáng hỏi</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">?</span><span class="lz-t">Truy vấn trong có nhắc tới một cột bên NGOÀI không?</span><span class="lz-d">Đó là toàn bộ phép kiểm. <code>WHERE n.user_id = u.id</code> nhắc tới <code>u</code>, thứ đến từ bên ngoài — vậy là có tương quan.</span></div>
+<div class="lz-step"><span class="lz-k">không</span><span class="lz-t">Không tương quan → chạy MỘT lần</span><span class="lz-d">Máy chủ tính đúng một lần rồi dùng lại kết quả cho mọi dòng ngoài. Chi phí độc lập với việc truy vấn ngoài có bao nhiêu dòng.</span></div>
+<div class="lz-step"><span class="lz-k">có</span><span class="lz-t">Có tương quan → về khái niệm là chạy MỖI DÒNG</span><span class="lz-d">Mười nghìn dòng ngoài nghĩa là mười nghìn lượt tính, trừ khi planner viết lại nó thành một cú join — điều PostgreSQL thường làm, và Chương 10 chỉ bạn cách xác nhận.</span></div>
+<div class="lz-step"><span class="lz-k">→</span><span class="lz-t">EXISTS dừng ở cú khớp ĐẦU TIÊN</span><span class="lz-d">Khác <code>COUNT(*) &gt; 0</code> vốn phải tìm hết mọi cú khớp rồi mới so sánh, <code>EXISTS</code> trả về ngay khi có MỘT dòng đủ điều kiện. Trên một bảng con lớn, khác biệt ấy chính là cả truy vấn.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — viết <code>(SELECT COUNT(*) …) &gt; 0</code> khi ý bạn là <code>EXISTS</code>.</strong> Chúng trả về cùng một giá trị đúng/sai và đọc gần như giống nhau, nên việc thay thế có cảm giác miễn phí. Không hề: phép đếm phải quét MỌI dòng con khớp để ra một con số rồi bạn vứt đi, trong khi <code>EXISTS</code> dừng ở cái đầu tiên. Trên một user có 40.000 note, phép đếm đọc 40.000 dòng để trả lời một câu hỏi mà dòng đầu tiên đã giải quyết xong. Cùng cái bẫy ấy có ảnh gương — <code>COUNT(*) = 0</code> đáng lẽ phải là <code>NOT EXISTS</code>. Dùng đếm khi bạn muốn CON SỐ; dùng <code>EXISTS</code> khi bạn muốn câu trả lời CÓ hay KHÔNG.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: EXISTS vs bẫy NULL của NOT IN, cạnh nhau</span><span class="lc-sub">Track Code Lab tái hiện bug kết-quả-rỗng và cách sửa.</span></span>
@@ -316,6 +348,22 @@ GROUP BY u.name ORDER BY u.name;</code></pre>
 <p>Now every note appears once (the comment counts were collapsed to one row per note <em>before</em> the join), so <code>sum(views)</code> is correct: Cuong 210, Lan 105, and Minh is back with his 42. This "pre-aggregate, then join" pattern is the definitive cure for double-counted sums — and CTEs make it read cleanly.</p>
 <div class="callout ok">Two uses for CTEs: <strong>readability</strong> (name each step of a complex query) and <strong>correctness</strong> (aggregate a one-to-many side <em>before</em> joining it, so its rows don't multiply a sum). When a report's totals look too big, a pre-aggregating CTE is very often the fix.</div>
 <div class="note-ct">Analytics dashboards here lean on this constantly: to show "each post with its view total and its comment count", the query pre-aggregates comments per post in a CTE and only then joins — otherwise a post with many comments would report an inflated view count. The CTE is both what makes the query readable and what keeps its numbers honest.</div>
+<h3>What a CTE buys, and what it costs</h3>
+<div class="lz-map">
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">Readability</span><span class="lz-nsub">the real reason to use one</span></span>
+<span class="lz-nbody">A nested subquery three levels deep reads inside-out; a chain of named CTEs reads top-down like paragraphs. Same plan, far lower chance the next person misreads it. Name each step after what it produces, not how it works.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">Reuse</span><span class="lz-nsub">reference it twice, define it once</span></span>
+<span class="lz-nbody">A CTE can be referenced several times in the main query. A derived table in <code>FROM</code> cannot — you would have to repeat it, and then the two copies drift apart during the next edit.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">The optimisation fence</span><span class="lz-nsub">changed in PostgreSQL 12</span></span>
+<span class="lz-nbody">Before 12, every CTE was materialised — the planner could not push a filter into it. From 12 onward it inlines them when it can, and <code>MATERIALIZED</code> / <code>NOT MATERIALIZED</code> let you override. Advice written before 2019 says the opposite of what is true today.</span>
+</div>
+</div>
+<div class="pitfall"><p><strong>Trap — reaching for a CTE to "make it faster".</strong> A CTE is a naming device, not an optimisation. On PostgreSQL 12+ an inlined CTE produces the same plan as the equivalent subquery — no faster — and a materialised one can be genuinely <em>slower</em>, because it computes the full intermediate result before any outer filter is applied. If your CTE selects a million rows and the outer query keeps ten, forcing <code>MATERIALIZED</code> makes you pay for 999,990 rows you discard. Choose a CTE when it makes the query readable; reach for <code>EXPLAIN</code> (Chapter 10) when you want it fast.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: rewrite with a CTE and fix the fan-out sum</span><span class="lc-sub">The Code Lab track walks through pre-aggregating before the join.</span></span>
@@ -378,6 +426,22 @@ GROUP BY u.name ORDER BY u.name;</code></pre>
 <p>Giờ mỗi note xuất hiện một lần (số bình luận đã gộp về một dòng mỗi note <em>trước</em> khi join), nên <code>sum(views)</code> đúng: Cuong 210, Lan 105, và Minh trở lại với 42 của anh. Mẫu "tổng hợp trước, rồi join" này là thuốc chữa dứt điểm cho các tổng bị đếm-hai-lần — và CTE khiến nó đọc gọn gàng.</p>
 <div class="callout ok">Hai công dụng của CTE: <strong>dễ đọc</strong> (đặt tên từng bước của một truy vấn phức tạp) và <strong>đúng đắn</strong> (tổng hợp một phía một-nhiều <em>trước</em> khi join nó, để các dòng của nó không nhân một tổng lên). Khi các tổng của một báo cáo trông quá lớn, một CTE tổng-hợp-trước rất thường là cách sửa.</div>
 <div class="note-ct">Các dashboard phân tích ở đây dựa vào cái này liên tục: để hiện "mỗi bài đăng kèm tổng views và số bình luận của nó", truy vấn tổng hợp bình luận mỗi bài trong một CTE rồi mới join — nếu không một bài nhiều bình luận sẽ báo số views phồng lên. CTE vừa là thứ khiến truy vấn dễ đọc vừa là thứ giữ các con số trung thực.</div>
+<h3>CTE mua được gì, và trả giá bằng gì</h3>
+<div class="lz-map">
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">Dễ đọc</span><span class="lz-nsub">lý do THẬT để dùng nó</span></span>
+<span class="lz-nbody">Một subquery lồng ba tầng phải đọc từ trong ra; một chuỗi CTE có tên đọc từ trên xuống như các đoạn văn. Cùng một kế hoạch, mà khả năng người sau đọc nhầm thấp hơn hẳn. Đặt tên mỗi bước theo thứ nó SINH RA, không theo cách nó chạy.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">Dùng lại</span><span class="lz-nsub">tham chiếu hai lần, định nghĩa một lần</span></span>
+<span class="lz-nbody">Một CTE tham chiếu được nhiều lần trong truy vấn chính. Một bảng dẫn xuất trong <code>FROM</code> thì không — bạn sẽ phải chép lại, và rồi hai bản trôi dạt khỏi nhau ở lần sửa kế tiếp.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">Hàng rào tối ưu</span><span class="lz-nsub">đã đổi ở PostgreSQL 12</span></span>
+<span class="lz-nbody">Trước bản 12, mọi CTE đều bị vật chất hoá — planner không đẩy được bộ lọc vào trong. Từ 12 trở đi nó nội tuyến khi có thể, và <code>MATERIALIZED</code> / <code>NOT MATERIALIZED</code> cho bạn ghi đè. Lời khuyên viết trước 2019 nói NGƯỢC với sự thật hôm nay.</span>
+</div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — với tay lấy CTE để "cho nhanh hơn".</strong> CTE là một công cụ ĐẶT TÊN, không phải một phép tối ưu. Trên PostgreSQL 12+, một CTE được nội tuyến cho ra đúng kế hoạch như subquery tương đương — không nhanh hơn — và một CTE bị vật chất hoá có thể CHẬM HƠN thật, vì nó tính trọn kết quả trung gian TRƯỚC khi bất kỳ bộ lọc ngoài nào được áp. Nếu CTE của bạn chọn một triệu dòng mà truy vấn ngoài chỉ giữ mười, ép <code>MATERIALIZED</code> là bắt bạn trả tiền cho 999.990 dòng vứt đi. Chọn CTE khi nó làm truy vấn DỄ ĐỌC; với tay lấy <code>EXPLAIN</code> (Chương 10) khi bạn muốn nó NHANH.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: viết lại bằng CTE và sửa fan-out sum</span><span class="lc-sub">Track Code Lab đi qua việc tổng hợp trước khi join.</span></span>
@@ -440,6 +504,14 @@ SELECT path FROM tree ORDER BY path;</code></pre>
 <p>Each level appended its own name to the parent's path, producing the full lineage for every employee — <code>Alice &gt; Bob &gt; Dave &gt; Erin</code> shows Erin is four levels deep. The same technique builds category breadcrumbs, comment-reply threads, and any "show the whole branch" view.</p>
 <div class="callout warn">A recursive CTE keeps going until the recursive step returns no new rows. If your data has a <em>cycle</em> (A manages B who manages A — usually a data bug), it would loop forever; guard against it by tracking visited ids in the path and stopping if one repeats. For clean tree data, it simply terminates when it runs out of children.</div>
 <div class="note-ct">Threaded comment replies on this site are exactly this: a comment's <code>parent_id</code> points at another comment, and rendering a full thread walks the chain with a recursive CTE — the same query shape as the org chart above, just over comments. Category trees and any nested navigation use the identical pattern.</div>
+<h3>The two halves of a recursive CTE</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The anchor</span><span class="lz-d">A plain query that produces the starting rows — the root of the tree, the first day of the range. It runs once and never again.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">UNION ALL</span><span class="lz-d">Almost always <code>ALL</code>, not plain <code>UNION</code>: the plain form deduplicates on every iteration, which is both slower and rarely what a tree walk wants.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The recursive term</span><span class="lz-d">A query that references the CTE by name. Each pass sees only the rows produced by the <em>previous</em> pass — not the whole accumulated set. That is the detail people get wrong.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Stop when a pass returns nothing</span><span class="lz-d">There is no explicit exit. The recursion ends when the recursive term produces zero rows, which is why a cycle in the data means it never ends.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — trusting the data to be acyclic.</strong> An org chart where two people are accidentally each other's manager, or a category tree where someone set a parent to its own child, turns a recursive CTE into an infinite loop that consumes memory until the connection dies. It works perfectly on your seed data and takes production down the day someone saves a bad row in the admin panel. Two defences, and use both: carry the visited path in an array and add <code>WHERE NOT node.id = ANY(path)</code>, and add a depth column with <code>WHERE depth &lt; 100</code>. The depth guard costs nothing and turns an outage into a truncated result you can notice.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Next chapter: window functions</span><span class="lc-sub">Rankings, running totals, and per-row-with-its-group calculations — closing Phase 2.</span></span>
@@ -492,6 +564,14 @@ SELECT path FROM tree ORDER BY path;</code></pre>
 <p>Mỗi cấp nối thêm tên của chính nó vào đường dẫn của cha, tạo ra dòng dõi đầy đủ cho mỗi nhân viên — <code>Alice &gt; Bob &gt; Dave &gt; Erin</code> cho thấy Erin sâu bốn cấp. Cùng kỹ thuật đó dựng breadcrumb danh mục, luồng trả lời bình luận, và mọi khung nhìn "hiện cả nhánh".</p>
 <div class="callout warn">Một CTE đệ quy cứ chạy tới khi bước đệ quy không trả về dòng mới nào. Nếu dữ liệu có một <em>chu trình</em> (A quản lý B, B quản lý A — thường là bug dữ liệu), nó sẽ lặp vô tận; hãy phòng bằng cách theo dõi các id đã thăm trong đường dẫn và dừng nếu một cái lặp lại. Với dữ liệu cây sạch, nó đơn giản dừng khi hết con.</div>
 <div class="note-ct">Trả lời bình luận lồng nhau trên trang này đúng là cái này: một <code>parent_id</code> của bình luận trỏ tới một bình luận khác, và hiển thị một luồng đầy đủ đi theo chuỗi bằng một CTE đệ quy — cùng hình truy vấn như sơ đồ tổ chức ở trên, chỉ khác là trên bình luận. Cây danh mục và mọi điều hướng lồng nhau dùng mẫu y hệt.</div>
+<h3>Hai nửa của một CTE đệ quy</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Phần neo</span><span class="lz-d">Một truy vấn thường sinh ra các dòng KHỞI ĐẦU — gốc của cây, ngày đầu của khoảng. Nó chạy một lần và không bao giờ nữa.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">UNION ALL</span><span class="lz-d">Gần như luôn là <code>ALL</code>, không phải <code>UNION</code> trần: dạng trần khử trùng lặp ở MỖI vòng, vừa chậm hơn vừa hiếm khi là thứ một cú duyệt cây muốn.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Phần đệ quy</span><span class="lz-d">Một truy vấn tham chiếu CTE bằng chính tên nó. Mỗi lượt chỉ nhìn thấy các dòng do lượt TRƯỚC sinh ra — không phải toàn bộ tập đã tích luỹ. Đó là chi tiết người ta hay hiểu sai.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Dừng khi một lượt không ra dòng nào</span><span class="lz-d">Không có lối thoát tường minh. Đệ quy kết thúc khi phần đệ quy sinh ra 0 dòng, và chính vì thế một chu trình trong DỮ LIỆU nghĩa là nó không bao giờ kết thúc.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tin rằng dữ liệu không có chu trình.</strong> Một sơ đồ tổ chức mà hai người vô tình làm quản lý của nhau, hay một cây danh mục mà ai đó đặt cha thành chính con của nó, sẽ biến một CTE đệ quy thành vòng lặp vô hạn ngốn bộ nhớ tới khi kết nối chết. Nó chạy hoàn hảo trên dữ liệu seed của bạn và hạ gục production vào ngày có người lưu một dòng xấu trong trang quản trị. Hai lớp phòng thủ, và hãy dùng CẢ HAI: mang đường đã đi trong một mảng rồi thêm <code>WHERE NOT node.id = ANY(path)</code>, và thêm một cột độ sâu với <code>WHERE depth &lt; 100</code>. Chốt độ sâu không tốn gì và biến một sự cố thành một kết quả bị cắt ngắn mà bạn nhận ra được.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Chương tới: hàm cửa sổ</span><span class="lc-sub">Xếp hạng, tổng luỹ tiến, và tính mỗi-dòng-cùng-nhóm-của-nó — khép lại Giai đoạn 2.</span></span>

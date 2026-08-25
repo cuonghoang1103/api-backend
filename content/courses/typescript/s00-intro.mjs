@@ -84,6 +84,7 @@ export default {
 <p>You should already know <strong>basic JavaScript</strong>: variables, functions, objects, arrays, and roughly what <code>async/await</code> does. If that is shaky, do chapters 4–5 of the "Web Foundations" course or chapter 1 of the Node.js course first. You do <strong>not</strong> need any prior TypeScript.</p>
 <div class="callout ok">Time budget: roughly <strong>2–3 hours per chapter</strong> if you type every example and run it through the compiler. 16 chapters ≈ 40–50 hours to genuinely absorb. The goal is not to finish — it's to reach the point where you can look at a red squiggle and know exactly why it's there.</div>
 <div class="note-ct">This site (cuongthai.com) is written in TypeScript end to end: roughly 244 TypeScript files and 80,000 lines on the backend alone, plus a fully typed React/Next frontend. Every database model, every API route, every service is typed. When a chapter says "here's how it's done in production", it means <em>here</em> — including the enum rename that passed every check and still broke production because one file had a hand-written copy of the type.</div>
+<div class="pitfall"><p><strong>Trap — expecting TypeScript to catch bugs at runtime.</strong> Every type annotation you write is erased before the code runs; the JavaScript that ships has no idea what a <code>User</code> is. So a JSON response that claims to be a <code>User</code> and is actually <code>null</code> will crash exactly as it would have without TypeScript — the compiler believed your annotation because you told it to. Types check the code you <em>wrote</em>; they cannot check data that arrives from outside it. Every boundary — HTTP responses, <code>JSON.parse</code>, environment variables, database rows — needs a runtime check, and Chapter 13 shows how Zod turns one schema into both the check and the type.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice track: TypeScript on Code Lab</span><span class="lc-sub">16 modules · 160 hands-on exercises with solutions — the companion drills for this course.</span></span>
@@ -162,6 +163,7 @@ export default {
 <p>Bạn cần biết <strong>JavaScript cơ bản</strong>: biến, hàm, object, mảng, và đại khái <code>async/await</code> làm gì. Nếu phần đó còn chông chênh, hãy học chương 4–5 khoá "Nền tảng Lập trình Web" hoặc chương 1 khoá Node.js trước. Bạn <strong>không</strong> cần biết TypeScript trước.</p>
 <div class="callout ok">Ngân sách thời gian: khoảng <strong>2–3 giờ mỗi chương</strong> nếu bạn gõ mọi ví dụ và cho chạy qua trình biên dịch. 16 chương ≈ 40–50 giờ để thấm thật sự. Mục tiêu không phải học xong — mà là đạt tới lúc nhìn một gạch đỏ là biết ngay vì sao nó ở đó.</div>
 <div class="note-ct">Site này (cuongthai.com) viết bằng TypeScript từ đầu tới cuối: khoảng 244 file TypeScript và 80.000 dòng chỉ riêng backend, cộng một frontend React/Next gõ kiểu đầy đủ. Mọi model cơ sở dữ liệu, mọi route API, mọi service đều có kiểu. Khi một chương nói "trong production người ta làm thế này", nghĩa là <em>ở đây</em> — kể cả lần đổi tên một enum qua sạch mọi kiểm tra mà vẫn vỡ production vì có một file giữ bản chép tay của kiểu đó.</div>
+<div class="pitfall"><p><strong>Bẫy — trông đợi TypeScript bắt lỗi lúc CHẠY.</strong> Mọi chú thích kiểu bạn viết đều bị XOÁ trước khi mã chạy; đoạn JavaScript được đẩy đi không hề biết <code>User</code> là cái gì. Nên một phản hồi JSON tự nhận là <code>User</code> mà thật ra là <code>null</code> sẽ sập y hệt như khi không có TypeScript — trình biên dịch TIN chú thích của bạn vì chính bạn bảo nó thế. Kiểu kiểm thứ mã bạn <em>đã viết</em>; nó không kiểm được dữ liệu đến từ BÊN NGOÀI. Mọi ranh giới — phản hồi HTTP, <code>JSON.parse</code>, biến môi trường, dòng dữ liệu từ CSDL — đều cần một phép kiểm lúc chạy, và Chương 13 chỉ cách Zod biến MỘT lược đồ thành cả phép kiểm lẫn cái kiểu.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Track luyện tập: TypeScript trên Code Lab</span><span class="lc-sub">16 module · 160 bài tập có lời giải — phần thực hành đi kèm khoá học này.</span></span>
@@ -386,6 +388,13 @@ node hello.ts</code></pre>
   <div class="kv"><span class="k">Error Lens extension</span><span class="v">Optional: prints the error inline on the line instead of hiding it in a panel.</span></div>
 </div>
 <div class="note-ct">This site pins TypeScript in <code>package.json</code> and runs <code>tsc --noEmit</code> as a required CI step before every deploy — because the runtime (tsx / compiled JS) never checks types, CI is the only gate that does. The project even has a <em>second</em> tsc config just for its database seed script, added after an enum rename passed the main check and still broke production. Chapter 9 tells that story.</div>
+<h3>Four ways to run TypeScript, and what each is for</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">tsc</span><span class="lz-lnote">The compiler. Checks types <em>and</em> emits JavaScript. This is what CI runs, and <code>tsc --noEmit</code> is the check-only form you will type most often.</span></div>
+<div class="lz-layer"><span class="lz-lname">tsx / ts-node</span><span class="lz-lnote">Run a <code>.ts</code> file directly. They strip types rather than check them, so a file with type errors still runs — fast for development, useless as a gate.</span></div>
+<div class="lz-layer"><span class="lz-lname">Your editor</span><span class="lz-lnote">The same language service <code>tsc</code> uses, running continuously. Red squiggles are real errors, which is why the editor catching nothing and CI failing means the two are reading different configs.</span></div>
+<div class="lz-layer"><span class="lz-lname">esbuild / swc</span><span class="lz-lnote">Bundlers that strip types at enormous speed and check nothing at all. Chapter 15 measures this: they are the build, <code>tsc --noEmit</code> is the check, and you need both.</span></div>
+</div>
 <a class="link-card dl" href="https://www.typescriptlang.org/download" target="_blank" rel="noopener">
   <span class="lc-ico">⬇️</span>
   <span class="lc-body"><span class="lc-title">typescriptlang.org/download — official install guide</span><span class="lc-sub">Every install path (npm, per-project, editors) from the source of truth.</span></span>
@@ -469,6 +478,13 @@ node hello.ts</code></pre>
   <div class="kv"><span class="k">Extension Error Lens</span><span class="v">Tuỳ chọn: in lỗi ngay trên dòng thay vì giấu trong một panel.</span></div>
 </div>
 <div class="note-ct">Site này ghim TypeScript trong <code>package.json</code> và chạy <code>tsc --noEmit</code> như một bước CI bắt buộc trước mỗi lần deploy — vì môi trường chạy (tsx / JS đã biên dịch) không bao giờ kiểm tra kiểu, CI là cửa gác duy nhất làm việc đó. Dự án thậm chí có một cấu hình tsc <em>thứ hai</em> chỉ dành cho script seed cơ sở dữ liệu, thêm vào sau khi một lần đổi tên enum qua sạch kiểm tra chính mà vẫn vỡ production. Chương 9 kể lại câu chuyện đó.</div>
+<h3>Bốn cách chạy TypeScript, và mỗi cách để làm gì</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">tsc</span><span class="lz-lnote">Trình biên dịch. Kiểm kiểu <em>và</em> phát ra JavaScript. Đây là thứ CI chạy, và <code>tsc --noEmit</code> là dạng chỉ-kiểm mà bạn sẽ gõ nhiều nhất.</span></div>
+<div class="lz-layer"><span class="lz-lname">tsx / ts-node</span><span class="lz-lnote">Chạy thẳng một tệp <code>.ts</code>. Chúng LỘT bỏ kiểu chứ không kiểm, nên một tệp có lỗi kiểu vẫn chạy — nhanh cho lúc phát triển, vô dụng khi làm chốt chặn.</span></div>
+<div class="lz-layer"><span class="lz-lname">Trình soạn thảo của bạn</span><span class="lz-lnote">Cùng một language service mà <code>tsc</code> dùng, chạy liên tục. Gạch đỏ là lỗi THẬT, và đó là lý do editor không báo gì mà CI lại đỏ nghĩa là hai bên đang đọc hai config khác nhau.</span></div>
+<div class="lz-layer"><span class="lz-lname">esbuild / swc</span><span class="lz-lnote">Các bộ đóng gói lột kiểu với tốc độ khủng khiếp và KHÔNG kiểm gì cả. Chương 15 đo chuyện này: chúng là phần DỰNG, <code>tsc --noEmit</code> là phần KIỂM, và bạn cần cả hai.</span></div>
+</div>
 <a class="link-card dl" href="https://www.typescriptlang.org/download" target="_blank" rel="noopener">
   <span class="lc-ico">⬇️</span>
   <span class="lc-body"><span class="lc-title">typescriptlang.org/download — hướng dẫn cài chính thức</span><span class="lc-sub">Mọi cách cài (npm, theo dự án, editor) từ nguồn chuẩn.</span></span>

@@ -54,6 +54,15 @@ ORDER BY n.id;</code></pre>
 (5 rows)</div>
 <p><code>USING (id)</code> matched <code>note.id = note_stat.id</code> and joined every note to its stats. Use <code>USING</code> when the column names line up; reach for <code>ON</code> the moment they differ (which, with <code>user_id</code> → <code>id</code> style keys, is most of the time).</p>
 <div class="note-ct">Every "post by an author" you see on this site is this join. The feed stores a post with an <code>author_id</code>, and rendering it joins to the users table to get the name and avatar — never copying those into the post row. Change your display name once, and every past post shows the new name, because the name was never duplicated: it's fetched fresh by the join.</div>
+<h3>What the server actually does</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Read both sides</span><span class="lz-d">Scan <code>note</code> and <code>app_user</code>. Neither is "the main table" — the planner picks which one to walk first, and Chapter 10 shows you how to see its choice.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Match on the condition</span><span class="lz-d">For every candidate pair, test <code>u.id = n.user_id</code>. A match emits one combined row; a miss emits nothing.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Project the columns</span><span class="lz-d">Only then does <code>SELECT</code> pick <code>n.title</code>, <code>u.name</code>. The join produces wide rows; the select list narrows them.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Order last</span><span class="lz-d"><code>ORDER BY</code> runs on the joined result, not on either table. That is why you can sort by a column from either side.</span></div>
+</div>
+<p>Reading a join in this order explains a surprise you will meet in 5.4: the number of output rows is decided at step 2, before <code>SELECT</code> ever runs — so a query that returns "too many rows" is never fixed by changing the select list.</p>
+<div class="pitfall"><p><strong>Trap — joining on a column that is not unique on either side.</strong> <code>JOIN app_user u ON u.name = n.author_name</code> looks reasonable and passes every test, until two users are both called "Cuong". Then every one of that user's notes comes back twice, the count on the page doubles, and nothing errors. A join condition is safe when at least one side is guaranteed unique — a primary key or a <code>UNIQUE</code> constraint. Join on <code>id</code>, never on a display name. If you find yourself joining on text, that is usually the sign that Chapter 3's normalization step was skipped.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: join notes to their authors and stats</span><span class="lc-sub">The Code Lab track sets up the multi-table data used across this chapter.</span></span>
@@ -95,6 +104,15 @@ ORDER BY n.id;</code></pre>
 (5 rows)</div>
 <p><code>USING (id)</code> khớp <code>note.id = note_stat.id</code> và join mỗi note với thống kê của nó. Dùng <code>USING</code> khi tên cột trùng khớp; vươn tới <code>ON</code> ngay khi chúng khác nhau (mà với các khoá kiểu <code>user_id</code> → <code>id</code>, đó là đa số trường hợp).</p>
 <div class="note-ct">Mọi "bài đăng của một tác giả" bạn thấy trên trang này chính là phép join này. Bảng tin lưu một bài đăng với một <code>author_id</code>, và khi hiển thị nó join sang bảng users để lấy tên và ảnh đại diện — không bao giờ chép chúng vào dòng bài đăng. Đổi tên hiển thị một lần, và mọi bài đăng cũ hiện tên mới, vì tên chưa bao giờ bị nhân bản: nó được lấy tươi bởi phép join.</div>
+<h3>Máy chủ thật sự làm gì</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đọc cả hai phía</span><span class="lz-d">Quét <code>note</code> và <code>app_user</code>. Không cái nào là "bảng chính" — planner tự chọn đi bảng nào trước, và Chương 10 chỉ bạn cách nhìn ra lựa chọn đó.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Khớp theo điều kiện</span><span class="lz-d">Với mỗi cặp ứng viên, kiểm <code>u.id = n.user_id</code>. Khớp thì phát ra một dòng ghép; trượt thì không phát gì.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Chiếu cột</span><span class="lz-d">Tới lúc này <code>SELECT</code> mới lấy <code>n.title</code>, <code>u.name</code>. Join sinh ra dòng RỘNG; select list mới thu hẹp lại.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Sắp xếp sau cùng</span><span class="lz-d"><code>ORDER BY</code> chạy trên kết quả ĐÃ join, không phải trên một bảng nào. Đó là lý do bạn sắp được theo cột của cả hai phía.</span></div>
+</div>
+<p>Đọc join theo thứ tự này giải thích một bất ngờ bạn sẽ gặp ở 5.4: SỐ DÒNG đầu ra được quyết ở bước 2, TRƯỚC khi <code>SELECT</code> chạy — nên một truy vấn trả "quá nhiều dòng" không bao giờ chữa được bằng cách sửa select list.</p>
+<div class="pitfall"><p><strong>Bẫy — join theo một cột không duy nhất ở cả hai phía.</strong> <code>JOIN app_user u ON u.name = n.author_name</code> trông hợp lý và qua mọi bài test, cho tới khi có hai user cùng tên "Cuong". Lúc đó mọi note của user ấy về hai lần, con số đếm trên trang gấp đôi, và không có lỗi nào cả. Một điều kiện join an toàn khi ÍT NHẤT một phía bảo đảm duy nhất — khoá chính hoặc ràng buộc <code>UNIQUE</code>. Hãy join theo <code>id</code>, đừng bao giờ join theo tên hiển thị. Nếu thấy mình đang join theo chữ, thường đó là dấu hiệu bước chuẩn hoá ở Chương 3 đã bị bỏ qua.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: join note với tác giả và thống kê của chúng</span><span class="lc-sub">Track Code Lab dựng bộ dữ liệu nhiều bảng dùng xuyên suốt chương này.</span></span>
@@ -171,6 +189,15 @@ ORDER BY u.id NULLS LAST, n.id NULLS LAST;</code></pre>
 (6 rows)</div>
 <div class="callout ok">In practice, <strong><code>LEFT JOIN</code> is by far the most used</strong> — you keep your "main" table on the left and optionally attach related data. <code>RIGHT JOIN</code> is rare (just flip the tables and use LEFT). <code>FULL JOIN</code> is occasional, mostly for reconciliation ("show me everything on either side, matched or not").</div>
 <div class="note-ct">The site uses LEFT JOINs to render "your profile with your stats even if they're all zero" — a brand-new user with no posts, no followers still shows a complete profile, with zeros where an INNER JOIN would have made the whole row vanish. And the anti-join pattern powers cleanup tasks: finding uploaded files no record points at, or accounts with no activity.</div>
+<h3>The four shapes, side by side</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">INNER</span><span class="lz-lnote">Only pairs that matched. Both unmatched sets are dropped. Row count ≤ either table.</span></div>
+<div class="lz-layer"><span class="lz-lname">LEFT</span><span class="lz-lnote">Every left row survives. Unmatched left rows get <code>NULL</code> for every right column. Row count ≥ left table.</span></div>
+<div class="lz-layer"><span class="lz-lname">RIGHT</span><span class="lz-lnote">The mirror image. Rare in practice — most people flip the table order and write LEFT, which reads better.</span></div>
+<div class="lz-layer"><span class="lz-lname">FULL</span><span class="lz-lnote">Everything from both sides, <code>NULL</code>-padded where there is no partner. The only shape that can produce <code>NULL</code> on either side.</span></div>
+</div>
+<p>The anti-join — "rows on the left with no partner at all" — is not a fifth keyword. It is <code>LEFT JOIN</code> plus <code>WHERE right.id IS NULL</code>, and that <code>IS NULL</code> test is the whole trick: it keeps exactly the rows the padding created.</p>
+<div class="pitfall"><p><strong>Trap — putting a condition on the right table in <code>WHERE</code> instead of <code>ON</code>.</strong> <code>LEFT JOIN note n ON n.user_id = u.id WHERE n.tag = 'sql'</code> silently becomes an INNER JOIN. The padding rows have <code>n.tag = NULL</code>, <code>NULL = 'sql'</code> is not true, and <code>WHERE</code> throws them away — so every user without a matching note vanishes, which is precisely the set <code>LEFT</code> existed to keep. The rule is mechanical: a filter on the <em>preserved</em> side belongs in <code>WHERE</code>; a filter on the <em>optional</em> side belongs in <code>ON</code>. Move it to <code>ON n.user_id = u.id AND n.tag = 'sql'</code> and the users come back.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: LEFT JOIN and the find-the-orphans anti-join</span><span class="lc-sub">The Code Lab track reproduces every result above.</span></span>
@@ -237,6 +264,15 @@ ORDER BY u.id NULLS LAST, n.id NULLS LAST;</code></pre>
 (6 rows)</div>
 <div class="callout ok">Thực tế, <strong><code>LEFT JOIN</code> được dùng nhiều nhất</strong> — bạn giữ bảng "chính" ở bên trái và tuỳ chọn đính kèm dữ liệu liên quan. <code>RIGHT JOIN</code> hiếm (chỉ cần lật hai bảng rồi dùng LEFT). <code>FULL JOIN</code> thỉnh thoảng, chủ yếu để đối soát ("cho tôi mọi thứ ở cả hai phía, khớp hay không").</div>
 <div class="note-ct">Trang này dùng LEFT JOIN để hiện "hồ sơ của bạn kèm thống kê kể cả khi tất cả bằng không" — một user mới toanh chưa có bài, chưa có người theo dõi vẫn hiện một hồ sơ đầy đủ, với số không ở chỗ mà INNER JOIN sẽ làm biến mất cả dòng. Và mẫu anti-join chạy các tác vụ dọn dẹp: tìm file đã tải lên mà không bản ghi nào trỏ tới, hay tài khoản không hoạt động.</div>
+<h3>Bốn hình dạng, đặt cạnh nhau</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">INNER</span><span class="lz-lnote">Chỉ những cặp đã khớp. Cả hai tập không khớp đều bị bỏ. Số dòng ≤ mỗi bảng.</span></div>
+<div class="lz-layer"><span class="lz-lname">LEFT</span><span class="lz-lnote">Mọi dòng bên trái đều sống. Dòng trái không khớp nhận <code>NULL</code> cho mọi cột bên phải. Số dòng ≥ bảng trái.</span></div>
+<div class="lz-layer"><span class="lz-lname">RIGHT</span><span class="lz-lnote">Ảnh gương của LEFT. Hiếm dùng thật — phần lớn người ta đảo thứ tự bảng rồi viết LEFT, đọc xuôi hơn.</span></div>
+<div class="lz-layer"><span class="lz-lname">FULL</span><span class="lz-lnote">Lấy hết cả hai phía, đệm <code>NULL</code> chỗ không có bạn. Hình dạng DUY NHẤT có thể sinh <code>NULL</code> ở cả hai bên.</span></div>
+</div>
+<p>Anti-join — "những dòng bên trái hoàn toàn không có bạn" — không phải một từ khoá thứ năm. Nó là <code>LEFT JOIN</code> cộng <code>WHERE right.id IS NULL</code>, và chính phép kiểm <code>IS NULL</code> ấy là toàn bộ mẹo: nó giữ đúng những dòng mà phần đệm vừa tạo ra.</p>
+<div class="pitfall"><p><strong>Bẫy — đặt điều kiện của bảng phải vào <code>WHERE</code> thay vì <code>ON</code>.</strong> <code>LEFT JOIN note n ON n.user_id = u.id WHERE n.tag = 'sql'</code> âm thầm biến thành INNER JOIN. Các dòng đệm có <code>n.tag = NULL</code>, mà <code>NULL = 'sql'</code> không đúng, nên <code>WHERE</code> vứt chúng đi — thế là mọi user không có note khớp biến mất, đúng cái tập mà <code>LEFT</code> sinh ra để giữ. Luật rất máy móc: bộ lọc trên phía <em>được giữ</em> thì thuộc về <code>WHERE</code>; bộ lọc trên phía <em>tuỳ chọn</em> thì thuộc về <code>ON</code>. Chuyển thành <code>ON n.user_id = u.id AND n.tag = 'sql'</code> là các user quay lại.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: LEFT JOIN và anti-join tìm mồ côi</span><span class="lc-sub">Track Code Lab tái hiện mọi kết quả ở trên.</span></span>
@@ -288,6 +324,14 @@ ORDER BY e.id;</code></pre>
 (4 rows)</div>
 <p>The same physical table plays two roles at once. Notice it's a <code>LEFT JOIN</code> on purpose: Alice is the top boss with <code>manager_id = NULL</code>, and LEFT keeps her (with an empty manager) — an INNER JOIN would have dropped the one person at the top. Self-joins model any "points at another row of the same kind": reply-to on comments, parent category on categories, referred-by on users.</p>
 <div class="note-ct">This exact three-table shape is a comment thread on the site: a comment row joins to its post, to the post's author, and to the commenter — one query renders "Lan commented 'Great intro!' on Cuong's post". And the self-join is how threaded replies work: a comment's <code>parent_id</code> points at another comment in the same table, joined to itself to show "replying to …".</div>
+<h3>Reading a three-table join</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">A</span><span class="lz-t">Joins are left-associative</span><span class="lz-d"><code>a JOIN b JOIN c</code> means <code>(a JOIN b) JOIN c</code>. The third join sees the combined result of the first two, which is why <code>c</code> may reference columns from either <code>a</code> or <code>b</code>.</span></div>
+<div class="lz-step"><span class="lz-k">B</span><span class="lz-t">Written order ≠ executed order</span><span class="lz-d">The planner is free to reorder inner joins entirely. Your job is to state the relationships correctly; its job is to find the cheapest path (Chapter 10.2).</span></div>
+<div class="lz-step"><span class="lz-k">C</span><span class="lz-t">A self-join needs two aliases</span><span class="lz-d">The same table twice is legal only when each copy has its own name — <code>employee e JOIN employee m ON m.id = e.manager_id</code>. Without aliases the server cannot tell which <code>id</code> you mean.</span></div>
+<div class="lz-step"><span class="lz-k">D</span><span class="lz-t">Self-joins are usually LEFT</span><span class="lz-d">The top of a hierarchy has no parent. <code>INNER</code> silently drops the CEO; <code>LEFT</code> keeps them with a <code>NULL</code> manager, which is almost always what you meant.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — assuming more joined tables means a proportionally slower query.</strong> The instinct is that six joins must be six times the work of one, so people flatten their schema to "avoid joins". Measured, the opposite is usually true: joining six small, indexed tables is routinely faster than scanning one wide denormalized table, because each join reads only the rows the previous step actually needs. What genuinely costs is a join with no usable index on the join key — one such join can dominate a query containing ten good ones. Chapter 9 measures exactly this: an index turned 28.6ms into 0.129ms on a single join. Count missing indexes, not joins.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: the 3-table comment query and the employee self-join</span><span class="lc-sub">The Code Lab track walks through aliasing a table twice.</span></span>
@@ -329,6 +373,14 @@ ORDER BY e.id;</code></pre>
 (4 rows)</div>
 <p>Cùng một bảng vật lý đóng hai vai cùng lúc. Để ý đây là <code>LEFT JOIN</code> có chủ đích: Alice là sếp cao nhất với <code>manager_id = NULL</code>, và LEFT giữ cô ấy (với quản lý trống) — một INNER JOIN sẽ rớt đúng người ở đỉnh. Self-join mô hình hoá mọi thứ "trỏ tới một dòng khác cùng loại": reply-to trên bình luận, danh mục cha trên danh mục, được-giới-thiệu-bởi trên user.</p>
 <div class="note-ct">Đúng hình ba-bảng này là một luồng bình luận trên trang: một dòng bình luận join tới bài đăng của nó, tới tác giả bài đăng, và tới người bình luận — một truy vấn hiện "Lan bình luận 'Great intro!' trên bài của Cuong". Và self-join là cách các trả lời lồng nhau hoạt động: một <code>parent_id</code> của bình luận trỏ tới một bình luận khác trong cùng bảng, join với chính nó để hiện "đang trả lời …".</div>
+<h3>Đọc một truy vấn join ba bảng</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">A</span><span class="lz-t">Join kết hợp từ TRÁI</span><span class="lz-d"><code>a JOIN b JOIN c</code> nghĩa là <code>(a JOIN b) JOIN c</code>. Cú join thứ ba nhìn thấy kết quả ghép của hai cú đầu, nên <code>c</code> tham chiếu được cột của cả <code>a</code> lẫn <code>b</code>.</span></div>
+<div class="lz-step"><span class="lz-k">B</span><span class="lz-t">Thứ tự VIẾT ≠ thứ tự CHẠY</span><span class="lz-d">Planner được phép sắp xếp lại hoàn toàn các inner join. Việc của bạn là khai đúng quan hệ; việc của nó là tìm đường rẻ nhất (Bài 10.2).</span></div>
+<div class="lz-step"><span class="lz-k">C</span><span class="lz-t">Self-join cần HAI alias</span><span class="lz-d">Cùng một bảng hai lần chỉ hợp lệ khi mỗi bản có tên riêng — <code>employee e JOIN employee m ON m.id = e.manager_id</code>. Không alias thì máy chủ không biết bạn nói <code>id</code> nào.</span></div>
+<div class="lz-step"><span class="lz-k">D</span><span class="lz-t">Self-join thường phải LEFT</span><span class="lz-d">Đỉnh của một cây thì không có cha. <code>INNER</code> âm thầm vứt mất CEO; <code>LEFT</code> giữ họ lại với manager <code>NULL</code>, gần như luôn là ý bạn muốn.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tưởng càng nhiều bảng join thì truy vấn càng chậm theo tỉ lệ.</strong> Trực giác nói sáu cú join phải nặng gấp sáu lần một cú, nên người ta làm phẳng lược đồ để "tránh join". Đo thật thì thường NGƯỢC LẠI: join sáu bảng nhỏ có chỉ mục thường nhanh hơn quét MỘT bảng rộng đã phi chuẩn hoá, vì mỗi cú join chỉ đọc đúng những dòng bước trước thật sự cần. Cái ĐẮT thật là một cú join không có chỉ mục dùng được trên khoá join — một cú như thế đủ lấn át cả truy vấn có mười cú join tốt. Chương 9 đo đúng chuyện này: một chỉ mục biến 28,6ms thành 0,129ms trên đúng một cú join. Hãy đếm chỉ mục THIẾU, đừng đếm số join.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: truy vấn bình luận 3 bảng và self-join nhân viên</span><span class="lc-sub">Track Code Lab đi qua việc đặt alias một bảng hai lần.</span></span>
@@ -405,6 +457,22 @@ ORDER BY u.id, n.id;</code></pre>
 (5 rows)</div>
 <div class="callout danger">The rule: on an OUTER JOIN, conditions that <em>define the match</em> go in <code>ON</code>; conditions that <em>filter the final result</em> go in <code>WHERE</code>. Putting a right-table filter in <code>WHERE</code> silently turns your LEFT JOIN back into an INNER JOIN — a very common source of "rows I expected are missing".</div>
 <div class="note-ct">Both of the last two traps have real consequences here. A dashboard that counts posts-with-their-comments in one join over-counts unless it aggregates — the fan-out. And a "show all users, plus their latest sql note if any" panel must put the tag filter in the <code>ON</code>, or brand-new users disappear from the list entirely. Chapter 6 is aggregation — exactly the tool that tames fan-out.</div>
+<h3>Where the extra rows come from</h3>
+<div class="lz-map">
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">Fan-out</span><span class="lz-nsub">one-to-many, joined twice</span></span>
+<span class="lz-nbody">Join <code>order</code> to <code>order_item</code> and the order row repeats once per item. Now add <code>SUM(o.total)</code> and the order total is counted once per item — a number that is too large by exactly the item count. The join was correct; the aggregate was applied at the wrong grain.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">Accidental CROSS JOIN</span><span class="lz-nsub">a forgotten ON</span></span>
+<span class="lz-nbody">Comma-separated tables with no <code>WHERE</code> linking them produce every pair: 1,000 × 1,000 = one million rows from two small tables. It rarely errors — it just hangs, and the row count is the giveaway.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">Deliberate CROSS JOIN</span><span class="lz-nsub">and it is genuinely useful</span></span>
+<span class="lz-nbody">Generating a calendar (every day × every product), filling gaps in a report, building a test matrix. When you want the full product, say <code>CROSS JOIN</code> explicitly so the next reader knows it was intended.</span>
+</div>
+</div>
+<div class="pitfall"><p><strong>Trap — debugging a wrong total by staring at the <code>SUM</code>.</strong> When a report shows an inflated figure, the arithmetic is almost never wrong; the row count is. The fastest diagnosis is to delete the aggregate entirely and run the bare join with <code>SELECT *</code> — then count the rows and look at the duplicates with your own eyes. If one order appears three times, you have found it, and no amount of rewriting the <code>SUM</code> would have. The fix is to aggregate the many-side first (a subquery or CTE, Chapter 7) and join to that single row, rather than joining first and aggregating after.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Next chapter: aggregation & GROUP BY</span><span class="lc-sub">You can combine tables; next, summarize them — counts, sums, averages per group.</span></span>
@@ -471,6 +539,22 @@ ORDER BY u.id, n.id;</code></pre>
 (5 rows)</div>
 <div class="callout danger">Luật: trên một OUTER JOIN, các điều kiện <em>định nghĩa sự khớp</em> đặt vào <code>ON</code>; các điều kiện <em>lọc kết quả cuối</em> đặt vào <code>WHERE</code>. Đặt một bộ lọc bảng-phải vào <code>WHERE</code> âm thầm biến LEFT JOIN của bạn trở lại thành INNER JOIN — một nguồn rất phổ biến của "các dòng tôi kỳ vọng bị thiếu".</div>
 <div class="note-ct">Cả hai cạm bẫy cuối đều có hậu quả thật ở đây. Một bảng điều khiển đếm bài-đăng-kèm-bình-luận trong một join sẽ đếm dư trừ khi nó tổng hợp — chính là fan-out. Và một panel "hiện mọi user, cộng note sql mới nhất nếu có" phải đặt bộ lọc tag vào <code>ON</code>, nếu không các user mới toanh biến mất khỏi danh sách hoàn toàn. Chương 6 là tổng hợp — đúng công cụ thuần hoá fan-out.</div>
+<h3>Số dòng thừa đến từ đâu</h3>
+<div class="lz-map">
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">Fan-out</span><span class="lz-nsub">một-nhiều, join hai lần</span></span>
+<span class="lz-nbody">Join <code>order</code> với <code>order_item</code> thì dòng order lặp lại một lần cho mỗi item. Giờ thêm <code>SUM(o.total)</code> và tổng đơn hàng bị đếm một lần cho mỗi item — một con số lớn dư đúng bằng số item. Cú join ĐÚNG; phép tổng hợp áp SAI ĐỘ MỊN.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">CROSS JOIN vô tình</span><span class="lz-nsub">quên mất ON</span></span>
+<span class="lz-nbody">Các bảng ngăn bằng dấu phẩy mà không có <code>WHERE</code> nối chúng sẽ sinh ra MỌI cặp: 1.000 × 1.000 = một triệu dòng từ hai bảng nhỏ. Nó hiếm khi báo lỗi — nó chỉ treo, và số dòng là dấu hiệu tố cáo.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">CROSS JOIN cố ý</span><span class="lz-nsub">và nó hữu ích thật</span></span>
+<span class="lz-nbody">Sinh lịch (mỗi ngày × mỗi sản phẩm), lấp lỗ hổng trong báo cáo, dựng ma trận test. Khi bạn MUỐN tích đầy đủ, hãy viết <code>CROSS JOIN</code> tường minh để người đọc sau biết đó là chủ ý.</span>
+</div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — gỡ một con tổng sai bằng cách nhìn chằm chằm vào <code>SUM</code>.</strong> Khi một báo cáo hiện con số phồng lên, phép tính gần như không bao giờ sai; SỐ DÒNG mới sai. Cách chẩn đoán nhanh nhất là XOÁ HẲN phép tổng hợp rồi chạy cú join trần với <code>SELECT *</code> — sau đó đếm dòng và nhìn tận mắt các bản trùng. Nếu một order hiện ba lần, bạn đã tìm ra, và sửa <code>SUM</code> bao nhiêu lần cũng không ra. Cách chữa là tổng hợp phía NHIỀU trước (subquery hoặc CTE, Chương 7) rồi join vào đúng một dòng, thay vì join trước rồi tổng hợp sau.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Chương tới: tổng hợp & GROUP BY</span><span class="lc-sub">Bạn kết hợp được các bảng; tiếp theo: tóm tắt chúng — đếm, tổng, trung bình theo nhóm.</span></span>

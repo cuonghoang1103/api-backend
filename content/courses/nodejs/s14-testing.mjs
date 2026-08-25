@@ -32,9 +32,9 @@ e2e (server thật + HTTP)  331.0ms / 100 = 3.3ms mỗi test  (734× unit)</div>
 <p>Read that as a budget, not as a verdict. A ten-second test suite can hold either 16 million unit assertions or 1.800 integration ones. Both suites take ten seconds; they do not catch the same bugs.</p>
 
 <div class="lz-map">
-  <div class="lz-node"><span class="lz-t">Unit</span><span class="lz-d">0,0006ms · kiểm một hàm, phụ thuộc đều là giả. Bắt lỗi logic, lỗi biên, lỗi tính toán</span></div>
-  <div class="lz-node"><span class="lz-t">Integration</span><span class="lz-d">5,5ms · kiểm route + service + DB thật. Bắt lỗi SQL, ràng buộc, mã trạng thái, phân quyền</span></div>
-  <div class="lz-node"><span class="lz-t">E2E</span><span class="lz-d">3,3ms trở lên · server thật nghe cổng, client HTTP thật. Bắt lỗi lắp ráp: middleware sai thứ tự, route chưa mount</span></div>
+  <div class="lz-node"><span class="lz-t">Unit</span><span class="lz-d">0.0006ms · tests one function with every dependency faked. Catches logic errors, boundary errors, arithmetic errors</span></div>
+  <div class="lz-node"><span class="lz-t">Integration</span><span class="lz-d">5.5ms · tests route + service + a real DB. Catches SQL errors, constraint violations, status codes, authorisation</span></div>
+  <div class="lz-node"><span class="lz-t">E2E</span><span class="lz-d">3.3ms and up · a real server listening on a port, a real HTTP client. Catches assembly errors: middleware in the wrong order, a route never mounted</span></div>
 </div>
 
 <div class="callout">
@@ -95,9 +95,9 @@ Tests:       12 passed, 12 total</div>
 
 <h3>So which one</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Backend Node thuần, JS hoặc TS qua tsx</span><span class="v">node:test — 0 phụ thuộc, nhanh nhất ở bộ nhỏ, không bao giờ lỗi thời theo Vite</span></div>
-  <div class="kv"><span class="k">Có front-end Vite / React trong cùng repo</span><span class="v">vitest — dùng chung transform, chung config, chung matcher với front-end</span></div>
-  <div class="kv"><span class="k">Repo cũ đã có sẵn hàng nghìn test jest</span><span class="v">giữ jest — chi phí chuyển đổi không đổi lấy được gì ở bảng số trên</span></div>
+  <div class="kv"><span class="k">A pure Node backend, JS or TS through tsx</span><span class="v">node:test — zero dependencies, fastest on small suites, and never made obsolete by a Vite release</span></div>
+  <div class="kv"><span class="k">A Vite / React frontend in the same repo</span><span class="v">vitest — shares the transform, the config and the matchers with the frontend</span></div>
+  <div class="kv"><span class="k">An older repo with thousands of existing jest tests</span><span class="v">keep jest — the migration cost buys you nothing in the table above</span></div>
 </div>
 <p>This chapter writes its examples in vitest, because its <code>expect</code> API is the one most readers will meet in job interviews and in existing repos, and because its assertion output is the most readable while you are learning. Every example converts to <code>node:test</code> mechanically: <code>expect(x).toBe(y)</code> becomes <code>assert.equal(x, y)</code>, and lesson 14.2 shows the one place where the two runners genuinely behave differently.</p>
 
@@ -106,10 +106,10 @@ Tests:       12 passed, 12 total</div>
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/nodejs-express${REF}#module-325"><span class="lc-t">Code Lab · Testing, Deployment, and Production Readiness</span><span class="lc-d">Bài tập kiểm thử cho backend Node/Express</span></a>
+  <a href="/code-lab/nodejs-express${REF}#module-325"><span class="lc-t">Code Lab · Testing, Deployment, and Production Readiness</span><span class="lc-d">Testing exercises for a Node/Express backend</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/javascript${REF}#module-268"><span class="lc-t">Code Lab · JavaScript Patterns and Testing</span><span class="lc-d">Nền tảng viết test cho JavaScript</span></a>
+  <a href="/code-lab/javascript${REF}#module-268"><span class="lc-t">Code Lab · JavaScript Patterns and Testing</span><span class="lc-d">Foundations of writing tests in JavaScript</span></a>
 </div>
 </div>
 
@@ -265,11 +265,11 @@ export async function create(actor, input) {
 
 <h3>The five kinds of test double</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Dummy</span><span class="v">chỉ để lấp chỗ trống trong tham số, không bao giờ bị gọi</span></div>
-  <div class="kv"><span class="k">Stub</span><span class="v">trả về giá trị định sẵn: <code>findBySlug: async () =&gt; null</code></span></div>
-  <div class="kv"><span class="k">Spy</span><span class="v">gọi thật nhưng ghi lại lời gọi để kiểm sau</span></div>
-  <div class="kv"><span class="k">Mock</span><span class="v">stub + kỳ vọng về việc nó phải được gọi thế nào</span></div>
-  <div class="kv"><span class="k">Fake</span><span class="v">bản cài đặt thu nhỏ nhưng chạy được thật, ví dụ repo lưu trong Map</span></div>
+  <div class="kv"><span class="k">Dummy</span><span class="v">purely to fill a parameter slot; never actually called</span></div>
+  <div class="kv"><span class="k">Stub</span><span class="v">returns a canned value: <code>findBySlug: async () =&gt; null</code></span></div>
+  <div class="kv"><span class="k">Spy</span><span class="v">calls through for real but records the call so you can inspect it later</span></div>
+  <div class="kv"><span class="k">Mock</span><span class="v">a stub plus an expectation about how it must be called</span></div>
+  <div class="kv"><span class="k">Fake</span><span class="v">a miniature but genuinely working implementation, such as a repository backed by a Map</span></div>
 </div>
 <p>In practice the distinction that matters is <em>state versus interaction</em>. Assert on the returned value when you can; assert on "was this called" only when the call itself <strong>is</strong> the behaviour — as in "a duplicate slug must not reach the database at all":</p>
 <pre><code>function fakeRepo(overrides = {}) {
@@ -328,20 +328,20 @@ $ npx vitest run tests/time-real.test.mjs   (1 test, chờ THẬT 1,5 giây)
 
 <h3>Four tests that pass while checking nothing</h3>
 <p>This is the failure mode nobody warns you about. Every one of these looks like a test, is counted as a test, turns the suite green, and verifies precisely nothing:</p>
-<pre><code>async function chuyenTien() { throw new Error('SO_DU_KHONG_DU'); }
-async function tinhTong() { return 5; }
+<pre><code>async function chuyenTien() { throw new Error('INSUFFICIENT_FUNDS'); }
+async function computeTotal() { return 5; }
 
 it('1. quên await ở rejects', () =&gt; {
   expect(chuyenTien()).rejects.toThrow('THÔNG_ĐIỆP_HOÀN_TOÀN_SAI');   // thiếu await
 });
 it('2. quên await ở lời gọi async', () =&gt; {
-  expect(tinhTong()).toBe(999);                                        // so Promise với số
+  expect(computeTotal()).toBe(999);                                        // so Promise với số
 });
 it('3. assertion nằm trong callback không bao giờ chạy', () =&gt; {
   [].forEach(() =&gt; { expect(1).toBe(2); });
 });
 it('4. try/catch nuốt lỗi', async () =&gt; {
-  try { expect(await tinhTong()).toBe(999); } catch { /* nuốt */ }
+  try { expect(await computeTotal()).toBe(999); } catch { /* nuốt */ }
 });</code></pre>
 <p>Run under vitest 4.1.10:</p>
 <div class="out">× 1. quên await ở rejects                              7ms
@@ -374,10 +374,17 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/javascript${REF}#module-565"><span class="lc-t">Code Lab · Advanced Testing, CI/CD, and Deployment</span><span class="lc-d">Test double, mock và tổ chức bộ test</span></a>
+  <a href="/code-lab/javascript${REF}#module-565"><span class="lc-t">Code Lab · Advanced Testing, CI/CD, and Deployment</span><span class="lc-d">Test doubles, mocks and organising a suite</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/typescript${REF}#module-571"><span class="lc-t">Code Lab · TypeScript Testing Strategies</span><span class="lc-d">Kiểm thử khi có kiểu tĩnh — và kiểm cả chính kiểu</span></a>
+  <a href="/code-lab/typescript${REF}#module-571"><span class="lc-t">Code Lab · TypeScript Testing Strategies</span><span class="lc-d">Testing with static types — and testing the types themselves</span></a>
+</div>
+<h3>A unit test that can actually fail</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Arrange, act, assert</span><span class="lz-d">Set up the input, call the thing, check the output. A test that does not fit this shape is usually testing more than one thing.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Inject what you want to replace</span><span class="lz-d">A service that constructs its own database client cannot be tested without one. Passing it in is what makes a double possible.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Assert on the outcome, not the calls</span><span class="lz-d">&quot;<code>save</code> was called once&quot; passes after a refactor that broke the behaviour. &quot;The stored record has status paid&quot; does not.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Make it fail once, deliberately</span><span class="lz-d">A new test that has never failed might be asserting nothing — a missing <code>await</code>, an assertion in a callback that never runs.</span></div>
 </div>
 </div>
 
@@ -492,20 +499,20 @@ $ npx vitest run tests/time-real.test.mjs   (1 test, chờ THẬT 1,5 giây)
 
 <h3>Bốn bài test màu xanh mà chẳng kiểm gì</h3>
 <p>Đây là kiểu hỏng mà không ai cảnh báo bạn. Từng cái một trong số này đều trông như một bài test, đều được đếm là một bài test, đều làm bộ test xanh lè, và đều xác minh đúng bằng không:</p>
-<pre><code>async function chuyenTien() { throw new Error('SO_DU_KHONG_DU'); }
-async function tinhTong() { return 5; }
+<pre><code>async function chuyenTien() { throw new Error('INSUFFICIENT_FUNDS'); }
+async function computeTotal() { return 5; }
 
 it('1. quên await ở rejects', () =&gt; {
   expect(chuyenTien()).rejects.toThrow('THÔNG_ĐIỆP_HOÀN_TOÀN_SAI');   // thiếu await
 });
 it('2. quên await ở lời gọi async', () =&gt; {
-  expect(tinhTong()).toBe(999);                                        // so Promise với số
+  expect(computeTotal()).toBe(999);                                        // so Promise với số
 });
 it('3. assertion nằm trong callback không bao giờ chạy', () =&gt; {
   [].forEach(() =&gt; { expect(1).toBe(2); });
 });
 it('4. try/catch nuốt lỗi', async () =&gt; {
-  try { expect(await tinhTong()).toBe(999); } catch { /* nuốt */ }
+  try { expect(await computeTotal()).toBe(999); } catch { /* nuốt */ }
 });</code></pre>
 <p>Chạy dưới vitest 4.1.10:</p>
 <div class="out">× 1. quên await ở rejects                              7ms
@@ -543,6 +550,13 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
 <div class="link-card codelab">
   <a href="/code-lab/typescript${REF}#module-571"><span class="lc-t">Code Lab · TypeScript Testing Strategies</span><span class="lc-d">Kiểm thử khi đã có kiểu tĩnh — và kiểm chính cái kiểu</span></a>
 </div>
+<h3>Một bài kiểm thử đơn vị thật sự hỏng được</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Sắp xếp, hành động, khẳng định</span><span class="lz-d">Dựng đầu vào, gọi cái thứ đó, kiểm đầu ra. Một bài kiểm thử không vừa hình dạng này thì thường đang kiểm nhiều hơn một thứ.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Hãy tiêm vào thứ bạn muốn thay thế</span><span class="lz-d">Một service tự dựng client cơ sở dữ liệu của chính nó thì không kiểm thử được nếu không có một cái thật. Truyền nó vào từ ngoài mới là thứ làm cho một test double trở nên khả thi.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Khẳng định về KẾT CỤC, đừng khẳng định về các lời gọi</span><span class="lz-d">&quot;<code>save</code> đã được gọi một lần&quot; vẫn qua sau một lần tái cấu trúc làm hỏng hành vi. Còn &quot;bản ghi đã lưu có trạng thái paid&quot; thì không.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Hãy cố ý làm nó hỏng một lần</span><span class="lz-d">Một bài kiểm thử mới chưa từng hỏng lần nào có thể là đang chẳng khẳng định gì — thiếu một <code>await</code>, hoặc một phép khẳng định nằm trong một callback chẳng bao giờ chạy.</span></div>
+</div>
 </div>
 `,
     },
@@ -572,7 +586,7 @@ export function createApp({ service, auth }) {
   return app;
 }
 
-// src/server.mjs — chỉ file NÀY được gọi listen
+// src/server.mjs — only THIS file may call listen
 import { createApp } from './app.mjs';
 createApp({ service: realService, auth: jwtAuth }).listen(3000);</code></pre>
 <p>The factory also takes its dependencies as arguments, which is what lets one test file run the whole app against a fake service and another run it against a real database — without a single environment variable.</p>
@@ -637,8 +651,8 @@ it('409 on a duplicate slug', async () =&gt; {
 <h3>The cost detail from lesson 14.1, explained</h3>
 <p>The pyramid measurement showed supertest at 5,5ms per request and a long-lived server at 3,3ms. Supertest is not slow — it is doing more work:</p>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-t">supertest</span><span class="lz-d">mỗi lần <code>request(app)</code>: tạo server → <code>listen(0)</code> → gửi → đóng server. An toàn tuyệt đối, không rò cổng, nhưng trả giá bằng vòng đời server cho từng request</span></div>
-  <div class="lz-step"><span class="lz-t">server thường trú</span><span class="lz-d">một lần <code>listen()</code> trong <code>beforeAll</code>, đóng ở <code>afterAll</code>; mọi request dùng lại. Nhanh hơn, nhưng bạn tự chịu trách nhiệm đóng nó</span></div>
+  <div class="lz-step"><span class="lz-t">supertest</span><span class="lz-d">every time <code>request(app)</code>: create the server → <code>listen(0)</code> → send → close the server. Perfectly safe with no leaked ports, at the price of a full server lifecycle per request</span></div>
+  <div class="lz-step"><span class="lz-t">a long-lived server</span><span class="lz-d">once <code>listen()</code> trong <code>beforeAll</code>, closed in <code>afterAll</code>; every request reuses it. Faster, but closing it is your responsibility</span></div>
 </div>
 <p>At six tests per file the difference is two milliseconds and not worth a line of code. At six hundred it is 1,3 seconds per file. Measure before optimising; the shape of your suite decides which side of that line you are on.</p>
 
@@ -647,10 +661,10 @@ it('409 on a duplicate slug', async () =&gt; {
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/nodejs-express${REF}#module-619"><span class="lc-t">Code Lab · API Versioning, Documentation, and Contract Testing</span><span class="lc-d">Kiểm hợp đồng API, không chỉ kiểm code</span></a>
+  <a href="/code-lab/nodejs-express${REF}#module-619"><span class="lc-t">Code Lab · API Versioning, Documentation, and Contract Testing</span><span class="lc-d">Testing the API contract, not just the code</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/socket-io${REF}#module-946"><span class="lc-t">Code Lab · Testing &amp; Debugging Realtime</span><span class="lc-d">Kiểm phân quyền theo từng sự kiện socket — đúng lớp lỗi ở khung trên</span></a>
+  <a href="/code-lab/socket-io${REF}#module-946"><span class="lc-t">Code Lab · Testing &amp; Debugging Realtime</span><span class="lc-d">Testing authorisation per socket event — exactly the error class in the frame above</span></a>
 </div>
 </div>
 
@@ -868,10 +882,17 @@ AssertionError: expected 1 to be +0</div>
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/prisma-orm${REF}#module-2371"><span class="lc-t">Code Lab · Testing Prisma Applications</span><span class="lc-d">Cô lập test, dữ liệu mẫu và migration trong CI</span></a>
+  <a href="/code-lab/prisma-orm${REF}#module-2371"><span class="lc-t">Code Lab · Testing Prisma Applications</span><span class="lc-d">Test isolation, fixtures and migrations in CI</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/nodejs-express${REF}#module-325"><span class="lc-t">Code Lab · Testing, Deployment, and Production Readiness</span><span class="lc-d">Bộ test tích hợp cho backend Node</span></a>
+  <a href="/code-lab/nodejs-express${REF}#module-325"><span class="lc-t">Code Lab · Testing, Deployment, and Production Readiness</span><span class="lc-d">An integration suite for a Node backend</span></a>
+</div>
+<h3>What only a real database can tell you</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Whether the SQL is valid</span><span class="lz-d">A fake accepts any query object. A real database rejects a typo'd column at the moment the test runs, not in production.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Whether the constraint fires</span><span class="lz-d">Unique violations, foreign keys, check constraints, cascade deletes. A mock returns whatever you told it to.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Whether the transaction rolls back</span><span class="lz-d">The behaviour under a mid-transaction failure is the thing you most want tested, and it is exactly what a fake cannot simulate.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">At a cost you can measure</span><span class="lz-d">A container per suite is seconds; per test is minutes. Isolation by transaction rollback keeps it fast and keeps tests independent.</span></div>
 </div>
 </div>
 
@@ -985,6 +1006,13 @@ AssertionError: expected 1 to be +0</div>
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-325"><span class="lc-t">Code Lab · Testing, Deployment, and Production Readiness</span><span class="lc-d">Bộ test tích hợp cho backend Node</span></a>
 </div>
+<h3>Chỉ một cơ sở dữ liệu thật mới nói cho bạn biết những gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đoạn SQL có hợp lệ không</span><span class="lz-d">Một bản giả nhận mọi object truy vấn. Một cơ sở dữ liệu thật từ chối một cột gõ nhầm ngay lúc bài kiểm thử chạy, chứ không phải trên production.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Ràng buộc có nổ không</span><span class="lz-d">Vi phạm tính duy nhất, khoá ngoại, ràng buộc kiểm, xoá dây chuyền. Một mock trả về đúng thứ bạn bảo nó trả về.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Giao dịch có quay lui không</span><span class="lz-d">Hành vi khi hỏng giữa chừng một giao dịch là thứ bạn muốn kiểm thử nhất, và đó chính xác là thứ một bản giả không mô phỏng nổi.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Với một cái giá đo được</span><span class="lz-d">Một container cho mỗi bộ kiểm thử là vài giây; cho mỗi bài kiểm thử là vài phút. Cô lập bằng cách quay lui giao dịch giữ cho nó nhanh và giữ cho các bài kiểm thử độc lập.</span></div>
+</div>
 </div>
 `,
     },
@@ -1023,9 +1051,9 @@ canEdit({id:2,role:EDITOR},{authorId:1}) = true</div>
 <h3>What coverage actually counts</h3>
 <p>V8 branch coverage records whether each side of an expression was <strong>evaluated</strong>, not whether each <strong>outcome</strong> occurred. The service test passes a <code>USER</code> whose id does not match, so JavaScript evaluates <code>note.authorId === user.id</code> (false), then evaluates <code>user.role === 'EDITOR'</code> (also false). Both operands ran. The counter is satisfied. The case where that second operand is <em>true</em> — the escalation — was never produced by any test, and coverage has no way to represent that.</p>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-t">Độ phủ CHỈ trả lời</span><span class="lz-d">"dòng/nhánh này có được thực thi trong lúc chạy test không?"</span></div>
-  <div class="lz-layer"><span class="lz-t">Nó KHÔNG trả lời</span><span class="lz-d">"có bài test nào sẽ ĐỎ LÊN nếu dòng này sai không?"</span></div>
-  <div class="lz-layer"><span class="lz-t">Hệ quả</span><span class="lz-d">một bộ test không có một khẳng định nào vẫn đạt được 100% cả bốn cột</span></div>
+  <div class="lz-layer"><span class="lz-t">Coverage answers ONLY</span><span class="lz-d">"was this line/branch executed while the tests ran?"</span></div>
+  <div class="lz-layer"><span class="lz-t">It does NOT answer</span><span class="lz-d">"would any test GO RED if this line were wrong?"</span></div>
+  <div class="lz-layer"><span class="lz-t">The consequence</span><span class="lz-d">a suite with not a single assertion in it still reaches 100% in all four columns</span></div>
 </div>
 <p>Use coverage the way a smoke detector is used: a low number is real information, a high number is not a certificate. The useful reading is the <em>uncovered</em> column — <code>app.mjs | 41,46-49</code> in the full run below says the error branches of <code>PATCH /notes/:id</code> were never exercised, and that is a genuine to-do list:</p>
 <div class="out">-------------------|---------|----------|---------|---------|-------------------
@@ -1041,18 +1069,18 @@ All files          |   83.33 |    70.83 |   79.16 |   84.61 |
 
 <h3>Flaky tests: the four causes, all measured in this chapter</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Trạng thái dùng chung</span><span class="v">4 file cùng TRUNCATE một bảng: <strong>đỏ 10/10</strong>, "expected 76 to be 20" (bài 14.4)</span></div>
-  <div class="kv"><span class="k">Rác còn sót từ trước</span><span class="v">một dòng do script khác để lại: "expected 2 to be 1", trong khi test và code không đổi một chữ (bài 14.4)</span></div>
-  <div class="kv"><span class="k">Thời gian thật</span><span class="v">khẳng định ở mốc biên bằng đồng hồ hệ thống — hôm nay đúng, ngày đổi giờ thì sai (bài 14.2)</span></div>
-  <div class="kv"><span class="k">Tương tranh không tất định</span><span class="v">cùng cuộc đua 23505: 0/5 lần hiện ra khi pool còn lạnh, 4/5 khi kết nối đã ấm (bài 14.4)</span></div>
+  <div class="kv"><span class="k">Shared state</span><span class="v">4 files TRUNCATE the same table: <strong>red 10 times out of 10</strong>, "expected 76 to be 20" (lesson 14.4)</span></div>
+  <div class="kv"><span class="k">Leftover garbage</span><span class="v">a single row left behind by another script: "expected 2 to be 1", while neither the test nor the code changed a character (lesson 14.4)</span></div>
+  <div class="kv"><span class="k">Real time</span><span class="v">asserting on a boundary using the system clock — right today, wrong on the day the clocks change (lesson 14.2)</span></div>
+  <div class="kv"><span class="k">Non-deterministic concurrency</span><span class="v">the same 23505 race: it appears 0 times in 5 with a cold pool, 4 times in 5 once the connections are warm (lesson 14.4)</span></div>
 </div>
 <p>A flaky test is worse than no test. It trains the team to re-run CI instead of reading it, and once that habit exists a <em>real</em> failure gets re-run too. Two tools for hunting one down:</p>
 <pre><code># 1. Chạy lặp — chập chờn theo xác suất thì lộ ra ở tần suất
 for i in $(seq 1 10); do npx vitest run --config vitest.flaky.mjs; done
-# → PASS=0 FAIL=10 : không phải chập chờn, mà là hỏng chắc chắn
-# → PASS=7 FAIL=3  : mới đúng là chập chờn, đi tìm trạng thái dùng chung
+# → PASS=0 FAIL=10 : not flaky, reliably broken
+# → PASS=7 FAIL=3  : that is genuinely flaky — go looking for shared state
 
-# 2. Xáo thứ tự — lộ ra sự phụ thuộc vào trình tự
+# 2. Shuffle the order — exposes order dependence
 npx vitest run --sequence.shuffle</code></pre>
 <div class="out">$ npx vitest run tests/slug.test.mjs --sequence.shuffle --reporter=verbose
  ✓ canEdit &gt; allows the author
@@ -1103,10 +1131,10 @@ success  …  1m49s</div>
 
 <h3>Four design decisions visible in that file</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k"><code>paths:</code> filter</span><span class="v">sửa README thì không chạy CI. Giữ cho tín hiệu CI có nghĩa và cho hàng đợi ngắn</span></div>
-  <div class="kv"><span class="k"><code>npm ci</code> chứ không <code>npm install</code></span><span class="v">chương 4 đã đo: <code>install</code> nhảy lên 4.22.2, <code>ci</code> giữ nguyên 4.18.0 theo lockfile</span></div>
-  <div class="kv"><span class="k">Bắt buộc so với tham khảo</span><span class="v">tsc, eval và test chặn merge; eslint <code>continue-on-error</code>. Một cảnh báo lint chặn hotfix là cách nhanh nhất để dạy cả nhóm bỏ qua CI</span></div>
-  <div class="kv"><span class="k">Test tự bỏ qua khi thiếu bí mật</span><span class="v">bài test chống bịa đặt thoát 0 khi không có khoá AI, nên bộ test vẫn chạy được ở fork và trên máy cá nhân</span></div>
+  <div class="kv"><span class="k"><code>paths:</code> filter</span><span class="v">editing the README does not run CI. It keeps the CI signal meaningful and the queue short</span></div>
+  <div class="kv"><span class="k"><code>npm ci</code> rather than <code>npm install</code></span><span class="v">chapter 4 measured this: <code>install</code> jumped to 4.22.2, while <code>ci</code> stayed at 4.18.0 per the lockfile</span></div>
+  <div class="kv"><span class="k">Blocking versus advisory</span><span class="v">tsc, eval and the tests block the merge; eslint <code>continue-on-error</code>. A lint warning blocking a hotfix is the fastest way to teach a whole team to ignore CI</span></div>
+  <div class="kv"><span class="k">Tests that skip themselves when a secret is missing</span><span class="v">the anti-fabrication test exits 0 when there is no AI key, so the suite still runs on forks and on personal machines</span></div>
 </div>
 
 <h3>What should block a merge</h3>
@@ -1117,10 +1145,10 @@ success  …  1m49s</div>
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/github-actions${REF}#module-924"><span class="lc-t">Code Lab · Building &amp; Testing Projects</span><span class="lc-d">Dựng pipeline CI chạy test cho Node</span></a>
+  <a href="/code-lab/github-actions${REF}#module-924"><span class="lc-t">Code Lab · Building &amp; Testing Projects</span><span class="lc-d">Building a CI pipeline that runs Node tests</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/observability-monitoring${REF}#module-993"><span class="lc-t">Code Lab · Observability in CI/CD</span><span class="lc-d">Quan sát chính pipeline — nối tiếp chương 15</span></a>
+  <a href="/code-lab/observability-monitoring${REF}#module-993"><span class="lc-t">Code Lab · Observability in CI/CD</span><span class="lc-d">Observing the pipeline itself — continuing into chapter 15</span></a>
 </div>
 </div>
 

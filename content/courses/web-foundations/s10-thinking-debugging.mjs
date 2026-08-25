@@ -66,6 +66,16 @@ What if there is only one word?          "hello"     → reversed list of 1 is u
 <p class="pitfall"><strong>If you cannot write the plain-language steps, you are not ready to write the code.</strong> "I don't know where to start" almost always means Step 1 and Step 2 were skipped. Going straight to the editor and typing randomly, hoping something works, is the single biggest time-waster for beginners. Five minutes with pen and paper (or a comment block) before touching the keyboard saves an hour of guessing.</p>
 
 <p class="note-ct"><strong>This is the exact loop you already used, without naming it.</strong> Every array method in Chapter 3, every component you composed in Chapter 4, every route you sketched in Chapter 6 — you restated the problem, listed steps, solved the simple case, then extended. Naming the habit lets you apply it on purpose, on problems no lesson has ever shown you.</p>
+<h3>Turning a vague task into code you can write</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">State the input and the output</span><span class="lz-d">"Given a list of notes and a search term, return the matching notes." If you cannot write this sentence, you do not yet know what to build.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Do one example by hand</span><span class="lz-d">On paper, with three notes. The steps you take are the algorithm — writing them down is most of the work.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Name the edge cases before coding</span><span class="lz-d">Empty list, empty search term, no matches, different capitalisation. Each is a decision; deciding now beats discovering later.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Write the smallest version that runs</span><span class="lz-d">Get one case working end to end, then extend. A half-built program that runs teaches you more than a whole one that does not.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — writing a hundred lines before running anything.</strong> It feels efficient and it is the slowest way to work: when you finally run it, five things are wrong at once, they interact, and the error points at whichever failed first — which is rarely the one that matters. Debugging is bisection, and a hundred untested lines gives you nothing to bisect. Run after every few lines, even if it only prints. The habit costs seconds and turns "something in here is broken" into "the thing I just typed is broken", which is a different and much smaller problem.</p></div>
+<div class="link-card"><a href="https://blog.codinghorror.com/rubber-duck-problem-solving/" target="_blank" rel="noopener">Rubber duck debugging — why explaining it out loud works</a></div>
+<div class="link-card"><a href="https://stackoverflow.com/help/minimal-reproducible-example" target="_blank" rel="noopener">How to build a minimal reproducible example</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.1</span>
@@ -114,6 +124,16 @@ Nếu chỉ có một từ?             "hello"     → đảo danh sách 1 ph�
 <p class="pitfall"><strong>Nếu không viết được các bước bằng ngôn ngữ thường, bạn chưa sẵn sàng viết code.</strong> "Tôi không biết bắt đầu từ đâu" gần như luôn nghĩa là Bước 1 và Bước 2 đã bị bỏ qua. Mở thẳng editor gõ ngẫu nhiên, hy vọng chạy được, là kẻ ngốn thời gian số một của người mới. Năm phút với bút giấy (hay một khối comment) trước khi chạm bàn phím tiết kiệm cả tiếng đồng hồ đoán mò.</p>
 
 <p class="note-ct"><strong>Đây đúng là vòng lặp bạn đã dùng, chỉ chưa gọi tên.</strong> Mọi phương thức mảng ở Chương 3, mọi component bạn ghép ở Chương 4, mọi route bạn phác ở Chương 6 — bạn đã diễn đạt lại vấn đề, liệt kê bước, giải trường hợp đơn giản, rồi mở rộng. Gọi tên thói quen này giúp bạn áp dụng nó có chủ đích, trên những vấn đề chưa bài học nào từng chỉ bạn.</p>
+<h3>Biến một yêu cầu mơ hồ thành mã viết được</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Phát biểu đầu vào và đầu ra</span><span class="lz-d">"Cho một danh sách ghi chú và một từ khoá tìm kiếm, trả về những ghi chú khớp." Nếu bạn viết không nổi câu này thì bạn chưa biết mình định dựng gì.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Làm tay một ví dụ</span><span class="lz-d">Trên giấy, với ba ghi chú. Những bước bạn làm chính là thuật toán — viết chúng ra là đã xong phần lớn công việc.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Gọi tên các ca biên trước khi viết mã</span><span class="lz-d">Danh sách rỗng, từ khoá rỗng, không có gì khớp, khác chữ hoa chữ thường. Mỗi cái là một quyết định; quyết bây giờ hơn là phát hiện về sau.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Viết phiên bản nhỏ nhất mà chạy được</span><span class="lz-d">Cho một trường hợp chạy thông từ đầu tới cuối, rồi mở rộng. Một chương trình dựng dở mà chạy được dạy bạn nhiều hơn một chương trình đầy đủ mà không chạy.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — viết một trăm dòng trước khi chạy thử bất cứ thứ gì.</strong> Nó có vẻ hiệu quả mà lại là cách làm việc chậm nhất: tới lúc bạn chạy, năm thứ cùng sai một lúc, chúng tương tác với nhau, và cái lỗi chỉ vào thứ nào hỏng trước — thứ hiếm khi là thứ quan trọng. Gỡ lỗi là phép chia đôi, mà một trăm dòng chưa thử thì chẳng có gì để chia. Hãy chạy sau mỗi vài dòng, dù chỉ để in ra một thứ. Thói quen này tốn vài giây và biến "có gì đó trong đống này hỏng" thành "thứ tôi vừa gõ bị hỏng", một bài toán khác hẳn và nhỏ hơn nhiều.</p></div>
+<div class="link-card"><a href="https://blog.codinghorror.com/rubber-duck-problem-solving/" target="_blank" rel="noopener">Gỡ lỗi kiểu vịt cao su — vì sao nói to ra lại hiệu nghiệm</a></div>
+<div class="link-card"><a href="https://stackoverflow.com/help/minimal-reproducible-example" target="_blank" rel="noopener">Cách dựng một ví dụ tái hiện tối thiểu</a></div>
 </div>
 `,
     },
@@ -168,6 +188,18 @@ Step over / step into → walk the code one line at a time</code></pre>
 4. Repeat</code></pre>
 <p class="note-ct"><strong>Random changes are not debugging.</strong> Editing code without a hypothesis about WHY it will fix things is guessing, and guessing rarely converges. One deliberate hypothesis, tested with one console.log or breakpoint, beats ten random edits — and you learn something permanent from every hypothesis, even a wrong one.</p>
 
+<h3>Reading a stack trace</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Line 1 — the type and message</span><span class="lz-t">What went wrong</span><span class="lz-d"><code>TypeError: Cannot read properties of undefined (reading 'name')</code>. It names the operation and the property — that is a lot of information already.</span></div>
+<div class="lz-layer"><span class="lz-k">The first "at" line in your code</span><span class="lz-t">Where it happened</span><span class="lz-d">Skip the frames inside <code>node_modules</code>. The topmost line with your own file path is where to look first.</span></div>
+<div class="lz-layer"><span class="lz-k">The frames below it</span><span class="lz-t">How you got there</span><span class="lz-d">Read downward for the call chain. The <em>cause</em> is often two or three frames down, where the wrong value was produced.</span></div>
+<div class="lz-layer"><span class="lz-k">Then check the assumption</span><span class="lz-t">One console.log</span><span class="lz-d">Print the thing that was <code>undefined</code> at each frame going back, until you find the first place it should have had a value.</span></div>
+</div>
+<div class="out">TypeError: Cannot read properties of undefined (reading 'name')
+    at formatUser (/app/src/format.js:12:20)
+    at /app/src/routes/users.js:31:18
+    at Layer.handle [as handle_request] (/app/node_modules/express/…)</div>
+<div class="pitfall"><p><strong>Trap — an empty <code>catch</code> block that deletes the evidence.</strong> <code>try { … } catch (e) {}</code> makes the red text stop appearing, and it makes the failure permanent and invisible: the operation did not happen, nothing was logged, and the symptom shows up later as missing data with no trace of a cause. The same applies to <code>catch (e) { console.log('error') }</code> — a message with no <code>e</code> in it tells you nothing. If you catch, either handle it (retry, use a default, return a 400) or log the whole error and rethrow. "Make the error go away" is never the same as "fix the error".</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration" target="_blank" rel="noopener">MDN — reading JavaScript errors and debugging</a></div>
 </div>
 <div class="ml-vi">
@@ -212,6 +244,18 @@ Step over / step into → đi từng dòng code một</code></pre>
 4. Lặp lại</code></pre>
 <p class="note-ct"><strong>Sửa ngẫu nhiên không phải gỡ lỗi.</strong> Sửa code mà không có giả thuyết VÌ SAO nó sẽ khắc phục là đoán mò, và đoán mò hiếm khi hội tụ. Một giả thuyết có chủ đích, kiểm bằng một console.log hay breakpoint, thắng mười sửa ngẫu nhiên — và bạn học được thứ lâu dài từ mỗi giả thuyết, kể cả cái sai.</p>
 
+<h3>Đọc một vệt stack</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Dòng 1 — loại lỗi và thông điệp</span><span class="lz-t">Chuyện gì đã sai</span><span class="lz-d"><code>TypeError: Cannot read properties of undefined (reading 'name')</code>. Nó gọi tên thao tác và cả thuộc tính — chừng đó đã là rất nhiều thông tin.</span></div>
+<div class="lz-layer"><span class="lz-k">Dòng "at" đầu tiên thuộc mã của bạn</span><span class="lz-t">Nó xảy ra ở đâu</span><span class="lz-d">Bỏ qua các khung nằm trong <code>node_modules</code>. Dòng cao nhất mang đường dẫn file của chính bạn là chỗ cần nhìn trước.</span></div>
+<div class="lz-layer"><span class="lz-k">Các khung bên dưới nó</span><span class="lz-t">Bạn tới đó bằng cách nào</span><span class="lz-d">Đọc xuôi xuống để thấy chuỗi lời gọi. <em>Nguyên nhân</em> thường nằm cách hai ba khung, ở chỗ giá trị sai được tạo ra.</span></div>
+<div class="lz-layer"><span class="lz-k">Rồi kiểm cái giả định</span><span class="lz-t">Một câu console.log</span><span class="lz-d">In ra cái thứ đang là <code>undefined</code> ở từng khung ngược về, cho tới khi bạn tìm ra chỗ đầu tiên lẽ ra nó phải có giá trị.</span></div>
+</div>
+<div class="out">TypeError: Cannot read properties of undefined (reading 'name')
+    at formatUser (/app/src/format.js:12:20)
+    at /app/src/routes/users.js:31:18
+    at Layer.handle [as handle_request] (/app/node_modules/express/…)</div>
+<div class="pitfall"><p><strong>Bẫy — một khối <code>catch</code> rỗng xoá sạch bằng chứng.</strong> <code>try { … } catch (e) {}</code> làm đoạn chữ đỏ thôi hiện ra, và nó làm cú hỏng trở thành vĩnh viễn và vô hình: thao tác đã không xảy ra, chẳng gì được ghi log, và triệu chứng lộ ra sau đó dưới dạng dữ liệu bị thiếu mà không còn dấu vết nguyên nhân. Chuyện tương tự với <code>catch (e) { console.log('lỗi') }</code> — một thông điệp không có <code>e</code> trong đó chẳng nói gì với bạn. Nếu đã bắt lỗi thì hoặc xử nó (thử lại, dùng giá trị mặc định, trả về 400) hoặc ghi cả cái lỗi ra rồi ném lại. "Làm cho lỗi biến mất" không bao giờ giống "sửa cái lỗi".</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration" target="_blank" rel="noopener">MDN — đọc lỗi JavaScript và gỡ lỗi</a></div>
 </div>
 `,
@@ -277,6 +321,16 @@ git commit                              // completes the merge</code></pre>
 <p class="pitfall"><strong>A conflict is not a crisis — it is Git asking a question it cannot answer alone.</strong> Read both sides, decide what the code should actually say, remove the markers (&lt;&lt;&lt;&lt;&lt;&lt;&lt;, =======, &gt;&gt;&gt;&gt;&gt;&gt;&gt;), then add and commit. Panicking and running destructive commands to "make it go away" is how real work gets lost.</p>
 
 <p class="note-ct"><strong>This is the exact loop this project's own CLAUDE.md documents for every real feature.</strong> Branch, small commits, push, review, merge, stay synced with pull — the same rhythm scales from a solo course project to a team shipping to production.</p>
+<h3>A workflow that scales from solo to a team</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Branch for each piece of work</span><span class="lz-d"><code>git switch -c fix/login-redirect</code>. <code>main</code> stays deployable, and an abandoned experiment costs nothing to throw away.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Commit small, with a real message</span><span class="lz-d">One logical change per commit. "Fix login redirect losing the query string" is worth writing; "update" is not, and you will read it again during a bisect.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Pull before you push</span><span class="lz-d">Bring in what others did while you worked. Conflicts found now are small; conflicts found after three days of work are an afternoon.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Open a pull request, even alone</span><span class="lz-d">It gives you a diff of your own work to read before it becomes permanent, and it is where CI reports back.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>git push --force</code> on a shared branch.</strong> It does exactly what it says: your version of history replaces the remote one, and any commits someone else pushed in between are simply gone from the branch. The person who loses work usually finds out when their next pull produces a bizarre conflict. Force-push is legitimate on a branch only you are working on — after a rebase or an amend — and never on <code>main</code>. This repo's rules put it in the forbidden list for exactly that reason. If you must, <code>--force-with-lease</code> at least refuses when the remote has moved since you last fetched.</p></div>
+<div class="link-card"><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">Learn Git Branching — branches and merges, visually</a></div>
+<div class="link-card"><a href="https://cbea.ms/git-commit/" target="_blank" rel="noopener">How to write a Git commit message</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.3</span>
@@ -330,6 +384,16 @@ git commit                              // hoàn tất việc merge</code></pre>
 <p class="pitfall"><strong>Một xung đột không phải khủng hoảng — đó là Git hỏi một câu nó không tự trả lời được.</strong> Đọc cả hai bên, quyết định code nên nói gì thật sự, xoá các dấu đánh dấu (&lt;&lt;&lt;&lt;&lt;&lt;&lt;, =======, &gt;&gt;&gt;&gt;&gt;&gt;&gt;), rồi add và commit. Hoảng loạn chạy lệnh phá huỷ để "cho nó biến mất" là cách việc thật bị mất.</p>
 
 <p class="note-ct"><strong>Đây đúng là vòng lặp mà CLAUDE.md của chính dự án này ghi lại cho mọi tính năng thật.</strong> Nhánh, commit nhỏ, push, review, merge, giữ đồng bộ bằng pull — cùng một nhịp điệu mở rộng từ một dự án khoá học một mình đến một team đưa lên production.</p>
+<h3>Một quy trình mở rộng được từ một mình lên cả đội</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Tạo nhánh cho từng mảng việc</span><span class="lz-d"><code>git switch -c fix/login-redirect</code>. <code>main</code> luôn ở trạng thái triển khai được, và một thí nghiệm bỏ dở thì vứt đi chẳng tốn gì.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Commit nhỏ, kèm thông điệp thật</span><span class="lz-d">Mỗi commit một thay đổi có nghĩa. "Sửa việc chuyển hướng đăng nhập làm mất query string" là đáng viết; "update" thì không, và bạn sẽ phải đọc lại nó trong một lần bisect.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Pull trước khi push</span><span class="lz-d">Kéo về những gì người khác làm trong lúc bạn làm. Xung đột phát hiện bây giờ thì nhỏ; xung đột phát hiện sau ba ngày làm việc là mất một buổi chiều.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Mở pull request, kể cả khi làm một mình</span><span class="lz-d">Nó cho bạn một bản diff công việc của chính mình để đọc trước khi nó thành vĩnh viễn, và đó là nơi CI báo cáo lại.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — <code>git push --force</code> lên một nhánh dùng chung.</strong> Nó làm đúng những gì nó nói: phiên bản lịch sử của bạn thay thế phiên bản ở máy chủ, và mọi commit người khác đẩy lên trong khoảng đó đơn giản là biến mất khỏi nhánh. Người mất việc thường phát hiện ra khi lần pull kế tiếp của họ sinh ra một xung đột kỳ quái. Force-push chỉ chính đáng trên nhánh chỉ mình bạn làm — sau một lần rebase hay amend — và không bao giờ trên <code>main</code>. Luật của kho này đưa nó vào danh sách cấm đúng vì lẽ đó. Nếu buộc phải dùng, <code>--force-with-lease</code> ít ra còn từ chối khi máy chủ đã thay đổi kể từ lần fetch cuối của bạn.</p></div>
+<div class="link-card"><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">Learn Git Branching — nhánh và trộn, trực quan</a></div>
+<div class="link-card"><a href="https://cbea.ms/git-commit/" target="_blank" rel="noopener">Cách viết một thông điệp commit Git</a></div>
 </div>
 `,
     },
@@ -379,6 +443,14 @@ Good: "I expected fetch("/api/users") to return an array, but I get
 <h3>Read other people's code</h3>
 <p>Open-source projects on GitHub, your teammates' pull requests, even this course's own content files — reading real code (not just tutorial snippets) teaches idioms, patterns and mistakes to avoid that no isolated exercise can. Start small: pick one function in a project you use, and trace exactly what it does.</p>
 
+<h3>Where to look when you are stuck</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">The official docs</span><span class="lz-t">First, not last</span><span class="lz-d">Versioned, accurate, and usually better written than the blog post about them. MDN for the web platform, the project's own site for a library.</span></div>
+<div class="lz-node"><span class="lz-k">The error message</span><span class="lz-t">Searched verbatim</span><span class="lz-d">Minus your own file paths and variable names. The exact string finds the person who hit it; a paraphrase finds nothing.</span></div>
+<div class="lz-node"><span class="lz-k">The library's source</span><span class="lz-t">Less scary than it sounds</span><span class="lz-d">It is in <code>node_modules</code>, it is JavaScript, and the function you are calling is usually twenty readable lines.</span></div>
+<div class="lz-node"><span class="lz-k">A small reproduction</span><span class="lz-t">The universal tool</span><span class="lz-d">Cutting the problem down to fifteen lines answers it yourself about half the time — and makes the question answerable when it does not.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — measuring progress by tutorials finished.</strong> Twenty completed courses and nothing you built alone is a common and demoralising place to end up: following along exercises recognition, not production, so the skill it builds is "I have seen this before" rather than "I can do this". The way out is uncomfortable and reliable — build something nobody wrote a tutorial for. It will be ugly, you will be stuck for hours, and those hours are the entire lesson. A finished small thing you designed yourself is worth more than ten polished clones.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/" target="_blank" rel="noopener">MDN Web Docs</a></div>
 </div>
 <div class="ml-vi">
@@ -418,6 +490,14 @@ Tốt: "Tôi mong fetch("/api/users") trả về một mảng, nhưng tôi nhậ
 <h3>Đọc code người khác</h3>
 <p>Dự án mã nguồn mở trên GitHub, pull request của đồng đội, thậm chí file nội dung của chính khoá học này — đọc code thật (không chỉ đoạn tutorial) dạy bạn lối viết, khuôn mẫu và lỗi cần tránh mà không bài tập cô lập nào dạy được. Bắt đầu nhỏ: chọn một hàm trong một dự án bạn dùng, và lần chính xác nó làm gì.</p>
 
+<h3>Tìm ở đâu khi bạn bị kẹt</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Tài liệu chính thức</span><span class="lz-t">Đầu tiên, không phải cuối cùng</span><span class="lz-d">Có đánh số phiên bản, chính xác, và thường viết tốt hơn bài blog nói về nó. MDN cho nền tảng web, trang của chính dự án cho một thư viện.</span></div>
+<div class="lz-node"><span class="lz-k">Thông điệp lỗi</span><span class="lz-t">Tìm nguyên văn</span><span class="lz-d">Bỏ đi đường dẫn file và tên biến của bạn. Đúng chuỗi đó thì tìm ra người đã gặp nó; diễn đạt lại thì chẳng ra gì.</span></div>
+<div class="lz-node"><span class="lz-k">Mã nguồn của thư viện</span><span class="lz-t">Ít đáng sợ hơn bạn tưởng</span><span class="lz-d">Nó nằm trong <code>node_modules</code>, nó là JavaScript, và cái hàm bạn đang gọi thường chỉ hai chục dòng đọc được.</span></div>
+<div class="lz-node"><span class="lz-k">Một bản tái hiện nhỏ</span><span class="lz-t">Công cụ vạn năng</span><span class="lz-d">Cắt bài toán xuống mười lăm dòng thì khoảng một nửa số lần bạn tự trả lời được — và khi không, nó làm câu hỏi trở nên trả lời được.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — đo tiến bộ bằng số khoá học đã xong.</strong> Hai mươi khoá hoàn thành mà chẳng có gì tự mình dựng là một điểm đến phổ biến và làm nản lòng: làm theo là luyện khả năng nhận ra, không phải khả năng tạo ra, nên kỹ năng nó xây lên là "tôi đã thấy cái này rồi" chứ không phải "tôi làm được cái này". Đường ra thì khó chịu mà đáng tin — hãy dựng một thứ chẳng ai viết hướng dẫn cho. Nó sẽ xấu, bạn sẽ kẹt hàng giờ, và chính những giờ ấy mới là toàn bộ bài học. Một thứ nhỏ đã hoàn thành do chính bạn thiết kế đáng giá hơn mười bản sao bóng bẩy.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/" target="_blank" rel="noopener">MDN Web Docs</a></div>
 </div>
 `,
@@ -472,6 +552,14 @@ Tốt: "Tôi mong fetch("/api/users") trả về một mảng, nhưng tôi nhậ
 
 <h3>One more habit for the road</h3>
 <p>Whatever you build next, keep a map of the ecosystem in view — libraries and tools change year to year, but the layers in the picture above do not.</p>
+<h3>One click, end to end</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The browser</span><span class="lz-d">An event handler runs, reads the form, and calls <code>fetch</code>. Nothing here can be trusted by anyone downstream — it runs on the user's machine.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The request</span><span class="lz-d">Method, path, headers, body. This is the boundary: everything before it is theirs, everything after it is yours.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The server</span><span class="lz-d">Authenticate, authorise, validate, then act. Those four in that order — skipping any of them is a category of bug from chapters 6 and 7.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The database, then back out</span><span class="lz-d">A query scoped to the caller, a status code that tells the truth, and a body the client can narrow. Then the browser renders it.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — debugging a full-stack bug without first finding which layer it is in.</strong> "Saving does not work" could be a handler that never ran, a request that never left, a 401 you did not check for, a 500 in the server, or a successful save the UI failed to re-render. Guessing means editing code at random. The Network tab answers it in seconds: is there a request at all? What status came back? What does the response body say? Each answer eliminates whole layers. Learn to ask "where did it stop?" before "what is wrong?", and most bugs become small.</p></div>
 <div class="link-card"><a href="https://roadmap.sh/" target="_blank" rel="noopener">roadmap.sh — visual developer roadmaps</a></div>
 
 <p class="note-ct"><strong>Thank you for finishing Web Foundations.</strong> Nine chapters ago this was all unfamiliar; now it is a mental model you own. Go build something real — that is the only tutorial left that matters.</p>
@@ -517,6 +605,14 @@ Tốt: "Tôi mong fetch("/api/users") trả về một mảng, nhưng tôi nhậ
 
 <h3>Thêm một thói quen cho chặng đường</h3>
 <p>Dù bạn dựng gì tiếp theo, hãy giữ trong tầm mắt một bản đồ của hệ sinh thái — thư viện và công cụ đổi theo từng năm, nhưng các tầng trong bức tranh trên thì không.</p>
+<h3>Một cú bấm, từ đầu tới cuối</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Trình duyệt</span><span class="lz-d">Một handler sự kiện chạy, đọc form, rồi gọi <code>fetch</code>. Chẳng gì ở đây được ai phía sau tin cả — nó chạy trên máy người dùng.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Cái request</span><span class="lz-d">Phương thức, đường dẫn, header, thân. Đây là cái biên: mọi thứ trước nó là của họ, mọi thứ sau nó là của bạn.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Máy chủ</span><span class="lz-d">Xác thực, phân quyền, kiểm dữ liệu, rồi mới hành động. Bốn bước đó theo đúng thứ tự đó — bỏ qua cái nào cũng là một họ lỗi ở chương 6 và 7.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Cơ sở dữ liệu, rồi quay ra</span><span class="lz-d">Một truy vấn giới hạn trong phạm vi người gọi, một mã trạng thái nói thật, và một phần thân mà client thu hẹp được. Rồi trình duyệt vẽ nó ra.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — gỡ một lỗi full-stack mà chưa tìm ra nó nằm ở tầng nào.</strong> "Lưu không được" có thể là một handler chưa từng chạy, một request chưa từng rời đi, một cú 401 bạn không kiểm, một cú 500 ở máy chủ, hoặc một lần lưu thành công mà giao diện quên vẽ lại. Đoán mò nghĩa là sửa mã bừa. Tab Network trả lời trong vài giây: có request nào không? Trạng thái trả về là gì? Thân phản hồi nói gì? Mỗi câu trả lời loại bỏ nguyên cả tầng. Hãy tập hỏi "nó dừng ở đâu?" trước khi hỏi "cái gì sai?", và phần lớn lỗi sẽ trở nên nhỏ bé.</p></div>
 <div class="link-card"><a href="https://roadmap.sh/" target="_blank" rel="noopener">roadmap.sh — bản đồ lộ trình lập trình viên</a></div>
 
 <p class="note-ct"><strong>Cảm ơn bạn đã hoàn thành Web Foundations.</strong> Chín chương trước tất cả còn xa lạ; giờ đó là một mô hình tư duy bạn đã sở hữu. Đi dựng một thứ thật đi — đó là tutorial duy nhất còn lại thật sự quan trọng.</p>
@@ -534,9 +630,25 @@ Tốt: "Tôi mong fetch("/api/users") trả về một mảng, nhưng tôi nhậ
       content: `
 <div class="ml-en"><p class="lead">Ten questions covering the whole capstone chapter: problem decomposition, reading errors and the debugging loop, the Git branch/PR/merge/conflict workflow, and habits for learning after the course ends.</p>
 <p class="note-ct"><strong>Now practice by doing.</strong> Reading about Git workflow is not the same as living it. On Code Lab, create branches, commit, open pull requests and resolve a real merge conflict on the Git track.</p>
+<h3>The chapter in four points</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Input, output, one example</span><span class="lz-t">Then the smallest running version</span><span class="lz-d">A hundred untested lines gives you nothing to bisect. Run after every few lines, even if it only prints.</span></div>
+<div class="lz-node"><span class="lz-k">Read the whole error</span><span class="lz-t">The first frame in your own code</span><span class="lz-d">Skip <code>node_modules</code>. Then print the suspect value at each frame going back until you find where it should have had one.</span></div>
+<div class="lz-node"><span class="lz-k">Never swallow an error</span><span class="lz-t">An empty catch deletes the evidence</span><span class="lz-d">Handle it, or log the whole error and rethrow. "Make it go away" is not "fix it".</span></div>
+<div class="lz-node"><span class="lz-k">Branch, commit small, pull first</span><span class="lz-t">And never force-push a shared branch</span><span class="lz-d">Someone else's commits disappear without warning, and they find out during their next pull.</span></div>
+</div>
+<p class="note-ct"><strong>You have finished the foundations.</strong> The next thing to do is not another course — it is one small application you designed yourself, with users, a database, and a deploy. Everything you were taught here will be tested by it, and the parts you only half-learned will announce themselves.</p>
 <div class="link-card"><a href="/code-lab/git">Practice on Code Lab → Git track</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu bao trọn chương khép khoá: chia nhỏ vấn đề, đọc lỗi và vòng lặp gỡ lỗi, quy trình Git branch/PR/merge/xung đột, và thói quen tự học sau khi khoá kết thúc.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Đọc về quy trình Git không giống như sống với nó. Trên Code Lab, hãy tạo nhánh, commit, mở pull request và giải quyết một xung đột merge thật ở track Git.</p>
+<h3>Cả chương trong bốn ý</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Đầu vào, đầu ra, một ví dụ</span><span class="lz-t">Rồi phiên bản nhỏ nhất chạy được</span><span class="lz-d">Một trăm dòng chưa thử thì chẳng có gì để chia đôi. Hãy chạy sau mỗi vài dòng, dù chỉ để in ra một thứ.</span></div>
+<div class="lz-node"><span class="lz-k">Đọc cả cái lỗi</span><span class="lz-t">Khung đầu tiên thuộc mã của bạn</span><span class="lz-d">Bỏ qua <code>node_modules</code>. Rồi in giá trị đáng ngờ ở từng khung ngược về cho tới khi tìm ra chỗ lẽ ra nó phải có giá trị.</span></div>
+<div class="lz-node"><span class="lz-k">Đừng bao giờ nuốt một lỗi</span><span class="lz-t">Catch rỗng xoá sạch bằng chứng</span><span class="lz-d">Hãy xử nó, hoặc ghi cả cái lỗi ra rồi ném lại. "Cho nó biến mất" không phải "sửa nó".</span></div>
+<div class="lz-node"><span class="lz-k">Tạo nhánh, commit nhỏ, pull trước</span><span class="lz-t">Và đừng bao giờ force-push nhánh dùng chung</span><span class="lz-d">Commit của người khác biến mất không một lời báo, và họ phát hiện ra trong lần pull kế tiếp.</span></div>
+</div>
+<p class="note-ct"><strong>Bạn đã học xong phần nền tảng.</strong> Việc tiếp theo nên làm không phải là thêm một khoá học nữa — mà là một ứng dụng nhỏ do chính bạn thiết kế, có người dùng, có cơ sở dữ liệu, và có triển khai. Mọi thứ được dạy ở đây sẽ bị nó đem ra thử, và những phần bạn mới học được một nửa sẽ tự lộ ra.</p>
 <div class="link-card"><a href="/code-lab/git">Luyện tập ở Code Lab → track Git</a></div></div>
 `,
       quiz: {

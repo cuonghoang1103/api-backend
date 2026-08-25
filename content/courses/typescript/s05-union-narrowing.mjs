@@ -55,6 +55,14 @@ export default {
 </div>
 <div class="callout ok">The mental shift: a union isn't a weaker type, it's an <em>honest</em> one. It says "the value is genuinely one of these, so handle each case." The compiler then makes sure you actually do — turning "I forgot the number case" into a compile error instead of a production <code>NaN</code>.</div>
 <div class="note-ct">This site's code is full of unions like <code>User | null</code> (a lookup that might miss) and <code>string | undefined</code> (an optional field). Every one forces the calling code, via narrowing, to handle the "missing" branch — which is a large part of why null-dereference crashes are rare here.</div>
+<h3>What narrowing actually is</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A union is a set of possibilities</span><span class="lz-d"><code>string | number</code> means "one of these two, and I do not know which". You may only use members that <em>every</em> member of the set has — which is why <code>.toUpperCase()</code> is an error on the union.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Control flow analysis tracks the set</span><span class="lz-d">The compiler walks your branches and shrinks the set per branch. Inside <code>if (typeof x === 'string')</code> the set is <code>{string}</code>; in the <code>else</code> it is <code>{number}</code>.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Narrowing is per-reference, not per-value</span><span class="lz-d">It follows the <em>expression you tested</em>. Test <code>x</code> and <code>x</code> is narrowed; copy it into <code>y</code> after the test and <code>y</code> is narrowed too — but a fresh read of a property is a fresh, un-narrowed expression.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Anything the compiler cannot follow resets it</span><span class="lz-d">A function call in between, an <code>await</code>, a reassignment — each can widen the reference back to the full union, because the compiler cannot prove nothing changed.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>typeof null === 'object'</code>, so a null check hidden inside a typeof check never fires.</strong> For <code>value: string | string[] | null</code>, writing <code>if (typeof value === 'object') { value.length }</code> narrows to <code>string[] | null</code>, not <code>string[]</code> — and <code>null.length</code> throws at runtime. This is a JavaScript wart TypeScript faithfully models: <code>typeof null</code> really is <code>'object'</code>. Narrow null out first with an explicit <code>if (value === null) return</code> or <code>if (value != null)</code>, and only then ask what kind of object it is. Under <code>strictNullChecks</code> the compiler does flag the <code>.length</code> — but only if you read the error instead of reaching for <code>!</code>.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: unions &amp; narrowing on Code Lab</span><span class="lc-sub">Drill typeof and truthiness narrowing after this chapter.</span></span>
@@ -99,6 +107,14 @@ export default {
 </div>
 <div class="callout ok">Cú xoay tư duy: một union không phải kiểu yếu hơn, mà là một kiểu <em>trung thực</em> hơn. Nó nói "giá trị thật sự là một trong những cái này, nên hãy xử lý từng trường hợp." Trình biên dịch rồi bảo đảm bạn thật sự làm vậy — biến "tôi quên trường hợp number" thành lỗi biên dịch thay vì một <code>NaN</code> trên production.</div>
 <div class="note-ct">Code site này đầy union như <code>User | null</code> (một tra cứu có thể trượt) và <code>string | undefined</code> (một field optional). Mỗi cái ép code gọi, qua thu hẹp, phải xử lý nhánh "thiếu" — đó là phần lớn lý do vì sao các cú sập kiểu null-dereference hiếm gặp ở đây.</div>
+<h3>Thu hẹp kiểu thật ra là gì</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Union là một tập khả năng</span><span class="lz-d"><code>string | number</code> nghĩa là "một trong hai cái này, và tôi không biết cái nào". Bạn chỉ được dùng những thành viên mà <em>mọi</em> phần tử trong tập đều có — đó là lý do <code>.toUpperCase()</code> là lỗi trên union.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Phân tích luồng điều khiển theo dõi cái tập đó</span><span class="lz-d">Trình biên dịch đi qua các nhánh của bạn và thu nhỏ tập ở từng nhánh. Trong <code>if (typeof x === 'string')</code> tập là <code>{string}</code>; ở <code>else</code> nó là <code>{number}</code>.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Thu hẹp theo THAM CHIẾU, không theo giá trị</span><span class="lz-d">Nó bám vào <em>biểu thức bạn đã kiểm</em>. Kiểm <code>x</code> thì <code>x</code> được thu hẹp; chép nó vào <code>y</code> sau phép kiểm thì <code>y</code> cũng được — nhưng một lần đọc thuộc tính mới là một biểu thức mới, chưa thu hẹp.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Thứ gì trình biên dịch không theo được sẽ đặt lại nó</span><span class="lz-d">Một lời gọi hàm chen vào, một <code>await</code>, một phép gán lại — mỗi thứ đều có thể nới tham chiếu về lại union đầy đủ, vì trình biên dịch không chứng minh được là chẳng có gì đổi.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — <code>typeof null === 'object'</code>, nên phép kiểm null giấu trong phép kiểm typeof chẳng bao giờ nổ.</strong> Với <code>value: string | string[] | null</code>, viết <code>if (typeof value === 'object') { value.length }</code> chỉ thu hẹp xuống <code>string[] | null</code>, chứ không phải <code>string[]</code> — và <code>null.length</code> ném lỗi lúc chạy. Đây là một vết sẹo của JavaScript mà TypeScript mô hình hoá trung thành: <code>typeof null</code> đúng là <code>'object'</code> thật. Hãy loại null ra trước bằng một <code>if (value === null) return</code> tường minh hoặc <code>if (value != null)</code>, rồi mới hỏi nó là loại object gì. Dưới <code>strictNullChecks</code> trình biên dịch CÓ báo cái <code>.length</code> đó — nhưng chỉ khi bạn đọc lỗi thay vì với tay lấy dấu <code>!</code>.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: union &amp; thu hẹp trên Code Lab</span><span class="lc-sub">Rèn thu hẹp typeof và tính đúng/sai sau chương này.</span></span>
@@ -150,6 +166,22 @@ export default {
 <p>Inside the <code>if</code>, TypeScript knows <code>u</code> must be the <code>Admin</code> (only it has <code>permissions</code>), so <code>u.permissions</code> is allowed. The <code>in</code> operator is handy — but there's a cleaner, more scalable pattern for object unions, coming next: the discriminated union.</p>
 <div class="callout ok">Literal unions are the payoff of chapter 2's literal types. On their own a single literal was pointless; as a union they become the way you make illegal values <em>unrepresentable</em>. A function that takes a <code>Status</code> can never be handed <code>'whatever'</code> — the compiler simply won't allow the call.</div>
 <div class="note-ct">This site models note status, user role and content type as exactly these string-literal unions. It also learned the sharp edge (chapter 9): a literal union is only safe if there is <em>one</em> definition of it. When a second file hand-copied the union's members, the two drifted on a rename and production broke — the fix was to derive every use from a single source.</div>
+<h3>Three ways to narrow, and what each needs</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">typeof</span><span class="lz-t">Splits primitives</span><span class="lz-d">Only distinguishes the seven runtime tags. Useless for telling two object shapes apart — both answer <code>'object'</code>.</span></div>
+<div class="lz-node"><span class="lz-k">=== on a literal</span><span class="lz-t">Splits literal unions</span><span class="lz-d"><code>if (status === 'draft')</code> narrows to exactly that member. Requires the type to <em>be</em> a literal union — a plain <code>string</code> narrows to nothing.</span></div>
+<div class="lz-node"><span class="lz-k">in</span><span class="lz-t">Splits object unions by key</span><span class="lz-d"><code>if ('radius' in shape)</code> keeps only members declaring that property. Works, but it is fragile: add a variant that also has <code>radius</code> and the branch silently starts catching two things.</span></div>
+<div class="lz-node"><span class="lz-k">A discriminant field</span><span class="lz-t">The one that scales</span><span class="lz-d">Next lesson. A shared literal-typed <code>kind</code> turns object unions back into the <code>===</code> case, which is exact and stays exact as variants are added.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — the literal union evaporates the moment the value passes through a mutable variable.</strong> <code>const s = 'draft'</code> has type <code>'draft'</code>, but <code>let s = 'draft'</code> has type <code>string</code>, because <code>let</code> can be reassigned so TypeScript widens. The same widening hits object properties: <code>const cfg = { status: 'draft' }</code> gives <code>cfg.status</code> the type <code>string</code>, so passing <code>cfg.status</code> to a parameter typed <code>'draft' | 'live'</code> is TS2345 — <em>Argument of type 'string' is not assignable</em> — on a value that is visibly the right string. Fix it at the source with <code>as const</code> (<code>{ status: 'draft' } as const</code>) or by annotating the property's type, not with a cast at the call site.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: Narrowing</span><span class="lc-sub">Every narrowing form, including the ones this lesson skips.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice: literal unions on Code Lab</span><span class="lc-sub">Drill widening, as const and narrowing by equality.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -187,6 +219,22 @@ export default {
 <p>Bên trong <code>if</code>, TypeScript biết <code>u</code> phải là <code>Admin</code> (chỉ nó có <code>permissions</code>), nên <code>u.permissions</code> được phép. Toán tử <code>in</code> tiện — nhưng có một mẫu gọn hơn, mở rộng tốt hơn cho union object, ngay sau đây: discriminated union.</p>
 <div class="callout ok">Union literal là phần thưởng của kiểu literal ở chương 2. Đứng một mình một literal vô dụng; thành union chúng trở thành cách bạn khiến những giá trị phi pháp <em>không biểu diễn nổi</em>. Một hàm nhận một <code>Status</code> không bao giờ bị đưa <code>'whatever'</code> — trình biên dịch đơn giản không cho phép lời gọi.</div>
 <div class="note-ct">Site này mô hình hoá status ghi chú, vai trò người dùng và kiểu nội dung đúng bằng các union literal-chuỗi này. Nó cũng học được cạnh sắc (chương 9): một union literal chỉ an toàn nếu có <em>một</em> định nghĩa của nó. Khi một file thứ hai chép tay các thành viên của union, hai bên trôi dạt khi đổi tên và production vỡ — cách sửa là rút mọi chỗ dùng từ một nguồn duy nhất.</div>
+<h3>Ba cách thu hẹp, và mỗi cách cần gì</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">typeof</span><span class="lz-t">Tách các primitive</span><span class="lz-d">Chỉ phân biệt được bảy nhãn lúc chạy. Vô dụng khi cần tách hai dáng object — cả hai đều trả lời <code>'object'</code>.</span></div>
+<div class="lz-node"><span class="lz-k">=== với một literal</span><span class="lz-t">Tách union literal</span><span class="lz-d"><code>if (status === 'draft')</code> thu hẹp đúng về thành viên đó. Đòi hỏi kiểu phải <em>là</em> một union literal — một <code>string</code> trơn thì chẳng thu hẹp được gì.</span></div>
+<div class="lz-node"><span class="lz-k">in</span><span class="lz-t">Tách union object theo khoá</span><span class="lz-d"><code>if ('radius' in shape)</code> giữ lại chỉ những thành viên có khai thuộc tính đó. Chạy được, nhưng mong manh: thêm một biến thể cũng có <code>radius</code> là nhánh đó âm thầm bắt luôn hai thứ.</span></div>
+<div class="lz-node"><span class="lz-k">Một field discriminant</span><span class="lz-t">Cái mở rộng được</span><span class="lz-d">Bài sau. Một <code>kind</code> kiểu literal dùng chung biến union object trở lại thành trường hợp <code>===</code>, vốn chính xác và giữ được chính xác khi thêm biến thể.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — union literal bốc hơi ngay khi giá trị đi qua một biến có thể thay đổi.</strong> <code>const s = 'draft'</code> có kiểu <code>'draft'</code>, nhưng <code>let s = 'draft'</code> có kiểu <code>string</code>, vì <code>let</code> gán lại được nên TypeScript nới rộng. Cùng phép nới đó đánh vào thuộc tính object: <code>const cfg = { status: 'draft' }</code> cho <code>cfg.status</code> kiểu <code>string</code>, nên truyền <code>cfg.status</code> vào một tham số kiểu <code>'draft' | 'live'</code> là TS2345 — <em>Argument of type 'string' is not assignable</em> — trên một giá trị nhìn rõ ràng là đúng chuỗi. Hãy chữa tại nguồn bằng <code>as const</code> (<code>{ status: 'draft' } as const</code>) hoặc gán kiểu cho thuộc tính, đừng ép kiểu ở chỗ gọi.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: Narrowing</span><span class="lc-sub">Mọi dạng thu hẹp, kể cả những dạng bài này bỏ qua.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện tập: union literal trên Code Lab</span><span class="lc-sub">Luyện nới rộng, as const và thu hẹp bằng so bằng.</span></span>
+</a>
 </div>
 `,
     },
@@ -237,6 +285,14 @@ export default {
 </div>
 <p>In every case the shared literal field (<code>status</code>, <code>state</code>, <code>type</code>, <code>kind</code>) is the key. Pick any name you like; the pattern is the same.</p>
 <div class="note-ct">This site models loading and result states as discriminated unions, so a component literally cannot read <code>data</code> while still in the <code>loading</code> state — the field isn't on that variant. That eliminates a whole family of "cannot read property of undefined during load" bugs at the type level.</div>
+<h3>What makes a union discriminated</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Every member has the field</span><span class="lz-t">Same property name in all variants</span><span class="lz-d">Miss it in one variant and the whole mechanism degrades to an ordinary union — <code>switch (s.kind)</code> stops narrowing anything.</span></div>
+<div class="lz-layer"><span class="lz-k">Its type is a literal</span><span class="lz-t">'circle', not string</span><span class="lz-d">The discriminant must be a literal (or literal union) type. Declare it <code>kind: string</code> and there is nothing to compare against — narrowing silently does nothing.</span></div>
+<div class="lz-layer"><span class="lz-k">The literals are distinct</span><span class="lz-t">No two variants share a tag</span><span class="lz-d">Two variants both tagged <code>'circle'</code> narrow to <em>both</em>, so the branch sees only their common properties.</span></div>
+<div class="lz-layer"><span class="lz-k">Then: switch narrows exactly</span><span class="lz-t">Per-case, per-variant</span><span class="lz-d">Inside <code>case 'circle'</code> you get the circle variant and its fields — no casts, no <code>in</code> checks, no optional-chaining noise.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>kind: string</code> instead of <code>kind: 'circle'</code> turns off narrowing without an error.</strong> Write the variant as <code>{ kind: string; radius: number }</code> and everything still compiles: it is a valid type, the union is a valid union, <code>switch (s.kind)</code> is valid code. But inside <code>case 'circle'</code> the compiler cannot exclude the other variants, so <code>s.radius</code> is TS2339 <em>Property 'radius' does not exist on type …</em> — an error that points at your access, not at the declaration that caused it. This is easiest to hit when the object comes from a constructor or a factory that widens, or from an interface someone "cleaned up". Check the declaration first whenever a discriminated union stops narrowing: hover the field, and if it says <code>string</code> you have found the bug.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: discriminated unions on Code Lab</span><span class="lc-sub">Model variant data after this chapter.</span></span>
@@ -281,6 +337,14 @@ export default {
 </div>
 <p>Trong mọi trường hợp, field literal chung (<code>status</code>, <code>state</code>, <code>type</code>, <code>kind</code>) là chìa khoá. Đặt tên nào tuỳ bạn; mẫu vẫn thế.</p>
 <div class="note-ct">Site này mô hình hoá các trạng thái tải và kết quả bằng discriminated union, nên một component theo đúng nghĩa đen không thể đọc <code>data</code> khi vẫn ở trạng thái <code>loading</code> — field đó không có trên biến thể ấy. Điều đó xoá cả một họ bug "cannot read property of undefined khi đang tải" ngay ở tầng kiểu.</div>
+<h3>Điều gì làm một union trở thành discriminated</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Mọi thành viên đều có field đó</span><span class="lz-t">Cùng tên thuộc tính ở mọi biến thể</span><span class="lz-d">Thiếu ở một biến thể là cả cơ chế tụt xuống thành union thường — <code>switch (s.kind)</code> thôi thu hẹp bất cứ thứ gì.</span></div>
+<div class="lz-layer"><span class="lz-k">Kiểu của nó là literal</span><span class="lz-t">'circle', không phải string</span><span class="lz-d">Discriminant phải là kiểu literal (hoặc union literal). Khai nó là <code>kind: string</code> thì chẳng có gì để đối chiếu — thu hẹp âm thầm chẳng làm gì cả.</span></div>
+<div class="lz-layer"><span class="lz-k">Các literal phải phân biệt</span><span class="lz-t">Không hai biến thể nào chung nhãn</span><span class="lz-d">Hai biến thể cùng gắn nhãn <code>'circle'</code> sẽ thu hẹp về <em>cả hai</em>, nên nhánh đó chỉ nhìn thấy các thuộc tính chung của chúng.</span></div>
+<div class="lz-layer"><span class="lz-k">Rồi thì: switch thu hẹp chính xác</span><span class="lz-t">Từng case, từng biến thể</span><span class="lz-d">Trong <code>case 'circle'</code> bạn có đúng biến thể circle cùng các field của nó — không ép kiểu, không kiểm <code>in</code>, không phải rắc optional chaining.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — <code>kind: string</code> thay vì <code>kind: 'circle'</code> tắt thu hẹp mà không báo lỗi.</strong> Viết biến thể là <code>{ kind: string; radius: number }</code> thì mọi thứ vẫn biên dịch: nó là kiểu hợp lệ, union là union hợp lệ, <code>switch (s.kind)</code> là mã hợp lệ. Nhưng trong <code>case 'circle'</code> trình biên dịch không loại được các biến thể kia, nên <code>s.radius</code> thành TS2339 <em>Property 'radius' does not exist on type …</em> — một lỗi chỉ vào chỗ bạn truy cập, chứ không vào khai báo đã gây ra nó. Dễ dính nhất khi object đến từ một constructor hay một factory làm nới kiểu, hoặc từ một interface bị ai đó "dọn dẹp". Hễ một discriminated union thôi thu hẹp thì hãy kiểm khai báo trước: rê chuột lên field đó, thấy nó ghi <code>string</code> là bạn tìm ra lỗi rồi.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: discriminated union trên Code Lab</span><span class="lc-sub">Mô hình dữ liệu nhiều biến thể sau chương này.</span></span>
@@ -335,6 +399,14 @@ export default {
 <span class="tok-comment">// default: return assertNever(shape);</span></code></pre>
 <p>Same compile-time guarantee, plus a clear runtime error if some untyped data ever sneaks a bad value in. You'll see <code>assertNever</code> in many production codebases for exactly this.</p>
 <div class="note-ct">This is the <code>never</code> check chapter 2 promised. On this site it guards the content-type union: when a new content type was added, the exhaustiveness check flagged every switch that hadn't been updated — a compile-time to-do list. It is precisely the safety net that the enum-rename incident (chapter 9) showed you need, wired directly into the type system.</div>
+<h3>Why never is the right tool here</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">never is the empty set of values</span><span class="lz-d">Nothing is assignable to it. That is the whole trick: it is a slot that only accepts a value the compiler has proved cannot exist.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">A fully handled switch narrows to never</span><span class="lz-d">If every variant has its own <code>case</code>, then in <code>default</code> the set of remaining possibilities is empty — so the value's type is <code>never</code>.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Assigning it there compiles — today</span><span class="lz-d"><code>const _x: never = s</code> in the default branch type-checks precisely because nothing can reach it.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Add a variant and that line breaks</span><span class="lz-d">Now <code>s</code> is the new variant, not <code>never</code>, and TS2322 fires — in the switch you forgot to update, not three modules away where the missing case would have surfaced as a runtime bug.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — one <code>default</code> that returns a fallback quietly cancels the whole check.</strong> Write <code>default: return 0</code> and you have a switch that is <em>never</em> exhaustive-checked: adding a variant compiles fine, ships fine, and returns 0 for the new case forever. The same happens with <code>default: throw new Error('unknown kind')</code> — the runtime tells you, but only after it ships, and only if that path is exercised. The exhaustiveness pattern only works when the default branch <em>consumes</em> the value at type <code>never</code> (<code>const _exhaustive: never = s;</code> or a <code>assertNever(s)</code> helper). If you also want a runtime guard, do both: assert the type first, then throw — the compile error is the one that saves you.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: exhaustiveness on Code Lab</span><span class="lc-sub">Cement chapter 5 with the matching exercises.</span></span>
@@ -379,6 +451,14 @@ export default {
 <span class="tok-comment">// default: return assertNever(shape);</span></code></pre>
 <p>Cùng bảo đảm lúc biên dịch, cộng thêm một lỗi lúc chạy rõ ràng nếu có dữ liệu không kiểu nào lẻn một giá trị xấu vào. Bạn sẽ thấy <code>assertNever</code> trong nhiều codebase production đúng vì điều này.</p>
 <div class="note-ct">Đây là phép kiểm <code>never</code> mà chương 2 đã hứa. Trên site này nó gác union kiểu-nội-dung: khi thêm một kiểu nội dung mới, phép kiểm đầy đủ tô đỏ mọi switch chưa được cập nhật — một danh sách việc-cần-làm lúc biên dịch. Đó đúng là tấm lưới an toàn mà sự cố enum-rename (chương 9) cho thấy bạn cần, ráp thẳng vào hệ thống kiểu.</div>
+<h3>Vì sao never là công cụ đúng ở đây</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">never là tập giá trị rỗng</span><span class="lz-d">Không gì gán được vào nó. Đó là toàn bộ mẹo: nó là một ô chỉ nhận một giá trị mà trình biên dịch đã chứng minh là không thể tồn tại.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Một switch xử đủ sẽ thu hẹp về never</span><span class="lz-d">Nếu mọi biến thể đều có <code>case</code> riêng thì ở <code>default</code> tập khả năng còn lại là rỗng — nên kiểu của giá trị là <code>never</code>.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Gán nó ở đó thì biên dịch được — hôm nay</span><span class="lz-d"><code>const _x: never = s</code> trong nhánh default qua kiểm kiểu chính vì không gì tới được đó.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Thêm một biến thể là dòng đó vỡ</span><span class="lz-d">Giờ <code>s</code> là biến thể mới chứ không phải <code>never</code>, và TS2322 nổ — ngay trong cái switch bạn quên cập nhật, chứ không phải cách đó ba module nơi ca thiếu sẽ lộ ra dưới dạng lỗi lúc chạy.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một <code>default</code> trả về giá trị dự phòng lặng lẽ huỷ cả phép kiểm.</strong> Viết <code>default: return 0</code> là bạn có một switch <em>không bao giờ</em> được kiểm đầy đủ: thêm biến thể vẫn biên dịch ngon, vẫn ship ngon, và trả về 0 cho ca mới mãi mãi. Chuyện tương tự với <code>default: throw new Error('unknown kind')</code> — lúc chạy nó có báo, nhưng chỉ sau khi đã ship, và chỉ khi đường đó được đi qua. Mẫu kiểm đầy đủ chỉ chạy khi nhánh default <em>tiêu thụ</em> giá trị ở kiểu <code>never</code> (<code>const _exhaustive: never = s;</code> hoặc một hàm phụ <code>assertNever(s)</code>). Nếu bạn còn muốn cả chốt chặn lúc chạy thì làm cả hai: khẳng định kiểu trước, rồi mới ném — lỗi biên dịch mới là thứ cứu bạn.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: exhaustiveness trên Code Lab</span><span class="lc-sub">Củng cố chương 5 bằng các bài tập tương ứng.</span></span>

@@ -27,9 +27,9 @@ export default {
 <p>The industry settled on three shapes of evidence, usually called the three pillars. They answer different questions and they are not substitutes for each other:</p>
 
 <div class="lz-map">
-  <div class="lz-node"><span class="lz-t">Logs — sự kiện rời rạc</span><span class="lz-d">"lúc 02:14:07 request abc123 ném lỗi ở listNotes". Trả lời câu hỏi <em>chuyện gì đã xảy ra với CÁI NÀY</em>. Đắt về dung lượng, rẻ về khái niệm</span></div>
-  <div class="lz-node"><span class="lz-t">Metrics — số tổng hợp theo thời gian</span><span class="lz-d">"tỉ lệ 5xx tăng từ 0,1% lên 4% trong 10 phút". Trả lời <em>hệ thống nói chung đang thế nào</em>. Rẻ khủng khiếp, nhưng không kể được câu chuyện của một người dùng</span></div>
-  <div class="lz-node"><span class="lz-t">Traces — cây thời gian của một request</span><span class="lz-d">"request đó mất 8,2 giây, trong đó 7,9 giây nằm ở 12 truy vấn pg giống hệt nhau". Trả lời <em>thời gian đã đi đâu</em>. Đắt nhất để dựng, giá trị nhất khi truy nguyên</span></div>
+  <div class="lz-node"><span class="lz-t">Logs — discrete events</span><span class="lz-d">"at 02:14:07 request abc123 threw in listNotes". Answers the question <em>what happened to THIS ONE</em>. Expensive in volume, cheap in concept</span></div>
+  <div class="lz-node"><span class="lz-t">Metrics — numbers aggregated over time</span><span class="lz-d">"the 5xx rate rose from 0.1% to 4% in 10 minutes". Answers <em>how the system as a whole is doing</em>. Astonishingly cheap, but it cannot tell one user's story</span></div>
+  <div class="lz-node"><span class="lz-t">Traces — one request's timing tree</span><span class="lz-d">"that request took 8.2 seconds, 7.9 of them in 12 identical pg queries". Answers <em>where the time went</em>. The costliest to build, the most valuable when tracing a cause</span></div>
 </div>
 
 <p>A useful way to hold them in your head: metrics tell you <em>that</em> something is wrong, traces tell you <em>where</em> it is wrong, logs tell you <em>what exactly</em> was wrong. Alerting on logs is expensive; debugging with metrics is impossible. Most production incidents walk down that list in order.</p>
@@ -142,13 +142,13 @@ HEADER: {"authorization":"[ĐÃ CHE]","cookie":"[ĐÃ CHE]"}
 <h3>Levels: the cheapest performance feature you own</h3>
 <p>A log call that is below the configured level should cost nothing. Measure whether it does:</p>
 
-<div class="out">pino level=warn, gọi log.debug() 100.000 lần   9,2ms   10.884.650 lần/giây
+<div class="out">pino level=warn, call log.debug() 100.000 lần   9,2ms   10.884.650 lần/giây
 console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/giây</div>
 
 <p>pino's suppressed call costs roughly 92 nanoseconds — it still builds the argument object before discovering the level is off. The hand-rolled guard costs 9 nanoseconds because the object is never built. Both are irrelevant next to a 500.000-per-second write. The practical rule: <strong>put <code>logger.debug</code> anywhere you want; put <code>logger.info</code> where you would be willing to pay for it in production</strong>, because that is exactly what you will do.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the expensive part of a suppressed log is not the logger, it is the argument. <code>logger.debug({ rows: await countEverything() }, 'x')</code> runs the query at every level, forever, including in production where the line is never written. If building the payload costs anything, guard it: <code>if (logger.isLevelEnabled('debug'))</code>.</p>
+<p><strong>A real trap:</strong> the expensive part of a suppressed log is not the logger, it is the argument. <code>logger.debug({ rows: await countEverything() }, 'x')</code> runs the query at every level, forever, including in production where the line is never written. If building the payload costs anything, guard it: <code>if (logger.isLevelEnabled('debug'))</code>.</p>
 </div>
 
 <h3>What this site does</h3>
@@ -161,7 +161,7 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 <p>That is a defensible choice for a single-container deployment: it is structured where it matters, it has zero dependencies, and it costs one <code>console.log</code>. What it gives up is exactly what this lesson measured — buffering, redaction and level-aware argument skipping. It is the right trade for now and the wrong trade at ten times the traffic, and the way you will know is that the p97.5 latency starts wobbling in a way the code does not explain.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> HTTP access logs come from <code>morgan('combined')</code>, with one deliberate override worth copying: some endpoints accept a JWT in the query string for SSE streaming, and morgan's default <code>:url</code> token would write that token into the access log verbatim. The site overrides the token to strip it — the same class of leak this lesson found in pino-http, caught by someone who thought about it in advance:</p>
+<p><strong>How cuongthai.com does it.</strong> HTTP access logs come from <code>morgan('combined')</code>, with one deliberate override worth copying: some endpoints accept a JWT in the query string for SSE streaming, and morgan's default <code>:url</code> token would write that token into the access log verbatim. The site overrides the token to strip it — the same class of leak this lesson found in pino-http, caught by someone who thought about it in advance:</p>
 <pre><code>morgan.token('url', (req) =&gt; (req.originalUrl || req.url || '')
   .replace(/([?&amp;](?:token|code)=)[^&amp;]+/gi, '$1[REDACTED]'));</code></pre>
 <p>Health probes are excluded via <code>skip</code>, so uptime checks every ten seconds do not drown the real traffic.</p>
@@ -431,24 +431,24 @@ import { randomUUID } from 'node:crypto';
 
 const als = new AsyncLocalStorage();
 
-// một middleware duy nhất, đặt trước mọi route
+// a single middleware, placed before every route
 app.use((req, res, next) =&gt; {
   const reqId = req.headers['x-request-id'] || randomUUID().slice(0, 8);
   res.setHeader('X-Request-ID', reqId);
   als.run({ log: logger.child({ reqId }) }, next);
 });
 
-// mọi nơi khác trong ứng dụng
+// everywhere else in the application
 function log() { return als.getStore()?.log ?? logger; }</code></pre>
 
 <p>Now the service and repository log through <code>log()</code> and get the right child logger automatically. <strong>Neither function takes <code>reqId</code> as a parameter.</strong> That is the output shown above — the three-layer app that produced those clean lines has no correlation parameter anywhere in it.</p>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Request đến</span><span class="lz-d">middleware sinh hoặc nhận lại reqId, dội ngược vào header <code>X-Request-ID</code></span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">als.run(store, next)</span><span class="lz-d">mở một "vùng ngữ cảnh"; mọi thứ chạy bên trong <code>next()</code> đều nhìn thấy store</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Route → service → repo</span><span class="lz-d">gọi <code>als.getStore()</code>, lấy đúng child logger, không hàm nào nhận thêm tham số</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">await, setTimeout, callback</span><span class="lz-d">ngữ cảnh đi theo chuỗi bất đồng bộ; đây là điểm mà biến toàn cục THẤT BẠI</span></div>
-  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Request kết thúc</span><span class="lz-d">vùng ngữ cảnh bị thu hồi tự động; không có gì phải dọn tay</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">A request arrives</span><span class="lz-d">middleware generates or reuses a reqId and echoes it back in the header <code>X-Request-ID</code></span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">als.run(store, next)</span><span class="lz-d">opens a "context region"; everything running inside <code>next()</code> can see the store</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Route → service → repo</span><span class="lz-d">call <code>als.getStore()</code>, get the right child logger, and no function takes an extra parameter</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">await, setTimeout, callback</span><span class="lz-d">the context follows the async chain; this is exactly where a global variable FAILS</span></div>
+  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">The request ends</span><span class="lz-d">the context region is reclaimed automatically; nothing to clean up by hand</span></div>
 </div>
 
 <div class="callout">
@@ -492,7 +492,7 @@ res.setHeader('X-Request-ID', id);</code></pre>
 <p>The length check matters. An inbound header is attacker-controlled: without a bound, someone posts a 4MB <code>X-Request-ID</code> and you obligingly write it into every log line of that request, then ship it to your aggregator, then pay for it. Trust-but-truncate.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> echoing the id back in the response header is not decoration — it is how a user reports a problem. "It broke" is unactionable; "it broke and the response said X-Request-ID: mJumRwAigpAO" is a grep away from the stack trace. Put the id in your error page, your API error body, and your support form.</p>
+<p><strong>A real trap:</strong> echoing the id back in the response header is not decoration — it is how a user reports a problem. "It broke" is unactionable; "it broke and the response said X-Request-ID: mJumRwAigpAO" is a grep away from the stack trace. Put the id in your error page, your API error body, and your support form.</p>
 </div>
 
 <h3>What this site does</h3>
@@ -509,19 +509,19 @@ RateLimit-Policy: 2000;w=900</div>
 <p>Twelve characters from <code>nanoid</code>, generated by the first middleware in the chain, echoed back, and — the detail most implementations forget — listed in <code>Access-Control-Expose-Headers</code>. Without that line the browser will not let front-end JavaScript read the header, so the front end cannot show the id in an error toast and the whole chain of evidence breaks at the last step.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> The middleware sits at position 1b in <code>src/index.ts</code> — before helmet, before CORS, before the rate limiter — so that even a request rejected with 429 carries an id. It honours an inbound header (nginx can set one) with a 64-character cap, exactly as described above. What the site does <em>not</em> yet have is <code>AsyncLocalStorage</code>: <code>req.id</code> is available on the request object, so route handlers can log it, but a service called three layers down cannot. That is the upgrade this lesson exists to justify.</p>
+<p><strong>How cuongthai.com does it.</strong> The middleware sits at position 1b in <code>src/index.ts</code> — before helmet, before CORS, before the rate limiter — so that even a request rejected with 429 carries an id. It honours an inbound header (nginx can set one) with a 64-character cap, exactly as described above. What the site does <em>not</em> yet have is <code>AsyncLocalStorage</code>: <code>req.id</code> is available on the request object, so route handlers can log it, but a service called three layers down cannot. That is the upgrade this lesson exists to justify.</p>
 </div>
 
 <h3>Beyond logs: the same id everywhere</h3>
 <p>Once the id is ambient, everything that reports on a request can carry it, and every one of these has repaid the effort in a real incident:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>Response header</span><b>Người dùng đọc được và gửi cho bạn</b></div>
-  <div class="kv"><span>Error body</span><b>Trả kèm mã lỗi để hỗ trợ khách hàng dán vào ticket</b></div>
-  <div class="kv"><span>Sentry / error tracker</span><b>Gắn làm tag → nhảy từ báo lỗi sang đúng dòng log</b></div>
-  <div class="kv"><span>Truy vấn DB chậm</span><b>Chèn vào SQL comment <code>/* reqId=abc */</code> → pg_stat_activity chỉ ra request nào đang khoá bảng</b></div>
-  <div class="kv"><span>Job nền</span><b>Truyền vào payload BullMQ (chương 13) → job chạy 10 phút sau vẫn truy ngược được về request đã đẩy nó vào hàng đợi</b></div>
-  <div class="kv"><span>Gọi service khác</span><b>Chuyển tiếp bằng header <code>X-Request-ID</code> để cả hệ thống dùng chung một mã</b></div>
+  <div class="kv"><span>Response header</span><b>Users can read it and send it to you</b></div>
+  <div class="kv"><span>Error body</span><b>Return it with the error so support can paste it into a ticket</b></div>
+  <div class="kv"><span>Sentry / error tracker</span><b>Attach it as a tag → jump from an error report to the exact log lines</b></div>
+  <div class="kv"><span>A slow DB query</span><b>Embed it in a SQL comment <code>/* reqId=abc */</code> → pg_stat_activity tells you which request is locking the table</b></div>
+  <div class="kv"><span>Background jobs</span><b>Pass it in the BullMQ payload (chapter 13) → a job running 10 minutes later still traces back to the request that enqueued it</b></div>
+  <div class="kv"><span>Calling another service</span><b>Forward it in the <code>X-Request-ID</code> header so the whole system shares one id</b></div>
 </div>
 
 <div class="link-card codelab">
@@ -795,18 +795,18 @@ request chậm  giữ 1/1 (100%)</div>
 <p>A hundredfold reduction with <strong>zero loss of incident data</strong>. The hash is the part that makes it work: a naive <code>Math.random() &lt; 0.01</code> per line would keep a scattered 1% of lines from every request, producing a file full of orphaned fragments — the worst of both worlds. Hashing the request id means each request is entirely in or entirely out, so a sampled request is still a complete story.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the hash must be over a value that is <em>identical on every line of the request</em> and <em>stable across processes</em>. Hash the request id, not the timestamp, not a per-line counter, and not <code>Math.random()</code>. If two containers hash the same request differently, a request that crossed both is half-kept — which looks exactly like a request that vanished mid-flight, and you will spend an afternoon chasing it.</p>
+<p><strong>A real trap:</strong> the hash must be over a value that is <em>identical on every line of the request</em> and <em>stable across processes</em>. Hash the request id, not the timestamp, not a per-line counter, and not <code>Math.random()</code>. If two containers hash the same request differently, a request that crossed both is half-kept — which looks exactly like a request that vanished mid-flight, and you will spend an afternoon chasing it.</p>
 </div>
 
 <h3>Levels, and the one rule that keeps them useful</h3>
 <p>Levels only work if everyone agrees what they mean. The version that survives contact with a team:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>error</span><b>Cần người xử lý. Nếu bạn không định làm gì với nó thì nó không phải error</b></div>
-  <div class="kv"><span>warn</span><b>Bất thường nhưng đã tự xử lý được: thử lại thành công, rơi về phương án dự phòng, hết hạn mức</b></div>
-  <div class="kv"><span>info</span><b>Sự kiện nghiệp vụ mà bạn sẵn sàng TRẢ TIỀN để giữ: đăng nhập, thanh toán, xoá dữ liệu</b></div>
-  <div class="kv"><span>debug</span><b>Bật khi đang truy vết một sự cố cụ thể. TẮT ở production, tính bằng biến môi trường</b></div>
-  <div class="kv"><span>trace</span><b>Chi tiết tới mức chỉ tác giả đọc nổi. Không bao giờ bật rộng</b></div>
+  <div class="kv"><span>error</span><b>Someone has to act. If you are not going to do anything about it, it is not an error</b></div>
+  <div class="kv"><span>warn</span><b>Unusual but already handled: a successful retry, a fallback path, a quota exhausted</b></div>
+  <div class="kv"><span>info</span><b>Business events you are willing to PAY to keep: logins, payments, data deletion</b></div>
+  <div class="kv"><span>debug</span><b>Turned on while chasing a specific incident. OFF in production, controlled by an environment variable</b></div>
+  <div class="kv"><span>trace</span><b>So detailed only its author can read it. Never enabled broadly</b></div>
 </div>
 
 <p>The rule that keeps this from rotting: <strong>an <code>error</code> that nobody acts on trains everyone to ignore <code>error</code></strong>. A log level is a promise about who will read it. Downgrade anything that fires routinely — a 401 on an expired token is not an error, it is Tuesday — or within a month your error channel is noise and a real outage scrolls past unnoticed.</p>
@@ -823,23 +823,23 @@ request chậm  giữ 1/1 (100%)</div>
 <p>250MB per container, hard ceiling, enforced by the daemon rather than by anyone remembering. Two details that matter: this applies only to containers <em>created after</em> the change, so existing ones need recreating; and <code>docker logs</code> only ever shows what is inside that window, which is why anything you need beyond a few hours must be shipped somewhere else before it rotates away.</p>
 
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-t">Ứng dụng</span><span class="lz-d">ghi JSON ra stdout. KHÔNG tự mở file, KHÔNG tự xoay vòng — đó không phải việc của tiến trình</span></div>
-  <div class="lz-layer"><span class="lz-t">Docker json-file driver</span><span class="lz-d">bắt stdout, xoay vòng theo max-size/max-file. Đây là trần cứng chống đầy đĩa</span></div>
-  <div class="lz-layer"><span class="lz-t">Bộ gom (Vector, Promtail, Fluent Bit)</span><span class="lz-d">đọc file đó, lấy mẫu, nén, đẩy đi. Chết cũng không làm chết ứng dụng</span></div>
-  <div class="lz-layer"><span class="lz-t">Kho log (Loki, ELK, dịch vụ trả phí)</span><span class="lz-d">đánh chỉ mục, truy vấn, giữ theo hạn. Đây là nơi hoá đơn được tính</span></div>
+  <div class="lz-layer"><span class="lz-t">The application</span><span class="lz-d">writes JSON to stdout. It does NOT open files and does NOT rotate them — that is not the process's job</span></div>
+  <div class="lz-layer"><span class="lz-t">Docker json-file driver</span><span class="lz-d">captures stdout and rotates by max-size/max-file. This is the hard ceiling against a full disk</span></div>
+  <div class="lz-layer"><span class="lz-t">The collector (Vector, Promtail, Fluent Bit)</span><span class="lz-d">reads those files, samples, compresses and ships. If it dies, the application does not</span></div>
+  <div class="lz-layer"><span class="lz-t">The log store (Loki, ELK, a paid service)</span><span class="lz-d">indexes, queries and retains. This is where the bill is calculated</span></div>
 </div>
 
 <p>The important property of that stack is that each layer can fail without taking the one above it down. An app that writes to stdout keeps serving when the shipper dies. An app that writes directly to a remote log service blocks when that service is slow — which is how a logging outage becomes an application outage.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> The backend writes JSON to stdout and owns nothing below that line — no log files, no rotation code, no shipper embedded in the process. Docker's json-file driver handles rotation, and <code>docker logs</code> is the read path. It is the simplest arrangement that has the failure isolation above, and it is enough at this traffic. The two upgrades it is missing, in the order they will be needed: a shipper, so history outlives rotation; and sampling at the shipper, so history is affordable.</p>
+<p><strong>How cuongthai.com does it.</strong> The backend writes JSON to stdout and owns nothing below that line — no log files, no rotation code, no shipper embedded in the process. Docker's json-file driver handles rotation, and <code>docker logs</code> is the read path. It is the simplest arrangement that has the failure isolation above, and it is enough at this traffic. The two upgrades it is missing, in the order they will be needed: a shipper, so history outlives rotation; and sampling at the shipper, so history is affordable.</p>
 </div>
 
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-992"><span class="lc-t">Code Lab · Debugging Production Incidents</span><span class="lc-d">Working backwards from a symptom to a log line</span></a>
 </div>
 <div class="link-card exphub">
-  <a href="/exp-hub${REF}"><span class="lc-t">Exp Hub · Lệnh đọc log trên VPS</span><span class="lc-d">docker logs, journalctl, grep + jq trong thực tế</span></a>
+  <a href="/exp-hub${REF}"><span class="lc-t">Exp Hub · Log-reading commands on a VPS</span><span class="lc-d">docker logs, journalctl, grep + jq in practice</span></a>
 </div>
 </div>
 
@@ -989,10 +989,10 @@ request chậm  giữ 1/1 (100%)</div>
 <p>Prometheus — the de facto standard, and what <code>prom-client</code> implements — has four:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>Counter</span><b>Chỉ tăng, không giảm. Tổng request, tổng lỗi, tổng byte gửi đi. Hỏi "tốc độ" bằng <code>rate()</code></b></div>
-  <div class="kv"><span>Gauge</span><b>Lên xuống tự do. Số kết nối đang mở, chiều dài hàng đợi, RAM đang dùng</b></div>
-  <div class="kv"><span>Histogram</span><b>Đếm quan sát rơi vào các khoảng đã định sẵn. Đây là thứ cho ra p50/p95/p99</b></div>
-  <div class="kv"><span>Summary</span><b>Tính phân vị NGAY TRONG tiến trình. Đừng dùng: không cộng gộp được giữa nhiều container</b></div>
+  <div class="kv"><span>Counter</span><b>Only increases, never decreases. Total requests, total errors, total bytes sent. Ask for the "rate" with <code>rate()</code></b></div>
+  <div class="kv"><span>Gauge</span><b>Moves freely up and down. Open connections, queue length, memory in use</b></div>
+  <div class="kv"><span>Histogram</span><b>Counts observations falling into predefined buckets. This is what gives you p50/p95/p99</b></div>
+  <div class="kv"><span>Summary</span><b>Computes percentiles INSIDE the process. Do not use it: it cannot be aggregated across containers</b></div>
 </div>
 
 <p>The Counter-versus-Gauge distinction matters more than it looks. A counter never resets except when the process restarts, and Prometheus detects that reset and corrects for it. A gauge that you increment and decrement by hand will drift out of sync the first time an error path skips the decrement — and drift silently, forever, because nothing recomputes it.</p>
@@ -1053,9 +1053,9 @@ http_request_duration_seconds_count{route="/notes/:id"}  300</code></pre>
 
 <h3>The RED method: three metrics that cover most of it</h3>
 <div class="lz-map">
-  <div class="lz-node"><span class="lz-t">Rate</span><span class="lz-d"><code>rate(http_requests_total[5m])</code> — bao nhiêu request mỗi giây. Tụt đột ngột = có thứ ở phía trước đang chặn</span></div>
-  <div class="lz-node"><span class="lz-t">Errors</span><span class="lz-d"><code>rate(http_requests_total{status=~"5.."}[5m])</code> — tỉ lệ hỏng. Đây là chỉ số đáng cảnh báo nhất</span></div>
-  <div class="lz-node"><span class="lz-t">Duration</span><span class="lz-d"><code>histogram_quantile(0.95, ...)</code> — chậm tới mức nào. Tăng dần thường là dấu hiệu sớm của một sự cố sắp tới</span></div>
+  <div class="lz-node"><span class="lz-t">Rate</span><span class="lz-d"><code>rate(http_requests_total[5m])</code> — how many requests per second. A sudden drop means something upstream is blocking</span></div>
+  <div class="lz-node"><span class="lz-t">Errors</span><span class="lz-d"><code>rate(http_requests_total{status=~"5.."}[5m])</code> — the failure rate. This is the metric most worth alerting on</span></div>
+  <div class="lz-node"><span class="lz-t">Duration</span><span class="lz-d"><code>histogram_quantile(0.95, ...)</code> — how slow. A gradual rise is often the earliest sign of an incident about to happen</span></div>
 </div>
 
 <p>Three metrics, one middleware, and you can answer "is the API healthy right now" for every route without knowing anything about what the routes do. Everything past this point is refinement.</p>
@@ -1087,16 +1087,16 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <p>The rule that prevents all of it, stated so it is hard to get wrong: <strong>a label value must come from a set you could write down on paper.</strong> Method, route template, status code, environment, region — all writable. User id, request id, email, note id, session id, raw URL, SQL string, error message — all unbounded, all forbidden.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the dangerous version is not <code>user_id</code> — that one is obviously wrong and gets caught in review. It is <code>error_message</code> as a label, which looks bounded because you "only have a few kinds of error", right up until one of them interpolates a value: <code>"note 8412 not found"</code>. Now you have one series per note id, created by an error path that only fires occasionally, so it grows slowly and is discovered months later during an out-of-memory incident.</p>
+<p><strong>A real trap:</strong> the dangerous version is not <code>user_id</code> — that one is obviously wrong and gets caught in review. It is <code>error_message</code> as a label, which looks bounded because you "only have a few kinds of error", right up until one of them interpolates a value: <code>"note 8412 not found"</code>. Now you have one series per note id, created by an error path that only fires occasionally, so it grows slowly and is discovered months later during an out-of-memory incident.</p>
 </div>
 
 <h3>Where the unbounded things belong</h3>
 <p>None of the forbidden values are useless — they are essential. They just belong in a different pillar:</p>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Có bao nhiêu, nhanh chậm ra sao?</span><span class="lz-d">METRIC — nhãn giới hạn, giá cố định, giữ nhiều tháng</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Cái nào chậm, chậm ở đâu?</span><span class="lz-d">TRACE — có mã request, có user id, lấy mẫu để chịu nổi giá</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Chuyện gì đã xảy ra với người dùng NÀY?</span><span class="lz-d">LOG — mọi trường tuỳ ý, tìm bằng grep, giữ ngắn hạn</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">How many, and how fast?</span><span class="lz-d">METRIC — bounded labels, fixed price, kept for months</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Which one is slow, and where?</span><span class="lz-d">TRACE — carries the request id and user id, sampled to keep the price bearable</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">What happened to THIS user?</span><span class="lz-d">LOG — arbitrary fields, searched by grep, kept briefly</span></div>
 </div>
 
 <p>"Which users hit the error?" is a log question. "How many users hit the error?" is a metric question. They sound like the same question and they have wildly different prices.</p>
@@ -1105,11 +1105,11 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <p>One line, and you get the numbers that explain most Node incidents without any application code:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>nodejs_eventloop_lag_p99_seconds</span><b>Chỉ số Node quan trọng nhất tồn tại. Tăng = có thứ đang CHẶN (chương 2)</b></div>
-  <div class="kv"><span>nodejs_heap_size_used_bytes</span><b>Rò bộ nhớ nhìn thấy được nhiều giờ trước khi container bị OOM giết</b></div>
-  <div class="kv"><span>nodejs_gc_duration_seconds</span><b>Giải thích những đỉnh trễ mà code không giải thích nổi</b></div>
-  <div class="kv"><span>process_cpu_seconds_total</span><b>Giới hạn ở CPU hay ở I/O — trả lời được bằng một biểu đồ</b></div>
-  <div class="kv"><span>nodejs_active_handles_total</span><b>Socket/timer không được đóng. Tăng đều = rò tài nguyên</b></div>
+  <div class="kv"><span>nodejs_eventloop_lag_p99_seconds</span><b>The single most important Node metric there is. Rising means something is BLOCKING (chapter 2)</b></div>
+  <div class="kv"><span>nodejs_heap_size_used_bytes</span><b>A memory leak becomes visible hours before the OOM killer takes the container</b></div>
+  <div class="kv"><span>nodejs_gc_duration_seconds</span><b>Explains the latency spikes the code cannot account for</b></div>
+  <div class="kv"><span>process_cpu_seconds_total</span><b>CPU-bound or I/O-bound — answered by a single graph</b></div>
+  <div class="kv"><span>nodejs_active_handles_total</span><b>Sockets and timers never closed. A steady rise means a resource leak</b></div>
 </div>
 
 <p>Event loop lag deserves a dashboard of its own. It is the metric that turns chapter 2's abstract "do not block the loop" into something you can alert on: when p99 lag crosses 100ms, some request somewhere is doing synchronous work, and every other request on that process is paying for it.</p>
@@ -1118,7 +1118,7 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <p><code>/metrics</code> describes your internals: route names, error rates, memory, sometimes version strings. It should not be on the public internet. Three options, in order of preference: bind the metrics server to a second port that only the private network can reach; or keep it on the main app and block <code>/metrics</code> at nginx for non-internal IPs; or require a bearer token. <strong>Do not skip this because "there is nothing sensitive in it"</strong> — route names alone map your entire attack surface.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Honest answer: this site has <strong>no <code>/metrics</code> endpoint at all</strong> — <code>curl</code> returns 404 for every plausible path. There is no Prometheus, no Grafana, no continuous view of rate/errors/duration; incidents are noticed by a person and diagnosed from <code>docker logs</code>. What it does have is Sentry, which covers the "errors" third of RED and nothing else. And one detail worth stealing: a middleware tags each request with its route template before reporting to Sentry, precisely so Sentry transactions do not explode into one entry per dynamic id — <strong>the same cardinality discipline this lesson measured, applied to a different tool</strong>. Adding <code>prom-client</code> is the single highest-value observability upgrade this codebase could make.</p>
+<p><strong>How cuongthai.com does it.</strong> Honest answer: this site has <strong>no <code>/metrics</code> endpoint at all</strong> — <code>curl</code> returns 404 for every plausible path. There is no Prometheus, no Grafana, no continuous view of rate/errors/duration; incidents are noticed by a person and diagnosed from <code>docker logs</code>. What it does have is Sentry, which covers the "errors" third of RED and nothing else. And one detail worth stealing: a middleware tags each request with its route template before reporting to Sentry, precisely so Sentry transactions do not explode into one entry per dynamic id — <strong>the same cardinality discipline this lesson measured, applied to a different tool</strong>. Adding <code>prom-client</code> is the single highest-value observability upgrade this codebase could make.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1293,11 +1293,11 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 
 <h3>The vocabulary, which is small</h3>
 <div class="kv-grid">
-  <div class="kv"><span>Span</span><b>Một khoảng thời gian có tên: "truy vấn pg", "gọi API ngoài", "xử lý route". Có bắt đầu, kết thúc, thuộc tính</b></div>
-  <div class="kv"><span>Trace</span><b>Toàn bộ cây span của MỘT request. Gắn với nhau bằng <code>trace_id</code> dùng chung</b></div>
-  <div class="kv"><span>Parent / child</span><b>Span con nằm trong span cha. Đây là thứ tạo ra cấu trúc cây thay vì danh sách phẳng</b></div>
-  <div class="kv"><span>Context propagation</span><b>Chuyển <code>trace_id</code> sang tiến trình khác qua header <code>traceparent</code>. Cùng cơ chế với AsyncLocalStorage ở bài 15.2</b></div>
-  <div class="kv"><span>Sampler</span><b>Quyết định trace nào được GHI LẠI. Trace đầy đủ thì đắt; đây là cần gạt giá tiền</b></div>
+  <div class="kv"><span>Span</span><b>A named interval of time: "pg query", "external API call", "route handling". It has a start, an end and attributes</b></div>
+  <div class="kv"><span>Trace</span><b>The entire span tree of ONE request. Held together by a shared <code>trace_id</code> </b></div>
+  <div class="kv"><span>Parent / child</span><b>A child span nested in a parent. This is what makes it a tree rather than a flat list</b></div>
+  <div class="kv"><span>Context propagation</span><b>Carries the <code>trace_id</code> into another process through a header <code>traceparent</code>. The same mechanism as AsyncLocalStorage in lesson 15.2</b></div>
+  <div class="kv"><span>Sampler</span><b>Decides which traces get RECORDED. Full tracing is expensive; this is the price lever</b></div>
 </div>
 
 <p>OpenTelemetry is the vendor-neutral standard that implements all of this. It matters because it means the instrumentation you write is not tied to a monitoring vendor: the same code exports to Jaeger, Tempo, Datadog, Honeycomb or a file.</p>
@@ -1320,11 +1320,11 @@ const sdk = new NodeSDK({
 });
 sdk.start();
 
-// chỉ SAU dòng này mới được import app
+// app may only be imported AFTER this line
 const { default: express } = await import('express');</code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy thật, và nó im lặng.</strong> If the SDK starts after <code>express</code> or <code>pg</code> is imported, there is nothing left to patch — those modules are already bound. You get no error, no warning, just an empty trace tree, and you conclude tracing "does not work". Either use a top-level <code>await import()</code> as above, or start the SDK from a separate file loaded with <code>node --import ./tracing.mjs app.js</code>.</p>
+<p><strong>A real trap, and a silent one.</strong> If the SDK starts after <code>express</code> or <code>pg</code> is imported, there is nothing left to patch — those modules are already bound. You get no error, no warning, just an empty trace tree, and you conclude tracing "does not work". Either use a top-level <code>await import()</code> as above, or start the SDK from a separate file loaded with <code>node --import ./tracing.mjs app.js</code>.</p>
 </div>
 
 <h3>What one request looks like</h3>
@@ -1358,11 +1358,11 @@ GET                                   60,19ms
 <p>The second thing the tree gives away is the 27,31ms <code>pg-pool.connect</code> at the top, containing a DNS lookup and a TCP handshake. That is chapter 7's cold-pool tax, visible as a distinct block instead of being smeared across the total. On the next request it disappears — and you can prove it, rather than assuming it.</p>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">Metric kêu</span><span class="lz-d">p95 của /feed tăng từ 120ms lên 900ms lúc 14:05</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Mở trace chậm trong khoảng đó</span><span class="lz-d">lọc theo route + thời lượng &gt; 500ms, lấy vài cái</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Nhìn hình dạng cây</span><span class="lz-d">một span dài? hay hai mươi span ngắn? Hai bệnh hoàn toàn khác nhau</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Lấy trace_id → grep log</span><span class="lz-d">đọc các dòng log của đúng request đó để biết THAM SỐ là gì</span></div>
-  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Sửa, rồi xác nhận bằng chính metric ở bước 1</span><span class="lz-d">vòng lặp khép kín; nếu p95 không xuống thì bạn sửa nhầm chỗ</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">A metric alerts</span><span class="lz-d">/feed's p95 rose from 120ms to 900ms at 14:05</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">Open the slow traces in that window</span><span class="lz-d">filter by route plus duration &gt; 500ms and take a handful</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">Look at the tree's shape</span><span class="lz-d">one long span? or twenty short ones? Two completely different diseases</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Take the trace_id → grep the logs</span><span class="lz-d">read that exact request's log lines to learn what the PARAMETERS were</span></div>
+  <div class="lz-step"><span class="lz-n">5</span><span class="lz-t">Fix it, then confirm with the very metric from step 1</span><span class="lz-d">a closed loop; if p95 does not fall, you fixed the wrong thing</span></div>
 </div>
 
 <h3>Connecting logs to traces</h3>
@@ -1429,20 +1429,20 @@ span.end();</code></pre>
 <p>Note the crucial difference from lesson 15.4: <strong>span attributes have no cardinality limit.</strong> <code>notes.count</code>, <code>user.id</code>, <code>request.id</code> are all fine here — a span is stored once and thrown away, it does not create a permanent time series. This is exactly why the forbidden metric labels belong on traces instead. Do not, however, put secrets there; a trace backend is no more designed to hold a bearer token than a log store is.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the <code>context.with(...)</code> wrapper is not optional decoration. <code>tracer.startSpan()</code> alone creates a span that is <em>not</em> active, so every child span created inside — including auto-instrumented <code>pg</code> queries — attaches to the wrong parent or to nothing. The tree comes out flat and you cannot see the nesting that was the entire point.</p>
+<p><strong>A real trap:</strong> the <code>context.with(...)</code> wrapper is not optional decoration. <code>tracer.startSpan()</code> alone creates a span that is <em>not</em> active, so every child span created inside — including auto-instrumented <code>pg</code> queries — attaches to the wrong parent or to nothing. The tree comes out flat and you cannot see the nesting that was the entire point.</p>
 </div>
 
 <h3>What to instrument first, if you only do one thing</h3>
 <div class="kv-grid">
-  <div class="kv"><span>HTTP vào</span><b>Miễn phí qua auto-instrumentation. Đây là gốc của mọi cây trace</b></div>
-  <div class="kv"><span>Truy vấn DB</span><b>Nơi phần lớn thời gian thật sự nằm. Là chỗ N+1 tự lộ diện</b></div>
-  <div class="kv"><span>Gọi HTTP ra ngoài</span><b>API bên thứ ba là nguyên nhân số một của độ trễ mà bạn không kiểm soát</b></div>
-  <div class="kv"><span>Cache Redis</span><b>Trúng/trượt cache nhìn thấy được ngay trên cây, không phải suy đoán</b></div>
-  <div class="kv"><span>Job nền</span><b>Nối trace_id từ request đẩy job vào hàng đợi (chương 13) sang lúc job chạy</b></div>
+  <div class="kv"><span>Inbound HTTP</span><b>Free through auto-instrumentation. This is the root of every trace tree</b></div>
+  <div class="kv"><span>DB queries</span><b>Where most of the time actually lives. This is where N+1 exposes itself</b></div>
+  <div class="kv"><span>Outbound HTTP calls</span><b>Third-party APIs are the number-one source of latency you do not control</b></div>
+  <div class="kv"><span>Cache Redis</span><b>Cache hits and misses become visible on the tree instead of being inferred</b></div>
+  <div class="kv"><span>Background jobs</span><b>Links the trace_id from the request that enqueued the job (chapter 13) to the moment the job runs</b></div>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> There is no OpenTelemetry here either — but Sentry's performance monitoring is a partial substitute: it records transactions with a span tree for a sampled fraction of requests. It covers the HTTP and database layers, and because a middleware tags transactions with the route template it does not suffer the cardinality problem. What it does not give is the vendor-neutral <code>trace_id</code> in log lines, so the log-to-trace jump described above still requires a human matching timestamps. Given the 39,6% measured overhead, the pragmatic path for a single-container deployment is: keep Sentry, add <code>prom-client</code> first, and reach for full OpenTelemetry when a second service appears — because that is the point at which "where did the time go" stops being answerable any other way.</p>
+<p><strong>How cuongthai.com does it.</strong> There is no OpenTelemetry here either — but Sentry's performance monitoring is a partial substitute: it records transactions with a span tree for a sampled fraction of requests. It covers the HTTP and database layers, and because a middleware tags transactions with the route template it does not suffer the cardinality problem. What it does not give is the vendor-neutral <code>trace_id</code> in log lines, so the log-to-trace jump described above still requires a human matching timestamps. Given the 39,6% measured overhead, the pragmatic path for a single-container deployment is: keep Sentry, add <code>prom-client</code> first, and reach for full OpenTelemetry when a second service appears — because that is the point at which "where did the time go" stops being answerable any other way.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1635,8 +1635,8 @@ span.end();</code></pre>
 
 <h3>Two different questions that look like one</h3>
 <div class="kv-grid">
-  <div class="kv"><span>Liveness — "còn sống không?"</span><b>Nếu trả lời SAI → container bị GIẾT và khởi động lại. Chỉ nên hỏi về chính tiến trình</b></div>
-  <div class="kv"><span>Readiness — "nhận việc được chưa?"</span><b>Nếu trả lời SAI → bị rút khỏi load balancer, KHÔNG bị giết. Được phép kiểm phụ thuộc</b></div>
+  <div class="kv"><span>Liveness — "are you alive?"</span><b>Answering NO → the container is KILLED and restarted. It should only ask about the process itself</b></div>
+  <div class="kv"><span>Readiness — "can you take work?"</span><b>Answering NO → you are pulled out of the load balancer, NOT killed. It is allowed to check dependencies</b></div>
 </div>
 
 <p>Confusing them is the single most expensive mistake in this lesson, so here is the failure in full. Suppose liveness checks the database. The database has a thirty-second hiccup. Every container fails its liveness probe, so the orchestrator kills them all. They restart — with cold connection pools, cold caches, cold JIT — and hammer the recovering database with a reconnect storm, which keeps it down. <strong>A thirty-second database blip has become a fifteen-minute total outage, and the monitoring system did it.</strong></p>
@@ -1646,7 +1646,7 @@ span.end();</code></pre>
 <pre><code>// liveness — không chạm vào bất cứ thứ gì bên ngoài
 app.get('/health/live', (req, res) =&gt; res.json({ status: 'ok' }));
 
-// readiness — được phép kiểm phụ thuộc, và PHẢI có timeout
+// readiness — allowed to check dependencies, and MUST have a timeout
 app.get('/health/ready', async (req, res) =&gt; {
   try {
     await prisma.$queryRaw\`SELECT 1\`;
@@ -1672,23 +1672,23 @@ app.get('/health/ready', async (req, res) =&gt; {
 
 <h3>What belongs in each check</h3>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">/health/live</span><span class="lz-d">trả 200 vô điều kiện. Chỉ SAI khi tiến trình treo cứng hoặc chết hẳn</span></div>
-  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">/health/ready</span><span class="lz-d">DB + cache, mỗi cái có timeout ngắn. Sai = rút khỏi cân bằng tải, không giết</span></div>
-  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">/health (chi tiết)</span><span class="lz-d">uptime, phiên bản, môi trường, trạng thái từng phụ thuộc. Cho CON NGƯỜI đọc, không cho probe</span></div>
-  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Loại khỏi access log</span><span class="lz-d">probe 10 giây một lần = 8.640 dòng/ngày/container không mang tin gì</span></div>
+  <div class="lz-step"><span class="lz-n">1</span><span class="lz-t">/health/live</span><span class="lz-d">returns 200 unconditionally. It only fails when the process is wedged solid or dead</span></div>
+  <div class="lz-step"><span class="lz-n">2</span><span class="lz-t">/health/ready</span><span class="lz-d">DB plus cache, each with a short timeout. Failing means removal from the load balancer, not a kill</span></div>
+  <div class="lz-step"><span class="lz-n">3</span><span class="lz-t">/health (detailed)</span><span class="lz-d">uptime, version, environment, the status of each dependency. For HUMANS to read, not for probes</span></div>
+  <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">Exclude it from the access log</span><span class="lz-d">a probe every 10 seconds is 8,640 lines a day per container carrying no information</span></div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> a readiness check that queries the database on <em>every</em> call is itself load. At a ten-second interval across six containers behind three probes, that is a query every 0,55 seconds, forever, for information that changes rarely. Cache the result for a few seconds. A readiness check that contributes to the overload it is meant to detect is a very expensive kind of irony.</p>
+<p><strong>A real trap:</strong> a readiness check that queries the database on <em>every</em> call is itself load. At a ten-second interval across six containers behind three probes, that is a query every 0,55 seconds, forever, for information that changes rarely. Cache the result for a few seconds. A readiness check that contributes to the overload it is meant to detect is a very expensive kind of irony.</p>
 </div>
 
 <h3>Alerts: the number that matters is how many you ignore</h3>
 <p>An alert is a promise that a human will do something. Every alert that fires without requiring action devalues every other alert, and the currency is trust — once an on-call engineer has silenced the same false page three times, they will silence the real one too. This is not a discipline problem; it is arithmetic.</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>Đánh thức người</span><b>Người dùng đang không dùng được sản phẩm NGAY BÂY GIỜ và cần người sửa NGAY</b></div>
-  <div class="kv"><span>Ticket, giờ hành chính</span><b>Đang xấu đi và sẽ thành sự cố trong vài ngày: đĩa 80%, chứng chỉ còn 14 ngày</b></div>
-  <div class="kv"><span>Chỉ vào bảng điều khiển</span><b>Đáng nhìn khi đang điều tra, không đáng gửi đi đâu cả</b></div>
+  <div class="kv"><span>Wake a human</span><b>Users cannot use the product RIGHT NOW and somebody has to fix it IMMEDIATELY</b></div>
+  <div class="kv"><span>A ticket, business hours</span><b>Degrading and will become an incident within days: disk at 80%, a certificate with 14 days left</b></div>
+  <div class="kv"><span>Dashboard only</span><b>Worth looking at during an investigation, not worth sending anywhere</b></div>
 </div>
 
 <p>Four rules that do most of the work:</p>
@@ -1705,10 +1705,10 @@ app.get('/health/ready', async (req, res) =&gt; {
 <p>Google's SRE framing, and a good checklist for "have I forgotten a category":</p>
 
 <div class="lz-map">
-  <div class="lz-node"><span class="lz-t">Latency</span><span class="lz-d">Chậm bao nhiêu — và đo RIÊNG request thành công với request lỗi, vì lỗi thường trả về rất nhanh và kéo trung bình xuống một cách giả tạo</span></div>
-  <div class="lz-node"><span class="lz-t">Traffic</span><span class="lz-d">Bao nhiêu request/giây. Cần để phân biệt "hỏng" với "không có ai vào"</span></div>
-  <div class="lz-node"><span class="lz-t">Errors</span><span class="lz-d">Tỉ lệ hỏng. Nhớ cả những lỗi trả về mã 200 nhưng thân rỗng — chúng không hiện ở đâu cả</span></div>
-  <div class="lz-node"><span class="lz-t">Saturation</span><span class="lz-d">Còn bao nhiêu chỗ trống: đĩa, RAM, pool kết nối, độ trễ event loop. Đây là chỉ số CẢNH BÁO SỚM</span></div>
+  <div class="lz-node"><span class="lz-t">Latency</span><span class="lz-d">How slow — and measure successful and failed requests SEPARATELY, because errors usually return very fast and drag the average down misleadingly</span></div>
+  <div class="lz-node"><span class="lz-t">Traffic</span><span class="lz-d">How many requests per second. Needed to tell "broken" apart from "nobody is visiting"</span></div>
+  <div class="lz-node"><span class="lz-t">Errors</span><span class="lz-d">The failure rate. Remember the errors that return 200 with an empty body — they show up nowhere at all</span></div>
+  <div class="lz-node"><span class="lz-t">Saturation</span><span class="lz-d">How much headroom is left: disk, memory, connection pool, event-loop lag. These are the EARLY WARNING metrics</span></div>
 </div>
 
 <p>Saturation is the one teams skip, and it is the one that gives warning. Latency, traffic and errors tell you an incident is happening. Saturation tells you one is coming — disk filling at a steady rate has a predictable arrival time, and a connection pool at 90% utilisation is one traffic spike away from timeouts.</p>
@@ -1723,18 +1723,18 @@ app.get('/health/ready', async (req, res) =&gt; {
 <p>Full observability is a big project. This is the subset that catches most incidents, ordered by value per hour of work:</p>
 
 <div class="kv-grid">
-  <div class="kv"><span>1. Log JSON + request id</span><b>Vài giờ làm. Không có nó thì mọi phép chẩn đoán đều là đoán</b></div>
-  <div class="kv"><span>2. Theo dõi lỗi (Sentry)</span><b>Một buổi chiều. Bạn biết chuyện hỏng TRƯỚC khi người dùng nhắn tin</b></div>
-  <div class="kv"><span>3. Uptime check từ bên ngoài</span><b>Mười phút. Bắt được đúng loại sự cố mà giám sát nội bộ bỏ sót: cả cái máy chết</b></div>
-  <div class="kv"><span>4. Cảnh báo đĩa/RAM</span><b>Mười phút. Chính là sự cố đã kể ở trên</b></div>
-  <div class="kv"><span>5. /metrics + biểu đồ RED</span><b>Một ngày. Chuyển từ phản ứng sang nhìn thấy trước</b></div>
-  <div class="kv"><span>6. Trace</span><b>Vài ngày + 40% throughput. Để dành tới khi có dịch vụ thứ hai</b></div>
+  <div class="kv"><span>1. Log JSON + request id</span><b>A few hours of work. Without it, every diagnosis is a guess</b></div>
+  <div class="kv"><span>2. Error tracking (Sentry)</span><b>An afternoon. You learn something broke BEFORE a user messages you</b></div>
+  <div class="kv"><span>3. An external uptime check</span><b>Ten minutes. It catches exactly the incident internal monitoring misses: the whole machine dying</b></div>
+  <div class="kv"><span>4. Disk and memory alerts</span><b>Ten minutes. Precisely the incident described above</b></div>
+  <div class="kv"><span>5. /metrics plus a RED dashboard</span><b>A day. It moves you from reacting to seeing things coming</b></div>
+  <div class="kv"><span>6. Trace</span><b>A few days plus 40% of your throughput. Save it until there is a second service</b></div>
 </div>
 
 <p>Item 3 deserves emphasis because it is ten minutes of work and covers a blind spot nothing else does: <strong>monitoring that runs inside the thing it monitors cannot report that the thing is gone.</strong> A check from outside your network, hitting a real URL, is the only signal that survives the machine dying.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Three probes exist in <code>src/index.ts</code>: <code>/health</code> (detailed — DB check plus uptime, environment and connection status), <code>/health/live</code> (unconditional 200, correct), and <code>/health/ready</code> (DB check, 503 on failure, correct). The separation is right. Two gaps are worth naming honestly. First, nginx proxies only <code>/api/</code>, so none of the three is reachable from outside — the externally visible one is <code>/api/v1/system/health</code>, which returns <code>{"status":"ok"}</code> and <em>does not check the database at all</em>. If an external uptime monitor watches that URL, it will report "ok" during a total database outage. Second, the DB check has no explicit timeout, which is the exact hang measured earlier in this lesson. Both are small changes; neither is visible until the day it matters.</p>
+<p><strong>How cuongthai.com does it.</strong> Three probes exist in <code>src/index.ts</code>: <code>/health</code> (detailed — DB check plus uptime, environment and connection status), <code>/health/live</code> (unconditional 200, correct), and <code>/health/ready</code> (DB check, 503 on failure, correct). The separation is right. Two gaps are worth naming honestly. First, nginx proxies only <code>/api/</code>, so none of the three is reachable from outside — the externally visible one is <code>/api/v1/system/health</code>, which returns <code>{"status":"ok"}</code> and <em>does not check the database at all</em>. If an external uptime monitor watches that URL, it will report "ok" during a total database outage. Second, the DB check has no explicit timeout, which is the exact hang measured earlier in this lesson. Both are small changes; neither is visible until the day it matters.</p>
 </div>
 
 <div class="link-card codelab">

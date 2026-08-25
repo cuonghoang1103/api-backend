@@ -46,6 +46,23 @@ export default {
 &lt;div className={isWide ? 'wide' : 'narrow'}&gt;&lt;Editor /&gt;&lt;/div&gt;</code></pre>
 <p>Position and type are React's notion of "is this the same thing?" Keep them stable and state survives; change them and state resets. The next lesson is about how React tells items in a <em>list</em> apart — which needs one more thing than position: the key.</p>
 
+<h3>How React decides what to keep</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Compare position by position</b> — React walks the old tree and the new tree together. It does not search — it looks at the same slot in both.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Same type, same position → keep the node</b> — The DOM element stays, its state stays, and only the changed attributes are written. This is the fast path.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Different type → destroy and rebuild</b> — A &#96;&lt;div&gt;&#96; that becomes a &#96;&lt;section&gt;&#96; loses everything inside it, including every child&#39;s state.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Inside a list, the key overrides position</b> — Keys let React match items that moved. Without them it falls back to position, which is why reordering loses state.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a conditional that swaps the wrapper element and silently resets everything inside.</strong> &#96;{isWide ? &lt;div className="wide"&gt;{form}&lt;/div&gt; : &lt;section&gt;{form}&lt;/section&gt;}&#96; looks like a styling choice. To React the type changed, so it unmounts the whole subtree and mounts a new one: every input clears, every open dropdown closes, every scroll position resets, and any component state inside is gone. It happens at exactly one moment — the width crossing a breakpoint — so it reproduces as &quot;the form clears when I resize the window&quot;. Keep the element type stable and change the class instead, or hoist the shared subtree so it is not re-created.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/preserving-and-resetting-state" target="_blank" rel="noopener">
+  <span class="lc-ico">🧬</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Preserving and resetting state</span><span class="lc-sub">Position, type and key — the three things that decide whether state survives.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/rendering-lists#why-does-react-need-keys" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Why does React need keys</span><span class="lc-sub">The matching algorithm, explained with the list case that motivates it.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://react.dev/learn/preserving-and-resetting-state" target="_blank" rel="noopener">
   <span class="lc-ico">🌳</span>
@@ -78,6 +95,23 @@ export default {
 <span class="tok-comment">// ✅ giữ type ổn định; đổi class thay vì đổi type</span>
 &lt;div className={isWide ? 'wide' : 'narrow'}&gt;&lt;Editor /&gt;&lt;/div&gt;</code></pre>
 <p>Vị trí và type là cách React hiểu "cái này có phải cùng một thứ không?" Giữ chúng ổn định thì state sống sót; đổi chúng thì state reset. Bài sau nói về cách React phân biệt các phần tử trong một <em>danh sách</em> — việc cần thêm một thứ nữa ngoài vị trí: key.</p>
+
+<h3>React quyết định giữ lại cái gì như thế nào</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>So sánh theo từng vị trí</b> — React đi song song trên cây cũ và cây mới. Nó không đi tìm — nó nhìn vào cùng một ô ở cả hai bên.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Cùng kiểu, cùng vị trí → giữ nút DOM</b> — Phần tử DOM ở lại, state của nó ở lại, và chỉ những thuộc tính đã đổi mới được ghi. Đây là đường nhanh.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Khác kiểu → phá đi dựng lại</b> — Một &#96;&lt;div&gt;&#96; biến thành &#96;&lt;section&gt;&#96; là mất sạch mọi thứ bên trong, kể cả state của từng đứa con.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Trong một danh sách, key đè lên vị trí</b> — Key cho phép React ghép được các phần tử đã dời chỗ. Không có key thì nó lùi về dùng vị trí, và đó là lý do đổi thứ tự làm mất state.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một điều kiện đổi thẻ bọc và âm thầm đặt lại sạch sẽ mọi thứ bên trong.</strong> &#96;{isWide ? &lt;div className="wide"&gt;{form}&lt;/div&gt; : &lt;section&gt;{form}&lt;/section&gt;}&#96; trông như một lựa chọn về giao diện. Với React thì kiểu đã đổi, nên nó gỡ cả cây con ra và gắn một cây mới vào: mọi ô nhập trắng trơn, mọi menu đang mở đóng lại, mọi vị trí cuộn về đầu, và mọi state của component bên trong biến mất. Nó xảy ra ở đúng một thời điểm — chiều rộng vượt qua một điểm ngắt — nên nó tái hiện dưới dạng &quot;form bị xoá trắng khi tôi kéo cửa sổ&quot;. Hãy giữ kiểu phần tử ổn định và đổi class thay thế, hoặc nâng cây con dùng chung lên để nó không bị tạo lại.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/preserving-and-resetting-state" target="_blank" rel="noopener">
+  <span class="lc-ico">🧬</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Giữ và đặt lại state</span><span class="lc-sub">Vị trí, kiểu và key — ba thứ quyết định state có sống sót hay không.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/rendering-lists#why-does-react-need-keys" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Vì sao React cần key</span><span class="lc-sub">Thuật toán ghép cặp, giải thích qua đúng trường hợp danh sách đã sinh ra nó.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://react.dev/learn/preserving-and-resetting-state" target="_blank" rel="noopener">
@@ -126,6 +160,24 @@ export default {
 <div class="pitfall">
 <p><strong>The tell of a key bug:</strong> state or focus "jumping" to the wrong row after an insert, delete or sort — a checkbox ticks the wrong item, an input keeps text from a deleted neighbour, an animation plays on the wrong card. When list items misbehave after the list changes, suspect <code>key={index}</code> first. Switching to <code>key={item.id}</code> usually fixes it outright.</p>
 </div>
+<h3>What a key is for</h3>
+<div class="lz-map">
+  <div class="lz-stage">Identity across renders — not uniqueness for its own sake</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">It answers &quot;is this the same item?&quot;</div><div class="lz-nsub">Not &quot;where is it in the array?&quot;. A stable id means React can follow an item that moved from position 1 to position 4.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">It must come from the data</div><div class="lz-nsub">A database id, a slug, a uuid generated when the item was created — anything that belongs to the item rather than to its current position.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Unique among siblings, not globally</div><div class="lz-nsub">Two different lists can both use key &quot;1&quot;. React only compares within one parent.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">It also resets state on purpose</div><div class="lz-nsub">Changing a component&#39;s key forces a remount. That is the idiomatic way to clear a form when the selected record changes.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — generating a key inside render, so it changes every time.</strong> &#96;key={crypto.randomUUID()}&#96; or &#96;key={Math.random()}&#96; makes the warning disappear and guarantees the worst possible behaviour: every key is new on every render, so React matches nothing, unmounts every row and mounts a fresh one. The list rebuilds completely on each keystroke — every input loses focus mid-typing, every animation restarts, and performance collapses on long lists. The symptom (&quot;the input loses focus after each character&quot;) looks nothing like the cause. If your data genuinely has no id, generate one <em>when the item is created</em> and store it alongside the item.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/rendering-lists#rules-of-keys" target="_blank" rel="noopener">
+  <span class="lc-ico">📏</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Rules of keys</span><span class="lc-sub">The four rules, including why generating keys during render is forbidden.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/preserving-and-resetting-state#resetting-a-form-with-a-key" target="_blank" rel="noopener">
+  <span class="lc-ico">♻️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Resetting a form with a key</span><span class="lc-sub">Using a key deliberately, as a feature rather than a warning to silence.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -158,6 +210,24 @@ export default {
 <div class="pitfall">
 <p><strong>Dấu hiệu của bug key:</strong> state hay focus "nhảy" sang nhầm hàng sau một lần chèn, xoá hay sắp — một checkbox tick nhầm phần tử, một input giữ chữ của hàng xóm đã xoá, một hiệu ứng chạy trên nhầm card. Khi phần tử danh sách cư xử lạ sau khi danh sách đổi, hãy nghi <code>key={index}</code> trước. Đổi sang <code>key={item.id}</code> thường sửa dứt điểm.</p>
 </div>
+<h3>Key dùng để làm gì</h3>
+<div class="lz-map">
+  <div class="lz-stage">Danh tính xuyên qua các lần render — không phải tính duy nhất cho có</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Nó trả lời &quot;có phải cùng một phần tử không?&quot;</div><div class="lz-nsub">Chứ không phải &quot;nó nằm ở đâu trong mảng?&quot;. Một id ổn định cho phép React theo dấu một phần tử đã dời từ vị trí 1 sang vị trí 4.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Nó phải đến từ dữ liệu</div><div class="lz-nsub">Một id trong cơ sở dữ liệu, một slug, một uuid sinh ra lúc phần tử được tạo — bất cứ thứ gì thuộc về phần tử chứ không thuộc về vị trí hiện tại của nó.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Duy nhất giữa các anh em, không cần duy nhất toàn cục</div><div class="lz-nsub">Hai danh sách khác nhau đều dùng key &quot;1&quot; được. React chỉ so sánh trong phạm vi một phần tử cha.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Nó cũng dùng để đặt lại state một cách có chủ đích</div><div class="lz-nsub">Đổi key của một component là ép nó gắn lại từ đầu. Đó là cách đúng điệu để xoá trắng một form khi bản ghi được chọn đổi.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — sinh key ngay trong lúc render, nên nó đổi mỗi lần.</strong> &#96;key={crypto.randomUUID()}&#96; hay &#96;key={Math.random()}&#96; làm cảnh báo biến mất và bảo đảm hành vi tệ nhất có thể: mọi key đều mới ở mọi lần render, nên React chẳng ghép được gì, gỡ mọi dòng ra rồi gắn dòng mới vào. Danh sách dựng lại hoàn toàn ở mỗi lần gõ phím — mọi ô nhập mất tiêu điểm giữa chừng, mọi hoạt ảnh chạy lại từ đầu, và hiệu năng sụp đổ với danh sách dài. Triệu chứng (&quot;ô nhập mất tiêu điểm sau mỗi ký tự&quot;) chẳng giống nguyên nhân chút nào. Nếu dữ liệu của bạn thật sự không có id, hãy sinh một cái <em>lúc phần tử được tạo ra</em> rồi lưu nó cùng phần tử.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/rendering-lists#rules-of-keys" target="_blank" rel="noopener">
+  <span class="lc-ico">📏</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Luật của key</span><span class="lc-sub">Bốn luật, gồm cả lý do vì sao cấm sinh key trong lúc render.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/preserving-and-resetting-state#resetting-a-form-with-a-key" target="_blank" rel="noopener">
+  <span class="lc-ico">♻️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Đặt lại một form bằng key</span><span class="lc-sub">Dùng key một cách có chủ đích, như một tính năng chứ không phải một cảnh báo cần dập.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -193,6 +263,23 @@ export default {
   <div class="kv"><span class="k">Most re-renders are free</span><span class="v">don't optimise a re-render you haven't measured. A cheap component re-rendering often costs nothing worth fixing.</span></div>
 </div>
 <p>So the first tool against "too many re-renders" is not <code>React.memo</code> — it is <em>where you put your state</em>. Lower state = smaller re-render radius. Reach for memoisation only when structure alone isn't enough and a profiler proves a real cost.</p>
+<h3>The four reasons a component renders</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Its own state changed</b> — A setter was called with a value that is not identical to the previous one.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Its parent rendered</b> — By default, a parent render re-renders every child, whether or not its props changed. This is normal and usually cheap.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>A context it reads changed</b> — Every consumer of that context, anywhere in the subtree.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Its key changed</b> — Which is not a re-render at all — it is an unmount and a mount, and state does not survive it.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — assuming a re-render is a performance problem.</strong> &quot;This component rendered 40 times&quot; sounds alarming and usually costs nothing: React&#39;s render is a function call producing objects, and the expensive part — writing to the DOM — only happens for what actually changed. Optimising on render <em>count</em> leads to &#96;memo&#96; and &#96;useCallback&#96; sprinkled everywhere, which adds comparisons, adds code, and often makes things slower. Measure duration, not frequency: the React DevTools profiler shows how many milliseconds each render took. A component rendering 40 times at 0.2ms is fine; one rendering twice at 300ms is the actual problem.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/render-and-commit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔄</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Render and commit</span><span class="lc-sub">What a render actually does, and why most of them are cheap.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react/Profiler" target="_blank" rel="noopener">
+  <span class="lc-ico">⏱️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Profiler</span><span class="lc-sub">Measuring render duration programmatically, when the DevTools panel is not enough.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -218,6 +305,23 @@ export default {
   <div class="kv"><span class="k">Phần lớn render lại là miễn phí</span><span class="v">đừng tối ưu một render lại bạn chưa đo. Một component rẻ render lại thường xuyên chẳng tốn gì đáng sửa.</span></div>
 </div>
 <p>Vậy công cụ đầu tiên chống "quá nhiều render lại" không phải <code>React.memo</code> — mà là <em>bạn đặt state ở đâu</em>. State thấp hơn = bán kính render lại nhỏ hơn. Với tới memo hoá chỉ khi riêng cấu trúc chưa đủ và một profiler chứng minh một chi phí thật.</p>
+<h3>Bốn lý do một component render lại</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>State của chính nó đã đổi</b> — Một setter được gọi với một giá trị không y hệt giá trị trước đó.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Cha của nó đã render</b> — Mặc định, một lần render của cha sẽ render lại mọi đứa con, bất kể props có đổi hay không. Đây là chuyện bình thường và thường là rẻ.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Một context nó đọc đã đổi</b> — Mọi chỗ tiêu thụ context đó, ở bất cứ đâu trong cây con.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Key của nó đã đổi</b> — Cái này thì hoàn toàn không phải render lại — nó là gỡ ra rồi gắn vào, và state không sống sót qua đó.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — cho rằng cứ render lại là có vấn đề hiệu năng.</strong> &quot;Component này render 40 lần&quot; nghe thì đáng báo động mà thường chẳng tốn gì: một lần render của React là một lời gọi hàm sinh ra các object, còn phần đắt đỏ — ghi vào DOM — chỉ xảy ra với đúng phần đã đổi. Tối ưu theo SỐ LẦN render dẫn tới việc rắc &#96;memo&#96; và &#96;useCallback&#96; khắp nơi, thêm phép so sánh, thêm mã, và thường làm mọi thứ chậm đi. Hãy đo thời lượng, đừng đo tần suất: profiler của React DevTools cho biết mỗi lần render mất bao nhiêu mili giây. Một component render 40 lần với 0,2ms mỗi lần thì không sao; một cái render hai lần với 300ms mỗi lần mới là vấn đề thật.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/render-and-commit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔄</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Render và commit</span><span class="lc-sub">Một lần render thật ra làm gì, và vì sao phần lớn chúng là rẻ.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react/Profiler" target="_blank" rel="noopener">
+  <span class="lc-ico">⏱️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Profiler</span><span class="lc-sub">Đo thời lượng render bằng mã, khi bảng DevTools không đủ.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -261,6 +365,23 @@ const onClick = useCallback(() =&gt; go(), []);
 <div class="note-ct">
 <p><strong>How cuongthai.com does it</strong> — the feed and message lists memoise their row components, because a list of hundreds of items re-rendering every row on each parent update is measurable, and each row is non-trivial (media, formatting). The stable-reference discipline follows: row callbacks are <code>useCallback</code>'d, and item objects come straight from the store so their reference is stable until the item actually changes. Cheap components elsewhere on the site are left un-memoised on purpose.</p>
 </div>
+<h3>What React.memo actually does</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>It compares props shallowly</b> — &#96;Object.is&#96; on each prop. If all are identical, React skips rendering this component and its subtree.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>So every prop must be stable</b> — One inline object, array or arrow function is enough to make the comparison fail every time — and then you pay for the comparison and get nothing.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>It does not help with context or state</b> — A memoised component still re-renders when its own state changes or when a context it reads changes. Memo only guards the props path.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>It is worth it when the subtree is expensive</b> — A big list, a chart, a heavy table. For a small component, the comparison can cost more than the render.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — wrapping a component in &#96;memo&#96; while a parent passes it a new function each render.</strong> &#96;export default memo(Row)&#96; with &#96;&lt;Row onSelect={() =&gt; select(id)} /&gt;&#96; in the parent memoises nothing: the arrow is a new function identity on every parent render, so the shallow comparison fails and &#96;Row&#96; re-renders exactly as often as before — plus a props comparison per row. On a 500-row table that is 500 wasted comparisons per render. Memo only pays off when the whole props object is stable, which usually means &#96;useCallback&#96; for handlers and &#96;useMemo&#96; for objects at the same time. Profile first: if the profiler does not show this component as expensive, do not memo it.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/memo" target="_blank" rel="noopener">
+  <span class="lc-ico">🧠</span>
+  <span class="lc-body"><span class="lc-title">react.dev — memo</span><span class="lc-sub">How the comparison works, and the section on when you should not use it.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react/useCallback#should-you-add-usecallback-everywhere" target="_blank" rel="noopener">
+  <span class="lc-ico">⚖️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Should you add useCallback everywhere?</span><span class="lc-sub">The companion answer: useCallback and memo only work as a pair.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -294,6 +415,23 @@ const onClick = useCallback(() =&gt; go(), []);
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào</strong> — danh sách feed và tin nhắn memo hoá các component hàng của chúng, vì một danh sách hàng trăm phần tử render lại từng hàng ở mỗi cập nhật cha là đo được, và mỗi hàng không tầm thường (media, định dạng). Kỷ luật tham-chiếu-ổn-định theo sau: callback của hàng được <code>useCallback</code>, và object phần tử tới thẳng từ store nên tham chiếu của chúng ổn định cho tới khi phần tử thật sự đổi. Các component rẻ ở nơi khác trên site được để không-memo có chủ đích.</p>
 </div>
+<h3>React.memo thật ra làm gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Nó so props theo kiểu nông</b> — Dùng &#96;Object.is&#96; trên từng prop. Nếu tất cả đều y hệt, React bỏ qua việc render component này và cả cây con của nó.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Nên mọi prop đều phải ổn định</b> — Một object, mảng hay arrow function viết thẳng cũng đủ làm phép so hỏng ở mọi lần — và thế là bạn trả tiền cho phép so mà chẳng được gì.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nó không giúp gì với context hay state</b> — Một component đã memo vẫn render lại khi state của chính nó đổi hoặc khi một context nó đọc đổi. Memo chỉ canh gác con đường props.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nó đáng dùng khi cây con đắt đỏ</b> — Một danh sách lớn, một biểu đồ, một bảng nặng. Với một component nhỏ, phép so có thể tốn hơn cả việc render.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — bọc một component trong &#96;memo&#96; trong khi cha truyền cho nó một hàm mới ở mỗi lần render.</strong> &#96;export default memo(Row)&#96; đi cùng &#96;&lt;Row onSelect={() =&gt; select(id)} /&gt;&#96; ở cha thì chẳng ghi nhớ được gì: cái arrow là một danh tính hàm mới ở mọi lần cha render, nên phép so nông hỏng và &#96;Row&#96; render lại đúng bằng số lần như trước — cộng thêm một phép so props cho mỗi dòng. Trên một bảng 500 dòng thì đó là 500 phép so lãng phí mỗi lần render. Memo chỉ có lãi khi cả object props đều ổn định, và thường điều đó nghĩa là phải dùng &#96;useCallback&#96; cho handler và &#96;useMemo&#96; cho object cùng lúc. Hãy đo trước: nếu profiler không cho thấy component này đắt đỏ thì đừng memo nó.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/memo" target="_blank" rel="noopener">
+  <span class="lc-ico">🧠</span>
+  <span class="lc-body"><span class="lc-title">react.dev — memo</span><span class="lc-sub">Phép so hoạt động ra sao, và mục nói về khi nào bạn KHÔNG nên dùng nó.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react/useCallback#should-you-add-usecallback-everywhere" target="_blank" rel="noopener">
+  <span class="lc-ico">⚖️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Có nên thêm useCallback ở mọi nơi?</span><span class="lc-sub">Câu trả lời đi kèm: useCallback và memo chỉ chạy khi đi thành cặp.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -335,6 +473,23 @@ const onClick = useCallback(() =&gt; go(), []);
 <p><strong>Stage 2 complete.</strong> You now understand how React works under the surface: effects synchronise with the outside world and clean up after themselves; the hooks toolbox covers refs, memoisation, reducers, context and your own hooks; and reconciliation, keys and re-render rules explain what actually updates and when. <strong>Progress Test 2</strong> covers everything so far. Stage 3 changes the game: Next.js, the App Router, and Server Components — where your React runs on a server before it ever reaches the browser.</p>
 </div>
 
+<h3>Measuring before optimising</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Record a profile of the real interaction</b> — React DevTools → Profiler → record, do the slow thing, stop. You get every render with its duration.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Read duration, not count</b> — Sort by the widest bar. The component at the top is where the time is, regardless of how many times anything rendered.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Ask why it rendered</b> — The profiler tells you: props changed, state changed, parent rendered, context changed. That answer picks the fix for you.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Change one thing, re-record</b> — If the bar did not shrink, revert it. An optimisation you cannot measure is a complication you cannot justify.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — profiling a development build and optimising something that does not exist in production.</strong> The development build ships extra checks, warnings and StrictMode&#39;s double invocation, so components render twice and each render is measurably slower. Optimising against those numbers leads you to memoise things that were never a problem, and hides the ones that are. Profile a production build (&#96;next build &amp;&amp; next start&#96;) when you want real numbers, and use the development profiler only for the &quot;why did this render?&quot; answer, which is accurate in both. The same caution applies to Lighthouse: run it against the built app, never against &#96;next dev&#96;.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/react-developer-tools" target="_blank" rel="noopener">
+  <span class="lc-ico">🔍</span>
+  <span class="lc-body"><span class="lc-title">react.dev — React Developer Tools</span><span class="lc-sub">Installing and using the profiler, including the &quot;why did this render&quot; panel.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing" target="_blank" rel="noopener">
+  <span class="lc-ico">🚀</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Optimizing</span><span class="lc-sub">The Next.js side: what the framework already does before you optimise anything yourself.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://react.dev/reference/react/memo" target="_blank" rel="noopener">
   <span class="lc-ico">⚡</span>
@@ -374,6 +529,23 @@ const onClick = useCallback(() =&gt; go(), []);
 <div class="callout ok">
 <p><strong>Hoàn thành Giai đoạn 2.</strong> Giờ bạn hiểu React hoạt động dưới bề mặt: effect đồng bộ với thế giới bên ngoài và tự dọn dẹp; bộ đồ nghề hooks phủ ref, memo hoá, reducer, context và hook tự viết; và reconciliation, key cùng luật render lại giải thích cái gì thật sự cập nhật và khi nào. <strong>Bài kiểm tra tiến độ 2</strong> phủ mọi thứ tới đây. Giai đoạn 3 đổi cuộc chơi: Next.js, App Router, và Server Components — nơi React của bạn chạy trên một server trước khi kịp tới trình duyệt.</p>
 </div>
+
+<h3>Đo trước khi tối ưu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Ghi lại một hồ sơ của thao tác thật</b> — React DevTools → Profiler → ghi, làm cái thao tác chậm đó, dừng. Bạn nhận được mọi lần render kèm thời lượng.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Đọc thời lượng, đừng đọc số lần</b> — Sắp theo thanh dài nhất. Component đứng đầu chính là chỗ thời gian nằm, bất kể thứ gì đã render bao nhiêu lần.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Hỏi vì sao nó render</b> — Profiler nói cho bạn: props đổi, state đổi, cha render, context đổi. Chính câu trả lời đó chọn giùm bạn cách sửa.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Đổi một thứ, rồi ghi lại lần nữa</b> — Nếu cái thanh không ngắn đi thì hãy hoàn tác. Một phép tối ưu bạn không đo được là một sự phức tạp bạn không biện minh được.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — đo trên bản dựng phát triển rồi đi tối ưu một thứ không hề tồn tại trên production.</strong> Bản dựng phát triển mang theo các phép kiểm phụ, các cảnh báo và việc gọi hai lần của StrictMode, nên component render hai lần và mỗi lần render chậm hơn hẳn một cách đo được. Tối ưu theo những con số đó dẫn bạn đi ghi nhớ những thứ chưa từng là vấn đề, và giấu đi những thứ thật sự là vấn đề. Hãy đo trên bản dựng production (&#96;next build &amp;&amp; next start&#96;) khi bạn muốn con số thật, và chỉ dùng profiler ở môi trường phát triển cho câu trả lời &quot;vì sao cái này render?&quot;, vốn chính xác ở cả hai. Cùng lời dặn ấy áp cho Lighthouse: hãy chạy nó với ứng dụng đã dựng, đừng bao giờ chạy với &#96;next dev&#96;.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/react-developer-tools" target="_blank" rel="noopener">
+  <span class="lc-ico">🔍</span>
+  <span class="lc-body"><span class="lc-title">react.dev — React Developer Tools</span><span class="lc-sub">Cài và dùng profiler, gồm cả bảng &quot;vì sao cái này render&quot;.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing" target="_blank" rel="noopener">
+  <span class="lc-ico">🚀</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Tối ưu hoá</span><span class="lc-sub">Phía Next.js: framework đã làm sẵn những gì trước khi bạn tự tối ưu bất cứ thứ gì.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://react.dev/reference/react/memo" target="_blank" rel="noopener">

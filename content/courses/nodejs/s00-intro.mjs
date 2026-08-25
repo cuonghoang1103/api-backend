@@ -93,6 +93,9 @@ export default {
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice track: Node.js (Express) on Code Lab</span><span class="lc-sub">16 modules · 160 hands-on exercises with solutions — the companion practice for this course.</span></span>
 </a>
+<div class="pitfall">
+<p><strong>Trap — reading a backend course the way you would read a frontend one.</strong> A frontend mistake is visible: the layout is wrong, the button does nothing, and you see it on the next reload. A backend mistake is usually invisible until it is expensive — a connection pool that leaks one socket per request, a transaction that is not one, a query that is fine on fifty rows. Nothing on screen changes, so &quot;it works&quot; is a much weaker signal here than you are used to. That is why almost every chapter in this course ends with a measurement rather than a screenshot: on the server, the only way to know something works is to make it prove it under conditions like production&#39;s.</p>
+</div>
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nodejs.org/en/docs" target="_blank" rel="noopener">
   <span class="lc-ico">🟢</span>
@@ -177,6 +180,9 @@ export default {
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Track luyện tập: Node.js (Express) trên Code Lab</span><span class="lc-sub">16 module · 160 bài tập có lời giải — phần thực hành đi kèm khoá học này.</span></span>
 </a>
+<div class="pitfall">
+<p><strong>Bẫy — đọc một khoá học backend theo cách bạn đọc một khoá frontend.</strong> Một sai sót ở frontend thì nhìn thấy được: bố cục lệch, cái nút không làm gì, và bạn thấy nó ngay ở lần tải lại kế tiếp. Một sai sót ở backend thì thường vô hình cho tới lúc nó đắt đỏ — một pool kết nối rò một socket mỗi request, một giao dịch mà thật ra không phải giao dịch, một truy vấn chạy ngon với năm mươi dòng. Chẳng có gì trên màn hình đổi cả, nên &quot;nó chạy được&quot; ở đây là một tín hiệu yếu hơn nhiều so với bạn quen. Đó là lý do gần như mọi chương trong khoá này kết thúc bằng một phép đo chứ không phải một tấm ảnh chụp màn hình: trên máy chủ, cách duy nhất để biết một thứ chạy được là bắt nó tự chứng minh dưới điều kiện giống production.</p>
+</div>
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nodejs.org/en/docs" target="_blank" rel="noopener">
   <span class="lc-ico">🟢</span>
@@ -239,6 +245,9 @@ export default {
   <div class="kv"><span class="k">After chapter 7</span><span class="v">Module 322 — Database integration &amp; data modelling</span></div>
   <div class="kv"><span class="k">After chapter 8–9</span><span class="v">Module 323 — Authentication, authorization, security</span></div>
 </div>
+<div class="pitfall">
+<p><strong>Trap — skipping step 3, because breaking working code feels like a waste of time.</strong> Retyping an example teaches you the shape; breaking it is what teaches you the error. If you have never seen <code>EADDRINUSE</code>, <code>ECONNREFUSED</code>, or &quot;Cannot read properties of undefined&quot; on purpose, then the first time you meet one it will be at 11pm with production down — and you will be learning the message and debugging the incident at the same time. Deliberately delete a required field, point at the wrong port, close the database mid-query. Each takes twenty seconds and turns a future outage into a message you already recognise.</p>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-318" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Start at Module 318 — JavaScript Foundations for Node.js</span><span class="lc-sub">10 exercises. Do them after chapter 1.</span></span>
@@ -295,6 +304,9 @@ export default {
   <div class="kv"><span class="k">Sau chương 6</span><span class="v">Module 321 — Thiết kế RESTful API</span></div>
   <div class="kv"><span class="k">Sau chương 7</span><span class="v">Module 322 — Tích hợp CSDL &amp; mô hình hoá dữ liệu</span></div>
   <div class="kv"><span class="k">Sau chương 8–9</span><span class="v">Module 323 — Xác thực, phân quyền, bảo mật</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — bỏ qua bước 3, vì phá hỏng đoạn mã đang chạy có cảm giác như phí thời gian.</strong> Gõ lại một ví dụ dạy bạn cái hình dạng; phá nó mới là thứ dạy bạn cái lỗi. Nếu bạn chưa từng cố tình nhìn thấy <code>EADDRINUSE</code>, <code>ECONNREFUSED</code>, hay &quot;Cannot read properties of undefined&quot;, thì lần đầu bạn gặp một trong số đó sẽ là lúc 11 giờ đêm với production đang chết — và bạn sẽ vừa học cái thông điệp vừa xử lý sự cố cùng một lúc. Hãy cố ý xoá một trường bắt buộc, trỏ vào sai cổng, đóng cơ sở dữ liệu giữa lúc đang truy vấn. Mỗi thứ mất hai mươi giây và biến một sự cố tương lai thành một thông điệp bạn đã nhận ra sẵn.</p>
 </div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-318" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -402,6 +414,13 @@ Type ".help" for more information.
 'object'
 &gt; .exit</div>
 <div class="note-ct">This site pins Node 22 in three places at once: <code>package.json</code> engines, the Dockerfile base image, and the CI workflow. When they disagree, the code passes on a laptop and fails on the server — which is exactly the kind of bug that only shows up in front of users.</div>
+<h3>Getting a Node version you can change later</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Install a version manager, not Node</span><span class="lz-d"><code>nvm</code>, <code>fnm</code> or <code>volta</code>. A system-wide Node from a package manager is the one you cannot change when a project needs another.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Pin the version per project</span><span class="lz-d">An <code>.nvmrc</code> or the <code>engines</code> field. Then &quot;works on my machine&quot; has one fewer meaning.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Use an LTS release</span><span class="lz-d">Even-numbered majors get 30 months of support. An odd-numbered one is fine to try and wrong to deploy.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Then confirm what is actually running</span><span class="lz-d"><code>node --version</code> in a <em>new</em> terminal — the old one read its PATH when it started, which is half of all &quot;it did not install&quot; reports.</span></div>
+</div>
 <a class="link-card exphub" href="/exp-hub/nodejs-cai-dat-moi-truong${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Environment setup guide — downloads &amp; troubleshooting</span><span class="lc-sub">Step-by-step nvm / fnm / VS Code setup for Windows, macOS and Linux, with official download links — on Exp Hub.</span></span>
@@ -486,6 +505,13 @@ Type ".help" for more information.
 'object'
 &gt; .exit</div>
 <div class="note-ct">Website này ghim Node 22 ở ba nơi cùng lúc: mục engines trong <code>package.json</code>, image nền trong Dockerfile, và workflow CI. Khi ba chỗ đó lệch nhau, code chạy ngon trên laptop nhưng chết trên server — đúng loại bug chỉ lộ ra trước mặt người dùng.</div>
+<h3>Có được một phiên bản Node mà sau này đổi được</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Hãy cài một trình quản lý phiên bản, đừng cài Node</span><span class="lz-d"><code>nvm</code>, <code>fnm</code> hoặc <code>volta</code>. Một bản Node cài toàn hệ thống từ trình quản lý gói là cái bạn KHÔNG đổi được khi một dự án cần bản khác.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Ghim phiên bản theo từng dự án</span><span class="lz-d">Một file <code>.nvmrc</code> hoặc trường <code>engines</code>. Khi đó câu &quot;máy tôi chạy được&quot; bớt đi một tầng nghĩa.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Hãy dùng một bản LTS</span><span class="lz-d">Các bản major số chẵn được hỗ trợ 30 tháng. Một bản số lẻ thì thử thì được mà đem đi triển khai là sai.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Rồi xác nhận thứ đang thật sự chạy</span><span class="lz-d"><code>node --version</code> trong một terminal MỚI — cái cũ đã đọc PATH từ lúc nó khởi động, và đó là một nửa số báo cáo &quot;cài không được&quot;.</span></div>
+</div>
 <a class="link-card exphub" href="/exp-hub/nodejs-cai-dat-moi-truong${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Hướng dẫn cài môi trường — link tải &amp; xử lý lỗi</span><span class="lc-sub">Các bước cài nvm / fnm / VS Code cho Windows, macOS, Linux kèm link tải chính chủ — trên Exp Hub.</span></span>

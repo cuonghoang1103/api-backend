@@ -60,6 +60,14 @@ title = <span class="tok-keyword">null</span>;</code></pre>
 <p>This is TypeScript earning its keep: it makes the possibility of <code>null</code> visible in the type, then refuses to let you ignore it. The fix is a guard — <code>if (s === null) return ''</code> — which chapter 5 formalises as "narrowing".</p>
 <div class="pitfall"><code>strictNullChecks</code> is part of <code>strict</code>. Turn strict off and this entire class of protection vanishes — <code>null</code> silently becomes assignable to everything, and you're back to JavaScript's billion-dollar mistake with extra syntax. This is the #1 reason to never disable strict.</div>
 <div class="note-ct">This site's <code>strictNullChecks</code> is on everywhere. When a database query "might return null" (a record that may not exist), the type is <code>User | null</code>, and every caller is forced by the compiler to handle the not-found case — which is why "cannot read property of undefined" almost never reaches production here.</div>
+<h3>The primitive types, and the two that are traps</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">string · number · boolean</span><span class="lz-lnote">Lowercase, always. <code>number</code> covers integers and floats alike — there is no <code>int</code>, because JavaScript has none.</span></div>
+<div class="lz-layer"><span class="lz-lname">null · undefined</span><span class="lz-lnote">Two distinct types for two distinct ideas: "deliberately empty" and "never set". Under <code>strictNullChecks</code> neither is assignable to anything else, which is the whole point.</span></div>
+<div class="lz-layer"><span class="lz-lname">bigint · symbol</span><span class="lz-lnote">Real primitives you will rarely annotate by hand. <code>bigint</code> matters for values beyond 2^53 — a database id column, for instance.</span></div>
+<div class="lz-layer"><span class="lz-lname">String · Number · Boolean</span><span class="lz-lnote">Capitalised wrapper objects. Almost never what you want, and TypeScript accepts them silently — the lint rule <code>ban-types</code> exists for exactly this.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>number</code> for money, exactly as in SQL.</strong> TypeScript's <code>number</code> is a 64-bit float, so <code>0.1 + 0.2 !== 0.3</code> in typed code just as in untyped code — the annotation guarantees nothing about precision. It also silently loses integers above 2^53, which is why a <code>bigint</code> id from PostgreSQL arrives correct and becomes wrong the moment it passes through <code>Number()</code>. Keep monetary amounts as integer minor units or as strings, and keep large ids as <code>string</code> or <code>bigint</code> end to end. The type system will not warn you, because nothing is inconsistent — only wrong.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: TypeScript basics on Code Lab</span><span class="lc-sub">Drill primitives and null-safety after this chapter.</span></span>
@@ -109,6 +117,14 @@ title = <span class="tok-keyword">null</span>;</code></pre>
 <p>Đây là lúc TypeScript kiếm cơm: nó làm cho khả năng <code>null</code> hiện rõ trong kiểu, rồi từ chối để bạn phớt lờ nó. Cách sửa là một chốt chặn — <code>if (s === null) return ''</code> — mà chương 5 sẽ chính thức gọi là "thu hẹp kiểu".</p>
 <div class="pitfall"><code>strictNullChecks</code> là một phần của <code>strict</code>. Tắt strict đi thì cả loại bảo vệ này biến mất — <code>null</code> âm thầm gán được vào mọi thứ, và bạn quay về "sai lầm tỷ đô" của JavaScript kèm thêm cú pháp. Đây là lý do số 1 để không bao giờ tắt strict.</div>
 <div class="note-ct">Site này bật <code>strictNullChecks</code> ở mọi nơi. Khi một truy vấn cơ sở dữ liệu "có thể trả về null" (một bản ghi có thể không tồn tại), kiểu là <code>User | null</code>, và mọi chỗ gọi đều bị trình biên dịch ép xử lý trường hợp không tìm thấy — nên "cannot read property of undefined" gần như không bao giờ tới được production ở đây.</div>
+<h3>Các kiểu nguyên thuỷ, và hai cái là bẫy</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">string · number · boolean</span><span class="lz-lnote">Luôn viết thường. <code>number</code> bao cả số nguyên lẫn số thực — không có <code>int</code>, vì JavaScript không có.</span></div>
+<div class="lz-layer"><span class="lz-lname">null · undefined</span><span class="lz-lnote">Hai kiểu RIÊNG cho hai ý niệm riêng: "cố ý để rỗng" và "chưa từng được gán". Dưới <code>strictNullChecks</code>, không cái nào gán được cho thứ khác, và đó chính là chủ đích.</span></div>
+<div class="lz-layer"><span class="lz-lname">bigint · symbol</span><span class="lz-lnote">Nguyên thuỷ thật mà bạn hiếm khi chú thích bằng tay. <code>bigint</code> quan trọng với giá trị vượt 2^53 — chẳng hạn một cột id trong cơ sở dữ liệu.</span></div>
+<div class="lz-layer"><span class="lz-lname">String · Number · Boolean</span><span class="lz-lnote">Các đối tượng bọc viết hoa. Gần như không bao giờ là thứ bạn muốn, và TypeScript chấp nhận chúng trong im lặng — luật lint <code>ban-types</code> tồn tại đúng vì chuyện này.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — dùng <code>number</code> cho TIỀN, y hệt như trong SQL.</strong> <code>number</code> của TypeScript là số thực 64 bit, nên <code>0.1 + 0.2 !== 0.3</code> trong mã đã gõ kiểu y như trong mã chưa gõ — chú thích không bảo đảm gì về độ chính xác. Nó cũng âm thầm làm mất các số nguyên trên 2^53, và đó là lý do một id kiểu <code>bigint</code> từ PostgreSQL về thì đúng rồi thành sai ngay khoảnh khắc đi qua <code>Number()</code>. Hãy giữ số tiền dưới dạng đơn vị nhỏ số nguyên hoặc dạng chuỗi, và giữ id lớn dưới dạng <code>string</code> hay <code>bigint</code> suốt từ đầu đến cuối. Hệ kiểu sẽ KHÔNG cảnh báo bạn, vì không có gì mâu thuẫn cả — chỉ là SAI.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: TypeScript cơ bản trên Code Lab</span><span class="lc-sub">Rèn primitive và an-toàn-null sau chương này.</span></span>
@@ -164,6 +180,22 @@ point = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <
 </div>
 <div class="callout warn">Reach for a tuple only for genuinely positional data. If someone has to remember "index 0 is the name, index 1 is the age", an object <code>{ name, age }</code> (chapter 4) is clearer. Tuples shine when the positions are obvious (x/y) or the pairing is a well-known idiom (useState).</div>
 <div class="note-ct">This site uses <code>readonly</code> array parameters in service functions that receive a list to render but must not change it — the type makes the "read-only" intent a compiler-enforced fact, not a comment someone can ignore.</div>
+<h3>Array or tuple — the question is whether position means something</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Array: many of the same thing</span><span class="lz-d"><code>string[]</code> has any length and every element is interchangeable. Position carries no meaning — the third item is not special.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Tuple: a fixed record with positions</span><span class="lz-d"><code>[number, string]</code> has exactly two elements with different meanings. This is what <code>useState</code> returns and what <code>Object.entries</code> yields.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">readonly changes the contract</span><span class="lz-d"><code>readonly string[]</code> forbids <code>push</code> and <code>sort</code> at compile time. Excellent for function parameters: it documents that you will not mutate the caller's array.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Name your tuple elements</span><span class="lz-d"><code>[x: number, y: number]</code> costs nothing and turns an unreadable pair into a labelled one in every tooltip.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — indexing an array and getting a type that lies.</strong> <code>const first: string = names[0]</code> compiles even when <code>names</code> is empty, because TypeScript types array access as <code>T</code> rather than <code>T | undefined</code> by default. The result is a confident <code>string</code> that is actually <code>undefined</code> at runtime — the exact class of bug types were supposed to remove. Turn on <code>noUncheckedIndexedAccess</code> (Chapter 9.3) and the compiler starts telling the truth; expect it to find real bugs in existing code, which is the point.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: tuple types</span><span class="lc-sub">Fixed-length tuples, optional and rest elements, readonly tuples.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice: arrays &amp; tuples on Code Lab</span><span class="lc-sub">Drill element types, readonly arrays and tuple destructuring.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -205,6 +237,22 @@ point = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <
 </div>
 <div class="callout warn">Chỉ với tay tới tuple cho dữ liệu thật sự mang tính vị trí. Nếu ai đó phải nhớ "chỉ số 0 là tên, chỉ số 1 là tuổi", thì một object <code>{ name, age }</code> (chương 4) rõ hơn. Tuple toả sáng khi các vị trí hiển nhiên (x/y) hoặc cặp đôi là một thành ngữ ai cũng biết (useState).</div>
 <div class="note-ct">Site này dùng tham số mảng <code>readonly</code> trong các service nhận một danh sách để render nhưng không được đổi — cái kiểu biến ý định "chỉ đọc" thành một sự thật do trình biên dịch ép, không phải một câu chú thích ai đó có thể phớt lờ.</div>
+<h3>Mảng hay tuple — câu hỏi là VỊ TRÍ có mang nghĩa không</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Mảng: nhiều thứ CÙNG loại</span><span class="lz-d"><code>string[]</code> có độ dài bất kỳ và mọi phần tử thay thế được cho nhau. Vị trí không mang nghĩa gì — phần tử thứ ba không có gì đặc biệt.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Tuple: một bản ghi CỐ ĐỊNH có vị trí</span><span class="lz-d"><code>[number, string]</code> có đúng hai phần tử mang hai nghĩa khác nhau. Đây là thứ <code>useState</code> trả về và thứ <code>Object.entries</code> sinh ra.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">readonly đổi cả hợp đồng</span><span class="lz-d"><code>readonly string[]</code> cấm <code>push</code> và <code>sort</code> ngay lúc biên dịch. Tuyệt vời cho tham số hàm: nó ghi rõ rằng bạn sẽ KHÔNG sửa mảng của bên gọi.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Đặt tên cho phần tử tuple</span><span class="lz-d"><code>[x: number, y: number]</code> không tốn gì và biến một cặp không đọc nổi thành một cặp CÓ NHÃN trong mọi tooltip.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — truy cập mảng theo chỉ số và nhận về một cái kiểu NÓI DỐI.</strong> <code>const first: string = names[0]</code> biên dịch được ngay cả khi <code>names</code> rỗng, vì mặc định TypeScript gán kiểu cho phép truy cập mảng là <code>T</code> chứ không phải <code>T | undefined</code>. Kết quả là một <code>string</code> đầy tự tin mà lúc chạy thật ra là <code>undefined</code> — đúng cái họ lỗi mà kiểu sinh ra để dẹp. Hãy bật <code>noUncheckedIndexedAccess</code> (Bài 9.3) và trình biên dịch bắt đầu nói thật; hãy chuẩn bị tinh thần là nó sẽ tìm ra bug THẬT trong mã đang có, và đó chính là mục đích.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: kiểu tuple</span><span class="lc-sub">Tuple độ dài cố định, phần tử tuỳ chọn và rest, tuple readonly.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện tập: mảng &amp; tuple trên Code Lab</span><span class="lc-sub">Luyện kiểu phần tử, mảng readonly và phép rã tuple.</span></span>
+</a>
 </div>
 `,
     },
@@ -263,6 +311,22 @@ x.foo.bar.<span class="tok-function">baz</span>();     <span class="tok-comment"
   <div class="kv"><span class="k">never (bottom)</span><span class="v">No value has this type. For code that can't be reached or a function that never returns.</span></div>
 </div>
 <div class="note-ct">This site uses a <code>never</code>-based exhaustiveness check on its content-type union: when a new content type is added and a switch statement forgets it, the build fails on a <code>never</code> assignment — a compile-time reminder that would have caught more than one "we forgot to handle X" bug before it shipped.</div>
+<h3>any, unknown, never, void — four very different ideas</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">any</span><span class="lz-lnote">"Stop checking." It is assignable both ways, so one <code>any</code> spreads outward through everything it touches. A deliberate escape hatch, not a placeholder.</span></div>
+<div class="lz-layer"><span class="lz-lname">unknown</span><span class="lz-lnote">"Something, but prove what before you use it." Assignable <em>from</em> anything, assignable <em>to</em> nothing until you narrow it. This is what every parsed JSON should be.</span></div>
+<div class="lz-layer"><span class="lz-lname">never</span><span class="lz-lnote">"This cannot happen." The return type of a function that always throws, and the type of a variable in an unreachable branch — which is how exhaustiveness checking works (5.4).</span></div>
+<div class="lz-layer"><span class="lz-lname">void</span><span class="lz-lnote">"Returns nothing you should use." Different from <code>undefined</code>: a <code>void</code>-returning callback may return a value, and the caller simply ignores it.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>any</code> used as a temporary fix that becomes permanent.</strong> It silences the error instantly, which is exactly why it survives code review and lives in the file for years. The damage is not local: any value derived from an <code>any</code> is also <code>any</code>, so one annotation can quietly disable checking across a whole call chain, and nothing ever reports it. When you genuinely do not know a type, write <code>unknown</code> — the errors it produces are the list of places that need a real check. Turn on <code>noImplicitAny</code> so the compiler stops inserting them for you.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/functions.html#never" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: never, void &amp; the special types</span><span class="lc-sub">What each one means to the compiler, and where they differ.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice: special types on Code Lab</span><span class="lc-sub">Drill any vs unknown, void vs undefined, and never.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -311,6 +375,22 @@ x.foo.bar.<span class="tok-function">baz</span>();     <span class="tok-comment"
   <div class="kv"><span class="k">never (đáy)</span><span class="v">Không giá trị nào mang kiểu này. Cho code không thể tới được hoặc hàm không bao giờ trả về.</span></div>
 </div>
 <div class="note-ct">Site này dùng một phép kiểm đầy đủ dựa trên <code>never</code> lên union kiểu-nội-dung: khi thêm một kiểu nội dung mới mà một câu switch quên nó, bản build hỏng ở một phép gán <code>never</code> — một lời nhắc lúc biên dịch đã có thể bắt được hơn một con bug "chúng ta quên xử lý X" trước khi nó lên production.</div>
+<h3>any, unknown, never, void — bốn ý niệm rất khác nhau</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">any</span><span class="lz-lnote">"Thôi đừng kiểm nữa." Nó gán được theo CẢ HAI chiều, nên một cái <code>any</code> LAN RA qua mọi thứ nó chạm vào. Một lối thoát hiểm CÓ CHỦ Ý, không phải một chỗ giữ tạm.</span></div>
+<div class="lz-layer"><span class="lz-lname">unknown</span><span class="lz-lnote">"Một thứ gì đó, nhưng chứng minh là gì trước khi dùng." Gán được TỪ mọi thứ, gán được CHO không thứ gì cho tới khi bạn thu hẹp nó. Đây là thứ mà mọi JSON vừa phân tích nên mang.</span></div>
+<div class="lz-layer"><span class="lz-lname">never</span><span class="lz-lnote">"Chuyện này không thể xảy ra." Kiểu trả về của một hàm luôn ném lỗi, và kiểu của một biến trong nhánh không thể tới được — đó chính là cách kiểm vét cạn hoạt động (5.4).</span></div>
+<div class="lz-layer"><span class="lz-lname">void</span><span class="lz-lnote">"Không trả về thứ gì bạn nên dùng." Khác <code>undefined</code>: một callback kiểu <code>void</code> VẪN được phép trả về giá trị, và bên gọi đơn giản là lờ nó đi.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — dùng <code>any</code> như một miếng vá tạm rồi nó thành vĩnh viễn.</strong> Nó dập tắt lỗi ngay lập tức, và chính vì thế nó sống sót qua review rồi nằm lại trong tệp hàng năm trời. Thiệt hại không cục bộ: mọi giá trị dẫn xuất từ một <code>any</code> cũng là <code>any</code>, nên MỘT chú thích có thể lặng lẽ tắt phép kiểm trên cả một chuỗi lời gọi, và không gì báo cáo chuyện đó. Khi bạn thật sự chưa biết kiểu, hãy viết <code>unknown</code> — những lỗi nó sinh ra chính là DANH SÁCH các chỗ cần một phép kiểm thật. Hãy bật <code>noImplicitAny</code> để trình biên dịch thôi tự chèn <code>any</code> giùm bạn.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/functions.html#never" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: never, void &amp; các kiểu đặc biệt</span><span class="lc-sub">Mỗi cái nghĩa là gì với trình biên dịch, và chúng khác nhau ở đâu.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện tập: kiểu đặc biệt trên Code Lab</span><span class="lc-sub">Luyện any với unknown, void với undefined, và never.</span></span>
+</a>
 </div>
 `,
     },
@@ -356,6 +436,14 @@ declare const tags: readonly ['a', 'b'];</div>
 <p>Literal types are the atom. Unions of them (chapter 5) let you say "one of these exact values". <code>as const</code> lets you lock real data into those precise types. Together they're how you make invalid states <em>unrepresentable</em> — the north star of good TypeScript modelling, which the rest of Stage 2 builds toward.</p>
 <div class="pitfall">Widening surprises beginners constantly. <code>const obj = { status: 'draft' }</code> gives <code>obj.status</code> the type <code>string</code>, not <code>'draft'</code> — so passing it where a <code>'draft' | 'published'</code> is expected fails. The fix is usually <code>as const</code> or an explicit type on the variable. When a literal "downgrades" to <code>string</code> unexpectedly, widening is the culprit.</div>
 <div class="note-ct">This site models things like content type, note status and user role as unions of string literals — the exact enum rename that broke production (chapter 9) was one of these. The lesson the codebase learned: derive the union from one source, never hand-copy the literals into a second file where they can drift.</div>
+<h3>How a literal type appears — and disappears</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">const gives you the literal</span><span class="lz-d"><code>const dir = 'left'</code> has type <code>'left'</code>, because a <code>const</code> can never hold anything else.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">let widens it</span><span class="lz-d"><code>let dir = 'left'</code> has type <code>string</code>. The variable is reassignable, so TypeScript picks the wider type — and it no longer fits <code>'left' | 'right'</code>.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Object properties widen too</span><span class="lz-d"><code>const o = { dir: 'left' }</code> gives <code>{ dir: string }</code>, because the property is mutable. This is the version that surprises people.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">as const freezes everything</span><span class="lz-d">It makes every property <code>readonly</code> and every value its literal type, recursively — turning a config object into a precise type you can derive unions from with <code>typeof</code> and <code>keyof</code>.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — passing an object literal to a function expecting a literal union.</strong> <code>request({ method: 'GET' })</code> works, but assigning it to a variable first and passing that fails: <code>const opts = { method: 'GET' }</code> widens <code>method</code> to <code>string</code>, and <code>string</code> is not <code>'GET' | 'POST'</code>. The error message talks about types you never wrote, and the fix looks arbitrary until you know the rule. Use <code>as const</code> on the object, or annotate the variable with the option type so the literal is preserved.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: types &amp; literals on Code Lab</span><span class="lc-sub">Cement chapter 2 with the matching exercises.</span></span>
@@ -395,6 +483,14 @@ declare const tags: readonly ['a', 'b'];</div>
 <p>Kiểu literal là nguyên tử. Union của chúng (chương 5) cho bạn nói "một trong những giá trị chính xác này". <code>as const</code> cho bạn khoá dữ liệu thật vào đúng các kiểu đó. Cùng nhau chúng là cách bạn khiến những trạng thái không hợp lệ <em>không biểu diễn nổi</em> — sao Bắc Đẩu của việc mô hình hoá TypeScript tốt, mà cả phần còn lại của Giai đoạn 2 hướng tới.</p>
 <div class="pitfall">Sự nới rộng làm người mới bất ngờ liên tục. <code>const obj = { status: 'draft' }</code> cho <code>obj.status</code> kiểu <code>string</code>, không phải <code>'draft'</code> — nên truyền nó vào chỗ chờ <code>'draft' | 'published'</code> sẽ thất bại. Cách sửa thường là <code>as const</code> hoặc một kiểu tường minh trên biến. Khi một literal bất ngờ "tụt hạng" xuống <code>string</code>, thủ phạm là nới rộng.</div>
 <div class="note-ct">Site này mô hình hoá những thứ như kiểu nội dung, trạng thái ghi chú và vai trò người dùng thành union của các literal chuỗi — chính lần đổi tên enum làm vỡ production (chương 9) là một trong số đó. Bài học codebase rút ra: rút union từ một nguồn, đừng bao giờ chép tay các literal sang một file thứ hai nơi chúng có thể trôi dạt.</div>
+<h3>Một kiểu literal xuất hiện — rồi biến mất — như thế nào</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">const cho bạn cái literal</span><span class="lz-d"><code>const dir = 'left'</code> có kiểu <code>'left'</code>, vì một <code>const</code> không bao giờ giữ được thứ khác.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">let NỚI RỘNG nó ra</span><span class="lz-d"><code>let dir = 'left'</code> có kiểu <code>string</code>. Biến ấy gán lại được, nên TypeScript chọn kiểu rộng hơn — và nó không còn vừa <code>'left' | 'right'</code> nữa.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Thuộc tính đối tượng cũng nới rộng</span><span class="lz-d"><code>const o = { dir: 'left' }</code> cho ra <code>{ dir: string }</code>, vì thuộc tính ấy sửa được. Đây là phiên bản làm người ta bất ngờ.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">as const đóng băng tất cả</span><span class="lz-d">Nó biến mọi thuộc tính thành <code>readonly</code> và mọi giá trị thành kiểu literal của nó, theo cả chiều sâu — biến một đối tượng cấu hình thành một kiểu CHÍNH XÁC mà bạn dẫn xuất union ra được bằng <code>typeof</code> và <code>keyof</code>.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — truyền một object literal vào hàm đang chờ một literal union.</strong> <code>request({ method: 'GET' })</code> thì chạy, nhưng gán nó vào một biến rồi truyền biến đó thì hỏng: <code>const opts = { method: 'GET' }</code> nới <code>method</code> thành <code>string</code>, và <code>string</code> không phải <code>'GET' | 'POST'</code>. Thông báo lỗi nói về những kiểu bạn chưa từng viết, và cách chữa trông tuỳ tiện cho tới khi bạn biết cái luật ấy. Hãy dùng <code>as const</code> lên đối tượng, hoặc chú thích cái biến bằng kiểu tuỳ chọn để literal được giữ nguyên.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: kiểu &amp; literal trên Code Lab</span><span class="lc-sub">Củng cố chương 2 bằng các bài tập tương ứng.</span></span>

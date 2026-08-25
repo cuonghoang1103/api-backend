@@ -608,6 +608,9 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Modular monoliths and reversible decisions</span></a>
 </div>
+<div class="pitfall">
+<p><strong>Trap — splitting a monolith to fix a problem that splitting makes worse.</strong> &quot;Deploys are risky&quot; and &quot;the codebase is hard to understand&quot; are the two reasons people give, and services address neither: a deploy that was one artefact becomes several with an ordering requirement, and code that was confusing in one repository is confusing in six with network calls between the confusing parts. What splitting genuinely buys is independent scaling and independent failure — and it charges for both in latency, partial failure, and distributed transactions you now have to design around. The three signals in this lesson are the ones that survive measurement; team frustration is not one of them.</p>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -679,6 +682,9 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 </div>
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Khối nguyên có mô-đun và những quyết định đảo ngược được</span></a>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — tách một monolith để chữa một vấn đề mà việc tách làm nó TỆ HƠN.</strong> &quot;Deploy rủi ro&quot; và &quot;kho mã khó hiểu&quot; là hai lý do người ta hay đưa ra, và các dịch vụ chẳng giải quyết được cái nào: một lần deploy vốn là một sản phẩm giờ thành nhiều sản phẩm kèm ràng buộc về thứ tự, còn đoạn mã vốn đã khó hiểu trong một kho thì vẫn khó hiểu trong sáu kho, cộng thêm các lời gọi mạng nằm giữa những phần khó hiểu ấy. Thứ mà việc tách thật sự mua được là mở rộng độc lập và hỏng hóc độc lập — và nó tính tiền cả hai bằng độ trễ, bằng hỏng hóc từng phần, và bằng những giao dịch phân tán mà giờ bạn phải thiết kế để né. Ba tín hiệu trong bài này là những tín hiệu sống sót qua phép đo; sự bực bội của cả đội không phải một trong số đó.</p>
 </div>
 </div>
 `,
@@ -915,6 +921,9 @@ khởi động toàn bộ: 3,63 giây</div>
 <div class="link-card exphub">
   <a href="/exp-hub${REF}"><span class="lc-t">Exp Hub</span><span class="lc-d">Setup guides, commands and snippets per technology</span></a>
 </div>
+<div class="pitfall">
+<p><strong>Trap — finishing the course and building the same thing again, but with more layers.</strong> Eighteen chapters of patterns is also eighteen chapters of things you can now apply prematurely: a queue for work that takes 8 ms, a cache in front of a query that runs in 2 ms, three services where one file would do. Every pattern here earns its place under a specific condition, and each lesson states that condition — the queue when the work outlives the request, the cache when the payload is small and the read rate is high, the split when scaling profiles genuinely diverge. The five recurring ideas are worth carrying; the implementations are worth carrying only along with the measurement that justified them.</p>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -991,6 +1000,9 @@ khởi động toàn bộ: 3,63 giây</div>
 </div>
 <div class="link-card exphub">
   <a href="/exp-hub${REF}"><span class="lc-t">Exp Hub</span><span class="lc-d">Hướng dẫn cài đặt, lệnh và đoạn mã theo từng công nghệ</span></a>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — học xong khoá rồi dựng lại đúng thứ cũ, nhưng thêm nhiều tầng hơn.</strong> Mười tám chương đầy các mẫu thiết kế cũng là mười tám chương những thứ mà giờ bạn có thể áp dụng quá sớm: một hàng đợi cho công việc mất 8 ms, một bộ nhớ đệm đặt trước một truy vấn chạy 2 ms, ba dịch vụ cho thứ mà một file là đủ. Mọi mẫu ở đây đều xứng chỗ của nó dưới một điều kiện cụ thể, và mỗi bài đều nói rõ điều kiện đó — hàng đợi khi công việc sống lâu hơn cái request, bộ nhớ đệm khi dữ liệu nhỏ và tần suất đọc cao, việc tách khi hồ sơ mở rộng thật sự phân kỳ. Năm ý tưởng lặp đi lặp lại thì đáng mang theo; còn phần hiện thực thì chỉ đáng mang theo cùng với cái phép đo đã biện minh cho nó.</p>
 </div>
 </div>
 `,

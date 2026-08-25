@@ -78,6 +78,22 @@ npm outdated                 <span class="tok-comment"># what has newer versions
 npm view &lt;pkg&gt; versions       <span class="tok-comment"># every published version</span>
 npx &lt;tool&gt;                   <span class="tok-comment"># run a tool without installing it globally</span></code></pre>
 <div class="note-ct">This site pins the Node version in three places that must agree: <code>engines</code> in package.json, the Docker base image, and the CI workflow. When they drift apart, code passes locally and fails after deploy — which is the most expensive kind of failure, because you only find out in front of users.</div>
+<h3>The fields that actually change behaviour</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">name and version</span><span class="lz-d">Identity. <code>version</code> is what other packages resolve against, and what <code>npm publish</code> refuses to reuse.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">type</span><span class="lz-d"><code>"module"</code> or absent. It decides whether every <code>.js</code> in the package is ESM or CommonJS — see lesson 1.5.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">dependencies vs devDependencies</span><span class="lz-d">Both install locally; only <code>dependencies</code> install with <code>--omit=dev</code>. Putting a runtime package in the wrong one breaks the production image, not the build.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">scripts and engines</span><span class="lz-d"><code>scripts</code> is the project's command line; <code>engines</code> states the Node version, which some hosts enforce and others only warn about.</span></div>
+</div>
+<a class="link-card dl" href="https://docs.npmjs.com/cli/v10/configuring-npm/package-json" target="_blank" rel="noopener">
+  <span class="lc-ico">📋</span>
+  <span class="lc-body"><span class="lc-title">npm — package.json</span><span class="lc-sub">Every field, with the ones that affect installation marked.</span></span>
+</a>
+<a class="link-card dl" href="https://docs.npmjs.com/cli/v10/using-npm/scripts" target="_blank" rel="noopener">
+  <span class="lc-ico">▶️</span>
+  <span class="lc-body"><span class="lc-title">npm — scripts</span><span class="lc-sub">Lifecycle hooks, pre/post, and why an install script is a supply-chain concern.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -143,6 +159,22 @@ npm outdated                 <span class="tok-comment"># gói nào đã có bả
 npm view &lt;gói&gt; versions       <span class="tok-comment"># mọi phiên bản đã phát hành</span>
 npx &lt;công cụ&gt;                <span class="tok-comment"># chạy công cụ mà không cần cài toàn cục</span></code></pre>
 <div class="note-ct">Website này ghim phiên bản Node ở ba nơi bắt buộc phải khớp nhau: mục <code>engines</code> trong package.json, image nền Docker, và workflow CI. Khi ba chỗ đó lệch nhau, code chạy ngon ở máy nhưng gãy sau khi deploy — loại hỏng hóc đắt đỏ nhất, vì bạn chỉ phát hiện ra khi đã ở trước mặt người dùng.</div>
+<h3>Những trường thật sự làm đổi hành vi</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">name và version</span><span class="lz-d">Danh tính. <code>version</code> là thứ các package khác giải theo, và là thứ <code>npm publish</code> từ chối cho dùng lại.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">type</span><span class="lz-d"><code>"module"</code> hoặc không có. Nó quyết định mọi file <code>.js</code> trong package là ESM hay CommonJS — xem bài 1.5.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">dependencies với devDependencies</span><span class="lz-d">Cả hai đều cài ở máy; chỉ <code>dependencies</code> mới được cài khi có <code>--omit=dev</code>. Đặt một package cần lúc chạy vào nhầm chỗ sẽ làm vỡ ảnh production, chứ không làm vỡ bản build.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">scripts và engines</span><span class="lz-d"><code>scripts</code> là dòng lệnh của dự án; <code>engines</code> khai phiên bản Node, thứ mà một số nhà cung cấp cưỡng chế còn số khác chỉ cảnh báo.</span></div>
+</div>
+<a class="link-card dl" href="https://docs.npmjs.com/cli/v10/configuring-npm/package-json" target="_blank" rel="noopener">
+  <span class="lc-ico">📋</span>
+  <span class="lc-body"><span class="lc-title">npm — package.json</span><span class="lc-sub">Mọi trường, có đánh dấu những cái ảnh hưởng tới việc cài đặt.</span></span>
+</a>
+<a class="link-card dl" href="https://docs.npmjs.com/cli/v10/using-npm/scripts" target="_blank" rel="noopener">
+  <span class="lc-ico">▶️</span>
+  <span class="lc-body"><span class="lc-title">npm — scripts</span><span class="lc-sub">Các hook vòng đời, pre/post, và vì sao một script cài đặt là mối lo về chuỗi cung ứng.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -213,6 +245,15 @@ rm package-lock.json &amp;&amp; npm install</code></pre>
 npm update                   <span class="tok-comment"># move within the allowed ranges</span>
 npm i express@latest         <span class="tok-comment"># jump a major deliberately — read the changelog first</span></code></pre>
 <div class="note-ct">Deploys on this site install with <code>npm ci</code>, precisely so the container runs the exact tree that was tested in CI. The alternative — <code>npm install</code> at deploy time — means the image you tested and the image you shipped can quietly differ, and you would have no record of what changed.</div>
+<a class="link-card dl" href="https://semver.org/" target="_blank" rel="noopener">
+  <span class="lc-ico">🔢</span>
+  <span class="lc-body"><span class="lc-title">semver.org — the specification</span><span class="lc-sub">Two pages, and it settles most arguments about what a version number promises.</span></span>
+</a>
+<a class="link-card dl" href="https://docs.npmjs.com/cli/v10/commands/npm-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">npm ci</span><span class="lc-sub">The command that installs strictly from the lockfile — the difference this lesson measures.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -267,6 +308,15 @@ rm package-lock.json &amp;&amp; npm install</code></pre>
 npm update                   <span class="tok-comment"># nhích lên trong phạm vi dải cho phép</span>
 npm i express@latest         <span class="tok-comment"># nhảy hẳn một major — đọc changelog trước đã</span></code></pre>
 <div class="note-ct">Việc deploy của website này cài bằng <code>npm ci</code>, chính là để container chạy đúng cái cây phụ thuộc đã được kiểm thử trong CI. Cách còn lại — chạy <code>npm install</code> lúc deploy — nghĩa là image bạn test và image bạn ship có thể âm thầm khác nhau, mà bạn lại chẳng có bằng chứng nào về việc gì đã đổi.</div>
+<a class="link-card dl" href="https://semver.org/" target="_blank" rel="noopener">
+  <span class="lc-ico">🔢</span>
+  <span class="lc-body"><span class="lc-title">semver.org — bản đặc tả</span><span class="lc-sub">Hai trang, và nó dập tắt phần lớn tranh cãi về việc một số phiên bản hứa hẹn điều gì.</span></span>
+</a>
+<a class="link-card dl" href="https://docs.npmjs.com/cli/v10/commands/npm-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">npm ci</span><span class="lc-sub">Lệnh cài đặt nghiêm ngặt theo file lock — đúng cái khác biệt mà bài này đo.</span></span>
+</a>
+
 </div>
 `,
     },

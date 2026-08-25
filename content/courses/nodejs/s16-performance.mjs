@@ -1198,6 +1198,9 @@ viết lại regex                                   1,005× LÀM NHANH HƠN</di
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Trade-offs that survive contact with production</span></a>
 </div>
+<div class="pitfall">
+<p><strong>Trap — optimising the part of the request you can see, not the part that takes the time.</strong> The serialiser is in your code, so it is where attention goes; the 40 ms database round trip is behind a library call and reads as one line. That is how a 1.39× faster JSON encoder buys 0.3% of a request — the thing you improved was 2% of the total. Amdahl&#39;s law is the whole lesson, and it is measurable before you start: profile, find what fraction the candidate actually occupies, and compute the ceiling. If the ceiling is under a few percent, the honest answer is to not do the work — and to write down the number, so the next person does not re-propose it.</p>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -1289,6 +1292,9 @@ viết lại regex                                   1,005× LÀM NHANH HƠN</di
 </div>
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Những đánh đổi sống sót được khi va vào production</span></a>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — tối ưu cái phần của request mà bạn NHÌN THẤY, chứ không phải cái phần tốn thời gian.</strong> Bộ tuần tự hoá nằm trong mã của bạn, nên sự chú ý dồn vào đó; còn 40 ms đi về cơ sở dữ liệu thì nằm sau một lời gọi thư viện và đọc lên chỉ là một dòng. Đó là cách một bộ mã hoá JSON nhanh hơn 1,39 lần mua được 0,3% của một request — thứ bạn cải thiện chiếm có 2% tổng số. Định luật Amdahl chính là toàn bộ bài học, và nó đo được TRƯỚC khi bắt đầu: hãy chạy profiler, tìm xem ứng viên đó thật sự chiếm bao nhiêu phần, rồi tính ra cái trần. Nếu cái trần dưới vài phần trăm thì câu trả lời thành thật là ĐỪNG làm — và hãy ghi con số đó lại, để người sau không đề xuất lại nó.</p>
 </div>
 </div>
 `,

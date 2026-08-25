@@ -59,6 +59,18 @@ node -p <span class="tok-string">"process.versions.uv"</span></code></pre>
 </div>
 <p>Step 3 is the magic. In a thread-per-request server (classic PHP or Java), that waiting thread sits idle and consumes memory. In Node the same thread immediately picks up the next request. That is why a single Node process can hold tens of thousands of open connections.</p>
 <div class="note-ct">This site runs a single Node process per container. It comfortably serves the API, WebSocket chat and file streaming from that one process — precisely because almost everything it does is <em>waiting</em>: for PostgreSQL, for Redis, for Cloudflare R2. The moments it does real computing (image processing) are the moments that need care.</div>
+<div class="pitfall">
+<p><strong>Trap — reading "single-threaded" as "Node uses one thread".</strong> One thread runs <em>your JavaScript</em>. Underneath, libuv keeps a thread pool — four by default — that handles filesystem work, DNS lookups and some crypto, and the OS handles the network sockets. So a program that feels single-threaded can be saturating four hidden threads, and a CPU-heavy <code>pbkdf2</code> on every login exhausts that pool and stalls every unrelated <code>fs.readFile</code> in the process. The number to know is <code>UV_THREADPOOL_SIZE</code>, and the symptom is filesystem latency rising when nothing about the disk changed.</p>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/cli.html#uv_threadpool_sizesize" target="_blank" rel="noopener">
+  <span class="lc-ico">🧵</span>
+  <span class="lc-body"><span class="lc-title">Node.js — UV_THREADPOOL_SIZE</span><span class="lc-sub">The one environment variable behind the hidden thread pool, and what it defaults to.</span></span>
+</a>
+<a class="link-card dl" href="https://docs.libuv.org/en/v1.x/design.html" target="_blank" rel="noopener">
+  <span class="lc-ico">⚙️</span>
+  <span class="lc-body"><span class="lc-title">libuv — design overview</span><span class="lc-sub">What actually runs the event loop, and which operations go to the pool rather than the OS.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -105,6 +117,18 @@ node -p <span class="tok-string">"process.versions.uv"</span></code></pre>
 </div>
 <p>Bước 3 mới là phép màu. Ở server kiểu một-luồng-một-request (PHP hay Java cổ điển), cái luồng đang chờ đó nằm không và vẫn ngốn bộ nhớ. Trong Node, đúng luồng ấy lập tức nhặt request kế tiếp. Đó là lý do một tiến trình Node duy nhất giữ được hàng chục nghìn kết nối mở.</p>
 <div class="note-ct">Website này chạy một tiến trình Node duy nhất trong mỗi container. Nó phục vụ thoải mái cả API, chat WebSocket lẫn truyền file từ một tiến trình đó — chính vì gần như mọi việc nó làm đều là <em>chờ</em>: chờ PostgreSQL, chờ Redis, chờ Cloudflare R2. Những khoảnh khắc nó thực sự tính toán (xử lý ảnh) mới là lúc phải cẩn thận.</div>
+<div class="pitfall">
+<p><strong>Bẫy — đọc &quot;đơn luồng&quot; thành &quot;Node dùng một luồng&quot;.</strong> Một luồng chạy <em>JavaScript của bạn</em>. Bên dưới, libuv giữ một pool luồng — mặc định bốn cái — lo phần việc hệ tệp, tra DNS và một số phép mã hoá, còn hệ điều hành lo các socket mạng. Nên một chương trình có cảm giác đơn luồng vẫn có thể đang làm bão hoà bốn cái luồng ẩn, và một phép <code>pbkdf2</code> nặng CPU ở mỗi lần đăng nhập sẽ vắt cạn cái pool đó rồi làm nghẽn mọi <code>fs.readFile</code> chẳng liên quan trong cùng tiến trình. Con số cần biết là <code>UV_THREADPOOL_SIZE</code>, và triệu chứng là độ trễ hệ tệp tăng lên trong khi chẳng có gì về cái đĩa thay đổi cả.</p>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/cli.html#uv_threadpool_sizesize" target="_blank" rel="noopener">
+  <span class="lc-ico">🧵</span>
+  <span class="lc-body"><span class="lc-title">Node.js — UV_THREADPOOL_SIZE</span><span class="lc-sub">Một biến môi trường duy nhất đứng sau cái pool luồng ẩn, và giá trị mặc định của nó.</span></span>
+</a>
+<a class="link-card dl" href="https://docs.libuv.org/en/v1.x/design.html" target="_blank" rel="noopener">
+  <span class="lc-ico">⚙️</span>
+  <span class="lc-body"><span class="lc-title">libuv — tổng quan thiết kế</span><span class="lc-sub">Thứ thật sự chạy vòng lặp sự kiện, và thao tác nào đi vào pool thay vì đi ra hệ điều hành.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -172,6 +196,15 @@ process.<span class="tok-function">nextTick</span>(() =&gt; <span class="tok-fun
 <h3>Why timers are never exact</h3>
 <p><code>setTimeout(fn, 100)</code> promises "not earlier than 100 ms", never "exactly at 100 ms". If the loop is busy when the deadline arrives, your callback waits its turn. In lesson 2.4 you will measure a timer that should have fired every 100 ms arriving <strong>2873 ms</strong> late.</p>
 <div class="note-ct">This matters for scheduled jobs. A "run every minute" timer in a busy process drifts. That is why real scheduling on this site uses cron-style jobs that check the clock, rather than counting on <code>setInterval</code> to stay accurate over hours.</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/../../../en/learn/asynchronous-work/event-loop-timers-and-nexttick" target="_blank" rel="noopener">
+  <span class="lc-ico">🔄</span>
+  <span class="lc-body"><span class="lc-title">Node.js — The event loop, timers and nextTick</span><span class="lc-sub">The official phase-by-phase walkthrough this lesson follows.</span></span>
+</a>
+<a class="link-card dl" href="https://www.youtube.com/watch?v=cCOL7MC4Pl0" target="_blank" rel="noopener">
+  <span class="lc-ico">🎥</span>
+  <span class="lc-body"><span class="lc-title">Jake Archibald — In the loop</span><span class="lc-sub">The talk that made the browser and Node loops legible to a generation of developers.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -223,6 +256,15 @@ process.<span class="tok-function">nextTick</span>(() =&gt; <span class="tok-fun
 <h3>Vì sao timer không bao giờ chính xác</h3>
 <p><code>setTimeout(fn, 100)</code> hứa "không sớm hơn 100 ms", chứ không bao giờ hứa "đúng 100 ms". Nếu vòng lặp đang bận lúc tới hạn, callback của bạn phải xếp hàng chờ. Ở bài 2.4 bạn sẽ tự đo một timer lẽ ra chạy mỗi 100 ms nhưng tới trễ <strong>2873 ms</strong>.</p>
 <div class="note-ct">Điều này quan trọng với các job chạy theo lịch. Một timer kiểu "chạy mỗi phút" trong tiến trình bận sẽ trôi dạt dần. Đó là lý do việc hẹn giờ thật trên website này dùng job kiểu cron có kiểm tra đồng hồ, thay vì trông cậy <code>setInterval</code> giữ được độ chính xác suốt nhiều giờ.</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/../../../en/learn/asynchronous-work/event-loop-timers-and-nexttick" target="_blank" rel="noopener">
+  <span class="lc-ico">🔄</span>
+  <span class="lc-body"><span class="lc-title">Node.js — Vòng lặp sự kiện, timer và nextTick</span><span class="lc-sub">Bản đi qua từng pha chính thức mà bài này đi theo.</span></span>
+</a>
+<a class="link-card dl" href="https://www.youtube.com/watch?v=cCOL7MC4Pl0" target="_blank" rel="noopener">
+  <span class="lc-ico">🎥</span>
+  <span class="lc-body"><span class="lc-title">Jake Archibald — In the loop</span><span class="lc-sub">Bài nói đã làm vòng lặp của trình duyệt và của Node trở nên dễ đọc với cả một thế hệ lập trình viên.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -277,6 +319,15 @@ nextTick ran: 1000000 times</div>
 </div>
 <div class="callout warn">If your instinct says "I'll use nextTick to make this run sooner" — stop. Running <em>sooner</em> than the event loop means running <em>before</em> pending I/O, which starves the very requests you are trying to serve. Reach for <code>setImmediate</code> instead: it politely waits its turn.</div>
 <div class="note-ct">In practice you will write <code>await</code> thousands of times and <code>process.nextTick</code> approximately never. Knowing it exists matters mainly for reading library source and for understanding why a stack trace shows your callback running "later" than you expected.</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/process.html#processnexttickcallback-args" target="_blank" rel="noopener">
+  <span class="lc-ico">⏭️</span>
+  <span class="lc-body"><span class="lc-title">Node.js — process.nextTick()</span><span class="lc-sub">Including the warning about starving the loop, straight from the API docs.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener">
+  <span class="lc-ico">🤝</span>
+  <span class="lc-body"><span class="lc-title">MDN — Promise</span><span class="lc-sub">Where the microtask queue comes from, and why it drains before any timer.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -315,6 +366,15 @@ nextTick đã chạy: 1000000 lần</div>
 </div>
 <div class="callout warn">Nếu bản năng mách bảo "dùng nextTick cho nó chạy sớm hơn" — hãy dừng lại. Chạy <em>sớm hơn</em> vòng lặp nghĩa là chạy <em>trước</em> các I/O đang chờ, tức là bỏ đói chính những request bạn đang cố phục vụ. Hãy với tay lấy <code>setImmediate</code>: nó lịch sự xếp hàng chờ tới lượt.</div>
 <div class="note-ct">Thực tế bạn sẽ viết <code>await</code> hàng nghìn lần và viết <code>process.nextTick</code> gần như không bao giờ. Biết nó tồn tại chủ yếu có ích khi đọc mã nguồn thư viện, và để hiểu vì sao một vết stack cho thấy callback của bạn chạy "muộn hơn" bạn tưởng.</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/process.html#processnexttickcallback-args" target="_blank" rel="noopener">
+  <span class="lc-ico">⏭️</span>
+  <span class="lc-body"><span class="lc-title">Node.js — process.nextTick()</span><span class="lc-sub">Kèm cả lời cảnh báo về việc bỏ đói vòng lặp, lấy thẳng từ tài liệu API.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener">
+  <span class="lc-ico">🤝</span>
+  <span class="lc-body"><span class="lc-title">MDN — Promise</span><span class="lc-sub">Hàng đợi microtask từ đâu ra, và vì sao nó được rút cạn trước mọi timer.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -405,6 +465,22 @@ h.<span class="tok-function">enable</span>();
   <div class="kv"><span class="k">over 500 ms</span><span class="v">Users are already feeling it. Requests are queueing behind computation.</span></div>
 </div>
 <div class="note-ct">This is why image resizing on this site is done by <em>sharp</em> — a native library that releases the JavaScript thread and works on libuv's pool — instead of a pure-JS image library. Same API shape from your side, completely different behaviour under load.</div>
+<h3>What counts as blocking, and what does not</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A long synchronous loop blocks</span><span class="lz-d">Parsing a 50 MB JSON, a nested loop over ten thousand items, a regex that backtracks. The thread cannot run anything else until it returns.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">A Sync API blocks</span><span class="lz-d"><code>readFileSync</code>, <code>execSync</code>, <code>crypto.pbkdf2Sync</code>. Convenient in a script, and a stalled server in a request handler.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">An await does not block</span><span class="lz-d">The handler pauses and the thread is free. This is the whole design — a request waiting on the database costs nothing.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">But a pool-backed call can queue</span><span class="lz-d"><code>fs</code> and some crypto go to libuv's four threads. Four concurrent hashes and the fifth waits, without anything looking blocked.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/en/learn/asynchronous-work/dont-block-the-event-loop" target="_blank" rel="noopener">
+  <span class="lc-ico">🚧</span>
+  <span class="lc-body"><span class="lc-title">Node.js — Don't block the event loop</span><span class="lc-sub">The official guide, with the partitioning and offloading strategies.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/perf_hooks.html#perf_hooksmonitoreventloopdelayoptions" target="_blank" rel="noopener">
+  <span class="lc-ico">📏</span>
+  <span class="lc-body"><span class="lc-title">Node.js — monitorEventLoopDelay</span><span class="lc-sub">Measuring the lag directly, which turns &quot;it feels slow&quot; into a histogram.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -479,6 +555,22 @@ h.<span class="tok-function">enable</span>();
   <div class="kv"><span class="k">trên 500 ms</span><span class="v">Người dùng đã cảm nhận được rồi. Request đang xếp hàng sau các phép tính.</span></div>
 </div>
 <div class="note-ct">Đây chính là lý do việc resize ảnh trên website này giao cho <em>sharp</em> — một thư viện native nhả luồng JavaScript ra và làm việc trên pool của libuv — thay vì một thư viện ảnh viết thuần JS. Nhìn từ phía bạn thì API giống hệt nhau, nhưng hành vi khi tải cao thì khác một trời một vực.</div>
+<h3>Cái gì được tính là chặn, và cái gì không</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Một vòng lặp đồng bộ dài thì CHẶN</span><span class="lz-d">Phân tích một file JSON 50 MB, một vòng lặp lồng trên mười nghìn phần tử, một biểu thức chính quy quay lui. Luồng không chạy được gì khác cho tới khi nó trả về.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Một API bản Sync thì CHẶN</span><span class="lz-d"><code>readFileSync</code>, <code>execSync</code>, <code>crypto.pbkdf2Sync</code>. Tiện trong một script, và là một máy chủ đứng hình khi nằm trong handler request.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Một phép await thì KHÔNG chặn</span><span class="lz-d">Handler tạm dừng và luồng được tự do. Đó là toàn bộ thiết kế — một request đang chờ cơ sở dữ liệu chẳng tốn gì cả.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nhưng một lời gọi đi qua pool thì có thể phải XẾP HÀNG</span><span class="lz-d"><code>fs</code> và một số phép mã hoá đi vào bốn luồng của libuv. Bốn phép băm song song là cái thứ năm phải chờ, mà chẳng có gì trông như bị chặn.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/en/learn/asynchronous-work/dont-block-the-event-loop" target="_blank" rel="noopener">
+  <span class="lc-ico">🚧</span>
+  <span class="lc-body"><span class="lc-title">Node.js — Đừng chặn vòng lặp sự kiện</span><span class="lc-sub">Hướng dẫn chính thức, kèm các chiến lược chia nhỏ và đẩy việc ra ngoài.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/perf_hooks.html#perf_hooksmonitoreventloopdelayoptions" target="_blank" rel="noopener">
+  <span class="lc-ico">📏</span>
+  <span class="lc-body"><span class="lc-title">Node.js — monitorEventLoopDelay</span><span class="lc-sub">Đo trực tiếp độ trễ, thứ biến &quot;thấy chậm chậm&quot; thành một biểu đồ tần suất.</span></span>
+</a>
+
 </div>
 `,
     },

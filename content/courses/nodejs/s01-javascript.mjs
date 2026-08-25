@@ -195,6 +195,22 @@ rebound with bind: Hello from NotesAPI</div>
   <div class="kv"><span class="k">Honest advice</span><span class="v">Most modern Node code avoids <code>this</code> almost entirely — plain exported functions plus closures are simpler to test and impossible to unbind.</span></div>
 </div>
 <div class="note-ct">The service layer of this site is written as plain exported async functions, deliberately: <code>export async function shareNote(noteId, userId)</code>. No <code>this</code>, so it can be called from an Express route, a Socket.IO handler or a background job with no binding ceremony.</div>
+<h3>What decides the value of this</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">An arrow function has no this of its own</span><span class="lz-d">It takes the one from where it was <em>written</em>. That is why an arrow passed to <code>setTimeout</code> still sees the surrounding object.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">A function expression takes it from the call</span><span class="lz-d"><code>obj.method()</code> gives <code>this = obj</code>; <code>const f = obj.method; f()</code> gives <code>undefined</code> in strict mode. Same function, different receiver.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">call, apply and bind set it explicitly</span><span class="lz-d"><code>bind</code> returns a new function with <code>this</code> fixed — useful, and it creates a new identity every call, which matters for listeners.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">A closure is the other half</span><span class="lz-d">A function keeps the variables it was created with, whatever <code>this</code> ends up being. The two mechanisms are independent and get confused constantly.</span></div>
+</div>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener">
+  <span class="lc-ico">🎯</span>
+  <span class="lc-body"><span class="lc-title">MDN — this</span><span class="lc-sub">Every binding rule, in the order the language applies them.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Closures" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">MDN — Closures</span><span class="lc-sub">The mechanism behind private state, and the loop trap from lesson 1.1.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -249,6 +265,22 @@ buộc lại bằng bind: Xin chào từ NotesAPI</div>
   <div class="kv"><span class="k">Lời khuyên thật lòng</span><span class="v">Phần lớn code Node hiện đại gần như tránh hẳn <code>this</code> — hàm export thuần cộng closure thì dễ test hơn và không thể bị mất ràng buộc.</span></div>
 </div>
 <div class="note-ct">Tầng service của website này được viết dưới dạng các hàm async export thuần, một cách có chủ đích: <code>export async function shareNote(noteId, userId)</code>. Không có <code>this</code>, nên nó gọi được từ route Express, từ handler Socket.IO hay từ một job chạy nền mà chẳng cần nghi thức bind nào.</div>
+<h3>Cái gì quyết định giá trị của this</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Một arrow function không có this của riêng nó</span><span class="lz-d">Nó lấy cái this từ nơi nó được <em>viết ra</em>. Đó là lý do một arrow truyền vào <code>setTimeout</code> vẫn nhìn thấy object bao quanh.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Một function expression lấy this từ chỗ GỌI</span><span class="lz-d"><code>obj.method()</code> cho <code>this = obj</code>; còn <code>const f = obj.method; f()</code> cho <code>undefined</code> ở chế độ nghiêm ngặt. Cùng một hàm, khác bên nhận.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">call, apply và bind đặt nó tường minh</span><span class="lz-d"><code>bind</code> trả về một hàm MỚI với <code>this</code> đã cố định — tiện, và nó tạo một danh tính mới ở mỗi lần gọi, điều đó có ý nghĩa với các listener.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Closure là nửa còn lại</span><span class="lz-d">Một hàm giữ lại những biến mà nó được tạo ra cùng, bất kể <code>this</code> rốt cuộc là gì. Hai cơ chế này độc lập với nhau và bị nhầm lẫn liên tục.</span></div>
+</div>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noopener">
+  <span class="lc-ico">🎯</span>
+  <span class="lc-body"><span class="lc-title">MDN — this</span><span class="lc-sub">Mọi luật gán this, theo đúng thứ tự ngôn ngữ áp dụng chúng.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Closures" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">MDN — Closure</span><span class="lc-sub">Cơ chế đứng sau trạng thái riêng tư, và cái bẫy vòng lặp ở bài 1.1.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -304,6 +336,22 @@ the deep copy                      : {"name":"An","address":{"city":"Huế"},"ta
 <span class="tok-keyword">const</span> limitBad = req.query.limit || <span class="tok-number">20</span>;          <span class="tok-comment">// || also replaces 0 and '' — usually a bug</span></code></pre>
 <div class="pitfall">Use <code>??</code>, not <code>||</code>, for defaults on numbers. With <code>||</code>, a legitimate <code>limit=0</code> or <code>page=0</code> silently becomes 20 — because <code>0</code> is falsy. This is a real and very annoying pagination bug.</div>
 <div class="note-ct">On this site the "don't leak secrets" rule is enforced at the serialisation layer: a <code>serializeUser()</code> function builds the response object explicitly, field by field. Adding a column to the database therefore <em>cannot</em> accidentally expose it through the API — the opposite of returning the raw database row.</div>
+<h3>Value or reference, and where the line is</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Primitives are copied</span><span class="lz-d">A number, a string, a boolean. Assigning one gives the other variable its own copy, and changing one cannot affect the other.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Objects and arrays are shared</span><span class="lz-d">The variable holds a reference. Two names can point at the same object, and a change through either is visible through both.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Spread copies one level</span><span class="lz-d"><code>{...obj}</code> gives a new top-level object whose nested values are still the same references. This is where most surprises live.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">structuredClone copies all of them</span><span class="lz-d">Deep, built into Node, and it handles Dates and Maps. Slower — reach for it when you actually need depth, not by default.</span></div>
+</div>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" target="_blank" rel="noopener">
+  <span class="lc-ico">📤</span>
+  <span class="lc-body"><span class="lc-title">MDN — Spread syntax</span><span class="lc-sub">What it copies, what it shares, and where it does not apply.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone" target="_blank" rel="noopener">
+  <span class="lc-ico">🧬</span>
+  <span class="lc-body"><span class="lc-title">MDN — structuredClone()</span><span class="lc-sub">A real deep copy, with the list of types it supports and the ones it throws on.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -350,6 +398,22 @@ bản sao sâu                 : {"name":"An","address":{"city":"Huế"},"tags":
 <span class="tok-keyword">const</span> limitSai = req.query.limit || <span class="tok-number">20</span>;           <span class="tok-comment">// || thay cả 0 và '' — thường là bug</span></code></pre>
 <div class="pitfall">Hãy dùng <code>??</code> chứ đừng dùng <code>||</code> để đặt giá trị mặc định cho số. Với <code>||</code>, một giá trị hợp lệ như <code>limit=0</code> hay <code>page=0</code> sẽ âm thầm biến thành 20 — vì <code>0</code> bị coi là "giá trị giả". Đây là một con bug phân trang có thật và rất khó chịu.</div>
 <div class="note-ct">Ở website này, quy tắc "không để rò rỉ bí mật" được thực thi ngay tại tầng chuyển đổi dữ liệu: hàm <code>serializeUser()</code> dựng object phản hồi một cách tường minh, từng trường một. Nhờ vậy, thêm một cột vào cơ sở dữ liệu <em>không thể</em> vô tình phơi nó ra API — ngược hẳn với kiểu trả thẳng bản ghi thô từ database.</div>
+<h3>Giá trị hay tham chiếu, và ranh giới nằm ở đâu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Giá trị nguyên thuỷ thì được CHÉP</span><span class="lz-d">Một con số, một chuỗi, một boolean. Gán một cái là biến kia có bản sao của riêng nó, và đổi cái này không đụng được cái kia.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Object và mảng thì được DÙNG CHUNG</span><span class="lz-d">Biến giữ một tham chiếu. Hai cái tên có thể trỏ vào cùng một object, và một thay đổi qua bên nào cũng nhìn thấy được từ cả hai.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Phép trải chép một tầng</span><span class="lz-d"><code>{...obj}</code> cho ra một object mới ở tầng trên cùng mà các giá trị lồng bên trong vẫn là đúng những tham chiếu cũ. Phần lớn bất ngờ sống ở đây.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">structuredClone chép hết mọi tầng</span><span class="lz-d">Sâu, có sẵn trong Node, và nó xử lý được cả Date lẫn Map. Chậm hơn — hãy với tay tới nó khi bạn THẬT SỰ cần độ sâu, đừng dùng theo mặc định.</span></div>
+</div>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax" target="_blank" rel="noopener">
+  <span class="lc-ico">📤</span>
+  <span class="lc-body"><span class="lc-title">MDN — Cú pháp trải</span><span class="lc-sub">Nó chép cái gì, dùng chung cái gì, và chỗ nào nó không áp dụng.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone" target="_blank" rel="noopener">
+  <span class="lc-ico">🧬</span>
+  <span class="lc-body"><span class="lc-title">MDN — structuredClone()</span><span class="lc-sub">Một bản chép sâu thật sự, kèm danh sách kiểu nó hỗ trợ và kiểu nó ném lỗi.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -599,6 +663,22 @@ ESM  : top-level await works</div>
   <div class="kv"><span class="k">You can import CJS from ESM</span><span class="v">Usually as a default import. The reverse (<code>require</code> an ESM package) is what breaks — that is why some packages say "ESM only".</span></div>
 </div>
 <div class="note-ct">This site's backend is <code>"type": "module"</code> — pure ESM, TypeScript compiled to ESM output. That is exactly why its maintenance scripts are written with <code>import</code> and can use top-level <code>await</code> without wrapping everything in an async main function.</div>
+<h3>How Node decides whether a file is CJS or ESM</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The extension wins first</span><span class="lz-d"><code>.mjs</code> is always ESM; <code>.cjs</code> is always CommonJS. Explicit, and it settles the question without reading anything else.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Then package.json type</span><span class="lz-d"><code>"type": "module"</code> makes every <code>.js</code> in that package ESM. Absent or <code>"commonjs"</code>, they are CJS.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The nearest package.json wins</span><span class="lz-d">Node walks up from the file. A subdirectory with its own <code>package.json</code> overrides the root, which is how one repo holds both.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And the two do not mix freely</span><span class="lz-d">ESM can <code>import</code> CJS; CJS cannot <code>require</code> ESM. That asymmetry is the source of most migration pain.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/packages.html#determining-module-system" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Node.js — Determining module system</span><span class="lc-sub">The exact resolution rules, including the dual-package cases.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/esm.html#interoperability-with-commonjs" target="_blank" rel="noopener">
+  <span class="lc-ico">🔀</span>
+  <span class="lc-body"><span class="lc-title">Node.js — ESM and CommonJS interop</span><span class="lc-sub">What can import what, and the named-export limitation that trips people up.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -652,6 +732,22 @@ ESM  : top-level await chạy được</div>
   <div class="kv"><span class="k">Có thể import CJS từ ESM</span><span class="v">Thường dưới dạng default import. Chiều ngược lại (<code>require</code> một gói ESM) mới là chiều gãy — đó là lý do vài gói ghi "ESM only".</span></div>
 </div>
 <div class="note-ct">Backend của website này đặt <code>"type": "module"</code> — thuần ESM, TypeScript biên dịch ra ESM. Đó chính là lý do các script bảo trì của nó viết bằng <code>import</code> và dùng được <code>await</code> ở cấp cao nhất mà không phải bọc mọi thứ vào một hàm main async.</div>
+<h3>Node quyết định một file là CJS hay ESM thế nào</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Phần mở rộng thắng trước tiên</span><span class="lz-d"><code>.mjs</code> luôn là ESM; <code>.cjs</code> luôn là CommonJS. Tường minh, và nó dập tắt câu hỏi mà chẳng cần đọc gì thêm.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Rồi tới trường type trong package.json</span><span class="lz-d"><code>"type": "module"</code> làm mọi file <code>.js</code> trong package đó thành ESM. Không có nó hoặc để <code>"commonjs"</code> thì chúng là CJS.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">package.json GẦN NHẤT thắng</span><span class="lz-d">Node đi ngược lên từ file đó. Một thư mục con có <code>package.json</code> riêng sẽ đè lên cái ở gốc, và đó là cách một kho chứa được cả hai.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và hai bên không trộn tự do được</span><span class="lz-d">ESM <code>import</code> được CJS; CJS thì KHÔNG <code>require</code> được ESM. Sự bất đối xứng đó là nguồn gốc của phần lớn nỗi đau khi chuyển đổi.</span></div>
+</div>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/packages.html#determining-module-system" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Node.js — Xác định hệ module</span><span class="lc-sub">Các luật giải chính xác, gồm cả những ca gói kép.</span></span>
+</a>
+<a class="link-card dl" href="https://nodejs.org/docs/latest/api/esm.html#interoperability-with-commonjs" target="_blank" rel="noopener">
+  <span class="lc-ico">🔀</span>
+  <span class="lc-body"><span class="lc-title">Node.js — ESM và CommonJS phối hợp</span><span class="lc-sub">Cái gì import được cái gì, và cái giới hạn về named export hay làm người ta vấp.</span></span>
+</a>
+
 </div>
 `,
     },

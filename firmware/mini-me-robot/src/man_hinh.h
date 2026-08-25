@@ -238,10 +238,16 @@ inline int batTatCa() {
   // Reset mềm TỪNG CON trước khi khởi tạo — thư viện không tự làm.
   // Reset mềm phòng hờ — thư viện nay đã có chân RST thật nên nó tự
   // phát xung phần cứng, nhưng gửi thêm 0x01 không hại gì.
+#if CO_MAN_NGUC
   resetMem(busNguc());
+#endif
   resetMem(busMatTrai());
   if (PIN_EYE_CS_R >= 0) resetMem(busMatPhai());
-  for (Arduino_GFX* g : {(Arduino_GFX*)nguc(), (Arduino_GFX*)matTrai(), (Arduino_GFX*)matPhai()}) {
+  for (Arduino_GFX* g : {
+#if CO_MAN_NGUC
+           (Arduino_GFX*)nguc(),
+#endif
+           (Arduino_GFX*)matTrai(), (Arduino_GFX*)matPhai()}) {
     if (!g) continue;
     if (g->begin(TOC_DO)) ok++;
     g->fillScreen(0);

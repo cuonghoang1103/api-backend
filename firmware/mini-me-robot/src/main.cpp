@@ -1182,13 +1182,16 @@ void setup() {
 
   // Bật cả ba màn trong một lần: ngực + hai mắt. Xoay đã đặt lúc dựng.
   const int soMan = man_hinh::batTatCa();
-  Serial.printf("[man] %d/3 man da gui xong chuoi khoi tao\n", soMan);
+  Serial.printf("[man] %d/%d man da gui xong chuoi khoi tao%s\n", soMan, CO_MAN_NGUC ? 3 : 2,
+                CO_MAN_NGUC ? "" : " (chua co man nguc)");
 
   // Khuôn mặt chiếm trọn màn, thay cho bảng chữ của chặng A. Bảng chữ
   // hữu ích lúc gỡ lỗi, nhưng một con robot nhìn vào mà thấy bảng
   // thông số thì nó là thiết bị đo, không phải bạn cùng bàn. Thông tin
   // trạng thái rút gọn còn hai chấm tròn ở góc.
-  face::begin(&tft);
+  // `nullptr` khi chưa cắm màn ngực: `face` tự im, và quan trọng hơn là
+  // `drawFace()` không còn bơm 480×320 vào chỗ trống mỗi lần mặt đổi.
+  face::begin(CO_MAN_NGUC ? &tft : nullptr);
 
   // Hai mắt. Vẽ theo dải có ngân sách thời gian nên chúng chạy được CẢ
   // KHI đang phát tiếng — khác hẳn màn ngực, vốn phải ngồi im lúc đó

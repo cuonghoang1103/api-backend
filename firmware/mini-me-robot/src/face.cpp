@@ -338,6 +338,10 @@ static void drawFace() {
 
 void begin(Arduino_GFX* t) {
   tft = t;
+  // `nullptr` = chưa cắm màn ngực (xem `CO_MAN_NGUC` trong config.h).
+  // Mọi hàm khác đã sẵn `if (!tft) return`, nên chỉ cần chặn ở đây là
+  // cả module tự im lặng — không cần rải `#if` khắp nơi.
+  if (!tft) return;
   // Xoá TOÀN màn đúng MỘT lần lúc khởi động. Sau đó chỉ xoá theo dải.
   // Không có dòng này thì rác lúc bật nguồn nằm lại vĩnh viễn ở những
   // chỗ khuôn mặt không đi qua — đúng dải sáng ở mép trên và mép trái

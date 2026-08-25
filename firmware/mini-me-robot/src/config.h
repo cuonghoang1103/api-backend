@@ -193,6 +193,30 @@
  * nhà mà tưởng còn đầy pin.
  */
 #define BAT_DIVIDER_FITTED  0
+
+/**
+ * ============================================================
+ * CÓ MÀN NGỰC HAY CHƯA
+ * ============================================================
+ *
+ * `0` = chưa cắm màn ngực. Robot chạy ĐỦ: hai mắt, loa, mic, WiFi, máy
+ * chủ, bánh xích. Chỉ thiếu bảng hành động ở ngực.
+ *
+ * ⚠️ VÌ SAO PHẢI CÓ CỜ NÀY, KHÔNG PHẢI CỨ RÚT DÂY RA LÀ XONG.
+ *
+ * `Arduino_GFX::begin()` gần như KHÔNG BAO GIỜ trả false — chân MISO để
+ * trống nên nó không đọc được ID chip, tức không có cách nào biết đầu
+ * kia có gì. Rút màn ra thì firmware vẫn tin là có màn, và `drawFace()`
+ * vẫn bơm trọn một khung 480×320 vào chỗ trống MỖI LẦN mặt đổi.
+ *
+ * Cái giá không phải là "phí điện". Xoá cả màn ở 20 MHz tốn ~90 ms SPI,
+ * mà đệm DMA của I2S chỉ giữ được 128 ms tiếng — nên mỗi lần chớp mắt
+ * là loa bị bỏ đói gần cạn đệm và TIẾNG VẤP. Robot không có màn ngực mà
+ * lại nói lắp, vì một con màn không tồn tại.
+ *
+ * Màn mới về: đổi thành `1`, cắm 7 sợi, nạp lại. Hết.
+ */
+#define CO_MAN_NGUC  0
 // GPIO38 và GPIO45 CÒN TRỐNG — servo đã chuyển hết sang PCA9685.
 
 // ─── Servo qua PCA9685 (I2C 0x40) ─────────────────────────

@@ -42,6 +42,24 @@ export default {
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb">Either way → <b>validate on the server</b>, and prefer one shared schema.</div></div>
 </div>
 
+<h3>Two ways to build a form, and when each wins</h3>
+<div class="lz-map">
+  <div class="lz-stage">The question is what has to happen while the user types</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Server Action + FormData</div><div class="lz-nsub">No client JavaScript needed, works before hydration, and the mutation lives next to the data. Best default for a create or edit form.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Client library + fetch/action</div><div class="lz-nsub">React Hook Form or similar. Needed when you want live validation, dependent fields, or a wizard with steps.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">You can combine them</div><div class="lz-nsub">A client form that validates as you type, submitting to a Server Action that validates again. Neither check replaces the other.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">The server check is not optional</div><div class="lz-nsub">Client validation is a courtesy to honest users. Anything arriving at the server is attacker-controlled, always.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a form that only works after the JavaScript loads.</strong> An &#96;onSubmit&#96; handler is inert until hydration finishes, so on a slow connection the user fills the form, presses submit, and nothing happens — no error, no spinner, just a dead button for a second or two. They press it again, and when hydration lands both clicks may fire. A &#96;&lt;form action={serverAction}&gt;&#96; has no such window: the browser can POST it natively, and React takes over once it is ready. When a form must work for everyone, that is the shape to reach for, and the client enhancements go on top.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#forms" target="_blank" rel="noopener">
+  <span class="lc-ico">📮</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Server Actions with forms</span><span class="lc-sub">The progressive-enhancement path, and what works before hydration.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/form" target="_blank" rel="noopener">
+  <span class="lc-ico">⚛️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — form</span><span class="lc-sub">The action prop and the hooks that report its pending state.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://react-hook-form.com/get-started" target="_blank" rel="noopener">
   <span class="lc-ico">📋</span>
@@ -68,6 +86,24 @@ export default {
   <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb">Form phức tạp, tương tác cao → <b>react-hook-form</b>, submit tới một action hoặc route handler.</div></div>
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb">Kiểu nào cũng → <b>validate trên server</b>, và ưu tiên một schema dùng chung.</div></div>
 </div>
+
+<h3>Hai cách dựng một form, và mỗi cách thắng khi nào</h3>
+<div class="lz-map">
+  <div class="lz-stage">Câu hỏi là cái gì phải xảy ra TRONG LÚC người dùng gõ</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Server Action + FormData</div><div class="lz-nsub">Không cần JavaScript phía client, chạy được trước khi hydrate, và phép ghi nằm ngay cạnh dữ liệu. Mặc định tốt nhất cho một form tạo hoặc sửa.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Thư viện client + fetch/action</div><div class="lz-nsub">React Hook Form hoặc tương tự. Cần khi bạn muốn kiểm dữ liệu trực tiếp, trường phụ thuộc nhau, hoặc một form nhiều bước.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Kết hợp cả hai được</div><div class="lz-nsub">Một form phía client kiểm ngay lúc gõ, gửi tới một Server Action rồi kiểm lại lần nữa. Chẳng phép kiểm nào thay thế phép kiểm kia.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Phép kiểm ở máy chủ là bắt buộc</div><div class="lz-nsub">Kiểm ở client là cử chỉ lịch sự với người dùng ngay thẳng. Mọi thứ tới máy chủ đều do kẻ tấn công điều khiển, luôn luôn.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một form chỉ chạy được sau khi JavaScript tải xong.</strong> Một handler &#96;onSubmit&#96; là bất động cho tới khi hydrate xong, nên trên đường truyền chậm người dùng điền form, bấm gửi, và chẳng có gì xảy ra — không lỗi, không vòng quay, chỉ là một cái nút chết trong một hai giây. Họ bấm lại, và khi hydrate xong thì cả hai cú bấm có thể cùng nổ. Một &#96;&lt;form action={serverAction}&gt;&#96; không có cái khe cửa đó: trình duyệt POST nó một cách bản địa được, và React tiếp quản khi nó sẵn sàng. Khi một form phải chạy được cho tất cả mọi người thì đó là hình dạng cần với tay tới, còn các cải tiến phía client thì đặt lên trên.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#forms" target="_blank" rel="noopener">
+  <span class="lc-ico">📮</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Server Action với form</span><span class="lc-sub">Con đường cải tiến tiệm tiến, và cái gì chạy được trước khi hydrate.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/form" target="_blank" rel="noopener">
+  <span class="lc-ico">⚛️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — form</span><span class="lc-sub">Prop action và các hook báo cáo trạng thái đang-gửi của nó.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://react-hook-form.com/get-started" target="_blank" rel="noopener">
@@ -120,6 +156,23 @@ function SignupForm() {
 <p><strong>Why it feels faster:</strong> because keystrokes do not flow through React state, a 20-field form does not re-render on every character. You get validation, error handling, and submit orchestration while typing stays cheap. For non-trivial forms this is the default choice.</p>
 </div>
 
+<h3>Why a form library exists</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Uncontrolled by default</b> — It registers inputs with refs, so typing does not re-render the form. On a twenty-field form that difference is visible.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Validation as a schema</b> — One resolver (&#96;zodResolver&#96;) turns a schema into field-level errors, so the rules live in one place.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>It tracks the states you would hand-roll</b> — Dirty, touched, submitting, submitted, per-field errors. Each is a boolean you would otherwise maintain yourself.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>It still needs the server</b> — The library validates the shape in the browser. The same schema must run again in the action.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an input rendered without &#96;register&#96;, silently absent from the submitted values.</strong> &#96;&lt;input name="title" /&gt;&#96; inside a React Hook Form looks registered because it has a name, and the library never sees it: registration happens through &#96;{...register(&#39;title&#39;)}&#96;, not through the attribute. So &#96;handleSubmit&#96; hands you an object with no title, validation reports it as missing, and the field on screen visibly contains text. It happens most often after refactoring a field into a child component, where the spread gets dropped. When a value is missing, check the spread before the schema — and for a component input, use &#96;Controller&#96; rather than passing &#96;register&#96; down.</p></div>
+<a class="link-card dl" href="https://react-hook-form.com/get-started" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">React Hook Form — Get started</span><span class="lc-sub">register, handleSubmit, and the uncontrolled model it is built on.</span></span>
+</a>
+<a class="link-card dl" href="https://react-hook-form.com/docs/usecontroller/controller" target="_blank" rel="noopener">
+  <span class="lc-ico">🎛️</span>
+  <span class="lc-body"><span class="lc-title">React Hook Form — Controller</span><span class="lc-sub">Wrapping a controlled component (a date picker, a select) so it registers correctly.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://react-hook-form.com/docs/useform" target="_blank" rel="noopener">
   <span class="lc-ico">🪝</span>
@@ -160,6 +213,23 @@ function SignupForm() {
 <div class="callout ok">
 <p><strong>Vì sao cảm giác nhanh hơn:</strong> vì phím gõ không chảy qua React state, một form 20 trường không render lại ở mỗi ký tự. Bạn được validation, xử lý lỗi, và điều phối submit trong khi gõ vẫn rẻ. Cho form không tầm thường, đây là lựa chọn mặc định.</p>
 </div>
+
+<h3>Vì sao có thư viện form</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Mặc định là không kiểm soát</b> — Nó đăng ký các ô nhập bằng ref, nên việc gõ chữ không render lại cả form. Với một form hai mươi trường thì khác biệt đó nhìn thấy được.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Kiểm dữ liệu dưới dạng schema</b> — Một resolver (&#96;zodResolver&#96;) biến một schema thành lỗi ở mức từng trường, nên các luật sống ở một chỗ.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nó theo dõi những trạng thái mà bạn sẽ phải tự viết</b> — Đã sửa, đã chạm, đang gửi, đã gửi, lỗi theo từng trường. Mỗi cái là một boolean mà nếu không có nó bạn phải tự duy trì.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nó vẫn cần máy chủ</b> — Thư viện kiểm cái dáng trong trình duyệt. Chính cái schema đó phải chạy lại trong action.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một ô nhập vẽ ra mà không có &#96;register&#96;, vắng mặt lặng lẽ khỏi các giá trị được gửi.</strong> &#96;&lt;input name="title" /&gt;&#96; bên trong một React Hook Form trông như đã đăng ký vì nó có thuộc tính name, mà thư viện thì chẳng thấy nó: việc đăng ký diễn ra qua &#96;{...register(&#39;title&#39;)}&#96;, không qua thuộc tính. Nên &#96;handleSubmit&#96; đưa cho bạn một object không có title, phần kiểm dữ liệu báo là thiếu, còn cái trường trên màn hình thì rành rành có chữ. Nó hay xảy ra nhất sau khi tách một trường ra thành component con và làm rơi mất phép trải. Khi một giá trị bị thiếu, hãy kiểm phép trải trước khi kiểm schema — và với một ô nhập dạng component thì hãy dùng &#96;Controller&#96; chứ đừng truyền &#96;register&#96; xuống.</p></div>
+<a class="link-card dl" href="https://react-hook-form.com/get-started" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">React Hook Form — Bắt đầu</span><span class="lc-sub">register, handleSubmit, và mô hình không-kiểm-soát mà nó dựng trên đó.</span></span>
+</a>
+<a class="link-card dl" href="https://react-hook-form.com/docs/usecontroller/controller" target="_blank" rel="noopener">
+  <span class="lc-ico">🎛️</span>
+  <span class="lc-body"><span class="lc-title">React Hook Form — Controller</span><span class="lc-sub">Bọc một component có kiểm soát (bộ chọn ngày, một select) để nó đăng ký đúng cách.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://react-hook-form.com/docs/useform" target="_blank" rel="noopener">
@@ -217,6 +287,23 @@ const { register, handleSubmit, formState: { errors } } =
   <div class="kv"><span class="k">Server is authoritative</span><span class="v">Client validation is UX; <code>safeParse</code> on the server is what actually rejects bad or malicious input.</span></div>
 </div>
 
+<h3>One schema, both sides</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Declare the shape once</b> — &#96;const CreateNote = z.object({ title: z.string().min(1), tags: z.array(z.string()) })&#96;. It is a runtime value, so it survives compilation.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Derive the type from it</b> — &#96;type CreateNote = z.infer&lt;typeof CreateNote&gt;&#96;. The check and the type cannot drift apart, because one produces the other.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Parse at the boundary</b> — In the Server Action, on the FormData. Not &#96;as CreateNote&#96; — that is a claim, and the bytes came from outside.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>safeParse, then narrow</b> — &#96;{ success: true, data }&#96; or &#96;{ success: false, error }&#96;. Return the field errors to the form rather than throwing.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a schema that describes what you type, not what the browser sends.</strong> &#96;z.object({ count: z.number() })&#96; fails on every submission, because &#96;FormData&#96; values are always strings: &quot;3&quot; is not a number, and the error says &quot;Expected number, received string&quot; on a field that visibly contains 3. The same applies to a checkbox (&#96;&#39;on&#39;&#96; or absent, never a boolean) and a date. Use &#96;z.coerce.number()&#96; and friends for form input, and remember that &#96;z.infer&#96; then gives you the <em>output</em> type — the input type is different, which matters the moment you use that type for a function parameter.</p></div>
+<a class="link-card dl" href="https://zod.dev/" target="_blank" rel="noopener">
+  <span class="lc-ico">🧾</span>
+  <span class="lc-body"><span class="lc-title">Zod — documentation</span><span class="lc-sub">Every type, coercion, refinement and the input/output distinction.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/react-hook-form/resolvers" target="_blank" rel="noopener">
+  <span class="lc-ico">🔌</span>
+  <span class="lc-body"><span class="lc-title">@hookform/resolvers</span><span class="lc-sub">Wiring the same schema into React Hook Form, so one declaration drives both sides.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://zod.dev" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
@@ -262,6 +349,23 @@ const { register, handleSubmit, formState: { errors } } =
   <div class="kv"><span class="k">Kiểu miễn phí</span><span class="v"><code>z.infer</code> suy ra kiểu TypeScript từ schema — không có bản chép tay có thể lệch nhịp.</span></div>
   <div class="kv"><span class="k">Server có thẩm quyền</span><span class="v">Validation client là UX; <code>safeParse</code> trên server mới thật sự từ chối input xấu hoặc độc hại.</span></div>
 </div>
+
+<h3>Một schema, dùng cho cả hai phía</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Khai cái dáng một lần</b> — &#96;const CreateNote = z.object({ title: z.string().min(1), tags: z.array(z.string()) })&#96;. Nó là một giá trị lúc chạy, nên nó sống sót qua biên dịch.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Dẫn xuất kiểu từ nó</b> — &#96;type CreateNote = z.infer&lt;typeof CreateNote&gt;&#96;. Phép kiểm và cái kiểu không thể trôi dạt khỏi nhau, vì cái này sinh ra cái kia.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Phân tích ở biên</b> — Trong Server Action, trên FormData. Đừng dùng &#96;as CreateNote&#96; — đó là một khẳng định, còn các byte thì đến từ bên ngoài.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>safeParse, rồi thu hẹp</b> — &#96;{ success: true, data }&#96; hoặc &#96;{ success: false, error }&#96;. Hãy trả lỗi theo từng trường về cho form thay vì ném lỗi.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một schema mô tả thứ bạn gõ, chứ không mô tả thứ trình duyệt gửi.</strong> &#96;z.object({ count: z.number() })&#96; hỏng ở mọi lần gửi, vì giá trị trong &#96;FormData&#96; luôn là chuỗi: &quot;3&quot; không phải một con số, và lỗi ghi &quot;Expected number, received string&quot; trên một trường rành rành chứa số 3. Chuyện tương tự với một ô tích (&#96;&#39;on&#39;&#96; hoặc vắng mặt, không bao giờ là boolean) và với một ngày. Hãy dùng &#96;z.coerce.number()&#96; và các anh em của nó cho đầu vào từ form, và nhớ rằng khi đó &#96;z.infer&#96; cho bạn kiểu <em>đầu ra</em> — kiểu đầu vào thì khác, và điều đó có ý nghĩa ngay khi bạn dùng cái kiểu ấy cho một tham số hàm.</p></div>
+<a class="link-card dl" href="https://zod.dev/" target="_blank" rel="noopener">
+  <span class="lc-ico">🧾</span>
+  <span class="lc-body"><span class="lc-title">Zod — tài liệu</span><span class="lc-sub">Mọi kiểu, phép ép kiểu, phép tinh chỉnh và sự phân biệt đầu vào/đầu ra.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/react-hook-form/resolvers" target="_blank" rel="noopener">
+  <span class="lc-ico">🔌</span>
+  <span class="lc-body"><span class="lc-title">@hookform/resolvers</span><span class="lc-sub">Đấu chính schema đó vào React Hook Form, để một khai báo lo cả hai phía.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://zod.dev" target="_blank" rel="noopener">
@@ -314,6 +418,23 @@ async function uploadAvatar(formData) {
 <p><strong>The blob:/data: preview trap — a real cuongthai.com bug.</strong> When you show an <em>optimistic preview</em> of a just-picked file, the browser gives you a local <code>blob:</code> or <code>data:</code> URL — already renderable as-is. A helper that blindly prepends the CDN base to <em>every</em> image value turned those into <code>https://cdn.../blob:...</code> and broke the preview (a 400). The fix: object/data URLs are already complete — return them untouched; only prepend the CDN base to bare storage keys. When building a media-URL helper, branch on whether the value is already a full/blob/data URL before adding any prefix.</p>
 </div>
 
+<h3>Where an uploaded file should go</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Not into your database</b> — A blob column makes every backup huge and every query slower. Store the file elsewhere and keep a URL.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Not onto the app server&#39;s disk</b> — A container is replaced on every deploy, and a second instance cannot see the first one&#39;s files.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Into object storage</b> — S3, R2, or similar. Durable, cheap, served by a CDN, and independent of your app&#39;s lifecycle.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Directly, with a presigned URL</b> — The browser uploads straight to storage; your server only signs the request. The file never passes through your process.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — routing every upload through the Next.js server.</strong> Accepting the file in a Server Action and forwarding it to storage works on a 200KB avatar and falls over on a 40MB video: the request body has to be buffered, serverless platforms cap it (4.5MB on Vercel), and on a VPS it is memory you did not budget for — several concurrent uploads and the process is killed. The failure is a 413 or a container restart, neither of which mentions upload size. Presigned URLs move the bytes browser-to-storage and leave your server signing a short string, which scales the same whether the file is 1MB or 1GB.</p></div>
+<a class="link-card dl" href="https://developers.cloudflare.com/r2/api/s3/presigned-urls/" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cloudflare R2 — Presigned URLs</span><span class="lc-sub">Generating an upload URL server-side, with the expiry and scope options.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/route-handlers#request-body-formdata" target="_blank" rel="noopener">
+  <span class="lc-ico">📤</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Handling FormData uploads</span><span class="lc-sub">When routing through the server is the right choice, and its limits.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/FormData" target="_blank" rel="noopener">
   <span class="lc-ico">📤</span>
@@ -354,6 +475,23 @@ async function uploadAvatar(formData) {
 <div class="pitfall">
 <p><strong>Bẫy preview blob:/data: — một bug thật của cuongthai.com.</strong> Khi bạn hiện một <em>preview lạc quan</em> của file vừa chọn, trình duyệt cho bạn một URL cục bộ <code>blob:</code> hoặc <code>data:</code> — đã render được nguyên trạng. Một helper vô tư ghép CDN base vào <em>mọi</em> giá trị ảnh đã biến chúng thành <code>https://cdn.../blob:...</code> và làm hỏng preview (một lỗi 400). Cách sửa: URL object/data đã hoàn chỉnh — trả nguyên trạng; chỉ ghép CDN base vào các khoá storage trần. Khi dựng một helper media-URL, hãy rẽ nhánh xem giá trị đã là URL đầy đủ/blob/data chưa trước khi thêm bất kỳ tiền tố nào.</p>
 </div>
+
+<h3>Một file tải lên nên đi đâu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Đừng vào cơ sở dữ liệu</b> — Một cột blob làm mọi bản sao lưu phình to và mọi truy vấn chậm đi. Hãy lưu file ở nơi khác và giữ lại một URL.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Đừng vào đĩa của máy chủ ứng dụng</b> — Một container bị thay ở mỗi lần deploy, và một thực thể thứ hai không nhìn thấy file của thực thể thứ nhất.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Vào kho lưu trữ đối tượng</b> — S3, R2, hoặc tương tự. Bền, rẻ, phục vụ qua CDN, và độc lập với vòng đời ứng dụng của bạn.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Đi thẳng, bằng một URL đã ký sẵn</b> — Trình duyệt tải thẳng lên kho; máy chủ của bạn chỉ ký cái request. File chẳng bao giờ đi qua tiến trình của bạn.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — cho mọi file tải lên đi vòng qua máy chủ Next.js.</strong> Nhận file trong một Server Action rồi chuyển tiếp lên kho thì chạy được với một ảnh đại diện 200KB và gục ngã với một video 40MB: thân request phải được đệm vào bộ nhớ, các nền tảng serverless chặn kích thước (4,5MB trên Vercel), và trên một VPS thì đó là bộ nhớ bạn không hề dự trù — vài lượt tải lên song song là tiến trình bị giết. Cú hỏng là một mã 413 hoặc một lần container khởi động lại, chẳng cái nào nhắc tới kích thước file. URL ký sẵn dời các byte đi thẳng từ trình duyệt tới kho và để máy chủ của bạn chỉ ký một chuỗi ngắn, thứ mở rộng như nhau dù file là 1MB hay 1GB.</p></div>
+<a class="link-card dl" href="https://developers.cloudflare.com/r2/api/s3/presigned-urls/" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cloudflare R2 — URL ký sẵn</span><span class="lc-sub">Sinh một URL tải lên ở phía máy chủ, kèm tuỳ chọn hạn dùng và phạm vi.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/route-handlers#request-body-formdata" target="_blank" rel="noopener">
+  <span class="lc-ico">📤</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Xử lý tải lên bằng FormData</span><span class="lc-sub">Khi nào đi vòng qua máy chủ mới là lựa chọn đúng, và giới hạn của nó.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/FormData" target="_blank" rel="noopener">
@@ -404,6 +542,23 @@ async function uploadAvatar(formData) {
 }</code></pre>
 <p>Note the server chooses the storage key — never trust a client-supplied path, or a user could write outside their own folder. Type and size are enforced here, not in the form.</p>
 
+<h3>Checks an upload endpoint needs</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Who is uploading</b> — Authenticate before signing anything. A presigned URL handed to an anonymous caller is free storage for the internet.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>How big, enforced by the signature</b> — Put the content-length limit in the presigned policy, not only in the client. The client is not a control.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>What type, checked by content</b> — Sniff the magic bytes rather than trusting the extension or the declared MIME type. Both are attacker-supplied.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Where it lands</b> — Generate the key server-side, namespaced by user. Never let the client choose the path.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — trusting the filename the browser sends.</strong> Using it as the storage key lets a caller send &#96;../../config/app.json&#96; and write outside the intended prefix, or send a name that collides with another user&#39;s file and overwrite it. Even without traversal, an attacker-chosen name is an attacker-chosen URL — useful for phishing on your domain, and awkward to clean up. Generate the key yourself: a uuid, prefixed by the user id, with an extension derived from the sniffed content type. Keep the original name in the database as a display label, where it is text and nothing more.</p></div>
+<a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🛡️</span>
+  <span class="lc-body"><span class="lc-title">OWASP — File Upload Cheat Sheet</span><span class="lc-sub">Every check an upload needs, and the attack each one blocks.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/sindresorhus/file-type" target="_blank" rel="noopener">
+  <span class="lc-ico">🔬</span>
+  <span class="lc-body"><span class="lc-title">file-type</span><span class="lc-sub">Detecting the real type from the file's magic bytes, rather than its name.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html" target="_blank" rel="noopener">
   <span class="lc-ico">🛡️</span>
@@ -442,6 +597,23 @@ async function uploadAvatar(formData) {
   await db.user.update({ where: { id: user.id }, data: { avatarKey: key } });
 }</code></pre>
 <p>Để ý server chọn khoá storage — đừng bao giờ tin một đường do client cấp, kẻo một người dùng ghi được ra ngoài thư mục của họ. Loại và kích thước được ép ở đây, không phải trong form.</p>
+
+<h3>Những phép kiểm mà một endpoint tải lên cần</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Ai đang tải lên</b> — Hãy xác thực trước khi ký bất cứ thứ gì. Một URL ký sẵn trao cho một người gọi vô danh là kho lưu trữ miễn phí cho cả internet.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>To bao nhiêu, cưỡng chế bằng chữ ký</b> — Hãy đặt giới hạn content-length vào chính chính sách ký sẵn, đừng chỉ đặt ở client. Client không phải một phép kiểm soát.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Loại gì, kiểm bằng nội dung</b> — Hãy ngửi các byte đặc trưng thay vì tin phần mở rộng hay kiểu MIME được khai. Cả hai đều do kẻ tấn công cung cấp.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nó rơi xuống đâu</b> — Sinh cái khoá ở phía máy chủ, phân vùng theo người dùng. Đừng bao giờ để client chọn đường dẫn.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tin cái tên file mà trình duyệt gửi lên.</strong> Dùng nó làm khoá lưu trữ là cho phép một người gọi gửi &#96;../../config/app.json&#96; và ghi ra ngoài tiền tố dự định, hoặc gửi một cái tên trùng với file của người khác rồi ghi đè lên. Kể cả không có phép đi ngược thư mục thì một cái tên do kẻ tấn công chọn cũng là một URL do kẻ tấn công chọn — tiện cho việc lừa đảo trên chính tên miền của bạn, và khó dọn dẹp. Hãy tự sinh cái khoá: một uuid, gắn tiền tố là id người dùng, với phần mở rộng suy ra từ kiểu nội dung đã ngửi được. Giữ tên gốc trong cơ sở dữ liệu làm nhãn hiển thị, nơi nó chỉ là chữ và không hơn.</p></div>
+<a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🛡️</span>
+  <span class="lc-body"><span class="lc-title">OWASP — Bản tra cứu tải file lên</span><span class="lc-sub">Mọi phép kiểm mà một lần tải lên cần, và cuộc tấn công mà từng cái chặn.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/sindresorhus/file-type" target="_blank" rel="noopener">
+  <span class="lc-ico">🔬</span>
+  <span class="lc-body"><span class="lc-title">file-type</span><span class="lc-sub">Nhận diện kiểu thật từ các byte đặc trưng của file, thay vì từ cái tên.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html" target="_blank" rel="noopener">

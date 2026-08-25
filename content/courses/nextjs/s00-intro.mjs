@@ -92,6 +92,7 @@ export default {
 <p><strong>By the end</strong> you will not just "know React". You will be able to open the source of cuongthai.com — a real Next.js App Router codebase — read any page, and know why it renders the way it does. That is the bar.</p>
 </div>
 
+<div class="pitfall"><p><strong>Trap — starting with Next.js before React, because the tutorial you found did.</strong> Next.js is a framework <em>around</em> React, so almost every error you hit in the first week is a React error wearing a Next.js hat: a stale closure, a missing key, an effect that re-runs, state copied from a prop. Without the React model underneath, those read as framework quirks and you learn workarounds instead of causes. That is why this course spends its first seven chapters on React with no framework involved. If you already know React, skim them and check you can answer the traps; if you do not, they are the part that makes the rest cheap.</p></div>
 <h3>📚 Learn deeper</h3>
 <p>The 100-second video above is the fastest possible overview. To go further, these are the primary sources — bookmark them, this course sends you back to them often:</p>
 <a class="link-card dl" href="https://react.dev/learn" target="_blank" rel="noopener">
@@ -181,6 +182,7 @@ export default {
 <p><strong>Học xong</strong> bạn sẽ không chỉ "biết React". Bạn sẽ mở được mã nguồn cuongthai.com — một codebase Next.js App Router thật — đọc bất kỳ trang nào, và biết vì sao nó render theo cách nó render. Đó là cái chuẩn.</p>
 </div>
 
+<div class="pitfall"><p><strong>Bẫy — bắt đầu với Next.js trước khi biết React, vì bài hướng dẫn bạn tìm được làm thế.</strong> Next.js là một framework bọc <em>quanh</em> React, nên gần như mọi lỗi bạn gặp trong tuần đầu đều là lỗi React đội mũ Next.js: một closure cũ, một key bị thiếu, một effect chạy lại, state chép từ một prop. Thiếu mô hình React ở bên dưới thì chúng đọc lên như những nét kỳ quặc của framework, và bạn học được các mẹo lách thay vì học nguyên nhân. Đó là lý do khoá này dành bảy chương đầu cho React mà chẳng dính framework nào. Nếu bạn đã biết React thì hãy lướt qua và kiểm xem mình trả lời được các cái bẫy không; nếu chưa thì đó chính là phần làm cho mọi thứ còn lại trở nên rẻ.</p></div>
 <h3>📚 Học sâu thêm</h3>
 <p>Video 100 giây phía trên là bản tổng quan nhanh nhất có thể. Muốn đi xa hơn, đây là các nguồn gốc — hãy lưu lại, khoá này sẽ gửi bạn quay về chúng thường xuyên:</p>
 <a class="link-card dl" href="https://react.dev/learn" target="_blank" rel="noopener">
@@ -251,6 +253,7 @@ export default {
 <p><strong>How cuongthai.com is built</strong> — this site is a Next.js App Router app in the <code>frontend/</code> folder, talking to a separate Node.js + Express API in the project root. The frontend renders pages (some on the server, some in the browser); the backend owns the database, auth and file storage. Chapters 8–20 are essentially a guided tour of how the <code>frontend/</code> folder actually works.</p>
 </div>
 
+<div class="pitfall"><p><strong>Trap — following an App Router tutorial that is actually written for the Pages Router.</strong> The two live in the same framework and share most of their vocabulary, so the difference is easy to miss: &#96;getServerSideProps&#96;, &#96;_app.tsx&#96;, &#96;next/router&#96; and an &#96;api/&#96; folder all belong to the older Pages Router, and none of them do anything in &#96;app/&#96;. The code does not error helpfully — a &#96;getServerSideProps&#96; export in an App Router page is simply ignored, so the page renders with no data and nothing says why. Check the date and the imports before trusting an example: anything using &#96;next/router&#96; rather than &#96;next/navigation&#96; predates the split.</p></div>
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://github.com/facebook/react/releases" target="_blank" rel="noopener">
   <span class="lc-ico">🐙</span>
@@ -303,6 +306,7 @@ export default {
 <p><strong>cuongthai.com được dựng thế nào</strong> — site này là một app Next.js App Router trong thư mục <code>frontend/</code>, nói chuyện với một API Node.js + Express riêng ở gốc dự án. Frontend render các trang (một số trên server, một số trong trình duyệt); backend nắm database, xác thực và lưu trữ file. Chương 8–20 về cơ bản là một chuyến tham quan có hướng dẫn xem thư mục <code>frontend/</code> thật sự hoạt động ra sao.</p>
 </div>
 
+<div class="pitfall"><p><strong>Bẫy — làm theo một bài hướng dẫn App Router mà thật ra viết cho Pages Router.</strong> Hai cái sống trong cùng một framework và dùng chung phần lớn từ vựng, nên khác biệt rất dễ bị bỏ sót: &#96;getServerSideProps&#96;, &#96;_app.tsx&#96;, &#96;next/router&#96; và một thư mục &#96;api/&#96; đều thuộc về Pages Router cũ, và chẳng cái nào làm gì trong &#96;app/&#96;. Mã không báo lỗi một cách hữu ích — một export &#96;getServerSideProps&#96; trong một trang App Router đơn giản là bị lờ đi, nên trang vẽ ra không có dữ liệu mà chẳng gì nói vì sao. Hãy kiểm ngày đăng và các dòng import trước khi tin một ví dụ: thứ gì dùng &#96;next/router&#96; thay vì &#96;next/navigation&#96; là có trước lần tách đó.</p></div>
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://github.com/facebook/react/releases" target="_blank" rel="noopener">
   <span class="lc-ico">🐙</span>
@@ -373,6 +377,14 @@ npm run dev
   tsconfig.json</code></pre>
 <p>The rule you will use a hundred times: <strong>a folder under <code>app/</code> is a URL segment, and a <code>page.tsx</code> inside it is the page shown at that URL.</strong> We unpack this fully in Chapter 8.</p>
 
+<h3>Checking the toolchain before writing any code</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Node version first</b> — Next.js has a minimum, and being below it produces syntax errors in library code that look like your mistake. &#96;node --version&#96; before anything else.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Create the app, then read what it made</b> — &#96;npx create-next-app@latest&#96;. Open &#96;app/layout.tsx&#96; and &#96;app/page.tsx&#96; — those two files are the whole starting point.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Run the dev server and change one word</b> — If the browser updates without a reload, hot reloading works and the toolchain is sound.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Then run a production build once</b> — &#96;next build&#96;. It type-checks the whole project and prints the route table, so you know both work before you have any code to debug.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a project created inside a folder whose path contains a space or a non-ASCII character.</strong> &#96;/Users/an/Tài liệu/my app/&#96; works for a while and then produces failures with no obvious connection to the path: a build tool that cannot resolve a module, a Docker mount that silently misses files, a script that runs in the wrong directory. Each error names something else, so the real cause is nearly impossible to guess. Keep project paths plain ASCII with no spaces — this is a five-second decision at creation time that removes a category of unexplainable problems later.</p></div>
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nodejs.org/en/download" target="_blank" rel="noopener">
   <span class="lc-ico">⬇️</span>
@@ -435,6 +447,14 @@ npm run dev
   tsconfig.json</code></pre>
 <p>Quy tắc bạn sẽ dùng cả trăm lần: <strong>một thư mục dưới <code>app/</code> là một đoạn URL, và một <code>page.tsx</code> bên trong nó là trang hiện ở URL đó.</strong> Chương 8 sẽ mổ xẻ trọn vẹn điều này.</p>
 
+<h3>Kiểm bộ công cụ trước khi viết dòng mã nào</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Phiên bản Node trước tiên</b> — Next.js có một mức tối thiểu, và ở dưới mức đó sẽ sinh ra lỗi cú pháp trong mã của thư viện, trông y như bạn làm sai. Hãy &#96;node --version&#96; trước mọi thứ.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Tạo ứng dụng, rồi đọc thứ nó vừa tạo</b> — &#96;npx create-next-app@latest&#96;. Hãy mở &#96;app/layout.tsx&#96; và &#96;app/page.tsx&#96; — hai file đó chính là toàn bộ điểm khởi đầu.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Chạy dev server rồi đổi một chữ</b> — Nếu trình duyệt cập nhật mà không cần tải lại thì nạp nóng chạy tốt và bộ công cụ lành lặn.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Rồi chạy một bản build production một lần</b> — &#96;next build&#96;. Nó kiểm kiểu cả dự án và in ra bảng route, nên bạn biết cả hai đều chạy được từ khi chưa có mã nào để gỡ lỗi.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một dự án tạo trong một thư mục có đường dẫn chứa dấu cách hoặc ký tự ngoài ASCII.</strong> &#96;/Users/an/Tài liệu/my app/&#96; chạy được một thời gian rồi sinh ra những cú hỏng chẳng có liên hệ rõ ràng nào với đường dẫn: một công cụ build không giải nổi một module, một mount Docker lặng lẽ bỏ sót file, một script chạy nhầm thư mục. Mỗi lỗi lại gọi tên một thứ khác, nên nguyên nhân thật gần như không đoán nổi. Hãy giữ đường dẫn dự án thuần ASCII và không có dấu cách — đây là một quyết định năm giây lúc tạo dự án, và nó gỡ bỏ cả một họ vấn đề không giải thích nổi về sau.</p></div>
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nodejs.org/en/download" target="_blank" rel="noopener">
   <span class="lc-ico">⬇️</span>

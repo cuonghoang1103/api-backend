@@ -46,6 +46,23 @@ export default {
 <p><strong>The most important idea in this chapter:</strong> production runs the <em>build</em>, not your source files. A lot of confusing production bugs come from this gap — something is true in your source but was decided at build time and frozen (the next lesson's env vars, the static pages from Chapter 17). "It works in dev but not in production" almost always means: dev re-reads your source live; production is serving a build that was made at a specific moment. Keep that distinction in mind and half of deploy mysteries dissolve.</p>
 </div>
 
+<h3>The three commands, and what each one is for</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>next dev</b> — Compiles on demand, hot-reloads, ships unminified code with development React. Never run this in production.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>next build</b> — Type-checks, lints, bundles, and pre-renders every static route. It prints the route table — the only authoritative answer about what is static.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>next start</b> — Serves what &#96;build&#96; produced. It does not compile anything, so it fails immediately if the build output is missing or stale.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>So the pair is the deploy</b> — Build, then start. A deploy that only restarts the process is running the previous build.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a deploy that restarts the container without rebuilding.</strong> The process comes back up, the health check passes, and it is serving the previous build — so your fix is not there, and the route you just added returns 404. It looks like the code did not push. This repo&#39;s own history has exactly this: a &#96;--no-build&#96; deploy left production running a stale &#96;dist/&#96; that never mounted a new route, and the symptom was diagnosed as a data problem for hours. The reliable check is an unauthenticated &#96;curl&#96; against a route only the new build has: 404 means stale build, 401 or 200 means it is live.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/next-cli" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — CLI reference</span><span class="lc-sub">Every command and flag, including what build actually does.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying" target="_blank" rel="noopener">
+  <span class="lc-ico">🚢</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Deploying</span><span class="lc-sub">The supported deployment shapes, and the build output each one needs.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying" target="_blank" rel="noopener">
   <span class="lc-ico">🚀</span>
@@ -75,6 +92,23 @@ export default {
 <div class="callout warn">
 <p><strong>Ý quan trọng nhất chương này:</strong> production chạy <em>bản build</em>, không phải file nguồn của bạn. Rất nhiều bug production khó hiểu tới từ khoảng cách này — một thứ đúng trong nguồn nhưng đã bị quyết lúc build và đóng băng (biến env của bài sau, trang tĩnh từ Chương 17). "Chạy ở dev mà không chạy ở production" gần như luôn nghĩa là: dev đọc lại nguồn của bạn trực tiếp; production đang phục vụ một bản build được tạo ở một thời điểm cụ thể. Giữ phân biệt đó trong đầu và một nửa bí ẩn deploy tan biến.</p>
 </div>
+
+<h3>Ba lệnh, và mỗi lệnh dùng để làm gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>next dev</b> — Biên dịch theo yêu cầu, nạp nóng, ship mã chưa nén với React bản phát triển. Đừng bao giờ chạy cái này trên production.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>next build</b> — Kiểm kiểu, lint, đóng gói, và dựng sẵn mọi route tĩnh. Nó in ra bảng route — câu trả lời có thẩm quyền duy nhất về việc cái gì là tĩnh.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>next start</b> — Phục vụ thứ mà &#96;build&#96; đã tạo ra. Nó không biên dịch gì cả, nên nó hỏng ngay nếu đầu ra của build bị thiếu hoặc đã cũ.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nên cặp đôi đó chính là lần deploy</b> — Build, rồi start. Một lần deploy chỉ khởi động lại tiến trình là đang chạy bản build trước đó.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một lần deploy khởi động lại container mà không dựng lại.</strong> Tiến trình sống lại, phép kiểm sức khoẻ qua, và nó đang phục vụ bản build trước đó — nên bản sửa của bạn không có ở đó, và cái route bạn vừa thêm trả về 404. Nó trông như mã chưa được push. Lịch sử của chính kho này có đúng chuyện đó: một lần deploy &#96;--no-build&#96; để production chạy một thư mục &#96;dist/&#96; cũ chưa từng gắn route mới, và triệu chứng bị chẩn đoán nhầm thành vấn đề dữ liệu suốt mấy tiếng. Phép kiểm đáng tin là một lệnh &#96;curl&#96; không xác thực vào một route chỉ bản build mới có: 404 nghĩa là build cũ, 401 hay 200 nghĩa là nó đang sống.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/next-cli" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Tra cứu CLI</span><span class="lc-sub">Mọi lệnh và cờ, gồm cả việc build thật sự làm gì.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying" target="_blank" rel="noopener">
+  <span class="lc-ico">🚢</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Triển khai</span><span class="lc-sub">Các hình thức triển khai được hỗ trợ, và mỗi cái cần đầu ra build nào.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying" target="_blank" rel="noopener">
@@ -117,6 +151,23 @@ export default {
 <p><strong>Where env values live in production matters too.</strong> On a self-hosted setup, production env vars live on the server (for cuongthai.com, in a file the deploy script loads every deploy). If you add a var while a deploy is already running, that deploy loaded env <em>before</em> your change — you must recreate the container or redeploy for it to take effect. Again: the running process captured a snapshot; changing the source of the snapshot later does not update what is already running.</p>
 </div>
 
+<h3>Environment variables, and which ones reach the browser</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Server-only by default</b> — &#96;process.env.DATABASE_URL&#96; in a Server Component or an action never leaves the server. This is the safe default.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>NEXT_PUBLIC_ ships to the client</b> — The prefix is the opt-in. The value is substituted into the JavaScript bundle, where any visitor can read it.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Public variables are baked at build time</b> — Not read at startup. Changing one requires a rebuild, not a restart — a restart appears to do nothing.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Add it in three places</b> — Local &#96;.env&#96;, &#96;.env.example&#96;, and the deployment environment. Missing the third is the most common deploy failure there is.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a third-party API key with the &#96;NEXT_PUBLIC_&#96; prefix.</strong> It fixes the &quot;undefined&quot; error instantly, and it publishes the key: the value is substituted into a JavaScript file that every visitor downloads, and bots scrape those files continuously. This exact failure is in this repo&#39;s history — a GIPHY key shipped in the client bundle, which then fell back to a revoked public key and started returning 403. The fix recorded there is the general one: put the key in a server-side environment variable and add a small authenticated proxy route, so the key stays on the server and rotating it is a restart rather than a rebuild.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/configuring/environment-variables" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Environment variables</span><span class="lc-sub">Load order, the NEXT_PUBLIC rule, and build-time substitution.</span></span>
+</a>
+<a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">OWASP — Secrets management</span><span class="lc-sub">Where secrets belong, and what to do the moment one leaks.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/configuring/environment-variables" target="_blank" rel="noopener">
   <span class="lc-ico">🔑</span>
@@ -147,6 +198,23 @@ export default {
 <div class="callout warn">
 <p><strong>Nơi giá trị env sống ở production cũng quan trọng.</strong> Trên một bố trí tự-host, biến env production sống trên server (với cuongthai.com, trong một file mà script deploy nạp mỗi lần deploy). Nếu bạn thêm một biến trong khi một deploy đang chạy, deploy đó đã nạp env <em>trước</em> thay đổi của bạn — bạn phải tạo lại container hoặc deploy lại để nó có hiệu lực. Lại là: tiến trình đang chạy đã chụp một ảnh; đổi nguồn của ảnh sau đó không cập nhật cái đang chạy.</p>
 </div>
+
+<h3>Biến môi trường, và cái nào tới được trình duyệt</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Mặc định là chỉ-máy-chủ</b> — &#96;process.env.DATABASE_URL&#96; trong một Server Component hay một action chẳng bao giờ rời khỏi máy chủ. Đây là mặc định an toàn.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>NEXT_PUBLIC_ thì đi tới client</b> — Cái tiền tố chính là phép đồng ý. Giá trị được thay thẳng vào gói JavaScript, nơi mọi khách đều đọc được.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Biến công khai được nướng sẵn lúc build</b> — Không phải đọc lúc khởi động. Đổi một cái đòi phải dựng lại, chứ không phải khởi động lại — khởi động lại trông như chẳng làm gì cả.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Thêm nó ở ba chỗ</b> — File &#96;.env&#96; ở máy, &#96;.env.example&#96;, và môi trường triển khai. Thiếu chỗ thứ ba là nguyên nhân hỏng deploy phổ biến nhất.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một khoá API của bên thứ ba mang tiền tố &#96;NEXT_PUBLIC_&#96;.</strong> Nó chữa cái lỗi &quot;undefined&quot; ngay tức thì, và nó CÔNG BỐ cái khoá: giá trị được thay thẳng vào một file JavaScript mà mọi khách đều tải về, và bot quét những file đó liên tục. Đúng cú hỏng này có trong lịch sử kho này — một khoá GIPHY ship trong gói phía client, rồi rơi về một khoá công khai đã bị thu hồi và bắt đầu trả 403. Cách chữa được ghi lại ở đó cũng là cách chữa tổng quát: đặt khoá vào một biến môi trường phía máy chủ và thêm một route proxy nhỏ có xác thực, để khoá ở lại máy chủ và việc xoay khoá chỉ là một lần khởi động lại chứ không phải một lần dựng lại.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/configuring/environment-variables" target="_blank" rel="noopener">
+  <span class="lc-ico">🔑</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Biến môi trường</span><span class="lc-sub">Thứ tự nạp, luật NEXT_PUBLIC, và phép thay thế lúc build.</span></span>
+</a>
+<a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">OWASP — Quản lý bí mật</span><span class="lc-sub">Bí mật thuộc về đâu, và phải làm gì ngay khi một cái bị rò.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/configuring/environment-variables" target="_blank" rel="noopener">
@@ -194,6 +262,23 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start when the conta
 <p><strong>Why cuongthai.com uses Docker:</strong> the site runs its Next.js frontend and its backend as containers on a VPS. Containerising means a deploy builds a fresh, self-contained image and swaps it in — the server never accumulates mismatched Node versions or half-installed packages. The whole app moves as one predictable box.</p>
 </div>
 
+<h3>A Next.js image that is small and correct</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Multi-stage build</b> — Dependencies, build, runtime. Only the last stage ships, so the toolchain and the source do not go to production.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Use output: 'standalone'</b> — Next traces exactly the files the server needs and copies them. The result is hundreds of megabytes smaller than the whole &#96;node_modules&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Copy the lockfile and npm ci</b> — Deterministic installs, and the layer caches until the lockfile changes.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Build-time args for NEXT_PUBLIC_</b> — They are baked in at build, so they must be present when the image is built, not when it starts.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a build that is green and an image that cannot run.</strong> Building the image against a base whose libc does not match the one the native dependencies were compiled for produces exactly this: the build succeeds, the push succeeds, the swap succeeds, and then the container restarts forever. This repo has the measured case — an image built from the wrong Dockerfile put glibc Prisma engines on a musl Alpine base, and the API returned 502 for seven minutes until the previous image was re-tagged. The lesson recorded there is the general one: <em>a green build does not mean a runnable image</em>. Run the container locally, hit a route, and only then push.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/next-config-js/output" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — output: 'standalone'</span><span class="lc-sub">What it traces, what it copies, and the caveats for static files.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/vercel/next.js/tree/canary/examples/with-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Next.js — with-docker example</span><span class="lc-sub">The official multi-stage Dockerfile, kept current with each release.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying#docker-image" target="_blank" rel="noopener">
   <span class="lc-ico">🐳</span>
@@ -229,6 +314,23 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
 <div class="callout ok">
 <p><strong>Vì sao cuongthai.com dùng Docker:</strong> site chạy frontend Next.js và backend của nó như các container trên một VPS. Container hoá nghĩa là một deploy build một image tươi, tự-chứa và tráo nó vào — server không bao giờ tích tụ phiên bản Node lệch hay package cài nửa chừng. Cả app di chuyển như một cái hộp đoán trước được.</p>
 </div>
+
+<h3>Một ảnh Next.js nhỏ và đúng</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Dựng nhiều tầng</b> — Phụ thuộc, build, runtime. Chỉ tầng cuối được ship, nên bộ công cụ và mã nguồn không lên production.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Dùng output: 'standalone'</b> — Next lần ra chính xác những file máy chủ cần rồi chép chúng. Kết quả nhỏ hơn cả thư mục &#96;node_modules&#96; hàng trăm megabyte.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Chép file lock rồi npm ci</b> — Cài đặt tất định, và cái tầng đó nằm trong đệm cho tới khi file lock đổi.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Đối số lúc build cho NEXT_PUBLIC_</b> — Chúng được nướng sẵn lúc build, nên chúng phải có mặt khi ảnh được DỰNG, không phải khi nó KHỞI ĐỘNG.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một bản build xanh và một cái ảnh không chạy nổi.</strong> Dựng ảnh trên một nền có libc không khớp với libc mà các phụ thuộc bản địa đã biên dịch cho sẽ cho ra đúng chuyện này: build xanh, đẩy xanh, tráo xanh, rồi container khởi động lại vô tận. Kho này có ca đo được — một ảnh dựng từ nhầm Dockerfile đã đặt engine Prisma bản glibc lên một nền Alpine dùng musl, và API trả 502 suốt bảy phút cho tới khi ảnh cũ được gắn nhãn lại. Bài học ghi ở đó cũng là bài học tổng quát: <em>build xanh không có nghĩa là ảnh chạy được</em>. Hãy chạy container ở máy, gọi thử một route, rồi mới đẩy.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/next-config-js/output" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — output: 'standalone'</span><span class="lc-sub">Nó lần ra cái gì, chép cái gì, và những lưu ý về file tĩnh.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/vercel/next.js/tree/canary/examples/with-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Next.js — ví dụ with-docker</span><span class="lc-sub">Dockerfile nhiều tầng chính thức, được cập nhật theo từng bản phát hành.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying#docker-image" target="_blank" rel="noopener">
@@ -268,6 +370,23 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
 <p><strong>The thread tying these together:</strong> each is a version of "what is running is not what you think." The container runs an old image; the server captured an old file list; the CDN cached an old (missing) response. When production behaves impossibly given your code, ask "is this actually running my latest build?" before debugging the code itself.</p>
 </div>
 
+<h3>Proving what production is actually running</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Ask a route, not the console</b> — &#96;curl -s -o /dev/null -w &quot;%{http_code}&quot; https://site/api/v1/&lt;new-route&gt;&#96;. 404 means stale build; 401 or 200 means it is mounted.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Check the image, not the repo</b> — The commit being on &#96;main&#96; proves nothing about what the container was built from.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Smoke-test after every deploy</b> — A handful of unauthenticated GETs that must not return 404. Automate it in the deploy script so it cannot be skipped.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Keep the previous image</b> — A rollback is then a re-tag and a restart — about forty seconds, instead of a fifteen-minute rebuild.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — diagnosing a stale build as a data problem.</strong> Two features break at once — a picker stops working, a list appears empty — and both look like the database. The actual cause was one deploy that copied files without rebuilding, so the running bundle never included the new route: it returned 404 while a neighbouring route returned 401, and the difference is invisible in a browser, which shows a generic failure either way. This is recorded in this repo&#39;s history, and the fix it left behind is the habit above: diagnose route health with an unauthenticated curl before you touch data, and never deploy without a rebuild.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying#self-hosting" target="_blank" rel="noopener">
+  <span class="lc-ico">🖥️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Self-hosting</span><span class="lc-sub">Running a build on your own server, with the caching and file-serving notes.</span></span>
+</a>
+<a class="link-card dl" href="https://docs.docker.com/engine/reference/commandline/image_ls/" target="_blank" rel="noopener">
+  <span class="lc-ico">🔖</span>
+  <span class="lc-body"><span class="lc-title">docker image ls</span><span class="lc-sub">Finding the previous image by size and id, which is what makes a fast rollback possible.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying#self-hosting" target="_blank" rel="noopener">
   <span class="lc-ico">🖧</span>
@@ -295,6 +414,23 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
 <div class="callout warn">
 <p><strong>Sợi chỉ nối chúng lại:</strong> mỗi cái là một biến thể của "cái đang chạy không phải cái bạn nghĩ." Container chạy image cũ; server chụp danh sách file cũ; CDN cache một phản hồi cũ (thiếu). Khi production hành xử bất khả thi so với code của bạn, hãy hỏi "cái này có thật sự chạy bản build mới nhất không?" trước khi gỡ chính code.</p>
 </div>
+
+<h3>Chứng minh production đang chạy thứ gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Hãy hỏi một route, đừng hỏi console</b> — &#96;curl -s -o /dev/null -w &quot;%{http_code}&quot; https://site/api/v1/&lt;route-mới&gt;&#96;. 404 nghĩa là build cũ; 401 hay 200 nghĩa là nó đã được gắn.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Kiểm cái ảnh, đừng kiểm cái kho</b> — Việc commit đã nằm trên &#96;main&#96; chẳng chứng minh gì về thứ mà container được dựng từ đó.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Kiểm nhanh sau mỗi lần deploy</b> — Một nhúm lời gọi GET không xác thực mà KHÔNG được phép trả 404. Hãy tự động hoá nó trong script deploy để không thể bỏ qua.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Giữ lại ảnh trước đó</b> — Khi đó quay lui chỉ là gắn nhãn lại rồi khởi động lại — chừng bốn mươi giây, thay vì mười lăm phút dựng lại.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — chẩn đoán một bản build cũ thành một vấn đề dữ liệu.</strong> Hai tính năng hỏng cùng lúc — một bộ chọn thôi chạy, một danh sách trông trống trơn — và cả hai đều trông như lỗi cơ sở dữ liệu. Nguyên nhân thật là một lần deploy chép file mà không dựng lại, nên cái gói đang chạy chưa từng có route mới: nó trả 404 trong khi một route hàng xóm trả 401, và khác biệt đó vô hình trong trình duyệt, thứ hiện ra một cú hỏng chung chung ở cả hai trường hợp. Chuyện này có trong lịch sử kho này, và cách chữa nó để lại chính là thói quen ở trên: hãy chẩn đoán sức khoẻ route bằng một lệnh curl không xác thực TRƯỚC khi động vào dữ liệu, và đừng bao giờ deploy mà không dựng lại.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying#self-hosting" target="_blank" rel="noopener">
+  <span class="lc-ico">🖥️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Tự vận hành</span><span class="lc-sub">Chạy một bản build trên máy chủ của chính bạn, kèm ghi chú về nhớ đệm và phục vụ file.</span></span>
+</a>
+<a class="link-card dl" href="https://docs.docker.com/engine/reference/commandline/image_ls/" target="_blank" rel="noopener">
+  <span class="lc-ico">🔖</span>
+  <span class="lc-body"><span class="lc-title">docker image ls</span><span class="lc-sub">Tìm lại ảnh trước đó theo kích thước và id, thứ làm cho việc quay lui nhanh trở nên khả thi.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying#self-hosting" target="_blank" rel="noopener">
@@ -341,6 +477,23 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
 <p><strong>You made it — the whole course, in one breath.</strong> You started with React (JSX, components, state, hooks), learned how it renders and re-renders, then wrapped it in Next.js: the App Router, Server vs Client Components, data fetching and caching, advanced routing, Server Actions, styling, state management, auth, forms and uploads, and finally rendering strategy, performance, testing, and this — build and deploy. You now have the full arc from an empty folder to a running production app, complete with the real-world traps that a running site like cuongthai.com paid to learn. Go build something, deploy it, and when production surprises you, you will know where to look.</p>
 </div>
 
+<h3>A deploy sequence that is hard to get wrong</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Check locally first</b> — Type-check, build, run the built app once. A build that fails on the server has already cost you a deploy window.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Deploy with one script</b> — The same command every time, with the checks inside it. A sequence people remember is a sequence people skip.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Verify before announcing</b> — Hit the new route, log in once, look at the logs. &quot;It deployed&quot; and &quot;it works&quot; are different claims.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Keep a rollback ready</b> — Know the previous image id before you swap. The time to work that out is not during an outage.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a deploy started from a working tree with uncommitted changes.</strong> What ships is whatever the deploy mechanism collects, which may be your working directory, another session&#39;s half-saved file, or the last commit — and the three can differ. Both failure directions are real: a fix you have not committed silently reaches production, or a fix you can see on your screen is missing from it. This repo&#39;s own tooling asks for confirmation when the tree is dirty for exactly that reason, and pushes only committed content. The habit that removes the whole class of problem is to commit first, deploy second, and verify the running build against a commit id rather than against your editor.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying" target="_blank" rel="noopener">
+  <span class="lc-ico">🚢</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Deploying</span><span class="lc-sub">Build outputs, self-hosting and the checklist per platform.</span></span>
+</a>
+<a class="link-card dl" href="https://docs.github.com/en/actions/deployment/about-deployments" target="_blank" rel="noopener">
+  <span class="lc-ico">🤖</span>
+  <span class="lc-body"><span class="lc-title">GitHub — About deployments</span><span class="lc-sub">Wiring the sequence into CI, so the checks cannot be skipped by hand.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying/production-checklist" target="_blank" rel="noopener">
   <span class="lc-ico">🏁</span>
@@ -375,6 +528,23 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
 <div class="callout ok">
 <p><strong>Bạn đã tới đích — cả khoá học, trong một hơi thở.</strong> Bạn bắt đầu với React (JSX, component, state, hook), học cách nó render và render lại, rồi bọc nó trong Next.js: App Router, Server vs Client Component, fetch và cache dữ liệu, định tuyến chuyên sâu, Server Actions, styling, quản lý state, auth, form và upload, và cuối cùng chiến lược render, hiệu năng, kiểm thử, và cái này — build và deploy. Bạn giờ có cả cung đường từ một thư mục trống tới một app production đang chạy, đầy đủ những cái bẫy thực tế mà một site đang chạy như cuongthai.com đã trả giá để học. Hãy dựng một thứ gì đó, deploy nó, và khi production làm bạn bất ngờ, bạn sẽ biết nhìn đâu.</p>
 </div>
+
+<h3>Một trình tự deploy khó làm sai</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Kiểm ở máy trước đã</b> — Kiểm kiểu, build, chạy thử bản đã build một lần. Một bản build hỏng trên máy chủ là đã tốn của bạn một cửa sổ deploy rồi.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Deploy bằng MỘT script</b> — Cùng một lệnh ở mọi lần, với các phép kiểm nằm bên trong nó. Một trình tự mà người ta phải nhớ là một trình tự người ta sẽ bỏ qua.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Xác minh trước khi thông báo</b> — Gọi thử route mới, đăng nhập một lần, nhìn vào log. &quot;Đã deploy&quot; và &quot;nó chạy&quot; là hai khẳng định khác nhau.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Giữ sẵn đường quay lui</b> — Hãy biết id của ảnh trước đó TRƯỚC khi tráo. Lúc đang có sự cố không phải lúc để đi tìm cái đó.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một lần deploy khởi động từ một cây làm việc còn thay đổi chưa commit.</strong> Thứ được ship là bất cứ thứ gì cơ chế deploy gom được, và nó có thể là thư mục làm việc của bạn, một file lưu dở của phiên làm việc khác, hoặc commit gần nhất — và ba thứ đó có thể khác nhau. Cả hai chiều hỏng đều có thật: một bản sửa bạn chưa commit lặng lẽ lên tới production, hoặc một bản sửa bạn nhìn thấy trên màn hình lại vắng mặt trên đó. Bộ công cụ của chính kho này hỏi xác nhận khi cây làm việc còn bẩn đúng vì lẽ đó, và nó chỉ đẩy đi phần nội dung đã commit. Thói quen gỡ bỏ cả họ vấn đề này là: commit trước, deploy sau, và xác minh bản đang chạy dựa trên một id commit chứ không dựa trên trình soạn thảo của bạn.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying" target="_blank" rel="noopener">
+  <span class="lc-ico">🚢</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Triển khai</span><span class="lc-sub">Các dạng đầu ra build, tự vận hành và danh sách kiểm cho từng nền tảng.</span></span>
+</a>
+<a class="link-card dl" href="https://docs.github.com/en/actions/deployment/about-deployments" target="_blank" rel="noopener">
+  <span class="lc-ico">🤖</span>
+  <span class="lc-body"><span class="lc-title">GitHub — Về deployment</span><span class="lc-sub">Đấu trình tự đó vào CI, để các phép kiểm không thể bị bỏ qua bằng tay.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying/production-checklist" target="_blank" rel="noopener">

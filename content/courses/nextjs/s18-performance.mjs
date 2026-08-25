@@ -44,6 +44,23 @@ export default {
 <p><strong>The good news:</strong> Next.js ships the two biggest wins almost for free — an image component that shrinks and optimises pictures automatically (next lesson), and Server Components that send zero JavaScript for everything server-rendered (lesson 18.3). You get a fast baseline just by using the framework's defaults; the rest of this chapter is how to keep it fast as the app grows.</p>
 </div>
 
+<h3>Measuring before changing anything</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Build first</b> — &#96;next build &amp;&amp; next start&#96;. Development numbers are meaningless — the dev server ships unminified code and re-compiles on demand.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Read the route table</b> — First Load JS per route. A route noticeably larger than its neighbours is where to look, and the number is comparable across commits.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Run Lighthouse on the built app</b> — It reports LCP, CLS and unused bytes with the specific resource named.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Change one thing, rebuild, compare</b> — Two changes at once and you cannot tell which helped. Keep the numbers in the commit message.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — optimising against the development server.</strong> &#96;next dev&#96; compiles on demand, serves unminified bundles, disables most caching and runs React&#39;s development build — so every measurement is wrong in a different direction, and the ones that look worst are often fine in production. People spend an afternoon memoising components because the profiler showed 40ms renders that are 2ms in a build. Worse, the reverse also happens: a genuine problem is hidden because dev serves everything from memory. Measure the built app, every time, and treat the dev server purely as a place to write code.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing" target="_blank" rel="noopener">
+  <span class="lc-ico">🚀</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Optimizing</span><span class="lc-sub">The full list of built-in optimisations, before you add any of your own.</span></span>
+</a>
+<a class="link-card dl" href="https://web.dev/articles/lighthouse-performance" target="_blank" rel="noopener">
+  <span class="lc-ico">🔦</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Lighthouse performance</span><span class="lc-sub">How each score is computed, so you know what a number is telling you.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing" target="_blank" rel="noopener">
   <span class="lc-ico">⚡</span>
@@ -77,6 +94,23 @@ export default {
 <div class="callout ok">
 <p><strong>Tin vui:</strong> Next.js kèm hai thắng lợi lớn nhất gần như miễn phí — một component ảnh tự thu nhỏ và tối ưu ảnh (bài sau), và Server Component gửi zero JavaScript cho mọi thứ render-trên-server (bài 18.3). Bạn có một nền nhanh chỉ nhờ dùng mặc định của framework; phần còn lại của chương là cách giữ nó nhanh khi app lớn lên.</p>
 </div>
+
+<h3>Đo trước khi đổi bất cứ thứ gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Build trước đã</b> — &#96;next build &amp;&amp; next start&#96;. Con số ở môi trường phát triển là vô nghĩa — dev server ship mã chưa nén và biên dịch lại theo yêu cầu.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Đọc bảng route</b> — First Load JS của từng route. Một route to hơn hẳn hàng xóm là chỗ cần soi, và con số đó so sánh được giữa các commit.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Chạy Lighthouse trên bản đã build</b> — Nó báo LCP, CLS và số byte không dùng tới, có gọi tên tài nguyên cụ thể.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Đổi một thứ, build lại, so sánh</b> — Đổi hai thứ cùng lúc là bạn không biết cái nào có tác dụng. Hãy ghi các con số vào thông điệp commit.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tối ưu dựa trên dev server.</strong> &#96;next dev&#96; biên dịch theo yêu cầu, phục vụ gói chưa nén, tắt phần lớn nhớ đệm và chạy bản dựng phát triển của React — nên mọi phép đo đều sai theo một hướng khác nhau, và những cái trông tệ nhất thường lại ổn trên production. Người ta mất cả buổi chiều đi memo các component vì profiler hiện ra những lần render 40ms mà trên bản build chỉ có 2ms. Tệ hơn, chiều ngược lại cũng xảy ra: một vấn đề thật bị giấu đi vì dev phục vụ mọi thứ từ bộ nhớ. Hãy đo trên bản đã build, mọi lần, và coi dev server thuần tuý là chỗ để viết mã.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing" target="_blank" rel="noopener">
+  <span class="lc-ico">🚀</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Tối ưu hoá</span><span class="lc-sub">Danh sách đầy đủ các phép tối ưu có sẵn, trước khi bạn tự thêm cái nào.</span></span>
+</a>
+<a class="link-card dl" href="https://web.dev/articles/lighthouse-performance" target="_blank" rel="noopener">
+  <span class="lc-ico">🔦</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Hiệu năng trong Lighthouse</span><span class="lc-sub">Từng điểm số được tính ra sao, để bạn biết một con số đang nói gì.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing" target="_blank" rel="noopener">
@@ -126,6 +160,23 @@ export default {
 <p><strong>The payoff is real:</strong> replacing raw <code>&lt;img&gt;</code> tags with <code>&lt;Image&gt;</code> routinely cuts image bytes by large margins (the video shows a 99% reduction on one file) and fixes layout shift at the same time. For most sites, images are the single biggest performance lever — and this is the lowest-effort way to pull it.</p>
 </div>
 
+<h3>What next/image does that an img tag does not</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Serves a modern format</b> — WebP or AVIF when the browser supports it, from the same source file. Usually 30–50% smaller for the same quality.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Resizes per device</b> — One source, several widths, and a &#96;srcset&#96; so a phone does not download a 2000px image.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Reserves the space</b> — Width and height are required, which is what prevents the layout shift that dominates CLS.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Lazy-loads below the fold</b> — And lets you opt the hero image out with &#96;priority&#96;, which is the one image that should load first.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — &#96;priority&#96; on every image, which is the same as on none.</strong> The flag tells the browser to preload that image ahead of other resources. Marking one hero image speeds up LCP; marking twelve makes the browser fetch twelve large files at once on a connection that can carry perhaps two — so everything, including the hero, arrives later than it would have. The Lighthouse warning about too many preloads is easy to miss because each individual &#96;priority&#96; looks harmless. One per screen, on the image that is actually the largest contentful paint, and everything below the fold stays lazy.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/components/image" target="_blank" rel="noopener">
+  <span class="lc-ico">🖼️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Image component</span><span class="lc-sub">Every prop, including sizes, fill, placeholder and the remote-pattern config.</span></span>
+</a>
+<a class="link-card dl" href="https://web.dev/articles/optimize-lcp" target="_blank" rel="noopener">
+  <span class="lc-ico">⚡</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Optimize LCP</span><span class="lc-sub">Why preloading the right image helps and preloading many hurts.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/images" target="_blank" rel="noopener">
   <span class="lc-ico">🏞️</span>
@@ -159,6 +210,23 @@ export default {
 <div class="callout ok">
 <p><strong>Phần thưởng có thật:</strong> thay các thẻ <code>&lt;img&gt;</code> trần bằng <code>&lt;Image&gt;</code> thường cắt bytes ảnh rất nhiều (video cho thấy giảm 99% trên một file) và sửa layout shift cùng lúc. Với đa số site, ảnh là đòn bẩy hiệu năng lớn nhất — và đây là cách tốn ít công nhất để kéo nó.</p>
 </div>
+
+<h3>next/image làm gì mà thẻ img không làm</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Phục vụ định dạng hiện đại</b> — WebP hay AVIF khi trình duyệt hỗ trợ, từ cùng một file gốc. Thường nhỏ hơn 30–50% với cùng chất lượng.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Đổi cỡ theo từng thiết bị</b> — Một file gốc, nhiều chiều rộng, và một &#96;srcset&#96; để điện thoại không phải tải một tấm ảnh 2000px.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Giữ chỗ sẵn</b> — Chiều rộng và chiều cao là bắt buộc, và chính điều đó ngăn cú xê dịch bố cục vốn chi phối CLS.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Tải lười phần dưới màn hình</b> — Và cho bạn loại tấm ảnh chính ra khỏi phép tải lười bằng &#96;priority&#96;, đó là tấm duy nhất nên tải trước.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — đặt &#96;priority&#96; cho mọi tấm ảnh, cũng như không đặt cho tấm nào.</strong> Cờ này bảo trình duyệt nạp trước tấm ảnh đó, ưu tiên hơn các tài nguyên khác. Đánh dấu một tấm ảnh chính thì tăng tốc LCP; đánh dấu mười hai tấm thì bắt trình duyệt lấy mười hai file lớn cùng lúc trên một đường truyền tải nổi chừng hai — nên mọi thứ, kể cả tấm ảnh chính, về muộn hơn so với khi không đánh dấu. Cảnh báo của Lighthouse về việc nạp trước quá nhiều rất dễ bỏ sót vì mỗi cái &#96;priority&#96; riêng lẻ trông đều vô hại. Một tấm mỗi màn hình, đặt lên đúng tấm thật sự là lần vẽ nội dung lớn nhất, còn mọi thứ dưới màn hình thì cứ để tải lười.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/components/image" target="_blank" rel="noopener">
+  <span class="lc-ico">🖼️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Component Image</span><span class="lc-sub">Mọi prop, gồm cả sizes, fill, placeholder và cấu hình remote-pattern.</span></span>
+</a>
+<a class="link-card dl" href="https://web.dev/articles/optimize-lcp" target="_blank" rel="noopener">
+  <span class="lc-ico">⚡</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Tối ưu LCP</span><span class="lc-sub">Vì sao nạp trước đúng tấm ảnh thì giúp ích còn nạp trước nhiều tấm thì có hại.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/images" target="_blank" rel="noopener">
@@ -203,6 +271,23 @@ const HeavyChart = dynamic(() =&gt; import('./HeavyChart'), {
 <p><strong>Watch the shared imports.</strong> Importing a large library into your root layout or a widely-used component puts it in <em>every</em> route's bundle. If only one page needs a heavy dependency, import it there (ideally via <code>next/dynamic</code>), not globally. A single misplaced import is a common reason a whole site's bundle balloons.</p>
 </div>
 
+<h3>Shipping less JavaScript</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Keep components on the server</b> — The largest saving available, and it costs nothing: server code is never in the bundle at all.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Import only what you use</b> — &#96;import { format } from &#39;date-fns&#39;&#96;, not the whole namespace. Check that the library supports tree shaking — many do not.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Load heavy widgets on demand</b> — &#96;next/dynamic&#96; for a chart, an editor, a map. It is not in the initial bundle and arrives when the component renders.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Look at the analyser before adding a dependency</b> — A date picker that costs 90kB is a decision, not an accident — but only if you looked.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a single import pulling an entire library into the bundle.</strong> &#96;import _ from &#39;lodash&#39;&#96; to use one function ships the whole library, because the CommonJS build cannot be tree-shaken. The same shape appears with icon packs (&#96;import { Icon } from &#39;@some/icons&#39;&#96; pulling in two thousand SVGs), moment.js and its locales, and a UI kit imported from its root. Nothing warns you; the route just gets 200kB heavier and the build succeeds. The bundle analyser shows it in one picture — run it after adding any dependency, and prefer the per-module import path (&#96;lodash/debounce&#96;) or a smaller library.</p></div>
+<a class="link-card dl" href="https://www.npmjs.com/package/@next/bundle-analyzer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔬</span>
+  <span class="lc-body"><span class="lc-title">@next/bundle-analyzer</span><span class="lc-sub">A treemap of what is actually in each bundle. Ten minutes here usually finds something.</span></span>
+</a>
+<a class="link-card dl" href="https://bundlephobia.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Bundlephobia</span><span class="lc-sub">The cost of a package before you install it, including whether it tree-shakes.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/lazy-loading" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
@@ -235,6 +320,23 @@ const HeavyChart = dynamic(() =&gt; import('./HeavyChart'), {
 <div class="callout warn">
 <p><strong>Coi chừng import dùng chung.</strong> Import một thư viện lớn vào root layout hay một component dùng rộng đặt nó vào bundle của <em>mọi</em> route. Nếu chỉ một trang cần một dependency nặng, hãy import ở đó (lý tưởng qua <code>next/dynamic</code>), không phải toàn cục. Một import đặt sai chỗ là lý do phổ biến khiến bundle của cả site phình to.</p>
 </div>
+
+<h3>Ship ít JavaScript hơn</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Giữ component ở phía máy chủ</b> — Khoản tiết kiệm lớn nhất có được, và nó chẳng tốn gì: mã máy chủ hoàn toàn không nằm trong gói.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Chỉ import thứ bạn dùng</b> — &#96;import { format } from &#39;date-fns&#39;&#96;, đừng import cả không gian tên. Hãy kiểm xem thư viện có hỗ trợ tree shaking không — nhiều cái không.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nạp các widget nặng theo yêu cầu</b> — &#96;next/dynamic&#96; cho một biểu đồ, một trình soạn thảo, một bản đồ. Nó không nằm trong gói ban đầu và chỉ về khi component được vẽ.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nhìn vào bộ phân tích TRƯỚC khi thêm một phụ thuộc</b> — Một bộ chọn ngày tốn 90kB là một quyết định, không phải một tai nạn — nhưng chỉ khi bạn có nhìn.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một dòng import kéo cả một thư viện vào gói.</strong> &#96;import _ from &#39;lodash&#39;&#96; để dùng một hàm sẽ ship cả thư viện, vì bản dựng CommonJS không tree-shake được. Cùng hình dạng ấy hiện ra với các bộ icon (&#96;import { Icon } from &#39;@some/icons&#39;&#96; lôi vào hai nghìn file SVG), với moment.js cùng đống ngôn ngữ của nó, và với một bộ UI import từ gốc. Chẳng gì cảnh báo bạn; cái route chỉ nặng thêm 200kB và bản build vẫn thành công. Bộ phân tích gói cho thấy điều đó trong một bức tranh — hãy chạy nó sau khi thêm bất kỳ phụ thuộc nào, và hãy ưu tiên đường import theo từng module (&#96;lodash/debounce&#96;) hoặc một thư viện nhỏ hơn.</p></div>
+<a class="link-card dl" href="https://www.npmjs.com/package/@next/bundle-analyzer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔬</span>
+  <span class="lc-body"><span class="lc-title">@next/bundle-analyzer</span><span class="lc-sub">Một sơ đồ cây về thứ thật sự nằm trong từng gói. Mười phút ở đây thường tìm ra thứ gì đó.</span></span>
+</a>
+<a class="link-card dl" href="https://bundlephobia.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Bundlephobia</span><span class="lc-sub">Chi phí của một package trước khi bạn cài nó, gồm cả việc nó có tree-shake được không.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/lazy-loading" target="_blank" rel="noopener">
@@ -281,6 +383,23 @@ export default function RootLayout({ children }) {
 <p><strong>A gotcha you will meet again in Chapter 20:</strong> the contents of <code>public/</code> are decided by the running server. If you add or rename files in <code>public/</code> while the dev server is running, you often must restart it for the new files to be served — otherwise you get a confusing 404 for a file that clearly exists on disk. (This exact class of bug once made a whole page hang; the deploy chapter has the full story.)</p>
 </div>
 
+<h3>Fonts, without the flash and the round trip</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Use next/font</b> — It downloads the font at build time and serves it from your own domain. No request to Google, and no third-party dependency in the critical path.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>It sets font-display automatically</b> — &#96;swap&#96; by default, so text is readable immediately in a fallback and swaps when the real font arrives.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>It computes fallback metrics</b> — Matching the fallback&#39;s size to the real font, so the swap does not move the text — CLS from fonts goes to zero.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Subset what you need</b> — &#96;subsets: [&#39;latin&#39;, &#39;vietnamese&#39;]&#96;. Loading every script in a font is often larger than the rest of the page.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a font loaded with a plain &#96;@import&#96; in CSS, blocking the first paint.</strong> A CSS &#96;@import&#96; is discovered only after the stylesheet has been fetched and parsed, so the font request starts late and the browser has nothing to render text with until it lands — a blank page where the content should be, sometimes for a second on a slow connection. The page eventually looks perfect, which is why this survives review. &#96;next/font&#96; loads it at build time and inlines the declaration, and if you must load a font yourself, use a &#96;&lt;link rel="preload"&gt;&#96; with an explicit &#96;font-display&#96;.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/fonts" target="_blank" rel="noopener">
+  <span class="lc-ico">🔤</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Font optimization</span><span class="lc-sub">next/font for Google and local fonts, with the subsetting options.</span></span>
+</a>
+<a class="link-card dl" href="https://web.dev/articles/font-best-practices" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Font best practices</span><span class="lc-sub">Display strategies, preloading, and the metrics-matching trick.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/fonts" target="_blank" rel="noopener">
   <span class="lc-ico">🔤</span>
@@ -315,6 +434,23 @@ export default function RootLayout({ children }) {
 <div class="callout warn">
 <p><strong>Một bẫy bạn sẽ gặp lại ở Chương 20:</strong> nội dung của <code>public/</code> được quyết bởi server đang chạy. Nếu bạn thêm hoặc đổi tên file trong <code>public/</code> khi dev server đang chạy, bạn thường phải khởi động lại nó để file mới được phục vụ — nếu không bạn nhận một 404 khó hiểu cho một file rõ ràng có trên đĩa. (Đúng loại bug này từng làm cả một trang treo; chương deploy có toàn bộ câu chuyện.)</p>
 </div>
+
+<h3>Font, không chớp sáng và không đi vòng</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Hãy dùng next/font</b> — Nó tải font về lúc build và phục vụ từ chính tên miền của bạn. Không request tới Google, và không có phụ thuộc bên thứ ba nào trên đường tới hạn.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Nó tự đặt font-display</b> — Mặc định là &#96;swap&#96;, nên chữ đọc được ngay bằng font dự phòng rồi đổi khi font thật về.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nó tính các thông số cho font dự phòng</b> — Khớp kích thước của font dự phòng với font thật, để cú đổi không làm chữ xê dịch — CLS do font về không.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Chỉ lấy tập ký tự bạn cần</b> — &#96;subsets: [&#39;latin&#39;, &#39;vietnamese&#39;]&#96;. Nạp mọi hệ chữ trong một font thường còn nặng hơn cả phần còn lại của trang.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một font nạp bằng &#96;@import&#96; trần trong CSS, chặn mất lần vẽ đầu tiên.</strong> Một &#96;@import&#96; trong CSS chỉ được phát hiện SAU khi bảng kiểu đã tải về và phân tích xong, nên request lấy font khởi động muộn và trình duyệt chẳng có gì để vẽ chữ cho tới khi nó về — một trang trắng ở đúng chỗ nội dung phải nằm, đôi khi cả một giây trên đường truyền chậm. Cuối cùng thì trang trông hoàn hảo, và đó là lý do chuyện này sống sót qua review. &#96;next/font&#96; nạp nó lúc build và đưa phần khai báo vào nội tuyến, còn nếu bạn buộc phải tự nạp font thì hãy dùng một &#96;&lt;link rel="preload"&gt;&#96; kèm &#96;font-display&#96; tường minh.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/fonts" target="_blank" rel="noopener">
+  <span class="lc-ico">🔤</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Tối ưu font</span><span class="lc-sub">next/font cho font Google và font cục bộ, kèm các tuỳ chọn tách tập ký tự.</span></span>
+</a>
+<a class="link-card dl" href="https://web.dev/articles/font-best-practices" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Thực hành tốt với font</span><span class="lc-sub">Các chiến lược hiển thị, nạp trước, và mẹo khớp thông số font.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/fonts" target="_blank" rel="noopener">
@@ -353,6 +489,24 @@ export default function RootLayout({ children }) {
 <p><strong>A sane workflow:</strong> build → run Lighthouse → fix the top item it flags → build again and confirm the number moved. Repeat until it is fast enough. This keeps you honest and stops you from polishing things no user would ever notice.</p>
 </div>
 
+<h3>Measuring what users experience, not what you experience</h3>
+<div class="lz-map">
+  <div class="lz-stage">Your machine is not the test</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Throttle the network</div><div class="lz-nsub">Slow 4G in DevTools. Most of the world is not on your office connection, and most bugs of this class only appear there.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Throttle the CPU</div><div class="lz-nsub">4× or 6× slowdown. A mid-range phone is several times slower than a laptop, and JavaScript cost scales with it.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Test on a real phone once</div><div class="lz-nsub">Over your local network. Touch targets, the on-screen keyboard, and hover-only interactions all fail here and nowhere else.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Then watch the field data</div><div class="lz-nsub">Real-user metrics from production. Lab numbers rank changes; field numbers tell you whether it mattered.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a site that is fast for you and slow for everyone, because you only ever load it warm.</strong> Your browser has the fonts, the images and the JavaScript cached; your DNS is resolved; your connection is short and fast. A first-time visitor on a phone has none of that, and their first paint can be five times slower than yours — which is why the site feels fine to the team and gets complaints from users. Test in an incognito window with the cache disabled and throttling on, at least before each release. That is the visitor you are actually building for, and it is a different page.</p></div>
+<a class="link-card dl" href="https://web.dev/articles/crux" target="_blank" rel="noopener">
+  <span class="lc-ico">🌍</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Chrome UX Report</span><span class="lc-sub">Field data for any public site, including yours and your competitors'.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/analytics" target="_blank" rel="noopener">
+  <span class="lc-ico">📡</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Analytics</span><span class="lc-sub">Reporting real Web Vitals from your own users with useReportWebVitals.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/bundle-analyzer" target="_blank" rel="noopener">
   <span class="lc-ico">📊</span>
@@ -379,6 +533,24 @@ export default function RootLayout({ children }) {
 <div class="callout ok">
 <p><strong>Một quy trình tỉnh táo:</strong> build → chạy Lighthouse → sửa mục đầu nó cảnh báo → build lại và xác nhận con số đã dịch. Lặp tới khi đủ nhanh. Cái này giữ bạn trung thực và ngăn bạn đánh bóng những thứ không người dùng nào để ý.</p>
 </div>
+
+<h3>Đo thứ người dùng trải nghiệm, không đo thứ BẠN trải nghiệm</h3>
+<div class="lz-map">
+  <div class="lz-stage">Máy của bạn không phải phép thử</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Bóp băng thông</div><div class="lz-nsub">Slow 4G trong DevTools. Phần lớn thế giới không dùng đường truyền văn phòng của bạn, và phần lớn lỗi loại này chỉ hiện ra ở đó.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Bóp CPU</div><div class="lz-nsub">Làm chậm 4× hoặc 6×. Một chiếc điện thoại tầm trung chậm hơn laptop vài lần, và chi phí JavaScript tăng theo đó.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Thử trên một chiếc điện thoại thật, một lần</div><div class="lz-nsub">Qua mạng nội bộ. Vùng chạm, bàn phím ảo, và các tương tác chỉ-khi-rê-chuột đều hỏng ở đây và không hỏng ở đâu khác.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Rồi theo dõi dữ liệu thực địa</div><div class="lz-nsub">Chỉ số từ người dùng thật trên production. Con số phòng thí nghiệm xếp hạng các thay đổi; con số thực địa nói cho bạn biết nó có ý nghĩa hay không.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một trang nhanh với bạn và chậm với tất cả mọi người, vì bạn chỉ toàn tải nó khi đã có sẵn đệm.</strong> Trình duyệt của bạn đã có sẵn font, ảnh và JavaScript trong đệm; DNS của bạn đã giải xong; đường truyền của bạn ngắn và nhanh. Một người ghé lần đầu bằng điện thoại chẳng có thứ nào trong đó, và lần vẽ đầu tiên của họ có thể chậm gấp năm lần của bạn — đó là lý do trang có cảm giác ổn với cả đội mà lại nhận phàn nàn từ người dùng. Hãy thử trong một cửa sổ ẩn danh với bộ đệm tắt và phép bóp băng thông bật, ít nhất là trước mỗi lần phát hành. Đó mới là người ghé mà bạn đang thật sự dựng trang cho, và đó là một trang khác hẳn.</p></div>
+<a class="link-card dl" href="https://web.dev/articles/crux" target="_blank" rel="noopener">
+  <span class="lc-ico">🌍</span>
+  <span class="lc-body"><span class="lc-title">web.dev — Chrome UX Report</span><span class="lc-sub">Dữ liệu thực địa cho mọi trang công khai, gồm trang của bạn và của đối thủ.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/analytics" target="_blank" rel="noopener">
+  <span class="lc-ico">📡</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Analytics</span><span class="lc-sub">Báo cáo Web Vitals thật từ chính người dùng của bạn bằng useReportWebVitals.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/optimizing/bundle-analyzer" target="_blank" rel="noopener">

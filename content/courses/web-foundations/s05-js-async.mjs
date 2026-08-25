@@ -49,6 +49,24 @@ console.log("end");
 
 <h3>Why this matters</h3>
 <p class="note-ct"><strong>This model is the "why" behind everything in this chapter.</strong> Promises and async/await are nicer syntax on top of exactly this machinery. When code runs in an order that surprises you, come back to one rule: synchronous code runs to completion first, then queued callbacks run. Watch the linked Philip Roberts talk — it makes the event loop unforgettable.</p>
+<h3>Why JavaScript can wait without blocking</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">One thread runs your code</span><span class="lz-d">There is exactly one call stack. While a function is running, nothing else can run — not a click handler, not a timer, not the page repainting.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Slow work is handed off</span><span class="lz-d">A network request or a timer is given to the browser (or Node), which handles it outside your thread. Your code returns immediately.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Finished work queues a callback</span><span class="lz-d">When the response arrives, your callback goes into a queue. It does not interrupt anything — it waits its turn.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The loop runs it when the stack is empty</span><span class="lz-d">Only when your current code has finished completely. This is why the order of <code>console.log</code>s often surprises people.</span></div>
+</div>
+<pre><code>console.log('first');
+setTimeout(() =&gt; console.log('third'), 0);
+Promise.resolve().then(() =&gt; console.log('second'));
+console.log('done sync');</code></pre>
+<div class="out">first
+done sync
+second
+third</div>
+<div class="pitfall"><p><strong>Trap — <code>setTimeout(fn, 0)</code> does not mean "run now".</strong> It means "run after the current code finishes, and after every promise callback already queued". So the output above puts <code>third</code> last, even though its delay is zero and the promise had no delay at all: promise callbacks live in a higher-priority queue than timers. The practical consequence is that a long synchronous loop blocks <em>everything</em> — timers, clicks, even the spinner you just showed, because the browser cannot repaint until your function returns. If a page freezes while "loading", look for a loop, not a network call.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop" target="_blank" rel="noopener">MDN — The event loop, stack and queues</a></div>
+<div class="link-card"><a href="http://latentflip.com/loupe/" target="_blank" rel="noopener">Loupe — watch the stack and queue run your code, live</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -81,6 +99,24 @@ console.log("end");
 
 <h3>Vì sao điều này quan trọng</h3>
 <p class="note-ct"><strong>Mô hình này là chữ "vì sao" đằng sau mọi thứ trong chương.</strong> Promise và async/await chỉ là cú pháp đẹp hơn đặt trên đúng bộ máy này. Khi code chạy theo thứ tự làm bạn bất ngờ, hãy quay về một luật: code đồng bộ chạy xong hết trước, rồi các callback trong hàng đợi mới chạy. Xem bài nói của Philip Roberts đã liên kết — nó khiến event loop không thể quên.</p>
+<h3>Vì sao JavaScript chờ được mà không chặn</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Một luồng duy nhất chạy mã của bạn</span><span class="lz-d">Chỉ có đúng một ngăn xếp gọi. Trong lúc một hàm đang chạy, không gì khác chạy được — không handler bấm chuột, không bộ đếm giờ, không cả việc vẽ lại trang.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Việc chậm được giao đi nơi khác</span><span class="lz-d">Một request mạng hay một bộ đếm giờ được giao cho trình duyệt (hoặc Node) lo bên ngoài luồng của bạn. Mã của bạn trả về ngay lập tức.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Việc xong thì xếp một callback vào hàng</span><span class="lz-d">Khi phản hồi về, callback của bạn vào một hàng đợi. Nó không ngắt bất cứ thứ gì — nó chờ tới lượt.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Vòng lặp chạy nó khi ngăn xếp rỗng</span><span class="lz-d">Chỉ khi mã hiện tại của bạn đã xong hoàn toàn. Đó là lý do thứ tự các <code>console.log</code> hay làm người ta ngạc nhiên.</span></div>
+</div>
+<pre><code>console.log('first');
+setTimeout(() =&gt; console.log('third'), 0);
+Promise.resolve().then(() =&gt; console.log('second'));
+console.log('done sync');</code></pre>
+<div class="out">first
+done sync
+second
+third</div>
+<div class="pitfall"><p><strong>Bẫy — <code>setTimeout(fn, 0)</code> KHÔNG có nghĩa là "chạy ngay".</strong> Nó nghĩa là "chạy sau khi mã hiện tại xong, và sau mọi callback promise đã xếp hàng". Nên đầu ra ở trên đặt <code>third</code> xuống cuối, dù độ trễ của nó bằng không và promise thì chẳng có độ trễ nào cả: callback của promise nằm ở một hàng đợi ưu tiên cao hơn bộ đếm giờ. Hệ quả thực tế là một vòng lặp đồng bộ dài sẽ chặn <em>mọi thứ</em> — bộ đếm giờ, cú bấm, kể cả cái vòng quay bạn vừa hiện ra, vì trình duyệt không vẽ lại được cho tới khi hàm của bạn trả về. Nếu một trang đơ trong lúc "đang tải", hãy tìm một vòng lặp, đừng tìm một lời gọi mạng.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop" target="_blank" rel="noopener">MDN — Vòng lặp sự kiện, ngăn xếp và các hàng đợi</a></div>
+<div class="link-card"><a href="http://latentflip.com/loupe/" target="_blank" rel="noopener">Loupe — xem ngăn xếp và hàng đợi chạy mã của bạn, trực tiếp</a></div>
 </div>
 `,
     },
@@ -131,6 +167,16 @@ console.log("end");
 const wait = ms =&gt; new Promise(resolve =&gt; setTimeout(resolve, ms));
 wait(1000).then(() =&gt; console.log("one second later"));</code></pre>
 <p class="note-ct"><strong>Promises are the foundation, async/await is the comfort.</strong> The next lesson shows a cleaner syntax for exactly these Promises — but it is still Promises underneath, so understanding <code>.then</code>/<code>.catch</code> here makes async/await obvious rather than magical.</p>
+<h3>The three states of a promise</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Pending</span><span class="lz-t">The work is in flight</span><span class="lz-d">The promise object exists immediately; the value does not exist yet. Printing it here shows <code>Promise { &lt;pending&gt; }</code>, which is not a bug.</span></div>
+<div class="lz-layer"><span class="lz-k">Fulfilled</span><span class="lz-t">A value arrived</span><span class="lz-d">Whatever you passed to <code>resolve</code>, or returned from an <code>async</code> function. <code>.then(cb)</code> runs <code>cb</code> with it.</span></div>
+<div class="lz-layer"><span class="lz-k">Rejected</span><span class="lz-t">Something failed</span><span class="lz-d">An error was thrown or <code>reject</code> was called. <code>.catch(cb)</code> runs; without one, you get an unhandled rejection warning.</span></div>
+<div class="lz-layer"><span class="lz-k">Settled once, forever</span><span class="lz-t">No going back</span><span class="lz-d">A promise moves out of pending exactly once. Calling <code>resolve</code> twice does nothing the second time — useful to know when wrapping callback APIs.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — forgetting to return the promise inside a <code>.then</code>, which breaks the chain silently.</strong> <code>fetch(a).then(r =&gt; { fetch(b) }).then(() =&gt; console.log('both done'))</code> prints "both done" immediately, before the second request has finished, because the first <code>.then</code> returned <code>undefined</code> instead of the inner promise. Nothing errors; the ordering is just wrong, and an error in that inner request never reaches your <code>.catch</code> either — it becomes an unhandled rejection. Return every promise you create inside a chain (<code>r =&gt; fetch(b)</code>, no braces), or use <code>await</code>, where the language does the returning for you.</p></div>
+<div class="link-card"><a href="https://javascript.info/promise-basics" target="_blank" rel="noopener">JavaScript.info — Promises from first principles</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises" target="_blank" rel="noopener">MDN — Using promises, including chaining mistakes</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -170,6 +216,16 @@ wait(1000).then(() =&gt; console.log("one second later"));</code></pre>
 const wait = ms =&gt; new Promise(resolve =&gt; setTimeout(resolve, ms));
 wait(1000).then(() =&gt; console.log("một giây sau"));</code></pre>
 <p class="note-ct"><strong>Promise là nền tảng, async/await là sự dễ chịu.</strong> Bài kế cho một cú pháp gọn hơn cho đúng những Promise này — nhưng bên dưới vẫn là Promise, nên hiểu <code>.then</code>/<code>.catch</code> ở đây khiến async/await trở nên hiển nhiên thay vì huyền bí.</p>
+<h3>Ba trạng thái của một promise</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Pending (đang chờ)</span><span class="lz-t">Việc đang trên đường</span><span class="lz-d">Object promise tồn tại ngay lập tức; còn giá trị thì chưa. In nó ra lúc này thấy <code>Promise { &lt;pending&gt; }</code>, và đó không phải lỗi.</span></div>
+<div class="lz-layer"><span class="lz-k">Fulfilled (đã xong)</span><span class="lz-t">Một giá trị đã về</span><span class="lz-d">Là thứ bạn truyền vào <code>resolve</code>, hoặc trả về từ một hàm <code>async</code>. <code>.then(cb)</code> chạy <code>cb</code> với nó.</span></div>
+<div class="lz-layer"><span class="lz-k">Rejected (đã hỏng)</span><span class="lz-t">Có gì đó thất bại</span><span class="lz-d">Một lỗi đã bị ném ra hoặc <code>reject</code> đã được gọi. <code>.catch(cb)</code> chạy; không có nó thì bạn nhận cảnh báo unhandled rejection.</span></div>
+<div class="lz-layer"><span class="lz-k">Chốt một lần, vĩnh viễn</span><span class="lz-t">Không quay lại được</span><span class="lz-d">Một promise rời khỏi trạng thái chờ đúng một lần. Gọi <code>resolve</code> lần thứ hai chẳng làm gì — biết điều này có ích khi bọc các API kiểu callback.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — quên return cái promise bên trong một <code>.then</code>, và chuỗi đứt một cách lặng lẽ.</strong> <code>fetch(a).then(r =&gt; { fetch(b) }).then(() =&gt; console.log('xong cả hai'))</code> in ra "xong cả hai" ngay lập tức, trước khi request thứ hai kịp xong, vì cái <code>.then</code> đầu đã trả về <code>undefined</code> thay vì cái promise bên trong. Chẳng lỗi nào cả; chỉ là thứ tự sai, và một lỗi trong request bên trong đó cũng chẳng bao giờ tới được <code>.catch</code> của bạn — nó thành unhandled rejection. Hãy return mọi promise bạn tạo ra trong một chuỗi (<code>r =&gt; fetch(b)</code>, không ngoặc nhọn), hoặc dùng <code>await</code>, nơi ngôn ngữ tự làm việc trả về giùm bạn.</p></div>
+<div class="link-card"><a href="https://javascript.info/promise-basics" target="_blank" rel="noopener">JavaScript.info — Promise từ nguyên lý đầu tiên</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises" target="_blank" rel="noopener">MDN — Dùng promise, gồm cả các lỗi nối chuỗi</a></div>
 </div>
 `,
     },
@@ -225,6 +281,20 @@ const [a, b] = await Promise.all([fetchA(), fetchB()]);</code></pre>
 <p class="pitfall"><strong>Do not await in a loop when the calls are independent.</strong> Awaiting one-by-one turns three 1-second calls into 3 seconds. If they do not depend on each other, fire them together with <code>Promise.all</code> and wait once — 1 second total. This is one of the most common real-world performance mistakes.</p>
 
 <p class="note-ct"><strong>Rule of thumb:</strong> use <code>await</code> when step B needs step A's result; use <code>Promise.all</code> when steps are independent. Getting this right is a genuine, measurable difference in how fast your apps feel.</p>
+<h3>await, and what it does not change</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">async makes a function return a promise</span><span class="lz-d">Always, even if you return a plain number. Callers still have to <code>await</code> it or <code>.then</code> it.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">await pauses this function only</span><span class="lz-d">The rest of the program keeps running — clicks are handled, timers fire. It is not a blocking sleep.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">try/catch works again</span><span class="lz-d">A rejected promise becomes a thrown error, so ordinary <code>try { } catch { }</code> handles it. This is the main reason to prefer <code>await</code> over <code>.then</code>.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Sequential unless you say otherwise</span><span class="lz-d">Two <code>await</code>s in a row wait one after the other. Independent work belongs in <code>Promise.all</code>.</span></div>
+</div>
+<pre><code>// Sequential: 2 seconds total
+const a = await slow();   // 1s
+const b = await slow();   // 1s
+
+// Parallel: 1 second total
+const [a, b] = await Promise.all([slow(), slow()]);</code></pre>
+<div class="pitfall"><p><strong>Trap — <code>await</code> inside <code>forEach</code> does nothing at all.</strong> <code>items.forEach(async item =&gt; { await save(item) })</code> looks like it saves each item in turn; in fact <code>forEach</code> ignores the promise each callback returns, so it fires all of them at once and moves on immediately. The line after the loop runs before a single save has finished, and any error inside becomes an unhandled rejection. Use <code>for (const item of items) { await save(item) }</code> when order matters, or <code>await Promise.all(items.map(save))</code> when it does not. The <code>for…of</code> is the one that respects <code>await</code>.</p></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.3</span>
@@ -269,6 +339,20 @@ const [a, b] = await Promise.all([fetchA(), fetchB()]);</code></pre>
 <p class="pitfall"><strong>Đừng await trong vòng lặp khi các lời gọi độc lập.</strong> Await từng cái một biến ba lời gọi 1 giây thành 3 giây. Nếu chúng không phụ thuộc nhau, bắn chúng cùng lúc bằng <code>Promise.all</code> và chờ một lần — tổng 1 giây. Đây là một trong những lỗi hiệu năng phổ biến nhất thực tế.</p>
 
 <p class="note-ct"><strong>Quy tắc bỏ túi:</strong> dùng <code>await</code> khi bước B cần kết quả bước A; dùng <code>Promise.all</code> khi các bước độc lập. Làm đúng điều này là một khác biệt thật, đo được, về việc app của bạn cảm giác nhanh thế nào.</p>
+<h3>await, và những gì nó KHÔNG đổi</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">async làm một hàm trả về promise</span><span class="lz-d">Luôn luôn, kể cả khi bạn trả về một con số trơn. Chỗ gọi vẫn phải <code>await</code> nó hoặc <code>.then</code> nó.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">await chỉ tạm dừng CHÍNH hàm này</span><span class="lz-d">Phần còn lại của chương trình vẫn chạy — cú bấm vẫn được xử, bộ đếm giờ vẫn nổ. Nó không phải một lệnh ngủ gây chặn.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">try/catch lại dùng được</span><span class="lz-d">Một promise bị từ chối trở thành một lỗi được ném ra, nên <code>try { } catch { }</code> thông thường xử được. Đây là lý do chính để chọn <code>await</code> thay vì <code>.then</code>.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Tuần tự, trừ khi bạn nói khác</span><span class="lz-d">Hai <code>await</code> liền nhau sẽ chờ cái này rồi tới cái kia. Việc độc lập với nhau thì thuộc về <code>Promise.all</code>.</span></div>
+</div>
+<pre><code>// Tuần tự: tổng 2 giây
+const a = await slow();   // 1s
+const b = await slow();   // 1s
+
+// Song song: tổng 1 giây
+const [a, b] = await Promise.all([slow(), slow()]);</code></pre>
+<div class="pitfall"><p><strong>Bẫy — <code>await</code> bên trong <code>forEach</code> chẳng làm gì cả.</strong> <code>items.forEach(async item =&gt; { await save(item) })</code> nhìn như đang lưu từng mục lần lượt; thật ra <code>forEach</code> lờ đi cái promise mà mỗi callback trả về, nên nó bắn hết cùng một lúc rồi đi tiếp ngay. Dòng sau vòng lặp chạy trước khi có lấy một lần lưu nào xong, và mọi lỗi bên trong đều thành unhandled rejection. Hãy dùng <code>for (const item of items) { await save(item) }</code> khi thứ tự có ý nghĩa, hoặc <code>await Promise.all(items.map(save))</code> khi không. Chính <code>for…of</code> mới là thứ tôn trọng <code>await</code>.</p></div>
 </div>
 `,
     },
@@ -322,6 +406,17 @@ const [a, b] = await Promise.all([fetchA(), fetchB()]);</code></pre>
 </div>
 <p class="note-ct"><strong>You have just met the client half of an API call.</strong> Chapter 6 explains the other half — HTTP methods, status codes and REST — from the server's point of view. Together they are the full request/response cycle that every web app runs on.</p>
 
+<h3>A fetch call, checked properly</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">await fetch(url)</span><span class="lz-d">Resolves as soon as the headers arrive — the body has not been read yet. This is why there is a second <code>await</code>.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Check res.ok</span><span class="lz-d">True for status 200–299. Skipping this is the single most common fetch bug; see the trap below.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">await res.json()</span><span class="lz-d">Reads and parses the body. It throws if the body is not valid JSON — an HTML error page, for instance.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Wrap it in try/catch</span><span class="lz-d">Only network-level failures reject: no connection, DNS failure, CORS block. Those are different from a 500, and both need handling.</span></div>
+</div>
+<pre><code>const res = await fetch('/api/v1/notes');
+if (!res.ok) throw new Error(&#96;HTTP \${res.status}&#96;);
+const data = await res.json();</code></pre>
+<div class="pitfall"><p><strong>Trap — <code>fetch</code> does not reject on 404 or 500.</strong> An HTTP error is still a successful round trip as far as <code>fetch</code> is concerned, so the promise fulfils and your <code>catch</code> never runs. What happens next depends on the server: if it returned an HTML error page, <code>res.json()</code> throws "Unexpected token &lt;" — an error about JSON parsing that tells you nothing about the 500 that caused it. If it returned JSON, you happily render an error object as if it were data. Always check <code>res.ok</code> before reading the body; it is one line, and it turns a mystifying parse error into the real status code.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener">MDN — Using the Fetch API</a></div>
 </div>
 <div class="ml-vi">
@@ -365,6 +460,17 @@ const [a, b] = await Promise.all([fetchA(), fetchB()]);</code></pre>
 </div>
 <p class="note-ct"><strong>Bạn vừa gặp nửa phía client của một lời gọi API.</strong> Chương 6 giải thích nửa còn lại — HTTP method, mã trạng thái và REST — từ góc nhìn server. Cùng nhau, chúng là trọn chu trình yêu cầu/phản hồi mà mọi ứng dụng web đứng trên.</p>
 
+<h3>Một lời gọi fetch, kiểm cho đúng</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">await fetch(url)</span><span class="lz-d">Xong ngay khi các header về — phần thân thì chưa hề được đọc. Đó là lý do có một <code>await</code> thứ hai.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Kiểm res.ok</span><span class="lz-d">Đúng với mã trạng thái 200–299. Bỏ qua bước này là lỗi fetch phổ biến nhất; xem cái bẫy bên dưới.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">await res.json()</span><span class="lz-d">Đọc và phân tích phần thân. Nó ném lỗi nếu thân không phải JSON hợp lệ — chẳng hạn một trang lỗi HTML.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Bọc nó trong try/catch</span><span class="lz-d">Chỉ những sự cố ở mức mạng mới bị từ chối: mất kết nối, hỏng DNS, bị CORS chặn. Chúng khác với một cú 500, và cả hai đều cần xử lý.</span></div>
+</div>
+<pre><code>const res = await fetch('/api/v1/notes');
+if (!res.ok) throw new Error(&#96;HTTP \${res.status}&#96;);
+const data = await res.json();</code></pre>
+<div class="pitfall"><p><strong>Bẫy — <code>fetch</code> KHÔNG từ chối khi gặp 404 hay 500.</strong> Với <code>fetch</code> thì một lỗi HTTP vẫn là một lượt đi về thành công, nên promise hoàn tất và cái <code>catch</code> của bạn chẳng bao giờ chạy. Chuyện tiếp theo tuỳ máy chủ: nếu nó trả về một trang lỗi HTML thì <code>res.json()</code> ném ra "Unexpected token &lt;" — một lỗi về phân tích JSON chẳng nói gì với bạn về cú 500 đã gây ra nó. Nếu nó trả về JSON thì bạn vui vẻ vẽ một object lỗi ra như thể đó là dữ liệu. Hãy luôn kiểm <code>res.ok</code> trước khi đọc thân; chỉ một dòng, và nó biến một lỗi phân tích khó hiểu thành đúng cái mã trạng thái thật.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener">MDN — Dùng Fetch API</a></div>
 </div>
 `,
@@ -413,6 +519,14 @@ const u = User("Lan");</code></pre>
 import { useState } from "react";  // a named export from React</code></pre>
 <p class="note-ct"><strong>This is the last foundational JavaScript idea before the specialised chapters.</strong> Node.js code is modules importing modules; a React component imports React and other components. You now have the whole JavaScript vocabulary those courses assume — variables, functions, arrays, async, and modules. Chapters 6–8 turn to the server side: HTTP, auth, and data.</p>
 
+<h3>import and export, in one picture</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">export function f()</span><span class="lz-t">Named export</span><span class="lz-d">Imported as <code>import { f } from './x.js'</code>. The name must match, which is what makes rename-across-files work in the editor.</span></div>
+<div class="lz-node"><span class="lz-k">export default x</span><span class="lz-t">One per file</span><span class="lz-d">Imported with any name you like. Convenient, and slightly worse for tooling — two files can import the same thing under different names.</span></div>
+<div class="lz-node"><span class="lz-k">The path is a real path</span><span class="lz-t">./ or ../, with the extension</span><span class="lz-d">In the browser, <code>./utils.js</code> — not <code>./utils</code>. Bundlers let you omit it, which is why moving code to the browser sometimes breaks the imports.</span></div>
+<div class="lz-node"><span class="lz-k">Modules run once</span><span class="lz-t">And are cached</span><span class="lz-d">Importing the same file from five places executes it once. Top-level code in a module is effectively a one-time setup step.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — opening an HTML file that uses modules with a <code>file://</code> URL.</strong> Double-clicking <code>index.html</code> opens it from disk, and ES modules are blocked there by the browser's origin rules: you get "CORS policy: Cross origin requests are only supported for protocol schemes: http…", an error that mentions CORS even though there is no server involved. Nothing is wrong with your code, only with how the page was opened. Serve the folder over HTTP instead — <code>npx serve</code> or VS Code's Live Server extension — and the same files work. This is also the first taste of a rule you will meet again: the browser's security model depends on the origin, and <code>file://</code> has none.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules" target="_blank" rel="noopener">MDN — JavaScript modules</a></div>
 </div>
 <div class="ml-vi">
@@ -450,6 +564,14 @@ const u = User("Lan");</code></pre>
 import { useState } from "react";  // một named export từ React</code></pre>
 <p class="note-ct"><strong>Đây là ý tưởng JavaScript nền tảng cuối cùng trước các chương chuyên sâu.</strong> Code Node.js là các module import module; một component React import React và các component khác. Giờ bạn đã có trọn vốn từ JavaScript mà các khoá đó mặc định — biến, hàm, mảng, bất đồng bộ, và module. Chương 6–8 chuyển sang phía server: HTTP, xác thực, và dữ liệu.</p>
 
+<h3>import và export, trong một bức tranh</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">export function f()</span><span class="lz-t">Export có tên</span><span class="lz-d">Import bằng <code>import { f } from './x.js'</code>. Tên phải khớp, và chính điều đó làm tính năng đổi-tên-khắp-file trong trình soạn thảo chạy được.</span></div>
+<div class="lz-node"><span class="lz-k">export default x</span><span class="lz-t">Mỗi file một cái</span><span class="lz-d">Import với cái tên nào tuỳ bạn. Tiện, và hơi tệ hơn cho công cụ — hai file có thể import cùng một thứ dưới hai cái tên khác nhau.</span></div>
+<div class="lz-node"><span class="lz-k">Đường dẫn là đường dẫn thật</span><span class="lz-t">./ hoặc ../, kèm phần mở rộng</span><span class="lz-d">Trong trình duyệt là <code>./utils.js</code> — không phải <code>./utils</code>. Bundler cho phép bỏ nó, và đó là lý do đem mã sang trình duyệt đôi khi làm hỏng các import.</span></div>
+<div class="lz-node"><span class="lz-k">Module chỉ chạy một lần</span><span class="lz-t">Và được nhớ đệm</span><span class="lz-d">Import cùng một file từ năm chỗ thì nó chỉ thực thi một lần. Mã ở cấp cao nhất của một module thực chất là một bước thiết lập chạy đúng một lần.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — mở một file HTML có dùng module bằng URL <code>file://</code>.</strong> Bấm đúp vào <code>index.html</code> là mở nó từ đĩa, và ES module bị chặn ở đó bởi luật origin của trình duyệt: bạn nhận "CORS policy: Cross origin requests are only supported for protocol schemes: http…", một lỗi nhắc tới CORS dù chẳng có máy chủ nào dính vào. Mã của bạn không sai gì cả, chỉ có cách mở trang là sai. Hãy phục vụ thư mục đó qua HTTP — <code>npx serve</code> hoặc extension Live Server của VS Code — là đúng những file ấy chạy được. Đây cũng là lần đầu bạn nếm một luật sẽ gặp lại: mô hình an toàn của trình duyệt dựa trên origin, mà <code>file://</code> thì chẳng có origin nào.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules" target="_blank" rel="noopener">MDN — Module JavaScript</a></div>
 </div>
 `,

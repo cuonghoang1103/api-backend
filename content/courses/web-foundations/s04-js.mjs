@@ -58,6 +58,19 @@ console.log(hi.length);             // 11  — strings know their length</code><
 <p class="pitfall"><strong>+ is overloaded, and it surprises beginners.</strong> With numbers it adds; with a string on either side it joins as text. So <code>2 + 2 + "1"</code> is <code>"41"</code> — the first <code>2 + 2</code> is <code>4</code>, then <code>4 + "1"</code> becomes the string <code>"41"</code>. Watch the types.</p>
 
 <p class="note-ct"><strong>Try it now:</strong> open your browser, press F12, click the <strong>Console</strong> tab, and type these lines one by one. The console is a live JavaScript playground — the fastest way to build intuition.</p>
+<h3>Choosing between const, let and var</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Start with const, always</span><span class="lz-d">It says "this name will not be pointed at anything else". Most variables never are, and the reader gets that guarantee for free.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Switch to let only when you reassign</span><span class="lz-d">A loop counter, an accumulator. The editor will tell you: assigning to a <code>const</code> is an immediate error, so you never have to decide in advance.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Never var in new code</span><span class="lz-d">It ignores block scope, so a <code>var</code> declared inside an <code>if</code> leaks to the whole function. It exists for compatibility with code from before 2015.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">const is not "frozen"</span><span class="lz-d">It locks the <em>name</em>, not the value. <code>const a = []</code> then <code>a.push(1)</code> is perfectly legal — you changed the array, not which array <code>a</code> refers to.</span></div>
+</div>
+<pre><code>const user = { name: 'An' };
+user.name = 'Binh';        // fine — mutating the object
+user = { name: 'Chi' };    // TypeError: Assignment to constant variable.</code></pre>
+<div class="pitfall"><p><strong>Trap — <code>==</code> converts types before comparing, and the rules are not memorable.</strong> <code>'' == 0</code> is true, <code>'0' == 0</code> is true, but <code>'' == '0'</code> is false; <code>null == undefined</code> is true while <code>null == 0</code> is false. Nobody reasons about this correctly under pressure, and the bugs it causes are quiet — a form field that is empty passes a check for zero, and a total comes out wrong three functions later. Use <code>===</code> everywhere: it compares without converting, so the answer matches what you read on the page. The only common use for <code>==</code> is <code>x == null</code>, which deliberately catches both <code>null</code> and <code>undefined</code>.</p></div>
+<div class="link-card"><a href="https://javascript.info/variables" target="_blank" rel="noopener">JavaScript.info — Variables (clear, exercise-driven)</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness" target="_blank" rel="noopener">MDN — Equality comparisons, with the full conversion table</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -99,6 +112,19 @@ console.log(hi.length);             // 11  — chuỗi biết độ dài của m
 <p class="pitfall"><strong>Dấu + mang hai vai, và làm người mới bất ngờ.</strong> Với số thì cộng; với một chuỗi ở bất kỳ bên nào thì nối thành chữ. Nên <code>2 + 2 + "1"</code> ra <code>"41"</code> — <code>2 + 2</code> trước là <code>4</code>, rồi <code>4 + "1"</code> thành chuỗi <code>"41"</code>. Để ý kiểu.</p>
 
 <p class="note-ct"><strong>Thử ngay:</strong> mở trình duyệt, bấm F12, chọn thẻ <strong>Console</strong>, gõ từng dòng trên. Console là một sân chơi JavaScript trực tiếp — cách nhanh nhất để xây trực giác.</p>
+<h3>Chọn giữa const, let và var</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Luôn bắt đầu bằng const</span><span class="lz-d">Nó nói "cái tên này sẽ không trỏ vào thứ gì khác". Phần lớn biến chẳng bao giờ trỏ lại, và người đọc nhận được bảo đảm đó miễn phí.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Chỉ đổi sang let khi bạn gán lại</span><span class="lz-d">Một biến đếm vòng lặp, một biến cộng dồn. Trình soạn thảo sẽ nhắc bạn: gán vào một <code>const</code> là lỗi ngay lập tức, nên bạn chẳng phải quyết định trước.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Đừng bao giờ dùng var trong mã mới</span><span class="lz-d">Nó bỏ qua phạm vi khối, nên một <code>var</code> khai trong một <code>if</code> rò ra cả hàm. Nó tồn tại để tương thích với mã từ trước 2015.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">const không có nghĩa là "đóng băng"</span><span class="lz-d">Nó khoá cái <em>tên</em>, không khoá giá trị. <code>const a = []</code> rồi <code>a.push(1)</code> hoàn toàn hợp lệ — bạn đổi cái mảng, chứ không đổi việc <code>a</code> trỏ vào mảng nào.</span></div>
+</div>
+<pre><code>const user = { name: 'An' };
+user.name = 'Bình';        // được — đang sửa object
+user = { name: 'Chi' };    // TypeError: Assignment to constant variable.</code></pre>
+<div class="pitfall"><p><strong>Bẫy — <code>==</code> chuyển đổi kiểu trước khi so, và luật của nó thì không nhớ nổi.</strong> <code>'' == 0</code> là đúng, <code>'0' == 0</code> là đúng, nhưng <code>'' == '0'</code> lại sai; <code>null == undefined</code> là đúng còn <code>null == 0</code> là sai. Chẳng ai suy luận đúng chuyện này khi đang gấp, và lỗi nó gây ra thì lặng lẽ — một ô nhập để trống lọt qua một phép kiểm số không, rồi một con số tổng sai đi ở ba hàm sau. Hãy dùng <code>===</code> ở mọi nơi: nó so mà không chuyển đổi, nên đáp án khớp với thứ bạn đọc trên trang. Chỗ dùng <code>==</code> hợp lý duy nhất hay gặp là <code>x == null</code>, vốn cố tình bắt cả <code>null</code> lẫn <code>undefined</code>.</p></div>
+<div class="link-card"><a href="https://javascript.info/variables" target="_blank" rel="noopener">JavaScript.info — Biến (rõ ràng, nhiều bài tập)</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness" target="_blank" rel="noopener">MDN — So sánh bằng, kèm bảng chuyển đổi đầy đủ</a></div>
 </div>
 `,
     },
@@ -161,6 +187,16 @@ for (const fruit of fruits) {
   console.log(fruit);
 }</code></pre>
 <p class="note-ct"><strong>for...of is your everyday loop.</strong> Once you meet arrays in Lesson 4.4, you will loop over them constantly — reach for <code>for...of</code> when you just need each item, and the classic <code>for</code> when you need the index counter.</p>
+<h3>What counts as false in a condition</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">The six falsy values</span><span class="lz-t">false, 0, '', null, undefined, NaN</span><span class="lz-d">These, and only these. Memorise the list once — every <code>if (x)</code> you ever write depends on it.</span></div>
+<div class="lz-node"><span class="lz-k">Everything else is truthy</span><span class="lz-t">Including [] and {}</span><span class="lz-d">An empty array is truthy. <code>if (items)</code> is true for <code>[]</code>, so it does not mean "has items" — you want <code>items.length</code>.</span></div>
+<div class="lz-node"><span class="lz-k">'0' is truthy</span><span class="lz-t">A non-empty string</span><span class="lz-d">Form fields give you strings. A quantity of <code>'0'</code> passes <code>if (qty)</code> and then breaks the arithmetic below it.</span></div>
+<div class="lz-node"><span class="lz-k">Say what you mean</span><span class="lz-t">Explicit beats clever</span><span class="lz-d"><code>if (name !== '')</code> and <code>if (list.length > 0)</code> read the same in six months as they do today.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>||</code> for a default value swallows legitimate zeros and empty strings.</strong> <code>const qty = input.value || 1</code> looks like "use 1 if nothing was given", and it is: it also uses 1 when the user deliberately typed <code>0</code>, because <code>0</code> is falsy. The same bug hits <code>const label = title || 'Untitled'</code> for a title that is genuinely empty, and <code>const page = params.page || 1</code> for page zero. Use <code>??</code> instead — it only falls back on <code>null</code> and <code>undefined</code>, which is what "no value was provided" actually means. Keep <code>||</code> for when you really do want every falsy value replaced.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Glossary/Falsy" target="_blank" rel="noopener">MDN — Falsy: the complete list, with examples</a></div>
+<div class="link-card"><a href="https://javascript.info/logical-operators" target="_blank" rel="noopener">JavaScript.info — Logical operators, including ?? and short-circuiting</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -212,6 +248,16 @@ for (const fruit of fruits) {
   console.log(fruit);
 }</code></pre>
 <p class="note-ct"><strong>for...of là vòng lặp hằng ngày của bạn.</strong> Khi gặp mảng ở Bài 4.4, bạn sẽ lặp qua chúng liên tục — dùng <code>for...of</code> khi chỉ cần từng phần tử, và <code>for</code> cổ điển khi cần biến đếm chỉ số.</p>
+<h3>Cái gì được tính là sai trong một điều kiện</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">Sáu giá trị falsy</span><span class="lz-t">false, 0, '', null, undefined, NaN</span><span class="lz-d">Chỉ có chừng ấy, không hơn. Hãy học thuộc danh sách này một lần — mọi <code>if (x)</code> bạn từng viết đều dựa vào nó.</span></div>
+<div class="lz-node"><span class="lz-k">Còn lại đều truthy</span><span class="lz-t">Kể cả [] và {}</span><span class="lz-d">Một mảng rỗng là truthy. <code>if (items)</code> đúng với <code>[]</code>, nên nó KHÔNG có nghĩa "có phần tử" — thứ bạn muốn là <code>items.length</code>.</span></div>
+<div class="lz-node"><span class="lz-k">'0' là truthy</span><span class="lz-t">Một chuỗi không rỗng</span><span class="lz-d">Ô nhập của form đưa cho bạn chuỗi. Một số lượng <code>'0'</code> lọt qua <code>if (qty)</code> rồi phá hỏng phép tính ngay bên dưới.</span></div>
+<div class="lz-node"><span class="lz-k">Hãy nói đúng thứ bạn muốn nói</span><span class="lz-t">Tường minh hơn khôn ngoan</span><span class="lz-d"><code>if (name !== '')</code> và <code>if (list.length > 0)</code> sáu tháng sau đọc lên vẫn y như hôm nay.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — dùng <code>||</code> để đặt giá trị mặc định là nuốt luôn số không và chuỗi rỗng hợp lệ.</strong> <code>const qty = input.value || 1</code> nhìn như "dùng 1 nếu chẳng có gì", và đúng thế: nó cũng dùng 1 khi người dùng cố tình gõ <code>0</code>, vì <code>0</code> là falsy. Cùng lỗi ấy đánh vào <code>const label = title || 'Không tên'</code> với một tiêu đề rỗng thật, và <code>const page = params.page || 1</code> với trang số không. Hãy dùng <code>??</code> thay thế — nó chỉ lùi về mặc định với <code>null</code> và <code>undefined</code>, tức là đúng nghĩa "chẳng có giá trị nào được cấp". Để dành <code>||</code> cho khi bạn thật sự muốn thay mọi giá trị falsy.</p></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Glossary/Falsy" target="_blank" rel="noopener">MDN — Falsy: danh sách đầy đủ, kèm ví dụ</a></div>
+<div class="link-card"><a href="https://javascript.info/logical-operators" target="_blank" rel="noopener">JavaScript.info — Toán tử logic, gồm cả ?? và đoản mạch</a></div>
 </div>
 `,
     },
@@ -268,6 +314,16 @@ function demo() {
 demo();
 // console.log(localMsg);   // ❌ ReferenceError — it does not exist out here</code></pre>
 <p class="note-ct"><strong>Keep functions small and single-purpose.</strong> A good function does one thing, has a clear name that says what it returns, and does not secretly depend on outside state. This is the single habit that most improves your code as programs grow — and it is exactly how you will structure Express routes and React components later.</p>
+<h3>Function, arrow, or method?</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">function name() {}</span><span class="lz-t">Hoisted, has its own this</span><span class="lz-d">Callable before the line it is written on. Fine for top-level helpers; the hoisting is occasionally handy and occasionally confusing.</span></div>
+<div class="lz-layer"><span class="lz-k">const f = () =&gt; {}</span><span class="lz-t">Not hoisted, inherits this</span><span class="lz-d">The default for callbacks. Inheriting <code>this</code> from the surrounding code is exactly what you want inside <code>map</code>, <code>setTimeout</code> and event handlers.</span></div>
+<div class="lz-layer"><span class="lz-k">Parameters vs arguments</span><span class="lz-t">Names vs values</span><span class="lz-d">Parameters are in the declaration, arguments are what you pass. A parameter with no argument is <code>undefined</code>, silently — default values (<code>= 1</code>) fix that.</span></div>
+<div class="lz-layer"><span class="lz-k">Return early</span><span class="lz-t">Guard clauses beat nesting</span><span class="lz-d">Handle the bad cases at the top and return; the happy path stays flat and readable instead of buried four levels deep.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an arrow function with braces returns <code>undefined</code>.</strong> <code>const double = n =&gt; n * 2</code> returns the product, but <code>const double = n =&gt; { n * 2 }</code> returns nothing: braces open a function <em>body</em>, so you need an explicit <code>return</code>. The two look almost identical, and the failure is silent — no error, just <code>undefined</code> flowing onward until it hits arithmetic and becomes <code>NaN</code>, or hits a property access and throws somewhere unrelated. The same trap catches people returning an object literal: <code>() =&gt; { id: 1 }</code> is an empty body with a label in it, and you need <code>() =&gt; ({ id: 1 })</code>.</p></div>
+<div class="link-card"><a href="https://javascript.info/function-basics" target="_blank" rel="noopener">JavaScript.info — Functions, from the ground up</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank" rel="noopener">MDN — Arrow functions and how they differ</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.3</span>
@@ -313,6 +369,16 @@ function demo() {
 demo();
 // console.log(localMsg);   // ❌ ReferenceError — nó không tồn tại ngoài này</code></pre>
 <p class="note-ct"><strong>Giữ hàm nhỏ và một mục đích.</strong> Một hàm tốt làm một việc, có tên rõ nói nó trả về gì, và không âm thầm phụ thuộc trạng thái bên ngoài. Đây là thói quen cải thiện code nhiều nhất khi chương trình lớn dần — và đúng là cách bạn sẽ tổ chức route Express và component React về sau.</p>
+<h3>function, arrow, hay method?</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">function name() {}</span><span class="lz-t">Được kéo lên, có this riêng</span><span class="lz-d">Gọi được trước cả dòng viết ra nó. Ổn cho các hàm phụ ở cấp cao nhất; việc kéo lên đó lúc thì tiện, lúc thì gây rối.</span></div>
+<div class="lz-layer"><span class="lz-k">const f = () =&gt; {}</span><span class="lz-t">Không kéo lên, kế thừa this</span><span class="lz-d">Mặc định cho callback. Việc kế thừa <code>this</code> từ mã bao quanh đúng là thứ bạn muốn bên trong <code>map</code>, <code>setTimeout</code> và các handler sự kiện.</span></div>
+<div class="lz-layer"><span class="lz-k">Tham số với đối số</span><span class="lz-t">Tên với giá trị</span><span class="lz-d">Tham số nằm ở khai báo, đối số là thứ bạn truyền vào. Một tham số không có đối số là <code>undefined</code>, một cách lặng lẽ — giá trị mặc định (<code>= 1</code>) chữa được.</span></div>
+<div class="lz-layer"><span class="lz-k">Trả về sớm</span><span class="lz-t">Mệnh đề chốt chặn hơn lồng nhau</span><span class="lz-d">Xử các ca xấu ngay đầu rồi trả về; nhánh thuận lợi ở lại phẳng và dễ đọc thay vì bị chôn sâu bốn tầng.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một arrow function có dấu ngoặc nhọn thì trả về <code>undefined</code>.</strong> <code>const double = n =&gt; n * 2</code> trả về tích, còn <code>const double = n =&gt; { n * 2 }</code> chẳng trả về gì: dấu ngoặc nhọn mở ra một <em>thân hàm</em>, nên bạn cần một <code>return</code> tường minh. Hai cái nhìn gần như y hệt, và cú hỏng thì im lặng — không lỗi nào, chỉ có một <code>undefined</code> trôi tiếp cho tới khi gặp phép tính rồi thành <code>NaN</code>, hoặc gặp phép truy cập thuộc tính rồi ném lỗi ở một chỗ chẳng liên quan. Cùng cái bẫy đó bắt người muốn trả về một object literal: <code>() =&gt; { id: 1 }</code> là một thân rỗng có cái nhãn bên trong, và bạn cần <code>() =&gt; ({ id: 1 })</code>.</p></div>
+<div class="link-card"><a href="https://javascript.info/function-basics" target="_blank" rel="noopener">JavaScript.info — Hàm, từ nền móng</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank" rel="noopener">MDN — Arrow function và những chỗ nó khác biệt</a></div>
 </div>
 `,
     },
@@ -370,6 +436,16 @@ user.city = "Hanoi";    // add a new property</code></pre>
 ];
 const names = users.map(u =&gt; u.name);   // ["Lan", "Minh"]</code></pre>
 <p class="note-ct"><strong>This is the heart of web data.</strong> A blog is an array of post objects; a chat is an array of message objects. Master <code>map</code>/<code>filter</code> over arrays of objects here, and the Node.js and React courses will feel like using tools you already own.</p>
+<h3>The three array methods you will use daily</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">map</span><span class="lz-t">Same length, transformed</span><span class="lz-d">Ten users in, ten names out. Returns a <em>new</em> array; the original is untouched.</span></div>
+<div class="lz-node"><span class="lz-k">filter</span><span class="lz-t">Fewer items, same shape</span><span class="lz-d">Keeps every element for which your function returns true. Also returns a new array.</span></div>
+<div class="lz-node"><span class="lz-k">find</span><span class="lz-t">One item, or undefined</span><span class="lz-d">Stops at the first match. The <code>undefined</code> when nothing matches is the part people forget to handle.</span></div>
+<div class="lz-node"><span class="lz-k">forEach vs map</span><span class="lz-t">Do something vs make something</span><span class="lz-d"><code>forEach</code> returns <code>undefined</code>, so it is for side effects only. If you want a result, you want <code>map</code>.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — copying an object with <code>{...obj}</code> and then mutating something one level deeper.</strong> The spread makes a <em>shallow</em> copy: top-level values are copied, but a nested object or array is shared between the original and the copy. So <code>const b = {...a}; b.tags.push('x')</code> pushes into <code>a.tags</code> too, because both names point at the same array. The bug shows up as "editing one item changed all of them", which sends people hunting through their render code instead of their copy. For nested data use <code>structuredClone(obj)</code>, or copy each level you intend to change explicitly.</p></div>
+<div class="link-card"><a href="https://javascript.info/array-methods" target="_blank" rel="noopener">JavaScript.info — Array methods, with exercises</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank" rel="noopener">MDN — every Array method, with "mutates?" clearly marked</a></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.4</span>
@@ -416,6 +492,16 @@ user.city = "Hanoi";    // thêm một thuộc tính mới</code></pre>
 ];
 const names = users.map(u =&gt; u.name);   // ["Lan", "Minh"]</code></pre>
 <p class="note-ct"><strong>Đây là trái tim của dữ liệu web.</strong> Một blog là một mảng các đối tượng bài viết; một cuộc trò chuyện là một mảng các đối tượng tin nhắn. Thạo <code>map</code>/<code>filter</code> trên mảng đối tượng ở đây, thì khoá Node.js và React sẽ như dùng công cụ bạn đã có sẵn.</p>
+<h3>Ba phương thức mảng bạn sẽ dùng mỗi ngày</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">map</span><span class="lz-t">Cùng độ dài, đã biến đổi</span><span class="lz-d">Mười người dùng vào, mười cái tên ra. Trả về một mảng <em>mới</em>; mảng gốc không bị đụng tới.</span></div>
+<div class="lz-node"><span class="lz-k">filter</span><span class="lz-t">Ít phần tử hơn, cùng dáng</span><span class="lz-d">Giữ lại mọi phần tử mà hàm của bạn trả về true. Cũng trả về một mảng mới.</span></div>
+<div class="lz-node"><span class="lz-k">find</span><span class="lz-t">Một phần tử, hoặc undefined</span><span class="lz-d">Dừng ở cái khớp đầu tiên. Cái <code>undefined</code> khi chẳng có gì khớp mới là phần người ta hay quên xử lý.</span></div>
+<div class="lz-node"><span class="lz-k">forEach với map</span><span class="lz-t">Làm gì đó với tạo ra gì đó</span><span class="lz-d"><code>forEach</code> trả về <code>undefined</code>, nên nó chỉ dành cho tác dụng phụ. Muốn có kết quả thì bạn cần <code>map</code>.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — chép một object bằng <code>{...obj}</code> rồi sửa thứ nằm sâu hơn một tầng.</strong> Phép trải tạo ra một bản chép <em>nông</em>: giá trị ở tầng trên cùng được chép, nhưng một object hay mảng lồng bên trong thì dùng chung giữa bản gốc và bản chép. Nên <code>const b = {...a}; b.tags.push('x')</code> đẩy luôn vào <code>a.tags</code>, vì hai cái tên cùng trỏ vào một mảng. Lỗi hiện ra dưới dạng "sửa một mục thì tất cả cùng đổi", khiến người ta đi lùng trong mã hiển thị thay vì trong đoạn chép. Với dữ liệu lồng nhau hãy dùng <code>structuredClone(obj)</code>, hoặc chép tường minh từng tầng bạn định sửa.</p></div>
+<div class="link-card"><a href="https://javascript.info/array-methods" target="_blank" rel="noopener">JavaScript.info — Phương thức mảng, kèm bài tập</a></div>
+<div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank" rel="noopener">MDN — mọi phương thức Array, ghi rõ cái nào sửa mảng gốc</a></div>
 </div>
 `,
     },
@@ -472,6 +558,14 @@ btn.addEventListener("click", () =&gt; {
 <p>Every variable, function, event and DOM idea from this chapter, in twelve lines — a button that actually does something.</p>
 <p class="note-ct"><strong>This is the bridge to frameworks.</strong> React exists precisely because updating the DOM by hand gets hard as apps grow — it lets you describe what the UI should look like and updates the DOM for you. But it is DOM updates underneath. Understand this lesson and React stops being magic.</p>
 
+<h3>Reading and changing the page from JavaScript</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Select an element</span><span class="lz-d"><code>document.querySelector('.card')</code> takes any CSS selector and returns the first match — or <code>null</code>, which is the case people forget.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Read or change it</span><span class="lz-d"><code>textContent</code> for text, <code>classList.add/remove/toggle</code> for styling, <code>value</code> for form fields. Prefer toggling a class over setting styles one by one.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Listen for events</span><span class="lz-d"><code>el.addEventListener('click', handler)</code>. The handler receives an event object with <code>target</code>, <code>currentTarget</code> and <code>preventDefault()</code>.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Events bubble upward</span><span class="lz-d">A click on a button also fires on its parent, and its parent's parent. That is what lets one listener on a list handle clicks on a hundred rows.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a <code>&lt;script&gt;</code> in the <code>&lt;head&gt;</code> runs before the elements exist.</strong> The browser executes scripts as it reaches them, so a script above your HTML runs when <code>document.querySelector('#btn')</code> has nothing to find: it returns <code>null</code>, and the next line throws "Cannot read properties of null (reading 'addEventListener')". The code is correct; only the timing is wrong. Two fixes, both one word: put <code>defer</code> on the script tag, which runs it after the document is parsed, or move the tag to just before <code>&lt;/body&gt;</code>. <code>defer</code> is the better default because it keeps the script reference where a reader will look for it.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction" target="_blank" rel="noopener">MDN — Introduction to the DOM</a></div>
 </div>
 <div class="ml-vi">
@@ -518,6 +612,14 @@ btn.addEventListener("click", () =&gt; {
 <p>Mọi ý tưởng về biến, hàm, sự kiện và DOM trong chương này, gói trong mười hai dòng — một cái nút thật sự làm được việc.</p>
 <p class="note-ct"><strong>Đây là cây cầu tới các framework.</strong> React ra đời chính vì cập nhật DOM bằng tay trở nên khó khi app lớn lên — nó cho bạn mô tả giao diện nên trông thế nào rồi tự cập nhật DOM giúp bạn. Nhưng bên dưới vẫn là cập nhật DOM. Hiểu bài này thì React hết còn là phép màu.</p>
 
+<h3>Đọc và sửa trang từ JavaScript</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Chọn một phần tử</span><span class="lz-d"><code>document.querySelector('.card')</code> nhận bộ chọn CSS bất kỳ và trả về cái khớp đầu tiên — hoặc <code>null</code>, đó mới là trường hợp người ta hay quên.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Đọc hoặc sửa nó</span><span class="lz-d"><code>textContent</code> cho chữ, <code>classList.add/remove/toggle</code> cho phần tô, <code>value</code> cho ô nhập. Hãy ưu tiên bật/tắt một class hơn là đặt từng thuộc tính style một.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Lắng nghe sự kiện</span><span class="lz-d"><code>el.addEventListener('click', handler)</code>. Handler nhận một object sự kiện có <code>target</code>, <code>currentTarget</code> và <code>preventDefault()</code>.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Sự kiện nổi bọt lên trên</span><span class="lz-d">Một cú bấm vào cái nút cũng kích hoạt trên phần tử cha, rồi cha của cha. Chính điều đó cho phép một listener trên danh sách xử lý cú bấm của cả trăm dòng.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một thẻ <code>&lt;script&gt;</code> nằm trong <code>&lt;head&gt;</code> chạy trước khi các phần tử tồn tại.</strong> Trình duyệt thực thi script ngay khi gặp, nên một script nằm trên phần HTML của bạn sẽ chạy lúc <code>document.querySelector('#btn')</code> chẳng có gì để tìm: nó trả về <code>null</code>, và dòng kế tiếp ném ra "Cannot read properties of null (reading 'addEventListener')". Mã thì đúng; chỉ có thời điểm là sai. Hai cách chữa, đều một chữ: đặt <code>defer</code> lên thẻ script để nó chạy sau khi tài liệu được phân tích xong, hoặc dời thẻ đó xuống ngay trước <code>&lt;/body&gt;</code>. <code>defer</code> là mặc định tốt hơn vì nó giữ tham chiếu script ở đúng chỗ người đọc sẽ tìm.</p></div>
 <div class="link-card"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction" target="_blank" rel="noopener">MDN — Giới thiệu về DOM</a></div>
 </div>
 `,

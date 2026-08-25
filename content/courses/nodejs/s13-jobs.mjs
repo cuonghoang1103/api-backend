@@ -32,10 +32,10 @@ export default {
 
 <h3>What actually goes wrong</h3>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-t">Người dùng phải chờ</span><span class="lz-d">độ trễ của bạn giờ bằng độ trễ của bên chậm nhất trong chuỗi. Bạn không kiểm soát nó</span></div>
-  <div class="lz-step"><span class="lz-t">Hỏng là mất hẳn</span><span class="lz-d">bên kia trả lỗi → request 500 → công việc biến mất, không còn dấu vết để thử lại</span></div>
-  <div class="lz-step"><span class="lz-t">Không có phanh</span><span class="lz-d">1.000 người đăng ký cùng lúc = 1.000 kết nối đồng thời tới SMTP, dù nó chỉ chịu được 5</span></div>
-  <div class="lz-step"><span class="lz-t">Deploy là cắt ngang</span><span class="lz-d">SIGTERM giữa lúc đang gọi ra ngoài — bài 13.5 đo đúng chuyện này</span></div>
+  <div class="lz-step"><span class="lz-t">The user has to wait</span><span class="lz-d">your latency is now the latency of the slowest party in the chain. You do not control it</span></div>
+  <div class="lz-step"><span class="lz-t">A failure loses it outright</span><span class="lz-d">the other side errors → the request 500s → the work vanishes, with no trace left to retry from</span></div>
+  <div class="lz-step"><span class="lz-t">No brakes</span><span class="lz-d">1,000 simultaneous sign-ups = 1,000 concurrent SMTP connections, against a server that can take 5</span></div>
+  <div class="lz-step"><span class="lz-t">A deploy cuts straight through</span><span class="lz-d">SIGTERM in the middle of an outbound call — lesson 13.5 measures exactly this</span></div>
 </div>
 
 <h3>Measurement 1 — the user's latency</h3>
@@ -94,8 +94,8 @@ app.post('/register', async (req, res) =&gt; {
 
 <h3>What belongs in a queue, and what does not</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Nên đưa vào hàng đợi</span><span class="v">gửi email/SMS/push · gọi API bên thứ ba · tạo ảnh thu nhỏ, nén video · dựng lại chỉ mục tìm kiếm · xuất báo cáo · webhook gửi đi · dọn dẹp định kỳ</span></div>
-  <div class="kv"><span class="k">KHÔNG nên</span><span class="v">bất cứ thứ gì phản hồi cần tới NGAY (kiểm mật khẩu, đọc dữ liệu) · việc phải chạy trong CÙNG transaction với ghi dữ liệu · việc rẻ hơn cả chi phí đưa vào hàng đợi</span></div>
+  <div class="kv"><span class="k">Belongs on a queue</span><span class="v">sending email/SMS/push · calling third-party APIs · generating thumbnails, transcoding video · rebuilding search indexes · exporting reports · outbound webhooks · periodic cleanup</span></div>
+  <div class="kv"><span class="k">Does NOT belong</span><span class="v">anything whose answer is needed IMMEDIATELY (password checks, data reads) · work that must run in the SAME transaction as the write · work cheaper than the cost of enqueueing it</span></div>
 </div>
 <p>That last exclusion matters more than it sounds. Enqueuing costs a Redis round trip plus a worker wake-up. If the work itself takes 2ms, you have made it slower and added a moving part.</p>
 
@@ -111,7 +111,7 @@ app.post('/register', async (req, res) =&gt; {
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Hàng đợi, sự kiện và kiến trúc bất đồng bộ trong Node.js</span></a>
+  <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Queues, events and asynchronous architecture in Node.js</span></a>
 </div>
 </div>
 
@@ -221,9 +221,9 @@ app.post('/register', async (req, res) =&gt; {
 
 <h3>Three objects, and that is the whole API</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-t">Queue</span><span class="lz-d">phía NGƯỜI GỬI. <code>queue.add(name, data, opts)</code>. Sống trong tiến trình web của bạn</span></div>
-  <div class="lz-layer"><span class="lz-t">Worker</span><span class="lz-d">phía NGƯỜI LÀM. <code>new Worker(name, handler, opts)</code>. Nên sống trong một tiến trình RIÊNG</span></div>
-  <div class="lz-layer"><span class="lz-t">Job</span><span class="lz-d">một bản ghi trong Redis: dữ liệu, tuỳ chọn, số lần đã thử, kết quả trả về, lý do thất bại</span></div>
+  <div class="lz-layer"><span class="lz-t">Queue</span><span class="lz-d">the SENDING side. <code>queue.add(name, data, opts)</code>. Lives inside your web process</span></div>
+  <div class="lz-layer"><span class="lz-t">Worker</span><span class="lz-d">the WORKING side. <code>new Worker(name, handler, opts)</code>. Should live in a SEPARATE process</span></div>
+  <div class="lz-layer"><span class="lz-t">Job</span><span class="lz-d">a record in Redis: the data, the options, the attempt count, the return value, the failure reason</span></div>
 </div>
 <pre><code class="language-javascript">// producer.js — trong tiến trình web
 import { Queue } from 'bullmq';
@@ -300,10 +300,10 @@ await emailQueue.add('password-reset', { userId: 42, token });</code></pre>
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">BullMQ, producer/consumer và mô hình sự kiện</span></a>
+  <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">BullMQ, producer/consumer and the event model</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-735"><span class="lc-t">Code Lab · Redis Streams and Event-Driven Architecture</span><span class="lc-d">Thứ nằm dưới mọi hàng đợi trên Redis</span></a>
+  <a href="/code-lab/redis${REF}#module-735"><span class="lc-t">Code Lab · Redis Streams and Event-Driven Architecture</span><span class="lc-d">What underlies every Redis-based queue</span></a>
 </div>
 </div>
 
@@ -521,10 +521,10 @@ new Worker('email', async (job) =&gt; {
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Thử lại, dead letter và xử lý lỗi trong hàng đợi</span></a>
+  <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Retries, dead letters and error handling in a queue</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/payment-integration${REF}"><span class="lc-t">Code Lab · Payment Integration</span><span class="lc-d">Idempotency key và webhook — nơi "chạy hai lần" tốn tiền thật</span></a>
+  <a href="/code-lab/payment-integration${REF}"><span class="lc-t">Code Lab · Payment Integration</span><span class="lc-d">Idempotency keys and webhooks — where "running twice" costs real money</span></a>
 </div>
 </div>
 
@@ -707,10 +707,10 @@ await queue.upsertJobScheduler(
    ⇒ Lịch nằm trong Redis, không nằm trong tiến trình → deploy 3 pod vẫn chỉ 1 lịch.</div>
 <p>Three processes registered the same scheduler and the job fired <strong>5 times, not 15</strong>. The schedule is state in Redis, not a timer in a process. Compare that with <code>setInterval</code> or in-process <code>node-cron</code>: those are timers <em>inside</em> a process, so three replicas means three independent timers means the nightly cleanup runs three times, the report email is sent three times, and the only thing standing between you and that bug is the fact that you currently run one container.</p>
 <div class="kv-grid">
-  <div class="kv"><span class="k">setInterval</span><span class="v">Trôi dạt dần, chết khi tiến trình chết, nhân lên theo số bản sao, không nhớ lần chạy hụt. Chỉ dùng cho việc trong bộ nhớ, vô hại</span></div>
-  <div class="kv"><span class="k">node-cron trong tiến trình</span><span class="v">Cú pháp cron đúng chuẩn, hiểu múi giờ, NHƯNG vẫn nằm trong tiến trình → 3 bản sao = 3 lần chạy. Cần một khoá phân tán (bài 12.4) nếu chạy nhiều bản</span></div>
-  <div class="kv"><span class="k">crontab của hệ điều hành</span><span class="v">Sống sót qua mọi lần khởi động lại app, nhưng nằm ngoài code, ngoài log, ngoài repo. Dễ quên khi đổi máy chủ</span></div>
-  <div class="kv"><span class="k">Job scheduler của BullMQ</span><span class="v">Lịch nằm trong Redis, chạy đúng MỘT lần dù có bao nhiêu tiến trình, dùng chung cơ chế thử lại/quan sát với mọi job khác</span></div>
+  <div class="kv"><span class="k">setInterval</span><span class="v">Drifts over time, dies with the process, multiplies with the replica count, and forgets missed runs. Only for harmless in-memory work</span></div>
+  <div class="kv"><span class="k">node-cron inside the process</span><span class="v">Proper cron syntax and timezone awareness, BUT still inside the process → 3 replicas = 3 runs. It needs a distributed lock (lesson 12.4) if you run more than one</span></div>
+  <div class="kv"><span class="k">the operating system's crontab</span><span class="v">Survives every application restart, but lives outside your code, your logs and your repo. Easy to forget when you change servers</span></div>
+  <div class="kv"><span class="k">BullMQ's job scheduler</span><span class="v">The schedule lives in Redis, runs exactly ONCE no matter how many processes there are, and shares its retry and observability machinery with every other job</span></div>
 </div>
 
 <h3>What a scheduled job should actually do</h3>
@@ -740,10 +740,10 @@ new Worker('cron', async () =&gt; {
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Job hẹn giờ, định kỳ và ưu tiên</span></a>
+  <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Delayed, repeating and prioritised jobs</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-737"><span class="lc-t">Code Lab · Lua Scripting Mastery for Atomic Operations</span><span class="lc-d">Cơ chế nguyên tử nằm dưới limiter và scheduler</span></a>
+  <a href="/code-lab/redis${REF}#module-737"><span class="lc-t">Code Lab · Lua Scripting Mastery for Atomic Operations</span><span class="lc-d">The atomic machinery beneath the limiter and the scheduler</span></a>
 </div>
 </div>
 
@@ -878,7 +878,7 @@ new Worker('cron', async () =&gt; {
 <div class="out">--- Job CHẶN event loop 3 giây (lockDuration 1s) ---
 Error: Missing lock for job 1. moveToFinished
   … code: -2
-   hàm xử lý chạy 2 lần · sự kiện stalled: 2
+   hàm xử lý chạy 2 lần · stalled events: 2
    completed=0 failed=1
    ⇒ Chặn event loop = timer gia hạn khoá KHÔNG chạy được ⇒ job bị coi là TREO và chạy LẠI.</div>
 <p><code>Missing lock for job 1. moveToFinished</code> is a real production error message, and now you know exactly what it means: <strong>your handler blocked the event loop past <code>lockDuration</code></strong>, so the renewal never fired, so the job was declared stalled and re-run — and when the original finally finished it no longer owned the lock and could not record its own completion. The job ran twice and still ended as <code>failed</code>.</p>
@@ -926,11 +926,11 @@ process.on('SIGINT', shutdown);    // Ctrl+C khi chạy máy cục bộ</code></
 
 <h3>What to watch</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">waiting đang tăng</span><span class="v">Tín hiệu QUAN TRỌNG NHẤT. Việc vào nhanh hơn việc ra → thêm worker, tăng concurrency, hoặc sửa job chậm. Hãy cảnh báo theo XU HƯỚNG, không theo con số tuyệt đối</span></div>
-  <div class="kv"><span class="k">failed đang tăng</span><span class="v">Có thứ hỏng có hệ thống. Một job hỏng là chuyện thường; failed tăng đều là sự cố</span></div>
-  <div class="kv"><span class="k">sự kiện stalled</span><span class="v">Worker đang chết hoặc job đang chặn event loop. Đáng lẽ phải bằng 0</span></div>
-  <div class="kv"><span class="k">tuổi của job cũ nhất</span><span class="v">Hàng đợi có thể ngắn mà vẫn kẹt. "Job cũ nhất đã chờ 40 phút" nói lên nhiều hơn "đang có 12 job chờ"</span></div>
-  <div class="kv"><span class="k">thời gian xử lý</span><span class="v">Chậm dần đi = bên thứ ba đang xuống sức, hoặc dữ liệu đã phình to</span></div>
+  <div class="kv"><span class="k">waiting is climbing</span><span class="v">The MOST IMPORTANT signal. Work arriving faster than it leaves → add workers, raise concurrency, or fix the slow job. Alert on the TREND, not on an absolute number</span></div>
+  <div class="kv"><span class="k">failed is climbing</span><span class="v">Something is systematically broken. One failed job is routine; a steady rise in failures is an incident</span></div>
+  <div class="kv"><span class="k">stalled events</span><span class="v">Workers are dying, or a job is blocking the event loop. This should be zero</span></div>
+  <div class="kv"><span class="k">the age of the oldest job</span><span class="v">A queue can be short and still stuck. "The oldest job has waited 40 minutes" says far more than "12 jobs are waiting"</span></div>
+  <div class="kv"><span class="k">processing time</span><span class="v">Gradually slowing = a third party is degrading, or your data has grown</span></div>
 </div>
 <pre><code class="language-javascript">// một endpoint sức khoẻ đủ dùng, không cần thư viện nào
 app.get('/health/queues', async (req, res) =&gt; {
@@ -945,12 +945,12 @@ app.get('/health/queues', async (req, res) =&gt; {
 
 <h3>The checklist for putting a queue in production</h3>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-t">Redis riêng, noeviction</span><span class="lz-d">Đừng dùng chung Redis cache đặt allkeys-lru — nó sẽ trục xuất job của bạn (bài 12.6)</span></div>
-  <div class="lz-step"><span class="lz-t">Worker ở tiến trình riêng</span><span class="lz-d">Không dùng chung event loop với web, co giãn độc lập</span></div>
-  <div class="lz-step"><span class="lz-t">attempts + backoff + idempotent</span><span class="lz-d">Cả ba, không phải chọn một (bài 13.3)</span></div>
-  <div class="lz-step"><span class="lz-t">SIGTERM đóng worker</span><span class="lz-d">Mỗi lần deploy đều dùng tới nó</span></div>
-  <div class="lz-step"><span class="lz-t">removeOnComplete / removeOnFail</span><span class="lz-d">Không đặt thì Redis phình tới lúc từ chối ghi</span></div>
-  <div class="lz-step"><span class="lz-t">Cảnh báo waiting và failed</span><span class="lz-d">Hàng đợi hỏng trong im lặng — đó là kiểu hỏng đặc trưng của nó</span></div>
+  <div class="lz-step"><span class="lz-t">A dedicated Redis, noeviction</span><span class="lz-d">Do not share the cache Redis set to allkeys-lru — it will evict your jobs (lesson 12.6)</span></div>
+  <div class="lz-step"><span class="lz-t">Workers in a separate process</span><span class="lz-d">No shared event loop with the web tier, and independent scaling</span></div>
+  <div class="lz-step"><span class="lz-t">attempts + backoff + idempotent</span><span class="lz-d">All three, not one of three (lesson 13.3)</span></div>
+  <div class="lz-step"><span class="lz-t">SIGTERM closes the worker</span><span class="lz-d">Every single deploy depends on it</span></div>
+  <div class="lz-step"><span class="lz-t">removeOnComplete / removeOnFail</span><span class="lz-d">Leave it unset and Redis grows until it refuses writes</span></div>
+  <div class="lz-step"><span class="lz-t">Alerts on waiting and failed</span><span class="lz-d">Queues fail silently — that is their characteristic failure mode</span></div>
 </div>
 
 <div class="pitfall">
@@ -962,7 +962,7 @@ app.get('/health/queues', async (req, res) =&gt; {
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Vận hành hàng đợi: job treo, tắt êm, dọn dẹp</span></a>
+  <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Operating a queue: stuck jobs, graceful shutdown, cleanup</span></a>
 </div>
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-990"><span class="lc-t">Code Lab · Metrics &amp; Dashboards</span><span class="lc-d">Đo và cảnh báo cho hàng đợi — nối tiếp chương 15</span></a>

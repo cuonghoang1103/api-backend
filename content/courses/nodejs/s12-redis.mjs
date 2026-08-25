@@ -114,10 +114,10 @@ export function getRedis() {
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-422"><span class="lc-t">Code Lab · Redis Setup and Foundation</span><span class="lc-d">Cài đặt, redis-cli, kiểu dữ liệu đầu tiên — làm tay trước khi đọc tiếp</span></a>
+  <a href="/code-lab/redis${REF}#module-422"><span class="lc-t">Code Lab · Redis Setup and Foundation</span><span class="lc-d">Installation, redis-cli, your first data types — hands-on before reading further</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-429"><span class="lc-t">Code Lab · Performance, Scripting, and Production Patterns</span><span class="lc-d">Pipeline, benchmark và các khuôn mẫu production</span></a>
+  <a href="/code-lab/redis${REF}#module-429"><span class="lc-t">Code Lab · Performance, Scripting, and Production Patterns</span><span class="lc-d">Pipelines, benchmarks and production patterns</span></a>
 </div>
 </div>
 
@@ -345,10 +345,10 @@ if (got) {
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-740"><span class="lc-t">Code Lab · Distributed Caching Strategies and Patterns</span><span class="lc-d">Cache-aside, write-through, stampede và các cách làm mới cache</span></a>
+  <a href="/code-lab/redis${REF}#module-740"><span class="lc-t">Code Lab · Distributed Caching Strategies and Patterns</span><span class="lc-d">Cache-aside, write-through, stampede and the ways to refresh a cache</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-424"><span class="lc-t">Code Lab · Expiration, TTL, and Key Management</span><span class="lc-d">EXPIRE, TTL, KEEPTTL và đặt tên khoá cho có kỷ luật</span></a>
+  <a href="/code-lab/redis${REF}#module-424"><span class="lc-t">Code Lab · Expiration, TTL, and Key Management</span><span class="lc-d">EXPIRE, TTL, KEEPTTL and naming keys with discipline</span></a>
 </div>
 </div>
 
@@ -528,14 +528,14 @@ hash-max-listpack-entries = 512</div>
 
 <h3>The full menu, and when each one is the answer</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">String</span><span class="v">cache JSON, cờ bật/tắt, bộ đếm (<code>INCR</code> chạy trên String). Mặc định, và không có gì sai khi dùng nó</span></div>
-  <div class="kv"><span class="k">Hash</span><span class="v">đối tượng cần sửa TỪNG trường: <code>HINCRBY user:42 views 1</code> không phải đọc-sửa-ghi cả đối tượng</span></div>
-  <div class="kv"><span class="k">List</span><span class="v">hàng đợi đơn giản (<code>LPUSH</code>/<code>BRPOP</code>), nhật ký N mục gần nhất (<code>LPUSH</code> + <code>LTRIM</code>)</span></div>
-  <div class="kv"><span class="k">Set</span><span class="v">quan hệ và phép toán tập hợp: bạn chung (<code>SINTER</code>), thẻ, "đã xem chưa"</span></div>
-  <div class="kv"><span class="k">Sorted Set</span><span class="v">bất cứ thứ gì có THỨ TỰ: bảng xếp hạng, hàng đợi ưu tiên, cửa sổ trượt theo thời gian (bài 12.4)</span></div>
-  <div class="kv"><span class="k">Bitmap</span><span class="v">1 bit/id trên dải id dày đặc: hoạt động theo ngày, cờ tính năng theo user</span></div>
-  <div class="kv"><span class="k">HyperLogLog</span><span class="v">đếm số lượng duy nhất khi con số gần đúng là đủ. 12 KB cố định, mãi mãi</span></div>
-  <div class="kv"><span class="k">Stream</span><span class="v">nhật ký sự kiện chỉ ghi thêm, có consumer group và xác nhận — bài 12.5</span></div>
+  <div class="kv"><span class="k">String</span><span class="v">cached JSON, feature flags, counters (<code>INCR</code> runs on Strings). The default, and there is nothing wrong with using it</span></div>
+  <div class="kv"><span class="k">Hash</span><span class="v">objects where you edit INDIVIDUAL fields: <code>HINCRBY user:42 views 1</code> rather than read-modify-write on the whole object</span></div>
+  <div class="kv"><span class="k">List</span><span class="v">simple queues (<code>LPUSH</code>/<code>BRPOP</code>), a log of the N most recent entries (<code>LPUSH</code> + <code>LTRIM</code>)</span></div>
+  <div class="kv"><span class="k">Set</span><span class="v">relationships and set arithmetic: mutual friends (<code>SINTER</code>), tags, "have they seen this"</span></div>
+  <div class="kv"><span class="k">Sorted Set</span><span class="v">anything with an ORDER: leaderboards, priority queues, sliding time windows (lesson 12.4)</span></div>
+  <div class="kv"><span class="k">Bitmap</span><span class="v">1 bit per id across a dense id range: daily activity, per-user feature flags</span></div>
+  <div class="kv"><span class="k">HyperLogLog</span><span class="v">counting distinct values when an approximation suffices. A fixed 12 KB, forever</span></div>
+  <div class="kv"><span class="k">Stream</span><span class="v">an append-only event log with consumer groups and acknowledgements — lesson 12.5</span></div>
 </div>
 
 <h3>Naming keys like you mean it</h3>
@@ -556,10 +556,10 @@ hash-max-listpack-entries = 512</div>
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-423"><span class="lc-t">Code Lab · Core Data Structures</span><span class="lc-d">String, Hash, List, Set, Sorted Set — bài tập từng lệnh</span></a>
+  <a href="/code-lab/redis${REF}#module-423"><span class="lc-t">Code Lab · Core Data Structures</span><span class="lc-d">String, Hash, List, Set, Sorted Set — exercises command by command</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-425"><span class="lc-t">Code Lab · Advanced Data Types and Commands</span><span class="lc-d">Bitmap, HyperLogLog, GEO và các lệnh ít gặp</span></a>
+  <a href="/code-lab/redis${REF}#module-425"><span class="lc-t">Code Lab · Advanced Data Types and Commands</span><span class="lc-d">Bitmap, HyperLogLog, GEO and the less common commands</span></a>
 </div>
 </div>
 
@@ -775,10 +775,10 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-737"><span class="lc-t">Code Lab · Lua Scripting Mastery for Atomic Operations</span><span class="lc-d">EVAL, EVALSHA, KEYS/ARGV và các script nguyên tử hay dùng</span></a>
+  <a href="/code-lab/redis${REF}#module-737"><span class="lc-t">Code Lab · Lua Scripting Mastery for Atomic Operations</span><span class="lc-d">EVAL, EVALSHA, KEYS/ARGV and the atomic scripts you will actually use</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/authentication${REF}#module-958"><span class="lc-t">Code Lab · Rate limiting</span><span class="lc-d">Giới hạn tần suất ở tầng ứng dụng — nối tiếp bài 8.4</span></a>
+  <a href="/code-lab/authentication${REF}#module-958"><span class="lc-t">Code Lab · Rate limiting</span><span class="lc-d">Application-level rate limiting — continuing from lesson 8.4</span></a>
 </div>
 </div>
 
@@ -979,7 +979,7 @@ XTRIM MAXLEN 1000  : XLEN=1000  RAM=0.03MB (1,40ms) ← chính xác
 XTRIM ~1000 LIMIT 0: XLEN=1000  RAM=0.03MB (1,18ms) ← xấp xỉ không giới hạn số nút quét
 stream-node-max-entries = 100</div>
 <p>Look at line two, because it surprised me. <code>MAXLEN ~1000</code> — the form every tutorial recommends — left <strong>40.000 entries</strong> and freed almost nothing. The <code>~</code> means "approximately", and by default Redis also caps how many nodes it will scan in one call, so it stops early. Either use the exact form, or pass <code>LIMIT 0</code> to let the approximate trim run to completion. Trimming is not optional: an untrimmed stream grows forever, and unlike a cache key it has no TTL to save you.</p>
-<p>Prefer <code>MAXLEN</code> when you care about memory and <code>MINID</code> when you care about time (<code>XTRIM log MINID &lt;id của 7 ngày trước&gt;</code>). You can also trim on write — <code>XADD jobs MAXLEN ~ 10000 * ...</code> — which is the option that never gets forgotten in a cron job.</p>
+<p>Prefer <code>MAXLEN</code> when you care about memory and <code>MINID</code> when you care about time (<code>XTRIM log MINID &lt;id from 7 days ago&gt;</code>). You can also trim on write — <code>XADD jobs MAXLEN ~ 10000 * ...</code> — which is the option that never gets forgotten in a cron job.</p>
 
 <h3>Three ways to move a message, measured</h3>
 <div class="out">--- 6. Tốc độ (pipeline 10.000 tin) ---
@@ -989,9 +989,9 @@ stream-node-max-entries = 100</div>
    RAM: stream 0,19MB | list 0,06MB</div>
 <p>Speed is a non-argument — all three are one round trip and the pipeline dominates. Choose on semantics:</p>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Pub/Sub</span><span class="v">rải tin cho MỌI người đang nghe, không lưu lại. Vô hiệu hoá cache giữa các tiến trình, adapter Socket.IO. Mất tin là chuyện bình thường</span></div>
-  <div class="kv"><span class="k">List + BRPOP</span><span class="v">hàng đợi đơn giản nhất, một tin cho một worker. Nhẹ RAM nhất. KHÔNG có xác nhận: worker chết giữa chừng là mất việc</span></div>
-  <div class="kv"><span class="k">Stream + consumer group</span><span class="v">một tin cho một worker, CÓ xác nhận và đòi lại việc bỏ dở, đọc lại được lịch sử. Đây là lựa chọn cho việc phải hoàn thành</span></div>
+  <div class="kv"><span class="k">Pub/Sub</span><span class="v">scatters a message to EVERYONE listening and stores nothing. Cross-process cache invalidation, the Socket.IO adapter. Losing messages is normal here</span></div>
+  <div class="kv"><span class="k">List + BRPOP</span><span class="v">the simplest queue, one message to one worker. The lightest on RAM. NO acknowledgement: a worker dying mid-job loses the job</span></div>
+  <div class="kv"><span class="k">Stream + consumer group</span><span class="v">one message to one worker, WITH acknowledgement and reclaiming of abandoned work, and history you can re-read. This is the choice for work that must complete</span></div>
 </div>
 <p>For real background jobs, most teams should not build this by hand — BullMQ sits on top of Redis and gives you retries with backoff, delayed jobs, priorities, repeatable jobs and a dashboard. That is chapter 13. Everything here is what BullMQ is doing underneath, and knowing it is how you debug BullMQ when it misbehaves.</p>
 
@@ -1004,10 +1004,10 @@ stream-node-max-entries = 100</div>
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-735"><span class="lc-t">Code Lab · Redis Streams and Event-Driven Architecture</span><span class="lc-d">XADD, XREADGROUP, XACK, XAUTOCLAIM — dựng hàng đợi bằng tay</span></a>
+  <a href="/code-lab/redis${REF}#module-735"><span class="lc-t">Code Lab · Redis Streams and Event-Driven Architecture</span><span class="lc-d">XADD, XREADGROUP, XACK, XAUTOCLAIM — building a queue by hand</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-736"><span class="lc-t">Code Lab · Advanced Pub/Sub Patterns and Real-Time Features</span><span class="lc-d">Kênh theo mẫu, fan-out và các khuôn mẫu realtime</span></a>
+  <a href="/code-lab/redis${REF}#module-736"><span class="lc-t">Code Lab · Advanced Pub/Sub Patterns and Real-Time Features</span><span class="lc-d">Pattern channels, fan-out and realtime patterns</span></a>
 </div>
 </div>
 
@@ -1160,18 +1160,18 @@ stream-node-max-entries = 100</div>
    ⇒ volatile-* mà quên đặt TTL = y hệt noeviction</div>
 <p><strong>This is the trap that catches experienced people.</strong> <code>volatile-lru</code> sounds safer — "only evict keys that were going to expire anyway" — and it is, right up until a code path writes keys without a TTL. Then there is nothing eligible to evict and you are back to a read-only Redis. Remember from lesson 12.2 that a plain <code>SET</code> over an existing key <em>removes</em> its TTL: that is all it takes.</p>
 <div class="kv-grid">
-  <div class="kv"><span class="k">noeviction</span><span class="v">MẶC ĐỊNH. Đầy là mọi lệnh ghi lỗi. Chỉ đúng khi Redis là kho dữ liệu CHÍNH và bạn thà lỗi còn hơn mất dữ liệu</span></div>
-  <div class="kv"><span class="k">allkeys-lru</span><span class="v">Vứt khoá ít được dùng gần đây nhất. Đây là lựa chọn cho một cái CACHE. Đặt kèm maxmemory và quên nó đi</span></div>
-  <div class="kv"><span class="k">allkeys-lfu</span><span class="v">Vứt theo TẦN SUẤT dùng thay vì lần dùng gần nhất. Tốt hơn khi có một nhóm khoá nóng ổn định bị các lần quét một-lần đẩy ra</span></div>
-  <div class="kv"><span class="k">volatile-*</span><span class="v">Chỉ vứt khoá CÓ TTL. Nghe an toàn, hỏng im lặng khi có nhánh code quên đặt TTL</span></div>
+  <div class="kv"><span class="k">noeviction</span><span class="v">THE DEFAULT. Once full, every write errors. Only right when Redis is your PRIMARY store and you would rather fail than lose data</span></div>
+  <div class="kv"><span class="k">allkeys-lru</span><span class="v">Evicts the least recently used keys. This is the choice for a CACHE. Set it alongside maxmemory and forget about it</span></div>
+  <div class="kv"><span class="k">allkeys-lfu</span><span class="v">Evicts by FREQUENCY of use rather than recency. Better when a stable hot set is being pushed out by one-off scans</span></div>
+  <div class="kv"><span class="k">volatile-*</span><span class="v">Evicts only keys that HAVE a TTL. It sounds safe and fails silently the moment some code path forgets to set one</span></div>
 </div>
 
 <h3>Persistence: Redis is not amnesiac, but do not rely on it</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">RDB (ảnh chụp)</span><span class="v">Chụp toàn bộ dữ liệu theo chu kỳ. Tệp nhỏ, khởi động lại nhanh, sao lưu tiện. Mất phần dữ liệu kể từ lần chụp cuối — có thể là vài phút</span></div>
-  <div class="kv"><span class="k">AOF (nhật ký lệnh)</span><span class="v">Ghi mọi lệnh ghi vào một tệp nhật ký. <code>appendfsync everysec</code> = mất tối đa 1 giây. Tệp to hơn, khởi động lại chậm hơn</span></div>
-  <div class="kv"><span class="k">Cả hai</span><span class="v">Khuyến nghị của Redis cho dữ liệu quan trọng: AOF để phục hồi, RDB để sao lưu</span></div>
-  <div class="kv"><span class="k">Không gì cả</span><span class="v">Đúng cho một cache thuần. Redis khởi động lại là rỗng, ứng dụng ấm lại. Nhanh nhất, đơn giản nhất</span></div>
+  <div class="kv"><span class="k">RDB (snapshots)</span><span class="v">Periodically snapshots the whole dataset. Small files, fast restarts, convenient backups. You lose everything since the last snapshot — possibly minutes</span></div>
+  <div class="kv"><span class="k">AOF (a command log)</span><span class="v">Appends every write command to a log file. <code>appendfsync everysec</code> = at most 1 second lost. Larger files, slower restarts</span></div>
+  <div class="kv"><span class="k">Both</span><span class="v">Redis's own recommendation for data that matters: AOF for recovery, RDB for backups</span></div>
+  <div class="kv"><span class="k">Neither</span><span class="v">Right for a pure cache. Redis restarts empty and the application warms it again. Fastest and simplest</span></div>
 </div>
 <p>The decision follows from one question: <em>if this Redis lost everything right now, would you lose data or just performance?</em> If the answer is "just performance", turn persistence off and stop thinking about it. If any answer is "data", you have accidentally made Redis a primary database, and it is worth asking whether that data belongs in PostgreSQL instead.</p>
 
@@ -1194,13 +1194,13 @@ stream-node-max-entries = 100</div>
 </div>
 
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-739"><span class="lc-t">Code Lab · Observability, Monitoring, and Performance Diagnostics</span><span class="lc-d">INFO, SLOWLOG, LATENCY và cách đọc chúng</span></a>
+  <a href="/code-lab/redis${REF}#module-739"><span class="lc-t">Code Lab · Observability, Monitoring, and Performance Diagnostics</span><span class="lc-d">INFO, SLOWLOG, LATENCY and how to read them</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-426"><span class="lc-t">Code Lab · Redis Persistence and Backup</span><span class="lc-d">RDB, AOF, sao lưu và phục hồi</span></a>
+  <a href="/code-lab/redis${REF}#module-426"><span class="lc-t">Code Lab · Redis Persistence and Backup</span><span class="lc-d">RDB, AOF, backup and recovery</span></a>
 </div>
 <div class="link-card codelab">
-  <a href="/code-lab/redis${REF}#module-734"><span class="lc-t">Code Lab · Redis Security Hardening and Access Control</span><span class="lc-d">requirepass, ACL, rename-command và bịt cổng</span></a>
+  <a href="/code-lab/redis${REF}#module-734"><span class="lc-t">Code Lab · Redis Security Hardening and Access Control</span><span class="lc-d">requirepass, ACL, rename-command and closing the port</span></a>
 </div>
 </div>
 

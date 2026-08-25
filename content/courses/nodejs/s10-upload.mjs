@@ -83,9 +83,9 @@ busboy → stream      : 287ms server-side, RSS 57,1 →  97,4MB   (+40,3MB)</di
 <p>For comparison, eight simultaneous 6,85MB photos cost +61,7MB with <code>memoryStorage</code> and +42,8MB streaming. The gap widens with file size, which is exactly why the rule of thumb below is size-based rather than absolute.</p>
 
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Ảnh, avatar, tài liệu nhỏ (&lt; 10MB)</span><span class="lz-lnote"><code>memoryStorage</code> is fine and much simpler: you need the whole buffer anyway to re-encode it (lesson 10.3), and 20MB of peak RAM per request is affordable</span></div>
-  <div class="lz-layer"><span class="lz-lname">Video, tệp lớn (&gt; 50MB)</span><span class="lz-lnote">never buffer. Either stream through to storage (lesson 10.2) or take your server out of the path entirely with a presigned URL</span></div>
-  <div class="lz-layer"><span class="lz-lname">Đĩa tạm (<code>diskStorage</code>)</span><span class="lz-lnote">the middle ground — cheap RAM, but now you own temp-file cleanup, and on a container that means a volume that fills up silently</span></div>
+  <div class="lz-layer"><span class="lz-lname">Images, avatars, small documents (&lt; 10MB)</span><span class="lz-lnote"><code>memoryStorage</code> is fine and much simpler: you need the whole buffer anyway to re-encode it (lesson 10.3), and 20MB of peak RAM per request is affordable</span></div>
+  <div class="lz-layer"><span class="lz-lname">Video, large files (&gt; 50MB)</span><span class="lz-lnote">never buffer. Either stream through to storage (lesson 10.2) or take your server out of the path entirely with a presigned URL</span></div>
+  <div class="lz-layer"><span class="lz-lname">Temporary disk (<code>diskStorage</code>)</span><span class="lz-lnote">the middle ground — cheap RAM, but now you own temp-file cleanup, and on a container that means a volume that fills up silently</span></div>
 </div>
 
 <h3>Limits: what they do and what they do not</h3>
@@ -822,17 +822,17 @@ proxy stream thẳng (Body.pipe)   : 481ms cho 20 lần</div>
 <p>Same bytes, 28% faster and far less memory, purely from not holding the object. But the real conclusion is one level up: <strong>every one of those requests spent your server's CPU and your VPS's bandwidth on something a CDN would have served from an edge node</strong>. Public media should be a direct URL. Keep a proxy route only for genuinely private files, and even then prefer redirecting to a short-lived signed URL (302) over piping the bytes yourself — you get the access check and still keep the transfer off your server.</p>
 
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-t">Công khai</span><span class="lz-d">URL trực tiếp tới media domain + <code>immutable</code>. Máy chủ của bạn không tham gia lần đọc nào</span></div>
-  <div class="lz-step"><span class="lz-t">Riêng tư, ngắn hạn</span><span class="lz-d">API kiểm quyền rồi trả 302 tới URL ký sẵn hạn vài phút. Không cache được ở CDN, nhưng byte không đi qua bạn</span></div>
-  <div class="lz-step"><span class="lz-t">Riêng tư, cần kiểm mỗi lần</span><span class="lz-d">proxy stream có kiểm quyền — đắt nhất, dành cho tài liệu nhạy cảm và hoá đơn, không dành cho ảnh feed</span></div>
+  <div class="lz-step"><span class="lz-t">Public</span><span class="lz-d">A direct URL to the media domain plus <code>immutable</code>. Your server takes no part in the read at all</span></div>
+  <div class="lz-step"><span class="lz-t">Private, short-lived</span><span class="lz-d">The API checks permissions and returns a 302 to a pre-signed URL valid for a few minutes. Not CDN-cacheable, but the bytes never pass through you</span></div>
+  <div class="lz-step"><span class="lz-t">Private, checked on every read</span><span class="lz-d">a permission-checked proxy stream — the most expensive option, for sensitive documents and invoices, not for feed images</span></div>
 </div>
 
 <h3>The part everybody forgets: deleting</h3>
 <p>Storage has no foreign keys. Delete a post row and the objects stay, paid for, forever. Three leaks and their fixes:</p>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Xoá bản ghi, quên object</span><span class="v">delete the row and the file in the same operation. Delete the object first: a failed row delete leaves a file that cleanup can find, while the reverse leaves a row pointing at nothing</span></div>
-  <div class="kv"><span class="k">Upload rồi bỏ dở</span><span class="v">the user picked a video, it uploaded, they closed the tab. The object exists and no row references it — this is what a pending-uploads table with a TTL is for</span></div>
-  <div class="kv"><span class="k">Thay ảnh cũ</span><span class="v">new avatar = new key. The old key is now orphaned unless the update path deletes it</span></div>
+  <div class="kv"><span class="k">Deleting the record, forgetting the object</span><span class="v">delete the row and the file in the same operation. Delete the object first: a failed row delete leaves a file that cleanup can find, while the reverse leaves a row pointing at nothing</span></div>
+  <div class="kv"><span class="k">Uploading and then abandoning</span><span class="v">the user picked a video, it uploaded, they closed the tab. The object exists and no row references it — this is what a pending-uploads table with a TTL is for</span></div>
+  <div class="kv"><span class="k">Replacing an old image</span><span class="v">new avatar = new key. The old key is now orphaned unless the update path deletes it</span></div>
 </div>
 
 <div class="note-ct">

@@ -175,7 +175,7 @@ argon2.verify (không giới hạn 72 byte) = false</div>
 <div class="out">loginNguyHiem: email KHÔNG tồn tại = 1.42ms | email CÓ tồn tại = 35.52ms | chênh 25.0×
 loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.62ms | chênh 1.1×</div>
 <p>A 25× gap is not subtle — a script can classify a million email addresses into "has an account here" and "does not" without ever guessing a password. For a general web app that is a privacy leak; for a dating site, a medical portal or a political forum it can be a safety problem for real people.</p>
-<div class="callout ok">Same fix, same shape, three places: identical timing, identical status code (401), identical message. "Email hoặc mật khẩu không đúng" — never "email không tồn tại".</div>
+<div class="callout ok">Same fix, same shape, three places: identical timing, identical status code (401), identical message. "Email or password is incorrect" — never "that email does not exist".</div>
 
 <h3>Upgrading cost without asking anyone to change their password</h3>
 <p>You picked <code>t=2</code> in 2026; in 2029 the machines are faster and you want <code>t=3</code>. Because the parameters live inside every stored string, you can migrate one user at a time, at the only moment you ever hold their plain password — the instant they log in:</p>
@@ -598,7 +598,7 @@ HTTP 401  {"error":{"code":"REFRESH_REUSE_DETECTED","message":"Phát hiện tái
   <span class="tok-kw">return</span> { accessToken: signAccessToken(user), refreshToken: refresh };
 }</code></pre>
 <p>Login calls it with no <code>familyId</code>, so a new family starts. Refresh calls it with the existing one, so the chain continues. That two-line difference is the whole rotation mechanism.</p>
-<p>Storing <code>userAgent</code> costs nothing and gives you the "active sessions" screen every serious app has: <em>Chrome on Windows · Hà Nội · 2 hours ago · [log out]</em>. Each row is one device, and logging one out is one <code>UPDATE</code>.</p>
+<p>Storing <code>userAgent</code> costs nothing and gives you the "active sessions" screen every serious app has: <em>Chrome on Windows · Hanoi · 2 hours ago · [log out]</em>. Each row is one device, and logging one out is one <code>UPDATE</code>.</p>
 
 <h3>The production incident this design prevents</h3>
 <p>A real one, from this project, in July 2026. Users were being logged out silently after a day — every authenticated call returned 401 while the login cookie was clearly still in the browser. Two settings, each defensible alone:</p>
@@ -1014,7 +1014,7 @@ router.delete(<span class="tok-str">'/users/:id'</span>, requireAuth, requireRol
 <p><code>update</code> and <code>remove</code> route their permission decision through <code>get</code>. There is one <code>canTouch</code> in the file, so the day the rule changes — shared notes, teams, a moderator role — there is one line to change and no chance of updating three of the four call sites.</p>
 
 <h3>The vulnerability this closes, demonstrated</h3>
-<p>An owns note 1. Bình is a perfectly normal logged-in user with a perfectly valid token, and simply types a different number in the URL. This class of bug has its own name — IDOR, insecure direct object reference — and it is consistently at the top of the OWASP list, because it needs no exploit code at all:</p>
+<p>An owns note 1. Binh is a perfectly normal logged-in user with a perfectly valid token, and simply types a different number in the URL. This class of bug has its own name — IDOR, insecure direct object reference — and it is consistently at the top of the OWASP list, because it needs no exploit code at all:</p>
 <div class="out">── 6. Bình đọc ghi chú id=1 của An
 HTTP 404  {"error":{"code":"NOTE_NOT_FOUND","message":"Note 1 does not exist"}}
 
@@ -1033,7 +1033,7 @@ HTTP 200  {"id":1,"title":"Ghi chu cua An","slug":"note-1785172381836",…</div>
 <div class="callout warn">Use 403 when the user already knows the resource exists — a team workspace they can see but not edit. Use 404 when knowing it exists is itself information they should not have. For a private per-user resource, that is almost always the case.</div>
 
 <h3>Two more holes in the same handler</h3>
-<p>First, the request body. Bình owns note 2 and tries to hand it to An by including <code>authorId</code> in a PATCH:</p>
+<p>First, the request body. Binh owns note 2 and tries to hand it to An by including <code>authorId</code> in a PATCH:</p>
 <div class="out">── 7. Bình đổi chủ ghi chú của mình sang An qua body (mass-assignment)
 authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
 <p>Blocked by the destructuring line that drops <code>id</code> and <code>authorId</code> before the update. Without it, <code>data: patch</code> passes whatever the client sent straight into the <code>UPDATE</code> — and a client can send fields your form never displays. Chapter 6's zod schema is the stronger version of this defence: an allowlist rather than a denylist.</p>
@@ -1048,9 +1048,9 @@ authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
 <p>The route did not learn anything about permissions; it gained one argument. Everything else lives in the service, which is what makes it testable without an HTTP request: call <code>get(binh, 1)</code> and assert <code>null</code>.</p>
 
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">requireAuth</span><span class="lz-lnote">bạn là ai — 401 nếu không biết</span></div>
-  <div class="lz-layer"><span class="lz-lname">requireRole</span><span class="lz-lnote">vai trò có đủ không — 403 nếu không</span></div>
-  <div class="lz-layer"><span class="lz-lname">service (canTouch)</span><span class="lz-lnote">tài nguyên CỤ THỂ này có phải của bạn không — 404 nếu không</span></div>
+  <div class="lz-layer"><span class="lz-lname">requireAuth</span><span class="lz-lnote">who are you — 401 if unknown</span></div>
+  <div class="lz-layer"><span class="lz-lname">requireRole</span><span class="lz-lnote">is your role sufficient — 403 if not</span></div>
+  <div class="lz-layer"><span class="lz-lname">service (canTouch)</span><span class="lz-lnote">is THIS SPECIFIC resource yours — 404 if not</span></div>
 </div>
 <p>Three layers, three questions, three status codes. The first two are middleware because they apply to whole groups of routes; the third cannot be, because it needs the row from the database.</p>
 
@@ -1300,7 +1300,7 @@ Set-Cookie: csrf_token=5866ee2352054a7d4323e097c541f0bb; Path=/; SameSite=Lax</d
    evil.com → /chuyen-tien-origin     HTTP 403  {"error":"CROSS_SITE","origin":"http://evil.com"}
    evil.com → /chuyen-tien-csrf       HTTP 403  {"error":"CSRF_TOKEN_MISMATCH"}
    evil.com → /chuyen-tien-bearer     HTTP 401  {"error":"NO_TOKEN"}</div>
-<p>The first line is the attack succeeding: a hundred million đồng transferred, authenticated, with a perfectly valid session. The attacker never saw the cookie and does not need to — they only need the browser to send it. And the same four endpoints called by the real site:</p>
+<p>The first line is the attack succeeding: a hundred million dong transferred, authenticated, with a perfectly valid session. The attacker never saw the cookie and does not need to — they only need the browser to send it. And the same four endpoints called by the real site:</p>
 <div class="out">   bank    → /chuyen-tien-origin     HTTP 200  {"ok":true,"soTien":"50000"}
    bank    → /chuyen-tien-csrf       HTTP 200  {"ok":true,"soTien":"50000"}
    bank    → /chuyen-tien-bearer     HTTP 200  {"ok":true,"soTien":"50000"}</div>
@@ -1388,7 +1388,7 @@ email KHÁC từ cùng IP        : HTTP 200</div>
 <h3>Recap</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Storage is a trade</span><span class="v">localStorage loses to XSS, cookies lose to CSRF. Pick the cookie and defend CSRF.</span></div>
-  <div class="kv"><span class="k">CSRF is real</span><span class="v">A cross-site POST moved 100 million đồng with a valid session. Origin check and double-submit both stopped it.</span></div>
+  <div class="kv"><span class="k">CSRF is real</span><span class="v">A cross-site POST moved 100 million dong with a valid session. The origin check and the double-submit token both stopped it.</span></div>
   <div class="kv"><span class="k">tokenVersion</span><span class="v">The one mechanism that kills a stateless token immediately — and remember to re-issue for the caller.</span></div>
   <div class="kv"><span class="k">Limit the login</span><span class="v">Key on IP + email, return 429 with <code>Retry-After</code>, and do not trust <code>req.ip</code> until you have configured the proxy.</span></div>
 </div>

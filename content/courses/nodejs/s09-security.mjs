@@ -373,8 +373,8 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
 
 <h3>Sanitize on write, or on read?</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Trên đường ghi (on write)</span><span class="lz-lnote">rẻ — làm một lần cho mỗi bài viết; nhưng dữ liệu gốc mất vĩnh viễn, và luật hôm nay là luật bạn phải sống cùng mãi mãi</span></div>
-  <div class="lz-layer"><span class="lz-lname">Trên đường đọc (on read)</span><span class="lz-lnote">đắt hơn — mỗi lần hiển thị; đổi lại luật sửa được, bản vá của thư viện tự áp dụng cho dữ liệu CŨ</span></div>
+  <div class="lz-layer"><span class="lz-lname">On the write path (on write)</span><span class="lz-lnote">cheap — done once per post; but the original data is gone forever, and today's rules are the rules you live with permanently</span></div>
+  <div class="lz-layer"><span class="lz-lname">On the read path (on read)</span><span class="lz-lnote">more expensive — once per render; in exchange the rules stay editable and a library patch applies itself to OLD data too</span></div>
 </div>
 <p>The trade-off is real, and the reason to prefer the render layer is that bypasses are discovered <em>after</em> your data is stored. A mutation-XSS bypass patched in DOMPurify next month protects you retroactively only if you sanitize when rendering. Sanitizing on write and trusting the column forever means the row that was "clean" under an old version stays in your database, trusted, forever.</p>
 
@@ -648,7 +648,7 @@ RSS sau 1.5 giây      : 213 MB</div>
 </a>
 <a class="link-card exphub" href="/exp-hub${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧰</span>
-  <span class="lc-body"><span class="lc-title">Exp Hub — mẹo và đoạn code hay dùng</span><span class="lc-sub">Tra nhanh cú pháp zod, helmet, cors khi đang code.</span></span>
+  <span class="lc-body"><span class="lc-title">Exp Hub — tips and frequently used snippets</span><span class="lc-sub">Tra nhanh cú pháp zod, helmet, cors khi đang code.</span></span>
 </a>
 </div>
 

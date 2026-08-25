@@ -40,6 +40,19 @@ export async function getMeta(): Promise<MakerMeta | null> {
 
 // ─── Devices ───────────────────────────────────────────────
 
+/**
+ * Xin vé cho trang mô phỏng nối vào cổng thiết bị.
+ *
+ * `dangOnline` = bo THẬT đang cắm. Cổng chỉ giữ một kết nối mỗi thiết
+ * bị, nên nối mô phỏng vào sẽ đá bo ra — hỏi người dùng trước.
+ */
+export async function xinVeMoPhong(
+  id: number,
+): Promise<{ ticket: string; expiresInMs: number; deviceId: number; dangOnline: boolean }> {
+  const res = await api.post(`${BASE}/devices/${id}/sim-ticket`);
+  return res.data?.data;
+}
+
 export async function listDevices(): Promise<MakerDevice[]> {
   const res = await api.get(`${BASE}/devices`);
   return res.data?.data ?? [];

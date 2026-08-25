@@ -161,6 +161,29 @@ export async function getDevice(deviceId: number, ownerId: number) {
   return { ...stripSecret(device), connected: isDeviceOnline(device.id) };
 }
 
+/**
+ * Phát vé cho trang mô phỏng nối vào cổng thiết bị.
+ *
+ * ⚠️ Trả kèm `dangOnline`. Cổng chỉ giữ MỘT kết nối cho mỗi thiết bị
+ * (`acceptDevice` đóng cái cũ với mã 4409 "replaced by newer
+ * connection"), nên mở mô phỏng trong lúc bo thật đang cắm điện sẽ ĐÁ
+ * BO RA. Đó là hành vi đúng — một thiết bị, một socket — nhưng nếu
+ * người dùng không được báo trước thì họ chỉ thấy robot thật im bặt mà
+ * không hiểu vì sao. Giao diện dùng cờ này để hỏi trước khi nối.
+ */
+export async function capVeMoPhong(deviceId: number, ownerId: number) {
+  const device = await assertDeviceOwner(deviceId, ownerId);
+  const { isDeviceOnline } = await import('../../socket/device.gateway.js');
+  const { phatVe } = await import('./simTicket.js');
+  const ve = phatVe({
+    deviceId: device.id,
+    projectId: device.projectId,
+    ownerId: device.ownerId,
+    deviceKey: device.deviceKey,
+  });
+  return { ...ve, deviceId: device.id, dangOnline: isDeviceOnline(device.id) };
+}
+
 export async function deleteDevice(deviceId: number, ownerId: number): Promise<void> {
   await assertDeviceOwner(deviceId, ownerId);
   await prisma.makerDevice.delete({ where: { id: deviceId } });

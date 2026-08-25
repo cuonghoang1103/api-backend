@@ -56,6 +56,23 @@ export default async function CoursesPage() {
 <h3>The catch: no interactivity here</h3>
 <p>Because a Server Component runs once on the server and its code is gone by the time the page is in the browser, it <strong>cannot</strong> use <code>useState</code>, <code>useEffect</code>, event handlers like <code>onClick</code>, or any browser API. There is no live component in the browser to hold state or respond to clicks. Everything you learned in Chapters 3–7 — state, effects, events — needs a <em>Client</em> Component. That is the next lesson.</p>
 
+<h3>What a Server Component can and cannot do</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>It runs on the server, once, before the response</b> — Never in the browser. Its code is not in the JavaScript bundle at all — a large date library used only here costs the user nothing.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>It can await directly</b> — &#96;const rows = await db.note.findMany()&#96;. No effect, no loading state, no waterfall — the component <em>is</em> the data fetch.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>It can hold secrets</b> — An API key or a database URL read here never reaches the client, because the component&#39;s source never does.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>It cannot use state, effects or browser APIs</b> — No &#96;useState&#96;, no &#96;onClick&#96;, no &#96;window&#96;. There is no browser and no second render to hold anything.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — adding &#96;&#39;use client&#39;&#96; to a page just to fix one error, and shipping the whole subtree to the browser.</strong> The directive is contagious downward: everything the file imports becomes part of the client bundle too. So marking a page because one button needs &#96;onClick&#96; drags the entire tree — the markdown renderer, the date library, the chart — into the browser, and the database call inside it now fails to compile at all. The bundle grows by hundreds of kilobytes and nothing warns you. Push the boundary down instead: keep the page on the server and extract the interactive part into its own small Client Component.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/rsc/server-components" target="_blank" rel="noopener">
+  <span class="lc-ico">🖥️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Server Components</span><span class="lc-sub">The model itself, independent of any framework.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/server-components" target="_blank" rel="noopener">
+  <span class="lc-ico">📗</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Server Components</span><span class="lc-sub">How Next.js implements it, with the full list of what is and is not allowed.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/server-components" target="_blank" rel="noopener">
   <span class="lc-ico">🖥️</span>
@@ -100,6 +117,23 @@ export default async function CoursesPage() {
 
 <h3>Cái giá: không có tương tác ở đây</h3>
 <p>Vì một Server Component chạy một lần trên server và code của nó đã biến mất khi trang tới trình duyệt, nó <strong>không thể</strong> dùng <code>useState</code>, <code>useEffect</code>, các handler như <code>onClick</code>, hay bất kỳ API trình duyệt nào. Không có component sống nào trong trình duyệt để giữ state hay phản hồi cú click. Mọi thứ bạn học ở Chương 3–7 — state, effect, sự kiện — cần một Client Component. Đó là bài sau.</p>
+
+<h3>Một Server Component làm được gì và không làm được gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Nó chạy trên máy chủ, một lần, trước khi phản hồi đi</b> — Không bao giờ chạy trong trình duyệt. Mã của nó hoàn toàn không nằm trong gói JavaScript — một thư viện ngày tháng nặng chỉ dùng ở đây chẳng tốn gì của người dùng.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Nó await thẳng được</b> — &#96;const rows = await db.note.findMany()&#96;. Không effect, không trạng thái đang tải, không thác nước — component <em>chính là</em> phép lấy dữ liệu.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nó giữ được bí mật</b> — Một khoá API hay một URL cơ sở dữ liệu đọc ở đây chẳng bao giờ tới được client, vì mã nguồn của component cũng không bao giờ tới đó.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nó không dùng được state, effect hay API trình duyệt</b> — Không &#96;useState&#96;, không &#96;onClick&#96;, không &#96;window&#96;. Chẳng có trình duyệt nào và cũng chẳng có lần render thứ hai nào để giữ thứ gì.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — thêm &#96;&#39;use client&#39;&#96; vào một trang chỉ để dập một lỗi, và đẩy nguyên cả cây con sang trình duyệt.</strong> Chỉ thị này lây xuống dưới: mọi thứ file đó import cũng trở thành một phần của gói client. Nên đánh dấu cả một trang chỉ vì một cái nút cần &#96;onClick&#96; sẽ lôi cả cái cây — bộ vẽ markdown, thư viện ngày tháng, cái biểu đồ — vào trình duyệt, và lời gọi cơ sở dữ liệu bên trong nó giờ không biên dịch nổi nữa. Gói phình thêm hàng trăm kilobyte mà chẳng gì cảnh báo bạn. Hãy đẩy cái ranh giới xuống thấp hơn: giữ trang ở phía máy chủ và rút phần tương tác ra thành một Client Component nhỏ của riêng nó.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/rsc/server-components" target="_blank" rel="noopener">
+  <span class="lc-ico">🖥️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Server Component</span><span class="lc-sub">Bản thân mô hình, độc lập với mọi framework.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/server-components" target="_blank" rel="noopener">
+  <span class="lc-ico">📗</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Server Component</span><span class="lc-sub">Next.js hiện thực nó ra sao, kèm danh sách đầy đủ cái gì được và không được.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/server-components" target="_blank" rel="noopener">
@@ -152,6 +186,24 @@ export default function Counter() {
 <h3>A useful rule of thumb</h3>
 <p>Ask: <em>does this piece need to remember something, respond to a user event, or touch the browser?</em> If yes → Client. If it just fetches data and renders markup → leave it a Server Component. A page that shows a list of courses is a Server Component; the little "favourite" toggle button inside each row is a Client Component.</p>
 
+<h3>What the directive actually marks</h3>
+<div class="lz-map">
+  <div class="lz-stage">A boundary, not a location</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">It marks an entry point</div><div class="lz-nsub">&#96;&#39;use client&#39;&#96; at the top of a file says &quot;from here down, this is client code&quot;. It does not mean &quot;runs only in the browser&quot;.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Client Components still render on the server</div><div class="lz-nsub">Once, for the initial HTML. That is why &#96;window&#96; is undefined during that first pass — hydration comes after.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">It is inherited by imports</div><div class="lz-nsub">Every module imported from a client file joins the client bundle. Marking one file can pull in a hundred.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">It is not inherited through children</div><div class="lz-nsub">A Server Component passed as &#96;children&#96; to a Client Component stays on the server. This is the escape hatch chapter 9.3 is about.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — believing &#96;&#39;use client&#39;&#96; means the code only runs in the browser.</strong> It does not: a Client Component is rendered once on the server to produce the initial HTML, then hydrated in the browser. So a component body that reads &#96;localStorage&#96; or &#96;window.innerWidth&#96; at the top level crashes the server render with &quot;localStorage is not defined&quot;, and the error appears at build time on a page that works perfectly in development navigation. Browser-only code belongs inside an effect or an event handler, both of which run only after hydration. When a value must be known on the first paint, read it on the server or accept a two-pass render.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/rsc/use-client" target="_blank" rel="noopener">
+  <span class="lc-ico">🏷️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — 'use client'</span><span class="lc-sub">The precise semantics: what the directive marks, and what it does not.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/client-components" target="_blank" rel="noopener">
+  <span class="lc-ico">💻</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Client Components</span><span class="lc-sub">The full render lifecycle, including the server pass people forget about.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/client-components" target="_blank" rel="noopener">
   <span class="lc-ico">🧑‍💻</span>
@@ -188,6 +240,24 @@ export default function Counter() {
 
 <h3>Một quy tắc ngón tay cái hữu ích</h3>
 <p>Hãy hỏi: <em>mảnh này có cần nhớ điều gì, phản hồi một sự kiện người dùng, hay chạm trình duyệt không?</em> Nếu có → Client. Nếu nó chỉ fetch dữ liệu và render markup → để nguyên Server Component. Một trang hiện danh sách khoá học là Server Component; cái nút "yêu thích" nhỏ trong mỗi hàng là Client Component.</p>
+
+<h3>Chỉ thị đó thật ra đánh dấu cái gì</h3>
+<div class="lz-map">
+  <div class="lz-stage">Một ranh giới, không phải một vị trí</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Nó đánh dấu một điểm vào</div><div class="lz-nsub">&#96;&#39;use client&#39;&#96; ở đầu file nói &quot;từ đây trở xuống là mã phía client&quot;. Nó KHÔNG có nghĩa &quot;chỉ chạy trong trình duyệt&quot;.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Client Component vẫn render trên máy chủ</div><div class="lz-nsub">Một lần, để tạo ra HTML ban đầu. Đó là lý do &#96;window&#96; là undefined trong lượt đầu đó — hydrate diễn ra sau.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Nó được kế thừa qua import</div><div class="lz-nsub">Mọi module được import từ một file client đều gia nhập gói client. Đánh dấu một file có thể lôi theo cả trăm cái.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Nó KHÔNG kế thừa qua children</div><div class="lz-nsub">Một Server Component truyền vào làm &#96;children&#96; của một Client Component vẫn ở lại máy chủ. Đó là cửa thoát mà bài 9.3 nói tới.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tin rằng &#96;&#39;use client&#39;&#96; nghĩa là mã chỉ chạy trong trình duyệt.</strong> Không phải: một Client Component được render một lần trên máy chủ để tạo HTML ban đầu, rồi mới được hydrate trong trình duyệt. Nên một thân component đọc &#96;localStorage&#96; hay &#96;window.innerWidth&#96; ở cấp cao nhất sẽ làm sập lượt render trên máy chủ với &quot;localStorage is not defined&quot;, và lỗi hiện ra lúc build trên một trang chạy hoàn hảo khi điều hướng ở môi trường phát triển. Mã chỉ-dành-cho-trình-duyệt thuộc về bên trong một effect hoặc một handler sự kiện, cả hai đều chỉ chạy sau khi hydrate. Khi một giá trị phải biết ngay ở lần vẽ đầu, hãy đọc nó ở máy chủ hoặc chấp nhận một lượt render hai pha.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/rsc/use-client" target="_blank" rel="noopener">
+  <span class="lc-ico">🏷️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — 'use client'</span><span class="lc-sub">Ngữ nghĩa chính xác: chỉ thị này đánh dấu cái gì, và không đánh dấu cái gì.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/client-components" target="_blank" rel="noopener">
+  <span class="lc-ico">💻</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Client Component</span><span class="lc-sub">Toàn bộ vòng đời render, gồm cả lượt chạy trên máy chủ mà người ta hay quên.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/client-components" target="_blank" rel="noopener">
@@ -243,6 +313,23 @@ export default async function Page() {
   <div class="kv"><span class="k">Client → children → Server</span><span class="v">✓ Allowed. The client receives rendered output through a slot, not the code.</span></div>
 </div>
 
+<h3>Keeping a Server Component inside a Client Component</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>A client file cannot import a server file</b> — The import would pull the server code into the bundle, so React forbids it — including the database call inside.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>But it can receive one as children</b> — &#96;&lt;Tabs&gt;&lt;ServerList /&gt;&lt;/Tabs&gt;&#96; composed in a <em>server</em> parent. The element is created on the server and passed in already rendered.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Props work the same way</b> — &#96;&lt;Modal body={&lt;ServerChart /&gt;} /&gt;&#96;. Any prop slot accepts a rendered server element, not just children.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>So the interactive shell wraps server content</b> — The tab bar is client, the panel inside is server. Neither one has to give up what it is good at.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a Client Component that only exists to add one &#96;onClick&#96;, wrapping the whole page.</strong> &#96;&#39;use client&#39;&#96; on a layout-shaped component means every child it imports is client code, so a page that was a Server Component becomes one too — the database query moves to the browser (and fails), the markdown parser ships to users, and the bundle doubles. The composition rule is the way out: keep the wrapper client, but let it render &#96;{children}&#96; and compose the server content in the <em>parent</em>. The rule of thumb is to push &#96;&#39;use client&#39;&#96; as far down the tree as it will go — usually to a single button or input.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Composition patterns</span><span class="lc-sub">The supported combinations, with the children pattern spelled out.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/rsc/server-components#interleaving-server-and-client-components" target="_blank" rel="noopener">
+  <span class="lc-ico">🪢</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Interleaving server and client components</span><span class="lc-sub">Why children works when imports do not.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns" target="_blank" rel="noopener">
   <span class="lc-ico">🧩</span>
@@ -286,6 +373,23 @@ export default async function Page() {
   <div class="kv"><span class="k">Client → import → Server</span><span class="v">✗ Không được. Code server sẽ lọt vào trình duyệt.</span></div>
   <div class="kv"><span class="k">Client → children → Server</span><span class="v">✓ Được. Client nhận output đã render qua một khe, không phải code.</span></div>
 </div>
+
+<h3>Giữ một Server Component bên trong một Client Component</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Một file client không import được file server</b> — Phép import sẽ lôi mã máy chủ vào gói, nên React cấm — kể cả lời gọi cơ sở dữ liệu bên trong.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Nhưng nó nhận được một cái làm children</b> — &#96;&lt;Tabs&gt;&lt;ServerList /&gt;&lt;/Tabs&gt;&#96; ghép ở một phần tử cha <em>phía máy chủ</em>. Element được tạo trên máy chủ và truyền vào ở dạng đã vẽ xong.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Props cũng hoạt động y như vậy</b> — &#96;&lt;Modal body={&lt;ServerChart /&gt;} /&gt;&#96;. Ô prop nào cũng nhận được một element máy chủ đã vẽ, không riêng gì children.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nên cái vỏ tương tác bọc quanh nội dung máy chủ</b> — Thanh tab là client, khung bên trong là máy chủ. Chẳng bên nào phải từ bỏ thứ mình giỏi.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một Client Component chỉ tồn tại để thêm một &#96;onClick&#96;, mà lại bọc cả trang.</strong> &#96;&#39;use client&#39;&#96; đặt lên một component có dáng layout nghĩa là mọi đứa con nó import đều thành mã client, nên một trang vốn là Server Component cũng thành client theo — truy vấn cơ sở dữ liệu dời sang trình duyệt (và hỏng), bộ phân tích markdown ship tới người dùng, và gói phình gấp đôi. Luật ghép chính là đường thoát: giữ cái vỏ ở phía client, nhưng để nó vẽ &#96;{children}&#96; và ghép nội dung máy chủ ở phần tử <em>cha</em>. Quy tắc ngón tay cái là đẩy &#96;&#39;use client&#39;&#96; xuống thấp nhất có thể trong cây — thường là xuống tới đúng một cái nút hoặc một ô nhập.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Các mẫu ghép</span><span class="lc-sub">Những tổ hợp được hỗ trợ, có nói rõ mẫu dùng children.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/rsc/server-components#interleaving-server-and-client-components" target="_blank" rel="noopener">
+  <span class="lc-ico">🪢</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Đan xen component máy chủ và client</span><span class="lc-sub">Vì sao children thì được mà import thì không.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns" target="_blank" rel="noopener">
@@ -335,6 +439,24 @@ export default async function Page() {
 <p><strong>A subtle one:</strong> ORM results are often class instances, not plain objects. Passing a whole Prisma model straight into a Client Component can trip the "only plain objects" rule. Pick the fields you need (<code>{ id, title, likes }</code>) or map to a plain object before crossing.</p>
 </div>
 
+<h3>What can cross the server-client boundary</h3>
+<div class="lz-map">
+  <div class="lz-stage">It has to survive being turned into data</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Primitives, arrays, plain objects</div><div class="lz-nsub">Strings, numbers, booleans, null, and anything built from them. Dates and Maps work too — React's serialiser handles them.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Server Actions</div><div class="lz-nsub">A function marked &#96;&#39;use server&#39;&#96; can be passed down. React sends a reference, not the code, and calling it makes a request.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">JSX elements</div><div class="lz-nsub">Already-rendered server output, passed as children or as a prop. This is what makes composition work.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Not: ordinary functions, class instances, symbols</div><div class="lz-nsub">There is no way to send a closure over the wire. React throws a build-time error naming the prop.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — passing a Prisma model straight from a Server Component to a Client Component.</strong> &#96;&lt;Editor note={note} /&gt;&#96; where &#96;note&#96; came from &#96;prisma.note.findUnique()&#96; usually works, and then one day it does not: a &#96;Decimal&#96; column, a &#96;BigInt&#96; id or a Prisma-specific wrapper is a class instance, and React refuses it with &quot;Only plain objects can be passed to Client Components&quot;. Worse, when it does serialise, you have shipped every column to the browser — including the ones your query selected but the UI never shows. Map to an explicit shape at the boundary: pick the fields the component needs and convert the odd types yourself.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/rsc/use-client#serializable-types" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Serializable types</span><span class="lc-sub">The exact list of what crosses the boundary, and what throws.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#passing-props-from-server-to-client-components-serialization" target="_blank" rel="noopener">
+  <span class="lc-ico">🚧</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Serialization at the boundary</span><span class="lc-sub">The Next.js-specific notes, including the Prisma and Date cases.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#passing-props-from-server-to-client-components-serialization" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
@@ -372,6 +494,24 @@ export default async function Page() {
 <div class="callout ok">
 <p><strong>Một cái tinh tế:</strong> kết quả ORM thường là instance class, không phải object thường. Truyền cả một model Prisma thẳng vào một Client Component có thể vấp luật "only plain objects". Hãy chọn các trường bạn cần (<code>{ id, title, likes }</code>) hoặc map sang object thường trước khi qua ranh giới.</p>
 </div>
+
+<h3>Cái gì đi qua được ranh giới máy chủ – client</h3>
+<div class="lz-map">
+  <div class="lz-stage">Nó phải sống sót khi bị biến thành dữ liệu</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Giá trị nguyên thuỷ, mảng, object thuần</div><div class="lz-nsub">Chuỗi, số, boolean, null, và mọi thứ dựng từ chúng. Date và Map cũng được — bộ tuần tự hoá của React xử lý chúng.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Server Action</div><div class="lz-nsub">Một hàm đánh dấu &#96;&#39;use server&#39;&#96; truyền xuống được. React gửi một tham chiếu chứ không gửi mã, và gọi nó là tạo ra một request.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Element JSX</div><div class="lz-nsub">Đầu ra máy chủ đã vẽ sẵn, truyền vào làm children hoặc làm prop. Chính nó làm phép ghép chạy được.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Không được: hàm thường, thực thể class, symbol</div><div class="lz-nsub">Không có cách nào gửi một closure qua đường truyền. React ném ra một lỗi lúc build có gọi tên cái prop.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — truyền thẳng một model Prisma từ Server Component sang Client Component.</strong> &#96;&lt;Editor note={note} /&gt;&#96; với &#96;note&#96; lấy từ &#96;prisma.note.findUnique()&#96; thường thì chạy được, rồi một ngày nó không: một cột &#96;Decimal&#96;, một id &#96;BigInt&#96; hay một lớp bọc riêng của Prisma đều là thực thể class, và React từ chối với &quot;Only plain objects can be passed to Client Components&quot;. Tệ hơn, khi nó tuần tự hoá được thì bạn đã ship mọi cột sang trình duyệt — kể cả những cột truy vấn có chọn mà giao diện chẳng bao giờ hiện. Hãy ánh xạ sang một dáng tường minh ngay tại ranh giới: chọn đúng những field component cần và tự tay chuyển đổi các kiểu lạ.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/rsc/use-client#serializable-types" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Các kiểu tuần tự hoá được</span><span class="lc-sub">Danh sách chính xác cái gì qua được ranh giới, và cái gì thì ném lỗi.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#passing-props-from-server-to-client-components-serialization" target="_blank" rel="noopener">
+  <span class="lc-ico">🚧</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Tuần tự hoá ở ranh giới</span><span class="lc-sub">Những ghi chú riêng của Next.js, gồm cả ca Prisma và Date.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#passing-props-from-server-to-client-components-serialization" target="_blank" rel="noopener">
@@ -428,6 +568,23 @@ export default async function FeedPage() {
 <p><strong>Rule of thumb for the boundary:</strong> if you find yourself adding <code>'use client'</code> to a page or layout, stop and ask whether only a child needs it. Ninety percent of the time you can lift the interactive part into its own small client component and keep the page on the server.</p>
 </div>
 
+<h3>Deciding where the boundary goes</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Start with everything on the server</b> — That is the default, and it is the cheapest option for the user. Only move things out when something forces you.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Find what actually needs the browser</b> — State that changes on interaction, an event handler, a browser API, a library that touches the DOM. Nothing else qualifies.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Mark the smallest component that needs it</b> — A like button, a search input, a tab bar — not the page and not the layout that contains them.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Then check the bundle</b> — &#96;next build&#96; prints the First Load JS per route. If a route grew, something crossed the boundary that did not have to.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a boundary drawn by file, not by responsibility.</strong> It is tempting to make one &#96;components/ui&#96; folder client because half of it needs interactivity. Every import from it then joins the bundle, including the purely presentational card and badge that could have stayed on the server — and because the directive is at the top of each file, nothing in the code shows what it cost. The measurable check is in the build output: compare First Load JS before and after a change. A route that gains 60kB from a one-line directive is telling you the boundary is in the wrong place, and the fix is usually to split one file into two.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#moving-client-components-down-the-tree" target="_blank" rel="noopener">
+  <span class="lc-ico">⬇️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Moving Client Components down the tree</span><span class="lc-sub">The official recommendation, with a before-and-after example.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/next-config-js/bundlePagesRouterDependencies" target="_blank" rel="noopener">
+  <span class="lc-ico">📊</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Analysing the bundle</span><span class="lc-sub">How to see what is actually in each route's JavaScript, rather than guessing.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#moving-client-components-down-the-tree" target="_blank" rel="noopener">
   <span class="lc-ico">🌳</span>
@@ -476,6 +633,23 @@ export default async function FeedPage() {
 <div class="callout warn">
 <p><strong>Quy tắc ngón tay cái cho ranh giới:</strong> nếu bạn thấy mình thêm <code>'use client'</code> vào một page hay layout, dừng lại và hỏi liệu chỉ một đứa con cần nó. Chín phần mười lần bạn có thể nhấc phần tương tác ra thành một component client nhỏ riêng và giữ trang trên server.</p>
 </div>
+
+<h3>Quyết định đặt ranh giới ở đâu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Hãy bắt đầu với mọi thứ ở phía máy chủ</b> — Đó là mặc định, và là lựa chọn rẻ nhất cho người dùng. Chỉ dời thứ gì ra khi có cái gì đó buộc bạn phải làm thế.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Tìm ra thứ thật sự cần trình duyệt</b> — State thay đổi khi tương tác, một handler sự kiện, một API của trình duyệt, một thư viện có chạm vào DOM. Ngoài ra không có gì đủ tiêu chuẩn.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Đánh dấu component NHỎ NHẤT cần nó</b> — Một nút thích, một ô tìm kiếm, một thanh tab — chứ không phải cả trang và không phải cái layout chứa chúng.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Rồi kiểm lại cái gói</b> — &#96;next build&#96; in ra First Load JS của từng route. Nếu một route phình lên thì có thứ gì đó đã vượt ranh giới mà lẽ ra không cần.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một ranh giới vạch theo file, chứ không vạch theo trách nhiệm.</strong> Rất dễ bị cám dỗ đánh dấu cả một thư mục &#96;components/ui&#96; là client vì một nửa trong đó cần tương tác. Từ đó mọi phép import từ nó đều gia nhập gói, kể cả cái thẻ và cái nhãn thuần trang trí lẽ ra ở lại máy chủ được — và vì chỉ thị nằm ở đầu mỗi file, chẳng có gì trong mã cho thấy nó tốn bao nhiêu. Phép kiểm đo được nằm ở đầu ra của build: hãy so First Load JS trước và sau một thay đổi. Một route phình thêm 60kB chỉ vì một dòng chỉ thị đang nói với bạn rằng ranh giới đặt sai chỗ, và cách chữa thường là tách một file thành hai.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#moving-client-components-down-the-tree" target="_blank" rel="noopener">
+  <span class="lc-ico">⬇️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Đẩy Client Component xuống thấp trong cây</span><span class="lc-sub">Khuyến nghị chính thức, kèm ví dụ trước-và-sau.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/next-config-js/bundlePagesRouterDependencies" target="_blank" rel="noopener">
+  <span class="lc-ico">📊</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Phân tích gói</span><span class="lc-sub">Cách nhìn thấy thật sự có gì trong JavaScript của từng route, thay vì đoán.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#moving-client-components-down-the-tree" target="_blank" rel="noopener">

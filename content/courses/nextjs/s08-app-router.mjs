@@ -62,6 +62,23 @@ export default function AboutPage() {
 <p><strong>This is exactly how cuongthai.com is built.</strong> Its frontend lives in <code>frontend/src/app/</code> — every page you have visited (<code>/feed</code>, <code>/courses</code>, <code>/exam</code>, this very lesson page) is a <code>page.tsx</code> inside a folder of that name, wrapped by layouts. The App Router is not a toy for this course; it is the production router of the site you are learning on.</p>
 </div>
 
+<h3>What Next.js adds on top of React</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Routing from the filesystem</b> — A folder is a URL segment. No route table to keep in sync with the pages that actually exist.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>A server that renders</b> — Components can run on the server, close to the database, and send HTML rather than a bundle plus a fetch.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>A build step that knows your routes</b> — It decides per route whether to pre-render at build time, cache, or render per request — and tells you which in the build output.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Conventions instead of configuration</b> — &#96;page&#96;, &#96;layout&#96;, &#96;loading&#96;, &#96;error&#96;, &#96;not-found&#96;. Each file name is a behaviour you would otherwise wire up by hand.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — bringing a client-side React mental model into the App Router unchanged.</strong> In a Vite app every component runs in the browser, so &#96;useState&#96;, &#96;window&#96; and &#96;localStorage&#96; are always available. In the App Router the default flips: components run on the server, and the same code throws &quot;window is not defined&quot; at build time or &quot;useState only works in a Client Component&quot; at compile time. The fix is not to add &#96;&#39;use client&#39;&#96; to everything — that gives up the framework&#39;s main advantage. It is to notice which parts genuinely need the browser and mark only those, which chapter 9 works through in detail.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing" target="_blank" rel="noopener">
+  <span class="lc-ico">🗺️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Routing Fundamentals</span><span class="lc-sub">Segments, folders, and the special files, from the official model.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Learn Next.js</span><span class="lc-sub">The official interactive course; a good second pass over the same material.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing" target="_blank" rel="noopener">
   <span class="lc-ico">🗺️</span>
@@ -112,6 +129,23 @@ export default function AboutPage() {
 <div class="note-ct">
 <p><strong>Đây đúng là cách cuongthai.com được dựng.</strong> Frontend của nó nằm trong <code>frontend/src/app/</code> — mọi trang bạn từng vào (<code>/feed</code>, <code>/courses</code>, <code>/exam</code>, chính trang bài học này) đều là một <code>page.tsx</code> trong thư mục cùng tên, bọc bởi các layout. App Router không phải đồ chơi cho khoá học; nó là router production của chính site bạn đang học.</p>
 </div>
+
+<h3>Next.js thêm gì lên trên React</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Định tuyến từ hệ tệp</b> — Một thư mục là một đoạn URL. Không còn bảng route nào phải giữ đồng bộ với những trang thật sự tồn tại.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Một máy chủ biết render</b> — Component chạy được trên máy chủ, sát cơ sở dữ liệu, và gửi về HTML thay vì một gói JS cộng một lượt fetch.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Một bước build biết các route của bạn</b> — Nó quyết định cho từng route là dựng sẵn lúc build, nhớ đệm, hay render theo từng request — và nói cho bạn biết cái nào trong phần đầu ra của build.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Quy ước thay cho cấu hình</b> — &#96;page&#96;, &#96;layout&#96;, &#96;loading&#96;, &#96;error&#96;, &#96;not-found&#96;. Mỗi tên file là một hành vi mà nếu không có nó bạn phải tự đấu dây.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — mang nguyên mô hình tư duy React phía client vào App Router.</strong> Trong một ứng dụng Vite thì mọi component đều chạy trong trình duyệt, nên &#96;useState&#96;, &#96;window&#96; và &#96;localStorage&#96; luôn có sẵn. Trong App Router thì mặc định lật ngược: component chạy trên máy chủ, và cùng đoạn mã ấy ném ra &quot;window is not defined&quot; lúc build hoặc &quot;useState only works in a Client Component&quot; lúc biên dịch. Cách chữa không phải là thêm &#96;&#39;use client&#39;&#96; vào mọi thứ — làm thế là vứt bỏ lợi thế chính của framework. Mà là nhận ra phần nào thật sự cần trình duyệt rồi chỉ đánh dấu đúng phần đó, việc mà chương 9 sẽ đi qua chi tiết.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing" target="_blank" rel="noopener">
+  <span class="lc-ico">🗺️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Nền tảng định tuyến</span><span class="lc-sub">Đoạn, thư mục, và các file đặc biệt, theo mô hình chính thức.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Học Next.js</span><span class="lc-sub">Khoá tương tác chính thức; một lượt đi lại tốt trên cùng nội dung.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing" target="_blank" rel="noopener">
@@ -169,6 +203,24 @@ export default function AboutPage() {
 <p><strong>error.tsx must be a Client Component.</strong> An error boundary needs to catch runtime errors and offer a <code>reset()</code> — that requires client-side JavaScript. Forget <code>'use client'</code> at the top of <code>error.tsx</code> and it will not work. (What "Client Component" means is the whole of Chapter 9.)</p>
 </div>
 
+<h3>The special files, and when each one runs</h3>
+<div class="lz-map">
+  <div class="lz-stage">Every name is a behaviour you would otherwise build</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">page.tsx</div><div class="lz-nsub">Makes the segment publicly routable. A folder without a &#96;page&#96; is not a URL — it only groups things.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">layout.tsx</div><div class="lz-nsub">Wraps the segment and everything below it. It does <em>not</em> re-render on navigation between its children, which is what preserves scroll and state.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">loading.tsx</div><div class="lz-nsub">A Suspense boundary, automatically. Shown while the segment&#39;s data resolves, without you writing &#96;&lt;Suspense&gt;&#96; yourself.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">error.tsx and not-found.tsx</div><div class="lz-nsub">An error boundary and the 404 view. &#96;error.tsx&#96; must be a Client Component, because it needs a reset handler.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a folder full of components that never becomes a route, because there is no &#96;page&#96;.</strong> &#96;app/dashboard/settings/Settings.tsx&#96; is just a file: without &#96;page.tsx&#96; in &#96;app/dashboard/settings/&#96;, the URL &#96;/dashboard/settings&#96; returns 404, no matter how complete the component is. The reverse trips people too — a &#96;layout.tsx&#96; with no sibling &#96;page.tsx&#96; renders nothing, because a layout only wraps a page. When a route 404s and the files look right, check for exactly two things: the file is named &#96;page&#96;, and it has a default export. Both are required, and neither produces an error when missing.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/file-conventions" target="_blank" rel="noopener">
+  <span class="lc-ico">📁</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — File conventions</span><span class="lc-sub">Every special file, with its exact signature and rendering rules.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Pages and layouts</span><span class="lc-sub">How page and layout nest, and what a layout preserves across navigations.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/file-conventions" target="_blank" rel="noopener">
   <span class="lc-ico">📗</span>
@@ -210,6 +262,24 @@ export default function AboutPage() {
 <div class="callout warn">
 <p><strong>error.tsx phải là Client Component.</strong> Một ranh giới lỗi cần bắt lỗi lúc chạy và đưa ra <code>reset()</code> — thứ đó cần JavaScript phía client. Quên <code>'use client'</code> ở đầu <code>error.tsx</code> là nó không hoạt động. (Client Component nghĩa là gì thì cả Chương 9 nói.)</p>
 </div>
+
+<h3>Các file quy ước, và mỗi cái chạy khi nào</h3>
+<div class="lz-map">
+  <div class="lz-stage">Mỗi cái tên là một hành vi mà nếu không có nó bạn phải tự dựng</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">page.tsx</div><div class="lz-nsub">Làm cho đoạn đó truy cập được công khai. Một thư mục không có &#96;page&#96; thì không phải một URL — nó chỉ dùng để nhóm.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">layout.tsx</div><div class="lz-nsub">Bọc quanh đoạn đó và mọi thứ bên dưới. Nó <em>không</em> render lại khi chuyển giữa các trang con, và đó là thứ giữ được vị trí cuộn và state.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">loading.tsx</div><div class="lz-nsub">Một ranh giới Suspense, tự động. Hiện ra trong lúc dữ liệu của đoạn đang được giải, mà bạn chẳng phải tự viết &#96;&lt;Suspense&gt;&#96;.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">error.tsx và not-found.tsx</div><div class="lz-nsub">Một ranh giới lỗi và khung 404. &#96;error.tsx&#96; bắt buộc phải là Client Component, vì nó cần một handler đặt lại.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một thư mục đầy component mà chẳng bao giờ thành route, vì thiếu &#96;page&#96;.</strong> &#96;app/dashboard/settings/Settings.tsx&#96; chỉ là một file: không có &#96;page.tsx&#96; trong &#96;app/dashboard/settings/&#96; thì URL &#96;/dashboard/settings&#96; trả về 404, dù cái component có hoàn chỉnh tới đâu. Chiều ngược lại cũng làm người ta vấp — một &#96;layout.tsx&#96; không có &#96;page.tsx&#96; anh em thì chẳng vẽ ra gì, vì layout chỉ bọc quanh một page. Khi một route trả 404 mà các file trông vẫn đúng, hãy kiểm đúng hai thứ: file có tên là &#96;page&#96; không, và nó có export mặc định không. Cả hai đều bắt buộc, và thiếu cái nào cũng chẳng sinh ra lỗi.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/file-conventions" target="_blank" rel="noopener">
+  <span class="lc-ico">📁</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Quy ước file</span><span class="lc-sub">Mọi file đặc biệt, kèm chữ ký chính xác và luật vẽ của nó.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Page và layout</span><span class="lc-sub">Page và layout lồng nhau ra sao, và layout giữ lại được gì khi chuyển trang.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/file-conventions" target="_blank" rel="noopener">
@@ -272,6 +342,23 @@ export default function RootLayout({ children }) {
 <h3>layout vs template</h3>
 <p>There is a sibling file, <code>template.tsx</code>, that looks like a layout but <em>does</em> re-mount on every navigation. You reach for it in the rare case you want a fresh instance each time (e.g. re-run an enter animation, reset per-page state). Ninety-nine times out of a hundred you want <code>layout.tsx</code> and its persistence.</p>
 
+<h3>How nested layouts compose</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Every segment can have one</b> — &#96;app/layout&#96; wraps everything; &#96;app/shop/layout&#96; wraps everything under &#96;/shop&#96;. They nest outside-in.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>The root layout owns html and body</b> — It is required, and it is the only layout allowed to render those tags.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Layouts persist across navigation</b> — Moving from &#96;/shop/a&#96; to &#96;/shop/b&#96; re-renders the page, not the shop layout — so its state, scroll and any open menu survive.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Which is why data in a layout is fetched once</b> — And not re-fetched when the child route changes. Useful for a nav; wrong for anything that depends on the current page.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — reading route parameters in a layout and expecting them to update.</strong> A layout does not re-render when you navigate between its children, so a value derived from the URL — the current product id, a tab name — is captured on the first render of that layout and then goes stale. The page updates, the layout&#39;s breadcrumb does not, and it looks like a caching bug. Layouts receive &#96;params&#96; for their <em>own</em> segment only, and that is deliberate: it is the mechanism that makes navigation cheap. Anything that must track the current route belongs in the page, or in a Client Component using &#96;usePathname&#96;.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#layouts" target="_blank" rel="noopener">
+  <span class="lc-ico">🧅</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Layouts</span><span class="lc-sub">Nesting, the root layout, and exactly what does and does not re-render.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/use-pathname" target="_blank" rel="noopener">
+  <span class="lc-ico">🧭</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — usePathname</span><span class="lc-sub">Reading the live path in a Client Component, when a layout genuinely needs it.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts" target="_blank" rel="noopener">
   <span class="lc-ico">🧱</span>
@@ -322,6 +409,23 @@ export default function RootLayout({ children }) {
 
 <h3>layout và template</h3>
 <p>Có một file anh em, <code>template.tsx</code>, trông như layout nhưng <em>lại</em> mount lại mỗi lần điều hướng. Bạn chỉ dùng nó trong ca hiếm hoi muốn một bản mới mỗi lần (ví dụ chạy lại animation vào trang, reset state theo từng trang). Chín mươi chín trên một trăm lần bạn muốn <code>layout.tsx</code> và tính bền của nó.</p>
+
+<h3>Layout lồng nhau ghép lại thế nào</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Mỗi đoạn đều có thể có một cái</b> — &#96;app/layout&#96; bọc mọi thứ; &#96;app/shop/layout&#96; bọc mọi thứ dưới &#96;/shop&#96;. Chúng lồng từ ngoài vào trong.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Layout gốc sở hữu thẻ html và body</b> — Nó là bắt buộc, và là layout duy nhất được phép vẽ hai thẻ đó.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Layout sống dai qua các lần chuyển trang</b> — Đi từ &#96;/shop/a&#96; sang &#96;/shop/b&#96; là render lại page, không render lại layout của shop — nên state, vị trí cuộn và mọi menu đang mở của nó đều sống sót.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Đó là lý do dữ liệu trong layout chỉ được lấy một lần</b> — Và không lấy lại khi route con đổi. Có ích cho một thanh điều hướng; sai với bất cứ thứ gì phụ thuộc vào trang hiện tại.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — đọc tham số route trong một layout rồi mong nó cập nhật.</strong> Một layout không render lại khi bạn chuyển giữa các trang con của nó, nên một giá trị dẫn xuất từ URL — id sản phẩm hiện tại, tên một tab — được bắt lấy ở lần render đầu của layout đó rồi cũ dần đi. Trang thì cập nhật, còn thanh breadcrumb của layout thì không, và nó trông như một lỗi bộ nhớ đệm. Layout chỉ nhận &#96;params&#96; của <em>chính</em> đoạn của nó, và điều đó là cố ý: đó chính là cơ chế làm cho việc chuyển trang trở nên rẻ. Mọi thứ phải bám theo route hiện tại đều thuộc về page, hoặc thuộc về một Client Component dùng &#96;usePathname&#96;.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#layouts" target="_blank" rel="noopener">
+  <span class="lc-ico">🧅</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Layout</span><span class="lc-sub">Lồng nhau, layout gốc, và chính xác cái gì render lại cái gì không.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/use-pathname" target="_blank" rel="noopener">
+  <span class="lc-ico">🧭</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — usePathname</span><span class="lc-sub">Đọc đường dẫn trực tiếp trong một Client Component, khi layout thật sự cần nó.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts" target="_blank" rel="noopener">
@@ -387,6 +491,23 @@ function NavItem({ href, label }) {
 }</code></pre>
 <p><code>usePathname()</code> returns the current URL path, so you can compare it to a link's <code>href</code> and style the current one. For section-level highlighting use <code>pathname.startsWith(href)</code> instead of <code>===</code>. Its sibling <code>useSearchParams()</code> reads the query string.</p>
 
+<h3>Navigating without a page reload</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Use next/link, not an anchor</b> — &#96;&lt;Link href="/shop"&gt;&#96; renders a real &#96;&lt;a&gt;&#96; — so it is right-clickable and crawlable — but intercepts the click for a client-side transition.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>It prefetches what is visible</b> — When a Link scrolls into view, Next fetches that route&#39;s payload in the background. The click then feels instant.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>useRouter for programmatic moves</b> — &#96;router.push(&#39;/x&#39;)&#96; after a form succeeds. It is a Client Component hook, from &#96;next/navigation&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>redirect() on the server</b> — In a Server Component or a Server Action. It throws, so nothing after it runs — put it at the end of the function.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — importing &#96;useRouter&#96; from &#96;next/router&#96; in an App Router project.</strong> That is the Pages Router hook. In the App Router it exists but throws at runtime: &quot;NextRouter was not mounted&quot; — an error that says nothing about the import path, and sends people looking for a missing provider. The App Router splits the old router into three imports from &#96;next/navigation&#96;: &#96;useRouter&#96; for pushing, &#96;usePathname&#96; for the current path, and &#96;useSearchParams&#96; for the query. Most examples on the internet predate the split, so check the import line first whenever a routing hook behaves strangely.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/components/link" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Link</span><span class="lc-sub">Every prop, including prefetch, replace and scroll behaviour.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/use-router" target="_blank" rel="noopener">
+  <span class="lc-ico">🧭</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — useRouter (App Router)</span><span class="lc-sub">The correct import and the full method list, with the Pages Router differences noted.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
@@ -440,6 +561,23 @@ function NavItem({ href, label }) {
   );
 }</code></pre>
 <p><code>usePathname()</code> trả về đường dẫn URL hiện tại, để bạn so với <code>href</code> của link và tô cái đang chọn. Muốn tô theo cả mục thì dùng <code>pathname.startsWith(href)</code> thay cho <code>===</code>. Anh em của nó, <code>useSearchParams()</code>, đọc chuỗi query.</p>
+
+<h3>Chuyển trang mà không tải lại</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Hãy dùng next/link, đừng dùng thẻ a trần</b> — &#96;&lt;Link href="/shop"&gt;&#96; vẽ ra một thẻ &#96;&lt;a&gt;&#96; thật — nên bấm chuột phải được và bot đọc được — nhưng chặn cú bấm để chuyển trang phía client.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Nó nạp trước thứ đang nhìn thấy</b> — Khi một Link cuộn vào tầm nhìn, Next lấy sẵn dữ liệu của route đó ở phía sau. Cú bấm sau đó cảm giác tức thì.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>useRouter cho việc chuyển bằng mã</b> — &#96;router.push(&#39;/x&#39;)&#96; sau khi một form thành công. Nó là hook của Client Component, lấy từ &#96;next/navigation&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>redirect() ở phía máy chủ</b> — Trong một Server Component hoặc một Server Action. Nó ném lỗi, nên không gì sau nó chạy — hãy đặt nó ở cuối hàm.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — import &#96;useRouter&#96; từ &#96;next/router&#96; trong một dự án App Router.</strong> Đó là hook của Pages Router. Trong App Router nó vẫn tồn tại nhưng ném lỗi lúc chạy: &quot;NextRouter was not mounted&quot; — một lỗi chẳng nói gì về đường import, và đẩy người ta đi tìm một provider bị thiếu. App Router tách cái router cũ thành ba import từ &#96;next/navigation&#96;: &#96;useRouter&#96; để chuyển trang, &#96;usePathname&#96; cho đường dẫn hiện tại, và &#96;useSearchParams&#96; cho phần truy vấn. Phần lớn ví dụ trên mạng có trước lần tách đó, nên hễ một hook định tuyến cư xử lạ thì hãy kiểm dòng import trước tiên.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/components/link" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Link</span><span class="lc-sub">Mọi prop, gồm cả prefetch, replace và hành vi cuộn.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/use-router" target="_blank" rel="noopener">
+  <span class="lc-ico">🧭</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — useRouter (App Router)</span><span class="lc-sub">Đường import đúng và danh sách phương thức đầy đủ, có ghi chỗ khác Pages Router.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating" target="_blank" rel="noopener">
@@ -505,6 +643,24 @@ export async function generateMetadata({ params }) {
 <p><strong>A real cuongthai.com bug this touches:</strong> a shared Messenger link once resolved back to <code>"/"</code> instead of the conversation, because the Open Graph URL in metadata was wrong. Metadata is not decoration — search engines and every social preview read exactly these tags. When a shared link shows the wrong title, image, or destination, the <code>metadata</code>/<code>generateMetadata</code> of that route is the first place to look.</p>
 </div>
 
+<h3>Organising routes without changing URLs</h3>
+<div class="lz-map">
+  <div class="lz-stage">Two tools that look similar and do opposite things</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Route groups: (marketing)</div><div class="lz-nsub">Parentheses. The folder groups files and gives them a shared layout, and the name never appears in the URL.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Private folders: _components</div><div class="lz-nsub">Underscore. Opted out of routing entirely — a place to keep components next to the route that uses them.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Metadata: export const metadata</div><div class="lz-nsub">A plain object in a &#96;layout&#96; or &#96;page&#96;. Next merges it down the tree, so a child can override just the title.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">generateMetadata for dynamic titles</div><div class="lz-nsub">An async function receiving &#96;params&#96;. It can fetch, and it deduplicates that fetch with the page&#39;s own.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — two route groups that resolve to the same URL path.</strong> &#96;app/(marketing)/about/page.tsx&#96; and &#96;app/(shop)/about/page.tsx&#96; both produce &#96;/about&#96;, because the group name is stripped. The build fails with a duplicate-route error that names the URL rather than the two folders, so on a large tree it takes a while to find the pair. Groups are for sharing a layout among sibling sections, not for namespacing — if you want two different &#96;/about&#96; pages you need two different URLs. Keep the group names describing the <em>layout</em> they share (&#96;(with-sidebar)&#96;), which makes accidental collisions much less likely.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/route-groups" target="_blank" rel="noopener">
+  <span class="lc-ico">🗂️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Route groups</span><span class="lc-sub">What parentheses do, and the multiple-root-layout pattern they enable.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/generate-metadata" target="_blank" rel="noopener">
+  <span class="lc-ico">🏷️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — generateMetadata</span><span class="lc-sub">Static and dynamic metadata, merging rules, and the deduplication behaviour.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/route-groups" target="_blank" rel="noopener">
   <span class="lc-ico">🗂️</span>
@@ -562,6 +718,24 @@ export async function generateMetadata({ params }) {
 <div class="note-ct">
 <p><strong>Một bug thật của cuongthai.com liên quan chỗ này:</strong> một link Messenger được chia sẻ từng trỏ về <code>"/"</code> thay vì cuộc trò chuyện, vì URL Open Graph trong metadata bị sai. Metadata không phải đồ trang trí — máy tìm kiếm và mọi bản xem trước mạng xã hội đọc đúng những thẻ này. Khi một link chia sẻ hiện sai title, ảnh, hay đích đến, <code>metadata</code>/<code>generateMetadata</code> của route đó là chỗ nhìn đầu tiên.</p>
 </div>
+
+<h3>Sắp xếp route mà không đổi URL</h3>
+<div class="lz-map">
+  <div class="lz-stage">Hai công cụ nhìn na ná nhau mà làm hai việc trái ngược</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Nhóm route: (marketing)</div><div class="lz-nsub">Dấu ngoặc tròn. Thư mục này gom các file lại và cho chúng một layout dùng chung, còn cái tên thì không bao giờ xuất hiện trong URL.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Thư mục riêng: _components</div><div class="lz-nsub">Dấu gạch dưới. Bị loại hẳn khỏi định tuyến — một chỗ để giữ component nằm cạnh route dùng nó.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Metadata: export const metadata</div><div class="lz-nsub">Một object thuần trong một &#96;layout&#96; hoặc &#96;page&#96;. Next trộn nó xuôi xuống cây, nên một trang con chỉ cần ghi đè mỗi cái tiêu đề.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">generateMetadata cho tiêu đề động</div><div class="lz-nsub">Một hàm async nhận &#96;params&#96;. Nó lấy dữ liệu được, và phép lấy đó được khử trùng lặp với phép lấy của chính trang.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — hai nhóm route cùng rút về một đường URL.</strong> &#96;app/(marketing)/about/page.tsx&#96; và &#96;app/(shop)/about/page.tsx&#96; đều cho ra &#96;/about&#96;, vì tên nhóm bị lược đi. Bản build hỏng với một lỗi trùng route gọi tên cái URL chứ không gọi tên hai thư mục, nên trên một cây lớn thì mất một lúc mới tìm ra cặp đó. Nhóm dùng để chia sẻ layout giữa các mục anh em, không dùng để phân vùng tên — nếu bạn muốn hai trang &#96;/about&#96; khác nhau thì bạn cần hai URL khác nhau. Hãy đặt tên nhóm theo cái <em>layout</em> mà chúng dùng chung (&#96;(with-sidebar)&#96;), như thế va chạm ngoài ý muốn khó xảy ra hơn nhiều.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/route-groups" target="_blank" rel="noopener">
+  <span class="lc-ico">🗂️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Nhóm route</span><span class="lc-sub">Dấu ngoặc tròn làm gì, và mẫu nhiều-layout-gốc mà nó cho phép.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/generate-metadata" target="_blank" rel="noopener">
+  <span class="lc-ico">🏷️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — generateMetadata</span><span class="lc-sub">Metadata tĩnh và động, luật trộn, và hành vi khử trùng lặp.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/route-groups" target="_blank" rel="noopener">

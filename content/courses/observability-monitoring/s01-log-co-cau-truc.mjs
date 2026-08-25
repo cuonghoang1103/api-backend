@@ -26,7 +26,7 @@ export default {
 
 <h3>The same event, written two ways</h3>
 <pre><code class="language-javascript">// Prose — readable, and unqueryable
-console.log(\`User \${user.id} failed to upload \${file.name} (\${file.size} bytes) after \${ms}ms\`)
+console.log(&#96;User \${user.id} failed to upload \${file.name} (\${file.size} bytes) after \${ms}ms&#96;)
 // → User u_8f3a failed to upload báo-cáo.pdf (4194304 bytes) after 8412ms
 
 // Structured — one JSON object per line
@@ -64,7 +64,7 @@ logger.error('upload failed', {
 };
 const line = config.nodeEnv === 'production'
   ? JSON.stringify(record)
-  : \`[\${record.ts}] \${level.toUpperCase().padEnd(5)} \${message}\`
+  : &#96;[\${record.ts}] \${level.toUpperCase().padEnd(5)} \${message}&#96;
     + (context ? ' ' + JSON.stringify(context) : '');
 </code></pre>
 <div class="out">// production
@@ -109,7 +109,7 @@ const line = config.nodeEnv === 'production'
 
 <h3>Cùng một sự kiện, viết theo hai cách</h3>
 <pre><code class="language-javascript">// Văn xuôi — đọc được, và không truy vấn được
-console.log(\`User \${user.id} failed to upload \${file.name} (\${file.size} bytes) after \${ms}ms\`)
+console.log(&#96;User \${user.id} failed to upload \${file.name} (\${file.size} bytes) after \${ms}ms&#96;)
 // → User u_8f3a failed to upload báo-cáo.pdf (4194304 bytes) after 8412ms
 
 // Có cấu trúc — mỗi dòng một object JSON
@@ -147,7 +147,7 @@ logger.error('upload failed', {
 };
 const line = config.nodeEnv === 'production'
   ? JSON.stringify(record)
-  : \`[\${record.ts}] \${level.toUpperCase().padEnd(5)} \${message}\`
+  : &#96;[\${record.ts}] \${level.toUpperCase().padEnd(5)} \${message}&#96;
     + (context ? ' ' + JSON.stringify(context) : '');
 </code></pre>
 <div class="out">// production
@@ -496,8 +496,8 @@ function bench(label, fn) {
   return Number(process.hrtime.bigint() - t) / N;   // ns per line
 }
 
-bench('bare string',        () =&gt; \`[info] request done\`);
-bench('concat + context',   () =&gt; \`[info] request done u=\${ctx.userId} r=\${ctx.route} ms=\${ctx.ms}\`);
+bench('bare string',        () =&gt; &#96;[info] request done&#96;);
+bench('concat + context',   () =&gt; &#96;[info] request done u=\${ctx.userId} r=\${ctx.route} ms=\${ctx.ms}&#96;);
 bench('JSON.stringify',     () =&gt; JSON.stringify({ ts: '2026-08-25T10:00:00.000Z', level: 'info', msg: 'request done', ...ctx }));
 bench('+ new Date().toISOString()', () =&gt; JSON.stringify({ ts: new Date().toISOString(), level: 'info', msg: 'request done', ...ctx }));
 </code></pre>
@@ -579,8 +579,8 @@ function bench(label, fn) {
   return Number(process.hrtime.bigint() - t) / N;   // ns mỗi dòng
 }
 
-bench('chuỗi trần',         () =&gt; \`[info] request done\`);
-bench('nối chuỗi + ngữ cảnh', () =&gt; \`[info] request done u=\${ctx.userId} r=\${ctx.route} ms=\${ctx.ms}\`);
+bench('chuỗi trần',         () =&gt; &#96;[info] request done&#96;);
+bench('nối chuỗi + ngữ cảnh', () =&gt; &#96;[info] request done u=\${ctx.userId} r=\${ctx.route} ms=\${ctx.ms}&#96;);
 bench('JSON.stringify',     () =&gt; JSON.stringify({ ts: '2026-08-25T10:00:00.000Z', level: 'info', msg: 'request done', ...ctx }));
 bench('+ new Date().toISOString()', () =&gt; JSON.stringify({ ts: new Date().toISOString(), level: 'info', msg: 'request done', ...ctx }));
 </code></pre>

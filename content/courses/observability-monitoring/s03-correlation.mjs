@@ -564,7 +564,7 @@ prisma.$use(async (params, next) =&gt; {
   if (!ctx) return next(params);
   // sqlcommenter format: /*key='value'*/ appended to the statement
   return prisma.$queryRawUnsafe(
-    &#96;/*requestId='\${ctx.requestId}',route='\${ctx.route}'*/ \` + sql);
+    &#96;/*requestId='\${ctx.requestId}',route='\${ctx.route}'*/ &#96; + sql);
 });</code></pre>
 <pre><code>Without it, the slow-query log says:
 
@@ -674,7 +674,7 @@ prisma.$use(async (params, next) =&gt; {
   if (!ctx) return next(params);
   // định dạng sqlcommenter: /*key='value'*/ nối vào câu lệnh
   return prisma.$queryRawUnsafe(
-    &#96;/*requestId='\${ctx.requestId}',route='\${ctx.route}'*/ \` + sql);
+    &#96;/*requestId='\${ctx.requestId}',route='\${ctx.route}'*/ &#96; + sql);
 });</code></pre>
 <pre><code>Không có nó, log truy vấn chậm nói:
 
@@ -793,7 +793,7 @@ requestContext.run({ requestId: id, traceId, spanId, sampled }, next);</code></p
 const ctx = currentContext();
 const childSpanId = randomBytes(8).toString('hex');
 const traceparent =
-  &#96;00-\${ctx.traceId}-\${childSpanId}-\${ctx.sampled ? '01' : '00'}\`;
+  &#96;00-\${ctx.traceId}-\${childSpanId}-\${ctx.sampled ? '01' : '00'}&#96;;
 
 await fetch(gatewayUrl, { headers: { traceparent } });</code></pre>
 <pre><code>What the far end sees, and why it matters:
@@ -903,7 +903,7 @@ requestContext.run({ requestId: id, traceId, spanId, sampled }, next);</code></p
 const ctx = currentContext();
 const childSpanId = randomBytes(8).toString('hex');
 const traceparent =
-  &#96;00-\${ctx.traceId}-\${childSpanId}-\${ctx.sampled ? '01' : '00'}\`;
+  &#96;00-\${ctx.traceId}-\${childSpanId}-\${ctx.sampled ? '01' : '00'}&#96;;
 
 await fetch(gatewayUrl, { headers: { traceparent } });</code></pre>
 <pre><code>Đầu bên kia thấy gì, và vì sao điều đó quan trọng:
@@ -1249,7 +1249,7 @@ là 20 byte đã làm cho chẩn đoán kia khả thi.</code></pre>
             points: 1,
           },
           {
-            question: 'Why is a module-level `let currentId` worse than having no correlation at all?|||Vì sao một biến `let currentId` ở cấp module còn tệ hơn là không có correlation gì cả?',
+            question: 'Why is a module-level &#96;let currentId&#96; worse than having no correlation at all?|||Vì sao một biến &#96;let currentId&#96; ở cấp module còn tệ hơn là không có correlation gì cả?',
             options: [
               'Because Node handles requests concurrently: request B overwrites the variable while A awaits the database, so A\'s next log line carries B\'s id. It appears to work in development where requests never overlap, and in production it produces lines that look normal and point at the wrong request.|||Vì Node xử lý nhiều request đồng thời: request B ghi đè cái biến trong lúc A đang await cơ sở dữ liệu, nên dòng log kế tiếp của A mang id của B. Nó có vẻ chạy được lúc phát triển khi request không bao giờ chồng lấn, và trên production nó sinh ra những dòng trông bình thường mà trỏ vào sai request.',
               'Because module-level variables are slower than AsyncLocalStorage|||Vì biến cấp module chậm hơn AsyncLocalStorage',
@@ -1271,7 +1271,7 @@ là 20 byte đã làm cho chẩn đoán kia khả thi.</code></pre>
             points: 1,
           },
           {
-            question: 'You register `emitter.on(\'done\', () => logger.info(\'finished\'))` inside a request handler. What goes wrong?|||Bạn đăng ký `emitter.on(\'done\', () => logger.info(\'finished\'))` bên trong một handler request. Chuyện gì hỏng?',
+            question: 'You register &#96;emitter.on(\'done\', () => logger.info(\'finished\'))&#96; inside a request handler. What goes wrong?|||Bạn đăng ký &#96;emitter.on(\'done\', () => logger.info(\'finished\'))&#96; bên trong một handler request. Chuyện gì hỏng?',
             options: [
               'The listener captures request A\'s context at registration time and keeps it forever, so every later firing logs A\'s id regardless of which request actually triggered it. Missing context is visible in your logs; borrowed context is not — the line looks perfectly normal.|||Cái listener chộp lấy ngữ cảnh của request A ngay lúc đăng ký và giữ nó mãi mãi, nên mọi lần kích hoạt sau này đều log id của A bất kể request nào thật sự kích hoạt. Ngữ cảnh THIẾU thì nhìn thấy trong log; ngữ cảnh MƯỢN thì không — dòng log trông hoàn toàn bình thường.',
               'The listener loses the context entirely and logs no id|||Cái listener mất sạch ngữ cảnh và không log id nào',

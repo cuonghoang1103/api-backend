@@ -275,7 +275,7 @@ function bench(label, fn) {
   const t = process.hrtime.bigint();       // monotonic, nanoseconds
   for (let i = 0; i &lt; N; i++) fn();
   const ns = Number(process.hrtime.bigint() - t);
-  return \`\${label.padEnd(30)} \${(ns / N).toFixed(0).padStart(5)} ns/op\`;
+  return &#96;\${label.padEnd(30)} \${(ns / N).toFixed(0).padStart(5)} ns/op&#96;;
 }
 
 console.log(bench('JSON.stringify', () =&gt; JSON.stringify({ a: 1, b: 'x' })));
@@ -330,7 +330,7 @@ function bench(label, fn) {
   const t = process.hrtime.bigint();       // đơn điệu, nano giây
   for (let i = 0; i &lt; N; i++) fn();
   const ns = Number(process.hrtime.bigint() - t);
-  return \`\${label.padEnd(30)} \${(ns / N).toFixed(0).padStart(5)} ns/thao tác\`;
+  return &#96;\${label.padEnd(30)} \${(ns / N).toFixed(0).padStart(5)} ns/thao tác&#96;;
 }
 
 console.log(bench('JSON.stringify', () =&gt; JSON.stringify({ a: 1, b: 'x' })));

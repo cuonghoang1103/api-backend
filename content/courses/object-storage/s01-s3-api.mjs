@@ -268,6 +268,13 @@ await client.send(new DeleteObjectsCommand({
 <p><strong>One sentence.</strong> Four core operations: PutObject (upload, with ContentType + CacheControl MANDATORY), GetObject (streams the body; this repo rarely uses it because of the CDN), HeadObject (metadata only, cheap), and DeleteObject/DeleteObjects (batches of up to 1000, silent on missing keys) — 90% of S3 code uses only these four.</p>
 </div>
 
+<h3>The four operations, and what each one costs</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">PutObject — write</span><span class="lz-d">A Class A request, billed at the higher rate. Overwriting an existing key is a Put too — there is no cheaper &quot;update&quot;.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">GetObject — read the bytes</span><span class="lz-d">Class B, plus egress if the caller is outside the provider's network. On S3 the egress is usually the whole bill.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">HeadObject — metadata only</span><span class="lz-d">Same headers as a Get, no body. Use it to check existence or size without paying to transfer the object.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">DeleteObject(s) — remove</span><span class="lz-d">Free or near-free, and <code>DeleteObjects</code> takes up to 1000 keys in one request. Deleting one at a time in a loop is the expensive way to do a cheap thing.</span></div>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS S3 — API operations</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API — full list, 60+ operations.</span></span></div>
 </div>
@@ -370,6 +377,13 @@ await client.send(new DeleteObjectsCommand({
 <p><strong>Một câu.</strong> Bốn core operation: PutObject (upload với ContentType + CacheControl BẮT BUỘC), GetObject (stream body, kho này ít dùng vì CDN), HeadObject (chỉ metadata, rẻ), DeleteObject/DeleteObjects (batch tới 1000, silent khi missing) — 90% code S3 chỉ dùng bốn cái này.</p>
 </div>
 
+<h3>Bốn thao tác, và mỗi cái tốn gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">PutObject — ghi</span><span class="lz-d">Một request Class A, tính giá cao hơn. Ghi đè lên một khoá đã có cũng là một Put — không có thao tác &quot;cập nhật&quot; nào rẻ hơn.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">GetObject — đọc các byte</span><span class="lz-d">Class B, cộng phí truyền ra nếu bên gọi nằm ngoài mạng của nhà cung cấp. Trên S3 thì phí truyền ra thường là toàn bộ hoá đơn.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">HeadObject — chỉ lấy siêu dữ liệu</span><span class="lz-d">Cùng bộ header như Get, không có thân. Hãy dùng nó để kiểm sự tồn tại hay kích thước mà không phải trả tiền truyền cả object.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">DeleteObject(s) — xoá</span><span class="lz-d">Miễn phí hoặc gần như miễn phí, và <code>DeleteObjects</code> nhận tới 1000 khoá trong một request. Xoá từng cái một trong vòng lặp là cách đắt đỏ để làm một việc rẻ tiền.</span></div>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS S3 — API operations</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API — full list, 60+ operations.</span></span></div>
 </div>

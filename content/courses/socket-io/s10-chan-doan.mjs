@@ -200,6 +200,16 @@ HTTP/1.1 200 OK    &lt;- OK, endpoint mounted
 <p><strong>One sentence.</strong> Q1 (is the client connected?) is answered by 4 checks in order — the DevTools WS tab (status 101), the transport-upgrade log, the connect_error handler, and the server log — and if Q1 fails, do NOT debug Q2-Q4, because they all assume a connection exists.</p>
 </div>
 
+<h3>Answering "is the client connected?" without guessing</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Look at the WS frames, not the page</span><span class="lz-d">DevTools → Network → WS. A live connection shows ping/pong frames arriving on a timer. An empty frame list means it is not connected, whatever the UI says.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Check the transport that was chosen</span><span class="lz-d"><code>socket.io.engine.transport.name</code>. If it says <code>polling</code> after the handshake, the WebSocket upgrade failed and something between the two ends blocked it.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Attach connect_error</span><span class="lz-d">The most useful three lines in this lesson: the error names CORS, a 502, a namespace typo, or an auth rejection — each of which looks identical from the outside.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Then compare against the server log</span><span class="lz-d">A client that never appears there never reached the process, which moves the investigation to the proxy rather than the code.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Trap — reading <code>socket.connected</code> and believing it.</strong> The flag reflects the client&#39;s own view, and a client whose network vanished — a laptop lid closed, a train tunnel — still reports <code>true</code> until the heartbeat times out, which can be tens of seconds later. So a UI gated on that boolean shows &quot;online&quot; while nothing is being delivered, and messages queue silently. It is also why a presence list built from client reports disagrees with the server. Trust the server&#39;s view for presence, treat <code>connected</code> as a local hint, and let the ping timeout — not the flag — define what &quot;disconnected&quot; means.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Lesson 1.4 — auth middleware</span><span class="lc-sub">/courses/socket-io/learn — connect_error patterns.</span></span></div>
 </div>
@@ -283,6 +293,16 @@ HTTP/1.1 200 OK    &lt;- OK, endpoint mounted
 <p><strong>Một câu.</strong> Q1 (client connected?) trả lời bằng 4 check theo thứ tự — DevTools WS tab (status 101), transport upgrade log, connect_error handler, server log — và nếu Q1 fail, KHÔNG debug Q2-Q4 vì chúng giả định connection tồn tại.</p>
 </div>
 
+<h3>Trả lời &quot;client có kết nối không?&quot; mà không phải đoán</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Hãy nhìn các frame WS, đừng nhìn cái trang</span><span class="lz-d">DevTools → Network → WS. Một kết nối sống sẽ hiện ra các frame ping/pong tới theo nhịp. Danh sách frame rỗng nghĩa là nó KHÔNG kết nối, bất kể giao diện nói gì.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Kiểm transport đã được chọn</span><span class="lz-d"><code>socket.io.engine.transport.name</code>. Nếu nó ghi <code>polling</code> sau khi bắt tay xong thì phép nâng cấp lên WebSocket đã hỏng và có thứ gì đó nằm giữa hai đầu đã chặn nó.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Hãy gắn connect_error</span><span class="lz-d">Ba dòng hữu ích nhất trong bài này: cái lỗi gọi tên CORS, một cú 502, một lỗi gõ nhầm namespace, hay một lần từ chối xác thực — mà nhìn từ bên ngoài thì cái nào cũng giống hệt nhau.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Rồi đối chiếu với log máy chủ</span><span class="lz-d">Một client chẳng bao giờ xuất hiện ở đó là một client chưa từng tới được tiến trình, và điều đó chuyển cuộc điều tra sang phía proxy chứ không phải phía mã.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — đọc <code>socket.connected</code> rồi tin nó.</strong> Cái cờ đó phản ánh cách nhìn của chính client, và một client vừa mất mạng — đóng nắp laptop, tàu chui vào hầm — vẫn báo <code>true</code> cho tới khi nhịp tim hết giờ, việc có thể xảy ra hàng chục giây sau đó. Nên một giao diện dựa vào cái boolean ấy sẽ hiện &quot;đang online&quot; trong khi chẳng có gì được giao đi, và tin nhắn lặng lẽ xếp hàng. Đó cũng là lý do một danh sách hiện diện dựng từ báo cáo của client lại bất đồng với máy chủ. Hãy tin cách nhìn của máy chủ cho phần hiện diện, coi <code>connected</code> là một gợi ý cục bộ, và để thời gian chờ ping — chứ không phải cái cờ — định nghĩa thế nào là &quot;mất kết nối&quot;.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Bài 1.4 — auth middleware</span><span class="lc-sub">/courses/socket-io/learn — connect_error patterns.</span></span></div>
 </div>
@@ -761,6 +781,16 @@ $ for i in 1 2 3 4; do curl -s http://backend-$i/health/socket; done
 <p><strong>One sentence.</strong> Three cluster-specific bugs: (1) a random 1/N of users receiving nothing means the Redis adapter never attached, (2) HTTP 400 &quot;sid unknown&quot; on polls means sticky sessions are missing, (3) presence flapping means in-process state is not shared across workers (fix: Redis SADD/SCARD) — a per-worker health endpoint, Redis PSUBSCRIBE, and local cluster testing are the three tools for debugging a cluster.</p>
 </div>
 
+<h3>Telling the three cluster bugs apart</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A fraction of users miss every event</span><span class="lz-d">Exactly 1/N of them, where N is the worker count. That ratio is the signature: the adapter is not wired, so each worker only reaches its own sockets.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Polling returns HTTP 400, session unknown</span><span class="lz-d">The handshake landed on one worker and the next poll on another. Sticky sessions are missing, or the balancer is not honouring them.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Presence flickers</span><span class="lz-d">The count is read from the local socket map, so it changes depending on which worker answered. Nothing is actually connecting and disconnecting.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Confirm with PSUBSCRIBE</span><span class="lz-d">Watching the Redis channel shows whether events are crossing workers at all — which separates &quot;adapter not working&quot; from &quot;event never emitted&quot;.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Trap — a cluster bug that is invisible in development because there is one worker.</strong> Every failure in this lesson requires N greater than one, and <code>npm run dev</code> runs a single process — so the adapter can be missing entirely, sticky sessions unconfigured, and presence read from the local map, and everything works perfectly on your machine. The first symptom is a production report that a fraction of users see nothing, and the fraction is the clue nobody recognises. Run two workers locally when you touch anything real-time: <code>PORT=3000 node server.js</code> twice behind a small proxy is enough to make all three bugs reproducible before they ship.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Lesson 5.1 — the Redis adapter</span><span class="lc-sub">/courses/socket-io/learn — cách attach adapter đúng.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Lesson 2.3 — sticky sessions</span><span class="lc-sub">/courses/socket-io/learn — cấu hình nginx cho polling.</span></span></div>
@@ -867,6 +897,16 @@ $ for i in 1 2 3 4; do curl -s http://backend-$i/health/socket; done
 <p><strong>Một câu.</strong> Ba bug đặc thù cluster: (1) random 1/N users không nhận = Redis adapter chưa attach, (2) poll HTTP 400 &quot;sid unknown&quot; = thiếu sticky sessions, (3) presence flap = state trong-process không share qua worker (vá: Redis SADD/SCARD) — health endpoint per worker + Redis PSUBSCRIBE + local cluster testing là ba tool debug cluster.</p>
 </div>
 
+<h3>Phân biệt ba lỗi đặc thù của cụm</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Một phần người dùng không nhận được sự kiện nào</span><span class="lz-d">Đúng 1/N trong số họ, với N là số worker. Chính cái tỷ lệ đó là dấu vân tay: adapter chưa được đấu vào, nên mỗi worker chỉ với tới được socket của chính nó.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Polling trả về HTTP 400, session unknown</span><span class="lz-d">Lần bắt tay rơi vào một worker còn lần hỏi tiếp theo rơi vào worker khác. Thiếu sticky session, hoặc bộ cân bằng tải không tôn trọng nó.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Hiện diện nhấp nháy</span><span class="lz-d">Con số đọc từ bản đồ socket cục bộ, nên nó đổi tuỳ theo worker nào trả lời. Thật ra chẳng có ai đang kết nối rồi ngắt kết nối cả.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Xác nhận bằng PSUBSCRIBE</span><span class="lz-d">Ngồi xem kênh Redis sẽ cho thấy các sự kiện có đi xuyên qua các worker hay không — và điều đó tách bạch &quot;adapter không chạy&quot; với &quot;sự kiện chưa từng được phát&quot;.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — một lỗi của cụm vô hình ở môi trường phát triển vì chỉ có một worker.</strong> Mọi cú hỏng trong bài này đều đòi N lớn hơn một, mà <code>npm run dev</code> thì chạy đúng một tiến trình — nên adapter có thể thiếu hoàn toàn, sticky session chưa cấu hình, và hiện diện đọc từ bản đồ cục bộ, mà mọi thứ vẫn chạy hoàn hảo trên máy bạn. Triệu chứng đầu tiên là một báo cáo từ production rằng một phần người dùng chẳng thấy gì, và chính cái tỷ lệ đó là manh mối mà chẳng ai nhận ra. Hãy chạy hai worker ở máy khi bạn động vào bất cứ thứ gì thời gian thực: <code>PORT=3000 node server.js</code> hai lần sau một cái proxy nhỏ là đủ để cả ba lỗi đều tái hiện được trước khi chúng lên production.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Bài 5.1 — Redis adapter</span><span class="lc-sub">/courses/socket-io/learn — cách attach adapter đúng.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Bài 2.3 — sticky sessions</span><span class="lc-sub">/courses/socket-io/learn — cấu hình nginx cho polling.</span></span></div>

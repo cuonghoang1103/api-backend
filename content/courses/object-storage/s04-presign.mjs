@@ -271,6 +271,13 @@ $ curl -X PUT "$UPLOAD_URL" -H "Content-Type: text/html" -d "&lt;script&gt;"
 <p><strong>One sentence.</strong> A presigned PUT with only ContentType on PutObjectCommand is not secure — the SDK signs only &#39;host&#39; by default, so an attacker can override the content-type to text/html and create stored XSS on your media domain; the fix is <code>signableHeaders: new Set([&#39;host&#39;, &#39;content-type&#39;])</code> — this repo caught it, fixed it, and left a comment explaining it.</p>
 </div>
 
+<h3>How an unsigned header becomes an XSS</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The client asks for a presigned URL</span><span class="lz-d">And supplies the content type it intends to upload with, because the server cannot know it in advance.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The server signs the request, but not that header</span><span class="lz-d"><code>signableHeaders</code> omits <code>content-type</code>, so the signature is valid for the URL regardless of what type is actually sent.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">So the uploader can change it after signing</span><span class="lz-d">The signature still verifies. The object lands with <code>text/html</code> instead of the image type the server approved.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And the bucket serves it as a page</span><span class="lz-d">Any visitor opening that object URL executes the attacker's script, on the bucket's origin. The fix is one line: sign the header you care about.</span></div>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SigV4 signing process</span><span class="lc-sub">docs.aws.amazon.com/general/latest/gr/sigv4_signing.html — protocol spec, canonical request formatting.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">src/config/r2.ts:117 (this repo)</span><span class="lc-sub">Real comment documenting the vulnerability, fix, and verification against real S3.</span></span></div>
@@ -375,6 +382,13 @@ $ curl -X PUT "$UPLOAD_URL" -H "Content-Type: text/html" -d "&lt;script&gt;"
 <p><strong>Một câu.</strong> Presigned PUT với chỉ ContentType trong PutObjectCommand không đủ security — SDK default sign chỉ &#39;host&#39;, attacker override content-type thành text/html tạo stored XSS trên media domain; fix là <code>signableHeaders: new Set([&#39;host&#39;, &#39;content-type&#39;])</code> — kho này bắt được, đã vá, có comment kể lại.</p>
 </div>
 
+<h3>Một header không được ký trở thành XSS như thế nào</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Client xin một URL đã ký sẵn</span><span class="lz-d">Và tự khai kiểu nội dung mà nó định tải lên, vì máy chủ không biết trước được.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Máy chủ ký cái request, nhưng KHÔNG ký cái header đó</span><span class="lz-d"><code>signableHeaders</code> bỏ sót <code>content-type</code>, nên chữ ký vẫn hợp lệ cho URL đó bất kể kiểu thật sự được gửi là gì.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nên bên tải lên đổi được nó SAU khi đã ký</span><span class="lz-d">Chữ ký vẫn xác minh được. Object rơi xuống với <code>text/html</code> thay vì kiểu ảnh mà máy chủ đã duyệt.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và bucket phục vụ nó như một trang web</span><span class="lz-d">Mọi khách mở URL của object đó đều chạy script của kẻ tấn công, trên chính origin của bucket. Cách chữa là một dòng: hãy ký cái header mà bạn quan tâm.</span></div>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SigV4 signing process</span><span class="lc-sub">docs.aws.amazon.com/general/latest/gr/sigv4_signing.html — protocol spec, canonical request formatting.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">src/config/r2.ts:117 (kho này)</span><span class="lc-sub">Comment thật tài liệu vulnerability, fix, và verify với S3 thật.</span></span></div>

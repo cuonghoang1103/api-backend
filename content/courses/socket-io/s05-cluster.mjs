@@ -399,6 +399,16 @@ logger.info('[socket] adapter', {
 <p><strong>One sentence.</strong> The adapter adds four cluster-wide methods — <code>fetchSockets</code> (aggregate, returns command-only <code>RemoteSocket</code>s because listeners cannot be serialized across processes), <code>socketsJoin</code>/<code>socketsLeave</code> (change room membership for sockets you do not hold), <code>serverSideEmit</code> (all-or-nothing RPC to the <em>other</em> workers), and <code>disconnectSockets</code> (the half of &quot;log out everywhere&quot; that token revocation cannot do) — and the danger is not these methods but their local counterparts, which in a cluster answer for one worker out of N without ever raising an error.</p>
 </div>
 
+<h3>Which adapter methods tell the truth across workers</h3>
+<div class="lz-map">
+  <div class="lz-node"><span class="lz-k">io.sockets</span><span class="lz-t">Local only — lies in a cluster</span><span class="lz-d">It is the map of sockets on <em>this</em> worker. In a four-worker cluster it sees a quarter of your users and reports it as the total.</span></div>
+  <div class="lz-node"><span class="lz-k">await io.fetchSockets()</span><span class="lz-t">Cluster-wide — the one to reach for</span><span class="lz-d">Asks every worker through the adapter and returns remote socket handles. Slower, and correct.</span></div>
+  <div class="lz-node"><span class="lz-k">socketsJoin / socketsLeave</span><span class="lz-t">Cluster-wide room changes</span><span class="lz-d">Moves sockets into or out of a room no matter which worker holds them. The local equivalent silently does nothing for three quarters of them.</span></div>
+  <div class="lz-node"><span class="lz-k">disconnectSockets</span><span class="lz-t">Cluster-wide disconnect</span><span class="lz-d">Same reason: a ban implemented with the local map bans the user on one worker and leaves them connected on the others.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Trap — a presence count read from the local socket map.</strong> <code>io.sockets.size</code> returns the sockets on the worker that happened to handle the request, so in a four-worker cluster it reports roughly a quarter of the real number — and it varies per request, because the load balancer picks a different worker each time. The bug reads as &quot;the online count is wrong and keeps changing&quot;, which sounds like a race condition rather than a topology problem. It is also invisible in development, where there is one worker and the number is exactly right. Anything that must see every user goes through the adapter: <code>fetchSockets</code>, or a count kept in Redis.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server API</span><span class="lc-sub">socket.io/docs/v4/server-api#serverfetchsockets — bảng đầy đủ, kèm phần RemoteSocket.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapter</span><span class="lc-sub">socket.io/docs/v4/adapter — method nào đi qua adapter và method nào không.</span></span></div>
@@ -600,6 +610,16 @@ logger.info('[socket] adapter', {
 <p><strong>Một câu.</strong> Adapter thêm bốn method toàn-cluster — <code>fetchSockets</code> (gộp lại, trả về <code>RemoteSocket</code> chỉ-nhận-lệnh vì listener không serialize được qua tiến trình), <code>socketsJoin</code>/<code>socketsLeave</code> (đổi thành viên room cho những socket bạn không cầm), <code>serverSideEmit</code> (RPC được-tất-cả-hoặc-không-gì tới các worker <em>khác</em>), và <code>disconnectSockets</code> (nửa của &quot;đăng xuất mọi nơi&quot; mà việc thu hồi token không làm được) — và mối nguy không nằm ở những method này mà ở những bản local tương ứng, vốn trong cluster trả lời thay cho một worker trên N mà không bao giờ nêu lên một lỗi nào.</p>
 </div>
 
+<h3>Method nào của adapter nói thật xuyên qua các worker</h3>
+<div class="lz-map">
+  <div class="lz-node"><span class="lz-k">io.sockets</span><span class="lz-t">Chỉ cục bộ — nói dối khi chạy cụm</span><span class="lz-d">Nó là bản đồ các socket trên <em>worker này</em>. Trong một cụm bốn worker nó thấy một phần tư số người dùng và báo cáo con số đó là tổng.</span></div>
+  <div class="lz-node"><span class="lz-k">await io.fetchSockets()</span><span class="lz-t">Toàn cụm — cái đáng với tay tới</span><span class="lz-d">Hỏi mọi worker qua adapter rồi trả về các tay cầm socket ở xa. Chậm hơn, và đúng.</span></div>
+  <div class="lz-node"><span class="lz-k">socketsJoin / socketsLeave</span><span class="lz-t">Đổi phòng trên toàn cụm</span><span class="lz-d">Chuyển socket vào hoặc ra khỏi một phòng bất kể worker nào đang giữ chúng. Bản cục bộ tương đương thì âm thầm chẳng làm gì với ba phần tư trong số đó.</span></div>
+  <div class="lz-node"><span class="lz-k">disconnectSockets</span><span class="lz-t">Ngắt kết nối trên toàn cụm</span><span class="lz-d">Cùng lý do: một lệnh cấm hiện thực bằng bản đồ cục bộ sẽ cấm người dùng trên một worker và để họ vẫn kết nối trên các worker còn lại.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — một con số hiện diện đọc từ bản đồ socket cục bộ.</strong> <code>io.sockets.size</code> trả về số socket trên đúng cái worker tình cờ xử lý request đó, nên trong một cụm bốn worker nó báo khoảng một phần tư con số thật — và nó thay đổi theo từng request, vì bộ cân bằng tải chọn một worker khác mỗi lần. Lỗi đọc lên thành &quot;số người online sai và cứ nhảy lung tung&quot;, nghe như một điều kiện tranh chấp chứ không phải một vấn đề về hình trạng hệ thống. Nó cũng vô hình ở môi trường phát triển, nơi chỉ có một worker và con số hoàn toàn chính xác. Mọi thứ phải nhìn thấy MỌI người dùng đều phải đi qua adapter: <code>fetchSockets</code>, hoặc một con số đếm giữ trong Redis.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server API</span><span class="lc-sub">socket.io/docs/v4/server-api#serverfetchsockets — bảng đầy đủ, kèm phần RemoteSocket.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapter</span><span class="lc-sub">socket.io/docs/v4/adapter — method nào đi qua adapter và method nào không.</span></span></div>

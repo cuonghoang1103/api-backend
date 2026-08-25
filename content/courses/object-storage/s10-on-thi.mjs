@@ -44,6 +44,12 @@ export default {
 <div class="callout">
 <p><strong>One sentence.</strong> The object-storage rules (flat keys, presigned signature scope, CORS, multipart cleanup) apply to every repo; the specific numbers (code size, the R2-versus-S3 delta, cache ratios) must be re-measured on yours; and intuitions about pricing and security are usually WRONG — read the docs and measure before concluding.</p>
 </div>
+<div class="pitfall">
+<p><strong>Trap — moving a Column B claim into Column A when you quote it later.</strong> The three columns in this lesson exist because most storage advice is a Column B statement — true where it was measured — repeated as if it were Column A. &quot;R2 is cheaper&quot; holds when egress dominates and reverses when Class A requests do; &quot;multipart is faster&quot; holds above a size threshold and is slower below it. The measurements here are labelled with their conditions precisely so the conditions travel with them. When you carry a number out of this course, carry the sentence that says where it was taken — a claim without its conditions is how Column C entries are created.</p>
+</div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS S3 pricing</span><span class="lc-sub">aws.amazon.com/s3/pricing — the authoritative list, with the Class A / Class B split this lesson uses.</span></span></div>
+<div class="link-card"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Cloudflare R2 pricing</span><span class="lc-sub">developers.cloudflare.com/r2/pricing — zero egress, and the operation classes that replace it as the variable cost.</span></span></div>
+
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.1</span>
@@ -77,6 +83,12 @@ export default {
 <div class="callout">
 <p><strong>Một câu.</strong> Object storage quy luật (flat keys, presigned signature scope, CORS, multipart cleanup) áp cho mọi kho; số cụ thể (repo code size, R2 vs S3 delta, cache ratio) đo lại cho kho bạn; và trực giác về pricing + security thường SAI — đọc doc + đo thật trước conclusion.</p>
 </div>
+<div class="pitfall">
+<p><strong>Bẫy — chuyển một khẳng định ở Cột B sang Cột A khi bạn trích lại nó về sau.</strong> Ba cột trong bài này tồn tại vì phần lớn lời khuyên về lưu trữ đều là một phát biểu Cột B — đúng ở nơi nó được đo — rồi được nhắc lại như thể nó là Cột A. &quot;R2 rẻ hơn&quot; đúng khi phí truyền ra chiếm chủ đạo và đảo ngược khi request Class A chiếm chủ đạo; &quot;multipart nhanh hơn&quot; đúng trên một ngưỡng kích thước và chậm hơn ở dưới ngưỡng đó. Các phép đo ở đây được ghi kèm điều kiện chính là để điều kiện đi theo chúng. Khi bạn mang một con số ra khỏi khoá này, hãy mang theo cả cái câu nói rõ nó được đo ở đâu — một khẳng định tách khỏi điều kiện của nó chính là cách các mục ở Cột C ra đời.</p>
+</div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS S3 pricing</span><span class="lc-sub">aws.amazon.com/s3/pricing — bảng giá chính thức, kèm phần chia Class A / Class B mà bài này dùng.</span></span></div>
+<div class="link-card"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Cloudflare R2 pricing</span><span class="lc-sub">developers.cloudflare.com/r2/pricing — truyền ra bằng không, và các lớp thao tác thay thế nó làm chi phí biến đổi.</span></span></div>
+
 </div>
 `,
     },

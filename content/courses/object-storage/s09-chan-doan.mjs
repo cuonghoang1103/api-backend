@@ -500,6 +500,16 @@ appearing 100+ times. If it is, either:
 <p><strong>One sentence.</strong> Storage latency spikes are almost always one of five specific causes (cold connection, first-TLS-handshake, local network, hot prefix, genuine service blip), each with a distinguishing measurement — run <code>curl -w</code> ten times to see whether TCP/TLS/TTFB is the ballooning number, then match to cause: if <code>connect</code>+<code>tls</code> spike it is connection setup (fix: keep-alive), if <code>ttfb</code> spikes intermittently on the same key it is prefix (fix: spread keys), and if it spikes across every request from every client it is the service (fix: wait, or file support).</p>
 </div>
 
+<h3>Where the milliseconds in one request go</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">DNS and TLS, once per connection</span><span class="lz-d">Tens to hundreds of milliseconds, and entirely avoidable — a reused connection pays it zero times after the first.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The round trip to the region</span><span class="lz-d">Physics. A bucket in another continent costs 150 ms before the object is even found; the fix is a closer bucket or a CDN, not a faster SDK.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Time to first byte at the storage layer</span><span class="lz-d">Where a hot prefix shows up: requests serialising behind each other on one partition, mostly an S3 concern.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Then the transfer itself</span><span class="lz-d">Proportional to size and bandwidth. If this dominates, the answer is a smaller object or a range request, not tuning anything above.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Trap — a new SDK client per request, paying the TLS handshake every time.</strong> Constructing <code>new S3Client()</code> inside a handler is tidy code and creates a fresh connection pool that is discarded after one use — so every request pays DNS plus a TLS handshake before it does any work. The measurement in this lesson is the one-line fix: hoist the client to module scope and the per-request latency drops by the whole handshake. It is invisible in a unit test, where one request runs, and it is the dominant cost under load, where thousands do. Any client with a connection pool belongs at module scope, created once.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS — S3 request rate performance</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html — prefix scaling behavior.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SDK v3 — reusing connections</span><span class="lc-sub">docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/node-reusing-connections.html — the keep-alive story on JS SDK.</span></span></div>
@@ -660,6 +670,16 @@ xuất hiện 100+ lần. Nếu có, hoặc:
 <p><strong>Một câu.</strong> Spike latency storage gần như luôn là một trong năm nguyên nhân cụ thể (connection cold, handshake TLS đầu, mạng local, prefix hot, blip service thật), mỗi cái với đo phân biệt — chạy <code>curl -w</code> mười lần để xem TCP/TLS/TTFB là số phình, rồi match nguyên nhân: nếu <code>connect</code>+<code>tls</code> spike là setup connection (vá: keep-alive), nếu <code>ttfb</code> spike intermittent trên cùng key là prefix (vá: trải key), và nếu spike qua mọi request từ mọi client là service (vá: chờ, hoặc mở support).</p>
 </div>
 
+<h3>Các mili giây trong một request đi đâu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">DNS và TLS, một lần cho mỗi kết nối</span><span class="lz-d">Vài chục tới vài trăm mili giây, và hoàn toàn tránh được — một kết nối dùng lại thì trả cái giá đó số lần bằng không sau lần đầu.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Lượt đi về tới vùng máy chủ</span><span class="lz-d">Vật lý thôi. Một bucket ở châu lục khác tốn 150 ms trước cả khi object được tìm thấy; cách chữa là một bucket gần hơn hoặc một CDN, không phải một SDK nhanh hơn.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Thời gian tới byte đầu tiên ở tầng lưu trữ</span><span class="lz-d">Đây là chỗ một tiền tố nóng lộ ra: các request xếp hàng sau nhau trên một phân vùng, chủ yếu là chuyện của S3.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Rồi tới chính phần truyền dữ liệu</span><span class="lz-d">Tỷ lệ với kích thước và băng thông. Nếu phần này chiếm chủ đạo thì câu trả lời là một object nhỏ hơn hoặc một range request, chứ không phải tinh chỉnh bất cứ thứ gì ở trên.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — tạo một client SDK mới cho mỗi request, trả giá bắt tay TLS ở mọi lần.</strong> Dựng <code>new S3Client()</code> bên trong một handler là đoạn mã gọn gàng và nó tạo ra một pool kết nối mới toanh rồi vứt đi sau đúng một lần dùng — nên mọi request đều trả tiền DNS cộng một lần bắt tay TLS trước khi làm được việc gì. Phép đo trong bài này chính là cách chữa một dòng: đưa client lên phạm vi module và độ trễ mỗi request giảm đi đúng bằng cả cái bắt tay đó. Nó vô hình trong một bài kiểm thử đơn vị, nơi chỉ có một request chạy, và nó là chi phí chủ đạo khi tải cao, nơi có hàng nghìn request. Mọi client có pool kết nối đều thuộc về phạm vi module, tạo đúng một lần.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS — S3 request rate performance</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html — hành vi scaling prefix.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SDK v3 — reusing connections</span><span class="lc-sub">docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/node-reusing-connections.html — câu chuyện keep-alive trên JS SDK.</span></span></div>

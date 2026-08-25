@@ -1074,6 +1074,13 @@ with the upgrade path left open.
 <p><strong>One sentence.</strong> File size is <code>sampleRate × bitDepth × channels × duration</code> for PCM and roughly <code>bitrate × duration</code> once compressed, and the right values differ by an order of magnitude between speech and music — 16 kHz mono at 24 kbps Opus is transparent for a voice (and 16 kHz is what ASR models and small speakers want anyway), while music needs 44.1/48 kHz stereo at 128-192 kbps; never resample or re-encode upward, because both invent data that was never captured while multiplying the bytes you store.</p>
 </div>
 
+<h3>Sizing an audio file, from the three numbers that decide it</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Sample rate sets the ceiling</span><span class="lz-d">Nyquist: you can represent frequencies up to half the rate. 16 kHz covers speech; 44.1 kHz covers hearing. Going higher stores nothing new.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Channels multiply it</span><span class="lz-d">Stereo is two streams. Speech recorded from one microphone is mono, and saving it as stereo doubles the bytes for a duplicated signal.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Bitrate is the budget you actually set</span><span class="lz-d">The codec fits the signal into it. Past the point where the artefacts stop being audible, more bitrate buys file size and nothing else.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So pick from the content</span><span class="lz-d">Speech mono at 16 kHz and 32 kbps is transparent; music stereo at 44.1 kHz needs 128 kbps or more. The wrong pairing wastes bytes or audibly degrades.</span></div>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Opus — codec comparison</span><span class="lc-sub">opus-codec.org/comparison — bitrate vs quality against MP3/AAC/Vorbis.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Xiph — 24/192 Music Downloads are Silly</span><span class="lc-sub">people.xiph.org/~xiphmont/demo/neil-young.html — why higher sample rates buy nothing audible.</span></span></div>
@@ -1256,6 +1263,13 @@ một lớp — cả hai phía đều đã hỗ trợ sẵn qua trường &#96;a
 <p><strong>Một câu.</strong> Kích thước file là <code>sampleRate × bitDepth × channels × thời lượng</code> với PCM và xấp xỉ <code>bitrate × thời lượng</code> khi đã nén, và giá trị đúng khác nhau một bậc độ lớn giữa tiếng nói và âm nhạc — 16 kHz mono ở 24 kbps Opus là trong suốt với một giọng nói (và 16 kHz cũng chính là cái mà mô hình ASR và loa nhỏ muốn), trong khi nhạc cần 44,1/48 kHz stereo ở 128-192 kbps; đừng bao giờ resample hay encode lại lên cao hơn, vì cả hai đều bịa ra dữ liệu chưa từng được ghi trong khi nhân lên số byte bạn phải lưu.</p>
 </div>
 
+<h3>Ước lượng cỡ một file âm thanh, từ ba con số quyết định nó</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Tần số lấy mẫu đặt ra cái trần</span><span class="lz-d">Định lý Nyquist: bạn biểu diễn được tần số tới một nửa tần số lấy mẫu. 16 kHz đủ cho giọng nói; 44,1 kHz đủ cho ngưỡng nghe. Lên cao hơn chẳng lưu thêm được gì mới.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Số kênh nhân nó lên</span><span class="lz-d">Stereo là hai luồng. Giọng nói thu từ một micro là mono, và lưu nó thành stereo là nhân đôi số byte cho một tín hiệu bị chép lại.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Bitrate mới là ngân sách bạn thật sự đặt ra</span><span class="lz-d">Bộ mã hoá nhét tín hiệu vừa vào đó. Vượt qua ngưỡng mà tai không còn nghe thấy nhiễu nữa thì thêm bitrate chỉ mua thêm dung lượng và không mua gì khác.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nên hãy chọn theo nội dung</span><span class="lz-d">Giọng nói mono ở 16 kHz và 32 kbps là trong suốt; nhạc stereo ở 44,1 kHz cần 128 kbps trở lên. Ghép sai cặp là hoặc phí byte hoặc nghe rõ là kém đi.</span></div>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Opus — codec comparison</span><span class="lc-sub">opus-codec.org/comparison — bitrate so với chất lượng, đối chiếu MP3/AAC/Vorbis.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Xiph — 24/192 Music Downloads are Silly</span><span class="lc-sub">people.xiph.org/~xiphmont/demo/neil-young.html — vì sao tần số lấy mẫu cao hơn không mua được gì nghe thấy.</span></span></div>

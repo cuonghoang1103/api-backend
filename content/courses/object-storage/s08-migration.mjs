@@ -806,6 +806,16 @@ for (const line of lines) {
 <p><strong>One sentence.</strong> Verify a migration with two layers: (1) an ETag <code>HeadObject</code> scan across 100% of keys, cheap enough to run for under $5 on 4M objects, which flags MISSING / ETag-mismatch / multipart-difference; and (2) a stratified byte-hash sample of ~500 objects across small-medium-large buckets to catch anything the ETag algorithm cannot see; only after Layer 1 mismatches are repaired and Layer 2 hashes match should you flip reads to R2.</p>
 </div>
 
+<h3>Verifying a migration in two layers</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Layer 1 — compare ETags for everything</span><span class="lz-d">Cheap, and it catches the common failures: a missing object, a truncated upload, a key that landed under the wrong prefix.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Know when an ETag is not a checksum</span><span class="lz-d">A multipart upload's ETag is a hash of hashes with a part suffix, so it will not match a single-part upload of identical bytes. Compare size in that case, or re-hash.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Layer 2 — byte-compare a stratified sample</span><span class="lz-d">Not a random sample: pick from each size band and each prefix, because failures cluster by upload path rather than uniformly.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Then state what was proven</span><span class="lz-d">&quot;All 412,000 ETags matched; 300 objects byte-compared across six size bands&quot; is a claim. &quot;The migration finished&quot; is not.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Trap — trusting the migration tool's own success report.</strong> The tool reports what it believes it did: objects it enumerated, requests that returned 200. It cannot report the object it never listed because a prefix was paginated wrong, the upload that succeeded with zero bytes, or the key that was written with the wrong content type. Every one of those returns a success code. An independent verification is a different program reading the destination and comparing against the source — and it is the only thing that can find a failure the tool was structurally unable to notice. Run it before deleting anything from the origin bucket.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS — S3 ETag semantics</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API/API_Object.html — the &quot;multipart ETag&quot; format explained.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — Checksums and ETags</span><span class="lc-sub">developers.cloudflare.com/r2/api/s3/api — how R2 computes ETags, differences from S3.</span></span></div>
@@ -991,6 +1001,16 @@ for (const line of lines) {
 <p><strong>Một câu.</strong> Verify migration với hai lớp: (1) scan ETag <code>HeadObject</code> trên 100% key, đủ rẻ chạy dưới $5 trên 4M object, flag MISSING / ETag-mismatch / khác-biệt-multipart; và (2) mẫu stratified byte-hash ~500 object trên bucket nhỏ-trung-lớn để bắt điều thuật toán ETag không thấy; chỉ sau khi mismatch Lớp 1 vá và hash Lớp 2 match thì flip đọc sang R2.</p>
 </div>
 
+<h3>Xác minh một lần di trú theo hai lớp</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Lớp 1 — so ETag cho mọi thứ</span><span class="lz-d">Rẻ, và nó bắt được những cú hỏng phổ biến: một object bị thiếu, một lần tải lên bị cụt, một khoá rơi nhầm tiền tố.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Hãy biết khi nào một ETag KHÔNG phải checksum</span><span class="lz-d">ETag của một lần tải lên nhiều phần là một hàm băm của các hàm băm kèm hậu tố số phần, nên nó sẽ không khớp với một lần tải lên một phần của cùng những byte đó. Trường hợp ấy thì so kích thước, hoặc băm lại.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Lớp 2 — so từng byte trên một mẫu phân tầng</span><span class="lz-d">Không phải mẫu ngẫu nhiên: hãy lấy từ mỗi dải kích thước và mỗi tiền tố, vì các cú hỏng túm tụm theo đường tải lên chứ không rải đều.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Rồi phát biểu ra thứ đã được chứng minh</span><span class="lz-d">&quot;Cả 412.000 ETag đều khớp; 300 object đã so từng byte trên sáu dải kích thước&quot; là một khẳng định. &quot;Lần di trú đã xong&quot; thì không.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — tin vào chính bản báo cáo thành công của công cụ di trú.</strong> Công cụ báo cáo thứ nó TIN là mình đã làm: những object nó đã liệt kê ra, những request trả về 200. Nó không báo cáo nổi cái object nó chưa từng liệt kê vì một tiền tố bị phân trang sai, cái lần tải lên thành công với không byte nào, hay cái khoá được ghi với sai kiểu nội dung. Cái nào trong số đó cũng trả về mã thành công. Một phép xác minh độc lập là một chương trình KHÁC đọc phía đích rồi đối chiếu với phía nguồn — và nó là thứ duy nhất tìm ra được cú hỏng mà công cụ kia về mặt cấu trúc không thể nhận ra. Hãy chạy nó TRƯỚC khi xoá bất cứ thứ gì khỏi bucket nguồn.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS — S3 ETag semantics</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API/API_Object.html — format &quot;multipart ETag&quot; giải thích.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — Checksums và ETag</span><span class="lc-sub">developers.cloudflare.com/r2/api/s3/api — cách R2 tính ETag, khác với S3.</span></span></div>

@@ -239,6 +239,16 @@ Kho nay: chi dung ack cho chat:send. Presence, typing khong.
 <p><strong>One sentence.</strong> At-least-once trong socket.io = <code>emitWithAck</code> plus a timeout plus a backoff retry loop plus a client-generated <code>messageId</code> for server-side dedup — the cost is +50-200ms of latency plus the memory to track pending acks, so use it only for data that matters (chat, payments, orders), NOT for realtime UI updates.</p>
 </div>
 
+<h3>At-least-once, and the duplicate it guarantees</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Send, and wait for the ack</span><span class="lz-d">The ack proves the server received it. No ack within the timeout means <em>unknown</em>, not <em>failed</em>.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Retry on timeout</span><span class="lz-d">Which is why delivery is at-least-once: the first attempt may have arrived and only the ack was lost.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">So the receiver must deduplicate</span><span class="lz-d">A client-generated id on the message, and a set of ids already processed. Without it, a retry is a second message in the room.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Cap the retries, then surface the failure</span><span class="lz-d">An unbounded retry loop against a down server is a queue that grows until the tab is closed.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Trap — treating a missing ack as proof the message was not delivered.</strong> The ack travels back over the same connection that just proved unreliable, so its absence tells you nothing about the outbound half: the message may have arrived, been stored, and triggered a notification, with only the acknowledgement lost. Retrying is correct — and it means the operation happens twice unless the receiver deduplicates. Any handler behind an acked event must be idempotent: keyed inserts, a processed-id set, or an upsert. Getting this wrong produces the classic report of a chat message that appears twice, only on a flaky network.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Acknowledgements</span><span class="lc-sub">socket.io/docs/v4/emitting-events/#acknowledgements — API chuẩn và ví dụ emitWithAck.</span></span></div>
 </div>
@@ -333,6 +343,16 @@ Kho nay: chi dung ack cho chat:send. Presence, typing khong.
 <p><strong>Một câu.</strong> At-least-once trong socket.io = <code>emitWithAck</code> + timeout + retry loop với backoff + client-generated <code>messageId</code> để dedup ở server — cost là +50-200ms latency + memory tracking pending acks, chỉ dùng cho data quan trọng (chat/payment/order), KHÔNG cho realtime UI updates.</p>
 </div>
 
+<h3>At-least-once, và bản sao mà nó bảo đảm sẽ có</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Gửi đi, rồi chờ ack</span><span class="lz-d">Cái ack chứng minh máy chủ đã nhận được. Không có ack trong thời gian chờ nghĩa là <em>không biết</em>, chứ không phải <em>đã hỏng</em>.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Thử lại khi hết giờ</span><span class="lz-d">Và đó là lý do việc giao nhận là ít-nhất-một-lần: lần thử đầu có thể đã tới nơi và chỉ có cái ack là bị mất.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nên bên nhận PHẢI khử trùng lặp</span><span class="lz-d">Một id do client sinh ra gắn vào thông điệp, cộng một tập các id đã xử lý. Không có nó, một lần thử lại là một thông điệp thứ hai trong phòng.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Chặn số lần thử lại, rồi báo cú hỏng ra</span><span class="lz-d">Một vòng lặp thử lại không giới hạn nhắm vào một máy chủ đang chết là một hàng đợi phình lên cho tới khi tab bị đóng.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — coi việc thiếu ack là bằng chứng rằng thông điệp chưa được giao.</strong> Cái ack đi ngược về trên đúng cái kết nối vừa chứng tỏ là không đáng tin, nên việc nó vắng mặt chẳng nói gì với bạn về nửa chiều đi: thông điệp có thể đã tới nơi, đã được lưu, và đã kích hoạt một thông báo, chỉ có mỗi cái xác nhận là bị mất. Thử lại là đúng — và điều đó nghĩa là thao tác xảy ra hai lần trừ khi bên nhận có khử trùng lặp. Mọi handler nằm sau một sự kiện có ack đều phải lặp-lại-vô-hại: chèn theo khoá, một tập id đã xử lý, hoặc một phép upsert. Làm sai chỗ này sẽ sinh ra cái báo cáo kinh điển về một tin nhắn chat hiện ra hai lần, và chỉ hiện trên mạng chập chờn.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Acknowledgements</span><span class="lc-sub">socket.io/docs/v4/emitting-events/#acknowledgements — API chuẩn và ví dụ emitWithAck.</span></span></div>
 </div>

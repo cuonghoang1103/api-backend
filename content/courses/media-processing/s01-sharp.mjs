@@ -905,6 +905,13 @@ Input: 600×450 web-sourced JPEG (81 KB)
 <p><strong>One sentence.</strong> <code>resize()</code> defaults to <code>fit: 'cover'</code> which crops to exact dimensions, so pass <code>fit: 'inside'</code> when you mean &quot;cap the size&quot; and width-only when you mean &quot;cap the width&quot;; always set <code>withoutEnlargement: true</code> because upscaling adds no information while multiplying file size (measured: a 400×400 avatar upscaled to 1200 is 7.6× larger and visibly soft), and in a multi-variant pipeline filter the size list against <code>metadata.width</code> first so you never produce a variant bigger than its source.</p>
 </div>
 
+<h3>The five fit modes, and what each one throws away</h3>
+<div class="lz-map">
+  <div class="lz-node"><span class="lz-k">cover</span><span class="lz-t">Fills the box, crops the rest</span><span class="lz-d">Aspect ratio kept, edges cut. The right default for a thumbnail, and the reason a face can end up half out of frame — see <code>position</code>.</span></div>
+  <div class="lz-node"><span class="lz-k">contain</span><span class="lz-t">Fits inside, pads the rest</span><span class="lz-d">Nothing cropped, so the output has bars unless you set <code>background</code>. Right when the whole image must be visible.</span></div>
+  <div class="lz-node"><span class="lz-k">fill</span><span class="lz-t">Stretches to the box</span><span class="lz-d">Aspect ratio ignored. Almost never what you want, and it is the one that makes people look wide.</span></div>
+  <div class="lz-node"><span class="lz-k">inside / outside</span><span class="lz-t">Bounds, without a fixed output size</span><span class="lz-d"><code>inside</code> never exceeds either dimension; <code>outside</code> covers both. Neither pads and neither crops — the output size varies.</span></div>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — resize()</span><span class="lc-sub">sharp.pixelplumbing.com/api-resize — every fit, position, and kernel option.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">libvips — Smart crop</span><span class="lc-sub">libvips.github.io/libvips/API/current/libvips-conversion.html — how attention/entropy strategies score regions.</span></span></div>
@@ -1093,6 +1100,13 @@ Input: JPEG lấy từ web 600×450 (81 KB)
 <p><strong>Một câu.</strong> <code>resize()</code> mặc định <code>fit: 'cover'</code> tức là cắt về kích thước chính xác, nên truyền <code>fit: 'inside'</code> khi bạn muốn &quot;chặn kích thước&quot; và chỉ-width khi bạn muốn &quot;chặn chiều rộng&quot;; luôn đặt <code>withoutEnlargement: true</code> vì phóng to không thêm thông tin mà nhân kích thước file (đo được: avatar 400×400 phóng lên 1200 lớn hơn 7.6× và thấy rõ mềm), và trong pipeline nhiều variant hãy lọc danh sách size theo <code>metadata.width</code> trước để không bao giờ sinh variant lớn hơn nguồn của nó.</p>
 </div>
 
+<h3>Năm fit mode, và mỗi cái vứt đi cái gì</h3>
+<div class="lz-map">
+  <div class="lz-node"><span class="lz-k">cover</span><span class="lz-t">Lấp đầy khung, cắt phần thừa</span><span class="lz-d">Giữ tỷ lệ, cắt mất mép. Mặc định đúng cho ảnh thu nhỏ, và là lý do một khuôn mặt có thể lọt nửa ra ngoài khung — xem <code>position</code>.</span></div>
+  <div class="lz-node"><span class="lz-k">contain</span><span class="lz-t">Nằm gọn bên trong, chèn thêm nền</span><span class="lz-d">Không cắt gì, nên đầu ra có dải viền trừ khi bạn đặt <code>background</code>. Đúng khi cả tấm ảnh phải nhìn thấy được.</span></div>
+  <div class="lz-node"><span class="lz-k">fill</span><span class="lz-t">Kéo giãn cho vừa khung</span><span class="lz-d">Bỏ qua tỷ lệ. Gần như chẳng bao giờ là thứ bạn muốn, và là cái làm người ta trông bè ra.</span></div>
+  <div class="lz-node"><span class="lz-k">inside / outside</span><span class="lz-t">Giới hạn, mà không cố định cỡ đầu ra</span><span class="lz-d"><code>inside</code> không bao giờ vượt quá chiều nào; <code>outside</code> phủ được cả hai. Cả hai đều không chèn nền và không cắt — cỡ đầu ra thay đổi.</span></div>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — resize()</span><span class="lc-sub">sharp.pixelplumbing.com/api-resize — mọi option fit, position, và kernel.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">libvips — Smart crop</span><span class="lc-sub">libvips.github.io/libvips/API/current/libvips-conversion.html — cách chiến lược attention/entropy chấm điểm vùng.</span></span></div>

@@ -72,6 +72,9 @@ export default {
 <p><strong>One sentence.</strong> The eight items in column A are socket.io rules that apply to any repo; the five in column B are this repo's measurements, which you must re-run yourself; the six in column C are intuitions that lost to measurement — including an estimation error of mine in lesson 0.2 that lesson 2.1 corrects and that is kept as a lesson in its own right.</p>
 </div>
 
+<div class="pitfall">
+<p><strong>Trap — quoting a Column B number without the condition that made it true.</strong> &quot;WebSocket is 40× lighter than polling&quot; was measured with a specific payload size, a specific header set, and a specific poll interval. Halve the poll interval or send a 4 KB message and the ratio moves by an order of magnitude. That is why this lesson has three columns rather than a list of facts: Column A survives any conditions, Column B survives only its own, and Column C is what happens when a Column B claim loses its footnote. The measurement this lesson admits getting wrong is the honest reminder — a number is only as portable as the sentence describing how it was taken.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO documentation</span><span class="lc-sub">socket.io/docs/v4 — nguồn chính cho cột A.</span></span></div>
 </div>
@@ -134,6 +137,9 @@ export default {
 <p><strong>Một câu.</strong> Tám điều trong cột A là quy luật socket.io áp cho mọi kho; năm điều trong cột B là phép đo của kho này bạn phải chạy lại; sáu điều trong cột C là trực giác thua đo lường — bao gồm một lỗi ước lượng của tôi ở bài 0.2 mà bài 2.1 sửa và giữ lại làm bài học.</p>
 </div>
 
+<div class="pitfall">
+<p><strong>Bẫy — trích một con số ở Cột B mà bỏ mất cái điều kiện đã làm nó đúng.</strong> &quot;WebSocket nhẹ hơn polling 40 lần&quot; là đo với một cỡ dữ liệu cụ thể, một bộ header cụ thể, và một chu kỳ hỏi cụ thể. Giảm chu kỳ hỏi đi một nửa hoặc gửi một thông điệp 4 KB là cái tỷ lệ đó dịch đi cả một bậc độ lớn. Đó là lý do bài này có ba cột chứ không phải một danh sách sự kiện: Cột A sống sót qua mọi điều kiện, Cột B chỉ sống sót qua điều kiện của chính nó, và Cột C là thứ xảy ra khi một khẳng định Cột B đánh mất cái chú thích của nó. Cái phép đo mà bài này thừa nhận là đã làm sai chính là lời nhắc thành thật — một con số chỉ mang đi được xa bằng đúng cái câu mô tả nó đã được đo ra sao.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO documentation</span><span class="lc-sub">socket.io/docs/v4 — nguồn chính cho cột A.</span></span></div>
 </div>

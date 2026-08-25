@@ -173,6 +173,16 @@ that compared the OUTPUT to the intent.
 <p><strong>One sentence.</strong> Twenty-three rules and roughly sixty measurements, of which the load-bearing few are: check pixels not bytes, rotate before encoding, never build a shell string, WebP q80/effort4 for images and CRF23/veryfast for video, one module owning every upload, keys that encode ownership and discard the user's filename, and — the thread running through both real bugs — assert a property of the output rather than trusting that the function returned.</p>
 </div>
 
+<h3>What to carry out of this course</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Measure on the file you actually have</span><span class="lz-d">Every number here came from a real run. A ratio from a blog post was measured on someone else's image, at someone else's size, with someone else's codec.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Sharp is a pipeline, and it is consumed once</span><span class="lz-d">The two real bugs in this course both came from treating an instance as reusable. Build a new one per operation.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The format decides more than the settings</span><span class="lz-d">A JPEG tuned perfectly is still larger than an unremarkable WebP. Choose the container first, then tune inside it.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And know what was left out</span><span class="lz-d">No colour management, no HDR, no video filters beyond the ones measured. Those are real topics, and this course does not have data on them.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Trap — carrying a measured ratio to a different input and expecting it to hold.</strong> &quot;WebP is 30% smaller&quot; was measured on specific images at a specific size with specific quality settings. On a photo it may be 35%, on a flat graphic it may be 70%, and on an image that was already recompressed it can be larger — recompression of a lossy source adds artefacts and bytes at the same time. The measurements in this course are labelled with their inputs precisely so they can be checked rather than quoted. Before relying on a ratio, run it on ten files from your own bucket; it takes a minute and it is the difference between a number and a belief.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp</span><span class="lc-sub">sharp.pixelplumbing.com — API, performance, và mọi option encoder.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg documentation</span><span class="lc-sub">ffmpeg.org/documentation.html — filter, muxer, protocol, ffprobe.</span></span></div>
@@ -341,6 +351,16 @@ nào có một bài test so OUTPUT với ý định.
 <p><strong>Một câu.</strong> Hai mươi ba luật và khoảng sáu mươi phép đo, trong đó vài cái chịu lực chính là: kiểm pixel chứ không phải byte, xoay trước khi encode, đừng bao giờ dựng chuỗi shell, WebP q80/effort4 cho ảnh và CRF23/veryfast cho video, một module sở hữu mọi lần upload, key mã hoá quyền sở hữu và vứt bỏ tên file người dùng, và — sợi chỉ xuyên suốt cả hai bug thật — hãy khẳng định một thuộc tính của output thay vì tin rằng hàm đã trả về.</p>
 </div>
 
+<h3>Nên mang gì ra khỏi khoá này</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Hãy đo trên đúng cái file bạn đang có</span><span class="lz-d">Mọi con số ở đây đều đến từ một lần chạy thật. Một tỷ lệ lấy từ bài blog là đo trên ảnh của người khác, ở cỡ của người khác, với bộ mã hoá của người khác.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Sharp là một pipeline, và nó bị tiêu thụ một lần</span><span class="lz-d">Cả hai lỗi thật trong khoá này đều đến từ việc coi một thực thể là dùng lại được. Hãy dựng một cái mới cho mỗi thao tác.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Định dạng quyết định nhiều hơn các thiết lập</span><span class="lz-d">Một file JPEG chỉnh hoàn hảo vẫn lớn hơn một file WebP tầm thường. Hãy chọn định dạng trước, rồi mới tinh chỉnh bên trong nó.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và hãy biết cái gì đã bị bỏ ra ngoài</span><span class="lz-d">Không quản lý màu, không HDR, không có bộ lọc video nào ngoài những cái đã đo. Đó đều là những chủ đề thật, và khoá này không có dữ liệu về chúng.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — mang một tỷ lệ đã đo sang một đầu vào khác rồi mong nó vẫn đúng.</strong> &quot;WebP nhỏ hơn 30%&quot; là đo trên những tấm ảnh cụ thể, ở một cỡ cụ thể, với thiết lập chất lượng cụ thể. Trên một tấm ảnh chụp nó có thể là 35%, trên một hình đồ hoạ phẳng nó có thể là 70%, còn trên một tấm ảnh vốn đã bị nén lại thì nó có thể LỚN HƠN — nén lại một nguồn có mất mát vừa thêm nhiễu vừa thêm byte cùng lúc. Các phép đo trong khoá này đều ghi rõ đầu vào chính là để chúng được kiểm lại chứ không phải để được trích dẫn. Trước khi dựa vào một tỷ lệ, hãy chạy nó trên mười file trong bucket của chính bạn; mất một phút, và đó là khác biệt giữa một con số và một niềm tin.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp</span><span class="lc-sub">sharp.pixelplumbing.com — API, performance, và mọi option encoder.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg documentation</span><span class="lc-sub">ffmpeg.org/documentation.html — filter, muxer, protocol, ffprobe.</span></span></div>

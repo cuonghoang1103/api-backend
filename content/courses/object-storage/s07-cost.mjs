@@ -129,6 +129,16 @@ And scale the objects to 100M:
 <p><strong>One sentence.</strong> Object-storage bills are five line items (storage, Class A writes, Class B reads, egress, infra fees) not one; R2's headline win is zero-egress which typically makes it 6-13× cheaper than S3 for browser- and CDN-facing apps, but on internal-only or CloudFront-fronted workloads the two are within 30%, and the sneakiest cost driver on either service is Class A from over-frequent LIST operations.</p>
 </div>
 
+<h3>Reading an object-storage bill</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Storage — per GB-month</span><span class="lz-d">The number everyone compares, and usually the smallest line on a bill with real traffic.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Egress — per GB out</span><span class="lz-d">Zero on R2, and on S3 this is typically where most of the money is. It is the single biggest difference between providers.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Class A — writes and lists</span><span class="lz-d"><code>PUT</code>, <code>POST</code>, <code>LIST</code>. Priced roughly ten times a read, which is why a listing in a loop is the trap in this lesson.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Class B — reads, and free operations</span><span class="lz-d"><code>GET</code>, <code>HEAD</code>. Cheap per request and enormous in volume, so it still adds up on a busy bucket.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Trap — a <code>LIST</code> inside a loop, billed as a Class A request every iteration.</strong> Listing a prefix to check whether one key exists reads as harmless and costs about ten times what the equivalent <code>HeadObject</code> would. Do it once per item in a sync over fifty thousand objects and the request line on the bill exceeds the storage line — for a job whose actual work was reading four hundred files. Nothing in the code looks expensive, and the SDK gives no signal. Use <code>HeadObject</code> for existence, list once and keep the result, and check the request counts in the provider&#39;s metrics after any batch job.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 pricing</span><span class="lc-sub">developers.cloudflare.com/r2/pricing — the five line items, in order.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">S3 pricing</span><span class="lc-sub">aws.amazon.com/s3/pricing — request classes, egress tiers, storage classes.</span></span></div>
@@ -251,6 +261,16 @@ Và scale object lên 100M:
 <p><strong>Một câu.</strong> Bill object-storage là năm line item (storage, Class A ghi, Class B đọc, egress, phí infra) không phải một; win headline của R2 là zero-egress thường làm nó rẻ 6-13× so S3 cho app browser- và CDN-facing, nhưng trên workload chỉ-internal hoặc CloudFront-fronted hai cái trong 30% nhau, và cost driver nham hiểm nhất trên cả hai service là Class A từ LIST operation quá thường xuyên.</p>
 </div>
 
+<h3>Đọc một hoá đơn lưu trữ đối tượng</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Dung lượng — theo GB-tháng</span><span class="lz-d">Con số ai cũng đem ra so, và thường là dòng nhỏ nhất trên một hoá đơn có lưu lượng thật.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Truyền ra — theo GB đi ra</span><span class="lz-d">Bằng không trên R2, còn trên S3 thì đây thường là chỗ phần lớn tiền nằm ở đó. Đây là khác biệt lớn nhất giữa các nhà cung cấp.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Class A — ghi và liệt kê</span><span class="lz-d"><code>PUT</code>, <code>POST</code>, <code>LIST</code>. Giá cỡ mười lần một phép đọc, và đó là lý do một phép liệt kê trong vòng lặp là cái bẫy của bài này.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Class B — đọc, và các thao tác miễn phí</span><span class="lz-d"><code>GET</code>, <code>HEAD</code>. Rẻ trên mỗi request và khổng lồ về số lượng, nên nó vẫn cộng dồn lên đáng kể trên một bucket bận rộn.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — một phép <code>LIST</code> nằm trong vòng lặp, bị tính là một request Class A ở mỗi vòng.</strong> Liệt kê một tiền tố để kiểm xem một khoá có tồn tại hay không thì đọc lên rất vô hại mà tốn khoảng mười lần cái <code>HeadObject</code> tương đương. Làm thế cho mỗi phần tử trong một lần đồng bộ năm mươi nghìn object là dòng phí request trên hoá đơn vượt cả dòng phí lưu trữ — cho một công việc mà phần việc thật chỉ là đọc bốn trăm file. Chẳng có gì trong mã trông đắt đỏ, và SDK cũng không phát tín hiệu nào. Hãy dùng <code>HeadObject</code> để kiểm tồn tại, liệt kê một lần rồi giữ lại kết quả, và kiểm số lượng request trong phần chỉ số của nhà cung cấp sau mỗi công việc chạy theo lô.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 pricing</span><span class="lc-sub">developers.cloudflare.com/r2/pricing — năm line item, theo thứ tự.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">S3 pricing</span><span class="lc-sub">aws.amazon.com/s3/pricing — class request, tier egress, class storage.</span></span></div>

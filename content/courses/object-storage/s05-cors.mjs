@@ -313,6 +313,13 @@ Access-Control-Allow-Credentials: true</code></pre>
 <p><strong>One sentence.</strong> A browser upload to R2/S3 always triggers a preflight OPTIONS, but the browser will cache the response for up to <code>MaxAgeSeconds</code> (capped by browser, typically ~2 hours) if you specify explicit <code>AllowedHeaders</code> (not <code>*</code>), an explicit <code>AllowedOrigins</code> (not <code>*</code>), and a value for <code>MaxAgeSeconds</code>; missing any of those turns every PUT into a preflight+PUT pair and doubles your Class A cost from browser upload traffic.</p>
 </div>
 
+<h3>What decides whether a preflight happens at all</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A simple request skips it</span><span class="lz-d"><code>GET</code> or <code>POST</code> with only safelisted headers and a form-ish content type. The browser sends it straight out.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Anything else triggers an OPTIONS first</span><span class="lz-d">A <code>PUT</code>, a custom header, or <code>Content-Type: application/json</code> — which is why an upload always preflights and a plain image fetch never does.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">MaxAgeSeconds caches the answer</span><span class="lz-d">Without it, every single upload costs two round trips. With it, one preflight covers the whole session.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">ExposeHeaders decides what JavaScript can read</span><span class="lz-d">The response arrives with <code>ETag</code> either way; without listing it, the browser hides it from your code and the verification step reads <code>undefined</code>.</span></div>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — CORS preflight</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/CORS#preflighted_requests — what triggers, what caches.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Access-Control-Max-Age</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age — per-browser caps.</span></span></div>
@@ -489,6 +496,13 @@ Access-Control-Allow-Credentials: true</code></pre>
 <p><strong>Một câu.</strong> Browser upload tới R2/S3 luôn trigger preflight OPTIONS, nhưng browser sẽ cache response tới <code>MaxAgeSeconds</code> (cap bởi browser, thường ~2 giờ) nếu bạn chỉ định <code>AllowedHeaders</code> explicit (không <code>*</code>), <code>AllowedOrigins</code> explicit (không <code>*</code>), và giá trị cho <code>MaxAgeSeconds</code>; bỏ bất kỳ cái nào biến mọi PUT thành cặp preflight+PUT và gấp đôi cost Class A từ traffic browser upload.</p>
 </div>
 
+<h3>Cái gì quyết định có xảy ra preflight hay không</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Một request đơn giản thì bỏ qua nó</span><span class="lz-d"><code>GET</code> hoặc <code>POST</code> chỉ với các header trong danh sách an toàn và một content type kiểu form. Trình duyệt gửi thẳng đi.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Còn lại đều kích hoạt một OPTIONS trước</span><span class="lz-d">Một <code>PUT</code>, một header tự đặt, hay <code>Content-Type: application/json</code> — đó là lý do một lần tải lên luôn có preflight còn một lần lấy ảnh thường thì không bao giờ.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">MaxAgeSeconds nhớ đệm câu trả lời</span><span class="lz-d">Không có nó, mỗi lần tải lên đều tốn hai lượt đi về. Có nó, một lần preflight phủ cả phiên làm việc.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">ExposeHeaders quyết định JavaScript đọc được gì</span><span class="lz-d">Phản hồi kiểu gì cũng mang theo <code>ETag</code>; nhưng không liệt kê nó ra thì trình duyệt giấu nó khỏi mã của bạn và bước xác minh đọc ra <code>undefined</code>.</span></div>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — CORS preflight</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/CORS#preflighted_requests — cái gì trigger, cái gì cache.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Access-Control-Max-Age</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age — cap per-browser.</span></span></div>

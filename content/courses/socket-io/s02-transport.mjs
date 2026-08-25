@@ -118,6 +118,13 @@ Cho video call signalling (Chuong 7): 200ms trans-Pacific WebSocket
 <p><strong>One sentence.</strong> At the socket.io layer, polling and WebSocket cost EXACTLY THE SAME (a measured 681 bytes for 20 messages on both) — the real overhead sits in the HTTP headers (2.7×-133× depending on burstiness) and in latency (an extra 1-2 RTT per interaction), and latency, not bytes, is the most important reason to upgrade to WebSocket.</p>
 </div>
 
+<h3>Where a real-time message's bytes actually go</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The payload you wrote</span><span class="lz-d">Usually the smallest part. A chat message is a few dozen bytes of JSON.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The framing around it</span><span class="lz-d">A WebSocket frame header is 2–14 bytes. Socket.IO adds its own packet type and namespace on top — small, and constant per message.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The HTTP headers, if polling</span><span class="lz-d">Every poll carries cookies, user-agent and the rest: hundreds of bytes per request, in both directions, for a payload of forty.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So the ratio depends on the transport</span><span class="lz-d">On a WebSocket the overhead is the framing and it is negligible. On polling it is the headers and it dominates completely.</span></div>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO — Transports</span><span class="lc-sub">socket.io/docs/v4/how-it-works/#transports — chi tiết định dạng packet cả hai transport.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 6455 — WebSocket frame format</span><span class="lc-sub">tools.ietf.org/html/rfc6455#section-5.2 — 2-14 byte overhead per frame là con số chính xác này.</span></span></div>
@@ -223,6 +230,13 @@ Cho video call signalling (Chuong 7): 200ms trans-Pacific WebSocket
 <p><strong>Một câu.</strong> Ở tầng socket.io, polling và WebSocket tốn CHÍNH XÁC BẰNG NHAU (đo được 681 byte cho 20 msg cả hai) — overhead thật ở tầng HTTP header (2,7×-133× tuỳ burstiness) và latency (thêm 1-2 RTT per interaction), latency mới là lý do quan trọng nhất để upgrade lên WebSocket, không phải bytes.</p>
 </div>
 
+<h3>Các byte của một thông điệp thời gian thực đi đâu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Phần dữ liệu bạn viết ra</span><span class="lz-d">Thường là phần nhỏ nhất. Một tin nhắn chat chỉ vài chục byte JSON.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Phần đóng khung quanh nó</span><span class="lz-d">Header của một frame WebSocket là 2–14 byte. Socket.IO thêm loại gói và namespace của riêng nó lên trên — nhỏ, và cố định trên mỗi thông điệp.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Các header HTTP, nếu dùng polling</span><span class="lz-d">Mỗi lượt hỏi đều mang theo cookie, user-agent và phần còn lại: hàng trăm byte mỗi request, ở cả hai chiều, cho một phần dữ liệu bốn mươi byte.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nên cái tỷ lệ đó phụ thuộc vào transport</span><span class="lz-d">Trên WebSocket thì phần thừa là phần đóng khung và nó không đáng kể. Trên polling thì phần thừa là các header và nó chiếm hoàn toàn.</span></div>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO — Transports</span><span class="lc-sub">socket.io/docs/v4/how-it-works/#transports — chi tiết định dạng packet cả hai transport.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 6455 — WebSocket frame format</span><span class="lc-sub">tools.ietf.org/html/rfc6455#section-5.2 — 2-14 byte overhead per frame là con số chính xác này.</span></span></div>
@@ -300,6 +314,9 @@ Ke ca 100.000 socket, tong ping traffic la 170 KB/s — khong dang ke
 <p><strong>One sentence.</strong> <code>pingInterval</code> (25s by default, and this repo keeps 25s) must be < proxy read timeout để giữ kết nối; <code>pingTimeout</code> (20s by default, set to 60s here) is the longest the server can take to notice a dead client — this repo picks 25s/60s because Vietnamese mobile users need tolerance for 3G/4G hiccups, trading 85s of worst-case disconnect detection for the absence of false disconnects.</p>
 </div>
 
+<div class="pitfall">
+<p><strong>Trap — a pingInterval longer than the proxy's idle timeout.</strong> Nginx closes an idle upstream connection after 60 seconds by default; set <code>pingInterval</code> to 25 s and the heartbeat keeps it alive, set it to 90 s and the proxy kills a connection both ends still believe is healthy. The client reconnects, so the app appears to work — with a disconnect and a full handshake every ninety seconds, per client, and a presence list that flickers. Nothing logs an error, because from Socket.IO&#39;s point of view the transport closed normally. Whenever a reconnect loop has a suspiciously round period, compare that number against every timeout between the two ends.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server options</span><span class="lc-sub">socket.io/docs/v4/server-options/#pinginterval — chi tiết cả hai option, default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nginx — proxy_read_timeout</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout — mặc định 60s, đè lên WebSocket idle.</span></span></div>
@@ -367,6 +384,9 @@ Ke ca 100.000 socket, tong ping traffic la 170 KB/s — khong dang ke
 <p><strong>Một câu.</strong> <code>pingInterval</code> (mặc định 25s, kho này giữ 25s) phải &lt; proxy read timeout để giữ kết nối; <code>pingTimeout</code> (mặc định 20s, kho này đặt 60s) là độ trễ tối đa server nhận biết client dead — kho này chọn 25s/60s vì user mobile VN cần tolerance với 3G/4G hiccup, đổi 85s max disconnect detection lấy tránh false-disconnect.</p>
 </div>
 
+<div class="pitfall">
+<p><strong>Bẫy — một pingInterval dài hơn thời gian chờ nhàn rỗi của proxy.</strong> Nginx mặc định đóng một kết nối upstream nhàn rỗi sau 60 giây; đặt <code>pingInterval</code> là 25 s thì nhịp tim giữ nó sống, đặt là 90 s thì proxy giết một kết nối mà cả hai đầu vẫn tin là khoẻ mạnh. Client kết nối lại, nên ứng dụng trông như vẫn chạy — với một lần rớt và một lần bắt tay đầy đủ cứ chín mươi giây một lần, cho mỗi client, và một danh sách hiện diện nhấp nháy. Chẳng có lỗi nào được ghi, vì theo cách nhìn của Socket.IO thì transport đã đóng một cách bình thường. Hễ một vòng lặp kết nối lại có chu kỳ tròn trịa một cách đáng ngờ thì hãy đem con số đó đối chiếu với MỌI thời gian chờ nằm giữa hai đầu.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server options</span><span class="lc-sub">socket.io/docs/v4/server-options/#pinginterval — chi tiết cả hai option, default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nginx — proxy_read_timeout</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout — mặc định 60s, đè lên WebSocket idle.</span></span></div>

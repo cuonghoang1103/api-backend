@@ -291,6 +291,16 @@ if (millis() - lastPing &gt; 30000) {
 <p><strong>One sentence.</strong> Raw-ws reconnection on the device tier has to be hand-written: exponential backoff (1s → 2s → 5s, capped at 30s) plus ±20% jitter so 1,000 devices do not power-cycle in unison, plus a heartbeat (WebSocket-native or application-level), plus server-side logging of the gap between reconnects to spot unhealthy devices.</p>
 </div>
 
+<h3>Backing off without synchronising every client</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Exponential, not constant</span><span class="lz-d">1 s, 2 s, 4 s, 8 s. A constant retry against a server that just fell over is a denial of service you wrote yourself.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Cap the maximum</span><span class="lz-d">Otherwise a long outage pushes the delay to hours, and clients stay disconnected long after the server recovered.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Add jitter — this is the part people skip</span><span class="lz-d">Without it, every client that dropped at the same moment retries at the same moment, forever. The server comes back up and is knocked over by the reconnect stampede.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Reset the counter on a successful connect</span><span class="lz-d">Not on a successful <em>attempt</em>: a connection that drops immediately should not reset back to a one-second retry.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Trap — a reconnect storm that takes the server down again the moment it recovers.</strong> Ten thousand clients lose the connection in the same second because the server restarted; without jitter they all wait exactly one second, all reconnect in the same millisecond, and the freshly-started process handles ten thousand simultaneous handshakes and falls over. It then restarts, and the cycle repeats — an outage that looks like the server &quot;cannot stay up&quot; when the server is fine and the clients are the load. A random factor on each delay spreads the same ten thousand connections over the whole window, and it is three lines of code.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 6455 — WebSocket ping/pong</span><span class="lc-sub">tools.ietf.org/html/rfc6455#section-5.5.2 — spec chính thức cho ping frames.</span></span></div>
 </div>
@@ -390,6 +400,16 @@ if (millis() - lastPing &gt; 30000) {
 <p><strong>Một câu.</strong> Raw ws reconnect ở device tier cần tự viết: exponential backoff (1s → 2s → 5s → 30s cap) + jitter ±20% để tránh 1.000 device power-cycle cùng lúc, + heartbeat WebSocket-native hoặc application-level, + log gap giữa reconnect ở server để phát hiện device kém.</p>
 </div>
 
+<h3>Lùi dần mà không đồng bộ hoá mọi client</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Theo hàm mũ, đừng theo hằng số</span><span class="lz-d">1 s, 2 s, 4 s, 8 s. Thử lại đều đặn nhắm vào một máy chủ vừa gục là một cuộc tấn công từ chối dịch vụ do chính bạn viết ra.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Chặn giá trị tối đa</span><span class="lz-d">Không thì một lần gián đoạn dài sẽ đẩy độ trễ lên hàng giờ, và client vẫn mất kết nối rất lâu sau khi máy chủ đã hồi phục.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Thêm nhiễu ngẫu nhiên — đây là phần người ta hay bỏ qua</span><span class="lz-d">Không có nó, mọi client cùng rớt một thời điểm sẽ cùng thử lại một thời điểm, mãi mãi. Máy chủ sống dậy rồi bị chính cơn lũ kết nối lại quật ngã.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Đặt lại bộ đếm khi KẾT NỐI thành công</span><span class="lz-d">Chứ không phải khi một <em>lần thử</em> thành công: một kết nối rớt ngay lập tức thì không nên được đặt lại về mức thử lại một giây.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — một cơn bão kết nối lại quật ngã máy chủ ngay khoảnh khắc nó vừa hồi phục.</strong> Mười nghìn client mất kết nối trong cùng một giây vì máy chủ khởi động lại; không có nhiễu ngẫu nhiên thì tất cả cùng chờ đúng một giây, cùng kết nối lại trong cùng một mili giây, và cái tiến trình vừa mới lên phải xử lý mười nghìn lần bắt tay cùng lúc rồi gục. Rồi nó khởi động lại, và vòng lặp tái diễn — một cú gián đoạn trông như máy chủ &quot;không trụ nổi&quot; trong khi máy chủ vẫn ổn và chính đám client mới là cái tải. Một hệ số ngẫu nhiên trên mỗi độ trễ sẽ trải đúng mười nghìn kết nối đó ra khắp cửa sổ thời gian, và nó là ba dòng mã.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 6455 — WebSocket ping/pong</span><span class="lc-sub">tools.ietf.org/html/rfc6455#section-5.5.2 — spec chính thức cho ping frames.</span></span></div>
 </div>

@@ -713,6 +713,13 @@ socket.on('thread:typing', (data) =&gt; {
 <p><strong>One sentence.</strong> Typing indicators need a CLIENT-side debounce (at most one emit every 3s) plus an auto-clear on the RECEIVING client (a 3s timeout after the last event) plus a server rate limit as backstop — the server stores no state, this is the ephemeral pattern (1.5) in its proper use case, and it cuts the cost 15× against emit-per-keystroke.</p>
 </div>
 
+<h3>Why a typing indicator needs two independent fixes</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The naive version emits per keystroke</span><span class="lz-d">Sixty characters is sixty broadcasts to every member of the room. The payload is tiny and the request count is not.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Debouncing on the sender fixes the volume</span><span class="lz-d">One <code>typing</code> at the start, one <code>stop</code> after a pause. Two events for a whole message instead of sixty.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">But the receiver still needs a timeout</span><span class="lz-d">Because the <code>stop</code> can be lost — a closed tab, a dropped connection, a crashed client — and then the indicator stays on forever.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So each fix covers a different failure</span><span class="lz-d">Debounce is about cost; the auto-clear is about correctness. Doing only one leaves either the bill or the stuck indicator.</span></div>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">socket.io — Rate limiting</span><span class="lc-sub">socket.io/get-started/basic-crud-application/#rate-limiting — pattern chuẩn cho server-side.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Lesson 1.5 — state patterns</span><span class="lc-sub">/courses/socket-io/learn${REF} — typing là ví dụ tuyệt vời cho ephemeral pattern.</span></span></div>
@@ -808,6 +815,13 @@ socket.on('thread:typing', (data) =&gt; {
 <p><strong>Một câu.</strong> Typing indicator cần debounce phía CLIENT (chỉ emit mỗi 3s tối đa) + auto-clear phía CLIENT nhận (timeout 3s sau event cuối) + server rate limit backstop — server không cần lưu state, đây là ephemeral pattern (1.5) đúng use case và giảm cost 15× so với emit-per-keystroke.</p>
 </div>
 
+<h3>Vì sao một chỉ báo đang-gõ cần hai cách chữa độc lập</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Bản ngây thơ phát sự kiện ở mỗi phím gõ</span><span class="lz-d">Sáu mươi ký tự là sáu mươi lần phát tới mọi thành viên trong phòng. Phần dữ liệu thì bé tí còn số lượng request thì không.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Debounce ở phía người gửi chữa được số lượng</span><span class="lz-d">Một sự kiện <code>typing</code> lúc bắt đầu, một <code>stop</code> sau một quãng ngừng. Hai sự kiện cho cả một tin nhắn thay vì sáu mươi.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nhưng phía nhận vẫn cần một thời gian chờ</span><span class="lz-d">Vì cái <code>stop</code> có thể bị mất — một tab bị đóng, một kết nối bị rớt, một client bị sập — và rồi cái chỉ báo sáng mãi mãi.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nên mỗi cách chữa phủ một kiểu hỏng khác nhau</span><span class="lz-d">Debounce là chuyện chi phí; tự-động-tắt là chuyện đúng đắn. Làm mỗi một cái thì hoặc còn cái hoá đơn hoặc còn cái chỉ báo kẹt.</span></div>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">socket.io — Rate limiting</span><span class="lc-sub">socket.io/get-started/basic-crud-application/#rate-limiting — pattern chuẩn cho server-side.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Bài 1.5 — state patterns</span><span class="lc-sub">/courses/socket-io/learn${REF} — typing là ví dụ tuyệt vời cho ephemeral pattern.</span></span></div>

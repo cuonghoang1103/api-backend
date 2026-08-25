@@ -138,6 +138,46 @@ ghi trong CLAUDE.md: **một luật "bỏ qua" trong bộ kiểm là một chỗ
 Số sau cùng: **nặng 0, nhẹ 32** (media-processing về sạch hẳn), 18/18 khoá
 qua `course-content-check`.
 
+✅ **Định danh + comment trong mã ví dụ, xong 25/08/2026.** Quyết định của
+người dùng: **định danh tiếng Anh ở CẢ ml-en lẫn ml-vi** (giữ bất biến "hai
+bản cùng một mã"), **comment tách ngôn ngữ**, **chuỗi hướng người dùng cuối
+giữ tiếng Việt**.
+
+| | |
+|---|---|
+| Định danh đổi tên | 4.251 lượt + 90 đường dẫn route |
+| Comment ml-en dịch | 821 → 2 (2 cái còn lại là *dữ liệu*) |
+| ml-en ↔ ml-vi | 1.028/1.062 khối `<pre>` khớp nhau khi bỏ comment + chuỗi |
+
+⚠️⚠️ **BỐN lỗi công cụ, và cái thứ tư suýt không bị phát hiện.**
+
+1. **Khoá ngắn ăn chữ trong comment.** `so → count` biến câu tiếng Anh
+   *"…all nine, so you can read…"* thành *"…all nine, count you can read…"*.
+   Vá: đổi tên CHỈ ngoài span `tok-comment`/`tok-string`.
+2. **Lược đồ Prisma lệch cột sau khi đổi tên.** Thêm bước căn lại ba cột.
+   Rồi bước căn lại tự hỏng vì regex đóng `}` khớp phải `@default("{}")` —
+   phải neo dấu `}` vào ĐẦU DÒNG.
+3. **Khối `.out` nói dối.** Đổi tên trong mã mà quên khối "kết quả chạy
+   thật" ⇒ mã ghi `name`, đầu ra ghi `"ten"`; lược đồ ghi `SampleType`,
+   `\d` ghi `KieuMau`. 40 khối. Áp cùng bản đồ vào 599 chỗ trong `.out`.
+4. **`[A-Za-z0-9_]` LÀ MỘT GIẢ ĐỊNH VỀ NGÔN NGỮ, và nó sai trong kho song
+   ngữ.** Lớp ranh giới từ không có chữ có dấu, nên với JS chữ `á` là ranh
+   giới ⇒ `kho → store` cắt nát **khoá · khoản · khoảng · khoẻ** (330 chỗ)
+   và `nghi → sleep` cắt nát **nghiệp vụ** (6 chỗ). Trong bài đọc thành
+   *"chỉ nói chuyện sleepệp vụ"*, *"tài storeản Pro"*, *"'exec' là từ
+   storeá quan trọng nhất"*.
+
+**Cái thứ 4 lộ ra thế nào — đáng ghi lại.** Không bộ kiểm nào thấy: HTML
+vẫn cân, thẻ vẫn khớp, quiz vẫn hợp lệ, `course-lang-check` vẫn báo nặng 0.
+Nó lộ ra vì MỘT dòng lọt vào danh sách comment-chưa-dịch đọc là
+`// service — chỉ nói chuyện sleepệp vụ`. Từ đúng một dòng ấy mới viết
+`damage.mjs` soát có hệ thống — đối chiếu HEAD với `git show <base>:<file>`
+chứ không đoán — và ra 336 chỗ.
+
+⛔ **Luật rút ra: đổi tên hàng loạt trong kho song ngữ thì lớp ranh giới từ
+PHẢI gồm chữ cái tiếng Việt có dấu, và phải có một bước SOÁT NGƯỢC đối
+chiếu với bản trước khi đổi.** Không có bước ấy thì hỏng câm.
+
 32 bài "nhẹ" còn lại KHÔNG phải lỗi — chúng là **dữ liệu và nhãn cố ý**: tên
 riêng tiếng Việt trong ví dụ (`'Đà Nẵng'` ở nodejs 1.x minh hoạ shallow copy),
 chính ký tự đang được đếm byte UTF-8 (`'à'` ở nodejs 3.x), khoá R2 không-ASCII

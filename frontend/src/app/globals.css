@@ -4121,9 +4121,9 @@ html.theme-dark .ai-tmpl-prose .hljs-regexp { color: #fde68a; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   TRANG CHỦ "/" — lớp màu riêng  (Hallmark · genre: editorial · theme: custom
-   tuned · paper-band: dark-ink / light-warm · display: geometric-sans ·
-   accent-hue: warm-amber)
+   TRANG CHỦ "/" — lớp màu riêng  (Hallmark · genre: atmospheric · theme:
+   custom About-night · paper-band: violet-night / light-lilac · display:
+   editorial-serif · accent-hue: violet + identity-gold)
 
    VÌ SAO CÓ KHỐI NÀY (07/08/2026)
    Token toàn site là bảng màu kiểu Facebook: `#18191a` nền, `#e4e6eb` chữ,
@@ -4132,16 +4132,10 @@ html.theme-dark .ai-tmpl-prose .hljs-regexp { color: #fde68a; }
    thì thành xám chết: không có chiều sâu, chữ trắng không "nổi" vì nền không
    có hướng ánh sáng nào để nổi lên khỏi. User chê đúng chỗ đó.
 
-   Cách chữa KHÔNG phải tăng độ sáng chữ (đã 91% rồi, tăng nữa thì chói).
-   Cách chữa là cho nền MỘT CHÚT SẮC ĐỘ và ĐẨY XA hai đầu:
-     · nền tối đi và ngả xanh mực (hue 265) → sâu hơn, ra chất giấy in
-     · chữ sáng lên và gần trắng ngà → tương phản ~15:1 thay vì ~11:1
-     · viền ngả cùng hue với nền → hết cảm giác "kẻ ô xám dán lên"
-     · nhấn đổi từ xanh Facebook sang HỔ PHÁCH ẤM — bổ sung cho nền xanh mực,
-       và tách trang chủ ra khỏi phần còn lại của site một cách có chủ ý
-
-   Theme SÁNG cũng đổi: `#f0f2f5` là xám lạnh của khung chat. Trang chủ dùng
-   giấy ngả ấm `oklch(98.2% .005 85)` — đọc như giấy in chứ không như cửa sổ ứng dụng.
+   Cách chữa KHÔNG phải tăng độ sáng chữ. Nền, mặt nổi, đường kẻ và chữ đều
+   cùng ngả về hue tím 300 như trang /about; chỉ avatar giữ một vòng vàng ấm
+   để nhận diện cá nhân. Bản tối sâu hơn và bản sáng vẫn giữ cùng một hue nên
+   nút đổi theme không làm trang biến thành một thiết kế khác.
 
    PHẠM VI: chỉ áp trong `.landing-root`. Phần còn lại của site KHÔNG đổi một
    pixel nào. Vẫn theo cơ chế sáng/tối cũ (`html.theme-dark`), nên nút đổi
@@ -4152,43 +4146,74 @@ html.theme-dark .ai-tmpl-prose .hljs-regexp { color: #fde68a; }
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .landing-root {
-  /* ── SÁNG: giấy ngả ấm ──────────────────────────────────────────────── */
-  --bg-primary: oklch(98.2% 0.005 85);
-  --bg-card: oklch(99.5% 0.005 85);
-  --bg-surface: oklch(96.4% 0.006 85);
-  --bg-surface-hover: oklch(95% 0.009 82);
-  --border-color: oklch(89.5% 0.009 80);
-  --text-primary: oklch(21% 0.015 265);
-  --text-secondary: oklch(46% 0.013 262);
-  /* 54% chứ không phải 58.5%: `--text-muted` trên trang chủ KHÔNG phải chữ
-     trang trí — nó là phần mô tả của mỗi mục trong ba dải, blurb của Deep Dives
-     và cả chân trang, tức là chữ thật để đọc. Đo thực tế: 58.5% chỉ đạt 3.98:1
-     trên nền giấy → trượt WCAG AA. 54% cho 4.78:1 trên nền trang và 4.56:1
-     trên nền surface. Hạ thêm nữa thì hết phân biệt với `--text-secondary`.
-     (Bảng token toàn site để `#8a8d91` — chỉ 2.9:1 — nhưng đó là chuyện của
-     phần còn lại của site, không sửa ở đây.) */
-  --text-muted: oklch(54% 0.013 262);
-  --accent-color: oklch(52% 0.13 62);
+  /* ── SÁNG: giấy tím rất nhạt, giữ cùng hue với bản tối ─────────────── */
+  --bg-primary: oklch(97.5% 0.009 300);
+  --bg-card: oklch(99% 0.007 300);
+  --bg-surface: oklch(94.5% 0.016 300);
+  --bg-surface-hover: oklch(92.5% 0.023 300);
+  --border-color: oklch(86% 0.025 300);
+  --text-primary: oklch(20% 0.025 300);
+  --text-secondary: oklch(43% 0.024 300);
+  /* Đây là chữ thật để đọc trong mô tả và chân trang, không phải màu trang
+     trí. Cặp muted/surface được đo lại sau mỗi lần đổi palette. */
+  --text-muted: oklch(50% 0.025 300);
+  --accent-color: oklch(55% 0.18 300);
 
   /* Biến riêng của trang chủ (không có trong bảng token toàn site) */
-  --landing-grain: 0.032;          /* độ đậm lớp hạt nhiễu */
-  --landing-rule-soft: oklch(93% 0.008 80);   /* kẻ dọc "khổ chữ" — nhạt hơn viền */
+  --landing-grain: 0.026;
+  --landing-rule-soft: oklch(91% 0.014 300);
+  --landing-atmosphere-core: oklch(62% 0.17 300);
+  --landing-grid-color: oklch(70% 0.04 300);
+  --landing-identity: oklch(64% 0.16 82);
+  --landing-robot-metal: oklch(89% 0.028 295);
+  --landing-robot-panel: oklch(30% 0.055 300);
 }
 
 html.theme-dark .landing-root {
-  /* ── TỐI: mực xanh sâu ──────────────────────────────────────────────── */
-  --bg-primary: oklch(16.5% 0.015 265);
-  --bg-card: oklch(21% 0.017 265);
-  --bg-surface: oklch(24% 0.018 265);
-  --bg-surface-hover: oklch(27.5% 0.02 265);
-  --border-color: oklch(29% 0.016 265);
-  --text-primary: oklch(96.5% 0.004 250);
-  --text-secondary: oklch(77% 0.012 255);
-  --text-muted: oklch(62% 0.015 258);
-  --accent-color: oklch(81% 0.13 76);
+  /* ── TỐI: cùng chất tím-đen của /about, nhưng không chạy canvas ───── */
+  --bg-primary: oklch(12.8% 0.025 300);
+  --bg-card: oklch(16.5% 0.032 300);
+  --bg-surface: oklch(19.5% 0.038 300);
+  --bg-surface-hover: oklch(23% 0.045 300);
+  --border-color: oklch(28% 0.034 300);
+  --text-primary: oklch(96% 0.008 295);
+  --text-secondary: oklch(78% 0.018 295);
+  --text-muted: oklch(66% 0.022 295);
+  --accent-color: oklch(72% 0.18 300);
 
-  --landing-grain: 0.05;
-  --landing-rule-soft: oklch(25% 0.014 265);
+  --landing-grain: 0.042;
+  --landing-rule-soft: oklch(22% 0.024 300);
+  --landing-atmosphere-core: oklch(61% 0.2 300);
+  --landing-grid-color: oklch(52% 0.06 300);
+  --landing-identity: oklch(80% 0.16 82);
+  --landing-robot-metal: oklch(84% 0.035 295);
+  --landing-robot-panel: oklch(22% 0.065 300);
+}
+
+/* Một trường sáng tím cố định thay cho canvas /about. Không rAF, không mouse
+   listener, không blur node: chỉ một radial two-stop và một lớp lưới mảnh. */
+.landing-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 68% 48% at 72% 14%,
+    color-mix(in oklch, var(--landing-atmosphere-core) 18%, transparent),
+    transparent 72%
+  );
+}
+
+.landing-atmosphere::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  opacity: 0.22;
+  background-image:
+    linear-gradient(color-mix(in oklch, var(--landing-grid-color) 12%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklch, var(--landing-grid-color) 12%, transparent) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  mask-image: linear-gradient(to bottom, var(--color-ink), transparent 72%);
 }
 
 /* ── Lớp hạt nhiễu ──────────────────────────────────────────────────────
@@ -4284,7 +4309,7 @@ body:has(.landing-root) {
   overflow-x: clip;
 }
 
-.landing-root > :not(.landing-grain):not(.landing-measure) {
+.landing-root > :not(.landing-atmosphere):not(.landing-grain):not(.landing-measure) {
   position: relative;
   z-index: 2;
 }
@@ -4293,30 +4318,63 @@ body:has(.landing-root) {
   position: sticky !important;
   top: 0;
   z-index: 40 !important;
+  display: block;
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+  background: color-mix(in oklch, var(--color-paper) 95%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.landing-header-main {
   display: flex;
   min-height: 4.5rem;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-md);
   padding-inline: max(5.25rem, calc((100vw - 76rem) / 2));
-  border-bottom: var(--rule-hair) solid var(--color-rule);
-  background: color-mix(in oklch, var(--color-paper) 94%, transparent);
-  backdrop-filter: blur(12px);
+}
+
+.landing-brand-cluster {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .landing-wordmark {
   display: inline-flex;
   min-height: 2.75rem;
   align-items: center;
+  gap: var(--space-sm);
   color: var(--color-ink);
-  font-family: var(--font-display);
-  font-size: var(--text-md);
-  font-weight: 720;
-  letter-spacing: -0.035em;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: -0.018em;
   text-decoration: none;
+  white-space: nowrap;
 }
 
-.landing-wordmark-short { display: none; }
+.landing-avatar-frame {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+  place-items: center;
+  overflow: hidden;
+  border: 2px solid var(--landing-identity);
+  border-radius: 50%;
+  background: var(--color-paper-3);
+  padding: 2px;
+}
+
+.landing-brand-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.landing-brand-name { white-space: nowrap; }
 
 .landing-header-actions {
   display: flex;
@@ -4344,6 +4402,78 @@ body:has(.landing-root) {
 
 .landing-icon-button { min-width: 2.75rem; padding-inline: var(--space-sm); }
 .landing-header-cta { gap: var(--space-xs); padding-inline: var(--space-md); white-space: nowrap; }
+
+/* Tier-B SVG mascot: it perches directly on a framed edge, then performs one
+   short run/jump/kick sequence. Every moving part is transform/opacity-only. */
+.landing-robot-rail {
+  position: relative;
+  height: 1.75rem;
+  overflow: clip;
+  border-top: var(--rule-hair) solid color-mix(in oklch, var(--color-rule) 65%, transparent);
+}
+
+.landing-robot-rail::before {
+  position: absolute;
+  inset: 0.85rem max(1rem, calc((100vw - 76rem) / 2)) auto;
+  height: 0.9rem;
+  content: '';
+  border: var(--rule-hair) solid color-mix(in oklch, var(--color-rule) 78%, transparent);
+  border-bottom: 0;
+  border-radius: var(--radius-control) var(--radius-control) 0 0;
+}
+
+.landing-robot-runner {
+  position: relative;
+  z-index: 1;
+  width: 7rem;
+  height: 100%;
+  transform-origin: center bottom;
+  animation: landing-robot-run 1.85s 320ms var(--ease-in-out) both;
+}
+
+.landing-robot-player { display: block; width: 7rem; height: 2.75rem; transform: translateY(-0.78rem); }
+.landing-robot-shadow { fill: color-mix(in oklch, var(--color-ink) 18%, transparent); }
+.landing-robot-head,
+.landing-robot-torso { fill: var(--landing-robot-metal); stroke: var(--color-accent); stroke-width: 1.2; }
+.landing-robot-ear { fill: var(--color-accent); }
+.landing-robot-highlight { fill: color-mix(in oklch, white 38%, transparent); }
+.landing-robot-face { fill: var(--landing-robot-panel); }
+.landing-robot-eye { fill: var(--landing-identity); }
+.landing-robot-core { fill: var(--color-accent); }
+.landing-robot-antenna,
+.landing-robot-limb,
+.landing-robot-speed,
+.landing-football-speed {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.landing-robot-speed,
+.landing-football-speed { opacity: 0.55; }
+.landing-football-shell { fill: var(--color-paper-2); stroke: var(--landing-identity); stroke-width: 1.2; }
+.landing-football-seam { fill: none; stroke: var(--color-ink); stroke-width: 0.9; stroke-linecap: round; stroke-linejoin: round; }
+.landing-football {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: landing-football-kick 1.85s 320ms var(--ease-in-out) both;
+}
+
+@keyframes landing-robot-run {
+  0% { opacity: 0; transform: translate3d(calc(100vw - 19rem), 0.12rem, 0) scale(0.9); }
+  12% { opacity: 1; }
+  34% { transform: translate3d(calc(100vw - 15.5rem), -0.42rem, 0) rotate(-2deg) scale(0.98); }
+  51% { transform: translate3d(calc(100vw - 13rem), 0.04rem, 0) rotate(2deg) scale(1); }
+  72% { transform: translate3d(calc(100vw - 10rem), -0.52rem, 0) rotate(-3deg) scale(1.02); }
+  100% { opacity: 0.94; transform: translate3d(calc(100vw - 9rem), 0.04rem, 0) scale(0.96); }
+}
+
+@keyframes landing-football-kick {
+  0%, 46% { transform: translate3d(0, 0, 0) rotate(0); }
+  67% { transform: translate3d(0.36rem, -0.28rem, 0) rotate(70deg); }
+  100% { transform: translate3d(0.7rem, 0, 0) rotate(150deg); }
+}
 
 .landing-hero-shell,
 .landing-deep-dives,
@@ -4639,12 +4769,6 @@ body:has(.landing-root) {
   .landing-deep-card:hover .landing-deep-card-action,
   .landing-directory-link:hover .landing-directory-name,
   .landing-footer-meta a:hover { color: var(--color-accent); }
-  .landing-primary-action:hover svg,
-  .landing-secondary-action:hover svg,
-  .landing-playground-cta:hover svg,
-  .landing-deep-card:hover .landing-deep-card-action svg,
-  .landing-directory-link:hover svg { transform: translate(0.14rem, -0.14rem); }
-  .landing-root svg { transition: transform var(--dur-micro) var(--ease-out); }
 }
 
 @media (max-width: 959px) {
@@ -4662,9 +4786,8 @@ body:has(.landing-root) {
 }
 
 @media (max-width: 639px) {
-  .landing-header { padding-inline: 4.75rem 1rem; }
-  .landing-wordmark-full { display: none; }
-  .landing-wordmark-short { display: inline; }
+  .landing-header-main { padding-inline: 4.75rem 1rem; }
+  .landing-brand-name { display: none; }
   .landing-header-cta { padding-inline: var(--space-sm); }
   .landing-header-cta svg { display: none; }
   .landing-hero-shell { padding-top: var(--space-2xl); }
@@ -4688,7 +4811,7 @@ body:has(.landing-root) {
 }
 
 @media (max-width: 374px) {
-  .landing-header { padding-left: 4.5rem; }
+  .landing-header-main { padding-left: 4.5rem; }
   .landing-icon-button { min-width: 2.5rem; padding-inline: 0.5rem; }
   .landing-header-cta { font-size: 0.6875rem; }
   .landing-hero-actions > a { width: 100%; }
@@ -4698,8 +4821,8 @@ body:has(.landing-root) {
   .landing-hero-copy,
   .landing-playground-preview { animation: none; }
   .landing-playground-preview { transform: none !important; transition: none; }
-  .landing-root svg { transition: none; }
-  .landing-root a:hover svg { transform: none; }
+  .landing-robot-runner { animation: none; opacity: 0.94; transform: translate3d(calc(100vw - 9rem), 0.04rem, 0) scale(0.96); }
+  .landing-football { animation: none; transform: translate3d(0.7rem, 0, 0) rotate(150deg); }
 }
 
 /* ═══════════════════════════════════════════════════════════════════

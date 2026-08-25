@@ -146,8 +146,9 @@ const VI_DEEP_DIVES: Record<string, { title: string; blurb: string; via?: string
 export const LANDING_COPY = {
   en: {
     header: {
-      wordmark: 'CuongThai',
-      homeLabel: 'CuongThai home',
+      identity: 'CuongHoang',
+      welcome: 'Wellcome to CuongThai',
+      homeLabel: 'Wellcome to CuongThai — home',
       languageLabel: 'Switch to Vietnamese',
       lightLabel: 'Use light theme',
       darkLabel: 'Use dark theme',
@@ -210,13 +211,14 @@ export const LANDING_COPY = {
   },
   vi: {
     header: {
-      wordmark: 'CuongThai',
-      homeLabel: 'Trang chủ CuongThai',
+      identity: 'CuongHoang',
+      welcome: 'Wellcome to CuongThai',
+      homeLabel: 'Wellcome to CuongThai — trang chủ',
       languageLabel: 'Chuyển sang tiếng Anh',
       lightLabel: 'Dùng giao diện sáng',
       darkLabel: 'Dùng giao diện tối',
       guestCta: 'Đăng nhập',
-      memberCta: 'Vào học',
+      memberCta: 'Tiếp tục',
     },
     hero: {
       title: 'Học cho hiểu.',

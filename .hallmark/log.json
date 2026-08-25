@@ -1,32 +1,41 @@
 {
-  "updatedAt": "2026-08-25",
+  "updatedAt": "2026-08-26",
   "route": "/",
   "contract": {
-    "genre": "editorial",
-    "macrostructure": "Split Studio",
+    "genre": "atmospheric",
+    "macrostructure": "Split Studio (iterated)",
     "tokens": "frontend/tokens.css",
-    "enrichment": "real 3D capture plus CSS pointer tilt",
-    "motionPrimitives": ["entrance", "pointer tilt", "arrow micro-shift"],
+    "enrichment": "real 3D capture, CSS pointer tilt and a hand-built pixel robot perched on a framed edge",
+    "motionPrimitives": ["entrance", "pointer tilt", "one-shot mascot run"],
     "performanceGuardrails": [
       "no WebGL or 3D runtime on homepage",
       "no Lottie assistant payload on homepage",
+      "no requestAnimationFrame canvas for the About-like atmosphere",
+      "mascot animation runs once rather than looping",
       "tilt disabled on touch and reduced-motion devices",
       "transform and opacity animation only"
     ],
     "preservedFlows": [
       "landing stats API",
-      "all homepage href destinations",
+      "guest Sign in destination",
+      "all homepage href destinations except the explicitly requested authenticated Continue destination",
       "PlaygroundGate confirmation",
       "navigation dock",
-      "ChatModal"
+      "ChatModal",
+      "all non-homepage flows"
     ]
   },
   "preEmitCritique": {
-    "purpose": 5,
+    "philosophy": 5,
     "hierarchy": 5,
-    "emotionalResonance": 4,
-    "systemCoherence": 5,
-    "responsiveIntegrity": 5,
-    "visibility": 5
+    "execution": 5,
+    "specificity": 5,
+    "restraint": 4,
+    "variety": 4
+  },
+  "iteration": {
+    "brief": "Restore the avatar identity with the requested Wellcome to CuongThai wordmark, route Continue to /about, borrow About's night atmosphere without its runtime cost, and add a pixel robot run-jump-kick moment.",
+    "variationKnobs": ["personal avatar identity", "static violet field", "one-shot perched Tier-B mascot"],
+    "verifiedViewports": [320, 375, 414, 768, 1280, 1920]
   }
 }

@@ -22,6 +22,7 @@ export default function LandingExperience() {
 
   return (
     <main className="landing-root min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
+      <div className="landing-atmosphere" aria-hidden />
       <div className="landing-grain" aria-hidden />
       <div className="landing-measure" aria-hidden />
       <LandingHeader />

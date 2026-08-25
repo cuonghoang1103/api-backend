@@ -297,8 +297,8 @@ nextTick ran: 1000000 times</div>
 <pre><code><span class="tok-keyword">let</span> n = <span class="tok-number">0</span>;
 <span class="tok-function">setTimeout</span>(() =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'setTimeout còn chạy được không?'</span>), <span class="tok-number">0</span>);
 
-<span class="tok-keyword">function</span> <span class="tok-function">deQuy</span>() { <span class="tok-keyword">if</span> (++n &lt; <span class="tok-number">1e6</span>) process.<span class="tok-function">nextTick</span>(deQuy); }
-<span class="tok-function">deQuy</span>();
+<span class="tok-keyword">function</span> <span class="tok-function">recurse</span>() { <span class="tok-keyword">if</span> (++n &lt; <span class="tok-number">1e6</span>) process.<span class="tok-function">nextTick</span>(recurse); }
+<span class="tok-function">recurse</span>();
 <span class="tok-function">console.log</span>(<span class="tok-string">'đã xếp 1 triệu nextTick vào hàng đợi'</span>);</code></pre>
 <div class="out">đã xếp 1 triệu nextTick vào hàng đợi
 setTimeout còn chạy được không?
@@ -413,11 +413,11 @@ h.<span class="tok-function">enable</span>();
 <p class="lead">Từ đầu tới giờ toàn lý thuyết. Giờ ta đo. Kỹ thuật: cho một timer "nhịp tim" chạy mỗi 100 ms rồi ghi lại nó thực sự tới trễ bao nhiêu. Con số đó — <strong>độ trễ event loop</strong> — là chỉ số sức khoẻ quan trọng bậc nhất của một dịch vụ Node.</p>
 
 <h3>Thí nghiệm</h3>
-<pre><code><span class="tok-keyword">let</span> truoc = Date.<span class="tok-function">now</span>(), max = <span class="tok-number">0</span>;
+<pre><code><span class="tok-keyword">let</span> prev = Date.<span class="tok-function">now</span>(), max = <span class="tok-number">0</span>;
 <span class="tok-keyword">const</span> nhip = <span class="tok-function">setInterval</span>(() =&gt; {
-  <span class="tok-keyword">const</span> tre = Date.<span class="tok-function">now</span>() - truoc - <span class="tok-number">100</span>;   <span class="tok-comment">// lẽ ra phải ~0</span>
-  <span class="tok-keyword">if</span> (tre &gt; max) max = tre;
-  truoc = Date.<span class="tok-function">now</span>();
+  <span class="tok-keyword">const</span> late = Date.<span class="tok-function">now</span>() - prev - <span class="tok-number">100</span>;   <span class="tok-comment">// lẽ ra phải ~0</span>
+  <span class="tok-keyword">if</span> (late &gt; max) max = late;
+  prev = Date.<span class="tok-function">now</span>();
 }, <span class="tok-number">100</span>);
 
 <span class="tok-function">setTimeout</span>(() =&gt; {
@@ -591,14 +591,14 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
 
 <h3>Thuốc 2 — chia việc thành từng lô</h3>
 <p>Nếu không dời việc đi được, bạn có thể xắt nhỏ nó ra và để vòng lặp thở giữa các lát bằng <code>setImmediate</code>:</p>
-<pre><code><span class="tok-keyword">const</span> TONG = <span class="tok-number">3e9</span>, LO = <span class="tok-number">3e7</span>;
+<pre><code><span class="tok-keyword">const</span> TOTAL = <span class="tok-number">3e9</span>, CHUNK = <span class="tok-number">3e7</span>;
 <span class="tok-keyword">let</span> i = <span class="tok-number">0</span>, s = <span class="tok-number">0</span>;
-<span class="tok-keyword">function</span> <span class="tok-function">chayLo</span>() {
-  <span class="tok-keyword">const</span> den = Math.<span class="tok-function">min</span>(i + LO, TONG);
-  <span class="tok-keyword">for</span> (; i &lt; den; i++) s += i;
-  <span class="tok-keyword">if</span> (i &lt; TONG) <span class="tok-function">setImmediate</span>(chayLo);   <span class="tok-comment">// nhường lượt cho vòng lặp</span>
+<span class="tok-keyword">function</span> <span class="tok-function">runChunk</span>() {
+  <span class="tok-keyword">const</span> end = Math.<span class="tok-function">min</span>(i + CHUNK, TOTAL);
+  <span class="tok-keyword">for</span> (; i &lt; end; i++) s += i;
+  <span class="tok-keyword">if</span> (i &lt; TOTAL) <span class="tok-function">setImmediate</span>(runChunk);   <span class="tok-comment">// nhường lượt cho vòng lặp</span>
 }
-<span class="tok-function">chayLo</span>();</code></pre>
+<span class="tok-function">runChunk</span>();</code></pre>
 <div class="out">→ xong sau 19580 ms · nhịp tim trễ tối đa: 194 ms</div>
 <div class="callout warn">Hãy nhìn thẳng vào cái giá phải trả: độ trễ giảm từ 2873 ms xuống 194 ms, nhưng công việc kéo dài từ 2871 ms lên <strong>19580 ms — chậm khoảng 6,8 lần</strong>. Nhường lượt liên tục làm mất thông lượng thật. Chia lô giữ cho server còn phản hồi, nhưng đó là một sự thoả hiệp, không phải món hời miễn phí. Việc thật sự nặng thì nên ưu tiên worker.</div>
 
@@ -610,7 +610,7 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
 <span class="tok-keyword">if</span> (cluster.isPrimary) {
   <span class="tok-keyword">for</span> (<span class="tok-keyword">let</span> i = <span class="tok-number">0</span>; i &lt; os.<span class="tok-function">cpus</span>().length; i++) cluster.<span class="tok-function">fork</span>();
 } <span class="tok-keyword">else</span> {
-  <span class="tok-function">khoiDongServer</span>();   <span class="tok-comment">// mỗi tiến trình con cùng lắng nghe một cổng</span>
+  <span class="tok-function">startServer</span>();   <span class="tok-comment">// mỗi tiến trình con cùng lắng nghe một cổng</span>
 }</code></pre>
 <p>Cách này nhân năng lực lên, nhưng <strong>không</strong> cứu bạn khỏi một endpoint gây chặn — nó chỉ khiến bạn có một tiến trình đóng băng trên bốn, thay vì một trên một. Cluster là để dùng hết số nhân CPU, không phải để chữa code tồi.</p>
 <div class="pitfall">Khi chạy nhiều tiến trình, trạng thái lưu trong bộ nhớ hết hiệu lực. Một bộ đếm rate-limit hay một cache nằm trong biến JavaScript thường giờ là của riêng từng tiến trình — bốn tiến trình, bốn bộ đếm khác nhau, bốn câu trả lời khác nhau. Đó chính xác là lý do trạng thái dùng chung phải dời sang Redis (chương 12).</div>

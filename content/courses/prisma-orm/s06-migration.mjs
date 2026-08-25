@@ -283,7 +283,7 @@ wc -l prisma/migrations/*/migration.sql | tail -1</code></pre>
 npx prisma migrate dev --name them_cot &amp;
 sleep 0.4
 docker exec pg-hoc psql -U student -d postgres -c "\\l" | grep shadow</code></pre>
-<div class="out"> prisma_migrate_shadow_db_9f2c48e1a7b3 | hocvien | UTF8 | ...</div>
+<div class="out"> prisma_migrate_shadow_db_9f2c48e1a7b3 | student | UTF8 | ...</div>
 <div class="callout">
 <p><strong>Steps 2 and 4 are the whole point.</strong> Step 2 verifies that your migration history is <em>replayable</em> — that a new developer, or a fresh CI database, can build the schema from scratch. Step 4 verifies that your real database still matches what the history describes. Without a shadow database Prisma could still generate a migration, but it could not tell you either of those things, and both are how migration bugs get caught before production.</p>
 </div>
@@ -401,7 +401,7 @@ npx prisma migrate diff \\
 npx prisma migrate dev --name them_cot &amp;
 sleep 0.4
 docker exec pg-hoc psql -U student -d postgres -c "\\l" | grep shadow</code></pre>
-<div class="out"> prisma_migrate_shadow_db_9f2c48e1a7b3 | hocvien | UTF8 | ...</div>
+<div class="out"> prisma_migrate_shadow_db_9f2c48e1a7b3 | student | UTF8 | ...</div>
 <div class="callout">
 <p><strong>Bước 2 và 4 mới là trọng tâm.</strong> Bước 2 kiểm rằng lịch sử migration của bạn <em>phát lại được</em> — rằng một lập trình viên mới, hay một cơ sở dữ liệu CI sạch, dựng lại được lược đồ từ đầu. Bước 4 kiểm rằng cơ sở dữ liệu thật của bạn vẫn còn khớp với thứ lịch sử mô tả. Không có shadow database thì Prisma vẫn sinh ra được migration, nhưng nó không nói được cho bạn cả hai điều đó, mà cả hai đều là cách những con bọ migration bị bắt trước khi lên production.</p>
 </div>
@@ -770,7 +770,7 @@ Time: 47218.442 ms      ← 47 giây mà mọi INSERT và UPDATE đều phải �
 
 -- Có CONCURRENTLY:
 CREATE INDEX
-Time: 91104.882 ms      ← tổng thời gian lâu hơn, và ghi vẫn chạy suốt</div>
+Time: 91104.882 ms      ← tổng thời gian lâu hơn, và write vẫn chạy suốt</div>
 <div class="callout warn">
 <p><strong><code>CONCURRENTLY</code> không chạy được bên trong một giao dịch, mà Prisma thì bọc mỗi tệp migration trong một giao dịch.</strong> Đặt nó vào một migration bình thường sẽ cho ra <code>ERROR: CREATE INDEX CONCURRENTLY cannot run inside a transaction block</code>. Hai lối ra: áp dụng riêng câu lệnh đó hoàn toàn ngoài Prisma (một bước thủ công được ghi rõ trong sổ tay deploy của bạn), hoặc tách nó thành một migration riêng và đánh dấu lại — vài đội giữ hẳn một thư mục <code>migrations-manual/</code> đúng cho việc này. Đằng nào thì đó cũng là một quyết định phải ghi lại, không phải một thứ để phát hiện giữa lúc phát hành.</p>
 </div>
@@ -1263,7 +1263,7 @@ ERROR: check constraint "orders_total_khong_am" is violated by some row</div>
 SELECT migration_name, started_at, applied_steps_count, left(logs, 200) AS error
 FROM _prisma_migrations
 WHERE finished_at IS NULL AND rolled_back_at IS NULL;</code></pre>
-<div class="out">      migration_name         |         started_at         | applied_steps_count |                loi
+<div class="out">      migration_name         |         started_at         | applied_steps_count |                error
 -----------------------------+----------------------------+---------------------+-------------------------------
  20260823071500_them_rang_buoc | 2026-08-23 07:15:02.118+00 |                   1 | ERROR: check constraint ...</div>
 <pre><code><span class="tok-comment"># Step 3, "undo" branch: clean up by hand, then record the decision</span>
@@ -1421,7 +1421,7 @@ ERROR: check constraint "orders_total_khong_am" is violated by some row</div>
 SELECT migration_name, started_at, applied_steps_count, left(logs, 200) AS error
 FROM _prisma_migrations
 WHERE finished_at IS NULL AND rolled_back_at IS NULL;</code></pre>
-<div class="out">      migration_name         |         started_at         | applied_steps_count |                loi
+<div class="out">      migration_name         |         started_at         | applied_steps_count |                error
 -----------------------------+----------------------------+---------------------+-------------------------------
  20260823071500_them_rang_buoc | 2026-08-23 07:15:02.118+00 |                   1 | ERROR: check constraint ...</div>
 <pre><code><span class="tok-comment"># Bước 3, nhánh "gỡ bỏ": dọn bằng tay, rồi ghi lại quyết định</span>

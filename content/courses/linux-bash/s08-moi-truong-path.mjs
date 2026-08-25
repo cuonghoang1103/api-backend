@@ -812,8 +812,8 @@ ps aux | grep mysql</code></pre>
 <pre><code><span class="tok-comment"># Cái file: thuộc về người dùng của dịch vụ, không ai khác đọc được</span>
 sudo install -o appuser -g appuser -m 600 /dev/null /opt/app/.env
 sudo -u appuser tee -a /opt/app/.env &gt;/dev/null &lt;&lt;'EOF'
-DATABASE_URL=postgres://app:DA_CHE@localhost:5432/app
-API_KEY=DA_CHE
+DATABASE_URL=postgres://app:REDACTED@localhost:5432/app
+API_KEY=REDACTED
 EOF
 
 <span class="tok-comment"># Unit đọc nó; ứng dụng không bao giờ thấy cái đường dẫn</span>

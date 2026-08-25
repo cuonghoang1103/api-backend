@@ -35,7 +35,7 @@ echo "$TOKEN" | cut -d. -f1 | base64 -d 2&gt;/dev/null
 echo "$TOKEN" | cut -d. -f2 | base64 -d 2&gt;/dev/null</code></pre>
 <div class="out">{"alg":"HS256","typ":"JWT"}
 {"sub":"clx7a2b1c0000","iss":"https://vidu.com","aud":"vidu-api",
- "iat":1756000000,"exp":1756000900,"vaiTro":"USER"}</div>
+ "iat":1756000000,"exp":1756000900,"role":"USER"}</div>
 <div class="callout warn">
 <p><strong><code>base64url</code> is an encoding, not encryption.</strong> Anyone who holds the token — the user, a browser extension, a proxy that logged it, whoever finds it in an error report — reads every claim inside. That is not a flaw; JWTs are designed to be readable. It does mean the rule is absolute: <strong>never put anything private in a token.</strong> No phone numbers, no addresses, no internal ids you would not print on a page, and certainly no secrets.</p>
 </div>
@@ -115,7 +115,7 @@ echo "$TOKEN" | cut -d. -f1 | base64 -d 2&gt;/dev/null
 echo "$TOKEN" | cut -d. -f2 | base64 -d 2&gt;/dev/null</code></pre>
 <div class="out">{"alg":"HS256","typ":"JWT"}
 {"sub":"clx7a2b1c0000","iss":"https://vidu.com","aud":"vidu-api",
- "iat":1756000000,"exp":1756000900,"vaiTro":"USER"}</div>
+ "iat":1756000000,"exp":1756000900,"role":"USER"}</div>
 <div class="callout warn">
 <p><strong><code>base64url</code> là MÃ HOÁ KÝ TỰ, không phải MẬT MÃ HOÁ.</strong> Bất kỳ ai cầm token — người dùng, một tiện ích trình duyệt, một proxy đã ghi log nó, bất kỳ ai nhặt được nó trong một báo cáo lỗi — đều đọc được MỌI claim bên trong. Đó không phải một khiếm khuyết; JWT được THIẾT KẾ để đọc được. Nhưng nó nghĩa là cái luật này TUYỆT ĐỐI: <strong>ĐỪNG BAO GIỜ đặt bất cứ thứ gì riêng tư vào một token.</strong> Không số điện thoại, không địa chỉ, không id nội bộ mà bạn sẽ không in ra trang, và tuyệt đối không bí mật nào.</p>
 </div>
@@ -204,7 +204,7 @@ console.log(h + "." + p + ".");            <span class="tok-comment">// ← ch�
 <div class="out">eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJjbHg3IiwidmFpVHJvIjoiQURNSU4iLCJleHAiOjk5OTk5OTk5OTl9.
 
 $ curl -s localhost:3000/toi -H "Authorization: Bearer &lt;token tren&gt;"
-{"id":"clx7","vaiTro":"ADMIN"}      ← neu thu vien chap nhan "none"</div>
+{"id":"clx7","role":"ADMIN"}      ← neu thu vien chap nhan "none"</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">It is in the specification</span><span class="v">RFC 7519 defines <code>none</code> as the "Unsecured JWS", for cases where integrity is guaranteed by some other layer. It is a legitimate mode with a legitimate purpose, and it must never be reachable by a token that arrives from the network.</span></div>
   <div class="kv"><span class="k">Libraries have shipped this open</span><span class="v">Several major implementations accepted <code>none</code> by default in the past, and the vulnerability class is old enough to have a CVE list of its own. Current versions reject it, which is not a reason to omit the allowlist.</span></div>
@@ -241,7 +241,7 @@ const s = c.createHmac("sha256", pem).update(h + "." + p).digest("base64url");
 console.log(h + "." + p + "." + s);
 '</code></pre>
 <div class="out">$ curl -s localhost:3000/toi -H "Authorization: Bearer &lt;token gia mao&gt;"
-{"id":"clx7","vaiTro":"ADMIN"}
+{"id":"clx7","role":"ADMIN"}
 
 # May chu doc alg=HS256, lay "khoa" no dang cam — chuoi PEM cong khai —
 # roi tinh HMAC. Ke tan cong cung dung DUNG chuoi do. Hai ben khop.
@@ -325,7 +325,7 @@ console.log(h + "." + p + ".");            <span class="tok-comment">// ← ch�
 <div class="out">eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJjbHg3IiwidmFpVHJvIjoiQURNSU4iLCJleHAiOjk5OTk5OTk5OTl9.
 
 $ curl -s localhost:3000/toi -H "Authorization: Bearer &lt;token tren&gt;"
-{"id":"clx7","vaiTro":"ADMIN"}      ← neu thu vien chap nhan "none"</div>
+{"id":"clx7","role":"ADMIN"}      ← neu thu vien chap nhan "none"</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nó NẰM TRONG đặc tả</span><span class="v">RFC 7519 định nghĩa <code>none</code> là "Unsecured JWS", dành cho trường hợp tính toàn vẹn đã được một tầng khác bảo đảm. Đó là một chế độ chính đáng với mục đích chính đáng, và nó KHÔNG BAO GIỜ được với tới bởi một token đến từ mạng.</span></div>
   <div class="kv"><span class="k">Các thư viện ĐÃ từng ship mở cửa này</span><span class="v">Nhiều bản cài đặt lớn từng mặc định chấp nhận <code>none</code>, và lớp lỗ hổng này đủ cũ để có một danh sách CVE của riêng nó. Các bản hiện hành từ chối nó, và đó KHÔNG phải lý do để bỏ qua danh sách trắng.</span></div>
@@ -362,7 +362,7 @@ const s = c.createHmac("sha256", pem).update(h + "." + p).digest("base64url");
 console.log(h + "." + p + "." + s);
 '</code></pre>
 <div class="out">$ curl -s localhost:3000/toi -H "Authorization: Bearer &lt;token gia mao&gt;"
-{"id":"clx7","vaiTro":"ADMIN"}
+{"id":"clx7","role":"ADMIN"}
 
 # May chu doc alg=HS256, lay "khoa" no dang cam — chuoi PEM cong khai —
 # roi tinh HMAC. Ke tan cong cung dung DUNG chuoi do. Hai ben khop.

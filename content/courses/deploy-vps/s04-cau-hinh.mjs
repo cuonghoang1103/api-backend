@@ -651,7 +651,7 @@ fi</code></pre>
 <h3>Two keys at once</h3>
 <p>The mechanism is one line of design: <strong>sign with one key, accept a list</strong>.</p>
 <pre><code><span class="tok-comment">// KY bang khoa dau tien; CHAP NHAN bat ky khoa nao trong danh sach</span>
-const KHOA = (process.env.KHOA_KY || '').split(',').filter(Boolean);
+const KHOA = (process.env.SIGNING_KEYS || '').split(',').filter(Boolean);
 
 const tao  = d =&gt; &#96;\${d}.\${ky(d, KHOA[0])}&#96;;            <span class="tok-comment">// luon la khoa dau</span>
 const kiem = t =&gt; KHOA.some(k =&gt; ky(phan(t), k) === chuky(t));  <span class="tok-comment">// bat ky khoa nao</span></code></pre>
@@ -692,7 +692,7 @@ const kiem = t =&gt; KHOA.some(k =&gt; ky(phan(t), k) === chuky(t));  <span clas
 <h3>A rotation is a deploy, so it is measurable</h3>
 <pre><code><span class="tok-comment"># tien trinh dang chay CO THAT SU nhan khoa moi khong? (Bai 4.2)</span>
 tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'node src/server.js')/environ \\
-  | awk -F= '/^KHOA_KY/{print "so khoa dang chap nhan:", split(\$2, a, ",")}'
+  | awk -F= '/^SIGNING_KEYS/{print "so khoa dang chap nhan:", split(\$2, a, ",")}'
 
 <span class="tok-comment"># token cu CON dung khong? (phai HOP LE o giai doan 2 va 3)</span>
 curl -s -o /dev/null -w '%{http_code}\\n' -H "Authorization: Bearer \$TOKEN_CU" \\
@@ -727,7 +727,7 @@ curl -s -o /dev/null -w '%{http_code}\\n' -H "Authorization: Bearer \$TOKEN_CU" 
 <h3>Hai khoá cùng lúc</h3>
 <p>Cơ chế gói trong một dòng thiết kế: <strong>KÝ bằng một khoá, CHẤP NHẬN cả một danh sách</strong>.</p>
 <pre><code><span class="tok-comment">// KY bang khoa dau tien; CHAP NHAN bat ky khoa nao trong danh sach</span>
-const KHOA = (process.env.KHOA_KY || '').split(',').filter(Boolean);
+const KHOA = (process.env.SIGNING_KEYS || '').split(',').filter(Boolean);
 
 const tao  = d =&gt; &#96;\${d}.\${ky(d, KHOA[0])}&#96;;            <span class="tok-comment">// luon la khoa dau</span>
 const kiem = t =&gt; KHOA.some(k =&gt; ky(phan(t), k) === chuky(t));  <span class="tok-comment">// bat ky khoa nao</span></code></pre>
@@ -768,7 +768,7 @@ const kiem = t =&gt; KHOA.some(k =&gt; ky(phan(t), k) === chuky(t));  <span clas
 <h3>Một lần xoay khoá cũng là một lần deploy, nên nó ĐO ĐƯỢC</h3>
 <pre><code><span class="tok-comment"># tien trinh dang chay CO THAT SU nhan khoa moi khong? (Bai 4.2)</span>
 tr '\\0' '\\n' &lt; /proc/\$(pgrep -f 'node src/server.js')/environ \\
-  | awk -F= '/^KHOA_KY/{print "so khoa dang chap nhan:", split(\$2, a, ",")}'
+  | awk -F= '/^SIGNING_KEYS/{print "so khoa dang chap nhan:", split(\$2, a, ",")}'
 
 <span class="tok-comment"># token cu CON dung khong? (phai HOP LE o giai doan 2 va 3)</span>
 curl -s -o /dev/null -w '%{http_code}\\n' -H "Authorization: Bearer \$TOKEN_CU" \\

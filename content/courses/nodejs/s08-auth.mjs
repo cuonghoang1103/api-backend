@@ -955,7 +955,7 @@ verify + findUnique(User) — bản đang dùng      trung vị 1.010ms  (n=2000
 <div class="out">── 3. Gọi /notes KHÔNG token
 HTTP 401  {"error":{"code":"NO_TOKEN","message":"Thiếu access token"}}
 
-── 4. Token rác / token ký bằng khoá khác
+── 4. Token rác / token ký bằng storeá khác
 HTTP 401  {"error":{"code":"TOKEN_INVALID","message":"jwt malformed"}}
 HTTP 401  {"error":{"code":"TOKEN_INVALID","message":"invalid signature"}}</div>
 <p>The second one is the important test, and it is worth being explicit about what it proves. That token was minted with the correct payload — <code>sub: '1'</code>, <code>role: 'ADMIN'</code>, correct issuer and audience, not expired. Everything about it is right except that it was signed with a different secret. That is the whole security boundary, and it holds.</p>
@@ -1135,7 +1135,7 @@ verify + findUnique(User) — bản đang dùng      trung vị 1.010ms  (n=2000
 <div class="out">── 3. Gọi /notes KHÔNG token
 HTTP 401  {"error":{"code":"NO_TOKEN","message":"Thiếu access token"}}
 
-── 4. Token rác / token ký bằng khoá khác
+── 4. Token rác / token ký bằng storeá khác
 HTTP 401  {"error":{"code":"TOKEN_INVALID","message":"jwt malformed"}}
 HTTP 401  {"error":{"code":"TOKEN_INVALID","message":"invalid signature"}}</div>
 <p>Cái thứ hai mới là phép thử quan trọng, và cần nói rõ nó chứng minh điều gì. Token đó được nặn ra với payload hoàn toàn đúng — <code>sub: '1'</code>, <code>role: 'ADMIN'</code>, đúng issuer và audience, chưa hết hạn. Mọi thứ ở nó đều đúng, trừ việc nó được ký bằng một khoá bí mật khác. Đó chính là toàn bộ ranh giới an toàn, và nó đứng vững.</p>
@@ -1361,7 +1361,7 @@ lần 4: HTTP 401  RateLimit-Remaining: 1
 lần 5: HTTP 401  RateLimit-Remaining: 0
 lần 6: HTTP 429  RateLimit-Remaining: 0 Retry-After: 60
 lần 7: HTTP 429  RateLimit-Remaining: 0 Retry-After: 60
-mật khẩu ĐÚNG khi đang bị khoá: HTTP 429
+mật khẩu ĐÚNG khi đang bị storeá: HTTP 429
 email KHÁC từ cùng IP        : HTTP 200</div>
 <p>Four decisions are visible in that output, and each of them is a trade-off someone gets wrong:</p>
 <div class="kv-grid">
@@ -1496,7 +1496,7 @@ lần 4: HTTP 401  RateLimit-Remaining: 1
 lần 5: HTTP 401  RateLimit-Remaining: 0
 lần 6: HTTP 429  RateLimit-Remaining: 0 Retry-After: 60
 lần 7: HTTP 429  RateLimit-Remaining: 0 Retry-After: 60
-mật khẩu ĐÚNG khi đang bị khoá: HTTP 429
+mật khẩu ĐÚNG khi đang bị storeá: HTTP 429
 email KHÁC từ cùng IP        : HTTP 200</div>
 <p>Trong đoạn kết quả đó có bốn quyết định, và cái nào cũng là một đánh đổi mà người ta hay làm sai:</p>
 <div class="kv-grid">

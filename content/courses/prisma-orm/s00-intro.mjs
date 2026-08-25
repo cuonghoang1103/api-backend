@@ -813,7 +813,7 @@ prisma:query COMMIT
   fullName: 'Nguyen Van An',
   createdAt: 2026-08-23T04:51:02.774Z,
   posts: [
-    { id: 1, title: 'Bai dau tien', body: 'Xin chao', published: true, views: 120, createdAt: ..., authorId: 1 },
+    { id: 1, title: 'Bai dau money', body: 'Xin chao', published: true, views: 120, createdAt: ..., authorId: 1 },
     { id: 2, title: 'Bai nhap', body: null, published: false, views: 0, createdAt: ..., authorId: 1 }
   ]
 }</div>
@@ -1035,7 +1035,7 @@ prisma:query COMMIT
   fullName: 'Nguyen Van An',
   createdAt: 2026-08-23T04:51:02.774Z,
   posts: [
-    { id: 1, title: 'Bai dau tien', body: 'Xin chao', published: true, views: 120, createdAt: ..., authorId: 1 },
+    { id: 1, title: 'Bai dau money', body: 'Xin chao', published: true, views: 120, createdAt: ..., authorId: 1 },
     { id: 2, title: 'Bai nhap', body: null, published: false, views: 0, createdAt: ..., authorId: 1 }
   ]
 }</div>

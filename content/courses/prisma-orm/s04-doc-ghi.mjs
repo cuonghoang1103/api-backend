@@ -858,7 +858,7 @@ real    0m1.207s</div>
   }
   throw e;
 }</code></pre>
-<div class="out">Trung o cot: [ 'email' ]</div>
+<div class="out">Trung o column: [ 'email' ]</div>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>P2002</code> — unique violation</span><span class="v"><code>e.meta.target</code> names the columns, so you can point the user at the right form field instead of showing "something went wrong".</span></div>
   <div class="kv"><span class="k"><code>P2003</code> — foreign key violation</span><span class="v">You referenced a parent that does not exist. Usually a bug rather than user input, but worth catching to produce a 400 rather than a 500.</span></div>
@@ -1026,7 +1026,7 @@ real    0m1.207s</div>
   }
   throw e;
 }</code></pre>
-<div class="out">Trung o cot: [ 'email' ]</div>
+<div class="out">Trung o column: [ 'email' ]</div>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>P2002</code> — vi phạm unique</span><span class="v"><code>e.meta.target</code> nêu tên các cột, nên bạn chỉ đúng ô nhập cho người dùng thay vì hiện "có gì đó sai".</span></div>
   <div class="kv"><span class="k"><code>P2003</code> — vi phạm khoá ngoại</span><span class="v">Bạn tham chiếu tới một cha không tồn tại. Thường là một con bọ chứ không phải dữ liệu người dùng, nhưng vẫn đáng bắt để trả 400 thay vì 500.</span></div>
@@ -1155,8 +1155,8 @@ await Promise.all(Array.from({ length: 100 }, () =&gt;
   prisma.post.update({ where: { id: 1 }, data: { views: { increment: 1 } } }),
 ));
 console.log('nguyen from  :', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);</code></pre>
-<div class="out">doc-roi-ghi: 23
-nguyen tu  : 100</div>
+<div class="out">doc-roi-write: 23
+nguyen from  : 100</div>
 <p>Seventy-seven of a hundred writes silently lost. On a development machine with one user this code appears to work perfectly, which is exactly why the bug reaches production. Any field that is <em>derived from its own previous value</em> — a counter, a balance, a stock level, a retry count — must use an atomic operator or an explicit transaction. Chapter 7 covers the cases atomic operators cannot express.</p>
 
 <h3><code>upsert</code>, and the race it still has</h3>
@@ -1335,8 +1335,8 @@ await Promise.all(Array.from({ length: 100 }, () =&gt;
   prisma.post.update({ where: { id: 1 }, data: { views: { increment: 1 } } }),
 ));
 console.log('nguyen from  :', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);</code></pre>
-<div class="out">doc-roi-ghi: 23
-nguyen tu  : 100</div>
+<div class="out">doc-roi-write: 23
+nguyen from  : 100</div>
 <p>Bảy mươi bảy trên một trăm lần ghi mất trong im lặng. Trên máy phát triển với một người dùng thì đoạn mã ấy trông chạy hoàn hảo, và chính vì thế con bọ đi thẳng lên production. Bất kỳ trường nào <em>được suy ra từ chính giá trị trước đó của nó</em> — một bộ đếm, một số dư, một mức tồn kho, một số lần thử lại — đều phải dùng toán tử nguyên tử hoặc một giao dịch tường minh. Chương 7 nói về những trường hợp mà toán tử nguyên tử diễn đạt không nổi.</p>
 
 <h3><code>upsert</code>, và cuộc đua nó vẫn còn</h3>

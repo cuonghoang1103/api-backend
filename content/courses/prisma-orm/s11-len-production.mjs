@@ -31,7 +31,7 @@ ls -la node_modules/.prisma/client/</code></pre>
 <div class="out">index.js                                    1.2 MB   <span class="tok-comment">← the JS API</span>
 index.d.ts                                  3.8 MB   <span class="tok-comment">← the types from Chapter 8</span>
 schema.prisma                                 12 KB   <span class="tok-comment">← a copy, read at runtime</span>
-libquery_engine-debian-openssl-3.0.x.so.node  18 MB   <span class="tok-comment">← the Rust engine</span></div>
+libquery_engine-debian-openssl-3.0.x.count.node  18 MB   <span class="tok-comment">← the Rust engine</span></div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">The engine speaks the wire protocol</span><span class="lz-lnote">It builds the SQL, manages the connection pool from Lesson 9.4, and handles the PostgreSQL protocol. The JavaScript layer is an API over it, which is why <code>PrismaClient</code> works identically across databases.</span></div>
   <div class="lz-layer"><span class="lz-lname">One file per platform</span><span class="lz-lnote">The name encodes it: <code>debian-openssl-3.0.x</code> means glibc plus OpenSSL 3. Alpine's <code>linux-musl-openssl-3.0.x</code> is a different binary, and an ARM Mac's <code>darwin-arm64</code> is a third.</span></div>
@@ -43,8 +43,8 @@ libquery_engine-debian-openssl-3.0.x.so.node  18 MB   <span class="tok-comment">
 <pre><code><span class="tok-comment"># The image built on Debian, running on Alpine</span>
 docker logs cuonghoangdev_backend --tail 20</code></pre>
 <div class="out">PrismaClientInitializationError:
-Unable to require(&#96;/app/node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node&#96;)
-Error loading shared library ld-linux-x86-64.so.2: No such file or directory
+Unable to require(&#96;/app/node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.count.node&#96;)
+Error loading shared library ld-linux-x86-64.count.2: No such file or directory
 
     at new PrismaClient (/app/node_modules/@prisma/client/…)
     at Object.&lt;anonymous&gt; (/app/dist/lib/prisma.js:4:16)
@@ -115,7 +115,7 @@ esac
 <span class="tok-comment"># 4. The only proof that counts: actually construct a client.</span>
 docker run --rm --entrypoint node "\$ANH" \\
   -e "new (require('@prisma/client').PrismaClient)(); console.log('✅ engine nap duoc')"</code></pre>
-<div class="out">✅ musl ↔ libquery_engine-linux-musl-openssl-3.0.x.so.node
+<div class="out">✅ musl ↔ libquery_engine-linux-musl-openssl-3.0.x.count.node
 ✅ engine nap duoc</div>
 <div class="callout ok">
 <p><strong>Step 4 is the one that generalises.</strong> Constructing a <code>PrismaClient</code> inside the built image loads the engine, and it does so without a database — the connection is lazy. It catches the libc mismatch, a missing OpenSSL, a <code>node_modules</code> layer that did not copy, and an engine that was pruned by an over-eager cleanup step. One <code>docker run</code>, about 400 ms, and it turns a seven-minute outage into a failed deploy step.</p>
@@ -129,7 +129,7 @@ docker run --rm --entrypoint node "\$ANH" \\
 npx prisma generate --no-engine</code></pre>
 <div class="out">✔ Generated Prisma Client (v6.4.1, engine=none) in 178ms
 
-node_modules/.prisma/client/  →  4.1 MB   (khong co .so.node)</div>
+node_modules/.prisma/client/  →  4.1 MB   (khong co .count.node)</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">What it is for</span><span class="lz-lnote">Prisma Accelerate and Data Proxy: the client speaks HTTP to a hosted service that owns the engine and the pool. The platform question from Lesson 9.4 — two hundred lambdas, one hundred connections — is what it exists to answer.</span></div>
   <div class="lz-layer"><span class="lz-lname">What you give up</span><span class="lz-lnote">A network hop per query, a vendor in the data path, and <code>$queryRaw</code> restrictions. For a container on a VPS with a database in the same datacentre, it adds latency and solves a problem you do not have.</span></div>
@@ -157,7 +157,7 @@ ls -la node_modules/.prisma/client/</code></pre>
 <div class="out">index.js                                    1,2 MB   <span class="tok-comment">← API JavaScript</span>
 index.d.ts                                  3,8 MB   <span class="tok-comment">← bộ kiểu của Chương 8</span>
 schema.prisma                                 12 KB   <span class="tok-comment">← một bản sao, đọc lúc chạy</span>
-libquery_engine-debian-openssl-3.0.x.so.node  18 MB   <span class="tok-comment">← engine Rust</span></div>
+libquery_engine-debian-openssl-3.0.x.count.node  18 MB   <span class="tok-comment">← engine Rust</span></div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Engine nói giao thức đường dây</span><span class="lz-lnote">Nó dựng câu SQL, quản connection pool của Bài 9.4, và xử lý giao thức PostgreSQL. Tầng JavaScript chỉ là một API phủ lên trên nó — đó là lý do <code>PrismaClient</code> hoạt động y hệt nhau trên các cơ sở dữ liệu khác nhau.</span></div>
   <div class="lz-layer"><span class="lz-lname">MỖI nền một file</span><span class="lz-lnote">Cái tên nói hết: <code>debian-openssl-3.0.x</code> nghĩa là glibc cộng OpenSSL 3. Bản <code>linux-musl-openssl-3.0.x</code> của Alpine là một tệp nhị phân KHÁC, và <code>darwin-arm64</code> của Mac ARM là cái thứ ba.</span></div>
@@ -169,8 +169,8 @@ libquery_engine-debian-openssl-3.0.x.so.node  18 MB   <span class="tok-comment">
 <pre><code><span class="tok-comment"># Ảnh dựng trên Debian, chạy trên Alpine</span>
 docker logs cuonghoangdev_backend --tail 20</code></pre>
 <div class="out">PrismaClientInitializationError:
-Unable to require(&#96;/app/node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node&#96;)
-Error loading shared library ld-linux-x86-64.so.2: No such file or directory
+Unable to require(&#96;/app/node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.count.node&#96;)
+Error loading shared library ld-linux-x86-64.count.2: No such file or directory
 
     at new PrismaClient (/app/node_modules/@prisma/client/…)
     at Object.&lt;anonymous&gt; (/app/dist/lib/prisma.js:4:16)
@@ -241,7 +241,7 @@ esac
 <span class="tok-comment"># 4. Bằng chứng DUY NHẤT có giá trị: thật sự dựng một client.</span>
 docker run --rm --entrypoint node "\$ANH" \\
   -e "new (require('@prisma/client').PrismaClient)(); console.log('✅ engine nap duoc')"</code></pre>
-<div class="out">✅ musl ↔ libquery_engine-linux-musl-openssl-3.0.x.so.node
+<div class="out">✅ musl ↔ libquery_engine-linux-musl-openssl-3.0.x.count.node
 ✅ engine nap duoc</div>
 <div class="callout ok">
 <p><strong>Bước 4 mới là bước TỔNG QUÁT ĐƯỢC.</strong> Dựng một <code>PrismaClient</code> bên trong ảnh đã build sẽ nạp engine, và nạp mà KHÔNG cần cơ sở dữ liệu — kết nối là lười. Nó bắt được cú lệch libc, một OpenSSL thiếu, một tầng <code>node_modules</code> không copy sang, và một engine bị một bước dọn dẹp quá hăng xoá mất. Một lệnh <code>docker run</code>, chừng 400 ms, và nó biến bảy phút chết API thành một bước deploy thất bại.</p>
@@ -255,7 +255,7 @@ docker run --rm --entrypoint node "\$ANH" \\
 npx prisma generate --no-engine</code></pre>
 <div class="out">✔ Generated Prisma Client (v6.4.1, engine=none) in 178ms
 
-node_modules/.prisma/client/  →  4,1 MB   (khong co .so.node)</div>
+node_modules/.prisma/client/  →  4,1 MB   (khong co .count.node)</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Nó dùng để làm gì</span><span class="lz-lnote">Prisma Accelerate và Data Proxy: client nói HTTP tới một dịch vụ được lưu trữ sẵn, dịch vụ đó SỞ HỮU engine và cái pool. Bài toán nền tảng của Bài 9.4 — hai trăm lambda, một trăm kết nối — chính là thứ nó sinh ra để trả lời.</span></div>
   <div class="lz-layer"><span class="lz-lname">Cái bạn đánh đổi</span><span class="lz-lnote">Một bước nhảy mạng cho MỖI truy vấn, một nhà cung cấp nằm trên đường đi của dữ liệu, và những hạn chế với <code>$queryRaw</code>. Với một container trên VPS có cơ sở dữ liệu cùng trung tâm dữ liệu, nó thêm độ trễ để giải một bài toán bạn không có.</span></div>
@@ -319,7 +319,7 @@ RUN npm ci &amp;&amp; npx prisma generate      <span class="tok-comment"># debia
 
 FROM node:22-alpine
 COPY --from=build /app/node_modules ./node_modules   <span class="tok-comment"># musl runtime, debian engine</span></code></pre>
-<div class="out">Error loading shared library ld-linux-x86-64.so.2: No such file or directory</div>
+<div class="out">Error loading shared library ld-linux-x86-64.count.2: No such file or directory</div>
 <pre><code><span class="tok-comment"># ✅ Same base everywhere</span>
 FROM node:22-alpine AS deps
 FROM node:22-alpine AS build
@@ -462,7 +462,7 @@ RUN npm ci &amp;&amp; npx prisma generate      <span class="tok-comment"># engin
 
 FROM node:22-alpine
 COPY --from=build /app/node_modules ./node_modules   <span class="tok-comment"># runtime musl, engine debian</span></code></pre>
-<div class="out">Error loading shared library ld-linux-x86-64.so.2: No such file or directory</div>
+<div class="out">Error loading shared library ld-linux-x86-64.count.2: No such file or directory</div>
 <pre><code><span class="tok-comment"># ✅ Cùng một nền ở mọi tầng</span>
 FROM node:22-alpine AS deps
 FROM node:22-alpine AS build
@@ -626,10 +626,10 @@ model User {
 }</code></pre>
 <div class="out">-- Prisma sinh ra:
 ALTER TABLE "User" DROP COLUMN "fullName";
-ALTER TABLE "User" ADD COLUMN "hoTen" TEXT NOT NULL;
+ALTER TABLE "User" ADD COLUMN "fullName" TEXT NOT NULL;
 
 -- Ma CU van dang SELECT "fullName" → 42703 column does not exist
--- Va toan bo du lieu ho ten vua bi xoa.</div>
+-- Va toan bo du lieu ho name vua bi xoa.</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Deploy 1</span><span class="lz-t">Expand</span><span class="lz-d">Add <code>fullName String?</code> — nullable, no default needed. Migration adds the column; old code ignores it. New code <strong>writes both</strong> columns and <strong>reads <code>fullName</code></strong>. Safe in both directions.</span></div>
   <div class="lz-step"><span class="lz-k">Between</span><span class="lz-t">Backfill</span><span class="lz-d"><code>UPDATE "User" SET "fullName" = "fullName" WHERE "fullName" IS NULL</code> — in chunks, as Lesson 11.4 shows. Nothing depends on it finishing, so it can take an hour.</span></div>
@@ -655,14 +655,14 @@ SET statement_timeout = '30s';
 
 ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></pre>
 <div class="out">-- KHONG co lock_timeout:
---   ALTER TABLE cho lay ACCESS EXCLUSIVE
+--   ALTER TABLE waitMs lay ACCESS EXCLUSIVE
 --   → mot truy van dang chay giu lock 40 giay
 --   → ALTER xep hang, va MOI truy van moi xep hang SAU no
 --   → ca website dung, 40 giay, vi mot lenh "tuc thi"
 
 -- CO lock_timeout = '3s':
 ERROR: canceling statement due to lock timeout
--- Migration that bai. Website khong sao. Chay lai luc vang.</div>
+-- Migration that post. Website khong sao. Chay lai luc vang.</div>
 <div class="callout warn">
 <p><strong>A queued <code>ALTER TABLE</code> blocks everything behind it, including plain <code>SELECT</code>s.</strong> This is the detail that makes lock waits so much worse than they sound: the <code>ALTER</code> waits politely for the lock, but every query that arrives after it queues behind the <code>ALTER</code>, not behind the original holder. One slow report and one "instant" migration produce a full outage. <code>lock_timeout</code> turns that into a failed migration, which is a far better outcome — and it is two lines.</p>
 </div>
@@ -746,10 +746,10 @@ model User {
 }</code></pre>
 <div class="out">-- Prisma sinh ra:
 ALTER TABLE "User" DROP COLUMN "fullName";
-ALTER TABLE "User" ADD COLUMN "hoTen" TEXT NOT NULL;
+ALTER TABLE "User" ADD COLUMN "fullName" TEXT NOT NULL;
 
 -- Ma CU van dang SELECT "fullName" → 42703 column does not exist
--- Va toan bo du lieu ho ten vua bi xoa.</div>
+-- Va toan bo du lieu ho name vua bi xoa.</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Deploy 1</span><span class="lz-t">Mở rộng</span><span class="lz-d">Thêm <code>fullName String?</code> — cho phép null, không cần default. Migration thêm cột; mã cũ lờ nó đi. Mã mới <strong>GHI cả hai</strong> cột và <strong>ĐỌC <code>fullName</code></strong>. An toàn cả hai chiều.</span></div>
   <div class="lz-step"><span class="lz-k">Ở giữa</span><span class="lz-t">Nạp bù</span><span class="lz-d"><code>UPDATE "User" SET "fullName" = "fullName" WHERE "fullName" IS NULL</code> — chia lô, như Bài 11.4 chỉ. Không có gì phụ thuộc vào việc nó xong lúc nào, nên nó chạy cả tiếng cũng được.</span></div>
@@ -775,14 +775,14 @@ SET statement_timeout = '30s';
 
 ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></pre>
 <div class="out">-- KHONG co lock_timeout:
---   ALTER TABLE cho lay ACCESS EXCLUSIVE
+--   ALTER TABLE waitMs lay ACCESS EXCLUSIVE
 --   → mot truy van dang chay giu lock 40 giay
 --   → ALTER xep hang, va MOI truy van moi xep hang SAU no
 --   → ca website dung, 40 giay, vi mot lenh "tuc thi"
 
 -- CO lock_timeout = '3s':
 ERROR: canceling statement due to lock timeout
--- Migration that bai. Website khong sao. Chay lai luc vang.</div>
+-- Migration that post. Website khong sao. Chay lai luc vang.</div>
 <div class="callout warn">
 <p><strong>Một <code>ALTER TABLE</code> đang xếp hàng sẽ CHẶN mọi thứ đứng sau nó, kể cả những câu <code>SELECT</code> thường.</strong> Đây là chi tiết làm cho việc chờ khoá tệ hơn nhiều so với vẻ ngoài của nó: cái <code>ALTER</code> chờ khoá một cách lịch sự, nhưng MỌI truy vấn tới sau nó lại xếp hàng SAU cái <code>ALTER</code>, chứ không phải sau kẻ đang giữ khoá ban đầu. Một báo cáo chạy chậm cộng một migration "tức thì" là ra một cú chết toàn phần. <code>lock_timeout</code> biến chuyện đó thành một migration thất bại, kết cục tốt hơn hẳn — và nó chỉ là hai dòng.</p>
 </div>
@@ -950,11 +950,11 @@ for (;;) {
   if (!KHO) break;
   await new Promise((r) =&gt; setTimeout(r, 200));   <span class="tok-comment">// let the database breathe</span>
 }</code></pre>
-<div class="out">$ npx tsx scripts/nap-bu-ho-ten.ts
+<div class="out">$ npx tsx scripts/nap-bu-ho-name.ts
 [thu] se cap nhat 1000 hang, vi du: { id: 'clx7…', fullName: 'Nguyen Van An' }
 1000 hang · 2026-08-23T13:04:11.284Z
 
-$ npx tsx scripts/nap-bu-ho-ten.ts --that
+$ npx tsx scripts/nap-bu-ho-name.ts --that
 1000 hang · 2026-08-23T13:05:02.118Z
 2000 hang · 2026-08-23T13:05:03.402Z
 …
@@ -1106,11 +1106,11 @@ for (;;) {
   if (!KHO) break;
   await new Promise((r) =&gt; setTimeout(r, 200));   <span class="tok-comment">// để cơ sở dữ liệu thở</span>
 }</code></pre>
-<div class="out">$ npx tsx scripts/nap-bu-ho-ten.ts
+<div class="out">$ npx tsx scripts/nap-bu-ho-name.ts
 [thu] se cap nhat 1000 hang, vi du: { id: 'clx7…', fullName: 'Nguyen Van An' }
 1000 hang · 2026-08-23T13:04:11.284Z
 
-$ npx tsx scripts/nap-bu-ho-ten.ts --that
+$ npx tsx scripts/nap-bu-ho-name.ts --that
 1000 hang · 2026-08-23T13:05:02.118Z
 2000 hang · 2026-08-23T13:05:03.402Z
 …
@@ -1210,7 +1210,7 @@ process.on('SIGINT',  () =&gt; backoff('SIGINT'));
 <span class="tok-comment">// A hard deadline, in case a request never finishes</span>
 process.on('SIGTERM', () =&gt; setTimeout(() =&gt; process.exit(1), 9000).unref());</code></pre>
 <div class="out">[SIGTERM] bat dau tat dan
-[tat] http da dong          ← 1,8s (mot request dang cho database)
+[tat] http da dong          ← 1,8s (mot request dang waitMs database)
 [tat] prisma da ngat        ← 1,9s
 exit 0                       ← khong co request nao bi cat giua chung</div>
 <div class="pitfall">
@@ -1251,7 +1251,7 @@ new PrismaClient({ log: ['query'] });</code></pre>
 prisma:query params: ["an@vidu.com"]
 
 prisma:query INSERT INTO "Message" ("content","threadId") VALUES ($1,$2)
-prisma:query params: ["so tai khoan cua minh la 0123456789", "clx7…"]</div>
+prisma:query params: ["count tai khoan cua minh la 0123456789", "clx7…"]</div>
 <pre><code><span class="tok-comment">// Structured, sampled, and without the parameters</span>
 prisma.$on('query', (e) =&gt; {
   if (e.duration &lt; 100) return;                <span class="tok-comment">// only the slow ones</span>
@@ -1350,7 +1350,7 @@ process.on('SIGINT',  () =&gt; backoff('SIGINT'));
 <span class="tok-comment">// Một hạn chót cứng, phòng khi có request không bao giờ xong</span>
 process.on('SIGTERM', () =&gt; setTimeout(() =&gt; process.exit(1), 9000).unref());</code></pre>
 <div class="out">[SIGTERM] bat dau tat dan
-[tat] http da dong          ← 1,8s (mot request dang cho database)
+[tat] http da dong          ← 1,8s (mot request dang waitMs database)
 [tat] prisma da ngat        ← 1,9s
 exit 0                       ← khong co request nao bi cat giua chung</div>
 <div class="pitfall">
@@ -1391,7 +1391,7 @@ new PrismaClient({ log: ['query'] });</code></pre>
 prisma:query params: ["an@vidu.com"]
 
 prisma:query INSERT INTO "Message" ("content","threadId") VALUES ($1,$2)
-prisma:query params: ["so tai khoan cua minh la 0123456789", "clx7…"]</div>
+prisma:query params: ["count tai khoan cua minh la 0123456789", "clx7…"]</div>
 <pre><code><span class="tok-comment">// Có cấu trúc, lấy mẫu, và KHÔNG kèm tham số</span>
 prisma.$on('query', (e) =&gt; {
   if (e.duration &lt; 100) return;                <span class="tok-comment">// chỉ những câu chậm</span>

@@ -366,7 +366,7 @@ crypto.getRandomValues(b);</code></pre>
 
 $ node -e "console.log(require('crypto').randomUUID())"
 9f2c4e18-7b3a-4d61-9e0f-a52c8d17b4e6
-                   ^ phien ban 4   ^ variant</div>
+                   ^ session ban 4   ^ variant</div>
 
 <h3>Bao nhiêu bit — TÍNH ra, đừng đoán</h3>
 <pre><code><span class="tok-comment"># Câu hỏi duy nhất có ý nghĩa: đoán ra một cái mất bao lâu?</span>
@@ -746,7 +746,7 @@ const tag = createHmac('sha256', BIMAT).update(duLieu).digest('hex');
 ⇒ api-service co the DUC ra mot token noi "role: ADMIN".
 ⇒ worker-service co the duc token cho bat ky nguoi dung nao.
 ⇒ Mot lo hong o BAT KY dich vu nao trong bon = gia mao duoc token toan he thong.
-⇒ Nha thau ben ngoai lam billing gio co the tu cap quyen admin.</div>
+⇒ Nha thau ben ngoai lam billing gio co the tu cap permission admin.</div>
 <pre><code><span class="tok-comment">// The fix: asymmetric. Only the issuer holds the private key.</span>
 <span class="tok-comment">// auth-service   signs   with the ED25519 / RS256 PRIVATE key</span>
 <span class="tok-comment">// everyone else  verifies with the PUBLIC key, published at</span>
@@ -853,7 +853,7 @@ const tag = createHmac('sha256', BIMAT).update(duLieu).digest('hex');
 ⇒ api-service co the DUC ra mot token noi "role: ADMIN".
 ⇒ worker-service co the duc token cho bat ky nguoi dung nao.
 ⇒ Mot lo hong o BAT KY dich vu nao trong bon = gia mao duoc token toan he thong.
-⇒ Nha thau ben ngoai lam billing gio co the tu cap quyen admin.</div>
+⇒ Nha thau ben ngoai lam billing gio co the tu cap permission admin.</div>
 <pre><code><span class="tok-comment">// Cách vá: bất đối xứng. CHỈ bên phát hành nắm khoá riêng.</span>
 <span class="tok-comment">// auth-service  KÝ       bằng khoá RIÊNG ED25519 / RS256</span>
 <span class="tok-comment">// mọi bên khác  xác minh bằng khoá CÔNG, công bố tại</span>
@@ -936,11 +936,11 @@ logger.info({ req }, 'request');                   <span class="tok-comment">// 
 <div class="out">{"level":30,"msg":"request","req":{"headers":{
   "cookie":"backend_token=eyJhbGciOiJIUzI1NiIs…",
   "authorization":"Bearer eyJhbGciOiJIUzI1NiIs…"},
-  "body":{"email":"an@vidu.com","matKhau":"MatKhauThat@2026"}}}
+  "body":{"email":"an@vidu.com","password":"MatKhauThat@2026"}}}
 
 # Dong nay gio nam trong: file log tren dia, cong cu gom log,
 # he thong luu tru dai han, ban sao luu cua no, va man hinh
-# cua bat ky ai co quyen doc dashboard.</div>
+# cua bat ky ai co permission doc dashboard.</div>
 <pre><code><span class="tok-comment">// The fix: redact at the logger, not at each call site</span>
 import pino from 'pino';
 
@@ -959,7 +959,7 @@ export const logger = pino({
 });</code></pre>
 <div class="out">{"level":30,"msg":"request","req":{"headers":{
   "cookie":"[DA_CHE]","authorization":"[DA_CHE]"},
-  "body":{"email":"an@vidu.com","matKhau":"[DA_CHE]"}}}</div>
+  "body":{"email":"an@vidu.com","password":"[DA_CHE]"}}}</div>
 <div class="pitfall">
 <p><strong>Trap — a deny-list of field names will miss one, and you will not know which.</strong> <code>password</code> is redacted; <code>mat_khau</code>, <code>password</code>, <code>pwd</code> and <code>newPassword</code> are not. The robust version is the other direction: log an explicit allow-list of fields you have decided are safe, and never pass whole request, response or error objects to the logger. It is more typing and it fails closed instead of open.</p>
 </div>
@@ -1058,11 +1058,11 @@ logger.info({ req }, 'request');                   <span class="tok-comment">// 
 <div class="out">{"level":30,"msg":"request","req":{"headers":{
   "cookie":"backend_token=eyJhbGciOiJIUzI1NiIs…",
   "authorization":"Bearer eyJhbGciOiJIUzI1NiIs…"},
-  "body":{"email":"an@vidu.com","matKhau":"MatKhauThat@2026"}}}
+  "body":{"email":"an@vidu.com","password":"MatKhauThat@2026"}}}
 
 # Dong nay gio nam trong: file log tren dia, cong cu gom log,
 # he thong luu tru dai han, ban sao luu cua no, va man hinh
-# cua bat ky ai co quyen doc dashboard.</div>
+# cua bat ky ai co permission doc dashboard.</div>
 <pre><code><span class="tok-comment">// Cách vá: che ngay tại LOGGER, đừng che ở từng chỗ gọi</span>
 import pino from 'pino';
 
@@ -1081,7 +1081,7 @@ export const logger = pino({
 });</code></pre>
 <div class="out">{"level":30,"msg":"request","req":{"headers":{
   "cookie":"[DA_CHE]","authorization":"[DA_CHE]"},
-  "body":{"email":"an@vidu.com","matKhau":"[DA_CHE]"}}}</div>
+  "body":{"email":"an@vidu.com","password":"[DA_CHE]"}}}</div>
 <div class="pitfall">
 <p><strong>Bẫy — một danh sách CẤM theo tên trường sẽ sót một cái, và bạn sẽ không biết là cái nào.</strong> <code>password</code> thì bị che; <code>mat_khau</code>, <code>password</code>, <code>pwd</code> và <code>newPassword</code> thì không. Bản vững chắc đi theo chiều NGƯỢC LẠI: ghi ra một danh sách CHO PHÉP tường minh gồm những trường bạn đã QUYẾT ĐỊNH là an toàn, và đừng bao giờ ném cả đối tượng request, response hay error vào logger. Gõ nhiều hơn thật, nhưng nó hỏng theo hướng ĐÓNG chứ không phải hướng MỞ.</p>
 </div>

@@ -355,15 +355,15 @@ model Content {
 <pre><code>ls -la node_modules/.prisma/client/
 du -sh node_modules/.prisma/client/</code></pre>
 <div class="out">total 42184
--rw-r--r--  1 hocvien hocvien      384 Aug 23 04:49 default.d.ts
--rw-r--r--  1 hocvien hocvien      197 Aug 23 04:49 default.js
--rw-r--r--  1 hocvien hocvien   241893 Aug 23 04:49 index.d.ts
--rw-r--r--  1 hocvien hocvien    38471 Aug 23 04:49 index.js
--rw-r--r--  1 hocvien hocvien   239114 Aug 23 04:49 edge.d.ts
--rw-r--r--  1 hocvien hocvien    39902 Aug 23 04:49 edge.js
--rwxr-xr-x  1 hocvien hocvien 18874368 Aug 23 04:49 libquery_engine-debian-openssl-3.0.x.so.node
--rw-r--r--  1 hocvien hocvien      812 Aug 23 04:49 schema.prisma
--rw-r--r--  1 hocvien hocvien     1204 Aug 23 04:49 package.json
+-rw-r--r--  1 student student      384 Aug 23 04:49 default.d.ts
+-rw-r--r--  1 student student      197 Aug 23 04:49 default.js
+-rw-r--r--  1 student student   241893 Aug 23 04:49 index.d.ts
+-rw-r--r--  1 student student    38471 Aug 23 04:49 index.js
+-rw-r--r--  1 student student   239114 Aug 23 04:49 edge.d.ts
+-rw-r--r--  1 student student    39902 Aug 23 04:49 edge.js
+-rwxr-xr-x  1 student student 18874368 Aug 23 04:49 libquery_engine-debian-openssl-3.0.x.count.node
+-rw-r--r--  1 student student      812 Aug 23 04:49 schema.prisma
+-rw-r--r--  1 student student     1204 Aug 23 04:49 package.json
 
 41M	node_modules/.prisma/client/</div>
 <div class="kv-grid">
@@ -459,7 +459,7 @@ grep -c '^enum ' prisma/schema.prisma</code></pre>
 ls src/generated/prisma/</code></pre>
 <div class="out">✔ Generated Prisma Client (v6.7.0) to ./src/generated/prisma in 96ms
 
-index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.so.node  package.json  schema.prisma</div>
+index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.count.node  package.json  schema.prisma</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Import path changes</span><span class="v"><code>import { PrismaClient } from '../generated/prisma'</code> — a relative path now, not a package name. Every file that imports it must be updated.</span></div>
   <div class="kv"><span class="k">Add it to <code>.gitignore</code></span><span class="v">It is still generated output. Committing it means merge conflicts in a 250 KB machine-written file, and a stale client whenever someone forgets to regenerate.</span></div>
@@ -501,15 +501,15 @@ index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.so.node  package.json
 <pre><code>ls -la node_modules/.prisma/client/
 du -sh node_modules/.prisma/client/</code></pre>
 <div class="out">total 42184
--rw-r--r--  1 hocvien hocvien      384 Aug 23 04:49 default.d.ts
--rw-r--r--  1 hocvien hocvien      197 Aug 23 04:49 default.js
--rw-r--r--  1 hocvien hocvien   241893 Aug 23 04:49 index.d.ts
--rw-r--r--  1 hocvien hocvien    38471 Aug 23 04:49 index.js
--rw-r--r--  1 hocvien hocvien   239114 Aug 23 04:49 edge.d.ts
--rw-r--r--  1 hocvien hocvien    39902 Aug 23 04:49 edge.js
--rwxr-xr-x  1 hocvien hocvien 18874368 Aug 23 04:49 libquery_engine-debian-openssl-3.0.x.so.node
--rw-r--r--  1 hocvien hocvien      812 Aug 23 04:49 schema.prisma
--rw-r--r--  1 hocvien hocvien     1204 Aug 23 04:49 package.json
+-rw-r--r--  1 student student      384 Aug 23 04:49 default.d.ts
+-rw-r--r--  1 student student      197 Aug 23 04:49 default.js
+-rw-r--r--  1 student student   241893 Aug 23 04:49 index.d.ts
+-rw-r--r--  1 student student    38471 Aug 23 04:49 index.js
+-rw-r--r--  1 student student   239114 Aug 23 04:49 edge.d.ts
+-rw-r--r--  1 student student    39902 Aug 23 04:49 edge.js
+-rwxr-xr-x  1 student student 18874368 Aug 23 04:49 libquery_engine-debian-openssl-3.0.x.count.node
+-rw-r--r--  1 student student      812 Aug 23 04:49 schema.prisma
+-rw-r--r--  1 student student     1204 Aug 23 04:49 package.json
 
 41M	node_modules/.prisma/client/</div>
 <div class="kv-grid">
@@ -605,7 +605,7 @@ grep -c '^enum ' prisma/schema.prisma</code></pre>
 ls src/generated/prisma/</code></pre>
 <div class="out">✔ Generated Prisma Client (v6.7.0) to ./src/generated/prisma in 96ms
 
-index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.so.node  package.json  schema.prisma</div>
+index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.count.node  package.json  schema.prisma</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Đường import đổi</span><span class="v"><code>import { PrismaClient } from '../generated/prisma'</code> — giờ là đường tương đối, không phải tên gói. Mọi tệp import nó đều phải sửa.</span></div>
   <div class="kv"><span class="k">Nhớ thêm vào <code>.gitignore</code></span><span class="v">Nó vẫn là mã sinh ra. Commit nó nghĩa là xung đột merge trong một tệp 250 KB do máy viết, và một client cũ mèm mỗi khi ai đó quên sinh lại.</span></div>
@@ -939,8 +939,8 @@ generator erd {
 </div>
 <pre><code><span class="tok-comment"># Proof that binaryTargets does what it says</span>
 ls node_modules/.prisma/client/*.node</code></pre>
-<div class="out">node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node
-node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node</div>
+<div class="out">node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.count.node
+node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.count.node</div>
 <div class="pitfall">
 <p><strong>Trap — <code>"native"</code> alone in a multi-stage Dockerfile.</strong> You generate on a Debian builder, copy <code>node_modules</code> into an Alpine runtime, and the engine you shipped is glibc while the image is musl. The container starts, the first query throws <code>Unable to require(...libquery_engine-debian-openssl-3.0.x.count.node)</code>, and the process restarts forever. This is exactly the CuongThai 502 from Lesson 1.3. The fix is one line — list both targets — and Chapter 11 shows the pre-push check that makes forgetting it impossible.</p>
 </div>
@@ -1046,8 +1046,8 @@ generator erd {
 </div>
 <pre><code><span class="tok-comment"># Bằng chứng binaryTargets làm đúng thứ nó nói</span>
 ls node_modules/.prisma/client/*.node</code></pre>
-<div class="out">node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node
-node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node</div>
+<div class="out">node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.count.node
+node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.count.node</div>
 <div class="pitfall">
 <p><strong>Bẫy — chỉ để mỗi <code>"native"</code> trong một Dockerfile nhiều tầng.</strong> Bạn generate trên tầng builder Debian, chép <code>node_modules</code> sang runtime Alpine, và engine bạn vừa đóng gói là glibc trong khi ảnh là musl. Container khởi động, câu truy vấn đầu tiên ném <code>Unable to require(...libquery_engine-debian-openssl-3.0.x.count.node)</code>, và tiến trình restart mãi mãi. Đây đúng là cú 502 của CuongThai ở Bài 1.3. Cách vá là một dòng — liệt kê cả hai target — và Chương 11 chỉ chốt kiểm trước khi đẩy khiến việc quên nó thành bất khả.</p>
 </div>

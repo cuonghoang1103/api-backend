@@ -210,7 +210,7 @@ const totp = (khoa: Buffer, giay = Date.now() / 1000, buoc = 30) =&gt;
   T=20000000000  ->  65353130
 
 # Sau con so nay in NGUYEN VAN trong phu luc B cua RFC 6238, voi hat giong
-# "12345678901234567890". Ba muoi dong o tren khop ca sau. Do la toan bo
+# "12345678901234567890". Ba salt dong o tren khop ca sau. Do la toan bo
 # thuat toan — khong con phan nao khac.</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Step 1</span><span class="lz-t">The counter is the clock</span><span class="lz-d">Unix seconds divided by thirty, floored. Both sides compute it independently from their own clock — nothing is transmitted, and that is why the code works on a phone in aeroplane mode.</span></div>
@@ -316,7 +316,7 @@ const totp = (khoa: Buffer, giay = Date.now() / 1000, buoc = 30) =&gt;
   T=20000000000  ->  65353130
 
 # Sau con so nay in NGUYEN VAN trong phu luc B cua RFC 6238, voi hat giong
-# "12345678901234567890". Ba muoi dong o tren khop ca sau. Do la toan bo
+# "12345678901234567890". Ba salt dong o tren khop ca sau. Do la toan bo
 # thuat toan — khong con phan nao khac.</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Bước 1</span><span class="lz-t">Bộ đếm CHÍNH LÀ cái đồng hồ</span><span class="lz-d">Giây Unix chia cho ba mươi, lấy phần nguyên. Hai bên tự tính độc lập từ đồng hồ của riêng mình — chẳng có gì được truyền đi cả, và đó là lý do cái mã vẫn chạy trên một chiếc điện thoại đang ở chế độ máy bay.</span></div>

@@ -203,43 +203,43 @@ rebound with bind: Hello from NotesAPI</div>
 <p class="lead">Closure là một hàm nhớ được những biến quanh nó, kể cả khi đoạn code tạo ra chúng đã chạy xong từ lâu. Chỉ một câu đó thôi đã giải thích được connection pool, bộ giới hạn tần suất, cache và các nhà máy sinh middleware — tất cả đều là thứ bạn sẽ tự viết ở phần sau của khoá.</p>
 
 <h3>Closure: trạng thái riêng tư mà không cần class</h3>
-<pre><code><span class="tok-keyword">function</span> <span class="tok-function">taoBoDem</span>() {
-  <span class="tok-keyword">let</span> soLan = <span class="tok-number">0</span>;            <span class="tok-comment">// riêng tư — bên ngoài không chạm được</span>
-  <span class="tok-keyword">return</span> <span class="tok-keyword">function</span> () { soLan++; <span class="tok-keyword">return</span> soLan; };
+<pre><code><span class="tok-keyword">function</span> <span class="tok-function">createCounter</span>() {
+  <span class="tok-keyword">let</span> count = <span class="tok-number">0</span>;            <span class="tok-comment">// riêng tư — bên ngoài không chạm được</span>
+  <span class="tok-keyword">return</span> <span class="tok-keyword">function</span> () { count++; <span class="tok-keyword">return</span> count; };
 }
-<span class="tok-keyword">const</span> demA = <span class="tok-function">taoBoDem</span>();
-<span class="tok-keyword">const</span> demB = <span class="tok-function">taoBoDem</span>();
-<span class="tok-function">console.log</span>(<span class="tok-function">demA</span>(), <span class="tok-function">demA</span>(), <span class="tok-function">demA</span>());
-<span class="tok-function">console.log</span>(<span class="tok-function">demB</span>());
-<span class="tok-function">console.log</span>(<span class="tok-string">'soLan có lộ ra ngoài không?'</span>, <span class="tok-keyword">typeof</span> soLan);</code></pre>
+<span class="tok-keyword">const</span> a = <span class="tok-function">createCounter</span>();
+<span class="tok-keyword">const</span> b = <span class="tok-function">createCounter</span>();
+<span class="tok-function">console.log</span>(<span class="tok-function">a</span>(), <span class="tok-function">a</span>(), <span class="tok-function">a</span>());
+<span class="tok-function">console.log</span>(<span class="tok-function">b</span>());
+<span class="tok-function">console.log</span>(<span class="tok-string">'count có lộ ra ngoài không?'</span>, <span class="tok-keyword">typeof</span> count);</code></pre>
 <div class="out">1 2 3
 1
-soLan có lộ ra ngoài không? undefined</div>
-<p>Hai điều đáng chú ý. Thứ nhất, <code>demA</code> và <code>demB</code> có bộ đếm <strong>riêng biệt</strong> — mỗi lần gọi <code>taoBoDem</code> tạo ra một phạm vi mới toanh. Thứ hai, <code>soLan</code> thực sự không với tới được từ bên ngoài; đó là đóng gói thật sự, chẳng cần class nào cả.</p>
+count có lộ ra ngoài không? undefined</div>
+<p>Hai điều đáng chú ý. Thứ nhất, <code>a</code> và <code>b</code> có bộ đếm <strong>riêng biệt</strong> — mỗi lần gọi <code>createCounter</code> tạo ra một phạm vi mới toanh. Thứ hai, <code>count</code> thực sự không với tới được từ bên ngoài; đó là đóng gói thật sự, chẳng cần class nào cả.</p>
 <div class="callout ok">Hình dạng này — một hàm nhà máy trả về một hàm "ôm" lấy cấu hình — là mẫu phổ biến bậc nhất trong Express. Mọi middleware bạn viết rồi sẽ trông như <code>function requireRole(role) { return (req, res, next) =&gt; { … } }</code>. Cái arrow bên trong đang ôm lấy biến <code>role</code>.</div>
 
 <h3><code>this</code>: chỗ ai cũng hiểu sai</h3>
 <p>Trong hàm thường, <code>this</code> phụ thuộc vào <strong>cách hàm được gọi</strong>, không phải nơi hàm được viết. Trong arrow function, <code>this</code> được lấy từ phạm vi bao quanh ngay lúc định nghĩa và không bao giờ đổi được:</p>
-<pre><code><span class="tok-keyword">const</span> dichVu = {
-  ten: <span class="tok-string">'NotesAPI'</span>,
-  chaoThuong: <span class="tok-keyword">function</span> () { <span class="tok-keyword">return</span> <span class="tok-string">'Xin chào từ '</span> + <span class="tok-keyword">this</span>.ten; },
-  chaoArrow: () =&gt; <span class="tok-string">'Xin chào từ '</span> + <span class="tok-keyword">this</span>.ten,
+<pre><code><span class="tok-keyword">const</span> service = {
+  name: <span class="tok-string">'NotesAPI'</span>,
+  greetNormal: <span class="tok-keyword">function</span> () { <span class="tok-keyword">return</span> <span class="tok-string">'Xin chào từ '</span> + <span class="tok-keyword">this</span>.name; },
+  greetArrow: () =&gt; <span class="tok-string">'Xin chào từ '</span> + <span class="tok-keyword">this</span>.name,
 };
-<span class="tok-function">console.log</span>(dichVu.<span class="tok-function">chaoThuong</span>());
-<span class="tok-function">console.log</span>(dichVu.<span class="tok-function">chaoArrow</span>());
+<span class="tok-function">console.log</span>(service.<span class="tok-function">greetNormal</span>());
+<span class="tok-function">console.log</span>(service.<span class="tok-function">greetArrow</span>());
 
-<span class="tok-keyword">const</span> tachRa = dichVu.chaoThuong;   <span class="tok-comment">// tách hàm ra khỏi object</span>
-<span class="tok-function">console.log</span>(<span class="tok-function">tachRa</span>());
-<span class="tok-function">console.log</span>(<span class="tok-string">'buộc lại bằng bind:'</span>, tachRa.<span class="tok-function">bind</span>(dichVu)());</code></pre>
+<span class="tok-keyword">const</span> detached = service.greetNormal;   <span class="tok-comment">// tách hàm ra khỏi object</span>
+<span class="tok-function">console.log</span>(<span class="tok-function">detached</span>());
+<span class="tok-function">console.log</span>(<span class="tok-string">'buộc lại bằng bind:'</span>, detached.<span class="tok-function">bind</span>(service)());</code></pre>
 <div class="out">Xin chào từ NotesAPI
 Xin chào từ (undefined)
 Xin chào từ undefined
 buộc lại bằng bind: Xin chào từ NotesAPI</div>
 <p>Dòng thứ ba mới là dòng nguy hiểm: tách một method ra khỏi object sẽ <strong>âm thầm</strong> làm mất <code>this</code>. Trong file CommonJS (không strict), <code>this</code> rơi về đối tượng toàn cục nên bạn nhận <code>undefined</code> thay vì một tiếng nổ. Trong ES module — vốn luôn strict — cùng đoạn code đó ném lỗi:</p>
 <pre><code><span class="tok-comment">// vẫn code đó, nhưng đặt trong file .mjs (ES module = luôn strict)</span>
-<span class="tok-keyword">const</span> tachRa = dichVu.chao;
-<span class="tok-function">tachRa</span>();</code></pre>
-<div class="out">TypeError: Cannot read properties of undefined (reading 'ten')</div>
+<span class="tok-keyword">const</span> detached = service.chao;
+<span class="tok-function">detached</span>();</code></pre>
+<div class="out">TypeError: Cannot read properties of undefined (reading 'name')</div>
 <div class="pitfall">Lỗi này cắn bạn khi truyền một method làm callback: <code>app.get('/notes', controller.list)</code> sẽ làm mất <code>this</code> bên trong <code>list</code>. Cách sửa, xếp theo thứ tự nên dùng: (1) đừng dùng <code>this</code> — cứ export hàm thuần; (2) <code>controller.list.bind(controller)</code>; (3) bọc lại: <code>(req, res) =&gt; controller.list(req, res)</code>.</div>
 
 <h3>Khi nào dùng loại nào</h3>
@@ -312,21 +312,21 @@ the deep copy                      : {"name":"An","address":{"city":"Huế"},"ta
 <p class="lead">Kiểu nguyên thuỷ được sao chép theo giá trị. Object và mảng thì sao chép <strong>theo tham chiếu</strong> — biến giữ một địa chỉ, không giữ dữ liệu. Gần như mọi con bug "sao bản gốc lại đổi?" trong backend đều sinh ra từ đúng sự thật này.</p>
 
 <h3>Sao chép nông chỉ đi được một tầng</h3>
-<pre><code><span class="tok-keyword">const</span> goc = { ten: <span class="tok-string">'An'</span>, diaChi: { thanhPho: <span class="tok-string">'Hà Nội'</span> }, tags: [<span class="tok-string">'a'</span>] };
+<pre><code><span class="tok-keyword">const</span> original = { name: <span class="tok-string">'An'</span>, address: { city: <span class="tok-string">'Hà Nội'</span> }, tags: [<span class="tok-string">'a'</span>] };
 
-<span class="tok-keyword">const</span> copyNong = { ...goc };          <span class="tok-comment">// spread = chỉ chép MỘT tầng</span>
-copyNong.ten = <span class="tok-string">'Bình'</span>;               <span class="tok-comment">// tầng ngoài → bản gốc an toàn</span>
-copyNong.diaChi.thanhPho = <span class="tok-string">'Đà Nẵng'</span>;  <span class="tok-comment">// tầng trong → DÙNG CHUNG với bản gốc!</span>
-<span class="tok-function">console.log</span>(<span class="tok-string">'gốc sau khi sửa bản sao nông:'</span>, JSON.<span class="tok-function">stringify</span>(goc));
+<span class="tok-keyword">const</span> shallow = { ...original };          <span class="tok-comment">// spread = chỉ chép MỘT tầng</span>
+shallow.name = <span class="tok-string">'Bình'</span>;               <span class="tok-comment">// tầng ngoài → bản gốc an toàn</span>
+shallow.address.city = <span class="tok-string">'Đà Nẵng'</span>;  <span class="tok-comment">// tầng trong → DÙNG CHUNG với bản gốc!</span>
+<span class="tok-function">console.log</span>(<span class="tok-string">'gốc sau khi sửa bản sao nông:'</span>, JSON.<span class="tok-function">stringify</span>(original));
 
-<span class="tok-keyword">const</span> copySau = <span class="tok-function">structuredClone</span>(goc);  <span class="tok-comment">// có sẵn từ Node 17</span>
-copySau.diaChi.thanhPho = <span class="tok-string">'Huế'</span>;
-<span class="tok-function">console.log</span>(<span class="tok-string">'gốc sau khi sửa bản sao sâu :'</span>, JSON.<span class="tok-function">stringify</span>(goc));
-<span class="tok-function">console.log</span>(<span class="tok-string">'bản sao sâu                 :'</span>, JSON.<span class="tok-function">stringify</span>(copySau));</code></pre>
-<div class="out">gốc sau khi sửa bản sao nông: {"ten":"An","diaChi":{"thanhPho":"Đà Nẵng"},"tags":["a"]}
-gốc sau khi sửa bản sao sâu : {"ten":"An","diaChi":{"thanhPho":"Đà Nẵng"},"tags":["a"]}
-bản sao sâu                 : {"ten":"An","diaChi":{"thanhPho":"Huế"},"tags":["a"]}</div>
-<p>Hãy đọc kỹ dòng kết quả đầu tiên: <code>ten</code> vẫn là <code>'An'</code> (được bảo vệ), nhưng <code>thanhPho</code> đã thành <code>'Đà Nẵng'</code> — object lồng bên trong chưa từng được sao chép, cả hai biến cùng trỏ vào một chỗ.</p>
+<span class="tok-keyword">const</span> deep = <span class="tok-function">structuredClone</span>(original);  <span class="tok-comment">// có sẵn từ Node 17</span>
+deep.address.city = <span class="tok-string">'Huế'</span>;
+<span class="tok-function">console.log</span>(<span class="tok-string">'gốc sau khi sửa bản sao sâu :'</span>, JSON.<span class="tok-function">stringify</span>(original));
+<span class="tok-function">console.log</span>(<span class="tok-string">'bản sao sâu                 :'</span>, JSON.<span class="tok-function">stringify</span>(deep));</code></pre>
+<div class="out">gốc sau khi sửa bản sao nông: {"name":"An","address":{"city":"Đà Nẵng"},"tags":["a"]}
+gốc sau khi sửa bản sao sâu : {"name":"An","address":{"city":"Đà Nẵng"},"tags":["a"]}
+bản sao sâu                 : {"name":"An","address":{"city":"Huế"},"tags":["a"]}</div>
+<p>Hãy đọc kỹ dòng kết quả đầu tiên: <code>name</code> vẫn là <code>'An'</code> (được bảo vệ), nhưng <code>city</code> đã thành <code>'Đà Nẵng'</code> — object lồng bên trong chưa từng được sao chép, cả hai biến cùng trỏ vào một chỗ.</p>
 <div class="callout warn">Tutorial cũ hay bảo dùng <code>JSON.parse(JSON.stringify(obj))</code> để chép sâu. Nó chạy được với dữ liệu thuần, nhưng <strong>phá hỏng</strong> <code>Date</code> (biến thành chuỗi), <code>undefined</code>, <code>Map</code>, <code>Set</code>, <code>BigInt</code> (ném lỗi) và hàm. Hãy dùng <code>structuredClone</code> — nó xử lý đúng cả Date, Map và Set.</div>
 
 <h3>Destructuring — cách bạn đọc dữ liệu từ request</h3>
@@ -338,14 +338,14 @@ bản sao sâu                 : {"ten":"An","diaChi":{"thanhPho":"Huế"},"tags
 
 <h3>Spread: cập nhật mà không sửa bản gốc</h3>
 <pre><code><span class="tok-comment">// ghép bản cập nhật lên bản ghi cũ — bản gốc không bị đụng</span>
-<span class="tok-keyword">const</span> banMoi = { ...note, title: <span class="tok-string">'Tiêu đề mới'</span>, updatedAt: <span class="tok-keyword">new</span> <span class="tok-function">Date</span>() };
+<span class="tok-keyword">const</span> updated = { ...note, title: <span class="tok-string">'Tiêu đề mới'</span>, updatedAt: <span class="tok-keyword">new</span> <span class="tok-function">Date</span>() };
 
 <span class="tok-comment">// loại bỏ một trường an toàn (đừng bao giờ gửi passwordHash cho client)</span>
 <span class="tok-keyword">const</span> { passwordHash, ...userAnToan } = user;</code></pre>
 <div class="callout ok">Dòng thứ hai là một thói quen bảo mật nên xây ngay từ bây giờ: bóc bí mật ra bằng destructuring, thay vì tin vào trí nhớ của mình về việc "được phép trả những trường nào".</div>
 
 <h3>Optional chaining và toán tử nullish</h3>
-<pre><code><span class="tok-keyword">const</span> thanhPho = user?.diaChi?.thanhPho ?? <span class="tok-string">'không rõ'</span>;  <span class="tok-comment">// không nổ nếu thiếu diaChi</span>
+<pre><code><span class="tok-keyword">const</span> city = user?.address?.city ?? <span class="tok-string">'không rõ'</span>;  <span class="tok-comment">// không nổ nếu thiếu diaChi</span>
 <span class="tok-keyword">const</span> limit = req.query.limit ?? <span class="tok-number">20</span>;              <span class="tok-comment">// ?? chỉ thay khi null/undefined</span>
 <span class="tok-keyword">const</span> limitSai = req.query.limit || <span class="tok-number">20</span>;           <span class="tok-comment">// || thay cả 0 và '' — thường là bug</span></code></pre>
 <div class="pitfall">Hãy dùng <code>??</code> chứ đừng dùng <code>||</code> để đặt giá trị mặc định cho số. Với <code>||</code>, một giá trị hợp lệ như <code>limit=0</code> hay <code>page=0</code> sẽ âm thầm biến thành 20 — vì <code>0</code> bị coi là "giá trị giả". Đây là một con bug phân trang có thật và rất khó chịu.</div>
@@ -472,32 +472,32 @@ fs.<span class="tok-function">readFile</span>(<span class="tok-string">'note.txt
 <span class="tok-function">console.log</span>(data);</code></pre>
 
 <h3>Lỗi 1 — quên await</h3>
-<pre><code><span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">layTen</span>() { <span class="tok-keyword">await</span> <span class="tok-function">nghi</span>(<span class="tok-number">50</span>); <span class="tok-keyword">return</span> <span class="tok-string">'An'</span>; }
+<pre><code><span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-function">getName</span>() { <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">50</span>); <span class="tok-keyword">return</span> <span class="tok-string">'An'</span>; }
 
-<span class="tok-keyword">const</span> thieuAwait = <span class="tok-function">layTen</span>();        <span class="tok-comment">// không await</span>
-<span class="tok-function">console.log</span>(<span class="tok-string">'không await:'</span>, thieuAwait);
-<span class="tok-function">console.log</span>(<span class="tok-string">'có await   :'</span>, <span class="tok-keyword">await</span> <span class="tok-function">layTen</span>());</code></pre>
+<span class="tok-keyword">const</span> missing = <span class="tok-function">getName</span>();        <span class="tok-comment">// không await</span>
+<span class="tok-function">console.log</span>(<span class="tok-string">'không await:'</span>, missing);
+<span class="tok-function">console.log</span>(<span class="tok-string">'có await   :'</span>, <span class="tok-keyword">await</span> <span class="tok-function">getName</span>());</code></pre>
 <div class="out">không await: Promise { &lt;pending&gt; }
 có await   : An</div>
 <p>Hàm <code>async</code> <strong>luôn luôn</strong> trả về một Promise. Quên <code>await</code> là bạn gửi cho client một object Promise, và nó được chuyển thành <code>{}</code> — đúng con bug kinh điển "API của tôi trả về object rỗng".</p>
 
 <h3>Lỗi 2 — chờ tuần tự những việc chạy song song được</h3>
 <pre><code><span class="tok-comment">// tuần tự: mỗi await chặn cái kế tiếp</span>
-<span class="tok-keyword">await</span> <span class="tok-function">nghi</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">nghi</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">nghi</span>(<span class="tok-number">300</span>);
+<span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>); <span class="tok-keyword">await</span> <span class="tok-function">sleep</span>(<span class="tok-number">300</span>);
 
 <span class="tok-comment">// song song: khởi động cả ba, rồi chờ cái chậm nhất</span>
-<span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">nghi</span>(<span class="tok-number">300</span>), <span class="tok-function">nghi</span>(<span class="tok-number">300</span>), <span class="tok-function">nghi</span>(<span class="tok-number">300</span>)]);</code></pre>
+<span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">sleep</span>(<span class="tok-number">300</span>), <span class="tok-function">sleep</span>(<span class="tok-number">300</span>), <span class="tok-function">sleep</span>(<span class="tok-number">300</span>)]);</code></pre>
 <div class="out">tuần tự  : 903 ms
 song song: 302 ms</div>
 <p>Nhanh gấp ba, cùng khối lượng công việc. Nguyên tắc: <strong>nếu B không cần kết quả của A thì đừng await A trước khi khởi động B.</strong> Một endpoint dashboard nạp user + ghi chú + thẻ theo kiểu tuần tự là đi ba vòng mạng chồng nhau một cách vô cớ.</p>
 <div class="callout warn">Có cả lỗi ngược lại: bắn 5.000 truy vấn trong một <code>Promise.all</code> sẽ vắt kiệt connection pool và làm sập cơ sở dữ liệu. Song song nghĩa là "vài cái một lúc", không phải "tất cả cùng lúc". Chương 16 sẽ nói về chia lô.</div>
 
 <h3>Lỗi 3 — tưởng cứ được ăn cả ngã về không</h3>
-<pre><code><span class="tok-keyword">try</span> { <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">nghi</span>(<span class="tok-number">10</span>), <span class="tok-function">hong</span>()]); }
+<pre><code><span class="tok-keyword">try</span> { <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>([<span class="tok-function">sleep</span>(<span class="tok-number">10</span>), <span class="tok-function">failing</span>()]); }
 <span class="tok-keyword">catch</span> (e) { <span class="tok-function">console.log</span>(<span class="tok-string">'Promise.all   → ném ngay:'</span>, e.message); }
 
-<span class="tok-keyword">const</span> ketQua = <span class="tok-keyword">await</span> Promise.<span class="tok-function">allSettled</span>([<span class="tok-function">nghi</span>(<span class="tok-number">10</span>), <span class="tok-function">hong</span>()]);
-<span class="tok-function">console.log</span>(<span class="tok-string">'allSettled    →'</span>, ketQua.<span class="tok-function">map</span>(r =&gt; r.status));</code></pre>
+<span class="tok-keyword">const</span> result = <span class="tok-keyword">await</span> Promise.<span class="tok-function">allSettled</span>([<span class="tok-function">sleep</span>(<span class="tok-number">10</span>), <span class="tok-function">failing</span>()]);
+<span class="tok-function">console.log</span>(<span class="tok-string">'allSettled    →'</span>, result.<span class="tok-function">map</span>(r =&gt; r.status));</code></pre>
 <div class="out">Promise.all   → ném ngay: DB mất kết nối
 allSettled    → [ 'fulfilled', 'rejected' ]</div>
 <div class="kv-grid">
@@ -608,19 +608,19 @@ ESM  : top-level await works</div>
 
 <h3>Đặt cạnh nhau</h3>
 <pre><code><span class="tok-comment">// ─── CommonJS ─── math.cjs</span>
-<span class="tok-keyword">function</span> <span class="tok-function">cong</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
-module.exports = { cong };
+<span class="tok-keyword">function</span> <span class="tok-function">add</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
+module.exports = { add };
 
 <span class="tok-comment">// dung.cjs</span>
-<span class="tok-keyword">const</span> { cong } = <span class="tok-function">require</span>(<span class="tok-string">'./math.cjs'</span>);
-<span class="tok-function">console.log</span>(<span class="tok-string">'CJS  :'</span>, <span class="tok-function">cong</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>), <span class="tok-string">'| __dirname có sẵn:'</span>, <span class="tok-keyword">typeof</span> __dirname);</code></pre>
+<span class="tok-keyword">const</span> { add } = <span class="tok-function">require</span>(<span class="tok-string">'./math.cjs'</span>);
+<span class="tok-function">console.log</span>(<span class="tok-string">'CJS  :'</span>, <span class="tok-function">add</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>), <span class="tok-string">'| __dirname có sẵn:'</span>, <span class="tok-keyword">typeof</span> __dirname);</code></pre>
 <div class="out">CJS  : 5 | __dirname có sẵn: string</div>
 <pre><code><span class="tok-comment">// ─── ES Modules ─── math.mjs</span>
-<span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">cong</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
+<span class="tok-keyword">export</span> <span class="tok-keyword">function</span> <span class="tok-function">add</span>(a, b) { <span class="tok-keyword">return</span> a + b; }
 
 <span class="tok-comment">// dung.mjs</span>
-<span class="tok-keyword">import</span> { cong } <span class="tok-keyword">from</span> <span class="tok-string">'./math.mjs'</span>;
-<span class="tok-function">console.log</span>(<span class="tok-string">'ESM  :'</span>, <span class="tok-function">cong</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>), <span class="tok-string">'| __dirname:'</span>, <span class="tok-keyword">typeof</span> __dirname);
+<span class="tok-keyword">import</span> { add } <span class="tok-keyword">from</span> <span class="tok-string">'./math.mjs'</span>;
+<span class="tok-function">console.log</span>(<span class="tok-string">'ESM  :'</span>, <span class="tok-function">add</span>(<span class="tok-number">2</span>, <span class="tok-number">3</span>), <span class="tok-string">'| __dirname:'</span>, <span class="tok-keyword">typeof</span> __dirname);
 <span class="tok-keyword">const</span> x = <span class="tok-keyword">await</span> Promise.<span class="tok-function">resolve</span>(<span class="tok-string">'top-level await chạy được'</span>);
 <span class="tok-function">console.log</span>(<span class="tok-string">'ESM  :'</span>, x);</code></pre>
 <div class="out">ESM  : 5 | __dirname: undefined

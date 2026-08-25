@@ -242,7 +242,7 @@ describe('slugify', () =&gt; {
 
 <h3>Why the service could not be tested — and what changed</h3>
 <p>The original Notes service imported its database module directly:</p>
-<pre><code>import { db } from './db.mjs';                 // ← khoá chặt vào PostgreSQL
+<pre><code>import { db } from './db.mjs';                 // ← storeá chặt vào PostgreSQL
 export async function create(actor, input) {
   const existing = await db.query('SELECT …');
   …
@@ -328,20 +328,20 @@ $ npx vitest run tests/time-real.test.mjs   (1 test, chờ THẬT 1,5 giây)
 
 <h3>Four tests that pass while checking nothing</h3>
 <p>This is the failure mode nobody warns you about. Every one of these looks like a test, is counted as a test, turns the suite green, and verifies precisely nothing:</p>
-<pre><code>async function chuyenTien() { throw new Error('SO_DU_KHONG_DU'); }
-async function tinhTong() { return 5; }
+<pre><code>async function chuyenTien() { throw new Error('INSUFFICIENT_FUNDS'); }
+async function computeTotal() { return 5; }
 
 it('1. quên await ở rejects', () =&gt; {
   expect(chuyenTien()).rejects.toThrow('THÔNG_ĐIỆP_HOÀN_TOÀN_SAI');   // thiếu await
 });
 it('2. quên await ở lời gọi async', () =&gt; {
-  expect(tinhTong()).toBe(999);                                        // so Promise với số
+  expect(computeTotal()).toBe(999);                                        // so Promise với số
 });
 it('3. assertion nằm trong callback không bao giờ chạy', () =&gt; {
   [].forEach(() =&gt; { expect(1).toBe(2); });
 });
 it('4. try/catch nuốt lỗi', async () =&gt; {
-  try { expect(await tinhTong()).toBe(999); } catch { /* nuốt */ }
+  try { expect(await computeTotal()).toBe(999); } catch { /* nuốt */ }
 });</code></pre>
 <p>Run under vitest 4.1.10:</p>
 <div class="out">× 1. quên await ở rejects                              7ms
@@ -406,7 +406,7 @@ describe('slugify', () =&gt; {
 
 <h3>Vì sao service không test được — và đã sửa gì</h3>
 <p>Bản Notes service ban đầu import thẳng module cơ sở dữ liệu:</p>
-<pre><code>import { db } from './db.mjs';                 // ← khoá chặt vào PostgreSQL
+<pre><code>import { db } from './db.mjs';                 // ← storeá chặt vào PostgreSQL
 export async function create(actor, input) {
   const existing = await db.query('SELECT …');
   …
@@ -492,20 +492,20 @@ $ npx vitest run tests/time-real.test.mjs   (1 test, chờ THẬT 1,5 giây)
 
 <h3>Bốn bài test màu xanh mà chẳng kiểm gì</h3>
 <p>Đây là kiểu hỏng mà không ai cảnh báo bạn. Từng cái một trong số này đều trông như một bài test, đều được đếm là một bài test, đều làm bộ test xanh lè, và đều xác minh đúng bằng không:</p>
-<pre><code>async function chuyenTien() { throw new Error('SO_DU_KHONG_DU'); }
-async function tinhTong() { return 5; }
+<pre><code>async function chuyenTien() { throw new Error('INSUFFICIENT_FUNDS'); }
+async function computeTotal() { return 5; }
 
 it('1. quên await ở rejects', () =&gt; {
   expect(chuyenTien()).rejects.toThrow('THÔNG_ĐIỆP_HOÀN_TOÀN_SAI');   // thiếu await
 });
 it('2. quên await ở lời gọi async', () =&gt; {
-  expect(tinhTong()).toBe(999);                                        // so Promise với số
+  expect(computeTotal()).toBe(999);                                        // so Promise với số
 });
 it('3. assertion nằm trong callback không bao giờ chạy', () =&gt; {
   [].forEach(() =&gt; { expect(1).toBe(2); });
 });
 it('4. try/catch nuốt lỗi', async () =&gt; {
-  try { expect(await tinhTong()).toBe(999); } catch { /* nuốt */ }
+  try { expect(await computeTotal()).toBe(999); } catch { /* nuốt */ }
 });</code></pre>
 <p>Chạy dưới vitest 4.1.10:</p>
 <div class="out">× 1. quên await ở rejects                              7ms
@@ -847,7 +847,7 @@ song song, mỗi file một schema     10/10       0,89s            258ms</div>
 <div class="out">docker run trả về sau        202 ms
 pg_isready báo OK lần đầu    954 ms
 psql kết nối THẬT được      1149 ms
-lỗi trong khoảng giữa: psql: error: connection to server on socket
+lỗi trong storeảng giữa: psql: error: connection to server on socket
   "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory</div>
 <p><strong>1149ms</strong> is the honest price of a guaranteed-clean database per run — cheap against a five-minute CI job, expensive against the 0,10s inner loop you run while typing.</p>
 <div class="pitfall">
@@ -959,7 +959,7 @@ song song, mỗi file một schema     10/10       0,89s            258ms</div>
 <div class="out">docker run trả về sau        202 ms
 pg_isready báo OK lần đầu    954 ms
 psql kết nối THẬT được      1149 ms
-lỗi trong khoảng giữa: psql: error: connection to server on socket
+lỗi trong storeảng giữa: psql: error: connection to server on socket
   "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory</div>
 <p><strong>1149ms</strong> là cái giá trung thực cho một cơ sở dữ liệu bảo đảm sạch ở mỗi lượt chạy — rẻ khi so với một job CI năm phút, đắt khi so với vòng lặp 0,10s bạn chạy trong lúc đang gõ code.</p>
 <div class="pitfall">
@@ -1086,9 +1086,9 @@ jobs:
         with: { node-version: '22', cache: 'npm' }   # 22 khớp runtime production (node:22-alpine)
       - run: npm ci --no-audit --no-fund       # ci, KHÔNG install: dựng lại đúng lockfile
       - run: npx tsc --noEmit                  # bắt buộc
-      - run: npm run eval:grader               # bắt buộc — bộ vàng, không DB, không khoá LLM
+      - run: npm run eval:grader               # bắt buộc — bộ vàng, không DB, không storeá LLM
       - run: npm run eval:cv-linter            # bắt buộc
-      - run: npm run eval:cv-fabrication       # tự BỎ QUA nếu thiếu khoá AI
+      - run: npm run eval:cv-fabrication       # tự BỎ QUA nếu thiếu storeá AI
       - run: npm test                          # bắt buộc — 20 test, 1297ms
       - run: npm run lint
         continue-on-error: true                # ← chỉ để tham khảo, không chặn merge</code></pre>
@@ -1214,9 +1214,9 @@ jobs:
         with: { node-version: '22', cache: 'npm' }   # 22 khớp runtime production (node:22-alpine)
       - run: npm ci --no-audit --no-fund       # ci, KHÔNG phải install: dựng lại đúng theo lockfile
       - run: npx tsc --noEmit                  # bắt buộc
-      - run: npm run eval:grader               # bắt buộc — bộ vàng, không DB, không khoá LLM
+      - run: npm run eval:grader               # bắt buộc — bộ vàng, không DB, không storeá LLM
       - run: npm run eval:cv-linter            # bắt buộc
-      - run: npm run eval:cv-fabrication       # tự BỎ QUA nếu thiếu khoá AI
+      - run: npm run eval:cv-fabrication       # tự BỎ QUA nếu thiếu storeá AI
       - run: npm test                          # bắt buộc — 20 test, 1297ms
       - run: npm run lint
         continue-on-error: true                # ← chỉ để tham khảo, không chặn merge</code></pre>

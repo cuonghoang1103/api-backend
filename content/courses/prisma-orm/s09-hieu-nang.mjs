@@ -48,9 +48,9 @@ export function start() {
 await getHomePage(userId);
 console.log(done());</code></pre>
 <div class="out">{
-  so: 47,
-  tongMs: 812,
-  cauTruyVan: [ … ]
+  count: 47,
+  totalMs: 812,
+  queryText: [ … ]
 }</div>
 <div class="callout warn">
 <p><strong>Forty-seven queries for one page.</strong> That number, not the 812 ms, is the finding. A page needing forty-seven round trips is an N+1 somewhere — and no index will fix it, because each individual query is probably fast. Count first, then look at durations. The two numbers point at completely different problems.</p>
@@ -75,7 +75,7 @@ console.log(done());</code></pre>
 
 console.table(rank(done().queryText));</code></pre>
 <div class="out">┌─────────┬────────────────────────────────────────────────────┬─────┬───────┬──────┐
-│ (index) │ sql                                                │ so  │ tong  │ max  │
+│ (index) │ sql                                                │ count  │ total  │ max  │
 ├─────────┼────────────────────────────────────────────────────┼─────┼───────┼──────┤
 │ 0       │ 'SELECT ... FROM "users" WHERE "users"."id" = ? …' │ 41  │ 402   │ 14   │
 │ 1       │ 'SELECT ... FROM "posts" WHERE "published" = ? O…' │ 1   │ 311   │ 311  │
@@ -145,7 +145,7 @@ Limit  (actual time=4.1..4.2 rows=20 loops=1)
 Execution Time: 4.281 ms
 
 -- and the request as a whole
-{ so: 47, tongMs: 505 }        ← was 812
+{ count: 47, totalMs: 505 }        ← was 812
 </div>
 <div class="pitfall">
 <p><strong>Trap — the page is still slow, and the temptation is to keep indexing.</strong> The slowest query went from 311 ms to 4 ms and the page went from 812 ms to 505 ms — the remaining 402 ms is the forty-one-call N+1 in row 0, which no index touches. This is why the ranking table comes before the plan: it tells you <em>which kind</em> of problem you have. Fixing the visible slow query first is the right order only when it is also the expensive one.</p>
@@ -222,9 +222,9 @@ export function start() {
 await getHomePage(userId);
 console.log(done());</code></pre>
 <div class="out">{
-  so: 47,
-  tongMs: 812,
-  cauTruyVan: [ … ]
+  count: 47,
+  totalMs: 812,
+  queryText: [ … ]
 }</div>
 <div class="callout warn">
 <p><strong>Bốn mươi bảy câu truy vấn cho một trang.</strong> Chính con số đó, không phải 812 mili giây, mới là phát hiện. Một trang cần bốn mươi bảy lượt đi về là một N+1 ở đâu đó — và không chỉ mục nào vá được, vì từng câu truy vấn riêng lẻ có lẽ đều nhanh. Hãy đếm trước, rồi mới nhìn thời lượng. Hai con số ấy chỉ vào hai bài toán hoàn toàn khác nhau.</p>
@@ -249,7 +249,7 @@ console.log(done());</code></pre>
 
 console.table(rank(done().queryText));</code></pre>
 <div class="out">┌─────────┬────────────────────────────────────────────────────┬─────┬───────┬──────┐
-│ (index) │ sql                                                │ so  │ tong  │ max  │
+│ (index) │ sql                                                │ count  │ total  │ max  │
 ├─────────┼────────────────────────────────────────────────────┼─────┼───────┼──────┤
 │ 0       │ 'SELECT ... FROM "users" WHERE "users"."id" = ? …' │ 41  │ 402   │ 14   │
 │ 1       │ 'SELECT ... FROM "posts" WHERE "published" = ? O…' │ 1   │ 311   │ 311  │
@@ -319,7 +319,7 @@ Limit  (actual time=4.1..4.2 rows=20 loops=1)
 Execution Time: 4.281 ms
 
 -- và cả yêu cầu nói chung
-{ so: 47, tongMs: 505 }        ← trước là 812
+{ count: 47, totalMs: 505 }        ← trước là 812
 </div>
 <div class="pitfall">
 <p><strong>Bẫy — trang vẫn chậm, và cám dỗ là đi thêm chỉ mục nữa.</strong> Câu truy vấn chậm nhất đi từ 311 ms xuống 4 ms còn trang đi từ 812 ms xuống 505 ms — 402 ms còn lại là cái N+1 bốn mươi mốt lời gọi ở dòng 0, thứ mà không chỉ mục nào đụng tới. Vì thế bảng xếp hạng phải đứng trước cái kế hoạch: nó nói cho bạn biết bạn đang có <em>loại</em> bài toán nào. Vá câu truy vấn chậm nhìn thấy được trước chỉ là thứ tự đúng khi nó cũng là câu tốn kém nhất.</p>
@@ -627,7 +627,7 @@ prisma:query SELECT ... FROM "posts" WHERE "author_id" IN ($1…$20)            
 prisma:query SELECT ... FROM "comments" WHERE "post_id" IN ($1…$200)             -- 4.182 bình luận
 prisma:query SELECT ... FROM "users" WHERE "id" IN ($1…$1204)                    -- 1.204 tác giả
 
-4 truy vấn · 1.284 ms · 5.606 hàng truyền đi cho một trang vẽ 20 cái thẻ</div>
+4 truy vấn · 1.284 ms · 5.606 hàng truyền đi waitMs một page vẽ 20 cái thẻ</div>
 <div class="callout warn">
 <p><strong>Đây không phải N+1 — nó là bốn câu truy vấn — và nó vẫn là vấn đề.</strong> Prisma đã gom lô hoàn hảo; cái giá là mỗi tầng nhân số hàng lên, và riêng câu thứ tư trả về 1.204 hàng người dùng đầy đủ. Bảng xếp hạng ở Bài 9.1 hiện chuyện này thành một câu truy vấn chậm chứ không phải nhiều câu nhanh, và vì thế <em>số hàng truyền đi</em> mới là con số thứ ba cần canh. Cách vá không phải gom lô; mà là xin ít lại.</p>
 </div>
@@ -828,7 +828,7 @@ WHERE c.contype = 'f'
     WHERE i.indrelid = c.conrelid AND a.attnum = i.indkey[0]
   )
 ORDER BY 1, 2;</code></pre>
-<div class="out">      bang       |       cot        |          rang_buoc
+<div class="out">      bang       |       column        |          rang_buoc
 -----------------+------------------+------------------------------
  comments        | author_id        | comments_author_id_fkey
  order_items     | product_id       | order_items_product_id_fkey
@@ -999,7 +999,7 @@ WHERE c.contype = 'f'
     WHERE i.indrelid = c.conrelid AND a.attnum = i.indkey[0]
   )
 ORDER BY 1, 2;</code></pre>
-<div class="out">      bang       |       cot        |          rang_buoc
+<div class="out">      bang       |       column        |          rang_buoc
 -----------------+------------------+------------------------------
  comments        | author_id        | comments_author_id_fkey
  order_items     | product_id       | order_items_product_id_fkey
@@ -1013,7 +1013,7 @@ ORDER BY 1, 2;</code></pre>
 CREATE INDEX "idx_ab" ON "posts" ("author_id", "published_at");
 CREATE INDEX "idx_ba" ON "posts" ("published_at", "author_id");</code></pre>
 <div class="out">-- Truy vấn A: WHERE author_id = 42 ORDER BY published_at DESC
-idx_ab → Index Scan, 0,09 ms          ← so bằng trước rồi tới sắp xếp: hoàn hảo
+idx_ab → Index Scan, 0,09 ms          ← count bằng trước rồi tới sắp xếp: hoàn hảo
 idx_ba → Seq Scan,  184 ms            ← không nhảy được: author_id không phải cột dẫn đầu
 
 -- Truy vấn B: WHERE published_at > '2026-08-01'
@@ -1185,7 +1185,7 @@ FROM pg_stat_activity
 WHERE datname = current_database()
 GROUP BY state
 ORDER BY count DESC;</code></pre>
-<div class="out">        state        | so |  lau_nhat
+<div class="out">        state        | count |  lau_nhat
 ---------------------+----+-----------
  idle                | 61 | 00:14:22
  active              |  8 | 00:00:00
@@ -1313,7 +1313,7 @@ FROM pg_stat_activity
 WHERE datname = current_database()
 GROUP BY state
 ORDER BY count DESC;</code></pre>
-<div class="out">        state        | so |  lau_nhat
+<div class="out">        state        | count |  lau_nhat
 ---------------------+----+-----------
  idle                | 61 | 00:14:22
  active              |  8 | 00:00:00
@@ -1625,8 +1625,8 @@ const posts = await prisma.socialPost.findMany({
 <div class="out">include: true   → 20 hang,  412 KB truyen,  31.4 ms
 select: {...}   → 20 hang,   47 KB truyen,   6.9 ms
 
-(365 KB chenh lech chu yeu la JSON "metadata" va nhung cot khong dung
- cua tac gia — it hon 8,8 lan du lieu, nhanh hon 4,5 lan)</div>
+(365 KB chenh lech chu yeu la JSON "metadata" va nhung column khong dung
+ cua tac price — it hon 8,8 attempt du lieu, nhanh hon 4,5 attempt)</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Byte</span><span class="lz-t">Tuần tự hoá hai lượt</span><span class="lz-d">PostgreSQL dựng hàng, giao thức đường dây mã hoá nó, engine giải mã, rồi client biến nó thành object JavaScript. Một cột bạn không dùng phải trả cái giá đó BỐN lần.</span></div>
   <div class="lz-step"><span class="lz-k">TOAST</span><span class="lz-t">Cú đọc ẩn</span><span class="lz-d">Một giá trị <code>text</code> hay <code>jsonb</code> lớn nằm ngoài dòng, trong bảng TOAST. Chọn nó là thêm một lần đọc cho mỗi hàng mà chỉ mục không cứu được. Không chọn nó là bỏ hẳn lần đọc đó.</span></div>
@@ -1665,7 +1665,7 @@ const tiepTheo = page.length === 20 ? page[19].id : null;</code></pre>
 con tro o hang  10000  →  0.6 ms
 con tro o hang 200000  →  0.5 ms
 
-(chi muc nhay THANG toi con tro; so trang khong lien quan)</div>
+(chi muc nhay THANG toi con tro; count page khong lien quan)</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">LUÔN phá hoà bằng một cột duy nhất</span><span class="v">Riêng <code>orderBy: { createdAt: 'desc' }</code> là nhập nhằng khi hai bài trùng dấu thời gian — cơ sở dữ liệu có thể xếp chúng khác nhau giữa hai lời gọi, và một con trỏ đi vào thứ tự nhập nhằng thì bỏ sót hoặc lặp hàng. Thêm <code>{ id: 'desc' }</code>.</span></div>
   <div class="kv"><span class="k">Đánh chỉ mục theo đúng thứ tự sắp xếp</span><span class="v">Con trỏ chỉ nhanh nếu <code>@@index([createdAt(sort: Desc), id(sort: Desc)])</code> tồn tại. Không có nó thì kế hoạch là sắp xếp cả bảng, và con trỏ chẳng mua được gì.</span></div>
@@ -1691,7 +1691,7 @@ WHERE oid = '"SocialPost"'::regclass;</code></pre>
 -------------
      1247104
 
-Execution Time: 0.118 ms   (nhanh hon 10.000 lan, lech 0,06%)</div>
+Execution Time: 0.118 ms   (nhanh hon 10.000 attempt, lech 0,06%)</div>
 <pre><code><span class="tok-comment">// Trong Prisma, qua một truy vấn thô có kiểu</span>
 const [{ uoc_luong }] = await prisma.$queryRaw&lt;{ uoc_luong: bigint }[]&gt;&#96;
   SELECT reltuples::bigint AS uoc_luong
@@ -1724,7 +1724,7 @@ await prisma.$transaction(
 $transaction([...500])    →    611 ms   (1 luot di ve, 1 giao dich)
 createMany(500)           →     38 ms   (1 cau lenh)
 
-Cung 500 hang. Chenh 127 lan giua hai dau.</div>
+Cung 500 hang. Chenh 127 attempt giua hai dau.</div>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>createMany</code> — nhanh nhất, hạn chế nhất</span><span class="v">Một câu <code>INSERT … VALUES (…),(…),(…)</code>. Nó không ghi được quan hệ lồng nhau và, trên cơ sở dữ liệu khác PostgreSQL và CockroachDB, nó không trả về hàng vừa tạo. <code>createManyAndReturn</code> (Prisma 5.14+) thì có trả, trên PostgreSQL.</span></div>
   <div class="kv"><span class="k"><code>$transaction([...])</code> — lô hàng tổng quát</span><span class="v">Bất kỳ danh sách thao tác nào, gửi cùng nhau, được ăn cả ngã về không. Nó KHÔNG phải một vòng lặp await bọc trong giao dịch: cả mảng đi ra trong MỘT lượt đi về, và đó là chỗ phần lớn con số 8 lần đến từ.</span></div>

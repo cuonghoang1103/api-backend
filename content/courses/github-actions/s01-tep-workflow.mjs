@@ -706,13 +706,13 @@ vps-cleanup-weekly.yml   schedule, workflow_dispatch</div>
 <p>Here is a rig built to make the difference visible. Base branch has a function and a test for it. The PR branch <strong>adds one new file</strong> and its own test — it does not touch a single file that the base branch touches. Meanwhile the base branch changes that function&#39;s signature and updates <em>its own</em> test to match:</p>
 
 <pre><code><span class="tok-comment"># main: chu ky cu</span>
-function tinh(a, b) { return a + b; }
+function calc(a, b) { return a + b; }
 
 <span class="tok-comment"># nhanh PR: CHI THEM file moi, goi ham theo chu ky cu</span>
-function tongDon(x, y) { return tinh(x, y); }
+function orderTotal(x, y) { return calc(x, y); }
 
 <span class="tok-comment"># main (trong luc do): doi chu ky, va sua test CUA CHINH NO</span>
-function tinh({ a, b }) { return a + b; }</code></pre>
+function calc({ a, b }) { return a + b; }</code></pre>
 
 <p>No file is edited on both sides, so the merge is textually clean. Now run the same test suite in each of the three places:</p>
 
@@ -875,13 +875,13 @@ ci-lint.yml on pull_request: branches: [main], KHONG co paths:
 <p>Đây là một bộ đồ nghề dựng ra để cho thấy khác biệt đó. Nhánh gốc có một hàm và một bài kiểm cho nó. Nhánh PR <strong>chỉ thêm một file mới</strong> cùng bài kiểm của riêng nó — nó không đụng một file nào mà nhánh gốc đụng. Trong lúc đó nhánh gốc đổi chữ ký của hàm ấy và sửa <em>bài kiểm của chính nó</em> cho khớp:</p>
 
 <pre><code><span class="tok-comment"># main: chu ky cu</span>
-function tinh(a, b) { return a + b; }
+function calc(a, b) { return a + b; }
 
 <span class="tok-comment"># nhanh PR: CHI THEM file moi, goi ham theo chu ky cu</span>
-function tongDon(x, y) { return tinh(x, y); }
+function orderTotal(x, y) { return calc(x, y); }
 
 <span class="tok-comment"># main (trong luc do): doi chu ky, va sua test CUA CHINH NO</span>
-function tinh({ a, b }) { return a + b; }</code></pre>
+function calc({ a, b }) { return a + b; }</code></pre>
 
 <p>Không file nào bị sửa ở cả hai phía, nên xét về mặt chữ, bản gộp sạch. Bây giờ chạy đúng một bộ kiểm ấy ở cả ba chỗ:</p>
 

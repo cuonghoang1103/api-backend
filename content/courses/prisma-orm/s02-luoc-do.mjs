@@ -76,21 +76,21 @@ model SampleType {
 }</code></pre>
 <pre><code>npx prisma migrate dev --name kieu_mau
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"SampleType\\""</code></pre>
-<div class="out">                                    Table "public.KieuMau"
+<div class="out">                                    Table "public.SampleType"
   Column   |            Type             | Nullable |                Default
 -----------+-----------------------------+----------+---------------------------------------
  id        | integer                     | not null | nextval('"KieuMau_id_seq"'::regclass)
- ten       | text                        | not null |
- moTa      | text                        |          |
- soLuong   | integer                     | not null |
- luotXem   | bigint                      | not null | 0
- diem      | double precision            | not null |
- giaTien   | numeric(12,2)               | not null |
- hienThi   | boolean                     | not null | true
- taoLuc    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
- caiDat    | jsonb                       | not null | '{}'
- chuKy     | bytea                       |          |
- theTag    | text[]                      | not null |</div>
+ name       | text                        | not null |
+ description      | text                        |          |
+ quantity   | integer                     | not null |
+ views   | bigint                      | not null | 0
+ score      | double precision            | not null |
+ price   | numeric(12,2)               | not null |
+ visible   | boolean                     | not null | true
+ createdAt    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
+ settings    | jsonb                       | not null | '{}'
+ signature     | bytea                       |          |
+ tags    | text[]                      | not null |</div>
 
 <h3>The money trap, measured</h3>
 <pre><code><span class="tok-comment">// Float: binary floating point cannot represent 0.1 exactly</span>
@@ -230,21 +230,21 @@ model SampleType {
 }</code></pre>
 <pre><code>npx prisma migrate dev --name kieu_mau
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"SampleType\\""</code></pre>
-<div class="out">                                    Table "public.KieuMau"
+<div class="out">                                    Table "public.SampleType"
   Column   |            Type             | Nullable |                Default
 -----------+-----------------------------+----------+---------------------------------------
  id        | integer                     | not null | nextval('"KieuMau_id_seq"'::regclass)
- ten       | text                        | not null |
- moTa      | text                        |          |
- soLuong   | integer                     | not null |
- luotXem   | bigint                      | not null | 0
- diem      | double precision            | not null |
- giaTien   | numeric(12,2)               | not null |
- hienThi   | boolean                     | not null | true
- taoLuc    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
- caiDat    | jsonb                       | not null | '{}'
- chuKy     | bytea                       |          |
- theTag    | text[]                      | not null |</div>
+ name       | text                        | not null |
+ description      | text                        |          |
+ quantity   | integer                     | not null |
+ views   | bigint                      | not null | 0
+ score      | double precision            | not null |
+ price   | numeric(12,2)               | not null |
+ visible   | boolean                     | not null | true
+ createdAt    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
+ settings    | jsonb                       | not null | '{}'
+ signature     | bytea                       |          |
+ tags    | text[]                      | not null |</div>
 
 <h3>Bẫy tiền, đo bằng số</h3>
 <pre><code><span class="tok-comment">// Float: dấu phẩy động nhị phân không biểu diễn nổi 0,1 cho chính xác</span>
@@ -369,17 +369,17 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
   fromDb    String   @default(dbgenerated("substr(md5(random()::text), 1, 8)"))
 }</code></pre>
 <pre><code>docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"Example\\"" | head -14</code></pre>
-<div class="out">                                   Table "public.Vidu"
+<div class="out">                                   Table "public.Example"
   Column   |            Type             | Nullable |              Default
 -----------+-----------------------------+----------+-------------------------------------
  id        | integer                     | not null | nextval('"Vidu_id_seq"'::regclass)
- trangThai | text                        | not null | 'NHAP'::text
- soLan     | integer                     | not null | 0
- hienThi   | boolean                     | not null | true
- theTag    | text[]                      | not null | ARRAY[]::text[]
- taoLuc    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
- ma        | text                        | not null |
- tuDb      | text                        | not null | substr(md5((random())::text), 1, 8)</div>
+ status | text                        | not null | 'NHAP'::text
+ attempts     | integer                     | not null | 0
+ visible   | boolean                     | not null | true
+ tags    | text[]                      | not null | ARRAY[]::text[]
+ createdAt    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
+ code        | text                        | not null |
+ fromDb      | text                        | not null | substr(md5((random())::text), 1, 8)</div>
 <div class="pitfall">
 <p><strong>Trap — look at the <code>code</code> column: it has no database default.</strong> <code>uuid()</code>, <code>cuid()</code> and <code>nanoid()</code> are generated <strong>by Prisma Client in JavaScript</strong>, not by PostgreSQL. So a row inserted by anything that is not Prisma — a raw <code>INSERT</code> in psql, a data-import script, another service — gets no value, and the <code>NOT NULL</code> constraint rejects it. If other systems write to that table, use <code>dbgenerated("gen_random_uuid()")</code> so the default lives where every writer can see it. This difference is invisible in the Prisma schema and obvious in <code>\\d</code>.</p>
 </div>
@@ -394,7 +394,7 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
 <div class="out">Indexes:
     "User_pkey" PRIMARY KEY, btree (id)
     "User_email_key" UNIQUE CONSTRAINT, btree (email)
-    "User_soDienThoai_key" UNIQUE CONSTRAINT, btree ("soDienThoai")
+    "User_soDienThoai_key" UNIQUE CONSTRAINT, btree ("phoneNumber")
     "uk_user_username" UNIQUE CONSTRAINT, btree (username)</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">It creates an index for free</span><span class="v">A unique constraint is backed by a B-tree index, so <code>where: { email }</code> is already fast. Adding <code>@@index([email])</code> as well is duplicated work and wasted disk.</span></div>
@@ -457,7 +457,7 @@ grep -c '@@map(' prisma/schema.prisma</code></pre>
 CREATE TABLE "tai_khoan" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "email" VARCHAR(180) NOT NULL,
-    "matKhau" VARCHAR(255) NOT NULL,
+    "password" VARCHAR(255) NOT NULL,
     "biet_danh" VARCHAR(50),
     "so_du" DECIMAL(14,2) NOT NULL DEFAULT 0,
     "tao_luc" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -511,17 +511,17 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
   fromDb    String   @default(dbgenerated("substr(md5(random()::text), 1, 8)"))
 }</code></pre>
 <pre><code>docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"Example\\"" | head -14</code></pre>
-<div class="out">                                   Table "public.Vidu"
+<div class="out">                                   Table "public.Example"
   Column   |            Type             | Nullable |              Default
 -----------+-----------------------------+----------+-------------------------------------
  id        | integer                     | not null | nextval('"Vidu_id_seq"'::regclass)
- trangThai | text                        | not null | 'NHAP'::text
- soLan     | integer                     | not null | 0
- hienThi   | boolean                     | not null | true
- theTag    | text[]                      | not null | ARRAY[]::text[]
- taoLuc    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
- ma        | text                        | not null |
- tuDb      | text                        | not null | substr(md5((random())::text), 1, 8)</div>
+ status | text                        | not null | 'NHAP'::text
+ attempts     | integer                     | not null | 0
+ visible   | boolean                     | not null | true
+ tags    | text[]                      | not null | ARRAY[]::text[]
+ createdAt    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
+ code        | text                        | not null |
+ fromDb      | text                        | not null | substr(md5((random())::text), 1, 8)</div>
 <div class="pitfall">
 <p><strong>Bẫy — nhìn cột <code>code</code>: nó KHÔNG có giá trị mặc định dưới cơ sở dữ liệu.</strong> <code>uuid()</code>, <code>cuid()</code> và <code>nanoid()</code> được sinh <strong>bởi Prisma Client bằng JavaScript</strong>, không phải bởi PostgreSQL. Nên một hàng do bất cứ thứ gì không phải Prisma chèn vào — một câu <code>INSERT</code> thô trong psql, một script nhập dữ liệu, một dịch vụ khác — sẽ không có giá trị, và ràng buộc <code>NOT NULL</code> từ chối nó. Nếu có hệ thống khác ghi vào bảng đó, hãy dùng <code>dbgenerated("gen_random_uuid()")</code> để giá trị mặc định sống ở nơi mọi bên ghi đều nhìn thấy. Khác biệt này vô hình trong lược đồ Prisma và hiện rành rành trong <code>\\d</code>.</p>
 </div>
@@ -536,7 +536,7 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
 <div class="out">Indexes:
     "User_pkey" PRIMARY KEY, btree (id)
     "User_email_key" UNIQUE CONSTRAINT, btree (email)
-    "User_soDienThoai_key" UNIQUE CONSTRAINT, btree ("soDienThoai")
+    "User_soDienThoai_key" UNIQUE CONSTRAINT, btree ("phoneNumber")
     "uk_user_username" UNIQUE CONSTRAINT, btree (username)</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nó tạo chỉ mục miễn phí</span><span class="v">Một ràng buộc unique được đỡ bởi một chỉ mục B-tree, nên <code>where: { email }</code> vốn đã nhanh. Thêm cả <code>@@index([email])</code> là làm trùng việc và phí đĩa.</span></div>
@@ -599,7 +599,7 @@ grep -c '@@map(' prisma/schema.prisma</code></pre>
 CREATE TABLE "tai_khoan" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "email" VARCHAR(180) NOT NULL,
-    "matKhau" VARCHAR(255) NOT NULL,
+    "password" VARCHAR(255) NOT NULL,
     "biet_danh" VARCHAR(50),
     "so_du" DECIMAL(14,2) NOT NULL DEFAULT 0,
     "tao_luc" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -647,7 +647,7 @@ CREATE UNIQUE INDEX "uk_taikhoan_email" ON "tai_khoan"("email");</div>
 <div class="out">CREATE TABLE "tham_gia" (
     "nguoi_dung_id" INTEGER NOT NULL,
     "nhom_id" INTEGER NOT NULL,
-    "vaiTro" TEXT NOT NULL DEFAULT 'THANH_VIEN',
+    "role" TEXT NOT NULL DEFAULT 'THANH_VIEN',
     "tham_gia_luc" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "tham_gia_pkey" PRIMARY KEY ("nguoi_dung_id","nhom_id")
@@ -786,7 +786,7 @@ CREATE INDEX "idx_posts_title_trgm" ON "posts" USING gin ("title" gin_trgm_ops);
 <div class="out">CREATE TABLE "tham_gia" (
     "nguoi_dung_id" INTEGER NOT NULL,
     "nhom_id" INTEGER NOT NULL,
-    "vaiTro" TEXT NOT NULL DEFAULT 'THANH_VIEN',
+    "role" TEXT NOT NULL DEFAULT 'THANH_VIEN',
     "tham_gia_luc" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "tham_gia_pkey" PRIMARY KEY ("nguoi_dung_id","nhom_id")
@@ -956,12 +956,12 @@ await prisma.event.create({ data: { name: 'Hop', noTz: t, withTz: t } });</code>
 SET TIME ZONE 'UTC';         SELECT "noTz", "withTz" FROM "SuKien";
 SET TIME ZONE 'Asia/Bangkok'; SELECT "noTz", "withTz" FROM "SuKien";</code></pre>
 <div class="out">-- UTC session
-        khongTz         |          coTz
+        noTz         |          withTz
 ------------------------+------------------------
  2026-08-23 03:00:00    | 2026-08-23 03:00:00+00
 
 -- Asia/Bangkok session (UTC+7)
-        khongTz         |          coTz
+        noTz         |          withTz
 ------------------------+------------------------
  2026-08-23 03:00:00    | 2026-08-23 10:00:00+07</div>
 <div class="callout warn">
@@ -1077,12 +1077,12 @@ await prisma.event.create({ data: { name: 'Hop', noTz: t, withTz: t } });</code>
 SET TIME ZONE 'UTC';         SELECT "noTz", "withTz" FROM "SuKien";
 SET TIME ZONE 'Asia/Bangkok'; SELECT "noTz", "withTz" FROM "SuKien";</code></pre>
 <div class="out">-- phiên UTC
-        khongTz         |          coTz
+        noTz         |          withTz
 ------------------------+------------------------
  2026-08-23 03:00:00    | 2026-08-23 03:00:00+00
 
 -- phiên Asia/Bangkok (UTC+7)
-        khongTz         |          coTz
+        noTz         |          withTz
 ------------------------+------------------------
  2026-08-23 03:00:00    | 2026-08-23 10:00:00+07</div>
 <div class="callout warn">
@@ -1201,12 +1201,12 @@ model Order {
   status OrderStatus @default(MOI) @map("trang_thai")
 }</code></pre>
 <div class="out">-- CreateEnum
-CREATE TYPE "TrangThaiDon" AS ENUM ('MOI', 'DANG_XU_LY', 'DA_GIAO', 'DA_HUY');
+CREATE TYPE "OrderStatus" AS ENUM ('MOI', 'DANG_XU_LY', 'DA_GIAO', 'DA_HUY');
 
 -- CreateTable
-CREATE TABLE "DonHang" (
+CREATE TABLE "Order" (
     "id" SERIAL NOT NULL,
-    "trang_thai" "TrangThaiDon" NOT NULL DEFAULT 'MOI',
+    "trang_thai" "OrderStatus" NOT NULL DEFAULT 'MOI',
     CONSTRAINT "DonHang_pkey" PRIMARY KEY ("id")
 );</div>
 <div class="kv-grid">
@@ -1224,7 +1224,7 @@ enum OrderStatus {
   DA_HUY
 }</code></pre>
 <div class="out">-- AlterEnum
-ALTER TYPE "TrangThaiDon" ADD VALUE 'DANG_GIAO';</div>
+ALTER TYPE "OrderStatus" ADD VALUE 'DANG_GIAO';</div>
 <pre><code><span class="tok-comment">// Renaming one is not</span>
 enum OrderStatus {
   MOI
@@ -1233,15 +1233,15 @@ enum OrderStatus {
   DA_HUY
 }</code></pre>
 <div class="out">⚠️  Warnings:
-  • The values [DA_GIAO] on the enum &#96;TrangThaiDon&#96; will be removed. If these variants are still used in the database, this will fail.
+  • The values [DA_GIAO] on the enum &#96;OrderStatus&#96; will be removed. If these variants are still used in the database, this will fail.
 
 -- AlterEnum
 BEGIN;
 CREATE TYPE "TrangThaiDon_new" AS ENUM ('MOI', 'DANG_XU_LY', 'HOAN_TAT', 'DA_HUY');
-ALTER TABLE "DonHang" ALTER COLUMN "trang_thai" DROP DEFAULT;
-ALTER TABLE "DonHang" ALTER COLUMN "trang_thai" TYPE "TrangThaiDon_new" USING ("trang_thai"::text::"TrangThaiDon_new");
-ALTER TYPE "TrangThaiDon" RENAME TO "TrangThaiDon_old";
-ALTER TYPE "TrangThaiDon_new" RENAME TO "TrangThaiDon";
+ALTER TABLE "Order" ALTER COLUMN "trang_thai" DROP DEFAULT;
+ALTER TABLE "Order" ALTER COLUMN "trang_thai" TYPE "TrangThaiDon_new" USING ("trang_thai"::text::"TrangThaiDon_new");
+ALTER TYPE "OrderStatus" RENAME TO "TrangThaiDon_old";
+ALTER TYPE "TrangThaiDon_new" RENAME TO "OrderStatus";
 DROP TYPE "TrangThaiDon_old";
 COMMIT;</div>
 <p>Seven statements, an exclusive lock on the table, and a cast that <strong>fails on any existing row still holding <code>DA_GIAO</code></strong>. The correct sequence is add-migrate-backfill-remove across two deploys: add <code>HOAN_TAT</code>, ship it, update every row and every code path, then remove <code>DA_GIAO</code> in a second migration. Chapter 6 generalises this into the expand–contract pattern.</p>
@@ -1373,12 +1373,12 @@ model Order {
   status OrderStatus @default(MOI) @map("trang_thai")
 }</code></pre>
 <div class="out">-- CreateEnum
-CREATE TYPE "TrangThaiDon" AS ENUM ('MOI', 'DANG_XU_LY', 'DA_GIAO', 'DA_HUY');
+CREATE TYPE "OrderStatus" AS ENUM ('MOI', 'DANG_XU_LY', 'DA_GIAO', 'DA_HUY');
 
 -- CreateTable
-CREATE TABLE "DonHang" (
+CREATE TABLE "Order" (
     "id" SERIAL NOT NULL,
-    "trang_thai" "TrangThaiDon" NOT NULL DEFAULT 'MOI',
+    "trang_thai" "OrderStatus" NOT NULL DEFAULT 'MOI',
     CONSTRAINT "DonHang_pkey" PRIMARY KEY ("id")
 );</div>
 <div class="kv-grid">
@@ -1396,7 +1396,7 @@ enum OrderStatus {
   DA_HUY
 }</code></pre>
 <div class="out">-- AlterEnum
-ALTER TYPE "TrangThaiDon" ADD VALUE 'DANG_GIAO';</div>
+ALTER TYPE "OrderStatus" ADD VALUE 'DANG_GIAO';</div>
 <pre><code><span class="tok-comment">// Đổi tên một giá trị thì không</span>
 enum OrderStatus {
   MOI
@@ -1405,15 +1405,15 @@ enum OrderStatus {
   DA_HUY
 }</code></pre>
 <div class="out">⚠️  Warnings:
-  • The values [DA_GIAO] on the enum &#96;TrangThaiDon&#96; will be removed. If these variants are still used in the database, this will fail.
+  • The values [DA_GIAO] on the enum &#96;OrderStatus&#96; will be removed. If these variants are still used in the database, this will fail.
 
 -- AlterEnum
 BEGIN;
 CREATE TYPE "TrangThaiDon_new" AS ENUM ('MOI', 'DANG_XU_LY', 'HOAN_TAT', 'DA_HUY');
-ALTER TABLE "DonHang" ALTER COLUMN "trang_thai" DROP DEFAULT;
-ALTER TABLE "DonHang" ALTER COLUMN "trang_thai" TYPE "TrangThaiDon_new" USING ("trang_thai"::text::"TrangThaiDon_new");
-ALTER TYPE "TrangThaiDon" RENAME TO "TrangThaiDon_old";
-ALTER TYPE "TrangThaiDon_new" RENAME TO "TrangThaiDon";
+ALTER TABLE "Order" ALTER COLUMN "trang_thai" DROP DEFAULT;
+ALTER TABLE "Order" ALTER COLUMN "trang_thai" TYPE "TrangThaiDon_new" USING ("trang_thai"::text::"TrangThaiDon_new");
+ALTER TYPE "OrderStatus" RENAME TO "TrangThaiDon_old";
+ALTER TYPE "TrangThaiDon_new" RENAME TO "OrderStatus";
 DROP TYPE "TrangThaiDon_old";
 COMMIT;</div>
 <p>Bảy câu lệnh, một khoá độc quyền trên bảng, và một phép ép kiểu <strong>hỏng với bất kỳ hàng nào còn đang giữ <code>DA_GIAO</code></strong>. Chuỗi thao tác đúng là thêm–migrate–đổ dữ liệu–bỏ, trải qua hai lần deploy: thêm <code>HOAN_TAT</code>, đưa lên chạy, cập nhật mọi hàng và mọi nhánh mã, rồi bỏ <code>DA_GIAO</code> trong một migration thứ hai. Chương 6 tổng quát hoá chuyện này thành mẫu nới–thu.</p>

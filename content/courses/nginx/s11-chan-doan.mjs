@@ -754,8 +754,8 @@ http {
     gzip_types text/plain text/css application/json application/javascript image/svg+xml;
 
     limit_req_zone  \$binary_remote_addr zone=chung:10m    rate=30r/s;
-    limit_req_zone  \$binary_remote_addr zone=dangnhap:10m rate=5r/m;
-    limit_conn_zone \$binary_remote_addr zone=ketnoi:10m;
+    limit_req_zone  \$binary_remote_addr zone=login:10m rate=5r/m;
+    limit_conn_zone \$binary_remote_addr zone=conn:10m;
     proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=web:10m max_size=500m inactive=60m;
 
     upstream ung_dung {
@@ -793,7 +793,7 @@ http {
         ssl_session_cache shared:SSL:10m;
         ssl_session_timeout 1d;
         include /etc/nginx/snippets/headers-baomat.conf;
-        limit_conn ketnoi 20;
+        limit_conn conn 20;
 
         location = /health     { access_log off; return 200 "ok\\n"; }
         location = /trang-thai { stub_status; access_log off; allow 10.0.0.0/8; deny all; }
@@ -805,7 +805,7 @@ http {
             access_log off;
         }
         location = /api/dang-nhap {
-            limit_req zone=dangnhap burst=3 nodelay;
+            limit_req zone=login burst=3 nodelay;
             include /etc/nginx/snippets/proxy.conf;
             proxy_pass http://ung_dung;
         }
@@ -942,8 +942,8 @@ http {
     gzip_types text/plain text/css application/json application/javascript image/svg+xml;
 
     limit_req_zone  \$binary_remote_addr zone=chung:10m    rate=30r/s;
-    limit_req_zone  \$binary_remote_addr zone=dangnhap:10m rate=5r/m;
-    limit_conn_zone \$binary_remote_addr zone=ketnoi:10m;
+    limit_req_zone  \$binary_remote_addr zone=login:10m rate=5r/m;
+    limit_conn_zone \$binary_remote_addr zone=conn:10m;
     proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=web:10m max_size=500m inactive=60m;
 
     upstream ung_dung {
@@ -981,7 +981,7 @@ http {
         ssl_session_cache shared:SSL:10m;
         ssl_session_timeout 1d;
         include /etc/nginx/snippets/headers-baomat.conf;
-        limit_conn ketnoi 20;
+        limit_conn conn 20;
 
         location = /health     { access_log off; return 200 "ok\\n"; }
         location = /trang-thai { stub_status; access_log off; allow 10.0.0.0/8; deny all; }
@@ -993,7 +993,7 @@ http {
             access_log off;
         }
         location = /api/dang-nhap {
-            limit_req zone=dangnhap burst=3 nodelay;
+            limit_req zone=login burst=3 nodelay;
             include /etc/nginx/snippets/proxy.conf;
             proxy_pass http://ung_dung;
         }

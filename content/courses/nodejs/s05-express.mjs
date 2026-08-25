@@ -86,7 +86,7 @@ xin chao</div>
 </div>
 
 <h3>What you get for free on an unknown route</h3>
-<pre><code>curl -i http://localhost:3000/khong-ton-tai</code></pre>
+<pre><code>curl -i http://localhost:3000/does-not-exist</code></pre>
 <div class="out">HTTP/1.1 404 Not Found
 Content-Security-Policy: default-src 'none'
 X-Content-Type-Options: nosniff
@@ -196,7 +196,7 @@ xin chao</div>
 </div>
 
 <h3>Bạn được tặng gì khi route không tồn tại</h3>
-<pre><code>curl -i http://localhost:3000/khong-ton-tai</code></pre>
+<pre><code>curl -i http://localhost:3000/does-not-exist</code></pre>
 <div class="out">HTTP/1.1 404 Not Found
 Content-Security-Policy: default-src 'none'
 X-Content-Type-Options: nosniff
@@ -210,7 +210,7 @@ Content-Type: text/html; charset=utf-8
 <p>Cùng một Notes API — liệt kê, đọc, tạo, sửa, xoá, có phân tích JSON, có giới hạn dung lượng body và có 404 — viết hai lần, một lần bằng module <code>http</code> lõi và một lần bằng Express. Đếm số dòng không rỗng bằng <code>grep -cve '^\\s*$'</code>:</p>
 <div class="out">http thuần, một file                       : 67 dòng
   ├─ ống nước thuần tuý (send/readJson/dispatch): 27 dòng
-  └─ nghiệp vụ thật sự của bạn              : 40 dòng
+  └─ sleepệp vụ thật sự của bạn              : 40 dòng
 
 express
   ├─ routes/notes.routes.js (đúng 5 route)  : 32 dòng
@@ -1109,7 +1109,7 @@ process: exited</div>
 ├── routes/
 │   └── notes.routes.mjs       ← HTTP: đường dẫn, mã trạng thái, kiểm tra dữ liệu
 ├── services/
-│   └── notes.service.mjs      ← nghiệp vụ, không biết gì về HTTP
+│   └── notes.service.mjs      ← sleepệp vụ, không biết gì về HTTP
 └── middleware/
     ├── errors.mjs             ← AppError, notFound, errorHandler
     └── logger.mjs             ← logger cho request</code></pre>

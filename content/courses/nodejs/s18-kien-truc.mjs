@@ -41,7 +41,7 @@ router.post('/notes', requireAuth, async (req, res, next) =&gt; {
   } catch (e) { next(e); }                                            // lỗi đi ra chỗ khác (chương 5)
 });
 
-// service — chỉ nói chuyện nghiệp vụ
+// service — chỉ nói chuyện sleepệp vụ
 async function create(actor, data) {
   if (!actor) throw new AppError('UNAUTHENTICATED', 401);
   if (await repo.slugExists(data.slug)) throw new AppError('SLUG_TAKEN', 409);
@@ -120,7 +120,7 @@ router.post('/notes', requireAuth, async (req, res, next) =&gt; {
   } catch (e) { next(e); }                                            // lỗi đi ra chỗ khác (chương 5)
 });
 
-// service — chỉ nói chuyện nghiệp vụ
+// service — chỉ nói chuyện sleepệp vụ
 async function create(actor, data) {
   if (!actor) throw new AppError('UNAUTHENTICATED', 401);
   if (await repo.slugExists(data.slug)) throw new AppError('SLUG_TAKEN', 409);
@@ -360,7 +360,7 @@ file to nhất:
 <p>Coupling is visible in the import graph. Counting which services other code depends on, in the production backend:</p>
 
 <div class="out">service bị nhiều nơi import nhất:
-  7×  pro.service              (kiểm tài khoản Pro)
+  7×  pro.service              (kiểm tài storeản Pro)
   5×  social.service
   3×  projectMarkdown.service
   3×  notification.service
@@ -446,7 +446,7 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <p>Ghép nối nhìn thấy được trong đồ thị import. Đếm xem những service nào bị code khác phụ thuộc vào, trên backend production:</p>
 
 <div class="out">service bị nhiều nơi import nhất:
-  7×  pro.service              (kiểm tài khoản Pro)
+  7×  pro.service              (kiểm tài storeản Pro)
   5×  social.service
   3×  projectMarkdown.service
   3×  notification.service

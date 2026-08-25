@@ -699,7 +699,7 @@ const cong = await prisma.$transaction(async (tx) =&gt; {
     throw new Error('Tai lieu da bi nguoi khac sua. Tai lai va thu lai.');
   }
 }</code></pre>
-<div class="out">UPDATE "Document" SET "noiDung" = $1, "version" = "Document"."version" + $2
+<div class="out">UPDATE "Document" SET "body" = $1, "version" = "Document"."version" + $2
 WHERE ("id" = $3 AND "version" = $4)
 
 -- User A saved first:  { count: 1 }, version 3 → 4
@@ -735,7 +735,7 @@ try {
 }</code></pre>
 <div class="out">-- instance 1
 Mot ban khac dang chay. Bo qua.     ← instance 2, immediately
-… nhap 41,208 ban ghi …             ← instance 1, three minutes later</div>
+… nhap 41,208 ban write …             ← instance 1, three minutes later</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">The lock is a number you choose</span><span class="v">It protects nothing in particular — it is a name in a shared namespace. Two different features must use different numbers; keep them in one constants file.</span></div>
   <div class="kv"><span class="k">Session-scoped or transaction-scoped</span><span class="v"><code>pg_advisory_lock</code> is held until you unlock or the connection closes; <code>pg_advisory_xact_lock</code> releases automatically at <code>COMMIT</code>. Prefer the transaction form — it cannot leak.</span></div>
@@ -865,7 +865,7 @@ const cong = await prisma.$transaction(async (tx) =&gt; {
     throw new Error('Tai lieu da bi nguoi khac sua. Tai lai va thu lai.');
   }
 }</code></pre>
-<div class="out">UPDATE "Document" SET "noiDung" = $1, "version" = "Document"."version" + $2
+<div class="out">UPDATE "Document" SET "body" = $1, "version" = "Document"."version" + $2
 WHERE ("id" = $3 AND "version" = $4)
 
 -- Người dùng A lưu trước: { count: 1 }, version 3 → 4
@@ -900,8 +900,8 @@ try {
   await prisma.$executeRaw&#96;SELECT pg_advisory_unlock(\${KHOA_NHAP})&#96;;
 }</code></pre>
 <div class="out">-- bản chạy 1
-Mot ban khac dang chay. Bo qua.     ← bản chạy 2, ngay lập tức
-… nhap 41,208 ban ghi …             ← bản chạy 1, ba phút sau</div>
+Mot ban khac dang chay. Bo qua.     ← bản chạy 2, day lập tức
+… nhap 41,208 ban write …             ← bản chạy 1, ba phút sau</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Cái khoá là một con số bạn chọn</span><span class="v">Nó không bảo vệ thứ gì cụ thể — nó là một cái tên trong một không gian tên dùng chung. Hai tính năng khác nhau phải dùng hai con số khác nhau; hãy giữ chúng trong một tệp hằng số.</span></div>
   <div class="kv"><span class="k">Phạm vi phiên hay phạm vi giao dịch</span><span class="v"><code>pg_advisory_lock</code> giữ tới khi bạn mở khoá hoặc kết nối đóng; <code>pg_advisory_xact_lock</code> tự nhả lúc <code>COMMIT</code>. Hãy ưu tiên dạng giao dịch — nó không rò được.</span></div>
@@ -1080,8 +1080,8 @@ model Transaction {
 <span class="tok-comment">// The caller generates the key once and reuses it across every retry</span>
 const key = crypto.randomUUID();
 await retry(() =&gt; withdraw(1, 100, key));</code></pre>
-<div class="out">-- first attempt:  INSERT … RETURNING  → { id: 41, khoa: 'a1b2…', soTien: 100 }
--- retried:        INSERT → P2002 → SELECT → { id: 41, khoa: 'a1b2…', soTien: 100 }
+<div class="out">-- first attempt:  INSERT … RETURNING  → { id: 41, key: 'a1b2…', amount: 100 }
+-- retried:        INSERT → P2002 → SELECT → { id: 41, key: 'a1b2…', amount: 100 }
 -- balance debited exactly once</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">The key comes from the caller</span><span class="lz-t">Not from the server</span><span class="lz-d">Generated once, before the first attempt, and reused for every retry. A server-generated key would be different each time, which defeats the whole mechanism.</span></div>
@@ -1251,8 +1251,8 @@ model Transaction {
 <span class="tok-comment">// Bên gọi sinh khoá một lần và dùng lại nó qua mọi lần thử lại</span>
 const key = crypto.randomUUID();
 await retry(() =&gt; withdraw(1, 100, key));</code></pre>
-<div class="out">-- lần đầu:     INSERT … RETURNING  → { id: 41, khoa: 'a1b2…', soTien: 100 }
--- thử lại:     INSERT → P2002 → SELECT → { id: 41, khoa: 'a1b2…', soTien: 100 }
+<div class="out">-- lần đầu:     INSERT … RETURNING  → { id: 41, key: 'a1b2…', amount: 100 }
+-- thử lại:     INSERT → P2002 → SELECT → { id: 41, key: 'a1b2…', amount: 100 }
 -- số dư bị trừ đúng một lần</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Khoá đến từ bên gọi</span><span class="lz-t">Không phải từ máy chủ</span><span class="lz-d">Sinh một lần, trước lần thử đầu tiên, và dùng lại cho mọi lần thử lại. Một khoá do máy chủ sinh sẽ khác nhau mỗi lần, và như thế là vô hiệu hoá toàn bộ cơ chế.</span></div>
@@ -1430,8 +1430,8 @@ async function transfer(fromId: number, toId: number, money: number, key: string
 <div class="out">-- 200 concurrent transfers between 20 accounts
 sum(so_du) truoc: 2000000.00
 sum(so_du) sau  : 2000000.00     ← conserved, which is the only test that matters
-so giao dich    : 200
-so lan thu lai  : 3</div>
+count giao dich    : 200
+count attempt thu lai  : 3</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Every tool from this chapter, and each earns its place</span><span class="v">Sorted locks prevent deadlock (7.3), the precondition prevents overdraft (4.4), the atomic operator prevents lost updates (4.4), the idempotency key prevents double-charging on retry (7.4), and the retry handles the deadlock that arrives from a path you have not written yet (7.2).</span></div>
   <div class="kv"><span class="k">The test is conservation</span><span class="v">Sum the balances before and after. Money moving between accounts must leave the total unchanged, and no unit test of a single transfer catches what two hundred concurrent ones do.</span></div>
@@ -1607,8 +1607,8 @@ async function transfer(fromId: number, toId: number, money: number, key: string
 <div class="out">-- 200 lần chuyển song song giữa 20 tài khoản
 sum(so_du) truoc: 2000000.00
 sum(so_du) sau  : 2000000.00     ← bảo toàn, và đó là phép kiểm duy nhất có ý nghĩa
-so giao dich    : 200
-so lan thu lai  : 3</div>
+count giao dich    : 200
+count attempt thu lai  : 3</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Mọi công cụ của chương này, và cái nào cũng xứng chỗ của nó</span><span class="v">Khoá đã sắp thứ tự chặn khoá chết (7.3), tiền điều kiện chặn rút quá số dư (4.4), toán tử nguyên tử chặn mất cập nhật (4.4), khoá idempotent chặn tính tiền hai lần khi thử lại (7.4), và lớp thử lại xử lý cái khoá chết đến từ một nhánh bạn chưa viết (7.2).</span></div>
   <div class="kv"><span class="k">Phép kiểm là tính bảo toàn</span><span class="v">Cộng tổng số dư trước và sau. Tiền chuyển giữa các tài khoản phải để tổng không đổi, và không một bài kiểm đơn vị nào cho một lần chuyển bắt được thứ mà hai trăm lần chuyển song song làm.</span></div>

@@ -338,9 +338,9 @@ limit_req_zone \$binary_remote_addr zone=theo-ip:10m rate=10r/s;
 <p class="lead">Rate limiting counts requests over time. A different resource runs out first: the connection slots themselves. <code>limit_conn</code> bounds those per client, works exactly as advertised, and does nothing at all about the one attack people usually deploy it against.</p>
 
 <h3>It works: six slow requests, one IP</h3>
-<pre><code>limit_conn_zone \$binary_remote_addr zone=ketnoi:10m;
+<pre><code>limit_conn_zone \$binary_remote_addr zone=conn:10m;
 
-location /d/ { limit_conn ketnoi 2; proxy_pass http://api; }</code></pre>
+location /d/ { limit_conn conn 2; proxy_pass http://api; }</code></pre>
 <div class="out">6 request DONG THOI toi mot duong dan cham 1,5 giay:
 
   co limit_conn 2   ->  2 x 200,  4 x 503
@@ -377,13 +377,13 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
   keepalive_timeout     30s;
 
   <span class="tok-comment"># Chống chiếm slot: giới hạn số kết nối ĐANG XỬ LÝ mỗi IP</span>
-  limit_conn_zone \$binary_remote_addr zone=ketnoi:10m;
+  limit_conn_zone \$binary_remote_addr zone=conn:10m;
   limit_conn_status 429;
 
   server {
-    limit_conn ketnoi 20;                <span class="tok-comment"># trang thường: rộng rãi</span>
+    limit_conn conn 20;                <span class="tok-comment"># trang thường: rộng rãi</span>
     location /tai-xuong/ {
-      limit_conn ketnoi 2;               <span class="tok-comment"># tải file: chặt</span>
+      limit_conn conn 2;               <span class="tok-comment"># tải file: chặt</span>
       limit_rate_after 5m;
       limit_rate 1m;
     }
@@ -421,9 +421,9 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <p class="lead">Giới hạn tần suất đếm số REQUEST theo thời gian. Có một tài nguyên khác cạn TRƯỚC: chính những cái slot kết nối. <code>limit_conn</code> chặn chúng theo từng client, chạy đúng như quảng cáo, và chẳng làm gì được với đúng cái đòn mà người ta thường triển khai nó để chống.</p>
 
 <h3>Nó CHẠY: sáu request chậm, một IP</h3>
-<pre><code>limit_conn_zone \$binary_remote_addr zone=ketnoi:10m;
+<pre><code>limit_conn_zone \$binary_remote_addr zone=conn:10m;
 
-location /d/ { limit_conn ketnoi 2; proxy_pass http://api; }</code></pre>
+location /d/ { limit_conn conn 2; proxy_pass http://api; }</code></pre>
 <div class="out">6 request DONG THOI toi mot duong dan cham 1,5 giay:
 
   co limit_conn 2   ->  2 x 200,  4 x 503
@@ -460,13 +460,13 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
   keepalive_timeout     30s;
 
   <span class="tok-comment"># Chống chiếm slot: giới hạn số kết nối ĐANG XỬ LÝ mỗi IP</span>
-  limit_conn_zone \$binary_remote_addr zone=ketnoi:10m;
+  limit_conn_zone \$binary_remote_addr zone=conn:10m;
   limit_conn_status 429;
 
   server {
-    limit_conn ketnoi 20;                <span class="tok-comment"># trang thường: rộng rãi</span>
+    limit_conn conn 20;                <span class="tok-comment"># trang thường: rộng rãi</span>
     location /tai-xuong/ {
-      limit_conn ketnoi 2;               <span class="tok-comment"># tải file: chặt</span>
+      limit_conn conn 2;               <span class="tok-comment"># tải file: chặt</span>
       limit_rate_after 5m;
       limit_rate 1m;
     }
@@ -658,8 +658,8 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 
   <span class="tok-comment"># 2) VÙNG — mỗi mục đích một vùng riêng</span>
   limit_req_zone  \$binary_remote_addr zone=chung:10m     rate=20r/s;
-  limit_req_zone  \$binary_remote_addr zone=dangnhap:10m  rate=10r/m;
-  limit_req_zone  \$binary_remote_addr zone=tailen:10m    rate=2r/s;
+  limit_req_zone  \$binary_remote_addr zone=login:10m  rate=10r/m;
+  limit_req_zone  \$binary_remote_addr zone=upload:10m    rate=2r/s;
   limit_conn_zone \$binary_remote_addr zone=ket:10m;
 
   <span class="tok-comment"># 3) MÃ TRẢ VỀ đúng nghĩa (7.1)</span>
@@ -679,7 +679,7 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
     limit_conn ket 20;                        <span class="tok-comment"># trần chung cho mỗi IP</span>
 
     location /api/dang-nhap {
-      limit_req zone=dangnhap burst=3 nodelay;
+      limit_req zone=login burst=3 nodelay;
       add_header Retry-After 6 always;
       proxy_pass http://api;
     }
@@ -688,7 +688,7 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
       proxy_pass http://api;
     }
     location /tai-len/ {
-      limit_req zone=tailen burst=5;          <span class="tok-comment"># VÙNG RIÊNG — xem bên dưới</span>
+      limit_req zone=upload burst=5;          <span class="tok-comment"># VÙNG RIÊNG — xem bên dưới</span>
       limit_conn ket 2;
       client_max_body_size 50m;
       proxy_pass http://api;
@@ -765,8 +765,8 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
 
   <span class="tok-comment"># 2) VÙNG — mỗi mục đích một vùng riêng</span>
   limit_req_zone  \$binary_remote_addr zone=chung:10m     rate=20r/s;
-  limit_req_zone  \$binary_remote_addr zone=dangnhap:10m  rate=10r/m;
-  limit_req_zone  \$binary_remote_addr zone=tailen:10m    rate=2r/s;
+  limit_req_zone  \$binary_remote_addr zone=login:10m  rate=10r/m;
+  limit_req_zone  \$binary_remote_addr zone=upload:10m    rate=2r/s;
   limit_conn_zone \$binary_remote_addr zone=ket:10m;
 
   <span class="tok-comment"># 3) MÃ TRẢ VỀ đúng nghĩa (7.1)</span>
@@ -786,7 +786,7 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
     limit_conn ket 20;                        <span class="tok-comment"># trần chung cho mỗi IP</span>
 
     location /api/dang-nhap {
-      limit_req zone=dangnhap burst=3 nodelay;
+      limit_req zone=login burst=3 nodelay;
       add_header Retry-After 6 always;
       proxy_pass http://api;
     }
@@ -795,7 +795,7 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
       proxy_pass http://api;
     }
     location /tai-len/ {
-      limit_req zone=tailen burst=5;          <span class="tok-comment"># VÙNG RIÊNG — xem bên dưới</span>
+      limit_req zone=upload burst=5;          <span class="tok-comment"># VÙNG RIÊNG — xem bên dưới</span>
       limit_conn ket 2;
       client_max_body_size 50m;
       proxy_pass http://api;

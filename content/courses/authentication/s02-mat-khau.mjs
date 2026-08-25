@@ -52,7 +52,7 @@ Khong phai "kho". Khong phai "ton kem". La MOT LAN NGHI GIAI LAO.</div>
 <pre><code><span class="tok-comment">// Without salt: identical passwords produce identical hashes</span>
 sha256('123456') = 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
 sha256('123456') = 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92</code></pre>
-<div class="out">SELECT bam, count(*) FROM "NguoiDung" GROUP BY bam ORDER BY 2 DESC LIMIT 3;
+<div class="out">SELECT bam, count(*) FROM "User" GROUP BY bam ORDER BY 2 DESC LIMIT 3;
 
                               bam                               | count
 ----------------------------------------------------------------+-------
@@ -154,7 +154,7 @@ Khong phai "kho". Khong phai "ton kem". La MOT LAN NGHI GIAI LAO.</div>
 <pre><code><span class="tok-comment">// Không muối: mật khẩu giống nhau cho ra chuỗi băm giống nhau</span>
 sha256('123456') = 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
 sha256('123456') = 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92</code></pre>
-<div class="out">SELECT bam, count(*) FROM "NguoiDung" GROUP BY bam ORDER BY 2 DESC LIMIT 3;
+<div class="out">SELECT bam, count(*) FROM "User" GROUP BY bam ORDER BY 2 DESC LIMIT 3;
 
                               bam                               | count
 ----------------------------------------------------------------+-------
@@ -521,11 +521,11 @@ const u = await prisma.user.findUnique({ where: { email } });
 if (!u) return res.status(401).json({ error: 'Email khong ton tai' });
 if (!(await verify(u.bam, password))) return res.status(401).json({ error: 'Sai mat khau' });</code></pre>
 <div class="out">$ for i in $(seq 200); do curl -s -o /dev/null -w "%{time_total}\\n" \\
-    localhost:3000/dang-nhap -d '{"email":"co-that@vidu.com","matKhau":"x"}' \\
+    localhost:3000/dang-nhap -d '{"email":"co-that@vidu.com","password":"x"}' \\
     -H 'content-type: application/json'; done | sort -n | awk 'NR==100'
 0.194
 
-$ … -d '{"email":"khong-co@vidu.com","matKhau":"x"}' …
+$ … -d '{"email":"khong-co@vidu.com","password":"x"}' …
 0.006
 
 # 194 ms doi lai 6 ms. Ban khong can doc thong bao loi:
@@ -578,10 +578,10 @@ export function needsRehash(oldHash: string): boolean {
       || t   &lt; PARAMS.timeCost
       || p   !== PARAMS.parallelism;
 }</code></pre>
-<div class="out">$ node -e "console.log(canBamLai('\$argon2id\$v=19\$m=19456,t=2,p=1\$…'))"
+<div class="out">$ node -e "console.log(needsRehash('\$argon2id\$v=19\$m=19456,t=2,p=1\$…'))"
 true      ← m=19456 < 65536, nang len
 
-$ node -e "console.log(canBamLai('\$argon2id\$v=19\$m=65536,t=2,p=1\$…'))"
+$ node -e "console.log(needsRehash('\$argon2id\$v=19\$m=65536,t=2,p=1\$…'))"
 false     ← da dung tham so hien tai</div>
 <div class="callout ok">
 <p><strong>This is the whole upgrade mechanism, and it costs four lines.</strong> Raise the parameters in one config object; every user is silently migrated the next time they log in. No mass reset, no downtime, no migration script. Lesson 2.5 uses exactly the same hook to move an entire table off bcrypt or off unsalted MD5 — the only difference is what <code>needsRehash</code> returns true for.</p>
@@ -646,11 +646,11 @@ const u = await prisma.user.findUnique({ where: { email } });
 if (!u) return res.status(401).json({ error: 'Email khong ton tai' });
 if (!(await verify(u.bam, password))) return res.status(401).json({ error: 'Sai mat khau' });</code></pre>
 <div class="out">$ for i in $(seq 200); do curl -s -o /dev/null -w "%{time_total}\\n" \\
-    localhost:3000/dang-nhap -d '{"email":"co-that@vidu.com","matKhau":"x"}' \\
+    localhost:3000/dang-nhap -d '{"email":"co-that@vidu.com","password":"x"}' \\
     -H 'content-type: application/json'; done | sort -n | awk 'NR==100'
 0.194
 
-$ … -d '{"email":"khong-co@vidu.com","matKhau":"x"}' …
+$ … -d '{"email":"khong-co@vidu.com","password":"x"}' …
 0.006
 
 # 194 ms doi lai 6 ms. Ban khong can doc thong bao loi:
@@ -703,10 +703,10 @@ export function needsRehash(oldHash: string): boolean {
       || t   &lt; PARAMS.timeCost
       || p   !== PARAMS.parallelism;
 }</code></pre>
-<div class="out">$ node -e "console.log(canBamLai('\$argon2id\$v=19\$m=19456,t=2,p=1\$…'))"
+<div class="out">$ node -e "console.log(needsRehash('\$argon2id\$v=19\$m=19456,t=2,p=1\$…'))"
 true      ← m=19456 < 65536, nang len
 
-$ node -e "console.log(canBamLai('\$argon2id\$v=19\$m=65536,t=2,p=1\$…'))"
+$ node -e "console.log(needsRehash('\$argon2id\$v=19\$m=65536,t=2,p=1\$…'))"
 false     ← da dung tham so hien tai</div>
 <div class="callout ok">
 <p><strong>Đây là TOÀN BỘ cơ chế nâng cấp, và nó tốn bốn dòng.</strong> Nâng tham số trong MỘT đối tượng cấu hình; mọi người dùng được chuyển đổi lặng lẽ ở lần đăng nhập kế tiếp. Không đặt lại hàng loạt, không ngừng dịch vụ, không script chuyển đổi. Bài 2.5 dùng ĐÚNG cái móc này để đưa cả một bảng rời khỏi bcrypt hoặc rời khỏi MD5 không muối — khác biệt duy nhất là <code>needsRehash</code> trả true cho những gì.</p>
@@ -997,7 +997,7 @@ export async function checkPassword(oldHash: string, password: string): Promise&
 export function needsRehash(oldHash: string): boolean {
   return !oldHash.startsWith('$argon2id$') || weakerParams(oldHash);
 }</code></pre>
-<div class="out">$ SELECT left(bam, 10) AS dinh_dang, count(*) FROM "NguoiDung" GROUP BY 1;
+<div class="out">$ SELECT left(bam, 10) AS dinh_dang, count(*) FROM "User" GROUP BY 1;
 
  dinh_dang  | count
 ------------+--------
@@ -1120,7 +1120,7 @@ export async function checkPassword(oldHash: string, password: string): Promise&
 export function needsRehash(oldHash: string): boolean {
   return !oldHash.startsWith('$argon2id$') || weakerParams(oldHash);
 }</code></pre>
-<div class="out">$ SELECT left(bam, 10) AS dinh_dang, count(*) FROM "NguoiDung" GROUP BY 1;
+<div class="out">$ SELECT left(bam, 10) AS dinh_dang, count(*) FROM "User" GROUP BY 1;
 
  dinh_dang  | count
 ------------+--------

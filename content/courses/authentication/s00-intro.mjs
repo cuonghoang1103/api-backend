@@ -213,7 +213,7 @@ app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
   res.json(order);                       <span class="tok-comment">// ← whose order is this?</span>
 });</code></pre>
 <div class="out">$ curl -s /api/don-hang/clx7… -H "Authorization: Bearer &lt;token cua AN&gt;"
-{"id":"clx7…","userId":"clx9…","tong":2490000,"diaChi":"…","dienThoai":"09…"}
+{"id":"clx7…","userId":"clx9…","total":2490000,"address":"…","phone":"09…"}
 
 # Cai don nay thuoc ve clx9 — KHONG phai An. An van doc duoc.
 # Doi id trong URL la doc duoc don cua bat ky ai. Day la IDOR.</div>
@@ -308,7 +308,7 @@ app.get('/api/orders/:id', requireAuth, async (req, res) =&gt; {
   res.json(order);                       <span class="tok-comment">// ← đơn này của AI?</span>
 });</code></pre>
 <div class="out">$ curl -s /api/don-hang/clx7… -H "Authorization: Bearer &lt;token cua AN&gt;"
-{"id":"clx7…","userId":"clx9…","tong":2490000,"diaChi":"…","dienThoai":"09…"}
+{"id":"clx7…","userId":"clx9…","total":2490000,"address":"…","phone":"09…"}
 
 # Cai don nay thuoc ve clx9 — KHONG phai An. An van doc duoc.
 # Doi id trong URL la doc duoc don cua bat ky ai. Day la IDOR.</div>
@@ -479,7 +479,7 @@ curl -s localhost:3000/dang-nhap -H 'content-type: application/json' \\
   -d '{"email":"an@vidu.com","password":"khongaidoanduoc"}'
 curl -s localhost:3000/toi -H 'x-session: 1756000123456'</code></pre>
 <div class="out">{"id":"clx7a2b1c0000abcdefghijkl"}
-{"phien":"1756000123456"}
+{"session":"1756000123456"}
 {"email":"an@vidu.com"}</div>
 <div class="callout ok">
 <p><strong>It works. That is the point.</strong> Every one of the six problems below is invisible from the outside: the endpoints return the right thing, the tests would pass, and a demo would go fine. Authentication bugs are almost never crashes — they are systems behaving exactly as written, where what was written is not what was meant.</p>
@@ -496,7 +496,7 @@ curl -s localhost:3000/toi -H 'x-session: 1756000123456'</code></pre>
 </div>
 <pre><code><span class="tok-comment">-- Problem 1, demonstrated in one query</span>
 psql "$DATABASE_URL" -c 'SELECT email, "password" FROM "User";'</code></pre>
-<div class="out">     email     |     matKhau
+<div class="out">     email     |     password
 ---------------+------------------
  an@vidu.com   | khongaidoanduoc
  binh@vidu.com | 123456
@@ -618,7 +618,7 @@ curl -s localhost:3000/dang-nhap -H 'content-type: application/json' \\
   -d '{"email":"an@vidu.com","password":"khongaidoanduoc"}'
 curl -s localhost:3000/toi -H 'x-session: 1756000123456'</code></pre>
 <div class="out">{"id":"clx7a2b1c0000abcdefghijkl"}
-{"phien":"1756000123456"}
+{"session":"1756000123456"}
 {"email":"an@vidu.com"}</div>
 <div class="callout ok">
 <p><strong>Nó CHẠY. Đó mới là điểm mấu chốt.</strong> Mọi lỗi trong sáu lỗi bên dưới đều VÔ HÌNH nhìn từ bên ngoài: các endpoint trả về đúng thứ cần trả, test sẽ xanh, và một buổi demo sẽ trôi chảy. Bug xác thực gần như không bao giờ là một cú sập — chúng là những hệ thống chạy CHÍNH XÁC như đã viết, nơi thứ đã viết không phải thứ đã định.</p>
@@ -635,7 +635,7 @@ curl -s localhost:3000/toi -H 'x-session: 1756000123456'</code></pre>
 </div>
 <pre><code><span class="tok-comment">-- Vấn đề 1, chứng minh bằng một câu truy vấn</span>
 psql "$DATABASE_URL" -c 'SELECT email, "password" FROM "User";'</code></pre>
-<div class="out">     email     |     matKhau
+<div class="out">     email     |     password
 ---------------+------------------
  an@vidu.com   | khongaidoanduoc
  binh@vidu.com | 123456

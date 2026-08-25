@@ -438,15 +438,15 @@ function allowed(u, hanhDong, dt, boiCanh) {
 
 <span class="tok-comment">// Luật: sửa = chuSoHuu HOẶC quanTri của vật chứa nó (đệ quy).</span>
 <span class="tok-comment">//       đọc = sửa HOẶC thanhVien của vật chứa nó HOẶC nguoiXem.</span></code></pre>
-<div class="out">SUA  taiLieu:42   <- nd:cuong             CHO   chuSoHuu truc tiep tren taiLieu:42
-SUA  taiLieu:42   <- nd:mai               CHO   quanTri cua khongGian:cuongthai (ke thua qua thuMuc:ke-hoach) (ke thua qua taiLieu:42)
-SUA  taiLieu:42   <- nd:nam               CHAN  khong tim thay duong nao
-DOC  taiLieu:42   <- nd:nam               CHO   thanhVien cua khongGian:cuongthai
-DOC  taiLieu:42   <- lienKetChiaSe:abc    CHO   nguoiXem truc tiep
-DOC  taiLieu:42   <- nd:lan               CHAN  khong tim thay duong nao
+<div class="out">SUA  document:42   <- nd:cuong             CHO   chuSoHuu truc tiep tren document:42
+SUA  document:42   <- nd:mai               CHO   quanTri cua namespace:cuongthai (ke thua qua folder:ke-hoach) (ke thua qua document:42)
+SUA  document:42   <- nd:nam               CHAN  khong tim thay duong nao
+DOC  document:42   <- nd:nam               CHO   thanhVien cua namespace:cuongthai
+DOC  document:42   <- shareLink:abc    CHO   nguoiXem truc tiep
+DOC  document:42   <- nd:lan               CHAN  khong tim thay duong nao
 
 # Sau bo ba, hai luat, mot phep duyet do thi. Mai KHONG he duoc gan gi tren
-# taiLieu:42 — quyen cua co ay ke thua qua thu muc len den khong gian lam viec.
+# document:42 — permission cua co ay ke thua qua thu muc len den khong gian lam viec.
 # Va moi quyet dinh deu keo theo DUONG DI: do la thu ma RBAC khong in ra duoc.</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Both directions work</span><span class="lz-t">The property ABAC lacks</span><span class="lz-d">"May Cường edit this?" walks up from the object. "Who can edit this?" walks down from it. The same tuples answer both, which is what makes a real sharing dialog possible.</span></div>
@@ -517,15 +517,15 @@ function allowed(u, hanhDong, dt, boiCanh) {
 
 <span class="tok-comment">// Luật: sửa = chuSoHuu HOẶC quanTri của vật chứa nó (đệ quy).</span>
 <span class="tok-comment">//       đọc = sửa HOẶC thanhVien của vật chứa nó HOẶC nguoiXem.</span></code></pre>
-<div class="out">SUA  taiLieu:42   <- nd:cuong             CHO   chuSoHuu truc tiep tren taiLieu:42
-SUA  taiLieu:42   <- nd:mai               CHO   quanTri cua khongGian:cuongthai (ke thua qua thuMuc:ke-hoach) (ke thua qua taiLieu:42)
-SUA  taiLieu:42   <- nd:nam               CHAN  khong tim thay duong nao
-DOC  taiLieu:42   <- nd:nam               CHO   thanhVien cua khongGian:cuongthai
-DOC  taiLieu:42   <- lienKetChiaSe:abc    CHO   nguoiXem truc tiep
-DOC  taiLieu:42   <- nd:lan               CHAN  khong tim thay duong nao
+<div class="out">SUA  document:42   <- nd:cuong             CHO   chuSoHuu truc tiep tren document:42
+SUA  document:42   <- nd:mai               CHO   quanTri cua namespace:cuongthai (ke thua qua folder:ke-hoach) (ke thua qua document:42)
+SUA  document:42   <- nd:nam               CHAN  khong tim thay duong nao
+DOC  document:42   <- nd:nam               CHO   thanhVien cua namespace:cuongthai
+DOC  document:42   <- shareLink:abc    CHO   nguoiXem truc tiep
+DOC  document:42   <- nd:lan               CHAN  khong tim thay duong nao
 
 # Sau bo ba, hai luat, mot phep duyet do thi. Mai KHONG he duoc gan gi tren
-# taiLieu:42 — quyen cua co ay ke thua qua thu muc len den khong gian lam viec.
+# document:42 — permission cua co ay ke thua qua thu muc len den khong gian lam viec.
 # Va moi quyet dinh deu keo theo DUONG DI: do la thu ma RBAC khong in ra duoc.</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Chạy được CẢ HAI CHIỀU</span><span class="lz-t">Tính chất mà ABAC thiếu</span><span class="lz-d">"Cường sửa được cái này không?" thì đi NGƯỢC LÊN từ đối tượng. "Ai sửa được cái này?" thì đi XUỐNG từ nó. Cùng một bộ ba trả lời được cả hai, và đó là thứ làm cho một hộp thoại chia sẻ thật sự trở nên khả thi.</span></div>
@@ -846,7 +846,7 @@ export async function deletePost(u: User, id: string) {
 <h3>The route is not the only door</h3>
 <div class="out"># Dem THAT trong kho ma nay — bao nhieu noi co the cham vao cung mot bang:
 
-  src/routes/       73 tep   <- di qua middleware phan quyen
+  src/routes/       73 tep   <- di qua middleware phan permission
   src/services/    115 tep   <- goi thang tu nhieu noi, khong middleware nao chay
   src/socket/        —       <- su kien realtime, khong co req cua Express
   scripts/         174 tep   <- chay tay, ket noi bang tai khoan migration
@@ -943,7 +943,7 @@ export async function deletePost(u: User, id: string) {
 <h3>Tuyến API KHÔNG phải cánh cửa duy nhất</h3>
 <div class="out"># Dem THAT trong kho ma nay — bao nhieu noi co the cham vao cung mot bang:
 
-  src/routes/       73 tep   <- di qua middleware phan quyen
+  src/routes/       73 tep   <- di qua middleware phan permission
   src/services/    115 tep   <- goi thang tu nhieu noi, khong middleware nao chay
   src/socket/        —       <- su kien realtime, khong co req cua Express
   scripts/         174 tep   <- chay tay, ket noi bang tai khoan migration

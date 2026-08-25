@@ -271,14 +271,14 @@ $queryRaw&lt;T = unknown&gt;(query: TemplateStringsArray, ...values: any[]): Pri
   FROM "SocialPost" GROUP BY "authorId"&#96;;
 console.log(rows[0]);
 res.json(rows);</code></pre>
-<div class="out">{ authorId: 'clx7…', so_bai: 14n }        ← note the n
+<div class="out">{ authorId: 'clx7…', post_count: 14n }        ← note the n
 
 TypeError: Do not know how to serialize a BigInt
     at JSON.stringify (&lt;anonymous&gt;)
     at ServerResponse.json (express/lib/response.js:1150:14)</div>
 <pre><code><span class="tok-comment">-- Fix at the source: cast in the SQL</span>
 SELECT "authorId", count(*)::int AS post_count FROM "SocialPost" GROUP BY "authorId";</code></pre>
-<div class="out">{ authorId: 'clx7…', so_bai: 14 }         ← a plain number</div>
+<div class="out">{ authorId: 'clx7…', post_count: 14 }         ← a plain number</div>
 <div class="callout ok">
 <p><strong>Cast in SQL, do not convert in JavaScript.</strong> <code>Number(row.post_count)</code> works but must be repeated at every call site and forgotten at exactly one of them. <code>::int</code> fixes it once, at the place the value is produced, for every caller — and it documents the intent to the next reader of the query. Use <code>::bigint</code> deliberately when a count really can exceed 2<sup>31</sup>, and then handle the BigInt on purpose.</p>
 </div>
@@ -355,7 +355,7 @@ const rows = StatsRow.array().parse(
 <div class="out">ZodError: [
   {
     "code": "invalid_type", "expected": "number", "received": "bigint",
-    "path": [0, "so_bai"], "message": "Expected number, received bigint"
+    "path": [0, "post_count"], "message": "Expected number, received bigint"
   }
 ]</div>
 <div class="callout ok">
@@ -402,14 +402,14 @@ $queryRaw&lt;T = unknown&gt;(query: TemplateStringsArray, ...values: any[]): Pri
   FROM "SocialPost" GROUP BY "authorId"&#96;;
 console.log(rows[0]);
 res.json(rows);</code></pre>
-<div class="out">{ authorId: 'clx7…', so_bai: 14n }        ← chu y chu n
+<div class="out">{ authorId: 'clx7…', post_count: 14n }        ← chu y chu n
 
 TypeError: Do not know how to serialize a BigInt
     at JSON.stringify (&lt;anonymous&gt;)
     at ServerResponse.json (express/lib/response.js:1150:14)</div>
 <pre><code><span class="tok-comment">-- Vá tại nguồn: ép kiểu ngay trong SQL</span>
 SELECT "authorId", count(*)::int AS post_count FROM "SocialPost" GROUP BY "authorId";</code></pre>
-<div class="out">{ authorId: 'clx7…', so_bai: 14 }         ← mot so thuong</div>
+<div class="out">{ authorId: 'clx7…', post_count: 14 }         ← mot count thuong</div>
 <div class="callout ok">
 <p><strong>Ép kiểu trong SQL, đừng chuyển đổi trong JavaScript.</strong> <code>Number(row.post_count)</code> chạy được nhưng phải lặp lại ở mọi chỗ gọi và sẽ bị quên ở đúng một chỗ. <code>::int</code> vá một lần, ngay nơi giá trị được sinh ra, cho MỌI người gọi — và nó nói rõ ý định cho người đọc câu truy vấn sau này. Chỉ dùng <code>::bigint</code> một cách CÓ CHỦ Ý khi phép đếm thật sự có thể vượt 2<sup>31</sup>, rồi xử lý BigInt một cách có chủ ý luôn.</p>
 </div>
@@ -486,7 +486,7 @@ const rows = StatsRow.array().parse(
 <div class="out">ZodError: [
   {
     "code": "invalid_type", "expected": "number", "received": "bigint",
-    "path": [0, "so_bai"], "message": "Expected number, received bigint"
+    "path": [0, "post_count"], "message": "Expected number, received bigint"
   }
 ]</div>
 <div class="callout ok">
@@ -532,7 +532,7 @@ CROSS JOIN LATERAL (
   LIMIT 3
 ) p
 WHERE u.id = ANY($1);</code></pre>
-<div class="out">50 tac gia x 3 bai = 150 hang, 1 cau truy van, 11.4 ms
+<div class="out">50 tac price x 3 post = 150 hang, 1 cau truy van, 11.4 ms
 
 (cung du lieu qua trinh dung: 51 cau truy van, 288 ms)</div>
 <div class="lz-flow">
@@ -554,7 +554,7 @@ LEFT JOIN "SocialPost" p ON p."authorId" = u.id AND p."deletedAt" IS NULL
 GROUP BY u.id, u.username
 ORDER BY post_count DESC
 LIMIT 5;</code></pre>
-<div class="out">  username  | so_bai | hang | luy_tien | nguoi_tren
+<div class="out">  username  | post_count | hang | luy_tien | nguoi_tren
 ------------+--------+------+----------+------------
  cuongthai  |    418 |    1 |      418 |
  an         |    391 |    2 |      809 | cuongthai
@@ -653,13 +653,13 @@ CREATE INDEX socialpost_tim_kiem_idx ON "SocialPost" USING GIN (tim_kiem);</code
   WHERE tim_kiem @@ truy_van AND "deletedAt" IS NULL
   ORDER BY score DESC, "createdAt" DESC
   LIMIT 20&#96;;</code></pre>
-<div class="out">tu khoa: prisma migration
+<div class="out">from key: prisma migration
 
- diem  | trich
+ score  | trich
 -------+-------------------------------------------------------
  0.099 | huong dan &lt;mark&gt;migration&lt;/mark&gt; cua &lt;mark&gt;Prisma&lt;/mark&gt;…
  0.075 | &lt;mark&gt;Prisma&lt;/mark&gt; migrate deploy tren VPS…
- 0.061 | vi sao &lt;mark&gt;migration&lt;/mark&gt; that bai voi P3006…
+ 0.061 | vi sao &lt;mark&gt;migration&lt;/mark&gt; that post voi P3006…
 
 Execution Time: 4.7 ms over 1.2M rows (GIN index scan)</div>
 <div class="callout ok">
@@ -707,7 +707,7 @@ CROSS JOIN LATERAL (
   LIMIT 3
 ) p
 WHERE u.id = ANY($1);</code></pre>
-<div class="out">50 tac gia x 3 bai = 150 hang, 1 cau truy van, 11,4 ms
+<div class="out">50 tac price x 3 post = 150 hang, 1 cau truy van, 11,4 ms
 
 (cung du lieu qua trinh dung: 51 cau truy van, 288 ms)</div>
 <div class="lz-flow">
@@ -729,13 +729,13 @@ LEFT JOIN "SocialPost" p ON p."authorId" = u.id AND p."deletedAt" IS NULL
 GROUP BY u.id, u.username
 ORDER BY post_count DESC
 LIMIT 5;</code></pre>
-<div class="out">  username  | so_bai | hang | luy_tien | nguoi_tren
+<div class="out">  username  | post_count | hang | luy_tien | nguoi_tren
 ------------+--------+------+----------+------------
  cuongthai  |    418 |    1 |      418 |
  an         |    391 |    2 |      809 | cuongthai
  binh       |    287 |    3 |     1096 | an
  chi        |    287 |    3 |     1383 | binh      ← hoa: ca hai deu hang 3
- dung       |    150 |    5 |     1533 | chi       ← rank() bo qua so 4</div>
+ dung       |    150 |    5 |     1533 | chi       ← rank() bo qua count 4</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Window function KHÔNG gộp hàng lại</span><span class="v"><code>GROUP BY</code> biến nhiều hàng thành một. <code>OVER (…)</code> tính trên một TẬP hàng mà GIỮ NGUYÊN mọi hàng. Đó là toàn bộ khác biệt, và là lý do một bảng xếp hạng CÓ thứ hạng thì cần nó, còn bảng KHÔNG có thứ hạng thì không.</span></div>
   <div class="kv"><span class="k"><code>rank()</code> đối lại <code>dense_rank()</code> đối lại <code>row_number()</code></span><span class="v"><code>rank</code> cho các trường hợp hoà cùng một số rồi BỎ QUA số kế (1,2,3,3,5). <code>dense_rank</code> không bỏ qua (1,2,3,3,4). <code>row_number</code> không bao giờ hoà (1,2,3,4,5) và tuỳ tiện giữa các hàng bằng nhau — thêm cột phá hoà vào <code>ORDER BY</code> nếu không nó không ổn định.</span></div>
@@ -828,13 +828,13 @@ CREATE INDEX socialpost_tim_kiem_idx ON "SocialPost" USING GIN (tim_kiem);</code
   WHERE tim_kiem @@ truy_van AND "deletedAt" IS NULL
   ORDER BY score DESC, "createdAt" DESC
   LIMIT 20&#96;;</code></pre>
-<div class="out">tu khoa: prisma migration
+<div class="out">from key: prisma migration
 
- diem  | trich
+ score  | trich
 -------+-------------------------------------------------------
  0,099 | huong dan &lt;mark&gt;migration&lt;/mark&gt; cua &lt;mark&gt;Prisma&lt;/mark&gt;…
  0,075 | &lt;mark&gt;Prisma&lt;/mark&gt; migrate deploy tren VPS…
- 0,061 | vi sao &lt;mark&gt;migration&lt;/mark&gt; that bai voi P3006…
+ 0,061 | vi sao &lt;mark&gt;migration&lt;/mark&gt; that post voi P3006…
 
 Execution Time: 4,7 ms tren 1,2 trieu hang (quet chi muc GIN)</div>
 <div class="callout ok">
@@ -932,7 +932,7 @@ rows[0].not_real;  <span class="tok-comment">// ❌ Property 'khong_co_that' doe
 npx prisma generate --sql</code></pre>
 <div class="out">Error: Failed to generate SQL queries
 
-  prisma/sql/thongKeTacGia.sql
+  prisma/sql/authorStats.sql
     Error: column p.content does not exist
       LINE 3:   p.content,
                 ^
@@ -1065,7 +1065,7 @@ rows[0].not_real;  <span class="tok-comment">// ❌ Property 'khong_co_that' doe
 npx prisma generate --sql</code></pre>
 <div class="out">Error: Failed to generate SQL queries
 
-  prisma/sql/thongKeTacGia.sql
+  prisma/sql/authorStats.sql
     Error: column p.content does not exist
       LINE 3:   p.content,
                 ^

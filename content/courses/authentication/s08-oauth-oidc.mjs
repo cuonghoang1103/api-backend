@@ -229,7 +229,7 @@ await redis.set(&#96;oauth:\${req.sessionId}&#96;, JSON.stringify({ verifier, st
 code_challenge        : coi0bg884uyP36FyBO_ZqDG1bbN8aqWYsYPsv0T-2jQ
 code_challenge_method : S256
 
-Kiem lai o may chu uy quyen: sha256(verifier) === challenge ? true
+Kiem lai o may chu uy permission: sha256(verifier) === challenge ? true
 Voi mot verifier khac      : false
 
 state : BzuHDh0OxTWWNSVWIEM8nQ  (chong CSRF o duong quay ve)
@@ -339,7 +339,7 @@ await redis.set(&#96;oauth:\${req.sessionId}&#96;, JSON.stringify({ verifier, st
 code_challenge        : coi0bg884uyP36FyBO_ZqDG1bbN8aqWYsYPsv0T-2jQ
 code_challenge_method : S256
 
-Kiem lai o may chu uy quyen: sha256(verifier) === challenge ? true
+Kiem lai o may chu uy permission: sha256(verifier) === challenge ? true
 Voi mot verifier khac      : false
 
 state : BzuHDh0OxTWWNSVWIEM8nQ  (chong CSRF o duong quay ve)

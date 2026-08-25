@@ -115,7 +115,7 @@ join    : /var/www/uploads</div>
   <div class="kv"><span class="k">path.extname / basename / parse</span><span class="v">Tháo rời một đường dẫn. Dùng mấy cái này thay cho <code>split('.')</code>.</span></div>
 </div>
 <div class="pitfall"><strong>Cái bẫy bảo mật.</strong> Đừng bao giờ viết <code>path.join(thuMucUpload, req.params.filename)</code> với tên file do người dùng gửi lên. Một cái tên kiểu <code>../../etc/passwd</code> sẽ thoát khỏi thư mục của bạn — đây là lỗ hổng path traversal. Luôn kiểm tra kết quả có còn nằm bên trong hay không:
-<br><br><code>const full = path.resolve(thuMucUpload, ten);<br>if (!full.startsWith(path.resolve(thuMucUpload) + path.sep)) throw new Error('đường dẫn không hợp lệ');</code></div>
+<br><br><code>const full = path.resolve(thuMucUpload, name);<br>if (!full.startsWith(path.resolve(thuMucUpload) + path.sep)) throw new Error('đường dẫn không hợp lệ');</code></div>
 
 <h3>fs có ba phong cách</h3>
 <pre><code><span class="tok-comment">// 1. API Promise — cái bạn nên dùng</span>
@@ -373,15 +373,15 @@ compressed:  15.0 MB</div>
 <span class="tok-function">console.log</span>(<span class="tok-string">'RAM trước :'</span>, <span class="tok-function">mb</span>(), <span class="tok-string">'MB'</span>);
 
 <span class="tok-keyword">const</span> data = fs.<span class="tok-function">readFileSync</span>(file);        <span class="tok-comment">// nạp TOÀN BỘ file vào RAM</span>
-<span class="tok-keyword">let</span> dong = <span class="tok-number">0</span>;
-<span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> ch <span class="tok-keyword">of</span> data) <span class="tok-keyword">if</span> (ch === <span class="tok-number">10</span>) dong++;
+<span class="tok-keyword">let</span> lines = <span class="tok-number">0</span>;
+<span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> ch <span class="tok-keyword">of</span> data) <span class="tok-keyword">if</span> (ch === <span class="tok-number">10</span>) lines++;
 <span class="tok-function">console.log</span>(<span class="tok-string">'RAM sau   :'</span>, <span class="tok-function">mb</span>(), <span class="tok-string">'MB'</span>);</code></pre>
 <div class="out">RAM trước : 37 MB
 RAM sau   : 395 MB
 số dòng: 6000000 | thời gian: 3662 ms</div>
 <p>Giờ vẫn phép đếm đó nhưng bằng stream, đọc theo từng khúc:</p>
 <pre><code>fs.<span class="tok-function">createReadStream</span>(file)
-  .<span class="tok-function">on</span>(<span class="tok-string">'data'</span>, (chunk) =&gt; { <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> ch <span class="tok-keyword">of</span> chunk) <span class="tok-keyword">if</span> (ch === <span class="tok-number">10</span>) dong++; })
+  .<span class="tok-function">on</span>(<span class="tok-string">'data'</span>, (chunk) =&gt; { <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> ch <span class="tok-keyword">of</span> chunk) <span class="tok-keyword">if</span> (ch === <span class="tok-number">10</span>) lines++; })
   .<span class="tok-function">on</span>(<span class="tok-string">'end'</span>, () =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'RAM đỉnh:'</span>, dinh, <span class="tok-string">'MB'</span>));</code></pre>
 <div class="out">RAM trước   : 37 MB
 RAM đỉnh    : 120 MB
@@ -517,18 +517,18 @@ store.<span class="tok-function">off</span>(<span class="tok-string">'saved'</sp
 <h3>Phát và nghe</h3>
 <pre><code><span class="tok-keyword">const</span> { EventEmitter } = <span class="tok-function">require</span>(<span class="tok-string">'node:events'</span>);
 
-<span class="tok-keyword">class</span> <span class="tok-type">KhoLuu</span> <span class="tok-keyword">extends</span> <span class="tok-type">EventEmitter</span> {
-  <span class="tok-function">luu</span>(ten) { <span class="tok-keyword">this</span>.<span class="tok-function">emit</span>(<span class="tok-string">'daLuu'</span>, { ten }); }
+<span class="tok-keyword">class</span> <span class="tok-type">NoteStore</span> <span class="tok-keyword">extends</span> <span class="tok-type">EventEmitter</span> {
+  <span class="tok-function">save</span>(name) { <span class="tok-keyword">this</span>.<span class="tok-function">emit</span>(<span class="tok-string">'daLuu'</span>, { name }); }
 }
 
-<span class="tok-keyword">const</span> kho = <span class="tok-keyword">new</span> <span class="tok-function">KhoLuu</span>();
-kho.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, (n) =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [log]    đã lưu:'</span>, n.ten));
-kho.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, (n) =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [email]  gửi thông báo về:'</span>, n.ten));
-kho.<span class="tok-function">once</span>(<span class="tok-string">'daLuu'</span>, () =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [once]   chỉ chạy lần đầu'</span>));
+<span class="tok-keyword">const</span> store = <span class="tok-keyword">new</span> <span class="tok-function">NoteStore</span>();
+store.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, (n) =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [log]    đã lưu:'</span>, n.name));
+store.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, (n) =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [email]  gửi thông báo về:'</span>, n.name));
+store.<span class="tok-function">once</span>(<span class="tok-string">'daLuu'</span>, () =&gt; <span class="tok-function">console.log</span>(<span class="tok-string">'  [once]   chỉ chạy lần đầu'</span>));
 
-kho.<span class="tok-function">luu</span>(<span class="tok-string">'ghi-chu-1'</span>);
-kho.<span class="tok-function">luu</span>(<span class="tok-string">'ghi-chu-2'</span>);
-<span class="tok-function">console.log</span>(<span class="tok-string">'số listener của daLuu:'</span>, kho.<span class="tok-function">listenerCount</span>(<span class="tok-string">'daLuu'</span>));</code></pre>
+store.<span class="tok-function">save</span>(<span class="tok-string">'ghi-chu-1'</span>);
+store.<span class="tok-function">save</span>(<span class="tok-string">'ghi-chu-2'</span>);
+<span class="tok-function">console.log</span>(<span class="tok-string">'số listener của daLuu:'</span>, store.<span class="tok-function">listenerCount</span>(<span class="tok-string">'daLuu'</span>));</code></pre>
 <div class="out">  [log]    đã lưu: ghi-chu-1
   [email]  gửi thông báo về: ghi-chu-1
   [once]   chỉ chạy lần đầu
@@ -549,14 +549,14 @@ e.<span class="tok-function">on</span>(<span class="tok-string">'error'</span>, 
 
 <h3>Cảnh báo rò rỉ bộ nhớ mà bạn sẽ gặp</h3>
 <pre><code>(node:1234) MaxListenersExceededWarning: Possible EventEmitter memory leak
-detected. 11 daLuu listeners added to [KhoLuu]. Use emitter.setMaxListeners()
+detected. 11 daLuu listeners added to [NoteStore]. Use emitter.setMaxListeners()
 to increase limit</code></pre>
 <div class="callout warn">Node cảnh báo khi một sự kiện có 11 listener. Chuyện này gần như không bao giờ được giải quyết bằng cách nâng giới hạn lên — nó có nghĩa bạn đang <strong>thêm listener mà không gỡ ra</strong>, thường là bên trong một request handler. Mỗi request lại thêm một cái, bộ nhớ phình dần, và cuối cùng tiến trình chết. Cách sửa là <code>off()</code> / <code>once()</code>, chứ không phải <code>setMaxListeners(100)</code>.</div>
 <pre><code><span class="tok-comment">// đăng ký rồi dọn dẹp</span>
-<span class="tok-keyword">const</span> khiLuu = (n) =&gt; <span class="tok-function">xuLy</span>(n);
-kho.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, khiLuu);
+<span class="tok-keyword">const</span> onSaved = (n) =&gt; <span class="tok-function">xuLy</span>(n);
+store.<span class="tok-function">on</span>(<span class="tok-string">'daLuu'</span>, onSaved);
 <span class="tok-comment">// về sau, khi bên tiêu thụ không cần nữa:</span>
-kho.<span class="tok-function">off</span>(<span class="tok-string">'daLuu'</span>, khiLuu);</code></pre>
+store.<span class="tok-function">off</span>(<span class="tok-string">'daLuu'</span>, onSaved);</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">on / off</span><span class="v">Thêm và gỡ listener. Muốn gỡ phải có ĐÚNG tham chiếu hàm đó — một arrow viết thẳng tại chỗ thì không gỡ được.</span></div>
   <div class="kv"><span class="k">once</span><span class="v">Tự gỡ sau lần phát đầu tiên. Dùng cho những việc một-lần như 'ready' hay 'close'.</span></div>

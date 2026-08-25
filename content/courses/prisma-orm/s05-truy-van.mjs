@@ -1056,9 +1056,9 @@ const bieuDo = await prisma.$queryRaw&lt;Day[]&gt;&#96;
   GROUP BY d.day
   ORDER BY d.day&#96;;</code></pre>
 <div class="out">[
-  { ngay: 2026-08-01, soDon: 128n, doanhThu: 24180000n },
-  { ngay: 2026-08-02, soDon:   0n, doanhThu:        0n },   ← the gap, filled
-  { ngay: 2026-08-03, soDon:  94n, doanhThu: 18402000n }
+  { day: 2026-08-01, orderCount: 128n, revenue: 24180000n },
+  { day: 2026-08-02, orderCount:   0n, revenue:        0n },   ← the gap, filled
+  { day: 2026-08-03, orderCount:  94n, revenue: 18402000n }
 ]</div>
 <div class="pitfall">
 <p><strong>Trap — <code>COUNT</code> and <code>SUM</code> come back as <code>BigInt</code> from a raw query.</strong> PostgreSQL returns <code>bigint</code> for both, and the driver maps it to the JavaScript <code>bigint</code> primitive. <code>JSON.stringify</code> then throws <code>TypeError: Do not know how to serialize a BigInt</code>. Cast in SQL (<code>COUNT(*)::int</code>) or convert in JavaScript (<code>Number(row.orderCount)</code>) before the response — and note that Prisma's own <code>_count</code> does this for you, which is why the problem only appears once you drop to raw.</p>
@@ -1202,9 +1202,9 @@ const bieuDo = await prisma.$queryRaw&lt;Day[]&gt;&#96;
   GROUP BY d.day
   ORDER BY d.day&#96;;</code></pre>
 <div class="out">[
-  { ngay: 2026-08-01, soDon: 128n, doanhThu: 24180000n },
-  { ngay: 2026-08-02, soDon:   0n, doanhThu:        0n },   ← chỗ trống, đã lấp
-  { ngay: 2026-08-03, soDon:  94n, doanhThu: 18402000n }
+  { day: 2026-08-01, orderCount: 128n, revenue: 24180000n },
+  { day: 2026-08-02, orderCount:   0n, revenue:        0n },   ← chỗ trống, đã lấp
+  { day: 2026-08-03, orderCount:  94n, revenue: 18402000n }
 ]</div>
 <div class="pitfall">
 <p><strong>Bẫy — <code>COUNT</code> và <code>SUM</code> quay về dưới dạng <code>BigInt</code> từ một truy vấn thô.</strong> PostgreSQL trả về <code>bigint</code> cho cả hai, và trình điều khiển ánh xạ nó sang kiểu nguyên thuỷ <code>bigint</code> của JavaScript. <code>JSON.stringify</code> khi ấy ném <code>TypeError: Do not know how to serialize a BigInt</code>. Hãy ép kiểu trong SQL (<code>COUNT(*)::int</code>) hoặc đổi trong JavaScript (<code>Number(row.orderCount)</code>) trước khi trả về — và lưu ý <code>_count</code> của chính Prisma làm hộ bạn việc đó, nên vấn đề chỉ xuất hiện khi bạn rơi xuống SQL thô.</p>
@@ -1312,7 +1312,7 @@ const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: numbe
   ORDER BY sim DESC
   LIMIT 20&#96;;</code></pre>
 <div class="out">[
-  { id: 4182, title: 'Huong dan Prisma tu dau', sim: 0.42 },
+  { id: 4182, title: 'Huong dan Prisma from dau', sim: 0.42 },
   { id: 9013, title: 'Prima facie: doc lai',    sim: 0.31 }   ← typo tolerance
 ]</div>
 
@@ -1346,7 +1346,7 @@ model Post {
 Execution Time: 2.011 ms
 
 [
-  { id: 4182, title: 'Huong dan Prisma tu dau', rank: 0.6079 },
+  { id: 4182, title: 'Huong dan Prisma from dau', rank: 0.6079 },
   { id: 7710, title: 'Migrate voi Prisma',      rank: 0.2432 }
 ]</div>
 <div class="lz-flow">
@@ -1447,7 +1447,7 @@ const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: numbe
   ORDER BY sim DESC
   LIMIT 20&#96;;</code></pre>
 <div class="out">[
-  { id: 4182, title: 'Huong dan Prisma tu dau', sim: 0.42 },
+  { id: 4182, title: 'Huong dan Prisma from dau', sim: 0.42 },
   { id: 9013, title: 'Prima facie: doc lai',    sim: 0.31 }   ← chịu được lỗi gõ
 ]</div>
 
@@ -1481,7 +1481,7 @@ model Post {
 Execution Time: 2.011 ms
 
 [
-  { id: 4182, title: 'Huong dan Prisma tu dau', rank: 0.6079 },
+  { id: 4182, title: 'Huong dan Prisma from dau', rank: 0.6079 },
   { id: 7710, title: 'Migrate voi Prisma',      rank: 0.2432 }
 ]</div>
 <div class="lz-flow">

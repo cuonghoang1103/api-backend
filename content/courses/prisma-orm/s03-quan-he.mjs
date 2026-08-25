@@ -1433,7 +1433,7 @@ model Post {
 }</code></pre>
 <pre><code><span class="tok-comment">// Remove the names and see what Prisma says</span>
 npx prisma validate</code></pre>
-<div class="out">error: Error validating model "Post": Ambiguous relation detected. The fields &#96;tacGia&#96; and &#96;nguoiDuyet&#96; in model &#96;Post&#96; both refer to &#96;User&#96;. Please provide different relation names for them by adding &#96;@relation(&lt;name&gt;)&#96;.
+<div class="out">error: Error validating model "Post": Ambiguous relation detected. The fields &#96;author&#96; and &#96;nguoiDuyet&#96; in model &#96;Post&#96; both refer to &#96;User&#96;. Please provide different relation names for them by adding &#96;@relation(&lt;name&gt;)&#96;.
   --&gt;  prisma/schema.prisma:18</div>
 <p>Clear, and it names the fix. Note the two different <code>onDelete</code> choices in the working version, which is the point of separating them: deleting a user must not silently delete the posts they wrote (<code>Restrict</code>, the default), but it should clear the reviewer field on posts they merely approved (<code>SetNull</code>). One relation, one policy.</p>
 
@@ -1603,7 +1603,7 @@ model Post {
 }</code></pre>
 <pre><code><span class="tok-comment">// Bỏ hai cái tên đi rồi xem Prisma nói gì</span>
 npx prisma validate</code></pre>
-<div class="out">error: Error validating model "Post": Ambiguous relation detected. The fields &#96;tacGia&#96; and &#96;nguoiDuyet&#96; in model &#96;Post&#96; both refer to &#96;User&#96;. Please provide different relation names for them by adding &#96;@relation(&lt;name&gt;)&#96;.
+<div class="out">error: Error validating model "Post": Ambiguous relation detected. The fields &#96;author&#96; and &#96;nguoiDuyet&#96; in model &#96;Post&#96; both refer to &#96;User&#96;. Please provide different relation names for them by adding &#96;@relation(&lt;name&gt;)&#96;.
   --&gt;  prisma/schema.prisma:18</div>
 <p>Rõ ràng, và nó nêu luôn cách vá. Để ý hai lựa chọn <code>onDelete</code> khác nhau trong bản chạy được, vì đó chính là điểm của việc tách chúng ra: xoá một người dùng thì không được âm thầm xoá những bài họ đã viết (<code>Restrict</code>, mặc định), nhưng nên xoá trường người duyệt trên những bài họ chỉ đi duyệt (<code>SetNull</code>). Một quan hệ, một chính sách.</p>
 

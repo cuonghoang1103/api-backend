@@ -440,7 +440,7 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
 <div class="out">token hợp lệ             → KẾT NỐI ĐƯỢC
 không token              → BỊ TỪ CHỐI: NO_TOKEN
 token hết hạn            → BỊ TỪ CHỐI: jwt expired
-token tự ký khoá sai     → BỊ TỪ CHỐI: invalid signature</div>
+token tự ký storeá sai     → BỊ TỪ CHỐI: invalid signature</div>
 <p>Rejection surfaces on the client as a <code>connect_error</code> event, not as a thrown exception — a client that only listens for <code>connect</code> will sit there silently forever, which is why an unauthenticated socket usually presents as "realtime just doesn't work" rather than as an error.</p>
 
 <h3>Measurement 2 — the hole: authenticated is not authorized</h3>
@@ -456,7 +456,7 @@ socket.on(<span class="tok-str">'join:safe'</span>, (threadId) =&gt; {
 <p>User 7 asks for thread 99, which belongs to two other people:</p>
 <div class="out">   join:unsafe → ĐÃ VÀO thread:99 (không ai kiểm!)
    join:safe   → TỪ CHỐI thread 99 (không phải người trong cuộc)
-   ⚠️  socket lậu NHẬN ĐƯỢC tin riêng tư: {"threadId":99,"body":"Chuyển khoản 50 triệu nhé"}</div>
+   ⚠️  socket lậu NHẬN ĐƯỢC tin riêng tư: {"threadId":99,"body":"Chuyển storeản 50 triệu nhé"}</div>
 <p>That is the whole attack. No stolen token, no XSS, no privilege escalation — a legitimately logged-in user emitted one event with a number they do not own. Thread ids are sequential integers, so "guessing" is a <code>for</code> loop. And because it happens over a socket, <strong>nothing appears in your REST access logs</strong>: no <code>GET /threads/99</code>, no 403, nothing to alert on.</p>
 
 <div class="note-ct">
@@ -525,7 +525,7 @@ tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
 <div class="out">token hợp lệ             → KẾT NỐI ĐƯỢC
 không token              → BỊ TỪ CHỐI: NO_TOKEN
 token hết hạn            → BỊ TỪ CHỐI: jwt expired
-token tự ký khoá sai     → BỊ TỪ CHỐI: invalid signature</div>
+token tự ký storeá sai     → BỊ TỪ CHỐI: invalid signature</div>
 <p>Việc bị từ chối hiện ra ở client dưới dạng sự kiện <code>connect_error</code>, không phải một ngoại lệ được ném ra — một client chỉ lắng nghe <code>connect</code> sẽ ngồi im lặng mãi mãi, và đó là lý do một socket chưa xác thực thường biểu hiện thành câu "realtime tự nhiên không chạy" chứ không thành một thông báo lỗi.</p>
 
 <h3>Phép đo 2 — cái lỗ: đã xác thực KHÔNG có nghĩa là có quyền</h3>
@@ -541,7 +541,7 @@ socket.on(<span class="tok-str">'join:safe'</span>, (threadId) =&gt; {
 <p>Người dùng 7 xin vào thread 99, vốn là của hai người khác:</p>
 <div class="out">   join:unsafe → ĐÃ VÀO thread:99 (không ai kiểm!)
    join:safe   → TỪ CHỐI thread 99 (không phải người trong cuộc)
-   ⚠️  socket lậu NHẬN ĐƯỢC tin riêng tư: {"threadId":99,"body":"Chuyển khoản 50 triệu nhé"}</div>
+   ⚠️  socket lậu NHẬN ĐƯỢC tin riêng tư: {"threadId":99,"body":"Chuyển storeản 50 triệu nhé"}</div>
 <p>Toàn bộ đòn tấn công chỉ có thế. Không trộm token, không XSS, không leo thang đặc quyền — một người dùng đăng nhập hợp pháp emit một sự kiện kèm một con số không thuộc về mình. Id của thread là số nguyên tuần tự, nên "đoán" ở đây là một vòng <code>for</code>. Và vì chuyện xảy ra qua socket nên <strong>không có gì hiện lên trong log truy cập REST</strong>: không <code>GET /threads/99</code>, không lỗi 403, không có gì để mà cảnh báo.</p>
 
 <div class="note-ct">

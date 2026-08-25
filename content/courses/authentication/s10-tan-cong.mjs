@@ -389,7 +389,7 @@ if (session.lastIp &amp;&amp; asn(req.ip) !== asn(session.lastIp)) {
   frontend  package-lock   1159 goi trong ca cay
 
 # 2.056 goi. Ban da doc mao dich vu cua bao nhieu cai trong so do?
-# Moi goi CHAY TRONG TRINH DUYET deu co quyen y het mot cu XSS.
+# Moi goi CHAY TRONG TRINH DUYET deu co permission y het mot cu XSS.
 # Moi goi chay o BACKEND deu doc duoc process.env — tuc la khoa ky.</div>
 <div class="pitfall">
 <p><strong>Trap — a compromised frontend package has exactly the power of a stored XSS, on every page, forever.</strong> It does not need a vulnerability in your code; you installed it and shipped it yourself. A backend package is worse: it runs with your process's privileges and can read <code>process.env</code>, which holds the JWT signing key from Lesson 4.4 and the database URL. The practical defences are unglamorous — pin exact versions with a lockfile, enable a scanner in CI, avoid packages with one maintainer and no releases for two years, and be suspicious of a new transitive dependency appearing in a routine update. And treat <code>postinstall</code> scripts as code you are choosing to run, because they are.</p>
@@ -470,7 +470,7 @@ Set-Cookie: session=…; Secure; HttpOnly            <span class="tok-comment">/
   frontend  package-lock   1159 goi trong ca cay
 
 # 2.056 goi. Ban da doc mao dich vu cua bao nhieu cai trong so do?
-# Moi goi CHAY TRONG TRINH DUYET deu co quyen y het mot cu XSS.
+# Moi goi CHAY TRONG TRINH DUYET deu co permission y het mot cu XSS.
 # Moi goi chay o BACKEND deu doc duoc process.env — tuc la khoa ky.</div>
 <div class="pitfall">
 <p><strong>Bẫy — một gói frontend bị nhiễm có ĐÚNG sức mạnh của một cú XSS lưu trữ, trên MỌI trang, MÃI MÃI.</strong> Nó chẳng cần một lỗ hổng nào trong mã của bạn; chính bạn đã cài nó và chính bạn đưa nó lên. Một gói backend còn tệ hơn: nó chạy với đặc quyền của tiến trình của bạn và đọc được <code>process.env</code>, nơi đang giữ khoá ký JWT ở Bài 4.4 và cả chuỗi kết nối cơ sở dữ liệu. Các biện pháp thực tế thì chẳng hào nhoáng gì — ghim phiên bản chính xác bằng lockfile, bật một bộ quét trong CI, tránh những gói chỉ có một người bảo trì và hai năm không ra bản mới, và hãy nghi ngờ một gói phụ thuộc gián tiếp MỚI bỗng xuất hiện trong một lần cập nhật thường lệ. Và hãy coi các script <code>postinstall</code> là MÃ MÀ BẠN ĐANG CHỌN CHẠY, vì chúng đúng là như vậy.</p>

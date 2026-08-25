@@ -96,7 +96,7 @@ export async function signIn(u: User, req: Request, res: Response) {
 Set-Cookie: __Host-refresh=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000
 Content-Type: application/json
 
-{"accessToken":"eyJhbGciOiJFZERTQSIsImtpZCI6IjIwMjYtMDgifQ…","hetHanSau":900}
+{"accessToken":"eyJhbGciOiJFZERTQSIsImtpZCI6IjIwMjYtMDgifQ…","expiresIn":900}
 
 # Access token di vao BO NHO cua front end (Bai 4.5).
 # Refresh token khong bao gio cham toi JavaScript.</div>
@@ -232,7 +232,7 @@ export async function signIn(u: User, req: Request, res: Response) {
 Set-Cookie: __Host-refresh=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000
 Content-Type: application/json
 
-{"accessToken":"eyJhbGciOiJFZERTQSIsImtpZCI6IjIwMjYtMDgifQ…","hetHanSau":900}
+{"accessToken":"eyJhbGciOiJFZERTQSIsImtpZCI6IjIwMjYtMDgifQ…","expiresIn":900}
 
 # Access token di vao BO NHO cua front end (Bai 4.5).
 # Refresh token khong bao gio cham toi JavaScript.</div>
@@ -327,17 +327,17 @@ Dich vu noi bo, may-toi-may  1 gio    khong co    1 gio</code></pre>
   ]);
   return newToken;
 }</code></pre>
-<div class="out">SELECT "hoId", left("tokenBam",8) AS bam, "taoLuc"::time, "dungLuc"::time
-FROM "RefreshToken" WHERE "hoId" = 'f47ac10b…' ORDER BY "taoLuc";
+<div class="out">SELECT "hoId", left("tokenHash",8) AS bam, "createdAt"::time, "usedAt"::time
+FROM "RefreshToken" WHERE "hoId" = 'f47ac10b…' ORDER BY "createdAt";
 
-  hoId     |   bam    |  taoLuc  |  dungLuc
+  hoId     |   bam    |  createdAt  |  usedAt
 -----------+----------+----------+----------
  f47ac10b… | 8f2a91c4 | 09:14:02 | 09:29:11    ← RT1, da doi lay RT2
  f47ac10b… | d47b0e29 | 09:29:11 | 09:44:20    ← RT2, da doi lay RT3
  f47ac10b… | 1c9fa38b | 09:44:20 |             ← RT3, dang song
 
 # Mot lan dang nhap = mot HO. Moi lan refresh them mot mat xich.
-# Cai het han TUYET DOI thua ke tu mat xich dau — xoay vong khong keo dai phien.</div>
+# Cai het han TUYET DOI thua ke tu mat xich dau — xoay vong khong keo dai session.</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Do not extend the absolute expiry</span><span class="v">Each new token inherits <code>expiresAt</code> from the one it replaced. Otherwise rotation becomes sliding expiry, and Lesson 3.1's problem returns: a stolen family kept warm never ends.</span></div>
   <div class="kv"><span class="k">One transaction, or the race wins</span><span class="v">Marking used and creating the successor must be atomic. Split them and two concurrent refreshes can both see an unused token and both mint successors — two live branches of one family, which is the state reuse detection is supposed to make impossible.</span></div>
@@ -378,9 +378,9 @@ if (cu.usedAt) {
   clearRefreshCookie(res);
   return res.status(401).json({ error: 'Session khong hop le, vui long dang nhap lai' });
 }</code></pre>
-<div class="out">{"level":40,"su_kien":"refresh_token_tai_dung","nguoiDungId":"clx7a2b1c",
- "hoId":"f47ac10b…","daDungLuc":"2026-08-23T09:29:11.284Z",
- "ip":"203.0.113.47","trinhDuyet":"Mozilla/5.0 (X11; Linux x86_64)…"}
+<div class="out">{"level":40,"event":"refresh_token_tai_dung","userId":"clx7a2b1c",
+ "hoId":"f47ac10b…","usedAt":"2026-08-23T09:29:11.284Z",
+ "ip":"203.0.113.47","browser":"Mozilla/5.0 (X11; Linux x86_64)…"}
 
 # Duong nay chay = mot chuoi refresh token da bi nhan doi.
 # Day la mot trong rat it tin hieu xac thuc gan nhu KHONG bao gio
@@ -456,17 +456,17 @@ if (cu.usedAt) {
   ]);
   return newToken;
 }</code></pre>
-<div class="out">SELECT "hoId", left("tokenBam",8) AS bam, "taoLuc"::time, "dungLuc"::time
-FROM "RefreshToken" WHERE "hoId" = 'f47ac10b…' ORDER BY "taoLuc";
+<div class="out">SELECT "hoId", left("tokenHash",8) AS bam, "createdAt"::time, "usedAt"::time
+FROM "RefreshToken" WHERE "hoId" = 'f47ac10b…' ORDER BY "createdAt";
 
-  hoId     |   bam    |  taoLuc  |  dungLuc
+  hoId     |   bam    |  createdAt  |  usedAt
 -----------+----------+----------+----------
  f47ac10b… | 8f2a91c4 | 09:14:02 | 09:29:11    ← RT1, da doi lay RT2
  f47ac10b… | d47b0e29 | 09:29:11 | 09:44:20    ← RT2, da doi lay RT3
  f47ac10b… | 1c9fa38b | 09:44:20 |             ← RT3, dang song
 
 # Mot lan dang nhap = mot HO. Moi lan refresh them mot mat xich.
-# Cai het han TUYET DOI thua ke tu mat xich dau — xoay vong khong keo dai phien.</div>
+# Cai het han TUYET DOI thua ke tu mat xich dau — xoay vong khong keo dai session.</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">ĐỪNG kéo dài hết hạn tuyệt đối</span><span class="v">Mỗi token mới THỪA KẾ <code>expiresAt</code> từ cái nó thay thế. Không thì việc xoay vòng biến thành hết-hạn-trượt, và vấn đề của Bài 3.1 quay lại: một dòng họ bị cắp mà giữ cho ấm thì không bao giờ kết thúc.</span></div>
   <div class="kv"><span class="k">MỘT giao dịch, không thì cuộc đua thắng</span><span class="v">Đánh dấu đã dùng và tạo cái kế nhiệm phải NGUYÊN TỬ. Tách chúng ra thì hai lần refresh song song đều thấy một token chưa dùng và đều đúc kế nhiệm — thành hai NHÁNH sống của một họ, đúng cái trạng thái mà phát hiện tái dùng lẽ ra phải làm cho bất khả.</span></div>
@@ -507,9 +507,9 @@ if (cu.usedAt) {
   clearRefreshCookie(res);
   return res.status(401).json({ error: 'Session khong hop le, vui long dang nhap lai' });
 }</code></pre>
-<div class="out">{"level":40,"su_kien":"refresh_token_tai_dung","nguoiDungId":"clx7a2b1c",
- "hoId":"f47ac10b…","daDungLuc":"2026-08-23T09:29:11.284Z",
- "ip":"203.0.113.47","trinhDuyet":"Mozilla/5.0 (X11; Linux x86_64)…"}
+<div class="out">{"level":40,"event":"refresh_token_tai_dung","userId":"clx7a2b1c",
+ "hoId":"f47ac10b…","usedAt":"2026-08-23T09:29:11.284Z",
+ "ip":"203.0.113.47","browser":"Mozilla/5.0 (X11; Linux x86_64)…"}
 
 # Duong nay chay = mot chuoi refresh token da bi nhan doi.
 # Day la mot trong rat it tin hieu xac thuc gan nhu KHONG bao gio
@@ -616,7 +616,7 @@ HTTP/1.1 204 No Content
 Set-Cookie: __Host-refresh=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0
 
 $ curl -X POST localhost:3000/auth/refresh -b "__Host-refresh=Kc9x2Lm…"
-HTTP/1.1 401 {"loi":"Phien khong hop le"}     ← ngay lap tuc
+HTTP/1.1 401 {"loi":"Session khong hop le"}     ← ngay lap tuc
 
 # Nhung access token cu VAN chay them toi 15 phut nua.
 # Voi mot nut dang xuat, do la dieu chap nhan duoc.</div>
@@ -671,14 +671,14 @@ export async function requireAuth(req, res, next) {
 
   await sendEmail(u.email, 'mat-khau-da-doi', { luc: new Date(), ip: req.ip });
 }</code></pre>
-<div class="out">SELECT "hoId", "thuHoiLuc" IS NOT NULL AS da_thu_hoi
-FROM "RefreshToken" WHERE "nguoiDungId" = 'clx7a2b1c' AND "thuHoiLuc" IS NULL OR true;
+<div class="out">SELECT "hoId", "revokedAt" IS NOT NULL AS da_thu_hoi
+FROM "RefreshToken" WHERE "userId" = 'clx7a2b1c' AND "revokedAt" IS NULL OR true;
 
   hoId     | da_thu_hoi
 -----------+------------
  f47ac10b… | f            ← trinh duyet hien tai, VAN dang nhap
  a91c4e7b… | t            ← dien thoai, da thoat
- 3d5b8f02… | t            ← mot phien khong nhan ra, da thoat</div>
+ 3d5b8f02… | t            ← mot session khong nhan ra, da thoat</div>
 <div class="callout ok">
 <p><strong>Always send the email, and always include the time and the approximate location.</strong> If the user did change their password, it is a harmless confirmation. If they did not, it is the only channel that reaches them — the attacker controls the session but not the mailbox. This one email is the highest-value notification in an authentication system, and it costs one function call.</p>
 </div>
@@ -755,7 +755,7 @@ HTTP/1.1 204 No Content
 Set-Cookie: __Host-refresh=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0
 
 $ curl -X POST localhost:3000/auth/refresh -b "__Host-refresh=Kc9x2Lm…"
-HTTP/1.1 401 {"loi":"Phien khong hop le"}     ← ngay lap tuc
+HTTP/1.1 401 {"loi":"Session khong hop le"}     ← ngay lap tuc
 
 # Nhung access token cu VAN chay them toi 15 phut nua.
 # Voi mot nut dang xuat, do la dieu chap nhan duoc.</div>
@@ -810,14 +810,14 @@ export async function requireAuth(req, res, next) {
 
   await sendEmail(u.email, 'mat-khau-da-doi', { luc: new Date(), ip: req.ip });
 }</code></pre>
-<div class="out">SELECT "hoId", "thuHoiLuc" IS NOT NULL AS da_thu_hoi
-FROM "RefreshToken" WHERE "nguoiDungId" = 'clx7a2b1c' AND "thuHoiLuc" IS NULL OR true;
+<div class="out">SELECT "hoId", "revokedAt" IS NOT NULL AS da_thu_hoi
+FROM "RefreshToken" WHERE "userId" = 'clx7a2b1c' AND "revokedAt" IS NULL OR true;
 
   hoId     | da_thu_hoi
 -----------+------------
  f47ac10b… | f            ← trinh duyet hien tai, VAN dang nhap
  a91c4e7b… | t            ← dien thoai, da thoat
- 3d5b8f02… | t            ← mot phien khong nhan ra, da thoat</div>
+ 3d5b8f02… | t            ← mot session khong nhan ra, da thoat</div>
 <div class="callout ok">
 <p><strong>LUÔN gửi email, và LUÔN kèm thời gian với vị trí gần đúng.</strong> Nếu người dùng ĐÚNG là đã đổi mật khẩu thì đó là một lời xác nhận vô hại. Nếu KHÔNG phải họ thì đó là kênh DUY NHẤT tới được họ — kẻ tấn công kiểm soát cái phiên chứ không kiểm soát hòm thư. Một cái email này là thông báo có GIÁ TRỊ CAO NHẤT trong một hệ xác thực, và nó tốn một lời gọi hàm.</p>
 </div>
@@ -879,12 +879,12 @@ FROM "RefreshToken" WHERE "nguoiDungId" = 'clx7a2b1c' AND "thuHoiLuc" IS NULL OR
   }));
 }</code></pre>
 <div class="out">[
-  { hoId:"f47ac10b…", laHienTai:true,  thietBi:"Chrome tren Windows",
-    viTri:"Ha Noi, Viet Nam",  hoatDong:"2026-08-23T09:44:20Z" },
-  { hoId:"a91c4e7b…", laHienTai:false, thietBi:"Safari tren iPhone",
-    viTri:"Ha Noi, Viet Nam",  hoatDong:"2026-08-22T18:02:11Z" },
-  { hoId:"3d5b8f02…", laHienTai:false, thietBi:"Firefox tren Linux",
-    viTri:"Frankfurt, Duc",    hoatDong:"2026-08-23T03:17:44Z" }
+  { hoId:"f47ac10b…", isCurrent:true,  device:"Chrome tren Windows",
+    position:"Ha Noi, Viet Nam",  active:"2026-08-23T09:44:20Z" },
+  { hoId:"a91c4e7b…", isCurrent:false, device:"Safari tren iPhone",
+    position:"Ha Noi, Viet Nam",  active:"2026-08-22T18:02:11Z" },
+  { hoId:"3d5b8f02…", isCurrent:false, device:"Firefox tren Linux",
+    position:"Frankfurt, Duc",    active:"2026-08-23T03:17:44Z" }
 ]
 
 # Dong thu ba la thu ma nguoi dung nhan ra ngay va giam sat cua ban thi khong:
@@ -945,10 +945,10 @@ export function readDevice(ua?: string | null) {
   await redis.set(&#96;chan-ho:\${req.params.hoId}&#96;, '1', { EX: 900 });   <span class="tok-comment">// Bài 5.3</span>
   res.status(204).end();
 });</code></pre>
-<div class="out">$ curl -X POST /tai-khoan/phien/3d5b8f02…/thu-hoi -H "Authorization: Bearer …"
+<div class="out">$ curl -X POST /tai-khoan/session/3d5b8f02…/thu-hoi -H "Authorization: Bearer …"
 HTTP/1.1 204 No Content
 
-# Phien Frankfurt chet o duong refresh NGAY LAP TUC.
+# Session Frankfurt chet o duong refresh NGAY LAP TUC.
 # Access token cua no chet trong &lt;= 15 phut, hoac ngay lap tuc neu
 # ban them khoa chan-ho vao middleware.</div>
 <div class="lz-stack">
@@ -1014,12 +1014,12 @@ if (!seenBefore) {
   }));
 }</code></pre>
 <div class="out">[
-  { hoId:"f47ac10b…", laHienTai:true,  thietBi:"Chrome tren Windows",
-    viTri:"Ha Noi, Viet Nam",  hoatDong:"2026-08-23T09:44:20Z" },
-  { hoId:"a91c4e7b…", laHienTai:false, thietBi:"Safari tren iPhone",
-    viTri:"Ha Noi, Viet Nam",  hoatDong:"2026-08-22T18:02:11Z" },
-  { hoId:"3d5b8f02…", laHienTai:false, thietBi:"Firefox tren Linux",
-    viTri:"Frankfurt, Duc",    hoatDong:"2026-08-23T03:17:44Z" }
+  { hoId:"f47ac10b…", isCurrent:true,  device:"Chrome tren Windows",
+    position:"Ha Noi, Viet Nam",  active:"2026-08-23T09:44:20Z" },
+  { hoId:"a91c4e7b…", isCurrent:false, device:"Safari tren iPhone",
+    position:"Ha Noi, Viet Nam",  active:"2026-08-22T18:02:11Z" },
+  { hoId:"3d5b8f02…", isCurrent:false, device:"Firefox tren Linux",
+    position:"Frankfurt, Duc",    active:"2026-08-23T03:17:44Z" }
 ]
 
 # Dong thu ba la thu ma nguoi dung nhan ra ngay va giam sat cua ban thi khong:
@@ -1080,10 +1080,10 @@ export function readDevice(ua?: string | null) {
   await redis.set(&#96;chan-ho:\${req.params.hoId}&#96;, '1', { EX: 900 });   <span class="tok-comment">// Bài 5.3</span>
   res.status(204).end();
 });</code></pre>
-<div class="out">$ curl -X POST /tai-khoan/phien/3d5b8f02…/thu-hoi -H "Authorization: Bearer …"
+<div class="out">$ curl -X POST /tai-khoan/session/3d5b8f02…/thu-hoi -H "Authorization: Bearer …"
 HTTP/1.1 204 No Content
 
-# Phien Frankfurt chet o duong refresh NGAY LAP TUC.
+# Session Frankfurt chet o duong refresh NGAY LAP TUC.
 # Access token cua no chet trong &lt;= 15 phut, hoac ngay lap tuc neu
 # ban them khoa chan-ho vao middleware.</div>
 <div class="lz-stack">
@@ -1143,7 +1143,7 @@ Promise.all([
 ]);</code></pre>
 <div class="out">09:44:20.104  GET /api/toi         → 401
 09:44:20.106  GET /api/thong-bao   → 401
-09:44:20.107  GET /api/feed        → 401          ← ca muoi cai, cung mot luc
+09:44:20.107  GET /api/feed        → 401          ← ca salt cai, cung mot luc
 …
 09:44:20.130  POST /auth/refresh   RT1 → RT2      ✅ cai dau tien thang
 09:44:20.131  POST /auth/refresh   RT1 → TAI DUNG ❌
@@ -1174,7 +1174,7 @@ async function getNewAccessToken(): Promise&lt;string&gt; {
   return refreshing;
 }</code></pre>
 <div class="out">09:44:20.130  POST /auth/refresh   RT1 → RT2      ✅  (mot lan duy nhat)
-09:44:20.152  Ca muoi request thu lai voi access token moi. Xong.</div>
+09:44:20.152  Ca salt request thu lai voi access token moi. Xong.</div>
 <div class="pitfall">
 <p><strong>Trap — never retry a failed refresh, and never refresh in response to a failed refresh.</strong> If <code>/auth/refresh</code> returns 401, the session is over: redirect to login. An interceptor that treats the refresh call like any other request will see its 401, try to refresh, get another 401, and loop until the browser tab freezes. Exclude the refresh endpoint from the interceptor explicitly.</p>
 </div>
@@ -1284,7 +1284,7 @@ Promise.all([
 ]);</code></pre>
 <div class="out">09:44:20.104  GET /api/toi         → 401
 09:44:20.106  GET /api/thong-bao   → 401
-09:44:20.107  GET /api/feed        → 401          ← ca muoi cai, cung mot luc
+09:44:20.107  GET /api/feed        → 401          ← ca salt cai, cung mot luc
 …
 09:44:20.130  POST /auth/refresh   RT1 → RT2      ✅ cai dau tien thang
 09:44:20.131  POST /auth/refresh   RT1 → TAI DUNG ❌
@@ -1315,7 +1315,7 @@ async function getNewAccessToken(): Promise&lt;string&gt; {
   return refreshing;
 }</code></pre>
 <div class="out">09:44:20.130  POST /auth/refresh   RT1 → RT2      ✅  (mot lan duy nhat)
-09:44:20.152  Ca muoi request thu lai voi access token moi. Xong.</div>
+09:44:20.152  Ca salt request thu lai voi access token moi. Xong.</div>
 <div class="pitfall">
 <p><strong>Bẫy — đừng bao giờ thử lại một lời gọi refresh đã hỏng, và đừng bao giờ đi refresh vì một lời gọi refresh hỏng.</strong> Nếu <code>/auth/refresh</code> trả 401 thì phiên đã hết: chuyển thẳng tới trang đăng nhập. Một cái interceptor đối xử với lời gọi refresh y như mọi request khác sẽ thấy cái 401 đó, đi refresh, nhận thêm một cái 401 nữa, và lặp cho tới khi tab của trình duyệt đứng hình. Hãy loại trừ endpoint refresh khỏi interceptor một cách tường minh.</p>
 </div>

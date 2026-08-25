@@ -65,10 +65,10 @@ GET  /api/me     → 403  <span class="tok-comment">// phiên tốt, PHÂN QUY�
 <h3>Question 3: does it reproduce outside the browser?</h3>
 <div class="out">$ curl -si -X POST https://vidu.com/api/v1/dang-nhap \\
     -H 'content-type: application/json' \\
-    -d '{"email":"kiem-thu@vidu.com","matKhau":"…"}' | head -20
+    -d '{"email":"kiem-thu@vidu.com","password":"…"}' | head -20
 
 HTTP/2 200
-set-cookie: phien=…; Path=/; HttpOnly; Secure; SameSite=Lax
+set-cookie: session=…; Path=/; HttpOnly; Secure; SameSite=Lax
 content-type: application/json
 
 # Dang nhap CHAY DUOC bang curl nhung HONG tren trinh duyet ⇒ khong phai
@@ -146,10 +146,10 @@ GET  /api/me     → 403  <span class="tok-comment">// phiên tốt, PHÂN QUY�
 <h3>Câu hỏi 3: nó có tái hiện được NGOÀI trình duyệt không?</h3>
 <div class="out">$ curl -si -X POST https://vidu.com/api/v1/dang-nhap \\
     -H 'content-type: application/json' \\
-    -d '{"email":"kiem-thu@vidu.com","matKhau":"…"}' | head -20
+    -d '{"email":"kiem-thu@vidu.com","password":"…"}' | head -20
 
 HTTP/2 200
-set-cookie: phien=…; Path=/; HttpOnly; Secure; SameSite=Lax
+set-cookie: session=…; Path=/; HttpOnly; Secure; SameSite=Lax
 content-type: application/json
 
 # Dang nhap CHAY DUOC bang curl nhung HONG tren trinh duyet ⇒ khong phai
@@ -342,7 +342,7 @@ content-type: application/json
 {"alg":"HS256","typ":"JWT"}
 
 $ echo $TOKEN | cut -d. -f2 | basenc --base64url -d
-{"sub":"clx7a2b1c0000","iss":"https://vidu.com","aud":"vidu-api","iat":1756000000,"exp":1756000900,"vaiTro":"USER"}
+{"sub":"clx7a2b1c0000","iss":"https://vidu.com","aud":"vidu-api","iat":1756000000,"exp":1756000900,"role":"USER"}
 
 exp     = 1756000900 = 2025-08-24T02:01:40.000Z
 bay gio = 1787484117 = 2026-08-23T11:21:57.000Z
@@ -357,13 +357,13 @@ bay gio = 1787484117 = 2026-08-23T11:21:57.000Z
 <h3>2 · Reproduce the browser with a cookie jar</h3>
 <div class="out">$ curl -si -c binh.txt -X POST http://127.0.0.1:4111/dang-nhap
 HTTP/1.1 200 OK
-Set-Cookie: phien=abc123xyz; Path=/; HttpOnly; SameSite=Lax; Max-Age=900
+Set-Cookie: session=abc123xyz; Path=/; HttpOnly; SameSite=Lax; Max-Age=900
 
 $ cat binh.txt
-#HttpOnly_127.0.0.1  FALSE  /  FALSE  1787485382  phien  abc123xyz
+#HttpOnly_127.0.0.1  FALSE  /  FALSE  1787485382  session  abc123xyz
 
 $ curl -s -b binh.txt http://127.0.0.1:4111/api/toi
-{"nhanDuoc":"phien=abc123xyz"}
+{"nhanDuoc":"session=abc123xyz"}
 
 $ curl -s http://127.0.0.1:4111/api/toi          # khong gui binh
 {"loi":"khong co cookie"}</div>
@@ -426,7 +426,7 @@ WHERE doi_tuong_id = 'u_812' ORDER BY luc DESC LIMIT 50;</code></pre>
 {"alg":"HS256","typ":"JWT"}
 
 $ echo $TOKEN | cut -d. -f2 | basenc --base64url -d
-{"sub":"clx7a2b1c0000","iss":"https://vidu.com","aud":"vidu-api","iat":1756000000,"exp":1756000900,"vaiTro":"USER"}
+{"sub":"clx7a2b1c0000","iss":"https://vidu.com","aud":"vidu-api","iat":1756000000,"exp":1756000900,"role":"USER"}
 
 exp     = 1756000900 = 2025-08-24T02:01:40.000Z
 bay gio = 1787484117 = 2026-08-23T11:21:57.000Z
@@ -441,13 +441,13 @@ bay gio = 1787484117 = 2026-08-23T11:21:57.000Z
 <h3>2 · Tái hiện trình duyệt bằng một bình cookie</h3>
 <div class="out">$ curl -si -c binh.txt -X POST http://127.0.0.1:4111/dang-nhap
 HTTP/1.1 200 OK
-Set-Cookie: phien=abc123xyz; Path=/; HttpOnly; SameSite=Lax; Max-Age=900
+Set-Cookie: session=abc123xyz; Path=/; HttpOnly; SameSite=Lax; Max-Age=900
 
 $ cat binh.txt
-#HttpOnly_127.0.0.1  FALSE  /  FALSE  1787485382  phien  abc123xyz
+#HttpOnly_127.0.0.1  FALSE  /  FALSE  1787485382  session  abc123xyz
 
 $ curl -s -b binh.txt http://127.0.0.1:4111/api/toi
-{"nhanDuoc":"phien=abc123xyz"}
+{"nhanDuoc":"session=abc123xyz"}
 
 $ curl -s http://127.0.0.1:4111/api/toi          # khong gui binh
 {"loi":"khong co cookie"}</div>

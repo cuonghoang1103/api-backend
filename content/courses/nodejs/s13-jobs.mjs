@@ -240,8 +240,8 @@ new Worker('email', async (job) =&gt; {
 <p>Running the worker in its own process is not a style preference. A worker that shares the web process shares its event loop, so a heavy job adds latency to every HTTP request — chapter 2.4 measured a 2871ms block delaying the heartbeat by 2873ms. Separate processes also let you scale them independently: two web containers and six workers, or the reverse during a backlog.</p>
 
 <h3>Open the box: what a job actually is</h3>
-<div class="out">   thêm 1 job → DBSIZE 5363 → 5369 (+6 khoá)
-   các khoá: wait, 1, events, meta, id, marker
+<div class="out">   thêm 1 job → DBSIZE 5363 → 5369 (+6 storeá)
+   các storeá: wait, 1, events, meta, id, marker
    HGETALL bull:t2:1:
       name         = email
       data         = {"to":"an@x.vn","subject":"Chào bạn"}
@@ -333,8 +333,8 @@ new Worker('email', async (job) =&gt; {
 <p>Chạy worker trong tiến trình riêng của nó không phải một sở thích về phong cách. Một worker dùng chung tiến trình web thì dùng chung luôn event loop, nên một job nặng sẽ cộng thêm độ trễ vào MỌI request HTTP — bài 2.4 đã đo được một khối chặn 2871ms làm nhịp tim trễ đúng 2873ms. Tiến trình tách rời còn cho bạn co giãn hai bên độc lập: hai container web và sáu worker, hoặc ngược lại khi hàng đợi đang ùn.</p>
 
 <h3>Mở hộp ra: một job thật sự là cái gì</h3>
-<div class="out">   thêm 1 job → DBSIZE 5363 → 5369 (+6 khoá)
-   các khoá: wait, 1, events, meta, id, marker
+<div class="out">   thêm 1 job → DBSIZE 5363 → 5369 (+6 storeá)
+   các storeá: wait, 1, events, meta, id, marker
    HGETALL bull:t2:1:
       name         = email
       data         = {"to":"an@x.vn","subject":"Chào bạn"}
@@ -430,11 +430,11 @@ await emailQueue.add('password-reset', { userId: 42, token });</code></pre>
 <h3>Turning on retries</h3>
 <div class="out">--- 2. attempts: 4, backoff cố định 300ms ---
    chạy 4 lần, mốc thời gian: 9ms → 377ms → 689ms → 1000ms
-   khoảng cách: 368ms, 312ms, 311ms</div>
+   storeảng cách: 368ms, 312ms, 311ms</div>
 <p>Fixed backoff waits the same amount every time. It is the wrong default, and the reason is in the next measurement.</p>
 <div class="out">--- 3. attempts: 5, backoff exponential delay 200ms ---
    chạy 5 lần, mốc: 10ms → 298ms → 715ms → 1541ms → 3215ms
-   khoảng cách: 288ms, 417ms, 826ms, 1674ms ← gấp đôi mỗi lần
+   storeảng cách: 288ms, 417ms, 826ms, 1674ms ← gấp đôi mỗi lần
    sau cùng: failed=1, attemptsMade=5</div>
 <p>Exponential backoff doubles the gap each round: 288 → 417 → 826 → 1674ms. Why that matters: the usual reason a job fails is that something downstream is <em>overloaded</em>. Retrying at a fixed fast interval adds load to a service that is already drowning — your retries become the outage. Exponential backoff gives the other side room to recover, and with <code>attempts: 5, delay: 1000</code> in production the last retry lands around 16 seconds later, which covers most transient failures.</p>
 <p>Add jitter for the same reason lesson 12.2 added it to TTLs: a thousand jobs that failed at the same instant will otherwise all retry at the same instant.</p>
@@ -543,11 +543,11 @@ new Worker('email', async (job) =&gt; {
 <h3>Bật thử lại lên</h3>
 <div class="out">--- 2. attempts: 4, backoff cố định 300ms ---
    chạy 4 lần, mốc thời gian: 9ms → 377ms → 689ms → 1000ms
-   khoảng cách: 368ms, 312ms, 311ms</div>
+   storeảng cách: 368ms, 312ms, 311ms</div>
 <p>Backoff cố định thì lần nào cũng chờ đúng bấy nhiêu. Đó là lựa chọn mặc định sai, và lý do nằm ở phép đo kế tiếp.</p>
 <div class="out">--- 3. attempts: 5, backoff exponential delay 200ms ---
    chạy 5 lần, mốc: 10ms → 298ms → 715ms → 1541ms → 3215ms
-   khoảng cách: 288ms, 417ms, 826ms, 1674ms ← gấp đôi mỗi lần
+   storeảng cách: 288ms, 417ms, 826ms, 1674ms ← gấp đôi mỗi lần
    sau cùng: failed=1, attemptsMade=5</div>
 <p>Backoff luỹ thừa nhân đôi khoảng cách sau mỗi vòng: 288 → 417 → 826 → 1674ms. Vì sao điều đó quan trọng: lý do thường gặp nhất khiến một job hỏng là có thứ gì đó ở phía dưới đang <em>quá tải</em>. Thử lại theo nhịp cố định và nhanh là cộng thêm tải cho một dịch vụ vốn đã sắp chết đuối — chính các lần thử lại của bạn trở thành sự cố. Backoff luỹ thừa cho bên kia khoảng thở để hồi phục, và với <code>attempts: 5, delay: 1000</code> trong production thì lần thử cuối rơi vào khoảng 16 giây sau, đủ phủ phần lớn các lỗi tạm thời.</p>
 <p>Hãy thêm jitter, cùng lý do mà bài 12.2 thêm nó vào TTL: một nghìn job cùng hỏng vào một khoảnh khắc thì nếu không có jitter chúng sẽ cùng thử lại vào một khoảnh khắc.</p>
@@ -658,7 +658,7 @@ new Worker('email', async (job) =&gt; {
 <h3>Delay — "not before", not "at"</h3>
 <pre><code class="language-javascript">await queue.add('remind', { userId }, { delay: 24 * 60 * 60 * 1000 });   // nhắc sau 24 giờ</code></pre>
 <div class="out">   vừa thêm: delayed=1 · waiting=0
-   khoá: 1, meta, id, marker, delayed, events
+   storeá: 1, meta, id, marker, delayed, events
    kiểu bull:dz:delayed = zset
    nội dung: ["1","7312115256188928"] → score = thời điểm chạy</div>
 <p>A delayed job goes into a <strong>sorted set</strong> scored by its run time — the same structure lesson 12.3 used for leaderboards. Nothing polls it in a loop; the worker asks Redis for whatever is due and sleeps until the next score. That is why a delay of 24 hours costs the same as a delay of 1 second.</p>
@@ -755,7 +755,7 @@ new Worker('cron', async () =&gt; {
 <h3>Hẹn giờ — "không sớm hơn", chứ không phải "đúng vào lúc"</h3>
 <pre><code class="language-javascript">await queue.add('remind', { userId }, { delay: 24 * 60 * 60 * 1000 });   // nhắc sau 24 giờ</code></pre>
 <div class="out">   vừa thêm: delayed=1 · waiting=0
-   khoá: 1, meta, id, marker, delayed, events
+   storeá: 1, meta, id, marker, delayed, events
    kiểu bull:dz:delayed = zset
    nội dung: ["1","7312115256188928"] → score = thời điểm chạy</div>
 <p>Một job hẹn giờ đi vào một <strong>sorted set</strong> được chấm điểm bằng chính thời điểm chạy của nó — đúng cấu trúc mà bài 12.3 dùng cho bảng xếp hạng. Không có gì phải hỏi vòng vòng cả; worker hỏi Redis xem có gì tới hạn chưa rồi ngủ tới điểm số kế tiếp. Đó là lý do hẹn 24 giờ tốn đúng bằng hẹn 1 giây.</p>
@@ -863,7 +863,7 @@ new Worker('cron', async () =&gt; {
    đã SIGKILL worker (không kịp dọn dẹp gì)
    ngay sau khi giết: active=1 waiting=0 ⇒ job "mắc kẹt" ở trạng thái active
    worker MỚI nhặt lại job sau 2036ms · sự kiện "stalled": 1
-   ⇒ Job KHÔNG mất. BullMQ phát hiện khoá hết hạn rồi trả job về hàng chờ.
+   ⇒ Job KHÔNG mất. BullMQ phát hiện storeá hết hạn rồi trả job về hàng chờ.
    completed=1 failed=0</div>
 <p>The job survived a <code>SIGKILL</code> — the signal a process cannot catch, handle or delay. Note the middle line though: for those 2036ms the job sat in <code>active</code> with nobody working on it. Nothing about the queue's own state said "this is broken"; it looked exactly like a job that was simply taking a while.</p>
 <p>The recovery mechanism is the distributed lock from lesson 12.4, applied per job. A worker holds a lock with a TTL (<code>lockDuration</code>, default 30 seconds) and renews it while it works. When the process dies, nothing renews it, the lock expires, and another worker's periodic check (<code>stalledInterval</code>) notices an <code>active</code> job with no live lock and moves it back to <code>wait</code>. It fires a <code>stalled</code> event when it does — <strong>that event is worth logging and alerting on</strong>, because a queue with a steady trickle of stalls is telling you workers are dying or jobs are blocking.</p>
@@ -873,14 +873,14 @@ new Worker('cron', async () =&gt; {
 <p>With <code>lockDuration: 1000</code>, a job that awaits for 3 seconds:</p>
 <div class="out">--- Job chạy lâu hơn lockDuration (worker vẫn sống) ---
    hàm xử lý chạy 1 lần (job chỉ có 1) · completed=1 failed=0
-   ⇒ Worker tự GIA HẠN khoá trong lúc chạy, nên job dài không bị coi là treo.</div>
+   ⇒ Worker tự GIA HẠN storeá trong lúc chạy, nên job dài không bị coi là treo.</div>
 <p>Correct — the renewal timer runs on the event loop while the handler awaits. Now the same 3 seconds spent in a <code>while</code> loop instead:</p>
 <div class="out">--- Job CHẶN event loop 3 giây (lockDuration 1s) ---
 Error: Missing lock for job 1. moveToFinished
   … code: -2
    hàm xử lý chạy 2 lần · stalled events: 2
    completed=0 failed=1
-   ⇒ Chặn event loop = timer gia hạn khoá KHÔNG chạy được ⇒ job bị coi là TREO và chạy LẠI.</div>
+   ⇒ Chặn event loop = timer gia hạn storeá KHÔNG chạy được ⇒ job bị coi là TREO và chạy LẠI.</div>
 <p><code>Missing lock for job 1. moveToFinished</code> is a real production error message, and now you know exactly what it means: <strong>your handler blocked the event loop past <code>lockDuration</code></strong>, so the renewal never fired, so the job was declared stalled and re-run — and when the original finally finished it no longer owned the lock and could not record its own completion. The job ran twice and still ended as <code>failed</code>.</p>
 <p>This is chapter 2.4 with a new consequence. There it cost latency; here it costs correctness. A CPU-heavy handler needs a sandboxed processor, a worker thread, or a separate process — never a tighter <code>lockDuration</code>, which only changes how fast you get the bug.</p>
 
@@ -932,7 +932,7 @@ process.on('SIGINT', shutdown);    // Ctrl+C khi chạy máy cục bộ</code></
   <div class="kv"><span class="k">the age of the oldest job</span><span class="v">A queue can be short and still stuck. "The oldest job has waited 40 minutes" says far more than "12 jobs are waiting"</span></div>
   <div class="kv"><span class="k">processing time</span><span class="v">Gradually slowing = a third party is degrading, or your data has grown</span></div>
 </div>
-<pre><code class="language-javascript">// một endpoint sức khoẻ đủ dùng, không cần thư viện nào
+<pre><code class="language-javascript">// một endpoint sức storeẻ đủ dùng, không cần thư viện nào
 app.get('/health/queues', async (req, res) =&gt; {
   const counts = await emailQueue.getJobCounts('waiting', 'active', 'failed', 'delayed');
   const [oldest] = await emailQueue.getWaiting(0, 0);
@@ -980,7 +980,7 @@ app.get('/health/queues', async (req, res) =&gt; {
    đã SIGKILL worker (không kịp dọn dẹp gì)
    ngay sau khi giết: active=1 waiting=0 ⇒ job "mắc kẹt" ở trạng thái active
    worker MỚI nhặt lại job sau 2036ms · sự kiện "stalled": 1
-   ⇒ Job KHÔNG mất. BullMQ phát hiện khoá hết hạn rồi trả job về hàng chờ.
+   ⇒ Job KHÔNG mất. BullMQ phát hiện storeá hết hạn rồi trả job về hàng chờ.
    completed=1 failed=0</div>
 <p>Job sống sót qua một cú <code>SIGKILL</code> — tín hiệu mà tiến trình không bắt được, không xử lý được, không trì hoãn được. Nhưng hãy để ý dòng ở giữa: trong suốt 2036ms đó job nằm ở trạng thái <code>active</code> mà chẳng có ai làm nó cả. Không có gì trong trạng thái của hàng đợi nói rằng "cái này đang hỏng"; nó trông y hệt một job chỉ đơn giản là hơi lâu.</p>
 <p>Cơ chế phục hồi chính là khoá phân tán của bài 12.4, áp cho từng job. Một worker giữ khoá kèm hạn (<code>lockDuration</code>, mặc định 30 giây) và gia hạn nó trong lúc làm việc. Khi tiến trình chết, không còn ai gia hạn, khoá hết hạn, và lượt kiểm tra định kỳ của một worker khác (<code>stalledInterval</code>) phát hiện một job <code>active</code> mà không có khoá còn sống, rồi chuyển nó về <code>wait</code>. Lúc làm việc đó nó phát ra sự kiện <code>stalled</code> — <strong>sự kiện đó đáng được ghi log và đặt cảnh báo</strong>, vì một hàng đợi rỉ rả sinh ra job treo đang nói cho bạn biết rằng worker đang chết hoặc job đang chặn event loop.</p>
@@ -990,14 +990,14 @@ app.get('/health/queues', async (req, res) =&gt; {
 <p>Với <code>lockDuration: 1000</code>, một job await 3 giây:</p>
 <div class="out">--- Job chạy lâu hơn lockDuration (worker vẫn sống) ---
    hàm xử lý chạy 1 lần (job chỉ có 1) · completed=1 failed=0
-   ⇒ Worker tự GIA HẠN khoá trong lúc chạy, nên job dài không bị coi là treo.</div>
+   ⇒ Worker tự GIA HẠN storeá trong lúc chạy, nên job dài không bị coi là treo.</div>
 <p>Đúng như mong đợi — cái timer gia hạn chạy trên event loop trong lúc hàm xử lý đang await. Bây giờ vẫn 3 giây đó nhưng tiêu trong một vòng lặp <code>while</code>:</p>
 <div class="out">--- Job CHẶN event loop 3 giây (lockDuration 1s) ---
 Error: Missing lock for job 1. moveToFinished
   … code: -2
    hàm xử lý chạy 2 lần · sự kiện stalled: 2
    completed=0 failed=1
-   ⇒ Chặn event loop = timer gia hạn khoá KHÔNG chạy được ⇒ job bị coi là TREO và chạy LẠI.</div>
+   ⇒ Chặn event loop = timer gia hạn storeá KHÔNG chạy được ⇒ job bị coi là TREO và chạy LẠI.</div>
 <p><code>Missing lock for job 1. moveToFinished</code> là một thông báo lỗi production có thật, và bây giờ bạn biết chính xác nó nghĩa là gì: <strong>hàm xử lý của bạn đã chặn event loop quá <code>lockDuration</code></strong>, nên lệnh gia hạn không bao giờ nổ, nên job bị tuyên là treo và bị chạy lại — rồi khi bản gốc cuối cùng cũng xong thì nó không còn sở hữu khoá nữa và không ghi nổi kết quả của chính mình. Job chạy hai lần mà vẫn kết thúc ở trạng thái <code>failed</code>.</p>
 <p>Đây là bài 2.4 với một hậu quả mới. Ở đó nó tốn độ trễ; ở đây nó tốn tính đúng đắn. Một hàm xử lý nặng CPU cần một sandboxed processor, một worker thread, hoặc một tiến trình riêng — tuyệt đối không phải một <code>lockDuration</code> chặt hơn, thứ chỉ thay đổi tốc độ bạn gặp con bug.</p>
 
@@ -1049,7 +1049,7 @@ process.on('SIGINT', shutdown);    // Ctrl+C khi chạy máy cục bộ</code></
   <div class="kv"><span class="k">tuổi của job cũ nhất</span><span class="v">Hàng đợi có thể ngắn mà vẫn kẹt. "Job cũ nhất đã chờ 40 phút" nói lên nhiều điều hơn "đang có 12 job chờ"</span></div>
   <div class="kv"><span class="k">thời gian xử lý</span><span class="v">Chậm dần đi = bên thứ ba đang xuống sức, hoặc dữ liệu đã phình to</span></div>
 </div>
-<pre><code class="language-javascript">// một endpoint sức khoẻ đủ dùng, không cần thư viện nào
+<pre><code class="language-javascript">// một endpoint sức storeẻ đủ dùng, không cần thư viện nào
 app.get('/health/queues', async (req, res) =&gt; {
   const counts = await emailQueue.getJobCounts('waiting', 'active', 'failed', 'delayed');
   const [oldest] = await emailQueue.getWaiting(0, 0);

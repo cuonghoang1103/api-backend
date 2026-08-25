@@ -257,7 +257,7 @@ GROUP BY state ORDER BY 2 DESC;</code></pre>
 <div class="out">P3009 migrate found failed migrations in the target database
 
 The &#96;20260823140000_them_cot_diem&#96; migration started at 2026-08-23 14:00:03 UTC
-failed with: ERROR: column "diem" of relation "SocialPost" already exists
+failed with: ERROR: column "score" of relation "SocialPost" already exists
 
 Prisma Migrate will not apply any further migrations until this is resolved.</div>
 <div class="lz-stack">
@@ -364,7 +364,7 @@ GROUP BY state ORDER BY 2 DESC;</code></pre>
 <div class="out">P3009 migrate found failed migrations in the target database
 
 The &#96;20260823140000_them_cot_diem&#96; migration started at 2026-08-23 14:00:03 UTC
-failed with: ERROR: column "diem" of relation "SocialPost" already exists
+failed with: ERROR: column "score" of relation "SocialPost" already exists
 
 Prisma Migrate will not apply any further migrations until this is resolved.</div>
 <div class="lz-stack">
@@ -502,7 +502,7 @@ WHERE cardinality(pg_blocking_pids(bi.pid)) &gt; 0;</code></pre>
 ---------+---------------------------+---------+-----------------------+-------------
    41302 | ALTER TABLE "SocialPost"… |   41287 | SELECT … FROM "User"  | 00:00:31
 
--- Bai 11.3: mot ALTER dang cho, va MOI truy van moi xep hang sau no.</div>
+-- Bai 11.3: mot ALTER dang waitMs, va MOI truy van moi xep hang sau no.</div>
 <pre><code><span class="tok-comment">-- 3. Which tables are being scanned instead of indexed? (Bài 9.3)</span>
 SELECT relname, seq_scan, seq_tup_read, idx_scan, n_live_tup, n_dead_tup
 FROM pg_stat_user_tables
@@ -513,7 +513,7 @@ ORDER BY seq_tup_read DESC LIMIT 5;</code></pre>
  SocialPost    |    18422 |  22947103884 |   904112 |    1247104 |     418209
  Comment       |       12 |         1440 |  8841029 |     418771 |       1104
 
--- 22 ty hang doc tuan tu = mot chi muc bi thieu.
+-- 22 ty hang doc tuan from = mot chi muc bi thieu.
 -- 418k dead tuple = autovacuum khong theo kip (Bai 11.4).</div>
 <pre><code><span class="tok-comment">-- 4. What is actually slow, cumulatively? (Bài 9.1)</span>
 SELECT calls, round(total_exec_time)::int AS tong_ms,
@@ -526,8 +526,8 @@ ORDER BY total_exec_time DESC LIMIT 5;</code></pre>
  884102 | 1204882 |   1.36 | SELECT … FROM "User" WHERE id = $1
      41 |  388104 | 9466.4 | SELECT … FROM "SocialPost" ORDER BY…
 
--- Cau tren: nhanh nhung goi 884 nghin lan → N+1 (Bai 9.2)
--- Cau duoi: 41 lan nhung 9,5 giay moi lan → thieu chi muc (Bai 9.3)</div>
+-- Cau tren: nhanh nhung goi 884 nghin attempt → N+1 (Bai 9.2)
+-- Cau duoi: 41 attempt nhung 9,5 giay moi attempt → thieu chi muc (Bai 9.3)</div>
 <div class="callout warn">
 <p><strong>Safe to run during an incident: everything above except three.</strong> <code>prisma db pull</code> rewrites your schema file, <code>prisma studio</code> can edit production rows, and <code>prisma migrate deploy</code> changes the database. Everything else — <code>migrate status</code>, <code>migrate diff</code>, <code>validate</code>, <code>$metrics</code>, all four <code>pg_stat</code> views, <code>EXPLAIN</code> without <code>ANALYZE</code> — only reads. When you are unsure and under pressure, that distinction is the one to remember. And note that <code>EXPLAIN ANALYZE</code> <em>executes</em> the query: on a <code>SELECT</code> that is fine, on an <code>UPDATE</code> it performs the update.</p>
 </div>
@@ -639,7 +639,7 @@ WHERE cardinality(pg_blocking_pids(bi.pid)) &gt; 0;</code></pre>
 ---------+---------------------------+---------+-----------------------+-------------
    41302 | ALTER TABLE "SocialPost"… |   41287 | SELECT … FROM "User"  | 00:00:31
 
--- Bai 11.3: mot ALTER dang cho, va MOI truy van moi xep hang sau no.</div>
+-- Bai 11.3: mot ALTER dang waitMs, va MOI truy van moi xep hang sau no.</div>
 <pre><code><span class="tok-comment">-- 3. Bảng nào đang bị quét thay vì dùng chỉ mục? (Bài 9.3)</span>
 SELECT relname, seq_scan, seq_tup_read, idx_scan, n_live_tup, n_dead_tup
 FROM pg_stat_user_tables
@@ -650,7 +650,7 @@ ORDER BY seq_tup_read DESC LIMIT 5;</code></pre>
  SocialPost    |    18422 |  22947103884 |   904112 |    1247104 |     418209
  Comment       |       12 |         1440 |  8841029 |     418771 |       1104
 
--- 22 ty hang doc tuan tu = mot chi muc bi thieu.
+-- 22 ty hang doc tuan from = mot chi muc bi thieu.
 -- 418k dead tuple = autovacuum khong theo kip (Bai 11.4).</div>
 <pre><code><span class="tok-comment">-- 4. Cái gì THẬT SỰ chậm, tính luỹ kế? (Bài 9.1)</span>
 SELECT calls, round(total_exec_time)::int AS tong_ms,
@@ -663,8 +663,8 @@ ORDER BY total_exec_time DESC LIMIT 5;</code></pre>
  884102 | 1204882 |   1.36 | SELECT … FROM "User" WHERE id = $1
      41 |  388104 | 9466.4 | SELECT … FROM "SocialPost" ORDER BY…
 
--- Cau tren: nhanh nhung goi 884 nghin lan → N+1 (Bai 9.2)
--- Cau duoi: 41 lan nhung 9,5 giay moi lan → thieu chi muc (Bai 9.3)</div>
+-- Cau tren: nhanh nhung goi 884 nghin attempt → N+1 (Bai 9.2)
+-- Cau duoi: 41 attempt nhung 9,5 giay moi attempt → thieu chi muc (Bai 9.3)</div>
 <div class="callout warn">
 <p><strong>Chạy được giữa lúc sự cố: TẤT CẢ ở trên trừ ba cái.</strong> <code>prisma db pull</code> viết lại file lược đồ, <code>prisma studio</code> sửa được hàng trên production, và <code>prisma migrate deploy</code> thay đổi cơ sở dữ liệu. Mọi thứ còn lại — <code>migrate status</code>, <code>migrate diff</code>, <code>validate</code>, <code>$metrics</code>, cả bốn khung nhìn <code>pg_stat</code>, <code>EXPLAIN</code> không kèm <code>ANALYZE</code> — chỉ ĐỌC. Khi bạn không chắc mà lại đang căng thẳng, đó là ranh giới cần nhớ. Và lưu ý: <code>EXPLAIN ANALYZE</code> có <em>THỰC THI</em> câu truy vấn — với một <code>SELECT</code> thì không sao, với một <code>UPDATE</code> thì nó cập nhật thật.</p>
 </div>

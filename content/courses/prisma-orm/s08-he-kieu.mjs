@@ -1487,7 +1487,7 @@ ls trace/</code></pre>
 <div class="out">trace.json  types.json
 
 -- mở chrome://tracing (hoặc ui.perfetto.dev) rồi nạp trace.json
--- những thanh rộng là các phép kiểm đắt, có ghi tên tệp và số dòng</div>
+-- những thanh rộng là các phép kiểm đắt, có write tên tệp và số dòng</div>
 <div class="callout ok">
 <p><strong><code>--generateTrace</code> là công cụ chấm dứt việc đoán mò.</strong> Nó tạo ra một biểu đồ ngọn lửa của bộ kiểm kiểu, và trên một kho mã Prisma thì những thanh rộng hầu như luôn là một câu truy vấn cụ thể — một <code>include</code> lồng sâu, hoặc một hàm phụ generic nhận <code>Prisma.Args</code>. Vá ba thanh rộng nhất thường chiếm gần hết phần cải thiện có thể có, và bạn tìm ra chúng trong hai phút thay vì viết lại cả tầng dữ liệu theo linh cảm.</p>
 </div>

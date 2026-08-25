@@ -178,7 +178,7 @@ alter table nguoi_dung add column dia_chi_email text;
 update nguoi_dung set dia_chi_email = email;
 
 <span class="tok-comment">-- 3. giu hai cot dong bo, du BEN NAO ghi</span>
-create or replace function dong_bo() returns trigger as \$\$
+create or replace function sync_row() returns trigger as \$\$
   begin
     if NEW.dia_chi_email is null then NEW.dia_chi_email := NEW.email; end if;
     if NEW.email is null then NEW.email := NEW.dia_chi_email; end if;
@@ -186,8 +186,8 @@ create or replace function dong_bo() returns trigger as \$\$
   end
 \$\$ language plpgsql;
 
-create trigger tg_dong_bo before insert or update on nguoi_dung
-  for each row execute function dong_bo();</code></pre>
+create trigger tg_sync_row before insert or update on nguoi_dung
+  for each row execute function sync_row();</code></pre>
 <div class="callout ok"><strong>The trigger is what makes the overlap safe in both directions.</strong> Without it, old code writing to <code>email</code> leaves <code>dia_chi_email</code> null, and new code sees a row with no address. The measurement above confirms it works: a row written by old code was immediately readable by new code. Application-level double-writing is the alternative and it is worse — it only covers the version that has the double-write, so the <em>other</em> version's writes are still missed.</div>
 <div class="pitfall"><strong>Trap — step 2 is an <code>UPDATE</code> over the whole table, and on a large table it is not free.</strong> A single <code>update ... set x = y</code> across ten million rows takes a long lock and writes a new version of every row, which can bloat the table and stall writes. Batch it — a few thousand rows at a time, in a loop with a short pause — and let the trigger handle everything written while the backfill runs. Lesson 5.3 measures the timings that make this concrete.</div>
 
@@ -250,7 +250,7 @@ alter table nguoi_dung add column dia_chi_email text;
 update nguoi_dung set dia_chi_email = email;
 
 <span class="tok-comment">-- 3. giu hai cot dong bo, du BEN NAO ghi</span>
-create or replace function dong_bo() returns trigger as \$\$
+create or replace function sync_row() returns trigger as \$\$
   begin
     if NEW.dia_chi_email is null then NEW.dia_chi_email := NEW.email; end if;
     if NEW.email is null then NEW.email := NEW.dia_chi_email; end if;
@@ -258,8 +258,8 @@ create or replace function dong_bo() returns trigger as \$\$
   end
 \$\$ language plpgsql;
 
-create trigger tg_dong_bo before insert or update on nguoi_dung
-  for each row execute function dong_bo();</code></pre>
+create trigger tg_sync_row before insert or update on nguoi_dung
+  for each row execute function sync_row();</code></pre>
 <div class="callout ok"><strong>Cái trigger mới là thứ làm cho khoảng chồng lấn an toàn theo CẢ HAI CHIỀU.</strong> Thiếu nó thì mã cũ ghi vào <code>email</code> sẽ để <code>dia_chi_email</code> rỗng, và mã mới nhìn thấy một dòng không có địa chỉ. Phép đo ở trên xác nhận nó chạy: một dòng do mã cũ ghi ra thì mã mới ĐỌC ĐƯỢC NGAY. Phương án thay thế là ghi-đôi ở tầng ứng dụng, và nó TỆ HƠN — nó chỉ phủ được cái phiên bản CÓ đoạn ghi-đôi, nên lệnh ghi của phiên bản KIA vẫn bị bỏ sót.</div>
 <div class="pitfall"><strong>Bẫy — bước 2 là một lệnh <code>UPDATE</code> trên TOÀN BỘ bảng, và trên một bảng lớn thì nó không miễn phí.</strong> Một lệnh <code>update ... set x = y</code> chạy qua mười triệu dòng sẽ giữ khoá lâu và ghi ra một phiên bản mới của MỌI dòng, làm bảng phình lên và làm nghẽn các lệnh ghi. Hãy CHIA LÔ — vài nghìn dòng một lần, trong một vòng lặp có nghỉ ngắn — và để cái trigger lo mọi thứ được ghi trong lúc lấp dữ liệu chạy. Bài 5.3 đo những con số làm chuyện này thành cụ thể.</div>
 

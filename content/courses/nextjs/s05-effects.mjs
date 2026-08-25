@@ -58,6 +58,23 @@ function ChatRoom({ roomId }) {
 <p><strong>The dependency array is not optional flavour — it changes behaviour completely.</strong> <code>useEffect(fn, [x])</code> re-runs when <code>x</code> changes. <code>useEffect(fn, [])</code> runs once after the first render. <code>useEffect(fn)</code> with <em>no</em> array runs after <em>every</em> render — usually a bug, and a classic cause of infinite loops when the effect also sets state. Next lesson makes the three cases precise.</p>
 </div>
 
+<h3>When an effect is the right tool — and when it is not</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Rendering must be pure</b> — A component computes JSX from props and state. Anything that touches the world outside — a subscription, a timer, a DOM measurement — cannot happen during that computation.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>An effect runs after the paint</b> — React finishes rendering, the browser shows the result, then your effect runs. This is why an effect never blocks the first paint.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>It is for synchronising with something external</b> — A WebSocket, an event listener on &#96;window&#96;, a third-party widget, a browser API. &quot;External&quot; is the test.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Not for reacting to your own state</b> — Transforming data, resetting a field when a prop changes, updating state from other state — all of those belong in render or in the event handler.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — using an effect to derive one piece of state from another.</strong> &#96;useEffect(() =&gt; { setFullName(first + &#39; &#39; + last) }, [first, last])&#96; works, and it costs you a second render every time either field changes: React renders with the stale name, paints it, runs the effect, sets state, renders again. The user can see the intermediate frame on a slow device. It also creates a second source of truth that can drift the moment someone sets &#96;fullName&#96; from somewhere else. Compute it during render instead — &#96;const fullName = first + &#39; &#39; + last&#96; — which is always correct and costs nothing.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/synchronizing-with-effects" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Synchronizing with Effects</span><span class="lc-sub">What effects are actually for, with the lifecycle drawn out.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/you-might-not-need-an-effect" target="_blank" rel="noopener">
+  <span class="lc-ico">🚫</span>
+  <span class="lc-body"><span class="lc-title">react.dev — You Might Not Need an Effect</span><span class="lc-sub">Six common effects that should not exist, each with the replacement.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://react.dev/learn/synchronizing-with-effects" target="_blank" rel="noopener">
   <span class="lc-ico">🔄</span>
@@ -107,6 +124,23 @@ function ChatRoom({ roomId }) {
 <p><strong>Mảng phụ thuộc không phải gia vị tuỳ chọn — nó đổi hành vi hoàn toàn.</strong> <code>useEffect(fn, [x])</code> chạy lại khi <code>x</code> đổi. <code>useEffect(fn, [])</code> chạy một lần sau render đầu. <code>useEffect(fn)</code> <em>không</em> có mảng chạy sau <em>mỗi</em> lần render — thường là bug, và là nguyên nhân kinh điển của vòng lặp vô tận khi effect còn set state. Bài sau làm rõ chính xác ba trường hợp.</p>
 </div>
 
+<h3>Khi nào effect là công cụ đúng — và khi nào không</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Việc render phải thuần khiết</b> — Một component tính ra JSX từ props và state. Mọi thứ chạm tới thế giới bên ngoài — một đăng ký, một bộ đếm giờ, một phép đo DOM — đều không được xảy ra trong lúc tính đó.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Một effect chạy SAU khi vẽ</b> — React render xong, trình duyệt hiện kết quả ra, rồi effect của bạn mới chạy. Đó là lý do một effect không bao giờ chặn lần vẽ đầu tiên.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nó dành để đồng bộ với một thứ bên ngoài</b> — Một WebSocket, một listener trên &#96;window&#96;, một widget của bên thứ ba, một API của trình duyệt. &quot;Bên ngoài&quot; chính là phép thử.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Không dành để phản ứng với state của chính bạn</b> — Biến đổi dữ liệu, đặt lại một trường khi prop đổi, cập nhật state từ state khác — tất cả đều thuộc về lúc render hoặc thuộc về handler sự kiện.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — dùng effect để dẫn xuất một mẩu state từ một mẩu state khác.</strong> &#96;useEffect(() =&gt; { setFullName(first + &#39; &#39; + last) }, [first, last])&#96; chạy được, và nó tốn của bạn một lần render thừa mỗi khi một trong hai trường đổi: React render với cái tên cũ, vẽ nó ra, chạy effect, đặt state, rồi render lại. Trên máy chậm người dùng nhìn thấy được khung hình trung gian đó. Nó còn tạo ra một nguồn sự thật thứ hai, sẵn sàng trôi dạt ngay khi có người đặt &#96;fullName&#96; từ chỗ khác. Hãy tính nó trong lúc render — &#96;const fullName = first + &#39; &#39; + last&#96; — vốn luôn đúng và chẳng tốn gì.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/synchronizing-with-effects" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Đồng bộ bằng Effect</span><span class="lc-sub">Effect thật ra dùng để làm gì, kèm vòng đời vẽ ra rõ ràng.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/you-might-not-need-an-effect" target="_blank" rel="noopener">
+  <span class="lc-ico">🚫</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Có thể bạn không cần Effect</span><span class="lc-sub">Sáu effect phổ biến lẽ ra không nên tồn tại, mỗi cái kèm thứ thay thế.</span></span>
+</a>
+
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://react.dev/learn/synchronizing-with-effects" target="_blank" rel="noopener">
   <span class="lc-ico">🔄</span>
@@ -154,6 +188,24 @@ unmount        → <span class="tok-comment">cleanup of 2</span></code></pre>
 <div class="pitfall">
 <p><strong>Objects and functions as dependencies re-trigger every render.</strong> <code>{ }</code>, <code>[ ]</code> and <code>() =&gt; {}</code> created during render are a <em>new reference</em> each time, so <code>Object.is</code> always says "changed" and the effect runs on every render. If an effect depends on an object or a function, either move it inside the effect, or memoise it with <code>useMemo</code>/<code>useCallback</code> (Chapter 6). This is one of the most common "why does my effect loop?" causes.</p>
 </div>
+<h3>The dependency array and the cleanup function</h3>
+<div class="lz-map">
+  <div class="lz-stage">Two halves of the same contract</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">No array — runs after every render</div><div class="lz-nsub">Almost never what you want. If the effect sets state, this is an infinite loop.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Empty array — runs once on mount</div><div class="lz-nsub">And the cleanup runs once on unmount. Correct for a subscription that never needs to change.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">With dependencies — re-runs when they change</div><div class="lz-nsub">Cleanup for the old values runs first, then the effect for the new ones. React is re-synchronising, not &quot;updating&quot;.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Cleanup undoes exactly what the effect did</div><div class="lz-nsub">Remove the listener, close the socket, clear the timer, cancel the request. If the effect subscribed, the cleanup unsubscribes.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — omitting a dependency to stop an effect from re-running.</strong> The lint rule complains that &#96;query&#96; is missing; deleting it from the array silences the warning and freezes the effect on the first render&#39;s value forever. The search box then keeps fetching results for whatever was typed first, and no error appears anywhere — the request succeeds, it is just the wrong request. The array is not a &quot;run when I say&quot; switch; it is a claim about which values the effect reads. When re-running is genuinely wrong, the fix is to change what the effect depends on — move the value into a ref, or into the setter&#39;s functional form — not to lie in the array.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/lifecycle-of-reactive-effects" target="_blank" rel="noopener">
+  <span class="lc-ico">♻️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Lifecycle of reactive effects</span><span class="lc-sub">Why an effect re-synchronises rather than &quot;updates&quot;, and what that means for dependencies.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/removing-effect-dependencies" target="_blank" rel="noopener">
+  <span class="lc-ico">✂️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Removing Effect dependencies</span><span class="lc-sub">How to legitimately shrink a dependency array, instead of deleting entries from it.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -182,6 +234,24 @@ unmount        → <span class="tok-comment">cleanup của 2</span></code></pre>
 <div class="pitfall">
 <p><strong>Object và hàm làm phụ thuộc kích hoạt lại mỗi render.</strong> <code>{ }</code>, <code>[ ]</code> và <code>() =&gt; {}</code> tạo trong lúc render là một <em>tham chiếu mới</em> mỗi lần, nên <code>Object.is</code> luôn nói "đã đổi" và effect chạy mỗi render. Nếu một effect phụ thuộc một object hay một hàm, hoặc đưa nó vào trong effect, hoặc ghi nhớ nó bằng <code>useMemo</code>/<code>useCallback</code> (Chương 6). Đây là một trong những nguyên nhân "sao effect của tôi lặp?" phổ biến nhất.</p>
 </div>
+<h3>Mảng phụ thuộc và hàm dọn dẹp</h3>
+<div class="lz-map">
+  <div class="lz-stage">Hai nửa của cùng một bản hợp đồng</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Không có mảng — chạy sau MỌI lần render</div><div class="lz-nsub">Gần như chẳng bao giờ là thứ bạn muốn. Nếu effect có đặt state thì đây là một vòng lặp vô tận.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Mảng rỗng — chạy một lần lúc gắn vào</div><div class="lz-nsub">Và phần dọn dẹp chạy một lần lúc gỡ ra. Đúng cho một đăng ký chẳng bao giờ cần đổi.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Có phụ thuộc — chạy lại khi chúng đổi</div><div class="lz-nsub">Phần dọn dẹp cho giá trị cũ chạy trước, rồi mới tới effect cho giá trị mới. React đang ĐỒNG BỘ LẠI, chứ không phải &quot;cập nhật&quot;.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Dọn dẹp hoàn tác đúng thứ effect đã làm</div><div class="lz-nsub">Gỡ listener, đóng socket, xoá bộ đếm giờ, huỷ request. Effect đã đăng ký thì dọn dẹp phải huỷ đăng ký.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — bỏ bớt một phụ thuộc để effect thôi chạy lại.</strong> Luật lint kêu là thiếu &#96;query&#96;; xoá nó khỏi mảng thì cảnh báo im đi và effect bị đóng băng ở giá trị của lần render đầu, mãi mãi. Ô tìm kiếm từ đó cứ lấy kết quả cho đúng cái người ta gõ đầu tiên, và chẳng có lỗi nào hiện ra ở đâu — request vẫn thành công, chỉ là sai request. Cái mảng không phải một công tắc &quot;chạy khi tôi bảo&quot;; nó là một khẳng định về những giá trị mà effect đọc. Khi việc chạy lại thật sự là sai, cách chữa là đổi thứ mà effect phụ thuộc vào — đưa giá trị vào một ref, hoặc vào dạng nhận hàm của setter — chứ không phải nói dối trong cái mảng.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/lifecycle-of-reactive-effects" target="_blank" rel="noopener">
+  <span class="lc-ico">♻️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Vòng đời của effect phản ứng</span><span class="lc-sub">Vì sao một effect đồng bộ lại chứ không &quot;cập nhật&quot;, và điều đó nghĩa gì với phụ thuộc.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/removing-effect-dependencies" target="_blank" rel="noopener">
+  <span class="lc-ico">✂️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Gỡ bớt phụ thuộc của Effect</span><span class="lc-sub">Cách thu nhỏ mảng phụ thuộc một cách chính đáng, thay vì xoá bớt mục trong đó.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -224,6 +294,23 @@ unmount        → <span class="tok-comment">cleanup của 2</span></code></pre>
 <div class="note-ct">
 <p><strong>How cuongthai.com does it</strong> — the site runs with StrictMode on in dev. Socket.IO connections, event listeners on <code>window</code>, and IntersectionObservers in the feed all pair their setup with a cleanup, precisely so the double-invoke leaves exactly one live connection/observer. When a new feature "connects twice" or a listener fires twice in dev, the fix is never to disable StrictMode — it is to add the missing cleanup.</p>
 </div>
+<h3>Why StrictMode runs your effect twice</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Only in development, only in StrictMode</b> — Production runs it once. This is a test React performs on your code, not a behaviour users experience.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>It mounts, unmounts, mounts again</b> — So the sequence is: effect, cleanup, effect. If your cleanup is correct, the end state is identical to running once.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>A doubled result is a missing cleanup</b> — Two sockets open, two listeners attached, two requests fired — each is the same bug that would appear in production the moment the component re-mounted.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>So do not disable it</b> — The double invocation is finding a real defect. Removing StrictMode hides the symptom and keeps the bug.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a &#96;useEffect&#96; that fires an analytics event or a POST, seen twice in development.</strong> The instinct is to add a ref guard (&#96;if (ran.current) return&#96;) so it only happens once. That silences development and leaves production broken in the case that matters: React will legitimately unmount and remount a component — a route change back and forth, a key change, Fast Refresh — and the guard makes the effect never run again on the second mount. The honest fixes are to make the operation idempotent (send an id the server deduplicates on), or to move it out of an effect entirely: a POST caused by a click belongs in the click handler, where it happens exactly as often as the user asked.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/StrictMode" target="_blank" rel="noopener">
+  <span class="lc-ico">🔬</span>
+  <span class="lc-body"><span class="lc-title">react.dev — StrictMode</span><span class="lc-sub">Everything it double-invokes, and the class of bug each check is hunting.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/synchronizing-with-effects#how-to-handle-the-effect-firing-twice-in-development" target="_blank" rel="noopener">
+  <span class="lc-ico">2️⃣</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Handling the effect firing twice</span><span class="lc-sub">The official answer, case by case: fetch, subscription, animation, analytics.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -256,6 +343,23 @@ unmount        → <span class="tok-comment">cleanup của 2</span></code></pre>
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào</strong> — site chạy với StrictMode bật ở dev. Kết nối Socket.IO, listener trên <code>window</code>, và IntersectionObserver trong feed đều ghép setup với một cleanup, chính xác để cú double-invoke để lại đúng một kết nối/observer sống. Khi một tính năng mới "kết nối hai lần" hay một listener nổ hai lần ở dev, cách vá không bao giờ là tắt StrictMode — mà là thêm cleanup còn thiếu.</p>
 </div>
+<h3>Vì sao StrictMode chạy effect của bạn hai lần</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Chỉ ở môi trường phát triển, chỉ trong StrictMode</b> — Bản production chạy một lần. Đây là một phép thử React làm với mã của bạn, không phải hành vi người dùng gặp phải.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Nó gắn vào, gỡ ra, rồi gắn lại</b> — Nên trình tự là: effect, dọn dẹp, effect. Nếu phần dọn dẹp của bạn đúng thì trạng thái cuối y hệt như chạy một lần.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Kết quả nhân đôi là dấu hiệu thiếu dọn dẹp</b> — Hai socket mở ra, hai listener gắn vào, hai request bắn đi — mỗi cái đều là đúng cái lỗi sẽ hiện ra trên production ngay khi component được gắn lại.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nên đừng tắt nó đi</b> — Việc gọi hai lần đang tìm ra một khiếm khuyết thật. Gỡ StrictMode là giấu triệu chứng và giữ lại cái lỗi.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một &#96;useEffect&#96; bắn một sự kiện analytics hay một POST, thấy chạy hai lần ở môi trường phát triển.</strong> Phản xạ là thêm một chốt bằng ref (&#96;if (ran.current) return&#96;) để nó chỉ xảy ra một lần. Việc đó làm môi trường phát triển im lặng và để production hỏng ở đúng trường hợp đáng quan tâm: React sẽ gỡ ra rồi gắn lại một component một cách chính đáng — đổi route đi rồi quay lại, đổi key, Fast Refresh — và cái chốt ấy làm effect chẳng bao giờ chạy lại ở lần gắn thứ hai. Cách chữa thành thật là làm cho thao tác trở nên lặp-lại-vô-hại (gửi kèm một id để máy chủ khử trùng lặp), hoặc dời hẳn nó ra khỏi effect: một POST do một cú bấm gây ra thì thuộc về handler bấm, nơi nó xảy ra đúng bằng số lần người dùng yêu cầu.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/StrictMode" target="_blank" rel="noopener">
+  <span class="lc-ico">🔬</span>
+  <span class="lc-body"><span class="lc-title">react.dev — StrictMode</span><span class="lc-sub">Mọi thứ nó gọi hai lần, và loại lỗi mà từng phép kiểm đang săn.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/synchronizing-with-effects#how-to-handle-the-effect-firing-twice-in-development" target="_blank" rel="noopener">
+  <span class="lc-ico">2️⃣</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Xử lý effect chạy hai lần</span><span class="lc-sub">Câu trả lời chính thức, theo từng ca: fetch, đăng ký, hoạt ảnh, analytics.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -311,6 +415,24 @@ function handleSubmit() {
 <h3>The test: "am I synchronising, or reacting?"</h3>
 <p>Before writing an effect, ask what it is for. If the answer is "keep an external system in step with my state" (a subscription, the document title, a non-React widget) — it's a real effect. If the answer is "compute a value", "copy a prop", or "respond to a click" — it is not an effect, and there is a simpler place for it. When in doubt, read the react.dev page below; it has a decision tree for exactly this.</p>
 
+<h3>Four effects that should not exist</h3>
+<div class="lz-map">
+  <div class="lz-stage">Each one has a simpler replacement</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Transforming data for rendering</div><div class="lz-nsub">&#96;useEffect(() =&gt; setVisible(items.filter(…)))&#96;. Compute it during render — it is always in sync and costs one line.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Handling a user event</div><div class="lz-nsub">&#96;useEffect(() =&gt; { if (submitted) send() })&#96;. Put the call in the submit handler, where the cause actually is.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Resetting state when a prop changes</div><div class="lz-nsub">An effect that clears a form when the id changes. Pass a &#96;key&#96; instead and let React remount the component.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Chaining state updates</div><div class="lz-nsub">One effect sets state that triggers another effect. Each link is a render; compute the final value in one place instead.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an effect that sets state on a dependency it also changes.</strong> &#96;useEffect(() =&gt; { setTotal(items.length) }, [items, total])&#96; loops forever: the effect sets &#96;total&#96;, which is a dependency, which re-runs the effect. React eventually warns about a maximum update depth, but the message points at the render, not at the array. The same shape appears more subtly when the dependency is an object or array literal created during render — it is a new reference every time, so the effect re-runs on every render even though nothing changed. Read the array as a claim: &quot;these are the values I read&quot;. If one of them is also a value you write, the effect is the wrong tool.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/you-might-not-need-an-effect" target="_blank" rel="noopener">
+  <span class="lc-ico">🚫</span>
+  <span class="lc-body"><span class="lc-title">react.dev — You Might Not Need an Effect</span><span class="lc-sub">The canonical list, with the before-and-after code for each case.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/separating-events-from-effects" target="_blank" rel="noopener">
+  <span class="lc-ico">🪓</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Separating events from Effects</span><span class="lc-sub">How to tell which logic is reactive and which is a one-off — the distinction this lesson rests on.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://react.dev/learn/you-might-not-need-an-effect" target="_blank" rel="noopener">
   <span class="lc-ico">✂️</span>
@@ -360,6 +482,24 @@ function handleSubmit() {
 
 <h3>Phép thử: "mình đang đồng bộ, hay đang phản ứng?"</h3>
 <p>Trước khi viết một effect, hãy hỏi nó để làm gì. Nếu câu trả lời là "giữ một hệ thống bên ngoài bước cùng state của mình" (một subscription, tiêu đề trang, một widget không-phải-React) — đó là effect thật. Nếu câu trả lời là "tính một giá trị", "chép một prop", hay "phản hồi một cú click" — nó không phải effect, và có một chỗ đơn giản hơn cho nó. Khi phân vân, đọc trang react.dev bên dưới; nó có một cây quyết định cho đúng việc này.</p>
+
+<h3>Bốn effect lẽ ra không nên tồn tại</h3>
+<div class="lz-map">
+  <div class="lz-stage">Cái nào cũng có thứ thay thế đơn giản hơn</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Biến đổi dữ liệu để vẽ ra</div><div class="lz-nsub">&#96;useEffect(() =&gt; setVisible(items.filter(…)))&#96;. Hãy tính nó trong lúc render — nó luôn đồng bộ và tốn một dòng.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Xử lý một sự kiện người dùng</div><div class="lz-nsub">&#96;useEffect(() =&gt; { if (submitted) send() })&#96;. Hãy đặt lời gọi vào handler submit, nơi nguyên nhân thật sự nằm ở đó.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Đặt lại state khi một prop đổi</div><div class="lz-nsub">Một effect xoá trắng form khi id đổi. Hãy truyền một &#96;key&#96; thay thế và để React dựng lại component.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Nối chuỗi các lần cập nhật state</div><div class="lz-nsub">Một effect đặt state, kéo theo một effect khác. Mỗi mắt xích là một lần render; hãy tính giá trị cuối ở một chỗ thôi.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một effect đặt state lên chính cái phụ thuộc mà nó cũng thay đổi.</strong> &#96;useEffect(() =&gt; { setTotal(items.length) }, [items, total])&#96; lặp vô tận: effect đặt &#96;total&#96;, mà &#96;total&#96; là một phụ thuộc, nên effect chạy lại. Cuối cùng React cảnh báo vượt độ sâu cập nhật tối đa, nhưng thông điệp chỉ vào phần render chứ không chỉ vào cái mảng. Cùng hình dạng ấy hiện ra tinh vi hơn khi phụ thuộc là một object hay mảng viết thẳng trong lúc render — nó là một tham chiếu mới mỗi lần, nên effect chạy lại ở mọi lần render dù chẳng có gì đổi. Hãy đọc cái mảng như một lời khẳng định: &quot;đây là những giá trị tôi ĐỌC&quot;. Nếu một trong số đó cũng là giá trị bạn GHI thì effect là công cụ sai.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/you-might-not-need-an-effect" target="_blank" rel="noopener">
+  <span class="lc-ico">🚫</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Có thể bạn không cần Effect</span><span class="lc-sub">Danh sách kinh điển, kèm mã trước-và-sau cho từng ca.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/separating-events-from-effects" target="_blank" rel="noopener">
+  <span class="lc-ico">🪓</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Tách sự kiện khỏi Effect</span><span class="lc-sub">Cách phân biệt logic nào là phản ứng và logic nào chỉ chạy một lần — chỗ phân biệt mà bài này dựa vào.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://react.dev/learn/you-might-not-need-an-effect" target="_blank" rel="noopener">
@@ -416,6 +556,23 @@ async function Profile({ userId }) {
 <div class="callout ok">
 <p><strong>Effects, in one paragraph.</strong> An effect synchronises an external system with your state; it runs after render, re-runs when its dependencies change, and cleans up before each re-run and on unmount. In dev it runs twice to prove your cleanup is right. Most effects you're tempted to write are really derived state, event logic, or data fetching that belongs on the server. Next up, Chapter 6: the rest of the hooks — <code>useRef</code>, <code>useMemo</code>, <code>useCallback</code>, <code>useReducer</code>, <code>useContext</code>, and writing your own.</p>
 </div>
+<h3>Fetching in an effect, without the race</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>The user types fast</b> — Three keystrokes fire three requests. They come back in whatever order the network decides, not the order you sent them.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>So the slow one can land last</b> — Request for &quot;ab&quot; resolves after the request for &quot;abc&quot;, and the results shown belong to a query the user has already moved past.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Ignore stale responses</b> — A local &#96;let ignore = false&#96; captured by the effect, set to &#96;true&#96; in the cleanup. Check it before calling &#96;setState&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Or cancel with AbortController</b> — &#96;signal&#96; into &#96;fetch&#96;, &#96;controller.abort()&#96; in the cleanup. This also stops the request rather than merely ignoring it.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — the race that only appears on a slow connection, and only sometimes.</strong> An effect that fetches on every keystroke works perfectly on localhost, where every response arrives in two milliseconds in the order it was sent. On a real network the ordering is not guaranteed, so the search results occasionally show the wrong query — and because it depends on timing, it will not reproduce when you go looking. Throttle your DevTools network to Slow 3G and type quickly; the bug appears immediately. Then add the &#96;ignore&#96; flag or the abort signal. In Next.js, the better answer is often to move the fetch to a Server Component or a data library, where this is handled for you.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/useEffect#fetching-data-with-effects" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Fetching data with Effects</span><span class="lc-sub">The ignore-flag pattern, and why React recommends a framework or library instead.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController" target="_blank" rel="noopener">
+  <span class="lc-ico">🛑</span>
+  <span class="lc-body"><span class="lc-title">MDN — AbortController</span><span class="lc-sub">Cancelling a fetch properly, including what error it throws when you do.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -456,6 +613,23 @@ async function Profile({ userId }) {
 <div class="callout ok">
 <p><strong>Effect, trong một đoạn.</strong> Một effect đồng bộ một hệ thống bên ngoài với state của bạn; nó chạy sau render, chạy lại khi phụ thuộc đổi, và dọn dẹp trước mỗi lần chạy lại và khi unmount. Ở dev nó chạy hai lần để chứng minh cleanup của bạn đúng. Phần lớn effect bạn bị cám dỗ viết thật ra là state suy ra, logic sự kiện, hoặc fetch dữ liệu thuộc về server. Tiếp theo, Chương 6: phần còn lại của hooks — <code>useRef</code>, <code>useMemo</code>, <code>useCallback</code>, <code>useReducer</code>, <code>useContext</code>, và tự viết hook của bạn.</p>
 </div>
+<h3>Fetch trong một effect, mà không dính cuộc đua</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Người dùng gõ nhanh</b> — Ba lần gõ phím bắn ra ba request. Chúng về theo thứ tự mà mạng quyết định, không phải thứ tự bạn gửi đi.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Nên cái chậm có thể về sau cùng</b> — Request cho &quot;ab&quot; xong sau request cho &quot;abc&quot;, và kết quả hiện ra thuộc về một truy vấn mà người dùng đã bỏ qua từ lâu.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Hãy lờ đi những phản hồi đã cũ</b> — Một biến cục bộ &#96;let ignore = false&#96; được effect bắt lấy, đặt thành &#96;true&#96; trong phần dọn dẹp. Kiểm nó trước khi gọi &#96;setState&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Hoặc huỷ bằng AbortController</b> — Truyền &#96;signal&#96; vào &#96;fetch&#96;, gọi &#96;controller.abort()&#96; trong phần dọn dẹp. Cách này còn dừng hẳn request chứ không chỉ lờ nó đi.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — cuộc đua chỉ hiện ra trên đường truyền chậm, và chỉ thỉnh thoảng.</strong> Một effect fetch ở mỗi lần gõ phím chạy hoàn hảo trên localhost, nơi mọi phản hồi về trong hai mili giây và đúng thứ tự đã gửi. Trên mạng thật thì thứ tự không được bảo đảm, nên kết quả tìm kiếm thỉnh thoảng hiện sai truy vấn — và vì nó phụ thuộc thời điểm, nó sẽ không tái hiện khi bạn đi tìm. Hãy bóp băng thông trong DevTools xuống Slow 3G rồi gõ thật nhanh; cái lỗi hiện ra ngay. Rồi thêm cờ &#96;ignore&#96; hoặc tín hiệu huỷ vào. Trong Next.js, câu trả lời tốt hơn thường là dời phép fetch sang Server Component hoặc một thư viện dữ liệu, nơi chuyện này đã được lo giùm.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/useEffect#fetching-data-with-effects" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Lấy dữ liệu bằng Effect</span><span class="lc-sub">Mẫu dùng cờ ignore, và vì sao React khuyên dùng framework hoặc thư viện thay thế.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController" target="_blank" rel="noopener">
+  <span class="lc-ico">🛑</span>
+  <span class="lc-body"><span class="lc-title">MDN — AbortController</span><span class="lc-sub">Huỷ một phép fetch cho đúng, gồm cả lỗi nó ném ra khi bạn huỷ.</span></span>
+</a>
+
 </div>
 `,
     },

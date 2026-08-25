@@ -57,6 +57,23 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 <p><strong>Don't read or write a ref during render.</strong> A ref is for effects and event handlers — code that runs <em>after</em> render. Reading <code>ref.current</code> during render (to decide what to show) or writing it during render makes your component impure and its output unpredictable, because React doesn't track ref changes. If a value decides what renders, it must be state, not a ref. Rule of thumb: <em>touch refs in handlers and effects, never in the render body.</em></p>
 </div>
 
+<h3>What a ref is, and what it is not</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>A box that survives renders</b> — &#96;useRef(0)&#96; returns the same object every render. Writing &#96;ref.current = 5&#96; changes the box; it does not tell React anything.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Changing it does not re-render</b> — That is the whole point. Use it for a value the UI does not display: a timer id, a previous value, a &quot;have I already run this&quot; flag.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Attach it to a DOM node with the ref prop</b> — &#96;&lt;input ref={inputRef} /&gt;&#96;. React fills &#96;current&#96; after the commit, so it is &#96;null&#96; during the first render.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Read it in an event handler or an effect</b> — Never during render. Reading a ref while rendering makes the output depend on something React cannot track.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — putting a displayed value in a ref, so the screen never updates.</strong> &#96;countRef.current++&#96; increments correctly and the number on screen never changes, because nothing asked React to render again. The value in DevTools is right, the DOM is stale, and it looks like a rendering bug rather than a choice you made. The rule is mechanical: if a value appears in the JSX, it is state. If it only exists to survive between renders without being shown, it is a ref. When you need both — a value shown <em>and</em> read by a timer — keep it in state and mirror it into a ref inside an effect.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/referencing-values-with-refs" target="_blank" rel="noopener">
+  <span class="lc-ico">📌</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Referencing values with refs</span><span class="lc-sub">When a ref is right, and the rules about reading during render.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/manipulating-the-dom-with-refs" target="_blank" rel="noopener">
+  <span class="lc-ico">🔧</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Manipulating the DOM with refs</span><span class="lc-sub">Focus, scroll and measurement — the legitimate reasons to reach for the DOM.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://react.dev/reference/react/useRef" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
@@ -99,6 +116,23 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 <div class="pitfall">
 <p><strong>Đừng đọc hay ghi một ref trong lúc render.</strong> Ref là để cho effect và handler sự kiện — code chạy <em>sau</em> render. Đọc <code>ref.current</code> trong lúc render (để quyết hiện gì) hay ghi nó trong lúc render làm component không thuần và output khó lường, vì React không theo dõi thay đổi ref. Nếu một giá trị quyết cái được render, nó phải là state, không phải ref. Nguyên tắc: <em>chạm ref trong handler và effect, không bao giờ trong thân render.</em></p>
 </div>
+
+<h3>Một ref là gì, và nó không phải là gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Một cái hộp sống qua các lần render</b> — &#96;useRef(0)&#96; trả về cùng một object ở mọi lần render. Ghi &#96;ref.current = 5&#96; là đổi cái hộp; nó chẳng nói gì với React cả.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Đổi nó thì KHÔNG render lại</b> — Đó chính là toàn bộ mục đích. Hãy dùng nó cho một giá trị giao diện không hiển thị: một id bộ đếm giờ, một giá trị trước đó, một cờ &quot;tôi đã chạy cái này chưa&quot;.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Gắn nó vào một nút DOM bằng prop ref</b> — &#96;&lt;input ref={inputRef} /&gt;&#96;. React điền vào &#96;current&#96; sau khi commit, nên nó là &#96;null&#96; trong lần render đầu.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Đọc nó trong handler sự kiện hoặc trong effect</b> — Đừng bao giờ đọc trong lúc render. Đọc một ref lúc đang render làm đầu ra phụ thuộc vào thứ React không theo dõi được.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — đặt một giá trị được hiển thị vào một ref, và màn hình chẳng bao giờ cập nhật.</strong> &#96;countRef.current++&#96; tăng đúng và con số trên màn hình chẳng bao giờ đổi, vì chẳng có gì bảo React render lại. Giá trị trong DevTools thì đúng, DOM thì cũ, và nó trông như một lỗi vẽ chứ không phải một lựa chọn bạn đã làm. Luật thì máy móc: nếu một giá trị xuất hiện trong JSX thì nó là state. Nếu nó chỉ tồn tại để sống qua các lần render mà không được hiển thị thì nó là ref. Khi bạn cần cả hai — một giá trị vừa hiện ra <em>vừa</em> được một bộ đếm giờ đọc — hãy giữ nó trong state rồi soi gương nó vào một ref bên trong một effect.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/referencing-values-with-refs" target="_blank" rel="noopener">
+  <span class="lc-ico">📌</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Tham chiếu giá trị bằng ref</span><span class="lc-sub">Khi nào ref là đúng, và các luật về việc đọc trong lúc render.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/manipulating-the-dom-with-refs" target="_blank" rel="noopener">
+  <span class="lc-ico">🔧</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Thao tác DOM bằng ref</span><span class="lc-sub">Tiêu điểm, cuộn và đo kích thước — những lý do chính đáng để với tay vào DOM.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://react.dev/reference/react/useRef" target="_blank" rel="noopener">
@@ -144,6 +178,24 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 <div class="callout warn">
 <p><strong>React 19's Compiler changes the calculus.</strong> React is shipping an automatic compiler that inserts this memoisation for you, so manual <code>useMemo</code>/<code>useCallback</code> will matter less over time. Learn what they do — you'll read them in existing code and still need them at boundaries — but don't pepper new code with them "to be safe". Correct, readable code first.</p>
 </div>
+<h3>Memoisation: what it buys and what it costs</h3>
+<div class="lz-map">
+  <div class="lz-stage">Measure first, memoise second</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">useMemo caches a value</div><div class="lz-nsub">&#96;useMemo(() =&gt; expensiveSort(items), [items])&#96;. Skips the computation when the dependencies are unchanged.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">useCallback caches a function</div><div class="lz-nsub">Same thing for a function identity, so a memoised child does not re-render because its handler is new.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">They are not free</div><div class="lz-nsub">Each one stores a value, compares dependencies on every render, and adds a line for the next reader to understand.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">They only help in three cases</div><div class="lz-nsub">An expensive computation; a dependency of an effect; a prop passed to a &#96;memo&#96;-wrapped child. Outside those, they cost more than they save.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — wrapping a handler in &#96;useCallback&#96; and passing it to a child that is not memoised.</strong> &#96;const onSelect = useCallback(…, [])&#96; keeps the function identity stable, which achieves nothing if the child is an ordinary component: it re-renders when its parent does, regardless of whether its props changed. So you have paid for the memoisation and bought nothing. The pair only works together — &#96;useCallback&#96; on the parent <em>and</em> &#96;React.memo&#96; on the child — and even then only if every other prop is stable too, which one inline object literal is enough to break. Profile before adding either; the React DevTools profiler shows you which components actually re-render and how long they take.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/useMemo#should-you-add-usememo-everywhere" target="_blank" rel="noopener">
+  <span class="lc-ico">⚖️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Should you add useMemo everywhere?</span><span class="lc-sub">The official answer, with the three cases where it genuinely helps.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/react-developer-tools" target="_blank" rel="noopener">
+  <span class="lc-ico">🔍</span>
+  <span class="lc-body"><span class="lc-title">react.dev — React Developer Tools</span><span class="lc-sub">The profiler: which components re-rendered, why, and how long each took.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -173,6 +225,24 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
 <div class="callout warn">
 <p><strong>React 19 Compiler đổi bài toán.</strong> React đang ra một compiler tự động chèn memo hoá này hộ bạn, nên <code>useMemo</code>/<code>useCallback</code> thủ công sẽ dần bớt quan trọng. Hãy học chúng làm gì — bạn sẽ đọc chúng trong code có sẵn và vẫn cần chúng ở các ranh giới — nhưng đừng rắc chúng khắp code mới "cho chắc". Code đúng, dễ đọc trước đã.</p>
 </div>
+<h3>Ghi nhớ (memoisation): nó mua được gì và tốn những gì</h3>
+<div class="lz-map">
+  <div class="lz-stage">Đo trước, ghi nhớ sau</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">useMemo nhớ một giá trị</div><div class="lz-nsub">&#96;useMemo(() =&gt; expensiveSort(items), [items])&#96;. Bỏ qua phép tính khi các phụ thuộc không đổi.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">useCallback nhớ một hàm</div><div class="lz-nsub">Cũng vậy nhưng cho danh tính của một hàm, để một component con đã memo không render lại chỉ vì handler của nó là mới.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Chúng không miễn phí</div><div class="lz-nsub">Mỗi cái đều lưu một giá trị, so các phụ thuộc ở mọi lần render, và thêm một dòng cho người đọc sau phải hiểu.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Chúng chỉ giúp trong ba trường hợp</div><div class="lz-nsub">Một phép tính đắt; một phụ thuộc của effect; một prop truyền cho component con bọc &#96;memo&#96;. Ngoài ba cái đó, chúng tốn nhiều hơn tiết kiệm.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — bọc một handler trong &#96;useCallback&#96; rồi truyền cho một component con KHÔNG được memo.</strong> &#96;const onSelect = useCallback(…, [])&#96; giữ danh tính hàm ổn định, và điều đó chẳng đạt được gì nếu component con là một component thường: nó render lại khi cha render, bất kể props có đổi hay không. Thế là bạn đã trả tiền cho phép ghi nhớ mà chẳng mua được gì. Cặp này chỉ chạy khi đi cùng nhau — &#96;useCallback&#96; ở cha <em>và</em> &#96;React.memo&#96; ở con — và ngay cả thế cũng chỉ khi mọi prop khác cũng ổn định, thứ mà một object viết thẳng cũng đủ phá vỡ. Hãy đo trước khi thêm cái nào; profiler của React DevTools cho bạn thấy component nào thật sự render lại và mất bao lâu.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/useMemo#should-you-add-usememo-everywhere" target="_blank" rel="noopener">
+  <span class="lc-ico">⚖️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Có nên thêm useMemo ở mọi nơi?</span><span class="lc-sub">Câu trả lời chính thức, kèm ba trường hợp nó thật sự giúp ích.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/react-developer-tools" target="_blank" rel="noopener">
+  <span class="lc-ico">🔍</span>
+  <span class="lc-body"><span class="lc-title">react.dev — React Developer Tools</span><span class="lc-sub">Profiler: component nào đã render lại, vì sao, và mỗi cái mất bao lâu.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -216,6 +286,23 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
   <div class="kv"><span class="k">useReducer</span><span class="v">many related fields; the next state depends on the old in non-trivial ways; the same transitions fire from several places; or you want to unit-test the state logic.</span></div>
 </div>
 <p>They are interchangeable in power — anything one does, the other can. Reach for <code>useReducer</code> when a component's <code>useState</code> calls have multiplied and the update logic is smeared across handlers; consolidating it into a reducer makes the component's behaviour readable as a single list of transitions. This same shape scales up to Redux and Zustand (Chapter 14) — a reducer is the heart of most state libraries.</p>
+<h3>When a reducer beats several useStates</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>The states are related</b> — Loading, data and error are one thing with three shapes, not three independent booleans that happen to sit near each other.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>The transitions are the logic</b> — &#96;dispatch({ type: &#39;fetch_failed&#39;, error })&#96; names what happened. The reducer decides what the state becomes.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>It is a pure function</b> — &#96;(state, action) =&gt; newState&#96;. Testable on its own, with no React involved — which is worth more than it sounds.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>And it removes impossible combinations</b> — With separate booleans, &#96;loading &amp;&amp; error&#96; is representable. With a reducer returning one shape per case, it is not.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — mutating the state object inside the reducer.</strong> &#96;case &#39;add&#39;: state.items.push(action.item); return state&#96; returns the same object it received, so React&#39;s identity comparison says nothing changed and the component does not re-render. The data is genuinely updated — you can see it in the console — and the screen stays wrong, which sends people looking at the component instead of the reducer. A reducer must return a <em>new</em> object: &#96;return { ...state, items: [...state.items, action.item] }&#96;. This is the same rule as &#96;useState&#96;, but easier to break here because the reducer looks like a place where you are &quot;allowed&quot; to write imperative code.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/extracting-state-logic-into-a-reducer" target="_blank" rel="noopener">
+  <span class="lc-ico">🧮</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Extracting state logic into a reducer</span><span class="lc-sub">The step-by-step refactor from several useStates to one reducer.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react/useReducer" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">react.dev — useReducer reference</span><span class="lc-sub">Signatures, lazy initialisation, and the purity requirement spelled out.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -249,6 +336,23 @@ return &lt;input ref={inputRef} /&gt;;</code></pre>
   <div class="kv"><span class="k">useReducer</span><span class="v">nhiều trường liên quan; state kế phụ thuộc cái cũ theo cách không tầm thường; cùng các chuyển trạng thái nổ từ nhiều nơi; hoặc bạn muốn unit-test logic state.</span></div>
 </div>
 <p>Chúng ngang sức nhau — cái nào làm được, cái kia cũng làm được. Với tới <code>useReducer</code> khi các lời gọi <code>useState</code> của một component đã nhân lên và logic cập nhật bị bôi khắp handler; gom nó vào một reducer làm hành vi component đọc được như một danh sách chuyển trạng thái duy nhất. Chính hình dạng này mở rộng lên Redux và Zustand (Chương 14) — một reducer là trái tim của phần lớn thư viện state.</p>
+<h3>Khi nào reducer hơn vài useState</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Các trạng thái có liên quan với nhau</b> — Đang tải, dữ liệu và lỗi là MỘT thứ với ba hình dạng, chứ không phải ba boolean độc lập tình cờ nằm cạnh nhau.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Các phép chuyển trạng thái chính là logic</b> — &#96;dispatch({ type: &#39;fetch_failed&#39;, error })&#96; gọi tên chuyện đã xảy ra. Reducer quyết định state trở thành gì.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nó là một hàm thuần khiết</b> — &#96;(state, action) =&gt; newState&#96;. Kiểm thử được riêng lẻ, chẳng dính gì tới React — và điều đó đáng giá hơn vẻ ngoài của nó.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Và nó loại bỏ những tổ hợp bất khả</b> — Với các boolean riêng lẻ thì &#96;loading &amp;&amp; error&#96; là biểu diễn được. Với một reducer trả về một dáng cho mỗi ca thì không.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — sửa thẳng object state bên trong reducer.</strong> &#96;case &#39;add&#39;: state.items.push(action.item); return state&#96; trả về đúng cái object nó nhận vào, nên phép so danh tính của React nói là chẳng có gì đổi và component không render lại. Dữ liệu thì đúng là đã cập nhật — bạn thấy được trong console — mà màn hình vẫn sai, khiến người ta đi soi component thay vì soi reducer. Một reducer phải trả về một object <em>mới</em>: &#96;return { ...state, items: [...state.items, action.item] }&#96;. Đây cũng là luật của &#96;useState&#96;, nhưng ở đây dễ phạm hơn vì reducer trông như một chỗ mà bạn &quot;được phép&quot; viết mã theo lối ra lệnh.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/extracting-state-logic-into-a-reducer" target="_blank" rel="noopener">
+  <span class="lc-ico">🧮</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Rút logic state ra thành reducer</span><span class="lc-sub">Phép tái cấu trúc từng bước từ vài useState thành một reducer.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react/useReducer" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Tra cứu useReducer</span><span class="lc-sub">Các chữ ký, khởi tạo lười, và yêu cầu về tính thuần khiết nói rõ ra.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -297,6 +401,23 @@ function DeepButton() {
 <div class="note-ct">
 <p><strong>How cuongthai.com does it</strong> — the site uses context for exactly the "good fit" cases: the auth/user context, the theme provider, and the Notes editor's own theme context (the <code>NotesThemeProvider</code> that scopes a light/dark/brown theme to the notes area). App-wide, low-frequency, read in many places — the textbook use. Fast-changing feature state lives in Zustand stores instead, precisely to avoid re-rendering half the tree on every update.</p>
 </div>
+<h3>Context, and the two mistakes around it</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>It solves prop drilling, not state management</b> — Context is a transport: it moves a value down the tree without passing it through every level. It does not store or update anything by itself.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Create it with undefined</b> — &#96;createContext&lt;Ctx | undefined&gt;(undefined)&#96;, then a &#96;useX()&#96; hook that throws when there is no provider. The throw narrows the type for every consumer.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Every consumer re-renders on change</b> — When the provider&#39;s value changes, all consumers render — even the ones that only read a field that did not change.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>So split contexts by change rate</b> — A theme that changes twice a year and a cart that changes constantly do not belong in the same provider.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an object literal as the provider value, re-rendering every consumer on every parent render.</strong> &#96;&lt;Ctx.Provider value={{ user, logout }}&gt;&#96; creates a new object each time the provider&#39;s own component renders, so context sees a changed value and re-renders every consumer in the subtree — even when &#96;user&#96; and &#96;logout&#96; are identical. In a provider near the root of the app, that is the whole tree, on every keystroke in an unrelated input. The fix is &#96;useMemo(() =&gt; ({ user, logout }), [user, logout])&#96;. This is one of the few places where memoisation is not premature: the cost is real and the fix is mechanical.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/passing-data-deeply-with-context" target="_blank" rel="noopener">
+  <span class="lc-ico">🌳</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Passing data deeply with context</span><span class="lc-sub">When context is the right answer, and the alternatives to try first.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react/useContext#optimizing-re-renders-when-passing-objects-and-functions" target="_blank" rel="noopener">
+  <span class="lc-ico">⚡</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Optimizing context re-renders</span><span class="lc-sub">The memoised-value pattern, straight from the docs.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -335,6 +456,23 @@ function DeepButton() {
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào</strong> — site dùng context đúng các ca "hợp": context xác thực/người dùng, provider theme, và context theme riêng của trình soạn Notes (<code>NotesThemeProvider</code> khoanh theme sáng/tối/nâu cho khu ghi chú). Toàn app, tần suất thấp, đọc ở nhiều nơi — đúng bài bản. State tính năng đổi nhanh thì nằm trong các store Zustand, chính xác để tránh render lại nửa cây ở mỗi cập nhật.</p>
 </div>
+<h3>Context, và hai sai lầm quanh nó</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Nó giải bài toán prop drilling, không phải quản lý state</b> — Context là một phương tiện vận chuyển: nó đưa một giá trị xuống cây mà không phải truyền qua từng tầng. Tự nó chẳng lưu hay cập nhật gì cả.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Hãy tạo nó với undefined</b> — &#96;createContext&lt;Ctx | undefined&gt;(undefined)&#96;, rồi một hook &#96;useX()&#96; ném lỗi khi không có provider. Phép ném lỗi đó thu hẹp kiểu cho mọi chỗ tiêu thụ.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Mọi chỗ tiêu thụ đều render lại khi giá trị đổi</b> — Khi giá trị của provider đổi, toàn bộ chỗ tiêu thụ đều render — kể cả những chỗ chỉ đọc một field chẳng hề đổi.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nên hãy chia context theo tốc độ thay đổi</b> — Một chủ đề giao diện đổi hai lần một năm và một giỏ hàng đổi liên tục thì không thuộc về cùng một provider.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một object viết thẳng làm giá trị của provider, render lại mọi chỗ tiêu thụ ở mỗi lần cha render.</strong> &#96;&lt;Ctx.Provider value={{ user, logout }}&gt;&#96; tạo một object mới mỗi khi chính component chứa provider render, nên context thấy giá trị đã đổi và render lại mọi chỗ tiêu thụ trong cây con — kể cả khi &#96;user&#96; và &#96;logout&#96; y hệt nhau. Với một provider gần gốc ứng dụng thì đó là cả cái cây, ở mỗi lần gõ phím trong một ô nhập chẳng liên quan. Cách chữa là &#96;useMemo(() =&gt; ({ user, logout }), [user, logout])&#96;. Đây là một trong số ít chỗ mà việc ghi nhớ không hề là quá sớm: chi phí là thật và cách chữa thì máy móc.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/passing-data-deeply-with-context" target="_blank" rel="noopener">
+  <span class="lc-ico">🌳</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Truyền dữ liệu xuống sâu bằng context</span><span class="lc-sub">Khi nào context là câu trả lời đúng, và những phương án nên thử trước.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react/useContext#optimizing-re-renders-when-passing-objects-and-functions" target="_blank" rel="noopener">
+  <span class="lc-ico">⚡</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Tối ưu việc render lại của context</span><span class="lc-sub">Mẫu giá trị đã ghi nhớ, lấy thẳng từ tài liệu.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -385,6 +523,23 @@ function Header() {
 <div class="callout ok">
 <p><strong>The hooks toolbox, complete.</strong> <code>useState</code> and <code>useEffect</code> from Stage 1–2 do most of the work; <code>useRef</code> remembers without rendering; <code>useMemo</code>/<code>useCallback</code> skip work at boundaries that need it; <code>useReducer</code> organises complex transitions; <code>useContext</code> distributes shared values; and custom hooks package any of it for reuse. Next, Chapter 7 closes Stage 2 with how React actually decides what to re-render — reconciliation, keys, and the performance rules that follow.</p>
 </div>
+<h3>Writing a hook of your own</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>It is a function that calls hooks</b> — Nothing more. The &#96;use&#96; prefix is what tells React&#39;s lint rules to enforce the rules of hooks inside it.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>It shares logic, not state</b> — Two components calling &#96;useToggle()&#96; each get their own independent state. A hook is a recipe, not a store.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Return what the caller needs</b> — An array for a pair the caller will rename (&#96;const [on, toggle] = useToggle()&#96;), an object when there are several named values.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Extract when it repeats, not before</b> — The same three lines in two components is a coincidence; in four it is a pattern with a name.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — calling a hook conditionally, which breaks React's internal bookkeeping.</strong> &#96;if (user) { const [x] = useState(0) }&#96; or an early &#96;return&#96; before a hook call changes how many hooks run between renders, and React matches hooks to their state <em>by call order</em>, not by name. So on the render where the condition flips, hook three receives hook two&#39;s state: a boolean turns up where you expected a string, and the error appears in a component that looks fine. The lint rule &#96;react-hooks/rules-of-hooks&#96; catches every case of this at edit time — the fix is not to be careful, it is to install the plugin and never disable that rule.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/reusing-logic-with-custom-hooks" target="_blank" rel="noopener">
+  <span class="lc-ico">🪝</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Reusing logic with custom hooks</span><span class="lc-sub">When to extract one, what to return, and the naming convention.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/rules/rules-of-hooks" target="_blank" rel="noopener">
+  <span class="lc-ico">📐</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Rules of Hooks</span><span class="lc-sub">The two rules, why they exist, and what breaks when you bend them.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -425,6 +580,23 @@ function Header() {
 <div class="callout ok">
 <p><strong>Bộ đồ nghề hooks, đủ bộ.</strong> <code>useState</code> và <code>useEffect</code> từ Giai đoạn 1–2 làm phần lớn việc; <code>useRef</code> nhớ mà không render; <code>useMemo</code>/<code>useCallback</code> bỏ qua việc ở những ranh giới cần; <code>useReducer</code> tổ chức các chuyển trạng thái phức tạp; <code>useContext</code> phân phối giá trị chung; và custom hook đóng gói bất cứ cái nào để tái dùng. Tiếp theo, Chương 7 đóng Giai đoạn 2 với cách React thật sự quyết cái gì render lại — reconciliation, key, và các quy tắc hiệu năng kéo theo.</p>
 </div>
+<h3>Viết một hook của riêng bạn</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Nó là một hàm có gọi hook</b> — Chỉ vậy thôi. Tiền tố &#96;use&#96; là thứ báo cho luật lint của React biết phải cưỡng chế các luật hook bên trong nó.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Nó chia sẻ logic, không chia sẻ state</b> — Hai component cùng gọi &#96;useToggle()&#96; thì mỗi cái có state độc lập của riêng mình. Một hook là một công thức, không phải một kho chứa.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Trả về đúng thứ chỗ gọi cần</b> — Một mảng cho một cặp mà chỗ gọi sẽ tự đặt tên (&#96;const [on, toggle] = useToggle()&#96;), một object khi có nhiều giá trị có tên.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Rút ra khi nó lặp lại, đừng rút trước</b> — Cùng ba dòng ở hai component là tình cờ; ở bốn chỗ thì nó là một mẫu có tên.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — gọi một hook có điều kiện, làm hỏng sổ sách nội bộ của React.</strong> &#96;if (user) { const [x] = useState(0) }&#96; hoặc một &#96;return&#96; sớm trước một lời gọi hook sẽ làm số hook chạy được thay đổi giữa các lần render, mà React ghép hook với state của nó <em>theo thứ tự gọi</em>, không theo tên. Nên ở lần render mà điều kiện lật, hook thứ ba nhận state của hook thứ hai: một boolean hiện ra ở chỗ bạn mong có một chuỗi, và lỗi xuất hiện trong một component trông chẳng có gì sai. Luật lint &#96;react-hooks/rules-of-hooks&#96; bắt mọi ca như thế ngay lúc bạn gõ — cách chữa không phải là cẩn thận, mà là cài plugin và đừng bao giờ tắt luật đó.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/reusing-logic-with-custom-hooks" target="_blank" rel="noopener">
+  <span class="lc-ico">🪝</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Dùng lại logic bằng hook tự viết</span><span class="lc-sub">Khi nào nên rút ra một cái, trả về gì, và quy ước đặt tên.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/rules/rules-of-hooks" target="_blank" rel="noopener">
+  <span class="lc-ico">📐</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Luật của Hook</span><span class="lc-sub">Hai luật, vì sao chúng tồn tại, và cái gì vỡ khi bạn bẻ cong chúng.</span></span>
+</a>
+
 </div>
 `,
     },

@@ -40,26 +40,26 @@ Vi phai tu viet MOI THU socket.io lam san:
   - health check
 </div>
 
-<h3>Vì sao KHÔNG dùng socket.io</h3>
+<h3>Why socket.io is NOT used here</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">firmware Arduino/ESP32</span><span class="lz-d">Có <code>WebSocketsClient</code> library — WebSocket thuần. Không có socket.io C++ client (chỉ có JavaScript, Swift, Kotlin). Firmware KHÔNG có Node.js runtime.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">socket.io framing overhead</span><span class="lz-d">Mỗi packet có prefix engine.io + socket.io type. Cho device chỉ gửi telemetry 20 byte, overhead 60% là quá.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">socket.io polling fallback không có nghĩa</span><span class="lz-d">ESP32 không dùng HTTP long-poll fallback. Nếu WS fail, device offline. Không cần fallback ở device side.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">firmware Arduino/ESP32</span><span class="lz-d">Có <code>WebSocketsClient</code> library — raw WebSocket. There is no socket.io C++ client (only JavaScript, Swift and Kotlin). The firmware has NO Node.js runtime.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">socket.io framing overhead</span><span class="lz-d">Every packet carries an engine.io prefix plus a socket.io type. For a device sending 20 bytes of telemetry, 60% overhead is too much.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">the socket.io polling fallback is meaningless here</span><span class="lz-d">An ESP32 does not use the HTTP long-poll fallback. If WS fails, the device is offline. No fallback is needed on the device side.</span></div>
 </div>
 
-<h3>Ba tầng của device gateway</h3>
+<h3>The device gateway's three tiers</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">Device tầng</span><span class="lz-nsub">ESP32 firmware</span></span>
-<span class="lz-nbody">Connect qua raw WebSocket. Ping/pong tự viết bằng WebSocket ping frames. Auth ban đầu là POST HTTP để lấy token, sau đó open WS với <code>?token=...</code> URL param.</span>
+<span class="lz-node"><span class="lz-ntitle">Device tier</span><span class="lz-nsub">ESP32 firmware</span></span>
+<span class="lz-nbody">Connects over a raw WebSocket. Ping/pong is hand-written using WebSocket ping frames. The initial auth is an HTTP POST to get a token, after which the WS opens with <code>?token=...</code> URL param.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">Gateway (server)</span><span class="lz-nsub">device.gateway.ts</span></span>
-<span class="lz-nbody">Nhận WS từ device, verify token, join device vào room <code>device:${'${id}'}</code>. Nhận telemetry, forward vào socket.io room (fanout tới dashboard subscribers).</span>
+<span class="lz-nbody">Accepts the WS from the device, verifies the token, joins the device to the <code>device:${'${id}'}</code>room. It receives telemetry and forwards it into a socket.io room (fanning out to dashboard subscribers).</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">Dashboard tầng</span><span class="lz-nsub">JS browser</span></span>
-<span class="lz-nbody">Kết nối bằng socket.io CHUẨN. Subscribe device qua <code>maker:device:join</code>. Nhận telemetry qua <code>device:telemetry</code> events. Không biết bên dưới là raw ws.</span>
+<span class="lz-node"><span class="lz-ntitle">Dashboard tier</span><span class="lz-nsub">JS browser</span></span>
+<span class="lz-nbody">Connects with ordinary socket.io. Subscribes to a device through <code>maker:device:join</code>. Receives telemetry through <code>device:telemetry</code> events. It has no idea raw ws is underneath.</span>
 </div>
 </div>
 
@@ -78,29 +78,29 @@ wsServer.on('connection', (ws, req) =&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Đây là pattern &quot;protocol adapter&quot;.</strong> Device tier dùng raw WS (giới hạn firmware). Dashboard tier dùng socket.io (rich API). Server bridge hai bên. Mỗi bên dùng tool đúng cho mình.</p>
+<p><strong>This is the &quot;protocol adapter&quot; pattern.</strong> The device tier uses raw WS (a firmware constraint). The dashboard tier uses socket.io (a rich API). The server bridges the two. Each side uses the tool that fits it.</p>
 </div>
 
-<h3>Tại sao KHÔNG dùng MQTT thay ws</h3>
+<h3>Why not use MQTT instead of ws</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">MQTT là chuẩn IoT</span><span class="lz-lnote">Được thiết kế cho device — topic hierarchy, QoS levels, retained message. Mosquitto, EMQ X là brokers phổ biến</span></div>
-<div class="lz-layer"><span class="lz-lname">Nhưng thêm dependency</span><span class="lz-lnote">Broker riêng, monitoring riêng, learning curve. Cho use case đơn giản (~1000 devices), raw ws đủ và ít infra</span></div>
-<div class="lz-layer"><span class="lz-lname">Bridge sang browser vẫn khó</span><span class="lz-lnote">MQTT không native browser. Cần MQTT-over-WebSocket bridge. Kết cục là 2 layer thay 1</span></div>
+<div class="lz-layer"><span class="lz-lname">MQTT is the IoT standard</span><span class="lz-lnote">Designed for devices — topic hierarchies, QoS levels, retained messages. Mosquitto and EMQ X are the common brokers</span></div>
+<div class="lz-layer"><span class="lz-lname">But it adds a dependency</span><span class="lz-lnote">Its own broker, its own monitoring, its own learning curve. For a simple use case (~1000 devices), raw ws is enough and needs less infrastructure</span></div>
+<div class="lz-layer"><span class="lz-lname">Bridging to the browser is still awkward</span><span class="lz-lnote">MQTT is not native to the browser. You need an MQTT-over-WebSocket bridge. You end up with 2 layers instead of 1</span></div>
 </div>
 
-<p>Kho này chọn raw ws + socket.io bridge — đủ tốt cho 100 devices, không cần broker riêng.</p>
+<p>This repo chooses raw ws plus a socket.io bridge — good enough for 100 devices, with no separate broker.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng socket.io ở device tier &quot;vì đơn giản&quot;.</strong> Nếu bạn viết JS server-side firmware (Node.js trên Raspberry Pi), có thể. Nhưng cho ESP32/Arduino thuần, socket.io-client không có, phải reverse engineer protocol. Không đáng.</p>
+<p><strong>Bẫy — dùng socket.io ở device tier &quot;vì đơn giản&quot;.</strong> If your firmware is JavaScript (Node.js on a Raspberry Pi), you can. But for bare ESP32/Arduino there is no socket.io-client and you would have to reverse-engineer the protocol. Not worth it.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> device.gateway.ts của kho này là 1.035 dòng (vs 518 messaging.socket.ts) vì phải tự viết mọi thứ socket.io làm sẵn (reconnect, heartbeat, room fanout, auth) cho ESP32 firmware không có socket.io-client — bridge pattern relay telemetry sang socket.io ở dashboard tier để hai bên đều dùng tool đúng cho mình.</p>
+<p><strong>One sentence.</strong> This repo's device.gateway.ts runs to 1,035 lines (against 518 for messaging.socket.ts) because it has to hand-write everything socket.io gives you for free (reconnect, heartbeat, room fanout, auth) for ESP32 firmware that has no socket.io-client — the bridge pattern then relays telemetry into socket.io on the dashboard tier so both sides use the right tool.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Arduino WebSocketsClient</span><span class="lc-sub">github.com/Links2004/arduinoWebSockets — thư viện WS phổ biến cho ESP32/Arduino.</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MQTT — chuẩn IoT</span><span class="lc-sub">mqtt.org — protocol chuẩn cho IoT, alternative cho raw ws.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MQTT — the IoT standard</span><span class="lc-sub">mqtt.org — protocol chuẩn cho IoT, alternative cho raw ws.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.1</span>
@@ -221,7 +221,7 @@ void loop() {
 }
 </code></pre>
 
-<h3>Thêm jitter — mission-critical</h3>
+<h3>Add jitter — this is mission-critical</h3>
 <pre><code class="language-cpp">// Ma khong jitter, 1000 device cung reconnect luc 30s -&gt; server SOA
 int jitter = random(-500, 500);              // +/- 500ms
 if (millis() - lastReconnect &gt; reconnectDelay + jitter) {
@@ -230,7 +230,7 @@ if (millis() - lastReconnect &gt; reconnectDelay + jitter) {
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Reconnect storm là scenario thật.</strong> Power outage: 1.000 device tắt. Điện lại 30 phút sau: 1.000 device boot cùng lúc, cùng thử connect. Server nhận 1.000 handshake trong 1 giây — có thể chết. Jitter phân phối over 1 giây.</p>
+<p><strong>The reconnect storm is a real scenario.</strong> A power cut: 1,000 devices go dark. The power returns 30 minutes later: 1,000 devices boot at the same instant and all try to connect. The server takes 1,000 handshakes in one second — and may die. Jitter spreads them across that second.</p>
 </div>
 
 <h3>Backoff patterns comparison</h3>
@@ -267,7 +267,7 @@ wsServer.on('connection', (ws, req) =&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Log gap giữa reconnect giúp phát hiện device kém.</strong> Device 1 reconnect mỗi 30s = network unstable. Device 2 chưa reconnect trong 5 phút = dead. Alert dashboard hiển thị.</p>
+<p><strong>Logging the gap between reconnects reveals unhealthy devices.</strong> Device 1 reconnecting every 30s means an unstable network. Device 2 not reconnecting for 5 minutes means it is dead. The dashboard shows the alert.</p>
 </div>
 
 <h3>Heartbeat WebSocket vs application-level</h3>
@@ -281,14 +281,14 @@ if (millis() - lastPing &gt; 30000) {
 }
 </code></pre>
 
-<p>WebSocket-native ping frame nhẹ hơn (~2 byte) nhưng một số proxy strip. Application-level ping (JSON) nặng hơn nhưng luôn qua. Kho này dùng cả hai.</p>
+<p>A WebSocket-native ping frame is lighter (~2 bytes) but some proxies strip it. An application-level ping (JSON) is heavier but always gets through. This repo uses both.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — retry ngay không backoff.</strong> ESP32 mất WS ở t=0. Tiếp tục thử connect mỗi 100ms → 10 lần/giây. Server thấy 10 handshake fail per second per device. 100 device = 1.000 fail/second — DDoS trên chính bạn.</p>
+<p><strong>Bẫy — retry ngay không backoff.</strong> An ESP32 loses its WS at t=0 and keeps retrying every 100ms → 10 attempts a second. The server sees 10 failed handshakes per second per device. 100 devices = 1,000 failures a second — a DDoS you built yourself.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Raw ws reconnect ở device tier cần tự viết: exponential backoff (1s → 2s → 5s → 30s cap) + jitter ±20% để tránh 1.000 device power-cycle cùng lúc, + heartbeat WebSocket-native hoặc application-level, + log gap giữa reconnect ở server để phát hiện device kém.</p>
+<p><strong>One sentence.</strong> Raw-ws reconnection on the device tier has to be hand-written: exponential backoff (1s → 2s → 5s, capped at 30s) plus ±20% jitter so 1,000 devices do not power-cycle in unison, plus a heartbeat (WebSocket-native or application-level), plus server-side logging of the gap between reconnects to spot unhealthy devices.</p>
 </div>
 
 <h3>Sources</h3>
@@ -452,7 +452,7 @@ socket.on('message', (data) =&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Bạn tiết kiệm 6× bandwidth + 50× parse time.</strong> Với device gửi telemetry 1 lần/giây trong 24h = 86.400 msg/day. JSON 50 byte × 86400 = 4.3 MB/day/device. Binary 8 byte × 86400 = 690 KB/day/device.</p>
+<p><strong>You save 6× on bandwidth and 50× on parse time.</strong> A device sending telemetry once a second for 24 hours is 86,400 messages a day. At 50 JSON bytes × 86,400 that is 4.3 MB/day/device. At 8 binary bytes × 86,400 it is 690 KB/day/device.</p>
 </div>
 
 <h3>Trade off — lost debuggability</h3>
@@ -463,16 +463,16 @@ Binary: hex, phai decode
   1a 47 ca 41 00 00 70 42 39 30 00 00
 </code></pre>
 
-<p>Debug binary khó hơn nhiều. Nếu telemetry ít (~1/s), JSON đủ tốt. Nếu cao (~10/s), cân nhắc binary.</p>
+<p>Debugging binary is far harder. If telemetry is sparse (~1/s), JSON is good enough. If it is dense (~10/s), consider binary.</p>
 
-<h3>Ngưỡng chuyển đổi</h3>
+<h3>The switching thresholds</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">low freq</span><span class="lz-t">&lt;1 msg/s per device</span><span class="lz-d">JSON. Debug dễ, bandwidth OK.</span></div>
-<div class="lz-step"><span class="lz-k">med freq</span><span class="lz-t">1-10 msg/s per device</span><span class="lz-d">MessagePack hoặc CBOR. Semi-readable với tools, nén tốt.</span></div>
-<div class="lz-step"><span class="lz-k">high freq</span><span class="lz-t">&gt;10 msg/s per device</span><span class="lz-d">Custom binary hoặc Protobuf. Cần schema/protocol doc. Đắt về maintainability.</span></div>
+<div class="lz-step"><span class="lz-k">low freq</span><span class="lz-t">&lt;1 msg/s per device</span><span class="lz-d">JSON. Easy to debug, bandwidth is fine.</span></div>
+<div class="lz-step"><span class="lz-k">med freq</span><span class="lz-t">1-10 msg/s per device</span><span class="lz-d">MessagePack or CBOR. Semi-readable with the right tools, and compresses well.</span></div>
+<div class="lz-step"><span class="lz-k">high freq</span><span class="lz-t">&gt;10 msg/s per device</span><span class="lz-d">Custom binary or Protobuf. Requires a schema or protocol document. Expensive in maintainability.</span></div>
 </div>
 
-<h3>Kho này — JSON cho MOST</h3>
+<h3>This repo — JSON for almost everything</h3>
 <pre><code class="language-ts">// device.gateway.ts
 ws.on('message', (data) =&gt; {
   try {
@@ -485,14 +485,14 @@ ws.on('message', (data) =&gt; {
 });
 </code></pre>
 
-<p>Maker Lab hôm nay là ~10 device, telemetry ~1/s. JSON dư giả. Nếu scale lên 1000 device, cân nhắc binary.</p>
+<p>Maker Lab today is ~10 devices at ~1 telemetry message a second. JSON is more than enough. If it scales to 1,000 devices, reconsider binary.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng Protobuf mà không schema versioning.</strong> Client v1 send Field A. Server v2 expect Field B. Migration khó nếu không plan trước. Protobuf schema versioning là separate skill — quyết định adopt = quyết định tăng complexity.</p>
+<p><strong>Bẫy — dùng Protobuf mà không schema versioning.</strong> Client v1 sends field A. Server v2 expects field B. Migration is painful without a plan. Protobuf schema versioning is a skill of its own — adopting it is a decision to take on complexity.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Message framing cho device: JSON đủ tốt cho low-freq (~1/s per device) với debug dễ; binary custom hoặc Protobuf cho high-freq (>10/s) giảm 6× bandwidth + 50× parse time nhưng cost debug + schema management; kho này dùng JSON vì scale hiện tại (~10 device).</p>
+<p><strong>One sentence.</strong> Message framing for devices: JSON is good enough at low frequency (~1/s per device) and easy to debug; custom binary or Protobuf at high frequency (>10/s) cuts bandwidth 6× and parse time 50× at the cost of debuggability and schema management; this repo uses JSON because of its current scale (~10 devices).</p>
 </div>
 
 <h3>Sources</h3>
@@ -648,14 +648,14 @@ io.on('connection', (socket) =&gt; {
 });
 </code></pre>
 
-<h3>Vì sao pattern này tốt</h3>
+<h3>Why this pattern works well</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Device không biết dashboard</span><span class="lz-d">Device chỉ gửi lên server. Không cần biết ai đang xem, hay xem không. Firmware đơn giản.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Dashboard không biết protocol device</span><span class="lz-d">Dashboard dùng socket.io API chuẩn. Nếu ngày mai bạn thay ESP32 bằng device khác (MQTT, HTTP polling), dashboard KHÔNG đổi.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Fanout N-to-M miễn phí</span><span class="lz-d">1 device có 5 dashboard đang xem: fanout tự động. 100 device × 10 dashboard = 1000 subscriptions, socket.io room quản.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The device knows nothing about dashboards</span><span class="lz-d">The device only sends upward to the server. It never needs to know who is watching, or whether anyone is. The firmware stays simple.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The dashboard knows nothing about the device protocol</span><span class="lz-d">The dashboard uses the ordinary socket.io API. If tomorrow you swap the ESP32 for something else (MQTT, HTTP polling), the dashboard does NOT change.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">N-to-M fanout for free</span><span class="lz-d">One device with 5 dashboards watching: the fanout is automatic. 100 devices × 10 dashboards = 1,000 subscriptions, all managed by socket.io rooms.</span></div>
 </div>
 
-<h3>Bảo mật — dashboard chỉ subscribe device họ có quyền</h3>
+<h3>Security — a dashboard may only subscribe to devices it is entitled to</h3>
 <pre><code class="language-ts">socket.on('maker:device:join', async (deviceId) =&gt; {
   // Kiem quyen truoc khi cho join
   const canAccess = await hasDeviceAccess(socket.data.userId, deviceId);
@@ -664,7 +664,7 @@ io.on('connection', (socket) =&gt; {
 });
 </code></pre>
 
-<h3>Reverse — command từ dashboard đến device</h3>
+<h3>The reverse direction — commands from dashboard to device</h3>
 <pre><code class="language-ts">socket.on('maker:device:command', async (data) =&gt; {
   const { deviceId, command } = data;
   // Kiem quyen
@@ -679,7 +679,7 @@ io.on('connection', (socket) =&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Bridge pattern cho phép loose coupling.</strong> Device tier có thể swap (ESP32 → Raspberry Pi → MQTT). Dashboard tier có thể swap (React → Vue → mobile app). Chỉ Bridge biết cả hai — và chỉ mọi đổi khi bạn muốn.</p>
+<p><strong>The bridge pattern buys you loose coupling.</strong> The device tier can be swapped (ESP32 → Raspberry Pi → MQTT). The dashboard tier can be swapped (React → Vue → a mobile app). Only the bridge knows both — and only it has to change when either does.</p>
 </div>
 
 <h3>Latency chain</h3>
@@ -692,15 +692,15 @@ Do bang: device.emit(&#96;now: \${millis()}&#96;) -&gt; dashboard log delta
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — bridge KHÔNG kiểm authenticate device.</strong> Ai đó biết deviceId gửi raw ws → server bridge → dashboard nhận telemetry giả. Bridge PHẢI verify device token trước khi emit sang socket.io. Đừng trust device chỉ vì họ &quot;có&quot; deviceId.</p>
+<p><strong>Bẫy — bridge KHÔNG kiểm authenticate device.</strong> Anyone who knows a deviceId can send raw ws → the server bridges it → dashboards display fabricated telemetry. The bridge MUST verify the device token before emitting into socket.io. Do not trust a device merely because it &quot;has&quot; a deviceId.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Bridge pattern relay từ raw ws (device tier) sang socket.io room (dashboard tier) qua <code>io.to(&#96;device:XX&#96;).emit(...)</code> — loose coupling cho phép swap device tier hoặc dashboard tier độc lập; permission check ở CẢ chiều (dashboard join room + command đến device); latency end-to-end 20-100ms tuỳ network.</p>
+<p><strong>One sentence.</strong> The bridge pattern relays from raw ws (device tier) into a socket.io room (dashboard tier) via <code>io.to(&#96;device:XX&#96;).emit(...)</code> — the loose coupling lets you swap either tier independently; permission checks are required in BOTH directions (a dashboard joining a room, and a command going to a device); end-to-end latency is 20-100ms depending on the network.</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Bài 3.1 — Rooms</span><span class="lc-sub">/courses/socket-io/learn${REF} — pattern <code>device:XX</code> là instance của per-resource room.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Lesson 3.1 — Rooms</span><span class="lc-sub">/courses/socket-io/learn${REF} — pattern <code>device:XX</code> là instance của per-resource room.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.4</span>
@@ -813,7 +813,7 @@ Do bang: device.emit(&#96;now: ${'${'}millis()}&#96;) -&gt; dashboard log delta
 <h2>When socket.io is enough after all</h2>
 <p class="lead">The 1.035-line device gateway is only necessary because ESP32 doesn&#39;t have socket.io-client. If your &quot;device&quot; is anything else, socket.io still probably wins.</p>
 
-<h3>Bảng client support</h3>
+<h3>The client-support table</h3>
 <div class="out">Platform                socket.io-client available?
 JavaScript (browser)    YES — socket.io-client
 Node.js (server)        YES — socket.io-client (same)
@@ -827,23 +827,23 @@ C++ / Arduino / ESP32   NO — raw WebSocket only
 Rust                    Community — rust-socketio
 </div>
 
-<h3>Ba dạng &quot;device&quot; khác nhau</h3>
+<h3>Three different kinds of &quot;device&quot;</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">Raspberry Pi + Node.js</span><span class="lz-nsub">socket.io-client works</span></span>
-<span class="lz-nbody">Full Node.js runtime. Dùng <code>socket.io-client</code>. Reconnect + rooms + ack built-in. Không cần bridge.</span>
+<span class="lz-nbody">A full Node.js runtime. Use <code>socket.io-client</code>. Reconnect, rooms and acks are built in. No bridge needed.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">Mobile app (iOS/Android)</span><span class="lz-nsub">socket.io-swift/java</span></span>
-<span class="lz-nbody">Native library có sẵn. API tương tự web. Không cần bridge.</span>
+<span class="lz-nbody">Native libraries exist. The API mirrors the web one. No bridge needed.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">ESP32/Arduino embedded</span><span class="lz-nsub">raw ws bắt buộc</span></span>
-<span class="lz-nbody">Không có socket.io-client C++. Phải raw ws + tự viết reconnect/heartbeat/framing. Đây là kịch bản duy nhất cần bridge pattern.</span>
+<span class="lz-node"><span class="lz-ntitle">ESP32/Arduino embedded</span><span class="lz-nsub">raw ws is mandatory</span></span>
+<span class="lz-nbody">There is no C++ socket.io-client. You must use raw ws and hand-write reconnect, heartbeat and framing. This is the only scenario that needs the bridge pattern.</span>
 </div>
 </div>
 
-<h3>Kho này — trường hợp đặc biệt</h3>
+<h3>This repo — the special case</h3>
 <pre><code class="language-text">Maker Lab devices = ESP32
 -&gt; buoc phai raw ws + bridge
 -&gt; device.gateway.ts la 1.035 dong
@@ -853,7 +853,7 @@ Neu Maker Lab la Raspberry Pi:
 -&gt; device.gateway.ts khoang 200 dong (chi handler + auth)
 </code></pre>
 
-<h3>Cost-benefit của bridge</h3>
+<h3>The bridge's cost-benefit</h3>
 <pre><code class="language-text">Bridge cost:
   + 500-1000 dong code (reconnect, heartbeat, framing)
   + Debug kho hon (khong co socket.io tools)
@@ -866,7 +866,7 @@ Bridge benefit:
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Đừng chọn raw ws vì &quot;lightweight&quot;.</strong> Bạn tiết kiệm ~150 KB library nhưng viết 800 dòng code + bug reconnect + bug heartbeat. Chỉ chọn khi client platform BUỘC PHẢI (embedded).</p>
+<p><strong>Do not choose raw ws because it is &quot;lightweight&quot;.</strong> You save ~150 KB of library and write 800 lines of code plus reconnect bugs plus heartbeat bugs. Choose it only when the client platform LEAVES YOU NO CHOICE (embedded).</p>
 </div>
 
 <h3>Alternative — HTTP polling cho device</h3>
@@ -885,14 +885,14 @@ void loop() {
 }
 </code></pre>
 
-<p>HTTP polling từ device có latency 5s + không realtime. Nhưng đơn giản hơn WS + firmware nhẹ hơn. Dùng khi telemetry ít quan trọng (điện, water meter đọc mỗi 5 phút).</p>
+<p>HTTP polling from a device carries 5s of latency and is not realtime. But it is simpler than WS and the firmware is lighter. Use it when the telemetry barely matters (an electricity or water meter read every 5 minutes).</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — chọn raw ws cho web browser client.</strong> Browser có socket.io-client sẵn có, tại sao KHÔNG dùng? Browser dev thấy socket.io &quot;heavy&quot; và viết raw ws — mất reconnect, mất rooms, mất debugging tools. Đường về đắt.</p>
+<p><strong>Bẫy — chọn raw ws cho web browser client.</strong> The browser has socket.io-client readily available, so why avoid it? A frontend developer decides socket.io is &quot;heavy&quot; and writes raw ws — losing reconnect, losing rooms, losing the debugging tools. The road back is expensive.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Socket.io-client có sẵn cho hầu hết platforms (JS, Node, RN, iOS, Android, Python, C#) — raw ws chỉ CẦN cho embedded (ESP32/Arduino/C++) không có socket.io-client; trong các trường hợp khác, socket.io thắng về reconnect + rooms + debugging + code size (trên server, không client bundle).</p>
+<p><strong>One sentence.</strong> socket.io-client exists for most platforms (JS, Node, RN, iOS, Android, Python, C#) — raw ws is only NECESSARY for embedded targets (ESP32/Arduino/C++) that have no socket.io-client; everywhere else socket.io wins on reconnect, rooms, debugging and code size (on the server, not in the client bundle).</p>
 </div>
 
 <h3>Sources</h3>

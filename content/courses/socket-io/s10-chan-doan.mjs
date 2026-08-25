@@ -20,13 +20,13 @@ export default {
 
 <h3>The tree</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">Q1</span><span class="lz-t">Client connected?</span><span class="lz-d">Check DevTools Network → WS tab. Có kết nối open không? Nếu không, bug ở connect/auth (Chương 1.4) — mọi thứ dưới không apply.</span></div>
-<div class="lz-step"><span class="lz-k">Q2</span><span class="lz-t">Event on the wire?</span><span class="lz-d">DevTools WS Messages tab. Có frame <code>42[&quot;event-name&quot;,...]</code> không? Nếu không, bug ở emit side hoặc adapter (Chương 5). Nếu CÓ nhưng client không nhận, bug ở receive side.</span></div>
-<div class="lz-step"><span class="lz-k">Q3</span><span class="lz-t">Handler running?</span><span class="lz-d">Set breakpoint or console.log in the handler. Fires? Nếu không, bug ở event name (typo) hoặc handler registration timing (Chương 1.1 race). Nếu CÓ, bug ở logic bên trong.</span></div>
-<div class="lz-step"><span class="lz-k">Q4</span><span class="lz-t">Side effect happened?</span><span class="lz-d">Kiểm DB update, presence Set, room membership. Actual state change không? Nếu không, bug ở logic. Nếu CÓ nhưng UI không update, bug ở FE state management.</span></div>
+<div class="lz-step"><span class="lz-k">Q1</span><span class="lz-t">Client connected?</span><span class="lz-d">Check DevTools Network → WS tab. Is a connection open? If not, the bug is in connect/auth (Chapter 1.4) — nothing below applies.</span></div>
+<div class="lz-step"><span class="lz-k">Q2</span><span class="lz-t">Event on the wire?</span><span class="lz-d">DevTools WS Messages tab. Is there a <code>42[&quot;event-name&quot;,...]</code> frame? If not, the bug is on the emit side or in the adapter (Chapter 5). If there IS one but the client does not act on it, the bug is on the receive side.</span></div>
+<div class="lz-step"><span class="lz-k">Q3</span><span class="lz-t">Handler running?</span><span class="lz-d">Set a breakpoint or a console.log in the handler. Does it fire? If not, the bug is the event name (a typo) or handler-registration timing (the Chapter 1.1 race). If it DOES, the bug is in the logic inside.</span></div>
+<div class="lz-step"><span class="lz-k">Q4</span><span class="lz-t">Side effect happened?</span><span class="lz-d">Check the DB update, the presence Set, room membership. Did state actually change? If not, the bug is in the logic. If it DID and the UI still does not update, the bug is in frontend state management.</span></div>
 </div>
 
-<h3>Bảng triệu chứng → bước tìm</h3>
+<h3>Symptom → where to look</h3>
 <div class="out">Symptom                              Start at   Common cause
 "client not receiving events"        Q1         auth fail; connect_error
 "some events reach, some don't"      Q2         volatile emit; buffer full
@@ -39,24 +39,24 @@ export default {
 </div>
 
 <div class="callout warn">
-<p><strong>Reflex &quot;thêm console.log&quot; kết thúc ở đâu.</strong> Bạn thêm log ở emit, ở receive, ở handler, ở effect — 40 dòng log. Deploy, chờ, đọc log — mất 15 phút. Bug vẫn còn ở tầng bạn không log. Fix: 4 câu trên bắt được 90% bug trong 5 phút.</p>
+<p><strong>Where the &quot;add another console.log&quot; reflex ends up.</strong> You add logs at the emit, at the receive, in the handler, in the effect — 40 lines of logging. Deploy, wait, read the logs — 15 minutes gone. The bug is still in the layer you did not log. The fix: the four questions above catch 90% of bugs in 5 minutes.</p>
 </div>
 
-<h3>Năm bài sau đi qua từng nhánh</h3>
+<h3>The five lessons that follow walk each branch</h3>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">10.2 — Q1 walkthrough</span><span class="lz-lnote">DevTools Network WS, auth error, transport upgrade</span></div>
 <div class="lz-layer"><span class="lz-lname">10.3 — Q2 walkthrough</span><span class="lz-lnote">Wire packet analysis, Chapter 0.3 tables applied</span></div>
 <div class="lz-layer"><span class="lz-lname">10.4 — Q3 walkthrough</span><span class="lz-lnote">Event naming, race conditions, handler cleanup</span></div>
 <div class="lz-layer"><span class="lz-lname">10.5 — cluster-specific bugs</span><span class="lz-lnote">Redis adapter, sticky sessions, cross-worker fanout</span></div>
-<div class="lz-layer"><span class="lz-lname">10.6 — quiz</span><span class="lz-lnote">6 câu, 10 phút</span></div>
+<div class="lz-layer"><span class="lz-lname">10.6 — quiz</span><span class="lz-lnote">6 questions, 10 minutes</span></div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng cây tuần tự (Q1 rồi Q2 rồi ...).</strong> Nếu bạn <em>đã thấy</em> event trên wire (Q2 pass), không cần Q1. Cây là để KHÔNG bỏ sót câu hỏi, không phải chạy đủ bốn câu mỗi lần.</p>
+<p><strong>Bẫy — dùng cây tuần tự (Q1 rồi Q2 rồi ...).</strong> If you <em>have already seen the</em> event on the wire (Q2 passes), you do not need Q1. The tree exists so you never SKIP a question, not so you run all four every time.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Bốn câu (client connected → event on wire → handler running → side effect happened) — mỗi cái có công cụ riêng (DevTools WS tab, breakpoint, DB check) — bắt được 90% realtime bug trong 5 phút thay vì 15+ phút với reflex console.log.</p>
+<p><strong>One sentence.</strong> Four questions (client connected → event on wire → handler running → side effect happened) — each with its own tool (the DevTools WS tab, a breakpoint, a DB check) — catch 90% of realtime bugs in 5 minutes instead of the 15+ the console.log reflex costs.</p>
 </div>
 
 <h3>Sources</h3>
@@ -168,7 +168,7 @@ socket.io.engine.on('upgrade', (t) =&gt; {
 # Neu THAY, kiem tra xem sid, transport, auth ok chua
 </code></pre>
 
-<h3>Bảng nguyên nhân</h3>
+<h3>The cause table</h3>
 <div class="out">Failure mode        Common cause                   Fix
 101 fail 400        Nginx thieu upgrade headers    proxy_set_header Upgrade $http_upgrade
 101 fail 403        Auth middleware reject         Kiem JWT, cookie, extractToken
@@ -179,10 +179,10 @@ No connect event    Middleware forgot next()       Kiem middleware code
 </div>
 
 <div class="callout warn">
-<p><strong>Nếu Q1 fail, đừng đi tiếp Q2/Q3/Q4.</strong> Chúng đều giả định connection tồn tại. Đầu tiên fix connect, sau đó mới debug event delivery.</p>
+<p><strong>If Q1 fails, do not move on to Q2/Q3/Q4.</strong> They all assume a connection exists. Fix the connection first, then debug event delivery.</p>
 </div>
 
-<h3>Debug từ terminal</h3>
+<h3>Debugging from the terminal</h3>
 <pre><code class="language-bash"># Test handshake endpoint
 $ curl -si 'https://api.example.com/socket.io/?EIO=4&transport=polling'
 HTTP/1.1 200 OK    &lt;- OK, endpoint mounted
@@ -193,15 +193,15 @@ HTTP/1.1 200 OK    &lt;- OK, endpoint mounted
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ &quot;client vẫn thấy dữ liệu&quot; = &quot;connect OK&quot;.</strong> Có thể client nhận dữ liệu từ HTTP GET (fetch) chứ không phải WebSocket. Kiểm tra CHÍNH XÁC socket.io connection — không nhầm với REST API responses.</p>
+<p><strong>Bẫy — nghĩ &quot;client vẫn thấy dữ liệu&quot; = &quot;connect OK&quot;.</strong> The client may be getting its data from an HTTP GET (a fetch) rather than the WebSocket. Check the socket.io connection SPECIFICALLY — do not confuse it with REST API responses.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Q1 (client connected?) trả lời bằng 4 check theo thứ tự — DevTools WS tab (status 101), transport upgrade log, connect_error handler, server log — và nếu Q1 fail, KHÔNG debug Q2-Q4 vì chúng giả định connection tồn tại.</p>
+<p><strong>One sentence.</strong> Q1 (is the client connected?) is answered by 4 checks in order — the DevTools WS tab (status 101), the transport-upgrade log, the connect_error handler, and the server log — and if Q1 fails, do NOT debug Q2-Q4, because they all assume a connection exists.</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Bài 1.4 — auth middleware</span><span class="lc-sub">/courses/socket-io/learn — connect_error patterns.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Lesson 1.4 — auth middleware</span><span class="lc-sub">/courses/socket-io/learn — connect_error patterns.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.2</span>
@@ -300,7 +300,7 @@ HTTP/1.1 200 OK    &lt;- OK, endpoint mounted
 <h2>Q2: is the event on the wire?</h2>
 <p class="lead">DevTools WS tab has a Messages sub-tab showing every frame. Chapter 0.3 taught how to read packet format. This lesson uses it to answer Q2.</p>
 
-<h3>Cách đọc frame</h3>
+<h3>How to read the frames</h3>
 <pre><code class="language-text">Mo DevTools -&gt; Network -&gt; WS -&gt; click connection socket.io -&gt; Messages tab
 
 Cot "Data" chua binary/text frame:
@@ -318,12 +318,12 @@ Cac frame thuong thay:
 
 <h3>Ba scenario cho Q2</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">Frame CÓ, handler KHÔNG chạy</span><span class="lz-d">Emit reach client, client không handle. Bug ở receive side: event name mismatch, handler chưa đăng ký, handler đăng ký sai socket.</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">Frame KHÔNG có phía client</span><span class="lz-d">Server nghĩ đã emit nhưng packet không đến. Nguyên nhân: sai room name, client không trong room, Redis adapter blip (cluster), transport buffer full.</span></div>
-<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">Frame CÓ nhưng payload trống/sai</span><span class="lz-d">JSON serialize lost circular ref, hoặc data mutation between emit và fire. Kiểm payload chính xác trong DevTools.</span></div>
+<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">The frame IS there, the handler does NOT run</span><span class="lz-d">The emit reached the client and the client did not handle it. The bug is on the receive side: a mismatched event name, an unregistered handler, or a handler registered on the wrong socket.</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">There is NO frame on the client side</span><span class="lz-d">The server believes it emitted, but the packet never arrived. Causes: the wrong room name, the client not being in the room, a Redis adapter blip (in a cluster), or a full transport buffer.</span></div>
+<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">The frame is there but the payload is empty or wrong</span><span class="lz-d">JSON serialisation dropped a circular reference, or the data mutated between the emit and the send. Inspect the exact payload in DevTools.</span></div>
 </div>
 
-<h3>Debug scenario A — frame có, handler không chạy</h3>
+<h3>Debug scenario A — the frame is there, the handler does not run</h3>
 <pre><code class="language-ts">// Kiem event name exact — case-sensitive
 socket.on('Chat:new-message', ...);    // SAI — server emit 'chat:new-message'
 
@@ -339,7 +339,7 @@ socket.on('X', handleX);
 socket.off('X', handleX);             // neu register + unregister sai, handler cu ap dung
 </code></pre>
 
-<h3>Debug scenario B — server emit nhưng client không thấy</h3>
+<h3>Debug scenario B — the server emits but the client sees nothing</h3>
 <pre><code class="language-ts">// Server log truoc va sau emit
 logger.info('emitting', { room: &#96;user:\${uid}&#96;, event: 'X', payload });
 io.to(&#96;user:\${uid}&#96;).emit('X', payload);
@@ -359,15 +359,15 @@ $ redis-cli PSUBSCRIBE 'socket.io#*'
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — bỏ ping/pong ở DevTools làm noise.</strong> Cứ 25s một PING (frame <code>2</code>) và PONG (<code>3</code>). Filter chúng bằng right-click → Hide frames matching pattern. Focus vào EVENT frames (<code>42[...]</code>).</p>
+<p><strong>Bẫy — bỏ ping/pong ở DevTools làm noise.</strong> Every 25s there is a PING (frame <code>2</code>) and a PONG (<code>3</code>). Filter them out with right-click → Hide frames matching pattern. Focus on the EVENT frames (<code>42[...]</code>).</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Q2 (event on wire?) trả lời bằng DevTools Messages tab đọc frame — nếu frame CÓ mà handler không chạy = bug receive side (event name, namespace, socket khác), nếu KHÔNG frame = bug emit side (room rỗng, Redis blip, buffer full), nếu frame có nhưng payload sai = bug serialization.</p>
+<p><strong>One sentence.</strong> Q2 (is the event on the wire?) is answered by reading frames in the DevTools Messages tab — a frame present but no handler running means a receive-side bug (event name, namespace, a different socket); no frame at all means an emit-side bug (an empty room, a Redis blip, a full buffer); a frame with the wrong payload means a serialisation bug.</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Bài 0.3 — packet format</span><span class="lc-sub">/courses/socket-io/learn — bảng packet types cho đọc DevTools.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Lesson 0.3 — packet format</span><span class="lc-sub">/courses/socket-io/learn — bảng packet types cho đọc DevTools.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.3</span>
@@ -477,11 +477,11 @@ socket.on('chat:send', async (data, ack) =&gt; {
 // CO ca hai -&gt; success — Q4 diagnose UI state
 </code></pre>
 
-<h3>Nguyên nhân Q3 fail (handler không fire)</h3>
+<h3>Why Q3 fails (the handler never fires)</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">Event name typo</span><span class="lz-d">Server emit &#39;chat:new-message&#39;, client on &#39;chat:new_message&#39;. Case- và char-sensitive.</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">Handler đăng ký muộn</span><span class="lz-d">Client emit event ngay khi connect, handler đăng ký sau 200ms. Bài 1.1 race — event mất.</span></div>
-<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">Sai socket instance</span><span class="lz-d">Có nhiều <code>io(url)</code> call trong React — mỗi cái tạo instance khác. Handler đăng ký trên instance A, event đến instance B.</span></div>
+<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">Event name typo</span><span class="lz-d">The server emits &#39;chat:new-message&#39; and the client listens for &#39;chat:new_message&#39;. It is case- and character-sensitive.</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">The handler is registered too late</span><span class="lz-d">The client emits on connect and the handler registers 200ms later. The lesson 1.1 race — the event is lost.</span></div>
+<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">Sai socket instance</span><span class="lz-d">There are several <code>io(url)</code> calls in the React tree — each creating a different instance. The handler is registered on instance A and the event arrives at instance B.</span></div>
 </div>
 
 <h3>Q4: side effect happened?</h3>
@@ -504,24 +504,24 @@ io.to(&#96;thread:\${id}&#96;).emit('X', ...);
 // -&gt; back to Q2: DevTools Messages tab, co frame khong?
 </code></pre>
 
-<h3>Ba nguyên nhân Q4 fail</h3>
+<h3>Three reasons Q4 fails</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">DB write silent fail</span><span class="lz-nsub">await không catch</span></span>
-<span class="lz-nbody">Async function không await → error swallow. Kiểm <code>await</code> mọi Prisma call. Try/catch quanh handler body.</span>
+<span class="lz-node"><span class="lz-ntitle">DB write silent fail</span><span class="lz-nsub">an uncaught await</span></span>
+<span class="lz-nbody">An async function that is not awaited swallows its error. Check for <code>await</code> on every Prisma call. Wrap the handler body in try/catch.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">Room khác room mong</span><span class="lz-nsub">typo hoặc userId sai</span></span>
-<span class="lz-nbody">Emit tới <code>user:${'${uid}'}</code> nhưng <code>uid</code> undefined → room name là <code>user:undefined</code>. Không client nào ở đó. Kiểm typescript type.</span>
+<span class="lz-node"><span class="lz-ntitle">The room is not the room you meant</span><span class="lz-nsub">a typo or a wrong userId</span></span>
+<span class="lz-nbody">Emitting to <code>user:${'${uid}'}</code> but <code>uid</code> is undefined → the room name becomes <code>user:undefined</code>. Nobody is in it. Check the TypeScript types.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">FE state không update</span><span class="lz-nsub">reducer bug</span></span>
-<span class="lz-nbody">Handler chạy, gọi <code>setMessages(...)</code>, state update. Nhưng UI không rerender vì reference equality (immutable update sai). React DevTools kiểm state.</span>
+<span class="lz-node"><span class="lz-ntitle">Frontend state does not update</span><span class="lz-nsub">reducer bug</span></span>
+<span class="lz-nbody">The handler runs, calls <code>setMessages(...)</code>, and state updates. But the UI does not re-render because of reference equality (a botched immutable update). Inspect state with React DevTools.</span>
 </div>
 </div>
 
 <div class="callout warn">
-<p><strong>Silent Promise rejection là bug số 1 ở Q4.</strong> <code>socket.on('X', async ...)</code>. Trong handler, một Promise rejects. Không catch → Node emit <code>unhandledRejection</code> (log nếu có handler) hoặc crash trong strict mode. Fix: catch + ack error.</p>
+<p><strong>A silent Promise rejection is the number-one Q4 bug.</strong> <code>socket.on('X', async ...)</code>. Somewhere in the handler a Promise rejects. Nothing catches it → Node emits <code>unhandledRejection</code> (logged if you have a handler) or crashes in strict mode. The fix: catch it and ack the error.</p>
 </div>
 
 <h3>Common bugs at Q4 by feature</h3>
@@ -541,11 +541,11 @@ Room member list stale:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — thêm log ở handler, không log ở effect.</strong> Handler fire, log say &quot;done&quot; — bạn cho là done. Nhưng emit sau đó fail (Q2), state không update (FE). Log MỌI TẦNG effect: DB write, emit, FE state change. Không chỉ handler entry/exit.</p>
+<p><strong>Bẫy — thêm log ở handler, không log ở effect.</strong> The handler fires, the log says &quot;done&quot; — so you consider it done. But the emit that followed failed (Q2), or state never updated (frontend). Log EVERY LAYER of the effect: the DB write, the emit, the frontend state change. Not just handler entry and exit.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Q3 (handler running?) trả lời bằng console.log đầu handler — không fire = event name/socket/timing sai (Q2 hoặc bài 1.1), fire nhưng không hoàn tất = silent Promise rejection; Q4 (side effect?) kiểm DB write + room membership + emit fire lại + FE state — thường bug là async không catch hoặc room name có <code>undefined</code>.</p>
+<p><strong>One sentence.</strong> Q3 (is the handler running?) is answered by a console.log at the top of the handler — no fire means a wrong event name, socket or timing (Q2 or lesson 1.1); firing but not finishing means a silent Promise rejection. Q4 (did the side effect happen?) checks the DB write, room membership, the follow-on emit and frontend state — and the bug is usually an uncaught async call or a room name containing <code>undefined</code>.</p>
 </div>
 
 <h3>Sources</h3>
@@ -664,7 +664,7 @@ Room member list stale:
 <h2>Cluster-specific bugs</h2>
 <p class="lead">Single-instance socket.io: 90% of bugs are in your code. Cluster: half your bugs are in the cluster setup. This lesson catalogs the three most common cluster bugs.</p>
 
-<h3>Bug 1: random 1/N users không nhận events</h3>
+<h3>Bug 1: a random 1/N of users receive no events</h3>
 <pre><code class="language-text">Symptom: 
   - Chat message send OK
   - Chi ~25% users trong thread nhan (voi 4 worker)
@@ -700,7 +700,7 @@ Fix: nginx sticky
   }
 </code></pre>
 
-<h3>Bug 3: presence flickers ở cluster</h3>
+<h3>Bug 3: presence flickers in a cluster</h3>
 <pre><code class="language-text">Symptom:
   - User online 3 tab (worker A, B, C)
   - Dong 1 tab -&gt; presence flap offline/online cho ban be
@@ -754,16 +754,16 @@ $ for i in 1 2 3 4; do curl -s http://backend-$i/health/socket; done
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — deploy cluster mà chưa test cluster ở dev.</strong> Dev là single-instance, cluster bugs không visible. Local Docker Compose có thể chạy 2 backend service với nginx load balance để reproduce cluster bugs ở dev.</p>
+<p><strong>Bẫy — deploy cluster mà chưa test cluster ở dev.</strong> Dev is single-instance, so cluster bugs are invisible there. A local Docker Compose can run 2 backend services behind an nginx load balancer to reproduce cluster bugs in dev.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Ba bug đặc thù cluster: (1) random 1/N users không nhận = Redis adapter chưa attach, (2) poll HTTP 400 &quot;sid unknown&quot; = thiếu sticky sessions, (3) presence flap = state trong-process không share qua worker (fix: Redis SADD/SCARD) — health endpoint per worker + Redis PSUBSCRIBE + local cluster testing là ba tool debug cluster.</p>
+<p><strong>One sentence.</strong> Three cluster-specific bugs: (1) a random 1/N of users receiving nothing means the Redis adapter never attached, (2) HTTP 400 &quot;sid unknown&quot; on polls means sticky sessions are missing, (3) presence flapping means in-process state is not shared across workers (fix: Redis SADD/SCARD) — a per-worker health endpoint, Redis PSUBSCRIBE, and local cluster testing are the three tools for debugging a cluster.</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Bài 5.1 — Redis adapter</span><span class="lc-sub">/courses/socket-io/learn — cách attach adapter đúng.</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Bài 2.3 — sticky sessions</span><span class="lc-sub">/courses/socket-io/learn — cấu hình nginx cho polling.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Lesson 5.1 — the Redis adapter</span><span class="lc-sub">/courses/socket-io/learn — cách attach adapter đúng.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Lesson 2.3 — sticky sessions</span><span class="lc-sub">/courses/socket-io/learn — cấu hình nginx cho polling.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.5</span>

@@ -262,7 +262,7 @@ export default function MakerProjectPage() {
           nao={(project.persona?.traits?.nao as string | undefined) ?? null}
         />
       )}
-      {tab === 'mo-phong' && <MoPhongTab devices={devices} isAuthed={isAuthed} />}
+      {tab === 'mo-phong' && <MoPhongTab devices={devices} isAuthed={isAuthed} projectSlug={project.slug} />}
       {tab === 'persona' && (
         <PersonaEditor
           projectId={project.id}

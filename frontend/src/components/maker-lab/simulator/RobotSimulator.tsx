@@ -56,6 +56,19 @@ export function RobotSimulator({ deviceId }: { deviceId: number }) {
   const vetRef = useRef<Array<[number, number]>>([]);
   const amRef = useRef<HTMLAudioElement | null>(null);
   const phanTichRef = useRef<AnalyserNode | null>(null);
+  /**
+   * MỘT `AudioContext` dùng chung, mở bằng CỬ CHỈ NGƯỜI DÙNG.
+   *
+   * ⚠️ Bản đầu dựng context MỚI cho mỗi câu nói. Trình duyệt tạo context
+   * ở trạng thái `suspended` và chỉ cho `resume()` trong một cử chỉ của
+   * người dùng — mà `say_end` đến từ WebSocket, không phải từ cú bấm
+   * nào. Kết quả: `play()` bị từ chối, robot im, và log chỉ có một dòng
+   * "trình duyệt chặn tự phát" nghe như lỗi vặt.
+   *
+   * Mở một lần ngay trong nút "Nối vào máy chủ" thì mọi câu sau đó phát
+   * được, vì context đã ở trạng thái `running` từ trước.
+   */
+  const ctxRef = useRef<AudioContext | null>(null);
 
   const troRef = useRef<TroOanTuTi | null>(null);
 
@@ -269,6 +282,14 @@ export function RobotSimulator({ deviceId }: { deviceId: number }) {
   // ─── Nối / ngắt ────────────────────────────────────────
   const noi = useCallback(async () => {
     setDangXin(true);
+    // Mở loa NGAY TRONG cú bấm — đây là cử chỉ người dùng duy nhất chắc
+    // chắn có, và trình duyệt chỉ cho mở âm thanh từ trong một cử chỉ.
+    try {
+      if (!ctxRef.current) ctxRef.current = new AudioContext();
+      if (ctxRef.current.state === 'suspended') await ctxRef.current.resume();
+    } catch {
+      /* không mở được thì vẫn nối, chỉ là không nghe được tiếng */
+    }
     try {
       const ve = await xinVeMoPhong(deviceId);
       if (ve.dangOnline) {
@@ -323,6 +344,15 @@ export function RobotSimulator({ deviceId }: { deviceId: number }) {
 
   // ─── Loa ───────────────────────────────────────────────
   const phat = (am: Blob) => {
+    // Máy chủ gửi 0 byte = TTS không sinh được tiếng. Gần như luôn là
+    // dự án chưa chọn giọng đọc. Nói thẳng ra thay vì để người dùng ngồi
+    // đoán tại sao robot im — chữ vẫn hiện nên nó rất giống lỗi loa.
+    if (am.size === 0) {
+      ghi('he', '⚠ máy chủ gửi 0 byte tiếng — dự án của thiết bị này CHƯA CHỌN GIỌNG ĐỌC (tab Tính cách)');
+      ngucRef.current?.setByName('neutral');
+      matRef.current?.setByName('confused', 1800);
+      return;
+    }
     const url = URL.createObjectURL(am);
     const a = new Audio(url);
     amRef.current = a;
@@ -330,13 +360,15 @@ export function RobotSimulator({ deviceId }: { deviceId: number }) {
     // vì đoán theo độ dài chuỗi. Đây đúng là thứ firmware làm với
     // `audio::level()`, nên đồng tử nảy giống hệt.
     try {
-      const ctx = new AudioContext();
-      const src = ctx.createMediaElementSource(a);
-      const pt = ctx.createAnalyser();
-      pt.fftSize = 512;
-      src.connect(pt);
-      pt.connect(ctx.destination);
-      phanTichRef.current = pt;
+      const ctx = ctxRef.current;
+      if (ctx) {
+        const src = ctx.createMediaElementSource(a);
+        const pt = ctx.createAnalyser();
+        pt.fftSize = 512;
+        src.connect(pt);
+        pt.connect(ctx.destination);
+        phanTichRef.current = pt;
+      }
     } catch {
       /* không đo được thì vẫn phát, chỉ là mắt không nảy */
     }

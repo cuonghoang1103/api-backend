@@ -73,6 +73,7 @@ export default {
 </div>
 <div class="callout ok">A B-tree is fast for <strong>equality</strong> (<code>=</code>), <strong>ranges</strong> (<code>&lt;</code>, <code>&gt;</code>, <code>BETWEEN</code>), <code>IN</code>, prefix <code>LIKE 'abc%'</code>, and it can also supply <strong>sorted order</strong> (<code>ORDER BY</code>) for free because its leaves are already sorted. That covers the overwhelming majority of real queries — B-tree is the right default 95% of the time.</div>
 <div class="note-ct">Every primary key you've created since Chapter 3 already has a B-tree index behind it (that's how a PK enforces uniqueness and stays fast). Looking a user up by <code>id</code> has always been an Index Scan; this lesson just makes it visible — and shows you how to give the <em>other</em> columns you filter on the same treatment.</div>
+<div class="pitfall"><p><strong>Trap — adding an index and assuming it is being used.</strong> Creating an index always succeeds; using it is a decision the planner makes independently, and it will refuse for reasons that are usually correct. On a small table a sequential scan is genuinely faster, so the index sits unused until the table grows. A function on the column (<code>WHERE lower(email) = …</code>) makes a plain index on <code>email</code> unusable. Out-of-date statistics can make the planner think a filter matches most rows. The only way to know is to ask: run <code>EXPLAIN</code> (Chapter 10) and look for the index name in the plan. An index nobody uses is not free — it slows every <code>INSERT</code> and <code>UPDATE</code> on that table and occupies disk, so an unused index is a cost with no benefit.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: run EXPLAIN ANALYZE and watch a Seq Scan become an Index Scan</span><span class="lc-sub">The Code Lab track builds the 500k-row table so you can measure it yourself.</span></span>
@@ -130,6 +131,7 @@ export default {
 </div>
 <div class="callout ok">Một B-tree nhanh cho <strong>bằng</strong> (<code>=</code>), <strong>khoảng</strong> (<code>&lt;</code>, <code>&gt;</code>, <code>BETWEEN</code>), <code>IN</code>, <code>LIKE 'abc%'</code> đầu chuỗi, và nó cũng cấp <strong>thứ tự đã sắp</strong> (<code>ORDER BY</code>) miễn phí vì lá của nó đã sắp sẵn. Điều đó bao phủ áp đảo phần lớn truy vấn thật — B-tree là mặc định đúng 95% thời gian.</div>
 <div class="note-ct">Mọi khoá chính bạn tạo từ Chương 3 đều đã có một chỉ mục B-tree phía sau (đó là cách một PK ép tính duy nhất và giữ nhanh). Tra một user theo <code>id</code> luôn là một Index Scan; bài này chỉ làm nó hiện ra — và chỉ cho bạn cách cho các cột <em>khác</em> mà bạn lọc theo được đối xử y hệt.</div>
+<div class="pitfall"><p><strong>Bẫy — thêm một chỉ mục rồi cho rằng nó đang được dùng.</strong> Tạo chỉ mục thì luôn thành công; DÙNG nó lại là một quyết định planner tự đưa ra, và nó sẽ từ chối vì những lý do thường là đúng. Trên bảng nhỏ, quét tuần tự thật sự nhanh hơn, nên chỉ mục nằm không cho tới khi bảng lớn lên. Một hàm bọc lên cột (<code>WHERE lower(email) = …</code>) làm chỉ mục thường trên <code>email</code> thành vô dụng. Thống kê cũ có thể khiến planner tưởng bộ lọc khớp phần lớn số dòng. Cách duy nhất để biết là ĐI HỎI: chạy <code>EXPLAIN</code> (Chương 10) và tìm tên chỉ mục trong kế hoạch. Một chỉ mục không ai dùng KHÔNG miễn phí — nó làm chậm mọi lệnh <code>INSERT</code> và <code>UPDATE</code> trên bảng đó và chiếm đĩa, nên chỉ mục không dùng là một khoản chi phí không kèm lợi ích nào.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: chạy EXPLAIN ANALYZE và nhìn Seq Scan thành Index Scan</span><span class="lc-sub">Track Code Lab dựng bảng 500k dòng để bạn tự đo.</span></span>
@@ -196,6 +198,14 @@ export default {
 <p><strong>Index Only Scan</strong> with <code>Heap Fetches: 0</code> — Postgres computed the sum reading only the index, never the table. Both <code>user_id</code> (the key) and <code>amount</code> (included) live in the index, so there was nothing left to fetch from the heap.</p>
 <div class="callout ok">Index the columns you <code>WHERE</code>/<code>JOIN</code>/<code>ORDER BY</code> on. For multi-column queries, prefer <strong>one composite index</strong> with equality columns first and the range/sort column last, over several single-column indexes. Reach for <code>INCLUDE</code> when a hot query reads just a couple of extra columns — you turn it into a table-free Index Only Scan.</div>
 <div class="note-ct">A feed query like "this user's posts, newest first" is exactly <code>(user_id, created_at)</code>. The site's foreign keys deserve indexes too: Postgres indexes the PK automatically but <em>not</em> the FK column on the child side — so <code>comment.note_id</code>, <code>note.user_id</code> etc. each need their own index or every join and every "delete the parent" check falls back to a Seq Scan.</div>
+<h3>Column order in a composite index</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Think of it as a sorted phone book</span><span class="lz-d">An index on <code>(last_name, first_name)</code> is sorted by surname, then by given name within each surname. That is literally the layout on disk.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The leftmost prefix rule</span><span class="lz-d">It serves queries on <code>(last_name)</code> and on <code>(last_name, first_name)</code>. It does <em>not</em> serve a query on <code>first_name</code> alone — you cannot look someone up by given name in a phone book.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Equality first, range last</span><span class="lz-d">Put columns you test with <code>=</code> before the one you test with <code>&gt;</code> or <code>BETWEEN</code>. Once a range is scanned, columns after it in the index can no longer narrow the search.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">INCLUDE for a covering index</span><span class="lz-d">Columns in <code>INCLUDE</code> are stored in the leaf pages but not used for searching. They let the query be answered from the index alone — an index-only scan, no table read.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — creating one index per column and expecting them to combine.</strong> Three separate indexes on <code>user_id</code>, <code>status</code> and <code>created_at</code> do not equal one composite index on all three. PostgreSQL <em>can</em> combine them with a bitmap scan, but that is far slower than a single index that already has the rows in the right order, and it often decides not to bother. The result is three indexes slowing down every write while the query still scans. Build the composite index the query actually needs — and check with <code>EXPLAIN</code> that a bitmap heap scan turned into an index scan.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: composite indexes, column order, and INCLUDE</span><span class="lc-sub">The Code Lab track proves the left-prefix rule with EXPLAIN.</span></span>
@@ -252,6 +262,14 @@ export default {
 <p><strong>Index Only Scan</strong> với <code>Heap Fetches: 0</code> — Postgres tính tổng chỉ đọc chỉ mục, không hề đọc bảng. Cả <code>user_id</code> (khoá) và <code>amount</code> (được include) đều nằm trong chỉ mục, nên không còn gì phải lấy từ heap.</p>
 <div class="callout ok">Index các cột bạn <code>WHERE</code>/<code>JOIN</code>/<code>ORDER BY</code>. Với truy vấn nhiều cột, ưu tiên <strong>một chỉ mục tổ hợp</strong> với cột bằng trước và cột khoảng/sắp cuối, hơn là nhiều chỉ mục một-cột. Dùng <code>INCLUDE</code> khi một truy vấn nóng chỉ đọc thêm vài cột — bạn biến nó thành một Index Only Scan không đụng bảng.</div>
 <div class="note-ct">Một truy vấn feed như "bài của user này, mới nhất trước" đúng là <code>(user_id, created_at)</code>. Các khoá ngoại của trang cũng đáng có chỉ mục: Postgres tự index PK nhưng <em>không</em> tự index cột FK ở phía con — nên <code>comment.note_id</code>, <code>note.user_id</code>… mỗi cái cần chỉ mục riêng, nếu không mọi join và mọi phép kiểm "xoá cha" rơi về Seq Scan.</div>
+<h3>Thứ tự cột trong một chỉ mục tổ hợp</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Hãy hình dung một cuốn danh bạ đã sắp</span><span class="lz-d">Chỉ mục trên <code>(last_name, first_name)</code> sắp theo họ, rồi theo tên trong mỗi họ. Đó đúng nghĩa đen là bố cục trên đĩa.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Luật tiền tố TRÁI NHẤT</span><span class="lz-d">Nó phục vụ truy vấn trên <code>(last_name)</code> và trên <code>(last_name, first_name)</code>. Nó KHÔNG phục vụ truy vấn chỉ trên <code>first_name</code> — bạn không tra được một người theo TÊN trong cuốn danh bạ.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Bằng trước, khoảng sau</span><span class="lz-d">Đặt các cột bạn kiểm bằng <code>=</code> TRƯỚC cột bạn kiểm bằng <code>&gt;</code> hay <code>BETWEEN</code>. Một khi đã quét theo khoảng, các cột đứng sau nó trong chỉ mục không thu hẹp tìm kiếm được nữa.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">INCLUDE để có chỉ mục phủ</span><span class="lz-d">Các cột trong <code>INCLUDE</code> được cất ở trang lá nhưng không dùng để TÌM. Chúng cho phép trả lời truy vấn CHỈ từ chỉ mục — một index-only scan, không đọc bảng.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tạo mỗi cột một chỉ mục rồi trông đợi chúng KẾT HỢP với nhau.</strong> Ba chỉ mục riêng trên <code>user_id</code>, <code>status</code> và <code>created_at</code> KHÔNG bằng một chỉ mục tổ hợp trên cả ba. PostgreSQL CÓ THỂ kết hợp chúng bằng bitmap scan, nhưng cách đó chậm hơn hẳn một chỉ mục đơn vốn đã có sẵn các dòng theo đúng thứ tự, và nó thường quyết định không thèm làm. Kết quả là ba chỉ mục làm chậm mọi lệnh ghi trong khi truy vấn vẫn quét. Hãy dựng đúng cái chỉ mục tổ hợp mà truy vấn cần — rồi kiểm bằng <code>EXPLAIN</code> xem bitmap heap scan đã thành index scan chưa.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: chỉ mục tổ hợp, thứ tự cột, và INCLUDE</span><span class="lc-sub">Track Code Lab chứng minh luật tiền-tố-trái bằng EXPLAIN.</span></span>
@@ -323,6 +341,14 @@ export default {
    into event     (9 indexes):   1330 ms   -- ~11x slower</div>
 <div class="callout warn">Indexes trade write speed and disk for read speed. Nine indexes made writes ~11× slower here. The discipline: index what you actually query, drop indexes nothing uses (<code>pg_stat_user_indexes.idx_scan = 0</code> flags them), and remember every redundant index is a tax on every write forever.</div>
 <div class="note-ct">The site's "unread notifications" and "pending moderation" queues are perfect partial-index targets — a <code>WHERE read = false</code> partial index stays kilobytes even as the notifications table grows to millions. And the write-cost lesson is why the feed tables aren't blanketed in indexes: each one would slow every new post and every like.</div>
+<h3>Why a perfectly good index gets ignored</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">Low selectivity</span><span class="lz-lnote">The filter matches 40% of the table. Following the index means reading most of the table anyway, in random order — a sequential scan is genuinely cheaper, and the planner is right.</span></div>
+<div class="lz-layer"><span class="lz-lname">A function on the column</span><span class="lz-lnote"><code>WHERE lower(email) = 'x'</code> cannot use an index on <code>email</code>. Either index the expression — <code>CREATE INDEX ON app_user (lower(email))</code> — or store the value already normalised.</span></div>
+<div class="lz-layer"><span class="lz-lname">Type mismatch</span><span class="lz-lnote">Comparing a <code>bigint</code> column to a text literal forces a cast on the column side, and the index goes unused. The query still works, which is what makes it hard to spot.</span></div>
+<div class="lz-layer"><span class="lz-lname">Stale statistics</span><span class="lz-lnote">After a bulk load the planner's row estimates can be wildly wrong. <code>ANALYZE</code> costs seconds and fixes plans that looked inexplicable.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a partial index whose <code>WHERE</code> does not match the query's.</strong> <code>CREATE INDEX … WHERE status = 'active'</code> is only usable when the planner can prove your query asks for a subset of that condition. <code>WHERE status = 'active'</code> works. <code>WHERE status = $1</code> with a parameter does not — at plan time the value is unknown, so it cannot prove anything, and the index is skipped. This is why a partial index that works beautifully in psql does nothing from the application, where every query is parameterised. Test partial indexes through the same query path the app uses, not by hand.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: expression indexes, selectivity, and partial indexes</span><span class="lc-sub">The Code Lab track makes the planner flip between Seq Scan and index.</span></span>
@@ -384,6 +410,14 @@ export default {
    vào event   (9 chỉ mục):    1330 ms   -- chậm ~11 lần</div>
 <div class="callout warn">Chỉ mục đánh đổi tốc độ ghi và đĩa lấy tốc độ đọc. Chín chỉ mục làm ghi chậm ~11× ở đây. Kỷ luật: index thứ bạn thật sự hỏi, bỏ chỉ mục không ai dùng (<code>pg_stat_user_indexes.idx_scan = 0</code> tố cáo chúng), và nhớ mỗi chỉ mục thừa là một thứ thuế trên mọi lần ghi, mãi mãi.</div>
 <div class="note-ct">Hàng đợi "thông báo chưa đọc" và "chờ kiểm duyệt" của trang là mục tiêu partial-index hoàn hảo — một partial index <code>WHERE read = false</code> ở lại cỡ kilobyte kể cả khi bảng thông báo lớn tới hàng triệu dòng. Và bài học chi phí ghi là vì sao các bảng feed không bị phủ kín chỉ mục: mỗi cái sẽ làm chậm mọi bài mới và mọi lượt like.</div>
+<h3>Vì sao một chỉ mục hoàn toàn tốt lại bị lờ đi</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">Tính chọn lọc thấp</span><span class="lz-lnote">Bộ lọc khớp 40% bảng. Đi theo chỉ mục nghĩa là đằng nào cũng đọc phần lớn bảng, mà lại theo thứ tự NGẪU NHIÊN — quét tuần tự thật sự rẻ hơn, và planner ĐÚNG.</span></div>
+<div class="lz-layer"><span class="lz-lname">Một hàm bọc lên cột</span><span class="lz-lnote"><code>WHERE lower(email) = 'x'</code> không dùng được chỉ mục trên <code>email</code>. Hoặc đánh chỉ mục cho BIỂU THỨC — <code>CREATE INDEX ON app_user (lower(email))</code> — hoặc lưu sẵn giá trị đã chuẩn hoá.</span></div>
+<div class="lz-layer"><span class="lz-lname">Lệch kiểu dữ liệu</span><span class="lz-lnote">So một cột <code>bigint</code> với một hằng chuỗi buộc phải ép kiểu Ở PHÍA CỘT, và chỉ mục thành vô dụng. Truy vấn vẫn chạy, và chính điều đó làm nó khó phát hiện.</span></div>
+<div class="lz-layer"><span class="lz-lname">Thống kê cũ</span><span class="lz-lnote">Sau một đợt nạp hàng loạt, ước lượng số dòng của planner có thể sai bét. <code>ANALYZE</code> tốn vài giây và chữa được những kế hoạch trông không giải thích nổi.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — chỉ mục bộ phận có <code>WHERE</code> không khớp với <code>WHERE</code> của truy vấn.</strong> <code>CREATE INDEX … WHERE status = 'active'</code> chỉ dùng được khi planner CHỨNG MINH ĐƯỢC truy vấn của bạn hỏi một tập con của điều kiện ấy. <code>WHERE status = 'active'</code> thì được. <code>WHERE status = $1</code> với một tham số thì KHÔNG — lúc lập kế hoạch giá trị chưa biết, nên nó không chứng minh được gì, và chỉ mục bị bỏ qua. Đây là lý do một chỉ mục bộ phận chạy đẹp trong psql lại không làm gì cả khi gọi từ ứng dụng, nơi mọi truy vấn đều tham số hoá. Hãy kiểm chỉ mục bộ phận QUA ĐÚNG đường truy vấn mà app dùng, đừng kiểm bằng tay.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: expression index, độ chọn lọc, và partial index</span><span class="lc-sub">Track Code Lab làm bộ lập kế hoạch lật giữa Seq Scan và chỉ mục.</span></span>
@@ -449,6 +483,22 @@ export default {
 <pre><code><span class="tok-keyword">CREATE UNIQUE INDEX</span> uq_event_email <span class="tok-keyword">ON</span> event(email);   <span class="tok-comment">-- rejects duplicates AND speeds lookups</span></code></pre>
 <div class="callout ok">Reach for B-tree by default. Use <strong>GIN</strong> when you query <em>inside</em> jsonb/arrays/text, <strong>BRIN</strong> for append-only time-series where index size matters, and <strong>GiST</strong> for ranges/geometry/overlap. And remember every unique constraint you write is already an index working for you.</div>
 <div class="note-ct">This maps straight onto the site: tag and jsonb-metadata search wants GIN (Chapter 13 wires up full-text this way), an events/audit-log table that only appends is the textbook BRIN case, and "these two bookings can't overlap" is a GiST exclusion constraint. That's Phase 3's foundation laid — next chapter reads the planner itself with EXPLAIN, to understand <em>why</em> it picks each of these.</div>
+<h3>Five index types and the one question each answers</h3>
+<div class="lz-map">
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">B-tree</span><span class="lz-nsub">the default, and right ~95% of the time</span></span>
+<span class="lz-nbody">Equality, ranges, sorting, <code>LIKE 'prefix%'</code>. If you are not sure, this is the answer. Every other type exists for a case B-tree handles badly.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">GIN</span><span class="lz-nsub">many values inside one row</span></span>
+<span class="lz-nbody">Full-text search, <code>jsonb</code> containment, array membership. Slower to write than B-tree because one row updates many index entries — the cost is real on write-heavy tables.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">GiST · BRIN · Hash</span><span class="lz-nsub">the specialists</span></span>
+<span class="lz-nbody">GiST for geometry and ranges; BRIN for huge tables whose physical order matches the column (append-only time series), where it is tiny and remarkably effective; Hash for equality only, and rarely worth choosing over B-tree.</span>
+</div>
+</div>
+<div class="pitfall"><p><strong>Trap — a GIN index on a column that is written constantly.</strong> GIN is superb for search and expensive to maintain: a single row update can touch dozens of index entries. On a table taking thousands of writes per second the index maintenance becomes the bottleneck, and the symptom is confusing — writes get slow while the search you added it for is beautifully fast. If that happens, <code>fastupdate</code> (on by default) batches the work but makes occasional writes very slow when the pending list flushes. The structural answer is usually to move search to a table that is written less often, or to accept a slightly stale search index updated by a background job.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Next chapter: EXPLAIN & the query planner</span><span class="lc-sub">Read cost estimates, join strategies, and why the planner chose the plan it did.</span></span>
@@ -504,6 +554,22 @@ export default {
 <pre><code><span class="tok-keyword">CREATE UNIQUE INDEX</span> uq_event_email <span class="tok-keyword">ON</span> event(email);   <span class="tok-comment">-- từ chối trùng VÀ tăng tốc tra cứu</span></code></pre>
 <div class="callout ok">Mặc định chọn B-tree. Dùng <strong>GIN</strong> khi bạn hỏi <em>bên trong</em> jsonb/mảng/text, <strong>BRIN</strong> cho chuỗi-thời-gian chỉ-thêm nơi kích thước chỉ mục quan trọng, và <strong>GiST</strong> cho khoảng/hình học/chồng lấn. Và nhớ mọi ràng buộc unique bạn viết đã là một chỉ mục đang làm việc cho bạn.</div>
 <div class="note-ct">Điều này ánh xạ thẳng vào trang: tìm thẻ và siêu-dữ-liệu-jsonb cần GIN (Chương 13 nối full-text theo cách này), một bảng event/nhật-ký-kiểm-toán chỉ thêm là ca BRIN kinh điển, và "hai đặt chỗ này không được chồng nhau" là một ràng buộc loại trừ GiST. Đó là nền của Giai đoạn 3 đã đặt xong — chương tới đọc chính bộ lập kế hoạch bằng EXPLAIN, để hiểu <em>vì sao</em> nó chọn mỗi cái này.</div>
+<h3>Năm loại chỉ mục và câu hỏi mà mỗi loại trả lời</h3>
+<div class="lz-map">
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">B-tree</span><span class="lz-nsub">mặc định, và đúng ~95% số lần</span></span>
+<span class="lz-nbody">Bằng, khoảng, sắp xếp, <code>LIKE 'tiền tố%'</code>. Nếu chưa chắc, đây là câu trả lời. Mọi loại khác tồn tại cho những trường hợp B-tree xử lý kém.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">GIN</span><span class="lz-nsub">nhiều giá trị bên trong MỘT dòng</span></span>
+<span class="lz-nbody">Tìm kiếm toàn văn, kiểm chứa của <code>jsonb</code>, thành viên trong mảng. Ghi chậm hơn B-tree vì một dòng cập nhật nhiều mục chỉ mục — cái giá ấy là thật trên bảng nặng ghi.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">GiST · BRIN · Hash</span><span class="lz-nsub">nhóm chuyên dụng</span></span>
+<span class="lz-nbody">GiST cho hình học và khoảng; BRIN cho bảng KHỔNG LỒ mà thứ tự vật lý trùng với cột (chuỗi thời gian chỉ ghi thêm), ở đó nó bé tí và hiệu quả đáng kinh ngạc; Hash chỉ cho phép bằng, và hiếm khi đáng chọn hơn B-tree.</span>
+</div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — đặt chỉ mục GIN lên một cột bị ghi liên tục.</strong> GIN tuyệt vời cho tìm kiếm và đắt để bảo trì: một lần cập nhật MỘT dòng có thể đụng tới hàng chục mục chỉ mục. Trên bảng nhận hàng nghìn lượt ghi mỗi giây, chính việc bảo trì chỉ mục thành nút thắt, và triệu chứng thì gây bối rối — GHI thì chậm đi trong khi cái TÌM KIẾM bạn thêm nó vì nó lại nhanh đẹp. Nếu gặp chuyện đó, <code>fastupdate</code> (mặc định bật) gom việc lại thành lô nhưng khiến một số lần ghi CHẬM DỮ DỘI lúc danh sách chờ được xả. Câu trả lời về mặt cấu trúc thường là chuyển phần tìm kiếm sang một bảng ít bị ghi hơn, hoặc chấp nhận một chỉ mục tìm kiếm hơi cũ do một job nền cập nhật.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Chương tới: EXPLAIN & bộ lập kế hoạch truy vấn</span><span class="lc-sub">Đọc ước lượng chi phí, chiến lược join, và vì sao bộ lập kế hoạch chọn plan đó.</span></span>

@@ -66,6 +66,14 @@ HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
 <p><code>numeric(12,2)</code> means "up to 12 total digits, 2 after the decimal point". It rounded 123.456 to 123.46 exactly, and it will never drift. Use it for money, quantities, anything where the decimal value must be exact.</p>
 <div class="callout danger">The rule, no exceptions: <strong>money and any exact decimal → <code>numeric</code>. Never <code>float</code>/<code>real</code>/<code>double precision</code>.</strong> Floats are for scientific/approximate values (sensor readings, ratios) where tiny imprecision doesn't matter. If a human counts it or gets billed for it, it's numeric.</div>
 <div class="note-ct">This site stores every price and balance as <code>numeric</code> (the Pro membership fee, wallet balances, payment amounts). A single float column there would eventually produce a payment that's off by a cent — and reconciling money that doesn't add up is the kind of bug that erodes trust instantly.</div>
+<h3>Picking a numeric type</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Counting things → integer / bigint</span><span class="lz-d">Exact, fast, and <code>bigint</code> for anything that could exceed two billion. An id column that outgrows <code>integer</code> is a migration nobody enjoys.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Money → numeric</span><span class="lz-d">Exact decimal arithmetic, no rounding surprises. Slower than a float and worth every cycle.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Measurements → real / double precision</span><span class="lz-d">Temperature, distance, a machine-learning score. Approximate by design, and that is fine when the input was approximate too.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Auto ids → identity, not serial</span><span class="lz-d"><code>GENERATED ALWAYS AS IDENTITY</code> is the standard form and behaves better on restore than the older <code>serial</code> pseudo-type.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — storing money in a floating-point column.</strong> <code>double precision</code> cannot represent 0.1 exactly, so <code>0.1 + 0.2</code> stores as 0.30000000000000004 — and a hundred thousand such rows sum to a total that is off by cents in a direction nobody can explain. It passes every test written with round numbers and fails the first audit. Use <code>numeric(12,2)</code> for amounts, or store integer minor units (đồng, cents) and format on display. This is not a theoretical concern: it is the single most common data-type bug in commercial software, and it is unfixable after the fact because the precision was lost at write time.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: watch float drift, then fix it with numeric</span><span class="lc-sub">The Code Lab track reproduces the money bug hands-on.</span></span>
@@ -119,6 +127,14 @@ HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
 <p><code>numeric(12,2)</code> nghĩa là "tối đa 12 chữ số tổng, 2 chữ số sau dấu phẩy". Nó làm tròn 123.456 thành 123.46 chính xác, và sẽ không bao giờ trôi lệch. Dùng nó cho tiền, số lượng, bất cứ thứ gì mà giá trị thập phân phải chính xác.</p>
 <div class="callout danger">Luật, không ngoại lệ: <strong>tiền và mọi số thập phân chính xác → <code>numeric</code>. Không bao giờ <code>float</code>/<code>real</code>/<code>double precision</code>.</strong> Float dành cho giá trị khoa học/xấp xỉ (số đo cảm biến, tỉ lệ) nơi sai lệch tí xíu không quan trọng. Nếu con người đếm nó hoặc bị tính tiền vì nó, nó là numeric.</div>
 <div class="note-ct">Trang này lưu mọi mức giá và số dư dưới dạng <code>numeric</code> (phí gói Pro, số dư ví, số tiền thanh toán). Chỉ một cột float ở đó rốt cuộc sẽ tạo ra một khoản thanh toán lệch một xu — và đối soát tiền không cộng khớp là loại bug làm xói mòn niềm tin ngay lập tức.</div>
+<h3>Chọn một kiểu số</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đếm thứ gì đó → integer / bigint</span><span class="lz-d">Chính xác, nhanh, và dùng <code>bigint</code> cho bất cứ thứ gì có thể vượt hai tỉ. Một cột id lớn quá <code>integer</code> là một cú migration không ai thích.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Tiền → numeric</span><span class="lz-d">Số học thập phân CHÍNH XÁC, không có bất ngờ làm tròn. Chậm hơn số thực và đáng từng nhịp máy.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Phép đo → real / double precision</span><span class="lz-d">Nhiệt độ, khoảng cách, một điểm số học máy. Gần đúng theo THIẾT KẾ, và như thế là ổn khi đầu vào cũng vốn gần đúng.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Id tự tăng → identity, đừng serial</span><span class="lz-d"><code>GENERATED ALWAYS AS IDENTITY</code> là dạng chuẩn và hành xử tốt hơn lúc phục hồi so với kiểu giả <code>serial</code> đời cũ.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — lưu TIỀN trong một cột dấu phẩy động.</strong> <code>double precision</code> không biểu diễn được 0.1 một cách chính xác, nên <code>0.1 + 0.2</code> lưu thành 0.30000000000000004 — và một trăm nghìn dòng như thế cộng lại ra một con tổng lệch vài xu theo một chiều không ai giải thích nổi. Nó qua mọi bài test viết bằng số tròn và trượt ngay cuộc kiểm toán đầu tiên. Hãy dùng <code>numeric(12,2)</code> cho số tiền, hoặc lưu đơn vị nhỏ dạng số nguyên (đồng, xu) rồi định dạng lúc hiển thị. Đây không phải mối lo lý thuyết: nó là con bug kiểu dữ liệu phổ biến NHẤT trong phần mềm thương mại, và nó không sửa được về sau vì độ chính xác đã mất ngay lúc GHI.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: xem float trôi lệch, rồi sửa bằng numeric</span><span class="lc-sub">Track Code Lab tái hiện bug tiền bạc bằng tay.</span></span>
@@ -183,6 +199,14 @@ INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 <p><code>'café'</code> is 4 characters but 5 bytes — the <code>é</code> takes 2 bytes in UTF-8. <code>length()</code> counts characters (what users see); <code>octet_length()</code> counts bytes (what's stored). For Vietnamese, Japanese, emoji, etc., always reason in characters unless you specifically care about storage size.</p>
 <div class="callout ok">Simple rule of thumb: use <strong><code>text</code></strong> by default. Use <strong><code>varchar(n)</code></strong> when you genuinely want to cap length (usernames, codes, titles). <strong>Never use <code>char(n)</code></strong>. That covers 99% of real columns.</div>
 <div class="note-ct">This site uses <code>text</code> for note bodies and messages, and <code>varchar</code> with a limit only where a cap is meaningful — e.g. a note title is <code>varchar(200)</code>, and a course's <code>shortDescription</code> is <code>varchar(500)</code> (which is exactly why the course seeder guards against descriptions over 500 characters — the database would reject them).</div>
+<h3>text, varchar, char — and which to use</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">text</span><span class="lz-lnote">Unlimited length, and in PostgreSQL there is <em>no performance penalty</em> versus <code>varchar</code> — they share the same storage. This is the default answer.</span></div>
+<div class="lz-layer"><span class="lz-lname">varchar(n)</span><span class="lz-lnote">Identical to <code>text</code> plus a length check. Use it when the limit is a genuine business rule, not as a guess about size.</span></div>
+<div class="lz-layer"><span class="lz-lname">char(n)</span><span class="lz-lnote">Blank-padded to a fixed length, which surprises everyone who compares values. Essentially never the right choice in new code.</span></div>
+<div class="lz-layer"><span class="lz-lname">citext</span><span class="lz-lnote">An extension giving case-insensitive comparison. Useful for email, though storing an already-normalised value is usually simpler.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>varchar(255)</code> chosen by habit.</strong> The number comes from an old MySQL storage detail and means nothing in PostgreSQL, where it is neither faster nor smaller than <code>text</code>. What it does do is impose an arbitrary limit that will eventually reject real data — a legitimate address, a long name, a URL with tracking parameters — and changing it later requires an <code>ALTER TABLE</code> on a live table. Either pick a limit the business actually has (<code>varchar(2)</code> for a country code) or use <code>text</code> and validate length in the application, where the rule is easy to change.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: reproduce the char(n) padding surprise</span><span class="lc-sub">The Code Lab track makes the trailing-space bug visible.</span></span>
@@ -237,6 +261,14 @@ INSERT INTO t_vc VALUES ('abcdef');</code></pre>
 <p><code>'café'</code> là 4 ký tự nhưng 5 byte — chữ <code>é</code> chiếm 2 byte trong UTF-8. <code>length()</code> đếm ký tự (cái người dùng thấy); <code>octet_length()</code> đếm byte (cái được lưu). Với tiếng Việt, tiếng Nhật, emoji, v.v., hãy luôn tư duy theo ký tự trừ khi bạn thật sự quan tâm tới dung lượng lưu.</p>
 <div class="callout ok">Quy tắc bỏ túi đơn giản: mặc định dùng <strong><code>text</code></strong>. Dùng <strong><code>varchar(n)</code></strong> khi bạn thật sự muốn giới hạn độ dài (username, mã, tiêu đề). <strong>Đừng bao giờ dùng <code>char(n)</code></strong>. Vậy là bao 99% cột thật.</div>
 <div class="note-ct">Trang này dùng <code>text</code> cho thân note và tin nhắn, và <code>varchar</code> có giới hạn chỉ ở nơi việc giới hạn có ý nghĩa — ví dụ tiêu đề note là <code>varchar(200)</code>, và <code>shortDescription</code> của khoá học là <code>varchar(500)</code> (đó chính là lý do seeder khoá học chặn mô tả dài quá 500 ký tự — cơ sở dữ liệu sẽ từ chối chúng).</div>
+<h3>text, varchar, char — và nên dùng cái nào</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">text</span><span class="lz-lnote">Độ dài không giới hạn, và trong PostgreSQL <em>KHÔNG có</em> hình phạt hiệu năng nào so với <code>varchar</code> — chúng dùng chung một cơ chế lưu. Đây là câu trả lời mặc định.</span></div>
+<div class="lz-layer"><span class="lz-lname">varchar(n)</span><span class="lz-lnote">Giống hệt <code>text</code> cộng thêm một phép kiểm độ dài. Dùng khi giới hạn ấy là một luật NGHIỆP VỤ thật, đừng dùng như một phỏng đoán về kích thước.</span></div>
+<div class="lz-layer"><span class="lz-lname">char(n)</span><span class="lz-lnote">Đệm khoảng trắng cho đủ độ dài cố định, thứ làm bất ngờ mọi người khi đem so sánh giá trị. Về cơ bản không bao giờ là lựa chọn đúng trong mã mới.</span></div>
+<div class="lz-layer"><span class="lz-lname">citext</span><span class="lz-lnote">Một extension cho phép so sánh không phân biệt hoa thường. Hữu ích cho email, dù lưu sẵn một giá trị đã chuẩn hoá thường đơn giản hơn.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — chọn <code>varchar(255)</code> theo thói quen.</strong> Con số ấy đến từ một chi tiết lưu trữ cũ của MySQL và chẳng có nghĩa gì trong PostgreSQL, nơi nó không nhanh hơn cũng không nhỏ hơn <code>text</code>. Thứ nó THẬT SỰ làm là áp một giới hạn tuỳ tiện rồi sẽ từ chối dữ liệu thật — một địa chỉ hợp lệ, một cái tên dài, một URL kèm tham số theo dõi — và đổi nó về sau đòi một cú <code>ALTER TABLE</code> trên bảng đang sống. Hoặc chọn một giới hạn mà nghiệp vụ THẬT SỰ có (<code>varchar(2)</code> cho mã quốc gia), hoặc dùng <code>text</code> rồi kiểm độ dài ở tầng ứng dụng, nơi luật ấy dễ đổi.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: tái hiện bất ngờ đệm khoảng trắng của char(n)</span><span class="lc-sub">Track Code Lab làm hiện rõ bug khoảng-trắng-cuối.</span></span>
@@ -300,6 +332,14 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
 (1 row)</div>
 <p>Recall from lesson 0.3 that <code>now()</code> returns the moment the <em>transaction</em> started, so every row inserted in one statement shares a timestamp. To get the actual wall-clock instant mid-transaction, use <code>clock_timestamp()</code> instead.</p>
 <div class="note-ct">Every <code>created_at</code> / <code>updated_at</code> on this site is <code>timestamptz</code> — that's why a note created at 9am Vietnam time shows correctly whether the viewer is in Hanoi or New York. The Node.js course logged a related gotcha: inside a Docker container the clock is UTC while the host is +07, so a value that looks "7 hours off" in a log is usually just a zone-display difference, not a bug.</div>
+<h3>The only two time types you need</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">timestamptz — an instant</span><span class="lz-d">Stored as UTC, converted on the way in and out using the session's time zone. "When did this happen" is always this type.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">date — a calendar day</span><span class="lz-d">A birthday, an invoice date. Deliberately has no time and no zone, because the concept genuinely does not have one.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">timestamp (no tz) — almost never</span><span class="lz-d">A wall-clock reading with no zone attached. Two rows written in Hanoi and London look identical and mean different instants, and nothing records which was which.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">interval — a duration</span><span class="lz-d">"3 days", "90 minutes". Add it to a timestamptz and PostgreSQL handles month lengths and DST for you.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>timestamp</code> instead of <code>timestamptz</code>, and finding out in October.</strong> The column works perfectly while everyone is in one zone. Then a daylight-saving change, a server in a different region, or a user in another country arrives, and there is no way to tell what any historic row meant — the information needed to interpret it was never stored. This project has been bitten by exactly this (Node.js Chapter 18 lists it under one-way doors). Default to <code>timestamptz</code> for every event, and store the user's zone in a separate column when you genuinely need to render local wall-clock time later.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: see the same instant in two timezones</span><span class="lc-sub">The Code Lab track makes the timestamptz conversion click.</span></span>
@@ -353,6 +393,14 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
 (1 row)</div>
 <p>Nhớ lại từ bài 0.3 rằng <code>now()</code> trả về khoảnh khắc <em>giao dịch</em> bắt đầu, nên mọi dòng chèn trong một câu lệnh chia sẻ cùng một mốc. Muốn lấy khoảnh khắc đồng hồ thật giữa giao dịch, dùng <code>clock_timestamp()</code> thay thế.</p>
 <div class="note-ct">Mọi <code>created_at</code> / <code>updated_at</code> trên trang này là <code>timestamptz</code> — đó là lý do một note tạo lúc 9 giờ sáng giờ Việt Nam hiện đúng dù người xem ở Hà Nội hay New York. Khoá Node.js ghi lại một cạm bẫy liên quan: bên trong container Docker đồng hồ là UTC còn host là +07, nên một giá trị trông "lệch 7 tiếng" trong log thường chỉ là khác biệt hiển-thị-múi-giờ, không phải bug.</div>
+<h3>Hai kiểu thời gian duy nhất bạn cần</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">timestamptz — một THỜI ĐIỂM</span><span class="lz-d">Lưu dưới dạng UTC, chuyển đổi lúc vào và lúc ra theo múi giờ của phiên. "Chuyện này xảy ra lúc nào" thì luôn là kiểu này.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">date — một NGÀY trên lịch</span><span class="lz-d">Một ngày sinh, một ngày hoá đơn. CỐ Ý không có giờ và không có múi, vì bản thân khái niệm ấy thật sự không có.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">timestamp (không tz) — gần như không bao giờ</span><span class="lz-d">Một số đọc trên mặt đồng hồ mà không kèm múi giờ. Hai dòng ghi ở Hà Nội và London trông y hệt nhau mà chỉ hai thời điểm khác nhau, và không gì ghi lại cái nào là cái nào.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">interval — một KHOẢNG</span><span class="lz-d">"3 ngày", "90 phút". Cộng nó vào một timestamptz và PostgreSQL lo giùm bạn chuyện tháng dài ngắn và giờ mùa hè.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — dùng <code>timestamp</code> thay vì <code>timestamptz</code>, và phát hiện ra vào tháng Mười.</strong> Cột ấy chạy hoàn hảo khi mọi người còn ở chung một múi giờ. Rồi một lần đổi giờ mùa hè, một máy chủ ở vùng khác, hay một người dùng ở nước khác xuất hiện, và không còn cách nào biết một dòng lịch sử bất kỳ có nghĩa gì — thông tin cần để diễn giải nó chưa từng được lưu. Chính dự án này đã dính đúng chuyện đó (Chương 18 khoá Node.js liệt nó vào nhóm cửa MỘT CHIỀU). Hãy mặc định <code>timestamptz</code> cho mọi sự kiện, và lưu múi giờ của người dùng trong một cột RIÊNG khi bạn thật sự cần dựng lại giờ địa phương về sau.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: thấy cùng một khoảnh khắc trong hai múi giờ</span><span class="lc-sub">Track Code Lab làm phép chuyển đổi timestamptz sáng ra.</span></span>
@@ -429,6 +477,22 @@ SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
 <p><code>-&gt;&gt; 'name'</code> pulled out <code>Cuong</code> as text; <code>-&gt; 'tags' -&gt; 0</code> reached into the array's first element; <code>@&gt;</code> checked that one JSON contains another. Chapter 13 goes deep on jsonb, including GIN indexes that make these queries fast on millions of rows.</p>
 <div class="callout ok">Use <code>jsonb</code> for genuinely variable data (per-item settings, flexible metadata, an external API's response). Do <strong>not</strong> use it as a lazy substitute for columns — if a field is always present and you filter on it, make it a real column with a real type. jsonb is a scalpel, not a dumping ground.</div>
 <div class="note-ct">This site uses <code>jsonb</code> exactly where flexibility is real — a quiz's questions and options live in a <code>quiz_data</code> jsonb column (their shape varies per quiz), while fixed fields like a lesson's title and type are proper typed columns. That's the right split: structured columns for what's always there, jsonb for what varies.</div>
+<h3>Four types that tempt you to skip modelling</h3>
+<div class="lz-map">
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">uuid</span><span class="lz-nsub">generated anywhere, not guessable</span></span>
+<span class="lz-nbody">Lets the client mint an id before the insert and hides your row counts from anyone reading a URL (the IDOR angle in the Authentication course). Costs 16 bytes and a less cache-friendly index than a sequential integer.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">enum · array</span><span class="lz-nsub">convenient, and rigid</span></span>
+<span class="lz-nbody">An <code>enum</code> reads beautifully until you must add a value, which is a schema change. An array is right when the items have no attributes of their own — tags, not order lines.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">jsonb</span><span class="lz-nsub">for shapes you genuinely cannot know</span></span>
+<span class="lz-nbody">A webhook payload, a per-tenant settings blob, an audit record. Indexable with GIN, queryable with operators — but nothing validates it, and nothing warns you when a key silently changes name.</span>
+</div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>jsonb</code> as a way to avoid deciding on a schema.</strong> It feels flexible on day one and becomes an undocumented schema with no constraints by month six: no <code>NOT NULL</code>, no foreign keys, no type checking, and a key that a deploy renamed from <code>userId</code> to <code>user_id</code> in half the rows. Every query then needs to handle both, forever, because you cannot migrate what you cannot enumerate. Use <code>jsonb</code> for data whose shape is genuinely outside your control, and promote any field you filter or join on into a real column — you can keep it in the JSON too during the transition.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Next chapter: constraints & schema design</span><span class="lc-sub">Now you know the types — next, the rules that keep a table's data correct.</span></span>
@@ -495,6 +559,22 @@ SELECT id, priority FROM tasks ORDER BY priority;</code></pre>
 <p><code>-&gt;&gt; 'name'</code> rút ra <code>Cuong</code> dạng text; <code>-&gt; 'tags' -&gt; 0</code> với vào phần tử đầu của mảng; <code>@&gt;</code> kiểm một JSON có chứa một JSON khác. Chương 13 đào sâu jsonb, kể cả chỉ mục GIN làm các truy vấn này nhanh trên hàng triệu dòng.</p>
 <div class="callout ok">Dùng <code>jsonb</code> cho dữ liệu thật sự thay đổi (thiết lập riêng từng phần tử, metadata linh hoạt, phản hồi của một API ngoài). <strong>Đừng</strong> dùng nó như một cái cớ lười thay cho cột — nếu một trường luôn có mặt và bạn lọc theo nó, hãy làm nó thành một cột thật với một kiểu thật. jsonb là con dao mổ, không phải bãi rác.</div>
 <div class="note-ct">Trang này dùng <code>jsonb</code> đúng chỗ sự linh hoạt là thật — câu hỏi và đáp án của một quiz nằm trong một cột <code>quiz_data</code> kiểu jsonb (hình dạng của chúng đổi theo từng quiz), còn các trường cố định như tiêu đề và loại của một bài học là các cột có kiểu đàng hoàng. Đó là cách chia đúng: cột có cấu trúc cho cái luôn có, jsonb cho cái thay đổi.</div>
+<h3>Bốn kiểu dữ liệu cám dỗ bạn bỏ qua bước mô hình hoá</h3>
+<div class="lz-map">
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">uuid</span><span class="lz-nsub">sinh ở đâu cũng được, không đoán ra</span></span>
+<span class="lz-nbody">Cho phép client đúc một id TRƯỚC khi chèn và giấu số lượng bản ghi của bạn khỏi bất kỳ ai đọc một URL (góc IDOR trong khoá Authentication). Trả giá 16 byte và một chỉ mục kém thân thiện với cache hơn số nguyên tuần tự.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">enum · array</span><span class="lz-nsub">tiện lợi, và cứng nhắc</span></span>
+<span class="lz-nbody">Một <code>enum</code> đọc rất đẹp cho tới khi bạn phải THÊM một giá trị, và đó là một cú đổi lược đồ. Một mảng thì đúng khi các phần tử không có thuộc tính riêng — thẻ tag thì được, dòng đơn hàng thì không.</span>
+</div>
+<div class="lz-stage lz-badge">
+<span class="lz-node"><span class="lz-ntitle">jsonb</span><span class="lz-nsub">cho những hình dạng bạn thật sự không thể biết</span></span>
+<span class="lz-nbody">Một payload webhook, một khối cấu hình theo từng tenant, một bản ghi kiểm toán. Đánh chỉ mục được bằng GIN, truy vấn được bằng toán tử — nhưng KHÔNG gì kiểm chứng nó, và không gì cảnh báo bạn khi một cái khoá âm thầm đổi tên.</span>
+</div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — dùng <code>jsonb</code> như một cách TRÁNH phải quyết định lược đồ.</strong> Ngày đầu nó cho cảm giác linh hoạt, và tới tháng thứ sáu nó thành một lược đồ KHÔNG TÀI LIỆU không có ràng buộc nào: không <code>NOT NULL</code>, không khoá ngoại, không kiểm kiểu, và một cái khoá mà một lần deploy đã đổi tên từ <code>userId</code> thành <code>user_id</code> ở một nửa số dòng. Từ đó mọi truy vấn phải xử lý cả hai, mãi mãi, vì bạn không di trú được thứ bạn không liệt kê được. Hãy dùng <code>jsonb</code> cho dữ liệu mà hình dạng thật sự nằm ngoài tầm kiểm soát của bạn, và NÂNG bất kỳ trường nào bạn lọc hay join lên thành một cột thật — trong giai đoạn chuyển tiếp bạn vẫn giữ nó trong JSON cũng được.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Chương tới: ràng buộc & thiết kế lược đồ</span><span class="lc-sub">Giờ bạn đã biết các kiểu — tiếp theo là các luật giữ dữ liệu một bảng luôn đúng.</span></span>

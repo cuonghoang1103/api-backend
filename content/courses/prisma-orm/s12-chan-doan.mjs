@@ -469,7 +469,7 @@ npx prisma db pull --schema /tmp/soi.prisma 2&gt;/dev/null || {
 }
 diff /tmp/schema.goc.prisma /tmp/soi.prisma</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — <code>db pull</code> destroys everything the database cannot express.</strong> It rewrites your schema file from introspection, so <code>@map</code> names it cannot infer, <code>@relation</code> labels, comments, ordering and generator blocks are rewritten or lost. It is a legitimate tool for adopting an existing database, and a terrible one for "let me just check". Copy the schema to <code>/tmp</code> and pull into that.</p>
+<p><strong>Trap — <code>db pull</code> destroys everything the database cannot express.</strong> It rewrites your schema file from introspection, so <code>@map</code> names it cannot infer, <code>@relation</code> labels, comments, ordering and generator blocks are rewritten or lost. It is a legitimate tool for adopting an existing database, and a terrible one for "let me just check". Copy the schema to <code>/tmp</code> and pull into that.</p>
 </div>
 <pre><code><span class="tok-comment"># ⚠️ A GUI on your data. Do not point it at production.</span>
 npx prisma studio</code></pre>

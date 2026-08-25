@@ -150,11 +150,11 @@ The repo already logs the savings part of this in uploadImage(). &#96;ms&#96; ma
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — sharing a worker pool between images and video.</strong> An image is ~180 ms; a video is ~19,000 ms. One video occupies a worker for the duration of about 105 images. Put them in the same queue and a burst of ten video uploads stalls every avatar change on the site for three minutes. Separate queues, separate concurrency limits.</p>
+<p><strong>Trap — sharing a worker pool between images and video.</strong> An image is ~180 ms; a video is ~19,000 ms. One video occupies a worker for the duration of about 105 images. Put them in the same queue and a burst of ten video uploads stalls every avatar change on the site for three minutes. Separate queues, separate concurrency limits.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating a growing queue as a temporary spike.</strong> A backlog that grows by a constant amount per hour never recovers on its own; it is a capacity deficit, not a spike. Alert on the <em>derivative</em> of queue depth, not the absolute value — &quot;depth increased for 30 consecutive minutes&quot; catches it while &quot;depth &gt; 1000&quot; only fires once it is already hours behind.</p>
+<p><strong>Trap — treating a growing queue as a temporary spike.</strong> A backlog that grows by a constant amount per hour never recovers on its own; it is a capacity deficit, not a spike. Alert on the <em>derivative</em> of queue depth, not the absolute value — &quot;depth increased for 30 consecutive minutes&quot; catches it while &quot;depth &gt; 1000&quot; only fires once it is already hours behind.</p>
 </div>
 
 <div class="callout">
@@ -162,7 +162,7 @@ The repo already logs the savings part of this in uploadImage(). &#96;ms&#96; ma
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Khoá Object Storage — Chương 7</span><span class="lc-sub">Năm line item chi phí, và vì sao Class A từ LIST là kẻ gây spike nham hiểm nhất.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Object Storage course — Chapter 7</span><span class="lc-sub">Năm line item chi phí, và vì sao Class A từ LIST là kẻ gây spike nham hiểm nhất.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare R2 pricing</span><span class="lc-sub">developers.cloudflare.com/r2/pricing — $0.015/GB-tháng, egress bằng 0.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS Lambda pricing</span><span class="lc-sub">aws.amazon.com/lambda/pricing — GB-giây, và trần 15 phút mỗi lần chạy.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/storage/uploadService.ts</span><span class="lc-sub">Dòng log <code>savings</code> vốn đã có — thêm <code>ms</code> là thành mô hình dung lượng.</span></span></div>
@@ -512,11 +512,11 @@ group by op, look at p50 vs p99, and the tail IS your capacity limit.
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — optimizing the median when the p99 is what hurts.</strong> Shaving 20 ms off a 180 ms image encode is invisible. The 4,100 ms screencast from Lesson 2.2 is what fills a worker and stalls the queue. Sort your log by <code>ms</code> descending and fix the top of that list, not the average.</p>
+<p><strong>Trap — optimizing the median when the p99 is what hurts.</strong> Shaving 20 ms off a 180 ms image encode is invisible. The 4,100 ms screencast from Lesson 2.2 is what fills a worker and stalls the queue. Sort your log by <code>ms</code> descending and fix the top of that list, not the average.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — benchmarking with the mean of N runs.</strong> One outlier — a GC pause, a noisy neighbour — drags the mean to a value no run actually produced. Use the median, and if you want the tail, report p99 separately rather than letting it contaminate the central estimate.</p>
+<p><strong>Trap — benchmarking with the mean of N runs.</strong> One outlier — a GC pause, a noisy neighbour — drags the mean to a value no run actually produced. Use the median, and if you want the tail, report p99 separately rather than letting it contaminate the central estimate.</p>
 </div>
 
 <div class="callout">

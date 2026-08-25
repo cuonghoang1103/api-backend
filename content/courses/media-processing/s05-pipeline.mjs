@@ -162,11 +162,11 @@ const result = await uploadImage(input, 'images/thumbnails', { userId })
 <p>Notice what this does <em>not</em> do: it does not write the JPEG straight to R2. FFmpeg produces a JPEG, and that JPEG goes back through <code>uploadImage()</code> like any user upload — so it gets the pixel budget, the WebP re-encode, the concurrency gate, and the <code>u&lt;id&gt;</code> ownership segment. A generated file is still a file, and the door applies to it too.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — an &quot;internal&quot; upload path that skips validation because the bytes are trusted.</strong> The video thumbnail above <em>is</em> server-generated and could arguably skip the checks. It does not, and that is correct: the input to FFmpeg was a user file, so the output inherits that taint. &quot;We generated it&quot; is not the same as &quot;we control its dimensions&quot;.</p>
+<p><strong>Trap — an &quot;internal&quot; upload path that skips validation because the bytes are trusted.</strong> The video thumbnail above <em>is</em> server-generated and could arguably skip the checks. It does not, and that is correct: the input to FFmpeg was a user file, so the output inherits that taint. &quot;We generated it&quot; is not the same as &quot;we control its dimensions&quot;.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — a size guard in <code>multer</code> only.</strong> <code>limits.fileSize</code> stops the HTTP body, which is necessary but not sufficient — it says nothing about pixels (Chapter 1's bomb) and it does not apply to buffers your own code produces. Keep the guard inside the upload service too, so every entry point is covered including the internal ones.</p>
+<p><strong>Trap — a size guard in <code>multer</code> only.</strong> <code>limits.fileSize</code> stops the HTTP body, which is necessary but not sufficient — it says nothing about pixels (Chapter 1's bomb) and it does not apply to buffers your own code produces. Keep the guard inside the upload service too, so every entry point is covered including the internal ones.</p>
 </div>
 
 <div class="callout">
@@ -511,11 +511,11 @@ category first and you must scan every category to find one tenant.
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — putting the user's filename in the key &quot;so downloads look right&quot;.</strong> It leaks document contents through URLs, breaks on unicode normalization, and is the exact path that Chapter 3's command injection travelled. Store the original name in a database column and apply it at serve time with <code>Content-Disposition: attachment; filename*=UTF-8''...</code>.</p>
+<p><strong>Trap — putting the user's filename in the key &quot;so downloads look right&quot;.</strong> It leaks document contents through URLs, breaks on unicode normalization, and is the exact path that Chapter 3's command injection travelled. Store the original name in a database column and apply it at serve time with <code>Content-Disposition: attachment; filename*=UTF-8''...</code>.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — timestamp without randomness.</strong> Two uploads in the same millisecond overwrite each other, and the second user silently gets the first user's file. It is rare enough to survive testing and common enough to happen in production within weeks. <code>crypto.randomBytes(6)</code> — not <code>Math.random()</code>, which is predictable and defeats the enumeration-hardening half of the purpose.</p>
+<p><strong>Trap — timestamp without randomness.</strong> Two uploads in the same millisecond overwrite each other, and the second user silently gets the first user's file. It is rare enough to survive testing and common enough to happen in production within weeks. <code>crypto.randomBytes(6)</code> — not <code>Math.random()</code>, which is predictable and defeats the enumeration-hardening half of the purpose.</p>
 </div>
 
 <div class="callout">
@@ -884,11 +884,11 @@ wrong — pass -threads explicitly and size it as cores ÷ workers.
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — calling the non-deterministic key builder inside a retryable job.</strong> <code>buildKey()</code> embeds <code>Date.now()</code> and random bytes, so a redelivered job writes a whole second set of variants under fresh keys. The DB points at the newest set and the earlier ones become orphans that no cleanup job knows about. Derive worker output keys from the input key.</p>
+<p><strong>Trap — calling the non-deterministic key builder inside a retryable job.</strong> <code>buildKey()</code> embeds <code>Date.now()</code> and random bytes, so a redelivered job writes a whole second set of variants under fresh keys. The DB points at the newest set and the earlier ones become orphans that no cleanup job knows about. Derive worker output keys from the input key.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — assuming a job runs exactly once.</strong> Every queue worth using is at-least-once. Worker crashes, visibility timeouts, and mid-job deploys all redeliver. The status check at the top of the handler (<code>if (row.status === 'READY') return</code>) costs one query and turns a duplicate delivery into a no-op.</p>
+<p><strong>Trap — assuming a job runs exactly once.</strong> Every queue worth using is at-least-once. Worker crashes, visibility timeouts, and mid-job deploys all redeliver. The status check at the top of the handler (<code>if (row.status === 'READY') return</code>) costs one query and turns a duplicate delivery into a no-op.</p>
 </div>
 
 <div class="callout">
@@ -899,7 +899,7 @@ wrong — pass -threads explicitly and size it as cores ÷ workers.
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/routes/upload.routes.ts</span><span class="lc-sub">Bảng <code>pending_uploads</code> với hạn 24 giờ và cron dọn mồ côi.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">BullMQ — retries and backoff</span><span class="lc-sub">docs.bullmq.io/guide/retrying-failing-jobs — chính sách retry và job chết.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Server-Sent Events</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/API/Server-sent_events — thay cho polling khi lượng poll thành vấn đề.</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Khoá Object Storage — Chương 6.3</span><span class="lc-sub">Reconciliation hai chiều cho object mồ côi, và vì sao cần hai lượt trước khi xoá.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Object Storage course — Chapter 6.3</span><span class="lc-sub">Reconciliation hai chiều cho object mồ côi, và vì sao cần hai lượt trước khi xoá.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.3</span>

@@ -192,11 +192,11 @@ watching rather than talking, Tier 1 or 2 is dramatically cheaper.
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — copying the VOD cache headers to a live manifest.</strong> An immutable, year-long <code>Cache-Control</code> on a playlist that changes every two seconds freezes the stream for every viewer while the origin reports perfect health. Curl the manifest twice ten seconds apart and diff — identical output means the cache is wrong.</p>
+<p><strong>Trap — copying the VOD cache headers to a live manifest.</strong> An immutable, year-long <code>Cache-Control</code> on a playlist that changes every two seconds freezes the stream for every viewer while the origin reports perfect health. Curl the manifest twice ten seconds apart and diff — identical output means the cache is wrong.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — reaching for WebRTC because the product says &quot;live&quot;.</strong> WebRTC is for conversation. If the audience is watching rather than talking, it replaces a CDN-scaled, flat-cost system with a stateful per-participant one for latency nobody needed. Ask question 1 above before picking a protocol.</p>
+<p><strong>Trap — reaching for WebRTC because the product says &quot;live&quot;.</strong> WebRTC is for conversation. If the audience is watching rather than talking, it replaces a CDN-scaled, flat-cost system with a stateful per-participant one for latency nobody needed. Ask question 1 above before picking a protocol.</p>
 </div>
 
 <div class="callout">
@@ -207,7 +207,7 @@ watching rather than talking, Tier 1 or 2 is dramatically cheaper.
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Apple — Low-Latency HLS</span><span class="lc-sub">developer.apple.com/documentation/http-live-streaming — partial segment và blocking playlist reload.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">WebRTC for the Curious</span><span class="lc-sub">webrtcforthecurious.com — sách mở, giải thích SFU và ICE rõ hơn mọi tài liệu chính thức.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — tune zerolatency</span><span class="lc-sub">trac.ffmpeg.org/wiki/StreamingGuide — B-frame, lookahead, và cái giá của việc tắt chúng.</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Khoá Socket.IO — Chương 7</span><span class="lc-sub">Phía signalling của WebRTC: trao đổi SDP và ICE candidate trước khi media chảy.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO course — Chapter 7</span><span class="lc-sub">Phía signalling của WebRTC: trao đổi SDP và ICE candidate trước khi media chảy.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.1</span>

@@ -67,7 +67,7 @@ Data quan trong -> luu DB, dung Bai 6.2 pattern
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ socket.io cho reliable delivery vì &quot;WebSocket bên dưới có delivery guarantee&quot;.</strong> WebSocket's TCP guarantees delivery WITHIN a connection. If the connection breaks, in-flight packets are LOST. WebSocket plus reconnect does NOT replay. This is the number-one misunderstanding among newer developers.</p>
+<p><strong>Trap — expecting reliable delivery from socket.io because &quot;the WebSocket underneath guarantees delivery&quot;.</strong> WebSocket's TCP guarantees delivery WITHIN a connection. If the connection breaks, in-flight packets are LOST. WebSocket plus reconnect does NOT replay. This is the number-one misunderstanding among newer developers.</p>
 </div>
 
 <div class="callout">
@@ -232,7 +232,7 @@ Kho nay: chi dung ack cho chat:send. Presence, typing khong.
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — quên gọi <code>ack</code> in the server handler.</strong> The client waits out the timeout (3s by default) and retries. You assume the client is buggy; in fact the server never acked. The rule: every <code>emitWithAck</code> on the client MUST have a matching <code>ack(...)</code> on the server, even when the payload is empty. A missing ack is the number-one bug with this pattern.</p>
+<p><strong>Trap — forgetting to call <code>ack</code> in the server handler.</strong> The client waits out the timeout (3s by default) and retries. You assume the client is buggy; in fact the server never acked. The rule: every <code>emitWithAck</code> on the client MUST have a matching <code>ack(...)</code> on the server, even when the payload is empty. A missing ack is the number-one bug with this pattern.</p>
 </div>
 
 <div class="callout">
@@ -417,7 +417,7 @@ Socket.io:  socket.emit('payment:create', { messageId: uuid(), amount: 100 })
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng messageId ngắn hoặc predictable.</strong> A timestamp or a sequential counter collides easily when clients run in parallel. UUID v4 (random) is the standard — 2^122 possibilities, effectively zero collisions.</p>
+<p><strong>Trap — using a short or predictable messageId.</strong> A timestamp or a sequential counter collides easily when clients run in parallel. UUID v4 (random) is the standard — 2^122 possibilities, effectively zero collisions.</p>
 </div>
 
 <div class="callout">
@@ -573,7 +573,7 @@ Live scores: overwrite theo lastest by timestamp, don gian.
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ &quot;WebSocket TCP nên order đúng&quot;.</strong> TCP ordering holds only between 2 endpoints sharing 1 connection. If the server has 4 workers emitting (via Redis pub/sub), or the client has 3 tabs (3 sockets), TCP ordering does not apply. You need a sequencing layer above it.</p>
+<p><strong>Trap — thinking &quot;WebSocket runs on TCP, so the order must be right&quot;.</strong> TCP ordering holds only between 2 endpoints sharing 1 connection. If the server has 4 workers emitting (via Redis pub/sub), or the client has 3 tabs (3 sockets), TCP ordering does not apply. You need a sequencing layer above it.</p>
 </div>
 
 <div class="callout">
@@ -715,7 +715,7 @@ Socket.io debugging:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng socket.io cho MỌI action vì &quot;realtime hơn&quot;.</strong> A user clicks &quot;Update profile&quot; — over a socket.io emit? Pointless. HTTP PUT has been the standard for 20 years, the tooling is complete and error handling is built in. Reach for socket.io only when you need a server push or when sub-100ms latency is critical.</p>
+<p><strong>Trap — using socket.io for EVERY action because it is &quot;more realtime&quot;.</strong> A user clicks &quot;Update profile&quot; — over a socket.io emit? Pointless. HTTP PUT has been the standard for 20 years, the tooling is complete and error handling is built in. Reach for socket.io only when you need a server push or when sub-100ms latency is critical.</p>
 </div>
 
 <div class="callout">

@@ -81,7 +81,7 @@ if: github.ref == "refs/heads/main"
 run: echo \${{ format('it''s fine') }}</code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — YAML quoting and expression quoting stacked on top of each other.</strong> A value like <code>\${{ ... }}</code> at the start of a YAML value must be quoted <em>as YAML</em>, because <code>{</code> starts a YAML flow mapping — so <code>key: \${{ x }}</code> parses, but <code>key: {{ x }}</code> does not, and <code>key: "\${{ x }}"</code> is the safe form when the value begins with a brace. Two quoting systems, applied by two parsers, on one line. When a workflow fails to parse and the error points at a line that looks obviously fine, this is usually why.</p>
+<p><strong>Trap — YAML quoting and expression quoting stacked on top of each other.</strong> A value like <code>\${{ ... }}</code> at the start of a YAML value must be quoted <em>as YAML</em>, because <code>{</code> starts a YAML flow mapping — so <code>key: \${{ x }}</code> parses, but <code>key: {{ x }}</code> does not, and <code>key: "\${{ x }}"</code> is the safe form when the value begins with a brace. Two quoting systems, applied by two parsers, on one line. When a workflow fails to parse and the error points at a line that looks obviously fine, this is usually why.</p>
 </div>
 
 <h3>What the substitution looks like in a real log</h3>
@@ -285,7 +285,7 @@ github.sha                     2</div>
 <p>Miss the <code>id:</code> and the step has no name in the context. Miss the <code>\$GITHUB_OUTPUT</code> write and the step exists but has no outputs. Both produce the same symptom — an empty string — and this repository uses exactly this pattern three times, all of them for a version tag.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>outcome</code> and <code>conclusion</code> are not the same value.</strong> <code>steps.&lt;id&gt;.outcome</code> is the result <em>before</em> <code>continue-on-error</code> is applied; <code>conclusion</code> is the result <em>after</em>. So for a step marked <code>continue-on-error: true</code> that failed, <code>outcome</code> is <code>failure</code> and <code>conclusion</code> is <code>success</code>. If you want a later step to react to the real failure of a tolerated step — which is the entire reason to tolerate it and then report — you must read <code>outcome</code>. Reading <code>conclusion</code> gives you a condition that is never true, silently.</p>
+<p><strong>Trap — <code>outcome</code> and <code>conclusion</code> are not the same value.</strong> <code>steps.&lt;id&gt;.outcome</code> is the result <em>before</em> <code>continue-on-error</code> is applied; <code>conclusion</code> is the result <em>after</em>. So for a step marked <code>continue-on-error: true</code> that failed, <code>outcome</code> is <code>failure</code> and <code>conclusion</code> is <code>success</code>. If you want a later step to react to the real failure of a tolerated step — which is the entire reason to tolerate it and then report — you must read <code>outcome</code>. Reading <code>conclusion</code> gives you a condition that is never true, silently.</p>
 </div>
 
 <h3>Where a context does not exist at all</h3>
@@ -476,7 +476,7 @@ off                             False                 bool
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the condition that fails open.</strong> Most configuration mistakes fail closed: a typo means something does not happen. This one fails <em>open</em> — the mistake means something happens that you intended to prevent. That asymmetry is why it deserves its own habit: any <code>if:</code> meant to disable something should be checked by looking at whether the step was skipped in a real run, not by reading the YAML. The run page shows skipped steps explicitly; the file does not.</p>
+<p><strong>Trap — the condition that fails open.</strong> Most configuration mistakes fail closed: a typo means something does not happen. This one fails <em>open</em> — the mistake means something happens that you intended to prevent. That asymmetry is why it deserves its own habit: any <code>if:</code> meant to disable something should be checked by looking at whether the step was skipped in a real run, not by reading the YAML. The run page shows skipped steps explicitly; the file does not.</p>
 </div>
 
 <p>Notice also the last two rows before the expression: <code>no</code> and <code>off</code> parse to boolean <code>False</code> — the same YAML 1.1 rule that turns the <code>on:</code> key into a boolean in lesson 1.1. A step written <code>if: off</code> is correctly disabled, but for a reason that has nothing to do with the expression language, and it would stop being disabled under a YAML 1.2 parser.</p>
@@ -491,7 +491,7 @@ tag: \${{ inputs.version || 'latest' }}
 moi_truong: \${{ github.ref == 'refs/heads/main' &amp;&amp; 'production' || 'staging' }}</code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — the ternary idiom breaks when the middle value is falsy.</strong> <code>cond &amp;&amp; A || B</code> reads like <code>cond ? A : B</code> and behaves like it <em>only while <code>A</code> is truthy</em>. Write <code>cond &amp;&amp; '' || 'x'</code> and you get <code>'x'</code> whatever <code>cond</code> is, because the empty string is falsy and falls through to the right-hand side. The same trap exists with <code>0</code> and with <code>false</code>. When the true-branch value can be empty, use an explicit <code>if:</code> on the step instead of a clever expression.</p>
+<p><strong>Trap — the ternary idiom breaks when the middle value is falsy.</strong> <code>cond &amp;&amp; A || B</code> reads like <code>cond ? A : B</code> and behaves like it <em>only while <code>A</code> is truthy</em>. Write <code>cond &amp;&amp; '' || 'x'</code> and you get <code>'x'</code> whatever <code>cond</code> is, because the empty string is falsy and falls through to the right-hand side. The same trap exists with <code>0</code> and with <code>false</code>. When the true-branch value can be empty, use an explicit <code>if:</code> on the step instead of a clever expression.</p>
 </div>
 
 <h3>Status functions, which only exist in <code>if:</code></h3>
@@ -689,7 +689,7 @@ hashFiles('frontend/package-lock.json', 'desktop/package-lock.json')
                                                         GIONG NHAU</div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>hashFiles</code> returns an empty string when nothing matches.</strong> No error, no warning. A cache key with a typo in the glob becomes <code>my-cache-</code> — a constant, shared by every run, that never invalidates. So the cache is restored from a stale entry forever and the workflow looks fast right up until it is wrong. If a cache key ends in a dash in your logs, that is what happened.</p>
+<p><strong>Trap — <code>hashFiles</code> returns an empty string when nothing matches.</strong> No error, no warning. A cache key with a typo in the glob becomes <code>my-cache-</code> — a constant, shared by every run, that never invalidates. So the cache is restored from a stale entry forever and the workflow looks fast right up until it is wrong. If a cache key ends in a dash in your logs, that is what happened.</p>
 </div>
 
 <h3><code>fromJSON()</code> — the two things it is actually for</h3>
@@ -913,7 +913,7 @@ ca ba deu o muc BUOC, khong cai nao o muc JOB</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>git diff</code> in that step needs history the default checkout does not fetch.</strong> <code>actions/checkout</code> defaults to <code>fetch-depth: 1</code>: one commit, no base branch, no merge base. The diff above will fail with <code>unknown revision</code>. Either add <code>fetch-depth: 0</code> — which fetches everything, and on a large repository that is a real cost — or use an action built for this, which fetches only what it needs. This is the single most common reason a hand-written changed-files step does not work first time.</p>
+<p><strong>Trap — <code>git diff</code> in that step needs history the default checkout does not fetch.</strong> <code>actions/checkout</code> defaults to <code>fetch-depth: 1</code>: one commit, no base branch, no merge base. The diff above will fail with <code>unknown revision</code>. Either add <code>fetch-depth: 0</code> — which fetches everything, and on a large repository that is a real cost — or use an action built for this, which fetches only what it needs. This is the single most common reason a hand-written changed-files step does not work first time.</p>
 </div>
 
 <h3>Where to put a condition</h3>

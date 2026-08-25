@@ -120,7 +120,7 @@ T3=\$(date +%s%N)</code></pre>
 === npm ci lan 3, cache SACH ===  1090 ms</div>
 
 <div class="pitfall">
-<p><strong>Bẫy — a toy project is not the measurement you need.</strong> 83 packages is nothing. The repository this course is written in has <strong>897</strong> resolved packages in the backend lockfile and <strong>1,159</strong> in the frontend one, and the frontend build is <code>next build</code>, not <code>tsc</code>. My 1,994 ms is a <em>floor</em>, not an estimate — a real rebuild of a real app is minutes. The ratio to remember is not "14×", it is "milliseconds against minutes, while the site is broken".</p>
+<p><strong>Trap — a toy project is not the measurement you need.</strong> 83 packages is nothing. The repository this course is written in has <strong>897</strong> resolved packages in the backend lockfile and <strong>1,159</strong> in the frontend one, and the frontend build is <code>next build</code>, not <code>tsc</code>. My 1,994 ms is a <em>floor</em>, not an estimate — a real rebuild of a real app is minutes. The ratio to remember is not "14×", it is "milliseconds against minutes, while the site is broken".</p>
 </div>
 
 <h3>What you are actually paying for: disk</h3>
@@ -387,7 +387,7 @@ v2 ghi : {"id":1002}</div>
 <p>It answers before touching anything. It does not open a database connection, it does not run a query, it does not read a config value. That is deliberate — a health check that talks to the database will report the app as unhealthy during a database blip and get the process killed by whatever supervises it, which turns a five-second database hiccup into a restart loop. So health checks are kept shallow on purpose, and a shallow health check cannot possibly detect a schema mismatch.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — "deep" health checks are not the fix.</strong> The obvious reaction is to make <code>/health</code> run <code>SELECT 1</code>. That catches "the database is unreachable" and still misses this entirely: <code>SELECT 1</code> succeeds perfectly against a schema your code cannot read. To catch <em>this</em> you would need the health check to exercise a real query on a real table — at which point it is no longer a health check, it is a smoke test, and it belongs in the deploy script, not on an endpoint a load balancer polls every two seconds.</p>
+<p><strong>Trap — "deep" health checks are not the fix.</strong> The obvious reaction is to make <code>/health</code> run <code>SELECT 1</code>. That catches "the database is unreachable" and still misses this entirely: <code>SELECT 1</code> succeeds perfectly against a schema your code cannot read. To catch <em>this</em> you would need the health check to exercise a real query on a real table — at which point it is no longer a health check, it is a smoke test, and it belongs in the deploy script, not on an endpoint a load balancer polls every two seconds.</p>
 </div>
 
 <h3>The fix, and its cost</h3>
@@ -643,7 +643,7 @@ Time: 239.525 ms
 <p>239 milliseconds, one megabyte reclaimed, and the phone number is gone from the page.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — "the bytes are still there" is not a recovery plan.</strong> Everything above is diagnostic, not a rescue. There is no supported way to read a dropped column's values back into a query, the layout is version-specific and undocumented as an interface, <code>TOAST</code>-ed values live in another table entirely, and any autovacuum-triggered rewrite erases them without warning. If you dropped a column you needed, the recovery is a restore from backup — which Chapter 10 measures with a stopwatch. What this measurement is genuinely good for: understanding that <code>DROP COLUMN</code> does <em>not</em> free disk, which surprises people whose disk is full.</p>
+<p><strong>Trap — "the bytes are still there" is not a recovery plan.</strong> Everything above is diagnostic, not a rescue. There is no supported way to read a dropped column's values back into a query, the layout is version-specific and undocumented as an interface, <code>TOAST</code>-ed values live in another table entirely, and any autovacuum-triggered rewrite erases them without warning. If you dropped a column you needed, the recovery is a restore from backup — which Chapter 10 measures with a stopwatch. What this measurement is genuinely good for: understanding that <code>DROP COLUMN</code> does <em>not</em> free disk, which surprises people whose disk is full.</p>
 </div>
 
 <div class="callout ok">
@@ -876,7 +876,7 @@ await c.query("commit");</code></pre>
 <p>Either both rows exist or neither does. There is no third state, and there is no network call inside the transaction to make it slow or flaky.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — the outbox worker will send something twice.</strong> Look at the worker loop: it sends, then marks the row sent. If it dies between those two steps, the next run sends again. Making it mark-then-send just trades duplicates for silent losses, which is worse. The real fix is on the receiving side: an idempotency key on the send, so the provider recognises the retry and delivers once. Every serious email and payment API supports this, and it is the single most important header in the request. In my rig the two statements are 4 ms apart, so I never observed a duplicate — that does not mean the window is not there, it means my measurement could not see it. Assume it is there.</p>
+<p><strong>Trap — the outbox worker will send something twice.</strong> Look at the worker loop: it sends, then marks the row sent. If it dies between those two steps, the next run sends again. Making it mark-then-send just trades duplicates for silent losses, which is worse. The real fix is on the receiving side: an idempotency key on the send, so the provider recognises the retry and delivers once. Every serious email and payment API supports this, and it is the single most important header in the request. In my rig the two statements are 4 ms apart, so I never observed a duplicate — that does not mean the window is not there, it means my measurement could not see it. Assume it is there.</p>
 </div>
 
 <h3>The decision this forces you to make early</h3>
@@ -1055,7 +1055,7 @@ x-ban: v3 X-Cache: HIT
 <p>Seven milliseconds. It is crude — it throws away every cached entry, not just the stale ones, so the next few requests all go to the origin — but on a rollback that is exactly what you want, and 7 ms of bluntness beats five minutes of serving the broken version.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — the cache in front of you may not be yours.</strong> My measurement is one nginx on the same machine, so <code>rm -rf</code> reaches it. In production the chain is longer: nginx, then possibly a CDN, then the browser. A CDN needs its own purge API call. The browser is worse — if you served an HTML page with <code>Cache-Control: max-age=3600</code>, there is no command on earth that reaches it, and the only remedy is waiting. This is the argument for <code>Cache-Control: no-store</code> on HTML documents and long caching only on content-hashed assets, which the Nginx course measures in detail. A rollback plan that cannot reach a cache is not a plan.</p>
+<p><strong>Trap — the cache in front of you may not be yours.</strong> My measurement is one nginx on the same machine, so <code>rm -rf</code> reaches it. In production the chain is longer: nginx, then possibly a CDN, then the browser. A CDN needs its own purge API call. The browser is worse — if you served an HTML page with <code>Cache-Control: max-age=3600</code>, there is no command on earth that reaches it, and the only remedy is waiting. This is the argument for <code>Cache-Control: no-store</code> on HTML documents and long caching only on content-hashed assets, which the Nginx course measures in detail. A rollback plan that cannot reach a cache is not a plan.</p>
 </div>
 
 <h3>The script that catches this</h3>

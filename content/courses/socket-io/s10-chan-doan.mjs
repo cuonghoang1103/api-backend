@@ -52,7 +52,7 @@ export default {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng cây tuần tự (Q1 rồi Q2 rồi ...).</strong> If you <em>have already seen the</em> event on the wire (Q2 passes), you do not need Q1. The tree exists so you never SKIP a question, not so you run all four every time.</p>
+<p><strong>Trap — walking the tree strictly in sequence (Q1, then Q2, then …).</strong> If you <em>have already seen the</em> event on the wire (Q2 passes), you do not need Q1. The tree exists so you never SKIP a question, not so you run all four every time.</p>
 </div>
 
 <div class="callout">
@@ -193,7 +193,7 @@ HTTP/1.1 200 OK    &lt;- OK, endpoint mounted
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ &quot;client vẫn thấy dữ liệu&quot; = &quot;connect OK&quot;.</strong> The client may be getting its data from an HTTP GET (a fetch) rather than the WebSocket. Check the socket.io connection SPECIFICALLY — do not confuse it with REST API responses.</p>
+<p><strong>Trap — reading &quot;the client still sees data&quot; as &quot;the connection is fine&quot;.</strong> The client may be getting its data from an HTTP GET (a fetch) rather than the WebSocket. Check the socket.io connection SPECIFICALLY — do not confuse it with REST API responses.</p>
 </div>
 
 <div class="callout">
@@ -359,7 +359,7 @@ $ redis-cli PSUBSCRIBE 'socket.io#*'
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — bỏ ping/pong ở DevTools làm noise.</strong> Every 25s there is a PING (frame <code>2</code>) and a PONG (<code>3</code>). Filter them out with right-click → Hide frames matching pattern. Focus on the EVENT frames (<code>42[...]</code>).</p>
+<p><strong>Trap — dismissing the ping/pong frames in DevTools as noise.</strong> Every 25s there is a PING (frame <code>2</code>) and a PONG (<code>3</code>). Filter them out with right-click → Hide frames matching pattern. Focus on the EVENT frames (<code>42[...]</code>).</p>
 </div>
 
 <div class="callout">
@@ -541,7 +541,7 @@ Room member list stale:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — thêm log ở handler, không log ở effect.</strong> The handler fires, the log says &quot;done&quot; — so you consider it done. But the emit that followed failed (Q2), or state never updated (frontend). Log EVERY LAYER of the effect: the DB write, the emit, the frontend state change. Not just handler entry and exit.</p>
+<p><strong>Trap — adding logs in the handler but none around the effect.</strong> The handler fires, the log says &quot;done&quot; — so you consider it done. But the emit that followed failed (Q2), or state never updated (frontend). Log EVERY LAYER of the effect: the DB write, the emit, the frontend state change. Not just handler entry and exit.</p>
 </div>
 
 <div class="callout">
@@ -754,7 +754,7 @@ $ for i in 1 2 3 4; do curl -s http://backend-$i/health/socket; done
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — deploy cluster mà chưa test cluster ở dev.</strong> Dev is single-instance, so cluster bugs are invisible there. A local Docker Compose can run 2 backend services behind an nginx load balancer to reproduce cluster bugs in dev.</p>
+<p><strong>Trap — deploying a cluster without ever testing one in dev.</strong> Dev is single-instance, so cluster bugs are invisible there. A local Docker Compose can run 2 backend services behind an nginx load balancer to reproduce cluster bugs in dev.</p>
 </div>
 
 <div class="callout">

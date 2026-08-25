@@ -83,7 +83,7 @@ vps-cleanup-weekly.yml    schedule, workflow_dispatch
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — adding <code>concurrency:</code> and thinking the problem is solved.</strong> 7.2 measured what <code>concurrency</code> does — it queues, it does not enforce ordering across separate workflows unless they share a group, and it does not make anything idempotent. Both July incidents involved two <em>different</em> workflows, so a per-workflow concurrency block would not have prevented them. Sharing a group across workflows is possible; making sure two people never trigger overlapping runs is not.</p>
+<p><strong>Trap — adding <code>concurrency:</code> and thinking the problem is solved.</strong> 7.2 measured what <code>concurrency</code> does — it queues, it does not enforce ordering across separate workflows unless they share a group, and it does not make anything idempotent. Both July incidents involved two <em>different</em> workflows, so a per-workflow concurrency block would not have prevented them. Sharing a group across workflows is possible; making sure two people never trigger overlapping runs is not.</p>
 </div>
 
 <div class="callout">
@@ -255,7 +255,7 @@ curl -f https://api/health || rollback</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the deploy that only tests itself.</strong> A deploy script that hits <code>/health</code> and considers a 200 sufficient proves that <em>the router mounted</em>. It does not prove that a route this deploy actually changed still works. CLAUDE.md documents an incident from 2026-07-02 where the entire <code>/api/v1/gifs</code> route was missing from a stale image and <code>/health</code> was fine. This repository&#39;s deploy script now checks core routes (401 or 200 = mounted; 404 = stale build) — a specific, cheap test that catches a specific, expensive failure.</p>
+<p><strong>Trap — the deploy that only tests itself.</strong> A deploy script that hits <code>/health</code> and considers a 200 sufficient proves that <em>the router mounted</em>. It does not prove that a route this deploy actually changed still works. CLAUDE.md documents an incident from 2026-07-02 where the entire <code>/api/v1/gifs</code> route was missing from a stale image and <code>/health</code> was fine. This repository&#39;s deploy script now checks core routes (401 or 200 = mounted; 404 = stale build) — a specific, cheap test that catches a specific, expensive failure.</p>
 </div>
 
 <h3>The general question, stated once</h3>
@@ -441,7 +441,7 @@ curl -f https://api/health || rollback</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — a rollback that requires the deploying human to be awake.</strong> If the recovery procedure is "SSH to the VPS and run these commands", then the on-call person needs SSH access, needs the runbook, and needs to be conscious. All three fail at the times rollback is most needed. The alternative is the deploy script encoding the rollback as its own else branch — the first two failures still stop you from responding, but the third one is automated.</p>
+<p><strong>Trap — a rollback that requires the deploying human to be awake.</strong> If the recovery procedure is "SSH to the VPS and run these commands", then the on-call person needs SSH access, needs the runbook, and needs to be conscious. All three fail at the times rollback is most needed. The alternative is the deploy script encoding the rollback as its own else branch — the first two failures still stop you from responding, but the third one is automated.</p>
 </div>
 
 <div class="callout ok">
@@ -609,7 +609,7 @@ vps-cleanup-weekly.yml       KHONG (chi don dep)
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the reviewer who always approves.</strong> A required reviewer who says yes to every deploy provides paperwork, not a gate. The value of the human step is that the human <em>reads</em>: the commit range, the changed files, the migration. If the workflow does not surface those to the approver, the reviewer approves what they cannot see, which is worse than no approval. Include the deploy summary in the workflow — commit range, changed files, migration count — as a comment or a job summary before the environment gate.</p>
+<p><strong>Trap — the reviewer who always approves.</strong> A required reviewer who says yes to every deploy provides paperwork, not a gate. The value of the human step is that the human <em>reads</em>: the commit range, the changed files, the migration. If the workflow does not surface those to the approver, the reviewer approves what they cannot see, which is worse than no approval. Include the deploy summary in the workflow — commit range, changed files, migration count — as a comment or a job summary before the environment gate.</p>
 </div>
 
 <div class="callout ok">
@@ -785,7 +785,7 @@ va do la CHUA phan biet xanh voi do.</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the notification that has no context.</strong> "CI failed on main" with a run URL and nothing else forces the recipient to open a browser, wait for it to load, and read the log — the exact thing the notification was meant to alert them to. Include the failing step&#39;s name, the exit code from 8.1, and the commit URL. Then the message on somebody&#39;s phone is enough to know whether it needs the on-call to log in or can wait until morning.</p>
+<p><strong>Trap — the notification that has no context.</strong> "CI failed on main" with a run URL and nothing else forces the recipient to open a browser, wait for it to load, and read the log — the exact thing the notification was meant to alert them to. Include the failing step&#39;s name, the exit code from 8.1, and the commit URL. Then the message on somebody&#39;s phone is enough to know whether it needs the on-call to log in or can wait until morning.</p>
 </div>
 
 <h3>What this repository does today</h3>

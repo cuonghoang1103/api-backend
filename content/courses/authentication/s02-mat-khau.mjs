@@ -73,7 +73,7 @@ const bam = createHash('sha256').update(Buffer.concat([muoi, Buffer.from(matKhau
   <div class="kv"><span class="k">The salt is not a secret</span><span class="v">It is stored next to the hash, and that is correct. It has one job — uniqueness — and hiding it would add nothing. The secret value stored separately is a <em>pepper</em>, which is a different tool covered in Lesson 2.3.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — reusing one salt for every user is the same as having no salt.</strong> A single application-wide salt still lets the attacker crack all rows in one pass, because every guess is hashed once and compared against the whole table. The salt must be <em>per record</em> and generated with a CSPRNG (Lesson 1.2). Modern password hashes generate and embed it for you, which is one more reason not to build this by hand.</p>
+<p><strong>Trap — reusing one salt for every user is the same as having no salt.</strong> A single application-wide salt still lets the attacker crack all rows in one pass, because every guess is hashed once and compared against the whole table. The salt must be <em>per record</em> and generated with a CSPRNG (Lesson 1.2). Modern password hashes generate and embed it for you, which is one more reason not to build this by hand.</p>
 </div>
 
 <h3>Slow and memory-hard: the numbers side by side</h3>
@@ -299,7 +299,7 @@ backend     6.71GiB / 2GiB     ← OOM. Container bi giet.
 # Mot cu nhoi tin vat khong can be duoc mat khau nao.
 # No chi can gui du lan dang nhap SAI cung luc.</div>
 <div class="pitfall">
-<p><strong>Bẫy — a slow password hash on an unauthenticated endpoint is a denial-of-service amplifier.</strong> Each failed login costs the attacker one HTTP request and costs you 64 MiB and 187 ms of CPU. That is an enormous asymmetry in <em>their</em> favour, and it is the reverse of what you wanted. Three defences, all required: rate-limit login attempts per IP and per account (Chapter 11), cap concurrent hashing with a small queue, and size <code>memoryCost × maxConcurrent</code> to fit the container's memory limit with room to spare.</p>
+<p><strong>Trap — a slow password hash on an unauthenticated endpoint is a denial-of-service amplifier.</strong> Each failed login costs the attacker one HTTP request and costs you 64 MiB and 187 ms of CPU. That is an enormous asymmetry in <em>their</em> favour, and it is the reverse of what you wanted. Three defences, all required: rate-limit login attempts per IP and per account (Chapter 11), cap concurrent hashing with a small queue, and size <code>memoryCost × maxConcurrent</code> to fit the container's memory limit with room to spare.</p>
 </div>
 <pre><code><span class="tok-comment">// Cap the concurrency explicitly rather than discovering the limit at 3am</span>
 import { Sema } from 'async-sema';
@@ -621,7 +621,7 @@ await verify(nd.bam, chuanBi(matKhau));</code></pre>
   <div class="lz-layer"><span class="lz-lname">Is it worth it?</span><span class="lz-lnote">If you have a secret manager and a rotation story, yes — it is cheap. If the pepper would live in the same <code>.env</code> that also holds <code>DATABASE_URL</code>, on the same box, then any leak of one leaks the other and you have added complexity for very little. Be honest about which situation you are in.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — a password change must invalidate other sessions, and almost no first implementation does.</strong> If someone changed their password because they believe an attacker knows the old one, and the attacker's session keeps working, the change accomplished nothing. Require the current password, then delete every session for that user except the current one. Chapter 5 builds the mechanism; the requirement belongs here, next to the password.</p>
+<p><strong>Trap — a password change must invalidate other sessions, and almost no first implementation does.</strong> If someone changed their password because they believe an attacker knows the old one, and the attacker's session keeps working, the change accomplished nothing. Require the current password, then delete every session for that user except the current one. Chapter 5 builds the mechanism; the requirement belongs here, next to the password.</p>
 </div>
 <div class="note-ct">
 <p><strong>The complete password checklist, for the code review.</strong> One error message and one duration for both failure branches · Argon2id (or a measured bcrypt) with parameters chosen on production hardware and dated in a comment · rehash on successful login when the parameters have moved · NFKC normalisation applied identically on both paths · no trimming, no truncation, no character filtering, no lowercasing · rate limiting in front of the endpoint (Chapter 11) · the password never reaching a log, an error object or an analytics event · and a password change that revokes every other session.</p>
@@ -851,7 +851,7 @@ con meo mun cua toi ten la Bo    diem 4 · centuries
   <div class="lz-layer"><span class="lz-lname">Vietnamese needs its own dictionary</span><span class="lz-lnote">zxcvbn's built-in lists are English, so <code>matkhaucuatoi</code> looks like random letters and scores far too high. Add a Vietnamese frequency list to the dictionary, or lean on the breach blocklist, which is language-agnostic because it is based on what people actually used.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — a maximum length below about 64 characters is a bug, and one below 20 is a signal.</strong> A short maximum usually means the password is being stored in a fixed-size column, or truncated by bcrypt's 72-byte limit (Lesson 2.2), or — historically — stored in plaintext. Users notice: a 16-character cap is widely read as "this site does not hash properly", and often they are right.</p>
+<p><strong>Trap — a maximum length below about 64 characters is a bug, and one below 20 is a signal.</strong> A short maximum usually means the password is being stored in a fixed-size column, or truncated by bcrypt's 72-byte limit (Lesson 2.2), or — historically — stored in plaintext. Users notice: a 16-character cap is widely read as "this site does not hash properly", and often they are right.</p>
 </div>
 <div class="note-ct">
 <p><strong>The whole policy, as code you can read in ten seconds.</strong> Minimum 12 characters · maximum 256 · reject anything the breach list knows · reject a zxcvbn score below 3, with the email and username as context · accept every printable character · never expire on a schedule · force a change only on evidence of compromise, and when you do, revoke every session. Everything else that used to be in a password policy has been removed on purpose, and removing it is the improvement.</p>
@@ -1071,7 +1071,7 @@ export async function kiemMatKhau(bamCu: string, matKhau: string) {
 <p><strong>Why this is the right shape.</strong> The wrapping step needs no plaintext, so it runs immediately over the whole table — the database stops being a liability in hours rather than months. The unwrapping happens lazily, so no user is inconvenienced. And the two mechanisms are independent: if the background job dies halfway, both formats still verify, and you restart it. Every property you want from a migration, and it is about forty lines.</p>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — match the old scheme byte for byte, including case and encoding.</strong> If the legacy column stored uppercase hex and you wrap the lowercase form, every wrapped row becomes permanently unverifiable and those users are locked out with no way back. Before running the job on production: take a copy, wrap it, and verify a real known password against a wrapped row. If the legacy scheme had its own salt or a fixed application secret, the wrap must include exactly that, in exactly that order.</p>
+<p><strong>Trap — match the old scheme byte for byte, including case and encoding.</strong> If the legacy column stored uppercase hex and you wrap the lowercase form, every wrapped row becomes permanently unverifiable and those users are locked out with no way back. Before running the job on production: take a copy, wrap it, and verify a real known password against a wrapped row. If the legacy scheme had its own salt or a fixed application secret, the wrap must include exactly that, in exactly that order.</p>
 </div>
 
 <h3>Importing from another provider</h3>

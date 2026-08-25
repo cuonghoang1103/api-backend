@@ -141,11 +141,11 @@ sharp.concurrency(2)   // cap libvips to 2 threads per operation
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — reusing a pipeline after <code>toBuffer()</code>.</strong> The instance is not reset. Calling <code>.jpeg().toBuffer()</code> on a pipeline that already ran <code>.webp().toBuffer()</code> gives you a pipeline with two output formats queued; which one wins is an implementation detail you should not depend on. Always <code>clone()</code> before the format-specific tail.</p>
+<p><strong>Trap — reusing a pipeline after <code>toBuffer()</code>.</strong> The instance is not reset. Calling <code>.jpeg().toBuffer()</code> on a pipeline that already ran <code>.webp().toBuffer()</code> gives you a pipeline with two output formats queued; which one wins is an implementation detail you should not depend on. Always <code>clone()</code> before the format-specific tail.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — assuming the chain is where the CPU goes.</strong> Profilers point at <code>toBuffer()</code> because that is where all the work happens. If you are timing a pipeline, time the await, and remember the number you get includes decode + transform + encode as one inseparable block. To separate them, encode to <code>.raw()</code> once to measure decode alone.</p>
+<p><strong>Trap — assuming the chain is where the CPU goes.</strong> Profilers point at <code>toBuffer()</code> because that is where all the work happens. If you are timing a pipeline, time the await, and remember the number you get includes decode + transform + encode as one inseparable block. To separate them, encode to <code>.raw()</code> once to measure decode alone.</p>
 </div>
 
 <div class="callout">
@@ -496,11 +496,11 @@ exif            header only     Timestamps, GPS, camera model
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — trusting <code>metadata().width</code> as the display width.</strong> For a photo with EXIF orientation 6 (rotate 90° CW), <code>width: 4032, height: 3024</code> describes the stored pixels, but the image displays as 3024×4032. If you store &quot;image dimensions&quot; in your DB from this field without accounting for orientation, half your portrait photos get landscape aspect ratios in the UI. Lesson 1.4 covers the fix.</p>
+<p><strong>Trap — trusting <code>metadata().width</code> as the display width.</strong> For a photo with EXIF orientation 6 (rotate 90° CW), <code>width: 4032, height: 3024</code> describes the stored pixels, but the image displays as 3024×4032. If you store &quot;image dimensions&quot; in your DB from this field without accounting for orientation, half your portrait photos get landscape aspect ratios in the UI. Lesson 1.4 covers the fix.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — checking file size instead of pixel count.</strong> This is the exact hole the bomb exploits. A 758 KB file can be 256 megapixels. Every byte-based limit in your stack — multer's <code>limits.fileSize</code>, nginx's <code>client_max_body_size</code>, your MIME allowlist — passes it cleanly. Only <code>width × height</code> sees it.</p>
+<p><strong>Trap — checking file size instead of pixel count.</strong> This is the exact hole the bomb exploits. A 758 KB file can be 256 megapixels. Every byte-based limit in your stack — multer's <code>limits.fileSize</code>, nginx's <code>client_max_body_size</code>, your MIME allowlist — passes it cleanly. Only <code>width × height</code> sees it.</p>
 </div>
 
 <div class="callout">
@@ -894,11 +894,11 @@ Input: 600×450 web-sourced JPEG (81 KB)
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — passing both width and height without thinking about fit.</strong> <code>.resize(800, 800)</code> defaults to <code>fit: 'cover'</code>, which <em>crops</em>. A user uploads a full-body portrait and gets back a headshot with the legs cut off, and nobody notices until a customer complains. If you want &quot;fit inside a box&quot;, say <code>fit: 'inside'</code> explicitly.</p>
+<p><strong>Trap — passing both width and height without thinking about fit.</strong> <code>.resize(800, 800)</code> defaults to <code>fit: 'cover'</code>, which <em>crops</em>. A user uploads a full-body portrait and gets back a headshot with the legs cut off, and nobody notices until a customer complains. If you want &quot;fit inside a box&quot;, say <code>fit: 'inside'</code> explicitly.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — generating variants larger than the source.</strong> Filtering <code>SIZES</code> against <code>metadata.width</code> before the loop is what stops you paying storage and Class A cost for a 1600px variant that is really a blurry 600px image. <code>withoutEnlargement</code> prevents the blur but still produces the file — the filter prevents the file.</p>
+<p><strong>Trap — generating variants larger than the source.</strong> Filtering <code>SIZES</code> against <code>metadata.width</code> before the loop is what stops you paying storage and Class A cost for a 1600px variant that is really a blurry 600px image. <code>withoutEnlargement</code> prevents the blur but still produces the file — the filter prevents the file.</p>
 </div>
 
 <div class="callout">
@@ -1249,11 +1249,11 @@ Assert on OUTPUT dimensions, not on the absence of an error:
 <p>Capture the fixtures with an actual phone, holding it in each orientation. Generating them with a tool that writes EXIF tends to produce files whose tags do not match what real cameras write, and the test then passes on files that do not resemble your traffic.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — using <code>.rotate(90)</code> to &quot;fix&quot; sideways photos.</strong> That rotates <em>every</em> image 90°, so the 55% that were already correct now land sideways. The fix for &quot;some photos are rotated&quot; is never a fixed angle; it is <code>.rotate()</code> with no argument, which reads each file's own tag.</p>
+<p><strong>Trap — using <code>.rotate(90)</code> to &quot;fix&quot; sideways photos.</strong> That rotates <em>every</em> image 90°, so the 55% that were already correct now land sideways. The fix for &quot;some photos are rotated&quot; is never a fixed angle; it is <code>.rotate()</code> with no argument, which reads each file's own tag.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — keeping EXIF instead of applying it.</strong> <code>.withMetadata()</code> preserves the EXIF block including orientation, which sounds like it solves the problem. It does not reliably: WebP and AVIF have inconsistent orientation support across browsers, and any downstream tool that re-encodes will drop it again. Applying the rotation to the pixels is permanent and works everywhere. Keep EXIF only if you specifically need the GPS/timestamp/camera fields — and note that shipping GPS coordinates in user uploads is a privacy leak, which is why Sharp strips metadata by default.</p>
+<p><strong>Trap — keeping EXIF instead of applying it.</strong> <code>.withMetadata()</code> preserves the EXIF block including orientation, which sounds like it solves the problem. It does not reliably: WebP and AVIF have inconsistent orientation support across browsers, and any downstream tool that re-encodes will drop it again. Applying the rotation to the pixels is permanent and works everywhere. Keep EXIF only if you specifically need the GPS/timestamp/camera fields — and note that shipping GPS coordinates in user uploads is a privacy leak, which is why Sharp strips metadata by default.</p>
 </div>
 
 <div class="callout">

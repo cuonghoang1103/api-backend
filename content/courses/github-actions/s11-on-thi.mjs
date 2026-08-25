@@ -94,7 +94,7 @@ export default {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating the course as complete.</strong> Every repository has its own incident log, and every incident log adds a class this catalogue does not cover. The correct way to use this chapter is as a starter — the second time you diagnose a novel failure, add it to your own <code>CLAUDE.md</code>-shaped notes, with a date and a measurement.</p>
+<p><strong>Trap — treating the course as complete.</strong> Every repository has its own incident log, and every incident log adds a class this catalogue does not cover. The correct way to use this chapter is as a starter — the second time you diagnose a novel failure, add it to your own <code>CLAUDE.md</code>-shaped notes, with a date and a measurement.</p>
 </div>
 
 <h3>Sources for the next step</h3>

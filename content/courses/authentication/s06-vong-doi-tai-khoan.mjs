@@ -67,7 +67,7 @@ function dungLam(e: string) {
 <span class="tok-comment">// "cuong.thai+mua@fastmail.com" → "cuongthai@fastmail.com"</span>
 <span class="tok-comment">// …là một địa chỉ HOÀN TOÀN KHÁC ở fastmail, và có thể là người khác.</span></code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — dot and plus stripping is a Gmail rule, not an email rule.</strong> Gmail ignores dots and treats <code>+tag</code> as an alias. Fastmail, Zoho, most corporate Exchange servers and every self-hosted domain do not: <code>a.b@</code> and <code>ab@</code> are two different mailboxes, often two different people. Strip them globally and you will eventually merge two strangers' accounts — a data breach you caused yourself, and one that is very hard to unwind. If you must block disposable aliases, do it per known provider, and only for abuse limits, never for identity.</p>
+<p><strong>Trap — dot and plus stripping is a Gmail rule, not an email rule.</strong> Gmail ignores dots and treats <code>+tag</code> as an alias. Fastmail, Zoho, most corporate Exchange servers and every self-hosted domain do not: <code>a.b@</code> and <code>ab@</code> are two different mailboxes, often two different people. Strip them globally and you will eventually merge two strangers' accounts — a data breach you caused yourself, and one that is very hard to unwind. If you must block disposable aliases, do it per known provider, and only for abuse limits, never for identity.</p>
 </div>
 <div class="callout warn">
 <p><strong>Confusable characters are a real attack, and normalisation does not touch them.</strong> The Cyrillic <code>а</code> (U+0430) renders identically to Latin <code>a</code> in nearly every font, and NFKC leaves both alone because they are genuinely different letters. A support agent reading <code>аdmin@cuongthai.com</code> in a ticket cannot see the difference. Two defences that are cheap: for domains you control, reject any local part outside a conservative character set; for display anywhere an operator makes a decision, mark addresses containing mixed scripts. Full confusable detection is a library, not a regex.</p>
@@ -307,7 +307,7 @@ do dai URL: 76 ky tu</div>
 # Nguoi dung bam luc 08:31 va thay "duong dan da het han".
 # Ho khong lam gi sai ca. Cong bao mat cua cong ty ho bam truoc, luc 08:14.</div>
 <div class="pitfall">
-<p><strong>Bẫy — a GET that consumes the token will be consumed by a machine.</strong> Outlook Safe Links, Proofpoint, Mimecast, Slack unfurling, Skype previews and half a dozen antivirus suites fetch every URL in an incoming mail to check it. They arrive seconds after delivery, they follow redirects, and they do not run your JavaScript. Any side effect you attach to that <code>GET</code> has already happened by the time the human opens the message.</p>
+<p><strong>Trap — a GET that consumes the token will be consumed by a machine.</strong> Outlook Safe Links, Proofpoint, Mimecast, Slack unfurling, Skype previews and half a dozen antivirus suites fetch every URL in an incoming mail to check it. They arrive seconds after delivery, they follow redirects, and they do not run your JavaScript. Any side effect you attach to that <code>GET</code> has already happened by the time the human opens the message.</p>
 </div>
 <pre><code><span class="tok-comment">// Vá: GET chỉ HIỂN THỊ. Việc xác minh nằm sau một cú POST.</span>
 app.get('/xac-minh', async (req, res) =&gt; {
@@ -526,7 +526,7 @@ Host: cuongthai.com      X-Forwarded-Host: ke-tan-cong.com  -> https://ke-tan-co
 # cua BAN gui thu that toi hop thu that cua nan nhan — voi mot duong dan
 # tro ve may chu cua ho. Nan nhan bam, va token bay thang sang do.</div>
 <div class="pitfall">
-<p><strong>Bẫy — this attack needs no XSS, no interception and no access to the victim.</strong> The attacker submits "forgot password" for someone else's address with a poisoned <code>Host</code> or <code>X-Forwarded-Host</code>. Your server sends a genuine mail, from your genuine domain, passing SPF and DKIM, landing in the real inbox — carrying a link to the attacker's host. The victim clicks a link in a legitimate mail they were half-expecting, and the token is delivered to the attacker's access log. Even without a click, some setups leak it: any image or asset your reset page loads from that host takes the token along in the <code>Referer</code>.</p>
+<p><strong>Trap — this attack needs no XSS, no interception and no access to the victim.</strong> The attacker submits "forgot password" for someone else's address with a poisoned <code>Host</code> or <code>X-Forwarded-Host</code>. Your server sends a genuine mail, from your genuine domain, passing SPF and DKIM, landing in the real inbox — carrying a link to the attacker's host. The victim clicks a link in a legitimate mail they were half-expecting, and the token is delivered to the attacker's access log. Even without a click, some setups leak it: any image or asset your reset page loads from that host takes the token along in the <code>Referer</code>.</p>
 </div>
 <pre><code><span class="tok-comment">// ĐÚNG: URL công khai là HẰNG SỐ CẤU HÌNH, không phải đầu vào.</span>
 const URL_CONG_KHAI = process.env.URL_CONG_KHAI!;              <span class="tok-comment">// https://cuongthai.com</span>
@@ -835,7 +835,7 @@ DA VA     CO  tai khoan      :  105.867 ms
 # Do that, 15 luot moi ca, lay trung vi. Cai thu BA la thoi gian, va
 # no lo hoan hao: khong co tai khoan thi ham bam KHONG chay.</div>
 <div class="pitfall">
-<p><strong>Bẫy — the timing leak is created by the very thing that makes your passwords safe.</strong> Argon2id is deliberately expensive: a hundred milliseconds and up. Skip it because there is no user row and you answer in microseconds. That gap is not a subtle statistical signal needing thousands of samples — it is a hundred-thousand-fold difference, visible in a single request, measurable over the internet through jitter, and completely untouched by making both error messages identical. A team that unified the wording and shipped it has fixed the symptom that appears in a screenshot and left the actual oracle running.</p>
+<p><strong>Trap — the timing leak is created by the very thing that makes your passwords safe.</strong> Argon2id is deliberately expensive: a hundred milliseconds and up. Skip it because there is no user row and you answer in microseconds. That gap is not a subtle statistical signal needing thousands of samples — it is a hundred-thousand-fold difference, visible in a single request, measurable over the internet through jitter, and completely untouched by making both error messages identical. A team that unified the wording and shipped it has fixed the symptom that appears in a screenshot and left the actual oracle running.</p>
 </div>
 <pre><code><span class="tok-comment">// 3. Vá thời gian: LUÔN LUÔN băm, kể cả khi không có tài khoản.</span>
 const BAM_GIA = process.env.BAM_GIA!;   <span class="tok-comment">// một hash Argon2id thật, sinh một lần lúc khởi động</span>
@@ -1032,7 +1032,7 @@ POST  /dat-lai    { t: '…', matKhauMoi: '…' }          → mọi phiên bị
   @@map("email_cho_doi")
 }</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — the pending address must be checked against the same uniqueness rule, and checked twice.</strong> Normalise it and reject it if any account already uses it — but the real trap is the gap between requesting the change and redeeming it. Two accounts can each hold a pending change to the same address, or somebody else can register it in the meantime. The check at request time is a courtesy that gives a good error message; the check that matters happens inside the transaction at redemption, where a <code>P2002</code> from the unique index is the only thing that cannot be raced.</p>
+<p><strong>Trap — the pending address must be checked against the same uniqueness rule, and checked twice.</strong> Normalise it and reject it if any account already uses it — but the real trap is the gap between requesting the change and redeeming it. Two accounts can each hold a pending change to the same address, or somebody else can register it in the meantime. The check at request time is a courtesy that gives a good error message; the check that matters happens inside the transaction at redemption, where a <code>P2002</code> from the unique index is the only thing that cannot be raced.</p>
 </div>
 
 <h3>Deleting an account: the grace period is the security control</h3>

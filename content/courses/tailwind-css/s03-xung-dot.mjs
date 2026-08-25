@@ -101,7 +101,7 @@ $ diff a.css b.css
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — "fixing" it by reordering the classes.</strong> When someone hits this, the first attempt is almost always to move the class to the end of the string. It appears to work sometimes, which is the worst possible outcome — the apparent success is coincidence (the utility that happened to be later in the generated file was also the one moved), and the false lesson gets carried forward. Reordering is never the fix; lesson 3.4 has the real one.</p>
+<p><strong>Trap — "fixing" it by reordering the classes.</strong> When someone hits this, the first attempt is almost always to move the class to the end of the string. It appears to work sometimes, which is the worst possible outcome — the apparent success is coincidence (the utility that happened to be later in the generated file was also the one moved), and the false lesson gets carried forward. Reordering is never the fix; lesson 3.4 has the real one.</p>
 </div>
 
 <div class="callout">
@@ -294,7 +294,7 @@ $ grep -rhoE 'className="[^"]*\\bmt-[0-9]+[^"]*\\bmt-[0-9]+[^"]*"' src --include
 <p>The proper tool is <code>eslint-plugin-tailwindcss</code>, whose <code>no-contradicting-classname</code> rule knows the full group structure and flags exactly these. It catches the static cases at lint time. It cannot catch the dynamic ones — a conflict assembled from a prop at runtime is invisible to a linter, which is why Chapter 4's runtime solution is still necessary.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating <code>p-4 px-8</code> and <code>mt-2 mt-10</code> as the same thing.</strong> They look identical in structure and are completely different in kind. The first is a designed, stable override. The second is undefined behaviour that happens to be deterministic. Reviewers who ban both lose a useful pattern; reviewers who allow both ship the bug. The question to ask is always "same property at the same scope?" — if yes, it is a mistake.</p>
+<p><strong>Trap — treating <code>p-4 px-8</code> and <code>mt-2 mt-10</code> as the same thing.</strong> They look identical in structure and are completely different in kind. The first is a designed, stable override. The second is undefined behaviour that happens to be deterministic. Reviewers who ban both lose a useful pattern; reviewers who allow both ship the bug. The question to ask is always "same property at the same scope?" — if yes, it is a mistake.</p>
 </div>
 
 <div class="callout">
@@ -490,7 +490,7 @@ $ grep -rhoE 'className=\\{&#96;[^&#96;]*&#96;\\}' src --include="*.tsx" | grep 
 <p>Start it at <code>warn</code> with the existing 631 as accepted debt, and set it to <code>error</code> for new code. A rule that fails the build on day one against 631 existing violations gets disabled on day two.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — assuming <code>clsx</code> alone is enough.</strong> <code>clsx</code> and <code>classnames</code> handle conditionals elegantly and do <em>not</em> resolve Tailwind conflicts at all — they concatenate. <code>clsx('px-4', 'px-8')</code> returns the string <code>"px-4 px-8"</code>, which has exactly the same problem as the template literal. This repo's <code>cn()</code> wraps <code>clsx</code> in <code>twMerge</code> precisely because the two do different jobs. A codebase using bare <code>clsx</code> for class composition is as exposed as one using template literals.</p>
+<p><strong>Trap — assuming <code>clsx</code> alone is enough.</strong> <code>clsx</code> and <code>classnames</code> handle conditionals elegantly and do <em>not</em> resolve Tailwind conflicts at all — they concatenate. <code>clsx('px-4', 'px-8')</code> returns the string <code>"px-4 px-8"</code>, which has exactly the same problem as the template literal. This repo's <code>cn()</code> wraps <code>clsx</code> in <code>twMerge</code> precisely because the two do different jobs. A codebase using bare <code>clsx</code> for class composition is as exposed as one using template literals.</p>
 </div>
 
 <div class="callout">
@@ -710,7 +710,7 @@ export function Button({ className, variant = 'primary', ...props }) {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — adding <code>cn()</code> to a component and assuming the caller's class now wins.</strong> It only wins if it is passed <em>last</em>. <code>cn(className, 'px-4')</code> compiles fine, merges correctly, and does the exact opposite of what was intended — the component's own class beats the caller's every time. This is a review-catchable mistake that behaves identically to having no merge at all, so it survives a superficial "we use cn() everywhere" audit.</p>
+<p><strong>Trap — adding <code>cn()</code> to a component and assuming the caller's class now wins.</strong> It only wins if it is passed <em>last</em>. <code>cn(className, 'px-4')</code> compiles fine, merges correctly, and does the exact opposite of what was intended — the component's own class beats the caller's every time. This is a review-catchable mistake that behaves identically to having no merge at all, so it survives a superficial "we use cn() everywhere" audit.</p>
 </div>
 
 <div class="callout">
@@ -921,7 +921,7 @@ $ grep -c '!important' src/app/globals.css
 <p>Tailwind can mark <em>every</em> utility important via <code>important: true</code> in the config. It exists for one scenario: incrementally adopting Tailwind inside an app with a large legacy stylesheet you cannot remove. Outside that migration case it is a trap — it makes every utility unoverridable, so component composition stops working entirely and the only remaining tool is inline styles.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — using <code>!</code> to beat a rule that is only winning because of layer position.</strong> This is the most common wasted escalation. A hand-written rule outside <code>@layer</code> beats your utility for structural reasons, and <code>!p-8</code> does fix it — but it fixes one element, and the same structural problem is still there for every other utility in the app. Moving the rule into <code>@layer components</code> fixes all of them at once. Chapter 7 covers this; the point here is that <code>!</code> can mask a systemic problem as a local one.</p>
+<p><strong>Trap — using <code>!</code> to beat a rule that is only winning because of layer position.</strong> This is the most common wasted escalation. A hand-written rule outside <code>@layer</code> beats your utility for structural reasons, and <code>!p-8</code> does fix it — but it fixes one element, and the same structural problem is still there for every other utility in the app. Moving the rule into <code>@layer components</code> fixes all of them at once. Chapter 7 covers this; the point here is that <code>!</code> can mask a systemic problem as a local one.</p>
 </div>
 
 <div class="callout">

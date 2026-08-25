@@ -79,7 +79,7 @@ t=125.02 server -&gt; B: call:end
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — thử &quot;stream video qua socket.io emit&quot;.</strong> You <code>MediaRecorder.ondataavailable</code> a 100 KB Buffer every 100ms over socket.io. The cost: 8 Mbps through the server, 100-500ms of latency, and no jitter buffer. The video breaks up and the server dies. This is an expensive lesson many teams have learned before rewriting on WebRTC.</p>
+<p><strong>Trap — attempting to &quot;stream video through a socket.io emit&quot;.</strong> You <code>MediaRecorder.ondataavailable</code> a 100 KB Buffer every 100ms over socket.io. The cost: 8 Mbps through the server, 100-500ms of latency, and no jitter buffer. The video breaks up and the server dies. This is an expensive lesson many teams have learned before rewriting on WebRTC.</p>
 </div>
 
 <div class="callout">
@@ -227,7 +227,7 @@ console.log(offer.sdp);
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — modify SDP ở server để &quot;force H.264&quot;.</strong> SDP munging is common in older WebRTC documentation. With modern SDP and Unified Plan it usually breaks codec negotiation. If you MUST force a codec, use <code>RTCRtpTransceiver.setCodecPreferences()</code> on the client rather than parsing SDP text.</p>
+<p><strong>Trap — modifying the SDP on the server to &quot;force H.264&quot;.</strong> SDP munging is common in older WebRTC documentation. With modern SDP and Unified Plan it usually breaks codec negotiation. If you MUST force a codec, use <code>RTCRtpTransceiver.setCodecPreferences()</code> on the client rather than parsing SDP text.</p>
 </div>
 
 <div class="callout">
@@ -392,7 +392,7 @@ useEffect(() =&gt; {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng socket ID để track call thay vì userId.</strong> A reconnect means a new sid, which means the call is lost. Track by <code>callId</code> (a UUID) plus userId — lesson 1.5's pattern applied again.</p>
+<p><strong>Trap — tracking a call by socket ID rather than by userId.</strong> A reconnect means a new sid, which means the call is lost. Track by <code>callId</code> (a UUID) plus userId — lesson 1.5's pattern applied again.</p>
 </div>
 
 <div class="callout">
@@ -570,7 +570,7 @@ socket.on('call:request-ice-servers', async (ack) =&gt; {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng free public TURN cho production.</strong> There are plenty of &quot;free TURN&quot; servers online, but they are slow, unreliable, and can steal your media. Use them only in dev. Production needs its own TURN.</p>
+<p><strong>Trap — using a free public TURN server in production.</strong> There are plenty of &quot;free TURN&quot; servers online, but they are slow, unreliable, and can steal your media. Use them only in dev. Production needs its own TURN.</p>
 </div>
 
 <div class="callout">
@@ -738,7 +738,7 @@ socket.on('room:join', async ({ roomId }) =&gt; {
 <p>Socket.io is the control plane (joining rooms, publish/subscribe transports). The SFU is the data plane (media). Two separate components.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — thử build SFU từ đầu.</strong> A WebRTC SFU requires understanding RTP, RTCP, DTLS-SRTP and codec-specific packet handling. Tens of thousands of lines of C++. Use mediasoup, Janus or LiveKit. Do not rewrite it.</p>
+<p><strong>Trap — attempting to build an SFU from scratch.</strong> A WebRTC SFU requires understanding RTP, RTCP, DTLS-SRTP and codec-specific packet handling. Tens of thousands of lines of C++. Use mediasoup, Janus or LiveKit. Do not rewrite it.</p>
 </div>
 
 <div class="callout">

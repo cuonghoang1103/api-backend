@@ -85,7 +85,7 @@ Signed URL:
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — hardcode API endpoint URL trong DB.</strong> You store <code>https://xxx.r2.cloudflarestorage.com/...</code> in <code>MediaFile.url</code>. Later you change the custom domain or the R2 endpoint, and every stored URL breaks. The fix: store <em>key</em> only, build URL runtime.</p>
+<p><strong>Trap — hardcode API endpoint URL trong DB.</strong> You store <code>https://xxx.r2.cloudflarestorage.com/...</code> in <code>MediaFile.url</code>. Later you change the custom domain or the R2 endpoint, and every stored URL breaks. The fix: store <em>key</em> only, build URL runtime.</p>
 </div>
 
 <div class="callout">
@@ -266,7 +266,7 @@ Combo cho private user data:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — set aggressive cache-control cho mutable content.</strong> An avatar cached for a year. The user changes it. A year later their friends still see the old one. The fix: either use a versioned URL, or cache briefly with a hash appended as a query string.</p>
+<p><strong>Trap — set aggressive cache-control cho mutable content.</strong> An avatar cached for a year. The user changes it. A year later their friends still see the old one. The fix: either use a versioned URL, or cache briefly with a hash appended as a query string.</p>
 </div>
 
 <div class="callout">
@@ -460,7 +460,7 @@ const url = await getSignedUrl(client, cmd, {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — cache signed URL trong DB.</strong> The signature expires. Cache it for 24 hours in the database and the URL is dead before the user clicks. Regenerate it per request.</p>
+<p><strong>Trap — cache signed URL trong DB.</strong> The signature expires. Cache it for 24 hours in the database and the URL is dead before the user clicks. Regenerate it per request.</p>
 </div>
 
 <div class="callout">

@@ -127,7 +127,7 @@ app.get('/notes', (req, res) =&gt; { res.type('json'); res.send(BODY); });</code
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> <code>--cpu-prof</code> writes the file when the process exits <em>normally</em>. Kill it with <code>SIGKILL</code> (or <code>pkill -9</code>) and the profile directory is empty — which looks exactly like "profiling did not work". Send <code>SIGTERM</code> and handle it, or call <code>process.exit(0)</code>. This cost twenty minutes while writing this lesson.</p>
+<p><strong>A real trap:</strong> <code>--cpu-prof</code> writes the file when the process exits <em>normally</em>. Kill it with <code>SIGKILL</code> (or <code>pkill -9</code>) and the profile directory is empty — which looks exactly like "profiling did not work". Send <code>SIGTERM</code> and handle it, or call <code>process.exit(0)</code>. This cost twenty minutes while writing this lesson.</p>
 </div>
 
 <div class="note-ct">
@@ -363,7 +363,7 @@ SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> instrumenting only <code>pool.query()</code> hides the entire story — it reports one number that silently mixes queueing with querying, and the two respond to opposite fixes. Time <code>pool.connect()</code> separately, or export <code>pool.waitingCount</code> as a gauge (chapter 15). A rising <code>waitingCount</code> means "raise the pool"; a flat <code>waitingCount</code> with rising query time means "the database is the limit, stop raising the pool".</p>
+<p><strong>A real trap:</strong> instrumenting only <code>pool.query()</code> hides the entire story — it reports one number that silently mixes queueing with querying, and the two respond to opposite fixes. Time <code>pool.connect()</code> separately, or export <code>pool.waitingCount</code> as a gauge (chapter 15). A rising <code>waitingCount</code> means "raise the pool"; a flat <code>waitingCount</code> with rising query time means "the database is the limit, stop raising the pool".</p>
 </div>
 
 <div class="note-ct">
@@ -551,7 +551,7 @@ gzip_comp_level 4;         # KHÔNG phải 9
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> compression and streaming interact badly. A compression middleware buffers to decide whether the response is worth compressing, which breaks Server-Sent Events and any progressive response — the client receives nothing until the stream ends. Either exclude those routes (<code>filter</code> in the <code>compression</code> options) or call <code>res.flush()</code> after each chunk. Symptom: SSE works locally, silently stops working behind the proxy.</p>
+<p><strong>A real trap:</strong> compression and streaming interact badly. A compression middleware buffers to decide whether the response is worth compressing, which breaks Server-Sent Events and any progressive response — the client receives nothing until the stream ends. Either exclude those routes (<code>filter</code> in the <code>compression</code> options) or call <code>res.flush()</code> after each chunk. Symptom: SSE works locally, silently stops working behind the proxy.</p>
 </div>
 
 <h3>The other bandwidth lever: keep-alive</h3>
@@ -766,7 +766,7 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the cron problem is the one that actually causes incidents, because it is silent. A nightly billing job written when the app ran one process starts sending four invoices per customer the day someone sets <code>WORKERS=4</code> for performance. Nothing errors. The guard used in this project is <code>let _started = false</code> — which correctly prevents double-scheduling <em>within one process</em> and does absolutely nothing across four.</p>
+<p><strong>A real trap:</strong> the cron problem is the one that actually causes incidents, because it is silent. A nightly billing job written when the app ran one process starts sending four invoices per customer the day someone sets <code>WORKERS=4</code> for performance. Nothing errors. The guard used in this project is <code>let _started = false</code> — which correctly prevents double-scheduling <em>within one process</em> and does absolutely nothing across four.</p>
 </div>
 
 <h3>cluster, PM2, or containers?</h3>
@@ -981,7 +981,7 @@ app.get('/__heap', (req, res) =&gt; {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> <code>Buffer</code> lives outside the V8 heap. A process that uploads files can sit at 200MB of heap and 1,5GB of RSS, and <code>--max-old-space-size</code> will never trigger — the container limit will, with exit 137 and no stack trace. This project has met exit 137 twice: once from parallel Docker builds and once from a runaway process. When RSS is high but heap is not, stop looking at JavaScript objects and start looking at buffers, streams and native modules.</p>
+<p><strong>A real trap:</strong> <code>Buffer</code> lives outside the V8 heap. A process that uploads files can sit at 200MB of heap and 1,5GB of RSS, and <code>--max-old-space-size</code> will never trigger — the container limit will, with exit 137 and no stack trace. This project has met exit 137 twice: once from parallel Docker builds and once from a runaway process. When RSS is high but heap is not, stop looking at JavaScript objects and start looking at buffers, streams and native modules.</p>
 </div>
 
 <div class="note-ct">

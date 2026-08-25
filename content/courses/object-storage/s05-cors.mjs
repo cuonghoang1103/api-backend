@@ -61,7 +61,7 @@ Preflight OPTIONS response:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>AllowedOrigins: [&quot;*&quot;]</code> in production.</strong> Allows any site to upload to your bucket if they get a signed URL. In production restrict to your domain(s). Wildcard OK for dev.</p>
+<p><strong>Trap — <code>AllowedOrigins: [&quot;*&quot;]</code> in production.</strong> Allows any site to upload to your bucket if they get a signed URL. In production restrict to your domain(s). Wildcard OK for dev.</p>
 </div>
 
 <div class="callout">
@@ -302,11 +302,11 @@ Access-Control-Allow-Credentials: true</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>AllowedHeaders: [&quot;*&quot;]</code> as a debugging shortcut.</strong> It works but disables preflight caching. Everyone does it during dev, few people go back and tighten it before production. Half your R2 Class A cost can be preflights that never needed to happen. Explicit lists are the fix.</p>
+<p><strong>Trap — <code>AllowedHeaders: [&quot;*&quot;]</code> as a debugging shortcut.</strong> It works but disables preflight caching. Everyone does it during dev, few people go back and tighten it before production. Half your R2 Class A cost can be preflights that never needed to happen. Explicit lists are the fix.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — expecting the browser to cache longer than its own maximum.</strong> Setting <code>MaxAgeSeconds: 86400</code> looks right in the CORS config but Chrome caps at 7200. Test in the browser you actually target; do not measure from a curl (curl has no preflight cache).</p>
+<p><strong>Trap — expecting the browser to cache longer than its own maximum.</strong> Setting <code>MaxAgeSeconds: 86400</code> looks right in the CORS config but Chrome caps at 7200. Test in the browser you actually target; do not measure from a curl (curl has no preflight cache).</p>
 </div>
 
 <div class="callout">
@@ -671,11 +671,11 @@ Debug:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — capitalizing header names as if they mattered.</strong> HTTP headers are case-insensitive. R2 and S3 lowercase them internally. Writing <code>&quot;X-Amz-Content-Sha256&quot;</code> in your CORS policy works, but so does <code>&quot;x-amz-content-sha256&quot;</code>. Do not spend time debating capitalization; nothing depends on it.</p>
+<p><strong>Trap — capitalizing header names as if they mattered.</strong> HTTP headers are case-insensitive. R2 and S3 lowercase them internally. Writing <code>&quot;X-Amz-Content-Sha256&quot;</code> in your CORS policy works, but so does <code>&quot;x-amz-content-sha256&quot;</code>. Do not spend time debating capitalization; nothing depends on it.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — CORS policy edit did not take effect immediately.</strong> Some clouds propagate CORS changes with 30-second to 5-minute lag. Change the policy, wait a full minute, then hard-refresh the browser (Ctrl+Shift+R to bust the preflight cache) before deciding the change did not work.</p>
+<p><strong>Trap — CORS policy edit did not take effect immediately.</strong> Some clouds propagate CORS changes with 30-second to 5-minute lag. Change the policy, wait a full minute, then hard-refresh the browser (Ctrl+Shift+R to bust the preflight cache) before deciding the change did not work.</p>
 </div>
 
 <div class="callout">

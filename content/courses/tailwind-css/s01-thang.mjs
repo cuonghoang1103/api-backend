@@ -109,7 +109,7 @@ padding: 20px;
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — assuming the number is pixels.</strong> The single most common beginner error is reading <code>p-4</code> as "4 pixels". It is 16px. The mistake is self-correcting for anyone who checks once, but it produces a specific confusing hour first: layouts come out four times too tight, and because everything is uniformly wrong it looks like a different bug entirely. Read the middle column of the measurement above once and the error never recurs.</p>
+<p><strong>Trap — assuming the number is pixels.</strong> The single most common beginner error is reading <code>p-4</code> as "4 pixels". It is 16px. The mistake is self-correcting for anyone who checks once, but it produces a specific confusing hour first: layouts come out four times too tight, and because everything is uniformly wrong it looks like a different bug entirely. Read the middle column of the measurement above once and the error never recurs.</p>
 </div>
 
 <div class="callout">
@@ -333,7 +333,7 @@ $ grep -rho 'text-\\[11px\\]' src --include="*.tsx" | wc -l
 <p>That is a different kind of gap: not "the scale lacks a value" but "the value must be resolved at runtime, per theme, so it cannot be a build-time constant". Tailwind's answer is to put the variable <em>in the config</em> so the class name is clean, and this repo does exactly that elsewhere — <code>text-text-primary</code> (1,389 uses) is configured as <code>primary: "var(--text-primary)"</code>. Chapter 6 is entirely about this technique, and the 767 bracket-syntax uses above are the parts that have not been migrated to it yet.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating arbitrary values as forbidden.</strong> The opposite error to over-using them is a team that bans them, and then rounds every value to the scale whether or not that is correct. That produces a codebase where a button is 2px off from the third-party widget it must align with, forever, because the scale had no 37px. The bracket syntax exists because escape hatches are necessary. The rule is not "never" — it is "count, and name the ones that recur".</p>
+<p><strong>Trap — treating arbitrary values as forbidden.</strong> The opposite error to over-using them is a team that bans them, and then rounds every value to the scale whether or not that is correct. That produces a codebase where a button is 2px off from the third-party widget it must align with, forever, because the scale had no 37px. The bracket syntax exists because escape hatches are necessary. The rule is not "never" — it is "count, and name the ones that recur".</p>
 </div>
 
 <div class="callout">
@@ -561,7 +561,7 @@ slate-700 on white: 10.35   ← DAT, kem ca AAA (7.0)
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — assuming the same step is safe across families.</strong> The ratios above are for <code>slate</code>. Luminance depends on hue: <code>yellow-500</code> is far brighter than <code>blue-500</code> because the green channel dominates the luminance formula (0.7152 weight versus 0.0722 for blue). <code>text-yellow-500</code> on white is unreadable while <code>text-blue-500</code> on white is fine, and both are "step 500". Compute per family; never generalise a step number across hues.</p>
+<p><strong>Trap — assuming the same step is safe across families.</strong> The ratios above are for <code>slate</code>. Luminance depends on hue: <code>yellow-500</code> is far brighter than <code>blue-500</code> because the green channel dominates the luminance formula (0.7152 weight versus 0.0722 for blue). <code>text-yellow-500</code> on white is unreadable while <code>text-blue-500</code> on white is fine, and both are "step 500". Compute per family; never generalise a step number across hues.</p>
 </div>
 
 <div class="callout">
@@ -775,7 +775,7 @@ $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — building a table-like layout out of nested flex rows.</strong> It looks fine with the sample data and breaks the moment one cell's content is longer, because each row computes its columns independently. Nothing aligns. This is the clearest signal that grid was the right tool: <em>alignment across siblings requires a shared coordinate system</em>, and rows of flex do not have one. Reach for <code>grid-cols-*</code> rather than adding fixed widths to every cell.</p>
+<p><strong>Trap — building a table-like layout out of nested flex rows.</strong> It looks fine with the sample data and breaks the moment one cell's content is longer, because each row computes its columns independently. Nothing aligns. This is the clearest signal that grid was the right tool: <em>alignment across siblings requires a shared coordinate system</em>, and rows of flex do not have one. Reach for <code>grid-cols-*</code> rather than adding fixed widths to every cell.</p>
 </div>
 
 <div class="callout">
@@ -978,7 +978,7 @@ lg=0.5rem  xl=0.75rem  2xl=1rem  3xl=1.5rem  full=9999px
 <p>Note that plain <code>rounded</code> is 4px — quite subtle. This application's actual usage skews far larger: <code>rounded-xl</code> 1,579 uses, <code>rounded-lg</code> 1,500, <code>rounded-full</code> 1,208, <code>rounded-2xl</code> 815, while bare <code>rounded</code> barely registers. That is a house style visible in the numbers: this is a soft, heavily-rounded interface, and the default of 4px belongs to an earlier design era. Worth knowing because it means copying a snippet from the docs will produce corners noticeably sharper than the surrounding UI.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — using <code>h-screen</code> for a full-height app shell.</strong> It is the obvious choice and it is wrong twice: it breaks on mobile as described above, and it forces exactly the viewport height even when content is longer, so content is clipped rather than scrolled. For an app shell you usually want <code>min-h-screen</code> (at least full height, grows with content) or <code>h-dvh</code> for a genuinely fixed-height scrolling pane. The difference between <code>h-</code> and <code>min-h-</code> here is the difference between clipped content and correct content.</p>
+<p><strong>Trap — using <code>h-screen</code> for a full-height app shell.</strong> It is the obvious choice and it is wrong twice: it breaks on mobile as described above, and it forces exactly the viewport height even when content is longer, so content is clipped rather than scrolled. For an app shell you usually want <code>min-h-screen</code> (at least full height, grows with content) or <code>h-dvh</code> for a genuinely fixed-height scrolling pane. The difference between <code>h-</code> and <code>min-h-</code> here is the difference between clipped content and correct content.</p>
 </div>
 
 <div class="callout">

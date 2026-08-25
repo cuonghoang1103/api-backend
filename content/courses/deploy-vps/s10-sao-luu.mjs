@@ -62,7 +62,7 @@ export default {
 <p><code>pg_dump</code> runs inside a single repeatable-read transaction, so the output is a consistent snapshot of the moment it started — not of the moment it finished. Writes during those 2.4 seconds are simply not in it, which is correct and is exactly what you want.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — a dump is consistent with <em>itself</em>, and with nothing else on the machine.</strong> If your app writes an uploaded file to disk and a row to the database, a dump taken between those two writes captures the row and not the file, or neither. Every backup that covers more than one system has this problem, and there is no flag that fixes it — the only real answers are to make the pairing recoverable (the row records the file path, so a missing file is detectable) or to accept the gap and know how you would repair it. 10.5 is about everything a database dump does not contain.</p>
+<p><strong>Trap — a dump is consistent with <em>itself</em>, and with nothing else on the machine.</strong> If your app writes an uploaded file to disk and a row to the database, a dump taken between those two writes captures the row and not the file, or neither. Every backup that covers more than one system has this problem, and there is no flag that fixes it — the only real answers are to make the pairing recoverable (the row records the file path, so a missing file is detectable) or to accept the gap and know how you would repair it. 10.5 is about everything a database dump does not contain.</p>
 </div>
 
 <div class="lz-map">
@@ -293,7 +293,7 @@ echo "\$NGAY \$(stat -c%s "\$TEP") \$SECONDS" >> "\$DICH/so-sach.txt"</code></pr
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — my 4.4 seconds is a 192 MB database, and restore time does not scale gently.</strong> Doubling the data more than doubles the restore, because index construction grows faster than linearly and because a large restore stops fitting in memory. Do not extrapolate my number to your database — <em>measure yours</em>, once, with a stopwatch, and write the figure down where the person doing the recovery will find it. That single measured number is the most useful sentence in any runbook: "a full restore of production takes about 40 minutes."</p>
+<p><strong>Trap — my 4.4 seconds is a 192 MB database, and restore time does not scale gently.</strong> Doubling the data more than doubles the restore, because index construction grows faster than linearly and because a large restore stops fitting in memory. Do not extrapolate my number to your database — <em>measure yours</em>, once, with a stopwatch, and write the figure down where the person doing the recovery will find it. That single measured number is the most useful sentence in any runbook: "a full restore of production takes about 40 minutes."</p>
 </div>
 
 <h3>Restoring one table instead of everything</h3>
@@ -494,7 +494,7 @@ lon=0  bf=300000</div>
 <p>Each individual behaviour is defensible. Together they produce a system in which the only reliable signal is at the very end, and it is the one nobody automates.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — the other ways this happens, none of which involve a full disk.</strong> A network copy interrupted at 97% leaves a file that is 97% right. A cloud sync that uploads while the file is still being written stores a partial object with a normal-looking size. A backup of a database whose disk was already failing contains whatever the failing disk returned. A dump taken with the wrong <code>PGDATABASE</code> is complete, valid, restorable, and of the wrong database. Every one of these produces a file that passes every check short of restoring it and counting rows.</p>
+<p><strong>Trap — the other ways this happens, none of which involve a full disk.</strong> A network copy interrupted at 97% leaves a file that is 97% right. A cloud sync that uploads while the file is still being written stores a partial object with a normal-looking size. A backup of a database whose disk was already failing contains whatever the failing disk returned. A dump taken with the wrong <code>PGDATABASE</code> is complete, valid, restorable, and of the wrong database. Every one of these produces a file that passes every check short of restoring it and counting rows.</p>
 </div>
 
 <div class="callout ok">
@@ -672,7 +672,7 @@ echo "  ✓ moi bang khop"</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — row counts catch a missing table, not a corrupted row.</strong> A backup with all the right counts and subtly wrong data passes this check. That is a real limit and it is worth knowing, though it is a much rarer failure than truncation. If you want more, add a checksum over a few stable columns — <code>select md5(string_agg(id::text||du_lieu, '' order by id)) from lon</code> — which costs a full scan and catches content changes. For most people, counts plus a successful restore is where the value stops rising steeply.</p>
+<p><strong>Trap — row counts catch a missing table, not a corrupted row.</strong> A backup with all the right counts and subtly wrong data passes this check. That is a real limit and it is worth knowing, though it is a much rarer failure than truncation. If you want more, add a checksum over a few stable columns — <code>select md5(string_agg(id::text||du_lieu, '' order by id)) from lon</code> — which costs a full scan and catches content changes. For most people, counts plus a successful restore is where the value stops rising steeply.</p>
 </div>
 
 <h3>Getting it off the machine, measured</h3>
@@ -864,7 +864,7 @@ echo "  ✓ moi bang khop"</code></pre>
 <p>Restore the roles first, then the database, and the same restore exits <strong>0</strong> with zero errors — measured.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — that file contains password hashes, so it is a secret.</strong> <code>pg_dumpall --roles-only</code> writes every role&#39;s SCRAM verifier in plain text. It is not the password, but it is the material an offline attack works against, and it belongs under the same rules as anything in Chapter 4: encrypted before it leaves the machine (10.4), never in the repository, never in a log. A great many people back up roles into a git repo because it is "just schema".</p>
+<p><strong>Trap — that file contains password hashes, so it is a secret.</strong> <code>pg_dumpall --roles-only</code> writes every role&#39;s SCRAM verifier in plain text. It is not the password, but it is the material an offline attack works against, and it belongs under the same rules as anything in Chapter 4: encrypted before it leaves the machine (10.4), never in the repository, never in a log. A great many people back up roles into a git repo because it is "just schema".</p>
 </div>
 
 <h3>Everything else outside the dump</h3>

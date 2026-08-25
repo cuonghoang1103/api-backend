@@ -78,7 +78,7 @@ JWT that, co role va permission                ~ 600–900 ky tu</code></pre>
 
 # Tren mang di dong, con so thu hai la thu ma nguoi dung CAM NHAN duoc.</div>
 <div class="pitfall">
-<p><strong>Bẫy — a JWT grows every time someone adds a claim, and nobody ever removes one.</strong> Permissions get inlined "to save a lookup", then a display name, then a feature-flag map. At around 4 KB the cookie stops being set at all — silently, with no error, and the user simply cannot log in on the browser that hit the limit first. If the token is in a header instead, you meet your proxy's header limit (often 8 KB) the same way. Put an id in the token and look the rest up.</p>
+<p><strong>Trap — a JWT grows every time someone adds a claim, and nobody ever removes one.</strong> Permissions get inlined "to save a lookup", then a display name, then a feature-flag map. At around 4 KB the cookie stops being set at all — silently, with no error, and the user simply cannot log in on the browser that hit the limit first. If the token is in a header instead, you meet your proxy's header limit (often 8 KB) the same way. Put an id in the token and look the rest up.</p>
 </div>
 
 <h3>What a JWT is actually for</h3>
@@ -295,7 +295,7 @@ JWSInvalid: "alg" (Algorithm) Header Parameter value not allowed
 
 # Ca hai cu tan cong deu chet o CUNG mot dong, truoc khi cham toi khoa.</div>
 <div class="pitfall">
-<p><strong>Bẫy — an allowlist with two entries can still be confused.</strong> <code>algorithms: ['RS256', 'HS256']</code> reopens attack 2 exactly, because the attacker simply picks the one that suits them. If you are migrating between algorithms, distinguish the keys by <code>kid</code> and derive the expected algorithm from <em>the key you selected</em>, never from the token. One algorithm per key, decided by you.</p>
+<p><strong>Trap — an allowlist with two entries can still be confused.</strong> <code>algorithms: ['RS256', 'HS256']</code> reopens attack 2 exactly, because the attacker simply picks the one that suits them. If you are migrating between algorithms, distinguish the keys by <code>kid</code> and derive the expected algorithm from <em>the key you selected</em>, never from the token. One algorithm per key, decided by you.</p>
 </div>
 <div class="note-ct">
 <p><strong>The four-line audit for any codebase that uses JWTs.</strong> Grep for <code>verify(</code> and confirm every call passes an explicit <code>algorithms</code> array with exactly one entry · grep for <code>decode(</code> and confirm none of the results is in a request path · check that the HMAC secret, if any, is 32 random bytes and not a word · and confirm the library is not configured to follow <code>jku</code> or <code>jwk</code>. Four greps, and they cover every attack on this page.</p>
@@ -530,7 +530,7 @@ export async function biChan(jti: string) {
   <div class="lz-layer"><span class="lz-lname">Cheapest of all: <code>iat</code> versus a timestamp</span><span class="lz-lnote">Store <code>tokenHopLeTu</code> on the user; reject any token whose <code>iat</code> is earlier. Same effect as the version number with no extra column semantics — and it is exactly what "sign out of all devices" needs, at the price of one already-loaded field.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — as soon as you need <code>jti</code> revocation, re-read Lesson 3.5.</strong> A denylist is a session store: it is a lookup on every request against mutable server state. If you arrived at JWTs to avoid exactly that, and you have now added it back, the stateless benefit is gone and only the drawbacks remain — the size, the staleness, the seconds trap. The design that keeps the benefit is short-lived tokens plus a <em>stateful refresh</em> path, which is Chapter 5, not a denylist bolted onto long-lived tokens.</p>
+<p><strong>Trap — as soon as you need <code>jti</code> revocation, re-read Lesson 3.5.</strong> A denylist is a session store: it is a lookup on every request against mutable server state. If you arrived at JWTs to avoid exactly that, and you have now added it back, the stateless benefit is gone and only the drawbacks remain — the size, the staleness, the seconds trap. The design that keeps the benefit is short-lived tokens plus a <em>stateful refresh</em> path, which is Chapter 5, not a denylist bolted onto long-lived tokens.</p>
 </div>
 <div class="note-ct">
 <p><strong>The five-line audit.</strong> Every <code>verify</code> call names <code>algorithms</code>, <code>issuer</code> and <code>audience</code> explicitly · <code>exp</code> is produced by a duration string, never by arithmetic on <code>Date.now()</code> · <code>clockTolerance</code> is single-digit seconds · <code>sub</code> is an internal id, not an email · and any custom claim is namespaced with a URI. Everything on this page reduces to those five lines, and each one has a concrete attack behind it.</p>
@@ -695,7 +695,7 @@ if (!khoa) throw new Error('kid khong biet');              <span class="tok-comm
 
 const { payload } = await jwtVerify(token, khoa, { algorithms: ['EdDSA'], … });</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — falling back to a default key when the <code>kid</code> is unknown undoes the whole point.</strong> It turns "which key signed this" into "any key I have will do", which is a smaller version of the algorithm confusion in Lesson 4.2. An unknown <code>kid</code> is a rejected token. And keep the map a map: <code>kid</code> is attacker-controlled input, so it must never reach a filesystem path, a SQL query or a template string.</p>
+<p><strong>Trap — falling back to a default key when the <code>kid</code> is unknown undoes the whole point.</strong> It turns "which key signed this" into "any key I have will do", which is a smaller version of the algorithm confusion in Lesson 4.2. An unknown <code>kid</code> is a rejected token. And keep the map a map: <code>kid</code> is attacker-controlled input, so it must never reach a filesystem path, a SQL query or a template string.</p>
 </div>
 
 <h3>Publishing the public keys: JWKS</h3>
@@ -988,7 +988,7 @@ async function goi(url: string, opt: RequestInit = {}) {
 # XSS van dung duoc accessToken trong luc trang mo — nhung khong lay
 # duoc cai token DAI HAN, nen no khong sang duoc may cua ke tan cong.</div>
 <div class="pitfall">
-<p><strong>Bẫy — the retry must be exactly once, and it must be shared across concurrent requests.</strong> A naive interceptor that refreshes on every 401 produces an infinite loop when the refresh itself returns 401, and fires ten simultaneous refreshes when ten requests expire together — which, with the rotation in Chapter 5, makes nine of them look like token reuse and revokes the whole family. Keep a single in-flight refresh promise that every caller awaits, and never retry a refresh that failed.</p>
+<p><strong>Trap — the retry must be exactly once, and it must be shared across concurrent requests.</strong> A naive interceptor that refreshes on every 401 produces an infinite loop when the refresh itself returns 401, and fires ten simultaneous refreshes when ten requests expire together — which, with the rotation in Chapter 5, makes nine of them look like token reuse and revokes the whole family. Keep a single in-flight refresh promise that every caller awaits, and never retry a refresh that failed.</p>
 </div>
 
 <h3>The BFF: the current recommendation for browsers</h3>

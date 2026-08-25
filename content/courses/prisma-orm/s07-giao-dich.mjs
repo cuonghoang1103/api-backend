@@ -84,7 +84,7 @@ prisma:query COMMIT</div>
 });</code></pre>
 <div class="out">prisma: cu@x.com | tx: moi@x.com</div>
 <div class="pitfall">
-<p><strong>Bẫy — and it gets worse than a stale read.</strong> If your pool has one free connection and the transaction is holding it, that <code>prisma.user.findUnique</code> waits for a connection that will not be released until the transaction ends — and the transaction cannot end until the query returns. That is a self-deadlock: the request hangs until <code>pool_timeout</code> fires with <code>P2024</code>. It happens on a busy server and never on your laptop, which is the worst possible failure profile. Never reference the outer client inside the callback; pass <code>tx</code> into any helper the callback calls.</p>
+<p><strong>Trap — and it gets worse than a stale read.</strong> If your pool has one free connection and the transaction is holding it, that <code>prisma.user.findUnique</code> waits for a connection that will not be released until the transaction ends — and the transaction cannot end until the query returns. That is a self-deadlock: the request hangs until <code>pool_timeout</code> fires with <code>P2024</code>. It happens on a busy server and never on your laptop, which is the worst possible failure profile. Never reference the outer client inside the callback; pass <code>tx</code> into any helper the callback calls.</p>
 </div>
 <pre><code><span class="tok-comment">// Type a helper so it accepts either client and cannot be called wrongly</span>
 type TxClient = Omit&lt;PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'&gt;;
@@ -362,7 +362,7 @@ await Promise.all([thangCap(10), thangCap(11)]);
 console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</code></pre>
 <div class="out">admin: 3</div>
 <div class="pitfall">
-<p><strong>Bẫy — both transactions counted 1, both decided "there is room", both wrote.</strong> Neither did anything wrong on its own; the rule was violated by the pair. <code>READ COMMITTED</code> permits this because the <code>count</code> in transaction A never saw transaction B's uncommitted insert, and nothing forced them to conflict. This is <em>write skew</em>, and it is the reason "I read it and checked" is not a guarantee. Two ways to fix it, in the next two sections.</p>
+<p><strong>Trap — both transactions counted 1, both decided "there is room", both wrote.</strong> Neither did anything wrong on its own; the rule was violated by the pair. <code>READ COMMITTED</code> permits this because the <code>count</code> in transaction A never saw transaction B's uncommitted insert, and nothing forced them to conflict. This is <em>write skew</em>, and it is the reason "I read it and checked" is not a guarantee. Two ways to fix it, in the next two sections.</p>
 </div>
 
 <h3><code>SERIALIZABLE</code>: the guarantee, and its price</h3>
@@ -777,7 +777,7 @@ async function chuyen(tu: number, den: number, tien: number) {
   });
 }</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — a deadlock is a design smell, not bad luck.</strong> PostgreSQL detects it in about a second and kills one transaction, so it is survivable — but it means two code paths acquire the same locks in different orders, and that will keep happening. The fix is a rule you apply everywhere: <strong>lock rows in ascending primary-key order</strong>, and lock tables in a fixed order too. Sorting the ids before locking, as above, costs nothing and removes the whole class of failure. Keep the retry wrapper as well: an unrelated deadlock can still arrive from a path you have not written yet.</p>
+<p><strong>Trap — a deadlock is a design smell, not bad luck.</strong> PostgreSQL detects it in about a second and kills one transaction, so it is survivable — but it means two code paths acquire the same locks in different orders, and that will keep happening. The fix is a rule you apply everywhere: <strong>lock rows in ascending primary-key order</strong>, and lock tables in a fixed order too. Sorting the ids before locking, as above, costs nothing and removes the whole class of failure. Keep the retry wrapper as well: an unrelated deadlock can still arrive from a path you have not written yet.</p>
 </div>
 
 <h3>Choosing</h3>
@@ -1001,7 +1001,7 @@ expired transaction. The timeout for this transaction was 5000 ms, however 5013 
 passed since the start of the transaction.
   code: 'P2028'</div>
 <div class="pitfall">
-<p><strong>Bẫy — the obvious fix is the wrong one.</strong> Setting <code>timeout: 600000</code> makes it work and creates a ten-minute transaction: one connection held, locks accumulating, the write-ahead log growing, autovacuum blocked on those tables, and a rollback that discards ten minutes of work if anything fails at minute nine. Raise the timeout only when the operation is genuinely one indivisible unit. For an import it is not — a thousand products are a thousand independent facts.</p>
+<p><strong>Trap — the obvious fix is the wrong one.</strong> Setting <code>timeout: 600000</code> makes it work and creates a ten-minute transaction: one connection held, locks accumulating, the write-ahead log growing, autovacuum blocked on those tables, and a rollback that discards ten minutes of work if anything fails at minute nine. Raise the timeout only when the operation is genuinely one indivisible unit. For an import it is not — a thousand products are a thousand independent facts.</p>
 </div>
 <pre><code><span class="tok-comment">// The right fix: batch, and use the default timeout</span>
 const KICH_THUOC = 500;

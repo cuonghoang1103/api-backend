@@ -82,7 +82,7 @@ const cls = isError ? 'text-red-500' : 'text-green-500';
 <p>The first version type-checks, renders, produces the markup <code>class="text-red-500"</code> in the browser, and the text is not red. Nothing errors. The class attribute is correct; the rule it refers to was never written into the CSS. Chapter 8 covers the whole family of these, but you can already derive it yourself from the one sentence — which is the point of learning the sentence first.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — searching the docs for a class name you cannot find.</strong> Newcomers hit an unfamiliar need, search "tailwind class for …", find nothing, and conclude Tailwind cannot do it. Usually the class exists and is derivable from the <em>scale</em> (Chapter 1), or the correct answer is an arbitrary value like <code>mt-[7px]</code>. Searching by name is the wrong retrieval strategy for a system whose names are generated from a small set of rules. Learn the rules; the names fall out.</p>
+<p><strong>Trap — searching the docs for a class name you cannot find.</strong> Newcomers hit an unfamiliar need, search "tailwind class for …", find nothing, and conclude Tailwind cannot do it. Usually the class exists and is derivable from the <em>scale</em> (Chapter 1), or the correct answer is an arbitrary value like <code>mt-[7px]</code>. Searching by name is the wrong retrieval strategy for a system whose names are generated from a small set of rules. Learn the rules; the names fall out.</p>
 </div>
 
 <h3>What this course does with the sentence</h3>
@@ -281,7 +281,7 @@ TONG:            7758
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — answering the objection with "it just scales better".</strong> That is an assertion, and the person objecting is right to distrust it. Answer with the measurement instead: the <code>style</code> attribute has no syntax for hover or for a breakpoint, and here are 7,758 places this application needs exactly that. A number ends the argument; a slogan extends it.</p>
+<p><strong>Trap — answering the objection with "it just scales better".</strong> That is an assertion, and the person objecting is right to distrust it. Answer with the measurement instead: the <code>style</code> attribute has no syntax for hover or for a breakpoint, and here are 7,758 places this application needs exactly that. A number ends the argument; a slogan extends it.</p>
 </div>
 
 <div class="callout">
@@ -472,7 +472,7 @@ const config: Config = {
 <p>This is worth reading as a general pattern. <code>@tailwindcss/typography</code> is the most commonly installed Tailwind plugin, and it ships opinionated colour choices along with its typography. In a project with a custom dark theme, adopting it means fighting those colours everywhere. The team measured that cost and chose to hand-write about 300 lines of <code>.rich-content</code> rules instead. Neither choice is universally right; what is right is that the reason is recorded next to the code, so the next person does not "helpfully" install the plugin and quietly break the theme.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — adding a glob to <code>content</code> that matches <code>node_modules</code>.</strong> The instinct when a class in a dependency does not work is to widen the globs. Pointing <code>content</code> at <code>node_modules</code> makes the scanner read tens of thousands of files on every rebuild; dev-server rebuild times go from milliseconds to seconds and nobody connects it to the config change weeks later. If you genuinely need classes from one package, add that one package's path, never the whole directory.</p>
+<p><strong>Trap — adding a glob to <code>content</code> that matches <code>node_modules</code>.</strong> The instinct when a class in a dependency does not work is to widen the globs. Pointing <code>content</code> at <code>node_modules</code> makes the scanner read tens of thousands of files on every rebuild; dev-server rebuild times go from milliseconds to seconds and nobody connects it to the config change weeks later. If you genuinely need classes from one package, add that one package's path, never the whole directory.</p>
 </div>
 
 <h3>Verifying the install, rather than assuming it</h3>

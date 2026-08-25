@@ -113,11 +113,11 @@ After rule (7 days later):
 <p>27% overhead on a small account is annoying. The same ratio on a shop with 10 TB of objects is $23/month evaporating monthly to storage nobody ever gets to read. The rule takes 30 seconds to configure and never runs again.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — thinking <code>ListObjectsV2</code> shows the leak.</strong> It does not. Multipart parts are stored under a separate namespace until <code>CompleteMultipartUpload</code> promotes them to an object. You need <code>ListMultipartUploads</code> to see them, and Cloudflare's dashboard "storage used" number counts them even though the object list does not.</p>
+<p><strong>Trap — thinking <code>ListObjectsV2</code> shows the leak.</strong> It does not. Multipart parts are stored under a separate namespace until <code>CompleteMultipartUpload</code> promotes them to an object. You need <code>ListMultipartUploads</code> to see them, and Cloudflare's dashboard "storage used" number counts them even though the object list does not.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — setting the rule and forgetting to <em>enable</em> it.</strong> The default <code>Status</code> in some tool-generated JSON is <code>"Disabled"</code>. The rule sits there looking configured and does nothing. Verify with <code>get-bucket-lifecycle-configuration</code> and read the <code>Status</code> field on every rule.</p>
+<p><strong>Trap — setting the rule and forgetting to <em>enable</em> it.</strong> The default <code>Status</code> in some tool-generated JSON is <code>"Disabled"</code>. The rule sits there looking configured and does nothing. Verify with <code>get-bucket-lifecycle-configuration</code> and read the <code>Status</code> field on every rule.</p>
 </div>
 
 <div class="callout">
@@ -356,11 +356,11 @@ the paper trail.
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — prefix matches more than you thought.</strong> A rule on prefix <code>report</code> (no slash) matches <code>report.pdf</code>, <code>reports/annual.csv</code>, and <code>reporting-config.json</code>. Always end filter prefixes with <code>/</code> unless you deliberately want a literal-prefix scan.</p>
+<p><strong>Trap — prefix matches more than you thought.</strong> A rule on prefix <code>report</code> (no slash) matches <code>report.pdf</code>, <code>reports/annual.csv</code>, and <code>reporting-config.json</code>. Always end filter prefixes with <code>/</code> unless you deliberately want a literal-prefix scan.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the rule keeps the parent "folder" the app expected to be there.</strong> S3 has no folders; <code>exports/</code> only exists as long as at least one key starts with it. When the rule deletes the last one, some apps break because they call <code>HeadObject</code> on the folder itself. If your code depends on a folder existing, keep a <code>.keep</code> file with a very long retention or no rule.</p>
+<p><strong>Trap — the rule keeps the parent "folder" the app expected to be there.</strong> S3 has no folders; <code>exports/</code> only exists as long as at least one key starts with it. When the rule deletes the last one, some apps break because they call <code>HeadObject</code> on the folder itself. If your code depends on a folder existing, keep a <code>.keep</code> file with a very long retention or no rule.</p>
 </div>
 
 <div class="callout">
@@ -634,11 +634,11 @@ async function findMissingObjects() {
 <p>The dollar savings are modest per month. The reason to run it is not the storage bill — it is that the mismatch keeps growing, the storage bill compounds, and you cannot answer &quot;what is in this bucket?&quot; without the reconciliation running. Every quarter or so is a reasonable cadence.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — reconciling under a growing prefix.</strong> If you list <code>uploads/</code> while new uploads land, your list is a moving target. Either freeze new uploads under a different prefix while the job runs, or split the reconciliation by month (<code>uploads/2026-01/</code>, <code>uploads/2026-02/</code>) so each range is stable at scan time.</p>
+<p><strong>Trap — reconciling under a growing prefix.</strong> If you list <code>uploads/</code> while new uploads land, your list is a moving target. Either freeze new uploads under a different prefix while the job runs, or split the reconciliation by month (<code>uploads/2026-01/</code>, <code>uploads/2026-02/</code>) so each range is stable at scan time.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — deleting on the first pass.</strong> A race between the reconciler and a legitimate upload will silently delete a user's file mid-upload. Always: log candidates on run 1, delete only keys that appear as candidates on run 2 the next day.</p>
+<p><strong>Trap — deleting on the first pass.</strong> A race between the reconciler and a legitimate upload will silently delete a user's file mid-upload. Always: log candidates on run 1, delete only keys that appear as candidates on run 2 the next day.</p>
 </div>
 
 <div class="callout">

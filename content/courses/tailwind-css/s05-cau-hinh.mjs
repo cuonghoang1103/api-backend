@@ -112,7 +112,7 @@ B (thay the):   2 quy tac
 <p>This matters because hardcoding <code>'2rem'</code> in three config keys means a scale change silently misses two of them. The function form keeps one source of truth, which is the same argument as naming a repeated arbitrary value in lesson 1.2.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — extending <code>colors</code> with a key that shadows a default family.</strong> Adding <code>extend: { colors: { gray: { … } } }</code> does not merge with Tailwind's <code>gray</code> — it <em>replaces</em> that family entirely, even though you are inside <code>extend</code>. Merging happens one level deep, so extending <code>colors</code> merges families, and a family you supply overwrites the whole default family of that name. If you want to adjust two shades of grey, you must respell all eleven.</p>
+<p><strong>Trap — extending <code>colors</code> with a key that shadows a default family.</strong> Adding <code>extend: { colors: { gray: { … } } }</code> does not merge with Tailwind's <code>gray</code> — it <em>replaces</em> that family entirely, even though you are inside <code>extend</code>. Merging happens one level deep, so extending <code>colors</code> merges families, and a family you supply overwrites the whole default family of that name. If you want to adjust two shades of grey, you must respell all eleven.</p>
 </div>
 
 <div class="callout">
@@ -327,7 +327,7 @@ B (thay the):   2 quy tac
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — deleting the zero-use entries and calling it done.</strong> Removing <code>lightbg</code> and its three siblings tidies the config and fixes nothing: the settings screen is still black in light mode, because the actual problem is the 2,677 uses of theme-named colours. The zero is a <em>symptom</em> pointing at where the real work is. Cleaning up the symptom while leaving the cause is the most common way an audit produces motion without progress.</p>
+<p><strong>Trap — deleting the zero-use entries and calling it done.</strong> Removing <code>lightbg</code> and its three siblings tidies the config and fixes nothing: the settings screen is still black in light mode, because the actual problem is the 2,677 uses of theme-named colours. The zero is a <em>symptom</em> pointing at where the real work is. Cleaning up the symptom while leaving the cause is the most common way an audit produces motion without progress.</p>
 </div>
 
 <div class="callout">
@@ -521,7 +521,7 @@ WRONG — theme names, hardcoded:
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — semantic names that are secretly pigments.</strong> <code>bg-primary</code> looks like a role and often is not: if <code>primary</code> is defined as your brand blue and used for backgrounds, borders, text and focus rings, it is a pigment wearing a role's name. The test is whether you can change it independently — if making <code>primary</code> darker for text contrast would break every button, the name covers several roles and needs splitting into <code>bg-primary</code>, <code>text-on-primary</code> and <code>border-primary</code>.</p>
+<p><strong>Trap — semantic names that are secretly pigments.</strong> <code>bg-primary</code> looks like a role and often is not: if <code>primary</code> is defined as your brand blue and used for backgrounds, borders, text and focus rings, it is a pigment wearing a role's name. The test is whether you can change it independently — if making <code>primary</code> darker for text contrast would break every button, the name covers several roles and needs splitting into <code>bg-primary</code>, <code>text-on-primary</code> and <code>border-primary</code>.</p>
 </div>
 
 <div class="callout">
@@ -752,7 +752,7 @@ animation: {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — adding a redundant guard because the audit said it was missing.</strong> If I had acted on that first measurement, six elements would have gained <code>motion-reduce:animate-none</code> on top of a CSS rule that already did the job. Harmless in effect, but it plants a false signal: the next reader sees the variant on some uses and not others and concludes the bare ones are bugs. A wrong audit does not stay wrong quietly; it propagates into the code as noise.</p>
+<p><strong>Trap — adding a redundant guard because the audit said it was missing.</strong> If I had acted on that first measurement, six elements would have gained <code>motion-reduce:animate-none</code> on top of a CSS rule that already did the job. Harmless in effect, but it plants a false signal: the next reader sees the variant on some uses and not others and concludes the bare ones are bugs. A wrong audit does not stay wrong quietly; it propagates into the code as noise.</p>
 </div>
 
 <div class="callout">
@@ -993,7 +993,7 @@ module.exports = {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — installing typography and then fighting <code>.prose</code> with <code>!important</code>.</strong> The predictable path: install it, discover the colours are wrong in dark mode, override a few, discover the overrides lose to <code>.prose</code>'s specificity, reach for <code>!important</code>, and end up with a stylesheet that is more override than content. That is strictly worse than the 300 lines it was meant to save — and it is the outcome this repo's recorded comment exists to prevent.</p>
+<p><strong>Trap — installing typography and then fighting <code>.prose</code> with <code>!important</code>.</strong> The predictable path: install it, discover the colours are wrong in dark mode, override a few, discover the overrides lose to <code>.prose</code>'s specificity, reach for <code>!important</code>, and end up with a stylesheet that is more override than content. That is strictly worse than the 300 lines it was meant to save — and it is the outcome this repo's recorded comment exists to prevent.</p>
 </div>
 
 <div class="callout">

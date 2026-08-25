@@ -121,7 +121,7 @@ docker run --rm --entrypoint node "\$ANH" \\
 <p><strong>Step 4 is the one that generalises.</strong> Constructing a <code>PrismaClient</code> inside the built image loads the engine, and it does so without a database — the connection is lazy. It catches the libc mismatch, a missing OpenSSL, a <code>node_modules</code> layer that did not copy, and an engine that was pruned by an over-eager cleanup step. One <code>docker run</code>, about 400 ms, and it turns a seven-minute outage into a failed deploy step.</p>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — building the image outside compose picks the default <code>Dockerfile</code>.</strong> <code>docker build .</code> means <code>-f Dockerfile</code>, whatever <code>docker-compose.yml</code> says the service uses. If your repository has <code>Dockerfile</code>, <code>Dockerfile.backend</code> and <code>frontend/Dockerfile</code>, a script that omits <code>-f</code> builds a plausible-looking image from the wrong recipe. Always pass <code>-f</code> explicitly in deploy scripts, and read it from the same compose file the server runs.</p>
+<p><strong>Trap — building the image outside compose picks the default <code>Dockerfile</code>.</strong> <code>docker build .</code> means <code>-f Dockerfile</code>, whatever <code>docker-compose.yml</code> says the service uses. If your repository has <code>Dockerfile</code>, <code>Dockerfile.backend</code> and <code>frontend/Dockerfile</code>, a script that omits <code>-f</code> builds a plausible-looking image from the wrong recipe. Always pass <code>-f</code> explicitly in deploy scripts, and read it from the same compose file the server runs.</p>
 </div>
 
 <h3>The engineless option</h3>
@@ -390,7 +390,7 @@ docker images backend:test
 REPOSITORY   TAG    SIZE
 backend      test   412MB     (node:22-alpine 178MB + engine 18MB + deps + dist)</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>npm prune --omit=dev</code> runs after <code>generate</code>, and that order is not optional.</strong> Prune first and the CLI is gone before it can generate; generate first and the already-generated client in <code>node_modules/.prisma</code> survives the prune, because prune removes packages, not the generated output. Getting this backwards produces <code>@prisma/client did not initialize yet. Please run "prisma generate"</code> at container start — a message that sends people to re-run generate on their laptop, where it works fine.</p>
+<p><strong>Trap — <code>npm prune --omit=dev</code> runs after <code>generate</code>, and that order is not optional.</strong> Prune first and the CLI is gone before it can generate; generate first and the already-generated client in <code>node_modules/.prisma</code> survives the prune, because prune removes packages, not the generated output. Getting this backwards produces <code>@prisma/client did not initialize yet. Please run "prisma generate"</code> at container start — a message that sends people to re-run generate on their laptop, where it works fine.</p>
 </div>
 
 <h3>The <code>.dockerignore</code> that matters</h3>
@@ -637,7 +637,7 @@ ALTER TABLE "User" ADD COLUMN "hoTen" TEXT NOT NULL;
   <div class="lz-step"><span class="lz-k">Deploy 3</span><span class="lz-t">Contract</span><span class="lz-d">Stop writing <code>fullName</code>. One deploy later, when you are sure no rollback target still reads it, a migration drops the column and <code>hoTen</code> becomes <code>NOT NULL</code>.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>@map</code> makes this free, and people forget it exists.</strong> If the change is only what the <em>Prisma field</em> is called, <code>hoTen String @map("fullName")</code> renames it in your code with an empty migration — no column moves, no window, no backfill. Three deploys are for changing the actual column. Check which one you are doing before writing any of this.</p>
+<p><strong>Trap — <code>@map</code> makes this free, and people forget it exists.</strong> If the change is only what the <em>Prisma field</em> is called, <code>hoTen String @map("fullName")</code> renames it in your code with an empty migration — no column moves, no window, no backfill. Three deploys are for changing the actual column. Check which one you are doing before writing any of this.</p>
 </div>
 
 <h3>The migrations that lock the table</h3>
@@ -902,7 +902,7 @@ const loai: ContentType = ContentType.CODE_REVIEW;</code></pre>
 <p><strong>Type-checking the seed is necessary and still not sufficient.</strong> The only way to know a seed works is to run it. A missing relation, a unique constraint the data violates, a required field with no default — none of those are type errors. Whenever the schema changes, the checklist is all three: <code>npx tsc --noEmit</code>, <code>npm run typecheck:seed</code>, and <code>npx prisma db seed</code> against a real local database. The third one is the only one that would have caught 08/08.</p>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — a hand-copied union type checks against itself.</strong> This is the general form, and it is not only about enums: a hand-written <code>interface</code> mirroring a Prisma model, a <code>type Role = 'ADMIN' | 'USER'</code> next to a Prisma enum, a duplicated list of column names. Each one is a copy that silently stops matching its original. Import from <code>@prisma/client</code>, always — Chapter 8 is thirty thousand characters on why the generated types are worth using.</p>
+<p><strong>Trap — a hand-copied union type checks against itself.</strong> This is the general form, and it is not only about enums: a hand-written <code>interface</code> mirroring a Prisma model, a <code>type Role = 'ADMIN' | 'USER'</code> next to a Prisma enum, a duplicated list of column names. Each one is a copy that silently stops matching its original. Import from <code>@prisma/client</code>, always — Chapter 8 is thirty thousand characters on why the generated types are worth using.</p>
 </div>
 
 <h3>The data migration: once, and recorded</h3>
@@ -1214,7 +1214,7 @@ process.on('SIGTERM', () =&gt; setTimeout(() =&gt; process.exit(1), 9000).unref(
 [tat] prisma da ngat        ← 1,9s
 exit 0                       ← khong co request nao bi cat giua chung</div>
 <div class="pitfall">
-<p><strong>Bẫy — Node as PID 1 does not get the default signal handlers.</strong> Linux gives PID 1 no default action for SIGTERM, so a container started with <code>CMD ["node", …]</code> ignores it entirely and dies to SIGKILL ten seconds later — every request in flight cut mid-response, every transaction rolled back. Your handler is never called and there is nothing in the log to say so. <code>ENTRYPOINT ["dumb-init", "--"]</code> from Lesson 11.2 fixes it; so does <code>tini</code>, or <code>docker run --init</code>. Verify it: <code>docker stop</code> a container and check whether your shutdown lines appear.</p>
+<p><strong>Trap — Node as PID 1 does not get the default signal handlers.</strong> Linux gives PID 1 no default action for SIGTERM, so a container started with <code>CMD ["node", …]</code> ignores it entirely and dies to SIGKILL ten seconds later — every request in flight cut mid-response, every transaction rolled back. Your handler is never called and there is nothing in the log to say so. <code>ENTRYPOINT ["dumb-init", "--"]</code> from Lesson 11.2 fixes it; so does <code>tini</code>, or <code>docker run --init</code>. Verify it: <code>docker stop</code> a container and check whether your shutdown lines appear.</p>
 </div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Order matters: HTTP first, Prisma second</span><span class="lz-lnote"><code>$disconnect()</code> before <code>server.close()</code> kills the pool while requests are still using it — every in-flight query fails with a connection error, and the client politely reconnects, which is the opposite of shutting down.</span></div>

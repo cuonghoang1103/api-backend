@@ -93,7 +93,7 @@ Pattern la: socket.io#&lt;namespace&gt;#&lt;room-name&gt;
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ adapter tự share tất cả state qua Redis.</strong> NO. The adapter shares only BROADCASTS (outgoing packets). Room membership stays LOCAL to each worker. <code>io.sockets.adapter.rooms.get(&#39;X&#39;)</code> on worker A holds only A's sockets. To answer &quot;who is in room X&quot; across the whole cluster you must use <code>await io.in(&#39;X&#39;).fetchSockets()</code> — it uses Redis to aggregate.</p>
+<p><strong>Trap — thinking the adapter shares all state through Redis by itself.</strong> NO. The adapter shares only BROADCASTS (outgoing packets). Room membership stays LOCAL to each worker. <code>io.sockets.adapter.rooms.get(&#39;X&#39;)</code> on worker A holds only A's sockets. To answer &quot;who is in room X&quot; across the whole cluster you must use <code>await io.in(&#39;X&#39;).fetchSockets()</code> — it uses Redis to aggregate.</p>
 </div>
 
 <div class="callout">
@@ -388,11 +388,11 @@ logger.info('[socket] adapter', {
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — using <code>io.sockets.sockets</code> for a user-facing count.</strong> It is a <code>Map</code> of the current worker's sockets only. On 4 workers your &quot;online users&quot; number is roughly a quarter of the truth, and it is <em>different on every request</em> depending on which worker answered. It never throws, so nothing points at it. Use <code>await io.fetchSockets()</code>, or better, a Redis presence set.</p>
+<p><strong>Trap — using <code>io.sockets.sockets</code> for a user-facing count.</strong> It is a <code>Map</code> of the current worker's sockets only. On 4 workers your &quot;online users&quot; number is roughly a quarter of the truth, and it is <em>different on every request</em> depending on which worker answered. It never throws, so nothing points at it. Use <code>await io.fetchSockets()</code>, or better, a Redis presence set.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating <code>serverSideEmit</code>'s callback as partial-results.</strong> If any worker misses the timeout you get an error and no responses at all, not the subset that answered. A monitoring endpoint written assuming partial results will show &quot;0 users online&quot; during a slow moment rather than a slightly stale number.</p>
+<p><strong>Trap — treating <code>serverSideEmit</code>'s callback as partial-results.</strong> If any worker misses the timeout you get an error and no responses at all, not the subset that answered. A monitoring endpoint written assuming partial results will show &quot;0 users online&quot; during a slow moment rather than a slightly stale number.</p>
 </div>
 
 <div class="callout">
@@ -657,7 +657,7 @@ Cluster adapter (khong dung Redis):
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ &quot;Redis rất reliable, không cần lo failure&quot;.</strong> Redis restarts for maintenance (~2 hours a month). For those 30 seconds, the socket.io cluster loses fanout. Redis is not broken — this is planned maintenance. The design has to survive it rather than assume Redis is always up.</p>
+<p><strong>Trap — thinking &quot;Redis is very reliable, no need to plan for failure&quot;.</strong> Redis restarts for maintenance (~2 hours a month). For those 30 seconds, the socket.io cluster loses fanout. Redis is not broken — this is planned maintenance. The design has to survive it rather than assume Redis is always up.</p>
 </div>
 
 <div class="callout">
@@ -785,7 +785,7 @@ Cluster-level:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — bật cluster trước khi làm 5 việc trên.</strong> At 100 users you see NO problem. At 1,000 the bugs are silent and unpredictable. At 10,000 every daily deploy is a crisis. Work the checklist BEFORE, not after.</p>
+<p><strong>Trap — enabling clustering before doing the five things above.</strong> At 100 users you see NO problem. At 1,000 the bugs are silent and unpredictable. At 10,000 every daily deploy is a crisis. Work the checklist BEFORE, not after.</p>
 </div>
 
 <div class="callout">
@@ -1019,11 +1019,11 @@ logger.info('[socket] adapter', { configured: adapter, actual: io.of('/').adapte
 <p>Note the log prints both the <em>intended</em> and the <em>actual</em> adapter. Those disagreeing — because an env var was missing, or a Redis connection failed and something swallowed the error — is precisely the silent misconfiguration this chapter keeps returning to.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — choosing Redis reflexively for a single-machine deployment.</strong> If all your workers are on one box under <code>node:cluster</code>, the cluster adapter is lower latency and adds no service to operate. Redis becomes correct the moment there is a second machine — not before.</p>
+<p><strong>Trap — choosing Redis reflexively for a single-machine deployment.</strong> If all your workers are on one box under <code>node:cluster</code>, the cluster adapter is lower latency and adds no service to operate. Redis becomes correct the moment there is a second machine — not before.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating the Postgres adapter as a drop-in for Redis at any scale.</strong> LISTEN/NOTIFY caps payloads at 8000 bytes and spills larger ones to a table, and the adapter holds a dedicated connection. On a chat-heavy workload you have quietly put your message bus in contention with your durable data. Measure p99 broadcast latency under your real query load before committing.</p>
+<p><strong>Trap — treating the Postgres adapter as a drop-in for Redis at any scale.</strong> LISTEN/NOTIFY caps payloads at 8000 bytes and spills larger ones to a table, and the adapter holds a dedicated connection. On a chat-heavy workload you have quietly put your message bus in contention with your durable data. Measure p99 broadcast latency under your real query load before committing.</p>
 </div>
 
 <div class="callout">

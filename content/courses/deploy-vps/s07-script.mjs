@@ -60,7 +60,7 @@ set -euo pipefail →  | ma thoat: 1</div>
 <p>A typo in a variable name, or a variable set in a different branch of an <code>if</code>, and the path you built is rooted at <code>/</code>. Exit code 0. This is the single most famous class of shell disaster, and <code>-u</code> is the one-word fix.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>-u</code> alone does not protect an interpolation you guarded wrongly.</strong> <code>\${GOC:-}</code> explicitly defaults to empty and silences <code>-u</code>, which is correct when you mean it and a disaster when you copied it from somewhere. For a path you are about to delete, use <code>\${GOC:?}</code> instead — it aborts with a message naming the variable. That is why the rollback script in 6.5 wrote <code>rm -rf "\${BO_DEM:?}"/*</code> and not <code>rm -rf "\$BO_DEM"/*</code>.</p>
+<p><strong>Trap — <code>-u</code> alone does not protect an interpolation you guarded wrongly.</strong> <code>\${GOC:-}</code> explicitly defaults to empty and silences <code>-u</code>, which is correct when you mean it and a disaster when you copied it from somewhere. For a path you are about to delete, use <code>\${GOC:?}</code> instead — it aborts with a message naming the variable. That is why the rollback script in 6.5 wrote <code>rm -rf "\${BO_DEM:?}"/*</code> and not <code>rm -rf "\$BO_DEM"/*</code>.</p>
 </div>
 
 <h3>The case that survives all four flags</h3>
@@ -295,7 +295,7 @@ ln -sfn "\$D/ban-\$1" "\$D/ht.moi" &amp;&amp; mv -Tf "\$D/ht.moi" "\$D/hien-tai"
 <p>Three runs, one line, and switching to a different version still works — which is the property people forget to test. Idempotent does not mean "does nothing the second time", it means <strong>the end state depends only on the arguments, not on how many times you ran it</strong>.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>grep -q … || echo …</code> quietly needs three flags.</strong> <code>-q</code> for quiet, <code>-x</code> to match the <em>whole line</em> (without it, a line that merely contains your string counts as present), and <code>-F</code> to treat the pattern as a fixed string (without it, every <code>.</code>, <code>$</code> and <code>[</code> in your config line is a regex metacharacter). Get any of the three wrong and the guard either never fires or always fires. The <code>2>/dev/null</code> matters too: on the first run the file does not exist yet, and <code>grep</code> printing an error would be the only sign.</p>
+<p><strong>Trap — <code>grep -q … || echo …</code> quietly needs three flags.</strong> <code>-q</code> for quiet, <code>-x</code> to match the <em>whole line</em> (without it, a line that merely contains your string counts as present), and <code>-F</code> to treat the pattern as a fixed string (without it, every <code>.</code>, <code>$</code> and <code>[</code> in your config line is a regex metacharacter). Get any of the three wrong and the guard either never fires or always fires. The <code>2>/dev/null</code> matters too: on the first run the file does not exist yet, and <code>grep</code> printing an error would be the only sign.</p>
 </div>
 
 <h3>The stronger version: generate, do not edit</h3>
@@ -544,7 +544,7 @@ khong co terminal de hoi — TU CHOI deploy. Dung --dong-y de bo qua.
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>flock</code> plus a background process is a self-inflicted deadlock.</strong> Lesson 3.5 measured this on my own swap script: <code>exec 9>/var/lock/x</code> takes the lock on file descriptor 9, then the app is started in the background and <em>inherits fd 9</em>. The script exits, the lock is not released — the long-lived app is still holding it — and the next deploy waits forever on a lock owned by a process that has no idea it has one. The fix is <code>9>&amp;-</code> on the background command, closing that descriptor in the child. Diagnose it with <code>ls -l /proc/&lt;pid&gt;/fd</code> or <code>fuser /var/lock/x</code>.</p>
+<p><strong>Trap — <code>flock</code> plus a background process is a self-inflicted deadlock.</strong> Lesson 3.5 measured this on my own swap script: <code>exec 9>/var/lock/x</code> takes the lock on file descriptor 9, then the app is started in the background and <em>inherits fd 9</em>. The script exits, the lock is not released — the long-lived app is still holding it — and the next deploy waits forever on a lock owned by a process that has no idea it has one. The fix is <code>9>&amp;-</code> on the background command, closing that descriptor in the child. Diagnose it with <code>ls -l /proc/&lt;pid&gt;/fd</code> or <code>fuser /var/lock/x</code>.</p>
 </div>
 
 <h3>Refusing is not the same as failing</h3>
@@ -703,7 +703,7 @@ exit \$LOI</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — only list routes that answer a bare unauthenticated GET.</strong> Add a POST-only route or one that requires a path parameter and every deploy fails on a route that was never going to return anything else. This repository learned that one the same way everybody does; its note now reads: <em>do NOT add POST-only or param-required routes, or every deploy will false-fail.</em> A smoke test that cries wolf gets commented out within a week, and then it is not protecting anything.</p>
+<p><strong>Trap — only list routes that answer a bare unauthenticated GET.</strong> Add a POST-only route or one that requires a path parameter and every deploy fails on a route that was never going to return anything else. This repository learned that one the same way everybody does; its note now reads: <em>do NOT add POST-only or param-required routes, or every deploy will false-fail.</em> A smoke test that cries wolf gets commented out within a week, and then it is not protecting anything.</p>
 </div>
 
 <h3>Now the part everybody skips</h3>
@@ -761,7 +761,7 @@ echo "  KHONG len duoc sau 6 lan thu"; exit 0</code></pre>
 22:09:16.271 XONG</div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>exec &gt; &gt;(…)</code> reorders your last line.</strong> The elegant way to timestamp everything is <code>exec &gt; &gt;(while read -r d; do printf '%s %s\\n' "\$(date …)" "\$d"; done) 2&gt;&amp;1</code>. It works, and it has a race: the process substitution is a separate process that keeps draining after the script exits. Measured three times out of three, the final <code>XONG</code> appeared <em>after</em> the calling shell had already moved on to the next command. If anything greps the log&#39;s last line to decide whether the deploy finished, that is a genuine race. The per-line <code>ghi()</code> function above has no such gap — I measured it three times and the ordering held.</p>
+<p><strong>Trap — <code>exec &gt; &gt;(…)</code> reorders your last line.</strong> The elegant way to timestamp everything is <code>exec &gt; &gt;(while read -r d; do printf '%s %s\\n' "\$(date …)" "\$d"; done) 2&gt;&amp;1</code>. It works, and it has a race: the process substitution is a separate process that keeps draining after the script exits. Measured three times out of three, the final <code>XONG</code> appeared <em>after</em> the calling shell had already moved on to the next command. If anything greps the log&#39;s last line to decide whether the deploy finished, that is a genuine race. The per-line <code>ghi()</code> function above has no such gap — I measured it three times and the ordering held.</p>
 </div>
 
 <p>And when a log is not enough, <code>set -x</code> with a useful <code>PS4</code> shows every command that actually ran, with line numbers:</p>
@@ -1073,7 +1073,7 @@ TRUOC=""     <span class="tok-comment"># thanh cong: khong lui nua</span></code>
 <p>100 milliseconds to recover, correct in both cases, and the exit codes still carry which failure it was.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — a rollback path that has never run is not a rollback path.</strong> My cleanup handler read correctly, was written by someone who had just spent a chapter measuring rollbacks, and was wrong. Nothing about reading it would have told me — I found it by deliberately deploying a broken artifact and then asking the front door what it was serving. Every failure branch in a deploy script needs that treatment: cause the failure on purpose, then check the machine, not the log. The log said &#39;dua symlink ve v2&#39; in both broken cases, and it was telling the truth about what it did.</p>
+<p><strong>Trap — a rollback path that has never run is not a rollback path.</strong> My cleanup handler read correctly, was written by someone who had just spent a chapter measuring rollbacks, and was wrong. Nothing about reading it would have told me — I found it by deliberately deploying a broken artifact and then asking the front door what it was serving. Every failure branch in a deploy script needs that treatment: cause the failure on purpose, then check the machine, not the log. The log said &#39;dua symlink ve v2&#39; in both broken cases, and it was telling the truth about what it did.</p>
 </div>
 
 <h3>The three properties that survived testing</h3>

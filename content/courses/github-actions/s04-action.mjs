@@ -82,7 +82,7 @@ CONG                111s                873s         11.3%</div>
 <p>Each <code>with:</code> key becomes an environment variable named <code>INPUT_&lt;KEY&gt;</code>, uppercased. That is the entire mechanism — which is why passing a value through <code>with:</code> is safe from shell injection in a way that putting it in <code>run:</code> is not: the action receives it as data, and never as script text. Outputs come back the same way an ordinary step&#39;s do, through <code>\$GITHUB_OUTPUT</code>, and are read from the <code>steps</code> context with an <code>id:</code>.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — a misspelled <code>with:</code> key is silently ignored.</strong> There is no schema validation on inputs at workflow level: write <code>node_version</code> where the action expects <code>node-version</code> and you get no error, no warning, and the action&#39;s <em>default</em> version instead of yours. The symptom is a build that works and uses the wrong toolchain, which surfaces weeks later as an inexplicable difference between CI and a developer machine. Read the action&#39;s <code>action.yml</code> for the exact input names rather than the README, which is prose and can lag.</p>
+<p><strong>Trap — a misspelled <code>with:</code> key is silently ignored.</strong> There is no schema validation on inputs at workflow level: write <code>node_version</code> where the action expects <code>node-version</code> and you get no error, no warning, and the action&#39;s <em>default</em> version instead of yours. The symptom is a build that works and uses the wrong toolchain, which surfaces weeks later as an inexplicable difference between CI and a developer machine. Read the action&#39;s <code>action.yml</code> for the exact input names rather than the README, which is prose and can lag.</p>
 </div>
 
 <h3>The pre and post phases</h3>
@@ -263,7 +263,7 @@ docker/setup-buildx-action@v3</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — pinning the action but not what the action downloads.</strong> A SHA-pinned <code>setup-node</code> still fetches a Node distribution over the network at run time; a SHA-pinned <code>checkout</code> still fetches your repository. Pinning the action fixes <em>the code that runs</em>, not <em>everything that code brings in</em>. This is not an argument against pinning — it is an argument against treating a pinned <code>uses:</code> as a completed security task. The install step immediately after it is usually the bigger surface, and that one is governed by your lockfile.</p>
+<p><strong>Trap — pinning the action but not what the action downloads.</strong> A SHA-pinned <code>setup-node</code> still fetches a Node distribution over the network at run time; a SHA-pinned <code>checkout</code> still fetches your repository. Pinning the action fixes <em>the code that runs</em>, not <em>everything that code brings in</em>. This is not an argument against pinning — it is an argument against treating a pinned <code>uses:</code> as a completed security task. The install step immediately after it is usually the bigger surface, and that one is governed by your lockfile.</p>
 </div>
 
 <h3>The one thing to do today</h3>
@@ -412,7 +412,7 @@ day du (fetch-depth: 0)   11540 · 10381 · 10152    10,7s   171M    480M    251
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — "shallow clone is faster" as a general rule.</strong> It is true for a repository with deep history and small files, and this course has now measured a repository where it is not. Before adding <code>fetch-depth: 0</code> and worrying about the cost, or leaving it at 1 and writing around the missing history, measure the two clones. It is one command each and the answer is repository-specific.</p>
+<p><strong>Trap — "shallow clone is faster" as a general rule.</strong> It is true for a repository with deep history and small files, and this course has now measured a repository where it is not. Before adding <code>fetch-depth: 0</code> and worrying about the cost, or leaving it at 1 and writing around the missing history, measure the two clones. It is one command each and the answer is repository-specific.</p>
 </div>
 
 <h3>What else the default costs you</h3>
@@ -642,7 +642,7 @@ muc tieu (tu log that)             699ec67c02f94027...</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the two caches do different things, and people expect the wrong one.</strong> <code>setup-node</code>&#39;s <code>cache:</code> caches the <strong>package manager&#39;s download directory</strong> — <code>~/.npm</code> — not <code>node_modules</code>. So <code>npm ci</code> still runs, still deletes and rebuilds <code>node_modules</code>, and still takes real time; what it skips is the network fetch. Measured on the desktop job in 2.3, <code>npm ci</code> ran in 38 to 107 seconds <em>with</em> that cache active. If you expected "cached dependencies" to mean "no install step", this is where that expectation breaks.</p>
+<p><strong>Trap — the two caches do different things, and people expect the wrong one.</strong> <code>setup-node</code>&#39;s <code>cache:</code> caches the <strong>package manager&#39;s download directory</strong> — <code>~/.npm</code> — not <code>node_modules</code>. So <code>npm ci</code> still runs, still deletes and rebuilds <code>node_modules</code>, and still takes real time; what it skips is the network fetch. Measured on the desktop job in 2.3, <code>npm ci</code> ran in 38 to 107 seconds <em>with</em> that cache active. If you expected "cached dependencies" to mean "no install step", this is where that expectation breaks.</p>
 </div>
 
 <h3>A dead cache, found in the same log</h3>
@@ -863,7 +863,7 @@ runs:
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — factoring out before the shape is known.</strong> Two copies of something is not evidence of a pattern; it is evidence of two things that currently look alike. A composite action extracted from two call sites tends to grow an input for every way the third call site differs, and ends up harder to read than the duplication it replaced. Nine copies with one axis of variation — this case — is past that threshold. Two copies is not.</p>
+<p><strong>Trap — factoring out before the shape is known.</strong> Two copies of something is not evidence of a pattern; it is evidence of two things that currently look alike. A composite action extracted from two call sites tends to grow an input for every way the third call site differs, and ends up harder to read than the duplication it replaced. Nine copies with one axis of variation — this case — is past that threshold. Two copies is not.</p>
 </div>
 
 <h3>Reusable workflows, and the one thing that surprises</h3>

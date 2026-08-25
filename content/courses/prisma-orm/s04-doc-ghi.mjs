@@ -98,7 +98,7 @@ An operation failed because it depends on one or more records that were required
 const latest = await prisma.post.findFirst({ where: { published: true } });</code></pre>
 <div class="out">prisma:query SELECT ... FROM "public"."posts" WHERE "public"."posts"."published" = $1 LIMIT $2 OFFSET $3</div>
 <div class="pitfall">
-<p><strong>Bẫy — no <code>ORDER BY</code> means no defined order.</strong> PostgreSQL returns whichever row it finds first, which is usually insertion order on a fresh table and stops being so the moment rows are updated (an update rewrites the row at the end of the heap) or the planner switches to an index scan. So this works in development, works in staging, and returns a random post in production after the table has churned. <strong>Every <code>findFirst</code> needs an <code>orderBy</code></strong> — if you cannot name the ordering, you wanted <code>findMany</code> or <code>findUnique</code>.</p>
+<p><strong>Trap — no <code>ORDER BY</code> means no defined order.</strong> PostgreSQL returns whichever row it finds first, which is usually insertion order on a fresh table and stops being so the moment rows are updated (an update rewrites the row at the end of the heap) or the planner switches to an index scan. So this works in development, works in staging, and returns a random post in production after the table has churned. <strong>Every <code>findFirst</code> needs an <code>orderBy</code></strong> — if you cannot name the ordering, you wanted <code>findMany</code> or <code>findUnique</code>.</p>
 </div>
 <pre><code><span class="tok-comment">// Correct</span>
 const latest = await prisma.post.findFirst({
@@ -444,7 +444,7 @@ prisma:query SELECT "id","username" FROM "users" WHERE "id" IN ($1,$2,$3,$4)
 prisma:query SELECT (SELECT COUNT(*) FROM "comments" WHERE "post_id" = "posts"."id"), (SELECT COUNT(*) FROM "likes" WHERE "post_id" = "posts"."id") FROM "posts" WHERE "id" = $1</div>
 <p>Five statements for a fully populated post page. Not one, but not fifty either — and each relation level is batched with <code>IN</code> rather than looped. Chapter 9 shows how <code>relationLoadStrategy: "join"</code> collapses these, and measures when that is actually faster.</p>
 <div class="pitfall">
-<p><strong>Bẫy — <code>take</code> inside a nested relation is per parent, not overall.</strong> <code>findMany({ take: 10, include: { comments: { take: 20 } } })</code> can return up to 200 comments, not 20. That is usually what you want for a feed; it is a surprise when the outer <code>take</code> is large. And note the nested <code>take</code> is applied per parent by the query engine, so it does not reduce the work the database does as much as you might hope — Chapter 9 has the measurement.</p>
+<p><strong>Trap — <code>take</code> inside a nested relation is per parent, not overall.</strong> <code>findMany({ take: 10, include: { comments: { take: 20 } } })</code> can return up to 200 comments, not 20. That is usually what you want for a feed; it is a surprise when the outer <code>take</code> is large. And note the nested <code>take</code> is applied per parent by the query engine, so it does not reduce the work the database does as much as you might hope — Chapter 9 has the measurement.</p>
 </div>
 
 <h3>Filtering and ordering the included relation</h3>
@@ -786,7 +786,7 @@ prisma:query INSERT INTO "posts" ("title") VALUES ($1) RETURNING "id"
 prisma:query INSERT INTO "_PostToTag" ("A","B") VALUES ($1,$2),($3,$4),($5,$6) ON CONFLICT DO NOTHING
 prisma:query COMMIT</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>connectOrCreate</code> is not atomic against a concurrent writer.</strong> It reads, then decides, then writes. Two requests creating the tag <code>prisma</code> at the same instant both see it missing and both insert — and the second gets <code>P2002</code>. The unique constraint saves your data, but your request fails. In a low-concurrency admin flow that is acceptable. Under real traffic, catch <code>P2002</code> and retry once, or pre-create your tag vocabulary. Chapter 7 covers the general pattern.</p>
+<p><strong>Trap — <code>connectOrCreate</code> is not atomic against a concurrent writer.</strong> It reads, then decides, then writes. Two requests creating the tag <code>prisma</code> at the same instant both see it missing and both insert — and the second gets <code>P2002</code>. The unique constraint saves your data, but your request fails. In a low-concurrency admin flow that is acceptable. Under real traffic, catch <code>P2002</code> and retry once, or pre-create your tag vocabulary. Chapter 7 covers the general pattern.</p>
 </div>
 
 <h3><code>createMany</code> — thousands in one statement</h3>
@@ -1104,7 +1104,7 @@ prisma:query UPDATE "posts" SET "published"=$1,"updated_at"=$2 WHERE ("author_id
 { count: 7 }
 prisma:query UPDATE "posts" SET "published"=$1,"updated_at"=$2 WHERE "author_id"=$3 RETURNING "id","title"</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>updateMany</code> matching nothing is silent.</strong> <code>{ count: 0 }</code> is not an error, so an update whose <code>where</code> was wrong looks exactly like an update whose rows were already correct. Any handler that reports success must check the count: <code>if (r.count === 0) return res.status(404)</code>. This is the mirror image of <code>update</code>, which throws — and the reason people reach for <code>updateMany</code> to "avoid the exception" and then never notice their update stopped working.</p>
+<p><strong>Trap — <code>updateMany</code> matching nothing is silent.</strong> <code>{ count: 0 }</code> is not an error, so an update whose <code>where</code> was wrong looks exactly like an update whose rows were already correct. Any handler that reports success must check the count: <code>if (r.count === 0) return res.status(404)</code>. This is the mirror image of <code>update</code>, which throws — and the reason people reach for <code>updateMany</code> to "avoid the exception" and then never notice their update stopped working.</p>
 </div>
 
 <h3>The lost-update race, drawn</h3>
@@ -1457,7 +1457,7 @@ prisma:query DELETE FROM "public"."posts" WHERE ("public"."posts"."author_id" = 
 { count: 12 }
 prisma:query DELETE FROM "public"."posts"</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>deleteMany({})</code> and <code>deleteMany({ where: undefined })</code> are the same thing.</strong> Both delete every row. And because <code>where</code> is optional, a filter built from request parameters that all came back <code>undefined</code> produces an empty object — so a "delete my drafts" endpoint with a bug deletes the whole table. Guard it: build the filter, check it is non-empty, and refuse if it is not. This is not paranoia; it is the single most expensive Prisma mistake there is.</p>
+<p><strong>Trap — <code>deleteMany({})</code> and <code>deleteMany({ where: undefined })</code> are the same thing.</strong> Both delete every row. And because <code>where</code> is optional, a filter built from request parameters that all came back <code>undefined</code> produces an empty object — so a "delete my drafts" endpoint with a bug deletes the whole table. Guard it: build the filter, check it is non-empty, and refuse if it is not. This is not paranoia; it is the single most expensive Prisma mistake there is.</p>
 </div>
 
 <h3>What a cascade actually costs</h3>

@@ -122,7 +122,7 @@ C. .unlayered dat trong @layer utilities, viet TRUOC
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — reasoning about Tailwind 3 output using CSS cascade-layer rules.</strong> Every article about <code>@layer</code> describes the CSS feature, which is real, well-specified and does not apply here. Reading the output once settles it: <code>grep -c '@layer' out.css</code> returns 0 on Tailwind 3 and non-zero on Tailwind 4. That single command tells you which set of rules governs your project.</p>
+<p><strong>Trap — reasoning about Tailwind 3 output using CSS cascade-layer rules.</strong> Every article about <code>@layer</code> describes the CSS feature, which is real, well-specified and does not apply here. Reading the output once settles it: <code>grep -c '@layer' out.css</code> returns 0 on Tailwind 3 and non-zero on Tailwind 4. That single command tells you which set of rules governs your project.</p>
 </div>
 
 <div class="callout">
@@ -324,7 +324,7 @@ C. .unlayered dat trong @layer utilities, viet TRUOC
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating a single count as a single problem.</strong> "620 rules outside a layer" reads like one issue with one fix. Classified, it is at least three: 358 legitimate descendant selectors that should stay, 139 position-dependent rules worth reviewing individually, and 92 pseudo-state rules that are fine. Any fix aimed at the aggregate would be wrong for most of it — and the aggregate is what a grep gives you unless you ask a second question.</p>
+<p><strong>Trap — treating a single count as a single problem.</strong> "620 rules outside a layer" reads like one issue with one fix. Classified, it is at least three: 358 legitimate descendant selectors that should stay, 139 position-dependent rules worth reviewing individually, and 92 pseudo-state rules that are fine. Any fix aimed at the aggregate would be wrong for most of it — and the aggregate is what a grep gives you unless you ask a second question.</p>
 </div>
 
 <div class="callout">
@@ -490,7 +490,7 @@ C. .unlayered dat trong @layer utilities, viet TRUOC
 <p>The first two are ideal base content. The third is the trap: styling <code>h1</code> globally means every <code>&lt;h1&gt;</code> carries that size, and a component wanting a small heading must override it. That is fine — utilities beat base easily — but it means every heading in the app now has a style you did not ask for, and removing it later is a site-wide visual change. Prefer styling elements in base only where a genuine document-level default is wanted.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — putting a component class in <code>@layer utilities</code> to make it "win".</strong> It works, and it inverts the relationship you actually want: now no utility can override that component, so every call site needing a variation must reach for <code>!important</code> or an arbitrary value. This is the failure lesson 3.5's ladder was built to avoid, arrived at from a different direction. If a component class keeps losing, the answer is almost never to promote it a layer — it is that something else has higher specificity, which layers do not fix.</p>
+<p><strong>Trap — putting a component class in <code>@layer utilities</code> to make it "win".</strong> It works, and it inverts the relationship you actually want: now no utility can override that component, so every call site needing a variation must reach for <code>!important</code> or an arbitrary value. This is the failure lesson 3.5's ladder was built to avoid, arrived at from a different direction. If a component class keeps losing, the answer is almost never to promote it a layer — it is that something else has higher specificity, which layers do not fix.</p>
 </div>
 
 <div class="callout">
@@ -657,7 +657,7 @@ dong   565           .unlayered  &lt;- CSS khong-layer, DUNG CHO BAN VIET
 <p>Reading a built stylesheet top to bottom is a reliable way to answer "why did that win" — the answer is nearly always visible as a line number, and Preflight occupying the first 555 lines is the reason your own rules start where they do.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — diagnosing a Preflight removal as a missing utility.</strong> A list with no bullets looks like a styling bug, so people add <code>list-disc</code> and move on. That is correct for a list you author. For editor or markdown output you cannot add a class, so the same symptom needs a completely different fix — a scoped rule. Recognising the symptom as <em>Preflight removed a default</em> rather than <em>I forgot a class</em> is what points at the right one.</p>
+<p><strong>Trap — diagnosing a Preflight removal as a missing utility.</strong> A list with no bullets looks like a styling bug, so people add <code>list-disc</code> and move on. That is correct for a list you author. For editor or markdown output you cannot add a class, so the same symptom needs a completely different fix — a scoped rule. Recognising the symptom as <em>Preflight removed a default</em> rather than <em>I forgot a class</em> is what points at the right one.</p>
 </div>
 
 <div class="callout">
@@ -820,7 +820,7 @@ dong   565           .unlayered  &lt;- CSS khong-layer, DUNG CHO BAN VIET
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — grepping the source instead of the output.</strong> Searching <code>globals.css</code> for a competing rule misses everything Tailwind generates, which is most of the file — Preflight's 555 lines and every utility. The question "what beats my class" can only be answered against the artefact that ships. This is the same principle as lesson 6.2's CI guard: check the output, not the input.</p>
+<p><strong>Trap — grepping the source instead of the output.</strong> Searching <code>globals.css</code> for a competing rule misses everything Tailwind generates, which is most of the file — Preflight's 555 lines and every utility. The question "what beats my class" can only be answered against the artefact that ships. This is the same principle as lesson 6.2's CI guard: check the output, not the input.</p>
 </div>
 
 <div class="callout">

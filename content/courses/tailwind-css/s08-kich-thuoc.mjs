@@ -85,7 +85,7 @@ run 3: 5.205 ms
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — optimising CSS size before measuring the page.</strong> 45 KB gzipped is rarely the largest thing on a page, and time spent shrinking it is time not spent on the image, the font loading strategy, or the JavaScript. Open the Network tab, sort by size, and act on the top of that list. If CSS is not in the top three, this chapter is background reading rather than a task list.</p>
+<p><strong>Trap — optimising CSS size before measuring the page.</strong> 45 KB gzipped is rarely the largest thing on a page, and time spent shrinking it is time not spent on the image, the font loading strategy, or the JavaScript. Open the Network tab, sort by size, and act on the top of that list. If CSS is not in the top three, this chapter is background reading rather than a task list.</p>
 </div>
 
 <div class="callout">
@@ -243,7 +243,7 @@ globals.css       166.234 byte tho  ->  45.229 byte gzip
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — quoting raw size in a technical argument.</strong> "Our CSS is 371 KB" is true, alarming, and describes a file nobody downloads. It is the single most common way the Tailwind size debate is conducted, on both sides. If someone raises raw size, the reply is not a counter-claim — it is the gzip figure and, if they are comparing against hand-written CSS, the measurement above showing the ranking inverts.</p>
+<p><strong>Trap — quoting raw size in a technical argument.</strong> "Our CSS is 371 KB" is true, alarming, and describes a file nobody downloads. It is the single most common way the Tailwind size debate is conducted, on both sides. If someone raises raw size, the reply is not a counter-claim — it is the gzip figure and, if they are comparing against hand-written CSS, the measurement above showing the ranking inverts.</p>
 </div>
 
 <div class="callout">
@@ -418,7 +418,7 @@ byte tuy y          : 105.189 / 317.448  (33,1% so byte)
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — assuming byte share tracks rule count.</strong> Gradients are 7.7% of rules and 15.6% of bytes; spacing utilities are the opposite. Any optimisation reasoned from rule counts — "we have 3,664 rules, that seems like a lot" — targets the cheap majority and misses the expensive minority. Sort by bytes, not by count; they rank differently and only one of them is what you pay for.</p>
+<p><strong>Trap — assuming byte share tracks rule count.</strong> Gradients are 7.7% of rules and 15.6% of bytes; spacing utilities are the opposite. Any optimisation reasoned from rule counts — "we have 3,664 rules, that seems like a lot" — targets the cheap majority and misses the expensive minority. Sort by bytes, not by count; they rank differently and only one of them is what you pay for.</p>
 </div>
 
 <div class="callout">
@@ -609,7 +609,7 @@ fi
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — celebrating a build-time improvement without checking the output.</strong> Build duration is the metric teams watch, and it is the one metric a broken content glob improves. Any config change that speeds the build materially should be followed by one <code>grep -c '^\\.'</code> on the output. If the rule count fell, the speedup was the bug.</p>
+<p><strong>Trap — celebrating a build-time improvement without checking the output.</strong> Build duration is the metric teams watch, and it is the one metric a broken content glob improves. Any config change that speeds the build materially should be followed by one <code>grep -c '^\\.'</code> on the output. If the rule count fell, the speedup was the bug.</p>
 </div>
 
 <div class="callout">
@@ -782,7 +782,7 @@ fi
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — optimising CSS because it is the thing you know how to measure.</strong> CSS size is easy to measure, easy to graph, and satisfying to reduce. Font loading strategy and image compression are harder to measure and usually worth an order of magnitude more. The measurement being convenient is not evidence that the target is the right one — and this chapter's own numbers say to do two server config lines and go and look at the images.</p>
+<p><strong>Trap — optimising CSS because it is the thing you know how to measure.</strong> CSS size is easy to measure, easy to graph, and satisfying to reduce. Font loading strategy and image compression are harder to measure and usually worth an order of magnitude more. The measurement being convenient is not evidence that the target is the right one — and this chapter's own numbers say to do two server config lines and go and look at the images.</p>
 </div>
 
 <div class="callout">

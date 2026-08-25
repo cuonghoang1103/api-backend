@@ -100,7 +100,7 @@ $ cat out.css
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — assuming all variants raise specificity.</strong> Four of the five do; the breakpoint does not. That asymmetry is invisible from the syntax, and it means a hand-written CSS rule with specificity <code>0,2,0</code> will beat <code>md:flex</code> while losing to <code>hover:flex</code>. When a responsive class mysteriously does not apply and a hover class on the same element does, this asymmetry is the first thing to check.</p>
+<p><strong>Trap — assuming all variants raise specificity.</strong> Four of the five do; the breakpoint does not. That asymmetry is invisible from the syntax, and it means a hand-written CSS rule with specificity <code>0,2,0</code> will beat <code>md:flex</code> while losing to <code>hover:flex</code>. When a responsive class mysteriously does not apply and a hover class on the same element does, this asymmetry is the first thing to check.</p>
 </div>
 
 <div class="callout">
@@ -299,7 +299,7 @@ $ cat out.css
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — putting <code>group</code> on the same element as <code>group-hover:</code>.</strong> The selector is <code>.group:hover .group-hover\\:x</code> with a <em>descendant</em> space, so the two classes must be on different elements. Putting both on one element produces a rule that requires the element to be its own ancestor, which nothing satisfies. It looks completely reasonable in the JSX and never fires.</p>
+<p><strong>Trap — putting <code>group</code> on the same element as <code>group-hover:</code>.</strong> The selector is <code>.group:hover .group-hover\\:x</code> with a <em>descendant</em> space, so the two classes must be on different elements. Putting both on one element produces a rule that requires the element to be its own ancestor, which nothing satisfies. It looks completely reasonable in the JSX and never fires.</p>
 </div>
 
 <div class="callout">
@@ -497,7 +497,7 @@ $ find src -name "*.tsx" | wc -l
 <p>47% of components carry at least one breakpoint variant. And recall the distribution from Section 0: <code>sm:</code> 1,220 uses, <code>lg:</code> 376, <code>md:</code> 266, <code>xl:</code> 48, <code>2xl:</code> 1. The heavy skew to <code>sm:</code> says most responsive work here is the single jump from phone to everything-else, rather than a carefully tiered five-breakpoint system. That is typical and fine — and it means the <code>2xl:</code> single use is almost certainly an accident worth deleting.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — reading <code>md:</code> as "on medium screens".</strong> It means "at 768px <em>and above</em>", so it applies to medium, large, extra-large and beyond. Writing <code>md:hidden</code> to hide something on tablets also hides it on every desktop. To target a band you need both ends: <code>md:max-lg:hidden</code>. This single misreading accounts for a large share of "my responsive layout is wrong on desktop" bugs, and it is entirely a vocabulary problem — the name suggests a range, the behaviour is a threshold.</p>
+<p><strong>Trap — reading <code>md:</code> as "on medium screens".</strong> It means "at 768px <em>and above</em>", so it applies to medium, large, extra-large and beyond. Writing <code>md:hidden</code> to hide something on tablets also hides it on every desktop. To target a band you need both ends: <code>md:max-lg:hidden</code>. This single misreading accounts for a large share of "my responsive layout is wrong on desktop" bugs, and it is entirely a vocabulary problem — the name suggests a range, the behaviour is a threshold.</p>
 </div>
 
 <div class="callout">
@@ -702,7 +702,7 @@ $ grep -rho 'dark:[^ "'"'"'&#96;]*' $(grep -rl 'dark:' src --include="*.tsx" | g
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — my own first measurement of this returned 0.</strong> I ran <code>grep -o 'dark:[a-z0-9/\\[\\]#.-]*'</code> and got zero matches, when the baseline count was 786. The escaped brackets inside a character class broke the class itself. The number was obviously wrong <em>only because I had a baseline to compare against</em> — without the 786 I would have concluded the rule was perfectly followed and moved on. A measurement returning zero deserves more suspicion than one returning a surprising number.</p>
+<p><strong>Trap — my own first measurement of this returned 0.</strong> I ran <code>grep -o 'dark:[a-z0-9/\\[\\]#.-]*'</code> and got zero matches, when the baseline count was 786. The escaped brackets inside a character class broke the class itself. The number was obviously wrong <em>only because I had a baseline to compare against</em> — without the 786 I would have concluded the rule was perfectly followed and moved on. A measurement returning zero deserves more suspicion than one returning a surprising number.</p>
 </div>
 
 <div class="callout">
@@ -899,7 +899,7 @@ $ grep -rho 'dark:[^ "'"'"'&#96;]*' $(grep -rl 'dark:' src --include="*.tsx" | g
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — reaching for an arbitrary variant when a component would be better.</strong> <code>[&amp;&gt;div&gt;span:nth-child(2)]:text-red-500</code> is legal, generated correctly, and unreadable. Arbitrary variants are for reaching into markup you do not control; when you <em>do</em> control the markup, put the class on the element directly. The syntax existing does not make it the right answer — a selector you cannot read at a glance has moved complexity rather than removing it.</p>
+<p><strong>Trap — reaching for an arbitrary variant when a component would be better.</strong> <code>[&amp;&gt;div&gt;span:nth-child(2)]:text-red-500</code> is legal, generated correctly, and unreadable. Arbitrary variants are for reaching into markup you do not control; when you <em>do</em> control the markup, put the class on the element directly. The syntax existing does not make it the right answer — a selector you cannot read at a glance has moved complexity rather than removing it.</p>
 </div>
 
 <div class="callout">

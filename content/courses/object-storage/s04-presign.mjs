@@ -77,7 +77,7 @@ Voi videos 500 MB, direct upload la BAT BUOC (khong workaround)
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — không set CORS trên bucket.</strong> A browser PUT to R2 is cross-origin, so the bucket must allow PUT from your site's origin. Chapter 5 covers the CORS setup.</p>
+<p><strong>Trap — never setting CORS on the bucket.</strong> A browser PUT to R2 is cross-origin, so the bucket must allow PUT from your site's origin. Chapter 5 covers the CORS setup.</p>
 </div>
 
 <div class="callout">
@@ -264,7 +264,7 @@ $ curl -X PUT "$UPLOAD_URL" -H "Content-Type: text/html" -d "&lt;script&gt;"
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — chỉ test presigned upload với &quot;happy path&quot;.</strong> QA uploads a valid video, it works, you ship. Nobody notices the attack surface until a security audit. Test with the WRONG content-type explicitly in your suite.</p>
+<p><strong>Trap — testing presigned upload only on the &quot;happy path&quot;.</strong> QA uploads a valid video, it works, you ship. Nobody notices the attack surface until a security audit. Test with the WRONG content-type explicitly in your suite.</p>
 </div>
 
 <div class="callout">

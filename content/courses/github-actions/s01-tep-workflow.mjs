@@ -64,7 +64,7 @@ d.get("on")    = None</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the "Norway problem" is real and it is this same rule.</strong> A list of country codes containing <code>NO</code> parses as <code>[..., False, ...]</code>. It has bitten enough people to have a name. The general rule: <strong>if a scalar could be read as something other than a string, and you meant a string, quote it.</strong> Version numbers, country codes, git refs, anything starting with a zero, anything that looks like a date.</p>
+<p><strong>Trap — the "Norway problem" is real and it is this same rule.</strong> A list of country codes containing <code>NO</code> parses as <code>[..., False, ...]</code>. It has bitten enough people to have a name. The general rule: <strong>if a scalar could be read as something other than a string, and you meant a string, quote it.</strong> Version numbers, country codes, git refs, anything starting with a zero, anything that looks like a date.</p>
 </div>
 
 <h3>The one that silently drops a command</h3>
@@ -310,7 +310,7 @@ vps-cleanup-weekly.yml   schedule, workflow_dispatch</div>
     types: [opened, synchronize, reopened, ready_for_review, labeled]</code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>synchronize</code> is the one that fires on every new commit, and it is easy to remove by accident.</strong> The moment you write an explicit <code>types:</code> list you have taken responsibility for the whole list. Writing <code>types: [opened]</code> because you wanted to add something gives you a workflow that checks the first commit of a PR and never looks at it again — every subsequent push goes unchecked while the PR still shows a green tick from the first run. This is one of the quietest ways to lose CI coverage.</p>
+<p><strong>Trap — <code>synchronize</code> is the one that fires on every new commit, and it is easy to remove by accident.</strong> The moment you write an explicit <code>types:</code> list you have taken responsibility for the whole list. Writing <code>types: [opened]</code> because you wanted to add something gives you a workflow that checks the first commit of a PR and never looks at it again — every subsequent push goes unchecked while the PR still shows a green tick from the first run. This is one of the quietest ways to lose CI coverage.</p>
 </div>
 
 <h3>Multiple triggers in one file</h3>
@@ -349,7 +349,7 @@ vps-cleanup-weekly.yml   schedule, workflow_dispatch</div>
 <p>Which gives you a dropdown in the UI, and <code>\${{ inputs.moi_truong }}</code> inside the run. This is the mechanism that lets a deploy be deliberate — a human chooses the target and the moment — while still being one button rather than a checklist somebody follows from memory.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — a boolean input arrives as a <em>string</em>.</strong> <code>type: boolean</code> produces the text <code>'true'</code> or <code>'false'</code> in the expression context, so <code>if: inputs.bo_qua_test</code> is truthy for <em>both</em> values, because a non-empty string is truthy. Write <code>if: inputs.bo_qua_test == 'true'</code>. Chapter 3 measures the expression rules that make this happen; it catches almost everybody once.</p>
+<p><strong>Trap — a boolean input arrives as a <em>string</em>.</strong> <code>type: boolean</code> produces the text <code>'true'</code> or <code>'false'</code> in the expression context, so <code>if: inputs.bo_qua_test</code> is truthy for <em>both</em> values, because a non-empty string is truthy. Write <code>if: inputs.bo_qua_test == 'true'</code>. Chapter 3 measures the expression rules that make this happen; it catches almost everybody once.</p>
 </div>
 
 <h3>What starts nothing</h3>
@@ -548,7 +548,7 @@ vps-cleanup-weekly.yml   schedule, workflow_dispatch</div>
 <p>This repository&#39;s workflow gets it right and, more importantly, <em>writes the conversion in a comment</em> — <code># Chạy lúc 3h sáng UTC mỗi Chủ nhật (= 10h sáng VN)</code>. A cron expression is five numbers with no units and no timezone; the comment is the only place the intent can live.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — for a country that observes daylight saving, one cron cannot mean one local time all year.</strong> UTC does not shift; local time does. A job scheduled for 09:00 local runs at 09:00 for half the year and 08:00 or 10:00 for the other half, and switches on a date nobody wrote down. Vietnam does not observe DST so this repository is unaffected — but if your team is in Europe or North America, the "why did the report arrive an hour early in March" question has this answer.</p>
+<p><strong>Trap — for a country that observes daylight saving, one cron cannot mean one local time all year.</strong> UTC does not shift; local time does. A job scheduled for 09:00 local runs at 09:00 for half the year and 08:00 or 10:00 for the other half, and switches on a date nobody wrote down. Vietnam does not observe DST so this repository is unaffected — but if your team is in Europe or North America, the "why did the report arrive an hour early in March" question has this answer.</p>
 </div>
 
 <h3>What this measurement should change</h3>
@@ -766,7 +766,7 @@ PR #4 mergeable_state            = unknown  <- GitHub tinh LUOI, chi tinh khi co
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — tagging or publishing with <code>github.sha</code> on a PR run.</strong> A step that does <code>docker build -t app:\${{ github.sha }}</code> produces, on a PR, an image tagged with a merge commit that will never exist again once the PR updates. It is not reproducible, not reachable from any branch, and after the PR merges the tag corresponds to nothing. On PR runs tag with <code>head.sha</code>, or do not publish from PR runs at all.</p>
+<p><strong>Trap — tagging or publishing with <code>github.sha</code> on a PR run.</strong> A step that does <code>docker build -t app:\${{ github.sha }}</code> produces, on a PR, an image tagged with a merge commit that will never exist again once the PR updates. It is not reproducible, not reachable from any branch, and after the PR merges the tag corresponds to nothing. On PR runs tag with <code>head.sha</code>, or do not publish from PR runs at all.</p>
 </div>
 
 <h3>When the merge does not exist, nothing runs — and nothing says so</h3>
@@ -822,7 +822,7 @@ main tu do toi nay (24/08/2026) da di them:
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the line that turns a convenience into a compromise.</strong> Combination 2 is useless for most real jobs: you wanted <code>pull_request_target</code> so you could <em>build the PR</em>, and the base checkout does not contain the PR. So the obvious next step is to add <code>ref: \${{ github.event.pull_request.head.sha }}</code>, and that step produces combination 3. It is obvious, it is what a search result will show you, and it hands an arbitrary stranger a shell with your production credentials in the environment. Note also that nothing in the attack required a malicious <em>workflow</em> — the workflow file came from the base branch, untouched. Editing one already-trusted script was enough.</p>
+<p><strong>Trap — the line that turns a convenience into a compromise.</strong> Combination 2 is useless for most real jobs: you wanted <code>pull_request_target</code> so you could <em>build the PR</em>, and the base checkout does not contain the PR. So the obvious next step is to add <code>ref: \${{ github.event.pull_request.head.sha }}</code>, and that step produces combination 3. It is obvious, it is what a search result will show you, and it hands an arbitrary stranger a shell with your production credentials in the environment. Note also that nothing in the attack required a malicious <em>workflow</em> — the workflow file came from the base branch, untouched. Editing one already-trusted script was enough.</p>
 </div>
 
 <h3>What to do instead</h3>
@@ -1122,7 +1122,7 @@ frontend/**               2.242
 **/*.json                    93</div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>src/*</code> is not "everything under src".</strong> A single <code>*</code> does not cross a <code>/</code>. In this repository <code>src/**</code> matches 353 files and <code>src/*</code> matches exactly one, because <code>src/index.ts</code> is the only file sitting directly in <code>src/</code>. Write <code>src/*</code> in a <code>paths:</code> filter and you have removed CI from 352 files — with no error, no warning, and a workflow that still runs often enough to look alive. The same trap turns <code>*.json</code> (5 files, root only) into something very different from <code>**/*.json</code> (93 files).</p>
+<p><strong>Trap — <code>src/*</code> is not "everything under src".</strong> A single <code>*</code> does not cross a <code>/</code>. In this repository <code>src/**</code> matches 353 files and <code>src/*</code> matches exactly one, because <code>src/index.ts</code> is the only file sitting directly in <code>src/</code>. Write <code>src/*</code> in a <code>paths:</code> filter and you have removed CI from 352 files — with no error, no warning, and a workflow that still runs often enough to look alive. The same trap turns <code>*.json</code> (5 files, root only) into something very different from <code>**/*.json</code> (93 files).</p>
 </div>
 
 <h3>The filter that stops a PR forever</h3>
@@ -1158,7 +1158,7 @@ so commit vuot 300 file: 0 / 200</div>
 <p>It does not. That match is inside a <code>docker/build-push-action</code> step, where <code>tags:</code> names the <em>Docker image tags</em> to push. Counting only inside the <code>on:</code> block gives the real number: <strong>0 of 11</strong> workflows here trigger on a tag.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — grepping a key name across YAML with no regard for nesting.</strong> <code>tags:</code>, <code>name:</code>, <code>env:</code>, <code>if:</code> and <code>permissions:</code> are all legal at several different depths with different meanings. A flat <code>grep</code> across workflow files answers a question you did not ask. Scope the search to the block you mean — and when a one-line grep produces a surprising claim about your own repository, that surprise is the signal to check it, not to write it down.</p>
+<p><strong>Trap — grepping a key name across YAML with no regard for nesting.</strong> <code>tags:</code>, <code>name:</code>, <code>env:</code>, <code>if:</code> and <code>permissions:</code> are all legal at several different depths with different meanings. A flat <code>grep</code> across workflow files answers a question you did not ask. Scope the search to the block you mean — and when a one-line grep produces a surprising claim about your own repository, that surprise is the signal to check it, not to write it down.</p>
 </div>
 
 <p>One more thing falls out of that same file. <code>deploy-ghcr.yml</code> tags its images with <code>\${{ github.sha }}</code>, which lesson 1.4 named as a pitfall on PR runs. It is safe here for a reason that has nothing to do with the tag: the workflow is <code>workflow_dispatch:</code> only, so it can never run on a pull request, so <code>github.sha</code> is always a real branch commit. The hazard was avoided by the trigger configuration, not by the variable choice — which is exactly the kind of accidental safety that stops being safe the moment somebody adds a <code>pull_request:</code> trigger to that file.</p>

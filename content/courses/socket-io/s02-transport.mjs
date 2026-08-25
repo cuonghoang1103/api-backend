@@ -111,7 +111,7 @@ Cho video call signalling (Chuong 7): 200ms trans-Pacific WebSocket
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — đọc số &quot;133×&quot; của tôi ở 0.2 mà không kiểm.</strong> I produced that figure myself with a simple multiplication, not with a measurement. This is the &quot;plausible-sounding number&quot; class of error — it gets into the text because it contradicts nothing you already know. The fix: run a probe. The prevention: every number must ship WITH ITS MEASUREMENT, not with an estimate standing in for one.</p>
+<p><strong>Trap — taking my &quot;133×&quot; figure from 0.2 without checking it.</strong> I produced that figure myself with a simple multiplication, not with a measurement. This is the &quot;plausible-sounding number&quot; class of error — it gets into the text because it contradicts nothing you already know. The fix: run a probe. The prevention: every number must ship WITH ITS MEASUREMENT, not with an estimate standing in for one.</p>
 </div>
 
 <div class="callout">
@@ -431,7 +431,7 @@ done
 <p>This repo runs the backend in ONE Docker container, not multi-worker (not yet). But the Redis adapter config (<code>attachRedisAdapter</code> trong <code>messaging.socket.ts:200</code>) is already in place — turn on clustering in PM2 or add Kubernetes replicas and it works. Sticky nginx is STILL required because of the polling handshake — the Redis adapter gives you cross-worker broadcast, NOT cross-worker sessions.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ Redis adapter thay thế sticky.</strong> NO. The Redis adapter fans broadcast messages out across workers; it does NOT share engine.io session state. Polling still needs one client to land back on the same worker. These are two different problems requiring two different solutions.</p>
+<p><strong>Trap — thinking the Redis adapter replaces sticky sessions.</strong> NO. The Redis adapter fans broadcast messages out across workers; it does NOT share engine.io session state. Polling still needs one client to land back on the same worker. These are two different problems requiring two different solutions.</p>
 </div>
 
 <div class="callout">
@@ -577,7 +577,7 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng <code>curl -v</code> without understanding the output.</strong> <code>-v</code> dumps 50+ lines of headers. It is easy to get lost. Start with <code>-s -o /dev/null -w &#39;%{http_code}&#39;</code> — status code only. Then <code>-s</code> to see the body. Only reach for <code>-v</code> once you know what you are looking for.</p>
+<p><strong>Trap — using <code>curl -v</code> without understanding the output.</strong> <code>-v</code> dumps 50+ lines of headers. It is easy to get lost. Start with <code>-s -o /dev/null -w &#39;%{http_code}&#39;</code> — status code only. Then <code>-s</code> to see the body. Only reach for <code>-v</code> once you know what you are looking for.</p>
 </div>
 
 <div class="callout">
@@ -740,7 +740,7 @@ Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
 <p>This repo keeps the 1 MB default. If a payload larger than 1 MB arrives, engine.io closes the connection with <code>disconnect(&quot;forced close&quot;)</code>.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng socket.io emit cho upload file 10 MB.</strong> You get <code>disconnect(forced close)</code> because you exceeded <code>maxHttpBufferSize</code>. Or you raise it to 100 MB — and then a single emit request holds 100 MB of server RAM. The fix: chunk the file, use a dedicated HTTP upload endpoint, and let socket.io ONLY announce &quot;upload finished&quot; in realtime.</p>
+<p><strong>Trap — using a socket.io emit to upload a 10 MB file.</strong> You get <code>disconnect(forced close)</code> because you exceeded <code>maxHttpBufferSize</code>. Or you raise it to 100 MB — and then a single emit request holds 100 MB of server RAM. The fix: chunk the file, use a dedicated HTTP upload endpoint, and let socket.io ONLY announce &quot;upload finished&quot; in realtime.</p>
 </div>
 
 <div class="callout">

@@ -83,7 +83,7 @@ so chuoi con 9-ky-tu CHUNG giua hai ban: 0</div>
     B64: \${{ secrets.VPS_SSH_PRIVATE_KEY }}</code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>add-mask</code> only protects output printed <em>after</em> it runs.</strong> Registering a mask does not retroactively scrub earlier lines, and it does not survive into another job. So the order matters: compute, mask, then use. And a value masked in one job is unmasked in the next unless that job registers it again — which is a reason to derive secrets where they are used rather than passing derived values between jobs.</p>
+<p><strong>Trap — <code>add-mask</code> only protects output printed <em>after</em> it runs.</strong> Registering a mask does not retroactively scrub earlier lines, and it does not survive into another job. So the order matters: compute, mask, then use. And a value masked in one job is unmasked in the next unless that job registers it again — which is a reason to derive secrets where they are used rather than passing derived values between jobs.</p>
 </div>
 
 <h3>The other thing masking does that surprises people</h3>
@@ -298,7 +298,7 @@ jobs:
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — adding <code>permissions:</code> and breaking a step nobody remembered needed it.</strong> Declaring any scope zeroes the rest, so a workflow that quietly relied on <code>issues: write</code> to post a comment stops posting, silently, with a 403 buried in an action&#39;s output. The safe order is: add the block with the scopes you know about, run it once, and read the log for permission errors — rather than adding it and assuming green means complete. This is the one change where "it still passes" is weak evidence.</p>
+<p><strong>Trap — adding <code>permissions:</code> and breaking a step nobody remembered needed it.</strong> Declaring any scope zeroes the rest, so a workflow that quietly relied on <code>issues: write</code> to post a comment stops posting, silently, with a 403 buried in an action&#39;s output. The safe order is: add the block with the scopes you know about, run it once, and read the log for permission errors — rather than adding it and assuming green means complete. This is the one change where "it still passes" is weak evidence.</p>
 </div>
 
 <h3>Environments, which this repository does not use</h3>
@@ -480,7 +480,7 @@ steps:
 <div class="out">id-token: write khai o  0 / 11 workflow cua kho nay</div>
 
 <div class="pitfall">
-<p><strong>Bẫy — forgetting <code>id-token: write</code>, and reading the error as a provider problem.</strong> Without it the job cannot request a token at all, and the failure surfaces on the cloud side as a credentials error — which sends people to check their role ARN and their trust policy, both of which are fine. It is one line in <code>permissions:</code>, and per 6.2 declaring it also zeroes every other scope, so <code>contents: read</code> has to be listed alongside it or the checkout breaks too.</p>
+<p><strong>Trap — forgetting <code>id-token: write</code>, and reading the error as a provider problem.</strong> Without it the job cannot request a token at all, and the failure surfaces on the cloud side as a credentials error — which sends people to check their role ARN and their trust policy, both of which are fine. It is one line in <code>permissions:</code>, and per 6.2 declaring it also zeroes every other scope, so <code>contents: read</code> has to be listed alongside it or the checkout breaks too.</p>
 </div>
 
 <h3>Where it applies, and where it does not</h3>
@@ -678,7 +678,7 @@ action ben thu ba chay trong cac job do: checkout, setup-node,
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating a green row as permanent.</strong> Every green result above is a property of the current files, not of the repository. <code>pull_request_target</code> is zero until somebody needs a labeller bot. Event interpolation is zero until somebody adds a step that echoes a branch name. The measurements are a snapshot, and the only thing that keeps them green is that the four checks are cheap enough to re-run — which is what 6.5 is for.</p>
+<p><strong>Trap — treating a green row as permanent.</strong> Every green result above is a property of the current files, not of the repository. <code>pull_request_target</code> is zero until somebody needs a labeller bot. Event interpolation is zero until somebody adds a step that echoes a branch name. The measurements are a snapshot, and the only thing that keeps them green is that the four checks are cheap enough to re-run — which is what 6.5 is for.</p>
 </div>
 
 <h3>The ranking, if only one thing gets done</h3>
@@ -855,7 +855,7 @@ dong gay ra chenh lech:
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — a check that cannot fail.</strong> The most likely outcome for a script like this is that it is added, everything is green because the greps do not match anything, and nobody notices that a typo in a pattern made it structurally incapable of finding a problem. Before trusting it, break something on purpose: add <code>pull_request_target</code> to a scratch file, run the script, confirm it goes amber, and remove it. A check you have never seen fail is a check you have not tested.</p>
+<p><strong>Trap — a check that cannot fail.</strong> The most likely outcome for a script like this is that it is added, everything is green because the greps do not match anything, and nobody notices that a typo in a pattern made it structurally incapable of finding a problem. Before trusting it, break something on purpose: add <code>pull_request_target</code> to a scratch file, run the script, confirm it goes amber, and remove it. A check you have never seen fail is a check you have not tested.</p>
 </div>
 
 <h3>What it deliberately does not check</h3>

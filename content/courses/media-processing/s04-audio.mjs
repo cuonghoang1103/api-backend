@@ -209,11 +209,11 @@ through 64 KB at a time.
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — not draining stderr.</strong> The OS pipe buffer is ~64 KB. A child that writes past it blocks forever waiting for a reader, your <code>close</code> handler never fires, and the request hangs until your timeout. It presents as &quot;FFmpeg is slow on some files&quot; and it is really &quot;FFmpeg is chatty on some files&quot;. Always attach a listener or call <code>.resume()</code>.</p>
+<p><strong>Trap — not draining stderr.</strong> The OS pipe buffer is ~64 KB. A child that writes past it blocks forever waiting for a reader, your <code>close</code> handler never fires, and the request hangs until your timeout. It presents as &quot;FFmpeg is slow on some files&quot; and it is really &quot;FFmpeg is chatty on some files&quot;. Always attach a listener or call <code>.resume()</code>.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — piping a format that needs to seek.</strong> MP4 read from <code>pipe:0</code> fails when its index is at the end of the file, and MP4 written to <code>pipe:1</code> fails because the muxer must go back and fill in the index. Both errors read like corruption. Use temp files for MP4, or fragment it with <code>-movflags frag_keyframe+empty_moov</code>.</p>
+<p><strong>Trap — piping a format that needs to seek.</strong> MP4 read from <code>pipe:0</code> fails when its index is at the end of the file, and MP4 written to <code>pipe:1</code> fails because the muxer must go back and fill in the index. Both errors read like corruption. Use temp files for MP4, or fragment it with <code>-movflags frag_keyframe+empty_moov</code>.</p>
 </div>
 
 <div class="callout">
@@ -650,11 +650,11 @@ After the fix:   Input Integrated:  -14.1 LUFS   ← normalized</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — a fallback that hides the thing it falls back from.</strong> The <code>catch</code> here was correct in intent: a broken loudnorm should not fail the upload. But it logged at <code>warn</code> and returned success, so the primary path could be 100% broken and every metric stayed green. If a fallback is meant to be rare, count it — a counter that fires on every request is an alert, not a log line.</p>
+<p><strong>Trap — a fallback that hides the thing it falls back from.</strong> The <code>catch</code> here was correct in intent: a broken loudnorm should not fail the upload. But it logged at <code>warn</code> and returned success, so the primary path could be 100% broken and every metric stayed green. If a fallback is meant to be rare, count it — a counter that fires on every request is an alert, not a log line.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — building filter graphs by joining array entries.</strong> FFmpeg filter strings are long, so the temptation to split them across lines is strong. Concatenate with <code>+</code> (no separator) or use a template literal; never <code>.join(' ')</code>. Better still, pass argv so the boundaries are explicit.</p>
+<p><strong>Trap — building filter graphs by joining array entries.</strong> FFmpeg filter strings are long, so the temptation to split them across lines is strong. Concatenate with <code>+</code> (no separator) or use a template literal; never <code>.join(' ')</code>. Better still, pass argv so the boundaries are explicit.</p>
 </div>
 
 <div class="callout">
@@ -1063,11 +1063,11 @@ with the upgrade path left open.
 <p>That is 8.5 MB for a 3.5-minute track at 320 kbps stereo. Re-encoding it to 192 kbps — the repo's target — gives 5.1 MB for a difference almost nobody can hear on the devices this gets played on. The repo's <code>getAudioMetadata()</code> wraps exactly this <code>ffprobe</code> call and returns duration, bitrate, sample rate, channels, and codec.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — re-encoding at a HIGHER bitrate than the source.</strong> A 128 kbps MP3 re-encoded to 320 kbps is 2.5× the size and <em>worse</em> quality than the original, because generational loss compounds — the second encoder faithfully reproduces the first encoder's artifacts and adds its own. Probe first; if the source bitrate is already at or below your target, either copy the stream or leave it alone.</p>
+<p><strong>Trap — re-encoding at a HIGHER bitrate than the source.</strong> A 128 kbps MP3 re-encoded to 320 kbps is 2.5× the size and <em>worse</em> quality than the original, because generational loss compounds — the second encoder faithfully reproduces the first encoder's artifacts and adds its own. Probe first; if the source bitrate is already at or below your target, either copy the stream or leave it alone.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — resampling speech up to 44.1 kHz &quot;for quality&quot;.</strong> Upsampling invents nothing, exactly like image upscaling in Lesson 1.3. A 16 kHz voice recording resampled to 44.1 kHz is 2.75× the data describing the same 8 kHz of actual content. Keep the rate the source has, or the rate the consumer needs — whichever is lower.</p>
+<p><strong>Trap — resampling speech up to 44.1 kHz &quot;for quality&quot;.</strong> Upsampling invents nothing, exactly like image upscaling in Lesson 1.3. A 16 kHz voice recording resampled to 44.1 kHz is 2.75× the data describing the same 8 kHz of actual content. Keep the rate the source has, or the rate the consumer needs — whichever is lower.</p>
 </div>
 
 <div class="callout">

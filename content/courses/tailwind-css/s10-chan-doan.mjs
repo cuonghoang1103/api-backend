@@ -62,7 +62,7 @@ export default {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng cây quyết định such as một checklist tuần tự.</strong> Not every symptom starts at Q1. If you <em>have already seen</em> DevTools strike through the rule, Q1 is plainly answered already (the rule EXISTS, it is merely LOSING). The tree exists so you never SKIP a question, not so you run all four every time.</p>
+<p><strong>Trap — treating the decision tree as a sequential checklist.</strong> Not every symptom starts at Q1. If you <em>have already seen</em> DevTools strike through the rule, Q1 is plainly answered already (the rule EXISTS, it is merely LOSING). The tree exists so you never SKIP a question, not so you run all four every time.</p>
 </div>
 
 <div class="callout">
@@ -218,7 +218,7 @@ color: rgb(138, 141, 145)     &lt;- MAU DAY, khong phai 70% alpha
 <p>The final check is to run it in a real browser and read <code>getComputedStyle</code>. The text has the <em>full</em> colour rather than 70% of it — in other words the base class applies and the opacity modifier does NOT. That matches what step 2 said: Tailwind does NOT emit <code>.text-text-muted\\/70</code>.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng công cụ &quot;class-name checker&quot; trực tuyến.</strong> They run a default Tailwind CLI on their own servers, WITHOUT your config. <code>bg-bg-elevated/60</code> is valid IF you declare <code>--bg-elevated</code> — and that site has no way of knowing. A WRONG answer from it is very hard to tell apart from a right one, and you can spend an entire evening trying to fix something broken by config rather than by the class.</p>
+<p><strong>Trap — using an online &quot;class-name checker&quot; tool.</strong> They run a default Tailwind CLI on their own servers, WITHOUT your config. <code>bg-bg-elevated/60</code> is valid IF you declare <code>--bg-elevated</code> — and that site has no way of knowing. A WRONG answer from it is very hard to tell apart from a right one, and you can spend an entire evening trying to fix something broken by config rather than by the class.</p>
 </div>
 
 <div class="callout">
@@ -399,11 +399,11 @@ Thu tu PHAT SINH: mt-1 mt-10 mt-12 mt-16 mt-2 mt-20 mt-24 mt-3 mt-32 mt-4 mt-8
 <p>Because with 6,562 className strings carrying arbitrary values in this repo (the §C measurement), pulling up a browser for each would take a whole evening. Q2 exists so YOU can locate the break in your head <em>before</em> opening DevTools, so that when you do open it, it is to confirm rather than to search. The three kinds in the <code>lz-map</code> above are three hypotheses worth trying.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — đọc panel Computed thay vì panel Styles.</strong> The Computed panel gives you <em>số</em> that applied; it does NOT tell you who applied it. You will see <code>margin-top: 2rem</code> and have no idea whether it came from <code>mt-8</code>, from an ordinary CSS rule, or from the default value itself. The Styles panel has strikethroughs; the Computed panel does not.</p>
+<p><strong>Trap — reading the Computed panel instead of the Styles panel.</strong> The Computed panel gives you <em>số</em> that applied; it does NOT tell you who applied it. You will see <code>margin-top: 2rem</code> and have no idea whether it came from <code>mt-8</code>, from an ordinary CSS rule, or from the default value itself. The Styles panel has strikethroughs; the Computed panel does not.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> When Q1 comes back YES (the rule exists) but the class still does not apply, DevTools&#39; Styles panel lists the winner at the TOP without a strikethrough and every loser below it struck through — and the losers' order is the generated CSS order, which explains why <code>mt-8</code> wins when reading the string with your eyes suggests <code>mt-32</code> should.</p>
+<p><strong>One sentence.</strong> When Q1 comes back YES (the rule exists) but the class still does not apply, DevTools&#39; Styles panel lists the winner at the TOP without a strikethrough and every loser below it struck through — and the losers' order is the generated CSS order, which explains why <code>mt-8</code> wins when reading the string with your eyes suggests <code>mt-32</code> should.</p>
 </div>
 
 <h3>Sources</h3>
@@ -575,11 +575,11 @@ for m in re.finditer(r'\\.rich-content[^{}]*\\{', globals_css):
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — cho rằng <code>@layer</code> (lesson 7.1) &quot;settles every dispute&quot;.</strong> NO. It only helps when Q3 TIES. A <code>.rich-content .body</code> rule at specificity 0,2,1 wrapped in <code>@layer components</code> still loses to a <code>.text-red-500</code> at 0,1,0 if — and only if — the utility is generated later. <em>Specificity still decides before layers do.</em></p>
+<p><strong>Trap — assuming <code>@layer</code> (lesson 7.1) &quot;settles every dispute&quot;.</strong> NO. It only helps when Q3 TIES. A <code>.rich-content .body</code> rule at specificity 0,2,1 wrapped in <code>@layer components</code> still loses to a <code>.text-red-500</code> at 0,1,0 if — and only if — the utility is generated later. <em>Specificity still decides before layers do.</em></p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Q3 (specificity) and Q4 (source order) are considered in exactly that order, and the four ways to break a tie differ in cost by an order of magnitude — reordering the source is nearly free, <code>@layer</code> costs one line, raising specificity costs a longer selector, and <code>!important</code> costs you <em>every</em> future utility on that same property — so it is only worth it for third-party components you cannot edit.</p>
+<p><strong>One sentence.</strong> Q3 (specificity) and Q4 (source order) are considered in exactly that order, and the four ways to break a tie differ in cost by an order of magnitude — reordering the source is nearly free, <code>@layer</code> costs one line, raising specificity costs a longer selector, and <code>!important</code> costs you <em>every</em> future utility on that same property — so it is only worth it for third-party components you cannot edit.</p>
 </div>
 
 <h3>Sources</h3>
@@ -783,11 +783,11 @@ cva() KHONG bọc cn()                         : 12   file
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — cho rằng &quot;prompt engineering&quot; sẽ sửa được.</strong> You write &quot;always use <code>cn()</code>&quot; into the system prompt and the AI obeys in its first reply, then forgets by the third once the context window fills. A surer approach is an ESLint rule catching <code>className={&#96;...\${</code> without <code>cn(</code> — <em>and refusing the commit</em>— an enforcement, not a suggestion.</p>
+<p><strong>Trap — assuming &quot;prompt engineering&quot; will fix it.</strong> You write &quot;always use <code>cn()</code>&quot; into the system prompt and the AI obeys in its first reply, then forgets by the third once the context window fills. A surer approach is an ESLint rule catching <code>className={&#96;...\${</code> without <code>cn(</code> — <em>and refusing the commit</em>— an enforcement, not a suggestion.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> AI code generators produce three dangerous patterns — template concatenation splitting class names (a Q1 failure), variant objects that do not let consumers override properly (a Q4 failure), and <code>cva()</code> not wrapped in <code>cn()</code> (a Q4 failure for consumers) — all three are fixed in two lines with <code>cn()</code> plus a lookup table, and an ESLint rule catching these three at commit time is surer than any instruction in a system prompt.</p>
+<p><strong>One sentence.</strong> AI code generators produce three dangerous patterns — template concatenation splitting class names (a Q1 failure), variant objects that do not let consumers override properly (a Q4 failure), and <code>cva()</code> not wrapped in <code>cn()</code> (a Q4 failure for consumers) — all three are fixed in two lines with <code>cn()</code> plus a lookup table, and an ESLint rule catching these three at commit time is surer than any instruction in a system prompt.</p>
 </div>
 
 <h3>Sources</h3>

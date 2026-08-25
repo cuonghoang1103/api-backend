@@ -118,11 +118,11 @@ And scale the objects to 100M:
 <p>The line item people notice is storage. The line item that actually causes bill spikes is Class A from over-eager listing or lifecycle scans. If a cost report jumps 3× overnight, look at Class A before you look at anything else.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — assuming &quot;R2 is free&quot; because egress is free.</strong> R2 still bills for storage, Class A, and Class B. A million reads of the same 1KB avatar is fine on either service; a million writes is $5. Free egress is a huge win, but it is one of five line items, not all of them.</p>
+<p><strong>Trap — assuming &quot;R2 is free&quot; because egress is free.</strong> R2 still bills for storage, Class A, and Class B. A million reads of the same 1KB avatar is fine on either service; a million writes is $5. Free egress is a huge win, but it is one of five line items, not all of them.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — reading only the storage figure on the dashboard.</strong> Cloudflare's R2 dashboard shows storage prominently and Class A/B in a smaller section. AWS billing hides both under &quot;Requests&quot;. Every month, check both. A Class A spike from a runaway migration script has ended more free tiers than storage ever did.</p>
+<p><strong>Trap — reading only the storage figure on the dashboard.</strong> Cloudflare's R2 dashboard shows storage prominently and Class A/B in a smaller section. AWS billing hides both under &quot;Requests&quot;. Every month, check both. A Class A spike from a runaway migration script has ended more free tiers than storage ever did.</p>
 </div>
 
 <div class="callout">
@@ -360,11 +360,11 @@ are used every day         Cheaper (no compute)      Compute per generation
 <p>The gap between &quot;photo library used lightly&quot; and &quot;photo library that hits a feed&quot; is three orders of magnitude in Class B. This is where a CDN in front of the bucket usually pays for itself — a Cloudflare cache hit is $0 in Class B, and R2 through the Cloudflare edge automatically caches, so most reads never touch the origin at all. On S3 the equivalent is CloudFront in front of the bucket.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — regenerating variants in a migration.</strong> A one-line pipeline change (&quot;now output AVIF too&quot;) plus a &quot;regenerate all&quot; script triggers 200,000 × N-new-variants PUTs. On R2 that is dollars, on S3 that is dollars, on either service that Class A charge shows up on next month's bill as a mystery. Roll variant additions out only for new uploads; regenerate lazily as photos are viewed.</p>
+<p><strong>Trap — regenerating variants in a migration.</strong> A one-line pipeline change (&quot;now output AVIF too&quot;) plus a &quot;regenerate all&quot; script triggers 200,000 × N-new-variants PUTs. On R2 that is dollars, on S3 that is dollars, on either service that Class A charge shows up on next month's bill as a mystery. Roll variant additions out only for new uploads; regenerate lazily as photos are viewed.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>Cache-Control</code> not set on variant PUTs.</strong> Without it, R2/S3 responses have short cache lifetimes and every viewer's browser refetches. On a hot feed that turns a $1/month asset into a $20/month asset in Class B. Always set <code>Cache-Control: public, max-age=31536000, immutable</code> on variants (they are content-addressed, so immutable is safe).</p>
+<p><strong>Trap — <code>Cache-Control</code> not set on variant PUTs.</strong> Without it, R2/S3 responses have short cache lifetimes and every viewer's browser refetches. On a hot feed that turns a $1/month asset into a $20/month asset in Class B. Always set <code>Cache-Control: public, max-age=31536000, immutable</code> on variants (they are content-addressed, so immutable is safe).</p>
 </div>
 
 <div class="callout">
@@ -612,11 +612,11 @@ zcat logs/r2/2026/08/*.json.gz \\
 <p>Logging pays for itself the first time it prevents or explains an incident. On accounts with a real workload, that is once a quarter minimum — usually more often.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — budget alert set on &quot;forecast&quot; only.</strong> Forecast is a moving guess; a sudden spike may not be extrapolated fast enough to trip. Always pair a forecast alarm with an <em>actual</em> alarm at 100% of your ceiling — that fires the moment you cross, not when the math says you might.</p>
+<p><strong>Trap — budget alert set on &quot;forecast&quot; only.</strong> Forecast is a moving guess; a sudden spike may not be extrapolated fast enough to trip. Always pair a forecast alarm with an <em>actual</em> alarm at 100% of your ceiling — that fires the moment you cross, not when the math says you might.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — logging into the same bucket you're logging.</strong> The log writes are themselves Class A ops, and their events would be logged, which produce more writes… a small self-amplification loop. Log into a separate bucket, and exclude that bucket from its own logging config if the tool asks.</p>
+<p><strong>Trap — logging into the same bucket you're logging.</strong> The log writes are themselves Class A ops, and their events would be logged, which produce more writes… a small self-amplification loop. Log into a separate bucket, and exclude that bucket from its own logging config if the tool asks.</p>
 </div>
 
 <div class="callout">

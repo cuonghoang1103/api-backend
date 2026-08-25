@@ -102,7 +102,7 @@ lightbg / lightcard / lightsurface / lightborder    0
 <p>The inner element uses identical class names and renders differently, because the variables resolved against a nearer ancestor. This is how a dark sidebar inside a light page, or a preview pane showing the opposite theme, is built without a single variant. It is also exactly what the Notes feature needed in the 2026-07-02 incident — a scoped theme — and what <code>.dark</code> failed to give it because <code>:is(.dark *)</code> has no scope limit.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — a variable that is not defined anywhere.</strong> <code>var(--typo-here)</code> with no definition resolves to nothing, and the declaration is discarded as invalid at computed-value time. For <code>color</code> that means the element inherits its parent's colour, which is often close enough to look intentional. Nothing errors, and the class exists in the CSS. Always supply a fallback for anything load-bearing: <code>var(--text-primary, #1c1e21)</code>.</p>
+<p><strong>Trap — a variable that is not defined anywhere.</strong> <code>var(--typo-here)</code> with no definition resolves to nothing, and the declaration is discarded as invalid at computed-value time. For <code>color</code> that means the element inherits its parent's colour, which is often close enough to look intentional. Nothing errors, and the class exists in the CSS. Always supply a fallback for anything load-bearing: <code>var(--text-primary, #1c1e21)</code>.</p>
 </div>
 
 <div class="callout">
@@ -328,7 +328,7 @@ $ grep -rhoE '\\b[a-z-]+-(text|cat)-[a-z-]+/[0-9]+' src --include="*.tsx" | sort
 <p>Ten lines in CI turns a silent visual defect into a build failure. This is the "verify the checker" habit from Chapter 5 applied forward: the interesting bugs are the ones that produce no error, so the check has to look at the artefact rather than at the exit code.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — assuming the opacity modifier works because the base class does.</strong> They are generated independently. <code>text-text-muted</code> renders perfectly, which is exactly what makes people trust <code>text-text-muted/60</code> without checking. Any time you introduce a variable-backed colour, test the modifier once — one build and one grep settles it permanently for that colour.</p>
+<p><strong>Trap — assuming the opacity modifier works because the base class does.</strong> They are generated independently. <code>text-text-muted</code> renders perfectly, which is exactly what makes people trust <code>text-text-muted/60</code> without checking. Any time you introduce a variable-backed colour, test the modifier once — one build and one grep settles it permanently for that colour.</p>
 </div>
 
 <div class="callout">
@@ -554,7 +554,7 @@ Con lai: chi voi toi duoc tu CSS thuong
 <p><code>--bg-card</code>, <code>--border-color</code> and most of the other 194 have no config entry, so components reach them through <code>bg-[var(--bg-card)]</code> — 95 uses — or through hand-written CSS. Each of those is a variable name repeated at a call site, with the maintainability cost lesson 6.1 described. The theme system is sound; its exposure through Tailwind is the unfinished part.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — defining a variable in <code>html.theme-dark</code> and forgetting <code>:root</code>.</strong> The dark theme works, and light mode renders that property as nothing — an undefined variable is invalid at computed-value time, so the declaration is dropped and the element inherits. Because light is the base here, the asymmetry always fails in the same direction: a variable added only to the dark block is broken in light and nobody testing in dark will see it. Add to <code>:root</code> first, then override.</p>
+<p><strong>Trap — defining a variable in <code>html.theme-dark</code> and forgetting <code>:root</code>.</strong> The dark theme works, and light mode renders that property as nothing — an undefined variable is invalid at computed-value time, so the declaration is dropped and the element inherits. Because light is the base here, the asymmetry always fails in the same direction: a variable added only to the dark block is broken in light and nobody testing in dark will see it. Add to <code>:root</code> first, then override.</p>
 </div>
 
 <div class="callout">
@@ -744,7 +744,7 @@ const cls = 'flex items-center';
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — migrating utilities to variables because variables solved the theme problem.</strong> The pattern is: theme via variables works beautifully, so spacing, radii and font sizes get variables too. Six months later the class list still says <code>p-[var(--pad-card)]</code> everywhere, nobody can tell what the padding is without opening two files, and none of those values ever varied. The theme problem was specific; the solution does not generalise to values that do not vary.</p>
+<p><strong>Trap — migrating utilities to variables because variables solved the theme problem.</strong> The pattern is: theme via variables works beautifully, so spacing, radii and font sizes get variables too. Six months later the class list still says <code>p-[var(--pad-card)]</code> everywhere, nobody can tell what the padding is without opening two files, and none of those values ever varied. The theme problem was specific; the solution does not generalise to values that do not vary.</p>
 </div>
 
 <div class="callout">
@@ -934,7 +934,7 @@ colors: {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating this as one project.</strong> A/B/C share a subject and nothing else: A is a bug fix, B is a refactor, C is a design change. Bundled into one "theme migration" epic they block each other, and the 91-class defect waits behind 2,677 renames. Ship A this week on its own.</p>
+<p><strong>Trap — treating this as one project.</strong> A/B/C share a subject and nothing else: A is a bug fix, B is a refactor, C is a design change. Bundled into one "theme migration" epic they block each other, and the 91-class defect waits behind 2,677 renames. Ship A this week on its own.</p>
 </div>
 
 <div class="callout">

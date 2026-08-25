@@ -148,7 +148,7 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 <p>pino's suppressed call costs roughly 92 nanoseconds — it still builds the argument object before discovering the level is off. The hand-rolled guard costs 9 nanoseconds because the object is never built. Both are irrelevant next to a 500.000-per-second write. The practical rule: <strong>put <code>logger.debug</code> anywhere you want; put <code>logger.info</code> where you would be willing to pay for it in production</strong>, because that is exactly what you will do.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the expensive part of a suppressed log is not the logger, it is the argument. <code>logger.debug({ rows: await countEverything() }, 'x')</code> runs the query at every level, forever, including in production where the line is never written. If building the payload costs anything, guard it: <code>if (logger.isLevelEnabled('debug'))</code>.</p>
+<p><strong>A real trap:</strong> the expensive part of a suppressed log is not the logger, it is the argument. <code>logger.debug({ rows: await countEverything() }, 'x')</code> runs the query at every level, forever, including in production where the line is never written. If building the payload costs anything, guard it: <code>if (logger.isLevelEnabled('debug'))</code>.</p>
 </div>
 
 <h3>What this site does</h3>
@@ -492,7 +492,7 @@ res.setHeader('X-Request-ID', id);</code></pre>
 <p>The length check matters. An inbound header is attacker-controlled: without a bound, someone posts a 4MB <code>X-Request-ID</code> and you obligingly write it into every log line of that request, then ship it to your aggregator, then pay for it. Trust-but-truncate.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> echoing the id back in the response header is not decoration — it is how a user reports a problem. "It broke" is unactionable; "it broke and the response said X-Request-ID: mJumRwAigpAO" is a grep away from the stack trace. Put the id in your error page, your API error body, and your support form.</p>
+<p><strong>A real trap:</strong> echoing the id back in the response header is not decoration — it is how a user reports a problem. "It broke" is unactionable; "it broke and the response said X-Request-ID: mJumRwAigpAO" is a grep away from the stack trace. Put the id in your error page, your API error body, and your support form.</p>
 </div>
 
 <h3>What this site does</h3>
@@ -795,7 +795,7 @@ request chậm  giữ 1/1 (100%)</div>
 <p>A hundredfold reduction with <strong>zero loss of incident data</strong>. The hash is the part that makes it work: a naive <code>Math.random() &lt; 0.01</code> per line would keep a scattered 1% of lines from every request, producing a file full of orphaned fragments — the worst of both worlds. Hashing the request id means each request is entirely in or entirely out, so a sampled request is still a complete story.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the hash must be over a value that is <em>identical on every line of the request</em> and <em>stable across processes</em>. Hash the request id, not the timestamp, not a per-line counter, and not <code>Math.random()</code>. If two containers hash the same request differently, a request that crossed both is half-kept — which looks exactly like a request that vanished mid-flight, and you will spend an afternoon chasing it.</p>
+<p><strong>A real trap:</strong> the hash must be over a value that is <em>identical on every line of the request</em> and <em>stable across processes</em>. Hash the request id, not the timestamp, not a per-line counter, and not <code>Math.random()</code>. If two containers hash the same request differently, a request that crossed both is half-kept — which looks exactly like a request that vanished mid-flight, and you will spend an afternoon chasing it.</p>
 </div>
 
 <h3>Levels, and the one rule that keeps them useful</h3>
@@ -1087,7 +1087,7 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <p>The rule that prevents all of it, stated so it is hard to get wrong: <strong>a label value must come from a set you could write down on paper.</strong> Method, route template, status code, environment, region — all writable. User id, request id, email, note id, session id, raw URL, SQL string, error message — all unbounded, all forbidden.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the dangerous version is not <code>user_id</code> — that one is obviously wrong and gets caught in review. It is <code>error_message</code> as a label, which looks bounded because you "only have a few kinds of error", right up until one of them interpolates a value: <code>"note 8412 not found"</code>. Now you have one series per note id, created by an error path that only fires occasionally, so it grows slowly and is discovered months later during an out-of-memory incident.</p>
+<p><strong>A real trap:</strong> the dangerous version is not <code>user_id</code> — that one is obviously wrong and gets caught in review. It is <code>error_message</code> as a label, which looks bounded because you "only have a few kinds of error", right up until one of them interpolates a value: <code>"note 8412 not found"</code>. Now you have one series per note id, created by an error path that only fires occasionally, so it grows slowly and is discovered months later during an out-of-memory incident.</p>
 </div>
 
 <h3>Where the unbounded things belong</h3>
@@ -1324,7 +1324,7 @@ sdk.start();
 const { default: express } = await import('express');</code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy thật, và nó im lặng.</strong> If the SDK starts after <code>express</code> or <code>pg</code> is imported, there is nothing left to patch — those modules are already bound. You get no error, no warning, just an empty trace tree, and you conclude tracing "does not work". Either use a top-level <code>await import()</code> as above, or start the SDK from a separate file loaded with <code>node --import ./tracing.mjs app.js</code>.</p>
+<p><strong>A real trap, and a silent one.</strong> If the SDK starts after <code>express</code> or <code>pg</code> is imported, there is nothing left to patch — those modules are already bound. You get no error, no warning, just an empty trace tree, and you conclude tracing "does not work". Either use a top-level <code>await import()</code> as above, or start the SDK from a separate file loaded with <code>node --import ./tracing.mjs app.js</code>.</p>
 </div>
 
 <h3>What one request looks like</h3>
@@ -1429,7 +1429,7 @@ span.end();</code></pre>
 <p>Note the crucial difference from lesson 15.4: <strong>span attributes have no cardinality limit.</strong> <code>notes.count</code>, <code>user.id</code>, <code>request.id</code> are all fine here — a span is stored once and thrown away, it does not create a permanent time series. This is exactly why the forbidden metric labels belong on traces instead. Do not, however, put secrets there; a trace backend is no more designed to hold a bearer token than a log store is.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the <code>context.with(...)</code> wrapper is not optional decoration. <code>tracer.startSpan()</code> alone creates a span that is <em>not</em> active, so every child span created inside — including auto-instrumented <code>pg</code> queries — attaches to the wrong parent or to nothing. The tree comes out flat and you cannot see the nesting that was the entire point.</p>
+<p><strong>A real trap:</strong> the <code>context.with(...)</code> wrapper is not optional decoration. <code>tracer.startSpan()</code> alone creates a span that is <em>not</em> active, so every child span created inside — including auto-instrumented <code>pg</code> queries — attaches to the wrong parent or to nothing. The tree comes out flat and you cannot see the nesting that was the entire point.</p>
 </div>
 
 <h3>What to instrument first, if you only do one thing</h3>
@@ -1679,7 +1679,7 @@ app.get('/health/ready', async (req, res) =&gt; {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> a readiness check that queries the database on <em>every</em> call is itself load. At a ten-second interval across six containers behind three probes, that is a query every 0,55 seconds, forever, for information that changes rarely. Cache the result for a few seconds. A readiness check that contributes to the overload it is meant to detect is a very expensive kind of irony.</p>
+<p><strong>A real trap:</strong> a readiness check that queries the database on <em>every</em> call is itself load. At a ten-second interval across six containers behind three probes, that is a query every 0,55 seconds, forever, for information that changes rarely. Cache the result for a few seconds. A readiness check that contributes to the overload it is meant to detect is a very expensive kind of irony.</p>
 </div>
 
 <h3>Alerts: the number that matters is how many you ignore</h3>

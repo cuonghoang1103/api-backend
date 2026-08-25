@@ -92,7 +92,7 @@ $ grep -rhoE 'className="[^"]{120,}"' src --include="*.tsx" \\
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating line length as the metric.</strong> Some teams add a lint rule capping class-attribute length. It produces two bad outcomes: genuine one-off layouts get split into meaningless sub-components to satisfy the linter, and people work around it by moving classes into variables, which hides the length without removing the duplication. The metric that matters is <em>how many places must change together</em>, and no character count measures that.</p>
+<p><strong>Trap — treating line length as the metric.</strong> Some teams add a lint rule capping class-attribute length. It produces two bad outcomes: genuine one-off layouts get split into meaningless sub-components to satisfy the linter, and people work around it by moving classes into variables, which hides the length without removing the duplication. The metric that matters is <em>how many places must change together</em>, and no character count measures that.</p>
 </div>
 
 <div class="callout">
@@ -285,7 +285,7 @@ $ grep -rhoE 'className="[^"]{120,}"' src --include="*.tsx" \\
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>@apply</code>-ing a class that is itself made of <code>@apply</code>.</strong> The measurement above shows <code>.btn-lg { @apply btn px-8 }</code> works, which encourages building a hierarchy. Each level copies the level below it, so a three-deep chain triples the declarations, and a change at the root silently rewrites every descendant's output. It reads like inheritance and behaves like copy-paste — the worst combination, because the code implies a relationship the output does not have.</p>
+<p><strong>Trap — <code>@apply</code>-ing a class that is itself made of <code>@apply</code>.</strong> The measurement above shows <code>.btn-lg { @apply btn px-8 }</code> works, which encourages building a hierarchy. Each level copies the level below it, so a three-deep chain triples the declarations, and a change at the root silently rewrites every descendant's output. It reads like inheritance and behaves like copy-paste — the worst combination, because the code implies a relationship the output does not have.</p>
 </div>
 
 <div class="callout">
@@ -470,7 +470,7 @@ export const TextInput = forwardRef&lt;
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — accepting <code>className</code> and applying it to a wrapper the caller cannot see.</strong> A caller passes <code>w-full</code> expecting the input to fill its container; the class lands on an outer <code>&lt;div&gt;</code> that was already full width, and the input does not change. Nothing errors, the class is applied somewhere, and DevTools shows it working — on the wrong element. If your component has a wrapper, either put <code>className</code> on the element the name implies or expose two props with explicit names.</p>
+<p><strong>Trap — accepting <code>className</code> and applying it to a wrapper the caller cannot see.</strong> A caller passes <code>w-full</code> expecting the input to fill its container; the class lands on an outer <code>&lt;div&gt;</code> that was already full width, and the input does not change. Nothing errors, the class is applied somewhere, and DevTools shows it working — on the wrong element. If your component has a wrapper, either put <code>className</code> on the element the name implies or expose two props with explicit names.</p>
 </div>
 
 <div class="callout">
@@ -674,7 +674,7 @@ type ButtonProps = React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — introducing <code>cva</code> for a component with one variant axis.</strong> The config object is longer than the if-chain it replaced, the team now has two ways to write variants, and the benefit — compound variants and derived types — is unused. Adopt it when the first compound case appears, not in anticipation. Zero uses across 793 components is evidence that the anticipation is usually wrong.</p>
+<p><strong>Trap — introducing <code>cva</code> for a component with one variant axis.</strong> The config object is longer than the if-chain it replaced, the team now has two ways to write variants, and the benefit — compound variants and derived types — is unused. Adopt it when the first compound case appears, not in anticipation. Zero uses across 793 components is evidence that the anticipation is usually wrong.</p>
 </div>
 
 <div class="callout">
@@ -892,7 +892,7 @@ type ButtonProps = React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;
 <p>Neither is universally right. The signal to consolidate is when two areas' primitives have <em>converged</em> — if the finance and settings buttons have ended up identical, the duplication is no longer buying independence and should be collapsed.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — extracting the components and leaving the hardcoded values.</strong> The extraction in this file was only a fix because the values became CSS variables at the same time. Moving <code>#0a0a14</code> from twenty call sites into one component makes it easier to fix later, but the settings screen is still black in light mode until someone does. Extraction and the actual correction are two steps, and shipping only the first feels like progress while changing nothing a user can see.</p>
+<p><strong>Trap — extracting the components and leaving the hardcoded values.</strong> The extraction in this file was only a fix because the values became CSS variables at the same time. Moving <code>#0a0a14</code> from twenty call sites into one component makes it easier to fix later, but the settings screen is still black in light mode until someone does. Extraction and the actual correction are two steps, and shipping only the first feels like progress while changing nothing a user can see.</p>
 </div>
 
 <div class="callout">

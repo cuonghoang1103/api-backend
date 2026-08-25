@@ -56,15 +56,15 @@ export default {
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">lesson 7.1 · layer line offsets</span><span class="lz-nsub">4,143 lines instead of 219</span></span>
-<span class="lz-nbody">I took the distance between consecutive <code>@layer</code> markers and assumed the final layer ran to the end of the file. Off by a factor of 18.9. <strong>Bài học:</strong> measuring a nested structure means MATCHING BRACES, not counting lines.</span>
+<span class="lz-nbody">I took the distance between consecutive <code>@layer</code> markers and assumed the final layer ran to the end of the file. Off by a factor of 18.9. <strong>Lesson:</strong> measuring a nested structure means MATCHING BRACES, not counting lines.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">lesson 2.4 · the dark: grep returned 0</span><span class="lz-nsub">baseline 786</span></span>
-<span class="lz-nbody"><code>grep -o 'dark:[a-z0-9/\\[\\]#.-]*'</code> — the <code>[</code> <code>]</code> escape inside a character class broke the class and matched nothing. The baseline of 786 exposed it immediately. <strong>Bài học:</strong> a measurement returning 0 must be checked against a baseline BEFORE you believe it.</span>
+<span class="lz-nbody"><code>grep -o 'dark:[a-z0-9/\\[\\]#.-]*'</code> — the <code>[</code> <code>]</code> escape inside a character class broke the class and matched nothing. The baseline of 786 exposed it immediately. <strong>Lesson:</strong> a measurement returning 0 must be checked against a baseline BEFORE you believe it.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">lesson 9.5 · the motion-reduce grep</span><span class="lz-nsub">10 hits, concluding &quot;not suppressed&quot;</span></span>
-<span class="lz-nbody">Grep <code>motion-reduce:</code> across .tsx, assuming the guard lived in a utility. The truth: the repo suppresses CENTRALLY in CSS. <strong>Bài học:</strong> ask yourself &quot;what other form could the guard take?&quot; BEFORE declaring something broken.</span>
+<span class="lz-nbody">Grep <code>motion-reduce:</code> across .tsx, assuming the guard lived in a utility. The truth: the repo suppresses CENTRALLY in CSS. <strong>Lesson:</strong> ask yourself &quot;what other form could the guard take?&quot; BEFORE declaring something broken.</span>
 </div>
 </div>
 
@@ -80,11 +80,11 @@ export default {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — coi khoá học là một &quot;giấy phép&quot; không cần đo nữa.</strong> This repo's numbers are not your numbers. Column A transfers; column B does NOT. If you read lesson 9.1 and conclude your palette also has 3 AA failures, you have missed the spirit of the course. Run the measurement on your own repo; that is the entire point.</p>
+<p><strong>Trap — treating this course as a &quot;licence&quot; to stop measuring.</strong> This repo's numbers are not your numbers. Column A transfers; column B does NOT. If you read lesson 9.1 and conclude your palette also has 3 AA failures, you have missed the spirit of the course. Run the measurement on your own repo; that is the entire point.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> The six items in column A are Tailwind laws that apply to any repo; the five in column B are this repo's measurements, which you must re-run on yours; the six in column C are intuitions that lost to measurement — including three false alarms of my own, kept as lessons — and the three columns give you three different ways in when you meet a new Tailwind question.</p>
+<p><strong>One sentence.</strong> The six items in column A are Tailwind laws that apply to any repo; the five in column B are this repo's measurements, which you must re-run on yours; the six in column C are intuitions that lost to measurement — including three false alarms of my own, kept as lessons — and the three columns give you three different ways in when you meet a new Tailwind question.</p>
 </div>
 
 <h3>Sources</h3>

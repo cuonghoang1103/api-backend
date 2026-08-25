@@ -52,7 +52,7 @@ export default {
   <div class="kv"><span class="k">User uploads, going backwards</span><span class="v">Files users put on the server, being overwritten by whatever happened to be in your local <code>tai-len/</code> — which is usually a few test images from three months ago. With <code>rsync --delete</code>, the ones not in your local copy are deleted outright.</span></div>
   <div class="kv"><span class="k">An editor backup</span><span class="v"><code>server.js.orig</code> shipped too. Harmless here; not harmless when it is <code>config.php.bak</code> on a server that only executes <code>.php</code>, and now serves the backup as plain text to anyone who guesses the name.</span></div>
 </div>
-<div class="pitfall"><strong>Bẫy — <code>node_modules</code> from your laptop is not the same as <code>node_modules</code> on the server.</strong> 786 entries went across. Packages with native code compile against the machine that installed them: build on macOS and deploy to Linux, or build on Alpine and run on Debian, and the binary is for the wrong platform. This is exactly the shape of the outage in this repository's own history — a Prisma engine built for glibc inside a musl image, which passed every check and then restart-looped for seven minutes. Install dependencies <em>on the target</em>, or inside an image built for it. Never copy them from a developer machine.</div>
+<div class="pitfall"><strong>Trap — <code>node_modules</code> from your laptop is not the same as <code>node_modules</code> on the server.</strong> 786 entries went across. Packages with native code compile against the machine that installed them: build on macOS and deploy to Linux, or build on Alpine and run on Debian, and the binary is for the wrong platform. This is exactly the shape of the outage in this repository's own history — a Prisma engine built for glibc inside a musl image, which passed every check and then restart-looped for seven minutes. Install dependencies <em>on the target</em>, or inside an image built for it. Never copy them from a developer machine.</div>
 
 <h3>Four categories, and where each belongs</h3>
 <div class="lz-stack">
@@ -77,7 +77,7 @@ rsync -az --delete \\
   --exclude '.git' --exclude 'node_modules' --exclude '.env' \\
   --exclude 'tai-len' --exclude 'logs' --exclude '*.orig' \\
   ./ vps:/srv/app/</code></pre>
-<div class="pitfall"><strong>Bẫy — an exclude list is a list you maintain, and therefore a list you forget.</strong> Add a <code>.cache/</code> directory next month and it ships. Add <code>.env.production</code> and it ships. Every deploy is a chance to have missed one, and nothing tells you. This is why the rest of this chapter builds the artifact from what is <em>included</em> — <code>git archive</code> starts from nothing and adds only committed files, so a new directory is excluded by default rather than by memory.</div>
+<div class="pitfall"><strong>Trap — an exclude list is a list you maintain, and therefore a list you forget.</strong> Add a <code>.cache/</code> directory next month and it ships. Add <code>.env.production</code> and it ships. Every deploy is a chance to have missed one, and nothing tells you. This is why the rest of this chapter builds the artifact from what is <em>included</em> — <code>git archive</code> starts from nothing and adds only committed files, so a new directory is excluded by default rather than by memory.</div>
 <p>If you must use rsync, at least make the two lists one list: <code>rsync --exclude-from=.gitignore</code> reuses what you already maintain. It is not a perfect translation — rsync's pattern syntax overlaps with git's rather than matching it — but one list that is sometimes imprecise beats two lists that drift apart.</p>
 
 <h3>A five-minute audit of your own project</h3>
@@ -255,7 +255,7 @@ docs/           export-ignore
   <div class="kv"><span class="k">The fix is <code>gzip -n</code></span><span class="v">Do not store the name or the timestamp. Harmless, and it makes the named-file case behave like the pipe case.</span></div>
   <div class="kv"><span class="k">Four bytes out of 84 KB</span><span class="v">Enough to make two identical artifacts look different to every tool that compares checksums — including the one deciding whether it needs to re-upload.</span></div>
 </div>
-<div class="pitfall"><strong>Bẫy — a checksum that changes for no reason breaks the things built on top of it.</strong> A deploy that skips the upload when the hash matches will re-upload every time. A registry that deduplicates by digest will store a new copy of identical content on each build. And an alert on "the artifact changed unexpectedly" becomes noise, so it gets turned off, so a real change goes unnoticed. Use <code>gzip -n</code>, or compress from a pipe, and the problem does not arise.</div>
+<div class="pitfall"><strong>Trap — a checksum that changes for no reason breaks the things built on top of it.</strong> A deploy that skips the upload when the hash matches will re-upload every time. A registry that deduplicates by digest will store a new copy of identical content on each build. And an alert on "the artifact changed unexpectedly" becomes noise, so it gets turned off, so a real change goes unnoticed. Use <code>gzip -n</code>, or compress from a pipe, and the problem does not arise.</div>
 
 <h3>The recipe</h3>
 <pre><code><span class="tok-comment">#!/bin/bash</span>
@@ -429,7 +429,7 @@ sha256sum "\$TEN" | tee "\${TEN}.sha256"</code></pre>
 set -e
 npm ci
 echo "di tiep"</code></pre>
-<div class="pitfall"><strong>Bẫy — <code>set -e</code> is disabled for any command that is part of a <code>&amp;&amp;</code> or <code>||</code> list.</strong> This is documented in <code>man bash</code> and it is easy to walk into: the moment you write <code>lenh || xu-ly-loi</code>, the failure inside <code>lenh</code> no longer aborts anything — including failures several commands deep inside a subshell. In case A the failing <code>npm ci</code> was invisible and the script cheerfully continued. A deploy script full of <code>|| echo "canh bao"</code> has quietly turned off its own safety, and every step after the first failure runs against a half-built release. Chapter 7 builds a script that does not have this hole.</div>
+<div class="pitfall"><strong>Trap — <code>set -e</code> is disabled for any command that is part of a <code>&amp;&amp;</code> or <code>||</code> list.</strong> This is documented in <code>man bash</code> and it is easy to walk into: the moment you write <code>lenh || xu-ly-loi</code>, the failure inside <code>lenh</code> no longer aborts anything — including failures several commands deep inside a subshell. In case A the failing <code>npm ci</code> was invisible and the script cheerfully continued. A deploy script full of <code>|| echo "canh bao"</code> has quietly turned off its own safety, and every step after the first failure runs against a half-built release. Chapter 7 builds a script that does not have this hole.</div>
 
 <h3>Where the build should happen</h3>
 <div class="lz-flow">
@@ -588,7 +588,7 @@ if (req.url === '/version') {
 
   962ceea them /version
   4d0c4ac bo export-ignore</div>
-<div class="pitfall"><strong>Bẫy — a version file committed into the repository always names the previous commit.</strong> It is a chicken-and-egg problem, not a mistake you can be careful enough to avoid: writing the file requires knowing the hash, and the hash is not decided until the file is committed. So the file names its parent, forever, on every commit. Here the server reported <code>4d0c4ac</code> while running <code>962ceea</code> — and that is <em>worse</em> than reporting nothing, because it looks authoritative. Someone comparing that hash against staging would conclude the two match when they do not.</div>
+<div class="pitfall"><strong>Trap — a version file committed into the repository always names the previous commit.</strong> It is a chicken-and-egg problem, not a mistake you can be careful enough to avoid: writing the file requires knowing the hash, and the hash is not decided until the file is committed. So the file names its parent, forever, on every commit. Here the server reported <code>4d0c4ac</code> while running <code>962ceea</code> — and that is <em>worse</em> than reporting nothing, because it looks authoritative. Someone comparing that hash against staging would conclude the two match when they do not.</div>
 <p>The fix is to stamp the version <em>outside</em> the commit, during the build, after the artifact has been extracted:</p>
 <pre><code>set -euo pipefail
 COMMIT=\$(git rev-parse --short HEAD)
@@ -769,7 +769,7 @@ rsync -a --delete --link-dest=/srv/app/phat-hanh/&lt;ban-truoc&gt; \\
 
 ── 3) mv de len b (THAY muc thu muc) ──
      a.txt bay gio: GOC     (inode a=992893 b=1886675)</div>
-<div class="pitfall"><strong>Bẫy — <code>cp</code> over a hardlinked file changes every release that shares it.</strong> Appending is the obvious hazard, but <code>cp</code> is the one that catches people: it opens the destination and truncates it <em>in place</em>, so the inode is unchanged and every other name still points at the modified blocks. Both files still read <code>992893</code>. In a releases layout, editing one file in the current release silently rewrites that file inside every older release too — and your rollback target is now carrying the change you were rolling back from.</div>
+<div class="pitfall"><strong>Trap — <code>cp</code> over a hardlinked file changes every release that shares it.</strong> Appending is the obvious hazard, but <code>cp</code> is the one that catches people: it opens the destination and truncates it <em>in place</em>, so the inode is unchanged and every other name still points at the modified blocks. Both files still read <code>992893</code>. In a releases layout, editing one file in the current release silently rewrites that file inside every older release too — and your rollback target is now carrying the change you were rolling back from.</div>
 <p><code>mv</code> is safe, and the inode numbers say why: after the move <code>b</code> is inode 1886675 while <code>a</code> is still 992893. <code>mv</code> replaces the directory entry rather than the contents, so the link is broken and the other names keep the original file. This is also why <code>rsync</code> is safe by default — it writes to a temporary file and renames it into place, exactly the <code>mv</code> behaviour. It is <em>not</em> safe with <code>--inplace</code>, which does what <code>cp</code> does and exists precisely for cases where you want that.</p>
 <div class="callout warn"><strong>Two rules make hardlinked releases safe.</strong> Treat a release directory as read-only once it is created — never edit a file inside it, on any release, for any reason including a "quick fix in production". And keep everything writable outside the releases entirely, in the shared directory from Lesson 0.4: uploads, logs, caches. If nothing ever writes into a release, the sharp edge cannot cut you.</div>
 
@@ -783,7 +783,7 @@ rsync -a --delete --link-dest=/srv/app/phat-hanh/&lt;ban-truoc&gt; \\
 === BAY: neu hien-tai dang tro vao ban vua bi xoa thi sao? ===
   symlink tro vao: /srv/vps/gg/thuong/v9-khong-ton-tai
   doc duoc khong:  cat: .../m1.js: No such file or directory</div>
-<div class="pitfall"><strong>Bẫy — deleting the release the symlink points at leaves a dangling link and a dead site.</strong> It happens when a rollback moves <code>hien-tai</code> to an older release and the pruner then deletes "the oldest N" without checking. Nothing errors at delete time; the failure arrives on the next request, or on the next restart. Any pruner must read the symlink first and refuse to remove its target.</div>
+<div class="pitfall"><strong>Trap — deleting the release the symlink points at leaves a dangling link and a dead site.</strong> It happens when a rollback moves <code>hien-tai</code> to an older release and the pruner then deletes "the oldest N" without checking. Nothing errors at delete time; the failure arrives on the next request, or on the next restart. Any pruner must read the symlink first and refuse to remove its target.</div>
 <pre><code><span class="tok-comment">#!/bin/bash</span>
 set -euo pipefail
 GOC=/srv/app/phat-hanh

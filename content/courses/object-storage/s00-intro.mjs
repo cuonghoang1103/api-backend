@@ -245,7 +245,7 @@ model MediaFile {
 <p>When you need to &quot;delete a user&#39;s files&quot;, query the database by <code>uploadedBy</code> then DELETE the objects by key. Do NOT list the bucket.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng key với whitespace hoặc emoji.</strong> S3 accepts it, but the URL encoding gets complicated. <code>https://media/logo tết.png</code> → the browser encodes, the server decodes. If the key contains &quot;+&quot; or &quot;#&quot;, the two encodings disagree. Stick to ASCII alphanumerics plus <code>-</code>, <code>_</code>, <code>/</code>.</p>
+<p><strong>Trap — using a key containing whitespace or emoji.</strong> S3 accepts it, but the URL encoding gets complicated. <code>https://media/logo tết.png</code> → the browser encodes, the server decodes. If the key contains &quot;+&quot; or &quot;#&quot;, the two encodings disagree. Stick to ASCII alphanumerics plus <code>-</code>, <code>_</code>, <code>/</code>.</p>
 </div>
 
 <div class="callout">

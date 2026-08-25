@@ -126,11 +126,11 @@ curl -sI "https://media.cuongthai.com/path/to/file.webp" \\
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — debugging through the browser instead of the file.</strong> &quot;It looks wrong in Chrome&quot; conflates the file, the headers, the CDN, and the renderer. Download the object, run <code>ffprobe</code>/<code>metadata()</code> on it, and you have separated four systems into one.</p>
+<p><strong>Trap — debugging through the browser instead of the file.</strong> &quot;It looks wrong in Chrome&quot; conflates the file, the headers, the CDN, and the renderer. Download the object, run <code>ffprobe</code>/<code>metadata()</code> on it, and you have separated four systems into one.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — trusting the file extension.</strong> A <code>.png</code> key can hold WebP bytes (Lesson 5.1's exact failure), a <code>.jpg</code> can be a mislabelled video, and a <code>.mp4</code> can be a MOV. Every diagnosis starts by asking the file what it is, not by reading its name.</p>
+<p><strong>Trap — trusting the file extension.</strong> A <code>.png</code> key can hold WebP bytes (Lesson 5.1's exact failure), a <code>.jpg</code> can be a mislabelled video, and a <code>.mp4</code> can be a MOV. Every diagnosis starts by asking the file what it is, not by reading its name.</p>
 </div>
 
 <div class="callout">
@@ -386,11 +386,11 @@ expect(outMeta.pages).toBe(48)                    // frames survived
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — a fallback with no counter.</strong> Both repo bugs hid behind one. The fallback itself is usually the right design; what is missing is a metric that makes &quot;the primary path never runs&quot; visible. If a code path is expected to be rare, count it — then a 100% rate is an alert rather than an archaeology project.</p>
+<p><strong>Trap — a fallback with no counter.</strong> Both repo bugs hid behind one. The fallback itself is usually the right design; what is missing is a metric that makes &quot;the primary path never runs&quot; visible. If a code path is expected to be rare, count it — then a 100% rate is an alert rather than an archaeology project.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — testing that the function returns.</strong> Every silent bug in this course returns normally. The test must assert a property of the artifact — its orientation, its page count, its measured loudness, its size ratio — because that is the only thing that differs between working and broken.</p>
+<p><strong>Trap — testing that the function returns.</strong> Every silent bug in this course returns normally. The test must assert a property of the artifact — its orientation, its page count, its measured loudness, its size ratio — because that is the only thing that differs between working and broken.</p>
 </div>
 
 <div class="callout">

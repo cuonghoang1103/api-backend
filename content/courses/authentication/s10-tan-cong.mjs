@@ -67,7 +67,7 @@ if (n &gt; 5) {
 <span class="tok-comment">// Đăng nhập ĐÚNG → xoá bộ đếm. Người dùng thật không bao giờ chạm tới trần.</span>
 if (khop) await redis.del(KEY);</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — a permanent lockout after N failures is a denial-of-service tool handed to the attacker.</strong> If five wrong passwords lock an account until support unlocks it, anybody who knows an email address can lock that account, and a stuffing run locks out fifteen percent of your users in an afternoon. That is a worse outcome than the attack it prevents. Use a rolling window that expires on its own, back off exponentially rather than blocking outright, and reserve a real lock for accounts where you have positive evidence of compromise — where the correct response is a forced reset, not a wall.</p>
+<p><strong>Trap — a permanent lockout after N failures is a denial-of-service tool handed to the attacker.</strong> If five wrong passwords lock an account until support unlocks it, anybody who knows an email address can lock that account, and a stuffing run locks out fifteen percent of your users in an afternoon. That is a worse outcome than the attack it prevents. Use a rolling window that expires on its own, back off exponentially rather than blocking outright, and reserve a real lock for accounts where you have positive evidence of compromise — where the correct response is a forced reset, not a wall.</p>
 </div>
 
 <h3>Detecting it, which is easier than stopping it</h3>
@@ -221,7 +221,7 @@ ma diem cua "cuοngthai.com": cuU+3BFngthai.com
 # ve dang-nhap.co. Dong cuoi chua mot chu omicron Hy Lap. Ca sau dong deu
 # xin duoc chung chi TLS hop le trong vai giay va deu hien o khoa xanh.</div>
 <div class="pitfall">
-<p><strong>Bẫy — the padlock means the connection is encrypted, and nothing more.</strong> Free certificates are issued in seconds to anyone who controls a domain, so every phishing site has valid TLS and a padlock. A generation of security advice taught users to look for it, which now actively helps the attacker: the one visual cue people were trained to trust is present on both sides. The only reliable signal is the registrable domain itself, read right to left — and Lesson 7.4's whole point is that WebAuthn reads it for the user, mechanically, every time.</p>
+<p><strong>Trap — the padlock means the connection is encrypted, and nothing more.</strong> Free certificates are issued in seconds to anyone who controls a domain, so every phishing site has valid TLS and a padlock. A generation of security advice taught users to look for it, which now actively helps the attacker: the one visual cue people were trained to trust is present on both sides. The only reliable signal is the registrable domain itself, read right to left — and Lesson 7.4's whole point is that WebAuthn reads it for the user, mechanically, every time.</p>
 </div>
 
 <h3>What actually stops it</h3>
@@ -392,7 +392,7 @@ if (phien.ipCuoi &amp;&amp; asn(req.ip) !== asn(phien.ipCuoi)) {
 # Moi goi CHAY TRONG TRINH DUYET deu co quyen y het mot cu XSS.
 # Moi goi chay o BACKEND deu doc duoc process.env — tuc la khoa ky.</div>
 <div class="pitfall">
-<p><strong>Bẫy — a compromised frontend package has exactly the power of a stored XSS, on every page, forever.</strong> It does not need a vulnerability in your code; you installed it and shipped it yourself. A backend package is worse: it runs with your process's privileges and can read <code>process.env</code>, which holds the JWT signing key from Lesson 4.4 and the database URL. The practical defences are unglamorous — pin exact versions with a lockfile, enable a scanner in CI, avoid packages with one maintainer and no releases for two years, and be suspicious of a new transitive dependency appearing in a routine update. And treat <code>postinstall</code> scripts as code you are choosing to run, because they are.</p>
+<p><strong>Trap — a compromised frontend package has exactly the power of a stored XSS, on every page, forever.</strong> It does not need a vulnerability in your code; you installed it and shipped it yourself. A backend package is worse: it runs with your process's privileges and can read <code>process.env</code>, which holds the JWT signing key from Lesson 4.4 and the database URL. The practical defences are unglamorous — pin exact versions with a lockfile, enable a scanner in CI, avoid packages with one maintainer and no releases for two years, and be suspicious of a new transitive dependency appearing in a routine update. And treat <code>postinstall</code> scripts as code you are choosing to run, because they are.</p>
 </div>
 
 <h3>Subdomains, and the cookie scope that invites them</h3>
@@ -563,7 +563,7 @@ if (++trangThai.sai &gt;= 3) { await huy(phienId); await canhBao(nd, 'push.sai_s
   <div class="lz-step"><span class="lz-k">What actually works</span><span class="lz-t">Out-of-band, and slow on purpose</span><span class="lz-d">A code sent to the address on file, a callback to the number on file, approval from a manager in the customer's own organisation, or a verified payment method. Each proves control of something the caller must already have.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — every control in Chapter 7 is worth exactly as much as the help desk's ability to bypass it.</strong> Passkeys, TOTP, recovery codes, a four-rung ladder — all of it is undone by one agent who can disable MFA after two questions, because that path is faster and it is documented in an internal tool. Write the procedure down, require a second person for high-value accounts, make every bypass produce an audit entry and a mail to the account owner, and give agents an explicit, blameless right to refuse and escalate. And then test it: have somebody outside the team call in and try. Most organisations discover their real authentication strength in that phone call.</p>
+<p><strong>Trap — every control in Chapter 7 is worth exactly as much as the help desk's ability to bypass it.</strong> Passkeys, TOTP, recovery codes, a four-rung ladder — all of it is undone by one agent who can disable MFA after two questions, because that path is faster and it is documented in an internal tool. Write the procedure down, require a second person for high-value accounts, make every bypass produce an audit entry and a mail to the account owner, and give agents an explicit, blameless right to refuse and escalate. And then test it: have somebody outside the team call in and try. Most organisations discover their real authentication strength in that phone call.</p>
 </div>
 
 <h3>SIM swap, and why it is not your bug to fix</h3>
@@ -709,7 +709,7 @@ POST /dang-ky { email: 'nan-nhan@congty.com', matKhau: '<span class="tok-comment
   <div class="kv"><span class="k">Tell the user what they just claimed</span><span class="v">When a reset succeeds on an account with existing sessions or linked providers, say so: "we signed out 1 other session and removed 1 linked account". A user who never linked Google will read that sentence and contact you.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — a test suite that starts from an empty database cannot find any of this.</strong> Every variant needs a prior state: an account that already exists, a session already open, a change already pending, a link already attached. Standard tests create a user, act, assert — so the attacker's setup step is a state the tests never construct. Write them explicitly: create an account as the attacker, run the victim's full claim flow, and then assert that <em>every</em> attacker artefact is gone — their session rejected, their provider link absent, their pending email change dead, their recovery codes invalid. That single test, written once, covers all five variants.</p>
+<p><strong>Trap — a test suite that starts from an empty database cannot find any of this.</strong> Every variant needs a prior state: an account that already exists, a session already open, a change already pending, a link already attached. Standard tests create a user, act, assert — so the attacker's setup step is a state the tests never construct. Write them explicitly: create an account as the attacker, run the victim's full claim flow, and then assert that <em>every</em> attacker artefact is gone — their session rejected, their provider link absent, their pending email change dead, their recovery codes invalid. That single test, written once, covers all five variants.</p>
 </div>
 
 <h3>Races: the same token, redeemed five times</h3>

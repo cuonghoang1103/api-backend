@@ -114,7 +114,7 @@ io.on('connection', async (socket) =&gt; {
 <p>Does Socket.IO buffer packets at layer 2 while the handler is not registered yet? <strong>NO</strong>. An event that arrives before its handler is registered is dropped silently. This matches Node.js EventEmitter (same behaviour) but not what the client expects (they think emit means send).</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng <code>connection</code> handler as one big async &quot;init user session&quot; block.</strong> The handler runs synchronously, and a single <code>await fetch()</code> here opens a ~50-200ms window in which events the client sends are ALREADY lost. Register the handlers IMMEDIATELY and defer the async work to INSIDE those handlers.</p>
+<p><strong>Trap — writing the <code>connection</code> handler as one big async &quot;init user session&quot; block.</strong> The handler runs synchronously, and a single <code>await fetch()</code> here opens a ~50-200ms window in which events the client sends are ALREADY lost. Register the handlers IMMEDIATELY and defer the async work to INSIDE those handlers.</p>
 </div>
 
 <div class="callout">
@@ -342,7 +342,7 @@ io.on('connection', (socket) =&gt; {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dọn dẹp state NGAY khi thấy <code>disconnect</code>.</strong> Switching Wi-Fi → 4G produces <code>transport close</code>, and 800ms later the client is back. If you delete <code>onlineUserIds</code> immediately, the presence UI flaps. If you delete <code>currentThread</code> immediately, the client must re-join on reconnect and sees stale messages. Debounce; do not delete on the spot.</p>
+<p><strong>Trap — clearing state IMMEDIATELY on seeing <code>disconnect</code>.</strong> Switching Wi-Fi → 4G produces <code>transport close</code>, and 800ms later the client is back. If you delete <code>onlineUserIds</code> immediately, the presence UI flaps. If you delete <code>currentThread</code> immediately, the client must re-join on reconnect and sees stale messages. Debounce; do not delete on the spot.</p>
 </div>
 
 <div class="callout">
@@ -578,7 +578,7 @@ Jitter la CO Y — 1000 client cung reconnect KHONG lam DDoS server luc cap dien
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — tắt reconnection.</strong> Someone writes <code>{ reconnection: false }</code> to make debugging easier in dev, then forgets. In prod: 5s of lost Wi-Fi means the user has to reload the page. Only disable it in tests, or when you are writing your own reconnect logic (very rare).</p>
+<p><strong>Trap — switching reconnection off.</strong> Someone writes <code>{ reconnection: false }</code> to make debugging easier in dev, then forgets. In prod: 5s of lost Wi-Fi means the user has to reload the page. Only disable it in tests, or when you are writing your own reconnect logic (very rare).</p>
 </div>
 
 <div class="callout">
@@ -1020,11 +1020,11 @@ socket.on('resume', async ({ conversationId, lastEventId }, ack) =&gt; {
 <p>The <code>ready</code> event at the end matters more than it looks. Without it the client cannot tell &quot;connected&quot; from &quot;connected and restored&quot;, so it may emit into a socket that has not joined its rooms yet — and those emits go nowhere, silently.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — keying anything by <code>socket.id</code> across a reconnect.</strong> The id is regenerated, so every <code>Map&lt;socketId, …&gt;</code> entry becomes garbage the moment the network blips. It leaks memory and the lookup silently misses. Key by user id, which is stable.</p>
+<p><strong>Trap — keying anything by <code>socket.id</code> across a reconnect.</strong> The id is regenerated, so every <code>Map&lt;socketId, …&gt;</code> entry becomes garbage the moment the network blips. It leaks memory and the lookup silently misses. Key by user id, which is stable.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — trusting what the client replays.</strong> Pattern 3 has the client send a conversation id and a cursor. Both are attacker-controlled. Re-run your authorization check inside the <code>resume</code> handler; a client that asks to resume a conversation it was never in must be refused, not joined.</p>
+<p><strong>Trap — trusting what the client replays.</strong> Pattern 3 has the client send a conversation id and a cursor. Both are attacker-controlled. Re-run your authorization check inside the <code>resume</code> handler; a client that asks to resume a conversation it was never in must be refused, not joined.</p>
 </div>
 
 <div class="callout">

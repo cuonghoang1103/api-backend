@@ -55,7 +55,7 @@ console.log(n);</code></pre>
 <div class="out">prisma:query UPDATE "SocialPost" SET "deletedAt" = now() WHERE "authorId" = $1
 14</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>$executeRaw</code> returns a count, and people <code>await</code> it expecting rows.</strong> <code>const rows = await prisma.$executeRaw&#96;SELECT …&#96;</code> compiles, runs, and hands you the number <code>0</code> — because <code>SELECT</code> affects no rows. The type is <code>Promise&lt;number&gt;</code>, so TypeScript will complain the moment you index it; if you wrote <code>any</code> anywhere upstream, it fails silently at runtime instead. <code>SELECT</code> is always <code>$queryRaw</code>.</p>
+<p><strong>Trap — <code>$executeRaw</code> returns a count, and people <code>await</code> it expecting rows.</strong> <code>const rows = await prisma.$executeRaw&#96;SELECT …&#96;</code> compiles, runs, and hands you the number <code>0</code> — because <code>SELECT</code> affects no rows. The type is <code>Promise&lt;number&gt;</code>, so TypeScript will complain the moment you index it; if you wrote <code>any</code> anywhere upstream, it fails silently at runtime instead. <code>SELECT</code> is always <code>$queryRaw</code>.</p>
 </div>
 
 <h3>The attack, run for real</h3>
@@ -113,7 +113,7 @@ prisma:query params: ["%prisma%", "clx7…", 20]</div>
   <div class="lz-layer"><span class="lz-lname"><code>Prisma.raw('…')</code></span><span class="lz-lnote"><strong>Injects text verbatim.</strong> It exists for identifiers — a column name to sort by — and it is the one place inside the safe API where user input must never reach. Whitelist, always: <code>const cot = ({ moi: 'createdAt', ten: 'title' })[req.query.sort] ?? 'createdAt';</code></span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — you cannot parameterise an identifier.</strong> <code>ORDER BY \${cot}</code> inside <code>$queryRaw</code> sends <code>ORDER BY $1</code>, and PostgreSQL sorts every row by the constant string — no error, wrong results, and it looks like the sort is "just not working". Table names, column names, <code>ASC</code>/<code>DESC</code> and <code>LIMIT</code> keywords are SQL <em>text</em>. They go through <code>Prisma.raw</code>, from a whitelist, or they do not go at all.</p>
+<p><strong>Trap — you cannot parameterise an identifier.</strong> <code>ORDER BY \${cot}</code> inside <code>$queryRaw</code> sends <code>ORDER BY $1</code>, and PostgreSQL sorts every row by the constant string — no error, wrong results, and it looks like the sort is "just not working". Table names, column names, <code>ASC</code>/<code>DESC</code> and <code>LIMIT</code> keywords are SQL <em>text</em>. They go through <code>Prisma.raw</code>, from a whitelist, or they do not go at all.</p>
 </div>
 <div class="note-ct">
 <p><strong>The habit that removes the whole class of bug.</strong> Grep the repository for <code>RawUnsafe</code> in CI and fail the build on any new occurrence outside an allow-listed file. On CuongThai there are two legitimate uses — a maintenance script that vacuums a table chosen from a fixed list, and a migration helper — and both are in files the check names explicitly. Everything else uses the tagged template. A rule a machine enforces is worth more than a rule in a document nobody re-reads.</p>
@@ -293,7 +293,7 @@ console.log(rows[0].gia + 100);</code></pre>
 rows[0].gia.plus(100).toString();     <span class="tok-comment">// '249100'  — exact</span>
 rows[0].gia.toNumber() + 100;         <span class="tok-comment">// 249100    — float, loses precision above 2^53</span></code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — <code>Decimal + number</code> is a silent string concatenation.</strong> JavaScript's <code>+</code> falls back to string when either side is an object, and <code>Decimal.toString()</code> gives digits, so <code>249000 + 100</code> becomes <code>'249000100'</code> — a plausible-looking number that is wrong by a factor of a thousand. It reaches an invoice before anyone notices. Money is <code>Decimal</code>, and <code>Decimal</code> arithmetic uses methods: <code>.plus()</code>, <code>.minus()</code>, <code>.times()</code>, <code>.dividedBy()</code>.</p>
+<p><strong>Trap — <code>Decimal + number</code> is a silent string concatenation.</strong> JavaScript's <code>+</code> falls back to string when either side is an object, and <code>Decimal.toString()</code> gives digits, so <code>249000 + 100</code> becomes <code>'249000100'</code> — a plausible-looking number that is wrong by a factor of a thousand. It reaches an invoice before anyone notices. Money is <code>Decimal</code>, and <code>Decimal</code> arithmetic uses methods: <code>.plus()</code>, <code>.minus()</code>, <code>.times()</code>, <code>.dividedBy()</code>.</p>
 </div>
 
 <h3>Conversion 3 — raw queries use <em>column</em> names, not field names</h3>
@@ -608,7 +608,7 @@ SELECT * FROM cay ORDER BY duong_dan;</code></pre>
 
 Execution Time: 3.208 ms   (any depth, one query)</div>
 <div class="pitfall">
-<p><strong>Bẫy — a recursive CTE without a depth guard runs forever on a cycle.</strong> One row whose <code>parentId</code> points at its own descendant — a bug, a bad import, a merge — and the query generates rows until the connection dies or the disk fills with temp files. <code>WHERE do_sau &lt; 10</code> costs nothing and bounds the damage. The <code>duong_dan</code> array is the second half of the defence: <code>WHERE NOT c.id = ANY(duong_dan)</code> makes a cycle terminate rather than merely time out, and it gives you the ordering for free.</p>
+<p><strong>Trap — a recursive CTE without a depth guard runs forever on a cycle.</strong> One row whose <code>parentId</code> points at its own descendant — a bug, a bad import, a merge — and the query generates rows until the connection dies or the disk fills with temp files. <code>WHERE do_sau &lt; 10</code> costs nothing and bounds the damage. The <code>duong_dan</code> array is the second half of the defence: <code>WHERE NOT c.id = ANY(duong_dan)</code> makes a cycle terminate rather than merely time out, and it gives you the ordering for free.</p>
 </div>
 
 <h3>4. <code>ON CONFLICT DO UPDATE</code> with an expression</h3>
@@ -989,7 +989,7 @@ services:
   env: { DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/ci' }
 - run: npx tsc --noEmit</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — <code>prisma generate</code> without <code>--sql</code> leaves the old generated queries in place.</strong> It succeeds, prints a green tick, and your <code>@prisma/client/sql</code> import still resolves — to the types from the last time someone remembered the flag. Put <code>--sql</code> in the <code>postinstall</code> script and in every place the repository generates, or one machine in the team will be compiling against types nobody else has.</p>
+<p><strong>Trap — <code>prisma generate</code> without <code>--sql</code> leaves the old generated queries in place.</strong> It succeeds, prints a green tick, and your <code>@prisma/client/sql</code> import still resolves — to the types from the last time someone remembered the flag. Put <code>--sql</code> in the <code>postinstall</code> script and in every place the repository generates, or one machine in the team will be compiling against types nobody else has.</p>
 </div>
 <div class="note-ct">
 <p><strong>Where this pays and where it does not.</strong> A codebase with three raw queries does not need a Postgres service container in CI; runtime validation from Lesson 10.2 is the cheaper answer. A codebase with thirty — reports, dashboards, aggregations, a search endpoint — gets a compile-time guarantee across all of them for one fixed setup cost. The threshold is roughly where you start being afraid to rename a column, and that fear is a better signal than any rule of thumb.</p>
@@ -1162,7 +1162,7 @@ const prisma    = prismaGoc.$extends(mở_rộng);   <span class="tok-comment">/
 
 prismaGoc.$extends(mở_rộng);                      <span class="tok-comment">// ❌ does nothing at all</span></code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — calling <code>$extends</code> without assigning is a silent no-op.</strong> No error, no warning; the extension simply never runs, and the soft-delete filter you were relying on is not there. Export exactly one extended client from one module and import it everywhere — <code>export const prisma = new PrismaClient().$extends(…)</code> — so there is no un-extended client available to import by accident.</p>
+<p><strong>Trap — calling <code>$extends</code> without assigning is a silent no-op.</strong> No error, no warning; the extension simply never runs, and the soft-delete filter you were relying on is not there. Export exactly one extended client from one module and import it everywhere — <code>export const prisma = new PrismaClient().$extends(…)</code> — so there is no un-extended client available to import by accident.</p>
 </div>
 
 <h3><code>result</code> — computed fields, and the <code>needs</code> that makes them work</h3>
@@ -1266,7 +1266,7 @@ prisma:query SELECT … FROM "SocialPost" WHERE "authorId" = $1 AND "deletedAt" 
   <div class="lz-layer"><span class="lz-lname">✓ Unique constraints keep counting deleted rows</span><span class="lz-lnote">A soft-deleted user still occupies their email in a <code>@unique</code> column, so re-registering fails with <code>P2002</code>. The fix is a partial unique index — <code>CREATE UNIQUE INDEX … WHERE "deletedAt" IS NULL</code> — hand-written in a migration, because the schema language cannot express it.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — an incomplete soft-delete extension is more dangerous than none.</strong> With no extension, every developer knows they must filter and they do. With one that covers four operations out of a dozen, everybody stops thinking about it — and the day someone adds an <code>include</code>, deleted content appears in a response with no code change to blame. If you adopt soft delete, write down the three gaps above next to the extension, and test the include path specifically.</p>
+<p><strong>Trap — an incomplete soft-delete extension is more dangerous than none.</strong> With no extension, every developer knows they must filter and they do. With one that covers four operations out of a dozen, everybody stops thinking about it — and the day someone adds an <code>include</code>, deleted content appears in a response with no code change to blame. If you adopt soft delete, write down the three gaps above next to the extension, and test the include path specifically.</p>
 </div>
 <div class="note-ct">
 <p><strong>Why CuongThai does per-viewer deletion in the query layer instead.</strong> Message threads use a per-viewer <code>deletedAt</code> (delete-for-me), and on 2026-07-02 that looked exactly like data loss until someone read the query filters. The lesson taken from it was not "add an extension" but "make the filter visible at the call site": <code>listThreadsForUser</code> states its own <code>deletedAt</code> condition, so the next person debugging it finds the answer in the function they are already reading, not in an extension registered in a different file.</p>

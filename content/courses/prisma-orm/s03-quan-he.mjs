@@ -134,7 +134,7 @@ INSERT INTO "users" ("email") VALUES ($1) RETURNING "id"
 INSERT INTO "posts" ("title","author_id") VALUES ($2,$3) RETURNING ...
 COMMIT</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>connect</code> by a non-primary unique field is an extra query.</strong> <code>connect: { id: 1 }</code> can be written straight into the <code>INSERT</code> because the id <em>is</em> the foreign key value. <code>connect: { email: 'an@x.com' }</code> cannot — Prisma must first look up the id, so it becomes two statements inside a transaction. Harmless once; noticeable in a loop of five hundred imports. If you already hold the id, pass the scalar.</p>
+<p><strong>Trap — <code>connect</code> by a non-primary unique field is an extra query.</strong> <code>connect: { id: 1 }</code> can be written straight into the <code>INSERT</code> because the id <em>is</em> the foreign key value. <code>connect: { email: 'an@x.com' }</code> cannot — Prisma must first look up the id, so it becomes two statements inside a transaction. Harmless once; noticeable in a loop of five hundred imports. If you already hold the id, pass the scalar.</p>
 </div>
 
 <h3>The one thing the database does not know</h3>
@@ -389,7 +389,7 @@ SELECT
 -------+----------+-----------
    214 |     3891 |     41207</div>
 <div class="pitfall">
-<p><strong>Bẫy — one <code>delete</code>, forty-five thousand rows.</strong> Deleting that user removes 45,312 rows across four tables, holds locks on all of them for the duration, and cannot be undone. Two habits prevent the bad version of this: count first (the query above), and prefer <strong>soft delete</strong> for anything a user can trigger — a <code>deletedAt DateTime?</code> column, filtered out in your queries. Real deletion then becomes a scheduled job that runs deliberately rather than a click that runs immediately. Chapter 4 shows the soft-delete filter pattern in full.</p>
+<p><strong>Trap — one <code>delete</code>, forty-five thousand rows.</strong> Deleting that user removes 45,312 rows across four tables, holds locks on all of them for the duration, and cannot be undone. Two habits prevent the bad version of this: count first (the query above), and prefer <strong>soft delete</strong> for anything a user can trigger — a <code>deletedAt DateTime?</code> column, filtered out in your queries. Real deletion then becomes a scheduled job that runs deliberately rather than a click that runs immediately. Chapter 4 shows the soft-delete filter pattern in full.</p>
 </div>
 
 <h3>Reading and writing the "many" side</h3>
@@ -710,7 +710,7 @@ console.log(u.profile?.bio ?? '(chua co)');
 const p = await prisma.user.findUnique({ where: { id: 1 } }).profile();</code></pre>
 <div class="out">prisma:query SELECT "public"."profiles"."id", "public"."profiles"."bio", "public"."profiles"."avatar", "public"."profiles"."user_id" FROM "public"."profiles" WHERE ("public"."profiles"."user_id" = $1) LIMIT $2 OFFSET $3</div>
 <div class="pitfall">
-<p><strong>Bẫy — the fluent API returns <code>null</code> for two different reasons.</strong> <code>prisma.user.findUnique({ where: { id: 999 } }).profile()</code> returns <code>null</code> whether user 999 does not exist or exists without a profile. Those are different situations and your error message probably needs to distinguish them. Use <code>findUniqueOrThrow</code> plus <code>include</code> when the difference matters; keep the fluent form for the case where "no profile" and "no user" are equally fine.</p>
+<p><strong>Trap — the fluent API returns <code>null</code> for two different reasons.</strong> <code>prisma.user.findUnique({ where: { id: 999 } }).profile()</code> returns <code>null</code> whether user 999 does not exist or exists without a profile. Those are different situations and your error message probably needs to distinguish them. Use <code>findUniqueOrThrow</code> plus <code>include</code> when the difference matters; keep the fluent form for the case where "no profile" and "no user" are equally fine.</p>
 </div>
 
 <h3>The other one-to-one: sharing a primary key</h3>
@@ -957,7 +957,7 @@ await prisma.category.findMany({ include: { _count: { select: { posts: true } } 
 <div class="out">prisma:query DELETE FROM "public"."_CategoryToPost" WHERE "B" = $1
 prisma:query INSERT INTO "public"."_CategoryToPost" ("A","B") VALUES ($1,$2), ($3,$4) ON CONFLICT DO NOTHING</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>set</code> deletes everything first.</strong> It is a replace, not a merge: every existing link is removed and the given list is inserted. Send <code>set: []</code> and you have cleared the relation entirely. This is exactly what a naive "save the form" handler does when the user's browser sent no categories — one empty multi-select and a post's tags are gone. Use <code>connect</code> and <code>disconnect</code> for incremental edits, and reserve <code>set</code> for when you genuinely have the complete intended list in hand.</p>
+<p><strong>Trap — <code>set</code> deletes everything first.</strong> It is a replace, not a merge: every existing link is removed and the given list is inserted. Send <code>set: []</code> and you have cleared the relation entirely. This is exactly what a naive "save the form" handler does when the user's browser sent no categories — one empty multi-select and a post's tags are gone. Use <code>connect</code> and <code>disconnect</code> for incremental edits, and reserve <code>set</code> for when you genuinely have the complete intended list in hand.</p>
 </div>
 
 <h3>Explicit: the join table as a model you own</h3>
@@ -1324,7 +1324,7 @@ const roots = await prisma.comment.findMany({
 prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2,$3)
 prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2,$3,$4,$5,$6,$7)</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>include</code> cannot express "all the way down".</strong> Each nesting level is written out by hand and costs one query. Ten levels means ten <code>include</code>s and ten statements, and eleven levels silently returns a truncated tree with no error at all. There is no recursive <code>include</code> in Prisma and there is unlikely ever to be one, because the type would have to be infinite. For an arbitrarily deep tree you need the recursive CTE below.</p>
+<p><strong>Trap — <code>include</code> cannot express "all the way down".</strong> Each nesting level is written out by hand and costs one query. Ten levels means ten <code>include</code>s and ten statements, and eleven levels silently returns a truncated tree with no error at all. There is no recursive <code>include</code> in Prisma and there is unlikely ever to be one, because the type would have to be infinite. For an arbitrarily deep tree you need the recursive CTE below.</p>
 </div>
 
 <h3>The query a comment tree eventually needs</h3>

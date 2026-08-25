@@ -102,7 +102,7 @@ io.on('connection', (socket) =&gt; {
 <p>A 2× reduction does not solve a complexity problem — it is still O(N²). You have to change the ALGORITHM, not trim a constant.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ 10.000 users là &quot;quá scale&quot; không quan tâm hôm nay.</strong> This repo currently has ~200 online users. But a deploy storm scales as N² in <em>current N</em>, not in the target N. 200 × 200 = 40,000 packets. Still easy. 2,000 × 2,000 = 4 million packets — still survivable, but with a full second of lag. The problem detonates when you are not watching, not when you are waiting for it.</p>
+<p><strong>Trap — dismissing 10,000 users as &quot;too far off&quot; to care about today.</strong> This repo currently has ~200 online users. But a deploy storm scales as N² in <em>current N</em>, not in the target N. 200 × 200 = 40,000 packets. Still easy. 2,000 × 2,000 = 4 million packets — still survivable, but with a full second of lag. The problem detonates when you are not watching, not when you are waiting for it.</p>
 </div>
 
 <div class="callout">
@@ -293,7 +293,7 @@ CREATE TABLE presence_audience (
 <p>That is a different trade: write-heavy (every friend/thread change is N writes), read-fast (one index-backed query). This repo picks the Redis cache because the read/write ratio is ~100:1 — the cache is the healthier option.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — quên invalidate cache khi user block user khác.</strong> A block means removing the friend and leaving every shared thread. If invalidation is incomplete, the ex-friend keeps receiving presence updates for ~5 minutes. A very subtle bug, because users block rarely and tests usually miss it.</p>
+<p><strong>Trap — forgetting to invalidate the cache when one user blocks another.</strong> A block means removing the friend and leaving every shared thread. If invalidation is incomplete, the ex-friend keeps receiving presence updates for ~5 minutes. A very subtle bug, because users block rarely and tests usually miss it.</p>
 </div>
 
 <div class="callout">
@@ -495,7 +495,7 @@ async function markOnline(userId: number, socketId: string) {
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — quên cleanup <code>socketsByUser</code> khi cluster restart.</strong> If a worker crashes, an in-process Set vanishes with it. Redis-backed, the entry survives — and a 1h backup TTL clears it eventually. WITHOUT that TTL it is orphaned forever.</p>
+<p><strong>Trap — forgetting to clean up <code>socketsByUser</code> when the cluster restarts.</strong> If a worker crashes, an in-process Set vanishes with it. Redis-backed, the entry survives — and a 1h backup TTL clears it eventually. WITHOUT that TTL it is orphaned forever.</p>
 </div>
 
 <div class="callout">
@@ -706,7 +706,7 @@ socket.on('thread:typing', (data) =&gt; {
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — debounce phía server thay vì phía client.</strong> If the server does the debouncing, every socket still spams the server with events. The server saves only on BROADCAST, not on RECEIVE. Debouncing on the CLIENT saves both. Doing both (client debounce + server rate limit) is the standard.</p>
+<p><strong>Trap — debouncing on the server instead of on the client.</strong> If the server does the debouncing, every socket still spams the server with events. The server saves only on BROADCAST, not on RECEIVE. Debouncing on the CLIENT saves both. Doing both (client debounce + server rate limit) is the standard.</p>
 </div>
 
 <div class="callout">
@@ -901,7 +901,7 @@ Voi 1.000 thread dong thoi: 1.000.000 update/gio
 <p>That cost is real. Many apps let users turn it off (Messenger has a &quot;turn off read receipts&quot; setting) not for privacy — but to cut server cost.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng DELIVERED làm READ.</strong> The double tick (delivered) and the blue tick (read) are two different levels. If you treat delivered as read, users see &quot;seen&quot; even when the recipient never opened the tab. A serious UX bug, because people believe what that tick says.</p>
+<p><strong>Trap — treating DELIVERED as READ.</strong> The double tick (delivered) and the blue tick (read) are two different levels. If you treat delivered as read, users see &quot;seen&quot; even when the recipient never opened the tab. A serious UX bug, because people believe what that tick says.</p>
 </div>
 
 <div class="callout">

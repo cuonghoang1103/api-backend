@@ -148,7 +148,7 @@ Execution Time: 4.281 ms
 { so: 47, tongMs: 505 }        ← was 812
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — the page is still slow, and the temptation is to keep indexing.</strong> The slowest query went from 311 ms to 4 ms and the page went from 812 ms to 505 ms — the remaining 402 ms is the forty-one-call N+1 in row 0, which no index touches. This is why the ranking table comes before the plan: it tells you <em>which kind</em> of problem you have. Fixing the visible slow query first is the right order only when it is also the expensive one.</p>
+<p><strong>Trap — the page is still slow, and the temptation is to keep indexing.</strong> The slowest query went from 311 ms to 4 ms and the page went from 812 ms to 505 ms — the remaining 402 ms is the forty-one-call N+1 in row 0, which no index touches. This is why the ranking table comes before the plan: it tells you <em>which kind</em> of problem you have. Fixing the visible slow query first is the right order only when it is also the expensive one.</p>
 </div>
 
 <h3>The three numbers to watch</h3>
@@ -413,7 +413,7 @@ const bai = await prisma.post.findMany({
 });</code></pre>
 <div class="out">1 query · 6 ms</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>Promise.all</code> makes N+1 invisible in latency and worse in load.</strong> Forty sequential 14 ms queries take 560 ms and look obviously wrong. Forty concurrent ones take 40 ms and look fine — while consuming forty pool connections at once, which is how a page that "performs well" in isolation takes the site down at fifty concurrent users. Count queries, not milliseconds.</p>
+<p><strong>Trap — <code>Promise.all</code> makes N+1 invisible in latency and worse in load.</strong> Forty sequential 14 ms queries take 560 ms and look obviously wrong. Forty concurrent ones take 40 ms and look fine — while consuming forty pool connections at once, which is how a page that "performs well" in isolation takes the site down at fifty concurrent users. Count queries, not milliseconds.</p>
 </div>
 
 <h3>Form 3 — the nested <code>include</code> that fans out</h3>
@@ -1147,7 +1147,7 @@ node -e "console.log(require('os').cpus().length * 2 + 1)"</code></pre>
 docker run --rm --cpus=2 node:22-alpine node -e "console.log(require('os').cpus().length)"</code></pre>
 <div class="out">16</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>--cpus=2</code> does not change what <code>os.cpus()</code> reports.</strong> A CPU quota is enforced by the scheduler; it does not virtualise <code>/proc/cpuinfo</code>. So a container limited to two cores still computes a pool of 33, and four of them still ask for 132 connections. <strong>Always set <code>connection_limit</code> explicitly in containers.</strong> The default is only correct for a process that has the machine to itself, which in 2026 is almost nothing.</p>
+<p><strong>Trap — <code>--cpus=2</code> does not change what <code>os.cpus()</code> reports.</strong> A CPU quota is enforced by the scheduler; it does not virtualise <code>/proc/cpuinfo</code>. So a container limited to two cores still computes a pool of 33, and four of them still ask for 132 connections. <strong>Always set <code>connection_limit</code> explicitly in containers.</strong> The default is only correct for a process that has the machine to itself, which in 2026 is almost nothing.</p>
 </div>
 
 <h3>The arithmetic</h3>
@@ -1449,7 +1449,7 @@ OFFSET   200  → Limit … actual time=0.028..2.104 rows=20  loops=1     2.2 ms
 OFFSET 10000  → Limit … actual time=0.026..94.31 rows=20  loops=1    94.6 ms
 OFFSET 200000 → Limit … actual time=0.031..1873. rows=20  loops=1  1874.2 ms</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>OFFSET n</code> reads and throws away <code>n</code> rows.</strong> The database has no way to jump to row 200,000 of an ordered result; it produces them in order and discards the first 200,000. The cost is linear in the page number, so the page nobody visits is the one that ties up a connection for two seconds. Worse, it is <em>unstable</em>: a row inserted while a user pages through shifts everything down, so they see one row twice and never see another.</p>
+<p><strong>Trap — <code>OFFSET n</code> reads and throws away <code>n</code> rows.</strong> The database has no way to jump to row 200,000 of an ordered result; it produces them in order and discards the first 200,000. The cost is linear in the page number, so the page nobody visits is the one that ties up a connection for two seconds. Worse, it is <em>unstable</em>: a row inserted while a user pages through shifts everything down, so they see one row twice and never see another.</p>
 </div>
 <pre><code><span class="tok-comment">// Cursor pagination — constant cost, and stable</span>
 const trang = await prisma.socialPost.findMany({
@@ -1570,7 +1570,7 @@ async function capNhatHoSo(userId: string, data: CapNhatHoSo) {
 <p><strong>Delete the key, do not write the new value into it.</strong> Two concurrent updates that each write their own value into the cache can land in the opposite order from the two database writes, and the cache ends up holding the value that lost. Deleting has no such race: whoever reads next reloads from the database, which is the single source of truth. This is the whole argument, and it is why "cache-aside with delete" beats "write-through" for anything you did not carefully design.</p>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — a cache without a TTL is a second database you do not back up.</strong> Every invalidation path you forget becomes permanently wrong data. A TTL turns "forever wrong" into "wrong for five minutes", which is the difference between a bug report and an outage. Set one on every key, including the ones you are certain you invalidate correctly — you are not certain.</p>
+<p><strong>Trap — a cache without a TTL is a second database you do not back up.</strong> Every invalidation path you forget becomes permanently wrong data. A TTL turns "forever wrong" into "wrong for five minutes", which is the difference between a bug report and an outage. Set one on every key, including the ones you are certain you invalidate correctly — you are not certain.</p>
 </div>
 <div class="note-ct">
 <p><strong>CuongThai, in practice.</strong> The feed does not cache post rows: they change (edits, likes, comment counts) more often than they are read twice, so the cache would mostly serve misses and stale counts. What is cached is what is read constantly and changes rarely — the profile card, the category list, the course tree. That is the actual rule: cache what is <em>read many times per write</em>, and measure that ratio before writing a cache rather than after debugging one.</p>

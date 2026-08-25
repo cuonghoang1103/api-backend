@@ -196,11 +196,11 @@ need to think about it again.
 <p>The 60-second cap in this repo exists for a different reason than injection: a malformed or adversarial video can make FFmpeg spin for a very long time, and an upload endpoint that ties up a worker indefinitely is a denial-of-service even with no shell involved. Keep the timeout; just do not mistake it for the fix.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — believing quotes in the command string are a defence.</strong> <code>-i &quot;\${inputPath}&quot;</code> reads as if the quotes contain the danger. They contain whatever the attacker put there, including their own <code>&quot;</code>. Quoting solves spaces in filenames; it has never solved injection. The only robust answer is not to have a shell.</p>
+<p><strong>Trap — believing quotes in the command string are a defence.</strong> <code>-i &quot;\${inputPath}&quot;</code> reads as if the quotes contain the danger. They contain whatever the attacker put there, including their own <code>&quot;</code>. Quoting solves spaces in filenames; it has never solved injection. The only robust answer is not to have a shell.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — sanitizing the filename instead of removing it from the path.</strong> Every denylist of shell metacharacters is missing something — newline, <code>$()</code>, <code>&amp;</code>, backtick, locale-dependent characters. Generate the temp path yourself with a UUID and never let the user's bytes near it. That is a fix you cannot get subtly wrong.</p>
+<p><strong>Trap — sanitizing the filename instead of removing it from the path.</strong> Every denylist of shell metacharacters is missing something — newline, <code>$()</code>, <code>&amp;</code>, backtick, locale-dependent characters. Generate the temp path yourself with a UUID and never let the user's bytes near it. That is a fix you cannot get subtly wrong.</p>
 </div>
 
 <div class="callout">
@@ -604,11 +604,11 @@ export async function isVideoThumbnailingAvailable() {
 <p>Worth having because FFmpeg is a system dependency, not an npm one. It is present in your dev container and absent from a slim production image unless someone added it to the Dockerfile — a difference that shows up as &quot;thumbnails stopped working in production&quot; weeks later. A startup probe that logs loudly beats a silent per-upload warning.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — putting <code>-ss</code> after <code>-i</code>.</strong> Measured 318× slower at an 11-minute offset because FFmpeg decodes every frame up to the timestamp instead of seeking the index. Put it before <code>-i</code>; if you also need frame accuracy, use a coarse <code>-ss</code> before and a fine <code>-ss</code> after.</p>
+<p><strong>Trap — putting <code>-ss</code> after <code>-i</code>.</strong> Measured 318× slower at an 11-minute offset because FFmpeg decodes every frame up to the timestamp instead of seeking the index. Put it before <code>-i</code>; if you also need frame accuracy, use a coarse <code>-ss</code> before and a fine <code>-ss</code> after.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — downloading the whole video to grab one frame.</strong> FFmpeg reads <code>https://</code> inputs with Range requests and fetched 0.4% of a 486 MB file to produce a thumbnail. Pass the presigned URL directly — and generate it inside the job so it has not expired by the time the job runs.</p>
+<p><strong>Trap — downloading the whole video to grab one frame.</strong> FFmpeg reads <code>https://</code> inputs with Range requests and fetched 0.4% of a 486 MB file to produce a thumbnail. Pass the presigned URL directly — and generate it inside the job so it has not expired by the time the job runs.</p>
 </div>
 
 <div class="callout">
@@ -1045,11 +1045,11 @@ await new Promise((resolve, reject) =&gt; {
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — omitting <code>-pix_fmt yuv420p</code>.</strong> The output plays perfectly on your machine and shows a black screen on every iPhone, because Safari's H.264 decoder only handles 4:2:0 chroma. It reproduces only on hardware you may not have, so it survives review and ships. Put it in the baseline.</p>
+<p><strong>Trap — omitting <code>-pix_fmt yuv420p</code>.</strong> The output plays perfectly on your machine and shows a black screen on every iPhone, because Safari's H.264 decoder only handles 4:2:0 chroma. It reproduces only on hardware you may not have, so it survives review and ships. Put it in the baseline.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — re-encoding video that was already fine.</strong> A source that is already H.264 + AAC needs at most <code>-c copy -movflags +faststart</code>, which measured 200× faster than a re-encode and is lossless. Probe with <code>ffprobe</code> before spending 400 seconds of CPU to make a file <em>worse</em>.</p>
+<p><strong>Trap — re-encoding video that was already fine.</strong> A source that is already H.264 + AAC needs at most <code>-c copy -movflags +faststart</code>, which measured 200× faster than a re-encode and is lossless. Probe with <code>ffprobe</code> before spending 400 seconds of CPU to make a file <em>worse</em>.</p>
 </div>
 
 <div class="callout">

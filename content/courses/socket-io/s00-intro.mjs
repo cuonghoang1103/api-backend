@@ -98,7 +98,7 @@ CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — cài <code>ws</code> instead of <code>socket.io</code> because it is &quot;lighter&quot;.</strong> Yes, the <code>ws</code> library is ~20 KB and socket.io is ~150 KB. Then you write reconnect yourself (hard — how long? which backoff?), heartbeat (hard — a dead server and a dead client are not the same thing), room broadcast (easy but slow to build), and a fallback for proxies that strip the upgrade (very hard). Three months later you have a worse socket.io with no documentation. This repo DOES have one place that uses <code>ws</code> raw — <code>device.gateway.ts</code> — and it takes 1,035 lines to do its job; Chapter 8 teaches when that trade is worth making.</p>
+<p><strong>Trap — installing <code>ws</code> instead of <code>socket.io</code> because it is &quot;lighter&quot;.</strong> Yes, the <code>ws</code> library is ~20 KB and socket.io is ~150 KB. Then you write reconnect yourself (hard — how long? which backoff?), heartbeat (hard — a dead server and a dead client are not the same thing), room broadcast (easy but slow to build), and a fallback for proxies that strip the upgrade (very hard). Three months later you have a worse socket.io with no documentation. This repo DOES have one place that uses <code>ws</code> raw — <code>device.gateway.ts</code> — and it takes 1,035 lines to do its job; Chapter 8 teaches when that trade is worth making.</p>
 </div>
 
 <div class="callout">
@@ -320,7 +320,7 @@ io.on('connection', socket => {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — bật <code>transports: [&#39;websocket&#39;]</code> because a StackOverflow answer said it was &quot;faster&quot;.</strong> You cut polling → 3-5% of users report &quot;I'm not getting new messages&quot;. You cannot see why, because on your dev machine (good corporate network, no proxy) it works perfectly. This is the class of bug that does NOT reproduce in dev, and the log line &quot;client disconnect after ping timeout&quot; reads like a backend bug. The only way back is a rollback.</p>
+<p><strong>Trap — setting <code>transports: [&#39;websocket&#39;]</code> because a StackOverflow answer said it was &quot;faster&quot;.</strong> You cut polling → 3-5% of users report &quot;I'm not getting new messages&quot;. You cannot see why, because on your dev machine (good corporate network, no proxy) it works perfectly. This is the class of bug that does NOT reproduce in dev, and the log line &quot;client disconnect after ping timeout&quot; reads like a backend bug. The only way back is a rollback.</p>
 </div>
 
 <div class="callout">
@@ -573,7 +573,7 @@ Client:  431[{"ok":true}]
 <p>Only when you <code>emit</code> with a callback does an ack id get assigned. No callback → no ack id → no &quot;at-least-once&quot; guarantee — Chapter 6 measures exactly this.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ <code>2</code> và <code>3</code> are &quot;ping&quot; and &quot;pong&quot; at LAYER 3.</strong> NO. <code>2</code> và <code>3</code> are packet types at LAYER 2 (engine.io). At LAYER 3 (socket.io, once engine.io has said 4), <code>2</code> is EVENT and <code>3</code> is ACK. Same digits, different layer, different meaning. Confusing the two is the number-one source of muddled logs when debugging the protocol.</p>
+<p><strong>Trap — thinking <code>2</code> and <code>3</code> are &quot;ping&quot; and &quot;pong&quot; at LAYER 3.</strong> NO. <code>2</code> và <code>3</code> are packet types at LAYER 2 (engine.io). At LAYER 3 (socket.io, once engine.io has said 4), <code>2</code> is EVENT and <code>3</code> is ACK. Same digits, different layer, different meaning. Confusing the two is the number-one source of muddled logs when debugging the protocol.</p>
 </div>
 
 <div class="callout">

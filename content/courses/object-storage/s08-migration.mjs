@@ -147,11 +147,11 @@ Failure 2 — mid-run S3 permission change
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — thinking the source is untouched.</strong> Slurper does not delete anything from S3. It only reads. But it does read a lot of Class B ops, which show up on your AWS bill for the month of the migration. Watch the AWS side too; the surprise line item is not always where you expect.</p>
+<p><strong>Trap — thinking the source is untouched.</strong> Slurper does not delete anything from S3. It only reads. But it does read a lot of Class B ops, which show up on your AWS bill for the month of the migration. Watch the AWS side too; the surprise line item is not always where you expect.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — running Slurper without noting the &quot;point-in-time&quot;.</strong> The moment Slurper starts, it snapshots the source's key list from that <code>ListObjectsV2</code>. Objects uploaded to S3 after that instant are NOT included. Write down the timestamp; anything after it needs a follow-up sync or is orphaned in S3.</p>
+<p><strong>Trap — running Slurper without noting the &quot;point-in-time&quot;.</strong> The moment Slurper starts, it snapshots the source's key list from that <code>ListObjectsV2</code>. Objects uploaded to S3 after that instant are NOT included. Write down the timestamp; anything after it needs a follow-up sync or is orphaned in S3.</p>
 </div>
 
 <div class="callout">
@@ -453,11 +453,11 @@ ETag between S3 and R2 for every recently-modified key.
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — using <code>Promise.all([s3, r2])</code> for the dual-write.</strong> If R2 is briefly unavailable, every write returns 500 to your user. The whole point of secondary is that its failure is invisible. Fire-and-forget with a warn log is the pattern; a background reconciliation catches drift later.</p>
+<p><strong>Trap — using <code>Promise.all([s3, r2])</code> for the dual-write.</strong> If R2 is briefly unavailable, every write returns 500 to your user. The whole point of secondary is that its failure is invisible. Fire-and-forget with a warn log is the pattern; a background reconciliation catches drift later.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — turning off dual-write the moment Slurper finishes.</strong> A tiny fraction of concurrent writes during Phase 1 landed on S3 but the async R2 write failed silently. Keep dual-write on for the full duration of Phase 2 so those keys catch up through the read-fallback backfill.</p>
+<p><strong>Trap — turning off dual-write the moment Slurper finishes.</strong> A tiny fraction of concurrent writes during Phase 1 landed on S3 but the async R2 write failed silently. Keep dual-write on for the full duration of Phase 2 so those keys catch up through the read-fallback backfill.</p>
 </div>
 
 <div class="callout">
@@ -795,11 +795,11 @@ for (const line of lines) {
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating MP-DIFF as a bug.</strong> S3's ETag for a multipart-uploaded object is <code>md5-of-md5s + &quot;-&quot; + part_count</code>. Slurper may re-assemble the object as a single-part on R2, giving an entirely different ETag. Bytes are the same. Only bother investigating if the byte-hash sample also shows mismatches on multipart objects.</p>
+<p><strong>Trap — treating MP-DIFF as a bug.</strong> S3's ETag for a multipart-uploaded object is <code>md5-of-md5s + &quot;-&quot; + part_count</code>. Slurper may re-assemble the object as a single-part on R2, giving an entirely different ETag. Bytes are the same. Only bother investigating if the byte-hash sample also shows mismatches on multipart objects.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — running the ETag scan against a live S3 bucket during Phase 2.</strong> New uploads to S3 will appear in the scan and their R2 counterparts (from dual-write) may not exist yet, producing MISSING entries that are not really missing — just very recent. Either freeze S3 writes during verification, or filter the log to <code>LastModified &lt; scan_start_time</code>.</p>
+<p><strong>Trap — running the ETag scan against a live S3 bucket during Phase 2.</strong> New uploads to S3 will appear in the scan and their R2 counterparts (from dual-write) may not exist yet, producing MISSING entries that are not really missing — just very recent. Either freeze S3 writes during verification, or filter the log to <code>LastModified &lt; scan_start_time</code>.</p>
 </div>
 
 <div class="callout">

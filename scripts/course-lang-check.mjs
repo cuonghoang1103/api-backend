@@ -22,7 +22,13 @@ import { join, basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const DIAC = /[ăâđêôơưĂÂĐÊÔƠƯàáảãạằắẳẵặầấẩẫậèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵÀÁẢÃẠẰẮẲẴẶẦẤẨẪẬÈÉẺẼẸỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌỒỐỔỖỘỜỚỞỠỢÙÚỦŨỤỪỨỬỮỰỲÝỶỸỴ]/;
-const LABELS = [/^Bẫy\b/, /^Một câu\.?$/, /^Đo:?$/, /^Bài học:?$/, /^Nguồn$/, /^Kiểm tra/];
+// SỬA 25/08: chỉ bỏ qua đoạn CHÍNH LÀ cái nhãn, không bỏ qua mọi đoạn BẮT ĐẦU
+// bằng nhãn. Luật cũ `/^Bẫy\b/` khớp cả `Bẫy — <thân bài>` — mà thân bài của
+// hộp pitfall nằm CÙNG một đoạn text với nhãn, nên toàn bộ câu bị vứt khỏi cả
+// tử số lẫn mẫu số. Nó giấu 66 dòng tiêu đề pitfall vẫn còn tiếng Việt trong
+// khối ml-en, và chỉ lộ ra khi nhãn đổi sang `Trap —`. Cùng bẫy với
+// `/^Kiểm tra/`. Neo `$` là thứ giữ cho bộ kiểm không tự bịt mắt mình.
+const LABELS = [/^Bẫy\s*[—:]?$/, /^Một câu\.?$/, /^Đo:?$/, /^Bài học:?$/, /^Nguồn$/, /^Kiểm tra$/];
 
 const argv = process.argv.slice(2);
 const list = argv.includes('--list');

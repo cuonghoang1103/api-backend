@@ -76,7 +76,7 @@ FATAL ERROR: Reached heap limit Allocation failed</div>
 node --max-old-space-size=40 -e '...' | tail -1    -> exit 0</div>
 
 <div class="pitfall">
-<p><strong>Bẫy — this is the third time the same trap has caught a measurement in this course.</strong> Lesson 2.4 measured <code>set -e</code> through a <code>| grep</code> and read exit 0. Lesson 6.5&#39;s audit script used <code>grep -c</code> and undercounted by nine. And here, a <code>| tail</code> turned an exit 134 into an exit 0. Three different lessons, three different authors&#39; intentions, one default behaviour: <strong>a pipeline reports the exit code of its last command</strong>. That is why <code>shell: bash</code> — which adds <code>pipefail</code> — is the highest-value one-line change in a workflow file, and why this course keeps saying so.</p>
+<p><strong>Trap — this is the third time the same trap has caught a measurement in this course.</strong> Lesson 2.4 measured <code>set -e</code> through a <code>| grep</code> and read exit 0. Lesson 6.5&#39;s audit script used <code>grep -c</code> and undercounted by nine. And here, a <code>| tail</code> turned an exit 134 into an exit 0. Three different lessons, three different authors&#39; intentions, one default behaviour: <strong>a pipeline reports the exit code of its last command</strong>. That is why <code>shell: bash</code> — which adds <code>pipefail</code> — is the highest-value one-line change in a workflow file, and why this course keeps saying so.</p>
 </div>
 
 <h3>Reading the exit code out of a run</h3>
@@ -239,7 +239,7 @@ neu ty le hong that su la  5%:  can 59 lan xanh lien tiep de tin 95%
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the re-run button as a diagnostic.</strong> It is a repair tool, not a measurement: it gets the build green so work continues, which is legitimate. The failure is treating the green run as an answer. If a test has failed intermittently, the number worth having is its failure <em>rate</em> across recent runs — and that number is in the API, not in your memory of how often it feels like it happens.</p>
+<p><strong>Trap — the re-run button as a diagnostic.</strong> It is a repair tool, not a measurement: it gets the build green so work continues, which is legitimate. The failure is treating the green run as an answer. If a test has failed intermittently, the number worth having is its failure <em>rate</em> across recent runs — and that number is in the API, not in your memory of how often it feels like it happens.</p>
 </div>
 
 <h3>Deciding which one you have, in order of cost</h3>
@@ -428,7 +428,7 @@ heap_size_limit  = 8.240 MB</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — adding logging to CI instead of reproducing locally.</strong> The instinct on a CI-only failure is to push a commit that prints more. Each iteration costs a full run — 141 to 555 seconds here — plus the wait, and it changes the thing being debugged. Constraining a local machine gives an iteration time of seconds and a debugger. Add CI logging when you genuinely cannot name the difference; try to name it first.</p>
+<p><strong>Trap — adding logging to CI instead of reproducing locally.</strong> The instinct on a CI-only failure is to push a commit that prints more. Each iteration costs a full run — 141 to 555 seconds here — plus the wait, and it changes the thing being debugged. Constraining a local machine gives an iteration time of seconds and a debugger. Add CI logging when you genuinely cannot name the difference; try to name it first.</p>
 </div>
 
 <h3>What to print when you do need CI to tell you</h3>
@@ -623,7 +623,7 @@ heap_size_limit  = 8.240 MB</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating a failed downstream job as the failure.</strong> A red publish job with three red build jobs upstream has one failure, not four. The build jobs failed for their own reasons; the publish job failed because its <code>needs:</code> did not succeed. Read the earliest failure in the chain, not the loudest one — which is usually the one at the end.</p>
+<p><strong>Trap — treating a failed downstream job as the failure.</strong> A red publish job with three red build jobs upstream has one failure, not four. The build jobs failed for their own reasons; the publish job failed because its <code>needs:</code> did not succeed. Read the earliest failure in the chain, not the loudest one — which is usually the one at the end.</p>
 </div>
 
 <div class="callout ok">
@@ -774,7 +774,7 @@ verify: run under the 1600 MB constraint again
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the fix that raises the ceiling instead of restoring the margin.</strong> The most tempting reply to "the build ran out of heap" is to add <code>--max-old-space-size=8192</code> and push. It works — until the next dependency raises the peak by another 400 MB and CI is red again, having exchanged an OOM for a silent slow build in production. The reproduction identifies whether the fix should restore the margin or raise the ceiling. Both are legitimate; conflating them is how the class comes back.</p>
+<p><strong>Trap — the fix that raises the ceiling instead of restoring the margin.</strong> The most tempting reply to "the build ran out of heap" is to add <code>--max-old-space-size=8192</code> and push. It works — until the next dependency raises the peak by another 400 MB and CI is red again, having exchanged an OOM for a silent slow build in production. The reproduction identifies whether the fix should restore the margin or raise the ceiling. Both are legitimate; conflating them is how the class comes back.</p>
 </div>
 
 <h3>The green run as a check, not a proof</h3>

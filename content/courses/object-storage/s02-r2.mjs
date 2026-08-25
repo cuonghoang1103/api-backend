@@ -75,7 +75,7 @@ For media serving app: 90% Class B via CDN cache HIT anyway = $0
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — kiểm cost bằng cách nghĩ &quot;storage cheap enough&quot;.</strong> The real cost is usually egress (on S3) or requests (on R2, if you are request-heavy). Read an actual invoice after 30 days before concluding anything. Online cost calculators are estimates, not measurements.</p>
+<p><strong>Trap — assessing cost by assuming &quot;storage is cheap enough&quot;.</strong> The real cost is usually egress (on S3) or requests (on R2, if you are request-heavy). Read an actual invoice after 30 days before concluding anything. Online cost calculators are estimates, not measurements.</p>
 </div>
 
 <div class="callout">
@@ -237,7 +237,7 @@ But: for large single upload with checksums:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — assume mọi S3 SDK operation work identically on R2.</strong> ~90% match. Advanced features (Object Lambda, S3 Select, Batch Operations, Object Lock) are not supported yet. Check the R2 API compatibility page before relying on one.</p>
+<p><strong>Trap — assuming every S3 SDK operation works identically on R2.</strong> ~90% match. Advanced features (Object Lambda, S3 Select, Batch Operations, Object Lock) are not supported yet. Check the R2 API compatibility page before relying on one.</p>
 </div>
 
 <div class="callout">
@@ -390,7 +390,7 @@ MOI workload -&gt; MOT token. Neu 1 leak, xoa MOT token, khong break het.
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — commit .env chứa placeholder rồi thay bằng real secret post-commit.</strong> Git history still shows a placeholder, so reviewers assume it is fine. Tomorrow someone <code>git log -p</code> the real secret. The fix: never commit .env at all, only .env.example with dummy values.</p>
+<p><strong>Trap — committing a .env full of placeholders and swapping in the real secrets afterwards.</strong> Git history still shows a placeholder, so reviewers assume it is fine. Tomorrow someone <code>git log -p</code> the real secret. The fix: never commit .env at all, only .env.example with dummy values.</p>
 </div>
 
 <div class="callout">

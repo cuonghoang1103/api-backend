@@ -56,7 +56,7 @@ Cong bo       ubuntu-latest    1000003398         2s      34s
 <p>What <em>does</em> survive is deliberately narrow: artifacts (uploaded explicitly, retained for a configured period), caches (keyed, best-effort, and never guaranteed), job outputs (small strings, declared), and whatever you pushed to a real external system such as a registry or a server.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — expecting <code>export</code> to reach the next step.</strong> Each <code>run:</code> block is its own shell. <code>export VERSION=1.2.3</code> in step 4 is simply gone by step 5. The mechanism that does work is writing to the file named by <code>\$GITHUB_ENV</code>: <code>echo "VERSION=1.2.3" &gt;&gt; \$GITHUB_ENV</code> makes <code>\$VERSION</code> available in every <em>later</em> step — but still not in the step that wrote it, and never in another job.</p>
+<p><strong>Trap — expecting <code>export</code> to reach the next step.</strong> Each <code>run:</code> block is its own shell. <code>export VERSION=1.2.3</code> in step 4 is simply gone by step 5. The mechanism that does work is writing to the file named by <code>\$GITHUB_ENV</code>: <code>echo "VERSION=1.2.3" &gt;&gt; \$GITHUB_ENV</code> makes <code>\$VERSION</code> available in every <em>later</em> step — but still not in the step that wrote it, and never in another job.</p>
 </div>
 
 <h3>Queueing is fast — and this is the surprising part</h3>
@@ -87,7 +87,7 @@ runs-on: \${{ matrix.os }}  1   <- no ra macos-latest, windows-latest, ubuntu-la
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating a preinstalled tool as a stable interface.</strong> Runner images ship a large set of preinstalled software, and it is tempting to just call <code>node</code>, <code>python</code> or <code>docker</code> and rely on whatever is there. Those versions change with the image. The fix is not to distrust the runner but to <em>declare</em>: <code>actions/setup-node@v4</code> with an explicit version costs 8 to 22 seconds — measured on the three platforms in 2.3 — and makes the version a property of your workflow instead of a property of GitHub&#39;s rollout schedule.</p>
+<p><strong>Trap — treating a preinstalled tool as a stable interface.</strong> Runner images ship a large set of preinstalled software, and it is tempting to just call <code>node</code>, <code>python</code> or <code>docker</code> and rely on whatever is there. Those versions change with the image. The fix is not to distrust the runner but to <em>declare</em>: <code>actions/setup-node@v4</code> with an explicit version costs 8 to 22 seconds — measured on the three platforms in 2.3 — and makes the version a property of your workflow instead of a property of GitHub&#39;s rollout schedule.</p>
 </div>
 
 <h3>The runner is a real machine, and you can look at it</h3>
@@ -301,7 +301,7 @@ Tai VE ca ba trong job cong-bo: 12s</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the artifact that costs more than the job it saved.</strong> Uploading <code>node_modules</code> so the next job need not run <code>npm ci</code> is a reliable way to make a workflow slower. It is tens of thousands of small files; the upload compresses and transfers them, the download reverses it, and on the measurements in this repository a fresh <code>npm ci</code> takes 12 to 39 seconds depending on platform. Artifacts are for build <em>outputs</em> — the installer, the bundle, the report. For dependencies, the tool is the cache, and Chapter 5 measures both.</p>
+<p><strong>Trap — the artifact that costs more than the job it saved.</strong> Uploading <code>node_modules</code> so the next job need not run <code>npm ci</code> is a reliable way to make a workflow slower. It is tens of thousands of small files; the upload compresses and transfers them, the download reverses it, and on the measurements in this repository a fresh <code>npm ci</code> takes 12 to 39 seconds depending on platform. Artifacts are for build <em>outputs</em> — the installer, the bundle, the report. For dependencies, the tool is the cache, and Chapter 5 measures both.</p>
 </div>
 
 <h3>What <code>needs:</code> actually means when things fail</h3>
@@ -524,7 +524,7 @@ macOS chiem 82% hoa don, du chi chiem 44% thoi gian that</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — putting a platform-independent job on a matrix leg.</strong> If a step&#39;s result cannot differ between platforms — a lint pass, a typecheck, a JSON schema validation, a docs build — running it on all three legs of a matrix triples the wall-clock contribution and, at the multipliers above, multiplies the cost by thirteen for no additional information. Hoist those steps into a single Linux job that the matrix <code>needs:</code>. This repository does exactly that: <code>kiem-tra</code> runs once on Linux in 72 seconds, and only the genuinely platform-specific build fans out.</p>
+<p><strong>Trap — putting a platform-independent job on a matrix leg.</strong> If a step&#39;s result cannot differ between platforms — a lint pass, a typecheck, a JSON schema validation, a docs build — running it on all three legs of a matrix triples the wall-clock contribution and, at the multipliers above, multiplies the cost by thirteen for no additional information. Hoist those steps into a single Linux job that the matrix <code>needs:</code>. This repository does exactly that: <code>kiem-tra</code> runs once on Linux in 72 seconds, and only the genuinely platform-specific build fans out.</p>
 </div>
 
 <h3>Writing steps that work on all three</h3>
@@ -708,7 +708,7 @@ pipe.sh: line 2: lenh-khong-ton-tai: command not found
 <p>The first three are the documented and reasonable ones: a command being <em>tested</em> is allowed to fail, that is the point of testing it. The fourth is the one that surprises people, and it is worth stating precisely: if a shell function is called from inside an <code>if</code>, then every command inside that function is exempt too — the exemption is inherited, not confined to the call itself. A carefully written function full of error checks can run to completion with all of them ignored, because of where it was called from.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — the measurement command that hid the answer.</strong> While measuring the list above, the first command written for it was <code>bash -e mien.sh | grep -v "command not found"; echo \$?</code> — and it printed <strong>0</strong>. Read straight, that says <code>set -e</code> never fired at all. It is wrong: <code>\$?</code> there is the exit code of <code>grep</code>, not of the script. Re-run without the pipe:</p>
+<p><strong>Trap — the measurement command that hid the answer.</strong> While measuring the list above, the first command written for it was <code>bash -e mien.sh | grep -v "command not found"; echo \$?</code> — and it printed <strong>0</strong>. Read straight, that says <code>set -e</code> never fired at all. It is wrong: <code>\$?</code> there is the exit code of <code>grep</code>, not of the script. Re-run without the pipe:</p>
 <p><code>bash -e mien.sh</code> → <strong>127</strong> · <code>bash -e mien.sh | cat</code> → <strong>0</strong> · <code>pipefail</code> + pipe → <strong>127</strong></p>
 <p>The trap this lesson is about bit the lesson&#39;s own measurement, which is the most useful demonstration available: it is not an exotic failure mode, it is what happens by default to anyone who pipes a command into anything.</p>
 </div>
@@ -734,7 +734,7 @@ pipe.sh: line 2: lenh-khong-ton-tai: command not found
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>continue-on-error</code> as a way to make CI quiet.</strong> The moment it appears on a step that checks correctness — a test, a typecheck, a security scan — the job&#39;s green tick stops meaning anything, and it stops meaning anything <em>silently</em>, since a passing job is not something anybody opens. If a check is too noisy to block on, the honest options are to fix it, to delete it, or to mark it informational in its own name. Leaving a correctness check nominally present but unable to fail is the worst of the three, because it also removes the pressure to do one of the other two.</p>
+<p><strong>Trap — <code>continue-on-error</code> as a way to make CI quiet.</strong> The moment it appears on a step that checks correctness — a test, a typecheck, a security scan — the job&#39;s green tick stops meaning anything, and it stops meaning anything <em>silently</em>, since a passing job is not something anybody opens. If a check is too noisy to block on, the honest options are to fix it, to delete it, or to mark it informational in its own name. Leaving a correctness check nominally present but unable to fail is the worst of the three, because it also removes the pressure to do one of the other two.</p>
 </div>
 
 <h3>Conditions, and the two that get confused</h3>
@@ -978,7 +978,7 @@ HONG      ( 2 lan): 80, 334                                             -> HONG 
 <p>The other one is <code>timeout-minutes: 40</code> on the matrix job. Six of this repository&#39;s workflows set an explicit timeout; the default, if you set none, is <strong>360 minutes</strong> — six hours. A hung job with no timeout holds a runner for six hours and, on a private repository at the macOS multiplier, bills 3,600 minutes for producing nothing at all.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — a matrix that grew by multiplication.</strong> <code>{os: [ubuntu, macos, windows], node: [18, 20, 22]}</code> is nine jobs, which reads as reasonable until you price it: at the platform multipliers from 2.3, the three macOS legs alone would dominate the bill. Matrices grow by <em>multiplication</em> while the config grows by addition, so a one-line change adds three jobs. Before adding a dimension, ask what a leg would tell you that another leg does not — and if the answer is "it would be the same", <code>include:</code> the combinations that matter rather than crossing everything with everything.</p>
+<p><strong>Trap — a matrix that grew by multiplication.</strong> <code>{os: [ubuntu, macos, windows], node: [18, 20, 22]}</code> is nine jobs, which reads as reasonable until you price it: at the platform multipliers from 2.3, the three macOS legs alone would dominate the bill. Matrices grow by <em>multiplication</em> while the config grows by addition, so a one-line change adds three jobs. Before adding a dimension, ask what a leg would tell you that another leg does not — and if the answer is "it would be the same", <code>include:</code> the combinations that matter rather than crossing everything with everything.</p>
 </div>
 
 <div class="callout ok">

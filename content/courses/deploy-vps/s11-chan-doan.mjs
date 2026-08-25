@@ -84,7 +84,7 @@ psql -d nt -c 'select 1'              <span class="tok-comment"># chi CSDL      
 <p>The first of those four that fails is your layer. Everything below it is fine and can be left alone; everything above it is a symptom.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — the layer that fails is not always the layer at fault.</strong> Chapter 6 measured a rollback that left <code>/health</code> returning 200 while every real endpoint returned 500, because the application was fine and the <em>schema</em> had moved. Chapter 8 measured a database killed by a build script that exited 0. Chapter 9 measured a proxy returning 200 on one location and 502 on another. In all three the failing layer and the responsible change were different things — which is why Question 1 comes first.</p>
+<p><strong>Trap — the layer that fails is not always the layer at fault.</strong> Chapter 6 measured a rollback that left <code>/health</code> returning 200 while every real endpoint returned 500, because the application was fine and the <em>schema</em> had moved. Chapter 8 measured a database killed by a build script that exited 0. Chapter 9 measured a proxy returning 200 on one location and 502 on another. In all three the failing layer and the responsible change were different things — which is why Question 1 comes first.</p>
 </div>
 
 <h3>What to have open before you need it</h3>
@@ -249,7 +249,7 @@ psql -d nt -c 'select 1'              <span class="tok-comment"># chi CSDL      
 <span class="tok-comment"># (khong co dong nao cho 3370) ← ung dung KHONG. Day la ca 502.</span></code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — "nothing is listening" and "listening on the wrong address" look identical from the proxy.</strong> An application bound to <code>127.0.0.1</code> is unreachable from another container; one bound to a container&#39;s internal address is unreachable from the host. Both produce <code>ECONNREFUSED</code> and a sub-millisecond 502. <code>ss -ltn</code> shows the address as well as the port, and that column is the one to read — <code>0.0.0.0:3000</code> and <code>127.0.0.1:3000</code> are very different situations that the status code cannot tell apart.</p>
+<p><strong>Trap — "nothing is listening" and "listening on the wrong address" look identical from the proxy.</strong> An application bound to <code>127.0.0.1</code> is unreachable from another container; one bound to a container&#39;s internal address is unreachable from the host. Both produce <code>ECONNREFUSED</code> and a sub-millisecond 502. <code>ss -ltn</code> shows the address as well as the port, and that column is the one to read — <code>0.0.0.0:3000</code> and <code>127.0.0.1:3000</code> are very different situations that the status code cannot tell apart.</p>
 </div>
 
 <h3>The case with no status code at all</h3>
@@ -433,7 +433,7 @@ psql -d nt -c "select * from _prisma_migrations order by started_at desc limit 3
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — "nothing changed" is almost always false.</strong> A certificate expired. A disk crossed a threshold. A cron job ran for the first time this month. An upstream provider deployed. A log rotated and something reopened a file it should not have. Chapter 8 measured a disk filling from build cache alone, with nobody touching the machine. When somebody says nothing changed, they mean nobody deployed — which is a much smaller claim.</p>
+<p><strong>Trap — "nothing changed" is almost always false.</strong> A certificate expired. A disk crossed a threshold. A cron job ran for the first time this month. An upstream provider deployed. A log rotated and something reopened a file it should not have. Chapter 8 measured a disk filling from build cache alone, with nobody touching the machine. When somebody says nothing changed, they mean nobody deployed — which is a much smaller claim.</p>
 </div>
 
 <h3>Sources</h3>
@@ -591,7 +591,7 @@ grep -c 'oom' /sys/fs/cgroup/memory/…/memory.oom_control</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the resource that is exhausted is often not the one that broke.</strong> A full disk stops the database writing, and the symptom is 500s from the application. Memory pressure evicts the page cache, and the symptom is slow queries. Chapter 8 measured a build filling a disk shared with PostgreSQL and a build triggering an OOM kill of the database — in both, the visible failure was the database and the cause was a build. Check the machine before you tune the application.</p>
+<p><strong>Trap — the resource that is exhausted is often not the one that broke.</strong> A full disk stops the database writing, and the symptom is 500s from the application. Memory pressure evicts the page cache, and the symptom is slow queries. Chapter 8 measured a build filling a disk shared with PostgreSQL and a build triggering an OOM kill of the database — in both, the visible failure was the database and the cause was a build. Check the machine before you tune the application.</p>
 </div>
 
 <h3>Sources</h3>
@@ -793,7 +793,7 @@ catch(e){ s.writeHead(500,{"content-type":"text/plain"});
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — a green suite is evidence about the suite, not about the system.</strong> Twice in this course a check passed while the thing it was supposed to protect was broken: check 13 here, and the readiness loop in 7.4. Both times the fix was the same — make the failure happen deliberately and confirm the check goes red. A check nobody has seen fail is a check nobody has tested, and it is worth less than no check, because it produces confidence.</p>
+<p><strong>Trap — a green suite is evidence about the suite, not about the system.</strong> Twice in this course a check passed while the thing it was supposed to protect was broken: check 13 here, and the readiness loop in 7.4. Both times the fix was the same — make the failure happen deliberately and confirm the check goes red. A check nobody has seen fail is a check nobody has tested, and it is worth less than no check, because it produces confidence.</p>
 </div>
 
 <div class="callout ok">

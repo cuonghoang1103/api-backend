@@ -77,7 +77,7 @@ curl -s https://cuongthai.com/api/v1/auth/me \\
   <div class="kv"><span class="k">Nothing expires by itself</span><span class="v">A session row sits in the database until something deletes it; a signed token is valid until its <code>exp</code> passes, and there is no way to un-issue it. Revocation is a feature you build, not a property you get.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — "we will add authentication later" is not a schedule, it is a rewrite.</strong> Authentication decides your data model (who owns a row), your API shape (which endpoints take a user), your caching (what is per-user and therefore uncacheable), and your test setup (every test now needs a logged-in fixture). Retrofitting it touches every file that reads data. Decide the shape in the first week even if you build it in the fourth.</p>
+<p><strong>Trap — "we will add authentication later" is not a schedule, it is a rewrite.</strong> Authentication decides your data model (who owns a row), your API shape (which endpoints take a user), your caching (what is per-user and therefore uncacheable), and your test setup (every test now needs a logged-in fixture). Retrofitting it touches every file that reads data. Decide the shape in the first week even if you build it in the fourth.</p>
 </div>
 <div class="note-ct">
 <p><strong>A real example of how far this reaches.</strong> On CuongThai, the Notes API originally had a hard-coded <code>AUTHOR_ID = 1</code> — a placeholder for "the logged-in user" while auth did not exist yet. Removing it was not a one-line change: every query needed a user, every route needed a middleware, every test fixture needed a session, and the ownership checks had to be added to endpoints that previously had nothing to check. That is what "add it later" actually costs, on a small codebase.</p>
@@ -249,7 +249,7 @@ app.get('/api/don-hang/:id', requireAuth, async (req, res) =&gt; {
   <div class="lz-step"><span class="lz-k">Not a factor</span><span class="lz-t">IP, device fingerprint, "remember me"</span><span class="lz-d">Useful <em>signals</em> for risk scoring — a login from a new country deserves a second look. But they are not proof of anything, and treating them as a factor is how "trusted device" becomes a bypass.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — a security question is a password with a much smaller keyspace.</strong> "Your mother's maiden name" is guessable, public on social media, identical across every site that asks, and unchangeable after a breach. NIST SP 800-63B explicitly forbids them as an authenticator. If you must offer account recovery, use recovery codes (Chapter 7) or a verified email, and treat that path as the account's real security level — because it is.</p>
+<p><strong>Trap — a security question is a password with a much smaller keyspace.</strong> "Your mother's maiden name" is guessable, public on social media, identical across every site that asks, and unchangeable after a breach. NIST SP 800-63B explicitly forbids them as an authenticator. If you must offer account recovery, use recovery codes (Chapter 7) or a verified email, and treat that path as the account's real security level — because it is.</p>
 </div>
 
 <h3>Why the separation matters in code</h3>
@@ -509,7 +509,7 @@ curl -s localhost:3000/dang-nhap -d '{"email":"khong-co@vidu.com","matKhau":"x"}
 
 # Mot vong lap qua mot trieu email ro ri = danh sach nguoi dung cua ban.</div>
 <div class="pitfall">
-<p><strong>Bẫy — the fix for problem 2 is not just one message, it is one message <em>and</em> one duration.</strong> If the "no such user" branch returns in 3 ms and the "wrong password" branch takes 80 ms because it hashed something, the timing difference leaks the same information the message used to. Chapter 6 shows the fix: hash a dummy value on the missing-user path so both branches cost the same.</p>
+<p><strong>Trap — the fix for problem 2 is not just one message, it is one message <em>and</em> one duration.</strong> If the "no such user" branch returns in 3 ms and the "wrong password" branch takes 80 ms because it hashed something, the timing difference leaks the same information the message used to. Chapter 6 shows the fix: hash a dummy value on the missing-user path so both branches cost the same.</p>
 </div>
 <div class="note-ct">
 <p><strong>Keep this project. You will rewrite it six times.</strong> Each chapter fixes one of these lines and explains why the obvious fix is usually incomplete — hashing that is not slow enough, an expiry with no revocation, a cookie flag that silently does nothing on localhost. By Chapter 11 the same twenty lines will be about ninety, and every extra line will have a specific attack behind it. That is the shape of the course.</p>

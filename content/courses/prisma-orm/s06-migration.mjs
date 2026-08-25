@@ -100,7 +100,7 @@ Migration &#96;20260823041207_khoi_tao&#96; failed to apply cleanly to the shado
 Error:
 The migration &#96;20260823041207_khoi_tao&#96; was modified after it was applied.</div>
 <div class="pitfall">
-<p><strong>Bẫy — editing an applied migration breaks every future deploy.</strong> The checksum no longer matches, and Prisma refuses to proceed because it can no longer trust that the recorded history describes the database. Recovery is either reverting the file byte-for-byte, or updating the stored checksum by hand — and the second is a lie you are telling the deploy system.</p>
+<p><strong>Trap — editing an applied migration breaks every future deploy.</strong> The checksum no longer matches, and Prisma refuses to proceed because it can no longer trust that the recorded history describes the database. Recovery is either reverting the file byte-for-byte, or updating the stored checksum by hand — and the second is a lie you are telling the deploy system.</p>
 <p>This is why the CuongThai repository lists "never delete or edit files in <code>prisma/migrations/</code> that have already been deployed" among its forbidden actions. The rule sounds bureaucratic until you have watched a deploy pipeline stop because someone fixed a typo in a comment.</p>
 </div>
 <div class="callout ok">
@@ -572,7 +572,7 @@ model User {
 ALTER TABLE "users" DROP COLUMN "full_name";
 ALTER TABLE "users" ADD COLUMN     "ho_ten" TEXT;</div>
 <div class="pitfall">
-<p><strong>Bẫy — Prisma cannot see a rename.</strong> It diffs two schema states, and "column <code>full_name</code> gone, column <code>ho_ten</code> new" is indistinguishable from a rename. So the generated migration <strong>drops the column and every value in it</strong>. On a development database with test data this is invisible. On production it is silent, permanent data loss, and the migration reports success.</p>
+<p><strong>Trap — Prisma cannot see a rename.</strong> It diffs two schema states, and "column <code>full_name</code> gone, column <code>ho_ten</code> new" is indistinguishable from a rename. So the generated migration <strong>drops the column and every value in it</strong>. On a development database with test data this is invisible. On production it is silent, permanent data loss, and the migration reports success.</p>
 <p>The fix is one line, and you must write it yourself every time:</p>
 </div>
 <pre><code><span class="tok-comment">-- The hand-written version</span>
@@ -959,7 +959,7 @@ Applying migration &#96;20260622_add_message_reply_support&#96;
 Database reset successful
 The seed command has been executed.</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>migrate reset</code> is the right tool with the wrong <code>DATABASE_URL</code>.</strong> It drops every table and replays the history from scratch. On your development database that is a useful thirty-second operation. Pointed at staging it destroys the test data; pointed at production it is an outage and a restore from backup. The prompt is the only guard, and it is one keystroke.</p>
+<p><strong>Trap — <code>migrate reset</code> is the right tool with the wrong <code>DATABASE_URL</code>.</strong> It drops every table and replays the history from scratch. On your development database that is a useful thirty-second operation. Pointed at staging it destroys the test data; pointed at production it is an outage and a restore from backup. The prompt is the only guard, and it is one keystroke.</p>
 <p>Two habits make it safe. Keep production credentials out of every local <code>.env</code>, so the URL is simply not available to type against. And echo the target before destructive commands: <code>node -e "console.log(process.env.DATABASE_URL)"</code> takes two seconds and has saved more databases than any policy document.</p>
 </div>
 
@@ -1274,7 +1274,7 @@ npx prisma migrate resolve --rolled-back 20260823071500_them_rang_buoc
 psql "$DATABASE_URL" -f phan_con_lai.sql
 npx prisma migrate resolve --applied 20260823071500_them_rang_buoc</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — <code>migrate resolve</code> changes the record, not the database.</strong> It writes <code>rolled_back_at</code> or <code>finished_at</code> and nothing else. Marking a migration rolled back without actually undoing its applied statements tells Prisma a comforting lie: deploys resume, the next migration computes its diff from a state that does not exist, and the corruption compounds. This is precisely why the CuongThai repository forbids auto-resolving a failed migration and requires the exact error, the partial-application status, and a proposed fix to be reported to a human first.</p>
+<p><strong>Trap — <code>migrate resolve</code> changes the record, not the database.</strong> It writes <code>rolled_back_at</code> or <code>finished_at</code> and nothing else. Marking a migration rolled back without actually undoing its applied statements tells Prisma a comforting lie: deploys resume, the next migration computes its diff from a state that does not exist, and the corruption compounds. This is precisely why the CuongThai repository forbids auto-resolving a failed migration and requires the exact error, the partial-application status, and a proposed fix to be reported to a human first.</p>
 </div>
 
 <h3>The production checklist</h3>

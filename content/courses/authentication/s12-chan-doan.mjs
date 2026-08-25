@@ -59,7 +59,7 @@ POST /mfa/kiem    → 401  <span class="tok-comment">// mã đúng nhưng đồn
 GET  /api/toi     → 401  <span class="tok-comment">// đăng nhập ĐƯỢC, phiên KHÔNG dùng được ⇒ cookie hoặc token</span>
 GET  /api/toi     → 403  <span class="tok-comment">// phiên tốt, PHÂN QUYỀN từ chối ⇒ Chương 9, không phải xác thực</span></code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — "cannot log in" and "gets logged out immediately" are different bugs with the same sentence.</strong> If <code>/dang-nhap</code> returns 200 and the very next request returns 401, authentication succeeded and the <em>session</em> failed — which moves you from Chapter 2 to Chapter 3 or 4, an entirely different subsystem. Ask for the network tab, or reproduce with two <code>curl</code> calls: one to log in, one to use what it returned. Two commands separate the two halves of the course, and people routinely spend an afternoon in the wrong one.</p>
+<p><strong>Trap — "cannot log in" and "gets logged out immediately" are different bugs with the same sentence.</strong> If <code>/dang-nhap</code> returns 200 and the very next request returns 401, authentication succeeded and the <em>session</em> failed — which moves you from Chapter 2 to Chapter 3 or 4, an entirely different subsystem. Ask for the network tab, or reproduce with two <code>curl</code> calls: one to log in, one to use what it returned. Two commands separate the two halves of the course, and people routinely spend an afternoon in the wrong one.</p>
 </div>
 
 <h3>Question 3: does it reproduce outside the browser?</h3>
@@ -204,7 +204,7 @@ content-type: application/json
   <div class="lz-step"><span class="lz-k">4 · Old accounts work, new ones do not</span><span class="lz-t">Or exactly the reverse</span><span class="lz-d">A hash-parameter change without a rehash-on-login path (2.5), a schema default added without a backfill, a normalisation rule changed after rows already existed (6.1). The dividing line is a timestamp — find it and you have found the deploy.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — "it logs me out randomly" is the one report that is almost never random.</strong> Ask for two things: the exact time it last happened, and whether the user had more than one tab open. Two tabs plus a false reuse detection is Lesson 5.5, and it reproduces on demand with <code>Promise.all</code>. One tab plus a consistent interval is a lifetime, which is shape 1. And if it correlates with which instance served the request, it is shape 3 — check whether your session store is actually shared, because an in-memory fallback that "worked in development" is the single most common cause of this report.</p>
+<p><strong>Trap — "it logs me out randomly" is the one report that is almost never random.</strong> Ask for two things: the exact time it last happened, and whether the user had more than one tab open. Two tabs plus a false reuse detection is Lesson 5.5, and it reproduces on demand with <code>Promise.all</code>. One tab plus a consistent interval is a lifetime, which is shape 1. And if it correlates with which instance served the request, it is shape 3 — check whether your session store is actually shared, because an in-memory fallback that "worked in development" is the single most common cause of this report.</p>
 </div>
 
 <h3>Shapes 5 to 8: something disagrees</h3>
@@ -396,7 +396,7 @@ FROM nguoi_dung u WHERE email_chuan_hoa = 'nan-nhan@vidu.com';
 SELECT luc, loai, chu_the_id, ip, ket_qua FROM su_kien_kiem_toan
 WHERE doi_tuong_id = 'u_812' ORDER BY luc DESC LIMIT 50;</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — the database is the only thing that is not telling you a story.</strong> The user's description is filtered through what they noticed, the logs are filtered through what somebody decided to record, and your mental model is filtered through what you built six months ago. The row is the state. Before forming any hypothesis about why an account cannot log in, run query 6: is the email verified, is the account locked, what is the credential version, and how many live sessions are there? Four columns, one query, and it eliminates most hypotheses before you spend an hour on them.</p>
+<p><strong>Trap — the database is the only thing that is not telling you a story.</strong> The user's description is filtered through what they noticed, the logs are filtered through what somebody decided to record, and your mental model is filtered through what you built six months ago. The row is the state. Before forming any hypothesis about why an account cannot log in, run query 6: is the email verified, is the account locked, what is the credential version, and how many live sessions are there? Four columns, one query, and it eliminates most hypotheses before you spend an hour on them.</p>
 </div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Keep a scratch file of these queries</span><span class="lz-lnote">Per-account state, recent audit events, session count, factor list. In the repository, not in someone's shell history — so the next person, at 3am, runs the query instead of writing it.</span></div>
@@ -551,7 +551,7 @@ grep -rE "env\\\\.[A-Z_]*(SECRET|KEY)[A-Z_]*\\\\s*(\\\\|\\\\||\\\\?\\\\?)" src/ 
   <div class="lz-layer"><span class="lz-lname">Authorization and operations (18–20)</span><span class="lz-lnote">Is ownership in the query rather than in an <code>if</code> after it, and does an endpoint with no policy fail closed (9.1, 9.5)? In a multi-tenant system, does the tenant come from the session and is there a second layer below the application (9.4)? Is there an audit log with the actor recorded, and does anything alert on refresh-token reuse (11.4, 11.5)?</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — the answers are rarely "yes" or "no", and writing them as such makes the review useless.</strong> "Is MFA required?" has the answer "for administrators, since March, except three accounts exempted for a customer integration". That sentence is the finding; "no" is not. Write what you observed, where you observed it, and what you could not determine — an honest "I could not tell whether the session store is shared in production; it is Redis in the compose file and there is an in-memory fallback in the code" is far more useful than a confident tick either way, because it names the exact thing somebody should check next.</p>
+<p><strong>Trap — the answers are rarely "yes" or "no", and writing them as such makes the review useless.</strong> "Is MFA required?" has the answer "for administrators, since March, except three accounts exempted for a customer integration". That sentence is the finding; "no" is not. Write what you observed, where you observed it, and what you could not determine — an honest "I could not tell whether the session store is shared in production; it is Redis in the compose file and there is an in-memory fallback in the code" is far more useful than a confident tick either way, because it names the exact thing somebody should check next.</p>
 </div>
 
 <h3>Pass three: ordering the work</h3>

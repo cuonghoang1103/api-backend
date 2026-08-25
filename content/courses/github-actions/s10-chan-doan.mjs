@@ -74,7 +74,7 @@ HTTP/1.1 401 Unauthorized           <- CO mount, doi xac thuc</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating the browser as the diagnostic tool.</strong> A browser retries, follows redirects, applies cookies, runs JavaScript, and presents an error page for anything from a network hiccup to a 404. It is the worst possible tool for isolating a fault, and it is the default tool for reporting one. Every real diagnosis in this chapter uses <code>curl</code> or a log line instead — the browser is what the user saw, not what you should use to find the cause.</p>
+<p><strong>Trap — treating the browser as the diagnostic tool.</strong> A browser retries, follows redirects, applies cookies, runs JavaScript, and presents an error page for anything from a network hiccup to a 404. It is the worst possible tool for isolating a fault, and it is the default tool for reporting one. Every real diagnosis in this chapter uses <code>curl</code> or a log line instead — the browser is what the user saw, not what you should use to find the cause.</p>
 </div>
 
 <div class="callout">
@@ -226,7 +226,7 @@ import { ContentType } from '@prisma/client';
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — trusting the checklist because it exists.</strong> A pre-push checklist that passes is evidence of exactly what it says: those steps ran and did not error. It is silent about everything else. This incident&#39;s honest post-mortem is not "the checklist was wrong" but "the checklist covered the files we thought were important, and the file that broke was outside it". Adding items to the checklist is the correct response; treating an existing checklist as sufficient is not.</p>
+<p><strong>Trap — trusting the checklist because it exists.</strong> A pre-push checklist that passes is evidence of exactly what it says: those steps ran and did not error. It is silent about everything else. This incident&#39;s honest post-mortem is not "the checklist was wrong" but "the checklist covered the files we thought were important, and the file that broke was outside it". Adding items to the checklist is the correct response; treating an existing checklist as sufficient is not.</p>
 </div>
 
 <div class="callout">
@@ -383,7 +383,7 @@ docker exec frontend node -e "
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the check whose failure means "flake, ignore".</strong> A smoke test that intermittently fails will be ignored the first time and disabled the second — CLAUDE.md&#39;s history has several checks that were removed because they were unreliable. That is a rational response to noise, and it is also how a real regression eventually reaches production. If a check is noisy, fix the noise or delete the check; leaving it in place with instructions to ignore it is the worst option.</p>
+<p><strong>Trap — the check whose failure means "flake, ignore".</strong> A smoke test that intermittently fails will be ignored the first time and disabled the second — CLAUDE.md&#39;s history has several checks that were removed because they were unreliable. That is a rational response to noise, and it is also how a real regression eventually reaches production. If a check is noisy, fix the noise or delete the check; leaving it in place with instructions to ignore it is the worst option.</p>
 </div>
 
 <div class="callout">
@@ -588,7 +588,7 @@ $ npm start
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — assume the exit code is the truth.</strong> <code>pkill -f "next start"</code> returning zero means <em>at least one process was matched and signalled</em>, not <em>the process I wanted is gone</em>. The correct post-condition is <code>lsof -ti:PORT</code> printing nothing. A test that does not check its post-condition is not a test — same rule as the smoke test in lesson 10.3.</p>
+<p><strong>Trap — assume the exit code is the truth.</strong> <code>pkill -f "next start"</code> returning zero means <em>at least one process was matched and signalled</em>, not <em>the process I wanted is gone</em>. The correct post-condition is <code>lsof -ti:PORT</code> printing nothing. A test that does not check its post-condition is not a test — same rule as the smoke test in lesson 10.3.</p>
 </div>
 
 <div class="callout">
@@ -843,7 +843,7 @@ Result: 2 statements
 
 <h3>The class of fix that looks helpful and is not</h3>
 <div class="pitfall">
-<p><strong>Bẫy — rewriting the failed migration with <code>CREATE TABLE IF NOT EXISTS</code> so the deploy goes through.</strong> This is the auto-fix that reads like common sense: "the table already exists, so make the statement idempotent." It appears to work — the deploy completes, CI goes green, everyone moves on. The corruption is subtle: the <em>original</em> migration file, edited to be idempotent, is now different in git history from the SQL that Prisma has already stamped as applied on other environments. Any environment restored from backup, or set up fresh, will apply the <em>new</em> file and produce a DIFFERENT schema than the one prod has. You have introduced an environment-dependent schema without noticing.</p>
+<p><strong>Trap — rewriting the failed migration with <code>CREATE TABLE IF NOT EXISTS</code> so the deploy goes through.</strong> This is the auto-fix that reads like common sense: "the table already exists, so make the statement idempotent." It appears to work — the deploy completes, CI goes green, everyone moves on. The corruption is subtle: the <em>original</em> migration file, edited to be idempotent, is now different in git history from the SQL that Prisma has already stamped as applied on other environments. Any environment restored from backup, or set up fresh, will apply the <em>new</em> file and produce a DIFFERENT schema than the one prod has. You have introduced an environment-dependent schema without noticing.</p>
 </div>
 
 <div class="callout warn">

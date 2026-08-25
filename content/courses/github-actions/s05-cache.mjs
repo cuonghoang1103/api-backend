@@ -67,7 +67,7 @@ zstd -3   nen  1.727 ms  ->  152 MB
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — caching something that is cheap to recreate.</strong> A cache pays only when restoring is faster than rebuilding, and both sides have to be measured, not assumed. A <code>dist/</code> directory that takes four seconds to build is not worth a cache entry: the save and restore overhead plus the transfer will exceed four seconds, and you have added an invalidation bug surface for a negative return. The rule that follows from the table above: measure the rebuild first, and only cache what is slower than the round trip.</p>
+<p><strong>Trap — caching something that is cheap to recreate.</strong> A cache pays only when restoring is faster than rebuilding, and both sides have to be measured, not assumed. A <code>dist/</code> directory that takes four seconds to build is not worth a cache entry: the save and restore overhead plus the transfer will exceed four seconds, and you have added an invalidation bug surface for a negative return. The rule that follows from the table above: measure the rebuild first, and only cache what is slower than the round trip.</p>
 </div>
 
 <h3>Where the time actually goes</h3>
@@ -225,7 +225,7 @@ restore-keys: |
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>restore-keys</code> on a cache where partial content is wrong.</strong> A build cache tolerates being slightly out of date because the build tool re-checks what it uses. A <code>node_modules</code> cache does not: restoring the previous lockfile&#39;s tree and then <em>not</em> running the install leaves you building against dependency versions your lockfile does not name. The rule: use <code>restore-keys</code> when a stale hit is a speed-up on top of a correct step that still runs, and not when a stale hit <em>replaces</em> that step.</p>
+<p><strong>Trap — <code>restore-keys</code> on a cache where partial content is wrong.</strong> A build cache tolerates being slightly out of date because the build tool re-checks what it uses. A <code>node_modules</code> cache does not: restoring the previous lockfile&#39;s tree and then <em>not</em> running the install leaves you building against dependency versions your lockfile does not name. The rule: use <code>restore-keys</code> when a stale hit is a speed-up on top of a correct step that still runs, and not when a stale hit <em>replaces</em> that step.</p>
 </div>
 
 <h3>The scoping rule that explains "my cache never hits"</h3>
@@ -417,7 +417,7 @@ Cache not found for input keys: &lt;key&gt;, &lt;restore-key&gt;
         -> CHET. Chua bao gio luu duoc gi, va se khong bao gio</div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the miss that repeats every run, which looks like nothing at all.</strong> The dead cache at least prints a warning. A cache whose key changes on every run — because it contains <code>github.sha</code>, or a timestamp, or a <code>hashFiles</code> over a generated file — prints a perfectly ordinary "Cache not found" every time, saves a new entry every time, and is <em>worse</em> than having no cache: you pay the upload and never collect. The tell is that the "not found" line never becomes a "hit" line, over many runs.</p>
+<p><strong>Trap — the miss that repeats every run, which looks like nothing at all.</strong> The dead cache at least prints a warning. A cache whose key changes on every run — because it contains <code>github.sha</code>, or a timestamp, or a <code>hashFiles</code> over a generated file — prints a perfectly ordinary "Cache not found" every time, saves a new entry every time, and is <em>worse</em> than having no cache: you pay the upload and never collect. The tell is that the "not found" line never becomes a "hit" line, over many runs.</p>
 </div>
 
 <div class="callout ok">
@@ -584,7 +584,7 @@ tai ca ba ve (job cong bo):  12s</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — uploading a directory tree when you meant to upload a deliverable.</strong> <code>path: dist/</code> on a 40,000-file tree is the measurement above, at scale, on every run. If what the next job needs is one installer or one bundle, <code>tar</code> it first and upload the tarball: one file, one compression pass, and the measured 2.3–2.9× disappears. The exception is when a human needs to browse the artifact in the UI — then the file listing is the point, and the cost is what you are paying for.</p>
+<p><strong>Trap — uploading a directory tree when you meant to upload a deliverable.</strong> <code>path: dist/</code> on a 40,000-file tree is the measurement above, at scale, on every run. If what the next job needs is one installer or one bundle, <code>tar</code> it first and upload the tarball: one file, one compression pass, and the measured 2.3–2.9× disappears. The exception is when a human needs to browse the artifact in the UI — then the file listing is the point, and the cost is what you are paying for.</p>
 </div>
 
 <h3>Retention, and what it costs</h3>
@@ -778,7 +778,7 @@ tsc backend cua kho nay                    21,0s         —    khong co gi de c
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the large cache that evicts the useful ones.</strong> A 4 GB <code>node_modules</code> cache saved per branch will, on a repository with a few active branches, fill the 10 GB allowance by itself and evict the small, frequently-hit caches that were doing the real work. The symptom is that the <em>other</em> workflows get slower after somebody optimises one — and nothing in any log connects the two. If cache hit rates fall for no reason, look at what was recently added, not at what got slower.</p>
+<p><strong>Trap — the large cache that evicts the useful ones.</strong> A 4 GB <code>node_modules</code> cache saved per branch will, on a repository with a few active branches, fill the 10 GB allowance by itself and evict the small, frequently-hit caches that were doing the real work. The symptom is that the <em>other</em> workflows get slower after somebody optimises one — and nothing in any log connects the two. If cache hit rates fall for no reason, look at what was recently added, not at what got slower.</p>
 </div>
 
 <h3>Reading whether it is working, at repository level</h3>

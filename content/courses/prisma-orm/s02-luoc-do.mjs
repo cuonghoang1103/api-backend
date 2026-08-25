@@ -118,7 +118,7 @@ console.log(gia.toNumber());              <span class="tok-comment">// only when
 1.10
 0.1</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>Decimal</code> in a JSON response.</strong> <code>JSON.stringify</code> renders a <code>Prisma.Decimal</code> as <code>{"s":1,"e":-1,"d":[1000000]}</code> — its internal representation, which is meaningless to a client. Convert explicitly at the API boundary (<code>.toFixed(2)</code> for display, <code>.toString()</code> to keep precision) and never let a raw <code>Decimal</code> reach <code>res.json()</code>. The same applies to <code>BigInt</code>, which throws outright rather than serialising wrongly.</p>
+<p><strong>Trap — <code>Decimal</code> in a JSON response.</strong> <code>JSON.stringify</code> renders a <code>Prisma.Decimal</code> as <code>{"s":1,"e":-1,"d":[1000000]}</code> — its internal representation, which is meaningless to a client. Convert explicitly at the API boundary (<code>.toFixed(2)</code> for display, <code>.toString()</code> to keep precision) and never let a raw <code>Decimal</code> reach <code>res.json()</code>. The same applies to <code>BigInt</code>, which throws outright rather than serialising wrongly.</p>
 </div>
 
 <h3>The two modifiers</h3>
@@ -381,7 +381,7 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
  ma        | text                        | not null |
  tuDb      | text                        | not null | substr(md5((random())::text), 1, 8)</div>
 <div class="pitfall">
-<p><strong>Bẫy — look at the <code>ma</code> column: it has no database default.</strong> <code>uuid()</code>, <code>cuid()</code> and <code>nanoid()</code> are generated <strong>by Prisma Client in JavaScript</strong>, not by PostgreSQL. So a row inserted by anything that is not Prisma — a raw <code>INSERT</code> in psql, a data-import script, another service — gets no value, and the <code>NOT NULL</code> constraint rejects it. If other systems write to that table, use <code>dbgenerated("gen_random_uuid()")</code> so the default lives where every writer can see it. This difference is invisible in the Prisma schema and obvious in <code>\\d</code>.</p>
+<p><strong>Trap — look at the <code>ma</code> column: it has no database default.</strong> <code>uuid()</code>, <code>cuid()</code> and <code>nanoid()</code> are generated <strong>by Prisma Client in JavaScript</strong>, not by PostgreSQL. So a row inserted by anything that is not Prisma — a raw <code>INSERT</code> in psql, a data-import script, another service — gets no value, and the <code>NOT NULL</code> constraint rejects it. If other systems write to that table, use <code>dbgenerated("gen_random_uuid()")</code> so the default lives where every writer can see it. This difference is invisible in the Prisma schema and obvious in <code>\\d</code>.</p>
 </div>
 
 <h3><code>@unique</code> — and the constraint name it creates</h3>
@@ -728,7 +728,7 @@ CREATE INDEX "idx_users_email_lower" ON "users"(lower("email"));
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX "idx_posts_title_trgm" ON "posts" USING gin ("title" gin_trgm_ops);</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — an index you added but never proved.</strong> Adding <code>@@index</code> does not mean the planner will use it. It will ignore a low-selectivity index (a boolean on a two-value column), it will ignore a composite index queried in the wrong order, and it will ignore a B-tree index for a leading-wildcard <code>LIKE</code>. The only proof is <code>EXPLAIN ANALYZE</code> before and after, on a table with realistic row counts — an index on a 50-row development table is never used, because a sequential scan is cheaper. Chapter 9 makes this a routine.</p>
+<p><strong>Trap — an index you added but never proved.</strong> Adding <code>@@index</code> does not mean the planner will use it. It will ignore a low-selectivity index (a boolean on a two-value column), it will ignore a composite index queried in the wrong order, and it will ignore a B-tree index for a leading-wildcard <code>LIKE</code>. The only proof is <code>EXPLAIN ANALYZE</code> before and after, on a table with realistic row counts — an index on a 50-row development table is never used, because a sequential scan is cheaper. Chapter 9 makes this a routine.</p>
 </div>
 
 <h3><code>@@map</code>, <code>@@ignore</code>, <code>@@schema</code>, <code>@@fulltext</code></h3>
@@ -996,7 +996,7 @@ SELECT pg_size_pretty(pg_total_relation_size('"A"')) AS text_uuid,
   <div class="kv"><span class="k">Interoperability</span><span class="v">A <code>TEXT</code> id cannot be passed to a PostgreSQL function expecting <code>uuid</code> without a cast, which turns every raw query and every join with another system's table into a small friction.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>@db.VarChar(n)</code> is a constraint, not an optimisation.</strong> In PostgreSQL, <code>VARCHAR(50)</code> and <code>TEXT</code> have identical storage and identical performance; the length is checked and nothing else. So do not add it hoping for speed. <em>Do</em> add it when the limit is a real business rule you want the database to enforce — a country code that must be two characters, a status that must fit in twenty. And when you do, remember the length is now a constraint you must migrate to change, which is the next section.</p>
+<p><strong>Trap — <code>@db.VarChar(n)</code> is a constraint, not an optimisation.</strong> In PostgreSQL, <code>VARCHAR(50)</code> and <code>TEXT</code> have identical storage and identical performance; the length is checked and nothing else. So do not add it hoping for speed. <em>Do</em> add it when the limit is a real business rule you want the database to enforce — a country code that must be two characters, a status that must fit in twenty. And when you do, remember the length is now a constraint you must migrate to change, which is the next section.</p>
 </div>
 
 <h3>What happens when you narrow a column that has data</h3>
@@ -1303,7 +1303,7 @@ const row = await prisma.tep.findFirstOrThrow();
 console.log(row.bam.constructor.name, Buffer.from(row.bam).toString('hex').slice(0, 16));</code></pre>
 <div class="out">Uint8Array 4e9518575422c9087396887ce20477ab</div>
 <div class="pitfall">
-<p><strong>Bẫy — files in the database.</strong> A 5 MB image in a <code>BYTEA</code> column means every <code>SELECT *</code> on that table pulls 5 MB over the wire, every backup carries it, and PostgreSQL's TOAST machinery works around your data instead of with it. Store files in object storage (R2, S3) and keep a URL or key in the row. The CuongThai backend does exactly this with Cloudflare R2, and the CuongThai Object Storage course covers the pattern. Reserve <code>Bytes</code> for small fixed-size binaries: hashes, keys, encrypted tokens, a TOTP secret.</p>
+<p><strong>Trap — files in the database.</strong> A 5 MB image in a <code>BYTEA</code> column means every <code>SELECT *</code> on that table pulls 5 MB over the wire, every backup carries it, and PostgreSQL's TOAST machinery works around your data instead of with it. Store files in object storage (R2, S3) and keep a URL or key in the row. The CuongThai backend does exactly this with Cloudflare R2, and the CuongThai Object Storage course covers the pattern. Reserve <code>Bytes</code> for small fixed-size binaries: hashes, keys, encrypted tokens, a TOTP secret.</p>
 </div>
 
 <h3><code>Unsupported</code> — and the model it makes read-only</h3>

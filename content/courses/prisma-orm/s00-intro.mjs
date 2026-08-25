@@ -102,7 +102,7 @@ console.log(user?.fullName);</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — "the ORM will handle performance."</strong> It will not, and the belief that it will is how a page that took 40 ms in development takes 9 seconds in production. Prisma's job ends at generating correct SQL. Whether that SQL uses an index, whether you fetched 12 columns when you needed 2, and whether you issued one query or four hundred are decisions you made — usually without noticing. Turn on query logging on day one (Lesson 0.3) and you will never be surprised by this.</p>
+<p><strong>Trap — "the ORM will handle performance."</strong> It will not, and the belief that it will is how a page that took 40 ms in development takes 9 seconds in production. Prisma's job ends at generating correct SQL. Whether that SQL uses an index, whether you fetched 12 columns when you needed 2, and whether you issued one query or four hundred are decisions you made — usually without noticing. Turn on query logging on day one (Lesson 0.3) and you will never be surprised by this.</p>
 </div>
 
 <h3>What this course covers, and what it deliberately does not</h3>
@@ -374,7 +374,7 @@ DATABASE_URL="postgresql://hocvien:matkhau@localhost:5432/hocprisma?schema=publi
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the <code>.env</code> that is not read.</strong> The Prisma CLI reads <code>.env</code> from the current working directory <em>and</em> from <code>prisma/.env</code>, and it does this itself, without <code>dotenv</code>. Your application does <strong>not</strong>. So <code>npx prisma migrate dev</code> works, and then <code>node index.js</code> fails with "<code>Environment variable not found: DATABASE_URL</code>" and it looks like Prisma is broken. It is not. Either load the file yourself (<code>import 'dotenv/config'</code>) or run Node with <code>--env-file=.env</code>. Also: if both <code>.env</code> and <code>prisma/.env</code> exist, the CLI loads both and one silently wins — keep exactly one.</p>
+<p><strong>Trap — the <code>.env</code> that is not read.</strong> The Prisma CLI reads <code>.env</code> from the current working directory <em>and</em> from <code>prisma/.env</code>, and it does this itself, without <code>dotenv</code>. Your application does <strong>not</strong>. So <code>npx prisma migrate dev</code> works, and then <code>node index.js</code> fails with "<code>Environment variable not found: DATABASE_URL</code>" and it looks like Prisma is broken. It is not. Either load the file yourself (<code>import 'dotenv/config'</code>) or run Node with <code>--env-file=.env</code>. Also: if both <code>.env</code> and <code>prisma/.env</code> exist, the CLI loads both and one silently wins — keep exactly one.</p>
 </div>
 
 <h3>Step 4 — a first model and the generated client</h3>
@@ -475,7 +475,7 @@ export const prisma = new PrismaClient({
 prisma:query COMMIT</div>
 
 <div class="pitfall">
-<p><strong>Bẫy — one <code>PrismaClient</code>, not one per file.</strong> Each instance opens its own connection pool. Construct it inside a request handler, or let a Next.js dev server hot-reload a module that constructs it at the top level, and you will exhaust <code>max_connections</code> in about ninety seconds. The error is <code>P1001</code> or <code>too many clients already</code>, and it looks like a database problem. Export exactly one instance from one module, as above. The Next.js-specific version of this trap — and the <code>globalThis</code> workaround it needs — is in Chapter 11.</p>
+<p><strong>Trap — one <code>PrismaClient</code>, not one per file.</strong> Each instance opens its own connection pool. Construct it inside a request handler, or let a Next.js dev server hot-reload a module that constructs it at the top level, and you will exhaust <code>max_connections</code> in about ninety seconds. The error is <code>P1001</code> or <code>too many clients already</code>, and it looks like a database problem. Export exactly one instance from one module, as above. The Next.js-specific version of this trap — and the <code>globalThis</code> workaround it needs — is in Chapter 11.</p>
 </div>
 
 <h3>Verify the whole chain works</h3>
@@ -883,7 +883,7 @@ await prisma.user.delete({ where: { email: 'binh@example.com' } });</code></pre>
 { count: 1 }
 prisma:query INSERT INTO "public"."users" ("email","full_name","created_at") VALUES ($1,$2,$3) ON CONFLICT ("email") DO UPDATE SET "full_name" = $4 RETURNING ...</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>{ views: { increment: 1 } }</code> versus <code>{ views: post.views + 1 }</code>.</strong> They look equivalent. They are not. The first becomes <code>SET views = views + 1</code> and is safe under concurrency. The second reads a number into your process, adds one there, and writes it back — so two simultaneous requests both read 120, both write 121, and one view is gone forever. This is the classic lost-update race, it is invisible in development where you are the only user, and Chapter 7 reproduces it with real concurrent clients.</p>
+<p><strong>Trap — <code>{ views: { increment: 1 } }</code> versus <code>{ views: post.views + 1 }</code>.</strong> They look equivalent. They are not. The first becomes <code>SET views = views + 1</code> and is safe under concurrency. The second reads a number into your process, adds one there, and writes it back — so two simultaneous requests both read 120, both write 121, and one view is gone forever. This is the classic lost-update race, it is invisible in development where you are the only user, and Chapter 7 reproduces it with real concurrent clients.</p>
 </div>
 
 <h3>Count and aggregate</h3>

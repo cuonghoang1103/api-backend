@@ -91,7 +91,7 @@ wsServer.on('connection', (ws, req) =&gt; {
 <p>This repo chooses raw ws plus a socket.io bridge — good enough for 100 devices, with no separate broker.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng socket.io ở device tier &quot;vì đơn giản&quot;.</strong> If your firmware is JavaScript (Node.js on a Raspberry Pi), you can. But for bare ESP32/Arduino there is no socket.io-client and you would have to reverse-engineer the protocol. Not worth it.</p>
+<p><strong>Trap — using socket.io on the device tier &quot;because it is simpler&quot;.</strong> If your firmware is JavaScript (Node.js on a Raspberry Pi), you can. But for bare ESP32/Arduino there is no socket.io-client and you would have to reverse-engineer the protocol. Not worth it.</p>
 </div>
 
 <div class="callout">
@@ -284,7 +284,7 @@ if (millis() - lastPing &gt; 30000) {
 <p>A WebSocket-native ping frame is lighter (~2 bytes) but some proxies strip it. An application-level ping (JSON) is heavier but always gets through. This repo uses both.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — retry ngay không backoff.</strong> An ESP32 loses its WS at t=0 and keeps retrying every 100ms → 10 attempts a second. The server sees 10 failed handshakes per second per device. 100 devices = 1,000 failures a second — a DDoS you built yourself.</p>
+<p><strong>Trap — retrying immediately with no backoff.</strong> An ESP32 loses its WS at t=0 and keeps retrying every 100ms → 10 attempts a second. The server sees 10 failed handshakes per second per device. 100 devices = 1,000 failures a second — a DDoS you built yourself.</p>
 </div>
 
 <div class="callout">
@@ -488,7 +488,7 @@ ws.on('message', (data) =&gt; {
 <p>Maker Lab today is ~10 devices at ~1 telemetry message a second. JSON is more than enough. If it scales to 1,000 devices, reconsider binary.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng Protobuf mà không schema versioning.</strong> Client v1 sends field A. Server v2 expects field B. Migration is painful without a plan. Protobuf schema versioning is a skill of its own — adopting it is a decision to take on complexity.</p>
+<p><strong>Trap — using Protobuf without schema versioning.</strong> Client v1 sends field A. Server v2 expects field B. Migration is painful without a plan. Protobuf schema versioning is a skill of its own — adopting it is a decision to take on complexity.</p>
 </div>
 
 <div class="callout">
@@ -692,7 +692,7 @@ Do bang: device.emit(&#96;now: \${millis()}&#96;) -&gt; dashboard log delta
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — bridge KHÔNG kiểm authenticate device.</strong> Anyone who knows a deviceId can send raw ws → the server bridges it → dashboards display fabricated telemetry. The bridge MUST verify the device token before emitting into socket.io. Do not trust a device merely because it &quot;has&quot; a deviceId.</p>
+<p><strong>Trap — a bridge that does NOT authenticate the device.</strong> Anyone who knows a deviceId can send raw ws → the server bridges it → dashboards display fabricated telemetry. The bridge MUST verify the device token before emitting into socket.io. Do not trust a device merely because it &quot;has&quot; a deviceId.</p>
 </div>
 
 <div class="callout">
@@ -888,7 +888,7 @@ void loop() {
 <p>HTTP polling from a device carries 5s of latency and is not realtime. But it is simpler than WS and the firmware is lighter. Use it when the telemetry barely matters (an electricity or water meter read every 5 minutes).</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — chọn raw ws cho web browser client.</strong> The browser has socket.io-client readily available, so why avoid it? A frontend developer decides socket.io is &quot;heavy&quot; and writes raw ws — losing reconnect, losing rooms, losing the debugging tools. The road back is expensive.</p>
+<p><strong>Trap — choosing raw ws for a web browser client.</strong> The browser has socket.io-client readily available, so why avoid it? A frontend developer decides socket.io is &quot;heavy&quot; and writes raw ws — losing reconnect, losing rooms, losing the debugging tools. The road back is expensive.</p>
 </div>
 
 <div class="callout">

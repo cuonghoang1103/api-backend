@@ -68,7 +68,7 @@ read T1 I1 &lt; &lt;(doc); sleep 1; read T2 I2 &lt; &lt;(doc)
 <p>One busy core out of four reads as 26.9%, which is correct — the counters sum across all CPUs, so 100% means every core.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — the <code>steal</code> column is the one that matters on a cheap VPS.</strong> Field eight is time your virtual CPU was ready to run and the hypervisor gave the physical core to somebody else. On an oversubscribed host it can be double digits, and it produces the most confusing possible symptom: your application is slow, your CPU graph shows plenty of idle, and nothing you own is at fault. If <code>steal</code> is consistently above a few percent, the problem is your neighbours and no amount of optimisation on your side will fix it — that is a conversation with the provider, or a different machine.</p>
+<p><strong>Trap — the <code>steal</code> column is the one that matters on a cheap VPS.</strong> Field eight is time your virtual CPU was ready to run and the hypervisor gave the physical core to somebody else. On an oversubscribed host it can be double digits, and it produces the most confusing possible symptom: your application is slow, your CPU graph shows plenty of idle, and nothing you own is at fault. If <code>steal</code> is consistently above a few percent, the problem is your neighbours and no amount of optimisation on your side will fix it — that is a conversation with the provider, or a different machine.</p>
 </div>
 
 <h3>The four things worth watching on a small server</h3>
@@ -112,7 +112,7 @@ read T1 I1 &lt; &lt;(doc); sleep 1; read T2 I2 &lt; &lt;(doc)
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — every number in <code>/proc</code> here is cumulative, and a single reading is meaningless.</strong> This catches people writing their first monitoring script: they read <code>/proc/diskstats</code>, see a huge number, and report it as a rate. It is a total since boot. Everything in this lesson needs two samples and a subtraction — and the interval between them has to be measured too, not assumed, because <code>sleep 1</code> does not sleep for exactly one second.</p>
+<p><strong>Trap — every number in <code>/proc</code> here is cumulative, and a single reading is meaningless.</strong> This catches people writing their first monitoring script: they read <code>/proc/diskstats</code>, see a huge number, and report it as a rate. It is a total since boot. Everything in this lesson needs two samples and a subtraction — and the interval between them has to be measured too, not assumed, because <code>sleep 1</code> does not sleep for exactly one second.</p>
 </div>
 
 <h3>Sources</h3>
@@ -272,7 +272,7 @@ read T1 I1 &lt; &lt;(doc); sleep 1; read T2 I2 &lt; &lt;(doc)
 <p>Second: the slow requests are the ones that hold resources. Ten requests at 900 ms occupy connections, memory and worker slots for the same total time as 600 requests at 15 ms. Under load, the tail is what fills your connection pool — which is how a slow tail turns into a full outage without the mean moving much at all.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — you cannot average percentiles, and every dashboard invites you to.</strong> If one server reports p95=100 ms and another reports p95=300 ms, the fleet p95 is <em>not</em> 200 ms — that quantity has no meaning at all. Percentiles have to be computed from the underlying distribution, which is why real metric systems ship histogram buckets rather than pre-computed percentiles. Averaging p95 across servers, or across time buckets, produces a number that looks plausible and is arithmetic nonsense.</p>
+<p><strong>Trap — you cannot average percentiles, and every dashboard invites you to.</strong> If one server reports p95=100 ms and another reports p95=300 ms, the fleet p95 is <em>not</em> 200 ms — that quantity has no meaning at all. Percentiles have to be computed from the underlying distribution, which is why real metric systems ship histogram buckets rather than pre-computed percentiles. Averaging p95 across servers, or across time buckets, produces a number that looks plausible and is arithmetic nonsense.</p>
 </div>
 
 <h3>Getting percentiles without a metrics stack</h3>
@@ -447,7 +447,7 @@ awk '{print \$NF}' access.log | sort -n | awk '
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — a log line is a place secrets go to be permanently archived.</strong> Logging a full request body captures passwords on the login route. Logging headers captures <code>Authorization</code> and session cookies. Logging a query string captures a password-reset token. And unlike a leak in memory, this one is written to disk, shipped to an aggregator, backed up, and retained for months — Chapter 4&#39;s rules about where secrets may appear apply to logs with more force than anywhere else, because logs are the one place you are deliberately keeping everything. Choose fields explicitly; never log whole objects.</p>
+<p><strong>Trap — a log line is a place secrets go to be permanently archived.</strong> Logging a full request body captures passwords on the login route. Logging headers captures <code>Authorization</code> and session cookies. Logging a query string captures a password-reset token. And unlike a leak in memory, this one is written to disk, shipped to an aggregator, backed up, and retained for months — Chapter 4&#39;s rules about where secrets may appear apply to logs with more force than anywhere else, because logs are the one place you are deliberately keeping everything. Choose fields explicitly; never log whole objects.</p>
 </div>
 
 <h3>Structured does not mean JSON everywhere</h3>
@@ -633,7 +633,7 @@ awk -v tong="\$TONG" '
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — a trend alarm on noisy data fires constantly.</strong> My measurement used a clean monotonic series. Real disk usage goes up and down: a build writes 2 GB and deletes it, a backup lands and is shipped away. Extrapolating from two samples across that produces "full in 20 minutes" several times a day, and an alarm that cries wolf is an alarm somebody mutes. Smooth first — use a linear fit over the last several hours rather than the last two points, require the prediction to hold for two consecutive evaluations, and never alert on a shrinking series. My three-sample version above is the minimum that works on a quiet machine, not a template for a busy one.</p>
+<p><strong>Trap — a trend alarm on noisy data fires constantly.</strong> My measurement used a clean monotonic series. Real disk usage goes up and down: a build writes 2 GB and deletes it, a backup lands and is shipped away. Extrapolating from two samples across that produces "full in 20 minutes" several times a day, and an alarm that cries wolf is an alarm somebody mutes. Smooth first — use a linear fit over the last several hours rather than the last two points, require the prediction to hold for two consecutive evaluations, and never alert on a shrinking series. My three-sample version above is the minimum that works on a quiet machine, not a template for a busy one.</p>
 </div>
 
 <h3>The alert that is worse than no alert</h3>
@@ -838,7 +838,7 @@ echo | openssl s_client -connect vidu.com:443 -servername vidu.com 2>/dev/null \
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — checking content is what catches the failures that return 200.</strong> A single-page app whose JavaScript bundle 404s serves a perfectly valid 200 with an empty <code>&lt;div id="root"&gt;</code>. A backend returning <code>{"error":"database unavailable"}</code> with status 200 — which more frameworks do than you would like — is invisible to a status-code check. And Chapter 6&#39;s cache case returned 200 with the <em>wrong version</em>. In all three the status code is fine and the site is not, which is why the check has to look at the body.</p>
+<p><strong>Trap — checking content is what catches the failures that return 200.</strong> A single-page app whose JavaScript bundle 404s serves a perfectly valid 200 with an empty <code>&lt;div id="root"&gt;</code>. A backend returning <code>{"error":"database unavailable"}</code> with status 200 — which more frameworks do than you would like — is invisible to a status-code check. And Chapter 6&#39;s cache case returned 200 with the <em>wrong version</em>. In all three the status code is fine and the site is not, which is why the check has to look at the body.</p>
 </div>
 
 <h3>Two checks, and they are not interchangeable</h3>

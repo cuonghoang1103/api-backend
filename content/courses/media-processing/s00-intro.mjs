@@ -107,11 +107,11 @@ serverside via <code>heif-convert</code>
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating &quot;image&quot; and &quot;video&quot; as one problem.</strong> Images are one CPU-second operations, done once. Videos are multi-minute operations, done in the background with retry. Pipelines that treat them the same either block the event loop on video encode or over-engineer image handling.</p>
+<p><strong>Trap — treating &quot;image&quot; and &quot;video&quot; as one problem.</strong> Images are one CPU-second operations, done once. Videos are multi-minute operations, done in the background with retry. Pipelines that treat them the same either block the event loop on video encode or over-engineer image handling.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — trusting the file extension.</strong> A .jpg file can be an actual JPEG, a PNG with the wrong extension, or a video file some tool mislabeled. Always check magic bytes (Sharp does this automatically for images; for uploads, use <code>file-type</code> or read the first 8 bytes yourself).</p>
+<p><strong>Trap — trusting the file extension.</strong> A .jpg file can be an actual JPEG, a PNG with the wrong extension, or a video file some tool mislabeled. Always check magic bytes (Sharp does this automatically for images; for uploads, use <code>file-type</code> or read the first 8 bytes yourself).</p>
 </div>
 
 <div class="callout">
@@ -388,11 +388,11 @@ On-demand+cache:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — starting with on-demand because it &quot;sounds elegant&quot;.</strong> Cache-miss latency lands on every user viewing a fresh variant. A hot feed on-demand looks slower than an upload-time app until the cache fills. Test with a realistic warm-up curve before choosing.</p>
+<p><strong>Trap — starting with on-demand because it &quot;sounds elegant&quot;.</strong> Cache-miss latency lands on every user viewing a fresh variant. A hot feed on-demand looks slower than an upload-time app until the cache fills. Test with a realistic warm-up curve before choosing.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — running upload-time for video.</strong> Even a 10 MB, 20-second phone video takes 15-30 seconds to transcode to H.264. That blocks a request handler for the whole duration. The user's browser sees a hung POST. Always background for video.</p>
+<p><strong>Trap — running upload-time for video.</strong> Even a 10 MB, 20-second phone video takes 15-30 seconds to transcode to H.264. That blocks a request handler for the whole duration. The user's browser sees a hung POST. Always background for video.</p>
 </div>
 
 <div class="callout">

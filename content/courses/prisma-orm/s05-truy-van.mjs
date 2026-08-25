@@ -34,7 +34,7 @@ where: { deletedAt: { not: null } }           <span class="tok-comment">// IS NO
 SELECT ... WHERE "posts"."published" &lt;&gt; $1
 SELECT ... WHERE "posts"."deleted_at" IS NULL</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>{ not: true }</code> does not include NULL rows.</strong> In SQL, <code>NULL &lt;&gt; true</code> evaluates to <code>NULL</code>, which is not <code>TRUE</code>, so the row is excluded. A nullable <code>published</code> column filtered with <code>{ not: true }</code> silently drops every row where it was never set. If you mean "false or unset", say so: <code>{ OR: [{ published: false }, { published: null }] }</code>. This is standard three-valued logic and it catches everyone once.</p>
+<p><strong>Trap — <code>{ not: true }</code> does not include NULL rows.</strong> In SQL, <code>NULL &lt;&gt; true</code> evaluates to <code>NULL</code>, which is not <code>TRUE</code>, so the row is excluded. A nullable <code>published</code> column filtered with <code>{ not: true }</code> silently drops every row where it was never set. If you mean "false or unset", say so: <code>{ OR: [{ published: false }, { published: null }] }</code>. This is standard three-valued logic and it catches everyone once.</p>
 </div>
 
 <h3>Comparison — numbers, dates, strings</h3>
@@ -354,7 +354,7 @@ const u = await prisma.user.findMany({ where: { posts: { every: { published: tru
   { id: 9, email: 'chi@example.com' }     -- has NO posts at all        ← surprise
 ]</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>every</code> is true for an empty collection.</strong> Look at the generated SQL: <code>NOT EXISTS (… WHERE NOT condition)</code>. A user with zero posts has no row that violates the condition, so <code>NOT EXISTS</code> is true and they match. This is <em>vacuous truth</em> — mathematically correct, and almost never what the product manager meant. "All of their posts are published" in English implies they have posts. Say so explicitly:</p>
+<p><strong>Trap — <code>every</code> is true for an empty collection.</strong> Look at the generated SQL: <code>NOT EXISTS (… WHERE NOT condition)</code>. A user with zero posts has no row that violates the condition, so <code>NOT EXISTS</code> is true and they match. This is <em>vacuous truth</em> — mathematically correct, and almost never what the product manager meant. "All of their posts are published" in English implies they have posts. Say so explicitly:</p>
 </div>
 <pre><code><span class="tok-comment">// What you actually meant: has posts, AND all of them are published</span>
 const u = await prisma.user.findMany({
@@ -753,7 +753,7 @@ orderBy: [{ publishedAt: 'desc' }, { id: 'desc' }],
 cursor:  { id: lastSeenId },
 skip:    1,</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — the cursor field must be unique, and the ordering must end with it.</strong> Prisma's <code>cursor</code> only accepts a unique field, which prevents half of this mistake at compile time. The half it cannot prevent: if your <code>orderBy</code> does not end with that same unique field, the sort order and the cursor disagree, and rows near a tie can be skipped or repeated. The rule is simple — <strong>whatever you cursor on must be the last key in <code>orderBy</code></strong>.</p>
+<p><strong>Trap — the cursor field must be unique, and the ordering must end with it.</strong> Prisma's <code>cursor</code> only accepts a unique field, which prevents half of this mistake at compile time. The half it cannot prevent: if your <code>orderBy</code> does not end with that same unique field, the sort order and the cursor disagree, and rows near a tie can be skipped or repeated. The rule is simple — <strong>whatever you cursor on must be the last key in <code>orderBy</code></strong>.</p>
 </div>
 
 <h3>Compound cursors, when one key is not enough</h3>
@@ -1061,7 +1061,7 @@ const bieuDo = await prisma.$queryRaw&lt;Ngay[]&gt;&#96;
   { ngay: 2026-08-03, soDon:  94n, doanhThu: 18402000n }
 ]</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>COUNT</code> and <code>SUM</code> come back as <code>BigInt</code> from a raw query.</strong> PostgreSQL returns <code>bigint</code> for both, and the driver maps it to the JavaScript <code>bigint</code> primitive. <code>JSON.stringify</code> then throws <code>TypeError: Do not know how to serialize a BigInt</code>. Cast in SQL (<code>COUNT(*)::int</code>) or convert in JavaScript (<code>Number(row.soDon)</code>) before the response — and note that Prisma's own <code>_count</code> does this for you, which is why the problem only appears once you drop to raw.</p>
+<p><strong>Trap — <code>COUNT</code> and <code>SUM</code> come back as <code>BigInt</code> from a raw query.</strong> PostgreSQL returns <code>bigint</code> for both, and the driver maps it to the JavaScript <code>bigint</code> primitive. <code>JSON.stringify</code> then throws <code>TypeError: Do not know how to serialize a BigInt</code>. Cast in SQL (<code>COUNT(*)::int</code>) or convert in JavaScript (<code>Number(row.soDon)</code>) before the response — and note that Prisma's own <code>_count</code> does this for you, which is why the problem only appears once you drop to raw.</p>
 </div>
 
 <h3><code>distinct</code>, and where it actually runs</h3>
@@ -1356,7 +1356,7 @@ Execution Time: 2.011 ms
   <div class="lz-step"><span class="lz-k">Vietnamese</span><span class="lz-t"><code>'simple'</code>, not <code>'english'</code></span><span class="lz-d">There is no Vietnamese stemmer in core PostgreSQL. <code>'simple'</code> just lowercases and splits on whitespace, which is correct here — <code>'english'</code> would mangle Vietnamese words by applying English stemming rules to them.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — accent-insensitive search in Vietnamese.</strong> A user typing <code>tieng viet</code> will not match <code>tiếng việt</code>, because they are different strings and <code>'simple'</code> does not fold diacritics. The fix is the <code>unaccent</code> extension, applied on both sides — in the generated column and in the query. Miss one side and search silently returns nothing for half your users, which is the kind of bug that survives for months because the people it affects assume the content is not there.</p>
+<p><strong>Trap — accent-insensitive search in Vietnamese.</strong> A user typing <code>tieng viet</code> will not match <code>tiếng việt</code>, because they are different strings and <code>'simple'</code> does not fold diacritics. The fix is the <code>unaccent</code> extension, applied on both sides — in the generated column and in the query. Miss one side and search silently returns nothing for half your users, which is the kind of bug that survives for months because the people it affects assume the content is not there.</p>
 </div>
 <pre><code><span class="tok-comment">-- Accent-insensitive: unaccent on BOTH sides</span>
 CREATE EXTENSION IF NOT EXISTS unaccent;

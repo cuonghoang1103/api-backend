@@ -142,7 +142,7 @@ Dich vu noi bo, may-toi-may  1 gio    khong co    1 gio</code></pre>
   <div class="lz-layer"><span class="lz-lname">Machine-to-machine needs no refresh token</span><span class="lz-lnote">A backend service holds a client credential and can request a new access token whenever it likes. Refresh tokens exist because a browser or phone cannot safely hold a long-term secret — that is the entire reason for the pattern.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — a fifteen-minute access token with no rotation on refresh is a thirty-day credential with extra steps.</strong> If the same refresh token can be exchanged over and over, then stealing it once grants thirty days of access, and the short access lifetime protects nothing that matters. The short window is only real when the refresh token is single-use and reuse is detected — which is exactly Lesson 5.2. Implementing this half without that half is the most common way this pattern is got wrong.</p>
+<p><strong>Trap — a fifteen-minute access token with no rotation on refresh is a thirty-day credential with extra steps.</strong> If the same refresh token can be exchanged over and over, then stealing it once grants thirty days of access, and the short access lifetime protects nothing that matters. The short window is only real when the refresh token is single-use and reuse is detected — which is exactly Lesson 5.2. Implementing this half without that half is the most common way this pattern is got wrong.</p>
 </div>
 <div class="note-ct">
 <p><strong>When you do <em>not</em> need this.</strong> One server, one database, a browser on the same site: Chapter 3's session cookie already gives you instant revocation and a 0.3 ms lookup, and adding two token types buys nothing but code. The split earns its complexity when verification happens somewhere the session table is not — another service, another datacentre, an edge function, a mobile app talking to several APIs. Ask where verification happens before adopting it.</p>
@@ -415,7 +415,7 @@ if (cu.dungLuc) {
   <div class="lz-layer"><span class="lz-lname">A distinct error code helps everyone</span><span class="lz-lnote"><code>REFRESH_TAI_DUNG</code> lets the front end show the right screen, and lets you count it. A spike in that counter is a real security signal, and it is invisible if every failure is a generic 401.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — a buggy client triggers this constantly, and then someone disables it.</strong> Two tabs refreshing at once, a mobile app retrying after a timeout, an interceptor that fires ten refreshes for ten simultaneous 401s — every one of those replays a used token and revokes the family. Users get logged out at random, the team concludes that reuse detection is too aggressive, and it gets turned off. The fix is not to weaken detection; it is to make the client refresh <em>once</em> and to add a short grace window for the genuine race. That is Lesson 5.5, and it is required, not optional.</p>
+<p><strong>Trap — a buggy client triggers this constantly, and then someone disables it.</strong> Two tabs refreshing at once, a mobile app retrying after a timeout, an interceptor that fires ten refreshes for ten simultaneous 401s — every one of those replays a used token and revokes the family. Users get logged out at random, the team concludes that reuse detection is too aggressive, and it gets turned off. The fix is not to weaken detection; it is to make the client refresh <em>once</em> and to add a short grace window for the genuine race. That is Lesson 5.5, and it is required, not optional.</p>
 </div>
 <div class="note-ct">
 <p><strong>The order to build this in.</strong> Rotation first — it is a transaction and a family id, and it is safe on its own. Then the client fix from Lesson 5.5, so concurrent refreshes cannot produce false positives. <em>Then</em> turn on reuse detection, with the log line before the revocation so you can watch it for a week and see what it catches before it starts ending sessions. Deploying detection before the client is correct is how teams end up concluding that this pattern does not work.</p>
@@ -621,7 +621,7 @@ HTTP/1.1 401 {"loi":"Phien khong hop le"}     ← ngay lap tuc
 # Nhung access token cu VAN chay them toi 15 phut nua.
 # Voi mot nut dang xuat, do la dieu chap nhan duoc.</div>
 <div class="pitfall">
-<p><strong>Bẫy — clearing the cookie is not logging out.</strong> <code>res.clearCookie()</code> removes the browser's copy and leaves the row alive, so anyone who captured that token — from a log, a shared machine, a proxy — can still use it for thirty days. Logout is an <code>UPDATE</code> in the database; the cookie is a convenience for the browser. A logout endpoint that only clears cookies is one of the most common findings in an authentication review.</p>
+<p><strong>Trap — clearing the cookie is not logging out.</strong> <code>res.clearCookie()</code> removes the browser's copy and leaves the row alive, so anyone who captured that token — from a log, a shared machine, a proxy — can still use it for thirty days. Logout is an <code>UPDATE</code> in the database; the cookie is a convenience for the browser. A logout endpoint that only clears cookies is one of the most common findings in an authentication review.</p>
 </div>
 
 <h3>The fast path, for events 4 and 5</h3>
@@ -919,7 +919,7 @@ export function docThietBi(ua?: string | null) {
   return &#96;\${tr} tren \${he}&#96;;
 }</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — the user agent is unreliable, being deliberately reduced, and trivially forged.</strong> Chrome and others now freeze most of the string, privacy tools rewrite it, and an attacker simply copies the victim's. So it is fine for a <em>label</em> a human recognises — "that Firefox on Linux is not me" — and it must never be a security check. Never reject a request because the user agent changed; you would break legitimate browser updates and stop nobody.</p>
+<p><strong>Trap — the user agent is unreliable, being deliberately reduced, and trivially forged.</strong> Chrome and others now freeze most of the string, privacy tools rewrite it, and an attacker simply copies the victim's. So it is fine for a <em>label</em> a human recognises — "that Firefox on Linux is not me" — and it must never be a security check. Never reject a request because the user agent changed; you would break legitimate browser updates and stop nobody.</p>
 </div>
 
 <h3>Location, with the caveats stated to the user</h3>
@@ -1176,7 +1176,7 @@ async function layAccessTokenMoi(): Promise&lt;string&gt; {
 <div class="out">09:44:20.130  POST /auth/refresh   RT1 → RT2      ✅  (mot lan duy nhat)
 09:44:20.152  Ca muoi request thu lai voi access token moi. Xong.</div>
 <div class="pitfall">
-<p><strong>Bẫy — never retry a failed refresh, and never refresh in response to a failed refresh.</strong> If <code>/auth/refresh</code> returns 401, the session is over: redirect to login. An interceptor that treats the refresh call like any other request will see its 401, try to refresh, get another 401, and loop until the browser tab freezes. Exclude the refresh endpoint from the interceptor explicitly.</p>
+<p><strong>Trap — never retry a failed refresh, and never refresh in response to a failed refresh.</strong> If <code>/auth/refresh</code> returns 401, the session is over: redirect to login. An interceptor that treats the refresh call like any other request will see its 401, try to refresh, get another 401, and loop until the browser tab freezes. Exclude the refresh endpoint from the interceptor explicitly.</p>
 </div>
 
 <h3>Fix 2 — coordinate across tabs</h3>

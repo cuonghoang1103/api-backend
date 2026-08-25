@@ -79,7 +79,7 @@ socket.leave(&#96;user:\${userId}&#96;);      // roi room user cua chinh minh �
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>socket.rooms</code> includes the room NAMED AFTER THE SID.</strong> Every socket automatically joins the room named after its own sid (the thing that makes <code>io.to(sid).emit(...)</code> work). So <code>socket.rooms.size</code> is always 1 + however many rooms you joined by hand. Do not test for <code>if (socket.rooms.size === 0)</code>.</p>
+<p><strong>Trap — <code>socket.rooms</code> includes the room NAMED AFTER THE SID.</strong> Every socket automatically joins the room named after its own sid (the thing that makes <code>io.to(sid).emit(...)</code> work). So <code>socket.rooms.size</code> is always 1 + however many rooms you joined by hand. Do not test for <code>if (socket.rooms.size === 0)</code>.</p>
 </div>
 
 <div class="callout">
@@ -235,7 +235,7 @@ const c = io('http://example.com/tenant-42');
 <p>You can — but once <code>/tenant-42</code> has created it, there is NO way to clean the namespace up once every socket has left. It lives in memory forever. With 10,000 tenants that is 10,000 undeletable namespaces. This is the memory leak dynamic namespaces make easy to create.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng namespace như collection name.</strong> Someone reads <code>io.of(&#39;/thread-42&#39;)</code> and it sounds reasonable. NO. That is what a ROOM is for (<code>io.to(&#39;thread:42&#39;)</code>). Namespaces are for architectural isolation; rooms are for per-event routing. Confusing the two chokes the code that comes after.</p>
+<p><strong>Trap — using a namespace as though it were a collection name.</strong> Someone reads <code>io.of(&#39;/thread-42&#39;)</code> and it sounds reasonable. NO. That is what a ROOM is for (<code>io.to(&#39;thread:42&#39;)</code>). Namespaces are for architectural isolation; rooms are for per-event routing. Confusing the two chokes the code that comes after.</p>
 </div>
 
 <div class="callout">
@@ -396,7 +396,7 @@ const customRooms = [...allRooms.entries()]
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — leave() rồi expect emit trước đó không đến.</strong> <code>leave()</code> synchronous, but packets <code>emit</code> already queued in the I/O buffer are still sent. If you <code>emit('X', data); socket.leave('Y')</code> on a socket that is also in Y, the packet still reaches that socket. Not a bug — a race between the I/O flush and your synchronous code.</p>
+<p><strong>Trap — calling leave() and expecting an earlier emit not to arrive.</strong> <code>leave()</code> synchronous, but packets <code>emit</code> already queued in the I/O buffer are still sent. If you <code>emit('X', data); socket.leave('Y')</code> on a socket that is also in Y, the packet still reaches that socket. Not a bug — a race between the I/O flush and your synchronous code.</p>
 </div>
 
 <div class="callout">
@@ -572,7 +572,7 @@ try {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng <code>volatile.emit</code> cho chat.</strong> Chat messages are rarely busy enough to fill the buffer — so the bug never shows up in dev. But when a user goes briefly offline (transport close), the server-side buffer fills and the next message is DROPPED. The chat loses it.</p>
+<p><strong>Trap — using <code>volatile.emit</code> for chat.</strong> Chat messages are rarely busy enough to fill the buffer — so the bug never shows up in dev. But when a user goes briefly offline (transport close), the server-side buffer fills and the next message is DROPPED. The chat loses it.</p>
 </div>
 
 <div class="callout">
@@ -739,7 +739,7 @@ socket.on(EVT.THREAD_JOIN, handleThreadJoin);
 <p>Naming your own event anything on this list means your handler overrides socket.io's and breaks reconnect and heartbeat. NEVER do it. A feature prefix (<code>chat:connect</code>) is safe — only bare &quot;connect&quot; is reserved.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng camelCase.</strong> <code>threadJoin</code> works, but breaks the convention. This repo uses kebab with a colon (<code>thread:new-message</code>). If you mix them, grepping &quot;thread:&quot; misses threadJoin. Pick one convention and hold to it.</p>
+<p><strong>Trap — using camelCase.</strong> <code>threadJoin</code> works, but breaks the convention. This repo uses kebab with a colon (<code>thread:new-message</code>). If you mix them, grepping &quot;thread:&quot; misses threadJoin. Pick one convention and hold to it.</p>
 </div>
 
 <div class="callout">

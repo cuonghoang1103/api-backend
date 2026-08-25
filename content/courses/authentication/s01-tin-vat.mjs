@@ -49,7 +49,7 @@ curl -s https://api.vidu.com/toi -H "Authorization: Bearer eyJhbGciOi…"</code>
   <div class="kv"><span class="k">4 · Revocation must exist before you need it</span><span class="v">The day you learn a token leaked is a bad day to discover you have no way to invalidate it. Build the off switch while nothing is on fire.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — a credential in a URL leaks through five channels you do not control.</strong> <code>https://vidu.com/reset?token=abc123</code> ends up in browser history, in the <code>Referer</code> header sent to every third-party script on the page, in server access logs, in proxy and CDN logs, and in the chat app that generated a link preview by fetching it. Password reset links are the common case, and Chapter 6 shows the mitigations: single use, short expiry, and consuming the token into a POST as soon as the page loads.</p>
+<p><strong>Trap — a credential in a URL leaks through five channels you do not control.</strong> <code>https://vidu.com/reset?token=abc123</code> ends up in browser history, in the <code>Referer</code> header sent to every third-party script on the page, in server access logs, in proxy and CDN logs, and in the chat app that generated a link preview by fetching it. Password reset links are the common case, and Chapter 6 shows the mitigations: single use, short expiry, and consuming the token into a POST as soon as the page loads.</p>
 </div>
 
 <h3>The journey, and what breaks at each hop</h3>
@@ -291,7 +291,7 @@ $ node -e "console.log(require('crypto').randomUUID())"
   <div class="kv"><span class="k"><code>randomUUID()</code></span><span class="v">Thirty-six characters but only 122 bits — six of the 128 are fixed version and variant markers. Perfectly fine for a session id; just do not count it as 128, and never use UUIDv1, which embeds a timestamp and a MAC address.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — a random-looking id is not a secret if it is also a database key you display.</strong> A <code>cuid</code> or a UUID in a URL is an identifier, not a credential: it appears in logs, in referrers, in shared links, and in the page source. Authorization must still check ownership (Lesson 0.2). "Unguessable URL" is a valid design for an unlisted document, but it is a <em>bearer credential</em> the moment you rely on it — with all four consequences from Lesson 1.1.</p>
+<p><strong>Trap — a random-looking id is not a secret if it is also a database key you display.</strong> A <code>cuid</code> or a UUID in a URL is an identifier, not a credential: it appears in logs, in referrers, in shared links, and in the page source. Authorization must still check ownership (Lesson 0.2). "Unguessable URL" is a valid design for an unlisted document, but it is a <em>bearer credential</em> the moment you rely on it — with all four consequences from Lesson 1.1.</p>
 </div>
 
 <h3>The lookup table</h3>
@@ -486,7 +486,7 @@ if (a.length === b.length &amp;&amp; timingSafeEqual(a, b)) { … }</code></pre>
 RangeError [ERR_CRYPTO_TIMING_SAFE_EQUAL_LENGTH]:
   Input buffers must have the same byte length</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>timingSafeEqual</code> throws on a length mismatch, so a naive wrapper leaks the length instead.</strong> If your code returns a different error, or returns much faster, when the lengths differ, you have replaced a byte-level leak with a length-level one. Length is usually not secret — every session id you issue is the same length — so an explicit length check first is fine. When length <em>is</em> secret, hash both sides to a fixed size first and compare the hashes, which is the pattern below.</p>
+<p><strong>Trap — <code>timingSafeEqual</code> throws on a length mismatch, so a naive wrapper leaks the length instead.</strong> If your code returns a different error, or returns much faster, when the lengths differ, you have replaced a byte-level leak with a length-level one. Length is usually not secret — every session id you issue is the same length — so an explicit length check first is fine. When length <em>is</em> secret, hash both sides to a fixed size first and compare the hashes, which is the pattern below.</p>
 </div>
 <pre><code><span class="tok-comment">// The double-HMAC pattern: safe for any lengths, no branch on length</span>
 import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
@@ -724,7 +724,7 @@ verify(null, Buffer.from('xin chao'), publicKey, chuKy);</code></pre>
   <div class="kv"><span class="k">None of the three provides confidentiality</span><span class="v">A signed JWT is readable by anyone holding it — <code>base64url</code> is encoding, not encryption. If a value must be secret <em>and</em> unforgeable, you need encryption with authentication (AEAD), not a signature over plaintext.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>sha256(bimat + tinNhan)</code> is a broken MAC with a name: length extension.</strong> SHA-256's internal construction lets an attacker who knows the digest and the length of the secret — without knowing the secret itself — compute a valid digest for <code>tinNhan + padding + themVao</code>. Their forged message keeps your original payload and appends their own, and the tag verifies. This has broken real APIs. HMAC's nested construction exists precisely to prevent it, and it is one function call away.</p>
+<p><strong>Trap — <code>sha256(bimat + tinNhan)</code> is a broken MAC with a name: length extension.</strong> SHA-256's internal construction lets an attacker who knows the digest and the length of the secret — without knowing the secret itself — compute a valid digest for <code>tinNhan + padding + themVao</code>. Their forged message keeps your original payload and appends their own, and the tag verifies. This has broken real APIs. HMAC's nested construction exists precisely to prevent it, and it is one function call away.</p>
 </div>
 <pre><code><span class="tok-comment">// ❌ Homemade MAC — vulnerable to length extension</span>
 const tag = createHash('sha256').update(BIMAT + duLieu).digest('hex');
@@ -961,7 +961,7 @@ export const logger = pino({
   "cookie":"[DA_CHE]","authorization":"[DA_CHE]"},
   "body":{"email":"an@vidu.com","matKhau":"[DA_CHE]"}}}</div>
 <div class="pitfall">
-<p><strong>Bẫy — a deny-list of field names will miss one, and you will not know which.</strong> <code>matKhau</code> is redacted; <code>mat_khau</code>, <code>password</code>, <code>pwd</code> and <code>newPassword</code> are not. The robust version is the other direction: log an explicit allow-list of fields you have decided are safe, and never pass whole request, response or error objects to the logger. It is more typing and it fails closed instead of open.</p>
+<p><strong>Trap — a deny-list of field names will miss one, and you will not know which.</strong> <code>matKhau</code> is redacted; <code>mat_khau</code>, <code>password</code>, <code>pwd</code> and <code>newPassword</code> are not. The robust version is the other direction: log an explicit allow-list of fields you have decided are safe, and never pass whole request, response or error objects to the logger. It is more typing and it fails closed instead of open.</p>
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Error objects are the sneakiest</span><span class="v">An axios error carries <code>err.config.headers</code> — including the <code>Authorization</code> header of the failed request. A Prisma error carries the query parameters (Lesson 11.5 of the Prisma course). Serialising an error is serialising everything it captured.</span></div>

@@ -257,7 +257,7 @@ otpauth URI  : otpauth://totp/CuongThai:cuong%40cuongthai.com?secret=IIO6GHS2LR6
   return null;
 }</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — returning a boolean makes replay impossible to prevent, and replay is the attack that actually happens.</strong> A TOTP code stays valid for up to ninety seconds. Anyone who sees it once — over the shoulder, in a phishing proxy, in a screenshot pasted into a support chat — can use it again inside that window. The fix is to return the step number that matched and store it: <code>lastStep</code> on the factor row, with the rule that the new step must be strictly greater. A code that already succeeded can never succeed twice, and the change is two lines.</p>
+<p><strong>Trap — returning a boolean makes replay impossible to prevent, and replay is the attack that actually happens.</strong> A TOTP code stays valid for up to ninety seconds. Anyone who sees it once — over the shoulder, in a phishing proxy, in a screenshot pasted into a support chat — can use it again inside that window. The fix is to return the step number that matched and store it: <code>lastStep</code> on the factor row, with the rule that the new step must be strictly greater. A code that already succeeded can never succeed twice, and the change is two lines.</p>
 </div>
 <pre><code>const buoc = kiemTotp(biMat, ma);
 if (buoc === null || buoc &lt;= yeuTo.buocCuoi) {         <span class="tok-comment">// ← chặn TÁI DÙNG</span>
@@ -468,7 +468,7 @@ Doan mu 10 ma  : 10 / 1.126e+15 = 1 tren 1.126e+14</div>
   <div class="kv"><span class="k">Regenerating invalidates every old code</span><span class="v">Delete then insert, in one transaction. Half-regenerating leaves old printouts working, which defeats the reason someone regenerates: they think the old list leaked.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — a recovery code is a complete MFA bypass, so it needs the same limiter as the code it replaces.</strong> It is tempting to treat recovery as an exceptional path and skip the rate limiting, the notification and the audit entry. That inverts the security: the attacker simply attacks the unprotected path. Rate-limit recovery attempts exactly like TOTP attempts, mail the account every time one is used, and log it. A recovery code used from a country the account has never seen is one of the highest-signal events your system can produce.</p>
+<p><strong>Trap — a recovery code is a complete MFA bypass, so it needs the same limiter as the code it replaces.</strong> It is tempting to treat recovery as an exceptional path and skip the rate limiting, the notification and the audit entry. That inverts the security: the attacker simply attacks the unprotected path. Rate-limit recovery attempts exactly like TOTP attempts, mail the account every time one is used, and log it. A recovery code used from a country the account has never seen is one of the highest-signal events your system can produce.</p>
 </div>
 
 <h3>Rate limiting, which is what makes six digits enough</h3>
@@ -690,7 +690,7 @@ const ok = verify(khoaCong, Buffer.concat([authData, sha256(clientDataJSON)]), c
   <div class="kv"><span class="k">You can tell, and mostly should not care</span><span class="v">The backup-eligible and backup-state flags in <code>authenticatorData</code> say whether a credential is syncable. Read them for a bank or an admin console where hardware binding is a policy; ignore them elsewhere, because refusing synced passkeys means refusing almost every user who has one.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — the RP ID is not the origin, and getting it wrong is the mistake that costs a migration.</strong> The origin is <code>https://cuongthai.com</code>; the RP ID is the bare domain <code>cuongthai.com</code>. It may be the page's domain or a registrable parent of it — a page on <code>app.cuongthai.com</code> may use <code>cuongthai.com</code>, but never the reverse, and never a different site's domain. Credentials are permanently bound to the RP ID chosen at registration: pick <code>app.cuongthai.com</code> today and every passkey stops working the day you move to <code>cuongthai.com</code>. Choose the broadest domain you will ever legitimately serve from, and write down why.</p>
+<p><strong>Trap — the RP ID is not the origin, and getting it wrong is the mistake that costs a migration.</strong> The origin is <code>https://cuongthai.com</code>; the RP ID is the bare domain <code>cuongthai.com</code>. It may be the page's domain or a registrable parent of it — a page on <code>app.cuongthai.com</code> may use <code>cuongthai.com</code>, but never the reverse, and never a different site's domain. Credentials are permanently bound to the RP ID chosen at registration: pick <code>app.cuongthai.com</code> today and every passkey stops working the day you move to <code>cuongthai.com</code>. Choose the broadest domain you will ever legitimately serve from, and write down why.</p>
 </div>
 
 <h3>Discoverable credentials, and login with no username</h3>
@@ -899,7 +899,7 @@ const cred = await navigator.credentials.get({
   res.status(201).end();
 });</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — a challenge round-tripped through the client is not a challenge.</strong> It is tempting to put it in a hidden field or a cookie so the endpoint can stay stateless. That removes the only property the challenge has: an attacker who can choose it can replay an old signed response forever. Keep it server-side, keyed by session, with a short expiry, and delete it on use — <code>GETDEL</code> in one round trip. The same rule applies to the authentication ceremony, and it is the single most common WebAuthn implementation bug.</p>
+<p><strong>Trap — a challenge round-tripped through the client is not a challenge.</strong> It is tempting to put it in a hidden field or a cookie so the endpoint can stay stateless. That removes the only property the challenge has: an attacker who can choose it can replay an old signed response forever. Keep it server-side, keyed by session, with a short expiry, and delete it on use — <code>GETDEL</code> in one round trip. The same rule applies to the authentication ceremony, and it is the single most common WebAuthn implementation bug.</p>
 </div>
 
 <h3>Authentication, and the counter that will bite you</h3>

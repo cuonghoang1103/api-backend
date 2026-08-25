@@ -76,7 +76,7 @@ Dung Windows 323s   windows   <- NGOAI. Xong luc 19:56:11, cho 1m55s</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — adding a <code>needs:</code> because the order feels right.</strong> A <code>needs:</code> edge is a promise that job B consumes job A&#39;s output. Adding one for tidiness — "check formatting before we build" — converts two parallel jobs into a chain and adds the first job&#39;s entire duration to every run, permanently, for no information gained. The test is concrete: if job B would still produce a correct result when job A fails, the edge is not a data dependency and it is costing you the whole of A.</p>
+<p><strong>Trap — adding a <code>needs:</code> because the order feels right.</strong> A <code>needs:</code> edge is a promise that job B consumes job A&#39;s output. Adding one for tidiness — "check formatting before we build" — converts two parallel jobs into a chain and adds the first job&#39;s entire duration to every run, permanently, for no information gained. The test is concrete: if job B would still produce a correct result when job A fails, the edge is not a data dependency and it is costing you the whole of A.</p>
 </div>
 
 <h3>What this changes about reading a slow workflow</h3>
@@ -234,7 +234,7 @@ concurrency:
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>cancel-in-progress: true</code> on anything that deploys or publishes.</strong> A cancelled job stops between two steps, wherever it happened to be. For a lint run that is fine. For a deploy it can mean containers recreated but migrations not applied; for a release, three of five assets uploaded. This repository gets it right by splitting the two cases, and the reasoning is written down in the file — which is the part worth copying, because the next person to add a workflow will otherwise copy whichever block they saw first.</p>
+<p><strong>Trap — <code>cancel-in-progress: true</code> on anything that deploys or publishes.</strong> A cancelled job stops between two steps, wherever it happened to be. For a lint run that is fine. For a deploy it can mean containers recreated but migrations not applied; for a release, three of five assets uploaded. This repository gets it right by splitting the two cases, and the reasoning is written down in the file — which is the part worth copying, because the next person to add a workflow will otherwise copy whichever block they saw first.</p>
 </div>
 
 <h3>The thing <code>concurrency</code> does not do</h3>
@@ -414,7 +414,7 @@ cac lan HONG:  80 s  va  334 s   -> TB 207 s</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — a performance regression test on run duration.</strong> A check that fails when the run exceeds some threshold will, on this workflow, fire on the 160-second run and stay quiet on the 155-second one, teaching everybody that the check is noise. If you want to catch real regressions, compare a rolling median against a baseline median with a margin of several standard deviations — or measure the specific step you care about, which is both quieter and more informative.</p>
+<p><strong>Trap — a performance regression test on run duration.</strong> A check that fails when the run exceeds some threshold will, on this workflow, fire on the 160-second run and stay quiet on the 155-second one, teaching everybody that the check is noise. If you want to catch real regressions, compare a rolling median against a baseline median with a margin of several standard deviations — or measure the specific step you care about, which is both quieter and more informative.</p>
 </div>
 
 <h3>Where the variance comes from</h3>
@@ -567,7 +567,7 @@ toi uu ban dung macOS  (437s): giam 20%  ->  tiet kiem 87s dong ho</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — optimising a workflow that is not the slow one.</strong> This chapter has spent five lessons on the release workflow because it has the interesting structure. But it runs on demand, a few times a week, and nobody waits for it. <code>ci-lint.yml</code> runs on every push and every PR — 526 times — and takes 141 seconds. A ten-second improvement there is worth more developer-minutes per month than a two-minute improvement on the release. Frequency belongs in the ranking, and it is not in any of the tables above.</p>
+<p><strong>Trap — optimising a workflow that is not the slow one.</strong> This chapter has spent five lessons on the release workflow because it has the interesting structure. But it runs on demand, a few times a week, and nobody waits for it. <code>ci-lint.yml</code> runs on every push and every PR — 526 times — and takes 141 seconds. A ten-second improvement there is worth more developer-minutes per month than a two-minute improvement on the release. Frequency belongs in the ranking, and it is not in any of the tables above.</p>
 </div>
 
 <h3>What the frequency-weighted ranking looks like</h3>

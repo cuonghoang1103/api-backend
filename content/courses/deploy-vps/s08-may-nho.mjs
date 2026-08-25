@@ -101,7 +101,7 @@ oom_kill 1</div>
 <p><code>oom_kill 1</code> is a counter, not a flag — it accumulates. Reading it after a deploy tells you whether anything was killed during it, even if nobody was watching at the time. On a machine using cgroups v2 the equivalent lines live in <code>memory.events</code> as <code>oom</code> and <code>oom_kill</code>.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>dmesg</code> is a ring buffer, so the evidence expires.</strong> It has a fixed size (often 1 MB or less) and old lines are overwritten by new ones. On a busy machine the OOM record from this morning may simply be gone by the afternoon, and you will be left with a mystery restart and no explanation. If a machine has systemd, <code>journalctl -k</code> reads the persisted copy; if it does not, arrange for the kernel log to be collected somewhere before you need it. Chapter 9 covers what to keep and for how long.</p>
+<p><strong>Trap — <code>dmesg</code> is a ring buffer, so the evidence expires.</strong> It has a fixed size (often 1 MB or less) and old lines are overwritten by new ones. On a busy machine the OOM record from this morning may simply be gone by the afternoon, and you will be left with a mystery restart and no explanation. If a machine has systemd, <code>journalctl -k</code> reads the persisted copy; if it does not, arrange for the kernel log to be collected somewhere before you need it. Chapter 9 covers what to keep and for how long.</p>
 </div>
 
 <h3>Recognising it in the wild</h3>
@@ -322,7 +322,7 @@ MemoryHigh=400M            <span class="tok-comment"># tran mem: vuot thi bi bop
 <p><code>MemoryHigh</code> is worth knowing about specifically because it is the gentle version: a process over that line gets throttled and pushed to reclaim, rather than killed. A service that briefly spikes gets slowed down instead of removed, which is almost always what you want for something you cannot afford to lose.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>Restart=always</code> plus an OOM turns a spike into a loop.</strong> The service is killed, systemd restarts it, it allocates its way back to the same ceiling, and it is killed again. Every restart drops connections and rebuilds caches, so each cycle is <em>more</em> expensive than the last and the machine degrades under a load it could otherwise have absorbed. Set <code>StartLimitIntervalSec</code> and <code>StartLimitBurst</code> so the unit gives up and stays down rather than thrashing — a service that is honestly down is easier to diagnose than one that is up for four seconds at a time.</p>
+<p><strong>Trap — <code>Restart=always</code> plus an OOM turns a spike into a loop.</strong> The service is killed, systemd restarts it, it allocates its way back to the same ceiling, and it is killed again. Every restart drops connections and rebuilds caches, so each cycle is <em>more</em> expensive than the last and the machine degrades under a load it could otherwise have absorbed. Set <code>StartLimitIntervalSec</code> and <code>StartLimitBurst</code> so the unit gives up and stays down rather than thrashing — a service that is honestly down is easier to diagnose than one that is up for four seconds at a time.</p>
 </div>
 
 <h3>The thing you cannot fix with scores</h3>
@@ -482,7 +482,7 @@ XONG 500 MB — KHONG bi giet
 <p>Exit 0 instead of 137. The process that was killed in 8.1 now finishes.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — my first reading of this said swap was never used, and that was my mistake.</strong> I checked <code>memory.stat</code> after the process exited and saw <code>swap 0</code>, and briefly concluded the allocation had somehow fit in RAM. It had not: the counter is per-cgroup and the pages were freed the moment the process died, so by the time I read it there was nothing to count. Sampling <em>during</em> the run shows what actually happened:</p>
+<p><strong>Trap — my first reading of this said swap was never used, and that was my mistake.</strong> I checked <code>memory.stat</code> after the process exited and saw <code>swap 0</code>, and briefly concluded the allocation had somehow fit in RAM. It had not: the counter is per-cgroup and the pages were freed the moment the process died, so by the time I read it there was nothing to count. Sampling <em>during</em> the run shows what actually happened:</p>
 </div>
 
 <div class="out">  t=0.25s  cgroup_rss=164 MB  cgroup_swap=0 MB    he_thong_swap=0 MB
@@ -533,7 +533,7 @@ XONG 500 MB — KHONG bi giet
 <span class="tok-comment"># ca hai chay lien tuc = THRASHING, du 'swpd' co the khong doi.</span></code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — a swap file needs <code>chmod 600</code>, and <code>swapon</code> will tell you so.</strong> Swap holds whatever was in memory: session tokens, decrypted secrets, request bodies. A world-readable swap file is a plaintext dump of your process memory sitting on disk, which is why <code>swapon</code> prints "insecure permissions" and refuses. This is also the reason Chapter 4&#39;s advice about secrets in environment variables has a caveat — an environment variable can be swapped to disk like anything else.</p>
+<p><strong>Trap — a swap file needs <code>chmod 600</code>, and <code>swapon</code> will tell you so.</strong> Swap holds whatever was in memory: session tokens, decrypted secrets, request bodies. A world-readable swap file is a plaintext dump of your process memory sitting on disk, which is why <code>swapon</code> prints "insecure permissions" and refuses. This is also the reason Chapter 4&#39;s advice about secrets in environment variables has a caveat — an environment variable can be swapped to disk like anything else.</p>
 </div>
 
 <h3>Where the cgroup accounting bites</h3>
@@ -730,7 +730,7 @@ python3 10903 root   3w  REG  104857600     0    14 /mnt/dia/cache/log-lon.log (
 <p><code>: > /proc/&lt;pid&gt;/fd/3</code> truncated the file through the still-open descriptor and returned all 100 MB <em>without restarting anything</em>. That is the move worth remembering: when the process holding a deleted file is your database, you do not want the other option.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — this is why <code>rm big.log</code> on a running service frees nothing.</strong> The instinct during a disk emergency is to delete the biggest file, and if a process has it open you get exactly zero bytes back while <code>du</code> now shows the space as gone. Truncate instead of deleting — <code>: &gt; big.log</code> or <code>truncate -s 0 big.log</code> — which frees the blocks immediately and leaves the writer with a valid, empty file. This is also precisely what <code>logrotate</code>&#39;s <code>copytruncate</code> option exists for, and why the alternative requires signalling the process to reopen its log.</p>
+<p><strong>Trap — this is why <code>rm big.log</code> on a running service frees nothing.</strong> The instinct during a disk emergency is to delete the biggest file, and if a process has it open you get exactly zero bytes back while <code>du</code> now shows the space as gone. Truncate instead of deleting — <code>: &gt; big.log</code> or <code>truncate -s 0 big.log</code> — which frees the blocks immediately and leaves the writer with a valid, empty file. This is also precisely what <code>logrotate</code>&#39;s <code>copytruncate</code> option exists for, and why the alternative requires signalling the process to reopen its log.</p>
 </div>
 
 <h3>Case two: free space, and still ENOSPC</h3>
@@ -751,7 +751,7 @@ python3 10903 root   3w  REG  104857600     0    14 /mnt/dia/cache/log-lon.log (
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — an attempt at measuring inode exhaustion that measured something else.</strong> My first run created one-byte files on a default ext4 filesystem expecting to run out of inodes. It stopped at 32,394 files with <code>df -i</code> showing only <strong>64%</strong> of inodes used — it had run out of <em>blocks</em>, because ext4 allocates a minimum of one 4 KB block per file. 32,394 one-byte files consumed 127 MB, an amplification of about 4,000×. That failed measurement is worth more than the one I was aiming for: on a real server, "the disk is full and I only have a few hundred megabytes of actual data" is usually this, not inodes. I had to format a second filesystem with <code>mkfs.ext4 -N 2000</code> to produce genuine inode exhaustion.</p>
+<p><strong>Trap — an attempt at measuring inode exhaustion that measured something else.</strong> My first run created one-byte files on a default ext4 filesystem expecting to run out of inodes. It stopped at 32,394 files with <code>df -i</code> showing only <strong>64%</strong> of inodes used — it had run out of <em>blocks</em>, because ext4 allocates a minimum of one 4 KB block per file. 32,394 one-byte files consumed 127 MB, an amplification of about 4,000×. That failed measurement is worth more than the one I was aiming for: on a real server, "the disk is full and I only have a few hundred megabytes of actual data" is usually this, not inodes. I had to format a second filesystem with <code>mkfs.ext4 -N 2000</code> to produce genuine inode exhaustion.</p>
 </div>
 
 <h3>The disk that takes the database with it</h3>
@@ -976,7 +976,7 @@ docker build --memory=512m --memory-swap=1g .</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — Node does not know it is in a container.</strong> Without an explicit limit, V8 sizes its default heap from the <em>host&#39;s</em> total RAM, read from <code>/proc/meminfo</code> — which inside a container still reports the whole machine. On a 16 GB host with a 512 MB container limit, Node will happily plan for a multi-gigabyte heap and get killed long before it ever considers a garbage collection. This is the single most common cause of "it works on my machine, it exits 137 in the container", and <code>--max-old-space-size</code> is the fix.</p>
+<p><strong>Trap — Node does not know it is in a container.</strong> Without an explicit limit, V8 sizes its default heap from the <em>host&#39;s</em> total RAM, read from <code>/proc/meminfo</code> — which inside a container still reports the whole machine. On a 16 GB host with a 512 MB container limit, Node will happily plan for a multi-gigabyte heap and get killed long before it ever considers a garbage collection. This is the single most common cause of "it works on my machine, it exits 137 in the container", and <code>--max-old-space-size</code> is the fix.</p>
 </div>
 
 <h3>What else is running while you build</h3>

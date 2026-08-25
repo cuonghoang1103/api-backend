@@ -128,7 +128,7 @@ try {
   <div class="lz-layer"><span class="lz-lname"><code>PrismaClientRustPanicError</code></span><span class="lz-lnote">The engine crashed. Rare, and unrecoverable — the client must be restarted. Log it loudly and let the process die.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>e.code === 'P2002'</code> without the <code>instanceof</code> check.</strong> On a plain <code>unknown</code>, TypeScript will not let you read <code>.code</code>, so people write <code>(e as any).code</code> — and then a completely unrelated error with a <code>code</code> property (a Node <code>ENOENT</code>, an Axios error) matches the branch and returns a 409 to a confused user. The <code>instanceof</code> is what makes the narrowing real.</p>
+<p><strong>Trap — <code>e.code === 'P2002'</code> without the <code>instanceof</code> check.</strong> On a plain <code>unknown</code>, TypeScript will not let you read <code>.code</code>, so people write <code>(e as any).code</code> — and then a completely unrelated error with a <code>code</code> property (a Node <code>ENOENT</code>, an Axios error) matches the branch and returns a 409 to a confused user. The <code>instanceof</code> is what makes the narrowing real.</p>
 </div>
 
 <h3>6 · The client type itself</h3>
@@ -1060,7 +1060,7 @@ function clientChoThue(tenantId: number) {
 const db = clientChoThue(req.user.tenantId);
 await db.post.findMany();       <span class="tok-comment">// automatically scoped, impossible to forget</span></code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — a tenant filter in an extension is a safety net, not a security boundary.</strong> It covers the queries that go through the extended client and nothing else: not <code>$queryRaw</code>, not nested reads inside an <code>include</code> on a different model, not a helper that captured the base client. For real isolation, use PostgreSQL row-level security, or a schema per tenant, or a database per tenant — and keep the extension as the layer that catches the ordinary mistakes.</p>
+<p><strong>Trap — a tenant filter in an extension is a safety net, not a security boundary.</strong> It covers the queries that go through the extended client and nothing else: not <code>$queryRaw</code>, not nested reads inside an <code>include</code> on a different model, not a helper that captured the base client. For real isolation, use PostgreSQL row-level security, or a schema per tenant, or a database per tenant — and keep the extension as the layer that catches the ordinary mistakes.</p>
 </div>
 
 <h3>4 · <code>client</code> — top-level methods</h3>

@@ -164,11 +164,11 @@ feed of instant thumbnails feels fast even though nothing has loaded.
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — reaching for HLS because &quot;that is what video platforms use&quot;.</strong> Video platforms serve 90-minute films to viewers on trains. A 15-second product clip has none of those constraints and pays 1.8× storage, 2.7× CPU, ~60× the object count, and a JavaScript player for an adaptation it will never perform. Match the delivery to the content length.</p>
+<p><strong>Trap — reaching for HLS because &quot;that is what video platforms use&quot;.</strong> Video platforms serve 90-minute films to viewers on trains. A 15-second product clip has none of those constraints and pays 1.8× storage, 2.7× CPU, ~60× the object count, and a JavaScript player for an adaptation it will never perform. Match the delivery to the content length.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — serving video from a route that does not implement Range.</strong> Playback appears to work, then seeking re-downloads from the start and the browser buffers for tens of seconds. The tell is a <code>200</code> in the network tab where there should be a <code>206</code>. Object storage handles this for you; hand-rolled Express routes do not.</p>
+<p><strong>Trap — serving video from a route that does not implement Range.</strong> Playback appears to work, then seeking re-downloads from the start and the browser buffers for tens of seconds. The tell is a <code>200</code> in the network tab where there should be a <code>206</code>. Object storage handles this for you; hand-rolled Express routes do not.</p>
 </div>
 
 <div class="callout">
@@ -179,7 +179,7 @@ feed of instant thumbnails feels fast even though nothing has loaded.
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — HTTP Range requests</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests — 206, Content-Range, Accept-Ranges.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — video element attributes</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTML/Element/video — preload, poster, playsinline.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Apple — HLS overview</span><span class="lc-sub">developer.apple.com/streaming — cái mà HLS được thiết kế để giải quyết.</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Khoá Object Storage — Chương 3</span><span class="lc-sub">Cache-Control, immutable, và vì sao key có timestamp làm cho cache vĩnh viễn an toàn.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Object Storage course — Chapter 3</span><span class="lc-sub">Cache-Control, immutable, và vì sao key có timestamp làm cho cache vĩnh viễn an toàn.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
@@ -541,11 +541,11 @@ and 369 of 370 segments returned 200.
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — omitting <code>-hls_playlist_type vod</code>.</strong> The playlist lacks <code>#EXT-X-ENDLIST</code>, so players treat a finished file as a live stream: no duration, no seek bar, and endless manifest polling. It reads as a player bug and is a one-flag encode bug.</p>
+<p><strong>Trap — omitting <code>-hls_playlist_type vod</code>.</strong> The playlist lacks <code>#EXT-X-ENDLIST</code>, so players treat a finished file as a live stream: no duration, no seek bar, and endless manifest polling. It reads as a player bug and is a one-flag encode bug.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — letting the encoder choose keyframe positions.</strong> Without <code>-g</code>, <code>-keyint_min</code>, and <code>-sc_threshold 0</code>, segment boundaries drift between renditions and rendition switching glitches. It never shows up in testing because you test on a connection too good to trigger a switch.</p>
+<p><strong>Trap — letting the encoder choose keyframe positions.</strong> Without <code>-g</code>, <code>-keyint_min</code>, and <code>-sc_threshold 0</code>, segment boundaries drift between renditions and rendition switching glitches. It never shows up in testing because you test on a connection too good to trigger a switch.</p>
 </div>
 
 <div class="callout">

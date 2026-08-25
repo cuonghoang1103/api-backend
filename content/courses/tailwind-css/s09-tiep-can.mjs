@@ -606,14 +606,14 @@ placeholder:text-text-muted/60     7  &lt;- variant placeholder: chay chuong 6
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — cho rằng &quot;lớp NOT có quy tắc&quot; là vô hại vì nó KHÔNG lỗi.</strong> None of this makes Tailwind complain, JSX refuse, or TypeScript break. That IS the problem — there is no signal to respond to. Compensate with a periodic measurement, or a linter, or both; do not rely on spotting it while browsing the site.</p>
+<p><strong>Trap — assuming a &quot;class with NO rule&quot; is harmless because nothing errors.</strong> None of this makes Tailwind complain, JSX refuse, or TypeScript break. That IS the problem — there is no signal to respond to. Compensate with a periodic measurement, or a linter, or both; do not rely on spotting it while browsing the site.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> 0.28% of the static classes in this repo resolve to NOTHING, but that small number hides a concentrated structure: 81 uses are the alpha-on-a-bare- <code>var()</code> group Chapter 6 measured, 76 uses are a <code>bg-elevated</code> token that was never declared, 13 uses need an uninstalled plugin, 18 uses are off-scale values, and 25 uses are Tailwind syntax wrong by a single digit — each group a defect spread across many files with no signal to respond to.</p>
+<p><strong>One sentence.</strong> 0.28% of the static classes in this repo resolve to NOTHING, but that small number hides a concentrated structure: 81 uses are the alpha-on-a-bare- <code>var()</code> group Chapter 6 measured, 76 uses are a <code>bg-elevated</code> token that was never declared, 13 uses need an uninstalled plugin, 18 uses are off-scale values, and 25 uses are Tailwind syntax wrong by a single digit — each group a defect spread across many files with no signal to respond to.</p>
 </div>
 
-<h3>Nguồn</h3>
+<h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">eslint-plugin-tailwindcss</span><span class="lc-sub">github.com/francoismassart/eslint-plugin-tailwindcss — rule <code>no-custom-classname</code> bắt A/B/D/E ở IDE, cùng vài rule differs from đáng bật như <code>classnames-order</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind — Detecting classes in source files</span><span class="lc-sub">tailwindcss.com/docs/detecting-classes-in-source-files — tài liệu chính thức về khi nào one lớp KHÔNG được phát sinh, kể cả trường hợp template literal chẻ chuỗi ngang mà bài 0.1 đã đo.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">CSS Escapes — CSS Syntax Module Level 3</span><span class="lc-sub">w3.org/TR/css-syntax-3/#escaping — quy tắc thoát chuỗi mà bài này must cài để NOT báo động giả về mọi shadow tuỳ ý.</span></span></div>
@@ -811,11 +811,11 @@ focus-visible:    211 luot   (chi hien khi vao BANG BAN PHIM)
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ trợ năng bàn phím CHỈ dành cho người khiếm thị.</strong> Anyone driving the machine from the keyboard — someone with sore wrists who moved to shortcuts, an iPad user with a physical keyboard, a fast typist tabbing through a form — needs to see the focus ring to keep their place. This is accessibility measured in keyboard users, not only in screen-reader users.</p>
+<p><strong>Trap — thinking keyboard accessibility is ONLY for blind users.</strong> Anyone driving the machine from the keyboard — someone with sore wrists who moved to shortcuts, an iPad user with a physical keyboard, a fast typist tabbing through a form — needs to see the focus ring to keep their place. This is accessibility measured in keyboard users, not only in screen-reader users.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> 86% of the places using <code>outline-none</code> in this repo do draw a replacement focus ring matching the palette, but the remaining 72 do not — and 58 of those 72 are <code>input</code>/<code>textarea</code>/<code>select</code>inputs, exactly where keyboard users NEED the focus ring most, and they can be patched with one shared <code>inputFocus</code> constant without touching anything else.</p>
+<p><strong>One sentence.</strong> 86% of the places using <code>outline-none</code> in this repo do draw a replacement focus ring matching the palette, but the remaining 72 do not — and 58 of those 72 are <code>input</code>/<code>textarea</code>/<code>select</code>inputs, exactly where keyboard users NEED the focus ring most, and they can be patched with one shared <code>inputFocus</code> constant without touching anything else.</p>
 </div>
 
 <h3>Sources</h3>
@@ -1001,7 +1001,7 @@ for m in re.finditer(r'@media \\(prefers-reduced-motion: reduce\\)\\s*\\{', css)
 <p>The last block uses <code>* { animation: none !important }</code> — the sledgehammer that clears everything in that region. Good for the chat area, but it is also the only one NOT present in the Notes region. Chapter 2 measured this: <code>notes-theme-root</code> is the exception to <code>dark:</code>, and it is the exception for <em>several</em> other effects too. If somebody adds an ambient animation inside Notes, no suppression block covers it automatically. It has not happened yet — I grepped and found nothing. But it is the one gap worth knowing about.</p>
 
 <div class="callout warn">
-<p><strong>Bẫy — dùng <code>* { animation: none !important }</code> at the scope of <code>html</code>.</strong> It sounds like a solution of dubious appetite — suppress EVERYTHING. It would also suppress <code>animate-spin</code>, and the spinner would freeze while the machine waits on the network. Right for chat-studio, because chat-studio has NO spinner; wrong for the whole app.</p>
+<p><strong>Trap — using <code>* { animation: none !important }</code> at the scope of <code>html</code>.</strong> It sounds like a solution of dubious appetite — suppress EVERYTHING. It would also suppress <code>animate-spin</code>, and the spinner would freeze while the machine waits on the network. Right for chat-studio, because chat-studio has NO spinner; wrong for the whole app.</p>
 </div>
 
 <h3>What about motion-driven libraries?</h3>
@@ -1016,11 +1016,11 @@ grep -c 'framer-motion' src/**/*.tsx     : 34   (34 file dung, khong ai kiem tra
 <p>This repo uses <code>framer-motion</code> in 34 files — <code>motion.div</code>, enter/exit animations when a modal opens, page transitions. NOWHERE does it call <code>useReducedMotion()</code>. In most cases that is fine — these animations are short (150-400ms) and meaningful (they tell the user a modal just opened). But if somebody adds an infinitely looping <code>motion.div</code> , nothing switches it off automatically.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ rằng &quot;chúng tôi dùng framer-motion, framer-motion tự tôn trọng prefers-reduced-motion&quot;.</strong> Wrong. Framer only supplies the <em>tool</em> (<code>useReducedMotion</code>) so that you can CHECK and DECIDE for yourself — it does not disable your animations on your behalf. If you write an infinite <code>animate={{ opacity: [0, 1] }}</code> , it will run forever whether <code>prefers-reduced-motion</code> is on or off.</p>
+<p><strong>Trap — believing that &quot;we use framer-motion, and framer-motion respects prefers-reduced-motion on its own&quot;.</strong> Wrong. Framer only supplies the <em>tool</em> (<code>useReducedMotion</code>) so that you can CHECK and DECIDE for yourself — it does not disable your animations on your behalf. If you write an infinite <code>animate={{ opacity: [0, 1] }}</code> , it will run forever whether <code>prefers-reduced-motion</code> is on or off.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> The seven ambient animations in <code>tailwind.config.ts</code> are all suppressed by <code>@media (prefers-reduced-motion: reduce)</code> blocks in globals.css — and my initial element-level measurement reporting &quot;NOT SUPPRESSED&quot; was wrong, because the repo suppresses CENTRALLY in CSS rather than scattering utilities through JSX; the real remaining gap is the 34 files using <code>framer-motion</code> where nobody calls <code>useReducedMotion</code>, plus the possibility that someone adds an animation inside Notes with no suppression block covering it automatically.</p>
+<p><strong>One sentence.</strong> The seven ambient animations in <code>tailwind.config.ts</code> are all suppressed by <code>@media (prefers-reduced-motion: reduce)</code> blocks in globals.css — and my initial element-level measurement reporting &quot;NOT SUPPRESSED&quot; was wrong, because the repo suppresses CENTRALLY in CSS rather than scattering utilities through JSX; the real remaining gap is the 34 files using <code>framer-motion</code> where nobody calls <code>useReducedMotion</code>, plus the possibility that someone adds an animation inside Notes with no suppression block covering it automatically.</p>
 </div>
 
 <h3>Sources</h3>

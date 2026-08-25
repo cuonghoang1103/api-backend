@@ -168,11 +168,11 @@ raw                                           Content-Disposition:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — thinking <code>&lt;img src&gt;</code> safety is enough.</strong> It is true that scripts do not run inside <code>&lt;img&gt;</code>. It is irrelevant, because the attacker does not need your page to render it — they send the victim the direct CDN URL. Your rendering context is not the only context the file will ever be loaded in.</p>
+<p><strong>Trap — thinking <code>&lt;img src&gt;</code> safety is enough.</strong> It is true that scripts do not run inside <code>&lt;img&gt;</code>. It is irrelevant, because the attacker does not need your page to render it — they send the victim the direct CDN URL. Your rendering context is not the only context the file will ever be loaded in.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — checking MIME <em>or</em> extension instead of both.</strong> The client controls the MIME header entirely, and controls the filename entirely. Either alone is a single client-controlled gate. The repo's <code>DANGEROUS_MIME.has(mime) || DANGEROUS_EXT.test(name)</code> rejects if <em>either</em> fires, which is the correct shape — reject on any signal, do not require agreement between signals.</p>
+<p><strong>Trap — checking MIME <em>or</em> extension instead of both.</strong> The client controls the MIME header entirely, and controls the filename entirely. Either alone is a single client-controlled gate. The repo's <code>DANGEROUS_MIME.has(mime) || DANGEROUS_EXT.test(name)</code> rejects if <em>either</em> fires, which is the correct shape — reject on any signal, do not require agreement between signals.</p>
 </div>
 
 <div class="callout">
@@ -540,11 +540,11 @@ The GIF is under ~50 KB                      The conversion saves bytes
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — putting <code>animated: true</code> on the output format instead of the constructor.</strong> <code>sharp(gif).webp({ animated: true })</code> is not a thing; the option belongs to <code>sharp(input, { animated: true })</code>. Written the wrong way it silently produces a single-frame output, which is exactly the bug you were trying to fix.</p>
+<p><strong>Trap — putting <code>animated: true</code> on the output format instead of the constructor.</strong> <code>sharp(gif).webp({ animated: true })</code> is not a thing; the option belongs to <code>sharp(input, { animated: true })</code>. Written the wrong way it silently produces a single-frame output, which is exactly the bug you were trying to fix.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — forgetting that <code>pages</code> multiplies your pixel budget.</strong> A per-frame dimension check passes a 2,000-frame flat-colour GIF that is 2,000 MP in total. Always compute <code>width × height × (pages ?? 1)</code> when animation is allowed.</p>
+<p><strong>Trap — forgetting that <code>pages</code> multiplies your pixel budget.</strong> A per-frame dimension check passes a 2,000-frame flat-colour GIF that is 2,000 MP in total. Always compute <code>width × height × (pages ?? 1)</code> when animation is allowed.</p>
 </div>
 
 <div class="callout">
@@ -907,11 +907,11 @@ export function formatSavings(originalSize, optimizedSize) {
 <p>The <code>LARGER</code> branch is the interesting one. Re-encoding is not always a win: a tiny already-optimized JPEG, a screenshot that was already a well-compressed PNG, or an image whose source format suited it better can all come out bigger. Logging that explicitly means you find out, rather than silently shipping inflated files. If you see <code>LARGER</code> often, that is a signal to add a &quot;keep the original if the re-encode is not smaller&quot; branch.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — copying an AVIF quality number from a WebP config.</strong> The scales are unrelated. AVIF q=80 produces a file 65% <em>larger</em> than WebP q=80 at no visible benefit. The rough equivalence is AVIF q=50 ≈ WebP q=80; always re-tune when switching formats rather than carrying the number across.</p>
+<p><strong>Trap — copying an AVIF quality number from a WebP config.</strong> The scales are unrelated. AVIF q=80 produces a file 65% <em>larger</em> than WebP q=80 at no visible benefit. The rough equivalence is AVIF q=50 ≈ WebP q=80; always re-tune when switching formats rather than carrying the number across.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — trusting the direction of the <code>effort</code> scale from a comment.</strong> It has flipped between libvips versions, and the repo's own comment is stale on this point. Measure it: time <code>effort: 0</code> against <code>effort: 6</code> on your installed version. Whichever is slower is the &quot;compress harder&quot; end.</p>
+<p><strong>Trap — trusting the direction of the <code>effort</code> scale from a comment.</strong> It has flipped between libvips versions, and the repo's own comment is stale on this point. Measure it: time <code>effort: 0</code> against <code>effort: 6</code> on your installed version. Whichever is slower is the &quot;compress harder&quot; end.</p>
 </div>
 
 <div class="callout">

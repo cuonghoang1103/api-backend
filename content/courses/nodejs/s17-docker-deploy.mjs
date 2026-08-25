@@ -113,7 +113,7 @@ CMD ["node", "dist/index.js"]</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the naive image copied <code>node_modules</code> from the host with <code>COPY . .</code>. On a Mac that means arm64 binaries going into a linux/amd64 image. Pure JS survives; anything native crashes with an architecture error that reads like a compiler bug. The fix is one line in <code>.dockerignore</code> — measured in the next lesson — and it also happens to make the build twice as fast.</p>
+<p><strong>A real trap:</strong> the naive image copied <code>node_modules</code> from the host with <code>COPY . .</code>. On a Mac that means arm64 binaries going into a linux/amd64 image. Pure JS survives; anything native crashes with an architecture error that reads like a compiler bug. The fix is one line in <code>.dockerignore</code> — measured in the next lesson — and it also happens to make the build twice as fast.</p>
 </div>
 
 <div class="note-ct">
@@ -286,7 +286,7 @@ multi-stage                rebuild  1,13s      (3 giai đoạn, vẫn bỏ qua n
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> <code>COPY package*.json ./</code> matches <code>package.json</code> and <code>package-lock.json</code> — and silently matches nothing at all if you are in the wrong directory, because <code>COPY</code> with a glob that matches zero files does not error. The build then fails several lines later at <code>npm ci</code> with a confusing "no such file" and everyone blames npm.</p>
+<p><strong>A real trap:</strong> <code>COPY package*.json ./</code> matches <code>package.json</code> and <code>package-lock.json</code> — and silently matches nothing at all if you are in the wrong directory, because <code>COPY</code> with a glob that matches zero files does not error. The build then fails several lines later at <code>npm ci</code> with a confusing "no such file" and everyone blames npm.</p>
 </div>
 
 <h3><code>.dockerignore</code>: the file everyone forgets</h3>
@@ -538,7 +538,7 @@ exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất �
 <p><code>exec</code> replaces the shell process with node instead of forking a child, so node <em>becomes</em> PID 1 and receives signals directly. Without it, the shell stays at PID 1 and you are back to the middle row of the table.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> a Node process at PID 1 is also responsible for reaping zombie children — a job normally done by init. If your app spawns child processes (ffmpeg, imagemagick, yt-dlp), their finished processes accumulate as zombies and eventually exhaust the process table. That is what <code>--init</code> exists for. If you never spawn anything, PID 1 as node is fine.</p>
+<p><strong>A real trap:</strong> a Node process at PID 1 is also responsible for reaping zombie children — a job normally done by init. If your app spawns child processes (ffmpeg, imagemagick, yt-dlp), their finished processes accumulate as zombies and eventually exhaust the process table. That is what <code>--init</code> exists for. If you never spawn anything, PID 1 as node is fine.</p>
 </div>
 
 <h3>Health checks that the orchestrator can act on</h3>
@@ -734,7 +734,7 @@ CMD ["node", "src/index.js"]</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the single most common deploy failure caused by configuration is a new environment variable added to the local <code>.env</code>, added to <code>.env.example</code>, and then never added to the server. Local CI passes, the build passes, the container starts, and the feature fails at the first request with a message about an undefined value. The habit that prevents it: <strong>validate every required variable at boot and refuse to start without it</strong> — a container that fails immediately and loudly is far better than one that runs and is quietly broken.</p>
+<p><strong>A real trap:</strong> the single most common deploy failure caused by configuration is a new environment variable added to the local <code>.env</code>, added to <code>.env.example</code>, and then never added to the server. Local CI passes, the build passes, the container starts, and the feature fails at the first request with a message about an undefined value. The habit that prevents it: <strong>validate every required variable at boot and refuse to start without it</strong> — a container that fails immediately and loudly is far better than one that runs and is quietly broken.</p>
 </div>
 
 <pre><code>// config/env.ts — thà chết lúc khởi động còn hơn hỏng lúc chạy
@@ -945,7 +945,7 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> WebSocket connections do not roll. An HTTP request lasts milliseconds and finishes during the grace period; a Socket.IO connection lasts hours and is simply cut. Chapter 11 measured what the client sees: reconnect after 1.053ms with a <em>new</em> socket id, rooms not rejoined, and the five messages emitted while it was away received as zero — gone. Every deploy is a disconnect storm for realtime users, and the fix is on the client (rejoin rooms and refetch missed state on reconnect), not the deploy.</p>
+<p><strong>A real trap:</strong> WebSocket connections do not roll. An HTTP request lasts milliseconds and finishes during the grace period; a Socket.IO connection lasts hours and is simply cut. Chapter 11 measured what the client sees: reconnect after 1.053ms with a <em>new</em> socket id, rooms not rejoined, and the five messages emitted while it was away received as zero — gone. Every deploy is a disconnect storm for realtime users, and the fix is on the client (rejoin rooms and refetch missed state on reconnect), not the deploy.</p>
 </div>
 
 <div class="note-ct">
@@ -1157,7 +1157,7 @@ git revert &lt;sha_xau&gt;
 <p>Step 5 is the one experienced people follow and everyone else learns the hard way. The instinct under pressure is to find the cause first — and every minute spent on that is a minute of outage. Roll back, confirm the site is healthy, <em>then</em> reproduce it somewhere that is not production.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> a deploy script that continues after a failed step turns one broken thing into several. Start every script with <code>set -euo pipefail</code> so an error stops it, and make each stage's success an explicit condition for the next. The version of this that bites hardest: a migration step that fails, followed by a container swap that succeeds — now new code is running against an old schema and the logs are full of errors about columns that do not exist.</p>
+<p><strong>A real trap:</strong> a deploy script that continues after a failed step turns one broken thing into several. Start every script with <code>set -euo pipefail</code> so an error stops it, and make each stage's success an explicit condition for the next. The version of this that bites hardest: a migration step that fails, followed by a container swap that succeeds — now new code is running against an old schema and the logs are full of errors about columns that do not exist.</p>
 </div>
 
 <div class="note-ct">

@@ -84,7 +84,7 @@ src/utils         5 file      336 dòng
 <p>Cross-cutting concerns belong in middleware precisely because they are the ones you would otherwise have to remember 62 times. The rule of thumb: <strong>if forgetting it in one place is a security bug, it should not be something you can forget.</strong></p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> middleware order is architecture, not configuration. The request-id middleware in this project sits at position 1b — before helmet, before CORS, before the rate limiter — so that even a request rejected with 429 carries an id. Move it three lines down and every rate-limited request becomes untraceable. There is no test that catches this and no error message; it just quietly stops working on the day you need it.</p>
+<p><strong>A real trap:</strong> middleware order is architecture, not configuration. The request-id middleware in this project sits at position 1b — before helmet, before CORS, before the rate limiter — so that even a request rejected with 429 carries an id. Move it three lines down and every rate-limited request becomes untraceable. There is no test that catches this and no error message; it just quietly stops working on the day you need it.</p>
 </div>
 
 <div class="note-ct">
@@ -251,7 +251,7 @@ file to nhất:
 <p>Signal 1 is the useful one and it is old advice with a bad name — "single responsibility" sounds like a rule about size and is actually a rule about <em>reasons to change</em>. A 900-line file that only ever changes when the payment provider changes its API is a good file. A 200-line file that gets touched by three unrelated tickets a week is not.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> splitting a large file by moving functions into new files, with no change to who calls what, produces a codebase that is worse — the same tangle, now spread across eight files so you cannot see it. If the extracted piece still needs to reach back into the original, you have not found a boundary, you have found a page break. A real split leaves both halves independently understandable; if that is not true, leave it as one file until you know where the seam is.</p>
+<p><strong>A real trap:</strong> splitting a large file by moving functions into new files, with no change to who calls what, produces a codebase that is worse — the same tangle, now spread across eight files so you cannot see it. If the extracted piece still needs to reach back into the original, you have not found a boundary, you have found a page break. A real split leaves both halves independently understandable; if that is not true, leave it as one file until you know where the seam is.</p>
 </div>
 
 <div class="note-ct">
@@ -422,7 +422,7 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <p><strong>Push shared concepts down, not sideways.</strong> If two feature services both need "is this user Pro", that belongs in a layer <em>below</em> both, not in one of them that the other imports. The measured <code>pro.service</code> hub is the right idea; what makes a hub dangerous is when it also depends upward on the features that use it.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the cheapest possible coupling reduction is deleting code. A feature nobody uses still constrains every schema change, appears in every dependency scan, breaks every refactor and must be kept compiling. This project removed the old <code>/admin/messages</code> page on purpose when support threads merged into <code>/messages</code> — and the note "do not recreate it" is in its own instructions, because the strongest force in any codebase is somebody helpfully adding back the thing you deliberately removed.</p>
+<p><strong>A real trap:</strong> the cheapest possible coupling reduction is deleting code. A feature nobody uses still constrains every schema change, appears in every dependency scan, breaks every refactor and must be kept compiling. This project removed the old <code>/admin/messages</code> page on purpose when support threads merged into <code>/messages</code> — and the note "do not recreate it" is in its own instructions, because the strongest force in any codebase is somebody helpfully adding back the thing you deliberately removed.</p>
 </div>
 
 <div class="note-ct">
@@ -749,7 +749,7 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 <p>Every one of those was a reasonable local decision that became expensive at a distance. That is what debt is — not carelessness, but a cost deferred to a moment when it will be someone else's problem, frequently your own.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> the most dangerous debt is the kind that <em>works</em>. A schema that is subtly wrong keeps serving requests correctly for a year while every feature built on it inherits the flaw, and by the time it hurts there are 95 migrations and a million rows on top of it. Code that is merely ugly announces itself. Structure that is wrong stays silent until it is expensive.</p>
+<p><strong>A real trap:</strong> the most dangerous debt is the kind that <em>works</em>. A schema that is subtly wrong keeps serving requests correctly for a year while every feature built on it inherits the flaw, and by the time it hurts there are 95 migrations and a million rows on top of it. Code that is merely ugly announces itself. Structure that is wrong stays silent until it is expensive.</p>
 </div>
 
 <div class="note-ct">

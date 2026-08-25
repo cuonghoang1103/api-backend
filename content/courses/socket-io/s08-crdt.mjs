@@ -93,7 +93,7 @@ server.on('upgrade', (req, socket, head) =&gt; {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — build collaborative editing bằng socket.io events.</strong> You emit &quot;user typed X at position Y&quot;. Concurrent edits produce a merge conflict, and the document falls apart. Yjs solves this with a CRDT — every update commutes, so there are no conflicts. Do not reinvent CRDTs on top of socket.io.</p>
+<p><strong>Trap — building collaborative editing out of socket.io events.</strong> You emit &quot;user typed X at position Y&quot;. Concurrent edits produce a merge conflict, and the document falls apart. Yjs solves this with a CRDT — every update commutes, so there are no conflicts. Do not reinvent CRDTs on top of socket.io.</p>
 </div>
 
 <div class="callout">
@@ -265,7 +265,7 @@ awareness.on('change', () =&gt; {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — persist Yjs document vào SQL column dạng JSON.</strong> A Yjs document is binary. If you <code>JSON.stringify</code> it and then store the result, you corrupt the structure. Store it as <code>Y.encodeStateAsUpdate(doc)</code> → binary Uint8Array → column BYTEA/BLOB.</p>
+<p><strong>Trap — persisting a Yjs document into a SQL column as JSON.</strong> A Yjs document is binary. If you <code>JSON.stringify</code> it and then store the result, you corrupt the structure. Store it as <code>Y.encodeStateAsUpdate(doc)</code> → binary Uint8Array → column BYTEA/BLOB.</p>
 </div>
 
 <div class="callout">
@@ -430,7 +430,7 @@ Sau initial sync, client va server o "sync state":
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng Hocuspocus không có auth extension.</strong> Someone calls <code>new HocuspocusProvider({ url, name: 'doc-123' })</code> from an arbitrary browser and edits document 123. You need <code>onAuthenticate</code> to reject anyone without a token, and to resolve permissions per document.</p>
+<p><strong>Trap — running Hocuspocus without an auth extension.</strong> Someone calls <code>new HocuspocusProvider({ url, name: 'doc-123' })</code> from an arbitrary browser and edits document 123. You need <code>onAuthenticate</code> to reject anyone without a token, and to resolve permissions per document.</p>
 </div>
 
 <div class="callout">
@@ -598,7 +598,7 @@ new Redis({ host: config.redis.host, port: 6379, prefix: 'notes:' });
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — save đồng bộ trong <code>onChange</code> handler.</strong> The handler runs synchronously on the hot path. A 20ms Postgres write stalls sync for 20ms and users feel the lag. The fix: <code>scheduleDbPersist</code> onto a background queue and return immediately.</p>
+<p><strong>Trap — saving synchronously inside the <code>onChange</code> handler.</strong> The handler runs synchronously on the hot path. A 20ms Postgres write stalls sync for 20ms and users feel the lag. The fix: <code>scheduleDbPersist</code> onto a background queue and return immediately.</p>
 </div>
 
 <div class="callout">
@@ -766,7 +766,7 @@ await collaborationServer.closeConnections({ documentName: &#96;note-\${noteId}&
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — cache permission mà quên invalidate.</strong> The owner revokes at t=0. The cache TTL is 5s. The ex-user keeps editing from t=0 to t=5 (because of the cache). If invalidation is buggy, they keep editing forever. The fix: a revoke must explicitly <code>redis.del</code> + <code>closeConnections</code>.</p>
+<p><strong>Trap — caching permissions and forgetting to invalidate.</strong> The owner revokes at t=0. The cache TTL is 5s. The ex-user keeps editing from t=0 to t=5 (because of the cache). If invalidation is buggy, they keep editing forever. The fix: a revoke must explicitly <code>redis.del</code> + <code>closeConnections</code>.</p>
 </div>
 
 <div class="callout">

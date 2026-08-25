@@ -94,7 +94,7 @@ prisma:query SELECT ... FROM "public"."users" WHERE "public"."users"."id" IN ($1
 real    0m0.061s</div>
 <p>201 queries became 2, and 4.8 seconds became 61 milliseconds — a factor of seventy-nine. Look at the second statement: Prisma collected every distinct <code>authorId</code> and issued <strong>one</strong> <code>IN</code> query, then stitched the results together in memory. That is the classic dataloader batching pattern, built in.</p>
 <div class="pitfall">
-<p><strong>Bẫy — <code>include</code> does not always mean one query.</strong> Two levels of nesting means three statements, not one. A list of users with their posts <em>and</em> each post's comments produces a query per level. That is usually fine — three round trips is not two hundred — but it stops being fine when a level returns thousands of rows and you only needed a count. Prisma 5.7 added <code>relationLoadStrategy: "join"</code> to collapse them into a single SQL <code>LATERAL</code> join, and Chapter 9 measures when each strategy wins.</p>
+<p><strong>Trap — <code>include</code> does not always mean one query.</strong> Two levels of nesting means three statements, not one. A list of users with their posts <em>and</em> each post's comments produces a query per level. That is usually fine — three round trips is not two hundred — but it stops being fine when a level returns thousands of rows and you only needed a count. Prisma 5.7 added <code>relationLoadStrategy: "join"</code> to collapse them into a single SQL <code>LATERAL</code> join, and Chapter 9 measures when each strategy wins.</p>
 </div>
 
 <h3>Granularity: where do you put the address?</h3>
@@ -446,7 +446,7 @@ grep -c '^enum ' prisma/schema.prisma</code></pre>
 19</div>
 
 <div class="pitfall">
-<p><strong>Bẫy — importing types from <code>.prisma/client</code> directly.</strong> It works, and it is wrong. Always import from <code>@prisma/client</code>. The <code>.prisma</code> path is an implementation detail that has changed shape between major versions (and moves entirely when you set a custom <code>output</code> in the generator block). Code that reaches into it breaks on upgrade for no benefit.</p>
+<p><strong>Trap — importing types from <code>.prisma/client</code> directly.</strong> It works, and it is wrong. Always import from <code>@prisma/client</code>. The <code>.prisma</code> path is an implementation detail that has changed shape between major versions (and moves entirely when you set a custom <code>output</code> in the generator block). Code that reaches into it breaks on upgrade for no benefit.</p>
 </div>
 
 <h3>Generating somewhere you can see</h3>
@@ -749,7 +749,7 @@ Execution Time: 18.501 ms</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the stale generated client.</strong> The engine validates against the schema <em>embedded in the client at generate time</em>, not the live database. Change the schema, run <code>migrate deploy</code>, forget <code>generate</code>, and you get errors that name columns which plainly exist ("<code>The column &#96;users.phone&#96; does not exist</code>" when it does). The database is right; the client is out of date. In CI, always run <code>generate</code> after <code>migrate deploy</code> — and note the postinstall hook only saves you when the schema was already correct at install time.</p>
+<p><strong>Trap — the stale generated client.</strong> The engine validates against the schema <em>embedded in the client at generate time</em>, not the live database. Change the schema, run <code>migrate deploy</code>, forget <code>generate</code>, and you get errors that name columns which plainly exist ("<code>The column &#96;users.phone&#96; does not exist</code>" when it does). The database is right; the client is out of date. In CI, always run <code>generate</code> after <code>migrate deploy</code> — and note the postinstall hook only saves you when the schema was already correct at install time.</p>
 </div>
 
 <h3>Learning sources for this lesson</h3>
@@ -942,7 +942,7 @@ ls node_modules/.prisma/client/*.node</code></pre>
 <div class="out">node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node
 node_modules/.prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>"native"</code> alone in a multi-stage Dockerfile.</strong> You generate on a Debian builder, copy <code>node_modules</code> into an Alpine runtime, and the engine you shipped is glibc while the image is musl. The container starts, the first query throws <code>Unable to require(...libquery_engine-debian-openssl-3.0.x.so.node)</code>, and the process restarts forever. This is exactly the CuongThai 502 from Lesson 1.3. The fix is one line — list both targets — and Chapter 11 shows the pre-push check that makes forgetting it impossible.</p>
+<p><strong>Trap — <code>"native"</code> alone in a multi-stage Dockerfile.</strong> You generate on a Debian builder, copy <code>node_modules</code> into an Alpine runtime, and the engine you shipped is glibc while the image is musl. The container starts, the first query throws <code>Unable to require(...libquery_engine-debian-openssl-3.0.x.so.node)</code>, and the process restarts forever. This is exactly the CuongThai 502 from Lesson 1.3. The fix is one line — list both targets — and Chapter 11 shows the pre-push check that makes forgetting it impossible.</p>
 </div>
 
 <h3>Preview features worth knowing about</h3>
@@ -1217,7 +1217,7 @@ These models were enriched with &#96;@@map&#96; information taken from the previ
   - "Post"
   - "User"</div>
 <div class="pitfall">
-<p><strong>Bẫy — what introspection cannot see.</strong> It reads only what the database encodes. A relation with no foreign key constraint (common in legacy MySQL, and universal under <code>relationMode = "prisma"</code>) becomes two unrelated <code>Int</code> fields, and you must write the <code>@relation</code> yourself. Check constraints, triggers, row-level security policies, partial indexes and stored procedures do not appear at all — they keep working in the database, and Prisma simply does not know about them. Chapter 10 covers keeping such objects alive across migrations.</p>
+<p><strong>Trap — what introspection cannot see.</strong> It reads only what the database encodes. A relation with no foreign key constraint (common in legacy MySQL, and universal under <code>relationMode = "prisma"</code>) becomes two unrelated <code>Int</code> fields, and you must write the <code>@relation</code> yourself. Check constraints, triggers, row-level security policies, partial indexes and stored procedures do not appear at all — they keep working in the database, and Prisma simply does not know about them. Chapter 10 covers keeping such objects alive across migrations.</p>
 </div>
 
 <h3>Choosing, in one table</h3>

@@ -77,7 +77,7 @@ Internet → :443 nginx ─┬→ 127.0.0.1:3000  /api
                        ├→ 127.0.0.1:4000  /ai
                        └→ /var/www        /static  (nginx tự phục vụ)</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — "Nginx is faster" is the most misused sentence about it.</strong> Nginx does not make your application faster: a proxied request is always SLOWER than a direct one, because there is an extra hop. What it does is take away the work your application does badly — holding thousands of slow connections, reading files off disk, terminating TLS, absorbing junk requests — so your event loop or thread pool only does its OWN job. Measure one API endpoint before and after adding a proxy and you will see it get a few milliseconds slower, and that is a trade worth making, not a magic trick.</p>
+<p><strong>Trap — "Nginx is faster" is the most misused sentence about it.</strong> Nginx does not make your application faster: a proxied request is always SLOWER than a direct one, because there is an extra hop. What it does is take away the work your application does badly — holding thousands of slow connections, reading files off disk, terminating TLS, absorbing junk requests — so your event loop or thread pool only does its OWN job. Measure one API endpoint before and after adding a proxy and you will see it get a few milliseconds slower, and that is a trade worth making, not a magic trick.</p>
 </div>
 
 <h3>When you do not need it</h3>
@@ -242,7 +242,7 @@ $ nproc
   </div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — "Permission denied" from Nginx is almost always about the WORKER, not the master.</strong> The master runs as root, so it can bind port 80 and read anything; the workers run as <code>www-data</code> or <code>nobody</code> and they are the ones reading your files. So a directory readable only by its owner produces <code>13: Permission denied</code> in the error log even though <code>cat</code> as root works fine. And it is not only the file's own permissions: the worker needs EXECUTE permission on EVERY parent directory along the path — a frequent failure when <code>root</code> points somewhere under <code>/home/someone</code>.</p>
+<p><strong>Trap — "Permission denied" from Nginx is almost always about the WORKER, not the master.</strong> The master runs as root, so it can bind port 80 and read anything; the workers run as <code>www-data</code> or <code>nobody</code> and they are the ones reading your files. So a directory readable only by its owner produces <code>13: Permission denied</code> in the error log even though <code>cat</code> as root works fine. And it is not only the file's own permissions: the worker needs EXECUTE permission on EVERY parent directory along the path — a frequent failure when <code>root</code> points somewhere under <code>/home/someone</code>.</p>
 </div>
 
 <h3>Reload: the property that makes it operable</h3>
@@ -464,7 +464,7 @@ http {                                     <span class="tok-comment"># ← mọi
 # Dong 2: dat lai o location NEN cai o http BIEN MAT — khong phai hai header,
 #         ma la MOT. Do la luat quan trong nhat trong ca bai nay.</div>
 <div class="pitfall">
-<p><strong>Bẫy — array-type directives are inherited by REPLACEMENT, not by addition.</strong> This is how a security header disappears. You set four <code>add_header</code> directives at <code>http</code>, everything works, and six months later somebody adds ONE <code>add_header</code> to one <code>location</code> — and in that location, the other four vanish completely. No warning, no error, and <code>nginx -t</code> is perfectly happy. The same rule applies to <code>proxy_set_header</code>: declaring one at a lower level discards every one from above, which is exactly why Chapter 3 has you put the six proxy headers in one file and <code>include</code> it everywhere they are needed.</p>
+<p><strong>Trap — array-type directives are inherited by REPLACEMENT, not by addition.</strong> This is how a security header disappears. You set four <code>add_header</code> directives at <code>http</code>, everything works, and six months later somebody adds ONE <code>add_header</code> to one <code>location</code> — and in that location, the other four vanish completely. No warning, no error, and <code>nginx -t</code> is perfectly happy. The same rule applies to <code>proxy_set_header</code>: declaring one at a lower level discards every one from above, which is exactly why Chapter 3 has you put the six proxy headers in one file and <code>include</code> it everywhere they are needed.</p>
 </div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Inheritance goes DOWN, never sideways</span><span class="lz-lnote">A directive at <code>http</code> applies to every <code>server</code> and every <code>location</code> below it. A directive in one <code>server</code> does not apply to another <code>server</code>. That is why shared settings belong at the <code>http</code> level, or in a file you <code>include</code>.</span></div>

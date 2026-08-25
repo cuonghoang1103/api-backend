@@ -157,11 +157,11 @@ curl -v -X PUT \\
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — restarting the app when the fix is clock sync.</strong> Clock skew is the single most common cause of intermittent SigV4 signature failures, and no amount of restarting fixes it. Every container on the host has the same wrong time; every deploy from CI has the same wrong time. Check <code>date -u</code> against <code>curl -sI &lt;endpoint&gt; | grep -i date</code> before anything else on intermittent signature errors.</p>
+<p><strong>Trap — restarting the app when the fix is clock sync.</strong> Clock skew is the single most common cause of intermittent SigV4 signature failures, and no amount of restarting fixes it. Every container on the host has the same wrong time; every deploy from CI has the same wrong time. Check <code>date -u</code> against <code>curl -sI &lt;endpoint&gt; | grep -i date</code> before anything else on intermittent signature errors.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — treating the browser's console error as the response.</strong> Chrome's console often shows &quot;GET https://xxx failed with status 403&quot; while the actual XML body has &quot;Request has expired&quot;. The XML tells you the whole story; the console line is a summary. Always dig into the Network tab, click the failing request, view the Response body.</p>
+<p><strong>Trap — treating the browser's console error as the response.</strong> Chrome's console often shows &quot;GET https://xxx failed with status 403&quot; while the actual XML body has &quot;Request has expired&quot;. The XML tells you the whole story; the console line is a summary. Always dig into the Network tab, click the failing request, view the Response body.</p>
 </div>
 
 <div class="callout">
@@ -489,11 +489,11 @@ appearing 100+ times. If it is, either:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — blaming the storage service for lambda cold-start latency.</strong> A lambda that has been idle 5 minutes takes 200-800 ms to start, plus ~40 ms to reach R2 for its first GET. The user sees &quot;1 second before the response&quot; and files a bug against your storage. The fix is provisioned concurrency on the function, not anything about the bucket.</p>
+<p><strong>Trap — blaming the storage service for lambda cold-start latency.</strong> A lambda that has been idle 5 minutes takes 200-800 ms to start, plus ~40 ms to reach R2 for its first GET. The user sees &quot;1 second before the response&quot; and files a bug against your storage. The fix is provisioned concurrency on the function, not anything about the bucket.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — assuming the SDK reuses connections by default.</strong> The AWS JS SDK v3 does, but the v2 SDK did NOT unless you configured <code>httpOptions.agent</code> with <code>keepAlive: true</code>. Many legacy codebases still run v2. If you see &quot;first request slow, second fast&quot; and you're on v2, that is the fix.</p>
+<p><strong>Trap — assuming the SDK reuses connections by default.</strong> The AWS JS SDK v3 does, but the v2 SDK did NOT unless you configured <code>httpOptions.agent</code> with <code>keepAlive: true</code>. Many legacy codebases still run v2. If you see &quot;first request slow, second fast&quot; and you're on v2, that is the fix.</p>
 </div>
 
 <div class="callout">

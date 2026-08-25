@@ -65,7 +65,7 @@ Do that o heap bi bop 1600MB — khong doan:
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — CI proves the commit works, not that the code is correct.</strong> A green run means every command you listed exited 0 on a clean checkout. If your workflow runs a type-check and no tests, green means the types are consistent — and nothing else. This repository&#39;s own CI is explicit about the distinction: some steps are labelled <code>(required)</code> and one is <code>continue-on-error: true</code>, which means its failure is visible and does not stop the build. Knowing exactly what your green means is more useful than making it greener.</p>
+<p><strong>Trap — CI proves the commit works, not that the code is correct.</strong> A green run means every command you listed exited 0 on a clean checkout. If your workflow runs a type-check and no tests, green means the types are consistent — and nothing else. This repository&#39;s own CI is explicit about the distinction: some steps are labelled <code>(required)</code> and one is <code>continue-on-error: true</code>, which means its failure is visible and does not stop the build. Knowing exactly what your green means is more useful than making it greener.</p>
 </div>
 
 <h3>What this repository actually gates on</h3>
@@ -257,7 +257,7 @@ Cong bo, buoc 4:      "Tai ban cai cua ca ba nen tang ve" 12s</div>
 <p>And the build step itself: <strong>149 s on Linux, 171 s on Windows, 315 s on macOS</strong>. Nothing about the code differs. <code>runs-on:</code> is one line and it is one of the most consequential lines in the file.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>ubuntu-latest</code> is not a version, it is a moving target.</strong> It points at whatever Ubuntu GitHub currently considers current, and it moves — usually with a deprecation window, occasionally with surprises. A workflow that was green for a year can go red on a morning you did not touch it. This repository&#39;s <code>ci-lint.yml</code> pins <code>ubuntu-24.04</code> for exactly this reason, while <code>desktop-release.yml</code> uses <code>ubuntu-latest</code> — two files, two different risk appetites, both defensible. What is not defensible is not knowing which one you chose.</p>
+<p><strong>Trap — <code>ubuntu-latest</code> is not a version, it is a moving target.</strong> It points at whatever Ubuntu GitHub currently considers current, and it moves — usually with a deprecation window, occasionally with surprises. A workflow that was green for a year can go red on a morning you did not touch it. This repository&#39;s <code>ci-lint.yml</code> pins <code>ubuntu-24.04</code> for exactly this reason, while <code>desktop-release.yml</code> uses <code>ubuntu-latest</code> — two files, two different risk appetites, both defensible. What is not defensible is not knowing which one you chose.</p>
 </div>
 
 <h3>Steps: sequential, and they stop</h3>
@@ -452,7 +452,7 @@ Cong bo, buoc 4:      "Tai ban cai cua ca ba nen tang ve" 12s</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the default timeout is six hours.</strong> A step that waits on input, retries forever, or deadlocks will sit there burning runner time until <code>timeout-minutes</code> or the six-hour ceiling stops it. On a private repository that is billed minutes; on any repository it is a job that looks "in progress" for an afternoon while everyone assumes it is just slow. Ten minutes, as here, is a statement: <em>if this takes longer than ten minutes something is wrong, and I would rather know.</em></p>
+<p><strong>Trap — the default timeout is six hours.</strong> A step that waits on input, retries forever, or deadlocks will sit there burning runner time until <code>timeout-minutes</code> or the six-hour ceiling stops it. On a private repository that is billed minutes; on any repository it is a job that looks "in progress" for an afternoon while everyone assumes it is just slow. Ten minutes, as here, is a statement: <em>if this takes longer than ten minutes something is wrong, and I would rather know.</em></p>
 </div>
 
 <h3>The steps, and why they are in this order</h3>
@@ -488,7 +488,7 @@ Cong bo, buoc 4:      "Tai ban cai cua ca ba nen tang ve" 12s</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — <code>| tail -30</code> silently discards the exit code.</strong> In a pipeline, the shell reports the status of the <em>last</em> command, and <code>tail</code> almost always succeeds. So <code>npm run lint | tail -30</code> exits 0 whether lint passed or not, and the <code>|| echo</code> after it can never fire. Here that is harmless — the step is informational and <code>continue-on-error</code> already says so. In a step that is meant to gate, the same shape means the gate is not there. The Deploy VPS course measured this exact behaviour: without <code>set -o pipefail</code>, a failing command in a pipeline is invisible.</p>
+<p><strong>Trap — <code>| tail -30</code> silently discards the exit code.</strong> In a pipeline, the shell reports the status of the <em>last</em> command, and <code>tail</code> almost always succeeds. So <code>npm run lint | tail -30</code> exits 0 whether lint passed or not, and the <code>|| echo</code> after it can never fire. Here that is harmless — the step is informational and <code>continue-on-error</code> already says so. In a step that is meant to gate, the same shape means the gate is not there. The Deploy VPS course measured this exact behaviour: without <code>set -o pipefail</code>, a failing command in a pipeline is invisible.</p>
 </div>
 
 <h3>The step that is designed to skip</h3>
@@ -694,7 +694,7 @@ Hai job chay SONG SONG: backend-lint (node 22) + frontend-lint (node 20)</div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — the numbers in this course are from one repository, and yours will differ.</strong> A Node monorepo on GitHub-hosted runners is a specific shape. Your <code>npm ci</code> will not take 38 seconds; your macOS build will not take 315. What transfers is not the figures but the <em>relationships</em>: that Windows is consistently slower at filesystem-heavy work, that the critical path is one job and not the sum, that a cache hit and a cache miss differ by a factor you should know for your own project. Every chapter shows the command, so you can produce your own numbers.</p>
+<p><strong>Trap — the numbers in this course are from one repository, and yours will differ.</strong> A Node monorepo on GitHub-hosted runners is a specific shape. Your <code>npm ci</code> will not take 38 seconds; your macOS build will not take 315. What transfers is not the figures but the <em>relationships</em>: that Windows is consistently slower at filesystem-heavy work, that the critical path is one job and not the sum, that a cache hit and a cache miss differ by a factor you should know for your own project. Every chapter shows the command, so you can produce your own numbers.</p>
 </div>
 
 <div class="callout ok">

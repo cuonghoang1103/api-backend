@@ -50,6 +50,23 @@ async function createPost(formData) {
 <p><strong>It is not magic — it is a network call.</strong> Calling a Server Action still crosses to the server behind the scenes. So its argument must be serializable (Chapter 9's rule), it is asynchronous, and — critically — it is a real, reachable endpoint that you must secure. Lesson 12.5 is entirely about that.</p>
 </div>
 
+<h3>What happens when you call a Server Action</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>You mark a function &#96;&#39;use server&#39;&#96;</b> — Either at the top of the function or at the top of a file that exports only actions.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>React sends a reference, not the code</b> — The client bundle gets an id. The function body stays on the server, so it can query the database and read secrets.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Calling it makes a POST</b> — To the current route, handled by the framework. You never write a fetch, a URL, or a JSON body.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>It can revalidate before returning</b> — &#96;revalidatePath(&#39;/notes&#39;)&#96; in the same function invalidates both the server caches and the client router cache.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — treating a Server Action as private because it is not an API route.</strong> It is a public HTTP endpoint. The id is in the client bundle, so anyone can call the action directly with a crafted request — no button, no form, no UI validation. Nothing in the code looks like a route, which is exactly why this is missed: an action that deletes a note looks like a local function call, and reads like trusted code. Every action needs the same checks a route handler needs: is the caller authenticated, are they allowed to touch this record, and is the input valid. Lesson 12.5 is entirely about this.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations" target="_blank" rel="noopener">
+  <span class="lc-ico">⚡</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Server Actions and mutations</span><span class="lc-sub">The full model: declaration, invocation, revalidation and the security notes.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/rsc/use-server" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">react.dev — 'use server'</span><span class="lc-sub">The directive itself, and what React guarantees about the boundary.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations" target="_blank" rel="noopener">
   <span class="lc-ico">⚡</span>
@@ -87,6 +104,23 @@ async function createPost(formData) {
 <div class="callout warn">
 <p><strong>Nó không phải phép màu — nó là một cú gọi mạng.</strong> Gọi một Server Action vẫn vượt sang server ở hậu trường. Nên tham số của nó phải serialize được (luật Chương 9), nó bất đồng bộ, và — quan trọng nhất — nó là một endpoint thật, tới được, mà bạn phải bảo vệ. Bài 12.5 dành trọn cho điều đó.</p>
 </div>
+
+<h3>Chuyện gì xảy ra khi bạn gọi một Server Action</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Bạn đánh dấu một hàm &#96;&#39;use server&#39;&#96;</b> — Hoặc ở đầu hàm, hoặc ở đầu một file chỉ export các action.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>React gửi một tham chiếu, không gửi mã</b> — Gói phía client chỉ nhận một id. Thân hàm ở lại máy chủ, nên nó truy vấn được cơ sở dữ liệu và đọc được bí mật.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Gọi nó là tạo ra một POST</b> — Tới chính route hiện tại, do framework xử lý. Bạn chẳng phải viết một phép fetch, một URL, hay một thân JSON nào.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nó làm mới được trước khi trả về</b> — &#96;revalidatePath(&#39;/notes&#39;)&#96; ngay trong hàm đó vô hiệu hoá cả lớp đệm phía máy chủ lẫn router cache phía client.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — coi một Server Action là riêng tư chỉ vì nó không phải một route API.</strong> Nó LÀ một endpoint HTTP công khai. Cái id nằm trong gói phía client, nên ai cũng gọi thẳng action đó được bằng một request tự soạn — không cần nút, không cần form, không qua phép kiểm nào của giao diện. Chẳng có gì trong mã trông giống một route, và đó chính là lý do người ta bỏ sót: một action xoá ghi chú nhìn như một lời gọi hàm cục bộ, và đọc lên như mã đáng tin. Mọi action đều cần đúng những phép kiểm mà một route handler cần: người gọi đã xác thực chưa, họ có được phép đụng vào bản ghi này không, và đầu vào có hợp lệ không. Bài 12.5 nói trọn vẹn về chuyện này.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations" target="_blank" rel="noopener">
+  <span class="lc-ico">⚡</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Server Action và phép ghi</span><span class="lc-sub">Toàn bộ mô hình: khai báo, lời gọi, làm mới và các ghi chú an toàn.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/rsc/use-server" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">react.dev — 'use server'</span><span class="lc-sub">Bản thân chỉ thị đó, và React bảo đảm gì về cái ranh giới.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations" target="_blank" rel="noopener">
@@ -141,6 +175,23 @@ export default function NewPost() {
 <p><strong>Passing extra arguments:</strong> to give an action data that is not a form field — say the id of the item being edited — use <code>bind</code>: <code>action={updatePost.bind(null, post.id)}</code>. The bound value arrives as the first argument, with <code>formData</code> after it. This keeps ids out of hidden inputs where users could tamper with them.</p>
 </div>
 
+<h3>A form that works without JavaScript</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Pass the action to the form</b> — &#96;&lt;form action={createNote}&gt;&#96;. No &#96;onSubmit&#96;, no &#96;preventDefault&#96;, no fetch.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>The action receives FormData</b> — &#96;formData.get(&#39;title&#39;)&#96;. Every field with a &#96;name&#96; is included — the same rule as a plain HTML form.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>It works before hydration</b> — If the JavaScript has not loaded yet, the browser does a normal form POST and the action still runs. This is progressive enhancement, for free.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Everything is a string</b> — &#96;FormData&#96; values are text. A number, a boolean or a date needs converting and validating — chapter 16 does this with Zod.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an input with no &#96;name&#96;, silently missing from the submission.</strong> &#96;&lt;input value={title} onChange={…} /&gt;&#96; is a perfectly good controlled input and contributes nothing to &#96;FormData&#96;: only named fields are collected. So the action receives &#96;null&#96; for the title, and your validation reports &quot;title is required&quot; for a form that visibly contains one — which sends people looking at the validation code. The same applies to a checkbox, where an unchecked box is absent entirely rather than &#96;false&#96;. When a form action gets nothing, check the &#96;name&#96; attributes before anything else; it is the fastest thing to rule out.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/form" target="_blank" rel="noopener">
+  <span class="lc-ico">📮</span>
+  <span class="lc-body"><span class="lc-title">react.dev — form</span><span class="lc-sub">The action prop, FormData, and the pending states it enables.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/FormData" target="_blank" rel="noopener">
+  <span class="lc-ico">🧾</span>
+  <span class="lc-body"><span class="lc-title">MDN — FormData</span><span class="lc-sub">How fields are collected, including the checkbox and multi-select cases.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#forms" target="_blank" rel="noopener">
   <span class="lc-ico">📝</span>
@@ -179,6 +230,23 @@ export default function NewPost() {
 <div class="callout ok">
 <p><strong>Truyền tham số thêm:</strong> để đưa cho action dữ liệu không phải trường form — ví dụ id của mục đang sửa — dùng <code>bind</code>: <code>action={updatePost.bind(null, post.id)}</code>. Giá trị bind tới làm tham số đầu tiên, còn <code>formData</code> sau nó. Cách này giữ id ra khỏi các hidden input nơi người dùng có thể sửa lén.</p>
 </div>
+
+<h3>Một form chạy được cả khi không có JavaScript</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Truyền action vào thẻ form</b> — &#96;&lt;form action={createNote}&gt;&#96;. Không &#96;onSubmit&#96;, không &#96;preventDefault&#96;, không fetch.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Action nhận vào FormData</b> — &#96;formData.get(&#39;title&#39;)&#96;. Mọi trường có &#96;name&#96; đều được gom — cùng luật với một form HTML thuần.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Nó chạy được trước khi hydrate</b> — Nếu JavaScript chưa tải xong, trình duyệt gửi một POST form bình thường và action vẫn chạy. Đây là cải tiến tiệm tiến, miễn phí.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Mọi thứ đều là chuỗi</b> — Giá trị trong &#96;FormData&#96; là chữ. Một con số, một boolean hay một ngày đều cần chuyển đổi và kiểm — chương 16 làm việc này bằng Zod.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một ô nhập thiếu &#96;name&#96;, vắng mặt lặng lẽ khỏi phép gửi.</strong> &#96;&lt;input value={title} onChange={…} /&gt;&#96; là một ô nhập có kiểm soát hoàn toàn ổn và nó đóng góp con số không vào &#96;FormData&#96;: chỉ những trường có tên mới được gom. Nên action nhận &#96;null&#96; cho tiêu đề, và phần kiểm dữ liệu của bạn báo &quot;thiếu title&quot; cho một form rành rành có tiêu đề — khiến người ta đi soi đoạn mã kiểm dữ liệu. Chuyện tương tự với một ô tích, nơi một ô chưa tích thì VẮNG HẲN chứ không phải là &#96;false&#96;. Khi một form action chẳng nhận được gì, hãy kiểm các thuộc tính &#96;name&#96; trước tiên; đó là thứ loại trừ nhanh nhất.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/components/form" target="_blank" rel="noopener">
+  <span class="lc-ico">📮</span>
+  <span class="lc-body"><span class="lc-title">react.dev — form</span><span class="lc-sub">Prop action, FormData, và các trạng thái đang-gửi mà nó mở ra.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/FormData" target="_blank" rel="noopener">
+  <span class="lc-ico">🧾</span>
+  <span class="lc-body"><span class="lc-title">MDN — FormData</span><span class="lc-sub">Các trường được gom thế nào, gồm cả trường hợp ô tích và chọn nhiều.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#forms" target="_blank" rel="noopener">
@@ -228,6 +296,23 @@ async function createPost(formData) {
 <p><strong>Contrast with a classic SPA:</strong> there you would manually update local state after the write, or refetch and setState, and keep client and server in sync by hand. Here the source of truth is the server cache; you invalidate it and let the framework re-render. Fewer places for the two to drift apart.</p>
 </div>
 
+<h3>Making the screen match the database after a write</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Write, then revalidate, then return</b> — &#96;await db.note.create(...)&#96;, &#96;revalidatePath(&#39;/notes&#39;)&#96;, and the list re-renders with the new row.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>revalidatePath for a URL</b> — Clears the cached render of that path. Use the route pattern for dynamic segments: &#96;revalidatePath(&#39;/notes/[id]&#39;, &#39;page&#39;)&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>revalidateTag for a set of fetches</b> — Tag them at fetch time (&#96;next: { tags: [&#39;notes&#39;] }&#96;) and clear them all by name — better when the same data appears on several routes.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>redirect() after a create</b> — Called at the end of the action. It throws, so nothing after it runs.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a write that succeeds while the list keeps showing the old data.</strong> The row is in the database, the action returned without error, and the page still shows the previous state — because nothing invalidated the cache for that route. It reads as a database problem and it is a cache one, which is why people go looking in the wrong place. The rule is simple: any action that changes data must revalidate what displays it. When the same records appear on three routes, tag the fetches and revalidate the tag instead of listing every path — a path you forget is a screen that stays stale, and nothing will tell you.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/revalidateTag" target="_blank" rel="noopener">
+  <span class="lc-ico">🏷️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — revalidateTag</span><span class="lc-sub">Tagging fetches and clearing them by name, with the multi-route case.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/redirect" target="_blank" rel="noopener">
+  <span class="lc-ico">↪️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — redirect()</span><span class="lc-sub">Where it may be called, why it throws, and how it interacts with try/catch.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#revalidating-data" target="_blank" rel="noopener">
   <span class="lc-ico">♻️</span>
@@ -265,6 +350,23 @@ async function createPost(formData) {
 <div class="callout ok">
 <p><strong>Đối chiếu với SPA kinh điển:</strong> ở đó bạn sẽ cập nhật state cục bộ thủ công sau khi ghi, hoặc fetch lại rồi setState, và giữ client với server đồng bộ bằng tay. Ở đây nguồn sự thật là cache server; bạn vô hiệu hoá nó và để framework render lại. Ít chỗ để hai bên trôi lệch nhau.</p>
 </div>
+
+<h3>Làm cho màn hình khớp với cơ sở dữ liệu sau một lần ghi</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Ghi, rồi làm mới, rồi trả về</b> — &#96;await db.note.create(...)&#96;, &#96;revalidatePath(&#39;/notes&#39;)&#96;, và danh sách vẽ lại với dòng mới.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>revalidatePath cho một URL</b> — Xoá bản đã vẽ trong đệm của đường dẫn đó. Với đoạn động thì dùng mẫu route: &#96;revalidatePath(&#39;/notes/[id]&#39;, &#39;page&#39;)&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>revalidateTag cho một nhóm phép fetch</b> — Gắn thẻ lúc fetch (&#96;next: { tags: [&#39;notes&#39;] }&#96;) rồi xoá tất cả theo tên — tốt hơn khi cùng một dữ liệu xuất hiện trên nhiều route.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>redirect() sau khi tạo</b> — Gọi ở cuối action. Nó ném lỗi, nên không gì sau nó chạy.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một phép ghi thành công mà danh sách vẫn cứ hiện dữ liệu cũ.</strong> Dòng dữ liệu đã nằm trong cơ sở dữ liệu, action trả về không lỗi, mà trang vẫn hiện trạng thái trước đó — vì chẳng có gì vô hiệu hoá bộ nhớ đệm của route ấy. Nó đọc lên như một vấn đề cơ sở dữ liệu trong khi là vấn đề nhớ đệm, và đó là lý do người ta đi tìm sai chỗ. Luật thì đơn giản: mọi action làm đổi dữ liệu đều phải làm mới thứ hiển thị dữ liệu đó. Khi cùng những bản ghi ấy xuất hiện trên ba route, hãy gắn thẻ cho các phép fetch rồi làm mới theo thẻ thay vì liệt kê từng đường dẫn — một đường dẫn bạn quên là một màn hình ở lại cũ, và chẳng gì báo cho bạn.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/revalidateTag" target="_blank" rel="noopener">
+  <span class="lc-ico">🏷️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — revalidateTag</span><span class="lc-sub">Gắn thẻ cho phép fetch rồi xoá theo tên, kèm trường hợp nhiều route.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/redirect" target="_blank" rel="noopener">
+  <span class="lc-ico">↪️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — redirect()</span><span class="lc-sub">Được phép gọi ở đâu, vì sao nó ném lỗi, và nó tương tác với try/catch ra sao.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#revalidating-data" target="_blank" rel="noopener">
@@ -322,6 +424,24 @@ function SubmitButton() {
 <p><strong>Optimistic UI:</strong> for instant feedback (a like count bumping before the server confirms), React's <code>useOptimistic</code> pairs naturally with actions — show the expected result immediately, reconcile when the action resolves. Reach for it once the basics above feel comfortable.</p>
 </div>
 
+<h3>Showing progress and errors from an action</h3>
+<div class="lz-map">
+  <div class="lz-stage">Two hooks, two different questions</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">useActionState</div><div class="lz-nsub">Wraps the action and gives you back its return value plus a pending flag. This is where validation errors come back to the form.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">useFormStatus</div><div class="lz-nsub">Read from a child of the form — usually the submit button. It knows whether the enclosing form is submitting.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">It must be a child</div><div class="lz-nsub">&#96;useFormStatus&#96; reads context from the form above it. Called in the same component that renders &#96;&lt;form&gt;&#96;, it always returns false.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Return errors, do not throw them</div><div class="lz-nsub">An action that throws produces an error boundary. Returning &#96;{ error: &#39;Title is required&#39; }&#96; lets the form display it in place.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — &#96;useFormStatus&#96; called in the component that renders the form, always reporting &#96;pending: false&#96;.</strong> The hook reads a context provided by the &#96;&lt;form&gt;&#96; element, so it only sees a submission from <em>inside</em> that form. In the parent — the component that writes &#96;&lt;form action={…}&gt;&#96; — there is no such context, so &#96;pending&#96; never becomes true, the button never disables, and a double-click sends the action twice. The fix is structural, not logical: extract the submit button into its own small Client Component and call the hook there. The docs say this explicitly, and it is the single most common report about the hook.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/hooks/useFormStatus" target="_blank" rel="noopener">
+  <span class="lc-ico">⏱️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — useFormStatus</span><span class="lc-sub">The parent-child rule, spelled out, with the recommended button component.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react/useActionState" target="_blank" rel="noopener">
+  <span class="lc-ico">📋</span>
+  <span class="lc-body"><span class="lc-title">react.dev — useActionState</span><span class="lc-sub">State, pending and the action signature it expects.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://react.dev/reference/react/useActionState" target="_blank" rel="noopener">
   <span class="lc-ico">⏳</span>
@@ -371,6 +491,24 @@ function SubmitButton() {
 <div class="callout ok">
 <p><strong>UI lạc quan (optimistic):</strong> để phản hồi tức thì (số like nhảy trước khi server xác nhận), <code>useOptimistic</code> của React ghép tự nhiên với action — hiện kết quả kỳ vọng ngay, đối chiếu lại khi action xong. Hãy dùng khi những điều cơ bản ở trên đã thấy quen.</p>
 </div>
+
+<h3>Hiện tiến trình và lỗi từ một action</h3>
+<div class="lz-map">
+  <div class="lz-stage">Hai hook, hai câu hỏi khác nhau</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">useActionState</div><div class="lz-nsub">Bọc lấy action rồi trả về giá trị nó trả về cộng một cờ đang-chạy. Đây là chỗ lỗi kiểm dữ liệu quay về với form.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">useFormStatus</div><div class="lz-nsub">Đọc từ một đứa con của form — thường là cái nút gửi. Nó biết cái form bao quanh có đang gửi hay không.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Nó phải là một đứa CON</div><div class="lz-nsub">&#96;useFormStatus&#96; đọc context từ cái form ở trên nó. Gọi trong chính component vẽ ra &#96;&lt;form&gt;&#96; thì nó luôn trả về false.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Hãy TRẢ VỀ lỗi, đừng ném lỗi</div><div class="lz-nsub">Một action ném lỗi sẽ kích hoạt ranh giới lỗi. Trả về &#96;{ error: &#39;Thiếu tiêu đề&#39; }&#96; cho phép form hiện nó ra ngay tại chỗ.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — gọi &#96;useFormStatus&#96; ngay trong component vẽ ra form, và nó luôn báo &#96;pending: false&#96;.</strong> Hook này đọc một context do chính phần tử &#96;&lt;form&gt;&#96; cung cấp, nên nó chỉ thấy được một lần gửi từ <em>bên trong</em> cái form đó. Ở phần tử cha — component viết ra &#96;&lt;form action={…}&gt;&#96; — chẳng có context nào như thế, nên &#96;pending&#96; không bao giờ thành true, cái nút không bao giờ bị khoá, và một cú bấm đúp gửi action hai lần. Cách chữa là về cấu trúc chứ không phải về logic: hãy rút cái nút gửi ra thành một Client Component nhỏ riêng rồi gọi hook ở đó. Tài liệu nói thẳng điều này, và nó là báo cáo phổ biến nhất về cái hook này.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react-dom/hooks/useFormStatus" target="_blank" rel="noopener">
+  <span class="lc-ico">⏱️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — useFormStatus</span><span class="lc-sub">Luật cha-con, nói rõ ra, kèm component nút gửi được khuyến nghị.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/reference/react/useActionState" target="_blank" rel="noopener">
+  <span class="lc-ico">📋</span>
+  <span class="lc-body"><span class="lc-title">react.dev — useActionState</span><span class="lc-sub">State, cờ đang-chạy và chữ ký action mà nó mong đợi.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://react.dev/reference/react/useActionState" target="_blank" rel="noopener">
@@ -427,6 +565,23 @@ function SubmitButton() {
 <p><strong>Also:</strong> only export functions that are meant to be actions from a <code>'use server'</code> file — every export there becomes a callable endpoint. Do not put helper functions you did not mean to expose in the same module.</p>
 </div>
 
+<h3>The four checks every Server Action needs</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Who is calling?</b> — Read the session on the server, inside the action. Never trust a user id passed in as an argument — the caller chooses those.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>May they touch this record?</b> — Scope the query to the caller: &#96;where: { id, userId: session.user.id }&#96;. Look it up scoped rather than looking it up and then checking.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Is the input valid?</b> — Parse the &#96;FormData&#96; with a schema. Everything arriving is attacker-controlled text, including hidden fields and select values.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Should it be rate-limited?</b> — An action is a public endpoint. Anything that sends mail, costs money, or can be enumerated needs a limit.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — an action that takes the user id as a parameter.</strong> &#96;async function deleteNote(noteId, userId)&#96; looks harmless because the only caller is your own form, which passes the logged-in user&#39;s id. But the action is a public endpoint and the caller controls every argument: a crafted request can pass any pair of ids it likes, and the action will happily delete someone else&#39;s note while looking perfectly correct in code review. Read the identity from the session inside the action, never from an argument. The same applies to a price, a role, or a status passed from the client — if the server needs to trust it, the server has to derive it.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#security" target="_blank" rel="noopener">
+  <span class="lc-ico">🛡️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Server Action security</span><span class="lc-sub">Authentication, authorisation, and the closure-capture caveat.</span></span>
+</a>
+<a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">OWASP — Authorization Cheat Sheet</span><span class="lc-sub">The general rule this lesson is a special case of: check on every request, at the resource.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#authentication-and-authorization" target="_blank" rel="noopener">
   <span class="lc-ico">🔒</span>
@@ -467,6 +622,23 @@ function SubmitButton() {
 <div class="callout warn">
 <p><strong>Còn nữa:</strong> chỉ export những hàm định làm action từ một file <code>'use server'</code> — mọi export ở đó thành một endpoint gọi được. Đừng để những hàm phụ bạn không định phơi bày trong cùng module.</p>
 </div>
+
+<h3>Bốn phép kiểm mà mọi Server Action đều cần</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Ai đang gọi?</b> — Hãy đọc phiên đăng nhập ở phía máy chủ, ngay trong action. Đừng bao giờ tin một id người dùng truyền vào làm đối số — người gọi tự chọn những thứ đó.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Họ có được đụng vào bản ghi này không?</b> — Hãy giới hạn truy vấn theo người gọi: &#96;where: { id, userId: session.user.id }&#96;. Tra trong phạm vi, chứ đừng tra ra rồi mới đi kiểm.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Đầu vào có hợp lệ không?</b> — Hãy phân tích &#96;FormData&#96; bằng một schema. Mọi thứ đi tới đều là chữ do kẻ tấn công điều khiển, kể cả trường ẩn và giá trị của select.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Có cần giới hạn tần suất không?</b> — Một action là một endpoint công khai. Bất cứ thứ gì gửi thư, tốn tiền, hay có thể bị dò tuần tự đều cần một giới hạn.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một action nhận id người dùng làm tham số.</strong> &#96;async function deleteNote(noteId, userId)&#96; nhìn vô hại vì chỗ gọi duy nhất là form của chính bạn, vốn truyền id của người đang đăng nhập. Nhưng action là một endpoint công khai và người gọi điều khiển mọi đối số: một request tự soạn truyền được bất kỳ cặp id nào nó thích, và action sẽ vui vẻ xoá ghi chú của người khác trong khi trông hoàn toàn đúng đắn lúc review mã. Hãy đọc danh tính từ phiên đăng nhập ngay trong action, đừng bao giờ đọc từ một đối số. Chuyện tương tự với một mức giá, một vai trò, hay một trạng thái truyền từ client — nếu máy chủ cần tin nó thì máy chủ phải tự suy ra nó.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#security" target="_blank" rel="noopener">
+  <span class="lc-ico">🛡️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — An toàn cho Server Action</span><span class="lc-sub">Xác thực, phân quyền, và lưu ý về việc closure bắt giá trị.</span></span>
+</a>
+<a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔒</span>
+  <span class="lc-body"><span class="lc-title">OWASP — Authorization Cheat Sheet</span><span class="lc-sub">Luật tổng quát mà bài này là một ca riêng: kiểm ở mọi request, ngay tại tài nguyên.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#authentication-and-authorization" target="_blank" rel="noopener">

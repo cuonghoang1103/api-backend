@@ -57,6 +57,24 @@ export default async function Shop({ params }) {
 <p><strong>More specific wins.</strong> If you have both <code>app/shop/[id]/page.tsx</code> and <code>app/shop/[[...slug]]/page.tsx</code>, a single-segment URL like <code>/shop/42</code> matches the more specific <code>[id]</code>, not the catch-all. Keep an eye on overlap when mixing dynamic forms in one folder.</p>
 </div>
 
+<h3>The four dynamic segment shapes</h3>
+<div class="lz-map">
+  <div class="lz-stage">Brackets, and what each one matches</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">[id]</div><div class="lz-nsub">Exactly one segment. &#96;/notes/12&#96; matches, &#96;/notes&#96; and &#96;/notes/12/edit&#96; do not.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">[...slug]</div><div class="lz-nsub">One or more segments, as an array. &#96;/docs/a/b/c&#96; gives &#96;[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;]&#96;; the bare &#96;/docs&#96; still does not match.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">[[...slug]]</div><div class="lz-nsub">Zero or more. Now &#96;/docs&#96; matches too, with &#96;slug&#96; undefined — one route for the index and every depth below it.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Every value is a string</div><div class="lz-nsub">&#96;params.id&#96; is &#96;&#39;12&#39;&#96;, never &#96;12&#96;. Convert deliberately, and check the conversion before using it in a query.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — passing a route param straight into a database query as a number.</strong> &#96;where: { id: Number(params.id) }&#96; on &#96;/notes/abc&#96; passes &#96;NaN&#96;, which most drivers turn into an error deep in the query layer — a stack trace about an invalid parameter rather than &quot;this URL is nonsense&quot;. The visitor gets a 500 for what should be a 404, and your error tracker fills with them, because a crawler will try every shape of URL eventually. Validate the param first: check the parse, and call &#96;notFound()&#96; when it fails. That is a two-line guard that turns a class of 500s into the correct response.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes" target="_blank" rel="noopener">
+  <span class="lc-ico">🔤</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Dynamic routes</span><span class="lc-sub">Every bracket form, with the params shape each produces.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/not-found" target="_blank" rel="noopener">
+  <span class="lc-ico">🚫</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — notFound()</span><span class="lc-sub">Rendering the 404 view from inside a component, and where it may be called.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes" target="_blank" rel="noopener">
   <span class="lc-ico">🧭</span>
@@ -98,6 +116,24 @@ export default async function Shop({ params }) {
 <div class="callout warn">
 <p><strong>Cụ thể hơn thì thắng.</strong> Nếu bạn có cả <code>app/shop/[id]/page.tsx</code> lẫn <code>app/shop/[[...slug]]/page.tsx</code>, một URL một đoạn như <code>/shop/42</code> khớp cái cụ thể hơn <code>[id]</code>, không phải catch-all. Để ý sự chồng lấn khi trộn nhiều dạng động trong một thư mục.</p>
 </div>
+
+<h3>Bốn dạng đoạn động</h3>
+<div class="lz-map">
+  <div class="lz-stage">Dấu ngoặc vuông, và mỗi dạng khớp cái gì</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">[id]</div><div class="lz-nsub">Đúng một đoạn. &#96;/notes/12&#96; khớp, còn &#96;/notes&#96; và &#96;/notes/12/edit&#96; thì không.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">[...slug]</div><div class="lz-nsub">Một đoạn trở lên, dưới dạng mảng. &#96;/docs/a/b/c&#96; cho ra &#96;[&#39;a&#39;,&#39;b&#39;,&#39;c&#39;]&#96;; còn &#96;/docs&#96; trần thì vẫn không khớp.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">[[...slug]]</div><div class="lz-nsub">Không đoạn nào cũng được. Giờ &#96;/docs&#96; cũng khớp, với &#96;slug&#96; là undefined — một route cho cả trang chỉ mục lẫn mọi độ sâu bên dưới.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Mọi giá trị đều là chuỗi</div><div class="lz-nsub">&#96;params.id&#96; là &#96;&#39;12&#39;&#96;, không bao giờ là &#96;12&#96;. Hãy chuyển đổi có chủ đích, và kiểm kết quả chuyển đổi trước khi dùng nó trong một truy vấn.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — truyền thẳng một tham số route vào truy vấn cơ sở dữ liệu dưới dạng số.</strong> &#96;where: { id: Number(params.id) }&#96; với &#96;/notes/abc&#96; sẽ truyền vào &#96;NaN&#96;, thứ mà phần lớn driver biến thành một lỗi sâu trong tầng truy vấn — một vệt stack về tham số không hợp lệ chứ không phải câu &quot;cái URL này vô nghĩa&quot;. Khách nhận một cú 500 cho thứ lẽ ra phải là 404, và hệ theo dõi lỗi của bạn đầy những cái đó, vì sớm muộn cũng có bot thử đủ mọi hình dạng URL. Hãy kiểm tham số trước: kiểm kết quả chuyển đổi, và gọi &#96;notFound()&#96; khi nó hỏng. Đó là một chốt chặn hai dòng biến cả một họ lỗi 500 thành phản hồi đúng.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes" target="_blank" rel="noopener">
+  <span class="lc-ico">🔤</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Route động</span><span class="lc-sub">Mọi dạng ngoặc vuông, kèm dáng params mà từng cái sinh ra.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/not-found" target="_blank" rel="noopener">
+  <span class="lc-ico">🚫</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — notFound()</span><span class="lc-sub">Vẽ khung 404 từ bên trong một component, và chỗ nào được phép gọi nó.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes" target="_blank" rel="noopener">
@@ -144,6 +180,23 @@ export default async function CoursePage({ params }) {
 <p><strong>How to think about it:</strong> <code>generateStaticParams</code> is "build these pages ahead of time." Combined with <code>revalidate</code> (Chapter 10) you get pages that are static and fast, yet refresh on a schedule — the sweet spot for content that is mostly stable but occasionally edited, like courses or docs.</p>
 </div>
 
+<h3>Pre-rendering a dynamic route at build time</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Return the list of params to build</b> — &#96;generateStaticParams&#96; runs at build and returns &#96;[{ slug: &#39;a&#39; }, { slug: &#39;b&#39; }]&#96;. Next renders one HTML file per entry.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Those pages are then static</b> — Served from a file or a CDN. No database call per visit, and the build output marks them with &#96;●&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Unlisted params still work by default</b> — They render on demand the first time and are cached afterwards. Set &#96;dynamicParams = false&#96; to 404 them instead.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>The list is fixed until the next build</b> — New content added after deploy is not in it, which is what on-demand revalidation is for.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — generating every param for a table that keeps growing.</strong> Returning ten thousand slugs makes the build render ten thousand pages: the build time goes from forty seconds to twenty minutes, CI times out, and the deploy that used to be routine becomes a thing people avoid doing. Worse, the cost grows silently with the data, so it is fine until the day it is not. Generate the pages that matter — the most visited, the most recent hundred — and let the long tail render on demand and cache. The build output tells you what you signed up for: check the page count after adding this function.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/generate-static-params" target="_blank" rel="noopener">
+  <span class="lc-ico">🏗️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — generateStaticParams</span><span class="lc-sub">The signature, nested routes, and how dynamicParams interacts with it.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/partial-prerendering" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Partial prerendering</span><span class="lc-sub">Where this is heading: a static shell with dynamic holes, in one route.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/generate-static-params" target="_blank" rel="noopener">
   <span class="lc-ico">🏗️</span>
@@ -178,6 +231,23 @@ export default async function CoursePage({ params }) {
 <div class="callout ok">
 <p><strong>Cách nghĩ:</strong> <code>generateStaticParams</code> là "dựng sẵn các trang này trước". Ghép với <code>revalidate</code> (Chương 10) bạn có trang vừa tĩnh vừa nhanh, mà vẫn làm mới theo lịch — điểm ngọt cho nội dung phần lớn ổn định nhưng thỉnh thoảng sửa, như khoá học hay tài liệu.</p>
 </div>
+
+<h3>Dựng sẵn một route động lúc build</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Trả về danh sách params cần dựng</b> — &#96;generateStaticParams&#96; chạy lúc build và trả về &#96;[{ slug: &#39;a&#39; }, { slug: &#39;b&#39; }]&#96;. Next vẽ ra một file HTML cho mỗi mục.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Những trang đó từ đó là tĩnh</b> — Phục vụ từ một file hoặc một CDN. Không gọi cơ sở dữ liệu ở mỗi lượt ghé, và đầu ra của build đánh dấu chúng bằng &#96;●&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Params không có trong danh sách vẫn chạy được, mặc định</b> — Chúng được vẽ theo yêu cầu ở lần đầu rồi được nhớ đệm. Đặt &#96;dynamicParams = false&#96; nếu bạn muốn chúng thành 404.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Danh sách đó cố định cho tới lần build sau</b> — Nội dung thêm vào sau khi deploy không nằm trong đó, và đó là việc của phép làm mới theo yêu cầu.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — sinh mọi params cho một bảng cứ lớn dần.</strong> Trả về mười nghìn slug là bắt bản build vẽ mười nghìn trang: thời gian build đi từ bốn mươi giây lên hai mươi phút, CI hết giờ, và cái lần deploy vốn là chuyện thường ngày trở thành thứ người ta né tránh. Tệ hơn, chi phí ấy lớn lên lặng lẽ theo dữ liệu, nên nó vẫn ổn cho tới cái ngày nó không còn ổn. Hãy sinh những trang đáng sinh — trang được ghé nhiều nhất, một trăm trang mới nhất — và để cái đuôi dài vẽ theo yêu cầu rồi nhớ đệm. Đầu ra của build cho bạn biết bạn đã ký vào cái gì: hãy kiểm số trang sau khi thêm hàm này.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/generate-static-params" target="_blank" rel="noopener">
+  <span class="lc-ico">🏗️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — generateStaticParams</span><span class="lc-sub">Chữ ký, route lồng nhau, và dynamicParams tương tác với nó ra sao.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/rendering/partial-prerendering" target="_blank" rel="noopener">
+  <span class="lc-ico">🧪</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Partial prerendering</span><span class="lc-sub">Hướng đi sắp tới: một cái vỏ tĩnh với các lỗ động, trong cùng một route.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/functions/generate-static-params" target="_blank" rel="noopener">
@@ -229,6 +299,23 @@ export async function POST(request) {
 <p><strong>cuongthai.com's split:</strong> the heavy API is a separate Express/TypeScript backend, and the Next.js frontend uses route handlers mainly as thin proxies to it (for example, forwarding auth calls so a secret or cookie is handled server-side). A real bug from the project: a frontend proxy route once called a backend path that did not exist, so every request through it failed even though the cookie was present. Lesson: a proxy handler is only as correct as the URL it forwards to — verify the downstream route exists, don't assume.</p>
 </div>
 
+<h3>When you still need an API route</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Not for your own pages</b> — A Server Component can query the database directly. Calling your own route from it is a network hop to your own process.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Yes for external callers</b> — A webhook from Stripe, a mobile app, a third-party integration — anything that is not your own React tree.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Yes for non-HTML responses</b> — An image, a PDF, a CSV export, an RSS feed. Return a &#96;Response&#96; with the right &#96;Content-Type&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Export by method name</b> — &#96;export async function GET(req)&#96;, &#96;POST&#96;, &#96;DELETE&#96;. A method with no export returns 405 automatically.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a route handler that is cached when you meant it to be live.</strong> A &#96;GET&#96; handler with no dynamic input can be statically evaluated at build time, so it runs once and every visitor gets the same body forever — a &quot;random quote&quot; endpoint that returns the same quote for a week, or a health check that reports the state of the build machine. It is the correct default and completely invisible: the response is a 200 with plausible content. Reading &#96;request&#96;, &#96;cookies()&#96; or &#96;headers()&#96; opts it into dynamic automatically; otherwise say so explicitly with &#96;export const dynamic = &#39;force-dynamic&#39;&#96;.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/route-handlers" target="_blank" rel="noopener">
+  <span class="lc-ico">🛣️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Route handlers</span><span class="lc-sub">Methods, Request/Response, streaming, and the caching rules.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/Response" target="_blank" rel="noopener">
+  <span class="lc-ico">📨</span>
+  <span class="lc-body"><span class="lc-title">MDN — Response</span><span class="lc-sub">The web-standard object route handlers return, with every constructor option.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/route-handlers" target="_blank" rel="noopener">
   <span class="lc-ico">🔌</span>
@@ -268,6 +355,23 @@ export async function POST(request) {
 <div class="note-ct">
 <p><strong>Cách chia của cuongthai.com:</strong> API nặng là một backend Express/TypeScript riêng, và frontend Next.js dùng route handler chủ yếu như proxy mỏng tới nó (ví dụ chuyển tiếp lời gọi auth để một bí mật hay cookie được xử lý ở phía server). Một bug thật của dự án: một route proxy frontend từng gọi một đường backend không tồn tại, nên mọi request qua nó đều hỏng dù cookie vẫn có. Bài học: một handler proxy chỉ đúng bằng chính URL nó chuyển tới — hãy kiểm route hạ nguồn có tồn tại, đừng đoán.</p>
 </div>
+
+<h3>Khi nào bạn vẫn cần một route API</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Không dùng cho chính các trang của bạn</b> — Một Server Component truy vấn cơ sở dữ liệu trực tiếp được. Gọi route của chính mình từ đó là một chặng mạng đi vòng về chính tiến trình của mình.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Có, cho các bên gọi từ ngoài</b> — Một webhook từ Stripe, một ứng dụng di động, một tích hợp bên thứ ba — bất cứ thứ gì không phải cây React của chính bạn.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Có, cho các phản hồi không phải HTML</b> — Một tấm ảnh, một file PDF, một bản xuất CSV, một nguồn RSS. Hãy trả về một &#96;Response&#96; với đúng &#96;Content-Type&#96;.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Export theo tên phương thức</b> — &#96;export async function GET(req)&#96;, &#96;POST&#96;, &#96;DELETE&#96;. Một phương thức không được export sẽ tự động trả 405.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một route handler bị nhớ đệm trong khi bạn định cho nó chạy trực tiếp.</strong> Một handler &#96;GET&#96; không có đầu vào động có thể được tính sẵn lúc build, nên nó chạy đúng một lần và mọi khách đều nhận cùng một thân phản hồi mãi mãi — một endpoint &quot;câu nói ngẫu nhiên&quot; trả về đúng một câu suốt một tuần, hay một phép kiểm sức khoẻ báo cáo tình trạng của máy build. Đó là mặc định đúng và hoàn toàn vô hình: phản hồi là 200 với nội dung nghe rất hợp lý. Đọc &#96;request&#96;, &#96;cookies()&#96; hay &#96;headers()&#96; sẽ tự động đưa nó sang động; không thì hãy nói rõ ra bằng &#96;export const dynamic = &#39;force-dynamic&#39;&#96;.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/route-handlers" target="_blank" rel="noopener">
+  <span class="lc-ico">🛣️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Route handler</span><span class="lc-sub">Các phương thức, Request/Response, streaming, và luật nhớ đệm.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/API/Response" target="_blank" rel="noopener">
+  <span class="lc-ico">📨</span>
+  <span class="lc-body"><span class="lc-title">MDN — Response</span><span class="lc-sub">Object chuẩn web mà route handler trả về, kèm mọi tuỳ chọn của hàm dựng.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/route-handlers" target="_blank" rel="noopener">
@@ -317,6 +421,23 @@ export default function Layout({ children, team, analytics }) {
 <p><strong>Where cuongthai.com would use this:</strong> a dashboard-style screen showing several independent widgets — analytics, system stats, recent activity — is a textbook parallel-routes layout. Each panel loads and errors on its own, so a slow stats query streams in late without freezing the rest of the page.</p>
 </div>
 
+<h3>Rendering two independent panes in one URL</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>A slot is a folder named @name</b> — &#96;@feed&#96; and &#96;@sidebar&#96; beside &#96;page.tsx&#96;. They do not add anything to the URL.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>The layout receives them as props</b> — &#96;export default function Layout({ children, feed, sidebar })&#96;. Each is a rendered subtree you place wherever you like.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Each slot loads and errors on its own</b> — A slow feed does not block the sidebar, and a failed sidebar does not take down the page. Separate Suspense and error boundaries, for free.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>default.tsx handles the unmatched case</b> — When a navigation matches one slot and not the other, the missing slot renders its &#96;default&#96; instead of disappearing.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a parallel route that 404s the whole page after a hard refresh.</strong> Soft navigation keeps the previous state of a slot that has no match for the new URL, so everything looks fine while you click around. Reload the page and Next has no state to fall back on: a slot with no matching segment and no &#96;default.tsx&#96; makes the whole route 404. The bug therefore only appears on a direct link or a refresh — never during development, where you navigated in. Add a &#96;default.tsx&#96; to every slot, even if it just returns &#96;null&#96;, the moment you add a parallel route.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/parallel-routes" target="_blank" rel="noopener">
+  <span class="lc-ico">🪟</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Parallel routes</span><span class="lc-sub">Slots, default.tsx, and the soft-vs-hard navigation difference this trap is about.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/file-conventions/default" target="_blank" rel="noopener">
+  <span class="lc-ico">🧷</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — default.js</span><span class="lc-sub">Exactly when it renders, and why omitting it produces a 404.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/parallel-routes" target="_blank" rel="noopener">
   <span class="lc-ico">🪟</span>
@@ -354,6 +475,23 @@ export default function Layout({ children, team, analytics }) {
 <div class="note-ct">
 <p><strong>Chỗ cuongthai.com sẽ dùng cái này:</strong> một màn kiểu dashboard hiện nhiều widget độc lập — analytics, thống kê hệ thống, hoạt động gần đây — là một layout parallel-routes bài bản. Mỗi panel tự tải và tự báo lỗi, nên một truy vấn thống kê chậm stream vào muộn mà không đóng băng phần còn lại.</p>
 </div>
+
+<h3>Vẽ hai khung độc lập trong cùng một URL</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Một khe (slot) là một thư mục tên @name</b> — &#96;@feed&#96; và &#96;@sidebar&#96; nằm cạnh &#96;page.tsx&#96;. Chúng không thêm gì vào URL.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Layout nhận chúng dưới dạng props</b> — &#96;export default function Layout({ children, feed, sidebar })&#96;. Mỗi cái là một cây con đã vẽ, bạn đặt vào đâu tuỳ ý.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Mỗi khe tự tải và tự hỏng riêng</b> — Một feed chậm không chặn thanh bên, và một thanh bên hỏng không kéo sập cả trang. Ranh giới Suspense và ranh giới lỗi riêng biệt, miễn phí.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>default.tsx lo trường hợp không khớp</b> — Khi một lần chuyển trang khớp khe này mà không khớp khe kia, khe thiếu sẽ vẽ &#96;default&#96; của nó thay vì biến mất.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một parallel route làm cả trang 404 sau khi tải lại cứng.</strong> Chuyển trang mềm giữ lại trạng thái trước đó của một khe không khớp URL mới, nên mọi thứ trông vẫn ổn khi bạn bấm loanh quanh. Tải lại trang là Next chẳng còn trạng thái nào để lùi về: một khe không có đoạn nào khớp và cũng không có &#96;default.tsx&#96; sẽ làm cả route trả 404. Cái lỗi vì thế chỉ hiện ra khi vào bằng liên kết trực tiếp hoặc khi tải lại — chẳng bao giờ hiện lúc phát triển, vì lúc đó bạn đi vào bằng điều hướng. Hãy thêm một &#96;default.tsx&#96; cho mọi khe, dù nó chỉ trả về &#96;null&#96;, ngay khi bạn thêm một parallel route.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/parallel-routes" target="_blank" rel="noopener">
+  <span class="lc-ico">🪟</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Parallel route</span><span class="lc-sub">Khe, default.tsx, và khác biệt chuyển-trang-mềm với cứng mà bẫy này nói tới.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/file-conventions/default" target="_blank" rel="noopener">
+  <span class="lc-ico">🧷</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — default.js</span><span class="lc-sub">Chính xác khi nào nó được vẽ, và vì sao bỏ nó đi lại sinh ra 404.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/parallel-routes" target="_blank" rel="noopener">
@@ -399,6 +537,24 @@ export default function Layout({ children, team, analytics }) {
 <p><strong>Always ship the real page too.</strong> The intercepted modal is only for soft navigation. If you forget the standalone <code>photo/[id]/page.tsx</code>, a shared link or a refresh has nothing to render. The pattern is two routes working together: the full page for hard loads, the interceptor for in-app clicks.</p>
 </div>
 
+<h3>Intercepting a route to show it as a modal</h3>
+<div class="lz-map">
+  <div class="lz-stage">Same URL, two presentations</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">The convention is (.) (..) (...)</div><div class="lz-nsub">Like relative paths, but for route segments: &#96;(.)photo&#96; intercepts a sibling, &#96;(..)photo&#96; one level up.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">A soft navigation renders the interception</div><div class="lz-nsub">Clicking a thumbnail shows the photo in a modal over the current page, and the URL updates to the photo&#39;s own.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">A hard load renders the real route</div><div class="lz-nsub">Sharing that URL, or reloading it, gives the full photo page. One address, two correct presentations.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">It pairs with a parallel route</div><div class="lz-nsub">The modal lives in a &#96;@modal&#96; slot so it can be rendered over the page rather than instead of it.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a modal built by intercepting, with no way to close it back to the list.</strong> The modal is a route now, so closing it is a navigation, not a state change: calling a local &#96;setOpen(false)&#96; hides the element while the URL still points at the photo, so the back button and a refresh both bring it straight back. The close button has to call &#96;router.back()&#96; — and the slot needs a &#96;default.tsx&#96; returning &#96;null&#96; so the modal disappears when the user navigates to a route that does not match it. Both are easy to miss because the modal looks right the first time you open it.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/intercepting-routes" target="_blank" rel="noopener">
+  <span class="lc-ico">🪞</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Intercepting routes</span><span class="lc-sub">The convention, with the photo-modal example this lesson follows.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/parallel-routes#modals" target="_blank" rel="noopener">
+  <span class="lc-ico">🖼️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Modals with parallel routes</span><span class="lc-sub">The full pattern: slot, interception, default.tsx and the close handler.</span></span>
+</a>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/intercepting-routes" target="_blank" rel="noopener">
   <span class="lc-ico">🎭</span>
@@ -432,6 +588,24 @@ export default function Layout({ children, team, analytics }) {
 <div class="callout warn">
 <p><strong>Luôn ship cả trang thật.</strong> Modal bị chặn chỉ cho điều hướng mềm. Nếu bạn quên trang độc lập <code>photo/[id]/page.tsx</code>, một link chia sẻ hay một lần refresh chẳng có gì để render. Mẫu này là hai route làm việc cùng nhau: trang đầy đủ cho tải cứng, cái chặn cho các cú bấm trong app.</p>
 </div>
+
+<h3>Chặn một route để hiện nó thành modal</h3>
+<div class="lz-map">
+  <div class="lz-stage">Cùng một URL, hai cách trình bày</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Quy ước là (.) (..) (...)</div><div class="lz-nsub">Giống đường dẫn tương đối, nhưng dành cho đoạn route: &#96;(.)photo&#96; chặn một đoạn anh em, &#96;(..)photo&#96; chặn ở cấp trên một bậc.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Chuyển trang mềm sẽ vẽ bản chặn</div><div class="lz-nsub">Bấm vào một ảnh thu nhỏ là ảnh hiện trong một modal đè lên trang hiện tại, và URL cập nhật thành URL của chính tấm ảnh.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Tải cứng thì vẽ route thật</div><div class="lz-nsub">Chia sẻ URL đó, hoặc tải lại nó, sẽ cho ra trang ảnh đầy đủ. Một địa chỉ, hai cách trình bày đều đúng.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Nó đi cặp với một parallel route</div><div class="lz-nsub">Cái modal sống trong một khe &#96;@modal&#96; để nó vẽ được ĐÈ LÊN trang chứ không phải THAY CHO trang.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một modal dựng bằng phép chặn, mà chẳng có cách nào đóng lại về danh sách.</strong> Giờ cái modal là một route, nên đóng nó là một lần chuyển trang chứ không phải một thay đổi state: gọi một &#96;setOpen(false)&#96; cục bộ chỉ giấu phần tử đi trong khi URL vẫn trỏ vào tấm ảnh, nên nút quay lại và một lần tải lại đều lôi nó về ngay. Nút đóng phải gọi &#96;router.back()&#96; — và cái khe cần một &#96;default.tsx&#96; trả về &#96;null&#96; để modal biến mất khi người dùng chuyển sang một route không khớp nó. Cả hai đều dễ bỏ sót vì cái modal trông rất ổn ở lần mở đầu tiên.</p></div>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/intercepting-routes" target="_blank" rel="noopener">
+  <span class="lc-ico">🪞</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Chặn route</span><span class="lc-sub">Quy ước, kèm ví dụ modal-ảnh mà bài này đi theo.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/parallel-routes#modals" target="_blank" rel="noopener">
+  <span class="lc-ico">🖼️</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org — Modal bằng parallel route</span><span class="lc-sub">Toàn bộ mẫu: khe, phép chặn, default.tsx và handler đóng.</span></span>
+</a>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/routing/intercepting-routes" target="_blank" rel="noopener">

@@ -62,6 +62,14 @@ export default {
 </div>
 <p>You will meet these three codes constantly. Learning to read <code>TSxxxx</code> at a glance — problem on the message line, location on the file line — is a skill this course drills into you by always showing the real output.</p>
 <div class="note-ct">On this site, exactly this class of bug is why a <code>tsc --noEmit</code> check is a required gate in CI before every deploy. The code runs through <code>tsx</code> (which doesn't check types), so without that gate, a <code>TS2551</code> typo would sail straight to production — which is precisely how one enum rename broke it. Chapter 9 tells that story in full.</div>
+<h3>The three bugs types actually prevent</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Reading a property that is not there</span><span class="lz-d"><code>user.emial</code> — a typo that JavaScript answers with <code>undefined</code> and TypeScript answers with a red line under the word. The single most common bug in any codebase, and the cheapest to eliminate.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Calling something with the wrong shape</span><span class="lz-d">Passing a string where a number is expected, or forgetting the third argument. JavaScript proceeds cheerfully and produces <code>NaN</code> three functions later, far from the cause.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Forgetting a case</span><span class="lz-d">A new status value added to a union, and every <code>switch</code> that handles statuses lights up until it is dealt with. This is the one that pays off years later.</span></div>
+<div class="lz-step"><span class="lz-k">→</span><span class="lz-t">What it does not prevent</span><span class="lz-d">Wrong business logic, a race condition, an off-by-one, bad data from an API. Types narrow the space of possible mistakes; they do not empty it.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — believing that a compiling program is a correct one.</strong> TypeScript proves consistency between the annotations you wrote, and nothing more. <code>function add(a: number, b: number) { return a - b }</code> compiles perfectly and is wrong. The value is real but bounded, and the boundary matters when deciding how much testing to keep: types replace the tests that assert "this argument is a string", and replace none of the tests that assert "this function computes the right answer". Teams that drop their test suite after adopting TypeScript are trading a check for a different check and calling it progress.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: TypeScript track on Code Lab</span><span class="lc-sub">Do the first module's exercises after this chapter.</span></span>
@@ -113,6 +121,14 @@ export default {
 </div>
 <p>Bạn sẽ gặp ba mã này liên tục. Học đọc lướt <code>TSxxxx</code> — vấn đề ở dòng thông báo, vị trí ở dòng file — là kỹ năng khoá này rèn cho bạn bằng cách luôn cho xem output thật.</p>
 <div class="note-ct">Trên site này, đúng loại bug đó là lý do có một bước kiểm <code>tsc --noEmit</code> bắt buộc trong CI trước mỗi lần deploy. Code chạy qua <code>tsx</code> (vốn không kiểm kiểu), nên nếu thiếu cửa gác đó, một lỗi gõ sai <code>TS2551</code> sẽ lướt thẳng lên production — chính là cách một lần đổi tên enum làm vỡ nó. Chương 9 kể trọn câu chuyện.</div>
+<h3>Ba con bug mà kiểu THẬT SỰ ngăn được</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đọc một thuộc tính không tồn tại</span><span class="lz-d"><code>user.emial</code> — một lỗi gõ mà JavaScript trả lời bằng <code>undefined</code> còn TypeScript trả lời bằng một gạch đỏ dưới chữ ấy. Con bug phổ biến nhất trong mọi kho mã, và rẻ nhất để dẹp.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Gọi một thứ với hình dạng sai</span><span class="lz-d">Truyền chuỗi vào chỗ cần số, hoặc quên tham số thứ ba. JavaScript vui vẻ đi tiếp rồi sinh ra <code>NaN</code> ở ba hàm sau đó, xa tít nguyên nhân.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Quên một trường hợp</span><span class="lz-d">Một giá trị trạng thái mới thêm vào một union, và MỌI câu <code>switch</code> xử lý trạng thái đều sáng đèn cho tới khi được xử lý. Đây là cái sinh lời sau nhiều NĂM.</span></div>
+<div class="lz-step"><span class="lz-k">→</span><span class="lz-t">Cái nó KHÔNG ngăn được</span><span class="lz-d">Lô-gíc nghiệp vụ sai, một cuộc đua, một lỗi lệch một đơn vị, dữ liệu xấu từ một API. Kiểu THU HẸP không gian sai lầm khả dĩ; nó không làm rỗng không gian ấy.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tin rằng một chương trình biên dịch được là một chương trình ĐÚNG.</strong> TypeScript chứng minh sự NHẤT QUÁN giữa các chú thích bạn đã viết, không hơn. <code>function add(a: number, b: number) { return a - b }</code> biên dịch hoàn hảo và SAI. Giá trị của nó là thật nhưng CÓ BIÊN, và cái biên ấy quan trọng khi quyết định giữ lại bao nhiêu kiểm thử: kiểu thay thế những bài test khẳng định "tham số này là chuỗi", và không thay thế được bài test nào khẳng định "hàm này tính ra kết quả đúng". Đội nào bỏ bộ test sau khi chuyển sang TypeScript là đang đổi một phép kiểm lấy một phép kiểm KHÁC rồi gọi đó là tiến bộ.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: track TypeScript trên Code Lab</span><span class="lc-sub">Làm bài tập module đầu tiên sau chương này.</span></span>
@@ -162,6 +178,14 @@ export default {
 </div>
 <p>Hold this and you will never be surprised by TypeScript again. When something feels wrong, ask: <em>am I expecting a compile-time tool to do a runtime job?</em> Usually, yes — and that's the bug.</p>
 <div class="note-ct">This is not academic. This site's backend validates every incoming request body with a schema at runtime <em>and</em> types it at compile time — two separate layers, because the type alone would let a malformed request through and crash a route three functions deep.</div>
+<h3>What the compiler proves, in one line each</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">It proves</span><span class="lz-lnote">That every value flows into a place expecting that shape — given that your annotations describe reality.</span></div>
+<div class="lz-layer"><span class="lz-lname">It assumes</span><span class="lz-lnote">Every <code>as</code>, every <code>any</code>, and every type on external data. Each one is a promise you made that it accepts without checking.</span></div>
+<div class="lz-layer"><span class="lz-lname">It cannot see</span><span class="lz-lnote">Anything at runtime: network responses, file contents, <code>process.env</code>, a database row. To the compiler these are whatever you claimed.</span></div>
+<div class="lz-layer"><span class="lz-lname">So the rule is</span><span class="lz-lnote">Types are only as good as the truthfulness of the boundary. Guard the boundary and the interior is genuinely proven; lie at the boundary and every proof inside it is void.</span></div>
+</div>
+<a class="link-card" href="https://www.typescriptlang.org/docs/handbook/2/basic-types.html" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">TypeScript Handbook — The Basics</span><span class="lc-sub">The official explanation of what static checking does and does not guarantee.</span></span></a>
 </div>
 
 <div class="ml-vi">
@@ -197,6 +221,14 @@ export default {
 </div>
 <p>Nắm được điều này thì bạn sẽ không bao giờ bị TypeScript làm cho bất ngờ nữa. Khi có gì đó thấy sai sai, hãy hỏi: <em>mình có đang mong một công cụ lúc-biên-dịch làm một việc lúc-chạy không?</em> Thường là có — và đó chính là con bug.</p>
 <div class="note-ct">Điều này không hàn lâm chút nào. Backend site này validate mọi thân request đi vào bằng một schema lúc chạy <em>và</em> gõ kiểu cho nó lúc biên dịch — hai tầng tách biệt, vì chỉ mỗi cái kiểu thôi sẽ để một request dị dạng lọt qua và làm sập một route sâu ba hàm.</div>
+<h3>Trình biên dịch chứng minh cái gì, mỗi ý một dòng</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">Nó CHỨNG MINH</span><span class="lz-lnote">Rằng mọi giá trị đều chảy vào một chỗ đang chờ đúng hình dạng ấy — VỚI ĐIỀU KIỆN các chú thích của bạn mô tả đúng sự thật.</span></div>
+<div class="lz-layer"><span class="lz-lname">Nó GIẢ ĐỊNH</span><span class="lz-lnote">Mọi <code>as</code>, mọi <code>any</code>, và mọi cái kiểu gắn cho dữ liệu bên ngoài. Mỗi cái là một lời hứa của bạn mà nó chấp nhận không kiểm.</span></div>
+<div class="lz-layer"><span class="lz-lname">Nó KHÔNG thấy được</span><span class="lz-lnote">Bất cứ thứ gì lúc chạy: phản hồi mạng, nội dung tệp, <code>process.env</code>, một dòng dữ liệu. Với trình biên dịch, chúng là bất cứ thứ gì bạn KHAI.</span></div>
+<div class="lz-layer"><span class="lz-lname">Nên luật là</span><span class="lz-lnote">Kiểu chỉ tốt bằng mức TRUNG THỰC ở ranh giới. Canh ranh giới thì phần bên trong được chứng minh thật; nói dối ở ranh giới thì mọi chứng minh bên trong đều vô hiệu.</span></div>
+</div>
+<a class="link-card" href="https://www.typescriptlang.org/docs/handbook/2/basic-types.html" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">TypeScript Handbook — The Basics</span><span class="lc-sub">Giải thích chính thức về việc kiểm tĩnh bảo đảm và không bảo đảm những gì.</span></span></a>
 </div>
 `,
     },
@@ -248,6 +280,14 @@ declare const mixed: (string | number | boolean)[];</div>
 <div class="callout ok"><strong>Annotate function parameters and return types; let inference handle the rest.</strong> Parameters are the boundaries where a value enters — the one place the compiler genuinely can't guess. Local variables, return values you can often leave to inference.</div>
 <div class="pitfall">Always turn on <code>strict</code> in <code>tsconfig.json</code> (chapter 9). Without it, TypeScript falls back to <code>any</code> in exactly the situations where you most need it not to — silently, giving you a false sense of safety. Every example in this course runs with <code>--strict</code>. A non-strict TypeScript project is a JavaScript project wearing a costume.</div>
 <div class="note-ct">This site runs full strict mode. When you clone it and hover any variable, the editor shows a precise type the author never had to write — inferred from Prisma's generated types all the way out to the route handler. That is inference doing the heavy lifting across 80,000 lines.</div>
+<h3>When to annotate and when to let it infer</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Let it infer local variables</span><span class="lz-d"><code>const n = 5</code> needs no annotation, and adding one only creates a second place to update. Inference is not a weaker form of typing — it is the same type, written once.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Annotate function parameters, always</span><span class="lz-d">There is nothing to infer from: a parameter's type is a decision, not a deduction. This is where most of your annotations belong.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Annotate return types on exported functions</span><span class="lz-d">It pins the contract so an internal change cannot silently widen what callers receive, and it makes the error appear in the function rather than at every call site.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Watch widening</span><span class="lz-d"><code>let s = 'sql'</code> infers <code>string</code>, while <code>const s = 'sql'</code> infers the literal <code>'sql'</code>. That difference decides whether the value fits a literal union, and it is why <code>as const</code> exists (2.4).</span></div>
+</div>
+<a class="link-card" href="https://www.typescriptlang.org/docs/handbook/type-inference.html" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">TypeScript Handbook — Type Inference</span><span class="lc-sub">How the compiler derives types, and where widening happens.</span></span></a>
 </div>
 
 <div class="ml-vi">
@@ -289,6 +329,14 @@ declare const mixed: (string | number | boolean)[];</div>
 <div class="callout ok"><strong>Chú thích tham số hàm và kiểu trả về; để suy luận lo phần còn lại.</strong> Tham số là những ranh giới nơi một giá trị đi vào — đúng một chỗ mà trình biên dịch thật sự không đoán được. Biến cục bộ, giá trị trả về thì thường có thể để cho suy luận.</div>
 <div class="pitfall">Luôn bật <code>strict</code> trong <code>tsconfig.json</code> (chương 9). Không bật, TypeScript quay về <code>any</code> đúng những tình huống mà bạn cần nó đừng làm vậy nhất — một cách âm thầm, cho bạn một cảm giác an toàn giả. Mọi ví dụ trong khoá này chạy với <code>--strict</code>. Một dự án TypeScript không strict là một dự án JavaScript đang mặc đồ hoá trang.</div>
 <div class="note-ct">Site này chạy chế độ strict đầy đủ. Khi bạn clone nó về và rê chuột lên bất kỳ biến nào, editor hiện một kiểu chính xác mà tác giả chẳng phải viết ra — suy ra từ các kiểu Prisma sinh ra kéo dài tận tới handler của route. Đó là suy luận gánh phần nặng xuyên suốt 80.000 dòng.</div>
+<h3>Khi nào chú thích và khi nào để nó tự suy</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Để nó tự suy cho biến cục bộ</span><span class="lz-d"><code>const n = 5</code> không cần chú thích, và thêm vào chỉ tạo ra một chỗ thứ hai phải cập nhật. Suy luận KHÔNG phải một dạng gõ kiểu yếu hơn — nó là CÙNG cái kiểu, viết một lần.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">LUÔN chú thích tham số hàm</span><span class="lz-d">Không có gì để suy ra cả: kiểu của một tham số là một QUYẾT ĐỊNH, không phải một phép suy diễn. Đây là chỗ phần lớn chú thích của bạn thuộc về.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Chú thích kiểu trả về cho hàm được export</span><span class="lz-d">Nó ghim HỢP ĐỒNG lại để một thay đổi bên trong không âm thầm nới rộng thứ bên gọi nhận được, và nó làm lỗi hiện ra TRONG hàm thay vì ở mọi chỗ gọi.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Coi chừng NỚI RỘNG</span><span class="lz-d"><code>let s = 'sql'</code> suy ra <code>string</code>, còn <code>const s = 'sql'</code> suy ra literal <code>'sql'</code>. Khác biệt ấy quyết định giá trị có vừa một literal union hay không, và đó là lý do <code>as const</code> tồn tại (2.4).</span></div>
+</div>
+<a class="link-card" href="https://www.typescriptlang.org/docs/handbook/type-inference.html" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">TypeScript Handbook — Type Inference</span><span class="lc-sub">Trình biên dịch suy ra kiểu thế nào, và chỗ nào xảy ra nới rộng.</span></span></a>
 </div>
 `,
     },
@@ -345,6 +393,7 @@ x.foo.bar.<span class="tok-function">baz</span>();       <span class="tok-commen
   <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Strict</div><div class="lz-d">Turn on strict, fix the new reds, never go back.</div></div>
 </div>
 <div class="note-ct">A live-fire lesson from this site (chapter 9 tells it in full): an enum value was renamed, the whole build passed, and production still broke — because one file, the database seed script, held a <em>hand-written copy</em> of the type instead of importing the real one, so it happily checked itself against its own stale definition. The fix was a second compiler pass over that file. The moral fits here: types only protect you where they connect. A hand-typed duplicate — or an <code>any</code> — is a gap in the net.</div>
+<a class="link-card" href="https://www.typescriptlang.org/docs/handbook/2/functions.html#unknown" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">TypeScript Handbook — unknown</span><span class="lc-sub">Why unknown is the safe top type and any is an escape hatch.</span></span></a>
 </div>
 
 <div class="ml-vi">
@@ -391,6 +440,7 @@ x.foo.bar.<span class="tok-function">baz</span>();       <span class="tok-commen
   <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Strict</div><div class="lz-d">Bật strict, sửa chỗ đỏ mới, không quay lại.</div></div>
 </div>
 <div class="note-ct">Một bài học đạn thật từ site này (chương 9 kể trọn): một giá trị enum bị đổi tên, cả bản build qua sạch, mà production vẫn vỡ — vì một file, script seed cơ sở dữ liệu, giữ một <em>bản chép tay</em> của kiểu thay vì import bản thật, nên nó vui vẻ tự kiểm với chính định nghĩa cũ mèm của mình. Cách sửa là một lượt biên dịch thứ hai lên file đó. Bài học khớp ở đây: kiểu chỉ bảo vệ bạn ở nơi chúng nối liền. Một bản sao gõ tay — hoặc một <code>any</code> — là một lỗ thủng trong tấm lưới.</div>
+<a class="link-card" href="https://www.typescriptlang.org/docs/handbook/2/functions.html#unknown" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">TypeScript Handbook — unknown</span><span class="lc-sub">Vì sao unknown là kiểu đỉnh an toàn còn any là lối thoát hiểm.</span></span></a>
 </div>
 `,
     },

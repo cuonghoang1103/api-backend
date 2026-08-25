@@ -740,19 +740,34 @@ fix(security): command injection in video thumbnail extraction`, và bản vá �
 **chưa có trên `main`, chưa lên production**. Nội dung khoá chậm một ngày không
 sao; lỗ command-injection còn sống trên production thì có.
 
-Nhánh đi trước `origin/main` **242 commit**, nhưng phần đụng `src/` chỉ có
-**đúng hai file** — nên `tsc` chạy rất nhanh và bề mặt rủi ro rất hẹp:
+⚠️⚠️ **SỐ Ở ĐÂY ĐÃ LỖI THỜI MỘT LẦN — đo lại trước khi tin.** Mục này từng ghi
+"đi trước 242 commit, phần đụng `src/` chỉ có **đúng hai file**, bề mặt rủi ro
+rất hẹp". Đo lại 25/08/2026: **253 commit** và **9 file `src/`**, trong đó có
+**340 dòng bị XOÁ** ở `codeLab`/`makerLab`/`simTicket`/`device.gateway` — tức
+là gỡ tính năng, không phải sửa nhỏ. Bề mặt rủi ro KHÔNG hẹp như câu cũ nói.
+Chạy lại hai lệnh này rồi mới quyết định kiểm tới đâu:
+
+```bash
+git fetch origin main
+git diff --stat origin/main..HEAD -- src/ frontend/ prisma/
+```
+
+Đo thật 25/08/2026:
 
 ```
-src/services/ffmpeg.service.ts   | 94 +++++++++++-----------
-src/services/video.service.ts    | 22 ++++-----
+src/  9 file  (+77 −340)   ← ffmpeg.service, video.service (bản vá bảo mật)
+                              + codeLab/makerLab/techTrends/simTicket/device.gateway (gỡ tính năng)
+frontend/ 30 file          ⇒ BẮT BUỘC chạy cả tsc LẪN npm run build (§Pre-Push Checklist)
+prisma/   0 file           ⇒ KHÔNG có migration, KHÔNG cần seed lại schema
 ```
 
 ```bash
 # 1. Kiểm kiểu — CHƯA CHẠY ĐƯỢC LẦN NÀO (sandbox không có node_modules)
 npx tsc --noEmit
+(cd frontend && npx tsc --noEmit)
+(cd frontend && npm run build)      # 30 file frontend ⇒ bắt buộc, tsc không thay được
 
-# 2. Merge nhánh vào main (local), rồi chạy checklist trước khi đẩy
+# 2. Merge nhánh vào main (local)
 git checkout main && git pull origin main
 git merge claude/intelligent-cori-pt8zxp
 
@@ -766,6 +781,13 @@ git push origin main
 Thứ tự trên là bắt buộc: `deploy-nha.sh` lấy mã từ **commit**, và một push vào
 `main` KHÔNG kích hoạt deploy — đẩy trước rồi quên deploy là kho GitHub xanh
 trong khi production vẫn chạy mã cũ.
+
+⚠️ **Deploy KHÔNG làm video hiện lên.** Đo 25/08/2026: 30 file frontend thay đổi
+**không có file nào thuộc trang `/courses` hay trang học**. Bản đồ video sống
+trong DB, và thứ đưa nó vào DB là `course-video-seed.mjs --apply` ở §6.1 —
+không phải deploy. Deploy là để đưa **bản vá bảo mật** (và các thay đổi khác)
+lên production. Hai việc rời nhau: muốn học ngay thì chạy seed là đủ; nhưng
+đừng vì thế mà hoãn deploy bản vá.
 
 ### 6.1 — Ảnh bìa + seed cho các khoá mới
 

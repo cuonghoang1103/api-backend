@@ -540,36 +540,36 @@ for p in ('globals.css','exam.css','code-lab.css','cyber.css'):
   KHONG co quy tac o dau ca     : 326 luot / 119 ten  (0,28%)
 </div>
 
-<h3>Phân loại theo NGUYÊN NHÂN — bốn nhóm có ý nghĩa</h3>
+<h3>Sorted by CAUSE — four groups that mean something</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">A · bổ từ độ mờ trên <code>var()</code> trần</span><span class="lz-nsub">81 lượt / 12 tên · Chương 6</span></span>
-<span class="lz-nbody">Nhắc lại từ Chương 6, đo lại hôm nay. Cao nhất: <code>text-text-muted/70</code> (15), <code>text-text-muted/30</code> (15), <code>text-text-muted/50</code> (12). Đây là <em>đúng</em> nhóm 91 lượt của Chương 6, khớp trong sai số của một đợt commit — chín trong số đó nay ở className động (<code>\${...}</code>) và năm trong <code>cva()</code>.</span>
+<span class="lz-node"><span class="lz-ntitle">A · an opacity modifier on a <code>var()</code> bare</span><span class="lz-nsub">81 uses / 12 names · Chapter 6</span></span>
+<span class="lz-nbody">Carried over from Chapter 6 and re-measured today. The worst offender: <code>text-text-muted/70</code> (15), <code>text-text-muted/30</code> (15), <code>text-text-muted/50</code> (12). That is <em>exactly</em> Chapter 6's group of 91, matching within a commit's worth of drift — nine of them now live in a dynamic className (<code>\${...}</code>) and five in <code>cva()</code>.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">B · token <code>bg-elevated</code> chưa từng tồn tại</span><span class="lz-nsub">76 lượt / 9 tên · 14 file</span></span>
-<span class="lz-nbody">Kho này KHÔNG khai <code>--bg-elevated</code> ở đâu — không trong <code>tailwind.config.ts</code>, không trong bốn file CSS viết tay. Vậy mà <code>bg-bg-elevated/60</code> xuất hiện 40 lần, <code>bg-bg-elevated/40</code> mười sáu, <code>hover:bg-bg-elevated/80</code> năm. Không lớp nào phát sinh cả — mọi phần tử ấy đều đang trong suốt hoàn toàn thay vì có một bề mặt nâng lên. Đây là loại lỗi mà lint tĩnh của TypeScript và ESLint không nhìn thấy được.</span>
+<span class="lz-node"><span class="lz-ntitle">B · token <code>bg-elevated</code> never existed at all</span><span class="lz-nsub">76 uses / 9 names · 14 files</span></span>
+<span class="lz-nbody">This repo does NOT declare <code>--bg-elevated</code> anywhere — not in <code>tailwind.config.ts</code>, not in any of the four hand-written CSS files. And yet <code>bg-bg-elevated/60</code> appears 40 times, <code>bg-bg-elevated/40</code> sixteen, <code>hover:bg-bg-elevated/80</code> five. Not one of those classes is generated — every one of those elements is fully transparent instead of carrying a raised surface. This is the class of error that TypeScript's and ESLint's static linting cannot see.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">C · lớp cần plugin không cài</span><span class="lz-nsub">13 lượt / 4 tên</span></span>
-<span class="lz-nbody"><code>prose-invert</code> (6), <code>dark:prose-invert</code> (4), <code>prose-cl</code> (2), <code>prose-language</code> (1) — tất cả cần <code>@tailwindcss/typography</code>. Mục 0 đo được <code>plugins: []</code>, nên plugin ấy KHÔNG có mặt. Bốn dòng CSS không tồn tại đang được đặt vào JSX một cách vô hại.</span>
+<span class="lz-node"><span class="lz-ntitle">C · classes that need an uninstalled plugin</span><span class="lz-nsub">13 uses / 4 names</span></span>
+<span class="lz-nbody"><code>prose-invert</code> (6), <code>dark:prose-invert</code> (4), <code>prose-cl</code> (2), <code>prose-language</code> (1) — all of which need <code>@tailwindcss/typography</code>. Section 0 measured <code>plugins: []</code>, so that plugin is NOT present. Four lines of non-existent CSS are being placed into JSX quite harmlessly.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">D · giá trị ngoài thang</span><span class="lz-nsub">18 lượt / 5 tên · Chương 1</span></span>
-<span class="lz-nbody"><code>w-4.5</code> (7), <code>h-4.5</code> (7), <code>w-5.5</code>, <code>h-5.5</code>, <code>prose-code:py-0.5</code>. Đúng chỗ Chương 1 nói thang chỉ có bước <code>.5</code> đến <code>3.5</code>; <code>4.5</code> chưa từng có, và Tailwind âm thầm không phát ra gì. Bảy cặp <code>w</code>/<code>h</code> khớp nhau ở sáu file gợi ra ai đó muốn một icon 18px và Tailwind trả lại icon <em>không cỡ nào cả</em>.</span>
+<span class="lz-node"><span class="lz-ntitle">D · values off the scale</span><span class="lz-nsub">18 uses / 5 names · Chapter 1</span></span>
+<span class="lz-nbody"><code>w-4.5</code> (7), <code>h-4.5</code> (7), <code>w-5.5</code>, <code>h-5.5</code>, <code>prose-code:py-0.5</code>. Precisely where Chapter 1 said the scale only steps <code>.5</code> to <code>3.5</code>; <code>4.5</code> has never existed, and Tailwind silently emits nothing. Seven matched <code>w</code>/<code>h</code> pairs across six files suggest somebody wanted an 18px icon and Tailwind handed back an icon of <em>no size at all</em>.</span>
 </div>
 </div>
 
-<h3>Nhóm E — giá trị tuỳ ý viết SAI CÚ PHÁP</h3>
+<h3>Group E — arbitrary values with the SYNTAX WRONG</h3>
 <pre><code class="language-text">border-white/12                    5  &lt;- opacity phai la buoc chuan: 10 hoac /[12%]
 to-neon-purple                     4  &lt;- to-* can gradient CO cai to-color
 prose-strong:text-[var(--...)]     2  &lt;- variant prose-* chi ton tai voi plugin
 placeholder:text-text-muted/60     7  &lt;- variant placeholder: chay chuong 6
 </code></pre>
 
-<p>Hai mươi lăm lượt, mười tám tên. Cái chung là <em>gần như đúng</em> — <code>border-white/12</code> khác <code>border-white/10</code> đúng một chữ số và không chữ số 12 nào có trong thang mặc định của Tailwind, nên nó phát sinh KHÔNG GÌ; muốn 12% thì viết <code>border-white/[12%]</code>. Cùng lỗi ở dạng <code>duration-3000</code> (3 lượt): thang chỉ có <code>duration-1000</code>.</p>
+<p>Twenty-five uses, eighteen names. What they share is being <em>almost right</em> — <code>border-white/12</code> differs from <code>border-white/10</code> by exactly one digit, and no 12 exists in Tailwind's default scale, so it generates NOTHING; for 12% you write <code>border-white/[12%]</code>. The same mistake appears as <code>duration-3000</code> (3 uses): the scale only has <code>duration-1000</code>.</p>
 
-<h3>Nhóm F — còn lại</h3>
+<h3>Group F — the remainder</h3>
 <div class="out">113 luot / 71 ten — nhung cai KHONG rot vao 5 nhom tren:
    khong-in            6   &lt;- lop cua RIENG UNG DUNG, dinh boi CSS in
    markdown-body       5   &lt;- kieu github-markdown-css, KHONG cai
@@ -579,13 +579,13 @@ placeholder:text-text-muted/60     7  &lt;- variant placeholder: chay chuong 6
    text-bg-base        4   &lt;- token DaisyUI-style, KHONG khai
 </div>
 
-<p>Phần lớn nhóm F là ký ức của các <em>công cụ khác</em> — thư viện in ấn, thư viện tô mã, plugin cuộn — mà ai đó nhớ tên lớp nhưng không cài. Không cái nào là bug của Tailwind; tất cả đều là bug của <em>giả định</em>.</p>
+<p>Most of group F is the memory of <em>other tools</em> — a print library, a syntax-highlighting library, a scroll plugin — whose class names somebody remembered without installing them. None of these is a Tailwind bug; every one is a bug of <em>assumption</em>.</p>
 
 <div class="callout ok">
-<p><strong>0,28% nghe nhỏ, nhưng nó CHỌN LỌC.</strong> 118.511 token nhìn tổng thể thì 326 là dưới ba phần nghìn. Nhưng chín mươi phần trăm số lượt ấy tập trung vào ba nhóm A/B/C — mỗi cái là một khiếm khuyết trải khắp hàng chục file. Đó là lý do một bộ đếm rừng rú (&quot;99,72% lớp đều hoạt động&quot;) sẽ đánh giá thấp mọi thứ ở đây.</p>
+<p><strong>0.28% sounds small, but it is SELECTIVE.</strong> Against 118,511 tokens, 326 is under three in a thousand. But ninety percent of those uses concentrate into the three groups A/B/C — each one a defect spread across dozens of files. That is why a coarse counter (&quot;99.72% of classes work&quot;) understates everything here.</p>
 </div>
 
-<h3>Cái LINT có thể bắt, ngày mai</h3>
+<h3>What LINTING could catch, starting tomorrow</h3>
 <pre><code class="language-js">// eslint-plugin-tailwindcss/no-custom-classname
 {
   rules: {
@@ -600,24 +600,24 @@ placeholder:text-text-muted/60     7  &lt;- variant placeholder: chay chuong 6
 </code></pre>
 
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">bật rule</span><span class="lz-d">bắt A, B, D và phần lớn E ngay ở chỗ gõ, trước cả khi build. C và F cần whitelist các tiền tố kho tự dùng.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">đối chứng bằng CI</span><span class="lz-d">chạy chính script kiểm ở đầu bài như một bước CI. Nó bắt được cả những chỗ mà template literal động qua mặt AST của ESLint.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">tính SÀN chứ không tính TRẦN</span><span class="lz-d">giống Chương 8: chặn build khi số lượt tăng, không chặn khi vượt một ngưỡng tuyệt đối. Ngưỡng bị lãng quên; tăng đột biến bị chú ý.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">enable the rule</span><span class="lz-d">catches A, B, D and most of E right at the keyboard, before any build. C and F need a whitelist for the repo's own prefixes.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">cross-check in CI</span><span class="lz-d">run the very script from the top of this lesson as a CI step. It also catches the places where a dynamic template literal slips past ESLint's AST.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">measure the FLOOR, not the CEILING</span><span class="lz-d">just like Chapter 8: fail the build when the count rises, not when it crosses an absolute threshold. Thresholds get forgotten; a jump gets noticed.</span></div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — cho rằng &quot;lớp không có quy tắc&quot; là vô hại vì nó KHÔNG lỗi.</strong> Không cái nào ở đây làm Tailwind kêu, JSX từ chối, hay TypeScript hỏng. Đó là VẤN ĐỀ — không có tín hiệu nào để đáp lại. Bù đắp bằng một phép đo có định kỳ, hoặc bằng linter, hoặc cả hai; đừng dựa vào việc thấy nó xảy ra trong duyệt web.</p>
+<p><strong>Bẫy — cho rằng &quot;lớp NOT có quy tắc&quot; là vô hại vì nó KHÔNG lỗi.</strong> None of this makes Tailwind complain, JSX refuse, or TypeScript break. That IS the problem — there is no signal to respond to. Compensate with a periodic measurement, or a linter, or both; do not rely on spotting it while browsing the site.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> 0,28% các lớp tĩnh trong kho này phân giải thành KHÔNG GÌ, nhưng con số nhỏ ấy che một cấu trúc tập trung: 81 lượt là nhóm alpha trên <code>var()</code> mà Chương 6 đã đo, 76 lượt là một token <code>bg-elevated</code> chưa bao giờ khai, 13 lượt cần một plugin không cài, 18 lượt là giá trị ngoài thang, và 25 lượt là cú pháp Tailwind viết sai một chữ số — mỗi nhóm là một khiếm khuyết trải khắp nhiều file mà không có tín hiệu nào để đáp lại.</p>
+<p><strong>Một câu.</strong> 0.28% of the static classes in this repo resolve to NOTHING, but that small number hides a concentrated structure: 81 uses are the alpha-on-a-bare- <code>var()</code> group Chapter 6 measured, 76 uses are a <code>bg-elevated</code> token that was never declared, 13 uses need an uninstalled plugin, 18 uses are off-scale values, and 25 uses are Tailwind syntax wrong by a single digit — each group a defect spread across many files with no signal to respond to.</p>
 </div>
 
 <h3>Nguồn</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">eslint-plugin-tailwindcss</span><span class="lc-sub">github.com/francoismassart/eslint-plugin-tailwindcss — rule <code>no-custom-classname</code> bắt A/B/D/E ở IDE, cùng vài rule khác đáng bật như <code>classnames-order</code>.</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind — Detecting classes in source files</span><span class="lc-sub">tailwindcss.com/docs/detecting-classes-in-source-files — tài liệu chính thức về khi nào một lớp KHÔNG được phát sinh, kể cả trường hợp template literal chẻ chuỗi ngang mà bài 0.1 đã đo.</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">CSS Escapes — CSS Syntax Module Level 3</span><span class="lc-sub">w3.org/TR/css-syntax-3/#escaping — quy tắc thoát chuỗi mà bài này phải cài để không báo động giả về mọi shadow tuỳ ý.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 6 — biến CSS và cái bẫy alpha</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — nguồn gốc của nhóm A và bản vá hai file cho nó.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">eslint-plugin-tailwindcss</span><span class="lc-sub">github.com/francoismassart/eslint-plugin-tailwindcss — rule <code>no-custom-classname</code> bắt A/B/D/E ở IDE, cùng vài rule differs from đáng bật như <code>classnames-order</code>.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind — Detecting classes in source files</span><span class="lc-sub">tailwindcss.com/docs/detecting-classes-in-source-files — tài liệu chính thức về khi nào one lớp KHÔNG được phát sinh, kể cả trường hợp template literal chẻ chuỗi ngang mà bài 0.1 đã đo.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">CSS Escapes — CSS Syntax Module Level 3</span><span class="lc-sub">w3.org/TR/css-syntax-3/#escaping — quy tắc thoát chuỗi mà bài này must cài để NOT báo động giả về mọi shadow tuỳ ý.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 6 — CSS variables and the alpha trap</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — nguồn gốc của nhóm A và bản vá hai file cho nó.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.3</span>
@@ -763,7 +763,7 @@ for path in walk('src', suffix='.tsx'):
   KHONG co gi thay the                :   72   (14%)   trong 48 file
 </div>
 
-<p>Mười bốn phần trăm là con số cần đặt kề <em>chỗ</em> nó xảy ra — không phải mọi ô nhập đều đáng lo bằng nhau:</p>
+<p>Fourteen percent is a number you have to place next to <em>where</em> it happens — not every input is equally worrying:</p>
 
 <div class="out">72 chuoi KHONG co ring thay the, theo the:
    input             39     &lt;- o nhap text/email/mat khau
@@ -775,11 +775,11 @@ for path in walk('src', suffix='.tsx'):
 </div>
 
 <div class="callout warn">
-<p><strong>Năm mươi tám trong số đó là ô nhập.</strong> <code>input</code>, <code>textarea</code>, <code>select</code>, <code>Command.Input</code> — đúng những chỗ người dùng bàn phím <em>phải</em> biết mình đang gõ ở đâu để làm việc nổi. Một chỗ hở trên <code>div</code> chỉ là nhức mắt; một chỗ hở trên <code>input</code> là nếu bạn tab qua một form ba trường thì không có ba đèn nhấp nháy nào cả.</p>
+<p><strong>Fifty-eight of them are input fields.</strong> <code>input</code>, <code>textarea</code>, <code>select</code>, <code>Command.Input</code> — exactly where keyboard users <em>must</em> know where they are typing in order to work at all. A gap on a <code>div</code> is merely an eyesore; a gap on an <code>input</code> means tabbing through a three-field form gives you no three blinking lights at all.</p>
 </div>
 
-<h3>Vì sao <code>outline-none</code> lại BỊ gõ vào</h3>
-<p>Không phải ai cũng có ý xấu. Vòng focus mặc định của trình duyệt là một khung xanh Windows cũ 2px dày, thường sát viền input, và ở nhiều thiết kế nó CẢN thẩm mỹ. Cú thao tác đúng là gỡ nó rồi vẽ lại một cái khớp bảng màu:</p>
+<h3>Why <code>outline-none</code> gets typed in the first place</h3>
+<p>Nobody here is being careless on purpose. The browser's default focus ring is a 2px old-Windows-blue frame, usually hugging the input's border, and in many designs it genuinely fights the aesthetic. The correct move is to remove it and draw a replacement that matches the palette:</p>
 
 <pre><code class="language-tsx">// dung — 86% cua kho lam nhu vay
 &lt;input className=&quot;outline-none focus:ring-2 focus:ring-blue-500&quot; /&gt;
@@ -788,41 +788,41 @@ for path in walk('src', suffix='.tsx'):
 &lt;input className=&quot;outline-none&quot; /&gt;
 </code></pre>
 
-<h3>Sao lại là <code>focus-visible:</code> chứ không <code>focus:</code></h3>
-<p>Sự khác biệt không nhỏ, và kho này đã đúng ở đại đa số. Đếm lại toàn bộ file <code>.tsx</code>:</p>
+<h3>Why <code>focus-visible:</code> rather than <code>focus:</code></h3>
+<p>The difference is not small, and this repo gets it right in the vast majority of cases. Recounting across every file, <code>.tsx</code>:</p>
 
 <div class="out">focus:            854 luot   (chua duoc chuot moi ban ha xuong)
 focus-visible:    211 luot   (chi hien khi vao BANG BAN PHIM)
 </div>
 
-<p><code>focus-visible:</code> là lựa chọn tinh hơn — nó không vẽ vòng khi người dùng chuột bấm vào một nút (họ đâu cần thấy) nhưng có vẽ khi họ tab tới. Kho này đã bật đủ mạnh mẽ ở 211 chỗ; nhưng phần còn lại vẫn dùng <code>focus:</code>, thứ vẫn hoạt động ổn — có vòng thừa lúc chuột bấm không phải khiếm khuyết trợ năng, chỉ là hơi tuềnh toàng.</p>
+<p><code>focus-visible:</code> is the finer choice — it draws no ring when a mouse user clicks a button (they do not need to see one) but does draw one when they tab to it. This repo uses it robustly in 211 places; the remainder still uses <code>focus:</code>, which still works fine — an extra ring on a mouse click is not an accessibility defect, just a little unpolished.</p>
 
-<h3>Còn <code>ring-offset-*</code>?</h3>
+<h3>And <code>ring-offset-*</code>?</h3>
 <div class="out">ring-offset*  : 5 luot trong toan bo .tsx
 </div>
 
-<p>Chỉ NĂM lượt. <code>ring-offset</code> tách vòng focus khỏi cạnh phần tử, giúp nó nổi lên trên nền cùng màu — quan trọng khi ring và nền cùng nằm trong một dải tương phản thấp. Không phải lỗ hổng, chỉ là chi tiết đánh bóng có sẵn mà kho gần như không dùng đến.</p>
+<p>Only FIVE uses. <code>ring-offset</code> separates the focus ring from the element's edge, letting it stand out against a same-coloured background — which matters when ring and background sit in the same low-contrast band. Not a hole, just a piece of available polish the repo barely touches.</p>
 
-<h3>Sửa 72 chỗ — đề xuất</h3>
+<h3>Fixing the 72 — a proposal</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">một MIXIN dùng chung</span><span class="lz-d">tạo một hằng ở <code>frontend/src/lib/</code>:  <code>export const inputFocus = 'outline-none focus-visible:ring-2 focus-visible:ring-cat-ai-icon focus-visible:ring-offset-2'</code>. Mọi <code>input</code> mới nối thêm nó qua <code>cn()</code>.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">vá 58 ô nhập trước</span><span class="lz-d">tìm 58 file bằng script ở đầu bài, thay <code>&quot;outline-none&quot;</code> bằng <code>cn(&quot;...&quot;, inputFocus)</code>. Blast radius bằng KHÔNG — không đụng phần tử không phải input, không đổi hình thức khi không focus.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">bật một rule</span><span class="lz-d">ESLint không có rule sẵn cho việc này, nhưng một regex đơn (<code>eslint-plugin-regex</code>) đủ: khớp <code>className=&quot;.*outline-none.*&quot;</code> mà KHÔNG có <code>focus(-visible)?:</code> trong cùng chuỗi. Lằn ranh bảo trì đóng, sau đó số 72 chỉ có thể giảm.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">one shared MIXIN</span><span class="lz-d">create a constant in <code>frontend/src/lib/</code>:  <code>export const inputFocus = 'outline-none focus-visible:ring-2 focus-visible:ring-cat-ai-icon focus-visible:ring-offset-2'</code>. Every new <code>input</code> appends it through <code>cn()</code>.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">patch the 58 inputs first</span><span class="lz-d">find the 58 files with the script at the top of this lesson and replace <code>&quot;outline-none&quot;</code> with <code>cn(&quot;...&quot;, inputFocus)</code>. The blast radius is ZERO — it touches no non-input element and changes nothing about the unfocused appearance.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">turn on a rule</span><span class="lz-d">ESLint ships no rule for this, but a single regex (<code>eslint-plugin-regex</code>) suffices: match <code>className=&quot;.*outline-none.*&quot;</code> with NO <code>focus(-visible)?:</code> in the same string. The maintenance boundary closes, and from then on 72 can only fall.</span></div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ trợ năng bàn phím CHỈ dành cho người khiếm thị.</strong> Bất kỳ ai điều khiển máy bằng bàn phím — người mỏi cổ tay chuyển sang phím tắt, người dùng iPad có bàn phím vật lý, thao tác viên gõ nhanh dùng Tab để dồn form — đều phải thấy vòng focus để không lạc chỗ. Đây là trợ năng tính bằng số người dùng bàn phím, không chỉ số người dùng trình đọc màn hình.</p>
+<p><strong>Bẫy — nghĩ trợ năng bàn phím CHỈ dành cho người khiếm thị.</strong> Anyone driving the machine from the keyboard — someone with sore wrists who moved to shortcuts, an iPad user with a physical keyboard, a fast typist tabbing through a form — needs to see the focus ring to keep their place. This is accessibility measured in keyboard users, not only in screen-reader users.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> 86% chỗ dùng <code>outline-none</code> trong kho này có vẽ lại một vòng focus khớp bảng màu, nhưng 72 chỗ còn lại không — và 58 trong 72 là các ô nhập <code>input</code>/<code>textarea</code>/<code>select</code>, đúng chỗ người dùng bàn phím CẦN thấy vòng focus nhất, có thể vá bằng một hằng <code>inputFocus</code> chung mà không đụng phần còn lại.</p>
+<p><strong>Một câu.</strong> 86% of the places using <code>outline-none</code> in this repo do draw a replacement focus ring matching the palette, but the remaining 72 do not — and 58 of those 72 are <code>input</code>/<code>textarea</code>/<code>select</code>inputs, exactly where keyboard users NEED the focus ring most, and they can be patched with one shared <code>inputFocus</code> constant without touching anything else.</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">WCAG 2.2 — 2.4.7 Focus Visible</span><span class="lc-sub">w3.org/WAI/WCAG22/Understanding/focus-visible — mỗi thao tác focus được bằng bàn phím phải để lại một chỉ báo THẤY được. Tiêu chuẩn nói chính xác 72 chỗ trên là trượt.</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — <code>:focus-visible</code></span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible — cách nó khác <code>:focus</code>, và vì sao heuristic của trình duyệt bỏ ring cho click chuột lại là hành vi ĐÚNG.</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind — <code>ring</code> utilities</span><span class="lc-sub">tailwindcss.com/docs/ring-width — <code>ring-2</code>, <code>ring-offset-*</code>, <code>ring-inset</code> — mọi thứ cần biết để vẽ lại đúng phần bị <code>outline-none</code> gỡ.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 4 — <code>cn()</code> và các mixin chung</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — cấu trúc để chèn <code>inputFocus</code> vào 58 ô nhập mà không sao chép chuỗi bảy lần.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">WCAG 2.2 — 2.4.7 Focus Visible</span><span class="lc-sub">w3.org/WAI/WCAG22/Understanding/focus-visible — mỗi thao tác focus được with bàn phím must để lại one chỉ báo THẤY được. Tiêu chuẩn nói chính xác 72 where trên là trượt.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — <code>:focus-visible</code></span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible — cách nó differs from <code>:focus</code>, và vì sao heuristic của trình duyệt bỏ ring cho click chuột lại là hành vi ĐÚNG.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind — <code>ring</code> utilities</span><span class="lc-sub">tailwindcss.com/docs/ring-width — <code>ring-2</code>, <code>ring-offset-*</code>, <code>ring-inset</code> — mọi thứ cần biết để vẽ lại exactly phần bị <code>outline-none</code> gỡ.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 4 — <code>cn()</code> and shared mixins</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — cấu trúc để chèn <code>inputFocus</code> vào 58 ô nhập mà NOT sao chép chuỗi bảy lần.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.4</span>
@@ -945,12 +945,12 @@ focus-visible:    211 luot   (chi hien khi vao BANG BAN PHIM)
    animate-levelup, laser-complete 3      &lt;- animation cua tinh nang cu the
 </div>
 
-<p>Ba dòng đầu — <code>animate-spin</code>, <code>animate-pulse</code>, <code>animate-ping</code> — là <em>hạ tầng</em>. Người dùng chỉ thấy chúng khi máy đang bận (spinner tải, chấm điểm nhấp nháy trong khi lấy dữ liệu). Chúng ngắn, có mục đích, và <em>không</em> nằm trong danh sách cần chặn — chặn spinner khi máy đang chờ mạng là tệ hơn cho người bị chóng mặt tiền đình, vì họ sẽ tưởng máy đã đơ.</p>
+<p>The first three — <code>animate-spin</code>, <code>animate-pulse</code>, <code>animate-ping</code> — are <em>infrastructure</em>. Users only see them while the machine is busy (a loading spinner, a pulsing dot while data is fetched). They are short, purposeful, and <em>NOT</em> on the list of things to suppress — stopping the spinner while the machine waits on the network is worse for someone with vestibular disorders, because they will assume the machine has frozen.</p>
 
-<h3>Ambient motion — cái ĐÁNG chặn</h3>
-<p>Bảy animation còn lại (aurora-drift-slow/slower, shimmer-sweep, caret-blink, scroll-cue-pulse, reel-spin, projector-pulse) chạy KHÔNG có lý do — chúng là chi tiết nền thẩm mỹ. Với chúng, WCAG 2.3.3 &quot;Animation from Interactions&quot; khuyến nghị người dùng phải tắt được, và <code>@media (prefers-reduced-motion: reduce)</code> là cơ chế chuẩn.</p>
+<h3>Ambient motion — what SHOULD be suppressed</h3>
+<p>The other seven animations (aurora-drift-slow/slower, shimmer-sweep, caret-blink, scroll-cue-pulse, reel-spin, projector-pulse) run for NO reason — they are decorative background detail. For those, WCAG 2.3.3 &quot;Animation from Interactions&quot; recommends the user be able to switch them off, and <code>@media (prefers-reduced-motion: reduce)</code> is the standard mechanism.</p>
 
-<h3>Đọc 9 khối chặn trong globals.css</h3>
+<h3>Reading the 9 suppression blocks in globals.css</h3>
 <pre><code class="language-python"># dem theo KHOP NGOAC, khong theo dong (bai hoc tu bai 7.1)
 for m in re.finditer(r'@media \\(prefers-reduced-motion: reduce\\)\\s*\\{', css):
     i = m.end(); depth = 1
@@ -980,31 +980,31 @@ for m in re.finditer(r'@media \\(prefers-reduced-motion: reduce\\)\\s*\\{', css)
 </div>
 
 <div class="callout ok">
-<p><strong>Bảy animation ambient KHAI trong config đều được chặn.</strong> Khối lớn ở dòng 2509 (bảy selector + <code>.reel-spin</code> + <code>.animate-projector-pulse</code>) phủ đúng danh sách cần chặn. <code>caret-blink</code> chặn qua selector <code>.hero-caret</code> (nơi duy nhất dùng nó). Ngoài Tailwind, các animation CSS thuần — flashcard, shimmer, exphub blob, app-splash, pull-to-refresh — mỗi cái có khối chặn riêng, phù hợp phạm vi.</p>
+<p><strong>All seven ambient animations DECLARED in the config are suppressed.</strong> The large block at line 2509 (seven selectors plus <code>.reel-spin</code> + <code>.animate-projector-pulse</code>) covers exactly the list that needs suppressing. <code>caret-blink</code> is suppressed through the <code>.hero-caret</code> selector (the only place that uses it). Beyond Tailwind, the plain-CSS animations — flashcard, shimmer, exphub blob, app-splash, pull-to-refresh — each get their own suppression block, scoped appropriately.</p>
 </div>
 
-<h3>Phép đo TÔI đã LÀM SAI — kể lại đầy đủ</h3>
-<p>Trong lượt soát đầu tôi grep <em>ở cấp phần tử</em> — <code>grep -c 'motion-reduce:' src</code> — và ra 10 lượt cho 13 animation. Tôi suýt viết &quot;kho này KHÔNG bảo vệ chuyển động&quot;. Đó là báo động sai:</p>
+<h3>A measurement I GOT WRONG — told in full</h3>
+<p>On my first pass I grepped <em>at the element level</em> — <code>grep -c 'motion-reduce:' src</code> — and got 10 uses for 13 animations. I nearly wrote &quot;this repo does NOT guard motion&quot;. That was a false alarm:</p>
 
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">tôi giả định</span><span class="lz-d">rằng lưới chắn nằm ở <em>utility Tailwind</em> <code>motion-reduce:animate-none</code> gắn trên chính phần tử. Tài liệu Tailwind trình bày cách đó nên nó nghe hợp lý.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">tôi bỏ qua</span><span class="lz-d">rằng nó cũng có thể ở <em>CSS thường</em> — một khối <code>@media (prefers-reduced-motion: reduce) { .animate-aurora-drift-slow { animation: none } }</code> gộp nhiều selector trong <em>một</em> chỗ.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">kho này chọn CÁCH THỨ HAI</span><span class="lz-d">— và nó ĐÚNG HƠN: chặn tập trung ở một file thì soát được trong một lượt đọc, còn <code>motion-reduce:</code> rải khắp .tsx thì phải grep hết mỗi lần review.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">I assumed</span><span class="lz-d">the guard lived in a <em>utility Tailwind</em> <code>motion-reduce:animate-none</code> attached to the element itself. Tailwind's documentation presents it that way, so it sounded reasonable.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">I overlooked</span><span class="lz-d">that it could equally live in <em>ordinary CSS</em> — one <code>@media (prefers-reduced-motion: reduce) { .animate-aurora-drift-slow { animation: none } }</code> block gathering many selectors in <em>one</em> place.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">this repo chose the SECOND WAY</span><span class="lz-d">— and it is the BETTER one: centralised suppression in one file can be audited in a single read, whereas <code>motion-reduce:</code> scattered through .tsx files has to be grepped in full at every review.</span></div>
 </div>
 
-<p>Tôi đã suýt biến một quyết định thiết kế TỐT thành một chỗ trượt WCAG trong bài học. Đối chiếu bằng cách đọc <code>@media</code> block, không bằng đếm utility trên JSX, là cách duy nhất KHÔNG bị đánh lừa.</p>
+<p>I nearly turned a GOOD design decision into a WCAG failure in the lesson. Cross-checking by reading the <code>@media</code> blocks, rather than counting utilities in JSX, is the only way not to be fooled.</p>
 
-<h3>Chỗ duy nhất còn HỞ</h3>
+<h3>The one remaining GAP</h3>
 <div class="out">.chat-studio * { animation: none; transition: none; ... }   &lt;- khoi 4395
 </div>
 
-<p>Khối cuối dùng <code>* { animation: none !important }</code> — cách gõ búa xoá tất cả trong vùng đó. Tốt cho vùng chat, nhưng đây cũng là cái duy nhất KHÔNG có trong vùng Notes. Chương 2 đã đo: <code>notes-theme-root</code> là ngoại lệ với <code>dark:</code>, và cũng là ngoại lệ cho <em>một số</em> hiệu ứng khác. Nếu ai đó thêm một animation ambient trong Notes, không có khối chặn nào phủ nó tự động. Chưa xảy ra — tôi grep xong không thấy. Nhưng đây là chỗ hở duy nhất cần biết.</p>
+<p>The last block uses <code>* { animation: none !important }</code> — the sledgehammer that clears everything in that region. Good for the chat area, but it is also the only one NOT present in the Notes region. Chapter 2 measured this: <code>notes-theme-root</code> is the exception to <code>dark:</code>, and it is the exception for <em>several</em> other effects too. If somebody adds an ambient animation inside Notes, no suppression block covers it automatically. It has not happened yet — I grepped and found nothing. But it is the one gap worth knowing about.</p>
 
 <div class="callout warn">
-<p><strong>Bẫy — dùng <code>* { animation: none !important }</code> ở phạm vi <code>html</code>.</strong> Nghe như một giải pháp cỡ trứng vịt lộn — chặn TẤT. Nó sẽ chặn cả <code>animate-spin</code>, và spinner sẽ đứng im khi máy chờ mạng. Đúng cho chat-studio vì chat-studio KHÔNG có spinner; sai cho toàn app.</p>
+<p><strong>Bẫy — dùng <code>* { animation: none !important }</code> at the scope of <code>html</code>.</strong> It sounds like a solution of dubious appetite — suppress EVERYTHING. It would also suppress <code>animate-spin</code>, and the spinner would freeze while the machine waits on the network. Right for chat-studio, because chat-studio has NO spinner; wrong for the whole app.</p>
 </div>
 
-<h3>Còn hàm dựa chuyển động?</h3>
+<h3>What about motion-driven libraries?</h3>
 <pre><code class="language-tsx">// framer-motion, dung o vai cho
 useReducedMotion()   // -&gt; true khi user co bat
 </code></pre>
@@ -1013,21 +1013,21 @@ useReducedMotion()   // -&gt; true khi user co bat
 grep -c 'framer-motion' src/**/*.tsx     : 34   (34 file dung, khong ai kiem tra)
 </div>
 
-<p>Kho này dùng <code>framer-motion</code> ở 34 file — <code>motion.div</code>, các animation vào-ra khi mở modal, các chuyển trang. KHÔNG chỗ nào gọi <code>useReducedMotion()</code>. Trong hầu hết trường hợp không sao — các animation này ngắn (150–400ms) và có nghĩa (báo cho người dùng biết modal vừa mở). Nhưng nếu ai đó thêm một <code>motion.div</code> lặp vô hạn, không có gì tắt nó tự động.</p>
+<p>This repo uses <code>framer-motion</code> in 34 files — <code>motion.div</code>, enter/exit animations when a modal opens, page transitions. NOWHERE does it call <code>useReducedMotion()</code>. In most cases that is fine — these animations are short (150-400ms) and meaningful (they tell the user a modal just opened). But if somebody adds an infinitely looping <code>motion.div</code> , nothing switches it off automatically.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — nghĩ rằng &quot;chúng tôi dùng framer-motion, framer-motion tự tôn trọng prefers-reduced-motion&quot;.</strong> Sai. Framer chỉ cung cấp <em>công cụ</em> (<code>useReducedMotion</code>) để bạn KIỂM và tự QUYẾT — nó không tự tắt animation của bạn. Nếu bạn viết một <code>animate={{ opacity: [0, 1] }}</code> vô hạn, nó sẽ chạy vô hạn dù <code>prefers-reduced-motion</code> bật hay tắt.</p>
+<p><strong>Bẫy — nghĩ rằng &quot;chúng tôi dùng framer-motion, framer-motion tự tôn trọng prefers-reduced-motion&quot;.</strong> Wrong. Framer only supplies the <em>tool</em> (<code>useReducedMotion</code>) so that you can CHECK and DECIDE for yourself — it does not disable your animations on your behalf. If you write an infinite <code>animate={{ opacity: [0, 1] }}</code> , it will run forever whether <code>prefers-reduced-motion</code> is on or off.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Bảy animation ambient trong <code>tailwind.config.ts</code> đều được chặn bởi các khối <code>@media (prefers-reduced-motion: reduce)</code> trong globals.css — và một phép đo cấp-phần-tử của tôi ban đầu báo &quot;KHÔNG CHẶN&quot; đã sai vì kho chọn chặn TẬP TRUNG ở CSS chứ không rải utility trên JSX; chỗ hở thực sự còn lại là 34 file dùng <code>framer-motion</code> không ai gọi <code>useReducedMotion</code>, và một khả năng người ta có thể thêm animation vào Notes mà không có khối chặn nào tự động phủ.</p>
+<p><strong>Một câu.</strong> The seven ambient animations in <code>tailwind.config.ts</code> are all suppressed by <code>@media (prefers-reduced-motion: reduce)</code> blocks in globals.css — and my initial element-level measurement reporting &quot;NOT SUPPRESSED&quot; was wrong, because the repo suppresses CENTRALLY in CSS rather than scattering utilities through JSX; the real remaining gap is the 34 files using <code>framer-motion</code> where nobody calls <code>useReducedMotion</code>, plus the possibility that someone adds an animation inside Notes with no suppression block covering it automatically.</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">WCAG 2.2 — 2.3.3 Animation from Interactions</span><span class="lc-sub">w3.org/WAI/WCAG22/Understanding/animation-from-interactions — người dùng phải tắt được animation phi thiết yếu. Bảy animation ambient của kho này rơi vào định nghĩa &quot;phi thiết yếu&quot;.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">WCAG 2.2 — 2.3.3 Animation from Interactions</span><span class="lc-sub">w3.org/WAI/WCAG22/Understanding/animation-from-interactions — người dùng must tắt được animation phi thiết yếu. Bảy animation ambient của kho này rơi vào định nghĩa &quot;phi thiết yếu&quot;.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — prefers-reduced-motion</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion — cách trình duyệt phơi sở thích, và cả <code>reduce</code> lẫn <code>no-preference</code> là gì.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Framer Motion — useReducedMotion</span><span class="lc-sub">framer.com/motion/use-reduced-motion — hook cần gọi ở 34 file để đóng lỗ hổng còn lại.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 2 — biến thể và vùng Notes</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — cấu trúc CSS lồng nhau ở vùng Notes, và vì sao nó là chỗ duy nhất mà lưới chắn ambient KHÔNG tự động phủ.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 2 — variants and the Notes region</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — cấu trúc CSS lồng nhau ở vùng Notes, và vì sao nó là where duy nhất mà lưới chắn ambient KHÔNG tự động phủ.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.5</span>
@@ -1150,7 +1150,7 @@ grep -c 'framer-motion' src/**/*.tsx     : 34   (34 file dung, khong ai kiem tra
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Quiz</span>
 <h2>What Chapter 9 measured</h2>
-<p class="lead">Tám câu, mười hai phút. Mọi con số ở đây rút thẳng từ CHÍNH kho này — không phải từ tài liệu, và không phải từ một dự án mẫu.</p>
+<p class="lead">Eight questions, twelve minutes. Every number here comes straight from THIS repo — not from the documentation, and not from a sample project.</p>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">9.1 — the failure that fits in one token</span><span class="lz-lnote">of 12 real text-on-background pairs, 3 fail AA. All three are <code>--text-muted</code> — the ONLY text token holding the same hex in both themes. 2.537 uses, fixed by changing 2 lines</span></div>
 <div class="lz-layer"><span class="lz-lname">9.2 — the 1,16 incident</span><span class="lz-lnote">near-black text on a fixed dark surface, 142 files / 622 uses. The fix re-declares the theme variables on the dark surfaces themselves — self-enforcing, blast radius zero</span></div>

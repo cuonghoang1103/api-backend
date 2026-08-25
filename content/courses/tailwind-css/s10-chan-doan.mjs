@@ -62,7 +62,7 @@ export default {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng cây quyết định như một checklist tuần tự.</strong> Không phải mọi triệu chứng đều bắt đầu từ Q1. Nếu bạn <em>đã thấy</em> DevTools kẻ gạch lên quy tắc thì Q1 rõ ràng là đã trả lời rồi (rule EXISTS, just LOSING). Cây là để KHÔNG bỏ sót câu hỏi, không phải để chạy đủ bốn câu mỗi lần.</p>
+<p><strong>Bẫy — dùng cây quyết định such as một checklist tuần tự.</strong> Not every symptom starts at Q1. If you <em>have already seen</em> DevTools strike through the rule, Q1 is plainly answered already (the rule EXISTS, it is merely LOSING). The tree exists so you never SKIP a question, not so you run all four every time.</p>
 </div>
 
 <div class="callout">
@@ -158,7 +158,7 @@ npx tailwindcss -i in.css -o probe.css --content './probe.html'
 getComputedStyle(document.getElementById('x')).color
 </code></pre>
 
-<h3>Case 1 — <code>text-text-muted/70</code> (Chương 6)</h3>
+<h3>Case 1 — <code>text-text-muted/70</code> (Chapter 6)</h3>
 <div class="out">$ grep -c 'text-text-muted\\\\/70' out.css
 0
 
@@ -171,7 +171,7 @@ $ grep 'text-text-muted' probe.css
 
 <p>Zero hits on the exact class. Only the base <code>text-text-muted</code> exists. Q1 answer: <strong>NO</strong> — go read Chapter 6 for why. Every downstream question (Q2/Q3/Q4) does not apply, and no <code>!important</code> can create a rule that Tailwind refused to emit.</p>
 
-<h3>Case 2 — <code>bg-bg-elevated/60</code> (Chương 9)</h3>
+<h3>Case 2 — <code>bg-bg-elevated/60</code> (Chapter 9)</h3>
 <div class="out">$ grep -c 'bg-bg-elevated' out.css
 0
 
@@ -185,18 +185,18 @@ $ grep '\\-\\-bg-elevated' src/app/globals.css
 <p>Zero everywhere. Not in the built CSS, not in the config, and not as a CSS variable. The name looked plausible — <code>bg-bg-elevated</code> follows the pattern <code>bg-&lt;colour-token&gt;</code>, and colour tokens like <code>bg-darkbg</code> do exist — but no such colour token was ever declared. Forty elements are asking Tailwind for a background that Tailwind cannot compose. All forty render fully transparent instead.</p>
 
 <div class="callout warn">
-<p><strong>Vì sao TypeScript, ESLint và Prettier đều không cảnh báo.</strong> Cả ba đều nhìn thấy chuỗi <code>&quot;bg-bg-elevated/60&quot;</code> như một chuỗi tuỳ ý — <code>className</code> có kiểu <code>string</code>. Chỉ Tailwind biết chuỗi ấy có nghĩa gì, và Tailwind chọn phản ứng bằng cách <em>không phát ra gì</em> khi nó không biết. Không có kênh nào để phàn nàn.</p>
+<p><strong>Why TypeScript, ESLint and Prettier all stay silent.</strong> All three see the string <code>&quot;bg-bg-elevated/60&quot;</code> as an arbitrary one — <code>className</code> is typed <code>string</code>. Only Tailwind knows what that string means, and Tailwind's chosen response is to <em>emit nothing</em> when it does not recognise it. There is no channel through which to complain.</p>
 </div>
 
-<h3>Bốn lý do phổ biến Q1 trả về NO</h3>
+<h3>Four common reasons Q1 comes back NO</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">glob <code>content</code> hỏng</span><span class="lz-d">bài 8.4 — <code>src</code> gõ nhầm thành <code>SRC-TYPO</code>, build ra 10.379 byte và không lớp nào ngoài Preflight. Đây là kiểu Q1=NO tồi tệ nhất vì <em>MỌI</em> lớp trong file đó biến mất, không chỉ một lớp.</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">chuỗi nối thời điểm chạy</span><span class="lz-d">bài 0.1 — <code>&#96;text-\${size}&#96;</code>, Tailwind chỉ nhìn thấy chuỗi <code>text-</code>. Cần viết tên lớp HOÀN CHỈNH ở đâu đó Tailwind quét được, hoặc dùng safelist.</span></div>
-<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">giá trị ngoài thang</span><span class="lz-d">bài 1.2 — <code>w-4.5</code> không có, vì thang chỉ có <code>.5, 1.5, 2.5, 3.5</code>. Hoặc dùng giá trị tuỳ ý <code>w-[18px]</code>, hoặc mở rộng thang trong config.</span></div>
-<div class="lz-step"><span class="lz-k">d</span><span class="lz-t">bổ từ trên token không hỗ trợ</span><span class="lz-d">bài 6.2 — <code>text-text-muted/70</code>, vì <code>--text-muted</code> khai là <code>var()</code> trần chứ không phải kênh RGB. Cần viết lại cả biến và config.</span></div>
+<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">glob <code>content</code> is broken</span><span class="lz-d">lesson 8.4 — <code>src</code> mistyped as <code>SRC-TYPO</code>produced a 10,379-byte build with no classes beyond Preflight. This is the worst kind of Q1=NO, because <em>EVERY</em> class in that file disappears, not just one.</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">a string concatenated at runtime</span><span class="lz-d">lesson 0.1 — <code>&#96;text-\${size}&#96;</code>, Tailwind only sees the string <code>text-</code>. The COMPLETE class name has to appear somewhere Tailwind scans, or you need a safelist.</span></div>
+<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">a value off the scale</span><span class="lz-d">lesson 1.2 — <code>w-4.5</code> does not exist, because the scale only goes <code>.5, 1.5, 2.5, 3.5</code>. Either use an arbitrary value <code>w-[18px]</code>, or extend the scale in the config.</span></div>
+<div class="lz-step"><span class="lz-k">d</span><span class="lz-t">a modifier on a token that does not support it</span><span class="lz-d">lesson 6.2 — <code>text-text-muted/70</code>, because <code>--text-muted</code> is declared as a bare <code>var()</code> rather than as RGB channels. Both the variable and the config have to be rewritten.</span></div>
 </div>
 
-<h3>Cái thứ hai — chạy thực tế</h3>
+<h3>The second check — run it for real</h3>
 <pre><code class="language-html">&lt;!doctype html&gt;
 &lt;head&gt;&lt;style id="probe"&gt;&lt;/style&gt;&lt;/head&gt;
 &lt;body class="theme-light"&gt;
@@ -215,10 +215,10 @@ color: rgb(138, 141, 145)     &lt;- MAU DAY, khong phai 70% alpha
                                     text-text-muted/70 KHONG co
 </div>
 
-<p>Kiểm cuối là chạy thật trong trình duyệt và đọc <code>getComputedStyle</code>. Chữ có màu <em>đầy đủ</em> chứ không phải 70% — nói khác đi, lớp base áp và bổ từ độ mờ KHÔNG. Trùng khớp với những gì bước 2 nói: Tailwind KHÔNG phát ra <code>.text-text-muted\\/70</code>.</p>
+<p>The final check is to run it in a real browser and read <code>getComputedStyle</code>. The text has the <em>full</em> colour rather than 70% of it — in other words the base class applies and the opacity modifier does NOT. That matches what step 2 said: Tailwind does NOT emit <code>.text-text-muted\\/70</code>.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng công cụ &quot;class-name checker&quot; trực tuyến.</strong> Chúng chạy Tailwind CLI mặc định trên máy chủ họ, KHÔNG có config của bạn. <code>bg-bg-elevated/60</code> hợp lệ NẾU bạn khai <code>--bg-elevated</code> — trang web đó không biết. Câu trả lời NHẦM đến từ đó rất khó phân biệt với câu trả lời đúng, và bạn có thể dành cả buổi tối cố sửa một thứ đã hỏng do config chứ không phải do lớp.</p>
+<p><strong>Bẫy — dùng công cụ &quot;class-name checker&quot; trực tuyến.</strong> They run a default Tailwind CLI on their own servers, WITHOUT your config. <code>bg-bg-elevated/60</code> is valid IF you declare <code>--bg-elevated</code> — and that site has no way of knowing. A WRONG answer from it is very hard to tell apart from a right one, and you can spend an entire evening trying to fix something broken by config rather than by the class.</p>
 </div>
 
 <div class="callout">
@@ -228,7 +228,7 @@ color: rgb(138, 141, 145)     &lt;- MAU DAY, khong phai 70% alpha
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind — Detecting classes in source files</span><span class="lc-sub">tailwindcss.com/docs/detecting-classes-in-source-files — bốn nguyên nhân Q1=NO liệt kê nguyên trong trang này, đặc biệt phần &quot;Dynamic class names&quot;.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — getComputedStyle</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/API/Window/getComputedStyle — phép đo cuối, không thể sai vì nó đọc chính bảng kiểu trình duyệt đã áp.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 6 — biến CSS và bẫy alpha</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — vì sao <code>text-text-muted/70</code> KHÔNG phát sinh, và bản vá hai file cho nó.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 6 — CSS variables and the alpha trap</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — vì sao <code>text-text-muted/70</code> KHÔNG phát sinh, và bản vá hai file cho nó.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.2</span>
@@ -368,8 +368,8 @@ element.style {
 <p><strong>The panel is ordered by outcome, not by source.</strong> The winner sits at the top, followed by losers in the order they were emitted in the CSS. This is why <em>reading</em> the panel is faster than <em>reasoning</em> about the panel: the browser already ran the cascade algorithm, and the answer is at the top.</p>
 </div>
 
-<h3>Đọc thứ tự các kẻ thua</h3>
-<p>Các kẻ thua có thứ tự trong bảng KHÔNG phải là thứ tự bạn viết chúng. Đó là thứ tự chúng xuất hiện trong CSS phát sinh:</p>
+<h3>Reading the order of the losers</h3>
+<p>The losers' order in the panel is NOT the order you wrote them. It is the order they appear in the generated CSS:</p>
 
 <div class="out">Thu tu VIET:      mt-1 mt-2 mt-3 mt-4 mt-8 mt-10 mt-12 mt-16 mt-20 mt-24 mt-32
 Thu tu PHAT SINH: mt-1 mt-10 mt-12 mt-16 mt-2 mt-20 mt-24 mt-3 mt-32 mt-4 mt-8
@@ -377,39 +377,39 @@ Thu tu PHAT SINH: mt-1 mt-10 mt-12 mt-16 mt-2 mt-20 mt-24 mt-3 mt-32 mt-4 mt-8
                                                                           kẻ THẮNG
 </div>
 
-<p>Đây là chỗ Chương 3.1 đã đo: Tailwind sắp theo <strong>chuỗi ký tự</strong> chứ không theo <strong>số</strong>. <code>&quot;8&quot;</code> đứng CUỐI khi các chuỗi <code>&quot;1&quot;, &quot;10&quot;, &quot;12&quot;, &quot;16&quot;, &quot;2&quot;, ...</code> sắp theo alphabet. Kẻ ĐẾN SAU trong CSS thắng. Bạn không cần biết thuật toán sắp xếp để dùng DevTools — nhưng biết nó giải thích được vì sao <code>mt-8</code> thắng, không phải <code>mt-32</code> hay <code>mt-1</code>.</p>
+<p>This is what Chapter 3.1 measured: Tailwind sorts by <strong>character string</strong> and not by <strong>số</strong>. <code>&quot;8&quot;</code> comes LAST when the strings are <code>&quot;1&quot;, &quot;10&quot;, &quot;12&quot;, &quot;16&quot;, &quot;2&quot;, ...</code> sorted alphabetically. Whichever comes LATER in the CSS wins. You do not need to know the sorting algorithm to use DevTools — but knowing it explains why <code>mt-8</code> wins rather than <code>mt-32</code> hay <code>mt-1</code>.</p>
 
-<h3>Ba loại &quot;kẻ thắng&quot; bạn có thể thấy</h3>
+<h3>Three kinds of &quot;winner&quot; you may see</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">một utility Tailwind KHÁC</span><span class="lz-nsub">như <code>mt-8</code> ở trên</span></span>
-<span class="lz-nbody">Nguyên nhân: bạn có nhiều utility cùng thuộc tính trong cùng một chuỗi. Vá: chạy chuỗi qua <code>cn()</code> (Chương 3.4), hoặc gỡ bớt utility thừa.</span>
+<span class="lz-node"><span class="lz-ntitle">a DIFFERENT Tailwind utility</span><span class="lz-nsub">such as <code>mt-8</code> above</span></span>
+<span class="lz-nbody">Cause: you have several utilities for the same property in one string. Fix: run the string through <code>cn()</code> (Chapter 3.4), or remove the redundant utility.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">một quy tắc CSS thường</span><span class="lz-nsub">selector trông không giống Tailwind</span></span>
-<span class="lz-nbody">Ví dụ <code>.rich-content h2 { margin-top: 0 }</code> đè <code>.mt-4</code>. Nguyên nhân: 620 quy tắc viết tay của Chương 7. Vá: kiểm độ đặc hiệu ở Q3, không phải reflex thêm bang.</span>
+<span class="lz-node"><span class="lz-ntitle">an ordinary CSS rule</span><span class="lz-nsub">a selector that does not look like Tailwind</span></span>
+<span class="lz-nbody">For example <code>.rich-content h2 { margin-top: 0 }</code> đè <code>.mt-4</code>. Cause: Chapter 7's 620 hand-written rules. Fix: check specificity at Q3, rather than reaching reflexively for an exclamation mark.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">kế thừa từ CHA</span><span class="lz-nsub">không có selector nào ke gach lên</span></span>
-<span class="lz-nbody">Nếu bảng Styles không có rule nào ke gach mà computed vẫn khác, thuộc tính bị KẾ THỪA từ cha. Ví dụ <code>color</code> và <code>font-family</code> luôn kế thừa. Vá: đặt lại explicit trên chính phần tử.</span>
+<span class="lz-node"><span class="lz-ntitle">inherited from a PARENT</span><span class="lz-nsub">no selector is struck through at all</span></span>
+<span class="lz-nbody">If the Styles panel strikes nothing through and the computed value still differs, the property is INHERITED from a parent. For example <code>color</code> và <code>font-family</code> always inherits. Fix: set it explicitly on the element itself.</span>
 </div>
 </div>
 
-<h3>Sao lại vẫn HỎI Q2 nếu DevTools trả lời sẵn?</h3>
-<p>Vì trong 6.562 chuỗi className có giá trị tuỳ ý ở kho này (bài §C phép đo), việc lôi ra một trình duyệt cho mỗi cái sẽ là một cả buổi tối. Q2 tồn tại để BẠN đoán được trong đầu chỗ hỏng ở đâu <em>trước</em> khi mở DevTools, sao cho khi mở là để xác nhận chứ không phải để tìm. Ba loại trong <code>lz-map</code> trên là ba giả thiết được đáng thử.</p>
+<h3>Why ASK Q2 at all if DevTools answers it for you?</h3>
+<p>Because with 6,562 className strings carrying arbitrary values in this repo (the §C measurement), pulling up a browser for each would take a whole evening. Q2 exists so YOU can locate the break in your head <em>before</em> opening DevTools, so that when you do open it, it is to confirm rather than to search. The three kinds in the <code>lz-map</code> above are three hypotheses worth trying.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — đọc panel Computed thay vì panel Styles.</strong> Panel Computed cho bạn <em>số</em> đã áp; nó KHÔNG cho bạn biết ai đã áp nó. Bạn sẽ thấy <code>margin-top: 2rem</code> và không biết nó đến từ <code>mt-8</code>, hay từ một quy tắc CSS thường, hay từ chính giá trị mặc định. Panel Styles có dòng gạch; panel Computed không.</p>
+<p><strong>Bẫy — đọc panel Computed thay vì panel Styles.</strong> The Computed panel gives you <em>số</em> that applied; it does NOT tell you who applied it. You will see <code>margin-top: 2rem</code> and have no idea whether it came from <code>mt-8</code>, from an ordinary CSS rule, or from the default value itself. The Styles panel has strikethroughs; the Computed panel does not.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Khi Q1 trả về CÓ (rule tồn tại) nhưng lớp vẫn không áp, DevTools&#39; Styles panel liệt kê kẻ thắng ở TRÊN CÙNG mà không kẻ gạch và tất cả kẻ thua ở dưới với kẻ gạch — thứ tự các kẻ thua chính là thứ tự CSS phát sinh, giải thích được vì sao <code>mt-8</code> thắng khi bạn đọc chuỗi bằng mắt và nghĩ <code>mt-32</code> sẽ thắng.</p>
+<p><strong>Một câu.</strong> When Q1 comes back YES (the rule exists) but the class still does not apply, DevTools&#39; Styles panel lists the winner at the TOP without a strikethrough and every loser below it struck through — and the losers' order is the generated CSS order, which explains why <code>mt-8</code> wins when reading the string with your eyes suggests <code>mt-32</code> should.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Chrome DevTools — CSS Overview and Styles pane</span><span class="lc-sub">developer.chrome.com/docs/devtools/css/reference — dòng gạch, phím tắt Cmd/Ctrl+Shift+C để chọn phần tử, các nhóm rule.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Firefox DevTools — Examine CSS</span><span class="lc-sub">firefox-source-docs.mozilla.org/devtools-user/page_inspector/how_to/examine_and_edit_css — hoạt động giống Chrome, kèm bảng &quot;Inactive CSS&quot; xịn hơn giải thích vì sao quy tắc KHÔNG áp.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 3 — nơi mô hình rò rỉ</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — cơ chế sắp xếp phía sau vì sao <code>mt-8</code> thắng, và <code>cn()</code> khôi phục trực giác.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 3 — where the model leaks</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — cơ chế sắp xếp phía sau vì sao <code>mt-8</code> thắng, và <code>cn()</code> khôi phục trực giác.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.3</span>
@@ -517,27 +517,27 @@ Thu tu PHAT SINH: mt-1 mt-10 mt-12 mt-16 mt-2 mt-20 mt-24 mt-3 mt-32 mt-4 mt-8
 
 <p>Read the two numbers in the &quot;Specificity&quot; column of DevTools (or count: <em>id, class-or-attribute, element</em>). Higher wins. Same-level ties fall through to Q4 (source order). This is not Tailwind rules — this is the CSS cascade algorithm that every rule participates in.</p>
 
-<h3>Bốn cách phá hoà — sắp theo chi phí</h3>
+<h3>Four ways to break the tie — ordered by cost</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">SẮP LẠI nguồn (Q4)</span><span class="lz-d">Chi phí: gần bằng KHÔNG. Chỉ áp khi hai bên CÙNG độ đặc hiệu. Ví dụ: hai utility trong cùng chuỗi — cho <code>cn()</code> giải quyết. Ví dụ khác: một quy tắc CSS thường lớp-đơn thua utility vì viết TRƯỚC directives Tailwind — chuyển nó xuống dưới.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">wrap <code>@layer</code> (Q4)</span><span class="lz-d">Chi phí: một dòng. Đặt quy tắc trong <code>@layer components</code> và Tailwind DI DỜI nó vào giữa base và utilities (bài 7.1). Chỉ dùng khi bạn muốn utility <em>đè</em> nó — ví dụ default cho một component nhưng cho phép override.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">TĂNG độ đặc hiệu (Q3)</span><span class="lz-d">Chi phí: một selector dài hơn. Áp khi Q3 nói đối thủ có độ đặc hiệu CAO HƠN. Ví dụ: <code>.card &gt; .card__body</code> đè utility <code>.p-4</code> đơn vì 0,2,0 &gt; 0,1,0. Vá: đổi cấu trúc HTML để không cần double-class, hoặc chấp nhận rằng utility ĐANG không đủ đặc hiệu.</span></div>
-<div class="lz-step"><span class="lz-k">4</span><span class="lz-t"><code>!important</code></span><span class="lz-d">Chi phí: mọi utility TƯƠNG LAI trên cùng thuộc tính giờ cũng phải <code>!important</code>. Áp KHI VÀ CHỈ KHI: bạn không kiểm soát selector đối thủ (bên thứ ba, thư viện UI). Trong chính kho này, phạm vi hợp lệ nhỏ đến mức không có ví dụ nào trong 620 quy tắc <code>.rich-content</code> cần đến nó.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">REORDER the source (Q4)</span><span class="lz-d">Cost: nearly ZERO. Only applies when both sides have the SAME specificity. Example: two utilities in one string — let <code>cn()</code> resolve it. Another example: a single-class ordinary CSS rule losing to a utility because it was written BEFORE the Tailwind directives — move it below them.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">wrap <code>@layer</code> (Q4)</span><span class="lz-d">Cost: one line. Put the rule inside <code>@layer components</code> and Tailwind RELOCATES it between base and utilities (lesson 7.1). Use it only when you want utilities to <em>đè</em> it — a component default that still allows an override, say.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">RAISE the specificity (Q3)</span><span class="lz-d">Cost: a longer selector. Applies when Q3 says the rival has HIGHER specificity. Example: <code>.card &gt; .card__body</code> overrides a single <code>.p-4</code> utility because 0,2,0 &gt; 0,1,0. Fix: restructure the HTML so no double class is needed, or accept that the utility simply is not specific enough.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t"><code>!important</code></span><span class="lz-d">Cost: every FUTURE utility on that same property now also has to be <code>!important</code>. Applies IF AND ONLY IF you do not control the rival selector (a third party, a UI library). In this repo the legitimate scope is so small that none of the 620 <code>.rich-content</code> rules needs it.</span></div>
 </div>
 
-<h3>Ba tình huống thật</h3>
+<h3>Three real situations</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">Tình huống A</span><span class="lz-nsub"><code>mt-8 mt-32</code></span></span>
-<span class="lz-nbody">Q1 CÓ. Q2 kẻ thắng là <code>.mt-8</code>. Q3 cả hai đều 0,1,0 — HOÀ. Q4: <code>.mt-8</code> phát sinh SAU trong CSS. Vá: <strong>số 1</strong> — chạy chuỗi qua <code>cn()</code>. Chi phí: không có.</span>
+<span class="lz-node"><span class="lz-ntitle">Situation A</span><span class="lz-nsub"><code>mt-8 mt-32</code></span></span>
+<span class="lz-nbody">Q1 YES. Q2's winner is <code>.mt-8</code>. Q3 puts both at 0,1,0 — a TIE. Q4: <code>.mt-8</code> is generated LATER in the CSS. Fix: <strong>number 1</strong> — run the string through <code>cn()</code>. Cost: none.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">Tình huống B</span><span class="lz-nsub"><code>.rich-content h2</code> đè <code>.mt-4</code></span></span>
-<span class="lz-nbody">Q1 CÓ. Q2 kẻ thắng là <code>.rich-content h2</code>. Q3 đối thủ 0,1,1 &gt; utility 0,1,0. Vá: <strong>số 3</strong> — chấp nhận rằng bên trong <code>.rich-content</code> thì các h2 có margin RIÊNG, viết lại quy tắc h2 bên trong nó nếu cần đổi. Không phải một chỗ nên đập bằng utility.</span>
+<span class="lz-node"><span class="lz-ntitle">Situation B</span><span class="lz-nsub"><code>.rich-content h2</code> đè <code>.mt-4</code></span></span>
+<span class="lz-nbody">Q1 YES. Q2's winner is <code>.rich-content h2</code>. Q3 puts the rival at 0,1,1 against the utility's 0,1,0. Fix: <strong>number 3</strong> — accept that inside <code>.rich-content</code> the h2 elements have their OWN margins, and rewrite the h2 rule inside it if that needs changing. Not a place to hammer with a utility.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">Tình huống C</span><span class="lz-nsub">component thư viện với inline style</span></span>
-<span class="lz-nbody">Q1 CÓ. Q2 kẻ thắng là <code>element.style</code> (0,0,0,với tie-breaker). Q3 mọi utility đều thua inline style. Vá: <strong>số 4</strong> — <code>!</code> tiền tố của Tailwind (<code>!mt-4</code>) — vì bạn không sửa được inline style của component ấy. Đây là trường hợp DUY NHẤT hợp lệ cho <code>!important</code>.</span>
+<span class="lz-node"><span class="lz-ntitle">Situation C</span><span class="lz-nsub">a library component with an inline style</span></span>
+<span class="lz-nbody">Q1 YES. Q2's winner is <code>element.style</code> (0,0,0, with the tie-breaker). Q3: every utility loses to an inline style. Fix: <strong>number 4</strong> — <code>!</code> Tailwind's prefix (<code>!mt-4</code>) — because you cannot edit that component's inline style. This is the ONLY legitimate case for <code>!important</code>.</span>
 </div>
 </div>
 
@@ -562,31 +562,31 @@ for m in re.finditer(r'\\.rich-content[^{}]*\\{', globals_css):
 </div>
 
 <div class="callout">
-<p><strong>Vì sao con số 93,5% quan trọng.</strong> Nó nói rằng cố &quot;ghi đè lên rich-content bằng utility&quot; là một mô hình sai — không phải một lỗi Tailwind. Cách đúng là sửa <code>.rich-content</code> hoặc dùng một wrapper KHÁC không có <code>.rich-content</code>, không phải đập từng chỗ một bằng <code>!important</code>.</p>
+<p><strong>Why the 93.5% figure matters.</strong> It says that trying to &quot;override rich-content with a utility&quot; is a wrong model — not a Tailwind fault. The right way is to fix <code>.rich-content</code> or to use a DIFFERENT wrapper without <code>.rich-content</code>, rather than hammering each spot with <code>!important</code>.</p>
 </div>
 
-<h3>Bảng ra quyết định gọn</h3>
+<h3>The compact decision table</h3>
 <pre><code class="language-text">Q3: do dac hieu doi thu &gt; ban?
      ↓ CÓ                                ↓ HOÀ
-     &gt; ĐỔI CẤU TRÚC (số 3)               Q4: doi thu phat sinh SAU?
-     &gt; hoặc chấp nhận thua                     ↓ CÓ           ↓ KHÔNG
+     &gt; ĐỔI CẤU TRÚC (number 3)               Q4: doi thu phat sinh SAU?
+     &gt; or chấp nhận thua                     ↓ CÓ           ↓ KHÔNG
                                               &gt; SẮP LẠI      &gt; đã ok!
-                                                (số 1 hoặc 2)
+                                                (number 1 or 2)
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — cho rằng <code>@layer</code> (bài 7.1) &quot;giải quyết mọi tranh chấp&quot;.</strong> KHÔNG. Nó chỉ giúp khi Q3 HOÀ. Một quy tắc <code>.rich-content .body</code> ở specificity 0,2,1 bọc vào <code>@layer components</code> vẫn thua một <code>.text-red-500</code> ở specificity 0,1,0 nếu — và chỉ nếu — utility phát sinh sau. <em>Đặc hiệu vẫn quyết định trước layer.</em></p>
+<p><strong>Bẫy — cho rằng <code>@layer</code> (lesson 7.1) &quot;settles every dispute&quot;.</strong> NO. It only helps when Q3 TIES. A <code>.rich-content .body</code> rule at specificity 0,2,1 wrapped in <code>@layer components</code> still loses to a <code>.text-red-500</code> at 0,1,0 if — and only if — the utility is generated later. <em>Specificity still decides before layers do.</em></p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Q3 (độ đặc hiệu) và Q4 (thứ tự nguồn) xét theo đúng thứ tự đó, và bốn cách phá hoà có chi phí khác nhau một bậc độ lớn — sắp lại nguồn thì gần miễn phí, <code>@layer</code> tốn một dòng, tăng độ đặc hiệu tốn một selector dài hơn, và <code>!important</code> tốn <em>mọi</em> utility tương lai trên cùng thuộc tính — nên nó chỉ xứng đáng cho các component bên thứ ba mà bạn không sửa được.</p>
+<p><strong>Một câu.</strong> Q3 (specificity) and Q4 (source order) are considered in exactly that order, and the four ways to break a tie differ in cost by an order of magnitude — reordering the source is nearly free, <code>@layer</code> costs one line, raising specificity costs a longer selector, and <code>!important</code> costs you <em>every</em> future utility on that same property — so it is only worth it for third-party components you cannot edit.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — CSS Specificity</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/Specificity — cách đếm <em>id, class, element</em>, và bảng tie-breaker khi so hai selector.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind — <code>!</code> prefix</span><span class="lc-sub">tailwindcss.com/docs/configuration#important-modifier — cú pháp <code>!mt-4</code> thay cho <code>mt-4 !important</code>, và khuyến cáo dùng &quot;tối thiểu&quot; vì lý do bài này giải thích.</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — cascade layers</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/@layer — khác biệt giữa <code>@layer</code> của CSS và <code>@layer</code> của Tailwind (bài 7.1 đã đo: Tailwind XOÁ nó).</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 7 — <code>@layer</code> và cơ chế thật</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — sáu bài về cách 88% CSS thường của kho này không đi qua layer, và ai thắng khi có tranh chấp.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — cascade layers</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/@layer — khác biệt giữa <code>@layer</code> of a CSS và <code>@layer</code> of a Tailwind (bài 7.1 đã đo: Tailwind XOÁ nó).</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 7 — <code>@layer</code> and the real mechanism</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — sáu bài về cách 88% CSS thường of a kho này không đi qua layer, và ai thắng khi có tranh chấp.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.4</span>
@@ -695,15 +695,15 @@ const cls = &#96;text-\${size} \${isPrimary ? &#39;text-blue-500&#39; : &#39;tex
 &lt;button className={&#96;btn \${cls} \${extra}&#96;}&gt;
 </code></pre>
 
-<p>Ba lỗi khác nhau trong một chuỗi:</p>
+<p>Three different bugs in one string:</p>
 
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">Q1 fail — class-name chẻ ngang</span><span class="lz-d"><code>text-\${size}</code> — Tailwind chỉ thấy chuỗi <code>text-</code>, không thấy <code>text-xs</code> hoặc <code>text-sm</code>. Bài 0.1 đo được, và đây là nguyên nhân số một của Q1=NO.</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">Q4 fail — không qua <code>twMerge</code></span><span class="lz-d">Nếu <code>extra</code> chứa <code>text-red-500</code> và <code>cls</code> đã có <code>text-blue-500</code>, cả hai đều phát sinh và cái đến SAU trong CSS thắng — không phải cái viết SAU trong chuỗi (bài 3.2).</span></div>
-<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">accessibility gap</span><span class="lz-d">Không có cách nào biết chuỗi có chứa <code>focus-visible:ring</code> hay không nếu <code>outline-none</code> có mặt (bài 9.4). Static grep bỏ sót vì <code>${'${'}extra}</code>.</span></div>
+<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">Q1 fail — the class name is split</span><span class="lz-d"><code>text-\${size}</code> — Tailwind only sees the string <code>text-</code>and never <code>text-xs</code> or <code>text-sm</code>. Lesson 0.1 measured it, and this is the number-one cause of Q1=NO.</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">Q4 fail — it never goes through <code>twMerge</code></span><span class="lz-d">If <code>extra</code> contains <code>text-red-500</code> và <code>cls</code> already has <code>text-blue-500</code>, both are generated and whichever comes LATER in the CSS wins — not whichever was written later in the string (lesson 3.2).</span></div>
+<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">accessibility gap</span><span class="lz-d">There is no way to know whether the string contains <code>focus-visible:ring</code> when <code>outline-none</code> is present (lesson 9.4). A static grep misses it because <code>${'${'}extra}</code>.</span></div>
 </div>
 
-<h3>Fix trong hai dòng</h3>
+<h3>Fixed in two lines</h3>
 <pre><code class="language-tsx">import { cn } from '~/lib/utils'   // twMerge(clsx(inputs))
 
 const cls = cn(
@@ -713,7 +713,7 @@ const cls = cn(
 &lt;button className={cn('btn', cls, extra)}&gt;
 </code></pre>
 
-<p><code>cn()</code> gọi <code>twMerge</code>, giải quyết Q4 fail. Nhưng nó KHÔNG cứu được Q1 fail — <code>text-\${size}</code> vẫn không được quét. Cần thêm bước:</p>
+<p><code>cn()</code> calls <code>twMerge</code>, which settles the Q4 failure. But it does NOT rescue the Q1 failure — <code>text-\${size}</code> is still not scanned. One more step is needed:</p>
 
 <pre><code class="language-tsx">// cai NAO ma AI thuong KHONG lam:
 const SIZE = { xs: 'text-xs', sm: 'text-sm', base: 'text-base', lg: 'text-lg' }
@@ -721,7 +721,7 @@ const SIZE = { xs: 'text-xs', sm: 'text-sm', base: 'text-base', lg: 'text-lg' }
 const cls = cn(SIZE[size], isPrimary ? 'text-blue-500' : 'text-slate-500')
 </code></pre>
 
-<p>Tất cả các tên lớp bây giờ xuất hiện DẦY ĐỦ trong file nguồn, Tailwind quét được, Q1 pass.</p>
+<p>Every class name now appears IN FULL in the source file, Tailwind can scan them, and Q1 passes.</p>
 
 <h3>Habit 2 — variant object nested</h3>
 <pre><code class="language-tsx">// pattern AI thuong ra
@@ -734,17 +734,17 @@ const styles = {
 &lt;button className={&#96;\${styles[variant]} \${size === 'lg' ? 'px-6 py-3' : 'px-3 py-1.5'}&#96;}&gt;
 </code></pre>
 
-<p>Cấu trúc này không có lỗi Q1 vì tên lớp xuất hiện đầy đủ trong file nguồn. Nhưng vẫn có lỗi Q4 khi consumer thêm <code>className</code> ghi đè:</p>
+<p>This structure has no Q1 bug, because the class names appear in full in the source. But it still has a Q4 bug when a consumer adds <code>className</code> to override:</p>
 
 <pre><code class="language-tsx">&lt;Button variant="primary" className="bg-transparent" /&gt;
 // mong doi: nen trong suot. Thuc te: bg-blue-500 thang neu ban khong dung cn()
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Đây là chỗ 76,3% Chương 4 đo có ý nghĩa NHẤT.</strong> Không phải 76,3% chuỗi &quot;có bug&quot; — mà là 76,3% các component KHÔNG cho phép consumer override như kỳ vọng. Người dùng component ấy sẽ ngạc nhiên, thêm <code>!important</code>, và lây bệnh xuống bên dưới. Cùng nguyên nhân: không có <code>twMerge</code>.</p>
+<p><strong>This is where Chapter 4's 76.3% matters MOST.</strong> It is not that 76.3% of strings &quot;have a bug&quot; — it is that 76.3% of components do NOT let consumers override the way they expect. Users of those components are surprised, add <code>!important</code>, and the disease spreads downward. Same cause: no <code>twMerge</code>.</p>
 </div>
 
-<h3>Habit 3 — <code>cva()</code> với đa variant</h3>
+<h3>Habit 3 — <code>cva()</code> with several variants</h3>
 <pre><code class="language-tsx">// pattern AI thuong ra
 import { cva } from 'class-variance-authority'
 
@@ -759,20 +759,20 @@ const button = cva('inline-flex items-center gap-2 rounded-md', {
 &lt;button className={button({ variant, size })}&gt; /* KO cn() */
 </code></pre>
 
-<p><code>cva()</code> tự chạy <code>twMerge</code> KHÔNG? Câu trả lời trong tài liệu chính thức: <em>KHÔNG mặc định</em>. Bạn phải cấu hình bằng cách bọc trong <code>cn()</code>:</p>
+<p><code>cva()</code> runs <code>twMerge</code> on its own? The answer, from the official documentation: <em>NOT by default</em>. You have to configure it by wrapping it in <code>cn()</code>:</p>
 
 <pre><code class="language-tsx">// dung
 const button = cva('...', { ... })
 &lt;button className={cn(button({ variant, size }), className)}&gt;
 </code></pre>
 
-<p>Nếu bỏ <code>cn()</code>, khi consumer truyền <code>className="p-8"</code> để phá <code>px-3 py-2</code> của <code>size=md</code>, cả hai đều phát sinh và kẻ đến SAU trong CSS thắng — thường là utility KHÔNG phải cái consumer viết. Bug này khó tái hiện vì phụ thuộc thứ tự phát sinh Tailwind, và có thể chỉ hiện ra ở một số cặp thuộc tính.</p>
+<p>If you omit <code>cn()</code>, then when a consumer passes <code>className="p-8"</code> to override the <code>px-3 py-2</code> of a <code>size=md</code>, both are generated and whichever comes LATER in the CSS wins — usually NOT the one the consumer wrote. This bug is hard to reproduce because it depends on Tailwind's generation order, and it may only surface for certain property pairs.</p>
 
-<h3>Vì sao AI generators lại hay ra ba pattern này</h3>
+<h3>Why AI generators keep producing these three patterns</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">habit 1</span><span class="lz-lnote">phần lớn code samples công cộng viết ở đầu 2022 khi <code>tailwind-merge</code> chưa phổ biến. Model học từ đó nên viết <code>&#96;text-\${size}&#96;</code> mà không nghĩ. Fix: thêm ví dụ <code>cn()</code> vào system prompt hoặc project rules</span></div>
-<div class="lz-layer"><span class="lz-lname">habit 2</span><span class="lz-lnote">các thư viện UI mẫu (shadcn-ui) trước v0.5 KHÔNG dùng <code>twMerge</code>. Nhiều dự án fork từ thời điểm đó. Fix: chạy codemod thay <code>className={A + " " + B}</code> → <code>className={cn(A, B)}</code></span></div>
-<div class="lz-layer"><span class="lz-lname">habit 3</span><span class="lz-lnote"><code>cva()</code> có API riêng và một số ví dụ trong tài liệu chính thức KHÔNG bọc <code>cn()</code>. Model theo mẫu. Fix: một comment ở đầu file <code>utils.ts</code> nói rõ &quot;mọi <code>cva()</code> phải bọc <code>cn()</code>&quot;</span></div>
+<div class="lz-layer"><span class="lz-lname">habit 1</span><span class="lz-lnote">most public code samples were written in early 2022, when <code>tailwind-merge</code> was not yet common. Models learned from those and write <code>&#96;text-\${size}&#96;</code> without thinking. Fix: add a <code>cn()</code> example to the system prompt or the project rules</span></div>
+<div class="lz-layer"><span class="lz-lname">habit 2</span><span class="lz-lnote">the exemplar UI libraries (shadcn-ui) before v0.5 did NOT use <code>twMerge</code>. Many projects forked from that era. Fix: run a codemod to replace <code>className={A + " " + B}</code> → <code>className={cn(A, B)}</code></span></div>
+<div class="lz-layer"><span class="lz-lname">habit 3</span><span class="lz-lnote"><code>cva()</code> has its own API and some examples in the official documentation do NOT wrap it in <code>cn()</code>. Models follow the sample. Fix: a comment at the top of <code>utils.ts</code> stating plainly that &quot;every <code>cva()</code> must be wrapped in <code>cn()</code>&quot;</span></div>
 </div>
 
 <h3>Đo trên kho này</h3>
@@ -783,18 +783,18 @@ cva() KHONG bọc cn()                         : 12   file
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — cho rằng &quot;prompt engineering&quot; sẽ sửa được.</strong> Bạn viết vào system prompt &quot;luôn dùng <code>cn()</code>&quot; và AI tuân theo trong lời hồi đáp đầu, rồi quên trong lời hồi đáp thứ ba khi context window đầy. Cách chắc chắn hơn là một ESLint rule bắt <code>className={&#96;...\${</code> mà không có <code>cn(</code> — <em>từ chối commit</em>, không phải khuyến nghị.</p>
+<p><strong>Bẫy — cho rằng &quot;prompt engineering&quot; sẽ sửa được.</strong> You write &quot;always use <code>cn()</code>&quot; into the system prompt and the AI obeys in its first reply, then forgets by the third once the context window fills. A surer approach is an ESLint rule catching <code>className={&#96;...\${</code> without <code>cn(</code> — <em>and refusing the commit</em>— an enforcement, not a suggestion.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Máy sinh mã AI ra ba pattern nguy hiểm — template concat làm class-name chẻ ngang (Q1 fail), variant object không cho consumer override đúng cách (Q4 fail), và <code>cva()</code> không bọc <code>cn()</code> (Q4 fail cho consumers) — cả ba đều fix trong hai dòng bằng <code>cn()</code> plus một bảng lookup, và ESLint rule bắt được ba pattern này ở commit-time chắc chắn hơn mọi lời hướng dẫn trong system prompt.</p>
+<p><strong>Một câu.</strong> AI code generators produce three dangerous patterns — template concatenation splitting class names (a Q1 failure), variant objects that do not let consumers override properly (a Q4 failure), and <code>cva()</code> not wrapped in <code>cn()</code> (a Q4 failure for consumers) — all three are fixed in two lines with <code>cn()</code> plus a lookup table, and an ESLint rule catching these three at commit time is surer than any instruction in a system prompt.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">tailwind-merge</span><span class="lc-sub">github.com/dcastil/tailwind-merge — thư viện làm việc Tailwind KHÔNG làm: hiểu quan hệ giữa các utility (<code>p</code> nuốt <code>px</code>, <code>my</code> nuốt <code>mt/mb</code>).</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">class-variance-authority (cva)</span><span class="lc-sub">cva.style — API đầy đủ, và ghi chú &quot;CVA does NOT perform any Tailwind-specific merging&quot; ở giữa trang, dễ bỏ qua.</span></span></div>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">eslint-plugin-tailwindcss</span><span class="lc-sub">github.com/francoismassart/eslint-plugin-tailwindcss — rule <code>enforces-shorthand</code> và <code>classnames-order</code> chặn được nhiều biến thể của Habit 1.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 3 — nơi mô hình rò rỉ</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — cơ chế thứ tự phát sinh mà 76,3% chuỗi động dính, cùng bảng đo <code>cn()</code> khôi phục.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">class-variance-authority (cva)</span><span class="lc-sub">cva.style — API full, và ghi chú &quot;CVA does NOT perform any Tailwind-specific merging&quot; ở giữa trang, dễ bỏ qua.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">eslint-plugin-tailwindcss</span><span class="lc-sub">github.com/francoismassart/eslint-plugin-tailwindcss — rule <code>enforces-shorthand</code> và <code>classnames-order</code> chặn được nhiều biến thể of a Habit 1.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 3 — where the model leaks</span><span class="lc-sub">/courses/tailwind-css/learn${REF} — cơ chế thứ tự phát sinh mà 76,3% chuỗi động dính, cùng bảng đo <code>cn()</code> khôi phục.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.5</span>
@@ -922,13 +922,13 @@ cva() KHONG bọc cn()                         : 12   file
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Quiz</span>
 <h2>What Chapter 10 measured</h2>
-<p class="lead">Tám câu, mười hai phút. Chương này không tạo dữ liệu mới; nó ĐÓNG GÓI dữ liệu của tám chương trước thành một cây quyết định.</p>
+<p class="lead">Eight questions, twelve minutes. This chapter generates no new data; it PACKAGES the data of the previous eight chapters into a decision tree.</p>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">10.1 — cây bốn câu</span><span class="lz-lnote">Q1 rule generated · Q2 who overrides it · Q3 specificity · Q4 source order. Không câu nào là &quot;thử !important&quot;</span></div>
-<div class="lz-layer"><span class="lz-lname">10.2 — Q1</span><span class="lz-lnote">ba phép kiểm: grep out.css, sinh probe với chính config, đọc getComputedStyle. Bốn nguyên nhân Q1=NO</span></div>
-<div class="lz-layer"><span class="lz-lname">10.3 — Q2</span><span class="lz-lnote">DevTools Styles panel gạch mọi kẻ thua; kẻ thắng ở trên cùng. Panel Computed KHÔNG cho biết ai thắng</span></div>
-<div class="lz-layer"><span class="lz-lname">10.4 — Q3 và Q4</span><span class="lz-lnote">bốn cách phá hoà xếp theo chi phí: sắp lại nguồn, @layer, tăng specificity, !important. 93,5% của 620 rule .rich-content ở specificity vượt utility</span></div>
-<div class="lz-layer"><span class="lz-lname">10.5 — bẫy AI</span><span class="lz-lnote">ba pattern: template concat làm class-name chẻ ngang, variant object không cn(), cva() không bọc cn(). ESLint rule chặn commit chắc hơn prompt engineering</span></div>
+<div class="lz-layer"><span class="lz-lname">10.1 — the four-question tree</span><span class="lz-lnote">Q1 rule generated · Q2 who overrides it · Q3 specificity · Q4 source order. None of them is &quot;try !important&quot;</span></div>
+<div class="lz-layer"><span class="lz-lname">10.2 — Q1</span><span class="lz-lnote">three checks: grep out.css, generate a probe with your own config, read getComputedStyle. Four causes of Q1=NO</span></div>
+<div class="lz-layer"><span class="lz-lname">10.3 — Q2</span><span class="lz-lnote">The DevTools Styles panel strikes through every loser; the winner sits at the top. The Computed panel does NOT tell you who won</span></div>
+<div class="lz-layer"><span class="lz-lname">10.4 — Q3 and Q4</span><span class="lz-lnote">four ways to break a tie, ordered by cost: reorder the source, @layer, raise specificity, !important. 93.5% of the 620 .rich-content rules out-specify the utilities</span></div>
+<div class="lz-layer"><span class="lz-lname">10.5 — the AI trap</span><span class="lz-lnote">three patterns: template concatenation splitting class names, variant objects without cn(), cva() not wrapped in cn(). An ESLint rule blocking the commit is surer than prompt engineering</span></div>
 </div>
 </div>
 <div class="ml-vi">

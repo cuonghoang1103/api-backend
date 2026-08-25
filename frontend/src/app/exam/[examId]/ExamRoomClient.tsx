@@ -575,6 +575,7 @@ function WriteRunner({ q, idx, total, L, isVi, value, onChange }: {
         <span className="text-sm font-semibold text-text-secondary">{isVi ? 'Câu' : 'Question'} {idx + 1}/{total} · {q.points}đ</span>
       </div>
       <div className="mb-4 text-[15px] leading-relaxed"><Prompt html={q.prompt} L={L} /></div>
+      {q.imageUrl && <QuestionImageToggle url={q.imageUrl} isVi={isVi} resetKey={q.id} className="mb-4" />}
       <textarea value={value} onChange={(e) => onChange(e.target.value)}
         placeholder={isVi ? 'Viết bài của bạn bằng tiếng Anh tại đây…' : 'Write your answer in English here…'}
         className="w-full min-h-[320px] rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 text-[15px] leading-relaxed outline-none focus:border-[var(--exam-accent)] resize-y exam-scroll" />

@@ -61,9 +61,9 @@ const questions = qs.map((q, i) => {
   return {
     kind: 'WRITE',
     points: q.points ?? 1,
-    prompt: (i === 0 ? sysBlock : '') + bl(
-      `<p><b>Question ${i + 1} (${q.points} ${q.points === 1 ? 'point' : 'points'})</b></p>${wrap(q.prompt_en)}`,
-      `<p><b>Câu ${i + 1} (${q.points} điểm)</b></p>${wrap(q.prompt_vi)}`),
+    // KHÔNG tự thêm tiêu đề "Question N" — prompt của agent đã có, và WriteRunner
+    // (frontend) cũng hiện "Câu N/total · Xđ". Thêm nữa gây lặp (sửa 26/08).
+    prompt: (i === 0 ? sysBlock : '') + bl(wrap(q.prompt_en), wrap(q.prompt_vi)),
     sampleSolution: bl(wrap(q.sample_en), wrap(q.sample_vi)),
     rubric,
   };

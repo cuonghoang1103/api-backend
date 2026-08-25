@@ -188,6 +188,14 @@ point = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Name your tuple elements</span><span class="lz-d"><code>[x: number, y: number]</code> costs nothing and turns an unreadable pair into a labelled one in every tooltip.</span></div>
 </div>
 <div class="pitfall"><p><strong>Trap — indexing an array and getting a type that lies.</strong> <code>const first: string = names[0]</code> compiles even when <code>names</code> is empty, because TypeScript types array access as <code>T</code> rather than <code>T | undefined</code> by default. The result is a confident <code>string</code> that is actually <code>undefined</code> at runtime — the exact class of bug types were supposed to remove. Turn on <code>noUncheckedIndexedAccess</code> (Chapter 9.3) and the compiler starts telling the truth; expect it to find real bugs in existing code, which is the point.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: tuple types</span><span class="lc-sub">Fixed-length tuples, optional and rest elements, readonly tuples.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice: arrays &amp; tuples on Code Lab</span><span class="lc-sub">Drill element types, readonly arrays and tuple destructuring.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -237,6 +245,14 @@ point = [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Đặt tên cho phần tử tuple</span><span class="lz-d"><code>[x: number, y: number]</code> không tốn gì và biến một cặp không đọc nổi thành một cặp CÓ NHÃN trong mọi tooltip.</span></div>
 </div>
 <div class="pitfall"><p><strong>Bẫy — truy cập mảng theo chỉ số và nhận về một cái kiểu NÓI DỐI.</strong> <code>const first: string = names[0]</code> biên dịch được ngay cả khi <code>names</code> rỗng, vì mặc định TypeScript gán kiểu cho phép truy cập mảng là <code>T</code> chứ không phải <code>T | undefined</code>. Kết quả là một <code>string</code> đầy tự tin mà lúc chạy thật ra là <code>undefined</code> — đúng cái họ lỗi mà kiểu sinh ra để dẹp. Hãy bật <code>noUncheckedIndexedAccess</code> (Bài 9.3) và trình biên dịch bắt đầu nói thật; hãy chuẩn bị tinh thần là nó sẽ tìm ra bug THẬT trong mã đang có, và đó chính là mục đích.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: kiểu tuple</span><span class="lc-sub">Tuple độ dài cố định, phần tử tuỳ chọn và rest, tuple readonly.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện tập: mảng &amp; tuple trên Code Lab</span><span class="lc-sub">Luyện kiểu phần tử, mảng readonly và phép rã tuple.</span></span>
+</a>
 </div>
 `,
     },
@@ -303,6 +319,14 @@ x.foo.bar.<span class="tok-function">baz</span>();     <span class="tok-comment"
 <div class="lz-layer"><span class="lz-lname">void</span><span class="lz-lnote">"Returns nothing you should use." Different from <code>undefined</code>: a <code>void</code>-returning callback may return a value, and the caller simply ignores it.</span></div>
 </div>
 <div class="pitfall"><p><strong>Trap — <code>any</code> used as a temporary fix that becomes permanent.</strong> It silences the error instantly, which is exactly why it survives code review and lives in the file for years. The damage is not local: any value derived from an <code>any</code> is also <code>any</code>, so one annotation can quietly disable checking across a whole call chain, and nothing ever reports it. When you genuinely do not know a type, write <code>unknown</code> — the errors it produces are the list of places that need a real check. Turn on <code>noImplicitAny</code> so the compiler stops inserting them for you.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/functions.html#never" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: never, void &amp; the special types</span><span class="lc-sub">What each one means to the compiler, and where they differ.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice: special types on Code Lab</span><span class="lc-sub">Drill any vs unknown, void vs undefined, and never.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -359,6 +383,14 @@ x.foo.bar.<span class="tok-function">baz</span>();     <span class="tok-comment"
 <div class="lz-layer"><span class="lz-lname">void</span><span class="lz-lnote">"Không trả về thứ gì bạn nên dùng." Khác <code>undefined</code>: một callback kiểu <code>void</code> VẪN được phép trả về giá trị, và bên gọi đơn giản là lờ nó đi.</span></div>
 </div>
 <div class="pitfall"><p><strong>Bẫy — dùng <code>any</code> như một miếng vá tạm rồi nó thành vĩnh viễn.</strong> Nó dập tắt lỗi ngay lập tức, và chính vì thế nó sống sót qua review rồi nằm lại trong tệp hàng năm trời. Thiệt hại không cục bộ: mọi giá trị dẫn xuất từ một <code>any</code> cũng là <code>any</code>, nên MỘT chú thích có thể lặng lẽ tắt phép kiểm trên cả một chuỗi lời gọi, và không gì báo cáo chuyện đó. Khi bạn thật sự chưa biết kiểu, hãy viết <code>unknown</code> — những lỗi nó sinh ra chính là DANH SÁCH các chỗ cần một phép kiểm thật. Hãy bật <code>noImplicitAny</code> để trình biên dịch thôi tự chèn <code>any</code> giùm bạn.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/functions.html#never" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: never, void &amp; các kiểu đặc biệt</span><span class="lc-sub">Mỗi cái nghĩa là gì với trình biên dịch, và chúng khác nhau ở đâu.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện tập: kiểu đặc biệt trên Code Lab</span><span class="lc-sub">Luyện any với unknown, void với undefined, và never.</span></span>
+</a>
 </div>
 `,
     },

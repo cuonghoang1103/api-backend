@@ -38,6 +38,14 @@ export default {
 
 <div class="callout ok">Type-checking, not emit, is what makes <code>tsc</code> slow. Measure with <code>tsc --extendedDiagnostics</code> and read the shape (numbers vary per run). If library <code>.d.ts</code> checking dominates, <code>skipLibCheck: true</code> both speeds the build and sidesteps cross-dependency type conflicts.</div>
 <div class="note-ct">This project's tsconfig sets <code>skipLibCheck: true</code> — it's why a type mismatch buried inside some dependency's declarations never blocks a deploy, and it keeps the pre-push <code>tsc --noEmit</code> gate fast enough to run on every change. Measure first: the win only matters if library checking is actually your bottleneck.</div>
+<h3>Measure first — where tsc actually spends time</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">tsc --diagnostics</span><span class="lz-d">Prints files, lines, and time split across parse / bind / check / emit. Two minutes of reading beats an afternoon of guessing.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Check time high → your types</span><span class="lz-d">Deep conditional types, large unions, recursive mapped types. This is where a clever type costs the whole team on every build.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Parse time high → too many files</span><span class="lz-d">Often <code>node_modules</code> declarations. <code>skipLibCheck</code> and a tight <code>types</code> array are the levers.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">tsc --generateTrace for the hard cases</span><span class="lz-d">Emits a trace you can open in a profiler and see which type instantiation is expensive, by name.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>skipLibCheck</code> speeds up the build by not checking the types you depend on.</strong> It is the standard recommendation and usually right, but it is a trade, not a free win: it stops <code>tsc</code> from checking <code>.d.ts</code> files, so two packages whose declarations genuinely conflict — the classic being mismatched <code>@types/node</code> versions in a monorepo — no longer produce an error at build time. The conflict is still real; you just meet it later, as a type that resolves differently in two places and an error message that makes no sense. Keep <code>skipLibCheck</code> on for day-to-day speed, and run one CI job without it so the conflicts still surface somewhere.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: measuring builds on Code Lab</span><span class="lc-sub">Read an --extendedDiagnostics report and reason about it.</span></span>
@@ -65,6 +73,14 @@ export default {
 
 <div class="callout ok">Kiểm kiểu, không phải xuất file, là thứ làm <code>tsc</code> chậm. Đo bằng <code>tsc --extendedDiagnostics</code> và đọc hình dạng (số dao động theo lần chạy). Nếu việc kiểm <code>.d.ts</code> thư viện chiếm phần lớn, <code>skipLibCheck: true</code> vừa tăng tốc build vừa né xung đột kiểu giữa các dependency.</div>
 <div class="note-ct">tsconfig của dự án này đặt <code>skipLibCheck: true</code> — đó là lý do một chỗ vênh kiểu chôn sâu trong khai báo của một dependency không bao giờ chặn một deploy, và nó giữ cổng <code>tsc --noEmit</code> trước-khi-push đủ nhanh để chạy trên mỗi thay đổi. Đo trước: cú thắng chỉ đáng nếu kiểm thư viện thật sự là nút thắt của bạn.</div>
+<h3>Đo trước — tsc thật sự tiêu thời gian ở đâu</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">tsc --diagnostics</span><span class="lz-d">In ra số file, số dòng, và thời gian chia theo parse / bind / check / emit. Hai phút đọc hơn một buổi chiều đoán.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Thời gian check cao → do kiểu của bạn</span><span class="lz-d">Conditional type sâu, union lớn, mapped type đệ quy. Đây là chỗ một kiểu "thông minh" bắt cả đội trả giá ở mọi lần build.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Thời gian parse cao → quá nhiều file</span><span class="lz-d">Thường là khai báo trong <code>node_modules</code>. <code>skipLibCheck</code> và một mảng <code>types</code> chặt là hai cái cần gạt.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">tsc --generateTrace cho ca khó</span><span class="lz-d">Sinh ra một vết bạn mở được trong profiler và thấy phép tạo kiểu nào đắt, kèm tên.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — <code>skipLibCheck</code> làm build nhanh lên bằng cách không kiểm những kiểu bạn đang phụ thuộc.</strong> Nó là khuyến nghị chuẩn và thường là đúng, nhưng nó là một cuộc đánh đổi chứ không phải món hời miễn phí: nó chặn <code>tsc</code> kiểm các file <code>.d.ts</code>, nên hai package có khai báo thật sự xung đột — kinh điển là hai phiên bản <code>@types/node</code> lệch nhau trong một monorepo — không còn sinh lỗi lúc build. Xung đột vẫn có thật; bạn chỉ gặp nó muộn hơn, dưới dạng một kiểu giải ra khác nhau ở hai chỗ và một thông báo lỗi chẳng ra nghĩa gì. Hãy bật <code>skipLibCheck</code> cho tốc độ hằng ngày, và chạy một việc CI không có nó để xung đột vẫn lộ ra ở đâu đó.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: đo build trên Code Lab</span><span class="lc-sub">Đọc một báo cáo --extendedDiagnostics và lý giải nó.</span></span>
@@ -108,6 +124,14 @@ export default {
 
 <div class="callout ok"><code>incremental: true</code> caches a build in <code>.tsbuildinfo</code> so the next one only re-checks changes — one flag, always worth it. <code>project references</code> (<code>composite</code> + <code>references</code>, built with <code>tsc -b</code>) split a big repo into independently-built projects that mirror your package structure.</div>
 <div class="note-ct">This repo's backend and frontend are separate TypeScript projects with their own tsconfigs — the pre-push checklist runs <code>tsc --noEmit</code> in each independently, so a backend-only change doesn't pay for re-checking the frontend. That separation is the same idea as project references, applied at the repo's two-package granularity.</div>
+<h3>Two ways to stop redoing work</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">incremental: true</span><span class="lz-t">Cache across runs</span><span class="lz-d">Writes a <code>.tsbuildinfo</code> and re-checks only what changed. One line of config, works on any project.</span></div>
+<div class="lz-node"><span class="lz-k">Project references</span><span class="lz-t">Split into buildable units</span><span class="lz-d">Each sub-project emits its own <code>.d.ts</code>, and dependents check against that instead of re-checking the source.</span></div>
+<div class="lz-node"><span class="lz-k">composite: true</span><span class="lz-t">Required on a referenced project</span><span class="lz-d">Forces declaration emit and a rootDir, which is what makes a referenced project consumable without its sources.</span></div>
+<div class="lz-node"><span class="lz-k">tsc --build</span><span class="lz-t">The orchestrator</span><span class="lz-d">Walks the reference graph, builds only stale projects, in dependency order. Plain <code>tsc</code> ignores references entirely.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a stale <code>.tsbuildinfo</code> makes <code>tsc</code> skip work that genuinely needed redoing.</strong> The cache keys on file timestamps and sizes, so anything that changes a file's meaning without changing those — a <code>git checkout</code> that restores an older version byte-for-byte, a Docker layer that copies files with a fixed mtime, a branch switch on a fast filesystem — can leave the build convinced nothing changed. You get a green build of the previous code, which is worse than a red one. Add <code>*.tsbuildinfo</code> to <code>.gitignore</code> (a committed one poisons every clone), never copy it into a Docker image, and when a build result is inexplicable, delete it and re-run before you debug anything else.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: incremental builds on Code Lab</span><span class="lc-sub">Enable incremental and reason about a reference graph.</span></span>
@@ -141,6 +165,14 @@ export default {
 
 <div class="callout ok"><code>incremental: true</code> cache một build vào <code>.tsbuildinfo</code> để build sau chỉ kiểm lại phần đổi — một cờ, luôn đáng. <code>project references</code> (<code>composite</code> + <code>references</code>, build bằng <code>tsc -b</code>) chia một repo lớn thành các dự án build độc lập phản chiếu cấu trúc package của bạn.</div>
 <div class="note-ct">Backend và frontend của repo này là các dự án TypeScript riêng với tsconfig của mình — checklist trước-khi-push chạy <code>tsc --noEmit</code> trong mỗi bên độc lập, nên một thay đổi chỉ-backend không phải trả giá kiểm lại frontend. Sự tách đó là cùng ý tưởng với project references, áp ở độ hạt hai-package của repo.</div>
+<h3>Hai cách để thôi làm lại việc đã làm</h3>
+<div class="lz-map">
+<div class="lz-node"><span class="lz-k">incremental: true</span><span class="lz-t">Nhớ đệm giữa các lần chạy</span><span class="lz-d">Ghi một file <code>.tsbuildinfo</code> và chỉ kiểm lại phần đã đổi. Một dòng cấu hình, chạy được với mọi dự án.</span></div>
+<div class="lz-node"><span class="lz-k">Project references</span><span class="lz-t">Chia thành các đơn vị dựng được</span><span class="lz-d">Mỗi dự án con sinh <code>.d.ts</code> riêng, và các dự án phụ thuộc kiểm với cái đó thay vì kiểm lại mã nguồn.</span></div>
+<div class="lz-node"><span class="lz-k">composite: true</span><span class="lz-t">Bắt buộc trên dự án được tham chiếu</span><span class="lz-d">Ép sinh khai báo và một rootDir, và chính điều đó làm một dự án được tham chiếu dùng được mà không cần mã nguồn của nó.</span></div>
+<div class="lz-node"><span class="lz-k">tsc --build</span><span class="lz-t">Người điều phối</span><span class="lz-d">Đi qua đồ thị tham chiếu, chỉ dựng những dự án đã cũ, theo thứ tự phụ thuộc. <code>tsc</code> trơn bỏ qua hoàn toàn các tham chiếu.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một <code>.tsbuildinfo</code> cũ làm <code>tsc</code> bỏ qua đúng phần việc thật sự cần làm lại.</strong> Bộ nhớ đệm khoá theo dấu thời gian và kích thước file, nên bất cứ thứ gì đổi ý nghĩa của file mà không đổi hai thứ đó — một <code>git checkout</code> khôi phục bản cũ giống hệt từng byte, một lớp Docker chép file với mtime cố định, một cú đổi nhánh trên hệ tệp nhanh — đều có thể làm bản dựng đinh ninh là chẳng có gì đổi. Bạn nhận một bản build xanh của mã trước đó, thứ còn tệ hơn một bản đỏ. Hãy thêm <code>*.tsbuildinfo</code> vào <code>.gitignore</code> (lỡ commit một cái là đầu độc mọi bản clone), đừng bao giờ chép nó vào ảnh Docker, và khi một kết quả build không sao giải thích nổi thì hãy xoá nó chạy lại trước khi gỡ lỗi bất cứ thứ gì khác.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: build incremental trên Code Lab</span><span class="lc-sub">Bật incremental và lý giải một đồ thị reference.</span></span>
@@ -174,6 +206,14 @@ export default {
 
 <div class="callout ok">Fast builders (esbuild, SWC, Vite, Next) transpile file-by-file and never type-check. <code>isolatedModules: true</code> bans constructs that need cross-file type info (e.g. re-exporting a type without <code>export type</code> → TS1205), keeping your code safe for them. Type-check separately with <code>tsc --noEmit</code>.</div>
 <div class="note-ct">This is exactly the split this project runs: the frontend's <code>next build</code> and the backend's build transpile without full type-checking, while <code>tsc --noEmit</code> is the separate correctness gate in the pre-push checklist. The frontend sets <code>isolatedModules</code> because Next transpiles per-file — which is also why an <code>export type</code> slip shows up as a build error there.</div>
+<h3>Why a bundler needs isolatedModules</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">tsc sees the whole program</span><span class="lz-d">It resolves every import, so it knows whether a re-exported name is a type or a value and can drop it correctly.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">esbuild / swc see one file</span><span class="lz-d">They transpile in isolation for speed. Given <code>export { User } from './types'</code> they cannot tell whether <code>User</code> exists at runtime.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">isolatedModules bans the ambiguity</span><span class="lz-d">It turns every construct a single-file transpiler cannot handle into a compile error, so <code>tsc</code> catches them before the bundler mis-emits.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The two-tool setup</span><span class="lz-d">Bundler transpiles (fast, no type info), <code>tsc --noEmit</code> checks. Neither does the other's job, and CI must run both.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — the bundler emits your code even when the types are wrong, because it never looked at them.</strong> esbuild strips types without checking a single one; that is why it is fast. So a dev server keeps serving a broken build, and a Docker image built with only the bundler ships type errors to production — the whole guarantee is gone and nothing in the output says so. The <code>tsc --noEmit</code> step is not optional overhead, it is where the checking happens: put it in the same script as the build (<code>tsc --noEmit &amp;&amp; vite build</code>) so it cannot be skipped by accident, and run it in CI on every push.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: isolatedModules on Code Lab</span><span class="lc-sub">Fix a type re-export for a per-file transpiler.</span></span>
@@ -197,6 +237,14 @@ export default {
 
 <div class="callout ok">Bộ build nhanh (esbuild, SWC, Vite, Next) transpile từng-file và không bao giờ kiểm kiểu. <code>isolatedModules: true</code> cấm các cấu trúc cần thông tin kiểu chéo-file (vd re-export một kiểu không có <code>export type</code> → TS1205), giữ code của bạn an toàn cho chúng. Kiểm kiểu riêng bằng <code>tsc --noEmit</code>.</div>
 <div class="note-ct">Đây đúng là sự tách dự án này chạy: <code>next build</code> của frontend và build của backend transpile mà không kiểm kiểu đầy đủ, còn <code>tsc --noEmit</code> là cổng đúng-đắn riêng trong checklist trước-khi-push. Frontend đặt <code>isolatedModules</code> vì Next transpile từng-file — cũng là lý do một lỗi quên <code>export type</code> hiện ra như một lỗi build ở đó.</div>
+<h3>Vì sao một bundler cần isolatedModules</h3>
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">tsc nhìn thấy cả chương trình</span><span class="lz-d">Nó giải mọi import, nên nó biết một cái tên được xuất lại là kiểu hay giá trị và bỏ nó đi đúng cách.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">esbuild / swc chỉ nhìn một file</span><span class="lz-d">Chúng dịch trong cô lập để lấy tốc độ. Với <code>export { User } from './types'</code> chúng không biết được <code>User</code> có tồn tại lúc chạy hay không.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">isolatedModules cấm sự mập mờ</span><span class="lz-d">Nó biến mọi cấu trúc mà một trình dịch từng-file không xử nổi thành lỗi biên dịch, để <code>tsc</code> bắt chúng trước khi bundler sinh sai.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Bộ đôi công cụ</span><span class="lz-d">Bundler dịch (nhanh, không thông tin kiểu), <code>tsc --noEmit</code> kiểm. Không cái nào làm việc của cái kia, và CI phải chạy cả hai.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — bundler vẫn sinh mã kể cả khi kiểu sai, vì nó chưa bao giờ nhìn vào kiểu.</strong> esbuild tước kiểu đi mà không kiểm lấy một cái; đó chính là lý do nó nhanh. Nên một dev server cứ phục vụ một bản dựng hỏng, và một ảnh Docker dựng bằng mỗi bundler sẽ ship lỗi kiểu lên production — cả cái bảo đảm biến mất mà chẳng gì trong đầu ra nói cho bạn. Bước <code>tsc --noEmit</code> không phải phần phụ trội tuỳ chọn, nó là nơi việc kiểm diễn ra: hãy đặt nó cùng một script với lệnh build (<code>tsc --noEmit &amp;&amp; vite build</code>) để không thể lỡ tay bỏ qua, và chạy nó trong CI ở mọi lần push.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: isolatedModules trên Code Lab</span><span class="lc-sub">Sửa một re-export kiểu cho một bộ transpile từng-file.</span></span>
@@ -231,6 +279,14 @@ export default {
 
 <div class="callout ok"><code>import type</code> / <code>export type</code> mark type-only dependencies so they're erased, never emitted as runtime imports — smaller bundles, faster builds, no accidental side effects. <code>verbatimModuleSyntax: true</code> enforces the annotation (TS1484), making every runtime import intentional.</div>
 <div class="note-ct">The frontend uses <code>import type</code> for the DTO and model types it shares with the backend — that annotation is exactly what stops a shared <em>type</em> from bundling server code into the browser (chapter 10's boundary point, now also a build-size win). One keyword keeps the client bundle from importing things it only needed at the type level.</div>
+<h3>import type, and its config switches</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">import type { T }</span><span class="lz-t">Guaranteed erased</span><span class="lz-d">Explicit and unambiguous, which is what a single-file transpiler needs. Using the binding as a value is an error.</span></div>
+<div class="lz-layer"><span class="lz-k">import { type T, value }</span><span class="lz-t">Inline, mixed</span><span class="lz-d">TS 4.5+. Lets one statement bring in both, with the type-only part marked. Handy when a module exports both kinds.</span></div>
+<div class="lz-layer"><span class="lz-k">verbatimModuleSyntax</span><span class="lz-t">No guessing at all</span><span class="lz-d">Emits imports exactly as written: anything not marked <code>type</code> stays in the output. Removes the elision rules entirely — the modern recommendation.</span></div>
+<div class="lz-layer"><span class="lz-k">Side-effect imports survive</span><span class="lz-t">import './register'</span><span class="lz-d">The bare form is never elided under any setting, which is why it is the correct way to depend on a module's load-time behaviour.</span></div>
+</div>
+<div class="pitfall"><p><strong>Trap — <code>import type</code> on something you need at runtime compiles, then throws.</strong> The rule is what the value is used <em>for</em>, not what it looks like: a class is both a type and a value, so <code>import type { ApiError } from './errors'</code> is legal, and <code>catch (e) { if (e instanceof ApiError) }</code> then fails with TS1361 — "cannot be used as a value because it was imported using 'import type'". That one is caught. The uncaught version is a Zod schema or a Prisma enum object imported as a type in a file that only uses it in a type position today; add a runtime use later and the error is immediate and clear. The real danger stays the side-effect module from chapter 10 — no error, just behaviour that quietly stops happening.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: import type on Code Lab</span><span class="lc-sub">Convert a type import and reason about the emitted module.</span></span>
@@ -255,6 +311,14 @@ export default {
 
 <div class="callout ok"><code>import type</code> / <code>export type</code> đánh dấu phụ thuộc chỉ-kiểu để chúng bị xoá, không bao giờ xuất thành import lúc chạy — bundle nhỏ hơn, build nhanh hơn, không side effect vô tình. <code>verbatimModuleSyntax: true</code> ép chú thích đó (TS1484), làm mọi import lúc chạy thành có chủ đích.</div>
 <div class="note-ct">Frontend dùng <code>import type</code> cho các kiểu DTO và model nó chia sẻ với backend — chú thích đó đúng là thứ chặn một <em>kiểu</em> dùng chung khỏi đóng gói code server vào trình duyệt (điểm biên của chương 10, giờ cũng là một cú thắng về kích thước build). Một từ khoá giữ bundle client khỏi import những thứ nó chỉ cần ở mức kiểu.</div>
+<h3>import type, và các công tắc cấu hình của nó</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">import type { T }</span><span class="lz-t">Chắc chắn bị xoá</span><span class="lz-d">Tường minh và không mập mờ, đúng thứ một trình dịch từng-file cần. Dùng tên đó như giá trị là lỗi.</span></div>
+<div class="lz-layer"><span class="lz-k">import { type T, value }</span><span class="lz-t">Đánh dấu tại chỗ, trộn lẫn</span><span class="lz-d">TS 4.5+. Cho một câu lệnh mang vào cả hai loại, với phần chỉ-kiểu được đánh dấu. Tiện khi một module xuất cả hai.</span></div>
+<div class="lz-layer"><span class="lz-k">verbatimModuleSyntax</span><span class="lz-t">Không đoán gì cả</span><span class="lz-d">Sinh import đúng như đã viết: thứ gì không đánh dấu <code>type</code> thì ở lại trong đầu ra. Gỡ bỏ hoàn toàn các luật bỏ-import — khuyến nghị hiện đại.</span></div>
+<div class="lz-layer"><span class="lz-k">Import vì tác dụng phụ thì sống sót</span><span class="lz-t">import './register'</span><span class="lz-d">Dạng trần không bao giờ bị bỏ dưới bất kỳ thiết lập nào, và đó là lý do nó là cách đúng để phụ thuộc vào hành vi lúc nạp của một module.</span></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — <code>import type</code> cho thứ bạn cần lúc chạy thì biên dịch được, rồi ném lỗi.</strong> Luật nằm ở chỗ giá trị được dùng <em>để làm gì</em>, không phải ở hình dáng của nó: một class vừa là kiểu vừa là giá trị, nên <code>import type { ApiError } from './errors'</code> hợp lệ, rồi <code>catch (e) { if (e instanceof ApiError) }</code> hỏng với TS1361 — "cannot be used as a value because it was imported using 'import type'". Cái đó có bắt được. Bản không bắt được là một schema Zod hay một object enum Prisma import dạng kiểu trong một file hôm nay chỉ dùng nó ở vị trí kiểu; thêm một chỗ dùng lúc chạy sau này thì lỗi hiện ra ngay và rõ. Cái nguy hiểm thật vẫn là module có tác dụng phụ ở chương 10 — không lỗi nào, chỉ có hành vi lặng lẽ thôi xảy ra.</p></div>
 <a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện tập: import type trên Code Lab</span><span class="lc-sub">Chuyển một import kiểu và lý giải module xuất ra.</span></span>

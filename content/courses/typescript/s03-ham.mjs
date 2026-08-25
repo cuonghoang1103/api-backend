@@ -194,6 +194,14 @@ export default {
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">void means "I ignore your return"</span><span class="lz-d">A <code>() =&gt; void</code> slot accepts a function returning anything. That is why <code>arr.forEach(x =&gt; set.add(x))</code> compiles despite <code>add</code> returning the set.</span></div>
 </div>
 <div class="pitfall"><p><strong>Trap — <code>['1','2','3'].map(parseInt)</code>.</strong> It returns <code>[1, NaN, NaN]</code>, and TypeScript does not stop you, because the types genuinely line up: <code>map</code> passes <code>(value, index)</code> and <code>parseInt(string, radix)</code> accepts two arguments, so index 1 becomes radix 1. The rule that makes point-free callbacks pleasant is the same rule that hides this bug. Pass the argument you mean explicitly — <code>.map(s =&gt; parseInt(s, 10))</code> — whenever the target function has optional parameters, which most standard-library functions do.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/functions.html#function-type-expressions" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: function type expressions</span><span class="lc-sub">Typing callbacks, call signatures and contextual typing.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice: callbacks on Code Lab</span><span class="lc-sub">Drill callback signatures and contextual inference.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -237,6 +245,14 @@ export default {
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">void nghĩa là "tôi lờ giá trị trả về của bạn"</span><span class="lz-d">Một chỗ nhận <code>() =&gt; void</code> chấp nhận hàm trả về bất cứ thứ gì. Đó là lý do <code>arr.forEach(x =&gt; set.add(x))</code> biên dịch được dù <code>add</code> trả về chính cái set.</span></div>
 </div>
 <div class="pitfall"><p><strong>Bẫy — <code>['1','2','3'].map(parseInt)</code>.</strong> Nó trả về <code>[1, NaN, NaN]</code>, và TypeScript KHÔNG chặn bạn, vì các kiểu thật sự khớp nhau: <code>map</code> truyền <code>(value, index)</code> còn <code>parseInt(string, radix)</code> nhận hai đối số, nên index 1 trở thành cơ số 1. Chính cái luật làm cho callback dạng point-free trở nên dễ chịu cũng là cái luật giấu con bug này đi. Hãy truyền tường minh đúng đối số bạn muốn — <code>.map(s =&gt; parseInt(s, 10))</code> — bất cứ khi nào hàm đích có tham số tuỳ chọn, mà phần lớn hàm thư viện chuẩn thì có.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/functions.html#function-type-expressions" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: biểu thức kiểu hàm</span><span class="lc-sub">Gán kiểu cho callback, chữ ký gọi và suy kiểu theo ngữ cảnh.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện tập: callback trên Code Lab</span><span class="lc-sub">Luyện chữ ký callback và suy kiểu theo ngữ cảnh.</span></span>
+</a>
 </div>
 `,
     },
@@ -290,6 +306,14 @@ nums.<span class="tok-function">forEach</span>(n => dst.<span class="tok-functio
 <div class="lz-layer"><span class="lz-lname">Overloads last</span><span class="lz-lnote">Reach for them when the argument shapes are genuinely unrelated — <code>createElement('a')</code> vs <code>createElement('div')</code> returning different element types.</span></div>
 </div>
 <div class="pitfall"><p><strong>Trap — overload signatures the implementation does not actually satisfy.</strong> TypeScript checks the implementation loosely against its overloads, so you can declare an overload returning <code>string</code> while the body can return <code>undefined</code> on one path, and it compiles. Callers then get a <code>string</code> the compiler vouched for and a crash at runtime, with the annotation pointing away from the cause. Keep the implementation signature as narrow as the union of the overloads allows, and write one test per overload — the type system is deliberately not checking this for you.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/functions.html#function-overloads" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: function overloads</span><span class="lc-sub">Overload signatures, the implementation signature, and when to prefer a union.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice: overloads &amp; void on Code Lab</span><span class="lc-sub">Drill overload resolution and void-returning callbacks.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -333,6 +357,14 @@ nums.<span class="tok-function">forEach</span>(n => dst.<span class="tok-functio
 <div class="lz-layer"><span class="lz-lname">Overload sau cùng</span><span class="lz-lnote">Chỉ với tay lấy nó khi các hình dạng đối số thật sự KHÔNG liên quan gì nhau — <code>createElement('a')</code> so với <code>createElement('div')</code> trả về hai kiểu phần tử khác nhau.</span></div>
 </div>
 <div class="pitfall"><p><strong>Bẫy — chữ ký overload mà phần cài đặt thật ra KHÔNG thoả mãn.</strong> TypeScript kiểm phần cài đặt một cách LỎNG so với các overload của nó, nên bạn khai được một overload trả <code>string</code> trong khi thân hàm có một nhánh trả <code>undefined</code>, và nó vẫn biên dịch. Bên gọi khi ấy nhận một <code>string</code> được trình biên dịch bảo chứng và một cú sập lúc chạy, với cái chú thích chỉ đi HƯỚNG NGƯỢC LẠI với nguyên nhân. Hãy giữ chữ ký cài đặt HẸP hết mức mà hợp của các overload cho phép, và viết một bài test cho MỖI overload — hệ kiểu cố ý không kiểm giùm bạn chuyện này.</p></div>
+<a class="link-card doc" href="https://www.typescriptlang.org/docs/handbook/2/functions.html#function-overloads" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Handbook: nạp chồng hàm</span><span class="lc-sub">Chữ ký nạp chồng, chữ ký hiện thực, và khi nào nên chọn union.</span></span>
+</a>
+<a class="link-card codelab" href="/code-lab/typescript${REF}" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện tập: nạp chồng &amp; void trên Code Lab</span><span class="lc-sub">Luyện việc chọn chữ ký nạp chồng và callback trả void.</span></span>
+</a>
 </div>
 `,
     },

@@ -715,6 +715,43 @@ Hai thứ thêm vào để cái chưa xác minh không lọt lên trang học:
 
 ## 6. Việc chưa chạy được từ sandbox (áp cho MỌI khoá mới)
 
+### 6.0 — BA VIỆC Ở MÁY NHÀ, LÀM TRƯỚC NỘI DUNG KHOÁ
+
+⚠️ **Việc 1 gấp hơn toàn bộ phần nội dung khoá học bên dưới.** Nhánh
+`claude/intelligent-cori-pt8zxp` đang mang bản vá bảo mật `94f3a0a0
+fix(security): command injection in video thumbnail extraction`, và bản vá đó
+**chưa có trên `main`, chưa lên production**. Nội dung khoá chậm một ngày không
+sao; lỗ command-injection còn sống trên production thì có.
+
+Nhánh đi trước `origin/main` **242 commit**, nhưng phần đụng `src/` chỉ có
+**đúng hai file** — nên `tsc` chạy rất nhanh và bề mặt rủi ro rất hẹp:
+
+```
+src/services/ffmpeg.service.ts   | 94 +++++++++++-----------
+src/services/video.service.ts    | 22 ++++-----
+```
+
+```bash
+# 1. Kiểm kiểu — CHƯA CHẠY ĐƯỢC LẦN NÀO (sandbox không có node_modules)
+npx tsc --noEmit
+
+# 2. Merge nhánh vào main (local), rồi chạy checklist trước khi đẩy
+git checkout main && git pull origin main
+git merge claude/intelligent-cori-pt8zxp
+
+# 3. Deploy — ĐÂY mới là cái đưa bản vá lên production, KHÔNG phải git push
+bash deploy-nha.sh
+
+# 4. Người dùng thử production, xác nhận chạy được, RỒI mới push (§Docker & Deploy)
+git push origin main
+```
+
+Thứ tự trên là bắt buộc: `deploy-nha.sh` lấy mã từ **commit**, và một push vào
+`main` KHÔNG kích hoạt deploy — đẩy trước rồi quên deploy là kho GitHub xanh
+trong khi production vẫn chạy mã cũ.
+
+### 6.1 — Ảnh bìa + seed cho các khoá mới
+
 Hai bước cuối của mỗi khoá cần môi trường mà sandbox không có — hãy chạy khi ở máy nhà:
 
 ```bash

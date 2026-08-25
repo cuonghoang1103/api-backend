@@ -109,6 +109,13 @@ Content-Length: 50
 Allow: GET, HEAD</div>
 <div class="callout warn">What Express does <em>not</em> do for free: 405. Send <code>DELETE</code> to a path that only has a GET route and you get <strong>404</strong>, not <code>405 Method Not Allowed</code> — because Express matches on method+path together and simply finds nothing. It is technically defensible and practically confusing: a client debugging "404 on an endpoint I can see working in the browser" is almost always sending the wrong method. Worth remembering the next time a frontend developer swears the URL is right.</div>
 <div class="note-ct">The URLs on cuongthai.com follow exactly the table above, with one deliberate exception: a handful of action endpoints such as restoring a deleted conversation, which reads as <code>POST /threads/:id/restore</code>. A pure-noun version of that would be worse to read and worse to search for in the codebase. Consistency is the goal; purity is not.</div>
+<h3>Turning a feature into a resource</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Name the noun, not the action</span><span class="lz-d"><code>/notes</code>, not <code>/getNotes</code>. The method already carries the verb, and the noun is what stays stable as features change.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Plural collection, singular member</span><span class="lz-d"><code>GET /notes</code> lists, <code>GET /notes/12</code> reads one. Consistency here is worth more than which convention you pick.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nest only one level</span><span class="lz-d"><code>/notes/12/comments</code> is fine; <code>/users/3/notes/12/comments/5</code> is a path that breaks whenever the hierarchy changes. Link by id instead.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Then pick the method by its promises</span><span class="lz-d">Safe, idempotent, neither — the next section. The method is a contract the whole internet acts on, not a label.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — RESTful API Design and Implementation</span><span class="lc-sub">10 exercises on resources, methods and API structure.</span></span>
@@ -201,6 +208,13 @@ Content-Length: 50
 Allow: GET, HEAD</div>
 <div class="callout warn">Còn thứ Express <em>không</em> tặng miễn phí: mã 405. Gửi <code>DELETE</code> tới một đường dẫn chỉ có route GET thì bạn nhận <strong>404</strong>, chứ không phải <code>405 Method Not Allowed</code> — vì Express khớp method và path cùng lúc, và đơn giản là không tìm thấy gì. Về lý thì bảo vệ được, về thực tế thì gây rối: một người đang gỡ lỗi "404 ở cái endpoint mà tôi mở trình duyệt thấy chạy ngon" gần như luôn là đang gửi sai phương thức. Đáng nhớ cho lần sau khi một bạn frontend thề sống thề chết là URL đúng rồi.</div>
 <div class="note-ct">Các URL trên cuongthai.com đi theo đúng bảng ở trên, với một ngoại lệ cố ý: vài endpoint hành động chẳng hạn khôi phục một cuộc trò chuyện đã xoá, viết là <code>POST /threads/:id/restore</code>. Một phiên bản thuần danh từ cho việc đó vừa khó đọc hơn vừa khó tìm hơn trong code base. Mục tiêu là sự nhất quán, không phải sự thuần khiết.</div>
+<h3>Biến một tính năng thành một tài nguyên</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Hãy gọi tên DANH TỪ, đừng gọi tên hành động</span><span class="lz-d"><code>/notes</code>, không phải <code>/getNotes</code>. Phương thức đã mang sẵn động từ rồi, còn danh từ mới là thứ ở lại ổn định khi tính năng thay đổi.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Tập hợp thì số nhiều, phần tử thì số ít</span><span class="lz-d"><code>GET /notes</code> liệt kê, <code>GET /notes/12</code> đọc một cái. Sự nhất quán ở đây đáng giá hơn việc bạn chọn quy ước nào.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Chỉ lồng một cấp</span><span class="lz-d"><code>/notes/12/comments</code> thì ổn; còn <code>/users/3/notes/12/comments/5</code> là một đường dẫn sẽ vỡ mỗi khi cây phân cấp thay đổi. Hãy liên kết bằng id thay thế.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Rồi chọn phương thức theo những lời hứa của nó</span><span class="lz-d">An toàn, bất biến khi lặp, hoặc không cái nào — mục kế tiếp. Phương thức là một bản hợp đồng mà cả internet hành động dựa trên đó, không phải một cái nhãn.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực REST API</span><span class="lc-sub">10 bài tập về tài nguyên, phương thức và cấu trúc API.</span></span>
@@ -298,6 +312,13 @@ Content-Type: application/json; charset=utf-8
   <div class="kv"><span class="k">Explicit null over missing</span><span class="v">A field that is sometimes absent forces every client to handle two shapes. Send <code>"body": null</code>.</span></div>
 </div>
 <div class="note-ct">Every API on this site answers errors with <code>{ error: { code, message } }</code> and nothing else, which is why the frontend has exactly one axios interceptor: it reads the status for the transport decision (401 → refresh and retry once) and the <code>code</code> for the UI decision. Endpoints added years apart still work with that one interceptor — that is what the consistency buys.</div>
+<h3>Picking the status code from what happened</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Did it work?</span><span class="lz-d">200 for a read or update, 201 with a <code>Location</code> for a create, 204 when there is genuinely nothing to return.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Was the request malformed?</span><span class="lz-d">400. The body was not valid JSON, a required field was absent, a parameter was not a number.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Was the data valid but unacceptable?</span><span class="lz-d">422. Well-formed and semantically wrong — a date in the past, a quantity above stock. Different from 400, and clients act on it differently.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Who is at fault?</span><span class="lz-d">401 not authenticated, 403 authenticated and refused, 404 no such thing. 5xx means it was your fault, and it should page someone.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — RESTful API Design and Implementation</span><span class="lc-sub">Status codes, response shapes and REST conventions.</span></span>
@@ -379,6 +400,13 @@ Content-Type: application/json; charset=utf-8
   <div class="kv"><span class="k">Null tường minh hơn là thiếu trường</span><span class="v">Một trường lúc có lúc không buộc mọi client phải xử lý hai hình dạng. Hãy gửi <code>"body": null</code>.</span></div>
 </div>
 <div class="note-ct">Mọi API trên website này trả lỗi bằng đúng <code>{ error: { code, message } }</code> và không gì khác, nhờ vậy frontend chỉ có duy nhất một bộ chặn axios: nó đọc mã trạng thái để quyết định ở tầng vận chuyển (401 → làm mới token và gọi lại một lần) và đọc <code>code</code> để quyết định ở tầng giao diện. Những endpoint viết cách nhau nhiều năm vẫn chạy được với đúng bộ chặn đó — đó chính là thứ mà sự nhất quán mua được.</div>
+<h3>Chọn mã trạng thái theo thứ đã xảy ra</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Nó có chạy được không?</span><span class="lz-d">200 cho một phép đọc hay sửa, 201 kèm header <code>Location</code> cho một phép tạo, 204 khi thật sự chẳng có gì để trả về.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Request có sai định dạng không?</span><span class="lz-d">400. Phần thân không phải JSON hợp lệ, một trường bắt buộc bị thiếu, một tham số không phải số.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Dữ liệu hợp lệ mà không chấp nhận được?</span><span class="lz-d">422. Đúng định dạng mà sai về mặt ngữ nghĩa — một ngày nằm trong quá khứ, một số lượng vượt tồn kho. Khác 400, và các client hành xử khác nhau với nó.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Lỗi của ai?</span><span class="lz-d">401 chưa xác thực, 403 đã xác thực và bị từ chối, 404 không có thứ đó. 5xx nghĩa là lỗi của bạn, và nó nên gọi người dậy.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực REST API</span><span class="lc-sub">Mã trạng thái, hình dạng phản hồi và quy ước REST.</span></span>
@@ -504,6 +532,13 @@ Content-Type: application/json; charset=utf-8
   <div class="kv"><span class="k">Not a replacement for DB constraints</span><span class="v">Validation catches the honest mistakes; the unique index catches the race between two simultaneous requests. Chapter 7 needs both.</span></div>
 </div>
 <div class="note-ct">Every write endpoint on this site validates at the router with a declared schema, and the API returns the same <code>fields[]</code> array you saw above — which is how a form can highlight three inputs in red from one response. The endpoints that predate that convention are exactly the ones where a bad request produced a 500 from deep inside a database driver, with a message no user should ever see.</div>
+<h3>Where validation belongs, and what it produces</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">At the boundary, before anything else</span><span class="lz-d">The handler's first statement. Everything after it can then assume the shape, which is what removes the wall of <code>if</code>s.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Parse, do not assert</span><span class="lz-d"><code>schema.parse(req.body)</code> returns a typed value or fails. <code>req.body as CreateNote</code> returns a lie that compiles.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Return field-level errors</span><span class="lz-d">A path and a message per field, so the client can attach each one to its input. One opaque string is a worse API and a worse form.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And derive the type from the schema</span><span class="lz-d">One declaration produces the runtime check and the compile-time type, so they cannot drift apart.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — RESTful API Design and Implementation</span><span class="lc-sub">Validation, error shapes and safe input handling.</span></span>
@@ -620,6 +655,13 @@ Content-Type: application/json; charset=utf-8
   <div class="kv"><span class="k">Không thay thế được ràng buộc ở CSDL</span><span class="v">Kiểm dữ liệu bắt được những nhầm lẫn ngay thẳng; còn chỉ mục duy nhất mới bắt được cuộc đua giữa hai request đồng thời. Chương 7 cần cả hai.</span></div>
 </div>
 <div class="note-ct">Mọi endpoint ghi dữ liệu trên website này đều kiểm tra ngay tại router bằng một lược đồ khai báo, và API trả về đúng mảng <code>fields[]</code> mà bạn vừa thấy — nhờ vậy một cái form có thể tô đỏ ba ô nhập chỉ từ một phản hồi. Những endpoint có từ trước quy ước đó đúng là những chỗ mà một request sai sinh ra lỗi 500 từ tận sâu trong trình điều khiển cơ sở dữ liệu, kèm một câu thông báo mà không người dùng nào nên nhìn thấy.</div>
+<h3>Kiểm dữ liệu thuộc về đâu, và nó cho ra cái gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Ở biên, trước mọi thứ khác</span><span class="lz-d">Câu lệnh đầu tiên của handler. Mọi thứ sau đó có thể giả định được cái dáng, và chính điều đó gỡ bỏ bức tường <code>if</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Hãy PHÂN TÍCH, đừng KHẲNG ĐỊNH</span><span class="lz-d"><code>schema.parse(req.body)</code> trả về một giá trị có kiểu hoặc là hỏng. Còn <code>req.body as CreateNote</code> trả về một lời nói dối biên dịch được.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Trả về lỗi ở mức từng trường</span><span class="lz-d">Một đường dẫn và một thông điệp cho mỗi trường, để client gắn được từng cái vào đúng ô nhập của nó. Một chuỗi mờ đục là một API tệ hơn và một cái form tệ hơn.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và hãy dẫn xuất kiểu từ schema</span><span class="lz-d">Một khai báo sinh ra cả phép kiểm lúc chạy lẫn kiểu lúc biên dịch, nên chúng không thể trôi dạt khỏi nhau.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực REST API</span><span class="lc-sub">Kiểm tra dữ liệu, hình dạng lỗi và xử lý đầu vào an toàn.</span></span>
@@ -722,6 +764,13 @@ SELECT reltuples FROM pg_class …        →   0.025 ms   (estimate from statis
   <div class="kv"><span class="k">Text search is not <code>LIKE '%q%'</code></span><span class="v">A leading wildcard cannot use a normal index. Small tables survive it; past that you need full-text search or a trigram index.</span></div>
 </div>
 <div class="note-ct">The feed on cuongthai.com is cursor-paginated for exactly the reason demonstrated above — an offset feed was showing repeated posts whenever someone published while a visitor was scrolling. The admin tables stayed on offset pagination on purpose: they need page numbers, the row counts are small, and nobody is inserting into them mid-scroll. Two mechanisms, chosen per use case, is the correct answer here — not a rule that one is better.</div>
+<h3>Offset or cursor, decided by the data</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Offset is simple and gets slower</span><span class="lz-d"><code>LIMIT 20 OFFSET 10000</code> makes the database walk ten thousand rows to discard them. Fine for page 2, expensive at page 500.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Offset also skips and repeats rows</span><span class="lz-d">If a row is inserted while the user pages, page 3 shows an item they already saw on page 2. Nothing errors; the list is just wrong.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Cursor is stable and forward-only</span><span class="lz-d">&quot;Give me what comes after this id&quot;. Constant cost at any depth, and inserts do not shift the window.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Always cap the page size</span><span class="lz-d">A list endpoint with no maximum is one <code>?limit=1000000</code> away from an outage, and the caller does not have to be malicious.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — RESTful API Design and Implementation</span><span class="lc-sub">Pagination, filtering and query design.</span></span>
@@ -808,6 +857,13 @@ SELECT reltuples FROM pg_class …        →   0,025 ms   (ước lượng từ
   <div class="kv"><span class="k">Tìm kiếm chữ không phải <code>LIKE '%q%'</code></span><span class="v">Ký tự đại diện đứng đầu thì không dùng được chỉ mục thường. Bảng nhỏ thì còn sống được; qua mốc đó bạn cần full-text search hoặc chỉ mục trigram.</span></div>
 </div>
 <div class="note-ct">Bảng tin trên cuongthai.com phân trang bằng con trỏ đúng vì lý do vừa trình diễn ở trên — bản dùng OFFSET đã hiện lặp bài viết mỗi khi có người đăng bài trong lúc khách đang cuộn. Còn các bảng quản trị thì cố ý giữ nguyên OFFSET: chúng cần số trang, số dòng thì nhỏ, và không ai chèn dữ liệu vào giữa lúc cuộn cả. Hai cơ chế, chọn theo từng ca sử dụng — đó mới là câu trả lời đúng ở đây, chứ không phải một quy tắc kiểu "cái này tốt hơn cái kia".</div>
+<h3>Offset hay cursor, quyết định bởi chính dữ liệu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Offset thì đơn giản và chậm dần</span><span class="lz-d"><code>LIMIT 20 OFFSET 10000</code> bắt cơ sở dữ liệu đi qua mười nghìn dòng chỉ để vứt chúng đi. Ổn với trang 2, đắt đỏ ở trang 500.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Offset còn bỏ sót và lặp lại dòng</span><span class="lz-d">Nếu có một dòng được chèn vào trong lúc người dùng lật trang, trang 3 sẽ hiện một mục họ đã thấy ở trang 2. Chẳng lỗi nào cả; chỉ là cái danh sách sai.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Cursor thì ổn định và chỉ đi tới</span><span class="lz-d">&quot;Cho tôi những gì đứng sau id này&quot;. Chi phí không đổi ở mọi độ sâu, và các phép chèn không làm dịch cửa sổ.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Luôn chặn kích thước trang</span><span class="lz-d">Một endpoint danh sách không có giá trị tối đa chỉ cách một cú <code>?limit=1000000</code> là tới một cú gián đoạn, và bên gọi chẳng cần phải có ác ý.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực REST API</span><span class="lc-sub">Phân trang, lọc và thiết kế truy vấn.</span></span>
@@ -927,6 +983,13 @@ paths:
   <div class="kv"><span class="k">Additive by default</span><span class="v">The cheapest migration is the one where old clients never notice.</span></div>
 </div>
 <div class="note-ct">Everything on this site lives under <code>/api/v1</code> and has never needed a v2 — because every change so far has been expressible as an added optional field. The one place with a genuine contract obligation is media upload, where a retry after a dropped connection must not create a second file; the pattern there is exactly the key-then-work ordering described above.</div>
+<h3>What a client is allowed to depend on</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Adding a field is safe</span><span class="lz-d">A client that ignores unknown keys keeps working. This is why tolerant readers are a contract requirement, not a nicety.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Removing or renaming one is not</span><span class="lz-d">Neither is narrowing a type, making an optional field required, or changing what a status code means. Those need a version.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">ETag gives you optimistic concurrency</span><span class="lz-d">The client sends back <code>If-Match</code>; a 412 means someone else changed the row first. This is how you avoid last-write-wins without locking.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">An idempotency key makes a retry safe</span><span class="lz-d">The client generates it, the server stores the outcome against it. The second attempt returns the first result instead of charging twice.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — RESTful API Design and Implementation</span><span class="lc-sub">Versioning, caching headers and API contracts.</span></span>
@@ -1030,6 +1093,13 @@ paths:
   <div class="kv"><span class="k">Mặc định là chỉ thêm vào</span><span class="v">Cuộc di trú rẻ nhất là cuộc di trú mà client cũ không hề hay biết.</span></div>
 </div>
 <div class="note-ct">Mọi thứ trên website này nằm dưới <code>/api/v1</code> và chưa bao giờ cần tới v2 — vì tới giờ mọi thay đổi đều diễn đạt được thành một trường tuỳ chọn thêm vào. Chỗ duy nhất có nghĩa vụ hợp đồng thật sự là phần tải file lên, nơi một lần thử lại sau khi rớt kết nối không được phép tạo ra file thứ hai; khuôn mẫu ở đó đúng là thứ tự ghi-khoá-trước-làm-việc-sau mô tả ở trên.</div>
+<h3>Một client được phép phụ thuộc vào cái gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Thêm một field thì an toàn</span><span class="lz-d">Một client biết lờ đi các khoá lạ sẽ vẫn chạy. Đó là lý do &quot;đọc khoan dung&quot; là một yêu cầu của hợp đồng, không phải một sự tử tế.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Gỡ hay đổi tên một field thì KHÔNG</span><span class="lz-d">Thu hẹp một kiểu, biến một trường tuỳ chọn thành bắt buộc, hay đổi ý nghĩa của một mã trạng thái cũng vậy. Những thứ đó cần một phiên bản mới.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">ETag cho bạn kiểm soát tranh chấp lạc quan</span><span class="lz-d">Client gửi lại <code>If-Match</code>; một cú 412 nghĩa là có người khác đã đổi cái dòng đó trước. Đây là cách bạn tránh được &quot;ai ghi sau thì thắng&quot; mà không cần khoá.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Một khoá idempotency làm phép thử lại trở nên an toàn</span><span class="lz-d">Client sinh ra nó, máy chủ lưu kết cục theo nó. Lần thử thứ hai trả về kết quả của lần đầu thay vì tính tiền hai lượt.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực REST API</span><span class="lc-sub">Đánh phiên bản, header cache và hợp đồng API.</span></span>

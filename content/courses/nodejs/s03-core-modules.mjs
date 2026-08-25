@@ -739,6 +739,13 @@ Content-Type: application/json; charset=utf-8
 <p><code>res</code> is a writable stream and <code>req</code> is a readable one. Once that clicks, uploads, downloads and proxies all become the same idea.</p>
 <div class="pitfall">Every response must end <strong>exactly once</strong>. Forget <code>res.end()</code> and the client hangs until it times out; call it twice and you get <code>ERR_STREAM_WRITE_AFTER_END</code>. The classic cause is forgetting <code>return</code> after sending a response — execution continues and sends a second one.</div>
 <div class="note-ct">Express is a thin layer over exactly this API. That is why you can always drop down to <code>req</code>/<code>res</code> inside an Express handler when you need something the framework does not wrap — as this site does for streaming media with HTTP Range support.</div>
+<h3>What the raw http module makes you do by hand</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Parse the URL yourself</span><span class="lz-d"><code>req.url</code> is a string. Routing, path parameters and the query string are all yours to split.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Collect the body from a stream</span><span class="lz-d"><code>req</code> is a readable stream, so a JSON body arrives in chunks you concatenate and parse — including the error case when it is not JSON.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Set every header and status</span><span class="lz-d">Nothing is defaulted for you. Forget <code>Content-Type</code> and the browser guesses, usually wrong.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And handle errors on every path</span><span class="lz-d">An uncaught throw in a handler takes the process down, because there is no framework layer to catch it.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-320" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Express.js Core Concepts</span><span class="lc-sub">Ready for chapter 5 — 10 exercises on routing and middleware.</span></span>
@@ -814,6 +821,13 @@ Content-Type: application/json; charset=utf-8
 <p><code>res</code> là một stream ghi còn <code>req</code> là một stream đọc. Khi điều đó vỡ ra trong đầu, thì upload, download và proxy đều trở thành cùng một ý tưởng.</p>
 <div class="pitfall">Mỗi phản hồi phải kết thúc <strong>đúng một lần</strong>. Quên <code>res.end()</code> thì client treo cho tới lúc hết giờ chờ; gọi hai lần thì nhận <code>ERR_STREAM_WRITE_AFTER_END</code>. Nguyên nhân kinh điển là quên <code>return</code> sau khi đã gửi phản hồi — code chạy tiếp và gửi thêm cái thứ hai.</div>
 <div class="note-ct">Express là một lớp mỏng phủ lên đúng cái API này. Đó là lý do bạn luôn có thể tụt xuống dùng thẳng <code>req</code>/<code>res</code> bên trong một handler Express khi cần thứ mà framework không bọc sẵn — như website này vẫn làm khi truyền media có hỗ trợ HTTP Range.</div>
+<h3>Module http trần bắt bạn tự làm những gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Tự phân tích URL</span><span class="lz-d"><code>req.url</code> là một chuỗi. Định tuyến, tham số đường dẫn và chuỗi truy vấn đều là việc bạn phải tự cắt ra.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Tự gom phần thân từ một luồng</span><span class="lz-d"><code>req</code> là một luồng đọc được, nên một thân JSON tới theo từng mẩu mà bạn phải nối lại rồi phân tích — kể cả xử lý trường hợp lỗi khi nó không phải JSON.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Tự đặt mọi header và mã trạng thái</span><span class="lz-d">Chẳng có gì được đặt mặc định giùm bạn. Quên <code>Content-Type</code> là trình duyệt đoán, và thường đoán sai.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và tự xử lỗi trên mọi nhánh</span><span class="lz-d">Một lệnh ném lỗi không bắt trong handler sẽ hạ luôn tiến trình, vì chẳng có tầng framework nào ở đó để hứng nó.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-320" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Các khái niệm lõi của Express</span><span class="lc-sub">Chuẩn bị cho chương 5 — 10 bài tập về định tuyến và middleware.</span></span>

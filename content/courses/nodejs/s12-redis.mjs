@@ -350,6 +350,13 @@ if (got) {
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-424"><span class="lc-t">Code Lab · Expiration, TTL, and Key Management</span><span class="lc-d">EXPIRE, TTL, KEEPTTL and naming keys with discipline</span></a>
 </div>
+<h3>Cache-aside, and where each betrayal enters</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Read: try the cache, then the source</span><span class="lz-d">A hit returns immediately; a miss reads the database and writes the value back. Four lines, and every failure below lives inside them.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Betrayal — the payload is large</span><span class="lz-d">The network transfer and the JSON parse can cost more than the query did. Measure both; a cache is only a win when the source is the slow part.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Betrayal — the write path forgets</span><span class="lz-d">Updating the row without invalidating the key serves stale data until the TTL. This is the one that produces &quot;it fixed itself after five minutes&quot;.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Betrayal — everything expires at once</span><span class="lz-d">Identical TTLs written in one batch expire in one batch, and the stampede hits the database together. Add jitter to the TTL.</span></div>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -469,6 +476,13 @@ if (got) {
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-424"><span class="lc-t">Code Lab · Expiration, TTL, and Key Management</span><span class="lc-d">EXPIRE, TTL, KEEPTTL và đặt tên khoá cho có kỷ luật</span></a>
 </div>
+<h3>Cache-aside, và mỗi cú phản bội đi vào ở đâu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đọc: thử bộ đệm trước, rồi tới nguồn</span><span class="lz-d">Trúng thì trả về ngay; trượt thì đọc cơ sở dữ liệu rồi ghi giá trị ngược lại. Bốn dòng, và mọi cú hỏng bên dưới đều sống bên trong chúng.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Phản bội — phần dữ liệu quá lớn</span><span class="lz-d">Việc truyền qua mạng và việc phân tích JSON có thể tốn hơn cả cái truy vấn. Hãy đo cả hai; một bộ đệm chỉ có lãi khi cái nguồn mới là phần chậm.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Phản bội — đường ghi quên mất</span><span class="lz-d">Cập nhật cái dòng mà không vô hiệu hoá cái khoá thì phục vụ dữ liệu cũ cho tới hết TTL. Đây là cú tạo ra câu &quot;năm phút sau nó tự khỏi&quot;.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Phản bội — mọi thứ hết hạn cùng lúc</span><span class="lz-d">Những TTL giống hệt nhau ghi trong một lô sẽ hết hạn trong một lô, và cơn lũ đập vào cơ sở dữ liệu cùng lúc. Hãy thêm nhiễu ngẫu nhiên vào TTL.</span></div>
+</div>
 </div>
 `,
     },
@@ -561,6 +575,13 @@ hash-max-listpack-entries = 512</div>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-425"><span class="lc-t">Code Lab · Advanced Data Types and Commands</span><span class="lc-d">Bitmap, HyperLogLog, GEO and the less common commands</span></a>
 </div>
+<h3>Why the structure matters more than the size</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A string per field is the expensive shape</span><span class="lz-d">One hundred thousand sessions as separate keys pays Redis's per-key overhead one hundred thousand times.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">A hash groups them under one key</span><span class="lz-d">Same data, one key, and small hashes use a compact encoding that is dramatically smaller in memory.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The encoding has a cliff</span><span class="lz-d">Past a configured entry count or value size, Redis converts to the general structure and memory jumps — one extra field can multiply the footprint.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And for counting, do not store the members</span><span class="lz-d">A Set of unique visitors grows with traffic; HyperLogLog answers the same question in a fixed twelve kilobytes, with about 0.8% error.</span></div>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -644,6 +665,13 @@ hash-max-listpack-entries = 512</div>
 </div>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-425"><span class="lc-t">Code Lab · Advanced Data Types and Commands</span><span class="lc-d">Bitmap, HyperLogLog, GEO và các lệnh ít gặp</span></a>
+</div>
+<h3>Vì sao cấu trúc quan trọng hơn kích thước</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Mỗi field một chuỗi là hình dạng đắt đỏ</span><span class="lz-d">Một trăm nghìn phiên đăng nhập để thành các khoá riêng lẻ sẽ trả cái phí phụ trội trên mỗi khoá của Redis đúng một trăm nghìn lần.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Một hash gom chúng lại dưới một khoá</span><span class="lz-d">Cùng dữ liệu, một khoá, và các hash nhỏ dùng một cách mã hoá gọn hơn hẳn về mặt bộ nhớ.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Cách mã hoá đó có một VÁCH ĐÁ</span><span class="lz-d">Vượt qua số mục hoặc cỡ giá trị đã cấu hình là Redis chuyển sang cấu trúc tổng quát và bộ nhớ nhảy vọt — một field thêm vào có thể nhân dung lượng lên nhiều lần.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và để ĐẾM thì đừng lưu các phần tử</span><span class="lz-d">Một Set khách truy cập duy nhất phình lên theo lưu lượng; HyperLogLog trả lời cùng câu hỏi trong đúng mười hai kilobyte cố định, với sai số cỡ 0,8%.</span></div>
 </div>
 </div>
 `,
@@ -780,6 +808,13 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
 <div class="link-card codelab">
   <a href="/code-lab/authentication${REF}#module-958"><span class="lc-t">Code Lab · Rate limiting</span><span class="lc-d">Application-level rate limiting — continuing from lesson 8.4</span></a>
 </div>
+<h3>Making a check-then-act sequence atomic</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Read-then-write is a race</span><span class="lz-d"><code>GET</code>, add one, <code>SET</code> — two clients read the same number and one increment is lost. Correct in testing, wrong under load.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">A single atomic command fixes counting</span><span class="lz-d"><code>INCR</code> does read, add and write as one operation. There is no window for a second client to interleave.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Two commands are not one operation</span><span class="lz-d"><code>INCR</code> then <code>EXPIRE</code> can crash between them and leave a counter with no TTL — a rate limit that blocks the user forever.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Lua, or a command with options, makes it one</span><span class="lz-d"><code>SET key val NX EX 30</code> for a lock; a script for anything more complex. Redis runs a script atomically.</span></div>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -899,6 +934,13 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
 <div class="link-card codelab">
   <a href="/code-lab/authentication${REF}#module-958"><span class="lc-t">Code Lab · Rate limiting</span><span class="lc-d">Giới hạn tần suất ở tầng ứng dụng — nối tiếp counterBài 8.4</span></a>
 </div>
+<h3>Làm cho một chuỗi kiểm-rồi-làm trở nên nguyên tử</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đọc-rồi-ghi là một cuộc đua</span><span class="lz-d"><code>GET</code>, cộng một, <code>SET</code> — hai client đọc cùng một con số và một lần tăng bị mất. Đúng lúc kiểm thử, sai khi tải cao.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Một lệnh nguyên tử duy nhất chữa được phép đếm</span><span class="lz-d"><code>INCR</code> làm cả đọc, cộng và ghi như MỘT thao tác. Chẳng có khe cửa nào để một client thứ hai chen vào.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Hai lệnh KHÔNG phải một thao tác</span><span class="lz-d"><code>INCR</code> rồi <code>EXPIRE</code> có thể sập ở giữa và để lại một bộ đếm không có TTL — một giới hạn tần suất khoá người dùng lại mãi mãi.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Lua, hoặc một lệnh có tuỳ chọn, gộp chúng thành một</span><span class="lz-d"><code>SET key val NX EX 30</code> cho một cái khoá; một script cho những thứ phức tạp hơn. Redis chạy một script một cách nguyên tử.</span></div>
+</div>
 </div>
 `,
     },
@@ -1009,6 +1051,13 @@ stream-node-max-entries = 100</div>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-736"><span class="lc-t">Code Lab · Advanced Pub/Sub Patterns and Real-Time Features</span><span class="lc-d">Pattern channels, fan-out and realtime patterns</span></a>
 </div>
+<h3>Pub/Sub or Streams, decided by what may be lost</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Pub/Sub delivers to who is listening now</span><span class="lz-d">No subscriber, no delivery, no record. It is a broadcast, and a message sent while a worker restarts is gone.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">A subscriber connection cannot do anything else</span><span class="lz-d">Once subscribed, that client only receives. Reusing it for a <code>GET</code> throws — hence a second connection, which is the trap costing an afternoon.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Streams keep the messages</span><span class="lz-d">An append-only log with ids. A consumer that was down reads what it missed, which is what makes it a queue rather than a broadcast.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Consumer groups split the work</span><span class="lz-d">Each message to one member of the group, with a pending list for what was delivered and never acknowledged — the at-least-once machinery.</span></div>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -1103,6 +1152,13 @@ stream-node-max-entries = 100</div>
 </div>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-736"><span class="lc-t">Code Lab · Advanced Pub/Sub Patterns and Real-Time Features</span><span class="lc-d">Kênh theo mẫu, fan-out và các khuôn mẫu realtime</span></a>
+</div>
+<h3>Pub/Sub hay Streams, quyết định bởi thứ được phép mất</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Pub/Sub giao cho ai đang nghe NGAY LÚC NÀY</span><span class="lz-d">Không có người đăng ký thì không giao, và không có bản ghi nào. Nó là một cú phát thanh, và một thông điệp gửi đi trong lúc một worker khởi động lại là mất.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Một kết nối đã đăng ký thì chẳng làm được gì khác</span><span class="lz-d">Đã subscribe rồi thì client đó chỉ còn NHẬN. Dùng lại nó cho một lệnh <code>GET</code> là ném lỗi — nên phải có kết nối thứ hai, và đó là cái bẫy tốn mất một buổi chiều.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Streams GIỮ LẠI các thông điệp</span><span class="lz-d">Một cuốn log chỉ-ghi-thêm kèm id. Một bên tiêu thụ vừa chết sống dậy sẽ đọc được phần nó bỏ lỡ, và chính điều đó làm nó thành một hàng đợi chứ không phải một cú phát thanh.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nhóm tiêu thụ chia việc ra</span><span class="lz-d">Mỗi thông điệp tới một thành viên của nhóm, kèm một danh sách chờ cho những cái đã giao mà chưa từng được xác nhận — chính là bộ máy ít-nhất-một-lần.</span></div>
 </div>
 </div>
 `,
@@ -1202,6 +1258,13 @@ stream-node-max-entries = 100</div>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-734"><span class="lc-t">Code Lab · Redis Security Hardening and Access Control</span><span class="lc-d">requirepass, ACL, rename-command and closing the port</span></a>
 </div>
+<h3>Commands that stop the whole server</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Redis runs one command at a time</span><span class="lz-d">Every client shares one thread. A command that takes two seconds makes every other client wait two seconds — that is the entire operational risk.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">KEYS scans everything, at once</span><span class="lz-d">On a million keys it blocks for the whole scan. <code>SCAN</code> returns a cursor and a slice, so the server stays responsive between calls.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">DEL blocks proportionally to size</span><span class="lz-d">Freeing a large collection takes time on the main thread. <code>UNLINK</code> hands the free to a background thread and returns immediately.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So the rule is: nothing unbounded</span><span class="lz-d"><code>KEYS</code>, <code>FLUSHALL</code>, <code>SMEMBERS</code> on a huge set, a Lua script with a loop — each is fine on your laptop and an outage on production.</span></div>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -1290,6 +1353,13 @@ stream-node-max-entries = 100</div>
 </div>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-734"><span class="lc-t">Code Lab · Redis Security Hardening and Access Control</span><span class="lc-d">requirepass, ACL, rename-command và counterBịt cổng</span></a>
+</div>
+<h3>Những lệnh làm cả máy chủ đứng hình</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Redis chạy MỘT lệnh tại một thời điểm</span><span class="lz-d">Mọi client dùng chung một luồng. Một lệnh mất hai giây làm mọi client khác chờ hai giây — đó là toàn bộ rủi ro vận hành.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">KEYS quét sạch mọi thứ, trong một phát</span><span class="lz-d">Trên một triệu khoá nó chặn suốt cả lần quét. <code>SCAN</code> trả về một con trỏ và một lát cắt, nên máy chủ vẫn phản hồi được giữa các lời gọi.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">DEL chặn tỷ lệ với kích thước</span><span class="lz-d">Giải phóng một tập hợp lớn tốn thời gian trên luồng chính. <code>UNLINK</code> giao việc giải phóng cho một luồng nền rồi trả về ngay.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nên luật là: đừng có gì không giới hạn</span><span class="lz-d"><code>KEYS</code>, <code>FLUSHALL</code>, <code>SMEMBERS</code> trên một tập khổng lồ, một script Lua có vòng lặp — cái nào cũng ổn trên laptop của bạn và là một cú gián đoạn trên production.</span></div>
 </div>
 </div>
 `,

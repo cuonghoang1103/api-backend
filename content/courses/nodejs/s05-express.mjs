@@ -119,6 +119,13 @@ express
 server logs : [error handler] ERR_HTTP_HEADERS_SENT</div>
 <div class="pitfall">The client got the right answer, so this bug hides for months. But the handler kept running and tried to send a second response; Node raised <code>ERR_HTTP_HEADERS_SENT</code> into the error handler. On a route where the second <code>res.json</code> came before an expensive database write, you would also be doing that write for a request you had already rejected. Rule: <strong>every <code>res.*</code> that ends a request gets a <code>return</code> in front of it</strong>, unless it is the last statement in the function.</div>
 <div class="note-ct">Every API on cuongthai.com is an Express app of exactly this shape: one <code>app</code>, a stack of middleware, routers mounted under <code>/api/v1/…</code>, then a JSON 404 and one error handler at the bottom. The chapters after this one only add layers to that skeleton — database, auth, uploads, realtime — they never replace it.</div>
+<h3>What Express removes, pain by pain</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Routing</span><span class="lz-d"><code>app.get('/notes/:id')</code> instead of parsing <code>req.url</code> and branching. Path parameters arrive parsed.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Body parsing</span><span class="lz-d"><code>express.json()</code> collects the stream and parses it, and answers 400 on malformed JSON instead of crashing the handler.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Middleware</span><span class="lz-d">A chain each request passes through. Authentication, logging and rate limiting become one line each rather than a call at the top of every handler.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Error handling</span><span class="lz-d">A four-argument handler catches what the chain throws — so one throw does not take the process down. Async handlers still need wrapping before Express 5.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-320" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Express.js Core Concepts</span><span class="lc-sub">10 exercises on app setup, routing and responses.</span></span>
@@ -229,6 +236,13 @@ express
 server log  : [error handler] ERR_HTTP_HEADERS_SENT</div>
 <div class="pitfall">Client nhận đúng kết quả, nên con bug này nằm im hàng tháng trời. Nhưng handler vẫn chạy tiếp và cố gửi phản hồi thứ hai; Node ném <code>ERR_HTTP_HEADERS_SENT</code> vào error handler. Ở một route mà lệnh <code>res.json</code> thứ hai nằm sau một phép ghi cơ sở dữ liệu tốn kém, bạn còn đang thực hiện phép ghi đó cho một request mà mình đã từ chối. Quy tắc: <strong>mọi lệnh <code>res.*</code> kết thúc request đều phải có <code>return</code> đứng trước</strong>, trừ khi nó là câu lệnh cuối cùng của hàm.</div>
 <div class="note-ct">Mọi API trên cuongthai.com đều là một ứng dụng Express đúng hình dạng này: một <code>app</code>, một chồng middleware, các router gắn dưới <code>/api/v1/…</code>, rồi một 404 dạng JSON và một error handler ở đáy. Các chương sau chỉ thêm tầng vào bộ khung đó — cơ sở dữ liệu, xác thực, tải file, realtime — chứ không bao giờ thay thế nó.</div>
+<h3>Express gỡ bỏ những gì, theo từng nỗi đau</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Định tuyến</span><span class="lz-d"><code>app.get('/notes/:id')</code> thay vì phân tích <code>req.url</code> rồi rẽ nhánh. Tham số đường dẫn tới nơi đã được phân tích sẵn.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Phân tích thân request</span><span class="lz-d"><code>express.json()</code> gom cái luồng lại rồi phân tích, và trả về 400 khi JSON sai định dạng thay vì làm sập handler.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Middleware</span><span class="lz-d">Một chuỗi mà mọi request đi qua. Xác thực, ghi log và giới hạn tần suất mỗi thứ thành một dòng thay vì một lời gọi ở đầu mỗi handler.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Xử lý lỗi</span><span class="lz-d">Một handler bốn đối số hứng thứ mà cái chuỗi ném ra — nên một lệnh ném lỗi không hạ được cả tiến trình. Handler async vẫn cần bọc lại nếu chưa lên Express 5.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-320" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Kiến thức cốt lõi Express.js</span><span class="lc-sub">10 bài tập về khởi tạo app, định tuyến và phản hồi.</span></span>

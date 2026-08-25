@@ -69,6 +69,13 @@ after freeze: { name: 'An' }</div>
   <div class="kv"><span class="k">var never</span><span class="v">There is no case in new code where var is the right answer.</span></div>
 </div>
 <div class="note-ct">Every service file on this site declares with <code>const</code> first; ESLint is configured to flag a <code>let</code> that is never reassigned. It sounds pedantic until you are reading an unfamiliar 300-line file and can tell at a glance which values move and which don't.</div>
+<h3>Which declaration to reach for, in order</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">const by default</span><span class="lz-d">It says the name will not be repointed. Most variables never are, and the reader gets that guarantee for free.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">let only when you reassign</span><span class="lz-d">A loop counter, an accumulator. The editor tells you — assigning to a <code>const</code> is an immediate error.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Never var in new code</span><span class="lz-d">It ignores block scope, so a <code>var</code> inside an <code>if</code> leaks to the whole function. It is also the mechanism behind the classic loop trap above.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">const does not freeze the value</span><span class="lz-d"><code>const a = []</code> then <code>a.push(1)</code> is legal. The name is locked; the object it points at is not.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-318" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 318 — JavaScript Foundations for Node.js</span><span class="lc-sub">Practise scope, closures and async on 10 graded exercises.</span></span>
@@ -128,6 +135,13 @@ sau freeze: { name: 'An' }</div>
   <div class="kv"><span class="k">var thì không bao giờ</span><span class="v">Trong code mới, không có tình huống nào var là câu trả lời đúng.</span></div>
 </div>
 <div class="note-ct">Mọi file service của website này đều khai báo <code>const</code> trước; ESLint được cấu hình để cảnh báo khi một <code>let</code> chẳng bao giờ bị gán lại. Nghe có vẻ khó tính, cho tới lúc bạn phải đọc một file 300 dòng chưa từng thấy và muốn liếc một cái là biết giá trị nào thay đổi, giá trị nào không.</div>
+<h3>Nên với tay tới khai báo nào, theo thứ tự</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">const theo mặc định</span><span class="lz-d">Nó nói rằng cái tên này sẽ không bị trỏ lại. Phần lớn biến chẳng bao giờ bị trỏ lại, và người đọc nhận được bảo đảm đó miễn phí.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">let chỉ khi bạn gán lại</span><span class="lz-d">Một biến đếm vòng lặp, một biến cộng dồn. Trình soạn thảo sẽ nhắc bạn — gán vào một <code>const</code> là lỗi ngay lập tức.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Đừng bao giờ dùng var trong mã mới</span><span class="lz-d">Nó bỏ qua phạm vi khối, nên một <code>var</code> trong một <code>if</code> rò ra cả hàm. Nó cũng là cơ chế đứng sau cái bẫy vòng lặp kinh điển ở trên.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">const KHÔNG đóng băng giá trị</span><span class="lz-d"><code>const a = []</code> rồi <code>a.push(1)</code> là hợp lệ. Cái tên bị khoá; còn object nó trỏ tới thì không.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-318" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 318 — Nền tảng JavaScript cho Node.js</span><span class="lc-sub">Luyện phạm vi biến, closure và bất đồng bộ qua 10 bài tập có chấm.</span></span>

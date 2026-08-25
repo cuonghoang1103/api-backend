@@ -384,6 +384,13 @@ node_modules/send
 </div>
 <div class="pitfall">The riskiest moment is not choosing a package — it is the <em>update</em> months later. Historically the damaging npm incidents were popular, trusted packages whose maintainer account was compromised, shipping a malicious patch release. A caret range plus no lockfile means that release reaches you automatically.</div>
 <div class="note-ct">This is also why secrets on this site live in the server's runtime environment and never in the repository. If a build-time script ever exfiltrated the environment it could read them — so the blast radius is deliberately kept small: no long-lived credentials in CI, and the deploy user cannot read the production database directly.</div>
+<h3>Reducing what a dependency can do to you</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Read the tree, not the list</span><span class="lz-d">One direct dependency is often sixty-seven packages. <code>npm ls --all</code> is the number that matters, and it is the surface you actually installed.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Install scripts run before you import anything</span><span class="lz-d"><code>--ignore-scripts</code> in CI, and audit the few packages that genuinely need one. This is the step where a compromised package acts.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Pin with a lockfile, install with npm ci</span><span class="lz-d">A range lets a patch release in without review. <code>npm ci</code> installs exactly what was committed.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Then check what changed, not just what broke</span><span class="lz-d"><code>npm audit</code> for known issues, and a diff of the lockfile in code review — an unexplained new transitive dependency is worth a question.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-319" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 319 — Core Modules and the npm Ecosystem</span><span class="lc-sub">10 exercises covering npm, packaging and module resolution.</span></span>
@@ -446,6 +453,13 @@ node_modules/send
 </div>
 <div class="pitfall">Khoảnh khắc rủi ro nhất không phải lúc chọn gói — mà là lúc <em>cập nhật</em> vài tháng sau đó. Trong lịch sử, những sự cố npm gây thiệt hại đều rơi vào các gói phổ biến và đáng tin, nhưng tài khoản người bảo trì bị chiếm rồi phát hành một bản vá độc hại. Dải dấu mũ cộng với việc không có lockfile nghĩa là bản phát hành đó tới tay bạn một cách tự động.</div>
 <div class="note-ct">Đây cũng là lý do các bí mật của website này nằm trong môi trường chạy của server chứ không bao giờ nằm trong kho mã nguồn. Nếu một script lúc build có thể tuồn biến môi trường ra ngoài thì nó sẽ đọc được chúng — nên bán kính thiệt hại được cố tình giữ nhỏ: không để thông tin đăng nhập sống lâu trong CI, và tài khoản deploy không đọc thẳng được cơ sở dữ liệu production.</div>
+<h3>Thu hẹp thứ mà một phụ thuộc làm được với bạn</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Hãy đọc cái CÂY, đừng đọc cái danh sách</span><span class="lz-d">Một phụ thuộc trực tiếp thường là sáu mươi bảy package. <code>npm ls --all</code> mới là con số đáng kể, và đó mới là bề mặt bạn thật sự đã cài.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Script cài đặt chạy TRƯỚC khi bạn import bất cứ thứ gì</span><span class="lz-d">Hãy dùng <code>--ignore-scripts</code> trong CI, và soi kỹ vài package thật sự cần một cái. Đây là bước mà một package bị chiếm sẽ ra tay.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Ghim bằng file lock, cài bằng npm ci</span><span class="lz-d">Một khoảng phiên bản cho phép một bản vá lọt vào mà chẳng ai duyệt. <code>npm ci</code> cài đúng thứ đã được commit.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Rồi kiểm cái gì đã ĐỔI, đừng chỉ kiểm cái gì hỏng</span><span class="lz-d"><code>npm audit</code> cho các vấn đề đã biết, và một bản diff của file lock trong lúc review mã — một phụ thuộc gián tiếp mới xuất hiện không rõ lý do là đáng để hỏi một câu.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-319" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 319 — Module lõi &amp; hệ sinh thái npm</span><span class="lc-sub">10 bài tập về npm, đóng gói và cách phân giải module.</span></span>

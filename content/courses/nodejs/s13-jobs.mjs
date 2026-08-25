@@ -526,6 +526,13 @@ new Worker('email', async (job) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/payment-integration${REF}"><span class="lc-t">Code Lab · Payment Integration</span><span class="lc-d">Idempotency keys and webhooks — where "running twice" costs real money</span></a>
 </div>
+<h3>Retrying without charging the card three times</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A timeout is unknown, not failed</span><span class="lz-d">The request may have succeeded and only the response was lost. This one sentence is why retries need idempotency.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Retry only what is safe to repeat</span><span class="lz-d">A read, a <code>PUT</code>, a delete. A payment is not — unless the provider accepts a key that makes the second attempt return the first result.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Back off exponentially, with jitter</span><span class="lz-d">Constant retries against a struggling service finish it off, and identical delays synchronise every worker into one wave.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Cap the attempts and record the failure</span><span class="lz-d">An unbounded retry is a job that never completes and never alerts. After the cap, move it to a dead-letter queue where a human can see it.</span></div>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -639,6 +646,13 @@ new Worker('email', async (job) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/payment-integration${REF}"><span class="lc-t">Code Lab · Payment Integration</span><span class="lc-d">Idempotency key và webhook — nơi "chạy hai lần" tốn tiền thật</span></a>
 </div>
+<h3>Thử lại mà không quẹt thẻ ba lần</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Hết giờ là KHÔNG BIẾT, không phải ĐÃ HỎNG</span><span class="lz-d">Request có thể đã thành công và chỉ có phản hồi là bị mất. Đúng một câu đó là lý do việc thử lại cần tính lặp-lại-vô-hại.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Chỉ thử lại thứ an toàn khi lặp</span><span class="lz-d">Một phép đọc, một <code>PUT</code>, một phép xoá. Một lần thanh toán thì KHÔNG — trừ khi nhà cung cấp nhận một cái khoá làm lần thử thứ hai trả về kết quả của lần đầu.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Lùi dần theo hàm mũ, có nhiễu ngẫu nhiên</span><span class="lz-d">Thử lại đều đặn nhắm vào một dịch vụ đang ngắc ngoải là kết liễu nó, và những độ trễ giống hệt nhau đồng bộ hoá mọi worker thành một đợt sóng.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Chặn số lần thử và ghi lại cú hỏng</span><span class="lz-d">Một phép thử lại không giới hạn là một công việc chẳng bao giờ xong và chẳng bao giờ báo động. Sau khi hết số lần, hãy chuyển nó sang một hàng đợi thư chết nơi con người nhìn thấy được.</span></div>
+</div>
 </div>
 `,
     },
@@ -745,6 +759,13 @@ new Worker('cron', async () =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-737"><span class="lc-t">Code Lab · Lua Scripting Mastery for Atomic Operations</span><span class="lc-d">The atomic machinery beneath the limiter and the scheduler</span></a>
 </div>
+<h3>Four scheduling needs, four different mechanisms</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Delay — not before a time</span><span class="lz-d">A job with a delay is queued now and becomes eligible later. It is &quot;not before&quot;, never &quot;exactly at&quot; — a busy worker pool adds latency on top.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Priority — jump the queue</span><span class="lz-d">An OTP must not wait behind ten thousand newsletters. Priority is per-queue and only works if the low-priority work is in the same queue.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Throttling — match someone else's limit</span><span class="lz-d">A rate limiter on the worker, not on the producer. The queue absorbs the burst; the limiter decides how fast it drains.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Repeat — cron, with one owner</span><span class="lz-d">A repeatable job in the queue, not a <code>cron</code> line per server — otherwise three instances run the same nightly job three times.</span></div>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -841,6 +862,13 @@ new Worker('cron', async () =&gt; {
 </div>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-737"><span class="lc-t">Code Lab · Lua Scripting Mastery for Atomic Operations</span><span class="lc-d">Cơ chế nguyên tử nằm dưới limiter và scheduler</span></a>
+</div>
+<h3>Bốn nhu cầu lập lịch, bốn cơ chế khác nhau</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Trì hoãn — không sớm hơn một thời điểm</span><span class="lz-d">Một job có độ trễ được xếp hàng NGAY và trở nên đủ điều kiện SAU đó. Nó là &quot;không sớm hơn&quot;, không bao giờ là &quot;đúng lúc&quot; — một pool worker đang bận sẽ cộng thêm độ trễ lên trên.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Ưu tiên — chen hàng</span><span class="lz-d">Một mã OTP không được phép chờ sau mười nghìn bản tin. Ưu tiên áp theo từng hàng đợi và chỉ có tác dụng nếu phần việc ưu tiên thấp nằm cùng hàng đợi đó.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Điều tiết — khớp với giới hạn của người khác</span><span class="lz-d">Một bộ giới hạn tần suất đặt ở worker, không đặt ở bên sản xuất. Hàng đợi hấp thụ cơn dồn dập; bộ giới hạn quyết định nó rút cạn nhanh tới đâu.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Lặp lại — cron, với đúng MỘT chủ sở hữu</span><span class="lz-d">Một job lặp lại nằm trong hàng đợi, đừng để một dòng <code>cron</code> trên mỗi máy chủ — không thì ba thực thể sẽ chạy cùng một công việc đêm ba lần.</span></div>
 </div>
 </div>
 `,

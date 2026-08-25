@@ -1393,6 +1393,13 @@ email KHÁC từ cùng IP        : HTTP 200</div>
   <div class="kv"><span class="k">Limit the login</span><span class="v">Key on IP + email, return 429 with <code>Retry-After</code>, and do not trust <code>req.ip</code> until you have configured the proxy.</span></div>
 </div>
 
+<h3>Four defences, and what each one actually stops</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">HttpOnly stops script theft</span><span class="lz-d">JavaScript cannot read the cookie, so an XSS bug cannot exfiltrate the session. It does nothing against CSRF.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">SameSite stops most CSRF</span><span class="lz-d">The browser will not attach the cookie to a cross-site request. <code>Lax</code> covers the common cases; it is a browser behaviour, not a server check.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">A CSRF token stops the rest</span><span class="lz-d">For the cases <code>SameSite</code> does not cover, and for older browsers. It has to be per-session and verified server-side, or it is decoration.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Revocation stops a stolen session</span><span class="lz-d">A token you cannot revoke is valid until it expires. A server-side session id, or a deny-list, is what turns &quot;log out everywhere&quot; into a real action.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/authentication${REF}#module-957" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 957 — CSRF, XSS &amp; Session Security</span><span class="lc-sub">10 bài tập: cờ cookie, double-submit, chặn kịch bản chèn.</span></span>
@@ -1528,6 +1535,13 @@ email KHÁC từ cùng IP        : HTTP 200</div>
   <div class="kv"><span class="k">Chặn tần suất đăng nhập</span><span class="v">Khoá theo IP + email, trả 429 kèm <code>Retry-After</code>, và đừng tin <code>req.ip</code> cho tới khi bạn đã cấu hình proxy.</span></div>
 </div>
 
+<h3>Bốn lớp phòng thủ, và mỗi lớp thật sự chặn được gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">HttpOnly chặn việc script lấy cắp</span><span class="lz-d">JavaScript không đọc được cookie, nên một lỗ hổng XSS không rút được phiên đăng nhập ra ngoài. Nó chẳng làm gì với CSRF.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">SameSite chặn phần lớn CSRF</span><span class="lz-d">Trình duyệt sẽ không đính cookie vào một request từ trang khác. <code>Lax</code> phủ được các ca thường gặp; đây là hành vi của TRÌNH DUYỆT, không phải một phép kiểm ở máy chủ.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Một token CSRF chặn phần còn lại</span><span class="lz-d">Cho những ca mà <code>SameSite</code> không phủ, và cho các trình duyệt cũ. Nó phải theo từng phiên và phải được xác minh ở máy chủ, không thì nó chỉ là đồ trang trí.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Thu hồi chặn một phiên bị đánh cắp</span><span class="lz-d">Một token bạn không thu hồi được thì hợp lệ cho tới khi nó hết hạn. Một id phiên ở phía máy chủ, hoặc một danh sách chặn, mới là thứ biến &quot;đăng xuất mọi nơi&quot; thành một hành động thật.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/authentication${REF}#module-957" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 957 — CSRF, XSS &amp; Session Security</span><span class="lc-sub">10 bài tập: cờ cookie, double-submit, chặn kịch bản chèn.</span></span>

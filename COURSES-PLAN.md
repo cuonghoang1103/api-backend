@@ -83,9 +83,10 @@ nó báo "✅ đạt mọi sàn" ở lúc chương 10–16 (28 bài) vẫn còn 
 khoá bằng cách *import module* (đừng quét regex trên file: `slug:` ở cấp
 section sẽ bị đếm nhầm thành bài, cho ra 168 thay vì 85):
 
-**1.054 bài lý thuyết · 85 bài vẫn dưới chuẩn TỪNG BÀI**, ở 13 khoá khác:
+**Đo lần đầu: 1.054 bài lý thuyết · 85 bài dưới chuẩn TỪNG BÀI** ở 13 khoá
+khác — tất cả đều đang "đạt sàn tổng" (TB 9,1k–24,1k):
 
-| Khoá | Số bài thiếu | | Khoá | Số bài thiếu |
+| Khoá | Thiếu | | Khoá | Thiếu |
 |---|---|---|---|---|
 | `nodejs` | 39 | | `media-processing` | 3 |
 | `prisma-orm` | 10 | | `authentication` | 2 |
@@ -95,8 +96,23 @@ section sẽ bị đếm nhầm thành bài, cho ra 168 thay vì 85):
 | `linux-bash` | 4 | | `tailwind-css` | 1 |
 | `docker` | 3 | | | |
 
-Cả 13 khoá này **đều đạt sàn tổng** (TB 9.1k–24.1k). Lỗ thủng chỉ lộ ra khi
-đếm theo từng bài. Đây là việc còn lại, chưa làm.
+**✅ ĐÃ VÁ HẾT 85 bài, ngày 25/08/2026.** Đo lại: **1.054 bài lý thuyết ·
+0 bài dưới chuẩn từng-bài**. Cả 18 khoá đều sạch ở cả ba bộ kiểm.
+
+Việc vá phải khớp đúng quy ước markup của TỪNG khoá, vì chúng không giống
+nhau — và đây là thứ dễ làm hỏng nhất nếu sinh mã hàng loạt:
+
+| Quy ước | Khoá dùng |
+|---|---|
+| `<span class="lz-k">` | prisma-orm, socket-io, object-storage, media-processing, docker, redis, linux-bash (đa số) |
+| `<div class="lz-k">` | nodejs |
+| `lz-layer`/`lz-lname`/`lz-lnote` | deploy-vps, authentication, tailwind-css, nginx, github-actions |
+| `<a class="link-card" href=…>CHỮ</a>` | prisma-orm, authentication, nginx, docker, linux-bash, redis |
+| `<div class="link-card">` + `lc-ico`/`lc-body`, URL nằm trong `lc-sub` | socket-io, object-storage, media-processing, tailwind-css, github-actions, deploy-vps |
+| `<a class="link-card dl">` + `lc-ico`/`lc-body` | nodejs |
+| `<div class="pitfall"><p><strong>Trap — …` | đa số |
+| `<div class="pitfall"><strong>Pitfall:</strong> …` (không bọc `<p>`) | docker, redis, linux-bash, deploy-vps, nodejs |
+
 
 ### Thứ tự ưu tiên (đã chốt)
 

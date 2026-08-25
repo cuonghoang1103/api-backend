@@ -893,6 +893,13 @@ timeout or doing less work in the transaction.</div>
   <strong>How cuongthai.com does it.</strong> The same three-layer split runs the real site: routes translate HTTP, services own the rules, and the Prisma client is imported from one place. Because services never touch <code>req</code>/<code>res</code>, the identical <code>notes</code> functions are called from HTTP routes, from the scheduled AI jobs, and from tests. Transactions are used where they earn it — issuing a Pro activation code and marking it redeemed, creating a message thread with its first message — and deliberately not wrapped around anything that talks to R2 or an AI provider, because a five-second upload inside a transaction is a pool slot held hostage.
 </div>
 
+<h3>What a transaction does and does not promise</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">All of it, or none of it</span><span class="lz-d">Two writes inside one transaction either both land or neither does. A crash between them leaves the database as it was.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">It does not order concurrent work</span><span class="lz-d">Under Read Committed, two transactions can read the same row, each compute from it, and each write — the second silently wins. Atomicity is not serialisation.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">It holds locks for its whole duration</span><span class="lz-d">So a transaction that awaits an HTTP call holds a row lock across the network. Keep them short and do I/O outside.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And Prisma gives you two forms</span><span class="lz-d">An array runs the queries as one unit; a callback lets you branch, and it is the one where a slow line becomes a long-held lock.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/prisma-orm${REF}#module-2368" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 2368 — Transactions and Batch Operations</span><span class="lc-sub">10 exercises on atomic writes and batching.</span></span>
@@ -1048,6 +1055,13 @@ timeout or doing less work in the transaction.</div>
   <strong>cuongthai.com làm thế nào.</strong> Đúng cách chia ba tầng này đang chạy trang thật: route dịch HTTP, service giữ luật nghiệp vụ, và Prisma client được import từ một chỗ duy nhất. Vì service không bao giờ chạm vào <code>req</code>/<code>res</code>, cùng những hàm <code>notes</code> đó được gọi từ route HTTP, từ các job AI chạy theo lịch, và từ test. Transaction chỉ dùng ở chỗ nó xứng đáng — phát mã kích hoạt Pro và đánh dấu đã dùng, tạo một luồng tin nhắn kèm tin nhắn đầu tiên — và cố tình KHÔNG bọc quanh bất cứ thứ gì nói chuyện với R2 hay nhà cung cấp AI, vì một lần tải file năm giây nằm trong transaction là một chỗ pool bị bắt làm con tin.
 </div>
 
+<h3>Một giao dịch hứa gì và không hứa gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Được cả, hoặc chẳng được gì</span><span class="lz-d">Hai phép ghi trong một giao dịch thì hoặc cả hai cùng vào hoặc chẳng cái nào vào. Một cú sập ở giữa để lại cơ sở dữ liệu y như cũ.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Nó KHÔNG sắp thứ tự cho các công việc song song</span><span class="lz-d">Dưới Read Committed, hai giao dịch có thể cùng đọc một dòng, mỗi bên tính ra từ đó, rồi cùng ghi — bên thứ hai thắng một cách lặng lẽ. Tính nguyên tử không phải tính tuần tự.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nó giữ khoá suốt cả thời gian tồn tại</span><span class="lz-d">Nên một giao dịch có await một lời gọi HTTP sẽ giữ khoá dòng xuyên qua đường mạng. Hãy giữ chúng ngắn và đẩy phần vào-ra ra ngoài.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và Prisma cho bạn hai dạng</span><span class="lz-d">Dạng mảng chạy các truy vấn như một khối; dạng callback cho bạn rẽ nhánh, và đó là dạng mà một dòng chậm biến thành một cái khoá giữ lâu.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/prisma-orm${REF}#module-2368" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 2368 — Transactions and Batch Operations</span><span class="lc-sub">10 bài tập về ghi nguyên tử và gộp lô.</span></span>

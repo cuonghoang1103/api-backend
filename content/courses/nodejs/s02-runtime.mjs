@@ -649,6 +649,13 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
   <div class="kv"><span class="k">Best of all</span><span class="v">Don't do the work during the request. Precompute it, cache it, or queue it.</span></div>
 </div>
 <div class="note-ct">On this site, video and image processing never happens inside a request. The upload endpoint stores the file and returns immediately; the heavy work runs elsewhere. That is the pattern to internalise: <strong>a request should decide and delegate, not compute.</strong></div>
+<h3>Choosing where heavy work goes</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Chunk it, if it can be interrupted</span><span class="lz-d">Split the loop and yield with <code>setImmediate</code>. Cheapest option, no new process, and the loop stays responsive between chunks.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">A worker thread, for CPU in this process</span><span class="lz-d">Real parallelism, shared memory via <code>SharedArrayBuffer</code>, and a message-passing boundary. Right for image work, hashing, parsing.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">A cluster, to use all cores for requests</span><span class="lz-d">Several processes behind one port. It does not make one slow handler faster — it makes N of them run at once.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">A queue, when the work outlives the request</span><span class="lz-d">Chapter 13. The user gets an id immediately and the work happens elsewhere, which is the only option that survives a restart.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-324" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 324 — Performance, Caching and Scaling</span><span class="lc-sub">10 exercises on workers, clustering and keeping the loop free.</span></span>
@@ -715,6 +722,13 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
   <div class="kv"><span class="k">Tốt nhất trong mọi cách</span><span class="v">Đừng làm việc đó ngay trong request. Hãy tính trước, cache lại, hoặc xếp vào hàng đợi.</span></div>
 </div>
 <div class="note-ct">Ở website này, xử lý video và ảnh không bao giờ diễn ra bên trong một request. Endpoint upload lưu file rồi trả về ngay lập tức; phần việc nặng chạy ở chỗ khác. Đó là mẫu hình cần thấm: <strong>một request nên quyết định và giao việc, chứ không nên ngồi tính.</strong></div>
+<h3>Chọn chỗ để đẩy công việc nặng sang</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Chia nhỏ, nếu nó ngắt quãng được</span><span class="lz-d">Cắt vòng lặp ra rồi nhường lượt bằng <code>setImmediate</code>. Phương án rẻ nhất, không thêm tiến trình nào, và vòng lặp vẫn phản hồi được giữa các mẩu.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Một worker thread, cho việc nặng CPU trong chính tiến trình này</span><span class="lz-d">Song song thật, chia sẻ bộ nhớ qua <code>SharedArrayBuffer</code>, và một ranh giới truyền thông điệp. Đúng cho xử lý ảnh, băm, phân tích cú pháp.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Một cụm (cluster), để dùng hết các nhân cho request</span><span class="lz-d">Nhiều tiến trình sau một cổng. Nó KHÔNG làm một handler chậm nhanh lên — nó làm N cái chạy được cùng lúc.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Một hàng đợi, khi công việc sống lâu hơn cái request</span><span class="lz-d">Chương 13. Người dùng nhận một id ngay lập tức và phần việc xảy ra ở nơi khác, đó là phương án duy nhất sống sót qua một lần khởi động lại.</span></div>
+</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-324" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 324 — Hiệu năng, Cache và Mở rộng</span><span class="lc-sub">10 bài tập về worker, cluster và giữ cho event loop luôn rảnh.</span></span>

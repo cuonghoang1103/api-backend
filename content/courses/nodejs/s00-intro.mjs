@@ -414,6 +414,13 @@ Type ".help" for more information.
 'object'
 &gt; .exit</div>
 <div class="note-ct">This site pins Node 22 in three places at once: <code>package.json</code> engines, the Dockerfile base image, and the CI workflow. When they disagree, the code passes on a laptop and fails on the server — which is exactly the kind of bug that only shows up in front of users.</div>
+<h3>Getting a Node version you can change later</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Install a version manager, not Node</span><span class="lz-d"><code>nvm</code>, <code>fnm</code> or <code>volta</code>. A system-wide Node from a package manager is the one you cannot change when a project needs another.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Pin the version per project</span><span class="lz-d">An <code>.nvmrc</code> or the <code>engines</code> field. Then &quot;works on my machine&quot; has one fewer meaning.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Use an LTS release</span><span class="lz-d">Even-numbered majors get 30 months of support. An odd-numbered one is fine to try and wrong to deploy.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Then confirm what is actually running</span><span class="lz-d"><code>node --version</code> in a <em>new</em> terminal — the old one read its PATH when it started, which is half of all &quot;it did not install&quot; reports.</span></div>
+</div>
 <a class="link-card exphub" href="/exp-hub/nodejs-cai-dat-moi-truong${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Environment setup guide — downloads &amp; troubleshooting</span><span class="lc-sub">Step-by-step nvm / fnm / VS Code setup for Windows, macOS and Linux, with official download links — on Exp Hub.</span></span>
@@ -498,6 +505,13 @@ Type ".help" for more information.
 'object'
 &gt; .exit</div>
 <div class="note-ct">Website này ghim Node 22 ở ba nơi cùng lúc: mục engines trong <code>package.json</code>, image nền trong Dockerfile, và workflow CI. Khi ba chỗ đó lệch nhau, code chạy ngon trên laptop nhưng chết trên server — đúng loại bug chỉ lộ ra trước mặt người dùng.</div>
+<h3>Có được một phiên bản Node mà sau này đổi được</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Hãy cài một trình quản lý phiên bản, đừng cài Node</span><span class="lz-d"><code>nvm</code>, <code>fnm</code> hoặc <code>volta</code>. Một bản Node cài toàn hệ thống từ trình quản lý gói là cái bạn KHÔNG đổi được khi một dự án cần bản khác.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Ghim phiên bản theo từng dự án</span><span class="lz-d">Một file <code>.nvmrc</code> hoặc trường <code>engines</code>. Khi đó câu &quot;máy tôi chạy được&quot; bớt đi một tầng nghĩa.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Hãy dùng một bản LTS</span><span class="lz-d">Các bản major số chẵn được hỗ trợ 30 tháng. Một bản số lẻ thì thử thì được mà đem đi triển khai là sai.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Rồi xác nhận thứ đang thật sự chạy</span><span class="lz-d"><code>node --version</code> trong một terminal MỚI — cái cũ đã đọc PATH từ lúc nó khởi động, và đó là một nửa số báo cáo &quot;cài không được&quot;.</span></div>
+</div>
 <a class="link-card exphub" href="/exp-hub/nodejs-cai-dat-moi-truong${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Hướng dẫn cài môi trường — link tải &amp; xử lý lỗi</span><span class="lc-sub">Các bước cài nvm / fnm / VS Code cho Windows, macOS, Linux kèm link tải chính chủ — trên Exp Hub.</span></span>

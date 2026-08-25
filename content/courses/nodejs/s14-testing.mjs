@@ -379,6 +379,13 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
 <div class="link-card codelab">
   <a href="/code-lab/typescript${REF}#module-571"><span class="lc-t">Code Lab · TypeScript Testing Strategies</span><span class="lc-d">Testing with static types — and testing the types themselves</span></a>
 </div>
+<h3>A unit test that can actually fail</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Arrange, act, assert</span><span class="lz-d">Set up the input, call the thing, check the output. A test that does not fit this shape is usually testing more than one thing.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Inject what you want to replace</span><span class="lz-d">A service that constructs its own database client cannot be tested without one. Passing it in is what makes a double possible.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Assert on the outcome, not the calls</span><span class="lz-d">&quot;<code>save</code> was called once&quot; passes after a refactor that broke the behaviour. &quot;The stored record has status paid&quot; does not.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Make it fail once, deliberately</span><span class="lz-d">A new test that has never failed might be asserting nothing — a missing <code>await</code>, an assertion in a callback that never runs.</span></div>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -542,6 +549,13 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
 </div>
 <div class="link-card codelab">
   <a href="/code-lab/typescript${REF}#module-571"><span class="lc-t">Code Lab · TypeScript Testing Strategies</span><span class="lc-d">Kiểm thử khi đã có kiểu tĩnh — và kiểm chính cái kiểu</span></a>
+</div>
+<h3>Một bài kiểm thử đơn vị thật sự hỏng được</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Sắp xếp, hành động, khẳng định</span><span class="lz-d">Dựng đầu vào, gọi cái thứ đó, kiểm đầu ra. Một bài kiểm thử không vừa hình dạng này thì thường đang kiểm nhiều hơn một thứ.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Hãy tiêm vào thứ bạn muốn thay thế</span><span class="lz-d">Một service tự dựng client cơ sở dữ liệu của chính nó thì không kiểm thử được nếu không có một cái thật. Truyền nó vào từ ngoài mới là thứ làm cho một test double trở nên khả thi.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Khẳng định về KẾT CỤC, đừng khẳng định về các lời gọi</span><span class="lz-d">&quot;<code>save</code> đã được gọi một lần&quot; vẫn qua sau một lần tái cấu trúc làm hỏng hành vi. Còn &quot;bản ghi đã lưu có trạng thái paid&quot; thì không.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Hãy cố ý làm nó hỏng một lần</span><span class="lz-d">Một bài kiểm thử mới chưa từng hỏng lần nào có thể là đang chẳng khẳng định gì — thiếu một <code>await</code>, hoặc một phép khẳng định nằm trong một callback chẳng bao giờ chạy.</span></div>
 </div>
 </div>
 `,
@@ -873,6 +887,13 @@ AssertionError: expected 1 to be +0</div>
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-325"><span class="lc-t">Code Lab · Testing, Deployment, and Production Readiness</span><span class="lc-d">An integration suite for a Node backend</span></a>
 </div>
+<h3>What only a real database can tell you</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Whether the SQL is valid</span><span class="lz-d">A fake accepts any query object. A real database rejects a typo'd column at the moment the test runs, not in production.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Whether the constraint fires</span><span class="lz-d">Unique violations, foreign keys, check constraints, cascade deletes. A mock returns whatever you told it to.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Whether the transaction rolls back</span><span class="lz-d">The behaviour under a mid-transaction failure is the thing you most want tested, and it is exactly what a fake cannot simulate.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">At a cost you can measure</span><span class="lz-d">A container per suite is seconds; per test is minutes. Isolation by transaction rollback keeps it fast and keeps tests independent.</span></div>
+</div>
 </div>
 
 <div class="ml-vi">
@@ -984,6 +1005,13 @@ AssertionError: expected 1 to be +0</div>
 </div>
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-325"><span class="lc-t">Code Lab · Testing, Deployment, and Production Readiness</span><span class="lc-d">Bộ test tích hợp cho backend Node</span></a>
+</div>
+<h3>Chỉ một cơ sở dữ liệu thật mới nói cho bạn biết những gì</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Đoạn SQL có hợp lệ không</span><span class="lz-d">Một bản giả nhận mọi object truy vấn. Một cơ sở dữ liệu thật từ chối một cột gõ nhầm ngay lúc bài kiểm thử chạy, chứ không phải trên production.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Ràng buộc có nổ không</span><span class="lz-d">Vi phạm tính duy nhất, khoá ngoại, ràng buộc kiểm, xoá dây chuyền. Một mock trả về đúng thứ bạn bảo nó trả về.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Giao dịch có quay lui không</span><span class="lz-d">Hành vi khi hỏng giữa chừng một giao dịch là thứ bạn muốn kiểm thử nhất, và đó chính xác là thứ một bản giả không mô phỏng nổi.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Với một cái giá đo được</span><span class="lz-d">Một container cho mỗi bộ kiểm thử là vài giây; cho mỗi bài kiểm thử là vài phút. Cô lập bằng cách quay lui giao dịch giữ cho nó nhanh và giữ cho các bài kiểm thử độc lập.</span></div>
 </div>
 </div>
 `,

@@ -40,12 +40,12 @@ export default {
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Revocation within 15 minutes</span><span class="lz-nsub">And zero lookups on the request path</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// Cùng một request, hai vai trò rất khác nhau</span>
+<pre><code><span class="tok-comment">// The same request, two very different roles</span>
 GET /api/bai-viet          Authorization: Bearer &lt;access, 15 phút&gt;
 POST /auth/refresh         Cookie: __Host-refresh=&lt;refresh, 30 ngày&gt;
 
-<span class="tok-comment">// Access token: xác minh bằng chữ ký. KHÔNG chạm cơ sở dữ liệu.</span>
-<span class="tok-comment">// Refresh token: tra một hàng, kiểm thu hồi, cấp access token mới.</span></code></pre>
+<span class="tok-comment">// Access token: verified by signature. Does NOT touch the database.</span>
+<span class="tok-comment">// Refresh token: look up a row, check revocation, issue a new access token.</span></code></pre>
 <div class="callout ok">
 <p><strong>The number you are choosing is the revocation window.</strong> Disable an account and the attacker's access token keeps working until it expires — fifteen minutes, or five, or an hour. That is not a flaw in the design; it is the design, stated honestly. Pick the number by asking what damage fifteen minutes of continued access does in <em>your</em> product, and shorten it until the answer is acceptable.</p>
 </div>
@@ -54,8 +54,8 @@ POST /auth/refresh         Cookie: __Host-refresh=&lt;refresh, 30 ngày&gt;
 <pre><code>res.cookie('__Host-refresh', token, {
   httpOnly: true,
   secure:   true,
-  sameSite: 'strict',        <span class="tok-comment">// KHÔNG bao giờ gửi xuyên trang — Bài 3.2</span>
-  path:     '/',             <span class="tok-comment">// __Host- bắt buộc Path=/</span>
+  sameSite: 'strict',        <span class="tok-comment">// NEVER sent cross-site — Lesson 3.2</span>
+  path:     '/',             <span class="tok-comment">// __Host- requires Path=/</span>
   maxAge:   30 * 24 * 60 * 60 * 1000,
 });</code></pre>
 <div class="kv-grid">
@@ -68,14 +68,14 @@ POST /auth/refresh         Cookie: __Host-refresh=&lt;refresh, 30 ngày&gt;
 <h3>The schema, which is Chapter 3's table with one column added</h3>
 <pre><code>model RefreshToken {
   id        String    @id @default(cuid())
-  tokenHash String    @unique               <span class="tok-comment">// sha256 — Bài 1.3</span>
+  tokenHash String    @unique               <span class="tok-comment">// sha256 — Lesson 1.3</span>
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  hoId      String    <span class="tok-comment">// ← HỌ token: Bài 5.2</span>
+  hoId      String    <span class="tok-comment">// ← the token FAMILY: Lesson 5.2</span>
   createdAt DateTime  @default(now())
   expiresAt DateTime
-  usedAt    DateTime? <span class="tok-comment">// ← đã đổi lấy access token chưa</span>
+  usedAt    DateTime? <span class="tok-comment">// ← has it been exchanged yet</span>
   revokedAt DateTime?
 
   browser   String?
@@ -84,13 +84,13 @@ POST /auth/refresh         Cookie: __Host-refresh=&lt;refresh, 30 ngày&gt;
   @@index([userId])
   @@index([hoId])
 }</code></pre>
-<pre><code><span class="tok-comment">// Đăng nhập: cấp CẢ HAI</span>
+<pre><code><span class="tok-comment">// Sign-in: issue BOTH</span>
 export async function signIn(u: User, req: Request, res: Response) {
-  const access = await signAccessToken(u);                   <span class="tok-comment">// JWT, 15 phút</span>
-  const refresh = await createRefreshToken(u.id, randomUUID(), req);  <span class="tok-comment">// họ mới</span>
+  const access = await signAccessToken(u);                   <span class="tok-comment">// JWT, 15 minutes</span>
+  const refresh = await createRefreshToken(u.id, randomUUID(), req);  <span class="tok-comment">// a new family</span>
 
   setRefreshCookie(res, refresh);
-  return { accessToken: access, expiresIn: 900 };           <span class="tok-comment">// giây</span>
+  return { accessToken: access, expiresIn: 900 };           <span class="tok-comment">// seconds</span>
 }</code></pre>
 <div class="out">HTTP/1.1 200 OK
 Set-Cookie: __Host-refresh=Kc9x2Lm…; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000
@@ -113,10 +113,10 @@ Content-Type: application/json
     clearRefreshCookie(res);
     return res.status(401).json({ error: 'Session khong hop le' });
   }
-  <span class="tok-comment">// Bài 5.2 chèn phần phát hiện TÁI DÙNG vào ngay đây.</span>
+  <span class="tok-comment">// Lesson 5.2 inserts REUSE detection right here.</span>
 
   const u = await prisma.user.findUniqueOrThrow({ where: { id: cu.userId } });
-  const moi = await rotateRefreshToken(cu, req);              <span class="tok-comment">// dùng một lần</span>
+  const moi = await rotateRefreshToken(cu, req);              <span class="tok-comment">// single use</span>
   setRefreshCookie(res, moi);
 
   res.json({ accessToken: await signAccessToken(u), expiresIn: 900 });
@@ -312,14 +312,14 @@ Dich vu noi bo, may-toi-may  1 gio    khong co    1 gio</code></pre>
   await prisma.$transaction([
     prisma.refreshToken.update({
       where: { id: cu.id },
-      data:  { usedAt: new Date() },              <span class="tok-comment">// đánh dấu ĐÃ DÙNG</span>
+      data:  { usedAt: new Date() },              <span class="tok-comment">// mark it USED</span>
     }),
     prisma.refreshToken.create({
       data: {
         tokenHash: createHash('sha256').update(newToken).digest('hex'),
         userId: cu.userId,
-        hoId: cu.hoId,                             <span class="tok-comment">// ← CÙNG một họ</span>
-        expiresAt: cu.expiresAt,                         <span class="tok-comment">// trần TUYỆT ĐỐI không dời</span>
+        hoId: cu.hoId,                             <span class="tok-comment">// ← the SAME family</span>
+        expiresAt: cu.expiresAt,                         <span class="tok-comment">// the ABSOLUTE ceiling never moves</span>
         browser: req.get('user-agent')?.slice(0, 200),
         createdIp: req.ip,
       },
@@ -358,12 +358,12 @@ FROM "RefreshToken" WHERE "hoId" = 'f47ac10b…' ORDER BY "createdAt";
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Victim presents RT1</span><span class="lz-nsub">REUSE → family revoked → RT2' dies too</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// Chèn vào /auth/refresh, ngay sau khi tìm thấy hàng</span>
+<pre><code><span class="tok-comment">// Insert into /auth/refresh, right after the row is found</span>
 if (cu.usedAt) {
-  <span class="tok-comment">// Token này ĐÃ được đổi rồi. Có một bản sao đang tồn tại.</span>
+  <span class="tok-comment">// This token was ALREADY exchanged. A copy of it exists somewhere.</span>
   await prisma.refreshToken.updateMany({
     where: { hoId: cu.hoId, revokedAt: null },
-    data:  { revokedAt: new Date() },              <span class="tok-comment">// giết CẢ HỌ</span>
+    data:  { revokedAt: new Date() },              <span class="tok-comment">// kill the WHOLE family</span>
   });
 
   logger.warn({
@@ -398,10 +398,10 @@ if (cu.usedAt) {
 </div>
 
 <h3>What the user sees, and what to tell them</h3>
-<pre><code><span class="tok-comment">// ❌ Câu mặc định của phần lớn hệ thống</span>
+<pre><code><span class="tok-comment">// ❌ What most systems say by default</span>
 { "loi": "Session khong hop le" }
 
-<span class="tok-comment">// ✅ Nói ra chuyện gì đã xảy ra và họ nên làm gì</span>
+<span class="tok-comment">// ✅ Say what happened and what they should do</span>
 {
   "loi": "Session cua ban da ket thuc vi ly do bao mat",
   "detail": "Chung toi phat hien tai khoan nay duoc truy cap tu hai noi cung luc. "
@@ -595,7 +595,7 @@ if (cu.usedAt) {
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Immediate, for events 4 and 5</span><span class="lz-nsub">One Redis key per affected user, TTL = access lifetime</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// Sự kiện 1 và 2 — chỉ là những câu UPDATE</span>
+<pre><code><span class="tok-comment">// Events 1 and 2 — just UPDATE statements</span>
 export async function signOut(refreshToken: string, res: Response) {
   const hash = createHash('sha256').update(refreshToken).digest('hex');
   await prisma.refreshToken.updateMany({
@@ -625,7 +625,7 @@ HTTP/1.1 401 {"loi":"Session khong hop le"}     ← ngay lap tuc
 </div>
 
 <h3>The fast path, for events 4 and 5</h3>
-<pre><code><span class="tok-comment">// Khi khoá một tài khoản hoặc hạ quyền — có hiệu lực NGAY</span>
+<pre><code><span class="tok-comment">// When locking an account or lowering a role — effective IMMEDIATELY</span>
 export async function lockAccount(userId: string) {
   await prisma.$transaction([
     prisma.user.update({ where: { id: userId }, data: { locked: true } }),
@@ -634,12 +634,12 @@ export async function lockAccount(userId: string) {
     }),
   ]);
 
-  <span class="tok-comment">// Chặn cả những access token ĐANG BAY, trong đúng tuổi thọ còn lại</span>
+  <span class="tok-comment">// Blocks even IN-FLIGHT access tokens, for exactly their remaining lifetime</span>
   await redis.set(&#96;chan-nguoi:\${userId}&#96;, '1', { EX: 900 });
 }</code></pre>
-<pre><code><span class="tok-comment">// Middleware: một lần EXISTS, chỉ cho những token đã qua chữ ký</span>
+<pre><code><span class="tok-comment">// Middleware: one EXISTS, only for tokens that already passed the signature check</span>
 export async function requireAuth(req, res, next) {
-  const claims = await checkToken(getToken(req));          <span class="tok-comment">// chữ ký + claim</span>
+  const claims = await checkToken(getToken(req));          <span class="tok-comment">// signature + claims</span>
 
   if (await redis.exists(&#96;chan-nguoi:\${claims.sub}&#96;)) {   <span class="tok-comment">// ~0,05 ms</span>
     return res.status(401).json({ error: 'Tai khoan da bi khoa' });
@@ -864,7 +864,7 @@ FROM "RefreshToken" WHERE "userId" = 'clx7a2b1c' AND "revokedAt" IS NULL OR true
       userId,
       revokedAt: null,
       expiresAt: { gt: new Date() },
-      usedAt: null,                       <span class="tok-comment">// chỉ mắt xích ĐANG SỐNG của mỗi họ</span>
+      usedAt: null,                       <span class="tok-comment">// only the LIVE link of each family</span>
     },
     select: { hoId: true, createdAt: true, browser: true, createdIp: true },
     orderBy: { createdAt: 'desc' },
@@ -873,9 +873,9 @@ FROM "RefreshToken" WHERE "userId" = 'clx7a2b1c' AND "revokedAt" IS NULL OR true
   return rows.map((r) =&gt; ({
     hoId: r.hoId,
     isCurrent: r.hoId === currentFamilyId,
-    device: readDevice(r.browser),      <span class="tok-comment">// "Chrome trên Windows"</span>
-    position:   approxLocation(r.createdIp),         <span class="tok-comment">// "Hà Nội, Việt Nam"</span>
-    active: r.createdAt,                     <span class="tok-comment">// lần refresh gần nhất</span>
+    device: readDevice(r.browser),      <span class="tok-comment">// "Chrome on Windows"</span>
+    position:   approxLocation(r.createdIp),         <span class="tok-comment">// "Hanoi, Vietnam"</span>
+    active: r.createdAt,                     <span class="tok-comment">// the most recent refresh</span>
   }));
 }</code></pre>
 <div class="out">[
@@ -935,14 +935,14 @@ export function readDevice(ua?: string | null) {
   const { count } = await prisma.refreshToken.updateMany({
     where: {
       hoId: req.params.hoId,
-      userId: req.user.sub,          <span class="tok-comment">// ← cổng 3, Bài 0.2</span>
+      userId: req.user.sub,          <span class="tok-comment">// ← gate 3, Lesson 0.2</span>
       revokedAt: null,
     },
     data: { revokedAt: new Date() },
   });
   if (count === 0) return res.status(404).json({ error: 'Khong tim thay session' });
 
-  await redis.set(&#96;chan-ho:\${req.params.hoId}&#96;, '1', { EX: 900 });   <span class="tok-comment">// Bài 5.3</span>
+  await redis.set(&#96;chan-ho:\${req.params.hoId}&#96;, '1', { EX: 900 });   <span class="tok-comment">// Lesson 5.3</span>
   res.status(204).end();
 });</code></pre>
 <div class="out">$ curl -X POST /tai-khoan/session/3d5b8f02…/thu-hoi -H "Authorization: Bearer …"
@@ -959,7 +959,7 @@ HTTP/1.1 204 No Content
 </div>
 
 <h3>The email that does the most work</h3>
-<pre><code><span class="tok-comment">// Đăng nhập từ một thiết bị chưa từng thấy → gửi thư</span>
+<pre><code><span class="tok-comment">// A sign-in from a never-seen device → send mail</span>
 const seenBefore = await prisma.refreshToken.findFirst({
   where: { userId: u.id, browser: deviceFingerprint(req) },
 });
@@ -1136,7 +1136,7 @@ if (!seenBefore) {
 <p class="lead">Reuse detection from Lesson 5.2 assumes that a used refresh token being presented again means theft. In practice it usually means the client sent two refreshes at once. Get this wrong and users are logged out at random, the team blames reuse detection, and the best security mechanism in the chapter gets turned off — so this lesson is not optional polish.</p>
 
 <h3>The race</h3>
-<pre><code><span class="tok-comment">// Một trang tải xong, gửi mười request. Access token vừa hết hạn.</span>
+<pre><code><span class="tok-comment">// A page finishes loading and fires ten requests. The access token has just expired.</span>
 Promise.all([
   goi('/api/me'), goi('/api/thong-bao'), goi('/api/feed'),
   goi('/api/cart'), goi('/api/messages'), <span class="tok-comment">/* … */</span>
@@ -1163,7 +1163,7 @@ Promise.all([
 <pre><code>let refreshing: Promise&lt;string&gt; | null = null;
 
 async function getNewAccessToken(): Promise&lt;string&gt; {
-  if (refreshing) return refreshing;              <span class="tok-comment">// ← mọi người cùng chờ MỘT cái</span>
+  if (refreshing) return refreshing;              <span class="tok-comment">// ← everyone waits on ONE of them</span>
 
   refreshing = (async () =&gt; {
     const r = await fetch('/auth/refresh', { method: 'POST', credentials: 'include' });
@@ -1180,10 +1180,10 @@ async function getNewAccessToken(): Promise&lt;string&gt; {
 </div>
 
 <h3>Fix 2 — coordinate across tabs</h3>
-<pre><code><span class="tok-comment">// Web Locks: một cái khoá dùng chung cho mọi tab CÙNG origin</span>
+<pre><code><span class="tok-comment">// Web Locks: one shared lock across every tab on the SAME origin</span>
 async function getNewAccessToken(): Promise&lt;string&gt; {
   return navigator.locks.request('lam-moi-token', async () =&gt; {
-    <span class="tok-comment">// Tab khác có thể vừa làm mới xong trong lúc ta đợi khoá.</span>
+    <span class="tok-comment">// Another tab may have finished refreshing while we waited for the lock.</span>
     if (stillValid(accessToken)) return accessToken!;
 
     const r = await fetch('/auth/refresh', { method: 'POST', credentials: 'include' });
@@ -1201,7 +1201,7 @@ async function getNewAccessToken(): Promise&lt;string&gt; {
 </div>
 
 <h3>Fix 3 — refresh before the 401, not after</h3>
-<pre><code><span class="tok-comment">// Access token 15 phút → làm mới ở phút thứ 12. Không bao giờ thấy 401.</span>
+<pre><code><span class="tok-comment">// A 15-minute access token → refresh at minute 12. You never see a 401.</span>
 let expiresAt = 0;
 
 function schedule(expiresIn: number) {
@@ -1210,8 +1210,8 @@ function schedule(expiresIn: number) {
 }
 
 async function call(url: string, opt: RequestInit = {}) {
-  if (Date.now() &gt; expiresAt - 30_000) await getNewAccessToken();   <span class="tok-comment">// hàng rào 30 giây</span>
-  <span class="tok-comment">// …gửi request; 401 giờ là ngoại lệ, không phải chuyện thường ngày</span>
+  if (Date.now() &gt; expiresAt - 30_000) await getNewAccessToken();   <span class="tok-comment">// a 30-second fence</span>
+  <span class="tok-comment">// …send the request; a 401 is now the exception, not the routine</span>
 }</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">The storm disappears</span><span class="lz-lnote">Ten simultaneous requests with a valid token are ten normal requests. The refresh happened three minutes ago, alone, with nothing racing it. This removes the cause rather than handling the symptom.</span></div>
@@ -1221,26 +1221,26 @@ async function call(url: string, opt: RequestInit = {}) {
 </div>
 
 <h3>Fix 4 — the server's grace window</h3>
-<pre><code><span class="tok-comment">// Sau khi xoay vòng, nhớ lại "token này đã đổi ra cái gì" trong 30 giây</span>
+<pre><code><span class="tok-comment">// After rotating, remember "what this token was exchanged for" for 30 seconds</span>
 export async function rotateRefreshToken(cu: RefreshToken, req: Request) {
   const newToken = randomBytes(32).toString('base64url');
-  await prisma.$transaction([ <span class="tok-comment">/* …như Bài 5.2… */</span> ]);
+  await prisma.$transaction([ <span class="tok-comment">/* …as in Lesson 5.2… */</span> ]);
 
   await redis.set(&#96;ke-nhiem:\${cu.tokenHash}&#96;, newToken, { EX: 30 });
   return newToken;
 }</code></pre>
-<pre><code><span class="tok-comment">// Trong /auth/refresh, TRƯỚC khi kết luận là tái dùng</span>
+<pre><code><span class="tok-comment">// In /auth/refresh, BEFORE concluding it is reuse</span>
 if (cu.usedAt) {
   const successor = await redis.get(&#96;ke-nhiem:\${bam}&#96;);
 
   if (successor) {
-    <span class="tok-comment">// Đây là một cuộc ĐUA, không phải một cú trộm: trả về ĐÚNG cái đã cấp.</span>
+    <span class="tok-comment">// This is a RACE, not a theft: return EXACTLY what was already issued.</span>
     setRefreshCookie(res, successor);
     const u = await prisma.user.findUniqueOrThrow({ where: { id: cu.userId } });
     return res.json({ accessToken: await signAccessToken(u), expiresIn: 900 });
   }
 
-  <span class="tok-comment">// Quá 30 giây → đây là tái dùng THẬT. Bài 5.2 xử lý tiếp.</span>
+  <span class="tok-comment">// Past 30 seconds → this is REAL reuse. Lesson 5.2 takes it from here.</span>
   await revokeFamily(cu.hoId);
   <span class="tok-comment">// …</span>
 }</code></pre>

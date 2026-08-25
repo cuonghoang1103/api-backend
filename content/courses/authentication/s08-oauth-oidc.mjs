@@ -57,12 +57,12 @@ export default {
 </div>
 
 <h3>What OAuth actually replaced</h3>
-<pre><code><span class="tok-comment">// Trước OAuth, việc "cho ứng dụng này đọc danh bạ của tôi" trông như thế này:</span>
+<pre><code><span class="tok-comment">// Before OAuth, "let this app read my contacts" looked like this:</span>
 POST /nhap-danh-ba
 { "email": "cuong@gmail.com", "password": "mat-khau-gmail-that" }
 
-<span class="tok-comment">// Bên thứ ba giữ mật khẩu Gmail của bạn. Toàn quyền. Vĩnh viễn.</span>
-<span class="tok-comment">// Muốn thu hồi ⇒ đổi mật khẩu ⇒ mọi ứng dụng khác cũng chết theo.</span></code></pre>
+<span class="tok-comment">// A third party holds your Gmail password. Full access. Forever.</span>
+<span class="tok-comment">// To revoke ⇒ change the password ⇒ every other app dies with it.</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Scoped</span><span class="lz-t">Not all or nothing</span><span class="lz-d">A token for <code>contacts.readonly</code> cannot send mail. The password could do everything, and there was no way to ask for less.</span></div>
   <div class="lz-step"><span class="lz-k">Revocable individually</span><span class="lz-t">One app at a time</span><span class="lz-d">The user's account page lists every connected application with its own revoke button — the device list from Lesson 5.4, applied to third parties.</span></div>
@@ -71,7 +71,7 @@ POST /nhap-danh-ba
 </div>
 
 <h3>Discovery: one URL, and everything else follows</h3>
-<pre><code><span class="tok-comment">// Mọi thứ bạn cần biết về một nhà cung cấp nằm ở MỘT địa chỉ cố định.</span>
+<pre><code><span class="tok-comment">// Everything you need to know about a provider lives at ONE fixed address.</span>
 curl -s https://accounts.google.com/.well-known/openid-configuration</code></pre>
 <div class="out">issuer                   https://accounts.google.com
 authorization_endpoint   https://accounts.google.com/o/oauth2/v2/auth
@@ -220,8 +220,8 @@ id_token_signing_alg_values       ["RS256"]
 </div>
 
 <h3>PKCE, with real numbers</h3>
-<pre><code>const verifier  = randomBytes(32).toString('base64url');                    <span class="tok-comment">// bí mật, GIỮ LẠI</span>
-const challenge = createHash('sha256').update(verifier).digest('base64url'); <span class="tok-comment">// công khai, GỬI ĐI</span>
+<pre><code>const verifier  = randomBytes(32).toString('base64url');                    <span class="tok-comment">// secret, KEEP IT</span>
+const challenge = createHash('sha256').update(verifier).digest('base64url'); <span class="tok-comment">// public, SEND IT</span>
 
 await redis.set(&#96;oauth:\${req.sessionId}&#96;, JSON.stringify({ verifier, state, nonce }), { EX: 600 });</code></pre>
 <div class="out">code_verifier         : Vc0FZ5zeusRqMY_oUBI1_SoYEk5k5vbJ7bQRzfCnp50
@@ -270,10 +270,10 @@ nonce : ijJ9VAWAMw37WJxPeMV4Fw  (chong phat lai ID token)</div>
   body: new URLSearchParams({
     grant_type: 'authorization_code',
     code: String(req.query.code),
-    redirect_uri: REDIRECT_URI,          <span class="tok-comment">// PHẢI giống hệt bước 2</span>
+    redirect_uri: REDIRECT_URI,          <span class="tok-comment">// MUST be identical to step 2</span>
     client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,        <span class="tok-comment">// backend mới có; SPA thuần thì không</span>
-    code_verifier: saved.verifier,         <span class="tok-comment">// ← bản gốc, chưa băm</span>
+    client_secret: CLIENT_SECRET,        <span class="tok-comment">// backends only; a pure SPA has none</span>
+    code_verifier: saved.verifier,         <span class="tok-comment">// ← the original, unhashed</span>
   }),
 });
 const { access_token, id_token, refresh_token, expires_in } = await r.json();</code></pre>
@@ -437,14 +437,14 @@ const { access_token, id_token, refresh_token, expires_in } = await r.json();</c
 <p class="lead">These three appear in every OAuth example and almost every explanation lumps them together as "security parameters". They are not interchangeable: each one closes a specific attack, and a flow can have two of them perfect while the third is wide open. Learn which is which and you can audit any integration in five minutes.</p>
 
 <h3>state — CSRF on the callback, which is worse than it sounds</h3>
-<pre><code><span class="tok-comment">// Kẻ tấn công tự chạy luồng bằng tài khoản Google CỦA HẮN,</span>
-<span class="tok-comment">// dừng lại ở bước 5, và giữ lại cái mã chưa dùng.</span>
+<pre><code><span class="tok-comment">// The attacker runs the flow with THEIR OWN Google account,</span>
+<span class="tok-comment">// stops at step 5, and keeps the unused code.</span>
 
-<span class="tok-comment">// Rồi khiến trình duyệt của nạn nhân đi tới:</span>
+<span class="tok-comment">// Then makes the victim's browser visit:</span>
 GET https://cuongthai.com/oauth/quay-ve?code=&lt;MA-CUA-KE-TAN-CONG&gt;
 
-<span class="tok-comment">// Máy chủ của bạn đổi mã, thấy tài khoản Google của kẻ tấn công,</span>
-<span class="tok-comment">// và NỐI nó vào phiên đang đăng nhập của nạn nhân.</span></code></pre>
+<span class="tok-comment">// Your server exchanges the code, sees the attacker's Google account,</span>
+<span class="tok-comment">// and LINKS it to the victim's signed-in session.</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">What the attacker gains</span><span class="v">Not the victim's account — the reverse. From now on the victim is working inside an account the attacker also controls: uploaded files, saved payment details, private notes, all readable by whoever else can sign in with that Google account. It is a takeover pointing the other way, and it is easy to miss because nothing looks broken to the victim.</span></div>
   <div class="kv"><span class="k">The fix, in three lines</span><span class="v">Generate <code>state</code> as random bytes, store it server-side against the session before redirecting, and on the callback compare it and delete it. A callback with a missing or mismatched <code>state</code> is rejected before the code is exchanged — before anything is spent.</span></div>
@@ -453,12 +453,12 @@ GET https://cuongthai.com/oauth/quay-ve?code=&lt;MA-CUA-KE-TAN-CONG&gt;
 </div>
 
 <h3>nonce — replay of an ID token</h3>
-<pre><code><span class="tok-comment">// nonce đi TRONG request uỷ quyền, và quay về BÊN TRONG id_token đã ký.</span>
+<pre><code><span class="tok-comment">// The nonce goes IN the authorisation request and comes back INSIDE the signed id_token.</span>
 {
   "iss": "https://accounts.google.com",
   "aud": "1234.apps.googleusercontent.com",
   "sub": "108772…",
-  "nonce": "ijJ9VAWAMw37WJxPeMV4Fw",     <span class="tok-comment">// ← phải khớp cái bạn đã lưu</span>
+  "nonce": "ijJ9VAWAMw37WJxPeMV4Fw",     <span class="tok-comment">// ← must match what you stored</span>
   "email": "cuong@cuongthai.com",
   "email_verified": true,
   "iat": 1756000000, "exp": 1756003600
@@ -488,12 +488,12 @@ https://cuongthai.com/oauth/quay-ve#@ke-tan-cong.com      CHO    chan    cuongth
 <div class="pitfall">
 <p><strong>Trap — every clever matching rule has a bypass, and the bypasses are already written down.</strong> Prefix matching lets an attacker append a path or a fragment. Wildcard subdomains (<code>https://*.cuongthai.com/cb</code>) become a full compromise the day one subdomain is taken over — a stale CNAME pointing at an unclaimed cloud bucket is enough. Substring checks fall to <code>cuongthai.com.attacker.com</code>. Host checks written by hand fall to the userinfo trick above, where <code>@</code> ends the credentials portion and everything before it is decoration. OAuth 2.1 settles it: the <code>redirect_uri</code> must match a registered value <em>exactly</em>, byte for byte, with no normalisation and no pattern. Register one URI per environment, and if you need a return path, keep it server-side with the <code>state</code>.</p>
 </div>
-<pre><code><span class="tok-comment">// Ngay cả khớp CHÍNH XÁC vẫn thua nếu ĐÍCH của bạn tự chuyển hướng đi tiếp.</span>
+<pre><code><span class="tok-comment">// Even an EXACT match loses if your target then redirects onward by itself.</span>
 GET /oauth/quay-ve?code=…&amp;state=…
-→ 302 /bang-dieu-khien?next=https://ke-tan-cong.com   <span class="tok-comment">// ← chuyển hướng mở</span>
-→ 302 https://ke-tan-cong.com                          <span class="tok-comment">// mã đi theo trong Referer</span>
+→ 302 /bang-dieu-khien?next=https://ke-tan-cong.com   <span class="tok-comment">// ← an open redirect</span>
+→ 302 https://ke-tan-cong.com                          <span class="tok-comment">// the code rides along in the Referer</span>
 
-<span class="tok-comment">// Vá: mọi đích chuyển hướng phải nằm trong DANH SÁCH TRẮNG đường dẫn nội bộ.</span>
+<span class="tok-comment">// Fix: every redirect target must be on an ALLOW-LIST of internal paths.</span>
 const VALID_SERVICES = new Set(['/bang-dieu-khien', '/ho-so', '/']);
 const service = VALID_SERVICES.has(saved.service) ? saved.service : '/';</code></pre>
 <div class="lz-stack">
@@ -644,11 +644,11 @@ chu ky bi doi mot byte  TU CHOI  &lt;- chu ky SAI
 # Bay token RS256 THAT, ky bang mot khoa sinh tai cho, kiem bang bay phep
 # kiem duoi day. Moi dong bi tu choi vi mot ly do KHAC nhau — bo bat mot
 # phep kiem la mot dong trong so do im lang chuyen thanh CHAP NHAN.</div>
-<pre><code>const result = await jwtVerify(idToken, JWKS, {                <span class="tok-comment">// jose, JWKS lấy từ discovery</span>
+<pre><code>const result = await jwtVerify(idToken, JWKS, {                <span class="tok-comment">// jose, with the JWKS taken from discovery</span>
   issuer:   'https://accounts.google.com',                 <span class="tok-comment">// 2. iss — KHỚP CHÍNH XÁC</span>
   audience: CLIENT_ID,                                     <span class="tok-comment">// 3. aud — client id CỦA BẠN</span>
-  algorithms: ['RS256'],                                   <span class="tok-comment">// 1. thuật toán GHIM — Bài 4.2</span>
-  clockTolerance: 60,                                      <span class="tok-comment">// 4. exp/iat, cho lệch 60 giây</span>
+  algorithms: ['RS256'],                                   <span class="tok-comment">// 1. PINNED algorithm — Lesson 4.2</span>
+  clockTolerance: 60,                                      <span class="tok-comment">// 4. exp/iat, allowing 60 seconds of skew</span>
 });
 const p = result.payload;
 
@@ -663,27 +663,27 @@ if (p.email &amp;&amp; p.email_verified !== true) throw new Error('email chua xa
 </div>
 
 <h3>The one boolean, and the takeover behind it</h3>
-<pre><code><span class="tok-comment">// SAI — và đây là con lỗi đã hạ được nhiều sản phẩm lớn:</span>
+<pre><code><span class="tok-comment">// WRONG — and this is the bug that has taken down several large products:</span>
 const u = await prisma.user.findUnique({ where: { normalizedEmail: normalize(p.email) } });
-if (u) return signIn(u);          <span class="tok-comment">// ← nối tài khoản CHỈ bằng email</span>
+if (u) return signIn(u);          <span class="tok-comment">// ← linking accounts by email ALONE</span>
 
-<span class="tok-comment">// Kẻ tấn công: mở tài khoản ở một nhà cung cấp OIDC dễ dãi,</span>
-<span class="tok-comment">// đặt email hồ sơ thành victim@congty.com (không ai xác minh),</span>
-<span class="tok-comment">// bấm "đăng nhập bằng nhà cung cấp đó" ở trang của bạn.</span>
-<span class="tok-comment">// Máy chủ của bạn thấy một email khớp và trao cho hắn tài khoản.</span></code></pre>
+<span class="tok-comment">// The attacker: opens an account at a lax OIDC provider,</span>
+<span class="tok-comment">// sets the profile email to victim@company.com (nobody verifies it),</span>
+<span class="tok-comment">// clicks "sign in with that provider" on your site.</span>
+<span class="tok-comment">// Your server sees a matching email and hands them the account.</span></code></pre>
 <div class="pitfall">
 <p><strong>Trap — an email address inside an ID token is a claim, not a fact, until <code>email_verified</code> says otherwise.</strong> Providers differ enormously: Google verifies, GitHub distinguishes verified from unverified addresses, and a long tail of smaller providers let a user type anything into a profile field and hand it to you unchallenged. If your login matches accounts on the email alone, anyone who can register at the sloppiest provider you accept can sign in as any of your users. Two rules close it: refuse any token whose <code>email_verified</code> is not exactly <code>true</code>, and treat "which providers do we accept" as a security decision made deliberately rather than a list that grows whenever someone asks.</p>
 </div>
-<pre><code><span class="tok-comment">// ĐÚNG — khoá là (nhà cung cấp, sub), còn email chỉ để hiển thị.</span>
+<pre><code><span class="tok-comment">// RIGHT — the key is (provider, sub); the email is for display only.</span>
 model ProviderLink {
   id          String  @id @default(cuid())
   provider    String  <span class="tok-comment">// 'google' | 'github' | …</span>
-  providerSub String  <span class="tok-comment">// claim 'sub' — ỔN ĐỊNH, KHÔNG ĐỔI</span>
+  providerSub String  <span class="tok-comment">// the 'sub' claim — STABLE, NEVER CHANGES</span>
   userId      String
-  emailAtTime String? <span class="tok-comment">// ảnh chụp, chỉ để tra cứu về sau</span>
+  emailAtTime String? <span class="tok-comment">// a snapshot, only for looking things up later</span>
 
   user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@unique([provider, providerSub])        <span class="tok-comment">// ← danh tính THẬT sự nằm ở đây</span>
+  @@unique([provider, providerSub])        <span class="tok-comment">// ← the REAL identity lives here</span>
   @@map("lien_ket_nha_cung_cap")
 }</code></pre>
 <div class="lz-stack">
@@ -859,18 +859,18 @@ model ProviderLink {
   </div>
 </div>
 <h3>Case 3, decided properly</h3>
-<pre><code><span class="tok-comment">// Địa chỉ ĐÃ xác minh, trùng một tài khoản đang có, chưa có liên kết nào.</span>
+<pre><code><span class="tok-comment">// A VERIFIED address, matching an existing account, with no link yet.</span>
 const u = await prisma.user.findUnique({ where: { normalizedEmail: ch } });
 
 if (!u.passwordHash &amp;&amp; !(await hasOtherFactor(u.id))) {
-  <span class="tok-comment">// Tài khoản này KHÔNG có cách đăng nhập nào khác — không ai "sở hữu" nó</span>
-  <span class="tok-comment">// theo nghĩa có thể chứng minh. Nối luôn là an toàn.</span>
+  <span class="tok-comment">// This account has NO other way to sign in — nobody "owns" it</span>
+  <span class="tok-comment">// in any provable sense. Linking straight away is safe.</span>
   await linkAndSignIn(u, provider, sub);
 } else {
-  <span class="tok-comment">// CÓ mật khẩu hoặc CÓ passkey ⇒ bắt bên đang sở hữu chứng minh trước.</span>
-  <span class="tok-comment">// KHÔNG đăng nhập. Lưu một yêu cầu nối đang chờ, rồi hỏi.</span>
+  <span class="tok-comment">// HAS a password or HAS a passkey ⇒ make the current owner prove it first.</span>
+  <span class="tok-comment">// Do NOT sign them in. Store a pending link request, then ask.</span>
   await savePendingLinkRequest(u.id, provider, sub, p.email);
-  return res.render('xac-nhan-noi-tai-khoan');   <span class="tok-comment">// "Nhập mật khẩu để nối"</span>
+  return res.render('xac-nhan-noi-tai-khoan');   <span class="tok-comment">// "Enter your password to link"</span>
 }</code></pre>
 <div class="pitfall">
 <p><strong>Trap — automatic linking on a matching address turns any provider compromise into a compromise of your product.</strong> The reasoning sounds airtight: the address is verified by a provider you trust, so the person on the other end owns that mailbox, so they are the account holder. The gap is that owning the mailbox <em>today</em> is not the same as being the person who created your account, and it silently makes the weakest provider you accept the security level of every account. Corporate addresses get reassigned to new employees, domains change hands, and provider accounts get taken over — and in every one of those cases automatic linking hands over an account with a password the attacker never learned. Link automatically only when the existing account has no other way in, and otherwise ask the side that can already prove ownership.</p>
@@ -884,7 +884,7 @@ if (!u.passwordHash &amp;&amp; !(await hasOtherFactor(u.id))) {
 
 <h3>Unlinking, and the lockout it causes</h3>
 <pre><code>app.delete('/toi/lien-ket/:provider', requireReauth({ within: 300 }), async (req, res) =&gt; {
-  const distance = await countRecentSignIns(u.id);   <span class="tok-comment">// mật khẩu + passkey + số liên kết</span>
+  const distance = await countRecentSignIns(u.id);   <span class="tok-comment">// password + passkey + link count</span>
 
   if (distance &lt;= 1) {
     return res.status(409).json({
@@ -910,7 +910,7 @@ if (!u.passwordHash &amp;&amp; !(await hasOtherFactor(u.id))) {
   <div class="kv"><span class="k">Plan for the provider being unavailable</span><span class="v">Outages happen, API terms change, free tiers get withdrawn, and companies discontinue products. Because the account is keyed on <code>(provider, sub)</code> and not on the provider being reachable, existing sessions keep working — but nobody can sign in fresh. Users with a second method are unaffected, which is the real argument for prompting people to add one.</span></div>
 </div>
 <h3>Not every provider is an OIDC provider</h3>
-<pre><code><span class="tok-comment">// Đo thật: nhà cung cấp nào có tài liệu discovery của OIDC?</span>
+<pre><code><span class="tok-comment">// Measured: which providers publish an OIDC discovery document?</span>
 for u in google microsoft gitlab github; do curl -s -o /dev/null -w … ; done</code></pre>
 <div class="out">nha cung cap HTTP   issuer trong tai lieu discovery
 Google       200    https://accounts.google.com

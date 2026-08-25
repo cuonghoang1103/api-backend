@@ -52,17 +52,17 @@ export default {
 </div>
 
 <h3>Fail at boot, not at 3am</h3>
-<pre><code><span class="tok-comment">// Kiểm MỘT lần lúc khởi động. Thiếu bí mật ⇒ tiến trình KHÔNG chạy.</span>
+<pre><code><span class="tok-comment">// Checked ONCE at startup. A missing secret ⇒ the process does NOT run.</span>
 const Required = z.object({
   DATABASE_URL:   z.string().url(),
-  JWT_SECRET:     z.string().min(32),        <span class="tok-comment">// KHÔNG có giá trị mặc định</span>
+  JWT_SECRET:     z.string().min(32),        <span class="tok-comment">// NO default value</span>
   REDIS_URL:      z.string().url(),
-  PUBLIC_URL:  z.string().url(),          <span class="tok-comment">// ← Bài 6.3, chặn đầu độc Host</span>
+  PUBLIC_URL:  z.string().url(),          <span class="tok-comment">// ← Lesson 6.3, blocks Host poisoning</span>
 });
 
-export const env = Required.parse(process.env);  <span class="tok-comment">// ném lỗi ngay lúc nạp module</span>
+export const env = Required.parse(process.env);  <span class="tok-comment">// throws at module load time</span>
 
-<span class="tok-comment">// SAI, và đây là cách một bí mật dev đi tới production:</span>
+<span class="tok-comment">// WRONG, and this is how a dev secret reaches production:</span>
 <span class="tok-comment">// const secret = process.env.JWT_SECRET ?? 'dev-secret';</span></code></pre>
 <div class="pitfall">
 <p><strong>Trap — a missing variable that defaults silently is worse than a crash, because it is invisible.</strong> With a fallback, the app starts, tokens are signed with a value an attacker can read in your repository, and everything looks healthy. With a validated schema the process refuses to start, the deploy fails, and someone fixes it in two minutes. Validate at module load so the failure happens during the deploy rather than on the first request that happens to need it — and put <code>PUBLIC_URL</code> in the required set, because a missing public URL is how Lesson 6.3's reset link falls back to the <code>Host</code> header.</p>
@@ -84,10 +84,10 @@ doc ma KHONG duoc khai       :  84
 # chung deu co gia tri mac dinh hop ly. Nhung: mot nguoi moi vao khong
 # biet co the chinh nhung gi, va nguoi di XOAY mot khoa khong co danh
 # sach nao de doi chieu. Danh sach do phai SINH RA TU MA, khong go tay.</div>
-<pre><code><span class="tok-comment">// Sinh .env.example TỪ MÃ, rồi để CI báo hỏng khi nó lệch.</span>
+<pre><code><span class="tok-comment">// Generate .env.example FROM THE CODE, and let CI fail when it drifts.</span>
 grep -rhoE 'process\\.env\\.[A-Z0-9_]+' src/ | sed 's/process\\.env\\.//' | sort -u &gt; /tmp/dang-doc
 grep -oE '^[A-Z0-9_]+' .env.example | sort -u &gt; /tmp/dang-khai
-diff /tmp/dang-doc /tmp/dang-khai || exit 1        <span class="tok-comment">// lệch là CI đỏ</span></code></pre>
+diff /tmp/dang-doc /tmp/dang-khai || exit 1        <span class="tok-comment">// drift turns CI red</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Separate configuration from secrets</span><span class="lz-t">They have different rules</span><span class="lz-d">A timeout, a model name and a feature flag can live in the repository and change with a pull request. A signing key cannot. Mixing them in one file means the whole file gets treated with the care of its least sensitive line.</span></div>
   <div class="lz-step"><span class="lz-k">Document every variable, including the boring ones</span><span class="lz-t">Name, purpose, default, and who owns it</span><span class="lz-d">The eighty-four undocumented variables above are all harmless individually. Collectively they are the reason nobody can answer "what does this service need to run?" without reading the source.</span></div>
@@ -249,14 +249,14 @@ diff /tmp/dang-doc /tmp/dang-khai || exit 1        <span class="tok-comment">// 
 <div class="pitfall">
 <p><strong>Trap — signing with a key before every verifier knows about it is an instant, total outage.</strong> The last line of the measurement above is that mistake: a perfectly valid token, signed with a real key, rejected because the verifying side has never heard of <code>kid: k2</code>. It happens most often during a rolling deploy, where new instances sign with the new key while old instances are still verifying with only the old set — so half your requests fail and the half that works depends on which pod answered. Publish first, wait for the rollout to complete, and only then flip. And keep the two settings genuinely separate: a list of keys that verify, and one key id that signs.</p>
 </div>
-<pre><code><span class="tok-comment">// Hai cấu hình RIÊNG BIỆT. Đây là toàn bộ cơ chế.</span>
-KHOA_KY_HIEN_TAI = 'k2'                    <span class="tok-comment">// đúng MỘT khoá ký</span>
-CHUM_KHOA = { k1: '…', k2: '…' }           <span class="tok-comment">// NHIỀU khoá xác minh</span>
+<pre><code><span class="tok-comment">// Two SEPARATE configurations. That is the entire mechanism.</span>
+KHOA_KY_HIEN_TAI = 'k2'                    <span class="tok-comment">// exactly ONE signing key</span>
+CHUM_KHOA = { k1: '…', k2: '…' }           <span class="tok-comment">// MANY verification keys</span>
 
 const token = jwt.sign(payload, CHUM_KEYS[KHOA_KY_HIEN_TAI],
                        { algorithm: 'HS256', keyid: KHOA_KY_HIEN_TAI });
 
-<span class="tok-comment">// Xác minh: đọc kid, tra trong chùm, GHIM thuật toán (Bài 4.2).</span>
+<span class="tok-comment">// Verify: read the kid, look it up in the set, PIN the algorithm (Lesson 4.2).</span>
 const kid = jwt.decode(token, { complete: true })?.header.kid;
 const key = CHUM_KEYS[kid];
 if (!key) throw new Error('kid khong biet');
@@ -403,7 +403,7 @@ rai deu 20 req / 120s
 </div>
 
 <h3>The axis matters more than the algorithm</h3>
-<pre><code><span class="tok-comment">// Mỗi luồng đếm theo một TRỤC khác nhau. Chọn sai trục là bộ giới hạn vô dụng.</span>
+<pre><code><span class="tok-comment">// Each flow counts along a different AXIS. Pick the wrong axis and the limiter is useless.</span>
 '/sign-in'        → theo TÀI KHOẢN  (kẻ tấn công xoay IP, không xoay được đích) <span class="tok-comment">// 10.1</span>
 '/sign-up'          → theo IP + ASN   (chưa có tài khoản nào để mà đếm)
 '/forgot-password'    → CẢ HAI          (theo IP chặn quét, theo email chặn bom thư) <span class="tok-comment">// 6.3</span>
@@ -420,14 +420,14 @@ rai deu 20 req / 120s
 </div>
 
 <h3>Answering, without helping</h3>
-<pre><code><span class="tok-comment">// Trả lời đủ để client cư xử đúng, không đủ để kẻ tấn công dò ra trần.</span>
+<pre><code><span class="tok-comment">// Answer enough for a well-behaved client, not enough for an attacker to map the cap.</span>
 res.status(429)
-   .set('Retry-After', String(cho))        <span class="tok-comment">// giây — client tử tế sẽ chờ</span>
+   .set('Retry-After', String(cho))        <span class="tok-comment">// seconds — a polite client will wait</span>
    .json({ error: 'Quá nhiều yêu cầu. Hãy thử lại sau.' });
 
-<span class="tok-comment">// KHÔNG gửi kèm: trần là bao nhiêu, còn lại mấy lượt, đang đếm theo trục nào.</span>
-<span class="tok-comment">// Với API công khai có tài liệu thì các header X-RateLimit-* là ĐÚNG;</span>
-<span class="tok-comment">// với endpoint xác thực thì chúng là bản đồ chỉ đường cho việc dò.</span></code></pre>
+<span class="tok-comment">// Do NOT send: what the cap is, how many are left, which axis is being counted.</span>
+<span class="tok-comment">// For a documented public API the X-RateLimit-* headers are RIGHT;</span>
+<span class="tok-comment">// for an auth endpoint they are a map for probing.</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Always send Retry-After</span><span class="lz-t">It changes client behaviour</span><span class="lz-d">Without it, a mobile app retries immediately and turns one rejection into a loop that looks exactly like an attack. With it, well-behaved clients back off and your graph becomes readable.</span></div>
   <div class="lz-step"><span class="lz-k">Back off exponentially, reset on success</span><span class="lz-t">Lesson 10.1's shape</span><span class="lz-d">Two seconds, four, eight, capped. A real user who mistyped once never reaches the second step, and an attacker's throughput collapses within a dozen attempts.</span></div>
@@ -559,13 +559,13 @@ res.status(429)
   id        BigInt   @id @default(autoincrement())
   luc       DateTime @default(now())
   loai      String   <span class="tok-comment">// 'vai_tro.cap', 'mat_khau.dat_lai'</span>
-  subjectId String?  <span class="tok-comment">// AI làm — người vận hành, không phải nạn nhân</span>
-  objectId  String?  <span class="tok-comment">// làm LÊN AI/CÁI GÌ</span>
+  subjectId String?  <span class="tok-comment">// WHO did it — the actor, not the victim</span>
+  objectId  String?  <span class="tok-comment">// done TO WHOM/WHAT</span>
   ip        String?
   userAgent String?
   result    String   <span class="tok-comment">// 'thanh_cong' | 'that_bai' | 'tu_choi'</span>
-  detail    Json?    <span class="tok-comment">// bối cảnh — xem danh sách CẤM bên dưới</span>
-  prevHash  String   <span class="tok-comment">// ← chuỗi băm, phần dưới bài</span>
+  detail    Json?    <span class="tok-comment">// context — see the FORBIDDEN list below</span>
+  prevHash  String   <span class="tok-comment">// ← the hash chain, later in this lesson</span>
   bam       String
 
   @@index([subjectId, luc])
@@ -584,14 +584,14 @@ res.status(429)
 <div class="pitfall">
 <p><strong>Trap — an audit log that captures credentials is a credential file with better indexing.</strong> Never write: passwords, even wrong ones, even hashed; tokens, session ids, refresh tokens, reset tokens or authorization codes; TOTP secrets or codes; full card numbers; API keys. And never log a whole request or response body on an authentication route — that is how all of the above end up there without anyone deciding to put them there. Store identifiers and hashes: the last four characters of a token, or its SHA-256, is enough to correlate two log lines without the log becoming the thing an attacker wants. The same rule covers your error reporter and your APM tracer, which capture request bodies by default and are usually the ones that actually leak.</p>
 </div>
-<pre><code><span class="tok-comment">// SAI — và đây là cách một nhật ký trở thành thứ ĐÁNG CẮP NHẤT bạn có:</span>
+<pre><code><span class="tok-comment">// WRONG — and this is how a log becomes the MOST STEALABLE thing you own:</span>
 log.info('dang nhap that bai', { email, password, body: req.body });
 
-<span class="tok-comment">// ĐÚNG — đủ để đối chiếu, không đủ để dùng lại:</span>
+<span class="tok-comment">// RIGHT — enough to correlate, not enough to replay:</span>
 log.info('dang nhap that bai', {
-  normalizedEmail,                      <span class="tok-comment">// định danh, không phải tín vật</span>
+  normalizedEmail,                      <span class="tok-comment">// an identifier, not a credential</span>
   ip: req.ip, asn: asn(req.ip),
-  tokenTail: token?.slice(-4),     <span class="tok-comment">// đối chiếu được, không phát lại được</span>
+  tokenTail: token?.slice(-4),     <span class="tok-comment">// correlatable, not replayable</span>
 });</code></pre>
 
 <h3>Tamper evidence, run for real</h3>
@@ -604,7 +604,7 @@ log.info('dang nhap that bai', {
 Kiem lai: chuoi NGUYEN VEN
 Sau khi SUA ban ghi #2 (giau viec tu cap admin): HONG o ban ghi #1
 Sau khi XOA HAN ban ghi #2: HONG o ban ghi #1</div>
-<pre><code><span class="tok-comment">// Mỗi bản ghi băm CẢ nội dung của nó LẪN băm của bản ghi trước.</span>
+<pre><code><span class="tok-comment">// Each record hashes BOTH its own content AND the previous record's hash.</span>
 const prevHash = (await lastRecord())?.bam ?? '0'.repeat(64);
 const bam = sha256(JSON.stringify(event) + prevHash);
 await prisma.auditEvent.create({ data: { ...event, prevHash, bam } });</code></pre>
@@ -784,10 +784,10 @@ await prisma.auditEvent.create({ data: { ...event, prevHash, bam } });</code></p
   <div class="lz-step"><span class="lz-k">Dashboard only</span><span class="lz-t">Context, not alerts</span><span class="lz-d">Logins per hour, sessions created, MFA enrolment percentage, passkey adoption, password-reset volume. You look at these <em>after</em> an alert, and their value is that they tell you what normal looks like.</span></div>
   <div class="lz-step"><span class="lz-k">Never alert on a single user's behaviour</span><span class="lz-t">Except reuse detection</span><span class="lz-d">One person failing five logins is a typo. Alerting per user produces thousands of pages and finds nothing — aggregate first, and let the per-user events live in the audit log where an investigation can find them.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Ghi mọi sự kiện xác thực thành MỘT chỉ số có nhãn. Cảnh báo dựng trên nó.</span>
+<pre><code><span class="tok-comment">// Record every auth event as ONE labelled metric. Alerts are built on it.</span>
 requireAuthTong.inc({ kiu: 'dang_nhap', result: khop ? 'thanh_cong' : 'that_bai' });
 
-<span class="tok-comment">// PromQL: tỉ lệ hỏng trong 15 phút, KHÔNG phải số đếm.</span>
+<span class="tok-comment">// PromQL: the failure RATE over 15 minutes, NOT a raw count.</span>
 <span class="tok-comment">//   sum(rate(xac_thuc_tong{loai="dang_nhap",ketQua="that_bai"}[15m]))</span>
 <span class="tok-comment">// / sum(rate(xac_thuc_tong{loai="dang_nhap"}[15m])) &gt; 0.30</span></code></pre>
 

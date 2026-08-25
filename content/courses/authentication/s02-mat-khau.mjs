@@ -63,9 +63,9 @@ sha256('123456') = 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6
 # Ke tan cong be MOT lan, lay duoc 8.544 tai khoan.
 # Va mot bang cau vong tinh san tra ra ca ba trong vai mili giay.</div>
 <pre><code><span class="tok-comment">// With a per-user salt: the same password, two different hashes</span>
-const salt = randomBytes(16);                    <span class="tok-comment">// 128 bit, một người một cái</span>
+const salt = randomBytes(16);                    <span class="tok-comment">// 128 bits, one per user</span>
 const hash = createHash('sha256').update(Buffer.concat([salt, Buffer.from(password)])).digest();
-<span class="tok-comment">// Lưu CẢ HAI: muối không phải bí mật, nó chỉ cần DUY NHẤT.</span></code></pre>
+<span class="tok-comment">// Store BOTH: a salt is not a secret, it only has to be UNIQUE.</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">✅ Salt kills precomputation</span><span class="v">A rainbow table is built once and reused against every unsalted hash on earth. With a unique salt per user, a precomputed table is useless — the attacker must start from scratch for each row.</span></div>
   <div class="kv"><span class="k">✅ Salt hides duplicates</span><span class="v">The <code>GROUP BY</code> above stops working. The attacker can no longer see that four thousand users share a password, nor crack all four thousand with one success.</span></div>
@@ -255,7 +255,7 @@ $2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewKyPjHiw3sTJoiu
 </div>
 
 <h3>The method: budget, measure, choose</h3>
-<pre><code><span class="tok-comment">// scripts/do-bam.ts — chạy trên MÁY SẼ CHẠY PRODUCTION</span>
+<pre><code><span class="tok-comment">// scripts/measure-hash.ts — run it on the MACHINE THAT WILL RUN PRODUCTION</span>
 import { hash } from '@node-rs/argon2';
 
 const BUDGET_MS = 250;
@@ -304,7 +304,7 @@ backend     6.71GiB / 2GiB     ← OOM. Container bi giet.
 <pre><code><span class="tok-comment">// Cap the concurrency explicitly rather than discovering the limit at 3am</span>
 import { Secode } from 'async-sema';
 
-const gate = new Sema(8);                     <span class="tok-comment">// 8 × 64 MiB = 512 MiB tối đa</span>
+const gate = new Sema(8);                     <span class="tok-comment">// 8 × 64 MiB = 512 MiB at peak</span>
 
 export async function hashPassword(pw: string) {
   await gate.acquire();
@@ -334,26 +334,26 @@ true
 </div>
 
 <h3>The three, configured</h3>
-<pre><code><span class="tok-comment">// Argon2id — dùng @node-rs/argon2 (Rust, prebuilt cho cả musl lẫn glibc)</span>
+<pre><code><span class="tok-comment">// Argon2id — use @node-rs/argon2 (Rust, prebuilt for both musl and glibc)</span>
 import { hash, verify } from '@node-rs/argon2';
 
 const PARAMS = { memoryCost: 65536, timeCost: 2, parallelism: 1 };
-<span class="tok-comment">// đo 08/2026 trên VPS 4 vCPU: 187 ms</span>
+<span class="tok-comment">// measured 08/2026 on a 4-vCPU VPS: 187 ms</span>
 
-await hash(password, PARAMS);                  <span class="tok-comment">// muối tự sinh, tự nhúng</span>
-await verify(bamDaLuu, password);               <span class="tok-comment">// tham số đọc từ chính chuỗi</span></code></pre>
-<pre><code><span class="tok-comment">// bcrypt — một núm duy nhất, khó chỉnh sai</span>
+await hash(password, PARAMS);                  <span class="tok-comment">// salt generated and embedded automatically</span>
+await verify(bamDaLuu, password);               <span class="tok-comment">// parameters read out of the string itself</span></code></pre>
+<pre><code><span class="tok-comment">// bcrypt — a single knob, hard to get wrong</span>
 import bcrypt from 'bcrypt';
-await bcrypt.hash(password, 12);                <span class="tok-comment">// đo trước; 12 là mức sàn ngày nay</span>
+await bcrypt.hash(password, 12);                <span class="tok-comment">// measure first; 12 is today's floor</span>
 await bcrypt.compare(password, bamDaLuu);</code></pre>
-<pre><code><span class="tok-comment">// scrypt — có sẵn trong Node, không cần module native</span>
+<pre><code><span class="tok-comment">// scrypt — built into Node, no native module needed</span>
 import { scrypt, randomBytes, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
 const scryptAsync = promisify(scrypt);
 
 const salt = randomBytes(16);
 const bam = await scryptAsync(password, salt, 64, { N: 2 ** 15, r: 8, p: 1 });
-<span class="tok-comment">// N=32768, r=8 → khoảng 32 MiB. Lưu 'scrypt$32768$8$1$muối$băm' để tự mô tả.</span></code></pre>
+<span class="tok-comment">// N=32768, r=8 → about 32 MiB. Store 'scrypt$32768$8$1$salt$hash' so it is self-describing.</span></code></pre>
 <div class="note-ct">
 <p><strong>Do not hash the password in the browser.</strong> It sounds protective and it is not: whatever the client sends becomes the credential, so a client-side hash is just a password with extra steps — and an attacker with the database can replay the stored value directly. Send the password over TLS and hash it on the server. The one legitimate variant is a zero-knowledge protocol such as OPAQUE, where the server never sees the password at all; that is a real design with real trade-offs, and it is not "call sha256 in the front end".</p>
 </div>
@@ -534,13 +534,13 @@ $ … -d '{"email":"khong-co@vidu.com","password":"x"}' …
 import { hash, verify } from '@node-rs/argon2';
 import { PARAMS } from './cau-hinh.js';
 
-<span class="tok-comment">// Sinh một lần lúc khởi động, từ một mật khẩu không ai có.</span>
+<span class="tok-comment">// Generated once at startup, from a password nobody holds.</span>
 const FAKE_HASH = await hash(randomBytes(32).toString('base64url'), PARAMS);
 
 export async function signIn(email: string, password: string) {
   const u = await prisma.user.findUnique({ where: { email } });
 
-  <span class="tok-comment">// Cùng một phép băm ở CẢ HAI nhánh — chỉ khác cái nó so với.</span>
+  <span class="tok-comment">// The SAME hash work on BOTH branches — only what it compares against differs.</span>
   const dung = await verify(u?.bam ?? FAKE_HASH, password).catch(() =&gt; false);
 
   if (!u || !dung) {
@@ -572,7 +572,7 @@ if (needsRehash(u.bam)) {
 <pre><code><span class="tok-comment">// The check reads the parameters out of the stored string itself</span>
 export function needsRehash(oldHash: string): boolean {
   const m = /^\\$argon2id\\$v=(\\d+)\\$m=(\\d+),t=(\\d+),p=(\\d+)/.exec(oldHash);
-  if (!m) return true;                                   <span class="tok-comment">// bcrypt cũ, hoặc lạ → nâng</span>
+  if (!m) return true;                                   <span class="tok-comment">// old bcrypt, or unknown → upgrade</span>
   const [, , mem, t, p] = m.map(Number);
   return mem &lt; PARAMS.memoryCost
       || t   &lt; PARAMS.timeCost
@@ -589,8 +589,8 @@ false     ← da dung tham so hien tai</div>
 
 <h3>Normalise, but do not mangle</h3>
 <pre><code><span class="tok-comment">// The same password, typed on two keyboards, is two different byte strings</span>
-'mật'.normalize('NFC').length   <span class="tok-comment">// 3 — ậ là MỘT điểm mã</span>
-'mật'.normalize('NFD').length   <span class="tok-comment">// 5 — a + dấu mũ + dấu nặng</span>
+'mật'.normalize('NFC').length   <span class="tok-comment">// 3 — ậ is ONE code point</span>
+'mật'.normalize('NFD').length   <span class="tok-comment">// 5 — a + circumflex + dot-below</span>
 
 Buffer.from('mật', 'utf8').length                    <span class="tok-comment">// 5 byte (NFC)</span>
 Buffer.from('mật'.normalize('NFD'), 'utf8').length   <span class="tok-comment">// 8 byte (NFD)</span></code></pre>
@@ -611,7 +611,7 @@ const PEPPER = Buffer.from(process.env.PASSWORD_PEPPER!, 'base64');  <span class
 const prepare = (pw: string) =&gt;
   createHmac('sha256', PEPPER).update(mk.normalize('NFKC')).digest('base64');
 
-await hash(prepare(password), PARAMS);       <span class="tok-comment">// lưu như bình thường</span>
+await hash(prepare(password), PARAMS);       <span class="tok-comment">// stored as usual</span>
 await verify(u.bam, prepare(password));</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">What it buys: a database-only leak becomes useless</span><span class="lz-lnote">The attacker who dumps the user table cannot start cracking at all without the pepper, because every candidate must be HMAC'd with a 256-bit key they do not have. Given how many breaches are backup-shaped rather than server-shaped, this is a meaningful boundary.</span></div>
@@ -800,11 +800,11 @@ import { createHash } from 'node:crypto';
 
 export async function leaked(password: string): Promise&lt;number&gt; {
   const sha1 = createHash('sha1').update(password).digest('hex').toUpperCase();
-  const prefix = sha1.slice(0, 5);        <span class="tok-comment">// gửi đi</span>
-  const duoi = sha1.slice(5);          <span class="tok-comment">// KHÔNG gửi</span>
+  const prefix = sha1.slice(0, 5);        <span class="tok-comment">// sent</span>
+  const duoi = sha1.slice(5);          <span class="tok-comment">// NOT sent</span>
 
   const r = await fetch(&#96;https://api.pwnedpasswords.com/range/\${dau}&#96;, {
-    headers: { 'Add-Padding': 'true' },   <span class="tok-comment">// che cả kích thước phản hồi</span>
+    headers: { 'Add-Padding': 'true' },   <span class="tok-comment">// hides the response size too</span>
   });
   const text = await r.text();
 
@@ -991,7 +991,7 @@ import bcrypt from 'bcrypt';
 export async function checkPassword(oldHash: string, password: string): Promise&lt;boolean&gt; {
   if (oldHash.startsWith('$argon2')) return argonVerify(oldHash, password).catch(() =&gt; false);
   if (/^\\$2[aby]\\$/.test(oldHash))   return bcrypt.compare(password, oldHash);
-  return false;                                   <span class="tok-comment">// định dạng lạ → trượt</span>
+  return false;                                   <span class="tok-comment">// unknown format → fail</span>
 }
 
 export function needsRehash(oldHash: string): boolean {
@@ -1016,7 +1016,7 @@ export function needsRehash(oldHash: string): boolean {
 <span class="tok-comment">// You do not need the plaintext to do this — so it runs right now,</span>
 <span class="tok-comment">// on every row, in one background job.</span>
 
-bam_moi = argon2id( md5_hex_da_co )        <span class="tok-comment">// lưu kèm nhãn 'boc1$'</span></code></pre>
+bam_moi = argon2id( md5_hex_da_co )        <span class="tok-comment">// stored with the 'wrap1$' marker</span></code></pre>
 <div class="lz-map">
   <div class="lz-stage">
     <span class="lz-badge">Before</span>
@@ -1031,11 +1031,11 @@ bam_moi = argon2id( md5_hex_da_co )        <span class="tok-comment">// lưu kè
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">verify(md5(typed))</span><span class="lz-nsub">then re-store as plain argon2id(typed)</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// scripts/boc-md5.ts — chạy một lần, chia lô, nối lại được (Prisma 11.4)</span>
+<pre><code><span class="tok-comment">// scripts/wrap-md5.ts — run once, in batches, resumable (Prisma 11.4)</span>
 const LO = 500;
 for (;;) {
   const needsWrap = await prisma.user.findMany({
-    where: { bam: { not: { startsWith: '$' } } },   <span class="tok-comment">// còn là md5 hex trần</span>
+    where: { bam: { not: { startsWith: '$' } } },   <span class="tok-comment">// still a bare md5 hex</span>
     select: { id: true, bam: true },
     take: LO,
   });

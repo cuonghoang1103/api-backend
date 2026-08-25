@@ -52,12 +52,12 @@ export default {
 </div>
 
 <h3>Question 2: which step?</h3>
-<pre><code><span class="tok-comment">// Ba bước, ba mã trạng thái khác nhau. Hỏi CÁI NÀO trước khi đoán vì sao.</span>
-POST /sign-in   → 401  <span class="tok-comment">// tín vật sai, HOẶC tài khoản bị khoá, HOẶC băm không khớp</span>
-POST /sign-in   → 429  <span class="tok-comment">// bộ giới hạn — Bài 11.3, và hãy hỏi nó đếm theo TRỤC nào</span>
-POST /mfa/kiem    → 401  <span class="tok-comment">// mã đúng nhưng đồng hồ lệch, hoặc buocCuoi chặn tái dùng — 7.2</span>
-GET  /api/me     → 401  <span class="tok-comment">// đăng nhập ĐƯỢC, phiên KHÔNG dùng được ⇒ cookie hoặc token</span>
-GET  /api/me     → 403  <span class="tok-comment">// phiên tốt, PHÂN QUYỀN từ chối ⇒ Chương 9, không phải xác thực</span></code></pre>
+<pre><code><span class="tok-comment">// Three steps, three different status codes. Ask WHICH before guessing why.</span>
+POST /sign-in   → 401  <span class="tok-comment">// wrong credential, OR account locked, OR hash mismatch</span>
+POST /sign-in   → 429  <span class="tok-comment">// the rate limiter — Lesson 11.3, and ask which AXIS it counts on</span>
+POST /mfa/kiem    → 401  <span class="tok-comment">// right code but clock skew, or lastStep blocking reuse — 7.2</span>
+GET  /api/me     → 401  <span class="tok-comment">// sign-in WORKS, the session does NOT ⇒ cookie or token</span>
+GET  /api/me     → 403  <span class="tok-comment">// good session, AUTHORISATION refuses ⇒ Chapter 9, not authentication</span></code></pre>
 <div class="pitfall">
 <p><strong>Trap — "cannot log in" and "gets logged out immediately" are different bugs with the same sentence.</strong> If <code>/dang-nhap</code> returns 200 and the very next request returns 401, authentication succeeded and the <em>session</em> failed — which moves you from Chapter 2 to Chapter 3 or 4, an entirely different subsystem. Ask for the network tab, or reproduce with two <code>curl</code> calls: one to log in, one to use what it returned. Two commands separate the two halves of the course, and people routinely spend an afternoon in the wrong one.</p>
 </div>
@@ -236,15 +236,15 @@ content-type: application/json
 </div>
 
 <h3>The lookup table</h3>
-<pre><code><span class="tok-comment">// Triệu chứng                          → mở chương nào trước</span>
-'dung sau dung N phut/gio'            → 5.1 · 3.2 · 11.2   <span class="tok-comment">// một tuổi thọ nào đó</span>
-'tat ca bi dang xuat cung luc'        → 11.2 · 3.3 · 6.3   <span class="tok-comment">// một thứ DÙNG CHUNG đổi</span>
-'dang xuat ngau nhien, vai nguoi'     → 5.5 · 3.3          <span class="tok-comment">// đua, hoặc kho phiên không chung</span>
-'tai khoan cu chay, moi thi khong'    → 2.5 · 6.1          <span class="tok-comment">// đổi tham số hoặc luật chuẩn hoá</span>
-'chay o trinh duyet nay, kia thi khong' → 3.4 · 3.5        <span class="tok-comment">// thuộc tính cookie</span>
-'ma MFA luon bi tu choi'              → 7.2                <span class="tok-comment">// lệch đồng hồ / mã hoá / thuật toán</span>
-'callback OAuth hong luc duoc luc khong' → 8.2 · 8.3       <span class="tok-comment">// đổi mã hai lần / state trong bộ nhớ</span>
-'dung nguoi ma van 403'               → 9.5 · 9.4 · 9.1    <span class="tok-comment">// phân quyền, không phải xác thực</span></code></pre>
+<pre><code><span class="tok-comment">// Symptom                               → which chapter to open first</span>
+'dung sau dung N phut/gio'            → 5.1 · 3.2 · 11.2   <span class="tok-comment">// some lifetime somewhere</span>
+'tat ca bi dang xuat cung luc'        → 11.2 · 3.3 · 6.3   <span class="tok-comment">// something SHARED changed</span>
+'dang xuat ngau nhien, vai nguoi'     → 5.5 · 3.3          <span class="tok-comment">// a race, or a session store that is not shared</span>
+'tai khoan cu chay, moi thi khong'    → 2.5 · 6.1          <span class="tok-comment">// changed parameters or normalisation rules</span>
+'chay o trinh duyet nay, kia thi khong' → 3.4 · 3.5        <span class="tok-comment">// cookie attributes</span>
+'ma MFA luon bi tu choi'              → 7.2                <span class="tok-comment">// clock skew / encryption / algorithm</span>
+'callback OAuth hong luc duoc luc khong' → 8.2 · 8.3       <span class="tok-comment">// code exchanged twice / in-memory state</span>
+'dung nguoi ma van 403'               → 9.5 · 9.4 · 9.1    <span class="tok-comment">// authorisation, not authentication</span></code></pre>
 <div class="note-ct">
 <p><strong>Two questions worth asking before any of the eight.</strong> First: does it reproduce for you, right now, with <code>curl</code>? If yes you have a bug you control; if no, the difference is in the client and you need theirs. Second: when did it last work? A shape that started at a deploy is a deploy; one that started at a round number of days after a deploy is a lifetime; one that has never worked for anybody is a configuration that was wrong from the beginning. Those two questions plus the table above resolve most authentication incidents before you open an editor.</p>
 </div>
@@ -375,24 +375,24 @@ $ curl -s http://127.0.0.1:4111/api/toi          # khong gui binh
 </div>
 
 <h3>3 to 7 · The rest of the box</h3>
-<pre><code><span class="tok-comment">// 3. Băm Argon2 tự khai tham số của nó — đọc ngay trong chuỗi.</span>
+<pre><code><span class="tok-comment">// 3. An Argon2 hash declares its own parameters — read them straight out of the string.</span>
 $argon2id$v=19$m=65536,t=3,p=4$c29tZXNhbHQ$…
-<span class="tok-comment">//        ↑ phiên bản  ↑ bộ nhớ 64MB, 3 lượt, 4 luồng — Bài 2.3</span>
-<span class="tok-comment">// Bản ghi CŨ mang tham số CŨ. Đó là hình dạng 4 ở Bài 12.2.</span>
+<span class="tok-comment">//        ↑ version   ↑ memory 64MB, 3 passes, 4 lanes — Lesson 2.3</span>
+<span class="tok-comment">// OLD records carry OLD parameters. That is shape 4 in Lesson 12.2.</span>
 
-<span class="tok-comment">// 4. Tuyến có được gắn không? 404 = build cũ, 401 = có gắn và đòi xác thực.</span>
+<span class="tok-comment">// 4. Is the route mounted? 404 = stale build, 401 = mounted and demanding auth.</span>
 curl -s -o /dev/null -w "%{http_code}\\\\n" https://vidu.com/api/v1/&lt;route&gt;
 
-<span class="tok-comment">// 5. Đồng hồ máy chủ — cái hay bị bỏ qua nhất ở hình dạng 6.</span>
+<span class="tok-comment">// 5. The server clock — the most overlooked cause of shape 6.</span>
 date -u; timedatectl status | grep -i 'synchronized\\\\|NTP'
 
-<span class="tok-comment">// 6. Cơ sở dữ liệu nói gì về tài khoản này (đọc, đừng đoán):</span>
+<span class="tok-comment">// 6. What the database says about this account (read it, do not guess):</span>
 SELECT email_xac_minh, khoa_luc, phien_ban_tin_vat,
        (SELECT count(*) FROM refresh_token r
          WHERE r.user_id = u.id AND r.revoked_at IS NULL) AS phien_song
 FROM nguoi_dung u WHERE email_chuan_hoa = 'nan-nhan@vidu.com';
 
-<span class="tok-comment">// 7. Nhật ký kiểm toán — Bài 11.4 dựng ra chính là để trả lời câu này.</span>
+<span class="tok-comment">// 7. The audit log — Lesson 11.4 exists precisely to answer this question.</span>
 SELECT luc, kind, chu_the_id, ip, ket_qua FROM su_kien_kiem_toan
 WHERE doi_tuong_id = 'u_812' ORDER BY luc DESC LIMIT 50;</code></pre>
 <div class="pitfall">
@@ -530,12 +530,12 @@ src/services/llm/gateway.ts:51:  process.env.OPENAI_COMPAT_API_KEY ||
 # Quet chi CHI CHO, khong ket luan. Muc 5 o day phan lon la mot chuoi doc
 # NHIEU TEN BIEN cho cung mot khoa — co chu y, khong phai bi mat chep cung.
 # Muc 2 thi khac: bay loi goi khong ghim thuat toan, va do la Bai 4.2.</div>
-<pre><code><span class="tok-comment"># Năm dấu hiệu đỏ. Mỗi cái là một họ lỗi trong khoá học này.</span>
-grep -rE 'jwt\\\\.decode\\\\(|decodeJwt\\\\('        src/   <span class="tok-comment"># 8.4 · giải mã thay vì kiểm chứng</span>
-grep -rE 'jwt\\\\.verify\\\\('  src/ | grep -v algorithms  <span class="tok-comment"># 4.2 · không ghim thuật toán</span>
-grep -rE 'data:\\\\s*req\\\\.body|\\\\.\\\\.\\\\.req\\\\.body'    src/   <span class="tok-comment"># 9.5 · gán hàng loạt</span>
-grep -rE "req\\\\.headers\\\\.host|x-forwarded-host" src/   <span class="tok-comment"># 6.3 · đầu độc Host</span>
-grep -rE "env\\\\.[A-Z_]*(SECRET|KEY)[A-Z_]*\\\\s*(\\\\|\\\\||\\\\?\\\\?)" src/ <span class="tok-comment"># 11.1 · mặc định dự phòng</span></code></pre>
+<pre><code><span class="tok-comment"># Five red flags. Each one is a family of bugs from this course.</span>
+grep -rE 'jwt\\\\.decode\\\\(|decodeJwt\\\\('        src/   <span class="tok-comment"># 8.4 · decoding instead of verifying</span>
+grep -rE 'jwt\\\\.verify\\\\('  src/ | grep -v algorithms  <span class="tok-comment"># 4.2 · algorithm not pinned</span>
+grep -rE 'data:\\\\s*req\\\\.body|\\\\.\\\\.\\\\.req\\\\.body'    src/   <span class="tok-comment"># 9.5 · mass assignment</span>
+grep -rE "req\\\\.headers\\\\.host|x-forwarded-host" src/   <span class="tok-comment"># 6.3 · Host poisoning</span>
+grep -rE "env\\\\.[A-Z_]*(SECRET|KEY)[A-Z_]*\\\\s*(\\\\|\\\\||\\\\?\\\\?)" src/ <span class="tok-comment"># 11.1 · fallback defaults</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">A grep finds candidates, a human classifies them</span><span class="v">Ten hits on the secrets pattern here are mostly one key read under several variable names — a documented fallback chain, not a hard-coded value. Seven unpinned <code>jwt.verify</code> calls are a real finding. Report what you measured and what you concluded, separately.</span></div>
   <div class="kv"><span class="k">Zero hits is information too</span><span class="v">No <code>jwt.decode</code> anywhere means nobody took that shortcut, which is worth writing down. A review that only lists problems reads as if everything is broken.</span></div>

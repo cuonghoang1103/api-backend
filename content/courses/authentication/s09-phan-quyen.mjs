@@ -42,17 +42,17 @@ export default {
 </div>
 
 <h3>IDOR, in four lines</h3>
-<pre><code><span class="tok-comment">// Endpoint này CÓ xác thực. Nó vẫn là một lỗ hổng.</span>
+<pre><code><span class="tok-comment">// This endpoint IS authenticated. It is still a vulnerability.</span>
 app.get('/api/invoices/:id', requireAuth, async (req, res) =&gt; {
   const invoice = await prisma.invoice.findUnique({ where: { id: req.params.id } });
-  res.json(invoice);            <span class="tok-comment">// ← hoá đơn CỦA AI cũng được</span>
+  res.json(invoice);            <span class="tok-comment">// ← ANYONE'S invoice will do</span>
 });
 
-<span class="tok-comment">// Vá: chủ sở hữu là một phần của CÂU TRUY VẤN, không phải một phép kiểm sau đó.</span>
+<span class="tok-comment">// Fix: ownership is part of the QUERY, not a check performed afterwards.</span>
 const invoice = await prisma.invoice.findFirst({
-  where: { id: req.params.id, userId: req.u.id },   <span class="tok-comment">// ← ở ĐÂY</span>
+  where: { id: req.params.id, userId: req.u.id },   <span class="tok-comment">// ← RIGHT HERE</span>
 });
-if (!invoice) return res.status(404).end();                    <span class="tok-comment">// 404, không phải 403</span></code></pre>
+if (!invoice) return res.status(404).end();                    <span class="tok-comment">// 404, not 403</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Insecure direct object reference</span><span class="v">The client supplies an identifier and the server fetches it without asking whether this user may have it. It is the most common access-control bug by a wide margin, and it needs no tooling to find: change a number in a URL.</span></div>
   <div class="kv"><span class="k">Put ownership in the WHERE clause</span><span class="v">A separate <code>if (invoice.userId !== req.u.id)</code> works and is one refactor away from being deleted. A query that cannot return another user's row is correct by construction, and it stays correct when somebody adds a second code path.</span></div>
@@ -61,7 +61,7 @@ if (!invoice) return res.status(404).end();                    <span class="tok-
 </div>
 
 <h3>How many places can this go wrong? Measured</h3>
-<pre><code><span class="tok-comment">// Đếm mọi endpoint trong chính kho mã này, và xem cái nào có lớp chắn nào.</span>
+<pre><code><span class="tok-comment">// Count every endpoint in this very repo, and see which guard each one has.</span>
 grep -c "router\\\\.(get|post|put|patch|delete)" src/routes/*.ts</code></pre>
 <div class="out">tong endpoint                         : 939
 co middleware ngay tren TUYEN         : 460
@@ -196,10 +196,10 @@ KHONG co lop nao trong hai lop tren   : 114
 
 <h3>Stage one: the boolean, and why it always spreads</h3>
 <pre><code>model User {
-  isAdmin Boolean @default(false)      <span class="tok-comment">// tuần 1: hoàn toàn hợp lý</span>
+  isAdmin Boolean @default(false)      <span class="tok-comment">// week 1: perfectly reasonable</span>
 }
 
-<span class="tok-comment">// Tháng 6, sau khi có đội hỗ trợ, đội kiểm duyệt và đội tài chính:</span>
+<span class="tok-comment">// Month 6, once there is a support team, a moderation team and a finance team:</span>
 model User {
   isAdmin        Boolean @default(false)
   isModerator    Boolean @default(false)
@@ -207,7 +207,7 @@ model User {
   isAccountant   Boolean @default(false)
   canViewRevenue Boolean @default(false)
   canDeletePost  Boolean @default(false)
-  <span class="tok-comment">// …và không ai còn trả lời được: một "kiểm duyệt viên" thì làm được gì?</span>
+  <span class="tok-comment">// …and nobody can answer any more: what exactly can a "moderator" do?</span>
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Booleans do not compose</span><span class="v">Six flags are sixty-four possible combinations, and your product intends to support four of them. The other sixty exist, are reachable through the admin interface, and have never been tested.</span></div>
@@ -229,7 +229,7 @@ model UserRole {
   roleId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  @@id([userId, roleId])                 <span class="tok-comment">// một người NHIỀU vai — quan trọng</span>
+  @@id([userId, roleId])                 <span class="tok-comment">// one person, MANY roles — this matters</span>
   @@map("user_roles")
 }</code></pre>
 <div class="out"># Lay tu chinh prisma/schema.prisma cua kho ma nay — no dung dung mo hinh tren.
@@ -250,14 +250,14 @@ ADD CONSTRAINT "user_roles_roleId_fkey" FOREIGN KEY ("roleId")
 </div>
 
 <h3>Stage three: roles grant permissions</h3>
-<pre><code><span class="tok-comment">// Vai trò là cái CON NGƯỜI hiểu. Quyền là cái MÃ kiểm.</span>
+<pre><code><span class="tok-comment">// Roles are what PEOPLE understand. Permissions are what CODE checks.</span>
 model Permission     { id Int @id  ma String @unique  roles RolePermission[] }  <span class="tok-comment">// 'bai_viet:xoa'</span>
 model RolePermission { roleId Int  quyenId Int   @@id([roleId, quyenId]) }
 
-<span class="tok-comment">// Mã KHÔNG BAO GIỜ nhắc tên vai trò. Nó hỏi về QUYỀN.</span>
+<span class="tok-comment">// The code NEVER names a role. It asks about a PERMISSION.</span>
 app.delete('/posts/:id', requireAuth, changeRole('post:xoa'), deletePost);
 
-<span class="tok-comment">// SAI — đây là chặng hai đội lốt chặng ba:</span>
+<span class="tok-comment">// WRONG — this is stage two dressed up as stage three:</span>
 if (u.role === 'admin' || u.role === 'kiem_duyet') { <span class="tok-comment">/* … */</span> }</code></pre>
 <div class="pitfall">
 <p><strong>Trap — checking role names in application code recreates every problem the roles were meant to solve.</strong> The moment a handler says <code>if (role === 'admin' || role === 'moderator')</code>, adding a fourth role means finding and editing every such condition, and nobody can list what a role does without reading the whole codebase. Check <em>permissions</em>, always: <code>changeRole('post:xoa')</code>. Then creating a role is inserting rows, changing what a role can do is an admin screen, and the code never changes. The one legitimate exception is a hard-coded superuser check used to protect the permission system itself from locking everyone out.</p>
@@ -270,13 +270,13 @@ if (u.role === 'admin' || u.role === 'kiem_duyet') { <span class="tok-comment">/
 </div>
 
 <h3>Where RBAC stops</h3>
-<pre><code><span class="tok-comment">// Ba câu hỏi mà KHÔNG mô hình vai trò nào trả lời nổi:</span>
-"Cường có được sửa tài liệu số 42 không?"        <span class="tok-comment">// ← phụ thuộc AI SỞ HỮU nó</span>
-"Người này có được xem hoá đơn của khách hàng X?" <span class="tok-comment">// ← phụ thuộc họ thuộc nhóm nào</span>
-"Ai đang có đường dẫn chia sẻ thì đọc được chứ?" <span class="tok-comment">// ← chẳng dính gì tới người dùng cả</span>
+<pre><code><span class="tok-comment">// Three questions NO role model can answer:</span>
+"Cường có được sửa tài liệu số 42 không?"        <span class="tok-comment">// ← depends on WHO OWNS it</span>
+"Người này có được xem hoá đơn của khách hàng X?" <span class="tok-comment">// ← depends on which group they belong to</span>
+"Ai đang có đường dẫn chia sẻ thì đọc được chứ?" <span class="tok-comment">// ← has nothing to do with the user at all</span>
 
-<span class="tok-comment">// Vai trò trả lời "người này LÀ AI trong tổ chức".</span>
-<span class="tok-comment">// Chúng KHÔNG trả lời được "người này với THỨ NÀY có quan hệ gì".</span></code></pre>
+<span class="tok-comment">// Roles answer "WHO is this person in the organisation".</span>
+<span class="tok-comment">// They CANNOT answer "what is this person's relationship to THIS THING".</span></code></pre>
 <div class="callout warn">
 <p><strong>The tell is a role whose name contains an identifier.</strong> When someone proposes <code>editor_of_project_42</code>, or a table of roles that grows with your data rather than with your org chart, RBAC has run out — you are trying to encode a relationship between a user and an object into a model that only knows about users. Every workaround from there is worse than the next model: a role per project, a permission string containing an id, a check that parses the role name. Lesson 9.3 is that next model, and the honest advice is that most products need both, with roles for organisation-wide capability and relationships for per-object access.</p>
 </div>
@@ -410,15 +410,15 @@ if (u.role === 'admin' || u.role === 'kiem_duyet') { <span class="tok-comment">/
 <p class="lead">Roles describe a person. The questions that break them describe a <em>pair</em>: this person and this object. Sharing, ownership, workspaces, folders, delegated access — every one of those is a fact about a relationship, and no amount of role modelling encodes it without smuggling an identifier into a role name.</p>
 
 <h3>ABAC: the rule reads the attributes</h3>
-<pre><code><span class="tok-comment">// Quyết định là một HÀM của (chủ thể, hành động, đối tượng, bối cảnh).</span>
+<pre><code><span class="tok-comment">// The decision is a FUNCTION of (subject, action, object, context).</span>
 function allowed(u, hanhDong, dt, boiCanh) {
   if (hanhDong === 'sua' &amp;&amp; dt.loai === 'document') {
-    if (dt.ownerId === u.id) return true;                    <span class="tok-comment">// sở hữu</span>
-    if (dt.state === 'DA_KHOA') return false;                 <span class="tok-comment">// trạng thái ĐỐI TƯỢNG</span>
-    if (u.department === dt.department &amp;&amp; u.tier &gt;= 3) return true; <span class="tok-comment">// thuộc tính CHỦ THỂ</span>
+    if (dt.ownerId === u.id) return true;                    <span class="tok-comment">// ownership</span>
+    if (dt.state === 'DA_KHOA') return false;                 <span class="tok-comment">// OBJECT state</span>
+    if (u.department === dt.department &amp;&amp; u.tier &gt;= 3) return true; <span class="tok-comment">// SUBJECT attribute</span>
     if (boiCanh.gio &lt; 6 || boiCanh.gio &gt; 22) return false;        <span class="tok-comment">// BỐI CẢNH</span>
   }
-  return false;                                                   <span class="tok-comment">// mặc định TỪ CHỐI</span>
+  return false;                                                   <span class="tok-comment">// DENY by default</span>
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">It expresses anything, which is its strength and its cost</span><span class="v">Department, seniority, document state, time of day, IP range, whether the account is verified. If you can read it, you can decide on it — and nothing forces the rules to stay comprehensible.</span></div>
@@ -428,7 +428,7 @@ function allowed(u, hanhDong, dt, boiCanh) {
 </div>
 
 <h3>ReBAC: store the relationships, walk the graph</h3>
-<pre><code><span class="tok-comment">// Một bộ ba: (đối tượng, quan hệ, chủ thể). Chỉ thế thôi.</span>
+<pre><code><span class="tok-comment">// A triple: (object, relation, subject). That is all it is.</span>
 ['document:42',         'chuSoHuu',  'u:cuong'],
 ['document:42',         'nam_trong', 'folder:ke-hoach'],
 ['folder:ke-hoach',    'nam_trong', 'namespace:cuongthai'],
@@ -436,8 +436,8 @@ function allowed(u, hanhDong, dt, boiCanh) {
 ['namespace:cuongthai','thanhVien', 'u:nam'],
 ['document:42',         'nguoiXem',  'shareLink:abc'],
 
-<span class="tok-comment">// Luật: sửa = chuSoHuu HOẶC quanTri của vật chứa nó (đệ quy).</span>
-<span class="tok-comment">//       đọc = sửa HOẶC thanhVien của vật chứa nó HOẶC nguoiXem.</span></code></pre>
+<span class="tok-comment">// Rule: edit = owner OR admin of its container (recursively).</span>
+<span class="tok-comment">//       read = edit OR member of its container OR viewer.</span></code></pre>
 <div class="out">SUA  document:42   <- nd:cuong             CHO   chuSoHuu truc tiep tren document:42
 SUA  document:42   <- nd:mai               CHO   quanTri cua namespace:cuongthai (ke thua qua folder:ke-hoach) (ke thua qua document:42)
 SUA  document:42   <- nd:nam               CHAN  khong tim thay duong nao
@@ -577,13 +577,13 @@ DOC  document:42   <- nd:lan               CHAN  khong tim thay duong nao
 <p class="lead">Every authorization bug so far has been one user seeing another user's row. In a multi-tenant product the same mistake is one <em>company</em> seeing another company's data, and it is the failure that ends contracts and triggers breach notifications. It also has a distinctive property: it is caused by omission, in a query that looks completely ordinary.</p>
 
 <h3>The bug, and why it is invisible in review</h3>
-<pre><code><span class="tok-comment">// Ba truy vấn. Hai cái đúng, một cái không. Cái nào?</span>
+<pre><code><span class="tok-comment">// Three queries. Two are correct, one is not. Which one?</span>
 const a = await prisma.invoice.findMany({ where: { tenantId, state: 'CHUA_TRA' } });
 const b = await prisma.invoice.findMany({ where: { tenantId, khachHangId } });
 const c = await prisma.invoice.findMany({ where: { state: 'QUA_HAN' } });
 
-<span class="tok-comment">// Cái thứ ba trả về hoá đơn quá hạn của MỌI công ty. Nó biên dịch được,</span>
-<span class="tok-comment">// nó chạy được, test cũng xanh — vì môi trường test chỉ có MỘT tenant.</span></code></pre>
+<span class="tok-comment">// The third returns the overdue invoices of EVERY company. It compiles,</span>
+<span class="tok-comment">// it runs, and the tests pass — because the test environment has only ONE tenant.</span></code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nothing marks it as wrong</span><span class="v">There is no type error, no lint rule, and no runtime failure. The query returns rows, the page renders, and the defect is only visible if a reviewer holds "every query touching this table needs a tenant filter" in their head across every file.</span></div>
   <div class="kv"><span class="k">Tests miss it by construction</span><span class="v">A test fixture with one tenant cannot detect a missing tenant filter, because with one tenant the filtered and unfiltered results are identical. Every multi-tenant test suite needs a second tenant whose data must never appear.</span></div>
@@ -610,14 +610,14 @@ const c = await prisma.invoice.findMany({ where: { state: 'QUA_HAN' } });
     <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">"Everyone remembers the filter"</span><span class="lz-nsub">This is the state you are in right now, and it is why the bug exists</span></div></div>
   </div>
 </div>
-<pre><code><span class="tok-comment">// Lớp 1 — tenant lấy TỪ PHIÊN. Không bao giờ từ tham số của request.</span>
+<pre><code><span class="tok-comment">// Layer 1 — the tenant comes FROM THE SESSION. Never from a request parameter.</span>
 app.use((req, res, next) =&gt; {
-  req.tenantId = req.u.tenantId;              <span class="tok-comment">// ĐÚNG: máy chủ tự biết</span>
-  <span class="tok-comment">// req.tenantId = req.query.tenant;          // SAI: khách hàng tự khai</span>
+  req.tenantId = req.u.tenantId;              <span class="tok-comment">// RIGHT: the server already knows</span>
+  <span class="tok-comment">// req.tenantId = req.query.tenant;          // WRONG: the client declares it</span>
   next();
 });
 
-<span class="tok-comment">// Lớp 2 — phần mở rộng Prisma tự chèn bộ lọc vào MỌI truy vấn.</span>
+<span class="tok-comment">// Layer 2 — a Prisma extension injects the filter into EVERY query.</span>
 const db = prisma.$extends({
   query: { $allModels: { async $allOperations({ args, query, model }) {
     if (BANG_CO_TENANT.has(model!) &amp;&amp; args.where) {
@@ -649,7 +649,7 @@ UPDATE 0
 CREATE POLICY chi_tenant_cua_minh ON hoa_don
   USING (tenant_id = current_setting('app.tenant', true));
 
-<span class="tok-comment">-- Ứng dụng đặt biến này MỘT lần cho mỗi request, trong cùng giao dịch:</span>
+<span class="tok-comment">-- The application sets this variable ONCE per request, inside the same transaction:</span>
 SET LOCAL app.tenant = 'cuongthai';</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">It applies to every path</span><span class="lz-t">Not just the request one</span><span class="lz-d">The background job, the export script, the analytics query and the console session all go through the same policy. This is the property no application-layer solution has.</span></div>
@@ -828,18 +828,18 @@ SET LOCAL app.tenant = 'cuongthai';</code></pre>
   <div class="lz-layer"><span class="lz-lname">The service layer — the right place for object rules</span><span class="lz-lnote">Load the object, call one decision function, act. Every caller — HTTP handler, background job, GraphQL resolver, CLI script — goes through the same function, which is the property route middleware lacks.</span></div>
   <div class="lz-layer"><span class="lz-lname">The data layer — the only one that cannot be bypassed</span><span class="lz-lnote">Ownership in the <code>WHERE</code> clause and RLS in the database (Lessons 9.1 and 9.4). It cannot express "may Mai publish this", but what it does express, it enforces against every connection that ever opens.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Một hàm quyết định. Mọi đường gọi đều đi qua đúng nó.</span>
+<pre><code><span class="tok-comment">// One decision function. Every call path goes through exactly it.</span>
 export function canDeletePost(u: User | null, post: Post): boolean {
   if (!u) return false;
   if (post.authorId === u.id) return true;
   return u.permission.has('post:xoa');
 }
 
-<span class="tok-comment">// Tầng dịch vụ — KHÔNG phải bộ xử lý HTTP.</span>
+<span class="tok-comment">// The service layer — NOT the HTTP handler.</span>
 export async function deletePost(u: User, id: string) {
   const bv = await prisma.post.findUnique({ where: { id } });
   if (!bv) throw new NotFound();
-  if (!canDeletePost(u, bv)) throw new NotFound();   <span class="tok-comment">// 404, không phải 403</span>
+  if (!canDeletePost(u, bv)) throw new NotFound();   <span class="tok-comment">// 404, not 403</span>
   await prisma.post.delete({ where: { id } });
 }</code></pre>
 
@@ -858,17 +858,17 @@ export async function deletePost(u: User, id: string) {
 <div class="pitfall">
 <p><strong>Trap — mass assignment turns an ordinary update endpoint into privilege escalation.</strong> A handler that spreads the request body into an update lets the client write any column the model has: <code>PATCH /me { "ten": "Cường", "role": "admin" }</code> succeeds, and every authorization rule in this chapter was enforced correctly on an operation the user was genuinely allowed to perform. The fix is to allow-list fields explicitly — never <code>data: req.body</code>, always <code>data: { ten, anhDaiDien }</code> — and to validate with a schema that <em>strips</em> unknown keys rather than one that ignores them. Grep for <code>...req.body</code> across the codebase; it finds this class in one pass.</p>
 </div>
-<pre><code><span class="tok-comment">// SAI — client viết được MỌI cột mà model có:</span>
+<pre><code><span class="tok-comment">// WRONG — the client can write EVERY column the model has:</span>
 await prisma.user.update({ where: { id: u.id }, data: req.body });
 
-<span class="tok-comment">// ĐÚNG — danh sách trắng tường minh, và schema CẮT BỎ khoá lạ:</span>
-const { ten, anhDaiDien } = ZodHoSo.parse(req.body);   <span class="tok-comment">// .strict() để lỗi thay vì lờ đi</span>
+<span class="tok-comment">// RIGHT — an explicit allow-list, and the schema STRIPS unknown keys:</span>
+const { ten, anhDaiDien } = ZodHoSo.parse(req.body);   <span class="tok-comment">// .strict() so it errors instead of ignoring</span>
 await prisma.user.update({ where: { id: u.id }, data: { ten, anhDaiDien } });</code></pre>
 
 <h3>Making forgetting a build error</h3>
-<pre><code><span class="tok-comment">// Mỗi tuyến PHẢI khai một chính sách. Kiểu dữ liệu ép điều đó.</span>
+<pre><code><span class="tok-comment">// Every route MUST declare a policy. The type system enforces it.</span>
 type Policy =
-  | { kiu: 'congKhai'; reason: string }        <span class="tok-comment">// công khai thì phải NÓI VÌ SAO</span>
+  | { kiu: 'congKhai'; reason: string }        <span class="tok-comment">// public means you must SAY WHY</span>
   | { kiu: 'daDangNhap' }
   | { kiu: 'permission'; ma: MaQuyen };
 
@@ -877,7 +877,7 @@ function route(cs: Policy, ...handlers: RequestHandler[]) { <span class="tok-com
 route({ kiu: 'congKhai', reason: 'danh sách khoá học hiển thị cho khách' },
       listCourses);
 route({ kiu: 'permission', ma: 'post:xoa' }, deletePost);
-<span class="tok-comment">// tuyen(layDanhSachKhoaHoc);   ← KHÔNG biên dịch được. Đó là toàn bộ ý tưởng.</span></code></pre>
+<span class="tok-comment">// route(listCourses);   ← does NOT compile. That is the whole idea.</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Deny by default, in the type system</span><span class="lz-t">Not in a code review</span><span class="lz-d">A route with no declared policy fails to compile. Lesson 9.1 measured 114 endpoints in this repository with no visible guard; with this shape, every one of them would carry a written reason instead of an unanswered question.</span></div>
   <div class="lz-step"><span class="lz-k">Public routes state their reason</span><span class="lz-t">The reason is the review</span><span class="lz-d">Forcing a <code>reason</code> string turns "no marking" into "somebody wrote a sentence a reviewer can disagree with". It costs nothing and converts an omission into a claim.</span></div>

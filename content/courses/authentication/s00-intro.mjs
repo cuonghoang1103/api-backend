@@ -396,7 +396,7 @@ npm init -y
 npm i express@5 pg prisma @prisma/client
 npm i -D tsx typescript @types/node @types/express
 npx prisma init --datasource-provider postgresql</code></pre>
-<pre><code><span class="tok-comment"># docker-compose.yml — một Postgres, không hơn</span>
+<pre><code><span class="tok-comment"># docker-compose.yml — one Postgres, nothing more</span>
 services:
   db:
     image: postgres:16-alpine
@@ -435,7 +435,7 @@ Your database is now in sync with your schema.</div>
 </div>
 
 <h3>The twenty lines</h3>
-<pre><code><span class="tok-comment">// src/index.ts — đừng dùng cái này ở đâu cả</span>
+<pre><code><span class="tok-comment">// src/index.ts — do not use this anywhere</span>
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 

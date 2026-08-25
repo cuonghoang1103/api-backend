@@ -56,17 +56,17 @@ export default {
 </div>
 
 <h3>When to ask, which is not "every login"</h3>
-<pre><code><span class="tok-comment">// Yếu tố thứ hai ở BA thời điểm khác nhau, và chúng khác nhau thật.</span>
+<pre><code><span class="tok-comment">// The second factor at THREE different moments, and they genuinely differ.</span>
 
-<span class="tok-comment">// 1. Lúc đăng nhập — nhưng nhớ thiết bị, không thì người dùng sẽ tắt MFA đi</span>
+<span class="tok-comment">// 1. At sign-in — but remember the device, or users will simply turn MFA off</span>
 if (!rememberedDevice(req)) await changeSecondFactor(u);
 
-<span class="tok-comment">// 2. Xác thực lại trước việc nhạy cảm — Bài 6.5, và đây là chỗ quan trọng NHẤT</span>
+<span class="tok-comment">// 2. Re-auth before a sensitive action — Lesson 6.5, and this is the MOST important one</span>
 app.patch('/me/email', requireReauth({ within: 300 }), doiEmail);
 app.post('/me/delete',     requireReauth({ within: 300 }), xoaTaiKhoan);
 app.post('/thanh-toan',  requireReauth({ within: 300 }), chuyenTien);
 
-<span class="tok-comment">// 3. Khi có gì đó BẤT THƯỜNG — quốc gia mới, thiết bị mới, sau một lần đặt lại</span>
+<span class="tok-comment">// 3. When something is UNUSUAL — a new country, a new device, right after a reset</span>
 if (riskScore(req, u) &gt; NGUONG) await changeSecondFactor(u);</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Remembering the device is not a weakness, it is what makes MFA survive</span><span class="lz-lnote">A factor demanded on every login gets switched off, or the user picks the weakest option available. Remember the browser for thirty days with a separate signed cookie, and re-ask when it expires, when the device is new, or when the risk score rises.</span></div>
@@ -187,18 +187,18 @@ if (riskScore(req, u) &gt; NGUONG) await changeSecondFactor(u);</code></pre>
 
 function hotp(khoa: Buffer, counter: number, soChuSo = 6): string {
   const buf = Buffer.alloc(8);
-  buf.writeBigUInt64BE(BigInt(counter));                    <span class="tok-comment">// 1. bộ đếm, 8 byte, big-endian</span>
+  buf.writeBigUInt64BE(BigInt(counter));                    <span class="tok-comment">// 1. the counter, 8 bytes, big-endian</span>
 
   const h = createHmac('sha1', key).update(buf).digest(); <span class="tok-comment">// 2. HMAC-SHA1 → 20 byte</span>
 
-  const off = h[h.length - 1] &amp; 0x0f;                      <span class="tok-comment">// 3. cắt động: 4 bit cuối = vị trí</span>
+  const off = h[h.length - 1] &amp; 0x0f;                      <span class="tok-comment">// 3. dynamic truncation: the last 4 bits = the offset</span>
   const bin = ((h[off] &amp; 0x7f) &lt;&lt; 24) | (h[off + 1] &lt;&lt; 16)
-            | (h[off + 2] &lt;&lt; 8)   |  h[off + 3];           <span class="tok-comment">//    lấy 31 bit từ vị trí đó</span>
+            | (h[off + 2] &lt;&lt; 8)   |  h[off + 3];           <span class="tok-comment">//    take 31 bits from that offset</span>
 
-  return String(bin % 10 ** soChuSo).padStart(soChuSo, '0'); <span class="tok-comment">// 4. lấy dư, đệm số 0</span>
+  return String(bin % 10 ** soChuSo).padStart(soChuSo, '0'); <span class="tok-comment">// 4. take the remainder, zero-pad</span>
 }
 
-<span class="tok-comment">// TOTP chỉ là HOTP với bộ đếm = thời gian chia cho 30.</span>
+<span class="tok-comment">// TOTP is just HOTP with the counter = time divided by 30.</span>
 const totp = (khoa: Buffer, giay = Date.now() / 1000, buoc = 30) =&gt;
   hotp(key, Math.floor(giay / buoc));</code></pre>
 <div class="out">RFC 6238 test vectors (SHA-1):
@@ -220,7 +220,7 @@ const totp = (khoa: Buffer, giay = Date.now() / 1000, buoc = 30) =&gt;
 </div>
 
 <h3>Base32, the QR code, and the shape of an enrolment</h3>
-<pre><code><span class="tok-comment">// Bí mật là 20 byte ngẫu nhiên. Ứng dụng sinh mã đọc base32, KHÔNG đọc hex.</span>
+<pre><code><span class="tok-comment">// The secret is 20 random bytes. Authenticator apps read base32, NOT hex.</span>
 const secret = randomBytes(20);
 const uri = 'otpauth://totp/CuongThai:' + encodeURIComponent(u.email)
           + '?secret=' + base32(secret)
@@ -249,9 +249,9 @@ otpauth URI  : otpauth://totp/CuongThai:cuong%40cuongthai.com?secret=IIO6GHS2LR6
 
   for (let d = -cuaSo; d &lt;= cuaSo; d++) {
     const expected = hotp(secret, currentStep + d);
-    <span class="tok-comment">// So sánh hằng thời gian — Bài 1.3, và ở đây nó thật sự cần thiết.</span>
+    <span class="tok-comment">// Constant-time comparison — Lesson 1.3, and here it genuinely matters.</span>
     if (timingSafeEqual(Buffer.from(expected), Buffer.from(inputCode.padEnd(6)))) {
-      return currentStep + d;                <span class="tok-comment">// ← TRẢ VỀ BƯỚC, không trả về true</span>
+      return currentStep + d;                <span class="tok-comment">// ← RETURNS THE STEP, not true</span>
     }
   }
   return null;
@@ -260,7 +260,7 @@ otpauth URI  : otpauth://totp/CuongThai:cuong%40cuongthai.com?secret=IIO6GHS2LR6
 <p><strong>Trap — returning a boolean makes replay impossible to prevent, and replay is the attack that actually happens.</strong> A TOTP code stays valid for up to ninety seconds. Anyone who sees it once — over the shoulder, in a phishing proxy, in a screenshot pasted into a support chat — can use it again inside that window. The fix is to return the step number that matched and store it: <code>lastStep</code> on the factor row, with the rule that the new step must be strictly greater. A code that already succeeded can never succeed twice, and the change is two lines.</p>
 </div>
 <pre><code>const buoc = checkTotp(secret, code);
-if (buoc === null || buoc &lt;= factor.lastStep) {         <span class="tok-comment">// ← chặn TÁI DÙNG</span>
+if (buoc === null || buoc &lt;= factor.lastStep) {         <span class="tok-comment">// ← blocks REUSE</span>
   await recordFailure(u.id);
   return res.status(401).json({ error: 'Mã không đúng.' });
 }
@@ -404,11 +404,11 @@ await prisma.factor.update({ where: { id: factor.id }, data: { lastStep: buoc } 
 <p class="lead">The cryptography in Lesson 7.2 is the easy half. The hard half is that a second factor is a physical object which will be dropped, wiped, upgraded and lost — and every one of those events arrives as a support ticket from somebody who cannot get into their own account. Design the losing case first; the enrolment flow follows from it.</p>
 
 <h3>Enrolment, in the only safe order</h3>
-<pre><code><span class="tok-comment">// 1. Xác thực lại TRƯỚC (Bài 7.1) — kẻ có phiên không được tự cắm yếu tố của hắn.</span>
+<pre><code><span class="tok-comment">// 1. Re-auth FIRST (Lesson 7.1) — whoever holds the session must not enrol their own factor.</span>
 app.post('/me/totp/begin', requireReauth({ within: 300 }), async (req, res) =&gt; {
   const secret = randomBytes(20);
 
-  <span class="tok-comment">// 2. Lưu ở trạng thái CHƯA BẬT, có hạn. Tài khoản chưa đổi gì cả.</span>
+  <span class="tok-comment">// 2. Store it NOT-YET-ENABLED, with an expiry. The account has changed nothing yet.</span>
   await prisma.factor.upsert({
     where:  { userId_kiu: { userId: u.id, kiu: 'TOTP' } },
     create: { userId: u.id, kiu: 'TOTP', encryptedSecret: encrypt(secret),
@@ -417,10 +417,10 @@ app.post('/me/totp/begin', requireReauth({ within: 300 }), async (req, res) =&gt
               registrationExpiresAt: new Date(Date.now() + 10 * 60_000) },
   });
 
-  <span class="tok-comment">// 3. Trả về QR + bí mật dạng chữ. Vẫn CHƯA bật.</span>
+  <span class="tok-comment">// 3. Return the QR plus the secret as text. Still NOT enabled.</span>
   res.json({ uri: otpauthUri(u, secret), secret: base32(secret) });
 });</code></pre>
-<pre><code><span class="tok-comment">// 4. Chỉ BẬT sau khi người dùng chứng minh họ đọc được một mã.</span>
+<pre><code><span class="tok-comment">// 4. ENABLE only after the user proves they can read a code.</span>
 app.post('/me/totp/confirm', requireReauth({ within: 300 }), async (req, res) =&gt; {
   const factor = await getUnenabledFactors(u.id, 'TOTP');
   if (!yt || factor.registrationExpiresAt &lt; new Date()) return res.status(410).json({ error: 'Hết hạn.' });
@@ -428,7 +428,7 @@ app.post('/me/totp/confirm', requireReauth({ within: 300 }), async (req, res) =&
   const buoc = checkTotp(decrypt(factor.encryptedSecret), String(req.body.ma ?? ''));
   if (buoc === null) return res.status(401).json({ error: 'Mã không đúng.' });
 
-  const recoveryCode = generateRecoveryCodes(10);              <span class="tok-comment">// ← sinh CÙNG LÚC, không để sau</span>
+  const recoveryCode = generateRecoveryCodes(10);              <span class="tok-comment">// ← generated AT THE SAME TIME, not later</span>
   await prisma.$transaction([
     prisma.factor.update({ where: { id: factor.id },
       data: { enabledAt: new Date(), lastStep: buoc, registrationExpiresAt: null } }),
@@ -436,8 +436,8 @@ app.post('/me/totp/confirm', requireReauth({ within: 300 }), async (req, res) =&
     prisma.recoveryCode.createMany({ data: recoveryCode.map((m) =&gt; ({
       userId: u.id, hashCode: sha256(m) })) }),
   ]);
-  await sendMailMfaEnabled(u.email);                      <span class="tok-comment">// ← Bài 6.5, lá thư thứ tư</span>
-  res.json({ recoveryCode });                            <span class="tok-comment">// ← lần DUY NHẤT chúng xuất hiện</span>
+  await sendMailMfaEnabled(u.email);                      <span class="tok-comment">// ← Lesson 6.5, the fourth email</span>
+  res.json({ recoveryCode });                            <span class="tok-comment">// ← the ONLY time they are ever shown</span>
 });</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Never enable on step 3</span><span class="lz-t">The classic lockout</span><span class="lz-d">If showing the QR code turns MFA on, a user whose camera failed, whose app crashed, or who simply closed the tab is now locked out of an account they were trying to protect. Proving one code works is the whole point of the confirm step.</span></div>
@@ -472,17 +472,17 @@ Doan mu 10 ma  : 10 / 1.126e+15 = 1 tren 1.126e+14</div>
 </div>
 
 <h3>Rate limiting, which is what makes six digits enough</h3>
-<pre><code><span class="tok-comment">// Trần theo TÀI KHOẢN, không theo IP — kẻ tấn công đổi IP dễ hơn đổi tài khoản.</span>
+<pre><code><span class="tok-comment">// Cap per ACCOUNT, not per IP — an attacker changes IPs more easily than accounts.</span>
 const KEY = &#96;mfa-that-bai:\${u.id}&#96;;
 const attempts = await redis.incr(KEY);
 if (attempts === 1) await redis.expire(KEY, 3600);
 
-if (attempts &gt; 10) {                                  <span class="tok-comment">// 10 lần/giờ</span>
-  await sendMailSuspicious(u.email);                    <span class="tok-comment">// ← ai đó đang đoán mã của bạn</span>
+if (attempts &gt; 10) {                                  <span class="tok-comment">// 10 per hour</span>
+  await sendMailSuspicious(u.email);                    <span class="tok-comment">// ← somebody is guessing your codes</span>
   return res.status(429).json({ error: 'Quá nhiều lần thử. Hãy đợi.' });
 }
 
-<span class="tok-comment">// Đúng mã → xoá bộ đếm. Sai → để nguyên, nó tự hết hạn sau một giờ.</span>
+<span class="tok-comment">// Correct code → clear the counter. Wrong → leave it; it expires by itself in an hour.</span>
 if (buoc !== null &amp;&amp; buoc &gt; factor.lastStep) await redis.del(KEY);</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Ten per hour turns a million into nothing</span><span class="lz-lnote">Three valid codes out of a million, ten guesses an hour: about one chance in thirty-eight thousand per hour of trying, and a very loud trail. Without the limiter, a script reaches even odds in under two days of quiet requests.</span></div>
@@ -666,14 +666,14 @@ rpIdHash cua cu0ngthai.com : f6bde3cab3230ecce3669f5514a9e6d2…
     TU CHOI: origin la https://cu0ngthai.com, mong doi https://cuongthai.com
 3. Trang lua dao tu xin credential cua chinh no
     TU CHOI: origin la https://cu0ngthai.com, mong doi https://cuongthai.com</div>
-<pre><code><span class="tok-comment">// Origin nằm TRONG phần dữ liệu được ký. Đó là toàn bộ câu chuyện.</span>
+<pre><code><span class="tok-comment">// The origin is INSIDE the signed data. That is the whole story.</span>
 const cd = JSON.parse(clientDataJSON.toString());
 <span class="tok-comment">// { type: 'webauthn.get', challenge: '…', origin: 'https://cuongthai.com', … }</span>
 
 if (cd.origin !== ORIGIN_MONG_DOI) throw new Error('sai origin');
 if (!authData.subarray(0, 32).equals(sha256(RP_ID))) throw new Error('sai rpIdHash');
 
-<span class="tok-comment">// Chữ ký phủ lên: authenticatorData ‖ sha256(clientDataJSON)</span>
+<span class="tok-comment">// The signature covers: authenticatorData ‖ sha256(clientDataJSON)</span>
 const ok = verify(publicKey, Buffer.concat([authData, sha256(clientDataJSON)]), signature);</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Case 1</span><span class="lz-t">The real user</span><span class="lz-d">Origin matches, RP ID hash matches, signature verifies. Nothing was typed and nothing was transcribed — the user tapped a fingerprint sensor.</span></div>
@@ -694,17 +694,17 @@ const ok = verify(publicKey, Buffer.concat([authData, sha256(clientDataJSON)]), 
 </div>
 
 <h3>Discoverable credentials, and login with no username</h3>
-<pre><code><span class="tok-comment">// Có thể khám phá được: chính cái passkey mang theo id người dùng.</span>
-<span class="tok-comment">// Người dùng bấm "Đăng nhập", chạm vân tay, xong. Không gõ email.</span>
+<pre><code><span class="tok-comment">// Discoverable: the passkey itself carries the user id.</span>
+<span class="tok-comment">// The user clicks "Sign in", touches the sensor, done. No email typed.</span>
 const cred = await navigator.credentials.get({
   publicKey: {
-    challenge: thuThach,          <span class="tok-comment">// ngẫu nhiên, do máy chủ phát, dùng một lần</span>
+    challenge: thuThach,          <span class="tok-comment">// random, server-issued, single use</span>
     rpId: 'cuongthai.com',
-    userVerification: 'required', <span class="tok-comment">// bắt buộc mở khoá: vân tay / mặt / PIN</span>
-    <span class="tok-comment">// KHÔNG có allowCredentials → trình duyệt tự hỏi người dùng chọn passkey nào</span>
+    userVerification: 'required', <span class="tok-comment">// unlock required: fingerprint / face / PIN</span>
+    <span class="tok-comment">// NO allowCredentials → the browser asks the user which passkey to use</span>
   },
 });
-<span class="tok-comment">// response.userHandle cho biết đây là ai. Máy chủ tra bằng id thông tin xác thực.</span></code></pre>
+<span class="tok-comment">// response.userHandle tells you who this is. The server looks up by credential id.</span></code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">This is where the user experience wins outright</span><span class="lz-lnote">One tap, no email, no password, no code, no waiting for an SMS. It is faster than the password flow it replaces, which is the only reason a security feature ever gets adopted at scale.</span></div>
   <div class="lz-layer"><span class="lz-lname">Store the user handle as an opaque random id</span><span class="lz-lnote">The handle is written into the credential on the authenticator and shows up in account pickers. Never put the email or a database primary key there — use a random per-user identifier, so a device someone else picks up leaks nothing.</span></div>
@@ -843,13 +843,13 @@ const cred = await navigator.credentials.get({
 <pre><code>model Credential {
   id           String    @id @default(cuid())
   userId       String
-  credentialId Bytes     @unique          <span class="tok-comment">// id do bộ xác thực cấp — DUY NHẤT toàn hệ thống</span>
-  publicKey    Bytes     <span class="tok-comment">// khoá công dạng COSE, lưu nguyên xi</span>
-  counter      Int       @default(0)      <span class="tok-comment">// bộ đếm chữ ký — đọc Bài này trước khi kiểm</span>
-  aaguid       Bytes?    <span class="tok-comment">// loại bộ xác thực → "Passkey trên iPhone"</span>
-  backedUp     Boolean   @default(false)  <span class="tok-comment">// cờ BS: nó có đồng bộ không</span>
+  credentialId Bytes     @unique          <span class="tok-comment">// id issued by the authenticator — UNIQUE across the whole system</span>
+  publicKey    Bytes     <span class="tok-comment">// the public key in COSE form, stored verbatim</span>
+  counter      Int       @default(0)      <span class="tok-comment">// the signature counter — read this lesson before checking it</span>
+  aaguid       Bytes?    <span class="tok-comment">// authenticator type → "Passkey on iPhone"</span>
+  backedUp     Boolean   @default(false)  <span class="tok-comment">// the BS flag: is it synced</span>
   channel      String[]  <span class="tok-comment">// internal / hybrid / usb / nfc / ble</span>
-  ten          String?   <span class="tok-comment">// người dùng đặt: "MacBook cơ quan"</span>
+  ten          String?   <span class="tok-comment">// set by the user: "Work MacBook"</span>
   lastUsedAt   DateTime?
   createdAt    DateTime  @default(now())
 
@@ -868,19 +868,19 @@ const cred = await navigator.credentials.get({
 <pre><code>app.post('/passkey/register/begin', requireReauth({ within: 300 }), async (req, res) =&gt; {
   const optional = await generateRegistrationOptions({
     rpName: 'CuongThai', rpID: RP_ID,
-    userID: u.userHandle,               <span class="tok-comment">// ngẫu nhiên mỗi người, KHÔNG phải email</span>
+    userID: u.userHandle,               <span class="tok-comment">// random per user, NOT the email</span>
     userName: u.email, userDisplayName: u.ten,
-    attestationType: 'none',             <span class="tok-comment">// ← Bài 7.4</span>
+    attestationType: 'none',             <span class="tok-comment">// ← Lesson 7.4</span>
     excludeCredentials: (await getCredentials(u.id)).map((c) =&gt; ({ id: c.credentialId })),
     authenticatorSelection: { residentKey: 'preferred', userVerification: 'preferred' },
   });
 
-  <span class="tok-comment">// Thử thách nằm ở MÁY CHỦ, gắn với phiên, có hạn. KHÔNG gửi kèm về rồi nhận lại.</span>
+  <span class="tok-comment">// The challenge lives on the SERVER, bound to the session, with an expiry. Do NOT round-trip it.</span>
   await redis.set(&#96;thu-challenge:\${req.sessionId}&#96;, optional.challenge, { EX: 300 });
   res.json(optional);
 });</code></pre>
 <pre><code>app.post('/passkey/register/finish', requireReauth({ within: 300 }), async (req, res) =&gt; {
-  const expected = await redis.getDel(&#96;thu-challenge:\${req.sessionId}&#96;);   <span class="tok-comment">// đọc và XOÁ: dùng một lần</span>
+  const expected = await redis.getDel(&#96;thu-challenge:\${req.sessionId}&#96;);   <span class="tok-comment">// read and DELETE: single use</span>
   if (!mong) return res.status(410).json({ error: 'Thử thách hết hạn.' });
 
   const result = await verifyRegistrationResponse({
@@ -895,7 +895,7 @@ const cred = await navigator.credentials.get({
     counter: credential.counter, aaguid, backedUp: credentialBackedUp,
     channel: req.body.response.transports ?? [], ten: guessDeviceName(aaguid),
   }});
-  await sendMailPasskeyAdded(u.email);         <span class="tok-comment">// ← lá thư thứ năm của Bài 6.5</span>
+  await sendMailPasskeyAdded(u.email);         <span class="tok-comment">// ← the fifth email of Lesson 6.5</span>
   res.status(201).end();
 });</code></pre>
 <div class="pitfall">
@@ -926,13 +926,13 @@ Passkey moi dang ky  ->  0x5d  (01011101)
   credential: { id: c.credentialId, publicKey: c.publicKey, counter: c.counter },
 });
 
-<span class="tok-comment">// SAI — dòng này giết sạch mọi passkey đồng bộ trên đời:</span>
+<span class="tok-comment">// WRONG — this line kills every synced passkey in existence:</span>
 if (result.authenticationInfo.newCounter &lt;= c.counter) throw new Error('nhan ban!');
 
-<span class="tok-comment">// ĐÚNG — chỉ kiểm khi bộ xác thực THẬT SỰ có dùng bộ đếm:</span>
+<span class="tok-comment">// RIGHT — check only when the authenticator ACTUALLY uses a counter:</span>
 const bd = result.authenticationInfo.newCounter;
 if (c.counter &gt; 0 &amp;&amp; bd &gt; 0 &amp;&amp; bd &lt;= c.counter) {
-  await warnDuplicate(u, c);                <span class="tok-comment">// tín hiệu THẬT: có bản sao khoá</span>
+  await warnDuplicate(u, c);                <span class="tok-comment">// a REAL signal: the key has been cloned</span>
   return res.status(401).json({ error: 'Không xác thực được.' });
 }
 await prisma.credential.update({ where: { id: c.id },
@@ -945,14 +945,14 @@ await prisma.credential.update({ where: { id: c.id },
 </div>
 
 <h3>Conditional UI, which is where adoption comes from</h3>
-<pre><code><span class="tok-comment">// Passkey hiện ra ngay trong gợi ý tự điền của ô email. Không cần bấm gì thêm.</span>
+<pre><code><span class="tok-comment">// The passkey appears right in the email field's autofill. No extra click needed.</span>
 &lt;input name="email" autocomplete="username webauthn" /&gt;
 
 if (await PublicKeyCredential.isConditionalMediationAvailable?.()) {
   navigator.credentials.get({
     publicKey: { challenge: await getChallenge(), rpId: RP_ID },
-    mediation: 'conditional',            <span class="tok-comment">// ← không mở hộp thoại nếu không có passkey</span>
-  }).then(dangNhapBangPasskey).catch(() =&gt; {});   <span class="tok-comment">// im lặng khi người dùng lờ đi</span>
+    mediation: 'conditional',            <span class="tok-comment">// ← opens no dialog when there is no passkey</span>
+  }).then(dangNhapBangPasskey).catch(() =&gt; {});   <span class="tok-comment">// silent when the user ignores it</span>
 }</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">It fails silently, and that is the point</span><span class="lz-lnote">A user with no passkey sees an ordinary login form and never knows the call happened. A user with one sees their account offered in the autofill drop-down. There is no "do you have a passkey?" question to get wrong.</span></div>

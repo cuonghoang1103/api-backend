@@ -54,17 +54,17 @@ thoi gian de thu het 1 trieu cap:
   <div class="lz-step"><span class="lz-k">3 · Per-account attempt limits</span><span class="lz-t">Not per-IP</span><span class="lz-d">The attacker rotates addresses freely and cannot rotate the target account. Count failures against the identifier, with an exponential backoff that resets on success — and never a permanent lock, which hands them a denial of service.</span></div>
   <div class="lz-step"><span class="lz-k">4 · Risk signals</span><span class="lz-t">Cheap, and surprisingly effective</span><span class="lz-d">A first-ever login from a new country, a datacentre ASN, a missing or absurd user agent, a session with no prior device cookie. None is proof; together they justify demanding a second factor for that attempt.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Trần theo TÀI KHOẢN, lùi theo cấp số nhân, tự hồi phục.</span>
+<pre><code><span class="tok-comment">// Cap per ACCOUNT, exponential backoff, self-healing.</span>
 const KEY = &#96;dn-hong:\${normalizedEmail}&#96;;
 const n = await redis.incr(KEY);
 if (n === 1) await redis.expire(KEY, 900);
 
 if (n &gt; 5) {
-  const cho = Math.min(2 ** (n - 5), 300);          <span class="tok-comment">// 2, 4, 8 … tối đa 300 giây</span>
+  const cho = Math.min(2 ** (n - 5), 300);          <span class="tok-comment">// 2, 4, 8 … capped at 300 seconds</span>
   return res.status(429).set('Retry-After', String(cho)).end();
 }
 
-<span class="tok-comment">// Đăng nhập ĐÚNG → xoá bộ đếm. Người dùng thật không bao giờ chạm tới trần.</span>
+<span class="tok-comment">// A CORRECT sign-in → clear the counter. Real users never reach the cap.</span>
 if (match) await redis.del(KEY);</code></pre>
 <div class="pitfall">
 <p><strong>Trap — a permanent lockout after N failures is a denial-of-service tool handed to the attacker.</strong> If five wrong passwords lock an account until support unlocks it, anybody who knows an email address can lock that account, and a stuffing run locks out fifteen percent of your users in an afternoon. That is a worse outcome than the attack it prevents. Use a rolling window that expires on its own, back off exponentially rather than blocking outright, and reserve a real lock for accounts where you have positive evidence of compromise — where the correct response is a forced reset, not a wall.</p>
@@ -231,10 +231,10 @@ ma diem cua "cuοngthai.com": cuU+3BFngthai.com
   <div class="lz-step"><span class="lz-k">Step-up on the actions that matter</span><span class="lz-t">Lesson 7.1, again</span><span class="lz-d">A stolen session is inside the product. Re-authentication before changing the email, adding a factor or moving money means the attacker has to phish a second time, at the exact moment the user is not expecting a prompt.</span></div>
   <div class="lz-step"><span class="lz-k">Watch for the lookalike domains</span><span class="lz-t">Detection, not prevention</span><span class="lz-d">Certificate transparency logs publish every certificate issued, so a feed filtered for names resembling yours finds the phishing site the day it is set up — often before the campaign starts.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Cảnh báo khi một PHIÊN đột ngột đổi chỗ — không chặn, nhưng phát hiện.</span>
+<pre><code><span class="tok-comment">// Alert when a SESSION suddenly relocates — do not block, but do detect.</span>
 if (session.lastIp &amp;&amp; asn(req.ip) !== asn(session.lastIp)) {
   await recordEvent('session.network_change', { sessionId: session.id, cu: session.lastIp, moi: req.ip });
-  if (isSensitiveAction(req)) return requireReauth(req, res);   <span class="tok-comment">// ← Bài 7.1</span>
+  if (isSensitiveAction(req)) return requireReauth(req, res);   <span class="tok-comment">// ← Lesson 7.1</span>
 }</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Do not fight it with fingerprinting alone</span><span class="lz-lnote">A proxy forwards the victim's own user agent and can forward much of the rest. Fingerprint mismatches catch the lazy kits and miss the current ones, so treat a match as no evidence and a mismatch as a signal worth an alert.</span></div>
@@ -396,11 +396,11 @@ if (session.lastIp &amp;&amp; asn(req.ip) !== asn(session.lastIp)) {
 </div>
 
 <h3>Subdomains, and the cookie scope that invites them</h3>
-<pre><code><span class="tok-comment">// Cookie này đi tới MỌI tên miền con, kể cả cái bạn đã quên:</span>
+<pre><code><span class="tok-comment">// This cookie reaches EVERY subdomain, including the one you forgot about:</span>
 Set-Cookie: session=…; Domain=.cuongthai.com; Secure; HttpOnly
 
-<span class="tok-comment">// Cookie này KHÔNG:</span>
-Set-Cookie: session=…; Secure; HttpOnly            <span class="tok-comment">// ← không có Domain = chỉ host này</span>
+<span class="tok-comment">// This one does NOT:</span>
+Set-Cookie: session=…; Secure; HttpOnly            <span class="tok-comment">// ← no Domain = this host only</span>
 
 <span class="tok-comment">// blog cu.cuongthai.com tro CNAME toi mot bucket da xoa ⇒ ai dang ky lai</span>
 <span class="tok-comment">// cai bucket do se nhan duoc cookie phien cua moi nguoi dung ghe qua.</span></code></pre>
@@ -546,13 +546,13 @@ nem 100 lan cung chi con toi da 3 lan doan.</div>
   <div class="kv"><span class="k">Number matching closes it structurally</span><span class="v">The user must type a two-digit number displayed on the sign-in screen — which they are not looking at, because they are not signing in. There is no button to press by mistake, and the residual is a one-in-a-hundred guess capped by a wrong-entry limit.</span></div>
   <div class="kv"><span class="k">Also cap the prompts and alert on the burst</span><span class="v">Three pending approvals per account per hour, and a denied prompt should count as a security event. A burst of push requests is one of the clearest "this password is compromised" signals you will ever get — treat it like Lesson 7.3's failure burst.</span></div>
 </div>
-<pre><code><span class="tok-comment">// Khớp số: con số hiện trên MÀN HÌNH ĐĂNG NHẬP, người dùng GÕ nó vào app.</span>
-const so = String(randomInt(10, 100));                <span class="tok-comment">// hai chữ số</span>
+<pre><code><span class="tok-comment">// Number matching: the number appears on the SIGN-IN SCREEN and the user TYPES it into the app.</span>
+const so = String(randomInt(10, 100));                <span class="tok-comment">// two digits</span>
 await redis.set(&#96;push:\${sessionId}&#96;, JSON.stringify({ count, wrong: 0 }), { EX: 120 });
-showOnSignInScreen(count);                          <span class="tok-comment">// ← kẻ tấn công thấy cái này</span>
-sendPush(u, 'Nhập số hiện trên màn hình đăng nhập');  <span class="tok-comment">// ← nạn nhân KHÔNG thấy</span>
+showOnSignInScreen(count);                          <span class="tok-comment">// ← the attacker sees this one</span>
+sendPush(u, 'Nhập số hiện trên màn hình đăng nhập');  <span class="tok-comment">// ← the victim does NOT</span>
 
-<span class="tok-comment">// Sai 3 lần là huỷ, và đó là một sự kiện bảo mật.</span>
+<span class="tok-comment">// Three wrong attempts cancels it, and that is a security event.</span>
 if (++state.sai &gt;= 3) { await revoke(sessionId); await warn(u, 'push.error_margin'); }</code></pre>
 
 <h3>The help desk, which is the real back door</h3>
@@ -675,15 +675,15 @@ if (++state.sai &gt;= 3) { await revoke(sessionId); await warn(u, 'push.error_ma
 <p class="lead">The attacks in this lesson are unusual because the attacker acts <em>before</em> the victim exists as a user. They were catalogued systematically only in 2022, they affected a large fraction of the popular sites tested, and every one of them is invisible to a test suite that starts from an empty database and one well-behaved user.</p>
 
 <h3>The shape: act first, wait, come back</h3>
-<pre><code><span class="tok-comment">// Bước 1 — kẻ tấn công đăng ký bằng email của NẠN NHÂN, hôm nay.</span>
-POST /sign-up { email: 'nan-nhan@congty.com', password: '<span class="tok-comment">…của hắn…</span>' }
+<pre><code><span class="tok-comment">// Step 1 — the attacker registers with the VICTIM's email, today.</span>
+POST /sign-up { email: 'nan-nhan@congty.com', password: '<span class="tok-comment">…theirs…</span>' }
 
-<span class="tok-comment">// Bước 2 — chờ. Vài tuần, vài tháng. Không làm gì cả.</span>
+<span class="tok-comment">// Step 2 — wait. Weeks, months. Do nothing at all.</span>
 
-<span class="tok-comment">// Bước 3 — nạn nhân thật tới, thấy "email đã tồn tại", bấm quên mật khẩu,</span>
-<span class="tok-comment">//          đặt lại thành công, và tin rằng tài khoản này là của họ.</span>
+<span class="tok-comment">// Step 3 — the real victim arrives, sees "email already exists", clicks forgot-password,</span>
+<span class="tok-comment">//          resets successfully, and believes the account is theirs.</span>
 
-<span class="tok-comment">// Bước 4 — kẻ tấn công vẫn còn quyền vào. Đó là toàn bộ cú tấn công.</span></code></pre>
+<span class="tok-comment">// Step 4 — the attacker still has access. That is the entire attack.</span></code></pre>
 <div class="lz-map">
   <div class="lz-stage">
     <span class="lz-badge">Variant 1</span>
@@ -719,17 +719,17 @@ POST /sign-up { email: 'nan-nhan@congty.com', password: '<span class="tok-commen
 
 Ma dung MOT lan ma doi duoc nam lan. Cung hinh dang nay ap cho:
   token dat lai mat khau · loi moi · phieu giam gia · lenh rut tien.</div>
-<pre><code><span class="tok-comment">// SAI — có một cái await giữa lúc ĐỌC trạng thái và lúc HÀNH ĐỘNG theo nó.</span>
+<pre><code><span class="tok-comment">// WRONG — there is an await between READING the state and ACTING on it.</span>
 const code = await prisma.recoveryCode.findFirst({ where: { hashCode, used: false } });
 if (!code) throw new Error('khong hop le');
-await argon2.hash(newPassword);                 <span class="tok-comment">// ← 100ms. Năm request cùng qua được đây.</span>
+await argon2.hash(newPassword);                 <span class="tok-comment">// ← 100ms. Five requests get through here together.</span>
 await prisma.recoveryCode.update({ where: { id: ma.id }, data: { used: true } });</code></pre>
-<pre><code><span class="tok-comment">// ĐÚNG — để CƠ SỞ DỮ LIỆU quyết định ai thắng, bằng một lệnh ghi có điều kiện.</span>
+<pre><code><span class="tok-comment">// RIGHT — let the DATABASE decide who wins, with a conditional write.</span>
 const result = await prisma.recoveryCode.updateMany({
-  where: { hashCode, used: false },             <span class="tok-comment">// điều kiện nằm TRONG lệnh ghi</span>
+  where: { hashCode, used: false },             <span class="tok-comment">// the condition is INSIDE the write</span>
   data:  { used: true, usedAt: new Date() },
 });
-if (result.count === 0) throw new Error('khong hop le');   <span class="tok-comment">// đúng MỘT request nhận count=1</span></code></pre>
+if (result.count === 0) throw new Error('khong hop le');   <span class="tok-comment">// exactly ONE request gets count=1</span></code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">The pattern to look for</span><span class="lz-t">Read, await, decide</span><span class="lz-d">Any handler that loads a row, awaits something slow, and then acts on what it read has this bug. Hashing a password, sending a mail and calling an API are all slow enough to lose the race — and authentication flows do all three.</span></div>
   <div class="lz-step"><span class="lz-k">The fix is a conditional write</span><span class="lz-t">Not a lock</span><span class="lz-d">Put the condition in the <code>WHERE</code> of the update and check the affected-row count. The database serialises it for you, it works across processes, and it needs no coordination service.</span></div>

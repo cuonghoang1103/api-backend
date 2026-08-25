@@ -253,9 +253,9 @@ console.log(code);</code></pre>
 <pre><code><span class="tok-comment">// The correct source, in Node</span>
 import { randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 
-randomBytes(32).toString('base64url');   <span class="tok-comment">// 256 bit, 43 ký tự</span>
-randomBytes(16).toString('hex');         <span class="tok-comment">// 128 bit, 32 ký tự</span>
-randomUUID();                            <span class="tok-comment">// 122 bit ngẫu nhiên (UUIDv4)</span>
+randomBytes(32).toString('base64url');   <span class="tok-comment">// 256 bits, 43 characters</span>
+randomBytes(16).toString('hex');         <span class="tok-comment">// 128 bits, 32 characters</span>
+randomUUID();                            <span class="tok-comment">// 122 random bits (UUIDv4)</span>
 
 <span class="tok-comment">// In the browser</span>
 const b = new Uint8Array(32);
@@ -302,7 +302,7 @@ export const sessionCode   = () =&gt; randomBytes(32).toString('base64url'); <sp
 export const csrfToken    = () =&gt; randomBytes(16).toString('base64url'); <span class="tok-comment">// 128 bit</span>
 export const resetCode  = () =&gt; randomBytes(32).toString('base64url'); <span class="tok-comment">// 256 bit</span>
 export const apiKey   = () =&gt; 'ct_' + randomBytes(32).toString('base64url');
-export const recoveryCode = () =&gt;                                        <span class="tok-comment">// 10 mã, mỗi mã 40 bit</span>
+export const recoveryCode = () =&gt;                                        <span class="tok-comment">// 10 codes, 40 bits each</span>
   Array.from({ length: 10 }, () =&gt; randomBytes(5).toString('hex'));</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Session id — 128 bits minimum, 256 is free</span><span class="lz-lnote">Lives as long as the session, and guessing one is instant account access. There is no reason to economise here.</span></div>
@@ -514,7 +514,7 @@ const session = await prisma.session.findUnique({ where: { tokenHash: bam } });<
 <pre><code><span class="tok-comment">// prisma/schema.prisma</span>
 model Session {
   id        String   @id @default(cuid())
-  tokenHash String   @unique          <span class="tok-comment">// sha256 của token, KHÔNG phải token</span>
+  tokenHash String   @unique          <span class="tok-comment">// sha256 OF the token, NOT the token</span>
   expiresAt DateTime
   userId    String
 }</code></pre>
@@ -930,9 +930,9 @@ const tag = cipher.getAuthTag();       <span class="tok-comment">// ← thiếu 
 <h3>Logs: the leak that needs no attacker</h3>
 <pre><code><span class="tok-comment">// Four lines that each print a credential, from real codebases</span>
 console.log('req headers:', req.headers);          <span class="tok-comment">// → cookie, authorization</span>
-console.log('login body:', req.body);              <span class="tok-comment">// → mật khẩu, dạng thô</span>
-logger.error({ err }, 'that bai');                 <span class="tok-comment">// → err.config.headers ở axios</span>
-logger.info({ req }, 'request');                   <span class="tok-comment">// → toàn bộ đối tượng, kèm mọi thứ</span></code></pre>
+console.log('login body:', req.body);              <span class="tok-comment">// → the password, in the clear</span>
+logger.error({ err }, 'that bai');                 <span class="tok-comment">// → err.config.headers in axios</span>
+logger.info({ req }, 'request');                   <span class="tok-comment">// → the whole object, with everything in it</span></code></pre>
 <div class="out">{"level":30,"msg":"request","req":{"headers":{
   "cookie":"backend_token=eyJhbGciOiJIUzI1NiIs…",
   "authorization":"Bearer eyJhbGciOiJIUzI1NiIs…"},

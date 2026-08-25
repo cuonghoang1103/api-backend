@@ -17,32 +17,32 @@ export default {
 <h2>What survived measurement</h2>
 <p class="lead">Nine chapters generated concepts and numbers. Some hold in any S3-compatible project. Some are properties of THIS repo. Some are intuitions measurement contradicted.</p>
 
-<h3>Cột A — LUÔN ĐÚNG</h3>
+<h3>Column A — ALWAYS TRUE</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">Object storage flat keys, no directories</span><span class="lz-lnote">&quot;/&quot; is just a character. No rename. Bài 0.1</span></div>
-<div class="lz-layer"><span class="lz-lname">Bucket + key + object = 3-tier model</span><span class="lz-lnote">Every S3-compatible service. Bài 0.2</span></div>
-<div class="lz-layer"><span class="lz-lname">Presigned PUT default signs only &#39;host&#39;</span><span class="lz-lnote">Explicit <code>signableHeaders</code> required cho content-type binding. Bài 4.2</span></div>
-<div class="lz-layer"><span class="lz-lname">CORS chặn cross-origin PUT trước khi request</span><span class="lz-lnote">Bucket CORS config required. Bài 5.1</span></div>
-<div class="lz-layer"><span class="lz-lname">Incomplete multipart upload chiếm cost invisible</span><span class="lz-lnote">Lifecycle rule cần thiết. Bài 6.1</span></div>
+<div class="lz-layer"><span class="lz-lname">Object storage flat keys, no directories</span><span class="lz-lnote">&quot;/&quot; is just a character. No rename. Lesson 0.1</span></div>
+<div class="lz-layer"><span class="lz-lname">Bucket + key + object = 3-tier model</span><span class="lz-lnote">Every S3-compatible service. Lesson 0.2</span></div>
+<div class="lz-layer"><span class="lz-lname">Presigned PUT default signs only &#39;host&#39;</span><span class="lz-lnote">Explicit <code>signableHeaders</code> required to bind the content type. Lesson 4.2</span></div>
+<div class="lz-layer"><span class="lz-lname">CORS blocks a cross-origin PUT before the request is even sent</span><span class="lz-lnote">A bucket CORS config is required. Lesson 5.1</span></div>
+<div class="lz-layer"><span class="lz-lname">Incomplete multipart uploads cost money invisibly</span><span class="lz-lnote">A lifecycle rule is necessary. Lesson 6.1</span></div>
 </div>
 
-<h3>Cột B — CHỈ ĐÚNG KHI ĐO</h3>
+<h3>Column B — TRUE ONLY WHERE MEASURED</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">Kho này 331 dòng r2.ts + 291 dòng upload.service.ts</span><span class="lz-lnote">Số của bạn khác. Nguyên tắc lazy init + wrapper pattern giữ nguyên</span></div>
-<div class="lz-layer"><span class="lz-lname">R2 vs S3 chênh 46× cho 10 TB/mo egress</span><span class="lz-lnote">Số cụ thể phụ thuộc scenario. Đo trên kho của bạn</span></div>
-<div class="lz-layer"><span class="lz-lname">Cache hit ratio ~95% cho immutable assets</span><span class="lz-lnote">Số bạn phụ thuộc traffic pattern</span></div>
+<div class="lz-layer"><span class="lz-lname">This repo: 331 lines of r2.ts + 291 lines of upload.service.ts</span><span class="lz-lnote">Your numbers will differ. The lazy-init and wrapper patterns still hold</span></div>
+<div class="lz-layer"><span class="lz-lname">R2 versus S3 differs by 46× at 10 TB/month of egress</span><span class="lz-lnote">The exact figure depends on the scenario. Measure it on your own repo</span></div>
+<div class="lz-layer"><span class="lz-lname">Cache hit ratio ~95% cho immutable assets</span><span class="lz-lnote">Your number depends on your traffic pattern</span></div>
 </div>
 
-<h3>Cột C — LUÔN SAI</h3>
+<h3>Column C — ALWAYS WRONG</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">TRỰC GIÁC: &quot;S3 storage class rẻ nhất&quot;</span><span class="lz-lnote">SAI cho media apps — egress dominant, R2 zero egress win. Bài 2.1</span></div>
-<div class="lz-layer"><span class="lz-lname">TRỰC GIÁC: &quot;PutObject với ContentType đủ security&quot;</span><span class="lz-lnote">SAI. Cần signableHeaders explicit. Bài 4.2 kho này bug thật</span></div>
-<div class="lz-layer"><span class="lz-lname">TRỰC GIÁC: &quot;Storage cost thấp so với egress&quot;</span><span class="lz-lnote">SAI cho write-heavy — Class A ops có thể dominate. Bài 7.1</span></div>
-<div class="lz-layer"><span class="lz-lname">TRỰC GIÁC: &quot;Migrate S3 → R2 zero-cost&quot;</span><span class="lz-lnote">SAI. Pay S3 egress in migration ($0.09/GB one-time). Bài 8.1</span></div>
+<div class="lz-layer"><span class="lz-lname">INTUITION: &quot;the cheapest S3 storage class wins&quot;</span><span class="lz-lnote">WRONG for media apps — egress dominates, and R2's zero egress wins. Lesson 2.1</span></div>
+<div class="lz-layer"><span class="lz-lname">INTUITION: &quot;PutObject with ContentType is secure enough&quot;</span><span class="lz-lnote">WRONG. signableHeaders must be explicit. Lesson 4.2, a real bug in this repo</span></div>
+<div class="lz-layer"><span class="lz-lname">INTUITION: &quot;storage costs little next to egress&quot;</span><span class="lz-lnote">WRONG for write-heavy workloads — Class A operations can dominate. Lesson 7.1</span></div>
+<div class="lz-layer"><span class="lz-lname">INTUITION: &quot;migrating S3 → R2 costs nothing&quot;</span><span class="lz-lnote">WRONG. You pay S3 egress during the migration ($0.09/GB, one time). Lesson 8.1</span></div>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Object storage quy luật (flat keys, presigned signature scope, CORS, multipart cleanup) áp cho mọi kho; số cụ thể (repo code size, R2 vs S3 delta, cache ratio) đo lại cho kho bạn; và trực giác về pricing + security thường SAI — đọc doc + đo thật trước conclusion.</p>
+<p><strong>One sentence.</strong> The object-storage rules (flat keys, presigned signature scope, CORS, multipart cleanup) apply to every repo; the specific numbers (code size, the R2-versus-S3 delta, cache ratios) must be re-measured on yours; and intuitions about pricing and security are usually WRONG — read the docs and measure before concluding.</p>
 </div>
 </div>
 <div class="ml-vi">
@@ -86,7 +86,7 @@ export default {
       slug: 'os-10-2-de-thi',
       type: 'QUIZ',
       description: 'Mười câu, 15 phút.',
-      content: `<div class="ml-en"><span class="eyebrow">Chapter 10 · Final exam</span><h2>10 câu, 15 phút</h2></div><div class="ml-vi"><span class="eyebrow">Chương 10 · Đề thi cuối</span><h2>10 câu, 15 phút</h2></div>`,
+      content: `<div class="ml-en"><span class="eyebrow">Chapter 10 · Final exam</span><h2>Ten questions, fifteen minutes</h2></div><div class="ml-vi"><span class="eyebrow">Chương 10 · Đề thi cuối</span><h2>10 câu, 15 phút</h2></div>`,
       quiz: {
         timeLimitSeconds: 900,
         questions: [

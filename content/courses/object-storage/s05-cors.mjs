@@ -49,7 +49,7 @@ So R2 must configure CORS to allow uploads
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">If disallowed, browser blocks</span><span class="lz-d">No PUT even sent. DevTools shows CORS error. Server sees no PUT request at all.</span></div>
 </div>
 
-<h3>Debug từ DevTools</h3>
+<h3>Debugging from DevTools</h3>
 <pre><code class="language-text">Network tab -&gt; failing request:
   Status: (blocked:cors)
   Console error: "Access to fetch has been blocked by CORS policy..."

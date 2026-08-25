@@ -185,7 +185,7 @@ Object storage:
 </div>
 </div>
 
-<h3>Kho này — key naming</h3>
+<h3>This repo — key naming</h3>
 <pre><code class="language-ts">// upload.service.ts
 &#96;users/\${userId}/avatars/\${filename}&#96;
 &#96;posts/\${postId}/media/\${filename}&#96;
@@ -208,10 +208,10 @@ Cai gi trong bucket:
   - Lifecycle: none (files song mai)
 </code></pre>
 
-<h3>Object metadata — hai loại</h3>
+<h3>Object metadata — two kinds</h3>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">system</span><span class="lz-t">Content-Type, Content-Length, ETag, Last-Modified</span><span class="lz-d">Standard HTTP metadata + S3 internals. Cache-Control is here — critical for CDN behavior.</span></div>
-<div class="lz-step"><span class="lz-k">user</span><span class="lz-t">x-amz-meta-anything</span><span class="lz-d">Custom key-value pairs. Total size &lt;2 KB. Uses: tags, source URLs, upload timestamps. Kho này không dùng — track trong DB.</span></div>
+<div class="lz-step"><span class="lz-k">user</span><span class="lz-t">x-amz-meta-anything</span><span class="lz-d">Custom key-value pairs. Total size &lt;2 KB. Uses: tags, source URLs, upload timestamps. This repo does not use them — it tracks that in the database instead.</span></div>
 </div>
 
 <h3>ETag — hash of content</h3>
@@ -225,10 +225,10 @@ console.log(res.ETag);   // "d41d8cd98f00b204e9800998ecf8427e"
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Đừng rely vào ETag = MD5.</strong> Với multipart upload hoặc server-side encryption, ETag KHÔNG phải MD5. Nếu bạn cần content hash để dedup, tính MD5/SHA256 CLIENT-side và lưu vào metadata hoặc DB.</p>
+<p><strong>Do not rely on the ETag being an MD5.</strong> For a multipart upload, or with server-side encryption, the ETag is NOT an MD5. If you need a content hash for deduplication, compute MD5/SHA256 client-side and store it in the metadata or in your database.</p>
 </div>
 
-<h3>Kho này track objects trong Postgres</h3>
+<h3>This repo tracks objects in Postgres</h3>
 <pre><code class="language-prisma">// prisma/schema.prisma
 model MediaFile {
   id         Int      @id @default(autoincrement())
@@ -242,14 +242,14 @@ model MediaFile {
 }
 </code></pre>
 
-<p>Khi cần &quot;delete user&#39;s files&quot;, query DB theo <code>uploadedBy</code> rồi DELETE objects theo key. KHÔNG list bucket.</p>
+<p>When you need to &quot;delete a user&#39;s files&quot;, query the database by <code>uploadedBy</code> then DELETE the objects by key. Do NOT list the bucket.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng key với whitespace hoặc emoji.</strong> S3 accepts nhưng URL encoding phức tạp. <code>https://media/logo tết.png</code> → browser encode → server decode. Nếu key có &quot;+&quot; hoặc &quot;#&quot;, encoding lệch. Stick với ASCII alphanumeric + <code>-</code>, <code>_</code>, <code>/</code>.</p>
+<p><strong>Bẫy — dùng key với whitespace hoặc emoji.</strong> S3 accepts it, but the URL encoding gets complicated. <code>https://media/logo tết.png</code> → the browser encodes, the server decodes. If the key contains &quot;+&quot; or &quot;#&quot;, the two encodings disagree. Stick to ASCII alphanumerics plus <code>-</code>, <code>_</code>, <code>/</code>.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Bucket (container, global unique) + key (up to 1024 UTF-8 bytes, unique in bucket) + object (data + system metadata + user metadata + ETag) — 3 concepts đơn giản mà mọi S3 API operation dựa trên; kho này track trong Postgres MediaFile table để không phải list bucket.</p>
+<p><strong>One sentence.</strong> Bucket (a globally unique container) + key (up to 1024 UTF-8 bytes, unique within the bucket) + object (data + system metadata + user metadata + ETag) — three simple concepts that every S3 API operation rests on; this repo tracks them in a Postgres MediaFile table so it never has to list the bucket.</p>
 </div>
 
 <h3>Sources</h3>
@@ -355,7 +355,7 @@ model MediaFile {
       type: 'QUIZ',
       description: 'Bốn câu, sáu phút. Về ba khác biệt object storage vs filesystem và bucket/key/object model.',
       content: `
-<div class="ml-en"><span class="eyebrow">Section 0 · Quiz</span><h2>What Section 0 established</h2><p class="lead">Bốn câu về concept cơ bản — sự khác biệt fundamental giữa object storage và filesystem.</p></div>
+<div class="ml-en"><span class="eyebrow">Section 0 · Quiz</span><h2>What Section 0 established</h2><p class="lead">Four questions on the core concepts — the fundamental difference between object storage and a filesystem.</p></div>
 <div class="ml-vi"><span class="eyebrow">Mục 0 · Kiểm tra</span><h2>Mục 0 đã dựng được gì</h2><p class="lead">Bốn câu về concept cơ bản — sự khác biệt fundamental giữa object storage và filesystem.</p></div>
 `,
       quiz: {

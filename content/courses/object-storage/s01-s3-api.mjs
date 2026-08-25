@@ -23,7 +23,7 @@ export default {
 
 <p>Two packages: <code>client-s3</code> for operations, <code>s3-request-presigner</code> for signed URLs. Together ~450 KB (v2 was ~40 MB monolithic).</p>
 
-<h3>Kho này — lazy init pattern</h3>
+<h3>This repo — the lazy-init pattern</h3>
 <pre><code class="language-ts">// src/config/r2.ts
 import { S3Client } from '@aws-sdk/client-s3';
 import { config } from './env.js';
@@ -75,7 +75,7 @@ r2: {
 <p>Four env vars: bucket name (which bucket), endpoint (R2 API host), access key + secret (auth), public URL base (CDN custom domain).</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng <code>endpoint</code> làm public URL.</strong> <code>R2_ENDPOINT_URL</code> là <em>API</em> endpoint (<code>xxx.r2.cloudflarestorage.com</code>) — không cache, egress cost cao. Public URL phải là custom domain qua CDN. Đây là 2 khác nhau. Lưu cả hai riêng.</p>
+<p><strong>Bẫy — dùng <code>endpoint</code> as a public URL.</strong> <code>R2_ENDPOINT_URL</code> là <em>API</em> endpoint (<code>xxx.r2.cloudflarestorage.com</code>) — it is uncached and egress is expensive. The public URL must be a custom domain fronted by a CDN. These are two different things; store both separately.</p>
 </div>
 
 <div class="callout">
@@ -198,7 +198,7 @@ export async function putObject(
 </code></pre>
 
 <div class="callout warn">
-<p><strong><code>ContentType</code> là bắt buộc.</strong> Không có → S3 default <code>application/octet-stream</code> → browser download thay vì display. <code>&lt;audio&gt;</code>/<code>&lt;video&gt;</code> tag REJECT sai type.</p>
+<p><strong><code>ContentType</code> is mandatory.</strong> Without it, S3 defaults to <code>application/octet-stream</code> → the browser downloads the file instead of displaying it. <code>&lt;audio&gt;</code>/<code>&lt;video&gt;</code> tag REJECT sai type.</p>
 </div>
 
 <h3>GetObject — download</h3>
@@ -214,7 +214,7 @@ const buffer = Buffer.concat(await res.Body.transformToWebStream().getReader().r
 const text = await res.Body.transformToString();
 </code></pre>
 
-<p>Kho này KHÔNG dùng <code>getObject</code> server-side — public files phục vụ trực tiếp qua CDN. GetObject chỉ dùng cho private files hoặc thumbnail generation.</p>
+<p>This repo does NOT use <code>getObject</code> server-side — public files are served straight from the CDN. GetObject is only used for private files and for thumbnail generation.</p>
 
 <h3>HeadObject — metadata only</h3>
 <pre><code class="language-ts">import { HeadObjectCommand } from '@aws-sdk/client-s3';
@@ -231,10 +231,10 @@ try {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>HeadObject rẻ hơn GetObject.</strong> Chỉ metadata, không transfer body. Dùng để check exists, get size trước decide download.</p>
+<p><strong>HeadObject is cheaper than GetObject.</strong> Metadata only, no body transfer. Use it to check existence and read the size before deciding to download.</p>
 </div>
 
-<h3>DeleteObject và DeleteObjects (batch)</h3>
+<h3>DeleteObject and DeleteObjects (batch)</h3>
 <pre><code class="language-ts">import { DeleteObjectCommand, DeleteObjectsCommand } from '@aws-sdk/client-s3';
 
 // Xoa 1 object
@@ -250,7 +250,7 @@ await client.send(new DeleteObjectsCommand({
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — DeleteObjectsCommand không error khi object không tồn tại.</strong> Nếu bạn expect &quot;deleted 5 objects&quot; nhưng chỉ 2 tồn tại, response vẫn ok. Check response.Deleted array để biết chính xác.</p>
+<p><strong>Bẫy — DeleteObjectsCommand không error khi object không tồn tại.</strong> If you expect &quot;deleted 5 objects&quot; but only 2 existed, the response is still a success. Read the response.Deleted array to find out what actually happened.</p>
 </div>
 
 <h3>Error handling</h3>
@@ -265,7 +265,7 @@ await client.send(new DeleteObjectsCommand({
 </code></pre>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Bốn core operation: PutObject (upload with ContentType + CacheControl BẮT BUỘC), GetObject (stream body, kho này ít dùng vì CDN), HeadObject (metadata only, rẻ), DeleteObject/DeleteObjects (batch tới 1000, silent on missing) — 90% code S3 chỉ dùng bốn cái này.</p>
+<p><strong>One sentence.</strong> Four core operations: PutObject (upload, with ContentType + CacheControl MANDATORY), GetObject (streams the body; this repo rarely uses it because of the CDN), HeadObject (metadata only, cheap), and DeleteObject/DeleteObjects (batches of up to 1000, silent on missing keys) — 90% of S3 code uses only these four.</p>
 </div>
 
 <h3>Sources</h3>
@@ -394,7 +394,7 @@ await client.send(new DeleteObjectsCommand({
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">CompleteMultipartUpload</span><span class="lz-d">Send list of PartNumber+ETag. S3 stitches parts into one object. Atomic — either complete object or nothing.</span></div>
 </div>
 
-<h3>Code — cơ bản</h3>
+<h3>The code — basics</h3>
 <pre><code class="language-ts">import { S3Client, CreateMultipartUploadCommand, UploadPartCommand, CompleteMultipartUploadCommand } from '@aws-sdk/client-s3';
 
 async function multipartUpload(key: string, filePath: string, partSize: number = 5 * 1024 * 1024) {
@@ -450,7 +450,7 @@ upload.on('httpUploadProgress', (progress) =&gt; {
 await upload.done();
 </code></pre>
 
-<p>Lớp <code>Upload</code> xử lý CreateMultipartUpload + UploadPart + CompleteMultipartUpload tự động. Có retry, có progress. Recommend dùng thay tự viết.</p>
+<p>The <code>Upload</code> class handles CreateMultipartUpload + UploadPart + CompleteMultipartUpload for you, with retries and progress reporting. Prefer it over hand-rolling the sequence.</p>
 
 <h3>Cleanup — Abort incomplete uploads</h3>
 <pre><code class="language-ts">// Multipart upload chua complete van chiem cost trong bucket
@@ -471,11 +471,11 @@ for (const u of uploads.Uploads ?? []) {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng multipart cho file &lt;100 MB.</strong> Overhead 3 API call vs 1. Latency cao hơn cho small files. Rule of thumb: single PUT cho &lt;100 MB, multipart cho &gt;=100 MB.</p>
+<p><strong>Bẫy — dùng multipart cho file &lt;100 MB.</strong> Three API calls instead of one, so latency is worse for small files. Rule of thumb: a single PUT below 100 MB, multipart at 100 MB and above.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Multipart upload chia file &gt;=100 MB thành parts 10 MB-5 GB (max 10.000 parts), upload parallel, stitch atomically với 3 command; dùng SDK <code>Upload</code> class thay tự viết; abandoned uploads chiếm cost — add lifecycle rule abort sau 7 ngày.</p>
+<p><strong>One sentence.</strong> Multipart upload splits a file of 100 MB or more into parts of 10 MB-5 GB (max 10,000 parts), uploads them in parallel, and stitches them atomically with three commands; use the SDK <code>Upload</code> class rather than writing it yourself; abandoned uploads keep costing money — add a lifecycle rule that aborts them after 7 days.</p>
 </div>
 
 <h3>Sources</h3>
@@ -589,7 +589,7 @@ for (const u of uploads.Uploads ?? []) {
       type: 'QUIZ',
       description: 'Bốn câu, sáu phút. Về SDK v3, R2 client init, core operations, multipart.',
       content: `
-<div class="ml-en"><span class="eyebrow">Chapter 1 · Quiz</span><h2>What Chapter 1 established</h2><p class="lead">Bốn câu về S3 API essentials.</p></div>
+<div class="ml-en"><span class="eyebrow">Chapter 1 · Quiz</span><h2>What Chapter 1 established</h2><p class="lead">Four questions on the S3 API essentials.</p></div>
 <div class="ml-vi"><span class="eyebrow">Chương 1 · Kiểm tra</span><h2>Chương 1 đã dựng được gì</h2><p class="lead">Bốn câu về S3 API essentials.</p></div>
 `,
       quiz: {

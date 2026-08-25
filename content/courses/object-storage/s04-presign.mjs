@@ -17,7 +17,7 @@ export default {
 <h2>Why direct upload from browser: bypass server limits</h2>
 <p class="lead">User uploads a 500 MB video. Naive: POST to your API, backend forwards to R2. Result: Cloudflare proxy strips at 100 MB, or your Express server crashes on 500 MB in RAM. Direct upload solves both.</p>
 
-<h3>Three approaches so sánh</h3>
+<h3>Three approaches compared</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">Naive: POST to API</span><span class="lz-nsub">breaks at ~100 MB</span></span>
@@ -28,12 +28,12 @@ export default {
 <span class="lz-nbody">Backend stream body → S3 multipart. Solves RAM issue but still Cloudflare limit + double network hop. Complex code.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">Presigned PUT direct</span><span class="lz-nsub">chuẩn</span></span>
+<span class="lz-node"><span class="lz-ntitle">Presigned PUT direct</span><span class="lz-nsub">the standard</span></span>
 <span class="lz-nbody">Backend generate signed URL → client PUT DIRECTLY to R2. No 100 MB limit, no backend memory, single-hop upload. R2 verifies signature.</span>
 </div>
 </div>
 
-<h3>Kho này flow — from r2.ts + api.ts</h3>
+<h3>This repo's flow — from r2.ts + api.ts</h3>
 <pre><code class="language-ts">// 1. Client request signed URL from backend
 POST /api/v1/files/presign-r2
 { filename: 'video.mp4', contentType: 'video/mp4' }
@@ -57,7 +57,7 @@ POST /api/v1/files/complete
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Bốn bước, ba party.</strong> Client ↔ backend (auth + presign), client ↔ R2 (upload), client ↔ backend (register). Backend không bao giờ chạm file bytes.</p>
+<p><strong>Four steps, three parties.</strong> Client ↔ backend (auth + presign), client ↔ R2 (upload), client ↔ backend (register). The backend never touches the file bytes.</p>
 </div>
 
 <h3>Cloudflare 100 MB limit</h3>
@@ -71,17 +71,17 @@ Voi videos 500 MB, direct upload la BAT BUOC (khong workaround)
 
 <h3>Trade off: complexity</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">-</span><span class="lz-t">Client code phức tạp hơn</span><span class="lz-d">FE phải handle presign request, PUT to R2, notify complete. Không chỉ 1 API call.</span></div>
-<div class="lz-step"><span class="lz-k">-</span><span class="lz-t">Security phức tạp hơn</span><span class="lz-d">SigV4 signature phải pin content type (Bài 4.2). Kho này đã có bug ở đây.</span></div>
-<div class="lz-step"><span class="lz-k">-</span><span class="lz-t">Retry harder</span><span class="lz-d">Network drop giữa PUT → client tự retry (SDK không có sẵn). Multipart giúp resume.</span></div>
+<div class="lz-step"><span class="lz-k">-</span><span class="lz-t">The client code gets more complex</span><span class="lz-d">The frontend has to request a presign, PUT to R2, and then notify completion. It is no longer one API call.</span></div>
+<div class="lz-step"><span class="lz-k">-</span><span class="lz-t">The security gets more subtle</span><span class="lz-d">The SigV4 signature must pin the content type (Lesson 4.2). This repo had a bug exactly there.</span></div>
+<div class="lz-step"><span class="lz-k">-</span><span class="lz-t">Retry harder</span><span class="lz-d">A network drop mid-PUT means the client has to retry itself (the SDK will not). Multipart makes resuming possible.</span></div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — không set CORS trên bucket.</strong> Browser PUT tới R2 = cross-origin. Bucket phải allow PUT từ site origin. Chương 5 dạy CORS setup.</p>
+<p><strong>Bẫy — không set CORS trên bucket.</strong> A browser PUT to R2 is cross-origin, so the bucket must allow PUT from your site's origin. Chapter 5 covers the CORS setup.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Direct upload từ browser đến R2 với presigned PUT URL bypass Cloudflare 100 MB proxy limit + backend RAM exhaustion + double-hop latency — trade off là client code phức tạp hơn (presign → PUT → notify) và security cần pin content type qua signableHeaders (Bài 4.2).</p>
+<p><strong>One sentence.</strong> Uploading directly from the browser to R2 with a presigned PUT URL sidesteps Cloudflare's 100 MB proxy limit, backend RAM exhaustion, and double-hop latency — the trade is more complex client code (presign → PUT → notify) and a security requirement to pin the content type via signableHeaders (Lesson 4.2).</p>
 </div>
 
 <h3>Sources</h3>
@@ -205,10 +205,10 @@ content-type: text/html    &lt;- stored XSS on media domain!
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Content-Type ở PutObjectCommand không đủ.</strong> Nó chỉ là DEFAULT ContentType. Attacker override được ở PUT request nếu signature không bind content-type header.</p>
+<p><strong>Content-Type on PutObjectCommand is not enough.</strong> It only sets a DEFAULT ContentType. An attacker can override it on the PUT request if the signature does not bind the content-type header.</p>
 </div>
 
-<h3>The fix — kho này code hiện tại</h3>
+<h3>The fix — this repo's current code</h3>
 <pre><code class="language-ts">// FIXED — from r2.ts:117
 export async function getSignedUploadUrl(
   key: string,
@@ -228,7 +228,7 @@ export async function getSignedUploadUrl(
 }
 </code></pre>
 
-<h3>Kho này comment kể lại</h3>
+<h3>This repo's comment tells the story</h3>
 <pre><code class="language-text">// SECURITY: signableHeaders is what actually pins the content type.
 // Without it SigV4 signs only host (X-Amz-SignedHeaders: host), and the
 // ContentType passed to PutObjectCommand degrades to a mere DEFAULT — a
@@ -250,7 +250,7 @@ $ curl -X PUT "$UPLOAD_URL" -H "Content-Type: text/html" -d "&lt;script&gt;"
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Client MUST send exact Content-Type used at signing.</strong> Kho này FE code (frontend/src/lib/api.ts):
+<p><strong>Client MUST send exact Content-Type used at signing.</strong> This repo's frontend code (frontend/src/lib/api.ts):
 <code>xhr.setRequestHeader(&#39;Content-Type&#39;, file.type)</code> — same file.type passed to /presign-r2. Signature matches. Any deviation = 403.</p>
 </div>
 
@@ -264,11 +264,11 @@ $ curl -X PUT "$UPLOAD_URL" -H "Content-Type: text/html" -d "&lt;script&gt;"
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — chỉ test presigned upload với &quot;happy path&quot;.</strong> QA test upload valid video, works. Ship. Attack surface không notice cho tới security audit. Test with WRONG content-type in test suite explicitly.</p>
+<p><strong>Bẫy — chỉ test presigned upload với &quot;happy path&quot;.</strong> QA uploads a valid video, it works, you ship. Nobody notices the attack surface until a security audit. Test with the WRONG content-type explicitly in your suite.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Presigned PUT với chỉ ContentType trong PutObjectCommand không đủ security — SDK default sign chỉ &#39;host&#39;, attacker override content-type thành text/html tạo stored XSS trên media domain; fix là <code>signableHeaders: new Set([&#39;host&#39;, &#39;content-type&#39;])</code> — kho này bắt được, đã vá, có comment kể lại.</p>
+<p><strong>One sentence.</strong> A presigned PUT with only ContentType on PutObjectCommand is not secure — the SDK signs only &#39;host&#39; by default, so an attacker can override the content-type to text/html and create stored XSS on your media domain; the fix is <code>signableHeaders: new Set([&#39;host&#39;, &#39;content-type&#39;])</code> — this repo caught it, fixed it, and left a comment explaining it.</p>
 </div>
 
 <h3>Sources</h3>

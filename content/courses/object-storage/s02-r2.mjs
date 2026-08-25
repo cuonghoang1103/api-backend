@@ -36,11 +36,11 @@ Difference: 46x cheaper for R2 in this scenario
 <h3>Why zero egress</h3>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Cloudflare owns edge network</span><span class="lz-d">Egress bandwidth from Cloudflare-to-user is free (Cloudflare peers with ISPs directly). Passing that through to R2 users.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Compete với S3</span><span class="lz-d">R2 released 2021 as direct S3 alternative. Zero egress is the marketing hook.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Competing with S3</span><span class="lz-d">R2 released 2021 as direct S3 alternative. Zero egress is the marketing hook.</span></div>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Charge cho request instead</span><span class="lz-d">Class A operations (PUT, POST, LIST): $4.50/million. Class B (GET, HEAD): $0.36/million. So a busy app pays through requests, not egress.</span></div>
 </div>
 
-<h3>Kho này — ước lượng cost</h3>
+<h3>This repo — estimating the cost</h3>
 <pre><code class="language-text">Uoc luong hom nay (~1000 users, moderate media):
   Storage:  ~50 GB = $0.75/mo
   Egress:  ~500 GB/mo = $0 (R2)
@@ -56,10 +56,10 @@ Neu chuyen sang S3:
 
 <h3>When R2 might not be right</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">Ecosystem lock-in</span><span class="lz-lnote">Bạn dùng AWS S3 + Lambda + CloudFront tight integration. Switching cost cao. Đôi khi $/month tiết kiệm KHÔNG bù được migration cost + team retraining</span></div>
-<div class="lz-layer"><span class="lz-lname">Compliance (GDPR data residency)</span><span class="lz-lnote">R2 stores in Cloudflare region &quot;auto&quot;. EU customer data cần EU-only? R2 có Jurisdictional Restrictions option (paid) — hoặc chọn S3 EU-West-1</span></div>
-<div class="lz-layer"><span class="lz-lname">Advanced S3 features</span><span class="lz-lnote">R2 has ~90% of S3 API. Some things missing: S3 Batch Operations, S3 Select, Object Lambda. Nếu bạn dùng chúng, chưa migrate được</span></div>
-<div class="lz-layer"><span class="lz-lname">Multi-region auto-replication</span><span class="lz-lnote">S3 có Cross-Region Replication built-in. R2 chỉ single global (data lưu 1 region, phục vụ qua edge). Cho DR strict, có thể cần thêm layer</span></div>
+<div class="lz-layer"><span class="lz-lname">Ecosystem lock-in</span><span class="lz-lnote">You run AWS S3 + Lambda + CloudFront as a tightly integrated stack. Switching costs are high, and the monthly saving often does NOT repay the migration plus retraining the team</span></div>
+<div class="lz-layer"><span class="lz-lname">Compliance (GDPR data residency)</span><span class="lz-lnote">R2 stores in Cloudflare's &quot;auto&quot; region. Need EU customer data to stay EU-only? R2 has a paid Jurisdictional Restrictions option — or pick S3 eu-west-1</span></div>
+<div class="lz-layer"><span class="lz-lname">Advanced S3 features</span><span class="lz-lnote">R2 covers ~90% of the S3 API. Missing pieces include S3 Batch Operations, S3 Select and Object Lambda. If you depend on those, you cannot migrate yet</span></div>
+<div class="lz-layer"><span class="lz-lname">Multi-region auto-replication</span><span class="lz-lnote">S3 has Cross-Region Replication built in. R2 is single-global (data in one region, served from the edge). Strict DR requirements may need a layer on top</span></div>
 </div>
 
 <h3>Class A vs Class B operations</h3>
@@ -75,11 +75,11 @@ For media serving app: 90% Class B via CDN cache HIT anyway = $0
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — kiểm cost bằng cách nghĩ &quot;storage cheap enough&quot;.</strong> Cost thật thường là egress (S3) hoặc requests (R2 nếu request-heavy). Kiểm hoá đơn thật sau 30 ngày trước khi conclude. Cost calculator online là ước lượng, KHÔNG chính xác.</p>
+<p><strong>Bẫy — kiểm cost bằng cách nghĩ &quot;storage cheap enough&quot;.</strong> The real cost is usually egress (on S3) or requests (on R2, if you are request-heavy). Read an actual invoice after 30 days before concluding anything. Online cost calculators are estimates, not measurements.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> R2 free egress + $0.015/GB storage vs S3 $0.09/GB egress + $0.023/GB storage — cho media app 10 TB/mo egress khác biệt là ~$900 vs ~$20 (46× cheaper), đây là lý do chính chọn R2; nhưng ecosystem lock-in, compliance, và advanced features S3 vẫn là ba lý do valid stick với S3.</p>
+<p><strong>One sentence.</strong> R2's zero egress + $0.015/GB storage against S3's $0.09/GB egress + $0.023/GB storage — for a media app doing 10 TB/month of egress that is roughly $900 versus $20 (46× cheaper), and it is the main reason to choose R2; but ecosystem lock-in, compliance requirements, and S3's advanced features remain three valid reasons to stay.</p>
 </div>
 
 <h3>Sources</h3>
@@ -182,7 +182,7 @@ new S3Client({ region: 'us-east-1' });
 new S3Client({ region: 'auto' });
 </code></pre>
 
-<p>R2 stores data globally with single location. Bạn không chọn region. SDK bắt buộc field <code>region</code>, nên convention là <code>&#39;auto&#39;</code>.</p>
+<p>R2 stores data globally from a single location. You do not choose a region. The SDK requires the field <code>region</code>, so the convention is <code>&#39;auto&#39;</code>.</p>
 
 <h3>Quirk 2: virtual-hosted style preferred</h3>
 <pre><code class="language-ts">// Path style (S3 legacy default cho custom endpoint):
@@ -197,15 +197,15 @@ new S3Client({
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Custom domain (media.cuongthai.com) yêu cầu virtual-hosted style.</strong> DNS point custom domain → R2 bucket. Path style không map được custom domain.</p>
+<p><strong>A custom domain (media.cuongthai.com) requires virtual-hosted style.</strong> DNS points the custom domain at the R2 bucket. Path style cannot map to a custom domain.</p>
 </div>
 
-<h3>Quirk 3: một số S3 header không support</h3>
+<h3>Quirk 3: some S3 headers are not supported</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">x-amz-storage-class</span><span class="lz-lnote">S3 có STANDARD, STANDARD_IA, GLACIER... R2 chỉ có STANDARD. Set khác không error nhưng ignore</span></div>
-<div class="lz-layer"><span class="lz-lname">Server-side encryption</span><span class="lz-lnote">R2 luôn encrypt at rest tự động (AES-256). Không có SSE-KMS, SSE-C. Set SSECustomer* không error nhưng ignore</span></div>
-<div class="lz-layer"><span class="lz-lname">Request payer</span><span class="lz-lnote">S3 có &quot;requester pays&quot; billing. R2 luôn owner pays</span></div>
-<div class="lz-layer"><span class="lz-lname">Object lock</span><span class="lz-lnote">S3 có compliance mode retention. R2 chưa support object lock (beta)</span></div>
+<div class="lz-layer"><span class="lz-lname">x-amz-storage-class</span><span class="lz-lnote">S3 has STANDARD, STANDARD_IA, GLACIER and more. R2 has only STANDARD. Setting anything else does not error — it is ignored</span></div>
+<div class="lz-layer"><span class="lz-lname">Server-side encryption</span><span class="lz-lnote">R2 always encrypts at rest automatically (AES-256). There is no SSE-KMS or SSE-C. Setting SSECustomer* does not error — it is ignored</span></div>
+<div class="lz-layer"><span class="lz-lname">Request payer</span><span class="lz-lnote">S3 offers &quot;requester pays&quot; billing. On R2 the owner always pays</span></div>
+<div class="lz-layer"><span class="lz-lname">Object lock</span><span class="lz-lnote">S3 has compliance-mode retention. R2 does not support object lock yet (beta)</span></div>
 </div>
 
 <h3>Custom domain setup</h3>
@@ -222,7 +222,7 @@ Result:
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Cloudflare custom domain = built-in CDN.</strong> Không cần Cloudfront hoặc thêm CDN service. Cache invalidation qua Cloudflare purge API. Cost egress vẫn zero.</p>
+<p><strong>Cloudflare custom domain = built-in CDN.</strong> No CloudFront or extra CDN service needed. Cache invalidation goes through the Cloudflare purge API. Egress stays at zero.</p>
 </div>
 
 <h3>ETag differences</h3>
@@ -237,11 +237,11 @@ But: for large single upload with checksums:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — assume mọi S3 SDK operation work identically on R2.</strong> ~90% match. Advanced features (Object Lambda, S3 Select, Batch Operations, Object Lock) chưa support. Check R2 API compatibility page trước dùng.</p>
+<p><strong>Bẫy — assume mọi S3 SDK operation work identically on R2.</strong> ~90% match. Advanced features (Object Lambda, S3 Select, Batch Operations, Object Lock) are not supported yet. Check the R2 API compatibility page before relying on one.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> R2 quirks: region <code>&#39;auto&#39;</code> (SDK required nhưng R2 ignore), <code>forcePathStyle: false</code> (virtual-hosted cho custom domain), một số S3 headers ignore silent (storage class, SSE-KMS, requester pays, object lock) — check R2 compat page trước migrate S3-specific code.</p>
+<p><strong>One sentence.</strong> R2 quirks: region <code>&#39;auto&#39;</code> (required by the SDK but ignored by R2), <code>forcePathStyle: false</code> (virtual-hosted, for custom domains), and several S3 headers are silently ignored (storage class, SSE-KMS, requester pays, object lock) — check the R2 compatibility page before migrating S3-specific code.</p>
 </div>
 
 <h3>Sources</h3>
@@ -359,14 +359,14 @@ MOI workload -&gt; MOT token. Neu 1 leak, xoa MOT token, khong break het.
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Per-workload = blast radius nhỏ.</strong> Backend leak = revoke backend token, cấp mới, deploy. Worker/admin không bị ảnh hưởng.</p>
+<p><strong>One token per workload keeps the blast radius small.</strong> A backend leak means: revoke the backend token, issue a new one, deploy. The worker and admin tokens are untouched.</p>
 </div>
 
 <h3>Rotation schedule</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Quarterly (khuyến nghị)</span><span class="lz-d">Cứ 3 tháng rotate mọi token. Overlap 24h — old token vẫn hoạt động trong khi deploy new token.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Post-incident</span><span class="lz-d">Bất cứ khi nào suspect leak (Git commit, log expose, employee leave). Không đợi quarterly.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Automated</span><span class="lz-d">Ideal: rotation script + secret manager (Vault, AWS Secrets Manager). Kho này chưa có — manual quarterly.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Quarterly (recommended)</span><span class="lz-d">Rotate every token every three months. Overlap them by 24 hours so the old token still works while the new one is deploying.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Post-incident</span><span class="lz-d">Any time you suspect a leak (a Git commit, an exposed log, someone leaving). Do not wait for the quarterly cycle.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Automated</span><span class="lz-d">Ideally a rotation script plus a secret manager (Vault, AWS Secrets Manager). This repo does not have one yet — rotation is manual and quarterly.</span></div>
 </div>
 
 <h3>Rotation procedure</h3>
@@ -383,18 +383,18 @@ MOI workload -&gt; MOT token. Neu 1 leak, xoa MOT token, khong break het.
 
 <h3>Storing credentials — DON'T</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">Git commit</span><span class="lz-lnote">Ngay cả private repo, credential vào Git history không remove được (rewrite history khó). .gitignore .env luôn</span></div>
-<div class="lz-layer"><span class="lz-lname">Frontend bundle</span><span class="lz-lnote"><code>NEXT_PUBLIC_R2_KEY</code> = ship key qua browser bundle. Ai view page source cũng thấy. NEVER</span></div>
-<div class="lz-layer"><span class="lz-lname">Docker image (COPY .env)</span><span class="lz-lnote">Image layer chứa .env. Layer inspect được. Dùng env vars ở runtime</span></div>
-<div class="lz-layer"><span class="lz-lname">Log output</span><span class="lz-lnote">Sanitize log để không print process.env. Sentry, Datadog, log aggregators đều retain</span></div>
+<div class="lz-layer"><span class="lz-lname">Git commit</span><span class="lz-lnote">Even in a private repo, a credential in Git history cannot really be removed (rewriting history is painful). Always .gitignore your .env</span></div>
+<div class="lz-layer"><span class="lz-lname">Frontend bundle</span><span class="lz-lnote"><code>NEXT_PUBLIC_R2_KEY</code> ships the key inside the browser bundle. Anyone who views source can read it. NEVER do this</span></div>
+<div class="lz-layer"><span class="lz-lname">Docker image (COPY .env)</span><span class="lz-lnote">The image layer then contains .env, and layers can be inspected. Pass environment variables at runtime instead</span></div>
+<div class="lz-layer"><span class="lz-lname">Log output</span><span class="lz-lnote">Sanitize your logs so they never print process.env. Sentry, Datadog and every log aggregator retain what you send them</span></div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — commit .env chứa placeholder rồi thay bằng real secret post-commit.</strong> Git history vẫn có placeholder — reviewers assume ok. Ngày mai bạn <code>git log -p</code> real secret. Fix: never commit .env, chỉ commit .env.example với dummy values.</p>
+<p><strong>Bẫy — commit .env chứa placeholder rồi thay bằng real secret post-commit.</strong> Git history still shows a placeholder, so reviewers assume it is fine. Tomorrow someone <code>git log -p</code> the real secret. The fix: never commit .env at all, only .env.example with dummy values.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> R2 API tokens là long-lived, không auto-rotate như IAM STS — tạo per-workload (backend, worker, admin) để limit blast radius, rotate quarterly + post-incident với overlap 24h, và NEVER commit vào Git, ship qua frontend bundle, bake vào Docker image, hay log output.</p>
+<p><strong>One sentence.</strong> R2 API tokens are long-lived and do not auto-rotate the way IAM STS credentials do — issue one per workload (backend, worker, admin) to limit the blast radius, rotate them quarterly and after any incident with a 24-hour overlap, and NEVER commit them to Git, ship them in a frontend bundle, bake them into a Docker image, or log them.</p>
 </div>
 
 <h3>Sources</h3>
@@ -475,7 +475,7 @@ MOI workload -&gt; MOT token. Neu 1 leak, xoa MOT token, khong break het.
       type: 'QUIZ',
       description: 'Bốn câu, sáu phút. Về pricing, quirks, tokens.',
       content: `
-<div class="ml-en"><span class="eyebrow">Chapter 2 · Quiz</span><h2>What Chapter 2 established</h2><p class="lead">Bốn câu về R2 specifics.</p></div>
+<div class="ml-en"><span class="eyebrow">Chapter 2 · Quiz</span><h2>What Chapter 2 established</h2><p class="lead">Four questions on R2 specifics.</p></div>
 <div class="ml-vi"><span class="eyebrow">Chương 2 · Kiểm tra</span><h2>Chương 2 đã dựng được gì</h2><p class="lead">Bốn câu về R2 specifics.</p></div>
 `,
       quiz: {

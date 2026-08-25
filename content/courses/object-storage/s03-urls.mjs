@@ -17,23 +17,23 @@ export default {
 <h2>Three URL types: API, CDN, signed</h2>
 <p class="lead">Same object, three different URLs. Each serves a different purpose. Confusing them costs money or leaks data.</p>
 
-<h3>Three URLs cho cùng object</h3>
+<h3>Three URLs for the same object</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">1. R2 API endpoint</span><span class="lz-nsub">xxx.r2.cloudflarestorage.com</span></span>
-<span class="lz-nbody">Cho code (SDK). Cần auth (access key + signature). KHÔNG cache. Cost egress cao (nhưng R2 zero). Dùng cho upload, list, delete từ backend.</span>
+<span class="lz-nbody">For code (the SDK). Requires auth (access key + signature). NOT cached. Egress is expensive (though zero on R2). Use it for upload, list and delete from the backend.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">2. Custom domain</span><span class="lz-nsub">media.cuongthai.com/key</span></span>
-<span class="lz-nbody">Cho browser. Public. Cached qua Cloudflare CDN globally. Egress zero. Dùng cho serving avatars, images, videos.</span>
+<span class="lz-nbody">For the browser. Public. Cached globally by the Cloudflare CDN. Zero egress. Use it to serve avatars, images and video.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">3. Signed URL</span><span class="lz-nsub">endpoint/key?X-Amz-Signature=...</span></span>
-<span class="lz-nbody">Cho private objects. Short-lived (5-10 min). Verified signature. KHÔNG cache. Dùng cho paid course PDFs, expiring downloads.</span>
+<span class="lz-nbody">For private objects. Short-lived (5-10 minutes). Signature-verified. NOT cached. Use it for paid-course PDFs and expiring downloads.</span>
 </div>
 </div>
 
-<h3>Kho này config từ src/config/r2.ts</h3>
+<h3>This repo's config, from src/config/r2.ts</h3>
 <pre><code class="language-ts">export function buildPublicUrl(key: string): string {
   // Serve qua CDN, khong qua R2 endpoint
   return &#96;\${config.r2.publicUrlBase}/\${key}&#96;;
@@ -49,7 +49,7 @@ return buildPublicUrl(key);
 // -&gt; https://media.cuongthai.com/... (public, cached)
 </code></pre>
 
-<h3>Bảng use case</h3>
+<h3>Use-case table</h3>
 <div class="out">Use case                 URL type              Cache?  Auth?  Cost
 Upload from backend      API endpoint          NO      YES    ~0 (R2)
 Download to server       API endpoint          NO      YES    ~0 (R2)
@@ -60,7 +60,7 @@ Temporary share link     Signed URL            NO      SIG    ~0
 </div>
 
 <div class="callout warn">
-<p><strong>ĐỪNG serve public files qua API endpoint.</strong> Bug số 1: dev quên custom domain, code trả về <code>xxx.r2.cloudflarestorage.com/...</code>. Client fetch → 401 (không auth). Fix: <em>luôn</em> <code>buildPublicUrl(key)</code>, không expose endpoint.</p>
+<p><strong>Do NOT serve public files through the API endpoint.</strong> Bug number one: a developer forgets the custom domain and the code returns <code>xxx.r2.cloudflarestorage.com/...</code>. The client fetches it and gets a 401 (unauthenticated). The fix: <em>always</em> <code>buildPublicUrl(key)</code>, never expose the endpoint.</p>
 </div>
 
 <h3>URL structure detail</h3>
@@ -80,16 +80,16 @@ Signed URL:
 <h3>Cache implications</h3>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">CDN</span><span class="lz-t">Cache-Control determines TTL</span><span class="lz-d">Cache header set at upload time. Browser + CDN cache accordingly. Invalidate via Cloudflare purge API.</span></div>
-<div class="lz-step"><span class="lz-k">API</span><span class="lz-t">No cache by design</span><span class="lz-d">R2 endpoint không cache — every GET reaches R2. Slow (~50-200ms latency) and expensive (egress $ on S3).</span></div>
-<div class="lz-step"><span class="lz-k">Signed</span><span class="lz-t">Explicit no-cache</span><span class="lz-d">Query string với signature makes URL unique per signature. CDN không cache (query string). Every fetch goes to R2. Slower.</span></div>
+<div class="lz-step"><span class="lz-k">API</span><span class="lz-t">No cache by design</span><span class="lz-d">The R2 endpoint is not cached — every GET reaches R2. Slow (~50-200 ms) and expensive (egress costs money on S3).</span></div>
+<div class="lz-step"><span class="lz-k">Signed</span><span class="lz-t">Explicit no-cache</span><span class="lz-d">The signature in the query string makes every URL unique, so the CDN will not cache it. Every fetch reaches R2. Slower.</span></div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — hardcode API endpoint URL trong DB.</strong> Bạn lưu <code>https://xxx.r2.cloudflarestorage.com/...</code> vào <code>MediaFile.url</code>. Sau đó đổi custom domain hoặc R2 endpoint, mọi URL cũ vỡ. Fix: lưu <em>key</em> only, build URL runtime.</p>
+<p><strong>Bẫy — hardcode API endpoint URL trong DB.</strong> You store <code>https://xxx.r2.cloudflarestorage.com/...</code> in <code>MediaFile.url</code>. Later you change the custom domain or the R2 endpoint, and every stored URL breaks. The fix: store <em>key</em> only, build URL runtime.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Ba URL type cho cùng object: API endpoint (backend SDK, auth, no cache, upload/delete), custom domain qua CDN (browser, public, cached, serving), signed URL (short-lived, sig auth, no cache, private access) — lưu key trong DB không URL, build URL runtime.</p>
+<p><strong>One sentence.</strong> Three URL types for the same object: the API endpoint (backend SDK, authenticated, uncached, for upload and delete), a custom domain through the CDN (browser, public, cached, for serving), and a signed URL (short-lived, signature-authenticated, uncached, for private access) — store the key in your database rather than a URL, and build the URL at runtime.</p>
 </div>
 
 <h3>Sources</h3>
@@ -192,7 +192,7 @@ Signed URL:
 <h2>Cache-Control per content type</h2>
 <p class="lead">Cache-Control header set on the object at upload time controls how long browsers and CDNs cache the response. Wrong TTL = either stale content or unnecessary hits.</p>
 
-<h3>Kho này tune per content type</h3>
+<h3>This repo tunes it per content type</h3>
 <pre><code class="language-ts">// upload.service.ts
 const CACHE_POLICIES = {
   image:   'public, max-age=31536000, immutable',    // 1 year, immutable
@@ -208,7 +208,7 @@ const CACHE_POLICIES = {
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">immutable</span><span class="lz-nsub">1 year + immutable directive</span></span>
-<span class="lz-nbody">Content never changes at this URL. New version = new URL (versioned key hoặc hash). Browser aggressive cache, không hỏi server. E.g. images, video, minified JS bundles.</span>
+<span class="lz-nbody">The content at this URL never changes. A new version means a new URL (a versioned key or a hash). The browser caches aggressively and never asks the server. Images, video, minified JS bundles.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">short-cache</span><span class="lz-nsub">1 hour</span></span>
@@ -236,10 +236,10 @@ Cach tot:
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Versioned URL = cache aggressive + no invalidation needed.</strong> Kho này dùng pattern này cho avatar upload — key include timestamp <code>avatar-1234567890.jpg</code>.</p>
+<p><strong>Versioned URL = cache aggressive + no invalidation needed.</strong> This repo uses that pattern for avatar uploads — the key includes a timestamp <code>avatar-1234567890.jpg</code>.</p>
 </div>
 
-<h3>CDN cache invalidation — khi cần thiết</h3>
+<h3>CDN cache invalidation — when you actually need it</h3>
 <pre><code class="language-bash"># Cloudflare purge URL
 $ curl -X POST \\
     "https://api.cloudflare.com/client/v4/zones/$ZONE/purge_cache" \\
@@ -248,7 +248,7 @@ $ curl -X POST \\
     -d '{"files":["https://media.cuongthai.com/x.jpg"]}'
 </code></pre>
 
-<p>Cloudflare free plan: 30 purges/day. Paid: unlimited. Free tier limit reason enough để dùng versioned URL.</p>
+<p>Cloudflare's free plan allows 30 purges a day; paid plans are unlimited. That free-tier limit is reason enough to prefer versioned URLs.</p>
 
 <h3>Cache-Control syntax</h3>
 <pre><code class="language-text">public                — anyone (including CDN) can cache
@@ -266,11 +266,11 @@ Combo cho private user data:
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — set aggressive cache-control cho mutable content.</strong> Avatar cache 1 year. User đổi avatar. 1 năm sau bạn bè họ vẫn thấy avatar cũ. Fix: hoặc dùng versioned URL, hoặc cache short với hash query string append.</p>
+<p><strong>Bẫy — set aggressive cache-control cho mutable content.</strong> An avatar cached for a year. The user changes it. A year later their friends still see the old one. The fix: either use a versioned URL, or cache briefly with a hash appended as a query string.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Cache-Control set at upload: immutable content (image, video, hashed asset) = 1 year immutable, mutable content = 1 hour max-age, versioned URL is better than short cache + invalidation, và Cloudflare CDN cache-tuning tự động dựa vào header — set đúng lúc upload.</p>
+<p><strong>One sentence.</strong> Cache-Control is set at upload time: immutable content (image, video, hashed asset) gets one year immutable, mutable content gets a one-hour max-age, a versioned URL beats a short cache plus invalidation, and the Cloudflare CDN tunes its own cache from that header — so set it correctly at upload.</p>
 </div>
 
 <h3>Sources</h3>
@@ -411,7 +411,7 @@ Signature = HMAC-SHA256 cua request + key + date + expires
 R2 recalculate signature; match -&gt; serve; nomatch -&gt; 403
 </code></pre>
 
-<h3>Kho này pattern — paid course</h3>
+<h3>This repo's pattern — a paid course</h3>
 <pre><code class="language-ts">// GET /api/v1/courses/:courseId/lessons/:lessonId/download
 async function downloadLesson(req, res) {
   const { courseId, lessonId } = req.params;
@@ -456,15 +456,15 @@ const url = await getSignedUrl(client, cmd, {
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Chương 4 đo bug SigV4 thật của kho này khi signableHeaders sai.</strong> Presigned PUT security phức tạp — Chương 4 dạy chi tiết.</p>
+<p><strong>Chapter 4 measures the real SigV4 bug this repo hit when signableHeaders was wrong.</strong> Presigned PUT security is subtle — Chapter 4 covers it in detail.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — cache signed URL trong DB.</strong> Signature has expiry. Cache 24h in DB → URL expired trước khi user click. Regenerate mỗi request.</p>
+<p><strong>Bẫy — cache signed URL trong DB.</strong> The signature expires. Cache it for 24 hours in the database and the URL is dead before the user clicks. Regenerate it per request.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Signed URL = short-lived (5-10 min for download, 1 hour for streaming) private access without making objects public — kho này pattern: API endpoint verify entitlement + return signed URL for client to fetch directly from R2, saving server bandwidth; signed URL cho upload (presigned PUT) là separate topic covered in Chương 4.</p>
+<p><strong>One sentence.</strong> A signed URL gives short-lived private access (5-10 minutes for a download, an hour for streaming) without making the object public — this repo's pattern is an API endpoint that verifies entitlement and returns a signed URL for the client to fetch straight from R2, saving server bandwidth; signed URLs for upload (presigned PUT) are a separate topic, covered in Chapter 4.</p>
 </div>
 
 <h3>Sources</h3>
@@ -574,7 +574,7 @@ const url = await getSignedUrl(client, cmd, {
       slug: 'os-3-4-quiz',
       type: 'QUIZ',
       description: 'Bốn câu, sáu phút. Về URL types, Cache-Control, signed URLs.',
-      content: `<div class="ml-en"><span class="eyebrow">Chapter 3 · Quiz</span><h2>What Chapter 3 established</h2><p class="lead">Bốn câu về URL patterns.</p></div><div class="ml-vi"><span class="eyebrow">Chương 3 · Kiểm tra</span><h2>Chương 3 đã dựng được gì</h2><p class="lead">Bốn câu về URL patterns.</p></div>`,
+      content: `<div class="ml-en"><span class="eyebrow">Chapter 3 · Quiz</span><h2>What Chapter 3 established</h2><p class="lead">Four questions on URL patterns.</p></div><div class="ml-vi"><span class="eyebrow">Chương 3 · Kiểm tra</span><h2>Chương 3 đã dựng được gì</h2><p class="lead">Bốn câu về URL patterns.</p></div>`,
       quiz: {
         timeLimitSeconds: 360,
         questions: [

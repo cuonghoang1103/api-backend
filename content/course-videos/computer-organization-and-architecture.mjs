@@ -15,7 +15,7 @@ export default {
     "cea201-3-2-bus": { yt: "xBYhHC8_A6o", credit: "Gate Smashers — L-1.4:Types of Buses (Address, Data and Control) in Computer Organization and Architecture" },
     "cea201-4-1-locality": { yt: "E6QATWzjWZU", credit: "Gate Smashers — L-3.11: Locality of Reference in Cache Memory | Spatial Vs Temporal Locality | Computer Organization" },
     "cea201-4-2-mapping": { yt: "m1dA7D6c3C0", credit: "Gate Smashers — L-3.5: What is Cache Mapping || Cache Mapping techniques || Computer Organisation and Architecture" },
-    "cea201-5-1-ram-rom": { yt: "19t0Uw3nkgM", credit: "LS Academy for Technical Education — RAM,ROM & their types(SRAM,DRAM,PROM,EPROM,EEPROM,Flash memory) |COA Lecture series" },
+    "cea201-5-1-ram-rom": { yt: "19t0Uw3nkgM", credit: "LS Academy for Technical Education  — RAM,ROM & their types(SRAM,DRAM,PROM,EPROM,EEPROM,Flash memory) |COA Lecture series" },
     "cea201-5-2-error-correction": { yt: "wbH2VxzmoZk", credit: "Neso Academy — Hamming Code | Error Correction" },
     "cea201-6-1-magnetic-disk": { yt: "e8tpapnaJ44", credit: "Chirag Bhalodia — Magnetic Disk Structure | Hard Disk Structure | Explain working of hard disk using animation" },
     "cea201-6-2-raid-ssd": { yt: "-6sA9nHlZDc", credit: "Gate Smashers — Lec-126: What is RAID? RAID 0, RAID 1, RAID 4, RAID 5, RAID 6, Nested RAID 10 Explained" },

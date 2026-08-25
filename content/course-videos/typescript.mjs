@@ -34,8 +34,8 @@ export default {
     /* ── Chương 3 ── */
     "typescript-3-1-tham-so": { yt: "jXoSaX_yFh4", credit: "Net Ninja — TypeScript Tutorial #8 - Function Basics" },
     "typescript-3-2-callback": { yt: "m8O-Bo3I8pc", credit: "Smartherd — Functions as Type | TypeScript Tutorial" },
-    "typescript-3-3-overload-void": { yt: "322L8At_sBo", credit: "nevsky.programming — Function Overloading in TypeScript - TypeScript Tutorial" },
-    "typescript-3-4-this": { yt: "wueQKy86aSY", credit: "Typed Rocks — The Secret THIS Parameter: TypeScript's overlooked Superpower Explained!" },
+    "typescript-3-3-overload-void": { yt: "322L8At_sBo", credit: "nevsky.programming — Function Overloading in TypeScript  - TypeScript Tutorial" },
+    "typescript-3-4-this": { yt: "wueQKy86aSY", credit: "Typed Rocks — The Secret THIS Parameter: TypeScript’s overlooked Superpower Explained!" },
     /* ── Chương 4 ── */
     "typescript-4-1-dang-object": { yt: "9dw2ik9N8wo", credit: "Dave Gray — Typescript Objects, Arrays, Tuples & Enums | Basics Tutorial" },
     "typescript-4-2-interface-vs-type": { yt: "IXAT3If0pGI", credit: "basarat — TypeScript TYPES vs INTERFACES (Key Differences)" },
@@ -43,7 +43,7 @@ export default {
     "typescript-4-4-index-record": { yt: "2eAqXLi8q70", credit: "Dave Gray — Typescript Index Signatures, keyof Assertions & the Record Utility Type" },
     /* ── Chương 5 ── */
     "typescript-5-1-union-narrowing": { yt: "HUZhBJL0Dv4", credit: "Tech With Piotr — TypeScript Crash Course Part 2 – Union Types & Type Narrowing" },
-    "typescript-5-2-literal-union": { yt: "2HJHRqThWRQ", credit: "Eulier Gonzalez — Typescript Essentials: Union and Narrowing Types examples with string, literals and maps" },
+    "typescript-5-2-literal-union": { yt: "2HJHRqThWRQ", credit: "Eulier Gonzalez — Typescript Essentials : Union and Narrowing Types examples with string, literals and maps" },
     "typescript-5-3-discriminated-union": { yt: "5V-y911AO5c", credit: "Coder Foundry — Level Up Your TypeScript: Discriminated Unions Explained" },
     "typescript-5-4-exhaustiveness": { yt: "safz1yCVYxo", credit: "Hitesh Choudhary — Discriminated Union and Exhaustiveness Checking with never" },
     /* ── Chương 6 ── */
@@ -52,15 +52,15 @@ export default {
     "typescript-6-3-generic-types-classes": { yt: "EcCTIExsqmI", credit: "Web Dev Simplified — Learn TypeScript Generics In 13 Minutes" },
     "typescript-6-4-generics-in-practice": { yt: "lMfGp29Ht8c", credit: "Matt Pocock — WHEN should I use a Generic? - Advanced TypeScript" },
     /* ── Chương 7 ── */
-    "typescript-7-1-mapped-types": { yt: "lYQZPXrbEbg", credit: "Array Blog — Mapped Types in TypeScript | readonly, Optional Modifiers & Use Cases" },
-    "typescript-7-2-mapping-modifiers": { yt: "lYQZPXrbEbg", credit: "Array Blog — Mapped Types in TypeScript | readonly, Optional Modifiers & Use Cases" },
+    "typescript-7-1-mapped-types": { yt: "lYQZPXrbEbg", credit: "Array Blog — Mapped Types in TypeScript  | readonly, Optional Modifiers & Use Cases" },
+    "typescript-7-2-mapping-modifiers": { yt: "lYQZPXrbEbg", credit: "Array Blog — Mapped Types in TypeScript  | readonly, Optional Modifiers & Use Cases" },
     "typescript-7-3-conditional-infer": { yt: "hLZXJTm7TEk", credit: "Matt Pocock — Infer is easier than you think" },
     "typescript-7-4-template-literal-types": { yt: "8KIkLPQPt98", credit: "basarat — TypeScript Template Literal Types // So much power ☢️" },
     /* ── Chương 8 ── */
-    "typescript-8-1-partial-required-readonly": { yt: "BhNSauna0eo", credit: "Web Dev Simplified — You are a Junior Dev if You Don't Know These 18 TypeScript Utility Types" },
+    "typescript-8-1-partial-required-readonly": { yt: "BhNSauna0eo", credit: "Web Dev Simplified — You are a Junior Dev if You Don’t Know These 18 TypeScript Utility Types" },
     "typescript-8-2-pick-omit": { yt: "vBLOBDksjq4", credit: "Mohit Decodes — TypeScript Tutorial #39 - Partial, Pick & Omit Utility Types" },
-    "typescript-8-3-record": { yt: "E1C00MZXhQ4", credit: "Fabio Biondi — Typescript: utility Types (Partial, Omit, Pick, Record, keyof)" },
-    "typescript-8-4-exclude-returntype-awaited": { yt: "BhNSauna0eo", credit: "Web Dev Simplified — You are a Junior Dev if You Don't Know These 18 TypeScript Utility Types" },
+    "typescript-8-3-record": { yt: "E1C00MZXhQ4", credit: "Fabio Biondi — Typescript: utility Types (Partial, Omit, Pick, Record,  keyof)" },
+    "typescript-8-4-exclude-returntype-awaited": { yt: "BhNSauna0eo", credit: "Web Dev Simplified — You are a Junior Dev if You Don’t Know These 18 TypeScript Utility Types" },
     /* ── Chương 9 ── */
     "typescript-9-1-tsc-and-tsconfig": { yt: "FGYwsnItyDs", credit: "Net Ninja — TypeScript Crash Course #4 - Better Workflow with tsconfig" },
     "typescript-9-2-strict-mode": { yt: "eJXVEju3XLM", credit: "Matt Pocock — The TSConfig Cheat Sheet" },
@@ -70,7 +70,7 @@ export default {
     "typescript-10-1-es-modules": { yt: "EpOPR03z4Vw", credit: "Net Ninja — TypeScript Tutorial #14 - Modules" },
     "typescript-10-2-declaration-files": { yt: "06ygIwV8CkI", credit: "ProgramArtist — TypeScript Declaration Files" },
     "typescript-10-3-augmentation": { yt: "byCYSXVmH6E", credit: "Matt Pocock — Using DECLARE GLOBAL for amazing inference - Advanced TypeScript" },
-    "typescript-10-4-types-from-packages": { yt: "LeWgPsLTOyg", credit: "Angular University — Typescript 2 @types - Installing Type Definitions For 3rd Party Libraries" },
+    "typescript-10-4-types-from-packages": { yt: "LeWgPsLTOyg", credit: "Angular University — 💥 Typescript 2 @types - Installing Type Definitions For 3rd Party Libraries" },
     /* ── Chương 11 ── */
     "typescript-11-1-express-handlers": { yt: "bYgphDEWwvs", credit: "freeCodeCamp.org — TypeScript in Express – TypeScript Tutorial" },
     "typescript-11-2-typed-responses": { yt: "BWUi6BS9T5Y", credit: "TomDoesTech — Build a REST API with Node.js, Express, TypeScript, MongoDB & Zod" },
@@ -87,7 +87,7 @@ export default {
     "typescript-13-3-schema-source-of-truth": { yt: "L6BE-U3oy80", credit: "Web Dev Simplified — Learn Zod In 30 Minutes" },
     "typescript-13-4-types-from-prisma": { yt: "3_K841jF0FM", credit: "Prisma — Getting up and running with TypeScript and Prisma" },
     /* ── Chương 14 ── */
-    "typescript-14-1-classes-access": { yt: "5ixtGi3n-Tg", credit: "Technical Rajni — Typescript Tutorial #24 Private and Public Access Modifiers Typescript" },
+    "typescript-14-1-classes-access": { yt: "5ixtGi3n-Tg", credit: "Technical Rajni — Typescript Tutorial  #24  Private and Public Access Modifiers Typescript" },
     "typescript-14-2-abstract-implements": { yt: "62J_eQsK0e0", credit: "TypeScript with Benny Code — TypeScript Interfaces & Abstract Classes Tutorial" },
     "typescript-14-3-hash-private-static": { yt: "59jen6P7RFo", credit: "FED Learning — Static Members in TypeScript | Static Properties | Static Methods" },
     "typescript-14-4-decorators": { yt: "O6A-u_FoEX8", credit: "Fireship — The Magic of TypeScript Decorators" },

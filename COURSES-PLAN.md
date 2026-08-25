@@ -109,12 +109,42 @@ tailwind-css 10, nodejs 15. Số chạy lại sau khi vá:
 | Nhẹ (<20%) | 36 bài | 36 bài |
 | Tổng | 1.285 bài | 1.285 bài |
 
-36 bài "nhẹ" còn lại KHÔNG phải lỗi — chúng là **dữ liệu và nhãn cố ý**: tên
+✅ **Nhãn `Bẫy` đã đổi sang `Trap` 25/08/2026** — 521 lượt trong khối `ml-en`
+trên 109 tệp (`Bẫy —` → `Trap —` 499, `Bẫy thật:` → `A real trap:` 21, một
+dạng lẻ 1). Khối `ml-vi` giữ nguyên 760 lượt. Cùng lượt: `Một câu.` →
+`One sentence.`, `Bài học:` → `Lesson:`, `Nguồn` → `Sources`.
+
+⚠️⚠️ **Đổi nhãn xong thì bộ kiểm nhảy 36 → 93 bài "nhẹ", và đó là bộ kiểm
+tự tố cáo mình.** `course-lang-check.mjs` có luật bỏ qua nhãn:
+
+```js
+const LABELS = [/^Bẫy\b/, …]          // ← THIẾU NEO $
+.filter(t => … && !LABELS.some(re => re.test(t)))
+```
+
+Thân bài của hộp pitfall nằm **cùng một đoạn text** với nhãn, nên `/^Bẫy\b/`
+khớp cả `Bẫy — <thân bài>` và vứt TRỌN câu khỏi cả tử số lẫn mẫu số. Nó giấu
+**66 dòng tiêu đề pitfall vẫn còn tiếng Việt** trong `ml-en` mà bộ đo vẫn báo
+sạch — và chúng chỉ lộ ra vì cái nhãn đổi sang `Trap`. Đã neo `$` cho mọi
+nhãn và dịch nốt 66 dòng đó. Trong số ấy có một câu lai *"dùng cây quyết định
+**such as** một checklist tuần tự"* — dấu vết của chính lỗi khoá-ngắn-ăn-tiền-tố
+ở mục trên, sống sót qua ba lượt kiểm.
+
+Bài học, và nó đúng y [[feedback_verify_the_checker_before_the_content]] đã
+ghi trong CLAUDE.md: **một luật "bỏ qua" trong bộ kiểm là một chỗ mù có chủ
+đích, và chỗ mù nào cũng phải được đo xem nó đang che mất bao nhiêu.** Cách
+đo rẻ nhất hoá ra là đổi cái thứ mà luật ấy đang bỏ qua.
+
+Số sau cùng: **nặng 0, nhẹ 32** (media-processing về sạch hẳn), 18/18 khoá
+qua `course-content-check`.
+
+32 bài "nhẹ" còn lại KHÔNG phải lỗi — chúng là **dữ liệu và nhãn cố ý**: tên
 riêng tiếng Việt trong ví dụ (`'Đà Nẵng'` ở nodejs 1.x minh hoạ shallow copy),
 chính ký tự đang được đếm byte UTF-8 (`'à'` ở nodejs 3.x), khoá R2 không-ASCII
-(`logo tết.png` ở object-storage), và bộ nhãn quy ước dùng chung 18 khoá
-(`Bẫy —`, `Một câu.`, `Đo thật`, `Nguồn`). Đổi bộ nhãn là quyết định xuyên
-khoá nên **để lại cho người dùng chọn**, không tự đổi.
+(`logo tết.png` ở object-storage), và các comment tiếng Việt **bên trong khối
+`<pre>`** của những khoá mà mã ví dụ dùng định danh tiếng Việt xuyên suốt
+(`nguoiDungId`, `thuHoiLuc`, `hetHan` ở authentication/nginx/prisma-orm) —
+dịch riêng comment mà giữ định danh sẽ đọc còn kỳ hơn.
 
 ⚠️ **Hai lỗi của bộ công cụ đã trả giá để biết** (công cụ ở `/tmp/langfix/`,
 không commit — nhưng bài học thì ghi lại):

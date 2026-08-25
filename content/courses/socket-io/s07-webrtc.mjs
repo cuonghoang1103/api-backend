@@ -30,10 +30,10 @@ export default {
 </div>
 
 <div class="callout ok">
-<p><strong>Đây là điểm quan trọng nhất cho scale.</strong> Nếu media qua server, 1.000 concurrent calls = 1-2 Gbps qua server. Nếu peer-to-peer, server chỉ cần đủ để signalling — vài KB per call. Same server có thể handle cả trăm nghìn calls.</p>
+<p><strong>This is the single most important point for scale.</strong> If the media flows through the server, 1,000 concurrent calls means 1-2 Gbps through that server. Peer-to-peer, the server only carries the signalling — a few KB per call. The same box can then handle hundreds of thousands of calls.</p>
 </div>
 
-<h3>call.socket.ts — 5 event của kho này</h3>
+<h3>call.socket.ts — this repo's 5 events</h3>
 <pre><code class="language-ts">// src/socket/call.socket.ts (275 dong)
 socket.on('call:offer',  async ({ toUserId, sdp }) =&gt; { ... });
 socket.on('call:answer', async ({ toUserId, sdp }) =&gt; { ... });
@@ -42,9 +42,9 @@ socket.on('call:reject', async ({ toUserId }) =&gt; { ... });
 socket.on('call:end',    async ({ toUserId }) =&gt; { ... });
 </code></pre>
 
-<p>Naming: <code>call:*</code> prefix (bài 3.5). Payload nhỏ (~500 byte). Không track state cho media — chỉ relay signalling messages.</p>
+<p>Naming: <code>call:*</code> prefix (lesson 3.5). Small payloads (~500 bytes). No media state is tracked — it only relays signalling messages.</p>
 
-<h3>Call flow trên timeline</h3>
+<h3>The call flow on a timeline</h3>
 <pre><code class="language-text">t=0     User A press "call"
 t=0.05  A -&gt; server: call:offer   {toUserId: B, sdp: "v=0\\r\\no=- ..."}
 t=0.06  server -&gt; B: call:incoming {fromUserId: A, sdp: "..."}
@@ -65,30 +65,30 @@ t=125.02 server -&gt; B: call:end
 
 <h3>Socket.io responsibilities</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">Peer discovery</span><span class="lz-lnote">User A muốn call user B → server dùng room <code>user:B</code> để tìm B online</span></div>
-<div class="lz-layer"><span class="lz-lname">Relay SDP + ICE</span><span class="lz-lnote">Chuyển tin giữa A và B khi họ chưa peer-to-peer connect được</span></div>
+<div class="lz-layer"><span class="lz-lname">Peer discovery</span><span class="lz-lnote">User A wants to call user B → the server uses the <code>user:B</code> room to find B online</span></div>
+<div class="lz-layer"><span class="lz-lname">Relay SDP + ICE</span><span class="lz-lnote">Relays messages between A and B while they have not yet connected peer-to-peer</span></div>
 <div class="lz-layer"><span class="lz-lname">Ring notification</span><span class="lz-lnote">Emit <code>call:incoming</code>, <code>call:ringing</code> cho UI</span></div>
-<div class="lz-layer"><span class="lz-lname">Cleanup on drop</span><span class="lz-lnote">Nếu A disconnect trong lúc gọi, server emit <code>call:end</code> cho B</span></div>
+<div class="lz-layer"><span class="lz-lname">Cleanup on drop</span><span class="lz-lnote">If A disconnects mid-call, the server emits <code>call:end</code> cho B</span></div>
 </div>
 
-<h3>Socket.io KHÔNG làm</h3>
+<h3>What socket.io does NOT do</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">Không mang media</span><span class="lz-lnote">Không có video/audio qua socket.io ever. Nếu bạn nghĩ dùng socket emit binary Buffer để &quot;stream video&quot;, đó là sai kiến trúc — Chương 8 giải thích</span></div>
-<div class="lz-layer"><span class="lz-lname">Không lưu media</span><span class="lz-lnote">Recording call, nếu cần, phải làm ở peer (client-side MediaRecorder) hoặc dùng SFU/MCU server (khác socket.io hoàn toàn)</span></div>
-<div class="lz-layer"><span class="lz-lname">Không TURN</span><span class="lz-lnote">Khi peers không thể P2P (NAT symmetric), cần TURN server relay media. TURN là dịch vụ RIÊNG — coturn, Xirsys — không phải socket.io</span></div>
+<div class="lz-layer"><span class="lz-lname">It does not carry media</span><span class="lz-lnote">No video or audio ever travels over socket.io. If you are thinking of emitting binary Buffers to &quot;stream video&quot;, that is an architectural error — Chapter 8 explains why</span></div>
+<div class="lz-layer"><span class="lz-lname">It does not store media</span><span class="lz-lnote">Call recording, if you need it, has to happen at the peer (client-side MediaRecorder) or on an SFU/MCU server (an entirely different thing from socket.io)</span></div>
+<div class="lz-layer"><span class="lz-lname">It is not TURN</span><span class="lz-lnote">When peers cannot reach each other directly (symmetric NAT), a TURN server has to relay the media. TURN is a SEPARATE service — coturn, Xirsys — not socket.io</span></div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — thử &quot;stream video qua socket.io emit&quot;.</strong> Bạn <code>MediaRecorder.ondataavailable</code> Buffer 100 KB mỗi 100ms, emit qua socket.io. Cost: 8 Mbps qua server + latency 100-500ms + không có jitter buffer. Video vỡ, server chết. Đây là bài học đắt mà nhiều team đã học rồi rewrite bằng WebRTC.</p>
+<p><strong>Bẫy — thử &quot;stream video qua socket.io emit&quot;.</strong> You <code>MediaRecorder.ondataavailable</code> a 100 KB Buffer every 100ms over socket.io. The cost: 8 Mbps through the server, 100-500ms of latency, and no jitter buffer. The video breaks up and the server dies. This is an expensive lesson many teams have learned before rewriting on WebRTC.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Video call = WebRTC cho media (RTP over UDP peer-to-peer, ~1-2 Mbps per stream, server không thấy) + socket.io cho signalling (5-20 packet SDP/ICE relay, ~2 KB total, room <code>user:${'${uid}'}</code> để tìm peer) — nhầm hai tầng này là sai kiến trúc lớn.</p>
+<p><strong>One sentence.</strong> A video call is WebRTC for the media (RTP over UDP, peer-to-peer, ~1-2 Mbps per stream, invisible to the server) plus socket.io for the signalling (5-20 SDP/ICE relay packets, ~2 KB in total, using the <code>user:${'${uid}'}</code> room to find the peer) — confusing these two layers is a major architectural mistake.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — WebRTC signalling</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Signaling_and_video_calling — chuẩn Mozilla, có full example.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Bài 7.2 — SDP là gì</span><span class="lc-sub">/courses/socket-io/learn${REF} — nội dung của cái SDP mà socket.io relay.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Lesson 7.2 — what SDP is</span><span class="lc-sub">/courses/socket-io/learn${REF} — nội dung của cái SDP mà socket.io relay.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
@@ -175,7 +175,7 @@ a=ice-pwd:x9cml/YzichV2+XlhiMu8g
 ...
 </code></pre>
 
-<p>Text plain, 1-3 KB. Có ~50 dòng thông tin: codec (opus, VP8, VP9), bitrate, resolution, DTLS keys, ICE credentials. Peer A gửi &quot;offer&quot; SDP, peer B gửi &quot;answer&quot; SDP — thoả thuận cái gì cả hai support.</p>
+<p>Plain text, 1-3 KB, about 50 lines of information: codecs (opus, VP8, VP9), bitrate, resolution, DTLS keys, ICE credentials. Peer A sends an &quot;offer&quot; SDP and peer B sends an &quot;answer&quot; SDP — agreeing on what both of them support.</p>
 
 <h3>ICE — Interactive Connectivity Establishment</h3>
 <pre><code class="language-text">candidate:842163049 1 udp 1677729535 192.168.1.42 51234 typ srflx
@@ -184,9 +184,9 @@ candidate:1855263000 1 tcp 1518280447 66.11.12.13 9 typ relay
 </code></pre>
 
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">host</span><span class="lz-lnote">IP local của peer (10.0.0.5:52111). Peer khác thử connect — thành công nếu cùng LAN</span></div>
-<div class="lz-layer"><span class="lz-lname">srflx (server reflexive)</span><span class="lz-lnote">IP public của peer nhìn từ STUN server (192.168.1.42:51234). Cần khi NAT — peer khác thử connect</span></div>
-<div class="lz-layer"><span class="lz-lname">relay (TURN)</span><span class="lz-lnote">IP của TURN server (66.11.12.13:9). Nếu srflx không work (NAT symmetric), fall back TURN relay</span></div>
+<div class="lz-layer"><span class="lz-lname">host</span><span class="lz-lnote">The peer's local IP (10.0.0.5:52111). The other peer tries to connect — which succeeds if they share a LAN</span></div>
+<div class="lz-layer"><span class="lz-lname">srflx (server reflexive)</span><span class="lz-lnote">The peer's public IP as seen by a STUN server (192.168.1.42:51234). Needed behind NAT — the other peer tries to connect</span></div>
+<div class="lz-layer"><span class="lz-lname">relay (TURN)</span><span class="lz-lnote">The TURN server's IP (66.11.12.13:9). If srflx does not work (symmetric NAT), it falls back to a TURN relay</span></div>
 </div>
 
 <h3>Server relay pattern</h3>
@@ -204,10 +204,10 @@ candidate:1855263000 1 tcp 1518280447 66.11.12.13 9 typ relay
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Server không parse SDP. Không kiểm codec. Không đổi ICE.</strong> Chỉ relay. Đây là điểm hay nhất của architecture WebRTC — server dumb, peers smart.</p>
+<p><strong>The server does not parse the SDP. It does not check codecs. It does not touch ICE.</strong> It only relays. That is the best thing about the WebRTC architecture — a dumb server and smart peers.</p>
 </div>
 
-<h3>Trickle ICE — vì sao ICE là nhiều event</h3>
+<h3>Trickle ICE — why ICE is many events</h3>
 <pre><code class="language-text">Client-side WebRTC gathering ICE candidates asynchronously:
   t=0     onicecandidate: host      -&gt; emit call:ice
   t=100   onicecandidate: srflx     -&gt; emit call:ice
@@ -227,11 +227,11 @@ console.log(offer.sdp);
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — modify SDP ở server để &quot;force H.264&quot;.</strong> SDP munging phổ biến trong WebRTC docs cũ. Ở modern SDP + Unified Plan, nó thường vỡ codec negotiation. Nếu bạn PHẢI force codec, dùng <code>RTCRtpTransceiver.setCodecPreferences()</code> phía client, không parse SDP text.</p>
+<p><strong>Bẫy — modify SDP ở server để &quot;force H.264&quot;.</strong> SDP munging is common in older WebRTC documentation. With modern SDP and Unified Plan it usually breaks codec negotiation. If you MUST force a codec, use <code>RTCRtpTransceiver.setCodecPreferences()</code> on the client rather than parsing SDP text.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> SDP (1-3 KB text) mô tả codec + audio/video setup mà peer đưa ra, ICE candidates (~50 byte mỗi cái) là các cách kết nối network (host/srflx/relay) mà peer thử — server socket.io chỉ RELAY, không parse hay modify, và trickle ICE cho phép candidates đến dần thay vì đợi cả list.</p>
+<p><strong>One sentence.</strong> SDP (1-3 KB of text) describes the codecs and audio/video setup a peer offers, ICE candidates (~50 bytes each) are the network routes a peer will try (host/srflx/relay) — the socket.io server only RELAYS them, never parsing or modifying, and trickle ICE lets candidates arrive one at a time instead of waiting for the whole list.</p>
 </div>
 
 <h3>Sources</h3>
@@ -336,29 +336,29 @@ socket.on('call:offer', async ({ toUserId, sdp }) =&gt; {
 });
 </code></pre>
 
-<p>Room <code>user:42</code> đưa <code>call:incoming</code> đến MỌI tab của user 42. UI mỗi tab hiện dialog &quot;incoming call&quot;.</p>
+<p>Room <code>user:42</code> delivers <code>call:incoming</code> to EVERY tab user 42 has open. Each tab's UI shows an &quot;incoming call&quot; dialog.</p>
 
-<h3>Kho này thêm layer — thread-based filtering</h3>
+<h3>This repo adds a layer — thread-based filtering</h3>
 <pre><code class="language-ts">// call.socket.ts:132
 const inThread = socket.rooms.has(&#96;thread:\${threadId}&#96;);
 // Chi ai dang MO thread do moi nhan call notification tren tab do
 </code></pre>
 
-<p>Vì sao? Nếu user có 5 tab và chỉ 1 tab đang mở chat với người gọi, bạn không muốn call dialog pop lên trên MỌI tab. Chỉ tab của thread. Xoá &quot;phiền&quot; UX.</p>
+<p>Why? If a user has 5 tabs open and only 1 has the caller's chat open, you do not want the call dialog popping up in EVERY tab. Only in that thread's tab. It removes a genuine UX annoyance.</p>
 
-<h3>Ba trạng thái call</h3>
+<h3>The three call states</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">busy</span><span class="lz-nsub">recipient hoàn toàn offline</span></span>
-<span class="lz-nbody">Room <code>user:B</code> size 0. Server emit <code>call:busy</code> cho caller. UI caller hiển thị &quot;Not available&quot;.</span>
+<span class="lz-node"><span class="lz-ntitle">busy</span><span class="lz-nsub">the recipient is fully offline</span></span>
+<span class="lz-nbody">Room <code>user:B</code> size 0. Server emit <code>call:busy</code> to the caller. The caller's UI shows &quot;Not available&quot;.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">ringing</span><span class="lz-nsub">recipient online, đang chờ answer</span></span>
-<span class="lz-nbody">Server emit <code>call:incoming</code> cho B, và emit <code>call:ringing</code> cho A để A biết B đã nhận notification. UI A hiển thị &quot;Ringing...&quot;.</span>
+<span class="lz-node"><span class="lz-ntitle">ringing</span><span class="lz-nsub">the recipient is online and the call is waiting to be answered</span></span>
+<span class="lz-nbody">Server emit <code>call:incoming</code> to B, and emits <code>call:ringing</code> to A so A knows B received the notification. A's UI shows &quot;Ringing...&quot;.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">answered / rejected</span><span class="lz-nsub">B đã tương tác</span></span>
-<span class="lz-nbody">B emit <code>call:answer</code> (accept) hoặc <code>call:reject</code>. Server relay cho A. Ringing UI đổi thành connected hoặc dismissed.</span>
+<span class="lz-node"><span class="lz-ntitle">answered / rejected</span><span class="lz-nsub">B has responded</span></span>
+<span class="lz-nbody">B emit <code>call:answer</code> (accept) or <code>call:reject</code>. The server relays it to A. The ringing UI becomes connected or dismissed.</span>
 </div>
 </div>
 
@@ -388,19 +388,19 @@ useEffect(() =&gt; {
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Không có handler này, call ghosts.</strong> Caller crash trình duyệt trong lúc gọi. Recipient vẫn thấy &quot;connecting&quot;. Không bao giờ được notify. UI stuck vô hạn. Fix: track active call cho mỗi socket, cleanup on disconnect.</p>
+<p><strong>Without this handler, calls turn into ghosts.</strong> The caller's browser crashes mid-call. The recipient still sees &quot;connecting&quot; and is never told otherwise. The UI is stuck forever. The fix: track the active call per socket and clean it up on disconnect.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng socket ID để track call thay vì userId.</strong> Reconnect = sid mới = call bị mất. Track theo <code>callId</code> (UUID) + userId. Bài 1.5 pattern áp lại.</p>
+<p><strong>Bẫy — dùng socket ID để track call thay vì userId.</strong> A reconnect means a new sid, which means the call is lost. Track by <code>callId</code> (a UUID) plus userId — lesson 1.5's pattern applied again.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Room <code>user:${'${uid}'}</code> route call notifications đến mọi tab của recipient; kho này lọc thêm bằng <code>socket.rooms.has(&quot;thread:X&quot;)</code> để không spam mọi tab; ba trạng thái (busy/ringing/answered-rejected) map thành 3-4 events; và cleanup on disconnect quan trọng để call không ghost.</p>
+<p><strong>One sentence.</strong> Room <code>user:${'${uid}'}</code> routes call notifications to every tab the recipient has open; this repo filters further with <code>socket.rooms.has(&quot;thread:X&quot;)</code> so it does not spam all of them; three states (busy / ringing / answered-rejected) map onto 3-4 events; and cleanup on disconnect matters so calls do not turn into ghosts.</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Bài 3.1 — Rooms</span><span class="lc-sub">/courses/socket-io/learn${REF} — pattern user:${'${uid}'} là căn bản.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Lesson 3.1 — Rooms</span><span class="lc-sub">/courses/socket-io/learn${REF} — pattern user:${'${uid}'} là căn bản.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.3</span>
@@ -523,23 +523,23 @@ Cost: TURN server nhan + resend TOAN BO media bytes.
 1.000 calls = 2 Gbps.
 </code></pre>
 
-<h3>Cost thật của TURN service</h3>
+<h3>The real cost of a TURN service</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">tự host (coturn)</span><span class="lz-nsub">setup vài giờ</span></span>
-<span class="lz-nbody">Cấu hình coturn trên VPS, mở port 3478 UDP + 5349 TLS. Cost: bandwidth server. VN VPS: ~$5/Mbps/tháng. 1 Gbps = $5.000/tháng chỉ cho TURN.</span>
+<span class="lz-node"><span class="lz-ntitle">self-hosted (coturn)</span><span class="lz-nsub">a few hours of setup</span></span>
+<span class="lz-nbody">Configure coturn on a VPS and open port 3478 UDP plus 5349 TLS. The cost is server bandwidth. On a Vietnamese VPS: ~$5/Mbps/month. 1 Gbps is $5,000/month for TURN alone.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">managed TURN (Xirsys, Twilio)</span><span class="lz-nsub">$0.4-1.5/GB traffic</span></span>
-<span class="lz-nbody">Không setup, tính theo GB. 10.000 phút call/tháng × 30 MB/min = 300 GB = $120-450/tháng. Cheap ở small scale, đắt ở large.</span>
+<span class="lz-nbody">No setup, billed by the GB. 10,000 call-minutes a month × 30 MB/min = 300 GB = $120-450/month. Cheap at small scale, expensive at large.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">không có TURN</span><span class="lz-nsub">chấp nhận 15% call fail</span></span>
-<span class="lz-nbody">Cho app cá nhân / thử nghiệm, có thể không cần. 15% call giữa symmetric NAT peers sẽ không kết nối được. Users báo bug.</span>
+<span class="lz-node"><span class="lz-ntitle">no TURN at all</span><span class="lz-nsub">accepting that 15% of calls fail</span></span>
+<span class="lz-nbody">For a personal or experimental app you may not need it. 15% of calls between symmetric-NAT peers will simply fail to connect, and users will report it as a bug.</span>
 </div>
 </div>
 
-<h3>WebRTC config với TURN</h3>
+<h3>WebRTC config with TURN</h3>
 <pre><code class="language-tsx">const pc = new RTCPeerConnection({
   iceServers: [
     { urls: 'stun:stun.l.google.com:19302' },       // STUN free
@@ -566,15 +566,15 @@ socket.on('call:request-ice-servers', async (ack) =&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Không share TURN credential static.</strong> Sinh short-lived (10 phút) per user. Nếu leak, không dùng được lâu. coturn hỗ trợ HMAC-based auth.</p>
+<p><strong>Never share a static TURN credential.</strong> Generate short-lived ones (10 minutes) per user. If one leaks, it is useless soon after. coturn supports HMAC-based auth.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng free public TURN cho production.</strong> Có nhiều &quot;free TURN&quot; online nhưng chúng slow, unreliable, và có thể ăn cắp media. Chỉ dùng cho dev. Production phải có TURN riêng.</p>
+<p><strong>Bẫy — dùng free public TURN cho production.</strong> There are plenty of &quot;free TURN&quot; servers online, but they are slow, unreliable, and can steal your media. Use them only in dev. Production needs its own TURN.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> 15% users sau symmetric NAT không kết nối P2P được và cần TURN server relay media — cost TURN đáng kể (bandwidth × 2 Mbps per call), managed service (Xirsys/Twilio) rẻ ở small scale nhưng đắt ở large, self-host coturn rẻ nhưng phải setup + monitor; credential rotation TURN quan trọng để không bị abuse.</p>
+<p><strong>One sentence.</strong> 15% of users behind symmetric NAT cannot connect peer-to-peer and need a TURN server to relay their media — TURN costs real money (bandwidth × 2 Mbps per call), a managed service (Xirsys/Twilio) is cheap at small scale and expensive at large, self-hosted coturn is cheap but needs setup and monitoring; rotating TURN credentials matters so the service is not abused.</p>
 </div>
 
 <h3>Sources</h3>
@@ -687,19 +687,19 @@ socket.on('call:request-ice-servers', async (ack) =&gt; {
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">Mesh (P2P full)</span><span class="lz-nsub">N=2 OK, N=4 lag</span></span>
-<span class="lz-nbody">Mỗi peer connect trực tiếp với mọi peer khác. N peers = N*(N-1) connections. Upload cost: (N-1) × stream bitrate PER peer. Với N=4, mỗi peer upload 3 stream = ~6-9 Mbps. Consumer internet không chịu nổi.</span>
+<span class="lz-nbody">Every peer connects directly to every other peer. N peers means N*(N-1) connections. The upload cost is (N-1) × stream bitrate PER PEER. At N=4, each peer uploads 3 streams = ~6-9 Mbps. Consumer internet cannot take it.</span>
 </div>
 <div class="lz-stage lz-badge">
-<span class="lz-node"><span class="lz-ntitle">SFU (Selective Forwarding Unit)</span><span class="lz-nsub">chuẩn cho small groups</span></span>
-<span class="lz-nbody">Mỗi peer upload 1 stream lên server SFU. Server FORWARD stream đó đến N-1 peers khác. Server không encode/decode — chỉ route. Cost server: N × stream × 2 (in + out). 10 group × 10 peers × 1 Mbps = 200 Mbps.</span>
+<span class="lz-node"><span class="lz-ntitle">SFU (Selective Forwarding Unit)</span><span class="lz-nsub">the standard for small groups</span></span>
+<span class="lz-nbody">Each peer uploads 1 stream to the SFU. The server FORWARDS that stream to the other N-1 peers. It never encodes or decodes — it only routes. Server cost: N × stream × 2 (in + out). 10 groups × 10 peers × 1 Mbps = 200 Mbps.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">MCU (Multipoint Conferencing Unit)</span><span class="lz-nsub">large groups, high server cost</span></span>
-<span class="lz-nbody">Server decode mọi stream, mix thành MỘT stream composite, encode lại, gửi 1 stream cho mỗi peer. Cost CPU cao — bandwidth thấp phía client. Không phổ biến vì SFU + client-side layout đủ.</span>
+<span class="lz-nbody">The server decodes every stream, mixes them into ONE composite, re-encodes, and sends a single stream to each peer. High CPU cost, low client bandwidth. Uncommon, because an SFU plus client-side layout is good enough.</span>
 </div>
 </div>
 
-<h3>Math của mesh</h3>
+<h3>The mesh arithmetic</h3>
 <pre><code class="language-text">N peers, moi peer video 1 Mbps
 
 Mesh:
@@ -718,15 +718,15 @@ SFU:
 SFU shifts N^2 cost TU peer sang server.
 </code></pre>
 
-<h3>SFU implementations phổ biến</h3>
+<h3>Common SFU implementations</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">mediasoup (open source, Node.js)</span><span class="lz-lnote">Rất mạnh, TypeScript API. Docs OK. Kho này CÓ thể dùng nếu group call — chưa. mediasoup.org</span></div>
-<div class="lz-layer"><span class="lz-lname">Janus Gateway (open source, C)</span><span class="lz-lnote">Đa năng, plugin-based. Ổn định 10 năm. janus.conf.meetecho.com</span></div>
-<div class="lz-layer"><span class="lz-lname">LiveKit (open source, Go, managed available)</span><span class="lz-lnote">Modern, cloud-native, SDK đầy đủ. Rất phổ biến hiện nay. livekit.io</span></div>
-<div class="lz-layer"><span class="lz-lname">Managed (Daily.co, Twilio Video, Zoom SDK)</span><span class="lz-lnote">Không dựng infra. $0.001-0.01 per minute per user. Setup nhanh, cost cao ở scale</span></div>
+<div class="lz-layer"><span class="lz-lname">mediasoup (open source, Node.js)</span><span class="lz-lnote">Very capable, with a TypeScript API. Decent docs. This repo COULD use it for group calls — it does not yet. mediasoup.org</span></div>
+<div class="lz-layer"><span class="lz-lname">Janus Gateway (open source, C)</span><span class="lz-lnote">Versatile and plugin-based. Stable for a decade. janus.conf.meetecho.com</span></div>
+<div class="lz-layer"><span class="lz-lname">LiveKit (open source, Go, managed available)</span><span class="lz-lnote">Modern, cloud-native, with a complete SDK. Very popular today. livekit.io</span></div>
+<div class="lz-layer"><span class="lz-lname">Managed (Daily.co, Twilio Video, Zoom SDK)</span><span class="lz-lnote">No infrastructure to run. $0.001-0.01 per minute per user. Fast to set up, expensive at scale</span></div>
 </div>
 
-<h3>Socket.io vẫn dùng cho SIGNALLING</h3>
+<h3>Socket.io is still used for SIGNALLING</h3>
 <pre><code class="language-ts">// Socket.io signalling giua peers va SFU vẫn giong 1-on-1
 socket.on('room:join', async ({ roomId }) =&gt; {
   const publishTransport = await sfu.createWebRtcTransport();
@@ -735,14 +735,14 @@ socket.on('room:join', async ({ roomId }) =&gt; {
 });
 </code></pre>
 
-<p>Socket.io là control plane (join room, publish/subscribe transports). SFU là data plane (media). Hai component riêng.</p>
+<p>Socket.io is the control plane (joining rooms, publish/subscribe transports). The SFU is the data plane (media). Two separate components.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — thử build SFU từ đầu.</strong> WebRTC SFU cần hiểu RTP, RTCP, DTLS-SRTP, codec-specific packet handling. Vài chục nghìn dòng C++. Dùng mediasoup, Janus, LiveKit. Đừng viết lại.</p>
+<p><strong>Bẫy — thử build SFU từ đầu.</strong> A WebRTC SFU requires understanding RTP, RTCP, DTLS-SRTP and codec-specific packet handling. Tens of thousands of lines of C++. Use mediasoup, Janus or LiveKit. Do not rewrite it.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Mesh N-peer P2P chỉ scale tới N=2-3 (upload cost O(N)); group calls cần SFU (server route media, cost server O(N²), peer O(1)) — kho này chưa có group call nhưng nếu thêm phải chọn mediasoup/LiveKit/managed service; socket.io vẫn dùng cho signalling giữa peer và SFU, không thay đổi.</p>
+<p><strong>One sentence.</strong> A peer-to-peer mesh only scales to N=2-3 (upload cost is O(N)); group calls need an SFU (the server routes media, server cost O(N²), peer cost O(1)) — this repo has no group calls yet, but adding them would mean choosing mediasoup, LiveKit or a managed service; socket.io remains the signalling channel between peer and SFU, unchanged.</p>
 </div>
 
 <h3>Sources</h3>

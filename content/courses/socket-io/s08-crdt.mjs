@@ -27,19 +27,19 @@ export default {
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">socket.io</span><span class="lz-nsub">path: /socket.io/</span></span>
-<span class="lz-nbody">Messaging, calls, listen-together, presence. Event-based, rooms, fallback polling. Bài 0-7.</span>
+<span class="lz-nbody">Messaging, calls, listen-together, presence. Event-based, rooms, polling fallback. Lessons 0-7.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">Hocuspocus (Yjs)</span><span class="lz-nsub">path: /notes-collaboration</span></span>
-<span class="lz-nbody">Notes CRDT sync. Y.Doc updates streamed đôi chiều. Không phải events — là binary Yjs updates. Bài này.</span>
+<span class="lz-nbody">Notes CRDT sync. Y.Doc updates streamed in both directions. Not events — binary Yjs updates. This lesson.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">device gateway (raw ws)</span><span class="lz-nsub">path: /devices</span></span>
-<span class="lz-nbody">Maker Lab devices (ESP32). Không dùng socket.io vì device firmware không có socket.io-client. Raw WebSocket + JSON.</span>
+<span class="lz-nbody">Maker Lab devices (ESP32). Not socket.io, because device firmware has no socket.io-client. Raw WebSocket plus JSON.</span>
 </div>
 </div>
 
-<h3>Cùng một HTTP server, khác path</h3>
+<h3>One HTTP server, different paths</h3>
 <pre><code class="language-ts">// src/index.ts
 const server = http.createServer(app);
 
@@ -48,16 +48,16 @@ initNotesCollaborationGateway(server); // /notes-collaboration — Hocuspocus
 initDeviceGateway(server);             // /devices — raw ws
 </code></pre>
 
-<p>HTTP server emit event <code>upgrade</code> khi client request WebSocket upgrade. Mỗi handler kiểm URL path và chỉ xử lý nếu match — không xung đột. Comment trong <code>src/socket/device.gateway.ts</code> ghi lại design này.</p>
+<p>HTTP server emit event <code>upgrade</code> when a client requests a WebSocket upgrade. Each handler checks the URL path and only takes the connection if it matches — no conflict. The comment in <code>src/socket/device.gateway.ts</code> records this design.</p>
 
-<h3>Vì sao KHÔNG dùng socket.io cho notes</h3>
+<h3>Why notes do NOT use socket.io</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Yjs là CRDT binary protocol</span><span class="lz-d">Update là binary Uint8Array (~10-100 byte typical). Không phải event-based. Socket.io event framing thêm overhead không cần.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Yjs sync bên trong đã ordered</span><span class="lz-d">CRDT commutative — update A áp trước hay sau B đều ra cùng result. Không cần socket.io ack/ordering. Overhead thừa.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Hocuspocus có sẵn</span><span class="lz-d">Hocuspocus là Yjs-compatible WebSocket server production-ready. Xử lý auth, awareness, persistence, redis pub/sub. Không cần build từ socket.io.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Yjs is a binary CRDT protocol</span><span class="lz-d">An update is a binary Uint8Array (~10-100 bytes typically). It is not event-shaped. Socket.io's event framing adds overhead you do not need.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Yjs sync is already ordered internally</span><span class="lz-d">CRDTs are commutative — applying update A before or after B yields the same result. Socket.io's acks and ordering are unnecessary. Pure overhead.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Hocuspocus already exists</span><span class="lz-d">Hocuspocus is a production-ready, Yjs-compatible WebSocket server. It handles auth, awareness, persistence and Redis pub/sub. There is nothing to build on top of socket.io.</span></div>
 </div>
 
-<h3>Kho này gọi Hocuspocus</h3>
+<h3>How this repo calls Hocuspocus</h3>
 <pre><code class="language-ts">// src/socket/notes-collaboration.gateway.ts
 const collaborationServer = new Hocuspocus({
   extensions: [
@@ -82,22 +82,22 @@ server.on('upgrade', (req, socket, head) =&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Ba WebSocket server cùng share HTTP server + port.</strong> Chỉ có MỘT port 3000 mở. Nginx proxy vào ba path khác nhau. Mỗi WS server xử lý path của mình. Simple và clean.</p>
+<p><strong>Three WebSocket servers sharing one HTTP server and port.</strong> Only ONE port, 3000, is open. Nginx proxies to three different paths. Each WS server handles its own path. Simple and clean.</p>
 </div>
 
-<h3>Khi nào chọn Yjs/CRDT thay socket.io</h3>
+<h3>When to choose Yjs/CRDT over socket.io</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">rich text editing đa người cùng lúc</span><span class="lz-lnote">Google Docs style. Concurrent edits mà không conflict, no lock. Yjs + Tiptap là combo chuẩn</span></div>
-<div class="lz-layer"><span class="lz-lname">Figma-style canvas</span><span class="lz-lnote">Shapes, positions, styles mọi user chỉnh cùng. CRDT tự merge</span></div>
-<div class="lz-layer"><span class="lz-lname">offline-first apps</span><span class="lz-lnote">Y.Doc local, sync khi online. Mỗi client là source of truth cho phần của mình</span></div>
+<div class="lz-layer"><span class="lz-lname">rich-text editing by several people at once</span><span class="lz-lnote">Google Docs style. Concurrent edits with no conflicts and no locks. Yjs plus Tiptap is the standard combination</span></div>
+<div class="lz-layer"><span class="lz-lname">Figma-style canvas</span><span class="lz-lnote">Shapes, positions and styles that every user edits at once. The CRDT merges them for you</span></div>
+<div class="lz-layer"><span class="lz-lname">offline-first apps</span><span class="lz-lnote">A local Y.Doc that syncs when online. Each client is the source of truth for its own part</span></div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — build collaborative editing bằng socket.io events.</strong> Bạn emit &quot;user typed X at position Y&quot;. Concurrent edits = merge conflict = document vỡ. Yjs giải quyết bằng CRDT — mọi update commute, không conflict. Đừng reinvent CRDT trên socket.io.</p>
+<p><strong>Bẫy — build collaborative editing bằng socket.io events.</strong> You emit &quot;user typed X at position Y&quot;. Concurrent edits produce a merge conflict, and the document falls apart. Yjs solves this with a CRDT — every update commutes, so there are no conflicts. Do not reinvent CRDTs on top of socket.io.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Kho này chạy ba WebSocket server song song trên một HTTP server (paths: <code>/socket.io/</code>, <code>/notes-collaboration</code>, <code>/devices</code>) vì socket.io tốt cho events + rooms nhưng KHÔNG phù hợp cho CRDT binary sync (Yjs/Hocuspocus) hay device firmware (raw WS + JSON) — mỗi tool cho đúng use case.</p>
+<p><strong>One sentence.</strong> This repo runs three WebSocket servers side by side on one HTTP server (paths: <code>/socket.io/</code>, <code>/notes-collaboration</code>, <code>/devices</code>) because socket.io is good at events and rooms but NOT suited to binary CRDT sync (Yjs/Hocuspocus) or device firmware (raw WS plus JSON) — each tool for its proper use case.</p>
 </div>
 
 <h3>Sources</h3>
@@ -204,7 +204,7 @@ server.on('upgrade', (req, socket, head) =&gt; {
 <h2>CRDT vs event: why merges just work</h2>
 <p class="lead">The magic of Yjs is that two users can edit the same document at the same position, and there is no conflict. This lesson shows why — CRDTs have a mathematical property that makes merges automatic.</p>
 
-<h3>Event-based (naive) — vỡ ở concurrent edit</h3>
+<h3>Event-based (the naive way) — breaks on concurrent edits</h3>
 <pre><code class="language-text">Document state: "Hello world"
 
 User A inserts "!" at position 11         Event: insert(11, "!")
@@ -240,17 +240,17 @@ Sort by id -&gt; deterministic! Ket qua giong nhau bat ke thu tu apply.
 </code></pre>
 
 <div class="callout ok">
-<p><strong>Đây là tính chất mathematical.</strong> Update <code>u</code> và <code>v</code> commute: <code>apply(apply(D, u), v) === apply(apply(D, v), u)</code>. Vì vậy client và server luôn hội tụ về CÙNG state, dù network delay bao nhiêu.</p>
+<p><strong>This is a mathematical property.</strong> Update <code>u</code> và <code>v</code> commute: <code>apply(apply(D, u), v) === apply(apply(D, v), u)</code>. That is why client and server always converge on the SAME state, no matter how large the network delay.</p>
 </div>
 
-<h3>Trade off — CRDT không free</h3>
+<h3>The trade — CRDTs are not free</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">memory overhead</span><span class="lz-d">Mỗi character có unique ID (~16 byte). Document 10 KB text có thể là 160 KB CRDT structure. Yjs optimize (encode ID delta) — thường 2-3× raw text</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">tombstones</span><span class="lz-d">Delete không xoá thật — chỉ mark deleted (tombstone). Cần cho merge commute. Document sau nhiều edit tăng size dù text KHÔNG dài hơn</span></div>
-<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">history compaction</span><span class="lz-d">Yjs có <code>snapshot</code> để compact history — remove old tombstones. Cần chạy định kỳ</span></div>
+<div class="lz-step"><span class="lz-k">a</span><span class="lz-t">memory overhead</span><span class="lz-d">Every character carries a unique ID (~16 bytes). A 10 KB text document can become a 160 KB CRDT structure. Yjs optimises this (delta-encoding the IDs) — usually 2-3× the raw text</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">tombstones</span><span class="lz-d">A delete does not really delete — it marks a tombstone. That is what makes merges commute. After many edits a document grows even though the text is NO longer</span></div>
+<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">history compaction</span><span class="lz-d">Yjs has <code>snapshot</code> to compact history and remove old tombstones. It needs to run periodically</span></div>
 </div>
 
-<h3>Awareness — không phải CRDT nhưng đi kèm</h3>
+<h3>Awareness — not a CRDT, but it comes along</h3>
 <pre><code class="language-ts">// Awareness = ephemeral state cua user (cursor position, name, color)
 // KHONG persist, KHONG merge — chi broadcast
 awareness.setLocalStateField('cursor', { pos: 42 });
@@ -261,15 +261,15 @@ awareness.on('change', () =&gt; {
 </code></pre>
 
 <div class="callout">
-<p><strong>Awareness là gì socket.io CHUẨN đưa.</strong> Presence, cursor, live typing. Trong Yjs stack, awareness là feature riêng của y-websocket/Hocuspocus. Về nghĩa hoạt động, tương tự bài 4.1 presence — broadcast ephemeral.</p>
+<p><strong>Awareness is exactly what socket.io is good at.</strong> Presence, cursors, live typing. In the Yjs stack, awareness is a separate feature of y-websocket/Hocuspocus. Functionally it behaves just like lesson 4.1's presence — an ephemeral broadcast.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — persist Yjs document vào SQL column dạng JSON.</strong> Yjs document là binary. Nếu bạn <code>JSON.stringify</code> rồi lưu, hỏng cấu trúc. Lưu là <code>Y.encodeStateAsUpdate(doc)</code> → binary Uint8Array → column BYTEA/BLOB.</p>
+<p><strong>Bẫy — persist Yjs document vào SQL column dạng JSON.</strong> A Yjs document is binary. If you <code>JSON.stringify</code> it and then store the result, you corrupt the structure. Store it as <code>Y.encodeStateAsUpdate(doc)</code> → binary Uint8Array → column BYTEA/BLOB.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> CRDT có tính chất mathematical &quot;update commute&quot; — mọi apply order cho cùng result, nên concurrent edit không cần lock/conflict resolution; trade off là 2-3× memory + tombstones (delete không thật xoá) + cần snapshot compaction; awareness (cursor/presence) là ephemeral feature riêng, giống pattern bài 4.1.</p>
+<p><strong>One sentence.</strong> CRDTs have the mathematical property that updates commute — every apply order gives the same result, so concurrent edits need neither locks nor conflict resolution; the trade is 2-3× the memory plus tombstones (a delete never truly deletes) plus the need for snapshot compaction; awareness (cursors, presence) is a separate ephemeral feature following the same pattern as lesson 4.1.</p>
 </div>
 
 <h3>Sources</h3>
@@ -367,23 +367,23 @@ awareness.on('change', () =&gt; {
 <h2>Yjs binary sync protocol</h2>
 <p class="lead">Yjs syncs via a binary message protocol over WebSocket. Four message types cover everything from initial handshake to real-time updates to cursor awareness.</p>
 
-<h3>Bốn message types</h3>
+<h3>The four message types</h3>
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">SyncStep1</span><span class="lz-nsub">state vector</span></span>
-<span class="lz-nbody">Client gửi &quot;state vector&quot; — tôi đã có tới clock X của mỗi client. Server dùng để biết cần gửi gì. ~50 byte.</span>
+<span class="lz-nbody">The client sends a &quot;state vector&quot; — I have everything up to clock X for each client. The server uses it to work out what to send. ~50 bytes.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">SyncStep2</span><span class="lz-nsub">missing updates</span></span>
-<span class="lz-nbody">Server gửi các update client thiếu. Nếu document mới, ~10 KB - 1 MB. Nếu chỉ vài edit, vài KB.</span>
+<span class="lz-nbody">The server sends the updates the client is missing. For a fresh document, ~10 KB - 1 MB. For a handful of edits, a few KB.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">Update</span><span class="lz-nsub">delta stream</span></span>
-<span class="lz-nbody">Sau khi sync, mỗi edit local sinh update ~10-100 byte, gửi cả hai chiều. Đây là stream real-time.</span>
+<span class="lz-nbody">Once synced, every local edit produces a ~10-100 byte update, sent in both directions. This is the realtime stream.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">AwarenessUpdate</span><span class="lz-nsub">cursor + presence</span></span>
-<span class="lz-nbody">Ephemeral state — cursor position, user name, color. ~100-500 byte per user. Broadcast liên tục.</span>
+<span class="lz-nbody">Ephemeral state — cursor position, user name, colour. ~100-500 bytes per user. Broadcast continuously.</span>
 </div>
 </div>
 
@@ -401,7 +401,7 @@ Sau initial sync, client va server o "sync state":
   8. Peer apply -&gt; Y.Doc.on('update') fire
 </code></pre>
 
-<h3>Bandwidth thực tế</h3>
+<h3>Bandwidth in practice</h3>
 <div class="out">Document editing scenarios:
   Initial load 10 KB doc:     ~15 KB SyncStep2 (2-3x with CRDT metadata)
   Type 1 character:           ~20 byte Update (client -&gt; server)
@@ -410,7 +410,7 @@ Sau initial sync, client va server o "sync state":
   Idle:                       0 traffic (khac socket.io ping 25s)
 </div>
 
-<h3>Hocuspocus extensions phổ biến</h3>
+<h3>Common Hocuspocus extensions</h3>
 <pre><code class="language-ts">const server = new Hocuspocus({
   extensions: [
     new Redis({ host: 'redis-host' }),           // multi-worker sync
@@ -422,7 +422,7 @@ Sau initial sync, client va server o "sync state":
 });
 </code></pre>
 
-<h3>Kho này custom extensions</h3>
+<h3>This repo's custom extensions</h3>
 <pre><code class="language-ts">// noteRealtimeExtensions
 // - Kiem permission thoi gian thuc (owner + shared users)
 // - Debounce persist DB (mac dinh Hocuspocus save moi 2s, kho nay 5s)
@@ -430,11 +430,11 @@ Sau initial sync, client va server o "sync state":
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng Hocuspocus không có auth extension.</strong> Ai đó gọi <code>new HocuspocusProvider({ url, name: 'doc-123' })</code> từ browser random và edit document 123. Cần <code>onAuthenticate</code> reject nếu không có token, kèm resolve permission per document.</p>
+<p><strong>Bẫy — dùng Hocuspocus không có auth extension.</strong> Someone calls <code>new HocuspocusProvider({ url, name: 'doc-123' })</code> from an arbitrary browser and edits document 123. You need <code>onAuthenticate</code> to reject anyone without a token, and to resolve permissions per document.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Yjs sync protocol dùng 4 binary message types (SyncStep1 state vector ~50 byte, SyncStep2 missing updates ~10 KB-1 MB, Update stream ~10-100 byte per edit, AwarenessUpdate ~150 byte per cursor move) — tổng bandwidth thấp hơn socket.io chat-like protocol vì binary optimized và không có ping keepalive.</p>
+<p><strong>One sentence.</strong> The Yjs sync protocol uses 4 binary message types (SyncStep1, a ~50-byte state vector; SyncStep2, ~10 KB-1 MB of missing updates; Update, a ~10-100 byte stream per edit; AwarenessUpdate, ~150 bytes per cursor move) — total bandwidth is lower than a socket.io chat-style protocol because it is binary-optimised and carries no ping keepalive.</p>
 </div>
 
 <h3>Sources</h3>
@@ -534,19 +534,19 @@ Sau initial sync, client va server o "sync state":
 <h2>Persistence: when to save the Y.Doc</h2>
 <p class="lead">Y.Doc lives in RAM. To survive server restart, you must persist it to storage. But every keystroke = new update = potential save = database hammered. This lesson tunes when to save.</p>
 
-<h3>Bốn persistence strategy</h3>
+<h3>Four persistence strategies</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Debounce save (chuẩn)</span><span class="lz-d">Save 5 giây sau update cuối. Nếu edit tiếp tục, timer reset. Cost thấp, staleness ≤5s. Kho này dùng.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Save mỗi N updates</span><span class="lz-d">Save khi tích luỹ 100 updates. Không tốt cho slow edits (một user gõ 30 char rồi đi ngủ → save chậm).</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Interval save</span><span class="lz-d">Save mỗi 30s bất kể có edit không. Đơn giản nhưng lãng phí nếu không edit.</span></div>
-<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Save on disconnect</span><span class="lz-d">Save khi last user rời document. Đảm bảo state cuối cùng an toàn.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Debounced save (the standard)</span><span class="lz-d">Save 5 seconds after the last update. If editing continues, the timer resets. Low cost, ≤5s of staleness. This repo uses it.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Save every N updates</span><span class="lz-d">Save once 100 updates have accumulated. Poor for slow editing (a user types 30 characters then goes to bed → the save is late).</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Interval save</span><span class="lz-d">Save every 30s regardless of whether anything was edited. Simple, but wasteful when nothing changed.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Save on disconnect</span><span class="lz-d">Save when the last user leaves the document. Guarantees the final state is safe.</span></div>
 </div>
 
 <div class="callout ok">
-<p><strong>Kho này dùng 1 + 4.</strong> Debounce 5s cho save thường xuyên + save on disconnect cho state cuối. Đủ tốt cho tần suất edit của notes.</p>
+<p><strong>This repo uses 1 and 4.</strong> A 5s debounce for routine saves plus a save on disconnect for the final state. Good enough for the edit frequency notes see.</p>
 </div>
 
-<h3>Cách lưu format binary</h3>
+<h3>How to store the binary format</h3>
 <pre><code class="language-ts">// Encode Y.Doc -&gt; binary Uint8Array
 const state = Y.encodeStateAsUpdate(doc);
 
@@ -575,10 +575,10 @@ await prisma.note.update({
 </code></pre>
 
 <div class="callout warn">
-<p><strong>Snapshot lag sau Y.Doc live.</strong> User edit đến t=10s, snapshot save ở t=15s. Search index có state của t=15s. User search từ họ vừa gõ ở t=12s → không tìm ra 3s. Chấp nhận được với notes; không cho code search realtime.</p>
+<p><strong>Snapshot lag sau Y.Doc live.</strong> The user edits until t=10s and the snapshot saves at t=15s. The search index holds the t=15s state. A user searching for something they typed at t=12s finds nothing for 3 seconds. Acceptable for notes; not for realtime code search.</p>
 </div>
 
-<h3>Garbage collect updates cũ</h3>
+<h3>Garbage-collecting old updates</h3>
 <pre><code class="language-ts">// Sau nhieu edit, Y.Doc chua nhieu update lich su
 // Encode state -&gt; nen (thuong ~2-3x tot hon raw)
 const compactState = Y.encodeStateAsUpdate(doc);
@@ -598,11 +598,11 @@ new Redis({ host: config.redis.host, port: 6379, prefix: 'notes:' });
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — save đồng bộ trong <code>onChange</code> handler.</strong> Handler chạy sync trên hot path. Postgres write 20ms → sync stalls 20ms → users thấy lag. Fix: <code>scheduleDbPersist</code> vào queue background, trả về ngay.</p>
+<p><strong>Bẫy — save đồng bộ trong <code>onChange</code> handler.</strong> The handler runs synchronously on the hot path. A 20ms Postgres write stalls sync for 20ms and users feel the lag. The fix: <code>scheduleDbPersist</code> onto a background queue and return immediately.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Persistence Y.Doc = debounce save 5s idle + save on disconnect + snapshot HTML riêng cho search + Redis pub/sub multi-worker + async queue để không block sync hot path — kho này áp cả năm pattern trong notes-collaboration.gateway.ts.</p>
+<p><strong>One sentence.</strong> Y.Doc persistence is a 5s idle debounced save plus a save on disconnect plus a separate HTML snapshot for search plus Redis pub/sub for multiple workers plus an async queue so the sync hot path never blocks — this repo applies all five patterns in notes-collaboration.gateway.ts.</p>
 </div>
 
 <h3>Sources</h3>
@@ -703,11 +703,11 @@ new Redis({ host: config.redis.host, port: 6379, prefix: 'notes:' });
 
 <h3>Two-stage auth</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Authenticate at connect</span><span class="lz-d">Client gửi token trong <code>connectionParams</code>. Hocuspocus <code>onAuthenticate</code> verify + return context (userId).</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Authorize per document</span><span class="lz-d">User có thể connect nhiều document. Mỗi lần open, check permission: owner? shared? read-only? Kho này resolve trong <code>onLoadDocument</code>.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Authenticate at connect</span><span class="lz-d">The client sends its token in <code>connectionParams</code>. Hocuspocus <code>onAuthenticate</code> verify + return context (userId).</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Authorize per document</span><span class="lz-d">A user can connect to many documents. On each open, check permissions: owner? shared? read-only? This repo resolves that in <code>onLoadDocument</code>.</span></div>
 </div>
 
-<h3>Kho này code</h3>
+<h3>This repo's code</h3>
 <pre><code class="language-ts">// notes-collaboration.gateway.ts
 const collaborationServer = new Hocuspocus({
   async onAuthenticate({ token }) {
@@ -731,9 +731,9 @@ const collaborationServer = new Hocuspocus({
 
 <h3>Cache permission — trade off staleness vs latency</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">no cache</span><span class="lz-lnote">DB query per update. 100 edit/s = 100 query/s. Prisma pool cạn nhanh</span></div>
-<div class="lz-layer"><span class="lz-lname">TTL 5s (kho này)</span><span class="lz-lnote">DB query 1 lần/5s per user per doc. Nếu owner revoke access ở t=1s, user vẫn edit đến t=5s. Chấp nhận</span></div>
-<div class="lz-layer"><span class="lz-lname">TTL 60s</span><span class="lz-lnote">Query rất rẻ. Nhưng revoke lag 60s có thể quá lâu cho sensitive doc</span></div>
+<div class="lz-layer"><span class="lz-lname">no cache</span><span class="lz-lnote">A DB query per update. 100 edits/s means 100 queries/s. The Prisma pool drains fast</span></div>
+<div class="lz-layer"><span class="lz-lname">a 5s TTL (this repo)</span><span class="lz-lnote">One DB query per 5s per user per document. If the owner revokes access at t=1s, the user can still edit until t=5s. Acceptable</span></div>
+<div class="lz-layer"><span class="lz-lname">TTL 60s</span><span class="lz-lnote">The queries are very cheap. But a 60s revocation lag may be far too long for a sensitive document</span></div>
 </div>
 
 <h3>Read vs write permission</h3>
@@ -766,11 +766,11 @@ await collaborationServer.closeConnections({ documentName: &#96;note-\${noteId}&
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — cache permission mà quên invalidate.</strong> Owner revoke ở t=0. Cache TTL 5s. Ex-user edit từ t=0 đến t=5 (do cache). Nếu bug invalidate, edit đến vô hạn. Fix: revoke = explicit <code>redis.del</code> + <code>closeConnections</code>.</p>
+<p><strong>Bẫy — cache permission mà quên invalidate.</strong> The owner revokes at t=0. The cache TTL is 5s. The ex-user keeps editing from t=0 to t=5 (because of the cache). If invalidation is buggy, they keep editing forever. The fix: a revoke must explicitly <code>redis.del</code> + <code>closeConnections</code>.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Hocuspocus auth two-stage — <code>onAuthenticate</code> verify token ở connect, <code>onLoadDocument</code> + <code>beforeHandleMessage</code> check permission per document với TTL cache 5s — read/write phân biệt (canRead cho join, canEdit filter update), revoke access = invalidate cache + closeConnections chủ động.</p>
+<p><strong>One sentence.</strong> Hocuspocus auth two-stage — <code>onAuthenticate</code> verifies the token on connect, <code>onLoadDocument</code> + <code>beforeHandleMessage</code> checks permissions per document with a 5s TTL cache — read and write are distinct (canRead to join, canEdit to filter updates), and revoking access means invalidating the cache plus actively calling closeConnections.</p>
 </div>
 
 <h3>Sources</h3>

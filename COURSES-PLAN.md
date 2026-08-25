@@ -99,6 +99,40 @@ nhận về tiếng Việt. Rà toàn bộ ngày 24/08 tìm ra **90 bài** như 
 vùng mà tiếng Việt là hợp lệ: khối `<pre>` (trích nguyên văn mã/comment của kho),
 khối `.out` (kết quả chạy thật), và `lc-sub` (phụ đề thẻ nguồn).
 
+✅ **Đã vá xong 25/08/2026 — tầng nặng về 0 trên cả 18 khoá.** 2.280 đoạn /
+~142k ký tự văn xuôi trong 4 khoá: object-storage 16 bài, socket-io 49,
+tailwind-css 10, nodejs 15. Số chạy lại sau khi vá:
+
+| | trước | sau |
+|---|---|---|
+| Nặng (≥20% đoạn ml-en là tiếng Việt) | 90 bài | **0** |
+| Nhẹ (<20%) | 36 bài | 36 bài |
+| Tổng | 1.285 bài | 1.285 bài |
+
+36 bài "nhẹ" còn lại KHÔNG phải lỗi — chúng là **dữ liệu và nhãn cố ý**: tên
+riêng tiếng Việt trong ví dụ (`'Đà Nẵng'` ở nodejs 1.x minh hoạ shallow copy),
+chính ký tự đang được đếm byte UTF-8 (`'à'` ở nodejs 3.x), khoá R2 không-ASCII
+(`logo tết.png` ở object-storage), và bộ nhãn quy ước dùng chung 18 khoá
+(`Bẫy —`, `Một câu.`, `Đo thật`, `Nguồn`). Đổi bộ nhãn là quyết định xuyên
+khoá nên **để lại cho người dùng chọn**, không tự đổi.
+
+⚠️ **Hai lỗi của bộ công cụ đã trả giá để biết** (công cụ ở `/tmp/langfix/`,
+không commit — nhưng bài học thì ghi lại):
+
+1. **Thay theo thứ tự khoá trong JSON là sai.** Một khoá ngắn (`KHÔNG phải`)
+   ăn mất tiền tố của khoá dài (`KHÔNG phải MQTT / STOMP`), khoá dài thành
+   "không khớp", và chỗ đó còn lại một câu **lai nửa Anh nửa Việt** —
+   tệ hơn cả để nguyên. Phải **sắp khoá dài trước**. Bắt được vì `apply.mjs`
+   in ra danh sách "KHÔNG khớp"; nếu nó im lặng thì 6 chỗ hỏng đã lọt.
+2. **Một `git checkout` rẻ hơn một chuỗi vá tay.** Khi tệp đầu tiên hỏng theo
+   kiểu trên, chạy lại từ bản sạch với công cụ đã sửa cho ra 0 sót; đi vá
+   từng chỗ một thì không có gì bảo đảm đã hết.
+
+Và một lỗi **nội dung** mà đợt rà này tình cờ tìm ra: khối `ml-en` của bài
+Socket.IO 11.1 mang một dòng của khoá Tailwind kèm câu tự sửa giữa bài
+("Không, wait, đó là kho Tailwind course…"). Khối `ml-vi` cùng chỗ vẫn đúng.
+Không bộ kiểm nào bắt được — nó chỉ lộ ra khi có người ĐỌC từng đoạn.
+
 ### Luật soạn nội dung (đã trả giá để biết)
 
 - **Song ngữ bắt buộc**: mỗi bài có `<div class="ml-en">…</div>` và `<div class="ml-vi">…</div>`,

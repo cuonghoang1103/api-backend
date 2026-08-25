@@ -666,29 +666,46 @@ Còn hai bước phải chạy ở máy nhà — xem §6.
 
 ---
 
-### 25/08/2026 — Bản đồ video YouTube (6/15 khoá · 344 bài)
+### 25/08/2026 — Bản đồ video YouTube (15/15 khoá · 804 bài) — XONG
 
 Khoá `nodejs`, `nextjs`, `typescript`, `postgresql` đã có `content/course-videos/<slug>.mjs`
-từ trước. 15 khoá còn lại thì chưa — **804 bài lý thuyết không có video**. Đợt này làm
-được **6 khoá · 344 bài**, mỗi bài một video RIÊNG (không bài nào dùng lại video của bài khác):
+từ trước. 15 khoá còn lại thì chưa — **804 bài lý thuyết không có video**. Nay **đủ cả
+15 khoá · 804 bài**, mỗi bài một video RIÊNG (trong cùng một khoá, không bài nào dùng
+lại video của bài khác):
 
-| Khoá | Bài có video | Video khác nhau |
-|---|---|---|
-| `observability-monitoring` | 57/57 | 57 |
-| `git` | 50/50 | 50 |
-| `linux-bash` | 57/57 | 57 |
-| `docker` | 63/63 | 63 |
-| `nginx` | 58/58 | 58 |
-| `deploy-vps` | 59/59 | 59 |
+| Khoá | Bài có video | Video khác nhau | Đợt |
+|---|---|---|---|
+| `observability-monitoring` | 57/57 | 57 | đợt 1 |
+| `git` | 50/50 | 50 | đợt 1 |
+| `linux-bash` | 57/57 | 57 | đợt 1 |
+| `docker` | 63/63 | 63 | đợt 1 |
+| `nginx` | 58/58 | 58 | đợt 1 |
+| `deploy-vps` | 59/59 | 59 | đợt 1 |
+| `github-actions` | 55/55 | 55 | đợt 2 |
+| `redis` | 63/63 | 63 | đợt 2 |
+| `prisma-orm` | 63/63 | 63 | đợt 2 |
+| `authentication` | 63/63 | 63 | đợt 2 |
+| `socket-io` | 54/54 | 54 | đợt 2 |
+| `tailwind-css` | 54/54 | 54 | đợt 2 |
+| `web-foundations` | 54/54 | 54 | đợt 2 |
+| `object-storage` | 28/28 | 28 | đợt 2 |
+| `media-processing` | 26/26 | 26 | đợt 2 |
 
-**Còn 9 khoá · 460 bài:** `github-actions` 55 · `redis` 63 · `prisma-orm` 63 ·
-`authentication` 63 · `socket-io` 54 · `tailwind-css` 54 · `web-foundations` 54 ·
-`object-storage` 28 · `media-processing` 26.
-
-⛔ **Vì sao dừng ở 6 khoá: hết hạn mức WebSearch của phiên** (200/200 lượt). Mọi id đều
+⛔ **Đợt 1 dừng ở 6 khoá vì hết hạn mức WebSearch của phiên** (200/200 lượt). Mọi id đều
 lấy từ một lượt tìm kiếm SỐNG, không lấy từ trí nhớ — nên hết lượt tìm là hết cách làm
-tiếp mà vẫn giữ được độ chính xác. Phiên sau, hoặc nâng
-`CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`, thì làm tiếp được ngay.
+tiếp mà vẫn giữ được độ chính xác.
+
+✅ **Đợt 2 (9 khoá · 460 bài) làm hết trong ~93 lượt tìm**, tức **~6-16 lượt/khoá** thay
+vì ~33. Nhịp đã tối ưu: gộp 4 truy vấn CHỦ ĐỀ RỘNG chạy song song một lượt, mỗi lượt trả
+~10 kết quả, rồi gán cả một chương từ một rổ kết quả — thay vì tìm riêng cho từng bài.
+Khoá 63 bài chỉ cần ~12 lượt. Chép lại nhịp này nếu phải làm thêm khoá mới.
+
+⚠️ **Ghép bài ↔ video không phải lúc nào cũng khít.** Vài bài rất riêng của kho này
+(ví dụ `ga-10-4-diet-cong` "diệt tiến trình theo cổng", `mp-2-1-svg` "SVG chạy được
+JavaScript", `os-8-2-sipper` "ghi kép trong lúc di trú") **không có video nào trên
+YouTube nói đúng chuyện đó** — chỗ ấy gán video gần nghĩa nhất trong cùng chủ đề. Đó là
+lựa chọn có ý thức, không phải sót: khung YT chỉ là bài giảng BỔ SUNG, nội dung chính
+vẫn nằm trong bài.
 
 ⚠️ **`credit` để RỖNG là cố ý, và phải chạy `--fix-credits` trước khi seed.**
 Máy dựng khoá bị chặn ra `youtube.com` — đo thật: `curl` trả
@@ -769,19 +786,31 @@ node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ### Video YouTube — CHẠY `--fix-credits` TRƯỚC KHI SEED
 
 ```bash
+KHOA_VIDEO="observability-monitoring git linux-bash docker nginx deploy-vps \
+github-actions redis prisma-orm authentication socket-io tailwind-css \
+web-foundations object-storage media-processing"
+
 # 1. Xác minh + điền credit (bắt buộc; in ra link nào đã chết)
-for s in observability-monitoring git linux-bash docker nginx deploy-vps; do
+for s in $KHOA_VIDEO; do
   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/$s.mjs --fix-credits
 done
 
-# 2. Kiểm ngoại tuyến lại cho chắc (0 lỗi, 0 cảnh báo là xong)
-node scripts/course-video-audit.mjs --all
+# 2. Kiểm ngoại tuyến lại cho chắc
+for s in $KHOA_VIDEO; do
+  node scripts/course-video-audit.mjs --file ./content/course-videos/$s.mjs
+done
 
 # 3. Gắn vào DB (bị TỪ CHỐI nếu bước 1 chưa chạy)
-for s in observability-monitoring git linux-bash docker nginx deploy-vps; do
+for s in $KHOA_VIDEO; do
   node scripts/course-video-seed.mjs --file ./content/course-videos/$s.mjs --apply
 done
 ```
+
+⚠️ **ĐỪNG dùng `course-video-audit.mjs --all` làm cổng kiểm.** Nó quét cả
+`content/course-videos/` — trong đó có ~40 bản đồ CŨ của các khoá không nằm ở
+`content/courses/` (chúng seed bằng đường khác), nên `--all` luôn báo ~43 lỗi
+`không thấy khoá` dù 15 khoá này sạch. Kiểm từng `--file` như trên; 15 khoá đều
+**0 lỗi**. (`typescript.mjs` có cảnh báo dùng lại id — lỗi cũ từ trước, xem §5.)
 
 Link nào báo `✗ ... DEAD` thì báo lại kèm slug bài — đổi id là một dòng.
 

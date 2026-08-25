@@ -1492,6 +1492,9 @@ await prisma.job.updateMany({
 </div>
 
 <h3>Learning sources for this lesson</h3>
+<div class="pitfall">
+<p><strong>Trap — a transaction that is correct and still loses the write, because the isolation level was not the one you assumed.</strong> PostgreSQL&#39;s default is Read Committed, which permits two concurrent transactions to read the same row, each compute a new value from it, and each write — the second overwrites the first with no error and no conflict. Wrapping the pair in &#96;$transaction&#96; does not prevent it; a transaction guarantees all-or-nothing, not serial ordering. This is why a view counter written as read-then-write undercounts under load and is perfect in testing, where nothing runs concurrently. Use an atomic operation (&#96;increment&#96;), a conditional update that fails when the row moved, or raise the isolation level deliberately — and know which of the three you chose.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/queries/transactions#dependent-writes" target="_blank" rel="noopener"><span class="lc-ico">🔗</span><span class="lc-body"><span class="lc-title">Dependent writes and transactions</span><span class="lc-sub">prisma.io/docs · Prisma's own decision guide for which mechanism a given write needs</span></span></a>
 <a class="link-card" href="https://www.postgresql.org/docs/current/mvcc.html" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">PostgreSQL — concurrency control</span><span class="lc-sub">postgresql.org · MVCC, row locks and the guarantees underneath every pattern here</span></span></a>
 <a class="link-card" href="https://brandur.org/postgres-queues" target="_blank" rel="noopener"><span class="lc-ico">📬</span><span class="lc-body"><span class="lc-title">Postgres queues — Brandur Leach</span><span class="lc-sub">brandur.org · The SKIP LOCKED queue in production detail, including the reclaim problem</span></span></a>
@@ -1669,6 +1672,9 @@ await prisma.job.updateMany({
 </div>
 
 <h3>Nguồn học cho bài này</h3>
+<div class="pitfall">
+<p><strong>Bẫy — một giao dịch đúng mà vẫn mất phép ghi, vì mức cô lập không phải cái bạn tưởng.</strong> Mặc định của PostgreSQL là Read Committed, mức cho phép hai giao dịch song song cùng đọc một dòng, mỗi bên tính ra một giá trị mới từ nó, rồi cùng ghi — bên thứ hai ghi đè bên thứ nhất, không lỗi và không xung đột. Bọc cặp đó trong &#96;$transaction&#96; KHÔNG ngăn được; một giao dịch bảo đảm được-cả-hoặc-không-gì, chứ không bảo đảm thứ tự tuần tự. Đó là lý do một bộ đếm lượt xem viết theo lối đọc-rồi-ghi sẽ đếm thiếu khi tải cao và lại hoàn hảo lúc kiểm thử, nơi chẳng có gì chạy song song. Hãy dùng một thao tác nguyên tử (&#96;increment&#96;), một phép cập nhật có điều kiện sẽ hỏng khi dòng đã đổi, hoặc nâng mức cô lập một cách có chủ đích — và hãy biết mình đã chọn cái nào trong ba.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/queries/transactions#dependent-writes" target="_blank" rel="noopener"><span class="lc-ico">🔗</span><span class="lc-body"><span class="lc-title">Dependent writes and transactions</span><span class="lc-sub">prisma.io/docs · Hướng dẫn của chính Prisma về việc một lần ghi cho trước cần cơ chế nào</span></span></a>
 <a class="link-card" href="https://www.postgresql.org/docs/current/mvcc.html" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">PostgreSQL — điều khiển tranh chấp</span><span class="lc-sub">postgresql.org · MVCC, khoá hàng và những bảo đảm nằm dưới mọi mẫu ở đây</span></span></a>
 <a class="link-card" href="https://brandur.org/postgres-queues" target="_blank" rel="noopener"><span class="lc-ico">📬</span><span class="lc-body"><span class="lc-title">Postgres queues — Brandur Leach</span><span class="lc-sub">brandur.org · Hàng đợi SKIP LOCKED ở mức chi tiết production, kể cả bài toán đòi lại việc</span></span></a>

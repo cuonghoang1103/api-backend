@@ -446,6 +446,13 @@ exit \$rc</code></pre>
   FAIL https://cuongthai.com/api/v1/gifs             404 (expected 401)</div>
 <p>A 401 is a <em>pass</em> here: it proves the route is mounted and demanding authentication. A 404 means the route is not mounted at all — a stale or partial build, which is exactly the failure this project hit on 2026-07-02 when a <code>--no-build</code> deploy shipped an old image. Checking for "not 404" rather than "200" is what makes the test meaningful for authenticated endpoints.</p>
 
+<h3>The curl flags worth memorising</h3>
+<div class="lz-map">
+  <div class="lz-node"><span class="lz-k">-i and -v</span><span class="lz-t">See the response, then the whole exchange</span><span class="lz-d"><code>-i</code> prints status and headers with the body; <code>-v</code> shows the request too. The answer to &quot;why did this fail&quot; is nearly always in one of them.</span></div>
+  <div class="lz-node"><span class="lz-k">-f</span><span class="lz-t">Fail on an HTTP error</span><span class="lz-d">Without it, curl exits 0 on a 500 — so <code>curl … &amp;&amp; deploy</code> proceeds after the check failed. Essential in any script.</span></div>
+  <div class="lz-node"><span class="lz-k">-L and --max-time</span><span class="lz-t">Follow redirects, and give up</span><span class="lz-d"><code>-L</code> because an endpoint that moved returns 301 with an empty body; <code>--max-time</code> because a hung request in a script blocks forever.</span></div>
+  <div class="lz-node"><span class="lz-k">-w '%{http_code}'</span><span class="lz-t">Extract exactly one number</span><span class="lz-d"><code>-s -o /dev/null -w "%{http_code}"</code> prints just the status — the shape used for every route health check in this repository.</span></div>
+</div>
 <a class="link-card" href="https://everything.curl.dev/" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Everything curl</span><span class="lc-sub">A whole free book by curl's author. The "Using curl" chapters cover HTTP, TLS and debugging far better than the man page.</span></span>
@@ -624,6 +631,13 @@ exit \$rc</code></pre>
   HỎNG https://cuongthai.com/api/v1/gifs             404 (chờ đợi 401)</div>
 <p>Ở đây một mã 401 là ĐẠT: nó chứng minh tuyến đã được gắn vào và đang đòi xác thực. Một mã 404 nghĩa là tuyến hoàn toàn chưa được gắn — một bản dựng cũ hoặc dựng dở, đúng cái kiểu hỏng mà chính dự án này gặp ngày 02/07/2026 khi một lần deploy <code>--no-build</code> đem lên một ảnh cũ. Kiểm theo tiêu chí "không phải 404" thay vì "phải là 200" chính là thứ làm phép thử có ý nghĩa với những điểm cuối cần xác thực.</p>
 
+<h3>Những cờ curl đáng học thuộc</h3>
+<div class="lz-map">
+  <div class="lz-node"><span class="lz-k">-i và -v</span><span class="lz-t">Xem phản hồi, rồi xem cả cuộc trao đổi</span><span class="lz-d"><code>-i</code> in ra trạng thái và header cùng với thân; <code>-v</code> hiện cả phần request. Câu trả lời cho &quot;vì sao cái này hỏng&quot; gần như luôn nằm ở một trong hai.</span></div>
+  <div class="lz-node"><span class="lz-k">-f</span><span class="lz-t">Hỏng khi gặp lỗi HTTP</span><span class="lz-d">Không có nó, curl thoát với mã 0 kể cả khi gặp 500 — nên <code>curl … &amp;&amp; deploy</code> vẫn chạy tiếp sau khi phép kiểm đã hỏng. Thiết yếu trong mọi script.</span></div>
+  <div class="lz-node"><span class="lz-k">-L và --max-time</span><span class="lz-t">Đi theo chuyển hướng, và biết bỏ cuộc</span><span class="lz-d"><code>-L</code> vì một endpoint đã dời chỗ sẽ trả 301 với thân rỗng; <code>--max-time</code> vì một request treo trong script sẽ chặn mãi mãi.</span></div>
+  <div class="lz-node"><span class="lz-k">-w '%{http_code}'</span><span class="lz-t">Rút ra đúng một con số</span><span class="lz-d"><code>-s -o /dev/null -w "%{http_code}"</code> chỉ in ra mã trạng thái — đúng hình dạng dùng cho mọi phép kiểm sức khoẻ route trong kho này.</span></div>
+</div>
 <a class="link-card" href="https://everything.curl.dev/" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">Everything curl</span><span class="lc-sub">Cả một cuốn sách miễn phí do chính tác giả curl viết. Các chương "Using curl" nói về HTTP, TLS và gỡ lỗi hay hơn hẳn trang man.</span></span>

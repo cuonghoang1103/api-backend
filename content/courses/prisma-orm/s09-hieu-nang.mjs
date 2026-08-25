@@ -942,6 +942,9 @@ LIMIT 10;</code></pre>
 </div>
 
 <h3>Learning sources for this lesson</h3>
+<div class="pitfall">
+<p><strong>Trap — adding an index for every column that appears in a &#96;where&#96;.</strong> An index is not free: every &#96;INSERT&#96;, &#96;UPDATE&#96; and &#96;DELETE&#96; must update it, it occupies disk and cache, and the planner has to consider it on every query. Ten indexes on a hot write table can halve write throughput while helping no read that was actually slow. Worse, an index the planner never chooses costs everything and returns nothing — and Postgres will tell you which ones those are (&#96;pg_stat_user_indexes&#96;, &#96;idx_scan = 0&#96;). Add an index because a specific slow query&#39;s &#96;EXPLAIN&#96; asked for it, verify the plan changed, and delete the ones that never get scanned.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-schema/data-model/indexes" target="_blank" rel="noopener"><span class="lc-ico">📇</span><span class="lc-body"><span class="lc-title">Prisma — indexes</span><span class="lc-sub">prisma.io/docs · <code>@@index</code> with sort, type and ops, and what cannot be declared</span></span></a>
 <a class="link-card" href="https://use-the-index-luke.com/" target="_blank" rel="noopener"><span class="lc-ico">🔦</span><span class="lc-body"><span class="lc-title">Use The Index, Luke</span><span class="lc-sub">use-the-index-luke.com · The best free book on index design; the column-order chapter is the one to read first</span></span></a>
 <a class="link-card" href="https://www.postgresql.org/docs/current/indexes-index-only-scans.html" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">PostgreSQL — index-only scans</span><span class="lc-sub">postgresql.org · <code>INCLUDE</code>, the visibility map, and when Heap Fetches stops being zero</span></span></a>
@@ -1113,6 +1116,9 @@ LIMIT 10;</code></pre>
 </div>
 
 <h3>Nguồn học cho bài này</h3>
+<div class="pitfall">
+<p><strong>Bẫy — thêm chỉ mục cho mọi cột xuất hiện trong một &#96;where&#96;.</strong> Một chỉ mục không miễn phí: mọi &#96;INSERT&#96;, &#96;UPDATE&#96; và &#96;DELETE&#96; đều phải cập nhật nó, nó chiếm đĩa và chiếm bộ nhớ đệm, và bộ lập kế hoạch phải cân nhắc nó ở mọi truy vấn. Mười chỉ mục trên một bảng ghi nhiều có thể làm thông lượng ghi giảm một nửa mà chẳng giúp được phép đọc nào vốn đang chậm. Tệ hơn, một chỉ mục mà bộ lập kế hoạch chẳng bao giờ chọn thì tốn đủ thứ và trả về con số không — và Postgres nói cho bạn biết những cái đó là cái nào (&#96;pg_stat_user_indexes&#96;, &#96;idx_scan = 0&#96;). Hãy thêm chỉ mục vì &#96;EXPLAIN&#96; của một truy vấn chậm cụ thể đòi nó, xác nhận kế hoạch đã đổi, và xoá những cái chẳng bao giờ được quét tới.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-schema/data-model/indexes" target="_blank" rel="noopener"><span class="lc-ico">📇</span><span class="lc-body"><span class="lc-title">Prisma — indexes</span><span class="lc-sub">prisma.io/docs · <code>@@index</code> kèm sort, type và ops, và những gì không khai được</span></span></a>
 <a class="link-card" href="https://use-the-index-luke.com/" target="_blank" rel="noopener"><span class="lc-ico">🔦</span><span class="lc-body"><span class="lc-title">Use The Index, Luke</span><span class="lc-sub">use-the-index-luke.com · Cuốn sách miễn phí hay nhất về thiết kế chỉ mục; chương thứ tự cột nên đọc trước</span></span></a>
 <a class="link-card" href="https://www.postgresql.org/docs/current/indexes-index-only-scans.html" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">PostgreSQL — index-only scan</span><span class="lc-sub">postgresql.org · <code>INCLUDE</code>, bản đồ khả kiến, và khi nào Heap Fetches thôi bằng không</span></span></a>

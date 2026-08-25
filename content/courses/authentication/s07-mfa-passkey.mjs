@@ -87,6 +87,9 @@ if (riskScore(req, u) &gt; NGUONG) await changeSecondFactor(u);</code></pre>
 </div>
 
 <h3>Learning sources for this lesson</h3>
+<div class="pitfall">
+<p><strong>Trap — a second factor that can be reset by the first one.</strong> TOTP protects the login and then the account recovery flow emails a reset link, so anyone holding the password&#39;s mailbox skips the second factor entirely — the strongest factor in the system is now the weakest path into it. The same shape appears when support staff can disable MFA on request, or when a backup code is stored beside the password in a manager. Attackers do not attack the factor; they attack the reset. Enumerate every path that ends in &quot;user is now logged in&quot; and check that each one requires the second factor, and that recovery codes are issued once, offline, and invalidated on use.</p>
+</div>
 <a class="link-card" href="https://security.googleblog.com/2019/05/new-research-how-effective-is-basic.html" target="_blank" rel="noopener"><span class="lc-ico">📊</span><span class="lc-body"><span class="lc-title">Google — how effective is basic account hygiene</span><span class="lc-sub">security.googleblog.com · The study behind the table above, with its methodology</span></span></a>
 <a class="link-card" href="https://pages.nist.gov/800-63-3/sp800-63b.html" target="_blank" rel="noopener"><span class="lc-ico">📏</span><span class="lc-body"><span class="lc-title">NIST SP 800-63B — authenticators</span><span class="lc-sub">pages.nist.gov · Authenticator assurance levels, and the position on SMS</span></span></a>
 <a class="link-card" href="https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html" target="_blank" rel="noopener"><span class="lc-ico">📋</span><span class="lc-body"><span class="lc-title">OWASP — multifactor authentication</span><span class="lc-sub">cheatsheetseries.owasp.org · When to prompt, and the recovery trap</span></span></a>
@@ -161,6 +164,9 @@ if (riskScore(req, u) &gt; NGUONG) await changeSecondFactor(u);</code></pre>
 </div>
 
 <h3>Nguồn học cho bài này</h3>
+<div class="pitfall">
+<p><strong>Bẫy — một yếu tố thứ hai mà yếu tố thứ nhất đặt lại được.</strong> TOTP bảo vệ lần đăng nhập, rồi luồng khôi phục tài khoản gửi một liên kết đặt lại qua email, thế là ai cầm hòm thư của mật khẩu sẽ bỏ qua hoàn toàn yếu tố thứ hai — yếu tố mạnh nhất trong hệ thống giờ lại là con đường yếu nhất đi vào nó. Cùng hình dạng ấy hiện ra khi nhân viên hỗ trợ tắt được MFA theo yêu cầu, hoặc khi một mã dự phòng được cất ngay cạnh mật khẩu trong một trình quản lý. Kẻ tấn công không tấn công cái yếu tố; họ tấn công phép đặt lại. Hãy liệt kê MỌI con đường kết thúc bằng &quot;người dùng giờ đã đăng nhập&quot; rồi kiểm rằng mỗi đường đều đòi yếu tố thứ hai, và rằng mã khôi phục được cấp một lần, ngoại tuyến, và bị vô hiệu ngay khi dùng.</p>
+</div>
 <a class="link-card" href="https://security.googleblog.com/2019/05/new-research-how-effective-is-basic.html" target="_blank" rel="noopener"><span class="lc-ico">📊</span><span class="lc-body"><span class="lc-title">Google — vệ sinh tài khoản cơ bản hiệu quả tới đâu</span><span class="lc-sub">security.googleblog.com · Nghiên cứu đứng sau cái bảng ở trên, kèm phương pháp đo</span></span></a>
 <a class="link-card" href="https://pages.nist.gov/800-63-3/sp800-63b.html" target="_blank" rel="noopener"><span class="lc-ico">📏</span><span class="lc-body"><span class="lc-title">NIST SP 800-63B — các bộ xác thực</span><span class="lc-sub">pages.nist.gov · Các mức bảo đảm xác thực, và lập trường về SMS</span></span></a>
 <a class="link-card" href="https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html" target="_blank" rel="noopener"><span class="lc-ico">📋</span><span class="lc-body"><span class="lc-title">OWASP — xác thực đa yếu tố</span><span class="lc-sub">cheatsheetseries.owasp.org · Hỏi lúc nào, và cái bẫy nằm ở đường khôi phục</span></span></a>

@@ -819,6 +819,13 @@ services:
 <div class="callout ok"><strong><code>platform: linux/amd64</code> in Compose is the pragmatic fix for one stubborn service.</strong> An old image with no ARM build will then run under emulation on an Apple Silicon laptop — slowly, but it runs, and the rest of your stack stays native. Put a comment next to it saying why, because a whole Compose file pinned to <code>linux/amd64</code> is how a team ends up emulating everything and wondering why their machines are slow.</div>
 <pre><code>docker buildx rm multi &gt;/dev/null 2&gt;&amp;1; docker rmi alpine:3.20 &gt;/dev/null 2&gt;&amp;1</code></pre>
 
+<h3>Why exec format error happens</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">An image is built for one CPU architecture</span><span class="lz-d"><code>linux/amd64</code> or <code>linux/arm64</code>. The binaries inside are machine code for that instruction set and nothing else.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">A tag can point at an index, not an image</span><span class="lz-d">A multi-arch tag is a manifest list: the daemon picks the entry matching its own platform. That is why <code>node:22</code> works everywhere.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Build on Apple silicon, run on an x86 VPS</span><span class="lz-d">Your local build produced arm64 only, the tag now points at an arm64 image, and the server cannot execute a single instruction in it.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The error names the format, not the cause</span><span class="lz-d"><code>exec format error</code> — the kernel is telling you the ELF header is for another machine. Nothing mentions architecture, which is why it reads as corruption.</span></div>
+</div>
 <a class="link-card" href="https://docs.docker.com/build/building/multi-platform/" target="_blank" rel="noopener">
   <span class="lc-ico">🏗️</span>
   <span class="lc-body"><span class="lc-title">Multi-platform builds</span><span class="lc-sub">The three strategies — emulation, native nodes, cross-compilation — with their trade-offs, plus the <code>TARGETPLATFORM</code> build-arg table you will want when cross-compiling.</span></span>
@@ -946,6 +953,13 @@ services:
 <div class="callout ok"><strong><code>platform: linux/amd64</code> trong Compose là cách chữa thực dụng cho MỘT dịch vụ cứng đầu.</strong> Một ảnh cũ không có bản dựng ARM khi đó sẽ chạy dưới mô phỏng trên một laptop Apple Silicon — chậm, nhưng nó CHẠY, và phần còn lại của hệ thống vẫn native. Hãy đặt một dòng chú thích bên cạnh nói rõ vì sao, bởi vì cả một file Compose bị ghim vào <code>linux/amd64</code> là cách một đội rốt cuộc mô phỏng MỌI THỨ rồi tự hỏi sao máy mình chậm thế.</div>
 <pre><code>docker buildx rm multi &gt;/dev/null 2&gt;&amp;1; docker rmi alpine:3.20 &gt;/dev/null 2&gt;&amp;1</code></pre>
 
+<h3>Vì sao có lỗi exec format error</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Một ảnh được dựng cho MỘT kiến trúc CPU</span><span class="lz-d"><code>linux/amd64</code> hoặc <code>linux/arm64</code>. Các file nhị phân bên trong là mã máy cho đúng tập lệnh đó và không cho gì khác.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Một tag có thể trỏ vào một index, không phải một ảnh</span><span class="lz-d">Một tag đa kiến trúc là một danh sách manifest: daemon chọn mục khớp với nền tảng của chính nó. Đó là lý do <code>node:22</code> chạy được ở mọi nơi.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Dựng trên Apple silicon, chạy trên một VPS x86</span><span class="lz-d">Bản dựng ở máy bạn chỉ cho ra arm64, cái tag giờ trỏ vào một ảnh arm64, và máy chủ không thực thi nổi một lệnh nào trong đó.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Lỗi gọi tên ĐỊNH DẠNG, không gọi tên nguyên nhân</span><span class="lz-d"><code>exec format error</code> — nhân hệ điều hành đang nói với bạn rằng phần đầu ELF là dành cho một loại máy khác. Chẳng gì nhắc tới kiến trúc, và đó là lý do nó đọc lên như một file hỏng.</span></div>
+</div>
 <a class="link-card" href="https://docs.docker.com/build/building/multi-platform/" target="_blank" rel="noopener">
   <span class="lc-ico">🏗️</span>
   <span class="lc-body"><span class="lc-title">Dựng đa nền tảng</span><span class="lc-sub">Ba chiến lược — mô phỏng, nút native, biên dịch chéo — kèm đánh đổi của từng cái, cộng bảng tham số dựng <code>TARGETPLATFORM</code> mà bạn sẽ cần khi biên dịch chéo.</span></span>

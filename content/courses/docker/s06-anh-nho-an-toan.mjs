@@ -967,6 +967,13 @@ done</code></pre>
     memory:    0
     sock:      MOUNTED (!)</div>
 
+<h3>Reducing what a compromised container can reach</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Drop root first</span><span class="lz-d"><code>USER node</code>. A process that is not root cannot write outside its own files, load kernel modules, or bind a privileged port — most of the escalation paths close here.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Make the root filesystem read-only</span><span class="lz-d"><code>--read-only</code> plus a <code>tmpfs</code> for the paths that genuinely need writes. An attacker who lands cannot leave anything behind.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Drop capabilities to what is used</span><span class="lz-d"><code>--cap-drop ALL</code>, then add back the one or two the process actually needs. Most application containers need none.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Then check what you left open</span><span class="lz-d"><code>--privileged</code>, a mounted Docker socket, or the host network each undo everything above in one flag.</span></div>
+</div>
 <a class="link-card" href="https://docs.docker.com/engine/security/" target="_blank" rel="noopener">
   <span class="lc-ico">🔒</span>
   <span class="lc-body"><span class="lc-title">Docker security</span><span class="lc-sub">The default capability set, the seccomp profile, what the daemon attack surface is, and an honest account of what the container boundary does and does not protect.</span></span>
@@ -1120,6 +1127,13 @@ done</code></pre>
     memory:    0
     sock:      ĐÃ GẮN (!)</div>
 
+<h3>Thu hẹp thứ mà một container bị chiếm với tới được</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Bỏ quyền root trước tiên</span><span class="lz-d"><code>USER node</code>. Một tiến trình không phải root thì không ghi được ra ngoài phạm vi file của nó, không nạp được module nhân, không gắn được cổng đặc quyền — phần lớn đường leo thang đóng lại ngay ở đây.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Cho hệ tệp gốc thành chỉ-đọc</span><span class="lz-d"><code>--read-only</code> cộng một <code>tmpfs</code> cho những đường thật sự cần ghi. Kẻ tấn công vào được cũng chẳng để lại được gì.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Bỏ hết capability, chỉ giữ cái đang dùng</span><span class="lz-d"><code>--cap-drop ALL</code>, rồi thêm lại một hai cái mà tiến trình thật sự cần. Phần lớn container ứng dụng chẳng cần cái nào.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Rồi kiểm xem bạn còn để hở cái gì</span><span class="lz-d"><code>--privileged</code>, một socket Docker được mount vào, hay mạng của host — mỗi cái đều huỷ sạch mọi thứ ở trên chỉ bằng một cờ.</span></div>
+</div>
 <a class="link-card" href="https://docs.docker.com/engine/security/" target="_blank" rel="noopener">
   <span class="lc-ico">🔒</span>
   <span class="lc-body"><span class="lc-title">An ninh của Docker</span><span class="lc-sub">Bộ capability mặc định, hồ sơ seccomp, bề mặt tấn công của tiến trình nền là gì, và một bản tường thuật trung thực về việc ranh giới container bảo vệ và không bảo vệ được gì.</span></span>

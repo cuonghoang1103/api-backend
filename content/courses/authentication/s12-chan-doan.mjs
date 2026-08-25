@@ -700,6 +700,9 @@ grep -rE "env\\\\.[A-Z_]*(SECRET|KEY)[A-Z_]*\\\\s*(\\\\|\\\\||\\\\?\\\\?)" src/ 
 </div>
 
 <h3>Learning sources for this lesson</h3>
+<div class="pitfall">
+<p><strong>Trap — building the whole list before shipping any of it.</strong> This lesson ends with a ranked list precisely because the ranking is the useful part: sessions that expire, passwords hashed properly, and authorisation checked at the resource cover most of the real risk, and each one ships on its own. Waiting until MFA, device management and audit logging are all done means running for another quarter on whatever the prototype did — usually a session that never expires and a permission check in the UI. Ship day-one items on day one. The list is ordered by how much risk each item removes per hour of work, and reading it as a prerequisite chain inverts that.</p>
+</div>
 <a class="link-card" href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" target="_blank" rel="noopener"><span class="lc-ico">📋</span><span class="lc-body"><span class="lc-title">OWASP — authentication cheat sheet</span><span class="lc-sub">cheatsheetseries.owasp.org · The whole course as one page to re-read yearly</span></span></a>
 <a class="link-card" href="https://pages.nist.gov/800-63-3/" target="_blank" rel="noopener"><span class="lc-ico">📏</span><span class="lc-body"><span class="lc-title">NIST SP 800-63 — digital identity guidelines</span><span class="lc-sub">pages.nist.gov · The standard the parameters in this course come from</span></span></a>
 <a class="link-card" href="https://datatracker.ietf.org/doc/html/rfc9700" target="_blank" rel="noopener"><span class="lc-ico">📗</span><span class="lc-body"><span class="lc-title">RFC 9700 — OAuth security best current practice</span><span class="lc-sub">datatracker.ietf.org · Updated as attacks are found; worth a re-read each year</span></span></a>
@@ -761,6 +764,9 @@ grep -rE "env\\\\.[A-Z_]*(SECRET|KEY)[A-Z_]*\\\\s*(\\\\|\\\\||\\\\?\\\\?)" src/ 
 </div>
 
 <h3>Nguồn học cho bài này</h3>
+<div class="pitfall">
+<p><strong>Bẫy — dựng xong cả danh sách rồi mới ship.</strong> Bài này kết thúc bằng một danh sách xếp hạng chính vì cái thứ hạng mới là phần hữu ích: phiên có hạn, mật khẩu băm cho đúng, và phân quyền kiểm ngay tại tài nguyên đã phủ phần lớn rủi ro thật, và mỗi thứ đều ship riêng lẻ được. Chờ tới khi làm xong cả MFA, quản lý thiết bị và log kiểm toán nghĩa là chạy thêm một quý nữa với đúng thứ mà bản mẫu đã làm — thường là một phiên không bao giờ hết hạn và một phép kiểm quyền nằm ở giao diện. Hãy ship các mục ngày-một ngay trong ngày một. Danh sách được xếp theo mức rủi ro mà mỗi mục gỡ bỏ trên mỗi giờ công, và đọc nó như một chuỗi điều kiện tiên quyết là làm ngược lại điều đó.</p>
+</div>
 <a class="link-card" href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" target="_blank" rel="noopener"><span class="lc-ico">📋</span><span class="lc-body"><span class="lc-title">OWASP — bảng tra về xác thực</span><span class="lc-sub">cheatsheetseries.owasp.org · Cả khoá học này gói vào một trang, đáng đọc lại mỗi năm</span></span></a>
 <a class="link-card" href="https://pages.nist.gov/800-63-3/" target="_blank" rel="noopener"><span class="lc-ico">📏</span><span class="lc-body"><span class="lc-title">NIST SP 800-63 — hướng dẫn danh tính số</span><span class="lc-sub">pages.nist.gov · Bản chuẩn mà các tham số trong khoá này lấy ra từ đó</span></span></a>
 <a class="link-card" href="https://datatracker.ietf.org/doc/html/rfc9700" target="_blank" rel="noopener"><span class="lc-ico">📗</span><span class="lc-body"><span class="lc-title">RFC 9700 — thực hành bảo mật OAuth hiện hành</span><span class="lc-sub">datatracker.ietf.org · Được cập nhật mỗi khi có cú tấn công mới; đáng đọc lại hằng năm</span></span></a>

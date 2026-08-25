@@ -709,6 +709,13 @@ curl -s -o /dev/null -w '%{http_code}\\n' -H "Authorization: Bearer \$TOKEN_CU" 
   <div class="lz-layer"><span class="lz-lname">Rotate on a schedule, not only on a leak</span><span class="lz-lnote">A rotation you have done before is a rotation you can do under pressure. The first time should not be the day it leaked.</span></div>
   <div class="lz-layer"><span class="lz-lname">Keep an expiry shorter than your patience</span><span class="lz-lnote">Phase 4 waits for the longest-lived token. Thirty-day sessions mean a thirty-day rotation. That is an argument for short access tokens plus refresh — which is where the Authentication course goes into this properly.</span></div>
 </div>
+<h3>Rotating a secret without an outage</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Accept both, briefly</span><span class="lz-lnote">The verifier trusts the old key and the new one at the same time. This overlap window is the entire trick, and it is what turns a rotation from an outage into a deploy.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Issue only with the new one</span><span class="lz-lnote">New sessions and new signatures use the new key from the moment it is deployed. Nothing old is being created any more.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Wait out the longest lifetime</span><span class="lz-lnote">Everything signed with the old key expires on its own schedule. Cutting this short is what logs people out.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Then remove the old key</span><span class="lz-lnote">And confirm nothing broke, because now a stale token fails loudly rather than silently continuing to work.</span></div>
+</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 7517 — JSON Web Key Set, and the kid header</span><span class="lc-sub">datatracker.ietf.org/doc/html/rfc7517 — the standard version of "accept a list": each token names which key signed it, so verification does not have to try them all.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">OWASP — Key Management Cheat Sheet</span><span class="lc-sub">cheatsheetseries.owasp.org/cheatsheets/Key_Management_Cheat_Sheet.html — rotation intervals, and the distinction between planned and emergency rotation.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — ALTER ROLE ... PASSWORD</span><span class="lc-sub">postgresql.org/docs/current/sql-alterrole.html — and why creating a second role is usually the cleaner rotation than changing one password.</span></span></div>
@@ -784,6 +791,13 @@ curl -s -o /dev/null -w '%{http_code}\\n' -H "Authorization: Bearer \$TOKEN_CU" 
   <div class="lz-layer"><span class="lz-lname">Thiết kế theo dạng DANH SÁCH ngay từ ngày đầu</span><span class="lz-lnote"><code>JWT_SECRET</code> dạng danh sách ngăn bằng dấu phẩy chẳng tốn gì khi trong đó chỉ có một giá trị, và nó là khác biệt giữa một lần xoay bốn giai đoạn với một cú đăng xuất hàng loạt về sau. Chắp vá nó vào GIỮA một sự cố thì không phải lúc.</span></div>
   <div class="lz-layer"><span class="lz-lname">Xoay theo LỊCH, đừng chỉ xoay khi bị lộ</span><span class="lz-lnote">Một quy trình xoay bạn ĐÃ TỪNG làm là một quy trình bạn làm được dưới áp lực. Lần đầu tiên không nên là cái ngày nó bị lộ.</span></div>
   <div class="lz-layer"><span class="lz-lname">Giữ hạn sử dụng NGẮN hơn mức kiên nhẫn của bạn</span><span class="lz-lnote">Giai đoạn 4 chờ cái token sống lâu nhất. Phiên đăng nhập ba mươi ngày nghĩa là một cuộc xoay khoá ba mươi ngày. Đó là lý lẽ cho token truy cập NGẮN cộng refresh — mà khoá Authentication đi vào chuyện đó cho tử tế.</span></div>
+</div>
+<h3>Xoay một bí mật mà không gây gián đoạn</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Chấp nhận cả hai, trong chốc lát</span><span class="lz-lnote">Bên xác minh tin cả khoá cũ lẫn khoá mới cùng lúc. Cái cửa sổ chồng lấn này chính là toàn bộ mẹo, và nó là thứ biến một lần xoay khoá từ một cú gián đoạn thành một lần deploy.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Chỉ cấp phát bằng khoá mới</span><span class="lz-lnote">Phiên mới và chữ ký mới dùng khoá mới ngay từ lúc nó được triển khai. Chẳng còn thứ cũ nào được tạo ra nữa.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Chờ hết cái tuổi thọ dài nhất</span><span class="lz-lnote">Mọi thứ ký bằng khoá cũ sẽ tự hết hạn theo lịch của nó. Cắt ngắn khoảng này chính là thứ đá văng người dùng ra.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Rồi mới gỡ khoá cũ</span><span class="lz-lnote">Và xác nhận không có gì hỏng, vì giờ một token cũ sẽ hỏng to tiếng chứ không lặng lẽ tiếp tục chạy được.</span></div>
 </div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 7517 — JSON Web Key Set, và header kid</span><span class="lc-sub">datatracker.ietf.org/doc/html/rfc7517 — phiên bản chuẩn hoá của "chấp nhận cả danh sách": mỗi token tự nêu tên khoá đã ký nó, nên khâu kiểm chứng không phải thử hết.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">OWASP — Key Management Cheat Sheet</span><span class="lc-sub">cheatsheetseries.owasp.org/cheatsheets/Key_Management_Cheat_Sheet.html — chu kỳ xoay khoá, và phân biệt giữa xoay có kế hoạch với xoay khẩn cấp.</span></span></div>

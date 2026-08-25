@@ -504,6 +504,13 @@ $ find src -name "*.tsx" | wc -l
 <p><strong>One sentence.</strong> Breakpoint variants add no specificity and win purely by being emitted later, so Tailwind sorts <code>min-*</code> ascending and <code>max-*</code> descending to make the narrowest matching rule land last — which makes mobile-first the direction the cascade runs rather than a style preference, and leaves every responsive class vulnerable to any hand-written rule scoring <code>0,2,0</code>.</p>
 </div>
 
+<h3>Why breakpoint order in the class attribute does not matter</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Every responsive utility has zero extra specificity</span><span class="lz-d"><code>md:p-4</code> is a plain class inside a media query. It does not outrank <code>p-2</code> by being more specific, because it is not.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">So the winner is source order in the stylesheet</span><span class="lz-d">And Tailwind emits breakpoints in ascending width, always — <code>sm</code>, then <code>md</code>, then <code>lg</code>, regardless of how you typed them.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Which is why mobile-first works</span><span class="lz-d">The unprefixed value applies everywhere and each larger breakpoint overrides it, because each is emitted later.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And why <code>md:p-4 p-2</code> behaves identically to <code>p-2 md:p-4</code></span><span class="lz-d">The class attribute is a set, not a sequence. Nothing you do in the markup changes which rule wins.</span></div>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Responsive design</span><span class="lc-sub">tailwindcss.com/docs/responsive-design — the mobile-first explanation, the <code>max-*</code> variants, and the two-sided <code>md:max-lg:</code> form for targeting a band.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Using media queries</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries — including the explicit statement that a media query does not affect specificity, which is the fact this whole lesson rests on.</span></span></div>
@@ -598,6 +605,13 @@ $ find src -name "*.tsx" | wc -l
 <p><strong>Một câu.</strong> Biến thể điểm ngắt KHÔNG thêm độ đặc hiệu và thắng thuần tuý nhờ được phát sinh sau, nên Tailwind sắp <code>min-*</code> tăng dần và <code>max-*</code> giảm dần để quy tắc khớp HẸP NHẤT rơi xuống cuối — thứ biến mobile-first thành CHIỀU CHẠY của cascade chứ không phải một sở thích phong cách, và để mọi lớp responsive dễ tổn thương trước bất kỳ quy tắc viết tay nào đạt <code>0,2,0</code>.</p>
 </div>
 
+<h3>Vì sao thứ tự điểm ngắt trong thuộc tính class không có ý nghĩa</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Mọi utility responsive đều có độ đặc hiệu bằng không</span><span class="lz-d"><code>md:p-4</code> chỉ là một class thường nằm trong một media query. Nó KHÔNG thắng <code>p-2</code> nhờ đặc hiệu hơn, vì nó không hề đặc hiệu hơn.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Nên kẻ thắng là thứ tự trong bảng kiểu</span><span class="lz-d">Và Tailwind luôn sinh ra các điểm ngắt theo chiều rộng tăng dần — <code>sm</code>, rồi <code>md</code>, rồi <code>lg</code>, bất kể bạn gõ chúng theo thứ tự nào.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Đó là lý do lối ưu-tiên-điện-thoại chạy được</span><span class="lz-d">Giá trị không tiền tố áp ở mọi nơi và mỗi điểm ngắt lớn hơn đè lên nó, vì mỗi cái được sinh ra sau.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và là lý do <code>md:p-4 p-2</code> hành xử y hệt <code>p-2 md:p-4</code></span><span class="lz-d">Thuộc tính class là một TẬP HỢP, không phải một trình tự. Chẳng có gì bạn làm trong markup đổi được luật nào thắng.</span></div>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Responsive design</span><span class="lc-sub">tailwindcss.com/docs/responsive-design — lời giải thích mobile-first, các biến thể <code>max-*</code>, và dạng hai-đầu <code>md:max-lg:</code> để nhắm một dải.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Using media queries</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries — gồm cả lời khẳng định TƯỜNG MINH rằng media query KHÔNG ảnh hưởng độ đặc hiệu, chính là sự thật mà cả bài này dựa lên.</span></span></div>

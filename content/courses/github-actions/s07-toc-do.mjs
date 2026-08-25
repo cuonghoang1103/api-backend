@@ -740,6 +740,9 @@ cu hong 32400097927 nam TRON trong tap 147 commit ay</div>
 <p><strong>The one sentence.</strong> This repository&#39;s CI is free, would cost 11,130 billable minutes if it were not, and 76% of that would be one macOS matrix leg — while the failure that most justified having CI at all was in a directory that 73.5% of commits change without triggering anything.</p>
 </div>
 
+<div class="pitfall">
+<p><strong>Trap — measuring CI by its invoice instead of by what it catches.</strong> Minutes are the visible number, so that is what gets optimised: caching aggressively, dropping the slowest job, running tests only on changed paths. Each saves money and each removes coverage, and the loss shows up months later as a bug that reached production through the path nobody checks any more. The comparison that matters is against the counterfactual — what one escaped defect costs in incident time, rollback, and the hour every engineer spends waiting on a broken main. Before cutting a job, find the last thing it caught. If it has never caught anything in a year, that is a real argument for deleting it; &quot;it is slow&quot; is not.</p>
+</div>
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — About billing for GitHub Actions</span><span class="lc-sub">docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions — the per-platform multipliers, per-job minute rounding, included allowances per plan, and the statement that public repositories are free.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — Viewing your Actions usage</span><span class="lc-sub">docs.github.com/en/billing/managing-billing-for-github-actions/viewing-your-github-actions-usage — the per-workflow breakdown that turns the estimate above into a real figure for a private repository.</span></span></div>
@@ -814,6 +817,9 @@ cu hong 32400097927 nam TRON trong tap 147 commit ay</div>
 <p><strong>Một câu.</strong> CI của kho này miễn phí, sẽ tốn 11.130 phút tính tiền nếu không, và 76% con số ấy sẽ là MỘT nhánh ma trận macOS — trong khi cú hỏng biện minh mạnh nhất cho việc có CI lại nằm ở một thư mục mà 73,5% commit sửa vào mà không kích hoạt gì cả.</p>
 </div>
 
+<div class="pitfall">
+<p><strong>Bẫy — đo CI bằng hoá đơn của nó thay vì bằng thứ nó bắt được.</strong> Số phút là con số nhìn thấy được, nên đó là thứ bị đem đi tối ưu: nhớ đệm thật mạnh, bỏ bớt việc chậm nhất, chỉ chạy kiểm thử trên những đường đã đổi. Mỗi cách đều tiết kiệm tiền và mỗi cách đều gỡ bớt phạm vi phủ, và phần mất mát hiện ra vài tháng sau dưới dạng một lỗi lọt lên production qua đúng con đường mà chẳng ai còn kiểm. Phép so sánh đáng làm là so với kịch bản ngược lại — một khiếm khuyết lọt lưới tốn bao nhiêu thời gian xử lý sự cố, quay lui, và một giờ mà mỗi kỹ sư ngồi chờ nhánh chính hỏng. Trước khi cắt một việc, hãy tìm xem lần gần nhất nó bắt được cái gì. Nếu suốt một năm nó chẳng bắt được gì thì đó là lý lẽ thật để xoá nó; còn &quot;nó chậm&quot; thì không.</p>
+</div>
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — About billing for GitHub Actions</span><span class="lc-sub">docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions — hệ số theo nền tảng, làm tròn phút theo từng job, hạn mức kèm theo mỗi gói, và phát biểu rằng kho công khai là miễn phí.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — Viewing your Actions usage</span><span class="lc-sub">docs.github.com/en/billing/managing-billing-for-github-actions/viewing-your-github-actions-usage — bảng phân tích theo từng workflow, thứ biến ước lượng bên trên thành một con số THẬT cho một kho riêng tư.</span></span></div>

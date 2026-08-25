@@ -118,6 +118,13 @@ cp -r src/ /tmp/backup/ &amp;&amp; <span class="tok-keyword">echo</span> <span c
 done</div>
 <p>The <code>&amp;&amp;</code> is a preview of Chapter 6: run the second command only if the first succeeded. On a long copy it is the difference between knowing it worked and assuming it did.</p>
 
+<h3>The trailing slash, which changes what cp and rsync mean</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">cp -r src dst — dst does not exist</span><span class="lz-d">Creates <code>dst</code> as a copy of <code>src</code>. This is what you almost always meant.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">cp -r src dst — dst already exists</span><span class="lz-d">Creates <code>dst/src</code>. Same command, different outcome, decided entirely by whether the destination happened to exist.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">rsync src/ dst/ — with the slash</span><span class="lz-d">Copies the <em>contents</em> of <code>src</code> into <code>dst</code>. The slash means &quot;what is inside&quot;.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">rsync src dst/ — without it</span><span class="lz-d">Copies the <em>directory</em>, producing <code>dst/src</code>. One character, and a deploy that lands one level deeper than expected.</span></div>
+</div>
 <a class="link-card" href="https://man7.org/linux/man-pages/man1/cp.1.html" target="_blank" rel="noopener">
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">cp(1) — including -a, -u and the --backup options</span><span class="lc-sub"><code>--backup=numbered</code> is a useful middle ground between <code>-i</code> and overwriting.</span></span>
@@ -231,6 +238,13 @@ cp -r src/ /tmp/backup/ &amp;&amp; <span class="tok-keyword">echo</span> <span c
 xong</div>
 <p>Dấu <code>&amp;&amp;</code> là một hé lộ của Chương 6: chỉ chạy lệnh thứ hai nếu lệnh đầu thành công. Với một lần chép lâu, đó là khác biệt giữa BIẾT rằng nó chạy được và CHO RẰNG nó chạy được.</p>
 
+<h3>Dấu gạch chéo cuối, thứ làm đổi nghĩa của cp và rsync</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">cp -r src dst — khi dst chưa tồn tại</span><span class="lz-d">Tạo <code>dst</code> là một bản chép của <code>src</code>. Đây gần như luôn là thứ bạn muốn.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">cp -r src dst — khi dst đã tồn tại</span><span class="lz-d">Tạo ra <code>dst/src</code>. Cùng một lệnh, kết cục khác nhau, quyết định hoàn toàn bởi việc cái đích tình cờ có tồn tại hay không.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">rsync src/ dst/ — có dấu gạch chéo</span><span class="lz-d">Chép <em>nội dung</em> của <code>src</code> vào <code>dst</code>. Dấu gạch chéo nghĩa là &quot;những gì bên trong&quot;.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">rsync src dst/ — không có nó</span><span class="lz-d">Chép cả <em>thư mục</em>, cho ra <code>dst/src</code>. Một ký tự, và một lần deploy rơi xuống sâu hơn một tầng so với dự kiến.</span></div>
+</div>
 <a class="link-card" href="https://man7.org/linux/man-pages/man1/cp.1.html" target="_blank" rel="noopener">
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">cp(1) — gồm cả -a, -u và các tuỳ chọn --backup</span><span class="lc-sub"><code>--backup=numbered</code> là điểm trung gian hữu ích giữa <code>-i</code> và ghi đè thẳng.</span></span>

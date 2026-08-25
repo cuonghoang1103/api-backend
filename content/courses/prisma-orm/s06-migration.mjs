@@ -378,6 +378,9 @@ npx prisma migrate diff \\
 </div>
 
 <h3>Learning sources for this lesson</h3>
+<div class="pitfall">
+<p><strong>Trap — pointing the shadow database at a URL that already holds data.</strong> &#96;shadowDatabaseUrl&#96; names a database Prisma <em>drops and recreates</em> on every &#96;migrate dev&#96; run. Give it the URL of a staging database and the first migration wipes it, silently and completely — the command reports success, because destroying that database is exactly what it was asked to do. It bites hardest on a hosted provider where the shadow URL is copied from the dashboard and the two connection strings differ by one character. Point it at a database whose only purpose is being thrown away, and never at anything whose name you would mind seeing in a backup request.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-migrate/understanding-prisma-migrate/shadow-database" target="_blank" rel="noopener"><span class="lc-ico">👥</span><span class="lc-body"><span class="lc-title">The shadow database</span><span class="lc-sub">prisma.io/docs · What it is for, the permissions it needs, and every workaround per provider</span></span></a>
 <a class="link-card" href="https://www.prisma.io/docs/orm/reference/prisma-cli-reference#migrate-diff" target="_blank" rel="noopener"><span class="lc-ico">🔬</span><span class="lc-body"><span class="lc-title"><code>migrate diff</code> — reference</span><span class="lc-sub">prisma.io/docs · Every <code>--from</code> and <code>--to</code> combination, which is the whole power of the command</span></span></a>
 <a class="link-card" href="https://www.prisma.io/docs/orm/reference/error-reference#p3014" target="_blank" rel="noopener"><span class="lc-ico">🚨</span><span class="lc-body"><span class="lc-title">P3014 and P3006</span><span class="lc-sub">prisma.io/docs · The two shadow-database errors, and what each one is really telling you</span></span></a>
@@ -496,6 +499,9 @@ npx prisma migrate diff \\
 </div>
 
 <h3>Nguồn học cho bài này</h3>
+<div class="pitfall">
+<p><strong>Bẫy — trỏ shadow database vào một URL vốn đang chứa dữ liệu.</strong> &#96;shadowDatabaseUrl&#96; gọi tên một cơ sở dữ liệu mà Prisma <em>xoá đi rồi dựng lại</em> ở mỗi lần chạy &#96;migrate dev&#96;. Đưa cho nó URL của một cơ sở dữ liệu staging là migration đầu tiên xoá sạch nó, lặng lẽ và trọn vẹn — lệnh báo thành công, vì phá huỷ cơ sở dữ liệu đó đúng là việc nó được giao. Nó cắn đau nhất trên một nhà cung cấp dịch vụ nơi URL shadow được chép từ bảng điều khiển và hai chuỗi kết nối chỉ khác nhau một ký tự. Hãy trỏ nó vào một cơ sở dữ liệu mà mục đích duy nhất là bị vứt đi, và đừng bao giờ trỏ vào thứ mà bạn sẽ tiếc nếu thấy tên nó trong một yêu cầu khôi phục sao lưu.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-migrate/understanding-prisma-migrate/shadow-database" target="_blank" rel="noopener"><span class="lc-ico">👥</span><span class="lc-body"><span class="lc-title">The shadow database</span><span class="lc-sub">prisma.io/docs · Nó dùng để làm gì, cần quyền gì, và mọi cách đi vòng theo từng provider</span></span></a>
 <a class="link-card" href="https://www.prisma.io/docs/orm/reference/prisma-cli-reference#migrate-diff" target="_blank" rel="noopener"><span class="lc-ico">🔬</span><span class="lc-body"><span class="lc-title"><code>migrate diff</code> — tra cứu</span><span class="lc-sub">prisma.io/docs · Mọi tổ hợp <code>--from</code> và <code>--to</code>, tức toàn bộ sức mạnh của câu lệnh</span></span></a>
 <a class="link-card" href="https://www.prisma.io/docs/orm/reference/error-reference#p3014" target="_blank" rel="noopener"><span class="lc-ico">🚨</span><span class="lc-body"><span class="lc-title">P3014 và P3006</span><span class="lc-sub">prisma.io/docs · Hai lỗi của shadow database, và mỗi cái thật ra đang nói với bạn điều gì</span></span></a>

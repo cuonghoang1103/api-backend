@@ -458,6 +458,13 @@ ok   curl
 ok   ps</div>
 <p>You will not understand that loop yet — it is Chapter 6. Run it anyway; by the end of this course you will read it at a glance.</p>
 
+<h3>Four ways to get a shell, and what each one really is</h3>
+<div class="lz-map">
+  <div class="lz-node"><span class="lz-k">WSL2</span><span class="lz-t">A real Linux kernel on Windows</span><span class="lz-d">Full syscall compatibility, and the filesystem boundary is the thing to watch — keep projects under <code>~</code>, not <code>/mnt/c</code>, or every file operation crosses a translation layer.</span></div>
+  <div class="lz-node"><span class="lz-k">macOS Terminal</span><span class="lz-t">BSD userland, not Linux</span><span class="lz-d"><code>sed</code>, <code>date</code> and <code>xargs</code> take different flags. Scripts written here break on a server; install the GNU tools if you want them to match.</span></div>
+  <div class="lz-node"><span class="lz-k">A Linux desktop</span><span class="lz-t">Already the target</span><span class="lz-d">Nothing to install, and the only setup that guarantees your local commands behave the way the VPS will.</span></div>
+  <div class="lz-node"><span class="lz-k">A Docker container</span><span class="lz-t">Disposable and identical</span><span class="lz-d"><code>docker run -it --rm debian bash</code>. Break it freely, and it matches the distribution your server actually runs.</span></div>
+</div>
 <a class="link-card" href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank" rel="noopener">
   <span class="lc-ico">🪟</span>
   <span class="lc-body"><span class="lc-title">Microsoft Docs — Install WSL</span><span class="lc-sub">Official setup, plus the VS Code integration and the filesystem performance note.</span></span>
@@ -562,6 +569,13 @@ ok   curl
 ok   ps</div>
 <p>Bạn chưa hiểu cái vòng lặp đó đâu — nó là Chương 6. Cứ chạy đi; tới cuối khoá này bạn sẽ đọc nó chỉ bằng một cái liếc mắt.</p>
 
+<h3>Bốn cách để có một shell, và mỗi cách thật ra là gì</h3>
+<div class="lz-map">
+  <div class="lz-node"><span class="lz-k">WSL2</span><span class="lz-t">Một nhân Linux thật trên Windows</span><span class="lz-d">Tương thích lời gọi hệ thống đầy đủ, và cái ranh giới hệ tệp mới là thứ cần để ý — hãy giữ dự án dưới <code>~</code>, đừng để ở <code>/mnt/c</code>, không thì mọi thao tác file đều đi qua một lớp phiên dịch.</span></div>
+  <div class="lz-node"><span class="lz-k">Terminal của macOS</span><span class="lz-t">Bộ lệnh BSD, không phải Linux</span><span class="lz-d"><code>sed</code>, <code>date</code> và <code>xargs</code> nhận cờ khác nhau. Script viết ở đây sẽ vỡ trên máy chủ; hãy cài bộ công cụ GNU nếu muốn chúng khớp nhau.</span></div>
+  <div class="lz-node"><span class="lz-k">Một máy để bàn Linux</span><span class="lz-t">Vốn đã là đích đến</span><span class="lz-d">Chẳng phải cài gì, và là thiết lập duy nhất bảo đảm các lệnh ở máy bạn cư xử đúng như trên VPS.</span></div>
+  <div class="lz-node"><span class="lz-k">Một container Docker</span><span class="lz-t">Vứt đi được và giống hệt</span><span class="lz-d"><code>docker run -it --rm debian bash</code>. Cứ phá thoải mái, và nó khớp với bản phân phối mà máy chủ của bạn thật sự chạy.</span></div>
+</div>
 <a class="link-card" href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank" rel="noopener">
   <span class="lc-ico">🪟</span>
   <span class="lc-body"><span class="lc-title">Microsoft Docs — Cài đặt WSL</span><span class="lc-sub">Hướng dẫn chính thức, kèm tích hợp VS Code và ghi chú về hiệu năng hệ thống file.</span></span>

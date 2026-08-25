@@ -447,6 +447,13 @@ docker volume ls -f dangling=true --format '{{.Name}}' | head -2</code></pre>
 </div>
 <pre><code>docker rmi voltest &gt;/dev/null 2&gt;&amp;1; docker volume prune -f &gt;/dev/null</code></pre>
 
+<h3>The instructions, grouped by what they cost</h3>
+<div class="lz-map">
+  <div class="lz-node"><span class="lz-k">Creates a layer</span><span class="lz-t"><code>RUN</code>, <code>COPY</code>, <code>ADD</code></span><span class="lz-d">Each one adds bytes to the image and a cache entry. Order them so the ones that change least often come first.</span></div>
+  <div class="lz-node"><span class="lz-k">Metadata only</span><span class="lz-t"><code>ENV</code>, <code>WORKDIR</code>, <code>EXPOSE</code>, <code>LABEL</code></span><span class="lz-d">Free in size, and they still invalidate the cache for everything below them when they change.</span></div>
+  <div class="lz-node"><span class="lz-k">Runtime behaviour</span><span class="lz-t"><code>CMD</code>, <code>ENTRYPOINT</code>, <code>USER</code>, <code>HEALTHCHECK</code></span><span class="lz-d">Nothing happens at build time. They are recorded in the config and read when a container starts.</span></div>
+  <div class="lz-node"><span class="lz-k">Build-time only</span><span class="lz-t"><code>ARG</code>, <code>FROM … AS</code></span><span class="lz-d"><code>ARG</code> is not available at runtime, which is the difference from <code>ENV</code> that catches everyone once.</span></div>
+</div>
 <a class="link-card" href="https://docs.docker.com/reference/dockerfile/" target="_blank" rel="noopener">
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">Dockerfile reference</span><span class="lc-sub">Every instruction with exact semantics and edge cases. The <code>COPY</code> and <code>ADD</code> sections in particular are worth reading in full — most of the surprises in this lesson are documented there.</span></span>
@@ -569,6 +576,13 @@ docker volume ls -f dangling=true --format '{{.Name}}' | head -2</code></pre>
 </div>
 <pre><code>docker rmi voltest &gt;/dev/null 2&gt;&amp;1; docker volume prune -f &gt;/dev/null</code></pre>
 
+<h3>Các chỉ thị, nhóm theo thứ chúng tốn</h3>
+<div class="lz-map">
+  <div class="lz-node"><span class="lz-k">Tạo ra một tầng</span><span class="lz-t"><code>RUN</code>, <code>COPY</code>, <code>ADD</code></span><span class="lz-d">Mỗi cái thêm byte vào ảnh và thêm một mục trong bộ nhớ đệm. Hãy sắp thứ tự để những cái ít đổi nhất đứng trước.</span></div>
+  <div class="lz-node"><span class="lz-k">Chỉ là siêu dữ liệu</span><span class="lz-t"><code>ENV</code>, <code>WORKDIR</code>, <code>EXPOSE</code>, <code>LABEL</code></span><span class="lz-d">Miễn phí về kích thước, mà khi đổi thì vẫn vô hiệu hoá bộ đệm cho mọi thứ bên dưới chúng.</span></div>
+  <div class="lz-node"><span class="lz-k">Hành vi lúc chạy</span><span class="lz-t"><code>CMD</code>, <code>ENTRYPOINT</code>, <code>USER</code>, <code>HEALTHCHECK</code></span><span class="lz-d">Lúc build chẳng có gì xảy ra. Chúng được ghi vào phần cấu hình và được đọc khi một container khởi động.</span></div>
+  <div class="lz-node"><span class="lz-k">Chỉ có lúc build</span><span class="lz-t"><code>ARG</code>, <code>FROM … AS</code></span><span class="lz-d"><code>ARG</code> KHÔNG có mặt lúc chạy, và đó là khác biệt với <code>ENV</code> mà ai cũng vấp một lần.</span></div>
+</div>
 <a class="link-card" href="https://docs.docker.com/reference/dockerfile/" target="_blank" rel="noopener">
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">Tài liệu tra cứu Dockerfile</span><span class="lc-sub">Mọi chỉ thị kèm ngữ nghĩa chính xác và các trường hợp biên. Riêng phần <code>COPY</code> và <code>ADD</code> đáng đọc trọn vẹn — phần lớn bất ngờ trong bài này đều được ghi ở đó.</span></span>

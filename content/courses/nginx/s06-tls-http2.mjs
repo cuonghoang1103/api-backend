@@ -581,6 +581,9 @@ Kich thuoc header gui di (curl bao cao), cookie 1,5KB, 20 request:
 </div>
 
 <h3>Learning sources for this lesson</h3>
+<div class="pitfall">
+<p><strong>Trap — concluding HTTP/2 does nothing, from a benchmark run on localhost.</strong> The whole benefit is multiplexing many requests over one connection, and its size is proportional to latency and connection cost — both of which are near zero on loopback. So a local benchmark shows a difference in the noise, and the honest conclusion from that data is &quot;this measurement cannot detect the effect&quot;, not &quot;the effect is absent&quot;. Measure it where the conditions exist: a real client, a real network, DevTools throttled, and a page with several dozen subresources. This is the general trap in the chapter — a benchmark that cannot observe the mechanism will always report that the mechanism does not matter.</p>
+</div>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_v2_module.html" target="_blank" rel="noopener"><span class="lc-ico">2️⃣</span><span class="lc-body"><span class="lc-title">nginx — the HTTP/2 module</span><span class="lc-sub">nginx.org · Directives, limits, and the version note about the listen parameter</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_v3_module.html" target="_blank" rel="noopener"><span class="lc-ico">3️⃣</span><span class="lc-body"><span class="lc-title">nginx — the HTTP/3 module</span><span class="lc-sub">nginx.org · What QUIC needs, and the Alt-Svc header that advertises it</span></span></a>
 <a class="link-card" href="https://hpbn.co/http2/" target="_blank" rel="noopener"><span class="lc-ico">📖</span><span class="lc-body"><span class="lc-title">High Performance Browser Networking — HTTP/2</span><span class="lc-sub">hpbn.co · Multiplexing, HPACK and prioritisation, explained with the round trips visible</span></span></a>
@@ -640,6 +643,9 @@ Kich thuoc header gui di (curl bao cao), cookie 1,5KB, 20 request:
 </div>
 
 <h3>Nguồn học cho bài này</h3>
+<div class="pitfall">
+<p><strong>Bẫy — kết luận HTTP/2 chẳng làm gì, từ một phép đo chạy trên localhost.</strong> Toàn bộ lợi ích là ghép nhiều request lên một kết nối, và độ lớn của nó tỷ lệ với độ trễ và chi phí mở kết nối — cả hai đều gần bằng không trên loopback. Nên một phép đo cục bộ cho ra chênh lệch nằm trong nhiễu, và kết luận thành thật từ dữ liệu đó là &quot;phép đo này không phát hiện được hiệu ứng&quot;, chứ không phải &quot;hiệu ứng không tồn tại&quot;. Hãy đo ở nơi có đủ điều kiện: một client thật, một đường mạng thật, DevTools có bóp băng thông, và một trang có vài chục tài nguyên con. Đây là cái bẫy tổng quát của cả chương — một phép đo không quan sát được cơ chế thì luôn báo cáo rằng cơ chế đó chẳng có ý nghĩa gì.</p>
+</div>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_v2_module.html" target="_blank" rel="noopener"><span class="lc-ico">2️⃣</span><span class="lc-body"><span class="lc-title">nginx — module HTTP/2</span><span class="lc-sub">nginx.org · Các chỉ thị, các giới hạn, và ghi chú phiên bản về tham số của listen</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_v3_module.html" target="_blank" rel="noopener"><span class="lc-ico">3️⃣</span><span class="lc-body"><span class="lc-title">nginx — module HTTP/3</span><span class="lc-sub">nginx.org · QUIC cần gì, và cái header Alt-Svc dùng để quảng cáo nó</span></span></a>
 <a class="link-card" href="https://hpbn.co/http2/" target="_blank" rel="noopener"><span class="lc-ico">📖</span><span class="lc-body"><span class="lc-title">High Performance Browser Networking — HTTP/2</span><span class="lc-sub">hpbn.co · Ghép kênh, HPACK và ưu tiên, giải thích với số vòng đi về hiện rõ</span></span></a>

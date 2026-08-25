@@ -1033,6 +1033,7 @@ diff /tmp/a /tmp/b | grep '^&gt;' | head -4</code></pre>
   <div class="kv"><span class="k">Then go and operate one</span><span class="v">Nothing in this course substitutes for owning an instance through a growth curve, an incident and a version upgrade. The lessons stick when they cost you an evening.</span></div>
 </div>
 
+<div class="pitfall"><strong>Trap:</strong> treating Redis as &quot;a cache&quot; and stopping there. This course spent most of its time on the things that are not caching — distributed locks, rate limits, queues, streams, pub/sub — and every one of them has a failure mode a cache does not. A cache that loses data gets slower; a distributed lock that loses data lets two processes into the critical section. If you leave this course with only &quot;Redis is fast because it is in RAM&quot;, you have skipped the part the ten rules above are about: what is durable, what replicates, and what fails silently. Before using Redis for anything where losing data means losing money, re-read the durability section — it is not what people assume.</div>
 <a class="link-card" href="https://redis.io/docs/latest/" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
   <span class="lc-body"><span class="lc-title">The Redis documentation</span><span class="lc-sub">Unusually good for a database: the command reference, the data-type guides, the operations section and the reference specs. Almost every link in this course points into it.</span></span>
@@ -1132,6 +1133,7 @@ diff /tmp/a /tmp/b | grep '^&gt;' | head -4</code></pre>
   <div class="kv"><span class="k">Rồi hãy đi vận hành một cái</span><span class="v">Không gì trong khoá học này thay thế được việc sở hữu một cái máy đi qua một đường tăng trưởng, một sự cố và một lần nâng phiên bản. Các bài học ngấm vào người khi chúng lấy của bạn một buổi tối.</span></div>
 </div>
 
+<div class="pitfall"><strong>Bẫy:</strong> coi Redis là &quot;một cái cache&quot; và dừng lại ở đó. Khoá này dành phần lớn thời gian cho những thứ KHÔNG phải cache — khoá phân tán, giới hạn tần suất, hàng đợi, luồng, pub/sub — và mỗi cái trong số đó có một chế độ hỏng riêng mà một bộ nhớ đệm không có. Một cache mất dữ liệu thì chậm đi; một khoá phân tán mất dữ liệu thì hai tiến trình cùng vào vùng tới hạn. Nếu bạn rời khoá này với đúng một câu &quot;Redis nhanh vì nó nằm trong RAM&quot; thì bạn đã bỏ lỡ phần mà mười luật ở trên nói tới: cái gì bền vững, cái gì tự nhân bản, cái gì im lặng khi hỏng. Trước khi dùng Redis cho một thứ mà mất dữ liệu là mất tiền, hãy kiểm lại mục về độ bền — nó không phải cái bạn đoán.</div>
 <a class="link-card" href="https://redis.io/docs/latest/" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
   <span class="lc-body"><span class="lc-title">Tài liệu Redis</span><span class="lc-sub">Tốt một cách bất thường so với một cơ sở dữ liệu: tài liệu tra cứu lệnh, các hướng dẫn theo kiểu dữ liệu, mục vận hành và các bản đặc tả. Gần như mọi liên kết trong khoá này đều trỏ vào đó.</span></span>

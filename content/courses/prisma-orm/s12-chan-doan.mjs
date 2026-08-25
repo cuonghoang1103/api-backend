@@ -91,6 +91,9 @@ docker logs cuonghoangdev_backend --since 15m 2&gt;&amp;1 | grep -iE 'prisma|P[0
 </div>
 
 <h3>Learning sources for this lesson</h3>
+<div class="pitfall">
+<p><strong>Trap — restarting the process before capturing anything.</strong> A restart clears the symptom often enough to feel like a fix, and it destroys the evidence: the connection pool state, the stuck query, the memory profile, the in-flight requests. Now the incident is over, nobody knows why it started, and it will happen again at a worse hour with the same amount of information. Thirty seconds of capture first — &#96;pg_stat_activity&#96;, the last hundred log lines, the pool metrics — costs nothing when the restart works and is the entire difference when it does not. Restart second, capture first; the order is the whole discipline.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/reference/error-reference" target="_blank" rel="noopener"><span class="lc-ico">🔢</span><span class="lc-body"><span class="lc-title">Prisma — error reference</span><span class="lc-sub">prisma.io/docs · Every P-code, with the condition that produces it</span></span></a>
 <a class="link-card" href="https://www.postgresql.org/docs/current/monitoring-stats.html" target="_blank" rel="noopener"><span class="lc-ico">📊</span><span class="lc-body"><span class="lc-title">PostgreSQL — the statistics views</span><span class="lc-sub">postgresql.org · pg_stat_activity and friends, the first place to look</span></span></a>
 <a class="link-card" href="https://sre.google/sre-book/effective-troubleshooting/" target="_blank" rel="noopener"><span class="lc-ico">🧭</span><span class="lc-body"><span class="lc-title">Google SRE — effective troubleshooting</span><span class="lc-sub">sre.google · The general method this lesson is a Prisma-shaped instance of</span></span></a>
@@ -170,6 +173,9 @@ docker logs cuonghoangdev_backend --since 15m 2&gt;&amp;1 | grep -iE 'prisma|P[0
 </div>
 
 <h3>Nguồn học cho bài này</h3>
+<div class="pitfall">
+<p><strong>Bẫy — khởi động lại tiến trình trước khi kịp ghi lại thứ gì.</strong> Một lần khởi động lại xoá được triệu chứng đủ thường xuyên để có cảm giác như một cách chữa, và nó phá sạch bằng chứng: trạng thái pool kết nối, truy vấn đang kẹt, hồ sơ bộ nhớ, các request đang dở. Giờ sự cố đã qua, chẳng ai biết vì sao nó bắt đầu, và nó sẽ tái diễn vào một giờ tệ hơn với đúng ngần ấy thông tin. Ba mươi giây ghi lại trước — &#96;pg_stat_activity&#96;, một trăm dòng log cuối, các chỉ số pool — chẳng tốn gì khi việc khởi động lại có tác dụng và là toàn bộ khác biệt khi nó không. Khởi động lại sau, ghi lại trước; đúng cái thứ tự đó chính là toàn bộ kỷ luật.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/reference/error-reference" target="_blank" rel="noopener"><span class="lc-ico">🔢</span><span class="lc-body"><span class="lc-title">Prisma — tra cứu mã lỗi</span><span class="lc-sub">prisma.io/docs · Mọi mã P, kèm điều kiện sinh ra nó</span></span></a>
 <a class="link-card" href="https://www.postgresql.org/docs/current/monitoring-stats.html" target="_blank" rel="noopener"><span class="lc-ico">📊</span><span class="lc-body"><span class="lc-title">PostgreSQL — các khung nhìn thống kê</span><span class="lc-sub">postgresql.org · pg_stat_activity và họ hàng, chỗ nhìn đầu tiên</span></span></a>
 <a class="link-card" href="https://sre.google/sre-book/effective-troubleshooting/" target="_blank" rel="noopener"><span class="lc-ico">🧭</span><span class="lc-body"><span class="lc-title">Google SRE — gỡ rối hiệu quả</span><span class="lc-sub">sre.google · Phương pháp tổng quát mà bài này là một hiện thân hình-dạng-Prisma của nó</span></span></a>
@@ -285,6 +291,9 @@ const post = await prisma.socialPost.findMany({ where: { authorId } });
 </div>
 
 <h3>Learning sources for this lesson</h3>
+<div class="pitfall">
+<p><strong>Trap — reading the last error in the log instead of the first.</strong> A pool exhaustion produces hundreds of timeout errors, and the one at the bottom of the screen is the hundredth — a symptom of a symptom. The line that identifies the cause is the first one, minutes earlier: a single slow query, a connection that never returned, a migration that took a lock. Scrolling to the newest entry is what a log viewer does by default, which is why this is so easy to fall into. Sort ascending and find the first occurrence of the error class, then look at the sixty seconds before it. The seven shapes in this lesson are only distinguishable at the start of the cascade.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/reference/error-reference" target="_blank" rel="noopener"><span class="lc-ico">🔢</span><span class="lc-body"><span class="lc-title">Prisma — error reference</span><span class="lc-sub">prisma.io/docs · The authoritative list: every P-code and its meta fields</span></span></a>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-migrate/workflows/patching-and-hotfixing" target="_blank" rel="noopener"><span class="lc-ico">🩹</span><span class="lc-body"><span class="lc-title">Prisma — failed migrations</span><span class="lc-sub">prisma.io/docs · The official procedure, and what resolve actually does</span></span></a>
 <a class="link-card" href="https://www.postgresql.org/docs/current/errcodes-appendix.html" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">PostgreSQL — error codes</span><span class="lc-sub">postgresql.org · The SQLSTATE behind each Prisma code, when you need more detail</span></span></a>
@@ -392,6 +401,9 @@ const post = await prisma.socialPost.findMany({ where: { authorId } });
 </div>
 
 <h3>Nguồn học cho bài này</h3>
+<div class="pitfall">
+<p><strong>Bẫy — đọc lỗi CUỐI CÙNG trong log thay vì đọc lỗi ĐẦU TIÊN.</strong> Một lần cạn pool sinh ra hàng trăm lỗi hết giờ, và cái nằm dưới cùng màn hình là cái thứ một trăm — một triệu chứng của một triệu chứng. Dòng chỉ ra nguyên nhân là dòng đầu tiên, từ mấy phút trước: một truy vấn chậm duy nhất, một kết nối chẳng bao giờ trả về, một migration đã giữ khoá. Cuộn tới mục mới nhất là việc mà trình xem log mặc định làm, và đó là lý do người ta rất dễ rơi vào. Hãy sắp tăng dần rồi tìm lần xuất hiện đầu tiên của loại lỗi đó, sau đó nhìn vào sáu mươi giây trước nó. Bảy hình dáng trong bài này chỉ phân biệt được ở đầu chuỗi đổ vỡ.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/reference/error-reference" target="_blank" rel="noopener"><span class="lc-ico">🔢</span><span class="lc-body"><span class="lc-title">Prisma — tra cứu mã lỗi</span><span class="lc-sub">prisma.io/docs · Danh sách chuẩn: mọi mã P và các trường meta của nó</span></span></a>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-migrate/workflows/patching-and-hotfixing" target="_blank" rel="noopener"><span class="lc-ico">🩹</span><span class="lc-body"><span class="lc-title">Prisma — migration thất bại</span><span class="lc-sub">prisma.io/docs · Quy trình chính thức, và resolve THẬT SỰ làm gì</span></span></a>
 <a class="link-card" href="https://www.postgresql.org/docs/current/errcodes-appendix.html" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">PostgreSQL — mã lỗi</span><span class="lc-sub">postgresql.org · SQLSTATE nằm sau mỗi mã Prisma, khi bạn cần chi tiết hơn</span></span></a>
@@ -782,6 +794,9 @@ groups:
 </div>
 
 <h3>Learning sources for this lesson</h3>
+<div class="pitfall">
+<p><strong>Trap — an alert that fires often enough to be muted.</strong> A threshold set too tight produces a page every few days for something that resolves itself, and within a month the channel is muted or the rule is disabled — so when the real one fires, nobody is listening. This is not a discipline problem; it is arithmetic. An alert is only useful if a human should act on it <em>every single time</em> it fires. If you would not get out of bed for it, it is a dashboard panel, not an alert. Set thresholds from the measured normal range plus real headroom, review anything that fired more than twice without action, and delete rules rather than ignoring them.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/observability-and-logging/metrics" target="_blank" rel="noopener"><span class="lc-ico">📊</span><span class="lc-body"><span class="lc-title">Prisma — metrics</span><span class="lc-sub">prisma.io/docs · Every gauge, counter and histogram, and the Prometheus format</span></span></a>
 <a class="link-card" href="https://github.com/prometheus-community/postgres_exporter" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">postgres_exporter</span><span class="lc-sub">github.com · Turns the pg_stat views from Lesson 12.3 into Prometheus metrics</span></span></a>
 <a class="link-card" href="https://prometheus.io/docs/practices/alerting/" target="_blank" rel="noopener"><span class="lc-ico">🔔</span><span class="lc-body"><span class="lc-title">Prometheus — alerting practices</span><span class="lc-sub">prometheus.io · Symptom-based alerting, and why resource alerts age badly</span></span></a>
@@ -883,6 +898,9 @@ groups:
 </div>
 
 <h3>Nguồn học cho bài này</h3>
+<div class="pitfall">
+<p><strong>Bẫy — một cảnh báo nổ đủ thường xuyên để bị tắt tiếng.</strong> Một ngưỡng đặt quá chặt sẽ gọi người vài ngày một lần cho một thứ tự nó khỏi, và trong vòng một tháng thì cái kênh đó bị tắt tiếng hoặc luật đó bị vô hiệu hoá — nên khi cái cảnh báo thật nổ thì chẳng ai nghe. Đây không phải vấn đề kỷ luật; đây là số học. Một cảnh báo chỉ có ích nếu con người nên hành động <em>ở mọi lần</em> nó nổ. Nếu bạn sẽ không bò dậy khỏi giường vì nó thì nó là một bảng theo dõi, không phải một cảnh báo. Hãy đặt ngưỡng từ khoảng bình thường đã đo được cộng một biên độ thật, xem lại mọi thứ đã nổ quá hai lần mà không ai làm gì, và hãy XOÁ luật đi thay vì phớt lờ nó.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/observability-and-logging/metrics" target="_blank" rel="noopener"><span class="lc-ico">📊</span><span class="lc-body"><span class="lc-title">Prisma — chỉ số</span><span class="lc-sub">prisma.io/docs · Mọi gauge, counter và histogram, và định dạng Prometheus</span></span></a>
 <a class="link-card" href="https://github.com/prometheus-community/postgres_exporter" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">postgres_exporter</span><span class="lc-sub">github.com · Biến các khung nhìn pg_stat của Bài 12.3 thành chỉ số Prometheus</span></span></a>
 <a class="link-card" href="https://prometheus.io/docs/practices/alerting/" target="_blank" rel="noopener"><span class="lc-ico">🔔</span><span class="lc-body"><span class="lc-title">Prometheus — thực hành cảnh báo</span><span class="lc-sub">prometheus.io · Cảnh báo theo triệu chứng, và vì sao cảnh báo theo tài nguyên già đi tệ</span></span></a>
@@ -957,6 +975,9 @@ groups:
 </div>
 
 <h3>Learning sources for this lesson</h3>
+<div class="pitfall">
+<p><strong>Trap — treating the ORM as the thing you learned.</strong> Prisma&#39;s API will change; some of what is in this course is already phrased differently from two years ago. What does not change is underneath it: how a connection pool behaves under load, why an N+1 is invisible on five rows, what an index costs on write, what a transaction does and does not guarantee, why a migration cannot be edited after it has run. Those are properties of the database, and they transfer to every ORM and to raw SQL. If you finish this course able to recite the Prisma method names but unable to read an &#96;EXPLAIN&#96; plan, the durable half is the half you skipped.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs" target="_blank" rel="noopener"><span class="lc-ico">📘</span><span class="lc-body"><span class="lc-title">Prisma documentation</span><span class="lc-sub">prisma.io/docs · The reference this course paraphrases; read the sections you now have questions about</span></span></a>
 <a class="link-card" href="https://github.com/prisma/prisma/releases" target="_blank" rel="noopener"><span class="lc-ico">🆕</span><span class="lc-body"><span class="lc-title">Prisma releases</span><span class="lc-sub">github.com · Preview features graduating, and what changes between minors</span></span></a>
 <a class="link-card" href="/courses/postgresql/learn${REF}"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">CuongThai course — PostgreSQL</span><span class="lc-sub">The database underneath all of this, taught on its own terms</span></span></a>
@@ -1023,6 +1044,9 @@ groups:
 </div>
 
 <h3>Nguồn học cho bài này</h3>
+<div class="pitfall">
+<p><strong>Bẫy — tưởng cái ORM chính là thứ bạn vừa học được.</strong> API của Prisma rồi sẽ đổi; một phần những gì trong khoá này đã được diễn đạt khác so với hai năm trước. Thứ KHÔNG đổi nằm ở bên dưới nó: một pool kết nối cư xử ra sao khi tải cao, vì sao một N+1 vô hình với năm dòng dữ liệu, một chỉ mục tốn gì ở phía ghi, một giao dịch bảo đảm và không bảo đảm điều gì, vì sao một migration không sửa được sau khi đã chạy. Đó là những tính chất của cơ sở dữ liệu, và chúng đi theo bạn sang mọi ORM và sang cả SQL thuần. Nếu bạn học xong khoá này mà đọc vanh vách tên các phương thức Prisma nhưng không đọc nổi một kế hoạch &#96;EXPLAIN&#96;, thì đúng cái nửa bền vững lại là cái nửa bạn đã bỏ qua.</p>
+</div>
 <a class="link-card" href="https://www.prisma.io/docs" target="_blank" rel="noopener"><span class="lc-ico">📘</span><span class="lc-body"><span class="lc-title">Tài liệu Prisma</span><span class="lc-sub">prisma.io/docs · Bản tham chiếu mà khoá này diễn giải lại; hãy đọc những mục mà giờ bạn ĐÃ CÓ câu hỏi</span></span></a>
 <a class="link-card" href="https://github.com/prisma/prisma/releases" target="_blank" rel="noopener"><span class="lc-ico">🆕</span><span class="lc-body"><span class="lc-title">Bản phát hành Prisma</span><span class="lc-sub">github.com · Tính năng xem trước tốt nghiệp, và cái gì đổi giữa hai bản minor</span></span></a>
 <a class="link-card" href="/courses/postgresql/learn${REF}"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — PostgreSQL</span><span class="lc-sub">Cơ sở dữ liệu nằm dưới tất cả những thứ này, dạy theo cách của chính nó</span></span></a>

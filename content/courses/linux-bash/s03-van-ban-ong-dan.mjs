@@ -1186,6 +1186,13 @@ X11Forwarding no</div>
   <div class="kv"><span class="k">Structured formats</span><span class="v">Do not sed JSON, XML or YAML. <code>jq</code>, <code>yq</code> and <code>xmlstarlet</code> exist, understand the syntax, and will not corrupt a file that gets reformatted.</span></div>
 </div>
 
+<h3>Reading a sed command from the outside in</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The command letter comes first</span><span class="lz-d"><code>s</code> substitute, <code>d</code> delete, <code>p</code> print, <code>a</code> append. Everything else is arguments to that one letter.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">An address selects lines</span><span class="lz-d"><code>/error/d</code> deletes matching lines; <code>2,5s/…/…/</code> substitutes only in lines 2–5. No address means every line.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The delimiter is whatever follows s</span><span class="lz-d"><code>s|a|b|</code> is the same as <code>s/a/b/</code> — useful when the pattern contains slashes, which is every path you will ever edit.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Flags go at the end</span><span class="lz-d"><code>g</code> for every match on the line, not just the first. Leaving it off is the commonest reason a substitution &quot;only half worked&quot;.</span></div>
+</div>
 <a class="link-card" href="https://www.gnu.org/software/sed/manual/sed.html" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">GNU sed Manual</span><span class="lc-sub">Complete, and the "Some Sample Scripts" chapter is a genuinely good read — it shows how far one-line programs stretch.</span></span>
@@ -1314,6 +1321,13 @@ X11Forwarding no</div>
   <div class="kv"><span class="k">Định dạng có cấu trúc</span><span class="v">Đừng sed vào JSON, XML hay YAML. Đã có <code>jq</code>, <code>yq</code> và <code>xmlstarlet</code>, chúng hiểu cú pháp và sẽ không phá hỏng một file vừa được định dạng lại.</span></div>
 </div>
 
+<h3>Đọc một lệnh sed từ ngoài vào trong</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Chữ cái lệnh đứng trước</span><span class="lz-d"><code>s</code> thay thế, <code>d</code> xoá, <code>p</code> in, <code>a</code> chèn thêm. Mọi thứ còn lại đều là đối số cho đúng chữ cái đó.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Một địa chỉ chọn các dòng</span><span class="lz-d"><code>/error/d</code> xoá những dòng khớp; <code>2,5s/…/…/</code> chỉ thay trong dòng 2–5. Không có địa chỉ nghĩa là mọi dòng.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Dấu phân cách là ký tự đứng ngay sau s</span><span class="lz-d"><code>s|a|b|</code> giống hệt <code>s/a/b/</code> — tiện khi mẫu có chứa dấu gạch chéo, tức là mọi đường dẫn bạn từng sửa.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Cờ đặt ở cuối</span><span class="lz-d"><code>g</code> để thay MỌI chỗ khớp trên dòng, không chỉ chỗ đầu tiên. Bỏ quên nó là lý do phổ biến nhất khiến một phép thay thế &quot;chỉ chạy được một nửa&quot;.</span></div>
+</div>
 <a class="link-card" href="https://www.gnu.org/software/sed/manual/sed.html" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
   <span class="lc-body"><span class="lc-title">GNU sed Manual</span><span class="lc-sub">Đầy đủ, và chương "Some Sample Scripts" thật sự đáng đọc — nó cho thấy những chương trình một dòng vươn xa tới đâu.</span></span>

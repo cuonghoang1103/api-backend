@@ -186,7 +186,27 @@ inline Arduino_GFX* nguc() {
   // Đo thật 25/08/2026 trên vỏ đã lắp: hướng 1 cho hình NGƯỢC LÊN TRÊN.
   // Con số này gắn với cách bo màn được bắt vào tấm ngực, không phải
   // với chip — lắp lại màn theo chiều khác thì phải đổi lại.
-  static Arduino_GFX* g = new Arduino_ILI9488(b, GFX_NOT_DEFINED, 3, false);
+  // ⛔⛔ PHẢI LÀ `_18bit`, KHÔNG PHẢI `Arduino_ILI9488` trần.
+  //
+  // ILI9488 qua SPI **không nhận màu 16 bit**. Chip chỉ hiểu RGB666
+  // 18 bit; lớp `Arduino_ILI9488` trần gửi RGB565 và chỉ đúng khi nối
+  // bus SONG SONG 8/16 bit. Còn `Arduino_ILI9488_18bit` chuyển 565→666
+  // ngay lúc gửi, đó mới là lớp cho SPI.
+  //
+  // Triệu chứng khi dùng nhầm lớp (đo thật 25/08/2026): màn SÁNG ĐỤC,
+  // không hình — chip vẫn nhận lệnh khởi tạo, đèn nền vẫn chạy, chỉ dữ
+  // liệu điểm ảnh là lệch. KHÔNG có lỗi nào ở Serial, và `drawFace()`
+  // vẫn đếm đủ số lần chạy.
+  //
+  // Vì sao bàn kiểm `test/` không lộ ra: nó dùng TFT_eSPI, thư viện ấy
+  // TỰ chuyển 16→18 bit cho ILI9488. Arduino_GFX bắt chọn đúng lớp.
+  // Hai bàn thử dùng hai thư viện khác nhau nên một bên xanh không
+  // chứng minh được gì cho bên kia.
+  // Cờ IPS = true. Với false, `fillScreen(0)` — lệnh tô ĐEN — lại cho
+  // ra màn TRẮNG: đó là màu bị đảo âm bản, không phải màn hỏng.
+  // Đo thật 25/08/2026: màn sáng trắng đục suốt trong khi drawFace()
+  // vẫn đếm đủ nhịp chạy và Serial không báo lỗi nào.
+  static Arduino_GFX* g = new Arduino_ILI9488_18bit(b, GFX_NOT_DEFINED, 3, true);
   return g;
 }
 

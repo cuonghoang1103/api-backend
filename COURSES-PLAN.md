@@ -26,10 +26,10 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | # | Track Code Lab | Khoá `/courses` | Trạng thái |
 |---|---|---|---|
 | 1 | `nodejs-express` | `nodejs` — Node.js | ✅ ĐỦ (19 mục · 112 bài · 1,93 tr ký tự) |
-| 2 | `nextjs` + `react` | `nextjs` — Next.js & React | ✅ có (21 mục · 121 bài · 686k) — *mỏng, xem §4* |
-| 3 | `typescript` | `typescript` — TypeScript | ✅ có (17 mục · 84 bài · 649k) — *thiếu sơ đồ* |
-| 4 | `postgresql` | `postgresql` — PostgreSQL | ✅ có (11 mục · 54 bài · 488k) |
-| 5 | `javascript` + `html-css` | `web-foundations` — Nền tảng Lập trình Web | ✅ có (11 mục · 64 bài · 333k) — *0 sơ đồ* |
+| 2 | `nextjs` + `react` | `nextjs` — Next.js & React | ✅ có (21 mục · 121 bài · **1.181k**) — đã nâng chuẩn 25/08 |
+| 3 | `typescript` | `typescript` — TypeScript | ✅ có (17 mục · 84 bài · **910k**) — đã nâng chuẩn 25/08 |
+| 4 | `postgresql` | `postgresql` — PostgreSQL | ✅ có (11 mục · 54 bài · **631k**) — đã nâng chuẩn 25/08 |
+| 5 | `javascript` + `html-css` | `web-foundations` — Nền tảng Lập trình Web | ✅ có (11 mục · 64 bài · **591k**) — đã nâng chuẩn 25/08 |
 | 6 | `git` | `git` — Git & GitHub | ✅ **XONG** (14 mục · 63 bài · 889k · TB 14.109) |
 | 7 | `linux-bash` | `linux-bash` — Linux & Bash | ✅ **XONG** (13 mục · 69 bài · 1.660k · TB 24.064) |
 | 8 | `docker` | `docker` — Docker | ✅ **XONG** (13 mục · 76 bài · 1.584k · TB 20.842) |
@@ -56,14 +56,47 @@ Còn lại: `observability-monitoring` · `payment-integration` · `vnpay` · `p
 
 ⚠️ **18 "đã có" KHÔNG có nghĩa 18 đạt chuẩn.** Chạy `course-depth-audit.mjs`
 trên cả 18 ngày 25/08: **14 đạt mọi sàn §3, 4 KHÔNG** — và cả 4 đều nằm trong
-nhóm 5 khoá CŨ ở §4 (chỉ `nodejs` đã được nâng lên chuẩn):
+nhóm 5 khoá CŨ ở §4 (chỉ `nodejs` đã được nâng lên chuẩn).
 
-| Khoá | TB ký tự/bài | Thiếu gì |
-|---|---|---|
-| `nextjs` | 5.672 | dưới sàn 9.000 · sơ đồ 56/101 · bẫy 46/101 · nguồn 184/202 · 39 bài mỏng |
-| `web-foundations` | 5.201 | dưới sàn 9.000 · **sơ đồ 0**/54 · nguồn 74/108 · 30 bài mỏng |
-| `typescript` | 7.720 | dưới sàn 9.000 · sơ đồ 8/68 · bẫy 20/68 · nguồn 122/136 |
-| `postgresql` | 9.039 | TB đạt, nhưng sơ đồ 20/44 · bẫy 10/44 |
+**✅ ĐÃ NÂNG XONG cả 4, ngày 25/08/2026.** Đo lại sau khi vá:
+
+| Khoá | TB trước | TB sau | Sơ đồ | Bẫy | Nguồn |
+|---|---|---|---|---|---|
+| `postgresql` | 9.039 | **11.694** | 20 → 90 | 10 → 96 | 92 |
+| `typescript` | 7.720 | **10.831** | 8 → 136 | 20 → 144 | 122 → 152 |
+| `web-foundations` | 5.201 | **9.236** | **0 → 128** | 56 → 164 | 74 → 200 |
+| `nextjs` | 5.672 | **9.761** | 56 → 252 | 46 → 246 | 184 → 572 |
+
+Cả 4 đều **kiểm TỪNG BÀI**, không chỉ tin bộ đếm tổng: 44/44 · 68/68 · 54/54 ·
+101/101 bài lý thuyết đều có ≥1 sơ đồ, ≥1 bẫy, ≥1 nguồn ở **cả hai** khối
+`ml-en` và `ml-vi`. Cả ba bộ kiểm (`content-check`, `depth-audit`,
+`lang-check`) đều sạch trên toàn bộ 18 khoá.
+
+### ⚠️ Bộ đếm TỔNG của depth-audit che được lỗ thủng TỪNG BÀI
+
+Đây là lần thứ tư trong dự án một bộ kiểm nói "đạt" trong khi vẫn còn lỗ
+(xem §Bài học về bộ kiểm). Sàn §3 đếm **cộng dồn** — `sơ đồ ≥ n − quiz` —
+nên một khoá có 20 bài mang 5 sơ đồ và 40 bài mang 0 vẫn qua. Với `typescript`
+nó báo "✅ đạt mọi sàn" ở lúc chương 10–16 (28 bài) vẫn còn **0 sơ đồ, 0 bẫy**.
+
+**Đo thật ngày 25/08 sau khi 4 khoá trên đã xong** — quét từng bài trên cả 18
+khoá bằng cách *import module* (đừng quét regex trên file: `slug:` ở cấp
+section sẽ bị đếm nhầm thành bài, cho ra 168 thay vì 85):
+
+**1.054 bài lý thuyết · 85 bài vẫn dưới chuẩn TỪNG BÀI**, ở 13 khoá khác:
+
+| Khoá | Số bài thiếu | | Khoá | Số bài thiếu |
+|---|---|---|---|---|
+| `nodejs` | 39 | | `media-processing` | 3 |
+| `prisma-orm` | 10 | | `authentication` | 2 |
+| `socket-io` | 9 | | `github-actions` | 1 |
+| `object-storage` | 7 | | `nginx` | 1 |
+| `deploy-vps` | 4 | | `redis` | 1 |
+| `linux-bash` | 4 | | `tailwind-css` | 1 |
+| `docker` | 3 | | | |
+
+Cả 13 khoá này **đều đạt sàn tổng** (TB 9.1k–24.1k). Lỗ thủng chỉ lộ ra khi
+đếm theo từng bài. Đây là việc còn lại, chưa làm.
 
 ### Thứ tự ưu tiên (đã chốt)
 

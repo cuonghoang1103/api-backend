@@ -1,26 +1,29 @@
 {
-  "scannedAt": "2026-08-16",
-  "scope": "frontend/src/app/notes and frontend/src/components/notes",
-  "framework": "Next.js 14 App Router with React 18 and Tailwind CSS 3",
-  "fonts": [
-    "Inter",
-    "Poppins",
-    "Nunito",
-    "JetBrains Mono",
-    "Fraunces Variable"
-  ],
-  "palette": "Existing semantic Notes CSS variables with light, dark, and brown themes",
-  "motion": "framer-motion 11 is installed and already used for drawers and dialogs",
-  "spacing": "Existing Tailwind 4px-based spacing scale",
+  "scannedAt": "2026-08-25",
+  "scope": "frontend homepage route / and frontend/src/components/home/landing",
+  "framework": "Next.js 14 App Router, React 18, Tailwind CSS 3",
+  "genre": "editorial",
+  "tone": "editorial-cinematic, restrained",
+  "audience": "Vietnamese learners who want a practical route through software, languages and career work",
+  "primaryAction": "choose a learning path or continue an existing one",
+  "macrostructure": "Split Studio",
+  "nav": "N9 edge-aligned minimal with the existing dock preserved",
+  "footer": "Ft5 statement footer",
+  "fonts": ["Fraunces Variable", "Inter", "JetBrains Mono"],
+  "palette": "Existing homepage-scoped OKLCH ink, warm paper and amber semantic tokens",
+  "motion": "one entrance, one pointer tilt and one arrow micro-shift; transform/opacity only",
+  "performance": "static optimized 3D capture on the landing route; actual WebGPU assets load only after explicit entry",
   "preserve": [
-    "NotesThemeProvider scoped .dark behavior",
-    "current /notes route and component ownership",
-    "existing subject/chapter/note information architecture",
-    "existing user data and APIs"
+    "all existing route destinations",
+    "real GET /api/v1/landing/stats data and null-hiding behavior",
+    "PlaygroundGate modifier-click and warning-dialog behavior",
+    "global navigation dock and ChatModal behavior",
+    "all non-homepage Navbar, reminder and AI assistant behavior"
   ],
   "introduce": [
-    "clearer page context and properties",
-    "accessible interaction states",
-    "incremental Business-grade collaboration architecture"
+    "localized Vietnamese and English homepage copy",
+    "asymmetric editorial bento for deep guides",
+    "responsive split directory rails",
+    "reduced-motion and touch-safe static fallbacks"
   ]
 }

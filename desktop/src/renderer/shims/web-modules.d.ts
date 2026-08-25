@@ -26,13 +26,6 @@
  * khai báo phần tối thiểu, và giữ nó thật nhỏ.
  */
 
-declare module '@/app/notes/page' {
-  import type { ComponentType } from 'react';
-  /** Trang Notes đầy đủ của web — tự quản lý sidebar, soạn thảo, panel phụ. */
-  const NotesPage: ComponentType;
-  export default NotesPage;
-}
-
 declare module '@/store/authStore' {
   /**
    * Chỉ khai báo `setAuth` vì đó là thứ duy nhất desktop gọi tới: nạp phiên
@@ -156,127 +149,7 @@ declare module '@/lib/ai-templates/install' {
  * khác với những khai báo khác trong tệp này, vốn chỉ hỏng lúc CHẠY.
  * ──────────────────────────────────────────────────────────────────────────── */
 
-declare module '@/app/language/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/notebook/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/alphabet/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/alphabet/practice/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/conversation/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/grammar/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/grammar-check/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/hanzi/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/listening/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/practice/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/qna/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/reading/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/roadmap/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/roleplay/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/stats/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/translate/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/vocab/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/language/[code]/writing/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
 declare module '@/components/roadmap/RoadmapLanding' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/roadmap/[slug]/page' {
   import type { ComponentType } from 'react';
   const Trang: ComponentType;
   export default Trang;
@@ -296,95 +169,36 @@ declare module '@/components/simulation/SimulationStudio' {
   export default Trang;
 }
 
-/* ── Phỏng vấn (22/08/2026) ──────────────────────────────────
-   Năm màn của `/interview`. Cùng hình dạng như cây Ngoại ngữ: mỗi tệp
-   `export default` một component không nhận prop — tham số động (`:id`) đi
-   qua `useParams()` của shim, không qua prop, y như trên Next. */
-
-declare module '@/app/interview/page' {
+/* ── MỌI module TRANG của Next, khai gộp (22/08/2026) ─────────
+ *
+ * Trước đây mỗi trang một khối năm dòng. Tới 35 khối thì nó chỉ còn là tiếng
+ * ồn: cả 35 giống hệt nhau, vì mọi tệp `page.tsx` của Next đều có CÙNG một
+ * hợp đồng — `export default` một component không nhận prop. Tham số động
+ * (`[id]`) đi qua `useParams()` của shim chứ không qua prop, nên chữ ký không
+ * đổi theo trang. Nay còn 39 trang nữa phải thêm; 74 khối lặp là không nuôi nổi.
+ *
+ * ⚠️ CÁI GIÁ, đo thật trước khi đổi — phải biết mà chấp nhận:
+ * `tsc` KHÔNG còn bắt được đường dẫn import BỊA. Thử `@/app/khong-co-that-dau/page`
+ * → typecheck XANH. Lưới đỡ chuyển sang `vite build`, và nó bắt được thật
+ * (rollup không đọc nổi file, build ĐỎ). Cả hai bước đều chạy trong
+ * `desktop-release.yml`, nên vẫn có chốt trước khi ra bản cài — chỉ là chốt
+ * nằm ở bước sau.
+ *
+ * ⚠️ Wildcard này CỐ Ý chỉ khớp đuôi `/page`, không phải `@/app/*` trần: chỉ
+ * module trang của Next mới có hợp đồng trên. Thứ khác trong `@/app` mà
+ * desktop cần dùng thì vẫn phải khai riêng, đúng như trước.
+ */
+declare module '@/app/*/page' {
   import type { ComponentType } from 'react';
   const Trang: ComponentType;
   export default Trang;
 }
 
-declare module '@/app/interview/drill/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/interview/history/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/interview/session/[id]/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/interview/report/[id]/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-/* ── CV Builder (22/08/2026) ─────────────────────────────────
-   Chín màn của `/cv`, thay cho màn native cũ. Cùng hình dạng như hai cây
-   trước: mỗi tệp `export default` một component không nhận prop. */
-
-declare module '@/app/cv/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/cv/import/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/cv/intake/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/cv/profile/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/cv/recruiter-view/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/cv/review/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/cv/target/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/cv/xem/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
-}
-
-declare module '@/app/cv/builder/[id]/page' {
-  import type { ComponentType } from 'react';
-  const Trang: ComponentType;
-  export default Trang;
+/* Provider react-query của web. `VoWeb` dựng nó cho MỌI cây web dùng lại —
+   `/creator` và `/saved` gọi `useQuery`, và thiếu nó thì chúng nổ ngay lúc vẽ
+   với "No QueryClient set". Khai riêng vì wildcard trên chỉ phủ module TRANG. */
+declare module '@/components/providers/TanStackQueryProvider' {
+  import type { ComponentType, ReactNode } from 'react';
+  const P: ComponentType<{ children: ReactNode }>;
+  export default P;
 }

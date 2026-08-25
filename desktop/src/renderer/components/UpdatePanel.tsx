@@ -15,7 +15,7 @@ export function UpdatePanel() {
   // lúc nói hai điều khác nhau về cùng một sự việc.
   const status = useUpdateStatus();
   const [info, setInfo] = useState<AppInfo | null>(null);
-  const [noi, setNoi] = useState<{ duong: string; trongApplications: boolean; ghiDuoc: boolean } | null>(null);
+  const [noi, setNoi] = useState<{ duong: string; daCaiDung: boolean; ghiDuoc: boolean } | null>(null);
 
   useEffect(() => {
     void window.cuongthai?.app.getInfo().then(setInfo);
@@ -128,8 +128,20 @@ export function UpdatePanel() {
           Đây là thứ đã làm người dùng bấm cập nhật ba lần mà không hiểu vì sao
           không lên bản mới: họ mở app từ `desktop/release/…` trong thư mục mã
           nguồn (bản 0.4.0 cũ), trong khi bản thật trong Applications đã mới.
-          Không có dòng này thì không có gì trên màn hình nói ra điều đó. */}
-      {noi && !noi.trongApplications && (
+          Không có dòng này thì không có gì trên màn hình nói ra điều đó.
+
+          ⚠️ CHỈ hiện trên macOS. `daCaiDung` luôn `true` ở Linux/Windows (xem
+          `noiDangChay` trong `main/ipc/update.ts`) vì hai nền tảng đó tự cập
+          nhật được thật, và ta không có cách phân biệt đáng tin "đã cài đúng
+          chỗ" với "giải nén ra đâu đó".
+
+          Trước 24/08/2026 điều kiện là `!trongApplications`, mà đường dẫn lại
+          tính theo hình dạng bó ứng dụng của macOS — nên MỌI người dùng Linux
+          và Windows đều thấy dải đỏ này, với nội dung SAI SỰ THẬT ("sẽ không
+          bao giờ nhận được bản mới") và hướng dẫn vô nghĩa với họ (thư mục
+          Applications, Spotlight). Vì thế chữ dưới đây được phép nói giọng
+          macOS: nó không thể xuất hiện ở nơi khác. */}
+      {noi && !noi.daCaiDung && (
         <div className="ct-notice" data-tone="err" style={{ marginTop: 10 }}>
           <AlertTriangle size={15} aria-hidden />
           <span>

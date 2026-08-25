@@ -55,6 +55,7 @@ import bcrypt from 'bcryptjs';
 import { MakerCommandStatus, MakerDeviceStatus } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
+import { tieuVe } from '../services/makerlab/simTicket.js';
 import { getIO } from './messaging.socket.js';
 import { encodeForDevice, PCM_SAMPLE_RATE, type DeviceAudioFormat } from '../services/makerlab/audio.js';
 
@@ -811,6 +812,29 @@ interface AuthResult {
  * cảnh báo, rồi bỏ hẳn sau khi mọi bo đã lên bản mới.
  */
 async function authenticateDevice(url: URL, headers?: NodeJS.Dict<string>): Promise<AuthResult | null> {
+  // ── Vé mô phỏng ──
+  //
+  // Trang mô phỏng robot chạy trong trình duyệt, mà `WebSocket` của
+  // trình duyệt KHÔNG đặt được header — nên nó không gửi được
+  // `x-device-key`. Vé là đường vào riêng cho nó: ngẫu nhiên 32 byte,
+  // sống 60 giây, dùng đúng một lần, và chỉ chủ thiết bị xin được qua
+  // REST đã xác thực. Xem `services/makerlab/simTicket.ts`.
+  //
+  // Kiểm TRƯỚC key/secret: có vé thì không cần gì khác, và tiêu vé
+  // ngay cả khi phần sau lỗi cũng đúng — vé chỉ dùng một lần.
+  const ticket = url.searchParams.get('ticket');
+  if (ticket) {
+    const ve = tieuVe(ticket);
+    if (!ve) return null;
+    logger.info('MakerLab: mô phỏng nối vào bằng vé', { deviceId: ve.deviceId });
+    return {
+      deviceId: ve.deviceId,
+      projectId: ve.projectId,
+      ownerId: ve.ownerId,
+      deviceKey: ve.deviceKey,
+    };
+  }
+
   const h = (n: string): string | undefined => {
     const v = headers?.[n];
     return Array.isArray(v) ? v[0] : v;

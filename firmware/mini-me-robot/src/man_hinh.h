@@ -82,7 +82,49 @@ namespace man_hinh {
 //
 // Muốn nâng tốc độ thì phải kiểm bằng HÌNH THẬT (con mắt), không bao
 // giờ bằng ô màu đặc.
-static constexpr int32_t TOC_DO = 4000000;
+//
+// ── 40 MHz, ĐO THẬT 23/08/2026 trên bo hshop + vỏ đã lắp ──
+//
+// Con số cũ là 4 MHz, hạ xuống 15/08 để né bo GC9A01 CŨ — con bo
+// `XY1.28YYFT-S7P` có R1–R5 đều 1kΩ mắc NỐI TIẾP năm đường tín hiệu,
+// cộng điện dung dây dupont thành bộ lọc thông thấp làm nhoè sườn xung.
+// Bo hshop `1.28"TFT V1.0` KHÔNG có mấy con trở đó (ba con trở của nó
+// nằm ở đường nguồn và mạch lái đèn nền), nên nó gánh được cao hơn hẳn.
+//
+// Đo bằng `-e mat-demo`, lệnh `f`, nhìn HÌNH MẮT THẬT chứ không ô đặc:
+//
+//      4 MHz →  41 vòng/giây · đỉnh 25,1 ms   ✗ vượt ngưỡng gấp 3
+//     10 MHz →  94 vòng/giây · đỉnh 11,2 ms   ✗
+//     20 MHz → 167 vòng/giây · đỉnh  6,5 ms   ✓ sạch, biên 1,5 ms
+//     40 MHz → 271 vòng/giây · đỉnh  4,2 ms   ✓ sạch, biên 3,8 ms
+//
+// Ngưỡng là 8 ms: quá đó thì CPU không bơm kịp I2S và TIẾNG BẮT ĐẦU
+// VẤP — xem `demo_mat.cpp`. Nên 4 MHz không chỉ chậm, nó vốn đã nằm
+// ngoài mức chạy được cho robot vừa vẽ mắt vừa nói.
+//
+// Chọn 40 thay vì 20 vì biên rộng gấp đôi: lúc chạy `mini-me`, hai mắt
+// còn chia bus với màn ngực, vẽ xong sớm bao nhiêu thì tiếng có thêm
+// chừng ấy thời gian không bị vấp.
+//
+// ⚠️ Quay lại bo màn CŨ thì phải hạ về 4 MHz. Con số này gắn với BO,
+// không phải với chip GC9A01.
+// ⛔⛔ 24/08/2026 — HẠ VỀ 20 MHz. 40 MHz LÀM MÀN BỤNG RA SỌC.
+//
+// Phép đo 23/08 chạy bằng `-e mat-demo`, mà bàn thử đó CHỈ VẼ HAI MẮT
+// GC9A01 — nó không đụng tới màn ngực. Tôi lấy kết quả "40 MHz sạch"
+// rồi áp cho CẢ BA màn, trong khi màn ngực là ILI9488, chip khác hẳn,
+// và bàn kiểm riêng của nó (`test/` env `test-ili9488`) vốn chạy 20 MHz.
+//
+// Kết quả: hai mắt vẽ đẹp ở 40 MHz, còn màn ngực đầy sọc dọc.
+//
+// Bài học: đo trên MỘT loại màn không kết luận được cho loại kia, dù
+// chúng dùng chung một bus SPI. Muốn nâng riêng cho mắt thì phải tách
+// `TOC_DO` thành hai hằng số — nhưng cả ba đang chia chung một bus nên
+// tốc độ phải lấy theo con CHẬM NHẤT.
+//
+// 20 MHz vẫn dư: đo được 167 vòng/giây, đỉnh 6,5 ms, dưới ngưỡng 8 ms
+// mà CPU cần để bơm kịp I2S.
+static constexpr int32_t TOC_DO = 20000000;
 
 // ⚠️ HSPI (SPI3), KHÔNG phải bus mặc định. Bus mặc định của ESP32-S3
 // dùng chân trùng GPIO 33–37 — vốn đã bị PSRAM octal của bản N16R8
@@ -140,7 +182,31 @@ inline Arduino_GFX* nguc() {
   Arduino_DataBus* b = busNguc();
   // RST = GFX_NOT_DEFINED → reset bằng lệnh phần mềm (dây RST nối 3V3).
   // Xoay 1 = ngang 480×320, giữ đúng bố cục mà `face.cpp` đang vẽ.
-  static Arduino_GFX* g = new Arduino_ILI9488(b, GFX_NOT_DEFINED, 1, false);
+  // Hướng 3, KHÔNG phải 1. Cả hai đều nằm ngang nhưng lệch nhau 180°.
+  // Đo thật 25/08/2026 trên vỏ đã lắp: hướng 1 cho hình NGƯỢC LÊN TRÊN.
+  // Con số này gắn với cách bo màn được bắt vào tấm ngực, không phải
+  // với chip — lắp lại màn theo chiều khác thì phải đổi lại.
+  // ⛔⛔ PHẢI LÀ `_18bit`, KHÔNG PHẢI `Arduino_ILI9488` trần.
+  //
+  // ILI9488 qua SPI **không nhận màu 16 bit**. Chip chỉ hiểu RGB666
+  // 18 bit; lớp `Arduino_ILI9488` trần gửi RGB565 và chỉ đúng khi nối
+  // bus SONG SONG 8/16 bit. Còn `Arduino_ILI9488_18bit` chuyển 565→666
+  // ngay lúc gửi, đó mới là lớp cho SPI.
+  //
+  // Triệu chứng khi dùng nhầm lớp (đo thật 25/08/2026): màn SÁNG ĐỤC,
+  // không hình — chip vẫn nhận lệnh khởi tạo, đèn nền vẫn chạy, chỉ dữ
+  // liệu điểm ảnh là lệch. KHÔNG có lỗi nào ở Serial, và `drawFace()`
+  // vẫn đếm đủ số lần chạy.
+  //
+  // Vì sao bàn kiểm `test/` không lộ ra: nó dùng TFT_eSPI, thư viện ấy
+  // TỰ chuyển 16→18 bit cho ILI9488. Arduino_GFX bắt chọn đúng lớp.
+  // Hai bàn thử dùng hai thư viện khác nhau nên một bên xanh không
+  // chứng minh được gì cho bên kia.
+  // Cờ IPS = true. Với false, `fillScreen(0)` — lệnh tô ĐEN — lại cho
+  // ra màn TRẮNG: đó là màu bị đảo âm bản, không phải màn hỏng.
+  // Đo thật 25/08/2026: màn sáng trắng đục suốt trong khi drawFace()
+  // vẫn đếm đủ nhịp chạy và Serial không báo lỗi nào.
+  static Arduino_GFX* g = new Arduino_ILI9488_18bit(b, GFX_NOT_DEFINED, 3, true);
   return g;
 }
 

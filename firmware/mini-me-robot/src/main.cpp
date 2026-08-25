@@ -384,7 +384,14 @@ static void uiHeartbeat() {
 // chuẩn nhà máy nung sẵn trong eFuse của chính con chip này. analogRead
 // thô lệch tới 10%, đủ để "còn 40%" hiện thành "còn 15%".
 
-static const float BAT_CHIA_AP = (100.0f + 47.0f) / 47.0f;  // = 3,128
+// Hệ số chia áp lấy TỪ config.h, không tự tính lại ở đây.
+//
+// ⚠️ 23/08/2026: dòng này từng là `(100.0f + 47.0f) / 47.0f` viết cứng,
+// trong khi config.h khai `BATTERY_DIVIDER` riêng — hai con số ở hai
+// kho, không ai nối lại. Đổi pack 2S → 3S mà chỉ sửa config.h thì
+// KHÔNG có tác dụng gì: firmware vẫn chia theo bộ trở cũ và báo pin
+// sai hơn 38%.
+static const float BAT_CHIA_AP = BATTERY_DIVIDER;
 
 /**
  * Đọc điện áp pack, đơn vị volt. Trả 0 nghĩa là CHƯA CẮM bộ chia áp.
@@ -418,7 +425,9 @@ static float docPin() {
  */
 static int phanTramPin(float v) {
   if (v <= 0) return -1;
-  const float c = v / 2.0f;  // volt mỗi viên
+  // Volt mỗi viên. Số viên lấy từ config.h — dòng này từng viết cứng
+  // `/ 2.0f`, và đó là chỗ thứ hai khiến đổi sang 3S không ăn thua.
+  const float c = v / (float)BATTERY_CELLS;
   static const float moc[][2] = {
       {4.20f, 100}, {4.10f, 90}, {4.00f, 80}, {3.93f, 70}, {3.87f, 60},
       {3.80f, 50},  {3.73f, 40}, {3.67f, 30}, {3.60f, 20}, {3.50f, 10},

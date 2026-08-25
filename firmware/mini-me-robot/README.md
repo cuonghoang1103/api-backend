@@ -110,6 +110,56 @@ Bàn thử chạy **độc lập**: chỉ cần bo + hai màn, không WiFi, khô
 
 ⚠️ **Ba thứ dễ sai lúc đấu dây**, đọc trước khi cắm:
 
+> ## ⛔⛔⛔ 25/08/2026 — CHÁY CON THỨ HAI, MÀN NGỰC ILI9488 3.5"
+>
+> Cùng một sai lầm, chín ngày sau, trên bo khác. `VCC` chuyển từ 3V3 lên
+> 5V → nóng → bốc khói → chết.
+>
+> **Nhưng bệnh gốc KHÔNG phải điện áp — bo đã hỏng sẵn.** Đo dứt điểm
+> 26/08: tháo `VCC` thì `U1` nguội, cắm lại `VCC` vào **3V3** thì nó
+> **nóng tiếp**. Ổn áp 3,3V với đầu vào 3,3V rụng gần 0V, tức đốt gần 0W
+> — không có cách nào nóng. Nóng nghĩa là đã chập bên trong.
+>
+> Nhiều khả năng `U1` **suy yếu dần từ trước**, và 5V chỉ kết liễu. Nó
+> khớp cả bốn quan sát: tối trước chạy rồi hôm sau trắng · chạy đúng một
+> lượt rồi thôi (đầu ra nằm sát ngưỡng) · bốn sợi tín hiệu đo đủ 3,28V
+> (dây chưa bao giờ có lỗi) · 5V làm nó chạy lại (bù phần áp `U1` đánh
+> mất).
+>
+> ⛔ **PHÉP ĐO ĐẦU TIÊN CHO MỘT MÀN CÂM LÀ ĐẦU RA CỦA ỔN ÁP, KHÔNG PHẢI
+> DÂY.** Vào 3,3V mà ra dưới 3,0V, hoặc `U1` ấm tay, là bo hỏng — hết,
+> không cần dò dây, không cần đổi thư viện, không cần sáu cấu hình. Hai
+> ngày 25–26/08 mất vì phép đo hai mươi giây ấy không được làm.
+>
+> ✅ **Bo mới về thì kiểm TRƯỚC KHI bắt vào vỏ:** cắm mỗi `VCC`(3V3) +
+> `GND`, bật nguồn, sờ `U1` sau một phút. Phải NGUỘI. Ấm là trả hàng.
+> Rồi mới cắm bốn sợi tín hiệu.
+>
+> Điều đáng ghi không phải "5V làm cháy" — dòng ngay dưới đã nói rồi.
+> Điều đáng ghi là **vì sao lời cảnh báo có sẵn vẫn không chặn được**:
+>
+> - Triệu chứng thật là **màn trắng, chạy đúng MỘT lượt rồi thôi**. Đó là
+>   chữ ký của TIẾP XÚC CHẬP CHỜN. Thiếu áp thì thiếu đều, không cho chạy
+>   trọn một lượt. Nhận định này đã được viết ra, rồi vẫn đi làm việc khác.
+> - **Đo điện áp KHÔNG kiểm được dây.** Bốn sợi tín hiệu đo đủ 3,28V nên
+>   bị kết luận là "sạch". Sai: đồng hồ ~10MΩ đọc đủ áp qua một mối bấm
+>   chỉ còn dính vài sợi đồng, mà mối ấy không tải nổi xung SPI 20MHz.
+>   Phép đúng là đo **Ω** (thang `200Ω`, rút điện, ngoáy đầu cắm trong lúc
+>   đo). Phép ấy đến lúc màn cháy vẫn chưa được làm.
+> - Lời khuyên đưa ra dạng **"5V an toàn NẾU cầu J1 hở"** — biến một phép
+>   chặn thành phép kiểm điều kiện rồi giao cho người dùng tự gác. Với
+>   thứ hỏng là không hoàn tác được, phải trả lời **"không"**, không trả
+>   lời "được nếu…".
+>
+> **Luật từ nay: không nâng `VCC` của bất kỳ bo màn nào** trừ khi đọc
+> được chữ trên thân IC ổn áp, hoặc có datasheet đúng bo, hoặc đo được
+> đầu ra ổn áp. Cần thêm chênh áp thì dùng **3,8–4,2V** (một diode
+> `1N4007` nối tiếp rụng 0,7V), không bao giờ 5V.
+>
+> ⚠️ Chip cháy thường chết dạng **CHẬP**. Tháo hẳn bo hỏng khỏi bus dùng
+> chung NGAY — bốn sợi `CS`·`DC`·`SCK`·`MOSI` đi chung với hai mắt và với
+> GPIO của ESP32.
+
 1. ⛔ **`VCC` màn tròn nối `3V3`. Cấp 5V là CHÁY — đã cháy thật 16/08/2026.**
 
    Một con XY1.28YYFT-S7P **bốc khói và khét** khi cấp 5V vào `VCC`, cắm đúng cực. Lúc đó trên bo **chỉ có đúng hai sợi `VCC` và `GND`**, không một dây tín hiệu nào — nên không thể đổ cho chân tín hiệu hay cho ESP32. Riêng 5V vào `VCC` đã đủ giết.

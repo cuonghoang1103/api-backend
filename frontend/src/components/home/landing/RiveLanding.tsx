@@ -58,6 +58,7 @@ import Link from 'next/link';
 import PlaygroundGate from './PlaygroundGate';
 import DeepDives from './DeepDives';
 import { useLandingStats, fmt } from './useLandingStats';
+export { default } from './LandingExperience';
 
 /**
  * Một dải nội dung: số thứ tự + nhãn + tiêu đề + các mục đi vào.
@@ -120,7 +121,7 @@ const RAILS: Rail[] = [
   },
 ];
 
-export default function RiveLanding() {
+export function LegacyRiveLanding() {
   const stats = useLandingStats();
 
   // Chỉ giữ ô nào ĐẾM ĐƯỢC. `null` là không đếm được ⇒ biến mất khỏi hàng,

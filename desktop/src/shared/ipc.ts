@@ -1117,7 +1117,7 @@ export interface DesktopBridge {
      */
     tuCapNhat(): Promise<void>;
     /** App đang chạy từ thư mục nào, có ghi đè tại chỗ được không. */
-    noiDangChay(): Promise<{ duong: string; trongApplications: boolean; ghiDuoc: boolean }>;
+    noiDangChay(): Promise<{ duong: string; daCaiDung: boolean; ghiDuoc: boolean }>;
   };
   storage: {
     usage(): Promise<StorageUsage>;

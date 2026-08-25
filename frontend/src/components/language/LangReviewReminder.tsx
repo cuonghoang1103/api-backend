@@ -6,16 +6,18 @@
  * calendar day via sessionStorage so it fires at most once per day per session.
  */
 import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
 import { notebookApi } from '@/lib/language-api';
 
 export default function LangReviewReminder() {
+  const pathname = usePathname();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const shownRef = useRef(false);
 
   useEffect(() => {
-    if (shownRef.current || !isAuthenticated || typeof window === 'undefined') return;
+    if (pathname === '/' || shownRef.current || !isAuthenticated || typeof window === 'undefined') return;
     const today = new Date().toISOString().slice(0, 10);
     if (sessionStorage.getItem('lang-review-reminded') === today) return;
     shownRef.current = true;
@@ -32,7 +34,7 @@ export default function LangReviewReminder() {
         });
       })
       .catch(() => { shownRef.current = false; });
-  }, [isAuthenticated]);
+  }, [isAuthenticated, pathname]);
 
   return null;
 }

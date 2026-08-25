@@ -143,6 +143,211 @@ async function detectBannerHeight(buf, width) {
   return 34; // fallback to the known constant if detection is inconclusive
 }
 
+// Third known source layout ("red-divider"): a fixed left sidebar (site
+// wordmark + progress bar + an "Answer" checkbox panel + Back/Next buttons)
+// separated from the real question+options panel by a solid RED vertical
+// rule, plus a yellow circular page-number badge fixed in the bottom-right
+// corner. None of trim()'s existing branches handle this — the checkbox
+// panel and badge sit far from the real content, so a plain bounding-box
+// trim() stays close to full-canvas size (caught 24/08/2026 on SWR302
+// Đề 7-26: ~12/20 decks used this layout and shipped essentially uncropped).
+//
+// Fix: detect the red rule (a column that's >40% strongly-red down its
+// height — distinct enough that no other known layout's black/gray accent
+// bars false-positive), slice everything to its right, white out the
+// badge's fixed corner rectangle, then trim with a LOOSENED threshold (30,
+// not the usual 10) because this template's empty panel area is filled
+// light gray (~240,240,240) rather than pure white — default threshold
+// treats that as real content. Finally cap the height: a stray horizontal
+// footer rule sits ~500px below the real content and pins trim()'s box to
+// it even at high threshold (the rule itself is dark enough to stay
+// "non-white" at any reasonable threshold), so anything past a generous
+// MAX_CONTENT_H is guaranteed template chrome, not text.
+async function findRedDivider(buf, width, height) {
+  const { data, info } = await sharp(buf).raw().toBuffer({ resolveWithObject: true });
+  const channels = info.channels;
+  // Loosened from (r>180,g<90,b<90): some decks (SWT301 PT3 SPRING23, a
+  // green-themed variant) draw a LIGHTER/pinker divider ~ (160,110,110) that the
+  // strict red missed, leaving the page essentially uncropped (logo + checkbox
+  // panel kept — caught 25/08/2026 on PT3-1 q16). The >40% full-height coverage
+  // requirement below still rejects stray reddish text/glyphs, so this only adds
+  // genuine full-height rules.
+  const isRed = (i) => data[i] > 150 && data[i + 1] < 120 && data[i + 2] < 120;
+  let best = { x: -1, count: 0 };
+  for (let x = 0; x < width; x++) {
+    let redCount = 0;
+    for (let y = 0; y < height; y += 2) {
+      if (isRed((y * width + x) * channels)) redCount++;
+    }
+    if (redCount > best.count) best = { x, count: redCount };
+  }
+  if (best.count / (height / 2) <= 0.4) return { x: -1, yTop: 0, yBottom: height };
+  // vertical extent of the red rule → the question band top/bottom
+  let yTop = height, yBottom = 0;
+  for (let y = 0; y < height; y++) {
+    if (isRed((y * width + best.x) * channels)) { if (y < yTop) yTop = y; if (y > yBottom) yBottom = y; }
+  }
+  return { x: best.x, yTop, yBottom };
+}
+
+const RED_DIVIDER_MAX_CONTENT_H = 460;
+
+// Some red-divider scans (SWT301 SU2024/SP2025 variants) run the top progress
+// bar ("There are 60 questions, and your progress of answering is …") and the
+// blue site wordmark FULL-WIDTH, so they bleed into the right panel too — a
+// plain right-slice keeps that strip on top of the real question (caught
+// 25/08/2026 on SWT301 Đề 6/7/9/21/22: logo + "…swering is" fragment survived
+// and pinned the box height to the cap). That chrome is BLUE (b clearly the
+// dominant channel); the question text is near-black. Find the first row that
+// carries a real run of near-black text and white out everything above it —
+// on a scan with no such top strip the first dark row is already at the top,
+// so nothing is removed (safe for the original SWR302 red-divider decks).
+async function firstDarkTextTop(buf, width, height) {
+  const { data, info } = await sharp(buf).raw().toBuffer({ resolveWithObject: true });
+  const channels = info.channels;
+  for (let y = 0; y < Math.min(height, 300); y++) {
+    let dark = 0;
+    for (let x = 0; x < width; x++) {
+      const i = (y * width + x) * channels;
+      const r = data[i], g = data[i + 1], b = data[i + 2];
+      // near-black glyph pixel, and NOT blue-dominant chrome
+      if (r < 110 && g < 110 && b < 110 && !(b > r + 25 && b > g + 25)) dark++;
+    }
+    if (dark >= 6) return y;
+  }
+  return 0;
+}
+
+async function cropRedDividerLayout(whited, meta) {
+  const { x: redX, yTop, yBottom } = await findRedDivider(whited, meta.width, meta.height);
+  if (redX < 0) return null;
+
+  const badgeRect = await sharp({ create: { width: 220, height: 130, channels: 4, background: WHITE } }).png().toBuffer();
+  const badgeWhited = await sharp(whited).composite([{ input: badgeRect, left: meta.width - 220, top: meta.height - 130 }]).png().toBuffer();
+
+  // SPLIT variant (SWT301 FA2022 / older): the option list (A–D) sits to the
+  // LEFT of the red rule and only the short stem sits to its right, so slicing
+  // right-of-rule drops every option (caught 25/08/2026 on Đề 23 — 48 crops
+  // showed just the stem over empty space). Distinguish it from the all-right
+  // variant by the RIGHT panel: all-right holds stem+4 options (tall), split
+  // holds only the stem (short). Left-panel chrome ("(Choose 1 answer)", Back/
+  // Next) can be wide/tall too, so the left box alone false-positived Đề 7/21 —
+  // require the right box to be SHORT as well. When split, crop the whole
+  // content band [x≥105, red-rule's y-span] which holds stem + options together.
+  // Discriminator: an OPTION sentence to the left of the rule spans a wide,
+  // continuous run of text on a single row (≥300px); the left-panel UI chrome
+  // ("(Choose 1 answer)", Back, Next) never exceeds ~150px on any row. So the
+  // presence of a wide text row in x[105..redX] is a robust "split" signal that
+  // doesn't false-positive on short all-right questions (which the box-size
+  // heuristic did on Đề 9/21/4).
+  // Skip the ~12px just inside the rule's top/bottom: a solid horizontal box
+  // border there is a lone wide row that would otherwise read as an option and
+  // false-split the all-right variant (its only wide left row was that border).
+  const wideLeftRows = await countWideTextRows(badgeWhited, meta.width, meta.height, { x0: 105, x1: redX - 5, y0: yTop + 12, y1: yBottom - 8 }, 250);
+  const isSplit = wideLeftRows >= 3;
+  if (isSplit) {
+    const band = await sharp(badgeWhited)
+      .extract({ left: 105, top: Math.max(0, yTop - 4), width: meta.width - 105, height: Math.min(meta.height - yTop, yBottom - yTop + 8) })
+      .png().toBuffer();
+    const bmeta = await sharp(band).metadata();
+    // Exclude the bottom ~35px of the band: the "< >" page-nav arrows and the
+    // panel's bottom border sit there and would otherwise stretch the box down
+    // with empty space (seen on Đề 23 q26). A mid-band table/diagram (mixed
+    // questions) ends well above this and is unaffected.
+    const bb = await darkTextBBox(band, bmeta.width, bmeta.height, { y1: bmeta.height - 35 });
+    if (bb) {
+      const M = 12;
+      const left = Math.max(0, bb.minX - M), top = Math.max(0, bb.minY - M);
+      return sharp(band).extract({
+        left, top,
+        width: Math.min(bmeta.width - left, bb.maxX - bb.minX + 2 * M),
+        height: Math.min(bmeta.height - top, bb.maxY - bb.minY + 2 * M),
+      }).png().toBuffer();
+    }
+  }
+
+  const rightLeft = redX + 8;
+  const rightW = meta.width - rightLeft;
+  let rightBuf = await sharp(badgeWhited).extract({ left: rightLeft, top: 0, width: rightW, height: meta.height }).png().toBuffer();
+
+  // Erase the top progress/logo strip (if any) above the first real text row,
+  // keeping an ~8px margin so the question box's own top border survives.
+  const darkTop = await firstDarkTextTop(rightBuf, rightW, meta.height);
+  if (darkTop > 8) {
+    const cover = await sharp({ create: { width: rightW, height: darkTop - 8, channels: 4, background: WHITE } }).png().toBuffer();
+    rightBuf = await sharp(rightBuf).composite([{ input: cover, left: 0, top: 0 }]).png().toBuffer();
+  }
+
+  // Bound the crop to the tight bounding box of near-BLACK text, NOT to the
+  // question box's own gray border/filler. trim() latches onto that border and
+  // the light-gray box interior, so on the SWT301 SU2024 variant (Đề 21) whose
+  // box is much TALLER than its text it left ~250px of empty box below the
+  // options (all 60 pinned at the cap). A dark-text bbox ignores the gray box
+  // chrome entirely and stays tight on both variants (caught 25/08/2026).
+  const bbox = await darkTextBBox(rightBuf, rightW, meta.height);
+  if (bbox) {
+    const M = 10;
+    const left = Math.max(0, bbox.minX - M);
+    const top = Math.max(0, bbox.minY - M);
+    const width = Math.min(rightW - left, bbox.maxX - bbox.minX + 2 * M);
+    const height = Math.min(meta.height - top, bbox.maxY - bbox.minY + 2 * M, RED_DIVIDER_MAX_CONTENT_H);
+    return sharp(rightBuf).extract({ left, top, width, height }).png().toBuffer();
+  }
+  // fallback: original trim path (shouldn't happen for a real question)
+  const { info: tinfo } = await sharp(rightBuf).trim({ background: '#ffffff', threshold: 30 }).toBuffer({ resolveWithObject: true });
+  const left = Math.abs(tinfo.trimOffsetLeft);
+  const top = Math.abs(tinfo.trimOffsetTop);
+  const cappedHeight = Math.min(tinfo.height, RED_DIVIDER_MAX_CONTENT_H, meta.height - top);
+  return sharp(rightBuf).extract({ left, top, width: Math.min(tinfo.width, rightW - left), height: cappedHeight }).png().toBuffer();
+}
+
+// Count rows in the region carrying a run of near-black text at least
+// `minWidth` px wide (min→max dark-text x on that row). Long option sentences
+// produce MANY such rows; a lone wide row is just a horizontal box border (seen
+// at y=yTop on the all-right variant), so callers threshold on the count.
+async function countWideTextRows(buf, width, height, region, minWidth) {
+  const { data, info } = await sharp(buf).raw().toBuffer({ resolveWithObject: true });
+  const ch = info.channels;
+  const x0 = Math.max(0, region.x0), y0 = Math.max(0, region.y0);
+  const x1 = Math.min(width, region.x1), y1 = Math.min(height, region.y1);
+  let count = 0;
+  for (let y = y0; y < y1; y++) {
+    let lo = -1, hi = -1;
+    for (let x = x0; x < x1; x++) {
+      const i = (y * width + x) * ch;
+      const r = data[i], g = data[i + 1], b = data[i + 2];
+      if (r < 120 && g < 120 && b < 120 && !(b > r + 25 && b > g + 25)) {
+        if (lo < 0) lo = x;
+        hi = x;
+      }
+    }
+    if (hi - lo >= minWidth) count++;
+  }
+  return count;
+}
+
+// Tight bounding box of near-black text pixels (ignores gray box borders/filler
+// and blue site chrome). Optional region {x0,y0,x1,y1} restricts the scan.
+// Returns null if no text found.
+async function darkTextBBox(buf, width, height, region) {
+  const { data, info } = await sharp(buf).raw().toBuffer({ resolveWithObject: true });
+  const ch = info.channels;
+  const x0 = Math.max(0, region?.x0 ?? 0), y0 = Math.max(0, region?.y0 ?? 0);
+  const x1 = Math.min(width, region?.x1 ?? width), y1 = Math.min(height, region?.y1 ?? height);
+  let minX = width, minY = height, maxX = -1, maxY = -1;
+  for (let y = y0; y < y1; y++) {
+    for (let x = x0; x < x1; x++) {
+      const i = (y * width + x) * ch;
+      const r = data[i], g = data[i + 1], b = data[i + 2];
+      if (r < 120 && g < 120 && b < 120 && !(b > r + 25 && b > g + 25)) {
+        if (x < minX) minX = x; if (x > maxX) maxX = x;
+        if (y < minY) minY = y; if (y > maxY) maxY = y;
+      }
+    }
+  }
+  return maxX < 0 ? null : { minX, minY, maxX, maxY };
+}
+
 const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.png'));
 let done = 0;
 for (const f of files) {
@@ -152,10 +357,14 @@ for (const f of files) {
 
   const whitedRect = await whiteOutWatermark(sharp(src), meta.height);
   const whited = await whiteOutGhostWatermark(whitedRect, meta.width, meta.height);
-  const bannerHeight = await detectBannerHeight(whited, meta.width);
+
+  const redDividerBuf = await cropRedDividerLayout(whited, meta);
+  const bannerHeight = redDividerBuf ? 0 : await detectBannerHeight(whited, meta.width);
 
   let finalBuf;
-  if (bannerHeight > 0) {
+  if (redDividerBuf) {
+    finalBuf = redDividerBuf;
+  } else if (bannerHeight > 0) {
     // banner layout: trim banner strip and body separately, re-stack at
     // the body's trimmed width so the banner doesn't force full width.
     const bannerBuf = await sharp(whited).extract({ left: 0, top: 0, width: meta.width, height: bannerHeight }).png().toBuffer();

@@ -229,6 +229,10 @@ static void chayMot(const CauHinh& c, int stt) {
 }
 
 void setup() {
+  // ⛔ Vô hiệu hai màn KHÔNG thử: CS thả nổi bắt nhiễu và chúng sẽ
+  // nuốt dữ liệu gửi cho mắt trái. CS tích cực THẤP → kéo CAO là tắt.
+  pinMode(PIN_TFT_CS, OUTPUT);   digitalWrite(PIN_TFT_CS, HIGH);
+  pinMode(PIN_EYE_CS_R, OUTPUT); digitalWrite(PIN_EYE_CS_R, HIGH);
   Serial.begin(115200);
   delay(600);
   Serial.println("\n\n╔══════════════════════════════════════════╗");

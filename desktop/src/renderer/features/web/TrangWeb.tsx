@@ -22,13 +22,15 @@
  * trên web ngày 02/07/2026). Nên lớp bọc này tự đặt `.dark` khi app đang ở chủ
  * đề tối, phạm vi đúng trong cây web.
  */
-import { Suspense, lazy, useEffect, useMemo, useState, type ComponentType } from 'react';
+import { Component, Suspense, lazy, useEffect, useMemo, useState,
+  type ComponentType, type ReactNode } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { configureWebApi } from '../../shims/web-api-adapter';
-import { ThamSoTuyen } from '../../shims/next-navigation';
+import { LoiChuyenHuong, LoiKhongTimThay, ThamSoTuyen } from '../../shims/next-navigation';
+import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider';
 import { khopTuyenWeb } from './dinhTuyenWeb';
 
 function DangMo({ ten }: { ten: string }) {
@@ -75,12 +77,34 @@ export function useCauNoiWeb(): boolean {
   return xong;
 }
 
-/** Bọc chung: đặt `.dark` cho biến thể Tailwind của cây web. */
+/**
+ * Bọc chung: đặt `.dark` cho biến thể Tailwind của cây web, và dựng những
+ * PROVIDER mà mã web trông đợi có sẵn.
+ *
+ * ─── Vì sao cần provider (24/08/2026) ───
+ * Trên web, `app/layout.tsx` bọc mọi trang trong bốn provider:
+ * `AuthProvider` → `ToasterProvider` → `TanStackQueryProvider` → `ThemeProvider`.
+ * App desktop định tuyến THẲNG vào module trang nên không có cái nào.
+ *
+ * Sáu cây port trước không dùng react-query nên không lộ. `/creator` và
+ * `/saved` thì dùng, và chúng nổ ngay lúc vẽ: "No QueryClient set, use
+ * QueryClientProvider to set one".
+ *
+ * ⚠️ CHỈ thêm `TanStackQueryProvider`, KHÔNG thêm ba cái kia — mỗi cái là một
+ * quyết định riêng, không phải một gói:
+ *  • `ThemeProvider` của web đặt lớp lên `<html>`, mà app đã có hệ chủ đề
+ *    riêng. Trộn vào là đúng lỗi 02/07/2026 (lớp `dark` toàn cục phá Notes).
+ *  • `AuthProvider` sẽ đi nạp phiên lần nữa, trong khi `useCauNoiWeb` đã nạp
+ *    phiên của app vào `authStore` rồi.
+ *  • `ToasterProvider` là chuyện có thật cần xử lý (không có nó thì mọi lời
+ *    gọi `toast.*` trong cây web im lặng không hiện gì) — nhưng nó ảnh hưởng
+ *    CẢ SÁU cây đã chạy tốt, nên tách ra làm riêng, có đo.
+ */
 export function VoWeb({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useAppState();
   return (
     <div className={`ct-web-host${resolvedTheme === 'dark' ? ' dark' : ''}`}>
-      {children}
+      <TanStackQueryProvider>{children}</TanStackQueryProvider>
     </div>
   );
 }
@@ -122,6 +146,66 @@ export function TrangWebDon({
 }
 
 /**
+ * Bắt hai lỗi mà `next/navigation` CỐ Ý ném ra — `notFound()` và `redirect()`.
+ *
+ * Trên Next, khung của nó bắt hai lỗi này. Ở đây không có khung đó, nên không
+ * bắt nghĩa là React tháo cả cây và người dùng thấy MÀN HÌNH TRẮNG — không lỗi
+ * nào hiện lên để hiểu vì sao. Mười cây port ngày 24/08/2026 gọi `notFound()`
+ * ở 4 chỗ và `redirect()` ở 1 chỗ.
+ *
+ * ⚠️ Lỗi LẠ thì KHÔNG nuốt: hiện ra một khối đọc được kèm nguyên văn thông
+ * điệp. Trước đây một trang web nổ giữa chừng là màn hình trắng câm; đây là
+ * cải thiện, nhưng nó cũng có nghĩa là ranh giới này che mất chỗ React vốn sẽ
+ * in stack ra console — nên vẫn `console.error` nguyên lỗi.
+ */
+class RanhGioiTuyen extends Component<
+  { children: ReactNode; chuyenHuong: (den: string) => void; ten: string },
+  { loi: unknown }
+> {
+  override state: { loi: unknown } = { loi: null };
+
+  static getDerivedStateFromError(loi: unknown): { loi: unknown } {
+    return { loi };
+  }
+
+  override componentDidCatch(loi: unknown): void {
+    /* Điều hướng Ở ĐÂY, không phải trong `render`: gọi `navigate()` giữa lượt
+       vẽ là đặt state của component khác ngay trong lúc vẽ. */
+    if (loi instanceof LoiChuyenHuong) { this.props.chuyenHuong(loi.den); return; }
+    if (loi instanceof LoiKhongTimThay) return;
+    console.error(`[${this.props.ten}] trang nổ:`, loi);
+  }
+
+  override render(): ReactNode {
+    const { loi } = this.state;
+    if (!loi) return this.props.children;
+
+    // Đang chuyển hướng — vẽ màn chờ cho tới khi route mới thay chỗ.
+    if (loi instanceof LoiChuyenHuong) return <DangMo ten={this.props.ten} />;
+
+    if (loi instanceof LoiKhongTimThay) {
+      return (
+        <div className="ct-page">
+          <div className="ct-empty">
+            <h1>Không tìm thấy</h1>
+            <p>Mục bạn mở không còn tồn tại, hoặc đường dẫn đã cũ.</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="ct-page">
+        <div className="ct-empty">
+          <h1>Trang gặp lỗi</h1>
+          <p>{loi instanceof Error ? loi.message : String(loi)}</p>
+        </div>
+      </div>
+    );
+  }
+}
+
+/**
  * Dựng trang web theo ĐƯỜNG DẪN HIỆN TẠI, kèm tham số động.
  * Dùng cho Ngoại ngữ và Lộ trình — hai cây có trang con.
  */
@@ -154,9 +238,14 @@ export function TrangWebTheoTuyen({ ten }: { ten: string }) {
     <VoWeb>
       {/* `key` buộc gắn lại khi đổi đường dẫn — xem chú thích đầu tệp. */}
       <ThamSoTuyen.Provider value={khop.thamSo}>
-        <Suspense fallback={<DangMo ten={ten} />}>
-          <Lazy key={route} />
-        </Suspense>
+        {/* `key` trên RANH GIỚI, không phải trên `Lazy`: ranh giới giữ lỗi
+            trong state, đổi đường dẫn mà không gắn lại thì trang mới cũng hiện
+            lỗi của trang cũ. */}
+        <RanhGioiTuyen key={route} ten={ten} chuyenHuong={navigate}>
+          <Suspense fallback={<DangMo ten={ten} />}>
+            <Lazy />
+          </Suspense>
+        </RanhGioiTuyen>
       </ThamSoTuyen.Provider>
     </VoWeb>
   );

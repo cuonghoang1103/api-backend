@@ -25,6 +25,8 @@
     "agent:check": "tsx scripts/agent-check.ts",
     "agent:check:http": "tsx scripts/agent-http-check.ts",
     "llm:route": "tsx scripts/dinh-tuyen-check.ts",
+    "seo:check": "bash scripts/kiem-web-seo.sh",
+    "len-web": "bash scripts/len-web.sh",
     "eval:grader": "tsx eval/runEval.ts",
     "eval:grader:ai": "tsx eval/runEval.ts --ai",
     "lint": "eslint src --ext .ts",

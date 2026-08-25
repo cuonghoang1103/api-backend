@@ -1,0 +1,32 @@
+{
+  "updatedAt": "2026-08-25",
+  "route": "/",
+  "contract": {
+    "genre": "editorial",
+    "macrostructure": "Split Studio",
+    "tokens": "frontend/tokens.css",
+    "enrichment": "real 3D capture plus CSS pointer tilt",
+    "motionPrimitives": ["entrance", "pointer tilt", "arrow micro-shift"],
+    "performanceGuardrails": [
+      "no WebGL or 3D runtime on homepage",
+      "no Lottie assistant payload on homepage",
+      "tilt disabled on touch and reduced-motion devices",
+      "transform and opacity animation only"
+    ],
+    "preservedFlows": [
+      "landing stats API",
+      "all homepage href destinations",
+      "PlaygroundGate confirmation",
+      "navigation dock",
+      "ChatModal"
+    ]
+  },
+  "preEmitCritique": {
+    "purpose": 5,
+    "hierarchy": 5,
+    "emotionalResonance": 4,
+    "systemCoherence": 5,
+    "responsiveIntegrity": 5,
+    "visibility": 5
+  }
+}

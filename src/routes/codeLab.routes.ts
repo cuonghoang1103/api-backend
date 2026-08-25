@@ -7,10 +7,12 @@
  *  - GET  /groups                       — full group ▸ track tree
  *  - GET  /tracks/:slug                 — track roadmap (modules + exercises)
  *  - GET  /exercises/:slug              — one exercise (full)
+ *  - GET  /exercises/:slug/meta         — chỉ tiêu đề/mô tả (thẻ SEO), không đếm view
  *  - GET  /exercises                    — list/filter/paginate
  *  - GET  /search  ? q=                 — full-text search
  *  - GET  /autocomplete ? q=            — search suggestions
  *  - GET  /stats
+ *  - GET  /sitemap                      — slug + updatedAt cho sitemap.xml
  * Authenticated (any logged-in user):
  *  - POST /exercises/:id/progress       — save attempt / mark solved
  *  - GET  /progress/mine ? trackId=
@@ -102,10 +104,35 @@ router.get('/exercises', async (req, res: Response<ApiResponse>, next) => {
   } catch (e) { next(e); }
 });
 
+// GET /sitemap — mọi URL Code Lab công khai, dạng nhẹ (cho frontend
+// sitemap.xml). Không phân trang: payload chỉ là slug + ngày sửa, ~12,5k
+// hàng vẫn gọn, và sitemap muốn TOÀN BỘ danh sách chứ không phải một trang.
+// Cache 1 giờ ở tầng HTTP — nội dung này đổi theo ngày, không theo giây, và
+// đây là truy vấn quét bảng nên không nên để Googlebot gọi tự do.
+router.get('/sitemap', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await codeLab.listSitemapEntries();
+    res.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
 // GET /tracks/:slug — roadmap
 router.get('/tracks/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
     const data = await codeLab.getTrackBySlug(req.params.slug, { admin: isEditor(req) });
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+// GET /exercises/:slug/meta — chỉ tiêu đề + mô tả, cho generateMetadata của
+// trang bài tập. KHÔNG tăng viewCount (xem chú thích ở getExerciseMeta) và
+// KHÔNG trả lời giải. Phải đứng TRƯỚC `/exercises/:slug` — Express khớp theo
+// thứ tự khai báo, và `:slug` sẽ nuốt luôn "…/meta" nếu đặt sau.
+router.get('/exercises/:slug/meta', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await codeLab.getExerciseMeta(req.params.slug);
+    res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=3600');
     res.json({ success: true, data });
   } catch (e) { next(e); }
 });

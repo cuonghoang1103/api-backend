@@ -3,9 +3,17 @@
  *
  * Cây Ngoại ngữ của web (45 tệp, 12.616 dòng) điều hướng bằng ba hook này —
  * đo thật 20/08/2026: `useParams` 34 chỗ, `useRouter` 19, `useSearchParams` 8.
- * KHÔNG có `usePathname`, KHÔNG có `redirect` (những chữ "redirect" tìm thấy
- * đều nằm trong chú thích). Shim này phủ đúng ba hook đó và không hơn — một
- * shim giả vờ làm được nhiều hơn thực tế sẽ hỏng ở chỗ khác, xa chỗ gây ra.
+ * Lúc đó KHÔNG có `usePathname`, KHÔNG có `redirect`.
+ *
+ * ⚠️ Mười cây port ngày 24/08/2026 thì có: đo lại trên `app/{maker-lab,creator,
+ * projects,repos,exp-hub,games,finance,forum,saved,profile}` ra `useRouter` 13 ·
+ * `useSearchParams` 6 · `useParams` 6 · **`notFound` 4** · **`usePathname` 2** ·
+ * **`redirect` 1**. Ba cái sau chưa có, nên `vite build` ĐỎ — và đó là điều tốt:
+ * nó chặn ngay chứ không để trang vỡ lúc người dùng mở.
+ *
+ * Bài học của chính lần này: đo "có bao nhiêu import từ `next/navigation`" là
+ * KHÔNG ĐỦ. Phải đo **nhập những TÊN NÀO**. Tôi đã đếm số dòng import rồi kết
+ * luận "shim phủ hết", và bản dựng bác bỏ.
  *
  * ─── Tham số động tới từ đâu ───
  * App desktop định tuyến bằng MỘT chuỗi đường dẫn (`route` trong app-state),
@@ -108,3 +116,50 @@ export function useRouter(): BoDieuHuong {
     refresh: () => {},
   }), [di, navigate, route]);
 }
+
+
+/* ── Đường dẫn hiện tại ────────────────────────────────────────── */
+
+/**
+ * `usePathname` của Next trả về đường dẫn KHÔNG kèm chuỗi truy vấn — `route`
+ * của app-state cũng vậy, nên ánh xạ là một-một.
+ *
+ * Dùng ở `app/creator/layout.tsx` và `app/projects/search/page.tsx` để tô đậm
+ * mục đang mở.
+ */
+export function usePathname(): string {
+  return useAppState().route;
+}
+
+/* ── `notFound()` và `redirect()` ──────────────────────────────────
+ *
+ * Trên Next, hai hàm này KHÔNG trả về — chúng NÉM một lỗi đặc biệt để khung
+ * bắt lại. Mã web gọi chúng ngay giữa lượt vẽ:
+ *
+ *     if (!game) notFound();
+ *     redirect('/games/love-me-game/love-me.html');
+ *
+ * Nên shim cũng phải NÉM. Trả `undefined` là mã đi tiếp và đọc `game.ten` của
+ * một giá trị rỗng — nổ ở chỗ khác, xa nguyên nhân.
+ *
+ * ⚠️ KHÔNG được gọi `navigate()` thẳng ở đây: đó là đặt state của component
+ * KHÁC ngay giữa lượt vẽ, React cảnh báo và hành vi không xác định. Ném ra rồi
+ * để `RanhGioiTuyen` (trong `TrangWeb.tsx`) xử lý sau khi lượt vẽ kết thúc.
+ */
+
+/** Lỗi do `notFound()` ném ra. */
+export class LoiKhongTimThay extends Error {
+  constructor() { super('next/navigation: notFound()'); this.name = 'LoiKhongTimThay'; }
+}
+
+/** Lỗi do `redirect()` ném ra, mang theo nơi cần tới. */
+export class LoiChuyenHuong extends Error {
+  constructor(public readonly den: string) {
+    super(`next/navigation: redirect(${den})`);
+    this.name = 'LoiChuyenHuong';
+  }
+}
+
+export function notFound(): never { throw new LoiKhongTimThay(); }
+
+export function redirect(href: string): never { throw new LoiChuyenHuong(href); }

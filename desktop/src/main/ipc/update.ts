@@ -420,17 +420,85 @@ async function taiFileCai(): Promise<void> {
  *     bao giờ mở tới.
  */
 
-/** App đang chạy từ đâu, và có tráo được tại chỗ không. */
-export function noiDangChay(): { duong: string; trongApplications: boolean; ghiDuoc: boolean } {
-  // `/Applications/X.app/Contents/MacOS/X` → lùi 3 cấp là bó ứng dụng.
-  const duong = path.resolve(path.dirname(app.getPath('exe')), '..', '..');
+/**
+ * App đang chạy từ đâu, có tráo được tại chỗ không, và có phải bản ĐÃ CÀI ĐÚNG
+ * CHỖ không.
+ *
+ * ─── Vì sao phải phân nhánh theo nền tảng (24/08/2026) ───
+ * Bản trước tính đường dẫn theo đúng hình dạng bó ứng dụng của macOS —
+ * `path.dirname(exe)` rồi lùi hai cấp:
+ *
+ *   macOS  /Applications/X.app/Contents/MacOS/X   → /Applications/X.app   ĐÚNG
+ *   Linux  /tmp/.mount_XXXXXX/cuongthai-desktop   → /                     SAI
+ *   Win    …\Local\Programs\cuongthai-desktop\X.exe → …\Local          SAI
+ *
+ * Rồi nó hỏi `duong.startsWith('/Applications/')` — trên Linux và Windows câu
+ * đó LUÔN sai, nên giao diện bật dải cảnh báo đỏ "Bạn đang mở một bản dựng
+ * thử… sẽ không bao giờ nhận được bản mới" cho MỌI người dùng hai nền tảng đó.
+ *
+ * Câu cảnh báo ấy không chỉ thừa, nó SAI SỰ THẬT: trên Linux và Windows tự
+ * cập nhật CHẠY ĐẦY ĐỦ qua electron-updater (xem nhánh `update-available` —
+ * `taiSanBanMac` chỉ chạy khi `platform === 'darwin'`, hai nền tảng kia đi
+ * thẳng `autoUpdater.downloadUpdate()`).
+ *
+ * ⚠️ `daCaiDung` (trước tên là `trongApplications`) là khái niệm CHUNG, mỗi nền
+ * tảng tự định nghĩa. Nó CHỈ dùng để quyết định có bật cảnh báo hay không, nên
+ * quy tắc là: **chỉ báo động khi CHẮC CHẮN sai chỗ**. Một dải đỏ sai còn tệ hơn
+ * không có dải nào — người dùng sẽ học cách bỏ qua mọi cảnh báo của app.
+ */
+export function noiDangChay(): { duong: string; daCaiDung: boolean; ghiDuoc: boolean } {
+  const duong = duongDangChay();
   let ghiDuoc = false;
   try {
     fs.accessSync(path.dirname(duong), fs.constants.W_OK);
     fs.accessSync(duong, fs.constants.W_OK);
     ghiDuoc = true;
   } catch { ghiDuoc = false; }
-  return { duong, trongApplications: duong.startsWith('/Applications/'), ghiDuoc };
+
+  /*
+   * macOS: giữ NGUYÊN luật cũ — đây là nền tảng duy nhất có cái bẫy thật (mở
+   * nhầm bản dựng thử trong `desktop/release/…` trong khi bản trong
+   * Applications đã mới hơn), và cũng là nền tảng duy nhất KHÔNG tự cập nhật
+   * được (app chưa ký số).
+   *
+   * Linux/Windows: KHÔNG báo động. Ta không có cách phân biệt đáng tin giữa
+   * "đã cài đúng chỗ" và "giải nén ra đâu đó" — mà cả hai đều tự cập nhật
+   * được. Không có bằng chứng chắc chắn thì không dựng cờ đỏ.
+   */
+  const daCaiDung = process.platform === 'darwin'
+    ? duong.startsWith('/Applications/')
+    : true;
+
+  return { duong, daCaiDung, ghiDuoc };
+}
+
+/** Nơi app đang chạy, tính theo đúng hình dạng của từng nền tảng. */
+function duongDangChay(): string {
+  const exe = app.getPath('exe');
+
+  if (process.platform === 'darwin') {
+    // `/Applications/X.app/Contents/MacOS/X` → lùi 3 cấp là bó ứng dụng.
+    return path.resolve(path.dirname(exe), '..', '..');
+  }
+
+  if (process.platform === 'linux') {
+    /*
+     * ⚠️ CHƯA XÁC MINH TRÊN MÁY LINUX THẬT (24/08/2026 — máy đang làm là macOS).
+     *
+     * Bộ chạy AppImage đặt biến `APPIMAGE` trỏ tới đường dẫn THẬT của file
+     * `.AppImage`, trong khi `app.getPath('exe')` trỏ vào thư mục mount tạm
+     * (`/tmp/.mount_XXXXXX/…`) — thứ biến mất khi thoát app.
+     *
+     * Nếu biến đó không có (bản `.deb`, hoặc AppImage đã giải nén) thì chính
+     * `exe` mới là câu trả lời đúng. Cả hai đường đều KHÔNG bật cảnh báo, nên
+     * đoán sai ở đây cũng chỉ làm sai chuỗi hiển thị, không làm sai hành vi.
+     */
+    return process.env.APPIMAGE ?? exe;
+  }
+
+  // Windows: `…\Programs\cuongthai-desktop\CuongThai.exe`. Thư mục chứa file
+  // chạy CHÍNH LÀ thư mục cài — không có lớp bó nào để lùi qua như macOS.
+  return path.dirname(exe);
 }
 
 /** Bản `.zip` đã tải sẵn, đang chờ tráo. Giữ giữa các lần kiểm. */

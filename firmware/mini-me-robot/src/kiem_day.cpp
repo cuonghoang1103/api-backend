@@ -39,9 +39,10 @@ struct Chan {
   const char* ten;
 };
 
-// Đúng bảy sợi của một con màn. VCC và GND không nằm đây vì chúng là
-// nguồn — đo trực tiếp bằng đồng hồ, không cần firmware kéo.
+// SÁU sợi tín hiệu của cả ba con màn. VCC và GND không nằm đây vì chúng
+// là nguồn — đo trực tiếp bằng đồng hồ, không cần firmware kéo.
 static const Chan DS[] = {
+    {PIN_TFT_CS, "CS   (man NGUC)"},
     {PIN_EYE_CS_L, "CS   (mat trai)"},
     {PIN_TFT_DC, "DC"},
     {PIN_TFT_SCLK, "SCL / SCK"},
@@ -55,6 +56,16 @@ static const Chan DS[] = {
 //
 // Muốn kiểm sợi RST thì đo bằng đồng hồ: nó phải thông với chân 3V3,
 // firmware không kéo được chân mà nó không giữ.
+//
+// ⚠️ 25/08/2026 — `PIN_TFT_CS` (GPIO 10) TỪNG BỊ THIẾU ở bảng này, và
+// nó thiếu đúng vào hôm màn ngực chết. Bộ dò được viết lúc trên bàn chỉ
+// có màn tròn, nên nó liệt hai CS mắt mà quên CS ngực; rồi cả một buổi
+// dò dây mà sợi khả nghi nhất KHÔNG NẰM TRONG PHÉP DÒ. Bộ kiểm im lặng
+// về một sợi trông y hệt sợi ấy tốt.
+//
+// Xem [[feedback_verify_the_checker_before_the_content]]: trước khi tin
+// một kết quả "đo rồi, không thấy gì", hãy đếm xem phép đo có phủ hết
+// thứ cần đo không.
 static constexpr int SO = sizeof(DS) / sizeof(DS[0]);
 
 void setup() {

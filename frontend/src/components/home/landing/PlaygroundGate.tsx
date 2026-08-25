@@ -16,9 +16,28 @@
  *
  * Dùng lại được ở bất cứ đâu cần dẫn sang sân chơi — truyền `children` là phần
  * hiện ra, phần cảnh báo giữ nguyên.
+ *
+ * ─── VÌ SAO CÁI BẤM LÀ <a> CHỨ KHÔNG PHẢI <button> (23/08/2026) ──────────────
+ * Nó từng là `<button onClick={() => setOpen(true)}>`. Hộp thoại chạy đúng,
+ * nhưng cái nút KHÔNG CÓ `href` — và ba thứ mất theo:
+ *
+ *   · Googlebot không bò sang được. Nó đi theo `href`, không bấm nút. Sân chơi
+ *     3D là thứ khác biệt nhất của cả web mà lại gần như vô hình với tìm kiếm.
+ *   · Bấm giữa / Ctrl+bấm / Cmd+bấm không mở tab mới. Chuột phải không có
+ *     "Mở trong tab mới", cũng không copy được địa chỉ.
+ *   · Trình đọc màn hình đọc ra "nút" thay vì "liên kết", nên người dùng không
+ *     biết là sắp rời trang.
+ *
+ * Nay là `<a href="/playground">` thật. Hộp thoại cảnh báo vẫn nguyên: bấm
+ * trái bình thường thì `preventDefault()` rồi mở hộp thoại. Nhưng bấm-có-phím-
+ * bổ-trợ (Ctrl/Cmd/Shift/Alt) và bấm chuột giữa thì KHÔNG chặn — để trình
+ * duyệt làm đúng việc của nó. Người cố tình mở tab mới là người đã biết mình
+ * muốn gì; chặn họ lại để cảnh báo là phiền chứ không phải giúp.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from '@/hooks/useTranslation';
+import { getLandingCopy } from './landingCopy';
 
 const PLAYGROUND_URL = '/playground';
 
@@ -29,10 +48,12 @@ export default function PlaygroundGate({
   children: React.ReactNode;
   className?: string;
 }) {
+  const { locale } = useTranslation();
+  const copy = getLandingCopy(locale).playgroundGate;
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const enterRef = useRef<HTMLAnchorElement | null>(null);
-  const openerRef = useRef<HTMLButtonElement | null>(null);
+  const openerRef = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => setMounted(true), []);
 
@@ -73,7 +94,7 @@ export default function PlaygroundGate({
           nhất, và ở đây lại càng sai vì máy yếu chính là đối tượng cảnh báo. */}
       <button
         type="button"
-        aria-label="Đóng"
+        aria-label={copy.close}
         onClick={close}
         className="absolute inset-0 h-full w-full cursor-default bg-black/70 backdrop-blur-[10px] motion-safe:animate-[pg-fade_.18s_ease-out]"
       />
@@ -81,29 +102,25 @@ export default function PlaygroundGate({
       <div className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl motion-safe:animate-[pg-rise_.22s_cubic-bezier(.32,.94,.6,1)]">
         <div className="border-b border-[var(--border-color)] px-6 py-5">
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
-            Before you enter
+            {copy.eyebrow}
           </p>
           <h2
             id="pg-gate-title"
             className="mt-1.5 font-heading text-2xl font-bold text-[var(--text-primary)]"
           >
-            This one runs on your graphics card
+            {copy.title}
           </h2>
         </div>
 
         <div id="pg-gate-desc" className="space-y-4 px-6 py-5 text-sm leading-relaxed text-[var(--text-secondary)]">
           <p>
-            The playground is a real-time 3D world. It renders entirely on{' '}
-            <strong className="text-[var(--text-primary)]">your device&rsquo;s GPU</strong> — nothing is
-            streamed from a server, so how smoothly it runs depends on the machine you are on right now.
+            {copy.introBefore}
+            <strong className="text-[var(--text-primary)]">{copy.introStrong}</strong>
+            {copy.introAfter}
           </p>
 
           <ul className="space-y-2.5">
-            {[
-              ['~35 MB to download', 'First visit takes a moment on a slow connection. After that it is cached for a week.'],
-              ['Needs a recent browser', 'Chrome, Edge or Safari from the last couple of years. WebGPU with a WebGL fallback.'],
-              ['Not built for weak hardware', 'Older laptops, low-end phones and integrated graphics will stutter. That is expected, not a bug.'],
-            ].map(([head, body]) => (
+            {copy.facts.map(([head, body]) => (
               <li key={head} className="flex gap-3">
                 <span aria-hidden className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-[var(--text-muted)]" />
                 <span>
@@ -115,8 +132,7 @@ export default function PlaygroundGate({
           </ul>
 
           <p className="text-[var(--text-muted)]">
-            Everything else on the site works fine without it. Drive around, smash the brick walls for a
-            vocabulary quiz, and use the gates to jump into any part of CuongThai.
+            {copy.outro}
           </p>
         </div>
 
@@ -126,7 +142,7 @@ export default function PlaygroundGate({
             onClick={close}
             className="rounded-lg px-4 py-2.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-color)]"
           >
-            Stay here
+            {copy.stay}
           </button>
           {/* Thẻ <a> thật, không phải next/link: sân chơi là ứng dụng tĩnh nằm
               ngoài router của Next, đi bằng client-side nav sẽ hỏng. */}
@@ -135,7 +151,7 @@ export default function PlaygroundGate({
             href={PLAYGROUND_URL}
             className="rounded-lg bg-[var(--text-primary)] px-5 py-2.5 text-center text-sm font-semibold text-[var(--bg-primary)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-color)]"
           >
-            Enter the playground
+            {copy.enter}
           </a>
         </div>
       </div>
@@ -147,9 +163,25 @@ export default function PlaygroundGate({
 
   return (
     <>
-      <button ref={openerRef} type="button" onClick={() => setOpen(true)} className={className}>
+      <a
+        ref={openerRef}
+        href={PLAYGROUND_URL}
+        className={className}
+        onClick={(e) => {
+          // Để nguyên những lối đi mà người dùng CỐ Ý chọn:
+          //   · e.metaKey/ctrlKey → mở tab mới
+          //   · e.shiftKey        → mở cửa sổ mới
+          //   · e.altKey          → tải về
+          //   · e.button !== 0    → bấm giữa (React chỉ bắn onClick cho nút
+          //                         chính, nhưng kiểm cho chắc)
+          // Mọi trường hợp đó đi thẳng sang /playground, không qua hộp thoại.
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+          e.preventDefault();
+          setOpen(true);
+        }}
+      >
         {children}
-      </button>
+      </a>
       {mounted && open && createPortal(dialog, document.body)}
     </>
   );

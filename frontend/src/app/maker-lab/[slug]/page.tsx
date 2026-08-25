@@ -23,6 +23,7 @@ import {
   Box,
   CircuitBoard,
   CalendarClock,
+  Bot,
   Clock,
   Cpu,
   FileCode2,
@@ -42,6 +43,7 @@ import { BomTable } from '@/components/maker-lab/BomTable';
 import { WiringDiagram } from '@/components/maker-lab/WiringDiagram';
 import { SystemFlowDiagram } from '@/components/maker-lab/SystemFlowDiagram';
 import { DeviceConsole } from '@/components/maker-lab/DeviceConsole';
+import { MoPhongTab } from '@/components/maker-lab/simulator/MoPhongTab';
 import { FirmwarePlan } from '@/components/maker-lab/FirmwarePlan';
 import { FirmwareUpload } from '@/components/maker-lab/FirmwareUpload';
 import { RobotBlueprint } from '@/components/maker-lab/RobotBlueprint';
@@ -61,6 +63,7 @@ const TABS = [
   { id: 'wiring', label: 'Nối dây', icon: Zap },
   { id: 'firmware', label: 'Firmware', icon: FileCode2 },
   { id: 'console', label: 'Điều khiển', icon: Radio },
+  { id: 'mo-phong', label: 'Mô phỏng', icon: Bot },
   { id: 'kehoach', label: 'Kế hoạch', icon: CalendarClock },
   { id: 'persona', label: 'Tính cách', icon: Mic2 },
   { id: 'training', label: 'Huấn luyện', icon: GraduationCap },
@@ -259,6 +262,7 @@ export default function MakerProjectPage() {
           nao={(project.persona?.traits?.nao as string | undefined) ?? null}
         />
       )}
+      {tab === 'mo-phong' && <MoPhongTab devices={devices} isAuthed={isAuthed} />}
       {tab === 'persona' && (
         <PersonaEditor
           projectId={project.id}

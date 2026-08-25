@@ -1,0 +1,1325 @@
+<title>Sổ lắp ráp Odin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --ground:#F2F3F1; --surface:#FFFFFF; --sunk:#E7E9E6; --plate:#EDEFEB;
+  --ink:#1B2021; --ink-2:#4A5350; --ink-3:#6B7472;
+  --line:#D2D6D2; --line-2:#BFC5C0;
+  --accent:#F0B310; --danger:#C0392B; --danger-bg:#FBEDEB; --danger-line:#E8BDB7;
+  --ok:#2E6F4E; --ok-bg:#E9F2ED; --ok-line:#BCD8C8;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#141718; --surface:#1D2223; --sunk:#252B2C; --plate:#E7E9E6;
+    --ink:#EDEFEC; --ink-2:#B4BCB8; --ink-3:#8C9591;
+    --line:#333A3B; --line-2:#454E4F;
+    --accent:#F5C13F; --danger:#F08579; --danger-bg:#33201D; --danger-line:#5C332D;
+    --ok:#7BC49B; --ok-bg:#1A2A22; --ok-line:#2E4739;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#141718; --surface:#1D2223; --sunk:#252B2C; --plate:#E7E9E6;
+  --ink:#EDEFEC; --ink-2:#B4BCB8; --ink-3:#8C9591;
+  --line:#333A3B; --line-2:#454E4F;
+  --accent:#F5C13F; --danger:#F08579; --danger-bg:#33201D; --danger-line:#5C332D;
+  --ok:#7BC49B; --ok-bg:#1A2A22; --ok-line:#2E4739;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 24px 96px}
+
+.masthead{padding:56px 0 28px;border-bottom:2px solid var(--ink)}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin:0 0 14px;
+}
+h1{
+  font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:700;
+  font-size:clamp(38px,7.5vw,62px);line-height:.98;margin:0;
+  text-transform:uppercase;text-wrap:balance;
+}
+.standfirst{margin:16px 0 0;font-size:17px;color:var(--ink-2);max-width:64ch}
+.meta{
+  display:flex;flex-wrap:wrap;gap:10px 26px;margin:22px 0 0;
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-3);
+}
+.meta b{color:var(--ink-2);font-weight:600}
+
+section{padding-top:46px}
+h2{
+  font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:700;
+  font-size:27px;letter-spacing:.02em;text-transform:uppercase;
+  margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line-2);
+}
+h3{font-weight:600;font-size:17px;margin:26px 0 6px}
+p{margin:0 0 14px;max-width:70ch}
+ul,ol{margin:0 0 14px;padding-left:22px;max-width:70ch}
+li{margin:0 0 7px}
+code,kbd{
+  font-family:"IBM Plex Mono",monospace;font-size:.9em;
+  background:var(--sunk);padding:1px 5px;border:1px solid var(--line);
+}
+kbd{font-weight:600}
+a{color:var(--ink);text-decoration-color:var(--accent);text-underline-offset:3px}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+figure.fig{margin:22px 0;border:1px solid var(--line);background:var(--surface);padding:18px 18px 0}
+figure.fig svg{display:block;width:100%;max-width:100%;height:auto;color:var(--ink)}
+figure.fig figcaption{
+  border-top:1px solid var(--line);margin:14px -18px 0;padding:12px 18px;
+  font-size:13.5px;line-height:1.55;color:var(--ink-2);
+}
+
+.part{
+  border:1px solid var(--line);background:var(--surface);margin:0 0 18px;
+  display:grid;grid-template-columns:300px 1fr;
+}
+.part-img{
+  background:var(--plate);border-right:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;padding:10px;
+}
+.part-img img{width:100%;height:auto;display:block;mix-blend-mode:multiply}
+.part-info{padding:16px 18px}
+.part-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:2px}
+.part-id{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:600}
+.qty{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+  background:var(--accent);color:#1B2021;padding:1px 7px;letter-spacing:.04em;
+}
+.dims{
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;margin-left:auto;
+}
+.part-role{font-weight:600;font-size:15.5px;margin:6px 0 8px}
+.part-info p{font-size:14.5px;margin:0 0 10px;max-width:none}
+.part-info p:last-child{margin-bottom:0}
+.fit{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);display:block;margin:12px 0 3px;
+}
+
+.warn,.note{border:1px solid var(--danger-line);background:var(--danger-bg);padding:13px 15px;margin:14px 0}
+.warn p,.note p{margin:0;max-width:none;font-size:14.5px}
+.warn p+p,.note p+p{margin-top:9px}
+.warn-h{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--danger);
+  display:block;margin-bottom:6px;
+}
+.note{border-color:var(--ok-line);background:var(--ok-bg)}
+.note .warn-h{color:var(--ok)}
+.part-info .warn,.part-info .note{margin:12px 0 0}
+
+.tw{overflow-x:auto;margin:16px 0;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--surface)}
+th,td{padding:9px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{
+  background:var(--sunk);font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);font-weight:600;white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.mono{font-family:"IBM Plex Mono",monospace;font-size:13px}
+
+pre{margin:14px 0;padding:13px 15px;overflow-x:auto;background:var(--ink);border:1px solid var(--ink)}
+pre code{background:none;border:0;padding:0;color:#EDEFEC;font-size:13px;line-height:1.65}
+:root[data-theme="dark"] pre{background:#0D0F10;border-color:var(--line)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) pre{background:#0D0F10;border-color:var(--line)}}
+
+ol.steps{list-style:none;padding:0;counter-reset:s;max-width:70ch}
+ol.steps>li{counter-increment:s;position:relative;padding-left:34px;margin-bottom:12px}
+ol.steps>li::before{
+  content:counter(s,decimal-leading-zero);position:absolute;left:0;top:2px;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink-3);
+}
+
+.order{border:1px solid var(--line);background:var(--surface);margin:16px 0}
+.order-row{display:grid;grid-template-columns:52px 1fr;border-top:1px solid var(--line)}
+.order-row:first-child{border-top:0}
+.order-row.done .order-key{color:var(--ok)}
+.order-key{
+  font-family:"Saira Condensed",sans-serif;font-weight:700;font-size:26px;
+  color:var(--accent);display:flex;align-items:center;justify-content:center;
+  background:var(--sunk);border-right:1px solid var(--line);
+}
+.order-body{padding:12px 16px}
+.order-body b{display:block;font-size:15.5px;margin-bottom:3px}
+.order-body span{font-size:14.5px;color:var(--ink-2)}
+.order-body code{font-size:12.5px}
+.tick{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ok);font-weight:600;
+}
+
+details{border:1px solid var(--line);background:var(--surface);margin:12px 0}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;font-size:15px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:"IBM Plex Mono",monospace;color:var(--ink-3)}
+details[open] summary::after{content:"–"}
+details[open] summary{border-bottom:1px solid var(--line)}
+.details-body{padding:14px 15px}
+.details-body>*:last-child{margin-bottom:0}
+
+@media (max-width:640px){
+  .wrap{padding:0 18px 72px}
+  .part{grid-template-columns:1fr}
+  .part-img{border-right:0;border-bottom:1px solid var(--line)}
+  .dims{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">Maker Lab · dự án 01 · vỏ PETG</p>
+  <h1>Sổ lắp ráp Odin</h1>
+  <p class="standfirst">Mười bốn mảnh vỏ, sơ đồ lắp đúng tỉ lệ, cách xếp mạch vào lòng thân, và bảng nối dây toàn bộ lấy thẳng từ <code>config.h</code>. Kèm hai mối nối mà bộ mảnh không có sẵn, và phần thử servo sau cùng.</p>
+  <div class="meta">
+    <span><b>Vỏ</b> 14 mảnh PETG</span>
+    <span><b>Vít</b> M3 tự ren</span>
+    <span><b>Khung</b> TP101 · 155 mm</span>
+    <span><b>Nguồn</b> 12 V/3 A để bàn · 12,6 V/2 A để sạc</span>
+  </div>
+</header>
+
+<section>
+  <h2>Đọc bốn dòng này trước khi cắm điện</h2>
+  <div class="warn">
+    <span class="warn-h">Bốn chỗ đã làm hỏng đồ thật</span>
+    <p><b>VCC mọi module lấy ở khối <code>3V3</code> góc trên phải</b> của MKE-B01, không lấy hàng <code>5V</code> nằm ngay cạnh hàng <code>SIG</code>. Hàng đó tiện tay hơn nhiều, và nó đã làm cháy một màn GC9A01 hôm 16/08.</p>
+    <p><b>Cắm ESP32 theo mũi tên in trên bo</b>, mũi tên chỉ vào chữ <code>USB</code>. Ngược 180° là 5 V rơi thẳng vào GND.</p>
+    <p><b>VCC của IBT-2 cắm 3V3, không phải 5V.</b> Chân điều khiển qua đệm 74HC244, ngưỡng mức cao 0,7×VCC — cấp 5 V thì ngưỡng thành 3,5 V mà ESP32 chỉ ra 3,3 V. Triệu chứng là robot im ru trong khi đo chân nào cũng thấy có tín hiệu.</p>
+    <p><b>Đừng cắm cụm I2C của shield.</b> Khối đó ghi <code>SCL|9</code>, mà GPIO 9 là chân <code>CS</code> mắt trái. Lấy <code>SDA</code> ở đấy được (GPIO 8, trùng), <code>SCL</code> phải lấy ở hàng <code>SIG</code> chỗ số 18.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Ba hình để định vị</h2>
+  <p>Vẽ đúng tỉ lệ thật, đơn vị milimét, tính từ mặt đất. Số vàng là tên mảnh.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 420 300" role="img" aria-label="Robot nhìn từ bên: ốp xích cao 95mm cách đất 10mm, khung TP101 cao 55mm, thân 130mm đặt trên khung, tấm cổ, rồi đầu — tổng cao 248mm">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,1 L9,5 L0,9 z" fill="currentColor"/>
+        </marker>
+      </defs>
+      <g stroke="currentColor" fill="none" stroke-width="1.2">
+        <line x1="105" y1="280" x2="300" y2="280" stroke-width="2"/>
+        <circle cx="146" cy="256.5" r="23.5" stroke-dasharray="3 3" opacity=".55"/>
+        <circle cx="254" cy="256.5" r="23.5" stroke-dasharray="3 3" opacity=".55"/>
+        <rect x="122" y="225" width="155" height="55" stroke-dasharray="4 3" opacity=".55"/>
+        <rect x="120" y="175" width="160" height="95" stroke-width="1.6"/>
+        <circle cx="146" cy="256.5" r="8"/>
+        <circle cx="254" cy="256.5" r="8"/>
+        <rect x="139.5" y="95" width="120" height="130" stroke-width="1.6"/>
+        <rect x="132.5" y="87" width="7" height="138" fill="currentColor" opacity=".18"/>
+        <rect x="132.5" y="87" width="7" height="138" stroke-width="1.4"/>
+        <rect x="259.5" y="95" width="3" height="130" fill="currentColor" opacity=".18"/>
+        <rect x="259.5" y="95" width="3" height="130" stroke-width="1.4"/>
+        <rect x="169.5" y="92" width="60" height="3" fill="currentColor" opacity=".3"/>
+        <rect x="171.5" y="32" width="56" height="60" stroke-width="1.6"/>
+        <rect x="131.5" y="35" width="40" height="54" stroke-width="1.4"/>
+        <line x1="131.5" y1="47" x2="131.5" y2="77" stroke-width="3"/>
+      </g>
+      <g stroke="currentColor" fill="none" stroke-width=".8" opacity=".5">
+        <line x1="310" y1="280" x2="310" y2="32" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <line x1="300" y1="225" x2="316" y2="225" stroke-dasharray="2 2"/>
+        <line x1="300" y1="95" x2="316" y2="95" stroke-dasharray="2 2"/>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor">
+        <text x="322" y="160" opacity=".75">248 cao</text>
+        <text x="322" y="229" opacity=".6">55 khung</text>
+        <text x="322" y="99" opacity=".6">185 nóc thân</text>
+        <text x="106" y="277" font-size="9.5" opacity=".6">mặt đất</text>
+        <text x="120" y="292" font-size="9.5" opacity=".6">◀ mặt trước xe</text>
+      </g>
+      <g stroke="currentColor" stroke-width=".8" opacity=".55">
+        <line x1="118" y1="222" x2="82" y2="235"/>
+        <line x1="137" y1="115" x2="86" y2="115"/>
+        <line x1="132" y1="150" x2="86" y2="163"/>
+        <line x1="150" y1="45" x2="86" y2="45"/>
+        <line x1="199" y1="30" x2="199" y2="14"/>
+        <line x1="229" y1="93" x2="284" y2="76"/>
+        <line x1="262" y1="130" x2="300" y2="130"/>
+      </g>
+      <g font-family="Saira Condensed, sans-serif" font-weight="700" font-size="15" fill="#B8860B">
+        <text x="52" y="239">08</text><text x="52" y="119">01</text>
+        <text x="52" y="167">03</text><text x="52" y="49">05</text>
+        <text x="192" y="12">04</text><text x="288" y="73">10</text>
+        <text x="304" y="134">02</text>
+      </g>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity=".7">
+        <text x="52" y="251">ốp xích</text><text x="52" y="131">thân</text>
+        <text x="52" y="179">ngực</text><text x="52" y="61">ống mắt</text>
+        <text x="192" y="25">đầu</text><text x="288" y="86">tấm cổ</text>
+        <text x="304" y="146">nắp sau</text>
+      </g>
+    </svg>
+    <figcaption>Nhìn từ bên. Ốp xích <b>08</b> không chạm đất — hở gầm 10 mm — và đỉnh nó ở 105 mm, che kín 50 mm phần dưới thân, nên mối nối tự khoan giữa thân và khung nằm khuất hoàn toàn. Tấm ngực <b>03</b> cao hơn nóc thân 8 mm: đó là dải thừa phải nằm phía trên.</figcaption>
+  </figure>
+
+  <figure class="fig">
+    <svg viewBox="0 0 420 300" role="img" aria-label="Robot nhìn từ trước: hai dải xích rộng 196mm, thân 150mm ở giữa, tấm ngực 140mm mang loa và màn, đầu 130mm với hai mắt đường kính 54mm cách nhau 62mm">
+      <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+      <g stroke="currentColor" fill="none" stroke-width="1.2">
+        <line x1="90" y1="280" x2="310" y2="280" stroke-width="2"/>
+        <rect x="102" y="233" width="23" height="47" stroke-dasharray="3 3" opacity=".55"/>
+        <rect x="275" y="233" width="23" height="47" stroke-dasharray="3 3" opacity=".55"/>
+        <rect x="99" y="175" width="3" height="95" fill="currentColor" opacity=".35"/>
+        <rect x="298" y="175" width="3" height="95" fill="currentColor" opacity=".35"/>
+        <rect x="125" y="95" width="150" height="130" stroke-dasharray="4 3" opacity=".5"/>
+        <rect x="130" y="87" width="140" height="138" stroke-width="1.6"/>
+        <rect x="157" y="100" width="86" height="41" stroke-width="1.4" fill="currentColor" fill-opacity=".12"/>
+        <circle cx="200" cy="183.5" r="26" stroke-width="1.4"/>
+        <circle cx="200" cy="183.5" r="8" opacity=".5"/>
+        <rect x="135" y="32" width="130" height="60" stroke-width="1.6"/>
+        <circle cx="169" cy="62" r="27" stroke-width="1.6"/>
+        <circle cx="231" cy="62" r="27" stroke-width="1.6"/>
+        <circle cx="169" cy="62" r="17.5" opacity=".6"/>
+        <circle cx="231" cy="62" r="17.5" opacity=".6"/>
+        <rect x="272" y="112" width="3" height="24" fill="currentColor" opacity=".45"/>
+        <rect x="125" y="112" width="3" height="24" fill="currentColor" opacity=".45"/>
+      </g>
+      <g stroke="currentColor" fill="none" stroke-width=".8" opacity=".5">
+        <line x1="169" y1="20" x2="231" y2="20" marker-start="url(#ar2)" marker-end="url(#ar2)"/>
+        <line x1="130" y1="240" x2="270" y2="240" marker-start="url(#ar2)" marker-end="url(#ar2)"/>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" text-anchor="middle">
+        <text x="200" y="16" opacity=".75">62 tâm–tâm</text>
+        <text x="200" y="253" opacity=".75">140 ngực</text>
+      </g>
+      <g stroke="currentColor" stroke-width=".8" opacity=".55">
+        <line x1="196" y1="62" x2="330" y2="52"/>
+        <line x1="243" y1="120" x2="330" y2="108"/>
+        <line x1="226" y1="183.5" x2="330" y2="172"/>
+        <line x1="99" y1="200" x2="66" y2="200"/>
+        <line x1="125" y1="124" x2="66" y2="136"/>
+      </g>
+      <g font-family="Saira Condensed, sans-serif" font-weight="700" font-size="15" fill="#B8860B">
+        <text x="334" y="56">05</text><text x="334" y="112">03</text>
+        <text x="334" y="176">03</text><text x="34" y="204">08</text>
+        <text x="34" y="140">11</text>
+      </g>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity=".7">
+        <text x="334" y="68">ống mắt ⌀54</text><text x="334" y="124">cửa sổ màn</text>
+        <text x="334" y="188">lỗ loa ⌀52</text><text x="34" y="216">ốp xích</text>
+        <text x="34" y="152">khối vai</text>
+      </g>
+    </svg>
+    <figcaption>Nhìn từ trước. Hai mắt là <b>05</b> úp ngoài, còn bo màn nằm phẳng sau mặt đầu — vành ⌀54 chỉ để lộ ⌀35. Trên tấm ngực, màn ở <b>trên</b> và loa ở <b>dưới</b>: đó là chiều đúng.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Thứ tự lắp — bản đồ tổng thể</h2>
+  <p>Mỗi bước che mất chỗ để tay của bước trước. Ghi lại để lần sau, hoặc để người khác lắp con thứ hai.</p>
+  <div class="order">
+    <div class="order-row"><div class="order-key">A</div><div class="order-body"><b>Khung xích và hai tấm ốp</b>
+      <span>TP101 + hai động cơ 33GB-520 + hai bo IBT-2. <code>08-op-xich</code> xỏ trục hai đầu, hở gầm 10 mm.</span></div></div>
+    <div class="order-row"><div class="order-key">B</div><div class="order-body"><b>Nối thân với khung</b>
+      <span>Không mảnh nào làm sẵn mối nối này. Khoan đáy thân <b>một lượt cả hai loại lỗ</b>: bốn lỗ ⌀3,2 bắt xuống khung (chấm qua lỗ sẵn có của TP101) và một lỗ ⌀12 luồn dây, đặt ở dải sau. Đáy chỉ dày 2,4 mm nên phải có đai ốc hoặc trụ đồng M3 ở mặt trong.</span></div></div>
+    <div class="order-row"><div class="order-key">C</div><div class="order-body"><b>Xếp mạch vào lòng thân</b>
+      <span>Luồn dây động cơ lên trước khi siết vít đáy · đế pin · ESP32 áp thành sau, USB chĩa ra cửa bảo trì · PCA9685 và LM2596 ở tầng trên.</span></div></div>
+    <div class="order-row"><div class="order-key">D</div><div class="order-body"><b>Tấm ngực</b>
+      <span>Loa ⌀65 lên bốn trụ, màn 3.5" áp từ mặt trong. Luồn dây vào trong rồi mới bắt hai vít góc dưới.</span></div></div>
+    <div class="order-row"><div class="order-key">E</div><div class="order-body"><b>Đầu và hai mắt</b>
+      <span>Bo GC9A01 luồn từ phía sau, bốn vấu giữ, chêm bằng tấm phôi · ống mắt úp ngoài · khoan lỗ ⌀12 ở đáy đầu để luồn cáp.</span></div></div>
+    <div class="order-row"><div class="order-key">F</div><div class="order-body"><b>Cổ</b>
+      <span><code>10-tam-co</code> bắc qua nóc thân, khoan xuyên từ ngoài · khung pan-tilt · đặt đầu lên.</span></div></div>
+    <div class="order-row"><div class="order-key">G</div><div class="order-body"><b>Hai tay</b>
+      <span><code>11-khoi-vai</code> áp thành bên · cánh tay trượt lên mộng tới khi <b>tì vào đế</b> thì lỗ chốt trùng khít · <code>12-khop-khuyu</code> nối xuống cẳng tay.</span></div></div>
+    <div class="order-row"><div class="order-key">H</div><div class="order-body"><b>Dò dây rồi mới đóng nắp</b>
+      <span>Chạy <code>kiem-day</code> lúc dây đã cắm mà nắp còn mở. Xong thì úp <code>02-nap-sau</code>, khoan lưới loa 7–9 lỗ ⌀3 và hai lỗ micro ⌀2.</span></div></div>
+  </div>
+  <p>Ba lỗ khoan tay — cáp qua cổ ⌀12, lưới loa, micro — cố ý không có trong file STL: dễ khoan hơn là in, và khoan thì chỉnh được vị trí sau khi đã lắp thử.</p>
+</section>
+
+<section>
+  <h2>Nhét mạch vào thân</h2>
+  <p>Lòng thân là <b>145,2 rộng × 117,6 sâu × 130 cao</b>. Chỗ nào đã có chủ, tính theo chiều sâu từ mặt trước:</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 420 262" role="img" aria-label="Mặt cắt dọc lòng thân: loa chiếm 30mm sâu đầu tiên, màn nằm cao hơn loa, đế pin ở đáy từ 32 đến 75mm, và 42,6mm sau cùng còn trống dành cho mạch — nằm sát cửa bảo trì">
+      <defs><marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+      <g stroke="currentColor" fill="none">
+        <rect x="70" y="24" width="188" height="208" stroke-width="1.8"/>
+        <rect x="217.2" y="24" width="40.8" height="208" fill="#F0B310" fill-opacity=".22" stroke="#B8860B" stroke-width="1.4"/>
+        <rect x="70" y="113.6" width="48" height="104" stroke-width="1.3" fill="currentColor" fill-opacity=".1"/>
+        <rect x="70" y="32" width="16" height="65.6" stroke-width="1.3" fill="currentColor" fill-opacity=".1"/>
+        <rect x="121.2" y="196.8" width="96" height="35.2" stroke-width="1.3" fill="currentColor" fill-opacity=".1"/>
+      </g>
+      <g stroke="currentColor" fill="none" stroke-width=".8" opacity=".5">
+        <line x1="70" y1="246" x2="118" y2="246" marker-start="url(#ar3)" marker-end="url(#ar3)"/>
+        <line x1="121.2" y1="246" x2="217.2" y2="246" marker-start="url(#ar3)" marker-end="url(#ar3)"/>
+        <line x1="217.2" y1="246" x2="258" y2="246" marker-start="url(#ar3)" marker-end="url(#ar3)"/>
+        <line x1="266" y1="128" x2="300" y2="128" marker-end="url(#ar3)" stroke="#B8860B" opacity=".9"/>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" text-anchor="middle" opacity=".75">
+        <text x="94" y="258">0–30</text>
+        <text x="169" y="258">32–92</text>
+        <text x="237" y="258">92–117,6</text>
+      </g>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor">
+        <text x="94" y="170" text-anchor="middle">loa ⌀65</text>
+        <text x="78" y="66" font-size="9.5">màn</text>
+        <text x="169" y="215" text-anchor="middle">đế pin 3 viên</text>
+        <text x="237" y="118" text-anchor="middle" font-weight="600" font-size="10">ESP32</text>
+        <text x="237" y="131" text-anchor="middle" font-size="8.5" opacity=".8">PCA9685</text>
+        <text x="237" y="143" text-anchor="middle" font-size="8.5" opacity=".8">LM2596</text>
+        <text x="304" y="125" font-size="10" fill="#B8860B" font-weight="600">cửa bảo trì</text>
+        <text x="304" y="139" font-size="9.5" opacity=".7">USB chĩa ra đây</text>
+        <text x="60" y="130" font-size="9.5" text-anchor="end" opacity=".7">mặt</text>
+        <text x="60" y="142" font-size="9.5" text-anchor="end" opacity=".7">trước</text>
+      </g>
+    </svg>
+    <figcaption>Mặt cắt dọc lòng thân, 117,6 mm sâu × 130 cao. Loa và màn không tranh chỗ nhau vì loa nằm ở cao 9–74 còn màn ở 84–125. Dải vàng <b>25,6 mm</b> sau cùng là chỗ duy nhất với tới được qua cửa bảo trì — đó là lý do mạch phải nằm đấy, không phải vì hết chỗ khác.</figcaption>
+  </figure>
+
+  <h3>Khoan đáy thân — làm hết một lượt</h3>
+  <p>Đáy là tấm đặc 2,4 mm, và bạn cần <b>hai loại lỗ</b>. Khoan cả hai <b>trước khi</b> bắt thân xuống khung, vì sau đó không lật thân lên được nữa.</p>
+  <ol class="steps">
+    <li><b>Bốn lỗ ⌀3,2</b> bắt xuống khung — chấm bút dạ qua lỗ có sẵn của TP101, đừng khoan lỗ mới vào nhôm.</li>
+    <li><b>Một lỗ ⌀12 luồn dây</b> cho dây động cơ và dây nguồn từ khung lên. Đặt ở <b>dải sau</b> (sâu hơn 92 mm) để dây đi thẳng lên chỗ mạch.</li>
+    <li>Cả hai loại đều <b>tránh dải 32–92 mm</b> — đó là chỗ đế pin 3 viên nằm.</li>
+    <li><b>Vê mép lỗ ⌀12.</b> Mép nhựa in sắc cứa vỏ dây dần dần — hỏng sau vài tháng rung lắc, đúng lúc không ai còn nghĩ tới nó.</li>
+    <li>Vít M3 từ dưới lên, đai ốc + long đền ở mặt trong; hoặc trụ đồng M3 6 × 10 làm chân, nâng thân thêm 10 mm và cho khe thoát nhiệt.</li>
+  </ol>
+
+  <h3>Rồi xếp theo thứ tự này</h3>
+  <ol class="steps">
+    <li><b>Luồn dây động cơ lên qua lỗ ⌀12</b> trước khi siết bốn vít đáy.</li>
+    <li><b>Đế pin</b> xuống đáy, sát ngay sau loa.</li>
+    <li><b>ESP32 trên MKE-B01</b> áp thành sau, <b>cổng USB chĩa thẳng ra cửa bảo trì</b>.</li>
+    <li><b>PCA9685 và LM2596</b> ở phần trên của dải sau, trên đầu đế pin.</li>
+    <li><b>Luồn dây loa và dây màn vào trong</b>, rồi mới bắt tấm ngực bằng hai vít M3 ở góc dưới.</li>
+  </ol>
+
+  <div class="warn">
+    <span class="warn-h">Nạp firmware một lần TRƯỚC khi đóng nắp sau</span>
+    <p>Firmware có sẵn OTA — flash 16 MB chia hai khe app, bản mới ghi vào khe trống rồi đối chiếu SHA-256 mới đổi khe. Sau lần đầu bạn không cần cổng USB nữa.</p>
+    <p><b>Nhưng lần đầu thì cần.</b> Nạp <code>mini-me</code> qua USB một lượt, thấy bo lên WiFi và nhận lệnh, rồi hẵng đóng nắp.</p>
+  </div>
+
+  <div class="note">
+    <span class="warn-h">Lắp thiếu module cũng không sao — firmware không treo</span>
+    <p>Thiếu <b>PCA9685</b>: <code>servo::begin()</code> trả false, lệnh servo báo "khong thay PCA9685", phần còn lại chạy bình thường. Thiếu <b>MPU6050</b>: <code>_coGyro = false</code>, xe vẫn chạy chỉ mất giữ hướng.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Nối dây toàn bộ</h2>
+  <p>Nguồn sự thật là <code>firmware/mini-me-robot/src/config.h</code> — firmware chạy theo đúng những con số dưới đây. Làm theo <b>từng module một</b>: cầm một module lên, nối hết chân của nó, rồi mới sang cái tiếp theo. Nối nửa chừng rồi nhảy sang module khác là cách chắc chắn nhất để sót một sợi.</p>
+
+  <div class="warn">
+    <span class="warn-h">Tab "Nối dây" trên web đang sai bốn chỗ — đừng dùng nó</span>
+    <p>Nó viết trước khi phần cứng đổi và chưa ai cập nhật: nói cầu H là <b>DRV8833</b> (nay là 2× IBT-2), có <b>encoder GPIO 47/48</b> (động cơ mua về chỉ 2 dây, không có encoder), đo pin ở <b>GPIO 3</b> (thật là <b>GPIO 1</b>), và chỉ kể <b>2 màn</b> (thật là 3).</p>
+    <p>Riêng chỗ GPIO 3 mà làm theo là hỏng kiểu khó tìm: đó là chân định đoạt nguồn JTAG lúc khởi động, cắm chia áp vào là mỗi lần bật máy pack pin quyết định hộ con chip một lựa chọn hệ thống.</p>
+  </div>
+
+  <h3>Nguồn — ba mức áp, nối trước tất cả</h3>
+  <figure class="fig">
+    <svg viewBox="0 0 420 236" role="img" aria-label="Sơ đồ phân phối nguồn: jack 12V vào MKE-B01 sinh 5V và 3V3 cho logic, đồng thời 12V đi thẳng vào hai bo IBT-2, và một mạch LM2596 riêng hạ 12V xuống 5V nuôi servo, ampli và vòng LED">
+      <defs><marker id="arn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+      <g stroke="currentColor" fill="none" stroke-width="1.3" font-family="IBM Plex Sans, sans-serif">
+        <rect x="14" y="96" width="74" height="34"/>
+        <rect x="150" y="20" width="96" height="42"/>
+        <rect x="150" y="92" width="96" height="42"/>
+        <rect x="150" y="166" width="96" height="42"/>
+        <rect x="300" y="20" width="106" height="42" stroke-dasharray="4 3"/>
+        <rect x="300" y="86" width="106" height="54" stroke-dasharray="4 3"/>
+        <rect x="300" y="160" width="106" height="54" stroke-dasharray="4 3"/>
+      </g>
+      <g stroke="currentColor" fill="none" stroke-width="1.3">
+        <path d="M88,113 L118,113 L118,41 L148,41" marker-end="url(#arn)"/>
+        <path d="M88,113 L148,113" marker-end="url(#arn)"/>
+        <path d="M88,113 L118,113 L118,187 L148,187" marker-end="url(#arn)"/>
+        <line x1="246" y1="41" x2="298" y2="41" marker-end="url(#arn)"/>
+        <path d="M246,105 L272,105 L272,100 L298,100" marker-end="url(#arn)"/>
+        <path d="M246,121 L272,121 L272,126 L298,126" marker-end="url(#arn)"/>
+        <line x1="246" y1="187" x2="298" y2="187" marker-end="url(#arn)"/>
+      </g>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" text-anchor="middle">
+        <text x="51" y="110" font-weight="600">jack</text><text x="51" y="123">12 V / 3 A</text>
+        <text x="198" y="37" font-weight="600">2× IBT-2</text><text x="198" y="51" font-size="9.5" opacity=".75">nhận thẳng 12 V</text>
+        <text x="198" y="109" font-weight="600">MKE-B01</text><text x="198" y="123" font-size="9.5" opacity=".75">XL1509 · AMS1117</text>
+        <text x="198" y="183" font-weight="600">LM2596</text><text x="198" y="197" font-size="9.5" opacity=".75">chỉnh ra 5 V</text>
+        <text x="353" y="37" font-size="10">động cơ 33GB-520</text><text x="353" y="51" font-size="9.5" opacity=".75">B+/B− · M+/M−</text>
+        <text x="353" y="103" font-size="10" font-weight="600">3V3</text>
+        <text x="353" y="117" font-size="9.5" opacity=".8">ESP32 · 3 màn · mic</text>
+        <text x="353" y="130" font-size="9.5" opacity=".8">I2C · VCC của IBT-2</text>
+        <text x="353" y="177" font-size="10" font-weight="600">5 V</text>
+        <text x="353" y="191" font-size="9.5" opacity=".8">servo V+ · MAX98357A</text>
+        <text x="353" y="204" font-size="9.5" opacity=".8">vòng LED</text>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="9" fill="currentColor" opacity=".7">
+        <text x="122" y="30">12 V</text><text x="122" y="88">12 V</text><text x="122" y="215">12 V</text>
+      </g>
+      <text x="210" y="230" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity=".8" text-anchor="middle">GND của cả ba nhánh phải chập chung về MỘT điểm</text>
+    </svg>
+    <figcaption>Servo có mạch hạ áp <b>riêng</b> vì <code>XL1509</code> của MKE-B01 chỉ 2 A, không gánh nổi sáu servo cùng gồng (~700 mA mỗi con). Vặn LM2596 ra đúng 5 V <b>trước khi</b> cắm tải — vặn sau là servo ăn nguyên mức đang để.</figcaption>
+  </figure>
+
+  <div class="warn">
+    <span class="warn-h">Ba luật nguồn không được phá</span>
+    <p><b>VCC của IBT-2 cắm 3V3, không phải 5V.</b> Chân điều khiển qua đệm 74HC244, ngưỡng mức cao 0,7×VCC. Cấp 5 V thì ngưỡng thành 3,5 V mà ESP32 chỉ ra 3,3 V — robot im ru trong khi đo chân nào cũng thấy có tín hiệu.</p>
+    <p><b>VCC của ba màn cắm 3V3.</b> Không bao giờ 5 V — một con GC9A01 đã bốc khói vì thế, lúc trên bo chỉ có đúng hai sợi VCC và GND. Muốn đèn nền sáng hơn thì cấp <b>3,8–4,2 V</b> (đúng bằng một viên 18650): LDO vẫn ra đủ 3,3 V mà chỉ đốt 0,7 V thay vì 1,7 V.</p>
+    <p><b>GND phải chập chung một điểm.</b> Ba nhánh nguồn mà đất rời nhau thì tín hiệu I2S và SPI lấy mốc khác nhau — nhiễu, treo, và không lần ra được.</p>
+  </div>
+
+  <h3>Nối theo từng module</h3>
+  <p>Cột <b>Về đâu</b> ghi chân trên ESP32 hoặc rail nguồn. Chân nào ghi <b>để hở</b> thì đừng nối gì — nối vào là đổi chế độ của chip.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Module</th><th>Chân</th><th class="num">Về đâu</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="6"><b>Mic INMP441</b><br><span style="opacity:.7;font-size:13px">I2S0</span></td><td class="mono">SCK</td><td class="num">GPIO 4</td><td>xung nhịp bit</td></tr>
+      <tr><td class="mono">WS</td><td class="num">GPIO 5</td><td>chọn kênh</td></tr>
+      <tr><td class="mono">SD</td><td class="num">GPIO 6</td><td>dữ liệu ra</td></tr>
+      <tr><td class="mono">L/R</td><td class="num">GND</td><td><b>bắt buộc nối đất</b> — firmware đặt <code>ONLY_LEFT</code>, để hở là mic nói ở kênh phải và thu về im lặng</td></tr>
+      <tr><td class="mono">VDD</td><td class="num">3V3</td><td>1,8–3,3 V</td></tr>
+      <tr><td class="mono">GND</td><td class="num">GND</td><td></td></tr>
+
+      <tr><td rowspan="7"><b>Ampli MAX98357A</b><br><span style="opacity:.7;font-size:13px">I2S1</span></td><td class="mono">BCLK</td><td class="num">GPIO 15</td><td></td></tr>
+      <tr><td class="mono">LRC</td><td class="num">GPIO 16</td><td></td></tr>
+      <tr><td class="mono">DIN</td><td class="num">GPIO 7</td><td></td></tr>
+      <tr><td class="mono">SD</td><td class="num">để hở</td><td>hở = phát (L+R)/2. <b>Nối đất là TẮT loa</b> — đây là chân dễ nối nhầm nhất trên bo này</td></tr>
+      <tr><td class="mono">GAIN</td><td class="num">để hở</td><td>hở = 9 dB. Đất = 12 dB, nối Vin = 6 dB</td></tr>
+      <tr><td class="mono">Vin</td><td class="num">5 V</td><td>từ LM2596. Chạy 3V3 cũng kêu nhưng không đủ 3 W</td></tr>
+      <tr><td class="mono">+ / −</td><td class="num">loa ⌀65</td><td>chân <b>−</b> nối cực âm loa, <b>KHÔNG</b> nối đất</td></tr>
+
+      <tr><td><b>Ba màn</b></td><td class="mono">—</td><td class="num">xem mục riêng</td><td>Hai mắt và màn bụng là <b>hai loại chip khác nhau, tên chân khác nhau</b> — có mục <b>Ba màn hình</b> ngay dưới bảng này</td></tr>
+
+      <tr><td rowspan="4"><b>I2C</b><br><span style="opacity:.7;font-size:13px">ba thiết bị chung bus</span></td><td class="mono">SDA</td><td class="num">GPIO 8</td><td rowspan="2">nối song song cả ba thiết bị</td></tr>
+      <tr><td class="mono">SCL</td><td class="num">GPIO 18</td></tr>
+      <tr><td class="mono">VCC ×3</td><td class="num">3V3</td><td>MPU6050 <code>0x68</code> · VL53L0X <code>0x29</code> · PCA9685 <code>0x40</code></td></tr>
+      <tr><td class="mono">GND ×3</td><td class="num">GND</td><td></td></tr>
+
+      <tr><td rowspan="4"><b>PCA9685</b><br><span style="opacity:.7;font-size:13px">sáu servo</span></td><td class="mono">VCC</td><td class="num">3V3</td><td>chỉ nuôi phần logic</td></tr>
+      <tr><td class="mono">V+</td><td class="num">5 V</td><td><b>từ LM2596, không lấy từ shield</b></td></tr>
+      <tr><td class="mono">GND</td><td class="num">GND</td><td>chung với đất toàn robot</td></tr>
+      <tr><td class="mono">kênh 0–5</td><td class="num">servo</td><td>cổ quay · cổ gật · vai T · khuỷu T · vai P · khuỷu P</td></tr>
+
+      <tr><td rowspan="6"><b>2× IBT-2</b><br><span style="opacity:.7;font-size:13px">chip BTS7960 · mỗi bo một bánh</span></td><td class="mono">RPWM trái</td><td class="num">GPIO 39</td><td>tiến</td></tr>
+      <tr><td class="mono">LPWM trái</td><td class="num">GPIO 40</td><td>lùi</td></tr>
+      <tr><td class="mono">RPWM phải</td><td class="num">GPIO 41</td><td>tiến</td></tr>
+      <tr><td class="mono">LPWM phải</td><td class="num">GPIO 42</td><td>lùi</td></tr>
+      <tr><td class="mono">R_EN + L_EN</td><td class="num">3V3</td><td>nối cứng, không tốn chân</td></tr>
+      <tr><td class="mono">VCC · B+/B− · M+/M−</td><td class="num">3V3 · 12 V · động cơ</td><td><b>VCC là 3V3</b>, còn B+/B− mới là 12 V</td></tr>
+
+      <tr><td rowspan="4"><b>Phụ trợ</b><br><span style="opacity:.7;font-size:13px">lắp sau cũng được</span></td><td class="mono">Vòng LED DIN</td><td class="num">GPIO 21</td><td>16 LED, nguồn lấy 5 V</td></tr>
+      <tr><td class="mono">Cảm ứng đầu</td><td class="num">GPIO 17</td><td>TTP223</td></tr>
+      <tr><td class="mono">Dò vực trái/phải</td><td class="num">GPIO 38 / 2</td><td>TCRT5000</td></tr>
+      <tr><td class="mono">Đo pin</td><td class="num">GPIO 1</td><td><b>GPIO 1, không phải 3.</b> Chia áp 100k/47k. Hàn xong nhớ đổi <code>BAT_DIVIDER_FITTED</code> thành 1</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Thứ tự nối — và hai chỗ dừng lại kiểm</h3>
+  <ol class="steps">
+    <li><b>GND trước tất cả.</b> Chập đất của MKE-B01, LM2596, hai IBT-2 và PCA9685 về một điểm, rồi mới nối gì khác.</li>
+    <li><b>Vặn LM2596 ra đúng 5 V, đo bằng đồng hồ, rồi mới cắm tải.</b> Đây là chỗ dừng thứ nhất — vặn sau khi cắm servo là chúng ăn nguyên mức đang để.</li>
+    <li>Ba rail nguồn: 12 V cho IBT-2, 3V3 cho logic, 5 V cho servo và ampli.</li>
+    <li>Mic, rồi ampli, rồi ba màn, rồi I2C, rồi PCA9685, rồi động cơ — hết module này sang module khác.</li>
+    <li><b>Chạy <code>kiem-day</code> trước khi đóng nắp.</b> Đây là chỗ dừng thứ hai.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Ba màn hình — hai loại chip, tên chân khác nhau</h2>
+  <p>Đây là chỗ dễ nối sai nhất của cả robot, vì <b>hai con mắt giống hệt nhau còn màn bụng thì khác hẳn</b>: khác chip, khác số chân, và cùng một sợi dây lại mang tên khác nhau ở hai đầu.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 420 250" role="img" aria-label="Ba màn dùng chung ba sợi SCLK, MOSI, DC, nhưng mỗi màn có một sợi CS riêng đi tới GPIO khác nhau: mắt trái GPIO 9, màn bụng GPIO 10, mắt phải GPIO 14">
+      <defs><marker id="ar5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+      <g stroke="currentColor" fill="none" stroke-width="1.3">
+        <rect x="16" y="86" width="78" height="72"/>
+        <circle cx="300" cy="46" r="30"/>
+        <circle cx="300" cy="200" r="30"/>
+        <rect x="266" y="98" width="68" height="48"/>
+      </g>
+      <g stroke="currentColor" fill="none" stroke-width="1.5">
+        <path d="M94,104 L170,104" />
+        <path d="M170,104 L170,40 L268,40" marker-end="url(#ar5)"/>
+        <path d="M170,104 L170,118 L264,118" marker-end="url(#ar5)"/>
+        <path d="M170,104 L170,194 L268,194" marker-end="url(#ar5)"/>
+      </g>
+      <g stroke="#B8860B" fill="none" stroke-width="1.5">
+        <path d="M94,126 L140,126 L140,58 L268,58" marker-end="url(#ar5)"/>
+        <path d="M94,134 L128,134 L128,132 L264,132" marker-end="url(#ar5)"/>
+        <path d="M94,142 L116,142 L116,212 L268,212" marker-end="url(#ar5)"/>
+      </g>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" text-anchor="middle">
+        <text x="55" y="112" font-weight="600">ESP32</text>
+        <text x="55" y="127" font-size="9.5" opacity=".75">HSPI</text>
+        <text x="300" y="44" font-size="10">mắt trái</text><text x="300" y="56" font-size="9" opacity=".7">GC9A01</text>
+        <text x="300" y="118" font-size="10">màn bụng</text><text x="300" y="130" font-size="9" opacity=".7">ILI9488</text>
+        <text x="300" y="198" font-size="10">mắt phải</text><text x="300" y="210" font-size="9" opacity=".7">GC9A01</text>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="9.5" fill="currentColor" opacity=".8">
+        <text x="176" y="34">SCLK 12 · MOSI 11 · DC 13 — DÙNG CHUNG</text>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#B8860B" font-weight="600">
+        <text x="146" y="54">CS 9</text><text x="146" y="146">CS 10</text><text x="122" y="228">CS 14</text>
+      </g>
+      <text x="210" y="243" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity=".75" text-anchor="middle">RST cả ba nối 3V3 · MISO không nối · BLK để hở</text>
+    </svg>
+    <figcaption>Ba sợi <code>SCLK</code>, <code>MOSI</code>, <code>DC</code> đi <b>song song tới cả ba màn</b> — một chân ESP32 nuôi ba đầu vào là bình thường. Chỉ <code>CS</code> là riêng, và chính nó quyết định con nào đang nghe. Đấu chung CS cho hai màn thì <b>không phải màn đen</b> mà là hai hình chồng nhau nhấp nháy — rất dễ đổ oan cho nhiễu rồi đi hạ tốc độ SPI.</figcaption>
+  </figure>
+
+  <h3>Cùng một sợi, hai cái tên</h3>
+  <p>Nhà sản xuất in tên khác nhau trên bo. Đây là bảng quy đổi — <b>đọc chữ in trên chính bo màn của bạn</b> rồi tra sang cột giữa:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Trên bo có thể ghi</th><th>Là chân gì</th><th class="num">Về đâu</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">SCL · SCK · SCLK · CLK</td><td>xung nhịp</td><td class="num">GPIO 12</td></tr>
+      <tr><td class="mono">SDA · MOSI · SDI · DIN</td><td>dữ liệu vào màn</td><td class="num">GPIO 11</td></tr>
+      <tr><td class="mono">DC · RS · A0</td><td>lệnh hay dữ liệu</td><td class="num">GPIO 13</td></tr>
+      <tr><td class="mono">CS · SS</td><td>chọn chip</td><td class="num">9 / 10 / 14 — <b>mỗi màn một chân</b></td></tr>
+      <tr><td class="mono">RES · RST · RESET</td><td>khởi động lại</td><td class="num">3V3 (cả ba)</td></tr>
+      <tr><td class="mono">BLK · LED · BL</td><td>đèn nền</td><td class="num"><b>khác nhau hai màn</b></td></tr>
+      <tr><td class="mono">SDO · MISO</td><td>dữ liệu ra khỏi màn</td><td class="num"><b>KHÔNG nối</b></td></tr>
+      <tr><td class="mono">VCC · VDD</td><td>nguồn</td><td class="num">3V3</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Hai con mắt — GC9A01, tám chân, giống hệt nhau</h3>
+  <p>Hai mắt nối <b>y như nhau, khác đúng một sợi</b> là CS.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Chân trên bo</th><th class="num">Mắt trái</th><th class="num">Mắt phải</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">GND</td><td class="num">GND</td><td class="num">GND</td><td></td></tr>
+      <tr><td class="mono">VCC</td><td class="num">3V3</td><td class="num">3V3</td><td><b>không bao giờ 5 V</b> — hoặc 3,8–4,2 V nếu muốn đèn nền sáng hơn mà vẫn mát</td></tr>
+      <tr><td class="mono">SCL</td><td class="num">GPIO 12</td><td class="num">GPIO 12</td><td rowspan="3">ba sợi này nối song song cả hai mắt <b>và</b> màn bụng</td></tr>
+      <tr><td class="mono">SDA</td><td class="num">GPIO 11</td><td class="num">GPIO 11</td></tr>
+      <tr><td class="mono">DC</td><td class="num">GPIO 13</td><td class="num">GPIO 13</td></tr>
+      <tr><td class="mono">CS</td><td class="num"><b>GPIO 9</b></td><td class="num"><b>GPIO 14</b></td><td>← <b>chỗ duy nhất hai mắt khác nhau</b></td></tr>
+      <tr><td class="mono">RES</td><td class="num">3V3</td><td class="num">3V3</td><td>nối cứng, firmware reset bằng lệnh <code>0x01</code></td></tr>
+      <tr><td class="mono">BLK</td><td class="num">để hở</td><td class="num">để hở</td><td>hở = sáng luôn, vì bo tròn có transistor <code>Q1 (S8050)</code> lái đèn nền. <b>Đừng đem quy tắc này sang màn bụng</b></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Màn bụng — ILI9488 3.5", nhiều chân hơn, phần lớn bỏ trống</h3>
+  <p>Module 3.5" thường có <b>hai nhóm chân</b>: nhóm màn hình và nhóm cảm ứng. <b>Firmware không dùng cảm ứng</b>, nên cả nhóm sau để trống.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Chân trên bo</th><th class="num">Về đâu</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">VCC</td><td class="num"><b>tuỳ bo</b></td><td>3V3 hay 5 V phụ thuộc vào con chip đệm trên bo — <b>đọc ô "Màn bụng cấp 3,3 V hay 5 V" ngay dưới bảng</b>, đừng đoán</td></tr>
+      <tr><td class="mono">GND</td><td class="num">GND</td><td></td></tr>
+      <tr><td class="mono">CS</td><td class="num"><b>GPIO 10</b></td><td>riêng của màn bụng</td></tr>
+      <tr><td class="mono">RESET</td><td class="num">3V3</td><td><b>không cắm vào GPIO 14</b> — đó là CS mắt phải, cắm nhầm là màn bụng reset liên tục theo nhịp chọn chip và không bao giờ hiện gì</td></tr>
+      <tr><td class="mono">DC · RS</td><td class="num">GPIO 13</td><td>dùng chung</td></tr>
+      <tr><td class="mono">SDI · MOSI</td><td class="num">GPIO 11</td><td>dùng chung</td></tr>
+      <tr><td class="mono">SCK</td><td class="num">GPIO 12</td><td>dùng chung</td></tr>
+      <tr><td class="mono">LED · BL</td><td class="num"><b>3V3</b></td><td><b>PHẢI cấp điện.</b> Khác hẳn màn tròn: bo 3.5" phần lớn nối chân này thẳng vào dãy LED qua trở hạn dòng, không có transistor lái. Bỏ hở là màn <b>tối đen hoàn toàn</b> trong khi chip vẫn chạy — xem ô dưới</td></tr>
+      <tr><td class="mono">SDO · MISO</td><td class="num"><b>không nối</b></td><td>firmware khai <code>GFX_NOT_DEFINED</code> cho MISO — nó không bao giờ đọc ngược từ màn</td></tr>
+      <tr><td class="mono">T_CLK T_CS T_DIN T_DO T_IRQ</td><td class="num"><b>không nối</b></td><td>cả nhóm cảm ứng. Firmware không có mã đọc touch</td></tr>
+    </tbody>
+  </table></div>
+
+
+  <h3>Màn bụng cấp 3,3 V hay 5 V — lật bo lên nhìn</h3>
+  <p>Phần lớn module 3.5" in chữ <code>5V</code> cạnh chân nguồn và bán kèm ví dụ cho Arduino Uno. Nhưng chữ đó đúng cho <b>Arduino 5 V</b>; với ESP32 thì câu trả lời phụ thuộc vào việc bo có con <b>74HC245</b> hay không — và lý do nằm ở con đệm ấy, không ở chip màn.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Lật mặt sau bo, tìm</th><th class="num">Cấp VCC</th><th>Vì sao</th></tr></thead>
+    <tbody>
+      <tr><td>Có IC 20 chân ghi <code>74HC245</code> / <code>HC245</code><br><span style="opacity:.7;font-size:13px">thường kèm cả <code>AMS1117-3.3</code></span></td><td class="num"><b>3,3 V</b></td><td>ngưỡng nhận mức cao của 74HC245 là 0,7 × VCC. Cấp 5 V ⇒ ngưỡng <b>3,5 V</b> mà ESP32 chỉ ra 3,3 V — <b>dưới ngưỡng</b>. Cấp 3,3 V ⇒ ngưỡng còn 2,31 V, vượt thoải mái</td></tr>
+      <tr><td>Chỉ có <code>AMS1117-3.3</code>, <b>không</b> có 74HC245</td><td class="num"><b>5 V</b></td><td>không có đệm thì tín hiệu 3,3 V vào thẳng chip màn 3,3 V — không vướng ngưỡng nào. Cấp 5 V để ổn áp có chênh áp mà làm việc, đèn nền sáng đủ</td></tr>
+      <tr><td>Không có con nào trong hai con trên</td><td class="num"><b>3,3 V</b></td><td>bo thuần 3,3 V, cấp 5 V là cấp thẳng vào chip màn — cháy như con GC9A01 hôm 16/08</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="warn">
+    <span class="warn-h">Cấp 5 V cho bo CÓ 74HC245 hỏng theo kiểu tệ nhất</span>
+    <p>Nó <b>không chết ngay</b>. 3,3 V nằm ngay sát dưới ngưỡng 3,5 V nên bo chạy được trên bàn lúc nguội, rồi nhiễu dần hoặc chết hẳn khi nóng lên. Màn trắng, hình rác, hoặc lúc được lúc không — và bạn sẽ đi tìm lỗi ở dây, ở tốc độ SPI, ở firmware.</p>
+    <p>Đây <b>đúng bằng cái bẫy của IBT-2</b> đã ghi ở đầu sổ: cùng một con đệm 74HC, cùng một phép tính 0,7 × VCC, cùng một triệu chứng "đo chân nào cũng thấy có tín hiệu mà không chạy".</p>
+  </div>
+
+  <div class="note">
+    <span class="warn-h">Cấp 3,3 V cho bo có ổn áp thì mất gì</span>
+    <p><code>AMS1117</code> bị dropout, ra khoảng <b>3,0–3,2 V</b> thay vì 3,3 V. Chip ILI9488 chạy được từ 2,5 V nên vẫn đủ — chỉ <b>đèn nền hơi mờ</b>. Đúng tình huống của màn tròn GC9A01, và ở đó cách chữa sạch là cấp <b>3,8–4,2 V</b>: đủ chênh áp cho ổn áp mà vẫn dưới ngưỡng nguy hiểm. Với màn bụng cũng dùng được mẹo ấy nếu thấy tối quá.</p>
+  </div>
+
+
+  <div class="warn">
+    <span class="warn-h">"Tối đen" và "trắng xoá" là hai lỗi khác hẳn nhau</span>
+    <p><b>Trắng xoá</b> = đèn nền sáng, chip không nhận lệnh ⇒ lỗi driver hoặc dây tín hiệu. <b>Tối đen hoàn toàn</b> = đèn nền không có điện ⇒ lỗi nguồn hoặc chân <code>LED</code> chưa nối. Phân biệt được thì khỏi đi sai đường: chip có thể đang chạy đúng suốt mà bạn không thấy gì.</p>
+    <p>23/08/2026 sổ này từng ghi <code>LED</code> "3V3 hoặc để hở, tuỳ lô" — lấy nhầm quy tắc của màn tròn. Bo tròn GC9A01 có transistor <code>Q1 = J3Y (S8050)</code> cùng <code>R2</code>/<code>R3</code> lái đèn nền nên để hở là sáng; bo 3.5" không có mạch ấy. Repo có pinout GC9A01 nhưng <b>không có pinout nào cho ILI9488</b>, và chỗ hở đó là nơi lời khuyên sai chui vào.</p>
+  </div>
+
+  <div class="warn">
+    <span class="warn-h">Đọc chữ in trên bo, đừng tin thứ tự chân</span>
+    <p>Bo màn tròn <b>in tên chân ở MẶT SAU</b>. Nhìn từ mặt trước thì thứ tự đảo ngược, và đấu theo mặt này rồi cắm theo mặt kia là cả bảy sợi bị lật gương quanh chân giữa: <code>RST↔VCC</code>, <code>CS↔GND</code>, <code>DC↔SCL</code>, riêng <code>SDA</code> đứng yên.</p>
+    <p>Hậu quả: VCC vào chân RST, GND vào chân CS. Đèn nền <b>vẫn sáng</b> qua đường bảo vệ nên nhìn tưởng đúng, mà không một lệnh nào tới được chip — đúng triệu chứng "sáng mà đen".</p>
+  </div>
+
+  <div class="note">
+    <span class="warn-h">Hai màn xoay khác nhau, và đó là cố ý</span>
+    <p>Firmware khởi tạo màn bụng với hướng <b>1</b> (xoay 90°, hình nằm ngang) và hai mắt với hướng <b>0</b>. Hai mắt còn bật cờ <b>IPS</b>, màn bụng thì không — sai cờ này thì màu bị đảo âm bản chứ không phải màn hỏng.</p>
+    <p>Nếu lắp xong thấy hình màn bụng nằm sai chiều, sửa con số <code>1</code> trong <code>man_hinh.h</code> chứ đừng xoay cả tấm ngực.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Nguồn 3S — ba viên 18650 nối tiếp</h2>
+  <p>Chốt 23/08/2026, thay cho pack 2S trong bản thiết kế đầu. Đo thật được <b>10,6 V</b> — chia ba là <b>3,53 V mỗi viên</b>, mức giữa, pin còn khoẻ. Điện áp đó cấp cho mọi mạch đều tốt và còn gần 12 V hơn 2S, nên động cơ chạy khoẻ hơn.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th></th><th class="num">2S (bản cũ)</th><th class="num">3S (nay)</th></tr></thead>
+    <tbody>
+      <tr><td>Sạc đầy</td><td class="num">8,4 V</td><td class="num">12,6 V</td></tr>
+      <tr><td>Cạn — BMS cắt</td><td class="num">6,0 V</td><td class="num"><b>9,6 V</b></td></tr>
+      <tr><td>Bộ chia áp đo pin</td><td class="num">100k / 47k</td><td class="num"><b>100k / 30k</b></td></tr>
+      <tr><td>Hệ số chia</td><td class="num">3,128</td><td class="num"><b>4,33</b></td></tr>
+      <tr><td>BMS</td><td class="num">2S <span style="opacity:.7">(có sẵn, KHÔNG dùng được)</span></td><td class="num"><b>3S 20A có cân bằng</b></td></tr>
+      <tr><td>Nguồn sạc</td><td class="num">TP5100</td><td class="num"><b>adapter 12,6 V 2A</b><br><span style="font-size:12px;opacity:.75">jack DC 5.5×2.1</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="warn">
+    <span class="warn-h">Giữ bộ trở cũ là cháy chân GPIO 1</span>
+    <p>Hệ số 3,128 tính cho 2S. Với 3S: <b>10,6 V → 3,39 V</b> (đã vượt trần 3,3 V của ADC) và <b>12,6 V → 4,03 V</b>. Bộ đúng là <b>100k / 30k</b> → 12,6 V ra 2,91 V, còn dư biên an toàn. <code>220k / 68k</code> cũng được và rò ít hơn.</p>
+    <p><b>Đừng dùng 150k/47k</b> — nó ra 3,01 V, sát trần quá; chỉ cần một viên sạc hơi quá là chạm 3,3 V.</p>
+  </div>
+
+
+  <div class="note">
+    <span class="warn-h">Bộ đã chốt mua — 23/08/2026</span>
+    <p><b>Bo "Mạch sạc Pin 3S 12V-20A, sạc cân bằng và bảo vệ"</b> — trên bo in <code>0V</code> · <code>4.2V</code> · <code>8.4V</code> · <code>12.6V</code>, đó chính là bốn mối <code>B−</code> <code>B1</code> <code>B2</code> <code>B+</code>. Xả liên tục 20 A, tức thời 40 A, size 58 × 20 × 3,6 mm.</p>
+    <p><b>Nó KHÔNG tự tạo ra 12,6 V</b> — mô tả ghi "sử dụng sạc 12,6 V – 13 V, đề xuất nguồn có hạn dòng". Nên mua kèm <b>adapter 12,6 V 2A</b> (cùng shop có phân loại đó, jack DC 5.5×2.1 — đúng cỡ jack sạc bạn sắp lắp).</p>
+    <p>Bộ này thay hẳn module sạc Type-C: module ấy chỉ sạc chứ <b>không cân bằng cell</b>, dùng nó thì vẫn phải mua thêm BMS. Bo trên gộp cả hai việc.</p>
+    <p>⚠️ Bo ghi <b>xả cạn 9,6 V</b> (3,20 V/cell) chứ không phải 9,0 V. <code>BATTERY_EMPTY_MV</code> đã sửa theo — để 9000 thì firmware báo ~3% đúng lúc BMS cắt nguồn, tức người dùng thấy "còn pin" mà robot tắt ngóm.</p>
+  </div>
+
+
+  <div class="note">
+    <span class="warn-h">Khay thật của robot này — đo và hàn xong 23/08/2026</span>
+    <p>Khay 3 ngăn chỉ ra <b>2 dây</b>, phải hàn thêm hai dây cân bằng. Trong khay pin, <b>nốt đồng vàng phẳng là cực DƯƠNG</b>, <b>lò xo là cực ÂM</b>, và ba viên xếp <b>xen kẽ chiều</b>. Hai mối nối tiếp lộ ngay <b>mặt trước</b>, không cần lật mặt sau.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Dây</th><th>Hàn vào</th><th class="num">Đo được</th><th class="num">Cắm chân BMS</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">B−</td><td>dây <b>đen</b> có sẵn</td><td class="num">0 V</td><td class="num"><code>0V</code></td></tr>
+        <tr><td class="mono">B1</td><td>nốt đồng <b>ngăn 3, đầu DƯỚI</b></td><td class="num">3,52 V</td><td class="num"><code>4.2V</code></td></tr>
+        <tr><td class="mono">B2</td><td>nốt đồng <b>ngăn 2, đầu TRÊN</b></td><td class="num">7,04 V</td><td class="num"><code>8.4V</code></td></tr>
+        <tr><td class="mono">B+</td><td>dây <b>đỏ</b> có sẵn</td><td class="num">10,56 V</td><td class="num"><code>12.6V</code></td></tr>
+      </tbody>
+    </table></div>
+    <p>Ba viên đều <b>3,52 V</b> — 7,04 ÷ 3,52 = đúng 2,00 và 10,56 = đúng 3 lần. Pack cân bằng hoàn hảo.</p>
+    <p><b>Hàn vào nốt đồng, đừng hàn vào lò xo:</b> nốt đồng phẳng nên thiếc bám trong hai giây, còn lò xo tản nhiệt nhanh, khó ăn thiếc, và hàn lâu làm mất tính đàn hồi khiến viên pin tiếp xúc kém về sau.</p>
+  </div>
+
+  <div class="warn">
+    <span class="warn-h"><code>B1</code> và <code>B2</code> KHÔNG phải cực dương hay âm</span>
+    <p>Chúng là <b>nấc thang điện áp</b>, không phải cực. Điện áp luôn là hiệu số giữa hai điểm, nên "3,52 V" có nghĩa là "cao hơn dây đen 3,52 V". BMS lấy hiệu số từng bậc để biết từng viên: viên 1 = <code>B1−B−</code>, viên 2 = <code>B2−B1</code>, viên 3 = <code>B+−B2</code>. Bốn điểm mới cho ra ba hiệu số — đó là lý do cần bốn dây.</p>
+    <p><b>Nhưng thứ tự thì sống còn.</b> Đấu ngược <code>B1</code> với <code>B2</code> thì BMS tính ra viên 1 = 7,04 V (tưởng quá áp nghiêm trọng) và viên 2 = <b>−3,52 V</b>, một điện áp âm không tồn tại. Gặp số đó BMS có thể hỏng ngay hoặc cắt vĩnh viễn. Dùng hai màu dây khác nhau và dán nhãn lúc hàn.</p>
+    <p>Cách ghép khỏi nhầm: bo BMS in sẵn <code>0V</code> · <code>4.2V</code> · <code>8.4V</code> · <code>12.6V</code> — <b>số nhỏ vào chỗ số nhỏ</b>. Số trên bo là điện áp lúc đầy, pack đang 3,52 V/viên nên đo thấp hơn, thứ tự vẫn khớp.</p>
+  </div>
+
+  <h3>Làm pack — thứ tự này quan trọng</h3>
+  <ol class="steps">
+    <li><b>Đo từng viên riêng trước khi nối.</b> Ba viên phải cùng loại, cùng dung lượng, cùng tuổi, và chênh nhau <b>không quá 0,05 V</b>. Lệch hơn thì sạc riêng cho đều rồi mới ghép — pack lệch cell thì viên yếu bị đẩy quá sâu mỗi lần xả, hỏng nhanh và phồng.</li>
+    <li><b>Nối tiếp:</b> + viên 1 → − viên 2, + viên 2 → − viên 3. Còn lại là − của viên 1 (đất pack) và + của viên 3 (12,6 V).</li>
+    <li><b>Đấu BMS theo đúng thứ tự <code>B−</code> → <code>B1</code> → <code>B2</code> → <code>B+</code>.</b> Nhảy cóc có thể làm hỏng BMS ngay lúc chạm dây. <code>B−</code> vào cực âm viên 1, <code>B1</code> vào mối nối 1–2, <code>B2</code> vào mối 2–3, <code>B+</code> vào cực dương viên 3.</li>
+    <li><b>Tải lấy ở <code>P+</code> / <code>P−</code>, không lấy thẳng ở B+/B−.</b> Lấy ở B là mất hẳn phần bảo vệ, và BMS trở thành thứ trang trí.</li>
+    <li><b>Chọn BMS đủ dòng:</b> hai động cơ 33GB-520 bứt cùng lúc kéo tới 6 A. Lấy loại <b>3S 20 A trở lên</b>, đừng lấy loại 8 A bán kèm đèn pin.</li>
+    <li><b>Hàn chia áp 100k/30k</b> vào GPIO 1, rồi đổi <code>BAT_DIVIDER_FITTED</code> từ <code>0</code> thành <code>1</code>. Để nguyên số 0 thì firmware trả 0 V và im lặng không báo pin — an toàn, chỉ là không biết còn bao nhiêu.</li>
+  </ol>
+
+  <div class="note">
+    <span class="warn-h">Firmware đã sửa sẵn cho 3S — và hai chỗ hardcode đã được gỡ</span>
+    <p><code>config.h</code> nay khai <code>BATTERY_CELLS 3</code>, <code>BATTERY_DIVIDER 4.33f</code>, đầy <code>12600</code> mV, cạn <code>9000</code> mV.</p>
+    <p>Quan trọng hơn: ba hằng số đó <b>trước đây là hằng số chết</b>. <code>main.cpp</code> tự tính lại <code>(100+47)/47</code> và chia điện áp cho <code>2.0f</code> viên, cả hai đều viết cứng — nên sửa <code>config.h</code> một mình sẽ không có tác dụng gì, firmware vẫn báo pin sai hơn 38 %. Hai chỗ ấy nay đọc thẳng từ <code>config.h</code>.</p>
+  </div>
+
+  <div class="warn">
+    <span class="warn-h">Hai thứ trong hộp thành vô dụng với 3S</span>
+    <p><b>BMS 2S</b> và <b>TP5100</b> (sạc 2S) không dùng được nữa. Cắm sạc 2S vào pack 3S thì pack không bao giờ đầy; ngược lại, sạc 3S vào pack 2S là nạp quá áp và phồng pin. Kiểm con số in trên củ sạc trước mỗi lần cắm: phải là <b>12,6 V</b>.</p>
+  </div>
+
+  <div class="warn">
+    <span class="warn-h">Đế 3 viên sâu hơn đế 2 viên 17 mm — chỗ của mạch hẹp lại</span>
+    <p>Bản thiết kế tính cho đế 2 viên <b>92 × 43 × 22</b> chiếm dải sâu 32–75 mm. Đế 3 viên khoảng <b>78 × 60 × 22</b>, đặt cạnh dài theo chiều ngang thân thì chiếm tới <b>92 mm</b> — dải cho mạch tụt từ 42,6 xuống <b>25,6 mm</b>.</p>
+    <p>Vẫn đủ nếu đặt ESP32 <b>nằm áp thành sau</b> (mặt bo song song với nắp), nhưng <b>không đủ để dựng đứng</b>. Đo đế thật rồi hãy chốt chỗ.</p>
+    <p><b>Và đừng dựng pack đứng lên cho gọn.</b> Robot cao 248 mm trên khung xích; dồn 150 g pin lên cao là mua thêm nguy cơ lật khi phanh gấp. Pin là vật nặng nhất trong thân, chỗ của nó là sát đáy.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Ngân sách dòng — đo thật 23/08/2026</h2>
+  <p>Câu hỏi thực tế là "nguồn này gánh nổi bao nhiêu thứ cùng lúc". Trả lời: <b>cả ba màn, mic và loa cùng chạy thì vẫn đủ</b> — nhưng nút thắt không nằm ở chỗ dễ đoán.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>Tầng</th><th class="num">Tải</th><th class="num">Trần</th><th></th></tr></thead>
+    <tbody>
+      <tr><td><b>AMS1117</b> của shield<br><span style="opacity:.7;font-size:13px">5V → 3V3</span></td><td class="num">270 mA</td><td class="num">~300–400 mA</td><td>⚠️ <b>đây mới là nút thắt.</b> Nó ĐỐT phần chênh 1,7 V nên toả 0,46 W — chịu được nhưng ấm, và không còn chỗ cho thứ 3V3 nào thêm</td></tr>
+      <tr><td><b>XL1509</b> của shield<br><span style="opacity:.7;font-size:13px">12V → 5V</span></td><td class="num">450–870 mA</td><td class="num">2000 mA</td><td>✅ dư thoải mái, kể cả lúc loa kêu to hết cỡ</td></tr>
+      <tr><td>Servo · động cơ</td><td class="num">—</td><td class="num">—</td><td>không đụng shield: servo lấy <code>V+</code> từ LM2596 riêng, động cơ lấy 12 V thẳng vào <code>B+/B−</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="warn">
+    <span class="warn-h">USB một mình KHÔNG gánh nổi ba màn — đo được, không phải suy đoán</span>
+    <p>23/08 chạy ba màn chỉ bằng USB-C: một màn <b>mờ hẳn và tự tắt mỗi giây rồi sáng lại</b>, hai màn kia bình thường. Nạp bàn kiểm chỉ lái MỘT màn thì hết ngay. Cắm 12 V vào jack rồi chạy lại cả ba — sạch hoàn toàn.</p>
+    <p>Nguyên nhân: ba màn cùng bú vào <b>ổn áp bé trên DevKit</b> (~500 mA), vốn còn phải nuôi chính con ESP32. Riêng đèn nền màn bụng đã ăn 100–150 mA.</p>
+    <p>⛔ <b>Lấy 3V3 cho các module từ khối <code>3V3</code> của MKE-B01, KHÔNG lấy từ chân <code>3V3</code> của ESP32.</b> Cắm nhầm chỗ này là dựng lại đúng cái lỗi trên, mà triệu chứng của nó — một màn mờ, chập chờn — trông y như màn kém chất lượng hoặc dây tiếp xúc tồi.</p>
+  </div>
+
+  <div class="note">
+    <span class="warn-h">Phân biệt hai triệu chứng, vì chúng dẫn đi hai hướng</span>
+    <p><b>Một màn mờ / chập chờn, hai màn kia ổn</b> ⇒ nguồn. Nếu ESP32 reset thì <b>cả ba</b> cùng tắt, nên chỉ một màn tắt là loại được giả thuyết reset.</p>
+    <p><b>Sọc ngang, nhiễu hạt, màu lem</b> ⇒ đường truyền, hạ tốc độ SPI. Hai lỗi này không liên quan gì đến nhau — chữa nhầm cái nọ bằng cách của cái kia thì mất cả buổi.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Đi dây nguồn cố định — làm một lần, pin về là cắm</h2>
+  <p>Mục này để làm <b>trước khi pin về</b>: cố định khay, dựng đường phân nguồn, chừa sẵn chỗ cho BMS. Khi ba viên Samsung tới thì chỉ việc đặt vào và cắm hai đầu dây.</p>
+
+  <figure class="fig">
+    <svg viewBox="0 0 420 540" role="img" aria-label="Sơ đồ nguồn hoàn chỉnh: ba viên 18650 nối tiếp vào BMS 3S, jack sạc riêng nối B+ B−, công tắc ba vị trí chọn giữa adapter và pin, qua điểm phân nhánh 12V có tụ, chia ba nhánh cho MKE-B01, hai bo IBT-2 và LM2596">
+      <defs><marker id="arn2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.3">
+        <rect x="34" y="18" width="172" height="46"/>
+        <rect x="44" y="27" width="48" height="28"/><rect x="96" y="27" width="48" height="28"/><rect x="148" y="27" width="48" height="28"/>
+        <rect x="34" y="108" width="172" height="52" stroke-width="1.7"/>
+        <rect x="258" y="108" width="128" height="40" stroke-dasharray="4 3"/>
+        <rect x="34" y="212" width="172" height="58" stroke="#B8860B" stroke-width="1.9"/>
+        <rect x="258" y="222" width="128" height="40" stroke-dasharray="4 3"/>
+        <rect x="26" y="330" width="368" height="18" fill="currentColor" fill-opacity=".1" stroke-width="1.6"/>
+        <rect x="26" y="404" width="112" height="60"/>
+        <rect x="154" y="404" width="112" height="60"/>
+        <rect x="282" y="404" width="112" height="60"/>
+        <rect x="282" y="486" width="112" height="38" stroke-dasharray="3 3"/>
+      </g>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.4">
+        <line x1="68" y1="64" x2="68" y2="106" marker-end="url(#arn2)"/>
+        <line x1="120" y1="64" x2="120" y2="106" marker-end="url(#arn2)" stroke-dasharray="2 2"/>
+        <line x1="172" y1="64" x2="172" y2="106" marker-end="url(#arn2)"/>
+        <path d="M258,128 L228,128 L228,134 L208,134" marker-end="url(#arn2)" stroke-dasharray="4 3"/>
+        <line x1="120" y1="160" x2="120" y2="210" marker-end="url(#arn2)"/>
+        <path d="M258,242 L232,242 L232,252 L208,252" marker-end="url(#arn2)" stroke-dasharray="4 3"/>
+      </g>
+      <g stroke="#B8860B" fill="none" stroke-width="1.7">
+        <line x1="120" y1="270" x2="120" y2="328" marker-end="url(#arn2)"/>
+        <line x1="82" y1="348" x2="82" y2="402" marker-end="url(#arn2)"/>
+        <line x1="210" y1="348" x2="210" y2="402" marker-end="url(#arn2)"/>
+        <line x1="338" y1="348" x2="338" y2="402" marker-end="url(#arn2)"/>
+        <line x1="338" y1="464" x2="338" y2="484" marker-end="url(#arn2)"/>
+      </g>
+
+      <g font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" text-anchor="middle">
+        <text x="120" y="14" font-weight="600">KHAY 3 VIÊN 18650 nối tiếp — 12,6 V khi đầy</text>
+        <text x="68" y="45">18650</text><text x="120" y="45">18650</text><text x="172" y="45">18650</text>
+        <text x="120" y="128" font-weight="600">BMS 3S ≥ 20 A có cân bằng</text>
+        <text x="120" y="146" font-size="9.5" opacity=".8">vào: B− B1 B2 B+ · ra: P+ P−</text>
+        <text x="322" y="126" font-size="10">jack SẠC riêng</text><text x="322" y="139" font-size="9" opacity=".75">12,6 V CC/CV → B+/B−</text>
+        <text x="120" y="234" font-weight="600" font-size="11">CÔNG TẮC ON–OFF–ON</text>
+        <text x="120" y="249" font-size="9.5">≥ 10 A · 3 vị trí</text>
+        <text x="120" y="262" font-size="9" opacity=".8">adapter │ TẮT │ pin</text>
+        <text x="322" y="240" font-size="10">jack ADAPTER 12 V</text><text x="322" y="253" font-size="9" opacity=".75">đường dùng khi để bàn</text>
+        <text x="210" y="343" font-size="10" font-weight="600">ĐIỂM PHÂN NHÁNH 12 V — tụ 2200 µF + 104 tại đây</text>
+        <text x="82" y="424" font-size="10" font-weight="600">MKE-B01</text>
+        <text x="82" y="439" font-size="9" opacity=".8">XL1509 → 5 V: loa</text>
+        <text x="82" y="452" font-size="9" opacity=".8">AMS1117 → 3V3: 3 màn, mic, I2C</text>
+        <text x="210" y="424" font-size="10" font-weight="600">2× IBT-2</text>
+        <text x="210" y="439" font-size="9" opacity=".8">12 V thẳng vào B+/B−</text>
+        <text x="210" y="452" font-size="9" opacity=".8">→ hai động cơ 33GB-520</text>
+        <text x="338" y="424" font-size="10" font-weight="600">LM2596</text>
+        <text x="338" y="439" font-size="9" opacity=".8">vặn ra ĐÚNG 5,0 V</text>
+        <text x="338" y="452" font-size="9" opacity=".8">trước khi cắm tải</text>
+        <text x="338" y="504" font-size="10">V+ của PCA9685</text><text x="338" y="517" font-size="9" opacity=".75">6 servo · vòng LED</text>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="8.5" fill="currentColor" opacity=".8">
+        <text x="46" y="80">B−</text><text x="99" y="80">B1·B2</text><text x="163" y="80">B+</text>
+        <text x="126" y="188">P+ / P−</text>
+        <text x="126" y="300">18 AWG</text>
+        <text x="88" y="372">24 AWG</text><text x="216" y="372">20 AWG</text><text x="344" y="372">22 AWG</text>
+      </g>
+      <text x="120" y="95" font-family="IBM Plex Sans, sans-serif" font-size="8.5" fill="currentColor" opacity=".7" text-anchor="middle">nét đứt = dây cân bằng, chỉ ~100 mA</text>
+    </svg>
+    <figcaption>Đường vàng là đường mang dòng tải. <b>Chỉ <code>B−</code> và <code>B+</code> gánh cả 11 A</b> — hai dây cân bằng <code>B1</code>/<code>B2</code> chỉ đo áp từng cell nên 24 AWG là thừa đủ. Công tắc ba vị trí khiến adapter và pin <b>không thể cùng nối</b>, và vị trí giữa là tắt hẳn.</figcaption>
+  </figure>
+
+  <div class="warn">
+    <span class="warn-h">Vì sao phải một cửa vào, không phải hai</span>
+    <p>Pack 3S sạc đầy là <b>12,6 V</b>, adapter là <b>12,0 V</b>. Cắm cả hai cùng lúc thì chênh 0,6 V đẩy dòng từ pack sang adapter, hoặc adapter nạp ngược vào pack theo kiểu không kiểm soát — không qua mạch sạc, không cân bằng cell, không giới hạn dòng.</p>
+    <p>Một jack cái duy nhất khiến lỗi đó <b>không thể xảy ra bằng thao tác</b>, thay vì trông vào việc nhớ. Rẻ hơn mọi mạch chuyển nguồn tự động, và không có gì để hỏng.</p>
+  </div>
+
+  <div class="warn">
+    <span class="warn-h">Công tắc phải chịu ≥ 10 A — không dùng loại bán kèm hộp pin</span>
+    <p>Cộng đỉnh: MKE-B01 450 mA + loa 600 mA + sáu servo 4,2 A + hai động cơ bứt 6 A ≈ <b>11,2 A</b>. Công tắc 3 A sẽ nóng chảy đúng lúc robot bứt tốc, và hỏng kiểu ấy thì tiếp điểm dính lại chứ không ngắt.</p>
+    <p>Đặt công tắc ở <b>đường dương, sau jack</b>, để rút jack ra là cắt hẳn mọi thứ kể cả khi công tắc đang bật.</p>
+  </div>
+
+
+  <figure class="fig">
+    <svg viewBox="0 0 420 350" role="img" aria-label="Sơ đồ đấu công tắc DPDT sáu chân: hai chân trên nối tắt nhận cực dương từ pin, hai chân dưới nối tắt nhận cực dương adapter, hai chân giữa nối tắt đi ra tải, còn hai cực âm nối chung không qua công tắc">
+      <defs><marker id="arc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+
+      <rect x="150" y="60" width="120" height="170" rx="4" fill="currentColor" fill-opacity=".07" stroke="currentColor" stroke-width="1.6"/>
+      <text x="210" y="50" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" text-anchor="middle" font-weight="600">CÔNG TẮC DPDT — nhìn từ MẶT DƯỚI</text>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.4">
+        <rect x="168" y="76" width="26" height="14"/><rect x="226" y="76" width="26" height="14"/>
+        <rect x="168" y="138" width="26" height="14"/><rect x="226" y="138" width="26" height="14"/>
+        <rect x="168" y="200" width="26" height="14"/><rect x="226" y="200" width="26" height="14"/>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" text-anchor="middle">
+        <text x="181" y="87">1</text><text x="239" y="87">4</text>
+        <text x="181" y="149">2</text><text x="239" y="149">5</text>
+        <text x="181" y="211">3</text><text x="239" y="211">6</text>
+      </g>
+
+      <g stroke="#B8860B" stroke-width="2.6" fill="none">
+        <line x1="194" y1="83" x2="226" y2="83"/>
+        <line x1="194" y1="145" x2="226" y2="145"/>
+        <line x1="194" y1="207" x2="226" y2="207"/>
+      </g>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="8.5" fill="#B8860B" text-anchor="middle" font-weight="600">
+        <text x="210" y="78">nối tắt</text><text x="210" y="140">nối tắt</text><text x="210" y="202">nối tắt</text>
+      </g>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.5">
+        <line x1="100" y1="83" x2="166" y2="83" marker-end="url(#arc)"/>
+        <line x1="100" y1="207" x2="166" y2="207" marker-end="url(#arc)"/>
+        <line x1="254" y1="145" x2="330" y2="145" marker-end="url(#arc)"/>
+      </g>
+
+      <g font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor">
+        <text x="96" y="80" text-anchor="end" font-weight="600">BMS P+</text>
+        <text x="96" y="93" text-anchor="end" font-size="9" opacity=".75">cực dương pin</text>
+        <text x="96" y="204" text-anchor="end" font-weight="600">adapter +</text>
+        <text x="96" y="217" text-anchor="end" font-size="9" opacity=".75">ruột jack DC</text>
+        <text x="334" y="142" font-weight="600">ra tải</text>
+        <text x="334" y="155" font-size="9" opacity=".75">→ tụ 2200µF → phân nhánh</text>
+      </g>
+
+      <g stroke="currentColor" fill="none" stroke-width="1.5" stroke-dasharray="5 3">
+        <path d="M100,278 L210,278"/>
+        <path d="M100,300 L210,300"/>
+        <path d="M210,278 L210,300"/>
+        <line x1="210" y1="289" x2="330" y2="289" marker-end="url(#arc)"/>
+      </g>
+      <circle cx="210" cy="289" r="3.5" fill="currentColor"/>
+      <g font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor">
+        <text x="96" y="282" text-anchor="end" font-weight="600">BMS P−</text>
+        <text x="96" y="304" text-anchor="end" font-weight="600">adapter −</text>
+        <text x="334" y="286" font-weight="600">đất chung</text>
+        <text x="334" y="299" font-size="9" opacity=".75">GND toàn robot</text>
+      </g>
+      <text x="210" y="326" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity=".8" text-anchor="middle">hai cực ÂM chập thẳng vào nhau — KHÔNG qua công tắc</text>
+      <text x="210" y="245" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="currentColor" opacity=".7" text-anchor="middle">nấc giữa = cả 1·4 lẫn 3·6 đều hở ⇒ TẮT</text>
+    </svg>
+    <figcaption>Ba nét vàng là <b>ba mối nối tắt</b> biến hai mạch của DPDT thành một mạch gánh gấp đôi dòng: <code>1↔4</code>, <code>2↔5</code>, <code>3↔6</code>. Dùng dây 18 AWG hoặc mẩu đồng. Đường âm đi thẳng, không dính gì tới công tắc.</figcaption>
+  </figure>
+
+
+  <div class="warn">
+    <span class="warn-h">HAI adapter, HAI jack — dán nhãn ngay lúc lắp</span>
+    <div class="tw"><table>
+      <thead><tr><th>Adapter</th><th class="num">Cắm vào</th><th>Việc của nó</th></tr></thead>
+      <tbody>
+        <tr><td><b>12 V / 3 A</b><br><span style="opacity:.75;font-size:13px">JH-1230, đã có sẵn</span></td><td class="num">jack <b>NGUỒN</b></td><td>qua công tắc tới tải. Đủ cho robot đứng bàn nói chuyện và cử động tay (1,1–1,7 A); lúc bứt tốc vượt 3 A nên hơi yếu, tụ 2200 µF đỡ phần xung</td></tr>
+        <tr><td><b>12,6 V / 2 A</b><br><span style="opacity:.75;font-size:13px">đặt kèm BMS</span></td><td class="num">jack <b>SẠC</b></td><td>thẳng vào <code>B+</code>/<code>B−</code> của BMS. Sạc pack 2500 mAh trong ~1,25 giờ</td></tr>
+      </tbody>
+    </table></div>
+    <p><b>Cắm nhầm thì sao:</b> 12 V vào jack sạc ⇒ pack không bao giờ đầy, chỉ lên 4,00 V/cell (80 %) rồi dừng. 12,6 V vào jack nguồn ⇒ vô hại nhưng chỉ có 2 A, thiếu cho động cơ.</p>
+    <p><b>Và đừng dùng adapter 12 V để sạc</b> dù nó cắm vừa. Nó là nguồn áp thuần, không có mạch CC/CV: cắm vào pack 10,35 V thì chênh 1,65 V trên nội trở 90 mΩ đòi 18 A lý thuyết — adapter tự sụt áp rồi chạy hết công suất liên tục, nóng, và không có giai đoạn CV để kết thúc đúng cách.</p>
+    <p>Cả hai đều là <b>jack DC 5.5×2.1, tâm dương</b> — cắm lọt lẫn nhau, nên nhãn dán là thứ duy nhất ngăn nhầm.</p>
+  </div>
+
+  <h3>Bảy chặng — đo xong chặng này mới sang chặng sau</h3>
+  <p>Đây là chỗ dễ mất linh kiện nhất của cả robot: một lần đấu ngược là mất pack, mất BMS, hoặc mất ESP32. Nên <b>mỗi chặng kết thúc bằng một phép đo</b>, và không nối tải nào cho tới chặng cuối.</p>
+
+  <div class="tw"><table>
+    <thead><tr><th class="num">Chặng</th><th>Làm</th><th>Đo xong mới đi tiếp</th></tr></thead>
+    <tbody>
+      <tr><td class="num"><b>1</b></td><td><b>Khay 3 viên, chưa lắp pin.</b> Cố định khay xuống đáy thân ở dải sâu 32–92 mm bằng vít hoặc dán hai mặt.</td><td>Nhìn: cực + và − của từng ngăn đúng chiều lò xo</td></tr>
+      <tr><td class="num"><b>2</b></td><td><b>Hàn dây ra khay.</b> <code>B−</code> ở cực âm ngăn 1, <code>B+</code> ở cực dương ngăn 3 — cả hai <b>18 AWG</b>. Hai dây cân bằng <code>B1</code> (mối ngăn 1–2) và <code>B2</code> (mối 2–3) chỉ cần <b>24 AWG</b>.</td><td><b>Chưa lắp pin.</b> Đo thông mạch từng dây tới đúng điểm của nó</td></tr>
+      <tr><td class="num"><b>3</b></td><td><b>Lắp pin, đấu BMS theo thứ tự <code>B−</code> → <code>B1</code> → <code>B2</code> → <code>B+</code>.</b> Nhảy cóc có thể hỏng BMS ngay lúc chạm dây.</td><td><b>Đo <code>P+</code>/<code>P−</code> phải ra đúng điện áp pack.</b> Ra 0 V là BMS đang cắt — thường do một cell dưới ngưỡng</td></tr>
+      <tr><td class="num"><b>4</b></td><td><b>Jack sạc riêng → <code>B+</code>/<code>B−</code> của BMS.</b> Đây là cửa duy nhất cho sạc 12,6 V CC/CV.</td><td>Đo cực jack: giữa ruột và vỏ phải ra đúng điện áp pack, đúng cực</td></tr>
+      <tr><td class="num"><b>5</b></td><td><b>Công tắc ON–OFF–ON.</b> Chân giữa → đi tiếp. Một chân bên → <code>P+</code> của BMS. Chân bên kia → ruột jack adapter. <b>GND của adapter chập chung với <code>P−</code>.</b></td><td>Gạt ba vị trí, đo chân giữa: <b>pin → 12,6 V · giữa → 0 V · adapter → 12 V</b></td></tr>
+      <tr><td class="num"><b>6</b></td><td><b>Điểm phân nhánh.</b> Một cầu đấu hoặc mẩu đồng, <b>không</b> chuyền dây tay nọ sang tay kia. Hàn <b>tụ 2200 µF + 104</b> ngay tại đây, dải màu trên tụ là cực âm.</td><td>Đo lại 12 V ở điểm phân nhánh. Cắm điện lần đầu sẽ thấy <b>tia lửa nhỏ</b> — đó là dòng nạp tụ, bình thường</td></tr>
+      <tr><td class="num"><b>7</b></td><td><b>Ba nhánh, mỗi nhánh một cặp dây riêng từ điểm phân nhánh.</b></td><td>Nối từng nhánh một, đo trước khi nối nhánh sau</td></tr>
+    </tbody>
+  </table></div>
+
+
+  <div class="warn">
+    <span class="warn-h">Đo chiều gạt TRƯỚC KHI hàn — đừng đoán</span>
+    <p>Ở phần lớn công tắc gạt, <b>gạt cần LÊN thì chân giữa nối xuống chân DƯỚI</b> chứ không phải chân trên — cơ cấu đòn bẩy lật ngược. Nhưng không phải lô nào cũng vậy, và hàn xong mới phát hiện thì phải tháo cả sáu mối.</p>
+    <p><b>Cách đo, 30 giây:</b> để đồng hồ ở thang thông mạch (có tiếng bíp). Que một cắm chân <b>2</b> (giữa cột trái). Que kia chạm chân <b>1</b>, rồi chân <b>3</b>. Gạt cần lên, xuống, giữa và ghi lại nấc nào thông với chân nào.</p>
+    <p>Rồi mới quyết định gán: bạn muốn <b>gạt lên = pin</b> thì nối <code>BMS P+</code> vào cặp chân mà nấc trên thông tới. Ba nấc phải cho ra: một nấc thông pin, nấc giữa <b>không thông gì cả</b>, nấc kia thông adapter.</p>
+  </div>
+
+  <div class="tw"><table>
+    <thead><tr><th class="num">Chân</th><th>Nối vào</th><th>Dây</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td class="num"><b>1 + 4</b></td><td><code>P+</code> của BMS</td><td class="num">18 AWG</td><td>cực dương pin. Hai chân này <b>nối tắt với nhau</b> rồi mới nhận một sợi dây vào</td></tr>
+      <tr><td class="num"><b>3 + 6</b></td><td>ruột jack adapter</td><td class="num">18 AWG</td><td>cực dương adapter, cũng nối tắt hai chân</td></tr>
+      <tr><td class="num"><b>2 + 5</b></td><td>ra tải</td><td class="num">18 AWG</td><td>nối tắt, rồi một sợi đi tới tụ 2200 µF và điểm phân nhánh</td></tr>
+      <tr><td class="num">—</td><td><code>P−</code> của BMS <b>+</b> vỏ jack adapter</td><td class="num">18 AWG</td><td><b>chập thẳng vào nhau, không qua công tắc.</b> Đây là đất chung của toàn robot</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note">
+    <span class="warn-h">Vì sao cắm cả hai nguồn cùng lúc vẫn an toàn</span>
+    <p>Giả sử adapter đang cắm mà bạn gạt sang <b>pin</b>: cực âm adapter vẫn nối đất chung, nhưng cực dương của nó bị công tắc bỏ hở ⇒ <b>mạch không khép kín, không có dòng nào chạy</b>. Ngược lại cũng thế.</p>
+    <p>Nghĩa là bạn không cần nhớ rút jack trước khi gạt. Chỉ cần đừng bao giờ nối hai cực dương lại với nhau ở đâu đó ngoài công tắc.</p>
+  </div>
+
+  <h3>Ba nhánh — cái nào đi đâu</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Nhánh</th><th class="num">Dây</th><th class="num">Dòng</th><th>Nuôi những gì</th></tr></thead>
+    <tbody>
+      <tr><td><b>MKE-B01</b><br><span style="opacity:.7;font-size:13px">12 V vào jack của shield</span></td><td class="num">24 AWG</td><td class="num">1,1 A</td><td><code>XL1509</code> → 5 V cho <b>loa MAX98357A</b><br><code>AMS1117</code> → 3V3 cho <b>ba màn, mic, I2C</b></td></tr>
+      <tr><td><b>2× IBT-2</b><br><span style="opacity:.7;font-size:13px">12 V thẳng vào <code>B+</code>/<code>B−</code></span></td><td class="num">20 AWG</td><td class="num">6,0 A</td><td>hai động cơ 33GB-520. <b>Không</b> qua mạch hạ áp nào — động cơ ăn thẳng 12 V</td></tr>
+      <tr><td><b>LM2596</b><br><span style="opacity:.7;font-size:13px">vặn ra đúng 5,0 V</span></td><td class="num">22 AWG</td><td class="num">4,5 A</td><td><b><code>V+</code> của PCA9685</b> cho sáu servo, và <b>vòng LED</b></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="warn">
+    <span class="warn-h">Bốn chỗ sai là mất đồ, không phải mất công</span>
+    <p><b>Vặn LM2596 ra 5,0 V TRƯỚC KHI cắm tải.</b> Nó xuất xưởng ở mức bất kỳ — có con ra 12 V nguyên. Cắm servo vào rồi mới vặn là servo ăn nguyên mức đang để.</p>
+    <p><b><code>VCC</code> của IBT-2 cắm 3V3, không phải 12 V.</b> Chỉ <code>B+</code>/<code>B−</code> mới nhận 12 V; <code>VCC</code> là chân nuôi phần logic, cấp 12 V vào đó là chết bo.</p>
+    <p><b>Đừng lấy 3V3 từ chân ESP32.</b> Ba màn phải lấy ở khối <code>3V3</code> của MKE-B01 — đo thật 23/08: lấy từ ESP32 thì một màn mờ và tự tắt mỗi giây.</p>
+    <p><b>Tụ hoá đúng cực — hai dấu hiệu phải khớp nhau.</b> <b>Chân DÀI là cực dương</b>, chân ngắn là cực âm; và trên thân có <b>dải màu nhạt in dấu <code>−</code></b> chỉ về phía chân ngắn. Nếu chân đã bị cắt bằng nhau thì tin vào dải trên thân, đừng đoán theo chân.</p>
+    <p>Tụ mắc <b>SONG SONG</b> với nguồn — bắc ngang giữa đường dương và đường âm ngay tại điểm phân nhánh, <b>không nối tiếp</b> vào đường dây. Dòng vẫn đi thẳng từ công tắc ra ba nhánh; tụ chỉ ngồi cạnh làm kho điện. Con <code>104</code> đi kèm thì không phân cực, cắm chiều nào cũng được.</p>
+    <p>Cắm ngược vào 12 V thì nổ trong vài giây, kêu to và bắn giấy bạc. Tụ ở rail 12 V lấy loại <b>≥ 25 V</b> — con số in ngay trên thân cạnh dung lượng.</p>
+  </div>
+
+  <div class="note">
+    <span class="warn-h">Dùng hằng ngày sau khi xong</span>
+    <p><b>Để bàn:</b> gạt công tắc sang <b>adapter</b>, cắm jack 12 V. Muốn nạp pack thì cắm thêm sạc 12,6 V vào jack sạc — pack được nạp và cân bằng trong khi tải chạy hoàn toàn bằng adapter.</p>
+    <p><b>Mang đi:</b> rút cả hai jack, gạt sang <b>pin</b>.</p>
+    <p><b>Cất lâu:</b> gạt về <b>giữa</b>. BMS vẫn rút một dòng rất nhỏ, nên vị trí tắt là thứ giữ pack không tự cạn sau vài tuần không dùng.</p>
+    <p>Gạt công tắc lúc robot đang chạy thì nó mất điện chừng một giây rồi khởi động lại — không sao, firmware tự nối lại WiFi.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Tụ — gắn ở đâu và vì sao</h2>
+  <p>Không mảnh nào của bộ vỏ giữ tụ, và bảng nối dây ở trên cũng không kể chúng: tụ không nối vào chân GPIO nào cả, chúng <b>bắc ngang giữa một rail nguồn và đất</b>. Nhưng thiếu chúng thì robot reset giữa câu đang nói, và triệu chứng trông y như lỗi phần mềm.</p>
+
+  <h3>Hai họ tụ làm hai việc khác hẳn nhau</h3>
+  <p><b>Tụ gốm 104</b> (đọc là 10 × 10⁴ pF = <b>100 nF</b>) lọc nhiễu cao tần. Nó phải nằm <b>sát chân VCC–GND của con chip</b> — cách vài centimet là gần như mất tác dụng, vì chính đoạn dây ấy có điện cảm.</p>
+  <p><b>Tụ hoá 470 / 1000 / 2200 µF</b> là kho điện tại chỗ. Khi động cơ bứt hoặc sáu servo cùng gồng, chúng xả ra trong khoảng mili giây đầu — đúng lúc mạch hạ áp chưa kịp phản hồi.</p>
+
+  <h3>Cần bao nhiêu — tính chứ không đoán</h3>
+  <p>ΔV = I × Δt / C, với Δt là thời gian mạch hạ áp cần để phản hồi. ESP32 bị brownout khi bus tụt dưới <b>4,5 V</b>.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Rail</th><th class="num">Xung</th><th class="num">470 µF</th><th class="num">1000 µF</th><th class="num">2200 µF</th></tr></thead>
+    <tbody>
+      <tr><td>5 V servo (6× MG90S gồng)</td><td class="num">4,2 A</td><td class="num">sụt 0,89 V ❌</td><td class="num">sụt 0,42 V ✅</td><td class="num">—</td></tr>
+      <tr><td>12 V động cơ (2× 33GB-520 bứt)</td><td class="num">6,0 A</td><td class="num">sụt 1,91 V ❌</td><td class="num">sụt 0,90 V ⚠️</td><td class="num">sụt 0,41 V ✅</td></tr>
+      <tr><td>5 V ampli (MAX98357A 3 W)</td><td class="num">1,2 A</td><td class="num">sụt 0,51 V ❌</td><td class="num">sụt 0,24 V ✅</td><td class="num">—</td></tr>
+    </tbody>
+  </table></div>
+  <div class="warn">
+    <span class="warn-h">470 µF KHÔNG đủ cho rail servo</span>
+    <p>Sụt 0,89 V nghĩa là 5 V tụt còn 4,1 V mỗi lần sáu khớp cùng động — servo giật và ESP32 có thể theo đó mà reset. Dùng <b>1000 µF</b>, hoặc ghép <b>hai con 470 µF song song</b> (= 940 µF, dung lượng cộng lại khi mắc song song).</p>
+  </div>
+
+  <h3>Bảng gắn</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Tụ</th><th>Gắn ở đâu</th><th>Vì sao chỗ đó</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">2200 µF + 104</td><td><b>12 V, sát jack nguồn</b></td><td>động cơ là thứ rút xung mạnh nhất; đặt trước cả MKE-B01 lẫn hai IBT-2</td></tr>
+      <tr><td class="mono">1000 µF + 104</td><td><b>5 V, sát <code>V+</code> của PCA9685</b></td><td>sáu servo. Đặt ở đầu PCA9685 chứ không ở đầu LM2596 — dây giữa hai nơi mới là chỗ sinh sụt áp</td></tr>
+      <tr><td class="mono">1000 µF + 104</td><td><b>5 V, sát <code>Vin</code> MAX98357A</b></td><td>ampli lớp D rút dòng theo nhịp nhạc; thiếu tụ thì tiếng méo ở đoạn to</td></tr>
+      <tr><td class="mono">470 µF + 104</td><td><b>5 V, sát vòng LED</b></td><td>16 LED sáng trắng hết cỡ kéo gần 1 A</td></tr>
+      <tr><td class="mono">470 µF + 104</td><td><b>3V3, sát MKE-B01</b></td><td><code>AMS1117</code> đốt phần chênh áp nên thực tế chỉ chịu ~300–400 mA liên tục</td></tr>
+      <tr><td class="mono">104 (còn lại)</td><td><b>đầu MODULE, cuối sợi dupont</b></td><td>module mua sẵn thường đã có tụ 104 trên bo, nhưng dupont 10 cm có điện cảm đủ để làm nó mất tác dụng. Thêm một con ngay tại module: ba màn, mic, MPU6050, hai IBT-2</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="warn">
+    <span class="warn-h">Tụ hoá có cực tính — cắm ngược là nổ thật</span>
+    <p>Dải màu nhạt in dọc thân tụ đánh dấu <b>cực ÂM</b>, và chân âm cũng ngắn hơn. Cắm ngược vào 12 V thì nó nổ trong vài giây, kêu to và bắn giấy bạc ra khắp nơi. Tụ gốm 104 thì không phân cực, cắm chiều nào cũng được.</p>
+    <p><b>Điện áp chịu đựng phải dư gấp rưỡi:</b> tụ ở rail 12 V lấy loại <b>≥25 V</b>, ở rail 5 V lấy <b>≥10 V</b>. Con số này in ngay trên thân tụ cạnh dung lượng.</p>
+    <p>Lần cắm điện đầu sau khi gắn 2200 µF sẽ thấy <b>một tia lửa nhỏ ở jack</b> — đó là dòng nạp tụ, bình thường, không phải chập.</p>
+  </div>
+
+  <div class="note">
+    <span class="warn-h">Cách kiểm tụ có tác dụng thật</span>
+    <p>Để đồng hồ ở thang một chiều, kẹp vào rail đang đo, rồi cho robot làm việc nặng nhất — sáu servo cùng về 0° hoặc hai bánh bứt từ đứng yên. Nhìn số tụt bao nhiêu. Nếu rail 5 V tụt xuống dưới <b>4,5 V</b> thì tụ chưa đủ; ghép thêm một con song song rồi đo lại.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Dò dây — trước khi đóng nắp</h2>
+  <pre><code>cd firmware/mini-me-robot &amp;&amp; pio run -e kiem-day -t upload -t monitor</code></pre>
+  <p>Nó kéo lần lượt từng chân lên 3,3 V trong 6 giây và đọc tên chân ra Serial. Bạn kẹp que đo ở <b>đầu bên kia sợi dây, trên bo màn</b>. Lên đúng lúc gọi tên → sợi tốt. Lên sai lúc → Serial cho biết nó đang nối nhầm sang chân nào. Không bao giờ lên → đứt hoặc tiếp xúc hỏng.</p>
+  <div class="warn">
+    <span class="warn-h">Bo màn in tên chân ở mặt sau</span>
+    <p>Nhìn từ mặt trước thì thứ tự chân đảo ngược. Đấu theo mặt này rồi cắm theo mặt kia thì cả bảy sợi bị lật gương quanh chân giữa: <code>RST↔VCC</code>, <code>CS↔GND</code>, <code>DC↔SCL</code>, riêng <code>SDA</code> đứng yên. Hậu quả là VCC vào chân RST, GND vào chân CS — đèn nền vẫn sáng qua đường bảo vệ nên nhìn tưởng đúng, mà không một lệnh nào tới được chip. Đúng triệu chứng "sáng mà đen".</p>
+  </div>
+</section>
+
+<section>
+  <h2>Sau khi nối xong — thử servo</h2>
+  <pre><code>cd firmware/mini-me-robot &amp;&amp; pio run -e thu-servo -t upload -t monitor</code></pre>
+  <p><kbd>0</kbd>–<kbd>5</kbd> chọn khớp, <kbd>±1°</kbd>/<kbd>±5°</kbd> nhích, <kbd>s</kbd> quét chậm cả dải tìm điểm chạm cơ khí. Ghi lại sáu con số rồi siết vào <code>config.h</code>.</p>
+  <div class="warn">
+    <span class="warn-h">Thứ tự gắn càng servo — không đảo được</span>
+    <p>Cắm servo khi <b>chưa gắn càng</b> → bấm <kbd>c</kbd> cho nó về 0° → <b>giờ mới</b> gắn càng ở tư thế trung lập. Gắn càng trước rồi mới cấp điện thì servo nhảy về 0° kéo theo cả càng.</p>
+    <p><b><code>ELBOW_MAX = 0</code>.</b> Khuỷu chỉ gập một chiều. Vượt 0° là cẳng tay đâm vào cánh tay trên, servo kẹt cứng rồi cháy trong khoảng một phút.</p>
+  </div>
+  <div class="note">
+    <span class="warn-h">Firmware cố ý không đẩy servo về đâu lúc khởi động</span>
+    <p>Servo không biết nó đang ở đâu — nhận xung đầu tiên là lao tới đó bằng tốc độ tối đa. Nên <code>begin()</code> tắt hết kênh, tay buông thõng, chỉ cử động khi có lệnh thật. Đây là quyết định an toàn, đừng "sửa" nó.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Ba phép thử cuối</h2>
+  <ol class="steps">
+    <li><b>Cấp 12 V, chưa nạp firmware chạy.</b> Nhìn xem có bánh nào tự quay không. Bốn con trở 10k kéo <code>RPWM</code>/<code>LPWM</code> xuống GND là thứ chặn chuyện đó — đo <b>trong mạch</b> ra ~7,8k là bình thường, chỉ <code>OL</code> hoặc <code>0</code> mới là hỏng.</li>
+    <li><b>Nạp <code>mini-me</code>, xem hai mắt vẽ xong không.</b> Cả ba màn chạy ở <b>40 MHz</b> (đo 23/08: 271 vòng/giây, đỉnh 4,2 ms).</li>
+    <li><b>Cho chạy tiến 1 giây trên sàn.</b> PWM 100 là ngưỡng bứt được từ đứng yên, 115 là số đang dùng, 255 là hết ga và xe đi thẳng.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Mười bốn mảnh</h2>
+  <p>Ảnh trái là góc nghiêng để thấy khối, ảnh phải chiếu thẳng từ trên xuống để thấy lỗ nằm đâu.</p>
+
+  <div class="part">
+    <div class="part-img"><img alt="Thân robot: hộp hở nóc và hở mặt sau, bốn trụ bắt vít ở bốn góc mặt sau" src="__IMG_01-than__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">01-than</span><span class="qty">×1</span><span class="dims">150 × 120 × 130</span></div>
+      <div class="part-role">Hộp chính — đáy và ba thành</div>
+      <p><b>Hở nóc và hở mặt sau, cả hai đều cố ý.</b> Bốn trụ ở bốn góc mặt sau, cách mép 5,65 mm, lỗ mồi ⌀2,7 — chỗ bắt nắp sau.</p>
+      <div class="warn">
+        <span class="warn-h">Đáy là tấm đặc — không có lỗ bắt xuống khung</span>
+        <p>Trong cả 14 mảnh <b>không có chi tiết nào nối thân với khung TP101</b>. Bạn phải tự khoan cả lỗ bắt vít lẫn lỗ luồn dây.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Nắp sau: tấm phẳng chữ nhật với bốn lỗ vít ở bốn góc" src="__IMG_02-nap-sau__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">02-nap-sau</span><span class="qty">×1</span><span class="dims">150 × 130 × 3</span></div>
+      <div class="part-role">Cửa bảo trì</div>
+      <p>Bốn lỗ ⌀3,2 khớp bốn trụ trong lòng thân. Mảnh bạn sẽ tháo ra nhiều nhất — đừng dán, đừng siết chết.</p>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Tấm ngực: cửa sổ chữ nhật cho màn hình phía trên, lỗ tròn cho loa ở giữa, bốn trụ bắt loa và hai lỗ vít góc dưới" src="__IMG_03-tam-nguc__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">03-tam-nguc</span><span class="qty">×1</span><span class="dims">140 × 138 × 7</span></div>
+      <div class="part-role">Mặt ngực — màn 3.5" và loa</div>
+      <p>Cửa sổ <b>86 × 41</b> ở trên; lỗ <b>⌀52</b> ở giữa là lỗ thoát âm (đường kính <em>màng</em> loa, không phải vành ⌀65); bốn trụ bắt loa; hai lỗ ⌀3,2 góc dưới bắt vào thân.</p>
+      <div class="note">
+        <span class="warn-h">Chiều đúng: màn TRÊN, loa DƯỚI</span>
+        <p>Hai lỗ vít nằm <b>cùng dải với loa</b>, ở y = 7 từ mép dưới. Tấm cao 138 mà thân 130, nên 8 mm thừa phải ở <b>trên</b>; lật ngược thì hai lỗ vít rơi vào dải thừa và bắt vào khoảng không.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Đầu robot: hộp hở mặt sau, mặt trước có hai lỗ tròn cho mắt, quanh mỗi lỗ có bốn vấu giữ bo màn" src="__IMG_04-dau__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">04-dau</span><span class="qty">×1</span><span class="dims">130 × 60 × 56</span></div>
+      <div class="part-role">Đầu — hai hốc mắt</div>
+      <p>Hai lỗ <b>⌀35</b>, tâm cách nhau 62 mm. Bốn vấu 4 × 4 × 4,5 mm giữ bo màn. Mặt sau hở để luồn cáp xuống cổ.</p>
+      <div class="warn">
+        <span class="warn-h">Bo màn mới lỏng 2,5 mm mỗi bên</span>
+        <p>Hốc 40 × 47,5 mà bo mới chỉ 35 × 43. Cắt <code>14-tam-phoi</code> làm miếng chêm. Lệch dưới 1 mm không thấy: kính ⌀35 nhưng vùng hiển thị chỉ ⌀32,4.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Ống mắt: vành khuyên tròn rỗng, vành trước dày hơn thân ống" src="__IMG_05-ong-mat__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">05-ong-mat</span><span class="qty">×2</span><span class="dims">⌀54 × 40 dài</span></div>
+      <div class="part-role">Vành ống kính — thuần trang trí</div>
+      <p><b>Bo màn KHÔNG nằm trong ống này.</b> Nó chỉ là vành khuyên úp chồng lên mặt trước đầu từ ngoài. Bo 38 × 45,5 cần hốc 40 × 47,5, mà nửa đường chéo hốc đó là 31 mm — lớn hơn bán kính ống 27 mm, bốn góc sẽ chọc thủng thành ống.</p>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Cánh tay trên: hai má song song, mỗi má có hai lỗ trục ở hai đầu, giữa rỗng" src="__IMG_06-canh-tay-tren__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">06-canh-tay-tren</span><span class="qty">×2</span><span class="dims">18 × 52 × 14</span></div>
+      <div class="part-role">Cánh tay trên</div>
+      <p>Hai lỗ ⌀6 cách mỗi đầu 9 mm. Khoảng rỗng giữa hai má là <b>rãnh luồn dây</b> xuống khuỷu.</p>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Cẳng tay: hai má có một lỗ trục ở đầu trên, đầu dưới là khối bẹt làm bàn tay" src="__IMG_07-cang-tay__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">07-cang-tay</span><span class="qty">×2</span><span class="dims">20 × 54 × 12</span></div>
+      <div class="part-role">Cẳng tay — có sẵn bàn tay</div>
+      <p>Một lỗ ⌀6 cách đầu trên 8 mm. Bàn tay in liền. Đặc ruột 12 % — mỗi gram ở cẳng tay "đắt" gấp đôi ở vai.</p>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Ốp xích: tấm phẳng dài với hai lỗ tròn lớn gần mép dưới ở hai đầu" src="__IMG_08-op-xich__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">08-op-xich</span><span class="qty">×2</span><span class="dims">160 × 95 × 3</span></div>
+      <div class="part-role">Váy che ngoài khung xích</div>
+      <p>Hai lỗ <b>⌀16</b>, tâm cách mép dưới <b>13,5 mm</b>, cách mỗi đầu <b>26 mm</b>. Hở gầm 10 mm. Lỗ cố ý ⌀16 chứ không ⌀10: vị trí trục là số <em>suy ra</em> từ bán kính bánh, ⌀16 cho dung sai ±5 mm.</p>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Giá cổ: khối chữ L với một rãnh chữ U ôm servo, hai tai bắt vít hai bên" src="__IMG_09-gia-co__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">09-gia-co</span><span class="qty">×1</span><span class="dims">44 × 18 × 26</span></div>
+      <div class="part-role">Giá servo cổ — ôm <b>một</b> servo</div>
+      <div class="warn">
+        <span class="warn-h">Món duy nhất còn phải mua</span>
+        <p>Firmware khai <b>hai</b> kênh cổ mà mảnh này ôm một servo. Muốn đầu quay đủ hai trục thì mua <b>khung pan-tilt đúc sẵn, 20–40k</b>; <code>10-tam-co</code> đã chừa chiều sâu 60 mm để đặt chân khung đó.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Tấm cổ: tấm phẳng rộng với hai gờ thả xuống ở hai mép" src="__IMG_10-tam-co__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">10-tam-co</span><span class="qty">×1</span><span class="dims">150 × 60 × 18</span></div>
+      <div class="part-role">Sàn cổ</div>
+      <p>Tấm dày 3 đè lên nóc hai thành bên, hai gờ 3 mm thả xuống 15 mm áp mặt trong. Khoan xuyên <b>từ ngoài vào</b>: 2,4 + 3 = <b>5,4 mm</b> ăn vít tự ren rất chắc.</p>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Khối vai: đế phẳng áp vào thành thân, mộng chữ nhật chĩa ra ngoài có lỗ chốt" src="__IMG_11-khoi-vai__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">11-khoi-vai</span><span class="qty">×2</span><span class="dims">19 × 30 × 24</span></div>
+      <div class="part-role">Trục vai</div>
+      <p>Đế 30 × 24 × 3 áp vào thành bên, mộng chĩa ra mang lỗ chốt cách chân 9 mm. <b>Đế chính là cữ chặn</b> — trượt cánh tay tới khi tì vào đế thì lỗ trùng khít.</p>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Khớp khuỷu: hai mộng khác cỡ đấu lưng nhau qua một khối giữa" src="__IMG_12-khop-khuyu__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">12-khop-khuyu</span><span class="qty">×2</span><span class="dims">36 × 14,4 × 8,4</span></div>
+      <div class="part-role">Khớp khuỷu</div>
+      <p><b>Mộng lớn vào cánh tay trên, mộng nhỏ vào cẳng tay</b>, khối giữa 6 mm cho khuỷu gập.</p>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Chốt: trụ tròn có mũ chặn ở một đầu" src="__IMG_13-chot__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">13-chot</span><span class="qty">×4</span><span class="dims">thân ⌀5,8 · mũ ⌀9 · dài 20</span></div>
+      <div class="part-role">Chốt xoay có mũ chặn</div>
+      <p><b>Thân ⌀5,8 chứ không ⌀6</b> — nhựa in nở ra, đúng 6 thì chốt chặt cứng và khớp không xoay được. Mũ chặn rộng ⌀9, nên cầm mảnh nhựa lên đo bề ngang sẽ ra 9 mm chứ không phải 5,8.</p>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-img"><img alt="Tấm phôi: tấm nhựa phẳng chữ nhật, không có lỗ" src="__IMG_14-tam-phoi__"></div>
+    <div class="part-info">
+      <div class="part-head"><span class="part-id">14-tam-phoi</span><span class="qty">×2</span><span class="dims">80 × 60 × 3</span></div>
+      <div class="part-role">Phôi PETG — không phải mảnh của robot</div>
+      <p>Chêm bo màn tròn · làm ke nối thân với khung · cắt càng nối servo cho tay.</p>
+    </div>
+  </div>
+
+  <div class="warn">
+    <span class="warn-h">Hai chỗ thiết kế còn hở</span>
+    <p><b>Nối thân với khung TP101</b> — đáy thân là tấm đặc không lỗ, không mảnh nào làm mối nối này.</p>
+    <p><b>Càng servo cho tay</b> — mộng + chốt chỉ tạo khớp xoay <b>tự do</b>. Muốn servo kéo được thì cắt càng nối từ <code>14-tam-phoi</code>.</p>
+  </div>
+</section>
+
+
+<section>
+  <h2>Bảy thứ trong hộp mà thiết kế này không dùng</h2>
+  <p>Bạn đã mua chúng ở các đợt trước, và chúng vẫn nằm trong hộp linh kiện. Không mảnh vỏ nào giữ chúng, firmware không khai chân nào cho chúng, và bảng nối dây ở trên cố ý không kể — <b>để nguyên trong hộp là đúng</b>, đừng đi tìm chỗ cắm.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Linh kiện</th><th>Vốn định làm gì</th><th>Vì sao không dùng nữa</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">DRV8833</td><td>cầu H hai bánh</td><td>dòng kẹt của 33GB-520 vượt xa mức 1,5 A nó chịu được — cắm vào là cháy mạch chứ không phải chạy chậm. Thay bằng 2× IBT-2</td></tr>
+      <tr><td class="mono">TB6612</td><td>cầu H hai bánh</td><td>cùng lý do với DRV8833</td></tr>
+      <tr><td class="mono">HC-SR04</td><td>đo khoảng cách siêu âm</td><td>thay bằng VL53L0X (laser): nhỏ hơn, đi I2C nên không tốn hai chân riêng, và không bị vải với thảm nuốt mất tiếng dội</td></tr>
+      <tr><td class="mono">PCF8575</td><td>mở rộng thêm 16 chân I/O</td><td>sau khi dời sáu servo sang PCA9685 thì ESP32 còn dư chân — <code>config.h</code> ghi rõ GPIO 38 và 45 vẫn trống</td></tr>
+      <tr><td class="mono">XL6009</td><td>tăng áp</td><td>không có rail nào cần điện áp cao hơn nguồn vào; cả ba mức 12 / 5 / 3V3 đều là hạ áp</td></tr>
+      <tr><td class="mono">ESP32-CAM</td><td>mắt nhìn</td><td>chưa có trong thiết kế hiện tại. Đầu đã kín chỗ vì hai màn tròn</td></tr>
+      <tr><td class="mono">TP5100 · BMS 2S</td><td>sạc và bảo vệ pin</td><td>chỉ cần khi chạy pin thật, và đều là loại 2S nên KHÔNG dùng được với pack 3S</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">
+    <span class="warn-h">Hai con encoder cũng vậy</span>
+    <p><code>config.h</code> còn khai <code>PIN_ENC_L</code> = 47 và <code>PIN_ENC_R</code> = 48 nhưng đánh dấu <b>KHÔNG DÙNG</b>: động cơ 33GB-520 mua về chỉ ra <b>2 dây</b>, bản có encoder là mã khác 6 dây. Giữ hướng bằng con quay MPU6050 — với xe xích thì đó còn đúng hơn encoder, vì xích trượt mà encoder vẫn đếm đủ vòng trong khi thân đã lệch.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Tra nhanh</h2>
+
+  <details>
+    <summary>Giới hạn góc sáu khớp</summary>
+    <div class="details-body">
+      <div class="tw"><table>
+        <thead><tr><th>Khớp</th><th class="num">Nhỏ nhất</th><th class="num">Lớn nhất</th><th class="num">Kênh</th></tr></thead>
+        <tbody>
+          <tr><td>Cổ quay (pan)</td><td class="num">−90°</td><td class="num">+90°</td><td class="num">0</td></tr>
+          <tr><td>Cổ gật (tilt)</td><td class="num">−35°</td><td class="num">+35°</td><td class="num">1</td></tr>
+          <tr><td>Vai trái / phải</td><td class="num">−90°</td><td class="num">+90°</td><td class="num">2 · 4</td></tr>
+          <tr><td>Khuỷu trái / phải</td><td class="num">−120°</td><td class="num">0°</td><td class="num">3 · 5</td></tr>
+        </tbody>
+      </table></div>
+      <p>Lắp xong thấy khuỷu đụng sớm hơn thì nới <code>ELBOW_MIN</code> lên −100. <b>Đừng nới <code>ELBOW_MAX</code> quá 0.</b> Xung 500–2500 µs cho ±90°, 12 bit ở 50 Hz.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Vài con số hay phải tra</summary>
+    <div class="details-body">
+      <div class="tw"><table>
+        <tbody>
+          <tr><td>Ngưỡng bứt động cơ</td><td class="num">PWM 100</td><td>đo thật trên sàn có tải; 115 là số đang dùng</td></tr>
+          <tr><td>Watchdog động cơ</td><td class="num">500 ms</td><td>không có lệnh mới thì cắt — nằm trong firmware, không phải server</td></tr>
+          <tr><td>Tốc độ bus SPI</td><td class="num">4 MHz</td><td>cả ba màn</td></tr>
+          <tr><td>Lấy mẫu mic</td><td class="num">16 kHz</td><td>đúng mức Whisper cần</td></tr>
+          <tr><td>Pin đầy / cạn</td><td class="num">8400 / 6000 mV</td><td>2S, chia áp 100k/47k hệ số 3,128</td></tr>
+          <tr><td>Brownout ESP32</td><td class="num">dưới 4,5 V</td><td>ngưỡng để tính tụ khối</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Thông số in, nếu phải in lại mảnh nào</summary>
+    <div class="details-body">
+      <div class="tw"><table>
+        <tbody>
+          <tr><td>Lớp</td><td class="num">0,2 mm</td></tr>
+          <tr><td>Thành</td><td>3 lớp — riêng thân và giá cổ 6 lớp</td></tr>
+          <tr><td>Đặc ruột</td><td>20 % gyroid — riêng cánh tay và cẳng tay 12 %</td></tr>
+          <tr><td>Vật liệu đỡ</td><td>chỉ cho <code>01-than</code> và <code>04-dau</code></td></tr>
+          <tr><td>Bám bàn</td><td>brim 5 mm cho <code>08-op-xich</code> — dài và mỏng, dễ vênh góc</td></tr>
+        </tbody>
+      </table></div>
+      <pre><code>cd firmware/mini-me-robot/shell
+node gen-stl.mjs ./stl        # sinh lại cả 14 mảnh
+python3 xem-stl.py stl anh    # dựng lại ảnh xem trước
+node dung-trang.mjs           # dựng lại chính trang này</code></pre>
+      <p>Mọi kích thước nằm trong khối <code>P</code> ở đầu <code>gen-stl.mjs</code>. Hay phải chỉnh sau khi cầm linh kiện thật: <code>eyeInnerD</code> (bo màn không lọt hoặc lỏng), <code>screwD</code> (vít M3 chặt quá), <code>postInnerD</code> (lỗ mồi vít tự ren — máy in khác nhau co khác nhau).</p>
+    </div>
+  </details>
+</section>
+
+</div>

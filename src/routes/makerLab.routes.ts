@@ -262,6 +262,18 @@ router.post(
   },
 );
 
+/**
+ * Vé cho trang mô phỏng. Xem `services/makerlab/simTicket.ts` để biết
+ * vì sao là vé chứ không phải key + secret.
+ */
+router.post('/devices/:id/sim-ticket', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.capVeMoPhong(toId(req), userId(req)) });
+  } catch (e) {
+    next(e);
+  }
+});
+
 router.post('/devices/:id/commands', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
     const { type, payload } = req.body ?? {};

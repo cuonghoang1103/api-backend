@@ -690,7 +690,8 @@ static void testTft() {
   Serial.println("  NHÌN VÀO MÀN HÌNH — sẽ chạy 4 bước, mỗi bước 2 giây");
 
   tft.init();
-  tft.setRotation(1);  // nằm ngang: 480 rộng × 320 cao
+  tft.setRotation(3);  // nằm ngang, XOAY 180° so với mặc định — màn lắp
+                       // trong vỏ Odin quay ngược, xem man_hinh.h
 
   // ── 1. Ba màu nguyên ──
   Serial.println("  [1/4] Tô đỏ → lục → lam");

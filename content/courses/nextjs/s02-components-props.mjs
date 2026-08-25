@@ -54,6 +54,23 @@ function UserCard({ user }) {
 <div class="callout ok">
 <p><strong>The one-sentence version:</strong> a component takes props from above and returns UI; it never writes to its props, and it never reaches upward for data. Hold that and the rest of React is downhill.</p>
 </div>
+<h3>How data moves through a React tree</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Props go down, only down</b> — A parent passes values to a child. There is no way for a child to reach up and read its parent&#39;s variables — that one-way rule is what makes a tree predictable.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Props are read-only</b> — Assigning to &#96;props.title&#96; is an error in strict mode and a lie everywhere else: the parent will overwrite it on the next render anyway.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>To send data up, pass a function down</b> — The parent owns the state and hands the child a callback. The child calls it; the parent decides what changes.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Two children share by lifting</b> — When two siblings need the same value, it moves to their closest common parent. This is the single most common refactor in React.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — passing an object or array literal as a prop on every render.</strong> &#96;&lt;List items={[]} style={{ margin: 0 }} /&gt;&#96; creates a brand-new array and a brand-new object each time the parent renders. They are equal in value and different by identity, so any child wrapped in &#96;React.memo&#96; re-renders anyway, and any &#96;useEffect&#96; that depends on the prop fires every time — occasionally as an infinite loop, if the effect sets state. Nothing errors; the app is just slower than it looks like it should be. Hoist constant values outside the component, or memoise computed ones with &#96;useMemo&#96;.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/passing-props-to-a-component" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Passing props to a component</span><span class="lc-sub">Props, defaults, spreading, and children as a prop.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/sharing-state-between-components" target="_blank" rel="noopener">
+  <span class="lc-ico">⬆️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Sharing state between components</span><span class="lc-sub">The lifting-state refactor, step by step, with the code before and after.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -94,6 +111,23 @@ function UserCard({ user }) {
 <div class="callout ok">
 <p><strong>Bản một câu:</strong> một component nhận props từ trên và trả về UI; nó không bao giờ ghi vào props, và không bao giờ với lên trên để lấy dữ liệu. Nắm chắc điều đó thì phần còn lại của React là đường xuống dốc.</p>
 </div>
+<h3>Dữ liệu di chuyển thế nào trong một cây React</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Props đi xuống, chỉ đi xuống</b> — Cha truyền giá trị cho con. Con không có cách nào với ngược lên đọc biến của cha — chính luật một chiều đó làm cái cây trở nên đoán được.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Props là chỉ-đọc</b> — Gán vào &#96;props.title&#96; là lỗi trong chế độ nghiêm ngặt và là một lời nói dối ở mọi nơi khác: dù sao cha cũng sẽ ghi đè nó ở lần render sau.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Muốn gửi dữ liệu lên thì truyền một hàm xuống</b> — Cha sở hữu state và đưa cho con một callback. Con gọi nó; cha quyết định cái gì thay đổi.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Hai đứa con chia sẻ bằng cách nâng state lên</b> — Khi hai anh em cần cùng một giá trị, nó dời lên phần tử cha chung gần nhất. Đây là phép tái cấu trúc phổ biến nhất trong React.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — truyền một object hay mảng viết thẳng làm prop ở mỗi lần render.</strong> &#96;&lt;List items={[]} style={{ margin: 0 }} /&gt;&#96; tạo ra một mảng mới toanh và một object mới toanh mỗi lần cha render. Chúng bằng nhau về giá trị mà khác nhau về danh tính, nên mọi component con bọc trong &#96;React.memo&#96; vẫn render lại, và mọi &#96;useEffect&#96; phụ thuộc vào prop đó đều nổ mỗi lần — thỉnh thoảng thành một vòng lặp vô tận, nếu effect có đặt state. Chẳng lỗi nào cả; ứng dụng chỉ chậm hơn cái vẻ ngoài của nó. Hãy đưa các giá trị hằng ra ngoài component, hoặc ghi nhớ các giá trị tính toán bằng &#96;useMemo&#96;.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/passing-props-to-a-component" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Truyền props cho component</span><span class="lc-sub">Props, giá trị mặc định, phép trải, và children như một prop.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/sharing-state-between-components" target="_blank" rel="noopener">
+  <span class="lc-ico">⬆️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Chia sẻ state giữa các component</span><span class="lc-sub">Phép nâng state lên, từng bước, kèm mã trước và sau.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -152,6 +186,24 @@ function UserCard({ user }) {
 <div class="note-ct">
 <p><strong>How cuongthai.com does it</strong> — the site is full of frame-and-slot components: a modal that renders an overlay, a close button and a titled header, then drops <code>{children}</code> in the middle; a card shell that gives padding, border and hover, and lets each feature fill it. When you see the same visual container around wildly different content — a message thread, a settings panel, a quiz — that is one <code>children</code>-based component doing all of it.</p>
 </div>
+<h3>Composition instead of configuration</h3>
+<div class="lz-map">
+  <div class="lz-stage">Two ways to build a flexible component</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">The props route</div><div class="lz-nsub">&#96;&lt;Card title icon footer showBorder /&gt;&#96;. Every new need adds a prop, and after ten of them nobody can tell which combinations are valid.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">The children route</div><div class="lz-nsub">&#96;&lt;Card&gt;&lt;CardTitle/&gt;…&lt;/Card&gt;&#96;. The caller supplies the content directly, so the card never needs to know what goes inside it.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Several slots, several props</div><div class="lz-nsub">When you need two holes, pass elements as props: &#96;&lt;Layout sidebar={&lt;Nav/&gt;} main={&lt;Feed/&gt;} /&gt;&#96;. Elements are ordinary values.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Composition avoids prop drilling</div><div class="lz-nsub">A wrapper that renders &#96;children&#96; never touches the data inside them, so nothing has to be threaded through it.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a component whose props list keeps growing to cover new cases.</strong> &#96;&lt;Modal title confirmText cancelText showClose hideFooter danger wide /&gt;&#96; starts as three booleans and ends as a component nobody dares change, because any prop might interact with any other. The symptom to watch for is a boolean added to support exactly one caller. When you see it, invert the design: let the modal render &#96;children&#96; and let each caller compose what it needs. You trade a few lines at the call site for a component with no combinations to test — and callers can then do things you never anticipated.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/passing-props-to-a-component#passing-jsx-as-children" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Passing JSX as children</span><span class="lc-sub">The children prop, and why it is just a prop like any other.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/thinking-in-react" target="_blank" rel="noopener">
+  <span class="lc-ico">🧠</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Thinking in React</span><span class="lc-sub">Where component boundaries come from, and how to spot one that is wrong.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -200,6 +252,24 @@ function UserCard({ user }) {
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào</strong> — site đầy những component khung-và-chỗ-trống: một modal render lớp phủ, một nút đóng và một header có tiêu đề, rồi thả <code>{children}</code> vào giữa; một vỏ card cho padding, viền và hiệu ứng hover, để mỗi tính năng lấp đầy nó. Khi bạn thấy cùng một cái hộp thị giác bao quanh những nội dung rất khác nhau — một luồng tin nhắn, một bảng cài đặt, một quiz — đó là một component dựa trên <code>children</code> làm tất cả.</p>
 </div>
+<h3>Ghép thay vì cấu hình</h3>
+<div class="lz-map">
+  <div class="lz-stage">Hai cách dựng một component linh hoạt</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Đường props</div><div class="lz-nsub">&#96;&lt;Card title icon footer showBorder /&gt;&#96;. Mỗi nhu cầu mới lại thêm một prop, và sau mười cái thì chẳng ai biết tổ hợp nào là hợp lệ.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Đường children</div><div class="lz-nsub">&#96;&lt;Card&gt;&lt;CardTitle/&gt;…&lt;/Card&gt;&#96;. Chỗ gọi tự cấp nội dung, nên cái thẻ chẳng bao giờ cần biết bên trong nó có gì.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Nhiều ô thì nhiều prop</div><div class="lz-nsub">Khi bạn cần hai chỗ trống, hãy truyền element làm prop: &#96;&lt;Layout sidebar={&lt;Nav/&gt;} main={&lt;Feed/&gt;} /&gt;&#96;. Element là những giá trị bình thường.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Ghép thì tránh được prop drilling</div><div class="lz-nsub">Một component bọc chỉ vẽ &#96;children&#96; sẽ chẳng bao giờ chạm vào dữ liệu bên trong chúng, nên không có gì phải luồn qua nó.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một component có danh sách props cứ dài mãi ra để đỡ các ca mới.</strong> &#96;&lt;Modal title confirmText cancelText showClose hideFooter danger wide /&gt;&#96; bắt đầu bằng ba boolean và kết thúc thành một component chẳng ai dám sửa, vì prop nào cũng có thể tương tác với prop nào. Triệu chứng cần để ý là một boolean được thêm vào chỉ để phục vụ đúng một chỗ gọi. Thấy nó thì hãy lật ngược thiết kế: để modal vẽ &#96;children&#96; và để từng chỗ gọi tự ghép thứ nó cần. Bạn đánh đổi vài dòng ở chỗ gọi lấy một component không còn tổ hợp nào phải kiểm — và các chỗ gọi từ đó làm được cả những thứ bạn chưa từng lường trước.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/passing-props-to-a-component#passing-jsx-as-children" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Truyền JSX làm children</span><span class="lc-sub">Prop children, và vì sao nó cũng chỉ là một prop như mọi prop khác.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/thinking-in-react" target="_blank" rel="noopener">
+  <span class="lc-ico">🧠</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Tư duy kiểu React</span><span class="lc-sub">Ranh giới component đến từ đâu, và làm sao nhận ra một ranh giới đặt sai.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -260,6 +330,23 @@ function Badge({ label = 'New', tone }: BadgeProps) {
   return &lt;span className={&#96;badge badge-\${tone}&#96;}&gt;{label}&lt;/span&gt;;
 }</code></pre>
 <p>Now <code>&lt;Badge /&gt;</code> is a compile error (missing <code>tone</code>), and <code>&lt;Badge tone="danger" /&gt;</code> is a compile error (not one of the allowed values). The editor autocompletes the props too. We don't teach TypeScript from scratch here, but every example is typed the way a real codebase types it.</p>
+<h3>Typing a component's props</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Name the shape once</b> — &#96;type CardProps = { title: string; onClose?: () =&gt; void }&#96;. One declaration checks every call site in the project.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Annotate the parameter, not the function</b> — &#96;function Card({ title }: CardProps)&#96;. Avoid &#96;React.FC&#96;: it implicitly adds a &#96;children&#96; prop your component may not render.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Optional props need a default</b> — &#96;{ size = &#39;md&#39; }&#96; in the destructuring. The type says it may be absent; the default means the body never has to check.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>children is React.ReactNode</b> — The widest renderable type — elements, strings, numbers, arrays, &#96;null&#96;. Only add it when the component actually renders it.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — typing a prop as &#96;any&#96; to make a red squiggle go away.</strong> &#96;function Chart({ data }: { data: any })&#96; compiles, and it turns off checking for everything downstream: &#96;data.points.map(…)&#96; is unchecked, whatever it returns is unchecked, and the &#96;any&#96; travels into any variable that touches it. The crash arrives later, in a component that never mentioned &#96;any&#96;. When you genuinely do not know the shape, &#96;unknown&#96; is the honest choice — it forces a check at the point where you do know. And when the shape comes from an API, type it from a schema so the check is real rather than declared.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/typescript" target="_blank" rel="noopener">
+  <span class="lc-ico">🧾</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Using TypeScript with React</span><span class="lc-sub">Typing props, hooks, events and children, with the idiomatic patterns.</span></span>
+</a>
+<a class="link-card dl" href="https://react-typescript-cheatsheet.netlify.app/" target="_blank" rel="noopener">
+  <span class="lc-ico">📗</span>
+  <span class="lc-body"><span class="lc-title">React TypeScript Cheatsheet</span><span class="lc-sub">The community reference for &quot;how do I type this?&quot; — searchable, and current.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -310,6 +397,23 @@ function Badge({ label = 'New', tone }: BadgeProps) {
   return &lt;span className={&#96;badge badge-\${tone}&#96;}&gt;{label}&lt;/span&gt;;
 }</code></pre>
 <p>Giờ <code>&lt;Badge /&gt;</code> là lỗi biên dịch (thiếu <code>tone</code>), và <code>&lt;Badge tone="danger" /&gt;</code> là lỗi biên dịch (không thuộc các giá trị cho phép). Trình soạn thảo cũng tự gợi ý props. Ta không dạy TypeScript từ đầu ở đây, nhưng mọi ví dụ đều được gõ kiểu theo đúng cách một codebase thật gõ.</p>
+<h3>Gán kiểu cho props của một component</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Đặt tên cho cái dáng một lần</b> — &#96;type CardProps = { title: string; onClose?: () =&gt; void }&#96;. Một khai báo kiểm mọi chỗ gọi trong dự án.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Chú thích cho tham số, đừng chú thích cho hàm</b> — &#96;function Card({ title }: CardProps)&#96;. Hãy tránh &#96;React.FC&#96;: nó ngầm thêm một prop &#96;children&#96; mà component của bạn có thể chẳng vẽ ra.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Prop tuỳ chọn cần một giá trị mặc định</b> — &#96;{ size = &#39;md&#39; }&#96; ngay trong phép rã. Kiểu nói nó có thể vắng; giá trị mặc định làm phần thân chẳng bao giờ phải kiểm.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>children là React.ReactNode</b> — Kiểu vẽ-được rộng nhất — element, chuỗi, số, mảng, &#96;null&#96;. Chỉ thêm nó khi component thật sự vẽ nó ra.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — gán một prop là &#96;any&#96; cho một vệt gạch đỏ biến mất.</strong> &#96;function Chart({ data }: { data: any })&#96; biên dịch được, và nó tắt việc kiểm cho mọi thứ phía sau: &#96;data.points.map(…)&#96; không được kiểm, thứ nó trả về không được kiểm, và cái &#96;any&#96; ấy đi theo vào mọi biến chạm tới nó. Cú sập tới sau đó, trong một component chưa từng nhắc tới &#96;any&#96;. Khi bạn thật sự không biết cái dáng, &#96;unknown&#96; mới là lựa chọn thành thật — nó ép phải kiểm ở đúng chỗ bạn đã biết. Còn khi cái dáng đến từ một API, hãy gán kiểu từ một schema để phép kiểm là thật chứ không phải chỉ khai ra.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/typescript" target="_blank" rel="noopener">
+  <span class="lc-ico">🧾</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Dùng TypeScript với React</span><span class="lc-sub">Gán kiểu cho props, hook, sự kiện và children, theo các mẫu đúng điệu.</span></span>
+</a>
+<a class="link-card dl" href="https://react-typescript-cheatsheet.netlify.app/" target="_blank" rel="noopener">
+  <span class="lc-ico">📗</span>
+  <span class="lc-body"><span class="lc-title">React TypeScript Cheatsheet</span><span class="lc-sub">Tài liệu tra cứu của cộng đồng cho câu &quot;cái này gán kiểu sao?&quot; — tìm được và cập nhật.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -352,6 +456,23 @@ function Badge({ label = 'New', tone }: BadgeProps) {
 <div class="callout warn">
 <p><strong>The tell of an impure render.</strong> A count that increments every render, a list that grows each time the parent updates, a value that is right the first time and wrong after — these are almost always a render doing something it should only do in an event or an effect. When a bug is intermittent and tied to re-rendering, suspect an impure component first.</p>
 </div>
+<h3>Deciding where a component should end</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Start from the design, not the code</b> — Draw boxes around the parts of the mockup that repeat or that have a name a designer would use. Those names are your components.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>One component, one job</b> — If you cannot describe it in a sentence without &quot;and&quot;, it is two. A component that fetches, formats and renders is three.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Split when it repeats, not before</b> — Two similar blocks may still be genuinely different. Extract on the third occurrence, when the shared shape is actually visible.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Keep state as low as it can live</b> — Put it in the component that needs it; lift it only when a second component needs the same value.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — splitting components too early, guided by file length rather than by responsibility.</strong> Cutting a 200-line component into eight files feels tidy and often makes the code harder to follow: each new boundary needs props threaded through it, and a value that used to be one variable becomes a prop on four levels. The cost is not the files, it is the interfaces between them. The useful signal is not length — it is whether a part is reused, or has its own state, or would be independently testable. A long component that does one thing, read top to bottom, beats eight short ones you have to reassemble mentally.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/thinking-in-react" target="_blank" rel="noopener">
+  <span class="lc-ico">🧠</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Thinking in React</span><span class="lc-sub">The five-step method: from a mockup to a component tree, with state placed last.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/choosing-the-state-structure" target="_blank" rel="noopener">
+  <span class="lc-ico">🗂️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Choosing the state structure</span><span class="lc-sub">How to avoid redundant and contradictory state — the root of most component confusion.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -384,6 +505,23 @@ function Badge({ label = 'New', tone }: BadgeProps) {
 <div class="callout warn">
 <p><strong>Dấu hiệu của một render không thuần.</strong> Một bộ đếm tăng mỗi lần render, một danh sách dài thêm mỗi khi cha cập nhật, một giá trị đúng lần đầu và sai về sau — những thứ này gần như luôn là một render làm việc mà lẽ ra chỉ nên làm trong một sự kiện hoặc một effect. Khi một bug chập chờn và gắn với render lại, hãy nghi một component không thuần trước tiên.</p>
 </div>
+<h3>Quyết định một component nên kết thúc ở đâu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Bắt đầu từ thiết kế, đừng bắt đầu từ mã</b> — Hãy khoanh hộp quanh những phần của bản thiết kế lặp lại, hoặc có một cái tên mà người thiết kế sẽ dùng. Những cái tên đó chính là component của bạn.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Một component, một việc</b> — Nếu bạn không mô tả nổi nó trong một câu mà không dùng chữ &quot;và&quot;, thì nó là hai. Một component vừa lấy dữ liệu, vừa định dạng, vừa vẽ là ba.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Tách khi nó lặp lại, đừng tách trước</b> — Hai khối na ná nhau vẫn có thể thật sự khác nhau. Hãy tách ở lần xuất hiện thứ ba, khi cái dáng chung đã thật sự hiện rõ.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Giữ state ở chỗ thấp nhất nó sống được</b> — Đặt nó vào component cần nó; chỉ nâng lên khi có component thứ hai cần cùng giá trị.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — tách component quá sớm, lấy độ dài file làm kim chỉ nam thay vì lấy trách nhiệm.</strong> Cắt một component 200 dòng thành tám file thì trông gọn mà thường làm mã khó theo dõi hơn: mỗi ranh giới mới lại cần luồn props qua, và một giá trị vốn là một biến giờ thành một prop trên bốn tầng. Cái giá không nằm ở số file, nó nằm ở các giao diện giữa chúng. Tín hiệu hữu ích không phải độ dài — mà là một phần có được dùng lại không, có state riêng không, hay có kiểm thử độc lập được không. Một component dài mà làm đúng một việc, đọc một mạch từ trên xuống, hơn tám component ngắn mà bạn phải ghép lại trong đầu.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/thinking-in-react" target="_blank" rel="noopener">
+  <span class="lc-ico">🧠</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Tư duy kiểu React</span><span class="lc-sub">Phương pháp năm bước: từ bản thiết kế tới cây component, đặt state sau cùng.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/choosing-the-state-structure" target="_blank" rel="noopener">
+  <span class="lc-ico">🗂️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Chọn cấu trúc state</span><span class="lc-sub">Cách tránh state thừa và state mâu thuẫn — gốc rễ của phần lớn nhầm lẫn về component.</span></span>
+</a>
+
 </div>
 `,
     },

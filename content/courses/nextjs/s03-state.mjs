@@ -52,6 +52,23 @@ function Counter() {
 <div class="pitfall">
 <p><strong>Hooks have two rules, and both matter.</strong> (1) Only call hooks at the <em>top level</em> of a component — never inside an <code>if</code>, a loop, or a nested function. React tracks state by call order, so a conditional hook shifts the order and corrupts every hook after it. (2) Only call hooks from React components or other hooks, not from ordinary functions. Break either and React throws "Rendered fewer hooks than expected" or "Invalid hook call". Chapter 6 explains <em>why</em> the order matters; for now, hooks go at the top, unconditionally.</p>
 </div>
+<h3>What happens when you call a setter</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>React schedules a re-render</b> — It does not change the variable you are holding. &#96;count&#96; keeps its old value for the rest of this function — that is the part everyone trips on.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Updates are batched</b> — Several setter calls in one event handler produce one render, not three. React collects them and applies them together.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>The component runs again</b> — Top to bottom. &#96;useState&#96; returns the new value this time, and the JSX is rebuilt from it.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Bail out if the value is identical</b> — &#96;Object.is&#96; comparison. Setting the same primitive twice does not re-render — but a new object with the same contents does.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — calling the setter twice in one handler and getting one increment.</strong> &#96;setCount(count + 1); setCount(count + 1);&#96; increments by one, because both calls read the same &#96;count&#96; from this render&#39;s closure — the variable does not update mid-function. It looks like a batching bug and it is not: the value was simply stale for the second call. The functional form fixes it, because React passes each call the result of the previous one: &#96;setCount(c =&gt; c + 1)&#96; twice increments by two. Use the functional form whenever the next value depends on the previous one, including inside timers and effects, where the captured value can be several renders old.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/useState" target="_blank" rel="noopener">
+  <span class="lc-ico">🎛️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — useState reference</span><span class="lc-sub">Every signature, including the functional updater and lazy initialisation.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/queueing-a-series-of-state-updates" target="_blank" rel="noopener">
+  <span class="lc-ico">⏳</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Queueing a series of state updates</span><span class="lc-sub">Exactly why two setters increment by one, drawn out step by step.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -89,6 +106,23 @@ function Counter() {
 <div class="pitfall">
 <p><strong>Hook có hai luật, và cả hai đều quan trọng.</strong> (1) Chỉ gọi hook ở <em>cấp cao nhất</em> của một component — không bao giờ trong <code>if</code>, vòng lặp, hay một hàm lồng. React theo dõi state theo thứ tự gọi, nên một hook có điều kiện làm lệch thứ tự và hỏng mọi hook phía sau. (2) Chỉ gọi hook từ component React hoặc hook khác, không từ hàm thường. Vi phạm một trong hai là React ném "Rendered fewer hooks than expected" hoặc "Invalid hook call". Chương 6 giải thích <em>vì sao</em> thứ tự quan trọng; giờ thì, hook đặt trên cùng, vô điều kiện.</p>
 </div>
+<h3>Chuyện gì xảy ra khi bạn gọi setter</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>React xếp lịch render lại</b> — Nó KHÔNG đổi cái biến bạn đang cầm. &#96;count&#96; giữ nguyên giá trị cũ cho tới hết hàm này — và đó là chỗ ai cũng vấp.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Các lần cập nhật được gộp lô</b> — Vài lời gọi setter trong một handler sự kiện chỉ sinh ra một lần render, không phải ba. React gom chúng lại rồi áp cùng lúc.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Component chạy lại</b> — Từ trên xuống. Lần này &#96;useState&#96; trả về giá trị mới, và JSX được dựng lại từ đó.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Bỏ qua nếu giá trị y hệt</b> — So bằng &#96;Object.is&#96;. Đặt cùng một giá trị nguyên thuỷ hai lần thì không render lại — nhưng một object mới với cùng nội dung thì có.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — gọi setter hai lần trong một handler mà chỉ tăng được một.</strong> &#96;setCount(count + 1); setCount(count + 1);&#96; chỉ tăng một, vì cả hai lời gọi đều đọc cùng một &#96;count&#96; từ closure của lần render này — cái biến không cập nhật giữa chừng hàm. Nó trông như lỗi gộp lô mà không phải: giá trị đơn giản là đã cũ với lời gọi thứ hai. Dạng nhận hàm chữa được, vì React truyền cho mỗi lời gọi kết quả của lời gọi trước: &#96;setCount(c =&gt; c + 1)&#96; hai lần thì tăng hai. Hãy dùng dạng nhận hàm bất cứ khi nào giá trị kế tiếp phụ thuộc giá trị trước, kể cả trong bộ đếm giờ và trong effect, nơi giá trị bắt được có thể đã cũ vài lần render.</p></div>
+<a class="link-card dl" href="https://react.dev/reference/react/useState" target="_blank" rel="noopener">
+  <span class="lc-ico">🎛️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Tra cứu useState</span><span class="lc-sub">Mọi chữ ký, gồm cả dạng cập nhật bằng hàm và khởi tạo lười.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/queueing-a-series-of-state-updates" target="_blank" rel="noopener">
+  <span class="lc-ico">⏳</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Xếp hàng một chuỗi cập nhật state</span><span class="lc-sub">Chính xác vì sao hai setter chỉ tăng một, vẽ ra từng bước.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -141,6 +175,24 @@ setCount(c =&gt; c + 1);</code></pre>
 <div class="callout warn">
 <p><strong>The classic stale-closure bug.</strong> A <code>setInterval</code> that does <code>setCount(count + 1)</code> increments to 1 and then sticks, forever — the interval callback captured <code>count</code> from the render that created it and never sees a newer one. <code>setCount(c =&gt; c + 1)</code> fixes it instantly, because it never reads the stale snapshot. You will meet this exact bug again in Chapter 5 with effects; it is the same snapshot rule wearing a different hat.</p>
 </div>
+<h3>A render is a snapshot</h3>
+<div class="lz-map">
+  <div class="lz-stage">Everything in one render sees one set of values</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">The variables are frozen for this render</div><div class="lz-nsub">&#96;count&#96; is a &#96;const&#96; created when the function ran. A later setter call creates a new &#96;count&#96; in a new call — it never reaches back.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Event handlers capture that snapshot</div><div class="lz-nsub">A handler defined during render 3 sees render 3&#39;s values forever, even if it fires after render 7.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">So does anything you schedule</div><div class="lz-nsub">&#96;setTimeout&#96;, a promise callback, an interval. They all remember the render that created them.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">The functional updater escapes it</div><div class="lz-nsub">&#96;setX(prev =&gt; …)&#96; asks React for the current value at the moment the update is applied, not the value the closure captured.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — reading state right after setting it.</strong> &#96;setOpen(true); if (open) doSomething();&#96; never runs the body, and it looks like the setter failed. It did not: &#96;open&#96; is a constant belonging to this render, and it will not change until React runs the component again. The same shape appears as &#96;setItems([...items, x]); console.log(items.length)&#96; logging the old length, and as a validation check that reads the field it just set. When you need the new value, you already have it — use the expression you passed to the setter. When the work must happen after the render, that is what an effect is for.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/state-as-a-snapshot" target="_blank" rel="noopener">
+  <span class="lc-ico">📸</span>
+  <span class="lc-body"><span class="lc-title">react.dev — State as a snapshot</span><span class="lc-sub">The mental model this lesson is built on, with runnable examples.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/referencing-values-with-refs" target="_blank" rel="noopener">
+  <span class="lc-ico">📌</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Referencing values with refs</span><span class="lc-sub">When you genuinely need a value that survives renders without causing one.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -183,6 +235,24 @@ setCount(c =&gt; c + 1);</code></pre>
 <div class="callout warn">
 <p><strong>Bug closure cũ kinh điển.</strong> Một <code>setInterval</code> làm <code>setCount(count + 1)</code> tăng tới 1 rồi kẹt ở đó, mãi mãi — callback của interval đã bắt <code>count</code> từ lần render tạo ra nó và không bao giờ thấy cái mới hơn. <code>setCount(c =&gt; c + 1)</code> sửa nó ngay, vì nó không bao giờ đọc ảnh chụp cũ. Bạn sẽ gặp lại đúng bug này ở Chương 5 với effect; nó là cùng một quy tắc ảnh chụp đội một cái mũ khác.</p>
 </div>
+<h3>Một lần render là một tấm ảnh chụp</h3>
+<div class="lz-map">
+  <div class="lz-stage">Mọi thứ trong một lần render nhìn thấy một bộ giá trị</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Các biến bị đóng băng cho lần render này</div><div class="lz-nsub">&#96;count&#96; là một &#96;const&#96; tạo ra lúc hàm chạy. Một lời gọi setter sau đó tạo ra một &#96;count&#96; mới trong một lời gọi mới — nó không bao giờ với ngược lại.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Handler sự kiện bắt lấy tấm ảnh đó</div><div class="lz-nsub">Một handler định nghĩa trong lần render thứ 3 sẽ thấy giá trị của lần render 3 mãi mãi, kể cả khi nó nổ sau lần render thứ 7.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Mọi thứ bạn hẹn giờ cũng vậy</div><div class="lz-nsub">&#96;setTimeout&#96;, một callback promise, một interval. Tất cả đều nhớ lần render đã tạo ra chúng.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Dạng cập nhật bằng hàm thoát ra được</div><div class="lz-nsub">&#96;setX(prev =&gt; …)&#96; hỏi React giá trị hiện tại ngay lúc phép cập nhật được áp, chứ không lấy giá trị mà closure đã bắt.</div></div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — đọc state ngay sau khi vừa đặt nó.</strong> &#96;setOpen(true); if (open) doSomething();&#96; chẳng bao giờ chạy phần thân, và nó trông như setter đã hỏng. Không hề: &#96;open&#96; là một hằng thuộc về lần render này, và nó sẽ không đổi cho tới khi React chạy lại component. Cùng hình dạng ấy hiện ra ở &#96;setItems([...items, x]); console.log(items.length)&#96; in ra độ dài cũ, và ở một phép kiểm dữ liệu đọc đúng cái trường nó vừa đặt. Khi bạn cần giá trị mới thì bạn đã có nó rồi — hãy dùng chính biểu thức bạn truyền vào setter. Còn khi phần việc phải xảy ra SAU lần render thì đó là việc của một effect.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/state-as-a-snapshot" target="_blank" rel="noopener">
+  <span class="lc-ico">📸</span>
+  <span class="lc-body"><span class="lc-title">react.dev — State như một tấm ảnh chụp</span><span class="lc-sub">Mô hình tư duy mà bài này dựng trên đó, kèm ví dụ chạy được.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/referencing-values-with-refs" target="_blank" rel="noopener">
+  <span class="lc-ico">📌</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Tham chiếu giá trị bằng ref</span><span class="lc-sub">Khi nào bạn thật sự cần một giá trị sống qua các lần render mà không gây ra render.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -234,6 +304,23 @@ setTodos(todos.map(t =&gt; t.id === id ? { ...t, done: true } : t));  <span clas
 <div class="note-ct">
 <p><strong>How cuongthai.com does it</strong> — every list update in the app (a new message appended to a thread, a like toggled, an item removed from a cart) goes through <code>[...prev, x]</code>, <code>filter</code>, or <code>map</code>, never a mutation. Some feature stores use Immer (via Zustand's <code>immer</code> middleware, Chapter 14) so you can <em>write</em> mutating-looking code and it produces a new immutable state under the hood — but the rule it enforces is exactly this one.</p>
 </div>
+<h3>Why React needs a new object</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>It compares by identity</b> — &#96;Object.is(oldState, newState)&#96;. Same reference means &quot;nothing changed&quot; — even if you edited every field inside it.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Mutating keeps the reference</b> — &#96;items.push(x)&#96; changes the array in place, so old and new are the same object and React skips the render entirely.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Copy the levels you change</b> — &#96;[...items, x]&#96; for an array, &#96;{ ...user, name }&#96; for an object. Only the path you touch needs copying, not the whole tree.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>The screen then follows the data</b> — This is the whole contract: state is the source of truth, and a new value is how you say the truth changed.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — a nested update that copies only the top level.</strong> &#96;setUser({ ...user, address: user.address })&#96; then &#96;user.address.city = &#39;X&#39;&#96; mutates the original: the spread copied the reference to &#96;address&#96;, not the object. So the top level is new (React re-renders) while the nested object is shared — and any other state holding the old user now shows the new city too, which surfaces as &quot;editing one row changed all of them&quot;. Copy every level on the path you change: &#96;{ ...user, address: { ...user.address, city } }&#96;. For deeper shapes, flatten the state or reach for Immer, which lets you write the mutation and produces the copies for you.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/updating-objects-in-state" target="_blank" rel="noopener">
+  <span class="lc-ico">🧊</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Updating objects in state</span><span class="lc-sub">Copying nested shapes, and why the shallow spread is not enough.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/updating-arrays-in-state" target="_blank" rel="noopener">
+  <span class="lc-ico">📚</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Updating arrays in state</span><span class="lc-sub">A table of which array methods mutate and what to use instead.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -275,6 +362,23 @@ setTodos(todos.map(t =&gt; t.id === id ? { ...t, done: true } : t));  <span clas
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào</strong> — mọi cập nhật danh sách trong app (một tin nhắn mới nối vào luồng, một cú like bật/tắt, một món bỏ khỏi giỏ) đều đi qua <code>[...prev, x]</code>, <code>filter</code>, hoặc <code>map</code>, không bao giờ mutate. Một số store tính năng dùng Immer (qua middleware <code>immer</code> của Zustand, Chương 14) để bạn có thể <em>viết</em> code trông như mutate mà nó tạo ra một state bất biến mới ở bên dưới — nhưng quy tắc nó áp đặt chính là quy tắc này.</p>
 </div>
+<h3>Vì sao React cần một object mới</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Nó so theo danh tính</b> — &#96;Object.is(oldState, newState)&#96;. Cùng tham chiếu nghĩa là &quot;chẳng có gì đổi&quot; — kể cả khi bạn đã sửa mọi field bên trong.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Sửa tại chỗ thì giữ nguyên tham chiếu</b> — &#96;items.push(x)&#96; đổi mảng ngay tại chỗ, nên cũ và mới là cùng một object và React bỏ qua luôn lần render.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Chép những tầng bạn thay đổi</b> — &#96;[...items, x]&#96; cho mảng, &#96;{ ...user, name }&#96; cho object. Chỉ cần chép đúng đường bạn chạm tới, không cần chép cả cây.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Rồi màn hình đi theo dữ liệu</b> — Đó là toàn bộ bản hợp đồng: state là nguồn sự thật, và một giá trị mới là cách bạn nói rằng sự thật đã đổi.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — một phép cập nhật lồng nhau mà chỉ chép tầng trên cùng.</strong> &#96;setUser({ ...user, address: user.address })&#96; rồi &#96;user.address.city = &#39;X&#39;&#96; là sửa thẳng vào bản gốc: phép trải đã chép cái tham chiếu tới &#96;address&#96;, chứ không chép cái object. Nên tầng trên cùng là mới (React render lại) trong khi object lồng bên trong thì dùng chung — và mọi state khác đang giữ user cũ giờ cũng hiện thành phố mới, lộ ra dưới dạng &quot;sửa một dòng thì cả đám cùng đổi&quot;. Hãy chép mọi tầng trên đường bạn thay đổi: &#96;{ ...user, address: { ...user.address, city } }&#96;. Với những dáng sâu hơn, hãy làm phẳng state lại hoặc với tay tới Immer, thứ cho bạn viết như đang sửa tại chỗ mà vẫn sinh ra các bản chép.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/updating-objects-in-state" target="_blank" rel="noopener">
+  <span class="lc-ico">🧊</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Cập nhật object trong state</span><span class="lc-sub">Chép các dáng lồng nhau, và vì sao phép trải nông là không đủ.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/updating-arrays-in-state" target="_blank" rel="noopener">
+  <span class="lc-ico">📚</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Cập nhật mảng trong state</span><span class="lc-sub">Bảng liệt kê phương thức mảng nào sửa tại chỗ và nên dùng gì thay thế.</span></span>
+</a>
+
 </div>
 `,
     },
@@ -326,6 +430,23 @@ const count = items.length;              <span class="tok-comment">// always cor
 <div class="callout ok">
 <p><strong>Chapter 4 next:</strong> events and forms — where the setters from this chapter actually get called. You'll build controlled inputs, the pattern behind every real form, and see lifting state up in its natural habitat. After that, Progress Test 1 covers Chapters 1–4.</p>
 </div>
+<h3>Deciding where a piece of state belongs</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Can you compute it instead?</b> — A filtered list, a total, a &quot;form is valid&quot; flag. Derived values should be calculated during render, not stored — stored copies go stale.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Only one component uses it?</b> — Keep it there. State in the component that owns it is the cheapest thing to reason about and to delete later.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Two siblings need it?</b> — Lift it to their closest common parent and pass it down, with a setter for whoever changes it.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Half the app needs it?</b> — Context, or a store. But check first that it is not really server data — that belongs in a cache, not in component state.</div></div>
+</div>
+<div class="pitfall"><p><strong>Trap — copying a prop into state so you can edit it.</strong> &#96;const [name, setName] = useState(props.name)&#96; reads the prop once, on the first render, and then ignores it forever: when the parent passes a different user, the input still shows the old name, because &#96;useState&#96;&#39;s argument is an initial value, not a binding. It looks like a caching bug and it is a design one — there are now two sources of truth for the same fact. Either let the parent own the value and pass a change handler down, or, if you deliberately want an editable copy that resets per record, give the component a &#96;key&#96; so React remounts it when the record changes.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/choosing-the-state-structure" target="_blank" rel="noopener">
+  <span class="lc-ico">🗂️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Choosing the state structure</span><span class="lc-sub">Redundant state, contradictory state, and how to spot both.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/you-might-not-need-an-effect" target="_blank" rel="noopener">
+  <span class="lc-ico">🚫</span>
+  <span class="lc-body"><span class="lc-title">react.dev — You might not need an Effect</span><span class="lc-sub">Half the cases in this lesson end here: the value should be computed, not stored and synced.</span></span>
+</a>
+
 </div>
 
 <div class="ml-vi">
@@ -367,6 +488,23 @@ const count = items.length;              <span class="tok-comment">// luôn đú
 <div class="callout ok">
 <p><strong>Chương 4 tiếp theo:</strong> sự kiện và form — nơi các setter của chương này thật sự được gọi. Bạn sẽ dựng input có kiểm soát, khuôn mẫu đằng sau mọi form thật, và thấy nâng state lên trong môi trường tự nhiên của nó. Sau đó, Bài kiểm tra tiến độ 1 phủ Chương 1–4.</p>
 </div>
+<h3>Quyết định một mẩu state thuộc về đâu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Bạn tính ra nó được không?</b> — Một danh sách đã lọc, một con số tổng, một cờ &quot;form hợp lệ&quot;. Giá trị dẫn xuất nên được tính trong lúc render, đừng lưu lại — bản lưu sẽ cũ đi.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Chỉ một component dùng nó?</b> — Hãy để nó ở đó. State nằm trong component sở hữu nó là thứ rẻ nhất để suy luận và để xoá sau này.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Hai anh em cùng cần?</b> — Hãy nâng nó lên phần tử cha chung gần nhất rồi truyền xuống, kèm một setter cho bên nào thay đổi nó.</div></div>
+  <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nửa ứng dụng cần?</b> — Context, hoặc một store. Nhưng hãy kiểm trước xem nó có thật sự là dữ liệu máy chủ không — thứ đó thuộc về một bộ nhớ đệm, không thuộc về state của component.</div></div>
+</div>
+<div class="pitfall"><p><strong>Bẫy — chép một prop vào state để sửa được nó.</strong> &#96;const [name, setName] = useState(props.name)&#96; đọc cái prop đúng một lần, ở lần render đầu, rồi lờ nó đi mãi mãi: khi cha truyền xuống một người dùng khác, ô nhập vẫn hiện cái tên cũ, vì đối số của &#96;useState&#96; là một giá trị KHỞI TẠO chứ không phải một mối ràng buộc. Nó trông như lỗi bộ nhớ đệm mà thật ra là lỗi thiết kế — giờ có hai nguồn sự thật cho cùng một sự việc. Hoặc để cha sở hữu giá trị rồi truyền một handler thay đổi xuống, hoặc, nếu bạn cố tình muốn một bản chép sửa được và đặt lại theo từng bản ghi, hãy cho component một &#96;key&#96; để React dựng lại nó khi bản ghi đổi.</p></div>
+<a class="link-card dl" href="https://react.dev/learn/choosing-the-state-structure" target="_blank" rel="noopener">
+  <span class="lc-ico">🗂️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Chọn cấu trúc state</span><span class="lc-sub">State thừa, state mâu thuẫn, và cách nhận ra cả hai.</span></span>
+</a>
+<a class="link-card dl" href="https://react.dev/learn/you-might-not-need-an-effect" target="_blank" rel="noopener">
+  <span class="lc-ico">🚫</span>
+  <span class="lc-body"><span class="lc-title">react.dev — Có thể bạn không cần Effect</span><span class="lc-sub">Một nửa số ca trong bài này kết thúc ở đây: giá trị nên được tính ra, đừng lưu rồi đồng bộ.</span></span>
+</a>
+
 </div>
 `,
     },

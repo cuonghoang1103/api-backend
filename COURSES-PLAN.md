@@ -666,6 +666,53 @@ Còn hai bước phải chạy ở máy nhà — xem §6.
 
 ---
 
+### 25/08/2026 — Bản đồ video YouTube (6/15 khoá · 344 bài)
+
+Khoá `nodejs`, `nextjs`, `typescript`, `postgresql` đã có `content/course-videos/<slug>.mjs`
+từ trước. 15 khoá còn lại thì chưa — **804 bài lý thuyết không có video**. Đợt này làm
+được **6 khoá · 344 bài**, mỗi bài một video RIÊNG (không bài nào dùng lại video của bài khác):
+
+| Khoá | Bài có video | Video khác nhau |
+|---|---|---|
+| `observability-monitoring` | 57/57 | 57 |
+| `git` | 50/50 | 50 |
+| `linux-bash` | 57/57 | 57 |
+| `docker` | 63/63 | 63 |
+| `nginx` | 58/58 | 58 |
+| `deploy-vps` | 59/59 | 59 |
+
+**Còn 9 khoá · 460 bài:** `github-actions` 55 · `redis` 63 · `prisma-orm` 63 ·
+`authentication` 63 · `socket-io` 54 · `tailwind-css` 54 · `web-foundations` 54 ·
+`object-storage` 28 · `media-processing` 26.
+
+⛔ **Vì sao dừng ở 6 khoá: hết hạn mức WebSearch của phiên** (200/200 lượt). Mọi id đều
+lấy từ một lượt tìm kiếm SỐNG, không lấy từ trí nhớ — nên hết lượt tìm là hết cách làm
+tiếp mà vẫn giữ được độ chính xác. Phiên sau, hoặc nâng
+`CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION`, thì làm tiếp được ngay.
+
+⚠️ **`credit` để RỖNG là cố ý, và phải chạy `--fix-credits` trước khi seed.**
+Máy dựng khoá bị chặn ra `youtube.com` — đo thật: `curl` trả
+`CONNECT tunnel failed, response 403`, `WebFetch` trả `EGRESS_BLOCKED`, và chạy
+`verify-youtube-videos.mjs` trên chính `postgresql.mjs` (vốn đã tốt) báo **cả 44 link
+chết HTTP 403**. Tức là proxy chặn, không phải link mục. Hệ quả: không gọi được oEmbed
+⇒ **không đọc được tên kênh và không biết video có cho nhúng hay không**. Tiêu đề mong
+đợi ghi ở chú thích cuối mỗi dòng để đối chiếu; `--fix-credits` điền
+`Kênh — Tiêu đề` thật từ YouTube, và tiêu đề thật lệch hẳn chú thích nghĩa là id trỏ
+nhầm video.
+
+Hai thứ thêm vào để cái chưa xác minh không lọt lên trang học:
+
+- `scripts/course-video-seed.mjs` — `--apply` bị **TỪ CHỐI** khi còn `credit` rỗng, kiểm
+  trước khi mở kết nối Prisma nên lần chạy sai không để lại nửa vời trong DB. Bỏ chốt
+  bằng `--cho-phep-thieu-credit`. Đã thử thật với Prisma giả: chặn đúng 57/57 entry của
+  observability, và cho `postgresql.mjs` (credit đầy đủ) đi qua.
+- `scripts/course-video-audit.mjs` (mới) — bộ kiểm **NGOẠI TUYẾN**, hỏi những câu không
+  cần mạng: bài lý thuyết nào chưa có video · entry nào trỏ vào slug không tồn tại ·
+  entry nào gắn cho bài QUIZ · id nào dùng lại · id có đúng 11 ký tự · còn bao nhiêu
+  credit rỗng. Chạy trên 4 bản đồ CŨ: `nodejs` 94/94, `postgresql` 44/44, `nextjs`
+  101/101 sạch; `typescript` 68/68 **nhưng chỉ 57 video khác nhau** — 8 video bị dùng
+  lại, một cái tới 5 bài.
+
 ## 6. Việc chưa chạy được từ sandbox (áp cho MỌI khoá mới)
 
 Hai bước cuối của mỗi khoá cần môi trường mà sandbox không có — hãy chạy khi ở máy nhà:
@@ -681,6 +728,25 @@ docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
 node scripts/course-seed.mjs --file ./content/courses/git.mjs --dry
 node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
 ```
+
+### Video YouTube — CHẠY `--fix-credits` TRƯỚC KHI SEED
+
+```bash
+# 1. Xác minh + điền credit (bắt buộc; in ra link nào đã chết)
+for s in observability-monitoring git linux-bash docker nginx deploy-vps; do
+  node scripts/verify-youtube-videos.mjs --file ./content/course-videos/$s.mjs --fix-credits
+done
+
+# 2. Kiểm ngoại tuyến lại cho chắc (0 lỗi, 0 cảnh báo là xong)
+node scripts/course-video-audit.mjs --all
+
+# 3. Gắn vào DB (bị TỪ CHỐI nếu bước 1 chưa chạy)
+for s in observability-monitoring git linux-bash docker nginx deploy-vps; do
+  node scripts/course-video-seed.mjs --file ./content/course-videos/$s.mjs --apply
+done
+```
+
+Link nào báo `✗ ... DEAD` thì báo lại kèm slug bài — đổi id là một dòng.
 
 **Đang chờ chạy — mười khoá:**
 

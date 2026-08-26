@@ -9,22 +9,29 @@
   "macrostructure": "Split Studio (iterated)",
   "nav": "N9 edge-aligned avatar identity with the existing dock preserved",
   "footer": "Ft5 statement footer",
-  "fonts": ["Fraunces Variable", "Poppins", "JetBrains Mono"],
+  "fonts": [
+    "Fraunces Variable",
+    "Poppins",
+    "JetBrains Mono"
+  ],
   "palette": "Homepage-scoped OKLCH violet-black surfaces, violet accent and a small identity-gold ring",
-  "motion": "one entrance, one pointer tilt and one articulated SVG mascot cycle with a long invisible idle window; transform/opacity only",
+  "motion": "one entrance, one pointer tilt and one 24s narrative mascot cycle with a long window fully below the rail; transform/opacity only, plus one 0.75s dust sub-cycle phase-locked to the master",
   "performance": "static 3D capture; static CSS atmosphere; actual WebGPU assets load only after explicit entry",
   "preserve": [
     "all existing route destinations except the explicitly requested authenticated Continue destination",
     "real GET /api/v1/landing/stats data and null-hiding behavior",
     "PlaygroundGate modifier-click and warning-dialog behavior",
     "global navigation dock and ChatModal behavior",
-    "all non-homepage Navbar, reminder and AI assistant behavior"
+    "all non-homepage Navbar, reminder and AI assistant behavior",
+    "null-hiding stays the rule for every statistic - a number that cannot be counted is hidden, never shown as 0"
   ],
   "introduce": [
     "avatar-led CuongHoang identity with entitlement-aware Pro badge",
     "authenticated Continue route to /about",
-    "articulated hand-built pixel robot centred on one framed edge with a periodic football kick",
-    "About-like violet atmosphere without the About page's requestAnimationFrame canvas",
+    "a 2.5D shaded robot that rises from and descends into a hatch cut in the header rail, dribbling and kicking a ball between",
+    "all six countable landing statistics plus a counted-at provenance line",
+    "Ecosystem Index numbering (01/02/03) restored on the directory rails",
+    "About-like violet atmosphere without the About page requestAnimationFrame canvas",
     "reduced-motion and touch-safe static fallbacks"
   ]
 }

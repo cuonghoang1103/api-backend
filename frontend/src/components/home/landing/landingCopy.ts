@@ -170,6 +170,12 @@ export const LANDING_COPY = {
       exercises: 'graded exercises',
       examQuestions: 'exam questions',
       subjects: 'subjects & courses',
+      roadmapNodes: 'roadmap steps',
+      vocabWords: 'vocabulary entries',
+      hanziChars: 'hanzi & kanji taught',
+      // Ghi rõ số ở trên đến TỪ ĐÂU. Đây là điểm khác biệt thật của site so
+      // với những trang gõ cứng "8k+ câu hỏi": đếm được thì mới hiện.
+      countedAt: (when: string) => `Counted straight from the database · ${when}`,
     },
     deepDives: {
       title: 'Long reads worth finishing',
@@ -235,6 +241,10 @@ export const LANDING_COPY = {
       exercises: 'bài tập có chấm điểm',
       examQuestions: 'câu hỏi luyện thi',
       subjects: 'môn học & lộ trình',
+      roadmapNodes: 'bước trong lộ trình',
+      vocabWords: 'từ vựng ngoại ngữ',
+      hanziChars: 'chữ Hán & Kanji',
+      countedAt: (when: string) => `Đếm thẳng từ cơ sở dữ liệu · ${when}`,
     },
     deepDives: {
       title: 'Bài dài, đọc cho đáng',

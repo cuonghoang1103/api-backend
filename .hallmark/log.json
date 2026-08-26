@@ -5,16 +5,21 @@
     "genre": "atmospheric",
     "macrostructure": "Split Studio (iterated)",
     "tokens": "frontend/tokens.css",
-    "enrichment": "real 3D capture, CSS pointer tilt and a 2.5D shaded robot that enters and leaves through a hatch cut into the header rail",
-    "motionPrimitives": ["entrance", "pointer tilt", "narrative mascot cycle (rise · dribble · kick · turn · descend)"],
+    "enrichment": "real 3D capture, CSS pointer tilt, and one 2.5D robot playing TWO scenes on a hatch cut into the header rail — football, then sitting down to write code",
+    "motionPrimitives": [
+      "entrance",
+      "pointer tilt",
+      "narrative mascot cycle, two scenes (rise · dribble · kick · turn · descend / rise · sit · type · close · descend)"
+    ],
     "performanceGuardrails": [
       "no WebGL or 3D runtime on homepage",
       "no Lottie assistant payload on homepage",
       "no requestAnimationFrame canvas for the About-like atmosphere",
-      "mascot cycle is 24s: ~15.8s of action and ~8.2s fully below the rail, clipped out of paint",
-      "one nested 0.75s sub-cycle (foot dust) phase-locked to the 24s master; no other off-timeline animation",
+      "mascot cycle is 48s: ~16.6s scene one, ~24.5s scene two, ~6.9s fully below the rail and clipped out of paint",
+      "one rig for both scenes — no duplicated skeleton, no second set of animations running while hidden",
+      "sub-cycles all divide 48s exactly (0.3s key taps, 0.75s dust, 0.8s caret, 2.4s screen, 3s core) so they never drift",
       "tilt disabled on touch and reduced-motion devices",
-      "transform and opacity animation only"
+      "transform and opacity only, plus discrete visibility used to switch paint off, never on"
     ],
     "preservedFlows": [
       "landing stats API",
@@ -35,16 +40,24 @@
     "variety": 4
   },
   "iteration": {
-    "brief": "The mascot read as a flat sprite that vanished for no reason, and the page under-sold the platform's real breadth. Rebuild the mascot as a 2.5D scene with a narrative exit through a hatch in the rail; surface every real landing statistic instead of three; restore the Ecosystem Index numbering on the directory rails.",
+    "brief": "The mascot's face read straight at the viewer no matter which way it walked, and one scene was not enough. Redraw the head in three-quarter view so the turn actually turns the face; add a second scene where the robot climbs out with a laptop, sits on the rail and writes code.",
     "variationKnobs": [
-      "three-plane shaded shell with one global light direction",
-      "two-segment limbs (elbow and knee) instead of single-bone limbs",
-      "hatch in the rail as the mascot's entrance and exit",
-      "scaleX pinch-through-zero as a 2.5D turn",
+      "three-quarter head: nape block behind, visor pushed to the leading edge, far eye smaller than near eye",
+      "two scenes on one 48s timeline sharing a single rig",
+      "seated pose reusing the football leg rig (body drops 16, thigh -86°)",
+      "laptop with code lines that appear one at a time across two typing rounds",
+      "typing hands drawn into the laptop group so the lid cannot hide the key taps",
       "six real statistics plus a counted-at provenance line",
       "01/02/03 rail index restored"
     ],
-    "verifiedViewports": [320, 375, 414, 768, 1280, 1920],
-    "verifiedFrames": "28 paused samples of the 24s cycle rendered in both themes (headless Chromium, animation-delay sampling)"
+    "verifiedViewports": [
+      320,
+      375,
+      414,
+      768,
+      1280,
+      1920
+    ],
+    "verifiedFrames": "30 paused samples across the 48s cycle in both themes, plus close-ups of the typing pose; rendered in headless Chromium by animation-delay sampling, and re-run against the production-built CSS rather than the source file"
   }
 }

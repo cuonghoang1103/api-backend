@@ -15,7 +15,7 @@
     "JetBrains Mono"
   ],
   "palette": "Homepage-scoped OKLCH violet-black surfaces, violet accent and a small identity-gold ring",
-  "motion": "one entrance, one pointer tilt and one 24s narrative mascot cycle with a long window fully below the rail; transform/opacity only, plus one 0.75s dust sub-cycle phase-locked to the master",
+  "motion": "one entrance, one pointer tilt and one 48s two-scene mascot cycle with a long window fully below the rail; transform/opacity only, with every sub-cycle chosen to divide 48s exactly",
   "performance": "static 3D capture; static CSS atmosphere; actual WebGPU assets load only after explicit entry",
   "preserve": [
     "all existing route destinations except the explicitly requested authenticated Continue destination",
@@ -28,7 +28,9 @@
   "introduce": [
     "avatar-led CuongHoang identity with entitlement-aware Pro badge",
     "authenticated Continue route to /about",
-    "a 2.5D shaded robot that rises from and descends into a hatch cut in the header rail, dribbling and kicking a ball between",
+    "a 2.5D three-quarter robot that rises from and descends into a hatch cut in the header rail",
+    "scene one: dribbling and kicking a ball along the rail",
+    "scene two: climbing out with a laptop, sitting down and writing code, lines appearing as it types",
     "all six countable landing statistics plus a counted-at provenance line",
     "Ecosystem Index numbering (01/02/03) restored on the directory rails",
     "About-like violet atmosphere without the About page requestAnimationFrame canvas",

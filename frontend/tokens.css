@@ -1,5 +1,5 @@
-/* Hallmark · genre: editorial · macrostructure: Split Studio · theme: custom ink-and-amber · enrichment: real 3D capture + CSS tilt · nav: N9 · footer: Ft5 · contrast: pass (40–41) · slop: pass (42–45) · honest: pass (46) · chrome: pass (47) · tokens: pass (48) · responsive: pass (49) · icons: pass (30) · mobile: pass (34, 49, 50–57) */
-/* Hallmark · pre-emit critique: P5 H5 E4 S5 R5 V5 */
+/* Hallmark · genre: atmospheric · macrostructure: Split Studio (iterated) · theme: custom About-night · enrichment: real 3D capture + centred articulated Tier-B pixel mascot · nav: N9 entitlement-aware avatar identity · footer: Ft5 · knobs: normal/Pro logo / single header rail / periodic run-kick-disappear · contrast: pass (40–41) · slop: pass (42–45) · honest: pass (46) · chrome: pass (47) · tokens: pass (48) · responsive: pass (49) · icons: pass (30) · mobile: pass (34, 49, 50–57) */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R4 V4 */
 
 .landing-root {
   --color-paper: var(--bg-primary);
@@ -13,11 +13,11 @@
   --color-accent: var(--accent-color);
   --color-accent-ink: var(--bg-primary);
   --color-focus: var(--accent-color);
-  --color-proof-paper: oklch(18% 0.018 265);
-  --color-proof-ink: oklch(97% 0.006 82);
+  --color-proof-paper: oklch(16% 0.03 300);
+  --color-proof-ink: oklch(97% 0.008 295);
 
   --font-display: var(--font-fraunces), "Fraunces Variable", Georgia, serif;
-  --font-body: var(--font-inter), Inter, system-ui, sans-serif;
+  --font-body: var(--font-poppins), Poppins, system-ui, sans-serif;
   --font-outlier: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
 
   --space-3xs: 0.125rem;

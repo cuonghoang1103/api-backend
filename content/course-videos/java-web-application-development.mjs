@@ -23,7 +23,7 @@ export default {
     'prj301-cau-truc-deploy': { yt: 'wty6OROO__8', credit: 'Telusko — #5 Servlet and JSP Tutorial | Create Servlet and web.xml Config' },
 
     /* ── Chương 2 — Servlet chuyên sâu ──────────────────────────────────── */
-    'prj301-servlet-sau': { yt: 'kYzyXWmh37A', credit: 'Telusko — #8 Servlet and JSP Tutorial | RequestDispatcher and sendRedirect Theory' },
+    'prj301-servlet-sau': { yt: 'kYzyXWmh37A', credit: 'Telusko — #8 Servlet and JSP Tutorial | RequestDispatcher and  sendRedirect Theory' },
     'prj301-request-response': { yt: 'GbF_nBLHP6A', credit: 'Telusko — HttpServletRequest and HttpServletResponse Theory' },
     'prj301-init-context-validation': { yt: 'uKoBbSp0J3Y', credit: 'Telusko — ServletConfig and ServletContext' },
 
@@ -36,8 +36,8 @@ export default {
     'prj301-cookie-session': { yt: '5tLGwdyPGRY', credit: 'Telusko — #10 Servlet and JSP Tutorial | HttpSession | Cookie' },
 
     /* ── Chương 5 — JDBC & DAO ──────────────────────────────────────────── */
-    'prj301-jdbc-dao': { yt: 'y_YxwyYRJek', credit: 'Telusko — 16.1 JDBC | Java Database Connectivity Theory Tutorial' },
-    'prj301-jdbc-driver': { yt: 'xiVmv75Dug0', credit: 'Telusko — Java Database Connectivity JDBC Practical Tutorial' },
+    'prj301-jdbc-dao': { yt: 'y_YxwyYRJek', credit: 'Telusko — 16.1  JDBC | Java Database Connectivity Theory Tutorial' },
+    'prj301-jdbc-driver': { yt: 'xiVmv75Dug0', credit: 'Telusko — Java Database Connectivity  JDBC  Practical Tutorial' },
     'prj301-jdbc-crud': { yt: '7v2OnUti2eM', credit: 'Telusko — Java Database Connectivity | JDBC' },
 
     /* ── Chương 6 — Mô hình MVC ─────────────────────────────────────────── */

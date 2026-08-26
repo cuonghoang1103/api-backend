@@ -45,12 +45,41 @@ const esc = (s) => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 
-/* 1. Fetch the official logo and extract its path data. Simple Icons serves a
-      24×24 viewBox single-path SVG, which is exactly what we want to inline. */
-const iconUrl = `https://cdn.simpleicons.org/${ICON}/${COLOR}`;
-const res = await fetch(iconUrl);
-if (!res.ok) { console.error(`✗ không lấy được logo "${ICON}" (${res.status}) từ ${iconUrl}`); process.exit(1); }
-const iconSvg = await res.text();
+/* 1. Lấy logo và rút path. Simple Icons phát SVG viewBox 24×24, đúng thứ cần
+      nhúng thẳng vào ảnh.
+
+      ĐĨA TRƯỚC, MẠNG SAU (26/08/2026). Trước đó bước này gọi thẳng
+      cdn.simpleicons.org và `exit 1` khi CDN không trả 200 — nghĩa là cả mẻ
+      ảnh bìa phụ thuộc một dịch vụ ngoài, ngay lúc chạy, bên trong container.
+      Nó đã hỏng câm hai lần liền: script chạy đủ, deploy xanh, smoke-test
+      sạch, mà redis.png vẫn 404 trên R2. Nên 19 logo đang dùng được chép sẵn
+      vào scripts/icons/ (88 KB cho cả bộ) và đọc từ đĩa trước; CDN chỉ
+      còn là đường lùi cho logo chưa chép. */
+// Giải theo vị trí FILE này, không theo cwd — script chạy bằng `docker exec`
+// nên cwd không chắc là gốc repo.
+//
+// ⚠️ LOGO PHẢI NẰM TRONG scripts/, KHÔNG PHẢI assets/. Tầng `runner` của
+// Dockerfile.backend chỉ chép những đường dẫn ĐƯỢC GỌI TÊN — node_modules,
+// dist, src, prisma, package.json, scripts, content, data. Đặt ở assets/ thì
+// file có trong builder mà KHÔNG có trong ảnh chạy, nên bản vá đọc-từ-đĩa vẫn
+// rơi về CDN và chết y như cũ. Chính Dockerfile đã có chú thích cảnh báo bẫy
+// này, sau khi content/ và data/ từng dính.
+const iconLocal = new URL(`./icons/${ICON}.svg`, import.meta.url);
+let iconSvg = null;
+try {
+  iconSvg = await fs.readFile(iconLocal, 'utf8');
+  console.log(`· logo ${ICON}: đọc từ đĩa (scripts/icons/${ICON}.svg)`);
+} catch {
+  const iconUrl = `https://cdn.simpleicons.org/${ICON}/${COLOR}`;
+  console.log(`· logo ${ICON}: chưa chép vào scripts/icons/, thử CDN…`);
+  const res = await fetch(iconUrl).catch((e) => ({ ok: false, status: 0, err: e.message }));
+  if (!res.ok) {
+    console.error(`✗ không lấy được logo "${ICON}" (${res.status || res.err}) từ ${iconUrl}`);
+    console.error(`  Chép tay cho khỏi phụ thuộc mạng: scripts/icons/${ICON}.svg`);
+    process.exit(1);
+  }
+  iconSvg = await res.text();
+}
 const paths = [...iconSvg.matchAll(/<path\b[^>]*\bd="([^"]+)"/g)].map((m) => m[1]);
 if (!paths.length) { console.error('✗ SVG logo không có <path d="…">'); process.exit(1); }
 console.log(`· logo ${ICON}: ${paths.length} path, ${iconSvg.length} bytes`);

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { cache } from 'react';
-import { notFound } from 'next/navigation';
 import { getServerApiBaseUrl } from '@/lib/server-api';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import type { PublicTechTrendArticle, RelatedTechTrendArticle } from '@/lib/api';
@@ -90,10 +89,11 @@ function formatDate(iso: string | null): string {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const article = await getArticle(params.slug);
-  // Slug không có trong bảng tech-trends ⇒ 404 THẬT. Trả object title ở đây khiến
-  // Next chốt 200 trước khi thân trang gọi notFound() → soft-404 (200 mỏng, index
-  // rác). Gọi notFound() ngay trong generateMetadata để Next đặt đúng status 404.
-  if (!article) notFound();
+  // Slug không có trong bảng tech-trends ⇒ trang MỎNG. KHÔNG throw notFound()
+  // (Next 14 + force-dynamic + root loading.tsx đã stream → notFound() vẫn ra 200).
+  // Phát noindex ngay trong metadata → Google bỏ trang mỏng/trùng. Bài thật vẫn
+  // index + self-canonical như cũ.
+  if (!article) return { title: 'Không tìm thấy bài viết | CuongThai', robots: { index: false, follow: false } };
 
   // The root layout declares `template: '%s | CuongThai'`, so appending
   // "| CuongThai" here too produced "… | Tech Trends | CuongThai | CuongThai"
@@ -130,7 +130,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function TechTrendArticlePage({ params }: PageProps) {
   const article = await getArticle(params.slug);
-  if (!article) notFound();
+  // Không throw notFound() (ra 200 vì app đã stream) — render trang "không tìm
+  // thấy" nhẹ; metadata ở trên đã gắn noindex nên Google bỏ trang này.
+  if (!article) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center" style={{ background: '#0a0a0f' }}>
+        <p className="text-2xl font-bold text-white">Không tìm thấy bài viết</p>
+        <p className="max-w-md text-text-muted">Bài viết này không tồn tại ở đây (có thể đã chuyển sang mục khác).</p>
+        <Link href="/tech-trends" className="mt-2 rounded-lg border border-darkborder px-4 py-2 text-sm text-neon-violet transition-colors hover:bg-white/5">
+          Xem tất cả bài viết
+        </Link>
+      </div>
+    );
+  }
 
   const related = await getRelated(article.id);
   const cat = CATEGORY_LABEL[article.category] ?? { emoji: '🏷️', label: `#${article.category}` };

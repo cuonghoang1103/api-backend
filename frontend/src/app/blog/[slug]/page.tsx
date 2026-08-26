@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { cache } from 'react';
-import { notFound } from 'next/navigation';
 import { Calendar, Eye, Download, Clock, Package } from 'lucide-react';
 import { getServerApiBaseUrl } from '@/lib/server-api';
 import type { Post } from '@/types';
@@ -117,11 +116,12 @@ function readingMinutes(content?: string): number {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const post = await getPost(params.slug);
-  // Slug không có trong bảng posts ⇒ 404 THẬT, không phải trang "Bài viết" rỗng.
-  // Trả về object title ở đây khiến Next chốt 200 TRƯỚC khi thân trang gọi
-  // notFound() → thành soft-404 (200 mỏng, Google index rác + trùng path chéo).
-  // Gọi notFound() ngay trong generateMetadata để Next đặt đúng status 404.
-  if (!post) notFound();
+  // Slug không có trong bảng posts ⇒ trang MỎNG (bài thật chỉ sống ở posts HOẶC
+  // tech_trend_articles, không cả hai). KHÔNG throw notFound(): Next 14 +
+  // force-dynamic + root app/loading.tsx đã stream nên notFound() vẫn trả 200.
+  // Phát noindex NGAY trong metadata → Google BỎ trang mỏng/trùng, hết chia đôi
+  // tín hiệu /blog vs /tech-trends. Bài thật vẫn index + self-canonical như cũ.
+  if (!post) return { title: 'Không tìm thấy bài viết | CuongThai', robots: { index: false, follow: false } };
 
   const description = toText(post.excerpt || post.content) || 'Bài viết trên CuongThai.';
   const image = post.thumbnailUrl || undefined;
@@ -159,7 +159,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogPostPage({ params }: PageProps) {
   const post = await getPost(params.slug);
-  if (!post) notFound();
+  // Không throw notFound() (sẽ ra 200 vì app đã stream) — render thẳng trang
+  // "không tìm thấy" nhẹ; metadata ở trên đã gắn noindex nên Google bỏ trang này.
+  if (!post) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center" style={{ background: '#0a0a0f' }}>
+        <p className="text-2xl font-bold text-white">Không tìm thấy bài viết</p>
+        <p className="max-w-md text-text-muted">Bài viết này không tồn tại ở đây (có thể đã chuyển sang mục khác).</p>
+        <Link href="/tech-trends" className="mt-2 rounded-lg border border-darkborder px-4 py-2 text-sm text-neon-violet transition-colors hover:bg-white/5">
+          Xem tất cả bài viết
+        </Link>
+      </div>
+    );
+  }
 
   const url = `${SITE_URL}/blog/${params.slug}`;
   // `cache()` nên lời gọi này dùng chung kết quả với generateMetadata — một

@@ -71,29 +71,29 @@ export default {
     "postgresql-10-2-chien-luoc-join": { yt: "pJWCwfv983Q", credit: "The Magic of SQL — How do nested loop, hash, and merge joins work? Databases for Developers Performance #7" },
     "postgresql-10-3-thong-ke-uoc-luong": { yt: "P5iZri9s0WQ", credit: "Andrea Ross — Explaining the Postgres Query Optimizer" },
     "postgresql-10-4-buffers-tinh-chinh": { yt: "pFSmxnh-K0Y", credit: "EDB — Postgres Pulse: Using EXPLAIN ANALYZE for Planning and Optimizing Query Performance | PostgreSQL" },
-    "postgresql-11-1-giao-dich": { yt: "DvJq4L41ru0", credit: "" },   // How to implement Transactions (COMMIT, ROLLBACK, SavePoint) in PostgreSQL
-    "postgresql-11-2-mvcc": { yt: "AveRgUrC7FM", credit: "" },   // Postgres System Columns Explained (ctid, xmin, xmax)
-    "postgresql-11-3-muc-co-lap": { yt: "4EajrPgJAk0", credit: "" },   // [Backend #9] Understand isolation levels & read phenomena in MySQL & PostgreSQL via examples
-    "postgresql-11-4-khoa-deadlock": { yt: "URwmzTeuHdk", credit: "" },   // All Postgres Locks Explained | A Deep Dive
-    "postgresql-12-1-ham": { yt: "j1iGmLXoFfY", credit: "" },   // HOW TO CREATE PostgreSQL TRIGGERS | FUNCTIONS | Step by Step GUIDE
-    "postgresql-12-2-trigger": { yt: "4FFQcOD2bT8", credit: "" },   // How To Create Audit Triggers In PostgreSQL || Trigger Functions In PostgreSQL
-    "postgresql-12-3-view": { yt: "H5sBqE1pwPU", credit: "" },   // View in POSTGRESQL | Materialized View in POSTGRESQL
-    "postgresql-12-4-materialized-view": { yt: "yHppzfjqm1s", credit: "" },   // PostgreSQL Materialized Views Explained | Boost Query Performance & Optimize Large Datasets
-    "postgresql-13-1-jsonb": { yt: "aYqZXa2byrI", credit: "" },   // JSONB Tricks: Operators, Indexes, And When To (NOT) Use It
-    "postgresql-13-2-gin-jsonb": { yt: "EwFjETYge9I", credit: "" },   // Faster queries with index on JSONB columns in Postgres
-    "postgresql-13-3-full-text-search": { yt: "Ye9b_ujTF5Y", credit: "" },   // Postgres Is All You Need for Full Text Search (Seriously)
-    "postgresql-13-4-trigram": { yt: "JtXHTQUKPLM", credit: "" },   // 5mins of Postgres E6: Optimizing Postgres Text Search with Trigrams and GiST indexes
-    "postgresql-14-1-gia-ket-noi": { yt: "UkFEbiNXBrg", credit: "" },   // Webinar: Postgres Connection Pooling
-    "postgresql-14-2-pool-pgbouncer": { yt: "oPrEEHnB1qs", credit: "" },   // How to calculate max_connections for PostgreSQL and default_pool_size for pgbouncer?
-    "postgresql-14-3-vacuum-bloat": { yt: "vtjjaEVPAb8", credit: "" },   // Webinar: How to tune Postgres autovacuum to improve performance and reduce bloat
-    "postgresql-14-4-giam-sat": { yt: "kjE4jP59oJ4", credit: "" },   // Postgres In Production | Deep Dive into pg_stat_statements (Part 5)
-    "postgresql-15-1-pg-dump": { yt: "0NUV49elsX8", credit: "" },   // Backup and Restore PostgreSQL Database: pg_dump and pg_restore Explained
-    "postgresql-15-2-wal-pitr": { yt: "WZps_MYYvV8", credit: "" },   // Postgres Continuous Archiving and Point in Time Recovery
-    "postgresql-15-3-nhan-ban": { yt: "Yy0GJjRQcRQ", credit: "" },   // PostgreSQL Streaming Replication Tutorial
-    "postgresql-15-4-phan-manh": { yt: "dKJyMj_P-XA", credit: "" },   // PostgreSQL Partitioning: Slicing and Dicing for Performance and Easier Maintenance | POSETTE 2024
-    "postgresql-16-1-prisma-migration": { yt: "PX881bVAPxM", credit: "" },   // Prisma essentials: from development to production (Prisma Migrate workflow)
-    "postgresql-16-2-luoc-do-that": { yt: "jzn-Q0n-8_w", credit: "" },   // PGConf NYC 2021 - Advanced Postgres Schema Design by Sehrope Sarkuni
-    "postgresql-16-3-checklist": { yt: "-1aO6UznfI0", credit: "" },   // How to perform Postgres schema changes in production with zero downtime
-    "postgresql-16-4-capstone": { yt: "XpEevNnD0hc", credit: "" },   // PostgreSQL Performance Tuning Demo - Live Troubleshooting
+    "postgresql-11-1-giao-dich": { yt: "DvJq4L41ru0", credit: "Software Nuggets — How to implement Transactions (COMMIT, ROLLBACK, SavePoint) in PostgreSQL." },   // How to implement Transactions (COMMIT, ROLLBACK, SavePoint) in PostgreSQL
+    "postgresql-11-2-mvcc": { yt: "AveRgUrC7FM", credit: "Hussein Nasser — Postgres System Columns Explained (ctid, xmin,xmax)" },   // Postgres System Columns Explained (ctid, xmin, xmax)
+    "postgresql-11-3-muc-co-lap": { yt: "4EajrPgJAk0", credit: "TECH SCHOOL — [Backend #9] Understand isolation levels & read phenomena in MySQL & PostgreSQL via examples" },   // [Backend #9] Understand isolation levels & read phenomena in MySQL & PostgreSQL via examples
+    "postgresql-11-4-khoa-deadlock": { yt: "URwmzTeuHdk", credit: "Hussein Nasser — All Postgres Locks Explained | A Deep Dive" },   // All Postgres Locks Explained | A Deep Dive
+    "postgresql-12-1-ham": { yt: "j1iGmLXoFfY", credit: "Cypcode — HOW TO CREATE PostgreSQL TRIGGERS | FUNCTIONS | Step by Step GUIDE [SQL Example]" },   // HOW TO CREATE PostgreSQL TRIGGERS | FUNCTIONS | Step by Step GUIDE
+    "postgresql-12-2-trigger": { yt: "4FFQcOD2bT8", credit: "Knowledge 360 — How To Create Audit Triggers In PostgreSQL || Trigger Functions In PostgreSQL || Part 1 Video" },   // How To Create Audit Triggers In PostgreSQL || Trigger Functions In PostgreSQL
+    "postgresql-12-3-view": { yt: "H5sBqE1pwPU", credit: "Programming Connoisseur — View in POSTGRESQL | Materialized View in POSTGRESQL | Refresh Materialized view | SQL Views" },   // View in POSTGRESQL | Materialized View in POSTGRESQL
+    "postgresql-12-4-materialized-view": { yt: "yHppzfjqm1s", credit: "Dev Portal — PostgreSQL Materialized Views Explained | Boost Query Performance & Optimize Large Datasets" },   // PostgreSQL Materialized Views Explained | Boost Query Performance & Optimize Large Datasets
+    "postgresql-13-1-jsonb": { yt: "aYqZXa2byrI", credit: "San Francisco Bay Area PostgreSQL Users Group — JSONB Tricks: Operators, Indexes, And When To (NOT) Use It" },   // JSONB Tricks: Operators, Indexes, And When To (NOT) Use It
+    "postgresql-13-2-gin-jsonb": { yt: "EwFjETYge9I", credit: "Supabase — Faster queries with index on JSONB columns in Postgres" },   // Faster queries with index on JSONB columns in Postgres
+    "postgresql-13-3-full-text-search": { yt: "Ye9b_ujTF5Y", credit: "Andrey Fadeev — Postgres Is All You Need for Full Text Search (Seriously)" },   // Postgres Is All You Need for Full Text Search (Seriously)
+    "postgresql-13-4-trigram": { yt: "JtXHTQUKPLM", credit: "pganalyze — 5mins of Postgres E6: Optimizing Postgres Text Search with Trigrams and GiST indexes" },   // 5mins of Postgres E6: Optimizing Postgres Text Search with Trigrams and GiST indexes
+    "postgresql-14-1-gia-ket-noi": { yt: "UkFEbiNXBrg", credit: "EDB — Webinar: Postgres Connection Pooling" },   // Webinar: Postgres Connection Pooling
+    "postgresql-14-2-pool-pgbouncer": { yt: "oPrEEHnB1qs", credit: "Roel Van de Paar — How to calculate max_connections for PostgreSQL and default_pool_size for pgbouncer?" },   // How to calculate max_connections for PostgreSQL and default_pool_size for pgbouncer?
+    "postgresql-14-3-vacuum-bloat": { yt: "vtjjaEVPAb8", credit: "pganalyze — Webinar recording: How to tune Postgres autovacuum to improve performance and reduce bloat" },   // Webinar: How to tune Postgres autovacuum to improve performance and reduce bloat
+    "postgresql-14-4-giam-sat": { yt: "kjE4jP59oJ4", credit: "pganalyze — Postgres In Production | Special Series | Deep Dive into pg_stat_statements (Part 5)" },   // Postgres In Production | Deep Dive into pg_stat_statements (Part 5)
+    "postgresql-15-1-pg-dump": { yt: "0NUV49elsX8", credit: "InterviewBuddies — Backup and Restore PostgreSQL Database: pg_dump and pg_restore Explained" },   // Backup and Restore PostgreSQL Database: pg_dump and pg_restore Explained
+    "postgresql-15-2-wal-pitr": { yt: "WZps_MYYvV8", credit: "Zariga Tongy — Postgres Continuous Archiving and Point in Time Recovery PITR" },   // Postgres Continuous Archiving and Point in Time Recovery
+    "postgresql-15-3-nhan-ban": { yt: "Yy0GJjRQcRQ", credit: "Code with Lucian — PostgreSQL Streaming Replication Tutorial" },   // PostgreSQL Streaming Replication Tutorial
+    "postgresql-15-4-phan-manh": { yt: "dKJyMj_P-XA", credit: "Microsoft Developer — PostgreSQL Partitioning: Slicing and Dicing for Performance and Easier Maintenance | POSETTE 2024" },   // PostgreSQL Partitioning: Slicing and Dicing for Performance and Easier Maintenance | POSETTE 2024
+    "postgresql-16-1-prisma-migration": { yt: "PX881bVAPxM", credit: "Neon Postgres — Prisma essentials: from development to production (Prisma Migrate workflow)" },   // Prisma essentials: from development to production (Prisma Migrate workflow)
+    "postgresql-16-2-luoc-do-that": { yt: "jzn-Q0n-8_w", credit: "Confreaks — PGConf NYC 2021 - Advanced Postgres Schema Design... by Sehrope Sarkuni" },   // PGConf NYC 2021 - Advanced Postgres Schema Design by Sehrope Sarkuni
+    "postgresql-16-3-checklist": { yt: "-1aO6UznfI0", credit: "Xata — How to perform Postgres schema changes in production with zero downtime" },   // How to perform Postgres schema changes in production with zero downtime
+    "postgresql-16-4-capstone": { yt: "XpEevNnD0hc", credit: "PLTech Consulting — PostgreSQL Performance Tuning Demo - Live Troubleshooting" },   // PostgreSQL Performance Tuning Demo - Live Troubleshooting
   },
 };

@@ -125,8 +125,21 @@
 .tocActive .tocN, .tocActive .tocT { color: var(--accent) !important; }
 .tocActive { box-shadow: inset 2px 0 0 var(--accent); }
 
-.stage { flex: 1; min-width: 0; background: var(--paper); }
-.frame { display: block; width: 100%; height: 100%; border: 0; background: var(--paper); }
+/* Khung đọc canh GIỮA, bề rộng cố định — quyết định bởi CSS trình đọc (KHÔNG
+   phụ thuộc CSS bên trong sách hay JS inject). iframe là một "trang" ~960px đặt
+   giữa sân, có bóng nhẹ như tờ giấy → luôn vừa khung, ở giữa, hết dính trái. */
+.stage {
+  flex: 1; min-width: 0;
+  background: var(--paper);
+  display: flex; justify-content: center;
+}
+.frame {
+  display: block;
+  width: 100%; max-width: 960px; height: 100%;
+  border: 0; background: var(--paper);
+  box-shadow: 0 0 60px -30px rgba(0, 0, 0, 0.5);
+}
+@media (max-width: 899px) { .frame { max-width: none; box-shadow: none; } }
 
 .scrim { display: none; }
 

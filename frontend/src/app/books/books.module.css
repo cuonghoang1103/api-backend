@@ -282,3 +282,134 @@
   color: var(--ink-faint);
   font-size: 0.86rem;
 }
+
+/* ─────────────── Nâng cấp: kệ sách 3D + danh mục + animation ─────────────── */
+
+/* Reveal-on-scroll: mờ + trượt lên khi vào khung. IntersectionObserver gắn
+   .revealed. Ai bật giảm chuyển động thì hiện luôn, không hoạt hoạ. */
+/* AN TOÀN: chỉ ẩn khi JS đã bật hoạt hoạ (.animReady do LibraryClient thêm khi
+   mount). No-JS / hydration lỗi → mọi thứ HIỆN, không bao giờ trắng trang. */
+.reveal { transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.animReady .reveal { opacity: 0; transform: translateY(18px); }
+.animReady .revealed { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .animReady .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* Thanh danh mục dính — nhảy tới từng kệ, tô kệ đang xem. */
+.catBar {
+  position: sticky; top: 0; z-index: 20;
+  margin: 8px 0 34px;
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  backdrop-filter: saturate(140%) blur(10px);
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+}
+.catInner {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+  padding: 11px 26px;
+}
+.catInner::-webkit-scrollbar { display: none; }
+.catChip {
+  flex: none;
+  padding: 7px 14px; border-radius: 999px;
+  border: 1px solid var(--rule); background: var(--leaf);
+  color: var(--ink-soft); text-decoration: none;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.82rem; font-weight: 600; white-space: nowrap;
+  transition: color 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+}
+.catChip:hover { color: var(--ink); border-color: var(--rule-firm); }
+.catActive {
+  color: #fff; background: var(--ink); border-color: var(--ink);
+}
+:global(:root:not([data-theme="light"])) .catActive,
+:global(:root[data-theme="dark"]) .catActive { color: var(--paper); }
+
+/* Khu "Start here" — reading room. */
+.reading { margin: 6px 0 44px; }
+.readingHead { margin-bottom: 26px; }
+.readingTitle { margin: 0; font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -0.02em; font-weight: 700; }
+.readingSub { margin: 4px 0 0; color: var(--ink-soft); font-size: 1rem; }
+
+/* Kệ: hàng sách + tấm ván gỗ (plank) tạo cảm giác kệ thật. */
+.shelf { position: relative; }
+.shelfRow {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 22px 26px; align-items: end;
+  padding-bottom: 14px;
+}
+.reading .shelfRow { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.shelfPlank {
+  height: 12px; border-radius: 3px;
+  background: linear-gradient(var(--rule-firm), var(--leaf-2));
+  box-shadow: 0 14px 26px -18px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  margin-bottom: 36px;
+}
+
+/* Sách 3D: bìa nghiêng nhẹ khi hover như rút khỏi kệ; gáy màu bên trái. */
+.book3d { display: block; text-decoration: none; color: inherit; perspective: 1100px; }
+.book3dInner {
+  position: relative;
+  transform: rotateY(0deg);
+  transition: transform 0.42s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.42s ease;
+  will-change: transform;
+}
+.book3d:hover .book3dInner,
+.book3d:focus-visible .book3dInner {
+  transform: translateY(-9px) rotateY(-11deg) scale(1.015);
+}
+.book3d:focus-visible { outline: none; }
+.book3d:focus-visible .cover { outline: 2px solid var(--c); outline-offset: 3px; }
+
+.cover {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; gap: 14px;
+  min-height: 292px;
+  padding: 20px 20px 18px 32px;
+  border-radius: 2px 10px 10px 2px;
+  background: linear-gradient(155deg, color-mix(in srgb, var(--c) 16%, var(--leaf)) 0%, var(--leaf) 60%);
+  border: 1px solid var(--rule);
+  box-shadow: -10px 14px 30px -16px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: box-shadow 0.42s ease;
+}
+.book3d:hover .cover,
+.book3d:focus-visible .cover {
+  box-shadow: -18px 24px 46px -18px rgba(0, 0, 0, 0.62), 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+.book3dBig .cover { min-height: 336px; }
+
+.spine {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 16px; z-index: 2;
+  background: linear-gradient(var(--c), color-mix(in srgb, var(--c) 55%, #000));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset -1px 0 2px rgba(0, 0, 0, 0.25);
+}
+.spineVol {
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.62rem; font-weight: 600; color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.1em;
+}
+.spineTitle { display: none; }
+
+.coverTop { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.coverVol {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.72rem; font-weight: 600; color: var(--c); letter-spacing: 0.06em;
+}
+.coverIcon { color: var(--c); }
+.coverIcon svg { width: 34px; height: 34px; }
+.coverTitle {
+  margin: auto 0 0;
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.12rem; font-weight: 700; line-height: 1.24; letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.book3dBig .coverTitle { font-size: 1.24rem; }
+.coverMeta {
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.72rem; color: var(--ink-faint); letter-spacing: 0.03em;
+  border-top: 1px solid var(--rule); padding-top: 10px; font-variant-numeric: tabular-nums;
+}

@@ -36,10 +36,17 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
         html { scroll-behavior: smooth; }
         .cv-back { display: none !important; }
         .chap-open { scroll-margin-top: 24px; }
-        /* Cột đọc .col vốn canh trái trong .page (1080px) mà KHÔNG có margin-note
-           bên phải (đã kiểm 25/25) → thừa nửa phải. Canh giữa + nới nhẹ cho cân,
-           dễ đọc, hết cảnh "thụt một bên". */
-        .col { margin-left: auto !important; margin-right: auto !important; max-width: 74ch !important; }
+        /* Canh giữa + nới rộng cột đọc. Sách vốn để cột .col hẹp (74ch) canh trái
+           trong .page 1080px mà KHÔNG có margin-note (đã kiểm 25/25) → nhìn nhỏ,
+           thừa hai bên. Bỏ giới hạn .page, cho .col rộng ~92ch và luôn canh GIỮA
+           khung → dùng hết khung hình, dễ đọc, hết cảnh lệch trái. */
+        .page, .fm, .chap { max-width: none !important; }
+        .col {
+          max-width: min(92ch, calc(100% - 72px)) !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
+          width: auto !important;
+        }
       `;
       doc.head.appendChild(st);
 

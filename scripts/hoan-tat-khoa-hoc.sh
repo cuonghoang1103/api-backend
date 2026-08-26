@@ -88,13 +88,34 @@ console.log(`  Tổng gỡ: ${tong} link chết`);
 NODE
 
 # ── 3. Kiểm ngoại tuyến + commit ─────────────────────────────────────────────
+#
+# ⛔ PHẢI COMMIT MỌI THỨ CẦN LÊN PRODUCTION, KHÔNG CHỈ content/course-videos.
+# 26/08: bước 5 chết vì MODULE_NOT_FOUND /app/scripts/course-cover-upload.mjs,
+# và dấu vết thật nằm ở dòng "production đang chạy commit 46608d7e" — ĐÚNG BẰNG
+# commit của lần deploy trước, tức là lần deploy đó KHÔNG mang gì mới lên cả.
+# Nguyên nhân: `git checkout origin/<nhánh> -- scripts` chỉ đặt file vào CÂY LÀM
+# VIỆC, chưa commit; mà deploy-nha.sh chỉ đẩy thứ ĐÃ COMMIT (`git archive HEAD`)
+# — đó là cả lý do file đó tồn tại. Script mới nằm trên đĩa mà không vào image.
+# Bản cũ chỉ `git add content/course-videos` nên bỏ sót đúng chỗ đó.
 b "3/5 · Kiểm bản đồ rồi commit"
 node scripts/course-video-audit.mjs --all || true
-if [ -n "$(git status --porcelain content/course-videos)" ]; then
-  git add content/course-videos
-  git commit -q -m "videos: điền credit thật từ YouTube, gỡ link chết" && ok "đã commit"
+
+# Commit MỌI đường dẫn mà bước 4/5 cần có trong image.
+CAN_COMMIT="content/course-videos scripts"
+if [ -n "$(git status --porcelain -- $CAN_COMMIT)" ]; then
+  git add -- $CAN_COMMIT
+  git commit -q -m "courses: cập nhật bản đồ video + script ảnh bìa" && ok "đã commit $(git rev-parse --short HEAD)"
 else
   ok "không có gì đổi — bỏ qua commit"
+fi
+
+# Chốt cuối: còn gì chưa commit trong hai thư mục đó là deploy sẽ hụt.
+CON_BAN="$(git status --porcelain -- $CAN_COMMIT)"
+if [ -n "$CON_BAN" ]; then
+  no "VẪN còn thay đổi chưa commit — deploy sẽ KHÔNG mang chúng lên:"
+  printf '%s\n' "$CON_BAN" | sed 's/^/       /'
+  no "Dừng để khỏi deploy hụt lần nữa."
+  exit 1
 fi
 
 # ⚠️ DEPLOY PHẢI ĐI TRƯỚC ẢNH BÌA. Bước 5 gọi scripts/course-cover-upload.mjs

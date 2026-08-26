@@ -104,7 +104,7 @@ export default function LandingRobotRail() {
             <stop className="lt-stop-door-b" offset="1" />
           </linearGradient>
 
-          <linearGradient id="lt-glass" gradientUnits="userSpaceOnUse" x1="283" y1="48" x2="295" y2="60">
+          <linearGradient id="lt-glass" gradientUnits="userSpaceOnUse" x1="283" y1="47" x2="295" y2="60">
             <stop className="lt-stop-glass-a" offset="0" />
             <stop className="lt-stop-glass-b" offset="1" />
           </linearGradient>
@@ -231,16 +231,19 @@ export default function LandingRobotRail() {
               <path className="lt-laptop-keys" d="M284.4 63.1h3.4M289.2 63.1h3.4M294 63.1h2.6M285.3 62.1h3M289.5 62.1h3M293.7 62.1h2.2" />
 
               <g className="landing-laptop-lid">
-                <rect className="lt-laptop-shell" x="282.4" y="47.4" width="15.6" height="14.2" rx="1.6" />
-                <rect className="lt-laptop-screen" x="283.7" y="48.7" width="13" height="11.6" rx="0.8" fill="url(#lt-glass)" />
+                <rect className="lt-laptop-shell" x="282.4" y="46" width="15.6" height="15.6" rx="1.6" />
+                <rect className="lt-laptop-screen" x="283.7" y="47.3" width="13" height="13" rx="0.8" fill="url(#lt-glass)" />
+                {/* BỐN dòng, không phải năm. Ở cỡ thật màn hình chỉ cao ~13px:
+                    năm nét mảnh sát nhau đọc ra một vệt mờ, bốn nét dày giãn
+                    đều mới đọc ra "mấy dòng chữ". Hai dòng cuối bị ẩn dưới
+                    960px — xem `@media` trong globals.css. */}
                 <g className="lt-laptop-code">
-                  <path className="lt-code lt-code-1" d="M285 51.1h5.4" />
-                  <path className="lt-code lt-code-2" d="M285 53.1h8.4" />
-                  <path className="lt-code lt-code-3" d="M286.4 55.1h6" />
-                  <path className="lt-code lt-code-4" d="M286.4 57.1h7.6" />
-                  <path className="lt-code lt-code-5" d="M285 59.1h4.2" />
+                  <path className="lt-code lt-code-1" d="M285 50.2h5.6" />
+                  <path className="lt-code lt-code-2" d="M285 53.1h8.6" />
+                  <path className="lt-code lt-code-3" d="M286.6 56h6.4" />
+                  <path className="lt-code lt-code-4" d="M286.6 58.9h8" />
                 </g>
-                <rect className="lt-laptop-caret" x="290" y="58.3" width="1" height="1.7" />
+                <rect className="lt-laptop-caret" x="295.4" y="58" width="1.1" height="1.9" />
               </g>
 
               {/* Hai bàn tay GÕ. Chúng thuộc nhóm laptop chứ không thuộc cẳng

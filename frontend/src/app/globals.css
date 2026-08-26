@@ -4483,7 +4483,7 @@ body:has(.landing-root) {
 
 .landing-robot-rail {
   /* Hình học — xem bảng toạ độ ở trên trước khi đổi */
-  --lt-scene-h: 5.25rem;
+  --lt-scene-h: 6.25rem;
   --lt-ground: 0.75;
   --lt-line: 1.1rem;
   --lt-hatch-half: calc(var(--lt-scene-h) * 27 / 96);
@@ -4600,7 +4600,7 @@ body:has(.landing-root) {
 .lt-laptop-keys { fill: none; stroke: color-mix(in oklch, var(--lt-lit) 52%, transparent); stroke-width: 0.7; stroke-linecap: round; }
 .lt-laptop-shell { fill: url(#lt-shell); stroke: var(--lt-edge); stroke-width: 0.85; }
 .lt-laptop-screen { stroke: none; }
-.lt-code { fill: none; stroke: var(--landing-identity); stroke-width: 1; stroke-linecap: round; opacity: 0; }
+.lt-code { fill: none; stroke: var(--landing-identity); stroke-width: 1.35; stroke-linecap: round; opacity: 0; }
 .lt-laptop-caret { fill: var(--landing-identity); }
 
 /* ── Tâm xoay của từng khớp (đơn vị viewBox) ────────────────────────────── */
@@ -4684,7 +4684,6 @@ body:has(.landing-root) {
 .lt-code-2 { animation: lt-code-2 var(--lt-cycle) linear infinite both; }
 .lt-code-3 { animation: lt-code-3 var(--lt-cycle) linear infinite both; }
 .lt-code-4 { animation: lt-code-4 var(--lt-cycle) linear infinite both; }
-.lt-code-5 { animation: lt-code-5 var(--lt-cycle) linear infinite both; }
 /* Con trỏ: cửa sổ bật/tắt dùng `visibility` còn nháy dùng `opacity` — hai
    thuộc tính khác nhau nên hai animation không giẫm lên nhau. */
 .lt-laptop-caret { animation: lt-caret-window var(--lt-cycle) linear infinite both, lt-caret-blink 0.8s steps(1, end) infinite both; }
@@ -5131,10 +5130,9 @@ body:has(.landing-root) {
    dòng ở đợt thứ hai. Đây là thứ làm cảnh gõ có TIẾN TRIỂN thay vì chỉ là một
    cái máy sáng đèn. */
 @keyframes lt-code-1 { 0%, 54.2% { opacity: 0; } 54.6%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
-@keyframes lt-code-2 { 0%, 56.4% { opacity: 0; } 56.8%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
-@keyframes lt-code-3 { 0%, 59.2% { opacity: 0; } 59.6%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
-@keyframes lt-code-4 { 0%, 66.6% { opacity: 0; } 67%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
-@keyframes lt-code-5 { 0%, 71.4% { opacity: 0; } 71.8%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
+@keyframes lt-code-2 { 0%, 58.1% { opacity: 0; } 58.5%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
+@keyframes lt-code-3 { 0%, 66.6% { opacity: 0; } 67%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
+@keyframes lt-code-4 { 0%, 72.1% { opacity: 0; } 72.5%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
 
 @keyframes lt-caret-window {
   0%, 53.4% { visibility: hidden; }
@@ -5519,6 +5517,8 @@ body:has(.landing-root) {
    BA biến phải đi CÙNG NHAU: `--lt-scene-h` (cỡ cảnh), `--lt-line` (đường kẻ
    cách đỉnh thanh) và `height` (đủ chỗ cho cửa hầm nằm dưới đường kẻ). */
 @media (max-width: 959px) {
+  .lt-code-3,
+  .lt-code-4 { display: none; }
   .landing-header-main { min-height: 4rem; }
   .landing-robot-rail { --lt-scene-h: 4.1rem; --lt-line: 2.85rem; height: 3.5rem; }
 }

@@ -24,6 +24,7 @@ import {
 Sun, Moon, ArrowLeft, Megaphone,
 PlayCircle, Receipt, Ticket, Award, Crown,
   MonitorDown,
+  BookOpen,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { usePro } from '@/hooks/usePro';
@@ -53,6 +54,8 @@ const TOP_NAV_LINKS: TopNavLinkItem[] = [
  { href: '/messages', label: 'Messenger', icon: MessageCircle, authOnly: true },
  { href: '/music', label: 'Music', icon: Music },
  { href: '/chat', label: 'AI Chat', icon: Sparkles },
+  // Thư viện sách kỹ thuật (25 tập). Là nội dung nên đặt trước Get App.
+  { href: '/books', label: 'Sách', icon: BookOpen },
   // Trang tải app desktop. Đặt cuối vì nó không phải nội dung — người dùng
   // vào một lần rồi thôi, khác Feed/Music là chỗ quay lại hằng ngày.
   { href: '/download', label: 'Get App', icon: MonitorDown },

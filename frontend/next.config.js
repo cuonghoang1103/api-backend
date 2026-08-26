@@ -198,9 +198,12 @@ const nextConfig = {
               // 'unsafe-eval' là bắt buộc: Rapier là WebAssembly, biên dịch WASM
               // cần nó (hoặc 'wasm-unsafe-eval', nhưng trình duyệt cũ chưa hiểu).
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:",
-              "style-src 'self' 'unsafe-inline'",
+              // fonts.googleapis.com: stylesheet @font-face của bộ sách /books
+              // (Source Serif 4 / Source Sans 3 / JetBrains Mono). Cặp với
+              // fonts.gstatic.com ở font-src. Thiếu → font rơi về hệ thống.
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: blob:",
-              "font-src 'self' data:",
+              "font-src 'self' data: https://fonts.gstatic.com",
               // blob: chính là chỗ đã hỏng.
               "connect-src 'self' blob: data:",
               "media-src 'self' blob: data:",
@@ -270,7 +273,10 @@ const nextConfig = {
               // dựng Docker sẽ mang thêm chừng ấy. Người dùng web thì vốn đang
               // online. (App desktop thì ngược lại — nó bọc sẵn để chạy offline.)
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com https://cdn.jsdelivr.net",
-              "style-src 'self' 'unsafe-inline'",
+              // fonts.googleapis.com: stylesheet @font-face của bộ sách /books
+              // (Source Serif 4 / Source Sans 3 / JetBrains Mono). Cặp với
+              // fonts.gstatic.com ở font-src. Thiếu → font rơi về hệ thống.
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               // `media.cuongthai.com` (the R2 custom domain) was
               // added when the project migrated to Cloudflare R2 in
               // mid-2026. All new post images, avatars, playlist
@@ -286,7 +292,7 @@ const nextConfig = {
               // redirect — thiếu một trong hai là ảnh bị chặn. Trước đây thiếu
               // cả hai, nên mọi ô avatar đều rỗng dù ảnh trả HTTP 200.
               "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com https://*.giphy.com https://github.com https://avatars.githubusercontent.com",
-              "font-src 'self' data:",
+              "font-src 'self' data: https://fonts.gstatic.com",
               // blob: BẮT BUỘC cho sân chơi 3D. Các file .glb nhúng texture bên
               // trong; GLTFLoader bóc ra thành blob: URL rồi nạp bằng
               // ImageBitmapLoader — thứ dùng fetch() chứ không dùng thẻ <img>,

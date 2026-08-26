@@ -5,13 +5,13 @@
     "genre": "atmospheric",
     "macrostructure": "Split Studio (iterated)",
     "tokens": "frontend/tokens.css",
-    "enrichment": "real 3D capture, CSS pointer tilt and a hand-built pixel robot perched on a framed edge",
-    "motionPrimitives": ["entrance", "pointer tilt", "one-shot mascot run"],
+    "enrichment": "real 3D capture, CSS pointer tilt and a centred articulated pixel robot on one framed edge",
+    "motionPrimitives": ["entrance", "pointer tilt", "periodic articulated mascot cycle"],
     "performanceGuardrails": [
       "no WebGL or 3D runtime on homepage",
       "no Lottie assistant payload on homepage",
       "no requestAnimationFrame canvas for the About-like atmosphere",
-      "mascot animation runs once rather than looping",
+      "mascot cycle is active for half of each loop and invisible at rest",
       "tilt disabled on touch and reduced-motion devices",
       "transform and opacity animation only"
     ],
@@ -34,8 +34,8 @@
     "variety": 4
   },
   "iteration": {
-    "brief": "Restore the avatar identity with the requested Wellcome to CuongThai wordmark, route Continue to /about, borrow About's night atmosphere without its runtime cost, and add a pixel robot run-jump-kick moment.",
-    "variationKnobs": ["personal avatar identity", "static violet field", "one-shot perched Tier-B mascot"],
+    "brief": "Restore the CuongHoang logo with entitlement-aware Pro state, collapse the header to one rail, and articulate the centred robot's run-kick-disappear cycle.",
+    "variationKnobs": ["normal/Pro avatar identity", "single header rail", "periodic articulated Tier-B mascot"],
     "verifiedViewports": [320, 375, 414, 768, 1280, 1920]
   }
 }

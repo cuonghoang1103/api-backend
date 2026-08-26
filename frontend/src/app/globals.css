@@ -4319,9 +4319,7 @@ body:has(.landing-root) {
   top: 0;
   z-index: 40 !important;
   display: block;
-  border-bottom: var(--rule-hair) solid var(--color-rule);
-  background: color-mix(in oklch, var(--color-paper) 95%, transparent);
-  backdrop-filter: blur(12px);
+  background: var(--color-paper);
 }
 
 .landing-header-main {
@@ -4367,6 +4365,12 @@ body:has(.landing-root) {
   padding: 2px;
 }
 
+.landing-avatar-frame[data-pro='true'] {
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, var(--landing-identity) 38%, transparent),
+    0 0 0.9rem color-mix(in oklch, var(--landing-identity) 28%, transparent);
+}
+
 .landing-brand-avatar {
   width: 100%;
   height: 100%;
@@ -4375,6 +4379,19 @@ body:has(.landing-root) {
 }
 
 .landing-brand-name { white-space: nowrap; }
+.landing-brand-pro {
+  display: inline-flex;
+  min-height: 1.35rem;
+  align-items: center;
+  gap: var(--space-3xs);
+  border-radius: var(--radius-control);
+  background: var(--landing-identity);
+  color: var(--landing-robot-panel);
+  padding-inline: var(--space-xs);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
 
 .landing-header-actions {
   display: flex;
@@ -4403,76 +4420,174 @@ body:has(.landing-root) {
 .landing-icon-button { min-width: 2.75rem; padding-inline: var(--space-sm); }
 .landing-header-cta { gap: var(--space-xs); padding-inline: var(--space-md); white-space: nowrap; }
 
-/* Tier-B SVG mascot: it perches directly on a framed edge, then performs one
-   short run/jump/kick sequence. Every moving part is transform/opacity-only. */
+/* Tier-B articulated SVG mascot. The user explicitly requested a repeating
+   run/kick/disappear sequence; it is active for half of a long cycle and idle
+   while invisible. All joints stay on transform/opacity-only animations. */
 .landing-robot-rail {
   position: relative;
-  height: 1.75rem;
-  overflow: clip;
-  border-top: var(--rule-hair) solid color-mix(in oklch, var(--color-rule) 65%, transparent);
+  height: 2rem;
+  overflow: visible;
+  background: var(--color-paper);
 }
 
 .landing-robot-rail::before {
   position: absolute;
-  inset: 0.85rem max(1rem, calc((100vw - 76rem) / 2)) auto;
-  height: 0.9rem;
+  inset: 1.1rem max(1rem, calc((100vw - 76rem) / 2)) auto;
+  height: 1px;
   content: '';
-  border: var(--rule-hair) solid color-mix(in oklch, var(--color-rule) 78%, transparent);
-  border-bottom: 0;
-  border-radius: var(--radius-control) var(--radius-control) 0 0;
+  background: color-mix(in oklch, var(--color-rule) 78%, transparent);
 }
 
 .landing-robot-runner {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 50%;
   z-index: 1;
-  width: 7rem;
+  width: 8.25rem;
   height: 100%;
   transform-origin: center bottom;
-  animation: landing-robot-run 1.85s 320ms var(--ease-in-out) both;
+  animation: landing-mascot-cycle 7.2s var(--ease-in-out) infinite both;
 }
 
-.landing-robot-player { display: block; width: 7rem; height: 2.75rem; transform: translateY(-0.78rem); }
+.landing-robot-player { display: block; width: 8.25rem; height: 3.375rem; transform: translateY(-1.05rem); }
 .landing-robot-shadow { fill: color-mix(in oklch, var(--color-ink) 18%, transparent); }
 .landing-robot-head,
 .landing-robot-torso { fill: var(--landing-robot-metal); stroke: var(--color-accent); stroke-width: 1.2; }
 .landing-robot-ear { fill: var(--color-accent); }
-.landing-robot-highlight { fill: color-mix(in oklch, white 38%, transparent); }
+.landing-robot-highlight { fill: color-mix(in oklch, var(--color-paper) 42%, transparent); }
 .landing-robot-face { fill: var(--landing-robot-panel); }
 .landing-robot-eye { fill: var(--landing-identity); }
 .landing-robot-core { fill: var(--color-accent); }
 .landing-robot-antenna,
-.landing-robot-limb,
-.landing-robot-speed,
-.landing-football-speed {
+.landing-robot-arm,
+.landing-robot-leg,
+.landing-robot-panel-line,
+.landing-football-speed path {
   fill: none;
   stroke: var(--color-accent);
   stroke-width: 1.4;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.landing-robot-speed,
-.landing-football-speed { opacity: 0.55; }
+.landing-robot-arm rect,
+.landing-robot-leg rect { fill: var(--landing-robot-metal); stroke: var(--color-accent); stroke-width: 1.1; }
 .landing-football-shell { fill: var(--color-paper-2); stroke: var(--landing-identity); stroke-width: 1.2; }
 .landing-football-seam { fill: none; stroke: var(--color-ink); stroke-width: 0.9; stroke-linecap: round; stroke-linejoin: round; }
+
+.landing-robot-character,
+.landing-robot-head-group,
+.landing-robot-torso-group,
+.landing-robot-arm,
+.landing-robot-leg,
+.landing-robot-eye,
+.landing-robot-shadow,
+.landing-football,
+.landing-football-speed {
+  transform-box: view-box;
+}
+
+.landing-robot-character { transform-origin: 56px 49px; animation: landing-robot-body-cycle 7.2s var(--ease-in-out) infinite both; }
+.landing-robot-head-group { transform-origin: 56px 31px; animation: landing-robot-head-cycle 7.2s var(--ease-in-out) infinite both; }
+.landing-robot-torso-group { transform-origin: 56px 43px; animation: landing-robot-torso-cycle 7.2s var(--ease-in-out) infinite both; }
+.landing-robot-arm-back { transform-origin: 42px 31px; animation: landing-robot-arm-back-cycle 7.2s var(--ease-in-out) infinite both; }
+.landing-robot-arm-front { transform-origin: 68px 32px; animation: landing-robot-arm-front-cycle 7.2s var(--ease-in-out) infinite both; }
+.landing-robot-leg-plant { transform-origin: 49px 42px; animation: landing-robot-leg-plant-cycle 7.2s var(--ease-in-out) infinite both; }
+.landing-robot-leg-kick { transform-origin: 63px 42px; animation: landing-robot-leg-kick-cycle 7.2s var(--ease-in-out) infinite both; }
+.landing-robot-eye { transform-origin: center; animation: landing-robot-blink 7.2s var(--ease-in-out) infinite both; }
+.landing-robot-eye-right { animation-delay: 80ms; }
+.landing-robot-shadow { transform-origin: 56px 49px; animation: landing-robot-shadow-cycle 7.2s var(--ease-in-out) infinite both; }
 .landing-football {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: landing-football-kick 1.85s 320ms var(--ease-in-out) both;
+  transform-origin: 92px 43px;
+  animation: landing-football-cycle 7.2s var(--ease-in-out) infinite both;
+}
+.landing-football-speed { opacity: 0; animation: landing-football-speed-cycle 7.2s var(--ease-in-out) infinite both; }
+
+@keyframes landing-mascot-cycle {
+  0%, 3% { opacity: 0; transform: translate3d(-50%, 0.35rem, 0) scale(0.84); }
+  8% { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); }
+  13% { transform: translate3d(-50%, -0.28rem, 0) scale(1); }
+  18% { transform: translate3d(-50%, 0.02rem, 0) scale(1); }
+  23% { transform: translate3d(-50%, -0.2rem, 0) scale(1); }
+  28% { transform: translate3d(-50%, 0.02rem, 0) scale(1); }
+  33% { transform: translate3d(-50%, 0.08rem, 0) rotate(-2deg) scale(0.99); }
+  38% { transform: translate3d(-50%, -0.36rem, 0) rotate(3deg) scale(1.02); }
+  46%, 55% { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); }
+  62%, 100% { opacity: 0; transform: translate3d(-50%, -0.3rem, 0) scale(0.9); }
 }
 
-@keyframes landing-robot-run {
-  0% { opacity: 0; transform: translate3d(calc(100vw - 19rem), 0.12rem, 0) scale(0.9); }
-  12% { opacity: 1; }
-  34% { transform: translate3d(calc(100vw - 15.5rem), -0.42rem, 0) rotate(-2deg) scale(0.98); }
-  51% { transform: translate3d(calc(100vw - 13rem), 0.04rem, 0) rotate(2deg) scale(1); }
-  72% { transform: translate3d(calc(100vw - 10rem), -0.52rem, 0) rotate(-3deg) scale(1.02); }
-  100% { opacity: 0.94; transform: translate3d(calc(100vw - 9rem), 0.04rem, 0) scale(0.96); }
+@keyframes landing-robot-body-cycle {
+  0%, 10%, 28%, 46%, 100% { transform: translate3d(0, 0, 0) rotate(0); }
+  13%, 23% { transform: translate3d(0, -1px, 0) rotate(-1deg); }
+  33% { transform: translate3d(-1px, 1px, 0) rotate(-4deg); }
+  38% { transform: translate3d(1px, -2px, 0) rotate(4deg); }
 }
 
-@keyframes landing-football-kick {
-  0%, 46% { transform: translate3d(0, 0, 0) rotate(0); }
-  67% { transform: translate3d(0.36rem, -0.28rem, 0) rotate(70deg); }
-  100% { transform: translate3d(0.7rem, 0, 0) rotate(150deg); }
+@keyframes landing-robot-head-cycle {
+  0%, 18%, 48%, 100% { transform: rotate(0); }
+  23% { transform: rotate(-5deg); }
+  33% { transform: rotate(6deg); }
+  40% { transform: rotate(-3deg); }
+}
+
+@keyframes landing-robot-torso-cycle {
+  0%, 28%, 48%, 100% { transform: rotate(0) scaleY(1); }
+  33% { transform: rotate(-3deg) scaleY(0.94); }
+  38% { transform: rotate(4deg) scaleY(1.04); }
+}
+
+@keyframes landing-robot-arm-back-cycle {
+  0%, 10%, 28%, 48%, 100% { transform: rotate(0); }
+  13%, 23% { transform: rotate(18deg); }
+  18%, 33% { transform: rotate(-20deg); }
+  38% { transform: rotate(30deg); }
+}
+
+@keyframes landing-robot-arm-front-cycle {
+  0%, 10%, 28%, 48%, 100% { transform: rotate(0); }
+  13%, 23% { transform: rotate(-22deg); }
+  18%, 33% { transform: rotate(18deg); }
+  38% { transform: rotate(-34deg); }
+}
+
+@keyframes landing-robot-leg-plant-cycle {
+  0%, 10%, 28%, 48%, 100% { transform: rotate(0); }
+  13%, 23% { transform: rotate(9deg); }
+  18% { transform: rotate(-8deg); }
+  33% { transform: rotate(14deg); }
+  38% { transform: rotate(-6deg); }
+}
+
+@keyframes landing-robot-leg-kick-cycle {
+  0%, 10%, 28%, 48%, 100% { transform: rotate(0); }
+  13%, 23% { transform: rotate(-10deg); }
+  18% { transform: rotate(12deg); }
+  33% { transform: rotate(24deg); }
+  38% { transform: rotate(-48deg); }
+  43% { transform: rotate(-18deg); }
+}
+
+@keyframes landing-robot-blink {
+  0%, 14%, 16%, 49%, 51%, 100% { transform: scaleY(1); }
+  15%, 50% { transform: scaleY(0.18); }
+}
+
+@keyframes landing-robot-shadow-cycle {
+  0%, 10%, 28%, 46%, 100% { opacity: 0.58; transform: scaleX(1); }
+  13%, 23% { opacity: 0.34; transform: scaleX(0.8); }
+  38% { opacity: 0.25; transform: scaleX(0.7); }
+}
+
+@keyframes landing-football-cycle {
+  0%, 33% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0); }
+  39% { opacity: 1; transform: translate3d(0.55rem, -0.72rem, 0) rotate(85deg); }
+  46% { opacity: 1; transform: translate3d(1.5rem, 0, 0) rotate(210deg); }
+  54% { opacity: 0; transform: translate3d(2rem, -0.18rem, 0) rotate(300deg); }
+  55%, 100% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0); }
+}
+
+@keyframes landing-football-speed-cycle {
+  0%, 35%, 48%, 100% { opacity: 0; transform: translate3d(-0.25rem, 0, 0); }
+  39%, 44% { opacity: 0.58; transform: translate3d(0, 0, 0); }
 }
 
 .landing-hero-shell,
@@ -4787,7 +4902,8 @@ body:has(.landing-root) {
 
 @media (max-width: 639px) {
   .landing-header-main { padding-inline: 4.75rem 1rem; }
-  .landing-brand-name { display: none; }
+  .landing-brand-name,
+  .landing-brand-pro { display: none; }
   .landing-header-cta { padding-inline: var(--space-sm); }
   .landing-header-cta svg { display: none; }
   .landing-hero-shell { padding-top: var(--space-2xl); }
@@ -4821,8 +4937,18 @@ body:has(.landing-root) {
   .landing-hero-copy,
   .landing-playground-preview { animation: none; }
   .landing-playground-preview { transform: none !important; transition: none; }
-  .landing-robot-runner { animation: none; opacity: 0.94; transform: translate3d(calc(100vw - 9rem), 0.04rem, 0) scale(0.96); }
-  .landing-football { animation: none; transform: translate3d(0.7rem, 0, 0) rotate(150deg); }
+  .landing-robot-runner { animation: none; opacity: 0.94; transform: translate3d(-50%, 0, 0); }
+  .landing-robot-character,
+  .landing-robot-head-group,
+  .landing-robot-torso-group,
+  .landing-robot-arm,
+  .landing-robot-leg,
+  .landing-robot-eye,
+  .landing-robot-shadow,
+  .landing-football,
+  .landing-football-speed { animation: none; }
+  .landing-football { opacity: 1; transform: none; }
+  .landing-football-speed { opacity: 0; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════

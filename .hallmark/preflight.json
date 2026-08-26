@@ -11,7 +11,7 @@
   "footer": "Ft5 statement footer",
   "fonts": ["Fraunces Variable", "Poppins", "JetBrains Mono"],
   "palette": "Homepage-scoped OKLCH violet-black surfaces, violet accent and a small identity-gold ring",
-  "motion": "one entrance, one pointer tilt and one one-shot SVG mascot run; transform/opacity only",
+  "motion": "one entrance, one pointer tilt and one articulated SVG mascot cycle with a long invisible idle window; transform/opacity only",
   "performance": "static 3D capture; static CSS atmosphere; actual WebGPU assets load only after explicit entry",
   "preserve": [
     "all existing route destinations except the explicitly requested authenticated Continue destination",
@@ -21,9 +21,9 @@
     "all non-homepage Navbar, reminder and AI assistant behavior"
   ],
   "introduce": [
-    "avatar-led identity and the requested Wellcome to CuongThai wordmark",
+    "avatar-led CuongHoang identity with entitlement-aware Pro badge",
     "authenticated Continue route to /about",
-    "one-shot hand-built pixel robot perched on a framed edge with a football kick",
+    "articulated hand-built pixel robot centred on one framed edge with a periodic football kick",
     "About-like violet atmosphere without the About page's requestAnimationFrame canvas",
     "reduced-motion and touch-safe static fallbacks"
   ]

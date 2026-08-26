@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { ArrowUpRight, Moon, Sun } from 'lucide-react';
+import { ArrowUpRight, Crown, Moon, Sun } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 import { useTranslation } from '@/hooks/useTranslation';
+import { usePro } from '@/hooks/usePro';
 import { useAuthStore } from '@/store/authStore';
 import { getLandingCopy } from './landingCopy';
 import LandingRobotRail from './LandingRobotRail';
@@ -15,6 +16,7 @@ export default function LandingHeader() {
   const { locale, setLocale } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const { data: session } = useSession();
+  const { isPro } = usePro();
   const isBackendAuth = useAuthStore((state) => state.isAuthenticated);
   const [mounted, setMounted] = useState(false);
 
@@ -27,8 +29,8 @@ export default function LandingHeader() {
     <header className="landing-header">
       <div className="landing-header-main">
         <div className="landing-brand-cluster">
-          <Link href="/" className="landing-wordmark" aria-label={copy.header.homeLabel}>
-            <span className="landing-avatar-frame" aria-hidden>
+          <Link href="/" className="landing-wordmark" aria-label={`${copy.header.identity} — home`}>
+            <span className="landing-avatar-frame" data-pro={isPro ? 'true' : 'false'} aria-hidden>
               <Image
                 src="/images/avatar.png"
                 alt=""
@@ -39,7 +41,13 @@ export default function LandingHeader() {
                 className="landing-brand-avatar"
               />
             </span>
-            <span className="landing-brand-name">{copy.header.welcome}</span>
+            <span className="landing-brand-name">{copy.header.identity}</span>
+            {isPro && (
+              <span className="landing-brand-pro" aria-label="Pro account">
+                <Crown aria-hidden size={11} />
+                PRO
+              </span>
+            )}
           </Link>
         </div>
 

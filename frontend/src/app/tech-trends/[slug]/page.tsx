@@ -90,7 +90,10 @@ function formatDate(iso: string | null): string {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const article = await getArticle(params.slug);
-  if (!article) return { title: 'Bài viết | Blog' };
+  // Slug không có trong bảng tech-trends ⇒ 404 THẬT. Trả object title ở đây khiến
+  // Next chốt 200 trước khi thân trang gọi notFound() → soft-404 (200 mỏng, index
+  // rác). Gọi notFound() ngay trong generateMetadata để Next đặt đúng status 404.
+  if (!article) notFound();
 
   // The root layout declares `template: '%s | CuongThai'`, so appending
   // "| CuongThai" here too produced "… | Tech Trends | CuongThai | CuongThai"

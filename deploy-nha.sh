@@ -524,8 +524,34 @@ else
 
     if [ -n "$BAM_VPS" ] && [ "$BAM_NHA" = "$BAM_VPS" ]; then
         rm -f "$NGINX_TMP"
-        info "nginx.conf không đổi — không nạp lại (nạp thừa cũng vô hại, nhưng"
-        info "  im lặng thì dễ đọc log hơn, và đỡ một nhịp đứt kết nối giữ sẵn)."
+        # File trên đĩa GIỐNG bản commit — nhưng "file đúng" KHÔNG bảo đảm nginx
+        # đang CHẠY nó. Nếu một lần reload trước từng trượt (hoặc container gắn
+        # nhầm inode), mọi deploy sau đều thấy hash khớp và BỎ QUA reload → config
+        # đúng nằm im trên đĩa còn nginx phục vụ bản cũ trong RAM hàng giờ. Đúng ca
+        # HTTP/2 tắt 27/08/2026: `http2 on;` có trong file mà origin vẫn HTTP/1.1,
+        # deploy nào cũng báo "không đổi — không nạp lại". Vá: vẫn xác minh inode
+        # container + `nginx -t` + reload IDEMPOTENT để RAM luôn khớp đĩa. Không hề
+        # sửa file ở nhánh này; reload thừa vô hại, im lặng sai mới nguy.
+        info "nginx.conf không đổi — vẫn nạp lại nhẹ để chắc RAM khớp đĩa..."
+        NGINX_ENV_RL="PROJ='${COMPOSE_PROJECT}' REPO='${REPO_VPS}'"
+        sshvps "${NGINX_ENV_RL} bash -s" <<'EOF' 2>&1 | sed 's/^/         /'
+CONF="$REPO/nginx/nginx.conf"
+docker ps --format '{{.Names}}' | grep -qx "${PROJ}_nginx" || { echo "nginx không chạy — bỏ qua."; exit 0; }
+BAM_NGOAI=$(sha256sum "$CONF" | cut -d' ' -f1)
+BAM_TRONG=$(docker exec "${PROJ}_nginx" sha256sum /etc/nginx/nginx.conf 2>/dev/null | cut -d' ' -f1)
+if [ "$BAM_NGOAI" != "$BAM_TRONG" ]; then
+  echo "⚠ container đọc bản KHÁC file trên đĩa (lệch inode). Sửa:"
+  echo "   ssh VPS → docker compose -p ${PROJ} up -d --force-recreate nginx"
+  exit 0
+fi
+if docker exec "${PROJ}_nginx" nginx -t >/dev/null 2>&1; then
+  docker exec "${PROJ}_nginx" nginx -s reload >/dev/null 2>&1 \
+    && echo "reload OK — RAM đã khớp đĩa (config không đổi)" \
+    || echo "⚠ reload trượt — nginx giữ config cũ đang chạy, web không gián đoạn"
+else
+  echo "⚠ nginx -t hỏng trên file HIỆN TẠI — KHÔNG reload, giữ nguyên bản đang chạy"
+fi
+EOF
     else
         [ -z "$BAM_VPS" ] && warn "Không đọc được nginx.conf hiện tại trên VPS — vẫn đẩy bản mới."
         info "nginx.conf CÓ thay đổi — đang đồng bộ..."

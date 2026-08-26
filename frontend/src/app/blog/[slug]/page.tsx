@@ -117,7 +117,11 @@ function readingMinutes(content?: string): number {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const post = await getPost(params.slug);
-  if (!post) return { title: 'Bài viết | Blog | CuongThai' };
+  // Slug không có trong bảng posts ⇒ 404 THẬT, không phải trang "Bài viết" rỗng.
+  // Trả về object title ở đây khiến Next chốt 200 TRƯỚC khi thân trang gọi
+  // notFound() → thành soft-404 (200 mỏng, Google index rác + trùng path chéo).
+  // Gọi notFound() ngay trong generateMetadata để Next đặt đúng status 404.
+  if (!post) notFound();
 
   const description = toText(post.excerpt || post.content) || 'Bài viết trên CuongThai.';
   const image = post.thumbnailUrl || undefined;

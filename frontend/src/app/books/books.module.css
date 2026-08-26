@@ -118,6 +118,27 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Collection = tầng cao nhất (Technology, và các loại sách tương lai). Cao hơn
+   Shelf/Group một bậc thị giác để thư viện có thứ bậc rõ. */
+.collection { margin: 0 0 24px; }
+.collHead {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  padding-bottom: 14px; margin-bottom: 6px;
+  border-bottom: 2px solid var(--rule-firm);
+}
+.collName {
+  margin: 0;
+  font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+  letter-spacing: -0.02em; font-weight: 700; text-wrap: balance;
+}
+.collCount {
+  flex: none;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.collLede { margin: 0 0 34px; color: var(--ink-soft); font-size: 1.02rem; }
+
 .grp {
   margin: 0 0 46px;
 }
@@ -216,6 +237,28 @@
 .card:focus-visible .readmore {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* Collection sắp có — thẻ mờ, xếp lưới, gợi ý thư viện sẽ lớn dần. */
+.upcoming { margin: 8px 0 30px; }
+.upList {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;
+  margin-top: 20px;
+}
+.upItem {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 16px 18px;
+  border: 1px dashed var(--rule-firm); border-radius: 10px;
+  background: var(--leaf-2);
+}
+.upName {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-size: 1.02rem; font-weight: 600; color: var(--ink-soft);
+}
+.upSoon {
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.64rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-faint);
 }
 
 .note {

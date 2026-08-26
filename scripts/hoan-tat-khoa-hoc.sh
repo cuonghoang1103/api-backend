@@ -114,16 +114,22 @@ fi
 b "4/5 · Ảnh bìa — dò CDN rồi chỉ sinh cái thiếu"
 CDN="https://media.cuongthai.com/images/course-covers"
 CO=0; MOI=0; HONG=0
+# ⚠️ KHÔNG nuốt output. Bản đầu của hàm này có `>/dev/null 2>&1`, nên một lần
+# chạy hỏng chỉ hiện dấu ❌ trần trụi — không biết ssh chết, docker chết, hay
+# course-cover.mjs chết ở bước tải logo. Giữ lại lời than của nó và in ra khi
+# hỏng; im lặng chỉ dành cho lần chạy THÀNH CÔNG.
 bia() {  # slug icon color title subtitle
-  local ma
+  local ma out
   ma=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$CDN/$1.png" 2>/dev/null)
   if [ "$ma" = "200" ]; then ok "$1 — đã có, giữ nguyên"; CO=$((CO + 1)); return; fi
-  if ssh -o ConnectTimeout=15 "$VPS" \
+  if out=$(ssh -o ConnectTimeout=15 "$VPS" \
       "docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
-       --slug $1 --icon $2 --color $3 --title \"$4\" --subtitle \"$5\"" >/dev/null 2>&1; then
+       --slug $1 --icon $2 --color $3 --title \"$4\" --subtitle \"$5\"" 2>&1); then
     ok "$1 — vừa sinh"; MOI=$((MOI + 1))
   else
-    no "$1 — sinh HỎNG, chạy lại bằng tay"; HONG=$((HONG + 1))
+    no "$1 — sinh HỎNG:"
+    printf '%s\n' "$out" | sed 's/^/       /'
+    HONG=$((HONG + 1))
   fi
 }
 # Chữ trên ảnh theo ĐÚNG mẫu của bộ ảnh đã có (đọc từ ảnh chụp trang /courses

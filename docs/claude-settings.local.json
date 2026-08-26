@@ -1,11 +1,21 @@
 {
   "_doc": [
-    "Quyền cho Claude Code chạy TRÊN MÁY NHÀ của cuonghoang — tự làm hết vòng",
-    "deploy/build/kiểm mà không phải bấm y từng lệnh.",
+    "Quyền cho Claude Code CHẠY TRÊN MÁY BẠN ĐANG NGỒI GÕ (MacBook) — để nó tự",
+    "làm hết vòng deploy/build/kiểm mà không phải bấm y từng lệnh.",
     "",
-    "CÀI: cp may-nha/claude-settings.local.json .claude/settings.local.json",
-    "     (.claude/ nằm trong .gitignore nên bản cài KHÔNG bị commit — file",
-    "      này là bản mẫu để git mang được nó về máy, chỉ vậy thôi.)",
+    "⚠️ KHÔNG PHẢI cho máy nhà. Máy nhà (RTX 3060, 12 nhân/31GB) chỉ là máy",
+    "   BUILD và chạy 4 dịch vụ GPU; nó không chạy Claude Code. Xem sơ đồ ở",
+    "   đầu deploy-nha.sh:  Mac ──▶ máy nhà ──build──▶ GHCR ──▶ VPS ──tráo.",
+    "   Lệnh `bash deploy-nha.sh` gõ TỪ Mac, nên quyền cũng phải nằm ở Mac.",
+    "",
+    "CÀI (trên Mac, tại gốc kho):",
+    "     cp docs/claude-settings.local.json .claude/settings.local.json",
+    "  rồi KHỞI ĐỘNG LẠI Claude Code (hoặc mở /permissions một lần) để nạp.",
+    "  (.claude/ nằm trong .gitignore nên bản cài KHÔNG bị commit — file này là",
+    "   bản mẫu, chỉ để git mang được nó về máy.)",
+    "",
+    "Muốn dùng cho MỌI kho chứ không riêng kho này thì chép vào",
+    "     ~/.claude/settings.json",
     "",
     "── HAI CỬA, ĐỪNG NHẦM ───────────────────────────────────────────────",
     "  permissions.allow  gỡ hộp hỏi [y/N]",
@@ -26,32 +36,26 @@
     "tôi không xác nhận được deny có còn hiệu lực ở mode đó không. Thử",
     "'dontAsk' trước."
   ],
-
   "permissions": {
     "defaultMode": "dontAsk",
-
     "allow": [
       "Bash(bash deploy-nha.sh)",
       "Bash(echo y | bash deploy-nha.sh)",
       "Bash(bash deploy-nha.sh --khong-lui)",
       "Bash(bash deploy-nha.sh --khong-day)",
       "Bash(bash deploy.sh)",
-
       "Bash(npm *)",
       "Bash(npx *)",
       "Bash(node *)",
       "Bash(yarn *)",
       "Bash(pnpm *)",
-
       "Bash(git *)",
       "Bash(gh *)",
-
       "Bash(docker *)",
       "Bash(ssh *)",
       "Bash(scp *)",
       "Bash(rsync *)",
       "Bash(curl *)",
-
       "Bash(ls *)",
       "Bash(cat *)",
       "Bash(grep *)",
@@ -75,7 +79,6 @@
       "Bash(free *)",
       "Bash(python3 *)",
       "Bash(jq *)",
-
       "Read",
       "Edit",
       "Write",
@@ -84,7 +87,6 @@
       "WebFetch",
       "WebSearch"
     ],
-
     "_deny_doc": [
       "⚠️ DENY CŨNG KHỚP THEO TIỀN TỐ. 'Bash(git push --force*)' chặn được",
       "   `git push --force origin main` nhưng KHÔNG chặn",
@@ -105,7 +107,6 @@
       "Bash(git add .env*)",
       "Bash(docker system prune -a*)"
     ],
-
     "_ask_doc": [
       "Hỏi trước ở đúng hai chỗ không thể lùi được: đẩy lên main (nhánh",
       "chung, CLAUDE.md bắt xác nhận) và phát hành app desktop (số phiên",
@@ -117,11 +118,10 @@
       "Bash(npm run phat-hanh*)"
     ]
   },
-
   "autoMode": {
     "allow": [
       "$defaults",
-      "Chạy deploy-nha.sh / deploy.sh trong kho api-backend: đây là đường deploy CHUẨN của dự án, chạy trên máy của chính chủ sở hữu.",
+      "Chạy deploy-nha.sh / deploy.sh trong kho api-backend: đây là đường deploy CHUẨN của dự án, gõ từ máy của chính chủ sở hữu (nó đẩy mã sang máy nhà để build).",
       "SSH vào VPS production của dự án để đọc trạng thái, xem log, kiểm tra container và tráo lại ảnh Docker khi deploy hỏng.",
       "Chạy npx prisma migrate deploy / migrate status / generate / db seed.",
       "Chạy docker build, docker compose và docker exec trên máy nhà lẫn VPS.",
@@ -133,7 +133,6 @@
       "Tự gỡ một migration đã hỏng bằng prisma migrate resolve — CLAUDE.md bắt dừng lại và báo người."
     ]
   },
-
   "enableAllProjectMcpServers": true,
   "autoCompactEnabled": true,
   "fileCheckpointingEnabled": true

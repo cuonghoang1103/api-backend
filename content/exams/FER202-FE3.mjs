@@ -22,7 +22,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is React?</p></div><div class=\"ml-vi\"><p>React là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q1.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q1.png",
           "options": [
             {
               "text": "A programming language|||Một ngôn ngữ lập trình"
@@ -46,7 +46,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In the code above, how can we increase the value of the count state by 1 when the user clicks the &quot;Increment&quot; button?</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span>, { <span class=\"hljs-title class_\">Component</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Counter</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_ inherited__\">Component</span> {\n  <span class=\"hljs-title function_\">constructor</span>(<span class=\"hljs-params\">props</span>) {\n    <span class=\"hljs-variable language_\">super</span>(props);\n    <span class=\"hljs-variable language_\">this</span>.<span class=\"hljs-property\">state</span> = {\n      <span class=\"hljs-attr\">count</span>: <span class=\"hljs-number\">0</span>\n    };\n  }\n\n  <span class=\"hljs-title function_\">incrementCount</span>(<span class=\"hljs-params\"></span>) {\n    <span class=\"hljs-comment\">// <span class=\"hljs-doctag\">TODO:</span> Increase the count state by 1</span>\n  }\n\n  <span class=\"hljs-title function_\">render</span>(<span class=\"hljs-params\"></span>) {\n    <span class=\"hljs-keyword\">return</span> (\n      <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">p</span>&gt;</span>Count: {this.state.count}<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">p</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">button</span> <span class=\"hljs-attr\">onClick</span>=<span class=\"hljs-string\">{this.incrementCount}</span>&gt;</span>Increment<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">button</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span></span>\n    );\n  }\n}\n\n<span class=\"hljs-keyword\">export</span> <span class=\"hljs-keyword\">default</span> <span class=\"hljs-title class_\">Counter</span>;</code></pre></div><div class=\"ml-vi\"><p>Trong đoạn code trên, làm sao để tăng giá trị state count thêm 1 khi người dùng bấm nút &quot;Increment&quot;?</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span>, { <span class=\"hljs-title class_\">Component</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Counter</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_ inherited__\">Component</span> {\n  <span class=\"hljs-title function_\">constructor</span>(<span class=\"hljs-params\">props</span>) {\n    <span class=\"hljs-variable language_\">super</span>(props);\n    <span class=\"hljs-variable language_\">this</span>.<span class=\"hljs-property\">state</span> = {\n      <span class=\"hljs-attr\">count</span>: <span class=\"hljs-number\">0</span>\n    };\n  }\n\n  <span class=\"hljs-title function_\">incrementCount</span>(<span class=\"hljs-params\"></span>) {\n    <span class=\"hljs-comment\">// <span class=\"hljs-doctag\">TODO:</span> Increase the count state by 1</span>\n  }\n\n  <span class=\"hljs-title function_\">render</span>(<span class=\"hljs-params\"></span>) {\n    <span class=\"hljs-keyword\">return</span> (\n      <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">p</span>&gt;</span>Count: {this.state.count}<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">p</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">button</span> <span class=\"hljs-attr\">onClick</span>=<span class=\"hljs-string\">{this.incrementCount}</span>&gt;</span>Increment<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">button</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span></span>\n    );\n  }\n}\n\n<span class=\"hljs-keyword\">export</span> <span class=\"hljs-keyword\">default</span> <span class=\"hljs-title class_\">Counter</span>;</code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q2.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q2.png",
           "options": [
             {
               "text": "Call the method this.setState({ count: this.state.count + 1 }) inside the incrementCount method.|||Gọi this.setState({ count: this.state.count + 1 }) bên trong phương thức incrementCount."
@@ -70,7 +70,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How can you configure Tailwind CSS in a Next.js project?</p></div><div class=\"ml-vi\"><p>Làm sao cấu hình Tailwind CSS trong một dự án Next.js?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q3.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q3.png",
           "options": [
             {
               "text": "By using a CDN link in the HTML file.|||Dùng link CDN trong file HTML."
@@ -94,7 +94,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which HTTP method is typically used to retrieve data from a server?</p></div><div class=\"ml-vi\"><p>Phương thức HTTP nào thường dùng để lấy dữ liệu từ server?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q4.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q4.png",
           "options": [
             {
               "text": "POST|||POST"
@@ -118,7 +118,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of arrow functions in ES6?</p></div><div class=\"ml-vi\"><p>Mục đích của arrow function trong ES6 là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q5.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q5.png",
           "options": [
             {
               "text": "To bind the value of this inside a function|||Để bind giá trị this bên trong một hàm"
@@ -142,7 +142,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of the next/link module in Next.js?</p></div><div class=\"ml-vi\"><p>Module next/link trong Next.js dùng để làm gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q6.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q6.png",
           "options": [
             {
               "text": "It provides client-side routing capabilities.|||Cung cấp khả năng định tuyến phía client."
@@ -166,7 +166,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In React, what is the role of Suspense?</p></div><div class=\"ml-vi\"><p>Trong React, vai trò của Suspense là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q7.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q7.png",
           "options": [
             {
               "text": "To manage state in functional components|||Quản lý state trong functional component"
@@ -190,7 +190,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of a container component in React?</p></div><div class=\"ml-vi\"><p>Mục đích của một container component trong React là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q8.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q8.png",
           "options": [
             {
               "text": "To provide a visual representation of data|||Cung cấp hiển thị trực quan cho dữ liệu"
@@ -214,7 +214,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What components does the code above display?</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span>, <span class=\"hljs-title class_\">Checkbox</span>, <span class=\"hljs-title class_\">Listbox</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"hljs-comment\">//...</span>\n<span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span>&gt;</span>Primary Button<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Checkbox</span> <span class=\"hljs-attr\">label</span>=<span class=\"hljs-string\">&quot;Check me&quot;</span> /&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Listbox</span> <span class=\"hljs-attr\">options</span>=<span class=\"hljs-string\">{[</span>&#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">1</span>&#x27;, &#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">2</span>&#x27;, &#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">3</span>&#x27;]} /&gt;</span>\n<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span></span></code></pre></div><div class=\"ml-vi\"><p>Đoạn code trên hiển thị những component nào?</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span>, <span class=\"hljs-title class_\">Checkbox</span>, <span class=\"hljs-title class_\">Listbox</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"hljs-comment\">//...</span>\n<span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span>&gt;</span>Primary Button<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Checkbox</span> <span class=\"hljs-attr\">label</span>=<span class=\"hljs-string\">&quot;Check me&quot;</span> /&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Listbox</span> <span class=\"hljs-attr\">options</span>=<span class=\"hljs-string\">{[</span>&#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">1</span>&#x27;, &#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">2</span>&#x27;, &#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">3</span>&#x27;]} /&gt;</span>\n<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span></span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q9.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q9.png",
           "options": [
             {
               "text": "Grid, Button, ListBox|||Grid, Button, ListBox"
@@ -238,7 +238,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What components does the code above display?</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span>, <span class=\"hljs-title class_\">Checkbox</span>, <span class=\"hljs-title class_\">Listbox</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"hljs-comment\">//...</span>\n<span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span>&gt;</span>Primary Button<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Checkbox</span> <span class=\"hljs-attr\">label</span>=<span class=\"hljs-string\">&quot;Check me&quot;</span> /&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Listbox</span> <span class=\"hljs-attr\">options</span>=<span class=\"hljs-string\">{[</span>&#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">1</span>&#x27;, &#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">2</span>&#x27;, &#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">3</span>&#x27;]} /&gt;</span>\n<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span></span></code></pre></div><div class=\"ml-vi\"><p>Đoạn code trên hiển thị những component nào?</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span>, <span class=\"hljs-title class_\">Checkbox</span>, <span class=\"hljs-title class_\">Listbox</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"hljs-comment\">//...</span>\n<span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span>&gt;</span>Primary Button<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Checkbox</span> <span class=\"hljs-attr\">label</span>=<span class=\"hljs-string\">&quot;Check me&quot;</span> /&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Listbox</span> <span class=\"hljs-attr\">options</span>=<span class=\"hljs-string\">{[</span>&#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">1</span>&#x27;, &#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">2</span>&#x27;, &#x27;<span class=\"hljs-attr\">Option</span> <span class=\"hljs-attr\">3</span>&#x27;]} /&gt;</span>\n<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span></span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q10.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q10.png",
           "options": [
             {
               "text": "Grid, Button, ListBox|||Grid, Button, ListBox"
@@ -262,7 +262,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In Redux, when should you use combineReducers?</p></div><div class=\"ml-vi\"><p>Trong Redux, khi nào nên dùng combineReducers?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q11.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q11.png",
           "options": [
             {
               "text": "When you want to use Redux DevTools to track the state.|||Khi muốn dùng Redux DevTools để theo dõi state."
@@ -286,7 +286,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the correct way to declare PropTypes for a component in React?</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. Component.props = { ... }</span>\n<span class=\"hljs-comment\">// B. Component.typeCheck = { ... }</span>\n<span class=\"hljs-comment\">// C. Component.propTypes = { ... }</span>\n<span class=\"hljs-comment\">// D. Component.checkProps = { ... }</span></code></pre></div><div class=\"ml-vi\"><p>Cách đúng để khai báo PropTypes cho một component trong React là gì?</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. Component.props = { ... }</span>\n<span class=\"hljs-comment\">// B. Component.typeCheck = { ... }</span>\n<span class=\"hljs-comment\">// C. Component.propTypes = { ... }</span>\n<span class=\"hljs-comment\">// D. Component.checkProps = { ... }</span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q12.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q12.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -310,7 +310,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In React 18, how can you pass additional arguments to an event handler?</p></div><div class=\"ml-vi\"><p>Trong React 18, làm sao truyền thêm tham số cho một event handler?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q13.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q13.png",
           "options": [
             {
               "text": "By using the event.data property|||Dùng thuộc tính event.data"
@@ -334,7 +334,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How do you declare routes in React Router?</p></div><div class=\"ml-vi\"><p>Làm sao khai báo route trong React Router?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q14.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q14.png",
           "options": [
             {
               "text": "Using the &lt;Redirect&gt; component|||Dùng component &lt;Redirect&gt;"
@@ -358,7 +358,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How can you conditionally render content in JSX?</p></div><div class=\"ml-vi\"><p>Làm sao render nội dung có điều kiện trong JSX?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q15.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q15.png",
           "options": [
             {
               "text": "By using the if statement|||Dùng câu lệnh if"
@@ -382,7 +382,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the correct way to wrap a lazy component with Suspense in React?</p><pre><code class=\"language-jsx\"><span class=\"hljs-comment\">// A. &lt;Suspense fallback={&lt;Loading /&gt;} loading={&lt;MyComponent /&gt;} /&gt;</span>\n<span class=\"hljs-comment\">// B. &lt;Suspense loading={&lt;Loading /&gt;}&gt;&lt;MyComponent /&gt;&lt;/Suspense&gt;</span>\n<span class=\"hljs-comment\">// C. &lt;Suspense wait={&lt;Loading /&gt;}&gt;&lt;MyComponent /&gt;&lt;/Suspense&gt;</span>\n<span class=\"hljs-comment\">// D. &lt;Suspense fallback={&lt;Loading /&gt;}&gt;&lt;MyComponent /&gt;&lt;/Suspense&gt;</span></code></pre></div><div class=\"ml-vi\"><p>Cách đúng để bọc một component lazy với Suspense trong React là gì?</p><pre><code class=\"language-jsx\"><span class=\"hljs-comment\">// A. &lt;Suspense fallback={&lt;Loading /&gt;} loading={&lt;MyComponent /&gt;} /&gt;</span>\n<span class=\"hljs-comment\">// B. &lt;Suspense loading={&lt;Loading /&gt;}&gt;&lt;MyComponent /&gt;&lt;/Suspense&gt;</span>\n<span class=\"hljs-comment\">// C. &lt;Suspense wait={&lt;Loading /&gt;}&gt;&lt;MyComponent /&gt;&lt;/Suspense&gt;</span>\n<span class=\"hljs-comment\">// D. &lt;Suspense fallback={&lt;Loading /&gt;}&gt;&lt;MyComponent /&gt;&lt;/Suspense&gt;</span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q16.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q16.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -406,7 +406,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How do you include Tailwind CSS in a project?</p></div><div class=\"ml-vi\"><p>Làm sao nhúng Tailwind CSS vào một dự án?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q17.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q17.png",
           "options": [
             {
               "text": "Link the Tailwind CSS stylesheet in the HTML file.|||Link stylesheet Tailwind CSS trong file HTML."
@@ -430,7 +430,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is Tailwind CSS?</p></div><div class=\"ml-vi\"><p>Tailwind CSS là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q18.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q18.png",
           "options": [
             {
               "text": "A utility-first CSS framework for building responsive web interfaces.|||Một framework CSS utility-first để xây dựng giao diện web responsive."
@@ -454,7 +454,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What does ES6 stand for?</p></div><div class=\"ml-vi\"><p>ES6 là viết tắt của gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q19.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q19.png",
           "options": [
             {
               "text": "Efficient Syntax Language 6|||Efficient Syntax Language 6"
@@ -478,7 +478,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How do you create navigation links in React Router?</p></div><div class=\"ml-vi\"><p>Làm sao tạo liên kết điều hướng trong React Router?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q20.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q20.png",
           "options": [
             {
               "text": "Using the &lt;Link&gt; component|||Dùng component &lt;Link&gt;"
@@ -502,7 +502,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Select the code snippet that correctly defines a component with state in React.</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. React.createClass({ getInitialState() {...}, render() {...} })  — deprecated, removed since React 16</span>\n<span class=\"hljs-comment\">// B. function MyComponent() { const [count, setCount] = React.useState(0); return &lt;div&gt;{count}&lt;/div&gt;; }</span>\n<span class=\"hljs-comment\">// C. class MyComponent extends React.Component { constructor(props) { super(props); this.state = { count: 0 }; } render() { return &lt;div&gt;{this.state.count}&lt;/div&gt;; } }</span>\n<span class=\"hljs-comment\">// D. const MyComponent = () =&gt; { const [count, setCount] = React.useState(0); return &lt;div&gt;{count}&lt;/div&gt;; };</span></code></pre></div><div class=\"ml-vi\"><p>Chọn đoạn code định nghĩa đúng một component có state trong React.</p><pre><code class=\"language-javascript\"><span class=\"hljs-comment\">// A. React.createClass({ getInitialState() {...}, render() {...} })  — deprecated, removed since React 16</span>\n<span class=\"hljs-comment\">// B. function MyComponent() { const [count, setCount] = React.useState(0); return &lt;div&gt;{count}&lt;/div&gt;; }</span>\n<span class=\"hljs-comment\">// C. class MyComponent extends React.Component { constructor(props) { super(props); this.state = { count: 0 }; } render() { return &lt;div&gt;{this.state.count}&lt;/div&gt;; } }</span>\n<span class=\"hljs-comment\">// D. const MyComponent = () =&gt; { const [count, setCount] = React.useState(0); return &lt;div&gt;{count}&lt;/div&gt;; };</span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q21.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q21.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -526,7 +526,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What are PropTypes in React?</p></div><div class=\"ml-vi\"><p>PropTypes trong React là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q22.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q22.png",
           "options": [
             {
               "text": "They are used for manipulating the component&#39;s state.|||Dùng để thao tác state của component."
@@ -550,7 +550,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a common use case for using Redux in a React application?</p></div><div class=\"ml-vi\"><p>Đâu là một trường hợp sử dụng phổ biến của Redux trong ứng dụng React?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q23.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q23.png",
           "options": [
             {
               "text": "Managing authentication and user sessions|||Quản lý xác thực và phiên đăng nhập người dùng"
@@ -574,7 +574,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the command to start json-server and specify the JSON file to be served?</p></div><div class=\"ml-vi\"><p>Lệnh nào để khởi động json-server và chỉ định file JSON cần phục vụ?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q24.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q24.png",
           "options": [
             {
               "text": "json-server start|||json-server start"
@@ -598,7 +598,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which class is used to create a form input with a validation state in Bootstrap 5?</p></div><div class=\"ml-vi\"><p>Class nào dùng để tạo ô nhập form có trạng thái validate trong Bootstrap 5?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q25.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q25.png",
           "options": [
             {
               "text": ".input-group|||.input-group"
@@ -622,7 +622,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>[Source scan cut off mid-scroll — the actual question text and answer options after this code block were not visible in the captured image, only the code itself. Based on the visible code (a Kitchen component exposed via a ref, called imperatively from a Waiter component), the most likely topic is React refs / imperative child method calls. Best-effort question below — please cross-check against &quot;Show original image&quot; if reviewing this item.]</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span>, { useState } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n\n<span class=\"hljs-keyword\">function</span> <span class=\"hljs-title function_\">Dish</span>(<span class=\"hljs-params\">{ name }</span>) {\n  <span class=\"hljs-keyword\">return</span> <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span>&gt;</span>{name}<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span></span>;\n}\n\n<span class=\"hljs-keyword\">function</span> <span class=\"hljs-title function_\">Kitchen</span>(<span class=\"hljs-params\"></span>) {\n  <span class=\"hljs-keyword\">const</span> [orders, setOrders] = <span class=\"hljs-title function_\">useState</span>([]);\n\n  <span class=\"hljs-comment\">// Triggering a render (delivering the guest&#x27;s order to the kitchen)</span>\n  <span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">addOrder</span> = (<span class=\"hljs-params\">order</span>) =&gt; {\n    <span class=\"hljs-title function_\">setOrders</span>(<span class=\"hljs-function\">(<span class=\"hljs-params\">prevOrders</span>) =&gt;</span> [...prevOrders, order]);\n  };\n\n  <span class=\"hljs-comment\">// Rendering the component (preparing the order in the kitchen)</span>\n  <span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">renderOrders</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n    <span class=\"hljs-keyword\">return</span> orders.<span class=\"hljs-title function_\">map</span>(<span class=\"hljs-function\">(<span class=\"hljs-params\">order, index</span>) =&gt;</span> <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Dish</span> <span class=\"hljs-attr\">key</span>=<span class=\"hljs-string\">{index}</span> <span class=\"hljs-attr\">name</span>=<span class=\"hljs-string\">{order}</span> /&gt;</span></span>);\n  };\n\n  <span class=\"hljs-comment\">// Committing to the DOM (placing the order on the table)</span>\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">h2</span>&gt;</span>Orders:<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">h2</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">ul</span>&gt;</span>{renderOrders()}<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">ul</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span></span>\n  );\n}\n\n<span class=\"hljs-keyword\">function</span> <span class=\"hljs-title function_\">Waiter</span>(<span class=\"hljs-params\"></span>) {\n  <span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">handleOrder</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n    <span class=\"hljs-comment\">// Triggering a render (delivering the guest&#x27;s order to the kitchen)</span>\n    kitchenRef.<span class=\"hljs-property\">current</span>.<span class=\"hljs-title function_\">addOrder</span>(<span class=\"hljs-string\">&#x27;Pizza&#x27;</span>);\n  };\n\n  <span class=\"hljs-comment\">// A reference to the Kitchen component</span>\n  <span class=\"hljs-keyword\">const</span> kitchenRef = <span class=\"hljs-title class_\">React</span>.<span class=\"hljs-title function_\">createRef</span>();\n\n  <span class=\"hljs-comment\">// Rendering the Waiter component</span>\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">h1</span>&gt;</span>Welcome to the Restaurant!<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">h1</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">button</span> <span class=\"hljs-attr\">onClick</span>=<span class=\"hljs-string\">{handleOrder}</span>&gt;</span>Place Order<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">button</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Kitchen</span> <span class=\"hljs-attr\">ref</span>=<span class=\"hljs-string\">{kitchenRef}</span> /&gt;</span>\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span></span>\n  );\n}</code></pre></div><div class=\"ml-vi\"><p>[Ảnh gốc bị cắt giữa chừng do cuộn trang — phần câu hỏi và đáp án thật sau đoạn code này không hiển thị trong ảnh chụp được, chỉ thấy đoạn code. Dựa trên code hiển thị (component Kitchen được lộ ra qua ref, được gọi mệnh lệnh từ component Waiter), chủ đề nhiều khả năng nhất là ref / gọi phương thức con theo kiểu mệnh lệnh trong React. Câu hỏi dưới đây là suy đoán hợp lý nhất — nếu rà lại, nên đối chiếu với ảnh gốc.]</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span>, { useState } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n\n<span class=\"hljs-keyword\">function</span> <span class=\"hljs-title function_\">Dish</span>(<span class=\"hljs-params\">{ name }</span>) {\n  <span class=\"hljs-keyword\">return</span> <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span>&gt;</span>{name}<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span></span>;\n}\n\n<span class=\"hljs-keyword\">function</span> <span class=\"hljs-title function_\">Kitchen</span>(<span class=\"hljs-params\"></span>) {\n  <span class=\"hljs-keyword\">const</span> [orders, setOrders] = <span class=\"hljs-title function_\">useState</span>([]);\n\n  <span class=\"hljs-comment\">// Triggering a render (delivering the guest&#x27;s order to the kitchen)</span>\n  <span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">addOrder</span> = (<span class=\"hljs-params\">order</span>) =&gt; {\n    <span class=\"hljs-title function_\">setOrders</span>(<span class=\"hljs-function\">(<span class=\"hljs-params\">prevOrders</span>) =&gt;</span> [...prevOrders, order]);\n  };\n\n  <span class=\"hljs-comment\">// Rendering the component (preparing the order in the kitchen)</span>\n  <span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">renderOrders</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n    <span class=\"hljs-keyword\">return</span> orders.<span class=\"hljs-title function_\">map</span>(<span class=\"hljs-function\">(<span class=\"hljs-params\">order, index</span>) =&gt;</span> <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Dish</span> <span class=\"hljs-attr\">key</span>=<span class=\"hljs-string\">{index}</span> <span class=\"hljs-attr\">name</span>=<span class=\"hljs-string\">{order}</span> /&gt;</span></span>);\n  };\n\n  <span class=\"hljs-comment\">// Committing to the DOM (placing the order on the table)</span>\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">h2</span>&gt;</span>Orders:<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">h2</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">ul</span>&gt;</span>{renderOrders()}<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">ul</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span></span>\n  );\n}\n\n<span class=\"hljs-keyword\">function</span> <span class=\"hljs-title function_\">Waiter</span>(<span class=\"hljs-params\"></span>) {\n  <span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">handleOrder</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n    <span class=\"hljs-comment\">// Triggering a render (delivering the guest&#x27;s order to the kitchen)</span>\n    kitchenRef.<span class=\"hljs-property\">current</span>.<span class=\"hljs-title function_\">addOrder</span>(<span class=\"hljs-string\">&#x27;Pizza&#x27;</span>);\n  };\n\n  <span class=\"hljs-comment\">// A reference to the Kitchen component</span>\n  <span class=\"hljs-keyword\">const</span> kitchenRef = <span class=\"hljs-title class_\">React</span>.<span class=\"hljs-title function_\">createRef</span>();\n\n  <span class=\"hljs-comment\">// Rendering the Waiter component</span>\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">h1</span>&gt;</span>Welcome to the Restaurant!<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">h1</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">button</span> <span class=\"hljs-attr\">onClick</span>=<span class=\"hljs-string\">{handleOrder}</span>&gt;</span>Place Order<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">button</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Kitchen</span> <span class=\"hljs-attr\">ref</span>=<span class=\"hljs-string\">{kitchenRef}</span> /&gt;</span>\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span></span>\n  );\n}</code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q26.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q26.png",
           "options": [
             {
               "text": "This works correctly — refs can call functions defined inside a function component directly.|||Đoạn code chạy đúng — ref có thể gọi thẳng hàm định nghĩa bên trong function component."
@@ -646,7 +646,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What happens if a prop fails the validation defined by a simple property validator?</p></div><div class=\"ml-vi\"><p>Điều gì xảy ra nếu một prop không qua được kiểm tra định nghĩa bởi một property validator đơn giản?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q27.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q27.png",
           "options": [
             {
               "text": "The prop will be automatically converted to the expected type.|||Prop sẽ tự động được chuyển đổi sang kiểu mong đợi."
@@ -670,7 +670,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Select the code snippet that correctly defines a Class Component in React.</p><pre><code class=\"language-jsx\"><span class=\"hljs-comment\">// A. class MyComponent extends React.Component {</span>\n<span class=\"hljs-comment\">//      render() {</span>\n<span class=\"hljs-comment\">//        return &lt;div&gt;Hello, World!&lt;/div&gt;;</span>\n<span class=\"hljs-comment\">//      }</span>\n<span class=\"hljs-comment\">//    }</span>\n\n<span class=\"hljs-comment\">// B. function MyComponent() {</span>\n<span class=\"hljs-comment\">//      return &lt;div&gt;Hello, World!&lt;/div&gt;;</span>\n<span class=\"hljs-comment\">//    }</span>\n\n<span class=\"hljs-comment\">// C. const MyComponent = () =&gt; {</span>\n<span class=\"hljs-comment\">//      return &lt;div&gt;Hello, World!&lt;/div&gt;;</span>\n<span class=\"hljs-comment\">//    };</span>\n\n<span class=\"hljs-comment\">// D. const MyComponent = React.createClass({</span>\n<span class=\"hljs-comment\">//      render() {</span>\n<span class=\"hljs-comment\">//        return &lt;div&gt;Hello, World!&lt;/div&gt;;</span>\n<span class=\"hljs-comment\">//      }</span>\n<span class=\"hljs-comment\">//    });</span></code></pre></div><div class=\"ml-vi\"><p>Chọn đoạn code định nghĩa đúng một Class Component trong React.</p><pre><code class=\"language-jsx\"><span class=\"hljs-comment\">// A. class MyComponent extends React.Component {</span>\n<span class=\"hljs-comment\">//      render() {</span>\n<span class=\"hljs-comment\">//        return &lt;div&gt;Hello, World!&lt;/div&gt;;</span>\n<span class=\"hljs-comment\">//      }</span>\n<span class=\"hljs-comment\">//    }</span>\n\n<span class=\"hljs-comment\">// B. function MyComponent() {</span>\n<span class=\"hljs-comment\">//      return &lt;div&gt;Hello, World!&lt;/div&gt;;</span>\n<span class=\"hljs-comment\">//    }</span>\n\n<span class=\"hljs-comment\">// C. const MyComponent = () =&gt; {</span>\n<span class=\"hljs-comment\">//      return &lt;div&gt;Hello, World!&lt;/div&gt;;</span>\n<span class=\"hljs-comment\">//    };</span>\n\n<span class=\"hljs-comment\">// D. const MyComponent = React.createClass({</span>\n<span class=\"hljs-comment\">//      render() {</span>\n<span class=\"hljs-comment\">//        return &lt;div&gt;Hello, World!&lt;/div&gt;;</span>\n<span class=\"hljs-comment\">//      }</span>\n<span class=\"hljs-comment\">//    });</span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q28.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q28.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -694,7 +694,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a utility-first CSS framework that is often used with Next.js?</p></div><div class=\"ml-vi\"><p>Đâu là một CSS framework utility-first thường dùng cùng Next.js?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q29.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q29.png",
           "options": [
             {
               "text": "Bulma|||Bulma"
@@ -718,7 +718,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which React Hook is used to handle side effects in functional components?</p></div><div class=\"ml-vi\"><p>Hook React nào dùng để xử lý side effect trong functional component?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q30.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q30.png",
           "options": [
             {
               "text": "useReducer|||useReducer"
@@ -742,7 +742,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of the Redux middleware in React applications?</p></div><div class=\"ml-vi\"><p>Middleware của Redux trong ứng dụng React dùng để làm gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q31.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q31.png",
           "options": [
             {
               "text": "To define the structure of the Redux store|||Định nghĩa cấu trúc của Redux store"
@@ -766,7 +766,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which command is used to install the required dependencies for a React project?</p></div><div class=\"ml-vi\"><p>Lệnh nào dùng để cài các dependency cần thiết cho một dự án React?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q32.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q32.png",
           "options": [
             {
               "text": "git LOne|||git LOne"
@@ -790,7 +790,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of the action parameter in a Redux reducer function?</p></div><div class=\"ml-vi\"><p>Tham số action trong hàm reducer của Redux dùng để làm gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q33.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q33.png",
           "options": [
             {
               "text": "To handle asynchronous operations|||Xử lý các thao tác bất đồng bộ"
@@ -814,7 +814,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is a feature of Next.js?</p></div><div class=\"ml-vi\"><p>Đâu là một tính năng của Next.js?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q34.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q34.png",
           "options": [
             {
               "text": "A CSS framework for styling web applications.|||Một framework CSS để tạo kiểu ứng dụng web."
@@ -838,7 +838,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How can you define a lazy component in React?</p></div><div class=\"ml-vi\"><p>Làm sao định nghĩa một component lazy trong React?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q35.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q35.png",
           "options": [
             {
               "text": "Using the createLazyComponent method from the React package|||Dùng phương thức createLazyComponent từ package React"
@@ -862,7 +862,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How do you wrap a lazy component with Suspense in React?</p></div><div class=\"ml-vi\"><p>Làm sao bọc một component lazy với Suspense trong React?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q36.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q36.png",
           "options": [
             {
               "text": "Using the lazy prop of the Suspense component|||Dùng prop lazy của component Suspense"
@@ -886,7 +886,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In Bootstrap, select the HTML/CSS code snippet to create a navbar with a dropdown menu containing sub-items.</p><pre><code class=\"language-html\"><span class=\"hljs-comment\">&lt;!-- A. --&gt;</span>\n<span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">nav</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;navbar&quot;</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">ul</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav&quot;</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item&quot;</span>&gt;</span>Item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item dropdown&quot;</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-link dropdown-toggle&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span> <span class=\"hljs-attr\">role</span>=<span class=\"hljs-string\">&quot;button&quot;</span> <span class=\"hljs-attr\">data-toggle</span>=<span class=\"hljs-string\">&quot;dropdown&quot;</span> <span class=\"hljs-attr\">aria-haspopup</span>=<span class=\"hljs-string\">&quot;true&quot;</span> <span class=\"hljs-attr\">aria-expanded</span>=<span class=\"hljs-string\">&quot;false&quot;</span>&gt;</span>Dropdown<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-menu&quot;</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 2<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">ul</span>&gt;</span>\n<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">nav</span>&gt;</span>\n\n<span class=\"hljs-comment\">&lt;!-- B. --&gt;</span>\n<span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">nav</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;navbar&quot;</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">ul</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav&quot;</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item&quot;</span>&gt;</span>Item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item&quot;</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-link&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Dropdown<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-menu&quot;</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 2<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">ul</span>&gt;</span>\n<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">nav</span>&gt;</span>\n\n<span class=\"hljs-comment\">&lt;!-- C. --&gt;</span>\n<span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">nav</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;navbar&quot;</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">ul</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav&quot;</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item&quot;</span>&gt;</span>Item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item dropdown&quot;</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-link dropdown-toggle&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span> <span class=\"hljs-attr\">role</span>=<span class=\"hljs-string\">&quot;button&quot;</span> <span class=\"hljs-attr\">data-toggle</span>=<span class=\"hljs-string\">&quot;dropdown&quot;</span> <span class=\"hljs-attr\">aria-haspopup</span>=<span class=\"hljs-string\">&quot;true&quot;</span> <span class=\"hljs-attr\">aria-expanded</span>=<span class=\"hljs-string\">&quot;false&quot;</span>&gt;</span>Dropdown<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-content&quot;</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 2<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">ul</span>&gt;</span>\n<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">nav</span>&gt;</span></code></pre></div><div class=\"ml-vi\"><p>Trong Bootstrap, chọn đoạn code HTML/CSS đúng để tạo navbar có menu dropdown chứa các mục con.</p><pre><code class=\"language-html\"><span class=\"hljs-comment\">&lt;!-- A. --&gt;</span>\n<span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">nav</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;navbar&quot;</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">ul</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav&quot;</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item&quot;</span>&gt;</span>Item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item dropdown&quot;</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-link dropdown-toggle&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span> <span class=\"hljs-attr\">role</span>=<span class=\"hljs-string\">&quot;button&quot;</span> <span class=\"hljs-attr\">data-toggle</span>=<span class=\"hljs-string\">&quot;dropdown&quot;</span> <span class=\"hljs-attr\">aria-haspopup</span>=<span class=\"hljs-string\">&quot;true&quot;</span> <span class=\"hljs-attr\">aria-expanded</span>=<span class=\"hljs-string\">&quot;false&quot;</span>&gt;</span>Dropdown<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-menu&quot;</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 2<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">ul</span>&gt;</span>\n<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">nav</span>&gt;</span>\n\n<span class=\"hljs-comment\">&lt;!-- B. --&gt;</span>\n<span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">nav</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;navbar&quot;</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">ul</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav&quot;</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item&quot;</span>&gt;</span>Item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item&quot;</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-link&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Dropdown<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-menu&quot;</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 2<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">ul</span>&gt;</span>\n<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">nav</span>&gt;</span>\n\n<span class=\"hljs-comment\">&lt;!-- C. --&gt;</span>\n<span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">nav</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;navbar&quot;</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">ul</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav&quot;</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item&quot;</span>&gt;</span>Item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">li</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-item dropdown&quot;</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;nav-link dropdown-toggle&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span> <span class=\"hljs-attr\">role</span>=<span class=\"hljs-string\">&quot;button&quot;</span> <span class=\"hljs-attr\">data-toggle</span>=<span class=\"hljs-string\">&quot;dropdown&quot;</span> <span class=\"hljs-attr\">aria-haspopup</span>=<span class=\"hljs-string\">&quot;true&quot;</span> <span class=\"hljs-attr\">aria-expanded</span>=<span class=\"hljs-string\">&quot;false&quot;</span>&gt;</span>Dropdown<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">div</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-content&quot;</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 1<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">a</span> <span class=\"hljs-attr\">class</span>=<span class=\"hljs-string\">&quot;dropdown-item&quot;</span> <span class=\"hljs-attr\">href</span>=<span class=\"hljs-string\">&quot;#&quot;</span>&gt;</span>Sub-item 2<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">a</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">div</span>&gt;</span>\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">li</span>&gt;</span>\n  <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">ul</span>&gt;</span>\n<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">nav</span>&gt;</span></code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q37.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q37.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -910,7 +910,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of a router in web development?</p></div><div class=\"ml-vi\"><p>Mục đích của một router trong phát triển web là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q38.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q38.png",
           "options": [
             {
               "text": "To handle database operations|||Xử lý thao tác cơ sở dữ liệu"
@@ -934,7 +934,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is Node.js?</p></div><div class=\"ml-vi\"><p>Node.js là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q39.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q39.png",
           "options": [
             {
               "text": "A CSS framework|||Một framework CSS"
@@ -958,7 +958,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is a Component in React?</p></div><div class=\"ml-vi\"><p>Component trong React là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q40.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q40.png",
           "options": [
             {
               "text": "It is a JavaScript function.|||Nó là một hàm JavaScript."
@@ -982,7 +982,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What are the key features of Next.js?</p></div><div class=\"ml-vi\"><p>Các tính năng chính của Next.js là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q41.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q41.png",
           "options": [
             {
               "text": "Database integration, code debugging, and form validation.|||Tích hợp cơ sở dữ liệu, debug code, và validate form."
@@ -1006,7 +1006,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How do you create a new Next.js project?</p></div><div class=\"ml-vi\"><p>Làm sao tạo một dự án Next.js mới?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q42.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q42.png",
           "options": [
             {
               "text": "Use the create-next-app command-line tool.|||Dùng công cụ dòng lệnh create-next-app."
@@ -1030,7 +1030,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How can you create a new React application using Create React App?</p></div><div class=\"ml-vi\"><p>Làm sao tạo một ứng dụng React mới bằng Create React App?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q43.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q43.png",
           "options": [
             {
               "text": "By LOning a Git repository|||Bằng cách clone một Git repository"
@@ -1054,7 +1054,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In ReactJS with Bootstrap, select the JSX code snippet to create a button with a blue background and white text color.</p><pre><code class=\"language-jsx\"><span class=\"hljs-comment\">// A.</span>\n<span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span> <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n<span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">MyButton</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span> <span class=\"hljs-attr\">className</span>=<span class=\"hljs-string\">&quot;btn-primary&quot;</span>&gt;</span>\n      My Button\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span></span>\n  );\n};\n<span class=\"hljs-keyword\">export</span> <span class=\"hljs-keyword\">default</span> <span class=\"hljs-title class_\">MyButton</span>;\n\n<span class=\"hljs-comment\">// B.</span>\n<span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span> <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n<span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">MyButton</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span> <span class=\"hljs-attr\">className</span>=<span class=\"hljs-string\">&quot;btn btn-primary&quot;</span>&gt;</span>\n      My Button\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span></span>\n  );\n};\n<span class=\"hljs-keyword\">export</span> <span class=\"hljs-keyword\">default</span> <span class=\"hljs-title class_\">MyButton</span>;\n\n<span class=\"hljs-comment\">// C.</span>\n<span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span> <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n<span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">MyButton</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span> <span class=\"hljs-attr\">className</span>=<span class=\"hljs-string\">&quot;bg-primary text-white&quot;</span>&gt;</span>\n      My Button\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span></span>\n  );\n};\n<span class=\"hljs-keyword\">export</span> <span class=\"hljs-keyword\">default</span> <span class=\"hljs-title class_\">MyButton</span>;</code></pre></div><div class=\"ml-vi\"><p>Trong ReactJS với Bootstrap, chọn đoạn JSX đúng để tạo một nút có nền xanh dương và chữ trắng.</p><pre><code class=\"language-jsx\"><span class=\"hljs-comment\">// A.</span>\n<span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span> <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n<span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">MyButton</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span> <span class=\"hljs-attr\">className</span>=<span class=\"hljs-string\">&quot;btn-primary&quot;</span>&gt;</span>\n      My Button\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span></span>\n  );\n};\n<span class=\"hljs-keyword\">export</span> <span class=\"hljs-keyword\">default</span> <span class=\"hljs-title class_\">MyButton</span>;\n\n<span class=\"hljs-comment\">// B.</span>\n<span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span> <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n<span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">MyButton</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span> <span class=\"hljs-attr\">className</span>=<span class=\"hljs-string\">&quot;btn btn-primary&quot;</span>&gt;</span>\n      My Button\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span></span>\n  );\n};\n<span class=\"hljs-keyword\">export</span> <span class=\"hljs-keyword\">default</span> <span class=\"hljs-title class_\">MyButton</span>;\n\n<span class=\"hljs-comment\">// C.</span>\n<span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span> <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n<span class=\"hljs-keyword\">import</span> { <span class=\"hljs-title class_\">Button</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react-bootstrap&#x27;</span>;\n<span class=\"hljs-keyword\">const</span> <span class=\"hljs-title function_\">MyButton</span> = (<span class=\"hljs-params\"></span>) =&gt; {\n  <span class=\"hljs-keyword\">return</span> (\n    <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">Button</span> <span class=\"hljs-attr\">variant</span>=<span class=\"hljs-string\">&quot;primary&quot;</span> <span class=\"hljs-attr\">className</span>=<span class=\"hljs-string\">&quot;bg-primary text-white&quot;</span>&gt;</span>\n      My Button\n    <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">Button</span>&gt;</span></span>\n  );\n};\n<span class=\"hljs-keyword\">export</span> <span class=\"hljs-keyword\">default</span> <span class=\"hljs-title class_\">MyButton</span>;</code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q44.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q44.png",
           "options": [
             {
               "text": "Option A|||Phương án A"
@@ -1078,7 +1078,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How can you install React-Bootstrap in your ReactJS project?</p></div><div class=\"ml-vi\"><p>Làm sao cài React-Bootstrap vào dự án ReactJS?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q45.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q45.png",
           "options": [
             {
               "text": "By using npm or yarn to install the package.|||Dùng npm hoặc yarn để cài package."
@@ -1102,7 +1102,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of a server in a client-server architecture?</p></div><div class=\"ml-vi\"><p>Mục đích của server trong kiến trúc client-server là gì?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q46.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q46.png",
           "options": [
             {
               "text": "To display the website content.|||Hiển thị nội dung website."
@@ -1126,7 +1126,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which HTTP status code indicates a successful response from a server?</p></div><div class=\"ml-vi\"><p>Mã trạng thái HTTP nào cho biết phản hồi thành công từ server?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q47.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q47.png",
           "options": [
             {
               "text": "302 Found|||302 Found"
@@ -1150,7 +1150,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In the code above, how can we update the value of the name or email state based on the user input in the respective input fields?</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span>, { <span class=\"hljs-title class_\">Component</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Form</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_ inherited__\">Component</span> {\n  <span class=\"hljs-title function_\">constructor</span>(<span class=\"hljs-params\">props</span>) {\n    <span class=\"hljs-variable language_\">super</span>(props);\n    <span class=\"hljs-variable language_\">this</span>.<span class=\"hljs-property\">state</span> = {\n      <span class=\"hljs-attr\">name</span>: <span class=\"hljs-string\">&#x27;&#x27;</span>,\n      <span class=\"hljs-attr\">email</span>: <span class=\"hljs-string\">&#x27;&#x27;</span>\n    };\n  }\n\n  <span class=\"hljs-title function_\">handleInputChange</span>(<span class=\"hljs-params\">event</span>) {\n    <span class=\"hljs-comment\">// <span class=\"hljs-doctag\">TODO:</span> Update the corresponding state property based on user input</span>\n  }\n\n  <span class=\"hljs-title function_\">render</span>(<span class=\"hljs-params\"></span>) {\n    <span class=\"hljs-keyword\">return</span> (\n      <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">form</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">label</span>&gt;</span>\n          Name:\n          <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">input</span>\n            <span class=\"hljs-attr\">type</span>=<span class=\"hljs-string\">&quot;text&quot;</span>\n            <span class=\"hljs-attr\">value</span>=<span class=\"hljs-string\">{this.state.name}</span>\n            <span class=\"hljs-attr\">onChange</span>=<span class=\"hljs-string\">{this.handleInputChange}</span>\n          /&gt;</span>\n        <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">label</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">label</span>&gt;</span>\n          Email:\n          <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">input</span>\n            <span class=\"hljs-attr\">type</span>=<span class=\"hljs-string\">&quot;email&quot;</span>\n            <span class=\"hljs-attr\">value</span>=<span class=\"hljs-string\">{this.state.email}</span>\n            <span class=\"hljs-attr\">onChange</span>=<span class=\"hljs-string\">{this.handleInputChange}</span>\n          /&gt;</span>\n        <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">label</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">form</span>&gt;</span></span>\n    );\n  }\n}\n\n<span class=\"hljs-keyword\">export</span> <span class=\"hljs-keyword\">default</span> <span class=\"hljs-title class_\">Form</span>;</code></pre></div><div class=\"ml-vi\"><p>Trong đoạn code trên, làm sao cập nhật giá trị state name hoặc email dựa trên input người dùng nhập vào ô tương ứng?</p><pre><code class=\"language-jsx\"><span class=\"hljs-keyword\">import</span> <span class=\"hljs-title class_\">React</span>, { <span class=\"hljs-title class_\">Component</span> } <span class=\"hljs-keyword\">from</span> <span class=\"hljs-string\">&#x27;react&#x27;</span>;\n\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Form</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_ inherited__\">Component</span> {\n  <span class=\"hljs-title function_\">constructor</span>(<span class=\"hljs-params\">props</span>) {\n    <span class=\"hljs-variable language_\">super</span>(props);\n    <span class=\"hljs-variable language_\">this</span>.<span class=\"hljs-property\">state</span> = {\n      <span class=\"hljs-attr\">name</span>: <span class=\"hljs-string\">&#x27;&#x27;</span>,\n      <span class=\"hljs-attr\">email</span>: <span class=\"hljs-string\">&#x27;&#x27;</span>\n    };\n  }\n\n  <span class=\"hljs-title function_\">handleInputChange</span>(<span class=\"hljs-params\">event</span>) {\n    <span class=\"hljs-comment\">// <span class=\"hljs-doctag\">TODO:</span> Update the corresponding state property based on user input</span>\n  }\n\n  <span class=\"hljs-title function_\">render</span>(<span class=\"hljs-params\"></span>) {\n    <span class=\"hljs-keyword\">return</span> (\n      <span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">form</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">label</span>&gt;</span>\n          Name:\n          <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">input</span>\n            <span class=\"hljs-attr\">type</span>=<span class=\"hljs-string\">&quot;text&quot;</span>\n            <span class=\"hljs-attr\">value</span>=<span class=\"hljs-string\">{this.state.name}</span>\n            <span class=\"hljs-attr\">onChange</span>=<span class=\"hljs-string\">{this.handleInputChange}</span>\n          /&gt;</span>\n        <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">label</span>&gt;</span>\n        <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">label</span>&gt;</span>\n          Email:\n          <span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">input</span>\n            <span class=\"hljs-attr\">type</span>=<span class=\"hljs-string\">&quot;email&quot;</span>\n            <span class=\"hljs-attr\">value</span>=<span class=\"hljs-string\">{this.state.email}</span>\n            <span class=\"hljs-attr\">onChange</span>=<span class=\"hljs-string\">{this.handleInputChange}</span>\n          /&gt;</span>\n        <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">label</span>&gt;</span>\n      <span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">form</span>&gt;</span></span>\n    );\n  }\n}\n\n<span class=\"hljs-keyword\">export</span> <span class=\"hljs-keyword\">default</span> <span class=\"hljs-title class_\">Form</span>;</code></pre></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q48.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q48.png",
           "options": [
             {
               "text": "Assign a new value to name or email using the assignment operator (=) inside the handleInputChange method.|||Gán giá trị mới cho name hoặc email bằng toán tử gán (=) bên trong handleInputChange."
@@ -1174,7 +1174,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Why use React-Bootstrap?</p></div><div class=\"ml-vi\"><p>Vì sao dùng React-Bootstrap?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q49.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q49.png",
           "options": [
             {
               "text": "It is developed by Facebook and has large community support.|||Nó do Facebook phát triển và có cộng đồng hỗ trợ lớn."
@@ -1198,7 +1198,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How would you create a custom Hook in React?</p></div><div class=\"ml-vi\"><p>Làm sao tạo một custom Hook trong React?</p></div>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v2/q50.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/FER202/FE3-v3/q50.png",
           "options": [
             {
               "text": "By wrapping a class component with a functional component.|||Bằng cách bọc một class component trong một functional component."

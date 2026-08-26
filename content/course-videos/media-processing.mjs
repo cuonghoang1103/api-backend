@@ -32,6 +32,7 @@ export default {
     'mp-1-1-pipeline': { yt: 'UoNVywzzINY', credit: 'Kritika & Pranav | Programmer Couple — Process images the right way with SharpJS | Image cropping, reducing size and more...' }, // Process images the right way with SharpJS | Image cropping, reducing size and more...
     'mp-1-2-metadata': { yt: 'bWZjLkzHvC8', credit: 'SoftApp Technologies — Image Processing in Node js with Sharp' }, // Image Processing in Node js with Sharp
     'mp-1-3-resize': { yt: 'GCkQRMMbLn8', credit: 'Mitter - Your Tech Mate — Resize Images Using Sharp | JavaScript | Node Js' },   // Resize Images Using Sharp | JavaScript | Node Js
+    'mp-1-4-exif': { yt: 'dZpmgvLaJNY', credit: '' },   // Exiftool - Protect Your Privacy | Remove Metadata From Photos
 
     /* ── Chương 2 — Sharp trên production ── */
     'mp-2-1-svg': { yt: 'hT1764wkBdk', credit: 'Tejas Kumar — The Best Image Format, from AVIF to WebP to JPG with Core Web Vitals and Progressive Enhancement' },      // The Best Image Format, from AVIF to WebP to JPG with Core Web Vitals and Progressive Enhancement

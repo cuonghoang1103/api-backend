@@ -83,6 +83,7 @@ export default {
     'nginx-8-2-if-la-quy-du': { yt: 'LM-3SWQiCNg', credit: 'Durgadas Kamath — Rewrite rules, Try Files and Logging | Nginx Tutorial #2' },       // Rewrite rules, Try Files and Logging | Nginx Tutorial #2
     'nginx-8-3-map': { yt: '6dwy3TQrYIE', credit: 'dimzrio — Nginx Tutorials #6 - Map Module (Redirect URL Based on User Agent)' },                // Nginx Tutorials #6 - Map Module (Redirect URL Based on User Agent)
     'nginx-8-4-return-error-page': { yt: '0yKLjVdgX9A', credit: 'dimzrio — Nginx Tutorials #5 - Redirect Url (Index, Error_page, Return, Rewrite and Try_files)' },  // Nginx Tutorials #5 - Redirect Url (Index, Error_page, Return, Rewrite and Try_files)
+    'nginx-8-5-chuyen-doi-url': { yt: '9AGd9hnUnAg', credit: '' },   // NGINX Rewrite and Redirect
 
     /* ── Chương 9 — Cân bằng tải qua nhiều backend ── */
     'nginx-9-1-khoi-upstream': { yt: 'wYjhS42mbWM', credit: 'CultureLinux — 🔀 NGINX: Proxy Pass + Load Balancer (Round Robin, IP Hash...)' },           // NGINX: Proxy Pass + Load Balancer (Round Robin, IP Hash...)

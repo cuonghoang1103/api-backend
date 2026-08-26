@@ -50,9 +50,12 @@ export default {
     'wf-3-3-flexbox': { yt: 'wsTv9y931o8', credit: 'Coding2GO — Learn CSS Flexbox in 20 Minutes (Course)' },    // Learn CSS Flexbox in 20 Minutes (Course)
     'wf-3-4-css-grid': { yt: 'dT3aujtzBe4', credit: 'CodeKinda — Responsive Web Design Tutorial:  Media Queries & CSS Grid' },   // Responsive Web Design Tutorial: Media Queries & CSS Grid
     'wf-3-5-responsive': { yt: 'uiEdKv5Fyh0', credit: 'Infomax Computer Academy — Media Query in CSS | Responsive Web Design Tutorial for Beginners' }, // Media Query in CSS | Responsive Web Design Tutorial for Beginners
+    'wf-4-1-variables-types': { yt: 'tY3EYcQJdY4', credit: '' },   // JavaScript Variables & Data Types Explained – let, const, var (Beginner Guide)
 
     /* ── Chương 4 — Nền tảng JavaScript ── */
     'wf-4-2-conditions-loops': { yt: 'RlnvXCKQuso', credit: 'Satish C J — Introduction to JavaScript - I (variables, if else , switch , loops - for, while, do while - arrays)' }, // Introduction to JavaScript - I (variables, if else, switch, loops - for, while, do while - arrays)
+    'wf-4-3-functions': { yt: 'fRRRkognpOs', credit: '' },   // Learn JavaScript ARROW FUNCTIONS in 8 minutes!
+    'wf-4-4-arrays-objects': { yt: 'gnbzqtd2zgM', credit: '' },   // Learn Arrays & Objects in Vanilla JavaScript for Beginners (Data Structures)
     'wf-4-5-dom-events': { yt: 'UEQyj5Ds69s', credit: 'Aptech Learning Garden - Site - Orangi - Latifabad — DOM manipulation using JavaScript | innerHTML, innerText, querySelector, createElement, appendChild' },       // DOM manipulation using JavaScript | innerHTML, innerText, querySelector, createElement, appendChild
 
     /* ── Chương 5 — JavaScript bất đồng bộ & module ── */

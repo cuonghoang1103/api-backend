@@ -54,6 +54,7 @@ export default {
     /* ── Chương 4 — Action, và chuyện chạy mã của người khác ── */
     'ga-4-1-action-la-gi': { yt: 'JYOGmLzMbpM', credit: 'Mickey Gousset — Introduction to GitHub Actions - Part 4 - The GitHub Marketplace' }, // Introduction to GitHub Actions - Part 4 - The GitHub Marketplace
     'ga-4-2-ghim': { yt: '8uQLyErG4EE', credit: 'bdougie — Ensure your GitHub Actions are pinned to a SHA' },         // Ensure your GitHub Actions are pinned to a SHA
+    'ga-4-3-checkout': { yt: '-61_kIikldQ', credit: '' },   // How to Use the Checkout Action in Github Actions
     'ga-4-4-setup': { yt: 'gRPIPiiTH-c', credit: 'Swashbuckling with Code — CI #5 - Why use the setup-node action?' },        // CI #5 - Why use the setup-node action?
     'ga-4-5-tu-viet': { yt: 'zQdEsIBbVjE', credit: 'Mickey Gousset — Create Your First Custom GitHub Action' },      // Create Your First Custom GitHub Action
 

@@ -69,6 +69,7 @@ export default {
 
     /* ── Chương 9 — Sách công thức chẩn đoán ── */
     'os-9-1-common': { yt: 'rn4qLXhMesg', credit: 'Amazon Web Services — Why am I getting an HTTP 403 Forbidden error when I try to upload files using the Amazon S3 console?' },  // Why am I getting an HTTP 403 Forbidden error when I try to upload files using the Amazon S3 console?
+    'os-9-2-latency': { yt: 'EhkhfIGpiZE', credit: '' },   // Q1 2026 Cloud Storage Performance Stats: Backblaze B2 vs AWS S3 vs Cloudflare R2 vs Wasabi
 
     /* ── Chương 10 — Cái sống sót qua đo đạc ── */
     'os-10-1-song-qua': { yt: 'JXnMXgCUpuw', credit: 'Ram N Java — Master Amazon S3 Lifecycle Policies: Slash Your Storage Costs | Essential Tips for New Users' }, // Amazon S3 Lifecycle Policies: Save Costs on Storage | Amazon S3 Lifecycle for Beginners

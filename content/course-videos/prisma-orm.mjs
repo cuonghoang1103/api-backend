@@ -101,6 +101,7 @@ export default {
 
     /* ── Chương 11 — Đưa lên production ── */
     'pr-11-1-engine-trong-anh': { yt: 'lDpnnTPokdA', credit: 'Ben Awad — Setting up React Native and looking into Prisma\'s Docker container - Part 1' },     // Setting up React Native and looking into Prisma's Docker container - Part 1
+    'pr-11-2-dockerfile': { yt: '0TsJbFKUYtI', credit: '' },   // Setting up Express and Prisma with Docker | Express API & Prisma ORM Course
     'pr-11-3-migration-khi-deploy': { yt: 'ZDsn8Lm_LH8', credit: 'Very Academy — Automating Prisma Migration with Docker | Express API & Prisma ORM Query Fundamentals Course' }, // Automating Prisma Migration with Docker | Express API & Prisma ORM Query Fundamentals Course
     'pr-11-4-seed-va-nap-bu': { yt: 'mulzjQ4pZaA', credit: 'Prisma — How to Seed Your Database with Prisma ORM 7' },       // How to Seed Your Database with Prisma ORM 7
     'pr-11-5-vong-doi-client': { yt: 'ogfXx2NfiNo', credit: 'Prisma — Deploying a Prisma Client Application with the Serverless framework' },      // Deploying a Prisma Client Application with the Serverless framework

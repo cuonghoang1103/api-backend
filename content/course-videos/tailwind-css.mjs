@@ -73,7 +73,9 @@ export default {
 
     /* ── Chương 7 — @layer, và cơ chế thật sự của nó ── */
     'tw-7-1-strip-layer': { yt: '_wcuT6FPsxU', credit: 'AyyazTech — How to add @layer directive in Tailwind CSS?' }, // How to add @layer directive in Tailwind CSS?
+    'tw-7-2-phan-loai': { yt: 'fCHxFM6r9jI', credit: '' },   // When to use @apply and @layer directive?: Tailwind Tutorial #11
     'tw-7-3-ba-dai': { yt: 'F0k0Nhmjx8w', credit: 'Sanan Ali — Styling Base Elements in TailwindCSS v4   Layers in TailwindCSS' },      // Styling Base Elements in TailwindCSS v4 Layers in TailwindCSS
+    'tw-7-4-preflight': { yt: 'tV84IS9505c', credit: '' },   // Tailwind CSS Preflight (Default Styles)
     'tw-7-5-doc-dau-ra': { yt: 'uL1d3D5gc2w', credit: 'Sanan Ali — How to use @apply and @utility directives in TailwindCSS v4' },  // How to use @apply and @utility directives in TailwindCSS v4
 
     /* ── Chương 8 — Kích thước đầu ra, đo thật ── */

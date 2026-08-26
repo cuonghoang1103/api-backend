@@ -4420,174 +4420,517 @@ body:has(.landing-root) {
 .landing-icon-button { min-width: 2.75rem; padding-inline: var(--space-sm); }
 .landing-header-cta { gap: var(--space-xs); padding-inline: var(--space-md); white-space: nowrap; }
 
-/* Tier-B articulated SVG mascot. The user explicitly requested a repeating
-   run/kick/disappear sequence; it is active for half of a long cycle and idle
-   while invisible. All joints stay on transform/opacity-only animations. */
+/* ══════════════════════════════════════════════════════════════════════════
+   ROBOT ĐÁ BÓNG TRÊN THANH HEADER — cảnh 2.5D, một vòng 24 giây (26/08/2026)
+   ══════════════════════════════════════════════════════════════════════════
+   Lý do viết lại và hai thủ thuật dựng cảnh: xem đầu file
+   `components/home/landing/LandingRobotRail.tsx`. Ở đây chỉ ghi phần CSS cần
+   biết để sửa mà không làm gãy hình.
+
+   ─── TOẠ ĐỘ ĂN KHỚP CỨNG VỚI SVG ────────────────────────────────────────
+   viewBox `0 -6 560 96` · mặt đất y=66 · tâm x=280 · cửa hầm x 253,4→306,6.
+     · `--lt-ground: 0.75`  = (66 − (−6)) / 96 — mặt đất nằm ở 75% chiều cao
+       SVG. Đây là số dùng để kéo SVG lên cho mặt đất TRÙNG đường kẻ.
+     · `--lt-hatch-half`    = nửa bề rộng cửa, quy từ đơn vị viewBox ra rem.
+       Đường kẻ dùng nó để CHỪA một khoảng trống đúng chỗ cửa hầm — không thì
+       nét kẻ vẫn chạy ngang qua miệng hầm lúc cửa đang mở.
+   Đổi bất cứ số nào ở trên thì phải đổi cả hai nơi.
+
+   ─── MỐC THỜI GIAN (phần trăm của 24s) ──────────────────────────────────
+      0–2   nghỉ (nằm dưới hầm, bị xén hết)     37–40  SÚT
+      2–5   cửa mở                              40–45  ăn mừng, nhảy lên
+      5–10  trồi lên (vọt quá rồi hạ)           45–49  quay người (scaleX lật)
+     10–13  cửa đóng, chớp mắt, liếc quanh      49–58  đi ngược về cửa (3 nhịp)
+     13–16  bóng rơi xuống, nảy một cái         58–61  quay lại, cửa mở
+     16–18  hạ người lấy thế                    61–66  vẫy tay rồi chui xuống
+     18–33  chạy rê bóng sang phải (5 nhịp)     66–69  cửa đóng, đèn chốt nháy
+     33–37  trụ chân, vung chân lấy đà          69–100 nghỉ (7,4 giây)
+
+   Muốn cảnh nhanh/chậm hơn thì đổi ĐÚNG MỘT chỗ: `--lt-cycle`. Mọi mốc đều là
+   phần trăm nên chúng co giãn theo, giữ nguyên tỉ lệ giữa các đoạn.
+
+   Một nhịp chạy = 3% = 0,72s. Tư thế chạm đất ở 18/21/24/27/30/33, tư thế
+   nhấc chân ở 19,5/22,5/25,5/28,5/31,5 — nhờ gộp được nhiều mốc vào một dòng
+   nên cả bước chạy chỉ tốn hai dòng cho mỗi khớp thay vì hai mươi.
+
+   ─── LUẬT XOAY (SVG: +y hướng XUỐNG) ────────────────────────────────────
+   Robot quay mặt sang PHẢI. Một đốt chi chỉ xuống, xoay DƯƠNG thì đầu dưới
+   của nó lùi ra SAU (sang trái), xoay ÂM thì đưa ra TRƯỚC. Nhớ dấu này trước
+   khi chỉnh chân sút, không thì nó đá ngược.
+
+   ─── CHỈ transform VÀ opacity ───────────────────────────────────────────
+   Không filter, không box-shadow động, không rAF, không canvas. Bụi dưới chân
+   dùng vòng nhanh 0,75s LỒNG trong một cửa sổ bật/tắt của vòng lớn (24 chia
+   hết cho 0,75 nên hai vòng không bao giờ lệch pha).                        */
+
 .landing-robot-rail {
+  /* Hình học — xem bảng toạ độ ở trên trước khi đổi */
+  --lt-scene-h: 5.25rem;
+  --lt-ground: 0.75;
+  --lt-line: 1.1rem;
+  --lt-hatch-half: calc(var(--lt-scene-h) * 27 / 96);
+  --lt-cycle: 24s;
+
+  /* Bảng màu — dẫn xuất từ token, KHÔNG gán hex. `--color-ink` ở trang này là
+     màu CHỮ (sáng trong theme tối) nên tuyệt đối không dùng nó làm "màu đen":
+     mọi mảng tối phải đi qua `--landing-robot-panel`, thứ tối ở CẢ HAI theme. */
+  --lt-lit: color-mix(in oklch, var(--landing-robot-metal) 88%, var(--color-paper));
+  --lt-mid: var(--landing-robot-metal);
+  --lt-dim: color-mix(in oklch, var(--landing-robot-metal) 56%, var(--landing-robot-panel));
+  --lt-side: color-mix(in oklch, var(--landing-robot-metal) 32%, var(--landing-robot-panel));
+  --lt-edge: color-mix(in oklch, var(--color-accent) 68%, var(--landing-robot-panel));
+
   position: relative;
   height: 2rem;
-  overflow: visible;
   background: var(--color-paper);
+  pointer-events: none;
 }
 
-.landing-robot-rail::before {
+/* Đường kẻ chân header. Nó CHỪA một ô trống đúng bề rộng cửa hầm; đoạn đó do
+   hai cánh cửa trong SVG vẽ tiếp, nên lúc cửa đóng nét kẻ liền mạch còn lúc
+   cửa mở thì hở ra thật chứ không có nét gạch ngang qua miệng hầm. */
+.landing-rail-line {
   position: absolute;
-  inset: 1.1rem max(1rem, calc((100vw - 76rem) / 2)) auto;
+  top: var(--lt-line);
+  right: max(1rem, calc((100vw - 76rem) / 2));
+  left: max(1rem, calc((100vw - 76rem) / 2));
   height: 1px;
-  content: '';
-  background: color-mix(in oklch, var(--color-rule) 78%, transparent);
+  background: linear-gradient(
+    to right,
+    var(--color-rule) 0 calc(50% - var(--lt-hatch-half)),
+    transparent calc(50% - var(--lt-hatch-half)) calc(50% + var(--lt-hatch-half)),
+    var(--color-rule) calc(50% + var(--lt-hatch-half)) 100%
+  );
 }
 
-.landing-robot-runner {
+/* Kéo SVG lên sao cho mặt đất của nó (75% chiều cao) trùng đúng đường kẻ.
+   `will-change` ở đây KHÔNG phải để "cho nhanh" mà để CÁCH LY: header là
+   `position: sticky` trải hết bề ngang màn hình, mà hoạt hình SVG thì vẽ lại
+   trên luồng chính. Không tách lớp thì mỗi khung của robot kéo theo cả dải
+   header vẽ lại. Tách rồi thì phần vẽ lại gói gọn trong ô ~490×84px. */
+.landing-robot-scene {
   position: absolute;
-  top: 0;
+  top: calc(var(--lt-line) - var(--lt-scene-h) * var(--lt-ground));
   left: 50%;
   z-index: 1;
-  width: 8.25rem;
-  height: 100%;
-  transform-origin: center bottom;
-  animation: landing-mascot-cycle 7.2s var(--ease-in-out) infinite both;
+  width: calc(var(--lt-scene-h) * 560 / 96);
+  height: var(--lt-scene-h);
+  transform: translateX(-50%);
+  will-change: transform;
 }
 
-.landing-robot-player { display: block; width: 8.25rem; height: 3.375rem; transform: translateY(-1.05rem); }
-.landing-robot-shadow { fill: color-mix(in oklch, var(--color-ink) 18%, transparent); }
-.landing-robot-head,
-.landing-robot-torso { fill: var(--landing-robot-metal); stroke: var(--color-accent); stroke-width: 1.2; }
-.landing-robot-ear { fill: var(--color-accent); }
-.landing-robot-highlight { fill: color-mix(in oklch, var(--color-paper) 42%, transparent); }
-.landing-robot-face { fill: var(--landing-robot-panel); }
+/* ── Màu của các nút gradient ───────────────────────────────────────────── */
+.lt-stop-shell-lit { stop-color: var(--lt-lit); }
+.lt-stop-shell-mid { stop-color: var(--lt-mid); }
+.lt-stop-shell-dim { stop-color: var(--lt-dim); }
+.lt-stop-side-a { stop-color: var(--lt-side); }
+.lt-stop-side-b { stop-color: color-mix(in oklch, var(--lt-side) 62%, var(--landing-robot-panel)); }
+.lt-stop-visor-a { stop-color: color-mix(in oklch, var(--landing-robot-panel) 74%, var(--color-accent)); }
+.lt-stop-visor-b { stop-color: var(--landing-robot-panel); }
+.lt-stop-ball-a { stop-color: color-mix(in oklch, var(--color-paper) 84%, var(--landing-identity)); }
+.lt-stop-ball-b { stop-color: color-mix(in oklch, var(--landing-identity) 62%, var(--color-paper)); }
+.lt-stop-ball-c { stop-color: color-mix(in oklch, var(--landing-identity) 58%, var(--landing-robot-panel)); }
+.lt-stop-shaft-a { stop-color: color-mix(in oklch, var(--landing-robot-panel) 76%, black); }
+.lt-stop-shaft-b { stop-color: color-mix(in oklch, var(--landing-robot-panel) 76%, black); stop-opacity: 0; }
+/* Hai cánh cửa cố tình LÙI về gần màu đường kẻ: lúc đóng nó chỉ là một đoạn
+   gờ hơi dày trên nét kẻ, không phải hai thanh sáng trôi nổi. Mở ra mới thấy. */
+.lt-stop-door-a { stop-color: color-mix(in oklch, var(--color-rule) 58%, var(--landing-robot-metal)); }
+.lt-stop-door-b { stop-color: color-mix(in oklch, var(--color-rule) 62%, var(--landing-robot-panel)); }
+
+/* ── Mảng vỏ: ba mặt cho ra khối, viền tím mảnh cho ra nét vẽ ───────────── */
+.lt-plate { stroke: var(--lt-edge); stroke-width: 0.85; }
+.lt-plate-lit { fill: url(#lt-shell); }
+.lt-plate-dim { fill: var(--lt-dim); }
+.lt-plate-side { fill: url(#lt-shell-side); stroke: none; }
+.lt-plate-crown { fill: var(--color-paper); stroke: none; opacity: 0.34; }
+.lt-plate-belt { fill: var(--lt-side); }
+.lt-plate-neck { fill: var(--lt-dim); }
+
+.landing-robot-visor { fill: url(#lt-visor); stroke: var(--lt-edge); stroke-width: 0.8; }
+.landing-robot-visor-gloss { fill: var(--color-paper); stroke: none; opacity: 0.14; }
 .landing-robot-eye { fill: var(--landing-identity); }
-.landing-robot-core { fill: var(--color-accent); }
-.landing-robot-antenna,
-.landing-robot-arm,
-.landing-robot-leg,
-.landing-robot-panel-line,
-.landing-football-speed path {
-  fill: none;
-  stroke: var(--color-accent);
-  stroke-width: 1.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.landing-robot-arm rect,
-.landing-robot-leg rect { fill: var(--landing-robot-metal); stroke: var(--color-accent); stroke-width: 1.1; }
-.landing-football-shell { fill: var(--color-paper-2); stroke: var(--landing-identity); stroke-width: 1.2; }
-.landing-football-seam { fill: none; stroke: var(--color-ink); stroke-width: 0.9; stroke-linecap: round; stroke-linejoin: round; }
+.landing-robot-core { fill: var(--landing-identity); }
+.landing-robot-core-ring { fill: none; stroke: var(--color-accent); stroke-width: 0.9; opacity: 0.65; }
+.landing-robot-antenna { fill: none; stroke: var(--lt-edge); stroke-width: 1.3; stroke-linecap: round; }
+.landing-robot-antenna-bulb { fill: var(--landing-identity); }
+.landing-robot-vent { fill: none; stroke: var(--lt-edge); stroke-width: 0.8; stroke-linecap: round; opacity: 0.5; }
+.landing-robot-shadow { fill: color-mix(in oklch, var(--landing-robot-panel) 46%, transparent); }
+.landing-robot-dust circle { fill: color-mix(in oklch, var(--color-accent) 34%, transparent); }
 
-.landing-robot-character,
+/* Hai chi phía xa lùi lại một bậc — đó là thứ tách được lớp trước/lớp sau. */
+.landing-robot-arm-back,
+.landing-robot-thigh-back { opacity: 0.78; }
+
+.landing-football-shell { stroke: var(--lt-edge); stroke-width: 0.85; }
+.landing-football-seams { fill: none; stroke: color-mix(in oklch, var(--landing-robot-panel) 62%, transparent); stroke-width: 0.85; stroke-linecap: round; stroke-linejoin: round; }
+.landing-football-gloss { fill: var(--color-paper); stroke: none; opacity: 0.5; }
+.landing-football-speed path { fill: none; stroke: var(--color-accent); stroke-width: 1.3; stroke-linecap: round; }
+
+.landing-hatch-lip { fill: none; stroke: var(--color-accent); stroke-width: 1.2; stroke-linecap: round; }
+.landing-hatch-wall { fill: none; stroke: color-mix(in oklch, var(--color-accent) 46%, var(--landing-robot-panel)); stroke-width: 0.9; stroke-linecap: round; }
+.landing-hatch-door-edge { fill: none; stroke: color-mix(in oklch, var(--landing-robot-metal) 46%, var(--color-rule)); stroke-width: 0.9; }
+.landing-hatch-latch { fill: var(--landing-identity); }
+
+/* ── Tâm xoay của từng khớp (đơn vị viewBox) ────────────────────────────── */
+.landing-robot-travel,
+.landing-robot-lift,
+.landing-robot-facing,
+.landing-robot-body,
+.landing-robot-limb,
 .landing-robot-head-group,
 .landing-robot-torso-group,
-.landing-robot-arm,
-.landing-robot-leg,
+.landing-robot-gaze,
 .landing-robot-eye,
 .landing-robot-shadow,
+.landing-robot-dust,
+.landing-robot-dust-puff,
 .landing-football,
-.landing-football-speed {
-  transform-box: view-box;
+.landing-football-seams,
+.landing-football-speed,
+.landing-hatch-door,
+.landing-hatch-shaft { transform-box: view-box; }
+
+.landing-robot-facing { transform-origin: 280px 46px; }
+.landing-robot-body { transform-origin: 280px 66px; }
+.landing-robot-head-group { transform-origin: 280px 27px; }
+.landing-robot-torso-group { transform-origin: 280px 46px; }
+.landing-robot-arm-back { transform-origin: 272.5px 32px; }
+.landing-robot-forearm-back { transform-origin: 272.5px 42.5px; }
+.landing-robot-arm-front { transform-origin: 288px 32px; }
+.landing-robot-forearm-front { transform-origin: 288px 42.5px; }
+.landing-robot-thigh-back { transform-origin: 275px 46px; }
+.landing-robot-shin-back { transform-origin: 275px 56.5px; }
+.landing-robot-thigh-front { transform-origin: 285.5px 46px; }
+.landing-robot-shin-front { transform-origin: 285.5px 56.5px; }
+.landing-robot-eye { transform-origin: 275.8px 17.3px; }
+.landing-robot-eye-right { transform-origin: 283.8px 17.3px; }
+.landing-robot-shadow { transform-origin: 280px 65.4px; }
+.landing-football-seams { transform-origin: 322px 59px; }
+
+/* ── Gán vòng chạy ─────────────────────────────────────────────────────── */
+.landing-robot-travel { animation: lt-travel var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-lift { animation: lt-lift var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-facing { animation: lt-facing var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-body { animation: lt-body var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-head-group { animation: lt-head var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-torso-group { animation: lt-torso var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-arm-back { animation: lt-arm-back var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-forearm-back { animation: lt-forearm-back var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-arm-front { animation: lt-arm-front var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-forearm-front { animation: lt-forearm-front var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-thigh-back { animation: lt-thigh-back var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-shin-back { animation: lt-shin-back var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-thigh-front { animation: lt-thigh-front var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-shin-front { animation: lt-shin-front var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-gaze { animation: lt-gaze var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-eye { animation: lt-blink var(--lt-cycle) linear infinite both; }
+.landing-robot-shadow { animation: lt-shadow var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-robot-core { animation: lt-core 3s var(--ease-in-out) infinite both; }
+.landing-robot-antenna-bulb { animation: lt-core 3s var(--ease-in-out) infinite both; animation-delay: -1.5s; }
+.landing-robot-dust { animation: lt-dust-window var(--lt-cycle) linear infinite both; }
+.landing-robot-dust-puff { animation: lt-dust-puff 0.75s var(--ease-out) infinite both; }
+.landing-football { animation: lt-ball var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-football-seams { animation: lt-ball-spin var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-football-speed { animation: lt-speed var(--lt-cycle) var(--ease-out) infinite both; }
+.landing-hatch-door-left { animation: lt-door-left var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-hatch-door-right { animation: lt-door-right var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-hatch-shaft { animation: lt-shaft var(--lt-cycle) linear infinite both; }
+.landing-hatch-latch { animation: lt-latch var(--lt-cycle) linear infinite both; }
+
+/* ── Di chuyển ngang: chạy sang phải rồi đi ngược về ────────────────────── */
+@keyframes lt-travel {
+  0% { transform: translate3d(0, 0, 0); }
+  18% { transform: translate3d(0, 0, 0); animation-timing-function: linear; }
+  33% { transform: translate3d(100px, 0, 0); }
+  49% { transform: translate3d(100px, 0, 0); animation-timing-function: linear; }
+  58%, 100% { transform: translate3d(0, 0, 0); }
 }
 
-.landing-robot-character { transform-origin: 56px 49px; animation: landing-robot-body-cycle 7.2s var(--ease-in-out) infinite both; }
-.landing-robot-head-group { transform-origin: 56px 31px; animation: landing-robot-head-cycle 7.2s var(--ease-in-out) infinite both; }
-.landing-robot-torso-group { transform-origin: 56px 43px; animation: landing-robot-torso-cycle 7.2s var(--ease-in-out) infinite both; }
-.landing-robot-arm-back { transform-origin: 42px 31px; animation: landing-robot-arm-back-cycle 7.2s var(--ease-in-out) infinite both; }
-.landing-robot-arm-front { transform-origin: 68px 32px; animation: landing-robot-arm-front-cycle 7.2s var(--ease-in-out) infinite both; }
-.landing-robot-leg-plant { transform-origin: 49px 42px; animation: landing-robot-leg-plant-cycle 7.2s var(--ease-in-out) infinite both; }
-.landing-robot-leg-kick { transform-origin: 63px 42px; animation: landing-robot-leg-kick-cycle 7.2s var(--ease-in-out) infinite both; }
-.landing-robot-eye { transform-origin: center; animation: landing-robot-blink 7.2s var(--ease-in-out) infinite both; }
-.landing-robot-eye-right { animation-delay: 80ms; }
-.landing-robot-shadow { transform-origin: 56px 49px; animation: landing-robot-shadow-cycle 7.2s var(--ease-in-out) infinite both; }
-.landing-football {
-  transform-origin: 92px 43px;
-  animation: landing-football-cycle 7.2s var(--ease-in-out) infinite both;
-}
-.landing-football-speed { opacity: 0; animation: landing-football-speed-cycle 7.2s var(--ease-in-out) infinite both; }
-
-@keyframes landing-mascot-cycle {
-  0%, 3% { opacity: 0; transform: translate3d(-50%, 0.35rem, 0) scale(0.84); }
-  8% { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); }
-  13% { transform: translate3d(-50%, -0.28rem, 0) scale(1); }
-  18% { transform: translate3d(-50%, 0.02rem, 0) scale(1); }
-  23% { transform: translate3d(-50%, -0.2rem, 0) scale(1); }
-  28% { transform: translate3d(-50%, 0.02rem, 0) scale(1); }
-  33% { transform: translate3d(-50%, 0.08rem, 0) rotate(-2deg) scale(0.99); }
-  38% { transform: translate3d(-50%, -0.36rem, 0) rotate(3deg) scale(1.02); }
-  46%, 55% { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); }
-  62%, 100% { opacity: 0; transform: translate3d(-50%, -0.3rem, 0) scale(0.9); }
+/* Trồi lên / nhảy ăn mừng / chui xuống. 72px là đủ để đỉnh ăng-ten (y≈−0,8)
+   nằm hẳn dưới mặt đất y=66, tức bị `clipPath#lt-above-rail` xén sạch. */
+@keyframes lt-lift {
+  0%, 5% { transform: translate3d(0, 72px, 0); }
+  9% { transform: translate3d(0, -3.5px, 0); }
+  11%, 41% { transform: translate3d(0, 0, 0); }
+  43% { transform: translate3d(0, -6px, 0); }
+  45%, 62% { transform: translate3d(0, 0, 0); }
+  66%, 100% { transform: translate3d(0, 72px, 0); }
 }
 
-@keyframes landing-robot-body-cycle {
-  0%, 10%, 28%, 46%, 100% { transform: translate3d(0, 0, 0) rotate(0); }
-  13%, 23% { transform: translate3d(0, -1px, 0) rotate(-1deg); }
-  33% { transform: translate3d(-1px, 1px, 0) rotate(-4deg); }
-  38% { transform: translate3d(1px, -2px, 0) rotate(4deg); }
+/* Quay người: bóp bề ngang về gần 0 rồi lật dấu — mắt đọc ra một vòng xoay. */
+@keyframes lt-facing {
+  0%, 45.6% { transform: scaleX(1); }
+  47% { transform: scaleX(0.14); }
+  48.4%, 58.6% { transform: scaleX(-1); }
+  60% { transform: scaleX(0.14); }
+  61.4%, 100% { transform: scaleX(1); }
 }
 
-@keyframes landing-robot-head-cycle {
-  0%, 18%, 48%, 100% { transform: rotate(0); }
-  23% { transform: rotate(-5deg); }
-  33% { transform: rotate(6deg); }
-  40% { transform: rotate(-3deg); }
+@keyframes lt-body {
+  0%, 16% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  18% { transform: translate3d(0, 0.5px, 0) rotate(7deg); }
+  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: translate3d(0, -1.7px, 0) rotate(7deg); }
+  21%, 24%, 27%, 30%, 33% { transform: translate3d(0, 0.4px, 0) rotate(7deg); }
+  35% { transform: translate3d(0, 0, 0) rotate(-5deg); }
+  38% { transform: translate3d(0, 0, 0) rotate(11deg); }
+  40% { transform: translate3d(0, 0, 0) rotate(2deg); }
+  43%, 45% { transform: translate3d(0, 0, 0) rotate(-4deg); }
+  49%, 52%, 55%, 58% { transform: translate3d(0, 0.3px, 0) rotate(3deg); }
+  50.5%, 53.5%, 56.5% { transform: translate3d(0, -1.1px, 0) rotate(3deg); }
+  61%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
 }
 
-@keyframes landing-robot-torso-cycle {
-  0%, 28%, 48%, 100% { transform: rotate(0) scaleY(1); }
-  33% { transform: rotate(-3deg) scaleY(0.94); }
-  38% { transform: rotate(4deg) scaleY(1.04); }
+@keyframes lt-head {
+  0%, 5% { transform: rotate(-9deg); }
+  9%, 11% { transform: rotate(3deg); }
+  12.5% { transform: rotate(7deg); }
+  14% { transform: rotate(-6deg); }
+  16%, 18% { transform: rotate(0deg); }
+  20%, 33% { transform: rotate(5deg); }
+  35% { transform: rotate(-2deg); }
+  38% { transform: rotate(8deg); }
+  40% { transform: rotate(2deg); }
+  43%, 45% { transform: rotate(-10deg); }
+  49%, 58% { transform: rotate(2deg); }
+  61% { transform: rotate(-7deg); }
+  63% { transform: rotate(0deg); }
+  66%, 100% { transform: rotate(10deg); }
 }
 
-@keyframes landing-robot-arm-back-cycle {
-  0%, 10%, 28%, 48%, 100% { transform: rotate(0); }
-  13%, 23% { transform: rotate(18deg); }
-  18%, 33% { transform: rotate(-20deg); }
-  38% { transform: rotate(30deg); }
+@keyframes lt-torso {
+  0%, 16% { transform: scaleY(1); }
+  17% { transform: scaleY(0.93); }
+  18%, 41% { transform: scaleY(1); }
+  42% { transform: scaleY(0.92); }
+  43.5% { transform: scaleY(1.05); }
+  45%, 63% { transform: scaleY(1); }
+  64.5% { transform: scaleY(0.88); }
+  66%, 100% { transform: scaleY(1); }
 }
 
-@keyframes landing-robot-arm-front-cycle {
-  0%, 10%, 28%, 48%, 100% { transform: rotate(0); }
-  13%, 23% { transform: rotate(-22deg); }
-  18%, 33% { transform: rotate(18deg); }
-  38% { transform: rotate(-34deg); }
+/* ── Chân. Xoay DƯƠNG = bàn chân lùi ra sau, ÂM = đưa ra trước ──────────── */
+@keyframes lt-thigh-front {
+  0%, 5% { transform: rotate(8deg); }
+  9%, 16% { transform: rotate(0deg); }
+  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(-26deg); }
+  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(20deg); }
+  35% { transform: rotate(34deg); }
+  38% { transform: rotate(-38deg); }
+  40% { transform: rotate(-16deg); }
+  43% { transform: rotate(6deg); }
+  45%, 49%, 52%, 55%, 58% { transform: rotate(-17deg); }
+  50.5%, 53.5%, 56.5% { transform: rotate(15deg); }
+  61%, 62% { transform: rotate(0deg); }
+  66%, 100% { transform: rotate(6deg); }
 }
 
-@keyframes landing-robot-leg-plant-cycle {
-  0%, 10%, 28%, 48%, 100% { transform: rotate(0); }
-  13%, 23% { transform: rotate(9deg); }
-  18% { transform: rotate(-8deg); }
-  33% { transform: rotate(14deg); }
-  38% { transform: rotate(-6deg); }
+@keyframes lt-shin-front {
+  0%, 5% { transform: rotate(46deg); }
+  9%, 16% { transform: rotate(4deg); }
+  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(10deg); }
+  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(52deg); }
+  35% { transform: rotate(56deg); }
+  38% { transform: rotate(2deg); }
+  40% { transform: rotate(12deg); }
+  43%, 45%, 49%, 52%, 55%, 58% { transform: rotate(8deg); }
+  50.5%, 53.5%, 56.5% { transform: rotate(40deg); }
+  61%, 62% { transform: rotate(4deg); }
+  66%, 100% { transform: rotate(44deg); }
 }
 
-@keyframes landing-robot-leg-kick-cycle {
-  0%, 10%, 28%, 48%, 100% { transform: rotate(0); }
-  13%, 23% { transform: rotate(-10deg); }
-  18% { transform: rotate(12deg); }
-  33% { transform: rotate(24deg); }
-  38% { transform: rotate(-48deg); }
-  43% { transform: rotate(-18deg); }
+@keyframes lt-thigh-back {
+  0%, 5% { transform: rotate(-8deg); }
+  9%, 16% { transform: rotate(0deg); }
+  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(22deg); }
+  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(-24deg); }
+  35% { transform: rotate(-7deg); }
+  38% { transform: rotate(5deg); }
+  40%, 45%, 49%, 52%, 55%, 58% { transform: rotate(14deg); }
+  50.5%, 53.5%, 56.5% { transform: rotate(-16deg); }
+  61%, 62% { transform: rotate(0deg); }
+  66%, 100% { transform: rotate(-6deg); }
 }
 
-@keyframes landing-robot-blink {
-  0%, 14%, 16%, 49%, 51%, 100% { transform: scaleY(1); }
-  15%, 50% { transform: scaleY(0.18); }
+@keyframes lt-shin-back {
+  0%, 5% { transform: rotate(40deg); }
+  9%, 16% { transform: rotate(4deg); }
+  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(48deg); }
+  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(8deg); }
+  35%, 38%, 40% { transform: rotate(9deg); }
+  43%, 45%, 49%, 52%, 55%, 58% { transform: rotate(10deg); }
+  50.5%, 53.5%, 56.5% { transform: rotate(38deg); }
+  61%, 62% { transform: rotate(4deg); }
+  66%, 100% { transform: rotate(40deg); }
 }
 
-@keyframes landing-robot-shadow-cycle {
-  0%, 10%, 28%, 46%, 100% { opacity: 0.58; transform: scaleX(1); }
-  13%, 23% { opacity: 0.34; transform: scaleX(0.8); }
-  38% { opacity: 0.25; transform: scaleX(0.7); }
+/* ── Tay. Ngược pha với chân cùng bên; −150deg là tay giơ thẳng lên ─────── */
+@keyframes lt-arm-front {
+  0%, 5% { transform: rotate(-142deg); }
+  9% { transform: rotate(-96deg); }
+  11%, 16% { transform: rotate(5deg); }
+  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(28deg); }
+  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(-32deg); }
+  35% { transform: rotate(-40deg); }
+  38% { transform: rotate(32deg); }
+  40% { transform: rotate(14deg); }
+  42%, 45% { transform: rotate(-150deg); }
+  49%, 52%, 55%, 58% { transform: rotate(18deg); }
+  50.5%, 53.5%, 56.5% { transform: rotate(-20deg); }
+  61% { transform: rotate(-148deg); }
+  62% { transform: rotate(-124deg); }
+  63% { transform: rotate(-148deg); }
+  66%, 100% { transform: rotate(-118deg); }
 }
 
-@keyframes landing-football-cycle {
-  0%, 33% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0); }
-  39% { opacity: 1; transform: translate3d(0.55rem, -0.72rem, 0) rotate(85deg); }
-  46% { opacity: 1; transform: translate3d(1.5rem, 0, 0) rotate(210deg); }
-  54% { opacity: 0; transform: translate3d(2rem, -0.18rem, 0) rotate(300deg); }
-  55%, 100% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0); }
+@keyframes lt-forearm-front {
+  0%, 5% { transform: rotate(-24deg); }
+  9%, 16% { transform: rotate(-12deg); }
+  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(-48deg); }
+  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(-22deg); }
+  35% { transform: rotate(-18deg); }
+  38%, 40% { transform: rotate(-40deg); }
+  42%, 45% { transform: rotate(-14deg); }
+  49%, 52%, 55%, 58% { transform: rotate(-30deg); }
+  50.5%, 53.5%, 56.5% { transform: rotate(-16deg); }
+  61%, 63% { transform: rotate(-10deg); }
+  66%, 100% { transform: rotate(-20deg); }
 }
 
-@keyframes landing-football-speed-cycle {
-  0%, 35%, 48%, 100% { opacity: 0; transform: translate3d(-0.25rem, 0, 0); }
-  39%, 44% { opacity: 0.58; transform: translate3d(0, 0, 0); }
+@keyframes lt-arm-back {
+  0%, 5% { transform: rotate(-138deg); }
+  9% { transform: rotate(-92deg); }
+  11%, 16% { transform: rotate(-5deg); }
+  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(-30deg); }
+  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(26deg); }
+  35% { transform: rotate(34deg); }
+  38% { transform: rotate(-28deg); }
+  40% { transform: rotate(-12deg); }
+  42%, 45% { transform: rotate(-146deg); }
+  49%, 52%, 55%, 58% { transform: rotate(-18deg); }
+  50.5%, 53.5%, 56.5% { transform: rotate(20deg); }
+  61%, 63% { transform: rotate(-102deg); }
+  66%, 100% { transform: rotate(-114deg); }
+}
+
+@keyframes lt-forearm-back {
+  0%, 5% { transform: rotate(-20deg); }
+  9%, 16% { transform: rotate(-10deg); }
+  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(-20deg); }
+  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(-46deg); }
+  35% { transform: rotate(-44deg); }
+  38%, 40% { transform: rotate(-18deg); }
+  42%, 45% { transform: rotate(-12deg); }
+  49%, 52%, 55%, 58% { transform: rotate(-16deg); }
+  50.5%, 53.5%, 56.5% { transform: rotate(-32deg); }
+  61%, 63% { transform: rotate(-10deg); }
+  66%, 100% { transform: rotate(-18deg); }
+}
+
+/* ── Mắt: liếc quanh một lần sau khi trồi lên, chớp bốn lần cả vòng ─────── */
+@keyframes lt-gaze {
+  0%, 11% { transform: translate3d(0, 0, 0); }
+  12.5% { transform: translate3d(1.6px, 0, 0); }
+  14% { transform: translate3d(-1.4px, 0, 0); }
+  16%, 100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes lt-blink {
+  0%, 11.4%, 12%, 25.9%, 26.5%, 47.9%, 48.5%, 63.9%, 64.5%, 100% { transform: scaleY(1); }
+  11.7%, 26.2%, 48.2%, 64.2% { transform: scaleY(0.12); }
+}
+
+@keyframes lt-shadow {
+  0%, 4% { opacity: 0; transform: scaleX(0.4); }
+  9% { opacity: 0.42; transform: scaleX(0.88); }
+  11%, 41% { opacity: 0.5; transform: scaleX(1); }
+  43% { opacity: 0.26; transform: scaleX(0.76); }
+  45%, 62% { opacity: 0.5; transform: scaleX(1); }
+  66%, 100% { opacity: 0; transform: scaleX(0.42); }
+}
+
+@keyframes lt-core {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.42; }
+}
+
+/* Bụi: cửa sổ bật/tắt thuộc vòng lớn, còn cú tung bụi là vòng con 0,75s. */
+@keyframes lt-dust-window {
+  0%, 18% { opacity: 0; }
+  19%, 32% { opacity: 0.55; }
+  33%, 49% { opacity: 0; }
+  50%, 57% { opacity: 0.34; }
+  58%, 100% { opacity: 0; }
+}
+
+@keyframes lt-dust-puff {
+  0% { opacity: 0.9; transform: translate3d(0, 0, 0) scale(0.4); }
+  100% { opacity: 0; transform: translate3d(-9px, -3px, 0) scale(1.5); }
+}
+
+/* ── Bóng: rơi xuống → nảy → lăn theo chân → bay đi sau cú sút ──────────── */
+@keyframes lt-ball {
+  0%, 12.5% { opacity: 0; transform: translate3d(0, -46px, 0); }
+  13% { opacity: 1; transform: translate3d(0, -46px, 0); }
+  14.6% { opacity: 1; transform: translate3d(0, 0, 0); }
+  15.6% { transform: translate3d(1px, -9px, 0); }
+  16.6% { transform: translate3d(2px, 0, 0); }
+  17.2% { transform: translate3d(2.5px, -3px, 0); }
+  18% { transform: translate3d(3px, 0, 0); animation-timing-function: linear; }
+  33% { transform: translate3d(104px, 0, 0); }
+  37% { opacity: 1; transform: translate3d(104px, 0, 0); }
+  39.5% { opacity: 1; transform: translate3d(196px, -22px, 0); }
+  42% { opacity: 0; transform: translate3d(268px, -8px, 0); }
+  42.1%, 100% { opacity: 0; transform: translate3d(0, -46px, 0); }
+}
+
+/* Chỉ HOA VĂN xoay, vỏ bóng đứng yên dưới ánh sáng — có vậy mới ra vòng lăn
+   thay vì ra một cái đĩa quay. 104px lăn với r=7 ≈ 2,4 vòng ≈ 850deg. */
+@keyframes lt-ball-spin {
+  0%, 13% { transform: rotate(0deg); }
+  18% { transform: rotate(60deg); animation-timing-function: linear; }
+  33% { transform: rotate(850deg); }
+  37% { transform: rotate(850deg); }
+  42% { transform: rotate(1620deg); }
+  42.1%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes lt-speed {
+  0%, 37.6% { opacity: 0; transform: translate3d(88px, 0, 0); }
+  38.8% { opacity: 0.7; transform: translate3d(104px, -6px, 0); }
+  40.6%, 100% { opacity: 0; transform: translate3d(150px, -18px, 0); }
+}
+
+/* ── Cửa hầm ───────────────────────────────────────────────────────────── */
+@keyframes lt-door-left {
+  0%, 2% { transform: translate3d(0, 0, 0); }
+  5%, 11% { transform: translate3d(-25px, 0, 0); }
+  13%, 60% { transform: translate3d(0, 0, 0); }
+  61%, 67% { transform: translate3d(-25px, 0, 0); }
+  69%, 100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes lt-door-right {
+  0%, 2% { transform: translate3d(0, 0, 0); }
+  5%, 11% { transform: translate3d(25px, 0, 0); }
+  13%, 60% { transform: translate3d(0, 0, 0); }
+  61%, 67% { transform: translate3d(25px, 0, 0); }
+  69%, 100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes lt-shaft {
+  0%, 2.6% { opacity: 0; }
+  5%, 11.6% { opacity: 1; }
+  13%, 60.6% { opacity: 0; }
+  61.6%, 67% { opacity: 1; }
+  69%, 100% { opacity: 0; }
+}
+
+@keyframes lt-latch {
+  0%, 12.6% { opacity: 0; }
+  13.4%, 14.6% { opacity: 1; }
+  15.4%, 68.6% { opacity: 0; }
+  69.4%, 70.6% { opacity: 1; }
+  71.4%, 100% { opacity: 0; }
 }
 
 .landing-hero-shell,
@@ -4742,15 +5085,29 @@ body:has(.landing-root) {
 .landing-playground-note { margin-top: var(--space-2xs); color: var(--color-muted); font-size: var(--text-xs); line-height: 1.55; }
 .landing-playground-cta { min-height: 2.75rem; padding-inline: var(--space-sm); }
 
+/* SÁU ô số liệu, xếp 3 cột × 2 hàng. Đường kẻ dọc gắn theo `nth-child(3n+1)`
+   chứ không theo `+ .landing-stat`: cách cũ đúng khi chỉ có một hàng, thêm
+   hàng thứ hai là ô đầu hàng dưới cũng mọc kẻ dọc. Số cột được khai TƯỜNG MINH
+   ở từng breakpoint (3 → 2 → 1) vì `nth-child` không tự biết lưới gãy ở đâu. */
+.landing-stats-block { margin-top: clamp(3.5rem, 7vw, 6rem); }
+
 .landing-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: clamp(3.5rem, 7vw, 6rem);
   border-block: var(--rule-hair) solid var(--color-rule);
 }
 
-.landing-stat { padding-block: var(--space-lg); }
-.landing-stat + .landing-stat { border-left: var(--rule-hair) solid var(--color-rule); padding-left: var(--space-lg); }
+.landing-stat { min-width: 0; padding-block: var(--space-lg); }
+.landing-stat:not(:nth-child(3n + 1)) { border-left: var(--rule-hair) solid var(--color-rule); padding-left: var(--space-lg); }
+.landing-stat:nth-child(n + 4) { border-top: var(--rule-hair) solid var(--color-rule); }
+
+.landing-stats-source {
+  margin-top: var(--space-sm);
+  color: var(--color-muted);
+  font-family: var(--font-outlier);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+}
 .landing-stat dd { font-family: var(--font-display); font-size: clamp(1.85rem, 3vw, 2.65rem); font-weight: 680; letter-spacing: -0.04em; }
 .landing-stat dt { margin-top: var(--space-2xs); color: var(--color-muted); font-family: var(--font-outlier); font-size: 0.675rem; letter-spacing: 0.09em; text-transform: uppercase; }
 
@@ -4830,9 +5187,17 @@ body:has(.landing-root) {
 .landing-rail[data-reverse='true'] .landing-rail-intro { grid-column: 2; }
 .landing-rail[data-reverse='true'] .landing-directory-list { grid-column: 1; grid-row: 1; }
 .landing-rail-intro { align-self: start; }
-.landing-rail-label { color: var(--color-accent); font-family: var(--font-body); font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; }
+.landing-rail-index {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+  font-weight: 660;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  color: color-mix(in oklch, var(--color-ink) 28%, transparent);
+}
+.landing-rail-label { margin-top: var(--space-xs); color: var(--color-accent); font-family: var(--font-body); font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; }
 .landing-rail-intro h2 { max-width: 14ch; margin-top: var(--space-sm); font-size: clamp(2rem, 4vw, 3.6rem); line-height: 1.05; }
-.landing-rail-intro > p:not(.landing-rail-label) { max-width: 45ch; margin-top: var(--space-md); color: var(--color-ink-2); line-height: 1.68; }
+.landing-rail-intro > p:not(.landing-rail-label):not(.landing-rail-index) { max-width: 45ch; margin-top: var(--space-md); color: var(--color-ink-2); line-height: 1.68; }
 .landing-rail-count { display: block; margin-top: var(--space-lg); color: var(--color-muted); font-family: var(--font-body); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; }
 
 .landing-directory-list { margin: 0; padding: 0; border-top: var(--rule-hair) solid var(--color-rule); list-style: none; }
@@ -4898,10 +5263,32 @@ body:has(.landing-root) {
   .landing-rail[data-reverse='true'] { grid-template-columns: minmax(0, 1fr); }
   .landing-rail[data-reverse='true'] .landing-rail-intro,
   .landing-rail[data-reverse='true'] .landing-directory-list { grid-column: 1; grid-row: auto; }
+
+  .landing-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .landing-stat:not(:nth-child(3n + 1)) { border-left: 0; padding-left: 0; }
+  .landing-stat:nth-child(n + 4) { border-top: 0; }
+  .landing-stat:not(:nth-child(2n + 1)) { border-left: var(--rule-hair) solid var(--color-rule); padding-left: var(--space-lg); }
+  .landing-stat:nth-child(n + 3) { border-top: var(--rule-hair) solid var(--color-rule); }
+}
+
+/* Ở màn hẹp cụm nút bên phải (VI · sáng/tối · Đăng nhập) trườn vào ĐÚNG chỗ
+   robot đứng và cả quãng nó chạy — đo thật ở 375px và 768px thì thân robot nằm
+   đè lên hai nút tròn. Thu nhỏ robot KHÔNG cứu được: chiều dọc vẫn chồng, vì
+   nút cao 2,75rem còn robot thì buộc phải đứng trên đường kẻ.
+
+   Nên cách xử lý là hạ robot XUỐNG DƯỚI hàng nút: thanh dày lên, đường kẻ tụt
+   xuống theo, và hàng header thu lại gần đúng bằng phần thanh vừa dày thêm —
+   header dính (sticky) chỉ đội thêm ~16px ở tablet và ~3px ở điện thoại.
+   BA biến phải đi CÙNG NHAU: `--lt-scene-h` (cỡ cảnh), `--lt-line` (đường kẻ
+   cách đỉnh thanh) và `height` (đủ chỗ cho cửa hầm nằm dưới đường kẻ). */
+@media (max-width: 959px) {
+  .landing-header-main { min-height: 4rem; }
+  .landing-robot-rail { --lt-scene-h: 4.1rem; --lt-line: 2.85rem; height: 3.5rem; }
 }
 
 @media (max-width: 639px) {
-  .landing-header-main { padding-inline: 4.75rem 1rem; }
+  .landing-robot-rail { --lt-scene-h: 3.4rem; --lt-line: 2.35rem; height: 2.95rem; }
+  .landing-header-main { min-height: 3.75rem; padding-inline: 4.75rem 1rem; }
   .landing-brand-name,
   .landing-brand-pro { display: none; }
   .landing-header-cta { padding-inline: var(--space-sm); }
@@ -4911,7 +5298,8 @@ body:has(.landing-root) {
   .landing-playground-caption { grid-template-columns: minmax(0, 1fr); }
   .landing-playground-cta { width: 100%; }
   .landing-stats { grid-template-columns: minmax(0, 1fr); }
-  .landing-stat + .landing-stat { border-left: 0; border-top: var(--rule-hair) solid var(--color-rule); padding-left: 0; }
+  .landing-stat:not(:nth-child(2n + 1)) { border-left: 0; padding-left: 0; }
+  .landing-stat:nth-child(n + 2) { border-top: var(--rule-hair) solid var(--color-rule); }
   .landing-deep-grid > li,
   .landing-deep-grid > li[data-featured='true'],
   .landing-deep-grid > li:nth-child(2) { grid-column: 1 / -1; }
@@ -4937,18 +5325,30 @@ body:has(.landing-root) {
   .landing-hero-copy,
   .landing-playground-preview { animation: none; }
   .landing-playground-preview { transform: none !important; transition: none; }
-  .landing-robot-runner { animation: none; opacity: 0.94; transform: translate3d(-50%, 0, 0); }
-  .landing-robot-character,
+
+  /* Robot đứng yên cạnh cửa hầm ĐÃ ĐÓNG, bóng nằm dưới chân. Mọi khớp trả về
+     tư thế gốc trong SVG (đứng thẳng trên mặt đất y=66) nên chỉ cần tắt hoạt
+     hình là ra đúng một khung hình tĩnh có nghĩa — không cần tư thế riêng. */
+  .landing-robot-rail *,
+  .landing-robot-rail *::before,
+  .landing-robot-rail *::after { animation: none !important; }
+  .landing-robot-travel,
+  .landing-robot-lift,
+  .landing-robot-facing,
+  .landing-robot-body,
+  .landing-robot-limb,
   .landing-robot-head-group,
   .landing-robot-torso-group,
-  .landing-robot-arm,
-  .landing-robot-leg,
+  .landing-robot-gaze,
   .landing-robot-eye,
-  .landing-robot-shadow,
-  .landing-football,
-  .landing-football-speed { animation: none; }
-  .landing-football { opacity: 1; transform: none; }
-  .landing-football-speed { opacity: 0; }
+  .landing-football-seams,
+  .landing-hatch-door { transform: none; }
+  .landing-robot-shadow { opacity: 0.55; transform: none; }
+  .landing-football { opacity: 1; transform: translate3d(3px, 0, 0); }
+  .landing-robot-dust,
+  .landing-football-speed,
+  .landing-hatch-shaft,
+  .landing-hatch-latch { opacity: 0; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════

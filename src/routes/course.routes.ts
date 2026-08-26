@@ -772,10 +772,13 @@ async function serializeCourse(
       }),
     })),
     reviews: course.reviews,
-    // Admins / the instructor (includeDraftLessons) get direct access with
-    // no enrollment row, so report them as enrolled — otherwise the learn
-    // page bounces them back to the detail page.
-    isEnrolled: Boolean(enrollment) || Boolean(options?.includeDraftLessons),
+    // "isEnrolled" is the frontend's gate for entering the /learn page.
+    // Anyone with full access should pass: admins/instructor
+    // (includeDraftLessons), and — the key case — a logged-in user on a
+    // FREE course (hasPaidAccess) who has no enrollment row. Otherwise the
+    // learn page bounces them back to the detail page. Anonymous users have
+    // hasPaidAccess=false, so they still get the public detail page.
+    isEnrolled: Boolean(enrollment) || Boolean(options?.includeDraftLessons) || hasPaidAccess,
     // Admins / the instructor: surface an explicit flag so the detail page
     // can show a direct "Vào học ngay" button that bypasses the
     // free/code/paid enrollment options entirely.

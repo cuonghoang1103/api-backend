@@ -828,6 +828,22 @@ export default function CourseDetailPage() {
                   </div>
                 ))}
               </div>
+              {!isAuthenticated && (
+                <div className="mt-4 rounded-xl border border-neon-violet/30 bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 p-4 flex items-center justify-between gap-4 flex-wrap">
+                  <div className="flex items-center gap-3">
+                    <Lock className="w-5 h-5 text-neon-violet shrink-0" />
+                    <p className="text-sm text-text-secondary">
+                      Bạn cần <span className="font-semibold text-neon-violet">đăng nhập</span> để xem thêm nội dung khoá học chi tiết.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => router.push(`/login?callbackUrl=${encodeURIComponent(`/courses/${course.slug}`)}`)}
+                    className="shrink-0 px-4 py-2 rounded-lg bg-neon-violet/20 hover:bg-neon-violet/30 border border-neon-violet/40 text-neon-violet text-sm font-semibold transition-colors"
+                  >
+                    Đăng nhập
+                  </button>
+                </div>
+              )}
             </section>
 
             {/* Requirements */}

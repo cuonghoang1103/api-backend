@@ -17,6 +17,8 @@ import s07 from './postgresql/s07-subquery-cte.mjs';
 import s08 from './postgresql/s08-window.mjs';
 import s09 from './postgresql/s09-chi-muc.mjs';
 import s10 from './postgresql/s10-explain-planner.mjs';
+import s11 from './postgresql/s11-giao-dich.mjs';
+import s12 from './postgresql/s12-ham-trigger-view.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -48,5 +50,7 @@ export default {
     s08,
     s09,
     s10,
+    s11,
+    s12,
   ],
 };

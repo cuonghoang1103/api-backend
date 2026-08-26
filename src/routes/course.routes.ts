@@ -63,9 +63,11 @@ async function assertCanAccessCourseContent(
     if (!userId) throw new AppError('Course not available', 404);
   }
 
-  // Free courses bypass enrollment entirely. `isFree` is the
-  // explicit flag; `price <= 0` is a legacy fallback. Either way,
-  // no paywall applies.
+  // Free courses need no enrollment — but a LOGGED-IN user is still
+  // required to see full content. Anonymous visitors fall through to the
+  // 'preview' path below (isFreePreview lessons only, + a frontend
+  // "đăng nhập để xem thêm" notice). `isFree` is the explicit flag;
+  // `price <= 0` is a legacy fallback.
   //
   // Note: an inconsistency has happened in the admin UI where
   // admins set `isFree=true` AND `price=300000` on the same
@@ -79,7 +81,7 @@ async function assertCanAccessCourseContent(
   // `isFree=true && price<=0` bypasses enrollment.
   const isFree = course.accessType === 'FREE' || (course.isFree && Number(course.price) <= 0);
   const isCodeCourse = course.accessType === 'CODE';
-  if (isFree && !isCodeCourse && mode !== 'admin-or-enrolled') {
+  if (isFree && !isCodeCourse && mode !== 'admin-or-enrolled' && userId) {
     return { isAdmin: false, isEnrolled: true, isFree: true, hasCodeEnrollment: false };
   }
   // Admin / instructor bypass — applies to every mode because
@@ -545,8 +547,9 @@ async function serializeCourse(
   // lesson content. We compute this ONCE here and apply it to every
   // lesson in the response so the redaction logic is centralized.
   //
-  //   - Free course: everyone sees content (course.price <= 0 and
-  //     course.isFree === true). No paywall.
+  //   - Free course + logged in: full content, no enrollment needed.
+  //   - Free course + anonymous: only isFreePreview lessons (frontend
+  //     shows a "đăng nhập để xem thêm" notice). No paywall.
   //   - Paid course + not enrolled: redact content (no videoUrl,
   //     no teachingNotes, no sourceCodeUrl, no documents).
   //   - Paid course + enrolled: full content.
@@ -598,7 +601,11 @@ async function serializeCourse(
   const hasPaidAccess = options?.includeDraftLessons
     || isOwner
     || hasProAccess
-    || (isFree && !isCodeCourse && Boolean(enrollment) && !enrollmentExpired)
+    // Free course: any LOGGED-IN user sees full content — no enrollment
+    // needed. Anonymous visitors still get only isFreePreview lessons (the
+    // frontend shows a "đăng nhập để xem thêm" notice). Only PAID/CODE
+    // courses require enrollment/payment/code (handled by the clauses below).
+    || (isFree && !isCodeCourse && Boolean(options?.userId))
     || (hasPaidOrder && !enrollmentExpired)
     || (isPaidOrCodeCourse && hasCodeEnrollment);
 

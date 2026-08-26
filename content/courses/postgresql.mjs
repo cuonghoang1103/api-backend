@@ -19,6 +19,10 @@ import s09 from './postgresql/s09-chi-muc.mjs';
 import s10 from './postgresql/s10-explain-planner.mjs';
 import s11 from './postgresql/s11-giao-dich.mjs';
 import s12 from './postgresql/s12-ham-trigger-view.mjs';
+import s13 from './postgresql/s13-jsonb-fts.mjs';
+import s14 from './postgresql/s14-ket-noi-van-hanh.mjs';
+import s15 from './postgresql/s15-sao-luu-nhan-ban.mjs';
+import s16 from './postgresql/s16-production-capstone.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -52,5 +56,9 @@ export default {
     s10,
     s11,
     s12,
+    s13,
+    s14,
+    s15,
+    s16,
   ],
 };

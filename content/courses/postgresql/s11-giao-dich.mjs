@@ -75,9 +75,11 @@ DETAIL:  Failing row contains (A, Cuong, -400.00).
 ERROR:  current transaction is aborted, commands ignored until end of transaction block
 ROLLBACK</div>
 <p>Three things to read carefully there:</p>
+<div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The <code>CHECK</code> did its job</span><span class="lz-d">Chapter 3's constraint refused a negative balance. The database protected the invariant, exactly as designed.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">The <code>SELECT</code> never ran</span><span class="lz-d"><em>current transaction is aborted, commands ignored until end of transaction block.</em> Once a transaction has errored, it accepts nothing but <code>ROLLBACK</code> (or <code>ROLLBACK TO SAVEPOINT</code>). This is the message people hit at 2am and misread as "the database is broken".</span></div>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t"><code>COMMIT</code> printed <code>ROLLBACK</code></span><span class="lz-d">Look at the last line. You asked to commit; PostgreSQL rolled back. It <strong>cannot</strong> commit an aborted transaction, so committing one is silently a rollback. If your code logs "commit succeeded" here, that log is lying to you.</span></div>
+</div>
 
 <h3>SAVEPOINT: a checkpoint inside a transaction</h3>
 <p>Sometimes you want one statement to be allowed to fail without losing the rest of the transaction. A <code>SAVEPOINT</code> is a marker you can roll back <em>to</em>:</p>
@@ -185,9 +187,11 @@ DETAIL:  Failing row contains (A, Cuong, -400.00).
 ERROR:  current transaction is aborted, commands ignored until end of transaction block
 ROLLBACK</div>
 <p>Có ba thứ cần đọc thật kỹ ở đó:</p>
+<div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Cái <code>CHECK</code> đã làm đúng việc của nó</span><span class="lz-d">Ràng buộc từ Chương 3 từ chối một số dư âm. Cơ sở dữ liệu bảo vệ bất biến, đúng như thiết kế.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Câu <code>SELECT</code> KHÔNG hề chạy</span><span class="lz-d"><em>current transaction is aborted, commands ignored until end of transaction block.</em> Một khi giao dịch đã lỗi, nó không nhận gì ngoài <code>ROLLBACK</code> (hoặc <code>ROLLBACK TO SAVEPOINT</code>). Đây chính là dòng chữ người ta gặp lúc 2 giờ sáng và đọc nhầm thành "cơ sở dữ liệu hỏng rồi".</span></div>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t"><code>COMMIT</code> lại in ra <code>ROLLBACK</code></span><span class="lz-d">Nhìn dòng cuối. Bạn bảo commit; PostgreSQL lùi lại hết. Nó <strong>KHÔNG THỂ</strong> commit một giao dịch đã aborted, nên commit một cái như vậy thực chất là rollback. Nếu mã của bạn ghi log "commit thành công" ở đây, cái log đó đang nói dối bạn.</span></div>
+</div>
 
 <h3>SAVEPOINT: một cột mốc bên trong giao dịch</h3>
 <p>Đôi khi bạn muốn cho phép MỘT câu lệnh được hỏng mà không mất phần còn lại của giao dịch. <code>SAVEPOINT</code> là một cái mốc bạn có thể lùi <em>về</em>:</p>
@@ -275,6 +279,13 @@ LINE 1: SELECT count(*) FROM thu_ddl;
 <p>Read those two outputs side by side. The <code>ctid</code> moved from <code>(0,1)</code> to <code>(0,2)</code> — <strong>slot 2 of the same page</strong>. The row you see is a physically different row than before. The old version is still sitting in slot 1, now stamped with <code>xmax = 742</code>, invisible to anyone whose snapshot started after that transaction committed.</p>
 <div class="callout ok">This is the single most useful mental model in PostgreSQL: an <code>UPDATE</code> is really <em>an <code>INSERT</code> of a new version plus a "died at" stamp on the old one</em>. A <code>DELETE</code> is just the stamp with no new version. Once you hold that picture, index-only scans, bloat, <code>VACUUM</code>, replication lag and long-transaction problems all stop being separate mysteries.</div>
 
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">INSERT</span><span class="lz-v">A row version is written with <code>xmin</code> = the creating transaction and <code>xmax</code> = 0. Visible to every snapshot that starts after that transaction commits.</span></div>
+<div class="lz-layer"><span class="lz-k">UPDATE</span><span class="lz-v">A <em>new</em> version is written at a new <code>ctid</code>, and the old one is stamped <code>xmax</code> = the updating transaction. Both exist on disk simultaneously.</span></div>
+<div class="lz-layer"><span class="lz-k">old snapshots</span><span class="lz-v">A transaction that began earlier keeps reading the old version. This is why it never has to wait — nothing was overwritten.</span></div>
+<div class="lz-layer"><span class="lz-k">dead tuple</span><span class="lz-v">Once no snapshot can still need it, the old version is garbage — but it stays on disk, occupying space, until something clears it.</span></div>
+<div class="lz-layer"><span class="lz-k">VACUUM</span><span class="lz-v">Marks that space reusable by this table. The file does not shrink (measured below); only <code>VACUUM FULL</code> returns space to the OS.</span></div>
+</div>
 <h3>The payoff: a writer in flight does not stop a reader</h3>
 <p>Two real psql sessions, side by side. Session A opens a transaction and updates a row without committing; session B reads the same row:</p>
 <div class="out">A│ BEGIN;
@@ -357,6 +368,13 @@ B│ (1 row)</div>
 <p>Đọc hai output cạnh nhau. <code>ctid</code> đã nhảy từ <code>(0,1)</code> sang <code>(0,2)</code> — <strong>ô số 2 của cùng một trang</strong>. Dòng bạn đang thấy là một dòng VẬT LÝ KHÁC so với lúc nãy. Bản cũ vẫn còn nằm ở ô 1, giờ mang dấu <code>xmax = 742</code>, vô hình với bất kỳ ai có ảnh chụp bắt đầu sau khi giao dịch đó commit.</p>
 <div class="callout ok">Đây là mô hình tư duy hữu ích nhất trong cả PostgreSQL: một <code>UPDATE</code> thực chất là <em>một <code>INSERT</code> phiên bản mới CỘNG một con dấu "chết lúc" lên bản cũ</em>. Một <code>DELETE</code> chỉ là con dấu đó mà không có bản mới. Một khi bạn giữ được bức tranh ấy, index-only scan, bloat, <code>VACUUM</code>, độ trễ nhân bản và các vấn đề giao dịch dài đều thôi là những bí ẩn rời rạc.</div>
 
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">INSERT</span><span class="lz-v">Một phiên bản dòng được ghi ra với <code>xmin</code> = giao dịch tạo ra nó và <code>xmax</code> = 0. Nhìn thấy được với mọi ảnh chụp bắt đầu sau khi giao dịch đó commit.</span></div>
+<div class="lz-layer"><span class="lz-k">UPDATE</span><span class="lz-v">Một phiên bản <em>MỚI</em> được ghi ở một <code>ctid</code> mới, còn bản cũ bị đóng dấu <code>xmax</code> = giao dịch vừa cập nhật. CẢ HAI cùng tồn tại trên đĩa.</span></div>
+<div class="lz-layer"><span class="lz-k">ảnh chụp cũ</span><span class="lz-v">Một giao dịch bắt đầu sớm hơn vẫn đọc bản cũ. Đó là lý do nó không bao giờ phải chờ — chẳng có gì bị ghi đè cả.</span></div>
+<div class="lz-layer"><span class="lz-k">dead tuple</span><span class="lz-v">Khi không còn ảnh chụp nào có thể cần tới nó, bản cũ thành rác — nhưng nó VẪN nằm trên đĩa, chiếm chỗ, cho tới khi có thứ gì dọn đi.</span></div>
+<div class="lz-layer"><span class="lz-k">VACUUM</span><span class="lz-v">Đánh dấu chỗ đó là dùng lại được bởi chính bảng này. File KHÔNG co lại (đo ở dưới); chỉ <code>VACUUM FULL</code> mới trả chỗ về cho hệ điều hành.</span></div>
+</div>
 <h3>Phần thưởng: một người ghi đang dở KHÔNG chặn người đọc</h3>
 <p>Hai phiên psql thật, cạnh nhau. Phiên A mở một giao dịch và cập nhật một dòng mà chưa commit; phiên B đọc đúng dòng đó:</p>
 <div class="out">A│ BEGIN;
@@ -519,10 +537,12 @@ B│ HINT:  The transaction might succeed if retried.</div>
 <p>A committed; B was refused. The invariant holds. PostgreSQL tracked that B had <em>read</em> data that A then <em>wrote</em>, decided no serial order of the two could produce this outcome, and cancelled one. It is genuine serializable isolation — not locking, but detection.</p>
 <div class="callout warn">Read the <code>HINT</code>: <em>The transaction might succeed if retried.</em> That is not advice, it is a requirement. <code>SERIALIZABLE</code> works by <strong>aborting</strong> transactions, so any code path using it MUST catch SQLSTATE <code>40001</code> and retry the whole transaction from <code>BEGIN</code>. Without a retry loop you have not made the system correct — you have made it fail under load.</div>
 
+<div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">Read Committed</span><span class="lz-lnote">Snapshot per <em>statement</em>. Stops dirty reads. Allows non-repeatable reads and phantoms. Cheapest, never aborts for isolation reasons. The right default for ordinary web requests.</span></div>
 <div class="lz-layer"><span class="lz-lname">Repeatable Read</span><span class="lz-lnote">Snapshot per <em>transaction</em>. Also stops non-repeatable reads and phantoms. Can abort with <code>40001</code> when two transactions update the same row. Use it for multi-query reports and consistent exports.</span></div>
 <div class="lz-layer"><span class="lz-lname">Serializable</span><span class="lz-lnote">Everything above, plus write skew. Postgres tracks read/write dependencies and cancels transactions that could not have happened in any serial order. <strong>Requires a retry loop.</strong> Use it for a small number of genuinely critical invariants — booking a seat, allocating stock, on-call rotas.</span></div>
 <div class="lz-layer"><span class="lz-lname">Read Uncommitted</span><span class="lz-lnote">Accepted by the parser and silently treated as Read Committed. PostgreSQL never does dirty reads. If you see it in code copied from another database, it is doing nothing.</span></div>
+</div>
 
 <h3>Choosing, in practice</h3>
 <p>Do not reach for <code>SERIALIZABLE</code> globally. Most application code is correct at Read Committed because it does the safe thing anyway — <code>UPDATE … SET balance = balance - 10</code> reads and writes in one statement, so there is nothing to skew. Raise the level for the specific transaction that guards an invariant spanning several rows, and leave the rest alone.</p>
@@ -628,10 +648,12 @@ B│ HINT:  The transaction might succeed if retried.</div>
 <p>A commit được; B bị từ chối. Bất biến còn nguyên. PostgreSQL đã theo dõi rằng B <em>ĐỌC</em> dữ liệu mà A sau đó <em>GHI</em>, kết luận không thứ tự tuần tự nào của hai cái có thể sinh ra kết cục này, và huỷ một cái. Đó là cô lập tuần tự thật sự — không phải bằng khoá, mà bằng PHÁT HIỆN.</p>
 <div class="callout warn">Đọc dòng <code>HINT</code>: <em>The transaction might succeed if retried.</em> Đó không phải lời khuyên, đó là YÊU CẦU. <code>SERIALIZABLE</code> làm việc bằng cách <strong>HUỶ</strong> giao dịch, nên mọi nhánh mã dùng nó BẮT BUỘC phải bắt SQLSTATE <code>40001</code> và thử lại CẢ giao dịch từ <code>BEGIN</code>. Không có vòng thử lại thì bạn chưa làm hệ thống đúng — bạn đã làm nó HỎNG khi tải cao.</div>
 
+<div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">Read Committed</span><span class="lz-lnote">Ảnh chụp theo từng <em>câu lệnh</em>. Chặn dirty read. Cho phép non-repeatable read và phantom. Rẻ nhất, không bao giờ huỷ vì lý do cô lập. Mặc định đúng cho request web thông thường.</span></div>
 <div class="lz-layer"><span class="lz-lname">Repeatable Read</span><span class="lz-lnote">Ảnh chụp theo từng <em>giao dịch</em>. Chặn thêm non-repeatable read và phantom. Có thể huỷ với <code>40001</code> khi hai giao dịch cùng cập nhật một dòng. Dùng cho báo cáo nhiều truy vấn và xuất dữ liệu nhất quán.</span></div>
 <div class="lz-layer"><span class="lz-lname">Serializable</span><span class="lz-lnote">Mọi thứ ở trên, CỘNG write skew. Postgres theo dõi phụ thuộc đọc/ghi và huỷ những giao dịch không thể xảy ra ở bất kỳ thứ tự tuần tự nào. <strong>BẮT BUỘC có vòng thử lại.</strong> Dùng cho một số ít bất biến thật sự sống còn — đặt ghế, trừ tồn kho, lịch trực.</span></div>
 <div class="lz-layer"><span class="lz-lname">Read Uncommitted</span><span class="lz-lnote">Bộ phân tích cú pháp nhận, rồi âm thầm coi như Read Committed. PostgreSQL không bao giờ dirty read. Thấy nó trong mã chép từ cơ sở dữ liệu khác thì nó đang không làm gì cả.</span></div>
+</div>
 
 <h3>Chọn thế nào trong thực tế</h3>
 <p>Đừng vơ <code>SERIALIZABLE</code> cho toàn hệ thống. Phần lớn mã ứng dụng đã đúng ở Read Committed vì dù sao nó cũng làm điều an toàn — <code>UPDATE … SET balance = balance - 10</code> đọc và ghi trong MỘT câu lệnh, nên chẳng có gì để mà skew. Hãy nâng mức cho ĐÚNG cái giao dịch canh một bất biến trải trên nhiều dòng, còn lại để yên.</p>
@@ -749,6 +771,13 @@ B│   3 | job-3
 B│   4 | job-4</div>
 <p>Two workers, zero coordination, zero waiting, and no job handed out twice. Before reaching for a dedicated queue service, check whether this one clause is enough — for a great many applications it is.</p>
 
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A locks row A</span><span class="lz-d">Granted immediately. A holds it until its transaction ends — not until the statement ends.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">B locks row B</span><span class="lz-d">Also granted. Nothing is wrong yet, and nothing in either session looks unusual.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">A asks for row B · B asks for row A</span><span class="lz-d">Each waits for a lock the other holds. The cycle is now closed and neither can ever proceed.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">PostgreSQL breaks it</span><span class="lz-d">After <code>deadlock_timeout</code> (1 s) it detects the cycle, aborts one transaction, and lets the other finish. The victim gets <code>deadlock detected</code>.</span></div>
+<div class="lz-step"><span class="lz-k">→</span><span class="lz-t">The fix is ordering</span><span class="lz-d">If both had locked A before B — say, always ascending by primary key — step 3 could not have formed a cycle. <code>ORDER BY id</code> in the <code>SELECT … FOR UPDATE</code> is often the whole fix.</span></div>
+</div>
 <h3>Deadlock: two transactions each holding what the other wants</h3>
 <p>A locks row A then wants row B; B locks row B then wants row A. Neither can move:</p>
 <div class="out">A│ UPDATE accounts SET balance = balance - 1 WHERE id = 'A';
@@ -874,6 +903,13 @@ B│   3 | job-3
 B│   4 | job-4</div>
 <p>Hai worker, không phối hợp gì, không chờ nhau, và không việc nào bị giao hai lần. Trước khi với tay sang một dịch vụ hàng đợi riêng, hãy thử xem một mệnh đề này đã đủ chưa — với rất nhiều ứng dụng thì nó đủ.</p>
 
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A khoá dòng A</span><span class="lz-d">Được cấp ngay. A giữ nó tới khi giao dịch kết thúc — chứ không phải tới khi câu lệnh kết thúc.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">B khoá dòng B</span><span class="lz-d">Cũng được cấp. Chưa có gì sai cả, và không phiên nào trông có gì bất thường.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">A đòi dòng B · B đòi dòng A</span><span class="lz-d">Mỗi bên chờ một cái khoá mà bên kia đang giữ. Vòng lặp giờ đã KHÉP KÍN và không bên nào đi tiếp được nữa.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">PostgreSQL phá vòng</span><span class="lz-d">Sau <code>deadlock_timeout</code> (1 giây) nó phát hiện vòng lặp, huỷ MỘT giao dịch, và để cái kia chạy xong. Nạn nhân nhận <code>deadlock detected</code>.</span></div>
+<div class="lz-step"><span class="lz-k">→</span><span class="lz-t">Cách sửa là THỨ TỰ</span><span class="lz-d">Nếu cả hai đều khoá A trước rồi mới tới B — ví dụ luôn tăng dần theo khoá chính — thì bước 3 đã không thể tạo thành vòng. Một chữ <code>ORDER BY id</code> trong <code>SELECT … FOR UPDATE</code> thường là TOÀN BỘ cách sửa.</span></div>
+</div>
 <h3>Deadlock: hai giao dịch mỗi bên đang giữ đúng thứ bên kia cần</h3>
 <p>A khoá dòng A rồi muốn dòng B; B khoá dòng B rồi muốn dòng A. Không bên nào nhúc nhích được:</p>
 <div class="out">A│ UPDATE accounts SET balance = balance - 1 WHERE id = 'A';

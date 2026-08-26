@@ -87,9 +87,11 @@ số lần in "goi VOLATILE":   5
 -- SELECT … FROM (SELECT * FROM notes LIMIT 5) t WHERE id &gt; dem_goi_immutable(0);
 số lần in "goi IMMUTABLE":  1</div>
 <p>Five calls versus one, on identical work. Because <code>IMMUTABLE</code> promises the same input always gives the same output, the planner evaluated it <strong>once</strong> and folded the result into a constant. <code>VOLATILE</code> promises nothing, so it must be called per row.</p>
+<div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t"><code>IMMUTABLE</code></span><span class="lz-d">Same arguments ⇒ same result, forever. No database access at all. Can be constant-folded, and is the <strong>only</strong> level usable in an expression index (Chapter 9). Example: <code>lower(text)</code>, pure arithmetic.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t"><code>STABLE</code></span><span class="lz-d">Same result within one statement, but may read tables. Cannot be folded to a constant, but the planner may reuse it within a scan and it is safe in index scans. Anything doing <code>SELECT</code> belongs here — including <code>note_count</code> above.</span></div>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t"><code>VOLATILE</code></span><span class="lz-d">May return a different value on every call, may write. <code>random()</code>, <code>now()</code>-adjacent sequence functions, anything that <code>INSERT</code>s. The default — so a function you forgot to mark is treated as the most expensive kind.</span></div>
+</div>
 <div class="pitfall"><p><strong>Trap — declaring a function <code>IMMUTABLE</code> because it "feels" constant.</strong> The marker is a <em>promise you make to the planner</em>, and PostgreSQL does not verify it. Mark a function that reads a table as <code>IMMUTABLE</code> and it will be constant-folded against data from some earlier moment — giving stale answers with no error, and, far worse, if you build an expression index on it the index silently disagrees with the table forever. The classic version of this bug is a date helper that uses <code>now()</code> or the session time zone: not immutable, because the same input gives a different answer tomorrow. When unsure, use <code>STABLE</code>; the cost of being one level too conservative is some lost optimisation, while the cost of being one level too optimistic is wrong data.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
@@ -162,9 +164,11 @@ số lần in "goi VOLATILE":   5
 -- SELECT … FROM (SELECT * FROM notes LIMIT 5) t WHERE id &gt; dem_goi_immutable(0);
 số lần in "goi IMMUTABLE":  1</div>
 <p>Năm lần gọi so với MỘT, trên cùng một khối lượng việc. Vì <code>IMMUTABLE</code> hứa rằng cùng đầu vào thì luôn cho cùng đầu ra, bộ lập kế hoạch đã tính nó <strong>một lần</strong> rồi gấp kết quả thành hằng số. <code>VOLATILE</code> không hứa gì cả, nên nó phải được gọi cho từng dòng.</p>
+<div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t"><code>IMMUTABLE</code></span><span class="lz-d">Cùng tham số ⇒ cùng kết quả, mãi mãi. KHÔNG truy cập cơ sở dữ liệu chút nào. Gấp được thành hằng số, và là mức <strong>DUY NHẤT</strong> dùng được trong chỉ mục biểu thức (Chương 9). Ví dụ: <code>lower(text)</code>, phép tính thuần.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t"><code>STABLE</code></span><span class="lz-d">Cùng kết quả TRONG MỘT câu lệnh, nhưng có thể đọc bảng. Không gấp thành hằng số được, nhưng bộ lập kế hoạch có thể tái dùng trong một lượt quét và nó an toàn trong index scan. Mọi thứ có <code>SELECT</code> đều thuộc về đây — kể cả <code>note_count</code> ở trên.</span></div>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t"><code>VOLATILE</code></span><span class="lz-d">Có thể trả giá trị khác ở mỗi lần gọi, có thể ghi. <code>random()</code>, các hàm sequence gần <code>now()</code>, bất cứ thứ gì <code>INSERT</code>. Là MẶC ĐỊNH — nên một hàm bạn quên đánh dấu sẽ bị coi là loại đắt nhất.</span></div>
+</div>
 <div class="pitfall"><p><strong>Bẫy — khai một hàm là <code>IMMUTABLE</code> vì nó "có vẻ" bất biến.</strong> Cái nhãn đó là một <em>LỜI HỨA bạn đưa cho bộ lập kế hoạch</em>, và PostgreSQL KHÔNG kiểm chứng nó. Đánh dấu một hàm CÓ ĐỌC BẢNG là <code>IMMUTABLE</code> thì nó sẽ bị gấp thành hằng số dựa trên dữ liệu của một thời điểm nào đó trước kia — cho câu trả lời cũ mà không hề báo lỗi, và tệ hơn nhiều, nếu bạn dựng một chỉ mục biểu thức trên nó thì chỉ mục ấy âm thầm LỆCH với bảng vĩnh viễn. Phiên bản kinh điển của con bug này là một hàm phụ trợ về ngày tháng dùng <code>now()</code> hoặc múi giờ của phiên: KHÔNG bất biến, vì cùng đầu vào mà ngày mai cho câu trả lời khác. Không chắc thì dùng <code>STABLE</code>; cái giá của việc thận trọng thừa một mức là mất chút tối ưu, còn cái giá của lạc quan thừa một mức là DỮ LIỆU SAI.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
@@ -210,6 +214,13 @@ $$;
 <p>Inside a trigger function you get two special record variables: <code>NEW</code> (the row as it will be) and <code>OLD</code> (as it was). <code>NEW</code> is <code>NULL</code> in a <code>DELETE</code> trigger; <code>OLD</code> is <code>NULL</code> in an <code>INSERT</code> trigger. <code>TG_OP</code> tells you which operation fired.</p>
 <div class="callout ok"><strong>BEFORE vs AFTER is the decision that matters.</strong> A <code>BEFORE … FOR EACH ROW</code> trigger can <em>modify</em> the row by assigning to <code>NEW</code> — that is the only place stamping <code>updated_at</code> works. An <code>AFTER</code> trigger runs once the row is written and cannot change it; use it for side effects — writing an audit row, queueing a notification, updating a counter elsewhere.</div>
 
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Statement arrives</span><span class="lz-d">An <code>UPDATE</code> is issued. Any <code>BEFORE … FOR EACH STATEMENT</code> trigger fires once, before any row is touched.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t"><code>BEFORE … FOR EACH ROW</code></span><span class="lz-d">Fires per row, and can <strong>modify</strong> it by assigning to <code>NEW</code>. Returning <code>NULL</code> here silently skips the row entirely.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The row is written</span><span class="lz-d">Constraints and checks are applied to the row as the <code>BEFORE</code> trigger left it — not as the client sent it.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t"><code>AFTER … FOR EACH ROW</code></span><span class="lz-d">Fires per row once the write has happened. Cannot change the row; this is where side effects belong — audit rows, notifications, counters.</span></div>
+<div class="lz-step"><span class="lz-k">→</span><span class="lz-t">All inside one transaction</span><span class="lz-d">If any trigger raises, the original statement fails and everything rolls back together. A slow trigger makes every write on that table slow.</span></div>
+</div>
 <h3>An audit log that records only real changes</h3>
 <pre><code><span class="tok-keyword">CREATE FUNCTION</span> audit_notes() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$
 <span class="tok-keyword">BEGIN</span>
@@ -284,6 +295,13 @@ $$;
 <p>Bên trong một hàm trigger bạn có hai biến bản ghi đặc biệt: <code>NEW</code> (dòng SẼ như thế nào) và <code>OLD</code> (nó ĐÃ như thế nào). <code>NEW</code> là <code>NULL</code> trong trigger <code>DELETE</code>; <code>OLD</code> là <code>NULL</code> trong trigger <code>INSERT</code>. <code>TG_OP</code> cho bạn biết thao tác nào đã kích hoạt.</p>
 <div class="callout ok"><strong>BEFORE hay AFTER mới là quyết định quan trọng.</strong> Một trigger <code>BEFORE … FOR EACH ROW</code> có thể <em>SỬA</em> dòng bằng cách gán vào <code>NEW</code> — đó là chỗ DUY NHẤT mà việc đóng dấu <code>updated_at</code> chạy được. Trigger <code>AFTER</code> chạy sau khi dòng đã ghi xong và không đổi được nó nữa; dùng nó cho hiệu ứng phụ — ghi một dòng kiểm toán, xếp hàng một thông báo, cập nhật một bộ đếm ở chỗ khác.</div>
 
+<div class="lz-flow">
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Câu lệnh tới</span><span class="lz-d">Một lệnh <code>UPDATE</code> được phát ra. Mọi trigger <code>BEFORE … FOR EACH STATEMENT</code> chạy MỘT lần, trước khi chạm vào dòng nào.</span></div>
+<div class="lz-step"><span class="lz-k">2</span><span class="lz-t"><code>BEFORE … FOR EACH ROW</code></span><span class="lz-d">Chạy cho từng dòng, và <strong>SỬA</strong> được dòng đó bằng cách gán vào <code>NEW</code>. Trả về <code>NULL</code> ở đây là âm thầm bỏ qua HẲN cái dòng.</span></div>
+<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Dòng được ghi</span><span class="lz-d">Ràng buộc và kiểm tra áp lên dòng ở trạng thái mà trigger <code>BEFORE</code> để lại — chứ không phải trạng thái client gửi lên.</span></div>
+<div class="lz-step"><span class="lz-k">4</span><span class="lz-t"><code>AFTER … FOR EACH ROW</code></span><span class="lz-d">Chạy cho từng dòng SAU khi đã ghi xong. Không đổi được dòng nữa; đây là chỗ dành cho hiệu ứng phụ — dòng kiểm toán, thông báo, bộ đếm.</span></div>
+<div class="lz-step"><span class="lz-k">→</span><span class="lz-t">Tất cả nằm trong MỘT giao dịch</span><span class="lz-d">Nếu bất kỳ trigger nào ném lỗi thì câu lệnh gốc hỏng và mọi thứ cùng lùi lại. Một trigger chậm làm MỌI lệnh ghi trên bảng đó chậm.</span></div>
+</div>
 <h3>Một nhật ký kiểm toán chỉ ghi những thay đổi THẬT</h3>
 <pre><code><span class="tok-keyword">CREATE FUNCTION</span> audit_notes() <span class="tok-keyword">RETURNS</span> trigger <span class="tok-keyword">LANGUAGE</span> plpgsql <span class="tok-keyword">AS</span> $$
 <span class="tok-keyword">BEGIN</span>
@@ -363,6 +381,12 @@ $$;
 (1 row)</div>
 <p>That is the whole appeal. A join and aggregation you would otherwise paste into six places lives in one definition, and correcting it corrects all six.</p>
 
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Table</span><span class="lz-v">Stores rows. Always current, costs disk, and everything else on this list is built from it.</span></div>
+<div class="lz-layer"><span class="lz-k">View</span><span class="lz-v">Stores a <em>query</em>. Zero storage, always exactly as fresh as the table, costs whatever the query costs — every time.</span></div>
+<div class="lz-layer"><span class="lz-k">Materialized view</span><span class="lz-v">Stores <em>rows produced by a query</em>. Fast to read, stale until you <code>REFRESH</code>, and costs disk like a table (12.4).</span></div>
+<div class="lz-layer"><span class="lz-k">Summary table + trigger</span><span class="lz-v">Stores rows kept in step by an <code>AFTER</code> trigger. Fresh <em>and</em> fast, paid for with write throughput and complexity.</span></div>
+</div>
 <h3>Some views are writable</h3>
 <p>If a view selects from a single table with no aggregation, <code>DISTINCT</code>, <code>GROUP BY</code> or set operation, PostgreSQL can translate writes back to the base table automatically:</p>
 <pre><code><span class="tok-keyword">CREATE VIEW</span> note_cua_user1 <span class="tok-keyword">AS</span>
@@ -425,6 +449,12 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
 (1 row)</div>
 <p>Đó là toàn bộ sức hấp dẫn. Một phép join và tổng hợp mà lẽ ra bạn phải dán vào sáu chỗ giờ sống trong MỘT định nghĩa, và sửa nó là sửa cả sáu.</p>
 
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-k">Bảng</span><span class="lz-v">Lưu các dòng. Luôn hiện hành, tốn đĩa, và mọi thứ khác trong danh sách này đều dựng lên từ nó.</span></div>
+<div class="lz-layer"><span class="lz-k">View</span><span class="lz-v">Lưu một <em>TRUY VẤN</em>. Không tốn chỗ nào, luôn tươi đúng bằng cái bảng, và tốn đúng bằng chi phí của truy vấn — MỖI LẦN.</span></div>
+<div class="lz-layer"><span class="lz-k">Materialized view</span><span class="lz-v">Lưu <em>các dòng do một truy vấn sinh ra</em>. Đọc nhanh, CŨ cho tới khi bạn <code>REFRESH</code>, và tốn đĩa như một cái bảng (12.4).</span></div>
+<div class="lz-layer"><span class="lz-k">Bảng tổng hợp + trigger</span><span class="lz-v">Lưu các dòng được một trigger <code>AFTER</code> giữ đồng bộ. Vừa tươi <em>vừa</em> nhanh, trả giá bằng thông lượng ghi và độ phức tạp.</span></div>
+</div>
 <h3>Một số view GHI được</h3>
 <p>Nếu một view select từ MỘT bảng, không tổng hợp, không <code>DISTINCT</code>, không <code>GROUP BY</code>, không phép toán tập hợp, thì PostgreSQL tự dịch lệnh ghi ngược về bảng gốc:</p>
 <pre><code><span class="tok-keyword">CREATE VIEW</span> note_cua_user1 <span class="tok-keyword">AS</span>
@@ -518,9 +548,11 @@ HINT:  Create a unique index with no WHERE clause on one or more columns of the 
 REFRESH MATERIALIZED VIEW</div>
 <p><code>CONCURRENTLY</code> needs the unique index to match old rows against new ones so it can apply a difference instead of swapping the whole relation. It is slower overall and does more I/O — but readers keep working throughout, which is what matters on a live site.</p>
 
+<div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">View</span><span class="lz-lnote">Always fresh, stores nothing, costs whatever the query costs. The default choice. Use it to name a query you repeat.</span></div>
 <div class="lz-layer"><span class="lz-lname">Materialized view</span><span class="lz-lnote">Fast and stale. Stores rows on disk, needs a <code>REFRESH</code> you must schedule. Use it for expensive aggregations where an hour-old answer is acceptable — dashboards, leaderboards, reports.</span></div>
 <div class="lz-layer"><span class="lz-lname">Summary table + trigger</span><span class="lz-lnote">Fresh <em>and</em> fast, at the cost of write throughput and complexity: an <code>AFTER</code> trigger (12.2) keeps a real table in step on every change. Reach for it only when you need both and have measured that the other two do not do.</span></div>
+</div>
 
 <div class="pitfall"><p><strong>Trap — creating a materialized view and never scheduling the refresh.</strong> It has no expiry, no background job and no warning. It will serve the numbers from the afternoon you created it, for months, and every one of those queries will be fast and wrong. If you create one, create its refresh in the same change — a cron entry, a scheduled job, or a <code>pg_cron</code> task — and make the refresh time visible to whoever reads the dashboard, so a stale number looks stale instead of looking like a business trend. The second half of the trap: an ordinary <code>REFRESH</code> on a large view locks readers out for its entire duration, so the refresh you schedule at peak hour to "keep it fresh" is an outage on a timer. Add the unique index and use <code>CONCURRENTLY</code>.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
@@ -576,9 +608,11 @@ HINT:  Create a unique index with no WHERE clause on one or more columns of the 
 REFRESH MATERIALIZED VIEW</div>
 <p><code>CONCURRENTLY</code> cần cái unique index để KHỚP dòng cũ với dòng mới, nhờ đó nó áp một phần CHÊNH LỆCH thay vì tráo nguyên cả quan hệ. Nó chậm hơn về tổng thể và tốn I/O hơn — nhưng người đọc vẫn làm việc được suốt quá trình, và đó mới là thứ đáng kể trên một trang đang chạy.</p>
 
+<div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">View</span><span class="lz-lnote">Luôn tươi, không lưu gì, tốn đúng bằng chi phí của truy vấn. Lựa chọn mặc định. Dùng để ĐẶT TÊN cho một truy vấn bạn lặp lại.</span></div>
 <div class="lz-layer"><span class="lz-lname">Materialized view</span><span class="lz-lnote">Nhanh và CŨ. Lưu dòng xuống đĩa, cần một lệnh <code>REFRESH</code> mà bạn PHẢI lên lịch. Dùng cho các phép tổng hợp đắt mà một câu trả lời cũ một giờ vẫn chấp nhận được — bảng điều khiển, bảng xếp hạng, báo cáo.</span></div>
 <div class="lz-layer"><span class="lz-lname">Bảng tổng hợp + trigger</span><span class="lz-lnote">Vừa tươi <em>vừa</em> nhanh, đổi lại là thông lượng ghi và độ phức tạp: một trigger <code>AFTER</code> (12.2) giữ một cái bảng thật đồng bộ ở mọi thay đổi. Chỉ với tay sang đây khi bạn cần CẢ HAI và đã ĐO được rằng hai cách kia không đủ.</span></div>
+</div>
 
 <div class="pitfall"><p><strong>Bẫy — tạo một materialized view rồi KHÔNG BAO GIỜ lên lịch làm mới nó.</strong> Nó không có hạn dùng, không có tiến trình nền, không có cảnh báo. Nó sẽ phục vụ những con số của cái buổi chiều bạn tạo ra nó, suốt nhiều THÁNG, và mọi truy vấn ấy đều nhanh và SAI. Nếu bạn tạo một cái, hãy tạo luôn lệnh làm mới trong CÙNG một thay đổi — một mục cron, một job có lịch, hoặc một tác vụ <code>pg_cron</code> — và cho hiện thời điểm làm mới tới người đọc bảng điều khiển, để một con số cũ TRÔNG NHƯ đồ cũ thay vì trông như một xu hướng kinh doanh. Nửa sau của cái bẫy: một lệnh <code>REFRESH</code> thường trên một view lớn chặn người đọc suốt toàn bộ thời gian nó chạy, nên cái lệnh làm mới bạn hẹn giờ vào giờ cao điểm để "giữ cho nó tươi" chính là một sự cố có hẹn giờ. Hãy thêm unique index và dùng <code>CONCURRENTLY</code>.</p></div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">

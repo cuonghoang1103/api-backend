@@ -15,7 +15,8 @@
  *   node scripts/course-cover-offline.mjs --out /tmp/bia --slug redis
  *   node scripts/course-cover-offline.mjs --out /tmp/bia --icons-dir <đường dẫn>
  *
- * `--icons-dir` mặc định là `node_modules/simple-icons/icons`. Chưa có gói thì:
+ * `--icons-dir` mặc định là `scripts/icons/` — 19 logo chép sẵn trong repo.
+ * Muốn logo khác thì trỏ sang gói simple-icons:
  *   npm install simple-icons --prefix /tmp/si --no-save
  *   node scripts/course-cover-offline.mjs --out /tmp/bia \
  *     --icons-dir /tmp/si/node_modules/simple-icons/icons
@@ -28,7 +29,7 @@ const args = process.argv.slice(2);
 const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : d; };
 const OUT = val('--out', '/tmp/bia');
 const ONLY = val('--slug', null);
-const ICONS = val('--icons-dir', 'node_modules/simple-icons/icons');
+const ICONS = val('--icons-dir', new URL('./icons', import.meta.url).pathname);
 const EYEBROW = val('--eyebrow', 'CUONGTHAI COURSE');
 const W = 1200, H = 675;
 

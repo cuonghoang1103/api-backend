@@ -53,22 +53,29 @@ const esc = (s) => String(s)
       ảnh bìa phụ thuộc một dịch vụ ngoài, ngay lúc chạy, bên trong container.
       Nó đã hỏng câm hai lần liền: script chạy đủ, deploy xanh, smoke-test
       sạch, mà redis.png vẫn 404 trên R2. Nên 19 logo đang dùng được chép sẵn
-      vào assets/simple-icons/ (88 KB cho cả bộ) và đọc từ đĩa trước; CDN chỉ
+      vào scripts/icons/ (88 KB cho cả bộ) và đọc từ đĩa trước; CDN chỉ
       còn là đường lùi cho logo chưa chép. */
 // Giải theo vị trí FILE này, không theo cwd — script chạy bằng `docker exec`
 // nên cwd không chắc là gốc repo.
-const iconLocal = new URL(`../assets/simple-icons/${ICON}.svg`, import.meta.url);
+//
+// ⚠️ LOGO PHẢI NẰM TRONG scripts/, KHÔNG PHẢI assets/. Tầng `runner` của
+// Dockerfile.backend chỉ chép những đường dẫn ĐƯỢC GỌI TÊN — node_modules,
+// dist, src, prisma, package.json, scripts, content, data. Đặt ở assets/ thì
+// file có trong builder mà KHÔNG có trong ảnh chạy, nên bản vá đọc-từ-đĩa vẫn
+// rơi về CDN và chết y như cũ. Chính Dockerfile đã có chú thích cảnh báo bẫy
+// này, sau khi content/ và data/ từng dính.
+const iconLocal = new URL(`./icons/${ICON}.svg`, import.meta.url);
 let iconSvg = null;
 try {
   iconSvg = await fs.readFile(iconLocal, 'utf8');
-  console.log(`· logo ${ICON}: đọc từ đĩa (assets/simple-icons/${ICON}.svg)`);
+  console.log(`· logo ${ICON}: đọc từ đĩa (scripts/icons/${ICON}.svg)`);
 } catch {
   const iconUrl = `https://cdn.simpleicons.org/${ICON}/${COLOR}`;
-  console.log(`· logo ${ICON}: chưa chép vào assets/simple-icons/, thử CDN…`);
+  console.log(`· logo ${ICON}: chưa chép vào scripts/icons/, thử CDN…`);
   const res = await fetch(iconUrl).catch((e) => ({ ok: false, status: 0, err: e.message }));
   if (!res.ok) {
     console.error(`✗ không lấy được logo "${ICON}" (${res.status || res.err}) từ ${iconUrl}`);
-    console.error(`  Chép tay cho khỏi phụ thuộc mạng: assets/simple-icons/${ICON}.svg`);
+    console.error(`  Chép tay cho khỏi phụ thuộc mạng: scripts/icons/${ICON}.svg`);
     process.exit(1);
   }
   iconSvg = await res.text();

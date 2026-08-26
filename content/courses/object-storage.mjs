@@ -25,7 +25,7 @@ export default {
     language: 'Vietnamese',
     status: 'PUBLISHED',
     isFeatured: true,
-    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/object-storage.png',
+    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/object-storage.png?v=3',
     shortDescription: 'S3 API + Cloudflare R2 (zero egress cost). Presigned URLs, CORS, cache control, cost math, and the SigV4 signature bug this repo caught in production (fixed).|||S3 API + Cloudflare R2 (không có phí egress). Presigned URLs, CORS, cache control, tính cost, và cái bug SigV4 signature mà kho này bắt được ở production (đã vá).',
     description: 'Khoá Object Storage cho backend Node.js dùng Cloudflare R2 và AWS SDK v3. 11 mục đi từ concept (bucket, key, object) tới S3 API, R2 specifics, presigned URL security, CORS, lifecycle, cost math, migration. Mọi số đo lấy từ src/config/r2.ts (331 dòng) + upload.service.ts (291 dòng) của kho này — kèm một security bug thật (SigV4 signableHeaders XSS) mà kho đã bắt và vá.',
     whatYouLearn: 'Hiểu object storage khác file system ở chỗ nào; đọc và sinh presigned URL đúng cách (kể cả bug SigV4 signableHeaders); cấu hình CORS cho browser upload; quản lý cost (R2 zero egress vs S3 $0.09/GB); tune Cache-Control per content type; migrate từ S3 sang R2 mà không mất tin nhắn.',

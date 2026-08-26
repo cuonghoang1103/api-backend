@@ -28,7 +28,7 @@ export default {
     language: 'Vietnamese',
     status: 'PUBLISHED',
     isFeatured: true,
-    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/media-processing.png',
+    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/media-processing.png?v=3',
     shortDescription: 'Sharp cho ảnh, FFmpeg cho video/audio. Pipeline production với concurrency guard, decompression-bomb defense, và thumbnail explosion cost. Số đo từ chính kho này.|||Sharp cho ảnh, FFmpeg cho video/audio. Pipeline production với concurrency guard, decompression-bomb defense, và thumbnail explosion cost. Số đo từ chính kho này.',
     description: 'Khoá Media Processing cho backend Node.js. 11 mục về Sharp (metadata, resize, WebP re-encoding, animated GIF), FFmpeg (video thumbnails, transcoding, audio decode), pipeline pattern (upload → optimize → variants → CDN), cost management, streaming (HLS/DASH), và diagnosis. Vá decompression bomb thật (100MP guard) và mpg123 vs ffmpeg tradeoff (1.5MB vs 80MB image) từ imageOptimizer.ts + audio.ts.',
     tags: 'media,image,video,audio,sharp,ffmpeg,webp,transcoding,streaming,cdn',

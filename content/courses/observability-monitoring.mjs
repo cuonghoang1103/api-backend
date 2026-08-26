@@ -32,7 +32,7 @@ export default {
     language: 'Vietnamese',
     status: 'PUBLISHED',
     isFeatured: true,
-    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/observability-monitoring.png',
+    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/observability-monitoring.png?v=3',
     shortDescription: 'Logs, metrics, traces and alerts for a Node.js backend you run yourself. Every output block is a real measurement, including the ones that contradict the usual advice.|||Log, chỉ số, trace và cảnh báo cho một backend Node.js bạn tự vận hành. Mọi khối output đều là đo thật, kể cả những cái đi ngược lời khuyên thường nghe.',
     description: 'Khoá Observability & Monitoring cho backend Node.js tự vận hành trên VPS. 13 mục: log có cấu trúc và chi phí thật của nó, đường ống log tới nơi đọc được, correlation bằng AsyncLocalStorage, chỉ số và bùng nổ cardinality, chỉ số riêng của Node (độ trễ vòng lặp, heap, GC), trace phân tán và lấy mẫu, lỗi với Sentry, kiểm tra sức khoẻ và probe, cảnh báo dựa trên SLO, bảng theo dõi, và chẩn đoán sự cố. Số đo thật từ chính kho này: 945 khai báo route mà chỉ 16/73 file routes có import logger, 370 lời gọi logger so với 41 console, và bốn endpoint health mà một cái nói dối.',
     tags: 'observability,monitoring,logging,metrics,tracing,opentelemetry,sentry,prometheus,alerting,slo,nodejs',

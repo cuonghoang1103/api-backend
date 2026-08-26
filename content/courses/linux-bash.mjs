@@ -35,7 +35,7 @@ export default {
     // bìa dùng chung của CuongThai). Sinh lại, KHÔNG sửa tay:
     //   docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
     //     --slug linux-bash --icon linux --color FCC624 --title "Linux & Bash" --subtitle "Terminal → Server"
-    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/linux-bash.png',
+    thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/linux-bash.png?v=3',
     shortDescription: 'Go from pasting commands you do not understand to reading any command, writing scripts that fail loudly, and diagnosing a server you have never seen — using nothing but a terminal.|||Đi từ chỗ dán những lệnh không hiểu tới chỗ đọc được mọi lệnh, viết script hỏng thì kêu to, và chẩn đoán một máy chủ chưa từng thấy — chỉ bằng một cái terminal.',
     description: 'Khoá Linux & Bash từ số 0 tới vận hành máy chủ, do CuongThai tự biên soạn. 13 chương đi từ shell và hệ thống file, qua thao tác file, xử lý văn bản bằng ống dẫn, quyền và người dùng, tiến trình và tín hiệu, shell như một ngôn ngữ lập trình, viết script cho production, môi trường và PATH, mạng và máy từ xa, đĩa/gói/log, systemd và cron, cho tới một sách công thức chẩn đoán máy chủ thật. Mọi ví dụ là output terminal chạy thật.',
     whatYouLearn: 'Đọc một lệnh lạ và đoán trước nó làm gì, kể cả khi có ống dẫn và dấu nháy; tìm mọi file theo tên/kích thước/tuổi/nội dung và tác động lên tất cả trong một dòng; hiểu quyền đủ để sửa "Permission denied" thay vì vớ lấy sudo; nhìn ra tiến trình nào ngốn CPU, cái gì giữ một cổng, vì sao đĩa đầy; viết script shell có kiểm tham số và dọn dẹp khi thoát; chạy ứng dụng dưới systemd, hẹn giờ công việc, đọc log; và chẩn đoán một máy chủ chưa từng thấy.',

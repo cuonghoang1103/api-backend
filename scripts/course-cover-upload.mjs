@@ -12,6 +12,15 @@
  * ngoài, không sharp, không font, không SVG. Ảnh đã dựng sẵn ở scripts/covers/
  * bằng `course-cover-offline.mjs` — cùng bố cục, cùng bộ với ảnh cũ.
  *
+ * ⚠️ THAY ảnh cũ thì PHẢI bump `?v=` trong thumbnailUrl của khoá, nếu không
+ * không ai thấy ảnh mới. PUT ở dưới đặt `max-age=31536000, immutable`, nên
+ * trình duyệt và biên Cloudflare giữ ảnh cũ MỘT NĂM. Thêm ảnh MỚI thì không
+ * cần gì — lần gọi đầu đã là 200 và 200 được cache, đúng như mong muốn.
+ *
+ * 26/08/2026: 19 ảnh đẩy lên thành công mà trang vẫn vỡ ảnh, vì URL đã bị gọi
+ * hàng chục lần lúc còn 404 và biên Cloudflare cache luôn cái 404 đó. Phải vào
+ * dashboard Purge Everything mới hiện. Từ đó mọi thumbnailUrl mang `?v=3`.
+ *
  * PHẢI chạy trong container backend (cần biến R2_*):
  *   docker exec cuonghoangdev_backend node scripts/course-cover-upload.mjs
  *   docker exec cuonghoangdev_backend node scripts/course-cover-upload.mjs --slug redis

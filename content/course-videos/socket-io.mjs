@@ -32,14 +32,14 @@ export default {
     /* ── Chương 1 — Vòng đời của một kết nối ── */
     'io-1-1-connect': { yt: 'vQjiN8Qgs3c', credit: 'Net Ninja — WebSockets (using Socket.io) Tutorial #1 - What Are WebSockets?' },    // WebSockets (using Socket.io) Tutorial #1 - What Are WebSockets?
     'io-1-2-disconnect': { yt: 'UwS3wJoi7fY', credit: 'Net Ninja — WebSockets (using Socket.io) Tutorial #3 - Using Socket.io' }, // WebSockets (using Socket.io) Tutorial #3 - Using Socket.io
-    'io-1-3-reconnect': { yt: 'Ul9tlnb0Do8', credit: '' },   // Socket.io Client Not Reconnecting After Abrupt Disconnection: Solutions & Tips
+    'io-1-3-reconnect': { yt: 'Ul9tlnb0Do8', credit: 'The Debug Zone — Socket.io Client Not Reconnecting After Abrupt Disconnection: Solutions & Tips' },   // Socket.io Client Not Reconnecting After Abrupt Disconnection: Solutions & Tips
     'io-1-4-auth': { yt: 'I-RpDyIspsc', credit: 'i learned today — SocketIO Authenticate User Before Connection' },       // SocketIO Authenticate User Before Connection
     'io-1-5-state': { yt: 'Agr1FbRcIcA', credit: 'Lester Fernandez — Persistent SocketIO Sessions with Redis and PostgreSQL - Part 15' },      // Persistent SocketIO Sessions with Redis and PostgreSQL - Part 15
 
     /* ── Chương 2 — Transport và điệu nhảy nâng cấp ── */
     'io-2-1-overhead': { yt: 'ZKEqqIO7n-k', credit: 'Web Dev Simplified — Learn Socket.io In 30 Minutes' }, // Learn Socket.io In 30 Minutes
     'io-2-2-ping': { yt: 'cUGRlM3SZ1w', credit: 'Covalence — Keep Those WebSocket Connections Alive!' },     // Keep Those WebSocket Connections Alive!
-    'io-2-3-sticky': { yt: '0rExm4g4xxg', credit: '' },   // Sticky Sessions in Load Balancing: Step-by-Step Implementation Guide
+    'io-2-3-sticky': { yt: '0rExm4g4xxg', credit: 'RaviTeja Mureboina | Cybersecurity  — Sticky Sessions in Load Balancing: Step-by-Step Implementation Guide||aws devops||aws cloud' },   // Sticky Sessions in Load Balancing: Step-by-Step Implementation Guide
     'io-2-4-curl': { yt: '3MqrbL2Ri50', credit: 'Automation Step by Step — A Demo | How to check WebSocket requests in Browser' },     // A Demo | How to check WebSocket requests in Browser
     'io-2-5-binary': { yt: 'nyKw0puoyYk', credit: 'eSeGeCe — WebSocket Send Binary Messages - sgcWebSockets' },   // WebSocket Send Binary Messages - sgcWebSockets
 
@@ -47,7 +47,7 @@ export default {
     'io-3-1-room': { yt: 'in-Llm0rWHY', credit: 'Miguel Grinberg — Quick Socket.IO Tutorial, Part 7: Rooms' },           // Quick Socket.IO Tutorial, Part 7: Rooms
     'io-3-2-namespace': { yt: 'SAxvToEouB8', credit: 'Packt  — Socket.IO Solutions : Creating Chat Channels with Namespaces | packtpub.com' },      // Socket.IO Solutions : Creating Chat Channels with Namespaces
     'io-3-3-room-lifecycle': { yt: '9A9SlYp1-O8', credit: 'I Dev — #35 How to Join and leave room  in Socket.IO and optimize socket file #nodejs #reactnative #sockets' }, // #35 How to Join and leave room in Socket.IO and optimize socket file
-    'io-3-4-broadcast': { yt: 'FvArk8-qgCk', credit: '' },   // WebSockets (using Socket.io) Tutorial #5 - Broadcasting Messages
+    'io-3-4-broadcast': { yt: 'FvArk8-qgCk', credit: 'Net Ninja — WebSockets (using Socket.io) Tutorial #5 - Broadcasting Messages' },   // WebSockets (using Socket.io) Tutorial #5 - Broadcasting Messages
     'io-3-5-event-name': { yt: 'bxUlKDgpbWs', credit: 'CoderOne — Node.js Socket.io Namespaces, Rooms and Connections 02' },     // Node.js Socket.io Namespaces, Rooms and Connections 02
 
     /* ── Chương 4 — Hiện diện và cái bẫy O(N²) ── */

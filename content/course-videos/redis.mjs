@@ -26,7 +26,7 @@ export default {
   lessons: {
     /* ── Mục 0 — Redis giải quyết gì, và cài đặt ── */
     'rd-0-1-van-de': { yt: 'OqCK95AS-YE', credit: 'TechWorld with Nana — Redis Crash Course - the What, Why and How to use Redis as your primary database' },  // Redis Crash Course - the What, Why and How to use Redis as your primary database
-    'rd-0-2-cai-dat': { yt: 'qucL1F2YEKE', credit: '' },   // Install Redis using docker and docker compose | Redis Insight docker installation
+    'rd-0-2-cai-dat': { yt: 'qucL1F2YEKE', credit: 'CodeWithRajRanjan — Install Redis using docker and docker compose | Redis Insight docker installation' },   // Install Redis using docker and docker compose | Redis Insight docker installation
     'rd-0-3-nam-phut': { yt: 'Hbt56gFj998', credit: 'Traversy Media — Redis Crash Course Tutorial' },// Redis Crash Course Tutorial
 
     /* ── Chương 1 — Mô hình thực thi ── */
@@ -61,7 +61,7 @@ export default {
     'rd-5-1-hash': { yt: 'nns1mhlxTJ8', credit: 'TechByAni — L23. Redis Crash Course | Hands-On with Node.js & Docker | System Design' },              // L23. Redis Crash Course | Hands-On with Node.js & Docker | System Design
     'rd-5-2-ma-hoa-bo-nho': { yt: 'g6AKdCBVyyg', credit: 'vlogize — How to Easily Calculate Redis Memory Usage for Monitoring and Alerts' },     // How to Easily Calculate Redis Memory Usage for Monitoring and Alerts
     'rd-5-3-mo-hinh-doi-tuong': { yt: 'brw3uVmQgZ8', credit: 'Josh tried coding — Modern Redis in 40 Minutes | Crash Course 2023' }, // Modern Redis in 40 Minutes | Crash Course 2023
-    'rd-5-4-hexpire': { yt: 'I0esXDazvIM', credit: '' },   // Redis | Managing Expiration with EXPIRE, TTL, and Lifetimes
+    'rd-5-4-hexpire': { yt: 'I0esXDazvIM', credit: 'Very Academy — Redis | Managing Expiration with EXPIRE, TTL, and Lifetimes' },   // Redis | Managing Expiration with EXPIRE, TTL, and Lifetimes
     'rd-5-5-hash-thuc-te': { yt: 'OCOWjTPu9DI', credit: 'ProgrammingKnowledge — Redis Crash Course | Redis Tutorial' },      // Redis Crash Course | Redis Tutorial
 
     /* ── Chương 6 — Làm bộ đệm cho đúng ── */
@@ -88,7 +88,7 @@ export default {
     /* ── Chương 9 — Bộ nhớ, đẩy khoá và lưu lâu dài ── */
     'rd-9-1-bo-nho-di-dau': { yt: 'QemEy97fiY0', credit: 'ScyllaDB — End-To-End Performance Testing, Profiling, and Analysis at Redis' }, // End-To-End Performance Testing, Profiling, and Analysis at Redis
     'rd-9-2-day-khoa': { yt: 'I4TXUbQoaNg', credit: 'Kartikeya Sharma — Redis Expiration & Eviction Policies | TTL, LRU, LFU, RANDOM' },      // Redis Expiration & Eviction Policies | TTL, LRU, LFU, RANDOM
-    'rd-9-3-rdb': { yt: 'KOC3SXfYyIc', credit: '' },   // Redis Persistence RDB AOF
+    'rd-9-3-rdb': { yt: 'KOC3SXfYyIc', credit: 'Geeky Shows — Redis Persistence RDB AOF' },   // Redis Persistence RDB AOF
     'rd-9-4-aof': { yt: '5SnkVoatBpA', credit: 'Arpit Bhayani — Implementing AOF Persistence | Redis Internals' },           // Implementing AOF Persistence | Redis Internals
     'rd-9-5-tu-the-ben': { yt: '1pfvz24BAUs', credit: 'Coding with Raphael De Lio — Understanding Redis Persistence - AOF & RDB + Docker' },    // Understanding Redis Persistence - AOF & RDB + Docker
 

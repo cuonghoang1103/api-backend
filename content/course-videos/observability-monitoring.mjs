@@ -49,7 +49,7 @@ export default {
     'obs-2-2-xoay-vong': { yt: 'pDQzadfUfpE', credit: 'Sematext — Docker Log Rotation Configuration | Container Logging for Beginners - Sematext' },        // Docker Log Rotation Configuration | Container Logging for Beginners - Sematext
     'obs-2-3-trinh-thu-log': { yt: 'D2IL8DC9bAI', credit: 'Nodematic Tutorials — Intro to Grafana Loki Log Streams (Promtail Example)' },    // Intro to Grafana Loki Log Streams (Promtail Example)
     'obs-2-4-logql': { yt: 'VEGYgPiAazk', credit: 'Laszlo Fogas — Grafana Loki querying basics, log based metrics and setting alerts on logs' },            // Grafana Loki querying basics, log based metrics and setting up alerts
-    'obs-2-5-luu-tru': { yt: 'bmdymMVzZ6g', credit: '' },   // Reduce Observability Costs Through Logs-to-Metric Conversions with Telemetry Pipelines
+    'obs-2-5-luu-tru': { yt: 'bmdymMVzZ6g', credit: 'Edge Delta — Reduce Observability Costs Through Logs-to-Metric Conversions with Telemetry Pipelines' },   // Reduce Observability Costs Through Logs-to-Metric Conversions with Telemetry Pipelines
 
     /* ── Chương 3 — Nối một yêu cầu thành một sợi ── */
     'obs-3-1-id-di-den-hu-vo': { yt: 'OaHXz3iiw1U', credit: 'CodeSpace — How To Use CorrelationId in Node Js Microservices' },  // How To Use CorrelationId in Node Js Microservices
@@ -92,7 +92,7 @@ export default {
     'obs-8-3-cua-so-deploy': { yt: 'EjOYI1qPdZg', credit: 'Krish Dinesh — How to design Zero Downtime Deployments' },    // How to design Zero Downtime Deployments
     'obs-8-4-kiem-sau-toi-dau': { yt: 'x2e6pIBLKzw', credit: 'Tech Tutorials with Piyush — Day 18/40 - Kubernetes Health Probes Explained | Liveness vs Readiness Probes' }, // Day 18/40 - Kubernetes Health Probes Explained | Liveness vs Readiness Probes
     'obs-8-5-kiem-tu-ben-ngoai': { yt: 'aPA9Ow-QsgY', credit: 'Electronics For You — Monitoring website uptime, performance and SSL certificate expiry using Prometheus' },// Monitoring website uptime, performance and SSL certificate expiry using Prometheus
-    'obs-9-1-loi-hua-danh-thuc': { yt: 'GiaYg19-OTM', credit: '' },   // Prometheus - How to setup AlertManager in Prometheus
+    'obs-9-1-loi-hua-danh-thuc': { yt: 'GiaYg19-OTM', credit: 'DevopsGuru — Prometheus - How to setup AlertManager in Prometheus' },   // Prometheus - How to setup AlertManager in Prometheus
 
     /* ── Chương 9 — Cảnh báo: một lời hứa đánh thức người ── */
     'obs-9-2-nguong-suy-ra': { yt: '9joXN3ipABg', credit: 'DevOps Hint — Alerting Rules in Prometheus | Prometheus Tutorial for Beginners | Prometheus Alertmanager Tutorial' },       // Alerting Rules in Prometheus | Prometheus Tutorial for Beginners

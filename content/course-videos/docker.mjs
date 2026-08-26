@@ -31,7 +31,7 @@ export default {
 
     /* ── Chương 1 — Container & ảnh: mô hình trong đầu ── */
     'dk-1-1-container-la-gi': { yt: 'JF9S3MFDNtI', credit: 'Tiny Technical Tutorials — What Are Containers? Docker Basics Explained for Absolute Beginners | Step-by-Step Tutorial' },  // What Are Containers? Docker Basics Explained for Absolute Beginners
-    'dk-1-2-tang-anh': { yt: '1tHCVIO8Q04', credit: '' },   // Docker Layers and Multistage Builds | Docker Optimization | Reduce Layer Size
+    'dk-1-2-tang-anh': { yt: '1tHCVIO8Q04', credit: 'Cloud With Raj — Docker Layers and Multistage Builds | Docker Optimization | Reduce Layer Size' },   // Docker Layers and Multistage Builds | Docker Optimization | Reduce Layer Size
     'dk-1-3-vong-doi': { yt: 'jetcfvPpTbc', credit: 'shiva burade — Docker Container Lifecycle Explained with hands on example | docker tutorial for beginners.' },         // Docker Container Lifecycle Explained with hands on example
     'dk-1-4-tang-ghi-duoc': { yt: 'hXbXSRLXiS8', credit: 'WhatsCoding — Understanding OverlayFS | OverlayFS | Docker' },    // Understanding OverlayFS | OverlayFS | Docker
     'dk-1-5-ngan-xep-runtime': { yt: '253o0hxwxm8', credit: 'InvolveInInnovation — Docker Architecture | Docker components : daemon, containerd, containerd-shim, runc' }, // Docker Architecture | Docker components : daemon, containerd, containerd-shim, runc
@@ -63,7 +63,7 @@ export default {
     'dk-5-3-cache-mount': { yt: '8fILYOtoesQ', credit: 'Nilesh Gule — Supercharge Docker builds using Cache Mount' },         // Supercharge Docker builds using Cache Mount
     'dk-5-4-cache-ci': { yt: '77j6JFBTmTc', credit: 'anthonywritescode — docker: fast CI rebuilds with --cache-from (intermediate) anthony explains #448' },            // docker: fast CI rebuilds with --cache-from (anthony explains #448)
     'dk-5-5-chan-doan-dung-cham': { yt: 'SOZxl761MCI', credit: 'Harness — Speed Up Your CI Pipelines with Docker Layer Caching' }, // Speed Up Your CI Pipelines with Docker Layer Caching
-    'dk-6-1-multi-stage': { yt: 'V0kTEk7YA70', credit: '' },   // Docker Multistage builds explained in 8 minutes
+    'dk-6-1-multi-stage': { yt: 'V0kTEk7YA70', credit: 'Raghav Dua — Docker Multistage builds explained in 8 minutes' },   // Docker Multistage builds explained in 8 minutes
 
     /* ── Chương 6 — Ảnh nhỏ và an toàn ── */
     'dk-6-2-chon-anh-nen': { yt: 'GMWyq3rJNG8', credit: 'Server Logic Simplified — How Do Alpine And Distroless Make Smaller Docker Images? - Server Logic Simplified' },       // How Do Alpine And Distroless Make Smaller Docker Images

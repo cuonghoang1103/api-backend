@@ -84,7 +84,7 @@ export default {
     'deploy-8-2-giet-ai': { yt: 'UByJxVVFQdQ', credit: 'SystemDR - Scalable System Design  — Practical Linux OOM Killer Tuning Guide | Protect Critical Services from Out Of Memory Crashes' },           // Practical Linux OOM Killer Tuning Guide
     'deploy-8-3-swap': { yt: 'dpZljibTAQI', credit: 'SStract — Linux Memory & OOM Killer' },              // Linux Memory & OOM Killer
     'deploy-8-4-day-dia': { yt: 'v_bZEcx-mXo', credit: 'MrDIY — How To Fix \'No Space Left on Device\' Error with a Not Full Disk on Linux' },           // How To Fix 'No Space Left on Device' Error with a Not Full Disk on Linux
-    'deploy-8-5-dung-tren-may-nho': { yt: 'raQK1vRF_V0', credit: '' },   // Exit 137: Your Container Didn't Crash. Linux Killed It.
+    'deploy-8-5-dung-tren-may-nho': { yt: 'raQK1vRF_V0', credit: 'Shubham Sahoo — Exit 137: Your Container Didn\'t Crash. Linux Killed It. Here\'s Why.' },   // Exit 137: Your Container Didn't Crash. Linux Killed It.
 
     /* ── Chương 9 — Giám sát: con số nói dối và con số không ── */
     'deploy-9-1-do-cai-gi': { yt: 'ZdhIWieJqzQ', credit: 'Conf42 — 15 NGINX Metrics to Monitor | Dave McAllister | Conf42 DevOps 2025' },   // 15 NGINX Metrics to Monitor | Dave McAllister | Conf42 DevOps 2025

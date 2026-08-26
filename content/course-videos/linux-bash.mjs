@@ -48,7 +48,7 @@ export default {
     'lnx-3-3-grep-regex': { yt: 'VNVjPuLdb64', credit: 'CodeLucky — Linux Regular Expressions (Regex) Tutorial: grep, sed, & awk for Beginners' },             // Linux Regular Expressions (Regex) Tutorial: grep, sed, & awk for Beginners
     'lnx-3-4-bo-cong-cu-nho': { yt: 'yCTnihfbPCo', credit: 'Zach Gollwitzer — Intermediate Bash Commands (grep, sed, awk, tar, less, gzip)' },         // Intermediate Bash Commands (grep, sed, awk, tar, less, gzip)
     'lnx-3-5-sed': { yt: 'sGO9wAsAW4c', credit: 'Robert Cowher - AI & Robotics Tinkerer — Text Manipulation in Linux - Parsing logs with sed, awk, and grep' },                    // Text Manipulation in Linux - Parsing logs with sed, awk, and grep
-    'lnx-3-6-awk': { yt: 'adJb_G6WSqc', credit: '' },   // Learn awk Fast | Linux Terminal Tutorial
+    'lnx-3-6-awk': { yt: 'adJb_G6WSqc', credit: 'Tech Ressolve — Learn awk Fast | Linux Terminal Tutorial' },   // Learn awk Fast | Linux Terminal Tutorial
 
     /* ── Chương 4 — Quyền, người dùng & sudo ── */
     'lnx-4-1-mo-hinh-quyen': { yt: 'Z3_4RmYTO7s', credit: 'NextGenstar26 — Linux File Permissions Explained | chmod, chown, umask, SUID, SGID, Sticky Bit' },              // Linux File Permissions Explained | chmod, chown, umask, SUID, SGID, Sticky Bit
@@ -105,6 +105,6 @@ export default {
     'lnx-12-2-no-chet': { yt: 'fhBHvsi0Ql0', credit: 'USENIX — LISA19 - Linux Systems Performance' },      // LISA19 - Linux Systems Performance
     'lnx-12-3-no-cham': { yt: 'FJW8nGV4jxY', credit: 'Brendan Gregg — Linux Performance Tools, Brendan Gregg, part 1 of 2' },      // Linux Performance Tools, Brendan Gregg, part 1 of 2
     'lnx-12-4-no-la': { yt: 'zrr2nUln9Kk', credit: 'Brendan Gregg — Linux Performance Tools, Brendan Gregg, part 2 of 2' },        // Linux Performance Tools, Brendan Gregg, part 2 of 2
-    'lnx-12-5-tong-ket': { yt: 'JNbt2YuB2lo', credit: '' },   // Skills every sysadmin should learn beyond the basics
+    'lnx-12-5-tong-ket': { yt: 'JNbt2YuB2lo', credit: 'Red Hat Enterprise Linux — Skills every sysadmin should learn beyond the basics' },   // Skills every sysadmin should learn beyond the basics
   },
 };

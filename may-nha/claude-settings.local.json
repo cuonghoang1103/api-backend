@@ -1,0 +1,140 @@
+{
+  "_doc": [
+    "Quyền cho Claude Code chạy TRÊN MÁY NHÀ của cuonghoang — tự làm hết vòng",
+    "deploy/build/kiểm mà không phải bấm y từng lệnh.",
+    "",
+    "CÀI: cp may-nha/claude-settings.local.json .claude/settings.local.json",
+    "     (.claude/ nằm trong .gitignore nên bản cài KHÔNG bị commit — file",
+    "      này là bản mẫu để git mang được nó về máy, chỉ vậy thôi.)",
+    "",
+    "── HAI CỬA, ĐỪNG NHẦM ───────────────────────────────────────────────",
+    "  permissions.allow  gỡ hộp hỏi [y/N]",
+    "  autoMode.allow     gỡ bộ phân loại của auto mode — thứ ghi",
+    "                     'Blocked by classifier'. Đây là cửa KHÁC.",
+    "`autoMode.classifyAllShell` mặc định false nên allow rule vẫn có hiệu",
+    "lực trong auto mode; hai khối dưới bổ trợ nhau chứ không thừa.",
+    "",
+    "── LUẬT KHỚP: CHÍNH XÁC hoặc TIỀN TỐ ────────────────────────────────",
+    "  'Bash(git *)' khớp git, git status, git commit…  ← tiền tố, chạy được",
+    "  'Bash(ssh -i * root@1.2.3.4 *)' có * ở GIỮA      ← KHÔNG khớp gì cả",
+    "Nên mọi rule ở đây đều là tiền tố. Hệ quả cho khối deny: xem cảnh báo",
+    "ngay trên nó.",
+    "",
+    "── defaultMode ──────────────────────────────────────────────────────",
+    "'dontAsk' = không hỏi nhưng vẫn tôn trọng deny. Nếu vẫn còn chỗ bị",
+    "chặn, đổi sang 'bypassPermissions' — nhưng nó bỏ qua MỌI kiểm tra và",
+    "tôi không xác nhận được deny có còn hiệu lực ở mode đó không. Thử",
+    "'dontAsk' trước."
+  ],
+
+  "permissions": {
+    "defaultMode": "dontAsk",
+
+    "allow": [
+      "Bash(bash deploy-nha.sh)",
+      "Bash(echo y | bash deploy-nha.sh)",
+      "Bash(bash deploy-nha.sh --khong-lui)",
+      "Bash(bash deploy-nha.sh --khong-day)",
+      "Bash(bash deploy.sh)",
+
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(yarn *)",
+      "Bash(pnpm *)",
+
+      "Bash(git *)",
+      "Bash(gh *)",
+
+      "Bash(docker *)",
+      "Bash(ssh *)",
+      "Bash(scp *)",
+      "Bash(rsync *)",
+      "Bash(curl *)",
+
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(find *)",
+      "Bash(sed *)",
+      "Bash(awk *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(diff *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(chmod *)",
+      "Bash(lsof *)",
+      "Bash(kill *)",
+      "Bash(ps *)",
+      "Bash(df *)",
+      "Bash(du *)",
+      "Bash(free *)",
+      "Bash(python3 *)",
+      "Bash(jq *)",
+
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch"
+    ],
+
+    "_deny_doc": [
+      "⚠️ DENY CŨNG KHỚP THEO TIỀN TỐ. 'Bash(git push --force*)' chặn được",
+      "   `git push --force origin main` nhưng KHÔNG chặn",
+      "   `git push origin main --force` — cờ đứng sau thì tiền tố không",
+      "   với tới. Đây là lưới đỡ cho lỗi gõ nhanh, KHÔNG phải hàng rào",
+      "   kín. Danh sách lấy đúng mục 'NEVER DO' trong CLAUDE.md."
+    ],
+    "deny": [
+      "Bash(npx prisma migrate reset*)",
+      "Bash(prisma migrate reset*)",
+      "Bash(npx prisma db push*)",
+      "Bash(npx prisma migrate resolve*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git reset --hard origin/main*)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~*)",
+      "Bash(git add .env*)",
+      "Bash(docker system prune -a*)"
+    ],
+
+    "_ask_doc": [
+      "Hỏi trước ở đúng hai chỗ không thể lùi được: đẩy lên main (nhánh",
+      "chung, CLAUDE.md bắt xác nhận) và phát hành app desktop (số phiên",
+      "bản đã công bố thì không rút lại được)."
+    ],
+    "ask": [
+      "Bash(git push origin main*)",
+      "Bash(git push -u origin main*)",
+      "Bash(npm run phat-hanh*)"
+    ]
+  },
+
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Chạy deploy-nha.sh / deploy.sh trong kho api-backend: đây là đường deploy CHUẨN của dự án, chạy trên máy của chính chủ sở hữu.",
+      "SSH vào VPS production của dự án để đọc trạng thái, xem log, kiểm tra container và tráo lại ảnh Docker khi deploy hỏng.",
+      "Chạy npx prisma migrate deploy / migrate status / generate / db seed.",
+      "Chạy docker build, docker compose và docker exec trên máy nhà lẫn VPS.",
+      "Đọc và ghi mọi tệp trong kho, kể cả .env cục bộ (KHÔNG commit chúng)."
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Xoá hoặc ghi đè dữ liệu production: prisma migrate reset, prisma db push lên VPS, DROP/TRUNCATE trên cơ sở dữ liệu thật.",
+      "Tự gỡ một migration đã hỏng bằng prisma migrate resolve — CLAUDE.md bắt dừng lại và báo người."
+    ]
+  },
+
+  "enableAllProjectMcpServers": true,
+  "autoCompactEnabled": true,
+  "fileCheckpointingEnabled": true
+}

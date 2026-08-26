@@ -97,7 +97,24 @@ else
   ok "không có gì đổi — bỏ qua commit"
 fi
 
-# ── 4. Ảnh bìa: dò CDN rồi CHỈ sinh cái nào thiếu ────────────────────────────
+# ⚠️ DEPLOY PHẢI ĐI TRƯỚC ẢNH BÌA. course-cover.mjs chạy BÊN TRONG container
+# backend, và từ 26/08 nó đọc logo ở assets/simple-icons/ thay vì gọi CDN. Cả
+# mã mới lẫn thư mục logo chỉ vào được container qua một lần deploy (Dockerfile
+# COPY . .). Sinh ảnh trước khi deploy là chạy bản CŨ — đúng bản đã hỏng câm
+# hai lần: script xanh, deploy xanh, mà redis.png vẫn 404.
+# ── 4. Deploy ────────────────────────────────────────────────────────────────
+# Deploy chạy lại toàn bộ seed (Step 3.12b khoá + 3.12c video). Lần này chốt
+# credit cho qua, nên video mới thực sự gắn vào lesson_details.
+b "4/5 · Deploy"
+if [ "$KHONG_DEPLOY" = true ]; then
+  ok "bỏ qua theo --khong-deploy. Chạy tay: bash deploy-nha.sh"
+  no "Lưu ý: bước 5 sẽ chạy course-cover.mjs BẢN CŨ đang nằm trong container."
+  no "Bản đọc logo từ đĩa chỉ vào được container sau một lần deploy."
+else
+  echo y | bash deploy-nha.sh
+fi
+
+# ── 5. Ảnh bìa: dò CDN rồi CHỈ sinh cái nào thiếu ────────────────────────────
 # course-cover.mjs cần sharp + R2_*, nên PHẢI chạy trong container backend trên
 # VPS. Nó đẩy lên key images/course-covers/<slug>.png — đúng chỗ thumbnailUrl
 # của mọi khoá trỏ tới (cả 19 khoá dùng chung một mẫu URL), nên sinh xong là
@@ -111,7 +128,7 @@ fi
 # cả 19 đều có thật, nên không cái nào chết ở bước tải logo. Riêng nextdotjs
 # (#000000) và socketdotio (#010101) bị ép sang FFFFFF — hex thật của hãng là
 # màu đen, vẽ lên nền gradient tối thì mất tiêu.
-b "4/5 · Ảnh bìa — dò CDN rồi chỉ sinh cái thiếu"
+b "5/5 · Ảnh bìa — dò CDN rồi chỉ sinh cái thiếu"
 CDN="https://media.cuongthai.com/images/course-covers"
 CO=0; MOI=0; HONG=0
 # ⚠️ KHÔNG nuốt output. Bản đầu của hàm này có `>/dev/null 2>&1`, nên một lần
@@ -163,16 +180,6 @@ bia deploy-vps     ubuntu         E95420 "Deploy lên VPS"   "Zero → productio
 bia github-actions githubactions  2088FF "GitHub Actions"   "Zero → CI/CD chạy thật"
 bia observability-monitoring grafana F46800 "Observability"  "Log → Metric → Trace"
 echo "  ── $CO đã có · $MOI vừa sinh · $HONG hỏng ──"
-
-# ── 5. Deploy ────────────────────────────────────────────────────────────────
-# Deploy chạy lại toàn bộ seed (Step 3.12b khoá + 3.12c video). Lần này chốt
-# credit cho qua, nên video mới thực sự gắn vào lesson_details.
-b "5/5 · Deploy"
-if [ "$KHONG_DEPLOY" = true ]; then
-  ok "bỏ qua theo --khong-deploy. Chạy tay: bash deploy-nha.sh"
-else
-  echo y | bash deploy-nha.sh
-fi
 
 b "XONG"
 echo "  Kiểm lại trên web: thẻ khoá đã có ảnh chưa · bài học đã có video chưa."

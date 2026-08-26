@@ -35,7 +35,7 @@ export default {
               "maxScore": 0.2
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWR302/PE4.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWR302/PE4-q1.png"
         },
         {
           "kind": "WRITE",
@@ -62,7 +62,7 @@ export default {
               "maxScore": 0.5
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWR302/PE4.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWR302/PE4-q2.png"
         },
         {
           "kind": "WRITE",
@@ -89,7 +89,7 @@ export default {
               "maxScore": 1
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWR302/PE4.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWR302/PE4-q3.png"
         },
         {
           "kind": "WRITE",
@@ -116,7 +116,7 @@ export default {
               "maxScore": 0.5
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWR302/PE4.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWR302/PE4-q4.png"
         }
       ]
     }

@@ -47,7 +47,7 @@ export default {
               "maxScore": 1.5
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE15.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE15-q1.png"
         },
         {
           "kind": "WRITE",
@@ -80,7 +80,7 @@ export default {
               "maxScore": 1.5
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE15.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE15-q2.png"
         }
       ]
     }

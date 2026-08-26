@@ -35,7 +35,7 @@ export default {
               "maxScore": 1
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWT301/PE15.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWT301/PE15-q1.png"
         },
         {
           "kind": "WRITE",
@@ -56,7 +56,7 @@ export default {
               "maxScore": 2
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWT301/PE15.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWT301/PE15-q2.png"
         },
         {
           "kind": "WRITE",
@@ -83,7 +83,7 @@ export default {
               "maxScore": 1
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWT301/PE15.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/SWT301/PE15-q3.png"
         }
       ]
     }

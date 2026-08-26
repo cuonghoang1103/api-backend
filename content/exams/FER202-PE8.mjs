@@ -35,7 +35,7 @@ export default {
               "maxScore": 0.1
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8-q1.png"
         },
         {
           "kind": "WRITE",
@@ -56,7 +56,7 @@ export default {
               "maxScore": 0.1
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8-q2.png"
         },
         {
           "kind": "WRITE",
@@ -77,7 +77,7 @@ export default {
               "maxScore": 0.5
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8-q3.png"
         },
         {
           "kind": "WRITE",
@@ -104,7 +104,7 @@ export default {
               "maxScore": 0.5
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8-q4.png"
         },
         {
           "kind": "WRITE",
@@ -125,7 +125,7 @@ export default {
               "maxScore": 0.9
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8-q5.png"
         },
         {
           "kind": "WRITE",
@@ -146,7 +146,7 @@ export default {
               "maxScore": 0.5
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8-q6.png"
         },
         {
           "kind": "WRITE",
@@ -167,7 +167,7 @@ export default {
               "maxScore": 0.9
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8-q7.png"
         },
         {
           "kind": "WRITE",
@@ -188,7 +188,7 @@ export default {
               "maxScore": 0.5
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8-q8.png"
         },
         {
           "kind": "WRITE",
@@ -209,7 +209,7 @@ export default {
               "maxScore": 0.7
             }
           ],
-          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8.png"
+          "imageUrl": "https://media.cuongthai.com/images/exam-papers/FER202/PE8-q9.png"
         }
       ]
     }

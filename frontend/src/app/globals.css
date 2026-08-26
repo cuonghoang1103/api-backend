@@ -4324,7 +4324,7 @@ body:has(.landing-root) {
 
 .landing-header-main {
   display: flex;
-  min-height: 4.5rem;
+  min-height: 5rem;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-md);
@@ -4421,11 +4421,11 @@ body:has(.landing-root) {
 .landing-header-cta { gap: var(--space-xs); padding-inline: var(--space-md); white-space: nowrap; }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   ROBOT ĐÁ BÓNG TRÊN THANH HEADER — cảnh 2.5D, một vòng 24 giây (26/08/2026)
+   ROBOT TRÊN THANH HEADER — HAI CẢNH, một vòng 48 giây (26/08/2026)
    ══════════════════════════════════════════════════════════════════════════
-   Lý do viết lại và hai thủ thuật dựng cảnh: xem đầu file
-   `components/home/landing/LandingRobotRail.tsx`. Ở đây chỉ ghi phần CSS cần
-   biết để sửa mà không làm gãy hình.
+   Lý do dựng lại và ba thủ thuật dựng cảnh: xem đầu file
+   `components/home/landing/LandingRobotRail.tsx`. Ở đây chỉ ghi phần cần biết
+   để sửa mà không làm gãy hình.
 
    ─── TOẠ ĐỘ ĂN KHỚP CỨNG VỚI SVG ────────────────────────────────────────
    viewBox `0 -6 560 96` · mặt đất y=66 · tâm x=280 · cửa hầm x 253,4→306,6.
@@ -4436,40 +4436,58 @@ body:has(.landing-root) {
        nét kẻ vẫn chạy ngang qua miệng hầm lúc cửa đang mở.
    Đổi bất cứ số nào ở trên thì phải đổi cả hai nơi.
 
-   ─── MỐC THỜI GIAN (phần trăm của 24s) ──────────────────────────────────
-      0–2   nghỉ (nằm dưới hầm, bị xén hết)     37–40  SÚT
-      2–5   cửa mở                              40–45  ăn mừng, nhảy lên
-      5–10  trồi lên (vọt quá rồi hạ)           45–49  quay người (scaleX lật)
-     10–13  cửa đóng, chớp mắt, liếc quanh      49–58  đi ngược về cửa (3 nhịp)
-     13–16  bóng rơi xuống, nảy một cái         58–61  quay lại, cửa mở
-     16–18  hạ người lấy thế                    61–66  vẫy tay rồi chui xuống
-     18–33  chạy rê bóng sang phải (5 nhịp)     66–69  cửa đóng, đèn chốt nháy
-     33–37  trụ chân, vung chân lấy đà          69–100 nghỉ (7,4 giây)
+   ─── MỐC THỜI GIAN (phần trăm của 48s) ──────────────────────────────────
+   CẢNH 1 — ĐÁ BÓNG (0 → 34,5% ≈ 16,6 giây)
+      0–1    nghỉ (nằm dưới hầm, bị xén hết)   16,5–18,5  trụ chân, vung lấy đà
+      1–2,5  cửa mở                            18,5–20    SÚT
+      2,5–5  trồi lên (vọt quá rồi hạ)         20–22,5    ăn mừng, nhảy lên
+      5–6,5  cửa đóng, chớp mắt, liếc quanh    22,5–24,5  quay người (scaleX lật)
+      6,5–8  bóng rơi xuống, nảy một cái       24,5–29    đi ngược về cửa
+      8–9    hạ người lấy thế                  29–30,5    quay lại, cửa mở
+      9–16,5 chạy rê bóng sang phải (5 nhịp)   30,5–33    vẫy tay rồi chui xuống
+                                               33–34,5    cửa đóng, đèn nháy
+
+   CẢNH 2 — GÕ CODE (41 → 92% ≈ 24,5 giây)
+     41–42,5   cửa mở                          62–64,5   dừng, ngẩng đầu nghĩ
+     42,5–45   trồi lên, ôm laptop             64,5–76   GÕ đợt 2 (5,5s, 2 dòng)
+     46–48     cửa đóng, đứng vững             76–78     xong, gật đầu
+     48–51     ngồi bệt xuống, duỗi chân       78–81     gập nắp, đứng dậy
+     51–53     đặt laptop lên đùi, mở nắp      81–83     cửa mở
+     53–62     GÕ đợt 1 (4,3s, 3 dòng code)    83–88     vẫy tay, ôm máy chui xuống
+                                               88–92     cửa đóng, đèn chốt nháy
+
+   Nghỉ hẳn: 34,5–41% (3,1s) giữa hai cảnh, và 92–100% (3,8s) cuối vòng.
+
+   Một nhịp chạy = 1,5% = 0,72s. Tư thế chạm đất ở 9/10,5/12/13,5/15/16,5, tư
+   thế nhấc chân ở 9,75/11,25/… — nhờ gộp được nhiều mốc vào một dòng nên cả
+   bước chạy chỉ tốn hai dòng cho mỗi khớp thay vì hai mươi.
 
    Muốn cảnh nhanh/chậm hơn thì đổi ĐÚNG MỘT chỗ: `--lt-cycle`. Mọi mốc đều là
    phần trăm nên chúng co giãn theo, giữ nguyên tỉ lệ giữa các đoạn.
-
-   Một nhịp chạy = 3% = 0,72s. Tư thế chạm đất ở 18/21/24/27/30/33, tư thế
-   nhấc chân ở 19,5/22,5/25,5/28,5/31,5 — nhờ gộp được nhiều mốc vào một dòng
-   nên cả bước chạy chỉ tốn hai dòng cho mỗi khớp thay vì hai mươi.
 
    ─── LUẬT XOAY (SVG: +y hướng XUỐNG) ────────────────────────────────────
    Robot quay mặt sang PHẢI. Một đốt chi chỉ xuống, xoay DƯƠNG thì đầu dưới
    của nó lùi ra SAU (sang trái), xoay ÂM thì đưa ra TRƯỚC. Nhớ dấu này trước
    khi chỉnh chân sút, không thì nó đá ngược.
 
+   ─── VÒNG CON PHẢI CHIA HẾT 48s ─────────────────────────────────────────
+   Bụi 0,75s · nhịp gõ phím 0,3s · con trỏ nháy 0,8s · lõi ngực 3s · màn hình
+   2,4s. Chọn số chia hết 48 để chúng KHÔNG BAO GIỜ lệch pha với vòng lớn —
+   lệch pha thì sau vài vòng nhịp gõ rơi vào lúc tay đang buông, trông như hỏng.
+
    ─── CHỈ transform VÀ opacity ───────────────────────────────────────────
-   Không filter, không box-shadow động, không rAF, không canvas. Bụi dưới chân
-   dùng vòng nhanh 0,75s LỒNG trong một cửa sổ bật/tắt của vòng lớn (24 chia
-   hết cho 0,75 nên hai vòng không bao giờ lệch pha).                        */
+   Không filter, không box-shadow động, không rAF, không canvas. Hai ngoại lệ
+   là `visibility` (rời rạc, dùng để TẮT vẽ chứ không phải để vẽ thêm) trên con
+   trỏ nháy — và đó là lý do nó nằm riêng khỏi `opacity`: một phần tử chỉ nhận
+   được MỘT animation cho mỗi thuộc tính.                                     */
 
 .landing-robot-rail {
   /* Hình học — xem bảng toạ độ ở trên trước khi đổi */
-  --lt-scene-h: 5.25rem;
+  --lt-scene-h: 6.25rem;
   --lt-ground: 0.75;
   --lt-line: 1.1rem;
   --lt-hatch-half: calc(var(--lt-scene-h) * 27 / 96);
-  --lt-cycle: 24s;
+  --lt-cycle: 48s;
 
   /* Bảng màu — dẫn xuất từ token, KHÔNG gán hex. `--color-ink` ở trang này là
      màu CHỮ (sáng trong theme tối) nên tuyệt đối không dùng nó làm "màu đen":
@@ -4504,10 +4522,10 @@ body:has(.landing-root) {
 }
 
 /* Kéo SVG lên sao cho mặt đất của nó (75% chiều cao) trùng đúng đường kẻ.
-   `will-change` ở đây KHÔNG phải để "cho nhanh" mà để CÁCH LY: header là
-   `position: sticky` trải hết bề ngang màn hình, mà hoạt hình SVG thì vẽ lại
-   trên luồng chính. Không tách lớp thì mỗi khung của robot kéo theo cả dải
-   header vẽ lại. Tách rồi thì phần vẽ lại gói gọn trong ô ~490×84px. */
+   `will-change` KHÔNG phải để cho nhanh, mà để CÁCH LY: header là
+   `position: sticky` trải hết bề ngang, còn hoạt hình SVG thì vẽ lại trên
+   luồng chính. Không tách lớp thì mỗi khung của robot kéo cả dải header vẽ lại
+   theo; tách rồi thì phần vẽ lại gói gọn trong ô ~490×84px. */
 .landing-robot-scene {
   position: absolute;
   top: calc(var(--lt-line) - var(--lt-scene-h) * var(--lt-ground));
@@ -4536,6 +4554,8 @@ body:has(.landing-root) {
    gờ hơi dày trên nét kẻ, không phải hai thanh sáng trôi nổi. Mở ra mới thấy. */
 .lt-stop-door-a { stop-color: color-mix(in oklch, var(--color-rule) 58%, var(--landing-robot-metal)); }
 .lt-stop-door-b { stop-color: color-mix(in oklch, var(--color-rule) 62%, var(--landing-robot-panel)); }
+.lt-stop-glass-a { stop-color: color-mix(in oklch, var(--color-accent) 38%, var(--landing-robot-panel)); }
+.lt-stop-glass-b { stop-color: var(--landing-robot-panel); }
 
 /* ── Mảng vỏ: ba mặt cho ra khối, viền tím mảnh cho ra nét vẽ ───────────── */
 .lt-plate { stroke: var(--lt-edge); stroke-width: 0.85; }
@@ -4545,6 +4565,10 @@ body:has(.landing-root) {
 .lt-plate-crown { fill: var(--color-paper); stroke: none; opacity: 0.34; }
 .lt-plate-belt { fill: var(--lt-side); }
 .lt-plate-neck { fill: var(--lt-dim); }
+/* GÁY — khối tối thò ra phía sau đầu. Đây là dấu hiệu HƯỚNG NHÌN mạnh nhất
+   của cả nhân vật: nó bất đối xứng nên `scaleX(-1)` lật được nó sang bên kia,
+   trong khi mặt nạ đối xứng đặt giữa đầu thì lật kiểu gì cũng vẫn nhìn thẳng. */
+.lt-plate-nape { fill: color-mix(in oklch, var(--lt-side) 74%, var(--landing-robot-panel)); }
 
 .landing-robot-visor { fill: url(#lt-visor); stroke: var(--lt-edge); stroke-width: 0.8; }
 .landing-robot-visor-gloss { fill: var(--color-paper); stroke: none; opacity: 0.14; }
@@ -4571,6 +4595,26 @@ body:has(.landing-root) {
 .landing-hatch-door-edge { fill: none; stroke: color-mix(in oklch, var(--landing-robot-metal) 46%, var(--color-rule)); stroke-width: 0.9; }
 .landing-hatch-latch { fill: var(--landing-identity); }
 
+/* ── Cảnh 2: cái laptop ────────────────────────────────────────────────── */
+.lt-laptop-deck { fill: var(--lt-side); stroke: var(--lt-edge); stroke-width: 0.85; stroke-linejoin: round; }
+.lt-laptop-keys { fill: none; stroke: color-mix(in oklch, var(--lt-lit) 52%, transparent); stroke-width: 0.7; stroke-linecap: round; }
+.lt-laptop-shell { fill: url(#lt-shell); stroke: var(--lt-edge); stroke-width: 0.85; }
+.lt-laptop-screen { stroke: none; }
+.lt-code { fill: none; stroke: var(--landing-identity); stroke-width: 1.35; stroke-linecap: round; opacity: 0; }
+
+/* ── Dòng chữ robot gõ ra (cảnh 2) ─────────────────────────────────────── */
+.lt-greet-text {
+  fill: var(--color-ink-2);
+  font-family: var(--font-outlier);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.lt-greet-mark { fill: var(--color-accent); }
+.lt-greet-caret { fill: var(--color-accent); }
+.lt-greet-rule { fill: none; stroke: color-mix(in oklch, var(--color-accent) 30%, transparent); stroke-width: 0.9; stroke-linecap: round; }
+.lt-laptop-caret { fill: var(--landing-identity); }
+
 /* ── Tâm xoay của từng khớp (đơn vị viewBox) ────────────────────────────── */
 .landing-robot-travel,
 .landing-robot-lift,
@@ -4588,7 +4632,16 @@ body:has(.landing-root) {
 .landing-football-seams,
 .landing-football-speed,
 .landing-hatch-door,
-.landing-hatch-shaft { transform-box: view-box; }
+.landing-hatch-shaft,
+.landing-laptop,
+.landing-laptop-lid,
+.lt-hand-tap,
+.lt-greet,
+.lt-greet-mask,
+.lt-greet-caret,
+.lt-greet-rule { transform-box: view-box; }
+
+.lt-greet-rule { transform-origin: 330px 39.8px; }
 
 .landing-robot-facing { transform-origin: 280px 46px; }
 .landing-robot-body { transform-origin: 280px 66px; }
@@ -4602,10 +4655,15 @@ body:has(.landing-root) {
 .landing-robot-shin-back { transform-origin: 275px 56.5px; }
 .landing-robot-thigh-front { transform-origin: 285.5px 46px; }
 .landing-robot-shin-front { transform-origin: 285.5px 56.5px; }
-.landing-robot-eye { transform-origin: 275.8px 17.3px; }
-.landing-robot-eye-right { transform-origin: 283.8px 17.3px; }
+.landing-robot-eye { transform-origin: 278.9px 17.35px; }
+.landing-robot-eye-right { transform-origin: 285.7px 17.3px; }
 .landing-robot-shadow { transform-origin: 280px 65.4px; }
 .landing-football-seams { transform-origin: 322px 59px; }
+/* Nắp máy gập bằng `scaleY` quanh MÉP DƯỚI chứ không xoay: nắp ở đây vẽ theo
+   hướng nhìn chính diện (để còn thấy được màn hình), mà một mặt phẳng nhìn
+   chính diện thì không xoay bản lề được — bóp dẹt xuống đọc ra "gập nắp" đúng
+   hơn nhiều, và rẻ hơn. */
+.landing-laptop-lid { transform-origin: 290.2px 61.6px; }
 
 /* ── Gán vòng chạy ─────────────────────────────────────────────────────── */
 .landing-robot-travel { animation: lt-travel var(--lt-cycle) var(--ease-in-out) infinite both; }
@@ -4637,215 +4695,330 @@ body:has(.landing-root) {
 .landing-hatch-shaft { animation: lt-shaft var(--lt-cycle) linear infinite both; }
 .landing-hatch-latch { animation: lt-latch var(--lt-cycle) linear infinite both; }
 
-/* ── Di chuyển ngang: chạy sang phải rồi đi ngược về ────────────────────── */
+.landing-laptop { animation: lt-laptop var(--lt-cycle) var(--ease-in-out) infinite both; }
+.landing-laptop-lid { animation: lt-lid var(--lt-cycle) var(--ease-out) infinite both; }
+.lt-laptop-screen { animation: lt-screen 2.4s var(--ease-in-out) infinite both; }
+.lt-code-1 { animation: lt-code-1 var(--lt-cycle) linear infinite both; }
+.lt-code-2 { animation: lt-code-2 var(--lt-cycle) linear infinite both; }
+.lt-code-3 { animation: lt-code-3 var(--lt-cycle) linear infinite both; }
+.lt-code-4 { animation: lt-code-4 var(--lt-cycle) linear infinite both; }
+/* Con trỏ: cửa sổ bật/tắt dùng `visibility` còn nháy dùng `opacity` — hai
+   thuộc tính khác nhau nên hai animation không giẫm lên nhau. */
+.lt-laptop-caret { animation: lt-caret-window var(--lt-cycle) linear infinite both, lt-caret-blink 0.8s steps(1, end) infinite both; }
+.lt-hand-rest { animation: lt-hand-rest var(--lt-cycle) linear infinite both; }
+.lt-hand-tap { animation: lt-hand-typing var(--lt-cycle) linear infinite both, lt-tap 0.3s var(--ease-in-out) infinite both; }
+.lt-hand-tap-back { animation-delay: 0s, -0.15s; }
+
+.lt-greet { animation: lt-greet-window var(--lt-cycle) linear infinite both; }
+.lt-greet-mask { animation: lt-greet-type var(--lt-cycle) linear infinite both; }
+.lt-greet-rule { animation: lt-greet-rule var(--lt-cycle) linear infinite both; }
+.lt-greet-caret { animation: lt-greet-caret var(--lt-cycle) linear infinite both, lt-caret-blink 0.8s steps(1, end) infinite both; }
+
+/* ── Di chuyển ngang ───────────────────────────────────────────────────── */
 @keyframes lt-travel {
   0% { transform: translate3d(0, 0, 0); }
-  18% { transform: translate3d(0, 0, 0); animation-timing-function: linear; }
-  33% { transform: translate3d(100px, 0, 0); }
-  49% { transform: translate3d(100px, 0, 0); animation-timing-function: linear; }
-  58%, 100% { transform: translate3d(0, 0, 0); }
+  9% { transform: translate3d(0, 0, 0); animation-timing-function: linear; }
+  16.5% { transform: translate3d(100px, 0, 0); }
+  24.5% { transform: translate3d(100px, 0, 0); animation-timing-function: linear; }
+  29%, 41% { transform: translate3d(0, 0, 0); }
+  46%, 80% { transform: translate3d(-12px, 0, 0); }
+  83%, 100% { transform: translate3d(0, 0, 0); }
 }
 
-/* Trồi lên / nhảy ăn mừng / chui xuống. 72px là đủ để đỉnh ăng-ten (y≈−0,8)
-   nằm hẳn dưới mặt đất y=66, tức bị `clipPath#lt-above-rail` xén sạch. */
+/* Trồi lên / nhảy ăn mừng / ngồi xuống / chui xuống. 72px là đủ để đỉnh
+   ăng-ten (y≈−0,8) nằm hẳn dưới mặt đất y=66, tức bị `clipPath` xén sạch. */
 @keyframes lt-lift {
-  0%, 5% { transform: translate3d(0, 72px, 0); }
-  9% { transform: translate3d(0, -3.5px, 0); }
-  11%, 41% { transform: translate3d(0, 0, 0); }
-  43% { transform: translate3d(0, -6px, 0); }
-  45%, 62% { transform: translate3d(0, 0, 0); }
-  66%, 100% { transform: translate3d(0, 72px, 0); }
+  0%, 2.5% { transform: translate3d(0, 72px, 0); }
+  4.5% { transform: translate3d(0, -3.5px, 0); }
+  5.5%, 20.5% { transform: translate3d(0, 0, 0); }
+  21.5% { transform: translate3d(0, -6px, 0); }
+  22.5%, 31% { transform: translate3d(0, 0, 0); }
+  33%, 42.5% { transform: translate3d(0, 72px, 0); }
+  45% { transform: translate3d(0, -3px, 0); }
+  46%, 48% { transform: translate3d(0, 0, 0); }
+  51%, 78% { transform: translate3d(0, 16px, 0); }
+  80.5%, 84% { transform: translate3d(0, 0, 0); }
+  88%, 100% { transform: translate3d(0, 72px, 0); }
 }
 
-/* Quay người: bóp bề ngang về gần 0 rồi lật dấu — mắt đọc ra một vòng xoay. */
+/* Quay người: bóp bề ngang về gần 0 rồi lật dấu — mắt đọc ra một vòng xoay.
+   Chỉ ăn thua vì cái đầu đã bất đối xứng (gáy + mặt nạ dời về trước); mặt nạ
+   đối xứng thì lật xong vẫn y hệt, và đó chính là lỗi của bản trước. */
 @keyframes lt-facing {
-  0%, 45.6% { transform: scaleX(1); }
-  47% { transform: scaleX(0.14); }
-  48.4%, 58.6% { transform: scaleX(-1); }
-  60% { transform: scaleX(0.14); }
-  61.4%, 100% { transform: scaleX(1); }
+  0%, 22.8% { transform: scaleX(1); }
+  23.5% { transform: scaleX(0.14); }
+  24.2%, 29.3% { transform: scaleX(-1); }
+  30% { transform: scaleX(0.14); }
+  30.7%, 100% { transform: scaleX(1); }
 }
 
 @keyframes lt-body {
-  0%, 16% { transform: translate3d(0, 0, 0) rotate(0deg); }
-  18% { transform: translate3d(0, 0.5px, 0) rotate(7deg); }
-  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: translate3d(0, -1.7px, 0) rotate(7deg); }
-  21%, 24%, 27%, 30%, 33% { transform: translate3d(0, 0.4px, 0) rotate(7deg); }
-  35% { transform: translate3d(0, 0, 0) rotate(-5deg); }
-  38% { transform: translate3d(0, 0, 0) rotate(11deg); }
-  40% { transform: translate3d(0, 0, 0) rotate(2deg); }
-  43%, 45% { transform: translate3d(0, 0, 0) rotate(-4deg); }
-  49%, 52%, 55%, 58% { transform: translate3d(0, 0.3px, 0) rotate(3deg); }
-  50.5%, 53.5%, 56.5% { transform: translate3d(0, -1.1px, 0) rotate(3deg); }
-  61%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  0%, 8% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  9% { transform: translate3d(0, 0.5px, 0) rotate(7deg); }
+  9.75%, 11.25%, 12.75%, 14.25%, 15.75% { transform: translate3d(0, -1.7px, 0) rotate(7deg); }
+  10.5%, 12%, 13.5%, 15%, 16.5% { transform: translate3d(0, 0.4px, 0) rotate(7deg); }
+  17.5% { transform: translate3d(0, 0, 0) rotate(-5deg); }
+  19% { transform: translate3d(0, 0, 0) rotate(11deg); }
+  20% { transform: translate3d(0, 0, 0) rotate(2deg); }
+  21.5%, 22.5% { transform: translate3d(0, 0, 0) rotate(-4deg); }
+  24.5%, 26%, 27.5%, 29% { transform: translate3d(0, 0.3px, 0) rotate(3deg); }
+  25.25%, 26.75%, 28.25% { transform: translate3d(0, -1.1px, 0) rotate(3deg); }
+  30.5%, 48% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  51% { transform: translate3d(0, 0, 0) rotate(5deg); }
+  53%, 61.5% { transform: translate3d(0, 0, 0) rotate(8deg); }
+  63% { transform: translate3d(0, 0, 0) rotate(-4deg); }
+  64.5%, 75.5% { transform: translate3d(0, 0, 0) rotate(9deg); }
+  77% { transform: translate3d(0, 0, 0) rotate(-5deg); }
+  80.5%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
 }
 
 @keyframes lt-head {
-  0%, 5% { transform: rotate(-9deg); }
-  9%, 11% { transform: rotate(3deg); }
-  12.5% { transform: rotate(7deg); }
-  14% { transform: rotate(-6deg); }
-  16%, 18% { transform: rotate(0deg); }
-  20%, 33% { transform: rotate(5deg); }
-  35% { transform: rotate(-2deg); }
-  38% { transform: rotate(8deg); }
-  40% { transform: rotate(2deg); }
-  43%, 45% { transform: rotate(-10deg); }
-  49%, 58% { transform: rotate(2deg); }
-  61% { transform: rotate(-7deg); }
-  63% { transform: rotate(0deg); }
-  66%, 100% { transform: rotate(10deg); }
+  0%, 2.5% { transform: rotate(-9deg); }
+  4.5%, 5.5% { transform: rotate(3deg); }
+  6.25% { transform: rotate(7deg); }
+  7% { transform: rotate(-6deg); }
+  8%, 9% { transform: rotate(0deg); }
+  10%, 16.5% { transform: rotate(5deg); }
+  17.5% { transform: rotate(-2deg); }
+  19% { transform: rotate(8deg); }
+  20% { transform: rotate(2deg); }
+  21.5%, 22.5% { transform: rotate(-10deg); }
+  24.5%, 29% { transform: rotate(2deg); }
+  30.5% { transform: rotate(-7deg); }
+  31.5% { transform: rotate(0deg); }
+  33%, 42% { transform: rotate(10deg); }
+  44% { transform: rotate(-5deg); }
+  46%, 48% { transform: rotate(0deg); }
+  51% { transform: rotate(9deg); }
+  53%, 61% { transform: rotate(14deg); }
+  62.5%, 63.5% { transform: rotate(-11deg); }
+  64.5%, 75% { transform: rotate(14deg); }
+  76% { transform: rotate(2deg); }
+  76.8% { transform: rotate(12deg); }
+  77.6% { transform: rotate(2deg); }
+  80.5%, 82.5% { transform: rotate(0deg); }
+  84% { transform: rotate(-7deg); }
+  85.5% { transform: rotate(0deg); }
+  88%, 100% { transform: rotate(10deg); }
 }
 
 @keyframes lt-torso {
-  0%, 16% { transform: scaleY(1); }
-  17% { transform: scaleY(0.93); }
-  18%, 41% { transform: scaleY(1); }
-  42% { transform: scaleY(0.92); }
-  43.5% { transform: scaleY(1.05); }
-  45%, 63% { transform: scaleY(1); }
-  64.5% { transform: scaleY(0.88); }
-  66%, 100% { transform: scaleY(1); }
+  0%, 8% { transform: scaleY(1); }
+  8.5% { transform: scaleY(0.93); }
+  9%, 20.5% { transform: scaleY(1); }
+  21% { transform: scaleY(0.92); }
+  21.75% { transform: scaleY(1.05); }
+  22.5%, 31.5% { transform: scaleY(1); }
+  32.25% { transform: scaleY(0.88); }
+  33%, 47.5% { transform: scaleY(1); }
+  49.2% { transform: scaleY(0.94); }
+  51%, 79.5% { transform: scaleY(1); }
+  86.5% { transform: scaleY(0.9); }
+  88%, 100% { transform: scaleY(1); }
 }
 
-/* ── Chân. Xoay DƯƠNG = bàn chân lùi ra sau, ÂM = đưa ra trước ──────────── */
+/* ── Chân. Xoay DƯƠNG = bàn chân lùi ra sau, ÂM = đưa ra trước.
+   Ngồi bệt = đùi −86° (duỗi ngang ra trước) + cẳng chân gần thẳng. ─────── */
 @keyframes lt-thigh-front {
-  0%, 5% { transform: rotate(8deg); }
-  9%, 16% { transform: rotate(0deg); }
-  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(-26deg); }
-  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(20deg); }
-  35% { transform: rotate(34deg); }
-  38% { transform: rotate(-38deg); }
-  40% { transform: rotate(-16deg); }
-  43% { transform: rotate(6deg); }
-  45%, 49%, 52%, 55%, 58% { transform: rotate(-17deg); }
-  50.5%, 53.5%, 56.5% { transform: rotate(15deg); }
-  61%, 62% { transform: rotate(0deg); }
-  66%, 100% { transform: rotate(6deg); }
+  0%, 2.5% { transform: rotate(8deg); }
+  4.5%, 8% { transform: rotate(0deg); }
+  9%, 10.5%, 12%, 13.5%, 15%, 16.5% { transform: rotate(-26deg); }
+  9.75%, 11.25%, 12.75%, 14.25%, 15.75% { transform: rotate(20deg); }
+  17.5% { transform: rotate(34deg); }
+  19% { transform: rotate(-38deg); }
+  20% { transform: rotate(-16deg); }
+  21.5% { transform: rotate(6deg); }
+  22.5%, 24.5%, 26%, 27.5%, 29% { transform: rotate(-17deg); }
+  25.25%, 26.75%, 28.25% { transform: rotate(15deg); }
+  30.5%, 31% { transform: rotate(0deg); }
+  33%, 42% { transform: rotate(6deg); }
+  44% { transform: rotate(-12deg); }
+  46%, 48% { transform: rotate(0deg); }
+  51%, 78% { transform: rotate(-86deg); }
+  80.5%, 84% { transform: rotate(0deg); }
+  88%, 100% { transform: rotate(6deg); }
 }
 
 @keyframes lt-shin-front {
-  0%, 5% { transform: rotate(46deg); }
-  9%, 16% { transform: rotate(4deg); }
-  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(10deg); }
-  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(52deg); }
-  35% { transform: rotate(56deg); }
-  38% { transform: rotate(2deg); }
-  40% { transform: rotate(12deg); }
-  43%, 45%, 49%, 52%, 55%, 58% { transform: rotate(8deg); }
-  50.5%, 53.5%, 56.5% { transform: rotate(40deg); }
-  61%, 62% { transform: rotate(4deg); }
-  66%, 100% { transform: rotate(44deg); }
+  0%, 2.5% { transform: rotate(46deg); }
+  4.5%, 8% { transform: rotate(4deg); }
+  9%, 10.5%, 12%, 13.5%, 15%, 16.5% { transform: rotate(10deg); }
+  9.75%, 11.25%, 12.75%, 14.25%, 15.75% { transform: rotate(52deg); }
+  17.5% { transform: rotate(56deg); }
+  19% { transform: rotate(2deg); }
+  20% { transform: rotate(12deg); }
+  21.5%, 22.5%, 24.5%, 26%, 27.5%, 29% { transform: rotate(8deg); }
+  25.25%, 26.75%, 28.25% { transform: rotate(40deg); }
+  30.5%, 31% { transform: rotate(4deg); }
+  33%, 42% { transform: rotate(44deg); }
+  44% { transform: rotate(58deg); }
+  46%, 48% { transform: rotate(4deg); }
+  51%, 78% { transform: rotate(-2deg); }
+  80.5%, 84% { transform: rotate(4deg); }
+  88%, 100% { transform: rotate(44deg); }
 }
 
 @keyframes lt-thigh-back {
-  0%, 5% { transform: rotate(-8deg); }
-  9%, 16% { transform: rotate(0deg); }
-  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(22deg); }
-  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(-24deg); }
-  35% { transform: rotate(-7deg); }
-  38% { transform: rotate(5deg); }
-  40%, 45%, 49%, 52%, 55%, 58% { transform: rotate(14deg); }
-  50.5%, 53.5%, 56.5% { transform: rotate(-16deg); }
-  61%, 62% { transform: rotate(0deg); }
-  66%, 100% { transform: rotate(-6deg); }
+  0%, 2.5% { transform: rotate(-8deg); }
+  4.5%, 8% { transform: rotate(0deg); }
+  9%, 10.5%, 12%, 13.5%, 15%, 16.5% { transform: rotate(22deg); }
+  9.75%, 11.25%, 12.75%, 14.25%, 15.75% { transform: rotate(-24deg); }
+  17.5% { transform: rotate(-7deg); }
+  19% { transform: rotate(5deg); }
+  20%, 22.5%, 24.5%, 26%, 27.5%, 29% { transform: rotate(14deg); }
+  25.25%, 26.75%, 28.25% { transform: rotate(-16deg); }
+  30.5%, 31% { transform: rotate(0deg); }
+  33%, 42% { transform: rotate(-6deg); }
+  44% { transform: rotate(-14deg); }
+  46%, 48% { transform: rotate(0deg); }
+  51%, 78% { transform: rotate(-78deg); }
+  80.5%, 84% { transform: rotate(0deg); }
+  88%, 100% { transform: rotate(-6deg); }
 }
 
 @keyframes lt-shin-back {
-  0%, 5% { transform: rotate(40deg); }
-  9%, 16% { transform: rotate(4deg); }
-  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(48deg); }
-  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(8deg); }
-  35%, 38%, 40% { transform: rotate(9deg); }
-  43%, 45%, 49%, 52%, 55%, 58% { transform: rotate(10deg); }
-  50.5%, 53.5%, 56.5% { transform: rotate(38deg); }
-  61%, 62% { transform: rotate(4deg); }
-  66%, 100% { transform: rotate(40deg); }
+  0%, 2.5% { transform: rotate(40deg); }
+  4.5%, 8% { transform: rotate(4deg); }
+  9%, 10.5%, 12%, 13.5%, 15%, 16.5% { transform: rotate(48deg); }
+  9.75%, 11.25%, 12.75%, 14.25%, 15.75% { transform: rotate(8deg); }
+  17.5%, 19%, 20% { transform: rotate(9deg); }
+  21.5%, 22.5%, 24.5%, 26%, 27.5%, 29% { transform: rotate(10deg); }
+  25.25%, 26.75%, 28.25% { transform: rotate(38deg); }
+  30.5%, 31% { transform: rotate(4deg); }
+  33%, 42% { transform: rotate(40deg); }
+  44% { transform: rotate(54deg); }
+  46%, 48% { transform: rotate(4deg); }
+  51%, 78% { transform: rotate(-4deg); }
+  80.5%, 84% { transform: rotate(4deg); }
+  88%, 100% { transform: rotate(40deg); }
 }
 
-/* ── Tay. Ngược pha với chân cùng bên; −150deg là tay giơ thẳng lên ─────── */
+/* ── Tay. Ngược pha với chân cùng bên; −150deg là tay giơ thẳng lên.
+   Gõ phím: tay trước −44°, tay sau −64° (vươn xa hơn vì vai ở phía xa). ── */
 @keyframes lt-arm-front {
-  0%, 5% { transform: rotate(-142deg); }
-  9% { transform: rotate(-96deg); }
-  11%, 16% { transform: rotate(5deg); }
-  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(28deg); }
-  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(-32deg); }
-  35% { transform: rotate(-40deg); }
-  38% { transform: rotate(32deg); }
-  40% { transform: rotate(14deg); }
-  42%, 45% { transform: rotate(-150deg); }
-  49%, 52%, 55%, 58% { transform: rotate(18deg); }
-  50.5%, 53.5%, 56.5% { transform: rotate(-20deg); }
-  61% { transform: rotate(-148deg); }
-  62% { transform: rotate(-124deg); }
-  63% { transform: rotate(-148deg); }
-  66%, 100% { transform: rotate(-118deg); }
+  0%, 2.5% { transform: rotate(-142deg); }
+  4.5% { transform: rotate(-96deg); }
+  5.5%, 8% { transform: rotate(5deg); }
+  9%, 10.5%, 12%, 13.5%, 15%, 16.5% { transform: rotate(28deg); }
+  9.75%, 11.25%, 12.75%, 14.25%, 15.75% { transform: rotate(-32deg); }
+  17.5% { transform: rotate(-40deg); }
+  19% { transform: rotate(32deg); }
+  20% { transform: rotate(14deg); }
+  21%, 22.5% { transform: rotate(-150deg); }
+  24.5%, 26%, 27.5%, 29% { transform: rotate(18deg); }
+  25.25%, 26.75%, 28.25% { transform: rotate(-20deg); }
+  30.5% { transform: rotate(-148deg); }
+  31% { transform: rotate(-124deg); }
+  31.5% { transform: rotate(-148deg); }
+  33%, 42% { transform: rotate(-118deg); }
+  44% { transform: rotate(-40deg); }
+  46%, 48% { transform: rotate(-3deg); }
+  51% { transform: rotate(6deg); }
+  53%, 76% { transform: rotate(14deg); }
+  78% { transform: rotate(-6deg); }
+  80.5%, 86% { transform: rotate(-3deg); }
+  88%, 100% { transform: rotate(-118deg); }
 }
 
 @keyframes lt-forearm-front {
-  0%, 5% { transform: rotate(-24deg); }
-  9%, 16% { transform: rotate(-12deg); }
-  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(-48deg); }
-  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(-22deg); }
-  35% { transform: rotate(-18deg); }
-  38%, 40% { transform: rotate(-40deg); }
-  42%, 45% { transform: rotate(-14deg); }
-  49%, 52%, 55%, 58% { transform: rotate(-30deg); }
-  50.5%, 53.5%, 56.5% { transform: rotate(-16deg); }
-  61%, 63% { transform: rotate(-10deg); }
-  66%, 100% { transform: rotate(-20deg); }
+  0%, 2.5% { transform: rotate(-24deg); }
+  4.5%, 8% { transform: rotate(-12deg); }
+  9%, 10.5%, 12%, 13.5%, 15%, 16.5% { transform: rotate(-48deg); }
+  9.75%, 11.25%, 12.75%, 14.25%, 15.75% { transform: rotate(-22deg); }
+  17.5% { transform: rotate(-18deg); }
+  19%, 20% { transform: rotate(-40deg); }
+  21%, 22.5% { transform: rotate(-14deg); }
+  24.5%, 26%, 27.5%, 29% { transform: rotate(-30deg); }
+  25.25%, 26.75%, 28.25% { transform: rotate(-16deg); }
+  30.5%, 31.5% { transform: rotate(-10deg); }
+  33%, 42% { transform: rotate(-20deg); }
+  44% { transform: rotate(-40deg); }
+  46%, 48% { transform: rotate(-39deg); }
+  51% { transform: rotate(-62deg); }
+  53%, 76% { transform: rotate(-84deg); }
+  78% { transform: rotate(-52deg); }
+  80.5%, 86% { transform: rotate(-39deg); }
+  88%, 100% { transform: rotate(-20deg); }
 }
 
 @keyframes lt-arm-back {
-  0%, 5% { transform: rotate(-138deg); }
-  9% { transform: rotate(-92deg); }
-  11%, 16% { transform: rotate(-5deg); }
-  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(-30deg); }
-  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(26deg); }
-  35% { transform: rotate(34deg); }
-  38% { transform: rotate(-28deg); }
-  40% { transform: rotate(-12deg); }
-  42%, 45% { transform: rotate(-146deg); }
-  49%, 52%, 55%, 58% { transform: rotate(-18deg); }
-  50.5%, 53.5%, 56.5% { transform: rotate(20deg); }
-  61%, 63% { transform: rotate(-102deg); }
-  66%, 100% { transform: rotate(-114deg); }
+  0%, 2.5% { transform: rotate(-138deg); }
+  4.5% { transform: rotate(-92deg); }
+  5.5%, 8% { transform: rotate(-5deg); }
+  9%, 10.5%, 12%, 13.5%, 15%, 16.5% { transform: rotate(-30deg); }
+  9.75%, 11.25%, 12.75%, 14.25%, 15.75% { transform: rotate(26deg); }
+  17.5% { transform: rotate(34deg); }
+  19% { transform: rotate(-28deg); }
+  20% { transform: rotate(-12deg); }
+  21%, 22.5% { transform: rotate(-146deg); }
+  24.5%, 26%, 27.5%, 29% { transform: rotate(-18deg); }
+  25.25%, 26.75%, 28.25% { transform: rotate(20deg); }
+  30.5%, 31.5% { transform: rotate(-102deg); }
+  33%, 42% { transform: rotate(-114deg); }
+  44% { transform: rotate(-80deg); }
+  46%, 48% { transform: rotate(-16deg); }
+  51% { transform: rotate(-22deg); }
+  53%, 76% { transform: rotate(-27deg); }
+  78% { transform: rotate(-14deg); }
+  80.5% { transform: rotate(-10deg); }
+  81.5% { transform: rotate(-150deg); }
+  82.5% { transform: rotate(-126deg); }
+  83.5% { transform: rotate(-150deg); }
+  85%, 86% { transform: rotate(-108deg); }
+  88%, 100% { transform: rotate(-114deg); }
 }
 
 @keyframes lt-forearm-back {
-  0%, 5% { transform: rotate(-20deg); }
-  9%, 16% { transform: rotate(-10deg); }
-  18%, 21%, 24%, 27%, 30%, 33% { transform: rotate(-20deg); }
-  19.5%, 22.5%, 25.5%, 28.5%, 31.5% { transform: rotate(-46deg); }
-  35% { transform: rotate(-44deg); }
-  38%, 40% { transform: rotate(-18deg); }
-  42%, 45% { transform: rotate(-12deg); }
-  49%, 52%, 55%, 58% { transform: rotate(-16deg); }
-  50.5%, 53.5%, 56.5% { transform: rotate(-32deg); }
-  61%, 63% { transform: rotate(-10deg); }
-  66%, 100% { transform: rotate(-18deg); }
+  0%, 2.5% { transform: rotate(-20deg); }
+  4.5%, 8% { transform: rotate(-10deg); }
+  9%, 10.5%, 12%, 13.5%, 15%, 16.5% { transform: rotate(-20deg); }
+  9.75%, 11.25%, 12.75%, 14.25%, 15.75% { transform: rotate(-46deg); }
+  17.5% { transform: rotate(-44deg); }
+  19%, 20% { transform: rotate(-18deg); }
+  21%, 22.5% { transform: rotate(-12deg); }
+  24.5%, 26%, 27.5%, 29% { transform: rotate(-16deg); }
+  25.25%, 26.75%, 28.25% { transform: rotate(-32deg); }
+  30.5%, 31.5% { transform: rotate(-10deg); }
+  33%, 42% { transform: rotate(-18deg); }
+  44% { transform: rotate(-30deg); }
+  46%, 48% { transform: rotate(-24deg); }
+  51% { transform: rotate(-32deg); }
+  53%, 76% { transform: rotate(-37deg); }
+  78% { transform: rotate(-20deg); }
+  80.5%, 86% { transform: rotate(-14deg); }
+  88%, 100% { transform: rotate(-18deg); }
 }
 
-/* ── Mắt: liếc quanh một lần sau khi trồi lên, chớp bốn lần cả vòng ─────── */
+/* ── Mắt: liếc quanh sau khi trồi lên, nhìn xuống màn hình khi gõ ───────── */
 @keyframes lt-gaze {
-  0%, 11% { transform: translate3d(0, 0, 0); }
-  12.5% { transform: translate3d(1.6px, 0, 0); }
-  14% { transform: translate3d(-1.4px, 0, 0); }
-  16%, 100% { transform: translate3d(0, 0, 0); }
+  0%, 5.5% { transform: translate3d(0, 0, 0); }
+  6.25% { transform: translate3d(1.6px, 0, 0); }
+  7% { transform: translate3d(-1.4px, 0, 0); }
+  8%, 51% { transform: translate3d(0, 0, 0); }
+  53%, 61% { transform: translate3d(1.5px, 0.7px, 0); }
+  62.5%, 63.5% { transform: translate3d(-0.6px, -0.4px, 0); }
+  64.5%, 76% { transform: translate3d(1.5px, 0.7px, 0); }
+  78%, 100% { transform: translate3d(0, 0, 0); }
 }
 
 @keyframes lt-blink {
-  0%, 11.4%, 12%, 25.9%, 26.5%, 47.9%, 48.5%, 63.9%, 64.5%, 100% { transform: scaleY(1); }
-  11.7%, 26.2%, 48.2%, 64.2% { transform: scaleY(0.12); }
+  0%, 5.7%, 6%, 12.95%, 13.25%, 23.95%, 24.25%, 31.95%, 32.25%,
+  49.3%, 49.6%, 57.8%, 58.1%, 67.3%, 67.6%, 73.8%, 74.1%, 85.8%, 86.1%, 100% { transform: scaleY(1); }
+  5.85%, 13.1%, 24.1%, 32.1%, 49.45%, 57.95%, 67.45%, 73.95%, 85.95% { transform: scaleY(0.12); }
 }
 
 @keyframes lt-shadow {
-  0%, 4% { opacity: 0; transform: scaleX(0.4); }
-  9% { opacity: 0.42; transform: scaleX(0.88); }
-  11%, 41% { opacity: 0.5; transform: scaleX(1); }
-  43% { opacity: 0.26; transform: scaleX(0.76); }
-  45%, 62% { opacity: 0.5; transform: scaleX(1); }
-  66%, 100% { opacity: 0; transform: scaleX(0.42); }
+  0%, 2% { opacity: 0; transform: scaleX(0.4); }
+  4.5% { opacity: 0.42; transform: scaleX(0.88); }
+  5.5%, 20.5% { opacity: 0.5; transform: scaleX(1); }
+  21.5% { opacity: 0.26; transform: scaleX(0.76); }
+  22.5%, 31% { opacity: 0.5; transform: scaleX(1); }
+  33%, 42% { opacity: 0; transform: scaleX(0.42); }
+  44.5% { opacity: 0.4; transform: scaleX(0.84); }
+  46%, 48% { opacity: 0.5; transform: scaleX(1); }
+  51%, 79% { opacity: 0.55; transform: scaleX(1.24); }
+  81%, 84% { opacity: 0.5; transform: scaleX(1); }
+  88%, 100% { opacity: 0; transform: scaleX(0.42); }
 }
 
 @keyframes lt-core {
@@ -4855,11 +5028,11 @@ body:has(.landing-root) {
 
 /* Bụi: cửa sổ bật/tắt thuộc vòng lớn, còn cú tung bụi là vòng con 0,75s. */
 @keyframes lt-dust-window {
-  0%, 18% { opacity: 0; }
-  19%, 32% { opacity: 0.55; }
-  33%, 49% { opacity: 0; }
-  50%, 57% { opacity: 0.34; }
-  58%, 100% { opacity: 0; }
+  0%, 9% { opacity: 0; }
+  9.5%, 16% { opacity: 0.55; }
+  16.5%, 24.5% { opacity: 0; }
+  25%, 28.5% { opacity: 0.34; }
+  29%, 100% { opacity: 0; }
 }
 
 @keyframes lt-dust-puff {
@@ -4869,68 +5042,193 @@ body:has(.landing-root) {
 
 /* ── Bóng: rơi xuống → nảy → lăn theo chân → bay đi sau cú sút ──────────── */
 @keyframes lt-ball {
-  0%, 12.5% { opacity: 0; transform: translate3d(0, -46px, 0); }
-  13% { opacity: 1; transform: translate3d(0, -46px, 0); }
-  14.6% { opacity: 1; transform: translate3d(0, 0, 0); }
-  15.6% { transform: translate3d(1px, -9px, 0); }
-  16.6% { transform: translate3d(2px, 0, 0); }
-  17.2% { transform: translate3d(2.5px, -3px, 0); }
-  18% { transform: translate3d(3px, 0, 0); animation-timing-function: linear; }
-  33% { transform: translate3d(104px, 0, 0); }
-  37% { opacity: 1; transform: translate3d(104px, 0, 0); }
-  39.5% { opacity: 1; transform: translate3d(196px, -22px, 0); }
-  42% { opacity: 0; transform: translate3d(268px, -8px, 0); }
-  42.1%, 100% { opacity: 0; transform: translate3d(0, -46px, 0); }
+  0%, 6.25% { opacity: 0; transform: translate3d(0, -46px, 0); }
+  6.5% { opacity: 1; transform: translate3d(0, -46px, 0); }
+  7.3% { opacity: 1; transform: translate3d(0, 0, 0); }
+  7.8% { transform: translate3d(1px, -9px, 0); }
+  8.3% { transform: translate3d(2px, 0, 0); }
+  8.6% { transform: translate3d(2.5px, -3px, 0); }
+  9% { transform: translate3d(3px, 0, 0); animation-timing-function: linear; }
+  16.5% { transform: translate3d(104px, 0, 0); }
+  18.5% { opacity: 1; transform: translate3d(104px, 0, 0); }
+  19.75% { opacity: 1; transform: translate3d(196px, -22px, 0); }
+  21% { opacity: 0; transform: translate3d(268px, -8px, 0); }
+  21.05%, 100% { opacity: 0; transform: translate3d(0, -46px, 0); }
 }
 
 /* Chỉ HOA VĂN xoay, vỏ bóng đứng yên dưới ánh sáng — có vậy mới ra vòng lăn
    thay vì ra một cái đĩa quay. 104px lăn với r=7 ≈ 2,4 vòng ≈ 850deg. */
 @keyframes lt-ball-spin {
-  0%, 13% { transform: rotate(0deg); }
-  18% { transform: rotate(60deg); animation-timing-function: linear; }
-  33% { transform: rotate(850deg); }
-  37% { transform: rotate(850deg); }
-  42% { transform: rotate(1620deg); }
-  42.1%, 100% { transform: rotate(0deg); }
+  0%, 6.5% { transform: rotate(0deg); }
+  9% { transform: rotate(60deg); animation-timing-function: linear; }
+  16.5% { transform: rotate(850deg); }
+  18.5% { transform: rotate(850deg); }
+  21% { transform: rotate(1620deg); }
+  21.05%, 100% { transform: rotate(0deg); }
 }
 
 @keyframes lt-speed {
-  0%, 37.6% { opacity: 0; transform: translate3d(88px, 0, 0); }
-  38.8% { opacity: 0.7; transform: translate3d(104px, -6px, 0); }
-  40.6%, 100% { opacity: 0; transform: translate3d(150px, -18px, 0); }
+  0%, 18.8% { opacity: 0; transform: translate3d(88px, 0, 0); }
+  19.4% { opacity: 0.7; transform: translate3d(104px, -6px, 0); }
+  20.3%, 100% { opacity: 0; transform: translate3d(150px, -18px, 0); }
 }
 
-/* ── Cửa hầm ───────────────────────────────────────────────────────────── */
+/* ── Cửa hầm: mở/đóng BỐN lần một vòng (hai lần mỗi cảnh) ───────────────── */
 @keyframes lt-door-left {
-  0%, 2% { transform: translate3d(0, 0, 0); }
-  5%, 11% { transform: translate3d(-25px, 0, 0); }
-  13%, 60% { transform: translate3d(0, 0, 0); }
-  61%, 67% { transform: translate3d(-25px, 0, 0); }
-  69%, 100% { transform: translate3d(0, 0, 0); }
+  0%, 1% { transform: translate3d(0, 0, 0); }
+  2.5%, 5.5% { transform: translate3d(-25px, 0, 0); }
+  6.5%, 30% { transform: translate3d(0, 0, 0); }
+  30.5%, 33.5% { transform: translate3d(-25px, 0, 0); }
+  34.5%, 41% { transform: translate3d(0, 0, 0); }
+  42.5%, 45.5% { transform: translate3d(-25px, 0, 0); }
+  46.5%, 81% { transform: translate3d(0, 0, 0); }
+  82.5%, 87.5% { transform: translate3d(-25px, 0, 0); }
+  88.5%, 100% { transform: translate3d(0, 0, 0); }
 }
 
 @keyframes lt-door-right {
-  0%, 2% { transform: translate3d(0, 0, 0); }
-  5%, 11% { transform: translate3d(25px, 0, 0); }
-  13%, 60% { transform: translate3d(0, 0, 0); }
-  61%, 67% { transform: translate3d(25px, 0, 0); }
-  69%, 100% { transform: translate3d(0, 0, 0); }
+  0%, 1% { transform: translate3d(0, 0, 0); }
+  2.5%, 5.5% { transform: translate3d(25px, 0, 0); }
+  6.5%, 30% { transform: translate3d(0, 0, 0); }
+  30.5%, 33.5% { transform: translate3d(25px, 0, 0); }
+  34.5%, 41% { transform: translate3d(0, 0, 0); }
+  42.5%, 45.5% { transform: translate3d(25px, 0, 0); }
+  46.5%, 81% { transform: translate3d(0, 0, 0); }
+  82.5%, 87.5% { transform: translate3d(25px, 0, 0); }
+  88.5%, 100% { transform: translate3d(0, 0, 0); }
 }
 
 @keyframes lt-shaft {
-  0%, 2.6% { opacity: 0; }
-  5%, 11.6% { opacity: 1; }
-  13%, 60.6% { opacity: 0; }
-  61.6%, 67% { opacity: 1; }
-  69%, 100% { opacity: 0; }
+  0%, 1.3% { opacity: 0; }
+  2.5%, 5.8% { opacity: 1; }
+  6.5%, 30.3% { opacity: 0; }
+  30.8%, 33.5% { opacity: 1; }
+  34.5%, 41.3% { opacity: 0; }
+  42.5%, 45.8% { opacity: 1; }
+  46.5%, 81.3% { opacity: 0; }
+  82.5%, 87.5% { opacity: 1; }
+  88.5%, 100% { opacity: 0; }
 }
 
 @keyframes lt-latch {
-  0%, 12.6% { opacity: 0; }
-  13.4%, 14.6% { opacity: 1; }
-  15.4%, 68.6% { opacity: 0; }
-  69.4%, 70.6% { opacity: 1; }
-  71.4%, 100% { opacity: 0; }
+  0%, 6.3% { opacity: 0; }
+  6.7%, 7.3% { opacity: 1; }
+  7.7%, 34.3% { opacity: 0; }
+  34.7%, 35.3% { opacity: 1; }
+  35.7%, 46.3% { opacity: 0; }
+  46.7%, 47.3% { opacity: 1; }
+  47.7%, 88.3% { opacity: 0; }
+  88.7%, 89.3% { opacity: 1; }
+  89.7%, 100% { opacity: 0; }
+}
+
+/* ══ CẢNH 2 — LAPTOP VÀ GÕ CODE ═══════════════════════════════════════════
+   Laptop vẽ sẵn ở tư thế ĐÃ NGỒI (nằm trên đùi), nên đường đi của nó chỉ là
+   một trục Y: nhô lên khỏi hầm → ôm ngang ngực khi đứng → hạ xuống đùi khi
+   ngồi → nhấc lên khi đứng dậy → mang theo chui xuống. */
+@keyframes lt-laptop {
+  0%, 42.4% { opacity: 0; transform: translate3d(0, 46px, 0); }
+  42.6% { opacity: 1; transform: translate3d(0, 46px, 0); }
+  45% { opacity: 1; transform: translate3d(0, 4px, 0); }
+  46%, 48% { opacity: 1; transform: translate3d(0, -15px, 0); }
+  51%, 79% { opacity: 1; transform: translate3d(0, 0, 0); }
+  81% { opacity: 1; transform: translate3d(0, -17px, 0); }
+  84% { opacity: 1; transform: translate3d(0, -15px, 0); }
+  87.6% { opacity: 1; transform: translate3d(0, 46px, 0); }
+  87.8%, 100% { opacity: 0; transform: translate3d(0, 46px, 0); }
+}
+
+@keyframes lt-lid {
+  0%, 51% { transform: scaleY(0.05); }
+  53%, 78.5% { transform: scaleY(1); }
+  80%, 100% { transform: scaleY(0.05); }
+}
+
+@keyframes lt-screen {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.84; }
+}
+
+/* Năm dòng code hiện DẦN, không hiện một lượt: ba dòng ở đợt gõ thứ nhất, hai
+   dòng ở đợt thứ hai. Đây là thứ làm cảnh gõ có TIẾN TRIỂN thay vì chỉ là một
+   cái máy sáng đèn. */
+@keyframes lt-code-1 { 0%, 54.2% { opacity: 0; } 54.6%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
+@keyframes lt-code-2 { 0%, 58.1% { opacity: 0; } 58.5%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
+@keyframes lt-code-3 { 0%, 66.6% { opacity: 0; } 67%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
+@keyframes lt-code-4 { 0%, 72.1% { opacity: 0; } 72.5%, 78.5% { opacity: 1; } 79%, 100% { opacity: 0; } }
+
+@keyframes lt-caret-window {
+  0%, 53.4% { visibility: hidden; }
+  53.6%, 78.4% { visibility: visible; }
+  78.6%, 100% { visibility: hidden; }
+}
+
+@keyframes lt-caret-blink {
+  0%, 49.9% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Đổi vai giữa bàn tay THƯỜNG và bàn tay GÕ. Hai cái vẽ chồng đúng chỗ nhau
+   nên đổi `opacity` là liền mạch; cái đang gõ mang thêm vòng nhanh 0,3s. */
+@keyframes lt-hand-rest {
+  0%, 52.6% { opacity: 1; }
+  53%, 61.8% { opacity: 0; }
+  62.2%, 64.2% { opacity: 1; }
+  64.6%, 76% { opacity: 0; }
+  76.4%, 100% { opacity: 1; }
+}
+
+@keyframes lt-hand-typing {
+  0%, 52.6% { opacity: 0; }
+  53%, 61.8% { opacity: 1; }
+  62.2%, 64.2% { opacity: 0; }
+  64.6%, 76% { opacity: 1; }
+  76.4%, 100% { opacity: 0; }
+}
+
+@keyframes lt-tap {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -1.7px, 0); }
+}
+
+/* ══ DÒNG CHỮ GÕ RA ═══════════════════════════════════════════════════════
+   21 ký tự, bề rộng ép cứng 132 đơn vị (`textLength`) ⇒ mỗi ký tự 6,2857.
+   Chia làm HAI đợt khớp với hai đợt gõ của robot: 11 ký tự ở đợt một, ĐỨNG IM
+   trong lúc robot ngẩng đầu nghĩ (62→64,5%), rồi 10 ký tự còn lại. Chữ dừng
+   đúng lúc tay dừng — đó là thứ làm nó đọc ra "robot đang gõ dòng này" chứ
+   không phải "có một hiệu ứng chữ chạy sẵn ở đây".
+
+   `animation-timing-function` khai TRONG từng mốc: hàm đặt ở mốc nào thì áp
+   cho đoạn NGAY SAU mốc đó. Nên `steps(11)` nằm ở mốc 53% (đoạn 53→62) và
+   `steps(10)` nằm ở mốc 64,5% (đoạn 64,5→74).                              */
+@keyframes lt-greet-window {
+  0%, 52.6% { opacity: 0; }
+  53%, 78.5% { opacity: 1; }
+  79%, 100% { opacity: 0; }
+}
+
+@keyframes lt-greet-type {
+  0% { transform: translate3d(-132px, 0, 0); }
+  53% { transform: translate3d(-132px, 0, 0); animation-timing-function: steps(11, end); }
+  62% { transform: translate3d(-62.86px, 0, 0); }
+  64.5% { transform: translate3d(-62.86px, 0, 0); animation-timing-function: steps(10, end); }
+  74%, 100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes lt-greet-caret {
+  0% { transform: translate3d(0, 0, 0); }
+  53% { transform: translate3d(0, 0, 0); animation-timing-function: steps(11, end); }
+  62% { transform: translate3d(69.14px, 0, 0); }
+  64.5% { transform: translate3d(69.14px, 0, 0); animation-timing-function: steps(10, end); }
+  74%, 100% { transform: translate3d(132px, 0, 0); }
+}
+
+@keyframes lt-greet-rule {
+  0% { transform: scaleX(0); }
+  53% { transform: scaleX(0); animation-timing-function: steps(11, end); }
+  62% { transform: scaleX(0.5238); }
+  64.5% { transform: scaleX(0.5238); animation-timing-function: steps(10, end); }
+  74%, 100% { transform: scaleX(1); }
 }
 
 .landing-hero-shell,
@@ -5282,6 +5580,11 @@ body:has(.landing-root) {
    BA biến phải đi CÙNG NHAU: `--lt-scene-h` (cỡ cảnh), `--lt-line` (đường kẻ
    cách đỉnh thanh) và `height` (đủ chỗ cho cửa hầm nằm dưới đường kẻ). */
 @media (max-width: 959px) {
+  /* Dưới 960px cả cảnh phải thu nhỏ để nằm dưới hàng nút, cỡ chữ tụt còn
+     ~7px — không đọc được thì thà bỏ hẳn còn hơn để lại một vệt mờ. */
+  .lt-greet,
+  .lt-code-3,
+  .lt-code-4 { display: none; }
   .landing-header-main { min-height: 4rem; }
   .landing-robot-rail { --lt-scene-h: 4.1rem; --lt-line: 2.85rem; height: 3.5rem; }
 }
@@ -5345,6 +5648,13 @@ body:has(.landing-root) {
   .landing-hatch-door { transform: none; }
   .landing-robot-shadow { opacity: 0.55; transform: none; }
   .landing-football { opacity: 1; transform: translate3d(3px, 0, 0); }
+  .lt-hand-rest { opacity: 1; }
+  /* Khung hình tĩnh là CẢNH 1 (đứng cạnh quả bóng), nên mọi thứ riêng của
+     cảnh 2 phải tắt — laptop vẽ ở toạ độ lúc ngồi, để hiện thì nó lơ lửng
+     ngang bụng một robot đang đứng. */
+  .landing-laptop,
+  .lt-greet,
+  .lt-hand-tap,
   .landing-robot-dust,
   .landing-football-speed,
   .landing-hatch-shaft,

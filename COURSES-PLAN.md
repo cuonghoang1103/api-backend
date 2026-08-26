@@ -28,7 +28,7 @@ nhóm chuẩn của nó). Mỗi track ở đó **xứng đáng có một khoá h
 | 1 | `nodejs-express` | `nodejs` — Node.js | ✅ ĐỦ (19 mục · 112 bài · 1,93 tr ký tự) |
 | 2 | `nextjs` + `react` | `nextjs` — Next.js & React | ✅ có (21 mục · 121 bài · **1.181k**) — đã nâng chuẩn 25/08 |
 | 3 | `typescript` | `typescript` — TypeScript | ✅ có (17 mục · 84 bài · **910k**) — đã nâng chuẩn 25/08 |
-| 4 | `postgresql` | `postgresql` — PostgreSQL | ✅ có (11 mục · 54 bài · **631k**) — đã nâng chuẩn 25/08 |
+| 4 | `postgresql` | `postgresql` — PostgreSQL | ✅ có (**17 mục · 84 bài · 1,02M**) — đủ 16 chương như lộ trình công bố, 26/08 |
 | 5 | `javascript` + `html-css` | `web-foundations` — Nền tảng Lập trình Web | ✅ có (11 mục · 64 bài · **591k**) — đã nâng chuẩn 25/08 |
 | 6 | `git` | `git` — Git & GitHub | ✅ **XONG** (14 mục · 63 bài · 889k · TB 14.109) |
 | 7 | `linux-bash` | `linux-bash` — Linux & Bash | ✅ **XONG** (13 mục · 69 bài · 1.660k · TB 24.064) |
@@ -951,3 +951,110 @@ node scripts/course-depth-audit.mjs   ./content/courses/<slug>.mjs
 Ba lỗi mà bộ kiểm đã bắt được trong lúc soạn khoá Git, đều là loại đọc bằng mắt sẽ sót:
 thiếu hẳn nửa `ml-vi` của một bài 12k ký tự · khối `.out` đóng bằng `</code></pre>`
 thay vì `</div>` (hai lần) · quiz có phương án thuần code mang dấu tiếng Việt.
+
+---
+
+## 26/08/2026 — PostgreSQL: viết nốt 6 chương mà khoá đã HỨA nhưng chưa có
+
+**Người dùng phát hiện, không phải audit.** Câu hỏi là *"sao tôi thấy nó thiếu
+thiếu như bạn đang làm dở vậy ta, chưa đầy đủ chuyên sâu mới chỉ có 54 bài"* —
+và đúng. Khoá tự công bố **"4 giai đoạn, 16 chương"** ở NĂM chỗ trong chính nội
+dung của nó (tiêu đề lộ trình EN+VI ở `s00-intro`, ngân sách thời gian EN+VI,
+và `description` của khoá), nhưng trên đĩa chỉ có `s00..s10` — tức intro +
+chương 1–10. **Chương 11–16 chưa từng được viết ở bất kỳ nhánh nào** (kiểm bằng
+`git log --all --diff-filter=A -- 'content/courses/postgresql/s1[1-6]*'`: rỗng).
+
+Lộ trình đã hứa, và giờ đã có: 11 Giao dịch & đồng thời · 12 Hàm, trigger &
+view · 13 JSONB & FTS · 14 Kết nối, pool & vận hành · 15 Sao lưu, nhân bản &
+mở rộng · 16 Production & capstone. **54 → 84 bài, 631k → 1,02M ký tự.**
+
+### Bài học chung: một khoá học có thể tự MÂU THUẪN mà mọi phép kiểm vẫn xanh
+
+`course-content-check`, `course-depth-audit`, `course-lang-check` đều xanh trên
+bản 54 bài, vì cả ba đều kiểm **thứ đang có**, không cái nào đối chiếu nội dung
+với **thứ khoá tự hứa**. Đây cùng một họ với bẫy
+[[feedback_verify_the_checker_before_the_content]]: bộ kiểm chỉ thấy được thứ
+nó được dạy để nhìn. Muốn bắt loại lỗi này thì phải so *lời hứa* với *hiện vật*
+— ở đây là đếm số chương trong `s00-intro` rồi so với số file `s*.mjs`.
+
+### Cách dựng: DỰNG POSTGRESQL THẬT TRONG SANDBOX, đừng viết theo trí nhớ
+
+Sandbox này **có sẵn PostgreSQL 16.13** (`/usr/lib/postgresql/16/bin`). Không
+cần Docker, không cần mạng:
+
+```bash
+SP=<scratchpad>
+mkdir -p "$SP/pgdata" && chown postgres:postgres "$SP/pgdata" && chmod 700 "$SP/pgdata"
+chmod o+x /tmp/claude-0 …/scratchpad          # postgres phải ĐI QUA được cả chuỗi thư mục
+runuser -u postgres -- initdb -D "$SP/pgdata" -U postgres --encoding=UTF8 --locale=C
+runuser -u postgres -- pg_ctl -D "$SP/pgdata" -o "-p 5433 -k /tmp" -l /tmp/pg.log start
+```
+
+⚠️ `initdb` **từ chối chạy dưới root** — phải `runuser -u postgres`. Và vì đổi
+sang user khác nên **mọi thư mục cha phải có bit `o+x`**, nếu không nó báo
+`Permission denied` ở đúng thư mục mà `ls` vẫn thấy bình thường.
+
+**Kịch bản ĐỒNG THỜI cần hai kết nối THẬT**, không giả lập được bằng cách chạy
+tuần tự. `scripts/` không giữ lại, nhưng mẫu là: hai FIFO + hai `psql -f`, rồi
+bơm từng dòng vào FIFO tương ứng và `sleep` giữa các bước; `stdbuf -o0` để
+output ra đúng thứ tự. Nhờ nó mà các bản ghi `A│`/`B│` trong Ch11 là **thứ tự
+sự kiện có thật**, kể cả những chỗ một phiên TREO và chỉ in ra sau khi phiên
+kia commit.
+
+### Những con số chỉ có được vì đã ĐO cả hai chiều
+
+| Đo | Kết quả | Vì sao đáng |
+|---|---|---|
+| lost update | 100−10−20 = **80.00** (đúng phải 70.00) | không lỗi, không cảnh báo, cả hai giao dịch báo thành công |
+| write skew ở REPEATABLE READ | cả hai commit, **không còn ai trực** | SERIALIZABLE thì huỷ một bên kèm `Reason code: Canceled on identification as a pivot` |
+| deadlock | `deadlock detected` kèm PID thật | và `COMMIT` của nạn nhân trả về **`ROLLBACK`** |
+| bloat | 4.608 kB → **13 MB**, 199.915 dead tuple | `VACUUM` dọn sạch dead tuple mà file **vẫn 13 MB** |
+| volatility | VOLATILE gọi **5** lần, IMMUTABLE **1** lần | cùng truy vấn, cùng 5 dòng |
+| GIN chọn lọc | 56,8 ms → **1,2 ms** (45×) | |
+| GIN *không* chọn lọc | 54,1 → **31,5 ms** (chỉ 42%) | ⭐ **chỉ nói được vì đã đo CẢ HAI** — một mình con số 45× sẽ dạy sai |
+| FTS + GIN | 39,5 ms → **0,080 ms** | |
+| trigram cho `ILIKE '%…%'` | 46,2 ms → **0,210 ms** | dạng truy vấn ai cũng bảo "không đánh chỉ mục được" |
+| kết nối | 4,403 vs **0,186** ms/truy vấn (23,7×); pool 0,205 | cả lý lẽ dùng pool gói trong một phép đo |
+| cạn kết nối | đúng **100** rồi `sorry, too many clients already` | |
+| `pg_stat_statements` | 2 lượt ăn **51,1 ms** > 5 lượt ăn 12,7 ms | vì sao phải sắp theo `total_exec_time` |
+| DROP mảnh vs DELETE | **3,5 ms** vs 67,8 ms (19×) | và DELETE để lại 100.019 dead tuple, DROP thì không |
+
+**Ch15 dựng HAI cụm thật**: `pg_basebackup -R -S <slot> -X stream` chép 188.772 kB
+sang cổng 5434, `pg_is_in_recovery()` trả `t`, ghi vào bản sao báo
+`cannot execute INSERT in a read-only transaction`, `pg_stat_replication` báo
+`state=streaming` và trễ 0 byte.
+
+### Ch16 lấy số liệu từ CHÍNH kho mã này, và kiểm chứng lại tài liệu
+
+Bug P3006 mà `CLAUDE.md` mô tả **đã được kiểm tận file** thay vì chép lại:
+`prisma/migrations/20260706130000_add_music_and_profile/migration.sql` dòng 48–49
+đặt **trùng tên** một `UNIQUE` constraint và một `CREATE INDEX`. Đúng như tài
+liệu nói — nhưng giờ có bằng chứng, không phải niềm tin.
+
+Số liệu lược đồ đếm tại chỗ: **8.164 dòng · 277 model · 56 enum · 117 migration
+· 446 `@@index` · 441 `@relation`**, model `User` một mình **47 `@relation` /
+172 trường**. Chương 0 ghi *248 bảng / 95 migration / 6.980 dòng* — lệch, vì nó
+viết từ trước. Bài 16.2 **nêu thẳng độ lệch đó** và biến nó thành bài học:
+lược đồ là thứ LỚN LÊN, nên cơ chế phải là migration chứ không phải `db push`.
+
+### Bẫy đã dính và đã sửa trong chính đợt này
+
+- **Sơ đồ đếm bằng `lz-map|lz-flow|lz-stack`, KHÔNG phải `lz-step`/`lz-layer`.**
+  Sáu chương mới viết ra ban đầu có **0 sơ đồ** theo `course-depth-audit`, dù
+  đầy `lz-step`. Hoá ra `lz-flow`/`lz-stack` là **thẻ BỌC** quanh một cụm
+  `lz-step`/`lz-layer`. Bọc lại + bổ sung 7 sơ đồ còn thiếu ⇒ 68/68 bài lý
+  thuyết có sơ đồ, ngang chuẩn Ch1–10. *Bài học: đọc bộ kiểm để biết nó ĐẾM gì,
+  đừng đoán từ tên lớp CSS.*
+- **Test viết sai làm tính năng trông như hỏng.** `UPDATE note_cua_user1 … WHERE id=1`
+  trả `UPDATE 0`, suýt thành câu "view có lọc thì không ghi được". Thật ra note
+  `id=1` thuộc `user_id=2` nên nó **không nằm trong view**. Chọn đúng dòng thì
+  `UPDATE 1`. *Suýt viết một điều SAI vào giáo trình vì tin cái test.*
+- **Dữ liệu mẫu phải TẤT ĐỊNH.** Bản đầu dùng `random()` cho `views`, người học
+  chạy lại sẽ ra số khác. Đổi sang `views = (id * 37) % 101`.
+
+### Còn phải làm trên máy có mạng
+
+24 entry video mới để `credit: ""` vì sandbox **không ra được youtube.com**.
+Chạy `node scripts/verify-youtube-videos.mjs --file ./content/course-videos/postgresql.mjs --fix-credits`
+— nó vừa điền credit vừa **chứng minh** 24 link còn sống và nhúng được. Chốt
+credit rỗng trong `course-video-seed.mjs` sẽ chặn seed cho tới khi bước đó chạy.

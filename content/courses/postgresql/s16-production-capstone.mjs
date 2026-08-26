@@ -116,6 +116,7 @@ export default {
       title: '16.2 — Reading a real production schema|||16.2 — Đọc một lược đồ production thật',
       slug: 'postgresql-16-2-luoc-do-that',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Lược đồ đang chạy cuongthai.com, đo tại chỗ: 8.164 dòng, 277 model, 56 enum, 117 migration, 446 chỉ mục, 441 quan hệ — và model User một mình có 47 quan hệ với 172 trường. Cách tiếp cận một lược đồ lớn mà không bị nó nuốt chửng.',
       content: `
 <div class="ml-en">
@@ -225,6 +226,7 @@ số @relation       : 441</div>
       title: '16.3 — The production checklist|||16.3 — Checklist trước khi ra production',
       slug: 'postgresql-16-3-checklist',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Danh sách rút ra từ mười lăm chương trước: sao lưu đã khôi phục thử chưa, pool đã tính chưa, quan trắc đã bật TRƯỚC khi cần chưa, autovacuum đã chỉnh theo bảng nóng chưa, và những cái khoá nào có thể làm chết trang lúc migration.',
       content: `
 <div class="ml-en">
@@ -354,6 +356,7 @@ số @relation       : 441</div>
       title: '16.4 — Capstone: diagnose four real failures|||16.4 — Capstone: chẩn đoán bốn sự cố có thật',
       slug: 'postgresql-16-4-capstone',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Bốn tình huống, mỗi cái là một sự cố production có thật với triệu chứng gây hiểu lầm. Với mỗi cái: bạn chạy truy vấn nào trước, bạn suy ra gì, và bạn sửa thế nào — dùng tới cả mười lăm chương trước.',
       content: `
 <div class="ml-en">

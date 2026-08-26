@@ -171,6 +171,7 @@ export default {
       title: '13.2 — Querying JSONB and indexing it with GIN|||13.2 — Truy vấn JSONB và đánh chỉ mục bằng GIN',
       slug: 'postgresql-13-2-gin-jsonb',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Toán tử containment @> và toán tử tồn-tại ?, rồi chỉ mục GIN đo thật trên 200.000 dòng: 56,8 ms xuống 1,2 ms. Kèm điều ít ai nói — GIN chỉ đáng khi truy vấn CHỌN LỌC, và cùng phép đo đó chỉ tiết kiệm được 42% khi điều kiện khớp 25% số dòng.',
       content: `
 <div class="ml-en">
@@ -338,6 +339,7 @@ CÓ GIN index: 31,463 ms</div>
       title: '13.3 — Full-text search: tsvector, tsquery and ranking|||13.3 — Full-text search: tsvector, tsquery và xếp hạng',
       slug: 'postgresql-13-3-full-text-search',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Vì sao LIKE không phải là tìm kiếm. Gốc từ (jumping/jumped/jumps → jump), loại bỏ từ dừng, tsvector và tsquery, cột GENERATED có trọng số A/B, xếp hạng bằng ts_rank, và chỉ mục GIN đưa 39,5 ms xuống 0,080 ms.',
       content: `
 <div class="ml-en">
@@ -499,6 +501,7 @@ CÓ GIN index: 31,463 ms</div>
       title: '13.4 — Trigram search: typos, partial names and ILIKE that flies|||13.4 — Tìm bằng trigram: lỗi chính tả, tên gõ dở, và ILIKE bay được',
       slug: 'postgresql-13-4-trigram',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'pg_trgm cắt chuỗi thành cụm ba ký tự để đo độ giống nhau. "PostgresSQL" gõ sai vẫn đạt 0,769 điểm giống, và một chỉ mục GIN trigram khiến ILIKE có % ở đầu — thứ B-tree hoàn toàn bó tay — chạy từ 46,2 ms xuống 0,210 ms.',
       content: `
 <div class="ml-en">

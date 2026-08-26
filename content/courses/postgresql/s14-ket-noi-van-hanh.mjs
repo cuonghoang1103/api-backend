@@ -150,6 +150,7 @@ LỖI: sorry, too many clients already</div>
       title: '14.2 — Pooling: in the app, and in front of it|||14.2 — Pool: trong app, và đứng trước app',
       slug: 'postgresql-14-2-pool-pgbouncer',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Cách chỉnh cỡ pool cho đúng (công thức, và vì sao pool LỚN thường làm mọi thứ CHẬM đi), khi nào app pool là đủ và khi nào cần PgBouncer, ba chế độ của PgBouncer, và đúng những tính năng bị hỏng ở chế độ transaction.',
       content: `
 <div class="ml-en">
@@ -255,6 +256,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
       title: '14.3 — VACUUM, autovacuum and bloat|||14.3 — VACUUM, autovacuum và bloat',
       slug: 'postgresql-14-3-vacuum-bloat',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Cái giá của MVCC từ Chương 11, giờ là việc phải VẬN HÀNH. Ngưỡng autovacuum tính ra được (50 + 0,2×n) và vì sao nó quá thưa với bảng lớn, autovacuum chạy thật đo được, truy vấn tìm bảng phình, và mối nguy transaction ID wraparound.',
       content: `
 <div class="ml-en">
@@ -402,6 +404,7 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
       title: '14.4 — Monitoring: answering "why is it slow?"|||14.4 — Giám sát: trả lời câu "sao nó chậm thế?"',
       slug: 'postgresql-14-4-giam-sat',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Ba khung nhìn trả lời được câu hỏi đó: pg_stat_activity cho "ngay lúc này", pg_stat_statements cho "theo thời gian" — đo thật một truy vấn chạy 2 lượt ăn 51,1 ms nhiều hơn cả truy vấn chạy 5 lượt ăn 12,7 ms — và pg_stat_user_indexes cho các chỉ mục không ai dùng.',
       content: `
 <div class="ml-en">

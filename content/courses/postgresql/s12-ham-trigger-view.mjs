@@ -183,6 +183,7 @@ số lần in "goi IMMUTABLE":  1</div>
       title: '12.2 — Triggers: automation the application cannot forget|||12.2 — Trigger: tự động hoá mà ứng dụng KHÔNG THỂ quên',
       slug: 'postgresql-12-2-trigger',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Hai trigger đáng dùng nhất trong thực tế: updated_at tự cập nhật và một nhật ký kiểm toán ghi lại đúng những gì thật sự đổi. Kèm bẫy kinh điển: một BEFORE trigger trả về NULL nuốt gọn câu lệnh mà không báo lỗi.',
       content: `
 <div class="ml-en">
@@ -354,6 +355,7 @@ $$;
       title: '12.3 — Views: a query with a name|||12.3 — View: một truy vấn có tên',
       slug: 'postgresql-12-3-view',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'View lưu định nghĩa truy vấn chứ không lưu dữ liệu, nên nó luôn tươi. Cái nào ghi được và cái nào không (kèm thông báo lỗi thật), WITH CHECK OPTION để chặn dòng thoát ra khỏi phạm vi view, và dùng view làm ranh giới phân quyền.',
       content: `
 <div class="ml-en">
@@ -499,6 +501,7 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
       title: '12.4 — Materialized views: trading freshness for speed|||12.4 — Materialized view: đánh đổi độ tươi lấy tốc độ',
       slug: 'postgresql-12-4-materialized-view',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Materialized view LƯU kết quả trên đĩa, nên nó nhanh và nó CŨ. Đo thật hai bên lệch nhau 4416 vs 2416 cho tới khi REFRESH, vì sao REFRESH CONCURRENTLY bắt buộc phải có unique index, và cách quyết định giữa view, matview và một bảng tổng hợp do trigger nuôi.',
       content: `
 <div class="ml-en">

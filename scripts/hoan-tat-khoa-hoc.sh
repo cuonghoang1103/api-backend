@@ -126,25 +126,36 @@ bia() {  # slug icon color title subtitle
     no "$1 — sinh HỎNG, chạy lại bằng tay"; HONG=$((HONG + 1))
   fi
 }
-bia nodejs         nodedotjs      5FA04E "Node.js"        "Zero → Production"
-bia nextjs         nextdotjs      FFFFFF "Next.js"        "React → Production"
-bia typescript     typescript     3178C6 "TypeScript"     "JavaScript → TypeScript"
-bia postgresql     postgresql     4169E1 "PostgreSQL"     "SQL → Production"
-bia web-foundations html5         E34F26 "Web Foundations" "HTML → Full-stack"
-bia object-storage cloudflare     F38020 "Object Storage" "Upload → CDN"
-bia media-processing ffmpeg       007808 "Media Processing" "Ảnh · Video → Web"
-bia socket-io      socketdotio    FFFFFF "Socket.IO"      "Realtime → Production"
-bia tailwind-css   tailwindcss    06B6D4 "Tailwind CSS"   "Utility → Design system"
-bia git            git            F05032 "Git & GitHub"   "Zero → Production"
-bia linux-bash     linux          FCC624 "Linux & Bash"   "Terminal → Server"
-bia docker         docker         2496ED "Docker"         "Container → Production"
-bia redis          redis          DC382D "Redis"          "Cache → Production"
-bia prisma-orm     prisma         2D3748 "Prisma ORM"     "Schema → Production"
-bia authentication openid         F78C40 "Authentication" "Login → Production"
-bia nginx          nginx          009639 "Nginx"          "Request → Production"
-bia deploy-vps     ubuntu         E95420 "Deploy lên VPS" "Máy bạn → Production"
-bia github-actions githubactions  2088FF "GitHub Actions" "Push → Production"
-bia observability-monitoring grafana F46800 "Observability & Monitoring" "Log → Metric → Trace"
+# Chữ trên ảnh theo ĐÚNG mẫu của bộ ảnh đã có (đọc từ ảnh chụp trang /courses
+# ngày 26/08): eyebrow "CUONGTHAI COURSE", tiêu đề là tên khoá, phụ đề dạng
+# "Zero → <đích>" bằng tiếng Việt — ví dụ PostgreSQL "Zero → Production",
+# TypeScript "Zero → làm chủ hệ thống kiểu", Nền tảng Web "Zero → sẵn sàng học
+# Node.js & Next.js". Đặt phụ đề kiểu khác là ảnh mới lạc bầy ngay.
+#
+# Tiêu đề PHẢI ≤ ~16 ký tự: course-cover.mjs vẽ cứng font-size 82, không tự thu
+# nhỏ, mà chỗ trống bên phải logo chỉ ~850px. Nên tên dài bị cắt ngắn ở đây:
+# "Nền tảng Lập trình Web" → "Nền tảng Web", "Observability & Monitoring
+# (Node.js trên VPS)" → "Observability", "Object Storage (Cloudflare R2)" →
+# "Object Storage", "Media Processing (Sharp + FFmpeg)" → "Media Processing".
+bia nodejs         nodedotjs      5FA04E "Node.js"          "Zero → Production"
+bia nextjs         nextdotjs      FFFFFF "Next.js & React"  "Zero → Production · App Router"
+bia typescript     typescript     3178C6 "TypeScript"       "Zero → làm chủ hệ thống kiểu"
+bia postgresql     postgresql     4169E1 "PostgreSQL"       "Zero → Production"
+bia web-foundations html5         E34F26 "Nền tảng Web"     "Zero → sẵn sàng học Node.js & Next.js"
+bia object-storage cloudflare     F38020 "Object Storage"   "Zero → S3 API & Cloudflare R2"
+bia media-processing ffmpeg       007808 "Media Processing" "Zero → Sharp & FFmpeg"
+bia socket-io      socketdotio    FFFFFF "Socket.IO"        "Zero → realtime chạy thật"
+bia tailwind-css   tailwindcss    06B6D4 "Tailwind CSS"     "Zero → design system"
+bia git            git            F05032 "Git & GitHub"     "Zero → Production"
+bia linux-bash     linux          FCC624 "Linux & Bash"     "Zero → làm chủ máy chủ"
+bia docker         docker         2496ED "Docker"           "Zero → Production"
+bia redis          redis          DC382D "Redis"            "Zero → cache chạy thật"
+bia prisma-orm     prisma         2D3748 "Prisma ORM"       "Zero → lược đồ & truy vấn"
+bia authentication openid         F78C40 "Authentication"   "Zero → đăng nhập an toàn"
+bia nginx          nginx          009639 "Nginx"            "Zero → reverse proxy thật"
+bia deploy-vps     ubuntu         E95420 "Deploy lên VPS"   "Zero → production tự tráo"
+bia github-actions githubactions  2088FF "GitHub Actions"   "Zero → CI/CD chạy thật"
+bia observability-monitoring grafana F46800 "Observability"  "Log → Metric → Trace"
 echo "  ── $CO đã có · $MOI vừa sinh · $HONG hỏng ──"
 
 # ── 5. Deploy ────────────────────────────────────────────────────────────────

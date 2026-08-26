@@ -4324,7 +4324,7 @@ body:has(.landing-root) {
 
 .landing-header-main {
   display: flex;
-  min-height: 4.5rem;
+  min-height: 5rem;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-md);
@@ -4601,6 +4601,18 @@ body:has(.landing-root) {
 .lt-laptop-shell { fill: url(#lt-shell); stroke: var(--lt-edge); stroke-width: 0.85; }
 .lt-laptop-screen { stroke: none; }
 .lt-code { fill: none; stroke: var(--landing-identity); stroke-width: 1.35; stroke-linecap: round; opacity: 0; }
+
+/* ── Dòng chữ robot gõ ra (cảnh 2) ─────────────────────────────────────── */
+.lt-greet-text {
+  fill: var(--color-ink-2);
+  font-family: var(--font-outlier);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.lt-greet-mark { fill: var(--color-accent); }
+.lt-greet-caret { fill: var(--color-accent); }
+.lt-greet-rule { fill: none; stroke: color-mix(in oklch, var(--color-accent) 30%, transparent); stroke-width: 0.9; stroke-linecap: round; }
 .lt-laptop-caret { fill: var(--landing-identity); }
 
 /* ── Tâm xoay của từng khớp (đơn vị viewBox) ────────────────────────────── */
@@ -4623,7 +4635,13 @@ body:has(.landing-root) {
 .landing-hatch-shaft,
 .landing-laptop,
 .landing-laptop-lid,
-.lt-hand-tap { transform-box: view-box; }
+.lt-hand-tap,
+.lt-greet,
+.lt-greet-mask,
+.lt-greet-caret,
+.lt-greet-rule { transform-box: view-box; }
+
+.lt-greet-rule { transform-origin: 330px 39.8px; }
 
 .landing-robot-facing { transform-origin: 280px 46px; }
 .landing-robot-body { transform-origin: 280px 66px; }
@@ -4690,6 +4708,11 @@ body:has(.landing-root) {
 .lt-hand-rest { animation: lt-hand-rest var(--lt-cycle) linear infinite both; }
 .lt-hand-tap { animation: lt-hand-typing var(--lt-cycle) linear infinite both, lt-tap 0.3s var(--ease-in-out) infinite both; }
 .lt-hand-tap-back { animation-delay: 0s, -0.15s; }
+
+.lt-greet { animation: lt-greet-window var(--lt-cycle) linear infinite both; }
+.lt-greet-mask { animation: lt-greet-type var(--lt-cycle) linear infinite both; }
+.lt-greet-rule { animation: lt-greet-rule var(--lt-cycle) linear infinite both; }
+.lt-greet-caret { animation: lt-greet-caret var(--lt-cycle) linear infinite both, lt-caret-blink 0.8s steps(1, end) infinite both; }
 
 /* ── Di chuyển ngang ───────────────────────────────────────────────────── */
 @keyframes lt-travel {
@@ -5168,6 +5191,46 @@ body:has(.landing-root) {
   50% { transform: translate3d(0, -1.7px, 0); }
 }
 
+/* ══ DÒNG CHỮ GÕ RA ═══════════════════════════════════════════════════════
+   21 ký tự, bề rộng ép cứng 132 đơn vị (`textLength`) ⇒ mỗi ký tự 6,2857.
+   Chia làm HAI đợt khớp với hai đợt gõ của robot: 11 ký tự ở đợt một, ĐỨNG IM
+   trong lúc robot ngẩng đầu nghĩ (62→64,5%), rồi 10 ký tự còn lại. Chữ dừng
+   đúng lúc tay dừng — đó là thứ làm nó đọc ra "robot đang gõ dòng này" chứ
+   không phải "có một hiệu ứng chữ chạy sẵn ở đây".
+
+   `animation-timing-function` khai TRONG từng mốc: hàm đặt ở mốc nào thì áp
+   cho đoạn NGAY SAU mốc đó. Nên `steps(11)` nằm ở mốc 53% (đoạn 53→62) và
+   `steps(10)` nằm ở mốc 64,5% (đoạn 64,5→74).                              */
+@keyframes lt-greet-window {
+  0%, 52.6% { opacity: 0; }
+  53%, 78.5% { opacity: 1; }
+  79%, 100% { opacity: 0; }
+}
+
+@keyframes lt-greet-type {
+  0% { transform: translate3d(-132px, 0, 0); }
+  53% { transform: translate3d(-132px, 0, 0); animation-timing-function: steps(11, end); }
+  62% { transform: translate3d(-62.86px, 0, 0); }
+  64.5% { transform: translate3d(-62.86px, 0, 0); animation-timing-function: steps(10, end); }
+  74%, 100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes lt-greet-caret {
+  0% { transform: translate3d(0, 0, 0); }
+  53% { transform: translate3d(0, 0, 0); animation-timing-function: steps(11, end); }
+  62% { transform: translate3d(69.14px, 0, 0); }
+  64.5% { transform: translate3d(69.14px, 0, 0); animation-timing-function: steps(10, end); }
+  74%, 100% { transform: translate3d(132px, 0, 0); }
+}
+
+@keyframes lt-greet-rule {
+  0% { transform: scaleX(0); }
+  53% { transform: scaleX(0); animation-timing-function: steps(11, end); }
+  62% { transform: scaleX(0.5238); }
+  64.5% { transform: scaleX(0.5238); animation-timing-function: steps(10, end); }
+  74%, 100% { transform: scaleX(1); }
+}
+
 .landing-hero-shell,
 .landing-deep-dives,
 .landing-directory-shell,
@@ -5517,6 +5580,9 @@ body:has(.landing-root) {
    BA biến phải đi CÙNG NHAU: `--lt-scene-h` (cỡ cảnh), `--lt-line` (đường kẻ
    cách đỉnh thanh) và `height` (đủ chỗ cho cửa hầm nằm dưới đường kẻ). */
 @media (max-width: 959px) {
+  /* Dưới 960px cả cảnh phải thu nhỏ để nằm dưới hàng nút, cỡ chữ tụt còn
+     ~7px — không đọc được thì thà bỏ hẳn còn hơn để lại một vệt mờ. */
+  .lt-greet,
   .lt-code-3,
   .lt-code-4 { display: none; }
   .landing-header-main { min-height: 4rem; }
@@ -5587,6 +5653,7 @@ body:has(.landing-root) {
      cảnh 2 phải tắt — laptop vẽ ở toạ độ lúc ngồi, để hiện thì nó lơ lửng
      ngang bụng một robot đang đứng. */
   .landing-laptop,
+  .lt-greet,
   .lt-hand-tap,
   .landing-robot-dust,
   .landing-football-speed,

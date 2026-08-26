@@ -5,11 +5,12 @@
     "genre": "atmospheric",
     "macrostructure": "Split Studio (iterated)",
     "tokens": "frontend/tokens.css",
-    "enrichment": "real 3D capture, CSS pointer tilt, and one 2.5D robot playing TWO scenes on a hatch cut into the header rail — football, then sitting down to write code",
+    "enrichment": "real 3D capture, CSS pointer tilt, and one 2.5D robot playing TWO scenes on a hatch cut into the header rail — football, then sitting down to write code while a greeting types itself out beside it",
     "motionPrimitives": [
       "entrance",
       "pointer tilt",
-      "narrative mascot cycle, two scenes (rise · dribble · kick · turn · descend / rise · sit · type · close · descend)"
+      "narrative mascot cycle, two scenes (rise · dribble · kick · turn · descend / rise · sit · type · close · descend)",
+      "character-by-character greeting typed in step with the robot, pausing when it pauses"
     ],
     "performanceGuardrails": [
       "no WebGL or 3D runtime on homepage",
@@ -18,6 +19,7 @@
       "mascot cycle is 48s: ~16.6s scene one, ~24.5s scene two, ~6.9s fully below the rail and clipped out of paint",
       "one rig for both scenes — no duplicated skeleton, no second set of animations running while hidden",
       "sub-cycles all divide 48s exactly (0.3s key taps, 0.75s dust, 0.8s caret, 2.4s screen, 3s core) so they never drift",
+      "the typing greeting reveals via a clip window moved by transform+steps(), never by animating width",
       "tilt disabled on touch and reduced-motion devices",
       "transform and opacity only, plus discrete visibility used to switch paint off, never on"
     ],
@@ -40,7 +42,7 @@
     "variety": 4
   },
   "iteration": {
-    "brief": "The mascot's face read straight at the viewer no matter which way it walked, and one scene was not enough. Redraw the head in three-quarter view so the turn actually turns the face; add a second scene where the robot climbs out with a laptop, sits on the rail and writes code.",
+    "brief": "Add the greeting the robot is writing: 'Wellcome to CuongThai' typed one character at a time beside it, stopping while the robot stops to think. Give the header more room above so nothing sits against the top edge.",
     "variationKnobs": [
       "three-quarter head: nape block behind, visor pushed to the leading edge, far eye smaller than near eye",
       "two scenes on one 48s timeline sharing a single rig",
@@ -48,7 +50,10 @@
       "laptop with code lines that appear one at a time across two typing rounds",
       "typing hands drawn into the laptop group so the lid cannot hide the key taps",
       "six real statistics plus a counted-at provenance line",
-      "01/02/03 rail index restored"
+      "01/02/03 rail index restored",
+      "greeting typed by a clip window on steps(), split 11 + 10 characters across the two typing rounds",
+      "textLength pins the string width so the steps land on character edges whatever font loads",
+      "header row raised to 5rem for top breathing room"
     ],
     "verifiedViewports": [
       320,
@@ -58,6 +63,6 @@
       1280,
       1920
     ],
-    "verifiedFrames": "30 paused samples across the 48s cycle in both themes, plus close-ups of the typing pose; rendered in headless Chromium by animation-delay sampling, and re-run against the production-built CSS rather than the source file"
+    "verifiedFrames": "30 paused samples across the 48s cycle in both themes, close-ups of the typing pose, and five single-rail renders of the greeting; single-rail because duplicate clipPath ids across panels made every panel clip to the first one"
   }
 }

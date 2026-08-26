@@ -71,6 +71,14 @@ export default function LandingRobotRail() {
             <rect x="-220" y="-90" width="1000" height="156" />
           </clipPath>
 
+          {/* Cửa sổ trượt để hiện chữ TỪNG KÝ TỰ. Trượt một khung nhìn bằng
+              `transform` là cách duy nhất làm hiệu ứng gõ mà không đụng tới
+              `width` (thuộc tính bố cục) — luật của trang này là chỉ được
+              `transform` và `opacity`. */}
+          <clipPath id="lt-greet-clip">
+            <rect className="lt-greet-mask" x="330" y="20" width="132" height="22" />
+          </clipPath>
+
           {/* Một hướng sáng duy nhất cho cả nhân vật: trên-trái xuống dưới-phải. */}
           <linearGradient id="lt-shell" gradientUnits="userSpaceOnUse" x1="264" y1="2" x2="298" y2="62">
             <stop className="lt-stop-shell-lit" offset="0" />
@@ -269,6 +277,26 @@ export default function LandingRobotRail() {
             <path d="M318.4 57 314.6 56m11 1 3.8-1m-8.2 5.3-1.6 3.8m6-3.8 1.6 3.8M322 54.4V51" />
           </g>
           <ellipse className="landing-football-gloss" cx="319" cy="55.6" rx="2.4" ry="1.7" />
+        </g>
+
+        {/* ── Cảnh 2: dòng chữ robot gõ ra ──────────────────────────────
+            `textLength` ÉP CỨNG bề rộng 132 đơn vị cho 21 ký tự, nên mỗi ký
+            tự đúng 6,2857 đơn vị và `steps()` bên CSS rơi trúng mép từng chữ
+            — kể cả khi font mono chưa tải xong và trình duyệt đang dùng font
+            dự phòng có kích thước khác. Không có nó thì chữ hiện ra lệch nửa
+            ký tự, trông như lỗi.
+            ⚠️ Đổi chuỗi này thì PHẢI đổi cả `textLength` và số trong `steps()`
+            ở `@keyframes lt-greet-*`. Chuỗi lấy đúng `header.welcome` trong
+            `landingCopy.ts` (giống nhau ở cả hai ngôn ngữ). */}
+        <g className="lt-greet">
+          <path className="lt-greet-rule" d="M330 39.8h132" />
+          {/* ⚠️ Nội dung phải nằm TRÊN MỘT DÒNG. Đo thật trên Chromium: `textLength`
+              + `lengthAdjust` gặp `<tspan>` mà quanh nó có xuống dòng thì cả dòng
+              chữ KHÔNG VẼ GÌ CẢ — không lỗi, không cảnh báo, chỉ là trống. Cùng
+              nội dung viết liền một dòng thì vẽ bình thường. (`lengthAdjust="spacing"`
+              đi với `<tspan>` cũng vỡ y hệt — phải dùng `spacingAndGlyphs`.) */}
+          <text className="lt-greet-text" x="330" y="34" textLength="132" lengthAdjust="spacingAndGlyphs" clipPath="url(#lt-greet-clip)">Wellcome to <tspan className="lt-greet-mark">CuongThai</tspan></text>
+          <rect className="lt-greet-caret" x="330.6" y="25.4" width="1.5" height="10.6" rx="0.4" />
         </g>
 
         {/* Vệt gió kéo SAU quả bóng: vẽ ở bên trái vị trí bóng lúc bị sút

@@ -3,6 +3,20 @@
 export type Book = { vol: string; file: string; color: string; title: string; chapters: string; practice: string; words: string; icon: string };
 export type BookGroup = { title: string; desc: string; books: Book[] };
 
+// Logo thương hiệu THẬT (Simple Icons, đơn sắc) cho từng tập — phủ lên bìa bằng
+// CSS mask nên ăn theo màu "foil" của bìa, đóng vai ép nhũ như bìa cứng thật.
+// File nằm ở /public/books/logos/<slug>.svg. Bốn tập là khái niệm thuần (không
+// có một logo hãng duy nhất) → để trống, dùng lại glyph vẽ tay trong `icon`.
+export const BOOK_LOGOS: Record<string, string> = {
+  '01': 'react', '02': 'openjdk', '03': 'javascript', '04': 'typescript',
+  '05': 'nextdotjs', '06': 'postgresql', '07': 'nodedotjs', '08': 'docker',
+  '09': 'git', '10': 'tailwindcss', '11': 'prisma', '12': 'redis',
+  '13': 'socketdotio', '14': 'openid', '15': 'nginx', '16': 'ubuntu',
+  '17': 'linux', '18': 'githubactions', '20': 'cloudflare', '21': 'ffmpeg',
+  '22': 'grafana',
+  // 24 Terminal · 25 Networking · 19 Object Storage · 23 Payment → glyph khái niệm
+};
+
 export const SERIES_STATS = {
   "volumes": "25",
   "chapters": "412",

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { BOOK_GROUPS, SERIES_STATS, type Book } from './booksData';
+import { BOOK_GROUPS, BOOK_LOGOS, SERIES_STATS, type Book } from './booksData';
 import styles from './books.module.css';
 
 const STAT_ORDER: Array<[keyof typeof SERIES_STATS, string]> = [
@@ -21,6 +21,7 @@ const featured = FEATURED.map((v) => allBooks.find((b) => b.vol === v)).filter(B
 // Thẻ sách 3D: bìa (mặt trước) + gáy (mặt trái xoay 90°). Hover → nghiêng như rút
 // khỏi kệ. Toàn CSS transform, không thư viện ngoài.
 function Book3D({ book, big = false }: { book: Book; big?: boolean }) {
+  const logo = BOOK_LOGOS[book.vol];
   return (
     <Link
       href={`/books/${slugOf(book.file)}`}
@@ -34,12 +35,21 @@ function Book3D({ book, big = false }: { book: Book; big?: boolean }) {
           <span className={styles.spineTitle}>{book.title}</span>
         </span>
         <span className={styles.cover}>
-          <span className={styles.coverTop}>
-            <span className={styles.coverVol}>VOL {book.vol}</span>
-            <span className={styles.coverIcon} aria-hidden dangerouslySetInnerHTML={{ __html: book.icon }} />
+          <span className={styles.coverHead}>
+            <span className={styles.coverVol}>No. {book.vol}</span>
+            <span className={styles.coverSeries}>CuongThai</span>
           </span>
-          <span className={styles.coverTitle}>{book.title}</span>
-          <span className={styles.coverMeta}>{book.chapters} chapters · {book.words} words</span>
+          <span className={styles.coverMark} aria-hidden>
+            {logo ? (
+              <span className={styles.brand} style={{ '--logo': `url(/books/logos/${logo}.svg)` } as React.CSSProperties} />
+            ) : (
+              <span className={styles.glyph} dangerouslySetInnerHTML={{ __html: book.icon }} />
+            )}
+          </span>
+          <span className={styles.coverBody}>
+            <span className={styles.coverTitle}>{book.title}</span>
+            <span className={styles.coverMeta}>{book.chapters} chapters · {book.words} words</span>
+          </span>
         </span>
       </span>
     </Link>

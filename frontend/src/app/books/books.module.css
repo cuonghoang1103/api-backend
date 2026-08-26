@@ -1,19 +1,23 @@
-/* Trang /books — thẩm mỹ "thư viện/editorial" (serif, giấy, màu nhấn từng tập),
-   port từ index.html gốc của bộ sách nhưng: (1) scoped bằng CSS module để không
-   đụng theme neon của site, (2) theme-aware theo cơ chế của site — bare :root là
-   light, [data-theme="dark"] và prefers-color-scheme:dark là tối. Nền giấy đặt
-   trên .library (KHÔNG trên body) để chỉ trang này đổi màu. */
+/* Trang /books — thẩm mỹ "thư viện/editorial" (serif, giấy) nhưng NỀN ĂN THEO
+   TRANG CHỦ: cùng hệ màu tím (oklch hue 300) + nhũ vàng ấm (hue 82) như
+   .landing-root, để thư viện là một phần của site chứ không phải mảng rời.
+   Theme bám ĐÚNG cơ chế site: <html> mặc định `theme-dark`, sáng là `html.light`
+   (xem app/layout.tsx). Nên bare .library = TỐI (mặc định site), .light là phủ
+   sáng. KHÔNG dùng prefers-color-scheme (site không theo OS → từng lệch pha). */
 
 .library {
-  --paper: #f4f5f7;
-  --leaf: #ffffff;
-  --leaf-2: #edeff3;
-  --rule: #d3d9e2;
-  --rule-firm: #afb9c8;
-  --ink: #13181f;
-  --ink-soft: #55606f;
-  --ink-faint: #7c879a;
-  --lift: 0 1px 2px rgba(19, 24, 31, 0.06), 0 10px 30px -20px rgba(19, 24, 31, 0.35);
+  /* ── TỐI (mặc định, khớp .landing-root tối) ───────────────────────── */
+  --paper: oklch(12.8% 0.025 300);
+  --leaf: oklch(16.5% 0.032 300);
+  --leaf-2: oklch(19.5% 0.038 300);
+  --rule: oklch(28% 0.034 300);
+  --rule-firm: oklch(38% 0.04 300);
+  --ink: oklch(96% 0.008 295);
+  --ink-soft: oklch(78% 0.018 295);
+  --ink-faint: oklch(66% 0.022 295);
+  --accent: oklch(72% 0.18 300);
+  --gold: oklch(80% 0.12 82);
+  --lift: 0 1px 2px rgba(0, 0, 0, 0.5), 0 10px 30px -20px rgba(0, 0, 0, 0.9);
 
   background: var(--paper);
   color: var(--ink);
@@ -24,29 +28,19 @@
   min-height: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
-  :global(:root:not([data-theme="light"])) .library {
-    --paper: #0e1116;
-    --leaf: #151a21;
-    --leaf-2: #1b212a;
-    --rule: #28313d;
-    --rule-firm: #3c4857;
-    --ink: #e7ecf3;
-    --ink-soft: #98a4b5;
-    --ink-faint: #758093;
-    --lift: 0 1px 2px rgba(0, 0, 0, 0.5), 0 10px 30px -20px rgba(0, 0, 0, 0.9);
-  }
-}
-:global(:root[data-theme="dark"]) .library {
-  --paper: #0e1116;
-  --leaf: #151a21;
-  --leaf-2: #1b212a;
-  --rule: #28313d;
-  --rule-firm: #3c4857;
-  --ink: #e7ecf3;
-  --ink-soft: #98a4b5;
-  --ink-faint: #758093;
-  --lift: 0 1px 2px rgba(0, 0, 0, 0.5), 0 10px 30px -20px rgba(0, 0, 0, 0.9);
+:global(html.light) .library {
+  /* ── SÁNG (khớp .landing-root sáng: giấy tím rất nhạt) ─────────────── */
+  --paper: oklch(97.5% 0.009 300);
+  --leaf: oklch(99% 0.007 300);
+  --leaf-2: oklch(94.5% 0.016 300);
+  --rule: oklch(88% 0.02 300);
+  --rule-firm: oklch(78% 0.03 300);
+  --ink: oklch(20% 0.025 300);
+  --ink-soft: oklch(43% 0.024 300);
+  --ink-faint: oklch(52% 0.025 300);
+  --accent: oklch(55% 0.18 300);
+  --gold: oklch(52% 0.13 82);
+  --lift: 0 1px 2px rgba(60, 40, 90, 0.06), 0 10px 30px -20px rgba(40, 20, 70, 0.3);
 }
 
 .wrap {
@@ -319,10 +313,10 @@
 }
 .catChip:hover { color: var(--ink); border-color: var(--rule-firm); }
 .catActive {
-  color: #fff; background: var(--ink); border-color: var(--ink);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
 }
-:global(:root:not([data-theme="light"])) .catActive,
-:global(:root[data-theme="dark"]) .catActive { color: var(--paper); }
 
 /* Khu "Start here" — reading room. */
 .reading { margin: 6px 0 44px; }
@@ -360,54 +354,120 @@
 .book3d:focus-visible { outline: none; }
 .book3d:focus-visible .cover { outline: 2px solid var(--c); outline-offset: 3px; }
 
+/* ── BÌA CỨNG BỌC VẢI, ÉP NHŨ ─────────────────────────────────────────
+   Bìa là một VẬT có màu riêng cố định (như sách thật), KHÔNG theo theme trang:
+   nền vải = màu riêng của tập (--c) hạ tông sâu, có sợi vải + khung nhũ + logo
+   hãng thật ép nổi + tựa ép nhũ vàng. Đây là thứ giết vẻ "thẻ AI phẳng". */
 .cover {
+  /* Nhũ & mực trên vải — cố định, không phụ thuộc theme trang. */
+  --foil: #e6c583;
+  --foil-hi: #f5e7c2;
+  --cloth-ink: rgba(255, 251, 243, 0.95);
+  --cloth-soft: rgba(255, 250, 240, 0.6);
+
   position: relative; z-index: 1;
-  display: flex; flex-direction: column; gap: 14px;
-  min-height: 292px;
-  padding: 20px 20px 18px 32px;
-  border-radius: 2px 10px 10px 2px;
-  background: linear-gradient(155deg, color-mix(in srgb, var(--c) 16%, var(--leaf)) 0%, var(--leaf) 60%);
-  border: 1px solid var(--rule);
-  box-shadow: -10px 14px 30px -16px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.06);
+  display: flex; flex-direction: column;
+  min-height: 300px;
+  padding: 20px 20px 18px 34px;
+  border-radius: 2px 9px 9px 2px;
+  color: var(--cloth-ink);
+  /* Vải sách: nền tông sâu của chính màu tập + ánh sáng chếch trên. */
+  background:
+    linear-gradient(158deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 44%),
+    linear-gradient(205deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0) 58%),
+    color-mix(in oklab, var(--c) 80%, #14121b);
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  box-shadow:
+    -10px 14px 30px -16px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
   overflow: hidden;
   transition: box-shadow 0.42s ease;
 }
+/* Sợi vải dệt (linen) — hai lưới mảnh trộn soft-light. */
+.cover::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.06) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 3px);
+  mix-blend-mode: soft-light; opacity: 0.7;
+}
+/* Khung nhũ ép chìm cách mép — dấu hiệu bìa cứng cổ điển. */
+.cover::after {
+  content: ""; position: absolute; inset: 11px 11px 11px 25px; pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--foil) 42%, transparent);
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.28);
+}
 .book3d:hover .cover,
 .book3d:focus-visible .cover {
-  box-shadow: -18px 24px 46px -18px rgba(0, 0, 0, 0.62), 0 4px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: -18px 24px 46px -18px rgba(0, 0, 0, 0.66), 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.book3dBig .cover { min-height: 336px; }
+.book3dBig .cover { min-height: 344px; }
 
+/* Gáy: mặt trái, tông sâu hơn bìa, số tập ép nhũ + hai vạch nhũ. */
 .spine {
-  position: absolute; left: 0; top: 0; bottom: 0; width: 16px; z-index: 2;
-  background: linear-gradient(var(--c), color-mix(in srgb, var(--c) 55%, #000));
+  position: absolute; left: 0; top: 0; bottom: 0; width: 18px; z-index: 2;
+  background: linear-gradient(
+    color-mix(in oklab, var(--c) 62%, #000),
+    color-mix(in oklab, var(--c) 34%, #000));
   display: flex; align-items: center; justify-content: center;
-  box-shadow: inset -1px 0 2px rgba(0, 0, 0, 0.25);
+  border-top: 2px solid color-mix(in srgb, #e6c583 40%, transparent);
+  border-bottom: 2px solid color-mix(in srgb, #e6c583 40%, transparent);
+  box-shadow: inset -2px 0 4px rgba(0, 0, 0, 0.4), inset 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 .spineVol {
   writing-mode: vertical-rl; transform: rotate(180deg);
   font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.62rem; font-weight: 600; color: rgba(255, 255, 255, 0.9);
-  letter-spacing: 0.1em;
+  font-size: 0.62rem; font-weight: 700; color: #efd8a1;
+  letter-spacing: 0.14em;
 }
 .spineTitle { display: none; }
 
-.coverTop { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+/* Đầu bìa: "No. NN" ép nhũ, và tên bộ nhỏ tracking rộng. */
+.coverHead { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; position: relative; z-index: 1; }
 .coverVol {
   font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.72rem; font-weight: 600; color: var(--c); letter-spacing: 0.06em;
+  font-size: 0.72rem; font-weight: 700; color: var(--foil); letter-spacing: 0.08em;
 }
-.coverIcon { color: var(--c); }
-.coverIcon svg { width: 34px; height: 34px; }
+.coverSeries {
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.5rem; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--cloth-soft);
+}
+
+/* Dấu ấn giữa bìa: logo hãng thật (mask, ăn màu nhũ) hoặc glyph khái niệm. */
+.coverMark {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  margin: 8px 0 10px; position: relative; z-index: 1;
+}
+.brand {
+  width: 78px; height: 78px;
+  background: linear-gradient(180deg, var(--foil-hi), var(--foil));
+  -webkit-mask: var(--logo) center / contain no-repeat;
+  mask: var(--logo) center / contain no-repeat;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.4));
+  opacity: 0.94;
+}
+.book3dBig .brand { width: 92px; height: 92px; }
+.glyph { color: var(--foil); opacity: 0.9; filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.4)); }
+.glyph svg { width: 72px; height: 72px; }
+.book3dBig .glyph svg { width: 86px; height: 86px; }
+
+/* Chân bìa: tựa ép nhũ (serif) + thông số. */
+.coverBody { position: relative; z-index: 1; }
 .coverTitle {
-  margin: auto 0 0;
+  display: block; margin: 0;
   font-family: "Source Serif 4", Georgia, serif;
-  font-size: 1.12rem; font-weight: 700; line-height: 1.24; letter-spacing: -0.01em;
+  font-size: 1.14rem; font-weight: 700; line-height: 1.22; letter-spacing: -0.01em;
+  color: var(--foil-hi);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
   text-wrap: balance;
 }
-.book3dBig .coverTitle { font-size: 1.24rem; }
+.book3dBig .coverTitle { font-size: 1.28rem; }
 .coverMeta {
+  display: block; margin-top: 9px; padding-top: 9px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
   font-family: "Source Sans 3", system-ui, sans-serif;
-  font-size: 0.72rem; color: var(--ink-faint); letter-spacing: 0.03em;
-  border-top: 1px solid var(--rule); padding-top: 10px; font-variant-numeric: tabular-nums;
+  font-size: 0.7rem; color: var(--cloth-soft); letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
 }

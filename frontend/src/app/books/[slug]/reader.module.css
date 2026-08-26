@@ -1,17 +1,19 @@
 /* Trình đọc sách toàn màn hình. Phủ luôn chrome của site (position:fixed inset:0)
-   để đọc không vướng. Palette editorial giống trang thư viện, theme-aware theo
-   cơ chế site (bare :root sáng; [data-theme=dark] + prefers-color-scheme tối). */
+   để đọc không vướng. Palette ĂN THEO TRANG CHỦ (oklch hue 300 tím) + nhũ vàng,
+   khớp .landing-root và trang thư viện. Theme bám cơ chế site: <html> mặc định
+   `theme-dark`, sáng là `html.light` → bare .reader = TỐI, .light phủ sáng. */
 
 .reader {
-  --paper: #f4f5f7;
-  --leaf: #ffffff;
-  --leaf-2: #eef1f5;
-  --rule: #dfe4ec;
-  --rule-firm: #c4ccd8;
-  --ink: #13181f;
-  --ink-soft: #55606f;
-  --ink-faint: #808b9c;
-  --accent: #4f46e5;
+  /* ── TỐI (mặc định) ───────────────────────────────────────────────── */
+  --paper: oklch(12.8% 0.025 300);
+  --leaf: oklch(16.5% 0.032 300);
+  --leaf-2: oklch(19.5% 0.038 300);
+  --rule: oklch(28% 0.034 300);
+  --rule-firm: oklch(38% 0.04 300);
+  --ink: oklch(96% 0.008 295);
+  --ink-soft: oklch(78% 0.018 295);
+  --ink-faint: oklch(66% 0.022 295);
+  --accent: oklch(72% 0.18 300);
 
   position: fixed;
   inset: 0;
@@ -22,17 +24,16 @@
   color: var(--ink);
   font-family: "Source Sans 3", -apple-system, "Segoe UI", system-ui, sans-serif;
 }
-@media (prefers-color-scheme: dark) {
-  :global(:root:not([data-theme="light"])) .reader {
-    --paper: #0e1116; --leaf: #151a21; --leaf-2: #1b212a;
-    --rule: #28313d; --rule-firm: #3c4857;
-    --ink: #e7ecf3; --ink-soft: #98a4b5; --ink-faint: #6f7b8d; --accent: #8b8cf0;
-  }
-}
-:global(:root[data-theme="dark"]) .reader {
-  --paper: #0e1116; --leaf: #151a21; --leaf-2: #1b212a;
-  --rule: #28313d; --rule-firm: #3c4857;
-  --ink: #e7ecf3; --ink-soft: #98a4b5; --ink-faint: #6f7b8d; --accent: #8b8cf0;
+:global(html.light) .reader {
+  --paper: oklch(97.5% 0.009 300);
+  --leaf: oklch(99% 0.007 300);
+  --leaf-2: oklch(94.5% 0.016 300);
+  --rule: oklch(88% 0.02 300);
+  --rule-firm: oklch(78% 0.03 300);
+  --ink: oklch(20% 0.025 300);
+  --ink-soft: oklch(43% 0.024 300);
+  --ink-faint: oklch(52% 0.025 300);
+  --accent: oklch(55% 0.18 300);
 }
 
 /* Thanh tiến độ đọc — mảnh, sát mép trên. */

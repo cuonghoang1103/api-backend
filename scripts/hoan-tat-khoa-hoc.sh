@@ -97,16 +97,44 @@ else
   ok "không có gì đổi — bỏ qua commit"
 fi
 
-# ── 4. Ảnh bìa: PHẢI chạy trong container backend trên VPS ───────────────────
-# course-cover.mjs cần sharp + R2_*, và đẩy lên key images/course-covers/<slug>.png
-# — đúng chỗ thumbnailUrl của mỗi khoá trỏ tới, nên sinh xong là thẻ hết vỡ ảnh.
-b "4/5 · Sinh ảnh bìa 10 khoá (qua VPS)"
-bia() {
-  ssh -o ConnectTimeout=15 "$VPS" \
-    "docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
-     --slug $1 --icon $2 --color $3 --title \"$4\" --subtitle \"$5\"" \
-    >/dev/null 2>&1 && ok "$1" || no "$1 — chạy lại bằng tay, xem §6 COURSES-PLAN.md"
+# ── 4. Ảnh bìa: dò CDN rồi CHỈ sinh cái nào thiếu ────────────────────────────
+# course-cover.mjs cần sharp + R2_*, nên PHẢI chạy trong container backend trên
+# VPS. Nó đẩy lên key images/course-covers/<slug>.png — đúng chỗ thumbnailUrl
+# của mọi khoá trỏ tới (cả 19 khoá dùng chung một mẫu URL), nên sinh xong là
+# thẻ hết vỡ ảnh.
+#
+# Dò trước bằng curl thay vì sinh mù cả 19: khoá cũ (nodejs, nextjs…) đã có ảnh
+# do chính script này làm, sinh đè lại chỉ tốn thời gian và có rủi ro ghi hỏng
+# thứ đang chạy tốt. 200 = giữ nguyên, còn lại = sinh.
+#
+# Mọi mã logo dưới đây đã đối chiếu với bộ dữ liệu simple-icons (3.453 icon):
+# cả 19 đều có thật, nên không cái nào chết ở bước tải logo. Riêng nextdotjs
+# (#000000) và socketdotio (#010101) bị ép sang FFFFFF — hex thật của hãng là
+# màu đen, vẽ lên nền gradient tối thì mất tiêu.
+b "4/5 · Ảnh bìa — dò CDN rồi chỉ sinh cái thiếu"
+CDN="https://media.cuongthai.com/images/course-covers"
+CO=0; MOI=0; HONG=0
+bia() {  # slug icon color title subtitle
+  local ma
+  ma=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$CDN/$1.png" 2>/dev/null)
+  if [ "$ma" = "200" ]; then ok "$1 — đã có, giữ nguyên"; CO=$((CO + 1)); return; fi
+  if ssh -o ConnectTimeout=15 "$VPS" \
+      "docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
+       --slug $1 --icon $2 --color $3 --title \"$4\" --subtitle \"$5\"" >/dev/null 2>&1; then
+    ok "$1 — vừa sinh"; MOI=$((MOI + 1))
+  else
+    no "$1 — sinh HỎNG, chạy lại bằng tay"; HONG=$((HONG + 1))
+  fi
 }
+bia nodejs         nodedotjs      5FA04E "Node.js"        "Zero → Production"
+bia nextjs         nextdotjs      FFFFFF "Next.js"        "React → Production"
+bia typescript     typescript     3178C6 "TypeScript"     "JavaScript → TypeScript"
+bia postgresql     postgresql     4169E1 "PostgreSQL"     "SQL → Production"
+bia web-foundations html5         E34F26 "Web Foundations" "HTML → Full-stack"
+bia object-storage cloudflare     F38020 "Object Storage" "Upload → CDN"
+bia media-processing ffmpeg       007808 "Media Processing" "Ảnh · Video → Web"
+bia socket-io      socketdotio    FFFFFF "Socket.IO"      "Realtime → Production"
+bia tailwind-css   tailwindcss    06B6D4 "Tailwind CSS"   "Utility → Design system"
 bia git            git            F05032 "Git & GitHub"   "Zero → Production"
 bia linux-bash     linux          FCC624 "Linux & Bash"   "Terminal → Server"
 bia docker         docker         2496ED "Docker"         "Container → Production"
@@ -117,6 +145,7 @@ bia nginx          nginx          009639 "Nginx"          "Request → Productio
 bia deploy-vps     ubuntu         E95420 "Deploy lên VPS" "Máy bạn → Production"
 bia github-actions githubactions  2088FF "GitHub Actions" "Push → Production"
 bia observability-monitoring grafana F46800 "Observability & Monitoring" "Log → Metric → Trace"
+echo "  ── $CO đã có · $MOI vừa sinh · $HONG hỏng ──"
 
 # ── 5. Deploy ────────────────────────────────────────────────────────────────
 # Deploy chạy lại toàn bộ seed (Step 3.12b khoá + 3.12c video). Lần này chốt

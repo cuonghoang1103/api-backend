@@ -27,6 +27,7 @@ const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] :
 const has = (f) => args.includes(f);
 const ONLY = val('--slug', null);
 const DRY = has('--dry');
+const XOA_RAC = has('--xoa-rac');
 const DIR = val('--dir', fileURLToPath(new URL('./covers', import.meta.url)));
 
 if (!existsSync(DIR)) {
@@ -36,7 +37,14 @@ if (!existsSync(DIR)) {
   process.exit(1);
 }
 
-const files = readdirSync(DIR).filter((f) => f.endsWith('.png'))
+// ⛔ BỎ FILE `._*`. macOS gói kèm AppleDouble (resource fork) khi tar, nên
+// một cú `tar czf - scripts/covers | ssh …` từ Mac đẩy lên R2 cả 19 file rác
+// `._redis.png` 0,2 KB bên cạnh 19 ảnh thật — đo thật 26/08, log báo "38 ảnh".
+// Chúng vô hại với trang web (thumbnailUrl trỏ `redis.png`) nhưng làm bẩn
+// bucket. Lọc ở đây để nguồn nào đưa file vào cũng sạch; phía Mac thì đặt
+// COPYFILE_DISABLE=1 trước `tar`.
+const files = readdirSync(DIR)
+  .filter((f) => f.endsWith('.png') && !f.startsWith('._'))
   .filter((f) => !ONLY || f === `${ONLY}.png`);
 if (!files.length) { console.error(`✗ không có PNG nào trong ${DIR}`); process.exit(1); }
 
@@ -57,6 +65,18 @@ const s3 = DRY ? null : new S3Client({
     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
   },
 });
+
+// --xoa-rac: dọn những `._*.png` đã lỡ đẩy lên. Danh sách suy từ chính tên
+// ảnh thật, nên không cần liệt kê bucket và không thể xoá nhầm ảnh thật.
+if (XOA_RAC && !DRY) {
+  const { DeleteObjectsCommand } = await import('@aws-sdk/client-s3');
+  const Objects = files.map((f) => ({ Key: `images/course-covers/._${f}` }));
+  const r = await s3.send(new DeleteObjectsCommand({
+    Bucket: process.env.R2_BUCKET_NAME, Delete: { Objects, Quiet: false },
+  }));
+  console.log(`· dọn rác: xoá ${(r.Deleted || []).length} file ._*.png`);
+  for (const e of r.Errors || []) console.error(`  ✗ ${e.Key}: ${e.Message}`);
+}
 
 let ok = 0, loi = 0;
 for (const f of files.sort()) {

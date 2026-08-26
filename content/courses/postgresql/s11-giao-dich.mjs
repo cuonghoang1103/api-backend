@@ -253,7 +253,6 @@ LINE 1: SELECT count(*) FROM thu_ddl;
       title: '11.2 — MVCC: why readers never block writers|||11.2 — MVCC: vì sao người đọc không bao giờ chặn người ghi',
       slug: 'postgresql-11-2-mvcc',
       type: 'LESSON',
-      isFreePreview: true,
       description: 'Cơ chế trung tâm của PostgreSQL: mỗi giao dịch thấy một ảnh chụp riêng. xmin/xmax/ctid hiện ra bằng mắt, một UPDATE thật sự là chép-rồi-đánh-dấu-chết, và cái giá phải trả — dead tuple và bloat, đo thật 4,6 MB → 13 MB.',
       content: `
 <div class="ml-en">
@@ -441,7 +440,6 @@ B│ (1 row)</div>
       title: '11.3 — Isolation levels and the anomalies they stop|||11.3 — Các mức cô lập và những bất thường mỗi mức chặn được',
       slug: 'postgresql-11-3-muc-co-lap',
       type: 'LESSON',
-      isFreePreview: true,
       description: 'Read Committed (mặc định), Repeatable Read và Serializable — mỗi mức chặn đúng bất thường nào, chứng minh bằng hai phiên chạy thật, kể cả write skew mà chỉ Serializable bắt được, và vì sao dùng Serializable thì BẮT BUỘC phải có vòng thử lại.',
       content: `
 <div class="ml-en">
@@ -673,7 +671,6 @@ B│ HINT:  The transaction might succeed if retried.</div>
       title: '11.4 — Row locks, lost updates and deadlocks|||11.4 — Khoá dòng, lost update và deadlock',
       slug: 'postgresql-11-4-khoa-deadlock',
       type: 'LESSON',
-      isFreePreview: true,
       description: 'Người ghi CHẶN người ghi. Lost update đo thật: trừ 10 rồi trừ 20 từ 100 mà còn 80. Hai cách sửa, FOR UPDATE / NOWAIT / lock_timeout, hàng đợi việc bằng SKIP LOCKED, và một deadlock thật do Postgres tự phát hiện.',
       content: `
 <div class="ml-en">

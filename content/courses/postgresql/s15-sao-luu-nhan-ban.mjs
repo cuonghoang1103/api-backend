@@ -131,7 +131,6 @@ pg_restore -d db --data-only custom.dump     <span class="tok-comment"># chỉ d
       title: '15.2 — WAL and point-in-time recovery|||15.2 — WAL và khôi phục theo thời điểm',
       slug: 'postgresql-15-2-wal-pitr',
       type: 'LESSON',
-      isFreePreview: true,
       description: 'Write-Ahead Log là thứ làm cho chữ D trong ACID thành sự thật, và cũng là thứ cho phép khôi phục về ĐÚNG một giây trước lệnh DROP TABLE. LSN, segment 16MB, archive_mode, và vì sao một replication slot bị bỏ quên có thể làm đầy đĩa rồi giết cả máy chủ.',
       content: `
 <div class="ml-en">
@@ -239,7 +238,6 @@ archive_command = <span class="tok-string">'test ! -f /mnt/wal/%f &amp;&amp; cp 
       title: '15.3 — Streaming replication, built for real|||15.3 — Nhân bản streaming, dựng thật',
       slug: 'postgresql-15-3-nhan-ban',
       type: 'LESSON',
-      isFreePreview: true,
       description: 'Dựng một bản sao THẬT bằng pg_basebackup rồi chạy nó ở cổng 5434: ghi vào primary hiện ngay ở bản sao, ghi vào bản sao thì bị từ chối, pg_stat_replication báo độ trễ 0 byte. Kèm điều mà read replica KHÔNG giải quyết được.',
       content: `
 <div class="ml-en">
@@ -379,7 +377,6 @@ byte_tre         | 0</div>
       title: '15.4 — Partitioning: one table, many pieces|||15.4 — Phân mảnh: một bảng, nhiều mảnh',
       slug: 'postgresql-15-4-phan-manh',
       type: 'LESSON',
-      isFreePreview: true,
       description: 'Phân mảnh theo RANGE với partition pruning đo thật (chỉ 1 trong 3 mảnh bị đọc), và lý lẽ THẬT SỰ của phân mảnh: DROP một mảnh mất 3,5 ms so với DELETE mất 67,8 ms và để lại 100.019 dead tuple.',
       content: `
 <div class="ml-en">

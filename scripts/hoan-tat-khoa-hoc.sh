@@ -97,89 +97,41 @@ else
   ok "không có gì đổi — bỏ qua commit"
 fi
 
-# ⚠️ DEPLOY PHẢI ĐI TRƯỚC ẢNH BÌA. course-cover.mjs chạy BÊN TRONG container
-# backend, và từ 26/08 nó đọc logo ở assets/simple-icons/ thay vì gọi CDN. Cả
-# mã mới lẫn thư mục logo chỉ vào được container qua một lần deploy (Dockerfile
-# COPY . .). Sinh ảnh trước khi deploy là chạy bản CŨ — đúng bản đã hỏng câm
-# hai lần: script xanh, deploy xanh, mà redis.png vẫn 404.
+# ⚠️ DEPLOY PHẢI ĐI TRƯỚC ẢNH BÌA. Bước 5 gọi scripts/course-cover-upload.mjs
+# và đọc 19 PNG ở scripts/covers/ — cả script lẫn thư mục ảnh chỉ vào được
+# container qua một lần deploy. Đảo thứ tự là chạy vào khoảng không.
 # ── 4. Deploy ────────────────────────────────────────────────────────────────
 # Deploy chạy lại toàn bộ seed (Step 3.12b khoá + 3.12c video). Lần này chốt
 # credit cho qua, nên video mới thực sự gắn vào lesson_details.
 b "4/5 · Deploy"
 if [ "$KHONG_DEPLOY" = true ]; then
   ok "bỏ qua theo --khong-deploy. Chạy tay: bash deploy-nha.sh"
-  no "Lưu ý: bước 5 sẽ chạy course-cover.mjs BẢN CŨ đang nằm trong container."
-  no "Bản đọc logo từ đĩa chỉ vào được container sau một lần deploy."
+  no "Lưu ý: bước 5 sẽ hỏng nếu container chưa có scripts/course-cover-upload.mjs"
+  no "và scripts/covers/ — hai thứ đó chỉ vào ảnh sau một lần deploy."
 else
   echo y | bash deploy-nha.sh
 fi
 
-# ── 5. Ảnh bìa: dò CDN rồi CHỈ sinh cái nào thiếu ────────────────────────────
-# course-cover.mjs cần sharp + R2_*, nên PHẢI chạy trong container backend trên
-# VPS. Nó đẩy lên key images/course-covers/<slug>.png — đúng chỗ thumbnailUrl
-# của mọi khoá trỏ tới (cả 19 khoá dùng chung một mẫu URL), nên sinh xong là
-# thẻ hết vỡ ảnh.
+# ── 5. Ảnh bìa: đẩy PNG DỰNG SẴN lên R2 ──────────────────────────────────────
+# Trước đây bước này gọi course-cover.mjs 19 lần trong container, mà mỗi lần
+# nó làm ba việc: kéo logo từ cdn.simpleicons.org → vẽ SVG bằng sharp (cần font
+# DejaVu Sans) → đẩy R2. Ba chỗ chết, và nó đã chết câm nhiều lần: script chạy
+# đủ, deploy xanh, smoke-test sạch, mà redis.png vẫn 404. Ảnh bìa của
+# postgresql/typescript/nextjs làm được là vì HỒI ĐÓ container còn ra được CDN.
 #
-# Dò trước bằng curl thay vì sinh mù cả 19: khoá cũ (nodejs, nextjs…) đã có ảnh
-# do chính script này làm, sinh đè lại chỉ tốn thời gian và có rủi ro ghi hỏng
-# thứ đang chạy tốt. 200 = giữ nguyên, còn lại = sinh.
-#
-# Mọi mã logo dưới đây đã đối chiếu với bộ dữ liệu simple-icons (3.453 icon):
-# cả 19 đều có thật, nên không cái nào chết ở bước tải logo. Riêng nextdotjs
-# (#000000) và socketdotio (#010101) bị ép sang FFFFFF — hex thật của hãng là
-# màu đen, vẽ lên nền gradient tối thì mất tiêu.
-b "5/5 · Ảnh bìa — dò CDN rồi chỉ sinh cái thiếu"
-CDN="https://media.cuongthai.com/images/course-covers"
-CO=0; MOI=0; HONG=0
-# ⚠️ KHÔNG nuốt output. Bản đầu của hàm này có `>/dev/null 2>&1`, nên một lần
-# chạy hỏng chỉ hiện dấu ❌ trần trụi — không biết ssh chết, docker chết, hay
-# course-cover.mjs chết ở bước tải logo. Giữ lại lời than của nó và in ra khi
-# hỏng; im lặng chỉ dành cho lần chạy THÀNH CÔNG.
-bia() {  # slug icon color title subtitle
-  local ma out
-  ma=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$CDN/$1.png" 2>/dev/null)
-  if [ "$ma" = "200" ]; then ok "$1 — đã có, giữ nguyên"; CO=$((CO + 1)); return; fi
-  if out=$(ssh -o ConnectTimeout=15 "$VPS" \
-      "docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
-       --slug $1 --icon $2 --color $3 --title \"$4\" --subtitle \"$5\"" 2>&1); then
-    ok "$1 — vừa sinh"; MOI=$((MOI + 1))
-  else
-    no "$1 — sinh HỎNG:"
-    printf '%s\n' "$out" | sed 's/^/       /'
-    HONG=$((HONG + 1))
-  fi
-}
-# Chữ trên ảnh theo ĐÚNG mẫu của bộ ảnh đã có (đọc từ ảnh chụp trang /courses
-# ngày 26/08): eyebrow "CUONGTHAI COURSE", tiêu đề là tên khoá, phụ đề dạng
-# "Zero → <đích>" bằng tiếng Việt — ví dụ PostgreSQL "Zero → Production",
-# TypeScript "Zero → làm chủ hệ thống kiểu", Nền tảng Web "Zero → sẵn sàng học
-# Node.js & Next.js". Đặt phụ đề kiểu khác là ảnh mới lạc bầy ngay.
-#
-# Tiêu đề PHẢI ≤ ~16 ký tự: course-cover.mjs vẽ cứng font-size 82, không tự thu
-# nhỏ, mà chỗ trống bên phải logo chỉ ~850px. Nên tên dài bị cắt ngắn ở đây:
-# "Nền tảng Lập trình Web" → "Nền tảng Web", "Observability & Monitoring
-# (Node.js trên VPS)" → "Observability", "Object Storage (Cloudflare R2)" →
-# "Object Storage", "Media Processing (Sharp + FFmpeg)" → "Media Processing".
-bia nodejs         nodedotjs      5FA04E "Node.js"          "Zero → Production"
-bia nextjs         nextdotjs      FFFFFF "Next.js & React"  "Zero → Production · App Router"
-bia typescript     typescript     3178C6 "TypeScript"       "Zero → làm chủ hệ thống kiểu"
-bia postgresql     postgresql     4169E1 "PostgreSQL"       "Zero → Production"
-bia web-foundations html5         E34F26 "Nền tảng Web"     "Zero → sẵn sàng học Node.js & Next.js"
-bia object-storage cloudflare     F38020 "Object Storage"   "Zero → S3 API & Cloudflare R2"
-bia media-processing ffmpeg       007808 "Media Processing" "Zero → Sharp & FFmpeg"
-bia socket-io      socketdotio    FFFFFF "Socket.IO"        "Zero → realtime chạy thật"
-bia tailwind-css   tailwindcss    06B6D4 "Tailwind CSS"     "Zero → design system"
-bia git            git            F05032 "Git & GitHub"     "Zero → Production"
-bia linux-bash     linux          FCC624 "Linux & Bash"     "Zero → làm chủ máy chủ"
-bia docker         docker         2496ED "Docker"           "Zero → Production"
-bia redis          redis          DC382D "Redis"            "Zero → cache chạy thật"
-bia prisma-orm     prisma         2D3748 "Prisma ORM"       "Zero → lược đồ & truy vấn"
-bia authentication openid         F78C40 "Authentication"   "Zero → đăng nhập an toàn"
-bia nginx          nginx          009639 "Nginx"            "Zero → reverse proxy thật"
-bia deploy-vps     ubuntu         E95420 "Deploy lên VPS"   "Zero → production tự tráo"
-bia github-actions githubactions  2088FF "GitHub Actions"   "Zero → CI/CD chạy thật"
-bia observability-monitoring grafana F46800 "Observability"  "Log → Metric → Trace"
-echo "  ── $CO đã có · $MOI vừa sinh · $HONG hỏng ──"
+# Giờ ảnh dựng sẵn ở scripts/covers/ (bằng course-cover-offline.mjs, cùng bố
+# cục), container chỉ còn mỗi việc PUT lên R2. Không mạng ngoài, không sharp,
+# không font, không SVG — chỉ còn đúng một thứ có thể hỏng, và nó in tên biến
+# môi trường thiếu thay vì ném lỗi SDK khó đọc.
+b "5/5 · Ảnh bìa — đẩy 19 PNG dựng sẵn lên R2"
+if out=$(ssh -o ConnectTimeout=15 "$VPS" \
+    "docker exec cuonghoangdev_backend node scripts/course-cover-upload.mjs" 2>&1); then
+  printf '%s\n' "$out" | sed 's/^/  /'
+  ok "đẩy xong"
+else
+  no "đẩy HỎNG:"
+  printf '%s\n' "$out" | sed 's/^/       /'
+fi
 
 b "XONG"
 echo "  Kiểm lại trên web: thẻ khoá đã có ảnh chưa · bài học đã có video chưa."

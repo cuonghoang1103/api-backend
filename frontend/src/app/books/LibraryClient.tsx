@@ -50,19 +50,11 @@ export default function LibraryClient() {
   const [activeShelf, setActiveShelf] = useState(BOOK_GROUPS[0]?.title || '');
   const rootRef = useRef<HTMLDivElement>(null);
 
-  // Reveal-on-scroll + scroll-spy cho thanh danh mục.
+  // Scroll-spy cho thanh danh mục (tô sáng kệ đang xem). Entrance là CSS thuần
+  // nên KHÔNG có observer ẩn nội dung — JS lỗi cũng không sao.
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    // Bật chế độ animation (trước khi thêm, mọi .reveal đang HIỆN → an toàn no-JS).
-    root.classList.add(styles.animReady);
-
-    const revealIO = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add(styles.revealed); revealIO.unobserve(e.target); } }),
-      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
-    );
-    root.querySelectorAll(`.${styles.reveal}`).forEach((el) => revealIO.observe(el));
-
     const shelves = Array.from(root.querySelectorAll('[data-shelf]')) as HTMLElement[];
     const spyIO = new IntersectionObserver(
       (entries) => {
@@ -72,8 +64,7 @@ export default function LibraryClient() {
       { rootMargin: '-45% 0px -50% 0px', threshold: 0 },
     );
     shelves.forEach((el) => spyIO.observe(el));
-
-    return () => { revealIO.disconnect(); spyIO.disconnect(); };
+    return () => spyIO.disconnect();
   }, []);
 
   return (

@@ -287,21 +287,19 @@
 
 /* Reveal-on-scroll: mờ + trượt lên khi vào khung. IntersectionObserver gắn
    .revealed. Ai bật giảm chuyển động thì hiện luôn, không hoạt hoạ. */
-/* AN TOÀN: chỉ ẩn khi JS đã bật hoạt hoạ (.animReady do LibraryClient thêm khi
-   mount). No-JS / hydration lỗi → mọi thứ HIỆN, không bao giờ trắng trang. */
-.reveal { transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.animReady .reveal { opacity: 0; transform: translateY(18px); }
-.animReady .revealed { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) {
-  .animReady .reveal { opacity: 1; transform: none; transition: none; }
-}
+/* Entrance mờ + trượt lên bằng ANIMATION load thuần CSS (fill-mode both → luôn
+   kết ở opacity 1). KHÔNG dùng state ẩn phụ thuộc JS nữa → không bao giờ trắng
+   trang, dù JS lỗi. Ai giảm chuyển động thì bỏ hoạt hoạ. */
+.reveal { animation: bkReveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes bkReveal { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .reveal { animation: none; } }
 
 /* Thanh danh mục dính — nhảy tới từng kệ, tô kệ đang xem. */
+/* KHÔNG sticky: nav của site đã fixed ở đỉnh, sticky top:0 sẽ chồng lên. Để
+   thanh danh mục chạy theo trang cho gọn; scroll-spy vẫn tô kệ đang xem. */
 .catBar {
-  position: sticky; top: 0; z-index: 20;
   margin: 8px 0 34px;
-  background: color-mix(in srgb, var(--paper) 86%, transparent);
-  backdrop-filter: saturate(140%) blur(10px);
+  background: var(--leaf-2);
   border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
 }
 .catInner {

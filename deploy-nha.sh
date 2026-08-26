@@ -229,7 +229,7 @@ export DOCKER_BUILDKIT=1
 # dùng — vẫn ghi rõ cho khỏi trôi.
 docker build -f Dockerfile.backend --build-arg YTDLP_NGAY=\$(date +%F) -t ${GHCR_BE}:${SHA} -t ${GHCR_BE}:latest . > /tmp/nha-be.log 2>&1 &
 PID_BE=\$!
-docker build -f frontend/Dockerfile -t ${GHCR_FE}:${SHA} -t ${GHCR_FE}:latest ./frontend > /tmp/nha-fe.log 2>&1 &
+docker build -f frontend/Dockerfile --build-arg BUILD_NUMBER=${SHA} -t ${GHCR_FE}:${SHA} -t ${GHCR_FE}:latest ./frontend > /tmp/nha-fe.log 2>&1 &
 PID_FE=\$!
 
 wait \$PID_BE; MA_BE=\$?

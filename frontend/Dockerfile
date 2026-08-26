@@ -117,10 +117,16 @@ ENV NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE=$NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE
 ENV NEXT_PUBLIC_SENTRY_ENVIRONMENT=$NEXT_PUBLIC_SENTRY_ENVIRONMENT
 ENV NEXT_PUBLIC_SENTRY_RELEASE=$NEXT_PUBLIC_SENTRY_RELEASE
 ENV NEXT_PUBLIC_GIPHY_API_KEY=$NEXT_PUBLIC_GIPHY_API_KEY
+# Phơi BUILD_NUMBER (deploy truyền = SHA commit) cho scripts/stamp-sw.mjs.
+ENV BUILD_NUMBER=$BUILD_NUMBER
 
 # Clean build — prevents Next.js incremental build race condition
 # where HTML and JS chunks get mismatched hashes after source changes
 RUN rm -rf .next
+
+# Đóng dấu mã build vào public/sw.js NGAY TRƯỚC next build, để mỗi deploy đổi tên
+# cache service worker → PWA/mobile không kẹt bản cũ. Không bao giờ chặn build.
+RUN node scripts/stamp-sw.mjs
 
 # Build Next.js (standalone output)
 RUN npm run build

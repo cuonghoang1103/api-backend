@@ -243,7 +243,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Which graphs are bipartite?<br/>$X$: two disjoint edges (4 isolated vertices forming two separate edges).<br/>$Y$: the cube graph $Q_3$ (8 vertices, cube shape).</p></div><div class=\"ml-vi\"><p>Đồ thị nào sau đây là đồ thị hai phía (bipartite)?<br/>$X$: hai cạnh rời nhau (4 đỉnh cô lập tạo thành hai cạnh riêng biệt).<br/>$Y$: đồ thị hình lập phương $Q_3$ (8 đỉnh, dạng khối lập phương).</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which graphs are bipartite? (see diagram below)<br/>$X$: two disjoint edges.<br/>$Y$: the cube graph $Q_3$.</p><pre class=\"mermaid\">graph TD\n  subgraph X[&quot;X: two disjoint edges&quot;]\n    x1 --- x2\n    x3 --- x4\n  end\n  subgraph Y[&quot;Y: cube graph Q3&quot;]\n    y1 --- y2\n    y2 --- y3\n    y3 --- y4\n    y4 --- y1\n    y5 --- y6\n    y6 --- y7\n    y7 --- y8\n    y8 --- y5\n    y1 --- y5\n    y2 --- y6\n    y3 --- y7\n    y4 --- y8\n  end</pre></div><div class=\"ml-vi\"><p>Đồ thị nào sau đây là đồ thị hai phía (bipartite)? (xem sơ đồ bên dưới)<br/>$X$: hai cạnh rời nhau.<br/>$Y$: đồ thị hình lập phương $Q_3$.</p><pre class=\"mermaid\">graph TD\n  subgraph X[&quot;X: two disjoint edges&quot;]\n    x1 --- x2\n    x3 --- x4\n  end\n  subgraph Y[&quot;Y: cube graph Q3&quot;]\n    y1 --- y2\n    y2 --- y3\n    y3 --- y4\n    y4 --- y1\n    y5 --- y6\n    y6 --- y7\n    y7 --- y8\n    y8 --- y5\n    y1 --- y5\n    y2 --- y6\n    y3 --- y7\n    y4 --- y8\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D33/q10.png",
           "options": [
             {
@@ -393,7 +393,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Using depth-first search to produce a spanning tree for a given simple graph with vertices $A,B,C,D,E,Z$ and edges $A$-$B$, $A$-$C$, $B$-$C$, $B$-$D$, $B$-$E$, $C$-$E$, $D$-$E$, $D$-$Z$, $E$-$Z$, assume the vertices are ordered alphabetically. Choose vertex $A$ as the root of this spanning tree. What is the spanning tree that we obtain?</p></div><div class=\"ml-vi\"><p>Dùng tìm kiếm theo chiều sâu (DFS) để tạo cây khung cho đồ thị đơn với các đỉnh $A,B,C,D,E,Z$ và các cạnh $A$-$B$, $A$-$C$, $B$-$C$, $B$-$D$, $B$-$E$, $C$-$E$, $D$-$E$, $D$-$Z$, $E$-$Z$, giả sử các đỉnh được sắp theo thứ tự chữ cái. Chọn đỉnh $A$ làm gốc của cây khung này. Cây khung thu được là gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Using depth-first search to produce a spanning tree for the given simple graph (see diagram below), assume the vertices are ordered alphabetically. Choose vertex $A$ as the root of this spanning tree. What is the spanning tree that we obtain?</p><pre class=\"mermaid\">graph TD\n  A --- B\n  A --- C\n  B --- C\n  B --- D\n  B --- E\n  C --- E\n  D --- E\n  D --- Z\n  E --- Z</pre></div><div class=\"ml-vi\"><p>Dùng tìm kiếm theo chiều sâu (DFS) để tạo cây khung cho đồ thị đơn cho trước (xem sơ đồ bên dưới), giả sử các đỉnh được sắp theo thứ tự chữ cái. Chọn đỉnh $A$ làm gốc của cây khung này. Cây khung thu được là gì?</p><pre class=\"mermaid\">graph TD\n  A --- B\n  A --- C\n  B --- C\n  B --- D\n  B --- E\n  C --- E\n  D --- E\n  D --- Z\n  E --- Z</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D33/q16.png",
           "options": [
             {
@@ -627,7 +627,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Apply Dijkstra&#39;s algorithm to find the shortest path from $a$ to $z$ in a graph with vertices $a,b,c,d,e,z$ and weighted edges $a$-$b$(3), $a$-$d$(5), $b$-$d$(1), $b$-$c$(6), $d$-$c$(1), $d$-$e$(2), $c$-$e$(2), $c$-$z$(5), $e$-$z$(2). What are the first 4 vertices chosen?</p></div><div class=\"ml-vi\"><p>Áp dụng thuật toán Dijkstra để tìm đường đi ngắn nhất từ $a$ đến $z$ trong đồ thị có các đỉnh $a,b,c,d,e,z$ và các cạnh có trọng số $a$-$b$(3), $a$-$d$(5), $b$-$d$(1), $b$-$c$(6), $d$-$c$(1), $d$-$e$(2), $c$-$e$(2), $c$-$z$(5), $e$-$z$(2). 4 đỉnh đầu tiên được chọn là gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Apply Dijkstra&#39;s algorithm to find the shortest path from $a$ to $z$ in the weighted graph (see diagram below). What are the first 4 vertices chosen?</p><pre class=\"mermaid\">graph TD\n  a -- 3 --- b\n  a -- 5 --- d\n  b -- 1 --- d\n  b -- 6 --- c\n  d -- 1 --- c\n  d -- 2 --- e\n  c -- 2 --- e\n  c -- 5 --- z\n  e -- 2 --- z</pre></div><div class=\"ml-vi\"><p>Áp dụng thuật toán Dijkstra để tìm đường đi ngắn nhất từ $a$ đến $z$ trong đồ thị có trọng số (xem sơ đồ bên dưới). 4 đỉnh đầu tiên được chọn là gì?</p><pre class=\"mermaid\">graph TD\n  a -- 3 --- b\n  a -- 5 --- d\n  b -- 1 --- d\n  b -- 6 --- c\n  d -- 1 --- c\n  d -- 2 --- e\n  c -- 2 --- e\n  c -- 5 --- z\n  e -- 2 --- z</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D33/q25.png",
           "options": [
             {
@@ -708,7 +708,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>How many strongly connected components are there in the given directed graph (an octagon of 8 vertices with additional crossing diagonal edges)?</p></div><div class=\"ml-vi\"><p>Có bao nhiêu thành phần liên thông mạnh trong đồ thị có hướng cho trước (một bát giác gồm 8 đỉnh với các cạnh chéo cắt nhau)?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many strongly connected components are there in the given directed graph (see diagram below)?</p><pre class=\"mermaid\">graph TD\n  v1 --&gt; v2\n  v2 --&gt; v3\n  v3 --&gt; v4\n  v4 --&gt; v5\n  v5 --&gt; v6\n  v6 --&gt; v7\n  v7 --&gt; v8\n  v8 --&gt; v1\n  v1 --&gt; w1\n  v8 --&gt; w1\n  v2 --&gt; w2\n  v3 --&gt; w2\n  v4 --&gt; w3\n  v5 --&gt; w3\n  v6 --&gt; w4\n  v7 --&gt; w4\n  w2 --&gt; w4\n  w3 --&gt; w1</pre></div><div class=\"ml-vi\"><p>Có bao nhiêu thành phần liên thông mạnh trong đồ thị có hướng cho trước (xem sơ đồ bên dưới)?</p><pre class=\"mermaid\">graph TD\n  v1 --&gt; v2\n  v2 --&gt; v3\n  v3 --&gt; v4\n  v4 --&gt; v5\n  v5 --&gt; v6\n  v6 --&gt; v7\n  v7 --&gt; v8\n  v8 --&gt; v1\n  v1 --&gt; w1\n  v8 --&gt; w1\n  v2 --&gt; w2\n  v3 --&gt; w2\n  v4 --&gt; w3\n  v5 --&gt; w3\n  v6 --&gt; w4\n  v7 --&gt; w4\n  w2 --&gt; w4\n  w3 --&gt; w1</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D33/q28.png",
           "options": [
             {
@@ -728,14 +728,14 @@ export default {
             }
           ],
           "correctIndexes": [
-            2
+            4
           ],
-          "explanation": "<div class=\"ml-en\"><p>Based on the arrow directions shown, the graph splits into 4 mutually-reachable pairs of vertices (each pair connected by edges going both ways via the octagon boundary and the crossing diagonals), giving 4 strongly connected components.</p></div><div class=\"ml-vi\"><p>Dựa trên chiều mũi tên trong hình, đồ thị chia thành 4 cặp đỉnh liên thông hai chiều (mỗi cặp có đường đi cả hai hướng qua cạnh bát giác và các đường chéo cắt nhau), cho 4 thành phần liên thông mạnh.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The figure has 12 vertices: 8 outer octagon vertices (v1..v8) forming one directed 8-cycle v1-&gt;v2-&gt;...-&gt;v8-&gt;v1, plus 4 inner vertices w1..w4 that only receive edges from the outer cycle (or from each other) and have no path back into it. SCCs: {v1,...,v8} (one SCC of size 8) plus {w1},{w2},{w3},{w4} (four singleton SCCs) = 5 strongly connected components total.</p></div><div class=\"ml-vi\"><p>Hình có 12 đỉnh: 8 đỉnh bát giác ngoài (v1..v8) tạo thành một chu trình có hướng duy nhất v1-&gt;v2-&gt;...-&gt;v8-&gt;v1, cộng 4 đỉnh trong w1..w4 chỉ nhận cạnh từ chu trình ngoài (hoặc từ nhau) mà không có đường quay lại. Các thành phần liên thông mạnh: {v1,...,v8} (một thành phần cỡ 8) cộng {w1},{w2},{w3},{w4} (bốn thành phần đơn lẻ) = tổng cộng 5 thành phần liên thông mạnh.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Which of the graphs (i), (ii), (iii) shown are trees?</p></div><div class=\"ml-vi\"><p>Đồ thị nào trong các đồ thị (i), (ii), (iii) là cây?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which of the graphs (i), (ii), (iii) shown are trees? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;(i)&quot;]\n    i1 --- i2\n    i1 --- i3\n    i3 --- i4\n    i3 --- i5\n    i3 --- i6\n    i3 --- i7\n    i6 --- i7\n  end\n  subgraph G2[&quot;(ii)&quot;]\n    j1 --- j2\n    j1 --- j3\n    j3 --- j4\n    j3 --- j5\n    j3 --- j6\n    j7 --- j8\n  end\n  subgraph G3[&quot;(iii)&quot;]\n    k1 --- k2\n    k1 --- k2\n    k1 --- k3\n    k3 --- k4\n    k3 --- k5\n    k3 --- k6\n    k3 --- k7\n  end</pre></div><div class=\"ml-vi\"><p>Đồ thị nào trong các đồ thị (i), (ii), (iii) là cây? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;(i)&quot;]\n    i1 --- i2\n    i1 --- i3\n    i3 --- i4\n    i3 --- i5\n    i3 --- i6\n    i3 --- i7\n    i6 --- i7\n  end\n  subgraph G2[&quot;(ii)&quot;]\n    j1 --- j2\n    j1 --- j3\n    j3 --- j4\n    j3 --- j5\n    j3 --- j6\n    j7 --- j8\n  end\n  subgraph G3[&quot;(iii)&quot;]\n    k1 --- k2\n    k1 --- k2\n    k1 --- k3\n    k3 --- k4\n    k3 --- k5\n    k3 --- k6\n    k3 --- k7\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D33/q29.png",
           "options": [
             {
@@ -918,7 +918,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Are these two graphs isomorphic? If not, what is the reason?<br/>(Left graph: 5 vertices — a square missing its right side, plus a diagonal, plus an apex vertex below connected to three of the square&#39;s vertices, 7 edges total. Right graph: 5 vertices — a complete square outline plus two diagonals that meet at a shared center vertex, 8 edges total.)</p></div><div class=\"ml-vi\"><p>Hai đồ thị sau có đẳng cấu không? Nếu không, lý do là gì?<br/>(Đồ thị trái: 5 đỉnh — một hình vuông thiếu cạnh phải, cộng một đường chéo, cộng một đỉnh đỉnh chóp phía dưới nối với ba đỉnh của hình vuông, tổng 7 cạnh. Đồ thị phải: 5 đỉnh — một hình vuông đầy đủ cộng hai đường chéo gặp nhau tại một đỉnh trung tâm chung, tổng 8 cạnh.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Are these two graphs isomorphic? If not, what is the reason? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  subgraph L[&quot;Left graph&quot;]\n    L1 --- L2\n    L1 --- L3\n    L2 --- L4\n    L3 --- L4\n    L1 --- L5\n    L3 --- L5\n    L4 --- L5\n  end\n  subgraph R[&quot;Right graph&quot;]\n    R1 --- R2\n    R1 --- R3\n    R2 --- R4\n    R3 --- R4\n    R1 --- R4\n    R3 --- R5\n    R5 --- R2\n  end</pre></div><div class=\"ml-vi\"><p>Hai đồ thị sau có đẳng cấu không? Nếu không, lý do là gì? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  subgraph L[&quot;Left graph&quot;]\n    L1 --- L2\n    L1 --- L3\n    L2 --- L4\n    L3 --- L4\n    L1 --- L5\n    L3 --- L5\n    L4 --- L5\n  end\n  subgraph R[&quot;Right graph&quot;]\n    R1 --- R2\n    R1 --- R3\n    R2 --- R4\n    R3 --- R4\n    R1 --- R4\n    R3 --- R5\n    R5 --- R2\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D33/q36.png",
           "options": [
             {
@@ -938,9 +938,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            3
+            1
           ],
-          "explanation": "<div class=\"ml-en\"><p>Counting edges: the left graph has 7 edges (degree sequence 3,3,3,3,2), while the right graph has 8 edges (degree sequence 4,3,3,3,3, since the shared center vertex has degree 4). Since the edge counts differ (7 vs 8), the graphs cannot be isomorphic.</p></div><div class=\"ml-vi\"><p>Đếm cạnh: đồ thị trái có 7 cạnh (dãy bậc 3,3,3,3,2), trong khi đồ thị phải có 8 cạnh (dãy bậc 4,3,3,3,3, vì đỉnh trung tâm chung có bậc 4). Vì số cạnh khác nhau (7 so với 8), hai đồ thị không thể đẳng cấu.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Both graphs have 5 vertices, 7 edges, degree sequence (3,3,3,3,2), and 2 triangles — each is K4-minus-an-edge plus a new degree-2 vertex adjacent to exactly the two non-adjacent vertices of the K4-minus-edge. Explicit isomorphism L-&gt;R: L1-&gt;R2, L4-&gt;R3, L2-&gt;R5, L3-&gt;R1, L5-&gt;R4 — every one of the 7 edges of the left graph maps to an edge of the right graph. The graphs ARE isomorphic.</p></div><div class=\"ml-vi\"><p>Cả hai đồ thị đều có 5 đỉnh, 7 cạnh, dãy bậc (3,3,3,3,2), và 2 tam giác — mỗi đồ thị là K4-trừ-một-cạnh cộng một đỉnh bậc 2 mới kề với đúng hai đỉnh không kề nhau của K4-trừ-cạnh. Phép đẳng cấu tường minh L-&gt;R: L1-&gt;R2, L4-&gt;R3, L2-&gt;R5, L3-&gt;R1, L5-&gt;R4 — cả 7 cạnh của đồ thị trái đều ánh xạ thành cạnh của đồ thị phải. Hai đồ thị ĐẲNG CẤU.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1023,7 +1023,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Given the graph with vertices $a$ (top-left), $b$ (top-right), $c$ (bottom-right), $d$ (bottom-left) forming a square, and a center vertex $e$ connected to all four corners (splitting both diagonals). How many paths of length 3 are there from $a$ to $d$?</p></div><div class=\"ml-vi\"><p>Cho đồ thị với các đỉnh $a$ (trên-trái), $b$ (trên-phải), $c$ (dưới-phải), $d$ (dưới-trái) tạo thành hình vuông, và một đỉnh trung tâm $e$ nối với cả bốn đỉnh góc (chia đôi cả hai đường chéo). Có bao nhiêu đường đi độ dài 3 từ $a$ đến $d$?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the graph with vertices $a, b, c, d$ forming a square and a centre vertex $e$ (see diagram below). How many paths of length 3 are there from $a$ to $d$?</p><pre class=\"mermaid\">graph TD\n  a --- b\n  b --- c\n  c --- d\n  d --- a\n  a --- e\n  b --- e\n  d --- e</pre></div><div class=\"ml-vi\"><p>Cho đồ thị với các đỉnh $a, b, c, d$ tạo thành hình vuông và một đỉnh trung tâm $e$ (xem sơ đồ bên dưới). Có bao nhiêu đường đi độ dài 3 từ $a$ đến $d$?</p><pre class=\"mermaid\">graph TD\n  a --- b\n  b --- c\n  c --- d\n  d --- a\n  a --- e\n  b --- e\n  d --- e</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D33/q40.png",
           "options": [
             {
@@ -1043,9 +1043,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            2
+            0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Using the adjacency matrix (a,b,c,d each adjacent to their 2 square neighbors and to $e$; $e$ adjacent to all 4), $(A^3)_{a,d}=8$. Direct enumeration of walks $a$-$x$-$y$-$d$ confirms 8: via $x=b$: 3 walks ($y=a,c,e$); via $x=d$: 3 walks ($y=a,c,e$); via $x=e$: 2 walks ($y=a,c$). Total $3+3+2=8$.</p></div><div class=\"ml-vi\"><p>Dùng ma trận kề (a,b,c,d mỗi đỉnh kề với 2 đỉnh vuông lân cận và với $e$; $e$ kề với cả 4 đỉnh), $(A^3)_{a,d}=8$. Liệt kê trực tiếp các đường đi $a$-$x$-$y$-$d$ xác nhận 8: qua $x=b$: 3 đường ($y=a,c,e$); qua $x=d$: 3 đường ($y=a,c,e$); qua $x=e$: 2 đường ($y=a,c$). Tổng $3+3+2=8$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The graph has edges a-b, b-c, c-d, d-a, a-e, b-e, d-e (7 edges; there is NO c-e edge). Counting length-3 walks from a to d via the adjacency matrix: (A^3)[a][d] = 7 (via intermediate vertex b: 3 walks; via d itself: 3 walks; via e: 1 walk (only a is adjacent to d among e neighbors excluding backtrack) = 3+3+1=7).</p></div><div class=\"ml-vi\"><p>Đồ thị có các cạnh a-b, b-c, c-d, d-a, a-e, b-e, d-e (7 cạnh; KHÔNG có cạnh c-e). Đếm số đường đi độ dài 3 từ a đến d bằng ma trận kề: (A^3)[a][d] = 7 (qua b: 3 đường; qua d: 3 đường; qua e: 1 đường) = 3+3+1=7.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1176,7 +1176,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Given a rooted tree (drawn radially) where the root is the black square and it has roughly 8 first-level children, each with several second-level children, and some branches extending to a third level. Find the height of this tree.</p></div><div class=\"ml-vi\"><p>Cho một cây có gốc (vẽ theo dạng tỏa tròn) với gốc là ô vuông đen, có khoảng 8 con ở cấp 1, mỗi con có nhiều con ở cấp 2, và một số nhánh kéo dài tới cấp 3. Tìm chiều cao của cây này.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the rooted tree whose root is $R$ (see diagram below). Find the height of this tree.</p><pre class=\"mermaid\">graph TD\n  R --&gt; n1\n  R --&gt; n2\n  R --&gt; n3\n  R --&gt; n4\n  n1 --&gt; n5\n  n1 --&gt; n6\n  n1 --&gt; n7\n  n1 --&gt; n8\n  n2 --&gt; n9\n  n2 --&gt; n10\n  n2 --&gt; n11\n  n3 --&gt; n12\n  n3 --&gt; n13\n  n4 --&gt; n14\n  n4 --&gt; n15\n  n4 --&gt; n16\n  n4 --&gt; n17\n  n4 --&gt; n18\n  n5 --&gt; n19\n  n5 --&gt; n20\n  n5 --&gt; n21\n  n7 --&gt; n22\n  n7 --&gt; n23\n  n7 --&gt; n24\n  n7 --&gt; n25\n  n8 --&gt; n26\n  n8 --&gt; n27\n  n9 --&gt; n28\n  n9 --&gt; n29\n  n9 --&gt; n30\n  n9 --&gt; n31\n  n11 --&gt; n32\n  n11 --&gt; n33\n  n11 --&gt; n34\n  n12 --&gt; n35\n  n12 --&gt; n36\n  n13 --&gt; n37\n  n13 --&gt; n38\n  n13 --&gt; n39\n  n14 --&gt; n40\n  n14 --&gt; n41\n  n14 --&gt; n42\n  n14 --&gt; n43\n  n16 --&gt; n44\n  n16 --&gt; n45\n  n16 --&gt; n46\n  n17 --&gt; n47\n  n17 --&gt; n48\n  n17 --&gt; n49\n  n18 --&gt; n50\n  n37 --&gt; n51\n  n38 --&gt; n52\n  n39 --&gt; n53\n  n39 --&gt; n54\n  n42 --&gt; n55\n  n42 --&gt; n56\n  n47 --&gt; n57\n  n47 --&gt; n58\n  n48 --&gt; n59\n  n49 --&gt; n60\n  n49 --&gt; n61\n  n50 --&gt; n62\n  n50 --&gt; n63\n  n63 --&gt; n64</pre></div><div class=\"ml-vi\"><p>Cho cây có gốc với gốc là $R$ (xem sơ đồ bên dưới). Tìm chiều cao của cây này.</p><pre class=\"mermaid\">graph TD\n  R --&gt; n1\n  R --&gt; n2\n  R --&gt; n3\n  R --&gt; n4\n  n1 --&gt; n5\n  n1 --&gt; n6\n  n1 --&gt; n7\n  n1 --&gt; n8\n  n2 --&gt; n9\n  n2 --&gt; n10\n  n2 --&gt; n11\n  n3 --&gt; n12\n  n3 --&gt; n13\n  n4 --&gt; n14\n  n4 --&gt; n15\n  n4 --&gt; n16\n  n4 --&gt; n17\n  n4 --&gt; n18\n  n5 --&gt; n19\n  n5 --&gt; n20\n  n5 --&gt; n21\n  n7 --&gt; n22\n  n7 --&gt; n23\n  n7 --&gt; n24\n  n7 --&gt; n25\n  n8 --&gt; n26\n  n8 --&gt; n27\n  n9 --&gt; n28\n  n9 --&gt; n29\n  n9 --&gt; n30\n  n9 --&gt; n31\n  n11 --&gt; n32\n  n11 --&gt; n33\n  n11 --&gt; n34\n  n12 --&gt; n35\n  n12 --&gt; n36\n  n13 --&gt; n37\n  n13 --&gt; n38\n  n13 --&gt; n39\n  n14 --&gt; n40\n  n14 --&gt; n41\n  n14 --&gt; n42\n  n14 --&gt; n43\n  n16 --&gt; n44\n  n16 --&gt; n45\n  n16 --&gt; n46\n  n17 --&gt; n47\n  n17 --&gt; n48\n  n17 --&gt; n49\n  n18 --&gt; n50\n  n37 --&gt; n51\n  n38 --&gt; n52\n  n39 --&gt; n53\n  n39 --&gt; n54\n  n42 --&gt; n55\n  n42 --&gt; n56\n  n47 --&gt; n57\n  n47 --&gt; n58\n  n48 --&gt; n59\n  n49 --&gt; n60\n  n49 --&gt; n61\n  n50 --&gt; n62\n  n50 --&gt; n63\n  n63 --&gt; n64</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D33/q46.png",
           "options": [
             {
@@ -1196,14 +1196,14 @@ export default {
             }
           ],
           "correctIndexes": [
-            1
+            3
           ],
-          "explanation": "<div class=\"ml-en\"><p>The tree fans out from the root through two rings of children, and the deepest branches (visible in the denser clusters) extend one level further, giving a longest root-to-leaf path of 3 edges.</p></div><div class=\"ml-vi\"><p>Cây tỏa ra từ gốc qua hai vòng con, và các nhánh sâu nhất (thấy rõ ở các cụm dày đặc hơn) kéo dài thêm một cấp nữa, cho đường đi dài nhất từ gốc tới lá là 3 cạnh.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The tree has 65 nodes, 64 edges, root with 4 children, and node-depth distribution 0:1, 1:4, 2:14, 3:32, 4:13, 5:1 — traced pixel-by-pixel down two distinct depth-5/depth-4 chains from the root. The maximum depth (height) of the tree is 5.</p></div><div class=\"ml-vi\"><p>Cây có 65 đỉnh, 64 cạnh, gốc có 4 con, và phân bố độ sâu 0:1, 1:4, 2:14, 3:32, 4:13, 5:1 — được dò từng điểm ảnh theo hai nhánh độ sâu 5/4 riêng biệt từ gốc. Độ sâu tối đa (chiều cao) của cây là 5.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Using Prim&#39;s algorithm to find a minimal spanning tree in a graph with vertices $A,B,C,D,E,Z$ and weighted edges $A$-$B$(2), $A$-$C$(6), $B$-$C$(2), $B$-$D$(3), $B$-$E$(3), $C$-$E$(1), $D$-$E$(4), $D$-$Z$(2), $E$-$Z$(4), starting from vertex $A$. What is the list of edges chosen?</p></div><div class=\"ml-vi\"><p>Dùng thuật toán Prim để tìm cây khung nhỏ nhất trong đồ thị có các đỉnh $A,B,C,D,E,Z$ và các cạnh có trọng số $A$-$B$(2), $A$-$C$(6), $B$-$C$(2), $B$-$D$(3), $B$-$E$(3), $C$-$E$(1), $D$-$E$(4), $D$-$Z$(2), $E$-$Z$(4), bắt đầu từ đỉnh $A$. Danh sách các cạnh được chọn là gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Using Prim&#39;s algorithm to find a minimal spanning tree in the weighted graph (see diagram below), starting from vertex $A$. What is the list of edges chosen?</p><pre class=\"mermaid\">graph TD\n  A -- 2 --- B\n  A -- 6 --- C\n  B -- 2 --- C\n  B -- 3 --- D\n  B -- 3 --- E\n  C -- 1 --- E\n  D -- 4 --- E\n  D -- 2 --- Z\n  E -- 4 --- Z</pre></div><div class=\"ml-vi\"><p>Dùng thuật toán Prim để tìm cây khung nhỏ nhất trong đồ thị có trọng số (xem sơ đồ bên dưới), bắt đầu từ đỉnh $A$. Danh sách các cạnh được chọn là gì?</p><pre class=\"mermaid\">graph TD\n  A -- 2 --- B\n  A -- 6 --- C\n  B -- 2 --- C\n  B -- 3 --- D\n  B -- 3 --- E\n  C -- 1 --- E\n  D -- 4 --- E\n  D -- 2 --- Z\n  E -- 4 --- Z</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D33/q47.png",
           "options": [
             {

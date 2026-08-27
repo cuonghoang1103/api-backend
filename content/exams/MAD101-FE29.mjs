@@ -228,7 +228,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Are these two graphs isomorphic? If not, what is the reason? (two drawings, each with 8 vertices arranged in a circle and connected in a star pattern)</p></div><div class=\"ml-vi\"><p>Hai đồ thị này có đẳng cấu (isomorphic) không? Nếu không, lý do là gì? (hai hình vẽ, mỗi hình có 8 đỉnh xếp trên một đường tròn và nối theo dạng hình sao)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Are these two graphs isomorphic? If not, what is the reason? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;Graph 1&quot;]\n    A1 --- A3\n    A3 --- A5\n    A5 --- A7\n    A7 --- A1\n    A2 --- A4\n    A4 --- A6\n    A6 --- A8\n    A8 --- A2\n  end\n  subgraph G2[&quot;Graph 2&quot;]\n    B1 --- B4\n    B4 --- B7\n    B7 --- B2\n    B2 --- B5\n    B5 --- B8\n    B8 --- B3\n    B3 --- B6\n    B6 --- B1\n  end</pre></div><div class=\"ml-vi\"><p>Hai đồ thị này có đẳng cấu (isomorphic) không? Nếu không, lý do là gì? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;Graph 1&quot;]\n    A1 --- A3\n    A3 --- A5\n    A5 --- A7\n    A7 --- A1\n    A2 --- A4\n    A4 --- A6\n    A6 --- A8\n    A8 --- A2\n  end\n  subgraph G2[&quot;Graph 2&quot;]\n    B1 --- B4\n    B4 --- B7\n    B7 --- B2\n    B2 --- B5\n    B5 --- B8\n    B8 --- B3\n    B3 --- B6\n    B6 --- B1\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D29/q9.png",
           "options": [
             {
@@ -459,7 +459,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Using depth-first search to produce a spanning tree for the given simple graph, and assume that the vertices are ordered alphabetically. Choose the vertex A as the root of this spanning tree. What is the spanning tree that we obtain? (graph edges: A-C, B-C, B-E, C-E, D-E, D-Z)</p></div><div class=\"ml-vi\"><p>Dùng tìm kiếm theo chiều sâu (DFS) để tạo cây khung cho đồ thị đơn đã cho, giả sử các đỉnh được sắp theo thứ tự bảng chữ cái. Chọn đỉnh A làm gốc của cây khung này. Cây khung thu được là gì? (các cạnh của đồ thị: A-C, B-C, B-E, C-E, D-E, D-Z)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Using depth-first search to produce a spanning tree for the given simple graph, and assume that the vertices are ordered alphabetically. Choose the vertex A as the root of this spanning tree. What is the spanning tree that we obtain? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  A --- C\n  B --- C\n  B --- E\n  C --- E\n  D --- E\n  D --- Z\n  E --- Z</pre></div><div class=\"ml-vi\"><p>Dùng tìm kiếm theo chiều sâu (DFS) để tạo cây khung cho đồ thị đơn đã cho, giả sử các đỉnh được sắp theo thứ tự bảng chữ cái. Chọn đỉnh A làm gốc của cây khung này. Cây khung thu được là gì? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  A --- C\n  B --- C\n  B --- E\n  C --- E\n  D --- E\n  D --- Z\n  E --- Z</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D29/q18.png",
           "options": [
             {
@@ -564,7 +564,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Determine the order in which a post-order traversal visits the given rooted tree. (root a; a&#39;s children are b, c; b&#39;s children are d, e; e&#39;s children are f, g)</p></div><div class=\"ml-vi\"><p>Xác định thứ tự duyệt hậu thứ (post-order) của cây có gốc đã cho. (gốc a; con của a là b, c; con của b là d, e; con của e là f, g)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Determine the order in which a post-order traversal visits the given rooted tree. (see diagram below)</p><pre class=\"mermaid\">graph TD\n  a --&gt; b\n  a --&gt; c\n  b --&gt; d\n  b --&gt; e\n  e --&gt; f\n  e --&gt; g</pre></div><div class=\"ml-vi\"><p>Xác định thứ tự duyệt hậu thứ (post-order) của cây có gốc đã cho. (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  a --&gt; b\n  a --&gt; c\n  b --&gt; d\n  b --&gt; e\n  e --&gt; f\n  e --&gt; g</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D29/q22.png",
           "options": [
             {
@@ -879,7 +879,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given the directed graph in the picture (6 vertices arranged in 2 rows of 3: top row A, top-mid, top-right; bottom row bottom-left, bottom-mid, bottom-right), how many vertices are in the strongly connected component containing A?</p></div><div class=\"ml-vi\"><p>Cho đồ thị có hướng trong hình (6 đỉnh xếp thành 2 hàng 3 cột: hàng trên gồm A, đỉnh giữa trên, đỉnh phải trên; hàng dưới gồm đỉnh trái dưới, đỉnh giữa dưới, đỉnh phải dưới), có bao nhiêu đỉnh nằm trong thành phần liên thông mạnh chứa A?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the directed graph (see diagram below), how many vertices are in the strongly connected component containing A?</p><pre class=\"mermaid\">graph TD\n  A --&gt; B\n  B --&gt; C\n  A --&gt; E\n  D --&gt; A\n  E --&gt; B\n  E --&gt; D\n  E --&gt; F\n  F --&gt; B\n  F --&gt; C</pre></div><div class=\"ml-vi\"><p>Cho đồ thị có hướng (xem sơ đồ bên dưới), có bao nhiêu đỉnh nằm trong thành phần liên thông mạnh chứa A?</p><pre class=\"mermaid\">graph TD\n  A --&gt; B\n  B --&gt; C\n  A --&gt; E\n  D --&gt; A\n  E --&gt; B\n  E --&gt; D\n  E --&gt; F\n  F --&gt; B\n  F --&gt; C</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D29/q34.png",
           "options": [
             {
@@ -906,7 +906,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Use Dijkstra&#39;s algorithm to find the shortest path from A to Z. What are the first 4 vertices chosen? (edges: A-B=2, A-C=7, B-C=5, B-D=4, B-E=3, C-E=3, D-E=2, D-Z=2, E-Z=3)</p></div><div class=\"ml-vi\"><p>Dùng thuật toán Dijkstra để tìm đường đi ngắn nhất từ A đến Z. 4 đỉnh đầu tiên được chọn theo thứ tự là gì? (các cạnh: A-B=2, A-C=7, B-C=5, B-D=4, B-E=3, C-E=3, D-E=2, D-Z=2, E-Z=3)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Use Dijkstra&#39;s algorithm to find the shortest path from A to Z. What are the first 4 vertices chosen? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  A -- 2 --- B\n  A -- 7 --- C\n  B -- 5 --- C\n  B -- 4 --- D\n  B -- 3 --- E\n  C -- 3 --- E\n  D -- 2 --- E\n  D -- 2 --- Z\n  E -- 3 --- Z</pre></div><div class=\"ml-vi\"><p>Dùng thuật toán Dijkstra để tìm đường đi ngắn nhất từ A đến Z. 4 đỉnh đầu tiên được chọn theo thứ tự là gì? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  A -- 2 --- B\n  A -- 7 --- C\n  B -- 5 --- C\n  B -- 4 --- D\n  B -- 3 --- E\n  C -- 3 --- E\n  D -- 2 --- E\n  D -- 2 --- Z\n  E -- 3 --- Z</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D29/q35.png",
           "options": [
             {
@@ -1089,7 +1089,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>If we use the Prim algorithm (starting from vertex a) to find a minimum spanning tree, what are the fifth and sixth edges (in correct order) added? We always assume an edge is written with two endpoints in alphabetical order (e.g. we write edge &#39;ad&#39; instead of &#39;da&#39;). At each stage, if there are many choices, we choose in reverse dictionary order (e.g. between &#39;bc&#39;, &#39;de&#39;, &#39;az&#39;, we choose &#39;de&#39; first). (graph: a-b=5, b-c=4, a-d=2, b-d=3, b-e=5, b-f=6, c-f=3, d-e=7, e-f=1, plus a bottom row of vertices g,h,i with edges that continue off the visible part of the source image)</p></div><div class=\"ml-vi\"><p>Nếu dùng thuật toán Prim (bắt đầu từ đỉnh a) để tìm cây khung nhỏ nhất, cạnh thứ năm và thứ sáu (theo đúng thứ tự) được thêm vào là gì? Ta luôn quy ước một cạnh được viết với hai đầu mút theo thứ tự bảng chữ cái (ví dụ viết &#39;ad&#39; thay vì &#39;da&#39;). Ở mỗi bước, nếu có nhiều lựa chọn, ta chọn theo thứ tự từ điển ngược (ví dụ giữa &#39;bc&#39;, &#39;de&#39;, &#39;az&#39;, ta chọn &#39;de&#39; trước). (đồ thị: a-b=5, b-c=4, a-d=2, b-d=3, b-e=5, b-f=6, c-f=3, d-e=7, e-f=1, cộng thêm một hàng đỉnh dưới cùng g,h,i với các cạnh nằm ngoài phần hình ảnh nhìn thấy được)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>If we use the Prim algorithm (starting from vertex a) to find a minimum spanning tree, what are the fifth and sixth edges (in correct order) added? We always assume an edge is written with two endpoints in alphabetical order (e.g. we write edge &#39;ad&#39; instead of &#39;da&#39;). At each stage, if there are many choices, we choose in reverse dictionary order (e.g. between &#39;bc&#39;, &#39;de&#39;, &#39;az&#39;, we choose &#39;de&#39; first). (see diagram below; the weights of the bottom-row edges at g, h, i are cut off in the source scan)</p><pre class=\"mermaid\">graph TD\n  a -- 5 --- b\n  b -- 4 --- c\n  a -- 2 --- d\n  b -- 3 --- d\n  b -- 5 --- e\n  b -- 6 --- f\n  c -- 3 --- f\n  d -- 7 --- e\n  e -- 1 --- f\n  d --- g\n  d --- h\n  e --- h\n  f --- h\n  f --- i\n  g --- h\n  h --- i</pre></div><div class=\"ml-vi\"><p>Nếu dùng thuật toán Prim (bắt đầu từ đỉnh a) để tìm cây khung nhỏ nhất, cạnh thứ năm và thứ sáu (theo đúng thứ tự) được thêm vào là gì? Ta luôn quy ước một cạnh được viết với hai đầu mút theo thứ tự bảng chữ cái (ví dụ viết &#39;ad&#39; thay vì &#39;da&#39;). Ở mỗi bước, nếu có nhiều lựa chọn, ta chọn theo thứ tự từ điển ngược (ví dụ giữa &#39;bc&#39;, &#39;de&#39;, &#39;az&#39;, ta chọn &#39;de&#39; trước). (xem sơ đồ bên dưới; trọng số các cạnh ở hàng dưới g, h, i bị cắt mất trong ảnh gốc)</p><pre class=\"mermaid\">graph TD\n  a -- 5 --- b\n  b -- 4 --- c\n  a -- 2 --- d\n  b -- 3 --- d\n  b -- 5 --- e\n  b -- 6 --- f\n  c -- 3 --- f\n  d -- 7 --- e\n  e -- 1 --- f\n  d --- g\n  d --- h\n  e --- h\n  f --- h\n  f --- i\n  g --- h\n  h --- i</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D29/q42.png",
           "options": [
             {

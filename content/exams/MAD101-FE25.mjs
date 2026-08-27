@@ -45,7 +45,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2222,
-          "prompt": "<div class=\"ml-en\"><p>Choose the correct statement about the graph. [Graph: two triangles TL-BL-M1 and M2-TR-BR joined by a single bridge edge M1-M2]</p></div><div class=\"ml-vi\"><p>Chọn phát biểu đúng về đồ thị. [Đồ thị: hai tam giác TL-BL-M1 và M2-TR-BR nối với nhau bằng một cạnh cầu M1-M2]</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Choose the correct statement about the graph (see diagram below).</p><pre class=\"mermaid\">graph TD\n  TL --- BL\n  TL --- M1\n  BL --- M1\n  M1 --- M2\n  M2 --- TR\n  M2 --- BR\n  TR --- BR</pre></div><div class=\"ml-vi\"><p>Chọn phát biểu đúng về đồ thị (xem sơ đồ bên dưới).</p><pre class=\"mermaid\">graph TD\n  TL --- BL\n  TL --- M1\n  BL --- M1\n  M1 --- M2\n  M2 --- TR\n  M2 --- BR\n  TR --- BR</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D25/q2.png",
           "options": [
             {
@@ -69,7 +69,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2222,
-          "prompt": "<div class=\"ml-en\"><p>How many ancestors does the vertex $d$ have? [Rooted tree: root $a$ with children $b, d, c$; $b$&#39;s children $e, h, g$; $e$&#39;s children $i, n, k$; $c$&#39;s children $f, l, m$]</p></div><div class=\"ml-vi\"><p>Đỉnh $d$ có bao nhiêu tổ tiên (ancestor)? [Cây có gốc $a$ với các con $b, d, c$; con của $b$ là $e, h, g$; con của $e$ là $i, n, k$; con của $c$ là $f, l, m$]</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many ancestors does the vertex $d$ have? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  a --&gt; b\n  a --&gt; d\n  a --&gt; c\n  b --&gt; e\n  b --&gt; h\n  b --&gt; g\n  e --&gt; i\n  e --&gt; n\n  e --&gt; k\n  c --&gt; f\n  c --&gt; l\n  c --&gt; m</pre></div><div class=\"ml-vi\"><p>Đỉnh $d$ có bao nhiêu tổ tiên (ancestor)? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  a --&gt; b\n  a --&gt; d\n  a --&gt; c\n  b --&gt; e\n  b --&gt; h\n  b --&gt; g\n  e --&gt; i\n  e --&gt; n\n  e --&gt; k\n  c --&gt; f\n  c --&gt; l\n  c --&gt; m</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D25/q3.png",
           "options": [
             {
@@ -96,7 +96,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2222,
-          "prompt": "<div class=\"ml-en\"><p>Which of the following is NOT a circuit in this graph? (See picture) [Graph: A,B,D,C form K4 (A-B,A-D,A-C,B-D,B-C,D-C); plus edges B-F, F-E, E-D]</p></div><div class=\"ml-vi\"><p>Dãy nào sau đây KHÔNG phải là một chu trình (circuit) trong đồ thị? (Xem hình) [Đồ thị: A,B,D,C tạo thành K4 (A-B,A-D,A-C,B-D,B-C,D-C); cùng các cạnh B-F, F-E, E-D]</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which of the following is NOT a circuit in this graph? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  A --- B\n  A --- C\n  A --- D\n  B --- C\n  B --- D\n  C --- D\n  B --- F\n  F --- E\n  E --- D</pre></div><div class=\"ml-vi\"><p>Dãy nào sau đây KHÔNG phải là một chu trình (circuit) trong đồ thị? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  A --- B\n  A --- C\n  A --- D\n  B --- C\n  B --- D\n  C --- D\n  B --- F\n  F --- E\n  E --- D</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D25/q4.png",
           "options": [
             {
@@ -147,7 +147,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2222,
-          "prompt": "<div class=\"ml-en\"><p>Let $M$ be the incidence matrix of the given graph with rows indexed by $v_1, v_2, v_3, v_4$, and the columns indexed by $e_1, e_2, e_3, e_4, e_5$. What is the sum of the entries in the fourth row? [Graph: $v_1$(top-left), $v_2$(top-right), $v_3$(bottom-right), $v_4$(bottom-left); edges $e_1$=$v_1v_2$, $e_2$=$v_1v_4$, $e_3$=$v_4v_2$ (diagonal), $e_4$=$v_1v_3$ (diagonal), $e_5$=$v_4v_3$]</p></div><div class=\"ml-vi\"><p>Cho $M$ là ma trận liên thuộc (incidence matrix) của đồ thị đã cho với các hàng đánh số theo $v_1, v_2, v_3, v_4$, và các cột đánh số theo $e_1, e_2, e_3, e_4, e_5$. Tổng các phần tử ở hàng thứ tư là bao nhiêu? [Đồ thị: $v_1$(trên-trái), $v_2$(trên-phải), $v_3$(dưới-phải), $v_4$(dưới-trái); các cạnh $e_1$=$v_1v_2$, $e_2$=$v_1v_4$, $e_3$=$v_4v_2$ (chéo), $e_4$=$v_1v_3$ (chéo), $e_5$=$v_4v_3$]</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $M$ be the incidence matrix of the given graph with rows indexed by $v_1, v_2, v_3, v_4$, and the columns indexed by $e_1, e_2, e_3, e_4, e_5$. What is the sum of the entries in the fourth row? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  v1 -- e1 --- v2\n  v1 -- e2 --- v4\n  v4 -- e3 --- v2\n  v1 -- e4 --- v3\n  v4 -- e5 --- v3</pre></div><div class=\"ml-vi\"><p>Cho $M$ là ma trận liên thuộc (incidence matrix) của đồ thị đã cho với các hàng đánh số theo $v_1, v_2, v_3, v_4$, và các cột đánh số theo $e_1, e_2, e_3, e_4, e_5$. Tổng các phần tử ở hàng thứ tư là bao nhiêu? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  v1 -- e1 --- v2\n  v1 -- e2 --- v4\n  v4 -- e3 --- v2\n  v1 -- e4 --- v3\n  v4 -- e5 --- v3</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D25/q6.png",
           "options": [
             {
@@ -198,7 +198,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2222,
-          "prompt": "<div class=\"ml-en\"><p>What is the next vertex chosen after choosing O, A, B, C when using Dijkstra&#39;s algorithm to find the shortest path from O to T? [Weighted graph: O-A=2, O-B=5, O-C=4, A-B=2, A-D=7, A-F=12, B-C=1, B-D=4, B-E=3, C-E=4, D-E=1, D-T=5, E-T=7, F-T=3]</p></div><div class=\"ml-vi\"><p>Đỉnh nào được chọn tiếp theo sau khi đã chọn O, A, B, C khi dùng thuật toán Dijkstra để tìm đường đi ngắn nhất từ O đến T? [Đồ thị có trọng số: O-A=2, O-B=5, O-C=4, A-B=2, A-D=7, A-F=12, B-C=1, B-D=4, B-E=3, C-E=4, D-E=1, D-T=5, E-T=7, F-T=3]</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the next vertex chosen after choosing O, A, B, C when using Dijkstra&#39;s algorithm to find the shortest path from O to T? (see weighted diagram below)</p><pre class=\"mermaid\">graph TD\n  O -- 2 --- A\n  O -- 5 --- B\n  O -- 4 --- C\n  A -- 2 --- B\n  A -- 7 --- D\n  A -- 12 --- F\n  B -- 1 --- C\n  B -- 4 --- D\n  B -- 3 --- E\n  C -- 4 --- E\n  D -- 1 --- E\n  D -- 5 --- T\n  E -- 7 --- T\n  F -- 3 --- T</pre></div><div class=\"ml-vi\"><p>Đỉnh nào được chọn tiếp theo sau khi đã chọn O, A, B, C khi dùng thuật toán Dijkstra để tìm đường đi ngắn nhất từ O đến T? (xem sơ đồ có trọng số bên dưới)</p><pre class=\"mermaid\">graph TD\n  O -- 2 --- A\n  O -- 5 --- B\n  O -- 4 --- C\n  A -- 2 --- B\n  A -- 7 --- D\n  A -- 12 --- F\n  B -- 1 --- C\n  B -- 4 --- D\n  B -- 3 --- E\n  C -- 4 --- E\n  D -- 1 --- E\n  D -- 5 --- T\n  E -- 7 --- T\n  F -- 3 --- T</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D25/q8.png",
           "options": [
             {
@@ -222,7 +222,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2222,
-          "prompt": "<div class=\"ml-en\"><p>What is the total weight of the minimum spanning tree produced by the graph below? [Grid-like graph: a-b=2, b-c=3, c-d=1, a-e=3, b-f=1, c-g=2, d-h=5, e-f=4, f-g=3, g-h=3, e-i=4, f-j=2, i-j=3]</p></div><div class=\"ml-vi\"><p>Tổng trọng số của cây khung nhỏ nhất (MST) sinh ra từ đồ thị dưới đây là bao nhiêu? [Đồ thị dạng lưới: a-b=2, b-c=3, c-d=1, a-e=3, b-f=1, c-g=2, d-h=5, e-f=4, f-g=3, g-h=3, e-i=4, f-j=2, i-j=3]</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the total weight of the minimum spanning tree produced by the graph below? (see weighted diagram below)</p><pre class=\"mermaid\">graph TD\n  a -- 2 --- b\n  b -- 3 --- c\n  c -- 1 --- d\n  a -- 3 --- e\n  b -- 1 --- f\n  c -- 2 --- g\n  d -- 5 --- h\n  e -- 4 --- f\n  f -- 3 --- g\n  g -- 3 --- h\n  e -- 4 --- i\n  f -- 2 --- j\n  i -- 3 --- j</pre></div><div class=\"ml-vi\"><p>Tổng trọng số của cây khung nhỏ nhất (MST) sinh ra từ đồ thị dưới đây là bao nhiêu? (xem sơ đồ có trọng số bên dưới)</p><pre class=\"mermaid\">graph TD\n  a -- 2 --- b\n  b -- 3 --- c\n  c -- 1 --- d\n  a -- 3 --- e\n  b -- 1 --- f\n  c -- 2 --- g\n  d -- 5 --- h\n  e -- 4 --- f\n  f -- 3 --- g\n  g -- 3 --- h\n  e -- 4 --- i\n  f -- 2 --- j\n  i -- 3 --- j</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D25/q9.png",
           "options": [
             {
@@ -720,7 +720,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2222,
-          "prompt": "<div class=\"ml-en\"><p>Are these two graphs isomorphic? If not, what is the reason? [Left: 8 vertices in a circular arrangement connected mostly as a star polygon, but two adjacent vertices on the left side also share a direct edge (giving those two vertices degree 3 while the rest have degree 2). Right: 8 vertices in a rectangular arrangement with a dense, symmetric pattern of crossing edges.]</p></div><div class=\"ml-vi\"><p>Hai đồ thị sau có đẳng cấu (isomorphic) không? Nếu không, lý do là gì? [Trái: 8 đỉnh xếp vòng tròn nối chủ yếu theo dạng đa giác sao, nhưng hai đỉnh liền kề bên trái còn có thêm một cạnh nối trực tiếp (khiến hai đỉnh đó có bậc 3, còn lại bậc 2). Phải: 8 đỉnh xếp hình chữ nhật với các cạnh chéo cắt nhau dày đặc, đối xứng.]</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Are these two graphs isomorphic? If not, what is the reason? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  subgraph LEFT[&quot;Left graph&quot;]\n    L1 --- L3\n    L3 --- L5\n    L5 --- L7\n    L7 --- L1\n    L2 --- L4\n    L4 --- L6\n    L6 --- L8\n    L8 --- L2\n    L7 --- L8\n  end\n  subgraph RIGHT[&quot;Right graph&quot;]\n    R1 --- R4\n    R4 --- R7\n    R7 --- R2\n    R2 --- R5\n    R5 --- R8\n    R8 --- R3\n    R3 --- R6\n    R6 --- R1\n    R1 --- R8\n  end</pre></div><div class=\"ml-vi\"><p>Hai đồ thị sau có đẳng cấu (isomorphic) không? Nếu không, lý do là gì? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  subgraph LEFT[&quot;Left graph&quot;]\n    L1 --- L3\n    L3 --- L5\n    L5 --- L7\n    L7 --- L1\n    L2 --- L4\n    L4 --- L6\n    L6 --- L8\n    L8 --- L2\n    L7 --- L8\n  end\n  subgraph RIGHT[&quot;Right graph&quot;]\n    R1 --- R4\n    R4 --- R7\n    R7 --- R2\n    R2 --- R5\n    R5 --- R8\n    R8 --- R3\n    R3 --- R6\n    R6 --- R1\n    R1 --- R8\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D25/q28.png",
           "options": [
             {
@@ -999,7 +999,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2222,
-          "prompt": "<div class=\"ml-en\"><p>Determine the order in which a post-order traversal visits the given rooted tree. [Tree: root a with children b, c; b&#39;s children d, e; e&#39;s children f, g]</p></div><div class=\"ml-vi\"><p>Xác định thứ tự duyệt hậu tố (post-order) trên cây có gốc đã cho. [Cây: gốc a với các con b, c; con của b là d, e; con của e là f, g]</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Determine the order in which a post-order traversal visits the given rooted tree. (see diagram below)</p><pre class=\"mermaid\">graph TD\n  a --&gt; b\n  a --&gt; c\n  b --&gt; d\n  b --&gt; e\n  e --&gt; f\n  e --&gt; g</pre></div><div class=\"ml-vi\"><p>Xác định thứ tự duyệt hậu tố (post-order) trên cây có gốc đã cho. (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  a --&gt; b\n  a --&gt; c\n  b --&gt; d\n  b --&gt; e\n  e --&gt; f\n  e --&gt; g</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D25/q39.png",
           "options": [
             {
@@ -1122,7 +1122,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2222,
-          "prompt": "<div class=\"ml-en\"><p>Delete one edge from each graph to obtain 2 new graphs. How many cut-edges in total of the new graphs? [X: a 5-cycle (pentagon) drawn as a pentagram/5-pointed star, 5 vertices, 5 edges, 2-regular. Y: a &quot;bowtie&quot;/friendship graph — two triangles sharing a common central hub vertex, 5 vertices, 6 edges.]</p></div><div class=\"ml-vi\"><p>Xóa một cạnh khỏi mỗi đồ thị để được 2 đồ thị mới. Tổng số cạnh cầu (cut-edge) của các đồ thị mới là bao nhiêu? [X: chu trình 5 đỉnh (ngũ giác) vẽ dạng ngôi sao 5 cánh, 5 đỉnh, 5 cạnh, 2-đều. Y: đồ thị &quot;nơ bướm&quot; — hai tam giác chung một đỉnh trung tâm (hub), 5 đỉnh, 6 cạnh.]</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Delete one edge from each graph to obtain 2 new graphs. How many cut-edges in total of the new graphs? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  subgraph GX[&quot;Graph X (5-cycle, drawn as a pentagram)&quot;]\n    X1 --- X2\n    X2 --- X3\n    X3 --- X4\n    X4 --- X5\n    X5 --- X1\n  end\n  subgraph GY[&quot;Graph Y (bowtie: two triangles sharing hub Y3)&quot;]\n    Y1 --- Y2\n    Y2 --- Y3\n    Y3 --- Y1\n    Y3 --- Y4\n    Y4 --- Y5\n    Y5 --- Y3\n  end</pre></div><div class=\"ml-vi\"><p>Xóa một cạnh khỏi mỗi đồ thị để được 2 đồ thị mới. Tổng số cạnh cầu (cut-edge) của các đồ thị mới là bao nhiêu? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  subgraph GX[&quot;Graph X (5-cycle, drawn as a pentagram)&quot;]\n    X1 --- X2\n    X2 --- X3\n    X3 --- X4\n    X4 --- X5\n    X5 --- X1\n  end\n  subgraph GY[&quot;Graph Y (bowtie: two triangles sharing hub Y3)&quot;]\n    Y1 --- Y2\n    Y2 --- Y3\n    Y3 --- Y1\n    Y3 --- Y4\n    Y4 --- Y5\n    Y5 --- Y3\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D25/q44.png",
           "options": [
             {
@@ -1149,7 +1149,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2222,
-          "prompt": "<div class=\"ml-en\"><p>How many edges must be removed from a connected graph to produce a spanning tree? [10-vertex graph: outer pentagon G-F-J-I-H-G, plus inner vertices A,B,C,D,E with numerous crossing diagonal edges: G-C, F-B, H-C, H-D, B-C, B-A, B-E, B-D, C-D, C-A, C-E, A-J, A-E, A-D, D-E, D-I, E-I]</p></div><div class=\"ml-vi\"><p>Cần loại bỏ bao nhiêu cạnh khỏi một đồ thị liên thông để thu được cây khung (spanning tree)? [Đồ thị 10 đỉnh: ngũ giác ngoài G-F-J-I-H-G, cùng các đỉnh trong A,B,C,D,E với nhiều cạnh chéo cắt nhau: G-C, F-B, H-C, H-D, B-C, B-A, B-E, B-D, C-D, C-A, C-E, A-J, A-E, A-D, D-E, D-I, E-I]</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many edges must be removed from a connected graph to produce a spanning tree? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  G --- F\n  F --- J\n  J --- I\n  I --- H\n  H --- G\n  G --- C\n  F --- B\n  J --- A\n  I --- E\n  H --- D\n  A --- B\n  A --- C\n  A --- D\n  A --- E\n  B --- C\n  B --- D\n  B --- E\n  C --- D\n  C --- E\n  D --- E</pre></div><div class=\"ml-vi\"><p>Cần loại bỏ bao nhiêu cạnh khỏi một đồ thị liên thông để thu được cây khung (spanning tree)? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  G --- F\n  F --- J\n  J --- I\n  I --- H\n  H --- G\n  G --- C\n  F --- B\n  J --- A\n  I --- E\n  H --- D\n  A --- B\n  A --- C\n  A --- D\n  A --- E\n  B --- C\n  B --- D\n  B --- E\n  C --- D\n  C --- E\n  D --- E</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D25/q45.png",
           "options": [
             {
@@ -1169,9 +1169,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            2
+            3
           ],
-          "explanation": "<div class=\"ml-en\"><p>Counting all edges: outer pentagon (5) + inner edges G-C,F-B,H-C,H-D,B-C,B-A,B-E,B-D,C-D,C-A,C-E,A-J,A-E,A-D,D-E,D-I,E-I (17) = 22 edges total, 10 vertices. A spanning tree needs V-1=9 edges, so 22-9=13 edges must be removed.</p></div><div class=\"ml-vi\"><p>Đếm tất cả các cạnh: ngũ giác ngoài (5) + các cạnh trong G-C,F-B,H-C,H-D,B-C,B-A,B-E,B-D,C-D,C-A,C-E,A-J,A-E,A-D,D-E,D-I,E-I (17) = tổng 22 cạnh, 10 đỉnh. Cây khung cần V-1=9 cạnh, nên phải loại bỏ 22-9=13 cạnh.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The graph has 20 edges: outer pentagon G-F-J-I-H-G (5 edges) + complete K5 on A,B,C,D,E (10 edges) + 5 spokes G-C, F-B, J-A, I-E, H-D. A spanning tree on 10 vertices needs 9 edges, so the number of edges that must be removed = 20 - 9 = 11.</p></div><div class=\"ml-vi\"><p>Đồ thị có 20 cạnh: ngũ giác ngoài G-F-J-I-H-G (5 cạnh) + đồ thị đầy đủ K5 trên A,B,C,D,E (10 cạnh) + 5 cạnh nan hoa G-C, F-B, J-A, I-E, H-D. Cây khung trên 10 đỉnh cần 9 cạnh, nên số cạnh phải bỏ = 20 - 9 = 11.</p></div>"
         }
       ]
     }

@@ -870,7 +870,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>How many cut vertices and cut edges in this graph? (graph shown in the image: 8 vertices in a top(2)/middle(3)/bottom(3) layout with a crossing pair of diagonals, one long diagonal, one horizontal edge, and three vertical edges)</p></div><div class=\"ml-vi\"><p>Đồ thị này có bao nhiêu đỉnh cắt và cạnh cắt? (đồ thị trong hình: 8 đỉnh xếp trên(2)/giữa(3)/dưới(3) với một cặp đường chéo cắt nhau, một đường chéo dài, một cạnh ngang, và ba cạnh dọc)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many cut vertices and cut edges in this graph? (see diagram below; vertices labelled $v_1$-$v_8$ row by row, left to right)</p><pre class=\"mermaid\">graph TD\n  v1((v1)) --- v2((v2))\n  v1 --- v7((v7))\n  v2 --- v3((v3))\n  v2 --- v8((v8))\n  v3 --- v6((v6))\n  v4((v4)) --- v5((v5))\n  v4 --- v7\n  v5 --- v8</pre></div><div class=\"ml-vi\"><p>Đồ thị này có bao nhiêu đỉnh cắt và cạnh cắt? (xem sơ đồ bên dưới; các đỉnh được đánh số $v_1$-$v_8$ theo từng hàng, trái sang phải)</p><pre class=\"mermaid\">graph TD\n  v1((v1)) --- v2((v2))\n  v1 --- v7((v7))\n  v2 --- v3((v3))\n  v2 --- v8((v8))\n  v3 --- v6((v6))\n  v4((v4)) --- v5((v5))\n  v4 --- v7\n  v5 --- v8</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D12/q34.png",
           "options": [
             {

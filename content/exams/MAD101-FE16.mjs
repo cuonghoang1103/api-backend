@@ -921,7 +921,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>(See picture: two graphs, each drawn as a 7-pointed star polygon on 7 vertices arranged in a circle, connected with a different &quot;step&quot; pattern.) Are the two graphs isomorphic? If not, what is the reason?</p></div><div class=\"ml-vi\"><p>(Xem hình: hai đồ thị, mỗi đồ thị vẽ dạng ngôi sao 7 cánh trên 7 đỉnh xếp trên một vòng tròn, nối theo &quot;bước nhảy&quot; khác nhau.) Hai đồ thị có đẳng cấu không? Nếu không, vì sao?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>(See diagram below.) Are the two graphs isomorphic? If not, what is the reason?</p><pre class=\"mermaid\">graph TD\n  subgraph X\n    x1((1)); x2((2)); x3((3)); x4((4)); x5((5)); x6((6)); x7((7)); x8((8))\n    x1 --- x3\n    x2 --- x4\n    x3 --- x5\n    x4 --- x6\n    x5 --- x7\n    x6 --- x8\n    x7 --- x1\n    x8 --- x2\n  end\n  subgraph Y\n    y1((1)); y2((2)); y3((3)); y4((4)); y5((5)); y6((6)); y7((7)); y8((8))\n    y1 --- y4\n    y2 --- y5\n    y3 --- y6\n    y4 --- y7\n    y5 --- y8\n    y6 --- y1\n    y7 --- y2\n    y8 --- y3\n  end</pre></div><div class=\"ml-vi\"><p>(Xem sơ đồ bên dưới.) Hai đồ thị có đẳng cấu không? Nếu không, lý do là gì?</p><pre class=\"mermaid\">graph TD\n  subgraph X\n    x1((1)); x2((2)); x3((3)); x4((4)); x5((5)); x6((6)); x7((7)); x8((8))\n    x1 --- x3\n    x2 --- x4\n    x3 --- x5\n    x4 --- x6\n    x5 --- x7\n    x6 --- x8\n    x7 --- x1\n    x8 --- x2\n  end\n  subgraph Y\n    y1((1)); y2((2)); y3((3)); y4((4)); y5((5)); y6((6)); y7((7)); y8((8))\n    y1 --- y4\n    y2 --- y5\n    y3 --- y6\n    y4 --- y7\n    y5 --- y8\n    y6 --- y1\n    y7 --- y2\n    y8 --- y3\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D16/q36.png",
           "options": [
             {
@@ -941,14 +941,14 @@ export default {
             }
           ],
           "correctIndexes": [
-            3
+            0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Both drawings have 7 vertices, each of degree 2, connected into a single cycle (since 7 is prime, any &quot;skip&quot; step produces one Hamiltonian cycle). Both graphs are therefore just the cycle graph $C_7$ drawn differently, so they are isomorphic.</p></div><div class=\"ml-vi\"><p>Cả hai hình vẽ đều có 7 đỉnh, mỗi đỉnh bậc 2, tạo thành một chu trình duy nhất (vì 7 là số nguyên tố, mọi bước nhảy đều tạo ra một chu trình Hamilton). Cả hai đồ thị thực chất là đồ thị chu trình $C_7$ vẽ theo cách khác nhau, nên chúng đẳng cấu.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>X decomposes into two disjoint 4-cycles (1-3-5-7-1 and 2-4-6-8-2) — 2 connected components. Y is a single 8-cycle (1-4-7-2-5-8-3-6-1) — 1 connected component. Different number of connected components, so X and Y are NOT isomorphic.</p></div><div class=\"ml-vi\"><p>X tách thành hai chu trình 4 cạnh rời nhau (1-3-5-7-1 và 2-4-6-8-2) — 2 thành phần liên thông. Y là một chu trình 8 cạnh duy nhất (1-4-7-2-5-8-3-6-1) — 1 thành phần liên thông. Số thành phần liên thông khác nhau nên X và Y KHÔNG đẳng cấu.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Which graphs are isomorphic to $K_{2,3}$?<br/>(See picture: graph X is a diamond shape with a center vertex on the horizontal diagonal; graph Y is drawn with 3 vertices on top, 2 on the bottom, connected by crossing lines.)</p></div><div class=\"ml-vi\"><p>Đồ thị nào đẳng cấu với $K_{2,3}$?<br/>(Xem hình: đồ thị X có dạng hình thoi với một đỉnh ở giữa trên đường chéo ngang; đồ thị Y vẽ với 3 đỉnh ở trên, 2 đỉnh ở dưới, nối bằng các đường chéo cắt nhau.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which graphs are isomorphic to $K_{2,3}$?<br/>(See diagram below.)</p><pre class=\"mermaid\">graph TD\n  subgraph X\n    xT((T)); xL((L)); xC((C)); xR((R)); xB((B))\n    xL --- xT\n    xL --- xC\n    xL --- xB\n    xR --- xT\n    xR --- xC\n    xR --- xB\n  end\n  subgraph Y\n    y1((1)); y2((2)); y3((3)); y4((4)); y5((5))\n    y1 --- y2\n    y2 --- y3\n    y1 --- y5\n    y2 --- y4\n    y2 --- y5\n    y3 --- y4\n    y4 --- y5\n  end</pre></div><div class=\"ml-vi\"><p>Đồ thị nào đẳng cấu với $K_{2,3}$?<br/>(Xem sơ đồ bên dưới.)</p><pre class=\"mermaid\">graph TD\n  subgraph X\n    xT((T)); xL((L)); xC((C)); xR((R)); xB((B))\n    xL --- xT\n    xL --- xC\n    xL --- xB\n    xR --- xT\n    xR --- xC\n    xR --- xB\n  end\n  subgraph Y\n    y1((1)); y2((2)); y3((3)); y4((4)); y5((5))\n    y1 --- y2\n    y2 --- y3\n    y1 --- y5\n    y2 --- y4\n    y2 --- y5\n    y3 --- y4\n    y4 --- y5\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D16/q37.png",
           "options": [
             {
@@ -965,9 +965,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            2
+            0
           ],
-          "explanation": "<div class=\"ml-en\"><p>In X, the two degree-3 vertices (left, right) each connect to all three degree-2 vertices (top, center, bottom) — this is exactly $K_{2,3}$. In Y, the two bottom vertices each connect to all three top vertices via the crossing lines — also $K_{2,3}$. So both X and Y are isomorphic to $K_{2,3}$.</p></div><div class=\"ml-vi\"><p>Trong X, hai đỉnh bậc 3 (trái, phải) mỗi đỉnh nối với cả ba đỉnh bậc 2 (trên, giữa, dưới) — đây chính xác là $K_{2,3}$. Trong Y, hai đỉnh dưới mỗi đỉnh nối với cả ba đỉnh trên qua các đường chéo cắt nhau — cũng là $K_{2,3}$. Vậy cả X và Y đều đẳng cấu với $K_{2,3}$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>X (vertices T,L,C,R,B with L,R each joined to T,C,B) is exactly K_{2,3} — bipartition {L,R} vs {T,C,B}, 6 edges. Y has 7 edges (1-2,2-3,1-5,2-4,2-5,3-4,4-5), which already rules it out since K_{2,3} has only 6 edges. So only X is isomorphic to K_{2,3}.</p></div><div class=\"ml-vi\"><p>X (đỉnh T,L,C,R,B với L,R mỗi đỉnh nối tới T,C,B) chính là K_{2,3} — phân đôi {L,R} và {T,C,B}, 6 cạnh. Y có 7 cạnh (1-2,2-3,1-5,2-4,2-5,3-4,4-5), đã loại ngay vì K_{2,3} chỉ có 6 cạnh. Vậy chỉ X đẳng cấu với K_{2,3}.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -999,7 +999,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>(See picture: graph X is a 5-pointed star (pentagram) on 5 vertices; graph Y is a hub-and-spoke shape with a center vertex connected to 4 outer vertices.) Find the total number of cut-edges in the two graphs.</p></div><div class=\"ml-vi\"><p>(Xem hình: đồ thị X là ngôi sao 5 cánh (pentagram) trên 5 đỉnh; đồ thị Y có dạng một đỉnh trung tâm nối với 4 đỉnh ngoài.) Tìm tổng số cạnh cầu (cut-edge) trong hai đồ thị.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>(See diagram below.) Find the total number of cut-edges in the two graphs.</p><pre class=\"mermaid\">graph TD\n  subgraph X\n    p1((1)); p2((2)); p3((3)); p4((4)); p5((5))\n    p1 --- p3\n    p3 --- p5\n    p5 --- p2\n    p2 --- p4\n    p4 --- p1\n  end\n  subgraph Y\n    c((c)); u1((1)); u2((2)); u3((3)); u4((4))\n    u1 --- c\n    u2 --- c\n    u3 --- c\n    u4 --- c\n    u1 --- u3\n    u2 --- u4\n  end</pre></div><div class=\"ml-vi\"><p>(Xem sơ đồ bên dưới.) Tìm tổng số cạnh cầu (cut-edge) trong hai đồ thị.</p><pre class=\"mermaid\">graph TD\n  subgraph X\n    p1((1)); p2((2)); p3((3)); p4((4)); p5((5))\n    p1 --- p3\n    p3 --- p5\n    p5 --- p2\n    p2 --- p4\n    p4 --- p1\n  end\n  subgraph Y\n    c((c)); u1((1)); u2((2)); u3((3)); u4((4))\n    u1 --- c\n    u2 --- c\n    u3 --- c\n    u4 --- c\n    u1 --- u3\n    u2 --- u4\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D16/q39.png",
           "options": [
             {
@@ -1022,9 +1022,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            4
+            0
           ],
-          "explanation": "<div class=\"ml-en\"><p>X is drawn as a pentagram but is structurally a single 5-cycle (every vertex has degree 2) — a cycle has no cut-edges (bridges), so X contributes 0. Y is a star $K_{1,4}$: the center vertex connects to 4 leaf vertices; since it&#39;s a tree, all 4 edges are bridges. Total cut-edges = 0+4 = 4, which is option E.</p></div><div class=\"ml-vi\"><p>X vẽ dạng ngôi sao 5 cánh nhưng về cấu trúc là một chu trình 5 đỉnh duy nhất (mọi đỉnh đều bậc 2) — chu trình không có cạnh cầu, nên X đóng góp 0. Y là đồ thị hình sao $K_{1,4}$: đỉnh trung tâm nối với 4 đỉnh lá; vì đây là cây nên cả 4 cạnh đều là cạnh cầu. Tổng cạnh cầu = 0+4 = 4, tương ứng đáp án E.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>X is a single 5-cycle (1-3-5-2-4-1) — every edge lies on the cycle, so 0 cut-edges. Y is two triangles sharing hub c (c-u1-u3-c and c-u2-u4-c) — every edge lies on a triangle/cycle, so 0 cut-edges. Total cut-edges = 0 + 0 = 0.</p></div><div class=\"ml-vi\"><p>X là một chu trình 5 cạnh duy nhất (1-3-5-2-4-1) — mọi cạnh đều nằm trên chu trình nên có 0 cạnh cắt. Y là hai tam giác chung đỉnh c (c-u1-u3-c và c-u2-u4-c) — mọi cạnh đều nằm trên tam giác/chu trình nên có 0 cạnh cắt. Tổng cạnh cắt = 0 + 0 = 0.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1074,7 +1074,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>(See picture: a weighted graph with vertices A, B, two vertices on top, an inner vertex, and two vertices on the bottom.) Find the length of the shortest path from A to B.</p></div><div class=\"ml-vi\"><p>(Xem hình: đồ thị có trọng số với các đỉnh A, B, hai đỉnh phía trên, một đỉnh bên trong, và hai đỉnh phía dưới.) Tìm độ dài đường đi ngắn nhất từ A đến B.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>(See diagram below; T1, T2 are the top vertices, I the inner vertex, Bl, Br the bottom vertices.) Find the length of the shortest path from A to B.</p><pre class=\"mermaid\">graph TD\n  A -- 4 --- T1\n  A -- 8 --- T2\n  A -- 5 --- Bl\n  T1 -- 5 --- T2\n  T1 -- 2 --- Bl\n  T2 -- 3 --- I\n  T2 -- 6 --- B\n  I -- 2 --- B\n  I -- 1 --- Br\n  Br -- 4 --- B\n  Bl -- 6 --- Br</pre></div><div class=\"ml-vi\"><p>(Xem sơ đồ bên dưới; T1, T2 là hai đỉnh phía trên, I là đỉnh bên trong, Bl, Br là hai đỉnh phía dưới.) Tìm độ dài đường đi ngắn nhất từ A đến B.</p><pre class=\"mermaid\">graph TD\n  A -- 4 --- T1\n  A -- 8 --- T2\n  A -- 5 --- Bl\n  T1 -- 5 --- T2\n  T1 -- 2 --- Bl\n  T2 -- 3 --- I\n  T2 -- 6 --- B\n  I -- 2 --- B\n  I -- 1 --- Br\n  Br -- 4 --- B\n  Bl -- 6 --- Br</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D16/q42.png",
           "options": [
             {
@@ -1101,7 +1101,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>(See picture: a rooted tree with root a, children b, d, c; b&#39;s children e, h, g; e&#39;s children i, n, k; c&#39;s children f, l, m.) How many ancestors does vertex d have?</p></div><div class=\"ml-vi\"><p>(Xem hình: cây có gốc a, các con b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.) Đỉnh d có bao nhiêu tổ tiên?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>(See diagram below.) How many ancestors does vertex d have?</p><pre class=\"mermaid\">graph TD\n  a --&gt; b\n  a --&gt; d\n  a --&gt; c\n  b --&gt; e\n  b --&gt; h\n  b --&gt; g\n  e --&gt; i\n  e --&gt; n\n  e --&gt; k\n  c --&gt; f\n  c --&gt; l\n  c --&gt; m</pre></div><div class=\"ml-vi\"><p>(Xem sơ đồ bên dưới.) Đỉnh d có bao nhiêu tổ tiên?</p><pre class=\"mermaid\">graph TD\n  a --&gt; b\n  a --&gt; d\n  a --&gt; c\n  b --&gt; e\n  b --&gt; h\n  b --&gt; g\n  e --&gt; i\n  e --&gt; n\n  e --&gt; k\n  c --&gt; f\n  c --&gt; l\n  c --&gt; m</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D16/q43.png",
           "options": [
             {
@@ -1290,7 +1290,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>(See picture: a weighted graph with vertices A, B, C, D, E, F.) If using Prim&#39;s algorithm to find a minimum spanning tree T from the graph below, which edge is added to T in the last step?</p></div><div class=\"ml-vi\"><p>(Xem hình: đồ thị có trọng số với các đỉnh A, B, C, D, E, F.) Nếu dùng thuật toán Prim để tìm cây khung nhỏ nhất T từ đồ thị dưới đây, cạnh nào được thêm vào T ở bước cuối cùng?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>(See diagram below.) If using Prim&#39;s algorithm to find a minimum spanning tree T from the graph below, which edge is added to T in the last step?</p><pre class=\"mermaid\">graph TD\n  A -- 1 --- B\n  A -- 4 --- D\n  A -- 3 --- E\n  B -- 4 --- D\n  B -- 2 --- E\n  C -- 4 --- E\n  C -- 5 --- F\n  D -- 4 --- E\n  E -- 7 --- F</pre></div><div class=\"ml-vi\"><p>(Xem sơ đồ bên dưới.) Nếu dùng thuật toán Prim để tìm cây khung nhỏ nhất T từ đồ thị bên dưới, cạnh nào được thêm vào T ở bước cuối cùng?</p><pre class=\"mermaid\">graph TD\n  A -- 1 --- B\n  A -- 4 --- D\n  A -- 3 --- E\n  B -- 4 --- D\n  B -- 2 --- E\n  C -- 4 --- E\n  C -- 5 --- F\n  D -- 4 --- E\n  E -- 7 --- F</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D16/q50.png",
           "options": [
             {

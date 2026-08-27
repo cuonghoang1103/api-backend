@@ -723,7 +723,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Are these two graphs isomorphic? If not, what is the reason? (Left graph: a rectangle with 4 corner vertices plus one extra vertex below, connected by all 4 sides of the rectangle plus edges from the extra vertex to three of the four corners (all except the top-right corner), 7 edges total. Right graph: a rectangle with 4 corner vertices and both diagonals drawn through a marked center vertex, giving 4 side edges + 4 half-diagonal edges, 8 edges total.)</p></div><div class=\"ml-vi\"><p>Hai đồ thị sau có đẳng cấu không? Nếu không, lý do là gì? (Đồ thị trái: hình chữ nhật với 4 đỉnh góc cộng thêm 1 đỉnh phía dưới, nối bằng cả 4 cạnh của hình chữ nhật cộng các cạnh từ đỉnh thêm tới ba trong bốn đỉnh góc (trừ đỉnh trên-phải), tổng 7 cạnh. Đồ thị phải: hình chữ nhật với 4 đỉnh góc và cả hai đường chéo cắt nhau tại một đỉnh đánh dấu ở giữa, cho 4 cạnh biên + 4 nửa-đường-chéo, tổng 8 cạnh.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Are these two graphs isomorphic? If not, what is the reason? (see diagram below — vertices are unlabelled in the original figure; u1–u5 denote the left graph, v1–v4 and m the right graph)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;Left graph / Do thi trai&quot;]\n    direction TB\n    u1((&quot;u1&quot;)) --- u2((&quot;u2&quot;))\n    u1 --- u3((&quot;u3&quot;))\n    u2 --- u4((&quot;u4&quot;))\n    u3 --- u4\n    u1 --- u5((&quot;u5&quot;))\n    u3 --- u5\n    u4 --- u5\n  end\n  subgraph G2[&quot;Right graph / Do thi phai&quot;]\n    direction TB\n    v1((&quot;v1&quot;)) --- v2((&quot;v2&quot;))\n    v1 --- v3((&quot;v3&quot;))\n    v2 --- v4((&quot;v4&quot;))\n    v3 --- v4\n    v1 --- v4\n    v3 --- m((&quot;m&quot;))\n    m --- v2\n  end</pre></div><div class=\"ml-vi\"><p>Hai đồ thị sau có đẳng cấu không? Nếu không, lý do là gì? (xem sơ đồ bên dưới — hình gốc không ghi nhãn đỉnh; u1–u5 là đồ thị trái, v1–v4 và m là đồ thị phải)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;Left graph / Do thi trai&quot;]\n    direction TB\n    u1((&quot;u1&quot;)) --- u2((&quot;u2&quot;))\n    u1 --- u3((&quot;u3&quot;))\n    u2 --- u4((&quot;u4&quot;))\n    u3 --- u4\n    u1 --- u5((&quot;u5&quot;))\n    u3 --- u5\n    u4 --- u5\n  end\n  subgraph G2[&quot;Right graph / Do thi phai&quot;]\n    direction TB\n    v1((&quot;v1&quot;)) --- v2((&quot;v2&quot;))\n    v1 --- v3((&quot;v3&quot;))\n    v2 --- v4((&quot;v4&quot;))\n    v3 --- v4\n    v1 --- v4\n    v3 --- m((&quot;m&quot;))\n    m --- v2\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D11/q29.png",
           "options": [
             {
@@ -743,9 +743,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            0
+            2
           ],
-          "explanation": "<div class=\"ml-en\"><p>Both graphs have 5 vertices, but the left graph has 7 edges while the right graph (with the diagonal-crossing vertex splitting each diagonal into two edges) has 8 edges. Different edge counts immediately rules out isomorphism.</p></div><div class=\"ml-vi\"><p>Cả hai đồ thị đều có 5 đỉnh, nhưng đồ thị trái có 7 cạnh trong khi đồ thị phải (với đỉnh giao điểm đường chéo chia mỗi đường chéo thành hai cạnh) có 8 cạnh. Số cạnh khác nhau nên không thể đẳng cấu.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Both graphs have 7 edges and identical degree sequences [3,3,3,3,2]. An explicit isomorphism exists: u1-&gt;v2, u2-&gt;m, u3-&gt;v1, u4-&gt;v3, u5-&gt;v4 — every one of G1&#39;s 7 edges maps onto an edge of G2 under this map. So the graphs ARE isomorphic.</p></div><div class=\"ml-vi\"><p>Cả hai đồ thị đều có 7 cạnh và cùng dãy bậc [3,3,3,3,2]. Có một phép đẳng cấu tường minh: u1-&gt;v2, u2-&gt;m, u3-&gt;v1, u4-&gt;v3, u5-&gt;v4 — cả 7 cạnh của G1 đều ánh xạ đúng thành cạnh của G2. Vậy hai đồ thị ĐẲNG CẤU.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -822,7 +822,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What is the fourth vertex chosen when using Dijkstra&#39;s algorithm to find the shortest path from A to D in this weighted graph? (Edges: D-E=9, D-C=4, E-F=2, F-C=6, A-E=14, A-F=9, F-B=8, C-B=15, A-B=7)</p></div><div class=\"ml-vi\"><p>Đỉnh thứ tư được chọn khi dùng thuật toán Dijkstra để tìm đường đi ngắn nhất từ A đến D trong đồ thị có trọng số sau là gì? (Cạnh: D-E=9, D-C=4, E-F=2, F-C=6, A-E=14, A-F=9, F-B=8, C-B=15, A-B=7)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the fourth vertex chosen when using Dijkstra&#39;s algorithm to find the shortest path from A to D in this weighted graph? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  A((&quot;A&quot;)) -- 7 --- B((&quot;B&quot;))\n  A -- 9 --- F((&quot;F&quot;))\n  A -- 14 --- E((&quot;E&quot;))\n  B -- 8 --- F\n  B -- 15 --- C((&quot;C&quot;))\n  E -- 2 --- F\n  F -- 6 --- C\n  C -- 4 --- D((&quot;D&quot;))\n  D -- 9 --- E</pre></div><div class=\"ml-vi\"><p>Đỉnh thứ tư được chọn khi dùng thuật toán Dijkstra để tìm đường đi ngắn nhất từ A đến D trong đồ thị có trọng số sau là gì? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  A((&quot;A&quot;)) -- 7 --- B((&quot;B&quot;))\n  A -- 9 --- F((&quot;F&quot;))\n  A -- 14 --- E((&quot;E&quot;))\n  B -- 8 --- F\n  B -- 15 --- C((&quot;C&quot;))\n  E -- 2 --- F\n  F -- 6 --- C\n  C -- 4 --- D((&quot;D&quot;))\n  D -- 9 --- E</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D11/q33.png",
           "options": [
             {
@@ -996,7 +996,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>How many edges must be removed from a connected graph to produce a spanning tree? (Graph with 10 vertices F, G, H, B, C, A, D, E, J, I: an outer 5-cycle F-G-H-I-J-F, a complete graph $K_5$ among the inner vertices A, B, C, D, E, and 5 spoke edges connecting outer to inner vertices — 20 edges total.)</p></div><div class=\"ml-vi\"><p>Cần loại bỏ bao nhiêu cạnh khỏi một đồ thị liên thông để tạo thành một cây khung? (Đồ thị 10 đỉnh F, G, H, B, C, A, D, E, J, I: một chu trình ngoài 5 đỉnh F-G-H-I-J-F, một đồ thị đầy đủ $K_5$ giữa các đỉnh trong A, B, C, D, E, và 5 cạnh nan hoa nối đỉnh ngoài với đỉnh trong — tổng 20 cạnh.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many edges must be removed from a connected graph to produce a spanning tree? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  F((&quot;F&quot;)) --- G((&quot;G&quot;))\n  G --- H((&quot;H&quot;))\n  H --- I((&quot;I&quot;))\n  I --- J((&quot;J&quot;))\n  J --- F\n  F --- B((&quot;B&quot;))\n  G --- C((&quot;C&quot;))\n  H --- D((&quot;D&quot;))\n  I --- E((&quot;E&quot;))\n  J --- A((&quot;A&quot;))\n  A --- B\n  A --- C\n  A --- D\n  A --- E\n  B --- C\n  B --- D\n  B --- E\n  C --- D\n  C --- E\n  D --- E</pre></div><div class=\"ml-vi\"><p>Cần loại bỏ bao nhiêu cạnh khỏi một đồ thị liên thông để tạo thành một cây khung? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  F((&quot;F&quot;)) --- G((&quot;G&quot;))\n  G --- H((&quot;H&quot;))\n  H --- I((&quot;I&quot;))\n  I --- J((&quot;J&quot;))\n  J --- F\n  F --- B((&quot;B&quot;))\n  G --- C((&quot;C&quot;))\n  H --- D((&quot;D&quot;))\n  I --- E((&quot;E&quot;))\n  J --- A((&quot;A&quot;))\n  A --- B\n  A --- C\n  A --- D\n  A --- E\n  B --- C\n  B --- D\n  B --- E\n  C --- D\n  C --- E\n  D --- E</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D11/q40.png",
           "options": [
             {
@@ -1023,7 +1023,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find the length of a minimum spanning tree of the following weighted graph: (Edges: A-B=6, A-C=10, A-F=3, A-G=6, B-F=2, F-G=1, G-C=1, C-D=7, D-E=3, D-H=4, E-H=4, G-H=9, G-D=5)</p></div><div class=\"ml-vi\"><p>Tìm độ dài của cây khung nhỏ nhất của đồ thị có trọng số sau: (Cạnh: A-B=6, A-C=10, A-F=3, A-G=6, B-F=2, F-G=1, G-C=1, C-D=7, D-E=3, D-H=4, E-H=4, G-H=9, G-D=5)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the length of a minimum spanning tree of the following weighted graph: (see diagram below)</p><pre class=\"mermaid\">graph TD\n  A((&quot;A&quot;)) -- 6 --- B((&quot;B&quot;))\n  A -- 10 --- C((&quot;C&quot;))\n  A -- 3 --- F((&quot;F&quot;))\n  A -- 6 --- G((&quot;G&quot;))\n  B -- 2 --- F\n  F -- 1 --- G\n  G -- 1 --- C\n  G -- 5 --- D((&quot;D&quot;))\n  G -- 9 --- H((&quot;H&quot;))\n  C -- 7 --- D\n  D -- 3 --- E((&quot;E&quot;))\n  D -- 4 --- H\n  E -- 4 --- H</pre></div><div class=\"ml-vi\"><p>Tìm độ dài của cây khung nhỏ nhất của đồ thị có trọng số sau: (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  A((&quot;A&quot;)) -- 6 --- B((&quot;B&quot;))\n  A -- 10 --- C((&quot;C&quot;))\n  A -- 3 --- F((&quot;F&quot;))\n  A -- 6 --- G((&quot;G&quot;))\n  B -- 2 --- F\n  F -- 1 --- G\n  G -- 1 --- C\n  G -- 5 --- D((&quot;D&quot;))\n  G -- 9 --- H((&quot;H&quot;))\n  C -- 7 --- D\n  D -- 3 --- E((&quot;E&quot;))\n  D -- 4 --- H\n  E -- 4 --- H</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D11/q41.png",
           "options": [
             {
@@ -1257,7 +1257,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>How many vertices in the strongly connected component containing A? (Directed graph, two adjacent squares sharing a middle column of vertices; A is the top-left vertex, all arrows point rightward/downward from A with no edges returning into A.)</p></div><div class=\"ml-vi\"><p>Có bao nhiêu đỉnh trong thành phần liên thông mạnh chứa A? (Đồ thị có hướng, hai hình vuông liền kề chung cột đỉnh giữa; A là đỉnh trên-cùng-bên-trái, tất cả các cung đều hướng sang phải/xuống dưới từ A và không có cung nào quay trở lại A.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many vertices in the strongly connected component containing A? (see diagram below — only A is labelled in the original figure; B, C are the other top-row vertices and D, E, F the bottom row, left to right)</p><pre class=\"mermaid\">graph TD\n  A((&quot;A&quot;)) --&gt; B((&quot;B&quot;))\n  B --&gt; C((&quot;C&quot;))\n  A --&gt; E((&quot;E&quot;))\n  D((&quot;D&quot;)) --&gt; A\n  E --&gt; B\n  E --&gt; D\n  E --&gt; F((&quot;F&quot;))\n  F --&gt; B\n  F --&gt; C</pre></div><div class=\"ml-vi\"><p>Có bao nhiêu đỉnh trong thành phần liên thông mạnh chứa A? (xem sơ đồ bên dưới — hình gốc chỉ ghi nhãn A; B, C là hai đỉnh còn lại ở hàng trên, D, E, F là hàng dưới, từ trái sang phải)</p><pre class=\"mermaid\">graph TD\n  A((&quot;A&quot;)) --&gt; B((&quot;B&quot;))\n  B --&gt; C((&quot;C&quot;))\n  A --&gt; E((&quot;E&quot;))\n  D((&quot;D&quot;)) --&gt; A\n  E --&gt; B\n  E --&gt; D\n  E --&gt; F((&quot;F&quot;))\n  F --&gt; B\n  F --&gt; C</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D11/q50.png",
           "options": [
             {
@@ -1277,9 +1277,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            4
+            3
           ],
-          "explanation": "<div class=\"ml-en\"><p>A has only outgoing edges (no arrows point into A anywhere in the diagram), so no other vertex can reach back to A, meaning A cannot be part of any directed cycle. Its strongly connected component is therefore just {A}, size 1.</p></div><div class=\"ml-vi\"><p>A chỉ có cung đi ra (không có mũi tên nào chỉ vào A trong hình), nên không đỉnh nào khác có thể quay lại được A, nghĩa là A không thể nằm trong chu trình có hướng nào. Do đó thành phần liên thông mạnh của nó chỉ là {A}, kích thước 1.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Trace directed edges: A-&gt;E, E-&gt;D, D-&gt;A form a 3-cycle, so A, D, E are mutually reachable (same SCC). B, C, F are reachable FROM this cycle (A-&gt;B, E-&gt;F, F-&gt;B, F-&gt;C, B-&gt;C) but have no path back into {A,D,E} (B only goes to C; C has no outgoing edges; F only goes to B,C) — so they are NOT in the SCC. SCC(A) = {A, D, E}, size 3.</p></div><div class=\"ml-vi\"><p>Theo dõi các cạnh có hướng: A-&gt;E, E-&gt;D, D-&gt;A tạo thành chu trình 3 đỉnh, nên A, D, E đến được lẫn nhau (cùng một thành phần liên thông mạnh). B, C, F đến được TỪ chu trình này (A-&gt;B, E-&gt;F, F-&gt;B, F-&gt;C, B-&gt;C) nhưng không có đường quay lại {A,D,E} (B chỉ đi tới C; C không có cạnh ra; F chỉ đi tới B,C) — nên KHÔNG thuộc thành phần liên thông mạnh này. SCC(A) = {A, D, E}, gồm 3 đỉnh.</p></div>"
         }
       ]
     }

@@ -846,7 +846,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Are these two graphs isomorphic? (See picture: a rectangle with two vertices in the middle connected by an edge, and two side triangles vs. a triangle with a nested inner triangle connected by three spokes.)</p></div><div class=\"ml-vi\"><p>Hai đồ thị này có đẳng cấu (isomorphic) không? (Xem hình: hình chữ nhật với hai đỉnh giữa nối nhau và hai tam giác hai bên, so với một tam giác lồng một tam giác nhỏ bên trong nối bằng ba nan.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Are these two graphs isomorphic? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;Graph 1&quot;]\n    TL((TL)) --- TR((TR))\n    TL --- BL((BL))\n    TR --- BR((BR))\n    BL --- BR\n    TL --- ML((ML))\n    BL --- ML\n    TR --- MR((MR))\n    BR --- MR\n    ML --- MR\n  end\n  subgraph G2[&quot;Graph 2&quot;]\n    OT((OT)) --- OL((OL))\n    OT --- OR((OR))\n    OL --- OR\n    IT((IT)) --- IL((IL))\n    IT --- IR((IR))\n    IL --- IR\n    OT --- IT\n    OL --- IL\n    OR --- IR\n  end</pre></div><div class=\"ml-vi\"><p>Hai đồ thị này có đẳng cấu (isomorphic) không? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;Graph 1&quot;]\n    TL((TL)) --- TR((TR))\n    TL --- BL((BL))\n    TR --- BR((BR))\n    BL --- BR\n    TL --- ML((ML))\n    BL --- ML\n    TR --- MR((MR))\n    BR --- MR\n    ML --- MR\n  end\n  subgraph G2[&quot;Graph 2&quot;]\n    OT((OT)) --- OL((OL))\n    OT --- OR((OR))\n    OL --- OR\n    IT((IT)) --- IL((IL))\n    IT --- IR((IR))\n    IL --- IR\n    OT --- IT\n    OL --- IL\n    OR --- IR\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D13/q33.png",
           "options": [
             {
@@ -870,7 +870,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Are these two directed graphs isomorphic? (Two tetrahedral-layout digraphs with vertices 1,2,3,4, arrows shown in the picture.)</p></div><div class=\"ml-vi\"><p>Hai đồ thị có hướng này có đẳng cấu không? (Hai đồ thị hình tứ diện với các đỉnh 1,2,3,4, các mũi tên như trong hình.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Are these two directed graphs isomorphic? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;Graph 1&quot;]\n    A1((1))\n    A2((2))\n    A3((3))\n    A4((4))\n    A2 --&gt; A1\n    A1 --&gt; A3\n    A1 --&gt; A4\n    A3 --&gt; A2\n    A4 --&gt; A2\n    A3 --&gt; A4\n  end\n  subgraph G2[&quot;Graph 2&quot;]\n    B1((1))\n    B2((2))\n    B3((3))\n    B4((4))\n    B2 --&gt; B1\n    B1 --&gt; B3\n    B4 --&gt; B1\n    B3 --&gt; B2\n    B4 --&gt; B2\n    B3 --&gt; B4\n  end</pre></div><div class=\"ml-vi\"><p>Hai đồ thị có hướng này có đẳng cấu không? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;Graph 1&quot;]\n    A1((1))\n    A2((2))\n    A3((3))\n    A4((4))\n    A2 --&gt; A1\n    A1 --&gt; A3\n    A1 --&gt; A4\n    A3 --&gt; A2\n    A4 --&gt; A2\n    A3 --&gt; A4\n  end\n  subgraph G2[&quot;Graph 2&quot;]\n    B1((1))\n    B2((2))\n    B3((3))\n    B4((4))\n    B2 --&gt; B1\n    B1 --&gt; B3\n    B4 --&gt; B1\n    B3 --&gt; B2\n    B4 --&gt; B2\n    B3 --&gt; B4\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D13/q34.png",
           "options": [
             {
@@ -883,12 +883,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Left graph directed edges: 2→1, 1→3, 1→4, 2→3, 4→2, 3→4. Right graph: 2→1, 1→3, 4→1 (this one edge is reversed compared to the left graph&#39;s 1→4), 2→3, 4→2, 3→4. Although the identity vertex correspondence fails (because of the reversed edge), the bijection $\\varphi(1)=2,\\varphi(2)=4,\\varphi(3)=1,\\varphi(4)=3$ maps every left edge onto a right edge exactly (verified by direct check of all 6 edges), so the graphs ARE isomorphic. Determined via precise pixel-level analysis of arrowhead directions.</p></div><div class=\"ml-vi\"><p>Đồ thị trái có các cạnh có hướng: 2→1, 1→3, 1→4, 2→3, 4→2, 3→4. Đồ thị phải: 2→1, 1→3, 4→1 (cạnh này bị đảo chiều so với 1→4 ở đồ thị trái), 2→3, 4→2, 3→4. Dù ánh xạ đồng nhất giữa các đỉnh không cho ra đẳng cấu (do cạnh bị đảo), nhưng song ánh $\\varphi(1)=2,\\varphi(2)=4,\\varphi(3)=1,\\varphi(4)=3$ ánh xạ đúng mọi cạnh của đồ thị trái sang cạnh của đồ thị phải (đã kiểm tra đủ cả 6 cạnh), nên hai đồ thị ĐẲNG CẤU. Xác định bằng phân tích pixel chính xác hướng các mũi tên.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Graph 1 directed edges: 2→1, 1→3, 1→4, 3→2, 4→2, 3→4. Graph 2: 2→1, 1→3, 4→1 (this one edge is reversed compared to Graph 1&#39;s 1→4), 3→2, 4→2, 3→4. Although the identity vertex correspondence fails (because of the reversed edge), the bijection $\\varphi(1)=3,\\varphi(2)=1,\\varphi(3)=4,\\varphi(4)=2$ maps every edge of Graph 1 onto an edge of Graph 2 exactly: 2→1 ↦ 1→3, 1→3 ↦ 3→4, 1→4 ↦ 3→2, 3→2 ↦ 4→1, 4→2 ↦ 2→1, 3→4 ↦ 4→2 (all 6 edges checked), so the graphs ARE isomorphic. Arrow directions determined by pixel-level analysis of the arrowheads in the original figure.</p></div><div class=\"ml-vi\"><p>Đồ thị 1 có các cạnh có hướng: 2→1, 1→3, 1→4, 3→2, 4→2, 3→4. Đồ thị 2: 2→1, 1→3, 4→1 (cạnh này bị đảo chiều so với 1→4 ở đồ thị 1), 3→2, 4→2, 3→4. Dù ánh xạ đồng nhất giữa các đỉnh không cho ra đẳng cấu (do cạnh bị đảo), nhưng song ánh $\\varphi(1)=3,\\varphi(2)=1,\\varphi(3)=4,\\varphi(4)=2$ ánh xạ đúng mọi cạnh của đồ thị 1 sang cạnh của đồ thị 2: 2→1 ↦ 1→3, 1→3 ↦ 3→4, 1→4 ↦ 3→2, 3→2 ↦ 4→1, 4→2 ↦ 2→1, 3→4 ↦ 4→2 (đã kiểm tra đủ cả 6 cạnh), nên hai đồ thị ĐẲNG CẤU. Hướng mũi tên được xác định bằng phân tích pixel các đầu mũi tên trong hình gốc.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>How many connected components in the graph? (An outer square, an axis-aligned inner square, a rotated diamond crossing the inner square, and a center vertex joined by one edge to the diamond&#39;s left vertex; the outer square&#39;s top-right corner is joined by a diagonal edge to the inner square&#39;s top-right corner.)</p></div><div class=\"ml-vi\"><p>Đồ thị có bao nhiêu thành phần liên thông? (Một hình vuông ngoài, một hình vuông trong thẳng trục, một hình thoi xoay cắt qua hình vuông trong, và một đỉnh trung tâm nối bằng một cạnh tới đỉnh trái của hình thoi; góc trên-phải của hình vuông ngoài nối bằng một cạnh chéo tới góc trên-phải của hình vuông trong.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many connected components in the graph? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  OTL((OTL)) --- OTR((OTR))\n  OTR --- OBR((OBR))\n  OBR --- OBL((OBL))\n  OBL --- OTL\n  ITL((ITL)) --- ITR((ITR))\n  ITR --- IBR((IBR))\n  IBR --- IBL((IBL))\n  IBL --- ITL\n  OTR --- ITR\n  DT((DT)) --- DR((DR))\n  DR --- DB((DB))\n  DB --- DL((DL))\n  DL --- DT\n  DL --- C((C))</pre></div><div class=\"ml-vi\"><p>Đồ thị có bao nhiêu thành phần liên thông? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  OTL((OTL)) --- OTR((OTR))\n  OTR --- OBR((OBR))\n  OBR --- OBL((OBL))\n  OBL --- OTL\n  ITL((ITL)) --- ITR((ITR))\n  ITR --- IBR((IBR))\n  IBR --- IBL((IBL))\n  IBL --- ITL\n  OTR --- ITR\n  DT((DT)) --- DR((DR))\n  DR --- DB((DB))\n  DB --- DL((DL))\n  DL --- DT\n  DL --- C((C))</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D13/q35.png",
           "options": [
             {
@@ -918,7 +918,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>How many cut vertices does this graph $G$ have? (Vertices $a,b,c,d,e,f,g$: edges $a$-$b$, $a$-$c$, $b$-$c$, $c$-$f$, $c$-$d$, $f$-$d$, $f$-$g$, $d$-$e$.)</p></div><div class=\"ml-vi\"><p>Đồ thị $G$ có bao nhiêu đỉnh cắt? (Các đỉnh $a,b,c,d,e,f,g$: cạnh $a$-$b$, $a$-$c$, $b$-$c$, $c$-$f$, $c$-$d$, $f$-$d$, $f$-$g$, $d$-$e$.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many cut vertices does this graph $G$ have? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  a((a)) --- b((b))\n  a --- c((c))\n  b --- c\n  c --- f((f))\n  c --- d((d))\n  f --- d\n  f --- g((g))\n  d --- e((e))</pre></div><div class=\"ml-vi\"><p>Đồ thị $G$ có bao nhiêu đỉnh cắt? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  a((a)) --- b((b))\n  a --- c((c))\n  b --- c\n  c --- f((f))\n  c --- d((d))\n  f --- d\n  f --- g((g))\n  d --- e((e))</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D13/q36.png",
           "options": [
             {
@@ -966,7 +966,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What is the shortest distance between A and G? (Weighted graph with vertices A,B,C,D,E,F,G; edges A-B=8, A-C=8, B-D=7, B-C=6, B-E=5, E-D=4, C-E=6, E-F=3, C-F=5, D-F=6, D-G=8, F-G=7.)</p></div><div class=\"ml-vi\"><p>Khoảng cách ngắn nhất giữa A và G là bao nhiêu? (Đồ thị có trọng số với các đỉnh A,B,C,D,E,F,G; các cạnh A-B=8, A-C=8, B-D=7, B-C=6, B-E=5, E-D=4, C-E=6, E-F=3, C-F=5, D-F=6, D-G=8, F-G=7.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the shortest distance between A and G? (see weighted graph below)</p><pre class=\"mermaid\">graph TD\n  A -- 8 --- B\n  A -- 8 --- C\n  B -- 7 --- D\n  B -- 6 --- C\n  B -- 5 --- E\n  E -- 4 --- D\n  C -- 6 --- E\n  E -- 3 --- F\n  C -- 5 --- F\n  D -- 6 --- F\n  D -- 8 --- G\n  F -- 7 --- G</pre></div><div class=\"ml-vi\"><p>Khoảng cách ngắn nhất giữa A và G là bao nhiêu? (xem đồ thị có trọng số bên dưới)</p><pre class=\"mermaid\">graph TD\n  A -- 8 --- B\n  A -- 8 --- C\n  B -- 7 --- D\n  B -- 6 --- C\n  B -- 5 --- E\n  E -- 4 --- D\n  C -- 6 --- E\n  E -- 3 --- F\n  C -- 5 --- F\n  D -- 6 --- F\n  D -- 8 --- G\n  F -- 7 --- G</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D13/q38.png",
           "options": [
             {
@@ -1095,7 +1095,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What is the position of the letter $n$ when using the preorder traversal? (Tree rooted at $a$, with children $b, c$; $b$ has children $d, e$; $e$ has children $i, j$; $j$ has children $m, n, o$; $c$ has children $f, g, h$; $h$ has children $k, l$; $l$ has child $p$.)</p></div><div class=\"ml-vi\"><p>Vị trí của chữ cái $n$ khi dùng duyệt tiền tự (preorder) là bao nhiêu? (Cây gốc $a$, con là $b, c$; $b$ có con $d, e$; $e$ có con $i, j$; $j$ có con $m, n, o$; $c$ có con $f, g, h$; $h$ có con $k, l$; $l$ có con $p$.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the position of the letter $n$ when using the preorder traversal? (see tree below)</p><pre class=\"mermaid\">graph TD\n  a --&gt; b\n  a --&gt; c\n  b --&gt; d\n  b --&gt; e\n  e --&gt; i\n  e --&gt; j\n  j --&gt; m\n  j --&gt; n\n  j --&gt; o\n  c --&gt; f\n  c --&gt; g\n  c --&gt; h\n  h --&gt; k\n  h --&gt; l\n  l --&gt; p</pre></div><div class=\"ml-vi\"><p>Vị trí của chữ cái $n$ khi dùng duyệt tiền tự (preorder) là bao nhiêu? (xem cây bên dưới)</p><pre class=\"mermaid\">graph TD\n  a --&gt; b\n  a --&gt; c\n  b --&gt; d\n  b --&gt; e\n  e --&gt; i\n  e --&gt; j\n  j --&gt; m\n  j --&gt; n\n  j --&gt; o\n  c --&gt; f\n  c --&gt; g\n  c --&gt; h\n  h --&gt; k\n  h --&gt; l\n  l --&gt; p</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D13/q43.png",
           "options": [
             {
@@ -1179,7 +1179,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What is the total weight of a minimum spanning tree produced by the graph below? (Vertices A,B,C,D,E,F; edges A-B=1, B-C=6, A-D=3, B-D=5, B-E=1, C-E=5, C-F=2, D-E=1, E-F=4.)</p></div><div class=\"ml-vi\"><p>Tổng trọng số của cây khung nhỏ nhất (MST) sinh ra từ đồ thị dưới đây là bao nhiêu? (Các đỉnh A,B,C,D,E,F; các cạnh A-B=1, B-C=6, A-D=3, B-D=5, B-E=1, C-E=5, C-F=2, D-E=1, E-F=4.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the total weight of a minimum spanning tree produced by the graph below? (see weighted graph below)</p><pre class=\"mermaid\">graph TD\n  A -- 1 --- B\n  B -- 6 --- C\n  A -- 3 --- D\n  B -- 5 --- D\n  B -- 1 --- E\n  C -- 5 --- E\n  C -- 2 --- F\n  D -- 1 --- E\n  E -- 4 --- F</pre></div><div class=\"ml-vi\"><p>Tổng trọng số của cây khung nhỏ nhất (MST) sinh ra từ đồ thị dưới đây là bao nhiêu? (xem đồ thị có trọng số bên dưới)</p><pre class=\"mermaid\">graph TD\n  A -- 1 --- B\n  B -- 6 --- C\n  A -- 3 --- D\n  B -- 5 --- D\n  B -- 1 --- E\n  C -- 5 --- E\n  C -- 2 --- F\n  D -- 1 --- E\n  E -- 4 --- F</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D13/q46.png",
           "options": [
             {

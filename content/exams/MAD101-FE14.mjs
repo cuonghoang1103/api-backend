@@ -882,7 +882,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Which graph is bipartite?<br/>$C_6$ = Graph 1; Graph 2 is a 4-cycle with one diagonal (forming a triangle); Graph 3 is a quadrilateral with an extra vertex joined by two crossing edges.</p></div><div class=\"ml-vi\"><p>Đồ thị nào là hai phía (bipartite)?<br/>$C_6$ = Đồ thị 1; Đồ thị 2 là chu trình 4 đỉnh có thêm một đường chéo (tạo thành tam giác); Đồ thị 3 là tứ giác có thêm một đỉnh nối bằng hai cạnh cắt nhau.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which graph is bipartite? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;Graph 1: C6&quot;]\n    c1((&quot; &quot;)) --- c2((&quot; &quot;))\n    c2 --- c3((&quot; &quot;))\n    c3 --- c4((&quot; &quot;))\n    c4 --- c5((&quot; &quot;))\n    c5 --- c6((&quot; &quot;))\n    c6 --- c1\n  end\n  subgraph G2[&quot;Graph 2&quot;]\n    p1((&quot; &quot;)) --- p2((&quot; &quot;))\n    p2 --- p3((&quot; &quot;))\n    p3 --- p4((&quot; &quot;))\n    p4 --- p1\n    p1 --- p3\n  end\n  subgraph G3[&quot;Graph 3&quot;]\n    q1((&quot; &quot;)) --- q2((&quot; &quot;))\n    q2 --- q4((&quot; &quot;))\n    q3((&quot; &quot;)) --- q4\n    q1 --- q4\n    q5((&quot; &quot;)) --- q3\n  end</pre></div><div class=\"ml-vi\"><p>Đồ thị nào là hai phía (bipartite)? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  subgraph G1[&quot;Graph 1: C6&quot;]\n    c1((&quot; &quot;)) --- c2((&quot; &quot;))\n    c2 --- c3((&quot; &quot;))\n    c3 --- c4((&quot; &quot;))\n    c4 --- c5((&quot; &quot;))\n    c5 --- c6((&quot; &quot;))\n    c6 --- c1\n  end\n  subgraph G2[&quot;Graph 2&quot;]\n    p1((&quot; &quot;)) --- p2((&quot; &quot;))\n    p2 --- p3((&quot; &quot;))\n    p3 --- p4((&quot; &quot;))\n    p4 --- p1\n    p1 --- p3\n  end\n  subgraph G3[&quot;Graph 3&quot;]\n    q1((&quot; &quot;)) --- q2((&quot; &quot;))\n    q2 --- q4((&quot; &quot;))\n    q3((&quot; &quot;)) --- q4\n    q1 --- q4\n    q5((&quot; &quot;)) --- q3\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D14/q34.png",
           "options": [
             {
@@ -933,7 +933,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A multigraph on vertices a, b, c, d has: square edges a-b, a-d, d-c, b-c; three parallel curved edges between a and c; and a self-loop at each of b, c, d. What is the sum of the numbers in the third row of the adjacency matrix, in the order a,b,c,d?</p></div><div class=\"ml-vi\"><p>Một đa đồ thị trên các đỉnh a, b, c, d có: các cạnh hình vuông a-b, a-d, d-c, b-c; ba cạnh cong song song giữa a và c; và một khuyên (self-loop) tại mỗi đỉnh b, c, d. Tổng các số trong hàng thứ ba của ma trận kề, theo thứ tự a,b,c,d, là bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A multigraph on vertices a, b, c, d is given (see diagram below). What is the sum of the numbers in the third row of the adjacency matrix, in the order a,b,c,d?</p><pre class=\"mermaid\">graph TD\n  a((a)) --- b((b))\n  a --- b\n  a --- c((c))\n  a --- c\n  a --- c\n  a --- d((d))\n  b --- c\n  c --- d\n  c --- d\n  b --- b\n  c --- c\n  d --- d</pre></div><div class=\"ml-vi\"><p>Cho một đa đồ thị trên các đỉnh a, b, c, d (xem sơ đồ bên dưới). Tổng các số trong hàng thứ ba của ma trận kề, theo thứ tự a,b,c,d, là bao nhiêu?</p><pre class=\"mermaid\">graph TD\n  a((a)) --- b((b))\n  a --- b\n  a --- c((c))\n  a --- c\n  a --- c\n  a --- d((d))\n  b --- c\n  c --- d\n  c --- d\n  b --- b\n  c --- c\n  d --- d</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D14/q36.png",
           "options": [
             {
@@ -957,7 +957,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Are the two given graphs isomorphic? If not, what is the reason?<br/>(Left graph: 6 vertices, an outer square with one diagonal plus a pendant vertex attached to two opposite corners on each side. Right graph: same pendant structure, but the inner square has both diagonals and no vertical sides.)</p></div><div class=\"ml-vi\"><p>Hai đồ thị đã cho có đẳng cấu (isomorphic) không? Nếu không, lý do là gì?<br/>(Đồ thị trái: 6 đỉnh, một hình vuông ngoài có một đường chéo cộng thêm một đỉnh treo gắn vào hai góc đối diện mỗi bên. Đồ thị phải: cấu trúc đỉnh treo tương tự, nhưng hình vuông trong có cả hai đường chéo và không có hai cạnh dọc.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Are the two given graphs isomorphic? If not, what is the reason? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  subgraph L[&quot;Left graph&quot;]\n    x1((&quot; &quot;)) --- x2((&quot; &quot;))\n    x1 --- x4((&quot; &quot;))\n    x2 --- x3((&quot; &quot;))\n    x2 --- x4\n    x2 --- x5((&quot; &quot;))\n    x3 --- x5\n    x4 --- x5\n    x3 --- x6((&quot; &quot;))\n    x5 --- x6\n  end\n  subgraph R[&quot;Right graph&quot;]\n    y1((&quot; &quot;)) --- y2((&quot; &quot;))\n    y1 --- y4((&quot; &quot;))\n    y2 --- y3((&quot; &quot;))\n    y2 --- y5((&quot; &quot;))\n    y3 --- y4\n    y3 --- y5\n    y4 --- y5\n    y3 --- y6((&quot; &quot;))\n    y5 --- y6\n  end</pre></div><div class=\"ml-vi\"><p>Hai đồ thị đã cho có đẳng cấu (isomorphic) không? Nếu không, lý do là gì? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  subgraph L[&quot;Left graph&quot;]\n    x1((&quot; &quot;)) --- x2((&quot; &quot;))\n    x1 --- x4((&quot; &quot;))\n    x2 --- x3((&quot; &quot;))\n    x2 --- x4\n    x2 --- x5((&quot; &quot;))\n    x3 --- x5\n    x4 --- x5\n    x3 --- x6((&quot; &quot;))\n    x5 --- x6\n  end\n  subgraph R[&quot;Right graph&quot;]\n    y1((&quot; &quot;)) --- y2((&quot; &quot;))\n    y1 --- y4((&quot; &quot;))\n    y2 --- y3((&quot; &quot;))\n    y2 --- y5((&quot; &quot;))\n    y3 --- y4\n    y3 --- y5\n    y4 --- y5\n    y3 --- y6((&quot; &quot;))\n    y5 --- y6\n  end</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D14/q37.png",
           "options": [
             {
@@ -977,14 +977,14 @@ export default {
             }
           ],
           "correctIndexes": [
-            2
+            0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Computing degrees: the left graph&#39;s inner square (4 sides + 1 diagonal) gives two vertices of degree 4 and two of degree 3 (plus two pendant degree-2 vertices). The right graph&#39;s inner shape (top+bottom edges + both crossing diagonals, no verticals) gives four vertices of degree 3 and none of degree 4. Since the counts of degree-4 vertices differ (2 vs 0), the graphs are not isomorphic.</p></div><div class=\"ml-vi\"><p>Tính bậc các đỉnh: hình vuông trong của đồ thị trái (4 cạnh + 1 đường chéo) cho hai đỉnh bậc 4 và hai đỉnh bậc 3 (cùng hai đỉnh treo bậc 2). Hình bên trong của đồ thị phải (cạnh trên+dưới cùng hai đường chéo cắt nhau, không có cạnh dọc) cho bốn đỉnh bậc 3 và không có đỉnh bậc 4. Vì số đỉnh bậc 4 khác nhau (2 so với 0) nên hai đồ thị không đẳng cấu.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Both graphs share the same degree sequence [4,4,3,3,2,2] (2 vertices of degree 4, 2 of degree 3, 2 of degree 2 each), so options ruling out isomorphism by vertex-degree COUNTS are false. The real distinguishing invariant: on the LEFT, both degree-2 vertices (x1, x6) are adjacent to a degree-3 vertex. On the RIGHT, degree-2 vertex y6 is adjacent only to two degree-4 vertices (y3, y5) — NOT to any degree-3 vertex. This structural difference proves they are not isomorphic.</p></div><div class=\"ml-vi\"><p>Cả hai đồ thị có cùng dãy bậc [4,4,3,3,2,2] (2 đỉnh bậc 4, 2 đỉnh bậc 3, 2 đỉnh bậc 2), nên các phương án loại trừ đẳng cấu dựa trên SỐ LƯỢNG đỉnh theo bậc đều sai. Điểm khác biệt thật sự: ở đồ thị TRÁI, cả hai đỉnh bậc 2 (x1, x6) đều kề với một đỉnh bậc 3. Ở đồ thị PHẢI, đỉnh bậc 2 y6 chỉ kề với hai đỉnh bậc 4 (y3, y5) — KHÔNG kề đỉnh bậc 3 nào. Khác biệt cấu trúc này chứng minh chúng không đẳng cấu.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>How many cut-edges are there in this graph? (8 vertices: a top pendant pair, a chain leading into a triangle formed by three vertices, and another pendant pair hanging off the triangle.)</p></div><div class=\"ml-vi\"><p>Có bao nhiêu cạnh cầu (cut-edge) trong đồ thị này? (8 đỉnh: một cặp đỉnh treo phía trên, một chuỗi dẫn vào một tam giác gồm ba đỉnh, và một cặp đỉnh treo khác gắn vào tam giác.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many cut-edges are there in this graph? (see diagram below)</p><pre class=\"mermaid\">graph TD\n  v1((&quot; &quot;)) --- v2((&quot; &quot;))\n  v1 --- v3((&quot; &quot;))\n  v3 --- v4((&quot; &quot;))\n  v4 --- v5((&quot; &quot;))\n  v4 --- v6((&quot; &quot;))\n  v5 --- v6\n  v6 --- v7((&quot; &quot;))\n  v7 --- v8((&quot; &quot;))</pre></div><div class=\"ml-vi\"><p>Có bao nhiêu cạnh cầu (cut-edge) trong đồ thị này? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph TD\n  v1((&quot; &quot;)) --- v2((&quot; &quot;))\n  v1 --- v3((&quot; &quot;))\n  v3 --- v4((&quot; &quot;))\n  v4 --- v5((&quot; &quot;))\n  v4 --- v6((&quot; &quot;))\n  v5 --- v6\n  v6 --- v7((&quot; &quot;))\n  v7 --- v8((&quot; &quot;))</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D14/q38.png",
           "options": [
             {
@@ -1062,7 +1062,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find the length of the shortest path from A to B in the given weighted graph (7 vertices, edge weights as labeled: A-P=4, A-S=5, P-Q=5, Q-B=6, P-S=2, P-T=8, Q-R=3, R-B=2, R-T=1, S-T=6, T-B=4).</p></div><div class=\"ml-vi\"><p>Tìm độ dài đường đi ngắn nhất từ A đến B trong đồ thị có trọng số đã cho (7 đỉnh, trọng số cạnh: A-P=4, A-S=5, P-Q=5, Q-B=6, P-S=2, P-T=8, Q-R=3, R-B=2, R-T=1, S-T=6, T-B=4).</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the length of the shortest path from A to B in the given weighted graph (see diagram below).</p><pre class=\"mermaid\">graph LR\n  A((A)) -- 4 --- P((P))\n  A -- 5 --- S((S))\n  A -- 8 --- Q((Q))\n  P -- 5 --- Q\n  P -- 2 --- S\n  S -- 6 --- T((T))\n  Q -- 3 --- R((R))\n  Q -- 6 --- B((B))\n  R -- 1 --- T\n  R -- 2 --- B\n  T -- 4 --- B</pre></div><div class=\"ml-vi\"><p>Tìm độ dài đường đi ngắn nhất từ A đến B trong đồ thị có trọng số đã cho (xem sơ đồ bên dưới).</p><pre class=\"mermaid\">graph LR\n  A((A)) -- 4 --- P((P))\n  A -- 5 --- S((S))\n  A -- 8 --- Q((Q))\n  P -- 5 --- Q\n  P -- 2 --- S\n  S -- 6 --- T((T))\n  Q -- 3 --- R((R))\n  Q -- 6 --- B((B))\n  R -- 1 --- T\n  R -- 2 --- B\n  T -- 4 --- B</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D14/q41.png",
           "options": [
             {
@@ -1082,9 +1082,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            1
+            0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Running Dijkstra from A: two different routes tie for shortest — A-S-T-R-B (5+6+1+2=14) and A-P-Q-R-B (4+5+3+2=14) — giving shortest path length 14, which matches none of the numeric options.</p></div><div class=\"ml-vi\"><p>Chạy Dijkstra từ A: hai đường khác nhau cùng cho kết quả ngắn nhất — A-S-T-R-B (5+6+1+2=14) và A-P-Q-R-B (4+5+3+2=14) — cho độ dài đường đi ngắn nhất là 14, không khớp đáp án số nào.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Dijkstra from A: dist(P)=4, dist(S)=5, dist(Q)=8 (direct edges). Via P: S=6 (worse). Via Q: R=8+3=11, B=8+6=14 (direct). Via R: B=11+2=13, which beats the direct A-Q-B=14. Shortest path A-Q-R-B = 8+3+2 = 13.</p></div><div class=\"ml-vi\"><p>Dijkstra từ A: dist(P)=4, dist(S)=5, dist(Q)=8 (cạnh trực tiếp). Qua P: S=6 (tệ hơn). Qua Q: R=8+3=11, B=8+6=14 (trực tiếp). Qua R: B=11+2=13, tốt hơn đường A-Q-B=14 trực tiếp. Đường đi ngắn nhất A-Q-R-B = 8+3+2 = 13.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1170,7 +1170,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given a prefix code represented by the binary tree (root splits 0/1; 0-branch splits into leaf e (0) and a node (1) splitting into leaves f (0), n (1); 1-branch splits into leaf r (0) and a node (1) splitting into leaves s (0), u (1)). Decode the message 010111011.</p></div><div class=\"ml-vi\"><p>Cho một mã tiền tố (prefix code) biểu diễn bằng cây nhị phân (gốc tách 0/1; nhánh 0 tách thành lá e (0) và một nút (1) tách thành lá f (0), n (1); nhánh 1 tách thành lá r (0) và một nút (1) tách thành lá s (0), u (1)). Giải mã thông điệp 010111011.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given a prefix code represented by the binary tree (see diagram below). Decode the message 010111011.</p><pre class=\"mermaid\">graph TD\n  root((&quot; &quot;)) -- 0 --&gt; t0((&quot; &quot;))\n  root -- 1 --&gt; t1((&quot; &quot;))\n  t0 -- 0 --&gt; e((e))\n  t0 -- 1 --&gt; t01((&quot; &quot;))\n  t01 -- 0 --&gt; f((f))\n  t01 -- 1 --&gt; nn((n))\n  t1 -- 0 --&gt; rr((r))\n  t1 -- 1 --&gt; t11((&quot; &quot;))\n  t11 -- 0 --&gt; s((s))\n  t11 -- 1 --&gt; u((u))</pre></div><div class=\"ml-vi\"><p>Cho một mã tiền tố (prefix code) biểu diễn bằng cây nhị phân (xem sơ đồ bên dưới). Giải mã thông điệp 010111011.</p><pre class=\"mermaid\">graph TD\n  root((&quot; &quot;)) -- 0 --&gt; t0((&quot; &quot;))\n  root -- 1 --&gt; t1((&quot; &quot;))\n  t0 -- 0 --&gt; e((e))\n  t0 -- 1 --&gt; t01((&quot; &quot;))\n  t01 -- 0 --&gt; f((f))\n  t01 -- 1 --&gt; nn((n))\n  t1 -- 0 --&gt; rr((r))\n  t1 -- 1 --&gt; t11((&quot; &quot;))\n  t11 -- 0 --&gt; s((s))\n  t11 -- 1 --&gt; u((u))</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D14/q45.png",
           "options": [
             {
@@ -1224,7 +1224,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Use depth-first search to produce a spanning tree for the given simple graph (vertices A,B,C,D,E,Z with edges A-B, A-C, B-D, B-E, D-E, D-Z, E-Z, C-E), and assume that the vertices are ordered alphabetically. Choose the vertex A as the root of this spanning tree. What is the spanning tree that we obtain?</p></div><div class=\"ml-vi\"><p>Dùng tìm kiếm theo chiều sâu (depth-first search) để tạo cây khung (spanning tree) cho đồ thị đơn đã cho (các đỉnh A,B,C,D,E,Z với các cạnh A-B, A-C, B-D, B-E, D-E, D-Z, E-Z, C-E), giả sử các đỉnh được sắp theo thứ tự bảng chữ cái. Chọn đỉnh A làm gốc của cây khung này. Cây khung thu được là gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Use depth-first search to produce a spanning tree for the given simple graph (see diagram below), and assume that the vertices are ordered alphabetically. Choose the vertex A as the root of this spanning tree. What is the spanning tree that we obtain?</p><pre class=\"mermaid\">graph TD\n  A((A)) --- B((B))\n  A --- C((C))\n  B --- D((D))\n  B --- E((E))\n  D --- E\n  D --- Z((Z))\n  E --- Z\n  C --- E</pre></div><div class=\"ml-vi\"><p>Dùng tìm kiếm theo chiều sâu (depth-first search) để tạo cây khung (spanning tree) cho đồ thị đơn đã cho (xem sơ đồ bên dưới), giả sử các đỉnh được sắp theo thứ tự bảng chữ cái. Chọn đỉnh A làm gốc của cây khung này. Cây khung thu được là gì?</p><pre class=\"mermaid\">graph TD\n  A((A)) --- B((B))\n  A --- C((C))\n  B --- D((D))\n  B --- E((E))\n  D --- E\n  D --- Z((Z))\n  E --- Z\n  C --- E</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D14/q47.png",
           "options": [
             {
@@ -1251,7 +1251,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What is the third edge added into the minimum spanning tree in the following undirected weighted graph by using Prim&#39;s algorithm? (Vertices a,b,c,d,h,e,f,g with weights: a-b=6, a-d=2, a-c=9, b-d=12, d-c=5, c-h=3, c-e=1, h-e=8, h-g=10, h-f=4, g-f=7, e-f=11.)</p></div><div class=\"ml-vi\"><p>Cạnh thứ BA được thêm vào cây khung nhỏ nhất (minimum spanning tree) trong đồ thị vô hướng có trọng số sau đây bằng thuật toán Prim là gì? (Các đỉnh a,b,c,d,h,e,f,g với trọng số: a-b=6, a-d=2, a-c=9, b-d=12, d-c=5, c-h=3, c-e=1, h-e=8, h-g=10, h-f=4, g-f=7, e-f=11.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the third edge added into the minimum spanning tree in the following undirected weighted graph by using Prim&#39;s algorithm? (see diagram below)</p><pre class=\"mermaid\">graph LR\n  a((a)) -- 6 --- b((b))\n  a -- 2 --- d((d))\n  d -- 9 --- b\n  b -- 12 --- c((c))\n  d -- 5 --- c\n  c -- 3 --- h((h))\n  c -- 1 --- e((e))\n  h -- 8 --- e\n  h -- 10 --- g((g))\n  h -- 4 --- f((f))\n  g -- 7 --- f\n  e -- 11 --- f</pre></div><div class=\"ml-vi\"><p>Cạnh thứ BA được thêm vào cây khung nhỏ nhất (minimum spanning tree) trong đồ thị vô hướng có trọng số sau đây bằng thuật toán Prim là gì? (xem sơ đồ bên dưới)</p><pre class=\"mermaid\">graph LR\n  a((a)) -- 6 --- b((b))\n  a -- 2 --- d((d))\n  d -- 9 --- b\n  b -- 12 --- c((c))\n  d -- 5 --- c\n  c -- 3 --- h((h))\n  c -- 1 --- e((e))\n  h -- 8 --- e\n  h -- 10 --- g((g))\n  h -- 4 --- f((f))\n  g -- 7 --- f\n  e -- 11 --- f</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D14/q48.png",
           "options": [
             {
@@ -1278,7 +1278,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Choose the correct statement about the graph. (Two triangles joined by a single bridge edge, forming a bowtie/hourglass shape of 6 vertices.)</p></div><div class=\"ml-vi\"><p>Chọn phát biểu đúng về đồ thị. (Hai tam giác nối với nhau bằng một cạnh cầu duy nhất, tạo thành hình chiếc nơ/đồng hồ cát gồm 6 đỉnh.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Choose the correct statement about the graph (see diagram below; vertices labelled $v_1$-$v_6$).</p><pre class=\"mermaid\">graph LR\n  v1((v1)) --- v2((v2))\n  v1 --- v3((v3))\n  v2 --- v3\n  v3 --- v6((v6))\n  v6 --- v4((v4))\n  v6 --- v5((v5))\n  v4 --- v5</pre></div><div class=\"ml-vi\"><p>Chọn phát biểu đúng về đồ thị (xem sơ đồ bên dưới; các đỉnh được đánh nhãn $v_1$-$v_6$).</p><pre class=\"mermaid\">graph LR\n  v1((v1)) --- v2((v2))\n  v1 --- v3((v3))\n  v2 --- v3\n  v3 --- v6((v6))\n  v6 --- v4((v4))\n  v6 --- v5((v5))\n  v4 --- v5</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D14/q49.png",
           "options": [
             {

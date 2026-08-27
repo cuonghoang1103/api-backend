@@ -380,7 +380,13 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   language_tutor: 'claude-sonnet-5',
   language_bulk: 'gpt-5.4-mini',
 
-  codelab_coach: 'claude-sonnet-5',
+  // Gia sư LAB211 (giảng đề + chat hỏi tiếp + vấn đáp + đối chiếu code) chạy
+  // model MẠNH NHẤT theo yêu cầu: hiểu đề + 4 tính chất OOP + review code cần độ
+  // sâu, đây là chỗ chất lượng đáng tiền. Đã KIỂM cổng modelapi.vn 27/08/2026:
+  // claude-opus-4-8 sống thật (trả completion). Các lời gọi tương tác trong
+  // codeLab.explain/coach.service ĐÃ truyền purpose:'codelab_coach' để vào đây;
+  // codelab_bulk (sinh bài hàng loạt, chạy nền) vẫn giữ model rẻ.
+  codelab_coach: 'claude-opus-4-8',
   codelab_bulk: 'gpt-5.4-mini',
 
   cv_critique: 'gpt-5.6-sol',

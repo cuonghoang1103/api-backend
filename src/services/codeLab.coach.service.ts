@@ -130,6 +130,7 @@ export async function askViva(
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
+    purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
     system: ASK_SYSTEM,
     messages: [{ role: 'user', content: `MODE = ${opts.mode}\n\n${briefOf(ex)}${avoid}` }],
     maxTokens: 700,
@@ -190,6 +191,7 @@ export async function gradeViva(
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
+    purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
     system: GRADE_SYSTEM,
     messages: [{
       role: 'user',
@@ -260,6 +262,7 @@ export async function checkAgainstBrief(
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
+    purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
     system: CHECK_SYSTEM,
     messages: [{ role: 'user', content: `${briefOf(ex)}\n\nSTUDENT CODE:\n\`\`\`java\n${code}\n\`\`\`` }],
     maxTokens: 4000,
@@ -374,6 +377,7 @@ export async function checkProjectAgainstBrief(
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
+    purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
     system: PROJECT_CHECK_SYSTEM,
     messages: [{ role: 'user', content: `${briefOf(ex)}\n\nSTUDENT PROJECT:\n${body}` }],
     // Four sections instead of one, over a whole project — 4000 truncated the

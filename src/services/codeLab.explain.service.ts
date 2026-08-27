@@ -190,6 +190,7 @@ export async function explainExercise(
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
+    purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
     system: EXPLAIN_SYSTEM,
     messages: [{ role: 'user', content: briefFor(ex) }],
     // 16-26 blocks, every one of them bilingual, plus a structure tree:
@@ -321,6 +322,7 @@ export async function askFollowUp(
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
+    purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
     system: CHAT_SYSTEM,
     messages,
     maxTokens: 4000,

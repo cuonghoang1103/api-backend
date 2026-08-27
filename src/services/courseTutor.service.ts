@@ -79,10 +79,10 @@ async function loadLesson(lessonId: number) {
   return lesson;
 }
 
-const TUTOR_SYSTEM = `You are a patient tutor for FPT University students, embedded inside ONE
-specific course lesson the student is studying. You know the course and the lesson content
-below. Answer in BOTH languages: first English, then the same answer in Vietnamese under a
-line that reads "Tiếng Việt:".
+// Phần chung của prompt (khả năng + luật + cách trình bày). Ngôn ngữ tách riêng
+// bên dưới để đổi VI/EN mà không nhân đôi cả prompt.
+const TUTOR_SYSTEM_BASE = `You are a patient tutor for FPT University students, embedded inside ONE
+specific course lesson the student is studying. You know the course and the lesson content below.
 
 You help with anything about learning THIS lesson/course:
 - Where to start and how to study this lesson if the student is lost.
@@ -103,22 +103,39 @@ Rules:
 
 FORMATTING — your answer is rendered as RICH markdown (bold, lists, tables, highlighted
 code, KaTeX math, SVG figures). Use it well; keep it clean and scannable, never a wall of text:
-- Short paragraphs + bullet/numbered lists; **bold** key terms; use a markdown table when
-  comparing things.
+- Short paragraphs + bullet/numbered lists; **bold** key terms; use a markdown table when comparing.
 - Code: fenced blocks WITH a language — \`\`\`java … \`\`\`, \`\`\`jsx … \`\`\`, \`\`\`sql … \`\`\`.
 - Math: LaTeX only inside math delimiters — inline $…$, display $$…$$ (e.g. $O(n^2)$,
   $$\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$$). Never write \\frac, ^, _ outside $…$.
 - Diagrams / flowcharts / trees / UML when they clarify a STRUCTURE: output ONE small,
-  self-contained SVG inside a \`\`\`svg fence (set viewBox; simple <rect>/<line>/<text>; no
-  external refs, no scripts). Prefer a diagram over a long verbal description.
-- Keep the bilingual answer TIGHT: say it once well in English, then the same under
-  "Tiếng Việt:" — don't pad either side.`;
+  self-contained SVG inside a \`\`\`svg fence (viewBox; simple <rect>/<line>/<text>; no external
+  refs/scripts). Prefer a diagram over a long verbal description.`;
 
-/** Trả lời một câu hỏi của học viên về bài học đang mở. Không lưu. */
-export async function askCourseTutor(
+// Mặc định: TIẾNG VIỆT (giữ thuật ngữ tiếng Anh). Không trả lời hai thứ tiếng
+// một lúc nữa — vừa phí token vừa dài. Cần bản tiếng Anh thì bấm nút riêng.
+const LANG_VI = `\n\nLANGUAGE — Answer ENTIRELY in Vietnamese, natural and clear. KEEP the following in
+English (do NOT translate): technical terms, code identifiers, library / API / framework /
+class / method names, and standard technical phrases (e.g. "component", "state", "props",
+"commit", "unit test", "requirement", "endpoint", "pull request"). Do NOT write a separate
+English version — Vietnamese only.`;
+
+const LANG_EN = `\n\nLANGUAGE — Answer ENTIRELY in English.`;
+
+const tutorSystem = (english?: boolean): string => TUTOR_SYSTEM_BASE + (english ? LANG_EN : LANG_VI);
+
+export interface TutorAskOpts {
+  userId: number;
+  question: string;
+  history?: TutorMessage[];
+  /** true ⇒ trả lời bằng tiếng Anh (nút "Bản tiếng Anh"); mặc định tiếng Việt. */
+  english?: boolean;
+}
+
+// Dựng system + messages một chỗ để bản STREAM và bản thường luôn giống hệt nhau.
+async function buildTutorCall(
   lessonId: number,
-  opts: { userId: number; question: string; history?: TutorMessage[] },
-): Promise<{ answer: string }> {
+  opts: TutorAskOpts,
+): Promise<{ system: string; messages: TutorMessage[] }> {
   const question = (opts.question || '').trim();
   if (!question) throw new BadRequestError('Hãy nhập câu hỏi.');
   if (question.length > MAX_QUESTION) throw new BadRequestError('Câu hỏi dài quá.');
@@ -142,19 +159,52 @@ export async function askCourseTutor(
     ...(opts.history || []).slice(-MAX_HISTORY),
     { role: 'user', content: question },
   ];
+  return { system: tutorSystem(opts.english), messages };
+}
 
+/** Trả lời một câu (không stream) — dùng làm đường lùi khi SSE hỏng. Không lưu. */
+export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Promise<{ answer: string }> {
+  const { system, messages } = await buildTutorCall(lessonId, opts);
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab', // gộp cầu dao/nhóm với gia sư Code Lab
     purpose: 'course_tutor', // → Claude Opus 4.8 (chat nhỏ, không dính rate-limit)
-    system: TUTOR_SYSTEM,
+    system,
     messages,
     maxTokens: 4000,
     maxRetries: 2,
     timeoutMs: 180_000,
     userId: opts.userId,
   });
+  const answer = (res.text || '').trim();
+  if (!answer) throw new BadRequestError('AI chưa trả lời được. Thử lại nhé.');
+  return { answer };
+}
 
+/**
+ * Bản STREAM: gọi `onToken` mỗi mẩu chữ để frontend hiện dần ("gõ từng chữ").
+ * Trả về câu trả lời ĐẦY ĐỦ cuối cùng (route gửi nó ở khung "done" làm bản chuẩn
+ * — nếu stream có lặp do retry thì frontend thay bằng bản này). maxRetries 1 để
+ * hạn chế phát lại từ đầu.
+ */
+export async function streamCourseTutor(
+  lessonId: number,
+  opts: TutorAskOpts,
+  onToken: (delta: string) => void,
+): Promise<{ answer: string }> {
+  const { system, messages } = await buildTutorCall(lessonId, opts);
+  const res = await llmComplete({
+    step: 'generation',
+    feature: 'codelab',
+    purpose: 'course_tutor',
+    system,
+    messages,
+    maxTokens: 4000,
+    maxRetries: 1,
+    timeoutMs: 180_000,
+    userId: opts.userId,
+    onToken,
+  });
   const answer = (res.text || '').trim();
   if (!answer) throw new BadRequestError('AI chưa trả lời được. Thử lại nhé.');
   return { answer };

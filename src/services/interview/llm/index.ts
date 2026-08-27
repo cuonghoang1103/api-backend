@@ -60,7 +60,7 @@ export type LLMStep = 'interview' | 'report' | 'generation';
  */
 export interface LLMProvider {
   name: string;
-  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number; ep?: LlmEndpoint }): Promise<LLMResult>;
+  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number; ep?: LlmEndpoint; onToken?: (t: string) => void }): Promise<LLMResult>;
 }
 
 // ── Pricing lives in ONE place now: src/services/llm/gateway.ts. The table
@@ -102,7 +102,9 @@ const anthropicProvider: LLMProvider = {
     // in the chain ever sees an idle connection. Small calls stay non-streaming
     // — there is nothing to gain and one more thing to parse.
     const maxTokens = opts.maxTokens ?? 1500;
-    const useStream = maxTokens > 4000;
+    // `onToken` (chat streaming) buộc stream dù câu ngắn — người dùng thấy chữ
+    // chạy ngay thay vì chờ. Không có onToken thì giữ ngưỡng cũ (chỉ câu dài).
+    const useStream = maxTokens > 4000 || !!opts.onToken;
 
     try {
       const res = await fetch(url, {
@@ -133,7 +135,7 @@ const anthropicProvider: LLMProvider = {
         return await readStream(res, model, () => {
           clearTimeout(timer);
           timer = setTimeout(() => ctrl.abort(), timeoutMs);
-        });
+        }, opts.onToken);
       }
 
       const json = (await res.json()) as {
@@ -178,7 +180,9 @@ const openAiCompatProvider: LLMProvider = {
     // Cùng lý do với tuyến Anthropic: câu trả lời dài mà không stream thì
     // proxy nào đó trên đường đi sẽ bỏ cuộc trước khi model viết xong.
     const maxTokens = opts.maxTokens ?? 1500;
-    const useStream = maxTokens > 4000;
+    // `onToken` (chat streaming) buộc stream dù câu ngắn — người dùng thấy chữ
+    // chạy ngay thay vì chờ. Không có onToken thì giữ ngưỡng cũ (chỉ câu dài).
+    const useStream = maxTokens > 4000 || !!opts.onToken;
 
     try {
       const res = await fetch(url, {
@@ -204,7 +208,7 @@ const openAiCompatProvider: LLMProvider = {
         return await readOpenAiStream(res, model, () => {
           clearTimeout(timer);
           timer = setTimeout(() => ctrl.abort(), timeoutMs);
-        });
+        }, opts.onToken);
       }
 
       const json = (await res.json()) as {
@@ -235,6 +239,7 @@ async function readOpenAiStream(
   res: Response,
   model: string,
   onChunk: () => void,
+  onToken?: (t: string) => void,
 ): Promise<LLMResult> {
   const body = res.body;
   if (!body) throw new LLMError('openai_compat stream had no body', true);
@@ -271,7 +276,7 @@ async function readOpenAiStream(
         }
         if (evt.error) throw new LLMError(`openai_compat stream error: ${evt.error.message ?? 'unknown'}`, true);
         const delta = evt.choices?.[0]?.delta?.content;
-        if (delta) text += delta;
+        if (delta) { text += delta; onToken?.(delta); }
         if (evt.usage) {
           inputTokens = evt.usage.prompt_tokens ?? inputTokens;
           outputTokens = evt.usage.completion_tokens ?? outputTokens;
@@ -299,6 +304,7 @@ async function readStream(
   res: Response,
   model: string,
   onChunk: () => void,
+  onToken?: (t: string) => void,
 ): Promise<LLMResult> {
   const body = res.body;
   if (!body) throw new LLMError('anthropic stream had no body', true);
@@ -343,6 +349,7 @@ async function readStream(
         }
         if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
           text += evt.delta.text ?? '';
+          onToken?.(evt.delta.text ?? '');
         } else if (evt.type === 'message_start') {
           const u = evt.message?.usage ?? {};
           inputTokens = (u.input_tokens ?? 0) + (u.cache_creation_input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0);
@@ -613,6 +620,9 @@ export async function llmComplete(opts: {
   purpose?: LlmPurpose;
   maxRetries?: number; // override — latency-sensitive callers use fewer
   timeoutMs?: number; // override per-call timeout
+  /** Nhận từng mẩu văn bản khi model đang stream (chat "gõ từng chữ"). Có mặt
+   *  ⇒ buộc stream. Không đổi hành vi caller cũ (không truyền ⇒ như trước). */
+  onToken?: (delta: string) => void;
 }): Promise<LLMResult> {
   const maxRetries = opts.maxRetries ?? (Number(process.env.LLM_MAX_RETRIES) || 3);
   let lastErr: unknown;
@@ -663,7 +673,7 @@ export async function llmComplete(opts: {
         // llama.cpp chỉ mở tuyến OpenAI. Ép đúng adapter, nếu không thì đặt
         // `LLM_PROVIDER=anthropic` một lần là mọi việc cục bộ chết 404.
         const provider = ep.local ? openAiCompatProvider : getProvider();
-        const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs, ep });
+        const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs, ep, onToken: opts.onToken });
         recordSuccess(opts.feature);
         await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true }).catch(() => {});
         return result;

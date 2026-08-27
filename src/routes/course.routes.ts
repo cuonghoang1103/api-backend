@@ -6,7 +6,7 @@ import { prisma } from '../config/database.js';
 import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { isProEffective } from '../services/pro.service.js';
-import { askCourseTutor } from '../services/courseTutor.service.js';
+import { askCourseTutor, streamCourseTutor } from '../services/courseTutor.service.js';
 import { uploadDocument, deleteByUrl, UploadError } from '../storage/uploadService.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
 import { buildKey } from '../storage/keys.js';
@@ -2823,9 +2823,46 @@ router.post('/lessons/:id(\\d+)/ai/ask', authenticate, async (req, res: Response
       userId: req.userId!,
       question: String(req.body?.question || ''),
       history: Array.isArray(req.body?.history) ? req.body.history : [],
+      english: req.body?.english === true,
     });
     res.json({ success: true, data: out });
   } catch (e) { next(e); }
+});
+
+// POST /api/v1/courses/lessons/:id/ai/ask-stream — bản STREAM (SSE), "gõ từng chữ".
+// Khung: {type:'delta',text}… rồi {type:'done',answer} (bản chuẩn cuối) hoặc
+// {type:'error',error}. Frontend hiện dần theo delta, chốt bằng answer; hỏng thì
+// tự lùi về route /ai/ask thường.
+router.post('/lessons/:id(\\d+)/ai/ask-stream', authenticate, async (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no'); // tắt buffer của Nginx cho SSE
+  res.flushHeaders?.();
+
+  const send = (obj: unknown): void => { if (!res.writableEnded) res.write(`data: ${JSON.stringify(obj)}\n\n`); };
+  // Giữ kết nối sống qua Nginx (60s) + reset đồng hồ nhàn của client.
+  const keepalive = setInterval(() => { if (!res.writableEnded) res.write(': ka\n\n'); }, 15_000);
+  req.on('close', () => clearInterval(keepalive));
+
+  try {
+    const out = await streamCourseTutor(
+      Number(req.params.id),
+      {
+        userId: req.userId!,
+        question: String(req.body?.question || ''),
+        history: Array.isArray(req.body?.history) ? req.body.history : [],
+        english: req.body?.english === true,
+      },
+      (delta) => send({ type: 'delta', text: delta }),
+    );
+    send({ type: 'done', answer: out.answer });
+  } catch (e) {
+    send({ type: 'error', error: (e as Error)?.message || 'AI chưa trả lời được. Thử lại nhé.' });
+  } finally {
+    clearInterval(keepalive);
+    if (!res.writableEnded) res.end();
+  }
 });
 
 export default router;

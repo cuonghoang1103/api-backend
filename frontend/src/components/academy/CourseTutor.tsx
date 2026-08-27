@@ -1,25 +1,31 @@
 'use client';
 
-// Gia sư AI cho MỘT bài học Academy. Chat THUẦN, luôn sẵn sàng (khác Code Lab có
-// bản giảng cache trước — ở đây hỏi là trả lời ngay). Ngữ cảnh bài học được ghép
-// ở server từ lessonId; client chỉ gửi câu hỏi + lịch sử. Pro-gated. Trả lời
-// song ngữ Anh–Việt. Mẫu lấy từ nửa "follow-up chat" của code-lab/AiExplain.tsx.
+// Gia sư AI cho MỘT bài học Academy. Chat THUẦN, luôn sẵn sàng. Ngữ cảnh bài học
+// ghép ở server từ lessonId; client gửi câu hỏi + lịch sử. Pro-gated.
+// - Trả lời STREAM ("gõ từng chữ") qua SSE; hỏng thì tự lùi về POST thường.
+// - Mặc định TIẾNG VIỆT (giữ thuật ngữ tiếng Anh). Mỗi câu trả lời có nút
+//   "Bản tiếng Anh" để hỏi lại đúng câu đó bằng tiếng Anh khi cần.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Sparkles, Loader2, Send, MessageCircle, Crown, User } from 'lucide-react';
+import { Sparkles, Loader2, Send, MessageCircle, Crown, User, Languages } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { usePro } from '@/hooks/usePro';
-// Render câu trả lời AI như AI Chat chính: markdown (đậm/danh sách/bảng) +
-// công thức toán KaTeX + code tô màu + sơ đồ SVG. KHÔNG để markdown thô (**).
+// Render câu trả lời như AI Chat chính: markdown + KaTeX + code + sơ đồ SVG.
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 
-interface Turn { role: 'user' | 'assistant'; content: string }
+interface Turn {
+  role: 'user' | 'assistant';
+  content: string;
+  srcQuestion?: string; // câu hỏi tạo ra câu trả lời này → để bấm "Bản tiếng Anh"
+  english?: boolean;    // đây LÀ bản tiếng Anh (không hiện nút EN cho nó nữa)
+  streaming?: boolean;  // đang gõ dở → hoãn render KaTeX tới khi xong
+  enDone?: boolean;     // đã xin bản tiếng Anh cho câu này rồi
+}
 
-// Gợi ý mở màn — đúng 5 việc học viên cần: bắt đầu từ đâu · tạo bài tập · kiến
-// thức nền · giảng lại chỗ khó.
+// Gợi ý mở màn — đúng 5 việc học viên cần.
 const QUICK = [
   'Bài này học gì? Tôi nên bắt đầu từ đâu?',
   'Cho tôi 3 bài tập luyện + đáp án để tự kiểm tra.',
@@ -27,11 +33,18 @@ const QUICK = [
   'Giảng lại phần khó nhất của bài một cách dễ hiểu.',
 ];
 
+function getToken(): string {
+  if (typeof document === 'undefined') return '';
+  const m = document.cookie.match(/(?:^|;)\s*backend_token=([^;]*)/);
+  return m ? decodeURIComponent(m[1]) : '';
+}
+
+const toMsg = (t: Turn) => ({ role: t.role, content: t.content });
+
 export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: {
   lessonId: number; courseCode?: string; courseTitle?: string; lessonTitle?: string;
 }) {
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
-  // Một nguồn sự thật cho quyền Pro (giống AiExplain) — đừng đoán từ user object.
   const { isPro } = usePro();
 
   const [turns, setTurns] = useState<Turn[]>([]);
@@ -39,31 +52,101 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
   const [asking, setAsking] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
-  // Đổi sang bài học khác → reset hội thoại (ngữ cảnh khác hẳn).
   useEffect(() => { setTurns([]); setQuestion(''); }, [lessonId]);
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, [turns, asking]);
 
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }, [turns, asking]);
+  const patch = (aIdx: number, upd: Partial<Turn>) =>
+    setTurns((t) => t.map((x, i) => (i === aIdx ? { ...x, ...upd } : x)));
 
-  const send = useCallback(async (text: string) => {
+  // SSE: đọc luồng, dồn delta vào turn trợ lý ở vị trí aIdx. Ném lỗi để caller lùi.
+  const runStream = useCallback(async (aIdx: number, q: string, history: Turn[], english: boolean) => {
+    const res = await fetch(`/api/v1/courses/lessons/${lessonId}/ai/ask-stream`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}) },
+      body: JSON.stringify({ question: q, history: history.map(toMsg), english }),
+    });
+    if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let acc = '';
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const frames = buffer.split('\n\n');
+      buffer = frames.pop() || '';
+      for (const frame of frames) {
+        for (const line of frame.split('\n')) {
+          if (!line.startsWith('data:')) continue;
+          const raw = line.slice(5).trim();
+          if (!raw) continue;
+          let evt: { type?: string; text?: string; answer?: string; error?: string };
+          try { evt = JSON.parse(raw); } catch { continue; }
+          if (evt.type === 'delta' && evt.text) {
+            acc += evt.text;
+            patch(aIdx, { content: acc });
+          } else if (evt.type === 'done') {
+            // Bản chuẩn cuối — thay hẳn (né lặp nếu stream có retry).
+            patch(aIdx, { content: (evt.answer ?? acc), streaming: false });
+            return;
+          } else if (evt.type === 'error') {
+            throw new Error(evt.error || 'AI lỗi');
+          }
+        }
+      }
+    }
+    if (!acc.trim()) throw new Error('empty stream');
+    patch(aIdx, { content: acc, streaming: false });
+  }, [lessonId]);
+
+  // Hỏi một câu. showUser=false + english=true là lúc bấm nút "Bản tiếng Anh".
+  const ask = useCallback(async (text: string, opts?: { english?: boolean; showUser?: boolean }) => {
     const q = (text || '').trim();
     if (!q || asking) return;
-    setQuestion('');
-    const history = turns.slice(-12);
-    setTurns((t) => [...t, { role: 'user', content: q }]);
+    const english = !!opts?.english;
+    const showUser = opts?.showUser !== false;
+
     setAsking(true);
+    if (showUser) setQuestion('');
+
+    const history = turns.filter((t) => !t.streaming);
+    const aIdx = history.length + (showUser ? 1 : 0); // vị trí turn trợ lý mới
+
+    setTurns((t) => {
+      const base = showUser ? [...t, { role: 'user' as const, content: q }] : [...t];
+      return [...base, {
+        role: 'assistant' as const, content: '', streaming: true,
+        english, srcQuestion: english ? undefined : q,
+      }];
+    });
+
     try {
-      const r = await api.post<{ success: boolean; data: { answer: string } }>(
-        `/courses/lessons/${lessonId}/ai/ask`, { question: q, history }, { timeout: 240_000 });
-      setTurns((t) => [...t, { role: 'assistant', content: r.data.data.answer }]);
-    } catch (e: unknown) {
-      const status = (e as { response?: { status?: number } })?.response?.status;
-      setTurns((t) => t.slice(0, -1)); // gỡ câu hỏi vừa thêm để thử lại
-      setQuestion(q);
-      toast.error(status === 403 ? 'Hỏi AI là tính năng Pro.' : 'AI chưa trả lời được. Thử lại nhé.');
+      await runStream(aIdx, q, history, english);
+    } catch {
+      // SSE hỏng/không hỗ trợ → POST thường, không để chat chết.
+      try {
+        const r = await api.post<{ success: boolean; data: { answer: string } }>(
+          `/courses/lessons/${lessonId}/ai/ask`,
+          { question: q, history: history.map(toMsg), english },
+          { timeout: 240_000 });
+        patch(aIdx, { content: r.data.data.answer, streaming: false });
+      } catch (e: unknown) {
+        const status = (e as { response?: { status?: number } })?.response?.status;
+        setTurns((t) => t.slice(0, showUser ? -2 : -1)); // gỡ bubble hỏng
+        if (showUser) setQuestion(q);
+        toast.error(status === 403 ? 'Hỏi AI là tính năng Pro.' : 'AI chưa trả lời được. Thử lại nhé.');
+      }
     } finally { setAsking(false); }
-  }, [asking, turns, lessonId]);
+  }, [asking, turns, lessonId, runStream]);
+
+  const askEnglish = useCallback((aIdx: number) => {
+    const src = turns[aIdx]?.srcQuestion;
+    if (!src || asking) return;
+    patch(aIdx, { enDone: true });
+    void ask(src, { english: true, showUser: false });
+  }, [turns, asking, ask]);
 
   const label = [courseCode, courseTitle].filter(Boolean).join(' · ') || 'khoá học';
 
@@ -83,7 +166,8 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
         </div>
         <p className="mb-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
           Hỏi bất cứ điều gì về bài này — bắt đầu từ đâu, chỗ chưa hiểu, kiến thức nền còn thiếu,
-          xin bài tập luyện, hoặc dán bài của bạn nhờ chữa. Trả lời song ngữ Anh–Việt.
+          xin bài tập luyện, hoặc dán bài của bạn nhờ chữa. Trả lời bằng tiếng Việt; cần tiếng Anh
+          thì bấm &ldquo;Bản tiếng Anh&rdquo; dưới mỗi câu trả lời.
         </p>
 
         {turns.length > 0 && (
@@ -95,19 +179,29 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
                     ? <User size={14} style={{ color: 'var(--text-muted)' }} />
                     : <Sparkles size={14} style={{ color: 'var(--accent-color, #8b5cf6)' }} />}
                 </span>
-                <div className="ct-answer min-w-0 flex-1 rounded-lg px-3 py-2 text-sm"
-                  style={{ background: t.role === 'user' ? 'var(--bg-surface)' : 'var(--bg-surface-active, var(--bg-surface))', color: 'var(--text-primary)' }}>
-                  {t.role === 'user'
-                    ? <span className="whitespace-pre-wrap">{t.content}</span>
-                    : <ChatMarkdown content={t.content} />}
+                <div className="min-w-0 flex-1">
+                  <div className="ct-answer rounded-lg px-3 py-2 text-sm"
+                    style={{ background: t.role === 'user' ? 'var(--bg-surface)' : 'var(--bg-surface-active, var(--bg-surface))', color: 'var(--text-primary)' }}>
+                    {t.role === 'user'
+                      ? <span className="whitespace-pre-wrap">{t.content}</span>
+                      : (t.streaming && !t.content)
+                        ? <span className="inline-flex items-center gap-2 opacity-70"><Loader2 size={13} className="animate-spin" /> Đang soạn…</span>
+                        : <>
+                            <ChatMarkdown content={t.content} renderMath={!t.streaming} />
+                            {t.streaming && <span className="ml-0.5 inline-block h-3.5 w-1.5 animate-pulse align-middle" style={{ background: 'var(--accent-color,#8b5cf6)' }} />}
+                          </>}
+                  </div>
+                  {/* Nút "Bản tiếng Anh" — chỉ cho câu trả lời tiếng Việt đã xong. */}
+                  {t.role === 'assistant' && !t.english && !t.streaming && t.srcQuestion && !t.enDone && (
+                    <button type="button" onClick={() => askEnglish(i)} disabled={asking}
+                      className="mt-1 inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] disabled:opacity-40"
+                      style={{ color: 'var(--text-muted)' }}>
+                      <Languages size={12} /> Bản tiếng Anh
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
-            {asking && (
-              <div className="flex items-center gap-2 px-1 text-sm" style={{ color: 'var(--text-muted)' }}>
-                <Loader2 size={14} className="animate-spin" /> Đang nghĩ…
-              </div>
-            )}
             <div ref={endRef} />
           </div>
         )}
@@ -124,7 +218,7 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
             {turns.length === 0 && (
               <div className="mb-2 flex flex-wrap gap-1.5">
                 {QUICK.map((s) => (
-                  <button key={s} type="button" onClick={() => void send(s)} disabled={asking}
+                  <button key={s} type="button" onClick={() => void ask(s)} disabled={asking}
                     className="rounded-full border px-2.5 py-1 text-left text-xs disabled:opacity-40"
                     style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>
                     {s}
@@ -136,16 +230,16 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
               <textarea
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void send(question); } }}
+                onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void ask(question); } }}
                 rows={2}
                 placeholder="Hỏi bất cứ điều gì về bài này — hoặc dán code/bài làm của bạn nhờ chữa…"
                 className="flex-1 resize-none rounded-lg border px-3 py-2 text-sm outline-none"
                 style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-primary)' }}
               />
-              <button onClick={() => void send(question)} disabled={asking || !question.trim()}
+              <button onClick={() => void ask(question)} disabled={asking || !question.trim()}
                 className="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold disabled:opacity-40"
                 style={{ background: 'var(--accent-color, #8b5cf6)', color: '#fff' }}>
-                <Send size={14} /> Hỏi
+                {asking ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Hỏi
               </button>
             </div>
           </>

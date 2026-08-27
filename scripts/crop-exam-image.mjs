@@ -261,7 +261,17 @@ async function cropRedDividerLayout(whited, meta) {
   const hasShortLeftOptions = await countWideTextRows(badgeWhited, meta.width, meta.height, { x0: 15, x1: redX - 5, y0: 140, y1: yBottom - 8 }, 15) >= 1;
   const isSplit = wideLeftRows >= 3 || hasShortLeftOptions;
   if (isSplit) {
-    const bandLeft = wideLeftRows >= 3 ? 105 : 15;
+    // Always start the band at x=15 (not x=105), regardless of which detector
+    // fired. Using bandLeft=105 whenever wideLeftRows>=3 assumed real option
+    // text always starts past x=105 — false when a question ALSO has a long
+    // wrapped stem line in the left panel (e.g. "If input = ... find the order
+    // ... (i=2)."), which trips wideLeftRows on its own and forces bandLeft=105
+    // even though the actual "A./B./C./D." option letters start at x≈20 (caught
+    // 27/08/2026, MAD101 Đề 18 q14 — options rendered as bare ", 7" fragments,
+    // every leading digit/letter sliced off). x=15 is safe for every variant:
+    // darkTextBBox below already bounds the real content tightly, so a wider
+    // starting band only costs a little extra left margin, never lost text.
+    const bandLeft = 15;
     const band = await sharp(badgeWhited)
       .extract({ left: bandLeft, top: Math.max(0, yTop - 4), width: meta.width - bandLeft, height: Math.min(meta.height - yTop, yBottom - yTop + 8) })
       .png().toBuffer();
@@ -270,7 +280,7 @@ async function cropRedDividerLayout(whited, meta) {
     // panel's bottom border sit there and would otherwise stretch the box down
     // with empty space (seen on Đề 23 q26). A mid-band table/diagram (mixed
     // questions) ends well above this and is unaffected.
-    const bb = await darkTextBBox(band, bmeta.width, bmeta.height, { y1: bmeta.height - 35 });
+    const bb = await darkTextBBox(band, bmeta.width, bmeta.height, { y1: bmeta.height - 35 }, true);
     if (bb) {
       const M = 12;
       const left = Math.max(0, bb.minX - M), top = Math.max(0, bb.minY - M);
@@ -342,10 +352,20 @@ async function countWideTextRows(buf, width, height, region, minWidth) {
   return count;
 }
 
-// Tight bounding box of near-black text pixels (ignores gray box borders/filler
-// and blue site chrome). Optional region {x0,y0,x1,y1} restricts the scan.
+// Tight bounding box of near-black text pixels (by default also ignores blue
+// site chrome — progress bar / wordmark). Optional region {x0,y0,x1,y1}
+// restricts the scan. Pass includeBlue:true when the scanned region is known
+// to hold real content that may itself be blue-colored syntax-highlighted
+// pseudocode (e.g. MAD101's Bubblesort procedure block, all in blue) rather
+// than page chrome — the blue-exclusion test can't tell the two apart, and
+// excluding real blue text from the bbox silently crops the whole code block
+// out of the final image (caught 27/08/2026, MAD101 Đề 18 q14 — the right
+// panel's pseudocode vanished from every split-layout crop that had colored
+// code on it, even after the x=15 bandLeft fix restored the left-panel
+// options). Only isSplit's band scan (already narrowed to a single page's
+// real content, past any global top-chrome strip) is safe to relax this way.
 // Returns null if no text found.
-async function darkTextBBox(buf, width, height, region) {
+async function darkTextBBox(buf, width, height, region, includeBlue = false) {
   const { data, info } = await sharp(buf).raw().toBuffer({ resolveWithObject: true });
   const ch = info.channels;
   const x0 = Math.max(0, region?.x0 ?? 0), y0 = Math.max(0, region?.y0 ?? 0);
@@ -355,7 +375,10 @@ async function darkTextBBox(buf, width, height, region) {
     for (let x = x0; x < x1; x++) {
       const i = (y * width + x) * ch;
       const r = data[i], g = data[i + 1], b = data[i + 2];
-      if (r < 120 && g < 120 && b < 120 && !(b > r + 25 && b > g + 25)) {
+      const isDark = includeBlue
+        ? (r < 160 && g < 160 && b < 200)
+        : (r < 120 && g < 120 && b < 120 && !(b > r + 25 && b > g + 25));
+      if (isDark) {
         if (x < minX) minX = x; if (x > maxX) maxX = x;
         if (y < minY) minY = y; if (y > maxY) maxY = y;
       }

@@ -6,6 +6,7 @@ import { prisma } from '../config/database.js';
 import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { isProEffective } from '../services/pro.service.js';
+import { askCourseTutor } from '../services/courseTutor.service.js';
 import { uploadDocument, deleteByUrl, UploadError } from '../storage/uploadService.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
 import { buildKey } from '../storage/keys.js';
@@ -2812,6 +2813,19 @@ router.post('/activate-code', async (req: any, res: any, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+// ─── Gia sư AI cho từng bài học Academy (Pro only) ─────────────────
+// POST /api/v1/courses/lessons/:id/ai/ask — hỏi bất cứ điều gì về bài đang học.
+router.post('/lessons/:id(\\d+)/ai/ask', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await askCourseTutor(Number(req.params.id), {
+      userId: req.userId!,
+      question: String(req.body?.question || ''),
+      history: Array.isArray(req.body?.history) ? req.body.history : [],
+    });
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
 });
 
 export default router;

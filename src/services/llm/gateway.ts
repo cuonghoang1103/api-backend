@@ -305,6 +305,7 @@ export type LlmPurpose =
   | 'language_bulk'       // sinh từ vựng/bài đọc hàng loạt
   | 'codelab_coach'       // kèm code, giải thích lỗi
   | 'codelab_bulk'        // sinh bài tập hàng loạt
+  | 'course_tutor'        // gia sư khoá học Academy — chat hỏi trong bài
   | 'cv_critique'         // mổ CV — tính năng CV Builder được đánh giá qua đây
   | 'cv_writing'          // thư xin việc, viết lại gạch đầu dòng, dịch CV
   | 'cv_parse'            // tách JSON từ CV/JD — máy đọc
@@ -388,6 +389,9 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // codelab_bulk (sinh bài hàng loạt, chạy nền) vẫn giữ model rẻ.
   codelab_coach: 'claude-opus-4-8',
   codelab_bulk: 'gpt-5.4-mini',
+  // Gia sư Academy (hỏi trong từng bài học): chat NHỎ (≤4000 token) nên Opus 4.8
+  // KHÔNG dính rate-limit như bản giảng dài — cùng lý do codelab_coach chạy Opus.
+  course_tutor: 'claude-opus-4-8',
 
   cv_critique: 'gpt-5.6-sol',
   cv_writing: 'claude-sonnet-5',

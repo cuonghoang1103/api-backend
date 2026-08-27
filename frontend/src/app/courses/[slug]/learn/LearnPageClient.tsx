@@ -10,6 +10,7 @@ import {
   Code2, ExternalLink, FileText, Github, Award, Ticket, Eye
 } from 'lucide-react';
 import { coursesApi, certificatesApi } from '@/lib/api';
+import { CourseTutor } from '@/components/academy/CourseTutor';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
@@ -1069,6 +1070,17 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     dangerouslySetInnerHTML={{ __html: withLessonRef(sanitizeHtml(stripInlineColors(lessonDetail.teachingNotes || "")), currentLesson.id) }}
                   />
                 </div>
+              )}
+
+              {/* Gia sư AI — hỏi bất cứ điều gì về bài đang học (bắt đầu từ đâu,
+                  chỗ khó, kiến thức nền, tạo/chữa bài tập, review). Pro-gated. */}
+              {course && (
+                <CourseTutor
+                  lessonId={currentLesson.id}
+                  courseCode={course.courseCode ?? undefined}
+                  courseTitle={pickLang(course.title, locale)}
+                  lessonTitle={pickLang(currentLesson.title, locale)}
+                />
               )}
 
               {/* GitHub source code link — single button, large and

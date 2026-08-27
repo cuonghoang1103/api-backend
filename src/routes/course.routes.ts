@@ -2824,6 +2824,7 @@ router.post('/lessons/:id(\\d+)/ai/ask', authenticate, async (req, res: Response
       question: String(req.body?.question || ''),
       history: Array.isArray(req.body?.history) ? req.body.history : [],
       english: req.body?.english === true,
+      cacheKey: typeof req.body?.cacheKey === 'string' ? req.body.cacheKey.slice(0, 40) : undefined,
     });
     res.json({ success: true, data: out });
   } catch (e) { next(e); }
@@ -2853,10 +2854,13 @@ router.post('/lessons/:id(\\d+)/ai/ask-stream', authenticate, async (req, res) =
         question: String(req.body?.question || ''),
         history: Array.isArray(req.body?.history) ? req.body.history : [],
         english: req.body?.english === true,
+        cacheKey: typeof req.body?.cacheKey === 'string' ? req.body.cacheKey.slice(0, 40) : undefined,
       },
       (delta) => send({ type: 'delta', text: delta }),
     );
-    send({ type: 'done', answer: out.answer });
+    // cached:true ⇒ out.answer là bản có sẵn, không có delta nào trước đó → frontend
+    // hiện thẳng answer + gắn nhãn "⚡ Trả lời có sẵn".
+    send({ type: 'done', answer: out.answer, cached: out.cached });
   } catch (e) {
     send({ type: 'error', error: (e as Error)?.message || 'AI chưa trả lời được. Thử lại nhé.' });
   } finally {

@@ -23,10 +23,16 @@ const MAX_HISTORY = 12;
 
 export interface TutorMessage { role: 'user' | 'assistant'; content: string }
 
+// Quyền Pro/đăng nhập — LUÔN kiểm (kể cả khi trả lời từ cache: vẫn phải là Pro).
 async function assertPro(userId: number | null | undefined) {
   if (!(await isProEffective(userId))) {
     throw new ForbiddenError('Hỏi AI là tính năng Pro.');
   }
+}
+
+// Cầu dao AI + trần token/ngày — CHỈ kiểm khi thật sự gọi AI (cache HIT thì bỏ
+// qua: không gọi model nên không tính quota, và không bị chặn dù cầu dao mở).
+async function assertAiReady(userId: number | null | undefined) {
   // Dùng chung "cầu dao" (circuit breaker) nhóm 'codelab' với Code Lab: cùng là
   // gia sư tương tác, gộp trạng thái AI-sống/chết cho gọn.
   if (!isAiAvailable('codelab')) {
@@ -42,6 +48,27 @@ async function assertPro(userId: number | null | undefined) {
   if (userId && !(await checkTokenQuota(userId))) {
     throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay.');
   }
+}
+
+// ── Cache câu trả lời của các chip gợi ý (lessonId + cacheKey + lang) ──────────
+// Đọc/ghi bọc try/catch: lỗi cache KHÔNG bao giờ được làm chết câu trả lời.
+async function getCachedAnswer(lessonId: number, cacheKey: string, lang: string): Promise<string | null> {
+  try {
+    const row = await prisma.lessonAiAnswer.findUnique({
+      where: { lessonId_cacheKey_lang: { lessonId, cacheKey, lang } },
+      select: { answer: true },
+    });
+    return row?.answer ?? null;
+  } catch { return null; }
+}
+async function saveCachedAnswer(lessonId: number, cacheKey: string, lang: string, answer: string): Promise<void> {
+  try {
+    await prisma.lessonAiAnswer.upsert({
+      where: { lessonId_cacheKey_lang: { lessonId, cacheKey, lang } },
+      create: { lessonId, cacheKey, lang, answer },
+      update: { answer },
+    });
+  } catch { /* ghi cache hỏng thì thôi, câu trả lời vẫn về bình thường */ }
 }
 
 /** Bóc HTML về text thuần cho ngữ cảnh (không cần đẹp, chỉ cần đọc được). */
@@ -129,7 +156,12 @@ export interface TutorAskOpts {
   history?: TutorMessage[];
   /** true ⇒ trả lời bằng tiếng Anh (nút "Bản tiếng Anh"); mặc định tiếng Việt. */
   english?: boolean;
+  /** Key của chip gợi ý cố định ('start','exercises'…) ⇒ câu trả lời được CACHE
+   *  dùng chung. Không truyền (câu gõ tay) ⇒ không đụng cache, luôn sinh mới. */
+  cacheKey?: string;
 }
+
+const langOf = (english?: boolean): 'en' | 'vi' => (english ? 'en' : 'vi');
 
 // Dựng system + messages một chỗ để bản STREAM và bản thường luôn giống hệt nhau.
 async function buildTutorCall(
@@ -140,7 +172,8 @@ async function buildTutorCall(
   if (!question) throw new BadRequestError('Hãy nhập câu hỏi.');
   if (question.length > MAX_QUESTION) throw new BadRequestError('Câu hỏi dài quá.');
 
-  await assertPro(opts.userId);
+  // Quyền + cầu dao + quota đã kiểm ở hàm gọi (askCourseTutor/streamCourseTutor)
+  // — chỉ chạy tới đây khi CACHE MISS, tức sẽ gọi AI thật.
   const lesson = await loadLesson(lessonId);
 
   const course = lesson.section?.course;
@@ -162,8 +195,18 @@ async function buildTutorCall(
   return { system: tutorSystem(opts.english), messages };
 }
 
-/** Trả lời một câu (không stream) — dùng làm đường lùi khi SSE hỏng. Không lưu. */
-export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Promise<{ answer: string }> {
+/** Trả lời một câu (không stream) — đường lùi khi SSE hỏng. Có cache cho chip. */
+export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Promise<{ answer: string; cached: boolean }> {
+  await assertPro(opts.userId); // luôn: phải là Pro
+  const lang = langOf(opts.english);
+
+  // Câu hỏi gợi ý (có cacheKey) → thử cache trước; HIT thì trả ngay, khỏi tốn AI.
+  if (opts.cacheKey) {
+    const hit = await getCachedAnswer(lessonId, opts.cacheKey, lang);
+    if (hit) return { answer: hit, cached: true };
+  }
+
+  await assertAiReady(opts.userId); // MISS mới cần cầu dao + quota
   const { system, messages } = await buildTutorCall(lessonId, opts);
   const res = await llmComplete({
     step: 'generation',
@@ -178,7 +221,8 @@ export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Prom
   });
   const answer = (res.text || '').trim();
   if (!answer) throw new BadRequestError('AI chưa trả lời được. Thử lại nhé.');
-  return { answer };
+  if (opts.cacheKey) void saveCachedAnswer(lessonId, opts.cacheKey, lang, answer);
+  return { answer, cached: false };
 }
 
 /**
@@ -191,7 +235,18 @@ export async function streamCourseTutor(
   lessonId: number,
   opts: TutorAskOpts,
   onToken: (delta: string) => void,
-): Promise<{ answer: string }> {
+): Promise<{ answer: string; cached: boolean }> {
+  await assertPro(opts.userId);
+  const lang = langOf(opts.english);
+
+  // Cache HIT: KHÔNG stream (không có delta) — route sẽ gửi thẳng khung 'done'
+  // với answer + cached:true, frontend hiện ngay tức thì.
+  if (opts.cacheKey) {
+    const hit = await getCachedAnswer(lessonId, opts.cacheKey, lang);
+    if (hit) return { answer: hit, cached: true };
+  }
+
+  await assertAiReady(opts.userId);
   const { system, messages } = await buildTutorCall(lessonId, opts);
   const res = await llmComplete({
     step: 'generation',
@@ -207,5 +262,6 @@ export async function streamCourseTutor(
   });
   const answer = (res.text || '').trim();
   if (!answer) throw new BadRequestError('AI chưa trả lời được. Thử lại nhé.');
-  return { answer };
+  if (opts.cacheKey) void saveCachedAnswer(lessonId, opts.cacheKey, lang, answer);
+  return { answer, cached: false };
 }

@@ -7,7 +7,7 @@
 //   "Bản tiếng Anh" để hỏi lại đúng câu đó bằng tiếng Anh khi cần.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Sparkles, Loader2, Send, MessageCircle, Crown, User, Languages } from 'lucide-react';
+import { Sparkles, Loader2, Send, MessageCircle, Crown, User, Languages, RefreshCw } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
 import { api } from '@/lib/api';
@@ -19,18 +19,21 @@ import ChatMarkdown from '@/components/chat/ChatMarkdown';
 interface Turn {
   role: 'user' | 'assistant';
   content: string;
-  srcQuestion?: string; // câu hỏi tạo ra câu trả lời này → để bấm "Bản tiếng Anh"
-  english?: boolean;    // đây LÀ bản tiếng Anh (không hiện nút EN cho nó nữa)
-  streaming?: boolean;  // đang gõ dở → hoãn render KaTeX tới khi xong
-  enDone?: boolean;     // đã xin bản tiếng Anh cho câu này rồi
+  srcQuestion?: string;  // câu hỏi tạo ra câu trả lời này → để bấm "Bản tiếng Anh"
+  srcCacheKey?: string;  // cacheKey của chip (nếu có) → EN dùng lại để cache đúng khoá
+  english?: boolean;     // đây LÀ bản tiếng Anh (không hiện nút EN cho nó nữa)
+  streaming?: boolean;   // đang gõ dở → hoãn render KaTeX tới khi xong
+  enDone?: boolean;      // đã xin bản tiếng Anh cho câu này rồi
+  cached?: boolean;      // câu trả lời lấy từ cache (chip) → gắn nhãn "⚡ có sẵn"
 }
 
-// Gợi ý mở màn — đúng 5 việc học viên cần.
-const QUICK = [
-  'Bài này học gì? Tôi nên bắt đầu từ đâu?',
-  'Cho tôi 3 bài tập luyện + đáp án để tự kiểm tra.',
-  'Kiến thức nền nào cần có trước khi học bài này?',
-  'Giảng lại phần khó nhất của bài một cách dễ hiểu.',
+// Gợi ý mở màn — đúng 5 việc học viên cần. Mỗi chip có `key` cố định để CACHE
+// dùng chung: ai bấm cùng chip trên cùng bài đều nhận cùng câu trả lời, tức thì.
+const QUICK: { key: string; q: string }[] = [
+  { key: 'start', q: 'Bài này học gì? Tôi nên bắt đầu từ đâu?' },
+  { key: 'exercises', q: 'Cho tôi 3 bài tập luyện + đáp án để tự kiểm tra.' },
+  { key: 'prereq', q: 'Kiến thức nền nào cần có trước khi học bài này?' },
+  { key: 'hard', q: 'Giảng lại phần khó nhất của bài một cách dễ hiểu.' },
 ];
 
 function getToken(): string {
@@ -59,11 +62,11 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
     setTurns((t) => t.map((x, i) => (i === aIdx ? { ...x, ...upd } : x)));
 
   // SSE: đọc luồng, dồn delta vào turn trợ lý ở vị trí aIdx. Ném lỗi để caller lùi.
-  const runStream = useCallback(async (aIdx: number, q: string, history: Turn[], english: boolean) => {
+  const runStream = useCallback(async (aIdx: number, q: string, history: Turn[], english: boolean, cacheKey?: string) => {
     const res = await fetch(`/api/v1/courses/lessons/${lessonId}/ai/ask-stream`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}) },
-      body: JSON.stringify({ question: q, history: history.map(toMsg), english }),
+      body: JSON.stringify({ question: q, history: history.map(toMsg), english, cacheKey }),
     });
     if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
 
@@ -82,14 +85,14 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
           if (!line.startsWith('data:')) continue;
           const raw = line.slice(5).trim();
           if (!raw) continue;
-          let evt: { type?: string; text?: string; answer?: string; error?: string };
+          let evt: { type?: string; text?: string; answer?: string; error?: string; cached?: boolean };
           try { evt = JSON.parse(raw); } catch { continue; }
           if (evt.type === 'delta' && evt.text) {
             acc += evt.text;
             patch(aIdx, { content: acc });
           } else if (evt.type === 'done') {
-            // Bản chuẩn cuối — thay hẳn (né lặp nếu stream có retry).
-            patch(aIdx, { content: (evt.answer ?? acc), streaming: false });
+            // Bản chuẩn cuối — thay hẳn (né lặp nếu stream có retry). cached ⇒ nhãn.
+            patch(aIdx, { content: (evt.answer ?? acc), streaming: false, cached: !!evt.cached });
             return;
           } else if (evt.type === 'error') {
             throw new Error(evt.error || 'AI lỗi');
@@ -102,11 +105,12 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
   }, [lessonId]);
 
   // Hỏi một câu. showUser=false + english=true là lúc bấm nút "Bản tiếng Anh".
-  const ask = useCallback(async (text: string, opts?: { english?: boolean; showUser?: boolean }) => {
+  const ask = useCallback(async (text: string, opts?: { english?: boolean; showUser?: boolean; cacheKey?: string }) => {
     const q = (text || '').trim();
     if (!q || asking) return;
     const english = !!opts?.english;
     const showUser = opts?.showUser !== false;
+    const cacheKey = opts?.cacheKey;
 
     setAsking(true);
     if (showUser) setQuestion('');
@@ -118,20 +122,20 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
       const base = showUser ? [...t, { role: 'user' as const, content: q }] : [...t];
       return [...base, {
         role: 'assistant' as const, content: '', streaming: true,
-        english, srcQuestion: english ? undefined : q,
+        english, srcQuestion: english ? undefined : q, srcCacheKey: cacheKey,
       }];
     });
 
     try {
-      await runStream(aIdx, q, history, english);
+      await runStream(aIdx, q, history, english, cacheKey);
     } catch {
       // SSE hỏng/không hỗ trợ → POST thường, không để chat chết.
       try {
-        const r = await api.post<{ success: boolean; data: { answer: string } }>(
+        const r = await api.post<{ success: boolean; data: { answer: string; cached?: boolean } }>(
           `/courses/lessons/${lessonId}/ai/ask`,
-          { question: q, history: history.map(toMsg), english },
+          { question: q, history: history.map(toMsg), english, cacheKey },
           { timeout: 240_000 });
-        patch(aIdx, { content: r.data.data.answer, streaming: false });
+        patch(aIdx, { content: r.data.data.answer, streaming: false, cached: !!r.data.data.cached });
       } catch (e: unknown) {
         const status = (e as { response?: { status?: number } })?.response?.status;
         setTurns((t) => t.slice(0, showUser ? -2 : -1)); // gỡ bubble hỏng
@@ -142,10 +146,19 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
   }, [asking, turns, lessonId, runStream]);
 
   const askEnglish = useCallback((aIdx: number) => {
-    const src = turns[aIdx]?.srcQuestion;
-    if (!src || asking) return;
+    const t = turns[aIdx];
+    if (!t?.srcQuestion || asking) return;
     patch(aIdx, { enDone: true });
-    void ask(src, { english: true, showUser: false });
+    // Dùng lại cùng cacheKey ⇒ bản tiếng Anh cũng được cache dưới lang='en'.
+    void ask(t.srcQuestion, { english: true, showUser: false, cacheKey: t.srcCacheKey });
+  }, [turns, asking, ask]);
+
+  // "Hỏi lại mới": bỏ cache, sinh câu trả lời tươi (backend upsert nên cache cũng
+  // được làm mới cho người sau). showUser=false để không nhân đôi câu hỏi.
+  const askFresh = useCallback((aIdx: number) => {
+    const t = turns[aIdx];
+    if (!t?.srcQuestion || asking) return;
+    void ask(t.srcQuestion, { english: !!t.english, showUser: false });
   }, [turns, asking, ask]);
 
   const label = [courseCode, courseTitle].filter(Boolean).join(' · ') || 'khoá học';
@@ -191,13 +204,28 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
                             {t.streaming && <span className="ml-0.5 inline-block h-3.5 w-1.5 animate-pulse align-middle" style={{ background: 'var(--accent-color,#8b5cf6)' }} />}
                           </>}
                   </div>
-                  {/* Nút "Bản tiếng Anh" — chỉ cho câu trả lời tiếng Việt đã xong. */}
-                  {t.role === 'assistant' && !t.english && !t.streaming && t.srcQuestion && !t.enDone && (
-                    <button type="button" onClick={() => askEnglish(i)} disabled={asking}
-                      className="mt-1 inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] disabled:opacity-40"
-                      style={{ color: 'var(--text-muted)' }}>
-                      <Languages size={12} /> Bản tiếng Anh
-                    </button>
+                  {/* Nhãn + hành động dưới câu trả lời của trợ lý. */}
+                  {t.role === 'assistant' && !t.streaming && (t.cached || (!t.english && t.srcQuestion && !t.enDone)) && (
+                    <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                      {t.cached && (
+                        <span className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5"
+                          style={{ background: 'var(--bg-surface)', color: 'var(--accent-color, #8b5cf6)' }}>
+                          ⚡ Trả lời có sẵn
+                        </span>
+                      )}
+                      {!t.english && t.srcQuestion && !t.enDone && (
+                        <button type="button" onClick={() => askEnglish(i)} disabled={asking}
+                          className="inline-flex items-center gap-1 disabled:opacity-40">
+                          <Languages size={12} /> Bản tiếng Anh
+                        </button>
+                      )}
+                      {t.cached && t.srcQuestion && (
+                        <button type="button" onClick={() => askFresh(i)} disabled={asking}
+                          className="inline-flex items-center gap-1 disabled:opacity-40">
+                          <RefreshCw size={11} /> Hỏi lại mới
+                        </button>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>
@@ -218,10 +246,10 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
             {turns.length === 0 && (
               <div className="mb-2 flex flex-wrap gap-1.5">
                 {QUICK.map((s) => (
-                  <button key={s} type="button" onClick={() => void ask(s)} disabled={asking}
+                  <button key={s.key} type="button" onClick={() => void ask(s.q, { cacheKey: s.key })} disabled={asking}
                     className="rounded-full border px-2.5 py-1 text-left text-xs disabled:opacity-40"
                     style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>
-                    {s}
+                    {s.q}
                   </button>
                 ))}
               </div>

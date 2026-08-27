@@ -1034,10 +1034,31 @@ model Lesson {
   documents      CourseDocument[]
   assignments    Assignment[]
   lessonProgress LessonProgress[]
+  aiAnswers      LessonAiAnswer[]
 
   @@index([sectionId], name: "idx_lessons_section")
   @@index([isPublished], name: "idx_lessons_published")
   @@map("lessons")
+}
+
+// Cache câu trả lời gia sư AI cho các câu hỏi GỢI Ý cố định (chip) của một bài.
+// Ai bấm cùng một chip trên cùng một bài đều nhận cùng câu trả lời — người sau
+// nhận NGAY, khỏi tốn AI. Câu hỏi gõ tay (free-form) KHÔNG cache. Khoá:
+// (lessonId, cacheKey, lang); cacheKey = key của chip ('start','exercises'…).
+model LessonAiAnswer {
+  id        Int      @id @default(autoincrement())
+  lessonId  Int      @map("lesson_id")
+  cacheKey  String   @map("cache_key") @db.VarChar(40)
+  lang      String   @db.VarChar(4)
+  answer    String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, cacheKey, lang], name: "lessonId_cacheKey_lang")
+  @@index([lessonId], name: "idx_lesson_ai_answers_lesson")
+  @@map("lesson_ai_answers")
 }
 
 model LessonDetail {

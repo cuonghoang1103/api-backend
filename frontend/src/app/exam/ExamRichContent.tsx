@@ -21,6 +21,14 @@
  */
 import { memo, useEffect, useId, useRef } from 'react';
 import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
+// Static top-level import (not a dynamic import() inside the effect below) —
+// Next's webpack CSS handling only reliably extracts/injects node_modules
+// stylesheets from a top-level import. A dynamic import() of this same path
+// still let KaTeX's JS render fine (auto-render doesn't need the CSS to run),
+// but WITHOUT `.katex-mathml { clip: ... }` the invisible accessibility
+// MathML text stayed visible right next to the styled HTML rendering — every
+// $x$ showed twice ("x x"). Matches the working pattern in ChatMarkdown.tsx.
+import 'katex/dist/katex.min.css';
 
 const MATH_RE = /\$|\\\(|\\\[/;
 
@@ -65,7 +73,6 @@ function ExamRichContent({ html, L, className = '', inline = false }: {
     if (MATH_RE.test(el.textContent || '')) {
       (async () => {
         try {
-          await import('katex/dist/katex.min.css' as unknown as string);
           const mod = await import('katex/dist/contrib/auto-render.mjs' as unknown as string);
           const renderMathInElement = (mod.default || mod) as (
             e: HTMLElement, o: Record<string, unknown>,
